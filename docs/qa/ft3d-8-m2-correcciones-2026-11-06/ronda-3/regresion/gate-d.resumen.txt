@@ -1,0 +1,54 @@
+ok 1 - desktop · brand, real video, download, playback of the downloaded file, client document
+ok 2 - cancel, frozen delivery after a brand change, foreign plan and over-limit video
+ok 3 - publication through the existing /api/share contract (mocked): consent, errors, routes, CSP, no token leak
+ok 4 - second project with a different geometry (B): video without costs, plays back
+ok 5 - mobile 390x844 · delivery steps usable without horizontal scroll
+ok 6 - fallback without WebCodecs H.264 is announced honestly (real-time MediaRecorder, may not be seekable)
+ok 7 - the REAL Catastro provider reads the fixture GML exactly as the Node stand-in (contract is shared)
+ok 8 - desktop 1440x900 · scenarios A-J: correspondence, human messages, captures
+ok 9 - project switch through the real file input: A -> B with A's documents -> B coherent; nothing of A survives
+ok 10 - dossier package round trip: save, reopen, verified integrity, same id; Gantt sync and reversible timelapse
+ok 11 - video and delivery bound to the dossier: record, download, play, history kept after switching
+ok 12 - mobile 390x844 · dossier readable, no horizontal scroll, steps stacked
+ok 13 - fidelity vs real editor · case A
+ok 14 - fidelity vs real editor · case B
+ok 15 - fidelity vs real editor · case C
+ok 16 - two projects render differently; the demo house is never used
+ok 17 - fidelity lab interaction 1440x900
+ok 18 - fidelity lab interaction 390x844
+ok 19 - 1366×768 · start, playback, simultaneous works and end of plan fit the window together
+ok 20 - 1440×900 · start, playback, simultaneous works and end of plan fit the window together
+ok 21 - 1920×1080 · start, playback, simultaneous works and end of plan fit the window together
+ok 22 - 1280×720 · start, playback, simultaneous works and end of plan fit the window together
+ok 23 - 1366×768 · expanding tasks and items keeps the moment and the page height; closing restores it
+ok 24 - resizing the window re-frames the house (camera follows the viewer) unless the user moved it
+ok 25 - browser zoom: 125 % keeps the composition; 150 % falls back to the stacked layout, nothing cut or hidden
+ok 26 - mobile 390×844 keeps its stacked layout (viewer first, no horizontal scroll)
+ok 27 - AUTO orbit: at every angle the house stays on screen and clear of the headline (projection offset, not a world pan)
+ok 28 - FT3D-8 visual lab 1440x900
+ok 29 - FT3D-8 visual lab 390x844
+ok 30 - 01 · initial moment: nothing built, footprint and plain intro, stage «Inicio»
+ok 31 - 02 · structure: facade walls rise while the plan says so, the crane is an illustration
+ok 32 - 03 · simultaneous works: one day, four works, the same four in scene, Gantt and card
+ok 33 - 04 · carpentry: the 8 openings of the project appear with their task
+ok 34 - 05 · planned work without geometry is said, never drawn
+ok 35 - 06 · amounts: each work shows its net allocation (sin IVA) from C1-C4, and what it is not
+ok 36 - 07 · incomplete budget: unknown amounts are «desconocido», never 0 €
+ok 37 - 08 · Gantt → scene → card: selecting a work goes to its moment, first in the card, outlined
+ok 38 - 09 · going back in time restores the earlier state exactly
+ok 39 - 10 · a period without works says so and offers the next activity
+ok 40 - 11 · switching dossiers C → D → A leaves nothing of the previous project
+ok 41 - 12 · scenarios E/F/G/H/J: each problem is named; incompatibilities block the delivery, an obsolete revision lowers it; J keeps the previous dossier
+ok 42 - 13 · guided delivery: Previsualizar → Personalizar → Generar → Resultado, secondary options folded, nothing published
+ok 43 - 14 · MP4 = screen: indexed file, and at several instants the frame says what the card says
+ok 44 - 15 · client view: no technical tab nor professional details, the viewer stays the protagonist
+ok 45 - 16 · mobile 390×844: viewer first, no horizontal scroll in any section
+ok 46 - 17 · accessibility: tabs and Gantt by keyboard, named controls, live regions
+ok 47 - 18 · economic regression: plan total = sum of the task allocations, always «sin IVA»
+ok 48 - 19 · fidelity regression: what is drawn is the project; illustrations never count as project evidence
+ok 49 - 20 · no console errors, no external requests during the whole Gate D run
+# tests 49
+# pass 49
+# fail 0
+# skipped 0
+# duration_ms 431593.091117

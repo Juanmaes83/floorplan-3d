@@ -1,0 +1,2366 @@
+{
+ "codigoSha": "fix-ronda-1",
+ "navegador": "Chromium 153.0.8010.12",
+ "fecha": "2026-11-06T16:36:13.279Z",
+ "resumenEscenarios": {
+  "PASS": 16,
+  "FAIL": 2,
+  "PARTIAL": 2
+ },
+ "resumenComprobaciones": {
+  "PASS": 183,
+  "FAIL": 2,
+  "PARTIAL": 3,
+  "NOT_RUN": 1
+ },
+ "escenarios": [
+  {
+   "id": "EX-01",
+   "titulo": "Línea base y biblioteca sintética",
+   "area": "Biblioteca",
+   "checks": [
+    {
+     "id": "EX-01.1",
+     "desc": "La biblioteca contiene las 4 entradas sintéticas",
+     "status": "PASS",
+     "expected": 4,
+     "observed": 4,
+     "evidence": null
+    },
+    {
+     "id": "EX-01.2",
+     "desc": "El sujeto activo es la vivienda principal por id (no por nombre)",
+     "status": "PASS",
+     "expected": "ent_qa-a / prj_qa-vivienda-obra",
+     "observed": "ent_qa-a / prj_qa-vivienda-obra",
+     "evidence": null
+    },
+    {
+     "id": "EX-01.3",
+     "desc": "Dos entradas con el mismo nombre visible y distinta identidad",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-01.4",
+     "desc": "Sin errores JavaScript al cargar y recorrer las áreas",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Inventario real vivienda principal: {\"wall:new\":70,\"window:new\":12,\"door:new\":6,\"sliding-door:new\":2,\"opening:new\":2,\"floor:undeclared\":13,\"roof:new\":1,\"object:furniture\":46}"
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:32:29.899Z",
+   "error": null,
+   "finished": "2026-11-06T16:32:31.963Z"
+  },
+  {
+   "id": "EX-02",
+   "titulo": "Recorrido completo escritorio (vídeo 1)",
+   "area": "E2E",
+   "checks": [
+    {
+     "id": "EX-02.A1",
+     "desc": "C1–C4 genera 12 partidas desde las cantidades",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "floor:mat_wood",
+      "floor:mat_antislip",
+      "floor:mat_tile600",
+      "floor:mat_tile800",
+      "floor:mat_walnut",
+      "floor:mat_marble",
+      "skirting",
+      "paint",
+      "partition-new",
+      "opening:door",
+      "opening:sliding-door",
+      "opening:window"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A2-floor:mat_marble",
+     "desc": "Partida sin precio: importe desconocido, nunca 0",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A2-opening:door",
+     "desc": "Partida sin precio: importe desconocido, nunca 0",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A3",
+     "desc": "Importe por línea = referencia independiente (céntimos)",
+     "status": "PASS",
+     "expected": "diferencia 0",
+     "observed": 0,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A4",
+     "desc": "Base imponible mostrada = neto conocido de la referencia",
+     "status": "PASS",
+     "expected": 21601.18,
+     "observed": "Base imponible | 21.601,18 € | IVA | 2160,12 € | Total parcial (faltan 2 partidas) | 23.761,30 €",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A5",
+     "desc": "El total se declara incompleto (hay partidas sin precio)",
+     "status": "PASS",
+     "expected": null,
+     "observed": "2 partidas sin precio: el total no está completo.\n10 precios sin revisar.",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A6",
+     "desc": "El IVA mostrado sigue la regla por línea del contrato",
+     "status": "PASS",
+     "expected": 2160.12,
+     "observed": 2160.12,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.A7",
+     "desc": "Un presupuesto parcial no se rotula como «Total» sin calificarlo",
+     "status": "PASS",
+     "expected": "«—» o «parcial» junto al total",
+     "observed": "Base imponible | 21.601,18 € | IVA | 2160,12 € | Total parcial (faltan 2 partidas) | 23.761,30 €",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T01",
+     "desc": "Tarea T01 «Cimentación» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T02",
+     "desc": "Tarea T02 «Estructura» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T03",
+     "desc": "Tarea T03 «Cerramientos exteriores» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T04",
+     "desc": "Tarea T04 «Tabiquería interior» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T05",
+     "desc": "Tarea T05 «Impermeabilización» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T06",
+     "desc": "Tarea T06 «Aislamiento» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T07",
+     "desc": "Tarea T07 «Carpintería exterior» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T08",
+     "desc": "Tarea T08 «Fontanería» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T09",
+     "desc": "Tarea T09 «Pavimentos» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.T-T10",
+     "desc": "Tarea T10 «Pintura y acabados» creada por la UI",
+     "status": "PASS",
+     "expected": "guardada",
+     "observed": "guardada",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.H01",
+     "desc": "Hito «Fin de obra» (un día) creado",
+     "status": "PASS",
+     "expected": null,
+     "observed": "guardado",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.P1",
+     "desc": "Plan guardado con 11 tareas (10 + hito)",
+     "status": "PASS",
+     "expected": null,
+     "observed": 11,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.P2",
+     "desc": "Fechas guardadas exactamente como se introdujeron (no se mueven)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.P3",
+     "desc": "Dependencias FS/SS/FF/SF con desfases ±, guardadas",
+     "status": "PASS",
+     "expected": null,
+     "observed": "[[\"Cimentación\",[]],[\"Estructura\",[\"tsk_85664b7d4d8ea0ff\"]],[\"Cerramientos exteriores\",[\"tsk_134893b9a917c93e\"]],[\"Tabiquería interior\",[{\"taskId\":\"tsk_d6109c603ed4cdd2\",\"type\":\"SS\",\"lagDays\":3}]],[\"Impermeabilización\",[\"tsk_d6109c603ed4cdd2\"]],[\"Aislamiento\",[{\"taskId\":\"tsk_8f388b8c5554cb9c\",\"type\":\"SS\",\"lagDays\":2}]],[\"Carpintería exterior\",[{\"taskId\":\"tsk_9dd3df84f00e00d5\",\"type\":\"FF\",\"lagDays\":2}]],[\"Fontanería\",[{\"taskId\":\"tsk_3d433c8530dd0716\",\"type\":\"SS\",\"lagDays\":3}]],[\"Pavimentos\",[{\"taskId\":\"tsk_13af2d00a4d573a1\",\"type\":\"FS\",\"lagDays\":-2}]],[\"Pintura y acabados\",[{\"taskId\":\"tsk_b285be96282afff8\",\"type\":\"FF\",\"lagDays\":5},{\"taskId\":\"tsk_5890675e8d0413a8\",\"type\":\"SF\",\"lagDays\":0}]],[\"Fin de obra\",[\"tsk_80a94a6e00a79f38\"]]]",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.P4",
+     "desc": "La puerta queda «Sin tarea» (partida sin tarea)",
+     "status": "PASS",
+     "expected": null,
+     "observed": "PARTIDA\tIMPORTE SIN IVA\tTAREAS\tELEMENTOS\tESTADO\nPavimento Parqué de roble\nPavimentos y rodapiés · 32,563 m²\n\t1299,26 €\t\n09 Pavimentos · 100 % · 1299,26 €\n\t\nSuelo · Dormitorio principal\nSuelo · Baño en suite\nSuelo · Dormitorio infantil\n\t\nRepartida 100 %\nPrecio sin revisar\n\nPavimento Baldosa antideslizante 300\nPavimentos y rodapiés · 9,019 m²\n\t293,56 €\t\n09 Pavimentos · 100 % · 293,56 €\n\t\nSuelo · Dor",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.E1",
+     "desc": "Reproducir y pausar avanzan la fecha",
+     "status": "PASS",
+     "expected": null,
+     "observed": "2027-03-20",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.E2",
+     "desc": "Clic en la fila del Gantt selecciona la tarea",
+     "status": "PASS",
+     "expected": null,
+     "observed": "tsk_3d433c8530dd0716",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R0",
+     "desc": "La tarjeta ofrece la partida vinculada de T04",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R1",
+     "desc": "Presupuestar se abre sobre la evolución en la partida",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R2",
+     "desc": "Al volver: misma fecha",
+     "status": "PASS",
+     "expected": "2027-04-09",
+     "observed": "2027-04-09",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R3",
+     "desc": "Al volver: misma tarea seleccionada",
+     "status": "PASS",
+     "expected": "tsk_3d433c8530dd0716",
+     "observed": "tsk_3d433c8530dd0716",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R4",
+     "desc": "Al volver: el coste de T04 refleja el nuevo precio (50 % de la partida)",
+     "status": "PASS",
+     "expected": 4486.28,
+     "observed": 4486.28,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R5",
+     "desc": "La identidad (revisión del proyecto) no cambia por un cambio de precio",
+     "status": "PASS",
+     "expected": null,
+     "observed": true,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R6",
+     "desc": "La revisión declarada del plan se marca desactualizada tras cambiar el presupuesto",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "element-unscheduled",
+      "budget-revision-obsolete"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-02.R7",
+     "desc": "Tras recargar: el coste persistido es el nuevo",
+     "status": "PASS",
+     "expected": 4486.28,
+     "observed": 4486.28,
+     "evidence": null
+    },
+    {
+     "id": "EX-02.D1",
+     "desc": "Entrega HTML local generada para el mismo proyecto",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "type": "project",
+      "id": "prj_qa-vivienda-obra",
+      "name": "Vivienda QA obra nueva",
+      "updatedAt": "2026-09-30T00:00:00Z",
+      "fingerprint": "bc36c5876891162cdad9b178d78b5bc3171877506b5759c9a55730e021ff50d1"
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-02.D2",
+     "desc": "Entregar muestra la última entrega como «corresponde al estado actual»",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Última entrega: 6 nov 2026, 16:33 · corresponde al estado actual",
+     "evidence": null
+    },
+    {
+     "id": "EX-02.Z",
+     "desc": "Sin errores JavaScript en el recorrido",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Revisión A: neto conocido 21601.18 €, IVA por línea 2160.12 €, IVA sobre total 2160.12 € (diferencia de redondeo 0 €)",
+    "Tras recargar, la evolución abre en 2027-02-28 con selección null: la fecha/tarea de la sesión anterior no se conservan entre recargas (se registran, no se exigen)."
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:32:31.964Z",
+   "error": null,
+   "finished": "2026-11-06T16:33:03.746Z"
+  },
+  {
+   "id": "EX-03",
+   "titulo": "Validaciones del Plan de obra",
+   "area": "Plan",
+   "checks": [
+    {
+     "id": "EX-03.1",
+     "desc": "Una dependencia cíclica se rechaza con explicación",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Las dependencias forman un ciclo: una tarea no puede depender, directa o indirectamente, de sí misma.",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.2",
+     "desc": "Fecha que incumple FS se rechaza; RUBIK no mueve fechas",
+     "status": "PASS",
+     "expected": null,
+     "observed": "«Estructura» no cumple su dependencia con «Cimentación» (Fin → inicio): le faltan 2 días. Ajusta las fechas; RUBIK no las mueve por ti.",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.3",
+     "desc": "Las fechas guardadas no han cambiado",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-03.4",
+     "desc": "La partida ya repartida al 100 % aparece deshabilitada en el selector",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-03.5",
+     "desc": "El motor rechaza un reparto > 100 % (no se corrompe nada)",
+     "status": "PASS",
+     "expected": null,
+     "observed": "FloorPlanConstructionSchedule: budgetItemIds paint assigned to both tsk_b285be96282afff8 and tsk_80a94a6e00a79f38 beyond 100 %",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.6",
+     "desc": "Duplicar crea una tarea (sin elementos ni partidas)",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      11,
+      12
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-03.6b",
+     "desc": "La copia recién creada queda señalada en la tabla",
+     "status": "PASS",
+     "expected": null,
+     "observed": "señalada",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.7",
+     "desc": "La copia se elimina sin afectar al resto",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-03.8",
+     "desc": "No se elimina una tarea de la que dependen otras",
+     "status": "PASS",
+     "expected": null,
+     "observed": "«Estructura» depende de esta tarea: quita antes esa dependencia.",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.14",
+     "desc": "Editar el título de una tarea con elementos y partidas existentes se guarda",
+     "status": "PASS",
+     "expected": "tarea actualizada",
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-03.9",
+     "desc": "Cerrar con cambios sin guardar pregunta (guardar/descartar/seguir)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-03.10",
+     "desc": "Duplicar plan guarda una copia en borrador sin cambiar el plan en uso",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      2,
+      true
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-03.11",
+     "desc": "Existe en la UI una acción para eliminar un plan guardado",
+     "status": "PASS",
+     "expected": "botón «Eliminar plan»",
+     "observed": "no existe en la UI (solo en el núcleo removeSchedule)",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.12",
+     "desc": "Recargar con cambios sin guardar en el plan avisa antes de perderlos",
+     "status": "PASS",
+     "expected": "aviso beforeunload",
+     "observed": "aviso",
+     "evidence": null
+    },
+    {
+     "id": "EX-03.13",
+     "desc": "Tras recargar, el plan guardado sigue intacto (11 tareas)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:33:03.747Z",
+   "error": null,
+   "finished": "2026-11-06T16:33:08.949Z"
+  },
+  {
+   "id": "EX-04",
+   "titulo": "Economía: revisiones B y C (vídeo 2)",
+   "area": "Economía",
+   "checks": [
+    {
+     "id": "EX-04.B0",
+     "desc": "BCCA gestionada sigue bloqueada",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B1",
+     "desc": "La vista previa no cambia el presupuesto",
+     "status": "PASS",
+     "expected": null,
+     "observed": 7.4,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B2",
+     "desc": "Unidad incompatible: se bloquea y el presupuesto no cambia",
+     "status": "PASS",
+     "expected": null,
+     "observed": "No se puede aplicar\n\nLa unidad de la referencia no coincide con la de la partida. RUBIK no convierte unidades: elige otra referencia o corrige la medición.\n\nTu presupuesto no ha cambiado.",
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B3",
+     "desc": "Pintura con precio de referencia 7,90 € y procedencia PINT-LISA",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "p": 7.9,
+      "src": "provider-reference",
+      "code": "PINT-LISA"
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B4",
+     "desc": "El nogal queda sin precio (desconocido, no 0)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B5",
+     "desc": "Neto conocido = referencia independiente",
+     "status": "PASS",
+     "expected": 22287.44,
+     "observed": 22287.44,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B6",
+     "desc": "El historial registra el cambio por tarifa (antes/después y revisiones)",
+     "status": "PASS",
+     "expected": null,
+     "observed": 16,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B7",
+     "desc": "Los cambios manuales de precio también quedan en un historial de revisiones",
+     "status": "PASS",
+     "expected": "entrada para opening:window",
+     "observed": [
+      "floor:mat_wood",
+      "floor:mat_tile800",
+      "floor:mat_tile600",
+      "floor:mat_antislip",
+      "floor:mat_walnut",
+      "skirting",
+      "paint",
+      "partition-new",
+      "opening:window",
+      "opening:sliding-door",
+      "partition-new",
+      "floor:mat_tile800",
+      "partition-new",
+      "opening:window",
+      "floor:mat_walnut",
+      "paint"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B8",
+     "desc": "Evolución: importe conocido por tarea = referencia (reparto en céntimos) y partidas sin precio señaladas",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B9",
+     "desc": "Sin doble contabilización: suma por tareas = suma de lo asignado",
+     "status": "PASS",
+     "expected": 22287.44,
+     "observed": 22287.44,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.B10",
+     "desc": "La entrega de la revisión A queda desactualizada por el presupuesto",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Última entrega: 6 nov 2026, 16:33 · desactualizada: ha cambiado el presupuesto. La entrega descargada no cambia; genera una nueva versión.",
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C1",
+     "desc": "Reparto 60/40 aceptado (bajar primero, subir después)",
+     "status": "PASS",
+     "expected": null,
+     "observed": "",
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C2",
+     "desc": "Tras reabrir: reparto 60/40 guardado",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      60,
+      40
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C3",
+     "desc": "Tras reabrir: duraciones cambiadas",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C4",
+     "desc": "Tras reabrir: elemento de T07 cambiado",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "project/opn_window-1",
+      "project/opn_window-2",
+      "project/opn_window-5"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C5",
+     "desc": "Historial del plan conserva cada guardado",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "create",
+      "save",
+      "duplicate",
+      "save"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C6",
+     "desc": "La revisión declarada queda desactualizada tras B y C",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      {
+       "aspect": "plan",
+       "result": "match",
+       "code": "schedule-current"
+      },
+      {
+       "aspect": "review",
+       "result": "obsolete",
+       "code": "binding-schedule-revision-obsolete"
+      },
+      {
+       "aspect": "budget-revision",
+       "result": "unverifiable",
+       "code": "budget-revision-not-in-contract"
+      },
+      {
+       "aspect": "delivery",
+       "result": "obsolete",
+       "code": "delivery-obsolete",
+       "changed": [
+        "schedule",
+        "budget"
+       ],
+       "deliveryId": "dlv_173208d0a841e94e"
+      }
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C7",
+     "desc": "Historial de entregas: la de A se conserva y se añade la de C",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      {
+       "id": "dlv_173208d0a841e94e",
+       "at": "2026-11-06T16:33:02.851Z"
+      },
+      {
+       "id": "dlv_c520f24849ae62e1",
+       "at": "2026-11-06T16:33:18.575Z"
+      }
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-04.C8",
+     "desc": "La nueva entrega corresponde al estado actual",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-04.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Los cambios de precio hechos A MANO en el diálogo de presupuesto no se anotan en el historial M2 (solo los de «Precios de referencia»); ver hallazgo si procede."
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:33:08.950Z",
+   "error": null,
+   "finished": "2026-11-06T16:33:20.036Z"
+  },
+  {
+   "id": "EX-05",
+   "titulo": "Selección de elementos 3D (5.2)",
+   "area": "Evolución",
+   "checks": [
+    {
+     "id": "EX-05.R",
+     "desc": "Dentro de RUBIK hay un control visible para ocultar la cubierta y ver el interior",
+     "status": "FAIL",
+     "expected": null,
+     "observed": "control oculto en la vista integrada",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.1a",
+     "desc": "Clic real sobre «T04 tabique (partida tabiquería)»: el panel muestra ESE elemento",
+     "status": "PASS",
+     "expected": "project/wal_ref-w32",
+     "observed": "project/wal_ref-w32",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.1b",
+     "desc": "Panel: botón de la partida vinculada",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-05.1c",
+     "desc": "La partida se abre en Presupuestar",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-05.1d",
+     "desc": "Al volver de Presupuestar sin cambios, el panel del elemento sigue abierto",
+     "status": "PASS",
+     "expected": null,
+     "observed": "project/wal_ref-w32",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.1e",
+     "desc": "«Ver en el plan de obra» abre la pestaña Elementos en ese elemento",
+     "status": "PASS",
+     "expected": null,
+     "observed": "project/wal_ref-w32",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.1f",
+     "desc": "«Ver trabajo» selecciona la tarea en el Gantt",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-05.2a",
+     "desc": "Clic real sobre «T09 suelo (partidas pavimento)»: el panel muestra ESE elemento",
+     "status": "PASS",
+     "expected": "project/rom_master",
+     "observed": "project/rom_master",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.3",
+     "desc": "Selección real de «T02 muro de carga (tarea sin partida)»",
+     "status": "PARTIAL",
+     "expected": null,
+     "observed": null,
+     "why": "Ningún elemento de ese grupo es visible bajo el ratón en la vista ISO final"
+    },
+    {
+     "id": "EX-05.4a",
+     "desc": "Clic real sobre «muro sin tarea»: el panel muestra ESE elemento",
+     "status": "PASS",
+     "expected": "project/wal_ref-w27",
+     "observed": "project/wal_ref-w27",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.4b",
+     "desc": "Elemento sin tarea: el panel lo dice con naturalidad",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Muro · elemento nuevo\n\nEste elemento no tiene trabajos vinculados en la planificación.\n\nVer en el plan de obraCerrar",
+     "evidence": null
+    },
+    {
+     "id": "EX-05.K",
+     "desc": "La selección de elementos 3D tiene alternativa por teclado",
+     "status": "PASS",
+     "expected": "algún medio de teclado abre el panel de un elemento",
+     "observed": {
+      "panelAbiertoAntes": false,
+      "panelTrasTeclado": true
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-05.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Rejilla 39×27 en 3 vistas (ISO antes de la cubierta, PLANTA y ISO al final): 65 elementos distintos alcanzables con el ratón"
+   ],
+   "status": "FAIL",
+   "started": "2026-11-06T16:33:20.038Z",
+   "error": null,
+   "finished": "2026-11-06T16:34:02.367Z"
+  },
+  {
+   "id": "EX-06",
+   "titulo": "Aislamiento entre proyectos",
+   "area": "Identidad",
+   "checks": [
+    {
+     "id": "EX-06.1",
+     "desc": "B: otro sujeto, sin plan, sin entregas, sin historial de A",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "id": "prj_qa-vivienda-obra-2",
+      "record": false
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-06.2",
+     "desc": "B: ningún precio de A",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    },
+    {
+     "id": "EX-06.3",
+     "desc": "Vuelta a A: mismo plan, mismas tareas, mismas entregas",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-06.4",
+     "desc": "Vuelta a A: precio de pintura de A (no el 99 de B)",
+     "status": "PASS",
+     "expected": null,
+     "observed": 7.9,
+     "evidence": null
+    },
+    {
+     "id": "EX-06.5",
+     "desc": "Tras recargar: A y B conservan sus planes separados",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-06.6",
+     "desc": "Claves de registro distintas aunque los ids se parezcan (prefijo común)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:34:02.387Z",
+   "error": null,
+   "finished": "2026-11-06T16:34:06.212Z"
+  },
+  {
+   "id": "EX-07",
+   "titulo": "Evolución 4D completa",
+   "area": "Evolución",
+   "checks": [
+    {
+     "id": "EX-07.1",
+     "desc": "Cada día: tareas activas (escena/tarjeta) = motor y cursor del Gantt = fecha",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "bad": [],
+      "nbad": 0,
+      "days": 76,
+      "maxActive": 5,
+      "msPerDay": 1.8921052631554438
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-07.2",
+     "desc": "Hay días con varias tareas simultáneas",
+     "status": "PASS",
+     "expected": null,
+     "observed": 5,
+     "evidence": null
+    },
+    {
+     "id": "EX-07.3",
+     "desc": "Retroceder a una fecha restituye exactamente su estado",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-07.4",
+     "desc": "Cimentación (sin geometría) aparece en la tarjeta",
+     "status": "PASS",
+     "expected": null,
+     "observed": "01 Cimentación\n50 % del plazo\nlun 1 mar 2027 → mie 10 mar 2027 · 10 días · sin representación 3D\nSin partidas asignadas · asignado sin IVA desconocido",
+     "evidence": null
+    },
+    {
+     "id": "EX-07.5",
+     "desc": "El andamio es una ilustración y no un elemento del proyecto",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "ill": 1,
+      "elems": 12,
+      "inInv": false
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-07.6",
+     "desc": "La tarjeta lo rotula como ilustración",
+     "status": "PASS",
+     "expected": null,
+     "observed": "02 Estructura\n57 % del plazo\njue 11 mar 2027 → mie 24 mar 2027 · 14 días · 3 elementos del modelo · andamio (ilustración)\nSin partidas asignadas · asignado sin IVA desconocido",
+     "evidence": null
+    },
+    {
+     "id": "EX-07.7",
+     "desc": "Cada suelo vinculado a «Pavimentos» tiene su partida de material en la misma tarea",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "floors": [
+       {
+        "key": "project/rom_master",
+        "mat": "mat_wood"
+       },
+       {
+        "key": "project/rom_mbath",
+        "mat": "mat_antislip"
+       },
+       {
+        "key": "project/rom_kid",
+        "mat": "mat_wood"
+       }
+      ],
+      "items": [
+       "floor:mat_wood",
+       "floor:mat_tile800",
+       "floor:mat_tile600",
+       "floor:mat_antislip",
+       "floor:mat_walnut",
+       "floor:mat_marble",
+       "skirting"
+      ]
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-07.8",
+     "desc": "Composición Gate D: visor, 5 cámaras, transporte, tarjeta y Gantt",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-07.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:34:06.213Z",
+   "error": null,
+   "finished": "2026-11-06T16:34:12.027Z"
+  },
+  {
+   "id": "EX-08",
+   "titulo": "Edificio dos plantas · DEC-06/DEC-07",
+   "area": "Edificio",
+   "checks": [
+    {
+     "id": "EX-08.1",
+     "desc": "Sujeto edificio con 2 plantas y planta activa",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "entryId": "ent_qa-c",
+      "type": "building",
+      "id": "bld_fixture-house",
+      "name": "Edificio QA dos plantas",
+      "activeLevelId": "lvl_fixture-ground",
+      "levels": [
+       {
+        "id": "lvl_fixture-ground",
+        "name": "Planta baja",
+        "order": 0,
+        "projectId": "prj_fixture-ground"
+       },
+       {
+        "id": "lvl_fixture-upper",
+        "name": "Planta primera",
+        "order": 1,
+        "projectId": "prj_fixture-upper"
+       }
+      ]
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-08.2",
+     "desc": "La barra de plantas permite cambiar de planta",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-08.3",
+     "desc": "Planta activa cambiada, mismo sujeto edificio",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "lvl_fixture-ground",
+      "lvl_fixture-upper"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-08.4",
+     "desc": "Cada planta tiene su propio presupuesto (sujetos distintos)",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "prj_fixture-ground",
+      "prj_fixture-upper"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-08.5",
+     "desc": "El editor explica que un plan de edificio no reparte partidas (DEC-06)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-08.6",
+     "desc": "El plan de edificio ofrece elementos de ambas plantas",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "lvl_fixture-ground",
+      "lvl_fixture-upper",
+      "illustrative"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-08.7",
+     "desc": "Partidas: presupuestos por planta listados, sin «Total del edificio»",
+     "status": "PASS",
+     "expected": null,
+     "observed": "PLANTA\tPARTIDAS\tBASE IMPONIBLE CONOCIDA\tESTADO\nPlanta baja\t5\t3343,76 €\tParcial: hay partidas sin precio\nPlanta primera\t5\t761,04 €\tParcial: hay partidas sin precio",
+     "evidence": null
+    },
+    {
+     "id": "EX-08.8",
+     "desc": "DEC-07: presupuesto ↔ revisión del proyecto «no comprobable», nunca coincidencia",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Plan: guardado para la revisión actual del proyecto\nRevisión: sin declarar\nPresupuesto ↔ revisión del proyecto: no comprobable (el presupuesto no guarda la revisión del proyecto)\nEntregas: ninguna todavía",
+     "evidence": null
+    },
+    {
+     "id": "EX-08.9",
+     "desc": "Evolución del edificio: sin reparto de importes (no inventa total)",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "status": "unavailable",
+      "reason": "building-budget-not-supported"
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-08.10",
+     "desc": "Evolución del edificio no muestra un importe global",
+     "status": "PASS",
+     "expected": null,
+     "observed": "",
+     "evidence": null
+    },
+    {
+     "id": "EX-08.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Partidas con el mismo id en ambas plantas (comunes conceptuales): floor:mat_wood, skirting, paint, partition-new",
+    "Entregar (edificio): Presupuesto: 5 partidas · total no definitivo · 3 aviso(s)"
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:34:12.029Z",
+   "error": null,
+   "finished": "2026-11-06T16:34:17.835Z"
+  },
+  {
+   "id": "EX-09",
+   "titulo": "Catastro, emplazamiento y resiliencia",
+   "area": "Territorio",
+   "checks": [
+    {
+     "id": "EX-09.1",
+     "desc": "GML sigue siendo la fuente por defecto",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-09.2",
+     "desc": "Parcela GML guardada con su referencia y CRS; la vivienda no se mueve sola",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-09.3",
+     "desc": "GML con CRS no admitido: rechazo con mensaje claro",
+     "status": "PASS",
+     "expected": null,
+     "observed": "CRS de fuente no soportado.",
+     "evidence": null
+    },
+    {
+     "id": "EX-09.4",
+     "desc": "Tras el rechazo, la parcela y la colocación guardadas no cambian",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-09.5",
+     "desc": "Servicio caído: mensaje en castellano, sin códigos",
+     "status": "PASS",
+     "expected": null,
+     "observed": "No se ha podido consultar el Catastro ahora. Tu parcela guardada no cambia; inténtalo más tarde o abre el GML descargado de la Sede Electrónica del Catastro.",
+     "evidence": null
+    },
+    {
+     "id": "EX-09.6",
+     "desc": "Servicio caído: la parcela guardada se conserva",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-09.7",
+     "desc": "Cambio de proyecto: la vivienda A no hereda la parcela",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-09.8",
+     "desc": "Vuelta al proyecto P: la parcela sigue igual",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-09.9",
+     "desc": "La entrega HTML no contiene la geometría restringida de la parcela",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    },
+    {
+     "id": "EX-09.10",
+     "desc": "PNOA/MDT05 integrales",
+     "status": "NOT_RUN",
+     "why": "No ejecutado: sin carga de capas en este examen"
+    },
+    {
+     "id": "EX-09.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "PNOA y MDT05: NOT_RUN en este examen (no se cargan capas ráster; requieren red/licencia y su integración no está en el alcance M2)."
+   ],
+   "status": "PARTIAL",
+   "started": "2026-11-06T16:34:17.837Z",
+   "error": null,
+   "finished": "2026-11-06T16:34:23.215Z"
+  },
+  {
+   "id": "EX-10",
+   "titulo": "Entrega local y revisión histórica",
+   "area": "Entregar",
+   "checks": [
+    {
+     "id": "EX-10.1",
+     "desc": "La entrega usa la firma de Mi estudio del proyecto",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-10.2",
+     "desc": "Publicación remota bloqueada",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-10.3",
+     "desc": "MP4 generado (H.264 indexado)",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "bytes": 2853916,
+      "type": "video/mp4",
+      "name": "rubik-sota-evolucion-vivienda-qa-obra-nueva-bc36c587.mp4"
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-10.4",
+     "desc": "El MP4 descargado es un MP4 indexado válido",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "valid": true,
+      "codec": "avc1",
+      "w": 1280,
+      "h": 720,
+      "samples": 463
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-10.5",
+     "desc": "El HTML abierto muestra proyecto, marca y tareas",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Estudio Ficticio QA\nDatos de prueba\nEvolución de obra planificada\nVivienda QA obra nueva\n\nProyecto Vivienda QA obra nueva · revisión bc36c5876891 · plan sch_963b10f49848fc34 (plan-estimated) · lun 1 mar 2027 → jue 13 may 2027\n\nFases del plan\nWBS\tFase\tInicio\tFin\n01\tCimentación\tlun 1 mar 2027\tmie 10 m",
+     "evidence": null
+    },
+    {
+     "id": "EX-10.6",
+     "desc": "El HTML no contiene controles editables ni la biblioteca",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-10.7",
+     "desc": "El HTML dice que es obra prevista (simulación), no ejecutada",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Simulación planificada e ilustrativa de la evolución de obra: no muestra obra ejecutada ni certificada",
+     "evidence": null
+    },
+    {
+     "id": "EX-10.8",
+     "desc": "Entrega anterior desactualizada: presupuesto, plan y firma nombrados",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Última entrega: 6 nov 2026, 16:35 · desactualizada: ha cambiado el plan de obra, el presupuesto, la firma de Mi estudio. La entrega descargada no cambia; genera una nueva versión.",
+     "evidence": null
+    },
+    {
+     "id": "EX-10.9",
+     "desc": "El archivo HTML descargado antes no cambia",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-10.10",
+     "desc": "La nueva entrega lleva la marca renombrada",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-10.11",
+     "desc": "Histórico: se añade una entrega y las anteriores se conservan",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      3,
+      4
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-10.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "La marca se crea con FloorPlanBrand (núcleo de Mi estudio, misma clave de almacenamiento que su UI); el formulario de Mi estudio no se ha recorrido en este escenario."
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:34:23.217Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:25.390Z"
+  },
+  {
+   "id": "EX-11-1280",
+   "titulo": "Escritorio 1280×720",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-1280.stage",
+     "desc": "stage dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 0,
+      "b": 359,
+      "h": 359
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1280.transport",
+     "desc": "transport dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 359,
+      "b": 407,
+      "h": 48
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1280.card",
+     "desc": "card dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 430,
+      "b": 445,
+      "h": 15
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1280.gantt",
+     "desc": "gantt dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 407,
+      "b": 633,
+      "h": 226
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1280.scroll",
+     "desc": "Sin scroll de página en Evolución",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:25.391Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:27.970Z"
+  },
+  {
+   "id": "EX-11-1366",
+   "titulo": "Escritorio 1366×768",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-1366.stage",
+     "desc": "stage dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 0,
+      "b": 407,
+      "h": 407
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1366.transport",
+     "desc": "transport dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 407,
+      "b": 455,
+      "h": 48
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1366.card",
+     "desc": "card dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 478,
+      "b": 493,
+      "h": 15
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1366.gantt",
+     "desc": "gantt dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 455,
+      "b": 681,
+      "h": 226
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1366.scroll",
+     "desc": "Sin scroll de página en Evolución",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:27.970Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:30.773Z"
+  },
+  {
+   "id": "EX-11-1440",
+   "titulo": "Escritorio 1440×900",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-1440.stage",
+     "desc": "stage dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 0,
+      "b": 514,
+      "h": 514
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1440.transport",
+     "desc": "transport dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 514,
+      "b": 562,
+      "h": 48
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1440.card",
+     "desc": "card dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 585,
+      "b": 600,
+      "h": 15
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1440.gantt",
+     "desc": "gantt dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 562,
+      "b": 813,
+      "h": 251
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1440.scroll",
+     "desc": "Sin scroll de página en Evolución",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:30.773Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:33.567Z"
+  },
+  {
+   "id": "EX-11-1920",
+   "titulo": "Escritorio 1920×1080",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-1920.stage",
+     "desc": "stage dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 0,
+      "b": 633,
+      "h": 633
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1920.transport",
+     "desc": "transport dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 633,
+      "b": 691,
+      "h": 58
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1920.card",
+     "desc": "card dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 720,
+      "b": 735,
+      "h": 15
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1920.gantt",
+     "desc": "gantt dentro de la ventana",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "t": 691,
+      "b": 1007,
+      "h": 316
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-1920.scroll",
+     "desc": "Sin scroll de página en Evolución",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:33.567Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:36.962Z"
+  },
+  {
+   "id": "EX-11-zoom125",
+   "titulo": "Zoom 125 % sobre 1366×768",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-z1.25.1",
+     "desc": "Visor, tarjeta y Gantt visibles",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "vh": 566,
+      "vw": 1093,
+      "hs": false,
+      "stage": {
+       "t": 0,
+       "b": 253,
+       "h": 253
+      },
+      "gantt": {
+       "t": 301,
+       "b": 527,
+       "h": 226
+      },
+      "card": {
+       "t": 325,
+       "b": 340,
+       "h": 15
+      },
+      "pageH": 566
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-z1.25.4",
+     "desc": "Barra de RUBIK sin desbordar: nombre en una línea y ningún botón cortado",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "overflow": false,
+      "h2Lines": 1,
+      "h2H": 24,
+      "cut": []
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-z1.25.2",
+     "desc": "Sin scroll horizontal",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-z1.25.3",
+     "desc": "Plan de obra sin desbordamiento horizontal",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:36.963Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:40.358Z"
+  },
+  {
+   "id": "EX-11-zoom150",
+   "titulo": "Zoom 150 % sobre 1366×768",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-z1.5.1",
+     "desc": "Disposición apilada (Gate D): visor, tarjeta y Gantt renderizados y alcanzables con desplazamiento vertical",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "vh": 464,
+      "vw": 911,
+      "hs": false,
+      "stage": {
+       "t": 0,
+       "b": 320,
+       "h": 320
+      },
+      "gantt": {
+       "t": 388,
+       "b": 676,
+       "h": 288
+      },
+      "card": {
+       "t": 411,
+       "b": 426,
+       "h": 15
+      },
+      "pageH": 811
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-z1.5.4",
+     "desc": "Barra de RUBIK sin desbordar: nombre en una línea y ningún botón cortado",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "overflow": false,
+      "h2Lines": 1,
+      "h2H": 24,
+      "cut": []
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-z1.5.2",
+     "desc": "Sin scroll horizontal",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-z1.5.3",
+     "desc": "Plan de obra sin desbordamiento horizontal",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:40.358Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:44.130Z"
+  },
+  {
+   "id": "EX-11-movil",
+   "titulo": "Móvil 390×844 y 844×390 (vídeo 3)",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-m.1",
+     "desc": "M2-UX-MOB-01: el mensaje del pie no queda comprimido (≥ 200 px de ancho o ≤ 3 líneas)",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "foot": {
+       "statusW": 0,
+       "statusH": 0,
+       "overlap": false,
+       "footH": 117,
+       "buttons": [
+        [
+         109,
+         44
+        ],
+        [
+         184,
+         44
+        ],
+        [
+         114,
+         44
+        ],
+        [
+         165,
+         44
+        ]
+       ]
+      },
+      "foot2": {
+       "text": "Plan guardado para la revisión bc36c587 del proyecto.",
+       "w": 243,
+       "h": 42,
+       "lines": 2
+      }
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-m.2",
+     "desc": "Botones del pie con altura táctil ≥ 44 px",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      [
+       109,
+       44
+      ],
+      [
+       184,
+       44
+      ],
+      [
+       114,
+       44
+      ],
+      [
+       165,
+       44
+      ]
+     ],
+     "evidence": null
+    },
+    {
+     "id": "EX-11-m.3",
+     "desc": "M2-UX-MOB-02: «Entregar» alcanzable (desplazamiento horizontal o visible) con foco de teclado",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "sw": 370,
+      "cw": 370,
+      "ox": "auto",
+      "entVisible": true,
+      "stepH": 44,
+      "afterFocus": true
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-11-m.4",
+     "desc": "Pasos de la barra con altura táctil ≥ 44 px",
+     "status": "PASS",
+     "expected": null,
+     "observed": 44,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-m.5",
+     "desc": "Tocar «Entregar» cambia la evolución a la entrega",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-m.6",
+     "desc": "Evolución móvil sin scroll horizontal",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-m.7",
+     "desc": "Apaisado: sin scroll horizontal",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Navegación de Evolución en móvil: {\"sw\":370,\"cw\":370,\"ox\":\"auto\",\"entVisible\":true,\"stepH\":44}"
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:35:44.131Z",
+   "error": null,
+   "finished": "2026-11-06T16:35:57.039Z"
+  },
+  {
+   "id": "EX-11-teclado",
+   "titulo": "Teclado, foco y movimiento reducido",
+   "area": "UX",
+   "checks": [
+    {
+     "id": "EX-11-k.1",
+     "desc": "El diálogo se abre con teclado",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-k.2",
+     "desc": "Pestañas con flechas",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-k.3",
+     "desc": "Al cerrar con Escape el foco vuelve al botón que abrió el diálogo",
+     "status": "PASS",
+     "expected": null,
+     "observed": "construction-plan",
+     "evidence": null
+    },
+    {
+     "id": "EX-11-k.4",
+     "desc": "Escape cierra la Evolución y vuelve a RUBIK",
+     "status": "FAIL",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-k.5",
+     "desc": "Preferencia de movimiento reducido detectada por la página",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-11-k.6",
+     "desc": "Movimiento reducido aplicado en la animación 3D",
+     "status": "PARTIAL",
+     "expected": null,
+     "observed": null,
+     "why": "Solo se verifica la detección; la cámara automática de Gate D no se ha medido frame a frame"
+    }
+   ],
+   "notes": [],
+   "status": "FAIL",
+   "started": "2026-11-06T16:35:57.040Z",
+   "error": null,
+   "finished": "2026-11-06T16:36:00.021Z"
+  },
+  {
+   "id": "EX-12",
+   "titulo": "Persistencia y recuperación",
+   "area": "Persistencia",
+   "checks": [
+    {
+     "id": "EX-12.1",
+     "desc": "Versión desconocida: se explica y no se usa",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Plan de obra\n\nLos datos de obra de este navegador tienen una versión que esta versión de RUBIK no sabe leer. No se ha cambiado nada.\n\nTareas, fechas, dependencias, elementos del proyecto y reparto de partidas del presupuesto. Nada cambia de fecha sin tu decisión.\n\nCrear plan de obra",
+     "evidence": null
+    },
+    {
+     "id": "EX-12.2",
+     "desc": "El editor muestra el error y no ofrece un plan vacío como si no existiera",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "err": "Los datos de obra de este navegador tienen una versión que esta versión de RUBIK no sabe leer. No se ha cambiado nada.",
+      "empty": 1
+     },
+     "evidence": null
+    },
+    {
+     "id": "EX-12.3",
+     "desc": "Los datos de versión desconocida no se sobrescriben",
+     "status": "PASS",
+     "expected": null,
+     "observed": "9.9.9",
+     "evidence": null
+    },
+    {
+     "id": "EX-12.4",
+     "desc": "Registro corrupto: mensaje y sin bloqueo",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Plan de obra\n\nLos datos de obra guardados en este navegador no son válidos. No se ha cambiado nada.\n\nTareas, fechas, dependencias, elementos del proyecto y reparto de partidas del presupuesto. Nada cambia de fecha sin tu decisión.\n\nCrear plan de obra",
+     "evidence": null
+    },
+    {
+     "id": "EX-12.5",
+     "desc": "Entregar con presupuesto sin precios no bloquea la página",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "EX-12.Z",
+     "desc": "Sin errores JavaScript no controlados",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:36:00.022Z",
+   "error": null,
+   "finished": "2026-11-06T16:36:02.833Z"
+  },
+  {
+   "id": "EX-13",
+   "titulo": "Rendimiento y carga (QA-22)",
+   "area": "Rendimiento",
+   "checks": [
+    {
+     "id": "EX-13.x1",
+     "desc": "Evolución abre con 152 elementos en < 30 s",
+     "status": "PASS",
+     "expected": null,
+     "observed": 673,
+     "evidence": null
+    },
+    {
+     "id": "EX-13.x4",
+     "desc": "Evolución abre con 421 elementos en < 30 s",
+     "status": "PASS",
+     "expected": null,
+     "observed": 737,
+     "evidence": null
+    },
+    {
+     "id": "EX-13.x8",
+     "desc": "Evolución abre con 841 elementos en < 30 s",
+     "status": "PASS",
+     "expected": null,
+     "observed": 903,
+     "evidence": null
+    },
+    {
+     "id": "EX-13.lim",
+     "desc": "QA-22 a gran escala",
+     "status": "PARTIAL",
+     "expected": null,
+     "observed": null,
+     "why": "Medido hasta ~1200 elementos en un equipo de 4 vCPU con SwiftShader (sin GPU); no representa hardware de cliente"
+    },
+    {
+     "id": "EX-13.Z",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PARTIAL",
+   "started": "2026-11-06T16:36:02.834Z",
+   "error": null,
+   "finished": "2026-11-06T16:36:13.278Z"
+  }
+ ],
+ "metricas": [
+  {
+   "scenario": "EX-01",
+   "name": "carga-app",
+   "value": 838,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-01",
+   "name": "elementos-vivienda",
+   "value": 152,
+   "unit": "elementos"
+  },
+  {
+   "scenario": "EX-02",
+   "name": "crear-10-tareas-ui",
+   "value": 6651,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-02",
+   "name": "guardar-plan",
+   "value": 74,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-07",
+   "name": "abrir-evolucion-150",
+   "value": 586,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-07",
+   "name": "scrub-por-dia",
+   "value": 1.9,
+   "unit": "ms/día",
+   "dias": 76
+  },
+  {
+   "scenario": "EX-10",
+   "name": "rubik-sota-evolucion-vivienda-qa-obra-nueva-bc36c587.mp4",
+   "value": 36763,
+   "unit": "ms",
+   "bytes": 2853916,
+   "type": "video/mp4"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "abrir-proyecto-x1",
+   "value": 223,
+   "unit": "ms",
+   "elementos": 152
+  },
+  {
+   "scenario": "EX-13",
+   "name": "abrir-evolucion-x1",
+   "value": 673,
+   "unit": "ms",
+   "elementos": 152
+  },
+  {
+   "scenario": "EX-13",
+   "name": "scrub-dia-x1",
+   "value": 1.3,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "heap-evolucion-x1",
+   "value": 26,
+   "unit": "MiB"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "guardar-plan-x4",
+   "value": 296,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "abrir-proyecto-x4",
+   "value": 198,
+   "unit": "ms",
+   "elementos": 421
+  },
+  {
+   "scenario": "EX-13",
+   "name": "abrir-evolucion-x4",
+   "value": 737,
+   "unit": "ms",
+   "elementos": 421
+  },
+  {
+   "scenario": "EX-13",
+   "name": "scrub-dia-x4",
+   "value": 4,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "heap-evolucion-x4",
+   "value": 59,
+   "unit": "MiB"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "guardar-plan-x8",
+   "value": 429,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "abrir-proyecto-x8",
+   "value": 319,
+   "unit": "ms",
+   "elementos": 841
+  },
+  {
+   "scenario": "EX-13",
+   "name": "abrir-evolucion-x8",
+   "value": 903,
+   "unit": "ms",
+   "elementos": 841
+  },
+  {
+   "scenario": "EX-13",
+   "name": "scrub-dia-x8",
+   "value": 3.2,
+   "unit": "ms"
+  },
+  {
+   "scenario": "EX-13",
+   "name": "heap-evolucion-x8",
+   "value": 99,
+   "unit": "MiB"
+  }
+ ]
+}

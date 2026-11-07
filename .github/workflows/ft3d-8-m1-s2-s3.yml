@@ -1,0 +1,54 @@
+name: FT3D-8 M1 · S2 prices (BCCA/BC3) + S3 Catastro direct
+on:
+  push:
+    branches: [feat/ft3d-8-s2-s3-m1-2026-11-05]
+  pull_request:
+    branches: [master]
+    paths:
+      - 'js/cost-catalog-core.js'
+      - 'js/catastro-wfs-provider.js'
+      - 'js/parcel-association-core.js'
+      - 'labs/m1-s2-s3/**'
+      - 'tests/cost-catalog-core.test.cjs'
+      - 'tests/catastro-wfs-provider.test.cjs'
+      - 'tests/parcel-association-core.test.cjs'
+      - 'tests/m1-s2-s3.browser.test.cjs'
+      - 'tests/fixtures/bcca-es/**'
+      - '.github/workflows/ft3d-8-m1-s2-s3.yml'
+permissions:
+  contents: read
+jobs:
+  m1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: |
+          for f in js/cost-catalog-core.js js/catastro-wfs-provider.js js/parcel-association-core.js labs/m1-s2-s3/*.js tests/cost-catalog-core.test.cjs tests/catastro-wfs-provider.test.cjs tests/parcel-association-core.test.cjs tests/m1-s2-s3.browser.test.cjs; do node --check "$f"; done
+      - name: M1 pure tests (S2 + S3, synthetic data)
+        run: node --test tests/cost-catalog-core.test.cjs tests/catastro-wfs-provider.test.cjs tests/parcel-association-core.test.cjs
+      - name: Regression of the reused engines (C1–C4, bridge, BC3, BCCA, FIEBDC, Catastro, parcel, territory)
+        run: node --test tests/bc3-budget.test.cjs tests/budget-core.test.cjs tests/budget-cost-bridge.test.cjs tests/budget-draft.test.cjs tests/budget-presentation.test.cjs tests/cost-provider.test.cjs tests/cost-provider-manual.test.cjs tests/cost-provider-bcca-es.test.cjs tests/cost-provider-bcca-es-legal-date.test.cjs tests/fiebdc3-codec.test.cjs tests/geo-provider.test.cjs tests/geo-site-adapter.test.cjs tests/orthophoto-core.test.cjs tests/parcel-core.test.cjs tests/terrain-core.test.cjs tests/terrain-provider.test.cjs tests/territory-integration.test.cjs
+      - name: Chromium (pinned, same as the territory workflows)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/m1-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/m1-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/m1-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/m1-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: M1 lab in real Chromium (desktop + mobile; official host intercepted, never reached)
+        env:
+          FT3D8_M1_SHOTS: qa-results/ft3d-8-m1
+        run: node --test --test-concurrency=1 tests/m1-s2-s3.browser.test.cjs
+      - name: Browser regression of the existing budget and territory UIs
+        if: always()
+        run: node --test --test-concurrency=1 tests/budget-ui.browser.test.cjs tests/parcel.browser.test.cjs tests/territory-integration.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-m1-evidence
+          path: qa-results/ft3d-8-m1
+          if-no-files-found: ignore

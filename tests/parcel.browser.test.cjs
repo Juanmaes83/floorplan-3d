@@ -23,7 +23,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const {page,errors}=await pageFor(t,viewport),beforeGeometry=await editable(page);
  await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();await page.locator('#territoryDialog[open]').waitFor();
  assert.match(await page.locator('.territory-provider').innerText(),/Catastro/);
- assert.equal(await page.locator('#territoryProvider').isVisible(),false);
+ // M2 (S3): two parcel sources (GML document and the official lookup by reference); the GML stays the default.
+ assert.equal(await page.locator('#territoryProvider').isVisible(),true);assert.equal(await page.locator('#territoryProvider').inputValue(),'catastro-inspire-cp');
  assert.equal(await page.locator('#territoryReference').isVisible(),false);
  await page.locator('#territoryFile').setInputFiles(FIXTURE);
  await page.locator('#territoryImport').click();

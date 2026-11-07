@@ -1,0 +1,1614 @@
+{
+ "1280x720": {
+  "initial": {
+   "vh": 720,
+   "pageH": 782,
+   "scrollW": 1280,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 189,
+     "h": 114
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "transport": {
+     "top": 407,
+     "bottom": 455,
+     "h": 48
+    },
+    "card": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 467,
+     "bottom": 517,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 551,
+     "bottom": 570,
+     "h": 19
+    },
+    "gantt": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 455,
+     "bottom": 675,
+     "h": 220
+    },
+    "play": {
+     "top": 413,
+     "bottom": 449,
+     "h": 36
+    },
+    "scrub": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "date": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "stamp": {
+     "top": 364,
+     "bottom": 393,
+     "h": 29
+    },
+    "foot": {
+     "top": 375,
+     "bottom": 397,
+     "h": 22
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playing": {
+   "vh": 720,
+   "pageH": 782,
+   "scrollW": 1280,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 189,
+     "h": 114
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "transport": {
+     "top": 407,
+     "bottom": 455,
+     "h": 48
+    },
+    "card": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 467,
+     "bottom": 496,
+     "h": 29
+    },
+    "cardHeadline": {
+     "top": 530,
+     "bottom": 568,
+     "h": 38
+    },
+    "gantt": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 455,
+     "bottom": 675,
+     "h": 220
+    },
+    "play": {
+     "top": 413,
+     "bottom": 449,
+     "h": 36
+    },
+    "scrub": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "date": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "stamp": {
+     "top": 364,
+     "bottom": 393,
+     "h": 29
+    },
+    "foot": {
+     "top": 375,
+     "bottom": 397,
+     "h": 22
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playingDate": "2027-09-25",
+  "simultaneous": {
+   "vh": 720,
+   "pageH": 782,
+   "scrollW": 1280,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 189,
+     "h": 114
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "transport": {
+     "top": 407,
+     "bottom": 455,
+     "h": 48
+    },
+    "card": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 467,
+     "bottom": 496,
+     "h": 29
+    },
+    "cardHeadline": {
+     "top": 530,
+     "bottom": 568,
+     "h": 38
+    },
+    "gantt": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 455,
+     "bottom": 675,
+     "h": 220
+    },
+    "play": {
+     "top": 413,
+     "bottom": 449,
+     "h": 36
+    },
+    "scrub": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "date": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "stamp": {
+     "top": 364,
+     "bottom": 393,
+     "h": 29
+    },
+    "foot": {
+     "top": 375,
+     "bottom": 397,
+     "h": 22
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "final": {
+   "vh": 720,
+   "pageH": 782,
+   "scrollW": 1280,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 189,
+     "h": 114
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 407,
+     "h": 342
+    },
+    "transport": {
+     "top": 407,
+     "bottom": 455,
+     "h": 48
+    },
+    "card": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 467,
+     "bottom": 517,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 551,
+     "bottom": 589,
+     "h": 38
+    },
+    "gantt": {
+     "top": 455,
+     "bottom": 720,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 455,
+     "bottom": 675,
+     "h": 220
+    },
+    "play": {
+     "top": 413,
+     "bottom": 449,
+     "h": 36
+    },
+    "scrub": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "date": {
+     "top": 423,
+     "bottom": 439,
+     "h": 16
+    },
+    "stamp": {
+     "top": 364,
+     "bottom": 393,
+     "h": 29
+    },
+    "foot": {
+     "top": 375,
+     "bottom": 397,
+     "h": 22
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  }
+ },
+ "1366x768": {
+  "initial": {
+   "vh": 768,
+   "pageH": 830,
+   "scrollW": 1366,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 191,
+     "h": 116
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "transport": {
+     "top": 455,
+     "bottom": 503,
+     "h": 48
+    },
+    "card": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 515,
+     "bottom": 565,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 599,
+     "bottom": 618,
+     "h": 19
+    },
+    "gantt": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 503,
+     "bottom": 723,
+     "h": 220
+    },
+    "play": {
+     "top": 461,
+     "bottom": 497,
+     "h": 36
+    },
+    "scrub": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "date": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "stamp": {
+     "top": 412,
+     "bottom": 441,
+     "h": 29
+    },
+    "foot": {
+     "top": 406,
+     "bottom": 445,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playing": {
+   "vh": 768,
+   "pageH": 830,
+   "scrollW": 1366,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 191,
+     "h": 116
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "transport": {
+     "top": 455,
+     "bottom": 503,
+     "h": 48
+    },
+    "card": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 515,
+     "bottom": 544,
+     "h": 29
+    },
+    "cardHeadline": {
+     "top": 578,
+     "bottom": 616,
+     "h": 38
+    },
+    "gantt": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 503,
+     "bottom": 723,
+     "h": 220
+    },
+    "play": {
+     "top": 461,
+     "bottom": 497,
+     "h": 36
+    },
+    "scrub": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "date": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "stamp": {
+     "top": 412,
+     "bottom": 441,
+     "h": 29
+    },
+    "foot": {
+     "top": 406,
+     "bottom": 445,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playingDate": "2027-09-24",
+  "simultaneous": {
+   "vh": 768,
+   "pageH": 830,
+   "scrollW": 1366,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 191,
+     "h": 116
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "transport": {
+     "top": 455,
+     "bottom": 503,
+     "h": 48
+    },
+    "card": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 515,
+     "bottom": 544,
+     "h": 29
+    },
+    "cardHeadline": {
+     "top": 578,
+     "bottom": 616,
+     "h": 38
+    },
+    "gantt": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 503,
+     "bottom": 723,
+     "h": 220
+    },
+    "play": {
+     "top": 461,
+     "bottom": 497,
+     "h": 36
+    },
+    "scrub": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "date": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "stamp": {
+     "top": 412,
+     "bottom": 441,
+     "h": 29
+    },
+    "foot": {
+     "top": 406,
+     "bottom": 445,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "final": {
+   "vh": 768,
+   "pageH": 830,
+   "scrollW": 1366,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 75,
+     "bottom": 191,
+     "h": 116
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 455,
+     "h": 390
+    },
+    "transport": {
+     "top": 455,
+     "bottom": 503,
+     "h": 48
+    },
+    "card": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "cardWeek": {
+     "top": 515,
+     "bottom": 565,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 599,
+     "bottom": 637,
+     "h": 38
+    },
+    "gantt": {
+     "top": 503,
+     "bottom": 768,
+     "h": 265
+    },
+    "ganttCursor": {
+     "top": 503,
+     "bottom": 723,
+     "h": 220
+    },
+    "play": {
+     "top": 461,
+     "bottom": 497,
+     "h": 36
+    },
+    "scrub": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "date": {
+     "top": 471,
+     "bottom": 487,
+     "h": 16
+    },
+    "stamp": {
+     "top": 412,
+     "bottom": 441,
+     "h": 29
+    },
+    "foot": {
+     "top": 406,
+     "bottom": 445,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  }
+ },
+ "1440x900": {
+  "initial": {
+   "vh": 900,
+   "pageH": 962,
+   "scrollW": 1440,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "transport": {
+     "top": 542,
+     "bottom": 600,
+     "h": 58
+    },
+    "card": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "cardWeek": {
+     "top": 612,
+     "bottom": 662,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 708,
+     "bottom": 754,
+     "h": 46
+    },
+    "gantt": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "ganttCursor": {
+     "top": 602,
+     "bottom": 855,
+     "h": 253
+    },
+    "play": {
+     "top": 551,
+     "bottom": 591,
+     "h": 40
+    },
+    "scrub": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "date": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "stamp": {
+     "top": 499,
+     "bottom": 528,
+     "h": 29
+    },
+    "foot": {
+     "top": 493,
+     "bottom": 532,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playing": {
+   "vh": 900,
+   "pageH": 962,
+   "scrollW": 1440,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "transport": {
+     "top": 542,
+     "bottom": 600,
+     "h": 58
+    },
+    "card": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "cardWeek": {
+     "top": 612,
+     "bottom": 648,
+     "h": 36
+    },
+    "cardHeadline": {
+     "top": 694,
+     "bottom": 740,
+     "h": 46
+    },
+    "gantt": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "ganttCursor": {
+     "top": 602,
+     "bottom": 855,
+     "h": 253
+    },
+    "play": {
+     "top": 551,
+     "bottom": 591,
+     "h": 40
+    },
+    "scrub": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "date": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "stamp": {
+     "top": 499,
+     "bottom": 528,
+     "h": 29
+    },
+    "foot": {
+     "top": 493,
+     "bottom": 532,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playingDate": "2027-09-23",
+  "simultaneous": {
+   "vh": 900,
+   "pageH": 962,
+   "scrollW": 1440,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "transport": {
+     "top": 542,
+     "bottom": 600,
+     "h": 58
+    },
+    "card": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "cardWeek": {
+     "top": 612,
+     "bottom": 648,
+     "h": 36
+    },
+    "cardHeadline": {
+     "top": 694,
+     "bottom": 740,
+     "h": 46
+    },
+    "gantt": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "ganttCursor": {
+     "top": 602,
+     "bottom": 855,
+     "h": 253
+    },
+    "play": {
+     "top": 551,
+     "bottom": 591,
+     "h": 40
+    },
+    "scrub": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "date": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "stamp": {
+     "top": 499,
+     "bottom": 528,
+     "h": 29
+    },
+    "foot": {
+     "top": 493,
+     "bottom": 532,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "final": {
+   "vh": 900,
+   "pageH": 962,
+   "scrollW": 1440,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 542,
+     "h": 477
+    },
+    "transport": {
+     "top": 542,
+     "bottom": 600,
+     "h": 58
+    },
+    "card": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "cardWeek": {
+     "top": 612,
+     "bottom": 662,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 708,
+     "bottom": 754,
+     "h": 46
+    },
+    "gantt": {
+     "top": 600,
+     "bottom": 900,
+     "h": 300
+    },
+    "ganttCursor": {
+     "top": 602,
+     "bottom": 855,
+     "h": 253
+    },
+    "play": {
+     "top": 551,
+     "bottom": 591,
+     "h": 40
+    },
+    "scrub": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "date": {
+     "top": 563,
+     "bottom": 579,
+     "h": 16
+    },
+    "stamp": {
+     "top": 499,
+     "bottom": 528,
+     "h": 29
+    },
+    "foot": {
+     "top": 493,
+     "bottom": 532,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  }
+ },
+ "1920x1080": {
+  "initial": {
+   "vh": 1080,
+   "pageH": 1130,
+   "scrollW": 1920,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "transport": {
+     "top": 666,
+     "bottom": 724,
+     "h": 58
+    },
+    "card": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "cardWeek": {
+     "top": 736,
+     "bottom": 786,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 832,
+     "bottom": 877,
+     "h": 46
+    },
+    "gantt": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "ganttCursor": {
+     "top": 726,
+     "bottom": 1012,
+     "h": 286
+    },
+    "play": {
+     "top": 675,
+     "bottom": 715,
+     "h": 40
+    },
+    "scrub": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "date": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "stamp": {
+     "top": 623,
+     "bottom": 652,
+     "h": 29
+    },
+    "foot": {
+     "top": 617,
+     "bottom": 656,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playing": {
+   "vh": 1080,
+   "pageH": 1130,
+   "scrollW": 1920,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "transport": {
+     "top": 666,
+     "bottom": 724,
+     "h": 58
+    },
+    "card": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "cardWeek": {
+     "top": 736,
+     "bottom": 772,
+     "h": 36
+    },
+    "cardHeadline": {
+     "top": 818,
+     "bottom": 863,
+     "h": 46
+    },
+    "gantt": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "ganttCursor": {
+     "top": 726,
+     "bottom": 1012,
+     "h": 286
+    },
+    "play": {
+     "top": 675,
+     "bottom": 715,
+     "h": 40
+    },
+    "scrub": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "date": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "stamp": {
+     "top": 623,
+     "bottom": 652,
+     "h": 29
+    },
+    "foot": {
+     "top": 617,
+     "bottom": 656,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "playingDate": "2027-09-23",
+  "simultaneous": {
+   "vh": 1080,
+   "pageH": 1130,
+   "scrollW": 1920,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "transport": {
+     "top": 666,
+     "bottom": 724,
+     "h": 58
+    },
+    "card": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "cardWeek": {
+     "top": 736,
+     "bottom": 772,
+     "h": 36
+    },
+    "cardHeadline": {
+     "top": 818,
+     "bottom": 863,
+     "h": 46
+    },
+    "gantt": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "ganttCursor": {
+     "top": 726,
+     "bottom": 1012,
+     "h": 286
+    },
+    "play": {
+     "top": 675,
+     "bottom": 715,
+     "h": 40
+    },
+    "scrub": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "date": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "stamp": {
+     "top": 623,
+     "bottom": 652,
+     "h": 29
+    },
+    "foot": {
+     "top": 617,
+     "bottom": 656,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  },
+  "final": {
+   "vh": 1080,
+   "pageH": 1130,
+   "scrollW": 1920,
+   "regions": {
+    "topbar": {
+     "top": 0,
+     "bottom": 65,
+     "h": 65
+    },
+    "hero": {
+     "top": 81,
+     "bottom": 275,
+     "h": 194
+    },
+    "stage": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "canvas": {
+     "top": 65,
+     "bottom": 666,
+     "h": 601
+    },
+    "transport": {
+     "top": 666,
+     "bottom": 724,
+     "h": 58
+    },
+    "card": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "cardWeek": {
+     "top": 736,
+     "bottom": 786,
+     "h": 50
+    },
+    "cardHeadline": {
+     "top": 832,
+     "bottom": 877,
+     "h": 46
+    },
+    "gantt": {
+     "top": 724,
+     "bottom": 1080,
+     "h": 356
+    },
+    "ganttCursor": {
+     "top": 726,
+     "bottom": 1012,
+     "h": 286
+    },
+    "play": {
+     "top": 675,
+     "bottom": 715,
+     "h": 40
+    },
+    "scrub": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "date": {
+     "top": 687,
+     "bottom": 703,
+     "h": 16
+    },
+    "stamp": {
+     "top": 623,
+     "bottom": 652,
+     "h": 29
+    },
+    "foot": {
+     "top": 617,
+     "bottom": 656,
+     "h": 39
+    }
+   },
+   "visible": {
+    "hero": true,
+    "canvas": true,
+    "play": true,
+    "scrub": true,
+    "date": true,
+    "stamp": true,
+    "cardWeek": true,
+    "cardHeadline": true,
+    "gantt": true,
+    "ganttCursor": true
+   },
+   "fullyVisible": {
+    "canvas": true,
+    "card": true,
+    "gantt": true,
+    "transport": true
+   }
+  }
+ }
+}

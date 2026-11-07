@@ -1,0 +1,10 @@
+ok 1 - 8C-B document parcel UI 1440x900
+ok 2 - 8C-B document parcel UI 390x844
+ok 3 - 8C-B document parcel UI 844x390
+ok 4 - 8C-B parser rejects DTD, ambiguous selection and unsupported CRS
+ok 5 - 8C-B building stores parcel only at shared site
+# tests 5
+# pass 5
+# fail 0
+# skipped 0
+# duration_ms 14985.033018

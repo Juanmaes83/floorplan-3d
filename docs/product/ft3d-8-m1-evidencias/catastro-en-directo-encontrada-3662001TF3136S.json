@@ -1,0 +1,19 @@
+{
+ "status": "Parcela 3662001TF3136S encontrada. Revisa los datos antes de asociarla.",
+ "diagnostic": {
+  "kind": "ok",
+  "at": "2026-11-06T00:27:55.697Z",
+  "httpStatus": 200
+ },
+ "parcel": {
+  "reference": "3662001TF3136S",
+  "sourceCrs": "EPSG:25830",
+  "polygons": 1,
+  "vertices": 63,
+  "provider": "catastro-inspire-wfs",
+  "sourceName": "Dirección General del Catastro · WFS INSPIRE de parcela catastral (CP)",
+  "license": "restricted",
+  "retrievedAt": "2026-11-06T00:27:55.697Z",
+  "areaText": "2445,2 m² (calculada sobre la geometría; no es la superficie oficial)"
+ }
+}

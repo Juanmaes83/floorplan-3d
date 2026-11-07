@@ -1,0 +1,902 @@
+ok 1 - refuses unless configured, POST and with the right access token
+ok 2 - accepts only a known style and one bounded PNG/JPEG image
+ok 3 - sends a fixed geometry-preserving prompt and the image; returns the render without the key
+ok 4 - maps provider failures to short codes
+ok 5 - material alternatives: only known keys, geometry rules kept, reported back
+ok 6 - generic catalog has explicit validated three dimensions without rewriting old projects
+ok 7 - manifest adapts one verified source and hashes real fixture and permission bytes
+ok 8 - permission gates deny pending/missing/expired or incomplete usage and dimensions
+ok 9 - untrusted transform, extension, paths, sizes and duplicate IDs are excluded
+ok 10 - assetRef association/clear keeps room, identity, geometry and compatibility intact
+ok 11 - curated external evidence records exact binaries and project authorization without inventing worldwide rights
+ok 12 - external references survive JSON, project duplication, reload and ZIP without binary embedding
+ok 13 - loads a BC3 and searches by unit; unknown units are left out
+ok 14 - a reference quote goes through the bridge unreviewed, with its source
+ok 15 - the budget exports as a BC3 that reads back, and can be loaded as a base
+ok 16 - validates and normalises a profile; rejects unsafe links, SVG/active logos and empty names
+ok 17 - several profiles, per-project choice, frozen snapshot and removal
+ok 18 - old, damaged or foreign local data never breaks the editor
+ok 19 - creates a separate EUR budget document linked to project/building
+ok 20 - budget core rejects non-EUR documents in V1
+ok 21 - 7A quantity provenance stays explicit and no geometry is remeasured
+ok 22 - unavailable 7A quantity must be null rather than zero
+ok 23 - manual quantity is supported but explicitly marked manual
+ok 24 - waste is explicit and changes budget quantity without changing geometric quantity
+ok 25 - priced item calculates net, VAT and gross in EUR
+ok 26 - money is rounded at line level to cents while quantity keeps precision
+ok 27 - unknown price is null and never converted to zero
+ok 28 - explicit zero price remains a known zero and requires provenance
+ok 29 - priced item without price source is rejected
+ok 30 - unsupported price sources remain outside Budget
+ok 31 - manual price helper records provenance and starts unreviewed
+ok 32 - review is explicit and timestamped
+ok 33 - cannot mark an unpriced item as reviewed
+ok 34 - changing manual price resets review state
+ok 35 - clearing price restores pending/unpriced semantics
+ok 36 - budget VAT can be unknown without inventing zero tax
+ok 37 - item VAT override takes precedence over budget VAT
+ok 38 - zero VAT is explicit and different from unknown VAT
+ok 39 - chapter totals and global totals use only known lines but expose incompleteness
+ok 40 - unknown quantity prevents subtotal and is reported separately
+ok 41 - incomplete but known 7A subtotal remains visible and flagged incomplete
+ok 42 - unassigned items are summarized separately for future 7D presentation
+ok 43 - duplicate ids and unknown chapters are rejected
+ok 44 - negative quantity, waste, price and invalid VAT are rejected
+ok 45 - calculation and price/review helpers never mutate input documents
+ok 46 - budget document survives JSON roundtrip with same calculation
+ok 47 - browser export exposes FloorPlanBudget without DOM/network
+ok 48 - integration: real FloorPlanQuantities room floor can feed 7B without remeasurement
+ok 49 - serialize/parse validates the standalone budget document
+ok 50 - manual provenance rejects impossible calendar dates
+ok 51 - FloorPlanBudgetV1 JSON Schema matches core constants
+ok 52 - review timestamp rejects impossible calendar dates
+ok 53 - legacy 1.0 parses, serializes and roundtrips without migration
+ok 54 - legacy 1.0 remains manual only and rejects priceReference even null
+ok 55 - legacy manual price and review helpers preserve 1.0 item shape
+ok 56 - explicit upgrade preserves legacy data and all monetary calculations
+ok 57 - 1.1 requires priceReference field and validates provider active-price consistency
+ok 58 - 1.1 reference price zero and complete source metadata survive roundtrip
+ok 59 - a retained reference alone never prices or reviews an item
+ok 60 - real CostProvider registry quote is validated and applied as active reference
+ok 61 - ManualCostProvider real quote applies as manual active price, without reference or auto-review
+ok 62 - ManualCostProvider quote works on legacy 1.0 without silent upgrade
+ok 63 - reference quote requires explicit upgrade from 1.0
+ok 64 - attaching a reference leaves active price, source, review, calculation and all other fields intact
+ok 65 - reference quote cannot be attached to a different active provider reference
+ok 66 - full lifecycle: reference 28.43, professional review, manual override 31, retained reference, re-review
+ok 67 - applying Manual quote over a reference keeps that reference and resets review
+ok 68 - changing reference quote resets review even if active price was previously reviewed
+ok 69 - clearing active price retains reference; clearing reference is then allowed
+ok 70 - clearing reference is allowed with manual active price and preserves review
+ok 71 - unit exact match and EUR are required without conversion
+ok 72 - source provenance and license statuses persist exactly; no permission is inferred
+ok 73 - bridge rejects manual quote as priceReference and malformed quotes
+ok 74 - unknown budget item and invalid budget are rejected without mutations
+ok 75 - browser global bridge loads without DOM or network
+ok 76 - items from quantities, no price invented
+ok 77 - studio tariff prices are offered unreviewed, by finish kind
+ok 78 - previous prices and waste are kept; a review holds only for the same quantity
+ok 79 - new and demolished walls become their own items
+ok 80 - buildReport consumes Budget calculation and preserves canonical totals
+ok 81 - chapters preserve calculated lines and totals without duplicating budget formulas
+ok 82 - unassigned lines remain explicit
+ok 83 - quantity-engine refs group presentation by room, level and home
+ok 84 - home context can use budget subject id when the quantity ref omits id
+ok 85 - manual quantities are not falsely assigned to a geometric context
+ok 86 - warnings expose unknown, partial, unreviewed and tax-incomplete states
+ok 87 - explicit zero price remains zero in presentation and is not treated as unknown
+ok 88 - provider reference provenance survives report and CSV while active manual price remains distinct
+ok 89 - CSV is deterministic, RFC-style escaped and ends with the requested newline
+ok 90 - CSV keeps null blank and explicit zero numeric
+ok 91 - CSV supports semicolon/tab, optional BOM and rejects ambiguous options
+ok 92 - serializeReport returns the same structured report as buildReport
+ok 93 - presentation never mutates the source budget
+ok 94 - invalid budgets are rejected by the Budget authority instead of normalized locally
+ok 95 - browser global exposes the same pure 7D API without DOM requirements
+ok 96 - building accepts current FloorPlanProjectV1 1.6.0 levels and still rejects unknown future project versions
+ok 97 - asymmetric fixture validates and emits exactly the expected orientative warnings
+ok 98 - derived geometry: slab opening equals stair footprint, areas per level sum to the total, rise from elevations
+ok 99 - a 1.x reader and every consumer sharing the validator reject a building explicitly
+ok 100 - strict level profile rejects hidden multi-level meaning a 1.x reader would ignore
+ok 101 - invalid building documents are rejected with a path and never mutated
+ok 102 - JSON round trip keeps IDs, references and canonical content
+ok 103 - ZIP round trip resolves images per level exactly, with matching SHA-256 and IDs
+ok 104 - tampered, incomplete or foreign building ZIPs are rejected before anything is applied
+ok 105 - editing one level never changes the canonical hash of the other
+ok 106 - reversible migration: wrapping, single-level export and level export keep the 1.x project lossless
+ok 107 - library stores, saves, duplicates, varies, reopens and removes a building as one unit
+ok 108 - fixture furniture never sits on a stair footprint or slab void of its level
+ok 109 - room labels keep clear of stair zones without changing labelAt; a real conflict is reported, not hidden
+ok 110 - stair label sits inside the stair footprint on both levels, upright and fitted
+ok 111 - FT8-S3-01 · official service, documented query form, GeoProvider 1.3.0 reference mode, licence restricted
+ok 112 - FT8-S3-01 · the browser request sends no credentials, no referrer and follows no redirect
+ok 113 - FT8-S3-05 · every failure is a normal result: rejected service, exception, network, timeout, cancellation, size
+ok 114 - FT8-S3-05 · through the GeoProvider registry: cancellation and input validation stay in the contract
+ok 115 - M2 · autoZone: tries the official zones only while the service says «not found in this zone»; any other answer stops
+ok 116 - cost policy: costs only when project, plan and budget agree; null stays unknown; never "spent"
+ok 117 - cost policy blocks a foreign plan, a foreign budget, a building and double counting
+ok 118 - storyboard: opening, timeline over whole plan days, closing; deterministic and bounded
+ok 119 - overlay texts come from the plan and the cost policy
+ok 120 - brand: FloorPlanBrand snapshot, re-validated, contact filtered to the fields explicitly included
+ok 121 - manifest is frozen; later brand or project changes never alter an existing delivery
+ok 122 - client document: read-only, api/view-compatible, no editable project, honest notices
+ok 123 - publish errors map the real api/share responses; endpoints are absolute
+ok 124 - MP4 muxer writes an indexed file whose declared duration equals its sample table
+ok 125 - S1 manifest 0.2.0: carries the dossier identity and only the territory text its export policy allows
+ok 126 - every amount shown to the client says «sin IVA» (allocations are net C1-C4 amounts)
+ok 127 - Case A: single-level house, budget, plan, parcel and brand of the same project are matched by identity
+ok 128 - Case B: two-level building shows each level budget separately and never a building total
+ok 129 - Case C: reform keeps existing/new/demolished elements and partial allocations pending
+ok 130 - Case D: without plan the model is shown and no date is invented
+ok 131 - Case E: the budget of another house blocks the binding of costs
+ok 132 - Case F: a plan of another project with identically named tasks is rejected by identity
+ok 133 - Case G: a parcel associated with another project is a conflict, never placed; another reference too
+ok 134 - Case H: changing geometry or budget after binding invalidates what depends on it
+ok 135 - Case I: incomplete data degrades explicitly (null prices, pending allocations, estimated geometry, runtime layers)
+ok 136 - Case J: invalid GML or unsupported CRS is rejected safely and the saved parcel is kept
+ok 137 - C6 economy: amounts equal the C1-C4 engine, allocations never exceed an item, net/tax/gross stay separate
+ok 138 - C6 provenance: a BC3 reference price keeps provider, code, edition, region and licence
+ok 139 - C7 territory: placement transforms are checked numerically with a documented tolerance
+ok 140 - C8 no mutation: evaluating and packaging never modify the professional documents
+ok 141 - package: assemble -> open is verified; any edit after assembly marks it altered; GML text is not redistributed
+ok 142 - C4 imports: content sniffing, size and depth limits, malformed input, kind by schema
+ok 143 - fixture size justifies the 8 MiB package limit (S1-B §8)
+ok 144 - brand: another project or no association is reported; the snapshot is never rewritten
+ok 145 - compatibility: budget 1.0.0 and plan 0.1.0 are read without rewriting the documents
+ok 146 - switching dossiers: nothing of A survives in the evaluation of C
+ok 147 - every issue has a human message and keeps its technical code
+ok 148 - fixtures are labelled, valid for the real validators and never reuse the demo house
+ok 149 - identity, stable keys and canonical fingerprints
+ok 150 - geometry is copied from FloorPlanCore.geometry, not re-derived
+ok 151 - materials and openings come from the project; missing materials use declared viewer defaults
+ok 152 - two different projects produce different geometry, levels and roofs
+ok 153 - associations are per level: same raw id on another level is a different element
+ok 154 - no fictitious elements: categories RUBIK does not model are listed, never inventoried
+ok 155 - evidence uses the real states and is never upgraded
+ok 156 - reform starts from the existing building: existing walls are pre-existing, demolition is scheduled
+ok 157 - budget comes from the selected C1-C4 budget: exact per item, no double count, null stays unknown
+ok 158 - a building has no building-level budget in RUBIK: costs unavailable, never borrowed from one level
+ok 159 - missing planning is reported, not invented
+ok 160 - revision changes invalidate: project, schedule and budget edits mark the binding obsolete
+ok 161 - explanatory errors: broken link, role mismatch, other project, invalid binding
+ok 162 - new elements without a task are unscheduled and block an approved plan
+ok 163 - temporal reversibility over real element keys and dates untouched
+ok 164 - no mutation of project, building, schedule, budget or binding
+ok 165 - compatibility: legacy 0.1.0 schedule strings over real keys still evaluate
+ok 166 - A1: the highest level reachable today is "evidenced-plan"; accredited approval is never claimed
+ok 167 - A1: correct project fingerprint but unbound budget cannot reach evidenced-plan
+ok 168 - A1: obsolete plan fingerprint and obsolete budget fingerprint both block a declared plan
+ok 169 - A1: partially defined binding (plan not fixed) never raises confidence
+ok 170 - A1/A4: a reviewer declared in JSON is a declaration, not an authenticated approval
+ok 171 - A1: incomplete budget coverage stays at declared-plan with explicit blockers
+ok 172 - A2: a plan of another project never animates this geometry, even with identical task names
+ok 173 - A3: a level budget is identified and never used as the whole building budget
+ok 174 - S1: a C1-C4 budget whose subject is the building itself is accepted by identity (schema allows it)
+ok 175 - A6: three coverages are separate; 100 % of loaded items is not 100 % of the works
+ok 176 - Gate D: illustrative site resources are explicit plan links, drawn as illustrations, never project geometry
+ok 177 - M2-1 · identity is subject type + id inside one library entry; names never identify
+ok 178 - M2-1 · a plan is stored only for its own subject; other subjects stay untouched
+ok 179 - M2-1 · versions: unknown version rejected, invalid data rejected, empty store when nothing saved
+ok 180 - M2-1 · correspondence uses the S1 results: absent, match, obsolete, unverifiable (never match)
+ok 181 - M2-1 · links index: item → tasks → elements and element → tasks, shares never above 100 %
+ok 182 - M2-1 · injected storage: persists, reloads, and a full or blocked storage changes nothing
+ok 183 - M2-1 · several plans per subject: duplicate keeps the original, selection is explicit, removal never auto-selects
+ok 184 - creates a versioned schedule without modifying the project or its tasks
+ok 185 - validates impossible dates, invalid schema and inverted date ranges
+ok 186 - detects unknown dependencies, cycles and duplicate task IDs
+ok 187 - rejects duplicated budget links and visual element ownership
+ok 188 - unknown professional review cannot be presented as a reviewed plan
+ok 189 - stateAt is deterministic and reversible: same date produces same result regardless of visit history
+ok 190 - Gantt rows and bounds preserve user-supplied dates, not fabricated durations
+ok 191 - budget report draws real amounts only from C1-C4 and does not double count
+ok 192 - unreviewed prices and missing assignments cannot masquerade as verified or zero
+ok 193 - budget provenance is enforced: wrong project and unknown items reject
+ok 194 - stateAt and budget adapter never mutate incoming project data or budgets
+ok 195 - 0.1.0 schedules still parse and are upgraded to 0.2.0 without changing their stored shape
+ok 196 - rich forms round-trip and contradictory legacy + rich fields are rejected
+ok 197 - FS validates finish-to-start and never moves professional dates
+ok 198 - positive and negative explicit lags are honoured for FS
+ok 199 - SS lets services start while structure is still running
+ok 200 - FF and SF compare finishes and start-to-finish correctly
+ok 201 - dependency objects need an explicit type and integer lag; duplicates and cycles reject
+ok 202 - dependencyReport lists slack read-only and gantt rows keep dependency details
+ok 203 - one element can take part in several tasks with different visual roles
+ok 204 - allocation shares are explicit, two-decimal, positive and never exceed 100 %
+ok 205 - split items sum to the exact cent of their line: no double counting, no lost cents
+ok 206 - an allocation below 100 % stays pending: never redistributed and never verified
+ok 207 - unknown prices stay null (never zero) and block verification
+ok 208 - reviewed estimated quantities remain flagged as estimated, without blocking
+ok 209 - incomplete quantities and unreviewed prices block verification; price sources are traceable
+ok 210 - a manual price without date is reported as undated (warning)
+ok 211 - a draft plan never yields verified costs even with perfect budget lines
+ok 212 - project revision: unverifiable for C1-C4 budgets, mismatch blocks when a revision is exposed
+ok 213 - cost evidence is always "budgeted", never executed spending
+ok 214 - evidence ladder: plan-estimated / plan-approved only; execution records reserved
+ok 215 - calendar is UTC calendar days; other calendars are rejected instead of misread
+ok 216 - validation never mutates inputs (project refs, tasks, budgets)
+ok 217 - fixtures are explicitly labelled FIXTURE and are valid schedules
+ok 218 - timeline: inicio is an empty site the day before work, final is the day after the last task
+ok 219 - progress <-> date round-trip is stable for every day
+ok 220 - same wall: structure, then cladding, then finish (multi-role timelapse)
+ok 221 - overlapping tasks (SS) are active simultaneously
+ok 222 - reform: pre-existing walls stand, demolished parts leave, temporary protection comes and goes
+ok 223 - scrubbing forward/backward is exactly reversible and history-independent
+ok 224 - frames are plain serializable data, labelled planned/illustrative, with no demo geometry
+ok 225 - visual adapter never mutates schedule
+ok 226 - Gantt tasks: user dates, execution progress 0, costs only from the C1-C4 report
+ok 227 - Gantt cursor and 3D frame share the same date and active tasks
+ok 228 - FT8-S2-01 · search by code, text and family; each result keeps its own edition and region (never mixed)
+ok 229 - FT8-S2-02 · a quote shows code, description, unit, currency, price, edition, date and source
+ok 230 - FT8-S2-03 · compare reference, tariff and current price WITHOUT applying anything
+ok 231 - FT8-S2-03 · a reviewed price is never replaced without explicit consent
+ok 232 - FT8-S2-04 / QA-06 · a new edition proposes changes; history stays identical; only accepted items change
+ok 233 - FT8-S2-05 / QA-05 · units: notation only (ud→unit), never a conversion; kg, m3 and other currencies rejected
+ok 234 - FT8-S2-05 / QA-05 · unknown prices stay null; a partial budget is labelled partial, never total
+ok 235 - FT8-S2-06 / QA-24 · provenance survives serialise → reopen; budget 1.0 needs an explicit upgrade
+ok 236 - FT8-S2-07 / QA-07 · RUBIK-managed BCCA stays blocked (fail-closed); a BC3 supplied by the professional keeps working
+ok 237 - FT8-S2-08 · every state has a plain-language message; restricted quotes are blocked
+ok 238 - FT8-S2-09 · limits, cache, failure recovery and a representative catalogue (measured)
+ok 239 - QA-23 · the C1–C4 engine stays the only authority: totals equal calculateBudget, nothing recomputed here
+ok 240 - rubik-managed VERIFIED requires a real calendar review date
+ok 241 - factory validates canonical model, is immutable and conforms to CostProvider
+ok 242 - technical gate rejects fake or invalid model without repairing it
+ok 243 - index resolves canonical code, projected identity and exact aliases without case-folding IDs
+ok 244 - search ranking, case insensitivity, filters and stable limit
+ok 245 - price variants require selector, preserve inherited projections and zero
+ok 246 - invalid price value is unavailable and unrelated codec warnings are tolerated
+ok 247 - full dates are DDMMYYYY, partial and impossible dates never become asOf
+ok 248 - user-supplied UNKNOWN operates with unknown provenance; restricted blocks
+ok 249 - rubik-managed UNKNOWN/RESTRICTED block; VERIFIED simulation is activable
+ok 250 - currency is explicit, unit is preserved, and quote passes generic validator
+ok 251 - registry quote integrates with Budget bridge without professional review or unit conversion
+ok 252 - browser module works with poisoned network, DOM and storage globals
+ok 253 - CommonJS exports the provider object
+ok 254 - provider ID is exactly manual
+ok 255 - capabilities match the 7C-A contract
+ok 256 - inspectProvider accepts Manual without changing the contract
+ok 257 - source metadata describes human entry with no external license
+ok 258 - unsupported operations need no fake adapter methods
+ok 259 - search is unsupported through the core wrapper
+ok 260 - getItem is unsupported through the core wrapper
+ok 261 - getPrice returns one normalized EUR manual quote
+ok 262 - positive, decimal and explicit zero prices remain available without rounding
+ok 263 - negative, NaN and infinite prices are rejected
+ok 264 - numeric and localized strings are rejected without parsing
+ok 265 - null and missing price never become zero
+ok 266 - explicit item identity is preserved
+ok 267 - missing or blank item identity cannot produce a quote
+ok 268 - description follows the generic contract normalization
+ok 269 - description is required
+ok 270 - generic units are preserved without conversion
+ok 271 - no catalog code is invented
+ok 272 - explicit code is normalized by the generic contract
+ok 273 - source label is mandatory
+ok 274 - blank source label is rejected
+ok 275 - source label follows generic trim rules
+ok 276 - known asOf calendar date is preserved
+ok 277 - unknown asOf remains null without a current-date fallback
+ok 278 - impossible and informal dates are rejected by the 7C-A validator
+ok 279 - retrievedAt is always null for human entry
+ok 280 - adapter and wrapper do not mutate caller input
+ok 281 - real registry registers, gets and inspects Manual
+ok 282 - real registry executes getPrice and unsupported operations
+ok 283 - real registry rejects duplicate ID
+ok 284 - real registry unregisters Manual without changing its availability as an option
+ok 285 - browser global export works after explicit script loading
+ok 286 - browser adapter works with network, DOM and storage globals forbidden
+ok 287 - quote contains no review or Budget bridge and legacy Budget 1.0.0 stays supported
+ok 288 - exports contract constants
+ok 289 - valid provider inspection returns normalized snapshot
+ok 290 - provider id must be non-empty
+ok 291 - provider requires getCapabilities
+ok 292 - provider requires getSourceMetadata
+ok 293 - capability true requires method
+ok 294 - metadata provider id must match
+ok 295 - license status is explicit
+ok 296 - http(s) URLs only
+ok 297 - search query normalizes optional filters
+ok 298 - search requires text
+ok 299 - search limit bounded
+ok 300 - catalog item keeps provider identity and unit
+ok 301 - catalog item rejects provider mismatch
+ok 302 - quote accepts zero as a real price
+ok 303 - quote rejects null price
+ok 304 - quote is EUR-only in contract V1
+ok 305 - quote keeps manual/reference distinction
+ok 306 - quote requires offset-aware retrievedAt
+ok 307 - search normalizes available items
+ok 308 - getItem preserves not-found status
+ok 309 - getPrice returns normalized quote
+ok 310 - disabled capability returns unsupported without calling method
+ok 311 - provider operational exception becomes unavailable
+ok 312 - malformed provider payload is a contract error
+ok 313 - invalid license status in quote is a contract error
+ok 314 - input objects are cloned before provider invocation
+ok 315 - context must be a JSON-compatible object
+ok 316 - registry registers and lists providers deterministically
+ok 317 - registry rejects duplicate provider ids
+ok 318 - registry get and inspect do not invent missing provider
+ok 319 - registry missing provider operation is normalized not-found
+ok 320 - registry can unregister
+ok 321 - browser global export works
+ok 322 - the image says only what the project has: rooms, approximate surface, view; never a location
+ok 323 - missing data is omitted, not replaced by placeholders
+ok 324 - brand and contact only when given; long texts are bounded; level joins the view
+ok 325 - control characters are cleaned and tiny areas are not reported
+ok 326 - figures are copied verbatim from the canonical report
+ok 327 - report is not mutated
+ok 328 - origin and review are separate; retained reference with own price is contrast
+ok 329 - reviewed status comes from the item review
+ok 330 - null VAT is undefined, not 0 %; gross is not final
+ok 331 - VAT 0 % is defined
+ok 332 - mixed VAT rates stay defined
+ok 333 - unpriced, unavailable and incomplete quantities surface as canonical warnings
+ok 334 - client variant: same figures, no ids, provider ids, licence or notes
+ok 335 - empty budget and no-chapter lines
+ok 336 - invalid input and variant are rejected
+ok 337 - §14.3 all items unpriced: no net, no final gross
+ok 338 - §14.6 explicit price 0 is a price, never «sin precio»
+ok 339 - §14.13 review invalidated by a quantity change reappears as pending (C2 draft)
+ok 340 - §14.17/18 chapter completeness comes from the report
+ok 341 - §14.20/21 context from quantity source; manual quantity gets no invented context
+ok 342 - §14.22/23 subject project and building
+ok 343 - §14.30 deterministic: same budget, same view
+ok 344 - client warnings: certainty only, no review noise
+ok 345 - asymmetric multiroom footprint: perimeter facade, shared wall interior, original openings and material
+ok 346 - L-shaped footprint follows rooms rather than bounding rectangle
+ok 347 - missing room evidence remains unavailable; old project needs no new fields
+ok 348 - a declared partition cannot become facade through incomplete room coverage
+ok 349 - openings on a vetoed partition are never exposed as facade openings
+ok 350 - declared terrace is exterior surface without an inferred balcony from openings
+ok 351 - two levels keep independent footprint and offset/elevation authority
+ok 352 - existing 1.0 reference project derives without migration or mutation
+ok 353 - old project has no inferred parapet; one proved prism is deterministic and read-only
+ok 354 - declared rectangular parapet follows exact outer roof boundary, height and wall material
+ok 355 - L and U roofs use their actual concave perimeter; explicit off remains off
+ok 356 - invalid height and unknown material abstain; missing footprint and nonorthogonal setback propagate
+ok 357 - two equal footprints derive two volumes and only the upper roof may have a parapet
+ok 358 - setback and offset create parapets only on proved outer edges, never internal cell or upper-body seams
+ok 359 - partial geometric overhang has no invented supports; separate level heights are exact
+ok 360 - vertical level overlap and unproved elevation abstain without CSG or maximum-height fallback
+ok 361 - 1.8 declaration validates, JSON and ZIP round-trip; old document remains byte-identical on read
+ok 362 - contract building accepts 1.8 per-level declaration and JSON/ZIP preserve it
+ok 363 - projects ordered V/K/C/D/T/W records and preserves unknown records
+ok 364 - optional W scope name and raw percentage code survive projection
+ok 365 - terminal \# and \#\# are optional in D/T references without rewriting source codes
+ok 366 - terminal-marker identity applies to aliases and duplicate detection
+ok 367 - internal \# remains significant and is not merged with another concept
+ok 368 - only ASCII space, tab and CRLF directly before ~, | and backslash are ignored
+ok 369 - byte and normalized-model round trips are deterministic
+ok 370 - explicit zero and absent price remain different
+ok 371 - repeat the final price and date across additional V labels
+ok 372 - 850, 437 and ANSI bytes decode according to V and re-encode exactly
+ok 373 - parse and serialize leave caller values untouched
+ok 374 - malformed and truncated input has explicit errors
+ok 375 - a 7C-D codec has no provider, Budget, IO or network dependencies
+ok 376 - lab fixture is labelled FIXTURE everywhere and validates through the real core
+ok 377 - the cursor reaches an unequivocal finished state on completionDate without altering dates
+ok 378 - fence, hut, crane, scaffold, excavator and spoil heap disappear exactly when planned
+ok 379 - scrubbing back from the end restores temporaries exactly (reversible)
+ok 380 - SS/FF/SF are never emitted as Frappe finish-to-start arrows
+ok 381 - lab Gantt links: FS arrows only, other types as labelled badges
+ok 382 - reviewed budget lines are never presented as a verified project-budget revision match
+ok 383 - cost card distinguishes known-reviewed, known-unverified, partial/unknown and none
+ok 384 - weeks, labels and euro formatting are deterministic
+ok 385 - task card never claims execution: planned phases and illustrative label
+ok 386 - building status is global, derived and names every conflict with level, object, zone and scale confidence
+ok 387 - search: nearest valid pose inside one room, clear of stair, walls, door swing and furniture; deterministic
+ok 388 - search refuses instead of guessing: no room, ambiguous room, no free place
+ok 389 - a pose against a wall face is contact, through a wall is not; the door swing and other furniture block
+ok 390 - search budget: bounded candidates and time with many pieces of furniture
+ok 391 - BW5 geometry is the one the 3D builds: stair corners and furniture poses agree within 1 mm
+ok 392 - library: a conflicting building is stored, duplicated and varied as received; the state stays derived
+ok 393 - diagnosis with many objects on every level stays fast
+ok 394 - one level: design stacking does not block, real overlaps do
+ok 395 - findAnyRoom: a full room sends the item to the nearest room with space, measured from the asked point
+ok 396 - a proposal keeps id, size and rotation, resolves the conflict and does not touch the input
+ok 397 - no free place within the budget: reported, nothing proposed (the narrow «Paso»)
+ok 398 - two pieces whose individual proposals would collide: the set is computed together and stays valid
+ok 399 - proposals stay inside the unique room of the object; an ambiguous position is not guessed
+ok 400 - search derives unique entries and dimensions without duplicating catalog
+ok 401 - exact partial accent case redundant spaces synonym and stored type search
+ok 402 - combined query room family reset and empty preserve separation
+ok 403 - v1 contract has exactly eight capabilities, finite modes and compatible offline Manual
+ok 404 - inspection validates descriptor, provenance and operation atomically
+ok 405 - registry is isolated, sorted, filterable and duplicate registration is atomic
+ok 406 - routing has no fallback; disabled, invalid, thrown and cancelled calls never claim availability
+ok 407 - async providers receive a separate frozen query, retain result provenance and do not mutate inputs
+ok 408 - Manual available result becomes only the durable location fields, without invented metadata
+ok 409 - Geo to Site preserves supported result provenance and strips runtime descriptor fields
+ok 410 - unknown provider remains readable and survives project/building JSON and ZIP without registry resolution
+ok 411 - site adapter validates durable input without registering or contacting a provider
+ok 412 - import verbs with a file format select upload before the PNG export shortcut
+ok 413 - optional furniture, 3D, saving and PNG do not block a create goal
+ok 414 - blank dimensions do not require image calibration or pretend to verify measurements
+ok 415 - furnishing requires a matching item placed inside the target room
+ok 416 - example exploration is distinct from owning a project
+ok 417 - image metadata is not a successfully loaded image; unavailable blobs invalidate import
+ok 418 - estimated calibration and second dimension alone cannot complete reliable scale
+ok 419 - removing reference image retains the unmet import requirement for image-origin projects
+ok 420 - 3D has to load the current revision and becomes needs-review after geometry changes
+ok 421 - saving needs confirmed storage, not a button click
+ok 422 - PNG success is scoped to the current document revision
+ok 423 - changing goals recomputes the denominator and optional skips never complete a required task
+ok 424 - tasks are derived without mutating the schema document or guide
+ok 425 - intent normalization, synonyms and supported actions
+ok 426 - partial queries provide suggestions and unsafe ambiguous input never executes an intent
+ok 427 - synthetic 1.4 fixture schema + semantics valid; independent real-plan calibration not claimed
+ok 428 - repeat export binary and semantic equality; source frozen and never written
+ok 429 - mm axes, asymmetric room area, source IDs, diagonal wall and yaw retained
+ok 430 - real MIT catalog geometry, all material IDs, surface conversion and missing-reference fallback explicit
+ok 431 - merged source buffer references decode correct POSITION and index values (regression)
+ok 432 - opening volumes removed, overlapping openings union not double-subtracted
+ok 433 - concave and reversed floor polygons triangulate without filling notch
+ok 434 - package digests link geometry, source and semantic document
+ok 435 - cancel/failure/invalid source preserve input and saved project; no storage calls
+ok 436 - no source or evidence overwrite; outside path rejected
+ok 437 - profile current MIT fixture measured; malformed/oversized/extension/geometry/URI rejected
+ok 438 - project persistence imported/exported 1.4 snapshot unaffected by adapter
+ok 439 - new offline surface batch has three actual hash-verified CC0 albedos; old fifty unchanged
+ok 440 - new PNG albedos export through separate profile; no project or browser catalog mutation
+ok 441 - all fourteen existing curated models pass new core geometry guard; measured bounds not manufacturer precision
+ok 442 - offline PNG PBR preserves four channel slots while default browser-compatible profile rejects PNG
+ok 443 - surface converter rejects unsupported, oversize and indecodable input without filesystem mutation
+ok 444 - Blender rejects corrupt package before scene import/save # SKIP
+ok 445 - the example offers 3D first and then a copy of one's own; in 3D it does not offer 3D again
+ok 446 - an empty project has no guide button: the plan already shows «Crear primera estancia»
+ok 447 - after the first room the next action is doors and windows, not «Objetivo completado»; then furniture, 3D, presentation
+ok 448 - a change after presenting asks to review that version again; the 3D scene open counts as reviewing
+ok 449 - «Ahora no» puts off doors and windows, furniture or the 3D review for this project only
+ok 450 - building conflicts come before furniture and presentation, with the real headline and no promise to present
+ok 451 - an image plan walks through calibrate → second dimension → (repeat | confirm) → draw
+ok 452 - every result has at most one primary action, labels in the three languages and no placeholder left; input unchanged
+ok 453 - footprint helper is the W3 oriented footprint (clockwise rotation, y down)
+ok 454 - overlap uses the rotated footprint: no false positive where an axis-aligned box would overlap
+ok 455 - touching footprints are not an overlap; positive penetration is measured in mm
+ok 456 - clearance needs an explicit threshold; without it the check is insufficient but overlaps still run
+ok 457 - clearance threshold boundary: equal is fine, just below is reported once per pair
+ok 458 - a wall between two pieces is not a free gap, but a doorway in that wall is
+ok 459 - door sweep follows the stored hinge and side; contact angle is reported
+ok 460 - door without swing data is never declared blocked: partial or insufficient evidence
+ok 461 - stacking by design in Rubik 3D is excluded and listed, not reported or hidden
+ok 462 - invalid or missing geometry is skipped and degrades the status
+ok 463 - review is read-only: frozen projects work and the serialized project is unchanged
+ok 464 - reference plan: intentional stacks excluded, swing interference measured, limits always stated
+ok 465 - omitted geometry with a threshold and an active door: every object check is partial, valid findings stay
+ok 466 - omitted geometry with a threshold and no active door: doors stay checked (nothing to check), the rest partial
+ok 467 - omitted geometry without threshold: clearance stays insufficient and says so; global never checked
+ok 468 - evidence geometry is exact: overlap polygon, closest-point segment and leaf at contact
+ok 469 - create/open/rename/duplicate/delete persist independently after reload
+ok 470 - failed storage writes and invalid names preserve collection atomically
+ok 471 - collection rejects corruption without overwriting source
+ok 472 - renaming a project updates its portable name without altering independent projects
+ok 473 - file import preserves the visible original atomically, even when the incoming document has the same ID
+ok 474 - failed or invalid file imports leave every entry and the active project unchanged
+ok 475 - floors, walls and palette come from the project, ordered by weight
+ok 476 - wall finishes and real catalog samples; an empty project says so
+ok 477 - example: every shot stays clear of walls on the densely interpolated path, at eye height, looking slightly down
+ok 478 - example: the en-suite bath shot shows the bath and its three fixtures, not the bedroom
+ok 479 - synthetic rotated 30°: every shot stays clear of walls on the densely interpolated path, at eye height, looking slightly down
+ok 480 - synthetic rotated 30°: the en-suite bath shot shows the bath and its three fixtures, not the bedroom
+ok 481 - composition is deterministic and the Blender mapping matches the PR \#24 exporter frame
+ok 482 - the synthetic second case is declared, valid and has no axis-aligned wall
+ok 483 - offline pilot end to end in Blender (anchors only) # SKIP set BPY_PYTHON to a Python with bpy 5.2
+ok 484 - sides of a shared wall follow the wall direction and match the leaf the 2D/3D draw
+ok 485 - oblique walls: rotating the whole home keeps every label on the side the leaf really opens to
+ok 486 - exterior wall, overlapping rooms and repeated names fall back to «Lado 1/2»
+ok 487 - side attribution agrees with the MCP spatial relation (\#40) on the reference home
+ok 488 - interval guard: touching is fine; overlapping, outside the wall or worsening a legacy overlap is refused
+ok 489 - edit keeps the ID, removes or creates the swing with the type and never certifies a review
+ok 490 - the chosen side drives layout review of door leaves
+ok 491 - add from a room: only its walls, door opens into it, no overlap, input untouched
+ok 492 - a wall reversed in «Plano propio» keeps its openings in place with the same leaf
+ok 493 - add creates every contract kind from a room; swing only for a hinged door
+ok 494 - parcel source extent, pixels and north-up overlay are exact and bounded
+ok 495 - PNOA request uses fixed official WMS layer, exact EPSG metre bbox and JPEG
+ok 496 - registry routes explicit orthophoto, validates provenance, keeps pixels out of durable site
+ok 497 - PNOA rejects WMS XML, oversized and mismatched rasters even on HTTP 200
+ok 498 - project and building JSON/ZIP keep metadata, never raster, with root site authority
+ok 499 - FT8-S3-02 · canonical parcel: reference, CRS, source and a stable fingerprint
+ok 500 - FT8-S3-03 / QA-10 · association lands only on the selected project; others are untouched; revision checked
+ok 501 - FT8-S3-03 / FT8-S3-08 · a different parcel replaces the saved one only with confirmation; dependants are reported
+ok 502 - FT8-S3-05 · a failed lookup changes nothing (no result, invalid result)
+ok 503 - FT8-S3-04 · explicit placement: north required, exact round trip within the contract tolerance
+ok 504 - FT8-S3-07 / QA-17 · export per channel: restricted geometry never leaves; reference and attribution as text
+ok 505 - FT8-S3-06 · PNOA and MDT05 are optional context with their own licence; never requested automatically
+ok 506 - reference normalization follows official 14/18/20 prefix rule without correction
+ok 507 - canonical source geometry preserves holes, members, precision and deterministic frame
+ok 508 - geometry rejects invalid rings, holes, overlap and unsupported CRS without repairing
+ok 509 - registry parcel routing is explicit, capability-gated, immutable and stable
+ok 510 - site.parcel survives project and building JSON/ZIP without provider and never changes editable geometry
+ok 511 - format detection uses content, never the file extension
+ok 512 - large scans are reduced uniformly within the side and pixel limits
+ok 513 - DXF double-line walls become wall axes with measured thickness in mm
+ok 514 - DXF doors and windows land on their wall and rooms take interior faces and text labels
+ok 515 - DXF units scale to mm and unsupported or empty drawings are rejected with guidance
+ok 516 - RoomPlan CapturedRoom JSON becomes walls and openings on the nearest wall
+ok 517 - IFC walls take the minimum-area footprint; openings come from IfcOpeningElement with real sill; rooms from IfcSpace
+ok 518 - vector PDF: filled walls, swing arcs and glazing lines give walls, doors, windows and named rooms at the printed scale
+ok 519 - RoomPlan: flat and nested transforms agree; parentIdentifier places openings; sections name rooms
+ok 520 - raster bands: thick dark strokes become walls, thin strokes crossing a gap are ignored
+ok 521 - DWG versions are named in the guidance
+ok 522 - validates contact and files with plain messages
+ok 523 - builds a safe request, text and e-mail link without price
+ok 524 - 1–2. one level: axon supported; breakdown unsupported as single-level
+ok 525 - 3–4. two levels: both variants, top-level semantics
+ok 526 - 6–9. model-space coordinates: offsets on X / plan Y, real elevation, bounds bottom/top
+ok 527 - 10. stable order: order → sourceIndex → levelId
+ok 528 - 11. reason precedence
+ok 529 - 12–14. partial: invalid levels excluded and reported; every structural level is read
+ok 530 - 15–17. nominal gap, visual clearance and overlap-safe extra
+ok 531 - 18. unusual wall heights: lifted levels never overlap vertically
+ok 532 - 19–20. compact and exploded envelopes
+ok 533 - 21–23. serializable, no mutation, deterministic
+ok 534 - 33. N levels: conceptual accumulation (the product stays at two levels)
+ok 535 - 24, 30. axon-open: p0/p1 exactly the overview, 7000 ms, levels unmoved
+ok 536 - 25–26, 30. exploded: p0/p1 overview with zero deltas, full separation in the hold, 10000 ms
+ok 537 - 17 (contract). state is serializable plain data
+ok 538 - 27. stateAt is history-independent (reverse, scrub)
+ok 539 - 28–29. world-space fit: every corner in front and on screen; far/maxDistance cover the box
+ok 540 - 31. reduced-motion holds land on the readable states
+ok 541 - 32. independent of north, labels and language
+ok 542 - narratives refuse incomplete input instead of guessing
+ok 543 - real project geometry (Core.geometry) is accepted
+ok 544 - building plan: levels bottom-up, an overview per level, chosen order kept, stops keyed by level
+ok 545 - building plan: a level without chosen rooms is left out; nothing chosen gives no plan; more than two levels refused
+ok 546 - building plan: equal room IDs on both levels give distinct stops; currentBuilding follows every level
+ok 547 - capture reader: a building batch relates every view to one level and room; ambiguous batches are refused
+ok 548 - capture reader: existing single-level batches still read (committed r4-m09 batch and the current 1.x shape)
+ok 549 - presentation plan uses real room IDs, project center and revision without changing source
+ok 550 - presentation rejects empty or demolished layouts
+ok 551 - ordered room selection and sidecar reconciliation keep project geometry authoritative
+ok 552 - minimap preserves irregular rotated coordinates and maps camera direction to plan axes
+ok 553 - 1. simple rectangle: four stable candidates, plan-up first and clockwise
+ok 554 - 2. only walls the Exterior authority marks as façade count
+ok 555 - 3. demolished walls never come back
+ok 556 - 4. outward normal from the rooms, whatever the wall direction
+ok 557 - 5. ambiguous normal: left out of the candidates without reclassifying the wall (partial)
+ok 558 - 6. grouping in 45° sectors: a slightly rotated plan keeps four façades, a 30° one moves sector
+ok 559 - 7. irregular (L) plan: walls on the same side add up into one candidate
+ok 560 - 8. diagonal façades: a chamfered corner gives its own 45° candidate, not forced to N/S/E/O
+ok 561 - 9. stable ids: same order and names whatever the order walls are listed in
+ok 562 - 10. default = the longest total façade length
+ok 563 - 11. equal length → the most openings
+ok 564 - 12. equal length and openings → the first in angular order
+ok 565 - 13. without north: neutral labels, no cardinal invented
+ok 566 - 14. with north: cardinal from wrap(anglePlanDeg − northOffsetDeg)
+ok 567 - 15. north not a multiple of 45°
+ok 568 - 16. partial: a tiny façade group is excluded and said so, the others continue
+ok 569 - 17. no façade walls: unsupported with its reason
+ok 570 - 18. façade walls without a demonstrable outside: no-oriented-facade-walls
+ok 571 - 19. degenerate: façades too small to read; invalid geometry
+ok 572 - 20. two levels: façades of the same side add up into one candidate, the façade appears once
+ok 573 - 21. level offsets are respected in the building frame
+ok 574 - 22. the input is not mutated
+ok 575 - 23. determinism: the same input gives a deepEqual result
+ok 576 - reference project: supported with façades derived from its rooms
+ok 577 - R10 room stops make every counted room the protagonist: reference home
+ok 578 - R10 room stops make every counted room the protagonist: rotated home with concave bedroom
+ok 579 - R10 small en-suite bathroom is not dominated by the main bedroom
+ok 580 - R10 framing is deterministic, declares sections and honours a cut editor view
+ok 581 - R10 walkthrough choreography keeps eye height, gentle pitch, ramps and limited turning
+ok 582 - R10 planner grid follows the dominant wall angle of a rotated plan without changing axis-aligned routes
+ok 583 - R10 smoothed route keeps clearance along its whole dense path
+ok 584 - M18 reference home finds an interior path to the main bedroom and declares unreachable rooms aerial
+ok 585 - M18 interpolated path rounds a diagonal wall with clearance
+ok 586 - M18 uses a door opening and reports the door visual to open
+ok 587 - M18 concave room follows the floor polygon instead of its bounding box
+ok 588 - M18 furniture barrier, missing entrance and search budget produce explicit alternatives
+ok 589 - §14.1/2 simple rectangular one-level plan: supported, x axis, centre candidate
+ok 590 - §14.4/5/6 axis: X dominant, Z (plan y) dominant, tie → x
+ok 591 - visible side faces the deterministic overview camera; start is just in front of the envelope
+ok 592 - §14.3 irregular (L) plan: deterministic choice with rooms first
+ok 593 - §14.7/8/9 candidates 50 % → 40 % → 60 %, measured from the camera side
+ok 594 - ties keep the stable order; rooms win over walls
+ok 595 - §14.10/13 nothing crossed or no geometry → unsupported with a concrete reason
+ok 596 - §14.11 demolished walls do not count
+ok 597 - §14.12 no rooms but enough walls: supported on walls
+ok 598 - §14.14 openings crossed by the cut become vertical gaps of the cut face (no invented thickness)
+ok 599 - oblique wall: cut face width is its thickness across the line
+ok 600 - the reference project: supported, rooms and gaps from the real model
+ok 601 - §9 building: one axis for every level from the envelope in the building frame, offsets respected
+ok 602 - no mutation of the source and the sweep offset is a pure function
+ok 603 - section-open lives in NARRATIVES and SCENE_MS
+ok 604 - p = 0 is the overview untouched; p = 1 is exactly the overview with the section on
+ok 605 - checkpoints .25 .50 .75 follow the contract phases
+ok 606 - dolly zoom keeps the framed size of the cut while the lens opens
+ok 607 - continuous across phase boundaries and up to the end
+ok 608 - deterministic and reversible: same p, same state, forwards or backwards
+ok 609 - reduced-motion hold is the sectioned overview
+ok 610 - narrower screens frame the cut wider; input never mutated; bad input refused
+ok 611 - sequence with section-open between the plan reveal and the room descent
+ok 612 - p = 1 is exactly the overview pose, lens and the view near/far (no jump into the presentation)
+ok 613 - p = 0 is the plan: seen from above with a narrow, derived lens and flattened walls
+ok 614 - checkpoints 0, .25, .5, .75, 1 are monotonic: walls rise, lens opens, camera approaches
+ok 615 - reversible and deterministic: 0→1, 1→0 and 0→1→0 visit identical states; a new narrative gives the same
+ok 616 - derived from the project, not from the example: other sizes, aspect and a card region
+ok 617 - rejects missing facts with a readable error and keeps the input untouched; unknown narratives fail
+ok 618 - play time is proportional to the distance in p; reduced motion is immediate
+ok 619 - room descent: p = 0 is the overview, p = 1 is exactly the room stop pose with the walls at its section
+ok 620 - room descent: the camera descends along one arc (as the editor flights), walls go down monotonically, reversible
+ok 621 - room descent: play time follows the travel within bounds; missing poses fail readably
+ok 622 - from the 2D editor view: p = 0 keeps its centre and framed height; the view turns once, smoothly, to the overview
+ok 623 - sequence: P ↔ (scene, local p) are pure and inverse; boundaries go to the next scene; shares follow the weights
+ok 624 - elevation-open: registered narrative with its duration
+ok 625 - elevation-open: p = 0 and p = 1 are exactly the overview pose, lens and near/far, nothing enhanced
+ok 626 - elevation-open: frontal hold looks along −normal, horizontal, with the narrow 4° lens, and holds still
+ok 627 - elevation-open: the façade fits the free region in the frontal hold
+ok 628 - elevation-open: oblique exterior perspective from outward + clockwise tangent × .35 + up × .18
+ok 629 - elevation-open: continuous, reversible and deterministic (no jump, 0→1 and 1→0 visit identical states)
+ok 630 - elevation-open: enhancements are pure functions of p (solar only when chosen, context off in the frontal phase, levels rise and fold)
+ok 631 - elevation-open: reduced motion holds front, light and exterior; the sequence places the scene after the section
+ok 632 - elevation-open: missing facts fail readably
+ok 633 - catalog: exactly five immutable V1 profiles, six families, policies and no-template/audience namespaces
+ok 634 - validator rejects duplicate-template / 0
+ok 635 - validator rejects duplicate-capability / 1
+ok 636 - validator rejects unknown-capability / 2
+ok 637 - validator rejects unknown-family / 3
+ok 638 - validator rejects invalid-policy / 4
+ok 639 - validator rejects invalid-scope / 5
+ok 640 - validator rejects invalid-coverage / 6
+ok 641 - validator rejects invalid-minimum / 7
+ok 642 - validator rejects impossible-coverage / 8
+ok 643 - validator rejects bad-adapter / 9
+ok 644 - validator rejects bad-adapter / 10
+ok 645 - validator rejects invalid-requires / 11
+ok 646 - validator rejects cyclic-dependency / 12
+ok 647 - validator rejects invalid-reduced-motion / 13
+ok 648 - validator rejects impossible-target / 14
+ok 649 - validator rejects independent-building-toggle / 15
+ok 650 - validator rejects ft3d5-pending / 16
+ok 651 - validator rejects invalid-building-reading / 17
+ok 652 - validator rejects invalid-host / 18
+ok 653 - QA1,6,9,10,21: real one-level descriptor normalizes compact and single-level breakdown honestly
+ok 654 - QA2,7,8: partial descriptor and exact excluded reasons; two-source/one-valid cannot explode
+ok 655 - QA3–5: no-levels remains the FT3D-5 reason
+ok 656 - QA3–5: invalid-level-geometry remains the FT3D-5 reason
+ok 657 - QA3–5: degenerate-building-envelope remains the FT3D-5 reason
+ok 658 - QA11–17,20,22,23,35–37: adapter order, a single slot, nominal timings supplied by existing Story
+ok 659 - QA13,14,40: choose the first real eligible overview, never substitute a different stop or invent an anchor
+ok 660 - QA24–26: unsupported explicit variants and independent toggles are rejected; off must preserve minimum
+ok 661 - required disable and closing; optional overrides cannot activate an excluded capability
+ok 662 - QA38–41 / P11: minimum before execution, no roomless anchor and no overview(building)
+ok 663 - coverage and grammar: all levels are required for all-presented-levels, atLeast and partial truth
+ok 664 - room selection: family priority, diversity, area-only unclassified fallback, six-room recommendation
+ok 665 - explicit and historical rooms: preserve >6, compound identity, stale IDs, reset and switch without persistence
+ok 666 - QA30,33,34: structural levels independent of selected rooms; context stays elevation-only
+ok 667 - Section/Elevation partial, neutral north, Solar/no host/facade stale, resources are never chapters
+ok 668 - snapshot lifetime: once per key; entry/revision/level invalidate, options and viewport do not derive again
+ok 669 - QA29,31: deterministic, serializable, frozen inputs, no browser/network/storage or motion/language authority
+ok 670 - runtime failure uses remaining minimum, restores/skip or close; frozen semantic story is not rebuilt
+ok 671 - freeze boundary detaches session data; null catalog entries produce diagnostics instead of crashing
+ok 672 - project preview derives from the current project geometry
+ok 673 - axonometric uses the declared wall heights and skips demolished walls
+ok 674 - surface preview reflects the real metric and its status
+ok 675 - delivery preview does not invent unavailable outputs
+ok 676 - brand preview reflects the selected profile only
+ok 677 - preview components do not mutate the project
+ok 678 - automatic views use the saved presentation rooms, then main rooms by family and area
+ok 679 - browser schema is an exact copy of the F0 authority
+ok 680 - reference home validates and projects rooms, 48 original wall segments and 22 openings
+ok 681 - room family and free name stay independent, survive save/load and preserve area
+ok 682 - legacy name is untouched, missing family is derived, future family survives unchanged
+ok 683 - room display keeps legacy translations and uses family labels without changing data
+ok 684 - room name contract remains strict through 1.5 and optional from 1.6
+ok 685 - F0 valid example round-trips every field, image reference, asset pointer and extension
+ok 686 - newer minor retains unknown data; unknown major is rejected
+ok 687 - atomic rejection: malformed JSON
+ok 688 - atomic rejection: F0 invalid fixture
+ok 689 - atomic rejection: unknown version
+ok 690 - atomic rejection: wrong units
+ok 691 - atomic rejection: duplicate ID
+ok 692 - atomic rejection: broken wall reference
+ok 693 - atomic rejection: broken material reference
+ok 694 - atomic rejection: broken room reference
+ok 695 - atomic rejection: out of range coordinate
+ok 696 - atomic rejection: fractional coordinate
+ok 697 - atomic rejection: negative dimension
+ok 698 - atomic rejection: non-finite number
+ok 699 - atomic rejection: wrong numeric type
+ok 700 - atomic rejection: zero length wall
+ok 701 - atomic rejection: opening outside wall
+ok 702 - atomic rejection: opening above wall
+ok 703 - atomic rejection: self-intersecting polygon
+ok 704 - atomic rejection: repeated closing vertex
+ok 705 - atomic rejection: bad calibration
+ok 706 - atomic rejection: invalid timestamp
+ok 707 - atomic rejection: timestamp order
+ok 708 - atomic rejection: event injection in ID
+ok 709 - atomic rejection: CSS injection in color
+ok 710 - atomic rejection: unknown 1.0 field
+ok 711 - atomic rejection: future field cannot shadow numeric adapter
+ok 712 - storage failure does not apply an otherwise valid import
+ok 713 - legacy migration preserves IDs, rounds mm, maps references and retains original storage
+ok 714 - corrupt old/new saved states degrade to reference without overwriting originals
+ok 715 - failed migration write keeps original and usable migrated in-memory project
+ok 716 - editing adapters mutate canonical entities; history serialization has no aliases
+ok 717 - projection follows geometry edits and stable IDs despite wall reorder
+ok 718 - diagonal wall projection retains finite geometry without changing array length
+ok 719 - summarize counts only recorded origins and never changes the project
+ok 720 - no plan and pending scale are said plainly
+ok 721 - a template is named as a template, not as a plan
+ok 722 - furniture and finishes are counted, never attributed to Rubik or to the professional
+ok 723 - browser export uses its own global and requires the surface metrics global
+ok 724 - floor area is exactly the existing SurfaceMetrics result
+ok 725 - measured, estimated and pending follow the existing scale semantics
+ok 726 - room interior perimeter is derived from polygon and does not deduct openings
+ok 727 - wall physical quantities preserve one face and both faces explicitly
+ok 728 - known zero opening area is zero, never confused with unknown
+ok 729 - invalid wall height makes wall area unavailable instead of zero
+ok 730 - incomplete opening geometry keeps gross area but makes opening/net unavailable
+ok 731 - overlapping persisted openings use union area rather than double subtraction
+ok 732 - room wall faces are calculated only for geometrically demonstrated wall-face overlaps
+ok 733 - partial room-wall association returns a subtotal and marks the missing boundary
+ok 734 - room with no demonstrable wall relation reports wall-face area unavailable
+ok 735 - shared physical wall becomes one face for each adjacent room without duplicating the wall entity
+ok 736 - ambiguous overlapping physical walls do not produce a confident room-face total
+ok 737 - excluded room keeps its floor quantity but only SurfaceMetrics floor total excludes it
+ok 738 - unusable floor polygon is unavailable rather than 0 and makes floor subtotal incomplete
+ok 739 - opening counts are direct document quantities by kind
+ok 740 - wall lifecycle totals stay separate for existing, new and demolished walls
+ok 741 - floor material areas are derived without hiding excluded rooms
+ok 742 - N-level home keeps order and aggregates mixed measured/estimated quantities
+ok 743 - single project home is one level
+ok 744 - legacy and future V1-like inputs are read without mutation or version changes
+ok 745 - quantity engine never mutates its source object
+ok 746 - invalid inputs and unknown IDs fail explicitly instead of fabricating quantities
+ok 747 - quantity API keeps professional units numeric and unformatted
+ok 748 - room face with missing wall height is unavailable rather than fabricated
+ok 749 - totals and tables come from the quantity engine
+ok 750 - new and demolished walls are separated; unavailable stays null
+ok 751 - CSV for a Spanish spreadsheet
+ok 752 - raw image axes convert before placement/rotation/rounding, diagonals preserved
+ok 753 - snapshot is immutable, stable across exports and excludes private source fields
+ok 754 - source version anchor is bound to the actual detector bytes
+ok 755 - unknown/missing unit, frame, SHA, source, scale and metadata block export
+ok 756 - uncalibrated, wrong-image, mismatched or zero scales are not silently invented
+ok 757 - out-of-bounds or collapsed coordinates reject entire export without clipping
+ok 758 - anchors are normalised and bounded; anything else is the whole home
+ok 759 - a file with every anchor kind round-trips, and missing rooms or elements are detected
+ok 760 - anchor lists name elements by what they are and where they are
+ok 761 - a review is tied to one project version and never contains the project
+ok 762 - received files are read strictly
+ok 763 - the answer separates received, planned, discarded and implemented-in-version, and is read strictly
+ok 764 - rectangle footprint uses facade cycle and actual half-thickness, not envelope
+ok 765 - L and U concavities remain simple and have correct exterior area
+ok 766 - different wall thickness at orthogonal corners has bounded intersections
+ok 767 - canonicalization ignores start, winding, duplicate and redundant collinear vertex
+ok 768 - facade wall order and direction do not change footprint bytes
+ok 769 - open/multiple facades and heterogeneous tops abstain
+ok 770 - a facade cycle that does not enclose the indoor rooms abstains (audit regression)
+ok 771 - room edges may touch a corner or follow part of a split collinear facade
+ok 772 - concave U rejects an indoor room whose edge bridges the exterior notch
+ok 773 - self-intersection and almost-zero edges are invalid
+ok 774 - acute miter is unavailable, without bevel or guessed repair
+ok 775 - orthogonal setbacks conserve lower area, including containment, tangent and overhang
+ok 776 - non-orthogonal setback is unavailable, equivalent non-orthogonal footprint is allowed
+ok 777 - building transforms offsets into common frame, preserving areas and no mutation
+ok 778 - contract building example derives both elevations and exposed lower cells without mutation
+ok 779 - vendored Three triangulates concave roof with +Y normals and matching area
+ok 780 - blank project uses unchanged 1.3 contract and independent empty geometry
+ok 781 - multiple rooms share exactly one complete wall without changing the neighbor
+ok 782 - interior dimensions move three walls, preserve IDs, materials, scale and undo snapshot
+ok 783 - right/bottom fixed sides and depth changes preserve the selected interior face
+ok 784 - shared wall stays fixed, moving it or changing its length is rejected atomically
+ok 785 - door/window on a moving wall require explicit impact; IDs and offsets preserved
+ok 786 - opening offset changes keep its physical position when the wall start moves
+ok 787 - openings beyond shortened wall prevent application
+ok 788 - affected manual measurements block, unrelated measurements remain exact
+ok 789 - furniture is never silently moved/scaled/reassigned; shrink or wall collision blocks
+ok 790 - irregular rooms, missing/duplicate walls and junctions refuse safe numeric edit
+ok 791 - creation refuses overlapping rooms, invalid dimensions and mismatched shared spans
+ok 792 - extension fields survive room design and JSON/ZIP round trip
+ok 793 - separate projects persist after reload; failed collection write preserves prior data
+ok 794 - prolonged walls and partial/irregular neighbors cannot be silently displaced
+ok 795 - measurements anchored at wall axes also refuse dimensional changes
+ok 796 - share refuses unless configured, POST, with the access code and a known kind
+ok 797 - share stores the file with a random suffix and returns its URL, never the storage token
+ok 798 - view serves only published client files from the owner store, with a strict CSP
+ok 799 - facades take the outer side and the declared north; windows by orientation
+ok 800 - sun path at the project location matches the astronomy of the reference days
+ok 801 - site view draws the parcel and only an explicitly placed, provable footprint
+ok 802 - site visual read model never mutates its inputs
+ok 803 - north hemisphere: morning east, afternoon west, summer higher than winter and night below horizon
+ok 804 - south hemisphere summer sun is north at noon; normalized direction and declared north rotate the scene only
+ok 805 - IANA local time resolves winter, summer and DST; nonexistent and repeated times are rejected explicitly
+ok 806 - invalid or absent data never creates coordinates, time or north
+ok 807 - manual provider contract is offline, minimal and honest about supported capabilities
+ok 808 - site roundtrip, versioning, unknown future project fields and shared building authority
+ok 809 - independent NREL SPA published example agrees within 0.5 degrees (product tolerance)
+ok 810 - project and building ZIP roundtrip retain internal site without adding geographic media or network dependencies
+ok 811 - the corrected fixture has no BW5
+ok 812 - bed over the slab void of the upper level: BW5 with level, object, stair, rule and evidence
+ok 813 - sofa over the stair of the lower level: BW5 on the leaving level
+ok 814 - rotated furniture: the oriented footprint decides, not its bounding box
+ok 815 - contact without penetration and sub-tolerance overlap are not conflicts; above the tolerance is
+ok 816 - another level with the same XY never warns: each level uses only its own stairs in its own frame
+ok 817 - a stair added after the furniture is detected, and BW5 never blocks validation, JSON or ZIP
+ok 818 - layout review reports the same conflicts, without its own stair geometry
+ok 819 - seeded generative check against a sampling oracle (complements the fixed cases)
+ok 820 - browser export keeps the existing material surface catalog global intact
+ok 821 - rooms of one level add up; the status follows the level scale
+ok 822 - an excluded room keeps its area and does not add up
+ok 823 - an unavailable room is not 0 m²: the subtotal is the computable part and says it is incomplete
+ok 824 - N levels and the home total; mixed statuses aggregate as estimated
+ok 825 - a single project is one level; reading never changes it; the example keeps its net area
+ok 826 - inventory requires ten qualified maps per family and every map is local, unique and hash checked
+ok 827 - each library asset has pinned author and distributor CC0 evidence, not the website code license
+ok 828 - catalog rejects duplicate graphics, missing rights, unsafe paths and impossible dimensions
+ok 829 - PBR pilot stays within two aligned, bounded and licensed candidates
+ok 830 - five families, accent insensitive search and wall compatibility filters
+ok 831 - floor / shared whole-wall assignment changes only materials and target reference, preserving geometry and openings
+ok 832 - changing repeat for one room preserves another assignment and survives local library + JSON import/export
+ok 833 - broken wall references and wrong assignment category are rejected; unknown preset round-trips as color fallback
+ok 834 - rectangular grid keeps distinct extents, north/south values and bilinear samples
+ok 835 - NoData prevents interpolation and triangles; source to local is 1:1
+ok 836 - invalid dimensions, spacing, extent, CRS and values reject
+ok 837 - Project 1.11 and Building 1.4 persist metadata only, preserve level authority and export
+ok 838 - WCS URL requests exact official coverage, source and output CRS and ASCII
+ok 839 - ASCII parser checks CRS sidecar, dimensions, orientation and explicit NoData
+ok 840 - all four CRS require their own output projection sidecar
+ok 841 - registry terrain is explicit, rejects malformed available, and keeps legacy providers
+ok 842 - provider fetch is bounded, CORS/GET, no fallback and errors stay unavailable
+ok 843 - single north transform 0
+ok 844 - single north transform 90
+ok 845 - single north transform 37
+ok 846 - vertical origin, UV corners and no extrapolated texture domain
+ok 847 - placement dependencies, version gates, metadata-only JSON/ZIP and removal without downgrade
+ok 848 - Building exportLevel rebases offsets and vertical origin once with same physical point
+ok 849 - runtime assets isolated by owner and exact snapshots; URLs revoked on replacement/removal
+ok 850 - export policy uses license snapshots; sorted exact attribution dedup
+ok 851 - Solar at north 37 is identical with or without placement
+ok 852 - offline GLB/Blender package keeps local building geometry and omits territorial source layers
+ok 853 - renderer applies north, building offsets and vertical origin once; policy and resource cleanup
+ok 854 - offline Three runtime is the pinned 0.160.0 dependency closure with intact bytes and license
+ok 855 - image signatures/types/dimensions and strict application limits
+ok 856 - image/world transforms retain original pixels with rotation and translation
+ok 857 - calibration, independent verification, confirmation and recalibration are coherent
+ok 858 - schema and semantic verification reject forged points, measurements/status and confirmation
+ok 859 - stable manual walls/openings/rooms, snapping, deletion and invalid polygon rejection
+ok 860 - W1-W4 detect actual review, contour, furniture and scale without blocking
+ok 861 - W2 exactly covers segmented contours including tolerance around wall ends
+ok 862 - W3 ignores the solid removed by a real opening
+ok 863 - ZIP round-trip keeps full geometry, original image bytes and private filenames out
+ok 864 - ZIP rejects corruption, CRC, duplicate names, escape paths, broken refs and limits
+ok 865 - ZIP DEFLATE input is bounded and valid (independent compressed fixture)
+ok 866 - old V1 projects remain valid without new optional verification/opacity
+ok 867 - new project collection writes are atomic on storage failure
+ok 868 - snap accepts DOMPoint-like inherited coordinates from the actual SVG conversion
+ok 869 - JPEG and EXIF rotations retain original bytes/pixels, neutralizing display copy only
+ok 870 - ZIP rejects duplicate entries and encrypted flags before touching a collection
+ok 871 - ZIP inflation stops before accepting a payload larger than its declared bound
+ok 872 - W3 catches a furniture footprint crossing a concave room even with all corners inside
+ok 873 - static WebP VP8 and VP8L preserve dimensions, calibration and original ZIP bytes
+ok 874 - image ingestion validates empty MIME, extensions, WebP bounds and unsupported variants
+ok 875 - second dimension: coherent accepted, contradictory refused with numbers, scale and geometry kept
+ok 876 - variant copies the visible (possibly unsaved) project, gets unique ids and a local link
+ok 877 - editing the variant never mutates the original; renames keep the relation
+ok 878 - names avoid collisions, respect 120 characters, nest under the root and cap at two variants
+ok 879 - removing a variant keeps the original; removing the original keeps variants without a dangling link
+ok 880 - full storage fails atomically: same bytes, same list, same active project, no partial metadata
+ok 881 - old collections without variant metadata load unchanged; stale links are ignored, not rewritten
+ok 882 - exported variant is a normal FloorPlanProjectV1 project without local metadata
+ok 883 - comparison metrics reuse geometry and the Phase A review states without inventing a threshold
+ok 884 - M12 comparison frame shares scale, includes shifted geometry and rotates object footprints
+ok 885 - an older project opens unchanged: no origin is added and the version stays
+ok 886 - legacy partition without origin stays unregistered until the professional declares it
+ok 887 - declaring load-bearing, partition and back to unspecified, each time by a professional
+ok 888 - the type and its origin survive save and load
+ok 889 - a newer V1 version is kept; invalid values are refused; nothing is inferred
+ok 890 - clear strokes yield centerline proposals and multiple independent candidates
+ok 891 - short interruptions join but large gaps stay separate
+ok 892 - blank, uniform dark, low contrast and isolated noise abstain
+ok 893 - transparent strokes do not fabricate lines and raster limits are enforced
+ok 894 - sampling maps through original pixels, rotation and displacement with F1b transform
+ok 895 - explicit acceptance and correction reuse canonical IDs, source states and export validation
+ok 896 - invalid corrected geometry fails validation on a clone without changing live project
+ok 897 - synthetic detector timing is recorded without imposing product budgets
+# tests 897
+# pass 895
+# fail 0
+# skipped 2
+# duration_ms 54363.146481

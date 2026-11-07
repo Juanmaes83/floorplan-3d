@@ -719,6 +719,8 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/territory-renderer.js"></script>
 <script src="js/geo-provider.js"></script>
 <script src="js/catastro-parcel-provider.js"></script>
+<!-- FT3D-8 M2 (S3): official Catastro lookup by reference, registered in the default territorial registry. -->
+<script src="js/catastro-wfs-provider.js"></script>
 <script src="js/pnoa-orthophoto-provider.js"></script>
 <script src="js/ign-mdt05-terrain-provider.js"></script>
 <script src="js/geo-site-adapter.js"></script>
@@ -5336,5 +5338,14 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/economic-dossier-core.js"></script>
 <script src="js/economic-dossier-ui.js"></script>
 <script src="js/professional-workspace-ui.js"></script>
+<!-- FT3D-8 M2 (S4): one project, one budget, one plan, one evolution, one delivery. Reuses M1 and Gate D engines. -->
+<script src="js/cost-provider-bcca-es.js"></script>
+<script src="js/cost-catalog-core.js"></script>
+<script src="js/construction-schedule-core.js"></script>
+<script src="js/construction-project-adapter.js"></script>
+<script src="js/construction-record-core.js"></script>
+<script src="js/construction-context.js"></script>
+<script src="js/construction-plan-ui.js"></script>
+<script src="js/reference-prices-ui.js"></script>
 </body>
 </html>
