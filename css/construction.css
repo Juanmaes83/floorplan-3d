@@ -133,3 +133,6 @@
 .cx-dialog .cx-pick label span{flex:1 1 auto}
 .cx-dialog .cx-filter{display:block;width:100%;min-height:40px;margin:0 0 6px;padding:0 10px;border:1px solid var(--line-strong,#978b79);border-radius:4px;font:inherit;font-size:15px}
 .cx-dialog .cx-pick label[hidden],.cx-dialog .cx-pick fieldset[hidden]{display:none}
+/* M2-UX-MOB-01 (confirmed by the integration CI on Ubuntu fonts): on phones the footer message takes its own full row
+   instead of sharing it with the buttons (flex-basis 0 let it shrink to a narrow column of 4+ lines). */
+@media(max-width:600px){.cx-foot .cx-grow{flex:1 1 100%}}
