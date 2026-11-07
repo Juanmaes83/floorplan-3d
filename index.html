@@ -1916,6 +1916,9 @@ function applyView(){
 }
 function fitView(){
   const W = svg.clientWidth, H = svg.clientHeight;
+  // The plan has no size while it is hidden (3D, a presentation, a lost WebGL context): a scale of 0 would write a
+  // NaN/Infinity viewBox. The ResizeObserver below fits the plan as soon as it is laid out again.
+  if (!(W > 0 && H > 0)) { lastW = lastH = 0; return; }
   view.s = Math.min(W/BOUNDS.w, H/BOUNDS.h);
   view.x0 = BOUNDS.x - (W/view.s - BOUNDS.w)/2; view.y0 = BOUNDS.y - (H/view.s - BOUNDS.h)/2;
   applyView();
