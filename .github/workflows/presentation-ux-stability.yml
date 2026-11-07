@@ -12,6 +12,7 @@ on:
       - 'tests/presentation-ux-stability.browser.test.cjs'
       - '.github/workflows/presentation-ux-stability.yml'
       - 'docs/qa/presentation-ux/**'
+      - 'tests/helpers/render-budget.cjs'
 permissions:
   contents: read
 jobs:
