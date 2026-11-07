@@ -83,7 +83,7 @@ test('9. stable ids: same order and names whatever the order walls are listed in
  assert.deepEqual(ids(d),['facade-A','facade-B','facade-C'],'letters follow the candidates found, from plan-up clockwise');
  assert.deepEqual(angles(d),[90,180,270]);
 });
-test('10. default = the longest total façade length',()=>{
+test('10. without real openings, the default is the longest total façade length',()=>{
  const d=one(proj(box(0,0,6000,10000),[rect('r',0,0,6000,10000)]));
  assert.equal(d.defaultId,'facade-B','the long east side (10 m) wins over the 6 m sides');
 });
@@ -96,6 +96,43 @@ test('11. equal length → the most openings',()=>{
 test('12. equal length and openings → the first in angular order',()=>{
  assert.equal(one(rectangle()).defaultId,'facade-A');
  assert.equal(one(proj(box(0,0,8000,8000),[rect('r',0,0,8000,8000)])).defaultId,'facade-A');
+});
+// Owner decision 2026-11-06 (Presentation UX review): the default façade is the most expressive one of the project
+// itself — real opening surface first — instead of the longest; with no qualifying opening, the longest as before.
+const win=(id,wallId,w,h,kind='window')=>({id,wallId,kind,offsetMm:500,widthMm:w,heightMm:h,sillHeightMm:kind==='window'?900:0});
+test('12b. a narrower façade with real openings wins over a longer blank one',()=>{
+ const p=rectangle();p.openings=[win('o1',p.walls[1].id,1200,1200)];
+ const d=one(p);assert.equal(d.defaultId,'facade-B','the 6 m east side with a window beats the blank 10 m sides');
+ assert.equal(d.candidates.find(c=>c.id==='facade-B').openingAreaMm2,1200*1200);
+});
+test('12c. more real opening surface beats more openings',()=>{
+ const p=rectangle();p.openings=[win('o1',p.walls[2].id,600,600),win('o2',p.walls[2].id,600,600),win('o3',p.walls[1].id,2000,2100,'door')];
+ assert.equal(one(p).defaultId,'facade-B','4.2 m² of the east door beat 0.72 m² of two south windows');
+});
+test('12d. a small side under 60 % of the widest façade never wins; without a qualifying opening, the longest',()=>{
+ const p=proj(box(0,0,10000,4000),[rect('r',0,0,10000,4000)]);
+ p.openings=[win('o1',p.walls[1].id,3000,2400),win('o2',p.walls[0].id,600,600)];
+ assert.equal(one(p).defaultId,'facade-A','the 4 m glazed side (< 60 % of 10 m) loses to the 10 m side with a window');
+ const q=proj(box(0,0,10000,4000),[rect('r',0,0,10000,4000)]);q.openings=[win('o1',q.walls[1].id,3000,2400)];
+ assert.equal(one(q).defaultId,'facade-A','only the small side has openings: the longest, as before');
+});
+test('12e. equal opening surface → the most openings → the longest',()=>{
+ const p=rectangle();p.openings=[win('o1',p.walls[0].id,2000,1000),win('o2',p.walls[2].id,1000,1000),win('o3',p.walls[2].id,1000,1000)];
+ assert.equal(one(p).defaultId,'facade-C','2 m² each: two windows beat one');
+ const q=rectangle();q.openings=[win('o1',q.walls[0].id,1000,1000),win('o2',q.walls[1].id,1000,1000)];
+ assert.equal(one(q).defaultId,'facade-A','same surface and count: the longer (10 m) beats the 6 m side');
+});
+test('12f. openings without a size count as openings, never as invented surface',()=>{
+ const p=rectangle();p.openings=[{id:'o1',wallId:p.walls[1].id,kind:'window',offsetMm:500}];
+ const d=one(p);assert.equal(d.candidates.find(c=>c.id==='facade-B').openingCount,1);assert.equal(d.candidates.find(c=>c.id==='facade-B').openingAreaMm2,0);
+ assert.equal(d.defaultId,'facade-A','no real surface anywhere: the longest, as before');
+});
+test('12g. reference project: the façade with the largest real opening surface, not the long blind one',()=>{
+ const d=one(ref);const best=d.candidates.find(c=>c.id===d.defaultId),widest=Math.max(...d.candidates.map(c=>c.widthMm));
+ const eligible=d.candidates.filter(c=>c.openingCount>0&&c.widthMm>=.6*widest);
+ assert.ok(eligible.every(c=>c.openingAreaMm2<=best.openingAreaMm2),'largest real opening surface among eligible façades');
+ const longest=[...d.candidates].sort((a,b)=>b.totalFacadeLengthMm-a.totalFacadeLengthMm)[0];
+ assert.ok(best.openingAreaMm2>longest.openingAreaMm2,`${best.id} shows more of the home than the longest ${longest.id}`);
 });
 test('13. without north: neutral labels, no cardinal invented',()=>{
  const d=one(rectangle());

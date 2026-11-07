@@ -74,6 +74,13 @@ test('OFF parity; ON: selector, default, checkpoints, perpendicular 4° front in
  assert.ok(opts.length>=2);assert.ok(opts.every(o=>/^Fachada [A-H]/.test(o.t)));assert.ok(!opts.some(o=>/principal/i.test(o.t)),'never «principal»');
  const auto=opts.find(o=>o.s);assert.match(auto.t,/selección automática/);assert.equal(opts.filter(o=>/selección automática/.test(o.t)).length,1);
  const desc=await page.evaluate(()=>FloorPlanPresentationElevation.derive({levels:[{project:FloorPlanApp.project}]}));assert.equal(auto.v,desc.defaultId,'deterministic default');
+ // Owner decision (2026-11-06): the example opens on its most expressive façade, B (3 real windows, 11.78 m²), not on
+ // the longest one, C (2 narrow windows, 2.42 m²). Only real openings count; every façade stays selectable.
+ {const longest=[...desc.candidates].sort((a,b)=>b.totalFacadeLengthMm-a.totalFacadeLengthMm)[0],def=desc.candidates.find(c=>c.id===desc.defaultId);
+  assert.equal(longest.id,'facade-C','C is still the longest façade of the example');assert.equal(desc.defaultId,'facade-B','the example opens on façade B');
+  assert.match(auto.t,/^Fachada B/,'the dialog preselects façade B');
+  assert.ok(def.openingCount>0&&desc.candidates.every(c=>c.openingAreaMm2<=def.openingAreaMm2),'the largest real opening surface');
+  assert.ok(opts.some(o=>o.v==='facade-C')&&opts.length>=4,'every façade stays selectable');}
  assert.equal(await page.locator('#presentationElevationSolar').isDisabled(),true,'no north/location: solar unavailable');assert.match(await page.locator('#presentationElevationSolarHint').innerText(),/No disponible/);
  assert.equal(await page.locator('label:has(#presentationElevationFacade)').innerText().then(x=>/Fachada/.test(x)),true,'labelled selector');
  await page.locator('#presentationConfig').screenshot({path:path.join(QA,'config-on.png')});

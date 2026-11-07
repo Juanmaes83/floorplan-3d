@@ -1,0 +1,56 @@
+# FT3D-4 narrative façade: the pure derivation (unit) and the real app in a browser (dialog, default façade, scene,
+# reverse, scrub, building, phones). The default façade is the most expressive one of the project (owner decision
+# 2026-11-06): on the example, façade B, never an invented one.
+name: FT3D-4 façade
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'js/presentation-elevation-core.js'
+      - 'tests/presentation-elevation.test.cjs'
+      - 'tests/presentation-elevation.browser.test.cjs'
+      - '.github/workflows/ft3d-4-facade.yml'
+permissions:
+  contents: read
+jobs:
+  facade-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - run: node --test tests/presentation-elevation.test.cjs
+  facade-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      ELEVATION_ARTIFACTS: qa-results/ft3d-4-facade
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/ft3d-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ft3d-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/ft3d-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ft3d-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real app — façade dialog, default, scene, building, phones
+        run: node --test --test-concurrency=1 tests/presentation-elevation.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-4-facade-${{ env.TESTED_SHA }}
+          path: qa-results/ft3d-4-facade/
+          if-no-files-found: ignore

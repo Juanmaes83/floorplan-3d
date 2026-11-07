@@ -103,7 +103,7 @@
   card.querySelectorAll('.presentation-brand,.presentation-intro,.presentation-next').forEach(n=>n.remove());if(!snap)return;
   const p=snap.profile,top=el('div',undefined,undefined,'presentation-brand');if(p.logo){const i=el('img',undefined,top);i.src=p.logo;i.alt='';}
   const t=el('div',undefined,top);el('strong',p.name,t);el('small',snap.title,t);card.prepend(top);
-  if(kind==='overview'&&snap.intro)top.after(Object.assign(el('p',snap.intro,undefined,'presentation-intro')));
+  if(kind==='overview'&&snap.intro){const intro=el('p',snap.intro,undefined,'presentation-intro'),body=card.querySelector('.presentation-card-body');if(body)body.prepend(intro);else top.after(intro);}
   if(index===count-1){const next=el('p',undefined,undefined,'presentation-next');el('strong','Siguiente paso: ',next);next.append(`contacta con ${p.name}`+(B.contactLine(p)?` · ${B.contactLine(p)}`:''));card.querySelector('.presentation-controls')?.before(next);}
  }
  // PNG view with a bottom strip: logo, business name, project title and the view label. Same size as the input.
