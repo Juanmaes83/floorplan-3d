@@ -39,6 +39,9 @@ test(`Phase C2: operational budget ${viewport.width}x${viewport.height}`,{timeou
  const csvDl=page.waitForEvent('download');await d.locator('#budgetCsv').click();const csv=await fs.readFile(await (await csvDl).path(),'utf8');assert.ok(csv.startsWith('﻿'));assert.match(csv,/Puerta de paso/);
  const jsDl=page.waitForEvent('download');await d.locator('#budgetJson').click();const doc=JSON.parse(await fs.readFile(await (await jsDl).path(),'utf8'));assert.equal(doc.schema,'rubik-sota.floorplan-budget');assert.equal(doc.taxRatePercent,10);
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#budgetDialog').open);
+ // The workspace redraws its cards in the dialog's «close» event, which the browser fires as a task right after «open»
+ // is removed: wait for that redraw (a read in between saw the card of before), then the same assertion.
+ await page.waitForFunction(()=>/· 9 sin precio · 1 sin revisar/.test(document.querySelector('#professionalWorkspace')?.innerText||''),null,{timeout:10000}).catch(()=>{});
  assert.match(await workspace.innerText(),/11 partidas desde las cantidades · 9 sin precio · 1 sin revisar/,'the card follows the budget');
  // Reopen: kept. The project never changed.
  await workspace.locator('[data-route="budget-edit"]').click();assert.equal(await row('opening:door').locator('[data-field="review"]').isChecked(),true);assert.equal(await d.locator('#budgetVat').inputValue(),'10');

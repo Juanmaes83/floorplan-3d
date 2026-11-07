@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 /* FT3D-4 «Alzado / fachada narrativa»: checked on the real app in Chromium (contract §19).
    - OFF by default; with it off the presentation keeps exactly its tools and overview (no FT3D-4 node);
    - ON: candidates in a selector (automatic one marked, never «principal»), the default and an alternative; checkpoints
@@ -19,17 +20,17 @@ const QA=process.env.ELEVATION_ARTIFACTS||path.join(os.tmpdir(),'presentation-el
 const three=target=>require('./helpers/three-module.cjs')(target,()=>run('curl',['--fail','--show-error','--max-time','30',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout));
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary','.hdr':'application/octet-stream'};
 before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
- await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(QA,{recursive:true});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']}));await fs.mkdir(QA,{recursive:true});
  const b=S.build().building;for(const l of b.levels)l.project.objects=l.project.objects.filter(o=>!/sofa|bed/.test(o.id));
  const {entries}=await B.packageEntries(b,()=>null,T.imageInfo);zip=path.join(await fs.mkdtemp(path.join(os.tmpdir(),'elevation-')),'duplex.zip');await fs.writeFile(zip,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function open(t,viewport,{reduced=true}={}){const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,reducedMotion:reduced?'reduce':'no-preference'});t.after(()=>context.close());
- const page=await context.newPage(),errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(60000);
+ const page=await context.newPage(),errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(budget(60000));
  await page.route('**/*',async route=>{const target=route.request().url();if(target.startsWith('https://cdn.jsdelivr.net/npm/three@0.160.0/')){if(!cache.has(target))cache.set(target,three(target));return route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});}
   if(target.startsWith(url)||target.startsWith('blob:')||target.startsWith('data:'))return route.continue();external.push(target);return route.abort();});
- await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationElevation,null,{timeout:60000});return {page,errors,external};}
+ await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationElevation,null,{timeout:budget(60000)});return {page,errors,external};}
 const frames=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:180000});
+const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:budget(180000)});
 async function configure(page,{elevation=false,section=false,chapter=false,facade=null,solar=false}={}){await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  const option=page.locator('#presentationElevationOption');assert.equal(await option.isChecked(),false,'off by default, never remembered');
  if(elevation){await option.check();if(facade)await page.locator('#presentationElevationFacade').selectOption(facade);if(solar)await page.locator('#presentationElevationSolar').check();}
@@ -53,14 +54,14 @@ async function residueClean(page,name,before){const r=await page.evaluate(()=>({
 async function exit(page,before,name,how='close'){
  if(how==='escape'){await page.locator('#presentationOverlay').focus().catch(()=>{});await page.keyboard.press('Escape');}else if(how==='back')await page.goBack();else await page.locator('#presentationClose').click();
  await page.waitForFunction(()=>!FloorPlanPresentation.active);
- await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.querySelector('#stage')?.classList.contains('animating')&&!document.body.classList.contains('presentation-exiting'),null,{timeout:30000});await page.waitForTimeout(600);const after=await snapshot(page);
+ await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.querySelector('#stage')?.classList.contains('animating')&&!document.body.classList.contains('presentation-exiting'),null,{timeout:budget(30000)});await page.waitForTimeout(600);const after=await snapshot(page);
  assert.equal(after.project,before.project,`${name}: project JSON identical`);assert.equal(after.undo,before.undo,`${name}: same undo history`);assert.deepEqual(after.storage,[],`${name}: nothing stored`);
  assert.equal(await page.locator('#presentationElevationPlay').count(),0,`${name}: controls leave with the presentation`);
  const r=await page.evaluate(()=>View3D.presentationElevationResidue);assert.equal(r.elevationActive,false);assert.equal(r.extraScaled,0);}
 async function example(page){await page.locator('#welcomeExample').click();await page.waitForTimeout(800);}
 const OVERVIEW_TOOLS=(page,visible=false)=>page.evaluate(v=>[...document.querySelectorAll('#presentationTools button')].filter(b=>!v||!b.hidden).map(b=>b.id||b.textContent.trim()),visible);
 
-test('OFF parity; ON: selector, default, checkpoints, perpendicular 4° front in the free region, oblique perspective, reverse, scrub, cancel (1440x900)',{timeout:900000},async t=>{
+test('OFF parity; ON: selector, default, checkpoints, perpendicular 4° front in the free region, oblique perspective, reverse, scrub, cancel (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await example(page);const editor=await snapshot(page);
  // §19.1 OFF: no FT3D-4 node, the same tools and overview.
  await configure(page);await settled(page);await page.waitForTimeout(300);const off=await state(page),offTools=await OVERVIEW_TOOLS(page),offVisible=await OVERVIEW_TOOLS(page,true);
@@ -125,7 +126,7 @@ test('OFF parity; ON: selector, default, checkpoints, perpendicular 4° front in
  await exit(page,editor,'on');await shot(page,'desktop-after-exit');assert.deepEqual(errors,[]);assert.deepEqual(external,[],'no network for the narrative');
 });
 
-test('alternative façade, north cardinal, Escape restores focus and state (1440x900)',{timeout:900000},async t=>{
+test('alternative façade, north cardinal, Escape restores focus and state (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await example(page);
  // North 30° (no location): cardinal names, no solar.
  await page.evaluate(()=>FloorPlanSolarUI.open());await page.locator('#solarNorthInput').fill('30');await page.locator('#solarSave').click();await page.locator('#solarClose').click();
@@ -144,10 +145,10 @@ test('alternative façade, north cardinal, Escape restores focus and state (1440
  assert.ok(await page.evaluate(()=>document.activeElement&&document.activeElement!==document.body),'focus restored to a control');assert.deepEqual(errors,[]);
 });
 
-test('whole story: plan → section → façade → room and plan → façade → room, no camera jump; reduced steps (1440x900)',{timeout:900000},async t=>{
+test('whole story: plan → section → façade → room and plan → façade → room, no camera jump; reduced steps (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await example(page);const editor=await snapshot(page);
  for(const section of [true,false]){
-  await configure(page,{elevation:true,section,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:180000});
+  await configure(page,{elevation:true,section,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:budget(180000)});
   await page.locator('#presentationStoryPlay').click();await settled(page);const overviewPose=(await state(page)).cam;await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1);
   const kinds=section?['plan-reveal','section-open','elevation-open','room-descent']:['plan-reveal','elevation-open','room-descent'];
   assert.equal((await state(page)).story.scenes,kinds.length,`${kinds.join(' → ')}`);
@@ -172,7 +173,7 @@ test('whole story: plan → section → façade → room and plan → façade �
  assert.deepEqual(errors,[]);
 });
 
-test('autoplay pauses and resumes; the browser Back restores (1440x900, motion allowed)',{timeout:600000},async t=>{
+test('autoplay pauses and resumes; the browser Back restores (1440x900, motion allowed)',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900},{reduced:false});await example(page);const editor=await snapshot(page);
  await configure(page,{elevation:true});await settled(page);const before=(await state(page)).residue;await page.locator('#presentationElevationPlay').click();
  await page.evaluate(()=>new Promise(r=>{const tick=()=>{if(FloorPlanPresentation.story?.playing&&FloorPlanPresentation.story.p>0){document.querySelector('#presentationStoryPlay').click();r();}else requestAnimationFrame(tick);};tick();}));
@@ -183,7 +184,7 @@ test('autoplay pauses and resumes; the browser Back restores (1440x900, motion a
  await exit(page,editor,'back','back');await residueClean(page,'back',before);assert.deepEqual(errors,[]);
 });
 
-test('solar: off by default, fixed snapshot when chosen and restored; unavailable never blocks (1440x900)',{timeout:900000},async t=>{
+test('solar: off by default, fixed snapshot when chosen and restored; unavailable never blocks (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await example(page);
  await page.evaluate(()=>FloorPlanSolarUI.open());await page.locator('#solarNorthInput').fill('37');await page.locator('#solarLatitude').fill('40.4168');await page.locator('#solarLongitude').fill('-3.7038');await page.locator('#solarTimeZone').fill('Europe/Madrid');
  await page.locator('#solarDate').fill('2026-06-21');await page.locator('#solarTime').fill('11:00');await page.locator('#solarSave').click();await page.locator('#solarClose').click();
@@ -211,7 +212,7 @@ test('solar: off by default, fixed snapshot when chosen and restored; unavailabl
  await exit(page,editor,'solar unavailable');assert.deepEqual(errors,[]);
 });
 
-test('exterior context: hidden in the frontal phase, shown in the perspective, restored (1440x900)',{timeout:600000},async t=>{
+test('exterior context: hidden in the frontal phase, shown in the perspective, restored (1440x900)',{timeout:budget(600000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await example(page);
  const fixture=F.build();
  await page.evaluate(({building,grid})=>{const level=FloorPlanBuilding.exportLevel(building,building.levels[0].id).project;level.site.buildingPlacement={horizontal:{modelAnchorMm:{x:2000,y:1200},parcelLocalAnchorMm:{x:4200,y:9100},source:{type:'user-entered'}},vertical:{modelZeroElevationM:100,verticalReference:'orthometric',source:{type:'user-entered'}}};level.schemaVersion='1.12.0';
@@ -226,12 +227,12 @@ test('exterior context: hidden in the frontal phase, shown in the perspective, r
  await exit(page,editor,'context');assert.deepEqual(errors,[]);assert.deepEqual(external,[],'no download to complete the story');
 });
 
-test('two-level building: both levels in place, one façade per story, levelView restored (1440x900)',{timeout:900000},async t=>{
+test('two-level building: both levels in place, one façade per story, levelView restored (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});
  const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(zip);
- await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:60000});await page.waitForTimeout(800);const editor=await snapshot(page);
+ await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:budget(60000)});await page.waitForTimeout(800);const editor=await snapshot(page);
  const sources=await page.evaluate(()=>FloorPlanBuildingUI.presentationSources().levels.map(l=>({levelId:l.levelId,elevationMm:l.elevationMm})));
- await configure(page,{elevation:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:180000});
+ await configure(page,{elevation:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:budget(180000)});
  await page.locator('#presentationStoryPlay').click();await settled(page);const before=(await state(page)).residue;
  await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1);
  const kinds=(await state(page)).story.kinds;assert.equal(kinds.filter(k=>k==='elevation-open').length,1,`the façade is read once for the whole building: ${kinds.join(' → ')}`);
@@ -251,7 +252,7 @@ test('two-level building: both levels in place, one façade per story, levelView
 });
 
 for(const viewport of [{width:390,height:844},{width:844,height:390}])
-test(`phone ${viewport.width}x${viewport.height}: framed, readable, operable, no overflow; resize keeps the scene`,{timeout:600000},async t=>{
+test(`phone ${viewport.width}x${viewport.height}: framed, readable, operable, no overflow; resize keeps the scene`,{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,viewport);await example(page);const editor=await snapshot(page);
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  const option=page.locator('#presentationElevationOption');await option.scrollIntoViewIfNeeded();await option.check();const pick=page.locator('#presentationElevationFacade');await pick.scrollIntoViewIfNeeded();
@@ -271,7 +272,7 @@ test(`phone ${viewport.width}x${viewport.height}: framed, readable, operable, no
  await page.locator('#presentationStoryPlan').click();await settled(page);await exit(page,editor,'phone');assert.deepEqual(errors,[]);
 });
 
-test('unsupported model: option disabled with a concrete reason; presentation unaffected',{timeout:600000},async t=>{
+test('unsupported model: option disabled with a concrete reason; presentation unaffected',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await example(page);
  // Every wall declared a partition: the Exterior authority recognises no façade, the rooms still make a presentation.
  await page.evaluate(()=>{const p=structuredClone(FloorPlanApp.project);for(const w of p.walls)w.structure='partition';FloorPlanApp.importProject(p);});
