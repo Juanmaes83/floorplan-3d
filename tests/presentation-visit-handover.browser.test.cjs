@@ -43,11 +43,15 @@ const state=page=>page.evaluate(()=>{const s=FloorPlanPresentation.story,i=View3
   panel:vis('#presentationStory'),clip:View3D.presentationClipInfo,memory:View3D.rendererMemory};});
 // «Ver la historia completa», then wait for the autoplay to end (or for the story to close: the reported defect).
 async function playWholeStory(page,{pauseInVisit=false}={}){
+ // The pause is pressed inside the page, on the first frame in which the visit walks, by a watcher armed BEFORE the
+ // story starts: on a slow software renderer the walk phase can pass between two polls, and a poll loop started after
+ // the click then spun for its whole budget (CI cec48f1: the case hung for the 60-minute test timeout). If the story
+ // ends without a walking frame, the watcher says so at once.
+ if(pauseInVisit)await page.evaluate(()=>{window.__visitPause=null;const f=()=>{const s=FloorPlanPresentation.story;if(s?.kind==='room-visit'&&s.playing&&View3D.presentationStoryInfo?.phase==='walk'){document.querySelector('#presentationStoryPlay').click();window.__visitPause='paused';return;}if(window.__visitStarted&&(!s||(s.P>=1&&!s.playing&&!s.busy))){window.__visitPause='ended without a walking frame';return;}if(s)window.__visitStarted=true;requestAnimationFrame(f);};window.__visitStarted=false;requestAnimationFrame(f);});
  await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());
  await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1,null,{timeout:budget(120000)});
  if(pauseInVisit){
-  // the pause is pressed inside the page the moment the visit walks (a slow software renderer must not let it end first)
-  await page.evaluate(async()=>{for(let i=0;i<30000;i++){const s=FloorPlanPresentation.story;if(s?.kind==='room-visit'&&s.playing&&View3D.presentationStoryInfo?.phase==='walk'){document.querySelector('#presentationStoryPlay').click();return;}await new Promise(r=>setTimeout(r,20));}throw Error('the visit never walked');});
+  assert.equal(await (await page.waitForFunction(()=>window.__visitPause,null,{timeout:budget(900000)})).jsonValue(),'paused','the visit walked and was paused there');
   await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
   const paused=await state(page);assert.equal(paused.story?.kind,'room-visit','paused inside the visit');assert.ok(paused.story.P<1);
   await page.locator('#presentationStoryPlay').click();}   // resume with the play button: its own path to the end
