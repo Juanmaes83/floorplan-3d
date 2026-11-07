@@ -41,7 +41,7 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/intake-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/intake-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Guided desktop and mobile imports, cancellation and navigation
-        run: node --test --test-concurrency=1 tests/multiformat-guide.browser.test.cjs tests/upload.browser.test.cjs tests/guide-navigation.browser.test.cjs tests/guide.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/multiformat-guide.browser.test.cjs tests/upload.browser.test.cjs tests/guide-navigation.browser.test.cjs tests/guide.browser.test.cjs tests/home-legal.browser.test.cjs
       - name: Persistence, calibration, 2D/3D and export regressions
         run: node --test --test-concurrency=1 tests/browser.test.cjs tests/room-layout.browser.test.cjs tests/capture-3d.browser.test.cjs
       - uses: actions/upload-artifact@v4
