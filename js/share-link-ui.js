@@ -17,34 +17,50 @@
  const name=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
  const video=()=>{const r=window.FloorPlanTourVideo?.result;return r&&r.blob.size<=LIMIT?r:null;};
  async function upload(kind,body,code){
-  let r;try{r=await fetch('api/share',{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':'application/octet-stream','x-rubik-render-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name()).slice(0,120)},body});}
+  let r;try{r=await fetch('api/share',{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':kind==='delivery'?'application/json':'application/octet-stream','x-rubik-render-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name()).slice(0,120)},body});}
   catch{throw Error(ERRORS()['storage-unreachable']);}
   if(r.status===404)throw Error(ERRORS().unavailable);
   const out=await r.json().catch(()=>null);if(!r.ok||!out?.url)throw Error(ERRORS()[out?.error]||ERRORS()['storage-error']);return out.url;
  }
  // Video first (the page links to it), then the page itself. The link opens the page through /api/view.
- async function publish({withVideo,code}){
-  let tour=null;const v=withVideo?video():null;
-  if(v){const url=await upload(v.extension,v.blob,code);tour={url,host:new URL(url).hostname,type:v.blob.type};}
-  const out=await FloorPlanClientShare.build(tour?{video:tour}:{});
+ // Delivery 3D V1: with the visit, the read-only 3D snapshot is published first; the page links to the client view of
+ // this app (same deployment, ?entrega=<snapshot>), which opens it through /api/delivery.
+ // If a later step fails, the files already stored for this attempt are deleted again (same access code): a failed
+ // publication never leaves a 3D copy or a video reachable without a page that the professional knows about.
+ async function cleanup(urls,code){if(!urls.length)return;try{await fetch('api/unshare',{method:'POST',headers:{'Content-Type':'application/json','x-rubik-render-token':code},body:JSON.stringify({urls})});}catch{}}
+ async function publish(opts){const stored=[];try{return await publishSteps(opts,stored);}catch(e){await cleanup(stored,opts.code);throw e;}}
+ async function publishSteps({withVideo,code,with3d=false},stored){
+  let tour=null,experience=null,snap=null,delivery=null;const v=withVideo?video():null;
+  if(v){const url=await upload(v.extension,v.blob,code);stored.push(url);tour={url,host:new URL(url).hostname,type:v.blob.type};}
+  if(with3d&&window.FloorPlanDeliveryUI){snap=await FloorPlanDeliveryUI.snapshot();const body=new Blob([JSON.stringify(snap)],{type:'application/json'});if(body.size>LIMIT)throw Error(ERRORS().size);
+   delivery=await upload('delivery',body,code);stored.push(delivery);experience={url:new URL('./?entrega='+encodeURIComponent(delivery)+'#desde-documento',location.href).href,guided:snap.capabilities.guided,walk:snap.capabilities.walk};}
+  const out=await FloorPlanClientShare.build({...(tour?{video:tour}:{}),...(experience?{experience}:{})});
   if(out.bytes>LIMIT)throw Error(ERRORS().size);
   const page=await upload('html',new Blob([out.html],{type:'text/html'}),code);
-  return {link:new URL('api/view?f='+encodeURIComponent(page),location.href).href,page,video:!!tour,bytes:out.bytes,versionCode:out.versionCode};
+  const result={link:new URL('api/view?f='+encodeURIComponent(page),location.href).href,page,video:!!tour,bytes:out.bytes,versionCode:out.versionCode,visit:experience?.url||null};
+  window.FloorPlanDeliveryUI?.record({at:new Date().toISOString(),projectId:(window.FloorPlanBuildingUI?.building||app.project).id,title:name(),versionCode:out.versionCode,revision:window.FloorPlanDeliveryUI.revision(),link:result.link,visit:result.visit,page,delivery,video:tour?.url||null});
+  return result;
  }
  const dialog=el('dialog',undefined,document.body,'ai-render-dialog share-link-dialog');dialog.id='shareLinkDialog';dialog.setAttribute('aria-labelledby','shareLinkTitle');
  let returnFocus=null,last=null;
  dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
- function open(){returnFocus=document.activeElement;draw();dialog.showModal();dialog.querySelector('#shareLinkAgree')?.focus();}
+ let include3d=false;
+ function open(opts={}){include3d=!!opts.include3d;returnFocus=document.activeElement;draw();dialog.showModal();dialog.querySelector('#shareLinkAgree')?.focus();}
  function draw(message=''){
   dialog.replaceChildren();const head=el('div',undefined,dialog,'ai-render-head');el('h2',tx('Enlace para el cliente','Link for the client','客户链接'),head).id='shareLinkTitle';
   const close=btn(tx('Cerrar','Close','关闭'),head);close.id='shareLinkClose';close.onclick=()=>dialog.close();
   const note=el('p',undefined,dialog,'ai-render-note');note.id='shareLinkNote';
-  note.textContent=tx('Se publica el mismo documento de sólo lectura que el archivo para el cliente: vistas, plano firmado, superficies, orientación, emplazamiento, tu firma y el formulario de observaciones. Cualquiera que tenga el enlace podrá verlo; no aparece en buscadores. Se guarda en el almacén Vercel Blob de este proyecto y se borra desde ese panel. El proyecto editable no se envía.','The same read-only document as the client file is published: views, signed plan, areas, orientation, site, your signature and the observations form. Anyone with the link can see it; it is not indexed. It is stored in this project\'s Vercel Blob store and removed from that dashboard. The editable project is not sent.','发布与客户文件相同的只读文档。任何拥有链接的人都可查看；不会被搜索引擎收录。存储于本项目的 Vercel Blob，可在其面板删除。不发送可编辑项目。');
+  note.textContent=tx('Se publica el mismo documento de sólo lectura que el archivo para el cliente: vistas, plano firmado, superficies, orientación, emplazamiento, tu firma y el formulario de observaciones. Cualquiera que tenga el enlace podrá verlo; no aparece en buscadores. Se guarda en el almacén Vercel Blob de este proyecto; lo retiras aquí («Retirar») o desde ese panel. El proyecto editable no se envía.','The same read-only document as the client file is published: views, signed plan, areas, orientation, site, your signature and the observations form. Anyone with the link can see it; it is not indexed. It is stored in this project\'s Vercel Blob store; withdraw it here («Withdraw») or from that dashboard. The editable project is not sent.','发布与客户文件相同的只读文档。任何拥有链接的人都可查看；不会被搜索引擎收录。存储于本项目的 Vercel Blob，可在其面板删除。不发送可编辑项目。');
   const form=el('div',undefined,dialog,'ai-render-form');
   const tl=el('label',undefined,form);el('span',tx('Código de acceso','Access code','访问码'),tl);const ti=el('input',undefined,tl);ti.type='password';ti.id='shareLinkToken';ti.autocomplete='off';ti.value=token();
   const v=window.FloorPlanTourVideo?.result,vl=el('label',undefined,form,'ai-render-consent');const vc=el('input',undefined,vl);vc.type='checkbox';vc.id='shareLinkVideo';
   if(v&&v.blob.size<=LIMIT){vc.checked=true;el('span',tx(`Incluir el vídeo del recorrido (${v.extension.toUpperCase()}, ${(v.blob.size/1048576).toFixed(1).replace('.',',')} MB)`,`Include the tour video (${v.extension.toUpperCase()}, ${(v.blob.size/1048576).toFixed(1)} MB)`,'包含漫游视频'),vl);}
   else{vc.disabled=true;el('span',v?tx('El vídeo supera 4 MB: se publica sin vídeo.','The video is over 4 MB: published without video.','视频超过 4 MB，将不含视频发布。'):tx('Sin vídeo: grábalo en la presentación («Grabar vídeo») si quieres incluirlo.','No video: record it in the presentation («Record video») to include it.','无视频：可在展示中录制。'),vl);}
+  // Delivery 3D V1: the interactive visit (read-only 3D snapshot of this version), when the project can be explored.
+  const ds=window.FloorPlanDeliveryUI?.status(),dl=el('label',undefined,form,'ai-render-consent');const dc=el('input',undefined,dl);dc.type='checkbox';dc.id='shareLink3d';
+  if(ds?.walk){dc.checked=include3d;el('span',ds.guided?tx(`Incluir la visita 3D interactiva (exploración libre y tu presentación de ${ds.rooms} ${ds.rooms===1?'estancia':'estancias'})`,`Include the interactive 3D visit (free exploration and your ${ds.rooms}-room presentation)`,'包含交互式三维参观'):tx('Incluir la visita 3D interactiva (exploración libre; sin presentación preparada)','Include the interactive 3D visit (free exploration; no prepared presentation)','包含交互式三维参观（无预设展示）'),dl);
+   el('p',tx('Se publica una copia de solo lectura de esta versión del modelo (muros, huecos, estancias, mobiliario y acabados). No incluye el plano original, las medidas de trabajo, la ubicación ni el proyecto editable. Quien tenga el enlace puede inspeccionar esa copia.','A read-only copy of this version of the model is published (walls, openings, rooms, furniture and finishes). It excludes the original plan, working dimensions, location and the editable project. Anyone with the link can inspect that copy.','将发布此版本模型的只读副本。'),form,'ai-render-note').id='shareLink3dNote';}
+  else{dc.disabled=true;el('span',tx('Visita 3D no disponible: dibuja estancias con muros.','3D visit unavailable: draw rooms with walls.','三维参观不可用：请绘制带墙房间。'),dl);}
   const ok=el('label',undefined,form,'ai-render-consent');const cb=el('input',undefined,ok);cb.type='checkbox';cb.id='shareLinkAgree';el('span',tx('Entiendo que cualquiera con el enlace podrá ver este documento.','I understand anyone with the link can see this document.','我了解任何拥有链接的人都可查看此文档。'),ok);
   const go=btn(tx('Publicar enlace','Publish link','发布链接'),form,'btn primary');go.id='shareLinkGo';
   const status=el('p',message,dialog,'ai-render-status');status.id='shareLinkStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
@@ -52,11 +68,18 @@
    const copy=btn(tx('Copiar enlace','Copy link','复制链接'),box,'btn primary');copy.id='shareLinkCopy';copy.onclick=async()=>{try{await navigator.clipboard.writeText(last.link);status.textContent=tx('Enlace copiado.','Link copied.','链接已复制。');}catch{out.select();status.textContent=tx('Selecciona el enlace y cópialo.','Select the link and copy it.','请选择链接并复制。');}};
    const a=el('a',tx('Abrir','Open','打开'),box,'btn');a.id='shareLinkOpen';a.href=last.link;a.target='_blank';a.rel='noopener noreferrer';
    el('p',tx(`Versión ${last.versionCode}${last.video?' · con vídeo':''}. Si cambias el proyecto, publica un enlace nuevo: este no se actualiza solo.`,`Version ${last.versionCode}${last.video?' · with video':''}. If you change the project, publish a new link: this one does not update itself.`,`版本 ${last.versionCode}。项目更改后请发布新链接。`),dialog,'share-link-meta').id='shareLinkMeta';}
+  // Delivery 3D V1: deliveries published from this browser for this project, each one withdrawable (its page, 3D
+  // snapshot and video are deleted from the store; the link then says it is no longer available).
+  const pid=(window.FloorPlanBuildingUI?.building||app.project).id,pubs=(window.FloorPlanDeliveryUI?.publications()||[]).filter(p=>p.projectId===pid);
+  if(pubs.length){const box=el('section',undefined,dialog,'share-link-history');box.id='shareLinkHistory';el('h3',tx('Entregas publicadas','Published deliveries','已发布的交付'),box);
+   for(const p of pubs){const row=el('div',undefined,box,'share-link-row');el('span',`${new Date(p.at).toLocaleString(({es:'es-ES',en:'en-GB',zh:'zh-CN'})[typeof LANG==='string'?LANG:'es']||'es-ES',{dateStyle:'short',timeStyle:'short'})} · ${p.versionCode}${p.visit?tx(' · visita 3D',' · 3D visit',' · 三维参观'):''}`,row);
+    const w=btn(tx('Retirar','Withdraw','撤回'),row,'btn danger');w.dataset.link=p.link;w.onclick=async()=>{const code=ti.value.trim();if(!code){status.textContent=tx('Introduce el código de acceso para retirar la entrega.','Enter the access code to withdraw the delivery.','请输入访问码以撤回。');ti.focus();return;}
+     w.disabled=true;status.textContent=tx('Retirando…','Withdrawing…','正在撤回…');try{await FloorPlanDeliveryUI.withdraw(p,code);if(last?.link===p.link)last=null;draw(tx('Entrega retirada: el enlace, la visita 3D y el vídeo ya no están disponibles.','Delivery withdrawn: the link, the 3D visit and the video are no longer available.','交付已撤回。'));}catch(e){w.disabled=false;status.textContent=e.message;}};}}
   go.onclick=async()=>{
    if(!cb.checked){status.textContent=tx('Confirma que entiendes quién podrá verlo.','Confirm you understand who can see it.','请确认您了解谁可以查看。');cb.focus();return;}
    const code=ti.value.trim();if(!code){status.textContent=tx('Introduce el código de acceso.','Enter the access code.','请输入访问码。');ti.focus();return;}
    setToken(code);go.disabled=true;status.textContent=tx('Publicando…','Publishing…','正在发布…');
-   try{last=await publish({withVideo:vc.checked,code});draw(tx('Enlace publicado. Ábrelo para comprobarlo antes de enviarlo.','Link published. Open it to check it before sending it.','链接已发布。发送前请先打开检查。'));dialog.querySelector('#shareLinkCopy')?.focus();}
+   try{last=await publish({withVideo:vc.checked,code,with3d:dc.checked&&!dc.disabled});draw(tx('Enlace publicado. Ábrelo para comprobarlo antes de enviarlo.','Link published. Open it to check it before sending it.','链接已发布。发送前请先打开检查。'));dialog.querySelector('#shareLinkCopy')?.focus();}
    catch(e){if(/código de acceso|access code/i.test(e.message))setToken('');draw(e.message);}
   };
  }

@@ -3,32 +3,32 @@
  "steps": [
   {
    "step": "start",
-   "ms": 7535
+   "ms": 5046
   },
   {
    "step": "stop 2",
    "levelChange": false,
-   "ms": 6328
+   "ms": 3115
   },
   {
    "step": "stop 3",
    "levelChange": false,
-   "ms": 8892
+   "ms": 4380
   },
   {
    "step": "stop 4",
    "levelChange": true,
-   "ms": 11343
+   "ms": 4877
   },
   {
    "step": "stop 5",
    "levelChange": false,
-   "ms": 8460
+   "ms": 3967
   },
   {
    "step": "batch",
-   "ms": 23232,
-   "bytes": 704328
+   "ms": 14740,
+   "bytes": 677660
   }
  ],
  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
