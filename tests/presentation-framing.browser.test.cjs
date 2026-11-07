@@ -1,18 +1,19 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http');
 const {execFile}=require('node:child_process'),{promisify}=require('node:util'),run=promisify(execFile),{chromium}=require('playwright');
 const irregularHome=require('./helpers/irregular-home.cjs');
 const QA=process.env.R10_ARTIFACTS||'qa-results/serra-r10-framing';let server,url,browser;const cache=new Map();
 const three=target=>require('./helpers/three-module.cjs')(target,()=>run('curl',['--fail','--show-error','--max-time','30',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout));
-before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',file.endsWith('.hdr')?'application/octet-stream':/\.m?js$/.test(file)?'text/javascript':file.endsWith('.webp')?'image/webp':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(QA,{recursive:true});});
+before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',file.endsWith('.hdr')?'application/octet-stream':/\.m?js$/.test(file)?'text/javascript':file.endsWith('.webp')?'image/webp':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));url=`http://127.0.0.1:${server.address().port}/`;browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']}));await fs.mkdir(QA,{recursive:true});});
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
-async function setup(t,viewport,options={}){const context=await browser.newContext({viewport,isMobile:viewport.width<1000,hasTouch:viewport.width<1000,...options});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,three(target));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});await page.goto(url);await page.waitForFunction(()=>window.View3D?.presentationRoute&&window.FloorPlanPresentation&&FloorPlanSurfaces.entries.length===50,null,{timeout:30000});if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');await page.evaluate(()=>document.querySelector('#guideDetails').click());await page.evaluate(()=>document.querySelector('#guideAllTools').click());await require('./layout-fixture.cjs')(page);return{page,errors};}
-async function present(page,ids){await page.locator('#presentationBtn').click();await page.evaluate(ids=>{document.querySelectorAll('#presentationConfig input[type=checkbox]').forEach(i=>{const want=ids.includes(i.value);if(i.checked!==want){i.checked=want;i.dispatchEvent(new Event('change'));}});},ids);await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:60000});}
-async function goRoom(page,id){await page.evaluate(id=>{const i=FloorPlanPresentation.plan.stops.findIndex(s=>s.roomId===id);document.querySelectorAll('.presentation-stops button')[i].click();},id);await page.waitForFunction(id=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&View3D.presentationFrameInfo?.roomId===id,id,{timeout:60000});await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));}
+async function setup(t,viewport,options={}){const context=await browser.newContext({viewport,isMobile:viewport.width<1000,hasTouch:viewport.width<1000,...options});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,three(target));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});await page.goto(url);await page.waitForFunction(()=>window.View3D?.presentationRoute&&window.FloorPlanPresentation&&FloorPlanSurfaces.entries.length===50,null,{timeout:budget(30000)});if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');await page.evaluate(()=>document.querySelector('#guideDetails').click());await page.evaluate(()=>document.querySelector('#guideAllTools').click());await require('./layout-fixture.cjs')(page);return{page,errors};}
+async function present(page,ids){await page.locator('#presentationBtn').click();await page.evaluate(ids=>{document.querySelectorAll('#presentationConfig input[type=checkbox]').forEach(i=>{const want=ids.includes(i.value);if(i.checked!==want){i.checked=want;i.dispatchEvent(new Event('change'));}});},ids);await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(60000)});}
+async function goRoom(page,id){await page.evaluate(id=>{const i=FloorPlanPresentation.plan.stops.findIndex(s=>s.roomId===id);document.querySelectorAll('.presentation-stops button')[i].click();},id);await page.waitForFunction(id=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&View3D.presentationFrameInfo?.roomId===id,id,{timeout:budget(60000)});await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));}
 const snapshot=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),entry:FloorPlanApp.entryId,cut:View3D.presentationInspect()?.options?.cut??null,decor:View3D.presentationDecor}));
 const card=page=>page.evaluate(()=>{const r=document.querySelector('.presentation-card').getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:innerWidth,height:innerHeight};});
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R10 small rooms are framed as protagonists ${viewport.width}x${viewport.height}`,{timeout:240000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R10 small rooms are framed as protagonists ${viewport.width}x${viewport.height}`,{timeout:budget(240000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating);const editor=await snapshot(page);
  await present(page,['rom_mbath','rom_master','rom_hall']);
@@ -33,7 +34,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 });
 // The client's navigation comes first; the professional's tools are one group. On a phone that group is a single row,
 // so a tool added to it does not make the card cover more of the home (#75 and #78 each add one).
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:360,height:800},{width:844,height:390}])test(`R10 card keeps client navigation first and tools in one row ${viewport.width}x${viewport.height}`,{timeout:240000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:360,height:800},{width:844,height:390}])test(`R10 card keeps client navigation first and tools in one row ${viewport.width}x${viewport.height}`,{timeout:budget(240000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,phone=viewport.width<=600||viewport.height<=500;
  await present(page,['rom_mbath','rom_master']);
  const layout=()=>page.evaluate(()=>{const tools=document.querySelector('#presentationTools'),card=document.querySelector('.presentation-card');
@@ -54,7 +55,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:360
  await page.screenshot({path:path.join(QA,`${size}-card-groups.png`)});
  assert.deepEqual(errors,[]);
 });
-test('R10 framing is repeatable, respects reduced motion and an editor wall cut',{timeout:240000},async t=>{
+test('R10 framing is repeatable, respects reduced motion and an editor wall cut',{timeout:budget(240000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900},{reducedMotion:'reduce'});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating);
  await present(page,['rom_mbath']);await goRoom(page,'rom_mbath');const first=await page.evaluate(()=>View3D.cameraState);
@@ -68,7 +69,7 @@ test('R10 framing is repeatable, respects reduced motion and an editor wall cut'
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);assert.equal((await snapshot(page)).cut,1.2);assert.equal((await snapshot(page)).project,cutEditor.project);
  assert.deepEqual(errors,[]);
 });
-test('R10 rotated irregular plan frames every counted room',{timeout:300000},async t=>{
+test('R10 rotated irregular plan frames every counted room',{timeout:budget(300000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});
  const id=await page.evaluate(f=>{const p=eval(f)(FloorPlanReference);FloorPlanApp.importProject(p);return FloorPlanApp.project.id;},`(${irregularHome.toString()})`);assert.equal(id,'prj_irregular-rotated');
  const rooms=await page.evaluate(()=>FloorPlanApp.geometry.rooms.filter(r=>r.counted!==false).map(r=>r.id));const before=await snapshot(page);
@@ -78,7 +79,7 @@ test('R10 rotated irregular plan frames every counted room',{timeout:300000},asy
 });
 // The client sees the home, not the editor: with the edit columns open, presenting hides them and gives the scene the
 // full width; ending the presentation brings them back as they were.
-test('R10 presentation hides the edit columns 1440x900',{timeout:240000},async t=>{
+test('R10 presentation hides the edit columns 1440x900',{timeout:budget(240000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});
  const layout=()=>page.evaluate(()=>{const seen=sel=>{const e=document.querySelector(sel),r=e.getBoundingClientRect();return r.width>2&&getComputedStyle(e).visibility==='visible';};return {lib:seen('aside.lib'),panel:seen('aside.right'),main:Math.round(document.querySelector('main').getBoundingClientRect().width)};});
  const editor=await layout();assert.deepEqual([editor.lib,editor.panel],[true,true],'columns open in the editor');
