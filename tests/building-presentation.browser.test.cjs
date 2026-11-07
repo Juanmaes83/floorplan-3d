@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 // Presentation of a two-level building, end to end in Chromium at 1440×900, 390×844 and 844×390: rooms chosen per
 // level, one presentation that changes level with its own overview, one ZIP batch whose manifest relates every view to
 // its level and room, the editable building inside it, and the editor back on its level with the building unchanged.
@@ -13,7 +14,7 @@ const KEY='rubik-sota-project-library-v1',shots=process.env.BUILDING_PRESENTATIO
 const cache=new Map(),servers=[];let browser;
 function serve(dir){return new Promise(resolve=>{const server=createServer(async(req,res)=>{try{const file=path.resolve(dir,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(dir+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.webp')?'image/webp':file.endsWith('.json')?'application/json':file.endsWith('.png')?'image/png':file.endsWith('.wasm')?'application/wasm':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});servers.push(server);server.listen(0,'127.0.0.1',()=>resolve(`http://127.0.0.1:${server.address().port}/`));});}
 let url,baseUrl;
-before(async()=>{url=await serve(root);if(base)baseUrl=await serve(base);browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(shots,{recursive:true});});
+before(async()=>{url=await serve(root);if(base)baseUrl=await serve(base);browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']}));await fs.mkdir(shots,{recursive:true});});
 after(async()=>{await browser?.close();await Promise.all(servers.map(s=>new Promise(r=>s.close(r))));});
 const curl=target=>new Promise((resolve,reject)=>execFile('curl',['--fail','--silent','--show-error','--max-time','30',target],{maxBuffer:20e6},(e,out)=>e?reject(e):resolve(out)));
 async function setup(context,at=url){
@@ -31,11 +32,11 @@ async function buildingZip(building,bytesFor=()=>null){const {entries}=await B.p
 // Each import is a new library entry; wait for it to be the open entry with its two levels.
 async function importBuilding(page,zip,name='edificio.zip'){const before=await page.evaluate(k=>JSON.parse(localStorage.getItem(k))?.activeId||null,KEY);
  await page.locator('#uploadIn').setInputFiles({name,mimeType:'application/zip',buffer:zip});
- await page.waitForFunction(([k,id])=>{const lib=JSON.parse(localStorage.getItem(k));return lib&&lib.activeId!==id&&lib.entries.find(e=>e.id===lib.activeId)?.kind==='building'&&FloorPlanBuildingUI.context?.levels===2;},[KEY,before],{timeout:60000});}
+ await page.waitForFunction(([k,id])=>{const lib=JSON.parse(localStorage.getItem(k));return lib&&lib.activeId!==id&&lib.entries.find(e=>e.id===lib.activeId)?.kind==='building'&&FloorPlanBuildingUI.context?.levels===2;},[KEY,before],{timeout:budget(60000)});}
 // The open entry as stored, the editor state and the active level: what the presentation must leave untouched.
 const snapshot=page=>page.evaluate(k=>{const lib=JSON.parse(localStorage.getItem(k)),entry=lib.entries.find(e=>e.id===lib.activeId);
  return {entryId:lib.activeId,building:JSON.stringify(entry.building),activeLevelId:entry.activeLevelId,entries:lib.entries.length,undo:undoStack.length,redo:redoStack.length,view:FloorPlanApp.viewMode,level:FloorPlanBuildingUI.context?.levelId};},KEY);
-const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:90000});
+const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(90000)});
 const batchFile=name=>{if(name==='presentation.json'||name==='editable-building.zip'||name==='editable-project.zip'||/^views\/view-[0-9]{3}\.png$/.test(name))return name;throw Error('unexpected entry '+name);};
 async function readBatch(zip){const files=await P.unzip(zip,{check:batchFile,required:'presentation.json',jsonNames:['presentation.json'],maxEntries:40});const manifest=JSON.parse(new TextDecoder().decode(files.get('presentation.json')));return {files,manifest,summary:Pres.readCaptures(manifest,[...files.keys()])};}
 async function download(page,trigger,timeout=240000){const pending=page.waitForEvent('download',{timeout});pending.catch(()=>{});await trigger();const d=await pending,chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return {name:d.suggestedFilename(),bytes:Buffer.concat(chunks)};}
@@ -50,7 +51,7 @@ async function inspectStop(page){return page.evaluate(()=>{const plan=FloorPlanP
 const inside=(box,[w,h])=>box&&box.left>=-1&&box.top>=-1&&box.right<=w+1&&box.bottom<=h+1;
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
-test(`two-level building: one presentation and one batch with both levels ${viewport.width}x${viewport.height}`,{timeout:900000},async t=>{
+test(`two-level building: one presentation and one batch with both levels ${viewport.width}x${viewport.height}`,{timeout:budget(900000)},async t=>{
  const mobile=viewport.width<1000,size=`${viewport.width}x${viewport.height}`,metrics={viewport:size,steps:[]};
  const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await setup(context),fx=F.build();
@@ -88,7 +89,7 @@ test(`two-level building: one presentation and one batch with both levels ${view
   await page.screenshot({path:path.join(shots,`${size}-0${i+2}-stop-${i+1}${kind==='overview'?'-overview':''}-${upper?'upper':'ground'}.png`)});
  }
  // One batch: five views of both levels and the editable building; the level of the last stop comes back.
- await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
+ await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:budget(60000)});
  t0=Date.now();const file=await download(page,()=>press(page,'#presentationBatch',mobile));metrics.steps.push({step:'batch',ms:Date.now()-t0,bytes:file.bytes.length});
  assert.equal(file.name,'presentacion-edificio.zip');
  const {files,manifest,summary}=await readBatch(file.bytes);
@@ -113,7 +114,7 @@ test(`two-level building: one presentation and one batch with both levels ${view
  await page.screenshot({path:path.join(shots,`${size}-07-after-batch.png`)});
  // The reopened building imports into the editor as a new entry with both levels.
  // Leaving: the editor is back on the level it started from, the stored building and entry are unchanged.
- await press(page,'#presentationClose',mobile);await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:60000});
+ await press(page,'#presentationClose',mobile);await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:budget(60000)});
  const final=await snapshot(page);assert.equal(final.level,startLevel);assert.deepEqual(final,original,'building, entry, active level, history and view unchanged');
  await importBuilding(page,inner,'editable-building.zip');const reimported=await snapshot(page);assert.equal(reimported.entries,original.entries+1);
  for(const [i,level] of JSON.parse(reimported.building).levels.entries())assert.equal(digest(level.project.rooms),digest(stored.levels[i].project.rooms),'the editable building reopens with the same rooms');
@@ -121,7 +122,7 @@ test(`two-level building: one presentation and one batch with both levels ${view
  await fs.writeFile(path.join(shots,`${size}-metrics.json`),JSON.stringify(metrics,null,1));
 });
 
-test('equal room IDs and names on both levels: distinct stops, buttons, views and files',{timeout:600000},async t=>{
+test('equal room IDs and names on both levels: distinct stops, buttons, views and files',{timeout:budget(600000)},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await setup(context),fx=F.build(),ground=fx.building.levels[0].project,upper=fx.building.levels[1].project,shared=ground.rooms[0].id;
  for(const o of upper.objects)if(o.roomId===upper.rooms[0].id)o.roomId=shared;upper.rooms[0].id=shared;upper.rooms[0].name=ground.rooms[0].name;B.validate(fx.building);
@@ -131,15 +132,15 @@ test('equal room IDs and names on both levels: distinct stops, buttons, views an
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
  assert.deepEqual(await page.evaluate(()=>[...document.querySelectorAll('.presentation-stops button')].map(b=>b.getAttribute('aria-label'))),['Vista general · Planta baja','Cocina · Planta baja','Vista general · Planta primera','Cocina · Planta primera']);
  await page.locator('.presentation-stops button').nth(3).click();await settled(page);assert.equal((await inspectStop(page)).active,'lvl_fixture-upper');
- await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
- const {manifest,summary}=await readBatch((await download(page,()=>page.locator('#presentationBatch').click({timeout:120000}))).bytes);
+ await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:budget(60000)});
+ const {manifest,summary}=await readBatch((await download(page,()=>page.locator('#presentationBatch').click({timeout:budget(120000)}))).bytes);
  const rooms=manifest.views.filter(v=>v.kind==='room');
  assert.deepEqual(rooms.map(v=>[v.levelId,v.roomId,v.label,v.filename]),[['lvl_fixture-ground',shared,'Cocina','views/view-002.png'],['lvl_fixture-upper',shared,'Cocina','views/view-004.png']]);
  assert.notEqual(rooms[0].sha256,rooms[1].sha256,'two different images');assert.deepEqual(summary.byLevel,{'lvl_fixture-ground':2,'lvl_fixture-upper':2});
  assert.deepEqual(errors,[]);
 });
 
-test('professional brand reaches both levels of the building presentation batch',{timeout:900000},async t=>{
+test('professional brand reaches both levels of the building presentation batch',{timeout:budget(900000)},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await setup(context),fx=F.build();
  await importBuilding(page,await buildingZip(fx.building,fx.bytesFor));
@@ -157,7 +158,7 @@ test('professional brand reaches both levels of the building presentation batch'
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
  assert.match(await page.locator('.presentation-brand').textContent(),/Estudio Dos Plantas[\s\S]*Casa para cliente/);
  assert.match(await page.locator('.presentation-intro').textContent(),/Dos plantas en una entrega/);
- await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
+ await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:budget(60000)});
  const {files,manifest,summary}=await readBatch((await download(page,()=>page.locator('#presentationBatch').click())).bytes);
  assert.equal(summary.version,2);assert.deepEqual(summary.levels,['lvl_fixture-ground','lvl_fixture-upper']);
  assert.equal(manifest.views.length,4,'two overviews and one chosen room per level');
@@ -168,12 +169,12 @@ test('professional brand reaches both levels of the building presentation batch'
   const strip=await page.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);const band=Math.max(44,Math.round(img.height*.075));return [...x.getImageData(Math.round(img.width/2),img.height-band,1,1).data].slice(0,3);},png.toString('base64'));
   assert.deepEqual(strip,[213,217,219],`${view.levelName} has the brand strip`);
  }
- await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:60000});
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:budget(60000)});
  assert.deepEqual(await snapshot(page),original,'brand presentation does not modify the building or editor');
  assert.deepEqual(errors,[]);
 });
 
-test('pending distribution: no presentation, and no batch or PNG through any path',{timeout:600000},async t=>{
+test('pending distribution: no presentation, and no batch or PNG through any path',{timeout:budget(600000)},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await setup(context),downloads=[];page.on('download',d=>downloads.push(d.suggestedFilename()));
  await importBuilding(page,await buildingZip(Conflict.build().building));
@@ -187,7 +188,7 @@ test('pending distribution: no presentation, and no batch or PNG through any pat
  // A clear building whose state turns pending while presenting (simulated): batch and PNG refuse, with the reason.
  const fx=F.build();await importBuilding(page,await buildingZip(fx.building,fx.bytesFor));
  await page.locator('#presentationBtn').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
- await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
+ await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:budget(60000)});
  await page.evaluate(()=>{window.__status=FloorPlanBuildingUI.status;FloorPlanBuildingUI.status=()=>({state:'pending',headline:'1 mueble sobre la escalera',conflicts:[{}],unevaluated:[]});});
  await page.locator('#presentationBatch').click();await page.waitForTimeout(1500);
  assert.match(await page.locator('#presentationBatchStatus').textContent(),/^No se exporta: la distribución está pendiente \(1 mueble sobre la escalera\)\. Corrígelo en el editor\.$/);
@@ -195,7 +196,7 @@ test('pending distribution: no presentation, and no batch or PNG through any pat
  await page.locator('#presentationCapture').click();await page.waitForTimeout(1500);
  assert.deepEqual(downloads,[],'nothing downloaded');
  await page.evaluate(()=>{FloorPlanBuildingUI.status=window.__status;});await page.locator('#presentationClose').click();
- await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:60000});
+ await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:budget(60000)});
  assert.deepEqual(errors,[]);
 });
 
@@ -209,9 +210,9 @@ async function singleLevel(at,tag){
   const note=await page.locator('#presentationLevelNote').count(),groups=await page.locator('.presentation-level-group').count();
   await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
   const plan=await page.evaluate(()=>FloorPlanPresentation.plan);
-  await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
+  await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:budget(60000)});
   // Software rendering keeps the main thread busy (≈2.5 s per evaluate on master and here): a longer click wait.
-  const file=await download(page,()=>page.locator('#presentationBatch').click({timeout:120000})),files=await P.unzip(file.bytes,{check:batchFile,required:'presentation.json',jsonNames:['presentation.json'],maxEntries:40});
+  const file=await download(page,()=>page.locator('#presentationBatch').click({timeout:budget(120000)})),files=await P.unzip(file.bytes,{check:batchFile,required:'presentation.json',jsonNames:['presentation.json'],maxEntries:40});
   const manifest=JSON.parse(new TextDecoder().decode(files.get('presentation.json')));
   await page.screenshot({path:path.join(shots,`single-level-${tag}.png`)});
   const round=v=>JSON.parse(JSON.stringify(v,(_,x)=>typeof x==='number'?Math.round(x*1e6)/1e6:x));
@@ -219,7 +220,7 @@ async function singleLevel(at,tag){
    manifest:{keys:Object.keys(manifest),version:manifest.version,format:manifest.format,views:manifest.views.map(({order,kind,roomId,label,filename,width,height,...rest})=>({order,kind,roomId,label,filename,width,height,keys:Object.keys(rest).sort()})),portable:Object.keys(manifest.portableProject).sort()},manifestRaw:manifest,files_:files};
  }finally{await context.close();}
 }
-test('single-level project: same plan and batch format as before',{timeout:600000},async()=>{
+test('single-level project: same plan and batch format as before',{timeout:budget(600000)},async()=>{
  const mine=await singleLevel(url,'branch');
  assert.deepEqual(mine.errors,[]);assert.equal(mine.note,0,'no building note');assert.equal(mine.groups,0,'no level groups');
  assert.equal(mine.name,'presentacion-estancias.zip');assert.deepEqual(mine.files,['editable-project.zip','presentation.json','views/view-001.png','views/view-002.png','views/view-003.png']);

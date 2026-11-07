@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 /* FT3D-5 «Lectura del edificio»: axonometric reading (axon-open) and spatial breakdown (exploded-levels-open) checked on
    the real app in Chromium (contract V2 §36, docs/product/ft3d-5-axon-exploded-building-contract-2026-11-01.md).
    - OFF by default, OFF parity, script order, ES/EN/ZH, repeated dialog open/close without duplicates;
@@ -20,7 +21,7 @@ const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript
 async function pack(name,mutate){const b=S.build().building;for(const l of b.levels)l.project.objects=l.project.objects.filter(o=>!/sofa|bed/.test(o.id));mutate?.(b);B.validate(b);
  const {entries}=await B.packageEntries(b,()=>null,T.imageInfo);const file=path.join(await fs.mkdtemp(path.join(os.tmpdir(),'axon-')),name+'.zip');await fs.writeFile(file,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));return file;}
 before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.writeHead(200,{'content-type':types[path.extname(file)]||'application/octet-stream'});res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
- await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(QA,{recursive:true});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']}));await fs.mkdir(QA,{recursive:true});
  zips.duplex=await pack('duplex');
  // Upper level shifted on X and plan Y with its own smaller footprint; the lower level's walls are unusually tall
  // (4.6 m under a level 3.1 m up), so the nominal gap alone would make the floors overlap in the breakdown.
@@ -29,14 +30,14 @@ before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(asy
  zips.partial=await pack('partial',b=>{for(const w of b.levels[1].project.walls)w.status='demolished';});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function open(t,viewport,{reduced=true}={}){const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,reducedMotion:reduced?'reduce':'no-preference'});t.after(()=>context.close());
- const page=await context.newPage(),errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(60000);
+ const page=await context.newPage(),errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(budget(60000));
  await page.route('**/*',async route=>{const target=route.request().url();if(target.startsWith('https://cdn.jsdelivr.net/npm/three@0.160.0/')){if(!cache.has(target))cache.set(target,three(target));return route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});}
   if(target.startsWith(url)||target.startsWith('blob:')||target.startsWith('data:'))return route.continue();external.push(target);return route.abort();});
- await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationAxon,null,{timeout:60000});return {page,errors,external};}
+ await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationAxon,null,{timeout:budget(60000)});return {page,errors,external};}
 const frames=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:180000});
+const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:budget(180000)});
 async function importZip(page,file){const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(file);
- await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:60000});await page.waitForTimeout(800);}
+ await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:budget(60000)});await page.waitForTimeout(800);}
 async function example(page){await page.locator('#welcomeExample').click();await page.waitForTimeout(800);}
 async function openConfig(page){await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();}
 async function configure(page,{mode='off',section=false,elevation=false,chapter=false}={}){await openConfig(page);
@@ -67,16 +68,16 @@ async function residueClean(page,name,{levelView='active'}={}){const r=await pag
 async function exit(page,editor,name,how='close'){
  if(how==='escape'){await page.locator('#presentationOverlay').focus().catch(()=>{});await page.keyboard.press('Escape');}else if(how==='back')await page.goBack();else await page.locator('#presentationClose').click();
  await page.waitForFunction(()=>!FloorPlanPresentation.active);
- await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.body.classList.contains('presentation-exiting'),null,{timeout:30000});await page.waitForTimeout(600);const after=await snapshot(page);
+ await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.body.classList.contains('presentation-exiting'),null,{timeout:budget(30000)});await page.waitForTimeout(600);const after=await snapshot(page);
  for(const k of ['project','building','revision','undo'])assert.deepEqual(after[k],editor[k],`${name}: ${k} unchanged`);assert.deepEqual(after.storage,[],`${name}: nothing stored`);
  assert.equal(await page.locator('#presentationAxonPlay').count(),0,`${name}: controls leave with the presentation`);
  const r=await page.evaluate(()=>View3D.presentationAxonResidue);assert.equal(r.active,false);assert.equal(r.handles,0);}
 // Opens the standalone FT3D-5 scene on the current overview (reduced motion: it waits at p = 0).
 async function standalone(page,kind){const label=kind==='exploded-levels-open'?'Ver despiece':'Ver axonometría';const b=page.locator('#presentationAxonPlay');
  assert.equal(await b.isVisible(),true,'standalone action on the overview');assert.equal((await b.textContent()).trim(),label);await b.click();
- await page.waitForFunction(k=>FloorPlanPresentation.story?.kind===k,kind,{timeout:180000});await frames(page);return info(page);}
+ await page.waitForFunction(k=>FloorPlanPresentation.story?.kind===k,kind,{timeout:budget(180000)});await frames(page);return info(page);}
 
-test('two levels, active lower: breakdown ownership, p0/p1 before End, holds, reverse, five cycles, no rebuild per apply (1440x900)',{timeout:1500000},async t=>{
+test('two levels, active lower: breakdown ownership, p0/p1 before End, holds, reverse, five cycles, no rebuild per apply (1440x900)',{timeout:budget(1500000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await importZip(page,zips.duplex);const editor=await snapshot(page);
  await openConfig(page);
  assert.equal(await page.locator('#presentationAxonCompact').isDisabled(),false);assert.equal(await page.locator('#presentationAxonExploded').isDisabled(),false,'two valid levels: breakdown available');
@@ -130,7 +131,7 @@ test('two levels, active lower: breakdown ownership, p0/p1 before End, holds, re
  await exit(page,editor,'duplex');assert.deepEqual(errors,[]);assert.deepEqual(external,[],'no network');
 });
 
-test('one level: default OFF, OFF parity, script order, ES/EN/ZH, dialog reopen, compact only, reduced hold, p0/p1, capture, Escape (1440x900)',{timeout:900000},async t=>{
+test('one level: default OFF, OFF parity, script order, ES/EN/ZH, dialog reopen, compact only, reduced hold, p0/p1, capture, Escape (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await example(page);const editor=await snapshot(page);
  // The core loads before the UI that consumes it.
  const order=await page.evaluate(()=>[...document.scripts].map(s=>s.getAttribute('src')||'').filter(Boolean));
@@ -156,7 +157,7 @@ test('one level: default OFF, OFF parity, script order, ES/EN/ZH, dialog reopen,
  assert.ok(await canvasDiff(page,base,await canvasShot(page))<1.5,'p0 pixels');
  assert.equal(await page.locator('#presentationCapture').isDisabled(),true,'capture waits while the story runs');
  // Reduced motion: one explicit step lands on the compact reading.
- await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>View3D.presentationStoryInfo.phase==='axon',null,{timeout:120000});await frames(page);
+ await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>View3D.presentationStoryInfo.phase==='axon',null,{timeout:budget(120000)});await frames(page);
  const hold=await info(page);assert.ok(Math.abs(hold.story.local-.5)<1e-9,'reduced: the compact hold');assert.equal(hold.info.axon.phase,'axon');await canvasShot(page,'one-level-axon-hold');await shot(page,'one-level-axon-hold-card');
  assert.match(await page.locator('#presentationStoryCaption').textContent(),/Vista axonométrica/);
  assert.ok(hold.info.axon.levelDeltas.every(x=>x.dyM===0),'compact: nothing separated');
@@ -165,7 +166,7 @@ test('one level: default OFF, OFF parity, script order, ES/EN/ZH, dialog reopen,
  assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });
 
-test('active upper level, offsets X/Z, different footprints, unusual heights: the active level moves as one, no overlap (1440x900)',{timeout:900000},async t=>{
+test('active upper level, offsets X/Z, different footprints, unusual heights: the active level moves as one, no overlap (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await importZip(page,zips.offset);
  const upperId=await page.evaluate(()=>FloorPlanBuildingUI.presentationSources().levels.find(l=>l.order===1).levelId);
  await page.evaluate(id=>FloorPlanBuildingUI.selectLevel(id),upperId);await page.waitForTimeout(800);const editor=await snapshot(page);
@@ -191,9 +192,9 @@ test('active upper level, offsets X/Z, different footprints, unusual heights: th
  await exit(page,editor,'active upper','back');assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });
 
-test('whole story: section + façade + breakdown once, in order; cancel at 25/40/60/80 %; Close (1440x900)',{timeout:1500000},async t=>{
+test('whole story: section + façade + breakdown once, in order; cancel at 25/40/60/80 %; Close (1440x900)',{timeout:budget(1500000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await importZip(page,zips.duplex);const editor=await snapshot(page);
- await configure(page,{mode:'exploded',section:true,elevation:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:180000});
+ await configure(page,{mode:'exploded',section:true,elevation:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:budget(180000)});
  await page.locator('#presentationStoryPlay').click();await settled(page);
  await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1);
  const kinds=(await info(page)).story.kinds;
@@ -211,7 +212,7 @@ test('whole story: section + façade + breakdown once, in order; cancel at 25/40
  await exit(page,editor,'close mid-scene','close');await residueClean(page,'close');assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });
 
-test('Begin failure after active → all rolls back; all → all; furniture OFF and contact ON preserved; resize keeps p (1440x900)',{timeout:1200000},async t=>{
+test('Begin failure after active → all rolls back; all → all; furniture OFF and contact ON preserved; resize keeps p (1440x900)',{timeout:budget(1200000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await importZip(page,zips.duplex);
  await page.locator('[data-view="3d"]').first().click();await page.waitForTimeout(1500);
  await page.evaluate(()=>document.querySelector('#toggles3d [data-t="furn"]').click());await page.waitForTimeout(300);const editor=await snapshot(page);
@@ -246,7 +247,7 @@ test('Begin failure after active → all rolls back; all → all; furniture OFF 
  await exit(page,editor2,'all→all');assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });
 
-test('partial building: the reading names the level it leaves out (1440x900)',{timeout:600000},async t=>{
+test('partial building: the reading names the level it leaves out (1440x900)',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await importZip(page,zips.partial);await openConfig(page);
  const hint=await page.locator('#presentationAxonHint').textContent();assert.match(hint,/Lectura parcial/);assert.match(hint,/Planta primera/);
  assert.equal(await page.locator('#presentationAxonExploded').isDisabled(),true,'only one valid level: no breakdown');
@@ -254,7 +255,7 @@ test('partial building: the reading names the level it leaves out (1440x900)',{t
 });
 
 for(const viewport of [{width:390,height:844},{width:844,height:390}]){
- test(`phone ${viewport.width}x${viewport.height}: breakdown with operable controls and no overflow`,{timeout:900000},async t=>{
+ test(`phone ${viewport.width}x${viewport.height}: breakdown with operable controls and no overflow`,{timeout:budget(900000)},async t=>{
   const {page,errors,external}=await open(t,viewport);await importZip(page,zips.duplex);const editor=await snapshot(page);
   await configure(page,{mode:'exploded'});await settled(page);await standalone(page,'exploded-levels-open');
   const h=await scrub(page,64);assert.equal(h.info.axon.phase,'exploded');assert.equal(await noOverflow(page),true,'no horizontal overflow');
@@ -264,13 +265,13 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}]){
  });
 }
 
-test('reduced motion breakdown: compact hold, then exploded hold, then the presentation continues (1440x900)',{timeout:900000},async t=>{
+test('reduced motion breakdown: compact hold, then exploded hold, then the presentation continues (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900},{reduced:true});await importZip(page,zips.duplex);const editor=await snapshot(page);
  await configure(page,{mode:'exploded'});await settled(page);const overview=await info(page);await standalone(page,'exploded-levels-open');
  const H=await page.evaluate(()=>FloorPlanPresentationStory.EXPLODED_LEVELS_OPEN);
- await page.locator('#presentationStoryPlay').click();await page.waitForFunction(h=>Math.abs((FloorPlanPresentation.story?.local??-1)-h)<1e-9,H.reducedCompact,{timeout:120000});await frames(page);
+ await page.locator('#presentationStoryPlay').click();await page.waitForFunction(h=>Math.abs((FloorPlanPresentation.story?.local??-1)-h)<1e-9,H.reducedCompact,{timeout:budget(120000)});await frames(page);
  const c=await info(page);assert.ok(c.info.axon.levelDeltas.every(x=>x.dyM===0),'first hold: compact');assert.ok(c.info.axon.live.stairs.every(s=>s.visible));await shot(page,'reduced-exploded-compact');
- await page.locator('#presentationStoryPlay').click();await page.waitForFunction(h=>Math.abs((FloorPlanPresentation.story?.local??-1)-h)<1e-9,H.reducedExploded,{timeout:120000});await frames(page);
+ await page.locator('#presentationStoryPlay').click();await page.waitForFunction(h=>Math.abs((FloorPlanPresentation.story?.local??-1)-h)<1e-9,H.reducedExploded,{timeout:budget(120000)});await frames(page);
  const e=await info(page);assert.equal(e.info.axon.phase,'exploded','second hold: levels apart');await shot(page,'reduced-exploded-hold');
  assert.match(await page.locator('#presentationStoryPlay').textContent(),/Continuar presentación/);
  await page.locator('#presentationStoryPlay').click();await settled(page);await residueClean(page,'reduced');assert.ok(samePose((await info(page)).pose,overview.pose),'ends on the overview');

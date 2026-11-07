@@ -89,6 +89,9 @@ jobs:
           - delivery-image
     env:
       TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      # No GPU on the runner: the 3D view is drawn by SwiftShader on the CPU (about 1.3 s per 1440x900 frame), so the
+      # suites' time budgets — never their assertions — are multiplied by 3 (tests/helpers/render-budget.cjs).
+      RENDER_TIME_SCALE: '3'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -130,6 +133,7 @@ jobs:
           - material-detail
     env:
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      RENDER_TIME_SCALE: '3'   # same time budgets as the head job (no effect on a base without the helper)
     steps:
       - uses: actions/checkout@v4
         with:

@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 /* FT3D-3 «Sección dinámica»: checked on the real app (contract §14, §15).
    - OFF by default and when off the presentation is unchanged (no control, same tools, same overview pose);
    - ON: checkpoints 0/.25/.35/.50/.65/.75/1 of section-open on the same model — p = 0 and p = 1 are the overview pose,
@@ -16,16 +17,16 @@ const QA=process.env.SECTION_ARTIFACTS||path.join(os.tmpdir(),'presentation-sect
 const three=target=>require('./helpers/three-module.cjs')(target,()=>run('curl',['--fail','--show-error','--max-time','30',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout));
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary','.hdr':'application/octet-stream'};
 before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
- await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(QA,{recursive:true});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']}));await fs.mkdir(QA,{recursive:true});
  const b=S.build().building;for(const l of b.levels)l.project.objects=l.project.objects.filter(o=>!/sofa|bed/.test(o.id));
  const {entries}=await B.packageEntries(b,()=>null,T.imageInfo);zip=path.join(await fs.mkdtemp(path.join(os.tmpdir(),'section-')),'duplex.zip');await fs.writeFile(zip,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function open(t,viewport,{reduced=true}={}){const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,reducedMotion:reduced?'reduce':'no-preference'});t.after(()=>context.close());
- const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(60000);
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(budget(60000));
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,three(target));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});
- await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationSection,null,{timeout:60000});return {page,errors};}
+ await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationSection,null,{timeout:budget(60000)});return {page,errors};}
 const frames=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:180000});
+const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:budget(180000)});
 async function configure(page,{section=false,chapter=false}={}){await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  const option=page.locator('#presentationSectionOption');assert.equal(await option.isChecked(),false,'off by default, never remembered');
  if(section)await option.check();if(chapter)await page.locator('#presentationStoryOption').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();}
@@ -37,11 +38,11 @@ const clean=c=>c.materialsWithPlanes===0&&!c.localClipping&&c.sectionGroups===0&
 const shot=(page,name)=>page.screenshot({path:path.join(QA,name+'.png')});
 const noOverflow=page=>page.evaluate(()=>document.scrollingElement.scrollWidth<=innerWidth+1);
 async function exit(page,before,name){await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);
- await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.querySelector('#stage')?.classList.contains('animating')&&!document.body.classList.contains('presentation-exiting'),null,{timeout:30000});await page.waitForTimeout(600);const after=await snapshot(page),c=await page.evaluate(()=>View3D.presentationClipInfo);
+ await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.querySelector('#stage')?.classList.contains('animating')&&!document.body.classList.contains('presentation-exiting'),null,{timeout:budget(30000)});await page.waitForTimeout(600);const after=await snapshot(page),c=await page.evaluate(()=>View3D.presentationClipInfo);
  assert.equal(after.project,before.project,`${name}: project JSON identical`);assert.equal(after.undo,before.undo,`${name}: same undo history`);assert.deepEqual(after.storage,[],`${name}: nothing stored`);
  assert.ok(clean(c),`${name}: no clipping left after exit ${JSON.stringify(c)}`);assert.equal(await page.locator('#presentationSectionPlay').count(),0,`${name}: controls leave with the presentation`);}
 
-test('OFF unchanged; ON: checkpoints, real plane on the building only, reverse, resize, cancel, continue (1440x900)',{timeout:900000},async t=>{
+test('OFF unchanged; ON: checkpoints, real plane on the building only, reverse, resize, cancel, continue (1440x900)',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await page.locator('#welcomeExample').click();await page.waitForTimeout(800);
  const editor=await snapshot(page);
  // §14.38 OFF: no section control and the same overview as the presentation of master.
@@ -90,9 +91,9 @@ test('OFF unchanged; ON: checkpoints, real plane on the building only, reverse, 
  await exit(page,editor,'on');await shot(page,'desktop-after-exit');assert.deepEqual(errors,[]);
 });
 
-test('whole story: plan → section → room without a camera jump; restore on exit (1440x900, reduced motion)',{timeout:900000},async t=>{
+test('whole story: plan → section → room without a camera jump; restore on exit (1440x900, reduced motion)',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await page.locator('#welcomeExample').click();await page.waitForTimeout(800);const editor=await snapshot(page);
- await configure(page,{section:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:180000});
+ await configure(page,{section:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:budget(180000)});
  // Finish the chapter (reduced: one step), then the whole story.
  await page.locator('#presentationStoryPlay').click();await settled(page);await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes===3);
  const kinds=await page.evaluate(()=>['plan-reveal','section-open','room-descent']);assert.equal((await state(page)).story.scenes,3,kinds.join());
@@ -109,7 +110,7 @@ test('whole story: plan → section → room without a camera jump; restore on e
  await exit(page,editor,'story');assert.deepEqual(errors,[]);
 });
 
-test('autoplay plays and pauses; finishing restores (1440x900, motion allowed)',{timeout:600000},async t=>{
+test('autoplay plays and pauses; finishing restores (1440x900, motion allowed)',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900},{reduced:false});await page.locator('#welcomeExample').click();await page.waitForTimeout(800);const editor=await snapshot(page);
  await configure(page,{section:true});await settled(page);await page.locator('#presentationSectionPlay').click();
  // Pause from the page at the first played frame (the software renderer is too slow for a timed click).
@@ -120,7 +121,7 @@ test('autoplay plays and pauses; finishing restores (1440x900, motion allowed)',
 });
 
 for(const viewport of [{width:390,height:844},{width:844,height:390}])
-test(`phone ${viewport.width}x${viewport.height}: framed, operable, no overflow`,{timeout:600000},async t=>{
+test(`phone ${viewport.width}x${viewport.height}: framed, operable, no overflow`,{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,viewport);await page.locator('#welcomeExample').click();await page.waitForTimeout(800);const editor=await snapshot(page);
  await configure(page,{section:true});await settled(page);const sec=page.locator('#presentationSectionPlay');await sec.scrollIntoViewIfNeeded();await sec.click();
  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='section-open');
@@ -131,11 +132,11 @@ test(`phone ${viewport.width}x${viewport.height}: framed, operable, no overflow`
  await exit(page,editor,'phone');assert.deepEqual(errors,[]);
 });
 
-test('two-level building: one section per level, same axis, restore on exit',{timeout:900000},async t=>{
+test('two-level building: one section per level, same axis, restore on exit',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});
  const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(zip);
- await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:60000});await page.waitForTimeout(800);const editor=await snapshot(page);
- await configure(page,{section:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:180000});
+ await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:budget(60000)});await page.waitForTimeout(800);const editor=await snapshot(page);
+ await configure(page,{section:true,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:budget(180000)});
  const support=await page.evaluate(()=>FloorPlanPresentation.section);assert.equal(support.levels.length,2);
  const supported=support.levels.filter(l=>l.supported);assert.ok(supported.length>=1);assert.ok(support.axis,'one building axis');assert.ok(support.levels.every(l=>!l.supported||l.axis===support.axis));
  await page.locator('#presentationStoryPlay').click();await settled(page);await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1);
@@ -146,7 +147,7 @@ test('two-level building: one section per level, same axis, restore on exit',{ti
  await exit(page,editor,'building');assert.deepEqual(errors,[]);
 });
 
-test('unsupported plan: option disabled with a concrete reason; presentation unaffected',{timeout:600000},async t=>{
+test('unsupported plan: option disabled with a concrete reason; presentation unaffected',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await page.locator('#welcomeExample').click();await page.waitForTimeout(800);
  // Two rooms at the far ends of the plan: no candidate (50 %, 40 %, 60 %) crosses a room or two walls.
  await page.evaluate(()=>{const p=structuredClone(FloorPlanApp.project),w=p.walls[0],r=p.rooms[0];

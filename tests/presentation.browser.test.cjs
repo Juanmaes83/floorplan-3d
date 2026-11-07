@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const {execFile}=require('node:child_process'),{promisify}=require('node:util'),run=promisify(execFile),cache=new Map();
@@ -7,7 +8,7 @@ before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(asy
   res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}
  catch{res.writeHead(404);res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;});
 after(async()=>new Promise(r=>server.close(r)));
-async function setup(t,viewport,webgl=true){const browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
+async function setup(t,viewport,webgl=true){const browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']}));t.after(()=>browser.close());
  const page=await browser.newPage({viewport,isMobile:viewport.width<1000,hasTouch:viewport.width<1000}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{if(!webgl)return route.abort();const target=route.request().url();let p=cache.get(target);if(!p){p=require('./helpers/three-module.cjs')(target,()=>run('curl',['--fail','--silent','--show-error','--max-time','30',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout));cache.set(target,p);}await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await p});});
  if(!webgl)await page.route('**/vendor/three/**',route=>route.abort());
@@ -21,7 +22,7 @@ const presentEntry=async page=>page.locator('#guidePresent:visible, #presentatio
 async function assertFocusOnEntry(page,message){const {active,ids}=await page.evaluate(()=>({active:document.activeElement?.id||'',ids:['guidePresent','presentationBtn'].filter(id=>{const e=document.getElementById(id);return e&&!e.closest('[hidden]')&&e.getClientRects().length>0;})}));
  assert.equal(ids.length,1,`one visible presentation entry, got ${JSON.stringify(ids)}`);assert.equal(active,ids[0],message);}
 async function screenshot(page,name){const dir=process.env.PRESENTATION_ARTIFACTS||'qa-results/serra-r1';await fs.mkdir(dir,{recursive:true});await page.screenshot({path:path.join(dir,name+'.png')});}
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P01/P02 search and closed-guide entry preserve the project ${viewport.width}x${viewport.height}`,{timeout:150000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P01/P02 search and closed-guide entry preserve the project ${viewport.width}x${viewport.height}`,{timeout:budget(150000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,initial=await state(page),consoleErrors=[];
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  for(const query of ['presentar mi vivienda','tour','presentación en 3D']){
@@ -35,7 +36,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  }
  await page.locator('#guidePresent').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
  await page.locator('.presentation-room-row').nth(1).locator('input').check();
- await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
  assert.deepEqual(await state(page),initial);
  await page.locator('#guideClose').click();assert.equal(await page.locator('#presentationBtn').isVisible(),true);
@@ -55,11 +56,11 @@ async function presentationPng(page){
  const colours=await page.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(img,0,0,64,64);const d=x.getImageData(0,0,64,64).data,set=new Set();for(let i=0;i<d.length;i+=4)set.add(d[i]>>3<<10|d[i+1]>>3<<5|d[i+2]>>3);return set.size;},png.toString('base64'));
  assert.ok(colours>40,`rendered PNG has ${colours} colour buckets`);return png;
 }
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P13 presentation PNG is real and restores the view ${viewport.width}x${viewport.height}`,{timeout:150000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P13 presentation PNG is real and restores the view ${viewport.width}x${viewport.height}`,{timeout:budget(150000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,before=await state(page),consoleErrors=[];
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  const capture=page.locator('#presentationCapture'),expected=await page.evaluate(()=>View3D.shotSize({size:'1280',aspect:'view'}));
  assert.equal(await capture.textContent(),`Guardar PNG ${expected.width}×${expected.height}`);
  const rect=await capture.boundingBox();assert.ok(rect&&rect.x>=0&&rect.y>=0&&rect.x+rect.width<=viewport.width&&rect.y+rect.height<=viewport.height,`${size} capture visible`);
@@ -70,7 +71,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  // Every state of the flight is recorded in the page, so a slow software renderer cannot hide it behind a slow click.
  await page.evaluate(()=>{const o=document.querySelector('#presentationOverlay'),c=document.querySelector('#presentationCapture');window.__motion=[];new MutationObserver(()=>window.__motion.push({moving:o.dataset.moving,captureDisabled:c.disabled})).observe(o,{attributes:true,attributeFilter:['data-moving']});});
  await page.getByRole('button',{name:'Siguiente →'}).click();
- await page.waitForFunction(()=>window.__motion.some(m=>m.moving==='true'),null,{timeout:30000});
+ await page.waitForFunction(()=>window.__motion.some(m=>m.moving==='true'),null,{timeout:budget(30000)});
  assert.deepEqual(await page.evaluate(()=>window.__motion.filter(m=>m.moving==='true').map(m=>m.captureDisabled).filter(d=>!d)),[],'capture serialized with camera motion');
  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
  const room=await viewState(),roomPng=await presentationPng(page);assert.deepEqual(stable(await viewState()),stable(room));
@@ -87,13 +88,13 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
  assert.deepEqual(await state(page),before);assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`presentation starts from a real room and restores 2D ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`presentation starts from a real room and restores 2D ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
  const matches=await page.evaluate(()=>FloorPlanGuide.resolve('presentación en 3D').map(a=>a.id));assert.equal(matches[0],'presentation');
  await page.locator('#guidePresent').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);await screenshot(page,`${size}-config`);
  const startBox=await page.getByRole('button',{name:'Iniciar presentación'}).boundingBox();
  assert.ok(startBox&&startBox.y>=0&&startBox.y+startBox.height<=viewport.height,`${size}: start button inside viewport`);
- await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  assert.match(await page.locator('.presentation-progress').textContent(),/1 de 2 vistas visitadas/);
  await screenshot(page,`${size}-overview`);
  await page.getByRole('button',{name:'Siguiente →'}).click();await page.waitForFunction(()=>document.querySelector('.presentation-status')?.textContent?.includes('Vista 2')&&document.querySelector('#presentationOverlay').dataset.moving==='false');await screenshot(page,`${size}-room`);
@@ -104,12 +105,12 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const afterState=await state(page);for(const key of Object.keys(beforeState))assert.ok(afterState[key]===beforeState[key],`${key} restored`);assert.deepEqual(errors,[]);
 });
 
-test('R2 P06/P12 manual jumps and revisits count completed stops without guide evidence',{timeout:120000},async t=>{
+test('R2 P06/P12 manual jumps and revisits count completed stops without guide evidence',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
  const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await (await presentEntry(page)).click();await page.locator('.presentation-room-row').nth(1).locator('input').check();
  await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  const progress=()=>page.locator('.presentation-progress').textContent();
  assert.match(await progress(),/1 de 3 vistas visitadas/);
  assert.equal(await page.getByRole('button',{name:'← Anterior'}).isDisabled(),true);
@@ -133,7 +134,7 @@ test('R2 P06/P12 manual jumps and revisits count completed stops without guide e
  assert.deepEqual(await state(page),beforeState);
 });
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P11 missing GLB keeps generic furniture and warns ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P11 missing GLB keeps generic furniture and warns ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
  await page.waitForFunction(()=>FloorPlanAssetUI?.ready);
  const target=await page.evaluate(()=>{
@@ -144,7 +145,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await page.route('**/assets/f3/*.glb',route=>route.fulfill({status:404,body:'Missing'}));
  const beforeState=await state(page);
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(id=>FloorPlanPresentation.active&&View3D.assetStatus(id)?.state==='error',target.id,{timeout:30000});
+ await page.waitForFunction(id=>FloorPlanPresentation.active&&View3D.assetStatus(id)?.state==='error',target.id,{timeout:budget(30000)});
  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false');
  assert.match(await page.locator('.presentation-warning').textContent(),/se muestran muebles genéricos/);
  assert.equal(await page.locator('.presentation-warning').isVisible(),true);
@@ -155,24 +156,24 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
 });
 
-test('R2 P11 corrupt GLB also keeps the generic and the project',{timeout:90000},async t=>{
+test('R2 P11 corrupt GLB also keeps the generic and the project',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844});await page.waitForFunction(()=>FloorPlanAssetUI?.ready);
  const id=await page.evaluate(()=>{const entry=FloorPlanAssetUI.entries.find(e=>e.url.includes('songesand'));mutate(()=>{project.objects[0].assetRef={catalog:entry.catalog,assetId:entry.id,catalogRevision:entry.revision};});return project.objects[0].id;});
  await page.route('**/assets/f3/*.glb',route=>route.fulfill({status:200,contentType:'model/gltf-binary',body:'invalid GLB bytes'}));
  const beforeState=await state(page);await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(id=>FloorPlanPresentation.active&&View3D.assetStatus(id)?.state==='error',id,{timeout:30000});
+ await page.waitForFunction(id=>FloorPlanPresentation.active&&View3D.assetStatus(id)?.state==='error',id,{timeout:budget(30000)});
  assert.equal(await page.locator('.presentation-warning').isVisible(),true);
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
 });
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P11 WebGL context loss returns intact 2D ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P11 WebGL context loss returns intact 2D ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
  const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  const extension=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),gl=canvas.getContext('webgl2')||canvas.getContext('webgl');const ext=gl?.getExtension('WEBGL_lose_context');if(ext)ext.loseContext();else canvas.dispatchEvent(new Event('webglcontextlost',{cancelable:true}));return !!ext;});
- await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d'&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('m3d')&&getComputedStyle(document.querySelector('#plan')).opacity==='1',null,{timeout:30000});
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d'&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('m3d')&&getComputedStyle(document.querySelector('#plan')).opacity==='1',null,{timeout:budget(30000)});
  assert.ok(await page.locator('#plan .room').count()>0,'2D rooms remain visible');
  await page.waitForFunction(()=>{const stage=document.querySelector('#stage').getBoundingClientRect(),rooms=[...document.querySelectorAll('#plan .room')].map(el=>el.getBoundingClientRect());return rooms.length>0&&rooms.every(r=>r.left>=stage.left-2&&r.right<=stage.right+2&&r.top>=stage.top-2&&r.bottom<=stage.bottom+2);});
  assert.equal(await page.evaluate(()=>View3D.contextAvailable),false);
@@ -186,21 +187,21 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  if(!extension)t.diagnostic('WEBGL_lose_context unavailable; synthetic context-loss event used');
 });
 
-test('R2 P11 context loss while 3D starts cannot reopen the presentation',{timeout:90000},async t=>{
+test('R2 P11 context loss while 3D starts cannot reopen the presentation',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>!!document.querySelector('#view3d canvas'),null,{timeout:20000});
+ await page.waitForFunction(()=>!!document.querySelector('#view3d canvas'),null,{timeout:budget(20000)});
  await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),gl=canvas.getContext('webgl2')||canvas.getContext('webgl');const ext=gl?.getExtension('WEBGL_lose_context');if(ext)ext.loseContext();else canvas.dispatchEvent(new Event('webglcontextlost',{cancelable:true}));});
- await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d'&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy')&&getComputedStyle(document.querySelector('#plan')).opacity==='1',null,{timeout:30000});
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d'&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy')&&getComputedStyle(document.querySelector('#plan')).opacity==='1',null,{timeout:budget(30000)});
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
 });
 
-test('R2 P14 reduced motion and four resize aspects keep the active stop framed',{timeout:120000},async t=>{
+test('R2 P14 reduced motion and four resize aspects keep the active stop framed',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900}),beforeState=await state(page);
  const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.emulateMedia({reducedMotion:'reduce'});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  await page.locator('.presentation-stops button').nth(1).click();
  assert.equal(await page.locator('#presentationOverlay').getAttribute('data-moving'),'false','reduced-motion jump resolves without tour animation');
  for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}]){
@@ -215,7 +216,7 @@ test('R2 P14 reduced motion and four resize aspects keep the active stop framed'
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-test('R2 P14 presentation entered from 3D restores camera and final viewport aspect',{timeout:90000},async t=>{
+test('R2 P14 presentation entered from 3D restores camera and final viewport aspect',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
  const beforeState=await state(page),camera=await page.evaluate(()=>View3D.presentationInspect());
@@ -234,13 +235,13 @@ test('R2 P14 presentation entered from 3D restores camera and final viewport asp
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
 });
 
-test('R2 P15 ten presentation cycles release their loop and keep renderer memory stable',{timeout:180000},async t=>{
+test('R2 P15 ten presentation cycles release their loop and keep renderer memory stable',{timeout:budget(180000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
  const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  const metrics=[];
  for(let cycle=0;cycle<=10;cycle++){
   await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
-  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
   await page.locator('.presentation-stops button').nth(1).click();
   await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
   if(cycle===10)await screenshot(page,'390x844-ten-cycles-room');
@@ -261,7 +262,7 @@ test('R2 P15 ten presentation cycles release their loop and keep renderer memory
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P16 long HTML-like room name stays text and controls fit ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P16 long HTML-like room name stays text and controls fit ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
  const name='<script>window.__presentationInjected=1</script> &amp; Á住宅 '+('SinEspacios'.repeat(3));
  await page.evaluate(value=>mutate(()=>{project.rooms.find(r=>r.id===FloorPlanApp.geometry.rooms[0].id).name=value;}),name);
@@ -271,7 +272,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.equal(await page.locator('#presentationConfig script').count(),0);
  await screenshot(page,`${size}-long-name-config`);
  await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  await page.locator('.presentation-stops button').nth(1).click();
  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
  assert.equal(await page.locator('.presentation-card h2').textContent(),name);
@@ -288,7 +289,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
 });
 
-test('3D camera, focus and editor state return after Escape and browser Back',{timeout:120000},async t=>{
+test('3D camera, focus and editor state return after Escape and browser Back',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
  const beforeState=await state(page),camera=await page.evaluate(()=>View3D.presentationInspect());
@@ -307,7 +308,7 @@ test('3D camera, focus and editor state return after Escape and browser Back',{t
  assert.deepEqual(errors,[]);
 });
 
-test('R2 P08 walk pointer lock releases for presentation and needs a new gesture on return',{timeout:120000},async t=>{
+test('R2 P08 walk pointer lock releases for presentation and needs a new gesture on return',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900}),consoleErrors=[];
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.locator('#guideClose').click();
@@ -334,7 +335,7 @@ test('R2 P08 walk pointer lock releases for presentation and needs a new gesture
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-for(const viewport of [{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P08 touch walk stops and resumes by gesture ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+for(const viewport of [{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P08 touch walk stops and resumes by gesture ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.locator('#guideClose').click();await page.locator('[data-view="3d"]').click();
@@ -366,10 +367,10 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:360,
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-test('Escape during 3D loading cancels without a late presentation',{timeout:120000},async t=>{
+test('Escape during 3D loading cancels without a late presentation',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.keyboard.press('Escape');
- await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy'),null,{timeout:30000});
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy'),null,{timeout:budget(30000)});
  const afterState=await state(page);for(const key of Object.keys(beforeState))assert.ok(afterState[key]===beforeState[key],`${key} restored after cancel`);
  assert.deepEqual(errors,[]);
 });
@@ -379,7 +380,7 @@ for(const {viewport,exit} of [
  {viewport:{width:390,height:844},exit:'Close'},
  {viewport:{width:844,height:390},exit:'Escape'},
  {viewport:{width:360,height:800},exit:'Back'}
-])test(`R2 P07 ${exit} while 2D presentation is loading restores editor ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+])test(`R2 P07 ${exit} while 2D presentation is loading restores editor ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),beforeState=await state(page),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.evaluate(()=>{const enter=FloorPlanApp.enterPresentation3D;FloorPlanApp.enterPresentation3D=async()=>{const ok=await enter();await new Promise(resolve=>window.releaseP07Load=resolve);return ok;};});
@@ -404,7 +405,7 @@ for(const {viewport,exit} of [
  {viewport:{width:390,height:844},exit:'Back'},
  {viewport:{width:844,height:390},exit:'Escape'},
  {viewport:{width:360,height:800},exit:'Close'}
-])test(`R2 P07 ${exit} during room flight restores editor ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+])test(`R2 P07 ${exit} during room flight restores editor ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),beforeState=await state(page),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
@@ -414,7 +415,7 @@ for(const {viewport,exit} of [
  await page.evaluate(exit=>{const o=document.querySelector('#presentationOverlay');window.__exitAt=null;const mo=new MutationObserver(()=>{if(o.dataset.moving!=='true'||window.__exitAt)return;window.__exitAt={moving:o.dataset.moving,active:FloorPlanPresentation.active};mo.disconnect();
   if(exit==='Back')history.back();else if(exit==='Close')document.querySelector('#presentationClose').click();else document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));});mo.observe(o,{attributes:true,attributeFilter:['data-moving']});},exit);
  await page.locator('.presentation-stops button').nth(1).click();
- await page.waitForFunction(()=>window.__exitAt,null,{timeout:30000});
+ await page.waitForFunction(()=>window.__exitAt,null,{timeout:budget(30000)});
  assert.deepEqual(await page.evaluate(()=>window.__exitAt),{moving:'true',active:true},'exit during the room flight');
  await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&location.hash==='#editor');
  await page.waitForTimeout(750);
@@ -424,7 +425,7 @@ for(const {viewport,exit} of [
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-test('missing 3D runtime returns to the 2D document with an explanation',{timeout:45000},async t=>{
+test('missing 3D runtime returns to the 2D document with an explanation',{timeout:budget(45000)},async t=>{
  const {page}=await setup(t,{width:390,height:844},false),beforeState=await state(page);
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('presentation-exiting'));
@@ -432,7 +433,7 @@ test('missing 3D runtime returns to the 2D document with an explanation',{timeou
  assert.ok((await page.locator('#toast').textContent()).includes('3D no disponible'));
 });
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P03 empty project explains layout in both entry paths ${viewport.width}x${viewport.height}`,{timeout:60000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P03 empty project explains layout in both entry paths ${viewport.width}x${viewport.height}`,{timeout:budget(60000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,consoleErrors=[];
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.locator('#welcomeBtn').click();await page.locator('#welcomeBlank').click();await page.locator('#roomDesignCancel').click();
@@ -455,7 +456,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.equal(await page.evaluate(()=>FloorPlanApp.viewMode),'2d');assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P05 own and imported room data and poses follow active IDs ${viewport.width}x${viewport.height}`,{timeout:180000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P05 own and imported room data and poses follow active IDs ${viewport.width}x${viewport.height}`,{timeout:budget(180000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,consoleErrors=[];
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  async function verify(kind){
@@ -468,7 +469,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   await page.locator('.presentation-room-row').nth(1).locator('input').check();
   await screenshot(page,`${size}-p05-${kind}-config`);
   await page.getByRole('button',{name:'Iniciar presentación'}).click();
-  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
   const plan=await page.evaluate(()=>structuredClone(FloorPlanPresentation.plan));
   assert.equal(plan.projectId,source.id);assert.equal(plan.entryId,source.entry);
   assert.deepEqual(plan.stops.map(s=>s.roomId),[null,...source.rooms.slice(0,2).map(r=>r.id)]);
@@ -499,12 +500,12 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await page.locator('#guideClose').click();await verify('own');
  const ownId=await page.evaluate(()=>FloorPlanApp.project.id);
  await page.locator('#uploadPlanBtn').click();await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures/intake/vivienda-dos-estancias.dxf'));
- await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:30000});
+ await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:budget(30000)});
  await page.locator('#guideClose').click();await verify('imported');
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
-test('R2 room selection and order persist outside project; stale room IDs reconcile on reload',{timeout:120000},async t=>{
+test('R2 room selection and order persist outside project; stale room IDs reconcile on reload',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844});
  const original=await state(page),key=await page.evaluate(()=>FloorPlanPresentationCore.key(FloorPlanApp.entryId,FloorPlanApp.project.id));
  await (await presentEntry(page)).click();
@@ -545,7 +546,7 @@ test('R2 room selection and order persist outside project; stale room IDs reconc
  assert.deepEqual(errors,[]);
 });
 
-test('R2 changing active project invalidates the live plan and keeps sidecars isolated',{timeout:90000},async t=>{
+test('R2 changing active project invalidates the live plan and keeps sidecars isolated',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:844,height:390});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
@@ -563,7 +564,7 @@ test('R2 changing active project invalidates the live plan and keeps sidecars is
  assert.deepEqual(errors,[]);
 });
 
-test('R2 geometry revision invalidates the tour and resize restores the current aspect',{timeout:90000},async t=>{
+test('R2 geometry revision invalidates the tour and resize restores the current aspect',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:360,height:800});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
@@ -581,7 +582,7 @@ test('R2 geometry revision invalidates the tour and resize restores the current 
  assert.deepEqual(errors,[]);
 });
 
-test('R2 project switch during 3D loading cannot reopen a stale presentation',{timeout:90000},async t=>{
+test('R2 project switch during 3D loading cannot reopen a stale presentation',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844});
  await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  const old=await page.evaluate(()=>FloorPlanApp.project.id);
@@ -596,7 +597,7 @@ test('R2 project switch during 3D loading cannot reopen a stale presentation',{t
  assert.deepEqual(errors,[]);
 });
 
-test('R2 variant starts with independent presentation metadata',{timeout:90000},async t=>{
+test('R2 variant starts with independent presentation metadata',{timeout:budget(90000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});
  await (await presentEntry(page)).click();await page.locator('.presentation-room-row').nth(1).locator('input').check();
  await page.getByRole('button',{name:'Iniciar presentación'}).click();
