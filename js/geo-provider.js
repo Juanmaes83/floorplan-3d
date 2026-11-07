@@ -244,7 +244,11 @@
   const catastro=typeof module==='object'&&module.exports?require('./catastro-parcel-provider.js').provider:root.FloorPlanCatastroParcel?.provider;
   const pnoa=typeof module==='object'&&module.exports?require('./pnoa-orthophoto-provider.js').provider:root.FloorPlanPnoaOrthophoto?.provider;
   const terrain=typeof module==='object'&&module.exports?require('./ign-mdt05-terrain-provider.js').provider:root.FloorPlanIgnMdt05Terrain?.provider;
-  return createRegistry([Manual,...(catastro?[catastro]:[]),...(pnoa?[pnoa]:[]),...(terrain?[terrain]:[])]);
+  // FT3D-8 M2 (S3): official lookup by cadastral reference (WFS INSPIRE CP of the DGC). Network only when the
+  // professional asks; the UTM zone is searched among the official ones (FloorPlanCatastroWfs autoZone).
+  const Wfs=typeof module==='object'&&module.exports?require('./catastro-wfs-provider.js'):root.FloorPlanCatastroWfs;
+  const wfs=Wfs&&typeof (root.fetch||globalThis.fetch)==='function'?Wfs.create({autoZone:true}):null;
+  return createRegistry([Manual,...(catastro?[catastro]:[]),...(wfs?[wfs]:[]),...(pnoa?[pnoa]:[]),...(terrain?[terrain]:[])]);
  };
  const api={CONTRACT_VERSION,CAPABILITIES,PARCEL_INPUT_MODES,ORTHOPHOTO_REASONS,TERRAIN_REASONS,NETWORK_MODES,PROVIDER_KINDS,LICENSE_STATUSES,RESULT_STATUSES,Manual,zoneValid,validateLocation,validateSite,normalizeSource,normalizeParcelSource,inspectProvider,createRegistry,createDefaultRegistry};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanGeoProvider=api;

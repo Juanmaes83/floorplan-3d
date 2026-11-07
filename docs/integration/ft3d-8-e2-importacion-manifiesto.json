@@ -1,0 +1,2230 @@
+{
+ "fuente": {
+  "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+  "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+  "codigoProbado": "1620ba6af25d5ec793759225b183265f47f30d0b",
+  "base": "0f9c6ead9732901681498efec326d1ca92e42ffe"
+ },
+ "destino": {
+  "base": "49fc123a011964651f801f286b1689546abf8927"
+ },
+ "metodo": "importación selectiva por rutas: git diff base..fuente aplicado con 3 vías; verificación blob a blob",
+ "importados": [
+  {
+   "ruta": ".github/workflows/ft3d-8-m1-s2-s3.yml",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa",
+   "blobOrigen": "2ae668e432fe71bf78a93300f0f110cf2d8079f4"
+  },
+  {
+   "ruta": ".github/workflows/ft3d-8-m2-s4.yml",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0ab35bc9207407c040733f4858eb9470ec193fbf",
+   "blobOrigen": "cb63bec99be02e4e1298c14dbc75feb79d099b5d"
+  },
+  {
+   "ruta": ".github/workflows/ft3d-8v-schedule-core.yml",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "a88c759980b506bd7f7a4a98b3c85f6d44ea2827"
+  },
+  {
+   "ruta": "css/construction.css",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "c26196bb9111013824f6736bcaa14f8b877b9fbd"
+  },
+  {
+   "ruta": "docs/legal/bcca-es-reuse-gate-addendum-m1-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa",
+   "blobOrigen": "978654b4c115665ac365b302c2806723cad0af37"
+  },
+  {
+   "ruta": "docs/product/claude-code-2-ft3d8v-onboarding-y-encargo-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "176e635293060f271fb85093ec1310ae8e33e604",
+   "blobOrigen": "bda4b0bdb95ccae042dd49c94170688d8e97d019"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-auditoria-autoridades-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "64bb2439bb899f5395f3d3c3a0feb4db6e72d8f0",
+   "blobOrigen": "0ab0e76c78529a0f426b4b3e4746aa7b99afb64c"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-contrato-correspondencia-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "64bb2439bb899f5395f3d3c3a0feb4db6e72d8f0",
+   "blobOrigen": "f12bf994657f00af5ce379202b2a58d8f8f4abbd"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-entrega-video-enlace-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "d010a9a12ec200fc8613c5ac38f50e83606101c8",
+   "blobOrigen": "ea45b961dd07b09ae00fdc216fb772d8eeddfc11"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-fidelidad-evidencias-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "64bb2439bb899f5395f3d3c3a0feb4db6e72d8f0",
+   "blobOrigen": "55a2c0b8d3921e079fd134e8de56a5c3fc1eb9ef"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-gd-ux-01-correccion-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2",
+   "blobOrigen": "45cce8f09aaf92d2201ee9a3fd66433439e2b9a3"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-gd-ux-01/antes/medidas-antes.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2",
+   "blobOrigen": "6d548126dd0592b6a7e8b61fd44da5f2da5e4f47"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-gd-ux-01/despues/medidas-despues.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2",
+   "blobOrigen": "cba52d5c2d3dfdd6bcaddb273a09a80cb7c083eb"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-integracion-profesional-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "64bb2439bb899f5395f3d3c3a0feb4db6e72d8f0",
+   "blobOrigen": "28da9d46697c4908f5fe3d7445dab10dac58d6f2"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-m1-0-auditoria-y-contrato-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "59a955c1b5a69f531980a98b2ddb8365f25cdd02",
+   "blobOrigen": "4618f18cbdb7f927c5ed254aa0067cddb8e1c244"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-m1-evidencias/catastro-en-directo-encontrada-3662001TF3136S.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "cb349fab81ead6f44f4cd841b99adb56b325f466"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-m1-evidencias/catastro-en-directo-no-encontrada-0000000AA0000A.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "3670c9d92986a9caa30181afecc228fc3865e23e"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-m1-informe-final-2026-11-06.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "970ca54c2bf31a2dacf3f53694e8e477dfe5a90f",
+   "blobOrigen": "a3b55e9e0e80e44c5d32fc2967b9ea3080419528"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-m2-0-auditoria-integracion-2026-11-06.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "9a315deb3136957308f07f3edad2f9ef182c0e65",
+   "blobOrigen": "dd2c587959ec182699f08c943c7ada1177df66ce"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-m2-informe-final-2026-11-06.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "49e8feba2e3aad03a25fb602248758e39dbe3b3c",
+   "blobOrigen": "369081a80d97b1bcd8599d220e429fe6d38bdf8a"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1-especificacion-verificada-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "3c827212d98ab7ca6f6ff9026121997e15c16107",
+   "blobOrigen": "a41ced0be402d4dfa1ea82dfc32cc5868eb15c42"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1a-auditoria-autoridades-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "b45eef24aca2243c8c331d75cd9aa14d18a253c2",
+   "blobOrigen": "d755dad8c03e74611e6b4badb248399d0d65806f"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1b-contrato-expediente-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "eb5e0f47d3e5f02ef590c852d72ef3c403bad0db",
+   "blobOrigen": "e8fcddfdbba75346012e84d2ae1f3e3f888690df"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1c-adaptadores-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "300b583ffb71282ab3ec6d6284d1b778f7fa707b",
+   "blobOrigen": "eca8a7ed2e44797e4f97ba7743eae073f8bb0175"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1d-integracion-visual-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "300b583ffb71282ab3ec6d6284d1b778f7fa707b",
+   "blobOrigen": "5ad4ceff4ed45f1b46f2c9b2e74345ccbf768705"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1e-plan-integracion-futura-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "300b583ffb71282ab3ec6d6284d1b778f7fa707b",
+   "blobOrigen": "0421f8399645ed38b282d2ef713575bab2b3d287"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-s1f-matriz-38-correcciones-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "300b583ffb71282ab3ec6d6284d1b778f7fa707b",
+   "blobOrigen": "79330ac6d95dc64065cb8bcf6b67a2d8713c41b1"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-ux4d-corte-a-auditoria-y-diseno-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19",
+   "blobOrigen": "2f67fe5ecfc87d4cbd32126b84922b1ed9cd364d"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-ux4d-etapa0-diagnostico-y-propuesta-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "eebe64ea3b4e0666bdc70f0e6f200d07d2535709",
+   "blobOrigen": "0e6641f7d6c708acbca46552817ee87d0e068208"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-ux4d-etapa0/medidas.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa",
+   "blobOrigen": "b31c19722e2edf65eae837b63cf2aaca03587f39"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-ux4d-gate-d-informe-final-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "0fe6453b275b535e2a7dc37f854754c4285fedb5",
+   "blobOrigen": "5110d2a9ebd7a002054112bb6e706bfbab770f9b"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-ux4d-gate-d-matriz-equivalencias-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19",
+   "blobOrigen": "059421da2936937bc44f1b1a83e7f85f1f85564f"
+  },
+  {
+   "ruta": "docs/product/ft3d-8-ux4d-gate-d/medidas-despues.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19",
+   "blobOrigen": "cf5609fd6e37b2ad00f98fc49c410d1c820f45d1"
+  },
+  {
+   "ruta": "docs/product/ft3d-8v-contrato-gantt-timelapse-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "105fb598c8b1b2503402e5396a5a47fde3b5ab51",
+   "blobOrigen": "f9467da9fcc7815f3906ebe49d9c0a7a1ac69173"
+  },
+  {
+   "ruta": "docs/product/ft3d-8v-visual-lab-2026-11-05.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "0d50207d92ecb83bb45b6a7d938a63e5675b75cf"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/README.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "d83fe2f29dc5f0ac6bd52225f764383a9aebcd6f"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/informe-correcciones.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "ed3421ac70503058d1fde421d08cb6a674c2c7c9"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/matriz-experiencia-novato.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "cd2ba7fc24a2a8bc27a06497c12e2db9b4bb0af7"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/brand.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "0a314b0451abd884406e9f2f012de1f363f9fa6c"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/budget-ui.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "58b25e9713111eae02212fcd231f764f63dbfe51"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/economic-dossier.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "458fa2bef4b942f4a815b0c8c04bb0a8eeb7b926"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/gate-d.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "bb76da8fde9c3df9eac1a545d29229d8ff9dab8e"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/m1.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "d41a0ba0af1e817071fed2531ae1ea09561a51aa"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/m2-s4.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "2b016e4b01139282b8c0c49b2dff7131800400bb"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/parcel.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "5aab1520c1130993d20bb4f68544497286b3bf3c"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/presentation-section.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "86ca0971731e5cdde56935cd4d771cf1a0581edb"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/presentation-story.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "17bab0546ee09a294c2adf056eb283bc66920cf9"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/professional-entry.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "6735c0a4767d9a2e4a815ea2da67afff4fd726b0"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/professional-workspace.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "a7c1f9b4e4313262e58c6506c4565025dac8f06c"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/project-first.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "7d9779fbac4859ad2732883d4372ed6f0a7c7cf1"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/puras.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "996ca9885aeefdc2cfd1e5b2aa716a7c081d0af5"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/quantity-schedule.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "e0171c1b406cec9c7bb842b8dbbafee377c8d9f7"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/site-analyze.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "b160423f0b6e15cf977b26410ad19fe1e02f9021"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/summary.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "a847fcc3fb331073a2063b4594b759fee67d7e85"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/regresion/territory-integration.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "8abe27df8b6d58048b3fdb14ad2c7324070ab4a2"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-1/manifest-evidencias.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "e4775b6cbdf9cc42b1f116fc9d87398e1c603f2d"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-1/resultados-novato.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "1b0640b635c06225a3e5a59377a2c30c29ecf04a"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-1/resultados-v4-hallazgos.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "6bffccd88271b8eb1e697eec79cbab819ffdb92e"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-1/resultados.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "d0f571716136b55eb463362e302e5dcde667eb6b"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-2/manifest-evidencias.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "b0349363ecefb8fa12365e6c0a227b4b497ca846"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-2/resultados-novato.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "c304d81e7f533d394509500c2a7f48f3361fcc1e"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-2/resultados-v4-hallazgos.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "b18bad7cddffeff044d9c96e81994c9cdcc4596a"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-2/resultados.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "35f991029f62a34b25d60abffaa5c9b04c2ad6bd"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/manifest-evidencias.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "41b2389afb808a31ce020422e86d8ed1a720efd0"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/matriz-pruebas.md",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "2c42068d716f7099d953353229922a3381913479"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/brand.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "0a314b0451abd884406e9f2f012de1f363f9fa6c"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/budget-ui.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "58b25e9713111eae02212fcd231f764f63dbfe51"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/economic-dossier.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "458fa2bef4b942f4a815b0c8c04bb0a8eeb7b926"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/gate-d.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "bb76da8fde9c3df9eac1a545d29229d8ff9dab8e"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/m1.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "d41a0ba0af1e817071fed2531ae1ea09561a51aa"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/m2-s4.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "2b016e4b01139282b8c0c49b2dff7131800400bb"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/parcel.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "5aab1520c1130993d20bb4f68544497286b3bf3c"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/presentation-section.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "86ca0971731e5cdde56935cd4d771cf1a0581edb"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/presentation-story.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "17bab0546ee09a294c2adf056eb283bc66920cf9"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/professional-entry.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "6735c0a4767d9a2e4a815ea2da67afff4fd726b0"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/professional-workspace.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "a7c1f9b4e4313262e58c6506c4565025dac8f06c"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/project-first.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "7d9779fbac4859ad2732883d4372ed6f0a7c7cf1"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/puras.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "996ca9885aeefdc2cfd1e5b2aa716a7c081d0af5"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/quantity-schedule.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "e0171c1b406cec9c7bb842b8dbbafee377c8d9f7"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/site-analyze.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "b160423f0b6e15cf977b26410ad19fe1e02f9021"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/summary.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "a847fcc3fb331073a2063b4594b759fee67d7e85"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/regresion/territory-integration.resumen.txt",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "8abe27df8b6d58048b3fdb14ad2c7324070ab4a2"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/resultados-novato.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "ad3f93418f51ef967373c7a6d4f664db8a1db3f5"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/resultados-v4-hallazgos.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "0f79c6f986973d53236f7df11e2061219ac1b7c0"
+  },
+  {
+   "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/resultados.json",
+   "grupo": "E-documentacion",
+   "estado": "nuevo",
+   "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+   "blobOrigen": "b90b6107c943c4c9334eb31ff1b4e3523e0c8f4a"
+  },
+  {
+   "ruta": "evolucion/delivery-ui.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "bd502895735756985e1f3b75d9efcdca01b54ec4"
+  },
+  {
+   "ruta": "evolucion/dossier-ui.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "b21012915440793118f51032f800d2196a8668b6"
+  },
+  {
+   "ruta": "evolucion/fidelity-app.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "0c475d41b4f130297b1f757e7faf1ec3c6291c6a"
+  },
+  {
+   "ruta": "evolucion/fidelity.css",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "0e73401d45370487bacc9d4152b853c1284dbaea"
+  },
+  {
+   "ruta": "evolucion/gantt-view.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "79e08821b38e97e264932c0c39940463ac6b287f"
+  },
+  {
+   "ruta": "evolucion/illustrative-props.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "b7f4620402ac594f0f4b8abae849be9dc06848e0"
+  },
+  {
+   "ruta": "evolucion/index.html",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "85ca1a44c9ebeecbbf049db69a3d235bde016e07"
+  },
+  {
+   "ruta": "evolucion/lab.css",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "c9225acbe6bf9993f2ac224731b605cf931308dd"
+  },
+  {
+   "ruta": "evolucion/library-source.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "cb2414f82ce4618fb9d4adf323d277ba755d359f"
+  },
+  {
+   "ruta": "evolucion/project-scene.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "25a3d077f4cb960dfd28ee3dfb5442797933286a"
+  },
+  {
+   "ruta": "evolucion/ux-shell.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "57513f0f38e69ea9ddfcabfa9babdc3ad7caa137"
+  },
+  {
+   "ruta": "evolucion/ux.css",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "d96cd00dcc971ba9bd59f813309677820c46868c"
+  },
+  {
+   "ruta": "index.html",
+   "grupo": "A-producto",
+   "estado": "modificado",
+   "commitOrigen": "d33d7571b047b59a91eccf5d1bd9f3ce8e6d13e3",
+   "blobOrigen": "7fc93b590d136a15bb569639b47985bc846be337"
+  },
+  {
+   "ruta": "js/budget-ui.js",
+   "grupo": "A-producto",
+   "estado": "modificado",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "e4fea51d5054a819a0a961a8867cd8c8845016c7"
+  },
+  {
+   "ruta": "js/catastro-wfs-provider.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "d33d7571b047b59a91eccf5d1bd9f3ce8e6d13e3",
+   "blobOrigen": "79ea23a9f8ff6a16e9200c7315b4d45a75e43fc7"
+  },
+  {
+   "ruta": "js/construction-context.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "c2f7f532d42e1aa68886c1a847cb35bece658e4e"
+  },
+  {
+   "ruta": "js/construction-delivery-core.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "eed1202e07c0c3de6c19bf2596245ed9bfce8490"
+  },
+  {
+   "ruta": "js/construction-dossier-core.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "300b583ffb71282ab3ec6d6284d1b778f7fa707b",
+   "blobOrigen": "92364eddb53c3bc9e86a3462aff351dd683c8408"
+  },
+  {
+   "ruta": "js/construction-gantt-adapter.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "0565e2df1b40e0bbc1acc0d3fd6759942ec72ce1"
+  },
+  {
+   "ruta": "js/construction-lab-presenter.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "4d51da083c96ad1d64001f2ba07ca607b7ac3d11"
+  },
+  {
+   "ruta": "js/construction-mp4-muxer.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "d010a9a12ec200fc8613c5ac38f50e83606101c8",
+   "blobOrigen": "3d7afd59b16045edb312694b5d298d2895c98f6c"
+  },
+  {
+   "ruta": "js/construction-plan-ui.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "1250ffc8059094c423427d693269b5479f13dccc"
+  },
+  {
+   "ruta": "js/construction-project-adapter.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "7f2d3eb505dafb95b547e6e2a54eb58d62d1d94c"
+  },
+  {
+   "ruta": "js/construction-record-core.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "49e8feba2e3aad03a25fb602248758e39dbe3b3c",
+   "blobOrigen": "34d8c62bffa52ef2a2b6aea7c210c4508427eb3a"
+  },
+  {
+   "ruta": "js/construction-schedule-core.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "105fb598c8b1b2503402e5396a5a47fde3b5ab51",
+   "blobOrigen": "c5113e2207423cdd48f3c839f6f991a1ef124e09"
+  },
+  {
+   "ruta": "js/construction-visual-state.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "86c52927876b5691cb62cc2733369eb90cacb093"
+  },
+  {
+   "ruta": "js/cost-catalog-core.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "ba741de2e57f7acba75bd5e2c866fcb4084d7736"
+  },
+  {
+   "ruta": "js/economic-dossier-ui.js",
+   "grupo": "A-producto",
+   "estado": "modificado",
+   "commitOrigen": "0a2dea305f303e05a31a4dff4dadca03069a32f5",
+   "blobOrigen": "7e9df85c82d42b7540fecff9f18299030c89b3bc"
+  },
+  {
+   "ruta": "js/geo-provider.js",
+   "grupo": "A-producto",
+   "estado": "modificado",
+   "commitOrigen": "d33d7571b047b59a91eccf5d1bd9f3ce8e6d13e3",
+   "blobOrigen": "0feed44c280189da4ffd0ad6cb6355ec20aba398"
+  },
+  {
+   "ruta": "js/parcel-association-core.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "0029b3ba4169220182049b1b494cf2665362835e",
+   "blobOrigen": "1098d0511c94ab92523e6aa74da1870aaf8bbcc9"
+  },
+  {
+   "ruta": "js/professional-workspace-ui.js",
+   "grupo": "A-producto",
+   "estado": "modificado",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "b1c0333190629c70de82dfcf890746e060c64632"
+  },
+  {
+   "ruta": "js/reference-prices-ui.js",
+   "grupo": "A-producto",
+   "estado": "nuevo",
+   "commitOrigen": "d33d7571b047b59a91eccf5d1bd9f3ce8e6d13e3",
+   "blobOrigen": "90cdd90b1ffcbedc55f05f41195d65ac718c12ac"
+  },
+  {
+   "ruta": "js/territory-ui.js",
+   "grupo": "A-producto",
+   "estado": "modificado",
+   "commitOrigen": "0a2dea305f303e05a31a4dff4dadca03069a32f5",
+   "blobOrigen": "68976bf3b46379990473f062bcbf9b65b033eae5"
+  },
+  {
+   "ruta": "labs/ft3d-8/app.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "eebe64ea3b4e0666bdc70f0e6f200d07d2535709",
+   "blobOrigen": "408f1a5726167d1718f4e3b36397d42f5a062533"
+  },
+  {
+   "ruta": "labs/ft3d-8/demo.html",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "f5e55c2d8e32570985db9db40e68bbf7f5b94bc0"
+  },
+  {
+   "ruta": "labs/ft3d-8/dossier-fixtures.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "042f0f9b396a37a4a8d653a9959fb4e6cfb8b8b6",
+   "blobOrigen": "e3505379bddfa45a62d1bb8dfc035a0c0afd48c6"
+  },
+  {
+   "ruta": "labs/ft3d-8/fidelity-fixtures.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "64bb2439bb899f5395f3d3c3a0feb4db6e72d8f0",
+   "blobOrigen": "4ba0fec9770257773f69cdd7a2133cc37c5ff703"
+  },
+  {
+   "ruta": "labs/ft3d-8/index.html",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "52dbf462d7a1de4f1516235457617c94fd208215"
+  },
+  {
+   "ruta": "labs/ft3d-8/lab-fixture.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "add18020e084d4585d4cba87b7f63b2df3d07055"
+  },
+  {
+   "ruta": "labs/ft3d-8/scene.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "07cfe36381ee6d44ac4fb20281befeb670376ab2"
+  },
+  {
+   "ruta": "labs/m1-s2-s3/fixtures.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "d8739ed6be1b8602ed11c6ec81564814d7a1b76c"
+  },
+  {
+   "ruta": "labs/m1-s2-s3/index.html",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "9d2d50eddaeac07cf57c132ac2f7848cf44330a1"
+  },
+  {
+   "ruta": "labs/m1-s2-s3/m1.css",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "80fbb8ba390b7b2640147049079fe4d9bc5368a4"
+  },
+  {
+   "ruta": "labs/m1-s2-s3/s2-ui.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "a7c6c3de976bb547ab2cbe96fe9018aa4f819641"
+  },
+  {
+   "ruta": "labs/m1-s2-s3/s3-ui.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "a617604583a93dede7d78c0fae3c4b8ac729e918"
+  },
+  {
+   "ruta": "labs/m1-s2-s3/shell.js",
+   "grupo": "C-laboratorios",
+   "estado": "nuevo",
+   "commitOrigen": "fb00083d1201bf9e84d92750c555ca73154eaa72",
+   "blobOrigen": "8fdf4a5df781be888a552e2e834525a3cfe40976"
+  },
+  {
+   "ruta": "tests/catastro-wfs-provider.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "d33d7571b047b59a91eccf5d1bd9f3ce8e6d13e3",
+   "blobOrigen": "fc80594f46ab6cf998fd6b0b1b34681ca89d2617"
+  },
+  {
+   "ruta": "tests/construction-delivery-core.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "fae3a99453d79c9b2124224caf7ab922b6663804"
+  },
+  {
+   "ruta": "tests/construction-dossier-core.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "300b583ffb71282ab3ec6d6284d1b778f7fa707b",
+   "blobOrigen": "8dc3cc07669f58cca71a6c880437a73f8b99e468"
+  },
+  {
+   "ruta": "tests/construction-project-adapter.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "b7da45bd7d1c262f5ad7ec4fcadbcd0b3ab053b7",
+   "blobOrigen": "1959b53517ca1696e7181b50c7f33c7b47cc974f"
+  },
+  {
+   "ruta": "tests/construction-record-core.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "49e8feba2e3aad03a25fb602248758e39dbe3b3c",
+   "blobOrigen": "031f38ae257400671dbff92198f6f838f71e93ba"
+  },
+  {
+   "ruta": "tests/construction-schedule-core.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "8d353085b412c9949f31ed427303cf734e38e5d3",
+   "blobOrigen": "7d9f14c0ae216b52f2b9af8732643ca16c2ecdaf"
+  },
+  {
+   "ruta": "tests/construction-schedule-rules.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "105fb598c8b1b2503402e5396a5a47fde3b5ab51",
+   "blobOrigen": "4435dea1ef57f63dcb476825dd3f3961e6cc4ced"
+  },
+  {
+   "ruta": "tests/construction-visual-state.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "6bdefb99e239fee68a549b0c7f44b110cc667c3f"
+  },
+  {
+   "ruta": "tests/cost-catalog-core.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0029b3ba4169220182049b1b494cf2665362835e",
+   "blobOrigen": "4c4e6c8b8eea1325d15ea4f9e10f34790a6ca5e5"
+  },
+  {
+   "ruta": "tests/fixtures/bcca-es/editions.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0029b3ba4169220182049b1b494cf2665362835e",
+   "blobOrigen": "a4e65d65bd876082792a1321c7f1b4b724165bc3"
+  },
+  {
+   "ruta": "tests/fixtures/construction-schedule-fixtures.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "105fb598c8b1b2503402e5396a5a47fde3b5ab51",
+   "blobOrigen": "f38f9d6618e81555c49ce0078d713c7c7f12ab5b"
+  },
+  {
+   "ruta": "tests/ft3d-8-delivery.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "826fac8bae47d80cc9898b3224f2722d3971cfab"
+  },
+  {
+   "ruta": "tests/ft3d-8-dossier.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "b4ee138d42ce4eeaa958a29ed225023a9d1bc427"
+  },
+  {
+   "ruta": "tests/ft3d-8-fidelity.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "15e2be072f09316009e4952dd7f688f025519bca"
+  },
+  {
+   "ruta": "tests/ft3d-8-fit.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "dc1beb9ce912e93f1f078f0d72c137cfc623b683"
+  },
+  {
+   "ruta": "tests/ft3d-8-lab.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "64bb2439bb899f5395f3d3c3a0feb4db6e72d8f0",
+   "blobOrigen": "9bc50c393e9c829348714ef75124c8f50c10ce0a"
+  },
+  {
+   "ruta": "tests/ft3d-8-lab.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "29cf3c65a5b7a76c89710d8eaada806608f99a0f",
+   "blobOrigen": "1c8ce4fea73de866af9161b2661f4026ec6d50b0"
+  },
+  {
+   "ruta": "tests/ft3d-8-ux4d.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0b0ddd39d63858e96286d77e4a59f4ba83f793d3",
+   "blobOrigen": "5d41ca1afe3d46ec9a79088692ef78d6c31379dc"
+  },
+  {
+   "ruta": "tests/geo-provider.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "modificado",
+   "commitOrigen": "d33d7571b047b59a91eccf5d1bd9f3ce8e6d13e3",
+   "blobOrigen": "ce75c6217662eb8744079aad2d87bb680ecf5ddb"
+  },
+  {
+   "ruta": "tests/m1-s2-s3.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "7543255a40d5aa94691942db0d6968ce52ba5b30",
+   "blobOrigen": "dffdf6a21457e9980dea830f84fb8bde8f700264"
+  },
+  {
+   "ruta": "tests/m2-s4.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2",
+   "blobOrigen": "6370c1691c873ed2cc3deab0e57844ad87b1adc7"
+  },
+  {
+   "ruta": "tests/parcel-association-core.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "0029b3ba4169220182049b1b494cf2665362835e",
+   "blobOrigen": "588b58e681de6fd0c641fc68256f0760fa068ea5"
+  },
+  {
+   "ruta": "tests/parcel.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "modificado",
+   "commitOrigen": "0ab35bc9207407c040733f4858eb9470ec193fbf",
+   "blobOrigen": "be93cf0d8884bac219ea2b1940a296aea3a66fb3"
+  },
+  {
+   "ruta": "tests/professional-workspace.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "modificado",
+   "commitOrigen": "0ab35bc9207407c040733f4858eb9470ec193fbf",
+   "blobOrigen": "82bb1046e746b98b18be80b7f2ab9b1827a83027"
+  },
+  {
+   "ruta": "tests/qa-m2-examen.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "0569b3849fe3e91775480b08916cc1da6f847179"
+  },
+  {
+   "ruta": "tests/qa-m2-hallazgos-v4.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "605eff406ef986ec12372a5a437443965a5e5eb1"
+  },
+  {
+   "ruta": "tests/qa-m2-novato.browser.test.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "dece673c5832aea77e03161d52c76923f073cdba"
+  },
+  {
+   "ruta": "tests/qa-m2/examen-parte2.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "09f015d1fc5e2d9f82910372cdab842b8a6ea2ca"
+  },
+  {
+   "ruta": "tests/qa-m2/harness.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "fca69fd55f586f84919de9e241a0708bd825e489"
+  },
+  {
+   "ruta": "tests/qa-m2/matriz.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "dcbc130ded6822934a2fbca114f8ca1216c1450e"
+  },
+  {
+   "ruta": "tests/qa-m2/obra-sintetica.cjs",
+   "grupo": "B-pruebas-ci",
+   "estado": "nuevo",
+   "commitOrigen": "1620ba6af25d5ec793759225b183265f47f30d0b",
+   "blobOrigen": "35f5e317404cd1cf20c1ae284fd849ee8dfdb06e"
+  }
+ ],
+ "excluidos": {
+  "motivo": "evidencias multimedia y entregas generadas: permanecen en ramas QA (no se publican)",
+  "ramasQA": {
+   "examen": "qa/ft3d-8-m2-examen-final-2026-11-06@5e0fc420cc1a63a54523da1c3fb34fda5efb09ae"
+  },
+  "archivos": [
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1280x720-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1280x720-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1280x720-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1280x720-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1366x768-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1366x768-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1366x768-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1366x768-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1440x900-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1440x900-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1440x900-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1440x900-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1920x1080-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1920x1080-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1920x1080-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/antes/antes-1920x1080-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1280x720-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1280x720-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1280x720-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1366x768-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1366x768-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1366x768-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1440x900-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1440x900-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1440x900-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1920x1080-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1920x1080-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/comparacion/1920x1080-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1280x720-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1280x720-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1280x720-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1280x720-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1280x720-05-final-iso.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1366x768-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1366x768-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1366x768-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1366x768-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1366x768-05-final-iso.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1366x768-06-detalle-partidas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1440x900-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1440x900-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1440x900-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1440x900-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1440x900-05-final-iso.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1920x1080-01-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1920x1080-02-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1920x1080-03-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1920x1080-04-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/1920x1080-05-final-iso.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/movil-390x844.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/zoom125-1024x576-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-gd-ux-01/despues/zoom150-911x512-inicio-de-pagina.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "b12b9252fe1df5adb06cea5b17cde48642a893b2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-01-inicial-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-02-procedencia-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-03-confirmacion-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-04-unidad-incompatible-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-05-actualizacion-edicion-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-06-movil-390x844.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s2-07-movil-comparar-390x844.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s3-01-servicio-rechazado-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s3-02-parcela-encontrada-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s3-03-colocacion-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s3-04-sustitucion-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s3-05-movil-parcela-390x844.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m1-evidencias/s3-06-movil-colocar-390x844.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c1955b80efb356209b2d649f3577b365f61ceeaa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/comparacion-gate-d/1280x720.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/comparacion-gate-d/1366x768.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/comparacion-gate-d/1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/comparacion-gate-d/1920x1080.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-01-analizar.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-02-emplazamiento.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-03-precios-referencia.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-04-partida-tareas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-05-evolucion-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-05-partida-en-presupuestar.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-05-tarea-seleccionada.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-06-edificio.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-07-entregar-al-dia.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-07-vinculo-desactualizado.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-08-entrega.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-10-evolucion-1280x720.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-10-evolucion-1366x768.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-10-evolucion-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-10-evolucion-1920x1080.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-10-movil-evolucion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-m2-evidencias/m2-10-movil-plan.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "525756dc1870da890fda851e3c93d7544a522ca2"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-etapa0/desktop-01-al-abrir.png",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-etapa0/desktop-02-evolucion-tareas-simultaneas.png",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-etapa0/desktop-escena-final.png",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-etapa0/desktop-escena-inicio.png",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-etapa0/desktop-escena-mitad.png",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-etapa0/mobile-01-al-abrir.png",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "05a8c4d0f1edc6220a5309fee7c0f43333850baa"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d01-momento-inicial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d02-estructura.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d03-tareas-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d04-carpinteria.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d05-presupuesto-parcial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d06-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d07-navegacion-seleccion-gantt.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d08-movil-evolucion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d09-vista-profesional.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d10-vista-cliente.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/d11-entrega-guiada.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/demo-interfaz-gate-d.mp4",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/despues-desktop-01-al-abrir.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/despues-mobile-01-al-abrir.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/video-entrega-K-1280x720.mp4",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/video-entrega-K-fotograma-08s.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/product/ft3d-8-ux4d-gate-d/video-entrega-K-fotograma-cierre.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "c8f6ac02a168d53f13c0d941181f11b3f688be19"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/entrega-rubik-sota-evolucion-vivienda-qa-obra-nueva-bc36c587.html",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/entrega-rubik-sota-evolucion-vivienda-qa-obra-nueva-bc36c587.mp4",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex01-inicial-analyze.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex01-inicial-budget.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex01-inicial-deliver.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-5-1-cambio-precio.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-5-1-despues.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-diez-tareas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-entrega.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-evolucion-inicio.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-evolucion-tarea-T04.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-partidas-y-relaciones.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex02-presupuesto-revision-A.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex03-plan-duplicado.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex04-entregar-nueva.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex04-evolucion-revision-B.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex04-plan-revision-C.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex04-presupuesto-revision-B.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex04-tarifa-confirmacion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex05-pick-1.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex05-pick-2.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex05-pick-4.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex05-pick-partida.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex05-pick-plan.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex06-proyecto-B.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex07-andamio-ilustrativo.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex07-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex07-simultaneas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex08-edificio-evolucion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex08-edificio-partidas.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex09-emplazamiento.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex09-servicio-caido.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex10-entrega-desactualizada.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex10-html-abierto.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-evolucion-1280x720.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-evolucion-1366x768.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-evolucion-1440x900.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-evolucion-1920x1080.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-movil-apaisado.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-movil-evolucion-nav-desplazada.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-movil-evolucion-nav.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-movil-evolucion-reproduccion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-movil-plan-pie.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-zoom-125-plan.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-zoom-125.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-zoom-150-plan.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/ex11-zoom-150.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v1-recorrido-escritorio.webm",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v2-economia-persistencia.webm",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v3-movil.webm",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-6b-copia-sin-senalar.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-A7-total-parcial.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-C4-error-editar-elementos.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-MOB02-entregar-oculto.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-hallazgos-escritorio.webm",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-hallazgos-movil.webm",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v4-k4-escape-evolucion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-01-portada.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-02-recorrido-obra.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-03-presupuesto.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-04-plan-tarea.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-05-plan-guardado.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-06-recorrido-avanzado.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-07-evolucion.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-08-entregar.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-09-entregado.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-10-recorrido-final.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-entrega-rubik-sota-evolucion-mi-distribucion-c1a565fd.html",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-movil-recorrido.jpg",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   },
+   {
+    "ruta": "docs/qa/ft3d-8-m2-correcciones-2026-11-06/ronda-3/evidencias/v5-novato.webm",
+    "rama": "feat/ft3d-8-m2-s4-correcciones-2026-11-06",
+    "sha": "fe37c26e95712fa7c244a0b44cedbddf9f58d837",
+    "commitOrigen": "fe37c26e95712fa7c244a0b44cedbddf9f58d837"
+   }
+  ]
+ }
+}

@@ -1,0 +1,136 @@
+{
+ "codigoSha": "fix-ronda-1",
+ "navegador": "Chromium 153.0.8010.12",
+ "fecha": "2026-11-06T16:32:12.547Z",
+ "resumenEscenarios": {
+  "FAIL": 1,
+  "PASS": 1
+ },
+ "resumenComprobaciones": {
+  "PASS": 9,
+  "FAIL": 1
+ },
+ "escenarios": [
+  {
+   "id": "V4-escritorio",
+   "titulo": "Vídeo 4: hallazgos de escritorio",
+   "area": "Hallazgos (vídeo 4)",
+   "checks": [
+    {
+     "id": "V4.A7",
+     "desc": "Un presupuesto parcial no se rotula «Total» sin calificar",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Base imponible | 21.601,18 € | IVA | 2160,12 € | Total parcial (faltan 2 partidas) | 23.761,30 €",
+     "evidence": null
+    },
+    {
+     "id": "V4.B7",
+     "desc": "El cambio manual de precio queda en el historial",
+     "status": "PASS",
+     "expected": null,
+     "observed": 11,
+     "evidence": null
+    },
+    {
+     "id": "V4.C4",
+     "desc": "Editar los elementos de una tarea guardada se guarda",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "V4.6b",
+     "desc": "La copia queda señalada",
+     "status": "PASS",
+     "expected": null,
+     "observed": 1,
+     "evidence": null
+    },
+    {
+     "id": "V4.11",
+     "desc": "Existe «Eliminar plan» en la UI",
+     "status": "FAIL",
+     "expected": null,
+     "observed": 0,
+     "evidence": null
+    },
+    {
+     "id": "V4.12",
+     "desc": "Recargar con cambios sin guardar avisa",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "aviso": true,
+      "tareasDraftTrasRecarga": null
+     },
+     "evidence": null
+    },
+    {
+     "id": "V4.k3",
+     "desc": "El foco vuelve al botón que abrió el diálogo",
+     "status": "PASS",
+     "expected": null,
+     "observed": "construction-plan",
+     "evidence": null
+    },
+    {
+     "id": "V4.k4",
+     "desc": "Escape con el foco dentro de la Evolución la cierra",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "FAIL",
+   "started": "2026-11-06T16:30:57.619Z",
+   "error": null,
+   "finished": "2026-11-06T16:31:54.741Z"
+  },
+  {
+   "id": "V4-movil",
+   "titulo": "Vídeo 4: hallazgos móviles",
+   "area": "Hallazgos (vídeo 4)",
+   "checks": [
+    {
+     "id": "V4.MOB02",
+     "desc": "«Entregar» visible o revelado al recibir el foco",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "v0": {
+       "visible": true,
+       "sw": 370,
+       "cw": 370,
+       "h": 44
+      },
+      "v1": {
+       "visible": true,
+       "sw": 370,
+       "cw": 370,
+       "h": 44
+      }
+     },
+     "evidence": null
+    },
+    {
+     "id": "V4.m4",
+     "desc": "Pasos de la barra con altura ≥ 44 px",
+     "status": "PASS",
+     "expected": null,
+     "observed": 44,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:31:54.742Z",
+   "error": null,
+   "finished": "2026-11-06T16:32:12.545Z"
+  }
+ ],
+ "metricas": []
+}

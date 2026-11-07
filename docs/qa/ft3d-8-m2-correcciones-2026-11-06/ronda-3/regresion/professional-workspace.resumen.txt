@@ -1,0 +1,22 @@
+ok 1 - Point9 human tasks A–E, real routes and keyboard 1440x900
+ok 2 - Point9 human tasks A–E, real routes and keyboard 1280x800
+ok 3 - Point9 human tasks A–E, real routes and keyboard 390x844
+ok 4 - Point9 human tasks A–E, real routes and keyboard 844x390
+ok 5 - Point9 human review 2: context, layers, hierarchy and preserved flow 1440x900
+ok 6 - Point9 human review 2: context, layers, hierarchy and preserved flow 1280x800
+ok 7 - Point9 human review 2: context, layers, hierarchy and preserved flow 390x844
+ok 8 - Point9 human review 2: context, layers, hierarchy and preserved flow 844x390
+ok 9 - Point9 global controls remain interactive and editor context returns 1440x900
+ok 10 - Point9 global controls remain interactive and editor context returns 1280x800
+ok 11 - Point9 global controls remain interactive and editor context returns 390x844
+ok 12 - Point9 global controls remain interactive and editor context returns 844x390
+ok 13 - Point9 visual layer: honest project context, contrast and reduced motion 1440x900
+ok 14 - Point9 visual layer: honest project context, contrast and reduced motion 1280x800
+ok 15 - Point9 visual layer: honest project context, contrast and reduced motion 390x844
+ok 16 - Point9 visual layer: honest project context, contrast and reduced motion 844x390
+ok 17 - Point9 saved studio identity, legacy shortcuts, guide delivery and exterior route
+# tests 17
+# pass 17
+# fail 0
+# skipped 0
+# duration_ms 615349.730399

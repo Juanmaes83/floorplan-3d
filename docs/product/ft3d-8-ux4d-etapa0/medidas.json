@@ -1,0 +1,138 @@
+{
+ "desktop": {
+  "layout": {
+   "viewportH": 900,
+   "pageH": 2800,
+   "dossier": {
+    "top": 40,
+    "height": 738,
+    "width": 1440
+   },
+   "sources": {
+    "top": 778,
+    "height": 67,
+    "width": 1440
+   },
+   "stage": {
+    "top": 845,
+    "height": 414,
+    "width": 1440
+   },
+   "transport": {
+    "top": 1259,
+    "height": 52,
+    "width": 1440
+   },
+   "card": {
+    "top": 1312,
+    "height": 185,
+    "width": 360
+   },
+   "gantt": {
+    "top": 1312,
+    "height": 185,
+    "width": 1080
+   },
+   "coverage": {
+    "top": 1497,
+    "height": 277,
+    "width": 1440
+   },
+   "deliver": {
+    "top": 1774,
+    "height": 964,
+    "width": 1440
+   },
+   "ganttLabelPx": "12px",
+   "ganttWeekPx": "10px",
+   "buttons": 26,
+   "visibleTextChars": 8814
+  },
+  "occupancyPercent": {
+   "inicio": 21.1,
+   "inicioPresent": 0,
+   "mitad": 24.8,
+   "mitadPresent": 7,
+   "final": 25.1,
+   "finalPresent": 18
+  }
+ },
+ "simultaneous": {
+  "date": "2027-10-12",
+  "active": [
+   "tabiques",
+   "cubierta"
+  ],
+  "card": [
+   "03 Tabiqueria interior",
+   "75 % plan",
+   "lun 4 oct 2027 → vie 15 oct 2027 · 2 elemento(s) del proyecto",
+   "Presupuestado con partidas revisadas · total 1.922,72 €",
+   "04 Cubierta (envolvente superior derivada)",
+   "17 % plan"
+  ]
+ },
+ "ganttLabelClick": {
+  "before": "2027-10-12",
+  "after": "2027-10-12",
+  "selection": "none"
+ },
+ "mobile": {
+  "layout": {
+   "viewportH": 844,
+   "pageH": 5754,
+   "dossier": {
+    "top": 40,
+    "height": 1759,
+    "width": 390
+   },
+   "sources": {
+    "top": 1799,
+    "height": 265,
+    "width": 390
+   },
+   "stage": {
+    "top": 2064,
+    "height": 439,
+    "width": 390
+   },
+   "transport": {
+    "top": 2502,
+    "height": 138,
+    "width": 390
+   },
+   "card": {
+    "top": 2641,
+    "height": 156,
+    "width": 390
+   },
+   "gantt": {
+    "top": 2797,
+    "height": 185,
+    "width": 390
+   },
+   "coverage": {
+    "top": 2982,
+    "height": 601,
+    "width": 390
+   },
+   "deliver": {
+    "top": 3583,
+    "height": 2035,
+    "width": 390
+   },
+   "ganttLabelPx": "12px",
+   "ganttWeekPx": "10px",
+   "buttons": 26,
+   "visibleTextChars": 8604
+  },
+  "occupancyPercent": {
+   "inicio": 46.7,
+   "inicioPresent": 0,
+   "mitad": 54.9,
+   "mitadPresent": 7,
+   "final": 55.6,
+   "finalPresent": 18
+  }
+ }
+}
