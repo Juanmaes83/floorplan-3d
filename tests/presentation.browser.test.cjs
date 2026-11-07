@@ -247,13 +247,13 @@ test('R2 P15 ten presentation cycles release their loop and keep renderer memory
   if(cycle===10)await screenshot(page,'390x844-ten-cycles-room');
   await page.locator('#presentationClose').click();
   await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&FloorPlanApp.viewMode==='2d'&&!document.body.classList.contains('busy'));
-  const measure=await page.evaluate(()=>({memory:View3D.rendererMemory,lifecycle:View3D.lifecycleMetrics,history:history.length}));metrics.push(measure);
+  const measure=await page.evaluate(()=>({memory:View3D.rendererMemory,live:View3D.sceneGeometries,lifecycle:View3D.lifecycleMetrics,history:history.length}));metrics.push(measure);
   assert.deepEqual(measure.lifecycle,{loopActive:false,animating:false,flying:false,pendingAssets:0},`cycle ${cycle} releases work`);
   assert.deepEqual(await state(page),beforeState,`cycle ${cycle} restores document`);
  }
  t.diagnostic(`cycle renderer memory=${JSON.stringify(metrics.map(m=>m.memory))}`);
  const warm=metrics[0];for(let i=1;i<metrics.length;i++){
-  assert.equal(metrics[i].memory.geometries,warm.memory.geometries,`cycle ${i} geometry count stable`);
+  /* three.js uploads a geometry the first time it is drawn and a cycle rebuilds part of the scene, so the GPU count moves by a few with the frames drawn (1186 against 1188 on the CPU-rendered CI runner). A leak is a geometry that is created and never released: every cycle keeps exactly the live scene geometries of the first, and the GPU never holds more than the scene. */assert.equal(metrics[i].live,warm.live,`cycle ${i} live scene geometries stable`);assert.ok(metrics[i].memory.geometries<=metrics[i].live,`cycle ${i}: GPU holds more geometries than the scene ${metrics[i].memory.geometries}>${metrics[i].live}`);
   assert.equal(metrics[i].memory.textures,warm.memory.textures,`cycle ${i} texture count stable`);
   assert.equal(metrics[i].history,warm.history,`cycle ${i} does not grow history`);
  }
