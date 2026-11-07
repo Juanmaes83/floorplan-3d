@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 /* Section → Spatial Visit V1 on the real app (reference home of «Probar el ejemplo»):
    - the sub-option is off by default and only available with the section; OFF keeps the base story (no room-visit);
    - ON: the whole story is plan-reveal → section-open → room-visit to the first chosen room with a validated route;
@@ -11,15 +12,15 @@ const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=re
 const root=path.resolve(__dirname,'..'),three=require('./helpers/three-module.cjs');let server,url,browser;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary','.hdr':'application/octet-stream'};
 before(async()=>{server=createServer(async(req,res)=>{try{const f=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://l').pathname));if(!f.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
- await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||undefined,args:['--no-sandbox','--enable-unsafe-swiftshader']});});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME||undefined,args:['--no-sandbox','--enable-unsafe-swiftshader']}));});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function open(t,viewport={width:1280,height:800}){const mobile=viewport.width<1000,ctx=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,reducedMotion:'reduce'});t.after(()=>ctx.close());
- const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(90000);
+ const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(budget(90000));
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async r=>r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await three(r.request().url(),()=>{throw Error('no local three');})}));
- await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:90000});
+ await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:budget(90000)});
  await page.locator('#welcomeExample').click();await page.waitForFunction(()=>FloorPlanApp.project.rooms.length>3);return {page,errors};}
-const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:180000});
-const seek=(page,P)=>page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(v*1000));s.dispatchEvent(new Event('input',{bubbles:true}));},P).then(()=>page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:120000}));
+const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:budget(180000)});
+const seek=(page,P)=>page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(v*1000));s.dispatchEvent(new Event('input',{bubbles:true}));},P).then(()=>page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:budget(120000)}));
 async function start(page,{visit}){
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  const v=page.locator('#presentationVisitOption');assert.equal(await v.isChecked(),false,'off by default');assert.equal(await v.isDisabled(),true,'needs the section');
@@ -36,17 +37,17 @@ const validity=page=>page.evaluate(()=>{const g=FloorPlanApp.geometry,P=FloorPla
  const inDoor=g.doors.some(d=>inRect(d.rect,x,y,80));
  const s=View3D.presentationStoryInfo;return {phase:s.phase,kind:s.kind,cut:s.cut,h,above:h>Math.max(top,tallest),inWall,inObj,inDoor,room:room?.id||null,pos:c.map(v=>+v.toFixed(4))};});
 
-test('OFF: the base story is unchanged (no room-visit, no visit controls)',{timeout:600000},async t=>{
+test('OFF: the base story is unchanged (no room-visit, no visit controls)',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t);await start(page,{visit:false});
- await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1,null,{timeout:120000});
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1,null,{timeout:budget(120000)});
  const kinds=await page.evaluate(()=>FloorPlanPresentation.story.kinds);assert.ok(!kinds.includes('room-visit'));assert.ok(kinds.includes('section-open'));
  assert.equal(await page.locator('#presentationVisitWalk').isVisible(),false);assert.deepEqual(errors,[]);
 });
 
-test('ON: section → validated visit → eye level; reversible; hand-over to Recorrer and back; clean exit',{timeout:1200000},async t=>{
+test('ON: section → validated visit → eye level; reversible; hand-over to Recorrer and back; clean exit',{timeout:budget(1200000)},async t=>{
  const {page,errors}=await open(t);const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  await start(page,{visit:true});
- await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:budget(120000)});
  const kinds=await page.evaluate(()=>FloorPlanPresentation.story.kinds);assert.deepEqual(kinds.slice(-2),['section-open','room-visit']);
  const from=await page.evaluate(()=>{const k=FloorPlanPresentation.story.kinds,seq=FloorPlanPresentationStory.sequence(k.map(x=>FloorPlanPresentationStory.SCENE_MS[x]));return seq.at(k.indexOf('room-visit'),0);});
  // Sweep the visit: every state is safe.
@@ -78,27 +79,27 @@ test('ON: section → validated visit → eye level; reversible; hand-over to Re
 // From the room stop: replay the story to the arrival, walk, then «Volver a la sección» lands on the section start.
 async function seekBackToSectionFromWalk(page){
  await page.locator('.presentation-stops button').nth(0).click();await settled(page);
- await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:budget(120000)});
  await seek(page,1);await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());
- await page.locator('#presentationWalkSection').click();await page.waitForFunction(()=>!View3D.walking()&&FloorPlanPresentation.story?.kind==='section-open'&&!FloorPlanPresentation.story.busy,null,{timeout:180000});
+ await page.locator('#presentationWalkSection').click();await page.waitForFunction(()=>!View3D.walking()&&FloorPlanPresentation.story?.kind==='section-open'&&!FloorPlanPresentation.story.busy,null,{timeout:budget(180000)});
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.story.local),0,'held at the section start');
 }
 
 // The professional's own room choice (the presentation sidecar), as «Presentar mi vivienda» saves it.
 const chooseRooms=(page,ids)=>page.evaluate(ids=>{const C=FloorPlanPresentationCore,a=FloorPlanApp,p=a.project;localStorage.setItem(C.key(a.entryId,p.id),JSON.stringify(C.sidecar(p.id,a.entryId,FloorPlanGuide.revision(p),ids)));},ids);
 async function toArrival(page){
- await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:budget(120000)});
  await seek(page,1);await page.locator('#presentationVisitWalk').waitFor();}
 
-test('fallback: a chosen room without an interior route keeps the base descent and says why',{timeout:600000},async t=>{
+test('fallback: a chosen room without an interior route keeps the base descent and says why',{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t);await chooseRooms(page,['rom_kitchen']);await start(page,{visit:true});
- await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:budget(120000)});
  const kinds=await page.evaluate(()=>FloorPlanPresentation.story.kinds);assert.ok(!kinds.includes('room-visit'),'no visit invented');assert.ok(kinds.includes('room-descent'));
  assert.match(await page.locator('#presentationStoryCaption').textContent(),/Visita espacial no disponible: .*aéreo/);
  assert.deepEqual(errors,[]);
 });
 
-test('Escape while walking returns to the presentation; five cycles keep resources stable',{timeout:1500000},async t=>{
+test('Escape while walking returns to the presentation; five cycles keep resources stable',{timeout:budget(1500000)},async t=>{
  const {page,errors}=await open(t);await start(page,{visit:true});const mem=[];
  for(let i=0;i<5;i++){
   if(i)await page.locator('.presentation-stops button').nth(0).click(),await settled(page);
@@ -112,7 +113,7 @@ test('Escape while walking returns to the presentation; five cycles keep resourc
 });
 
 for(const [name,viewport] of [['phone portrait',{width:390,height:844}],['phone landscape',{width:844,height:390}]])
-test(`${name}: arrival, hand-over bar fits, no horizontal overflow`,{timeout:900000},async t=>{
+test(`${name}: arrival, hand-over bar fits, no horizontal overflow`,{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,viewport);await start(page,{visit:true});await toArrival(page);
  const cta=await page.locator('#presentationVisitWalk').boundingBox();assert.ok(cta&&cta.height>=40,'CTA reachable');
  await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());

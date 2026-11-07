@@ -1,3 +1,4 @@
+const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 // Delivery image in Chromium: what «Compartir imagen» downloads is a composed picture where the home fills the image
 // (overview reframed to the whole home), the project data and the brand sit in their own band, and the preview is the
 // very same bytes as the download. Example (one level) at 1440×900 and 390×844, the two-level fixture building with a
@@ -12,11 +13,11 @@ let server,url,browser;
 before(async()=>{server=createServer(async(req,res)=>{try{const f=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://l').pathname));if(!f.startsWith(root+path.sep))throw Error('path');
  res.setHeader('Content-Type',/\.m?js$/.test(f)?'text/javascript':f.endsWith('.css')?'text/css':f.endsWith('.json')?'application/json':f.endsWith('.webp')?'image/webp':'text/html');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
- browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});if(shots)await fs.mkdir(shots,{recursive:true});});
+ browser=budget.launched(await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']}));if(shots)await fs.mkdir(shots,{recursive:true});});
 after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
 const curl=t=>new Promise((res,rej)=>execFile('curl',['--fail','--silent','--show-error','--max-time','30',t],{maxBuffer:20e6},(e,o)=>e?rej(e):res(o)));
 async function open(t,viewport){const ctx=await browser.newContext({viewport,acceptDownloads:true,isMobile:viewport.width<1000,hasTouch:viewport.width<1000});t.after(()=>ctx.close());
- const page=await ctx.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));
+ const page=await ctx.newPage(),errors=[];page.setDefaultTimeout(budget(120000));page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async r=>{const target=r.request().url();let p=cache.get(target);if(!p){p=require('./helpers/three-module.cjs')(target,()=>curl(target));cache.set(target,p);}await r.fulfill({status:200,contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await p});});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D&&window.FloorPlanDeliveryImage);return {page,errors};}
 async function present(page,{brand,title}={}){
@@ -24,7 +25,7 @@ async function present(page,{brand,title}={}){
  await page.locator('#guidePresent:visible, #presentationBtn:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  if(id){await page.locator('.brand-config .brand-select').selectOption(id);if(title)await page.locator('#brandDeliveryTitle').fill(title);}
  await page.getByRole('button',{name:'Iniciar presentación'}).click();
- await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:180000});}
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(180000)});}
 const idle=page=>page.waitForFunction(()=>!document.querySelector('#shareDialog').hasAttribute('aria-busy'));
 // The downloaded file, checked against the preview, and the share of the image area the home occupies.
 async function take(page,tag,format){
@@ -40,7 +41,7 @@ async function take(page,tag,format){
  return {name,contact,...px};}
 const close=page=>page.locator('#shareDialog .share-actions button',{hasText:'Cerrar'}).click();
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`delivery image: the home fills the picture, the preview is the file ${viewport.width}x${viewport.height}`,{timeout:600000},async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`delivery image: the home fills the picture, the preview is the file ${viewport.width}x${viewport.height}`,{timeout:budget(600000)},async t=>{
  const {page,errors}=await open(t,viewport);await page.locator('#welcomeExample').click();await present(page);
  await page.locator('#presentationShare').click();await page.locator('#shareDialog[open]').waitFor();
  assert.equal(await page.locator('#shareContact').count(),0,'no brand: no contact option');
@@ -54,7 +55,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`del
  await close(page);assert.deepEqual(errors,[]);
 });
 
-test('delivery image with a brand: name and data in their band, contact only when asked',{timeout:900000},async t=>{
+test('delivery image with a brand: name and data in their band, contact only when asked',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await page.locator('#welcomeExample').click();
  await present(page,{brand:'Estudio Norte Arquitectura y Promoción Inmobiliaria del Mediterráneo',title:'Ático con terraza, bloque B, escalera 2 — vivienda tipo C de cuatro dormitorios'});
  await page.locator('#presentationShare').click();await page.locator('#shareDialog[open]').waitFor();
@@ -63,11 +64,11 @@ test('delivery image with a brand: name and data in their band, contact only whe
  await close(page);assert.deepEqual(errors,[]);
 });
 
-test('delivery image of a two-level building names the level it shows',{timeout:900000},async t=>{
+test('delivery image of a two-level building names the level it shows',{timeout:budget(900000)},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});
  await require('./editor-fixture.cjs')(page);const fx=F.build(),{entries}=await B.packageEntries(fx.building,im=>fx.bytesFor(im.id),T.imageInfo);
  await page.locator('#uploadIn').setInputFiles({name:'edificio.zip',mimeType:'application/zip',buffer:Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer())});
- await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2,null,{timeout:60000});
+ await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2,null,{timeout:budget(60000)});
  await present(page);await page.locator('#presentationShare').click();await page.locator('#shareDialog[open]').waitFor();
  const levelLabel=await page.evaluate(()=>FloorPlanPresentation.plan.stops[0].levelName);assert.ok(levelLabel,'the overview belongs to a level');
  const two=await take(page,'two-levels-landscape');assert.ok(two.fy>=.8,`two-level overview fills the height (${two.fy})`);
