@@ -5,6 +5,8 @@
 **Entrada auditada:** «Auditoría unificada de oportunidades UI/UX, servicios e integraciones» (corte 09/11/2026), aportada por el propietario.
 **Método:** cada afirmación del informe se ha contrastado con el código de `master`, las ramas remotas, las PR abiertas y, para los recursos externos, con su repositorio público.
 
+> **Nota de vigencia (añadida al integrar en master):** este documento refleja el estado de `de52d57`, **anterior** al cierre de Render IA D1. Lo que dice sobre Production (`dpl_CdmB…`) y sobre fusionar #180, #181 y #182 está **superado**: Production pasó a `dpl_5oHsDPdSVG5buSVCnYPrLPmbnbNi` sobre `master@5fb7a5c`. Los estados vigentes están en [`../render-ai/d1-acta-de-cierre-2026-11-09.md`](../render-ai/d1-acta-de-cierre-2026-11-09.md) y en el catálogo v1.3. El resto se conserva como registro histórico.
+
 > **Documento de decisión unificado:** [`rubik-catalogo-maestro-mejoras-2026-11-09.md`](./rubik-catalogo-maestro-mejoras-2026-11-09.md) reúne en una sola tabla esta auditoría, las fichas de los 4 PDF y los planes de IA de imágenes y personas, CAT-IA, FOT/360/vídeo, asistente y Home, con su orden y sus conflictos.
 
 > **Cómo leer este documento**
