@@ -13,7 +13,14 @@
    - Wrong access codes are counted: after RUBIK_RENDER_MAX_TOKEN_FAILS per hour the endpoint stops comparing (429).
    - Provider calls are capped per hour and per day (RUBIK_RENDER_MAX_PER_HOUR / _PER_DAY; 429 'limit').
      These counters live in the memory of one function instance (no database, no paid service), so they are a
-     best-effort brake; the binding monthly budget is the one set on the provider account. See docs/render-ai/. */
+     best-effort brake; the binding monthly budget is the one set on the provider account. See docs/render-ai/.
+   RENDER AI D1 · IMG-02 · usage and cost per generation:
+   - The provider's `usage` (tokens) is read from a closed list of integer fields and returned with the image.
+   - A cost is estimated ONLY when the owner sets the tariff in the environment (USD per million tokens:
+     RUBIK_RENDER_PRICE_INPUT_TEXT, RUBIK_RENDER_PRICE_INPUT_IMAGE, RUBIK_RENDER_PRICE_OUTPUT). No price is hard-coded:
+     prices change and the binding figure is the provider's bill.
+   - One JSON line per provider call goes to the function log (Vercel runtime logs): model, style, finishes, status,
+     duration, usage and estimated cost. Never the image, the access code, the key or the client's address. */
 'use strict';
 const {timingSafeEqual}=require('node:crypto');
 const same=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));return x.length===y.length&&timingSafeEqual(x,y);};
@@ -72,13 +79,31 @@ function sameSite(req){
  const host=req.headers['x-forwarded-host']||req.headers.host;
  try{return typeof origin==='string'&&!!host&&new URL(origin).host===String(host).split(',')[0].trim();}catch{return false;}
 }
+// IMG-02: usage from the provider, only known integer fields; anything else is ignored.
+function usageOf(u){
+ if(!u||typeof u!=='object')return null;
+ const int=v=>Number.isSafeInteger(v)&&v>=0?v:null,d=u.input_tokens_details&&typeof u.input_tokens_details==='object'?u.input_tokens_details:{};
+ const out={inputTokens:int(u.input_tokens),outputTokens:int(u.output_tokens),totalTokens:int(u.total_tokens),inputTextTokens:int(d.text_tokens),inputImageTokens:int(d.image_tokens)};
+ return Object.values(out).some(v=>v!==null)?out:null;
+}
+// Tariff from the environment (USD per 1M tokens). Absent or invalid → no estimate.
+function priceEnv(v){if(typeof v!=='string'||!/^\d{1,4}(\.\d{1,6})?$/.test(v.trim()))return null;return Number(v.trim());}
+function tariff(env){const t={inputText:priceEnv(env.RUBIK_RENDER_PRICE_INPUT_TEXT),inputImage:priceEnv(env.RUBIK_RENDER_PRICE_INPUT_IMAGE),output:priceEnv(env.RUBIK_RENDER_PRICE_OUTPUT)};return Object.values(t).every(v=>v!==null)?t:null;}
+function costOf(usage,t){
+ if(!usage||!t||usage.outputTokens===null)return null;
+ let text=usage.inputTextTokens,image=usage.inputImageTokens;
+ if(text===null&&image===null){if(usage.inputTokens===null)return null;image=usage.inputTokens;text=0;} // undetailed input: priced as image (the dearer side) to never under-estimate
+ const amount=((text||0)*t.inputText+(image||0)*t.inputImage+usage.outputTokens*t.output)/1e6;
+ return {amount:Math.round(amount*1e6)/1e6,currency:'USD',basis:'tariff-env'};
+}
+function logCall(entry,log){try{log(JSON.stringify({event:'rubik-render',...entry}));}catch{}}
 function send(res,status,body){res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify(body));}
 function parseImage(dataUrl){
  const m=/^data:(image\/(?:png|jpeg));base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl||''));
  if(!m)return null;const bytes=Buffer.from(m[2],'base64');
  if(!bytes.length||bytes.length>MAX_BYTES)return null;return {type:m[1],bytes};
 }
-async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now}={}){
+async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now,log=console.log,clock=Date.now}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
  if(env.RUBIK_RENDER_ENABLED!=='1')return send(res,503,{error:'disabled'});
  if(!env.OPENAI_API_KEY||!env.RUBIK_RENDER_TOKEN)return send(res,503,{error:'not-configured'});
@@ -96,13 +121,16 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
  if(!slot.ok){res.setHeader('Retry-After',String(slot.retryAfter));return send(res,429,{error:'limit',retryAfter:slot.retryAfter});}
  const form=new FormData();form.append('model',MODEL);form.append('prompt',prompt(style,{floor,walls}));form.append('n','1');form.append('size','1536x1024');
  form.append('image',new Blob([image.bytes],{type:image.type}),image.type==='image/png'?'view.png':'view.jpg');
+ const started=clock(),base={model:MODEL,style,floor,walls};
  let r;try{r=await fetchImpl('https://api.openai.com/v1/images/edits',{method:'POST',headers:{Authorization:`Bearer ${env.OPENAI_API_KEY}`},body:form});}
- catch{return send(res,502,{error:'provider-unreachable'});}
- const out=await r.json().catch(()=>null);
- if(!r.ok){const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':'provider-error';return send(res,502,{error:code});}
- const b64=out?.data?.[0]?.b64_json;if(!b64)return send(res,502,{error:'provider-empty'});
- return send(res,200,{image:`data:image/png;base64,${b64}`,model:MODEL,style,floor,walls,generatedAt:new Date().toISOString()});
+ catch{logCall({...base,status:'provider-unreachable',ms:clock()-started,usage:null,cost:null},log);return send(res,502,{error:'provider-unreachable'});}
+ const out=await r.json().catch(()=>null),usage=usageOf(out?.usage),cost=costOf(usage,tariff(env)),ms=clock()-started;
+ if(!r.ok){const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':'provider-error';logCall({...base,status:code,providerStatus:r.status,ms,usage,cost},log);return send(res,502,{error:code});}
+ const b64=out?.data?.[0]?.b64_json;if(!b64){logCall({...base,status:'provider-empty',ms,usage,cost},log);return send(res,502,{error:'provider-empty'});}
+ logCall({...base,status:'ok',ms,usage,cost},log);
+ return send(res,200,{image:`data:image/png;base64,${b64}`,model:MODEL,style,floor,walls,usage,cost,generatedAt:new Date().toISOString()});
 }
 module.exports=(req,res)=>handler(req,res);
 module.exports.handler=handler;module.exports.STYLES=STYLES;module.exports.FLOORS=FLOORS;module.exports.WALLS=WALLS;module.exports.prompt=prompt;
 module.exports.createMeter=createMeter;module.exports.limits=limits;module.exports.DEFAULT_LIMITS=DEFAULT_LIMITS;
+module.exports.usageOf=usageOf;module.exports.tariff=tariff;module.exports.costOf=costOf;
