@@ -15,6 +15,7 @@ jobs:
         tests/project-visual.test.cjs
         tests/site-visual.test.cjs
         tests/ai-render-api.test.cjs
+        tests/delivery-image.test.cjs
         tests/share-api.test.cjs
         tests/plan-service.test.cjs
         tests/review-anchors.test.cjs
@@ -36,6 +37,7 @@ jobs:
         tests/project-dossier.browser.test.cjs
         tests/client-share.browser.test.cjs
         tests/ai-render.browser.test.cjs
+        tests/delivery-image-detail.browser.test.cjs
         tests/tour-video.browser.test.cjs
         tests/share-link.browser.test.cjs
         tests/plan-service.browser.test.cjs

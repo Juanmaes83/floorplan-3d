@@ -25,3 +25,14 @@ test('control characters are cleaned and tiny areas are not reported',()=>{
  const c=D.content({title:'Casa\u0000\nNueva',rooms:[{poly:sq(0,0,500,500)}]});
  assert.equal(c.title,'Casa Nueva');assert.deepEqual(c.facts,['1 estancia']);
 });
+
+// RENDER AI D1 · IMG-01: the finishes of an AI render travel as their own line (detail), not glued to the view.
+test('IMG-01: detail is optional, bounded at 140 and kept apart from the 60-character view',()=>{
+ const D=require('../js/delivery-image.js');
+ assert.equal('detail' in D.content({title:'Casa',view:'Salón'}),false,'without detail the content is unchanged');
+ const fin='Suelo: Porcelánico gran formato · Paredes: Estuco arena';
+ const c=D.content({title:'Casa',view:'Render IA · Salón comedor principal',detail:fin});
+ assert.equal(c.detail,fin,'the whole finishes line survives');assert.equal(c.view,'Render IA · Salón comedor principal');
+ assert.equal(D.content({detail:'x'.repeat(200)}).detail.length,140);assert.ok(D.content({detail:'x'.repeat(200)}).detail.endsWith('…'));
+ assert.equal('detail' in D.content({detail:'  \n '}),false);
+});
