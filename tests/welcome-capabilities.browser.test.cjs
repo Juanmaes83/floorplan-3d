@@ -19,7 +19,7 @@ async function open(t,viewport,audience=null){const narrow=viewport.width<=1100,
  const press=async s=>{const l=page.locator(s);await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
  return {page,errors,provider,press,narrow};}
 const cards=page=>page.locator('#welcomeCapabilities .capability-card').evaluateAll(n=>n.map(c=>c.dataset.capability));
-const PROFILES=['architecture','real-estate','developer','renovation','interior'];
+const PROFILES=['architecture','real-estate','developer','renovation','interior','construction'];
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
 test(`neutral Home: hero, capabilities and Render IA band, honest and without horizontal scroll ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
@@ -83,4 +83,23 @@ test('keyboard: the profession selector and the capability accesses are reachabl
  const go=page.locator('#welcomeCap-render-ai');await go.focus();
  assert.equal(await go.evaluate(b=>getComputedStyle(b).outlineStyle!=='none'||getComputedStyle(b).boxShadow!=='none'),true,'visible focus');
  assert.deepEqual(errors,[]);
+});
+
+// HOM-02 · Constructora / jefe de obra: only verified FT3D-8 capabilities, always labelled as planned, never as real
+// progress on site; the plan opens in Presupuestar and the 4D evolution in Entregar.
+test('Constructora / jefe de obra: planned works only, plan in Budget and 4D evolution in Deliver 1440x900',{timeout:120000},async t=>{
+ const vp={width:1440,height:900};
+ {const {page,errors,provider,press}=await open(t,vp);await press('#welcomeAudience-construction');
+  assert.equal(await page.locator('#welcomeAudience-construction').getAttribute('aria-pressed'),'true');
+  assert.match(await page.locator('#welcomeDialogTitle').textContent(),/obra planificada/);
+  assert.match(await page.locator('.welcome-intro .lead').textContent(),/No sustituye el seguimiento real de la obra/);
+  assert.deepEqual(await cards(page),['construction-plan','evolution-4d','budget','building']);
+  const caps=await page.locator('#welcomeCapabilities').textContent();
+  assert.match(caps,/no registra el avance real/);assert.match(caps,/no es el estado real de ejecución/);
+  assert.doesNotMatch(caps+await page.locator('.welcome-intro').textContent(),/sensor|certificaci[oó]n oficial|seguimiento autom[aá]tico|en tiempo real/i,'no promise of real site tracking');
+  assert.match(await page.locator('#welcomeAudiencePurpose p').textContent(),/evolución prevista/);
+  assert.equal(await page.locator('.solutions-card[data-audience="construction"]').count(),1);
+  assert.deepEqual(provider,[]);assert.deepEqual(errors,[]);}
+ for(const [cap,area] of [['construction-plan','budget'],['evolution-4d','deliver']]){
+  const {page,errors,press}=await open(t,vp,'construction');await press('#welcomeCap-'+cap);await page.waitForFunction(a=>window.FloorPlanProfessionalUI?.area===a,area);assert.deepEqual(errors,[]);}
 });

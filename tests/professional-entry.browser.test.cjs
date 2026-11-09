@@ -28,7 +28,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
   const beforeProject=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
   const ids=await page.locator('.welcome-audience-option').evaluateAll(nodes=>nodes.map(node=>node.id));
-  assert.deepEqual(ids,['welcomeAudience-architecture','welcomeAudience-real-estate','welcomeAudience-developer','welcomeAudience-renovation','welcomeAudience-interior']);
+  assert.deepEqual(ids,['welcomeAudience-architecture','welcomeAudience-real-estate','welcomeAudience-developer','welcomeAudience-renovation','welcomeAudience-interior','welcomeAudience-construction'],'HOM-02: the five original profiles keep their ids and order; Constructora is added last');
   assert.deepEqual(await page.locator('.welcome-entry strong').allTextContents(),['Subir un plano','Crear desde cero','Probar el ejemplo']);
   assert.equal(await page.evaluate(()=>!!(document.querySelector('.welcome-entries').compareDocumentPosition(document.querySelector('.welcome-audience'))&Node.DOCUMENT_POSITION_FOLLOWING)),true,'el perfil opcional va tras las tres acciones');
   await page.locator('#welcomeAudience-developer').click();
@@ -92,7 +92,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.ok(order[0]<order[1]&&order[1]<order[2],'entries, then the 3D walk band, then the solutions');
  assert.match(await page.locator('#welcomeWalk h2').textContent(),/recórrela en 3D/);
  assert.deepEqual(await page.locator('.solutions-phases strong').allTextContents(),['Empezar','Preparar','Distribuir','Amueblar','Revisar y guardar']);
- assert.equal(await page.locator('.solutions-card').count(),5);assert.equal(await page.locator('.solutions-phases svg.icon').count(),5);
+ assert.equal(await page.locator('.solutions-card').count(),6,'HOM-02: one card per profile, Constructora included');assert.equal(await page.locator('.solutions-phases svg.icon').count(),5);
  const bodyH=id=>page.locator(`#solutionsBody-${id}`).evaluate(b=>b.getBoundingClientRect().height);
  assert.ok(await bodyH('real-estate')<2,'cards start closed: not everything at once');
  const head=page.locator('[data-audience="real-estate"] .solutions-head');await head.scrollIntoViewIfNeeded();
