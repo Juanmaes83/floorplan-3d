@@ -1,7 +1,7 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
-**Fecha:** 09/11/2026 · **Versión:** 1.0 · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
-**Base de verificación:** `master@a12a01e` (= `de52d57` + PR #180 Render IA acceso y límites). Production sigue en `de52d57`.
+**Fecha:** 09/11/2026 · **Versión:** 1.1 (incorpora 5 correcciones de revisión, ver §7) · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
+**Base de verificación:** `master@8896055` (= `de52d57` + PR #180 acceso y límites + PR #182 consumo y coste). La PR #181 está reconciliada con ese master y en CI. Production sigue en `de52d57`.
 
 ## 0. Para qué sirve y cómo usarlo
 
@@ -22,6 +22,16 @@ Es **el único sitio** donde están juntas todas las mejoras propuestas para RUB
 | **Precedencia** | Decisión posterior del propietario > código verificado en master > documentos de 05–09/11 > documentos y PDF anteriores. |
 | **No duplicar** | Lo que ya existe está en la **sección 2** y no vuelve a la cola. |
 | **Honestidad de datos** | Ninguna mejora puede mostrar cifras, estados o certificaciones que no salgan de datos reales del proyecto. |
+
+**Tres autoridades que no se mezclan:**
+
+| Fuente | Responde a |
+|---|---|
+| Este catálogo | Qué queremos estudiar, priorizar o descartar |
+| GitHub (master y PR) | Qué está implementado o pendiente de integrar. El estado de cada fila se vuelve a comprobar tras cada merge. |
+| QA, permisos y despliegue | Qué se puede ofrecer de verdad a profesionales y clientes |
+
+Aprobar una ola **no** aprueba el catálogo entero. Se resuelven los conflictos que afectan a las dos olas siguientes; el resto conserva su casilla pendiente.
 
 **Leyenda.**
 - **Estado:** **E** existe en master · **P** parcial · **R** en rama o PR · **N** no existe.
@@ -73,14 +83,18 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 
 | ID | Mejora | Alias de origen | Estado | Valor | Dif. | Depende de | Ola | Decisión |
 |---|---|---|---|---|---|---|---|---|
-| GOV-01 | Cerrar Render IA D1: fusionar #182 y #181, y Promote con `RUBIK_RENDER_ENABLED=1` | V-01, G6, W4, IMG-01/02 | R (#180 en master) | ★★★★★ | B | Tu Promote | 0 | ✔ (merge autorizado) |
+| GOV-01a | Render IA D1: **fusionar** #180, #182 y #181 con CI verde sobre el commit exacto | V-01, G6, W4, IMG-01/02 | #180 y #182 en master; #181 en CI | ★★★★★ | B | — | 0 | ✔ (merge autorizado el 09/11) |
+| GOV-01b | Render IA D1: **configurar el entorno** de Production (`RUBIK_RENDER_ENABLED=1` y, opcionalmente, las tarifas) | — | N | ★★★★★ | B (lo hace el propietario) | GOV-01a | 0 | ☐ |
+| GOV-01c | Render IA D1: **activar en Production (Promote)** y verificar después | — | N | ★★★★★ | B | GOV-01b + autorización expresa | 0 | ☐ |
+| GOV-09 | **Acreditar el modelo de imagen configurado** en Production (variable `RUBIK_RENDER_MODEL`; si no existe, el código usa `gpt-image-1`) y que sigue operativo. Tras el Promote, el registro de #182 muestra el modelo configurado en cada llamada. | K4 | N | ★★★★ | B | GOV-01c | 0 | ☐ |
 | GOV-02 | Cerrar o archivar PR obsoletas cuyo contenido ya está en master (#133–#151, #90) | F7 «50 PR», F8 C10 | N | ★★★ | B | — | 0 | ☐ |
 | GOV-03 | Registro único de capacidades «Disponible / En validación / En preparación», con SHA y prueba | UX-02, HUX-QA-01, F1 §7 | N | ★★★★ | B-M | — | 0 | ☐ |
 | GOV-04 | Decidir qué documentos de la rama de preparación pasan a master como documentación | F8 D7 | R | ★★ | B | — | 0 | ☐ |
 | GOV-05 | Revisión legal y privacidad: condiciones, retención, licencias, consentimientos de imágenes y personas | W3, G8, PR #161 | R (borrador) | ★★★★★ | M (externa) | Profesional jurídico | 1 | ☐ |
-| GOV-06 | Identidad y cuotas por usuario u organización (hoy hay un solo código compartido) | F1 §1, A6, IMG-04 | N | ★★★★ | A | GOV-05 | 3 | ☐ |
+| GOV-06a | **Autenticación y cuotas mínimas por profesional** para los servicios IA de pago (sustituir el código compartido; cuota y gasto por cuenta) | F1 §1, IMG-04 | N | ★★★★★ | A | GOV-05 | 2 | ☐ |
+| GOV-06b | Plataforma multiusuario avanzada: equipos, roles, organizaciones, portal | C-03, ENT-07 | N | ★★★ | MA | GOV-06a | 5 | ☐ |
 | GOV-07 | Pruebas en hardware real (iOS, Android, GPU de escritorio), DPR adaptativo y contexto WebGL | G4 | N | ★★★★ | M | — | 1 | ☐ |
-| GOV-08 | Proteger `api/share.js` con las mismas guardas que `api/render.js` | F10 (pendiente de #180) | N | ★★★ | B | — | 1 | ☐ |
+| GOV-08 | **Controles propios de publicación** en `api/share.js`, que guarda archivos en Vercel Blob con el mismo código compartido del render: autorización propia, tamaño, cuota de almacenamiento, caducidad y revocación, y comparación del código en tiempo constante (hoy usa `!==`). **No** reutilizar el interruptor del Render IA. | F10, ENT-02 | P | ★★★★ | M | — | 1 | ☐ |
 
 ### B · Home y descubrimiento
 
@@ -100,7 +114,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | ENT-04 | Dossier comercial antes/después, con presupuesto rotulado (parcial o completo) | C-02 | P | ★★★★★ | M | UX-07 | 2 | ☐ |
 | ENT-05 | Fichas de imagen: original, final, materiales, versión y leyenda IA | IMG-17, CAT-G4 | N | ★★★★ | M | IMG-12, ENT-01 | 3 | ☐ |
 | ENT-06 | Lotes de entrega: 5 vistas × alternativas, dossier y ZIP, con coste y cancelación | IMG-18 | N | ★★★★ | M | IMG-04, IMG-12 | 3 | ☐ |
-| ENT-07 | Portal multiusuario, equipos y white-label | C-03 | N | ★★★ | MA | GOV-06 | 5 | ☐ |
+| ENT-07 | Portal multiusuario, equipos y white-label | C-03 | N | ★★★ | MA | GOV-06b | 5 | ☐ |
 
 ### D · Estudio de imágenes IA (Render IA ampliado)
 
@@ -109,7 +123,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | IMG-01 | Textos completos en la exportación | IMG-01 | R (#181) | ★★★★ | B | — | 0 | ✔ |
 | IMG-02 | Consumo, coste estimado y registro por imagen | IMG-02 | R (#182) | ★★★★★ | B | — | 0 | ✔ |
 | IMG-03 | Calidad explícita: Borrador / Presentación / Máxima, con coste previsto | IMG-03 | N | ★★★★ | M | IMG-02 | 2 | ☐ |
-| IMG-04 | Confirmación de gasto y cuotas por lote (hoy: límites de servidor por hora y día) | IMG-04, #180 | P | ★★★★★ | M | IMG-02, GOV-06 | 2 | ☐ |
+| IMG-04 | Confirmación de gasto antes de generar, y lotes con cancelación. Hoy hay límites de servidor por hora y día **en memoria de cada instancia**: un freno, no un tope global. | IMG-04, #180 | P | ★★★★★ | M | IMG-02; las cuotas por profesional, de GOV-06a | 2 | ☐ |
 | IMG-05 | Catálogo amplio de suelos (maderas, espiga, porcelánicos, piedra, terrazo, microcemento) | IMG-05 | P (6 suelos) | ★★★★ | B-M | V-10 | 2 | ☐ |
 | IMG-06 | Paredes y techos: color, estuco, panelado, pared de acento | IMG-06 | P (5 paredes) | ★★★★ | B-M | — | 2 | ☐ |
 | IMG-07 | Iluminación de la escena: mañana, tarde, noche y temperatura | IMG-07, K4 | N | ★★★★ | M | — | 2 | ☐ |
@@ -129,8 +143,8 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 
 | ID | Mejora | Alias | Estado | Valor | Dif. | Depende | Ola | Decisión |
 |---|---|---|---|---|---|---|---|---|
-| PER-01 | **Personas genéricas** (0, 1, 2 o grupo, con actividad), con aviso «personas generadas» | IMG-19, V-07, F3 «escena habitada» | N | ★★★★ | M | IMG-12, GOV-05 | 3 | ☐ |
-| PER-02 | **Fotos reales del cliente** (o de su familia) disfrutando del espacio, solo con consentimiento expreso y revocable ⚠ | IMG-20, G9 | N | ★★★★★ | MA | GOV-05, GOV-06, PER-01 | 4 | ☐ |
+| PER-01 | **Personas genéricas** (0, 1, 2 o grupo, con actividad), con aviso «personas generadas». Complemento visual: **va detrás** de la fiabilidad, la trazabilidad y el coste de las imágenes (IMG-12, ECO-01). | IMG-19, V-07, F3 «escena habitada» | N | ★★★ | M | IMG-12, ECO-01, GOV-05 | 3 (final) | ☐ |
+| PER-02 | **Fotos reales del cliente** (o de su familia) disfrutando del espacio ⚠. **Requisitos reforzados:** base legal y permisos acreditados de cada persona, **exclusión o régimen específico para menores**, evaluación de impacto en protección de datos, almacenamiento aislado, conservación limitada, revocación y **borrado verificable**. Una casilla de consentimiento no basta. | IMG-20, G9 | N | ★★★★★ | MA | GOV-05, GOV-06a, PER-01 | 4 | ☐ |
 | PER-03 | Narrativa «Así se vive»: escenas del día, mascota, trabajo, descanso | IMG-21 | N | ★★★ | M | PER-01, ENT-05 | 4 | ☐ |
 
 ### F · Fotografías del cliente
@@ -210,7 +224,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | ID | Mejora | Alias | Estado | Valor | Dif. | Depende | Ola | Decisión |
 |---|---|---|---|---|---|---|---|---|
 | AG-0 | Contrato de mensajes, permisos, telemetría y costes (sin API) | AG-0 | N | ★★★ | M | — | 3 | ☐ |
-| AG-1 | Asistente de **consulta**: estancias, medidas, revisión, presupuesto (sin escribir) | AG-1, A-01, W5 | R (rama: herramientas de dominio) + MCP local E | ★★★★★ | A | AG-0, GOV-06 | 4 | ☐ |
+| AG-1 | Asistente de **consulta**: estancias, medidas, revisión, presupuesto (sin escribir) | AG-1, A-01, W5 | R (rama: herramientas de dominio) + MCP local E | ★★★★★ | A | AG-0, GOV-06a | 4 | ☐ |
 | AG-2 | Propuestas revisables con diff (material, mueble) | AG-2, W7, A-02 | N | ★★★★ | A | AG-1 | 4 | ☐ |
 | AG-3 | Aplicar con confirmación y deshacer | AG-3 | N | ★★★★ | A | AG-2 | 5 | ☐ |
 | AG-4 | Orquestar renders: elegir vistas, lote y coste | AG-4 | N | ★★★★ | A | AG-1, IMG-04 | 5 | ☐ |
@@ -248,10 +262,10 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 
 | # | Conflicto | Fuentes | Propuesta (aditiva) | Decides tú |
 |---|---|---|---|---|
-| K1 | **Prompt libre** («describe los cambios») frente a **listas cerradas** de estilos y acabados | Maket M9 / F1, B2/B8, #180 | Mantener listas cerradas como modo por defecto. Un campo libre **solo** en el modo avanzado, con autenticación (GOV-06), moderación y límite de gasto. No se elimina ninguna de las dos ideas: se ordenan. | ☐ |
+| K1 | **Prompt libre** («describe los cambios») frente a **listas cerradas** de estilos y acabados | Maket M9 / F1, B2/B8, #180 | Mantener listas cerradas como modo por defecto. Un campo libre **solo** en el modo avanzado, con autenticación (GOV-06a), moderación y límite de gasto. No se elimina ninguna de las dos ideas: se ordenan. | ☐ |
 | K2 | **Personas reales del cliente** (PER-02) frente a privacidad y protección de datos | F1 IMG-20, F3 G9 | Primero PER-01 (genéricas). PER-02 solo después del visto bueno legal (GOV-05): consentimiento escrito y revocable, borrado efectivo, almacenamiento aislado y aviso de imagen generada. | ☐ |
 | K3 | **360**: «diferido» (31/10) frente a «reabierto como estudio» (05/11) | F7, F3 | Se mantiene como **estudio**: PAN-01 conceptual rotulado en la ola 4, y PAN-02 diferido. No se implementa sin tu OK. | ☐ |
-| K4 | **Modelo de imagen**: la rama de compatibilidad cambia el modelo por defecto, pero tu render funciona en Production | F1 §1, rama `7e738ec` | Sin cambio de modelo por ahora (la PR-2 queda opcional). Cuando haga falta, comparar modelos con IMG-02 midiendo coste y calidad. | ☐ |
+| K4 | **Modelo de imagen**: master usa `gpt-image-1` por defecto, salvo que `RUBIK_RENDER_MODEL` diga otro. La rama de compatibilidad lo cambia. El propietario informa de que el render funcionó hace días. | F1 §1, rama `7e738ec`, código de master | **No deducir el modelo ni del código ni de una prueba histórica.** Antes de decidir, acreditar el valor configurado en Vercel y que funciona hoy (GOV-09). Después, mantener o cambiar comparando coste y calidad con IMG-02. La PR-2 queda en espera de ese dato. | ☐ |
 | K5 | **Perfil Constructora**: «solo con S4 integrado» frente a S4 ya en master | F5 HUX-DEC-04 | Desbloqueado (HOM-02), sin prometer obra real. | ☐ |
 | K6 | **Precios de paquetes** (F3) frente a «no fijar tarifa sin datos» (F1 §5) | F3, F1 | Los precios de F3 son **hipótesis de experimento**. Se validan con ECO-01 y ECO-03 antes de publicarse. | ☐ |
 | K7 | **Move Rooms**: «intercambiar metadatos y reamueblar» frente a la integridad geométrica | Maket M3, F8 | UX-26 (solo el uso, con aviso) como paso mínimo; UX-14 real diferido. | ☐ |
@@ -268,12 +282,23 @@ El orden sigue tres criterios: **(1)** cerrar lo que ya está casi hecho, **(2)*
 
 | Ola | Objetivo | Mejoras | Condición para pasar a la siguiente |
 |---|---|---|---|
-| **0 · Cerrar y ordenar** | Nada nuevo; terminar lo empezado | GOV-01, IMG-01, IMG-02, GOV-02, GOV-03, GOV-04 | Render IA D1 en Production con límites, y registro de capacidades creado |
+| **0 · Cerrar y ordenar** | Nada nuevo; terminar lo empezado | GOV-01a, GOV-01b, GOV-01c, GOV-09, IMG-01, IMG-02, GOV-02, GOV-03, GOV-04 | Render IA D1 en Production con límites, modelo acreditado y registro de capacidades creado |
 | **1 · Vender lo que ya existe** | Que cada profesional entienda RUBIK y pueda entregar al cliente con seguridad | HOM-01, HOM-02, ENT-01, ENT-02, OBR-01, GOV-05, GOV-07, GOV-08 | Home revisada por ti, #166 integrada y segura, legal iniciado |
-| **2 · Mejoras rápidas y medición** | Mejor experiencia con bajo riesgo, y saber cuánto cuesta cada imagen | UX-07, UX-22, UX-23, UX-25, UX-09, UX-05, UX-03, UX-08, UX-04, G-06, OBR-02, OBR-03, CAM-01, BIB-01, IMG-03 a IMG-08, IMG-10 a IMG-12, ENT-03, ENT-04, HOM-03, ECO-01 | Coste por imagen aceptada conocido; revisión visual |
-| **3 · Nuevos servicios que se pueden cobrar** | Diferenciación comercial | **FOT-01, CAT-01, PER-01**, UX-12, UX-13, UX-11, UX-24, PRE-01, IMG-09, IMG-13, IMG-15, IMG-16, IMG-22, ENT-05, ENT-06, MUE-01, VID-01, OBR-04, AST-01, AG-0, ECO-02, ECO-03 | Piloto con profesionales; precios validados; legal aprobado |
+| **2 · Mejoras rápidas y medición** | Mejor experiencia con bajo riesgo, y saber cuánto cuesta cada imagen | Ver cortes 2a–2f más abajo, más GOV-06a, que se prepara en esta ola | Coste por imagen aceptada conocido; revisión visual |
+| **3 · Nuevos servicios que se pueden cobrar** | Diferenciación comercial | **FOT-01, CAT-01**, UX-12, UX-13, UX-11, UX-24, PRE-01, IMG-09, IMG-13, IMG-15, IMG-16, IMG-22, ENT-05, ENT-06, MUE-01, VID-01, OBR-04, AST-01, AG-0, ECO-02, ECO-03 y, al final, PER-01 | Piloto con profesionales; precios validados; legal aprobado |
 | **4 · Interoperabilidad, asistente y personalización avanzada** | Confianza técnica y productividad | G-01, G-08, G-02, AG-1, AG-2, **PER-02**, PER-03, CAT-02, IMG-14, PAN-01, UX-10, UX-21, UX-26, OBR-05 | Lectura fiable del asistente; consentimiento operativo |
-| **5 · Investigación y gran escala** | Solo con decisión expresa y presupuesto | AG-3, AG-4, AG-5, CAT-03, FOT-02, MUE-02, PAN-02, VID-02, GEN-01, UX-14, LUZ-01, G-04, G-07, ENT-07, GOV-06 si no se hizo antes | — |
+| **5 · Investigación y gran escala** | Solo con decisión expresa y presupuesto | AG-3, AG-4, AG-5, CAT-03, FOT-02, MUE-02, PAN-02, VID-02, GEN-01, UX-14, LUZ-01, G-04, G-07, ENT-07, GOV-06b | — |
+
+**Las olas son grupos de decisión, no lotes de trabajo.** Cada ola se ejecuta en **cortes pequeños**, cada uno con su propia PR, responsable, pruebas, Preview y aceptación independiente. Un corte no espera a otro si no depende de él. Propuesta para la ola 2, la más cargada:
+
+| Corte | Contenido | Por qué juntos | Aceptación |
+|---|---|---|---|
+| 2a · Navegación 3D | UX-22, UX-23, UX-25, UX-05, UX-09 | Todos tocan los controles del visor 3D | Revisión visual escritorio y móvil, regresión de Presentación |
+| 2b · Comparar | UX-07, ENT-04 | La misma cortina y las mismas capturas | Comparación de 2 revisiones; presupuesto rotulado parcial o completo |
+| 2c · Editor | UX-03, UX-08, UX-04, G-06 | Panel, cotas y medición sobre el plano | Cifras de la geometría canónica y deshacer intacto |
+| 2d · Imágenes | IMG-03, IMG-05 a IMG-08, IMG-10, IMG-11, IMG-12, CAM-01 | Sobre `api/render.js` + #180/#182 | Coste previsto visible, pruebas simuladas y presupuesto de prueba autorizado |
+| 2e · Obra | OBR-02, OBR-03 | Evolución 4D de FT3D-8 | Datos solo del plan y C1–C4 vinculados |
+| 2f · Base comercial | BIB-01, ECO-01, HOM-03, ENT-03 | Licencias, medición de coste y contenido de la Home | Registro de licencias; coste por imagen aceptada calculado |
 
 **Lo que respondo a tu pregunta, en una línea:** las tres ideas que recordabas están todas.
 - **Personas del cliente disfrutando del espacio:** PER-01, después PER-02.
@@ -293,3 +318,12 @@ Marca en la sección 3 cada fila con ✔, ✖ o ⏸. Las decisiones que desbloqu
 3. **Ola 1:** encargar HOM-01 + HOM-02 y la puesta al día de ENT-01 (#166).
 4. **Presupuesto de pruebas IA** mensual, para las olas 2–3.
 5. **Abogado o asesor** para GOV-05, que es imprescindible antes de PER-02, FOT-01 y CAT-01.
+
+---
+
+## 7. Registro de cambios
+
+| Versión | Cambio | Origen |
+|---|---|---|
+| 1.0 | Primera consolidación | Propietario, 09/11 |
+| 1.1 | (1) GOV-01 separado en **merge, configuración del entorno y Promote** (GOV-01a/b/c), porque la CI en verde no autoriza las tres. (2) GOV-06 dividido en **06a**, autenticación y cuotas mínimas para servicios de pago (ola 2), y **06b**, multiusuario avanzado (ola 5); dependencias corregidas en IMG-04, AG-1, PER-02 y ENT-07. (3) GOV-08 redefinido como **controles propios de publicación** en `api/share.js`, que guarda en Vercel Blob; se añade la comparación del código en tiempo constante. (4) K4 y nuevo **GOV-09**: acreditar el modelo realmente configurado en lugar de deducirlo. (5) Olas convertidas en **grupos de decisión** y ola 2 dividida en **cortes 2a–2f**. Además: PER-01 pasa detrás de la fiabilidad y el coste de las imágenes; PER-02, requisitos reforzados (menores, evaluación de impacto, borrado verificable); se explicitan los límites en memoria por instancia y la distinción entre coste estimado y facturado. | Revisión externa aportada por el propietario, 09/11 |
