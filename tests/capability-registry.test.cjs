@@ -3,7 +3,7 @@
 // shows 3–4 of them. Pure: reads the file system only.
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const R=require('../js/capability-registry.js'),root=path.resolve(__dirname,'..');
-const PROFESSIONS=['architecture','real-estate','developer','renovation','interior'];
+const PROFESSIONS=['architecture','real-estate','developer','renovation','interior','construction'];
 
 test('every capability names existing modules and tests, a valid state and the verification SHA',()=>{
  const ids=new Set();

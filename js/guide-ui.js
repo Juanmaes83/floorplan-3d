@@ -11,7 +11,9 @@
   ['real-estate',['Inmobiliaria','Real estate agency','房地产机构']],
   ['developer',['Promotora','Property developer','房地产开发商']],
   ['renovation',['Reformas','Renovation','装修施工']],
-  ['interior',['Decoración e interiorismo','Interior design','室内设计']]
+  ['interior',['Decoración e interiorismo','Interior design','室内设计']],
+  // HOM-02: sixth field. Its tools are the FT3D-8 ones already in master (plan, Gantt, 4D evolution from the plan).
+  ['construction',['Constructora / jefe de obra','Construction company / site manager','施工单位 / 项目经理']]
  ];
  // What Rubik is for in each field, using only what the editor does today; the first action is one of the three
  // welcome entries, never a different tool set (docs/product/professional-client-experience-2026-10-21.md, result 1).
@@ -20,7 +22,8 @@
   'real-estate':['Convierte el plano del inmueble en una vivienda amueblada que el comprador puede recorrer en 3D, con tu marca.','Turn the property plan into a furnished home the buyer can walk through in 3D, with your brand.','将房源平面图变成买家可在 3D 中浏览的带家具住宅，并附上你的品牌。'],
   developer:['Prepara cada tipología, también de dos plantas, y preséntala con la misma identidad de marca.','Prepare each unit type, two-storey ones included, and present it with the same brand identity.','准备每种户型（包括两层），并以统一的品牌形象展示。'],
   renovation:['Parte del plano actual, ajusta estancias y huecos y enseña al cliente la propuesta en 3D.','Start from the current plan, adjust rooms and openings and show the client the proposal in 3D.','从现有平面图开始，调整房间和门窗，并在 3D 中向客户展示方案。'],
-  interior:['Amuebla, elige acabados y presenta cada ambiente en 3D a tu cliente.','Furnish, choose finishes and present each room in 3D to your client.','布置家具、选择饰面，并在 3D 中向客户展示每个空间。']
+  interior:['Amuebla, elige acabados y presenta cada ambiente en 3D a tu cliente.','Furnish, choose finishes and present each room in 3D to your client.','布置家具、选择饰面，并在 3D 中向客户展示每个空间。'],
+  construction:['Mide y presupuesta, organiza el plan de obra con su Gantt y enseña al cliente la evolución prevista en 3D.','Measure and budget, organise the works plan with its Gantt chart and show the client the planned evolution in 3D.','计量与预算，用甘特图编排施工计划，并以 3D 向客户展示计划中的施工进展。']
  };
  // HOM-01: what the hero says once a profession is chosen. Only outcomes the editor gives today; without a profession
  // the hero keeps its neutral text. The first action is always an existing entry (upload, example or the 3D walk).
@@ -29,6 +32,7 @@
   'real-estate':{eyebrow:['Para inmobiliarias','For real estate agencies','面向房产中介'],title:['Que el comprador recorra el inmueble antes de visitarlo','Let the buyer walk through the property before visiting','让买家在看房前先浏览房源'],lead:['Convierte el plano en una vivienda amueblada en 3D, preséntala por estancias y genera imágenes fotorrealistas orientativas.','Turn the plan into a furnished 3D home, present it room by room and create indicative photorealistic images.','将平面图变成带家具的 3D 住宅，按房间展示，并生成照片级参考图片。'],first:'walk'},
   developer:{eyebrow:['Para promotoras','For property developers','面向开发商'],title:['Cada tipología, también de dos plantas, con tu marca','Each unit type, two-storey ones included, with your brand','每种户型（含两层）统一品牌形象'],lead:['Prepara las viviendas y sus plantas, preséntalas en 3D con la misma identidad y acompáñalas de imágenes fotorrealistas orientativas.','Prepare the homes and their levels, present them in 3D with the same identity and add indicative photorealistic images.','准备住宅及其楼层，以统一形象 3D 展示，并附上照片级参考图片。'],first:'example'},
   renovation:{eyebrow:['Para empresas de reformas','For renovation companies','面向装修公司'],title:['Enseña la reforma antes de empezar la obra','Show the renovation before work starts','开工前展示改造方案'],lead:['Parte del plano actual, compara propuestas, calcula mediciones y presupuesto, y muestra el resultado en 3D y en imagen fotorrealista orientativa.','Start from the current plan, compare proposals, compute quantities and budget, and show the result in 3D and as an indicative photorealistic image.','从现有平面图开始，比较方案，计算工程量与预算，并以 3D 和照片级参考图片展示结果。'],first:'upload'},
+  construction:{eyebrow:['Para constructoras y jefes de obra','For contractors and site managers','面向施工单位和项目经理'],title:['La obra planificada, explicada en 3D','The planned works, explained in 3D','用 3D 讲清计划中的施工'],lead:['Mediciones y presupuesto, plan de obra con Gantt y dependencias, y la evolución prevista de la obra en 3D a partir de ese plan. No sustituye el seguimiento real de la obra.','Quantities and budget, a works plan with Gantt and dependencies, and the planned evolution of the works in 3D from that plan. It does not replace real site tracking.','工程量与预算、含甘特图和依赖关系的施工计划，以及基于该计划的 3D 施工进展。不能替代真实的现场跟踪。'],first:'example'},
   interior:{eyebrow:['Para decoración e interiorismo','For interior design','面向室内设计'],title:['Ambientes amueblados que tu cliente puede recorrer','Furnished spaces your client can walk through','客户可以漫游的带家具空间'],lead:['Amuebla, elige acabados reales, recorre cada estancia en 3D y genera imágenes fotorrealistas orientativas con estilos alternativos.','Furnish, choose real finishes, walk each room in 3D and create indicative photorealistic images with alternative styles.','布置家具、选择真实饰面、3D 漫游每个房间，并生成不同风格的照片级参考图片。'],first:'example'}
  };
  let audience='';
@@ -213,7 +217,7 @@
   el('h2',tx('Cómo trabajas con Rubik','How you work with Rubik','如何使用 Rubik'),sol);
   const phases=el('ol',undefined,sol,'solutions-phases');phases.setAttribute('aria-label',tx('Fases del proyecto','Project phases','项目阶段'));
   for(const [stage,ic,what] of [[G.stages[0],'upload',['Sube el plano o empieza desde cero','Upload the plan or start from scratch','上传平面图或从零开始']],[G.stages[1],'ruler',['Comprueba la escala con una medida conocida','Check the scale with a known length','用已知尺寸核对比例']],[G.stages[2],'plan',['Estancias, puertas y ventanas; una o dos plantas','Rooms, doors and windows; one or two levels','房间、门窗；一层或两层']],[G.stages[3],'sofa',['Muebles y acabados','Furniture and finishes','家具和饰面']],[G.stages[4],'cube',['Recorre en 3D, presenta y entrega','Walk in 3D, present and deliver','3D 漫游、展示并交付']]]){const li=el('li',undefined,phases);icon(ic,li,'icon phase-icon');el('strong',label(stage),li);el('span',label(what),li);}
-  const deliver={sheet:['Lámina de distribución con tu marca','Floor plan sheet with your brand','带品牌的平面图纸'],batch:['Lote ZIP con vistas 3D y el proyecto editable','ZIP with 3D views and the editable project','含 3D 视图和可编辑项目的 ZIP'],present:['Presentación 3D guiada por estancias','Guided 3D presentation by room','按房间引导的 3D 展示'],walk:['Recorrido 3D por dentro de la vivienda','3D walk-through inside the home','住宅内部 3D 漫游'],project:['Proyecto editable para seguir trabajando','Editable project to keep working','可继续编辑的项目']};
+  const deliver={evolution:['Vídeo y presentación de la evolución de obra prevista','Video and presentation of the planned works evolution','计划施工进展的视频和展示'],sheet:['Lámina de distribución con tu marca','Floor plan sheet with your brand','带品牌的平面图纸'],batch:['Lote ZIP con vistas 3D y el proyecto editable','ZIP with 3D views and the editable project','含 3D 视图和可编辑项目的 ZIP'],present:['Presentación 3D guiada por estancias','Guided 3D presentation by room','按房间引导的 3D 展示'],walk:['Recorrido 3D por dentro de la vivienda','3D walk-through inside the home','住宅内部 3D 漫游'],project:['Proyecto editable para seguir trabajando','Editable project to keep working','可继续编辑的项目']};
   el('h3',tx('Soluciones según tu trabajo','Solutions for your work','按工作类型的解决方案'),sol,'solutions-title');
   const cards=el('div',undefined,sol,'solutions-cards');
   const fields=[
@@ -221,7 +225,8 @@
    ['real-estate','key',['Que el comprador recorra el inmueble antes de visitarlo','Let the buyer walk through the property before visiting','让买家在看房前先浏览房源'],['walk','present','batch']],
    ['developer','building',['Cada tipología, también de dos plantas, con tu imagen de marca','Each unit type, two-storey ones included, with your brand','每种户型（含两层）统一品牌形象'],['batch','present','sheet']],
    ['renovation','hammer',['La propuesta de reforma sobre el plano actual','The renovation proposal on the current plan','在现有平面图上的改造方案'],['walk','sheet','project']],
-   ['interior','palette',['Ambientes amueblados y sus acabados, para recorrer','Furnished rooms and finishes, to walk through','可漫游的带家具空间及饰面'],['walk','present','batch']]
+   ['interior','palette',['Ambientes amueblados y sus acabados, para recorrer','Furnished rooms and finishes, to walk through','可漫游的带家具空间及饰面'],['walk','present','batch']],
+   ['construction','plan',['La obra prevista, del presupuesto al plan y a su evolución en 3D','The planned works, from budget to plan and its 3D evolution','计划中的施工：从预算到计划及其 3D 进展'],['evolution','project','sheet']]
   ];
   for(const [id,ic,problem,gives] of fields){const card=el('article',undefined,cards,'solutions-card');card.dataset.audience=id;
    const head=el('button',undefined,card,'solutions-head');head.type='button';head.setAttribute('aria-expanded','false');const body=el('div',undefined,card,'solutions-body');body.id='solutionsBody-'+id;head.setAttribute('aria-controls',body.id);

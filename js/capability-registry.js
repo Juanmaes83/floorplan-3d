@@ -42,7 +42,7 @@
   C('budget',['Mediciones y presupuesto','Quantities and budget','工程量与预算'],
    ['Cantidades del proyecto, precios propios o de referencia, revisión e IVA; exportación BC3.','Project quantities, your own or reference prices, review and VAT; BC3 export.','项目工程量、自有或参考价格、审核及增值税；BC3 导出。'],
    'available','area:budget',['js/budget-ui.js','js/quantity-schedule-ui.js','js/bc3-budget-core.js'],['tests/budget-ui.browser.test.cjs','tests/quantity-schedule.browser.test.cjs'],
-   ['architecture','renovation','general'],['Un presupuesto con partidas sin precio se muestra como parcial.','A budget with unpriced items is shown as partial.','含未定价项目的预算显示为部分预算。']),
+   ['architecture','renovation','construction','general'],['Un presupuesto con partidas sin precio se muestra como parcial.','A budget with unpriced items is shown as partial.','含未定价项目的预算显示为部分预算。']),
   C('variants',['Comparar propuestas','Compare proposals','比较方案'],
    ['Varias versiones del mismo proyecto lado a lado: superficie, estancias y holguras.','Several versions of the same project side by side: area, rooms and clearances.','同一项目的多个版本并排比较：面积、房间和间距。'],
    'available','area:design',['js/project-variants.js'],['tests/variants.test.cjs','tests/variants.browser.test.cjs'],
@@ -50,7 +50,7 @@
   C('building',['Viviendas de dos plantas','Two-storey homes','两层住宅'],
    ['Cada tipología con sus plantas y escaleras, en 2D y 3D.','Each unit type with its levels and stairs, in 2D and 3D.','每种户型含楼层和楼梯，支持 2D 和 3D。'],
    'available','area:design',['js/building-ui.js','js/building-core.js'],['tests/building.browser.test.cjs','tests/building-presentation.browser.test.cjs'],
-   ['developer']),
+   ['developer','construction']),
   C('brand',['Tu marca en cada entrega','Your brand on every delivery','每次交付都带你的品牌'],
    ['Logo y datos profesionales en láminas, imágenes y presentaciones.','Logo and professional details on sheets, images and presentations.','标志和专业信息出现在图纸、图片和展示中。'],
    'available','area:studio',['js/brand-ui.js','js/brand-core.js'],['tests/brand.browser.test.cjs','tests/brand-core.test.cjs'],
@@ -59,6 +59,16 @@
    ['Archivo de cliente para abrir sin instalar nada, con vídeo del recorrido y comentarios.','A client file that opens without installing anything, with the tour video and comments.','客户无需安装即可打开的文件，附漫游视频和评论。'],
    'available','area:deliver',['js/client-share-ui.js','js/tour-video-ui.js'],['tests/client-share.browser.test.cjs','tests/tour-video.browser.test.cjs'],
    ['real-estate'],['El enlace público en línea está en revisión de seguridad; el archivo local no depende de él.','The online public link is under security review; the local file does not depend on it.','在线公开链接正在进行安全审查；本地文件不依赖它。']),
+  // HOM-02 · Constructora / jefe de obra: FT3D-8 capabilities in master. The 4D evolution is derived from the plan and
+  // the budget: it never states real progress on site.
+  C('construction-plan',['Plan de obra y Gantt','Works plan and Gantt','施工计划与甘特图'],
+   ['Tareas, fechas, dependencias e hitos ligados a los elementos del proyecto y a sus partidas.','Tasks, dates, dependencies and milestones linked to the project elements and budget items.','任务、日期、依赖关系和里程碑，关联项目构件和预算条目。'],
+   'available','area:budget',['js/construction-plan-ui.js','js/construction-schedule-core.js','js/construction-record-core.js'],['tests/m2-s4.browser.test.cjs','tests/construction-schedule-core.test.cjs'],
+   ['construction'],['Es la obra planificada: no registra el avance real ni datos de obra.','It is the planned works: it does not record real progress or site data.','这是计划中的施工：不记录真实进度或现场数据。']),
+  C('evolution-4d',['Evolución de obra en 3D (4D)','Works evolution in 3D (4D)','3D 施工进展（4D）'],
+   ['La obra prevista día a día en 3D, con vídeo y presentación para el cliente, desde el plan y el presupuesto.','The planned works day by day in 3D, with a video and presentation for the client, from the plan and the budget.','基于计划和预算，逐日展示计划施工的 3D 进展，并生成给客户的视频和展示。'],
+   'available','area:deliver',['evolucion/fidelity-app.js','js/construction-context.js','js/construction-delivery-core.js'],['tests/ft3d-8-ux4d.browser.test.cjs','tests/construction-delivery-core.test.cjs'],
+   ['construction'],['Derivada del plan y de los datos disponibles: no es el estado real de ejecución.','Derived from the plan and the available data: it is not the real state of execution.','源自计划和现有数据：不是真实的施工执行状态。']),
   C('furnish',['Amueblar y elegir acabados','Furnish and choose finishes','布置家具与选择饰面'],
    ['Muebles del catálogo y superficies reales por estancia, con material board.','Catalogue furniture and real surfaces by room, with a material board.','按房间布置目录家具和真实饰面，并生成材料板。'],
    'available','area:design',['js/furniture-search.js','js/surface-ui.js','js/moodboard-ui.js'],['tests/surfaces.browser.test.cjs','tests/furniture-search.test.cjs','tests/moodboard.browser.test.cjs'],
@@ -71,7 +81,8 @@
   'real-estate':['walk3d','presentation','render-ai','client-file'],
   developer:['building','presentation','render-ai','brand'],
   renovation:['import','variants','budget','render-ai'],
-  interior:['furnish','render-ai','walk3d','presentation']
+  interior:['furnish','render-ai','walk3d','presentation'],
+  construction:['construction-plan','evolution-4d','budget','building']
  });
  const byId=id=>CAPABILITIES.find(c=>c.id===id)||null;
  function forAudience(audience){return (ORDER[audience]||ORDER.general).map(byId).filter(Boolean);}
