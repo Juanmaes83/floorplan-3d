@@ -1,0 +1,36 @@
+# HOM-01/HOM-02 · Home por profesión: capability registry (GOV-03 minimum), hero and capabilities per profession,
+# and the welcome, guide, work-area and Render IA regressions that share these files. No AI provider is called.
+name: Home por profesión
+on:
+  pull_request:
+    paths: ['index.html', 'js/guide-ui.js', 'js/guide-core.js', 'js/capability-registry.js', 'js/professional-workspace-ui.js', 'js/ai-render-ui.js', 'css/guided-experience.css', 'tests/capability-registry.test.cjs', 'tests/welcome-capabilities.browser.test.cjs', 'tests/professional-entry.browser.test.cjs', 'tests/welcome-generar.browser.test.cjs', '.github/workflows/home-profession.yml']
+  push:
+    branches: [master]
+    paths: ['js/guide-ui.js', 'js/capability-registry.js', 'css/guided-experience.css', '.github/workflows/home-profession.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  home:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax and capability registry
+        run: |
+          node --check js/capability-registry.js && node --check js/guide-ui.js
+          node --test tests/capability-registry.test.cjs
+      - name: Pinned Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Home por profesión and welcome regressions
+        run: node --test --test-concurrency=1 tests/welcome-capabilities.browser.test.cjs tests/professional-entry.browser.test.cjs tests/welcome-generar.browser.test.cjs tests/guide.browser.test.cjs
+      - name: Work areas and Render IA (mocked provider)
+        if: always()
+        run: node --test --test-concurrency=1 tests/professional-workspace.browser.test.cjs tests/ai-render.browser.test.cjs

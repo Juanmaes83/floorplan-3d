@@ -22,6 +22,15 @@
   renovation:['Parte del plano actual, ajusta estancias y huecos y enseña al cliente la propuesta en 3D.','Start from the current plan, adjust rooms and openings and show the client the proposal in 3D.','从现有平面图开始，调整房间和门窗，并在 3D 中向客户展示方案。'],
   interior:['Amuebla, elige acabados y presenta cada ambiente en 3D a tu cliente.','Furnish, choose finishes and present each room in 3D to your client.','布置家具、选择饰面，并在 3D 中向客户展示每个空间。']
  };
+ // HOM-01: what the hero says once a profession is chosen. Only outcomes the editor gives today; without a profession
+ // the hero keeps its neutral text. The first action is always an existing entry (upload, example or the 3D walk).
+ const audienceHero={
+  architecture:{eyebrow:['Para estudios de arquitectura','For architecture studios','面向建筑设计事务所'],title:['Del plano a una propuesta que tu cliente entiende','From the plan to a proposal your client understands','从平面图到客户能看懂的方案'],lead:['Importa y calibra el plano, analiza orientación y emplazamiento, mide y presupuesta, y entrega láminas con tu marca.','Import and calibrate the plan, analyse orientation and site, measure and budget, and deliver sheets with your brand.','导入并校准平面图，分析朝向与场地，计量与预算，并交付带品牌的图纸。'],first:'upload'},
+  'real-estate':{eyebrow:['Para inmobiliarias','For real estate agencies','面向房产中介'],title:['Que el comprador recorra el inmueble antes de visitarlo','Let the buyer walk through the property before visiting','让买家在看房前先浏览房源'],lead:['Convierte el plano en una vivienda amueblada en 3D, preséntala por estancias y genera imágenes fotorrealistas orientativas.','Turn the plan into a furnished 3D home, present it room by room and create indicative photorealistic images.','将平面图变成带家具的 3D 住宅，按房间展示，并生成照片级参考图片。'],first:'walk'},
+  developer:{eyebrow:['Para promotoras','For property developers','面向开发商'],title:['Cada tipología, también de dos plantas, con tu marca','Each unit type, two-storey ones included, with your brand','每种户型（含两层）统一品牌形象'],lead:['Prepara las viviendas y sus plantas, preséntalas en 3D con la misma identidad y acompáñalas de imágenes fotorrealistas orientativas.','Prepare the homes and their levels, present them in 3D with the same identity and add indicative photorealistic images.','准备住宅及其楼层，以统一形象 3D 展示，并附上照片级参考图片。'],first:'example'},
+  renovation:{eyebrow:['Para empresas de reformas','For renovation companies','面向装修公司'],title:['Enseña la reforma antes de empezar la obra','Show the renovation before work starts','开工前展示改造方案'],lead:['Parte del plano actual, compara propuestas, calcula mediciones y presupuesto, y muestra el resultado en 3D y en imagen fotorrealista orientativa.','Start from the current plan, compare proposals, compute quantities and budget, and show the result in 3D and as an indicative photorealistic image.','从现有平面图开始，比较方案，计算工程量与预算，并以 3D 和照片级参考图片展示结果。'],first:'upload'},
+  interior:{eyebrow:['Para decoración e interiorismo','For interior design','面向室内设计'],title:['Ambientes amueblados que tu cliente puede recorrer','Furnished spaces your client can walk through','客户可以漫游的带家具空间'],lead:['Amuebla, elige acabados reales, recorre cada estancia en 3D y genera imágenes fotorrealistas orientativas con estilos alternativos.','Furnish, choose real finishes, walk each room in 3D and create indicative photorealistic images with alternative styles.','布置家具、选择真实饰面、3D 漫游每个房间，并生成不同风格的照片级参考图片。'],first:'example'}
+ };
  let audience='';
  try{const stored=originalStorage.getItem(audienceKey);if(audiences.some(([id])=>id===stored))audience=stored;}catch{}
  try{const raw=originalStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed.version===1&&parsed.entries&&typeof parsed.entries==='object'&&!Array.isArray(parsed.entries))data=parsed;}}catch{storageError=tx('No se pudo recuperar la guía. El plano se conserva.','The guide could not be restored. The plan is preserved.','无法恢复指南。平面图已保留。');}
@@ -110,8 +119,18 @@
   // Always in the Home's top bar, whatever the chosen field; it opens over the Home and closing it returns here.
   btn('welcomeLegal',tx('Legal y autoría','Legal & authorship','法律与作者'),()=>window.FloorPlanLegal?.open(),nav).classList.add('welcome-legal');
   const intro=el('section',undefined,shell,'welcome-intro'),left=el('div',undefined,intro);
-  el('p',tx('Para inmobiliarias, promotoras y estudios','For agencies, developers and studios','面向房产中介、开发商和设计事务所'),left,'welcome-eyebrow');const h=el('h1',tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？'),left);h.id='welcomeDialogTitle';
-  el('p',tx('Convierte un plano en una vivienda editable en 2D y 3D, amuéblala y preséntala a tu cliente. Te acompañamos desde el primer paso.','Turn a plan into an editable home in 2D and 3D, furnish it and present it to your client. We guide you from the first step.','把平面图变成可编辑的 2D 和 3D 住宅，布置家具并展示给客户。从第一步开始提供指南。'),left,'lead');
+  const eyebrow=el('p','',left,'welcome-eyebrow');const h=el('h1','',left);h.id='welcomeDialogTitle';const lead=el('p','',left,'lead');
+  // HOM-01: two working calls to action in the hero; both run an existing entry, never a new tool.
+  const heroActions=el('div',undefined,left,'welcome-hero-actions');
+  const heroPrimary=btn('welcomeHeroPrimary','',()=>{},heroActions,true),heroSecondary=btn('welcomeHeroSecondary',tx('Ver lo que puedes hacer hoy','See what you can do today','查看现在可以做什么'),()=>{const t=document.getElementById('welcomeCapabilities');t?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});t?.querySelector('h2')?.focus({preventScroll:true});},heroActions);heroSecondary.classList.add('guide-link');
+  const FIRST={upload:[['Subir mi plano','Upload my plan','上传我的平面图'],()=>document.getElementById('welcomeUpload').click()],example:[['Probar el ejemplo','Try the example','试用示例'],()=>document.getElementById('welcomeExample').click()],walk:[['Recorrer el ejemplo en 3D','Walk through the example in 3D','在 3D 中漫游示例'],()=>safe(walkExample)]};
+  function renderHero(){const c=audienceHero[audience];
+   eyebrow.textContent=c?label(c.eyebrow):tx('Para inmobiliarias, promotoras y estudios','For agencies, developers and studios','面向房产中介、开发商和设计事务所');
+   h.textContent=c?label(c.title):tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？');
+   lead.textContent=c?label(c.lead):tx('Convierte un plano en una vivienda editable en 2D y 3D, amuéblala y preséntala a tu cliente. Te acompañamos desde el primer paso.','Turn a plan into an editable home in 2D and 3D, furnish it and present it to your client. We guide you from the first step.','把平面图变成可编辑的 2D 和 3D 住宅，布置家具并展示给客户。从第一步开始提供指南。');
+   const [text,fn]=FIRST[c?.first||'example'];heroPrimary.textContent=label(text);heroPrimary.onclick=()=>fn();heroPrimary.dataset.first=c?.first||'example';
+   welcome.dataset.audience=audience||'';}
+  renderHero();
   el('p',tx('Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional.','You get an editable 2D plan and its 3D view, stored in this browser. Measurements are indicative, not a professional survey.','你将得到可编辑的 2D 平面图及其 3D 视图，保存在此浏览器中。尺寸仅供参考，不能替代专业测量。'),left,'welcome-result');
   // «El plano | La vivienda en 3D»: the same example drawn in 2D and as a real 3D capture made with Rubik
   // (assets/welcome/example-3d.webp), so the step from plan to home is shown, not described.
@@ -138,7 +157,7 @@
    audience=audience===id?'':id;
    try{if(audience)originalStorage.setItem(audienceKey,audience);else originalStorage.removeItem(audienceKey);}catch{}
    for(const node of audienceOptions.children)node.setAttribute('aria-pressed',String(node.id==='welcomeAudience-'+audience));
-   showPurpose();
+   showPurpose();renderHero();renderCapabilities();
   },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));}
   // The chosen field answers «what is it for me» and offers the same first action as the entries above.
   const purpose=el('div',undefined,audienceSection,'welcome-audience-purpose');purpose.id='welcomeAudiencePurpose';purpose.setAttribute('aria-live','polite');
@@ -147,6 +166,37 @@
    btn('welcomeAudienceStart',tx('Empezar: subir un plano','Start: upload a plan','开始：上传平面图'),()=>document.getElementById('welcomeUpload').click(),row,true);
    btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
   showPurpose();
+  // HOM-01: «Lo que puedes hacer hoy» — 3–4 capabilities for the chosen profession (or a neutral set), straight from the
+  // verified registry (js/capability-registry.js, GOV-03). Each card says what it gives, its state, its honest limits
+  // and opens the existing place where it lives: the upload entry, the example walk or a professional work area.
+  const CAPS=window.FloorPlanCapabilities,STATE={available:['Disponible','Available','可用'],validation:['En validación','In validation','验证中'],preparation:['En preparación','In preparation','准备中']};
+  const AREA={design:['Diseñar','Design','设计'],analyze:['Analizar','Analyze','分析'],budget:['Presupuestar','Budget','预算'],deliver:['Entregar','Deliver','交付'],studio:['Mi estudio','My studio','我的事务所']};
+  function goArea(key){if(!window.FloorPlanProfessionalUI)return toast(tx('Esta área no está disponible en esta página.','This area is not available on this page.','此页面无法使用该区域。'),5000);closeWelcome();FloorPlanProfessionalUI.open(key);}
+  function access(c){if(c.access==='upload')return [tx('Subir un plano','Upload a plan','上传平面图'),()=>document.getElementById('welcomeUpload').click()];
+   if(c.access==='walk')return [tx('Recorrer el ejemplo en 3D','Walk the example in 3D','在 3D 中漫游示例'),()=>safe(walkExample)];
+   const key=c.access.slice(5);if(key==='design')return [tx('Ir al editor','Go to the editor','前往编辑器'),()=>closeWelcome()];return [tx('Abrir ','Open ','打开 ')+label(AREA[key]),()=>goArea(key)];}
+  const caps=el('section',undefined,shell,'welcome-capabilities');caps.id='welcomeCapabilities';caps.setAttribute('aria-labelledby','welcomeCapabilitiesTitle');
+  function renderCapabilities(){caps.replaceChildren();caps.hidden=!CAPS;if(!CAPS)return;
+   const head=el('h2','',caps);head.id='welcomeCapabilitiesTitle';head.tabIndex=-1;
+   const who=audiences.find(a=>a[0]===audience);head.textContent=who?tx('Lo que puedes hacer hoy · ','What you can do today · ','现在可以做什么 · ')+label(who[1]):tx('Lo que puedes hacer hoy con Rubik','What you can do with Rubik today','现在可以用 Rubik 做什么');
+   const grid=el('div',undefined,caps,'capability-cards');
+   for(const c of CAPS.forAudience(audience||'general')){const card=el('article',undefined,grid,'capability-card');card.dataset.capability=c.id;
+    const top=el('div',undefined,card,'capability-top');el('h3',label(c.name),top);const badge=el('span',label(STATE[c.state]),top,'capability-state');badge.dataset.state=c.state;
+    el('p',label(c.benefit),card,'capability-benefit');if(c.limits)el('p',label(c.limits),card,'capability-limits');
+    if(c.state==='available'){const [text,fn]=access(c);const b=btn('welcomeCap-'+c.id,text,()=>safe(fn),card);b.classList.add('capability-go');}}
+   el('p',tx('Todas las herramientas están disponibles para cualquier profesión; aquí solo cambia el orden.','Every tool is available to any profession; only the order changes here.','所有工具对任何职业都可用；这里只改变顺序。'),caps,'capability-note');}
+  renderCapabilities();
+  // HOM-01: Render IA, already active in Production, described honestly and reached where it really lives:
+  // Deliver → project views → «Render IA» on a real view (it needs a project, a 3D view and the studio access code).
+  const ai=CAPS?.byId('render-ai');
+  if(ai){const band=el('section',undefined,shell,'welcome-render-ai');band.id='welcomeRenderAI';band.setAttribute('aria-labelledby','welcomeRenderAITitle');
+   const text=el('div',undefined,band,'welcome-render-ai-text');el('p',tx('Ya disponible','Available now','现已可用'),text,'welcome-render-ai-eyebrow');
+   const t=el('h2',tx('Render IA fotorrealista desde tu proyecto','Photorealistic AI render from your project','基于项目的照片级 AI 渲染'),text);t.id='welcomeRenderAITitle';
+   el('p',label(ai.benefit),text);const ul=el('ul',undefined,text,'welcome-render-ai-facts');
+   for(const f of [['Parte de una vista 3D real de tu proyecto, en Entregar → Vistas del proyecto.','It starts from a real 3D view of your project, in Deliver → Project views.','从项目的真实 3D 视图开始（交付 → 项目视图）。'],['Es una imagen orientativa: la geometría válida sigue siendo la del proyecto.','It is an indicative image: the valid geometry is still the project’s.','这是参考图片：有效几何仍以项目为准。'],['Necesita el código de acceso de tu estudio; cada imagen consume créditos de IA.','It needs your studio access code; each image uses AI credits.','需要工作室访问码；每张图片消耗 AI 额度。']])el('li',label(f),ul);
+   btn('welcomeRenderAIGo',tx('Abrir Entregar','Open Deliver','打开交付'),()=>goArea('deliver'),text,true);
+   const fig=el('figure',undefined,band,'welcome-render-ai-visual');const img=el('img',undefined,fig,'welcome-render-ai-shot');img.src='assets/welcome/example-3d.webp';img.loading='lazy';img.alt=tx('Vista 3D real del proyecto de ejemplo, punto de partida del Render IA','Real 3D view of the example project, starting point of the AI render','示例项目的真实 3D 视图，AI 渲染的起点');
+   el('figcaption',tx('Vista 3D real de Rubik: el punto de partida del Render IA','Real Rubik 3D view: the starting point of the AI render','Rubik 真实 3D 视图：AI 渲染的起点'),fig);}
   // Line icons (24×24, stroke = currentColor) for the walk band, the phases and the field cards.
   const ICON={upload:'<path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/>',ruler:'<path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2m1-5 2 2m1-5 2 2"/>',plan:'<path d="M3 4h18v16H3z"/><path d="M3 12h8v8M11 4v5m4 3h6"/>',sofa:'<path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z"/><path d="M6 18v2m12-2v2"/>',cube:'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12 4 7.5M12 12l8-4.5M12 12v9"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="m9 21 3-7 3 3v4m-6-9 3-3 3 2 3 1M8 12l1-4"/>',compass:'<path d="M12 3 7 21m5-18 5 18M8 16h8"/><circle cx="12" cy="3" r="1"/>',key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9m-4 4 3 3m-6 0 2 2"/>',building:'<path d="M4 21V5l8-3v19M12 9h8v12M7 8h2m-2 4h2m-2 4h2m6-3h2m-2 4h2M2 21h20"/>',hammer:'<path d="m14 6 4 4M3 21l9-9M12 5l3-3 7 7-3 3z"/>',palette:'<path d="M12 3a9 9 0 1 0 0 18c1 0 2-1 1.5-2s.5-2 1.5-2h2a4 4 0 0 0 4-4c0-5.5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="8" r="1"/>'};
   const icon=(name,parent,cls='icon')=>{const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('class',cls);SafeDOM.markup(svg,ICON[name]);parent.append(svg);return svg;};
