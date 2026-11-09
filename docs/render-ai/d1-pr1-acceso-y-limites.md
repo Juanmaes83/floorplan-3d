@@ -4,9 +4,9 @@
 
 ## Por qué va primero
 
-- Master usa por defecto un modelo retirado (`gpt-image-1`), así que el render probablemente falla hoy.
-- Si se arreglara solo el modelo (PR-2), se reactivaría un gasto controlado únicamente por un código compartido.
-- Por eso, primero se cierran puertas.
+- El propietario confirma que **el render funciona hoy en Production** y que la cuenta del proveedor tiene saldo.
+- El gasto solo lo controla un código compartido, sin ningún límite en el servidor.
+- Por eso, primero se cierran puertas, sin apagar lo que funciona (ver «Efecto al promocionar»).
 
 ## Qué cambia (solo `api/render.js` y los mensajes de `js/ai-render-ui.js`)
 
@@ -46,9 +46,9 @@ Los mensajes nuevos de rechazo **no borran** un código de acceso válido guarda
 
 ## Efecto al fusionar y promocionar
 
-**Tras el Promote, el Render IA queda apagado en Production** hasta que el propietario lo active. Es intencionado.
+**Sin ese paso previo, tras el Promote el Render IA quedaría apagado en Production** (503 `disabled`) hasta que se añada la variable.
 
-Hoy probablemente ya falla por el modelo retirado, así que no se pierde nada que funcione.
+**Decisión del propietario (opción A):** antes del Promote, añadir `RUBIK_RENDER_ENABLED=1` en las variables de Production de Vercel. Así el render sigue funcionando sin interrupción, ya con límites.
 
 ## Activación (solo el propietario, cuando lo decida)
 
