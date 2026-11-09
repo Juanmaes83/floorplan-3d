@@ -1,6 +1,6 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
-**Fecha:** 09/11/2026 · **Versión:** 1.1 (incorpora 5 correcciones de revisión, ver §7) · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
+**Fecha:** 09/11/2026 · **Versión:** 1.2 (correcciones de revisión, ver §7) · **Estado: PROPUESTO** · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
 **Base de verificación:** `master@8896055` (= `de52d57` + PR #180 acceso y límites + PR #182 consumo y coste). Tras fusionar la PR #181, master queda en `5fb7a5c`. Production sigue en `de52d57`.
 
 ## 0. Para qué sirve y cómo usarlo
@@ -85,8 +85,9 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 |---|---|---|---|---|---|---|---|---|
 | GOV-01a | Render IA D1: **fusionar** #180, #182 y #181 con CI verde sobre el commit exacto | V-01, G6, W4, IMG-01/02 | **E**: #180, #182 y #181 fusionadas (master `5fb7a5c`) | ★★★★★ | B | — | 0 | ✔ hecho el 09/11 |
 | GOV-01b | Render IA D1: **configurar el entorno** de Production (`RUBIK_RENDER_ENABLED=1` y, opcionalmente, las tarifas) | — | N | ★★★★★ | B (lo hace el propietario) | GOV-01a | 0 | ☐ |
-| GOV-01c | Render IA D1: **activar en Production (Promote)** y verificar después | — | N | ★★★★★ | B | GOV-01b + autorización expresa | 0 | ☐ |
-| GOV-09 | **Acreditar el modelo de imagen configurado** en Production (variable `RUBIK_RENDER_MODEL`; si no existe, el código usa `gpt-image-1`) y que sigue operativo. Tras el Promote, el registro de #182 muestra el modelo configurado en cada llamada. | K4 | N | ★★★★ | B | GOV-01c | 0 | ☐ |
+| GOV-01c | Render IA D1: **activar en Production (Promote)** y verificar después | — | N | ★★★★★ | B | GOV-01b, GOV-09a + autorización expresa | 0 | ☐ |
+| GOV-09a | **Antes del Promote:** acreditar el modelo configurado (valor de `RUBIK_RENDER_MODEL` en Vercel; si no existe, el código usa `gpt-image-1`) y su compatibilidad con **una sola prueba autorizada en un entorno de prueba** (Preview con `RUBIK_RENDER_ENABLED=1`), con coste visible gracias a #182 | K4 | N | ★★★★★ | B | GOV-01a, autorización de gasto de prueba | 0 | ☐ |
+| GOV-09b | **Después del Promote:** confirmar en el registro de Production (`rubik-render`) que el modelo y el estado coinciden con lo acreditado en GOV-09a | K4 | N | ★★★ | B | GOV-01c | 0 | ☐ |
 | GOV-02 | Cerrar o archivar PR obsoletas cuyo contenido ya está en master (#133–#151, #90) | F7 «50 PR», F8 C10 | N | ★★★ | B | — | 0 | ☐ |
 | GOV-03 | Registro único de capacidades «Disponible / En validación / En preparación», con SHA y prueba | UX-02, HUX-QA-01, F1 §7 | N | ★★★★ | B-M | — | 0 | ☐ |
 | GOV-04 | Decidir qué documentos de la rama de preparación pasan a master como documentación | F8 D7 | R | ★★ | B | — | 0 | ☐ |
@@ -94,7 +95,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | GOV-06a | **Autenticación y cuotas mínimas por profesional** para los servicios IA de pago (sustituir el código compartido; cuota y gasto por cuenta) | F1 §1, IMG-04 | N | ★★★★★ | A | GOV-05 | 2 | ☐ |
 | GOV-06b | Plataforma multiusuario avanzada: equipos, roles, organizaciones, portal | C-03, ENT-07 | N | ★★★ | MA | GOV-06a | 5 | ☐ |
 | GOV-07 | Pruebas en hardware real (iOS, Android, GPU de escritorio), DPR adaptativo y contexto WebGL | G4 | N | ★★★★ | M | — | 1 | ☐ |
-| GOV-08 | **Controles propios de publicación** en `api/share.js`, que guarda archivos en Vercel Blob con el mismo código compartido del render: autorización propia, tamaño, cuota de almacenamiento, caducidad y revocación, y comparación del código en tiempo constante (hoy usa `!==`). **No** reutilizar el interruptor del Render IA. | F10, ENT-02 | P | ★★★★ | M | — | 1 | ☐ |
+| GOV-08 | **Publicación de enlaces de cliente segura en conjunto** (`api/share.js`, que guarda en Vercel Blob). Lo principal: (1) dejar de depender del **código compartido** del render (permiso de publicación propio, por profesional cuando exista GOV-06a); (2) **revocación individual sencilla** de cada enlace desde RUBIK, hoy solo posible borrando a mano en el panel de Vercel Blob; (3) caducidad opcional; (4) tamaño y cuota de almacenamiento; (5) registro de qué se publicó y cuándo. Además, comparación del código en tiempo constante (hoy usa `!==`), un detalle menor frente a lo anterior. **No** reutilizar el interruptor del Render IA. | F10, ENT-02 | P | ★★★★★ | M | GOV-06a para (1) por profesional | 1 | ☐ |
 
 ### B · Home y descubrimiento
 
@@ -102,7 +103,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 |---|---|---|---|---|---|---|---|---|
 | HOM-01 | Home por profesión: hero, prueba visual real, 3–4 ventajas con acceso real, CTA | HOME-UX-E2 H1, W1, G7, UX-01, M1 | P (5 perfiles) | ★★★★★ | M | GOV-03 | 1 | ☐ |
 | HOM-02 | 6.º perfil **Constructora / jefe de obra** (bloqueo «hasta S4» ya superado) | HUX-DEC-04 | N | ★★★★ | B | HOM-01 | 1 | ☐ |
-| HOM-03 | Sección «Nuevos servicios IA» en la Home, **solo** con lo que esté en master | F7 §3.4 E | N | ★★★ | B | GOV-01, GOV-03 | 2 | ☐ |
+| HOM-03 | Sección «Nuevos servicios IA» en la Home, **solo** con lo que esté **activo en Production** | F7 §3.4 E | N | ★★★ | B | GOV-01c, GOV-09b, GOV-03 | 2 | ☐ |
 
 ### C · Entregas y experiencia del cliente final
 
@@ -265,7 +266,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | K1 | **Prompt libre** («describe los cambios») frente a **listas cerradas** de estilos y acabados | Maket M9 / F1, B2/B8, #180 | Mantener listas cerradas como modo por defecto. Un campo libre **solo** en el modo avanzado, con autenticación (GOV-06a), moderación y límite de gasto. No se elimina ninguna de las dos ideas: se ordenan. | ☐ |
 | K2 | **Personas reales del cliente** (PER-02) frente a privacidad y protección de datos | F1 IMG-20, F3 G9 | Primero PER-01 (genéricas). PER-02 solo después del visto bueno legal (GOV-05): consentimiento escrito y revocable, borrado efectivo, almacenamiento aislado y aviso de imagen generada. | ☐ |
 | K3 | **360**: «diferido» (31/10) frente a «reabierto como estudio» (05/11) | F7, F3 | Se mantiene como **estudio**: PAN-01 conceptual rotulado en la ola 4, y PAN-02 diferido. No se implementa sin tu OK. | ☐ |
-| K4 | **Modelo de imagen**: master usa `gpt-image-1` por defecto, salvo que `RUBIK_RENDER_MODEL` diga otro. La rama de compatibilidad lo cambia. El propietario informa de que el render funcionó hace días. | F1 §1, rama `7e738ec`, código de master | **No deducir el modelo ni del código ni de una prueba histórica.** Antes de decidir, acreditar el valor configurado en Vercel y que funciona hoy (GOV-09). Después, mantener o cambiar comparando coste y calidad con IMG-02. La PR-2 queda en espera de ese dato. | ☐ |
+| K4 | **Modelo de imagen**: master usa `gpt-image-1` por defecto, salvo que `RUBIK_RENDER_MODEL` diga otro. La rama de compatibilidad lo cambia. El propietario informa de que el render funcionó hace días. | F1 §1, rama `7e738ec`, código de master | **No deducir el modelo ni del código ni de una prueba histórica.** Antes de decidir, acreditar el valor configurado en Vercel y que funciona hoy (GOV-09a, antes del Promote). Después, mantener o cambiar comparando coste y calidad con IMG-02. La PR-2 queda en espera de ese dato. | ☐ |
 | K5 | **Perfil Constructora**: «solo con S4 integrado» frente a S4 ya en master | F5 HUX-DEC-04 | Desbloqueado (HOM-02), sin prometer obra real. | ☐ |
 | K6 | **Precios de paquetes** (F3) frente a «no fijar tarifa sin datos» (F1 §5) | F3, F1 | Los precios de F3 son **hipótesis de experimento**. Se validan con ECO-01 y ECO-03 antes de publicarse. | ☐ |
 | K7 | **Move Rooms**: «intercambiar metadatos y reamueblar» frente a la integridad geométrica | Maket M3, F8 | UX-26 (solo el uso, con aviso) como paso mínimo; UX-14 real diferido. | ☐ |
@@ -282,7 +283,7 @@ El orden sigue tres criterios: **(1)** cerrar lo que ya está casi hecho, **(2)*
 
 | Ola | Objetivo | Mejoras | Condición para pasar a la siguiente |
 |---|---|---|---|
-| **0 · Cerrar y ordenar** | Nada nuevo; terminar lo empezado | GOV-01a, GOV-01b, GOV-01c, GOV-09, IMG-01, IMG-02, GOV-02, GOV-03, GOV-04 | Render IA D1 en Production con límites, modelo acreditado y registro de capacidades creado |
+| **0 · Cerrar y ordenar** | Nada nuevo; terminar lo empezado | GOV-01a, GOV-01b, GOV-09a, GOV-01c, GOV-09b, IMG-01, IMG-02, GOV-02, GOV-03, GOV-04 | Render IA D1 en Production con límites, modelo acreditado y registro de capacidades creado |
 | **1 · Vender lo que ya existe** | Que cada profesional entienda RUBIK y pueda entregar al cliente con seguridad | HOM-01, HOM-02, ENT-01, ENT-02, OBR-01, GOV-05, GOV-07, GOV-08 | Home revisada por ti, #166 integrada y segura, legal iniciado |
 | **2 · Mejoras rápidas y medición** | Mejor experiencia con bajo riesgo, y saber cuánto cuesta cada imagen | Ver cortes 2a–2f más abajo, más GOV-06a, que se prepara en esta ola | Coste por imagen aceptada conocido; revisión visual |
 | **3 · Nuevos servicios que se pueden cobrar** | Diferenciación comercial | **FOT-01, CAT-01**, UX-12, UX-13, UX-11, UX-24, PRE-01, IMG-09, IMG-13, IMG-15, IMG-16, IMG-22, ENT-05, ENT-06, MUE-01, VID-01, OBR-04, AST-01, AG-0, ECO-02, ECO-03 y, al final, PER-01 | Piloto con profesionales; precios validados; legal aprobado |
@@ -327,3 +328,4 @@ Marca en la sección 3 cada fila con ✔, ✖ o ⏸. Las decisiones que desbloqu
 |---|---|---|
 | 1.0 | Primera consolidación | Propietario, 09/11 |
 | 1.1 | (1) GOV-01 separado en **merge, configuración del entorno y Promote** (GOV-01a/b/c), porque la CI en verde no autoriza las tres. (2) GOV-06 dividido en **06a**, autenticación y cuotas mínimas para servicios de pago (ola 2), y **06b**, multiusuario avanzado (ola 5); dependencias corregidas en IMG-04, AG-1, PER-02 y ENT-07. (3) GOV-08 redefinido como **controles propios de publicación** en `api/share.js`, que guarda en Vercel Blob; se añade la comparación del código en tiempo constante. (4) K4 y nuevo **GOV-09**: acreditar el modelo realmente configurado en lugar de deducirlo. (5) Olas convertidas en **grupos de decisión** y ola 2 dividida en **cortes 2a–2f**. Además: PER-01 pasa detrás de la fiabilidad y el coste de las imágenes; PER-02, requisitos reforzados (menores, evaluación de impacto, borrado verificable); se explicitan los límites en memoria por instancia y la distinción entre coste estimado y facturado. | Revisión externa aportada por el propietario, 09/11 |
+| 1.2 | (1) HOM-03 ya no depende del antiguo GOV-01, sino de GOV-01c, GOV-09b y GOV-03, y solo anuncia lo **activo en Production**. (2) GOV-09 dividido: **GOV-09a**, acreditar el modelo y su compatibilidad con una prueba autorizada **antes** del Promote (GOV-01c pasa a depender de ella), y **GOV-09b**, confirmarlo en el registro **después**. (3) GOV-08 reordenado: lo principal es el código compartido, el permiso de publicación propio y la **revocación individual** de enlaces; la comparación en tiempo constante es un detalle menor. | Segunda revisión externa aportada por el propietario, 09/11 |
