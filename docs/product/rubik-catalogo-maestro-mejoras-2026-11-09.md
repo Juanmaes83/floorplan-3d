@@ -1,7 +1,7 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
 **Fecha:** 09/11/2026 · **Versión:** 1.1 (incorpora 5 correcciones de revisión, ver §7) · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
-**Base de verificación:** `master@8896055` (= `de52d57` + PR #180 acceso y límites + PR #182 consumo y coste). La PR #181 está reconciliada con ese master y en CI. Production sigue en `de52d57`.
+**Base de verificación:** `master@8896055` (= `de52d57` + PR #180 acceso y límites + PR #182 consumo y coste). Tras fusionar la PR #181, master queda en `5fb7a5c`. Production sigue en `de52d57`.
 
 ## 0. Para qué sirve y cómo usarlo
 
@@ -83,7 +83,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 
 | ID | Mejora | Alias de origen | Estado | Valor | Dif. | Depende de | Ola | Decisión |
 |---|---|---|---|---|---|---|---|---|
-| GOV-01a | Render IA D1: **fusionar** #180, #182 y #181 con CI verde sobre el commit exacto | V-01, G6, W4, IMG-01/02 | #180 y #182 en master; #181 en CI | ★★★★★ | B | — | 0 | ✔ (merge autorizado el 09/11) |
+| GOV-01a | Render IA D1: **fusionar** #180, #182 y #181 con CI verde sobre el commit exacto | V-01, G6, W4, IMG-01/02 | **E**: #180, #182 y #181 fusionadas (master `5fb7a5c`) | ★★★★★ | B | — | 0 | ✔ hecho el 09/11 |
 | GOV-01b | Render IA D1: **configurar el entorno** de Production (`RUBIK_RENDER_ENABLED=1` y, opcionalmente, las tarifas) | — | N | ★★★★★ | B (lo hace el propietario) | GOV-01a | 0 | ☐ |
 | GOV-01c | Render IA D1: **activar en Production (Promote)** y verificar después | — | N | ★★★★★ | B | GOV-01b + autorización expresa | 0 | ☐ |
 | GOV-09 | **Acreditar el modelo de imagen configurado** en Production (variable `RUBIK_RENDER_MODEL`; si no existe, el código usa `gpt-image-1`) y que sigue operativo. Tras el Promote, el registro de #182 muestra el modelo configurado en cada llamada. | K4 | N | ★★★★ | B | GOV-01c | 0 | ☐ |
