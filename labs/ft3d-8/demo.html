@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%2216%22 height=%2216%22 fill=%22%23e8622c%22/%3E%3C/svg%3E">
+<title>FT3D-8 demo ilustrativa — RUBIK (FIXTURE)</title>
+<link rel="stylesheet" href="../../evolucion/lab.css">
+<script type="importmap">
+{"imports":{
+  "three":"../../vendor/three/build/three.module.js",
+  "three/addons/":"../../vendor/three/examples/jsm/"
+}}
+</script>
+<!-- FT3D-8 pure core (same files the editor will use later). No API calls, no external requests. -->
+<script src="../../js/budget-core.js"></script>
+<script src="../../js/construction-schedule-core.js"></script>
+<script src="../../js/construction-visual-state.js"></script>
+<script src="../../js/construction-gantt-adapter.js"></script>
+<script src="../../js/construction-lab-presenter.js"></script>
+<script src="./lab-fixture.js"></script>
+<script type="module" src="./app.js"></script>
+</head>
+<body data-stage="inicio">
+<header class="topbar">
+  <span class="brand"><i></i>RUBIK // FT3D-8 <em>[VISUAL LAB]</em></span>
+  <span class="tab on">DEMO ILUSTRATIVA · casa ficticia</span><a class="tab" href="./index.html" style="color:#fff">Laboratorio de fidelidad →</a>
+  <span class="fixture" role="status"><b>DATOS FIXTURE</b><span class="long"> · demostración · no es un proyecto real de cliente</span><span class="short"> · NO REAL</span></span>
+</header>
+<main>
+  <section class="stagewrap" aria-label="Escena 3D de la construcción planificada">
+    <canvas id="stage"></canvas>
+    <div class="hud">
+      <div class="tags"><span class="tag dark">[FT3D-8<em> // LAB</em>]</span><span class="tag">PLAN FIXTURE · REV fixture-rev-1</span></div>
+      <h1>PLAN DE OBRA EN <span class="num"><b id="weeksCount">–</b> SEMANAS.</span></h1>
+      <p class="meta" id="metaLine"></p>
+      <p class="fixture-line" id="fixtureLabel"></p>
+    </div>
+    <div class="cams" role="group" aria-label="Cámara">
+      <span class="lbl">CAM</span>
+      <button data-view="auto" aria-pressed="true">AUTO</button><button data-view="iso" aria-pressed="false">ISO</button>
+      <button data-view="front" aria-pressed="false">ALZADO</button><button data-view="top" aria-pressed="false">PLANTA</button>
+      <button data-view="free" aria-pressed="false">LIBRE</button>
+    </div>
+    <div class="stamp" id="cardStage" data-stage="inicio">INICIO</div>
+  </section>
+  <nav class="transport" aria-label="Controles de reproducción">
+    <button id="reset" title="Reiniciar (Inicio)" aria-label="Reiniciar">⏮</button>
+    <button id="wback" title="Semana anterior (Shift+←)" aria-label="Semana anterior">«</button>
+    <button id="back" title="Día anterior (←)" aria-label="Día anterior">‹</button>
+    <button id="play" class="play" title="Reproducir / pausa (Espacio)" aria-label="Reproducir">▶</button>
+    <button id="fwd" title="Día siguiente (→)" aria-label="Día siguiente">›</button>
+    <button id="wfwd" title="Semana siguiente (Shift+→)" aria-label="Semana siguiente">»</button>
+    <button id="end" title="Final del plan (Fin)" aria-label="Final del plan">⏭</button>
+    <input id="scrub" type="range" min="0" max="1" step="0.01" value="0" aria-label="Línea de tiempo">
+    <select id="weekSel" aria-label="Seleccionar semana"></select>
+    <span class="speed" role="group" aria-label="Velocidad"><button data-speed="1" aria-pressed="true">×1</button><button data-speed="2" aria-pressed="false">×2</button><button data-speed="4" aria-pressed="false">×4</button></span>
+    <output id="dateReadout"></output>
+  </nav>
+  <section class="panel">
+    <article class="card" aria-live="polite">
+      <div class="cardtop"><span id="cardWeek">SEM 00</span><span id="cardDate"></span></div>
+      <p class="evidence" id="cardEvidence"></p>
+      <h2 id="cardHeadline"></h2>
+      <ul id="cardTasks"></ul>
+      <p class="rev" id="revisionNote"></p>
+    </article>
+    <div class="ganttwrap"><div class="gantt" id="gantt"></div>
+      <p class="legend"><b>PLAN, NO EJECUCIÓN.</b> <i class="k done"></i>completada según plan <i class="k act"></i>en curso <i class="k todo"></i>pendiente ·
+        → fin→inicio (FS) · <span class="dep">SS/FF/SF</span> otras dependencias, sin flecha ·
+        € revisado · €? no verificado · €½ parcial · €✕ desconocido</p>
+    </div>
+  </section>
+</main>
+<footer class="credits">
+  Inspiración visual: <a href="https://github.com/Sam1983Aing/flat-to-3d/tree/main/05-schedule-build" rel="noopener">Flat-to-3D · 05 Schedule Build</a> © Sam1983Aing, licencia MIT.
+  Implementación propia de RUBIK: no se ha copiado código ni modelos del donante. Three.js 0.160.0 (MIT) servido desde el repositorio.
+  Fechas, tareas e importes: núcleo FT3D-8 + presupuesto C1–C4 con datos FIXTURE. La animación entre días es ilustrativa.
+</footer>
+</body>
+</html>

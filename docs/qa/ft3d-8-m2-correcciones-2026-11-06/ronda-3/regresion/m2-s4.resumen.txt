@@ -1,0 +1,19 @@
+ok 1 - M2-QA-01 · same house in every area: subject, revision and level verified; no import, no lab
+ok 2 - M2-QA-02 · Catastro in Analizar: official lookup (intercepted), association, explicit placement, saved and reopened
+ok 3 - M2-QA-03/04 · BC3 price applied in Presupuestar; one item in two tasks and two element groups; both directions; no double amount
+ok 4 - M2-QA-05 · Evolución: scene, Gantt, date, card and amounts from one evaluation (simultaneous works, task without geometry)
+ok 5 - M2-QA-06 · two houses with the same name and a building: switching never mixes parcel, prices, plan or brand
+ok 6 - M2-QA-07/08 · local delivery with Mi estudio signature; later changes make it obsolete; history kept; no restricted layer
+ok 7 - M2-QA-08 · MP4 of the same plan, downloaded and inspected (Chromium WebCodecs)
+ok 8 - M2-QA-09 · full route Biblioteca → Analizar → Presupuestar → Plan de obra → Evolución → Entregar, with no lab and no JSON
+ok 9 - M2-QA-10 · desktop 1280×720: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 10 - M2-QA-10 · desktop 1366×768: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 11 - M2-QA-10 · desktop 1440×900: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 12 - M2-QA-10 · desktop 1920×1080: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 13 - M2-QA-10 · mobile 390×844, keyboard and reduced motion: plan editor and evolution usable, no horizontal scroll
+ok 14 - M2 · Entregar with a partially priced budget answers (master froze here: endless mutation loop in the C4 summary)
+# tests 14
+# pass 14
+# fail 0
+# skipped 0
+# duration_ms 115285.626971

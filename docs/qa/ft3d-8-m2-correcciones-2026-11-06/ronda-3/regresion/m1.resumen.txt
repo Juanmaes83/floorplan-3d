@@ -1,0 +1,17 @@
+ok 1 - S2 · initial state: partial budget never shown as total, managed BCCA blocked and explained
+ok 2 - S2 · search, provenance, explicit apply with preview; the previous version stays in the history
+ok 3 - S2 · incompatible unit and several price columns: blocked or asked, never decided for the user
+ok 4 - S2 · new edition: comparison, per-item decision, unit change never applied, history intact
+ok 5 - S2 · save and reopen the budget: prices, references and provenance kept; invalid file changes nothing
+ok 6 - S2 · keyboard: tabs with arrows, items and actions reachable; mobile 390×844 without horizontal scroll
+ok 7 - S3 · official service rejected (as observed from the dev environment): clear message, GML suggested, nothing changes
+ok 8 - S3 · SIMULATED official answer: parcel, source, CRS; associate to A only; persists across reload; B untouched
+ok 9 - S3 · replace only with confirmation; placement dropped (never moved); explicit placement round trip; export policy
+ok 10 - S3 · cancel, invalid reference, unsupported CRS, not found and GML fallback keep the saved parcel
+ok 11 - S3 · mobile 390×844: lookup, result and placement usable without horizontal scroll
+ok 12 - LIVE (optional, FT3D8_M1_LIVE=1) · real official request from Chromium, outcome recorded # SKIP
+# tests 12
+# pass 11
+# fail 0
+# skipped 1
+# duration_ms 8549.71604

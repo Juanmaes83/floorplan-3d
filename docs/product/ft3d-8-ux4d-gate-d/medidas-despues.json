@@ -1,0 +1,29 @@
+{
+ "desktop": {
+  "pageH": 900,
+  "summary": {
+   "top": 87,
+   "height": 273
+  }
+ },
+ "desktopEvolution": {
+  "pageH": 1057,
+  "stage": {
+   "top": 65,
+   "height": 458
+  },
+  "card": {
+   "top": 480,
+   "height": 29
+  },
+  "gantt": {
+   "top": 591,
+   "height": 288
+  }
+ },
+ "mobile": {
+  "stageTop": 95,
+  "scrollW": 390,
+  "innerW": 390
+ }
+}

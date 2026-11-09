@@ -1,0 +1,151 @@
+# RUBIK SOTA E2 · FT3D-8 integration gate: the FT3D-8 suites validated in the preflight, on the real integration SHA.
+# Runs on the isolated integration branch and on pull requests to master that touch FT3D-8 or the shared files.
+name: FT3D-8 E2 integration
+on:
+  push:
+    branches: ['integration/ft3d-8-e2-*']
+  pull_request:
+    branches: [master]
+    paths:
+      - 'index.html'
+      - 'js/construction-*.js'
+      - 'js/cost-catalog-core.js'
+      - 'js/catastro-wfs-provider.js'
+      - 'js/parcel-association-core.js'
+      - 'js/reference-prices-ui.js'
+      - 'js/budget-ui.js'
+      - 'js/economic-dossier-ui.js'
+      - 'js/geo-provider.js'
+      - 'js/territory-ui.js'
+      - 'js/professional-workspace-ui.js'
+      - 'css/construction.css'
+      - 'evolucion/**'
+      - 'labs/**'
+      - 'tests/qa-m2/**'
+      - 'tests/qa-m2-*.cjs'
+      - 'tests/int-r1-*.cjs'
+      - 'tests/m2-s4.browser.test.cjs'
+      - 'tests/ft3d-8-*.cjs'
+      - 'tests/construction-*.cjs'
+      - '.vercelignore'
+      - '.github/workflows/ft3d-8-e2-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PLAYWRIGHT_VERSION: '1.62.1'
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax of the FT3D-8 modules and the Evolución page
+        run: |
+          for f in js/construction-*.js js/cost-catalog-core.js js/catastro-wfs-provider.js js/parcel-association-core.js js/reference-prices-ui.js js/budget-ui.js js/geo-provider.js js/territory-ui.js js/economic-dossier-ui.js js/professional-workspace-ui.js evolucion/library-source.js; do node --check "$f"; done
+          for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < evolucion/$m.js; done
+      - name: labs/ is excluded from the deployment, multimedia evidence is not in the tree
+        run: |
+          grep -qx 'labs/' .vercelignore
+          if git ls-files 'docs/qa/ft3d-8-*' 'docs/product/ft3d-8-*' | grep -E '\.(webm|mp4|png|jpg|jpeg)$'; then echo 'FT3D-8 multimedia evidence must stay in the QA branches'; exit 1; fi
+      - name: Every pure test of the repository
+        run: node --test $(ls tests/*.test.cjs | grep -v browser)
+
+  app-m2-gate-d:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: M2 integrated QA over the real app
+        env:
+          FT3D8_M2_SHOTS: ${{ runner.temp }}/m2-shots
+        run: node --test --test-concurrency=1 tests/m2-s4.browser.test.cjs
+      - name: Gate D (evolucion/?lab=1) and M1
+        if: always()
+        run: node --test --test-concurrency=1 tests/ft3d-8-ux4d.browser.test.cjs tests/ft3d-8-fit.browser.test.cjs tests/ft3d-8-fidelity.browser.test.cjs tests/ft3d-8-dossier.browser.test.cjs tests/ft3d-8-delivery.browser.test.cjs tests/ft3d-8-lab.browser.test.cjs tests/m1-s2-s3.browser.test.cjs
+
+  exam-novice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      QA_OUT: ${{ github.workspace }}/qa-results/ft3d-8-e2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"
+      - name: Final exam (EX-01…EX-13; PARTIAL/NOT_RUN are recorded, not hidden)
+        run: node --test --test-concurrency=1 tests/qa-m2-examen.browser.test.cjs
+      - name: Findings closure (V4)
+        if: always()
+        run: node --test tests/qa-m2-hallazgos-v4.browser.test.cjs
+      - name: Novice journey (V5)
+        if: always()
+        run: node --test tests/qa-m2-novato.browser.test.cjs
+      - name: Summary
+        if: always()
+        run: for f in "$QA_OUT"/resultados*.json; do node -e "const r=require('$f');console.log('$f',JSON.stringify(r.resumenComprobaciones))"; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-e2-qa-${{ github.sha }}
+          path: qa-results/ft3d-8-e2/
+          if-no-files-found: ignore
+
+  real-3d:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Chromium and local Three (same as the Hybrid V2 gate)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: INT-R1 · Dibujo vivo ↔ Evolución share View3D (real RUBIK 3D)
+        run: node --test --test-concurrency=1 tests/int-r1-evolucion-dibujo-vivo.browser.test.cjs
+      - name: Section + Hybrid V2 scenes, brand and professional entry with real 3D
+        if: always()
+        run: node --test --test-concurrency=1 tests/presentation-scenes-integration.browser.test.cjs tests/brand.browser.test.cjs tests/professional-entry.browser.test.cjs
+
+  shared-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Shared modules touched by FT3D-8
+        run: node --test --test-concurrency=1 tests/budget-ui.browser.test.cjs tests/economic-dossier.browser.test.cjs tests/professional-workspace.browser.test.cjs tests/project-first.browser.test.cjs tests/site-analyze.browser.test.cjs tests/parcel.browser.test.cjs tests/territory-integration.browser.test.cjs tests/quantity-schedule.browser.test.cjs

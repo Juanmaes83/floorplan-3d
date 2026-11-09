@@ -100,5 +100,5 @@ test('async providers receive a separate frozen query, retain result provenance 
  assert.equal(output.provenance.license,undefined);assert.equal(descriptor.license.status,'unknown');
  assert.deepEqual(query,{...input,privateToken:'never pass'});assert.deepEqual(context,{note:'private'});
  assert.equal(registry.list({capability:'orthophoto'}).length,0);
- assert.deepEqual(Geo.createDefaultRegistry().list().map(d=>d.providerId),['catastro-inspire-cp','ign-mdt05-terrain','ign-pnoa-ma-wms','manual']);
+ assert.deepEqual(Geo.createDefaultRegistry().list().map(d=>d.providerId),['catastro-inspire-cp','catastro-inspire-wfs','ign-mdt05-terrain','ign-pnoa-ma-wms','manual']);
 });

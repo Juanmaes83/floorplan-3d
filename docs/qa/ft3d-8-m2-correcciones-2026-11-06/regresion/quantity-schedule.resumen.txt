@@ -1,0 +1,7 @@
+ok 1 - Phase C1: project quantities 1440x900
+ok 2 - Phase C1: project quantities 390x844
+# tests 2
+# pass 2
+# fail 0
+# skipped 0
+# duration_ms 3315.816854

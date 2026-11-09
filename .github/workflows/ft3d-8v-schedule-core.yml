@@ -1,0 +1,141 @@
+name: FT3D-8V pure schedule and budget validation
+on:
+  push:
+    branches:
+      - feat/ft3d-8v-schedule-core-2026-11-05
+      - feat/ft3d-8-s1-real-project-integration-2026-11-05
+      - feat/ft3d-8-ux4d-gate-d-2026-11-05
+    # Globs, not a closed list: a new FT3D-8 module or test (S1 dossier, mp4 muxer) must trigger the suite too.
+    paths:
+      - js/construction-*.js
+      - labs/ft3d-8/**
+      - evolucion/**
+      - tests/construction-*.cjs
+      - tests/ft3d-8-*.cjs
+      - tests/fixtures/construction-*.cjs
+      - docs/product/ft3d-8v-*.md
+      - docs/product/ft3d-8-*.md
+      - .github/workflows/ft3d-8v-schedule-core.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax checks
+        run: |
+          # Every FT3D-8 classic script and test (globs: new S1 files and the mp4 muxer are checked too).
+          for f in js/construction-*.js labs/ft3d-8/lab-fixture.js labs/ft3d-8/fidelity-fixtures.js labs/ft3d-8/dossier-fixtures.js \
+                   tests/construction-*.cjs tests/ft3d-8-*.cjs tests/fixtures/construction-*.cjs; do node --check "$f"; done
+          node --input-type=module --check < labs/ft3d-8/app.js
+          node --input-type=module --check < labs/ft3d-8/scene.js
+          for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < evolucion/$m.js; done
+      - name: Pure FT3D-8V and existing budget/story regression
+        run: >-
+          node --test
+          tests/construction-schedule-core.test.cjs
+          tests/construction-schedule-rules.test.cjs
+          tests/construction-visual-state.test.cjs
+          tests/ft3d-8-lab.test.cjs
+          tests/construction-project-adapter.test.cjs
+          tests/construction-delivery-core.test.cjs
+          tests/construction-dossier-core.test.cjs
+          tests/budget-core.test.cjs
+          tests/bc3-budget.test.cjs
+          tests/budget-cost-bridge.test.cjs
+          tests/fiebdc3-codec.test.cjs
+          tests/parcel-core.test.cjs
+          tests/geo-site-adapter.test.cjs
+          tests/territory-integration.test.cjs
+          tests/guide.test.cjs
+          tests/brand-core.test.cjs
+          tests/share-api.test.cjs
+          tests/budget-draft.test.cjs
+          tests/building.test.cjs
+          tests/presentation-story.test.cjs
+  visual-lab-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Browser dependency (pinned, same as other browser workflows)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/lab-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/lab-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/lab-tools/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/lab-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: FT3D-8 demo lab in real Chromium (1440x900 and 390x844)
+        env:
+          FT3D8_LAB_SHOTS: qa-results/ft3d-8-lab
+        run: node --test --test-concurrency=1 tests/ft3d-8-lab.browser.test.cjs
+      - name: FT3D-8 fidelity vs the real editor (reference captures, overlays, metrics, video)
+        if: always()
+        env:
+          FT3D8_FIDELITY_SHOTS: qa-results/ft3d-8-fidelity
+        run: node --test --test-concurrency=1 tests/ft3d-8-fidelity.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-visual-lab-screenshots
+          path: qa-results/ft3d-8-lab
+          if-no-files-found: ignore
+      - name: FT3D-8 delivery (brand, real video + playback of the downloaded file, client document, mocked publication)
+        if: always()
+        env:
+          FT3D8_DELIVERY_SHOTS: qa-results/ft3d-8-delivery
+        run: node --test --test-concurrency=1 tests/ft3d-8-delivery.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-delivery-evidence
+          path: qa-results/ft3d-8-delivery
+          if-no-files-found: ignore
+      - name: FT3D-8 S1 dossier (real Catastro provider, project switch, package, video bound to the dossier, mobile)
+        if: always()
+        env:
+          FT3D8_DOSSIER_SHOTS: qa-results/ft3d-8-dossier
+        run: node --test --test-concurrency=1 tests/ft3d-8-dossier.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-dossier-evidence
+          path: qa-results/ft3d-8-dossier
+          if-no-files-found: ignore
+      - name: FT3D-8 Gate D UX/4D (20 functional checks, MP4 = screen parity, guided delivery, client view, mobile)
+        if: always()
+        env:
+          FT3D8_UX4D_SHOTS: qa-results/ft3d-8-ux4d
+        run: node --test --test-concurrency=1 tests/ft3d-8-ux4d.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-ux4d-evidence
+          path: qa-results/ft3d-8-ux4d
+          if-no-files-found: ignore
+      - name: FT3D-8 Gate D GD-UX-01 (the 4D experience fits the window at 1280x720, 1366x768, 1440x900, 1920x1080, zoom, mobile)
+        if: always()
+        env:
+          FT3D8_FIT_SHOTS: qa-results/ft3d-8-fit
+        run: node --test --test-concurrency=1 tests/ft3d-8-fit.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-fit-evidence
+          path: qa-results/ft3d-8-fit
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-fidelity-evidence
+          path: qa-results/ft3d-8-fidelity
+          if-no-files-found: ignore
