@@ -84,8 +84,8 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | ID | Mejora | Alias de origen | Estado | Valor | Dif. | Depende de | Ola | Decisión |
 |---|---|---|---|---|---|---|---|---|
 | GOV-01a | Render IA D1: **fusionar** #180, #182 y #181 con CI verde sobre el commit exacto | V-01, G6, W4, IMG-01/02 | **E**: #180, #182 y #181 fusionadas (master `5fb7a5c`) | ★★★★★ | B | — | 0 | ✔ hecho el 09/11 |
-| GOV-01b | Render IA D1: **configurar el entorno** de Production (`RUBIK_RENDER_ENABLED=1` y, opcionalmente, las tarifas) | — | N | ★★★★★ | B (lo hace el propietario) | GOV-01a | 0 | ☐ |
-| GOV-01c | Render IA D1: **activar en Production (Promote)** y verificar después | — | N | ★★★★★ | B | GOV-01b, GOV-09a + autorización expresa | 0 | ☐ |
+| GOV-01b | Render IA D1: **configurar el entorno** de Production (`RUBIK_RENDER_ENABLED=1` y, opcionalmente, las tarifas) | — | **E** (09/11: `RUBIK_RENDER_ENABLED=1` en Production y Preview; `RUBIK_RENDER_MODEL=gpt-image-2.5-sunburst` creado en Production porque no existía) | ★★★★★ | B (lo hace el propietario) | GOV-01a | 0 | ☐ |
+| GOV-01c | Render IA D1: **activar en Production (Promote)** y verificar después | — | **E** (09/11: `dpl_fzFZHVzeHBLCb5aM349scQCGNfBB`, master `5fb7a5c`) | ★★★★★ | B | GOV-01b, GOV-09a + autorización expresa | 0 | ☐ |
 | GOV-09a | **Antes del Promote:** acreditar el modelo configurado (valor de `RUBIK_RENDER_MODEL` en Vercel; si no existe, el código usa `gpt-image-1`) y su compatibilidad con **una sola prueba autorizada en un entorno de prueba** (Preview con `RUBIK_RENDER_ENABLED=1`), con coste visible gracias a #182 | K4 | N | ★★★★★ | B | GOV-01a, autorización de gasto de prueba | 0 | ☐ |
 | GOV-09b | **Después del Promote:** confirmar en el registro de Production (`rubik-render`) que el modelo y el estado coinciden con lo acreditado en GOV-09a | K4 | N | ★★★ | B | GOV-01c | 0 | ☐ |
 | GOV-02 | Cerrar o archivar PR obsoletas cuyo contenido ya está en master (#133–#151, #90) | F7 «50 PR», F8 C10 | N | ★★★ | B | — | 0 | ☐ |
