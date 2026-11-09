@@ -1,0 +1,34 @@
+{
+ "type": "video/mp4;codecs=avc1.42E01E",
+ "extension": "mp4",
+ "bytes": 224549,
+ "width": 640,
+ "height": 360,
+ "duration": 3.4337,
+ "stops": 3,
+ "marks": [
+  {
+   "kind": "overview",
+   "roomId": null,
+   "atMs": 686,
+   "holdMs": 250
+  },
+  {
+   "kind": "room",
+   "roomId": "rom_master",
+   "atMs": 1735,
+   "holdMs": 250
+  },
+  {
+   "kind": "room",
+   "roomId": "rom_mbath",
+   "atMs": 2749,
+   "holdMs": 250
+  }
+ ],
+ "poseBack": 0,
+ "busy": false,
+ "firstVariance": 1510.2401640685712,
+ "lastVariance": 4437.263603082545,
+ "firstLastDiff": 68.6
+}

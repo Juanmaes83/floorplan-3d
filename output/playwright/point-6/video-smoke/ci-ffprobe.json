@@ -1,0 +1,10 @@
+{
+ "status": "passed",
+ "streams": [
+  {
+   "codec_name": "h264",
+   "width": 640,
+   "height": 360
+  }
+ ]
+}
