@@ -5,6 +5,8 @@
 **Entrada auditada:** «Auditoría unificada de oportunidades UI/UX, servicios e integraciones» (corte 09/11/2026), aportada por el propietario.
 **Método:** cada afirmación del informe se ha contrastado con el código de `master`, las ramas remotas, las PR abiertas y, para los recursos externos, con su repositorio público.
 
+> **Documento de decisión unificado:** [`rubik-catalogo-maestro-mejoras-2026-11-09.md`](./rubik-catalogo-maestro-mejoras-2026-11-09.md) reúne en una sola tabla esta auditoría, las fichas de los 4 PDF y los planes de IA de imágenes y personas, CAT-IA, FOT/360/vídeo, asistente y Home, con su orden y sus conflictos.
+
 > **Cómo leer este documento**
 > - **Sección 1:** el veredicto en una página.
 > - **Sección 2:** qué está desactualizado o es incorrecto en el informe de entrada, con la prueba.
