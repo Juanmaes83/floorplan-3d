@@ -2,18 +2,20 @@
 // code, and /api/view serves only those HTML files as a page with a strict CSP. The storage is a fake fetch: no network.
 const test=require('node:test'),assert=require('node:assert/strict'),{Readable}=require('node:stream');
 const Share=require('../api/share.js'),View=require('../api/view.js');
-const env={BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_AbC123_secret',RUBIK_RENDER_TOKEN:'access-123'};
+// GOV-08 S1: fictitious codes only. Publishing has its own code (≥32 chars), different from the render one.
+const SHARE='share-fixture-code-0123456789abcdef',RENDER='render-fixture-code-0123456789abcdef';
+const env={BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_AbC123_secret',RUBIK_SHARE_TOKEN:SHARE,RUBIK_RENDER_TOKEN:RENDER};
 const HOST='abc123.public.blob.vercel-storage.com',HTML='<!doctype html><html><body>Propuesta</body></html>';
 function res(){return {statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k.toLowerCase()]=v;},end(b){this.body=b;}};}
-function req(body,{token='access-123',kind='html',name='Casa Serra',method='POST'}={}){const r=Readable.from([Buffer.from(body)]);r.method=method;r.headers={};if(token!==null)r.headers['x-rubik-render-token']=token;if(kind!==null)r.headers['x-rubik-share-kind']=kind;r.headers['x-rubik-share-name']=name;return r;}
+function req(body,{token=SHARE,header='x-rubik-share-token',kind='html',name='Casa Serra',method='POST',origin}={}){const r=Readable.from([Buffer.from(body)]);r.method=method;r.headers={host:'rubik.example'};if(origin!==undefined)r.headers.origin=origin;if(token!==null)r.headers[header]=token;if(kind!==null)r.headers['x-rubik-share-kind']=kind;r.headers['x-rubik-share-name']=name;return r;}
 async function share(r,opts){const out=res();await Share.handler(r,out,opts);return {status:out.statusCode,json:JSON.parse(out.body)};}
 const stored=calls=>async(url,init)=>{calls.push({url,init});return {ok:true,status:200,json:async()=>({url:`https://${HOST}/rubik-share/casa-serra-Xy12.html`})};};
 
 test('share refuses unless configured, POST, with the access code and a known kind',async()=>{
  const none=()=>assert.fail('no storage call');
- assert.equal((await share(req(HTML),{env:{RUBIK_RENDER_TOKEN:'x'},fetchImpl:none})).json.error,'not-configured');
+ assert.equal((await share(req(HTML),{env:{RUBIK_RENDER_TOKEN:RENDER},fetchImpl:none})).json.error,'not-configured');
  assert.equal((await share(req(HTML,{method:'GET'}),{env,fetchImpl:none})).status,405);
- for(const token of [null,'wrong','x'.repeat(300)])assert.equal((await share(req(HTML,{token}),{env,fetchImpl:none})).status,401);
+ for(const token of [null,'','wrong','x'.repeat(300)])assert.equal((await share(req(HTML,{token}),{env,fetchImpl:none})).status,401);
  for(const kind of [null,'exe','__proto__'])assert.equal((await share(req(HTML,{kind}),{env,fetchImpl:none})).json.error,'kind');
  assert.equal((await share(req('<script>x</script>'),{env,fetchImpl:none})).json.error,'file','only a Rubik HTML document');
  assert.equal((await share(req(''),{env,fetchImpl:none})).json.error,'size');
@@ -44,4 +46,34 @@ test('view serves only published client files from the owner store, with a stric
  assert.deepEqual(fetched,[good]);
  assert.equal((await view('/api/view?f=x',{env:{},fetchImpl:ok})).statusCode,503);
  assert.equal((await view('/api/view?f='+encodeURIComponent(good),{env,fetchImpl:async()=>({ok:false,status:404})})).statusCode,404);
+});
+
+// GOV-08 S1 — authentication matrix of /api/share. Nothing reaches the storage unless the PUBLISHING code is right.
+test('S1: only RUBIK_SHARE_TOKEN publishes; the render code, its header and any fallback are refused',async()=>{
+ const none=()=>assert.fail('no storage call');
+ // Valid publishing code → authenticated (stops at the next validation with no storage call).
+ assert.equal((await share(req(HTML,{kind:'exe'}),{env,fetchImpl:none})).json.error,'kind','publishing code accepted');
+ // The render code is refused in either header, and the publishing code in the render header too.
+ assert.equal((await share(req(HTML,{token:RENDER}),{env,fetchImpl:none})).status,401,'render code in the share header');
+ assert.equal((await share(req(HTML,{token:RENDER,header:'x-rubik-render-token'}),{env,fetchImpl:none})).status,401,'render code in the render header');
+ assert.equal((await share(req(HTML,{token:SHARE,header:'x-rubik-render-token'}),{env,fetchImpl:none})).status,401,'old header is ignored');
+ // No fallback: without RUBIK_SHARE_TOKEN nothing publishes, even with the render code configured and sent.
+ for(const header of ['x-rubik-share-token','x-rubik-render-token'])
+  assert.deepEqual((await share(req(HTML,{token:RENDER,header}),{env:{BLOB_READ_WRITE_TOKEN:env.BLOB_READ_WRITE_TOKEN,RUBIK_RENDER_TOKEN:RENDER},fetchImpl:none})),{status:503,json:{error:'not-configured'}});
+ // Misconfiguration: the same value in both variables, or a weak publishing code, refuses to publish.
+ assert.deepEqual(await share(req(HTML,{token:RENDER}),{env:{...env,RUBIK_SHARE_TOKEN:RENDER},fetchImpl:none}),{status:503,json:{error:'misconfigured'}});
+ assert.deepEqual(await share(req(HTML,{token:'short'}),{env:{...env,RUBIK_SHARE_TOKEN:'short'},fetchImpl:none}),{status:503,json:{error:'misconfigured'}});
+ assert.equal(Share.MIN_CODE,32);
+ // Same-origin rule: another site is refused; the same host and server-side calls (no Origin) are judged by the code.
+ assert.deepEqual(await share(req(HTML,{origin:'https://evil.example'}),{env,fetchImpl:none}),{status:403,json:{error:'origin'}});
+ const calls=[];assert.equal((await share(req(HTML,{origin:'https://rubik.example'}),{env,fetchImpl:stored(calls)})).status,200);assert.equal(calls.length,1);
+ // A near miss (one char off, longer, shorter) is refused.
+ for(const token of [SHARE.slice(0,-1)+'X',SHARE+'x',SHARE.slice(1)])assert.equal((await share(req(HTML,{token}),{env,fetchImpl:none})).status,401);
+});
+
+test('S1: the codes never appear in responses or in what is sent to storage',async()=>{
+ const calls=[],r=await share(req(HTML),{env,fetchImpl:stored(calls)});
+ assert.equal(r.status,200);const out=JSON.stringify(r.json)+JSON.stringify(calls[0].init.headers);
+ for(const secret of [SHARE,RENDER])assert.ok(!out.includes(secret));
+ const bad=await share(req(HTML,{token:'wrong'}),{env,fetchImpl:()=>assert.fail('no storage call')});assert.ok(!JSON.stringify(bad.json).includes(SHARE));
 });

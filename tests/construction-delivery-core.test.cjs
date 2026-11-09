@@ -105,21 +105,21 @@ test('client document: read-only, api/view-compatible, no editable project, hone
   assert.ok(html.slice(0,200).toLowerCase().startsWith('<!doctype html>'),'api/share accepts only documents starting with <!doctype html>');
   assert.match(html,/Content-Security-Policy" content="default-src 'none'; img-src data:; media-src https:\/\/abc\.public\.blob\.vercel-storage\.com;/);
   assert.equal((html.match(/<script/g)||[]).length,1);assert.match(html,/<script type="application\/json" id="ft3d8-manifest">/);
-  for(const leak of ['"walls"','"openings"','"rooms"','sourceImages','BLOB_READ_WRITE_TOKEN','RUBIK_RENDER_TOKEN'])assert.ok(!html.includes(leak),leak);
+  for(const leak of ['"walls"','"openings"','"rooms"','sourceImages','BLOB_READ_WRITE_TOKEN','RUBIK_RENDER_TOKEN','RUBIK_SHARE_TOKEN'])assert.ok(!html.includes(leak),leak);
   for(const must of ['FIXTURE Estudio de Prueba','estudio@example.com','Evolución de obra planificada','no son gasto ejecutado','Alcance parcial','identidad no verificada',man.id])assert.ok(html.includes(must),must);
   assert.ok(!html.includes('+34 600 000 000'),'contact field not included stays out');
   assert.throws(()=>D.clientDocument(man,{video:{src:'http://insecure/x.webm'}}),/https URL/);
   const local=D.clientDocument(man,{video:null});assert.match(local,/media-src 'none'/);assert.match(local,/se entrega como archivo aparte/);
   // The existing api/share accepts it (mocked storage, no real upload).
   const calls=[];const res={headers:{},setHeader(k,v){this.headers[k]=v;},end(b){this.body=b;}};
-  await Share.handler({method:'POST',headers:{'x-rubik-render-token':'code','x-rubik-share-kind':'html','x-rubik-share-name':'x'},body:Buffer.from(html)},res,
-    {env:{BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_abc_secret',RUBIK_RENDER_TOKEN:'code'},fetchImpl:async(url,o)=>{calls.push({url,o});return {ok:true,json:async()=>({url:'https://abc.public.blob.vercel-storage.com/rubik-share/x-r.html'})};}});
+  await Share.handler({method:'POST',headers:{'x-rubik-share-token':'share-fixture-code-0123456789abcdef','x-rubik-share-kind':'html','x-rubik-share-name':'x'},body:Buffer.from(html)},res,
+    {env:{BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_abc_secret',RUBIK_SHARE_TOKEN:'share-fixture-code-0123456789abcdef',RUBIK_RENDER_TOKEN:'render-fixture-code-0123456789abcdef'},fetchImpl:async(url,o)=>{calls.push({url,o});return {ok:true,json:async()=>({url:'https://abc.public.blob.vercel-storage.com/rubik-share/x-r.html'})};}});
   assert.equal(res.statusCode,200);assert.match(calls[0].url,/rubik-share\/x\.html$/);
   assert.match(View.csp('abc.public.blob.vercel-storage.com'),/media-src https:\/\/abc\.public\.blob\.vercel-storage\.com/);
 });
 test('publish errors map the real api/share responses; endpoints are absolute',()=>{
   assert.deepEqual(D.ENDPOINTS,{share:'/api/share',view:'/api/view'});
-  assert.match(D.publishError(503,'not-configured'),/BLOB_READ_WRITE_TOKEN/);
+  assert.match(D.publishError(503,'not-configured'),/BLOB_READ_WRITE_TOKEN[\s\S]*RUBIK_SHARE_TOKEN/);assert.match(D.publishError(503,'misconfigured'),/coincide con el del Render IA/);assert.match(D.publishError(401,'token'),/código de publicación[\s\S]*distinto del código del Render IA/);
   assert.equal(D.publishError(401,'token'),D.PUBLISH_ERRORS.token);
   assert.match(D.publishError(413,'size'),/4 MB/);
   assert.match(D.publishError(404,null),/no existe aquí/);
