@@ -17,7 +17,9 @@
  const fmtArea=m2=>m2.toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:m2<100?1:0});
  // What the image says. rooms: [{poly:[[mm,mm]…], counted}] of what is shown (one level or the whole home).
  // Returns only the lines that have data; texts are bounded so a long name cannot push the home out.
- function content({title,view,level,rooms=[],brand=null,lang='es'}={}){
+ // detail (optional, IMG-01): a second descriptive line, e.g. the finishes of an AI render. It gets its own room in
+ // every layout instead of being glued to the view and cut; without it every format draws exactly as before.
+ function content({title,view,level,detail,rooms=[],brand=null,lang='es'}={}){
   const counted=rooms.filter(r=>r&&r.counted!==false&&Array.isArray(r.poly)&&r.poly.length>=3);
   const area=counted.reduce((a,r)=>a+shoelace(r.poly),0)/1e6;
   const facts=[];
@@ -25,7 +27,8 @@
   if(area>=1)facts.push(`Superficie útil aprox. ${fmtArea(area)} m²`);
   const t=cap(title,90),v=cap(view,60),l=cap(level,40);
   const b=brand&&clean(brand.name)?{name:cap(brand.name,60),logo:brand.logo||null,contact:cap(brand.contact,80)||null}:null;
-  return {title:t||null,view:[l,v].filter(Boolean).join(' · ')||null,facts,brand:b,
+  const d=cap(detail,140);
+  return {title:t||null,view:[l,v].filter(Boolean).join(' · ')||null,...(d?{detail:d}:{}),facts,brand:b,
    note:b?'Imagen orientativa · medidas aproximadas':'Imagen orientativa creada con Rubik Sota · medidas aproximadas'};
  }
  // Canvas drawing (browser only). layout 'band' (B: image, then a band) or 'header' (C: header, image, footer).
@@ -49,6 +52,7 @@
    const block=()=>{
     if(data.title){x.fillStyle='#1f2326';wrap(data.title,font(650,36),46,3);y+=8;}
     if(data.view){x.fillStyle='#2f6f78';wrap(data.view,font(600,26),34,2);y+=14;}
+    if(data.detail){x.fillStyle='#2f6f78';wrap(data.detail,font(500,22),30,3);y+=12;}
     x.fillStyle='#4a5256';for(const f of data.facts){x.font=font(500,24);put(fit(f,tw,font(500,24)),cx+p,y);y+=34;}
     y+=6;x.fillStyle='#7a8286';wrap(data.note,font(400,18),24,2);};
    const top=p+30;y=top;block();const blockH=y-top;
@@ -69,17 +73,24 @@
    x.fillStyle='#1f2326';x.textBaseline='middle';
    if(data.title){x.font=font(650,40);x.fillText(fit(data.title,F.w-pad*2,font(650,40)),pad,headH*.42);}
    if(data.view){x.fillStyle='#5b6266';x.fillText(fit(data.view,F.w-pad*2,font(500,26)),pad,headH*(data.title?.78:.5));}
-   await footer(x,{y:bandY,h:bandH,w:F.w,pad,font,fit,data,withFacts:true});
+   // A detail takes the footer's facts line whole; the facts join it only when both fit uncut (same rule as the band).
+   let foot=data;if(data.detail){const fw=F.w-pad*2-(data.brand?Math.round(F.w*.4)+pad:0),both=[data.detail,...data.facts].join(' · ');
+    x.font=font(500,24);foot={...data,facts:data.facts.length&&x.measureText(both).width<=fw?[data.detail,...data.facts]:[data.detail]};}
+   await footer(x,{y:bandY,h:bandH,w:F.w,pad,font,fit,data:foot,withFacts:true});
   }else{
    imgY=0;bandY=F.image.h;bandH=F.h-bandY;
    x.drawImage(img,0,0,F.image.w,F.image.h);
    x.fillStyle='#ffffff';x.fillRect(0,bandY,F.w,bandH);x.fillStyle='#d5d9db';x.fillRect(0,bandY,F.w,2);
    const portrait=format==='portrait',brandW=data.brand?(portrait?F.w-pad*2:Math.round(F.w*.34)):0;
    const textW=portrait?F.w-pad*2:F.w-pad*2-(brandW?brandW+pad:0);
-   let y=bandY+Math.round(bandH*(portrait?.16:.24));x.textBaseline='middle';
+   let y=bandY+Math.round(bandH*(portrait?.16:data.detail?.18:.24));x.textBaseline='middle';
    if(data.title){x.fillStyle='#1f2326';x.fillText(fit(data.title,textW,font(650,38)),pad,y);y+=Math.round(50*S*(portrait?1.35:1));}
    if(data.view){x.fillStyle='#2f6f78';x.fillText(fit(data.view,textW,font(600,26)),pad,y);y+=Math.round(38*S*(portrait?1.35:1));}
-   if(data.facts.length){x.fillStyle='#4a5256';x.fillText(fit(data.facts.join(' · '),textW,font(500,24)),pad,y);y+=Math.round(36*S*(portrait?1.35:1));}
+   // The band holds three text lines above the note. With a detail, it owns the third line whole; the facts join it
+   // only when both fit uncut (an AI render has no facts, so nothing is lost there).
+   const both=data.detail&&data.facts.length?[data.detail,...data.facts].join(' · '):'';
+   const third=data.detail?(both&&(x.font=font(500,24),x.measureText(both).width<=textW)?both:data.detail):data.facts.join(' · ');
+   if(third){x.fillStyle=data.detail?'#2f6f78':'#4a5256';x.fillText(fit(third,textW,font(500,24)),pad,y);y+=Math.round(36*S*(portrait?1.35:1));}
    x.fillStyle='#7a8286';x.fillText(fit(data.note,textW,font(400,18)),pad,portrait&&data.brand?y:bandY+bandH-Math.round(26*S*(portrait?1.35:1)));
    if(data.brand){const bx=portrait?pad:F.w-pad-brandW,by=portrait?bandY+bandH-Math.round(bandH*.30):bandY+Math.round(bandH*.18),bh=portrait?Math.round(bandH*.24):Math.round(bandH*.64);
     await brandBlock(x,{x:bx,y:by,w:brandW,h:bh,font,fit,brand:data.brand,align:portrait?'left':'right'});}
@@ -89,8 +100,15 @@
  async function footer(x,{y,h,w,pad,font,fit,data}){
   x.fillStyle='#ffffff';x.fillRect(0,y,w,h);x.fillStyle='#d5d9db';x.fillRect(0,y,w,2);x.textBaseline='middle';
   const brandW=data.brand?Math.round(w*.4):0,textW=w-pad*2-(brandW?brandW+pad:0);
-  if(data.facts.length){x.fillStyle='#4a5256';x.fillText(fit(data.facts.join(' · '),textW,font(500,24)),pad,y+h*.38);}
-  x.fillStyle='#7a8286';x.fillText(fit(data.note,textW,font(400,18)),pad,y+h*(data.facts.length?.7:.5));
+  // IMG-01: a detail that does not fit on one line wraps onto a second one (the last line is fitted); without a
+  // detail the footer draws exactly as before.
+  const lines=data.detail?(()=>{x.font=font(500,24);const t=data.facts.join(' · ');if(x.measureText(t).width<=textW)return [t];
+   const words=t.split(' ');let l='';for(let i=0;i<words.length;i++){const n=l?l+' '+words[i]:words[i];if(x.measureText(n).width>textW&&l)return [l,fit(words.slice(i).join(' '),textW,font(500,24))];l=n;}return [l];})():null;
+  if(lines&&lines.length===2){x.fillStyle='#2f6f78';x.font=font(500,24);x.fillText(lines[0],pad,y+h*.26);x.fillText(lines[1],pad,y+h*.5);
+   x.fillStyle='#7a8286';x.fillText(fit(data.note,textW,font(400,18)),pad,y+h*.78);}
+  else{
+  if(data.facts.length){x.fillStyle=data.detail?'#2f6f78':'#4a5256';x.fillText(fit(data.facts.join(' · '),textW,font(500,24)),pad,y+h*.38);}
+  x.fillStyle='#7a8286';x.fillText(fit(data.note,textW,font(400,18)),pad,y+h*(data.facts.length?.7:.5));}
   if(data.brand)await brandBlock(x,{x:w-pad-brandW,y:y+h*.18,w:brandW,h:h*.64,font,fit,brand:data.brand,align:'right'});
  }
  async function brandBlock(x,{x:bx,y,w,h,font,fit,brand,align}){

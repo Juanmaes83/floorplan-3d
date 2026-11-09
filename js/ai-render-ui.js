@@ -41,7 +41,7 @@
  // Download: the AI image in the delivery format, saying in its own band that it is AI-generated and orientative.
  async function download(result){
   const snap=window.FloorPlanBrandUI?.snapshot()||null,p=snap?.profile;
-  const data=FloorPlanDeliveryImage.content({title:snap?.title||(typeof nm==='function'?nm(app.project.name):app.project.name),view:tx('Render IA · ','AI render · ','AI 渲染 · ')+result.label+(finishText(result)?' · '+finishText(result):''),rooms:[],brand:p&&p.name?{name:p.name,logo:p.logo,contact:''}:null});
+  const data=FloorPlanDeliveryImage.content({title:snap?.title||(typeof nm==='function'?nm(app.project.name):app.project.name),view:tx('Render IA · ','AI render · ','AI 渲染 · ')+result.label,detail:finishText(result)||undefined,rooms:[],brand:p&&p.name?{name:p.name,logo:p.logo,contact:''}:null});
   data.note=tx('Imagen generada por IA a partir de la vista real del proyecto · orientativa, puede alterar detalles','AI-generated image from the project\'s real view · orientative, details may differ','根据项目真实视图生成的 AI 图片 · 仅供参考');
   const out=await FloorPlanDeliveryImage.compose({image:result.image,format:'landscape',layout:'band',data});
   const a=document.createElement('a');a.href=out.dataUrl;a.download=`rubik-sota-render-ia-${String(result.label).normalize('NFD').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'vista'}.png`;a.click();return out;
