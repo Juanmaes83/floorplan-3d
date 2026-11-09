@@ -89,6 +89,7 @@
 .ai-render-form .ai-render-consent{grid-column:1/-1;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:10px;font-weight:400}.ai-render-form .ai-render-consent input{width:20px;height:20px;min-height:0;padding:0;margin:1px 0 0}
 .ai-render-dialog .btn{border:1px solid #978b79;border-radius:4px;background:#fffcf6;min-height:44px;padding:0 14px}.ai-render-dialog .btn.primary{background:#205b60;border-color:#205b60;color:#fff}
 .ai-render-form .btn{justify-self:start;min-height:44px}.ai-render-status{font-weight:600;font-size:13px;min-height:1em}
+.ai-render-usage{font-size:12.5px;color:var(--muted,#5b6266);margin:4px 0 8px}
 .ai-render-compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:8px 0 12px}.ai-render-compare figure{margin:0}.ai-render-compare img{display:block;width:100%;height:auto;border:1px solid #cbc2b3}
 .ai-render-compare figcaption{font-size:12px;font-weight:600;margin-top:4px}.ai-render-compare .is-ai figcaption::before{content:'IA · ';color:#875936}
 @media(max-width:600px){.ai-render-form{grid-template-columns:minmax(0,1fr)}}

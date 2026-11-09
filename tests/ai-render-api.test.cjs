@@ -7,7 +7,7 @@ const env={OPENAI_API_KEY:'sk-test-secret',RUBIK_RENDER_TOKEN:'access-123',RUBIK
 const png='data:image/png;base64,'+Buffer.from([0x89,0x50,0x4e,0x47,1,2,3]).toString('base64');
 function res(){return {statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k.toLowerCase()]=v;},end(b){this.body=b;}};}
 const req=(body,{token='access-123',method='POST'}={})=>({method,headers:token===null?{}:{'x-rubik-render-token':token},body});
-async function call(r,opts){const out=res();await Render.handler(r,out,{meter:Render.createMeter(),...opts});return {status:out.statusCode,json:JSON.parse(out.body),headers:out.headers};}
+async function call(r,opts){const out=res();await Render.handler(r,out,{meter:Render.createMeter(),log:()=>{},...opts});return {status:out.statusCode,json:JSON.parse(out.body),headers:out.headers};}
 const okFetch=calls=>async(url,init)=>{calls.push({url,init});return {ok:true,status:200,json:async()=>({data:[{b64_json:'QUJD'}]})};};
 
 test('refuses unless configured, POST and with the right access token',async()=>{
@@ -110,4 +110,48 @@ test('D1: limits read from the environment fall back to conservative defaults wh
  assert.deepEqual(Render.limits({}),Render.DEFAULT_LIMITS);assert.deepEqual(Render.DEFAULT_LIMITS,{perHour:10,perDay:30,tokenFailsPerHour:20});
  for(const v of ['','-1','2.5','abc','99999',' '])assert.equal(Render.limits({RUBIK_RENDER_MAX_PER_HOUR:v}).perHour,10,JSON.stringify(v));
  assert.deepEqual(Render.limits({RUBIK_RENDER_MAX_PER_HOUR:'5',RUBIK_RENDER_MAX_PER_DAY:'0',RUBIK_RENDER_MAX_TOKEN_FAILS:'7'}),{perHour:5,perDay:0,tokenFailsPerHour:7});
+});
+
+// RENDER AI D1 · IMG-02: usage and cost per generation. Fake provider only: nothing billable runs here.
+const usageFetch=(usage,extra={})=>async()=>({ok:true,status:200,json:async()=>({data:[{b64_json:'QUJD'}],usage,...extra})});
+const sample={total_tokens:6460,input_tokens:1220,output_tokens:5240,input_tokens_details:{text_tokens:180,image_tokens:1040}};
+const prices={RUBIK_RENDER_PRICE_INPUT_TEXT:'5',RUBIK_RENDER_PRICE_INPUT_IMAGE:'10',RUBIK_RENDER_PRICE_OUTPUT:'40'};
+
+test('IMG-02: usage is returned from a closed list of integer fields; unknown or bad fields are dropped',async()=>{
+ const logs=[];const r=await call(req({style:'natural',image:png}),{env,fetchImpl:usageFetch(sample),log:l=>logs.push(l)});
+ assert.equal(r.status,200);assert.deepEqual(r.json.usage,{inputTokens:1220,outputTokens:5240,totalTokens:6460,inputTextTokens:180,inputImageTokens:1040});
+ assert.equal(r.json.cost,null,'no tariff configured: no estimate, never an invented price');
+ assert.deepEqual(Render.usageOf({total_tokens:-3,input_tokens:'12',output_tokens:1.5,secret:'x',input_tokens_details:'no'}),null);
+ assert.deepEqual(Render.usageOf({output_tokens:7,evil:{a:1}}),{inputTokens:null,outputTokens:7,totalTokens:null,inputTextTokens:null,inputImageTokens:null});
+ for(const u of [undefined,null,'x',[],{}])assert.equal(Render.usageOf(u),null);
+ const none=await call(req({style:'natural',image:png}),{env,fetchImpl:usageFetch(undefined),log:()=>{}});assert.equal(none.status,200);assert.equal(none.json.usage,null);assert.equal(none.json.cost,null);
+});
+
+test('IMG-02: cost is estimated only with a full tariff from the environment',async()=>{
+ const r=await call(req({style:'natural',image:png}),{env:{...env,...prices},fetchImpl:usageFetch(sample),log:()=>{}});
+ // (180×5 + 1040×10 + 5240×40) / 1e6 = 0.2209 USD
+ assert.deepEqual(r.json.cost,{amount:0.2209,currency:'USD',basis:'tariff-env'});
+ assert.equal(Render.tariff({...prices,RUBIK_RENDER_PRICE_OUTPUT:''}),null,'a missing price disables the estimate');
+ for(const bad of ['-1','abc','1e3','12345','0x10'])assert.equal(Render.tariff({...prices,RUBIK_RENDER_PRICE_INPUT_TEXT:bad}),null,bad);
+ assert.deepEqual(Render.tariff({...prices,RUBIK_RENDER_PRICE_INPUT_TEXT:' 2.5 '}),{inputText:2.5,inputImage:10,output:40});
+ // Undetailed input is priced at the image rate: the estimate errs high, never low.
+ assert.deepEqual(Render.costOf({inputTokens:1000,outputTokens:0,totalTokens:1000,inputTextTokens:null,inputImageTokens:null},Render.tariff(prices)),{amount:0.01,currency:'USD',basis:'tariff-env'});
+ assert.equal(Render.costOf({inputTokens:1000,outputTokens:null,totalTokens:null,inputTextTokens:null,inputImageTokens:null},Render.tariff(prices)),null);
+});
+
+test('IMG-02: one JSON log line per provider call, without image, access code, key or address',async()=>{
+ let t=1000;const clock=()=>(t+=850);
+ const logs=[];await call({...req({style:'warm',image:png,floor:'walnut'}),headers:{'x-rubik-render-token':'access-123','x-forwarded-for':'203.0.113.9'}},{env:{...env,...prices},fetchImpl:usageFetch(sample),log:l=>logs.push(l),clock});
+ assert.equal(logs.length,1);const e=JSON.parse(logs[0]);
+ assert.deepEqual(Object.keys(e).sort(),['cost','event','floor','model','ms','status','style','usage','walls']);
+ assert.equal(e.event,'rubik-render');assert.equal(e.status,'ok');assert.equal(e.ms,850);assert.equal(e.floor,'walnut');assert.equal(e.cost.amount,0.2209);
+ for(const secret of ['sk-test-secret','access-123','203.0.113.9','QUJD',png.slice(30)])assert.ok(!logs[0].includes(secret),secret);
+ // Failures are logged too, with the provider's status code but never its message.
+ const fl=[];await call(req({style:'natural',image:png}),{env,fetchImpl:async()=>({ok:false,status:429,json:async()=>({error:{message:'detail sk-test-secret'}})}),log:l=>fl.push(l)});
+ assert.equal(JSON.parse(fl[0]).status,'provider-rate-limit');assert.equal(JSON.parse(fl[0]).providerStatus,429);assert.ok(!fl[0].includes('sk-test-secret'));
+ const ul=[];await call(req({style:'natural',image:png}),{env,fetchImpl:async()=>{throw Error('down');},log:l=>ul.push(l)});assert.equal(JSON.parse(ul[0]).status,'provider-unreachable');
+ // Refusals before the provider (token, style, image) are not provider calls: no line.
+ const rl=[];await call(req({style:'x',image:png}),{env,log:l=>rl.push(l),fetchImpl:()=>assert.fail('no provider call')});await call(req({style:'natural',image:png},{token:'bad'}),{env,log:l=>rl.push(l),fetchImpl:()=>assert.fail('no provider call')});assert.deepEqual(rl,[]);
+ // A throwing logger never breaks the render.
+ assert.equal((await call(req({style:'natural',image:png}),{env,fetchImpl:usageFetch(sample),log:()=>{throw Error('log down');}})).status,200);
 });

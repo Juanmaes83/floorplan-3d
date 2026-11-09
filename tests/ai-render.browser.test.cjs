@@ -12,7 +12,7 @@ after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
 
 test('Phase B2: AI render of a real view with consent, access code and honest labels',{timeout:300000},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
- const page=await context.newPage(),errors=[],external=[],sent=[];let reply={status:200,body:{image:PNG,model:'gpt-image-1',style:'warm',generatedAt:'2026-10-29T12:00:00Z'}};page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
+ const page=await context.newPage(),errors=[],external=[],sent=[];let reply={status:200,body:{image:PNG,model:'gpt-image-1',style:'warm',usage:{inputTokens:1220,outputTokens:5240,totalTokens:6460,inputTextTokens:180,inputImageTokens:1040},cost:{amount:0.2209,currency:'USD',basis:'tariff-env'},generatedAt:'2026-10-29T12:00:00Z'}};page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/*',async r=>{const u=r.request().url();
   if(u.startsWith(url+'api/render')){sent.push({headers:r.request().headers(),body:JSON.parse(r.request().postData()||'{}')});return r.fulfill({status:reply.status,contentType:'application/json',body:JSON.stringify(reply.body)});}
   if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();external.push(u);return r.abort();});
@@ -33,6 +33,8 @@ test('Phase B2: AI render of a real view with consent, access code and honest la
  assert.ok(!JSON.stringify(sent[0].body).includes('rom_'),'no project data in the request');
  assert.deepEqual(await dialog.locator('figure figcaption').allInnerTexts(),['Vista real del proyecto','Render IA (orientativo)']);
  assert.match(await dialog.locator('#aiRenderStatus').innerText(),/Compáralo con la vista real/);
+ // IMG-02: what this image consumed, and a cost only because the server sent one (configured tariff).
+ assert.equal(await dialog.locator('#aiRenderUsage').innerText(),'Consumo de esta imagen: 6460 tokens · coste estimado 0,2209 US$ (según la tarifa configurada)');
  // The download is a delivery image that says it is AI.
  const download=page.waitForEvent('download');await dialog.locator('#aiRenderDownload').click();const d=await download;assert.equal(d.suggestedFilename(),'rubik-sota-render-ia-vista-general.png');
  const bytes=await fs.readFile(await d.path());assert.equal(bytes.readUInt32BE(16),1600);assert.equal(bytes.readUInt32BE(20),1000);
@@ -43,6 +45,7 @@ test('Phase B2: AI render of a real view with consent, access code and honest la
  reply={status:200,body:{image:PNG,model:'gpt-image-1',style:'warm',floor:'microcement',walls:'sage',generatedAt:'2026-10-30T12:00:00Z'}};
  await dialog.locator('#aiRenderFloor').selectOption('microcement');await dialog.locator('#aiRenderWalls').selectOption('sage');await dialog.locator('#aiRenderGo').click();
  await page.waitForFunction(()=>/Suelo: Microcemento · Paredes: Verde salvia/.test(document.querySelector('#aiRenderDialog figure.is-ai figcaption')?.textContent||''));
+ assert.equal(await dialog.locator('#aiRenderUsage').innerText(),'El proveedor no ha informado del consumo de esta imagen.','no usage reported: said, not invented');
  assert.equal(sent.length,2);assert.deepEqual(Object.keys(sent[1].body).sort(),['floor','image','style','walls']);assert.deepEqual([sent[1].body.floor,sent[1].body.walls],['microcement','sage']);
  const alts=dialog.locator('#aiRenderAlternatives .ai-render-alt');assert.equal(await alts.count(),2);assert.deepEqual(await alts.locator('span').allInnerTexts(),['Cálido','Cálido · Suelo: Microcemento · Paredes: Verde salvia']);
  assert.match(await dialog.locator('#aiRenderAlternatives').innerText(),/no cambian el proyecto; para usar un acabado, elígelo en Superficies/);
