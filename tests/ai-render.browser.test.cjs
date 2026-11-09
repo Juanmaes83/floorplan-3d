@@ -54,6 +54,10 @@ test('Phase B2: AI render of a real view with consent, access code and honest la
  await page.waitForFunction(()=>/El código de acceso no es correcto/.test(document.querySelector('#aiRenderStatus').textContent));assert.equal(await page.evaluate(()=>localStorage.getItem('rubik-render-token')),null);
  reply={status:503,body:{error:'not-configured'}};await dialog.locator('#aiRenderToken').fill('access-123');await dialog.locator('#aiRenderAgree').check();await dialog.locator('#aiRenderStyle').selectOption('premium');await dialog.locator('#aiRenderGo').click();
  await page.waitForFunction(()=>/no está configurado en este servidor[\s\S]*OPENAI_API_KEY y RUBIK_RENDER_TOKEN/.test(document.querySelector('#aiRenderStatus').textContent));
+ // RENDER AI D1: the server's new refusals are said plainly too, and they do not forget a valid access code.
+ for(const [error,status,text] of [['disabled',503,/está desactivado en este servidor/],['limit',429,/límite de renders de este periodo/],['origin',403,/no viene de RUBIK/]]){
+  reply={status,body:{error}};await dialog.locator('#aiRenderGo').click();
+  await page.waitForFunction(src=>new RegExp(src).test(document.querySelector('#aiRenderStatus').textContent),text.source);}
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#aiRenderDialog').open);
  assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'ai-overview','focus returns to the view action');
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'an AI render never changes the project');
