@@ -5,7 +5,22 @@
    - RUBIK_RENDER_TOKEN: shared access token the professional enters once in Rubik; without it the endpoint refuses,
      so nobody can spend the owner's OpenAI credit through the public URL.
    - Only the image and a style are sent: no project data, location or contact. Nothing is stored here.
-   The Rubik geometry stays the authority: the AI only changes the presentation of one image. */
+   The Rubik geometry stays the authority: the AI only changes the presentation of one image.
+   RENDER AI D1 · access and spending guards (server side, before any provider call):
+   - RUBIK_RENDER_ENABLED must be exactly '1'. Without it the endpoint answers 503 'disabled': a deployment never
+     spends by accident because a key happens to be configured.
+   - A request that declares an Origin from another site is refused (403 'origin'); same-site calls are unchanged.
+   - Wrong access codes are counted: after RUBIK_RENDER_MAX_TOKEN_FAILS per hour the endpoint stops comparing (429).
+   - Provider calls are capped per hour and per day (RUBIK_RENDER_MAX_PER_HOUR / _PER_DAY; 429 'limit').
+     These counters live in the memory of one function instance (no database, no paid service), so they are a
+     best-effort brake; the binding monthly budget is the one set on the provider account. See docs/render-ai/.
+   RENDER AI D1 · IMG-02 · usage and cost per generation:
+   - The provider's `usage` (tokens) is read from a closed list of integer fields and returned with the image.
+   - A cost is estimated ONLY when the owner sets the tariff in the environment (USD per million tokens:
+     RUBIK_RENDER_PRICE_INPUT_TEXT, RUBIK_RENDER_PRICE_INPUT_IMAGE, RUBIK_RENDER_PRICE_OUTPUT). No price is hard-coded:
+     prices change and the binding figure is the provider's bill.
+   - One JSON line per provider call goes to the function log (Vercel runtime logs): model, style, finishes, status,
+     duration, usage and estimated cost. Never the image, the access code, the key or the client's address. */
 'use strict';
 const {timingSafeEqual}=require('node:crypto');
 const same=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));return x.length===y.length&&timingSafeEqual(x,y);};
@@ -37,30 +52,85 @@ function prompt(style,{floor=null,walls=null}={}){
   +(floor||walls?'Change ONLY these finishes and nothing else: '+[floor&&`floor: ${FLOORS[floor]}`,walls&&`walls: ${WALLS[walls]}`].filter(Boolean).join('; ')+'. ':'')
   +`Style: ${STYLES[style]}.`;
 }
+// D1 limits. Integers from the environment, clamped; absent or invalid values fall back to conservative defaults.
+const DEFAULT_LIMITS={perHour:10,perDay:30,tokenFailsPerHour:20};
+function intEnv(v,fallback){if(typeof v!=='string'||!/^[0-9]{1,5}$/.test(v))return fallback;const n=Number(v);return n<=10000?n:fallback;}
+function limits(env){return {perHour:intEnv(env.RUBIK_RENDER_MAX_PER_HOUR,DEFAULT_LIMITS.perHour),perDay:intEnv(env.RUBIK_RENDER_MAX_PER_DAY,DEFAULT_LIMITS.perDay),tokenFailsPerHour:intEnv(env.RUBIK_RENDER_MAX_TOKEN_FAILS,DEFAULT_LIMITS.tokenFailsPerHour)};}
+const HOUR=3600e3,DAY=24*HOUR;
+// Fixed windows per function instance. A meter is injectable so the tests control time and start clean.
+function createMeter(){
+ const w={hour:{start:-Infinity,count:0},day:{start:-Infinity,count:0},fails:{start:-Infinity,count:0}};
+ const roll=(slot,size,now)=>{if(now-slot.start>=size){slot.start=now;slot.count=0;}return slot;};
+ return {
+  blockedByFails(now,max){return roll(w.fails,HOUR,now).count>=max;},
+  fail(now){roll(w.fails,HOUR,now).count++;},
+  // Reserves one provider call when both windows have room; otherwise says how long to wait (seconds).
+  reserve(now,{perHour,perDay}){const h=roll(w.hour,HOUR,now),d=roll(w.day,DAY,now);
+   if(d.count>=perDay)return {ok:false,retryAfter:Math.ceil((d.start+DAY-now)/1000)};
+   if(h.count>=perHour)return {ok:false,retryAfter:Math.ceil((h.start+HOUR-now)/1000)};
+   h.count++;d.count++;return {ok:true};},
+  snapshot(){return {hour:{...w.hour},day:{...w.day},fails:{...w.fails}};}};
+}
+const defaultMeter=createMeter();
+// Same-site check: browsers send Origin on cross-site POSTs. No Origin (server-to-server, old clients) is allowed:
+// the access code still applies. A malformed Origin is refused.
+function sameSite(req){
+ const origin=req.headers.origin;if(origin===undefined)return true;
+ const host=req.headers['x-forwarded-host']||req.headers.host;
+ try{return typeof origin==='string'&&!!host&&new URL(origin).host===String(host).split(',')[0].trim();}catch{return false;}
+}
+// IMG-02: usage from the provider, only known integer fields; anything else is ignored.
+function usageOf(u){
+ if(!u||typeof u!=='object')return null;
+ const int=v=>Number.isSafeInteger(v)&&v>=0?v:null,d=u.input_tokens_details&&typeof u.input_tokens_details==='object'?u.input_tokens_details:{};
+ const out={inputTokens:int(u.input_tokens),outputTokens:int(u.output_tokens),totalTokens:int(u.total_tokens),inputTextTokens:int(d.text_tokens),inputImageTokens:int(d.image_tokens)};
+ return Object.values(out).some(v=>v!==null)?out:null;
+}
+// Tariff from the environment (USD per 1M tokens). Absent or invalid → no estimate.
+function priceEnv(v){if(typeof v!=='string'||!/^\d{1,4}(\.\d{1,6})?$/.test(v.trim()))return null;return Number(v.trim());}
+function tariff(env){const t={inputText:priceEnv(env.RUBIK_RENDER_PRICE_INPUT_TEXT),inputImage:priceEnv(env.RUBIK_RENDER_PRICE_INPUT_IMAGE),output:priceEnv(env.RUBIK_RENDER_PRICE_OUTPUT)};return Object.values(t).every(v=>v!==null)?t:null;}
+function costOf(usage,t){
+ if(!usage||!t||usage.outputTokens===null)return null;
+ let text=usage.inputTextTokens,image=usage.inputImageTokens;
+ if(text===null&&image===null){if(usage.inputTokens===null)return null;image=usage.inputTokens;text=0;} // undetailed input: priced as image (the dearer side) to never under-estimate
+ const amount=((text||0)*t.inputText+(image||0)*t.inputImage+usage.outputTokens*t.output)/1e6;
+ return {amount:Math.round(amount*1e6)/1e6,currency:'USD',basis:'tariff-env'};
+}
+function logCall(entry,log){try{log(JSON.stringify({event:'rubik-render',...entry}));}catch{}}
 function send(res,status,body){res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify(body));}
 function parseImage(dataUrl){
  const m=/^data:(image\/(?:png|jpeg));base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl||''));
  if(!m)return null;const bytes=Buffer.from(m[2],'base64');
  if(!bytes.length||bytes.length>MAX_BYTES)return null;return {type:m[1],bytes};
 }
-async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
+async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now,log=console.log,clock=Date.now}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
+ if(env.RUBIK_RENDER_ENABLED!=='1')return send(res,503,{error:'disabled'});
  if(!env.OPENAI_API_KEY||!env.RUBIK_RENDER_TOKEN)return send(res,503,{error:'not-configured'});
+ if(!sameSite(req))return send(res,403,{error:'origin'});
+ const lim=limits(env);
+ if(meter.blockedByFails(now(),lim.tokenFailsPerHour)){res.setHeader('Retry-After','3600');return send(res,429,{error:'limit'});}
  const token=req.headers['x-rubik-render-token'];
- if(typeof token!=='string'||token.length>200||!same(token,env.RUBIK_RENDER_TOKEN))return send(res,401,{error:'token'});
+ if(typeof token!=='string'||token.length>200||!same(token,env.RUBIK_RENDER_TOKEN)){meter.fail(now());return send(res,401,{error:'token'});}
  let body=req.body;if(typeof body==='string'){try{body=JSON.parse(body);}catch{return send(res,400,{error:'json'});}}
  const style=body?.style;if(!Object.hasOwn(STYLES,style))return send(res,400,{error:'style'});
  const floor=body?.floor??null,walls=body?.walls??null;
  if((floor!==null&&!Object.hasOwn(FLOORS,floor))||(walls!==null&&!Object.hasOwn(WALLS,walls)))return send(res,400,{error:'finish'});
  const image=parseImage(body?.image);if(!image)return send(res,400,{error:'image'});
+ const slot=meter.reserve(now(),lim);
+ if(!slot.ok){res.setHeader('Retry-After',String(slot.retryAfter));return send(res,429,{error:'limit',retryAfter:slot.retryAfter});}
  const form=new FormData();form.append('model',MODEL);form.append('prompt',prompt(style,{floor,walls}));form.append('n','1');form.append('size','1536x1024');
  form.append('image',new Blob([image.bytes],{type:image.type}),image.type==='image/png'?'view.png':'view.jpg');
+ const started=clock(),base={model:MODEL,style,floor,walls};
  let r;try{r=await fetchImpl('https://api.openai.com/v1/images/edits',{method:'POST',headers:{Authorization:`Bearer ${env.OPENAI_API_KEY}`},body:form});}
- catch{return send(res,502,{error:'provider-unreachable'});}
- const out=await r.json().catch(()=>null);
- if(!r.ok){const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':'provider-error';return send(res,502,{error:code});}
- const b64=out?.data?.[0]?.b64_json;if(!b64)return send(res,502,{error:'provider-empty'});
- return send(res,200,{image:`data:image/png;base64,${b64}`,model:MODEL,style,floor,walls,generatedAt:new Date().toISOString()});
+ catch{logCall({...base,status:'provider-unreachable',ms:clock()-started,usage:null,cost:null},log);return send(res,502,{error:'provider-unreachable'});}
+ const out=await r.json().catch(()=>null),usage=usageOf(out?.usage),cost=costOf(usage,tariff(env)),ms=clock()-started;
+ if(!r.ok){const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':'provider-error';logCall({...base,status:code,providerStatus:r.status,ms,usage,cost},log);return send(res,502,{error:code});}
+ const b64=out?.data?.[0]?.b64_json;if(!b64){logCall({...base,status:'provider-empty',ms,usage,cost},log);return send(res,502,{error:'provider-empty'});}
+ logCall({...base,status:'ok',ms,usage,cost},log);
+ return send(res,200,{image:`data:image/png;base64,${b64}`,model:MODEL,style,floor,walls,usage,cost,generatedAt:new Date().toISOString()});
 }
 module.exports=(req,res)=>handler(req,res);
 module.exports.handler=handler;module.exports.STYLES=STYLES;module.exports.FLOORS=FLOORS;module.exports.WALLS=WALLS;module.exports.prompt=prompt;
+module.exports.createMeter=createMeter;module.exports.limits=limits;module.exports.DEFAULT_LIMITS=DEFAULT_LIMITS;
+module.exports.usageOf=usageOf;module.exports.tariff=tariff;module.exports.costOf=costOf;
