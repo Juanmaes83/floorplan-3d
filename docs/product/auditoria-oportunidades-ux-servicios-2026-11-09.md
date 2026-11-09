@@ -60,7 +60,11 @@
 - AG-1 en rama: 5 archivos y 350 líneas, `js/assistant-domain-tools-core.js`, no en master.
 - Siguen abiertas como borrador: #166, #167, #165, #164 y #169.
 
-**Fuentes que no he podido verificar:** los cuatro PDF de Google Drive (Maket, ErectionOS, Makio y Floorcraft), porque esta sesión no tiene acceso a Drive. Sus afirmaciones se tratan como hipótesis y se contrastan solo contra el código.
+**Los cuatro PDF (Maket, ErectionOS, Makio y Floorcraft):** auditados uno por uno desde la rama `docs/referencias-nuevas-para-auditar-e-implementar-2026-11-06@66b24b0`, en **[`auditoria-4-pdf-referencias-ui-ux-2026-11-09.md`](./auditoria-4-pdf-referencias-ui-ux-2026-11-09.md)**. Ahí están las fichas por documento, la revisión a fondo de `house-plan-designer` y las nuevas candidatas UX-22 a UX-26 y V-11.
+
+Dos precisiones que salen de esa auditoría:
+- El **minimapa** existe en la Presentación pero **se oculta mientras se camina**, lo que da la mejora real UX-22.
+- Los **muros de carga** son un tipo **declarado** por el profesional, no una verificación estructural.
 
 ---
 
@@ -187,11 +191,12 @@
 
 **Corte 1 · Confianza comercial:** HOME-UX-E2 con el perfil Constructora (UX-01 y UX-02), y puesta al día de **#166** para tu revisión visual.
 
-**Corte 2 · Mejoras rápidas que reutilizan módulos existentes:** antes/después (UX-07), cotas en vivo (UX-08), maqueta blanca y ocultar muebles (UX-09), selector de modos (UX-05), panel contextual 3D (UX-03), dossier antes/después (C-02), ayudas (UX-04, solo delta) y **medición sobre el plano importado (G-06)**.
+**Corte 2 · Mejoras rápidas que reutilizan módulos existentes:** minimapa en el paseo (UX-22), accesos por estancia en el 3D (UX-23), «abrir todas las puertas» (UX-25), antes/después (UX-07), cotas en vivo (UX-08), maqueta blanca y ocultar muebles (UX-09), selector de modos (UX-05), panel contextual 3D (UX-03), dossier antes/después (C-02), ayudas (UX-04, solo delta) y **medición sobre el plano importado (G-06)**.
 
 **Corte 3 · Nuevas ofertas:**
 - estudio de imágenes (V-02), con cámara colocable (UX-16);
-- presets de amueblamiento (UX-12);
+- presets de amueblamiento por estancia y densidad, con semilla reproducible (UX-12), más sugerencia de tipo de estancia (UX-24);
+- «trae tu mueble» simple: foto + medidas → volumen genérico (V-11);
 - biblioteca propia de materiales y muebles con licencias registradas (V-10);
 - material del muro desde el 3D (UX-11);
 - pilotos FOT-01 (V-03) y CAT-IA1 (V-04), con consentimiento y presupuesto de prueba.
