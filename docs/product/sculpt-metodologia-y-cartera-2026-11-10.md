@@ -9,7 +9,7 @@
 
 ## 1. Qué sabemos, qué no sabemos y de dónde procede
 
-Se identifican **3 familias donantes principales con PR y SHA contrastados** y **13 áreas de oportunidad G0–G12** en la investigación del ecosistema. Las 13 áreas no son 13 módulos implementados, ni autorizaciones, ni pruebas de calidad. No consta en este repositorio un baseline SCULPT-R01 ejecutado ni una validación profesional de los donantes. Los informes adjuntos a conversaciones externas no equivalen a archivos presentes en GitHub: no declarar leído ni completo lo que no esté accesible.
+Se identifican **3 familias donantes principales con PR y SHA contrastados** y **13 áreas de oportunidad G0–G12** en la investigación del ecosistema. Las 13 áreas no son 13 módulos implementados, ni autorizaciones, ni pruebas de calidad. El baseline SCULPT-R01 se ejecutó en el laboratorio aislado de la [PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191) (ver §3); no consta validación profesional de ningún donante. Los informes adjuntos a conversaciones externas no equivalen a archivos presentes en GitHub: no declarar leído ni completo lo que no esté accesible.
 
 Fuentes metodológicas comprobables, cuya autoridad permanece en sus repositorios de origen:
 
@@ -47,9 +47,25 @@ Cuando las fuentes difieran, aplicar la precedencia del catálogo maestro: decis
 
 | Alias | Fuente verificable y SHA del HEAD donante | Capacidad por comprobar | Encaje actual / ola heredada | Estado real |
 |---|---|---|---|---|
-| **R01** | [wy51ai/floorplan-3d PR #18](https://github.com/wy51ai/floorplan-3d/pull/18), rama del contribuidor `zhuzhuyumeng/floorplan-3d:feat/floorplan-recognition`, `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Reconocimiento de plano raster, muros/huecos/estancias, OCR y posprocesado, orientación, escala, worker, pruebas | **F2 experimental** y **G-01, ola 4**; también investigación para G-06, ola 2; ninguna validación F2 se concede por clonar | **Identificada / código inspeccionado en origen; baseline no ejecutada aquí** |
+| **R01** | [wy51ai/floorplan-3d PR #18](https://github.com/wy51ai/floorplan-3d/pull/18), rama del contribuidor `zhuzhuyumeng/floorplan-3d:feat/floorplan-recognition`, `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Reconocimiento de plano raster, muros/huecos/estancias, OCR y posprocesado, orientación, escala, worker, pruebas | **F2 experimental** y **G-01, ola 4**; también investigación para G-06, ola 2; ninguna validación F2 se concede por clonar | **SCULPT-R01 — LABORATORIO FUNCIONAL, NO VALIDADO SOBRE PLANOS REALES** ([PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA `2158fd19207e4a33aeee8fed26d1b29be96103fa`); integración en producto **BLOQUEADA** |
 | **R02** | [wy51ai/floorplan-3d PR #17](https://github.com/wy51ai/floorplan-3d/pull/17), `zhuzhuyumeng/floorplan-3d:feat/ceiling-layout`, `324eb64cf9b26f6d4df8323c2dec4591fa4691e3` | Principalmente distribución de techo y luminarias/equipos; examinar la familia real y sus pruebas. **No está demostrada aquí una red completa de electricidad/agua/datos ni cumplimiento normativo español.** | Cercanía con **LUZ-01 (ola 5)** y **OBR-04 (ola 3)** solo como referencias parciales; geometría de techo/MEP sin encaje maestro exacto: **decisión pendiente** | **Identificada, alcance técnico por acotar; no clonada** |
 | **R03** | [wy51ai/floorplan-3d PR #11](https://github.com/wy51ai/floorplan-3d/pull/11), `caikaidev/floorplan-3d:codex/walkthrough-cabinet-interiors`, `2495d8e0bf7d3846d2da827121c15e3e83d752bd` | Modelado de armarios, compartimentos, puertas, cajones y geometría paramétrica a verificar; distinguir runtime propio de Three.js vendorizado | Relación parcial con **CAT-03 (ola 5)** y biblioteca **F3** existente; el editor paramétrico de armarios no equivale automáticamente a CAT-03: **decisión pendiente** | **Identificada, PR original cerrada sin merge; derechos del contribuidor y dependencias pendientes** |
+
+**Estado R01 sincronizado (10/11/2026).** Evidencia: [PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA final `2158fd19207e4a33aeee8fed26d1b29be96103fa`, e [informe técnico y acta de cierre](https://github.com/Juanmaes83/floorplan-3d/blob/2158fd19207e4a33aeee8fed26d1b29be96103fa/docs/technical/sculpt-r01-recognition.md). Este anexo no duplica el informe.
+- **Hecho, solo en laboratorio:**
+  - SOURCE EXACT reproducido y verificado (23 hashes);
+  - baseline del donante ejecutada;
+  - motor raster reutilizado y adaptado;
+  - comparador con RUBIK sobre seis planos sintéticos;
+  - reconocimiento como evidencia en píxeles.
+- **Límites:**
+  - sin escritura en `FloorPlanProjectV1`;
+  - sin escala confirmada ni geometría aplicada;
+  - sin OCR real ejecutado;
+  - sin cancelación interrumpible;
+  - **sin validación F2 con planos reales**;
+  - **GOV-05 pendiente**.
+- **Dictamen:** APTO como laboratorio de investigación · **HOLD para integración en RUBIK**. No cambia ola, ID ni prioridad: sigue en F2 experimental y G-01, ola 4.
 
 **Detalle R01 conocido por lectura del origen:** `js/recognition-core.js`, `js/recognition-service.js`, `js/recognition-worker.js`, `js/ocr-postprocess-rules.js`, `js/recognition-ui.js`, `js/project-model.js`, `js/project-ui.js` y las pruebas de reconocimiento y navegador. La PR #18 incluye 21 archivos; las rutas y dependencias definitivas se fijarán mediante SOURCE/ISOLATE. La ejecución OCR vista en el origen utiliza Tesseract y `chi_sim`, lo cual no prueba rendimiento en planos españoles.
 
