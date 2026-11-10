@@ -812,7 +812,7 @@
       .replace(/mi$/i, 'm²')
       .replace(/m2$/i, 'm²');
   }
-  function parseRoomArea(text) {
+  function parseRoomAreaOf(text, opt = { inferDroppedDecimal: true }) {
     const t = normalizeOcrText(text);
     // 9.14m² / 4.18m / 30.06 / 17.39m²
     let m = t.match(/(\d{1,2}\.\d{1,2})\s*(?:m²|m)?/i);
@@ -820,6 +820,9 @@
       const v = Number(m[1]);
       if (v >= 1.5 && v <= 120) return v;
     }
+    // SCULPT-R01 C2: the next three rules invent a decimal point that the text does not contain.
+    // They stay for donor parity (default) and are switched off by the RUBIK adapter.
+    if (!opt.inferDroppedDecimal) return null;
     // OCR dropped the decimal: 418m → 4.18, 728m → 7.28, 682m → 6.82
     m = t.match(/^(\d)(\d{2})\s*(?:m²|m)?$/i);
     if (m) {
@@ -863,7 +866,10 @@
     for (const [name, re] of rules) if (re.test(t)) return name;
     return null;
   }
-  function enrich(result, words) {
+  function enrich(result, words, options = {}) {
+    // SCULPT-R01 C2: heuristics that invent rooms, names or decimals are optional (donor defaults kept).
+    const opt = { synthesizeRooms: options.synthesizeRooms !== false, heuristicNames: options.heuristicNames !== false, inferDroppedDecimal: options.inferDroppedDecimal !== false };
+    const parseRoomArea = text => parseRoomAreaOf(text, opt);
     const raw = (words || []).map(o => ({
       text: normalizeOcrText(o.text),
       confidence: o.confidence ?? 0,
@@ -882,6 +888,7 @@
       if (!parseRoomName(text) && parseRoomArea(text) == null) return;
       merged.push({
         text,
+        merged: true,
         confidence: Math.max(a.confidence, b.confidence, 40),
         bbox: {
           x0: Math.min(a.bbox.x0, b.bbox.x0), y0: Math.min(a.bbox.y0, b.bbox.y0),
@@ -900,7 +907,7 @@
         pushMerge(a, b, top.text + bot.text);
         pushMerge(a, b, left.text + right.text);
         // 4 + 18m → 4.18m when decimal point was lost
-        if (/^\d$/.test(left.text) && /^\d{2}(?:m²|m)?$/i.test(right.text)) {
+        if (opt.inferDroppedDecimal && /^\d$/.test(left.text) && /^\d{2}(?:m²|m)?$/i.test(right.text)) {
           pushMerge(a, b, left.text + '.' + right.text);
         }
       }
@@ -933,6 +940,7 @@
       if (room.textEvidence && String(room.name).length > label.name.length) continue;
       room.name = label.name;
       room.textEvidence = label;
+      room.nameBasis = contains(label.cx, label.cy, room.poly) ? 'ocr-inside' : 'ocr-nearby';
       usedNames.add(room.id);
     }
     const areaHits = merged.map(o => {
@@ -975,6 +983,7 @@
     result.scaleHint = estimateScale(result, list) || estimateScaleFromAreas(result.rooms);
     // Labels outside every polygon: attach to a nearby wall-bounded room when possible,
     // otherwise synthesize a placeholder (open balconies historically fell through here).
+    const unplacedLabels = [];
     const orphanNames = nameHits.filter(l => !result.rooms.some(r => contains(l.cx, l.cy, r.poly)));
     for (const label of orphanNames) {
       if (result.rooms.some(r => r.name === label.name && r.textEvidence)) continue;
@@ -982,8 +991,10 @@
       if (nearBound && !nearBound.synthetic && (!nearBound.textEvidence || /^空间/.test(nearBound.name))) {
         nearBound.name = label.name;
         nearBound.textEvidence = label;
+        nearBound.nameBasis = 'ocr-nearby';
         continue;
       }
+      if (!opt.synthesizeRooms) { unplacedLabels.push(label); continue; }
       const nearArea = areaHits.find(h => !h._used && Math.hypot(h.cx - label.cx, h.cy - label.cy) < 55);
       const mm = (result.scaleHint && result.scaleHint.mmPerPx) || 10;
       const neighbor = result.rooms
@@ -1029,29 +1040,31 @@
         name: label.name,
         poly, at: [label.cx, label.cy],
         areaPx: nearArea ? Math.round(nearArea.area * 1e6 / (mm * mm)) : Math.round(rw * rh * 0.7),
-        rect, review: true, textEvidence: label, synthetic: true
+        rect, review: true, textEvidence: label, synthetic: true, nameBasis: 'ocr-synthetic'
       };
       if (nearArea) { room.areaLabel = nearArea.area; room.areaEvidence = nearArea; nearArea._used = true; }
       result.rooms.push(room);
     }
     // Bathroom often loses the noun but keeps the area — name small unlabeled rooms by typical size.
-    for (const room of result.rooms) {
+    if (opt.heuristicNames) for (const room of result.rooms) {
       if (room.areaLabel == null || !/^空间/.test(room.name)) continue;
-      if (room.areaLabel >= 3.5 && room.areaLabel <= 6.5 && room.areaPx < 25000) room.name = '卫生间';
+      if (room.areaLabel >= 3.5 && room.areaLabel <= 6.5 && room.areaPx < 25000) { room.name = '卫生间'; room.nameBasis = 'heuristic-area'; }
     }
     // Tiny unlabeled room beside kitchen is usually 玄关 / 管道井.
     const kitchen = result.rooms.find(r => r.name === '厨房');
-    if (kitchen) {
+    if (kitchen && opt.heuristicNames) {
       for (const room of result.rooms) {
         if (!/^空间/.test(room.name) || room.areaPx > kitchen.areaPx * 0.7) continue;
         const dx = Math.abs(room.at[0] - kitchen.at[0]);
         const dy = Math.abs(room.at[1] - kitchen.at[1]);
         if (dy < (kitchen.rect[3] - kitchen.rect[1]) && dx < (kitchen.rect[2] - kitchen.rect[0]) * 1.2) {
           room.name = '玄关';
+          room.nameBasis = 'heuristic-adjacency';
         }
       }
     }
     result.words = list;
+    result.unplacedLabels = unplacedLabels;
     if (!result.scaleHint) result.scaleHint = estimateScaleFromAreas(result.rooms);
     return result;
   }
@@ -1065,6 +1078,31 @@
     const mmPerPx = median(ratios);
     if (!(mmPerPx > 2 && mmPerPx < 40)) return null;
     return { mmPerPx, axis: 'area', values: ratios.map(v => Math.round(v * 100) / 100), source: '房间面积标注反推' };
+  }
+  // SCULPT-R01 C3: every scale candidate, unselected. The donor keeps only the one closest to
+  // 10 mm/px (a prior of its own fixture); the RUBIK adapter reports all of them as unverified hints.
+  function scaleCandidates(result, words) {
+    const out = [];
+    const nums = [];
+    for (const o of words || []) {
+      const text = String(o.text || '');
+      for (const m of text.matchAll(/\b(\d{3,5})\b/g)) {
+        const value = Number(m[1]);
+        if (value < 600 || value > 20000) continue;
+        nums.push({ value, cx: (o.bbox.x0 + o.bbox.x1) / 2, cy: (o.bbox.y0 + o.bbox.y1) / 2 });
+      }
+    }
+    if (nums.length && result.bounds) {
+      const [x0, y0, x1, y1] = result.bounds, bw = x1 - x0, bh = y1 - y0;
+      const bottom = nums.filter(n => n.cy > y1 - bh * .18 && n.cx > x0 - 40 && n.cx < x1 + 40).sort((a, b) => a.cx - b.cx);
+      const right = nums.filter(n => n.cx > x1 - bw * .18 && n.cy > y0 - 40 && n.cy < y1 + 40).sort((a, b) => a.cy - b.cy);
+      if (bottom.length >= 2 && bw > 0) out.push({ method: 'dimension-text-sum', axis: 'x', mmPerPx: bottom.reduce((s, n) => s + n.value, 0) / bw, values: bottom.map(n => n.value) });
+      if (right.length >= 2 && bh > 0) out.push({ method: 'dimension-text-sum', axis: 'y', mmPerPx: right.reduce((s, n) => s + n.value, 0) / bh, values: right.map(n => n.value) });
+    }
+    const ratios = [];
+    for (const r of result.rooms || []) if (r.areaLabel > 1.5 && r.areaPx > 200 && !r.synthetic) ratios.push(1000 * Math.sqrt(r.areaLabel / r.areaPx));
+    if (ratios.length >= 2) out.push({ method: 'area-label-ratio', axis: null, mmPerPx: median(ratios), values: ratios });
+    return out;
   }
   function estimateScale(result, words) {
     const nums = [];
@@ -1345,6 +1383,6 @@
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" class="' + cls + '" aria-hidden="true">' + frame + walls + rooms + openings + compass + '</svg>';
   }
   function escapeXml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
-  root.FloorplanRecognition = { LEGACY_UI_MASK, detect, enrich, contains, median, estimateScale, toArchitecture, fillMissingPartitionWalls, overlaySVG, rectTouchesOuter, detectCompass, detectDimensionFrame, cleanUnderlayImage, scrubRoomLabelInk, roomLabelScrubRects, cropCanvasTo, snapNorthCardinal };
+  root.FloorplanRecognition = { LEGACY_UI_MASK, scaleCandidates, detect, enrich, contains, median, estimateScale, toArchitecture, fillMissingPartitionWalls, overlaySVG, rectTouchesOuter, detectCompass, detectDimensionFrame, cleanUnderlayImage, scrubRoomLabelInk, roomLabelScrubRects, cropCanvasTo, snapNorthCardinal };
   if (typeof module !== 'undefined') module.exports = root.FloorplanRecognition;
 })(globalThis);
