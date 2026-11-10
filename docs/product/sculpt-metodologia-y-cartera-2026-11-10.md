@@ -122,3 +122,72 @@ Para el reconocimiento de planos, [F2](../qa/F2-entry-protocol.md) exige **5 ses
 **Campos que debe aportar cada futura piedra:** alias, ID maestro/pendiente, fuente/SHA/ruta, hashes, licencia, capacidad completa, dependencias, autoridad del dato, estado (identificada → clonada → baseline → adaptada → probada → revisada → integrada), tests reales, Preview, riesgos, decisión humana, PR y SHA de integración. Ninguno de esos estados se infiere de la mera existencia de esta ficha.
 
 **Control de actualización:** cualquier ampliación de cartera debe modificar primero el catálogo maestro o aportar un enlace subordinado; no crear otro roadmap, ni reescribir las olas, ni convertir hipótesis en hechos.
+
+## 8. Inventario ampliado de donantes y oportunidades (revisión 10/11/2026)
+
+**Corrección de alcance:** R01–R03 son las **tres primeras piedras priorizadas**, no todas las piedras posibles. La revisión ha encontrado **8 PR registradas en el upstream** (solo #7 fusionada), **12 repositorios externos accesibles** (incluidos forks vinculados a las PR) y **2 forks propios cuyos HEAD coinciden exactamente con sus padres**. Estas cifras cuentan fuentes, NO piedras independientes ni módulos aprobados. Los 13 alias G0–G12 mantienen su significado y correspondencia en §4. Nada aquí crea otra ola ni autoriza copiar código.
+
+### 8.1 Las ocho PR de wy51ai/floorplan-3d
+
+| PR | Fuente y SHA del HEAD | Capacidad encontrada | Situación frente a RUBIK |
+|---|---|---|---|
+| [#4](https://github.com/wy51ai/floorplan-3d/pull/4) | `231be5373714bab24becb6fba8847c52c2054ff0` | Chino tradicional y términos de Taiwán | Cerrada sin merge; localización futura, no piedra prioritaria. |
+| [#7](https://github.com/wy51ai/floorplan-3d/pull/7) | `jinniw43805`, `e5c444995a5a80b68c66a9ff934c8fee7247b258` | UI chino tradicional | Única fusionada; no contar como PR donante pendiente. |
+| [#8](https://github.com/wy51ai/floorplan-3d/pull/8) | `jinniw43805`, `3140735d1a375571359c8b02ac902c620c79cff6` | Importar layout completo, editar/dibujar muros, snapping, estancias en L, undo y persistencia; todo en un diff de `index.html` | **Candidata adicional importante** para editor/F2; su importación reemplaza geometría: NO copiar el writer destructivo. |
+| [#9](https://github.com/wy51ai/floorplan-3d/pull/9) | `broxlighters`, `508c773659db2a145fe4fbeacf682514070c81e5` | Ocho muebles de taller, maquetismo, exhibición y cocina con encimera de acero | F3/BIB-01, activos y geometría; pruebas offline declaradas, sin recorrido real de navegador en la PR. |
+| [#11](https://github.com/wy51ai/floorplan-3d/pull/11) | `caikaidev`, `2495d8e0bf7d3846d2da827121c15e3e83d752bd` | Armarios paramétricos y Three.js vendorizado | **R03**; cerrada sin fusionar, derechos y dependencias por investigar. |
+| [#15](https://github.com/wy51ai/floorplan-3d/pull/15) | `tiggerhat`, `cdd5b9181ba60043137413fb25a12abae7cc0b61` | Pilares, conductos, patinillos de agua y electricidad/datos, ventilación, dimensiones y colisiones 2D/3D | **Candidata adicional importante** de elementos constructivos; no es cálculo ni certificación MEP. |
+| [#17](https://github.com/wy51ai/floorplan-3d/pull/17) | `zhuzhuyumeng`, `324eb64cf9b26f6d4df8323c2dec4591fa4691e3` | Techos y equipos, diseño asistido por IA, modelos de mobiliario y núcleo de reconocimiento/OCR compartido | **R02 es solo parte**. Separar `ai-layout.js` y `furniture-*` en inventario, no duplicar reconocimiento. |
+| [#18](https://github.com/wy51ai/floorplan-3d/pull/18) | `zhuzhuyumeng`, `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Motor raster/OCR, worker, reglas y pruebas | **R01**, parcialmente duplicada por #17. |
+
+**Solapamiento certificado por hash Git** entre los HEAD de #17 y #18: `js/recognition-core.js` = `d635e751abc5ed00a611491bc954c2fe184a952c`, `js/recognition-service.js` = `e905116d745588b9fee6f6cbc12b71a351d67362` y `js/ocr-postprocess-rules.js` = `c716eeef05ffbef6a6b088e130914d51328c010f`. Estos tres archivos son idénticos, no dos motores independientes. En cambio, `js/project-model.js` tiene hashes distintos y debe compararse antes de normalizar.
+
+### 8.2 Doce repositorios externos verificados (no doce piedras)
+
+| Repositorio | Referencia verificable | Diferencial o límite de la evidencia |
+|---|---|---|
+| [zhuzhuyumeng/floorplan-3d](https://github.com/zhuzhuyumeng/floorplan-3d) | `master@88323f3cc4ab5960570560192dee3d6163186a94` | Fork oficial del original; procedencia de #17/#18. |
+| [jinniw43805/floorplan-3d](https://github.com/jinniw43805/floorplan-3d) | PR #8, SHA arriba | Fork oficial; importación/edición y localización. |
+| [broxlighters/floorplan-3d](https://github.com/broxlighters/floorplan-3d) | PR #9, SHA arriba | Fork oficial; mobiliario de taller. |
+| [caikaidev/floorplan-3d](https://github.com/caikaidev/floorplan-3d) | PR #11, SHA arriba | Fork oficial; armarios. |
+| [tiggerhat/floorplan-3d](https://github.com/tiggerhat/floorplan-3d) | PR #15, SHA arriba | Fork oficial; elementos constructivos. |
+| [wholeai/floorplan-3d-go](https://github.com/wholeai/floorplan-3d-go) | `main@a9a226a7688c3f8eb2b9d3106387fea77b1d1f0a` | Derivado Go/SQLite; README describe 10 estilos, showroom, 16 familias de materiales, cantidades, presupuesto, PDF y variantes. RUBIK ya tiene parte: evaluar **delta**, no migrar a Go. |
+| [faye25tom/floorplan-3d-ai](https://github.com/faye25tom/floorplan-3d-ai) | `master@a575a3c330a5a54b5abad156eabbe517639d889b` | Derivado independiente; README describe reconocimiento LLM multimodal, editor modular, 4 presets y autoamueblado. Verificar código, precisión, costes, privacidad y no exponer claves en cliente. |
+| [TomNick777/home-design](https://github.com/TomNick777/home-design) | `master@6b1106e86062adcc3bb64956bd1a5836451fb7cb` | Caso secundario; estado del proyecto indica migración posterior a plantilla `house-plan-designer`. No atribuir el código actual íntegramente al original. |
+| [jinbao7788/my-floorplan](https://github.com/jinbao7788/my-floorplan) | `main@b78a2ece2d94b90beae003f82da36e173973aeb8` | Adaptación doméstica; diferencial funcional no evaluado. |
+| [masonycw/floorplan-3d](https://github.com/masonycw/floorplan-3d) | `master@622b48518aa47cb4034e95132eb993cceb29dbd5` | Variante de diseño y mobiliario; diferencial no medido. |
+| [hongyangchun/floorplan-3d](https://github.com/hongyangchun/floorplan-3d) | `main@d540dd868042d8deff32627e9d108c9741409464` | Derivado con despliegue Cloudflare; valor funcional no medido. |
+| [shaoq9371-glitch/3d66-modeling](https://github.com/shaoq9371-glitch/3d66-modeling) | `main@db032cd39a238524837ec5436bf1052a49217c67` | Derivado independiente con `server/cad.py` y `src/scene.js`; documentación declara DXF con `ezdxf`, unidades y capas. Comparar con importador DXF de RUBIK. |
+
+**Nombres todavía no localizados:** `Falix23/floorplan-3d` y `BysunLin/floorplan-3d` devolvieron 404 con esas rutas exactas y no se localizaron por la búsqueda de repositorios. No afirmar que se han inspeccionado, ni inventar SHA o clasificar su funcionalidad. Mantener referencia **pendiente de URL correcta/visibilidad**.
+
+### 8.3 Dos forks propios que ya tenemos
+
+| Repositorio propio | Padre verificado | SHA comparado |
+|---|---|---|
+| [Juanmaes83/floorplan-3d-ai](https://github.com/Juanmaes83/floorplan-3d-ai) | `faye25tom/floorplan-3d-ai` | `master@a575a3c330a5a54b5abad156eabbe517639d889b`, **igual al HEAD del padre** |
+| [Juanmaes83/floorplan-3d-go](https://github.com/Juanmaes83/floorplan-3d-go) | `wholeai/floorplan-3d-go` | `main@a9a226a7688c3f8eb2b9d3106387fea77b1d1f0a`, **igual al HEAD del padre** |
+
+Aprovechar copias propias; no son dos familias extra. Igualdad de SHA de HEAD significa mismo commit actual, no demuestra capacidades adicionales desarrolladas en los forks.
+
+### 8.4 Once familias adicionales observadas: candidatas, NO aprobadas
+
+| Familia para investigar | Fuente | Encaje tentativo en el catálogo maestro | Gate pendiente |
+|---|---|---|---|
+| Muros y estancias irregulares, snapping, undo | PR #8 | F2, G-01; UX-14 solo parcial | Comparar contra editor, ID y preflight canónicos. |
+| Pilares, conductos y patinillos | PR #15 | OBR-04 parcial; G7 investigación | No simular MEP normativo; geometría 2D/3D. |
+| Muebles de taller y encimeras | PR #9 | F3/BIB-01 y CAT-03 parcial | Licencias, dimensiones, performance y catálogo. |
+| Distribución IA y propuestas | PR #17, `js/ai-layout.js` | AG-2, GEN-01 parciales | Distinguir algoritmo de API y costes. |
+| Catálogo y colocación asistida | PR #17, `js/furniture-*` | UX-12, F3, CAT-03 parciales | Deduplicación y pruebas. |
+| Reconocimiento multimodal | faye25tom y fork propio | R01/G-01 y AG-1 parciales | Seguridad, privacidad, tasa de errores, coste. |
+| Autoamueblado y presets | faye25tom y fork propio | UX-12/UX-13 | Benchmark y geometría canónica. |
+| Estilos y showroom | wholeai y fork propio | IMG-08/UX-13 y Presentation existente | Retener visores, cámara y estados de RUBIK. |
+| Cómputos de materiales, presupuesto, informes PDF | wholeai y fork propio | C1–C4/BC3, ENT-04 | Comparar outputs; nunca duplicar presupuesto. |
+| CAD por capas y unidades | 3d66 | Importador DXF actual; G-01/G-02 parcial | Comparativa sobre fixtures autorizados. |
+| Plantillas residenciales y migración de motores | TomNick777 | Editor, F2, GEN-01 parcialmente | Verificar origen del template y permisos. |
+
+**No sumar** las 11 filas y las 3 piedras como 14 módulos independientes: varias comparten motores con otras o ya existen en RUBIK. Identificar un donante es SOURCE; solo después de ISOLATE + baseline + CLASSIFY se puede formalizar otra piedra.
+
+**Orden de investigación tentativo, NO de implementación:** R01 y las diferencias reales de #8/#15; después las neuronas no duplicadas de #17 y faye25tom; después wholeai como benchmark de estilos, cantidades y documentación; #9 como assets; otras fuentes como referencias secundarias. Se conservan sin alteración las olas 0–5, sus IDs, la seguridad GOV-08/ENT y las autorizaciones humanas.
+
+**Anti-duplicación y derechos:** comparar hashes, preservar origen exacto y permisos, examinar código real y no solo README, no importar aplicaciones completas, no activar proveedores pagos y no añadir escritores alternativos al `FloorPlanProjectV1`, `FloorPlanBuildingV1`, F3, C1–C4/BC3 o FT3D-8. **Toda futura piedra requiere PR/CI/Preview y aprobación por corte.**

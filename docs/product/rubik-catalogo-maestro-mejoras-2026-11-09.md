@@ -1,6 +1,6 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
-**Fecha:** 09/11/2026 · **Versión:** 1.5 (anexo documental SCULPT añadido el 10/11/2026; estados factuales v1.4 preservados, ver §7–8) · **Estado: PROPUESTO** · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
+**Fecha:** 09/11/2026 · **Versión:** 1.6 (donantes y familias ampliadas 10/11/2026; estados v1.4 preservados, ver §7–8) · **Estado: PROPUESTO** · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
 **Base de verificación:** `master@8df49ed` (= `5fb7a5c` + PR #183, #184 y #185). **Production:** `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` sobre `8df49ed` desde el 09/11/2026, con la Home de seis perfiles y Render IA D1 intacto (ver `docs/product/hom-01/cierre-hom-01-02-publicacion-2026-11-09.md` y `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`).
 
 ## 0. Para qué sirve y cómo usarlo
@@ -56,7 +56,7 @@ Aprobar una ola **no** aprueba el catálogo entero. Se resuelven los conflictos 
 | F8 | Auditoría verificada de oportunidades (09/11) | rama `docs/auditoria-oportunidades-2026-11-09`, `auditoria-oportunidades-ux-servicios-2026-11-09.md` | UX-01 a UX-21, V-, C-, G-, A-, fuentes externas |
 | F9 | Fichas de los 4 PDF (Maket, ERECTION.OS, Makio, Floorcraft) | misma rama, `auditoria-4-pdf-referencias-ui-ux-2026-11-09.md` | M1–M12, E1–E9, K1–K9, F1–F12, UX-22 a 26, V-11 |
 | F10 | Render IA D1 | PR #180 (fusionada), #181 y #182 | IMG-01, IMG-02 y parte de IMG-04 |
-| F11 | SCULPT: métodos y donantes del ecosistema Floorplan 3D (investigación, no ejecución) | [Anexo técnico subordinado](sculpt-metodologia-y-cartera-2026-11-10.md) · fuentes de FUNDING OS y VECINIA | R01–R03 y matriz de G0–G12 contra IDs/olas existentes; no concede autorización |
+| F11 | SCULPT: métodos y donantes del ecosistema Floorplan 3D (investigación, no ejecución) | [Anexo técnico subordinado](sculpt-metodologia-y-cartera-2026-11-10.md) · fuentes de FUNDING OS y VECINIA | R01–R03 priorizadas; 8 PR de upstream, 12 repos externos, 2 forks propios, 11 familias candidatas y G0–G12; no concede autorización |
 
 ---
 
@@ -332,9 +332,12 @@ Marca en la sección 3 cada fila con ✔, ✖ o ⏸. Las decisiones que desbloqu
 | 1.2 | (1) HOM-03 ya no depende del antiguo GOV-01, sino de GOV-01c, GOV-09b y GOV-03, y solo anuncia lo **activo en Production**. (2) GOV-09 dividido: **GOV-09a**, acreditar el modelo y su compatibilidad con una prueba autorizada **antes** del Promote (GOV-01c pasa a depender de ella), y **GOV-09b**, confirmarlo en el registro **después**. (3) GOV-08 reordenado: lo principal es el código compartido, el permiso de publicación propio y la **revocación individual** de enlaces; la comparación en tiempo constante es un detalle menor. | Segunda revisión externa aportada por el propietario, 09/11 |
 | 1.3 | Estados factuales tras el cierre de Render IA D1: Production en `dpl_5oHsDPdSVG5buSVCnYPrLPmbnbNi` (`5fb7a5c`); IMG-01 e IMG-02 pasan a **E**; GOV-09b hecho con el log real; GOV-09a registrada como **desviación cronológica** (no se hizo antes del Promote). Las casillas de decisión del propietario **no se modifican**. Acta: `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`. | Orden maestra del propietario, 09/11 |
 | 1.4 | Estados factuales tras publicar la Home: HOM-01 (#184) y HOM-02 (#185) pasan a **E** y están en Production `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (`master@8df49ed`), con la revisión visual aprobada por el propietario. GOV-03 pasa a **P** (registro mínimo). HOM-03, GOV-08, ENT-01 y ENT-02 **no cambian**: siguen pendientes de decisión. | Integración autorizada por el propietario, 09/11 |
+| 1.6 | Amplía el inventario: 3 piedras priorizadas, 8 PR upstream, 12 repos externos confirmados, 2 forks propios y 11 familias adicionales; documenta solapamientos por hash y referencias sin verificar. Sin cambiar olas, estados ni decisiones de producto. | Investigación verificada en GitHub y revisión del propietario, 10/11/2026 |
 | 1.5 | Se incorpora SCULPT como **método transversal** y registro de tres piedras y trece áreas G0–G12, todas reconciliadas con IDs y olas existentes o marcadas pendientes; sin modificar decisiones, estados, gates ni prioridades. Anexo técnico subordinado y enlace en roadmap histórico. | Autorización expresa del propietario para documentación, 10/11/2026 |
 
 ## 8. SCULPT — registro subordinado de piedras y oportunidades (propuesta documental de 10/11/2026)
+
+**Ampliación v1.6:** R01–R03 son las primeras piedras priorizadas, no el inventario total. El [anexo §8](sculpt-metodologia-y-cartera-2026-11-10.md#8-inventario-ampliado-de-donantes-y-oportunidades-revisión-10112026) registra ocho PR upstream, doce repos externos verificables, dos forks propios y once familias candidatas a deduplicar antes de formalizar piedras. **Ninguna nueva ola ni autorización.**
 
 **Una sola autoridad de decisiones:** las olas 0–5, los cortes 2a–2f, los IDs de mejora y las casillas del propietario de las secciones 3–6 **no se modifican** por incorporar SCULPT. La metodología es transversal, **no una nueva ola**. Su detalle técnico, riesgos, fuentes y mapeo G0–G12 constan en [SCULPT — metodología y cartera de piedras](sculpt-metodologia-y-cartera-2026-11-10.md).
 
