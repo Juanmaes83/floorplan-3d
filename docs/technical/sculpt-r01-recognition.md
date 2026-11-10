@@ -4,6 +4,41 @@
 **Estado:** **laboratorio funcional NO VALIDADO** sobre planos reales. **Integración en el producto: BLOQUEADA** hasta completar F2: cinco sesiones y veinte planos reales autorizados ([protocolo](../qa/F2-entry-protocol.md)). Laboratorio fuera de Vercel.
 **Registro:** la cartera SCULPT y los alias G0–G12 viven en el catálogo SCULPT de la PR #192 (`docs/product/sculpt-metodologia-y-cartera-2026-11-10.md`), subordinado al catálogo maestro. Este documento no crea otra cartera ni toca las olas.
 
+## Acta de cierre técnico — SCULPT-R01, primer corte (10/11/2026)
+
+**SCULPT-R01 — PRIMER CORTE DE LABORATORIO TÉCNICAMENTE COMPLETADO.**
+
+- **Alcance:** la auditoría independiente sobre `43fb03f` aceptó las siete correcciones anteriores. Este cierre solo añade el ajuste 1: el hash de píxeles pasa a ser obligatorio en `RecognitionEvidenceV1` (commit `ab64708`; ver §E y el ciclo C10).
+- **No hay** cambios de algoritmo, taller, comparador ni producto. La evidencia de los seis planos sintéticos es idéntica antes y después.
+- **Cerrar el expediente técnico no cierra la PR #191**, no la fusiona y no activa el reconocimiento en el producto.
+
+| Dictamen | Fundamento |
+|---|---|
+| **APTO COMO LABORATORIO DE INVESTIGACIÓN** | Donante recuperado (wy51ai/floorplan-3d#18, `1d235fc`). Copia exacta reproducible y verificada en local y en CI (`source-exact`). Capacidades adaptadas y probadas: taller 17/17, adaptador 17/17. Evidencia en píxeles y comparador con RUBIK sobre seis planos sintéticos. CI completo verificado: **12/12 sobre `ab64708`**. Contrato de evidencias corregido (hash de píxeles obligatorio) |
+| **HOLD PARA INTEGRACIÓN EN RUBIK** | Sin validación F2 con planos reales (5 sesiones y 20 planos). Licencias y atribuciones de GOV-05 pendientes. Ningún OCR local seleccionado ni integrado. Sin cancelación interrumpible. Sin contrato de propuestas aplicables con confirmación y deshacer |
+
+**Gates SCULPT de R01:**
+
+| Gate | Estado |
+|---|---|
+| 0 SOURCE | ✔ (licencias documentadas; GOV-05 abierto) |
+| 1 ISOLATE | ✔ |
+| 2 SCULPT | ✔ |
+| 3 BENCHMARK | ✔ solo sintético |
+| 4 HUMAN REVIEW | pendiente (Juanma) |
+| 5 SURGERY/INTEGRACIÓN | bloqueado |
+| 6 MERGE | no autorizado |
+| 7 PRODUCTION | no autorizado |
+
+**Trabajos posteriores, NO autorizados por esta acta** (cada uno, un corte independiente):
+1. GOV-05, licencias y atribuciones.
+2. F2, validación con planos reales autorizados, sin subirlos al repositorio público.
+3. Selección de un OCR local para ES/EN, sin APIs de pago.
+4. Cancelación real con el worker del donante.
+5. Contrato de aplicación segura: observación → propuesta → preflight → diff por ID → confirmación humana → operación atómica → deshacer.
+
+Registro en el catálogo: ficha R01 del anexo SCULPT y del catálogo maestro (PR #192), sincronizada con el SHA final de esta PR.
+
 Metodología: SCULPT (`SOURCE → ISOLATE → CLASSIFY → SCULPT → NORMALIZE → TEST → PREVIEW → HUMAN REVIEW → MERGE`), según `SUBVENCIONES-PYMES/docs/20-SCULPT-METHODOLOGY.md`, `VECINIA-WORLDS/docs/28-CROSS-REPO-CLONING…` y `…/ROADMAP_SCULPTURE_TO_SURGERY…`, y la metodología FT3D de escultura (rama `docs/ft3d-reference-sculpture-rea-methodology`). Esta misión cubre los gates 0–3; el 4 (revisión humana) corresponde a Juanma.
 
 ## A. Arqueología y procedencia
@@ -128,7 +163,7 @@ Detalle completo en `labs/sculpt/r01-recognition/PROVENANCE.md`. En resumen:
   |---|---|
   | Solo `imageRef.fileSha256` | `file.status: 'declared'` (no comprobado) |
   | Con `fileBytes` | El adaptador calcula SHA-256: `'verified'` más `bytes`; si no coincide con lo declarado, rechaza con `image-file-hash-mismatch` |
-  | `pixels.sha256` | Se calcula siempre sobre `uint32be(ancho)+uint32be(alto)+RGBA`; `validate(ev, {image})` lo recalcula (`pixels-hash-mismatch`) |
+  | `pixels.sha256` | **Obligatorio.** Se calcula siempre sobre `uint32be(ancho)+uint32be(alto)+RGBA` (`covers`). Sin `{image}`, `validate()` comprueba presencia, formato, estado `computed` y `covers` (`source-image-pixels:missing\|sha256\|status\|covers`), sin afirmar ninguna verificación criptográfica. Con `{image}` lo recalcula (`pixels-hash-mismatch`) |
   | Clave ambigua `sha256` | Rechazada |
 
   SHA-256 en JS puro y síncrono, contrastado con `node:crypto`. Coste: unos 190 ms con 2,9 MP en este contenedor.
@@ -176,12 +211,13 @@ Memoria de `analyse()` sobre `grey-walls-fills`, medida con `process.memoryUsage
 | **C6** | En el navegador, RUBIK salía sin huecos ni estancias (en Node, 3/3) | La página carga las dependencias de `project-core` en el orden de la app y no carga `surface-catalog` (su `catalog.json` daba 404) | Antes: «—, —»; después: «3 huecos, 3 estancias», igual que Node. Sin errores de página ni peticiones externas | KEEP |
 | **C7** (auditoría 1) | `fetch-source-exact.sh` hacía `rm -rf` sobre el destino indicado | Destino no vacío → salida 3; enlace o ruta interna → salida 2; construcción y verificación en un temporal, luego `mv`; `--verify` de solo lectura | Antes: con el script de `59226c5`, un directorio ajeno se borraba (prueba 15 en rojo). Después: contenido intacto y reproducibilidad conservada (verificación local y job `source-exact`) | KEEP |
 | **C8** (auditoría 3) | Cajas OCR fuera de la imagen aceptadas, texto truncado sin aviso, «hash» del llamante sin distinguir | Límites de marco con código e índice; ningún truncado; `file.status` `declared`/`verified`; `pixels.sha256` calculado; `validate` estructural de OCR, anotaciones y procedencia | Antes: las pruebas 5, 6, 7 y 14 fallan con `59226c5`. Después: pasan | KEEP |
+| **C10** (cierre, ajuste 1) | `validate()` aceptaba `source.image.pixels = null` | Hash de píxeles obligatorio, con códigos por motivo | Antes, en `43fb03f`: `validate(pixels=null)` → `[]` y la prueba 17 falla. Después: `["source-image-pixels","source-image-pixels:missing"]` y 17/17. Evidencia idéntica en 6 planos | KEEP |
 | **C9** (auditoría 2) | La prueba se llamaba «cancel/restart» | Renombrada a «recuperación tras rechazo (no cancelación)»; comprueba que no existe una API `cancel`/`abort` | Ninguna afirmación de cancelación real | KEEP |
 
 Capturas: `docs/qa/artifacts/sculpt-r01/lab-{1440x900,1280x800,390x844,844x390}.png`. Son solo sintéticos, sin desplazamiento horizontal y sin errores.
 
 ## Pruebas y CI
-- `tests/sculpt-r01-recognition.test.cjs`: **16/16**. Cubre:
+- `tests/sculpt-r01-recognition.test.cjs`: **17/17**. La 17, del cierre, comprueba el **hash de píxeles obligatorio**. Cubre:
   - procedencia, y que la imagen ajena no está en el repositorio;
   - `labs/` en `.vercelignore`;
   - contrato en los seis estilos;
@@ -241,7 +277,7 @@ Los alias G0–G12 y su correspondencia con el catálogo maestro se mantienen **
 | Capacidad | Raster: muros, huecos y estancias; asociación de OCR; pistas de escala; norte y marco de cotas |
 | Autoridad del dato | Ninguna: solo evidencia con `canonical: false`. La geometría sigue siendo de `FloorPlanProjectV1` |
 | **Estado** | **Laboratorio funcional NO VALIDADO**: clonada → baseline → adaptada → probada en sintético. Sin revisión humana, sin integrar |
-| Pruebas reales | Donante 24/24 (snapshot) y 17/17 (taller); laboratorio 16/16; CI en la PR #191 |
+| Pruebas reales | Donante 24/24 (snapshot) y 17/17 (taller); laboratorio 17/17; CI 12/12 en la PR #191 (`ab64708`) |
 | Preview | Vercel excluye `labs/` (404 comprobado); revisión local o con capturas |
 | Riesgos | Sin F2; OCR no ejecutado; coma decimal; sin cancelación interrumpible; GOV-05 |
 | Decisión humana / PR | PR #191 en borrador; **integración bloqueada** |
