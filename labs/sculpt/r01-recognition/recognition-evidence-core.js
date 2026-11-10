@@ -13,8 +13,9 @@
 
   const SCHEMA = 'rubik.recognition-evidence', VERSION = 1;
   const DONOR = Object.freeze({
-    repo: 'zhuzhuyumeng/floorplan-3d', commit: '1d235fc0a3c45783e1e1fa129944f8f34d97d297',
-    license: 'MIT', workshop: 'labs/sculpt/r01-recognition/workshop/recognition-core.js'
+    repo: 'zhuzhuyumeng/floorplan-3d', branch: 'feat/floorplan-recognition', upstreamPr: 'wy51ai/floorplan-3d#18',
+    commit: '1d235fc0a3c45783e1e1fa129944f8f34d97d297',
+    license: 'MIT (declared in the donor tree; legal review pending, GOV-05)', workshop: 'labs/sculpt/r01-recognition/workshop/recognition-core.js'
   });
   const LIMITS = Object.freeze({ minSide: 32, maxPixels: 3000000, maxWords: 5000, maxText: 200 });
   // C1/C2: donor-specific behaviour switched off. Explicit, so every evidence states what ran.
@@ -32,6 +33,56 @@
   const SHA256_RE = /^[0-9a-f]{64}$/;
 
   const finite = v => typeof v === 'number' && Number.isFinite(v);
+
+  // Pure, synchronous SHA-256 (FIPS 180-4) so the adapter can VERIFY hashes itself, in Node and in the browser alike.
+  const K256 = new Uint32Array([
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+    0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+    0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2]);
+  function sha256(parts) {
+    const H = new Uint32Array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]);
+    const w = new Uint32Array(64), block = new Uint8Array(64);
+    let fill = 0, total = 0;
+    const compress = () => {
+      for (let i = 0; i < 16; i++) w[i] = (block[i * 4] << 24 | block[i * 4 + 1] << 16 | block[i * 4 + 2] << 8 | block[i * 4 + 3]) >>> 0;
+      for (let i = 16; i < 64; i++) {
+        const a = w[i - 15], b = w[i - 2];
+        const s0 = (a >>> 7 | a << 25) ^ (a >>> 18 | a << 14) ^ a >>> 3, s1 = (b >>> 17 | b << 15) ^ (b >>> 19 | b << 13) ^ b >>> 10;
+        w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+      }
+      let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (let i = 0; i < 64; i++) {
+        const S1 = (e >>> 6 | e << 26) ^ (e >>> 11 | e << 21) ^ (e >>> 25 | e << 7), ch = e & f ^ ~e & g;
+        const t1 = (h + S1 + ch + K256[i] + w[i]) >>> 0;
+        const S0 = (a >>> 2 | a << 30) ^ (a >>> 13 | a << 19) ^ (a >>> 22 | a << 10), mj = a & b ^ a & c ^ b & c;
+        const t2 = (S0 + mj) >>> 0;
+        h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+      }
+      H[0] += a; H[1] += b; H[2] += c; H[3] += d; H[4] += e; H[5] += f; H[6] += g; H[7] += h;
+    };
+    const push = bytes => {
+      total += bytes.length;
+      for (let i = 0; i < bytes.length; i++) { block[fill++] = bytes[i]; if (fill === 64) { compress(); fill = 0; } }
+    };
+    for (const p of parts) push(p);
+    const bits = total * 8;
+    push(new Uint8Array([0x80]));
+    while (fill !== 56) push(new Uint8Array([0]));
+    const len = new Uint8Array(8);
+    for (let i = 0; i < 8; i++) len[7 - i] = Math.floor(bits / 2 ** (8 * i)) & 0xff;
+    push(len);
+    return Array.from(H, v => v.toString(16).padStart(8, '0')).join('');
+  }
+  const asBytes = d => d instanceof Uint8Array || d instanceof Uint8ClampedArray ? new Uint8Array(d.buffer, d.byteOffset, d.byteLength) : null;
+  // Hash of the decoded pixels: width and height (uint32, big endian) followed by the RGBA bytes. Computed, so always verified.
+  function pixelSha256(image) {
+    const head = new Uint8Array(8), v = new DataView(head.buffer);
+    v.setUint32(0, image.width); v.setUint32(4, image.height);
+    return sha256([head, asBytes(image.data) || Uint8Array.from(image.data)]);
+  }
   const rect4 = r => Array.isArray(r) && r.length === 4 && r.every(finite) ? [r[0], r[1], r[2], r[3]] : null;
   const point = p => Array.isArray(p) && p.length === 2 && p.every(finite) ? [p[0], p[1]] : null;
   const bboxOf = b => b && [b.x0, b.y0, b.x1, b.y1].every(finite) ? [b.x0, b.y0, b.x1, b.y1] : null;
@@ -47,37 +98,53 @@
   }
 
   // Words come from any OCR engine the caller ran. Their score is the engine's own number, passed through untouched.
-  function cleanWords(words) {
+  // Audit 10/11: every word is checked against the image frame; nothing is truncated or clamped silently.
+  function cleanWords(words, W, H) {
     if (words == null) return { words: null };
-    if (!Array.isArray(words) || words.length > LIMITS.maxWords) return { error: 'ocr-words-invalid' };
+    if (!Array.isArray(words)) return { error: 'ocr-words-invalid' };
+    if (words.length > LIMITS.maxWords) return { error: 'ocr-too-many-words' };
     const out = [];
-    for (const w of words) {
-      const bbox = w && bboxOf(w.bbox);
-      if (!w || typeof w.text !== 'string' || !bbox || bbox[2] < bbox[0] || bbox[3] < bbox[1]) return { error: 'ocr-words-invalid' };
-      const text = w.text.slice(0, LIMITS.maxText);
-      out.push({ text, bbox: { x0: bbox[0], y0: bbox[1], x1: bbox[2], y1: bbox[3] }, engineScore: finite(w.confidence) ? w.confidence : null });
+    for (let i = 0; i < words.length; i++) {
+      const w = words[i], at = 'word ' + i;
+      const bbox = w && typeof w === 'object' && bboxOf(w.bbox);
+      if (!bbox || typeof w.text !== 'string' || bbox[2] < bbox[0] || bbox[3] < bbox[1]) return { error: 'ocr-words-invalid', detail: at };
+      if (bbox[0] < 0 || bbox[1] < 0 || bbox[2] > W || bbox[3] > H) return { error: 'ocr-word-out-of-frame', detail: at };
+      if (w.text.length > LIMITS.maxText) return { error: 'ocr-word-text-too-long', detail: at };
+      if (w.confidence != null && !finite(w.confidence)) return { error: 'ocr-word-score-invalid', detail: at };
+      out.push({ text: w.text, bbox: { x0: bbox[0], y0: bbox[1], x1: bbox[2], y1: bbox[3] }, engineScore: finite(w.confidence) ? w.confidence : null });
     }
     return { words: out };
   }
 
-  function imageRefOf(ref) {
-    if (ref == null) return null;
-    if (typeof ref !== 'object') return undefined;
-    const out = {};
-    if (ref.sha256 != null) { if (typeof ref.sha256 !== 'string' || !SHA256_RE.test(ref.sha256)) return undefined; out.sha256 = ref.sha256; }
-    if (ref.id != null) { if (typeof ref.id !== 'string' || !ref.id || ref.id.length > 120) return undefined; out.id = ref.id; }
-    return Object.keys(out).length ? out : null;
+  // A file hash given by the caller is only DECLARED. It becomes VERIFIED when the caller also hands over the file bytes
+  // and they hash to the same value; a mismatch is refused. The pixel hash is always computed here.
+  function imageRefOf(ref, fileBytes) {
+    if (ref != null && (typeof ref !== 'object' || Array.isArray(ref))) return { error: 'image-ref-invalid' };
+    const out = { id: null, file: null };
+    if (ref?.id != null) { if (typeof ref.id !== 'string' || !ref.id || ref.id.length > 120) return { error: 'image-ref-invalid' }; out.id = ref.id; }
+    const declared = ref?.fileSha256 ?? null;
+    if (declared != null && (typeof declared !== 'string' || !SHA256_RE.test(declared))) return { error: 'image-ref-invalid' };
+    if (ref && 'sha256' in ref) return { error: 'image-ref-ambiguous-hash' }; // say which bytes: fileSha256 (file) — pixels are hashed here
+    if (fileBytes != null) {
+      const bytes = asBytes(fileBytes);
+      if (!bytes || !bytes.length) return { error: 'image-file-bytes-invalid' };
+      const actual = sha256([bytes]);
+      if (declared && declared !== actual) return { error: 'image-file-hash-mismatch' };
+      out.file = { sha256: actual, status: 'verified', bytes: bytes.length };
+    } else if (declared) out.file = { sha256: declared, status: 'declared' };
+    return { ref: out };
   }
 
-  function analyse(image, { words = null, ocrEngine = null, imageRef = null } = {}) {
+  function analyse(image, { words = null, ocrEngine = null, imageRef = null, fileBytes = null } = {}) {
     const bad = checkImage(image);
     if (bad) return fail(bad);
-    const ocr = cleanWords(words);
-    if (ocr.error) return fail(ocr.error);
+    const ocr = cleanWords(words, image.width, image.height);
+    if (ocr.error) return fail(ocr.error, ocr.detail);
     if (ocrEngine != null && (typeof ocrEngine !== 'string' || !ocrEngine || ocrEngine.length > 80)) return fail('ocr-engine-invalid');
     if (ocrEngine != null && ocr.words == null) return fail('ocr-engine-without-words');
-    const ref = imageRefOf(imageRef);
-    if (ref === undefined) return fail('image-ref-invalid');
+    const refOut = imageRefOf(imageRef, fileBytes);
+    if (refOut.error) return fail(refOut.error);
+    const ref = { ...refOut.ref, pixels: { sha256: pixelSha256(image), status: 'computed', covers: 'uint32be(width)+uint32be(height)+rgba' } };
     let result;
     try {
       result = R.detect(image, { ignoreRects: DETECT_OPTIONS.ignoreRects });
@@ -95,6 +162,7 @@
   }
 
   function fromDetection(result, { words = null, ocrEngine = null, imageRef = null } = {}) {
+    imageRef = imageRef || { id: null, file: null, pixels: null };
     const W = result.width, H = result.height;
     const walls = (result.walls || []).map((w, i) => {
       const r = rect4(w.rect);
@@ -157,7 +225,8 @@
   }
 
   // Strict structural check. Returns the list of problems; [] means valid.
-  function validate(ev) {
+  // With {image}, the pixel hash is recomputed: a "computed" hash that does not match the image is reported.
+  function validate(ev, { image = null } = {}) {
     const errs = [];
     const add = m => { if (errs.length < 50) errs.push(m); };
     if (!ev || typeof ev !== 'object') return ['not-an-object'];
@@ -197,10 +266,39 @@
     };
     walk(ev, '');
     if (!ev.ocr || !['not-run', 'provided'].includes(ev.ocr.status)) add('ocr-status');
+    const ocrWords = Array.isArray(ev.ocr?.words) ? ev.ocr.words : (add('ocr-words'), []);
+    if (ev.ocr?.status === 'not-run' && ocrWords.length) add('ocr-words-without-run');
+    ocrWords.forEach((w, i) => {
+      if (!w || typeof w.text !== 'string' || w.text.length > LIMITS.maxText) add('ocr-word-text:' + i);
+      if (!okRect(w?.bbox)) add('ocr-word-bbox:' + i);
+      if (w && w.engineScore !== null && !finite(w.engineScore)) add('ocr-word-score:' + i);
+    });
+    const seen = new Set();
+    for (const r of ev.rooms || []) for (const i of r.wordsInside || []) { if (seen.has(i)) add('word-in-two-rooms:' + i); seen.add(i); }
+    for (const r of ev.rooms || []) {
+      if (r.label && r.label.bbox !== null && !okRect(r.label.bbox)) add('room-label-bbox:' + r.id);
+      if (r.areaLabel && (!(r.areaLabel.valueM2 === null || finite(r.areaLabel.valueM2)) || (r.areaLabel.bbox !== null && !okRect(r.areaLabel.bbox)))) add('room-area-label:' + r.id);
+    }
+    for (const [i, l] of (ev.unplacedLabels || []).entries()) if (typeof l.text !== 'string' || (l.bbox !== null && !okRect(l.bbox))) add('unplaced-label:' + i);
+    const cp = ev.annotations?.compass;
+    if (cp && !(Array.isArray(cp.at) && cp.at.length === 2 && cp.at.every(finite) && inside(cp.at))) add('compass-at');
+    if (ev.annotations?.dimensionFrame && !okRect(ev.annotations.dimensionFrame.rect)) add('dimension-frame-rect');
+    for (const h of ev.scale?.hints || []) if (!finite(h.mmPerPxCandidate) || !Array.isArray(h.valuesRead) || !h.valuesRead.every(finite)) add('scale-hint-values');
+    // Provenance of the image: declared vs verified vs computed.
+    const im = ev.source?.image;
+    if (!im || typeof im !== 'object') add('source-image');
+    else {
+      if (im.file !== null && !(im.file && SHA256_RE.test(im.file.sha256) && ['declared', 'verified'].includes(im.file.status))) add('source-image-file');
+      if (im.file?.status === 'verified' && !Number.isInteger(im.file.bytes)) add('source-image-file-bytes');
+      if (im.file?.status === 'declared' && 'bytes' in im.file) add('source-image-file-bytes');
+      if (im.pixels !== null && !(im.pixels && SHA256_RE.test(im.pixels.sha256) && im.pixels.status === 'computed')) add('source-image-pixels');
+      if (image && im.pixels && (checkImage(image) || pixelSha256(image) !== im.pixels.sha256)) add('pixels-hash-mismatch');
+      if (image && (image.width !== f.width || image.height !== f.height)) add('frame-differs-from-image');
+    }
     if (!Array.isArray(ev.limits) || !STANDING_LIMITS.every(l => ev.limits.includes(l))) add('limits');
     return errs;
   }
 
-  const api = { SCHEMA, VERSION, DONOR, LIMITS, TOUCH_GAP_PX, DETECT_OPTIONS, ENRICH_OPTIONS, STANDING_LIMITS, analyse, fromDetection, validate };
+  const api = { SCHEMA, VERSION, DONOR, LIMITS, TOUCH_GAP_PX, sha256: bytes => sha256([asBytes(bytes) || Uint8Array.from(bytes)]), pixelSha256, DETECT_OPTIONS, ENRICH_OPTIONS, STANDING_LIMITS, analyse, fromDetection, validate };
   if (typeof module === 'object' && module.exports) module.exports = api; else root.RubikRecognitionEvidence = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

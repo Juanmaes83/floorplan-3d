@@ -64,11 +64,50 @@ test('invalid input is refused with a code, never a guess',()=>{
   assert.deepEqual(E.analyse({width:10,height:10,data:new Uint8ClampedArray(400)}),{ok:false,error:{code:'image-size-out-of-range'}});
   assert.deepEqual(E.analyse({width:2000,height:2000,data:new Uint8ClampedArray(2000*2000*4)}),{ok:false,error:{code:'image-size-out-of-range'}});
   assert.deepEqual(E.analyse({width:64,height:64,data:new Uint8ClampedArray(10)}),{ok:false,error:{code:'image-invalid'}});
-  assert.deepEqual(E.analyse(p.image,{words:[{text:'x'}]}),{ok:false,error:{code:'ocr-words-invalid'}});
+  assert.deepEqual(E.analyse(p.image,{words:[{text:'x'}]}),{ok:false,error:{code:'ocr-words-invalid',detail:'word 0'}});
   assert.deepEqual(E.analyse(p.image,{ocrEngine:'tesseract'}),{ok:false,error:{code:'ocr-engine-without-words'}});
-  assert.deepEqual(E.analyse(p.image,{imageRef:{sha256:'abc'}}),{ok:false,error:{code:'image-ref-invalid'}});
-  const ok=E.analyse(p.image,{imageRef:{sha256:'a'.repeat(64)}});
-  assert.deepEqual(ok.evidence.source.image,{sha256:'a'.repeat(64)});
+});
+
+test('OCR observations are bounded: inside the image frame, no silent truncation, engine score finite or absent',()=>{
+  const p=F.plan('black-walls'),W=p.image.width,H=p.image.height;
+  const code=words=>{const r=E.analyse(p.image,{words});return r.ok?'ok':r.error.code+(r.error.detail?' @'+r.error.detail:'');};
+  assert.equal(code([word('ok',10,10),{text:'x',bbox:{x0:-1,y0:0,x1:5,y1:5}}]),'ocr-word-out-of-frame @word 1');
+  assert.equal(code([{text:'x',bbox:{x0:W-5,y0:0,x1:W+1,y1:5}}]),'ocr-word-out-of-frame @word 0');
+  assert.equal(code([{text:'x',bbox:{x0:0,y0:H-2,x1:4,y1:H+0.5}}]),'ocr-word-out-of-frame @word 0');
+  assert.equal(code([{text:'x',bbox:{x0:0,y0:0,x1:W,y1:H}}]),'ok','the full frame is still inside');
+  assert.equal(code([{text:'x',bbox:{x0:5,y0:5,x1:4,y1:9}}]),'ocr-words-invalid @word 0','inverted box');
+  assert.equal(code([{text:'x',bbox:{x0:NaN,y0:0,x1:4,y1:4}}]),'ocr-words-invalid @word 0');
+  assert.equal(code([{text:'x'.repeat(E.LIMITS.maxText+1),bbox:{x0:0,y0:0,x1:4,y1:4}}]),'ocr-word-text-too-long @word 0','never truncated silently');
+  assert.equal(code([{text:'x',bbox:{x0:0,y0:0,x1:4,y1:4},confidence:Infinity}]),'ocr-word-score-invalid @word 0');
+  assert.equal(code([{text:'x',bbox:{x0:0,y0:0,x1:4,y1:4},confidence:'90'}]),'ocr-word-score-invalid @word 0','a score is a number or absent');
+  assert.equal(code(Array.from({length:E.LIMITS.maxWords+1},()=>word('a',1,1))),'ocr-too-many-words');
+  assert.equal(code([null]),'ocr-words-invalid @word 0');
+});
+
+test('image provenance: file hash declared vs verified, pixel hash computed and re-checkable',()=>{
+  const p=F.plan('black-walls'),file=Buffer.from('synthetic plan file bytes'),fileHash=sha(file);
+  assert.equal(E.sha256(file),fileHash,'pure SHA-256 equals node:crypto');
+  for(const n of [0,55,56,64,65,1000])assert.equal(E.sha256(crypto.randomBytes(n).fill(7)),sha(Buffer.alloc(n,7)));
+  const plain=E.analyse(p.image).evidence.source.image;
+  assert.deepEqual({id:plain.id,file:plain.file,status:plain.pixels.status},{id:null,file:null,status:'computed'});
+  const head=Buffer.alloc(8);head.writeUInt32BE(p.image.width,0);head.writeUInt32BE(p.image.height,4);
+  assert.equal(plain.pixels.sha256,sha(Buffer.concat([head,Buffer.from(p.image.data.buffer)])),'pixel hash = uint32be(w)+uint32be(h)+rgba');
+  const declared=E.analyse(p.image,{imageRef:{id:'plan-a',fileSha256:fileHash}}).evidence.source.image;
+  assert.deepEqual(declared.file,{sha256:fileHash,status:'declared'},'a hash given without bytes stays declared');
+  const verified=E.analyse(p.image,{imageRef:{fileSha256:fileHash},fileBytes:file}).evidence.source.image;
+  assert.deepEqual(verified.file,{sha256:fileHash,status:'verified',bytes:file.length});
+  assert.deepEqual(E.analyse(p.image,{fileBytes:file}).evidence.source.image.file,{sha256:fileHash,status:'verified',bytes:file.length});
+  assert.deepEqual(E.analyse(p.image,{imageRef:{fileSha256:'0'.repeat(64)},fileBytes:file}),{ok:false,error:{code:'image-file-hash-mismatch'}});
+  assert.deepEqual(E.analyse(p.image,{imageRef:{fileSha256:'abc'}}),{ok:false,error:{code:'image-ref-invalid'}});
+  assert.deepEqual(E.analyse(p.image,{imageRef:{sha256:'a'.repeat(64)}}),{ok:false,error:{code:'image-ref-ambiguous-hash'}});
+  assert.deepEqual(E.analyse(p.image,{fileBytes:new Uint8Array(0)}),{ok:false,error:{code:'image-file-bytes-invalid'}});
+  // validate with the image recomputes the pixel hash: evidence moved to another image is caught.
+  const ev=E.analyse(p.image).evidence;
+  assert.deepEqual(E.validate(ev,{image:p.image}),[]);
+  const other=clone(p.image);other.data[0]^=1;
+  assert.ok(E.validate(ev,{image:other}).includes('pixels-hash-mismatch'));
+  const forged=JSON.parse(JSON.stringify(ev));forged.source.image.file={sha256:fileHash,status:'verified'};
+  assert.ok(E.validate(forged).includes('source-image-file-bytes'),'"verified" must carry the byte count it was verified on');
 });
 
 test('OCR words: text kept verbatim, engine score passed through, no invented rooms, decimals or names',()=>{
@@ -150,7 +189,10 @@ test('comparator: measured facts on synthetic plans (lengths in px, tolerance re
   assert.throws(()=>C.compare(F.plan('black-walls').image,{}),/mmPerPx/);
 });
 
-test('cancel/restart: a rejected run leaves no partial evidence, no mutation, and the next run is clean; empty image is reported',()=>{
+// Audit 10/11: this proves RECOVERY AFTER A REJECTION, not cancellation. analyse() is synchronous: once started it cannot be
+// interrupted. Interruptible cancellation needs the donor worker (recognition-worker.js) + terminate(), not implemented yet.
+test('recovery after rejection (not cancellation): no partial evidence, no mutation, next run clean; empty image reported',()=>{
+  assert.ok(!('cancel' in E)&&!('abort' in E),'no cancellation API is claimed');
   const W=1200,H=1200,data=new Uint8ClampedArray(W*H*4).fill(255);
   // Dense texture of short strokes: the donor refuses it (more than 600 wall pieces).
   for(let y=0;y<H;y+=24)for(let x=0;x<W;x+=24){
@@ -165,4 +207,50 @@ test('cancel/restart: a rejected run leaves no partial evidence, no mutation, an
   assert.ok(blank.ok);assert.deepEqual(E.validate(blank.evidence),[]);
   assert.deepEqual([blank.evidence.walls.length,blank.evidence.rooms.length],[0,0]);
   assert.ok(blank.evidence.warnings.includes('no-walls')&&blank.evidence.warnings.includes('no-closed-rooms'));
+});
+
+test('validate checks OCR and annotation geometry structurally',()=>{
+  const p=F.plan('black-walls');
+  const ev=E.analyse(p.image,{words:[word('Salón',150,200),word('Cocina',380,120)]}).evidence;
+  assert.deepEqual(E.validate(ev),[]);
+  const bad=f=>{const x=JSON.parse(JSON.stringify(ev));f(x);return E.validate(x);};
+  assert.ok(bad(x=>x.ocr.words[0].bbox=[0,0,99999,5]).includes('ocr-word-bbox:0'));
+  assert.ok(bad(x=>x.ocr.words[1].engineScore='high').includes('ocr-word-score:1'));
+  assert.ok(bad(x=>{x.rooms[0].wordsInside=[0];x.rooms[1].wordsInside=[0];}).includes('word-in-two-rooms:0'));
+  assert.ok(bad(x=>x.rooms[0].wordsInside=[7]).includes('room-words:room-0'));
+  assert.ok(bad(x=>{x.ocr.status='not-run';}).includes('ocr-words-without-run'));
+  assert.ok(bad(x=>x.annotations.compass={at:[-5,3],angleDeg:0,facing:'N',basis:'raster-heuristic'}).includes('compass-at'));
+  assert.ok(bad(x=>x.unplacedLabels=[{text:'x',matched:null,bbox:[0,0,1e6,1]}]).includes('unplaced-label:0'));
+  assert.ok(bad(x=>x.source.image.pixels.status='verified').includes('source-image-pixels'));
+});
+
+test('fetch-source-exact.sh never deletes or overwrites what exists (guards run before any network access)',()=>{
+  const script=path.join(LAB,'fetch-source-exact.sh'),os=require('node:os');
+  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'sculpt-r01-fetch-'));
+  const run=(...args)=>{try{execFileSync('bash',[script,...args],{stdio:'pipe'});return 0;}catch(e){return e.status;}};
+  const full=path.join(tmp,'full');fs.mkdirSync(full);fs.writeFileSync(path.join(full,'keep.txt'),'precious');
+  const file=path.join(tmp,'file.txt');fs.writeFileSync(file,'precious');
+  fs.symlinkSync(full,path.join(tmp,'link'));
+  assert.equal(run(full),3,'existing non-empty directory is refused');
+  assert.equal(run(file),3,'existing file is refused');
+  assert.equal(run(path.join(tmp,'link')),2,'symbolic link is refused');
+  assert.equal(run(path.join(LAB,'snapshot-here')),2,'inside the repository is refused');
+  assert.equal(run('a','b'),64);
+  assert.equal(fs.readFileSync(path.join(full,'keep.txt'),'utf8'),'precious');
+  assert.equal(fs.readFileSync(file,'utf8'),'precious');
+  assert.ok(!fs.existsSync(path.join(LAB,'snapshot-here')));
+  // --verify only reads: a directory that is not the snapshot fails and is left as it was.
+  assert.equal(run('--verify',full),5);
+  assert.deepEqual(fs.readdirSync(full),['keep.txt']);
+  const src=fs.readFileSync(script,'utf8');
+  assert.ok(!/rm -rf\s+"?\$\{?(DEST|ABS)/.test(src),'no recursive removal of the destination');
+  fs.rmSync(tmp,{recursive:true,force:true});
+});
+
+test('integration stays blocked: no product file loads the lab, and the evidence keeps its standing limits',()=>{
+  let out='';
+  try{out=execFileSync('git',['grep','-l','-e','labs/sculpt','-e','RubikRecognitionEvidence','-e','RubikRecognitionCompare','--','js','api','css','index.html','evolucion'],{cwd:path.join(__dirname,'..'),encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim();}
+  catch(e){assert.equal(e.status,1,'git grep: 1 means no match');}
+  assert.equal(out,'','the product does not reference the lab');
+  for(const l of ['not-validated-on-real-plans','human-review-required'])assert.ok(E.STANDING_LIMITS.includes(l));
 });
