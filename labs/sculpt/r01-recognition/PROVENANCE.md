@@ -29,8 +29,12 @@ Comprobación: `git merge-base --is-ancestor` sobre clones de solo lectura (`GIT
 ## 3. Derechos sobre el código de R01
 
 - El commit `1d235fc` lo publicó su autor en un repositorio cuyo árbol contiene una licencia MIT en la raíz. Según las condiciones de GitHub (sección D.6, *inbound = outbound*), lo que se añade a un repositorio con licencia queda bajo esa licencia.
+- **Refuerzo comprobado:**
+  - `js/recognition-core.js` y `js/ocr-postprocess-rules.js` son **idénticos byte a byte** (`52fe5237…`, `beb461c6…`) en `master@88323f3` de zhuzhuyumeng;
+  - ese commit también es de olifod e incorpora el contenido de R01;
+  - por tanto, el código que usamos está en la rama principal del donante, bajo su `LICENSE` MIT.
 - **Riesgo residual (documentado, no resuelto por Claude):**
-  1. la rama no está fusionada;
+  1. la rama de la PR no está fusionada como tal: el contenido entró en `master` por otro commit;
   2. el autor no añadió un aviso propio;
   3. su identidad git es local (`olifod@192.168.100.9`).
 
