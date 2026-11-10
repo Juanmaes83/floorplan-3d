@@ -13,11 +13,18 @@
 | **B. Coste estimado** | Consumo por tarifa, solo si existen `RUBIK_RENDER_PRICE_INPUT_TEXT`, `_INPUT_IMAGE` y `_OUTPUT` (USD por millón de tokens) | `api/render.js` (`costOf`, #182) | La tarifa **no está ligada a un modelo ni a unas fechas**. No indica si incluye impuestos. Hay redondeo en coma flotante. Si la entrada no viene desglosada, se tarifica como imagen. **Hoy no hay tarifas configuradas: `cost: null`.** |
 | **C. Facturación real** | Ninguna | Factura del proveedor, fuera de Rubik | Rubik no la conoce |
 | **D. Aceptación de una imagen** | **No existe** | — | Rubik no registra ninguna decisión. Descargar o terminar la generación **no** es aceptar. |
-| **E. Ausente** | Identificador de cada generación en el evento; intentos rechazados antes de llamar al proveedor (código o límites, que no cuestan); fecha de vigencia de la tarifa; base de impuestos | — | Ver §4 |
+| **E. Ausente** | **Fecha e identificador dentro del JSON del evento.** Comprobado con el registro real de Production del 09/11: la fecha (`2026-11-09T13:55:31.050Z`) y el identificador de petición (`request=…`) los pone el registro de Vercel, **fuera** del JSON. Faltan también: intentos rechazados antes de llamar al proveedor (código o límites, que no cuestan); fecha de vigencia de la tarifa; base de impuestos | — | Ver §4 |
 
 **Dato conocido de D1:** una generación con estado `ok` y **1.996 tokens** (95 de texto de entrada, 1.300 de imagen de entrada y 601 de salida), con el modelo `gpt-image-2.5-sunburst`. **Coste: desconocido** (`cost: null`, sin tarifas). No se inventa.
 
-## 2. Qué añade `js/render-cost-core.js`
+## 2. Contrato temporal (propuesta verificable, sin cambiar `api/render.js`)
+- **Hoy:**
+  - `parseLog()` toma la fecha (`loggedAt`) y el identificador de petición (`requestId`) **del registro de la plataforma**: la cabecera `### <ISO> POST /api/render` y la línea `request=…` de la exportación de Vercel, o la fecha al principio de una línea;
+  - el origen queda marcado: `dateSource: 'platform-log'`;
+  - si la exportación no los trae, la fecha es **desconocida** y no se elige tarifa.
+- **Más adelante (necesita autorización):** que `api/render.js` escriba `at` (ISO) e `id` (aleatorio) **dentro** del evento y devuelva el `id` al navegador. Si el evento trae `at`, tiene prioridad (`dateSource: 'event'`). El `id` permitiría emparejar las aceptaciones. **No se ha modificado `api/render.js`.**
+
+## 3. Qué añade `js/render-cost-core.js`
 Lee los mismos eventos `rubik-render`. No sustituye la estimación en vivo de #182.
 
 - **Tarifa verificable** (`validateTariff`):
@@ -31,16 +38,24 @@ Lee los mismos eventos `rubik-render`. No sustituye la estimación en vivo de #1
   - el dinero se calcula en **micro-unidades enteras** (BigInt) y se redondea hacia arriba en la mitad (*half-up*) a la micro-unidad;
   - si faltan categorías, **no se reparte la entrada por suposición**: el coste queda desconocido;
   - si hay uso informado, una llamada fallida también se estima.
+- **Números exactos:**
+  - los importes y las sumas de tokens se calculan en BigInt y solo se convierten a `Number` si caben con exactitud;
+  - si no caben, el resultado es `amount-out-of-range` o `out-of-range`, nunca un valor redondeado en silencio.
 - **`summarize` (lote):**
   - cuenta llamadas registradas, correctas y fallidas por estado, y suma tokens solo si todos los intentos los informan;
   - solo da el total estimado si **todos** los intentos tienen estimación en la misma moneda y con la misma base de impuestos; si no, `null` y la lista de motivos (**nunca 0**);
   - calcula coste por imagen generada y por imagen aceptada, sin dividir entre cero;
-  - **aceptación:** solo cuenta decisiones explícitas (`accepted` o `rejected`) emparejadas por `id` de generación. Si no hay eventos o las generaciones no tienen `id`, la aceptación es **desconocida** y se dice por qué.
-- **`reconcile`:** compara la estimación con la factura solo si ambas son conocidas, en la misma moneda, con la misma base de impuestos y si la factura procede de una factura real.
+  - **aceptación:** solo cuenta decisiones explícitas (`accepted` o `rejected`) emparejadas por `id`. Distingue cuatro estados:
+    - **`unknown`**: no hay registro de decisiones, que es lo que pasa hoy;
+    - **`partial`**: hay un registro, pero no se ha declarado completo. Solo da un mínimo (`acceptedAtLeast`). **Una lista vacía no equivale a 0 aceptadas;**
+    - **`complete`**: registro declarado completo, con recuentos exactos, incluido un 0 real, y las generaciones sin decisión;
+    - **`unmatchable`**: los eventos no tienen `id`, como los reales de hoy.
+  - **período:** solo existe si quien llama declara la ventana exportada (`coverage: {from, to, complete}`) y todos los eventos tienen fecha y caen dentro de ella.
+- **`reconcile`:** compara la estimación con la factura solo si ambas son conocidas, en la misma moneda, con la misma base de impuestos, la factura es real, el período es **exactamente el mismo** y la exportación de llamadas está declarada **completa** para ese período. En cualquier otro caso devuelve el motivo y no calcula diferencia: `period-differs`, `billing-period-unknown`, `estimate-period-unknown` o `coverage-incomplete`.
 - **`formatMicros`:** solo para mostrar, con redondeo explícito.
-- **`parseLog`:** extrae las líneas `{"event":"rubik-render"…}` de un log exportado e ignora el resto.
+- **`parseLog`:** entiende el formato real (registro de varias líneas de Vercel) y el de una línea con la fecha al principio. Ignora el resto y nunca arrastra la fecha de un registro al siguiente.
 
-## 3. Pruebas (`tests/render-cost-core.test.cjs`, datos ficticios)
+## 4. Pruebas (`tests/render-cost-core.test.cjs`, datos ficticios)
 
 | Caso | Cubierto |
 |---|---|
@@ -52,8 +67,12 @@ Lee los mismos eventos `rubik-render`. No sustituye la estimación en vivo de #1
 | Aceptación explícita, rechazo, «descargada» no cuenta, generaciones sin `id` | ✅ |
 | Estimación frente a factura: comparable, otra moneda, otra base de impuestos, estimación presentada como factura | ✅ |
 | Log con líneas ajenas o rotas | ✅ |
+| **Formato real de master** (registro de Vercel anonimizado): sin fecha ni `id` en el JSON; fecha y petición tomadas de la plataforma; sin registro, la fecha es desconocida | ✅ |
+| Período: otro mes facturado, período desconocido, exportación parcial, evento fuera de la ventana o sin fecha | ✅ |
+| Aceptación desconocida, parcial (lista vacía ≠ 0), completa con 0 real, sin poder emparejar | ✅ |
+| Importes y sumas fuera de rango seguro | ✅ |
 
-## 4. Para que ECO-01 dé cifras reales (decisiones y trabajo posterior)
+## 5. Para que ECO-01 dé cifras reales (decisiones y trabajo posterior)
 1. **Tarifa verificada:** el propietario la registra a partir de la página de precios o de una factura del proveedor, para `gpt-image-2.5-sunburst`, con su vigencia y su base de impuestos. Claude no la inventa.
 2. **Identificador de generación:**
    - añadir un `id` aleatorio al evento `rubik-render` y a la respuesta de `/api/render`. Es un cambio pequeño en Render IA, **pendiente de autorización**;
