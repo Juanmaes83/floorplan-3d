@@ -78,6 +78,8 @@
   }
   const asBytes = d => d instanceof Uint8Array || d instanceof Uint8ClampedArray ? new Uint8Array(d.buffer, d.byteOffset, d.byteLength) : null;
   // Hash of the decoded pixels: width and height (uint32, big endian) followed by the RGBA bytes. Computed, so always verified.
+  // Mandatory in every valid RecognitionEvidenceV1 (closing audit 10/11): evidence without it cannot be tied to an image.
+  const PIXEL_HASH_COVERS = 'uint32be(width)+uint32be(height)+rgba';
   function pixelSha256(image) {
     const head = new Uint8Array(8), v = new DataView(head.buffer);
     v.setUint32(0, image.width); v.setUint32(4, image.height);
@@ -144,7 +146,7 @@
     if (ocrEngine != null && ocr.words == null) return fail('ocr-engine-without-words');
     const refOut = imageRefOf(imageRef, fileBytes);
     if (refOut.error) return fail(refOut.error);
-    const ref = { ...refOut.ref, pixels: { sha256: pixelSha256(image), status: 'computed', covers: 'uint32be(width)+uint32be(height)+rgba' } };
+    const ref = { ...refOut.ref, pixels: { sha256: pixelSha256(image), status: 'computed', covers: PIXEL_HASH_COVERS } };
     let result;
     try {
       result = R.detect(image, { ignoreRects: DETECT_OPTIONS.ignoreRects });
@@ -291,14 +293,23 @@
       if (im.file !== null && !(im.file && SHA256_RE.test(im.file.sha256) && ['declared', 'verified'].includes(im.file.status))) add('source-image-file');
       if (im.file?.status === 'verified' && !Number.isInteger(im.file.bytes)) add('source-image-file-bytes');
       if (im.file?.status === 'declared' && 'bytes' in im.file) add('source-image-file-bytes');
-      if (im.pixels !== null && !(im.pixels && SHA256_RE.test(im.pixels.sha256) && im.pixels.status === 'computed')) add('source-image-pixels');
-      if (image && im.pixels && (checkImage(image) || pixelSha256(image) !== im.pixels.sha256)) add('pixels-hash-mismatch');
+      // The pixel hash is mandatory. Without {image} only its presence and form are checked (no cryptographic claim);
+      // with {image} it is recomputed and must match.
+      const px = im.pixels, pixelErr = [];
+      if (!px || typeof px !== 'object' || Array.isArray(px)) pixelErr.push('missing');
+      else {
+        if (typeof px.sha256 !== 'string' || !SHA256_RE.test(px.sha256)) pixelErr.push('sha256');
+        if (px.status !== 'computed') pixelErr.push('status');
+        if (px.covers !== PIXEL_HASH_COVERS) pixelErr.push('covers');
+      }
+      if (pixelErr.length) { add('source-image-pixels'); for (const e of pixelErr) add('source-image-pixels:' + e); }
+      if (image && !pixelErr.length && (checkImage(image) || pixelSha256(image) !== px.sha256)) add('pixels-hash-mismatch');
       if (image && (image.width !== f.width || image.height !== f.height)) add('frame-differs-from-image');
     }
     if (!Array.isArray(ev.limits) || !STANDING_LIMITS.every(l => ev.limits.includes(l))) add('limits');
     return errs;
   }
 
-  const api = { SCHEMA, VERSION, DONOR, LIMITS, TOUCH_GAP_PX, sha256: bytes => sha256([asBytes(bytes) || Uint8Array.from(bytes)]), pixelSha256, DETECT_OPTIONS, ENRICH_OPTIONS, STANDING_LIMITS, analyse, fromDetection, validate };
+  const api = { SCHEMA, VERSION, DONOR, LIMITS, TOUCH_GAP_PX, PIXEL_HASH_COVERS, sha256: bytes => sha256([asBytes(bytes) || Uint8Array.from(bytes)]), pixelSha256, DETECT_OPTIONS, ENRICH_OPTIONS, STANDING_LIMITS, analyse, fromDetection, validate };
   if (typeof module === 'object' && module.exports) module.exports = api; else root.RubikRecognitionEvidence = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

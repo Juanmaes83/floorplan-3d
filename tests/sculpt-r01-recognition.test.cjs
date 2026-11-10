@@ -254,3 +254,35 @@ test('integration stays blocked: no product file loads the lab, and the evidence
   assert.equal(out,'','the product does not reference the lab');
   for(const l of ['not-validated-on-real-plans','human-review-required'])assert.ok(E.STANDING_LIMITS.includes(l));
 });
+
+// Closing audit 10/11 (adjustment 1): the pixel hash is a mandatory part of RecognitionEvidenceV1.
+test('pixel hash is mandatory: missing, null, malformed or with another status is rejected; recomputed when the image is given',()=>{
+  const p=F.plan('black-walls'),ev=E.analyse(p.image).evidence;
+  assert.deepEqual(E.validate(ev),[],'normally generated evidence is valid');
+  assert.deepEqual(ev.source.image.pixels,{sha256:ev.source.image.pixels.sha256,status:'computed',covers:E.PIXEL_HASH_COVERS});
+  const bad=f=>{const x=JSON.parse(JSON.stringify(ev));f(x);return E.validate(x);};
+  const expectPixels=(errs,why)=>{assert.ok(errs.includes('source-image-pixels'),why);assert.ok(errs.includes('source-image-pixels:'+why),why+' → '+errs.join(','));};
+  expectPixels(bad(x=>x.source.image.pixels=null),'missing');
+  expectPixels(bad(x=>{delete x.source.image.pixels;}),'missing');
+  expectPixels(bad(x=>x.source.image.pixels=[]),'missing');
+  expectPixels(bad(x=>{delete x.source.image.pixels.sha256;}),'sha256');
+  expectPixels(bad(x=>x.source.image.pixels.sha256='ABC'),'sha256');
+  expectPixels(bad(x=>x.source.image.pixels.sha256=x.source.image.pixels.sha256.toUpperCase()),'sha256');
+  expectPixels(bad(x=>x.source.image.pixels.status='declared'),'status');
+  expectPixels(bad(x=>x.source.image.pixels.status='verified'),'status');
+  expectPixels(bad(x=>{delete x.source.image.pixels.covers;}),'covers');
+  // With the image: recomputed. Without it: only presence and form, no "verified" claim is added anywhere.
+  assert.deepEqual(E.validate(ev,{image:p.image}),[]);
+  const altered=clone(p.image);altered.data[altered.data.length-1]^=0xff;
+  assert.ok(E.validate(ev,{image:altered}).includes('pixels-hash-mismatch'));
+  const wellFormedButWrong=JSON.parse(JSON.stringify(ev));wellFormedButWrong.source.image.pixels.sha256='f'.repeat(64);
+  assert.deepEqual(E.validate(wellFormedButWrong),[],'without the image a well-formed hash cannot be checked cryptographically');
+  assert.ok(E.validate(wellFormedButWrong,{image:p.image}).includes('pixels-hash-mismatch'),'with the image it is');
+  assert.equal(ev.source.image.pixels.status,'computed');
+  // File hash: declared stays distinct from verified, and both coexist with the computed pixel hash.
+  const file=Buffer.from('synthetic plan file bytes'),h=sha(file);
+  const d=E.analyse(p.image,{imageRef:{fileSha256:h}}).evidence.source.image;
+  const v=E.analyse(p.image,{imageRef:{fileSha256:h},fileBytes:file}).evidence.source.image;
+  assert.equal(d.file.status,'declared');assert.equal(v.file.status,'verified');assert.notDeepEqual(d.file,v.file);
+  assert.equal(d.pixels.sha256,v.pixels.sha256);assert.equal(d.pixels.status,'computed');
+});
