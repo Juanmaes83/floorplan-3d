@@ -27,3 +27,18 @@ jobs:
         run: node --test labs/sculpt/r01-recognition/workshop/donor-recognition.test.cjs
       - name: Adapter, comparator and provenance guards
         run: node --test tests/sculpt-r01-recognition.test.cjs
+  # Reproducibility of SOURCE EXACT: rebuilt from the donor commit OUTSIDE the checkout (runner temp, never uploaded),
+  # verified file by file against SOURCE-EXACT.sha256, then checked again in read-only mode.
+  source-exact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Rebuild and verify outside the repository
+        run: |
+          bash labs/sculpt/r01-recognition/fetch-source-exact.sh "$RUNNER_TEMP/r01-exact"
+          bash labs/sculpt/r01-recognition/fetch-source-exact.sh --verify "$RUNNER_TEMP/r01-exact"
+          if bash labs/sculpt/r01-recognition/fetch-source-exact.sh "$RUNNER_TEMP/r01-exact"; then echo "an existing snapshot must not be overwritten"; exit 1; fi
+          test -z "$(git status --porcelain)"
