@@ -61,13 +61,16 @@ Todo lo demás está ya en master o lo cubren S1/S2.
   Después **valida el resultado en modo estricto con los validadores de master**. Las salas de la presentación se filtran a las que existen, y nunca se inventa una selección. No modifica el proyecto de origen.
 - **`validate(snapshot, {bytes})`** para lo que llegue por la red. Rechaza:
   - otro esquema, otra versión o más de 4 MB;
-  - campos fuera del sobre;
+  - **cualquier campo no autorizado en cualquier nivel del sobre**: `content`, `presentation`, `presentation.levels`, las salas de presentación, `provenance`, `capabilities`, `studio` y `source`, incluidos números y objetos anidados;
   - contenido que no pase el validador estricto;
   - **cualquier campo que la minimización quitaría**, aunque el esquema canónico lo permita;
   - identidad de origen incoherente;
   - salas de la presentación que no existen;
-  - cualquier URL o esquema (`http`, `//`, `javascript:`, `data:` fuera de la imagen de portada y el logo);
+  - URL y esquemas **en cualquier posición del texto**, no solo al principio: `esquema://…`, `//host` a principio de texto o tras un espacio, `www.…`, y `javascript:`, `vbscript:`, `file:`, `blob:` y `data:` (salvo en la portada y el logo, que se comprueban aparte).
+
+  **No se detectan** un dominio sin esquema ni `www` (`ejemplo.com/x`) ni un correo electrónico. El visor muestra los textos como texto, nunca como enlaces ni recursos, así que no se descargan; aun así, el profesional no debe escribir datos personales en los nombres.
   - valores con forma de credencial.
+- **Comparación estructural**: no depende del orden de los campos. Dos instantáneas válidas con los mismos campos en distinto orden son iguales.
 - **`excluded(project)`** devuelve lo que queda fuera, para explicárselo al profesional.
 
 ## 3. Contrato de integración con S1/S2 (se aplica **después** de integrar S1 y S2)
@@ -98,7 +101,7 @@ Todo lo demás está ya en master o lo cubren S1/S2.
 | Qué viaja al navegador del cliente | La geometría que necesita el visor: muros, huecos, estancias (nombre y polígono), materiales (nombre y aspecto), objetos (tipo, nombre, posición, tamaño, color, `assetRef` del catálogo), defaults, escala, norte, nivel y escaleras. Además, el título, el nombre del estudio y, si las hay, la portada y el logo en `data:`. |
 | Excluido | Ubicación, parcela, ortofoto, terreno y emplazamiento; imagen y nombre del plano original, su hash y sus bytes; medidas de trabajo; notas libres de la escala; procedencia de cada elemento; datos de la aplicación; extensiones |
 | **Inspeccionable** | Todo lo que viaja **puede inspeccionarse**: la entrega **no es confidencial**. Nombres de estancias y objetos, y el nombre del proyecto, viajan tal cual, así que el profesional no debe escribir datos personales en ellos. |
-| URL y recursos externos | La instantánea **no contiene ninguna URL**. `assetRef` solo identifica un catálogo autorizado. **Pendiente de la integración:** comprobar en el navegador si la visita pide recursos de catálogo a un servidor externo y declararlo. |
+| URL y recursos externos | La instantánea no lleva URL reconocibles con los patrones anteriores (limitación: dominios sin esquema ni `www`). `assetRef` solo identifica un catálogo autorizado. **Pendiente de la integración:** comprobar en el navegador si la visita pide recursos de catálogo a un servidor externo y declararlo. |
 | Credenciales | La entrada de `buildSnapshot` no tiene campos de código. El validador rechaza valores con forma de credencial. El modo cliente de #166 sustituye `localStorage` y `sessionStorage` por memoria antes de cargar nada; la integración debe conservarlo y probarlo. |
 | `postMessage` (vista previa) | #166 comprueba `origin === location.origin`, `source === opener` y el tipo, y valida la instantánea. **Hay que conservarlo.** |
 | Acceso | Por enlace, sin autenticación adicional. La URL del Blob de la instantánea va dentro del enlace de la visita y se puede descargar directamente. Pendiente de S5 y GOV-06a. |
@@ -108,7 +111,7 @@ Todo lo demás está ya en master o lo cubren S1/S2.
 
 | Ámbito | Estado |
 |---|---|
-| Contrato (esta rama): esquema y versión, tamaño, campos fuera del contrato (también anidados), validador estricto, geometría conservada, datos excluidos ausentes, proyecto de origen intacto, identidad de revisión, salas inexistentes, edificio de varias plantas, URL, esquemas y credenciales, determinismo del contenido, proyecto sin estancias | ✅ 6 pruebas en `tests/client-delivery-core.test.cjs`, con fixtures sintéticos de `docs/contracts/examples` |
+| Contrato (esta rama): esquema y versión, tamaño, campos fuera del contrato (también anidados), validador estricto, geometría conservada, datos excluidos ausentes, proyecto de origen intacto, identidad de revisión, salas inexistentes, edificio de varias plantas, URL, esquemas y credenciales, determinismo del contenido, proyecto sin estancias | ✅ 9 pruebas en `tests/client-delivery-core.test.cjs` (incluye sobre estricto en todos los niveles, orden de campos y URL dentro del texto), con fixtures sintéticos de `docs/contracts/examples` |
 | API `/api/delivery`, publicación y retirada de `.delivery.json` | **Pendiente de la integración** (después de S1 y S2), con almacén simulado |
 | Navegador: visita libre y guiada, cambio de estancia, móvil vertical y horizontal, teclado y foco, sin scroll horizontal, sin WebGL, pérdida de contexto WebGL, fallo de red, ida y vuelta al documento, archivo offline intacto, Presentación profesional sin regresiones | **Pendiente de la integración**. Las pruebas de #166 no sirven como sustituto. |
 

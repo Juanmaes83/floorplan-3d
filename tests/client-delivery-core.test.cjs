@@ -97,3 +97,45 @@ test('ENT-01 contract: a project without rooms or walls is delivered without the
  const p=rich();p.rooms=[];p.objects=p.objects.map(o=>{const x=clone(o);delete x.roomId;return x;});
  const s=D.buildSnapshot({project:p,now:NOW,rand:RAND});assert.equal(s.capabilities.walk,false);assert.equal(s.capabilities.guided,false);
 });
+
+// Review 10/11: these snapshots were ACCEPTED by e43061d (or, for the reordered one, wrongly REFUSED). Each must now fail
+// (or pass) for the stated reason.
+test('ENT-01 contract: no unauthorised field at ANY level of the envelope, numbers and nested objects included',()=>{
+ const ok=build();
+ const bad=(name,mut,re)=>{const s=clone(ok);mut(s);assert.throws(()=>D.validate(s),re,name);};
+ bad('content',s=>{s.content.trackingId=12345;},/content\.trackingId/);
+ bad('presentation',s=>{s.presentation.gps={lat:40.4,lon:-3.7};},/presentation\.gps/);
+ bad('presentation.levels',s=>{s.presentation.levels[0].clientId=987;},/presentation\.levels\.clientId/);
+ bad('presentation.levels nested',s=>{s.presentation.levels[0].meta={visits:3};},/presentation\.levels\.meta/);
+ bad('presentation.scope',s=>{s.presentation.scope='elsewhere';},/presentation/);
+ bad('presentation.levels count',s=>{s.presentation.levels.push({levelId:null,name:'',order:1});},/presentation/);
+ bad('presentation.levels order',s=>{s.presentation.levels[0].order=1.5;},/presentation\.levels/);
+ bad('sidecar',s=>{s.presentation.sidecars=[{projectId:s.content.project.id,levelId:null,roomIds:[s.content.project.rooms[0].id],note:{a:1}}];s.capabilities.guided=true;},/presentation\.sidecars\.note/);
+ bad('provenance extra',s=>{s.provenance.sessionId=42;},/provenance\.sessionId/);
+ bad('provenance value',s=>{s.provenance.geometry={tracked:true};},/provenance/);
+ bad('capabilities extra',s=>{s.capabilities.analytics=1;},/capabilities\.analytics/);
+ bad('studio extra',s=>{s.studio.taxId=12345678;},/studio/);
+ bad('source extra',s=>{s.source.userId=7;},/source/);
+});
+
+test('ENT-01 contract: field order does not matter (structural comparison, not JSON text)',()=>{
+ const s=clone(build());
+ const rev=o=>Object.fromEntries(Object.entries(o).reverse());
+ s.content.project=rev(s.content.project);s.content.project.walls=s.content.project.walls.map(rev);s.content.project.scale=rev(s.content.project.scale);
+ s.presentation=rev(s.presentation);s.provenance=rev(s.provenance);
+ assert.doesNotThrow(()=>D.validate(s),'same fields in another order are valid');
+ const b=clone(D.buildSnapshot({building:clone(BEX),now:NOW,rand:RAND}));b.content.building=rev(b.content.building);b.content.building.levels=b.content.building.levels.map(rev);
+ assert.doesNotThrow(()=>D.validate(b));
+});
+
+test('ENT-01 contract: URL detection inside texts — what is detected and what is documented as not detected',()=>{
+ const ok=build();
+ const bad=(text,where)=>{const s=clone(ok);where(s,text);assert.throws(()=>D.validate(s),/url/,text);};
+ const name=(s,t)=>{s.content.project.rooms[0].name=t;};
+ for(const t of ['Ver https://tracker.example/x','salón (http://a.b)','foto ftp://host/f','enlace //cdn.example/x','visita www.example.com','x javascript:alert(1)','img data:image/png;base64,AA','JAVASCRIPT :void(0)'])bad(t,name);
+ bad('Ver https://x.example',(s,t)=>{s.title=t;});
+ // Not URLs: ordinary room names and measurements are accepted.
+ for(const t of ['Salón 1/2','Dormitorio: principal','Baño 2,5 m²','Terraza (sur)']){const s=clone(ok);name(s,t);assert.doesNotThrow(()=>D.validate(s),t);}
+ // Documented limitation: a bare domain without scheme or www is not detected (texts are shown as text, never fetched).
+ {const s=clone(ok);name(s,'ejemplo.com/x');assert.doesNotThrow(()=>D.validate(s));}
+});

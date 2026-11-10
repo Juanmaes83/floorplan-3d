@@ -64,10 +64,22 @@
   try{Core.validate(c.project,{strict:true});}catch(e){fail('project: '+e.message);}
   return [{levelId:null,project:c.project}];
  }
- const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+ // Structural equality independent of key order (two valid objects with the same fields in another order are equal).
+ function same(a,b){
+  if(a===b)return true;if(typeof a!==typeof b||a===null||b===null||typeof a!=='object')return false;
+  if(Array.isArray(a)!==Array.isArray(b))return false;
+  if(Array.isArray(a))return a.length===b.length&&a.every((x,i)=>same(x,b[i]));
+  const ka=Object.keys(a),kb=Object.keys(b);return ka.length===kb.length&&ka.every(k=>Object.hasOwn(b,k)&&same(a[k],b[k]));
+ }
+ // Exact key set: no field may be added at any level of the envelope (numbers and nested objects included).
+ const exactKeys=(o,keys,what)=>{if(!o||typeof o!=='object'||Array.isArray(o))fail(what);for(const k of Object.keys(o))if(!keys.includes(k))fail(what+'.'+k);};
  // Defence in depth: a delivery carries no URL at all (no external resource for the client's browser to fetch) and
  // nothing shaped like a credential. Images travel only as data: URLs in hero/logo, checked separately.
- const URL_RE=/^\s*(?:[a-z][a-z0-9+.-]*:)?\/\//i,SCHEME_RE=/^\s*(?:javascript|vbscript|file|blob|data):/i;
+ // Detected anywhere inside a text, not only at its start: «scheme://…», a «//host» after a space or at the start,
+ // «www.…», and the schemes javascript:, vbscript:, file:, blob: and data:. NOT detected: a bare domain without www
+ // («example.com/x») or an e-mail address — the viewer shows texts as text (never as links or resources), so those
+ // are not fetched; the professional is told not to put personal data in names.
+ const URL_RE=/[a-z][a-z0-9+.-]*:\/\/|(?:^|\s)\/\/\S|\bwww\.[a-z0-9-]+\./i,SCHEME_RE=/\b(?:javascript|vbscript|file|blob|data)\s*:/i;
  const SECRET_RE=/vercel_blob_rw_|\bsk-[A-Za-z0-9_-]{16,}|RUBIK_(?:RENDER|SHARE)_TOKEN|OPENAI_API_KEY|BLOB_READ_WRITE_TOKEN|-----BEGIN [A-Z ]*PRIVATE KEY/;
  function scanStrings(v,path,skip){
   if(typeof v==='string'){if(skip.has(path))return;if(URL_RE.test(v)||SCHEME_RE.test(v))fail('url at '+path);if(SECRET_RE.test(v))fail('secret-like value at '+path);return;}
@@ -115,16 +127,21 @@
   if(!s.studio||typeof s.studio.name!=='string'||s.studio.name.length>120||Object.keys(s.studio).some(k=>!['name','logo'].includes(k)))fail('studio');
   if(s.studio.logo!==null&&s.studio.logo!==undefined&&!dataImage(s.studio.logo,MAX_LOGO,['image/png']))fail('logo');
   if(s.hero!==null&&s.hero!==undefined&&!dataImage(s.hero,MAX_HERO))fail('hero');
-  const cap=s.capabilities;if(!cap||typeof cap.walk!=='boolean'||typeof cap.guided!=='boolean'||Object.keys(cap).length!==2)fail('capabilities');
-  if(!s.provenance||s.provenance.context!=='none')fail('provenance');
+  const cap=s.capabilities;exactKeys(cap,['walk','guided'],'capabilities');if(typeof cap.walk!=='boolean'||typeof cap.guided!=='boolean')fail('capabilities');
+  exactKeys(s.provenance,['geometry','furniture','materials','context'],'provenance');
+  if(s.provenance.geometry!=='project'||s.provenance.furniture!=='project'||s.provenance.materials!=='project'||s.provenance.context!=='none')fail('provenance');
+  exactKeys(s.content,['project','building'],'content');
   const levels=validateContent(s.content);
   // Nothing the minimisation removes may be present: a hand-edited snapshot cannot smuggle source images, parcel,
   // location, measurements, provenance notes or app data back in.
   if(s.content.project&&!same(minimizeProject(s.content.project),s.content.project))fail('fields outside the delivery contract');
   if(s.content.building&&!same(minimizeBuilding(s.content.building),s.content.building))fail('fields outside the delivery contract');
   if((src.kind==='building')!==!!s.content.building||src.id!==(s.content.building||s.content.project).id)fail('source mismatch');
-  const p=s.presentation;if(!p||!Array.isArray(p.sidecars)||!Array.isArray(p.levels))fail('presentation');
-  for(const x of p.sidecars){const lv=levels.find(l=>l.project.id===x?.projectId&&l.levelId===(x.levelId??null));
+  const p=s.presentation;exactKeys(p,['scope','sidecars','levels'],'presentation');
+  if(p.scope!==src.kind||!Array.isArray(p.sidecars)||!Array.isArray(p.levels)||p.levels.length!==levels.length)fail('presentation');
+  p.levels.forEach((l,i)=>{exactKeys(l,['levelId','name','order'],'presentation.levels');
+   if(l.levelId!==levels[i].levelId||typeof l.name!=='string'||l.name.length>80||!Number.isSafeInteger(l.order))fail('presentation.levels');});
+  for(const x of p.sidecars){exactKeys(x,['projectId','levelId','roomIds'],'presentation.sidecars');const lv=levels.find(l=>l.project.id===x?.projectId&&l.levelId===(x.levelId??null));
    if(!lv||!Array.isArray(x.roomIds)||!x.roomIds.length||x.roomIds.length>MAX_SIDECAR_ROOMS)fail('sidecar');
    const known=new Set(lv.project.rooms.map(r=>r.id));if(x.roomIds.some(id=>typeof id!=='string'||!known.has(id)))fail('sidecar room');}
   if(cap.guided!==(p.sidecars.length>0))fail('capabilities');
