@@ -1,6 +1,6 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
-**Fecha:** 09/11/2026 · **Versión:** 1.4 (estados factuales tras publicar HOM-01 y HOM-02, ver §7) · **Estado: PROPUESTO** · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
+**Fecha:** 09/11/2026 · **Versión:** 1.5 (anexo documental SCULPT añadido el 10/11/2026; estados factuales v1.4 preservados, ver §7–8) · **Estado: PROPUESTO** · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
 **Base de verificación:** `master@8df49ed` (= `5fb7a5c` + PR #183, #184 y #185). **Production:** `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` sobre `8df49ed` desde el 09/11/2026, con la Home de seis perfiles y Render IA D1 intacto (ver `docs/product/hom-01/cierre-hom-01-02-publicacion-2026-11-09.md` y `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`).
 
 ## 0. Para qué sirve y cómo usarlo
@@ -56,6 +56,7 @@ Aprobar una ola **no** aprueba el catálogo entero. Se resuelven los conflictos 
 | F8 | Auditoría verificada de oportunidades (09/11) | rama `docs/auditoria-oportunidades-2026-11-09`, `auditoria-oportunidades-ux-servicios-2026-11-09.md` | UX-01 a UX-21, V-, C-, G-, A-, fuentes externas |
 | F9 | Fichas de los 4 PDF (Maket, ERECTION.OS, Makio, Floorcraft) | misma rama, `auditoria-4-pdf-referencias-ui-ux-2026-11-09.md` | M1–M12, E1–E9, K1–K9, F1–F12, UX-22 a 26, V-11 |
 | F10 | Render IA D1 | PR #180 (fusionada), #181 y #182 | IMG-01, IMG-02 y parte de IMG-04 |
+| F11 | SCULPT: métodos y donantes del ecosistema Floorplan 3D (investigación, no ejecución) | [Anexo técnico subordinado](sculpt-metodologia-y-cartera-2026-11-10.md) · fuentes de FUNDING OS y VECINIA | R01–R03 y matriz de G0–G12 contra IDs/olas existentes; no concede autorización |
 
 ---
 
@@ -331,3 +332,20 @@ Marca en la sección 3 cada fila con ✔, ✖ o ⏸. Las decisiones que desbloqu
 | 1.2 | (1) HOM-03 ya no depende del antiguo GOV-01, sino de GOV-01c, GOV-09b y GOV-03, y solo anuncia lo **activo en Production**. (2) GOV-09 dividido: **GOV-09a**, acreditar el modelo y su compatibilidad con una prueba autorizada **antes** del Promote (GOV-01c pasa a depender de ella), y **GOV-09b**, confirmarlo en el registro **después**. (3) GOV-08 reordenado: lo principal es el código compartido, el permiso de publicación propio y la **revocación individual** de enlaces; la comparación en tiempo constante es un detalle menor. | Segunda revisión externa aportada por el propietario, 09/11 |
 | 1.3 | Estados factuales tras el cierre de Render IA D1: Production en `dpl_5oHsDPdSVG5buSVCnYPrLPmbnbNi` (`5fb7a5c`); IMG-01 e IMG-02 pasan a **E**; GOV-09b hecho con el log real; GOV-09a registrada como **desviación cronológica** (no se hizo antes del Promote). Las casillas de decisión del propietario **no se modifican**. Acta: `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`. | Orden maestra del propietario, 09/11 |
 | 1.4 | Estados factuales tras publicar la Home: HOM-01 (#184) y HOM-02 (#185) pasan a **E** y están en Production `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (`master@8df49ed`), con la revisión visual aprobada por el propietario. GOV-03 pasa a **P** (registro mínimo). HOM-03, GOV-08, ENT-01 y ENT-02 **no cambian**: siguen pendientes de decisión. | Integración autorizada por el propietario, 09/11 |
+| 1.5 | Se incorpora SCULPT como **método transversal** y registro de tres piedras y trece áreas G0–G12, todas reconciliadas con IDs y olas existentes o marcadas pendientes; sin modificar decisiones, estados, gates ni prioridades. Anexo técnico subordinado y enlace en roadmap histórico. | Autorización expresa del propietario para documentación, 10/11/2026 |
+
+## 8. SCULPT — registro subordinado de piedras y oportunidades (propuesta documental de 10/11/2026)
+
+**Una sola autoridad de decisiones:** las olas 0–5, los cortes 2a–2f, los IDs de mejora y las casillas del propietario de las secciones 3–6 **no se modifican** por incorporar SCULPT. La metodología es transversal, **no una nueva ola**. Su detalle técnico, riesgos, fuentes y mapeo G0–G12 constan en [SCULPT — metodología y cartera de piedras](sculpt-metodologia-y-cartera-2026-11-10.md).
+
+| Alias de piedra | Fuente exacta de investigación | Relación con mejora maestra y ola ya existente | Estado de evidencia / autorización |
+|---|---|---|---|
+| **R01 · Reconocimiento y OCR** | [Donante PR #18](https://github.com/wy51ai/floorplan-3d/pull/18), SHA `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Protocolo **F2** (experimental) y **G-01 / ola 4**; posible corte distinto de **G-06 / ola 2** | Identificada; **no clonada, no validada en planos reales, no aprobada para integrar**. |
+| **R02 · Techos y puntos técnicos** | [Donante PR #17](https://github.com/wy51ai/floorplan-3d/pull/17), SHA `324eb64cf9b26f6d4df8323c2dec4591fa4691e3` | Coincidencia **parcial** con LUZ-01 / ola 5 y OBR-04 / ola 3; modelado MEP/techo sin ID exacto | Identificada; alcance real y regulación pendientes; **sin autorización**. |
+| **R03 · Armarios paramétricos** | [Donante PR #11](https://github.com/wy51ai/floorplan-3d/pull/11), SHA `2495d8e0bf7d3846d2da827121c15e3e83d752bd` | F3 existente y relación **parcial** con CAT-03 / ola 5; módulo paramétrico requiere decisión | Identificada; PR donante cerrada sin merge; licencias por verificar; **sin autorización**. |
+
+La investigación describe **13 áreas G0–G12, no 13 piedras clonadas**. Sus correspondencias no inventan mejoras: G0 → GOV-05/BIB-01; G1–G3 → F2, G-01, G-06; G4/G5 → R02 con encaje incompleto y X-03 descartada para MEP automático; G6/G7 → editor/OBR-04 parcialmente, decisión pendiente; G8 → IMG-08/09, UX-13, CAT-01; G9 → C1–C4/FT3D-8, OBR-05 y ENT-04; G10 → R03/CAT-03 parcialmente; G11 → AG-1/AG-2; G12 → GOV-07 parcialmente. **Ver matriz exacta y límites en el anexo**, que no puede reasignar ninguna ola.
+
+**Gates:** origen/licencia → copia fiel → baseline → CLASSIFY → escultura → normalización → TEST → PREVIEW → revisión humana → merge y publicación como autorizaciones separadas. **El laboratorio R01, R02 o R03 no queda aprobado por esta documentación.** Se respetan los cinco casos y veinte planos autorizados de F2 para cualquier afirmación de precisión real. Los asuntos prioritarios de seguridad de enlaces/ENT/GOV-08 conservan su orden.
+
+**Estado:** propuesta documental en rama aislada; sin modificaciones de código ni de Production.
