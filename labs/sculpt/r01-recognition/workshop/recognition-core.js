@@ -245,7 +245,7 @@
       source: '外围尺寸/比例线'
     };
   }
-  function suppressOutsidePlan(neutral, dark, w, h, bounds, thickness, compass, dimensionFrame) {
+  function suppressOutsidePlan(neutral, dark, w, h, bounds, thickness, compass, dimensionFrame, ignore) {
     // Once scale/dimension lines are found, ignore everything outside that frame.
     // Otherwise fall back to wall-cluster bounds. Compass patch is the only exterior keep.
     let keep;
@@ -260,10 +260,13 @@
       const keepCompass = protect && x >= protect[0] && x < protect[2] && y >= protect[1] && y < protect[3];
       if (!inside && !keepCompass) { neutral[y * w + x] = 0; dark[y * w + x] = 0; }
     }
-    if (!dimensionFrame) {
-      clearRectMask(neutral, w, h, [Math.floor(w * .72), 0, w, Math.floor(h * .16)]);
-      clearRectMask(dark, w, h, [Math.floor(w * .72), 0, w, Math.floor(h * .16)]);
-    }
+    if (!dimensionFrame) for (const rect of ignore || []) { clearRectMask(neutral, w, h, rect); clearRectMask(dark, w, h, rect); }
+  }
+  // SCULPT-R01 C1: the donor always blanked the top-right 28%×16% (the app button of its own screenshot).
+  // That is now an explicit option; the legacy rectangle stays available for donor-parity runs.
+  const LEGACY_UI_MASK = Object.freeze([Object.freeze([.72, 0, 1, .16])]);
+  function ignoreRectsPx(list, w, h) {
+    return (list || []).map(r => [Math.floor(w * r[0]), Math.floor(h * r[1]), Math.ceil(w * r[2]), Math.ceil(h * r[3])]);
   }
   function largestWallCluster(walls, thickness) {
     if (walls.length <= 1) return walls;
@@ -433,8 +436,8 @@
     }
     const compass = detectCompass(data, w, h);
     // First pass finds walls; proportion lines are located outside that cluster.
-    clearRectMask(neutral, w, h, [Math.floor(w * .72), 0, w, Math.floor(h * .16)]);
-    clearRectMask(dark, w, h, [Math.floor(w * .72), 0, w, Math.floor(h * .16)]);
+    const ignore = ignoreRectsPx(options.ignoreRects, w, h);
+    for (const rect of ignore) { clearRectMask(neutral, w, h, rect); clearRectMask(dark, w, h, rect); }
     const horizontal = opening(neutral, w, h, length, thick), vertical = opening(neutral, w, h, thick, length);
     let walls = [];
     for (const [mask, axis] of [[horizontal, 'h'], [vertical, 'v']]) for (const c of components(mask, w, h).items) {
@@ -449,7 +452,7 @@
       ? [Math.min(...walls.map(v => v.rect[0])), Math.min(...walls.map(v => v.rect[1])), Math.max(...walls.map(v => v.rect[2])), Math.max(...walls.map(v => v.rect[3]))]
       : [0, 0, w, h];
     const dimensionFrame = detectDimensionFrame(dark, w, h, walls.length ? bounds : null);
-    suppressOutsidePlan(neutral, dark, w, h, bounds, preliminaryThickness || 8, compass, dimensionFrame);
+    suppressOutsidePlan(neutral, dark, w, h, bounds, preliminaryThickness || 8, compass, dimensionFrame, ignore);
     const anchors = [...walls];
     const colors = new Uint32Array(256), covered = new Uint8Array(w * h);
     for (const wall of walls) for (let y = wall.rect[1]; y < wall.rect[3]; y++) for (let x = wall.rect[0]; x < wall.rect[2]; x++) {
@@ -1342,6 +1345,6 @@
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" class="' + cls + '" aria-hidden="true">' + frame + walls + rooms + openings + compass + '</svg>';
   }
   function escapeXml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
-  root.FloorplanRecognition = { detect, enrich, contains, median, estimateScale, toArchitecture, fillMissingPartitionWalls, overlaySVG, rectTouchesOuter, detectCompass, detectDimensionFrame, cleanUnderlayImage, scrubRoomLabelInk, roomLabelScrubRects, cropCanvasTo, snapNorthCardinal };
+  root.FloorplanRecognition = { LEGACY_UI_MASK, detect, enrich, contains, median, estimateScale, toArchitecture, fillMissingPartitionWalls, overlaySVG, rectTouchesOuter, detectCompass, detectDimensionFrame, cleanUnderlayImage, scrubRoomLabelInk, roomLabelScrubRects, cropCanvasTo, snapNorthCardinal };
   if (typeof module !== 'undefined') module.exports = root.FloorplanRecognition;
 })(globalThis);

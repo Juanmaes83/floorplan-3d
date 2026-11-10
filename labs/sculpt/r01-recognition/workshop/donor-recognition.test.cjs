@@ -1,7 +1,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const Rules=require('../js/ocr-postprocess-rules.js');
-const R=require('../js/recognition-core.js');
+const Rules=require('./ocr-postprocess-rules.js');
+const R=require('./recognition-core.js');
 
 function solidRect(w,h,rects){
   const data=new Uint8ClampedArray(w*h*4);
