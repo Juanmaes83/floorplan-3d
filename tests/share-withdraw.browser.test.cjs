@@ -35,7 +35,11 @@ test('S2: «Mis publicaciones» withdraws a published link after confirmation, a
  const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#shareLinkDialog'),pubs=dialog.locator('#sharePublications');
  await page.locator('#workArea-deliver').click();await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
- assert.match(await pubs.innerText(),/Mis publicaciones \(este navegador\)[\s\S]*no es un registro completo[\s\S]*Todavía no hay publicaciones/);
+ assert.match(await pubs.innerText(),/Mis publicaciones \(este navegador\)[\s\S]*no es un registro completo[\s\S]*panel de Vercel Blob[\s\S]*copias en caché[\s\S]*Todavía no hay publicaciones/);
+ // S2: the dialog explains where links are withdrawn, without promising an exact disappearance time.
+ const note=await dialog.locator('#shareLinkNote').innerText();
+ assert.match(note,/publicados desde este navegador se pueden retirar en «Mis publicaciones»[\s\S]*otro equipo o navegador se retiran desde el panel de Vercel Blob[\s\S]*copias en caché[\s\S]*descargado siguen en su poder/);
+ assert.doesNotMatch(await dialog.innerText(),/\b60 s|un minuto|definitivamente/,'no exact-time promise');
  // Publish two links with the publishing code.
  const publishOnce=async()=>{await dialog.locator('#shareLinkAgree').check();if(!(await dialog.locator('#shareLinkToken').inputValue()))await dialog.locator('#shareLinkToken').fill(SHARE);
   const done=page.waitForResponse(r=>r.url().startsWith(url+'api/share'));await dialog.locator('#shareLinkGo').click();await done;await dialog.locator('#shareLinkUrl').waitFor();return dialog.locator('#shareLinkUrl').inputValue();};
@@ -59,7 +63,7 @@ test('S2: «Mis publicaciones» withdraws a published link after confirmation, a
  // Confirmed withdrawal with the publishing code.
  await dialog.locator('#shareLinkToken').fill(SHARE);const itemB2=pubs.locator(`.share-publication[data-pub="${pageOf(linkB)}"]`);
  await itemB2.getByRole('button',{name:'Retirar'}).click();answered=page.waitForResponse(r=>r.url().startsWith(url+'api/unshare'));await itemB2.getByRole('button',{name:'Sí, retirar enlace'}).click();
- assert.equal((await answered).status(),200);await page.waitForFunction(()=>/Enlace retirado: los archivos se han borrado del almacén[\s\S]*hasta un minuto/.test(document.querySelector('#shareLinkStatus').textContent));
+ assert.equal((await answered).status(),200);await page.waitForFunction(()=>/Enlace retirado: los archivos se han borrado del almacén[\s\S]*copias en caché[\s\S]*conserva su copia/.test(document.querySelector('#shareLinkStatus').textContent));
  const last=apiCalls.at(-1);assert.equal(last.headers['x-rubik-share-token'],SHARE);assert.equal(last.headers['x-rubik-render-token'],undefined);
  assert.equal(await pubs.locator(`.share-publication[data-pub="${pageOf(linkB)}"]`).getAttribute('data-state'),'withdrawn');
  assert.match(await pubs.locator(`.share-publication[data-pub="${pageOf(linkB)}"]`).innerText(),/Retirado el/);
@@ -80,4 +84,61 @@ test('S2: «Mis publicaciones» withdraws a published link after confirmation, a
  assert.equal(await page.evaluate(()=>FloorPlanShareRegistry.load(localStorage).filter(e=>e.state==='withdrawn').length),2);
  assert.equal(await page.evaluate(s=>Object.keys(localStorage).some(k=>localStorage.getItem(k).includes(s)),SHARE),false,'no code stored');
  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
+});
+
+// S2: «Borrar historial» forgets the local list only, after confirmation; and a tour video uploaded for a publication
+// whose page then fails is cleaned up (its exact URL only) or kept as a recoverable entry when cleanup fails.
+test('S2: clear history (no deletion) and no orphan videos when the page upload fails',{timeout:600000},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());
+ const store=new Map(),unshareBodies=[],errors=[];let n=0,failHtml=false,failDelete=false;
+ const blobFetch=async(u,init={})=>{
+  if(init.method==='PUT'){if(failHtml&&/\.html$/.test(new URL(u).pathname))return {ok:false,status:500,json:async()=>({})};const p=new URL(u).pathname.replace(/\.(\w+)$/,`-r${++n}.$1`);store.set(p,Buffer.from(init.body));return {ok:true,status:200,json:async()=>({url:`https://${HOST}${p}`})};}
+  if(u==='https://blob.vercel-storage.com/delete'){if(failDelete)return {ok:false,status:500,json:async()=>({})};for(const x of JSON.parse(init.body).urls)store.delete(new URL(x).pathname);return {ok:true,status:200,json:async()=>({})};}
+  const hit=store.get(new URL(u).pathname);return hit?{ok:true,status:200,text:async()=>hit.toString()}:{ok:false,status:404};};
+ const call=async(handler,req)=>{const body=req.postDataBuffer()||Buffer.alloc(0),stream=Readable.from([body]);stream.method=req.method();stream.headers=await req.allHeaders();stream.headers.host??=new URL(url).host;const out=fakeRes();await handler(stream,out,{env,fetchImpl:blobFetch});return out;};
+ await context.route('**/*',async r=>{const req=r.request(),u=req.url();
+  if(u.startsWith(url+'api/unshare')){unshareBodies.push(JSON.parse(req.postData()||'{}'));const out=await call(Unshare.handler,req);return r.fulfill({status:out.statusCode,headers:out.headers,body:out.body});}
+  if(u.startsWith(url+'api/share')){const out=await call(Share.handler,req);return r.fulfill({status:out.statusCode,headers:out.headers,body:out.body});}
+  if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();return r.abort();});
+ const page=await context.newPage();page.setDefaultTimeout(30000);page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanTourVideo);
+ // A small recorded tour video (fixture bytes), so publishing uploads video + page.
+ await page.evaluate(()=>{const blob=new Blob([new Uint8Array([0x1a,0x45,0xdf,0xa3,1,2,3,4])],{type:'video/webm'});Object.defineProperty(window.FloorPlanTourVideo,'result',{get:()=>({blob,extension:'webm'}),configurable:true});});
+ const dialog=page.locator('#shareLinkDialog'),pubs=dialog.locator('#sharePublications');
+ await page.locator('#workArea-deliver').click();await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ const publish=async()=>{await dialog.locator('#shareLinkAgree').check();if(!(await dialog.locator('#shareLinkToken').inputValue()))await dialog.locator('#shareLinkToken').fill(SHARE);await dialog.locator('#shareLinkGo').click();};
+ // 1) Page upload fails after the video → the video (and only it) is deleted, nothing stays published, nothing registered.
+ failHtml=true;await publish();
+ await page.waitForFunction(()=>/El vídeo que ya se había subido se ha borrado: no ha quedado nada publicado/.test(document.querySelector('#shareLinkStatus').textContent));
+ assert.equal(store.size,0,'no orphan video');assert.equal(unshareBodies.length,1);assert.equal(unshareBodies[0].urls.length,1);assert.match(unshareBodies[0].urls[0],/\.webm$/,'only the uploaded video is named');
+ assert.equal(await pubs.locator('.share-publication').count(),0);
+ // 2) Page upload fails and the cleanup fails too → the video is kept as a recoverable «Vídeo sin documento».
+ failDelete=true;await publish();
+ await page.waitForFunction(()=>/no se pudo borrar: aparece en «Mis publicaciones» como «Vídeo sin documento»/.test(document.querySelector('#shareLinkStatus').textContent));
+ assert.equal(store.size,1);const orphan=pubs.locator('.share-publication');assert.equal(await orphan.count(),1);
+ assert.equal(await orphan.getAttribute('data-state'),'partial');assert.match(await orphan.innerText(),/Vídeo sin documento \(la publicación falló\)/);assert.equal(await orphan.getByRole('link',{name:'Abrir'}).count(),0);
+ // …and later withdrawn from the list (only that URL).
+ failDelete=false;failHtml=false;await orphan.getByRole('button',{name:'Retirar'}).click();await orphan.getByRole('button',{name:'Sí, retirar enlace'}).click();
+ await page.waitForFunction(()=>document.querySelector('#sharePublications .share-publication')?.dataset.state==='withdrawn');assert.equal(store.size,0);assert.equal(unshareBodies.at(-1).urls.length,1);
+ // 3) A normal publication, then «Borrar historial»: cancel keeps it; confirm forgets the list but deletes nothing.
+ await publish();await dialog.locator('#shareLinkUrl').waitFor();const files=store.size;assert.equal(files,2,'video + page');
+ const calls=unshareBodies.length;
+ await dialog.locator('#sharePublicationsClear').click();
+ assert.match(await dialog.locator('#sharePublicationsClearWarning').innerText(),/no se retira ningún enlace ni se borra ningún archivo[\s\S]*ya no podrás retirarlos desde aquí[\s\S]*panel de Vercel Blob/);
+ await dialog.locator('#sharePublicationsClearCancel').click();assert.equal(await pubs.locator('.share-publication').count(),2);
+ await dialog.locator('#sharePublicationsClear').click();await dialog.locator('#sharePublicationsClearConfirm').click();
+ await page.waitForFunction(()=>/Historial borrado en este navegador\. Los enlaces siguen publicados/.test(document.querySelector('#shareLinkStatus').textContent));
+ assert.equal(await pubs.locator('.share-publication').count(),0);assert.match(await pubs.innerText(),/Todavía no hay publicaciones/);
+ assert.equal(store.size,files,'clearing the history deletes no file');assert.equal(unshareBodies.length,calls,'and calls no withdrawal');
+ assert.equal(await page.evaluate(()=>localStorage.getItem('rubik-share-publications-v1')),null);
+ assert.equal(await page.evaluate(s=>Object.keys(localStorage).some(k=>String(localStorage.getItem(k)).includes(s)),SHARE),false,'no code in localStorage');
+ // Keyboard: the clear button is reachable and labelled.
+ assert.equal(await dialog.locator('#sharePublicationsClear').count(),0,'no history → no clear button');
+ // 4) Cleanup fails AND this browser cannot store the register: the message itself carries the exact video URL.
+ failHtml=true;failDelete=true;const before=store.size;
+ await page.evaluate(()=>{Storage.prototype.setItem=function(){throw Error('blocked');};});
+ await publish();
+ await page.waitForFunction(()=>/no se pudo borrar ni guardar en este navegador\. Bórralo desde el panel de Vercel Blob: https:\/\/\S+\.webm/.test(document.querySelector('#shareLinkStatus').textContent));
+ assert.equal(store.size,before+1,'only that video remains, and its URL was shown');
+ assert.deepEqual(errors,[]);
 });

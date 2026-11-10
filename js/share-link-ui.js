@@ -29,16 +29,25 @@
  async function publish({withVideo,code}){
   let tour=null;const v=withVideo?video():null;
   if(v){const url=await upload(v.extension,v.blob,code);tour={url,host:new URL(url).hostname,type:v.blob.type};}
-  const out=await FloorPlanClientShare.build(tour?{video:tour}:{});
-  if(out.bytes>LIMIT)throw Error(ERRORS().size);
-  const page=await upload('html',new Blob([out.html],{type:'text/html'}),code);
+  let out,page;
+  try{out=await FloorPlanClientShare.build(tour?{video:tour}:{});if(out.bytes>LIMIT)throw Error(ERRORS().size);page=await upload('html',new Blob([out.html],{type:'text/html'}),code);}
+  catch(e){if(!tour)throw e;throw Error(e.message+' '+await cleanOrphanVideo(tour.url,code));}
   return {link:new URL('api/view?f='+encodeURIComponent(page),location.href).href,page,video:!!tour,videoUrl:tour?.url||null,bytes:out.bytes,versionCode:out.versionCode};
  }
  // S2: local register and withdrawal. The register keeps no code; the code typed above is sent only in the header.
  const REG=window.FloorPlanShareRegistry,store=()=>{try{return window.localStorage;}catch{return null;}};
  const WITHDRAW_ERRORS=()=>({...ERRORS(),urls:tx('Ese enlace no pertenece al almacén de este proyecto: no se puede retirar desde aquí.','That link does not belong to this project store: it cannot be withdrawn from here.','该链接不属于本项目存储。'),'too-many':tx('Demasiados archivos en una sola retirada.','Too many files in one withdrawal.','一次撤回的文件过多。'),unavailable:tx('Retirar enlaces no está disponible en este servidor (/api/unshare no existe aquí). Bórralo desde el panel de Vercel Blob.','Withdrawing links is not available on this server (/api/unshare does not exist here). Delete it from the Vercel Blob dashboard.','此服务器不提供撤回链接。')});
- async function withdraw(entry,code){
-  let r;try{r=await fetch('api/unshare',{method:'POST',headers:{'Content-Type':'application/json','x-rubik-share-token':code},body:JSON.stringify({urls:REG.toRemove(entry)})});}
+ async function withdraw(entry,code){return unshareUrls(REG.toRemove(entry),code);}
+ // S2: the tour video was uploaded but its page was not published. Remove THAT video only (its exact URL, nothing
+ // else); if the removal fails, keep it in «Mis publicaciones» as a pending «vídeo sin documento» to withdraw later.
+ async function cleanOrphanVideo(videoUrl,code){
+  try{const out=await unshareUrls([videoUrl],code);if(out.removed.includes(videoUrl))return tx('El vídeo que ya se había subido se ha borrado: no ha quedado nada publicado.','The video already uploaded was deleted: nothing was left published.','已上传的视频已删除。');}catch{}
+  const kept=!!REG&&REG.save(store(),REG.addOrphan(REG.load(store()),{video:videoUrl,project:name()}))&&REG.load(store()).some(e=>e.id===videoUrl);
+  if(!kept)return tx(`El vídeo que ya se había subido no se pudo borrar ni guardar en este navegador. Bórralo desde el panel de Vercel Blob: ${videoUrl}`,`The video already uploaded could not be deleted nor saved in this browser. Delete it from the Vercel Blob dashboard: ${videoUrl}`,`已上传的视频未能删除：${videoUrl}`);
+  return tx('El vídeo que ya se había subido no se pudo borrar: aparece en «Mis publicaciones» como «Vídeo sin documento» para que lo retires.','The video already uploaded could not be deleted: it appears in «My publications» as «Video without document» so you can withdraw it.','已上传的视频未能删除，可在「我的发布」中撤回。');
+ }
+ async function unshareUrls(urls,code){
+  let r;try{r=await fetch('api/unshare',{method:'POST',headers:{'Content-Type':'application/json','x-rubik-share-token':code},body:JSON.stringify({urls})});}
   catch{throw Error(ERRORS()['storage-unreachable']);}
   if(r.status===404)throw Error(WITHDRAW_ERRORS().unavailable);
   const out=await r.json().catch(()=>null);
@@ -54,7 +63,7 @@
   dialog.replaceChildren();const head=el('div',undefined,dialog,'ai-render-head');el('h2',tx('Enlace para el cliente','Link for the client','客户链接'),head).id='shareLinkTitle';
   const close=btn(tx('Cerrar','Close','关闭'),head);close.id='shareLinkClose';close.onclick=()=>dialog.close();
   const note=el('p',undefined,dialog,'ai-render-note');note.id='shareLinkNote';
-  note.textContent=tx('Se publica el mismo documento de sólo lectura que el archivo para el cliente: vistas, plano firmado, superficies, orientación, emplazamiento, tu firma y el formulario de observaciones. Cualquiera que tenga el enlace podrá verlo; no aparece en buscadores. Se guarda en el almacén Vercel Blob de este proyecto y se borra desde ese panel. El proyecto editable no se envía.','The same read-only document as the client file is published: views, signed plan, areas, orientation, site, your signature and the observations form. Anyone with the link can see it; it is not indexed. It is stored in this project\'s Vercel Blob store and removed from that dashboard. The editable project is not sent.','发布与客户文件相同的只读文档。任何拥有链接的人都可查看；不会被搜索引擎收录。存储于本项目的 Vercel Blob，可在其面板删除。不发送可编辑项目。');
+  note.textContent=tx('Se publica el mismo documento de sólo lectura que el archivo para el cliente: vistas, plano firmado, superficies, orientación, emplazamiento, tu firma y el formulario de observaciones. Cualquiera que tenga el enlace podrá verlo; no aparece en buscadores. Se guarda en el almacén Vercel Blob de este proyecto. Los enlaces publicados desde este navegador se pueden retirar en «Mis publicaciones», más abajo; los publicados desde otro equipo o navegador se retiran desde el panel de Vercel Blob. Al retirar un enlace se borran sus archivos, pero pueden quedar durante un tiempo copias en caché, y los archivos que el destinatario haya descargado siguen en su poder. El proyecto editable no se envía.','The same read-only document as the client file is published: views, signed plan, areas, orientation, site, your signature and the observations form. Anyone with the link can see it; it is not indexed. It is stored in this project\'s Vercel Blob store. Links published from this browser can be withdrawn in «My publications», below; those published from another computer or browser are withdrawn from the Vercel Blob dashboard. Withdrawing a link deletes its files, but cached copies may remain for a while, and files the recipient downloaded stay with them. The editable project is not sent.','发布与客户文件相同的只读文档。从此浏览器发布的链接可在「我的发布」中撤回；其他设备发布的链接需在 Vercel Blob 面板中删除。撤回会删除文件，但缓存副本可能暂时保留，收件人已下载的文件仍归其所有。不发送可编辑项目。');
   const form=el('div',undefined,dialog,'ai-render-form');
   const tl=el('label',undefined,form);el('span',tx('Código de publicación de enlaces','Link publishing code','链接发布码'),tl);const ti=el('input',undefined,tl);ti.type='password';ti.id='shareLinkToken';ti.autocomplete='off';ti.value=typedCode??sessionCode;ti.addEventListener('input',()=>{typedCode=ti.value;});
   const th=el('small',tx('Es distinto del código del Render IA. Solo se recuerda mientras esta página esté abierta.','It is different from the AI render code. It is only remembered while this page is open.','与 AI 渲染码不同，仅在此页面打开期间保留。'),tl);th.id='shareLinkTokenHint';ti.setAttribute('aria-describedby','shareLinkTokenHint');
@@ -74,21 +83,28 @@
    const code=ti.value.trim();if(!code){status.textContent=tx('Introduce el código de publicación.','Enter the publishing code.','请输入发布码。');ti.focus();return;}
    sessionCode=code;go.disabled=true;status.textContent=tx('Publicando…','Publishing…','正在发布…');
    try{last=await publish({withVideo:vc.checked,code});if(REG)REG.save(store(),REG.add(REG.load(store()),{page:last.page,video:last.videoUrl,link:last.link,project:name(),versionCode:last.versionCode}));draw(tx('Enlace publicado. Ábrelo para comprobarlo antes de enviarlo.','Link published. Open it to check it before sending it.','链接已发布。发送前请先打开检查。'));dialog.querySelector('#shareLinkCopy')?.focus();}
-   catch(e){if(e.message===ERRORS().token){sessionCode='';typedCode=null;}draw(e.message);}
+   catch(e){if(e.message.startsWith(ERRORS().token)){sessionCode='';typedCode=null;}draw(e.message);}
   };
  }
  // «Mis publicaciones»: what this browser published, with Open and Withdraw (confirmation first).
  function drawPublications(ti,status){
   const list=REG.load(store()),sec=el('section',undefined,dialog,'share-publications');sec.id='sharePublications';sec.setAttribute('aria-labelledby','sharePublicationsTitle');
   el('h3',tx('Mis publicaciones (este navegador)','My publications (this browser)','我的发布（此浏览器）'),sec).id='sharePublicationsTitle';
-  el('p',tx('Solo aparecen los enlaces publicados desde este navegador: no es un registro completo y otro equipo o navegador no los ve. Retirar borra los archivos del almacén; quien ya lo descargó conserva su copia y puede tardar hasta un minuto en dejar de abrirse.','Only links published from this browser appear: it is not a complete record and another computer or browser does not see them. Withdrawing deletes the files from the store; anyone who downloaded it keeps a copy and it may take up to a minute to stop opening.','仅显示从此浏览器发布的链接。'),sec,'share-publications-note');
+  el('p',tx('Solo aparecen los enlaces publicados desde este navegador: no es un registro completo y otro equipo o navegador no los ve. Los demás se retiran desde el panel de Vercel Blob. Retirar borra los archivos del almacén, pero pueden quedar durante un tiempo copias en caché, y quien ya lo descargó conserva su copia.','Only links published from this browser appear: it is not a complete record and another computer or browser does not see them. The others are withdrawn from the Vercel Blob dashboard. Withdrawing deletes the files from the store, but cached copies may remain for a while, and anyone who downloaded it keeps a copy.','仅显示从此浏览器发布的链接。'),sec,'share-publications-note');
   if(!list.length){el('p',tx('Todavía no hay publicaciones desde este navegador.','No publications from this browser yet.','此浏览器尚无发布。'),sec,'share-publications-empty');return;}
+  // «Borrar historial»: forgets this browser's list only — no file is deleted, no link is withdrawn.
+  const hist=el('div',undefined,sec,'share-publications-history');
+  if(confirming!=='history'){const c=btn(tx('Borrar historial de este navegador','Clear this browser\'s history','清除此浏览器的记录'),hist);c.id='sharePublicationsClear';c.dataset.action='clear-history';c.onclick=()=>{confirming='history';draw();dialog.querySelector('#sharePublicationsClearConfirm')?.focus();};}
+  else{el('p',tx('Solo se borra la lista de este navegador: no se retira ningún enlace ni se borra ningún archivo, y los enlaces siguen abriéndose. Después ya no podrás retirarlos desde aquí; tendrás que hacerlo desde el panel de Vercel Blob. ¿Borrar el historial?','Only this browser\'s list is cleared: no link is withdrawn and no file is deleted, and the links keep opening. Afterwards you can no longer withdraw them from here; you will have to use the Vercel Blob dashboard. Clear the history?','仅清除此浏览器的列表：不会撤回链接或删除文件。之后无法在此撤回。确定清除？'),hist,'share-publication-confirm').id='sharePublicationsClearWarning';
+   const yes=btn(tx('Sí, borrar solo el historial','Yes, clear only the history','确定仅清除记录'),hist,'btn');yes.id='sharePublicationsClearConfirm';
+   const no=btn(tx('Cancelar','Cancel','取消'),hist);no.id='sharePublicationsClearCancel';no.onclick=()=>{confirming=null;draw();};
+   yes.onclick=()=>{confirming=null;const ok=REG.clear(store());draw(ok?tx('Historial borrado en este navegador. Los enlaces siguen publicados.','History cleared in this browser. The links remain published.','已清除此浏览器的记录。链接仍然有效。'):tx('No se pudo borrar el historial de este navegador.','The history of this browser could not be cleared.','无法清除记录。'));};}
   const ul=el('ul',undefined,sec,'share-publications-list');
   const fmt=d=>{try{return new Date(d).toLocaleString(typeof LANG==='string'&&LANG==='en'?'en-GB':'es-ES',{dateStyle:'short',timeStyle:'short'});}catch{return d;}};
   for(const e of list){
    const li=el('li',undefined,ul,'share-publication');li.dataset.pub=e.id;li.dataset.state=e.state;
    el('strong',`${e.project||tx('Proyecto','Project','项目')}${e.versionCode?' · '+tx('versión','version','版本')+' '+e.versionCode:''}`,li);
-   el('span',`${tx('Publicado','Published','发布于')} ${fmt(e.publishedAt)} · ${e.kind==='html+video'?tx('Documento para el cliente con vídeo','Client document with video','含视频的客户文档'):tx('Documento para el cliente','Client document','客户文档')}`,li,'share-publication-meta');
+   el('span',`${tx('Publicado','Published','发布于')} ${fmt(e.publishedAt)} · ${e.kind==='orphan-video'?tx('Vídeo sin documento (la publicación falló)','Video without document (publishing failed)','无文档的视频（发布失败）'):e.kind==='html+video'?tx('Documento para el cliente con vídeo','Client document with video','含视频的客户文档'):tx('Documento para el cliente','Client document','客户文档')}`,li,'share-publication-meta');
    const st=e.state==='withdrawn'?tx(`Retirado el ${fmt(e.withdrawnAt)}`,`Withdrawn on ${fmt(e.withdrawnAt)}`,'已撤回'):e.state==='partial'?tx(`Retirada incompleta: faltan ${e.pending.length} archivo(s). Vuelve a pulsar «Retirar».`,`Incomplete withdrawal: ${e.pending.length} file(s) left. Press «Withdraw» again.`,'撤回未完成'):tx('Publicado','Published','已发布');
    el('span',st,li,'share-publication-state');
    if(e.state==='withdrawn')continue;
@@ -102,7 +118,7 @@
     const code=ti.value.trim();if(!code){status.textContent=tx('Introduce el código de publicación para retirar el enlace.','Enter the publishing code to withdraw the link.','请输入发布码以撤回链接。');ti.focus();return;}
     sessionCode=code;yes.disabled=true;status.textContent=tx('Retirando…','Withdrawing…','正在撤回…');
     try{const out=await withdraw(e,code);REG.save(store(),REG.applyWithdrawal(REG.load(store()),e.id,out));confirming=null;
-     draw(out.failed.length?tx(`Retirada incompleta: ${out.removed.length} archivo(s) borrado(s) y ${out.failed.length} sin borrar. Vuelve a intentarlo.`,`Incomplete withdrawal: ${out.removed.length} file(s) deleted and ${out.failed.length} not deleted. Try again.`,'撤回未完成。'):tx('Enlace retirado: los archivos se han borrado del almacén. Puede tardar hasta un minuto en dejar de abrirse; quien lo descargara conserva su copia.','Link withdrawn: the files were deleted from the store. It may take up to a minute to stop opening; anyone who downloaded it keeps a copy.','链接已撤回。'));}
+     draw(out.failed.length?tx(`Retirada incompleta: ${out.removed.length} archivo(s) borrado(s) y ${out.failed.length} sin borrar. Vuelve a intentarlo.`,`Incomplete withdrawal: ${out.removed.length} file(s) deleted and ${out.failed.length} not deleted. Try again.`,'撤回未完成。'):tx('Enlace retirado: los archivos se han borrado del almacén. Pueden quedar durante un tiempo copias en caché, y quien lo descargara conserva su copia.','Link withdrawn: the files were deleted from the store. Cached copies may remain for a while, and anyone who downloaded it keeps a copy.','链接已撤回。缓存副本可能暂时保留。'));}
     catch(err){if(err.message===ERRORS().token){sessionCode='';typedCode=null;}confirming=null;draw(err.message);}
    };
   }

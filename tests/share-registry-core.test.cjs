@@ -2,7 +2,7 @@
 // a link, never a code, and survives broken storage. Pure: a Map-backed fake Storage.
 const test=require('node:test'),assert=require('node:assert/strict');
 const R=require('../js/share-registry-core.js');
-const mem=()=>{const m=new Map();return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),raw:()=>m.get(R.KEY)};};
+const mem=()=>{const m=new Map();return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k),raw:()=>m.get(R.KEY)};};
 const P='https://abc.public.blob.vercel-storage.com/rubik-share/casa-r1.html',V='https://abc.public.blob.vercel-storage.com/rubik-share/casa-r2.webm';
 
 test('S2 register: add, save and load keep only whitelisted fields — never a code',()=>{
@@ -34,4 +34,19 @@ test('S2 register: two publications with long, similar URLs never overwrite each
  const long=n=>`https://abc.public.blob.vercel-storage.com/rubik-share/${'casa-con-un-nombre-muy-largo-de-proyecto'.repeat(2)}-${n}.html`;
  let list=R.add([],{page:long('aaaa')});list=R.add(list,{page:long('bbbb')});
  assert.equal(list.length,2);assert.deepEqual(list.map(e=>e.id),[long('bbbb'),long('aaaa')]);
+});
+
+test('S2 register: an orphan video keeps only its own URL, pending withdrawal',()=>{
+ const list=R.addOrphan(R.add([],{page:P}),{video:V,project:'Casa Serra'},new Date('2026-11-10T10:00:00Z'));
+ assert.equal(list.length,2);const o=list[0];
+ assert.deepEqual({id:o.id,kind:o.kind,state:o.state,files:o.files,link:o.link},{id:V,kind:'orphan-video',state:'partial',files:[V],link:null});
+ assert.deepEqual(R.toRemove(o),[V],'only the orphan video is named');
+ assert.deepEqual(R.addOrphan([],{video:'http://insecure/x.webm'}),[]);
+ const done=R.applyWithdrawal(list,V,{removed:[V],failed:[]});assert.equal(done[0].state,'withdrawn');assert.equal(done[1].state,'active','other entries untouched');
+});
+
+test('S2 register: clearing forgets only the local list (no deletion), and tolerates blocked storage',()=>{
+ const s=mem();R.save(s,R.add([],{page:P}));assert.ok(s.raw());
+ assert.equal(R.clear(s),true);assert.equal(s.raw(),undefined);assert.deepEqual(R.load(s),[]);
+ assert.equal(R.clear({removeItem:()=>{throw Error('blocked');}}),false);
 });

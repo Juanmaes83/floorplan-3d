@@ -16,11 +16,16 @@ const Auth=require('./_share-auth.js');
 const {storeHost}=require('./view.js');
 const MAX_FILES=8,MAX_BODY=8192;
 function send(res,status,body){res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify(body));}
+// The 8 KB limit applies to every body shape: an object already parsed by the platform is measured by its serialised
+// size (a value that cannot be serialised — circular, BigInt — is refused), strings and Buffers by their bytes, and a
+// raw stream stops reading as soon as it passes the limit.
+function sizedJson(value){try{const raw=JSON.stringify(value);return typeof raw==='string'&&Buffer.byteLength(raw,'utf8')<=MAX_BODY?value:null;}catch{return null;}}
 async function readBody(req){
- if(req.body&&typeof req.body==='object'&&!Buffer.isBuffer(req.body))return req.body;
- let raw='';if(typeof req.body==='string')raw=req.body;else if(Buffer.isBuffer(req.body))raw=req.body.toString('utf8');
- else{for await(const c of req){raw+=c;if(raw.length>MAX_BODY)return null;}}
- if(raw.length>MAX_BODY)return null;try{return JSON.parse(raw);}catch{return null;}
+ if(req.body&&typeof req.body==='object'&&!Buffer.isBuffer(req.body))return sizedJson(req.body);
+ let raw;
+ if(typeof req.body==='string')raw=Buffer.from(req.body,'utf8');else if(Buffer.isBuffer(req.body))raw=req.body;
+ else{const chunks=[];let size=0;for await(const c of req){const b=Buffer.isBuffer(c)?c:Buffer.from(String(c));size+=b.length;if(size>MAX_BODY)return null;chunks.push(b);}raw=Buffer.concat(chunks);}
+ if(raw.length>MAX_BODY)return null;try{return JSON.parse(raw.toString('utf8'));}catch{return null;}
 }
 // Only a file /api/share could have written to this store: https, this host, /rubik-share/<slug-random>.<html|mp4|webm>.
 function ownFile(raw,host){
@@ -47,4 +52,4 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  return send(res,!failed.length?200:removed.length?207:502,{removed,failed});
 }
 module.exports=(req,res)=>handler(req,res);
-module.exports.handler=handler;module.exports.ownFile=ownFile;module.exports.MAX_FILES=MAX_FILES;
+module.exports.handler=handler;module.exports.ownFile=ownFile;module.exports.MAX_FILES=MAX_FILES;module.exports.MAX_BODY=MAX_BODY;

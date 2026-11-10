@@ -76,3 +76,19 @@ test('S2: page and video are withdrawn together; partial and total failures are 
  const down=await unshare(req({urls:[page(3)]}),{env,fetchImpl:async()=>{throw Error('down');}});
  assert.equal(down.status,502);assert.deepEqual(down.json,{removed:[],failed:[{url:page(3),error:'storage-unreachable'}]});
 });
+
+test('S2: the 8 KB body limit applies to parsed objects, strings, Buffers and streams; unserialisable bodies are refused',async()=>{
+ const big={urls:[page(1)],pad:'x'.repeat(Unshare.MAX_BODY)};
+ const parsed=b=>{const r={method:'POST',headers:{host:'rubik.example','content-type':'application/json','x-rubik-share-token':SHARE},body:b};return r;};
+ const out=async r=>{const o=res();await Unshare.handler(r,o,{env,fetchImpl:none});return {status:o.statusCode,json:JSON.parse(o.body)};};
+ assert.deepEqual(await out(parsed(big)),{status:400,json:{error:'urls'}},'object parsed by the platform, over 8 KB');
+ assert.deepEqual(await out(parsed(JSON.stringify(big))),{status:400,json:{error:'urls'}},'string over 8 KB');
+ assert.deepEqual(await out(parsed(Buffer.from(JSON.stringify(big)))),{status:400,json:{error:'urls'}},'Buffer over 8 KB');
+ assert.equal((await unshare(req(big),{env,fetchImpl:none})).json.error,'urls','raw stream over 8 KB');
+ // Multi-byte characters are counted in bytes, not characters.
+ assert.equal((await out(parsed({urls:[page(1)],pad:'é'.repeat(Unshare.MAX_BODY/2)}))).json.error,'urls');
+ const circular={urls:[page(1)]};circular.self=circular;assert.deepEqual(await out(parsed(circular)),{status:400,json:{error:'urls'}});
+ assert.deepEqual(await out(parsed({urls:[page(1)],n:10n})),{status:400,json:{error:'urls'}},'BigInt cannot be serialised');
+ // A small parsed object still works.
+ const s=blob([page(1)]);const o=res();await Unshare.handler(parsed({urls:[page(1)]}),o,{env,fetchImpl:s.fetchImpl});assert.equal(o.statusCode,200);
+});

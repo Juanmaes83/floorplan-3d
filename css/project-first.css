@@ -109,6 +109,7 @@
 .share-publication[data-state="partial"] .share-publication-state{color:#8a3b12;font-weight:600}
 .share-publication-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}.share-publication-actions a.btn{display:inline-flex;align-items:center;text-decoration:none;color:inherit}
 .share-publication-confirm{flex-basis:100%;margin:2px 0;font-size:13px}
+.share-publications-history{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px}
 .plan-service-files{list-style:none;padding:0;margin:0;display:grid;gap:6px}.plan-service-files li{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f3eee4;padding:4px 4px 4px 10px;border-radius:4px;font-size:13px;overflow-wrap:anywhere}
 .plan-service-needs{border:1px solid #cbc2b3;border-radius:4px;display:flex;flex-wrap:wrap;gap:6px 16px;padding:8px 12px}.plan-service-needs label{display:flex;gap:6px;align-items:center;font-weight:400;min-height:32px}
 .plan-service-form textarea{padding:8px 10px;border:1px solid #978b79;border-radius:4px;font:inherit;font-weight:400}.plan-service-form .is-wide{grid-column:1/-1}.plan-service-done{font-size:14px;line-height:1.55}.plan-service-hint{color:#4f5249;font-size:13px}
