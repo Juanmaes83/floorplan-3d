@@ -1,0 +1,83 @@
+# SCULPT-R02-A lab (ceiling / high items). Lab only: labs/ is excluded from Vercel. Nothing in the product changes.
+name: SCULPT-R02-A lab
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'labs/sculpt/r02-ceiling/**'
+      - 'tests/sculpt-r02-ceiling-layout.test.cjs'
+      - 'js/furniture-placement.js'
+      - 'js/layout-review.js'
+      - 'js/tracing-core.js'
+      - 'js/project-core.js'
+      - 'vendor/three/**'
+      - '.vercelignore'
+      - '.github/workflows/sculpt-r02-lab.yml'
+permissions:
+  contents: read
+jobs:
+  lab-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Donor unit test, unchanged, against the verbatim workshop extracts
+        run: node --test labs/sculpt/r02-ceiling/workshop/donor-placement.test.cjs
+      - name: Contract, scenarios, parity and guards
+        run: node --test tests/sculpt-r02-ceiling-layout.test.cjs
+  # SOURCE EXACT rebuilt outside the checkout (runner temp, never uploaded); extracts checked byte by byte against it;
+  # the donor's own unit tests run in the snapshot (no install).
+  source-exact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Rebuild, verify, refuse overwrite, verify extracts, donor unit baseline
+        run: |
+          L=labs/sculpt/r02-ceiling
+          bash $L/fetch-source-exact.sh "$RUNNER_TEMP/r02a-exact"
+          bash $L/fetch-source-exact.sh --verify "$RUNNER_TEMP/r02a-exact"
+          if bash $L/fetch-source-exact.sh "$RUNNER_TEMP/r02a-exact"; then echo "an existing snapshot must not be overwritten"; exit 1; fi
+          node $L/extract-donor.cjs --verify "$RUNNER_TEMP/r02a-exact"
+          (cd "$RUNNER_TEMP/r02a-exact" && node --test tests/model.test.cjs)
+          test -z "$(git status --porcelain)"
+  # The donor's own browser specs, unchanged, on a throwaway copy of the snapshot; three.js served from vendor/three;
+  # any other external request is aborted and makes the job fail.
+  donor-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PW_VERSION: '1.62.1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Snapshot copy and pinned Playwright (no install scripts)
+        run: |
+          bash labs/sculpt/r02-ceiling/fetch-source-exact.sh "$RUNNER_TEMP/r02a-exact"
+          cp -r "$RUNNER_TEMP/r02a-exact" "$RUNNER_TEMP/r02a-run"
+          npm install --ignore-scripts --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/pw" @playwright/test@$PW_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          mkdir -p "$RUNNER_TEMP/shim/node_modules/@playwright/test"
+          cp labs/sculpt/r02-ceiling/baseline/playwright-test-shim.cjs "$RUNNER_TEMP/shim/node_modules/@playwright/test/index.js"
+      - name: Donor specs (ceiling, furniture-placement)
+        run: |
+          : > "$RUNNER_TEMP/blocked.log"
+          cd "$RUNNER_TEMP/r02a-run"
+          PW_REAL="$RUNNER_TEMP/pw/node_modules/@playwright/test" THREE_VENDOR="$GITHUB_WORKSPACE/vendor/three" BLOCKED_LOG="$RUNNER_TEMP/blocked.log" NODE_PATH="$RUNNER_TEMP/shim/node_modules" \
+            node "$RUNNER_TEMP/pw/node_modules/@playwright/test/cli.js" test -c playwright.config.cjs tests/ceiling.spec.cjs tests/furniture-placement.spec.cjs
+          if [ -s "$RUNNER_TEMP/blocked.log" ]; then echo "external requests:"; cat "$RUNNER_TEMP/blocked.log"; exit 1; fi
+          cd "$GITHUB_WORKSPACE" && test -z "$(git status --porcelain)"
