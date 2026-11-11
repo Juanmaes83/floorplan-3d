@@ -86,3 +86,12 @@
    - enviar un `GET` → 405.
 
    La retirada de un enlace real la decide el propietario desde «Mis publicaciones».
+
+## Auditoría adversarial y correcciones (11/11/2026)
+
+El expediente completo está en [`gov08-cierre-tecnico-s1-s2-2026-11-11.md`](gov08-cierre-tecnico-s1-s2-2026-11-11.md). Cada defecto se reprodujo primero sobre `fdf7fc4`, con una prueba que fallaba, y después se corrigió:
+
+1. **Falso «retirado» con una variante de URL.** Una URL del archivo con `?` o `#` final vacíos pasaba la validación, porque deja `search` y `hash` vacíos, pero se enviaba al almacén tal cual. Con un proveedor que borra por coincidencia exacta y es idempotente, la API respondía `removed` y el objeto real seguía publicado. **Ahora** `ownFile` devuelve la URL canónica `https://<host>/rubik-share/<nombre>`. Las variantes de un mismo archivo cuentan una sola vez.
+2. **Coerción de tipos.** `urls: [["https://…html"]]` se aceptaba, porque `String()` de un array anidado devuelve su elemento. **Ahora** solo se admiten cadenas de hasta 2048 caracteres.
+3. **Foco fuera del diálogo modal.** Tras «Cancelar», una retirada confirmada, un código erróneo o «Borrar historial», el diálogo se redibujaba, el foco caía en `<body>` y el desplazamiento volvía arriba (390×844). **Ahora** el foco vuelve a la entrada afectada; si el código es erróneo, al campo del código.
+4. **Pruebas de S2 fuera de la CI.** `unshare-api`, `share-registry-core` y `share-withdraw.browser` no estaban en ningún workflow. **Ahora** están en `project-first.yml`, junto con las nuevas baterías.

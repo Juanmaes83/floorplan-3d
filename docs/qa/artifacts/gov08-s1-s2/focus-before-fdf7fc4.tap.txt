@@ -1,0 +1,5 @@
+not ok 1 - S2 focus: after cancel, withdrawal, a wrong code and the history buttons, focus stays in the dialog next to what was acted on
+  error: 'focus left the dialog after Cancelar'
+# tests 1
+# pass 0
+# fail 1

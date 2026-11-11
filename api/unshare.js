@@ -28,10 +28,16 @@ async function readBody(req){
  if(raw.length>MAX_BODY)return null;try{return JSON.parse(raw.toString('utf8'));}catch{return null;}
 }
 // Only a file /api/share could have written to this store: https, this host, /rubik-share/<slug-random>.<html|mp4|webm>.
+// Audit 11/11/2026: only a string (an array is not coerced into its first element), at most MAX_URL characters, and
+// the result is the CANONICAL URL https://<host>/rubik-share/<name>. An equivalent spelling (a trailing «?» or «#»,
+// which leave search/hash empty but stay in href) is sent to the store as the real file URL, so a delete can never
+// report «removed» for a URL that is not the stored object, and variants of one file count once.
+const MAX_URL=2048;
 function ownFile(raw,host){
- let u;try{u=new URL(String(raw||''));}catch{return null;}
+ if(typeof raw!=='string'||!raw||raw.length>MAX_URL)return null;
+ let u;try{u=new URL(raw);}catch{return null;}
  if(u.protocol!=='https:'||u.hostname!==host||u.username||u.password||u.port||u.search||u.hash)return null;
- return /^\/rubik-share\/[\w-]+\.(html|mp4|webm)$/.test(u.pathname)?u.href:null;
+ return /^\/rubik-share\/[\w-]+\.(html|mp4|webm)$/.test(u.pathname)?`https://${host}${u.pathname}`:null;
 }
 async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
@@ -52,4 +58,4 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  return send(res,!failed.length?200:removed.length?207:502,{removed,failed});
 }
 module.exports=(req,res)=>handler(req,res);
-module.exports.handler=handler;module.exports.ownFile=ownFile;module.exports.MAX_FILES=MAX_FILES;module.exports.MAX_BODY=MAX_BODY;
+module.exports.handler=handler;module.exports.ownFile=ownFile;module.exports.MAX_FILES=MAX_FILES;module.exports.MAX_BODY=MAX_BODY;module.exports.MAX_URL=MAX_URL;

@@ -1,0 +1,20 @@
+ok 1 - [defect] an equivalent variant (trailing «?») withdraws the REAL stored file — never a false «removed»
+ok 2 - [defect] an equivalent variant (trailing «\#») withdraws the REAL stored file — never a false «removed»
+ok 3 - [ya correcto] an equivalent variant (explicit :443) withdraws the REAL stored file — never a false «removed»
+ok 4 - [ya correcto] an equivalent variant (upper-case host) withdraws the REAL stored file — never a false «removed»
+ok 5 - [ya correcto] an equivalent variant (dot segment) withdraws the REAL stored file — never a false «removed»
+ok 6 - [ya correcto] an equivalent variant (dot-dot back into the folder) withdraws the REAL stored file — never a false «removed»
+ok 7 - [ya correcto] an equivalent variant (backslashes) withdraws the REAL stored file — never a false «removed»
+ok 8 - [defect] variants of one file count once: one delete call, one result
+ok 9 - [defect] only string URLs are accepted: a nested array is not coerced into its first element
+ok 10 - protection: a URL longer than 2048 characters is refused (no file /api/share writes is that long)
+ok 11 - foreign, encoded or out-of-folder references are refused before any storage call
+ok 12 - withdrawal needs the publishing code and the same origin; nothing is deleted otherwise
+ok 13 - limits: 8 distinct files, 8 KB, JSON only, every body shape; malformed bodies delete nothing
+ok 14 - partial and total storage failures are reported file by file and a retry of the pending file completes it
+ok 15 - register: never keeps codes or project data, partial keeps what is left, errors do not change it, clearing deletes nothing
+ok 16 - view: a withdrawn file answers «no longer available» with no-store; the response itself is never cached
+ok 17 - [defect] the S2 test files run in CI (they were in no workflow)
+# tests 17
+# pass 17
+# fail 0
