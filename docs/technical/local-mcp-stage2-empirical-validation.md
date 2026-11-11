@@ -2,16 +2,174 @@
 
 **Fecha:** 11-11-2026.
 
-**Rama de validación:** `lab/mcp-stage2-empirical-validation`, apilada sobre #196. **No modifica la implementación auditada.**
+**Rama de validación:** `lab/mcp-stage2-empirical-validation` (PR #197), apilada sobre #196.
 
 **Evidencias:** [`docs/qa/artifacts/mcp-stage2-validation/`](../qa/artifacts/mcp-stage2-validation/README.md).
 
-> **Dictamen: HOLD.**
+Este informe tiene dos partes:
+
+- **Parte I — Corte de corrección F1, F2 y F3**, verificado sobre el motor corregido de #196 (`77ca084`, y `316487c`, que solo cambia un comentario).
+- **Parte II — Auditoría original sobre `369c5b7`**, que encontró F1, F2 y F3. Se conserva tal como se hizo, etiquetada **ANTES DE LA CORRECCIÓN**. Sus evidencias están en `before-fix/369c5b7/`.
+
+> **Dictamen del corte: MCP ETAPA 2 — CORRECCIONES F1/F2/F3 COMPLETADAS. VALIDACIÓN SINTÉTICA Y VISUAL SATISFACTORIA. PENDIENTE DE VALIDACIÓN CON PROYECTO REAL Y ACEPTACIÓN HUMANA. HOLD PARA MERGE Y ETAPA 3.**
 >
-> - La validación sintética y visual se ha ejecutado completa y la mayor parte del comportamiento es correcto y reproducible.
-> - Aparecen **dos defectos funcionales reproducidos (F1, F2)** y **una afirmación documental inexacta en #196 (F3)**. Requieren una decisión humana antes de aceptar la Etapa 2.
-> - **Validación con un proyecto real: PENDIENTE**, porque no hay ningún proyecto real autorizado en el entorno.
-> - No se declara «validado empíricamente en proyectos reales».
+> - **Sintética y visual:** verificada (Parte I).
+> - **Empírica con proyecto real:** **pendiente**. No existe un JSON real autorizado con escala confirmada. No se declara «validado empíricamente en proyectos reales».
+> - **Aceptación humana:** pendiente.
+
+# Parte I — Corte de corrección F1, F2 y F3
+
+## I.1 Versiones
+
+| PR | SHA anterior (baseline histórica) | SHA del motor corregido | Notas |
+|---|---|---|---|
+| #196 `lab/rubik-mcp-stage2-proposals` | `369c5b7d516afb55ded16054851504696dca3440` | `77ca0842a0028dbe87f19462db0d2606aba0d3ec` y `316487cd73a343b06eee4121d6a6e46e4298ed47` | `316487c` cambia **solo** un comentario de `proposal.cjs` y dos cifras de su acta (`git diff 77ca084 316487c -- tools/rubik-mcp/src`: una línea de comentario). Las evidencias se generaron con `77ca084` y valen para `316487c`. |
+| #197 `lab/mcp-stage2-empirical-validation` | `6c816c25a49744a278ce46a5ce07162ee5c059ad` | Merges normales de #196 (`7d69fd2`, `985eb5d`), sin force push | El SHA final y la CI están en la descripción de la PR. |
+
+- Al empezar, los HEAD eran los esperados: #196 `369c5b7`, #197 `6c816c2` y `master` `75615fd`. No había trabajo concurrente.
+- Sin conflictos en los dos merges.
+- **Archivos protegidos sin cambios** (`git diff 369c5b7..316487c`): `FloorPlanProjectV1`, `js/furniture-placement.js`, `js/layout-review.js`, `js/project-core.js`, el editor, la API web, las ramas GOV-08, R01, R02, R03 y Production.
+
+## I.2 F1, F2 y F3: antes, después y prueba
+
+| Defecto | Antes (`369c5b7`) | Después (`77ca084`) | Prueba |
+|---|---|---|---|
+| **F1** — conflicto que solo existe por el cuadrado **supuesto** de una puerta sin `swing` (`swingless-inward`, `obj_stool`) | `candidate-reviewable`, con solo una incertidumbre genérica | `pending/conflict-based-on-assumed-swing`, `suggestedPose:null`, `applied:false`, `evidence.assumedSwing.openingIds: ["opn_north"]`, conflicto marcado `assumedSwing:true`, evidencia geométrica conservada. No se inventan lado ni bisagra. | `F1: …` en `test/proposal.test.cjs`, `[F1, corregido]` en `validation-stage2.test.cjs`, stdio `F1-assumed-swing-only` |
+| F1 — conflicto acreditado y barrido supuesto (`swingless-plus-real`, `obj_crate`) | No probado | `candidate-reviewable` en (3350, 2800). El supuesto queda en `uncertainty` (`assumed-swing-conflict`) y **nunca** en `expectedEffects`. | Pruebas F1, geometría independiente, stdio `F1-accredited-plus-assumed` |
+| F1 — `swing` explícito con contacto real (`door-blocked`, objetivo de solape) | `candidate-reviewable` | Igual, con `resolves-door` como efecto | `F1: an explicit swing…` |
+| F1 — `clear-door-swing` sin `swing` | `pending/door-swing-missing` | Igual, también para `opn_north` | Pruebas y stdio `F1-door-goal-swing-missing` |
+| F1 — puerta sin `swing` cuyo cuadrado no toca el mueble | `no-change-needed` | Igual: no se inventa ningún conflicto (`door-without-swing`/`obj_chair`, `swingless-inward`/`obj_alpha`) | Pruebas y stdio `F1-swingless-not-touching` |
+| **F2** — `models-disagree-after`, paso 50 | `pending/goal-not-confirmed` en la nº 363 | `candidate-reviewable` en **(2650, 1500), 550 mm, nº 443**; 21 rechazos registrados; la 1.ª rechazada es (2600, 1500), nº 363 | `F2 regression: …`, `[F2, corregido]`, stdio |
+| F2 — `introduces-issue`, paso 50 | `pending/candidate-introduces-issues` en la nº 10 | **(550, 900), 112 mm, nº 15**; 1 rechazo | Idem |
+| F2 — `models-disagree-after`, paso 500 | `pending` en la nº 3 | (2100, 500), 1000 mm, nº 10; 3 rechazos | Idem |
+| F2 — `introduces-issue`, paso 600 | `pending` en la nº 2 | (1800, 1000), 1200 mm, nº 7; 3 rechazos | Idem |
+| **F3** — §9 de #196 afirmaba que se bloqueaba la creación de procesos | Las pruebas de #196 no interceptaban `child_process`, `open` en escritura, `write`, `dgram`, `tls` ni `dns` | Trampas completas adoptadas en `test/proposal.test.cjs`, con control positivo y registro aunque el error se capture. El §9 distingue cobertura anterior, adicional, estática e integridad, con sus **límites** (no cubre módulos nativos, `process.binding`, `inspector`…). | `control: the side-effect traps…` y §9 de `local-mcp-stage2-proposals.md` |
+
+**Las posiciones de F2 son las del enumerador independiente** (`validation/enumerate-candidates.cjs`), que no comparte código con la corrección: mismo índice, posición, distancia y **número de rechazos** (21, 1, 3 y 3). Ambas autoridades aceptan cada posición en una copia de la prueba, y otro algoritmo (`spatial.cjs`) confirma que no hay área compartida con muebles ni muros.
+
+**La primera candidata no se presenta como óptima.** `rationale` termina en «No es necesariamente la mejor» y `uncertainty.grid-search` lo repite.
+
+## I.3 Cómo funciona la búsqueda corregida (F2)
+
+- **Mismo generador y semántica que `FloorPlanPlacement.find`:**
+  - `candidates`, `scene` (sin el propio mueble) y `roomsAt`;
+  - mismo prefiltro por caja envolvente; las posiciones que no caben no cuentan, como en `find()`;
+  - redondeo a mm enteros, tolerancia de 1 mm, `stepMm` y `maxCandidates`.
+- **Orden de validación por posición:**
+  1. `problemsIn` (colocación);
+  2. copia efímera, con `validate`, `problems`, `review` y, si hay puerta, `leafContact`;
+  3. objetivo;
+  4. sin hallazgos nuevos.
+- **Si se rechaza, se registra el motivo y se continúa con el mismo presupuesto.** No se reinicia ni hay otro generador o motor de colisiones.
+- **Comprobado en 10 escenarios:** la primera posición válida para colocación de la búsqueda es exactamente la que devuelve `FloorPlanPlacement.find` (posición y contador).
+- **Registro acotado:** `search.rejected` guarda como máximo 10 entradas (índice, posición, distancia, código y hallazgos), más `rejectedTruncated` y `rejectedByCode`.
+- **Sin candidata:**
+  - presupuesto agotado → `pending` con el código del primer rechazo, o `search-budget-exhausted`;
+  - cuadrícula agotada → ídem, o `search-grid-exhausted`;
+  - siempre con «No demuestra que no exista sitio».
+- **Nuevo límite: 250 verificaciones completas por llamada.** Es una **decisión para revisión humana**.
+  - `layout-review` revisa el proyecto entero en cada verificación: 25,7 ms medidos con 100 muebles.
+  - Sin límite, el peor caso serían unos 100 s; con él, unos 6 s.
+  - Solo puede detener la búsqueda antes que `maxCandidates`; se declara en `search.verificationLimitReached`.
+  - Fixture `review-rejects-all`, paso 10: 250 rechazos, 3619 posiciones examinadas, 315 ms, `pending`.
+
+## I.4 Recuento de estados
+
+**Corrección del recuento comunicado.**
+- El informe final de la misión anterior y la descripción de #197 decían 5 / **13** / 8 / **6** (32).
+- `results/summary.json` de `369c5b7` contiene **30** propuestas: **5 `candidate-reviewable`, 12 `no-change-needed`, 8 `pending` y 5 `blocked`**. La tabla G de la Parte II ya era coherente con 12 y 5.
+- El error estaba en el resumen comunicado y en la PR, que se corrige.
+
+**Recalculado desde los resultados reales del motor corregido** (`results/summary.json`, `codeSha` `77ca084`):
+
+| Conjunto | `candidate-reviewable` | `no-change-needed` | `pending` | `blocked` | Total |
+|---|---|---|---|---|---|
+| `369c5b7`, 30 llamadas (antes) | 5 | 12 | 8 | 5 | 30 |
+| `77ca084`, **las mismas 30 llamadas** | 8 | 12 | 5 | 5 | 30 |
+| `77ca084`, conjunto ampliado (30 + 8 llamadas nuevas de F1 y F2) | **9** | **13** | **11** | **5** | **38** |
+
+**Qué cambia entre las mismas 30 llamadas.** Solo las 5 que corresponden a F1 y F2:
+- `swingless-inward` pasa de `candidate-reviewable` a `pending`;
+- las 4 de F2 pasan de `pending` a `candidate-reviewable`.
+
+Las otras 25 conservan el mismo estado, código y posición.
+
+**Las 8 llamadas nuevas:**
+- F1: mueble no afectado, `clear-door-swing` en `opn_north` y caso mixto;
+- F2: presupuestos 3, 442 y 2, cuadrícula agotada y límite de verificaciones.
+
+## I.5 Protocolo MCP real por stdio (motor `77ca084`)
+
+| Comprobación | Resultado |
+|---|---|
+| Grupos | 15: los 13 anteriores, `swingless-plus-real` y `review-rejects-all` |
+| Propuestas | 38, cada una enviada **dos veces**; respuestas **idénticas** |
+| Estado y código esperados | 38/38 coinciden, incluido el código en los 13 casos que lo fijan |
+| Herramientas | Las 9 (8 anteriores y `propose_layout`), todas de solo lectura |
+| stdout | 181 líneas, **0** que no sean JSON-RPC |
+| stderr | Una línea por grupo: `Rubik MCP local de solo lectura iniciado.` |
+| Código de salida | 0 en los 15 grupos |
+| `applied` | `false` en las 38 |
+
+## I.6 Regresión
+
+| Suite | Resultado local |
+|---|---|
+| MCP en #196 (`316487c`) | **108/108**: 46 previas, 60 de `proposal.test.cjs` (38 en `369c5b7`) y 2 de protocolo; eran 86 |
+| MCP en #197 | **128/128** (108 + 20 de `validation-stage2.test.cjs`) |
+| `npm run check` | PASS |
+| Regresiones geométricas: `project`, `tracing`, `layout-review`, `room-layout`, `furniture-placement` | 103/103 |
+| Visual (Playwright y Chromium 1243) | **101/101** |
+
+**Desglose de las 101 comprobaciones visuales:**
+- lectura del editor igual al MCP: ×3;
+- fidelidad de polígonos y ejes: ×18;
+- nueva comprobación del laboratorio igual al MCP: ×8;
+- sin desplazamiento horizontal en 18 escenarios × 4 tamaños: ×72.
+
+Hubo 0 errores de consola o de página y 0 peticiones externas en 76 ejecuciones.
+
+## I.7 Capturas y vídeos actualizados
+
+Todo lo que hay en la raíz de las evidencias se ha generado con el motor `77ca084`; el laboratorio muestra el código en cada captura.
+
+- **78 capturas:**
+  - 18 escenarios × 4 tamaños;
+  - el editor con 3 fixtures × 2 tamaños.
+  - Nuevas: `F1-assumed-swing-only`, `F1-accredited-plus-assumed`, `F2-D2-default-step` (dibuja la nº 363 rechazada y la nº 443 aceptada), `F2-introduces-default-step`, `F2-D2-default-budget-442` y `F2-verification-limit`.
+- **3 vídeos:**
+  - `video-1-conflicto-y-propuesta` (17,1 s);
+  - `video-2-puerta-y-barrido` (32,8 s, incluye F1 corregido y el caso mixto);
+  - `video-3-casos-adversariales` (36,4 s, incluye F2 corregido, presupuesto insuficiente y límite de verificaciones).
+- **Trazas:** 12,2 MB, no publicadas, con su SHA-256 en el README de evidencias.
+- **Evidencia anterior.** `before-fix/369c5b7/` conserva, con `git mv` y sin duplicar:
+  - resultados, logs y fixtures de `369c5b7`;
+  - los vídeos 2 y 3;
+  - las capturas de F1 y F2.
+  - El resto de lo generado con `369c5b7` sigue en el historial (`6c816c2`). **Nada de `before-fix/` es prueba del motor corregido.**
+
+## I.8 Integridad del archivo
+
+- En los 15 grupos, por el servidor real, el SHA-256, los bytes, el tamaño, el `mtime` y el listado del directorio son iguales antes y después, y el SHA-256 de `get_project_summary` coincide.
+- Las pruebas F1/F2 repiten la comprobación por la API con todas las trampas activas.
+- Nuevos fixtures: `swingless-plus-real` (`bbce7a4d28975a4e`) y `review-rejects-all` (`e812629dd795d6c0`). Los 13 anteriores conservan el SHA-256 de la tabla K.
+
+## I.9 Riesgos residuales
+
+1. **Sin validación con un proyecto real.** No se ha probado el comportamiento con planos reales: más muebles, estancias irregulares, escala `real` confirmada.
+2. **Límite de 250 verificaciones.** Nuevo, conservador, pendiente de decisión. En un proyecto de 100 muebles una llamada puede tardar unos 6 s.
+3. **Caso mixto de F1.** La búsqueda también evita el cuadrado **supuesto**. Es conservador y puede descartar posiciones que con el `swing` real serían válidas. Se declara.
+4. **D1–D3 siguen en las autoridades del producto** (bisagra supuesta, 1 mm frente a 10⁻⁶ mm, cuadrado frente a hoja). Corregirlas exige cambiar el producto y queda fuera de este corte.
+5. **Las trampas de seguridad cubren una lista concreta de APIs de Node**, no cualquier efecto posible (§9 de #196).
+6. **`npm audit`:** avisos preexistentes en dependencias transitivas del SDK.
+
+**Estado del proyecto real autorizado: PENDIENTE.**
+
+**`master` y Production:** sin cambios (`master` sigue en `75615fd`). Sin merge, sin Promote, sin Etapa 3, sin JSON Patch, sin variantes y sin aplicar propuestas.
+
+# Parte II — Auditoría original sobre `369c5b7` (ANTES DE LA CORRECCIÓN)
+
+> Esta parte describe el código **anterior** a la corrección y se conserva sin reescribir sus conclusiones. Sus evidencias están en `before-fix/369c5b7/`. La sección N contenía las correcciones propuestas que la Parte I aplica. Su dictamen de entonces era **HOLD** por F1, F2 y F3.
 
 ## A. Alcance y documentación
 
@@ -26,7 +184,7 @@
 
 ## B. Código auditado
 
-- **Implementación:** `369c5b7d516afb55ded16054851504696dca3440`, rama `lab/rubik-mcp-stage2-proposals` (PR #196, Draft). No se ha modificado: ni `src/`, ni los fixtures, ni las pruebas de #196.
+- **Implementación:** `369c5b7d516afb55ded16054851504696dca3440`, rama `lab/rubik-mcp-stage2-proposals` (PR #196, Draft). Durante esta auditoría no se modificó (ni `src/`, ni los fixtures, ni las pruebas de #196); la corrección posterior es la Parte I.
 - **Lo que añade esta rama, todo fuera del runtime:**
   - `tools/rubik-mcp/validation/`: cliente stdio, enumerador de auditoría, laboratorio visual y grabación;
   - `tools/rubik-mcp/test/validation-stage2.test.cjs`;
@@ -44,7 +202,7 @@
 
 | Categoría | Proyectos | Estado |
 |---|---|---|
-| **Sintéticos reproducibles** | 11 de #196 (`fixtures/proposal-projects.cjs`) y 1 nuevo, `swingless-inward` (`validation/validation-projects.cjs`). Copias en `artifacts/fixtures/`. | Publicables: geometría ficticia. |
+| **Sintéticos reproducibles** | 11 de #196 (`fixtures/proposal-projects.cjs`) y 1 nuevo, `swingless-inward` (`validation/validation-projects.cjs`). Copias en `before-fix/369c5b7/fixtures/`. | Publicables: geometría ficticia. |
 | **Ejemplo contractual ficticio con escala `real` declarada** | `docs/contracts/examples/floorplan-project-v1.example.json` («Estudio de ejemplo (ficticio)», con hash de imagen ilustrativo según el propio contrato). | Se usa como caso adicional. **No es un proyecto real ni una calibración real.** |
 | **Proyecto real autorizado** | Ninguno en el repositorio ni en el entorno de trabajo. No se buscó en carpetas privadas. | **VALIDACIÓN EMPÍRICA CON PROYECTO REAL: PENDIENTE POR AUSENCIA DE FIXTURE AUTORIZADA.** |
 
@@ -84,7 +242,7 @@
 
 ## G. Los cuatro estados (respuestas reales del servidor)
 
-Todas las respuestas completas están en `results/<fixture>.json`.
+Todas las respuestas completas de `369c5b7` están en `before-fix/369c5b7/results/<fixture>.json`.
 
 | Estado | Casos | Evidencia clave |
 |---|---|---|
@@ -173,7 +331,7 @@ Todas las respuestas completas están en `results/<fixture>.json`.
   - una nueva comprobación de la candidata en una copia efímera de la página;
   - el SHA-256 del JSON antes y después.
 
-**84/84 comprobaciones** (`results/playwright-checks.json`):
+**84/84 comprobaciones** (`before-fix/369c5b7/results/playwright-checks.json`):
 
 | Comprobación | Resultado |
 |---|---|
@@ -184,9 +342,9 @@ Todas las respuestas completas están en `results/<fixture>.json`.
 | Desplazamiento horizontal en 15 escenarios × 4 tamaños | Ninguno |
 | Errores de consola o de página, y peticiones externas | 0 |
 
-**Material grabado:**
-- 66 capturas;
-- **3 vídeos reales** de 16,9 s, 27,0 s y 29,4 s a 1440×900;
+**Material grabado** (con `369c5b7`):
+- 66 capturas: las 14 de F1 y F2 están en `before-fix/369c5b7/screenshots/`; el resto, en el historial (`6c816c2`);
+- **3 vídeos reales** de 16,9 s, 27,0 s y 29,4 s a 1440×900: los vídeos 2 y 3 están en `before-fix/369c5b7/videos/`; el vídeo 1, en el historial;
 - 3 trazas de Playwright, no publicadas por tamaño pero con su hash en el README de evidencias.
 
 Ninguna captura sustituye a una ejecución: los vídeos son grabaciones de la sesión de Chromium que ejecuta los pasos.
@@ -302,9 +460,9 @@ Ninguna captura sustituye a una ejecución: los vídeos son grabaciones de la se
 - **Real.** Aportar un JSON exportado de RUBIK con autorización y escala `real` confirmada. Validarlo en local, sin publicarlo.
 - **Etapa 3:** sigue sin autorizar.
 
-## Dictamen
+## Dictamen de la auditoría original (`369c5b7`)
 
-**HOLD.** Antes de aceptar la Etapa 2 hay que decidir sobre F1, F2 y F3.
+**HOLD.** Antes de aceptar la Etapa 2 había que decidir sobre F1, F2 y F3. Las tres decisiones se aplicaron en la Parte I.
 
 - La validación sintética y visual está completa y es reproducible.
 - No hay mutaciones, fugas de datos ni errores de protocolo.
