@@ -109,3 +109,23 @@ Se hace solo cuando S1 está en Production y verificado:
 | Un único código de publicación compartido por todos los profesionales | Pendiente (GOV-06a, cuentas) |
 
 **S1 no hace privadas las entregas ya publicadas:** solo separa quién puede **crear** enlaces nuevos.
+
+## 8. Auditoría adversarial (11/11/2026)
+
+Se ejecutó sobre `54e6fc3` **sin cambiar el código**, con códigos ficticios, un almacenamiento y un proveedor de IA simulados que hacen fallar la prueba si se les llama, y la consola capturada. Batería: `tests/gov08-s1-adversarial.test.cjs`, 5 pruebas, todas **ya correctas antes de esta auditoría**.
+
+| Comportamiento atacado | Resultado |
+|---|---|
+| 12 variantes de credencial: ausente, vacía, errónea, código del render en la cabecera de publicación, código de publicación en la cabecera antigua, ambas cabeceras a la vez, más de 200 caracteres, prefijo, espacios, cabecera duplicada (array), número y token del Blob | 401 `token`, sin llamar al almacenamiento |
+| 7 configuraciones: sin Blob, sin código, solo el código del render, código de 31 o de 201 caracteres, mismo valor que el render, código vacío | 503 (`not-configured` / `misconfigured`), también enviando el código del render: **sin *fallback*** |
+| 7 orígenes: sitio ajeno, `null`, valor mal formado, subdominio engañoso, otro puerto, consulta con el host y `x-forwarded-host` en lista | 403 `origin` aunque el código sea correcto. El propio host y las herramientas sin `Origin` se juzgan solo por el código |
+| Aislamiento cruzado | El código de publicación nunca autoriza el Render IA (3 combinaciones de cabeceras) y el del render nunca publica |
+| Fugas | Ninguna respuesta ni salida de consola contiene los códigos, el token del Blob ni la clave del proveedor. Toda respuesta lleva `Cache-Control: no-store` y solo `{error}` |
+
+**Resultado: sin defectos reproducibles en S1. No se modifica su código.** La batería se añade a la CI (`project-first.yml`).
+
+**Observaciones fuera del alcance de S1**, registradas en la deuda residual:
+- `api/render.js` compara longitudes antes de `timingSafeEqual`, lo que puede filtrar la longitud del código del render por tiempos;
+- la interfaz del Render IA guarda su código en `localStorage`.
+
+Ninguna de las dos se toca aquí: el Render IA queda fuera de este corte.
