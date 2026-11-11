@@ -86,6 +86,33 @@ const SCENARIOS = {
   'rug-in-door': () => { const p = base(); p.objects = [object('rug', 1300, 300, 400, 400, 0, 'rug')]; return p; },
   // Same overlap with an uncalibrated scale.
   'scale-pending': () => { const p = SCENARIOS.overlap(); p.scale = { confidence: 'pending', method: 'none' }; return p; },
+  // F1 — a door WITHOUT swing on the north wall. FloorPlanCore.geometry assumes hinge start / side left, which for this
+  // wall direction opens INTO the room: FloorPlanPlacement sees a door square the JSON never declared (layout-review
+  // skips the door). The stool's only conflict is that assumed square. Same geometry as the #197 validation fixture.
+  'swingless-inward': () => {
+    const p = SCENARIOS.correct();
+    p.openings.push({ id: 'opn_north', wallId: 'wal_north', kind: 'door', offsetMm: 2500, widthMm: 800, heightMm: 2100, sillHeightMm: 0 });
+    p.objects.push(object('stool', 2700, 2800, 300, 300, 0, 'chair'));
+    return p;
+  },
+  // F1 — the same assumed square plus an accredited conflict: a crate overlapping the stool by 150 mm.
+  'swingless-plus-real': () => {
+    const p = SCENARIOS['swingless-inward']();
+    p.objects.push(object('crate', 2850, 2800, 300, 300));
+    return p;
+  },
+  // F2 — a 700 mm strip whose only admissible row (y = 400) overlaps a long bench by 0.5 mm: FloorPlanPlacement
+  // (1 mm tolerance) accepts every position of that row and layout-review rejects all of them.
+  'review-rejects-all': () => {
+    const p = base({ swing: null });
+    const floor = p.rooms[0].floorMaterialId;
+    p.rooms = [room('strip', [[0, 0], [4000, 0], [4000, 700], [0, 700]], floor)];
+    p.walls = [wall('south', -100, -50, 4100, -50), wall('north', -100, 750, 4100, 750),
+      wall('west', -50, 0, -50, 700), wall('east', 4050, 0, 4050, 700)];
+    p.openings = [];
+    p.objects = [object('bench', 2000, 50, 4000, 100), object('block', 2000, 400, 400, 400), object('odd', 2100, 400, 400, 601)];
+    return p;
+  },
   // roomId stored on the piece contradicts its geometry.
   'stored-room-conflict': () => {
     const p = SCENARIOS.overlap();

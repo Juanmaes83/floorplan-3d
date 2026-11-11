@@ -2,8 +2,10 @@
 
 /* MCP Etapa 2 — propuestas de distribución explicables (docs/technical/local-mcp-stage2-proposals.md).
    Read-only and deterministic. Composes the existing authorities, never a new collision engine:
-   - FloorPlanPlacement.find / problemsIn (js/furniture-placement.js): candidate search on a grid of rings around the
-     current position; conservative door model (the square swept by the leaf).
+   - FloorPlanPlacement.candidates / scene / roomsAt / problemsIn (js/furniture-placement.js): the candidate sequence,
+     prefilter, rounding, tolerance and budget of FloorPlanPlacement.find, on a grid of rings around the current
+     position; conservative door model (the square swept by the leaf). The search does not stop at the first position
+     that FloorPlanPlacement accepts: it goes on, with the same budget, until one also passes layout-review.
    - FloorPlanLayoutReview.review / leafContact (js/layout-review.js): overlaps and the precise door-leaf contact.
    - FloorPlanCore.validate / geometry / clone (js/project-core.js): canonical contract and derived geometry.
    - Spatial.createSpatialIndex (./spatial.cjs): room attribution of the rotated footprint.
@@ -22,6 +24,11 @@ const LIMITS = Object.freeze({
   stepMm: { min: 10, max: 1000, default: Placement.STEP_MM },
   maxCandidates: { min: 1, max: Placement.MAX_CANDIDATES, default: Placement.MAX_CANDIDATES },
   objects: 100,
+  rejectedLog: 10,
+  // Full verifications (FloorPlanCore.validate + FloorPlanPlacement.problems + layout-review of the whole project) per
+  // call. layout-review is O(n²) in furniture (~21 ms with 100 pieces); this keeps a call bounded (~5 s worst case).
+  // It can only stop the search earlier than maxCandidates, never extend or reset it.
+  verifications: 250,
 });
 const SHA256 = /^[0-9a-f]{64}$/;
 const ID = /^[\s\S]{1,160}$/;
@@ -84,7 +91,9 @@ const reviewFindingsFor = (result, id) => result.findings
     message: f.message,
   }));
 const key = f => `${f.code}:${[...f.objects].sort().join('|')}`;
-const placementList = list => list.map(p => ({ kind: p.kind, ...(p.id ? { id: p.id } : {}), detail: p.detail }));
+// `assumed` marks a conflict with the square of a door whose swing is NOT in the JSON (FloorPlanCore.geometry assumes a
+// hinge for it): geometric evidence of the placement model, but based on an assumption, not on recorded data.
+const placementList = (list, assumed = () => false) => list.map(p => ({ kind: p.kind, ...(p.id ? { id: p.id } : {}), detail: p.detail, ...(assumed(p) ? { assumedSwing: true } : {}) }));
 
 function finish(out, status, extra = {}) {
   return { ...out, ...extra, status, applied: false };
@@ -173,11 +182,14 @@ function propose(project, snapshot, rawArgs) {
   const swingless = activeDoors.filter(o => !o.swing).map(o => o.id);
   if (swingless.length) out.uncertainty.push({ code: 'placement-assumes-door-swing', openingIds: swingless.slice(0, 20),
     message: 'Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON.' });
+  // F1: a placement conflict with one of those doors is a conflict with an ASSUMED sweep, not an accredited one.
+  const swinglessIds = new Set(swingless);
+  const isAssumed = p => p.kind === 'door' && swinglessIds.has(p.id);
 
   // 5. The problem exists? Never move something that has no problem.
   const placementBefore = Placement.problemsIn(scene, object, roomId);
   const reviewBefore = reviewFindingsFor(Review.review(project), object.id);
-  out.evidence.before = { placementModel: placementList(placementBefore), reviewModel: reviewBefore };
+  out.evidence.before = { placementModel: placementList(placementBefore, isAssumed), reviewModel: reviewBefore };
   let door = null;
   if (args.goal === 'clear-door-swing') {
     if (!args.openingId) return block('opening-required', 'clear-door-swing necesita openingId: el ID de la puerta cuyo barrido se quiere despejar.');
@@ -218,77 +230,155 @@ function propose(project, snapshot, rawArgs) {
       }
       return finish(out, 'no-change-needed', { rationale: 'FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.' });
     }
-    out.problem = { code: 'placement-conflict', problems: placementList(placementBefore),
-      description: `«${out.object.name}» tiene ${placementBefore.length} conflicto(s) de colocación en su estancia (FloorPlanPlacement).` };
-  }
-
-  // 6. Candidate search: the existing deterministic search, bounded.
-  const found = Placement.find(project, object, { near: object.position, stepMm: args.stepMm, maxCandidates: args.maxCandidates });
-  out.search = {
-    generator: 'FloorPlanPlacement.find', order: `anillos de ${args.stepMm} mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo`,
-    stepMm: args.stepMm, maxCandidates: args.maxCandidates, toleranceMm: Placement.TOLERANCE_MM,
-    tried: found.tried ?? 0, budgetExhausted: !found.ok && (found.tried ?? 0) >= args.maxCandidates,
-    checks: [...Placement.CHECKED.filter(c => c !== 'la escalera y su hueco')],
-  };
-  out.uncertainty.push({ code: 'grid-search', message: `La candidata es la primera posición válida de una cuadrícula de ${args.stepMm} mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias.` });
-  if (!found.ok) {
-    if (found.reason === 'no-space') {
-      out.evidence.searchBlockers = found.blockers;
-      return pending(out.search.budgetExhausted ? 'search-budget-exhausted' : 'search-grid-exhausted', out.search.budgetExhausted
-        ? `No se ha encontrado una posición válida en ${found.tried} candidatas (presupuesto agotado). No demuestra que no exista sitio.`
-        : `Ninguna posición de la cuadrícula de ${args.stepMm} mm en la estancia es válida (${found.tried} probadas). No demuestra que no exista sitio entre los puntos de la cuadrícula.`);
+    // F1: classify the conflicts by origin. Accredited (recorded data) vs. derived from an assumed door swing.
+    const accredited = placementBefore.filter(p => !isAssumed(p));
+    const assumedIds = [...new Set(placementBefore.filter(isAssumed).map(p => p.id))];
+    out.problem = { code: 'placement-conflict', problems: placementList(placementBefore, isAssumed),
+      ...(assumedIds.length ? { assumedSwingOpeningIds: assumedIds } : {}),
+      description: `«${out.object.name}» tiene ${placementBefore.length} conflicto(s) de colocación en su estancia (FloorPlanPlacement)${assumedIds.length ? `, ${placementBefore.length - accredited.length} de ellos con el barrido SUPUESTO de una puerta sin swing` : ''}.` };
+    if (assumedIds.length) {
+      out.evidence.assumedSwing = { openingIds: assumedIds, model: 'FloorPlanCore.geometry deriva la puerta con una bisagra supuesta (inicio, lado izquierdo) porque el JSON no registra swing; FloorPlanPlacement evita el cuadrado de ese barrido supuesto y layout-review no evalúa la puerta.' };
     }
-    if (found.reason === 'ambiguous-room') return pending('ambiguous-room', found.message);
-    if (found.reason === 'no-room') return block('object-outside-rooms', found.message);
-    return block('invalid-object-geometry', found.message);
+    if (!accredited.length) {
+      if (reviewBefore.some(f => f.code === 'solape')) {
+        return pending('models-disagree', 'El único conflicto de FloorPlanPlacement procede del barrido supuesto de una puerta sin swing, y layout-review registra además un solape del mueble que FloorPlanPlacement tolera (1 mm). Se conserva la discrepancia; no se propone ningún movimiento.');
+      }
+      return pending('conflict-based-on-assumed-swing', `El único motivo para mover «${out.object.name}» es el barrido SUPUESTO de ${assumedIds.length === 1 ? 'la puerta' : 'las puertas'} ${assumedIds.join(', ')}: el JSON no registra bisagra ni sentido de apertura, así que no está confirmado que la hoja abra hacia el mueble. No se inventa el lado ni la bisagra y no se propone ningún movimiento. Registra el swing de la puerta y repite la petición.`);
+    }
+    if (assumedIds.length) {
+      out.uncertainty.push({ code: 'assumed-swing-conflict', openingIds: assumedIds, message: 'Parte del conflicto procede del barrido supuesto de una puerta sin swing. La búsqueda también evita ese cuadrado supuesto, pero apartarse de él no se declara como efecto resuelto: la apertura no está confirmada.' });
+    }
   }
 
-  // 7. Verify the candidate on an ephemeral copy against both authorities. find() returning ok is not enough.
-  const moved = { ...object, position: { x: found.position.x, y: found.position.y } };
-  const copy = C.clone(project);
-  copy.objects = copy.objects.map(o => (o.id === object.id ? { ...o, position: { ...moved.position } } : o));
-  C.validate(copy);
-  const placementAfter = Placement.problems(copy, moved);
-  const reviewAll = Review.review(copy);
-  const reviewAfter = reviewFindingsFor(reviewAll, object.id);
-  out.evidence.after = { placementModel: placementList(placementAfter), reviewModel: reviewAfter };
-  const candidate = pose(moved, found.roomId);
-  let resolved, why;
-  if (door) {
-    const contactAfter = Review.leafContact(door, T.footprint(moved));
-    out.evidence.door.reviewLeafContactDegAfter = contactAfter === null ? null : Math.round(contactAfter * 10) / 10;
-    resolved = (contactAfter === null || contactAfter >= 90 - EPS) && !placementAfter.some(p => p.kind === 'door' && p.id === door.id);
-    why = 'La hoja de la puerta sigue alcanzando el mueble en la candidata según layout-review.';
-  } else {
-    const stillOverlap = reviewAfter.some(f => f.code === 'solape');
-    resolved = placementAfter.length === 0 && !stillOverlap;
-    why = stillOverlap
-      ? 'FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble.'
-      : 'FloorPlanPlacement vuelve a encontrar conflictos en la candidata.';
-  }
+  // 6+7. Candidate search and verification. The sequence, prefilter, rounding, tolerance, budget and room are exactly
+  //      those of FloorPlanPlacement.find (same generator, FloorPlanPlacement.candidates, and same validity test,
+  //      problemsIn with the 1 mm tolerance). Unlike find(), the search does not stop at the first position that
+  //      FloorPlanPlacement accepts: every such position is checked on an ephemeral copy against both authorities and,
+  //      when rejected, the search goes on with the SAME budget. The first position that passes every gate wins.
+  const searchScene = Placement.scene(project, { ignoreIds: [object.id] });
+  const room = searchScene.rooms.find(r => r.id === roomId);
+  const xs = room.poly.map(p => p.x), ys = room.poly.map(p => p.y);
+  const maxRadius = Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+  const fp0 = T.footprint({ ...object, position: { x: 0, y: 0 } });
+  const hx = Math.max(...fp0.map(p => Math.abs(p.x))), hy = Math.max(...fp0.map(p => Math.abs(p.y)));
+  const tol = Placement.TOLERANCE_MM;
+  // The prefilter of find(): a centre can only be valid when the footprint's bounding box fits the room's; such
+  // centres are not counted against the budget (find() does not count them either).
+  const fits = c => c.x - hx >= Math.min(...xs) - tol && c.x + hx <= Math.max(...xs) + tol && c.y - hy >= Math.min(...ys) - tol && c.y + hy <= Math.max(...ys) + tol;
   const beforeKeys = new Set(reviewBefore.map(key));
-  const introduced = reviewAfter.filter(f => !beforeKeys.has(key(f)));
+
+  // Every gate for one position that FloorPlanPlacement already accepts. Nothing is kept from the copy.
+  const verify = position => {
+    const moved = { ...object, position };
+    const copy = C.clone(project);
+    copy.objects = copy.objects.map(o => (o.id === object.id ? { ...o, position: { ...position } } : o));
+    C.validate(copy);
+    const placementAfter = Placement.problems(copy, moved);
+    const reviewAll = Review.review(copy);
+    const reviewAfter = reviewFindingsFor(reviewAll, object.id);
+    const v = { moved, placementAfter, reviewAll, reviewAfter, contactAfter: null };
+    if (door) {
+      const contactAfter = Review.leafContact(door, T.footprint(moved));
+      v.contactAfter = contactAfter === null ? null : Math.round(contactAfter * 10) / 10;
+      if (!((contactAfter === null || contactAfter >= 90 - EPS) && !placementAfter.some(p => p.kind === 'door' && p.id === door.id))) {
+        return { ...v, ok: false, code: 'goal-not-confirmed', why: 'La hoja de la puerta sigue alcanzando el mueble en la candidata según layout-review.' };
+      }
+    } else {
+      const stillOverlap = reviewAfter.some(f => f.code === 'solape');
+      if (placementAfter.length || stillOverlap) {
+        return { ...v, ok: false, code: 'goal-not-confirmed', why: stillOverlap
+          ? 'FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble.'
+          : 'FloorPlanPlacement vuelve a encontrar conflictos en la candidata.' };
+      }
+    }
+    const introduced = reviewAfter.filter(f => !beforeKeys.has(key(f)));
+    if (introduced.length) return { ...v, ok: false, code: 'candidate-introduces-issues', why: 'La candidata resuelve el objetivo, pero layout-review registra hallazgos nuevos del mueble en esa posición.', introduced };
+    return { ...v, ok: true };
+  };
+
+  const blockers = {};
+  const rejected = [];
+  const rejectedByCode = {};
+  let tried = 0, rejectedCount = 0, firstRejected = null, accepted = null, gridExhausted = true, verificationLimitReached = false;
+  for (const c of Placement.candidates({ x: Math.round(object.position.x), y: Math.round(object.position.y) }, args.stepMm, maxRadius)) {
+    if (!fits(c)) continue;
+    if (tried >= args.maxCandidates) { gridExhausted = false; break; }
+    tried++;
+    const position = { x: Math.round(c.x), y: Math.round(c.y) };
+    const list = Placement.problemsIn(searchScene, { ...object, position }, roomId, tol, true);
+    if (list.length) { for (const p of list) blockers[p.kind] = (blockers[p.kind] || 0) + 1; continue; }
+    if (rejectedCount >= LIMITS.verifications) { verificationLimitReached = true; tried--; gridExhausted = false; break; }
+    const v = verify(position);
+    if (v.ok) { accepted = { ...v, index: tried }; break; }
+    rejectedCount++;
+    rejectedByCode[v.code] = (rejectedByCode[v.code] || 0) + 1;
+    const entry = { index: tried, position, distanceMm: Math.round(Math.hypot(position.x - object.position.x, position.y - object.position.y)),
+      code: v.code, reviewFindings: v.reviewAfter.map(f => `${f.code}${f.measurementMm !== undefined ? ` ${f.measurementMm} mm` : ''}${f.measurementDeg !== undefined ? ` ${f.measurementDeg}°` : ''}`).slice(0, 5) };
+    if (rejected.length < LIMITS.rejectedLog) rejected.push(entry);
+    if (!firstRejected) firstRejected = { ...v, entry };
+  }
+  // The budget is spent only when the loop stopped on it; a grid with exactly maxCandidates admissible positions that
+  // were all examined is reported as an exhausted grid.
+  const budgetExhausted = !accepted && !gridExhausted && !verificationLimitReached;
+  out.search = {
+    generator: 'FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)',
+    order: `anillos de ${args.stepMm} mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo`,
+    stepMm: args.stepMm, maxCandidates: args.maxCandidates, toleranceMm: tol,
+    tried, budgetExhausted,
+    verificationLimit: LIMITS.verifications, verificationLimitReached,
+    placementValidRejected: rejectedCount,
+    ...(rejectedCount ? { rejectedByCode, rejected, ...(rejectedCount > rejected.length ? { rejectedTruncated: rejectedCount - rejected.length } : {}) } : {}),
+    ...(accepted ? { acceptedIndex: accepted.index } : {}),
+    checks: [...Placement.CHECKED.filter(c => c !== 'la escalera y su hueco')],
+    gates: ['FloorPlanPlacement.problemsIn (tolerancia 1 mm)', 'objetivo', 'FloorPlanPlacement.problems + layout-review sobre una copia efímera', 'sin hallazgos nuevos del mueble'],
+  };
+  out.uncertainty.push({ code: 'grid-search', message: `La candidata es la primera posición de una cuadrícula de ${args.stepMm} mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias.` });
+
+  if (!accepted) {
+    if (firstRejected) {
+      // Some positions passed FloorPlanPlacement but none passed every gate. Keep the first rejection as evidence.
+      const v = firstRejected;
+      const r = v.reviewAll;
+      if (r.checks.puertas?.status !== 'checked') out.uncertainty.push({ code: 'review-doors-partial', message: r.checks.puertas.reason || 'Algunas puertas no se han podido revisar.' });
+      const reach = verificationLimitReached
+        ? `Se alcanzó el límite de ${LIMITS.verifications} verificaciones completas con layout-review (${tried} posiciones examinadas, presupuesto de ${args.maxCandidates})`
+        : budgetExhausted
+          ? `Se agotó el presupuesto de ${args.maxCandidates} posiciones`
+          : `Se recorrió toda la cuadrícula de ${args.stepMm} mm (${tried} posiciones)`;
+      return pending(v.code, `${v.why} ${reach}: ${rejectedCount} posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio.`, {
+        evidence: {
+          ...out.evidence,
+          after: { placementModel: placementList(v.placementAfter, isAssumed), reviewModel: v.reviewAfter },
+          rejectedCandidate: pose(v.moved, roomId),
+          ...(v.introduced ? { introduced: v.introduced } : {}),
+          ...(door ? { door: { ...out.evidence.door, reviewLeafContactDegAfter: v.contactAfter } } : {}),
+        },
+      });
+    }
+    out.evidence.searchBlockers = blockers;
+    return pending(budgetExhausted ? 'search-budget-exhausted' : 'search-grid-exhausted', budgetExhausted
+      ? `No se ha encontrado una posición válida en ${tried} candidatas (presupuesto agotado). No demuestra que no exista sitio.`
+      : `Ninguna posición de la cuadrícula de ${args.stepMm} mm en la estancia es válida (${tried} probadas). No demuestra que no exista sitio entre los puntos de la cuadrícula.`);
+  }
+
+  const { moved, placementAfter, reviewAll, reviewAfter } = accepted;
+  out.evidence.after = { placementModel: placementList(placementAfter, isAssumed), reviewModel: reviewAfter };
+  if (door) out.evidence.door.reviewLeafContactDegAfter = accepted.contactAfter;
+  if (firstRejected) out.evidence.rejectedBefore = { count: rejectedCount, first: firstRejected.entry };
   const others = reviewAll.findings.filter(f => !f.objects.includes(object.id));
   out.remainingIssues = others.slice(0, 20).map(f => ({ code: f.code, objects: [...f.objects], message: f.message }));
   if (others.length > 20) out.remainingIssues.push({ code: 'truncated', message: `${others.length - 20} hallazgos más de otros elementos.` });
   if (reviewAll.checks.puertas?.status !== 'checked') out.uncertainty.push({ code: 'review-doors-partial', message: reviewAll.checks.puertas.reason || 'Algunas puertas no se han podido revisar.' });
 
-  if (!resolved) {
-    return pending('goal-not-confirmed', why, { evidence: { ...out.evidence, rejectedCandidate: candidate } });
-  }
-  if (introduced.length) {
-    return pending('candidate-introduces-issues', 'La candidata resuelve el objetivo, pero layout-review registra hallazgos nuevos del mueble en esa posición.', {
-      evidence: { ...out.evidence, rejectedCandidate: candidate, introduced },
-    });
-  }
-
-  out.suggestedPose = candidate;
-  out.distanceMm = found.distanceMm;
-  out.rationale = `Primera posición válida del barrido determinista de FloorPlanPlacement (${found.tried} candidata(s) probadas), a ${found.distanceMm} mm de la actual, dentro de «${found.roomName}». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.`;
+  const distanceMm = Math.round(Math.hypot(moved.position.x - object.position.x, moved.position.y - object.position.y));
+  out.suggestedPose = pose(moved, roomId);
+  out.distanceMm = distanceMm;
+  out.rationale = `Primera posición, en el orden determinista de FloorPlanPlacement (${tried} posición(es) examinadas${rejectedCount ? `, ${rejectedCount} aceptada(s) por FloorPlanPlacement pero rechazada(s) por layout-review u otra comprobación` : ''}), que supera todas las comprobaciones: a ${distanceMm} mm de la actual, dentro de «${room.name}». Comprobada con FloorPlanPlacement y layout-review sobre una copia efímera en memoria. No es necesariamente la mejor.`;
   out.expectedEffects = [
     { code: 'moves-position-only', message: `Solo cambia la posición de «${out.object.name}»: de (${object.position.x}, ${object.position.y}) a (${moved.position.x}, ${moved.position.y}) mm. ID, tamaño, giro y estancia se conservan.` },
     ...(door ? [{ code: 'door-leaf-clear', openingId: door.id, message: 'Según layout-review, la hoja de la puerta deja de alcanzar el mueble al abrir 90°.' }] : []),
-    ...placementBefore.map(p => ({ code: `resolves-${p.kind}`, ...(p.id ? { id: p.id } : {}), message: `Resuelve en el modelo de colocación: ${p.detail}` })),
+    // A conflict with an ASSUMED door swing is never reported as resolved: it stays in `uncertainty`.
+    ...placementBefore.filter(p => !isAssumed(p)).map(p => ({ code: `resolves-${p.kind}`, ...(p.id ? { id: p.id } : {}), message: `Resuelve en el modelo de colocación: ${p.detail}` })),
     ...reviewBefore.filter(f => !reviewAfter.some(g => key(g) === key(f))).map(f => ({ code: `review-clears-${f.code}`, objects: f.objects, message: `Deja de aparecer en layout-review: ${f.message}` })),
   ];
   return finish(out, 'candidate-reviewable');

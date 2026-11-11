@@ -13,6 +13,10 @@ const crypto = require('node:crypto');
 const net = require('node:net');
 const http = require('node:http');
 const https = require('node:https');
+const childProcess = require('node:child_process');
+const dgram = require('node:dgram');
+const tls = require('node:tls');
+const dns = require('node:dns');
 const core = require('../src/core.cjs');
 const Proposal = require('../src/proposal.cjs');
 const C = require('../../../js/project-core.js');
@@ -30,23 +34,43 @@ async function fixture(t, projectOrText) {
   return { dir, file, bytes, sha256, reader: core.createProjectReader(file) };
 }
 
-// Any write, network or child-process attempt during the call fails the test.
+// Any write, network or child-process attempt during the call fails the test. These are the APIs trapped (adopted
+// from the #197 audit, F3); it is a list of Node APIs, not a guarantee about every possible side effect:
+// - processes: child_process spawn/spawnSync/exec/execSync/execFile/execFileSync/fork;
+// - files: open/openSync/fsp.open with any write flag, write/writev/ftruncate, the fs and fs/promises mutators;
+// - network: net.connect/createConnection, http/https.request, tls.connect, dgram.createSocket, dns.lookup, fetch.
+// Reads (open with 'r' or read-only numeric flags) are allowed: the shared reader must read the project.
 function forbidSideEffects(t) {
-  const restore = [];
-  const trap = (target, name) => {
+  const hits = [], restore = [];
+  const trap = (target, name, allow) => {
     const original = target[name];
     if (typeof original !== 'function') return;
-    target[name] = function () { throw new Error(`side effect: ${name}`); };
+    target[name] = function (...args) {
+      if (allow && allow(...args)) return original.apply(this, args);
+      hits.push(name);
+      throw new Error(`side effect: ${name}`);
+    };
     restore.push(() => { target[name] = original; });
   };
-  for (const name of ['writeFile', 'appendFile', 'rm', 'unlink', 'rename', 'mkdir', 'copyFile', 'truncate']) trap(fsp, name);
-  for (const name of ['writeFileSync', 'appendFileSync', 'rmSync', 'unlinkSync', 'renameSync', 'mkdirSync', 'copyFileSync', 'truncateSync', 'createWriteStream']) trap(fs, name);
+  for (const name of ['spawn', 'spawnSync', 'exec', 'execSync', 'execFile', 'execFileSync', 'fork']) trap(childProcess, name);
+  const readOnly = flags => flags === undefined || flags === 'r' || (typeof flags === 'number' && (flags & (fs.constants.O_WRONLY | fs.constants.O_RDWR | fs.constants.O_APPEND | fs.constants.O_CREAT | fs.constants.O_TRUNC)) === 0);
+  trap(fsp, 'open', (_p, flags) => readOnly(flags));
+  trap(fs, 'open', (_p, flags) => typeof flags !== 'function' && readOnly(flags));
+  trap(fs, 'openSync', (_p, flags) => readOnly(flags));
+  for (const name of ['write', 'writeSync', 'writev', 'writevSync', 'ftruncate', 'ftruncateSync', 'symlink', 'symlinkSync', 'link', 'linkSync', 'chmod', 'chmodSync', 'utimes', 'utimesSync']) trap(fs, name);
+  for (const name of ['writeFile', 'appendFile', 'rm', 'unlink', 'rename', 'mkdir', 'copyFile', 'truncate', 'symlink', 'link', 'chmod', 'utimes', 'mkdtemp']) trap(fsp, name);
+  for (const name of ['writeFileSync', 'appendFileSync', 'rmSync', 'unlinkSync', 'renameSync', 'mkdirSync', 'copyFileSync', 'truncateSync', 'createWriteStream', 'mkdtempSync']) trap(fs, name);
   trap(net, 'connect'); trap(net, 'createConnection'); trap(http, 'request'); trap(https, 'request');
+  trap(tls, 'connect'); trap(dgram, 'createSocket'); trap(dns, 'lookup'); trap(dns.promises, 'lookup');
   const fetchOriginal = globalThis.fetch;
-  globalThis.fetch = () => { throw new Error('side effect: fetch'); };
+  globalThis.fetch = () => { hits.push('fetch'); throw new Error('side effect: fetch'); };
   restore.push(() => { globalThis.fetch = fetchOriginal; });
-  t.after(() => restore.forEach(fn => fn()));
-  return () => { restore.forEach(fn => fn()); restore.length = 0; };
+  const release = () => {
+    restore.splice(0).forEach(fn => fn());
+    assert.deepEqual(hits, [], 'no trapped API was called (even if the error was caught)');
+  };
+  t.after(() => restore.splice(0).forEach(fn => fn()));
+  return release;
 }
 
 async function propose(t, name, args, mutate) {
@@ -93,6 +117,15 @@ for (const [name, objectId, extra] of [
   ['concave', 'obj_table', {}],
   ['scale-pending', 'obj_beta', {}],
   ['door-blocked', 'obj_chair', { goal: 'clear-door-swing', openingId: 'opn_door' }],
+  // F1: an explicit swing and a real conflict with its square stays a reviewable candidate.
+  ['door-blocked', 'obj_chair', {}],
+  // F1: accredited conflict plus an assumed swing: the accredited conflict is still solved.
+  ['swingless-plus-real', 'obj_stool', {}],
+  // F2: the first position FloorPlanPlacement accepts is rejected by layout-review; the search goes on.
+  ['models-disagree-after', 'obj_odd', {}],
+  ['models-disagree-after', 'obj_odd', { stepMm: 500 }],
+  ['introduces-issue', 'obj_odd', {}],
+  ['introduces-issue', 'obj_odd', { stepMm: 600 }],
 ]) test(`candidate-reviewable: ${name} — a new position for ${objectId} only, checked by both authorities`, async t => {
   const { result, project, ...fx } = await propose(t, name, { objectId, ...extra });
   assertCommon(result, fx);
@@ -106,7 +139,9 @@ for (const [name, objectId, extra] of [
   assert.ok(Number.isSafeInteger(result.suggestedPose.position.x) && Number.isSafeInteger(result.suggestedPose.position.y));
   assert.equal(result.distanceMm, Math.round(Math.hypot(result.suggestedPose.position.x - original.position.x, result.suggestedPose.position.y - original.position.y)));
   assert.ok(result.problem && result.rationale && result.expectedEffects.some(e => e.code === 'moves-position-only'));
-  assert.equal(result.search.generator, 'FloorPlanPlacement.find');
+  assert.match(result.search.generator, /^FloorPlanPlacement\.candidates \+ FloorPlanPlacement\.problemsIn/);
+  assert.equal(result.search.acceptedIndex, result.search.tried);
+  assert.ok(result.search.tried <= result.search.maxCandidates);
   const clean = independentlyClean(project, objectId, result.suggestedPose.position, extra.openingId);
   assert.deepEqual(clean.placement, [], 'FloorPlanPlacement agrees');
   assert.deepEqual(clean.findings, [], 'layout-review agrees');
@@ -153,9 +188,15 @@ for (const [name, args, code] of [
   ['too-big', { objectId: 'obj_huge' }, 'search-grid-exhausted'],
   ['overlap', { objectId: 'obj_beta', maxCandidates: 1 }, 'search-budget-exhausted'],
   ['models-disagree-before', { objectId: 'obj_odd' }, 'models-disagree'],
-  ['models-disagree-after', { objectId: 'obj_odd', stepMm: 500 }, 'goal-not-confirmed'],
-  ['introduces-issue', { objectId: 'obj_odd', stepMm: 600 }, 'candidate-introduces-issues'],
+  // Budget too small to reach the later valid position (F2): pending, the first rejection kept as evidence.
+  ['models-disagree-after', { objectId: 'obj_odd', stepMm: 500, maxCandidates: 3 }, 'goal-not-confirmed'],
+  ['introduces-issue', { objectId: 'obj_odd', stepMm: 600, maxCandidates: 2 }, 'candidate-introduces-issues'],
+  // Every position FloorPlanPlacement accepts is rejected by layout-review: grid exhausted, never impossible.
+  ['review-rejects-all', { objectId: 'obj_odd' }, 'goal-not-confirmed'],
   ['door-without-swing', { objectId: 'obj_chair', goal: 'clear-door-swing', openingId: 'opn_door' }, 'door-swing-missing'],
+  ['swingless-inward', { objectId: 'obj_stool', goal: 'clear-door-swing', openingId: 'opn_north' }, 'door-swing-missing'],
+  // F1: the only reason to move is an assumed swing.
+  ['swingless-inward', { objectId: 'obj_stool' }, 'conflict-based-on-assumed-swing'],
 ]) test(`pending: ${name} → ${code}, never presented as a proof`, async t => {
   const { result, ...fx } = await propose(t, name, args);
   assertCommon(result, fx);
@@ -174,11 +215,152 @@ test('an exhausted search is incomplete, not impossible', async t => {
 });
 
 test('a candidate accepted by FloorPlanPlacement but rejected by layout-review is kept as a rejected candidate', async t => {
-  const after = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd', stepMm: 500 })).result;
-  assert.ok(after.evidence.rejectedCandidate);
+  const after = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd', stepMm: 500, maxCandidates: 3 })).result;
+  assert.deepEqual(after.evidence.rejectedCandidate.position, { x: 2600, y: 1500 });
   assert.ok(after.evidence.after.reviewModel.some(f => f.code === 'solape' && f.measurementMm === 0.5));
-  const introduced = (await propose(t, 'introduces-issue', { objectId: 'obj_odd', stepMm: 600 })).result;
+  assert.equal(after.search.budgetExhausted, true);
+  assert.match(after.blockingReasons[0].message, /presupuesto de 3 posiciones.*No demuestra que no exista sitio/);
+  const introduced = (await propose(t, 'introduces-issue', { objectId: 'obj_odd', stepMm: 600, maxCandidates: 2 })).result;
+  assert.deepEqual(introduced.evidence.rejectedCandidate.position, { x: 600, y: 400 });
   assert.ok(introduced.evidence.introduced.some(f => f.code === 'puerta'), 'the new door contact is reported, not hidden');
+});
+
+// ---------- F2: the search goes on after a rejection, with the same sequence and budget as find() ----------
+for (const [name, stepMm, rejected, accepted] of [
+  ['models-disagree-after', 50, { index: 363, position: { x: 2600, y: 1500 } }, { index: 443, position: { x: 2650, y: 1500 }, distanceMm: 550 }],
+  ['introduces-issue', 50, { index: 10, position: { x: 600, y: 900 } }, { index: 15, position: { x: 550, y: 900 }, distanceMm: 112 }],
+  ['models-disagree-after', 500, { index: 3, position: { x: 2600, y: 1500 } }, { index: 10, position: { x: 2100, y: 500 }, distanceMm: 1000 }],
+  ['introduces-issue', 600, { index: 2, position: { x: 600, y: 400 } }, { index: 7, position: { x: 1800, y: 1000 }, distanceMm: 1200 }],
+]) test(`F2 regression: ${name} step ${stepMm} — rejected #${rejected.index}, accepted #${accepted.index} at ${accepted.distanceMm} mm`, async t => {
+  const { result, project } = await propose(t, name, { objectId: 'obj_odd', stepMm });
+  assert.equal(result.status, 'candidate-reviewable');
+  assert.deepEqual(result.suggestedPose.position, accepted.position);
+  assert.equal(result.distanceMm, accepted.distanceMm);
+  assert.equal(result.search.acceptedIndex, accepted.index);
+  assert.equal(result.search.tried, accepted.index, 'the budget is never reset after a rejection');
+  assert.equal(result.search.rejected[0].index, rejected.index);
+  assert.deepEqual(result.search.rejected[0].position, rejected.position);
+  assert.deepEqual(result.evidence.rejectedBefore.first.position, rejected.position);
+  // The first rejection is exactly what FloorPlanPlacement.find returns: same sequence, prefilter and count.
+  const original = project.objects.find(o => o.id === 'obj_odd');
+  const found = Placement.find(project, original, { near: original.position, stepMm });
+  assert.equal(found.ok, true);
+  assert.deepEqual(found.position, rejected.position);
+  assert.equal(found.tried, rejected.index);
+  // Both authorities accept the new position, checked by the TEST on its own copy.
+  const clean = independentlyClean(project, 'obj_odd', accepted.position);
+  assert.deepEqual(clean.placement, []);
+  assert.deepEqual(clean.findings, []);
+  assert.match(result.rationale, /No es necesariamente la mejor/);
+  assert.ok(result.uncertainty.some(u => u.code === 'grid-search' && /No es óptima/.test(u.message)));
+});
+
+test('F2: one more position is never examined beyond maxCandidates, and less budget means pending', async t => {
+  const full = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd' })).result;
+  const short = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd', maxCandidates: full.search.acceptedIndex - 1 })).result;
+  assert.equal(short.status, 'pending');
+  assert.equal(short.search.tried, full.search.acceptedIndex - 1);
+  assert.equal(short.search.budgetExhausted, true);
+  const exact = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd', maxCandidates: full.search.acceptedIndex })).result;
+  assert.deepEqual(exact.suggestedPose, full.suggestedPose);
+});
+
+test('F2: the first FloorPlanPlacement-valid position of the search is find() itself, in every scenario with a candidate', async t => {
+  for (const [name, objectId, extra] of [['overlap', 'obj_beta'], ['rotated', 'obj_turned'], ['against-wall', 'obj_shelf'], ['two-close', 'obj_beta'],
+    ['concave', 'obj_table'], ['door-blocked', 'obj_chair', { goal: 'clear-door-swing', openingId: 'opn_door' }], ['swingless-plus-real', 'obj_stool'],
+    ['models-disagree-after', 'obj_odd'], ['introduces-issue', 'obj_odd'], ['review-rejects-all', 'obj_odd']]) {
+    const { result, project } = await propose(t, name, { objectId, ...extra });
+    const original = project.objects.find(o => o.id === objectId);
+    const found = Placement.find(project, original, { near: original.position });
+    const first = result.search.rejected?.[0] ?? { index: result.search.acceptedIndex, position: result.suggestedPose?.position };
+    assert.equal(found.ok, true, name);
+    assert.equal(first.index, found.tried, `${name}: same count as find()`);
+    assert.deepEqual(first.position, found.position, `${name}: same position as find()`);
+  }
+});
+
+test('F2: a grid where layout-review rejects every admissible position ends pending, with a bounded log', async t => {
+  const grid = (await propose(t, 'review-rejects-all', { objectId: 'obj_odd' })).result;
+  assert.equal(grid.search.budgetExhausted, false);
+  assert.equal(grid.search.verificationLimitReached, false);
+  assert.ok(grid.search.placementValidRejected > 10);
+  assert.equal(grid.search.rejected.length, 10);
+  assert.equal(grid.search.rejectedTruncated, grid.search.placementValidRejected - 10);
+  assert.match(grid.blockingReasons[0].message, /toda la cuadrícula.*No demuestra que no exista sitio/);
+  assert.ok(grid.search.rejected.every(r => r.position.y === 400 && r.reviewFindings.includes('solape 0.5 mm')));
+  // A finer grid hits the cap on full verifications before the candidate budget: still pending, still bounded.
+  const fine = (await propose(t, 'review-rejects-all', { objectId: 'obj_odd', stepMm: 10 })).result;
+  assert.equal(fine.status, 'pending');
+  assert.equal(fine.search.verificationLimitReached, true);
+  assert.equal(fine.search.budgetExhausted, false);
+  assert.equal(fine.search.placementValidRejected, Proposal.LIMITS.verifications);
+  assert.ok(fine.search.tried < fine.search.maxCandidates);
+  assert.match(fine.blockingReasons[0].message, /límite de 250 verificaciones/);
+  assert.ok(Buffer.byteLength(JSON.stringify(fine)) < 750 * 1024);
+});
+
+test('F2: deterministic — the same request gives the same answer, including the rejection log', async t => {
+  const a = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd' })).result;
+  const b = (await propose(t, 'models-disagree-after', { objectId: 'obj_odd' })).result;
+  assert.deepEqual(a, b);
+});
+
+// ---------- F1: conflicts classified by origin ----------
+test('F1: when the only conflict is the square of an ASSUMED swing, pending, door recorded, evidence kept, nothing invented', async t => {
+  const { result, project } = await propose(t, 'swingless-inward', { objectId: 'obj_stool' });
+  assert.equal(result.status, 'pending');
+  assert.equal(result.blockingReasons[0].code, 'conflict-based-on-assumed-swing');
+  assert.match(result.blockingReasons[0].message, /opn_north/);
+  assert.match(result.blockingReasons[0].message, /no está confirmado/);
+  assert.equal(result.suggestedPose, null);
+  assert.equal(result.applied, false);
+  assert.equal(result.search, null, 'no search');
+  assert.deepEqual(result.evidence.assumedSwing.openingIds, ['opn_north']);
+  assert.deepEqual(result.problem.assumedSwingOpeningIds, ['opn_north']);
+  assert.ok(result.problem.problems.every(p => p.kind === 'door' && p.assumedSwing === true));
+  assert.ok(result.evidence.before.placementModel.some(p => p.id === 'opn_north' && p.assumedSwing));
+  assert.ok(!project.openings.find(o => o.id === 'opn_north').swing, 'the JSON still has no swing');
+  assert.ok(!JSON.stringify(result).includes('"hinge"'), 'no hinge or side invented in the answer');
+});
+
+test('F1: accredited conflict plus assumed swing — the real one is solved, the assumed one stays an uncertainty', async t => {
+  const { result, project } = await propose(t, 'swingless-plus-real', { objectId: 'obj_crate' });
+  assert.equal(result.status, 'candidate-reviewable');
+  assert.deepEqual(result.problem.assumedSwingOpeningIds, ['opn_north']);
+  assert.ok(result.uncertainty.some(u => u.code === 'assumed-swing-conflict' && u.openingIds.includes('opn_north')));
+  assert.ok(result.expectedEffects.some(e => e.code === 'resolves-furniture'));
+  assert.ok(!result.expectedEffects.some(e => e.code === 'resolves-door'), 'the assumed sweep is never a confirmed effect');
+  const clean = independentlyClean(project, 'obj_crate', result.suggestedPose.position);
+  assert.deepEqual(clean.placement, []);
+  assert.deepEqual(clean.findings, []);
+});
+
+test('F1: an explicit swing with a real conflict reports the door as resolved; a swingless square elsewhere invents nothing', async t => {
+  const real = (await propose(t, 'door-blocked', { objectId: 'obj_chair' })).result;
+  assert.equal(real.status, 'candidate-reviewable');
+  assert.ok(real.expectedEffects.some(e => e.code === 'resolves-door' && e.id === 'opn_door'));
+  assert.ok(!real.uncertainty.some(u => u.code === 'assumed-swing-conflict'));
+  for (const [name, objectId] of [['swingless-inward', 'obj_alpha'], ['door-without-swing', 'obj_chair']]) {
+    const { result } = await propose(t, name, { objectId });
+    assert.equal(result.status, 'no-change-needed', name);
+    assert.equal(result.problem, null, name);
+    assert.ok(!('assumedSwing' in result.evidence), name);
+  }
+});
+
+test('F1 and F2: the project file keeps its bytes, mtime and listing; applied is always false', async t => {
+  for (const [name, args] of [['swingless-inward', { objectId: 'obj_stool' }], ['swingless-plus-real', { objectId: 'obj_crate' }],
+    ['models-disagree-after', { objectId: 'obj_odd' }], ['review-rejects-all', { objectId: 'obj_odd' }]]) {
+    const fx = await fixture(t, scenario(name));
+    const before = await fsp.stat(fx.file), listing = await fsp.readdir(fx.dir);
+    const release = forbidSideEffects(t);
+    const result = await core.proposeLayout(fx.reader, { expectedSha256: fx.sha256, goal: 'resolve-placement-conflict', ...args });
+    release();
+    assert.equal(result.applied, false);
+    assert.deepEqual(await fsp.readFile(fx.file), fx.bytes, name);
+    assert.equal((await fsp.stat(fx.file)).mtimeMs, before.mtimeMs, name);
+    assert.deepEqual(await fsp.readdir(fx.dir), listing, name);
+  }
 });
 
 test('doors without swing: the assumption of FloorPlanPlacement is declared in every proposal', async t => {
@@ -302,4 +484,22 @@ test('the contract exposes exactly its documented fields', async t => {
   assert.deepEqual(Object.keys(result).sort(), ['applied', 'blockingReasons', 'currentPose', 'distanceMm', 'evidence', 'expectedEffects', 'goal', 'notEvaluated', 'object', 'objectId', 'problem', 'proposalVersion', 'rationale', 'remainingIssues', 'search', 'source', 'status', 'suggestedPose', 'uncertainty', 'usedData'].sort());
   assert.deepEqual(Object.keys(result.source).sort(), ['scaleConfidence', 'schemaVersion', 'sha256']);
   assert.ok(Proposal.GOALS.includes(result.goal));
+});
+
+test('control: the side-effect traps do fire when the trapped APIs are called', async t => {
+  const release = forbidSideEffects(t);
+  const fired = [];
+  const expectThrow = (label, fn) => { try { fn(); } catch (e) { if (/side effect/.test(e.message)) fired.push(label); } };
+  expectThrow('spawn', () => childProcess.spawn('true'));
+  expectThrow('execSync', () => childProcess.execSync('true'));
+  expectThrow('openSync w', () => fs.openSync(path.join(os.tmpdir(), 'never.json'), 'w'));
+  expectThrow('fsp.open a', () => fsp.open(path.join(os.tmpdir(), 'never.json'), 'a'));
+  expectThrow('writeSync', () => fs.writeSync(1, 'x'));
+  expectThrow('dgram', () => dgram.createSocket('udp4'));
+  expectThrow('tls', () => tls.connect(443, 'example.invalid'));
+  expectThrow('dns', () => dns.lookup('example.invalid', () => {}));
+  expectThrow('net', () => net.connect(1));
+  expectThrow('fetch', () => globalThis.fetch('https://example.invalid'));
+  assert.deepEqual(fired, ['spawn', 'execSync', 'openSync w', 'fsp.open a', 'writeSync', 'dgram', 'tls', 'dns', 'net', 'fetch']);
+  assert.throws(release, /no trapped API was called/, 'the hits are reported even when the error was swallowed');
 });

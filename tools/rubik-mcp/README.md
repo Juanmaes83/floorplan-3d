@@ -116,7 +116,7 @@ get_project_summary()                       → snapshot.sha256
 propose_layout({"objectId":"obj_chair","goal":"clear-door-swing","openingId":"opn_door","expectedSha256":"<sha256>"})
 ```
 
-**De dónde sale la candidata.** La busca `FloorPlanPlacement.find`: anillos de `stepMm` alrededor de la posición actual, con un máximo de `maxCandidates` posiciones probadas.
+**De dónde sale la candidata.** Del generador de `FloorPlanPlacement.find` (`FloorPlanPlacement.candidates`), con su mismo orden, prefiltro, redondeo, tolerancia y presupuesto: anillos de `stepMm` alrededor de la posición actual y, como máximo, `maxCandidates` posiciones. Si `layout-review` rechaza una posición que `FloorPlanPlacement` acepta, la búsqueda **sigue** con el mismo presupuesto (y un máximo de 250 verificaciones completas). La candidata es la primera que supera todas las comprobaciones, no la mejor.
 
 **Cómo se comprueba.** Sobre una copia efímera en memoria, con `FloorPlanPlacement` y `layout-review`. Una puerta se evalúa con la hoja precisa de `layout-review`.
 
@@ -126,7 +126,7 @@ propose_layout({"objectId":"obj_chair","goal":"clear-door-swing","openingId":"op
 
 - una búsqueda que agota el presupuesto o la cuadrícula;
 - una estancia ambigua;
-- una puerta sin `swing`;
+- una puerta sin `swing` (con `clear-door-swing`), o un conflicto que solo existe por el barrido **supuesto** de una puerta sin `swing` (`conflict-based-on-assumed-swing`);
 - una discrepancia entre los dos modelos.
 
 **Qué no genera.** No genera parches, no escribe ningún JSON ni crea variantes; eso corresponde a las Etapas 3 y 4.
