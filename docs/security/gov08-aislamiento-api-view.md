@@ -89,7 +89,7 @@ Las demás directivas se conservan **literalmente**, lo que comprueba `tests/gov
 | Observaciones: estancia, punto del plano, imagen y quitar | ídem | 3 añadidas, 1 quitada |
 | Descarga del archivo de observaciones | ídem | `observaciones-<v>.json`, importable con `FloorPlanReviewNotes.read`, revisora y anclas correctas |
 | Anclas internas (`#…`) | ídem | Funcionan |
-| Documento de obra de Evolución (sin scripts) | `tests/ft3d-8-delivery.browser.test.cjs`, servido con `View.csp` | Ver §9 |
+| Documento de obra de Evolución (sin scripts) | `tests/ft3d-8-delivery.browser.test.cjs`, servido con `View.csp` | 6/6 |
 | Publicación completa con y sin vídeo, y apertura del enlace | `tests/share-link.browser.test.cjs` | Pasa |
 | Retirada, foco y archivo sin conexión | `share-withdraw`, `gov08-s2-focus`, `client-share`, `anchored-comments` | Pasan |
 | Sin errores de página ni de consola, y sin red externa | todas las anteriores | `[]` |
@@ -132,7 +132,8 @@ El script del documento ya envolvía el almacenamiento en `try/catch`, así que 
 
 - unitarias de publicación, retirada y notas: 55/55;
 - `share-link`, `client-share`, `anchored-comments`, `share-withdraw` y `gov08-s2-focus`: 7/7;
-- `ft3d-8-delivery`: ver el informe de la PR.
+- `ft3d-8-delivery`: 6/6.
+- La primera pasada de `share-link` dio 6/7 por el arnés descrito abajo (TAP conservado como `tap-regresion-publicacion-antes-del-ajuste-de-arnes.tap`); tras el ajuste, 1/1.
 
 **Ajuste de arnés (no de aserciones).** `tests/share-link.browser.test.cjs` sembraba el código de render con `addInitScript`, que se ejecuta en **todas** las páginas del contexto. Al leer `localStorage` en la página ya aislada lanzaba una excepción, que la prueba contaba como error del documento.
 

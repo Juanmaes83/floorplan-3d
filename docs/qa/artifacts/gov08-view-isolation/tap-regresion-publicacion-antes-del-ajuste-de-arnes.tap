@@ -1,0 +1,73 @@
+TAP version 13
+# Subtest: Phase B6: comments anchored to an element, a point of the plan and an image travel to the professional
+ok 1 - Phase B6: comments anchored to an element, a point of the plan and an image travel to the professional
+  ---
+  duration_ms: 26855.014455
+  type: 'test'
+  ...
+# Subtest: Phase B1: client file opens offline, shows the project and returns importable observations
+ok 2 - Phase B1: client file opens offline, shows the project and returns importable observations
+  ---
+  duration_ms: 2515.664655
+  type: 'test'
+  ...
+# Subtest: Phase B1: names cannot inject markup or scripts into the client file
+ok 3 - Phase B1: names cannot inject markup or scripts into the client file
+  ---
+  duration_ms: 1467.880422
+  type: 'test'
+  ...
+# Subtest: S2 focus: after cancel, withdrawal, a wrong code and the history buttons, focus stays in the dialog next to what was acted on
+ok 4 - S2 focus: after cancel, withdrawal, a wrong code and the history buttons, focus stays in the dialog next to what was acted on
+  ---
+  duration_ms: 2698.543304
+  type: 'test'
+  ...
+# Subtest: Phase B4: publish the client file as a link, with and without the tour video
+not ok 5 - Phase B4: publish the client file as a link, with and without the tour video
+  ---
+  duration_ms: 2857.867625
+  type: 'test'
+  location: '<repo>/tests/share-link.browser.test.cjs:19:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   "Failed to read the 'localStorage' property from 'Window': The document is sandboxed and lacks the 'allow-same-origin' flag."
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: "Failed to read the 'localStorage' property from 'Window': The document is sandboxed and lacks the 'allow-same-origin' flag."
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (<repo>/tests/share-link.browser.test.cjs:66:268)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: S2: «Mis publicaciones» withdraws a published link after confirmation, and only with the publishing code
+ok 6 - S2: «Mis publicaciones» withdraws a published link after confirmation, and only with the publishing code
+  ---
+  duration_ms: 16202.169896
+  type: 'test'
+  ...
+# Subtest: S2: clear history (no deletion) and no orphan videos when the page upload fails
+ok 7 - S2: clear history (no deletion) and no orphan videos when the page upload fails
+  ---
+  duration_ms: 2780.510495
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 6
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 58104.377138
