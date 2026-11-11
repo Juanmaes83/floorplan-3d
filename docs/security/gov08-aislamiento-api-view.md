@@ -223,7 +223,28 @@ Las pruebas se escribieron **antes** de cada cambio y se ejecutaron contra el SH
 
 ### 9.2 Regresión
 
-_Pendiente: se completa con el resultado de la ejecución en curso._
+Ejecutada en local, Chromium, con el código de `04f7b57` (TAP: `tap-cierre-regresion.tap`).
+
+**Unitarias de publicación, retirada, notas, entrega y aislamiento: 63/63**
+
+- `share-api`
+- `unshare-api`
+- `gov08-s1-adversarial`
+- `gov08-s2-adversarial`
+- `share-registry-core`
+- `construction-delivery-core`
+- `review-notes-core`
+- `review-anchors`
+- `gov08-view-isolation`
+
+**Navegador: 13/13**
+
+- `anchored-comments`
+- `client-share` ×2
+- `ft3d-8-delivery` ×6
+- `gov08-s2-focus`
+- `share-link`
+- `share-withdraw` ×2
 
 ### 9.3 Ajustes de arnés
 
@@ -279,7 +300,13 @@ Para Safari es especialmente relevante la descarga desde una página con `sandbo
 
 ## 11. CI
 
-_Pendiente: se completa con la CI del SHA final._
+La CI se registra **por SHA en la descripción de la PR #195**. Cada commit de esta acta cambia el SHA, así que el resultado no puede escribirse dentro del propio commit sin quedar desfasado.
+
+Criterio:
+
+- La CI vale solo si los jobs de navegador **llegan a ejecutar las pruebas en GitHub**.
+- Un fallo de infraestructura no cuenta como verde. Ejemplo: el DNS del runner al instalar Chromium, que ocurrió con `d4a5709` en el intento y en un único reintento de cada job.
+- Un fallo de infraestructura tampoco cuenta como fallo del código.
 
 ## 12. Riesgos residuales
 
@@ -318,4 +345,4 @@ _Pendiente: se completa con la CI del SHA final._
 3. Hacer la prueba manual en Safari iOS y Firefox (§10).
 4. Decidir cuándo fusionar la cadena S1 → S2 → #195. Antes debe crearse `RUBIK_SHARE_TOKEN` en Production (S1).
 
-_Dictamen pendiente de la CI del SHA final._
+**Dictamen:** solo se emite cuando la CI del SHA final está verificada (ver la descripción de la PR). Mientras tanto se mantiene el **HOLD para merge y Production**.
