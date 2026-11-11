@@ -1,0 +1,99 @@
+TAP version 13
+# Subtest: [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+ok 1 - [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+  ---
+  duration_ms: 4.107115
+  type: 'test'
+  ...
+# Subtest: every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+ok 2 - every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+  ---
+  duration_ms: 0.288861
+  type: 'test'
+  ...
+# Subtest: existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+ok 3 - existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+  ---
+  duration_ms: 1.473745
+  type: 'test'
+  ...
+# Subtest: privacy, cache and withdrawal policies are unchanged
+ok 4 - privacy, cache and withdrawal policies are unchanged
+  ---
+  duration_ms: 2.349771
+  type: 'test'
+  ...
+# Subtest: [defect] a document from before \#195 is served with the observations notice, once, right before the form; nothing else changes
+not ok 5 - [defect] a document from before \#195 is served with the observations notice, once, right before the form; nothing else changes
+  ---
+  duration_ms: 1.474962
+  type: 'test'
+  location: '<copia aislada de d4a5709>/tests/gov08-view-isolation.test.cjs:52:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    es: one notice
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de d4a5709>/tests/gov08-view-isolation.test.cjs:54:116)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: documents that need no notice are served byte for byte: a new one (own notice) and one without observations form
+ok 6 - documents that need no notice are served byte for byte: a new one (own notice) and one without observations form
+  ---
+  duration_ms: 0.535187
+  type: 'test'
+  ...
+# Subtest: the notice is fixed text: an unknown language falls back to Spanish and nothing from the document is copied into it
+not ok 7 - the notice is fixed text: an unknown language falls back to Spanish and nothing from the document is copied into it
+  ---
+  duration_ms: 0.779634
+  type: 'test'
+  location: '<copia aislada de d4a5709>/tests/gov08-view-isolation.test.cjs:66:1'
+  failureType: 'testCodeFailure'
+  error: 'inserted before the form'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: ~
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de d4a5709>/tests/gov08-view-isolation.test.cjs:69:127)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: the server notice and the new template notice say the same, in the three languages
+not ok 8 - the server notice and the new template notice say the same, in the three languages
+  ---
+  duration_ms: 0.514184
+  type: 'test'
+  location: '<copia aislada de d4a5709>/tests/gov08-view-isolation.test.cjs:72:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'es')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de d4a5709>/tests/gov08-view-isolation.test.cjs:74:62)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 5
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.513801

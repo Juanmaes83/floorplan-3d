@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+ok 1 - [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+  ---
+  duration_ms: 3.261741
+  type: 'test'
+  ...
+# Subtest: every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+ok 2 - every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+  ---
+  duration_ms: 0.321349
+  type: 'test'
+  ...
+# Subtest: existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+ok 3 - existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+  ---
+  duration_ms: 2.135012
+  type: 'test'
+  ...
+# Subtest: privacy, cache and withdrawal policies are unchanged
+ok 4 - privacy, cache and withdrawal policies are unchanged
+  ---
+  duration_ms: 3.299197
+  type: 'test'
+  ...
+# Subtest: [defect] a document from before \#195 is served with the observations notice, once, right before the form; nothing else changes
+ok 5 - [defect] a document from before \#195 is served with the observations notice, once, right before the form; nothing else changes
+  ---
+  duration_ms: 4.751372
+  type: 'test'
+  ...
+# Subtest: documents that need no notice are served byte for byte: a new one (own notice) and one without observations form
+ok 6 - documents that need no notice are served byte for byte: a new one (own notice) and one without observations form
+  ---
+  duration_ms: 0.452522
+  type: 'test'
+  ...
+# Subtest: the notice is fixed text: an unknown language falls back to Spanish and nothing from the document is copied into it
+ok 7 - the notice is fixed text: an unknown language falls back to Spanish and nothing from the document is copied into it
+  ---
+  duration_ms: 0.709572
+  type: 'test'
+  ...
+# Subtest: the server notice and the new template notice say the same, in the three languages
+ok 8 - the server notice and the new template notice say the same, in the three languages
+  ---
+  duration_ms: 0.721887
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 120.397121
