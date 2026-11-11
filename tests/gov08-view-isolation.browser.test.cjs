@@ -98,57 +98,104 @@ test('[defect] the page is isolated by its response: opaque origin, sandbox with
  assert.deepEqual(h.external,[]);
 });
 
-// The real client document, built by the app (views prepared, a tour video in the store), opened through the link.
-async function realDocument(t){
- const context=await browser.newContext({viewport:{width:1280,height:800},acceptDownloads:true});t.after(()=>context.close());const h=await harness(context);
- const page=await context.newPage();page.setDefaultTimeout(30000);await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanClientShare);
- await page.locator('#workArea-deliver').click();await page.locator('#professionalWorkspace [data-route="prepare-views"]').first().click();
- await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy'&&FloorPlanProjectViews.current().length>0,null,{timeout:240000});
- // A short real WebM recorded in the browser stands for the tour video uploaded to the store.
- const webm=Buffer.from(await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=320;c.height=180;const g=c.getContext('2d'),s=c.captureStream(15),rec=new MediaRecorder(s,{mimeType:'video/webm'}),parts=[];rec.ondataavailable=e=>parts.push(e.data);rec.start(100);
-  let i=0;const id=setInterval(()=>{g.fillStyle=i++%2?'#205b60':'#b0442c';g.fillRect(0,0,320,180);},60);await new Promise(o=>setTimeout(o,900));clearInterval(id);await new Promise(o=>{rec.onstop=o;rec.stop();});
-  return Array.from(new Uint8Array(await new Blob(parts,{type:'video/webm'}).arrayBuffer()));}));
- h.put('casa-Vd78.webm',webm,'video/webm');
- const out=await page.evaluate(v=>FloorPlanClientShare.build({video:v}),{url:`https://${HOST}/rubik-share/casa-Vd78.webm`,host:HOST,type:'video/webm'});
- h.put('casa-Gh90.html',out.html);
- const views=await page.evaluate(()=>FloorPlanProjectViews.current().length);
- return {context,h,page,out,views,open:async(ctx=context)=>{const c=await ctx.newPage(),errors=[];c.on('pageerror',e=>errors.push(e.message));c.on('console',m=>{if(m.type()==='error')errors.push(m.text());});const resp=await c.goto(link('casa-Gh90.html'));return {c,resp,errors};}};
+// The real client documents, built ONCE by the app (views prepared, a tour video in the store): one with today's
+// template and one with the template every link published before #195 carries (js/client-share-ui.js at 9c00c81,
+// identical to master 75615fd; kept verbatim in tests/fixtures/gov08-view-isolation/, sha256 97e68c5e…).
+const OLD_TEMPLATE=path.join(__dirname,'fixtures','gov08-view-isolation','client-share-ui-9c00c81.js');
+let docs=null;
+async function buildDocuments(){
+ if(docs)return docs;
+ const context=await browser.newContext({viewport:{width:1280,height:800}});
+ try{const page=await context.newPage();page.setDefaultTimeout(30000);await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanClientShare);
+  await page.locator('#workArea-deliver').click();await page.locator('#professionalWorkspace [data-route="prepare-views"]').first().click();
+  await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy'&&FloorPlanProjectViews.current().length>0,null,{timeout:240000});
+  // A short real WebM recorded in the browser stands for the tour video uploaded to the store.
+  const webm=Buffer.from(await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=320;c.height=180;const g=c.getContext('2d'),s=c.captureStream(15),rec=new MediaRecorder(s,{mimeType:'video/webm'}),parts=[];rec.ondataavailable=e=>parts.push(e.data);rec.start(100);
+   let i=0;const id=setInterval(()=>{g.fillStyle=i++%2?'#205b60':'#b0442c';g.fillRect(0,0,320,180);},60);await new Promise(o=>setTimeout(o,900));clearInterval(id);await new Promise(o=>{rec.onstop=o;rec.stop();});
+   return Array.from(new Uint8Array(await new Blob(parts,{type:'video/webm'}).arrayBuffer()));}));
+  const video={url:`https://${HOST}/rubik-share/casa-Vd78.webm`,host:HOST,type:'video/webm'};
+  const current=await page.evaluate(v=>FloorPlanClientShare.build({video:v}),video);
+  await page.addScriptTag({content:await fs.readFile(OLD_TEMPLATE,'utf8')});
+  const old=await page.evaluate(v=>FloorPlanClientShare.build({video:v}),video);
+  assert.ok(current.html.includes('id="shareVolatile"')&&!old.html.includes('shareVolatile'),'one template with its own notice, the other without');
+  docs={webm,versionCode:current.versionCode,views:await page.evaluate(()=>FloorPlanProjectViews.current().length),html:{new:current.html,old:old.html}};return docs;
+ }finally{await context.close();}
 }
+// Opens one of them through its link, in a fresh browser profile (the client's), recording every request it makes.
+async function openDocument(t,kind,viewport={width:1280,height:800}){
+ const d=await buildDocuments();const context=await browser.newContext({viewport,acceptDownloads:true});t.after(()=>context.close());const h=await harness(context);
+ h.put('casa-Vd78.webm',d.webm,'video/webm');const name=`casa-${kind}-Gh90.html`;h.put(name,d.html[kind]);
+ const requests=[];context.on('request',r=>{if(!/^(blob|data):/.test(r.url()))requests.push(r.url());});
+ const open=async()=>{const c=await context.newPage(),errors=[];c.on('pageerror',e=>errors.push(e.message));c.on('console',m=>{if(m.type()==='error')errors.push(m.text());});const resp=await c.goto(link(name));return {c,resp,errors};};
+ return {...d,context,h,name,requests,open};
+}
+// The notice the page shows: the document's own (new template) or the one /api/view adds (older documents). Exactly one.
+const notice=c=>c.locator('#shareVolatile, #rubikViewNotice').filter({visible:true});
+const CONTRACT=/^Las observaciones de esta página no se guardan automáticamente\. Antes de cerrar o recargar, descarga el archivo de observaciones y envíalo al profesional\.$/;
+const contrast=c=>notice(c).evaluate(n=>{const rgb=s=>s.match(/\d+(\.\d+)?/g).slice(0,3).map(Number),L=([r,g,b])=>{const f=v=>(v/=255)<=.03928?v/12.92:((v+.055)/1.055)**2.4;return .2126*f(r)+.7152*f(g)+.0722*f(b);};
+ const cs=getComputedStyle(n),a=L(rgb(cs.color)),b=L(rgb(cs.backgroundColor));return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);});
 
-test('the real client document keeps working when opened by its link: views, images, video, observations and the file download',{timeout:420000},async t=>{
- const {h,out,views,open}=await realDocument(t);const {c,resp,errors}=await open();
- assert.equal(resp.status(),200);await c.locator('#shareReview').waitFor();
+for(const [kind,tag] of [['new',''],['old','[defect] ']])
+test(`${tag}${kind==='new'?'a new document':'a document published before #195'}: notice before commenting, views, images, video, observations, keyboard and the importable file; nothing is sent`,{timeout:480000},async t=>{
+ const d=await openDocument(t,kind),{c,resp,errors}=await d.open();
+ assert.equal(resp.status(),200);await c.locator('#shareReview').waitFor();assert.equal(await c.evaluate(()=>self.origin),'null','still isolated');
+ // The notice: one, visible, the contract text, before the form, readable, not in the keyboard path.
+ assert.equal(await notice(c).count(),1,'exactly one notice');assert.match((await notice(c).innerText()).trim(),CONTRACT);
+ const [nb,fb]=await Promise.all([notice(c).boundingBox(),c.locator('#shareText').boundingBox()]);assert.ok(nb.y+nb.height<=fb.y,'the notice comes before the observation field');
+ assert.ok(await contrast(c)>=4.5,'contrast');assert.equal(await notice(c).getAttribute('role'),'note');assert.equal(await notice(c).getAttribute('tabindex'),null);
  // Images (the plan sheet and every prepared view) decode; each view offers «Comentar esta imagen».
  const imgs=await c.locator('img').evaluateAll(async list=>Promise.all(list.map(async i=>{await i.decode().catch(()=>{});return i.naturalWidth;})));
- assert.ok(imgs.length>=1+views&&imgs.every(w=>w>0),'images: '+JSON.stringify(imgs));
- assert.equal(await c.locator('.share-comment-view').count(),views);
+ assert.ok(imgs.length>=1+d.views&&imgs.every(w=>w>0),'images: '+JSON.stringify(imgs));assert.equal(await c.locator('.share-comment-view').count(),d.views);
  // The tour video plays from the store.
  const played=await c.locator('#shareTour video').evaluate(async v=>{if(v.readyState<1)await new Promise((ok,ko)=>{v.onloadedmetadata=ok;v.onerror=()=>ko(Error('video blocked'));});return v.videoWidth;});
  assert.equal(played,320,'the tour video plays under the page policy');
- // Observations: a room, a point of the plan, an image; one removed.
- await c.locator('#shareReviewer').fill('Clienta de prueba');await c.locator('#shareAnchor').selectOption({index:1});await c.locator('#shareText').fill('Más luz aquí.');await c.locator('#shareAdd').click();
+ // Observations: a room, a point of the plan, an image; one removed. The keyboard path is the form's own.
+ await c.locator('#shareReviewer').fill('Clienta de prueba');await c.keyboard.press('Tab');assert.equal(await c.evaluate(()=>document.activeElement.id),'shareAnchor');
+ await c.locator('#shareAnchor').selectOption({index:1});await c.locator('#shareText').fill('Más luz aquí.');await c.locator('#shareAdd').click();
  const p=await c.evaluate(()=>{const r=document.querySelector('#sharePlanPick .preview-room[data-room]').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};});
  await c.mouse.click(p.x,p.y);assert.equal(await c.locator('#sharePointMark').count(),1);await c.locator('#shareText').fill('Un enchufe aquí.');await c.locator('#shareAdd').click();
  await c.locator('.share-comment-view').first().click();await c.locator('#shareText').fill('Me gusta esta vista.');await c.locator('#shareAdd').click();
  assert.equal(await c.locator('#shareNotes li').count(),3);await c.locator('#shareNotes li').nth(1).getByRole('button',{name:'Quitar'}).click();assert.equal(await c.locator('#shareNotes li').count(),2);
- // «Guardar archivo de observaciones» downloads the file the professional imports.
- const dl=c.waitForEvent('download');await c.locator('#shareSave').click();const d=await dl;assert.equal(d.suggestedFilename(),`observaciones-${out.versionCode}.json`);
- const file=path.join(dir,d.suggestedFilename());await d.saveAs(file);const saved=Notes.read(await fs.readFile(file,'utf8'));
- assert.equal(saved.reviewer,'Clienta de prueba');assert.deepEqual(saved.notes.map(n=>n.anchor.kind),['room','view']);
- assert.match(await c.locator('#shareStatus').innerText(),/Archivo guardado/);
- // In-page anchors still move within the document.
- assert.equal(await c.evaluate(()=>{location.hash='#shareReview';return location.hash;}),'#shareReview');
- if(SHOTS){await fs.mkdir(SHOTS,{recursive:true});for(const [w,hh] of [[390,844],[768,1024],[1280,800],[1440,900]]){await c.setViewportSize({width:w,height:hh});await c.locator('#shareReview').scrollIntoViewIfNeeded();await c.screenshot({path:path.join(SHOTS,`view-iso-${w}-observaciones.png`)});}}
- assert.deepEqual(errors,[]);assert.deepEqual(h.external,[]);
+ // «Guardar archivo de observaciones», from the keyboard, downloads the file the professional imports.
+ await c.locator('#shareSave').focus();const dl=c.waitForEvent('download');await c.keyboard.press('Enter');const file=await dl;assert.equal(file.suggestedFilename(),`observaciones-${d.versionCode}.json`);
+ const saved=path.join(dir,kind+'-'+file.suggestedFilename());await file.saveAs(saved);const doc=Notes.read(await fs.readFile(saved,'utf8'));
+ assert.equal(doc.reviewer,'Clienta de prueba');assert.equal(doc.versionCode,d.versionCode);assert.deepEqual(doc.notes.map(n=>[n.anchor.kind,n.text]),[['room','Más luz aquí.'],['view','Me gusta esta vista.']]);
+ assert.match(await c.locator('#shareStatus').innerText(),/Archivo guardado\. Envíaselo al profesional/);
+ // Nothing travels: the page, then the video, and no other request.
+ assert.deepEqual([...new Set(d.requests)].sort(),[link(d.name),`https://${HOST}/rubik-share/casa-Vd78.webm`].sort());
+ assert.deepEqual(errors,[]);assert.deepEqual(d.h.external,[]);
 });
 
-test('[cambio] observations are not kept after a reload any more (no storage in an isolated page) and the page says so',{timeout:420000},async t=>{
- const {h,open}=await realDocument(t);const {c,errors}=await open();await c.locator('#shareReview').waitFor();
+for(const [kind,tag] of [['new','[cambio] '],['old','[defect] ']])
+test(`${tag}${kind==='new'?'a new document':'a document published before #195'}: after a reload, or closing and opening the link again, the observations are gone and the notice is there`,{timeout:480000},async t=>{
+ const d=await openDocument(t,kind),{c,errors}=await d.open();await c.locator('#shareReview').waitFor();
  await c.locator('#shareText').fill('Nota que se pierde al recargar.');await c.locator('#shareAdd').click();assert.equal(await c.locator('#shareNotes li').count(),1);
- // Before: kept in the app's storage, readable by any other published document. Now: kept only while the page is open.
- const notice=c.locator('#shareVolatile');assert.equal(await notice.isVisible(),true,'the page warns that observations are only kept while it is open');
- assert.match(await notice.innerText(),/no se conservan[\s\S]*Guarda el archivo/);
- await c.reload();await c.locator('#shareReview').waitFor();assert.equal(await c.locator('#shareNotes li').count(),0);
- if(SHOTS){await fs.mkdir(SHOTS,{recursive:true});await notice.scrollIntoViewIfNeeded();await c.screenshot({path:path.join(SHOTS,'view-iso-1280-aviso.png')});}
- assert.deepEqual(errors,[]);assert.deepEqual(h.external,[]);
+ assert.equal(await notice(c).count(),1,'the page warns before anything is lost');assert.match((await notice(c).innerText()).trim(),CONTRACT);
+ await c.reload();await c.locator('#shareReview').waitFor();assert.equal(await c.locator('#shareNotes li').count(),0,'not kept after a reload');assert.equal(await notice(c).count(),1);
+ await c.locator('#shareText').fill('Otra nota.');await c.locator('#shareAdd').click();await c.close();
+ const again=await d.open();await again.c.locator('#shareReview').waitFor();assert.equal(await again.c.locator('#shareNotes li').count(),0,'not kept after closing');assert.equal(await notice(again.c).count(),1);
+ if(SHOTS){await fs.mkdir(SHOTS,{recursive:true});await notice(again.c).scrollIntoViewIfNeeded();await again.c.screenshot({path:path.join(SHOTS,`view-iso-1280-aviso-${kind==='new'?'nuevo':'antiguo'}.png`)});}
+ assert.deepEqual([...errors,...again.errors],[]);assert.deepEqual(d.h.external,[]);
+});
+
+test('a withdrawn link answers «no longer available», not cached, for new and old documents alike',{timeout:480000},async t=>{
+ for(const kind of ['new','old']){const d=await openDocument(t,kind);d.h.store.delete(`/rubik-share/${d.name}`);const {c,resp}=await d.open();
+  assert.equal(resp.status(),404);assert.equal(resp.headers()['cache-control'],'no-store');assert.match(await c.locator('body').innerText(),/ya no está disponible/);}
+});
+
+test('visual QA at 390×844, 768×1024, 1280×800 and 1440×900: notice, form, plan, notes, save and its message fit, with a visible keyboard focus',{timeout:600000},async t=>{
+ for(const kind of ['new','old'])for(const [width,height] of [[390,844],[768,1024],[1280,800],[1440,900]]){
+  const d=await openDocument(t,kind,{width,height}),{c,errors}=await d.open(),at=`${kind} ${width}×${height}`;await c.locator('#shareReview').waitFor();
+  const fits=()=>c.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1);
+  assert.ok(await fits(),at+': no horizontal scroll');
+  for(const sel of ['#shareVolatile, #rubikViewNotice','#sharePlanPick','#shareText','#shareAdd','#shareSave','#shareTour video']){const b=await c.locator(sel).filter({visible:true}).first().boundingBox();assert.ok(b&&b.x>=0&&b.x+b.width<=width+1,`${at}: ${sel} inside the page width`);}
+  await c.locator('#shareText').fill('Comprobación visual.');await c.locator('#shareAdd').click();
+  await c.locator('#shareAdd').focus();await c.keyboard.press('Tab');
+  const focus=await c.evaluate(()=>{const a=document.activeElement,cs=getComputedStyle(a);return {id:a.id,visible:a.matches(':focus-visible'),ring:cs.outlineStyle!=='none'||cs.boxShadow!=='none'};});
+  assert.deepEqual(focus,{id:'shareSave',visible:true,ring:true},at+': keyboard focus on «Guardar» is visible');
+  if(SHOTS){await fs.mkdir(SHOTS,{recursive:true});await notice(c).scrollIntoViewIfNeeded();await c.screenshot({path:path.join(SHOTS,`view-iso-${kind==='new'?'nuevo':'antiguo'}-${width}-aviso-formulario.png`)});}
+  const dl=c.waitForEvent('download');await c.keyboard.press('Enter');await dl;assert.match(await c.locator('#shareStatus').innerText(),/Archivo guardado/);
+  assert.ok(await fits(),at+': still no horizontal scroll with notes');
+  if(SHOTS){await c.locator('#shareNotes').scrollIntoViewIfNeeded();await c.screenshot({path:path.join(SHOTS,`view-iso-${kind==='new'?'nuevo':'antiguo'}-${width}-guardado.png`)});}
+  assert.deepEqual(errors,[]);await d.context.close();}
 });
