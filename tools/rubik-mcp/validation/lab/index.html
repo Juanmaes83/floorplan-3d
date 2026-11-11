@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio MCP Etapa 2</title>
+<style>
+:root{--bg:#f4f1ea;--ink:#1f2421;--muted:#5d625b;--room:#ece4d4;--wall:#2b302c;--target:#c0392b;--cand:#1e7d4f;--rej:#d97a00;--audit:#2463b5;--panel:#fffdf8;--line:#d6cdbd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,sans-serif}
+.banner{background:#7a1f1f;color:#fff;font-weight:700;letter-spacing:.02em;padding:8px 14px;font-size:13px;text-align:center}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:12px;padding:12px;height:calc(100vh - 38px)}
+.stage{background:#fff;border:1px solid var(--line);border-radius:6px;position:relative;min-height:0}
+svg{width:100%;height:100%;display:block}
+aside{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow:auto;min-height:0}
+h1{font-size:16px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.badge{display:inline-block;padding:3px 9px;border-radius:12px;font-weight:700;font-size:13px;color:#fff}
+.s-candidate-reviewable{background:var(--cand)}.s-pending{background:var(--rej)}.s-blocked{background:#8e1d1d}.s-no-change-needed{background:#3d5a80}
+dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 10px;margin:10px 0;font-size:13px}
+dt{color:var(--muted)}dd{margin:0;overflow-wrap:anywhere}
+.applied{margin-top:10px;padding:8px;border:2px solid #7a1f1f;border-radius:6px;font-weight:800;text-align:center;color:#7a1f1f}
+pre{background:#f1ede4;border-radius:4px;padding:8px;font-size:11px;max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.step{font-weight:700;color:#7a1f1f;margin:6px 0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--muted);margin:8px 0}
+.legend i{display:inline-block;width:14px;height:10px;margin-right:4px;vertical-align:middle;border:2px solid}
+@media (max-width:900px){main{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(260px,55vh) auto;height:auto}aside{max-height:none}}
+@media (max-height:500px) and (orientation:landscape){main{grid-template-columns:minmax(0,1fr) 300px;height:auto}.stage{height:calc(100vh - 62px)}aside{max-height:calc(100vh - 62px)}}
+</style>
+</head>
+<body data-step="7">
+<div class="banner" id="banner">LABORATORIO DE VALIDACIÓN MCP ETAPA 2 — PROPUESTA NO APLICADA</div>
+<main>
+ <div class="stage"><svg id="plan" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plano del escenario"></svg></div>
+ <aside id="panel"></aside>
+</main>
+<!-- Product modules, in the order index.html loads them: the lab draws with Rubik's own geometry, never its own. -->
+<script src="../../../../js/project-schema.js"></script>
+<script src="../../../../js/reference-project.js"></script>
+<script src="../../../../js/parcel-core.js"></script>
+<script src="../../../../js/orthophoto-core.js"></script>
+<script src="../../../../js/terrain-core.js"></script>
+<script src="../../../../js/territory-integration-core.js"></script>
+<script src="../../../../js/territory-export-policy.js"></script>
+<script src="../../../../js/geo-provider.js"></script>
+<script src="../../../../js/geo-site-adapter.js"></script>
+<script src="../../../../js/parcel-site-adapter.js"></script>
+<script src="../../../../js/orthophoto-site-adapter.js"></script>
+<script src="../../../../js/terrain-site-adapter.js"></script>
+<script src="../../../../js/project-core.js"></script>
+<script src="../../../../js/tracing-core.js"></script>
+<script src="../../../../js/layout-review.js"></script>
+<script src="../../../../js/furniture-placement.js"></script>
+<script src="lab-data.js"></script>
+<script src="lab.js"></script>
+</body>
+</html>

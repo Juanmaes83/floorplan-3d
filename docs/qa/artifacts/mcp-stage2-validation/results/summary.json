@@ -1,0 +1,364 @@
+{
+  "codeSha": "369c5b7d516afb55ded16054851504696dca3440",
+  "node": "v22.23.4",
+  "generatedAt": "2026-11-11T19:24:04.384Z",
+  "proposals": [
+    {
+      "fixture": "overlap",
+      "label": "A-overlap-candidate",
+      "expect": "candidate-reviewable",
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 2600,
+        "y": 1500
+      },
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "overlap",
+      "label": "B-overlap-door-no-change",
+      "expect": "no-change-needed",
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "overlap",
+      "label": "C-budget-exhausted",
+      "expect": "pending",
+      "status": "pending",
+      "code": "search-budget-exhausted",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "overlap",
+      "label": "D-id-missing",
+      "expect": "blocked",
+      "status": "blocked",
+      "code": "object-not-found",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "overlap",
+      "label": "D-not-furniture",
+      "expect": "blocked",
+      "status": "blocked",
+      "code": "not-furniture",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "overlap",
+      "label": "D-stale-hash",
+      "expect": "blocked",
+      "status": "blocked",
+      "code": "stale-source",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "door-blocked",
+      "label": "A-door-candidate",
+      "expect": "candidate-reviewable",
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 1900,
+        "y": 300
+      },
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "door-blocked",
+      "label": "D-door-invalid",
+      "expect": "blocked",
+      "status": "blocked",
+      "code": "opening-not-found",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "rotated",
+      "label": "A-rotated-candidate",
+      "expect": "candidate-reviewable",
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 3300,
+        "y": 1500
+      },
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "correct",
+      "label": "B-correct",
+      "expect": "no-change-needed",
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "door-square-only",
+      "label": "B-D3-square-not-leaf",
+      "expect": "no-change-needed",
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "ambiguous-room",
+      "label": "C-ambiguous-room",
+      "expect": "pending",
+      "status": "pending",
+      "code": "ambiguous-room",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "door-without-swing",
+      "label": "C-D1-door-swing-missing",
+      "expect": "pending",
+      "status": "pending",
+      "code": "door-swing-missing",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "door-without-swing",
+      "label": "A-D1-overlap-with-swingless-door",
+      "expect": "candidate-reviewable",
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 2600,
+        "y": 1500
+      },
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "swingless-inward",
+      "label": "F1-assumed-swing-conflict",
+      "expect": "candidate-reviewable",
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 2250,
+        "y": 2800
+      },
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "models-disagree-before",
+      "label": "C-D2-models-disagree",
+      "expect": "pending",
+      "status": "pending",
+      "code": "models-disagree",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "models-disagree-after",
+      "label": "C-D2-rejected-step500",
+      "expect": "pending",
+      "status": "pending",
+      "code": "goal-not-confirmed",
+      "suggested": null,
+      "rejected": {
+        "x": 2600,
+        "y": 1500
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "models-disagree-after",
+      "label": "C-D2-rejected-default-step",
+      "expect": "pending",
+      "status": "pending",
+      "code": "goal-not-confirmed",
+      "suggested": null,
+      "rejected": {
+        "x": 2600,
+        "y": 1500
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "introduces-issue",
+      "label": "C-introduces-step600",
+      "expect": "pending",
+      "status": "pending",
+      "code": "candidate-introduces-issues",
+      "suggested": null,
+      "rejected": {
+        "x": 600,
+        "y": 400
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "introduces-issue",
+      "label": "C-introduces-default-step",
+      "expect": "pending",
+      "status": "pending",
+      "code": "candidate-introduces-issues",
+      "suggested": null,
+      "rejected": {
+        "x": 600,
+        "y": 900
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "outside",
+      "label": "D-outside-rooms",
+      "expect": "blocked",
+      "status": "blocked",
+      "code": "object-outside-rooms",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_bed-01-resolve",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_sofa-01-resolve",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_toilet-01-resolve",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_bed-01-opn_entrance",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_sofa-01-opn_entrance",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_toilet-01-opn_entrance",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_bed-01-opn_bath-door",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_sofa-01-opn_bath-door",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "contract-example",
+      "label": "E-obj_toilet-01-opn_bath-door",
+      "expect": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    }
+  ]
+}

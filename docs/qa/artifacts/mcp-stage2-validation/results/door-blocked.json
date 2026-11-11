@@ -1,0 +1,1486 @@
+{
+  "fixture": "door-blocked",
+  "source": "validation/validation-projects.cjs:door-blocked",
+  "command": "node tools/rubik-mcp/src/server.mjs --project <tmp>/door-blocked/project.json",
+  "serverInfo": {
+    "name": "rubik-floorplan-readonly",
+    "version": "0.1.4"
+  },
+  "protocolVersion": "2025-06-18",
+  "tools": [
+    {
+      "name": "check_route_2d",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "diagnose_project",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_element",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_summary",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "inspect_pair_clearance",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_project_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "measure_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "propose_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "review_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "toolsAsExpected": true,
+  "allReadOnly": true,
+  "summarySha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+  "scaleConfidence": "estimated",
+  "reviewStatus": "partial",
+  "reviewFindings": [
+    {
+      "code": "puerta",
+      "objects": [
+        "opn_door",
+        "obj_chair"
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "label": "A-door-candidate",
+      "expect": "candidate-reviewable",
+      "arguments": {
+        "expectedSha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+        "objectId": "obj_chair",
+        "goal": "clear-door-swing",
+        "openingId": "opn_door"
+      },
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 1900,
+        "y": 300
+      },
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "candidate-reviewable",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_chair",
+        "openingId": "opn_door",
+        "object": {
+          "id": "obj_chair",
+          "type": "chair",
+          "name": "chair"
+        },
+        "problem": {
+          "code": "door-leaf-contact",
+          "openingId": "opn_door",
+          "contactDeg": 9.5,
+          "description": "La hoja de la puerta (800 mm) alcanza «chair» al abrir unos 9° de 90° (layout-review)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 1300,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": {
+          "position": {
+            "x": 1900,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "distanceMm": 600,
+        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (323 candidata(s) probadas), a 600 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_door",
+                "detail": "Invade el barrido de una puerta."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "puerta",
+                "objects": [
+                  "opn_door",
+                  "obj_chair"
+                ],
+                "measurementDeg": 9,
+                "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+              }
+            ]
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 800,
+            "reviewLeafContactDeg": 9.5,
+            "placementSquareHit": true,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            },
+            "reviewLeafContactDegAfter": null
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [
+          {
+            "code": "moves-position-only",
+            "message": "Solo cambia la posición de «chair»: de (1300, 300) a (1900, 300) mm. ID, tamaño, giro y estancia se conservan."
+          },
+          {
+            "code": "door-leaf-clear",
+            "openingId": "opn_door",
+            "message": "Según layout-review, la hoja de la puerta deja de alcanzar el mueble al abrir 90°."
+          },
+          {
+            "code": "resolves-door",
+            "id": "opn_door",
+            "message": "Resuelve en el modelo de colocación: Invade el barrido de una puerta."
+          },
+          {
+            "code": "review-clears-puerta",
+            "objects": [
+              "opn_door",
+              "obj_chair"
+            ],
+            "message": "Deja de aparecer en layout-review: La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+          }
+        ],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.find",
+          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 50,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 323,
+          "budgetExhausted": false,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "D-door-invalid",
+      "expect": "blocked",
+      "arguments": {
+        "expectedSha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+        "objectId": "obj_chair",
+        "goal": "clear-door-swing",
+        "openingId": "opn_missing"
+      },
+      "status": "blocked",
+      "code": "opening-not-found",
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "blocked",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_chair",
+        "openingId": "opn_missing",
+        "object": {
+          "id": "obj_chair",
+          "type": "chair",
+          "name": "chair"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1300,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_door",
+                "detail": "Invade el barrido de una puerta."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "puerta",
+                "objects": [
+                  "opn_door",
+                  "obj_chair"
+                ],
+                "measurementDeg": 9,
+                "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+              }
+            ]
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "opening-not-found",
+            "message": "No existe un hueco con ese openingId en el JSON seleccionado."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ],
+  "integrity": {
+    "before": {
+      "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+      "size": 4083,
+      "mtimeMs": 1794425040774.4155,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "after": {
+      "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+      "size": 4083,
+      "mtimeMs": 1794425040774.4155,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "sameBytes": true,
+    "sameSha": true,
+    "sameSize": true,
+    "sameMtime": true,
+    "sameListing": true,
+    "summaryMatchesFile": true
+  },
+  "protocol": {
+    "stdoutLines": 11,
+    "nonJsonRpcLines": 0,
+    "stderr": "Rubik MCP local de solo lectura iniciado.",
+    "exit": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "transcript": [
+    {
+      "tool": "get_project_summary",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4083,
+          "modifiedAt": "2026-11-11T19:24:00.774Z"
+        },
+        "units": "mm",
+        "scaleConfidence": "estimated",
+        "counts": {
+          "rooms": 1,
+          "roomsCountingTowardArea": 1,
+          "walls": 4,
+          "openings": 1,
+          "objects": 1,
+          "sourceImages": 0
+        },
+        "usefulAreaM2": 12,
+        "note": "La superficie se deriva de los polígonos de estancia del JSON; no es una medición certificada."
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "rooms"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4083,
+          "modifiedAt": "2026-11-11T19:24:00.774Z"
+        },
+        "kind": "rooms",
+        "total": 1,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "rom_living",
+            "name": "living",
+            "polygon": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 4000,
+                "y": 0
+              },
+              {
+                "x": 4000,
+                "y": 3000
+              },
+              {
+                "x": 0,
+                "y": 3000
+              }
+            ],
+            "countsTowardArea": true,
+            "areaM2": 12,
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "own_id"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "objects"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4083,
+          "modifiedAt": "2026-11-11T19:24:00.774Z"
+        },
+        "kind": "objects",
+        "total": 1,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "obj_chair",
+            "type": "chair",
+            "name": "chair",
+            "position": {
+              "x": 1300,
+              "y": 300
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "openings"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4083,
+          "modifiedAt": "2026-11-11T19:24:00.774Z"
+        },
+        "kind": "openings",
+        "total": 1,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "opn_door",
+            "wallId": "wal_south",
+            "kind": "door",
+            "offsetMm": 1000,
+            "widthMm": 800,
+            "heightMm": 2100,
+            "sillHeightMm": 0,
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "opening_span_polygon_contact",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 0,
+                  "contactLengthMm": 800
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "review_layout",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4083,
+          "modifiedAt": "2026-11-11T19:24:00.774Z"
+        },
+        "status": "partial",
+        "units": "mm",
+        "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+        "scaleConfidence": "estimated",
+        "checks": {
+          "solapes": {
+            "status": "checked"
+          },
+          "holgura": {
+            "status": "insufficient_evidence",
+            "reason": "Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado."
+          },
+          "puertas": {
+            "status": "checked"
+          }
+        },
+        "findings": [
+          {
+            "code": "puerta",
+            "objects": [
+              "opn_door",
+              "obj_chair"
+            ],
+            "openingId": "opn_door",
+            "measurementDeg": 9,
+            "evidence": {
+              "kind": "door",
+              "hinge": {
+                "x": 900,
+                "y": 0
+              },
+              "radiusMm": 800,
+              "closed": {
+                "x": 1,
+                "y": 0
+              },
+              "open": {
+                "x": 0,
+                "y": 1
+              },
+              "contactDeg": 9.462322208025617,
+              "leaf": [
+                {
+                  "x": 900,
+                  "y": 0
+                },
+                {
+                  "x": 1689.115139065715,
+                  "y": 131.51918984428582
+                }
+              ],
+              "footprint": [
+                {
+                  "x": 1100,
+                  "y": 100
+                },
+                {
+                  "x": 1500,
+                  "y": 100
+                },
+                {
+                  "x": 1500,
+                  "y": 500
+                },
+                {
+                  "x": 1100,
+                  "y": 500
+                }
+              ]
+            },
+            "method": "Barrido de la hoja como cuarto de círculo de radio igual al ancho del hueco, con la bisagra y el sentido guardados (igual que el plano 2D)",
+            "limitation": "Hoja de grosor nulo y apertura completa de 90°; no evalúa altura, tiradores ni el lado opuesto.",
+            "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+          }
+        ],
+        "excluded": [],
+        "skipped": [],
+        "unsupported": [
+          {
+            "check": "altura",
+            "reason": "No se evalúa altura ni elevación: solo huellas en planta."
+          },
+          {
+            "check": "muros",
+            "reason": "La holgura se mide entre muebles, no entre un mueble y un muro (W3 ya avisa de solapes con muros)."
+          },
+          {
+            "check": "circulacion",
+            "reason": "No calcula recorridos de paso completos, giros ni entrega de muebles."
+          },
+          {
+            "check": "normativa",
+            "reason": "No comprueba normativa ni accesibilidad; el umbral lo fija la persona."
+          },
+          {
+            "check": "mallas",
+            "reason": "Usa el tamaño guardado del objeto, no la malla 3D del modelo."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+        "objectId": "obj_chair",
+        "goal": "clear-door-swing",
+        "openingId": "opn_door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "candidate-reviewable",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_chair",
+        "openingId": "opn_door",
+        "object": {
+          "id": "obj_chair",
+          "type": "chair",
+          "name": "chair"
+        },
+        "problem": {
+          "code": "door-leaf-contact",
+          "openingId": "opn_door",
+          "contactDeg": 9.5,
+          "description": "La hoja de la puerta (800 mm) alcanza «chair» al abrir unos 9° de 90° (layout-review)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 1300,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": {
+          "position": {
+            "x": 1900,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "distanceMm": 600,
+        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (323 candidata(s) probadas), a 600 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_door",
+                "detail": "Invade el barrido de una puerta."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "puerta",
+                "objects": [
+                  "opn_door",
+                  "obj_chair"
+                ],
+                "measurementDeg": 9,
+                "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+              }
+            ]
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 800,
+            "reviewLeafContactDeg": 9.5,
+            "placementSquareHit": true,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            },
+            "reviewLeafContactDegAfter": null
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [
+          {
+            "code": "moves-position-only",
+            "message": "Solo cambia la posición de «chair»: de (1300, 300) a (1900, 300) mm. ID, tamaño, giro y estancia se conservan."
+          },
+          {
+            "code": "door-leaf-clear",
+            "openingId": "opn_door",
+            "message": "Según layout-review, la hoja de la puerta deja de alcanzar el mueble al abrir 90°."
+          },
+          {
+            "code": "resolves-door",
+            "id": "opn_door",
+            "message": "Resuelve en el modelo de colocación: Invade el barrido de una puerta."
+          },
+          {
+            "code": "review-clears-puerta",
+            "objects": [
+              "opn_door",
+              "obj_chair"
+            ],
+            "message": "Deja de aparecer en layout-review: La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+          }
+        ],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.find",
+          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 50,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 323,
+          "budgetExhausted": false,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+        "objectId": "obj_chair",
+        "goal": "clear-door-swing",
+        "openingId": "opn_door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "candidate-reviewable",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_chair",
+        "openingId": "opn_door",
+        "object": {
+          "id": "obj_chair",
+          "type": "chair",
+          "name": "chair"
+        },
+        "problem": {
+          "code": "door-leaf-contact",
+          "openingId": "opn_door",
+          "contactDeg": 9.5,
+          "description": "La hoja de la puerta (800 mm) alcanza «chair» al abrir unos 9° de 90° (layout-review)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 1300,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": {
+          "position": {
+            "x": 1900,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "distanceMm": 600,
+        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (323 candidata(s) probadas), a 600 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_door",
+                "detail": "Invade el barrido de una puerta."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "puerta",
+                "objects": [
+                  "opn_door",
+                  "obj_chair"
+                ],
+                "measurementDeg": 9,
+                "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+              }
+            ]
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 800,
+            "reviewLeafContactDeg": 9.5,
+            "placementSquareHit": true,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            },
+            "reviewLeafContactDegAfter": null
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [
+          {
+            "code": "moves-position-only",
+            "message": "Solo cambia la posición de «chair»: de (1300, 300) a (1900, 300) mm. ID, tamaño, giro y estancia se conservan."
+          },
+          {
+            "code": "door-leaf-clear",
+            "openingId": "opn_door",
+            "message": "Según layout-review, la hoja de la puerta deja de alcanzar el mueble al abrir 90°."
+          },
+          {
+            "code": "resolves-door",
+            "id": "opn_door",
+            "message": "Resuelve en el modelo de colocación: Invade el barrido de una puerta."
+          },
+          {
+            "code": "review-clears-puerta",
+            "objects": [
+              "opn_door",
+              "obj_chair"
+            ],
+            "message": "Deja de aparecer en layout-review: La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+          }
+        ],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.find",
+          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 50,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 323,
+          "budgetExhausted": false,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+        "objectId": "obj_chair",
+        "goal": "clear-door-swing",
+        "openingId": "opn_missing"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "blocked",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_chair",
+        "openingId": "opn_missing",
+        "object": {
+          "id": "obj_chair",
+          "type": "chair",
+          "name": "chair"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1300,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_door",
+                "detail": "Invade el barrido de una puerta."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "puerta",
+                "objects": [
+                  "opn_door",
+                  "obj_chair"
+                ],
+                "measurementDeg": 9,
+                "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+              }
+            ]
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "opening-not-found",
+            "message": "No existe un hueco con ese openingId en el JSON seleccionado."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+        "objectId": "obj_chair",
+        "goal": "clear-door-swing",
+        "openingId": "opn_missing"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "blocked",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "07f49a4339ba7d2ae5979d42b957e499cc3f3682797b67e1efd390e8e7bfd2b4",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_chair",
+        "openingId": "opn_missing",
+        "object": {
+          "id": "obj_chair",
+          "type": "chair",
+          "name": "chair"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1300,
+            "y": 300
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 400
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_door",
+                "detail": "Invade el barrido de una puerta."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "puerta",
+                "objects": [
+                  "opn_door",
+                  "obj_chair"
+                ],
+                "measurementDeg": 9,
+                "message": "La hoja de la puerta de 800 mm alcanza «chair» al abrir unos 9° de 90°."
+              }
+            ]
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "opening-not-found",
+            "message": "No existe un hueco con ese openingId en el JSON seleccionado."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ]
+}
