@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SCULPT-R03 · armarios paramétricos</title>
+<link rel="icon" href="data:,">
+<style>
+ :root{--bg:#f5f6f8;--ink:#1c2330;--muted:#596273;--card:#fff;--line:#d8dde5;--accent:#1f6fd1;--donor:#c2410c;--wall:#3b4350;--bad:#b42318;--ok:#1b7a43;--warn:#9a6b00;
+  --board:#b99b74;--carcass:#e7d5ba;--cavity:#fffaf1;--drawer:#d5b38b;--rod:#6b7f86;--sector:rgba(31,111,209,.16);--square:#1f6fd1;--furn:#cfd6df}
+ *{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{margin:0;font:14px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+ header{padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line)}h1{margin:0 0 6px;font-size:18px}
+ .banner{display:block;padding:8px 10px;border-radius:8px;background:#fdecea;color:#7a1a10;font-weight:700;font-size:13px}
+ header p{margin:6px 0 0;color:var(--muted)}label{font-weight:600}
+ select,input,button{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line);max-width:100%;background:#fff;color:var(--ink)}
+ button{cursor:pointer}button:hover{border-color:var(--accent)}button:disabled{opacity:.45;cursor:default}
+ .controls{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:end;margin-top:10px}.controls>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+ main{padding:16px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))}
+ section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}h2{margin:0 0 8px;font-size:15px}
+ svg,canvas{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:6px;background:#fff}
+ svg text{font-family:system-ui,sans-serif;fill:var(--ink)}
+ #plan{max-height:min(62vh,560px)}#elev{max-height:min(70vh,620px)}
+ .wide{grid-column:1/-1}table{width:100%;border-collapse:collapse;font-size:12px}td,th{border-top:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top}th{font-weight:600}
+ .tablewrap{overflow-x:auto}.ok{color:var(--ok)}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn)}.muted{color:var(--muted)}
+ .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:6px}.legend i{display:inline-block;width:14px;height:10px;margin-right:4px;vertical-align:middle;border-radius:2px}
+ #err{color:var(--bad);min-height:1.4em;margin-top:6px}ul{margin:4px 0 0 18px;padding:0}pre{max-height:320px;overflow:auto;font-size:11px;background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:8px}
+ @media (max-width:520px){main{padding:10px}header{padding:12px 10px}.controls>div{flex:1 1 140px}}
+</style>
+</head>
+<body>
+<header>
+ <h1>SCULPT-R03 · armarios paramétricos: particiones, baldas, barras, cajones y puertas</h1>
+ <span class="banner" role="note">LABORATORIO SCULPT-R03 — NO INTEGRADO EN RUBIK — NO VALIDADO PARA FABRICACIÓN NI PEDIDO</span>
+ <p>Motor del donante (caikaidev/floorplan-3d @2495d8e, MIT + D.6) esculpido y comparado con RUBIK. Escenarios sintéticos; las ediciones viven solo en esta página y no se aplican a ningún proyecto.</p>
+ <div class="controls">
+  <div><label for="sc">Escenario</label><select id="sc"></select></div>
+  <div><label for="front">Puertas en 3D</label><select id="front"><option value="closed">cerradas</option><option value="hidden">ocultas (interior)</option><option value="open">abiertas</option></select></div>
+  <div><label for="bay">Partición</label><select id="bay"></select></div>
+  <div><label for="shelves">Baldas (mm, cara inferior)</label><input id="shelves" inputmode="decimal" size="16"></div>
+  <div><label for="rod">Barra (mm, 0 = sin barra)</label><input id="rod" type="number" min="0" step="1" size="6"></div>
+  <div><label for="drawers">Cajones</label><input id="drawers" type="number" min="0" max="6" step="1" size="3"></div>
+  <div><button id="apply">Aplicar partición</button></div>
+  <div><button id="split">Dividir</button></div>
+  <div><button id="merge">Unir</button></div>
+  <div><button id="reset">Restablecer</button></div>
+ </div>
+ <div id="err" role="alert"></div>
+</header>
+<main>
+ <section><h2>Alzado frontal (taller esculpido)</h2><svg id="elev" viewBox="0 0 10 10" role="img" aria-label="Alzado del armario en milímetros"></svg>
+  <div class="legend"><span><i style="background:var(--board)"></i>tablero / balda</span><span><i style="background:var(--drawer)"></i>cajón</span><span><i style="background:var(--rod)"></i>barra</span><span><i style="border:1px dashed var(--accent)"></i>puerta (bisagra ▲)</span></div></section>
+ <section><h2>3D · <span class="muted">cabinet-model.js del donante, literal, con three.js r160 de RUBIK</span></h2><canvas id="view3d" width="900" height="640" aria-label="Vista 3D del armario"></canvas></section>
+ <section><h2>Planta · barrido de puertas y cajones</h2><svg id="plan" viewBox="0 0 10 10" role="img" aria-label="Planta con barridos"></svg>
+  <div class="legend"><span><i style="background:var(--sector);border:1px solid var(--accent)"></i>sector 90° (taller)</span><span><i style="border:1px dashed var(--square)"></i>cuadrado (convención RUBIK)</span><span><i style="background:var(--donor)"></i>obstáculo del donante (puerta abierta)</span><span><i style="background:#f6c6c1"></i>conflicto</span></div></section>
+ <section><h2>Evidencia CabinetEvidenceV1</h2><div id="summary"></div></section>
+ <section class="wide"><h2>Comparador · donante ↔ taller ↔ evidencia ↔ RUBIK hoy</h2><div class="tablewrap"><table id="cmp"></table></div><div id="limits" class="muted"></div>
+  <details><summary>JSON de la evidencia</summary><pre id="json"></pre></details></section>
+</main>
+<!-- RUBIK authorities in the app order (index.html): project-core and its dependencies, tracing-core, layout-review, furniture-placement. -->
+<script src="../../../js/project-schema.js"></script>
+<script src="../../../js/reference-project.js"></script>
+<script src="../../../js/parcel-core.js"></script>
+<script src="../../../js/orthophoto-core.js"></script>
+<script src="../../../js/terrain-core.js"></script>
+<script src="../../../js/territory-integration-core.js"></script>
+<script src="../../../js/territory-export-policy.js"></script>
+<script src="../../../js/territory-runtime.js"></script>
+<script src="../../../js/territory-renderer.js"></script>
+<script src="../../../js/geo-provider.js"></script>
+<script src="../../../js/catastro-parcel-provider.js"></script>
+<script src="../../../js/catastro-wfs-provider.js"></script>
+<script src="../../../js/pnoa-orthophoto-provider.js"></script>
+<script src="../../../js/ign-mdt05-terrain-provider.js"></script>
+<script src="../../../js/geo-site-adapter.js"></script>
+<script src="../../../js/parcel-site-adapter.js"></script>
+<script src="../../../js/orthophoto-site-adapter.js"></script>
+<script src="../../../js/terrain-site-adapter.js"></script>
+<script src="../../../js/project-core.js"></script>
+<script src="../../../js/tracing-core.js"></script>
+<script src="../../../js/layout-review.js"></script>
+<script src="../../../js/furniture-placement.js"></script>
+<!-- Donor engine, verbatim (sets globalThis.HomeDesign), then the lab modules. -->
+<script src="workshop/design.js"></script>
+<script src="cabinet-core.js"></script>
+<script src="cabinet-evidence-core.js"></script>
+<script src="cabinet-compare-core.js"></script>
+<script src="fixtures/cabinet-scenarios.js"></script>
+<script type="importmap">{"imports":{"three":"../../../vendor/three/build/three.module.js","three/addons/":"../../../vendor/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { buildCabinet } from './workshop/cabinet-model.js';
+const K = window.RubikCabinetCore, E = window.RubikCabinetEvidence, X = window.RubikR03Compare, S = window.RubikR03Scenarios.SCENARIOS, C = window.FloorPlanCore, T = window.FloorPlanTracing;
+const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
+const esc = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ui = { id: null, cabinet: null, bay: 0, history: 0 };
+const scenario = () => S[ui.id];
+const object = () => scenario().project.objects.find(o => o.id === scenario().objectId);
+const outer = () => ({ w: object().size.widthMm, d: object().size.depthMm });
+
+// ---- 3D (lab helpers written for RUBIK: box with its base at y, materials, rod between two points) ----
+const canvas = $('#view3d'), renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#eef1f5');
+const camera = new THREE.PerspectiveCamera(40, canvas.width / canvas.height, .05, 60);
+const controls = new OrbitControls(camera, canvas); controls.enableDamping = false;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9aa3ad, 1.6)); const sun = new THREE.DirectionalLight(0xffffff, 1.8); sun.position.set(2, 4, 3); scene.add(sun);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.MeshStandardMaterial({ color: '#d9dee5', roughness: 1 })); floor.rotation.x = -Math.PI / 2; scene.add(floor);
+const mats = new Map(), mat = (color, opts = {}) => { const k = color + JSON.stringify(opts); if (!mats.has(k)) mats.set(k, new THREE.MeshStandardMaterial({ color, roughness: .6, ...opts })); return mats.get(k); };
+const metal = () => mat('#9aa4ab', { metalness: .7, roughness: .35 });
+const box = (w, h, d, m, x = 0, y = 0, z = 0) => { const g = new THREE.BoxGeometry(Math.max(w, 1e-4), Math.max(h, 1e-4), Math.max(d, 1e-4)); g.translate(0, h / 2, 0); const mesh = new THREE.Mesh(g, typeof m === 'string' ? mat(m) : m); mesh.position.set(x, y, z); return mesh; };
+const rod = (a, b, r, m) => { const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), L = A.distanceTo(B), g = new THREE.CylinderGeometry(r, r, L, 16); const mesh = new THREE.Mesh(g, m); mesh.position.copy(A).add(B).multiplyScalar(.5); mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize()); return mesh; };
+let cabGroup = null, swingGroup = null;
+function draw3d(ev) {
+  if (cabGroup) scene.remove(cabGroup); if (swingGroup) scene.remove(swingGroup); cabGroup = swingGroup = null;
+  if (!ev.computed) { renderer.render(scene, camera); return; }
+  const o = object(), f = { type: o.type, w: o.size.widthMm, d: o.size.depthMm, color: '#efe6d8', cabinet: ui.cabinet };
+  cabGroup = buildCabinet(f, { THREE, box, mat, rod: (a, b, r, m) => rod(a, b, r, m), metal }); scene.add(cabGroup);
+  // Door swing sectors on the floor (cabinet frame, metres; plan y = 3D z).
+  swingGroup = new THREE.Group();
+  for (const s of K.swing(outer(), ui.cabinet)) {
+    const shape = new THREE.Shape(s.sector.map(p => new THREE.Vector2(p.x / 1000, p.y / 1000)));
+    const m = new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshBasicMaterial({ color: '#1f6fd1', transparent: true, opacity: .22, side: THREE.DoubleSide }));
+    m.rotation.x = Math.PI / 2; m.position.y = .003; swingGroup.add(m);
+  }
+  scene.add(swingGroup);
+  const H = ui.cabinet.height / 1000, W = f.w / 1000, dist = Math.max(W, H) * 1.55 + 1;
+  camera.position.set(W * .55, H * .62, dist); controls.target.set(0, H * .45, .2); controls.update();
+  renderer.render(scene, camera);
+}
+controls.addEventListener('change', () => renderer.render(scene, camera));
+function resize3d() { const w = canvas.clientWidth || 600, h = Math.round(w * .7); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.render(scene, camera); }
+window.addEventListener('resize', resize3d);
+
+// ---- elevation ----
+function drawElevation() {
+  const svg = $('#elev'); svg.replaceChildren();
+  const o = outer(), c = ui.cabinet; if (!c || !Number.isFinite(c.height)) return;
+  const prim = K.elevation(o, c), pad = 120, W = o.w, H = c.height;
+  svg.setAttribute('viewBox', `${-pad} ${-pad} ${W + 2 * pad} ${H + 2 * pad + 60}`);
+  const fill = { carcass: 'var(--carcass)', cavity: 'var(--cavity)', bay: 'transparent', opening: 'transparent', shelf: 'var(--board)', rod: 'var(--rod)', drawer: 'var(--drawer)', handle: '#665848', divider: 'var(--board)', door: 'transparent', overlap: 'var(--bad)' };
+  let s = '';
+  for (const p of prim) {
+    const y = H - p.y - p.h, sel = p.bay === ui.bay && p.role === 'bay';
+    const stroke = p.role === 'door' ? 'stroke="var(--accent)" stroke-dasharray="18 12" stroke-width="3"' : p.role === 'bay' ? `stroke="${sel ? 'var(--accent)' : '#b9ab96'}" stroke-width="${sel ? 8 : 2}"` : p.role === 'drawer' ? 'stroke="#a88863" stroke-width="2"' : p.role === 'overlap' ? 'stroke="var(--bad)" stroke-width="10"' : '';
+    s += `<rect x="${p.x}" y="${y}" width="${p.w}" height="${p.h}" fill="${fill[p.role]}" ${stroke} data-role="${p.role}"${p.bay != null ? ` data-bay="${p.bay}"` : ''}/>`;
+    if (p.role === 'opening' && p.h > 120) s += `<text x="${p.x + p.w / 2}" y="${y + p.h / 2}" text-anchor="middle" font-size="44" fill="#536a61">${p.label}</text>`;
+    if (p.role === 'bay') s += `<text x="${p.x + p.w / 2}" y="${H + 70}" text-anchor="middle" font-size="46">${p.bay + 1} · ${p.label} mm</text>`;
+    if (p.role === 'door') s += `<path d="M${p.hinge === 'left' ? p.x + 20 : p.x + p.w - 20} ${y + 40} l16 28 h-32z" fill="var(--accent)"/>`;
+  }
+  s += `<text x="${W / 2}" y="${-40}" text-anchor="middle" font-size="50">${Math.round(W)} × ${Math.round(H)} mm</text>`;
+  svg.innerHTML = s;
+  svg.querySelectorAll('[data-role="bay"]').forEach(el => el.addEventListener('click', () => { ui.bay = +el.dataset.bay; render(); }));
+}
+// ---- plan ----
+function drawPlan(ev) {
+  const svg = $('#plan'), p = scenario().project, g = C.geometry(p), pts = [...g.walls.flatMap(w => w.poly), ...p.rooms.flatMap(r => r.polygon.map(v => [v.x, v.y]))];
+  const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]), x0 = Math.min(...xs) - 200, y0 = Math.min(...ys) - 200, W = Math.max(...xs) - x0 + 200, H = Math.max(...ys) - y0 + 200;
+  svg.setAttribute('viewBox', `${x0} ${y0} ${W} ${H}`);
+  const poly = (P, attrs) => `<polygon points="${P.map(q => Array.isArray(q) ? q.join(',') : q.x + ',' + q.y).join(' ')}" ${attrs}/>`;
+  const conflicted = new Set(ev.clearance ? ev.clearance.doors.flatMap(d => d.sectorHits.filter(h => h.kind === 'furniture').map(h => h.id)).concat(ev.clearance.blockedBy.filter(b => b.startsWith('furniture:')).map(b => b.slice(10))) : []);
+  let s = p.rooms.map(r => poly(r.polygon, 'fill="#fafbfc" stroke="#c3cad4" stroke-width="10"')).join('') + g.walls.map(w => poly(w.poly, 'fill="var(--wall)"')).join('');
+  for (const o of p.objects) s += poly(T.footprint(o), o.id === scenario().objectId ? 'fill="var(--carcass)" stroke="#8a6d4b" stroke-width="12"' : `fill="${conflicted.has(o.id) ? '#f6c6c1' : 'var(--furn)'}" stroke="${conflicted.has(o.id) ? 'var(--bad)' : '#8b95a3'}" stroke-width="10" data-obj="${esc(o.id)}"`);
+  if (ev.clearance) {
+    for (const d of ev.clearance.doors) s += poly(d.plan.square, 'fill="none" stroke="var(--square)" stroke-width="8" stroke-dasharray="40 30"') + poly(d.plan.sector, 'fill="var(--sector)" stroke="var(--accent)" stroke-width="6"') + poly(d.plan.donorSlab, 'fill="var(--donor)"');
+    for (const d of ev.clearance.drawers) { if (d.plan.body) s += poly(d.plan.body, 'fill="rgba(194,65,12,.18)" stroke="var(--donor)" stroke-width="6"'); }
+  }
+  for (const o of p.objects) { const c = o.position; s += `<text x="${c.x}" y="${c.y}" text-anchor="middle" font-size="${Math.max(90, W / 45)}">${esc(o.name)}</text>`; }
+  svg.innerHTML = s;
+}
+// ---- evidence summary and comparator ----
+const yes = (v, good = true) => v === null || v === undefined ? '<span class="muted">sin evaluar</span>' : (v === good ? `<span class="ok">sí</span>` : `<span class="bad">no</span>`);
+function drawSummary(ev, cmp) {
+  const h = ev.height, c = ev.cabinet;
+  let s = `<p><b>Estado del armario:</b> ${esc(c.status)}${c.issues.length ? ` · <span class="bad">${c.issues.length} problema(s): ${c.issues.map(i => esc(i.code)).join(', ')}</span>` : ''}</p>`;
+  s += `<p><b>Altura:</b> armario ${h.cabinetHeightMm ?? '—'} mm sobre ${h.elevationMm} mm · referencia vertical <b>${esc(h.vertical.status)}</b>${h.vertical.clearHeightMm ? ` ${h.vertical.clearHeightMm} mm (${esc(h.vertical.reference)})` : ''} · cabe: ${yes(h.fits)}${h.marginMm != null ? ` (margen ${h.marginMm} mm)` : ''}</p>`;
+  if (ev.computed) s += `<p><b>Hueco útil:</b> ${Math.round(ev.computed.cavity.width)} × ${Math.round(ev.computed.cavity.height)} × ${Math.round(ev.computed.cavity.depth)} mm · ${ev.computed.bays.length} particiones · ${ev.computed.fronts.length} puertas · conflictos bisagra/cajón: ${ev.computed.hingeDrawerConflicts.length ? '<span class="bad">' + ev.computed.hingeDrawerConflicts.join(', ') + '</span>' : '<span class="ok">ninguno</span>'}</p>`;
+  if (ev.clearance) s += `<p><b>Barridos (convención RUBIK):</b> ${ev.clearance.blockedBy.length ? '<span class="bad">' + ev.clearance.blockedBy.map(esc).join(', ') + '</span>' : '<span class="ok">libres</span>'}</p>`;
+  s += `<p><b>previewDiff</b> (no aplicado): ${ev.previewDiff.candidates.map(x => `<code>${esc(x.op)}</code> ${esc(x.path ?? 'interior')} → <b>${esc(x.status)}</b>`).join(' · ')}</p>`;
+  s += `<details><summary>Supuestos usados (${c.assumptions.length})</summary><ul>${c.assumptions.map(a => `<li><code>${esc(a.key)}</code>: ${esc(JSON.stringify(a.value))} — ${esc(a.source)}</li>`).join('')}</ul></details>`;
+  $('#summary').innerHTML = s;
+  const p = cmp.sculpt.parity, row = (k, a, b, c2, d) => `<tr><th>${k}</th><td>${a}</td><td>${b}</td><td>${c2}</td><td>${d}</td></tr>`;
+  const list = v => v == null ? '<span class="muted">—</span>' : v.length ? '<span class="bad">' + v.map(esc).join(', ') + '</span>' : '<span class="ok">ninguno</span>';
+  $('#cmp').innerHTML = `<tr><th></th><th>Donante (literal)</th><th>Taller esculpido</th><th>Evidencia CabinetEvidenceV1</th><th>RUBIK hoy (master)</th></tr>` +
+    row('Validación', esc(cmp.donor.validation), `paridad ${yes(p.validation)}`, esc(ev.cabinet.issues.map(i => i.code).join(', ') || 'válido'), '<span class="muted">sin interior</span>') +
+    row('Geometría interior', '—', Object.entries(p).filter(([k]) => k !== 'validation').map(([k, v]) => `${k} ${yes(v)}`).join(' · ') || '—', ev.computed ? 'calculada' : '—', 'caja genérica') +
+    row('Obstáculos en el barrido de puertas y cajones', `muebles con puertas cerradas ${list(cmp.donor.furnitureInClearance.closed)} · abiertas ${list(cmp.donor.furnitureInClearance.open)}`, 'sector 90° + cuadrado RUBIK, siempre', list(cmp.evidence.blockedBy), `solo la caja: ${list(ev.rubikToday.placementProblems)}`) +
+    row('Altura libre', `usa 2400 de calibración: aviso ${cmp.donor.warnsHeight ? 'sí' : 'no'}`, 'sin valor por defecto', `cabe ${yes(cmp.evidence.fits)}`, `no la evalúa; 3D a ${ev.rubikToday.drawn3dHeightMm ?? 'caja'} ${ev.rubikToday.drawn3dHeightMm ? 'mm fijos' : ''}`) +
+    row('Escritura en el proyecto', 'muta su estado propio', 'nunca muta', 'previewDiff, sin aplicar', 'esquema sin campo de interior');
+  $('#limits').innerHTML = '<b>No evaluado:</b> ' + ev.notEvaluated.map(esc).join(' · ');
+  $('#json').textContent = JSON.stringify(ev, null, 1);
+}
+function bayControls() {
+  const c = ui.cabinet, ok = c && Array.isArray(c.columns) && c.columns.length;
+  $('#bay').innerHTML = ok ? c.columns.map((_, i) => `<option value="${i}" ${i === ui.bay ? 'selected' : ''}>${i + 1}</option>`).join('') : '';
+  const b = ok ? c.columns[Math.min(ui.bay, c.columns.length - 1)] : null;
+  $('#shelves').value = b ? b.shelves.join(', ') : ''; $('#rod').value = b && b.rod != null ? b.rod : 0; $('#drawers').value = b ? b.drawers : 0;
+  $('#front').value = c?.front ?? 'closed';
+  for (const id of ['apply', 'split', 'merge', 'bay', 'shelves', 'rod', 'drawers', 'front']) $('#' + id).disabled = !ok || !ui.ev.computed;
+  $('#merge').disabled = !ok || c.columns.length < 2 || !ui.ev.computed;
+}
+function render() {
+  const s = scenario(), r = E.propose({ project: s.project, objectId: s.objectId, cabinet: ui.cabinet, vertical: s.vertical ?? null });
+  if (!r.ok) { $('#err').textContent = r.error.message; $('#summary').textContent = ''; $('#cmp').innerHTML = ''; ui.ev = null; window.__r03 = { ready: true, id: ui.id, error: r.error.code }; return; }
+  const ev = r.evidence; ui.ev = ev; if (!ui.cabinet) ui.cabinet = ev.cabinet.spec;
+  const cmp = X.compare({ ...s, cabinet: ui.cabinet });
+  ui.bay = Math.min(ui.bay, (ui.cabinet.columns?.length || 1) - 1);
+  drawElevation(); drawPlan(ev); drawSummary(ev, cmp); bayControls(); draw3d(ev);
+  window.__r03 = { ready: true, id: ui.id, evidence: ev, compare: { parity: cmp.sculpt.parity, donor: cmp.donor, evidence: cmp.evidence }, edits: ui.history };
+}
+function edit(result) {
+  if (!result.ok) { $('#err').textContent = result.issues.map(i => i.message).join(' · '); return false; }
+  $('#err').textContent = ''; ui.cabinet = result.cabinet; ui.history++; render(); return true;
+}
+function select(id) { ui.id = id; ui.cabinet = S[id].cabinet ? structuredClone(S[id].cabinet) : null; ui.bay = 0; ui.history = 0; $('#err').textContent = ''; render(); }
+$('#sc').innerHTML = Object.entries(S).map(([id, s]) => `<option value="${id}">${esc(s.title)}</option>`).join('');
+$('#sc').addEventListener('change', e => select(e.target.value));
+$('#bay').addEventListener('change', e => { ui.bay = +e.target.value; render(); });
+$('#front').addEventListener('change', e => edit({ ok: true, cabinet: { ...structuredClone(ui.cabinet), front: e.target.value } }));
+$('#apply').addEventListener('click', () => {
+  const raw = $('#shelves').value.trim(), shelves = raw ? raw.split(/[,;\s]+/).filter(Boolean).map(Number).sort((a, b) => a - b) : [];
+  const rod = +$('#rod').value || null, drawers = Math.trunc(+$('#drawers').value);
+  edit(K.setBay(outer(), ui.cabinet, ui.bay, { shelves, rod, drawers }));
+});
+$('#split').addEventListener('click', () => edit(K.splitBay(outer(), ui.cabinet, ui.bay)));
+$('#merge').addEventListener('click', () => edit(K.mergeBay(outer(), ui.cabinet, ui.bay)));
+$('#reset').addEventListener('click', () => select(ui.id));
+const first = new URLSearchParams(location.search).get('s');
+$('#sc').value = S[first] ? first : Object.keys(S)[0];
+resize3d(); select($('#sc').value);
+</script>
+</body>
+</html>

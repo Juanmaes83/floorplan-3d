@@ -1,0 +1,101 @@
+# SCULPT-R03 lab (parametric cabinets). Lab only: labs/ is excluded from Vercel. Nothing in the product changes.
+name: SCULPT-R03 lab
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'labs/sculpt/r03-cabinets/**'
+      - 'tests/sculpt-r03-cabinets.test.cjs'
+      - 'js/furniture-placement.js'
+      - 'js/layout-review.js'
+      - 'js/tracing-core.js'
+      - 'js/project-core.js'
+      - 'js/project-schema.js'
+      - 'vendor/three/**'
+      - '.vercelignore'
+      - '.github/workflows/sculpt-r03-lab.yml'
+permissions:
+  contents: read
+env:
+  PW_VERSION: '1.62.1'
+jobs:
+  lab-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Donor unit tests, unchanged, against the verbatim workshop design.js
+        run: cd labs/sculpt/r03-cabinets/workshop && node --test tests/design.test.cjs
+      - name: Parity, hypotheses H1–H4, CabinetEvidenceV1 and guards
+        run: node --test tests/sculpt-r03-cabinets.test.cjs
+  # SOURCE EXACT rebuilt outside the checkout (runner temp, never uploaded); workshop files checked byte by byte;
+  # the donor's unit tests run in the snapshot (no install, the donor has no package.json).
+  source-exact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Rebuild, verify, refuse overwrite, verify workshop, donor unit baseline
+        run: |
+          L=labs/sculpt/r03-cabinets
+          bash $L/fetch-source-exact.sh "$RUNNER_TEMP/r03-exact"
+          bash $L/fetch-source-exact.sh --verify "$RUNNER_TEMP/r03-exact"
+          if bash $L/fetch-source-exact.sh "$RUNNER_TEMP/r03-exact"; then echo "an existing snapshot must not be overwritten"; exit 1; fi
+          node $L/verify-workshop.cjs "$RUNNER_TEMP/r03-exact"
+          (cd "$RUNNER_TEMP/r03-exact" && node --test tests/design.test.cjs)
+          test -z "$(git status --porcelain)"
+  # The donor's own browser smoke test, unchanged, on a throwaway copy of the snapshot. A preload (RUBIK-authored)
+  # aborts and logs any request leaving 127.0.0.1; a non-empty log fails the job.
+  donor-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Snapshot copy and pinned Playwright (no install scripts)
+        run: |
+          bash labs/sculpt/r03-cabinets/fetch-source-exact.sh "$RUNNER_TEMP/r03-exact"
+          cp -r "$RUNNER_TEMP/r03-exact" "$RUNNER_TEMP/r03-run"
+          npm install --ignore-scripts --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/pw" playwright@$PW_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Donor tests/browser-smoke.cjs (unchanged)
+        run: |
+          : > "$RUNNER_TEMP/blocked.log"
+          cd "$RUNNER_TEMP/r03-run"
+          BLOCKED_LOG="$RUNNER_TEMP/blocked.log" NODE_PATH="$RUNNER_TEMP/pw/node_modules" \
+            node -r "$GITHUB_WORKSPACE/labs/sculpt/r03-cabinets/baseline/no-external-requests.cjs" tests/browser-smoke.cjs
+          if [ -s "$RUNNER_TEMP/blocked.log" ]; then echo "external requests:"; cat "$RUNNER_TEMP/blocked.log"; exit 1; fi
+          cd "$GITHUB_WORKSPACE" && test -z "$(git status --porcelain)"
+  # The lab page in Chromium at 1440×900, 1280×800, 390×844 and 844×390 (no screenshots written in CI).
+  lab-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright (no install scripts)
+        run: |
+          npm install --ignore-scripts --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/pw" playwright@$PW_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Lab QA (console, external requests, scroll, evidence = Node, parity, 3D pixels, refused edits)
+        run: |
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" node labs/sculpt/r03-cabinets/qa/lab-browser-qa.cjs
+          test -z "$(git status --porcelain)"
