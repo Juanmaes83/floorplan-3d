@@ -1,7 +1,7 @@
 # SCULPT-R02-A — Techos interiores, equipos altos y colocación 2D/3D (laboratorio)
 
 **Fecha:** 10/11/2026 · **Rama:** `lab/sculpt-r02-ceiling-layout` (desde `master@75615fd`) · **Laboratorio:** `labs/sculpt/r02-ceiling/` (fuera de Vercel)
-**Estado:** **laboratorio funcional, pendiente de revisión humana. NO integrado en RUBIK. NO validado para diseño técnico reglamentario.**
+**Estado:** **SCULPT-R02-A — laboratorio técnicamente completado, pendiente de aceptación humana** (acta en §14). **GO como laboratorio · HOLD para integración en RUBIK.** NO integrado. NO validado para diseño técnico reglamentario.
 **Registro:** la ficha R02 vive en el catálogo SCULPT (PR #192, alias G4/G5) subordinado al catálogo maestro (relación parcial con LUZ-01 y OBR-04, **sin ID maestro exacto: decisión del propietario**). Este documento no crea cartera ni ola.
 
 ## 1. Objetivo y límites
@@ -102,13 +102,18 @@ footprint · overlap (heredados de 88323f3) ──► furniturePlacement ──�
   - Vertical: desde el suelo indicado en `reference`.
   - El donante mide desde el suelo acabado, con un plano de techo en `height − floorFinish`.
   - RUBIK no tiene suelo acabado. Por eso, la altura derivada de la planta superior se etiqueta `level-floor` y no se mezcla con `finished-floor`. Una declaración que contradice a la derivada da `contradictory`, y entonces no se calcula ninguna cota.
-- **Seguridad:** no recibe permiso de escritura y no hay función `apply`. `previewDiff` solo enumera lo que *se añadiría*, con estado `not-applied`. `validate` rechaza confianzas, lux, vatios, circuitos o certificaciones y cualquier `applied: true`. `serialize`/`parse` hacen ida y vuelta validada.
+- **Seguridad:** no recibe permiso de escritura y no hay función `apply`. `previewDiff` es informativo y **clasifica** cada propuesta (§14):
+  - **candidata revisable:** `would-add`, no aplicada, pendiente de revisión humana;
+  - **pendiente** de datos: sin operación;
+  - **bloqueada:** sin operación, con sus motivos.
+
+  Nunca sustituye una recolocación fallida por la posición original. La contención completa de la huella girada en la estancia se declara **no evaluada**. `validate` rechaza confianzas, lux, vatios, circuitos o certificaciones y cualquier `applied: true`. `serialize`/`parse` hacen ida y vuelta validada.
 - **Cancelación:** el cálculo es síncrono y puro, así que **no se afirma que haya cancelación interrumpible**.
 
 ## 7. Escenarios y pruebas
 `fixtures/ceiling-scenarios.js`: 12 escenarios generados por código, con ids fijos. Ninguno es un plano real.
 
-`tests/sculpt-r02-ceiling-layout.test.cjs`: **18/18**.
+`tests/sculpt-r02-ceiling-layout.test.cjs`: **25/25**. Son 18 + 7 de la auditoría de cierre (§14).
 
 | Caso | Resultado medido |
 |---|---|
@@ -167,6 +172,8 @@ Después, abrir `http://127.0.0.1:8000/labs/sculpt/r02-ceiling/index.html?scenar
 | C5 serialización | — | `serialize`/`parse` con `validate` | Ida y vuelta idéntica; manipular la evidencia da `invalid-evidence` | KEEP |
 | C6 propuestas | — | Sin `apply` ni `cancel`; `previewDiff` con `not-applied` | — | KEEP |
 | C7 comparación | — | Comparador donante, adaptador y RUBIK hoy | Paridad F/D 18/18; delta medido (§5) | KEEP |
+| C8 (cierre, ajuste 1) | `validate()` no recalculaba `lowestPointMm` ni `fitsClearHeight`, y lanzaba `TypeError` si faltaba `size` | Una sola fórmula, `mountFrom()`, para `propose` y `validate`; códigos por defecto; sin excepciones | Con `7f0d523`, un `fitsClearHeight` manipulado se aceptaba y faltar `size` daba `TypeError`. Ahora se rechaza con código | KEEP |
+| C9 (cierre, ajuste 2) | `previewDiff()` daba `would-add` a todo y caía en la posición original | Tres estados; los bloqueados y pendientes no tienen operación | Con `7f0d523`, `no-fit` daba `would-add` en la posición original. Ahora es `blocked`, con `suggestedPosition: null` | KEEP |
 
 ## 10. Conservado, excluido y pendiente
 - **Conservado:** catálogo, capa, descuelgue, caída de cortina, regla de altura libre, cota 3D, colocación respecto a muros (huella girada y contacto permitido) y recolocación del donante.
@@ -209,3 +216,99 @@ No se aplica desde esta rama:
 - Hay cero escritura en el proyecto y los límites son explícitos.
 
 Esto **no** es «apto para integrar»: integrar exige las decisiones 2–5 y una cirugía autorizada.
+
+## 14. Acta de cierre técnico — SCULPT-R02-A (11/11/2026)
+
+**SCULPT-R02-A — LABORATORIO TÉCNICAMENTE COMPLETADO, PENDIENTE DE ACEPTACIÓN HUMANA.**
+**GO COMO LABORATORIO · HOLD PARA INTEGRACIÓN EN RUBIK.**
+
+El código **no** está preparado para entrar en el editor. Cerrar el expediente técnico no cierra ni fusiona la PR #193.
+
+| | |
+|---|---|
+| SHA auditado (inicial) | `7f0d5230cabdd9a57dcd600b6a7424469f77da8d` (CI 13/13) |
+| Correcciones | `d4f9969` (adaptador y pruebas) · `a840f3f` (vista y capturas): **CI 13/13 sobre `a840f3f`**, con `real-3d` en verde al primer intento |
+| SHA final | El HEAD de la PR #193 tras este acta (commit solo de documentación), registrado en la PR y en la ficha R02 de #192 |
+
+### Defecto 1 · validación vertical incompleta
+**Antes:** `validate()` comprobaba `topMm` y `bottomMm`, pero no `lowestPointMm` ni el valor de `fitsClearHeight`. Además, accedía a `size` y `vertical` sin protección.
+
+**Corrección:**
+- `mountFrom(clear, drop, h, curtain)` es la **única fórmula**, y la usan tanto `propose()` como `validate()`.
+- Para cada `mount.status = 'computed'`, `validate()` exige:
+  - `topMm = clearHeightMm − dropMm`
+  - `bottomMm = topMm − heightMm`
+  - `lowestPointMm = bottomMm − curtainLengthMm` (0 si no es cortina)
+  - `fitsClearHeight === (dropMm + heightMm + curtainLengthMm ≤ clearHeightMm)`
+- Códigos que distinguen cada defecto:
+
+  | Código | Defecto |
+  |---|---|
+  | `mount-missing-value:<campo>` | Valor ausente; también `null` tras pasar por JSON |
+  | `mount-non-finite:<campo>` | Valor no finito |
+  | `mount-reference-mismatch` | Referencia vertical distinta de la de la evidencia |
+  | `mount-top`, `mount-bottom`, `mount-lowest` | Relación de cotas incumplida |
+  | `mount-fits` | Estado de cabida incorrecto |
+  | `mount-curtain-incompatible` | Caída de cortina incompatible con el tipo |
+  | `mount-without-ceiling` | Cota calculada sin un techo conocido |
+  | `mount-source` | Origen del descuelgue o de la cortina no declarado |
+  | `mount-unknown-with-values` | Montaje desconocido que trae cotas |
+  | `vertical-missing`, `proposal-size-missing`, `mount-missing`, `plan-missing`, `plan-suggestion-missing`, `proposal-not-object` | Partes ausentes de la evidencia |
+
+- Nunca lanza una excepción. No asigna alturas cuando el dato falta.
+
+### Defecto 2 · `previewDiff()` presentaba como viables propuestas inviables
+**Antes:** `would-add` para todas las propuestas. Si faltaba la posición, usaba la original.
+
+**Corrección:** tres estados, función pura y sin capacidad de escritura.
+
+| Estado | Operación | Cuándo |
+|---|---|---|
+| `candidate-reviewable` | `would-add`, `not-applied`, `review: 'human-required'` | Ningún bloqueo conocido |
+| `pending` | `none` | Montaje desconocido, altura del objeto de suelo desconocida, solape vertical desconocido |
+| `blocked` | `none`, con `reasons` | Recolocación fuera de la estancia, `no-wall-free-position`, `no-integer-pose`, `unsupported-wall-orientation`, `exceeds-clear-height`, `overlap-3d-with:<id>`, `clash-with-floor-object:<id>`, `outside-rooms` |
+
+- Siempre se conservan `originalPosition` y `suggestedPosition`, que puede ser `null`. **Una propuesta bloqueada no tiene posición aplicable.**
+- Un solape solo en planta, sin choque vertical, no bloquea.
+- `notEvaluated` declara expresamente lo no comprobado: contención de la huella girada en la estancia, puertas, escalera y normativa. Queda para la cirugía futura.
+
+### Pruebas antes y después (mismo archivo de pruebas)
+| Código | Resultado |
+|---|---|
+| `7f0d523` | **17 pasan · 8 fallan** |
+| Corregido | **25/25** |
+
+Las 8 que fallan con `7f0d523`:
+- **14 · C5/C6:** su versión anterior aseguraba precisamente el defecto (todo `would-add`). Se ha **sustituido por una aserción más estricta**: 2 bloqueadas y 2 candidatas.
+- **19:** `fitsClearHeight` manipulado aceptado.
+- **20:** NaN, Infinity y valor ausente aceptados.
+- **21:** `TypeError` al faltar `size`.
+- **22:** cortina en un plafón y cota «calculada» sin techo, aceptadas.
+- **23:** sin estados.
+- **24:** `no-fit` convertido en `would-add` en la posición original.
+- **25:** excepción con una propuesta `null`.
+
+### Verificación completa
+- Taller del donante: 1/1.
+- Snapshot reconstruido y verificado; extractos idénticos byte a byte.
+- `model.test.cjs` del donante: 18/18.
+- E2E del donante: 2/2, con 0 peticiones externas.
+- **Paridad F/D 18/18 sin cambios.**
+- Proyecto intacto; ningún archivo del producto carga el laboratorio; 0 archivos del producto modificados.
+- **Evidencias visuales** (`docs/qa/artifacts/sculpt-r02a/`):
+  - 4 tamaños (`floor-layer`);
+  - 7 escenarios: plafón válido, aseo con la propuesta fuera, dos equipos que chocan, altura desconocida, muro diagonal, riel y dos plantas;
+  - sin desplazamiento horizontal, sin errores y sin peticiones externas.
+
+### Riesgos y decisiones que se mantienen
+- **GOV-05 abierto:** contribuciones con coautoría de IA y aviso MIT de wuyi.
+- Contención en la estancia no evaluada.
+- La recolocación del donante solo funciona con muros alineados.
+- Altura desconocida en la planta superior sin declaración.
+- Catálogo de tamaños del donante.
+- `brand.browser` sigue como deuda de CI aparte (esta vez pasó).
+- **Decisiones pendientes para integrar:**
+  1. si hay ID maestro (G4 sigue como investigación);
+  2. el modelo de datos (capa en `objects` + `elevationMm`, o colección nueva; altura libre por planta o por estancia);
+  3. GOV-05;
+  4. una cirugía autorizada con propuesta → preflight → diff por ID → confirmación → operación atómica → deshacer.
