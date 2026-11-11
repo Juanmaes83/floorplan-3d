@@ -21,6 +21,7 @@ jobs:
         tests/unshare-api.test.cjs
         tests/share-registry-core.test.cjs
         tests/gov08-s2-adversarial.test.cjs
+        tests/gov08-view-isolation.test.cjs
         tests/plan-service.test.cjs
         tests/review-anchors.test.cjs
         tests/review-notes-core.test.cjs
@@ -46,6 +47,7 @@ jobs:
         tests/share-link.browser.test.cjs
         tests/share-withdraw.browser.test.cjs
         tests/gov08-s2-focus.browser.test.cjs
+        tests/gov08-view-isolation.browser.test.cjs
         tests/plan-service.browser.test.cjs
         tests/anchored-comments.browser.test.cjs
         tests/moodboard.browser.test.cjs

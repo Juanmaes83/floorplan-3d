@@ -1,0 +1,25 @@
+{
+ "probe": {
+  "origin": "http://127.0.0.1:33137",
+  "local": {
+   "rubik-sota-floorplan-project-v1": "{\"name\":\"Proyecto ficticio de otra clienta\",\"rooms\":[]}",
+   "rubik-share-publications-v1": "[{\"page\":\"https://store42.public.blob.vercel-storage.com/rubik-share/otra-casa.html\"}]",
+   "rubik-share-notes:otro-proyecto:v9": "{\"notes\":[{\"text\":\"Nota privada de otra clienta\"}]}",
+   "rubik-render-token": "render-fixture-code-0123456789abcdef"
+  },
+  "session": {},
+  "cookie": "rubik-cookie=private-cookie-value",
+  "write": "written",
+  "idb": "pixels-of-a-private-photo",
+  "popup": "planted-by-document",
+  "connect": "blocked:TypeError"
+ },
+ "appStorageAfter": [
+  "planted-by-document",
+  null
+ ],
+ "navigations": [
+  "https://attacker.invalid/c?d=planted-by-document|",
+  "https://attacker.invalid/c?d=planted-by-document|"
+ ]
+}

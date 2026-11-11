@@ -29,6 +29,8 @@
  function form(parent){
   const s=el('section',undefined,undefined,'dossier-page share-review');const foot=parent.querySelector('.dossier-foot');foot?parent.insertBefore(s,foot):parent.append(s);s.id='shareReview';el('h2',tx('Tus observaciones','Your observations','您的意见'),s);
   el('p',tx('Escribe lo que quieras comentar de la vivienda o de una estancia. Al terminar, guarda el archivo de observaciones y envíaselo al profesional: no se envía nada automáticamente.','Write what you want to comment on the home or a room. When you finish, save the observations file and send it to the professional: nothing is sent automatically.','写下您对住宅或某个房间的意见。完成后保存意见文件并发送给专业人员：不会自动发送任何内容。'),s,'dossier-note');
+  // GOV-08 · aislamiento: a page opened by its link runs isolated and has no storage; the script shows this then.
+  const vol=el('p',tx('En esta página las observaciones no se conservan si la recargas o la cierras. Guarda el archivo de observaciones antes de salir.','On this page observations are not kept if you reload or close it. Save the observations file before you leave.','在此页面中，刷新或关闭后意见不会保留。离开前请保存意见文件。'),s,'share-volatile');vol.id='shareVolatile';vol.hidden=true;vol.setAttribute('role','note');
   const f=el('div',undefined,s,'share-form');
   const who=el('label',undefined,f);el('span',tx('Tu nombre (opcional)','Your name (optional)','您的姓名（可选）'),who);const wi=el('input',undefined,who);wi.id='shareReviewer';wi.maxLength=80;wi.autocomplete='name';
   const where=el('label',undefined,f);el('span',tx('Sobre','About','关于'),where);const sel=el('select',undefined,where);sel.id='shareAnchor';
@@ -49,7 +51,7 @@
   return s;
  }
  const SCRIPT=`(function(){'use strict';var R=window.FloorPlanReviewNotes,C=JSON.parse(document.getElementById('rubik-share').textContent),$=function(i){return document.getElementById(i)};
-var KEY='rubik-share-notes:'+C.projectId+':'+C.versionCode,doc;try{doc=R.read(localStorage.getItem(KEY)||'null')}catch(e){doc=null}
+var KEY='rubik-share-notes:'+C.projectId+':'+C.versionCode,doc,kept=true;try{localStorage.getItem(KEY)}catch(e){kept=false}if(!kept&&$('shareVolatile'))$('shareVolatile').hidden=false;try{doc=R.read(localStorage.getItem(KEY)||'null')}catch(e){doc=null}
 if(!doc||doc.versionCode!==C.versionCode){doc=R.create({id:C.projectId,name:C.projectName},'x');doc.versionCode=C.versionCode}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(doc))}catch(e){}}
 function draw(){var list=$('shareNotes');list.textContent='';doc.notes.forEach(function(n){var li=document.createElement('li'),b=document.createElement('b'),p=document.createElement('p'),x=document.createElement('button');b.textContent=n.anchor.kind==='project'?C.text.home:(n.anchor.label||C.text.home);p.textContent=n.text;x.type='button';x.textContent=C.text.remove;x.onclick=function(){doc=R.remove(doc,n.id);persist();draw()};li.append(b,p,x);list.append(li)});
@@ -69,7 +71,7 @@ draw()})();`;
 .share-form input,.share-form select,.share-form textarea{font:inherit;font-weight:400;padding:9px;border:1px solid #978b79;border-radius:4px;background:#fffdf8;min-height:44px;box-sizing:border-box;width:100%}
 .share-actions{display:flex;gap:10px;flex-wrap:wrap}.share-actions button,.share-notes button{font:600 14px system-ui,sans-serif;min-height:44px;padding:8px 14px;border:1px solid #2d332f;border-radius:4px;background:#fffdf8;color:#2d332f;cursor:pointer}
 .share-actions #shareSave{background:#205b60;border-color:#205b60;color:#fff}.share-actions button:disabled{opacity:.45;cursor:default}
-.share-notes{display:grid;gap:8px;padding-left:20px}.share-notes li{background:#f6f2e9;padding:10px;border-radius:4px}.share-notes p{margin:4px 0}.share-status{font-weight:600;font-size:13px}
+.share-volatile{margin:8px 0;padding:8px 10px;border-left:4px solid #b07a1c;background:#fff4d6;color:#4a3a12;font-weight:600;font-size:13px}.share-volatile[hidden]{display:none}\n.share-notes{display:grid;gap:8px;padding-left:20px}.share-notes li{background:#f6f2e9;padding:10px;border-radius:4px}.share-notes p{margin:4px 0}.share-status{font-weight:600;font-size:13px}
 \n.share-pick{margin:0}.share-pick figcaption{font-size:13px;color:#626457;margin-bottom:4px}.share-pick-plan{display:block;width:100%;max-height:340px;background:#f6f2e9;border:1px solid #d8d0c2;border-radius:4px;cursor:crosshair}.share-pick-plan .preview-room{fill:#e9dfcd;stroke:#b8ab94;stroke-width:20}.share-pick-plan .preview-wall{fill:#2d332f}.share-point-mark{fill:#b0442c;stroke:#fff;stroke-width:30}.share-comment-view{margin-top:6px;min-height:40px;padding:0 12px;border:1px solid #978b79;border-radius:4px;background:#fffcf6;font:inherit;cursor:pointer}@media print{.share-comment-view{display:none}}\n.share-tour video{display:block;width:100%;max-height:70vh;background:#111;border-radius:4px}.share-tour-note{font-size:13px;color:#626457}@media(max-width:700px){.share-form{grid-template-columns:minmax(0,1fr)}}@media print{.share-review{display:none}}`;
  // opts.video {url,host,type}: B4 link only — the published tour video, played from the owner's Blob store (media-src).
  // Each project image in the file gets «Comentar esta imagen», which selects that image as the anchor.

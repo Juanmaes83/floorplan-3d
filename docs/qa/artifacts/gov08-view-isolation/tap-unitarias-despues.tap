@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+ok 1 - [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+  ---
+  duration_ms: 2.020754
+  type: 'test'
+  ...
+# Subtest: every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+ok 2 - every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+  ---
+  duration_ms: 0.409234
+  type: 'test'
+  ...
+# Subtest: existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+ok 3 - existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+  ---
+  duration_ms: 1.227168
+  type: 'test'
+  ...
+# Subtest: privacy, cache and withdrawal policies are unchanged
+ok 4 - privacy, cache and withdrawal policies are unchanged
+  ---
+  duration_ms: 0.968547
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 94.080183

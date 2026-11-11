@@ -30,7 +30,9 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
   if(u.startsWith(`https://${HOST}/`)){const hit=store.get(new URL(u).pathname);return hit?r.fulfill({status:200,contentType:hit.type,body:hit.bytes}):r.fulfill({status:404,body:''});}
   if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();external.push(u);return r.abort();});
  // The professional already used the AI render in this browser: its code is stored under its own key.
- await context.addInitScript(r=>{if(!localStorage.getItem('rubik-render-token'))localStorage.setItem('rubik-render-token',r);},RENDER);
+ // (GOV-08 · aislamiento: this seeding runs in every page of the context; the published page is isolated — opaque origin,
+ // no storage — so it only seeds the app's own pages. The assertions are unchanged.)
+ await context.addInitScript(r=>{if(self.origin!=='null'&&!localStorage.getItem('rubik-render-token'))localStorage.setItem('rubik-render-token',r);},RENDER);
  const page=await context.newPage();page.setDefaultTimeout(30000);page.on('pageerror',e=>errors.push(e.message));
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanClientShare);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));

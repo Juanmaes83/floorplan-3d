@@ -4,10 +4,17 @@
    (store of BLOB_READ_WRITE_TOKEN, folder rubik-share/, .html) are served: it is not a general proxy.
    GOV-08 S2: answers with Cache-Control: no-store, so neither the browser nor Vercel's edge keep THIS response.
    The file itself is read through the Blob CDN, which may keep serving its copy for up to the cache time set at
-   upload (60 s, see api/share.js) after /api/unshare deletes it. Copies already downloaded by anyone are not reached. */
+   upload (60 s, see api/share.js) after /api/unshare deletes it. Copies already downloaded by anyone are not reached.
+   GOV-08 · aislamiento: the document is served under the app's own address, so the policy ends with `sandbox
+   allow-scripts allow-downloads` and WITHOUT allow-same-origin: the browser runs it in an opaque origin of its own.
+   Its inline script (the observations form) still runs and can still save the observations file, but it can no longer
+   read or change what the app keeps in that browser (render code, projects, publications, images, other documents'
+   observations), open windows, submit forms or navigate the page that opened it. Same URL, same stored file: existing
+   links keep opening. Trade-off: the observations are no longer kept across a reload (the page says so). See
+   docs/security/gov08-aislamiento-api-view.md. */
 'use strict';
 function storeHost(token){const m=/^vercel_blob_rw_([a-z0-9]+)_/i.exec(String(token||''));return m?`${m[1].toLowerCase()}.public.blob.vercel-storage.com`:null;}
-function csp(host){return `default-src 'none'; img-src data:; media-src https://${host}; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'`;}
+function csp(host){return `default-src 'none'; img-src data:; media-src https://${host}; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'; sandbox allow-scripts allow-downloads`;}
 function fail(res,status,text){res.statusCode=status;res.setHeader('Content-Type','text/plain; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(text);}
 function target(raw,host){
  let u;try{u=new URL(String(raw||''));}catch{return null;}
