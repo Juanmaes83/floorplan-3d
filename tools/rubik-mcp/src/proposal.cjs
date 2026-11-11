@@ -26,7 +26,7 @@ const LIMITS = Object.freeze({
   objects: 100,
   rejectedLog: 10,
   // Full verifications (FloorPlanCore.validate + FloorPlanPlacement.problems + layout-review of the whole project) per
-  // call. layout-review is O(n²) in furniture (~21 ms with 100 pieces); this keeps a call bounded (~5 s worst case).
+  // call. layout-review is O(n²) in furniture (~21 ms with 100 pieces); this keeps a call bounded (~6 s worst case: 25.7 ms measured per full verification with 100 pieces).
   // It can only stop the search earlier than maxCandidates, never extend or reset it.
   verifications: 250,
 });

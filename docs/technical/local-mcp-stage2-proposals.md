@@ -144,7 +144,7 @@ Las pruebas lo verifican, y la respuesta no supera 750 KiB.
 
    Si la posición falla en 2–4, se registra el motivo y la búsqueda **continúa con el mismo presupuesto** (no se reinicia). Gana la primera que supera todo. La primera posición válida para colocación es la misma que devolvería `FloorPlanPlacement.find` (las pruebas lo comparan). La copia se descarta.
 
-   **Límite de verificaciones.** `layout-review` revisa el proyecto entero en cada verificación (unos 21 ms con 100 muebles). Para acotar una llamada, se hacen como máximo **250 verificaciones completas** (unos 5 s en el peor caso). Este límite solo puede detener la búsqueda antes que `maxCandidates`; se declara en `search.verificationLimitReached`.
+   **Límite de verificaciones.** `layout-review` revisa el proyecto entero en cada verificación (unos 21 ms con 100 muebles). Para acotar una llamada, se hacen como máximo **250 verificaciones completas** (unos 6 s en el peor caso: 25,7 ms medidos por verificación completa con 100 muebles). Este límite solo puede detener la búsqueda antes que `maxCandidates`; se declara en `search.verificationLimitReached`.
 7. **Sin candidata.** Si se agotan la cuadrícula, el presupuesto o el límite de verificaciones, el resultado es `pending`, nunca una imposibilidad:
    - sin ninguna posición válida para colocación: `search-grid-exhausted` o `search-budget-exhausted`;
    - con posiciones válidas para colocación pero rechazadas después: el código del primer rechazo (`goal-not-confirmed` o `candidate-introduces-issues`), con esa candidata en `evidence.rejectedCandidate`.
@@ -300,5 +300,5 @@ La auditoría independiente de la PR #197 reprodujo tres defectos en `369c5b7d51
 | **F2** — la búsqueda paraba en la primera posición de `find()` | `pending/goal-not-confirmed` o `candidate-introduces-issues` aunque existiera otra válida | La búsqueda sigue con el mismo orden y presupuesto: (2650, 1500) a 550 mm, nº 443; (550, 900) a 112 mm, nº 15; nº 10 y nº 7 con pasos 500 y 600 | `F2 regression: …` y siguientes |
 | **F3** — §9 afirmaba que se bloqueaba la creación de procesos | Las pruebas no interceptaban `child_process` ni otras APIs | Trampas completas con control positivo; §9 distingue cobertura anterior, adicional, estática e integridad, y sus límites | `control: …` y §9 |
 
-**Nueva decisión para revisión humana:** el límite de 250 verificaciones completas por llamada (§6). Sin él, un proyecto de 100 muebles en el que `layout-review` rechazara todas las posiciones podría tardar unos 100 s.
+**Nueva decisión para revisión humana:** el límite de 250 verificaciones completas por llamada (§6). Sin él, un proyecto de 100 muebles en el que `layout-review` rechazara todas las posiciones podría tardar unos 100 s (4000 × 25,7 ms).
 
