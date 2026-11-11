@@ -177,11 +177,13 @@ test('H2 at scene level: a nightstand in the swing is seen by the evidence, not 
   assert.deepEqual(c.donor.furnitureInClearance, { closed: [], open: [] });
   assert.deepEqual(c.rubikToday.placementProblems, []);
   assert.deepEqual(c.evidence.furnitureInClearance, ['obj_nightstand']);
-  assert.deepEqual(c.evidence.blockedBy, ['furniture:obj_nightstand']);
+  assert.deepEqual(c.evidence.findings, { doorSquare: ['furniture:obj_nightstand'], doorSector: ['furniture:obj_nightstand'], drawers: [] });
+  assert.equal(c.evidence.summary, 'issues');
 });
 test('door swing in a narrow corridor is reported through RUBIK placement (room + wall), never applied', () => {
   const e = E.propose({ ...SCENARIOS['narrow-corridor'], objectId: 'obj_shoecab' }).evidence;
-  assert.deepEqual(e.clearance.blockedBy, ['room:rom_corridor', 'wall:wal_corridor-e']);
+  assert.deepEqual(e.clearance.findings.doorSquare, ['room:rom_corridor', 'wall:wal_corridor-e']);
+  assert.deepEqual(e.clearance.findings.doorSector, ['wall:wal_corridor-e'], 'the exact sector touches the wall; the room exit comes from the conservative square');
   assert.equal(e.previewDiff.applied, false);
 });
 
@@ -208,7 +210,9 @@ test('H4 reproduced: the donor ceiling comes from view calibration (default 2400
   assert.equal(unknown.height.fits, null); assert.equal(unknown.height.vertical.status, 'unknown');
   assert.match(unknown.notEvaluated[0], /^altura libre/);
   const derived = E.propose({ ...SCENARIOS['derived-vertical'] }).evidence;
-  assert.equal(derived.height.vertical.status, 'derived'); assert.equal(derived.height.marginMm, 550);
+  // closure cut: a level-floor reference is not comparable with an object on the finished floor without the floor finish
+  assert.equal(derived.height.vertical.status, 'derived'); assert.deepEqual(derived.height.check, { status: 'pending', reason: 'reference-not-comparable' });
+  assert.equal(derived.height.fits, null); assert.equal(derived.height.topMm, 2200);
   const invalid = E.propose({ ...SCENARIOS['bedroom-default'], vertical: { clearHeightMm: 2500.5, reference: 'finished-floor' } }).evidence;
   assert.equal(invalid.height.vertical.status, 'invalid'); assert.equal(invalid.height.fits, null);
 });
@@ -230,15 +234,16 @@ test('evidence validator rejects incoherent evidence', () => {
   const e = E.propose({ ...SCENARIOS['bedroom-default'] }).evidence, bad = f => { const x = clone(e); f(x); return E.validate(x); };
   assert.ok(bad(x => x.previewDiff.applied = true).includes('applied'));
   assert.ok(bad(x => x.canonical = true).includes('canonical'));
-  assert.ok(bad(x => x.previewDiff.candidates.push({ op: 'would-set', status: 'blocked' })).includes('blocked-op'));
-  assert.ok(bad(x => x.computed.bays[0].widthMm += 5).includes('width-balance'));
-  assert.ok(bad(x => x.height.fits = null).includes('fits-vs-vertical'));
+  assert.ok(bad(x => x.previewDiff.candidates.push({ op: 'would-set', status: 'blocked', blockers: [], pendingOn: [], independentIssues: [] })).includes('candidate-op-status'));
+  assert.ok(bad(x => x.computed.bays[0].widthMm += 5).includes('computed-mismatch'));
+  assert.ok(bad(x => x.height.fits = null).includes('vertical-fits'));
 });
 test('previewDiff: the interior is blocked by the canonical schema; size.heightMm is only a reviewable candidate', () => {
   const blocked = E.propose({ ...SCENARIOS['bedroom-default'] }).evidence.previewDiff.candidates;
-  assert.deepEqual(blocked.map(c => [c.op, c.status]), [['none', 'blocked']]);
+  assert.deepEqual(blocked.map(c => [c.id, c.op, c.status]), [['interior', 'none', 'blocked']]);
+  assert.deepEqual(blocked[0].blockers, [{ kind: 'schema', code: 'no-canonical-field' }]);
   const mismatch = E.propose({ ...SCENARIOS['height-mismatch'] }).evidence.previewDiff.candidates;
-  assert.deepEqual(mismatch[0], { path: '/objects/0/size/heightMm', op: 'would-set', from: 2400, to: 2200, status: 'candidate-reviewable', reason: mismatch[0].reason });
+  assert.deepEqual(mismatch[0], { id: 'object-height', path: '/objects/0/size/heightMm', op: 'would-set', status: 'candidate-reviewable', from: 2400, to: 2200, blockers: [], pendingOn: [], independentIssues: [], reason: mismatch[0].reason });
   const schema = require('../js/project-schema.js');
   const s = JSON.stringify(schema); assert.ok(!/"cabinet"/.test(s), 'FloorPlanProjectV1 has no cabinet field (unchanged)');
 });
@@ -262,4 +267,201 @@ test('guards: lab isolated from the product, no external requests, no product fi
   const page = fs.readFileSync(path.join(L, 'index.html'), 'utf8');
   assert.doesNotMatch(page, /https?:\/\/(?!www\.w3\.org)/, 'lab page loads nothing from the network');
   for (const f of ['index.html', 'js/furniture-placement.js', 'js/project-core.js', 'js/generic-catalog.js']) assert.doesNotMatch(fs.readFileSync(path.join(__dirname, '..', f), 'utf8'), /sculpt\/r03|RubikCabinet/, f);
+});
+
+// =====================================================================================================================
+// CLOSURE CUT (11/11/2026). Regression tests written BEFORE the fix and run against 964072d in an isolated copy.
+// Tags: [A-repro]/[B-repro]/[C-repro] target the audited defects; [nuevo] covers a capability that did not exist.
+// =====================================================================================================================
+const util = require('util');
+const scen = (base, patch = () => {}) => { const s = structuredClone(SCENARIOS[base]); patch(s); return s; };
+const ev = s => E.propose({ ...s }).evidence;
+const heightCandidate = e => (e.previewDiff.candidates || []).find(c => /\/size\/heightMm$/.test(c.path || ''));
+const safeValidate = (e, ctx) => { try { return E.validate(e, ctx); } catch (err) { return 'THROWS: ' + err.constructor.name + ': ' + err.message; } };
+const declared = (clearHeightMm, extra = {}) => ({ status: 'declared', clearHeightMm, reference: 'finished-floor', source: 'escenario de prueba', ...extra });
+const COMBOS = {
+  'mismatch-low-ceiling': scen('height-mismatch', s => { s.vertical = declared(2150); }),
+  'mismatch-unknown-ceiling': scen('height-mismatch', s => { s.vertical = null; }),
+  'mismatch-in-swing': scen('nightstand-in-swing', s => { s.project.objects[0].size.heightMm = 2400; }),
+  'mismatch-invalid-interior': scen('invalid-shelves', s => { s.project.objects[0].size.heightMm = 2400; }),
+  'mismatch-reviewable': scen('height-mismatch')
+};
+
+// ---------- A · vertical invariants ----------
+test('[A-repro] low-ceiling: the expected result stays (2200 in 2150 → does not fit, −50)', () => {
+  const e = ev(SCENARIOS['low-ceiling']);
+  assert.equal(e.height.fits, false); assert.equal(e.height.marginMm, -50); assert.equal(e.height.topMm, 2200);
+});
+for (const [name, f] of [
+  ['fits:true when it does not fit (low-ceiling)', e => { e.height.fits = true; }],
+  ['marginMm changed arbitrarily', e => { e.height.marginMm = 300; }],
+  ['topMm manipulated', e => { e.height.topMm = 2000; }],
+  ['cabinetHeightMm different from the height used', e => { e.height.cabinetHeightMm = 2100; }],
+  ['elevation without correspondence with the object', e => { e.height.elevationMm = 300; }],
+  ['marginMm NaN serialised to null by JSON', e => { e.height.marginMm = NaN; return JSON.parse(JSON.stringify(e)); }],
+  ['fits Infinity', e => { e.height.fits = Infinity; }],
+  ['vertical clearHeightMm replaced after the fact', e => { e.height.vertical.clearHeightMm = 2600; }]
+]) test('[A-repro] validate rejects a manipulated vertical result: ' + name, () => {
+  let e = ev(SCENARIOS['low-ceiling']); e = f(e) || e;
+  const r = safeValidate(e);
+  assert.ok(Array.isArray(r), String(r)); assert.ok(r.length > 0, 'accepted as valid: ' + name);
+});
+test('[A-repro] fits:false when it fits (bedroom-default) is rejected', () => {
+  const e = ev(SCENARIOS['bedroom-default']); e.height.fits = false;
+  const r = safeValidate(e); assert.ok(Array.isArray(r) && r.length > 0);
+});
+test('[A-repro] a level-floor reference is not compared with a finished-floor object without a floor finish: pending, no invented fit', () => {
+  const e = ev(SCENARIOS['derived-vertical']);
+  assert.equal(e.height.fits, null); assert.equal(e.height.marginMm, null);
+});
+test('[A-repro] a declared height without a stated source is not treated as verifiable', () => {
+  const e = ev(scen('bedroom-default', s => { s.vertical = { clearHeightMm: 2500, reference: 'finished-floor' }; }));
+  assert.notEqual(e.height.vertical.source, 'not stated'); assert.equal(e.height.fits, null);
+});
+test('[A-repro] a non-finite object elevation never produces a fit verdict', () => {
+  const e = ev(scen('bedroom-default', s => { s.project.objects[0].elevationMm = NaN; }));
+  assert.equal(e.height.fits, null); assert.equal(e.height.topMm, null);
+});
+test('[A-repro] an object heightMm that the canonical contract rejects is not reported as a plain difference', () => {
+  for (const bad of [2200.5, -1, 'alto', NaN]) {
+    const e = ev(scen('bedroom-default', s => { s.project.objects[0].size.heightMm = bad; }));
+    assert.equal(e.height.objectHeightConsistency, 'object-height-invalid', String(bad));
+  }
+});
+test('[A-repro] non-finite or missing clear heights are invalid or unknown, never zero (protection that already existed)', () => {
+  for (const v of [NaN, Infinity, -Infinity, null, undefined, 0, -10]) {
+    const e = ev(scen('bedroom-default', s => { s.vertical = { status: 'declared', clearHeightMm: v, reference: 'finished-floor', source: 'x' }; }));
+    assert.equal(e.height.fits, null, String(v)); assert.equal(e.height.vertical.clearHeightMm, null, String(v));
+  }
+  assert.equal(ev(SCENARIOS['unknown-ceiling']).height.vertical.status, 'unknown');
+});
+
+// ---------- B · robustness of validate() ----------
+const B_CASES = [
+  ['whole evidence null', () => null], ['evidence is an array', () => []], ['evidence is a string', () => 'x'],
+  ['cabinet null', e => { e.cabinet = null; }], ['cabinet.spec null', e => { e.cabinet.spec = null; }], ['cabinet.issues null', e => { e.cabinet.issues = null; }],
+  ['cabinet.issues is an object', e => { e.cabinet.issues = {}; }], ['object null', e => { e.object = null; }], ['object.size null', e => { e.object.size = null; }],
+  ['object.size is an array', e => { e.object.size = [2000, 600]; }], ['computed null (valid cabinet)', e => { e.computed = null; }], ['computed.cavity null', e => { e.computed.cavity = null; }],
+  ['computed.bays null', e => { e.computed.bays = null; }], ['computed.bays is an object', e => { e.computed.bays = { 0: {} }; }], ['computed.fronts null', e => { e.computed.fronts = null; }],
+  ['clearance null', e => { e.clearance = null; }], ['clearance.doors null', e => { e.clearance.doors = null; }], ['clearance.drawers is a string', e => { e.clearance.drawers = 'x'; }],
+  ['height null', e => { e.height = null; }], ['height.vertical null', e => { e.height.vertical = null; }], ['previewDiff null', e => { e.previewDiff = null; }],
+  ['previewDiff.candidates null', e => { e.previewDiff.candidates = null; }], ['previewDiff.candidates is an object', e => { e.previewDiff.candidates = { a: 1 }; }],
+  ['notEvaluated null', e => { e.notEvaluated = null; }], ['door plan with non-finite coordinates', e => { e.clearance.doors[0].plan.sector[3].x = NaN; }],
+  ['empty door polygon', e => { e.clearance.doors[0].plan.square = []; }], ['malformed polygon (numbers)', e => { e.clearance.doors[0].plan.sector = [1, 2, 3]; }],
+  ['unknown cabinet status', e => { e.cabinet.status = 'perfect'; }], ['candidate without op', e => { delete e.previewDiff.candidates[0].op; }],
+  ['candidate without status', e => { delete e.previewDiff.candidates[0].status; }], ['bay width as a string', e => { e.computed.bays[0].widthMm = '642'; }],
+  ['cabinet.spec columns not an array', e => { e.cabinet.spec.columns = 3; }]
+];
+for (const [name, f] of B_CASES) test('[B-repro] validate() answers with stable codes, without throwing: ' + name, () => {
+  const base = ev(SCENARIOS['nightstand-in-swing']); let e = structuredClone(base); const out = f(e); if (out !== undefined) e = out;
+  const snapshot = structuredClone(e), r1 = safeValidate(e), r2 = safeValidate(e);
+  assert.ok(Array.isArray(r1), String(r1));
+  assert.ok(r1.length > 0, 'incomplete evidence accepted as valid');
+  assert.ok(r1.every(c => typeof c === 'string' && c !== 'validator-exception'), JSON.stringify(r1));
+  assert.deepEqual(r1, r2, 'deterministic');
+  assert.ok(util.isDeepStrictEqual(e, snapshot), 'validate() must not modify its input');
+});
+test('[B-repro] computed values are checked against the pure engine, not only against each other', () => {
+  const e = ev(SCENARIOS['bedroom-default']);
+  e.computed.bays[0].widthMm += 5; e.computed.bays[1].widthMm -= 5;   // still balanced, but false
+  assert.ok(safeValidate(e).length > 0);
+  const g = ev(SCENARIOS['bedroom-default']); g.computed.cavity.depth = 999;
+  assert.ok(safeValidate(g).length > 0);
+});
+
+// ---------- C · previewDiff ----------
+test('[C-repro] taller object + ceiling too low → the height candidate is blocked (no would-set)', () => {
+  const c = heightCandidate(ev(COMBOS['mismatch-low-ceiling']));
+  assert.equal(c.status, 'blocked'); assert.notEqual(c.op, 'would-set');
+});
+test('[C-repro] taller object + unknown ceiling → pending, not presented as accepted', () => {
+  const c = heightCandidate(ev(COMBOS['mismatch-unknown-ceiling']));
+  assert.equal(c.status, 'pending'); assert.notEqual(c.op, 'would-set');
+});
+test('[C-repro] a blocked candidate manipulated into candidate-reviewable is rejected', () => {
+  const e = ev(COMBOS['mismatch-low-ceiling']), c = heightCandidate(e);
+  c.status = 'candidate-reviewable'; c.op = 'would-set';
+  assert.ok(safeValidate(e).length > 0);
+});
+test('[C-repro] a pending candidate manipulated into candidate-reviewable is rejected', () => {
+  const e = ev(COMBOS['mismatch-unknown-ceiling']), c = heightCandidate(e);
+  c.status = 'candidate-reviewable'; c.op = 'would-set';
+  assert.ok(safeValidate(e).length > 0);
+});
+test('[C-repro] the level-floor reference does not make the height candidate reviewable', () => {
+  const c = heightCandidate(ev(scen('derived-vertical', s => { s.project.objects[0].size.heightMm = 2400; })));
+  assert.equal(c.status, 'pending');
+});
+test('[C-repro] a placement / swing problem is reported next to the height candidate, not hidden', () => {
+  const e = ev(COMBOS['mismatch-in-swing']), c = heightCandidate(e);
+  assert.ok(Array.isArray(c.independentIssues) && c.independentIssues.some(i => i.kind === 'door-swing-square'), JSON.stringify(c));
+  assert.notEqual(e.summary?.state, 'clear');
+});
+test('[nuevo] invalid interior + different object height → explicit blocked candidate (the old code omitted it)', () => {
+  const c = heightCandidate(ev(COMBOS['mismatch-invalid-interior']));
+  assert.ok(c, 'candidate present'); assert.equal(c.status, 'blocked'); assert.equal(c.op, 'none');
+  assert.ok(c.blockers.some(b => b.code === 'cabinet-invalid'));
+});
+test('a reviewable candidate without blockers stays reviewable (would-set, never applied)', () => {
+  const e = ev(COMBOS['mismatch-reviewable']), c = heightCandidate(e);
+  assert.equal(c.status, 'candidate-reviewable'); assert.equal(c.op, 'would-set'); assert.equal(e.previewDiff.applied, false);
+});
+
+// ---------- closure: scenario matrix, context re-derivation, fixtures ----------
+test('the lab fixtures carry the same combinations the tests build independently', () => {
+  // 'mismatch-reviewable' is the existing 'height-mismatch' scenario itself; the other four exist in the fixtures
+  assert.deepEqual(COMBOS['mismatch-reviewable'], SCENARIOS['height-mismatch']);
+  for (const k of Object.keys(COMBOS).filter(k => k !== 'mismatch-reviewable')) { const a = structuredClone(SCENARIOS[k]), b = structuredClone(COMBOS[k]); delete a.title; delete b.title; assert.deepEqual(a, b, k); }
+});
+const MATRIX = {
+  'bedroom-default': ['clear', null], 'rotated-east-wall': ['clear', null], 'low-ceiling': ['issues', null], 'unknown-ceiling': ['clear-with-pending', null],
+  'invalid-shelves': ['invalid', null], 'nightstand-in-swing': ['issues', null], 'narrow-corridor': ['issues', null], 'height-mismatch': ['clear', 'candidate-reviewable'],
+  'derived-vertical': ['clear-with-pending', null], 'mismatch-low-ceiling': ['issues', 'blocked'], 'mismatch-unknown-ceiling': ['clear-with-pending', 'pending'],
+  'mismatch-in-swing': ['issues', 'candidate-reviewable'], 'mismatch-invalid-interior': ['invalid', 'blocked']
+};
+for (const [id, [state, height]] of Object.entries(MATRIX)) test(`[C] scenario matrix: ${id} → summary ${state}, height candidate ${height ?? 'none'}`, () => {
+  const s = SCENARIOS[id], before = structuredClone(s.project), e = ev(s), c = heightCandidate(e);
+  assert.equal(e.summary.state, state); assert.equal(c ? c.status : null, height);
+  if (c) assert.equal(c.op, c.status === 'candidate-reviewable' ? 'would-set' : 'none');
+  assert.equal(e.previewDiff.applied, false);
+  assert.ok(e.previewDiff.candidates.some(k => k.id === 'interior' && k.status === 'blocked' && k.op === 'none'));
+  assert.ok(util.isDeepStrictEqual(s.project, before), 'project untouched');
+  assert.deepEqual(E.validate(e), []); assert.deepEqual(E.validate(e, { ...s }), [], 'full re-derivation with the project');
+  assert.deepEqual(ev(s), e, 'reproducible');
+});
+test('[C] a candidate keeps placement and swing issues separate, with their authority, and does not let them decide the height', () => {
+  const c = heightCandidate(ev(SCENARIOS['mismatch-in-swing']));
+  assert.deepEqual(c.blockers, []); assert.deepEqual(c.pendingOn, []);
+  assert.deepEqual(c.independentIssues.map(i => [i.kind, i.items]), [['door-swing-square', ['furniture:obj_nightstand']], ['door-swing-sector', ['furniture:obj_nightstand']]]);
+  assert.match(c.independentIssues[1].authority, /experimental/);
+  const low = heightCandidate(ev(SCENARIOS['mismatch-low-ceiling']));
+  assert.deepEqual(low.blockers, [{ kind: 'vertical', code: 'does-not-fit', marginMm: -50 }]);
+  const inv = heightCandidate(ev(SCENARIOS['mismatch-invalid-interior']));
+  assert.deepEqual(inv.blockers.map(b => b.code), ['cabinet-invalid']); assert.equal(inv.to, 2200);
+});
+test('[C] the conservative square and the exact sector are reported separately (a square-only finding is not a sector collision)', () => {
+  const e = ev(SCENARIOS['narrow-corridor']);
+  assert.ok(e.clearance.findings.doorSquare.includes('room:rom_corridor'));
+  assert.ok(!e.clearance.findings.doorSector.includes('room:rom_corridor'));
+  assert.deepEqual(e.summary.experimental.map(x => x.kind), ['door-swing-sector']);
+  assert.match(e.clearance.interpretation, /conservador/);
+});
+test('validate(e, context) re-derives everything, including results that need the project', () => {
+  const s = SCENARIOS['narrow-corridor'], e = ev(s);
+  e.rubikToday.placementProblems = ['room:rom_corridor']; // forged, but internally plausible
+  const r = E.validate(e, { ...s });
+  assert.ok(r.includes('recomputed-mismatch'), JSON.stringify(r));
+  assert.ok(E.validate(ev(s), { ...s, vertical: declared(2100) }).includes('recomputed-mismatch'), 'evidence produced with another reference');
+});
+test('readVertical distinguishes unknown, invalid (with a stable problem), unsourced and sourced references', () => {
+  assert.equal(E.readVertical(null).status, 'unknown');
+  assert.deepEqual(E.readVertical([]), { status: 'invalid', clearHeightMm: null, reference: null, source: null, problem: 'not-an-object' });
+  assert.equal(E.readVertical({ status: 'guessed', clearHeightMm: 2500, reference: 'finished-floor', source: 'x' }).problem, 'status');
+  assert.equal(E.readVertical({ clearHeightMm: 2500, reference: 'ceiling' , source: 'x' }).problem, 'reference');
+  assert.deepEqual(E.readVertical({ clearHeightMm: 2500, reference: 'finished-floor', source: 'not stated' }), { status: 'unsourced', clearHeightMm: 2500, reference: 'finished-floor', source: null, claimed: 'declared' });
+  assert.equal(E.readVertical({ clearHeightMm: 2500, reference: 'finished-floor', source: '  ' }).status, 'unsourced');
+  assert.equal(E.readVertical(declared(2500)).status, 'declared');
+  const elevated = ev(scen('bedroom-default', s => { s.project.objects[0].elevationMm = 400; }));
+  assert.deepEqual([elevated.height.topMm, elevated.height.fits, elevated.height.marginMm], [2600, false, -100], 'elevation counts in the top');
+  assert.deepEqual(E.validate(elevated), []);
 });

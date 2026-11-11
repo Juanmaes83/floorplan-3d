@@ -44,7 +44,8 @@
       title: scenario.title, cabinetStatus: ev.cabinet.status, issues: ev.cabinet.issues.map(i => i.code),
       donor: { validation: donorError ?? 'ok', furnitureInClearance: { closed: donorSees('closed'), open: donorSees('open') }, ceilingUsedMm: 2400, warnsHeight: spec && Number.isFinite(spec.height) ? spec.height > 2400 : null },
       sculpt: { parity },
-      evidence: { furnitureInClearance: evidenceSees, blockedBy: ev.clearance ? ev.clearance.blockedBy : null, fits: ev.height.fits, marginMm: ev.height.marginMm, vertical: ev.height.vertical.status, previewDiff: ev.previewDiff.candidates.map(c => c.status + ':' + c.op) },
+      evidence: { furnitureInClearance: evidenceSees, findings: ev.clearance ? ev.clearance.findings : null, fits: ev.height.fits, marginMm: ev.height.marginMm, check: ev.height.check, vertical: ev.height.vertical.status,
+        previewDiff: ev.previewDiff.candidates.map(c => c.id + ':' + c.status + ':' + c.op), summary: ev.summary.state },
       rubikToday: ev.rubikToday, evidenceObject: ev
     };
   }

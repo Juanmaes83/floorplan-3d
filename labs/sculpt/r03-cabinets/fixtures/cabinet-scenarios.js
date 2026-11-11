@@ -47,6 +47,13 @@
   S['derived-vertical'] = { title: 'Referencia vertical derivada (misma forma que R02-A): 2750 mm desde el suelo de planta', project: project('derived', 4000, 3500, [northWardrobe()]), objectId: 'obj_wardrobe',
     vertical: { status: 'derived', clearHeightMm: 2750, reference: 'level-floor', source: 'FloorPlanBuildingV1: planta superior 3000 − forjado 250 − esta planta 0 (forma de R02-A, sin recalcular aquí)' } };
   S['not-a-cabinet'] = { title: 'Objeto que no es un armario', project: project('bed', 4000, 3500, [obj('obj_bed', 'bed', 'Cama', 2000, 1750, 1600, 2000, 0, 500)]), objectId: 'obj_bed', vertical: declared(2500) };
+  // Closure cut (11/11/2026): combinations for the height candidate of previewDiff (the tests rebuild them independently
+  // from the base scenarios and check they are identical).
+  const variant = (base, title, patch) => { const v = structuredClone(S[base]); v.title = title; patch(v); return v; };
+  S['mismatch-low-ceiling'] = variant('height-mismatch', 'Objeto de 2400 mm, armario de 2200 y techo de 2150: altura bloqueada', v => { v.vertical = declared(2150, 'escenario de prueba'); });
+  S['mismatch-unknown-ceiling'] = variant('height-mismatch', 'Objeto de 2400 mm sin referencia vertical: altura pendiente', v => { v.vertical = null; });
+  S['mismatch-in-swing'] = variant('nightstand-in-swing', 'Altura distinta y mesilla en el barrido: candidatura revisable con incidencia independiente', v => { v.project.objects[0].size.heightMm = 2400; });
+  S['mismatch-invalid-interior'] = variant('invalid-shelves', 'Interior no válido y altura distinta: candidatura bloqueada', v => { v.project.objects[0].size.heightMm = 2400; });
   const api = { SCENARIOS: S, ids: Object.keys(S) };
   if (typeof module === 'object' && module.exports) module.exports = api; else root.RubikR03Scenarios = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
