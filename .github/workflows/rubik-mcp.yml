@@ -9,6 +9,7 @@ on:
       - 'js/reference-project.js'
       - 'js/tracing-core.js'
       - 'js/layout-review.js'
+      - 'js/furniture-placement.js'
       - '.github/workflows/rubik-mcp.yml'
   push:
     branches: [master]
@@ -19,6 +20,7 @@ on:
       - 'js/reference-project.js'
       - 'js/tracing-core.js'
       - 'js/layout-review.js'
+      - 'js/furniture-placement.js'
       - '.github/workflows/rubik-mcp.yml'
 
 permissions:

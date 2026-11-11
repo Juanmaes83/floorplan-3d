@@ -11,6 +11,7 @@ const Diagnostics = require('./diagnostics.cjs');
 const Measure = require('./measure.cjs');
 const Clearance = require('./clearance.cjs');
 const Route = require('./route.cjs');
+const Proposal = require('./proposal.cjs');
 
 const MAX_PROJECT_BYTES = 15 * 1024 * 1024;
 const MAX_LAYOUT_OBJECTS = 100;
@@ -214,8 +215,14 @@ async function checkRoute2d(reader, args = {}) {
   return safeJson(Route.findRoute(project, snapshot, { start, end, widthMm }));
 }
 
+// Etapa 2: a candidate position for one piece of furniture, never applied (RubikLayoutProposalV1).
+async function proposeLayout(reader, args = {}) {
+  const { project, snapshot } = await reader.load();
+  return safeJson(Proposal.propose(project, snapshot, args));
+}
+
 module.exports = {
   MAX_PROJECT_BYTES, MAX_LAYOUT_OBJECTS, MAX_RESPONSE_BYTES,
   createProjectReader, getSummary, listElements, getElement, reviewLayout,
-  diagnoseProject, measureElements, inspectPairClearance, checkRoute2d,
+  diagnoseProject, measureElements, inspectPairClearance, checkRoute2d, proposeLayout,
 };
