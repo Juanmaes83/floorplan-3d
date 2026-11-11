@@ -49,7 +49,7 @@ Cuando las fuentes difieran, aplicar la precedencia del catálogo maestro: decis
 |---|---|---|---|---|
 | **R01** | [wy51ai/floorplan-3d PR #18](https://github.com/wy51ai/floorplan-3d/pull/18), rama del contribuidor `zhuzhuyumeng/floorplan-3d:feat/floorplan-recognition`, `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Reconocimiento de plano raster, muros/huecos/estancias, OCR y posprocesado, orientación, escala, worker, pruebas | **F2 experimental** y **G-01, ola 4**; también investigación para G-06, ola 2; ninguna validación F2 se concede por clonar | **SCULPT-R01 — LABORATORIO FUNCIONAL, NO VALIDADO SOBRE PLANOS REALES** ([PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA `2158fd19207e4a33aeee8fed26d1b29be96103fa`); integración en producto **BLOQUEADA** |
 | **R02** | [wy51ai/floorplan-3d PR #17](https://github.com/wy51ai/floorplan-3d/pull/17), `zhuzhuyumeng/floorplan-3d:feat/ceiling-layout`, `324eb64cf9b26f6d4df8323c2dec4591fa4691e3` | Principalmente distribución de techo y luminarias/equipos; examinar la familia real y sus pruebas. **No está demostrada aquí una red completa de electricidad/agua/datos ni cumplimiento normativo español.** | Cercanía con **LUZ-01 (ola 5)** y **OBR-04 (ola 3)** solo como referencias parciales; geometría de techo/MEP sin encaje maestro exacto: **decisión pendiente** | **R02-A — LABORATORIO FUNCIONAL, NO INTEGRADO, PENDIENTE DE ACEPTACIÓN HUMANA** ([PR #193](https://github.com/Juanmaes83/floorplan-3d/pull/193), SHA `7d8a6269047ec714fcdc51cf308f28c2650b23dc`); integración **HOLD** |
-| **R03** | [wy51ai/floorplan-3d PR #11](https://github.com/wy51ai/floorplan-3d/pull/11), `caikaidev/floorplan-3d:codex/walkthrough-cabinet-interiors`, `2495d8e0bf7d3846d2da827121c15e3e83d752bd` | Modelado de armarios, compartimentos, puertas, cajones y geometría paramétrica a verificar; distinguir runtime propio de Three.js vendorizado | Relación parcial con **CAT-03 (ola 5)** y biblioteca **F3** existente; el editor paramétrico de armarios no equivale automáticamente a CAT-03: **decisión pendiente** | **Identificada, PR original cerrada sin merge; derechos del contribuidor y dependencias pendientes** |
+| **R03** | [wy51ai/floorplan-3d PR #11](https://github.com/wy51ai/floorplan-3d/pull/11), `caikaidev/floorplan-3d:codex/walkthrough-cabinet-interiors`, `2495d8e0bf7d3846d2da827121c15e3e83d752bd` | Modelado de armarios, compartimentos, puertas, cajones y geometría paramétrica a verificar; distinguir runtime propio de Three.js vendorizado | Relación parcial con **CAT-03 (ola 5)** y biblioteca **F3** existente; el editor paramétrico de armarios no equivale automáticamente a CAT-03: **decisión pendiente** | **SCULPT-R03 — LABORATORIO TÉCNICAMENTE COMPLETADO, PENDIENTE DE ACEPTACIÓN HUMANA, SIN INTEGRACIÓN** ([PR #194](https://github.com/Juanmaes83/floorplan-3d/pull/194), SHA `fc5a4224f2a48be2f18cdb3a701240e21bd2269f`); GOV-05 documentado solo para R03; integración **HOLD** |
 
 **Estado R01 sincronizado (10/11/2026).** Evidencia: [PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA final `2158fd19207e4a33aeee8fed26d1b29be96103fa`, e [informe técnico y acta de cierre](https://github.com/Juanmaes83/floorplan-3d/blob/2158fd19207e4a33aeee8fed26d1b29be96103fa/docs/technical/sculpt-r01-recognition.md). Este anexo no duplica el informe.
 - **Hecho, solo en laboratorio:**
@@ -85,6 +85,28 @@ Cuando las fuentes difieran, aplicar la precedencia del catálogo maestro: decis
   - **sin MEP, sin falsos techos y sin validación reglamentaria**;
   - **GOV-05 pendiente** (contribuciones con coautoría de IA y aviso MIT).
 - **G4 sigue como investigación:** sin ID maestro ni ola. LUZ-01 y OBR-04 siguen siendo relaciones parciales, no equivalentes. **R02-B no iniciado.**
+
+**Estado R03 sincronizado (11/11/2026).** Evidencia: [PR #194](https://github.com/Juanmaes83/floorplan-3d/pull/194), SHA final `fc5a4224f2a48be2f18cdb3a701240e21bd2269f`, e [informe técnico y acta de cierre](https://github.com/Juanmaes83/floorplan-3d/blob/fc5a4224f2a48be2f18cdb3a701240e21bd2269f/docs/technical/sculpt-r03-cabinets.md). Este anexo no duplica el informe.
+- **Donante exacto:** wy51ai/floorplan-3d#11 ← `caikaidev:codex/walkthrough-cabinet-interiors` `2495d8e` (autor kai cai). `vendor/three` no se duplica: es idéntico al de RUBIK.
+- **GOV-05, solo para R03:**
+  - código de wuyi bajo MIT;
+  - contribución de la PR #11 bajo MIT por la cláusula D.6 de los Términos de GitHub, con el razonamiento y el riesgo residual en `PROVENANCE.md`;
+  - avisos y atribución conservados.
+  No se extiende a R01, R02 ni a otras piedras.
+- **Hecho, solo en laboratorio:**
+  - SOURCE EXACT reproducido (18 hashes, con respaldo por `refs/pull/11/head`);
+  - baseline del donante: pruebas unitarias 13/13 y navegador 3/3, con 0 peticiones externas;
+  - motor esculpido puro con paridad exacta: 928 tamaños, 3000 mutaciones y 300 redimensionados;
+  - capacidades recuperadas: módulos, divisores, baldas, barras, cajones, puertas independientes, dividir y unir, alzado, 3D y barrido de puertas y cajones, con evidencia `CabinetEvidenceV1`;
+  - corte de cierre: 98/98 pruebas y CI 14/14 sobre el código `417f389`.
+- **Límites:**
+  - sin escritura en `FloorPlanProjectV1` ni cambios en el producto;
+  - el interior no tiene campo canónico (`previewDiff` bloqueado);
+  - altura libre recibida o pendiente, nunca inventada;
+  - barridos a 90° (bisagra real desconocida);
+  - supuestos del donante, que no son medidas de fabricante;
+  - **no validado para fabricación ni para pedido**;
+  - **R03 no completa CAT-03.**
 
 **R02:** PR #17 incluye 39 archivos y varias capacidades acumuladas; **no** atribuir a la capa de techos todas las funciones de reconocimiento o IA contenidas en el diff. Separar capacidad nueva y dependencia heredada antes de clonar.
 
