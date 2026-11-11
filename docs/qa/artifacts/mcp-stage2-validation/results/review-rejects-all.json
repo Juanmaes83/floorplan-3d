@@ -1,0 +1,2598 @@
+{
+  "fixture": "review-rejects-all",
+  "source": "validation/validation-projects.cjs:review-rejects-all",
+  "command": "node tools/rubik-mcp/src/server.mjs --project <tmp>/review-rejects-all/project.json",
+  "serverInfo": {
+    "name": "rubik-floorplan-readonly",
+    "version": "0.1.4"
+  },
+  "protocolVersion": "2025-06-18",
+  "tools": [
+    {
+      "name": "check_route_2d",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "diagnose_project",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_element",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_summary",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "inspect_pair_clearance",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_project_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "measure_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "propose_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "review_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "toolsAsExpected": true,
+  "allReadOnly": true,
+  "summarySha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+  "scaleConfidence": "estimated",
+  "reviewStatus": "partial",
+  "reviewFindings": [
+    {
+      "code": "solape",
+      "objects": [
+        "obj_bench",
+        "obj_odd"
+      ]
+    },
+    {
+      "code": "solape",
+      "objects": [
+        "obj_block",
+        "obj_odd"
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "label": "F2-grid-exhausted-after-rejections",
+      "expect": "pending",
+      "expectCode": "goal-not-confirmed",
+      "arguments": {
+        "expectedSha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+        "objectId": "obj_odd",
+        "goal": "resolve-placement-conflict"
+      },
+      "status": "pending",
+      "code": "goal-not-confirmed",
+      "search": {
+        "tried": 219,
+        "acceptedIndex": null,
+        "placementValidRejected": 58,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
+      "suggested": null,
+      "rejected": {
+        "x": 2400,
+        "y": 400
+      },
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_odd",
+        "object": {
+          "id": "obj_odd",
+          "type": "table",
+          "name": "odd"
+        },
+        "problem": {
+          "code": "placement-conflict",
+          "problems": [
+            {
+              "kind": "furniture",
+              "id": "obj_block",
+              "detail": "Solapa «block»."
+            }
+          ],
+          "description": "«odd» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 2100,
+            "y": 400
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 601
+          },
+          "roomId": "rom_strip"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_strip"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "furniture",
+                "id": "obj_block",
+                "detail": "Solapa «block»."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              },
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_block",
+                  "obj_odd"
+                ],
+                "measurementMm": 300,
+                "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+              }
+            ]
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              }
+            ]
+          },
+          "rejectedCandidate": {
+            "position": {
+              "x": 2400,
+              "y": 400
+            },
+            "rotationDeg": 0,
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "roomId": "rom_strip"
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "goal-not-confirmed",
+            "message": "FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble. Se recorrió toda la cuadrícula de 50 mm (219 posiciones): 58 posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 50,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 219,
+          "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 58,
+          "rejectedByCode": {
+            "goal-not-confirmed": 58
+          },
+          "rejected": [
+            {
+              "index": 34,
+              "position": {
+                "x": 2400,
+                "y": 400
+              },
+              "distanceMm": 300,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 40,
+              "position": {
+                "x": 2450,
+                "y": 400
+              },
+              "distanceMm": 350,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 46,
+              "position": {
+                "x": 2500,
+                "y": 400
+              },
+              "distanceMm": 400,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 52,
+              "position": {
+                "x": 2550,
+                "y": 400
+              },
+              "distanceMm": 450,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 58,
+              "position": {
+                "x": 2600,
+                "y": 400
+              },
+              "distanceMm": 500,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 59,
+              "position": {
+                "x": 1600,
+                "y": 400
+              },
+              "distanceMm": 500,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 64,
+              "position": {
+                "x": 2650,
+                "y": 400
+              },
+              "distanceMm": 550,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 65,
+              "position": {
+                "x": 1550,
+                "y": 400
+              },
+              "distanceMm": 550,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 70,
+              "position": {
+                "x": 2700,
+                "y": 400
+              },
+              "distanceMm": 600,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 71,
+              "position": {
+                "x": 1500,
+                "y": 400
+              },
+              "distanceMm": 600,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            }
+          ],
+          "rejectedTruncated": 48,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "F2-verification-limit",
+      "expect": "pending",
+      "expectCode": "goal-not-confirmed",
+      "arguments": {
+        "expectedSha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+        "objectId": "obj_odd",
+        "goal": "resolve-placement-conflict",
+        "stepMm": 10
+      },
+      "status": "pending",
+      "code": "goal-not-confirmed",
+      "search": {
+        "tried": 3619,
+        "acceptedIndex": null,
+        "placementValidRejected": 250,
+        "budgetExhausted": false,
+        "verificationLimitReached": true
+      },
+      "suggested": null,
+      "rejected": {
+        "x": 2400,
+        "y": 400
+      },
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_odd",
+        "object": {
+          "id": "obj_odd",
+          "type": "table",
+          "name": "odd"
+        },
+        "problem": {
+          "code": "placement-conflict",
+          "problems": [
+            {
+              "kind": "furniture",
+              "id": "obj_block",
+              "detail": "Solapa «block»."
+            }
+          ],
+          "description": "«odd» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 2100,
+            "y": 400
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 601
+          },
+          "roomId": "rom_strip"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_strip"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "furniture",
+                "id": "obj_block",
+                "detail": "Solapa «block»."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              },
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_block",
+                  "obj_odd"
+                ],
+                "measurementMm": 300,
+                "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+              }
+            ]
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              }
+            ]
+          },
+          "rejectedCandidate": {
+            "position": {
+              "x": 2400,
+              "y": 400
+            },
+            "rotationDeg": 0,
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "roomId": "rom_strip"
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "goal-not-confirmed",
+            "message": "FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble. Se alcanzó el límite de 250 verificaciones completas con layout-review (3619 posiciones examinadas, presupuesto de 4000): 250 posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición de una cuadrícula de 10 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+          "order": "anillos de 10 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 10,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 3619,
+          "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": true,
+          "placementValidRejected": 250,
+          "rejectedByCode": {
+            "goal-not-confirmed": 250
+          },
+          "rejected": [
+            {
+              "index": 650,
+              "position": {
+                "x": 2400,
+                "y": 400
+              },
+              "distanceMm": 300,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 672,
+              "position": {
+                "x": 2410,
+                "y": 400
+              },
+              "distanceMm": 310,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 694,
+              "position": {
+                "x": 2420,
+                "y": 400
+              },
+              "distanceMm": 320,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 716,
+              "position": {
+                "x": 2430,
+                "y": 400
+              },
+              "distanceMm": 330,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 738,
+              "position": {
+                "x": 2440,
+                "y": 400
+              },
+              "distanceMm": 340,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 760,
+              "position": {
+                "x": 2450,
+                "y": 400
+              },
+              "distanceMm": 350,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 782,
+              "position": {
+                "x": 2460,
+                "y": 400
+              },
+              "distanceMm": 360,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 804,
+              "position": {
+                "x": 2470,
+                "y": 400
+              },
+              "distanceMm": 370,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 826,
+              "position": {
+                "x": 2480,
+                "y": 400
+              },
+              "distanceMm": 380,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 848,
+              "position": {
+                "x": 2490,
+                "y": 400
+              },
+              "distanceMm": 390,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            }
+          ],
+          "rejectedTruncated": 240,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ],
+  "integrity": {
+    "before": {
+      "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+      "size": 4299,
+      "mtimeMs": 1794427919050.6296,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "after": {
+      "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+      "size": 4299,
+      "mtimeMs": 1794427919050.6296,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "sameBytes": true,
+    "sameSha": true,
+    "sameSize": true,
+    "sameMtime": true,
+    "sameListing": true,
+    "summaryMatchesFile": true
+  },
+  "protocol": {
+    "stdoutLines": 11,
+    "nonJsonRpcLines": 0,
+    "stderr": "Rubik MCP local de solo lectura iniciado.",
+    "exit": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "transcript": [
+    {
+      "tool": "get_project_summary",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4299,
+          "modifiedAt": "2026-11-11T20:11:59.051Z"
+        },
+        "units": "mm",
+        "scaleConfidence": "estimated",
+        "counts": {
+          "rooms": 1,
+          "roomsCountingTowardArea": 1,
+          "walls": 4,
+          "openings": 0,
+          "objects": 3,
+          "sourceImages": 0
+        },
+        "usefulAreaM2": 2.8,
+        "note": "La superficie se deriva de los polígonos de estancia del JSON; no es una medición certificada."
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "rooms"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4299,
+          "modifiedAt": "2026-11-11T20:11:59.051Z"
+        },
+        "kind": "rooms",
+        "total": 1,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "rom_strip",
+            "name": "strip",
+            "polygon": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 4000,
+                "y": 0
+              },
+              {
+                "x": 4000,
+                "y": 700
+              },
+              {
+                "x": 0,
+                "y": 700
+              }
+            ],
+            "countsTowardArea": true,
+            "areaM2": 2.8,
+            "relation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "unique",
+              "method": "own_id"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "objects"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4299,
+          "modifiedAt": "2026-11-11T20:11:59.051Z"
+        },
+        "kind": "objects",
+        "total": 3,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "obj_bench",
+            "type": "table",
+            "name": "bench",
+            "position": {
+              "x": 2000,
+              "y": 50
+            },
+            "size": {
+              "widthMm": 4000,
+              "depthMm": 100
+            },
+            "rotationDeg": 0,
+            "relation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 400000
+                }
+              ]
+            }
+          },
+          {
+            "id": "obj_block",
+            "type": "table",
+            "name": "block",
+            "position": {
+              "x": 2000,
+              "y": 400
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "relation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 160000
+                }
+              ]
+            }
+          },
+          {
+            "id": "obj_odd",
+            "type": "table",
+            "name": "odd",
+            "position": {
+              "x": 2100,
+              "y": 400
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "rotationDeg": 0,
+            "relation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "openings"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4299,
+          "modifiedAt": "2026-11-11T20:11:59.051Z"
+        },
+        "kind": "openings",
+        "total": 0,
+        "offset": 0,
+        "limit": 50,
+        "items": []
+      }
+    },
+    {
+      "tool": "review_layout",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4299,
+          "modifiedAt": "2026-11-11T20:11:59.051Z"
+        },
+        "status": "partial",
+        "units": "mm",
+        "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+        "scaleConfidence": "estimated",
+        "checks": {
+          "solapes": {
+            "status": "checked"
+          },
+          "holgura": {
+            "status": "insufficient_evidence",
+            "reason": "Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado."
+          },
+          "puertas": {
+            "status": "checked",
+            "reason": "No hay puertas abatibles activas."
+          }
+        },
+        "findings": [
+          {
+            "code": "solape",
+            "objects": [
+              "obj_bench",
+              "obj_odd"
+            ],
+            "measurementMm": 0.5,
+            "evidence": {
+              "kind": "overlap",
+              "polygon": [
+                {
+                  "x": 2300,
+                  "y": 100
+                },
+                {
+                  "x": 1900,
+                  "y": 100
+                },
+                {
+                  "x": 1900,
+                  "y": 99.5
+                },
+                {
+                  "x": 2300,
+                  "y": 99.5
+                }
+              ],
+              "footprints": [
+                [
+                  {
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "x": 4000,
+                    "y": 0
+                  },
+                  {
+                    "x": 4000,
+                    "y": 100
+                  },
+                  {
+                    "x": 0,
+                    "y": 100
+                  }
+                ],
+                [
+                  {
+                    "x": 1900,
+                    "y": 99.5
+                  },
+                  {
+                    "x": 2300,
+                    "y": 99.5
+                  },
+                  {
+                    "x": 2300,
+                    "y": 700.5
+                  },
+                  {
+                    "x": 1900,
+                    "y": 700.5
+                  }
+                ]
+              ]
+            },
+            "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+            "limitation": "Huellas en planta; no evalúa altura, por lo que un solape puede ser intencionado (por ejemplo, una silla bajo la mesa).",
+            "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+          },
+          {
+            "code": "solape",
+            "objects": [
+              "obj_block",
+              "obj_odd"
+            ],
+            "measurementMm": 300,
+            "evidence": {
+              "kind": "overlap",
+              "polygon": [
+                {
+                  "x": 1900,
+                  "y": 200
+                },
+                {
+                  "x": 2200,
+                  "y": 200
+                },
+                {
+                  "x": 2200,
+                  "y": 600
+                },
+                {
+                  "x": 1900,
+                  "y": 600
+                }
+              ],
+              "footprints": [
+                [
+                  {
+                    "x": 1800,
+                    "y": 200
+                  },
+                  {
+                    "x": 2200,
+                    "y": 200
+                  },
+                  {
+                    "x": 2200,
+                    "y": 600
+                  },
+                  {
+                    "x": 1800,
+                    "y": 600
+                  }
+                ],
+                [
+                  {
+                    "x": 1900,
+                    "y": 99.5
+                  },
+                  {
+                    "x": 2300,
+                    "y": 99.5
+                  },
+                  {
+                    "x": 2300,
+                    "y": 700.5
+                  },
+                  {
+                    "x": 1900,
+                    "y": 700.5
+                  }
+                ]
+              ]
+            },
+            "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+            "limitation": "Huellas en planta; no evalúa altura, por lo que un solape puede ser intencionado (por ejemplo, una silla bajo la mesa).",
+            "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+          }
+        ],
+        "excluded": [],
+        "skipped": [],
+        "unsupported": [
+          {
+            "check": "altura",
+            "reason": "No se evalúa altura ni elevación: solo huellas en planta."
+          },
+          {
+            "check": "muros",
+            "reason": "La holgura se mide entre muebles, no entre un mueble y un muro (W3 ya avisa de solapes con muros)."
+          },
+          {
+            "check": "circulacion",
+            "reason": "No calcula recorridos de paso completos, giros ni entrega de muebles."
+          },
+          {
+            "check": "normativa",
+            "reason": "No comprueba normativa ni accesibilidad; el umbral lo fija la persona."
+          },
+          {
+            "check": "mallas",
+            "reason": "Usa el tamaño guardado del objeto, no la malla 3D del modelo."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+        "objectId": "obj_odd",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_odd",
+        "object": {
+          "id": "obj_odd",
+          "type": "table",
+          "name": "odd"
+        },
+        "problem": {
+          "code": "placement-conflict",
+          "problems": [
+            {
+              "kind": "furniture",
+              "id": "obj_block",
+              "detail": "Solapa «block»."
+            }
+          ],
+          "description": "«odd» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 2100,
+            "y": 400
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 601
+          },
+          "roomId": "rom_strip"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_strip"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "furniture",
+                "id": "obj_block",
+                "detail": "Solapa «block»."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              },
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_block",
+                  "obj_odd"
+                ],
+                "measurementMm": 300,
+                "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+              }
+            ]
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              }
+            ]
+          },
+          "rejectedCandidate": {
+            "position": {
+              "x": 2400,
+              "y": 400
+            },
+            "rotationDeg": 0,
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "roomId": "rom_strip"
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "goal-not-confirmed",
+            "message": "FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble. Se recorrió toda la cuadrícula de 50 mm (219 posiciones): 58 posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 50,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 219,
+          "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 58,
+          "rejectedByCode": {
+            "goal-not-confirmed": 58
+          },
+          "rejected": [
+            {
+              "index": 34,
+              "position": {
+                "x": 2400,
+                "y": 400
+              },
+              "distanceMm": 300,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 40,
+              "position": {
+                "x": 2450,
+                "y": 400
+              },
+              "distanceMm": 350,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 46,
+              "position": {
+                "x": 2500,
+                "y": 400
+              },
+              "distanceMm": 400,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 52,
+              "position": {
+                "x": 2550,
+                "y": 400
+              },
+              "distanceMm": 450,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 58,
+              "position": {
+                "x": 2600,
+                "y": 400
+              },
+              "distanceMm": 500,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 59,
+              "position": {
+                "x": 1600,
+                "y": 400
+              },
+              "distanceMm": 500,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 64,
+              "position": {
+                "x": 2650,
+                "y": 400
+              },
+              "distanceMm": 550,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 65,
+              "position": {
+                "x": 1550,
+                "y": 400
+              },
+              "distanceMm": 550,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 70,
+              "position": {
+                "x": 2700,
+                "y": 400
+              },
+              "distanceMm": 600,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 71,
+              "position": {
+                "x": 1500,
+                "y": 400
+              },
+              "distanceMm": 600,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            }
+          ],
+          "rejectedTruncated": 48,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+        "objectId": "obj_odd",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_odd",
+        "object": {
+          "id": "obj_odd",
+          "type": "table",
+          "name": "odd"
+        },
+        "problem": {
+          "code": "placement-conflict",
+          "problems": [
+            {
+              "kind": "furniture",
+              "id": "obj_block",
+              "detail": "Solapa «block»."
+            }
+          ],
+          "description": "«odd» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 2100,
+            "y": 400
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 601
+          },
+          "roomId": "rom_strip"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_strip"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "furniture",
+                "id": "obj_block",
+                "detail": "Solapa «block»."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              },
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_block",
+                  "obj_odd"
+                ],
+                "measurementMm": 300,
+                "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+              }
+            ]
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              }
+            ]
+          },
+          "rejectedCandidate": {
+            "position": {
+              "x": 2400,
+              "y": 400
+            },
+            "rotationDeg": 0,
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "roomId": "rom_strip"
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "goal-not-confirmed",
+            "message": "FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble. Se recorrió toda la cuadrícula de 50 mm (219 posiciones): 58 posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 50,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 219,
+          "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 58,
+          "rejectedByCode": {
+            "goal-not-confirmed": 58
+          },
+          "rejected": [
+            {
+              "index": 34,
+              "position": {
+                "x": 2400,
+                "y": 400
+              },
+              "distanceMm": 300,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 40,
+              "position": {
+                "x": 2450,
+                "y": 400
+              },
+              "distanceMm": 350,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 46,
+              "position": {
+                "x": 2500,
+                "y": 400
+              },
+              "distanceMm": 400,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 52,
+              "position": {
+                "x": 2550,
+                "y": 400
+              },
+              "distanceMm": 450,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 58,
+              "position": {
+                "x": 2600,
+                "y": 400
+              },
+              "distanceMm": 500,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 59,
+              "position": {
+                "x": 1600,
+                "y": 400
+              },
+              "distanceMm": 500,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 64,
+              "position": {
+                "x": 2650,
+                "y": 400
+              },
+              "distanceMm": 550,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 65,
+              "position": {
+                "x": 1550,
+                "y": 400
+              },
+              "distanceMm": 550,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 70,
+              "position": {
+                "x": 2700,
+                "y": 400
+              },
+              "distanceMm": 600,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 71,
+              "position": {
+                "x": 1500,
+                "y": 400
+              },
+              "distanceMm": 600,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            }
+          ],
+          "rejectedTruncated": 48,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+        "objectId": "obj_odd",
+        "goal": "resolve-placement-conflict",
+        "stepMm": 10
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_odd",
+        "object": {
+          "id": "obj_odd",
+          "type": "table",
+          "name": "odd"
+        },
+        "problem": {
+          "code": "placement-conflict",
+          "problems": [
+            {
+              "kind": "furniture",
+              "id": "obj_block",
+              "detail": "Solapa «block»."
+            }
+          ],
+          "description": "«odd» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 2100,
+            "y": 400
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 601
+          },
+          "roomId": "rom_strip"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_strip"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "furniture",
+                "id": "obj_block",
+                "detail": "Solapa «block»."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              },
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_block",
+                  "obj_odd"
+                ],
+                "measurementMm": 300,
+                "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+              }
+            ]
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              }
+            ]
+          },
+          "rejectedCandidate": {
+            "position": {
+              "x": 2400,
+              "y": 400
+            },
+            "rotationDeg": 0,
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "roomId": "rom_strip"
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "goal-not-confirmed",
+            "message": "FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble. Se alcanzó el límite de 250 verificaciones completas con layout-review (3619 posiciones examinadas, presupuesto de 4000): 250 posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición de una cuadrícula de 10 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+          "order": "anillos de 10 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 10,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 3619,
+          "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": true,
+          "placementValidRejected": 250,
+          "rejectedByCode": {
+            "goal-not-confirmed": 250
+          },
+          "rejected": [
+            {
+              "index": 650,
+              "position": {
+                "x": 2400,
+                "y": 400
+              },
+              "distanceMm": 300,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 672,
+              "position": {
+                "x": 2410,
+                "y": 400
+              },
+              "distanceMm": 310,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 694,
+              "position": {
+                "x": 2420,
+                "y": 400
+              },
+              "distanceMm": 320,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 716,
+              "position": {
+                "x": 2430,
+                "y": 400
+              },
+              "distanceMm": 330,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 738,
+              "position": {
+                "x": 2440,
+                "y": 400
+              },
+              "distanceMm": 340,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 760,
+              "position": {
+                "x": 2450,
+                "y": 400
+              },
+              "distanceMm": 350,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 782,
+              "position": {
+                "x": 2460,
+                "y": 400
+              },
+              "distanceMm": 360,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 804,
+              "position": {
+                "x": 2470,
+                "y": 400
+              },
+              "distanceMm": 370,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 826,
+              "position": {
+                "x": 2480,
+                "y": 400
+              },
+              "distanceMm": 380,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 848,
+              "position": {
+                "x": 2490,
+                "y": 400
+              },
+              "distanceMm": 390,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            }
+          ],
+          "rejectedTruncated": 240,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+        "objectId": "obj_odd",
+        "goal": "resolve-placement-conflict",
+        "stepMm": 10
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "e812629dd795d6c05e777057a57dc80e2274a3c6ea25351d34a0346bb4164f3a",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_odd",
+        "object": {
+          "id": "obj_odd",
+          "type": "table",
+          "name": "odd"
+        },
+        "problem": {
+          "code": "placement-conflict",
+          "problems": [
+            {
+              "kind": "furniture",
+              "id": "obj_block",
+              "detail": "Solapa «block»."
+            }
+          ],
+          "description": "«odd» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+        },
+        "currentPose": {
+          "position": {
+            "x": 2100,
+            "y": 400
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 601
+          },
+          "roomId": "rom_strip"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_strip"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_strip"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_strip",
+                  "overlapAreaMm2": 240200
+                }
+              ],
+              "reason": "footprint_partly_outside_rooms"
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "furniture",
+                "id": "obj_block",
+                "detail": "Solapa «block»."
+              }
+            ],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              },
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_block",
+                  "obj_odd"
+                ],
+                "measurementMm": 300,
+                "message": "Las huellas de «block» y «odd» se solapan 300 mm en planta."
+              }
+            ]
+          },
+          "after": {
+            "placementModel": [],
+            "reviewModel": [
+              {
+                "code": "solape",
+                "objects": [
+                  "obj_bench",
+                  "obj_odd"
+                ],
+                "measurementMm": 0.5,
+                "message": "Las huellas de «bench» y «odd» se solapan 0.5 mm en planta."
+              }
+            ]
+          },
+          "rejectedCandidate": {
+            "position": {
+              "x": 2400,
+              "y": 400
+            },
+            "rotationDeg": 0,
+            "size": {
+              "widthMm": 400,
+              "depthMm": 601
+            },
+            "roomId": "rom_strip"
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "goal-not-confirmed",
+            "message": "FloorPlanPlacement acepta la candidata (tolerancia 1 mm), pero layout-review sigue registrando un solape del mueble. Se alcanzó el límite de 250 verificaciones completas con layout-review (3619 posiciones examinadas, presupuesto de 4000): 250 posición(es) aceptada(s) por FloorPlanPlacement y rechazada(s) por las demás comprobaciones; ninguna supera todas. No demuestra que no exista sitio."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "grid-search",
+            "message": "La candidata es la primera posición de una cuadrícula de 10 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": {
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+          "order": "anillos de 10 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+          "stepMm": 10,
+          "maxCandidates": 4000,
+          "toleranceMm": 1,
+          "tried": 3619,
+          "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": true,
+          "placementValidRejected": 250,
+          "rejectedByCode": {
+            "goal-not-confirmed": 250
+          },
+          "rejected": [
+            {
+              "index": 650,
+              "position": {
+                "x": 2400,
+                "y": 400
+              },
+              "distanceMm": 300,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 672,
+              "position": {
+                "x": 2410,
+                "y": 400
+              },
+              "distanceMm": 310,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 694,
+              "position": {
+                "x": 2420,
+                "y": 400
+              },
+              "distanceMm": 320,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 716,
+              "position": {
+                "x": 2430,
+                "y": 400
+              },
+              "distanceMm": 330,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 738,
+              "position": {
+                "x": 2440,
+                "y": 400
+              },
+              "distanceMm": 340,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 760,
+              "position": {
+                "x": 2450,
+                "y": 400
+              },
+              "distanceMm": 350,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 782,
+              "position": {
+                "x": 2460,
+                "y": 400
+              },
+              "distanceMm": 360,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 804,
+              "position": {
+                "x": 2470,
+                "y": 400
+              },
+              "distanceMm": 370,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 826,
+              "position": {
+                "x": 2480,
+                "y": 400
+              },
+              "distanceMm": 380,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            },
+            {
+              "index": 848,
+              "position": {
+                "x": 2490,
+                "y": 400
+              },
+              "distanceMm": 390,
+              "code": "goal-not-confirmed",
+              "reviewFindings": [
+                "solape 0.5 mm"
+              ]
+            }
+          ],
+          "rejectedTruncated": 240,
+          "checks": [
+            "la estancia completa",
+            "los muros",
+            "el barrido de las puertas",
+            "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
+          ]
+        },
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ]
+}

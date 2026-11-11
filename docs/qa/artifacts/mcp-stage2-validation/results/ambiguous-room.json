@@ -1,0 +1,893 @@
+{
+  "fixture": "ambiguous-room",
+  "source": "validation/validation-projects.cjs:ambiguous-room",
+  "command": "node tools/rubik-mcp/src/server.mjs --project <tmp>/ambiguous-room/project.json",
+  "serverInfo": {
+    "name": "rubik-floorplan-readonly",
+    "version": "0.1.4"
+  },
+  "protocolVersion": "2025-06-18",
+  "tools": [
+    {
+      "name": "check_route_2d",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "diagnose_project",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_element",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_summary",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "inspect_pair_clearance",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_project_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "measure_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "propose_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "review_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "toolsAsExpected": true,
+  "allReadOnly": true,
+  "summarySha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+  "scaleConfidence": "estimated",
+  "reviewStatus": "partial",
+  "reviewFindings": [
+    {
+      "code": "solape",
+      "objects": [
+        "obj_alpha",
+        "obj_beta"
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "label": "C-ambiguous-room",
+      "expect": "pending",
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+        "objectId": "obj_beta",
+        "goal": "resolve-placement-conflict"
+      },
+      "status": "pending",
+      "code": "ambiguous-room",
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_beta",
+        "object": {
+          "id": "obj_beta",
+          "type": "table",
+          "name": "beta"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2300,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          }
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living",
+              "rom_alcove"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living",
+                "rom_alcove"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                },
+                {
+                  "roomId": "rom_alcove",
+                  "overlapAreaMm2": 360000
+                }
+              ],
+              "reason": "footprint_overlaps_multiple_rooms"
+            }
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "ambiguous-room",
+            "message": "La posición del mueble pertenece a más de una estancia: no se puede atribuir con certeza y no se elige una por conveniencia."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ],
+  "integrity": {
+    "before": {
+      "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+      "size": 4733,
+      "mtimeMs": 1794427916582.6294,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "after": {
+      "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+      "size": 4733,
+      "mtimeMs": 1794427916582.6294,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "sameBytes": true,
+    "sameSha": true,
+    "sameSize": true,
+    "sameMtime": true,
+    "sameListing": true,
+    "summaryMatchesFile": true
+  },
+  "protocol": {
+    "stdoutLines": 9,
+    "nonJsonRpcLines": 0,
+    "stderr": "Rubik MCP local de solo lectura iniciado.",
+    "exit": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "transcript": [
+    {
+      "tool": "get_project_summary",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4733,
+          "modifiedAt": "2026-11-11T20:11:56.583Z"
+        },
+        "units": "mm",
+        "scaleConfidence": "estimated",
+        "counts": {
+          "rooms": 2,
+          "roomsCountingTowardArea": 2,
+          "walls": 4,
+          "openings": 1,
+          "objects": 2,
+          "sourceImages": 0
+        },
+        "usefulAreaM2": 14,
+        "note": "La superficie se deriva de los polígonos de estancia del JSON; no es una medición certificada."
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "rooms"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4733,
+          "modifiedAt": "2026-11-11T20:11:56.583Z"
+        },
+        "kind": "rooms",
+        "total": 2,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "rom_living",
+            "name": "living",
+            "polygon": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 4000,
+                "y": 0
+              },
+              {
+                "x": 4000,
+                "y": 3000
+              },
+              {
+                "x": 0,
+                "y": 3000
+              }
+            ],
+            "countsTowardArea": true,
+            "areaM2": 12,
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "own_id"
+            }
+          },
+          {
+            "id": "rom_alcove",
+            "name": "alcove",
+            "polygon": [
+              {
+                "x": 1000,
+                "y": 1000
+              },
+              {
+                "x": 3000,
+                "y": 1000
+              },
+              {
+                "x": 3000,
+                "y": 2000
+              },
+              {
+                "x": 1000,
+                "y": 2000
+              }
+            ],
+            "countsTowardArea": true,
+            "areaM2": 2,
+            "relation": {
+              "roomIds": [
+                "rom_alcove"
+              ],
+              "status": "unique",
+              "method": "own_id"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "objects"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4733,
+          "modifiedAt": "2026-11-11T20:11:56.583Z"
+        },
+        "kind": "objects",
+        "total": 2,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "obj_alpha",
+            "type": "table",
+            "name": "alpha",
+            "position": {
+              "x": 2000,
+              "y": 1500
+            },
+            "size": {
+              "widthMm": 600,
+              "depthMm": 600
+            },
+            "rotationDeg": 0,
+            "relation": {
+              "roomIds": [
+                "rom_living",
+                "rom_alcove"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                },
+                {
+                  "roomId": "rom_alcove",
+                  "overlapAreaMm2": 360000
+                }
+              ],
+              "reason": "footprint_overlaps_multiple_rooms"
+            }
+          },
+          {
+            "id": "obj_beta",
+            "type": "table",
+            "name": "beta",
+            "position": {
+              "x": 2300,
+              "y": 1500
+            },
+            "size": {
+              "widthMm": 600,
+              "depthMm": 600
+            },
+            "rotationDeg": 0,
+            "relation": {
+              "roomIds": [
+                "rom_living",
+                "rom_alcove"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                },
+                {
+                  "roomId": "rom_alcove",
+                  "overlapAreaMm2": 360000
+                }
+              ],
+              "reason": "footprint_overlaps_multiple_rooms"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "openings"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4733,
+          "modifiedAt": "2026-11-11T20:11:56.583Z"
+        },
+        "kind": "openings",
+        "total": 1,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "opn_door",
+            "wallId": "wal_south",
+            "kind": "door",
+            "offsetMm": 1000,
+            "widthMm": 800,
+            "heightMm": 2100,
+            "sillHeightMm": 0,
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "opening_span_polygon_contact",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 0,
+                  "contactLengthMm": 800
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "review_layout",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_reference-home",
+          "projectName": "三室两厅两卫",
+          "sizeBytes": 4733,
+          "modifiedAt": "2026-11-11T20:11:56.583Z"
+        },
+        "status": "partial",
+        "units": "mm",
+        "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+        "scaleConfidence": "estimated",
+        "checks": {
+          "solapes": {
+            "status": "checked"
+          },
+          "holgura": {
+            "status": "insufficient_evidence",
+            "reason": "Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado."
+          },
+          "puertas": {
+            "status": "checked"
+          }
+        },
+        "findings": [
+          {
+            "code": "solape",
+            "objects": [
+              "obj_alpha",
+              "obj_beta"
+            ],
+            "measurementMm": 300,
+            "evidence": {
+              "kind": "overlap",
+              "polygon": [
+                {
+                  "x": 2000,
+                  "y": 1200
+                },
+                {
+                  "x": 2300,
+                  "y": 1200
+                },
+                {
+                  "x": 2300,
+                  "y": 1800
+                },
+                {
+                  "x": 2000,
+                  "y": 1800
+                }
+              ],
+              "footprints": [
+                [
+                  {
+                    "x": 1700,
+                    "y": 1200
+                  },
+                  {
+                    "x": 2300,
+                    "y": 1200
+                  },
+                  {
+                    "x": 2300,
+                    "y": 1800
+                  },
+                  {
+                    "x": 1700,
+                    "y": 1800
+                  }
+                ],
+                [
+                  {
+                    "x": 2000,
+                    "y": 1200
+                  },
+                  {
+                    "x": 2600,
+                    "y": 1200
+                  },
+                  {
+                    "x": 2600,
+                    "y": 1800
+                  },
+                  {
+                    "x": 2000,
+                    "y": 1800
+                  }
+                ]
+              ]
+            },
+            "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+            "limitation": "Huellas en planta; no evalúa altura, por lo que un solape puede ser intencionado (por ejemplo, una silla bajo la mesa).",
+            "message": "Las huellas de «alpha» y «beta» se solapan 300 mm en planta."
+          }
+        ],
+        "excluded": [],
+        "skipped": [],
+        "unsupported": [
+          {
+            "check": "altura",
+            "reason": "No se evalúa altura ni elevación: solo huellas en planta."
+          },
+          {
+            "check": "muros",
+            "reason": "La holgura se mide entre muebles, no entre un mueble y un muro (W3 ya avisa de solapes con muros)."
+          },
+          {
+            "check": "circulacion",
+            "reason": "No calcula recorridos de paso completos, giros ni entrega de muebles."
+          },
+          {
+            "check": "normativa",
+            "reason": "No comprueba normativa ni accesibilidad; el umbral lo fija la persona."
+          },
+          {
+            "check": "mallas",
+            "reason": "Usa el tamaño guardado del objeto, no la malla 3D del modelo."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+        "objectId": "obj_beta",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_beta",
+        "object": {
+          "id": "obj_beta",
+          "type": "table",
+          "name": "beta"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2300,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          }
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living",
+              "rom_alcove"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living",
+                "rom_alcove"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                },
+                {
+                  "roomId": "rom_alcove",
+                  "overlapAreaMm2": 360000
+                }
+              ],
+              "reason": "footprint_overlaps_multiple_rooms"
+            }
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "ambiguous-room",
+            "message": "La posición del mueble pertenece a más de una estancia: no se puede atribuir con certeza y no se elige una por conveniencia."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+        "objectId": "obj_beta",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "a8682bceba13f3e07a00fe3d06a44aee90c3afd846f008613a628d2079949e7c",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_beta",
+        "object": {
+          "id": "obj_beta",
+          "type": "table",
+          "name": "beta"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2300,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          }
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living",
+              "rom_alcove"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living",
+                "rom_alcove"
+              ],
+              "status": "ambiguous",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                },
+                {
+                  "roomId": "rom_alcove",
+                  "overlapAreaMm2": 360000
+                }
+              ],
+              "reason": "footprint_overlaps_multiple_rooms"
+            }
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "ambiguous-room",
+            "message": "La posición del mueble pertenece a más de una estancia: no se puede atribuir con certeza y no se elige una por conveniencia."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ]
+}

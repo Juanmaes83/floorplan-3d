@@ -1,0 +1,3845 @@
+{
+  "fixture": "contract-example",
+  "source": "docs/contracts/examples/floorplan-project-v1.example.json",
+  "command": "node tools/rubik-mcp/src/server.mjs --project <tmp>/contract-example/project.json",
+  "serverInfo": {
+    "name": "rubik-floorplan-readonly",
+    "version": "0.1.4"
+  },
+  "protocolVersion": "2025-06-18",
+  "tools": [
+    {
+      "name": "check_route_2d",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "diagnose_project",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_element",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_project_summary",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "inspect_pair_clearance",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_project_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "measure_elements",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "propose_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "review_layout",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "toolsAsExpected": true,
+  "allReadOnly": true,
+  "summarySha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+  "scaleConfidence": "real",
+  "reviewStatus": "partial",
+  "reviewFindings": [],
+  "proposals": [
+    {
+      "label": "E-obj_bed-01-resolve",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_sofa-01-resolve",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_toilet-01-resolve",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_bed-01-opn_entrance",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_sofa-01-opn_entrance",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_toilet-01-opn_entrance",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_bed-01-opn_bath-door",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_sofa-01-opn_bath-door",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "E-obj_toilet-01-opn_bath-door",
+      "expect": null,
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ],
+  "integrity": {
+    "before": {
+      "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+      "size": 7408,
+      "mtimeMs": 1794427920330.6296,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "after": {
+      "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+      "size": 7408,
+      "mtimeMs": 1794427920330.6296,
+      "listing": [
+        "project.json"
+      ]
+    },
+    "sameBytes": true,
+    "sameSha": true,
+    "sameSize": true,
+    "sameMtime": true,
+    "sameListing": true,
+    "summaryMatchesFile": true
+  },
+  "protocol": {
+    "stdoutLines": 25,
+    "nonJsonRpcLines": 0,
+    "stderr": "Rubik MCP local de solo lectura iniciado.",
+    "exit": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "transcript": [
+    {
+      "tool": "get_project_summary",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
+          "projectName": "Estudio de ejemplo (ficticio)",
+          "sizeBytes": 7408,
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
+        },
+        "units": "mm",
+        "scaleConfidence": "real",
+        "counts": {
+          "rooms": 2,
+          "roomsCountingTowardArea": 2,
+          "walls": 6,
+          "openings": 3,
+          "objects": 3,
+          "sourceImages": 1
+        },
+        "usefulAreaM2": 21.28,
+        "note": "La superficie se deriva de los polígonos de estancia del JSON; no es una medición certificada."
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "rooms"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
+          "projectName": "Estudio de ejemplo (ficticio)",
+          "sizeBytes": 7408,
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
+        },
+        "kind": "rooms",
+        "total": 2,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "rom_living",
+            "name": "Salón-dormitorio",
+            "polygon": [
+              {
+                "x": 120,
+                "y": 120
+              },
+              {
+                "x": 4150,
+                "y": 120
+              },
+              {
+                "x": 4150,
+                "y": 2250
+              },
+              {
+                "x": 5880,
+                "y": 2250
+              },
+              {
+                "x": 5880,
+                "y": 3880
+              },
+              {
+                "x": 120,
+                "y": 3880
+              }
+            ],
+            "labelAt": {
+              "x": 2100,
+              "y": 2000
+            },
+            "countsTowardArea": true,
+            "areaM2": 17.97,
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "own_id"
+            }
+          },
+          {
+            "id": "rom_bath",
+            "name": "Baño",
+            "polygon": [
+              {
+                "x": 4250,
+                "y": 120
+              },
+              {
+                "x": 5880,
+                "y": 120
+              },
+              {
+                "x": 5880,
+                "y": 2150
+              },
+              {
+                "x": 4250,
+                "y": 2150
+              }
+            ],
+            "countsTowardArea": true,
+            "areaM2": 3.31,
+            "relation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "own_id"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "objects"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
+          "projectName": "Estudio de ejemplo (ficticio)",
+          "sizeBytes": 7408,
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
+        },
+        "kind": "objects",
+        "total": 3,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "obj_bed-01",
+            "type": "bed",
+            "name": "Cama doble 1,40",
+            "position": {
+              "x": 1100,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "roomId": "rom_living",
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          {
+            "id": "obj_sofa-01",
+            "type": "sofa",
+            "name": "Sofá 3 plazas",
+            "position": {
+              "x": 2400,
+              "y": 3400
+            },
+            "size": {
+              "widthMm": 2200,
+              "depthMm": 900,
+              "heightMm": 800
+            },
+            "rotationDeg": 180,
+            "roomId": "rom_living",
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          {
+            "id": "obj_toilet-01",
+            "type": "toilet",
+            "name": "Inodoro",
+            "position": {
+              "x": 5500,
+              "y": 600
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 700
+            },
+            "rotationDeg": 270,
+            "roomId": "rom_bath",
+            "relation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_project_elements",
+      "arguments": {
+        "kind": "openings"
+      },
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
+          "projectName": "Estudio de ejemplo (ficticio)",
+          "sizeBytes": 7408,
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
+        },
+        "kind": "openings",
+        "total": 3,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "id": "opn_entrance",
+            "wallId": "wal_ext-south",
+            "kind": "door",
+            "offsetMm": 1000,
+            "widthMm": 900,
+            "heightMm": 2100,
+            "sillHeightMm": 0,
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "opening_span_polygon_contact",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 0,
+                  "contactLengthMm": 900
+                }
+              ]
+            }
+          },
+          {
+            "id": "opn_window-west",
+            "wallId": "wal_ext-west",
+            "kind": "window",
+            "offsetMm": 1200,
+            "widthMm": 1500,
+            "heightMm": 1300,
+            "sillHeightMm": 900,
+            "relation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "opening_span_polygon_contact",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 0,
+                  "contactLengthMm": 1500
+                }
+              ]
+            }
+          },
+          {
+            "id": "opn_bath-door",
+            "wallId": "wal_bath-south",
+            "kind": "door",
+            "offsetMm": 300,
+            "widthMm": 700,
+            "heightMm": 2100,
+            "sillHeightMm": 0,
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "relation": {
+              "roomIds": [
+                "rom_living",
+                "rom_bath"
+              ],
+              "status": "shared",
+              "method": "opening_span_polygon_contact",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 0,
+                  "contactLengthMm": 700
+                },
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 0,
+                  "contactLengthMm": 700
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "review_layout",
+      "arguments": {},
+      "isError": false,
+      "response": {
+        "snapshot": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
+          "projectName": "Estudio de ejemplo (ficticio)",
+          "sizeBytes": 7408,
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
+        },
+        "status": "partial",
+        "units": "mm",
+        "method": "Huella orientada en planta (rectángulo girado) y ejes separadores, en mm",
+        "scaleConfidence": "real",
+        "checks": {
+          "solapes": {
+            "status": "checked"
+          },
+          "holgura": {
+            "status": "insufficient_evidence",
+            "reason": "Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado."
+          },
+          "puertas": {
+            "status": "checked"
+          }
+        },
+        "findings": [],
+        "excluded": [],
+        "skipped": [],
+        "unsupported": [
+          {
+            "check": "altura",
+            "reason": "No se evalúa altura ni elevación: solo huellas en planta."
+          },
+          {
+            "check": "muros",
+            "reason": "La holgura se mide entre muebles, no entre un mueble y un muro (W3 ya avisa de solapes con muros)."
+          },
+          {
+            "check": "circulacion",
+            "reason": "No calcula recorridos de paso completos, giros ni entrega de muebles."
+          },
+          {
+            "check": "normativa",
+            "reason": "No comprueba normativa ni accesibilidad; el umbral lo fija la persona."
+          },
+          {
+            "check": "mallas",
+            "reason": "Usa el tamaño guardado del objeto, no la malla 3D del modelo."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_entrance"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "openingId": "opn_entrance",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "start",
+              "side": "right"
+            },
+            "widthMm": 900,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_bed-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_bed-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_bed-01",
+          "type": "bed",
+          "name": "Cama doble 1,40"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 1100,
+            "y": 1200
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 1400,
+            "depthMm": 2000
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 2800000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_sofa-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_sofa-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_sofa-01",
+          "type": "sofa",
+          "name": "Sofá 3 plazas"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2400,
+            "y": 3400
+          },
+          "rotationDeg": 180,
+          "size": {
+            "widthMm": 2200,
+            "depthMm": 900
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_living",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 1980000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+        "objectId": "obj_toilet-01",
+        "goal": "clear-door-swing",
+        "openingId": "opn_bath-door"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "real"
+        },
+        "objectId": "obj_toilet-01",
+        "openingId": "opn_bath-door",
+        "object": {
+          "id": "obj_toilet-01",
+          "type": "toilet",
+          "name": "Inodoro"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 5500,
+            "y": 600
+          },
+          "rotationDeg": 270,
+          "size": {
+            "widthMm": 400,
+            "depthMm": 700
+          },
+          "roomId": "rom_bath"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "Según layout-review, la hoja de la puerta no alcanza el mueble al abrir 90°.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_bath"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_bath"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "storedRoomId": "rom_bath",
+              "evidence": [
+                {
+                  "roomId": "rom_bath",
+                  "overlapAreaMm2": 280000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          },
+          "door": {
+            "swing": {
+              "hinge": "end",
+              "side": "right"
+            },
+            "widthMm": 700,
+            "reviewLeafContactDeg": null,
+            "placementSquareHit": false,
+            "models": {
+              "review": "layout-review.leafContact: hoja de grosor nulo que gira 90° (radio = ancho del hueco).",
+              "placement": "furniture-placement: cuadrado conservador que envuelve el barrido completo."
+            }
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    }
+  ]
+}
