@@ -24,35 +24,40 @@
  .tablewrap{overflow-x:auto}.ok{color:var(--ok)}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn)}.muted{color:var(--muted)}
  .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:6px}.legend i{display:inline-block;width:14px;height:10px;margin-right:4px;vertical-align:middle;border-radius:2px}
  #err{color:var(--bad);min-height:1.4em;margin-top:6px}ul{margin:4px 0 0 18px;padding:0}pre{max-height:320px;overflow:auto;font-size:11px;background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:8px}
+ :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ #cmp{min-width:760px}.tablewrap{border:1px solid var(--line);border-radius:6px}
+ .state{display:inline-block;padding:2px 9px;border-radius:999px;font-weight:700;font-size:12px;border:1px solid}.state.clear{color:var(--ok);border-color:var(--ok)}.state.pending{color:var(--warn);border-color:var(--warn)}.state.bad{color:var(--bad);border-color:var(--bad)}
+ #summary{columns:2 380px;column-gap:28px}#summary>*{break-inside:avoid}
+ .cand{border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin:6px 0}.cand p{margin:2px 0}
  @media (max-width:520px){main{padding:10px}header{padding:12px 10px}.controls>div{flex:1 1 140px}}
 </style>
 </head>
 <body>
 <header>
- <h1>SCULPT-R03 · armarios paramétricos: particiones, baldas, barras, cajones y puertas</h1>
+ <h1>SCULPT-R03 · armarios paramétricos: módulos interiores, baldas, barras, cajones y puertas</h1>
  <span class="banner" role="note">LABORATORIO SCULPT-R03 — NO INTEGRADO EN RUBIK — NO VALIDADO PARA FABRICACIÓN NI PEDIDO</span>
  <p>Motor del donante (caikaidev/floorplan-3d @2495d8e, MIT + D.6) esculpido y comparado con RUBIK. Escenarios sintéticos; las ediciones viven solo en esta página y no se aplican a ningún proyecto.</p>
  <div class="controls">
   <div><label for="sc">Escenario</label><select id="sc"></select></div>
   <div><label for="front">Puertas en 3D</label><select id="front"><option value="closed">cerradas</option><option value="hidden">ocultas (interior)</option><option value="open">abiertas</option></select></div>
-  <div><label for="bay">Partición</label><select id="bay"></select></div>
+  <div><label for="bay">Módulo</label><select id="bay"></select></div>
   <div><label for="shelves">Baldas (mm, cara inferior)</label><input id="shelves" inputmode="decimal" size="16"></div>
-  <div><label for="rod">Barra (mm, 0 = sin barra)</label><input id="rod" type="number" min="0" step="1" size="6"></div>
-  <div><label for="drawers">Cajones</label><input id="drawers" type="number" min="0" max="6" step="1" size="3"></div>
-  <div><button id="apply">Aplicar partición</button></div>
-  <div><button id="split">Dividir</button></div>
-  <div><button id="merge">Unir</button></div>
+  <div><label for="rod">Barra (mm; vacío o 0 = sin barra)</label><input id="rod" inputmode="decimal" size="6"></div>
+  <div><label for="drawers">Cajones (0–6)</label><input id="drawers" inputmode="numeric" size="3"></div>
+  <div><button id="apply">Aplicar al módulo</button></div>
+  <div><button id="split">Dividir módulo</button></div>
+  <div><button id="merge">Unir con el contiguo</button></div>
   <div><button id="reset">Restablecer</button></div>
  </div>
  <div id="err" role="alert"></div>
 </header>
 <main>
  <section><h2>Alzado frontal (taller esculpido)</h2><svg id="elev" viewBox="0 0 10 10" role="img" aria-label="Alzado del armario en milímetros"></svg>
-  <div class="legend"><span><i style="background:var(--board)"></i>tablero / balda</span><span><i style="background:var(--drawer)"></i>cajón</span><span><i style="background:var(--rod)"></i>barra</span><span><i style="border:1px dashed var(--accent)"></i>puerta (bisagra ▲)</span></div></section>
- <section><h2>3D · <span class="muted">cabinet-model.js del donante, literal, con three.js r160 de RUBIK</span></h2><canvas id="view3d" width="900" height="640" aria-label="Vista 3D del armario"></canvas></section>
+  <div class="legend"><span><i style="background:var(--board)"></i>tablero / balda</span><span><i style="background:var(--drawer)"></i>cajón</span><span><i style="background:var(--rod)"></i>barra</span><span><i style="border:1px dashed var(--accent)"></i>puerta (bisagra ▲)</span><span>M = módulo · ancho libre</span></div></section>
+ <section><h2>3D · <span class="muted">cabinet-model.js del donante, literal, con three.js r160 de RUBIK</span></h2><canvas id="view3d" width="900" height="640" aria-label="Vista 3D del armario"></canvas><p id="note3d" class="muted" role="status"></p></section>
  <section><h2>Planta · barrido de puertas y cajones</h2><svg id="plan" viewBox="0 0 10 10" role="img" aria-label="Planta con barridos"></svg>
-  <div class="legend"><span><i style="background:var(--sector);border:1px solid var(--accent)"></i>sector 90° (taller)</span><span><i style="border:1px dashed var(--square)"></i>cuadrado (convención RUBIK)</span><span><i style="background:var(--donor)"></i>obstáculo del donante (puerta abierta)</span><span><i style="background:#f6c6c1"></i>conflicto</span></div></section>
- <section><h2>Evidencia CabinetEvidenceV1</h2><div id="summary"></div></section>
+  <div class="legend"><span><i style="background:var(--sector);border:1px solid var(--accent)"></i>sector 90° (experimental)</span><span><i style="border:1px dashed var(--square)"></i>cuadrado (convención RUBIK, conservador)</span><span><i style="background:var(--donor)"></i>obstáculo del donante (puerta abierta)</span><span><i style="background:#f6c6c1"></i>conflicto</span></div></section>
+ <section class="wide"><h2>Evidencia CabinetEvidenceV1</h2><div id="summary"></div></section>
  <section class="wide"><h2>Comparador · donante ↔ taller ↔ evidencia ↔ RUBIK hoy</h2><div class="tablewrap"><table id="cmp"></table></div><div id="limits" class="muted"></div>
   <details><summary>JSON de la evidencia</summary><pre id="json"></pre></details></section>
 </main>
@@ -113,6 +118,7 @@ const rod = (a, b, r, m) => { const A = new THREE.Vector3(...a), B = new THREE.V
 let cabGroup = null, swingGroup = null;
 function draw3d(ev) {
   if (cabGroup) scene.remove(cabGroup); if (swingGroup) scene.remove(swingGroup); cabGroup = swingGroup = null;
+  $('#note3d').textContent = ev.computed ? `Puertas ${({ closed: 'cerradas', hidden: 'ocultas: se ve el interior', open: 'abiertas a 90° y cajones extraídos' })[ui.cabinet.front]}. El barrido azul del suelo es el sector de 90°.` : 'Sin modelo 3D: la distribución no es válida. Corrige los problemas indicados o pulsa «Restablecer».';
   if (!ev.computed) { renderer.render(scene, camera); return; }
   const o = object(), f = { type: o.type, w: o.size.widthMm, d: o.size.depthMm, color: '#efe6d8', cabinet: ui.cabinet };
   cabGroup = buildCabinet(f, { THREE, box, mat, rod: (a, b, r, m) => rod(a, b, r, m), metal }); scene.add(cabGroup);
@@ -137,18 +143,18 @@ function drawElevation() {
   const svg = $('#elev'); svg.replaceChildren();
   const o = outer(), c = ui.cabinet; if (!c || !Number.isFinite(c.height)) return;
   const prim = K.elevation(o, c), pad = 120, W = o.w, H = c.height;
-  svg.setAttribute('viewBox', `${-pad} ${-pad} ${W + 2 * pad} ${H + 2 * pad + 60}`);
+  svg.setAttribute('viewBox', `${-pad} ${-pad} ${W + 2 * pad} ${H + 2 * pad + 90}`);
   const fill = { carcass: 'var(--carcass)', cavity: 'var(--cavity)', bay: 'transparent', opening: 'transparent', shelf: 'var(--board)', rod: 'var(--rod)', drawer: 'var(--drawer)', handle: '#665848', divider: 'var(--board)', door: 'transparent', overlap: 'var(--bad)' };
   let s = '';
   for (const p of prim) {
     const y = H - p.y - p.h, sel = p.bay === ui.bay && p.role === 'bay';
     const stroke = p.role === 'door' ? 'stroke="var(--accent)" stroke-dasharray="18 12" stroke-width="3"' : p.role === 'bay' ? `stroke="${sel ? 'var(--accent)' : '#b9ab96'}" stroke-width="${sel ? 8 : 2}"` : p.role === 'drawer' ? 'stroke="#a88863" stroke-width="2"' : p.role === 'overlap' ? 'stroke="var(--bad)" stroke-width="10"' : '';
     s += `<rect x="${p.x}" y="${y}" width="${p.w}" height="${p.h}" fill="${fill[p.role]}" ${stroke} data-role="${p.role}"${p.bay != null ? ` data-bay="${p.bay}"` : ''}/>`;
-    if (p.role === 'opening' && p.h > 120) s += `<text x="${p.x + p.w / 2}" y="${y + p.h / 2}" text-anchor="middle" font-size="44" fill="#536a61">${p.label}</text>`;
-    if (p.role === 'bay') s += `<text x="${p.x + p.w / 2}" y="${H + 70}" text-anchor="middle" font-size="46">${p.bay + 1} · ${p.label} mm</text>`;
+    if (p.role === 'opening' && p.h > 120) s += `<text x="${p.x + p.w / 2}" y="${y + p.h / 2}" text-anchor="middle" font-size="60" fill="#3f5a50">${p.label}</text>`;
+    if (p.role === 'bay') s += `<text x="${p.x + p.w / 2}" y="${H + 85}" text-anchor="middle" font-size="62">M${p.bay + 1} · ${p.label} mm</text>`;
     if (p.role === 'door') s += `<path d="M${p.hinge === 'left' ? p.x + 20 : p.x + p.w - 20} ${y + 40} l16 28 h-32z" fill="var(--accent)"/>`;
   }
-  s += `<text x="${W / 2}" y="${-40}" text-anchor="middle" font-size="50">${Math.round(W)} × ${Math.round(H)} mm</text>`;
+  s += `<text x="${W / 2}" y="${-40}" text-anchor="middle" font-size="64">${Math.round(W)} × ${Math.round(H)} mm (exterior)</text>`;
   svg.innerHTML = s;
   svg.querySelectorAll('[data-role="bay"]').forEach(el => el.addEventListener('click', () => { ui.bay = +el.dataset.bay; render(); }));
 }
@@ -158,7 +164,8 @@ function drawPlan(ev) {
   const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]), x0 = Math.min(...xs) - 200, y0 = Math.min(...ys) - 200, W = Math.max(...xs) - x0 + 200, H = Math.max(...ys) - y0 + 200;
   svg.setAttribute('viewBox', `${x0} ${y0} ${W} ${H}`);
   const poly = (P, attrs) => `<polygon points="${P.map(q => Array.isArray(q) ? q.join(',') : q.x + ',' + q.y).join(' ')}" ${attrs}/>`;
-  const conflicted = new Set(ev.clearance ? ev.clearance.doors.flatMap(d => d.sectorHits.filter(h => h.kind === 'furniture').map(h => h.id)).concat(ev.clearance.blockedBy.filter(b => b.startsWith('furniture:')).map(b => b.slice(10))) : []);
+  const f = ev.clearance ? ev.clearance.findings : { doorSquare: [], doorSector: [], drawers: [] };
+  const conflicted = new Set([...f.doorSquare, ...f.doorSector, ...f.drawers].filter(t => t.startsWith('furniture:')).map(t => t.slice(10)));
   let s = p.rooms.map(r => poly(r.polygon, 'fill="#fafbfc" stroke="#c3cad4" stroke-width="10"')).join('') + g.walls.map(w => poly(w.poly, 'fill="var(--wall)"')).join('');
   for (const o of p.objects) s += poly(T.footprint(o), o.id === scenario().objectId ? 'fill="var(--carcass)" stroke="#8a6d4b" stroke-width="12"' : `fill="${conflicted.has(o.id) ? '#f6c6c1' : 'var(--furn)'}" stroke="${conflicted.has(o.id) ? 'var(--bad)' : '#8b95a3'}" stroke-width="10" data-obj="${esc(o.id)}"`);
   if (ev.clearance) {
@@ -170,29 +177,44 @@ function drawPlan(ev) {
 }
 // ---- evidence summary and comparator ----
 const yes = (v, good = true) => v === null || v === undefined ? '<span class="muted">sin evaluar</span>' : (v === good ? `<span class="ok">sí</span>` : `<span class="bad">no</span>`);
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const STATE = { clear: ['clear', 'sin incidencias en lo evaluado'], 'clear-with-pending': ['pending', 'sin bloqueos, con comprobaciones pendientes'], issues: ['bad', 'con incidencias'], invalid: ['bad', 'distribución no válida'], incomplete: ['pending', 'sin datos del armario'] };
+const CAND = { 'candidate-reviewable': ['clear', 'revisable'], pending: ['pending', 'pendiente'], blocked: ['bad', 'bloqueada'] };
+const CHECK = { fits: 'cabe', 'does-not-fit': 'no cabe', 'vertical-unknown': 'sin referencia vertical', 'vertical-unsourced': 'referencia sin procedencia acreditada', 'reference-not-comparable': 'referencia desde el suelo de forjado; falta el acabado del suelo para compararla', 'elevation-invalid': 'elevación del objeto no válida', 'cabinet-invalid': 'distribución no válida', 'cabinet': 'distribución no válida', 'no-canonical-field': 'sin campo canónico en FloorPlanProjectV1', 'target-invalid': 'valor objetivo no válido' };
+const why = code => CHECK[code] || (String(code).startsWith('vertical-invalid') ? 'referencia vertical no válida' : code);
+const ISSUE = { outer: 'medidas exteriores no válidas', 'bays-count': 'el armario necesita entre 1 y 8 módulos', 'bay-shape': 'cada módulo debe ser un objeto', dimensions: 'medidas del cuerpo fuera de rango (alto 400–4000, tablero 12–30, trasera 5–25, holgura frontal 18–80, zócalo 0–250 mm)', state: 'estado de puertas no válido', 'door-count': 'el número de puertas debe estar entre 1 y 12', cavity: 'el hueco útil es demasiado pequeño', 'bay-widths-sum': 'los anchos de los módulos deben sumar el ancho libre', 'bay-width': 'cada módulo necesita al menos 150 mm de ancho libre', drawers: 'número o altura de cajones no válidos (0–6 cajones enteros, 80–400 mm)', 'drawers-height': 'los cajones superan la altura del módulo', 'shelves-count': 'máximo 12 baldas por módulo', 'shelf-gap': 'deja al menos 60 mm entre baldas, sobre los cajones y bajo el techo del módulo', rod: 'la barra choca con una balda o con los cajones (30 mm a cada balda, 100 mm sobre los cajones)', 'single-bay': 'un único módulo ocupa todo el ancho libre', 'bay-index': 'no hay un módulo contiguo' };
+const issueText = i => (ISSUE[i.code] || i.code) + (i.bay != null ? ` (M${i.bay + 1})` : '');
+const badge = ([cls, txt]) => `<span class="state ${cls}">${esc(txt)}</span>`;
 function drawSummary(ev, cmp) {
-  const h = ev.height, c = ev.cabinet;
-  let s = `<p><b>Estado del armario:</b> ${esc(c.status)}${c.issues.length ? ` · <span class="bad">${c.issues.length} problema(s): ${c.issues.map(i => esc(i.code)).join(', ')}</span>` : ''}</p>`;
-  s += `<p><b>Altura:</b> armario ${h.cabinetHeightMm ?? '—'} mm sobre ${h.elevationMm} mm · referencia vertical <b>${esc(h.vertical.status)}</b>${h.vertical.clearHeightMm ? ` ${h.vertical.clearHeightMm} mm (${esc(h.vertical.reference)})` : ''} · cabe: ${yes(h.fits)}${h.marginMm != null ? ` (margen ${h.marginMm} mm)` : ''}</p>`;
-  if (ev.computed) s += `<p><b>Hueco útil:</b> ${Math.round(ev.computed.cavity.width)} × ${Math.round(ev.computed.cavity.height)} × ${Math.round(ev.computed.cavity.depth)} mm · ${ev.computed.bays.length} particiones · ${ev.computed.fronts.length} puertas · conflictos bisagra/cajón: ${ev.computed.hingeDrawerConflicts.length ? '<span class="bad">' + ev.computed.hingeDrawerConflicts.join(', ') + '</span>' : '<span class="ok">ninguno</span>'}</p>`;
-  if (ev.clearance) s += `<p><b>Barridos (convención RUBIK):</b> ${ev.clearance.blockedBy.length ? '<span class="bad">' + ev.clearance.blockedBy.map(esc).join(', ') + '</span>' : '<span class="ok">libres</span>'}</p>`;
-  s += `<p><b>previewDiff</b> (no aplicado): ${ev.previewDiff.candidates.map(x => `<code>${esc(x.op)}</code> ${esc(x.path ?? 'interior')} → <b>${esc(x.status)}</b>`).join(' · ')}</p>`;
-  s += `<details><summary>Supuestos usados (${c.assumptions.length})</summary><ul>${c.assumptions.map(a => `<li><code>${esc(a.key)}</code>: ${esc(JSON.stringify(a.value))} — ${esc(a.source)}</li>`).join('')}</ul></details>`;
+  const h = ev.height, c = ev.cabinet, st = STATE[ev.summary.state] || ['pending', ev.summary.state];
+  let s = `<p><b>Estado:</b> ${badge(st)} · armario <code>${esc(c.status)}</code>${c.issues.length ? ` · <span class="bad">${plural(c.issues.length, 'problema', 'problemas')}: ${c.issues.map(i => esc(issueText(i))).join('; ')}</span>` : ''}</p>`;
+  s += `<p><b>Altura:</b> armario ${h.cabinetHeightMm ?? '—'} mm sobre ${h.elevationMm ?? '—'} mm (cota superior ${h.topMm ?? '—'} mm) · referencia <b>${esc(h.vertical.status)}</b>${h.vertical.clearHeightMm ? ` ${h.vertical.clearHeightMm} mm (${esc(h.vertical.reference)})` : ''} · ${h.check.status === 'evaluated' ? `cabe: ${yes(h.fits)} (margen ${h.marginMm} mm)` : `<span class="warn">no evaluada: ${esc(why(h.check.reason))}</span>`}</p>`;
+  if (ev.computed) { const m = ev.computed.bays.length, d = ev.computed.fronts.length, hc = ev.computed.hingeDrawerConflicts;
+    s += `<p><b>Hueco útil:</b> ${Math.round(ev.computed.cavity.width)} × ${Math.round(ev.computed.cavity.height)} × ${Math.round(ev.computed.cavity.depth)} mm · ${plural(m, 'módulo', 'módulos')} · ${plural(m - 1, 'divisor interior', 'divisores interiores')} · ${plural(d, 'puerta', 'puertas')} · cajones bajo una bisagra: ${hc.length ? '<span class="bad">' + hc.map(b => 'M' + b).join(', ') + '</span>' : '<span class="ok">ninguno</span>'}</p>`; }
+  if (ev.clearance) { const f = ev.clearance.findings, L = v => v.length ? '<span class="bad">' + v.map(esc).join(', ') + '</span>' : '<span class="ok">libre</span>';
+    s += `<p><b>Barrido de puertas</b> · cuadrado RUBIK (conservador): ${L(f.doorSquare)} · sector 90° (experimental): ${L(f.doorSector)}<br><b>Recorrido de cajones:</b> ${L(f.drawers)}</p>`; }
+  s += '<p><b>previewDiff</b> (nunca se aplica):</p>' + ev.previewDiff.candidates.map(k => `<div class="cand"><p>${k.id === 'object-height' ? 'Altura del objeto <code>size.heightMm</code>' : 'Interior del armario'} · ${badge(CAND[k.status])} · <code>${esc(k.op)}</code>${k.id === 'object-height' ? ` · ${k.from ?? '—'} → ${k.to ?? '—'} mm` : ''}</p>` +
+    (k.blockers.length ? `<p class="bad">Bloqueos: ${k.blockers.map(b => esc(why(b.code)) + (b.marginMm != null ? ` (${b.marginMm} mm)` : '')).join('; ')}</p>` : '') +
+    (k.pendingOn.length ? `<p class="warn">Pendiente de: ${k.pendingOn.map(b => esc(why(b.code))).join('; ')}</p>` : '') +
+    (k.independentIssues.length ? `<p class="muted">Incidencias aparte (no deciden la altura): ${k.independentIssues.map(i => esc(i.kind) + ' — ' + i.items.map(esc).join(', ')).join(' · ')}</p>` : '') + '</div>').join('');
+  s += `<details><summary>Supuestos usados (${c.assumptions.length}): valores del donante, no medidas de fabricante</summary><ul>${c.assumptions.map(a => `<li><code>${esc(a.key)}</code>: ${esc(JSON.stringify(a.value))} — ${esc(a.source)}</li>`).join('')}</ul></details>`;
   $('#summary').innerHTML = s;
-  const p = cmp.sculpt.parity, row = (k, a, b, c2, d) => `<tr><th>${k}</th><td>${a}</td><td>${b}</td><td>${c2}</td><td>${d}</td></tr>`;
+  const p = cmp.sculpt.parity, row = (k, a, b, c2, d) => `<tr><th scope="row">${k}</th><td>${a}</td><td>${b}</td><td>${c2}</td><td>${d}</td></tr>`;
   const list = v => v == null ? '<span class="muted">—</span>' : v.length ? '<span class="bad">' + v.map(esc).join(', ') + '</span>' : '<span class="ok">ninguno</span>';
-  $('#cmp').innerHTML = `<tr><th></th><th>Donante (literal)</th><th>Taller esculpido</th><th>Evidencia CabinetEvidenceV1</th><th>RUBIK hoy (master)</th></tr>` +
+  const f = cmp.evidence.findings;
+  $('#cmp').innerHTML = `<thead><tr><th scope="col"></th><th scope="col">Donante (literal)</th><th scope="col">Taller esculpido</th><th scope="col">Evidencia CabinetEvidenceV1</th><th scope="col">RUBIK hoy (master)</th></tr></thead><tbody>` +
     row('Validación', esc(cmp.donor.validation), `paridad ${yes(p.validation)}`, esc(ev.cabinet.issues.map(i => i.code).join(', ') || 'válido'), '<span class="muted">sin interior</span>') +
     row('Geometría interior', '—', Object.entries(p).filter(([k]) => k !== 'validation').map(([k, v]) => `${k} ${yes(v)}`).join(' · ') || '—', ev.computed ? 'calculada' : '—', 'caja genérica') +
-    row('Obstáculos en el barrido de puertas y cajones', `muebles con puertas cerradas ${list(cmp.donor.furnitureInClearance.closed)} · abiertas ${list(cmp.donor.furnitureInClearance.open)}`, 'sector 90° + cuadrado RUBIK, siempre', list(cmp.evidence.blockedBy), `solo la caja: ${list(ev.rubikToday.placementProblems)}`) +
-    row('Altura libre', `usa 2400 de calibración: aviso ${cmp.donor.warnsHeight ? 'sí' : 'no'}`, 'sin valor por defecto', `cabe ${yes(cmp.evidence.fits)}`, `no la evalúa; 3D a ${ev.rubikToday.drawn3dHeightMm ?? 'caja'} ${ev.rubikToday.drawn3dHeightMm ? 'mm fijos' : ''}`) +
-    row('Escritura en el proyecto', 'muta su estado propio', 'nunca muta', 'previewDiff, sin aplicar', 'esquema sin campo de interior');
+    row('Barrido de puertas', `muebles con puertas cerradas ${list(cmp.donor.furnitureInClearance.closed)} · abiertas ${list(cmp.donor.furnitureInClearance.open)}`, 'sector 90° y cuadrado, siempre', f ? `cuadrado ${list(f.doorSquare)} · sector ${list(f.doorSector)}` : '—', `no lo evalúa; la caja: ${list(ev.rubikToday.placementProblems)}`) +
+    row('Recorrido de cajones', 'rectángulo con puertas abiertas', 'rectángulo de extensión', f ? list(f.drawers) : '—', 'no lo evalúa') +
+    row('Altura libre', `usa 2400 de calibración: aviso ${cmp.donor.warnsHeight ? 'sí' : 'no'}`, 'sin valor por defecto', h.check.status === 'evaluated' ? `cabe ${yes(h.fits)}` : `<span class="warn">pendiente: ${esc(why(h.check.reason))}</span>`, `no la evalúa; 3D a ${ev.rubikToday.drawn3dHeightMm ? ev.rubikToday.drawn3dHeightMm + ' mm fijos' : 'caja genérica'}`) +
+    row('Escritura en el proyecto', 'muta su estado propio', 'nunca muta', 'previewDiff, sin aplicar', 'esquema sin campo de interior') + '</tbody>';
   $('#limits').innerHTML = '<b>No evaluado:</b> ' + ev.notEvaluated.map(esc).join(' · ');
   $('#json').textContent = JSON.stringify(ev, null, 1);
 }
 function bayControls() {
   const c = ui.cabinet, ok = c && Array.isArray(c.columns) && c.columns.length;
-  $('#bay').innerHTML = ok ? c.columns.map((_, i) => `<option value="${i}" ${i === ui.bay ? 'selected' : ''}>${i + 1}</option>`).join('') : '';
+  $('#bay').innerHTML = ok ? c.columns.map((_, i) => `<option value="${i}" ${i === ui.bay ? 'selected' : ''}>M${i + 1}</option>`).join('') : '';
   const b = ok ? c.columns[Math.min(ui.bay, c.columns.length - 1)] : null;
   $('#shelves').value = b ? b.shelves.join(', ') : ''; $('#rod').value = b && b.rod != null ? b.rod : 0; $('#drawers').value = b ? b.drawers : 0;
   $('#front').value = c?.front ?? 'closed';
@@ -209,7 +231,7 @@ function render() {
   window.__r03 = { ready: true, id: ui.id, evidence: ev, compare: { parity: cmp.sculpt.parity, donor: cmp.donor, evidence: cmp.evidence }, edits: ui.history };
 }
 function edit(result) {
-  if (!result.ok) { $('#err').textContent = result.issues.map(i => i.message).join(' · '); return false; }
+  if (!result.ok) { $('#err').textContent = 'No se ha aplicado: ' + result.issues.map(issueText).join('; ') + '. El armario no ha cambiado.'; return false; }
   $('#err').textContent = ''; ui.cabinet = result.cabinet; ui.history++; render(); return true;
 }
 function select(id) { ui.id = id; ui.cabinet = S[id].cabinet ? structuredClone(S[id].cabinet) : null; ui.bay = 0; ui.history = 0; $('#err').textContent = ''; render(); }
@@ -219,7 +241,8 @@ $('#bay').addEventListener('change', e => { ui.bay = +e.target.value; render(); 
 $('#front').addEventListener('change', e => edit({ ok: true, cabinet: { ...structuredClone(ui.cabinet), front: e.target.value } }));
 $('#apply').addEventListener('click', () => {
   const raw = $('#shelves').value.trim(), shelves = raw ? raw.split(/[,;\s]+/).filter(Boolean).map(Number).sort((a, b) => a - b) : [];
-  const rod = +$('#rod').value || null, drawers = Math.trunc(+$('#drawers').value);
+  // No silent rescue: an invalid entry stays invalid and the engine rejects it with its reason.
+  const rodRaw = $('#rod').value.trim(), rod = rodRaw === '' || rodRaw === '0' ? null : Number(rodRaw.replace(',', '.')), dRaw = $('#drawers').value.trim(), drawers = dRaw === '' ? NaN : Number(dRaw);
   edit(K.setBay(outer(), ui.cabinet, ui.bay, { shelves, rod, drawers }));
 });
 $('#split').addEventListener('click', () => edit(K.splitBay(outer(), ui.cabinet, ui.bay)));
