@@ -25,6 +25,11 @@
   // Donor creation defaults (extract E). Only applied with options.useDonorDefaults, and always labelled as such.
   const DONOR_DEFAULTS = Object.freeze({ dropMm: t => t === 'acwall' ? 200 : 0, curtainMarginMm: 20, curtainMinMm: 100 });
   const ID_RE = /^[a-zA-Z0-9_-]{1,64}$/;
+  // The ONE vertical formula (donor rule D + 3D placement F), used by propose() and re-checked by validate().
+  function mountFrom(clear, drop, h, curtain) {
+    const top = clear - drop, bottom = top - h, lowest = bottom - curtain;
+    return { topMm: top, bottomMm: bottom, lowestPointMm: lowest, fitsClearHeight: drop + h + curtain <= clear };
+  }
 
   const finite = v => typeof v === 'number' && Number.isFinite(v);
   const fail = (code, detail) => ({ ok: false, error: detail ? { code, detail } : { code } });
@@ -126,9 +131,9 @@
       if (cat.kind === 'curtain' && curtain == null) warnings.push('curtain-length-unknown');
       if (clear == null) warnings.push('ceiling-' + vertical.status);
       const known = clear != null && drop != null && (cat.kind !== 'curtain' || curtain != null);
-      const top = known ? clear - drop : null, bottom = known ? top - q.size.heightMm : null;
-      const lowest = known ? bottom - (cat.kind === 'curtain' ? curtain : 0) : null;
-      const verticalOk = known ? drop + q.size.heightMm + (curtain || 0) <= clear : null;
+      const mf = known ? mountFrom(clear, drop, q.size.heightMm, cat.kind === 'curtain' ? curtain : 0) : null;
+      const top = known ? mf.topMm : null, bottom = known ? mf.bottomMm : null, lowest = known ? mf.lowestPointMm : null;
+      const verticalOk = known ? mf.fitsClearHeight : null;
       if (verticalOk === false) warnings.push('exceeds-clear-height');
       const mount = { status: known ? 'computed' : 'unknown', reference: known ? vertical.reference : null, dropMm: drop, dropSource,
         topMm: top, bottomMm: bottom, curtainLengthMm: cat.kind === 'curtain' ? curtain : null, curtainSource: cat.kind === 'curtain' ? curtainSource : null, lowestPointMm: lowest, fitsClearHeight: verticalOk };
@@ -199,9 +204,45 @@
     } };
   }
 
-  // What WOULD change if a human accepted every proposal. Nothing is applied: there is no apply function in this lab.
+  // What WOULD change if a human accepted a proposal. Informative only: nothing is applied and there is no apply function.
+  // Closing audit 11/11: three states. BLOCKED (evidence of infeasibility) and PENDING (data missing) never produce a
+  // `would-add`; only a CANDIDATE with no known blocker does, still `not-applied` and waiting for a human. A failed
+  // relocation never falls back to the original position. Full containment of the rotated footprint in the room polygon
+  // is NOT evaluated here (future surgery): it is listed in `notEvaluated` instead of being implied.
+  const NOT_EVALUATED = Object.freeze(['rotated-footprint-containment-in-room', 'door-swing', 'stairs', 'regulatory-checks']);
+  function previewState(p) {
+    const blocked = [], pending = [];
+    if (!p || typeof p !== 'object') return { state: 'blocked', blocked: ['invalid-proposal'], pending };
+    const sg = p.plan?.suggestion, m = p.mount;
+    if (!sg) blocked.push('plan-missing');
+    else {
+      if (['no-fit', 'no-integer-pose', 'unsupported-wall-orientation'].includes(sg.status)) blocked.push(sg.status === 'no-fit' ? 'no-wall-free-position' : sg.status);
+      if (sg.status === 'moved' && !sg.position) blocked.push('moved-without-position');
+      if (sg.status === 'moved' && sg.position && sg.roomId !== p.roomId) blocked.push('suggestion-leaves-room');
+    }
+    if (p.roomId == null) blocked.push('outside-rooms');
+    if (!m || m.status !== 'computed') pending.push('mount-unknown');
+    else if (m.fitsClearHeight === false) blocked.push('exceeds-clear-height');
+    for (const x of Array.isArray(p.interferences) ? p.interferences : []) {
+      if (x?.kind === 'overlap-3d') blocked.push('overlap-3d-with:' + x.with);
+      else if (x?.kind === 'plan-overlap-vertical-unknown') pending.push('vertical-overlap-unknown-with:' + x.with);
+    }
+    for (const c of Array.isArray(p.floorClearance) ? p.floorClearance : []) {
+      if (c?.status === 'clash') blocked.push('clash-with-floor-object:' + c.objectId);
+      else if (c?.status === 'object-height-unknown') pending.push('floor-object-height-unknown:' + c.objectId);
+      else if (c?.status === 'proposal-height-unknown' || c?.status === 'reference-unknown') pending.push(c.status + ':' + c.objectId);
+    }
+    return { state: blocked.length ? 'blocked' : pending.length ? 'pending' : 'candidate-reviewable', blocked, pending };
+  }
   function previewDiff(ev) {
-    return (ev?.proposals || []).map(p => ({ op: 'would-add', layer: 'ceiling', id: p.id, type: p.type, position: p.plan.suggestion.position || p.position, mount: p.mount.status, status: 'not-applied' }));
+    return (Array.isArray(ev?.proposals) ? ev.proposals : []).map((p, i) => {
+      const { state, blocked, pending } = previewState(p), sg = p?.plan?.suggestion;
+      const base = { id: p?.id ?? null, index: i, type: p?.type ?? null, layer: 'ceiling', state, status: 'not-applied', review: 'human-required',
+        originalPosition: p?.position ? { x: p.position.x, y: p.position.y } : null, suggestedPosition: sg?.position ? { x: sg.position.x, y: sg.position.y } : null };
+      if (state === 'candidate-reviewable')
+        return { op: 'would-add', ...base, position: base.suggestedPosition, relocated: sg.status === 'moved', mount: p.mount.status, reasons: [], notEvaluated: NOT_EVALUATED.slice() };
+      return { op: 'none', ...base, reasons: state === 'blocked' ? [...blocked, ...pending] : pending, notEvaluated: NOT_EVALUATED.slice() };
+    });
   }
 
   // ---- validation and serialisation -------------------------------------------------------------------------------
@@ -214,28 +255,59 @@
     const f = ev.frame;
     if (!f || f.units !== 'mm' || f.origin !== 'plan-top-left' || f.yAxis !== 'down' || f.rotation !== 'degrees-clockwise') add('frame');
     const v = ev.vertical;
-    if (!v || !['declared', 'derived', 'unknown', 'contradictory'].includes(v.status)) add('vertical-status');
-    else if (['declared', 'derived'].includes(v.status) ? !(Number.isInteger(v.clearHeightMm) && v.clearHeightMm > 0 && ['finished-floor', 'level-floor'].includes(v.reference)) : (v.clearHeightMm !== null || v.reference !== null)) add('vertical-values');
+    const vKnown = !!v && typeof v === 'object' && ['declared', 'derived'].includes(v.status);
+    if (!v || typeof v !== 'object') add('vertical-missing');
+    else if (!['declared', 'derived', 'unknown', 'contradictory'].includes(v.status)) add('vertical-status');
+    else if (vKnown ? !(Number.isInteger(v.clearHeightMm) && v.clearHeightMm > 0 && ['finished-floor', 'level-floor'].includes(v.reference)) : (v.clearHeightMm !== null || v.reference !== null)) add('vertical-values');
     if (!Array.isArray(ev.proposals)) { add('proposals'); return errs; }
     const ids = new Set();
-    for (const p of ev.proposals) {
-      const id = p?.id;
+    ev.proposals.forEach((p, i) => {
+      if (!p || typeof p !== 'object' || Array.isArray(p)) { add('proposal-not-object:' + i); return; }
+      const id = p.id;
       if (typeof id !== 'string' || !ID_RE.test(id) || ids.has(id)) add('proposal-id:' + id); ids.add(id);
-      if (!CATALOG[p?.type] || p.layer !== 'ceiling' || p.kind !== CATALOG[p.type]?.kind) add('proposal-type:' + id);
-      if (!p?.position || ![p.position.x, p.position.y, p.rotationDeg].every(finite) || !p.size || ![p.size.widthMm, p.size.depthMm, p.size.heightMm].every(x => finite(x) && x > 0)) add('proposal-geometry:' + id);
-      if (p?.review !== 'unreviewed' || p?.status !== 'proposed-not-applied') add('proposal-state:' + id);
-      const m = p?.mount;
-      if (!m || !['computed', 'unknown'].includes(m.status)) add('mount-status:' + id);
+      const cat = CATALOG[p.type];
+      if (!cat || p.layer !== 'ceiling' || p.kind !== cat.kind) add('proposal-type:' + id);
+      if (!p.position || ![p.position.x, p.position.y, p.rotationDeg].every(finite)) add('proposal-geometry:' + id);
+      const size = p.size, h = size?.heightMm;
+      if (!size || typeof size !== 'object') add('proposal-size-missing:' + id);
+      else if (![size.widthMm, size.depthMm, size.heightMm].every(x => finite(x) && x > 0)) add('proposal-geometry:' + id);
+      if (p.review !== 'unreviewed' || p.status !== 'proposed-not-applied') add('proposal-state:' + id);
+      const m = p.mount;
+      if (!m || typeof m !== 'object') add('mount-missing:' + id);
+      else if (!['computed', 'unknown'].includes(m.status)) add('mount-status:' + id);
       else if (m.status === 'computed') {
-        if (!['declared', 'derived'].includes(v?.status)) add('mount-without-ceiling:' + id);
-        if (![m.dropMm, m.topMm, m.bottomMm, m.lowestPointMm].every(finite) || m.topMm !== v.clearHeightMm - m.dropMm || m.bottomMm !== m.topMm - p.size.heightMm || typeof m.fitsClearHeight !== 'boolean') add('mount-values:' + id);
+        // Every value present and finite (JSON turns NaN/Infinity into null: that is "missing"), the reference equal to
+        // the evidence's, the curtain compatible with the type, then the relations of mountFrom() and the fit status.
+        const isCurtain = cat?.kind === 'curtain';
+        const fields = ['dropMm', 'topMm', 'bottomMm', 'lowestPointMm', ...(isCurtain ? ['curtainLengthMm'] : [])];
+        let complete = true;
+        for (const k of fields) {
+          if (m[k] === undefined || m[k] === null) { add(`mount-missing-value:${k}:${id}`); complete = false; }
+          else if (typeof m[k] !== 'number' || !Number.isFinite(m[k])) { add(`mount-non-finite:${k}:${id}`); complete = false; }
+        }
+        if (typeof m.fitsClearHeight !== 'boolean') { add('mount-missing-value:fitsClearHeight:' + id); complete = false; }
+        if (!vKnown) { add('mount-without-ceiling:' + id); complete = false; }
+        else if (m.reference !== v.reference) add('mount-reference-mismatch:' + id);
         if (!['request', 'donor-default'].includes(m.dropSource)) add('mount-source:' + id);
-      } else if (m.topMm !== null || m.bottomMm !== null || m.fitsClearHeight !== null) add('mount-unknown-with-values:' + id);
-      const sg = p?.plan?.suggestion;
-      if (!sg || !['in-place', 'moved', 'no-fit', 'no-integer-pose', 'unsupported-wall-orientation'].includes(sg.status)) add('plan:' + id);
+        if (isCurtain) {
+          if (finite(m.curtainLengthMm) && (m.curtainLengthMm < LIMITS.curtainMinMm || m.curtainLengthMm > LIMITS.curtainMaxMm)) { add('mount-curtain-incompatible:' + id); complete = false; }
+          if (!['request', 'donor-default'].includes(m.curtainSource)) add('mount-source:' + id);
+        } else if (m.curtainLengthMm !== null || m.curtainSource !== null) { add('mount-curtain-incompatible:' + id); complete = false; }
+        if (complete && finite(h) && h > 0) {
+          const want = mountFrom(v.clearHeightMm, m.dropMm, h, isCurtain ? m.curtainLengthMm : 0);
+          if (m.topMm !== want.topMm) add('mount-top:' + id);
+          if (m.bottomMm !== want.bottomMm) add('mount-bottom:' + id);
+          if (m.lowestPointMm !== want.lowestPointMm) add('mount-lowest:' + id);
+          if (m.fitsClearHeight !== want.fitsClearHeight) add('mount-fits:' + id);
+        }
+      } else if (m.topMm != null || m.bottomMm != null || m.lowestPointMm != null || m.fitsClearHeight != null) add('mount-unknown-with-values:' + id);
+      const plan = p.plan, sg = plan?.suggestion;
+      if (!plan || typeof plan !== 'object') add('plan-missing:' + id);
+      else if (!sg || typeof sg !== 'object') add('plan-suggestion-missing:' + id);
+      else if (!['in-place', 'moved', 'no-fit', 'no-integer-pose', 'unsupported-wall-orientation'].includes(sg.status)) add('plan:' + id);
       else if (sg.position && !(Number.isInteger(sg.position.x) && Number.isInteger(sg.position.y))) add('plan-non-integer:' + id);
-    }
-    for (const p of ev.proposals) for (const x of p?.interferences || []) if (!ids.has(x.with)) add('interference-target:' + p.id);
+    });
+    for (const p of ev.proposals) for (const x of (Array.isArray(p?.interferences) ? p.interferences : [])) if (!ids.has(x?.with)) add('interference-target:' + p.id);
     const walk = (o, path) => { if (!o || typeof o !== 'object') return; for (const [k, x] of Object.entries(o)) { if (/^(confidence|score|probability|lux|watts|circuit|airflow|certified)$/i.test(k)) add('forbidden-field:' + path + k); walk(x, path + k + '.'); } };
     walk(ev, '');
     if (!ev.floorLayer || ev.floorLayer.readOnly !== true) add('floor-layer');
@@ -249,6 +321,6 @@
     return errs.length ? fail('invalid-evidence', errs.slice(0, 5).join(',')) : { ok: true, evidence: ev };
   }
 
-  const api = { SCHEMA, VERSION, DONOR, LIMITS, STANDING_LIMITS, CATALOG, DONOR_DEFAULTS, wallShape, ceilingReference, propose, previewDiff, validate, serialize, parse, clone };
+  const api = { SCHEMA, VERSION, DONOR, LIMITS, STANDING_LIMITS, CATALOG, DONOR_DEFAULTS, NOT_EVALUATED, wallShape, ceilingReference, propose, previewDiff, validate, serialize, parse, clone };
   if (node && module.exports) module.exports = api; else root.RubikCeilingLayoutEvidence = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -132,7 +132,9 @@ test('C5/C6: serialisation round trip, deterministic, preview diff only — no a
   const a=run('two-interfering'),b=run('two-interfering');
   assert.equal(E.serialize(a),E.serialize(b),'same input, same evidence');
   const back=E.parse(E.serialize(a));assert.ok(back.ok);assert.deepEqual(back.evidence,a);
-  const diff=E.previewDiff(a);assert.equal(diff.length,4);assert.ok(diff.every(d=>d.op==='would-add'&&d.status==='not-applied'));
+  // Closing audit 11/11: two of the four interfere in 3D → blocked (op 'none'); the other two remain reviewable candidates.
+  const diff=E.previewDiff(a);assert.equal(diff.length,4);assert.ok(diff.every(d=>d.status==='not-applied'));
+  assert.deepEqual(diff.map(d=>[d.id,d.op,d.state]),[['pendant-1','none','blocked'],['light-1','none','blocked'],['pendant-2','would-add','candidate-reviewable'],['heater-1','would-add','candidate-reviewable']]);
   assert.ok(!('apply' in E)&&!('cancel' in E),'no apply or cancellation API is claimed');
   const tampered=JSON.parse(E.serialize(a));tampered.proposals[0].mount.topMm+=1;
   assert.equal(E.parse(JSON.stringify(tampered)).error.code,'invalid-evidence');
@@ -179,4 +181,101 @@ test('guards: no paid-AI client, no R01 recognition code, no product file loads 
   for(const f of lab){const t=fs.readFileSync(path.join(ROOT,f),'utf8');assert.ok(!/api\.openai\.com|deepseek|dashscope|generativelanguage|Authorization:\s*'Bearer/.test(t),f+' has no AI provider');assert.ok(!/recognition-core|FloorplanRecognition/.test(t),f+' has no R01 code');}
   let out='';try{out=execFileSync('git',['grep','-l','-e','labs/sculpt','-e','RubikCeilingLayoutEvidence','--','js','api','css','index.html','evolucion'],{cwd:ROOT,encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim();}catch(e){assert.equal(e.status,1);}
   assert.equal(out,'');
+});
+
+// ---- Closing audit 11/11 (adjustment 1): validate() checks every vertical relation and never throws ------------------------
+const has=(errs,code)=>errs.some(e=>e===code||e.startsWith(code+':'));
+const tamper=(ev,f)=>{const x=JSON.parse(E.serialize(ev));f(x);return x;};
+const safeValidate=x=>{let errs;assert.doesNotThrow(()=>{errs=E.validate(x);});return errs;};
+
+test('validate: manipulated vertical relations and fit status are rejected with identifiable codes',()=>{
+  const ok=run('rect-ceiling-light');                       // fits = true
+  const curt=(()=>{const s=F.scenario('curtain-track');s.requests[0].curtainLengthMm=2600;return E.propose({project:s.project,ceiling:s.ceiling,requests:s.requests}).evidence;})(); // fits = false
+  assert.deepEqual(E.validate(curt),[]);assert.equal(curt.proposals[0].mount.fitsClearHeight,false);
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.fitsClearHeight=false)),'mount-fits'),'true → false');
+  assert.ok(has(safeValidate(tamper(curt,x=>x.proposals[0].mount.fitsClearHeight=true)),'mount-fits'),'false → true');
+  assert.ok(has(safeValidate(tamper(curt,x=>x.proposals[0].mount.lowestPointMm+=100)),'mount-lowest'));
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.lowestPointMm=1)),'mount-lowest'),'a non-curtain item: lowest = bottom');
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.topMm-=10)),'mount-top'));
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.bottomMm+=10)),'mount-bottom'));
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.reference='level-floor')),'mount-reference-mismatch'));
+});
+
+test('validate: non-finite and missing values are distinguished (JSON turns NaN/Infinity into null)',()=>{
+  const ok=run('rect-ceiling-light');
+  const mem=E.clone(ok);mem.proposals[0].mount.topMm=NaN;
+  assert.ok(has(safeValidate(mem),'mount-non-finite:topMm'),'in memory: NaN');
+  const inf=E.clone(ok);inf.proposals[0].mount.dropMm=Infinity;
+  assert.ok(has(safeValidate(inf),'mount-non-finite:dropMm'),'in memory: Infinity');
+  const viaJson=JSON.parse(JSON.stringify((()=>{const x=E.clone(ok);x.proposals[0].mount.bottomMm=NaN;return x;})()));
+  assert.equal(viaJson.proposals[0].mount.bottomMm,null);
+  assert.ok(has(safeValidate(viaJson),'mount-missing-value:bottomMm'),'after JSON: null');
+  assert.ok(has(safeValidate(tamper(ok,x=>{delete x.proposals[0].mount.dropMm;})),'mount-missing-value:dropMm'));
+});
+
+test('validate: incomplete evidence never throws (size, mount, vertical, plan, suggestion, proposal itself)',()=>{
+  const ok=run('two-interfering');
+  assert.ok(has(safeValidate(tamper(ok,x=>{delete x.proposals[0].size;})),'proposal-size-missing'));
+  assert.ok(has(safeValidate(tamper(ok,x=>{delete x.proposals[0].mount;})),'mount-missing'));
+  const noV=safeValidate(tamper(ok,x=>{delete x.vertical;}));
+  assert.ok(has(noV,'vertical-missing'));assert.ok(has(noV,'mount-without-ceiling'),'computed heights need a known ceiling');
+  assert.ok(has(safeValidate(tamper(ok,x=>{delete x.proposals[0].plan;})),'plan-missing'));
+  assert.ok(has(safeValidate(tamper(ok,x=>{delete x.proposals[0].plan.suggestion;})),'plan-suggestion-missing'));
+  assert.ok(has(safeValidate(tamper(ok,x=>{x.proposals[1]=null;})),'proposal-not-object'));
+  assert.ok(has(safeValidate(tamper(ok,x=>{x.proposals[0].size={widthMm:500,depthMm:500};})),'proposal-geometry'));
+});
+
+test('validate: curtain length incompatible with the item type, and unknown heights presented as computed',()=>{
+  const ok=run('rect-ceiling-light'),cur=run('curtain-track'),unk=run('unknown-ceiling');
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.curtainLengthMm=500)),'mount-curtain-incompatible'),'a ceiling light has no curtain');
+  assert.ok(has(safeValidate(tamper(cur,x=>x.proposals[0].mount.curtainLengthMm=null)),'mount-missing-value:curtainLengthMm'));
+  assert.ok(has(safeValidate(tamper(cur,x=>x.proposals[0].mount.curtainLengthMm=50)),'mount-curtain-incompatible'),'below the contract minimum');
+  const fake=tamper(unk,x=>{Object.assign(x.proposals[0].mount,{status:'computed',reference:'finished-floor',dropMm:0,dropSource:'request',topMm:2600,bottomMm:2500,lowestPointMm:2500,fitsClearHeight:true});});
+  assert.ok(has(safeValidate(fake),'mount-without-ceiling'),'heights cannot be computed against an unknown ceiling');
+  assert.ok(has(safeValidate(tamper(ok,x=>x.proposals[0].mount.dropSource=null)),'mount-source'),'computed heights need a declared origin for the drop');
+  assert.ok(has(safeValidate(tamper(unk,x=>x.proposals[0].mount.topMm=2600)),'mount-unknown-with-values'));
+});
+
+// ---- Closing audit 11/11 (adjustment 2): previewDiff() separates reviewable, pending and blocked ---------------------------
+const diffOf=(ev,id)=>E.previewDiff(ev).find(d=>d.id===id);
+
+test('previewDiff: reviewable candidate, pending and blocked states; blocked items never produce would-add',()=>{
+  const c=diffOf(run('rect-ceiling-light'),'light-1');
+  assert.equal(c.state,'candidate-reviewable');assert.equal(c.op,'would-add');assert.equal(c.status,'not-applied');assert.equal(c.review,'human-required');
+  assert.ok(c.notEvaluated.includes('rotated-footprint-containment-in-room'),'full containment is not claimed');
+  const small=diffOf(run('too-small-room'),'track-1');
+  assert.equal(small.state,'blocked');assert.notEqual(small.op,'would-add');assert.ok(small.reasons.includes('suggestion-leaves-room'));
+  assert.deepEqual(small.originalPosition,{x:500,y:400});assert.deepEqual(small.suggestedPosition,{x:500,y:-170});
+  const s=F.scenario('curtain-track');s.requests[0].curtainLengthMm=2600;
+  const tall=diffOf(E.propose({project:s.project,ceiling:s.ceiling,requests:s.requests}).evidence,'track-1');
+  assert.equal(tall.state,'blocked');assert.ok(tall.reasons.includes('exceeds-clear-height'));
+  const two=run('two-interfering');
+  for(const id of ['pendant-1','light-1']){const d=diffOf(two,id);assert.equal(d.state,'blocked',id);assert.ok(d.reasons.some(r=>r.startsWith('overlap-3d')),id);}
+  for(const id of ['pendant-2','heater-1'])assert.equal(diffOf(two,id).state,'candidate-reviewable',id+': plan-only overlap is not a block');
+  const fl=run('floor-layer');
+  assert.equal(diffOf(fl,'pendant-w').state,'blocked');assert.ok(diffOf(fl,'pendant-w').reasons.includes('clash-with-floor-object:obj_wardrobe'));
+  assert.equal(diffOf(fl,'pendant-t').state,'pending');assert.ok(diffOf(fl,'pendant-t').reasons.includes('floor-object-height-unknown:obj_table'));
+  assert.equal(diffOf(fl,'light-free').state,'candidate-reviewable');
+  const unk=diffOf(run('unknown-ceiling'),'light-1');assert.equal(unk.state,'pending');assert.notEqual(unk.op,'would-add');assert.ok(unk.reasons.includes('mount-unknown'));
+  const diag=diffOf(run('diagonal-wall'),'light-1');assert.equal(diag.state,'blocked');assert.ok(diag.reasons.includes('unsupported-wall-orientation'));assert.equal(diag.suggestedPosition,null);
+  const out=diffOf(run('l-shaped-room'),'light-out');assert.equal(out.state,'blocked');assert.ok(out.reasons.includes('outside-rooms'));
+});
+
+test('previewDiff: a failed relocation is never replaced by the original position',()=>{
+  const ev=run('rect-ceiling-light');
+  for(const status of ['no-fit','no-integer-pose']){
+    const x=E.clone(ev);x.proposals[0].plan.wallContact='overlaps';x.proposals[0].plan.suggestion={status,position:null,donorMessage:'这里放不下啦'};
+    const d=E.previewDiff(x)[0];
+    assert.equal(d.state,'blocked',status);assert.notEqual(d.op,'would-add');assert.equal(d.suggestedPosition,null);assert.ok(!('position' in d),'no applicable position at all');
+  }
+});
+
+test('previewDiff: deterministic, serialisable, read-only on the evidence and the project',()=>{
+  const s=F.scenario('floor-layer'),before=JSON.stringify(s.project);
+  const ev=E.propose({project:s.project,ceiling:s.ceiling,requests:s.requests}).evidence,evBefore=E.serialize(ev);
+  const a=E.previewDiff(ev),b=E.previewDiff(E.parse(E.serialize(ev)).evidence);
+  assert.deepEqual(a,b);assert.deepEqual(JSON.parse(JSON.stringify(a)),a);
+  assert.equal(E.serialize(ev),evBefore);assert.equal(JSON.stringify(s.project),before);
+  assert.ok(a.every(d=>d.status==='not-applied'));assert.ok(!('apply' in E));
+  assert.doesNotThrow(()=>E.previewDiff({proposals:[null,{id:'x'}]}));
 });
