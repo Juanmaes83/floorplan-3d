@@ -1,0 +1,232 @@
+{
+  "schema": "rubik-sota.floorplan-project",
+  "schemaVersion": "1.0.0",
+  "id": "prj_reference-home",
+  "name": "三室两厅两卫",
+  "createdAt": "2026-09-30T00:00:00Z",
+  "updatedAt": "2026-09-30T00:00:00Z",
+  "units": "mm",
+  "coordinateSystem": {
+    "origin": "plan-top-left",
+    "xAxis": "right",
+    "yAxis": "down",
+    "rotation": "degrees-clockwise"
+  },
+  "scale": {
+    "confidence": "estimated",
+    "method": "template",
+    "declaredRatio": "1:60"
+  },
+  "defaults": {
+    "wallHeightMm": 2800,
+    "wallThicknessMm": 240
+  },
+  "walls": [
+    {
+      "id": "wal_south",
+      "start": {
+        "x": -100,
+        "y": -50
+      },
+      "end": {
+        "x": 4100,
+        "y": -50
+      },
+      "thicknessMm": 100,
+      "heightMm": 2600,
+      "structure": "partition",
+      "status": "existing"
+    },
+    {
+      "id": "wal_north",
+      "start": {
+        "x": -100,
+        "y": 750
+      },
+      "end": {
+        "x": 4100,
+        "y": 750
+      },
+      "thicknessMm": 100,
+      "heightMm": 2600,
+      "structure": "partition",
+      "status": "existing"
+    },
+    {
+      "id": "wal_west",
+      "start": {
+        "x": -50,
+        "y": 0
+      },
+      "end": {
+        "x": -50,
+        "y": 700
+      },
+      "thicknessMm": 100,
+      "heightMm": 2600,
+      "structure": "partition",
+      "status": "existing"
+    },
+    {
+      "id": "wal_east",
+      "start": {
+        "x": 4050,
+        "y": 0
+      },
+      "end": {
+        "x": 4050,
+        "y": 700
+      },
+      "thicknessMm": 100,
+      "heightMm": 2600,
+      "structure": "partition",
+      "status": "existing"
+    }
+  ],
+  "openings": [],
+  "rooms": [
+    {
+      "id": "rom_strip",
+      "name": "strip",
+      "polygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 4000,
+          "y": 0
+        },
+        {
+          "x": 4000,
+          "y": 700
+        },
+        {
+          "x": 0,
+          "y": 700
+        }
+      ],
+      "floorMaterialId": "mat_wood",
+      "countsTowardArea": true
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat_wood",
+      "name": "橡木地板",
+      "category": "floor",
+      "appearance": {
+        "color": "#d8b88a",
+        "preset": "wood"
+      }
+    },
+    {
+      "id": "mat_walnut",
+      "name": "胡桃木地板",
+      "category": "floor",
+      "appearance": {
+        "color": "#9b7250",
+        "preset": "walnut"
+      }
+    },
+    {
+      "id": "mat_tile800",
+      "name": "800 地砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#ebe6dc",
+        "preset": "tile-800"
+      }
+    },
+    {
+      "id": "mat_tile600",
+      "name": "600 地砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#dfe3e1",
+        "preset": "tile-600"
+      }
+    },
+    {
+      "id": "mat_marble",
+      "name": "大理石",
+      "category": "floor",
+      "appearance": {
+        "color": "#f1eee8",
+        "preset": "marble"
+      }
+    },
+    {
+      "id": "mat_antislip",
+      "name": "300 防滑砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#d3d8d4",
+        "preset": "tile-300"
+      }
+    },
+    {
+      "id": "mat_terrazzo",
+      "name": "水磨石",
+      "category": "floor",
+      "appearance": {
+        "color": "#e6dfd3",
+        "preset": "terrazzo"
+      }
+    },
+    {
+      "id": "mat_carpet",
+      "name": "满铺地毯",
+      "category": "floor",
+      "appearance": {
+        "color": "#c9c3d3",
+        "preset": "carpet"
+      }
+    }
+  ],
+  "objects": [
+    {
+      "id": "obj_bench",
+      "type": "table",
+      "name": "bench",
+      "position": {
+        "x": 2000,
+        "y": 50
+      },
+      "size": {
+        "widthMm": 4000,
+        "depthMm": 100
+      },
+      "rotationDeg": 0
+    },
+    {
+      "id": "obj_block",
+      "type": "table",
+      "name": "block",
+      "position": {
+        "x": 2000,
+        "y": 400
+      },
+      "size": {
+        "widthMm": 400,
+        "depthMm": 400
+      },
+      "rotationDeg": 0
+    },
+    {
+      "id": "obj_odd",
+      "type": "table",
+      "name": "odd",
+      "position": {
+        "x": 2100,
+        "y": 400
+      },
+      "size": {
+        "widthMm": 400,
+        "depthMm": 601
+      },
+      "rotationDeg": 0
+    }
+  ],
+  "measurements": []
+}

@@ -1,12 +1,13 @@
 {
-  "codeSha": "369c5b7d516afb55ded16054851504696dca3440",
+  "codeSha": "77ca0842a0028dbe87f19462db0d2606aba0d3ec",
   "node": "v22.23.4",
-  "generatedAt": "2026-11-11T19:24:04.384Z",
+  "generatedAt": "2026-11-11T20:12:00.655Z",
   "proposals": [
     {
       "fixture": "overlap",
       "label": "A-overlap-candidate",
       "expect": "candidate-reviewable",
+      "expectCode": null,
       "status": "candidate-reviewable",
       "code": null,
       "suggested": {
@@ -14,6 +15,13 @@
         "y": 1500
       },
       "rejected": null,
+      "search": {
+        "tried": 123,
+        "acceptedIndex": 123,
+        "placementValidRejected": 0,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -21,10 +29,12 @@
       "fixture": "overlap",
       "label": "B-overlap-door-no-change",
       "expect": "no-change-needed",
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -32,10 +42,18 @@
       "fixture": "overlap",
       "label": "C-budget-exhausted",
       "expect": "pending",
+      "expectCode": null,
       "status": "pending",
       "code": "search-budget-exhausted",
       "suggested": null,
       "rejected": null,
+      "search": {
+        "tried": 1,
+        "acceptedIndex": null,
+        "placementValidRejected": 0,
+        "budgetExhausted": true,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -43,10 +61,12 @@
       "fixture": "overlap",
       "label": "D-id-missing",
       "expect": "blocked",
+      "expectCode": null,
       "status": "blocked",
       "code": "object-not-found",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -54,10 +74,12 @@
       "fixture": "overlap",
       "label": "D-not-furniture",
       "expect": "blocked",
+      "expectCode": null,
       "status": "blocked",
       "code": "not-furniture",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -65,10 +87,12 @@
       "fixture": "overlap",
       "label": "D-stale-hash",
       "expect": "blocked",
+      "expectCode": null,
       "status": "blocked",
       "code": "stale-source",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -76,6 +100,7 @@
       "fixture": "door-blocked",
       "label": "A-door-candidate",
       "expect": "candidate-reviewable",
+      "expectCode": null,
       "status": "candidate-reviewable",
       "code": null,
       "suggested": {
@@ -83,6 +108,13 @@
         "y": 300
       },
       "rejected": null,
+      "search": {
+        "tried": 323,
+        "acceptedIndex": 323,
+        "placementValidRejected": 0,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -90,10 +122,12 @@
       "fixture": "door-blocked",
       "label": "D-door-invalid",
       "expect": "blocked",
+      "expectCode": null,
       "status": "blocked",
       "code": "opening-not-found",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -101,6 +135,7 @@
       "fixture": "rotated",
       "label": "A-rotated-candidate",
       "expect": "candidate-reviewable",
+      "expectCode": null,
       "status": "candidate-reviewable",
       "code": null,
       "suggested": {
@@ -108,6 +143,13 @@
         "y": 1500
       },
       "rejected": null,
+      "search": {
+        "tried": 227,
+        "acceptedIndex": 227,
+        "placementValidRejected": 0,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -115,10 +157,12 @@
       "fixture": "correct",
       "label": "B-correct",
       "expect": "no-change-needed",
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -126,10 +170,12 @@
       "fixture": "door-square-only",
       "label": "B-D3-square-not-leaf",
       "expect": "no-change-needed",
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -137,10 +183,12 @@
       "fixture": "ambiguous-room",
       "label": "C-ambiguous-room",
       "expect": "pending",
+      "expectCode": null,
       "status": "pending",
       "code": "ambiguous-room",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -148,10 +196,12 @@
       "fixture": "door-without-swing",
       "label": "C-D1-door-swing-missing",
       "expect": "pending",
+      "expectCode": null,
       "status": "pending",
       "code": "door-swing-missing",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -159,6 +209,7 @@
       "fixture": "door-without-swing",
       "label": "A-D1-overlap-with-swingless-door",
       "expect": "candidate-reviewable",
+      "expectCode": null,
       "status": "candidate-reviewable",
       "code": null,
       "suggested": {
@@ -166,20 +217,74 @@
         "y": 1500
       },
       "rejected": null,
+      "search": {
+        "tried": 123,
+        "acceptedIndex": 123,
+        "placementValidRejected": 0,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
     {
       "fixture": "swingless-inward",
-      "label": "F1-assumed-swing-conflict",
+      "label": "F1-assumed-swing-only",
+      "expect": "pending",
+      "expectCode": "conflict-based-on-assumed-swing",
+      "status": "pending",
+      "code": "conflict-based-on-assumed-swing",
+      "suggested": null,
+      "rejected": null,
+      "search": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "swingless-inward",
+      "label": "F1-swingless-not-touching",
+      "expect": "no-change-needed",
+      "expectCode": null,
+      "status": "no-change-needed",
+      "code": null,
+      "suggested": null,
+      "rejected": null,
+      "search": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "swingless-inward",
+      "label": "F1-door-goal-swing-missing",
+      "expect": "pending",
+      "expectCode": "door-swing-missing",
+      "status": "pending",
+      "code": "door-swing-missing",
+      "suggested": null,
+      "rejected": null,
+      "search": null,
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "swingless-plus-real",
+      "label": "F1-accredited-plus-assumed",
       "expect": "candidate-reviewable",
+      "expectCode": null,
       "status": "candidate-reviewable",
       "code": null,
       "suggested": {
-        "x": 2250,
+        "x": 3350,
         "y": 2800
       },
       "rejected": null,
+      "search": {
+        "tried": 211,
+        "acceptedIndex": 211,
+        "placementValidRejected": 0,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -187,17 +292,64 @@
       "fixture": "models-disagree-before",
       "label": "C-D2-models-disagree",
       "expect": "pending",
+      "expectCode": null,
       "status": "pending",
       "code": "models-disagree",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
     {
       "fixture": "models-disagree-after",
-      "label": "C-D2-rejected-step500",
+      "label": "F2-D2-step500",
+      "expect": "candidate-reviewable",
+      "expectCode": null,
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 2100,
+        "y": 500
+      },
+      "rejected": null,
+      "search": {
+        "tried": 10,
+        "acceptedIndex": 10,
+        "placementValidRejected": 3,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "models-disagree-after",
+      "label": "F2-D2-default-step",
+      "expect": "candidate-reviewable",
+      "expectCode": null,
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 2650,
+        "y": 1500
+      },
+      "rejected": null,
+      "search": {
+        "tried": 443,
+        "acceptedIndex": 443,
+        "placementValidRejected": 21,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "models-disagree-after",
+      "label": "F2-D2-step500-budget-3",
       "expect": "pending",
+      "expectCode": "goal-not-confirmed",
       "status": "pending",
       "code": "goal-not-confirmed",
       "suggested": null,
@@ -205,27 +357,87 @@
         "x": 2600,
         "y": 1500
       },
+      "search": {
+        "tried": 3,
+        "acceptedIndex": null,
+        "placementValidRejected": 1,
+        "budgetExhausted": true,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
     {
       "fixture": "models-disagree-after",
-      "label": "C-D2-rejected-default-step",
+      "label": "F2-D2-default-budget-442",
       "expect": "pending",
+      "expectCode": "goal-not-confirmed",
       "status": "pending",
       "code": "goal-not-confirmed",
       "suggested": null,
       "rejected": {
         "x": 2600,
         "y": 1500
+      },
+      "search": {
+        "tried": 442,
+        "acceptedIndex": null,
+        "placementValidRejected": 21,
+        "budgetExhausted": true,
+        "verificationLimitReached": false
       },
       "identicalOnRepeat": true,
       "applied": false
     },
     {
       "fixture": "introduces-issue",
-      "label": "C-introduces-step600",
+      "label": "F2-introduces-step600",
+      "expect": "candidate-reviewable",
+      "expectCode": null,
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 1800,
+        "y": 1000
+      },
+      "rejected": null,
+      "search": {
+        "tried": 7,
+        "acceptedIndex": 7,
+        "placementValidRejected": 3,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "introduces-issue",
+      "label": "F2-introduces-default-step",
+      "expect": "candidate-reviewable",
+      "expectCode": null,
+      "status": "candidate-reviewable",
+      "code": null,
+      "suggested": {
+        "x": 550,
+        "y": 900
+      },
+      "rejected": null,
+      "search": {
+        "tried": 15,
+        "acceptedIndex": 15,
+        "placementValidRejected": 1,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "introduces-issue",
+      "label": "F2-introduces-step600-budget-2",
       "expect": "pending",
+      "expectCode": "candidate-introduces-issues",
       "status": "pending",
       "code": "candidate-introduces-issues",
       "suggested": null,
@@ -233,19 +445,56 @@
         "x": 600,
         "y": 400
       },
+      "search": {
+        "tried": 2,
+        "acceptedIndex": null,
+        "placementValidRejected": 1,
+        "budgetExhausted": true,
+        "verificationLimitReached": false
+      },
       "identicalOnRepeat": true,
       "applied": false
     },
     {
-      "fixture": "introduces-issue",
-      "label": "C-introduces-default-step",
+      "fixture": "review-rejects-all",
+      "label": "F2-grid-exhausted-after-rejections",
       "expect": "pending",
+      "expectCode": "goal-not-confirmed",
       "status": "pending",
-      "code": "candidate-introduces-issues",
+      "code": "goal-not-confirmed",
       "suggested": null,
       "rejected": {
-        "x": 600,
-        "y": 900
+        "x": 2400,
+        "y": 400
+      },
+      "search": {
+        "tried": 219,
+        "acceptedIndex": null,
+        "placementValidRejected": 58,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
+      "identicalOnRepeat": true,
+      "applied": false
+    },
+    {
+      "fixture": "review-rejects-all",
+      "label": "F2-verification-limit",
+      "expect": "pending",
+      "expectCode": "goal-not-confirmed",
+      "status": "pending",
+      "code": "goal-not-confirmed",
+      "suggested": null,
+      "rejected": {
+        "x": 2400,
+        "y": 400
+      },
+      "search": {
+        "tried": 3619,
+        "acceptedIndex": null,
+        "placementValidRejected": 250,
+        "budgetExhausted": false,
+        "verificationLimitReached": true
       },
       "identicalOnRepeat": true,
       "applied": false
@@ -254,10 +503,12 @@
       "fixture": "outside",
       "label": "D-outside-rooms",
       "expect": "blocked",
+      "expectCode": null,
       "status": "blocked",
       "code": "object-outside-rooms",
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -265,10 +516,12 @@
       "fixture": "contract-example",
       "label": "E-obj_bed-01-resolve",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -276,10 +529,12 @@
       "fixture": "contract-example",
       "label": "E-obj_sofa-01-resolve",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -287,10 +542,12 @@
       "fixture": "contract-example",
       "label": "E-obj_toilet-01-resolve",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -298,10 +555,12 @@
       "fixture": "contract-example",
       "label": "E-obj_bed-01-opn_entrance",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -309,10 +568,12 @@
       "fixture": "contract-example",
       "label": "E-obj_sofa-01-opn_entrance",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -320,10 +581,12 @@
       "fixture": "contract-example",
       "label": "E-obj_toilet-01-opn_entrance",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -331,10 +594,12 @@
       "fixture": "contract-example",
       "label": "E-obj_bed-01-opn_bath-door",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -342,10 +607,12 @@
       "fixture": "contract-example",
       "label": "E-obj_sofa-01-opn_bath-door",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     },
@@ -353,10 +620,12 @@
       "fixture": "contract-example",
       "label": "E-obj_toilet-01-opn_bath-door",
       "expect": null,
+      "expectCode": null,
       "status": "no-change-needed",
       "code": null,
       "suggested": null,
       "rejected": null,
+      "search": null,
       "identicalOnRepeat": true,
       "applied": false
     }

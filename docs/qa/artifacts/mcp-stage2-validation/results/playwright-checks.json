@@ -1,5 +1,5 @@
 {
-  "codeSha": "369c5b7d516afb55ded16054851504696dca3440",
+  "codeSha": "77ca0842a0028dbe87f19462db0d2606aba0d3ec",
   "checks": [
     {
       "check": "editor-reads-overlap",
@@ -272,7 +272,7 @@
       "ok": true
     },
     {
-      "check": "lab-fidelity-F1-assumed-swing-conflict",
+      "check": "lab-fidelity-F1-assumed-swing-only",
       "ok": true,
       "note": "polígonos dibujados = FloorPlanTracing.footprint en Node; eje y hacia abajo (ctm.d > 0), sin giro de ejes",
       "ctm": {
@@ -283,7 +283,34 @@
       }
     },
     {
-      "check": "lab-recheck-matches-mcp-F1-assumed-swing-conflict",
+      "check": "lab-no-horizontal-scroll-F1-assumed-swing-only-1440x900",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F1-assumed-swing-only-1280x800",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F1-assumed-swing-only-390x844",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F1-assumed-swing-only-844x390",
+      "ok": true
+    },
+    {
+      "check": "lab-fidelity-F1-accredited-plus-assumed",
+      "ok": true,
+      "note": "polígonos dibujados = FloorPlanTracing.footprint en Node; eje y hacia abajo (ctm.d > 0), sin giro de ejes",
+      "ctm": {
+        "a": 0.19653846153846155,
+        "b": 0,
+        "c": 0,
+        "d": 0.19653846153846155
+      }
+    },
+    {
+      "check": "lab-recheck-matches-mcp-F1-accredited-plus-assumed",
       "ok": true,
       "lab": {
         "placement": [],
@@ -291,19 +318,19 @@
       }
     },
     {
-      "check": "lab-no-horizontal-scroll-F1-assumed-swing-conflict-1440x900",
+      "check": "lab-no-horizontal-scroll-F1-accredited-plus-assumed-1440x900",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-F1-assumed-swing-conflict-1280x800",
+      "check": "lab-no-horizontal-scroll-F1-accredited-plus-assumed-1280x800",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-F1-assumed-swing-conflict-390x844",
+      "check": "lab-no-horizontal-scroll-F1-accredited-plus-assumed-390x844",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-F1-assumed-swing-conflict-844x390",
+      "check": "lab-no-horizontal-scroll-F1-accredited-plus-assumed-844x390",
       "ok": true
     },
     {
@@ -388,7 +415,7 @@
       "ok": true
     },
     {
-      "check": "lab-fidelity-C-D2-rejected-default-step",
+      "check": "lab-fidelity-F2-D2-default-step",
       "ok": true,
       "note": "polígonos dibujados = FloorPlanTracing.footprint en Node; eje y hacia abajo (ctm.d > 0), sin giro de ejes",
       "ctm": {
@@ -399,7 +426,77 @@
       }
     },
     {
-      "check": "lab-recheck-matches-mcp-C-D2-rejected-default-step",
+      "check": "lab-recheck-matches-mcp-F2-D2-default-step",
+      "ok": true,
+      "lab": {
+        "placement": [],
+        "review": []
+      }
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-D2-default-step-1440x900",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-D2-default-step-1280x800",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-D2-default-step-390x844",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-D2-default-step-844x390",
+      "ok": true
+    },
+    {
+      "check": "lab-fidelity-F2-introduces-default-step",
+      "ok": true,
+      "note": "polígonos dibujados = FloorPlanTracing.footprint en Node; eje y hacia abajo (ctm.d > 0), sin giro de ejes",
+      "ctm": {
+        "a": 0.19653846153846155,
+        "b": 0,
+        "c": 0,
+        "d": 0.19653846153846155
+      }
+    },
+    {
+      "check": "lab-recheck-matches-mcp-F2-introduces-default-step",
+      "ok": true,
+      "lab": {
+        "placement": [],
+        "review": []
+      }
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-introduces-default-step-1440x900",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-introduces-default-step-1280x800",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-introduces-default-step-390x844",
+      "ok": true
+    },
+    {
+      "check": "lab-no-horizontal-scroll-F2-introduces-default-step-844x390",
+      "ok": true
+    },
+    {
+      "check": "lab-fidelity-F2-D2-default-budget-442",
+      "ok": true,
+      "note": "polígonos dibujados = FloorPlanTracing.footprint en Node; eje y hacia abajo (ctm.d > 0), sin giro de ejes",
+      "ctm": {
+        "a": 0.19653846153846155,
+        "b": 0,
+        "c": 0,
+        "d": 0.19653846153846155
+      }
+    },
+    {
+      "check": "lab-recheck-matches-mcp-F2-D2-default-budget-442",
       "ok": true,
       "lab": {
         "placement": [],
@@ -409,23 +506,23 @@
       }
     },
     {
-      "check": "lab-no-horizontal-scroll-C-D2-rejected-default-step-1440x900",
+      "check": "lab-no-horizontal-scroll-F2-D2-default-budget-442-1440x900",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-C-D2-rejected-default-step-1280x800",
+      "check": "lab-no-horizontal-scroll-F2-D2-default-budget-442-1280x800",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-C-D2-rejected-default-step-390x844",
+      "check": "lab-no-horizontal-scroll-F2-D2-default-budget-442-390x844",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-C-D2-rejected-default-step-844x390",
+      "check": "lab-no-horizontal-scroll-F2-D2-default-budget-442-844x390",
       "ok": true
     },
     {
-      "check": "lab-fidelity-C-introduces-default-step",
+      "check": "lab-fidelity-F2-verification-limit",
       "ok": true,
       "note": "polígonos dibujados = FloorPlanTracing.footprint en Node; eje y hacia abajo (ctm.d > 0), sin giro de ejes",
       "ctm": {
@@ -436,29 +533,29 @@
       }
     },
     {
-      "check": "lab-recheck-matches-mcp-C-introduces-default-step",
+      "check": "lab-recheck-matches-mcp-F2-verification-limit",
       "ok": true,
       "lab": {
         "placement": [],
         "review": [
-          "puerta 90°"
+          "solape 0.5 mm"
         ]
       }
     },
     {
-      "check": "lab-no-horizontal-scroll-C-introduces-default-step-1440x900",
+      "check": "lab-no-horizontal-scroll-F2-verification-limit-1440x900",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-C-introduces-default-step-1280x800",
+      "check": "lab-no-horizontal-scroll-F2-verification-limit-1280x800",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-C-introduces-default-step-390x844",
+      "check": "lab-no-horizontal-scroll-F2-verification-limit-390x844",
       "ok": true
     },
     {
-      "check": "lab-no-horizontal-scroll-C-introduces-default-step-844x390",
+      "check": "lab-no-horizontal-scroll-F2-verification-limit-844x390",
       "ok": true
     },
     {

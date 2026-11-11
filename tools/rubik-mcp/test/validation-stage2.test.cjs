@@ -1,14 +1,16 @@
 'use strict';
 
 // MCP Etapa 2 — tests added by the empirical validation (docs/technical/local-mcp-stage2-empirical-validation.md).
-// They do not change the implementation audited at 369c5b7. Three purposes:
+// Written against the implementation audited at 369c5b7; updated after the F1/F2/F3 correction (77ca084). Purposes:
 //  1. Close the side-effect gap found in the #196 tests: child_process, open() with a write flag, fs.write/writeSync,
 //     FileHandle writes, dgram/tls/dns were not trapped although the #196 record says process creation was.
 //  2. Independent geometric evidence: every candidate-reviewable footprint is checked with a DIFFERENT algorithm
 //     (triangulation + convex clipping of spatial.cjs, wall strips of FloorPlanCore.wallRect) instead of re-running
 //     FloorPlanPlacement / layout-review, and the D3 «no leaf contact» is checked by sampling the leaf.
-//  3. Characterisation of the two findings F1 and F2: these assertions describe CURRENT behaviour and are expected to
-//     change if the human review decides to correct it (they will then fail on purpose and must be updated).
+//  3. F1 and F2. At 369c5b7 these tests characterised the defects (ANTES DE LA CORRECCIÓN: candidate-reviewable for an
+//     assumed swing; pending after the first find() candidate). That historical evidence is kept in
+//     docs/qa/artifacts/mcp-stage2-validation/before-fix/. They now verify the corrected behaviour, cross-checked with
+//     the independent enumerator of validation/enumerate-candidates.cjs.
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -101,8 +103,10 @@ function overlapArea(poly, other) {
   return Spatial.triangulate(poly, 'x').reduce((sum, tri) => sum + Spatial.clippedArea(other, tri), 0);
 }
 for (const [name, args] of [['overlap', { objectId: 'obj_beta' }], ['rotated', { objectId: 'obj_turned' }], ['against-wall', { objectId: 'obj_shelf' }],
-  ['two-close', { objectId: 'obj_beta' }], ['concave', { objectId: 'obj_table' }], ['door-blocked', { objectId: 'obj_chair', goal: 'clear-door-swing', openingId: 'opn_door' }]])
-  test(`independent check of the candidate (${name}): inside its room, no area shared with furniture or walls`, () => {
+  ['two-close', { objectId: 'obj_beta' }], ['concave', { objectId: 'obj_table' }], ['door-blocked', { objectId: 'obj_chair', goal: 'clear-door-swing', openingId: 'opn_door' }],
+  ['models-disagree-after', { objectId: 'obj_odd' }], ['introduces-issue', { objectId: 'obj_odd' }], ['models-disagree-after', { objectId: 'obj_odd', stepMm: 500 }],
+  ['introduces-issue', { objectId: 'obj_odd', stepMm: 600 }], ['swingless-plus-real', { objectId: 'obj_crate' }]])
+  test(`independent check of the candidate (${name}${args.stepMm ? ` step ${args.stepMm}` : ''}): inside its room, no area shared with furniture or walls`, () => {
     const { project, result } = run(name, args);
     assert.equal(result.status, 'candidate-reviewable');
     const object = project.objects.find(o => o.id === args.objectId);
@@ -133,27 +137,36 @@ test('D3, independently: sampling the leaf every 0.05° from 0° to 90°, it nev
 });
 
 // ---------- 3. characterisation of the findings (current behaviour, not a desired one) ----------
-test('[F1, comportamiento actual] a conflict that exists only because of an ASSUMED swing yields candidate-reviewable', () => {
+test('[F1, corregido] a conflict that exists only because of an ASSUMED swing is pending, not candidate-reviewable', () => {
   const { project, result } = run('swingless-inward', { objectId: 'obj_stool' });
   assert.ok(!project.openings.find(o => o.id === 'opn_north').swing, 'the JSON declares no swing');
-  assert.deepEqual(result.problem.problems.map(p => [p.kind, p.id]), [['door', 'opn_north']], 'the only conflict is the assumed door square');
+  assert.deepEqual(result.problem.problems.map(p => [p.kind, p.id, p.assumedSwing]), [['door', 'opn_north', true]], 'the only conflict is the assumed door square');
   assert.deepEqual(result.evidence.before.reviewModel, [], 'layout-review sees nothing');
-  assert.equal(result.status, 'candidate-reviewable', 'F1: the status overstates the evidence (only a generic uncertainty is attached)');
-  assert.ok(result.uncertainty.some(u => u.code === 'placement-assumes-door-swing'));
+  assert.equal(result.status, 'pending');
+  assert.equal(result.blockingReasons[0].code, 'conflict-based-on-assumed-swing');
+  assert.equal(result.suggestedPose, null);
+  assert.equal(result.applied, false);
+  assert.deepEqual(result.evidence.assumedSwing.openingIds, ['opn_north']);
 });
 
 for (const [name, args, rejectedAt, acceptedAt] of [
   ['models-disagree-after', { objectId: 'obj_odd' }, 363, 443],
   ['introduces-issue', { objectId: 'obj_odd' }, 10, 15],
   ['models-disagree-after', { objectId: 'obj_odd', stepMm: 500 }, 3, 10],
-]) test(`[F2, comportamiento actual] ${name} ${JSON.stringify(args)}: pending after the first candidate although a later grid position satisfies both authorities`, () => {
+  ['introduces-issue', { objectId: 'obj_odd', stepMm: 600 }, 2, 7],
+]) test(`[F2, corregido] ${name} ${JSON.stringify(args)}: the search goes on past #${rejectedAt} and returns what the independent enumerator finds (#${acceptedAt})`, () => {
   const { project, result } = run(name, args);
-  assert.equal(result.status, 'pending');
-  assert.equal(result.search.tried, rejectedAt, 'the search stopped at the first candidate find() returned');
   const a = audit(project, { objectId: args.objectId, stepMm: args.stepMm });
   assert.equal(a.firstFoundByFind.index, rejectedAt, 'the audit walks the same sequence as find()');
   assert.equal(a.firstAcceptedByBoth.index, acceptedAt);
-  assert.ok(a.firstAcceptedByBoth.index <= Proposal.LIMITS.maxCandidates.default, 'within the default budget');
+  assert.equal(result.status, 'candidate-reviewable');
+  assert.equal(result.search.acceptedIndex, acceptedAt);
+  assert.equal(result.search.tried, acceptedAt);
+  assert.deepEqual(result.suggestedPose.position, a.firstAcceptedByBoth.position);
+  assert.equal(result.distanceMm, a.firstAcceptedByBoth.distanceMm);
+  assert.equal(result.search.placementValidRejected, a.placementValidButReviewRejected, 'same number of rejections as the enumerator');
+  assert.equal(result.search.rejected[0].index, rejectedAt);
+  assert.deepEqual(result.search.rejected[0].position, a.firstFoundByFind.position);
 });
 
 test('control: the traps above do fire when the trapped APIs are called', async t => {

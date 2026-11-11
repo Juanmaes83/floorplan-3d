@@ -100,6 +100,7 @@
     {
       "label": "E-obj_bed-01-resolve",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_bed-01",
@@ -107,6 +108,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -216,6 +218,7 @@
     {
       "label": "E-obj_sofa-01-resolve",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_sofa-01",
@@ -223,6 +226,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -332,6 +336,7 @@
     {
       "label": "E-obj_toilet-01-resolve",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_toilet-01",
@@ -339,6 +344,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -448,6 +454,7 @@
     {
       "label": "E-obj_bed-01-opn_entrance",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_bed-01",
@@ -456,6 +463,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -579,6 +587,7 @@
     {
       "label": "E-obj_sofa-01-opn_entrance",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_sofa-01",
@@ -587,6 +596,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -710,6 +720,7 @@
     {
       "label": "E-obj_toilet-01-opn_entrance",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_toilet-01",
@@ -718,6 +729,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -841,6 +853,7 @@
     {
       "label": "E-obj_bed-01-opn_bath-door",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_bed-01",
@@ -849,6 +862,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -972,6 +986,7 @@
     {
       "label": "E-obj_sofa-01-opn_bath-door",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_sofa-01",
@@ -980,6 +995,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -1103,6 +1119,7 @@
     {
       "label": "E-obj_toilet-01-opn_bath-door",
       "expect": null,
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
         "objectId": "obj_toilet-01",
@@ -1111,6 +1128,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -1236,7 +1254,7 @@
     "before": {
       "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
       "size": 7408,
-      "mtimeMs": 1794425044010.4158,
+      "mtimeMs": 1794427920330.6296,
       "listing": [
         "project.json"
       ]
@@ -1244,7 +1262,7 @@
     "after": {
       "sha256": "0228276ab764922e9b0e152558f86fde9309f6bec1b2502b9fac67c5d4247e5b",
       "size": 7408,
-      "mtimeMs": 1794425044010.4158,
+      "mtimeMs": 1794427920330.6296,
       "listing": [
         "project.json"
       ]
@@ -1277,7 +1295,7 @@
           "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
           "projectName": "Estudio de ejemplo (ficticio)",
           "sizeBytes": 7408,
-          "modifiedAt": "2026-11-11T19:24:04.010Z"
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
         },
         "units": "mm",
         "scaleConfidence": "real",
@@ -1306,7 +1324,7 @@
           "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
           "projectName": "Estudio de ejemplo (ficticio)",
           "sizeBytes": 7408,
-          "modifiedAt": "2026-11-11T19:24:04.010Z"
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
         },
         "kind": "rooms",
         "total": 2,
@@ -1403,7 +1421,7 @@
           "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
           "projectName": "Estudio de ejemplo (ficticio)",
           "sizeBytes": 7408,
-          "modifiedAt": "2026-11-11T19:24:04.010Z"
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
         },
         "kind": "objects",
         "total": 3,
@@ -1514,7 +1532,7 @@
           "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
           "projectName": "Estudio de ejemplo (ficticio)",
           "sizeBytes": 7408,
-          "modifiedAt": "2026-11-11T19:24:04.010Z"
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
         },
         "kind": "openings",
         "total": 3,
@@ -1618,7 +1636,7 @@
           "projectId": "prj_01J9Z0EXAMPLE0STUDIO",
           "projectName": "Estudio de ejemplo (ficticio)",
           "sizeBytes": 7408,
-          "modifiedAt": "2026-11-11T19:24:04.010Z"
+          "modifiedAt": "2026-11-11T20:12:00.331Z"
         },
         "status": "partial",
         "units": "mm",

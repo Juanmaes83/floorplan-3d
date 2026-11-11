@@ -98,25 +98,24 @@
   "reviewFindings": [],
   "proposals": [
     {
-      "label": "F1-assumed-swing-conflict",
-      "expect": "candidate-reviewable",
+      "label": "F1-assumed-swing-only",
+      "expect": "pending",
+      "expectCode": "conflict-based-on-assumed-swing",
       "arguments": {
         "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
         "objectId": "obj_stool",
         "goal": "resolve-placement-conflict"
       },
-      "status": "candidate-reviewable",
-      "code": null,
-      "suggested": {
-        "x": 2250,
-        "y": 2800
-      },
+      "status": "pending",
+      "code": "conflict-based-on-assumed-swing",
+      "search": null,
+      "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
       "applied": false,
       "response": {
         "proposalVersion": "RubikLayoutProposalV1",
-        "status": "candidate-reviewable",
+        "status": "pending",
         "goal": "resolve-placement-conflict",
         "source": {
           "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
@@ -135,10 +134,14 @@
             {
               "kind": "door",
               "id": "opn_north",
-              "detail": "Invade el barrido de una puerta."
+              "detail": "Invade el barrido de una puerta.",
+              "assumedSwing": true
             }
           ],
-          "description": "«stool» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+          "assumedSwingOpeningIds": [
+            "opn_north"
+          ],
+          "description": "«stool» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement), 1 de ellos con el barrido SUPUESTO de una puerta sin swing."
         },
         "currentPose": {
           "position": {
@@ -152,20 +155,9 @@
           },
           "roomId": "rom_living"
         },
-        "suggestedPose": {
-          "position": {
-            "x": 2250,
-            "y": 2800
-          },
-          "rotationDeg": 0,
-          "size": {
-            "widthMm": 300,
-            "depthMm": 300
-          },
-          "roomId": "rom_living"
-        },
-        "distanceMm": 450,
-        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (173 candidata(s) probadas), a 450 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
         "evidence": {
           "room": {
             "centreRoomIds": [
@@ -190,28 +182,26 @@
               {
                 "kind": "door",
                 "id": "opn_north",
-                "detail": "Invade el barrido de una puerta."
+                "detail": "Invade el barrido de una puerta.",
+                "assumedSwing": true
               }
             ],
             "reviewModel": []
           },
-          "after": {
-            "placementModel": [],
-            "reviewModel": []
+          "assumedSwing": {
+            "openingIds": [
+              "opn_north"
+            ],
+            "model": "FloorPlanCore.geometry deriva la puerta con una bisagra supuesta (inicio, lado izquierdo) porque el JSON no registra swing; FloorPlanPlacement evita el cuadrado de ese barrido supuesto y layout-review no evalúa la puerta."
           }
         },
-        "blockingReasons": [],
-        "expectedEffects": [
+        "blockingReasons": [
           {
-            "code": "moves-position-only",
-            "message": "Solo cambia la posición de «stool»: de (2700, 2800) a (2250, 2800) mm. ID, tamaño, giro y estancia se conservan."
-          },
-          {
-            "code": "resolves-door",
-            "id": "opn_north",
-            "message": "Resuelve en el modelo de colocación: Invade el barrido de una puerta."
+            "code": "conflict-based-on-assumed-swing",
+            "message": "El único motivo para mover «stool» es el barrido SUPUESTO de la puerta opn_north: el JSON no registra bisagra ni sentido de apertura, así que no está confirmado que la hoja abra hacia el mueble. No se inventa el lado ni la bisagra y no se propone ningún movimiento. Registra el swing de la puerta y repite la petición."
           }
         ],
+        "expectedEffects": [],
         "remainingIssues": [],
         "uncertainty": [
           {
@@ -224,14 +214,6 @@
               "opn_north"
             ],
             "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
-          },
-          {
-            "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
-          },
-          {
-            "code": "review-doors-partial",
-            "message": "Algunas puertas no tienen bisagra y sentido registrados."
           }
         ],
         "notEvaluated": [
@@ -264,21 +246,279 @@
             "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
           }
         ],
-        "search": {
-          "generator": "FloorPlanPlacement.find",
-          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
-          "stepMm": 50,
-          "maxCandidates": 4000,
-          "toleranceMm": 1,
-          "tried": 173,
-          "budgetExhausted": false,
-          "checks": [
-            "la estancia completa",
-            "los muros",
-            "el barrido de las puertas",
-            "otros muebles"
-          ]
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "F1-swingless-not-touching",
+      "expect": "no-change-needed",
+      "expectCode": null,
+      "arguments": {
+        "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+        "objectId": "obj_alpha",
+        "goal": "resolve-placement-conflict"
+      },
+      "status": "no-change-needed",
+      "code": null,
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
         },
+        "objectId": "obj_alpha",
+        "object": {
+          "id": "obj_alpha",
+          "type": "table",
+          "name": "alpha"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2000,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "placement-assumes-door-swing",
+            "openingIds": [
+              "opn_north"
+            ],
+            "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "label": "F1-door-goal-swing-missing",
+      "expect": "pending",
+      "expectCode": "door-swing-missing",
+      "arguments": {
+        "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+        "objectId": "obj_stool",
+        "goal": "clear-door-swing",
+        "openingId": "opn_north"
+      },
+      "status": "pending",
+      "code": "door-swing-missing",
+      "search": null,
+      "suggested": null,
+      "rejected": null,
+      "identicalOnRepeat": true,
+      "applied": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_stool",
+        "openingId": "opn_north",
+        "object": {
+          "id": "obj_stool",
+          "type": "chair",
+          "name": "stool"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2700,
+            "y": 2800
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 300,
+            "depthMm": 300
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 90000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_north",
+                "detail": "Invade el barrido de una puerta.",
+                "assumedSwing": true
+              }
+            ],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "door-swing-missing",
+            "message": "La puerta no tiene registrados bisagra y sentido de apertura (swing): no se puede calcular su barrido y no se inventan."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "placement-assumes-door-swing",
+            "openingIds": [
+              "opn_north"
+            ],
+            "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
         "usedData": [
           "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
           "objects[*]: posición, tamaño y giro para solapes",
@@ -295,7 +535,7 @@
     "before": {
       "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
       "size": 4755,
-      "mtimeMs": 1794425042474.4155,
+      "mtimeMs": 1794427917270.6294,
       "listing": [
         "project.json"
       ]
@@ -303,7 +543,7 @@
     "after": {
       "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
       "size": 4755,
-      "mtimeMs": 1794425042474.4155,
+      "mtimeMs": 1794427917270.6294,
       "listing": [
         "project.json"
       ]
@@ -316,7 +556,7 @@
     "summaryMatchesFile": true
   },
   "protocol": {
-    "stdoutLines": 9,
+    "stdoutLines": 13,
     "nonJsonRpcLines": 0,
     "stderr": "Rubik MCP local de solo lectura iniciado.",
     "exit": {
@@ -336,7 +576,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4755,
-          "modifiedAt": "2026-11-11T19:24:02.474Z"
+          "modifiedAt": "2026-11-11T20:11:57.271Z"
         },
         "units": "mm",
         "scaleConfidence": "estimated",
@@ -365,7 +605,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4755,
-          "modifiedAt": "2026-11-11T19:24:02.474Z"
+          "modifiedAt": "2026-11-11T20:11:57.271Z"
         },
         "kind": "rooms",
         "total": 1,
@@ -419,7 +659,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4755,
-          "modifiedAt": "2026-11-11T19:24:02.474Z"
+          "modifiedAt": "2026-11-11T20:11:57.271Z"
         },
         "kind": "objects",
         "total": 3,
@@ -523,7 +763,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4755,
-          "modifiedAt": "2026-11-11T19:24:02.474Z"
+          "modifiedAt": "2026-11-11T20:11:57.271Z"
         },
         "kind": "openings",
         "total": 2,
@@ -594,7 +834,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4755,
-          "modifiedAt": "2026-11-11T19:24:02.474Z"
+          "modifiedAt": "2026-11-11T20:11:57.271Z"
         },
         "status": "partial",
         "units": "mm",
@@ -656,7 +896,7 @@
       "isError": false,
       "response": {
         "proposalVersion": "RubikLayoutProposalV1",
-        "status": "candidate-reviewable",
+        "status": "pending",
         "goal": "resolve-placement-conflict",
         "source": {
           "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
@@ -675,10 +915,14 @@
             {
               "kind": "door",
               "id": "opn_north",
-              "detail": "Invade el barrido de una puerta."
+              "detail": "Invade el barrido de una puerta.",
+              "assumedSwing": true
             }
           ],
-          "description": "«stool» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+          "assumedSwingOpeningIds": [
+            "opn_north"
+          ],
+          "description": "«stool» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement), 1 de ellos con el barrido SUPUESTO de una puerta sin swing."
         },
         "currentPose": {
           "position": {
@@ -692,20 +936,9 @@
           },
           "roomId": "rom_living"
         },
-        "suggestedPose": {
-          "position": {
-            "x": 2250,
-            "y": 2800
-          },
-          "rotationDeg": 0,
-          "size": {
-            "widthMm": 300,
-            "depthMm": 300
-          },
-          "roomId": "rom_living"
-        },
-        "distanceMm": 450,
-        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (173 candidata(s) probadas), a 450 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
         "evidence": {
           "room": {
             "centreRoomIds": [
@@ -730,28 +963,26 @@
               {
                 "kind": "door",
                 "id": "opn_north",
-                "detail": "Invade el barrido de una puerta."
+                "detail": "Invade el barrido de una puerta.",
+                "assumedSwing": true
               }
             ],
             "reviewModel": []
           },
-          "after": {
-            "placementModel": [],
-            "reviewModel": []
+          "assumedSwing": {
+            "openingIds": [
+              "opn_north"
+            ],
+            "model": "FloorPlanCore.geometry deriva la puerta con una bisagra supuesta (inicio, lado izquierdo) porque el JSON no registra swing; FloorPlanPlacement evita el cuadrado de ese barrido supuesto y layout-review no evalúa la puerta."
           }
         },
-        "blockingReasons": [],
-        "expectedEffects": [
+        "blockingReasons": [
           {
-            "code": "moves-position-only",
-            "message": "Solo cambia la posición de «stool»: de (2700, 2800) a (2250, 2800) mm. ID, tamaño, giro y estancia se conservan."
-          },
-          {
-            "code": "resolves-door",
-            "id": "opn_north",
-            "message": "Resuelve en el modelo de colocación: Invade el barrido de una puerta."
+            "code": "conflict-based-on-assumed-swing",
+            "message": "El único motivo para mover «stool» es el barrido SUPUESTO de la puerta opn_north: el JSON no registra bisagra ni sentido de apertura, así que no está confirmado que la hoja abra hacia el mueble. No se inventa el lado ni la bisagra y no se propone ningún movimiento. Registra el swing de la puerta y repite la petición."
           }
         ],
+        "expectedEffects": [],
         "remainingIssues": [],
         "uncertainty": [
           {
@@ -764,14 +995,6 @@
               "opn_north"
             ],
             "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
-          },
-          {
-            "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
-          },
-          {
-            "code": "review-doors-partial",
-            "message": "Algunas puertas no tienen bisagra y sentido registrados."
           }
         ],
         "notEvaluated": [
@@ -804,21 +1027,7 @@
             "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
           }
         ],
-        "search": {
-          "generator": "FloorPlanPlacement.find",
-          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
-          "stepMm": 50,
-          "maxCandidates": 4000,
-          "toleranceMm": 1,
-          "tried": 173,
-          "budgetExhausted": false,
-          "checks": [
-            "la estancia completa",
-            "los muros",
-            "el barrido de las puertas",
-            "otros muebles"
-          ]
-        },
+        "search": null,
         "usedData": [
           "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
           "objects[*]: posición, tamaño y giro para solapes",
@@ -840,7 +1049,7 @@
       "isError": false,
       "response": {
         "proposalVersion": "RubikLayoutProposalV1",
-        "status": "candidate-reviewable",
+        "status": "pending",
         "goal": "resolve-placement-conflict",
         "source": {
           "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
@@ -859,10 +1068,14 @@
             {
               "kind": "door",
               "id": "opn_north",
-              "detail": "Invade el barrido de una puerta."
+              "detail": "Invade el barrido de una puerta.",
+              "assumedSwing": true
             }
           ],
-          "description": "«stool» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+          "assumedSwingOpeningIds": [
+            "opn_north"
+          ],
+          "description": "«stool» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement), 1 de ellos con el barrido SUPUESTO de una puerta sin swing."
         },
         "currentPose": {
           "position": {
@@ -876,20 +1089,9 @@
           },
           "roomId": "rom_living"
         },
-        "suggestedPose": {
-          "position": {
-            "x": 2250,
-            "y": 2800
-          },
-          "rotationDeg": 0,
-          "size": {
-            "widthMm": 300,
-            "depthMm": 300
-          },
-          "roomId": "rom_living"
-        },
-        "distanceMm": 450,
-        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (173 candidata(s) probadas), a 450 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
         "evidence": {
           "room": {
             "centreRoomIds": [
@@ -914,28 +1116,26 @@
               {
                 "kind": "door",
                 "id": "opn_north",
-                "detail": "Invade el barrido de una puerta."
+                "detail": "Invade el barrido de una puerta.",
+                "assumedSwing": true
               }
             ],
             "reviewModel": []
           },
-          "after": {
-            "placementModel": [],
-            "reviewModel": []
+          "assumedSwing": {
+            "openingIds": [
+              "opn_north"
+            ],
+            "model": "FloorPlanCore.geometry deriva la puerta con una bisagra supuesta (inicio, lado izquierdo) porque el JSON no registra swing; FloorPlanPlacement evita el cuadrado de ese barrido supuesto y layout-review no evalúa la puerta."
           }
         },
-        "blockingReasons": [],
-        "expectedEffects": [
+        "blockingReasons": [
           {
-            "code": "moves-position-only",
-            "message": "Solo cambia la posición de «stool»: de (2700, 2800) a (2250, 2800) mm. ID, tamaño, giro y estancia se conservan."
-          },
-          {
-            "code": "resolves-door",
-            "id": "opn_north",
-            "message": "Resuelve en el modelo de colocación: Invade el barrido de una puerta."
+            "code": "conflict-based-on-assumed-swing",
+            "message": "El único motivo para mover «stool» es el barrido SUPUESTO de la puerta opn_north: el JSON no registra bisagra ni sentido de apertura, así que no está confirmado que la hoja abra hacia el mueble. No se inventa el lado ni la bisagra y no se propone ningún movimiento. Registra el swing de la puerta y repite la petición."
           }
         ],
+        "expectedEffects": [],
         "remainingIssues": [],
         "uncertainty": [
           {
@@ -948,14 +1148,6 @@
               "opn_north"
             ],
             "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
-          },
-          {
-            "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
-          },
-          {
-            "code": "review-doors-partial",
-            "message": "Algunas puertas no tienen bisagra y sentido registrados."
           }
         ],
         "notEvaluated": [
@@ -988,21 +1180,519 @@
             "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
           }
         ],
-        "search": {
-          "generator": "FloorPlanPlacement.find",
-          "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
-          "stepMm": 50,
-          "maxCandidates": 4000,
-          "toleranceMm": 1,
-          "tried": 173,
-          "budgetExhausted": false,
-          "checks": [
-            "la estancia completa",
-            "los muros",
-            "el barrido de las puertas",
-            "otros muebles"
-          ]
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+        "objectId": "obj_alpha",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
         },
+        "objectId": "obj_alpha",
+        "object": {
+          "id": "obj_alpha",
+          "type": "table",
+          "name": "alpha"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2000,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "placement-assumes-door-swing",
+            "openingIds": [
+              "opn_north"
+            ],
+            "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+        "objectId": "obj_alpha",
+        "goal": "resolve-placement-conflict"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "no-change-needed",
+        "goal": "resolve-placement-conflict",
+        "source": {
+          "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_alpha",
+        "object": {
+          "id": "obj_alpha",
+          "type": "table",
+          "name": "alpha"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2000,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": "FloorPlanPlacement no encuentra ningún conflicto de colocación del mueble en su estancia.",
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 360000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "placement-assumes-door-swing",
+            "openingIds": [
+              "opn_north"
+            ],
+            "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+        "objectId": "obj_stool",
+        "goal": "clear-door-swing",
+        "openingId": "opn_north"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_stool",
+        "openingId": "opn_north",
+        "object": {
+          "id": "obj_stool",
+          "type": "chair",
+          "name": "stool"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2700,
+            "y": 2800
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 300,
+            "depthMm": 300
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 90000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_north",
+                "detail": "Invade el barrido de una puerta.",
+                "assumedSwing": true
+              }
+            ],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "door-swing-missing",
+            "message": "La puerta no tiene registrados bisagra y sentido de apertura (swing): no se puede calcular su barrido y no se inventan."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "placement-assumes-door-swing",
+            "openingIds": [
+              "opn_north"
+            ],
+            "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
+        "usedData": [
+          "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+          "objects[*]: posición, tamaño y giro para solapes",
+          "rooms[*]: id, name, polygon",
+          "walls[*]: start, end, thicknessMm, status",
+          "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+          "scale.confidence"
+        ],
+        "applied": false
+      }
+    },
+    {
+      "tool": "propose_layout",
+      "arguments": {
+        "expectedSha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+        "objectId": "obj_stool",
+        "goal": "clear-door-swing",
+        "openingId": "opn_north"
+      },
+      "isError": false,
+      "response": {
+        "proposalVersion": "RubikLayoutProposalV1",
+        "status": "pending",
+        "goal": "clear-door-swing",
+        "source": {
+          "sha256": "40d388980aaa7ceb6cfe770d73b41a00f0287350b77e47866f81e6a8d8378e37",
+          "schemaVersion": "1.0.0",
+          "scaleConfidence": "estimated"
+        },
+        "objectId": "obj_stool",
+        "openingId": "opn_north",
+        "object": {
+          "id": "obj_stool",
+          "type": "chair",
+          "name": "stool"
+        },
+        "problem": null,
+        "currentPose": {
+          "position": {
+            "x": 2700,
+            "y": 2800
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 300,
+            "depthMm": 300
+          },
+          "roomId": "rom_living"
+        },
+        "suggestedPose": null,
+        "distanceMm": null,
+        "rationale": null,
+        "evidence": {
+          "room": {
+            "centreRoomIds": [
+              "rom_living"
+            ],
+            "footprintRelation": {
+              "roomIds": [
+                "rom_living"
+              ],
+              "status": "unique",
+              "method": "rotated_footprint_overlap",
+              "evidence": [
+                {
+                  "roomId": "rom_living",
+                  "overlapAreaMm2": 90000
+                }
+              ]
+            }
+          },
+          "before": {
+            "placementModel": [
+              {
+                "kind": "door",
+                "id": "opn_north",
+                "detail": "Invade el barrido de una puerta.",
+                "assumedSwing": true
+              }
+            ],
+            "reviewModel": []
+          }
+        },
+        "blockingReasons": [
+          {
+            "code": "door-swing-missing",
+            "message": "La puerta no tiene registrados bisagra y sentido de apertura (swing): no se puede calcular su barrido y no se inventan."
+          }
+        ],
+        "expectedEffects": [],
+        "remainingIssues": [],
+        "uncertainty": [
+          {
+            "code": "scale-estimated",
+            "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+          },
+          {
+            "code": "placement-assumes-door-swing",
+            "openingIds": [
+              "opn_north"
+            ],
+            "message": "Hay puertas sin bisagra ni sentido registrados. FloorPlanPlacement las trata con una bisagra supuesta (inicio/izquierda) y evita ese cuadrado; layout-review no las evalúa. Las candidatas pueden apartarse de un barrido que no consta en el JSON."
+          }
+        ],
+        "notEvaluated": [
+          {
+            "code": "height",
+            "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+          },
+          {
+            "code": "clearance",
+            "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+          },
+          {
+            "code": "route",
+            "message": "Recorridos, accesibilidad, evacuación y normativa."
+          },
+          {
+            "code": "stairs-and-levels",
+            "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+          },
+          {
+            "code": "door-details",
+            "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+          },
+          {
+            "code": "other-moves",
+            "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+          },
+          {
+            "code": "preference",
+            "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+          }
+        ],
+        "search": null,
         "usedData": [
           "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
           "objects[*]: posición, tamaño y giro para solapes",

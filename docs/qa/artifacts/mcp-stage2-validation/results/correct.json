@@ -100,6 +100,7 @@
     {
       "label": "B-correct",
       "expect": "no-change-needed",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0e2c1174f9d05c615717bac0a65653b742156380bc38325f66d0f722ae3cd128",
         "objectId": "obj_alpha",
@@ -107,6 +108,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -222,7 +224,7 @@
     "before": {
       "sha256": "0e2c1174f9d05c615717bac0a65653b742156380bc38325f66d0f722ae3cd128",
       "size": 4327,
-      "mtimeMs": 1794425041378.4155,
+      "mtimeMs": 1794427916006.6294,
       "listing": [
         "project.json"
       ]
@@ -230,7 +232,7 @@
     "after": {
       "sha256": "0e2c1174f9d05c615717bac0a65653b742156380bc38325f66d0f722ae3cd128",
       "size": 4327,
-      "mtimeMs": 1794425041378.4155,
+      "mtimeMs": 1794427916006.6294,
       "listing": [
         "project.json"
       ]
@@ -263,7 +265,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:01.378Z"
+          "modifiedAt": "2026-11-11T20:11:56.007Z"
         },
         "units": "mm",
         "scaleConfidence": "estimated",
@@ -292,7 +294,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:01.378Z"
+          "modifiedAt": "2026-11-11T20:11:56.007Z"
         },
         "kind": "rooms",
         "total": 1,
@@ -346,7 +348,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:01.378Z"
+          "modifiedAt": "2026-11-11T20:11:56.007Z"
         },
         "kind": "objects",
         "total": 2,
@@ -423,7 +425,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:01.378Z"
+          "modifiedAt": "2026-11-11T20:11:56.007Z"
         },
         "kind": "openings",
         "total": 1,
@@ -471,7 +473,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:01.378Z"
+          "modifiedAt": "2026-11-11T20:11:56.007Z"
         },
         "status": "partial",
         "units": "mm",

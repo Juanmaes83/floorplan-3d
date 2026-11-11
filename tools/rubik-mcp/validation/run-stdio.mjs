@@ -42,15 +42,29 @@ const GROUPS = [
     { label: 'C-D1-door-swing-missing', expect: 'pending', args: { objectId: 'obj_chair', goal: 'clear-door-swing', openingId: 'opn_door' } },
     { label: 'A-D1-overlap-with-swingless-door', expect: 'candidate-reviewable', args: { objectId: 'obj_beta', goal: 'resolve-placement-conflict' } },
   ] },
-  { fixture: 'swingless-inward', calls: [{ label: 'F1-assumed-swing-conflict', expect: 'candidate-reviewable', args: { objectId: 'obj_stool', goal: 'resolve-placement-conflict' } }] },
+  // F1 (corrected in 77ca084; at 369c5b7 this call returned candidate-reviewable, see before-fix/).
+  { fixture: 'swingless-inward', calls: [
+    { label: 'F1-assumed-swing-only', expect: 'pending', expectCode: 'conflict-based-on-assumed-swing', args: { objectId: 'obj_stool', goal: 'resolve-placement-conflict' } },
+    { label: 'F1-swingless-not-touching', expect: 'no-change-needed', args: { objectId: 'obj_alpha', goal: 'resolve-placement-conflict' } },
+    { label: 'F1-door-goal-swing-missing', expect: 'pending', expectCode: 'door-swing-missing', args: { objectId: 'obj_stool', goal: 'clear-door-swing', openingId: 'opn_north' } },
+  ] },
+  { fixture: 'swingless-plus-real', calls: [{ label: 'F1-accredited-plus-assumed', expect: 'candidate-reviewable', args: { objectId: 'obj_crate', goal: 'resolve-placement-conflict' } }] },
   { fixture: 'models-disagree-before', calls: [{ label: 'C-D2-models-disagree', expect: 'pending', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict' } }] },
+  // F2 (corrected in 77ca084; at 369c5b7 the first four calls returned pending, see before-fix/).
   { fixture: 'models-disagree-after', calls: [
-    { label: 'C-D2-rejected-step500', expect: 'pending', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 500 } },
-    { label: 'C-D2-rejected-default-step', expect: 'pending', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict' } },
+    { label: 'F2-D2-step500', expect: 'candidate-reviewable', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 500 } },
+    { label: 'F2-D2-default-step', expect: 'candidate-reviewable', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict' } },
+    { label: 'F2-D2-step500-budget-3', expect: 'pending', expectCode: 'goal-not-confirmed', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 500, maxCandidates: 3 } },
+    { label: 'F2-D2-default-budget-442', expect: 'pending', expectCode: 'goal-not-confirmed', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', maxCandidates: 442 } },
   ] },
   { fixture: 'introduces-issue', calls: [
-    { label: 'C-introduces-step600', expect: 'pending', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 600 } },
-    { label: 'C-introduces-default-step', expect: 'pending', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict' } },
+    { label: 'F2-introduces-step600', expect: 'candidate-reviewable', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 600 } },
+    { label: 'F2-introduces-default-step', expect: 'candidate-reviewable', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict' } },
+    { label: 'F2-introduces-step600-budget-2', expect: 'pending', expectCode: 'candidate-introduces-issues', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 600, maxCandidates: 2 } },
+  ] },
+  { fixture: 'review-rejects-all', calls: [
+    { label: 'F2-grid-exhausted-after-rejections', expect: 'pending', expectCode: 'goal-not-confirmed', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict' } },
+    { label: 'F2-verification-limit', expect: 'pending', expectCode: 'goal-not-confirmed', args: { objectId: 'obj_odd', goal: 'resolve-placement-conflict', stepMm: 10 } },
   ] },
   { fixture: 'outside', calls: [{ label: 'D-outside-rooms', expect: 'blocked', args: { objectId: 'obj_lost', goal: 'resolve-placement-conflict' } }] },
   { fixture: 'contract-example', source: 'docs/contracts/examples/floorplan-project-v1.example.json', calls: 'all' },
@@ -120,7 +134,8 @@ async function runGroup(group, tmpRoot) {
     const args = { expectedSha256: summary.snapshot.sha256, ...c.args };
     const first = await call('propose_layout', args);
     const second = await call('propose_layout', args);
-    proposals.push({ label: c.label, expect: c.expect ?? null, arguments: args, status: first?.status, code: first?.blockingReasons?.[0]?.code ?? null,
+    proposals.push({ label: c.label, expect: c.expect ?? null, expectCode: c.expectCode ?? null, arguments: args, status: first?.status, code: first?.blockingReasons?.[0]?.code ?? null,
+      search: first?.search ? { tried: first.search.tried, acceptedIndex: first.search.acceptedIndex ?? null, placementValidRejected: first.search.placementValidRejected, budgetExhausted: first.search.budgetExhausted, verificationLimitReached: first.search.verificationLimitReached } : null,
       suggested: first?.suggestedPose?.position ?? null, rejected: first?.evidence?.rejectedCandidate?.position ?? null,
       identicalOnRepeat: JSON.stringify(first) === JSON.stringify(second), applied: first?.applied, response: first });
   }
@@ -156,9 +171,9 @@ for (const group of GROUPS) {
   await writeFile(path.join(outDir, 'logs', `${group.fixture}.stderr.log`), r.protocol.stderr + '\n');
   const { stdoutRaw, ...kept } = r;
   await writeFile(path.join(outDir, 'results', `${group.fixture}.json`), JSON.stringify(kept, null, 2) + '\n');
-  for (const p of r.proposals) summary.push({ fixture: r.fixture, label: p.label, expect: p.expect, status: p.status, code: p.code, suggested: p.suggested, rejected: p.rejected, identicalOnRepeat: p.identicalOnRepeat, applied: p.applied });
+  for (const p of r.proposals) summary.push({ fixture: r.fixture, label: p.label, expect: p.expect, expectCode: p.expectCode, status: p.status, code: p.code, suggested: p.suggested, rejected: p.rejected, search: p.search, identicalOnRepeat: p.identicalOnRepeat, applied: p.applied });
   console.log(`${r.fixture.padEnd(24)} tools:${r.toolsAsExpected && r.allReadOnly ? 'ok' : 'FAIL'} stdoutNonJson:${r.protocol.nonJsonRpcLines} exit:${r.protocol.exit.code} integrity:${Object.entries(r.integrity).filter(([k]) => k.startsWith('same') || k === 'summaryMatchesFile').every(([, v]) => v) ? 'ok' : 'FAIL'}`);
-  for (const p of r.proposals) console.log(`   ${p.label.padEnd(36)} ${String(p.status).padEnd(22)} ${String(p.code ?? '').padEnd(28)} expect:${p.expect ?? '-'} ${p.expect && p.expect !== p.status ? 'MISMATCH' : ''} repeat:${p.identicalOnRepeat} applied:${p.applied}`);
+  for (const p of r.proposals) console.log(`   ${p.label.padEnd(36)} ${String(p.status).padEnd(22)} ${String(p.code ?? '').padEnd(28)} expect:${p.expect ?? '-'} ${(p.expect && p.expect !== p.status) || (p.expectCode && p.expectCode !== p.code) ? 'MISMATCH' : ''} repeat:${p.identicalOnRepeat} applied:${p.applied}`);
 }
 await rm(tmpRoot, { recursive: true, force: true });
 await writeFile(path.join(outDir, 'results', 'summary.json'), JSON.stringify({ codeSha: process.env.CODE_SHA || null, node: process.version, generatedAt: new Date().toISOString(), proposals: summary }, null, 2) + '\n');

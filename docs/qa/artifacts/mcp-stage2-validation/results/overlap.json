@@ -108,6 +108,7 @@
     {
       "label": "A-overlap-candidate",
       "expect": "candidate-reviewable",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
         "objectId": "obj_beta",
@@ -115,6 +116,13 @@
       },
       "status": "candidate-reviewable",
       "code": null,
+      "search": {
+        "tried": 123,
+        "acceptedIndex": 123,
+        "placementValidRejected": 0,
+        "budgetExhausted": false,
+        "verificationLimitReached": false
+      },
       "suggested": {
         "x": 2600,
         "y": 1500
@@ -173,7 +181,7 @@
           "roomId": "rom_living"
         },
         "distanceMm": 300,
-        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (123 candidata(s) probadas), a 300 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "rationale": "Primera posición, en el orden determinista de FloorPlanPlacement (123 posición(es) examinadas), que supera todas las comprobaciones: a 300 mm de la actual, dentro de «living». Comprobada con FloorPlanPlacement y layout-review sobre una copia efímera en memoria. No es necesariamente la mejor.",
         "evidence": {
           "room": {
             "centreRoomIds": [
@@ -246,7 +254,7 @@
           },
           {
             "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
           }
         ],
         "notEvaluated": [
@@ -280,18 +288,28 @@
           }
         ],
         "search": {
-          "generator": "FloorPlanPlacement.find",
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
           "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
           "stepMm": 50,
           "maxCandidates": 4000,
           "toleranceMm": 1,
           "tried": 123,
           "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 0,
+          "acceptedIndex": 123,
           "checks": [
             "la estancia completa",
             "los muros",
             "el barrido de las puertas",
             "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
           ]
         },
         "usedData": [
@@ -308,6 +326,7 @@
     {
       "label": "B-overlap-door-no-change",
       "expect": "no-change-needed",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
         "objectId": "obj_beta",
@@ -316,6 +335,7 @@
       },
       "status": "no-change-needed",
       "code": null,
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -459,6 +479,7 @@
     {
       "label": "C-budget-exhausted",
       "expect": "pending",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
         "objectId": "obj_beta",
@@ -467,6 +488,13 @@
       },
       "status": "pending",
       "code": "search-budget-exhausted",
+      "search": {
+        "tried": 1,
+        "acceptedIndex": null,
+        "placementValidRejected": 0,
+        "budgetExhausted": true,
+        "verificationLimitReached": false
+      },
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -570,7 +598,7 @@
           },
           {
             "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
           }
         ],
         "notEvaluated": [
@@ -604,18 +632,27 @@
           }
         ],
         "search": {
-          "generator": "FloorPlanPlacement.find",
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
           "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
           "stepMm": 50,
           "maxCandidates": 1,
           "toleranceMm": 1,
           "tried": 1,
           "budgetExhausted": true,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 0,
           "checks": [
             "la estancia completa",
             "los muros",
             "el barrido de las puertas",
             "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
           ]
         },
         "usedData": [
@@ -632,6 +669,7 @@
     {
       "label": "D-id-missing",
       "expect": "blocked",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
         "objectId": "obj_missing",
@@ -639,6 +677,7 @@
       },
       "status": "blocked",
       "code": "object-not-found",
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -719,6 +758,7 @@
     {
       "label": "D-not-furniture",
       "expect": "blocked",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
         "objectId": "wal_south",
@@ -726,6 +766,7 @@
       },
       "status": "blocked",
       "code": "not-furniture",
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -806,6 +847,7 @@
     {
       "label": "D-stale-hash",
       "expect": "blocked",
+      "expectCode": null,
       "arguments": {
         "expectedSha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "objectId": "obj_beta",
@@ -813,6 +855,7 @@
       },
       "status": "blocked",
       "code": "stale-source",
+      "search": null,
       "suggested": null,
       "rejected": null,
       "identicalOnRepeat": true,
@@ -893,7 +936,7 @@
     "before": {
       "sha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
       "size": 4327,
-      "mtimeMs": 1794425040398.4155,
+      "mtimeMs": 1794427914970.6294,
       "listing": [
         "project.json"
       ]
@@ -901,7 +944,7 @@
     "after": {
       "sha256": "f6d66a6c18a290773348ee7c7468c42322bd0261acf6b05e3cc88af6b97aba59",
       "size": 4327,
-      "mtimeMs": 1794425040398.4155,
+      "mtimeMs": 1794427914970.6294,
       "listing": [
         "project.json"
       ]
@@ -934,7 +977,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:00.398Z"
+          "modifiedAt": "2026-11-11T20:11:54.971Z"
         },
         "units": "mm",
         "scaleConfidence": "estimated",
@@ -963,7 +1006,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:00.398Z"
+          "modifiedAt": "2026-11-11T20:11:54.971Z"
         },
         "kind": "rooms",
         "total": 1,
@@ -1017,7 +1060,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:00.398Z"
+          "modifiedAt": "2026-11-11T20:11:54.971Z"
         },
         "kind": "objects",
         "total": 2,
@@ -1094,7 +1137,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:00.398Z"
+          "modifiedAt": "2026-11-11T20:11:54.971Z"
         },
         "kind": "openings",
         "total": 1,
@@ -1142,7 +1185,7 @@
           "projectId": "prj_reference-home",
           "projectName": "三室两厅两卫",
           "sizeBytes": 4327,
-          "modifiedAt": "2026-11-11T19:24:00.398Z"
+          "modifiedAt": "2026-11-11T20:11:54.971Z"
         },
         "status": "partial",
         "units": "mm",
@@ -1317,7 +1360,7 @@
           "roomId": "rom_living"
         },
         "distanceMm": 300,
-        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (123 candidata(s) probadas), a 300 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "rationale": "Primera posición, en el orden determinista de FloorPlanPlacement (123 posición(es) examinadas), que supera todas las comprobaciones: a 300 mm de la actual, dentro de «living». Comprobada con FloorPlanPlacement y layout-review sobre una copia efímera en memoria. No es necesariamente la mejor.",
         "evidence": {
           "room": {
             "centreRoomIds": [
@@ -1390,7 +1433,7 @@
           },
           {
             "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
           }
         ],
         "notEvaluated": [
@@ -1424,18 +1467,28 @@
           }
         ],
         "search": {
-          "generator": "FloorPlanPlacement.find",
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
           "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
           "stepMm": 50,
           "maxCandidates": 4000,
           "toleranceMm": 1,
           "tried": 123,
           "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 0,
+          "acceptedIndex": 123,
           "checks": [
             "la estancia completa",
             "los muros",
             "el barrido de las puertas",
             "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
           ]
         },
         "usedData": [
@@ -1508,7 +1561,7 @@
           "roomId": "rom_living"
         },
         "distanceMm": 300,
-        "rationale": "Primera posición válida del barrido determinista de FloorPlanPlacement (123 candidata(s) probadas), a 300 mm de la actual, dentro de «living». Comprobada después con FloorPlanPlacement y layout-review sobre una copia efímera en memoria.",
+        "rationale": "Primera posición, en el orden determinista de FloorPlanPlacement (123 posición(es) examinadas), que supera todas las comprobaciones: a 300 mm de la actual, dentro de «living». Comprobada con FloorPlanPlacement y layout-review sobre una copia efímera en memoria. No es necesariamente la mejor.",
         "evidence": {
           "room": {
             "centreRoomIds": [
@@ -1581,7 +1634,7 @@
           },
           {
             "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
           }
         ],
         "notEvaluated": [
@@ -1615,18 +1668,28 @@
           }
         ],
         "search": {
-          "generator": "FloorPlanPlacement.find",
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
           "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
           "stepMm": 50,
           "maxCandidates": 4000,
           "toleranceMm": 1,
           "tried": 123,
           "budgetExhausted": false,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 0,
+          "acceptedIndex": 123,
           "checks": [
             "la estancia completa",
             "los muros",
             "el barrido de las puertas",
             "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
           ]
         },
         "usedData": [
@@ -2038,7 +2101,7 @@
           },
           {
             "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
           }
         ],
         "notEvaluated": [
@@ -2072,18 +2135,27 @@
           }
         ],
         "search": {
-          "generator": "FloorPlanPlacement.find",
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
           "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
           "stepMm": 50,
           "maxCandidates": 1,
           "toleranceMm": 1,
           "tried": 1,
           "budgetExhausted": true,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 0,
           "checks": [
             "la estancia completa",
             "los muros",
             "el barrido de las puertas",
             "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
           ]
         },
         "usedData": [
@@ -2205,7 +2277,7 @@
           },
           {
             "code": "grid-search",
-            "message": "La candidata es la primera posición válida de una cuadrícula de 50 mm, la más cercana en esa cuadrícula. No es óptima ni se exploran posiciones intermedias."
+            "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
           }
         ],
         "notEvaluated": [
@@ -2239,18 +2311,27 @@
           }
         ],
         "search": {
-          "generator": "FloorPlanPlacement.find",
+          "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
           "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
           "stepMm": 50,
           "maxCandidates": 1,
           "toleranceMm": 1,
           "tried": 1,
           "budgetExhausted": true,
+          "verificationLimit": 250,
+          "verificationLimitReached": false,
+          "placementValidRejected": 0,
           "checks": [
             "la estancia completa",
             "los muros",
             "el barrido de las puertas",
             "otros muebles"
+          ],
+          "gates": [
+            "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+            "objetivo",
+            "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+            "sin hallazgos nuevos del mueble"
           ]
         },
         "usedData": [

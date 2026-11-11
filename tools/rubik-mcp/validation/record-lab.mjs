@@ -34,17 +34,21 @@ const SCENARIOS = [
   ['B-correct', 'correct', 'B · no-change-needed: sin conflicto'],
   ['B-D3-square-not-leaf', 'door-square-only', 'B · D3: dentro del cuadrado, fuera de la hoja'],
   ['C-D1-door-swing-missing', 'door-without-swing', 'C · D1: puerta sin swing (pending)'],
-  ['F1-assumed-swing-conflict', 'swingless-inward', 'F1 · conflicto creado por un barrido SUPUESTO'],
+  ['F1-assumed-swing-only', 'swingless-inward', 'F1 corregido · solo un barrido SUPUESTO: pending'],
+  ['F1-accredited-plus-assumed', 'swingless-plus-real', 'F1 corregido · conflicto real + barrido supuesto'],
   ['C-ambiguous-room', 'ambiguous-room', 'C · pending: estancia ambigua'],
   ['C-budget-exhausted', 'overlap', 'C · pending: presupuesto agotado (maxCandidates 1)'],
   ['C-D2-models-disagree', 'models-disagree-before', 'C · D2: solape 0,5 mm solo para layout-review'],
-  ['C-D2-rejected-default-step', 'models-disagree-after', 'C · D2/F2: candidata rechazada y 2.ª candidata ignorada'],
-  ['C-introduces-default-step', 'introduces-issue', 'C · F2: candidata que roza la hoja; 2.ª candidata ignorada'],
+  ['F2-D2-default-step', 'models-disagree-after', 'F2 corregido · nº 363 rechazada, nº 443 aceptada'],
+  ['F2-introduces-default-step', 'introduces-issue', 'F2 corregido · nº 10 roza la hoja, nº 15 aceptada'],
+  ['F2-D2-default-budget-442', 'models-disagree-after', 'F2 · presupuesto 442: pending, nunca imposible'],
+  ['F2-verification-limit', 'review-rejects-all', 'F2 · layout-review rechaza todo: límite de 250 verificaciones'],
   ['D-stale-hash', 'overlap', 'D · blocked: hash obsoleto'],
   ['D-not-furniture', 'overlap', 'D · blocked: el ID es un muro'],
   ['D-outside-rooms', 'outside', 'D · blocked: mueble fuera de toda estancia'],
 ];
 const labData = { codeSha: process.env.CODE_SHA || null, scenarios: {} };
+if (!labData.codeSha) throw new Error('CODE_SHA es obligatorio: cada evidencia debe decir con qué código se generó.');
 const searchAudit = {};
 for (const [label, fixture, title] of SCENARIOS) {
   const run = results[fixture];
@@ -52,7 +56,7 @@ for (const [label, fixture, title] of SCENARIOS) {
   if (!proposal) throw new Error(`missing proposal ${label}`);
   const project = validationScenario(fixture);
   let scenarioAudit = null;
-  if (proposal.response.evidence?.rejectedCandidate) {
+  if (proposal.response.evidence?.rejectedCandidate || proposal.response.evidence?.rejectedBefore) {
     const a = { objectId: proposal.arguments.objectId, goal: proposal.arguments.goal, stepMm: proposal.arguments.stepMm, maxCandidates: proposal.arguments.maxCandidates };
     scenarioAudit = audit(project, Object.fromEntries(Object.entries(a).filter(([, v]) => v !== undefined)));
     searchAudit[label] = scenarioAudit;
@@ -99,7 +103,7 @@ async function appImport(page, fixture) {
 {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage(); const w = watch(page, 'app-import');
-  for (const [fixture, label] of [['overlap', 'A-overlap-candidate'], ['door-blocked', 'A-door-candidate'], ['swingless-inward', 'F1-assumed-swing-conflict']]) {
+  for (const [fixture, label] of [['overlap', 'A-overlap-candidate'], ['door-blocked', 'A-door-candidate'], ['swingless-inward', 'F1-assumed-swing-only']]) {
     await appImport(page, fixture);
     const mcp = labData.scenarios[label].mcp;
     const inApp = await page.evaluate(id => { const o = window.FloorPlanApp.project.objects.find(x => x.id === id); return { position: o.position, size: o.size, rotationDeg: o.rotationDeg, projectId: window.FloorPlanApp.project.id }; }, mcp.objectId);
@@ -169,10 +173,11 @@ await record('video-2-puerta-y-barrido', async page => {
   await steps(page, 'A-door-candidate');
   await steps(page, 'B-D3-square-not-leaf', 800);
   await steps(page, 'C-D1-door-swing-missing', 800);
-  await steps(page, 'F1-assumed-swing-conflict', 900);
+  await steps(page, 'F1-assumed-swing-only', 900);
+  await steps(page, 'F1-accredited-plus-assumed', 800);
 });
 await record('video-3-casos-adversariales', async page => {
-  for (const label of ['D-stale-hash', 'C-ambiguous-room', 'C-budget-exhausted', 'C-D2-rejected-default-step', 'C-introduces-default-step', 'D-outside-rooms']) await steps(page, label, 650);
+  for (const label of ['D-stale-hash', 'C-ambiguous-room', 'C-budget-exhausted', 'F2-D2-default-step', 'F2-introduces-default-step', 'F2-D2-default-budget-442', 'F2-verification-limit', 'D-outside-rooms']) await steps(page, label, 600);
 });
 await browser.close();
 await new Promise(r => server.close(r));
