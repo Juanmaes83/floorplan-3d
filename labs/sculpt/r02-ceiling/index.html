@@ -26,7 +26,7 @@
  <span class="banner" role="note">LABORATORIO SCULPT-R02-A — NO INTEGRADO EN RUBIK — NO VALIDADO PARA DISEÑO TÉCNICO REGLAMENTARIO</span>
  <p>Escenarios sintéticos generados por código. Las propuestas no se aplican a ningún proyecto. Sin cálculo eléctrico, luminotécnico ni de climatización.</p>
  <p><label for="sc">Escenario</label> <select id="sc"></select></p>
- <div class="legend"><span><i style="background:var(--ceil)"></i>propuesta de techo (RUBIK, evidencia)</span><span><i style="background:var(--donor)"></i>donante (huella / recolocación)</span><span><i style="background:var(--floor)"></i>capa de suelo (solo lectura)</span><span><i style="background:var(--wall)"></i>muros</span></div>
+ <div class="legend"><span><i style="background:var(--ceil)"></i>candidata revisable</span><span><i style="background:var(--warn)"></i>pendiente de datos</span><span><i style="background:var(--bad)"></i>bloqueada</span><span><i style="background:var(--donor)"></i>donante (huella / recolocación)</span><span><i style="background:var(--floor)"></i>capa de suelo (solo lectura)</span><span><i style="background:var(--wall)"></i>muros</span></div>
 </header>
 <main>
  <section><h2>A · Donante (comportamiento recuperado)</h2><svg id="planA" viewBox="0 0 10 10" role="img" aria-label="Planta del donante"></svg><div id="noteA" class="muted"></div></section>
@@ -83,6 +83,8 @@ function planFrame(svg,project){
  return {size:Math.max(W,H)};
 }
 const fmt=v=>v==null?'—':Math.round(v*10)/10;
+// Closing audit 11/11: the three previewDiff states.
+const STATE_ES={'candidate-reviewable':'candidata revisable',pending:'pendiente',blocked:'bloqueada'},STATE_COLOR={'candidate-reviewable':'#1f6fd1',pending:'#9a6b00',blocked:'#b42318'};
 const ES={declared:'declarada',derived:'derivada de la planta superior',unknown:'desconocida',contradictory:'contradictoria','finished-floor':'suelo acabado','level-floor':'suelo de la planta'};
 function render(name){
  const s=F.scenario(name),r=C.compare(F.scenario(name),{ruleText}),ev=r.evidence;
@@ -95,8 +97,9 @@ function render(name){
  $('noteA').textContent=r.rows.map(x=>`${x.id}: ${x.donor.topMm!=null?`techo−descuelgue ${x.donor.topMm}, base ${x.donor.bottomMm}, punto más bajo ${x.donor.lowestPointMm} mm; regla D ${x.donor.rule?'cumple':'NO cumple'}`:x.donor.note}${ev.proposals.find(p=>p.id===x.id).plan.suggestion.donorMessage?` · mensaje del donante: «${ev.proposals.find(p=>p.id===x.id).plan.suggestion.donorMessage}»`:''}`).join(' | ');
  // B · RUBIK interpretation: evidence proposals, suggestions in integer mm, room and warnings.
  const B=$('planB');planFrame(B,project);
- for(const p of ev.proposals){const fp=D.footprint({cx:p.position.x,cy:p.position.y,w:p.size.widthMm,d:p.size.depthMm,rot:p.rotationDeg});const bad=p.warnings.some(w=>/exceeds|clash|overlaps-wall|outside|leaves/.test(w));
-  poly(fp,{fill:'#1f6fd122',stroke:bad?'#b42318':'#1f6fd1','stroke-width':16},B);txt(p.position.x+40,p.position.y+150,`${p.id}${p.mount.status==='computed'?` ↓${p.mount.lowestPointMm}`:' alto ?'}`,120,B,bad?'#b42318':'#1f6fd1');}
+ const diff=E.previewDiff(ev),stateOf=id=>diff.find(d=>d.id===id);
+ for(const p of ev.proposals){const fp=D.footprint({cx:p.position.x,cy:p.position.y,w:p.size.widthMm,d:p.size.depthMm,rot:p.rotationDeg}),st=stateOf(p.id).state,col=STATE_COLOR[st];
+  poly(fp,{fill:col+'22',stroke:col,'stroke-width':16,...(st==='pending'?{'stroke-dasharray':'70 40'}:{})},B);txt(p.position.x+40,p.position.y+150,`${p.id} · ${STATE_ES[st]}${p.mount.status==='computed'?` ↓${p.mount.lowestPointMm}`:' · alto ?'}`,120,B,col);}
  $('noteB').textContent=`Altura libre: ${ES[ev.vertical.status]}${ev.vertical.clearHeightMm!=null?` · ${ev.vertical.clearHeightMm} mm sobre ${ES[ev.vertical.reference]}`:''} · avisos generales: ${ev.warnings.join(', ')||'ninguno'}`;
  // Section: heights against the ceiling plane, floor objects with known height.
  const S=$('section');S.replaceChildren();const clear=ev.vertical.clearHeightMm,Hmax=Math.max(clear||2800,2800),n=ev.proposals.length,col=1400,Wd=Math.max(n,1)*col+600;
@@ -111,16 +114,17 @@ function render(name){
   txt(x,Y(m.lowestPointMm)+(m.lowestPointMm<200?-30:120),`${m.topMm}→${m.lowestPointMm}${m.fitsClearHeight?'':' NO CABE'}`,100,S,m.fitsClearHeight?'#1b7a43':'#b42318');
   for(const c of p.floorClearance)if(c.objectTopMm!=null){sp('rect',{x:x+150,y:Y(c.objectTopMm),width:600,height:c.objectTopMm,fill:'#7c879633',stroke:'#7c8796','stroke-width':10},S);txt(x+170,Y(c.objectTopMm)+120,`${c.objectId} ${c.status}${c.clearanceMm!=null?' '+c.clearanceMm:''}`,90,S,c.status==='clash'?'#b42318':'#596273');}});
  // Comparator table.
- const T=$('cmp');T.replaceChildren();const head=T.insertRow();for(const h of ['Propuesta','Posición / suger.','Tamaño','Alturas (techo→abajo)','Cabe','Donante (F/D) · paridad','Suelo / interferencias','RUBIK hoy','Avisos'])head.insertCell().outerHTML=`<th>${h}</th>`;
+ const T=$('cmp');T.replaceChildren();const head=T.insertRow();for(const h of ['Propuesta','Estado (previewDiff)','Posición / suger.','Tamaño','Alturas (techo→abajo)','Cabe','Donante (F/D) · paridad','Suelo / interferencias','RUBIK hoy','Avisos'])head.insertCell().outerHTML=`<th>${h}</th>`;
  for(const row of r.rows){const p=ev.proposals.find(q=>q.id===row.id),tr=T.insertRow(),sg=p.plan.suggestion;
-  const cells=[`${p.id} · ${p.type} (${p.kind})`,`${p.position.x}, ${p.position.y} · ${p.rotationDeg}° → ${sg.status}${sg.position?` (${sg.position.x}, ${sg.position.y})`:''}`,`${p.size.widthMm}×${p.size.depthMm}×${p.size.heightMm} (${p.sizeSource})`,
+  const d=stateOf(p.id);
+  const cells=[`${p.id} · ${p.type} (${p.kind})`,`${STATE_ES[d.state]}${d.op==='would-add'?' · would-add (no aplicada)':' · sin operación'}${d.reasons.length?' — '+d.reasons.join(', '):''}`,`${p.position.x}, ${p.position.y} · ${p.rotationDeg}° → ${sg.status}${sg.position?` (${sg.position.x}, ${sg.position.y})`:''}`,`${p.size.widthMm}×${p.size.depthMm}×${p.size.heightMm} (${p.sizeSource})`,
    p.mount.status==='computed'?`${p.mount.topMm} → ${p.mount.bottomMm}${p.mount.curtainLengthMm?` · cortina ${p.mount.curtainLengthMm} → ${p.mount.lowestPointMm}`:''} (descuelgue ${p.mount.dropMm}, ${p.mount.dropSource})`:'desconocida',
    p.mount.fitsClearHeight==null?'—':p.mount.fitsClearHeight?'sí':'NO',
    row.parity?`F ${fmt(row.donor.topMm)}→${fmt(row.donor.lowestPointMm)} · D ${row.donor.rule?'cumple':'no'} · ${row.parity.vertical&&row.parity.rule?'= idéntico':'≠ DIVERGE'}`:'sin cálculo (dato ausente)',
    [...p.floorClearance.map(c=>`${c.objectId}: ${c.status}${c.clearanceMm!=null?' '+c.clearanceMm:''}`),...p.interferences.map(x=>`${x.with}: ${x.kind}`)].join('; ')||'—',
    `${row.rubikToday.problems.join(', ')||'sin conflictos'} · altura libre ${row.rubikToday.heightChecked?'comprobada':'NO comprobada'}${row.rubikToday.drawnAtMm===2200?' · dibuja a 2200 fijo':''}`,
    p.warnings.join(', ')||'—'];
-  cells.forEach((c,i)=>{const td=tr.insertCell();td.textContent=c;if(i===4)td.className=c==='NO'?'bad':c==='sí'?'ok':'';if(i===5&&/DIVERGE/.test(c))td.className='bad';});}
+  cells.forEach((c,i)=>{const td=tr.insertCell();td.textContent=c;if(i===1)td.className=d.state==='blocked'?'bad':d.state==='pending'?'warn':'ok';if(i===5)td.className=c==='NO'?'bad':c==='sí'?'ok':'';if(i===6&&/DIVERGE/.test(c))td.className='bad';});}
  $('limits').innerHTML='<strong>Límites:</strong> '+ev.limits.join(' · ')+'. Fuera de alcance: circuitos, climatización, lux, incendios, estructura, normativa, falsos techos paramétricos.';
  draw3d(project,ev);
 }
