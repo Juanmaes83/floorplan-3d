@@ -48,7 +48,7 @@ Cuando las fuentes difieran, aplicar la precedencia del catálogo maestro: decis
 | Alias | Fuente verificable y SHA del HEAD donante | Capacidad por comprobar | Encaje actual / ola heredada | Estado real |
 |---|---|---|---|---|
 | **R01** | [wy51ai/floorplan-3d PR #18](https://github.com/wy51ai/floorplan-3d/pull/18), rama del contribuidor `zhuzhuyumeng/floorplan-3d:feat/floorplan-recognition`, `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Reconocimiento de plano raster, muros/huecos/estancias, OCR y posprocesado, orientación, escala, worker, pruebas | **F2 experimental** y **G-01, ola 4**; también investigación para G-06, ola 2; ninguna validación F2 se concede por clonar | **SCULPT-R01 — LABORATORIO FUNCIONAL, NO VALIDADO SOBRE PLANOS REALES** ([PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA `2158fd19207e4a33aeee8fed26d1b29be96103fa`); integración en producto **BLOQUEADA** |
-| **R02** | [wy51ai/floorplan-3d PR #17](https://github.com/wy51ai/floorplan-3d/pull/17), `zhuzhuyumeng/floorplan-3d:feat/ceiling-layout`, `324eb64cf9b26f6d4df8323c2dec4591fa4691e3` | Principalmente distribución de techo y luminarias/equipos; examinar la familia real y sus pruebas. **No está demostrada aquí una red completa de electricidad/agua/datos ni cumplimiento normativo español.** | Cercanía con **LUZ-01 (ola 5)** y **OBR-04 (ola 3)** solo como referencias parciales; geometría de techo/MEP sin encaje maestro exacto: **decisión pendiente** | **Identificada, alcance técnico por acotar; no clonada** |
+| **R02** | [wy51ai/floorplan-3d PR #17](https://github.com/wy51ai/floorplan-3d/pull/17), `zhuzhuyumeng/floorplan-3d:feat/ceiling-layout`, `324eb64cf9b26f6d4df8323c2dec4591fa4691e3` | Principalmente distribución de techo y luminarias/equipos; examinar la familia real y sus pruebas. **No está demostrada aquí una red completa de electricidad/agua/datos ni cumplimiento normativo español.** | Cercanía con **LUZ-01 (ola 5)** y **OBR-04 (ola 3)** solo como referencias parciales; geometría de techo/MEP sin encaje maestro exacto: **decisión pendiente** | **R02-A — LABORATORIO FUNCIONAL, NO INTEGRADO, PENDIENTE DE ACEPTACIÓN HUMANA** ([PR #193](https://github.com/Juanmaes83/floorplan-3d/pull/193), SHA `7d8a6269047ec714fcdc51cf308f28c2650b23dc`); integración **HOLD** |
 | **R03** | [wy51ai/floorplan-3d PR #11](https://github.com/wy51ai/floorplan-3d/pull/11), `caikaidev/floorplan-3d:codex/walkthrough-cabinet-interiors`, `2495d8e0bf7d3846d2da827121c15e3e83d752bd` | Modelado de armarios, compartimentos, puertas, cajones y geometría paramétrica a verificar; distinguir runtime propio de Three.js vendorizado | Relación parcial con **CAT-03 (ola 5)** y biblioteca **F3** existente; el editor paramétrico de armarios no equivale automáticamente a CAT-03: **decisión pendiente** | **Identificada, PR original cerrada sin merge; derechos del contribuidor y dependencias pendientes** |
 
 **Estado R01 sincronizado (10/11/2026).** Evidencia: [PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA final `2158fd19207e4a33aeee8fed26d1b29be96103fa`, e [informe técnico y acta de cierre](https://github.com/Juanmaes83/floorplan-3d/blob/2158fd19207e4a33aeee8fed26d1b29be96103fa/docs/technical/sculpt-r01-recognition.md). Este anexo no duplica el informe.
@@ -68,6 +68,23 @@ Cuando las fuentes difieran, aplicar la precedencia del catálogo maestro: decis
 - **Dictamen:** APTO como laboratorio de investigación · **HOLD para integración en RUBIK**. No cambia ola, ID ni prioridad: sigue en F2 experimental y G-01, ola 4.
 
 **Detalle R01 conocido por lectura del origen:** `js/recognition-core.js`, `js/recognition-service.js`, `js/recognition-worker.js`, `js/ocr-postprocess-rules.js`, `js/recognition-ui.js`, `js/project-model.js`, `js/project-ui.js` y las pruebas de reconocimiento y navegador. La PR #18 incluye 21 archivos; las rutas y dependencias definitivas se fijarán mediante SOURCE/ISOLATE. La ejecución OCR vista en el origen utiliza Tesseract y `chi_sim`, lo cual no prueba rendimiento en planos españoles.
+
+**Estado R02-A sincronizado (11/11/2026).** Evidencia: [PR #193](https://github.com/Juanmaes83/floorplan-3d/pull/193), SHA final `7d8a6269047ec714fcdc51cf308f28c2650b23dc`, e [informe técnico y acta de cierre](https://github.com/Juanmaes83/floorplan-3d/blob/7d8a6269047ec714fcdc51cf308f28c2650b23dc/docs/technical/sculpt-r02-ceiling-layout.md). Este anexo no duplica el informe.
+- **Donante exacto:** wy51ai/floorplan-3d#17 ← `zhuzhuyumeng:feat/ceiling-layout` `324eb64` (padre `88323f3`). El diferencial real son 8 archivos.
+- **Hecho, solo en laboratorio:**
+  - SOURCE EXACT reproducido y verificado (41 hashes; solo en local, porque contiene la imagen de terceros de R01);
+  - baseline del donante: `model.test.cjs` 18/18 y E2E 2/2, con 0 peticiones externas;
+  - capacidades recuperadas: capa de techo separada del suelo, descuelgue, caída de cortina, regla de altura libre, cota vertical 3D y colocación respecto a muros, con evidencia `CeilingLayoutEvidenceV1`;
+  - **paridad demostrada** con la regla y la fórmula 3D del donante (18/18).
+- **Límites:**
+  - sin escritura en `FloorPlanProjectV1` ni cambios en el producto;
+  - altura de techo declarada, derivada o desconocida, nunca inventada;
+  - `previewDiff` informativo: candidata, pendiente o bloqueada;
+  - contención en la estancia no evaluada;
+  - recolocación solo con muros alineados;
+  - **sin MEP, sin falsos techos y sin validación reglamentaria**;
+  - **GOV-05 pendiente** (contribuciones con coautoría de IA y aviso MIT).
+- **G4 sigue como investigación:** sin ID maestro ni ola. LUZ-01 y OBR-04 siguen siendo relaciones parciales, no equivalentes. **R02-B no iniciado.**
 
 **R02:** PR #17 incluye 39 archivos y varias capacidades acumuladas; **no** atribuir a la capa de techos todas las funciones de reconocimiento o IA contenidas en el diff. Separar capacidad nueva y dependencia heredada antes de clonar.
 
