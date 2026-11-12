@@ -142,6 +142,34 @@ test('B.4 contract: future versions read-only, damaged data reported, orphans pr
   const pr = X.prune(gone); assert.equal(pr.ok, true); assert.equal(X.extension(pr.project).status === 'absent' || X.extension(pr.project).items.length === 0, true);
 });
 
+test('B.4 reopen: recheck() re-evaluates every stored item from the file as it is now; read-only, reasons in words', () => {
+  let p = X.setVerticalReference(flat(), { scope: 'room', roomId: 'rom_master', ...REF }).project;
+  p = X.confirmItem(p, { id: 'cei_master-1', type: 'ceilinglight', position: { x: 8300, y: 2700 }, dropMm: 0 }, { confirm: true }).project;
+  p = X.confirmItem(p, { id: 'cei_master-2', type: 'pendant', position: { x: 7000, y: 2300 }, size: { widthMm: 400, depthMm: 400, heightMm: 600 }, dropMm: 0 }, { confirm: true }).project;
+  // As saved: both hold, after a JSON round trip too.
+  const file = Core.prepare(JSON.stringify(p)).project, r = X.recheck(deepFreeze(structuredClone(file)));
+  assert.equal(r.status, 'present'); assert.deepEqual([r.holding, r.failing], [2, 0]); assert.ok(r.items.every(x => x.holds && x.state === 'candidate-reviewable'));
+  // The reference in the file was lowered (someone edited it, or measured again): the light now meets the wardrobe
+  // under it; the pendant, over free floor, still holds. Each item is judged on its own, with the reason in words.
+  const lower = structuredClone(file); lower.extensions[X.KEY].verticalReferences[0].clearHeightMm = 2100;
+  const before = JSON.stringify(lower), rl = X.recheck(lower, { labelOf: id => (lower.objects.find(o => o.id === id)?.type === 'wardrobe' ? 'el armario' : id) });
+  assert.equal(JSON.stringify(lower), before, 'read-only: nothing moved, fixed or deleted');
+  assert.deepEqual([rl.holding, rl.failing], [1, 1]);
+  assert.deepEqual(rl.items.map(x => [x.id, x.state, x.holds]), [['cei_master-1', 'blocked', false], ['cei_master-2', 'candidate-reviewable', true]]);
+  assert.match(rl.items[0].explanation[0], /Bloqueado: queda por debajo de la parte alta de el armario/);
+  // The reference was removed: pending, never an invented height.
+  const noref = structuredClone(file); noref.extensions[X.KEY].verticalReferences = [];
+  assert.ok(X.recheck(noref).items.every(x => !x.holds && x.state === 'pending'));
+  // The room was deleted by a reader that ignores the extension: reported as orphans, not dropped silently.
+  const gone = structuredClone(file); gone.rooms = gone.rooms.filter(x => x.id !== 'rom_master');
+  const rg = X.recheck(gone); assert.deepEqual(rg.items.map(x => x.state), ['orphan', 'orphan']); assert.deepEqual(rg.orphans.sort(), ['cei_master-1', 'cei_master-2', 'ref:rom_master'], 'the room reference too');
+  // Damaged, future and absent extensions: no items are trusted.
+  const dmg = structuredClone(file); dmg.extensions[X.KEY].items[0].review = 'auto';
+  assert.equal(X.recheck(dmg).status, 'invalid'); assert.equal(X.recheck(dmg).items.length, 0);
+  const fut = structuredClone(file); fut.extensions[X.KEY].version = 9; assert.equal(X.recheck(fut).status, 'future');
+  assert.equal(X.recheck(flat()).status, 'absent');
+});
+
 test('B guards: nothing in the product loads R02-A; the core is lab #193 verbatim except one require path; extracts byte-identical', () => {
   const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
   const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');

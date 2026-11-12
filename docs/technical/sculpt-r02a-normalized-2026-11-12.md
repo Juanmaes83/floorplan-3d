@@ -74,15 +74,19 @@ Una persona puede:
 | En móvil, tocar con un campo enfocado no generaba `click` | Eventos de puntero con umbral de 10 px y retirada del foco | Prueba táctil a 390 y 844 |
 | Colocar solo con el puntero (accesibilidad) | X/Y y botón «Colocar» | Prueba de teclado |
 | Cotas superpuestas con elementos bajos | Una sola línea si el elemento mide menos de 260 mm | Captura de la sección |
+| (Auditoría de ChatGPT, 12/11) «No prueban confirmación de la alternativa y reapertura de la persistencia». Era cierto: el laboratorio no tenía archivo, solo el JSON en pantalla | «Descargar proyecto JSON» y «Reabrir JSON». Al reabrir, `RubikCeilingContract.recheck` **vuelve a evaluar** cada elemento guardado con la referencia y los demás elementos tal como están en el archivo. Es de solo lectura: lo que ya no cumple se marca en rojo en la lista, la planta y el 3D, con su motivo, y no se mueve ni se borra | Prueba de navegador con el archivo real (alternativa → confirmar → descargar → página nueva → `input[type=file]`) y con el mismo archivo con la referencia rebajada a 1800 mm. Capturas `r02a-roundtrip-*` |
+| Al reabrir, el control de referencia decía «Desconocida» aunque hubiera una guardada; la sección decía «techo desconocido» sin elemento seleccionado | El control y la sección muestran la referencia guardada de la estancia (nunca una supuesta) | Misma prueba |
+| «Guardados 1 elementos», «1 confirmados» | Singular y plural | Misma prueba |
 
 ## B3 · Pruebas y resultados reales (local, Chromium de Playwright)
 
 ```
 tests/r02a-ceiling-core.test.cjs      22/22   (comportamiento de #193 sobre el núcleo normalizado)
-tests/r02a-ceiling-session.test.cjs   11/11   (estados, altura insuficiente, referencias ausentes, interferencias, lotes
-                                               parcialmente inválidos, contención, alternativas, comparación, contrato, guardas)
-tests/r02a-lab.browser.test.cjs       12/12   (1440, 1280, 390×844, 844×390; sin peticiones externas)
-Regresión unitaria del repositorio    1050 pruebas · 1048 pasan · 0 fallan
+tests/r02a-ceiling-session.test.cjs   12/12   (estados, altura insuficiente, referencias ausentes, interferencias, lotes
+                                               parcialmente inválidos, contención, alternativas, comparación, contrato,
+                                               reapertura con recomprobación, guardas)
+tests/r02a-lab.browser.test.cjs       13/13   (1440, 1280, 390×844, 844×390; ida y vuelta con el archivo real; sin peticiones externas)
+Regresión unitaria del repositorio    1051 pruebas · 1049 pasan · 0 fallan
 ```
 
 Capturas en `docs/qa/sculpt-r02a-normalized/`. El conjunto completo es el artefacto `r02a-<sha>` del workflow `R02-A normalized`.
@@ -121,11 +125,14 @@ Hay que decidir:
 4. Pulsar **«Ver alternativas»**: aparecen 1, 2 y 3 en la planta. Pulsar «Usar alternativa 1»: pasa a **«Revisable»**.
 5. Mirar las pestañas **Sección** y **3D**: el techo y la lámpara a sus alturas.
 6. Pulsar **«Añadir a la propuesta revisable»**: el proyecto sigue **«sin cambios»**.
-7. Marcar la casilla y pulsar **«Confirmar y guardar»**.
-8. Repetir sin referencia («Desconocida»): sale «Pendiente de datos» y no se dibuja ningún techo.
+7. Marcar la casilla y pulsar **«Confirmar y guardar»**: aparece en «Guardados en el proyecto» como «Sigue siendo revisable».
+8. Pulsar **«Descargar proyecto JSON»** y recargar la página: «Nada guardado todavía».
+9. Pulsar **«Reabrir JSON»** con el archivo: vuelve la lámpara, la referencia «Confirmada» con su fuente, y el aviso «comprobado de nuevo y revisable».
+10. Repetir sin referencia («Desconocida»): sale «Pendiente de datos» y no se dibuja ningún techo.
 
 ## Riesgos y HOLD
 
+- **Sin regla de paso libre para personas:** el núcleo de #193 solo comprueba techo, muebles y otros elementos. Una lámpara que cuelgue a 40 cm del suelo en una zona libre sale «Revisable» (comprobado). Por eso todo es «revisable» y necesita una persona; una regla de altura de paso sería una decisión de producto, no algo que deba suponer este laboratorio.
 - **GOV-05 abierto:** aportación con coautoría de IA y aviso MIT de wuyi.
 - **Tamaños del catálogo:** son del donante, no de productos medidos.
 - **Recolocación:** solo con muros alineados a los ejes.
