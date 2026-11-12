@@ -42,7 +42,7 @@ jobs:
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
-      - name: EX-05.3 selection, EX-11-k.6 reduced motion, EX-09.10 PNOA/MDT05, QA-22 volume
+      - name: EX-05.3 selection, EX-11-k.6 reduced motion (and scene lifecycle), EX-09.10 PNOA/MDT05, QA-22 volume
         run: |
-          OBR01_METRICS="$RUNNER_TEMP/obr01-qa22.json" node --test --test-concurrency=1 tests/obr01-ex05-pick.browser.test.cjs tests/obr01-ex11-reduced-motion.browser.test.cjs tests/obr01-ex09-territory.browser.test.cjs tests/obr01-qa22-scale.browser.test.cjs
+          OBR01_METRICS="$RUNNER_TEMP/obr01-qa22.json" node --test --test-concurrency=1 tests/obr01-ex05-pick.browser.test.cjs tests/obr01-ex11-reduced-motion.browser.test.cjs tests/obr01-scene-lifecycle.browser.test.cjs tests/obr01-ex09-territory.browser.test.cjs tests/obr01-qa22-scale.browser.test.cjs
           cat "$RUNNER_TEMP/obr01-qa22.json"
