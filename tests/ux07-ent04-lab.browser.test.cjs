@@ -97,7 +97,8 @@ for(const vp of [{width:390,height:844},{width:844,height:390}])test(`móvil ${v
     assert.equal(await page.locator('#side').isVisible(),false,'en cortina no se ve «lado a lado»');
     await page.locator('#slider').fill('20');assert.equal(await page.locator('#layerAfter').evaluate(e=>e.style.clipPath),'inset(0px 0px 0px 20%)');
     await page.selectOption('#budgetSel','test-partial');await page.getByRole('button',{name:'Preparar dossier'}).tap();await page.waitForSelector('#dosOut:not([hidden])');
-    assert.ok(await page.evaluate(()=>document.scrollingElement.scrollWidth<=innerWidth+1),'sin scroll horizontal');
+    // Contra el ancho real del dispositivo: con isMobile, innerWidth crece con el contenido que desborda (fase 2).
+    assert.ok(await page.evaluate(W=>document.scrollingElement.scrollWidth<=W+1,vp.width),'sin scroll horizontal');
     for(const b of await page.locator('button:visible').all()){const r=await b.boundingBox();assert.ok(r.height>=44,'botón ≥ 44 px');}
     assert.deepEqual(watch.errors,[]);assert.deepEqual(watch.external,[]);
   }finally{await context.close();}

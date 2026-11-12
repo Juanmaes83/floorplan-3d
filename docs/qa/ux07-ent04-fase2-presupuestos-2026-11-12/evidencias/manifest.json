@@ -1,26 +1,26 @@
 {
- "generated": "2026-11-12T23:52:08.606Z",
+ "generated": "2026-11-12T23:59:22.979Z",
  "data": "fixtures sintéticas (vivienda de referencia) y precios FICTICIOS de laboratorio",
  "navegador": "Chromium de Playwright; no es un dispositivo físico",
  "files": [
   {
    "file": "1-laboratorio-completa-escritorio-1440x900.png",
-   "sha256": "35b8adc24d3f88e3bb8e4756c9864914ada3cb15fd8f18a0e4f20ca2c0459057",
+   "sha256": "9a5d03ca62d2675e1bb9d6acf1bb3ceb14192d7013cbb7e42852cfc39a8e4cb0",
    "status": "complete"
   },
   {
    "file": "2-laboratorio-parcial-escritorio-1440x900.png",
-   "sha256": "86a820dede3301308cd287bbee3f3b2d9240aa7f0049b2097f394f7a938af9cc",
+   "sha256": "55c5bf676db32e21e0f5ab34cf30ad29d5ffa1360cdca14b2a63b6d56626b32f",
    "status": "partial"
   },
   {
    "file": "3-laboratorio-no-valida-escritorio-1440x900.png",
-   "sha256": "43e590f8ac371ec314edc5f8037feb69134c2807364fae04d057391eb75ef78a",
+   "sha256": "5fd495257ab94aeb232edcce721833bed63b93d64d943358aa37fba7a32dbed8",
    "status": "incoherent"
   },
   {
    "file": "4-verificado-escritorio-1440x900.png",
-   "sha256": "e88a3b7593a9094cac91c30277e3657091dddd09545dad6290826015df43a9be",
+   "sha256": "3601f17a905afdc2cb5c24c188dfc468cd5ed09d08c951833ec62e0a8a2bc7e4",
    "version": "1.1.0"
   },
   {
@@ -29,7 +29,7 @@
   },
   {
    "file": "1-laboratorio-completa-movil-390x844.png",
-   "sha256": "669faa98d2fa53b8c93425c1e3123b7f10c43db87f34715b0d0aeccbb3218214",
+   "sha256": "15a6c9dc5b0ac30fca243b871bfecdc327f0dd60b9ae8f71f1c5eaa800e3bc73",
    "status": "complete"
   },
   {
@@ -39,12 +39,12 @@
   },
   {
    "file": "3-laboratorio-no-valida-movil-390x844.png",
-   "sha256": "beab9de1496714577c41c09ac5c876d9d6a7fa21300c25c06ee937269f3a6fb7",
+   "sha256": "454e8d2aab9ad77edcccdaa11ec6262d6c739759a5646113cd9f57b650b95e2c",
    "status": "incoherent"
   },
   {
    "file": "4-verificado-movil-390x844.png",
-   "sha256": "daab6ae177da6321986b4e921ea57dd3a045df72a5e42c0f89ddcdb5c61e8032",
+   "sha256": "eb926723580a467f06e460dc779c3b6dd1765fb38895e498b75868a2aa56d9f6",
    "version": "1.1.0"
   },
   {

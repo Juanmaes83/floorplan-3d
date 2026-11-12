@@ -86,6 +86,16 @@ La fase 1 (#209) adjuntaba **un** presupuesto, el de «después», y avisaba si 
 
 **Defecto encontrado en el QA visual y corregido:** en el móvil, la tabla de partidas dejaba la «Diferencia» y la «Dependencia» fuera de la vista, sin ningún aviso, en el laboratorio; en el dossier descargado, la página **desbordaba en horizontal**. Ahora, en pantallas estrechas, cada partida es una ficha con sus rótulos. **Control negativo:** la prueba móvil, ejecutada contra el árbol sin la corrección, **falla** («ninguna celda de diferencia fuera de la pantalla»).
 
+**Segundo defecto, detectado por la CI de la PR y corregido.** Afectaba a dos pruebas de móvil (390×844), una de la fase 1 y otra nueva:
+- **Síntoma:** «Preparar dossier» no se podía pulsar porque el selector nuevo lo tapaba.
+- **Causa medida:** las columnas `1fr` de `.grid2` no bajan del ancho mínimo de su contenido. El texto largo de una opción del selector ensanchaba la columna a 420 px dentro de una caja de 324 px. En local solo desbordaba hacia la derecha; con las fuentes del runner, además, tapaba el botón.
+- **Corrección:** `minmax(0,1fr)` y selectores con `width:100%`.
+- **Por qué no lo vieron las pruebas locales:** con `isMobile`, Chromium ensancha el viewport de diseño hasta el contenido que desborda, así que `innerWidth` crece con él. Las comprobaciones de «sin scroll horizontal», también la de la fase 1, comparaban contra ese valor y nunca podían fallar.
+- **Pruebas reforzadas, no suavizadas:**
+  - se mide contra el ancho real del dispositivo;
+  - se comprueba con `elementFromPoint` que el botón y los selectores reciben el toque, sin depender de las fuentes.
+- **Control negativo:** sin la corrección, las dos pruebas fallan; la nueva enumera 6 controles fuera de la pantalla.
+
 ## 5. Evidencias
 
 En `evidencias/`, con `manifest.json` y SHA-256. Escritorio 1440×900 y móvil 390×844:
