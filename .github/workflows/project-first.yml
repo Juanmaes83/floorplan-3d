@@ -18,6 +18,9 @@ jobs:
         tests/delivery-image.test.cjs
         tests/share-api.test.cjs
         tests/gov08-s1-adversarial.test.cjs
+        tests/unshare-api.test.cjs
+        tests/share-registry-core.test.cjs
+        tests/gov08-s2-adversarial.test.cjs
         tests/plan-service.test.cjs
         tests/review-anchors.test.cjs
         tests/review-notes-core.test.cjs
@@ -41,6 +44,8 @@ jobs:
         tests/delivery-image-detail.browser.test.cjs
         tests/tour-video.browser.test.cjs
         tests/share-link.browser.test.cjs
+        tests/share-withdraw.browser.test.cjs
+        tests/gov08-s2-focus.browser.test.cjs
         tests/plan-service.browser.test.cjs
         tests/anchored-comments.browser.test.cjs
         tests/moodboard.browser.test.cjs

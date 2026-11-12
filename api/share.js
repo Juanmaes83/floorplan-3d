@@ -9,7 +9,7 @@
    - Anyone with the link can open it: it is read-only, carries no editable project, and the owner removes it from the
      Vercel Blob dashboard. Vercel limits a function request to 4.5 MB, so files are capped at 4 MB. */
 'use strict';
-const {createHash,timingSafeEqual}=require('node:crypto');
+const Auth=require('./_share-auth.js');
 const LIMIT=4*1024*1024;
 const KINDS={html:{type:'text/html; charset=utf-8',ext:'html'},mp4:{type:'video/mp4',ext:'mp4'},webm:{type:'video/webm',ext:'webm'}};
 function send(res,status,body){res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify(body));}
@@ -19,26 +19,9 @@ async function bodyBytes(req){
 }
 const slug=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'proyecto';
 const decodeName=v=>{try{return decodeURIComponent(String(v||''));}catch{return '';}};
-// Constant time on fixed-length digests: neither the content nor the length of the code leaks through timing.
-const digest=v=>createHash('sha256').update(String(v),'utf8').digest();
-const sameCode=(a,b)=>timingSafeEqual(digest(a),digest(b));
-const MIN_CODE=32,MAX_CODE=200;
-// Same-origin rule as api/render.js: a browser request from another site is refused; requests without Origin
-// (server-side tools) are judged by the code alone.
-function sameSite(req){
- const origin=req.headers.origin;if(origin===undefined)return true;
- const host=req.headers['x-forwarded-host']||req.headers.host;
- try{return typeof origin==='string'&&!!host&&new URL(origin).host===String(host).split(',')[0].trim();}catch{return false;}
-}
 async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
- const code=env.RUBIK_SHARE_TOKEN;
- if(!env.BLOB_READ_WRITE_TOKEN||!code)return send(res,503,{error:'not-configured'});
- // A weak code, or the render code reused as the publishing code, is a configuration error: refuse to publish.
- if(code.length<MIN_CODE||code.length>MAX_CODE||(env.RUBIK_RENDER_TOKEN&&sameCode(code,env.RUBIK_RENDER_TOKEN)))return send(res,503,{error:'misconfigured'});
- if(!sameSite(req))return send(res,403,{error:'origin'});
- const token=req.headers['x-rubik-share-token']; // x-rubik-render-token is deliberately ignored
- if(typeof token!=='string'||!token||token.length>MAX_CODE||!sameCode(token,code))return send(res,401,{error:'token'});
+ const denied=Auth.authorize(req,env);if(denied)return send(res,denied.status,{error:denied.error}); // GOV-08 S1: see api/_share-auth.js
  const kind=String(req.headers['x-rubik-share-kind']||'');if(!Object.hasOwn(KINDS,kind))return send(res,400,{error:'kind'});
  const bytes=await bodyBytes(req);if(!bytes||!bytes.length||bytes.length>LIMIT)return send(res,413,{error:'size'});
  if(kind==='html'&&!bytes.subarray(0,200).toString('utf8').toLowerCase().startsWith('<!doctype html>'))return send(res,400,{error:'file'});
@@ -50,5 +33,5 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  return send(res,200,{url:out.url,kind,bytes:bytes.length});
 }
 module.exports=(req,res)=>handler(req,res);
-module.exports.handler=handler;module.exports.LIMIT=LIMIT;module.exports.MIN_CODE=MIN_CODE;
+module.exports.handler=handler;module.exports.LIMIT=LIMIT;module.exports.MIN_CODE=Auth.MIN_CODE;
 module.exports.config={api:{bodyParser:false}};
