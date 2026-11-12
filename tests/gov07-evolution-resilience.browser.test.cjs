@@ -117,7 +117,9 @@ test('vertical y horizontal (móvil, DPR 3): el lienzo sigue al giro, sin scroll
 test('uso prolongado: 20 ciclos de reabrir, cambiar de pestaña, reproducir y cancelar sin fugas de GPU ni de memoria',{timeout:300000},async()=>{
   const {context,page,watch}=await K.openEvolution(env);try{
     const cdp=await context.newCDPSession(page);
-    const M=async()=>{await cdp.send('HeapProfiler.collectGarbage');return page.evaluate(()=>{const r=window.__ft3dFidelity.scene.renderer;return {...r.info.memory,programs:r.info.programs.length,heapMB:performance.memory.usedJSHeapSize/1e6};});};
+    // Three solo cuenta las geometrías ya subidas a la GPU: se mide siempre en el MISMO momento (final del plan, todo
+    // visible) y después de pintar, para comparar lo mismo (en CI, medir en fechas distintas daba 53→116 sin fuga).
+    const M=async()=>{await page.evaluate(()=>window.__ft3dFidelity.end());await K.frames(page,4);await cdp.send('HeapProfiler.collectGarbage');return page.evaluate(()=>{const r=window.__ft3dFidelity.scene.renderer;return {...r.info.memory,programs:r.info.programs.length,heapMB:performance.memory.usedJSHeapSize/1e6};});};
     const tab=name=>page.evaluate(n=>document.getElementById('tab-'+n)?.click(),name);
     // Primer ciclo completo para que existan todos los programas y cachés; desde ahí no debe crecer.
     const cycle=async i=>{await page.evaluate(async()=>{const f=window.__ft3dFidelity;await f.show(f.ctx.input,f.ctx.meta);});
