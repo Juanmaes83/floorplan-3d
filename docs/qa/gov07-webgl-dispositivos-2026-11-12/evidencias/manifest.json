@@ -1,0 +1,43 @@
+{
+ "generated": "2026-11-12T18:28:46.673Z",
+ "engine": "Chromium + SwiftShader (CPU, sin GPU real)",
+ "data": "fixture sintética A de laboratorio",
+ "files": [
+  {
+   "file": "1-perdida-aviso-escritorio-1440x900.png",
+   "sha256": "411329292c5ce012d3ae81a89234f93db75b95f749ad185b0bd8150d4b314041"
+  },
+  {
+   "file": "2-sin-respuesta-recargar-escritorio-1440x900.png",
+   "sha256": "5ed5c04b2509c1cd1643d64ee996731c9f84505d687660a6de9fbcaba373cefb"
+  },
+  {
+   "file": "3-degradado-escritorio-1440x900.png",
+   "sha256": "a0e79d307e89ad66880b4d073d5e7fc8921ee2a3d681e5ceb8eb3e974237d7b4",
+   "errors": 0,
+   "external": 0
+  },
+  {
+   "file": "4-sin-webgl-escritorio-1440x900.png",
+   "sha256": "880108cb7842d2767f0f31df45fd32a0bf0d307eefbfbc315d1f0240ddfaeb48"
+  },
+  {
+   "file": "1-perdida-aviso-movil-390x844.png",
+   "sha256": "6a61ec59a668027be1d38cd5323f83930f8f37d0ef943468e883d72576f8c186"
+  },
+  {
+   "file": "2-sin-respuesta-recargar-movil-390x844.png",
+   "sha256": "7ba79de0f304f1fa007aeb17b1f7f9f4c1308c1618c8983d125cebe33f3abc5e"
+  },
+  {
+   "file": "3-degradado-movil-390x844.png",
+   "sha256": "6f969ecae896a8a5e8edf40c6dcca0bbcd737b085f1cac611a1291d108f60bcd",
+   "errors": 0,
+   "external": 0
+  },
+  {
+   "file": "4-sin-webgl-movil-390x844.png",
+   "sha256": "43a53bdfb01531d5fb5448ba9dd491380f72f7d33019460fcb354b947de0d820"
+  }
+ ]
+}
