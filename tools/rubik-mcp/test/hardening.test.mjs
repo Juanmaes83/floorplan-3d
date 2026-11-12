@@ -67,6 +67,25 @@ test('isolate: refuses work beyond the cap with an explanation, honours an abort
   assert.equal(Isolate.timeoutFromEnv({}), Isolate.LIMITS.defaultTimeoutMs);
 });
 
+test('the isolated worker is locked down: file writes, child processes and network throw; reads of code still work', async () => {
+  const { Worker } = await import('node:worker_threads');
+  const lockdownPath = path.join(here, '..', 'src', 'lockdown.cjs');
+  const code = `const { parentPort, workerData } = require('node:worker_threads'); require(workerData.lockdown).lockdown();
+    const fs = require('node:fs'), cp = require('node:child_process'), http = require('node:http'), net = require('node:net'), out = {};
+    const probe = (k, f) => { try { f(); out[k] = 'allowed'; } catch (e) { out[k] = /Bloqueado/.test(e.message) ? 'blocked' : 'error:' + e.message; } };
+    probe('writeFileSync', () => fs.writeFileSync(workerData.target, 'x'));
+    probe('openSync-w', () => fs.openSync(workerData.target, 'w'));
+    probe('openSync-r', () => fs.closeSync(fs.openSync(workerData.lockdown, 'r')));
+    probe('spawn', () => cp.spawn('true')); probe('http', () => http.request('http://127.0.0.1')); probe('net', () => net.connect(1));
+    probe('fetch', () => fetch('http://127.0.0.1')); parentPort.postMessage(out);`;
+  const target = path.join(mkdtempSync(path.join(os.tmpdir(), 'mcp-lock-')), 'must-not-exist.txt');
+  const w = new Worker(code, { eval: true, workerData: { lockdown: lockdownPath, target } });
+  const out = await new Promise((res, rej) => { w.once('message', res); w.once('error', rej); });
+  await w.terminate();
+  assert.deepEqual(out, { writeFileSync: 'blocked', 'openSync-w': 'blocked', 'openSync-r': 'allowed', spawn: 'blocked', http: 'blocked', net: 'blocked', fetch: 'blocked' });
+  assert.throws(() => statSync(target), /ENOENT/, 'nothing was written');
+});
+
 function startServer(file, env = {}) {
   const child = spawn(process.execPath, [serverPath, '--project', file], { stdio: ['pipe', 'pipe', 'pipe'], env: { ...process.env, ...env } });
   const t0 = Date.now(), seen = new Map(), bad = []; let buf = '', stderr = '';
