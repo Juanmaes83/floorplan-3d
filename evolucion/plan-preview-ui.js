@@ -50,7 +50,7 @@ function render(s){
     const c=s.cost;
     $('.pp-cost').innerHTML=c.status==='available'?`Coste planificado a la fecha: <b>${eur(c.amount)}</b> sin IVA${c.plannedTotal!==null?` de ${eur(c.plannedTotal)} planificados`:''}`
       :c.status==='partial'?`Coste planificado a la fecha: <b>parcial</b>, ${eur(c.knownAmount)} sin IVA conocidos. ${esc(c.message)}`
-      :`<span class="pp-na">Coste planificado a la fecha: <b>No disponible</b>. ${esc(c.message.replace(/^No disponible:\s*/,''))}</span>`;
+      :`<span class="pp-na">Coste planificado a la fecha: <b>No disponible</b>. ${esc((m=>m.charAt(0).toUpperCase()+m.slice(1))(c.message.replace(/^No disponible:\s*/,'')))}</span>`;
   }
   $('.pp-exec').innerHTML=`Ejecutado: <b>sin registrar</b>`;$('.pp-exec').title=s.executed.label;
   const n=s.next;

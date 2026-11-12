@@ -55,7 +55,8 @@ No se crean IDs ni se cambian olas. **Se construye sobre FT3D-8: no hay un segun
 |---|---|
 | `obr02-obr03-plan-preview-core` (núcleo) | 14/14 |
 | `obr02-obr03-plan-preview.browser` (escritorio, móvil vertical y horizontal, grabación real cancelada, cambio de plan, tarea cancelada, captura) | 9/9 |
-| Regresión FT3D-8 | REGRESION |
+| Regresión FT3D-8: `fidelity` 6/6 · `ux4d` 20/20 · `delivery` 6/6 (grabación real) · `dossier` 6/6 · `fit` 9/9 · `lab` 2/2 · INT-R1 1/1 (Three 0.160 local) | 50/50 |
+| Núcleos: plan 0.2.0, estado visual, adaptador, `ft3d-8-lab` y este núcleo | 86/86 |
 
 **Casos adversariales:**
 - antes del plan y después del final;
