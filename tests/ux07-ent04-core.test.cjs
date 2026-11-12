@@ -46,7 +46,7 @@ test('planta SVG: mismo viewBox en las dos, rellenos con el color del material d
   const {before,after,c}=pair();const sb=R.planSvg(c,'before',before),sa=R.planSvg(c,'after',after);
   const vb=s=>s.match(/viewBox="([^"]+)"/)[1];assert.equal(vb(sb),vb(sa));
   assert.match(sa,/data-id="rom_kitchen"[^>]*/);assert.ok(sa.includes('fill="#e6dfd3"'),'cocina con el color del terrazo');assert.ok(sb.includes('fill="#dfe3e1"'));
-  assert.match(sa,/class="w st-new add" d="[^"]+" data-id="wal_ux07-new"/);assert.match(sa,/class="w st-demolished mod"/);
+  assert.match(sa,/class="w st-new add" d="[^"]+" data-id="wal_ux07-new"/);assert.match(sa,/class="w st-demolished del" d="[^"]+" data-id="wal_ref-w32"/);assert.match(sb,/class="w st-existing mod" d="[^"]+" data-id="wal_ref-w32"/);
   assert.match(sa,/class="d k-window add" d="[^"]+" data-id="opn_ux07-window"/);assert.ok(!sb.includes('opn_ux07-window'));
   assert.match(sb,/class="o del" d="[^"]+" data-id="obj_template-036"/);assert.ok(!sa.includes('obj_template-036'));
   assert.ok(!/<script|https?:\/\/(?!www\.w3\.org)/.test(sa+sb));

@@ -128,7 +128,9 @@
   function planSvg(comparison,side,project,{title}={}){
     const scene=comparison.scenes[side==='before'?0:1],[x,y,w,h]=comparison.perspective.viewBox,mats=byId(project.materials),rooms=byId(project.rooms),walls=byId(project.walls);
     const mark=new Map();for(const c of comparison.changes){if(c.entity==='material')continue;
-      const tag=c.change==='modified'?'mod':c.change==='added'?(side==='after'?'add':null):(side==='before'?'del':null);if(tag)mark.set(c.entity+':'+c.entityId,tag);}
+      // Un muro que pasa a «a demoler» se marca como quitado (rojo discontinuo) en «después», no como un cambio cualquiera.
+      const demolish=c.entity==='wall'&&c.change==='modified'&&c.fields.some(f=>f.field==='status'&&f.after==='demolished');
+      const tag=demolish&&side==='after'?'del':c.change==='modified'?'mod':c.change==='added'?(side==='after'?'add':null):(side==='before'?'del':null);if(tag)mark.set(c.entity+':'+c.entityId,tag);}
     const d=poly=>poly.map((p,i)=>`${i?'L':'M'}${Math.round(p[0])} ${Math.round(p[1])}`).join(' ')+' Z';
     const sw=Math.max(w,h)/400;
     const parts=[`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${w} ${h}" role="img" aria-label="${esc(title||(side==='before'?'Planta antes':'Planta después'))}" data-side="${side}">`,
