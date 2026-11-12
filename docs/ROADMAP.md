@@ -1,5 +1,8 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
+> **SCULPT · referencia metodológica subordinada (10/11/2026, propuesta documental):** véanse el [catálogo maestro único de mejoras](product/rubik-catalogo-maestro-mejoras-2026-11-09.md#8-sculpt--registro-subordinado-de-piedras-y-oportunidades-propuesta-documental-de-10112026) y el [anexo de metodología, piedras R01–R03 y mapeo G0–G12](product/sculpt-metodologia-y-cartera-2026-11-10.md). SCULPT no crea fases ni olas, no altera esta historia, ni autoriza implementar, fusionar o publicar.
+
+
 ## Propuesta paralela del 21-10-2026 — entrada profesional y entrega al cliente
 
 Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco resultados de experiencia y entrega. [Programa, auditoría de #70 y estado de las cinco líneas](product/professional-client-experience-2026-10-21.md). Estado al 22-10-2026 (sin merge ni despliegue; CI no ejecutada): orientación #71 Draft; entrada profesional #73 Draft (incluye #70) y «Soluciones» #76 Draft; del plano a la vivienda #74 Draft; revisión del cliente por archivo #75 Draft (enlace alojado pendiente de decisión D-06/D-08/D-09); lámina a escala #72 Draft (DXF candidato, no aprobado); ayuda con IA pendiente de decisión, prototipo sin IA no iniciado. Prueba D-01 pendiente.
