@@ -204,6 +204,37 @@ test('A1+A2 save, reopen from JSON, restore and cancel: the saved interior is wh
   await shot(page, 'r03-saved-json-1440');
 });
 
+test('A1 the real file round trip: «Descargar proyecto JSON», then «Reabrir JSON» in a fresh page gives the same interior, elevation and 3D', async t => {
+  const os = require('node:os');
+  const { page, errors } = await setup(t);
+  // Edit the SECOND cabinet of the list, so reopening has to find where the saved work is.
+  await page.locator('#list .pick').nth(1).click();
+  await page.click('#r03-tab-1'); await btn(page, 'Añadir balda').click(); await btn(page, 'Añadir balda').click(); await btn(page, 'Abiertas').click();
+  await btn(page, 'Guardar interior').click(); assert.match(await msg(page), /Interior guardado/);
+  const saved = await page.evaluate(() => ({ cabinet: R03Lab.session.state.cabinet, id: R03Lab.selected, parts: R03Lab.parts3d(), elevation: document.querySelector('#elevHost svg').outerHTML }));
+  await shot(page, 'r03-roundtrip-1-saved-1440');
+  const [download] = await Promise.all([page.waitForEvent('download'), page.click('#export')]);
+  const file = path.join(await fs.mkdtemp(path.join(os.tmpdir(), 'r03-')), download.suggestedFilename());
+  await download.saveAs(file);
+  const onDisk = JSON.parse(await fs.readFile(file, 'utf8'));
+  assert.deepEqual(onDisk.extensions['x-r03-cabinet'].entries.find(e => e.objectId === saved.id).cabinet, saved.cabinet, 'the downloaded file carries the saved interior');
+  // A fresh page knows nothing about the edit until the file is opened through the real file input.
+  const { page: p2, errors: e2 } = await setup(t);
+  assert.notDeepEqual(await p2.evaluate(() => R03Lab.session.state.cabinet), saved.cabinet);
+  await p2.setInputFiles('#import', file);
+  await p2.waitForFunction(() => /Proyecto reabierto/.test(document.querySelector('#fileNote').textContent));
+  assert.match(await p2.locator('#fileNote').innerText(), /Proyecto reabierto: 1 interior guardado\./);
+  assert.equal(await p2.evaluate(() => R03Lab.selected), saved.id);
+  assert.deepEqual(await p2.evaluate(() => R03Lab.session.state.cabinet), saved.cabinet, 'same interior');
+  assert.match(await p2.locator('#list .pick[aria-pressed=true] .st').innerText(), /interior guardado/);
+  assert.equal(await p2.evaluate(() => document.querySelector('#elevHost svg').outerHTML), saved.elevation, 'same elevation drawing');
+  assert.deepEqual(await p2.evaluate(() => R03Lab.parts3d()), saved.parts, 'same 3D parts in world coordinates');
+  assert.equal(await btn(p2, 'Guardar interior').isDisabled(), true, 'reopened = saved: nothing pending');
+  await shot(p2, 'r03-roundtrip-2-reopened-1440');
+  await p2.locator('#fileNote').scrollIntoViewIfNeeded(); await shot(p2, 'r03-roundtrip-3-file-note-1440', 'section:has(#fileNote)');
+  assert.deepEqual(errors, []); assert.deepEqual(e2, []);
+});
+
 test('A3 vertical reference: none → unchecked; a stated one is compared with the top of the cabinet', async t => {
   const { page } = await setup(t);
   assert.match(await page.locator('#vcheck').innerText(), /Sin referencia vertical confirmada.*2200 mm/);

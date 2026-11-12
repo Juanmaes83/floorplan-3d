@@ -22,7 +22,7 @@ No es CAT-03, ni sirve para fabricación, pedidos o presupuesto.
 | **A3** · geometría 3D pura (mm) | `js/r03-cabinet-geometry.js` | No |
 | **A3** · adaptador three.js (usa el three r160 de `vendor/`) | `js/r03-cabinet-three.js` | No |
 | Laboratorio demostrable, proyecto sintético | `labs/sculpt/r03-editor/index.html` (excluido de Vercel por `.vercelignore`) | — |
-| Pruebas | `tests/r03-cabinet-contract.test.cjs` (15), `tests/r03-cabinet-editor.test.cjs` (13), `tests/r03-cabinet-audit.test.cjs` (5), `tests/r03-editor.browser.test.cjs` (15) | — |
+| Pruebas | `tests/r03-cabinet-contract.test.cjs` (15), `tests/r03-cabinet-editor.test.cjs` (13), `tests/r03-cabinet-audit.test.cjs` (5), `tests/r03-editor.browser.test.cjs` (16) | — |
 | CI | `.github/workflows/r03-sculpt-complete.yml` | — |
 
 **Archivos reservados que esta rama NO toca:**
@@ -157,12 +157,13 @@ Las dimensiones interiores y las restricciones no se guardan. Se derivan siempre
 | Enter confirmaba dos veces (`keydown` + `change`) y el «Sin cambios» tapaba el resultado | Guardia del último valor confirmado | Prueba de baldas cercanas válidas |
 | La explicación de cajones citaba los valores vigentes y no los propuestos | La explicación usa el cambio rechazado | Prueba unitaria «6 cajones de 400 mm» |
 | Muros seccionados a 1 m que tapaban el zócalo | Corte a 35 cm | Captura con las puertas ocultas |
+| (Auditoría de ChatGPT, 12/11) «Falta confirmar guardado/reapertura». Causa: «Descargar proyecto JSON» y «Reabrir JSON» estaban dentro del desplegable cerrado «Datos guardados», invisibles para quien revisa | Archivo del proyecto como acción visible. Al reabrir se selecciona el primer armario con interior guardado. Mensaje en singular/plural correcto | Prueba nueva con el archivo real (descarga → página nueva → `input[type=file]`): mismo interior, mismo alzado (SVG idéntico) y mismas piezas 3D en coordenadas de mundo. Capturas `r03-roundtrip-*` |
 
 ## 4. Pruebas y resultados reales (local, Chromium de Playwright)
 
 ```
 node --test tests/r03-integration-core.test.cjs tests/r03-cabinet-contract.test.cjs tests/r03-cabinet-editor.test.cjs tests/r03-cabinet-audit.test.cjs   → 40/40
-CHROME=… node --test --test-concurrency=1 tests/r03-editor.browser.test.cjs                                                                            → 15/15
+CHROME=… node --test --test-concurrency=1 tests/r03-editor.browser.test.cjs                                                                            → 16/16
 node --test $(ls tests/*.test.cjs | grep -v browser)                                                                                                     → 1050 tests, 1048 pass, 0 fail
 ```
 
@@ -188,7 +189,9 @@ Capturas seleccionadas en `docs/qa/sculpt-r03-complete/`. El conjunto completo e
 7. En **Puertas**, elegir **«Ocultas (ver interior)»** y mirar el **3D**: se ve el interior. Después **«Abiertas»**: las hojas giran y los cajones salen; en **Planta** aparecen los barridos.
 8. **«Deshacer»**, **«Rehacer»** y **«Restablecer»** devuelven exactamente el estado anterior.
 9. **«Guardar interior»**: el armario de la lista pasa a «interior guardado».
-10. Repetir los pasos 2 a 7 en el móvil, en vertical y en horizontal.
+10. **«Descargar proyecto JSON»** (debajo de Guardar). Recargar la página: el armario vuelve a «sin interior guardado».
+11. **«Reabrir JSON»** con el archivo descargado: se abre ese mismo armario, con «interior guardado» y el mismo alzado y 3D.
+12. Repetir los pasos 2 a 7 en el móvil, en vertical y en horizontal.
 
 ## 7. Riesgos, límites y bloqueos
 
