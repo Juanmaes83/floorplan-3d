@@ -1,0 +1,30 @@
+# ENT-01 I0: isolated, read-only client delivery snapshot contract.
+# This workflow never publishes a visit and never calls an external provider.
+name: ENT-01 - client delivery core gate
+on:
+  pull_request:
+    paths:
+      - js/client-delivery-core.js
+      - tests/client-delivery-core.test.cjs
+      - docs/technical/ent01-client-delivery-contract.md
+      - .github/workflows/ent01-core.yml
+  push:
+    branches: [master]
+    paths:
+      - js/client-delivery-core.js
+      - tests/client-delivery-core.test.cjs
+      - docs/technical/ent01-client-delivery-contract.md
+      - .github/workflows/ent01-core.yml
+permissions:
+  contents: read
+jobs:
+  client-delivery-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Verify isolated delivery contract
+        run: node --test tests/client-delivery-core.test.cjs
