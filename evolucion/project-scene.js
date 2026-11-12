@@ -25,6 +25,11 @@ export function createProjectScene(canvas){
   Object.assign(sun.shadow.camera,{left:-25,right:25,top:25,bottom:-25,near:1,far:80});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;scene.add(sun);
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(300,300),mat('#e2e0da',{roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.002;ground.receiveShadow=true;scene.add(ground);
   const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.49;
+  /* OBR-01 · EX-11-k.6. prefers-reduced-motion: reduce stops the motion nobody asked for — the AUTO orbit (the view stays
+     on its fixed ISO framing) and the camera inertia after a drag. The user's own actions (drag, buttons, play) still
+     work. Followed live: changing the system preference during the session applies at once. */
+  const rmQuery=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;
+  let reducedMotion=!!rmQuery?.matches;
   const root=new THREE.Group();scene.add(root);
   // Outside root (never part of inspect() or of the model): the initial footprint and the selection outlines.
   const foot=new THREE.Group();foot.visible=false;scene.add(foot);
@@ -33,6 +38,8 @@ export function createProjectScene(canvas){
   const footLine=new THREE.LineBasicMaterial({color:0x2b3034});
   const markLine=new THREE.LineBasicMaterial({color:0x1f5a66,depthTest:false,transparent:true,opacity:.95});
   let objects=new Map(),roofVisible=true,frame={origin:{x:0,y:0}},auto=false,userMoved=false;
+  const applyMotion=()=>{controls.enableDamping=!reducedMotion;controls.autoRotate=auto&&!reducedMotion;};applyMotion();
+  rmQuery?.addEventListener?.('change',e=>{reducedMotion=e.matches;applyMotion();});
   const glass=new THREE.MeshPhysicalMaterial({color:0xcfe6ef,roughness:.05,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide});
   const frameMat=mat('#5d6166',{roughness:.5,metalness:.4});
   const capMat=mat('#34312d',{roughness:.9});
@@ -253,7 +260,7 @@ export function createProjectScene(canvas){
   }
   return {get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load,setState,highlight,pick,hitsAt,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
-    setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
+    setAuto(v){auto=!!v;controls.autoRotateSpeed=.5;applyMotion();},get reducedMotion(){return reducedMotion;},get autoRotating(){return controls.autoRotate;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
     get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};
 }
