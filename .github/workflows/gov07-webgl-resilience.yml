@@ -62,15 +62,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Firefox tal cual (sin GPU desactiva WebGL: prueba el camino «sin WebGL»), Firefox con WebGL por software forzado
-        # (dibujo y pérdida de contexto) y WebKit.
+        # Medido con tests/gov07/engine-probe.cjs en el runner: Firefox sin ventana no tiene WebGL (camino «sin WebGL»);
+        # con ventana (xvfb) tiene WebGL 2 por software (llvmpipe): dibujo, pérdida y recuperación. Cada variante declara
+        # el camino que debe recorrer (GOV07_EXPECT), para que ninguna pase en silencio por el otro.
         include:
           - browser: firefox
-            ffwebgl: ''
+            headful: ''
+            expect: unavailable
           - browser: firefox
-            ffwebgl: '1'
+            headful: '1'
+            expect: webgl
           - browser: webkit
-            ffwebgl: ''
+            headful: ''
+            expect: ''
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -80,16 +84,18 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.browser }}
-          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} node --test tests/gov07-cross-browser.browser.test.cjs
+          run=(node --test tests/gov07-cross-browser.browser.test.cjs)
+          if [ -n "${{ matrix.headful }}" ]; then run=(xvfb-run -a "${run[@]}"); fi
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=${{ matrix.headful }} GOV07_EXPECT=${{ matrix.expect }} "${run[@]}"
       # Diagnóstico del motor (no decide el resultado): WebGL mínimo, Evolución con WebGL bloqueado y Evolución tal cual,
       # sin ventana y con ventana (xvfb), en esta rama y en la base del PR, para separar «el motor de CI no da WebGL o
       # cae» de «nuestro código lo hace caer».
       - name: Engine probe (${{ matrix.browser }})
-        if: always()
+        if: always() && matrix.headful == ''
         run: |
           git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha || github.sha }}"
           git worktree add --detach "$RUNNER_TEMP/base" FETCH_HEAD
           for root in "$PWD" "$RUNNER_TEMP/base"; do
-            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} node tests/gov07/engine-probe.cjs
-            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} GOV07_HEADFUL=1 xvfb-run -a node tests/gov07/engine-probe.cjs
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} node tests/gov07/engine-probe.cjs
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=1 xvfb-run -a node tests/gov07/engine-probe.cjs
           done
