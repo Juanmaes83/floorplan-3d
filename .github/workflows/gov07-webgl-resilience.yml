@@ -81,3 +81,15 @@ jobs:
           npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.browser }}
           NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} node --test tests/gov07-cross-browser.browser.test.cjs
+      # Diagnóstico del motor (no decide el resultado): WebGL mínimo, Evolución con WebGL bloqueado y Evolución tal cual,
+      # sin ventana y con ventana (xvfb), en esta rama y en la base del PR, para separar «el motor de CI no da WebGL o
+      # cae» de «nuestro código lo hace caer».
+      - name: Engine probe (${{ matrix.browser }})
+        if: always()
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha || github.sha }}"
+          git worktree add --detach "$RUNNER_TEMP/base" FETCH_HEAD
+          for root in "$PWD" "$RUNNER_TEMP/base"; do
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} node tests/gov07/engine-probe.cjs
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} GOV07_HEADFUL=1 xvfb-run -a node tests/gov07/engine-probe.cjs
+          done

@@ -14,8 +14,9 @@ async function start(){
     res.setHeader('Content-Type',TYPES[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});
   await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}/`;
   // GOV07_FF_WEBGL=1: Firefox sin GPU desactiva WebGL; esta preferencia fuerza el WebGL por software (si el runner lo da).
+  // GOV07_HEADFUL=1: motor con ventana (en CI, bajo xvfb-run): algunos motores solo dan WebGL por software así.
   const ff=BROWSER==='firefox'&&process.env.GOV07_FF_WEBGL?{firefoxUserPrefs:{'webgl.force-enabled':true,'webgl.disabled':false}}:{};
-  const browser=BROWSER==='chromium'?await playwright.chromium.launch({...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),args:ARGS}):await playwright[BROWSER].launch(ff);
+  const browser=BROWSER==='chromium'?await playwright.chromium.launch({...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),args:ARGS}):await playwright[BROWSER].launch({...ff,headless:!process.env.GOV07_HEADFUL});
   return {base,browser,stop:async()=>{await browser.close();await new Promise(r=>server.close(r));}};
 }
 function watch(page,base){const w={errors:[],external:[]};
