@@ -155,12 +155,15 @@ export function createProjectScene(canvas){
      tarea»), en otro color y visibles a través de lo construido. Un elemento que todavía no existe se ve solo como
      contorno; uno que ya existe (p. ej. un acabado) se ve con el contorno encima. Ilustrativo: es plan, no obra. */
   const previewMat=new THREE.LineBasicMaterial({color:PREVIEW,transparent:true,opacity:.95,depthTest:false});
-  let previewKeys=new Set(),previewShown=0;
+  let previewKeys=new Set(),previewShown=0;const NO_RAYCAST=()=>{};
   function applyPreview(){
     previewShown=0;
     for(const [key,o] of objects){
       const on=previewKeys.has(key)&&!(o.g.userData.roof&&!roofVisible);
-      o.ghost.children.forEach(l=>{if(!l.userData.baseMat)l.userData.baseMat=l.material;l.material=on?previewMat:l.userData.baseMat;l.renderOrder=on?5:0;});
+      // El fantasma de vista previa es solo una indicación: nunca captura el clic (si no, robaría la selección de lo que
+      // hay construido cerca; EX-05.2a). Fuera de la vista previa, las aristas vuelven a su comportamiento de siempre.
+      o.ghost.children.forEach(l=>{if(!l.userData.baseMat)l.userData.baseMat=l.material;l.material=on?previewMat:l.userData.baseMat;l.renderOrder=on?5:0;
+        if(on)l.raycast=NO_RAYCAST;else delete l.raycast;});
       if(!on)continue;
       if(!o.g.visible){o.g.visible=true;o.parts.meshes.forEach(m=>m.visible=false);}
       o.ghost.visible=true;previewShown++;

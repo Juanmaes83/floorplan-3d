@@ -15,6 +15,8 @@ No se crean IDs ni se cambian olas. **Se construye sobre FT3D-8: no hay un segun
 
 ## Qué hace (en la Evolución, panel «Plan a la fecha»)
 
+**Colocación:** arriba a la derecha sobre la escena, como el titular de la Evolución. El panel **deja pasar los clics** a la escena (`pointer-events:none`) salvo en sus controles: el desplegable, «Ver en el plan» y la casilla del fantasma. La siguiente tarea empieza plegada.
+
 | Requisito | Cómo |
 |---|---|
 | Fantasma de la siguiente tarea planificada | Las tareas que empiezan en la **primera fecha posterior** al día mostrado (varias si coinciden, por WBS). Sus elementos se ven con **las aristas del propio elemento** (las mismas del estado «sin tarea»), en azul y a través de lo construido. Sin geometría nueva. Se puede apagar. |
@@ -32,6 +34,18 @@ No se crean IDs ni se cambian olas. **Se construye sobre FT3D-8: no hay un segun
 - `S.parse`/`S.validate` (contrato 0.2.0) **descartan en silencio** cualquier campo que no conocen. Un plan importado con `"status":"cancelled"` en una tarea se mostraba en la Evolución (Gantt, 4D y reparto de costes) **como trabajo planificado**, sin aviso.
 - Ahora la importación de la Evolución **rechaza** ese plan con un mensaje claro, usando la misma detección del núcleo (`unsupportedStates`).
 - El contrato canónico no se toca: añadir un estado «cancelada» al contrato es decisión de ChatGPT, que tendría que propagarlo a `construction-plan-ui`, al Gantt y al reparto.
+
+## Corrección tras la CI (examen FT3D-8)
+
+**Lo que falló:** la primera versión (`50c1732`) hizo fallar en CI el examen **EX-05.2a**, «clic real sobre T09 suelo». El examen elige el punto de cada pieza muestreando todo el lienzo y después hace un clic real con el ratón; el panel, opaco a los clics, recibía los que caían debajo.
+
+**Lo que se probó y no funcionó:** meter el panel en la tarjeta del momento rompió otros recorridos del examen, porque el contenido de `#cardExtra` dejaba de poder pulsarse. Se descartó.
+
+**Corrección final:**
+- el panel deja pasar los clics a la escena;
+- las aristas del fantasma de vista previa no participan en la selección.
+
+**Resultado:** examen 20/20 en local, con la nueva prueba «el panel deja pasar los clics a la escena».
 
 ## Cambios
 
@@ -54,7 +68,8 @@ No se crean IDs ni se cambian olas. **Se construye sobre FT3D-8: no hay un segun
 | Suite | Resultado |
 |---|---|
 | `obr02-obr03-plan-preview-core` (núcleo) | 14/14 |
-| `obr02-obr03-plan-preview.browser` (escritorio, móvil vertical y horizontal, grabación real cancelada, cambio de plan, tarea cancelada, captura) | 9/9 |
+| `obr02-obr03-plan-preview.browser` (escritorio, móvil vertical y horizontal, grabación real cancelada, cambio de plan, tarea cancelada, captura, clics que atraviesan el panel) | 10/10 |
+| Examen FT3D-8 (`qa-m2-examen`, el que corre en CI `exam-novice`) | 20/20 |
 | Regresión FT3D-8: `fidelity` 6/6 · `ux4d` 20/20 · `delivery` 6/6 (grabación real) · `dossier` 6/6 · `fit` 9/9 · `lab` 2/2 · INT-R1 1/1 (Three 0.160 local) | 50/50 |
 | Núcleos: plan 0.2.0, estado visual, adaptador, `ft3d-8-lab` y este núcleo | 86/86 |
 
@@ -90,10 +105,10 @@ Solo las fixtures sintéticas FT3D-8 de laboratorio (`labs/ft3d-8/fidelity-fixtu
 ## Recorrido humano (5 min)
 
 1. Abre la Preview en `/evolucion/index.html?lab=1&case=A` y pulsa «Ver evolución».
-2. Arriba a la derecha está **Plan a la fecha**. Mueve la barra de tiempo: el anillo y el coste crecen, y siempre pone **planificado** y **Ejecutado: sin registrar**.
+2. Arriba a la derecha está **Plan a la fecha** (en el móvil, abajo a la izquierda). Mueve la barra de tiempo: el anillo y el coste crecen, y siempre pone **planificado** y **Ejecutado: sin registrar**.
 3. La **siguiente tarea** aparece en azul en la escena (con la cubierta, el contorno del tejado). Pulsa «Ver en el plan»: se selecciona en el Gantt.
 4. Cambia a `case=B`: el coste dice **No disponible** y explica por qué. Nunca pone 0 €.
-5. En el móvil, el anillo está plegado abajo a la izquierda. Tócalo para abrirlo.
+5. Despliega «Siguiente tarea · planificada» para ver sus dependencias, el interruptor del fantasma y «Ver en el plan».
 
 ## Pendiente y decisiones para ChatGPT
 
