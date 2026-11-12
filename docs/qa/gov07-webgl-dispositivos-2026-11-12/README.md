@@ -142,6 +142,8 @@ En `evidencias/`, con `manifest.json` (SHA-256 por archivo), generadas con `test
 
 ## 10. Recorrido humano (5 min)
 
+> **Bloqueado hoy en la Preview.** `/labs/gov07/` y `?lab=1` devuelven 404 porque `.vercelignore` deja `labs/` fuera del despliegue (FT3D-8 E2, `e790546`). Comprobado en la Preview de `3e8a6f0`. La decisión de publicar el banco y los dos archivos de datos sintéticos es del propietario: la excepción mínima propuesta está en [`protocolo-dispositivos.md`](protocolo-dispositivos.md). Sin esa decisión, los pasos 1 y 3 no se pueden hacer en un teléfono.
+
 1. Abre la Preview en `/evolucion/index.html?lab=1&case=A`, pulsa «Ver evolución» y luego ▶.
 2. Ve a otra pestaña pesada o a otra app en el móvil y vuelve. Si el sistema liberó la GPU, verás «Vista 3D interrumpida» y la casa volverá sola.
 3. Abre `/labs/gov07/` en tu teléfono y pulsa «Ejecutar banco» en vertical y en horizontal. Mira «Resultado general» y guarda los JSON.
@@ -150,6 +152,7 @@ En `evidencias/`, con `manifest.json` (SHA-256 por archivo), generadas con `test
 ## 11. Riesgos y pendientes
 
 - **Hardware real:** sin probar; es el núcleo del contrato GOV-07.
+- **Banco no publicado:** sin la excepción de `.vercelignore`, ni el banco ni el protocolo físico se pueden abrir en la Preview (§10). Decisión del propietario: al integrar, también se publicarían en Production (datos sintéticos, `noindex`, sin peticiones).
 - **`performance.memory`** es impreciso; las fugas finas se vigilan por estructura (escuchadores, geometrías vivas fuera de escena), no por megas.
 - **Dossier:** `dossier-ui.js` asigna su estado antes de llamar a `show()`; si dos dossiers se cargan a la vez, la escena muestra el último pero el estado del dossier podría ser el del penúltimo. No reproducido en la interfaz (las cargas de dossier se esperan una a una); anotado para la integración.
 - **Defecto previo observado, fuera de GOV-07:** en móvil horizontal (844×390) la etiqueta del título tapa los botones AUTO/ISO/ALZADO/PLANTA de la vista (maquetación de FT3D-8). No se toca aquí; anotado para UX.

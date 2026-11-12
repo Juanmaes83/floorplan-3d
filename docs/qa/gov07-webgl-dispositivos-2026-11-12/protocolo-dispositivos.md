@@ -4,9 +4,26 @@
 
 **Regla:** solo se marca ✅ lo que has visto tú en ese dispositivo. Las pruebas automáticas de esta PR usan Chromium con SwiftShader (CPU) y **no** sustituyen a nada de esta lista.
 
+## ⚠️ Hoy no se puede ejecutar en la Preview (decisión pendiente)
+
+Comprobado en la Preview de `3e8a6f0` (`floorplan-3d-5tj7f34gm-…vercel.app`): `/labs/gov07/` y los datos de prueba que carga `?lab=1` (`labs/ft3d-8/fidelity-fixtures.js`) devuelven **404**. El motivo es `.vercelignore`, que desde FT3D-8 E2 (`e790546`) deja todo `labs/` fuera del despliegue. La Evolución del producto (`/evolucion/`) sí se publica.
+
+Para poder seguir este protocolo, el propietario debe decidir si se publican el banco y los dos archivos de datos sintéticos. Se publicarían también en Production al integrar. Son datos de prueba, no envían nada y llevan `noindex`. Excepción mínima propuesta para `.vercelignore` (no aplicada en esta PR). Con las reglas de `git check-ignore`, publica solo el banco y los dos archivos de datos; el resto de `labs/` sigue fuera. Falta comprobarlo en una Preview:
+
+```
+labs/*
+!labs/gov07/
+!labs/ft3d-8/
+labs/ft3d-8/*
+!labs/ft3d-8/fidelity-fixtures.js
+!labs/ft3d-8/dossier-fixtures.js
+```
+
+Mientras no se decida, el protocolo solo se puede seguir con un servidor local del repositorio en la misma red Wi-Fi que el dispositivo. Esa es una tarea técnica, no del propietario.
+
 ## Antes de empezar
 
-1. Abre la **Preview** de la PR GOV-07 en el dispositivo.
+1. Abre la **Preview** de la PR GOV-07 en el dispositivo (cuando el banco esté publicado: ver el aviso anterior).
 2. Ve a `/labs/gov07/`. El banco usa solo el proyecto de prueba (sintético) y no envía nada a ningún servidor.
 3. Anota el modelo exacto, el sistema operativo y su versión, y el navegador y su versión.
 
