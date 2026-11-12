@@ -126,11 +126,12 @@ html{scroll-padding-bottom:190px}
     <button class="r03-btn" id="vApply" type="button">Usar referencia</button><button class="r03-btn r03-btn-quiet" id="vClearBtn" type="button">Quitar</button>
    </div>
   </details>
+  <!-- The project file is a first-class action (save, close, reopen), not a detail hidden behind the data view. -->
+  <div class="file-row" aria-label="Archivo del proyecto sintético"><button class="r03-btn" id="export" type="button">Descargar proyecto JSON</button>
+   <label class="r03-btn" style="display:inline-flex;align-items:center;position:relative">Reabrir JSON<input id="import" type="file" accept="application/json,.json" style="position:absolute;left:-9999px"></label></div>
+  <p class="note" id="fileNote" role="status"></p>
   <details class="data"><summary>Datos guardados en el proyecto sintético (x-r03-cabinet)</summary>
    <pre id="json"></pre>
-   <div class="file-row"><button class="r03-btn" id="export" type="button">Descargar proyecto JSON</button>
-    <label class="r03-btn" style="display:inline-flex;align-items:center">Reabrir JSON<input id="import" type="file" accept="application/json,.json" style="position:absolute;left:-9999px"></label></div>
-   <p class="note" id="fileNote" role="status"></p>
   </details>
  </section>
 </main>
@@ -317,8 +318,11 @@ $('#export').addEventListener('click', () => { const a = document.createElement(
 $('#import').addEventListener('change', async e => {
   const f = e.target.files[0]; if (!f) return;
   try { const next = Core.prepare(await f.text()).project, rep = X.validateExtension(next); project = next; framedFor = null; drawnKey = null;
-    $('#fileNote').textContent = rep.ok ? `Proyecto reabierto: ${(next.extensions?.[X.KEY]?.entries || []).length} interiores.` : `Proyecto reabierto con avisos: ${rep.issues.map(i => i.message).join('; ')}`;
-    select(cabinets()[0].id);
+    const n = (next.extensions?.[X.KEY]?.entries || []).length, count = n === 1 ? '1 interior guardado' : `${n} interiores guardados`;
+    $('#fileNote').textContent = rep.ok ? `Proyecto reabierto: ${count}.` : `Proyecto reabierto con avisos: ${rep.issues.map(i => i.message).join('; ')}`;
+    // Open where the work is: the first cabinet whose saved interior reads back as ok, else the first cabinet.
+    const firstSaved = cabinets().find(o => X.read(next, o.id).status === 'ok');
+    select((firstSaved || cabinets()[0]).id);
   } catch (err) { $('#fileNote').textContent = 'No se pudo abrir: ' + err.message; }
   e.target.value = '';
 });
