@@ -12,6 +12,7 @@ on:
       - 'labs/ft3d-8/**'
       - 'tests/obr02/**'
       - 'tests/obr02-*.cjs'
+      - 'tests/obr01/**'
       - '.github/workflows/obr02-obr03-plan-4d.yml'
   push:
     branches: [master]
@@ -47,5 +48,5 @@ jobs:
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
-      - name: Evolution 4D with the plan panel (desktop, mobile, recording, plan change, cancelled task)
-        run: node --test --test-concurrency=1 tests/obr02-obr03-plan-preview.browser.test.cjs
+      - name: Evolution 4D with the plan panel + combined checks with OBR-01 (pick, lifecycle, recording, restore)
+        run: node --test --test-concurrency=1 tests/obr02-obr03-plan-preview.browser.test.cjs tests/obr02-obr03-integration.browser.test.cjs

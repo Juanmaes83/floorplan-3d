@@ -12,7 +12,8 @@ const pct=v=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:1}).format(v);
 const dateLabel=d=>P?.dateLabel?P.dateLabel(d):d;
 const DEP={FS:'fin→inicio',SS:'inicio→inicio',FF:'fin→fin',SF:'inicio→fin'};
 const PRED={completed:'terminada según plan','in-progress':'en curso según plan',pending:'pendiente según plan'};
-const state={snapshot:null,ghostKeys:[],shown:0,ghost:true};
+let waiting=0; // intervalo que espera el fin de una grabación (0 = ninguno pendiente)
+const state={snapshot:null,ghostKeys:[],shown:0,ghost:true,get watching(){return !!waiting;}};
 window.__ft3dPlanPreview=state;
 
 // Sobre la escena, como el titular de la Evolución: el panel DEJA PASAR los clics (pointer-events:none) salvo en sus
@@ -76,7 +77,6 @@ function applyGhost(){
   state.ghostKeys=keys;state.shown=f?.scene?.setPreview?f.scene.setPreview(keys):0;
 }
 // Al terminar o cancelar la grabación se vuelve a poner el fantasma (sin esperar a que cambie el día).
-let waiting=0;
 function watchRecording(){if(waiting)return;waiting=setInterval(()=>{if(window.__ft3dDelivery?.state?.recording)return;clearInterval(waiting);waiting=0;applyGhost();},300);}
 box.addEventListener('change',e=>{if(e.target.classList.contains('pp-ghost')){state.ghost=e.target.checked;applyGhost();}});
 box.addEventListener('click',e=>{const b=e.target.closest('[data-task]');if(b)fid()?.selectTask(b.dataset.task);});
