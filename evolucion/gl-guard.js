@@ -43,12 +43,15 @@ function contextLostAtCreation(canvas){
   return false;
 }
 // Lo que la app fija en la escena y hay que volver a aplicar a la real cuando exista (el último valor de cada uno).
-const REPLAY=['setRoofVisible','setFootprint','load','setState','highlight','setAuto','setSuspended'];
+const REPLAY=['setRoofVisible','setFootprint','load','setState','highlight','setPreview','setAuto','setSuspended'];
 /* Escena diferida: misma identidad para la app (fidelity-app guarda `scene` una vez). Mientras el contexto sigue perdido
    se comporta como la escena nula; al volver, crea la escena real en el MISMO lienzo, le aplica el estado guardado y
    pide a la app que encuadre de nuevo (onResize). Lo que registró el intento fallido ya se retiró (createClean). */
 export function createDeferredScene(create,canvas,error=null){
   let inner=createUnavailableScene(canvas,error),real=null,onResize=null;const last=new Map(),waiting=new Set();
+  // Lo que otros módulos asignan a la escena (p. ej. #211 envuelve renderNow) vive en la fachada: vale igual antes y
+  // después de que llegue la escena real, y nunca se envuelve a sí mismo.
+  const overrides=new Map();
   const keep=e=>e.preventDefault();// sin preventDefault el navegador no devolvería nunca el contexto
   canvas.addEventListener('webglcontextlost',keep);
   const onRestored=()=>{let s;try{s=createClean(create,canvas);}catch{return;}// sigue sin poder: se espera a la próxima
@@ -61,11 +64,12 @@ export function createDeferredScene(create,canvas,error=null){
       if(k==='pending')return !real;if(k==='unavailable')return false;if(k==='deferred')return true;
       if(k==='whenReady')return fn=>{if(real)fn(real);else waiting.add(fn);};
       if(k==='reason')return real?null:inner.reason;
+      if(overrides.has(k))return overrides.get(k);
       const v=inner[k];if(typeof v!=='function')return v;
       return (...a)=>{if(!real&&REPLAY.includes(k))last.set(k,a);return inner[k](...a);};
     },
-    set(_,k,v){if(k==='onResize')onResize=v;inner[k]=v;return true;},
-    has(_,k){return k in inner||['pending','deferred','whenReady'].includes(k);},
+    set(_,k,v){if(k==='onResize'){onResize=v;inner.onResize=v;}else overrides.set(k,v);return true;},
+    has(_,k){return overrides.has(k)||k in inner||['pending','deferred','whenReady'].includes(k);},
     ownKeys(){return Reflect.ownKeys(inner);},getOwnPropertyDescriptor(_,k){const d=Reflect.getOwnPropertyDescriptor(inner,k);return d&&{...d,configurable:true};},
   });
 }
@@ -78,7 +82,7 @@ export function createUnavailableScene(canvas,error=null){
     get userMoved(){return false;},screenBounds:()=>null,set onResize(fn){},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load:noop,setState:noop,highlight:noop,pick:()=>null,hitsAt:()=>[],presentationPose:()=>({...pose}),setFootprint:noop,get footprintVisible(){return false;},
     setPose:noop,frameEnvelope:()=>({...pose}),resize:noop,inspect:()=>[],setRenderSize:noop,releaseRenderSize:noop,orbitPose:()=>({...pose}),renderNow:noop,
-    setSuspended:noop,setAuto:noop,setRoofVisible:noop,get roofVisible(){return true;},get pose(){return {...pose};},get visiblePieces(){return 0;},get objectCount(){return 0;}};
+    setSuspended:noop,setAuto:noop,setRoofVisible:noop,get roofVisible(){return true;},get pose(){return {...pose};},setPreview:()=>0,get preview(){return {keys:[],shown:0};},get visiblePieces(){return 0;},get objectCount(){return 0;}};
 }
 
 export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=globalThis.FloorPlanGlQuality,restoreTimeoutMs,governorOptions={},now=()=>performance.now(),reload=()=>location.reload()}={}){

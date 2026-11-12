@@ -79,3 +79,14 @@ test('contexto perdido al crear y que no vuelve: «Recargar la vista» tras el p
     assert.equal(reloads,0);assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
+
+test('escena diferida: lo que otro módulo asigna a la escena antes de recuperarse (p. ej. envolver renderNow, como hace #211) sigue valiendo después, sin recursión',{timeout:180000},async()=>{
+  const {context,page,watch}=await openLostAtCreate();try{
+    await page.evaluate(()=>{const sc=window.__ft3dFidelity.scene;window.__gov07Wraps=0;const rn=sc.renderNow;sc.renderNow=(...a)=>{window.__gov07Wraps++;return rn(...a);};});
+    await page.evaluate(()=>window.__gov07LostAtCreate.restoreContext());await page.waitForFunction(()=>window.__ft3dGlGuard.state==='ok',null,{timeout:20000});
+    const r=await page.evaluate(()=>{const sc=window.__ft3dFidelity.scene;const before=window.__gov07Wraps;sc.renderNow();return {calls:window.__gov07Wraps-before,pending:sc.pending,
+      preview:typeof sc.setPreview==='function'?sc.setPreview([]):'n/a'};});
+    assert.equal(r.calls,1,'el envoltorio se llama una vez y llega a la escena real');assert.equal(r.pending,false);
+    await K.frames(page,4);assert.ok(await K.drawn(page)>0);assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});
