@@ -1,0 +1,30 @@
+# ECO-01: dedicated validation of the isolated render cost measurement engine.
+# Does not configure provider tariffs, access credentials, or call /api/render.
+name: ECO-01 - render cost core gate
+on:
+  pull_request:
+    paths:
+      - js/render-cost-core.js
+      - tests/render-cost-core.test.cjs
+      - docs/render-ai/eco01-medicion-de-costes.md
+      - .github/workflows/eco01-core.yml
+  push:
+    branches: [master]
+    paths:
+      - js/render-cost-core.js
+      - tests/render-cost-core.test.cjs
+      - docs/render-ai/eco01-medicion-de-costes.md
+      - .github/workflows/eco01-core.yml
+permissions:
+  contents: read
+jobs:
+  cost-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Validate pure render cost engine
+        run: node --test tests/render-cost-core.test.cjs
