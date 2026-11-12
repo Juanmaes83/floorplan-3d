@@ -80,4 +80,5 @@ Basada en la matriz de hardware real de `docs/technical/ent01-client-delivery-co
 | Navegador | Estado |
 |---|---|
 | Chromium | Automatizado (SwiftShader). |
-| Firefox y WebKit | Humo automático en el runner de GitHub (Playwright, sin GPU): carga, dibujo o aviso de «sin WebGL», pérdida/recuperación si el motor la permite y un clic = una selección. **No** equivale a Safari en iPhone ni a Firefox con GPU real: siguen en la matriz física. |
+| Firefox | En el runner de GitHub (Playwright, sin GPU): sin ventana, el camino «sin WebGL»; con ventana, WebGL por software con dibujo, pérdida y recuperación. **No** equivale a Firefox con GPU real. |
+| WebKit | En el runner (Playwright, Linux): la Evolución cae al cargar por su GStreamer, también en `master`, al consultar los formatos de vídeo (acta §7). Retirando esas API, la vista 3D, la pérdida y la recuperación funcionan. **No** equivale a Safari en iPhone: anota en B1 si la página se cierra o recarga sola al abrir la Evolución. |

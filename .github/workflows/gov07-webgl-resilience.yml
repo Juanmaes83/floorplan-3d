@@ -72,9 +72,12 @@ jobs:
           - browser: firefox
             headful: '1'
             expect: webgl
+          # WebKit: su GStreamer aborta la página cuando la Evolución consulta los formatos de vídeo al cargar (también en
+          # master; ver el paso de diagnóstico). El humo retira esas API para probar la vista 3D; la caída sigue a la vista.
           - browser: webkit
             headful: ''
-            expect: ''
+            expect: webgl
+            novideo: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -86,7 +89,7 @@ jobs:
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.browser }}
           run=(node --test tests/gov07-cross-browser.browser.test.cjs)
           if [ -n "${{ matrix.headful }}" ]; then run=(xvfb-run -a "${run[@]}"); fi
-          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=${{ matrix.headful }} GOV07_EXPECT=${{ matrix.expect }} "${run[@]}"
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=${{ matrix.headful }} GOV07_EXPECT=${{ matrix.expect }} GOV07_NO_VIDEO_APIS=${{ matrix.novideo }} "${run[@]}"
       # Diagnóstico del motor (no decide el resultado): WebGL mínimo, Evolución con WebGL bloqueado y Evolución tal cual,
       # sin ventana y con ventana (xvfb), en esta rama y en la base del PR, para separar «el motor de CI no da WebGL o
       # cae» de «nuestro código lo hace caer».
@@ -99,8 +102,5 @@ jobs:
             NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} node tests/gov07/engine-probe.cjs
             NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=1 xvfb-run -a node tests/gov07/engine-probe.cjs
           done
-          if [ "${{ matrix.browser }}" = webkit ]; then
-            # La Evolución hace caer a WebKit también sin WebGL y en la base: qué parte de la página, y qué dice el motor.
-            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=webkit GOV07_BISECT=1 node tests/gov07/engine-probe.cjs
-            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=webkit GOV07_STEPS=3 DEBUG=pw:browser node tests/gov07/engine-probe.cjs 2>&1 | tail -n 120
-          fi
+          # Bisección de la caída de WebKit (hecha en f4a4fd7; ver el acta §7): GOV07_BISECT=1 y, para la salida del motor,
+          # GOV07_STEPS=3 DEBUG=pw:browser.

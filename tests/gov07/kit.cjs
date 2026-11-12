@@ -22,8 +22,16 @@ function watch(page,base){const w={errors:[],external:[]};
   page.on('pageerror',e=>w.errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))w.errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))w.external.push(u);});return w;}
+const NO_VIDEO_APIS=`(()=>{for(const k of ['MediaRecorder','VideoEncoder','VideoDecoder','AudioEncoder','ImageDecoder'])try{delete self[k];self[k]=undefined;}catch{}
+  try{HTMLCanvasElement.prototype.captureStream=undefined;}catch{}})();`;
 async function openEvolution(env,{viewport={width:1440,height:900},deviceScaleFactor=1,isMobile=false,hasTouch=false,query='',caseId='A'}={}){
-  const context=await env.browser.newContext({viewport,deviceScaleFactor,isMobile,hasTouch});const page=await context.newPage();
+  const context=await env.browser.newContext({viewport,deviceScaleFactor,isMobile,hasTouch});
+  // GOV07_NO_VIDEO_APIS=1 (solo el WebKit de CI): al cargar, la Evolución pregunta a WebCodecs qué formato de vídeo puede
+  // grabar (delivery-ui.js, encoderConfig) y el GStreamer del WebKit de Playwright en Linux aborta el proceso de la página
+  // («gst_register_core_elements: code should not be reached»), también en master. Sin esas API la página carga y se
+  // prueba lo de GOV-07 (vista 3D, pérdida y recuperación). La caída original sigue a la vista en engine-probe.cjs.
+  if(process.env.GOV07_NO_VIDEO_APIS)await context.addInitScript(NO_VIDEO_APIS);
+  const page=await context.newPage();
   page.setDefaultTimeout(60000);const w=watch(page,env.base);
   await page.goto(`${env.base}evolucion/index.html?lab=1&case=${caseId}${query?'&'+query:''}`);
   await page.waitForFunction(()=>window.__ft3dFidelity?.ctx&&document.body.classList.contains('ready'),null,{timeout:120000});
@@ -40,4 +48,4 @@ const drawn=page=>page.evaluate(()=>{const c=document.getElementById('stage');if
 const loseContext=page=>page.evaluate(()=>{const c=document.getElementById('stage');const gl=c.getContext('webgl2')||c.getContext('webgl');window.__gov07Ext=gl.getExtension('WEBGL_lose_context');window.__gov07Ext.loseContext();});
 const restoreContext=page=>page.evaluate(()=>window.__gov07Ext.restoreContext());
 const frames=(page,n=2)=>page.evaluate(n=>new Promise(r=>{let k=0;const f=()=>++k>=n?r():requestAnimationFrame(f);requestAnimationFrame(f);}),n);
-module.exports={ROOT,BROWSER,start,openEvolution,showEvolution,watch,drawn,loseContext,restoreContext,frames};
+module.exports={ROOT,BROWSER,NO_VIDEO_APIS,start,openEvolution,showEvolution,watch,drawn,loseContext,restoreContext,frames};

@@ -9,7 +9,7 @@ let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await 
 test(`${K.BROWSER}: la Evolución carga y la vista 3D se dibuja, se recupera o explica que no puede`,{timeout:240000},async()=>{
   const {context,page,watch}=await K.openEvolution(env);try{
     const info=await page.evaluate(()=>({ua:navigator.userAgent,state:window.__ft3dGlGuard?.state,webgl:!!document.createElement('canvas').getContext('webgl')}));
-    console.log(`# ${K.BROWSER}: ${info.ua} · WebGL ${info.webgl} · guarda ${info.state}`);
+    console.log(`# ${K.BROWSER}: ${info.ua} · WebGL ${info.webgl} · guarda ${info.state}${process.env.GOV07_NO_VIDEO_APIS?' · API de vídeo retiradas (GStreamer de este WebKit aborta la página: ver engine-probe)':''}`);
     // GOV07_EXPECT=webgl|unavailable: la variante de CI dice qué camino debe recorrer (sin esto, una variante «con WebGL»
     // que se quedara sin él pasaría en silencio por el camino «sin WebGL»).
     if(process.env.GOV07_EXPECT)assert.equal(info.state,process.env.GOV07_EXPECT==='webgl'?'ok':'unavailable',`camino esperado: ${process.env.GOV07_EXPECT}`);

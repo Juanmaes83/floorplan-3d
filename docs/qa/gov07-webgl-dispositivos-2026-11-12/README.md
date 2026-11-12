@@ -124,8 +124,31 @@ Los 4 fallos son del códec de este entorno, no de GOV-07: se reproducen idénti
 | Motor / dispositivo | Estado |
 |---|---|
 | Chromium + SwiftShader | Automatizado (todas las suites). |
-| Firefox y WebKit de Playwright | **Humo en CI** (`cross-browser`): carga, dibujo o aviso de «sin WebGL», pérdida y recuperación si el motor la permite, un clic = una selección. En este entorno de desarrollo no se pueden instalar (la red bloquea su descarga). |
-| Safari en iPhone/iPad, Chrome en Android, GPU real de escritorio | **No probado.** Matriz física del protocolo, sin marcar. |
+| Firefox 153 de Playwright, **sin ventana** (CI) | Sin WebGL en el runner, ni forzando `webgl.force-enabled`. Prueba el camino «sin WebGL»: aviso, y el plan y la ficha funcionan. ✅ |
+| Firefox 153 de Playwright, **con ventana** (CI, `xvfb-run`) | WebGL 2 por software (llvmpipe): dibuja, pierde y recupera el contexto, un clic = una selección. ✅ |
+| WebKit 26.5 de Playwright (CI) | WebGL 2 disponible. **La Evolución hace caer la página, también en `master`**: ver más abajo. Con las API de vídeo retiradas, el humo prueba la vista 3D, la pérdida y la recuperación. |
+| Safari en iPhone/iPad, Chrome en Android, GPU real de escritorio | **No probado.** Matriz física del protocolo, sin marcar (y bloqueada en la Preview: §10). |
+
+Cada variante de CI declara el camino que debe recorrer (`GOV07_EXPECT`): una variante «con WebGL» que se quedara sin él falla, en vez de pasar por el camino «sin WebGL».
+
+**Firefox sin WebGL en `master`** (diagnóstico `tests/gov07/engine-probe.cjs`, base del PR): la Evolución no llega a cargar (`Fid() is undefined`, 60 s). Es D4 reproducido en un segundo motor; en esta rama carga y avisa.
+
+**WebKit: caída de la página al cargar la Evolución (previa, no de GOV-07).** Medido en el runner con `engine-probe.cjs`, quitando una cosa cada vez:
+
+| Se quita | Resultado |
+|---|---|
+| Nada (rama y `master`, con y sin ventana, con y sin WebGL) | La página cae a los ~15 s |
+| Las API de vídeo (`VideoEncoder`, `MediaRecorder`…) | **Carga; la vista 3D se dibuja (guarda `ok`)** |
+| `evolucion/delivery-ui.js` | Carga |
+| `construction-mp4-muxer.js`, `construction-delivery-core.js` o `brand-core.js` (cada uno impide que se haga la consulta) | Carga |
+| Cualquier otro módulo | Cae |
+
+Salida del motor al caer: `GStreamer:ERROR:../gst/gst.c:617:gst_register_core_elements: code should not be reached` («Bail out!»), justo al registrar `webkitvideoencoder`. Causa: al cargar, `delivery-ui.js` (línea 360) llama a `encoderConfig()`, que pregunta `VideoEncoder.isConfigSupported` para mostrar el formato del vídeo. En el WebKit de Playwright para Linux, eso arranca un GStreamer que aborta el proceso de la página.
+
+- **Alcance:** el WebKit de Playwright en Linux usa GStreamer. Safari en iPhone y Mac usa VideoToolbox, así que esto **no demuestra** que Safari caiga: queda para la matriz física.
+- **Lo que sí muestra:** la Evolución consulta el codificador de vídeo al abrirse, aunque nadie vaya a grabar. Si esa consulta falla de forma grave en un navegador, se pierde toda la página, no solo el vídeo.
+- **Propuesta (no aplicada; `delivery-ui.js` es de FT3D-8/entrega, fuera de GOV-07):** hacer la consulta al entrar en «Entrega» o al pulsar «Generar», no al cargar.
+- **En esta PR:** el humo de WebKit retira esas API antes de cargar (`GOV07_NO_VIDEO_APIS`, explicado en el registro del job) para probar lo que es de GOV-07. El paso de diagnóstico sigue mostrando la caída original en cada ejecución.
 
 ## 8. Integración
 
@@ -153,6 +176,7 @@ En `evidencias/`, con `manifest.json` (SHA-256 por archivo), generadas con `test
 
 - **Hardware real:** sin probar; es el núcleo del contrato GOV-07.
 - **Banco no publicado:** sin la excepción de `.vercelignore`, ni el banco ni el protocolo físico se pueden abrir en la Preview (§10). Decisión del propietario: al integrar, también se publicarían en Production (datos sintéticos, `noindex`, sin peticiones).
+- **Consulta del codificador de vídeo al abrir la Evolución** (`delivery-ui.js:360`, previa): hace caer la página en el WebKit de Playwright (§7). No está demostrado en Safari. Propuesta para el responsable de la entrega: hacer la consulta al entrar en «Entrega» o al generar.
 - **`performance.memory`** es impreciso; las fugas finas se vigilan por estructura (escuchadores, geometrías vivas fuera de escena), no por megas.
 - **Dossier:** `dossier-ui.js` asigna su estado antes de llamar a `show()`; si dos dossiers se cargan a la vez, la escena muestra el último pero el estado del dossier podría ser el del penúltimo. No reproducido en la interfaz (las cargas de dossier se esperan una a una); anotado para la integración.
 - **Defecto previo observado, fuera de GOV-07:** en móvil horizontal (844×390) la etiqueta del título tapa los botones AUTO/ISO/ALZADO/PLANTA de la vista (maquetación de FT3D-8). No se toca aquí; anotado para UX.

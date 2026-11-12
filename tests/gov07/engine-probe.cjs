@@ -42,8 +42,7 @@ async function step(env,name,url,{init=null,ready=null,block=null}={}){
     // GOV07_BISECT=1: la Evolución cae también con WebGL bloqueado (WebKit en CI, rama y base): ¿qué parte de la página?
     // Se quita una cosa cada vez; «ok» señala a la culpable. Sin ella la página no llega a «ready» si es fidelity-app.
     if(process.env.GOV07_BISECT){
-      const MEDIA=`(()=>{for(const k of ['MediaRecorder','VideoEncoder','VideoDecoder','AudioEncoder','ImageDecoder'])try{delete self[k];self[k]=undefined;}catch{}
-        try{HTMLCanvasElement.prototype.captureStream=undefined;}catch{}})();`;
+      const MEDIA=K.NO_VIDEO_APIS;
       const domReady=()=>document.readyState==='complete';
       await step(env,'4 sin-apis-de-video',evol,{init:MEDIA,ready});
       for(const m of ['delivery-ui','dossier-ui','ux-shell','fidelity-app'])await step(env,`5 sin-${m}`,evol,{block:new RegExp(`/evolucion/${m}\\.js$`),ready:domReady});
