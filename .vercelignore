@@ -1,8 +1,4 @@
 # RUBIK SOTA · rutas del repositorio que NO se publican en Vercel.
 # Laboratorios FT3D-8 (labs/ft3d-8, labs/m1-s2-s3): datos sintéticos y páginas de laboratorio que usan las pruebas de CI.
 # No forman parte del producto; el producto abre la Evolución con evolucion/?source=library.
-# Excepción TEMPORAL, solo rama de revisión humana R03; NO fusionar esta configuración.
-labs/*
-!labs/sculpt/
-labs/sculpt/*
-!labs/sculpt/r03-cabinets/
+labs/
