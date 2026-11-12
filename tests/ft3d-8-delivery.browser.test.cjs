@@ -216,17 +216,17 @@ test('publication through the existing /api/share contract (mocked): consent, er
   // Consent is mandatory and checked before any request.
   await page.fill('#publishToken','fixture-code');assert.match(await go(),/Confirma que entiendes/);assert.equal(calls.length,0);
   await page.locator('#publishAgree').check();
-  await page.fill('#publishToken','');assert.match(await go(),/código de acceso/);assert.equal(calls.length,0);
+  await page.fill('#publishToken','');assert.match(await go(),/código de publicación de enlaces/);assert.equal(calls.length,0);
   await page.fill('#publishToken','fixture-code');
   assert.match(await go(),/no están configurados en este servidor.*BLOB_READ_WRITE_TOKEN/);await shot(page,'08-publicacion-503.png',{clip:await page.locator('#step5').boundingBox()});
-  mode='401';assert.match(await go(),/código de acceso no es correcto/);
+  mode='401';assert.match(await go(),/código de publicación no es correcto/);
   mode='413';assert.match(await go(),/supera 4 MB/);
   mode='502';assert.match(await go(),/No se ha publicado nada/);
   mode='abort';assert.match(await go(),/No se pudo contactar con el almacenamiento/);
   assert.equal(await page.locator('#publishResult').isVisible(),false,'no link shown after an error');
   // Correct absolute route, never /labs/ft3d-8/api/share; the only secret sent is the access code typed by the person.
   assert.ok(calls.every(c=>new URL(c.url).pathname==='/api/share'));
-  assert.ok(calls.every(c=>c.headers['x-rubik-render-token']==='fixture-code'&&!JSON.stringify(c.headers).includes('vercel_blob_rw')));
+  assert.ok(calls.every(c=>c.headers['x-rubik-share-token']==='fixture-code'&&c.headers['x-rubik-render-token']===undefined&&!JSON.stringify(c.headers).includes('vercel_blob_rw')),'GOV-08 S1: only the publishing header');
   // Success (mocked storage): html published and the link opens through /api/view.
   mode='ok';calls.length=0;assert.match(await go(),/Enlace publicado/);
   const link=await page.locator('#publishUrl').inputValue();

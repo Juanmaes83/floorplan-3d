@@ -234,7 +234,8 @@
           <p class="hint">Cualquiera que tenga el enlace podrá abrirlo: no tiene contraseña ni caduca solo, y no figura en buscadores (eso no es una protección). Se guarda en el almacén Vercel Blob del proyecto (carpeta rubik-share/) y se retira desde ese panel. Si cambias el proyecto, genera una entrega nueva.</p>
           <label><input type="checkbox" id="publishVideo"> <span id="publishVideoNote"></span></label>
           <label><input type="checkbox" id="publishAgree"> Entiendo que cualquiera con el enlace podrá ver este contenido.</label>
-          <label>Código de acceso del servidor <input id="publishToken" type="password" autocomplete="off"></label>
+          <label>Código de publicación de enlaces <input id="publishToken" type="password" autocomplete="off" aria-describedby="publishTokenHint"></label>
+          <small id="publishTokenHint">Es distinto del código del Render IA (RUBIK_SHARE_TOKEN en Vercel). No se guarda en el navegador.</small>
           <button type="button" class="btn primary" id="publishGo">Publicar enlace</button>
           <p class="status" id="publishStatus" role="status" aria-live="polite"></p>
           <div id="publishResult" hidden><input id="publishUrl" readonly aria-label="Enlace para el cliente"><button type="button" class="btn" id="publishCopy">Copiar</button><a class="btn" id="publishOpen" target="_blank" rel="noopener noreferrer">Abrir</a></div>

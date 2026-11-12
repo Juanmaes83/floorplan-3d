@@ -155,3 +155,13 @@ test('IMG-02: one JSON log line per provider call, without image, access code, k
  // A throwing logger never breaks the render.
  assert.equal((await call(req({style:'natural',image:png}),{env,fetchImpl:usageFetch(sample),log:()=>{throw Error('log down');}})).status,200);
 });
+
+// GOV-08 S1: the publishing code never authorises an AI render, in either header. No provider call happens.
+test('S1: RUBIK_SHARE_TOKEN does not authorise the render',async()=>{
+ const SHARE='share-fixture-code-0123456789abcdef',both={...env,RUBIK_SHARE_TOKEN:SHARE};
+ const fetchImpl=()=>assert.fail('no provider call');
+ for(const headers of [{'x-rubik-render-token':SHARE},{'x-rubik-share-token':SHARE},{'x-rubik-share-token':'access-123'}]){
+  const out={statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k]=v;},end(b){this.body=b;}};
+  await Render.handler({method:'POST',headers,body:{style:'natural',image:'data:image/png;base64,iVBORw0KGgo='}},out,{env:both,fetchImpl,meter:Render.createMeter(),log:()=>{}});
+  assert.equal(out.statusCode,401,JSON.stringify(Object.keys(headers)));assert.deepEqual(JSON.parse(out.body),{error:'token'});}
+});

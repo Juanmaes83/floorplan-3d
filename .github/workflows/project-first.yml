@@ -17,6 +17,7 @@ jobs:
         tests/ai-render-api.test.cjs
         tests/delivery-image.test.cjs
         tests/share-api.test.cjs
+        tests/gov08-s1-adversarial.test.cjs
         tests/plan-service.test.cjs
         tests/review-anchors.test.cjs
         tests/review-notes-core.test.cjs

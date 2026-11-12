@@ -196,8 +196,10 @@ footer{font-size:13px;color:var(--muted);margin-top:24px}code{font-size:12px}.ta
   }
   // Publication messages for the existing api/share responses (no new service).
   const PUBLISH_ERRORS=Object.freeze({
-    'not-configured':'Los enlaces no están configurados en este servidor (faltan BLOB_READ_WRITE_TOKEN y/o RUBIK_RENDER_TOKEN en el proyecto Vercel). El vídeo y la presentación siguen disponibles para descargar.',
-    token:'El código de acceso no es correcto.',size:'El archivo supera 4 MB y no se puede publicar. Descárgalo y envíalo directamente.',
+    'not-configured':'Los enlaces no están configurados en este servidor (faltan BLOB_READ_WRITE_TOKEN y/o el código de publicación RUBIK_SHARE_TOKEN en el proyecto Vercel). El vídeo y la presentación siguen disponibles para descargar.',
+    misconfigured:'El código de publicación del servidor no es válido (es demasiado corto o coincide con el del Render IA). El vídeo y la presentación siguen disponibles para descargar.',
+    origin:'La publicación solo se acepta desde la propia aplicación Rubik.',
+    token:'El código de publicación no es correcto. Es distinto del código del Render IA.',size:'El archivo supera 4 MB y no se puede publicar. Descárgalo y envíalo directamente.',
     'storage-unreachable':'No se pudo contactar con el almacenamiento. Vuelve a intentarlo.','storage-error':'El almacenamiento rechazó el archivo. No se ha publicado nada.',
     unavailable:'Publicar enlaces no está disponible en este servidor (/api/share no existe aquí). Descarga los archivos y envíalos.',
     kind:'Tipo de archivo no admitido por el servicio.',file:'El documento no tiene el formato esperado.',method:'Método no permitido.'});

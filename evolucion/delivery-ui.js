@@ -303,7 +303,7 @@ function renderShare(message=null){
   if(message!==null)$('publishStatus').textContent=message;
 }
 async function upload(kind,body,code,name){
-  let r;try{r=await fetch(D.ENDPOINTS.share,{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':'application/octet-stream','x-rubik-render-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name).slice(0,120)},body});}
+  let r;try{r=await fetch(D.ENDPOINTS.share,{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':'application/octet-stream','x-rubik-share-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name).slice(0,120)},body});}
   catch{throw Error(D.PUBLISH_ERRORS['storage-unreachable']);}
   const out=await r.json().catch(()=>null);
   if(!r.ok||typeof out?.url!=='string'||!out.url.startsWith('https://'))throw Object.assign(Error(D.publishError(r.status,out?.error)),{status:r.status});
@@ -311,7 +311,7 @@ async function upload(kind,body,code,name){
 }
 async function publish({code,agree,withVideo}){
   if(!agree)throw Error('Confirma que entiendes que cualquiera con el enlace podrá verlo.');
-  if(!code)throw Error('Introduce el código de acceso del servidor (el mismo que para Render IA).');
+  if(!code)throw Error('Introduce el código de publicación de enlaces (es distinto del código del Render IA).');
   if(!state.doc)await prepareDocument();
   const m=state.manifest,v=withVideo?state.video:null;
   if(v&&v.bytes>D.SHARE_LIMIT_BYTES)throw Error(D.PUBLISH_ERRORS.size);

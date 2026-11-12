@@ -5,7 +5,9 @@
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{Readable}=require('node:stream'),{chromium}=require('playwright');
 const Share=require('../api/share.js'),View=require('../api/view.js');
 const root=path.resolve(__dirname,'..'),SHOTS=process.env.QA_SHOTS||'';let server,browser,url;
-const env={BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_Store42_secret',RUBIK_RENDER_TOKEN:'access-123'},HOST='store42.public.blob.vercel-storage.com';
+// GOV-08 S1: fictitious codes; publishing has its own code, different from the AI render one.
+const SHARE='share-fixture-code-0123456789abcdef',RENDER='render-fixture-code-0123456789abcdef';
+const env={BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_Store42_secret',RUBIK_SHARE_TOKEN:SHARE,RUBIK_RENDER_TOKEN:RENDER},HOST='store42.public.blob.vercel-storage.com';
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary'};
 before(async()=>{server=createServer(async(req,res)=>{try{const p=new URL(req.url,'http://l').pathname,f=path.resolve(root,'.'+(p==='/'?'/index.html':p));if(!f.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
@@ -21,29 +23,39 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  const blobFetch=async(u,init)=>{if(init?.method==='PUT'){const p=new URL(u).pathname.replace(/\.(\w+)$/,`-r${++n}.$1`);store.set(p,{type:init.headers['x-content-type'],bytes:Buffer.from(init.body)});return {ok:true,status:200,json:async()=>({url:`https://${HOST}${p}`})};}
   const hit=store.get(new URL(u).pathname);return hit?{ok:true,status:200,text:async()=>hit.bytes.toString()}:{ok:false,status:404};};
  await context.route('**/*',async r=>{const req=r.request(),u=req.url();
-  if(u.startsWith(url+'api/share')){const body=req.postDataBuffer()||Buffer.alloc(0),stream=Readable.from([body]);stream.method=req.method();stream.headers=await req.allHeaders();uploads.push({kind:stream.headers['x-rubik-share-kind'],token:stream.headers['x-rubik-render-token'],bytes:body.length,head:body.subarray(0,15).toString()});
+  if(u.startsWith(url+'api/share')){const body=req.postDataBuffer()||Buffer.alloc(0),stream=Readable.from([body]);stream.method=req.method();stream.headers=await req.allHeaders();stream.headers.host??=new URL(url).host;/* the browser adds Host on the wire; Playwright does not expose it, a real server always receives it (S1 origin check) */uploads.push({kind:stream.headers['x-rubik-share-kind'],token:stream.headers['x-rubik-share-token'],renderHeader:stream.headers['x-rubik-render-token'],bytes:body.length,head:body.subarray(0,15).toString()});
    if(shareStatus)return r.fulfill({status:shareStatus.status,contentType:'application/json',body:JSON.stringify(shareStatus.body)});
    const out=fakeRes();await Share.handler(stream,out,{env,fetchImpl:blobFetch});return r.fulfill({status:out.statusCode,headers:out.headers,body:out.body});}
   if(u.startsWith(url+'api/view')){const out=fakeRes();await View.handler({method:'GET',url:u.slice(url.length-1)},out,{env,fetchImpl:blobFetch});return r.fulfill({status:out.statusCode,headers:out.headers,body:out.body});}
   if(u.startsWith(`https://${HOST}/`)){const hit=store.get(new URL(u).pathname);return hit?r.fulfill({status:200,contentType:hit.type,body:hit.bytes}):r.fulfill({status:404,body:''});}
   if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();external.push(u);return r.abort();});
+ // The professional already used the AI render in this browser: its code is stored under its own key.
+ await context.addInitScript(r=>{if(!localStorage.getItem('rubik-render-token'))localStorage.setItem('rubik-render-token',r);},RENDER);
  const page=await context.newPage();page.setDefaultTimeout(30000);page.on('pageerror',e=>errors.push(e.message));
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanClientShare);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#shareLinkDialog');
  await page.locator('#workArea-deliver').click();await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ // S1: its own code field, empty: the render code is never read nor pre-filled.
+ assert.equal(await dialog.locator('#shareLinkToken').inputValue(),'','the render code is not reused');
+ assert.match(await dialog.innerText(),/Código de publicación de enlaces[\s\S]*Es distinto del código del Render IA/);
  assert.match(await dialog.locator('#shareLinkNote').innerText(),/Cualquiera que tenga el enlace podrá verlo[\s\S]*Vercel Blob[\s\S]*El proyecto editable no se envía/);
  assert.equal(await dialog.locator('#shareLinkVideo').isDisabled(),true);assert.match(await dialog.innerText(),/Sin vídeo: grábalo en la presentación/);
  // Consent and access code before anything leaves the browser.
  await dialog.locator('#shareLinkGo').click();assert.match(await dialog.locator('#shareLinkStatus').innerText(),/Confirma que entiendes quién podrá verlo/);
- await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkGo').click();assert.match(await dialog.locator('#shareLinkStatus').innerText(),/Introduce el código de acceso/);assert.equal(uploads.length,0);
+ await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkGo').click();assert.match(await dialog.locator('#shareLinkStatus').innerText(),/Introduce el código de publicación/);assert.equal(uploads.length,0);
  // A wrong code is said plainly and forgotten.
  await dialog.locator('#shareLinkToken').fill('wrong');await dialog.locator('#shareLinkGo').click();
- await page.waitForFunction(()=>/El código de acceso no es correcto/.test(document.querySelector('#shareLinkStatus').textContent));assert.equal(await page.evaluate(()=>localStorage.getItem('rubik-render-token')),null);assert.equal(store.size,0);
- shareStatus={status:503,body:{error:'not-configured'}};await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkToken').fill('access-123');await dialog.locator('#shareLinkGo').click();
+ await page.waitForFunction(()=>/El código de publicación no es correcto[\s\S]*distinto del código del Render IA/.test(document.querySelector('#shareLinkStatus').textContent));assert.equal(store.size,0);
+ // The AI render code does not publish (real handler → 401) and the render's stored code is left untouched.
+ await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkToken').fill(RENDER);const answered=page.waitForResponse(r=>r.url().startsWith(url+'api/share'));await dialog.locator('#shareLinkGo').click();
+ assert.equal((await answered).status(),401,'the real handler refuses the render code');await page.waitForFunction(()=>/El código de publicación no es correcto/.test(document.querySelector('#shareLinkStatus').textContent)&&!document.querySelector('#shareLinkGo').disabled);assert.equal(store.size,0);
+ assert.equal(await page.evaluate(()=>localStorage.getItem('rubik-render-token')),RENDER,'the render code is neither read, replaced nor removed');
+ assert.equal(await dialog.locator('#shareLinkToken').inputValue(),'','a wrong code is forgotten');
+ shareStatus={status:503,body:{error:'not-configured'}};await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkToken').fill(SHARE);await dialog.locator('#shareLinkGo').click();
  await page.waitForFunction(()=>/no están configurados en este servidor[\s\S]*BLOB_READ_WRITE_TOKEN/.test(document.querySelector('#shareLinkStatus').textContent));shareStatus=null;
  uploads.length=0;await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkGo').click();await dialog.locator('#shareLinkUrl').waitFor({timeout:120000});
- assert.deepEqual(uploads.map(u=>[u.kind,u.token]),[['html','access-123']],'only the finished client file travels');assert.equal(uploads[0].head,'<!doctype html>');
+ assert.deepEqual(uploads.map(u=>[u.kind,u.token]),[['html',SHARE]],'only the finished client file travels');assert.ok(uploads.every(u=>u.renderHeader===undefined),'the render header is never sent');assert.equal(uploads[0].head,'<!doctype html>');
  const link=await dialog.locator('#shareLinkUrl').inputValue();assert.match(link,new RegExp('^'+url.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'api/view\\?f=https%3A%2F%2F'+HOST.replace(/\./g,'\\.')+'%2Frubik-share%2F'));
  assert.match(await dialog.locator('#shareLinkMeta').innerText(),/^Versión \S+\. Si cambias el proyecto, publica un enlace nuevo/);
  await shot(page,'b4-1440-published');
@@ -66,7 +78,8 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  if(!(await workspace.isVisible()))await page.locator('#workArea-deliver').click();
  await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
  assert.equal(await dialog.locator('#shareLinkVideo').isChecked(),true);assert.match(await dialog.innerText(),new RegExp(`Incluir el vídeo del recorrido \\(${ext.toUpperCase()}`));
- assert.equal(await dialog.locator('#shareLinkToken').inputValue(),'access-123','the access code is remembered in this browser');
+ assert.equal(await dialog.locator('#shareLinkToken').inputValue(),SHARE,'the publishing code is remembered while this page is open');
+ assert.equal(await page.evaluate(s=>Object.keys(localStorage).some(k=>localStorage.getItem(k)===s)||Object.keys(sessionStorage).some(k=>sessionStorage.getItem(k)===s),SHARE),false,'the publishing code is never stored in the browser');
  uploads.length=0;await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkGo').click();
  await page.waitForFunction(()=>/con vídeo/.test(document.querySelector('#shareLinkMeta')?.textContent||''),null,{timeout:120000});
  assert.deepEqual(uploads.map(u=>u.kind),[ext,'html']);
