@@ -53,7 +53,40 @@
 
 ## 5. Resultados
 
-RESULTADOS
+**Rama de integración**, todo local en Chromium con SwiftShader:
+
+| Suite | Resultado |
+|---|---|
+| Núcleo OBR-02/03 | 14/14 |
+| OBR-02/03 navegador + 6 combinadas | 16/16 |
+| OBR-01 (5 archivos, incluida la de ciclo de vida de #207) | 14/14 |
+| `ft3d-8-fidelity` | 6/6 |
+| `ft3d-8-ux4d` | 20/20 |
+| `ft3d-8-delivery` (grabación real) | 6/6 |
+| `ft3d-8-dossier` | 6/6 |
+| `ft3d-8-fit` | 9/9 |
+| `ft3d-8-lab` | 2/2 |
+| INT-R1 | 1/1 |
+| Examen FT3D-8 | 20/20 |
+| `hallazgos-v4` | 2/2 |
+| `novato` | 2/2 |
+
+**Ensayo local con #208** (`e2d0e84`, sin publicar):
+
+| Suite | Resultado |
+|---|---|
+| GOV-07 núcleo | 10/10 |
+| GOV-07 navegador (resiliencia y banco) | 25/25 |
+| OBR-02/03 navegador + combinadas | 16/16 |
+| OBR-01 | 14/14 |
+| `ft3d-8-delivery` | 6/6 |
+| Examen FT3D-8 | 20/20 |
+
+**Detección:**
+- la resolución ingenua del conflicto (sin el ciclo de vida de la vista previa) **falla** la prueba combinada 6;
+- no se ha eliminado ni suavizado ninguna aserción.
+
+CI de la PR: ver la propia PR.
 
 ## 6. Bloqueos y pendientes
 
@@ -64,4 +97,23 @@ RESULTADOS
 
 ## 7. Preview de revisión
 
-PREVIEW
+**Rama de revisión:** `review/obr02-obr03-integration-20261112` (`181e34b`). Desciende de esta rama y **no forma parte de la PR**.
+- Solo añade `review-obr02/` y su generador `tests/obr02/build-review-fixture.cjs`.
+- No cambia `.vercelignore`, no publica `labs/` y no toca Production.
+
+**Datos:** la obra sintética del examen en la biblioteca local del navegador, en dos casos:
+- **con** un presupuesto de **precios ficticios** (borrador real C1–C4) asignado a tareas del plan;
+- **sin** presupuesto.
+
+**URL:** `https://floorplan-3d-98fnb7d77-juanma-espinosas-projects.vercel.app/review-obr02/index.html` (protegida por Vercel: abrir con sesión o con enlace de acceso).
+
+**Recorrido real sobre la Preview** (`tests/obr02/preview-walkthrough.cjs`; capturas y `manifest.json` en `docs/integration/evidencias-obr02-obr03-2026-11-12/`):
+
+| Paso | Escritorio 1440×900 | Móvil 390×844 (toque) |
+|---|---|---|
+| Con presupuesto: 48,1 % planificado; coste planificado 5.499,32 € de 21.708,90 €; «Ejecutado: sin registrar»; siguiente tarea (05 y 07) y 3 elementos en fantasma | ✓ | ✓ |
+| OBR-01 con el fantasma encendido: clic o toque real en el muro de carga → `project/wal_ref-w0` | ✓ | ✓ |
+| Sin presupuesto: coste «No disponible», nunca 0 € | ✓ | ✓ |
+| Errores de página / hosts externos | 0 / 0 | 0 / 0 |
+
+**Observación de UX para el GO visual (no bloquea):** en el móvil, con «Siguiente tarea» desplegada, el panel ocupa buena parte del escenario. Por defecto está plegado y deja pasar los clics a la escena.

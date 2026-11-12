@@ -1,0 +1,145 @@
+{
+ "generado": "2026-11-12T22:15:55.279Z",
+ "preview": "https://floorplan-3d-98fnb7d77-juanma-espinosas-projects.vercel.app",
+ "rama": "review/obr02-obr03-integration-20261112",
+ "datos": "sintéticos; precios FICTICIOS",
+ "navegador": "Chromium (Playwright, SwiftShader) en la nube, no un dispositivo físico",
+ "pasos": [
+  {
+   "paso": "con presupuesto · % plan, coste planificado y fantasma de la siguiente tarea",
+   "viewport": "escritorio-1440x900",
+   "pct": 48.1,
+   "cost": "available",
+   "amount": 5499.32,
+   "total": 21708.9,
+   "next": [
+    "05",
+    "07"
+   ],
+   "ghost": 3,
+   "text": "48,1% 48,1 % del plan transcurrido · planificado (3 de 11 tareas terminadas según plan, 2 en curso) Coste planificado a la fecha: 5499,32 € sin IVA de 21.708,90 € planificados Ejecutado: sin registrar SIGUIENTE TAREA · PLANIFICADA 05 Impermeabilización Empieza jue 15 abr 2027 (en 1 día) · 7 días Dep",
+   "ok": true
+  },
+  {
+   "paso": "OBR-01 · clic real en muro de carga con el fantasma encendido",
+   "viewport": "escritorio-1440x900",
+   "fantasma": 3,
+   "panel": "project/wal_ref-w0",
+   "ok": true
+  },
+  {
+   "paso": "sin presupuesto · coste «No disponible»",
+   "viewport": "escritorio-1440x900",
+   "pct": 48.1,
+   "cost": "unavailable",
+   "amount": null,
+   "total": null,
+   "next": [
+    "05",
+    "07"
+   ],
+   "ghost": 3,
+   "text": "48,1% 48,1 % del plan transcurrido · planificado (3 de 11 tareas terminadas según plan, 2 en curso) Coste planificado a la fecha: No disponible. No hay un presupuesto C1–C4 de este proyecto. Ejecutado: sin registrar SIGUIENTE TAREA · PLANIFICADA 05 Impermeabilización Empieza jue 15 abr 2027 (en 1 dí",
+   "ok": true
+  },
+  {
+   "paso": "errores de la página",
+   "viewport": "escritorio-1440x900",
+   "errores": [],
+   "ok": true
+  },
+  {
+   "paso": "hosts externos",
+   "viewport": "escritorio-1440x900",
+   "hosts": []
+  },
+  {
+   "paso": "con presupuesto · % plan, coste planificado y fantasma de la siguiente tarea",
+   "viewport": "movil-390x844",
+   "pct": 48.1,
+   "cost": "available",
+   "amount": 5499.32,
+   "total": 21708.9,
+   "next": [
+    "05",
+    "07"
+   ],
+   "ghost": 3,
+   "text": "48,1% 48,1 % del plan transcurrido · planificado (3 de 11 tareas terminadas según plan, 2 en curso) Coste planificado a la fecha: 5499,32 € sin IVA de 21.708,90 € planificados Ejecutado: sin registrar SIGUIENTE TAREA · PLANIFICADA 05 Impermeabilización Empieza jue 15 abr 2027 (en 1 día) · 7 días Dep",
+   "ok": true
+  },
+  {
+   "paso": "OBR-01 · clic real en muro de carga con el fantasma encendido",
+   "viewport": "movil-390x844",
+   "fantasma": 3,
+   "panel": "project/wal_ref-w0",
+   "ok": true
+  },
+  {
+   "paso": "sin presupuesto · coste «No disponible»",
+   "viewport": "movil-390x844",
+   "pct": 48.1,
+   "cost": "unavailable",
+   "amount": null,
+   "total": null,
+   "next": [
+    "05",
+    "07"
+   ],
+   "ghost": 3,
+   "text": "48,1% 48,1 % del plan transcurrido · planificado (3 de 11 tareas terminadas según plan, 2 en curso) Coste planificado a la fecha: No disponible. No hay un presupuesto C1–C4 de este proyecto. Ejecutado: sin registrar SIGUIENTE TAREA · PLANIFICADA 05 Impermeabilización Empieza jue 15 abr 2027 (en 1 dí",
+   "ok": true
+  },
+  {
+   "paso": "errores de la página",
+   "viewport": "movil-390x844",
+   "errores": [],
+   "ok": true
+  },
+  {
+   "paso": "hosts externos",
+   "viewport": "movil-390x844",
+   "hosts": []
+  }
+ ],
+ "capturas": [
+  {
+   "archivo": "0-pagina-revision-escritorio-1440x900.png",
+   "sha256": "1842b7a9c8aaedb6115a9ef5209d9fef451c7755c981a5862e0214e07f6e351a"
+  },
+  {
+   "archivo": "1-con-presupuesto-siguiente-en-fantasma-escritorio-1440x900.png",
+   "sha256": "a4eca4b63432d7b5752e9b0d5ef3e88d9035cae6130e4b7e5d017dd349938a05",
+   "pct": 48.1,
+   "coste": 5499.32
+  },
+  {
+   "archivo": "2-muro-carga-con-fantasma-escritorio-1440x900.png",
+   "sha256": "051705077cbcf90ca7b3bf3fc0855396d3ee239b2d53faa16e6a073cda96a6e3",
+   "panel": "project/wal_ref-w0"
+  },
+  {
+   "archivo": "3-sin-presupuesto-no-disponible-escritorio-1440x900.png",
+   "sha256": "75c9de4e1105ff752302f859148ef61155fe23854682d13f5400b450000a4742"
+  },
+  {
+   "archivo": "0-pagina-revision-movil-390x844.png",
+   "sha256": "f99e31aa6c5b00ef43b742c04cc3613482e0aa7271f8c826f32f9c4c3e620090"
+  },
+  {
+   "archivo": "1-con-presupuesto-siguiente-en-fantasma-movil-390x844.png",
+   "sha256": "d07909cfe18a2e63ffe675b44aa88cfe36dc2da627ef3902b1c07cf08b803a6a",
+   "pct": 48.1,
+   "coste": 5499.32
+  },
+  {
+   "archivo": "2-muro-carga-con-fantasma-movil-390x844.png",
+   "sha256": "17bd64397e58c7f2b2db1b3f164c98668b302353669cdd6d9bb68ac350468417",
+   "panel": "project/wal_ref-w0"
+  },
+  {
+   "archivo": "3-sin-presupuesto-no-disponible-movil-390x844.png",
+   "sha256": "48c0f45830308f47ef82ff6e01ba44c16d4dd0050622fcc5e2a558a220eec5ea"
+  }
+ ]
+}
