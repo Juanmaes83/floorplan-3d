@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisión OBR-02/03</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f4f3ef;--fg:#1d2124;--muted:#565c61;--line:#d6d3cc;--card:#fff;--accent:#1f5a66;--warn:#a8621c}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16191b;--fg:#e9e7e2;--muted:#a9aeb2;--line:#363b3f;--card:#1f2326;--accent:#7fbfcb;--warn:#e0a35c}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.3em 0}h2{font-size:1.1rem;margin:1.2em 0 .4em}
+.note{border-left:4px solid var(--warn);background:var(--card);padding:10px 12px;border-radius:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+button{font:inherit;min-height:44px;padding:0 16px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+button.secondary{background:var(--card);color:var(--fg);border-color:var(--line)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ol{padding-left:1.3em}li{margin:.3em 0}.muted{color:var(--muted)}#status{min-height:1.5em}
+</style>
+</head>
+<body>
+<main>
+  <h1>Revisión OBR-02 / OBR-03 · Plan a la fecha (integración sobre master con OBR-01)</h1>
+  <p class="note"><strong>Solo datos sintéticos de prueba</strong> (la obra del examen FT3D-8) y, en el primer caso, un presupuesto con <strong>precios ficticios</strong>. Esta página carga esos datos en la biblioteca local de <strong>este navegador y este dominio de Preview</strong> y abre la Evolución real de RUBIK. No envía nada a ningún servidor ni toca Production.</p>
+
+  <section class="card" aria-labelledby="c1">
+    <h2 id="c1">1 · Con presupuesto enlazado al plan (coste planificado a la fecha)</h2>
+    <button type="button" data-case="con">Cargar y abrir con presupuesto</button>
+    <ol>
+      <li>Pulsa <strong>Ver evolución</strong>. Arriba a la derecha está <strong>Plan a la fecha</strong>: anillo «% del plan», <strong>coste planificado a la fecha</strong> y «Ejecutado: sin registrar». Todo dice <strong>planificado</strong>.</li>
+      <li>Mueve la barra de tiempo: el anillo y el coste crecen; al final, 100 % y el total planificado.</li>
+      <li>Despliega <strong>Siguiente tarea · planificada</strong>: su WBS, fechas y dependencias. Sus elementos se ven en <strong>azul</strong> en la escena; «Ver en el plan» la selecciona en el Gantt.</li>
+      <li>OBR-01 sigue funcionando con el fantasma encendido: en <strong>PLANTA</strong> + <strong>INTERIOR</strong>, un clic en un muro de carga corto abre «Muro · 02 Estructura».</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="c2">
+    <h2 id="c2">2 · Sin presupuesto</h2>
+    <button type="button" data-case="sin">Cargar y abrir sin presupuesto</button>
+    <ol>
+      <li>El anillo «% del plan» sigue (es plan, no dinero), pero el coste dice <strong>«No disponible»</strong> con su motivo: nunca 0 €.</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="c3">
+    <h2 id="c3">Datos de este navegador</h2>
+    <p class="muted">Si ya había proyectos guardados en este dominio de Preview, se pide confirmación y se guarda una copia antes de sustituirlos.</p>
+    <button type="button" class="secondary" id="restore">Restaurar lo que había antes</button>
+    <button type="button" class="secondary" id="clear">Borrar los datos de esta revisión</button>
+  </section>
+  <p id="status" role="status" aria-live="polite"></p>
+</main>
+<script src="obra.js"></script>
+<script>
+'use strict';
+const KEYS=['rubik-sota-project-library-v1','rubik-construction-v1','rubik-budget-v1'],BACKUP='obr02-review-backup',MARK='obr02-review-loaded';
+const $=id=>document.getElementById(id),say=t=>$('status').textContent=t;
+const get=k=>{try{return localStorage.getItem(k);}catch{return null;}};
+function load(id){
+  const c=window.OBR02_REVIEW?.cases?.[id];if(!c){say('No se han encontrado los datos de revisión.');return;}
+  try{
+    const existing=KEYS.some(k=>get(k)!==null)&&get(MARK)===null;
+    if(existing&&!confirm('Este navegador ya tiene proyectos guardados en este dominio de Preview. Se guardará una copia y se sustituirán por los datos sintéticos de la revisión. ¿Continuar?'))return;
+    if(existing&&get(BACKUP)===null)localStorage.setItem(BACKUP,JSON.stringify(Object.fromEntries(KEYS.map(k=>[k,get(k)]))));
+    for(const [k,v] of Object.entries(c.storage))localStorage.setItem(k,v);
+    localStorage.setItem(MARK,id);
+    location.href='../'+c.url;
+  }catch(e){say('No se ha podido guardar en este navegador (modo privado o almacenamiento bloqueado): '+e.message);}
+}
+document.querySelectorAll('[data-case]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.case)));
+$('restore').addEventListener('click',()=>{try{const b=get(BACKUP);if(!b){say('No hay copia que restaurar.');return;}
+  for(const [k,v] of Object.entries(JSON.parse(b))){if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);}
+  localStorage.removeItem(BACKUP);localStorage.removeItem(MARK);say('Restaurado lo que había antes.');}catch(e){say('Error: '+e.message);}});
+$('clear').addEventListener('click',()=>{try{if(get(MARK)===null){say('No hay datos de esta revisión.');return;}
+  for(const k of KEYS)localStorage.removeItem(k);localStorage.removeItem(MARK);say('Datos de la revisión borrados.');}catch(e){say('Error: '+e.message);}});
+</script>
+</body>
+</html>
