@@ -9,8 +9,12 @@
 const K=require('./kit.cjs');
 const BLOCK_GL=`(()=>{for(const C of [self.HTMLCanvasElement,self.OffscreenCanvas].filter(Boolean)){const g=C.prototype.getContext;
   C.prototype.getContext=function(t,...a){return /webgl/i.test(String(t))?null:g.call(this,t,...a);};}})();`;
-async function step(env,name,url,{init=null,ready=null}={}){
+// GOV07_STEPS=3,7 ejecuta solo esos pasos (p. ej. con DEBUG=pw:browser para ver la salida del proceso del motor al caer).
+const ONLY=process.env.GOV07_STEPS?new Set(process.env.GOV07_STEPS.split(',')):null;
+async function step(env,name,url,{init=null,ready=null,block=null}={}){
+  if(ONLY&&!ONLY.has(name.split(' ')[0]))return;
   const context=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await context.newPage();
+  if(block)await context.route(u=>block.test(u.pathname),r=>r.abort());
   let crashed=false;page.on('crash',()=>{crashed=true;});const errors=[];page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   if(init)await page.addInitScript(init);const t0=Date.now();let out;
@@ -35,6 +39,21 @@ async function step(env,name,url,{init=null,ready=null}={}){
     await step(env,'1 webgl-minimo','about:blank');
     await step(env,'2 evol-sin-gl',evol,{init:BLOCK_GL,ready});
     await step(env,'3 evol',evol,{ready});
+    // GOV07_BISECT=1: la Evolución cae también con WebGL bloqueado (WebKit en CI, rama y base): ¿qué parte de la página?
+    // Se quita una cosa cada vez; «ok» señala a la culpable. Sin ella la página no llega a «ready» si es fidelity-app.
+    if(process.env.GOV07_BISECT){
+      const MEDIA=`(()=>{for(const k of ['MediaRecorder','VideoEncoder','VideoDecoder','AudioEncoder','ImageDecoder'])try{delete self[k];self[k]=undefined;}catch{}
+        try{HTMLCanvasElement.prototype.captureStream=undefined;}catch{}})();`;
+      const domReady=()=>document.readyState==='complete';
+      await step(env,'4 sin-apis-de-video',evol,{init:MEDIA,ready});
+      for(const m of ['delivery-ui','dossier-ui','ux-shell','fidelity-app'])await step(env,`5 sin-${m}`,evol,{block:new RegExp(`/evolucion/${m}\\.js$`),ready:domReady});
+      for(const m of ['tour-recorder','construction-mp4-muxer','construction-delivery-core','construction-dossier-core','construction-record-core','brand-core'])
+        await step(env,`6 sin-${m}`,evol,{block:new RegExp(`/js/${m}\\.js$`),ready:domReady});
+      await step(env,'7 solo-estatico',evol,{block:/\.m?js$/,ready:domReady});
+      // ¿Cae con cualquier página de este servidor? Una ruta inexistente (404 vacío) y el editor sin JavaScript.
+      await step(env,'8 servidor-404',`${env.base}no-existe.html`,{ready:domReady});
+      await step(env,'9 editor-solo-estatico',`${env.base}index.html`,{block:/\.m?js$/,ready:domReady});
+    }
   }catch(e){console.log(`# probe ${K.BROWSER} error ${e.message}`);}
   finally{await env.stop().catch(()=>{});}
 })();

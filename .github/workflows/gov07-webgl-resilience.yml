@@ -99,3 +99,8 @@ jobs:
             NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} node tests/gov07/engine-probe.cjs
             NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=1 xvfb-run -a node tests/gov07/engine-probe.cjs
           done
+          if [ "${{ matrix.browser }}" = webkit ]; then
+            # La Evolución hace caer a WebKit también sin WebGL y en la base: qué parte de la página, y qué dice el motor.
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=webkit GOV07_BISECT=1 node tests/gov07/engine-probe.cjs
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=webkit GOV07_STEPS=3 DEBUG=pw:browser node tests/gov07/engine-probe.cjs 2>&1 | tail -n 120
+          fi
