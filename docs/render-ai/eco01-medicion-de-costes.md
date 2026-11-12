@@ -1,8 +1,8 @@
 # ECO-01 — Medición del consumo y del coste del Render IA
 
 **Fecha:** 10/11/2026.
-**Base histórica de investigación:** `master@75615fd`. **Base de integración reconciliada el 12/11/2026:** `master@de028ad082bfe1f40e0c1ae93fcf54825a00e2d6` mediante un merge normal, sin reescribir el historial de #190.
-**Estado actual:** PR #190 Draft, **NO INTEGRADA**; el corte propuesto añade únicamente tres archivos nuevos y el motor no está cargado en `index.html`. El merge no autoriza tarifas, facturación, recopilación de datos ni gasto de proveedores. **CI del HEAD actualizado pendiente de verificación terminal antes de decidir integración.**
+**Base histórica de investigación:** `master@75615fd`. **Base vigente de integración (12/11/2026):** `master@7aced448f001d288de12a3bd1f150f32c8e022ed`, con catálogo v1.10 y #192 ya fusionados; reconciliación por merges normales, sin reescribir el historial de #190.
+**Estado actual:** PR #190 Draft, **NO INTEGRADA**; corte propuesto de **cuatro archivos**: motor, pruebas, documentación y workflow específico `ECO-01 - render cost core gate`. El motor no está cargado en `index.html`. El merge no autoriza tarifas, facturación, recopilación de datos ni gasto de proveedores. **Exigir CI del HEAD final, incluido el test específico, antes de decidir integración.**
 **Alcance:** un modelo de medición puro (`js/render-cost-core.js`) con pruebas, sin interfaz ni cambios en `api/render.js`.
 **Garantías:** no se ha llamado a ningún proveedor, no se han leído credenciales y ninguna tarifa es real. Las de las pruebas son ficticias.
 
@@ -72,6 +72,13 @@ Lee los mismos eventos `rubik-render`. No sustituye la estimación en vivo de #1
 | Período: otro mes facturado, período desconocido, exportación parcial, evento fuera de la ventana o sin fecha | ✅ |
 | Aceptación desconocida, parcial (lista vacía ≠ 0), completa con 0 real, sin poder emparejar | ✅ |
 | Importes y sumas fuera de rango seguro | ✅ |
+
+## 4 bis. Gate de integración controlada (12/11/2026)
+
+- **CI específica añadida:** `.github/workflows/eco01-core.yml` ejecuta explícitamente `node --test tests/render-cost-core.test.cjs` con Node 22.13.0, tanto en la PR como después de integrarse en `master`, cuando cambian sus archivos. **Los workflows generales anteriores no incluían este test en su lista Project-First.**
+- **Alcance auditable:** `js/render-cost-core.js` y `tests/render-cost-core.test.cjs` mantienen su SHA de blob del corte original (`cf452893` y `2bb523b2`). Ninguna llamada nueva al proveedor, dependencia externa, configuración de Vercel, tarifa real, persistencia, UI o activación comercial.
+- **Semántica:** no convertir consumos incompletos ni facturación/aceptaciones desconocidas en importes cero; no declarar costes reales sin tarifa validada y datos comparables.
+- **Estado:** propuesta Draft. Para un merge de #190 hacen falta CI específica y general en verde **sobre el HEAD final**, revisión del diff y autorización humana independiente del despliegue automático de `master`. La PR #192 ya está integrada como base documental. No se activa ningún servicio de las olas 3–5.
 
 ## 5. Para que ECO-01 dé cifras reales (decisiones y trabajo posterior)
 1. **Tarifa verificada:** el propietario la registra a partir de la página de precios o de una factura del proveedor, para `gpt-image-2.5-sunburst`, con su vigencia y su base de impuestos. Claude no la inventa.
