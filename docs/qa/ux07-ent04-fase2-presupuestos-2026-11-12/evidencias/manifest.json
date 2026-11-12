@@ -1,0 +1,55 @@
+{
+ "generated": "2026-11-12T23:52:08.606Z",
+ "data": "fixtures sintéticas (vivienda de referencia) y precios FICTICIOS de laboratorio",
+ "navegador": "Chromium de Playwright; no es un dispositivo físico",
+ "files": [
+  {
+   "file": "1-laboratorio-completa-escritorio-1440x900.png",
+   "sha256": "35b8adc24d3f88e3bb8e4756c9864914ada3cb15fd8f18a0e4f20ca2c0459057",
+   "status": "complete"
+  },
+  {
+   "file": "2-laboratorio-parcial-escritorio-1440x900.png",
+   "sha256": "86a820dede3301308cd287bbee3f3b2d9240aa7f0049b2097f394f7a938af9cc",
+   "status": "partial"
+  },
+  {
+   "file": "3-laboratorio-no-valida-escritorio-1440x900.png",
+   "sha256": "43e590f8ac371ec314edc5f8037feb69134c2807364fae04d057391eb75ef78a",
+   "status": "incoherent"
+  },
+  {
+   "file": "4-verificado-escritorio-1440x900.png",
+   "sha256": "e88a3b7593a9094cac91c30277e3657091dddd09545dad6290826015df43a9be",
+   "version": "1.1.0"
+  },
+  {
+   "file": "5-dossier-descargado-seccion-presupuestos-escritorio-1440x900.png",
+   "sha256": "9d9c269ed8aa2a8ec7023be8720c7a537132fbd21a2f9776af2e7ebd8385cb07"
+  },
+  {
+   "file": "1-laboratorio-completa-movil-390x844.png",
+   "sha256": "669faa98d2fa53b8c93425c1e3123b7f10c43db87f34715b0d0aeccbb3218214",
+   "status": "complete"
+  },
+  {
+   "file": "2-laboratorio-parcial-movil-390x844.png",
+   "sha256": "adc887d9bc4c3e246e67e77e60b99ed0dc6085292067c47e5f3bdaaecd866dbc",
+   "status": "partial"
+  },
+  {
+   "file": "3-laboratorio-no-valida-movil-390x844.png",
+   "sha256": "beab9de1496714577c41c09ac5c876d9d6a7fa21300c25c06ee937269f3a6fb7",
+   "status": "incoherent"
+  },
+  {
+   "file": "4-verificado-movil-390x844.png",
+   "sha256": "daab6ae177da6321986b4e921ea57dd3a045df72a5e42c0f89ddcdb5c61e8032",
+   "version": "1.1.0"
+  },
+  {
+   "file": "5-dossier-descargado-seccion-presupuestos-movil-390x844.png",
+   "sha256": "97977dc63936bc88527d47ac4d2213f0378997ae39687999308130f6b11bf807"
+  }
+ ]
+}
