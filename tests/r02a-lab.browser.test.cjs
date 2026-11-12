@@ -44,6 +44,7 @@ for (const [name, vp, touch] of [['1440x900', { width: 1440, height: 900 }, fals
 
 test('B3 missing reference: pending, no ceiling drawn in 3D or section, nothing assumed', async t => {
   const { page } = await setup(t);
+  assert.equal(await page.locator('#refForm').isVisible(), false, '«Desconocida»: no height form on screen');
   await item(page, 'ceilinglight', { drop: 0 });
   await page.evaluate(() => R02Lab.place({ x: 8300, y: 2700 }));
   assert.equal(await chip(page), 'Pendiente de datos');
@@ -75,6 +76,7 @@ test('B2 interference with a floor object: blocked with the reason in words, alt
   await confirmReference(page); await item(page, 'pendant', { h: 2300, drop: 0 });
   await page.evaluate(() => R02Lab.place({ x: 8300, y: 1000 }));
   assert.equal(await chip(page), 'Bloqueado'); assert.match(await page.locator('#explain').innerText(), /parte alta de la cama/);
+  assert.ok(await page.locator('#limitNote').isVisible()); assert.match(await page.locator('#limitNote').innerText(), /No comprueba la altura de paso para personas/, 'the known limit is stated next to every result');
   assert.match(await page.locator('#stageState').innerText(), /Bloqueado[\s\S]*cama/, 'the state is shown next to the views');
   await btn(page, 'Ver alternativas').click();
   const alts = await page.evaluate(() => R02Lab.alternatives.map(a => ({ p: a.position, room: a.evaluation.proposal.roomId, s: a.evaluation.state })));

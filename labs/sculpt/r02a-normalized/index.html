@@ -36,6 +36,9 @@ input[type=number]{width:9ch}input.src{width:24ch}
 #plan{width:100%;height:auto;max-height:66vh;display:block;background:#fff;border:1px solid var(--line);border-radius:10px;touch-action:manipulation;cursor:crosshair}
 #section{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px}
 #view3d{width:100%;height:300px;display:block;border-radius:10px;background:#eef0f2;touch-action:none}
+/* `.row{display:flex}` must not override the hidden attribute (the reference form showed with «Desconocida»). */
+#refForm[hidden]{display:none}
+.limit{margin:10px 0 0;padding:8px 10px;border-radius:8px;background:#fdf6e7;border:1px solid #e7d1a6;color:#6b4a00;font-size:13px}
 .saved-h{font-size:13px;margin:14px 0 6px;color:var(--muted,#5a6168)}.saved-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.saved-list li{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13.5px}.saved-list .why{flex-basis:100%;color:#8a2a1f}.file-row{margin-top:10px}.file-btn{position:relative;display:inline-flex;align-items:center}.file-btn input{position:absolute;left:-9999px}
 @media(max-width:1099px){.layout{display:block}.layout>*{margin-bottom:14px}.views-tabs{display:flex}.views{display:block}.v[hidden]{display:none!important}
  .stage{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0 8px;box-shadow:0 8px 12px -10px rgba(0,0,0,.25)}.stage .card{padding:8px}.v h3{display:none}
@@ -100,6 +103,7 @@ pre{max-height:220px;overflow:auto;font-size:11.5px;background:#f8f6f2;border:1p
    <div id="explain"></div>
    <div class="row"><button class="btn" id="altBtn" type="button" disabled>Ver alternativas</button><button class="btn" id="addBtn" type="button" disabled>Añadir a la propuesta revisable</button></div>
    <ol class="alts" id="alts"></ol>
+   <p class="limit" id="limitNote" role="note"><b>No comprueba la altura de paso para personas.</b> Solo compara con el techo, los muebles y otros elementos: una lámpara muy baja sobre una zona libre puede salir «Revisable». No es una validación de circulación, MEP ni normativa; siempre la revisa una persona.</p>
   </div>
   <div class="card"><h2>5 · Antes y después</h2>
    <div class="cmp"><div><b>Proyecto (RUBIK)</b><span class="big" id="cmpProject">sin cambios</span></div><div><b>Propuesta revisable</b><span class="big" id="cmpReview">0</span> elementos</div></div>
