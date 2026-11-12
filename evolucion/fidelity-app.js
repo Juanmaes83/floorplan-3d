@@ -4,6 +4,7 @@
    elements without a task -> grey outline "sin tarea", categories RUBIK does not model -> listed, not drawn. */
 import {createProjectScene} from './project-scene.js';
 import {createGanttView} from './gantt-view.js';
+import {attachGlGuard,createSceneSafely} from './gl-guard.js';
 const S=window.FloorPlanConstructionSchedule,V=window.FloorPlanConstructionVisualState,G=window.FloorPlanConstructionGantt,
   P=window.FloorPlanConstructionLabPresenter,B=window.FloorPlanBudget,A=window.FloorPlanConstructionProject,FX=window.FT3D8FidelityFixtures;
 const $=id=>document.getElementById(id),DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),iso=x=>new Date(x).toISOString().slice(0,10);
@@ -11,7 +12,12 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const LAYER=['finish','cladding'],APPEARS=['site','build','structure','envelope','services'];
 const q=new URLSearchParams(location.search),LIB=window.__ft3dSource?.mode==='library',RUBIK=LIB&&!!window.__ft3dSource?.embedded;
 if(q.get('capture')){const [w,h]=q.get('capture').split('x').map(Number);if(w&&h)document.documentElement.style.setProperty('--capture-w',w+'px'),document.documentElement.style.setProperty('--capture-h',h+'px'),document.body.classList.add('capture');}
-const scene=createProjectScene($('stage'));
+const scene=createSceneSafely(createProjectScene,$('stage'));
+// GOV-07: aviso y recuperación si se pierde el contexto WebGL, degradación controlada y DPR adaptativo.
+// Solo en laboratorio (?lab=1): tiempos de prueba para ejercitar la recuperación y el DPR en CI. El producto usa los
+// valores por defecto del núcleo.
+const glLab=q.get('lab')==='1',glNum=(k,min)=>glLab&&q.get(k)?Math.max(min,Number(q.get(k))||0):null;
+window.__ft3dGlGuard=attachGlGuard(scene,{...(glNum('glRestoreMs',500)?{restoreTimeoutMs:glNum('glRestoreMs',500)}:{}),governorOptions:glNum('glBudgetMs',1)?{budgetMs:glNum('glBudgetMs',1)}:{}});
 let ctx=null,pos=0,playing=false,speed=1,lastT=0,lastDay=-1;
 const api=window.__ft3dFidelity={last:null};
 
