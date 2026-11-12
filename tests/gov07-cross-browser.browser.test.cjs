@@ -7,7 +7,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');const K=require('./gov07/kit.cjs');
 let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
 test(`${K.BROWSER}: la Evolución carga y la vista 3D se dibuja, se recupera o explica que no puede`,{timeout:240000},async()=>{
-  const {context,page,watch}=await K.openEvolution(env);try{
+  const {context,page,watch}=await K.openEvolution(env);let lostAt=-1;try{
     const info=await page.evaluate(()=>({ua:navigator.userAgent,state:window.__ft3dGlGuard?.state,webgl:!!document.createElement('canvas').getContext('webgl')}));
     console.log(`# ${K.BROWSER}: ${info.ua} · WebGL ${info.webgl} · guarda ${info.state}${process.env.GOV07_NO_VIDEO_APIS?' · API de vídeo retiradas (GStreamer de este WebKit aborta la página: ver engine-probe)':''}`);
     // GOV07_EXPECT=webgl|unavailable: la variante de CI dice qué camino debe recorrer (sin esto, una variante «con WebGL»
@@ -20,7 +20,7 @@ test(`${K.BROWSER}: la Evolución carga y la vista 3D se dibuja, se recupera o e
     }else{
       assert.equal(info.state,'ok');await K.frames(page,6);assert.ok(await K.drawn(page)>0,'casa dibujada');
       const canLose=await page.evaluate(()=>{const c=document.getElementById('stage'),gl=c.getContext('webgl2')||c.getContext('webgl');return !!gl?.getExtension('WEBGL_lose_context');});
-      if(canLose){await K.loseContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='lost');
+      if(canLose){lostAt=watch.errors.length;await K.loseContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='lost');
         assert.match(await page.locator('.gl-guard').innerText(),/Vista 3D interrumpida/);
         await K.restoreContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='ok',null,{timeout:30000});await K.frames(page,6);assert.ok(await K.drawn(page)>0,'la casa vuelve');}
       else console.log(`# ${K.BROWSER}: sin WEBGL_lose_context, la pérdida queda para el protocolo físico`);
@@ -29,6 +29,14 @@ test(`${K.BROWSER}: la Evolución carga y la vista 3D se dibuja, se recupera o e
     await page.evaluate(()=>{window.__gov07Tasks=[];window.addEventListener('ft3d8-task',e=>window.__gov07Tasks.push(e.detail.taskId));});
     const lab=page.locator('#gantt .row .lab').first();await lab.scrollIntoViewIfNeeded();await lab.click();
     assert.equal((await page.evaluate(()=>window.__gov07Tasks)).length,1,'un clic, una selección');
-    assert.deepEqual(watch.errors.filter(e=>!/WebGL context could not be created|Error creating WebGL context/.test(e)),[]);assert.deepEqual(watch.external,[]);
+    // Tras recuperar el contexto, al recargar la escena Three libera geometrías creadas antes de la pérdida y borra sus
+    // búferes y VAOs del contexto perdido (medido en Chromium: 130 deleteBuffer y 52 deleteVertexArray tras 3 recargas).
+    // No hacen nada (ese contexto ya lo liberó todo) y no hay fuga; Chromium calla y WebKit avisa con este mensaje exacto.
+    // Se acepta SOLO ese mensaje, SOLO después de la pérdida, y se cuenta; cualquier otro error sigue fallando.
+    const STALE=/^WebGL: INVALID_OPERATION: delete: object does not belong to this context$/;
+    const before=lostAt<0?watch.errors:watch.errors.slice(0,lostAt),after=lostAt<0?[]:watch.errors.slice(lostAt);
+    assert.deepEqual(before.filter(e=>STALE.test(e)),[],'ningún borrado de otro contexto antes de la pérdida');
+    const stale=after.filter(e=>STALE.test(e)).length;if(stale)console.log(`# ${K.BROWSER}: ${stale} avisos de borrado de objetos del contexto perdido tras la recuperación (sin efecto)`);
+    assert.deepEqual([...before,...after.filter(e=>!STALE.test(e))].filter(e=>!/WebGL context could not be created|Error creating WebGL context/.test(e)),[]);assert.deepEqual(watch.external,[]);
   }finally{await context.close();}
 });

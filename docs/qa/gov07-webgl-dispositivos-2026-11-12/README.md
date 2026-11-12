@@ -129,6 +129,8 @@ Los 4 fallos son del códec de este entorno, no de GOV-07: se reproducen idénti
 | WebKit 26.5 de Playwright (CI) | WebGL 2 disponible. **La Evolución hace caer la página, también en `master`**: ver más abajo. Con las API de vídeo retiradas, el humo prueba la vista 3D, la pérdida y la recuperación. |
 | Safari en iPhone/iPad, Chrome en Android, GPU real de escritorio | **No probado.** Matriz física del protocolo, sin marcar (y bloqueada en la Preview: §10). |
 
+**Avisos de WebKit tras recuperar el contexto:** `WebGL: INVALID_OPERATION: delete: object does not belong to this context` (17 en CI). Medido en Chromium envolviendo las llamadas GL: tras la recuperación, al recargar la escena, Three r160 libera las geometrías creadas antes de la pérdida y borra sus búferes y VAOs **del contexto perdido** (130 `deleteBuffer` y 52 `deleteVertexArray` en 3 recargas). Esas llamadas no hacen nada, porque ese contexto ya lo liberó todo, y no hay fuga: los objetos del contexto nuevo se liberan con normalidad. Chromium calla y WebKit avisa. Evitarlo exigiría parchear Three. El humo acepta **solo ese mensaje, solo después de la pérdida**, y lo cuenta en el registro; cualquier otro error sigue fallando.
+
 Cada variante de CI declara el camino que debe recorrer (`GOV07_EXPECT`): una variante «con WebGL» que se quedara sin él falla, en vez de pasar por el camino «sin WebGL».
 
 **Firefox sin WebGL en `master`** (diagnóstico `tests/gov07/engine-probe.cjs`, base del PR): la Evolución no llega a cargar (`Fid() is undefined`, 60 s). Es D4 reproducido en un segundo motor; en esta rama carga y avisa.
