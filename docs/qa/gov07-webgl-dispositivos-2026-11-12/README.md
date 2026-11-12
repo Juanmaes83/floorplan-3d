@@ -61,6 +61,7 @@ Entre los ciclos 20 y 50 (después) el heap real **baja 0,44 MB**. `performance.
 | G2 | Cambio de proyecto durante una reconstrucción: si la evaluación anterior terminaba después, **se quedaba en pantalla el proyecto antiguo** | `show()` numera las selecciones; una que termina después de otra más reciente se descarta sin tocar la escena | «cambio de proyecto durante una reconstrucción» (B → A) |
 | G3 | `gl-guard` `dispose()` no retiraba sus escuchadores (`webglcontextlost/restored`, `visibilitychange`) | `AbortController` | Revisión de código; sin efecto visible hoy (la guarda no se reengancha) |
 | G4 | El **banco** del dispositivo usaba el mismo contador entre dos fechas y decía «crecimientos grandes = posible fuga»: en un teléfono habría dado el mismo falso positivo | Mide en el mismo momento y el invariante «geometrías en GPU ≤ en escena»; fuente de cada dato; resultado general; JSON con SHA-256 | `gov07-bench` |
+| G5 | En el móvil, el aviso «Calidad 3D reducida…» **tapaba la etiqueta del proyecto** («FIXTURE A») y parte de la barra de vistas (visto en las capturas) | El aviso prueba varias posiciones y usa la primera que no se cruza con ningún texto o control del visor; en pantallas estrechas muestra «Calidad 3D reducida» (la frase completa sigue para lectores de pantalla); se recoloca al cambiar el tamaño | «degradado 1440×900 / 390×844 / 844×390: el aviso no tapa…» (falla en 390×844 antes) |
 
 `project-scene.js` **no se toca** (lo modifica #207).
 
@@ -96,17 +97,27 @@ Se conserva el ciclo exacto (reabrir, Proyecto, Evolución, ▶, Entrega, pausa,
 | Suite | Resultado |
 |---|---|
 | `gov07-quality-core` (núcleo puro) | 10/10 |
-| `gov07-evolution-resilience` (Chromium) | 20/20 |
+| `gov07-evolution-resilience` (Chromium) | 23/23 |
 | `gov07-bench` (1440×900 y 390×844 a DPR 3) | 2/2 |
-| `gov07-cross-browser` (Chromium local; Firefox y WebKit en CI) | ver §7 |
-| Regresión: `ft3d-8-fidelity`, `ux4d`, `delivery`, `dossier`, `fit`, `lab`, INT-R1, `ft3d-8-lab` (Node) | ver §6.1 |
+| `gov07-cross-browser` | Chromium local 1/1; Firefox y WebKit en CI (§7) |
+| Regresión de la Evolución | ver §6.1 |
 | Antes/después (`GOV07_ROOT` sobre `a07306e`) | Las 3 pruebas nuevas de defectos fallan en `a07306e` y pasan aquí |
 
 Casos adversariales cubiertos en navegador: pérdida durante la reproducción (el plan avanza y sigue reproduciendo), cambio de proyecto con el contexto perdido (se dibuja el nuevo), restauración tardía tras `failed`, 5 pérdidas (una degradación), salir de la vista con la recuperación pendiente, cambio de proyecto durante una reconstrucción, pestaña congelada, 5 giros rápidos, sin WebGL, grabación con la guarda degradada, presupuesto de cuadro inalcanzable.
 
-### 6.1 Regresión
+### 6.1 Regresión (local, cada suite aislada)
 
-Se completa en la sección de entrega del PR con los números de la ejecución final.
+| Suite | Resultado | Nota |
+|---|---|---|
+| `ft3d-8-fidelity` | 6/6 | |
+| `ft3d-8-fit` | 9/9 | |
+| `ft3d-8-lab` (navegador) / `ft3d-8-lab` (Node) | 2/2 · 10/10 | |
+| INT-R1 (`THREE_LOCAL_DIR=vendor/three`) | 1/1 | |
+| `ft3d-8-ux4d` | 19/20 | La 14 («MP4 = pantalla») falla **igual en `a07306e`**: el Chromium de este entorno no codifica H.264 y graba WebM |
+| `ft3d-8-delivery` | 4/6 | Las 2 de vídeo MP4 fallan **igual en `a07306e`** (misma causa) |
+| `ft3d-8-dossier` | 5/6 | La de vídeo falla **igual en `a07306e`** (WebM sin duración navegable) |
+
+Los 4 fallos son del códec de este entorno, no de GOV-07: se reproducen idénticos en el árbol sin estos cambios. En CI esas suites usan su propio Chromium.
 
 ## 7. Navegadores y hardware
 
@@ -119,8 +130,9 @@ Se completa en la sección de entrega del PR con los números de la ejecución f
 ## 8. Integración
 
 - **Archivos:** `evolucion/gantt-view.js`, `evolucion/fidelity-app.js`, `evolucion/gl-guard.js`, `js/gl-quality-core.js`, `labs/gov07/`, `tests/gov07*`, el workflow propio y esta documentación.
-- **#207 (OBR-01):** no comparten archivo. Fusión simulada #208+#207 sin conflictos; pruebas de ambos en el árbol combinado (ver PR). Orden indiferente; si se quiere liberar los materiales explícitamente, hacerlo **después** de #207 en `clear()` de `project-scene.js`.
-- **#209 (UX-07/ENT-04)** y **#201 (ENT-01):** sin archivos comunes; fusión simulada limpia.
+- **Árbol combinado #208 + #207 + #209 + #201** (worktree temporal, sin subir): fusiones limpias, ningún archivo común. Resultados: `gov07-evolution-resilience` 20/20, OBR-01 `ex05` 4/4, `ex11` 4/4, `qa22` 2/2, `ex09` 3/3, `ux07-ent04-core` 16/16, `brand.browser` 3/3 (con el arreglo de #201).
+- **#207 (OBR-01):** orden indiferente. Si se quiere liberar los materiales explícitamente, hacerlo **después** de #207 en `clear()` de `project-scene.js`.
+- **#209 (UX-07/ENT-04)** y **#201 (ENT-01):** sin archivos comunes.
 - **FT3D-8 `real-3d` / `brand.browser` (marca profesional 1440×900):** el clic de «Vistas + proyecto ZIP» puede agotar los 30 s implícitos con CPU cargada. La corrección existe en #201 (`12b0cca`, presupuesto de 120 s para el clic, con todas las comprobaciones del ZIP) y **no está en `master`**. #208 no toca ese test reservado: hasta que #201 llegue a `master`, `real-3d` de #208 puede fallar de forma intermitente por esa causa (pasó en `a07306e`, falló en `d69b798`).
 - **Cirugía del editor:** [`ficha-cirugia-editor.md`](ficha-cirugia-editor.md).
 
@@ -140,5 +152,6 @@ En `evidencias/`, con `manifest.json` (SHA-256 por archivo), generadas con `test
 - **Hardware real:** sin probar; es el núcleo del contrato GOV-07.
 - **`performance.memory`** es impreciso; las fugas finas se vigilan por estructura (escuchadores, geometrías vivas fuera de escena), no por megas.
 - **Dossier:** `dossier-ui.js` asigna su estado antes de llamar a `show()`; si dos dossiers se cargan a la vez, la escena muestra el último pero el estado del dossier podría ser el del penúltimo. No reproducido en la interfaz (las cargas de dossier se esperan una a una); anotado para la integración.
+- **Defecto previo observado, fuera de GOV-07:** en móvil horizontal (844×390) la etiqueta del título tapa los botones AUTO/ISO/ALZADO/PLANTA de la vista (maquetación de FT3D-8). No se toca aquí; anotado para UX.
 - **Derechos:** código propio; Three.js r160 (MIT, ya en `vendor/`). Sin dependencias nuevas.
 - **Datos:** solo fixtures sintéticas; sin datos de clientes, sin escrituras en el proyecto, sin peticiones externas (comprobado en cada prueba).

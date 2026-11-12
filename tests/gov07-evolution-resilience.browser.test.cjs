@@ -254,3 +254,16 @@ test('degradado: la selección de un trabajo sigue marcando sus elementos y la e
     assert.equal(await page.evaluate(()=>window.__ft3dFidelity.visiblePieces>0),true);assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
+
+for(const [name,vp] of [['1440x900',{viewport:{width:1440,height:900}}],['390x844',{viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true}],['844x390',{viewport:{width:844,height:390},deviceScaleFactor:2,isMobile:true,hasTouch:true}]])
+test(`degradado ${name}: el aviso «Calidad 3D reducida» no tapa la etiqueta, el título ni los botones de la vista`,{timeout:180000},async()=>{
+  const {context,page,watch}=await K.openEvolution(env,vp);try{
+    for(let i=0;i<2;i++){await K.loseContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='lost');await K.restoreContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='ok');}
+    await page.waitForTimeout(400);
+    const r=await page.evaluate(()=>{const c=document.querySelector('.gl-guard-chip').getBoundingClientRect(),hit=[];
+      for(const el of document.querySelectorAll('.hero-k,.hero-t,.hero-meta,.hero-fx,[data-view],.scene-top *')){const b=el.getBoundingClientRect();if(!b.width||!b.height||!el.offsetParent)continue;
+        if(Math.min(c.right,b.right)-Math.max(c.left,b.left)>0&&Math.min(c.bottom,b.bottom)-Math.max(c.top,b.top)>0)hit.push((el.className||el.tagName)+':'+(el.textContent||'').trim().slice(0,24));}
+      return {hit,inside:c.left>=0&&c.right<=innerWidth,spot:window.__ft3dGlGuard.chipSpot};});
+    assert.deepEqual(r.hit,[],`posición ${r.spot}`);assert.ok(r.inside,'cabe en la pantalla');assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});

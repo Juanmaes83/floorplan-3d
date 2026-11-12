@@ -51,10 +51,30 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
   const text=document.createElement('p');text.style.margin='0';box.append(text);
   const btn=document.createElement('button');btn.type='button';btn.className='btn';btn.textContent='Recargar la vista';btn.hidden=true;Object.assign(btn.style,{marginTop:'10px',minHeight:'44px',padding:'0 16px',cursor:'pointer'});
   btn.addEventListener('click',()=>reload());box.append(btn);
-  const chip=document.createElement('div');chip.className='gl-guard-chip';chip.setAttribute('role','status');chip.hidden=true;chip.textContent=COPY.degraded;
+  const chip=document.createElement('div');chip.className='gl-guard-chip';chip.setAttribute('role','status');chip.hidden=true;
+  // En pantallas estrechas se ve «Calidad 3D reducida»; el resto de la frase sigue ahí para los lectores de pantalla.
+  const chipHead=document.createElement('span'),chipRest=document.createElement('span');chipHead.textContent='Calidad 3D reducida';chipRest.textContent=COPY.degraded.slice('Calidad 3D reducida'.length);chip.append(chipHead,chipRest);
+  const SR={position:'absolute',width:'1px',height:'1px',overflow:'hidden',clip:'rect(0 0 0 0)',whiteSpace:'nowrap'},NOSR={position:'',width:'',height:'',overflow:'',clip:'',whiteSpace:''};
   Object.assign(chip.style,{position:'absolute',left:'50%',top:'12px',transform:'translateX(-50%)',maxWidth:'calc(100% - 32px)',padding:'4px 10px',background:'#fff7ec',color:'#5c3a12',border:'1px solid #e5c79f',borderRadius:'999px',font:'12px/1.4 system-ui,sans-serif',zIndex:'5',pointerEvents:'none',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'});
   if(host&&getComputedStyle(host).position==='static')host.style.position='relative';
   host?.append(veil,box,chip);
+  /* El aviso de calidad reducida no debe tapar el título, sus etiquetas ni los botones de la vista (en el móvil tapaba
+     «FIXTURE A»). Se prueban varias posiciones y se usa la primera que no se cruza con ningún texto o control visible
+     del visor; si ninguna está libre, la que menos tapa. Se recoloca cuando el visor cambia de tamaño. */
+  const SPOTS=[{top:'12px',left:'50%',transform:'translateX(-50%)'},{top:'12px',right:'12px'},{bottom:'12px',left:'50%',transform:'translateX(-50%)'},{bottom:'12px',left:'12px'},{top:'12px',left:'12px'}];
+  const mine=new Set([canvas,veil,box,chip]);
+  const obstacles=()=>[...(host?.querySelectorAll('*')||[])].filter(el=>{if(mine.has(el)||[...mine].some(m=>m.contains(el)))return false;
+    const r=el.getBoundingClientRect();if(r.width<2||r.height<2)return false;const cs=getComputedStyle(el);if(cs.visibility==='hidden'||cs.display==='none'||Number(cs.opacity)===0)return false;
+    return el.matches('button,select,input,[role=button]')||el.children.length===0||[...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());}).map(el=>el.getBoundingClientRect());
+  const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left)+2)*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)+2);
+  function placeChip(){if(chip.hidden||!host)return;const narrow=host.getBoundingClientRect().width<600;Object.assign(chipRest.style,narrow?SR:NOSR);
+    Object.assign(chip.style,narrow?{font:'11px/1.4 system-ui,sans-serif',padding:'3px 8px'}:{font:'12px/1.4 system-ui,sans-serif',padding:'4px 10px'});const obs=obstacles();let best=null;
+    // Además de las esquinas y los bordes: justo debajo de lo que ocupa la parte alta del visor (en el móvil, el título).
+    const hr=host.getBoundingClientRect(),under=obs.filter(o=>o.top<hr.top+hr.height*.45).reduce((y,o)=>Math.max(y,o.bottom),hr.top);
+    const spots=[...SPOTS,{top:Math.round(under-hr.top+8)+'px',left:'50%',transform:'translateX(-50%)'}];
+    for(const spot of spots){Object.assign(chip.style,{top:'auto',bottom:'auto',left:'auto',right:'auto',transform:'none'},spot);
+      const r=chip.getBoundingClientRect(),hit=obs.reduce((a,o)=>a+overlap(r,o),0);if(!best||hit<best.hit)best={spot,hit};if(hit===0)break;}
+    Object.assign(chip.style,{top:'auto',bottom:'auto',left:'auto',right:'auto',transform:'none'},best.spot);chip.dataset.spot=String(spots.indexOf(best.spot));}
 
   const show=kind=>{text.innerHTML=COPY[kind];btn.hidden=kind!=='failed';box.hidden=false;veil.hidden=false;box.dataset.state=kind;canvas.setAttribute('aria-describedby','glGuardMsg');box.id='glGuardMsg';};
   const hide=()=>{box.hidden=true;veil.hidden=true;delete box.dataset.state;canvas.removeAttribute('aria-describedby');};
@@ -68,7 +88,7 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
     if(renderer.shadowMap.enabled){renderer.shadowMap.enabled=false;
       // Las sombras forman parte del programa de cada material: hay que recompilarlos.
       const seen=new Set();lastScene?.traverse(o=>{const m=o.material;for(const x of Array.isArray(m)?m:m?[m]:[])if(!seen.has(x)){seen.add(x);x.needsUpdate=true;}});}
-    chip.hidden=false;note('degraded',{reason,ratio:applied});
+    chip.hidden=false;placeChip();note('degraded',{reason,ratio:applied});
   }
 
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();const r=monitor.lost(now());if(!r.changed)return;show('lost');note('lost');
@@ -90,13 +110,14 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
     const ev=governor.sample(dt);if(ev){setRatio(ev.to);note('ratio',ev);}};
   raf=requestAnimationFrame(loop);
   document.addEventListener('visibilitychange',()=>{lastFrame=0;governor.resetWindow();},on);
+  let placeT=0;const ro=typeof ResizeObserver!=='undefined'&&host?new ResizeObserver(()=>{clearTimeout(placeT);placeT=setTimeout(placeChip,150);}):null;ro?.observe(host);
 
   const api={
     get state(){return monitor.state;},get degraded(){return monitor.degraded;},get pixelRatio(){return renderer.getPixelRatio();},get shadows(){return renderer.shadowMap.enabled;},
     get governor(){return governor.state();},get monitor(){return monitor.snapshot();},get events(){return events.map(e=>({...e}));},
     get message(){return box.hidden?null:{state:box.dataset.state,text:text.textContent,action:btn.hidden?null:btn.textContent};},
-    get chip(){return chip.hidden?null:chip.textContent;},
-    dispose(){ac.abort();cancelAnimationFrame(raf);clearTimeout(timer);renderer.render=render0;box.remove();veil.remove();chip.remove();},
+    get chip(){return chip.hidden?null:chip.textContent;},get chipSpot(){return chip.hidden?null:Number(chip.dataset.spot);},
+    dispose(){ac.abort();ro?.disconnect();clearTimeout(placeT);cancelAnimationFrame(raf);clearTimeout(timer);renderer.render=render0;box.remove();veil.remove();chip.remove();},
   };
   return api;
 }

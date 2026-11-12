@@ -1,11 +1,11 @@
 {
- "generated": "2026-11-12T19:24:45.804Z",
+ "generated": "2026-11-12T19:35:47.459Z",
  "engine": "Chromium + SwiftShader (CPU, sin GPU real)",
  "data": "fixture sintética A de laboratorio",
  "files": [
   {
    "file": "0-normal-escritorio-1440x900.png",
-   "sha256": "db209f5bdc7f6e38a31cbc30c98c70642997f48e1c3a1aa2d5dc23f94d26bac0"
+   "sha256": "05cda73fed46f11f6845fffd451e6ff1d9037958e066fecdc3f02e917abfe869"
   },
   {
    "file": "1-perdida-aviso-escritorio-1440x900.png",
@@ -13,7 +13,7 @@
   },
   {
    "file": "2-recuperado-escritorio-1440x900.png",
-   "sha256": "2c5f02d248fc80377d47e8d3b03c866e5e6eb405102d1406c36c0220dd888f40"
+   "sha256": "3c3e56bb5542dddbf87549c15181a99a7bc8bb70c284d96bc7b0957794b15d01"
   },
   {
    "file": "3-sin-respuesta-recargar-escritorio-1440x900.png",
@@ -21,7 +21,7 @@
   },
   {
    "file": "4-degradado-escritorio-1440x900.png",
-   "sha256": "80091fbc4378eb3f9af30d4f16ac6346e761e96633e317dfb4b43c4194386377",
+   "sha256": "f6434d9b872918eb683f473b8f05ab135d2c6d38a66e3945772f3ec2b0e43db2",
    "errors": 0,
    "external": 0
   },
@@ -39,7 +39,7 @@
   },
   {
    "file": "2-recuperado-movil-390x844.png",
-   "sha256": "63df53ecc82b7ea132469fb5e58bad718421287e8056c86498d61491276e3254"
+   "sha256": "e5374107e63732d740ea6805e61f407ce3d14912d150a4830f12fcf847cee956"
   },
   {
    "file": "3-sin-respuesta-recargar-movil-390x844.png",
@@ -47,7 +47,7 @@
   },
   {
    "file": "4-degradado-movil-390x844.png",
-   "sha256": "97de08314d4a946ad06bb7589258a61a9e71bf35ec6866fc57c1dbec148e2927",
+   "sha256": "5f9fed67ac89be30e315e2d6e1a17c97fa3aada726c4e4f935fdb5ecb342bc2d",
    "errors": 0,
    "external": 0
   },
@@ -57,7 +57,7 @@
   },
   {
    "file": "0-normal-movil-horizontal-844x390.png",
-   "sha256": "d1f3189854ad433a8bfb22c0dc7f521219d6cf2b8c3ceca4c2d248186056ac88"
+   "sha256": "4b1ddbafe767efd1adf497cd28f415a6588b5373d08fa0c9e65b1ee1283eb121"
   },
   {
    "file": "1-perdida-aviso-movil-horizontal-844x390.png",
@@ -65,7 +65,7 @@
   },
   {
    "file": "2-recuperado-movil-horizontal-844x390.png",
-   "sha256": "e7dec1c73da059a9e78b2d31d05e1dc9d53167862390e8ff1b5a75694edf2b67"
+   "sha256": "cdf975f20006c79c72310e50bf7142e53e82a05de62b017db64ddf0a43d0e731"
   },
   {
    "file": "3-sin-respuesta-recargar-movil-horizontal-844x390.png",
@@ -73,7 +73,7 @@
   },
   {
    "file": "4-degradado-movil-horizontal-844x390.png",
-   "sha256": "256c9fd09eb314f07008603aa35dac3eac0d8747a4085b7870572c2637c6ff2f",
+   "sha256": "6daefa77eb2475c8322fde1c0db82930aee4d55c6e7492edb431d2ac9ee60fab",
    "errors": 0,
    "external": 0
   },
@@ -83,11 +83,11 @@
   },
   {
    "file": "6-banco-resultado-escritorio-1440x900.png",
-   "sha256": "08d610bea2dad4e7f2bb3d32392ac13fc807d93e83633d37c621de83c8705f31"
+   "sha256": "ad5eddb38745c58eb133a0e22239ee5bc74534b61d432bdeceaebac29f576ba5"
   },
   {
    "file": "6-banco-resultado-movil-390x844.png",
-   "sha256": "7ec6cac59ace2df4f95b01f465d2cc0a8bce55c3dc95308a1934b18a94c9f074"
+   "sha256": "feb8845efa27307a7e57def75873e9dcd331ddd1adaf621a87df86bb96e5019d"
   }
  ]
 }
