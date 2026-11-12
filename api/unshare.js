@@ -37,7 +37,7 @@ function ownFile(raw,host){
  if(typeof raw!=='string'||!raw||raw.length>MAX_URL)return null;
  let u;try{u=new URL(raw);}catch{return null;}
  if(u.protocol!=='https:'||u.hostname!==host||u.username||u.password||u.port||u.search||u.hash)return null;
- return /^\/rubik-share\/[\w-]+\.(html|mp4|webm)$/.test(u.pathname)?`https://${host}${u.pathname}`:null;
+ return /^\/rubik-share\/[\w-]+\.(html|mp4|webm|delivery\.json)$/.test(u.pathname)?`https://${host}${u.pathname}`:null;
 }
 async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
