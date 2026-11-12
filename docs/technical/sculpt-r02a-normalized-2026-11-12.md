@@ -77,6 +77,8 @@ Una persona puede:
 | (Auditoría de ChatGPT, 12/11) «No prueban confirmación de la alternativa y reapertura de la persistencia». Era cierto: el laboratorio no tenía archivo, solo el JSON en pantalla | «Descargar proyecto JSON» y «Reabrir JSON». Al reabrir, `RubikCeilingContract.recheck` **vuelve a evaluar** cada elemento guardado con la referencia y los demás elementos tal como están en el archivo. Es de solo lectura: lo que ya no cumple se marca en rojo en la lista, la planta y el 3D, con su motivo, y no se mueve ni se borra | Prueba de navegador con el archivo real (alternativa → confirmar → descargar → página nueva → `input[type=file]`) y con el mismo archivo con la referencia rebajada a 1800 mm. Capturas `r02a-roundtrip-*` |
 | Al reabrir, el control de referencia decía «Desconocida» aunque hubiera una guardada; la sección decía «techo desconocido» sin elemento seleccionado | El control y la sección muestran la referencia guardada de la estancia (nunca una supuesta) | Misma prueba |
 | «Guardados 1 elementos», «1 confirmados» | Singular y plural | Misma prueba |
+| (Auditoría, 12/11) El límite de la altura de paso solo estaba en este documento | Aviso destacado y fijo bajo cada resultado: «No comprueba la altura de paso para personas…» | Prueba de navegador (aviso visible junto al resultado) y captura `r02a-alternatives-1440` |
+| Con «Desconocida» pulsado se veía el formulario de altura libre: `.row{display:flex}` anulaba el atributo `hidden` (ya estaba en la versión revisada) | `#refForm[hidden]{display:none}` | La prueba «B3 missing reference» falla antes del cambio y pasa después; captura `r02a-home-390x844` |
 
 ## B3 · Pruebas y resultados reales (local, Chromium de Playwright)
 
