@@ -149,3 +149,64 @@ test('stdio: an invalid timeout configuration stops the server at start with a c
   const code = await new Promise(r => child.on('exit', r));
   assert.equal(code, 1); assert.match(err, /RUBIK_MCP_HEAVY_TIMEOUT_MS debe ser un entero/);
 });
+
+// Audit (12/11): «verificar que todas las entradas y rutas provienen del validador principal». The worker can only be
+// reached through core.runIsolated, which calls reader.load() first: every refusal of the reader (symlink, size, format,
+// contract, file replaced) stops BEFORE a worker exists, and what the worker receives is exactly what the reader returned.
+test('provenance: the worker only ever receives the reader\'s validated project; every reader refusal starts no worker', async () => {
+  const { symlinkSync, renameSync } = await import('node:fs');
+  const real = Isolate.createIsolate({ timeoutMs: 60000 }), calls = [];
+  const spy = { run: (...a) => { calls.push(a); return real.run(...a); } };
+  const args = { start: { x: 0, y: 0 }, end: { x: 1, y: 1 }, widthMm: 800 };
+  // Valid file: the clone handed to the worker is the reader's project and snapshot, unchanged.
+  const good = write(scenario(names[0])), reader = core.createProjectReader(good), loaded = await reader.load();
+  await core.runIsolated(spy, reader, 'checkRoute2d', args);
+  assert.equal(calls.length, 1); assert.deepEqual(calls[0].slice(0, 4), ['checkRoute2d', loaded.project, loaded.snapshot, args]);
+  calls.length = 0;
+  const dir = mkdtempSync(path.join(os.tmpdir(), 'mcp-prov-')), at = n => path.join(dir, n);
+  writeFileSync(at('bad.json'), '{not json'); writeFileSync(at('contract.json'), JSON.stringify({ schemaVersion: '1.0.0', walls: 'no' }));
+  writeFileSync(at('big.json'), Buffer.alloc(core.MAX_PROJECT_BYTES + 1, 32)); symlinkSync(good, at('link.json'));
+  const cases = [['symlink', at('link.json'), /enlace simbólico/], ['oversize', at('big.json'), /15 MiB/], ['not JSON', at('bad.json'), /JSON válido/], ['contract', at('contract.json'), /FloorPlanProjectV1/]];
+  for (const [name, file, re] of cases) {
+    for (const task of ['proposeLayout', 'checkRoute2d', 'reviewLayout']) {
+      await assert.rejects(core.runIsolated(spy, core.createProjectReader(file), task, args), re, `${name} / ${task}`);
+    }
+  }
+  assert.equal(calls.length, 0, 'no worker for any refused input');
+  // The file replaced under the same name (new inode): the reader reads and VALIDATES it again; the worker gets the new,
+  // validated content with its new hash (never the old one, never unvalidated bytes). A proposal made with the old hash
+  // then comes back with the stale-hash refusal of #196 (expectedSha256), not with a result for the wrong file.
+  const swap = write(scenario(names[0])), swapReader = core.createProjectReader(swap), first = await swapReader.load();
+  writeFileSync(swap + '.new', JSON.stringify(scenario(names[1]))); renameSync(swap + '.new', swap);
+  const r = await core.runIsolated(spy, swapReader, 'reviewLayout', {});
+  assert.equal(r.snapshot.sha256, sha(readFileSync(swap))); assert.notEqual(r.snapshot.sha256, first.snapshot.sha256);
+  assert.equal(calls.length, 1); assert.deepEqual(calls[0][1], (await swapReader.load()).project);
+  const stale = await core.runIsolated(spy, swapReader, 'proposeLayout', { objectId: first.project.objects[0].id, goal: 'resolve-placement-conflict', expectedSha256: first.snapshot.sha256 });
+  assert.equal(stale.status, 'blocked', 'a proposal against the old hash is blocked, never offered as reviewable');
+  assert.equal(real.stats().started, 3);
+});
+
+// Adversarial arguments that BYPASS the zod schemas (calling the isolate directly): the pure functions validate their
+// own inputs, so the isolated path refuses exactly like the in-process one; prototype-like task names start no worker.
+test('adversarial: hostile arguments get the same refusal isolated and in-process; prototype task names start nothing', async () => {
+  const iso = Isolate.createIsolate({ timeoutMs: 30000 });
+  const file = write(scenario(names[0])), reader = core.createProjectReader(file), { project, snapshot } = await reader.load(), oid = project.objects[0].id;
+  const P = extra => ({ objectId: oid, goal: 'resolve-placement-conflict', expectedSha256: snapshot.sha256, ...extra });
+  const cases = [
+    ['proposeLayout', P({ stepMm: 1 }), /stepMm/], ['proposeLayout', P({ stepMm: NaN }), /stepMm/], ['proposeLayout', P({ maxCandidates: 1e9 }), /maxCandidates/],
+    ['proposeLayout', P({ goal: 'move-everything' }), /goal/],
+    ['checkRoute2d', { start: { x: NaN, y: 0 }, end: { x: 1, y: 1 }, widthMm: 800 }, /start y end/], ['checkRoute2d', { start: { x: 0, y: 0 }, end: { x: Infinity, y: 1 }, widthMm: 800 }, /start y end/],
+    ['checkRoute2d', { start: 'a', end: null, widthMm: '800' }, /start y end/], ['checkRoute2d', { start: { x: 0, y: 0 }, end: { x: 1, y: 1 }, widthMm: 1e12 }, /widthMm/],
+    ['reviewLayout', { clearanceMm: -1 }, /holgura/],
+  ];
+  const direct = { proposeLayout: core.proposeLayout, checkRoute2d: core.checkRoute2d, reviewLayout: core.reviewLayout };
+  for (const [task, args, re] of cases) {
+    const a = await core.runIsolated(iso, reader, task, args).then(() => null, e => e.message), b = await direct[task](reader, args).then(() => null, e => e.message);
+    assert.match(a || '', re, `${task} ${JSON.stringify(args)}`); assert.equal(a, b, 'same refusal on both paths');
+  }
+  // An unknown objectId such as "__proto__" is not a lookup into a prototype: an ordinary, explained result, identical.
+  assert.deepEqual(await core.runIsolated(iso, reader, 'proposeLayout', P({ objectId: '__proto__' })), await core.proposeLayout(reader, P({ objectId: '__proto__' })));
+  const started = iso.stats().started;
+  for (const t of ['__proto__', 'constructor', 'toString', 'hasOwnProperty', 'valueOf', '']) await assert.rejects(iso.run(t, project, snapshot, {}), /Cálculo no admitido/);
+  assert.equal(iso.stats().started, started, 'no worker for a task outside the three');
+});

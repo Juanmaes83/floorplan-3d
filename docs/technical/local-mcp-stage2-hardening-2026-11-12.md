@@ -34,7 +34,10 @@
    - **Memoria:** 512 MB de heap por *worker*.
    - El archivo **sigue leyéndose y validándose en el hilo principal** con el lector sin cambios (sin enlaces simbólicos, inodo comprobado, hasta 15 MiB). El *worker* recibe un clon del proyecto validado y llama a **las mismas funciones puras**.
 2. **Bloqueo del *worker*** (`src/lockdown.cjs`). Las trampas de las pruebas no alcanzan a un *worker*, porque carga sus propios módulos. Por eso el *worker* bloquea, antes de calcular, la escritura de archivos, los procesos hijos, la red (net, http, https, dgram, fetch, WebSocket) y `open` con escritura.
+   - **Alcance exacto (precisión de la auditoría de ChatGPT, correcta):** es **defensa en profundidad dentro del proceso Node**, no un *sandbox* del sistema operativo. Sustituye funciones de módulos; un código hostil que se ejecutara dentro del *worker* podría intentar rodearlo (por ejemplo, con un `process.binding` interno). Aquí no se ejecuta código del proyecto, solo datos: el *worker* recibe un clon estructurado de un JSON ya validado y solo admite tres nombres de cálculo. El bloqueo protege frente a un error en las funciones puras o en una dependencia, no frente a código no confiable. Para eso haría falta aislamiento del sistema operativo (contenedor, `seccomp`, usuario sin permisos) o el modelo de permisos de Node (`--permission`), que hoy no se activan.
 3. **Entradas acotadas:** `query` hasta 200 caracteres y `roomId` hasta 160.
+   - **Procedencia de las entradas (verificada tras la auditoría):** al *worker* solo se llega por `core.runIsolated`, que llama antes a `reader.load()`. Una prueba con un espía demuestra que (a) el *worker* recibe exactamente el proyecto y el *snapshot* que devolvió el lector; (b) **ninguna** negativa del lector (enlace simbólico, más de 15 MiB, JSON inválido, contrato FloorPlanProjectV1) llega a arrancar un *worker*, en las tres herramientas; (c) si el archivo se sustituye con el mismo nombre (inodo nuevo), el lector lo vuelve a leer y **validar**, el *worker* recibe el contenido nuevo con su hash nuevo, y una propuesta pedida con el hash antiguo sale `blocked` (`expectedSha256` de #196).
+   - **Argumentos hostiles que se saltan zod** (llamando al aislamiento directamente): las funciones puras validan sus propias entradas (`stepMm` 1 o NaN, `maxCandidates` 1e9, `goal` desconocido, puntos NaN, ±∞ o cadenas, `widthMm` 1e12, holgura negativa). La negativa es **idéntica** en el camino aislado y en el directo. Un `objectId` «__proto__» da un resultado normal e idéntico. Los nombres de cálculo «__proto__», «constructor», «toString», «hasOwnProperty», «valueOf» y la cadena vacía se rechazan **sin arrancar ningún *worker***.
 4. Versión del servidor: **0.1.5**.
 
 ### Antes y después (misma sonda, protocolo stdio real)
@@ -52,8 +55,10 @@
 
 ```
 tools/rubik-mcp  npm run check  → PASS
-tools/rubik-mcp  npm test       → 134/134
-  (128 de #196/#197 + 6 nuevas en test/hardening.test.mjs:
+tools/rubik-mcp  npm test       → 136/136
+  (128 de #196/#197 + 8 nuevas en test/hardening.test.mjs:
+   - procedencia: el worker solo recibe lo que validó el lector; ninguna negativa del lector arranca un worker;
+   - argumentos hostiles sin zod: misma negativa aislado y en proceso; nombres de prototipo no arrancan nada;
    - igualdad exacta aislado = en proceso en TODOS los fixtures de propuesta, más ruta y revisión;
    - límite de concurrencia, señal abortada y límite de tiempo;
    - worker bloqueado: escritura, spawn, http, net y fetch → bloqueados; lectura de código permitida; nada escrito;
