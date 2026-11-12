@@ -1,0 +1,48 @@
+# OBR-01 (ola 1): cierre de pendientes FT3D-8 — EX-05.3, EX-11-k.6, QA-22 y EX-09.10.
+# Navegador real (Chromium + SwiftShader, sin GPU) sobre la Evolución con la obra SINTÉTICA del examen.
+# No publica nada, no usa credenciales y cualquier petición fuera del servidor local hace fallar las pruebas.
+name: OBR-01 - FT3D-8 reliability
+on:
+  pull_request:
+    paths:
+      - 'evolucion/**'
+      - 'tests/obr01/**'
+      - 'tests/obr01-*.cjs'
+      - 'tests/qa-m2/**'
+      - 'tests/fixtures/territorial-integration.cjs'
+      - '.github/workflows/obr01-ft3d8-reliability.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'evolucion/**'
+      - 'tests/obr01/**'
+      - 'tests/obr01-*.cjs'
+      - '.github/workflows/obr01-ft3d8-reliability.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PLAYWRIGHT_VERSION: '1.62.1'
+jobs:
+  obr01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: |
+          for m in project-scene fidelity-app ux-shell; do node --input-type=module --check < evolucion/$m.js; done
+          for f in tests/obr01/*.cjs tests/obr01-*.cjs; do node --check "$f"; done
+      - name: Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: EX-05.3 selection, EX-11-k.6 reduced motion, EX-09.10 PNOA/MDT05, QA-22 volume
+        run: |
+          OBR01_METRICS="$RUNNER_TEMP/obr01-qa22.json" node --test --test-concurrency=1 tests/obr01-ex05-pick.browser.test.cjs tests/obr01-ex11-reduced-motion.browser.test.cjs tests/obr01-ex09-territory.browser.test.cjs tests/obr01-qa22-scale.browser.test.cjs
+          cat "$RUNNER_TEMP/obr01-qa22.json"
