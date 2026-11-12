@@ -12,6 +12,7 @@ const Measure = require('./measure.cjs');
 const Clearance = require('./clearance.cjs');
 const Route = require('./route.cjs');
 const Proposal = require('./proposal.cjs');
+const Isolate = require('./isolate.cjs');
 
 const MAX_PROJECT_BYTES = 15 * 1024 * 1024;
 const MAX_LAYOUT_OBJECTS = 100;
@@ -221,8 +222,19 @@ async function proposeLayout(reader, args = {}) {
   return safeJson(Proposal.propose(project, snapshot, args));
 }
 
+// Hardening: the heavy tools, isolated in a worker (see isolate.cjs). The file is read and validated HERE, on the main
+// thread, with the same protections and the same per-tool preconditions; the worker runs the same pure functions.
+async function runIsolated(isolate, reader, task, args = {}, { signal } = {}) {
+  const { project, snapshot } = await reader.load();
+  if (task === 'reviewLayout' && project.objects.length > MAX_LAYOUT_OBJECTS) {
+    fail('La revisión MCP admite hasta 100 muebles por proyecto para mantener acotado el cálculo. La revisión del editor sigue disponible.');
+  }
+  return safeJson(await isolate.run(task, project, snapshot, args, { signal }));
+}
+
 module.exports = {
   MAX_PROJECT_BYTES, MAX_LAYOUT_OBJECTS, MAX_RESPONSE_BYTES,
   createProjectReader, getSummary, listElements, getElement, reviewLayout,
   diagnoseProject, measureElements, inspectPairClearance, checkRoute2d, proposeLayout,
+  runIsolated, Isolate,
 };
