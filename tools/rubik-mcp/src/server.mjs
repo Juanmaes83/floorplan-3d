@@ -26,9 +26,9 @@ function registerReadTool(server, name, title, description, schema, handler) {
       idempotentHint: true,
       openWorldHint: false,
     },
-  }, async args => {
+  }, async (args, extra) => {
     try {
-      const result = await handler(args);
+      const result = await handler(args, extra);
       return {
         content: [{ type: 'text', text: JSON.stringify(result) }],
         structuredContent: result,
@@ -43,7 +43,11 @@ async function main() {
   // File protections remain mandatory; contract errors are reported by the diagnostic tool.
   await reader.inspect();
 
-  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.4' });
+  // Heavy computations run isolated: cancellable, time-bounded, at most 2 at once, never blocking the stdio loop.
+  const isolate = core.Isolate.createIsolate({ timeoutMs: core.Isolate.timeoutFromEnv() });
+  const heavy = task => (args, extra) => core.runIsolated(isolate, reader, task, args, { signal: extra?.signal });
+
+  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.5' });
   registerReadTool(server, 'diagnose_project', 'Diagnosticar proyecto',
     'Informa el primer bloqueo del validador FloorPlanProjectV1 o, si es válido, hallazgos independientes de procedencia, escala y relaciones espaciales. Las demás consultas rechazan un JSON inválido.',
     {}, () => core.diagnoseProject(reader));
@@ -59,13 +63,13 @@ async function main() {
   registerReadTool(server, 'check_route_2d', 'Comprobar recorrido 2D con anchura',
     'Con dos puntos explícitos {x,y} en mm del plano y widthMm explícito, comprueba si un disco 2D de ese diámetro puede ir de start a end por estancias y huecos de paso documentados sin invadir muros, ventanas ni muebles. Devuelve estado (recorrido_demostrado_en_modelo_2d, bloqueado_por_geometría_documentada, evidencia_insuficiente, no_evaluable o límite_de_cálculo), trayectoria verificada, anchura limitante, razones y hash. No acredita accesibilidad, evacuación, normativa, altura ni transitabilidad real.',
     { start: point, end: point, widthMm: z.number().positive().max(100000) },
-    args => core.checkRoute2d(reader, args));
+    heavy('checkRoute2d'));
   registerReadTool(server, 'get_project_summary', 'Resumen del proyecto',
     'Lee el resumen del JSON Rubik seleccionado al iniciar. Devuelve versión, hash, escala, recuentos y superficie aproximada. Nunca incluye imágenes ni rutas locales.',
     {}, () => core.getSummary(reader));
   registerReadTool(server, 'list_project_elements', 'Listar elementos',
     'Consulta habitaciones, muros, huecos o muebles del único JSON seleccionado. roomId usa la relación geométrica derivada, incluye elementos compartidos o ambiguos y filtra estancias por su propio ID. Usa páginas con limit/offset. Excluye imágenes, rutas y metadatos no necesarios.',
-    { kind: z.enum(['rooms', 'walls', 'openings', 'objects']), query: z.string().optional(), roomId: z.string().optional(), offset: z.number().int().min(0).optional(), limit: z.number().int().min(1).max(100).optional() },
+    { kind: z.enum(['rooms', 'walls', 'openings', 'objects']), query: z.string().max(200).optional(), roomId: z.string().min(1).max(160).optional(), offset: z.number().int().min(0).optional(), limit: z.number().int().min(1).max(100).optional() },
     args => core.listElements(reader, args));
   registerReadTool(server, 'get_project_element', 'Consultar elemento',
     'Obtiene un único elemento del proyecto por ID, sin modificar el archivo.',
@@ -74,7 +78,7 @@ async function main() {
   registerReadTool(server, 'review_layout', 'Revisar distribución',
     'Reutiliza la revisión geométrica de Rubik para solapes, holgura indicada explícitamente y barridos de puertas. clearanceMm es opcional: si se omite, holguras queda como insufficient_evidence. El resultado no certifica normativa ni accesibilidad.',
     { clearanceMm: z.number().positive().optional() },
-    args => core.reviewLayout(reader, args));
+    heavy('reviewLayout'));
 
   registerReadTool(server, 'propose_layout', 'Proponer posición de un mueble (sin aplicar)',
     'Etapa 2. Para un mueble (objectId) y un objetivo (goal: resolve-placement-conflict o clear-door-swing con openingId), propone UNA posición candidata buscada con FloorPlanPlacement y comprobada con FloorPlanPlacement y layout-review sobre una copia efímera. Exige expectedSha256 (de get_project_summary). Devuelve RubikLayoutProposalV1 con estado candidate-reviewable, pending, blocked o no-change-needed, evidencia, incertidumbre y lo no evaluado. Nunca aplica nada (applied:false), no escribe ni genera parches, no mueve otros muebles, no gira ni cambia de estancia. No es una certificación ni la posición óptima.',
@@ -86,7 +90,7 @@ async function main() {
       stepMm: z.number().int().min(10).max(1000).optional(),
       maxCandidates: z.number().int().min(1).max(4000).optional(),
     },
-    args => core.proposeLayout(reader, args));
+    heavy('proposeLayout'));
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
