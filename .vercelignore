@@ -1,4 +1,13 @@
 # RUBIK SOTA · rutas del repositorio que NO se publican en Vercel.
 # Laboratorios FT3D-8 (labs/ft3d-8, labs/m1-s2-s3): datos sintéticos y páginas de laboratorio que usan las pruebas de CI.
 # No forman parte del producto; el producto abre la Evolución con evolucion/?source=library.
-labs/
+#
+# ⚠ RAMA DE REVISIÓN review/gov07-device-bench-preview — NO FUSIONABLE (decisión en #208, comentario 6835414237).
+# Publica SOLO en Vercel Preview, de forma temporal, el banco GOV-07 (labs/gov07/) y las dos fixtures sintéticas que
+# carga evolucion/?lab=1. El resto de labs/ sigue fuera. El .vercelignore de master no cambia.
+labs/*
+!labs/gov07/
+!labs/ft3d-8/
+labs/ft3d-8/*
+!labs/ft3d-8/fidelity-fixtures.js
+!labs/ft3d-8/dossier-fixtures.js
