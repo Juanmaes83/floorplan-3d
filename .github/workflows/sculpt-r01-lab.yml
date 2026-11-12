@@ -3,10 +3,14 @@
 name: SCULPT-R01 lab
 on:
   pull_request:
-    branches: [master]
+    branches: [master, 'lab/sculpt-r01-recognition']
     paths:
       - 'labs/sculpt/r01-recognition/**'
       - 'tests/sculpt-r01-recognition.test.cjs'
+      - 'tests/sculpt-r01-f2-bridge.test.cjs'
+      - 'tests/sculpt-r01-cancel.browser.test.cjs'
+      - 'scripts/f2-wall-evaluation.py'
+      - 'scripts/f2-readiness.py'
       - 'js/plan-intake.js'
       - '.vercelignore'
       - '.github/workflows/sculpt-r01-lab.yml'
@@ -27,6 +31,35 @@ jobs:
         run: node --test labs/sculpt/r01-recognition/workshop/donor-recognition.test.cjs
       - name: Adapter, comparator and provenance guards
         run: node --test tests/sculpt-r01-recognition.test.cjs
+      - name: F2 bridge into the approved wall evaluator (synthetic only, f2_validated false)
+        run: node --test tests/sculpt-r01-f2-bridge.test.cjs
+  # D2: real cancellation in the browser (Web Worker + terminate), responsiveness and worker = main-thread evidence.
+  cancel-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      R01_ARTIFACTS: qa-results/r01
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/r01-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/r01-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/r01-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/r01-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Cancellable background analysis
+        run: node --test --test-concurrency=1 tests/sculpt-r01-cancel.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r01-cancel-${{ github.event.pull_request.head.sha }}
+          path: qa-results/r01
+          if-no-files-found: warn
   # Reproducibility of SOURCE EXACT: rebuilt from the donor commit OUTSIDE the checkout (runner temp, never uploaded),
   # verified file by file against SOURCE-EXACT.sha256, then checked again in read-only mode.
   source-exact:
