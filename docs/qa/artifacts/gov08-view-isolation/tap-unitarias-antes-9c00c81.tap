@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+not ok 1 - [defect] the policy adds exactly «sandbox allow-scripts allow-downloads»: no same origin, popups, navigation, forms or modals
+  ---
+  duration_ms: 1.592507
+  type: 'test'
+  location: '<copia aislada de 9c00c81>/tests/gov08-view-isolation.test.cjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    one sandbox directive
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de 9c00c81>/tests/gov08-view-isolation.test.cjs:20:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+ok 2 - every directive of the previous policy is kept verbatim (the change only adds the sandbox)
+  ---
+  duration_ms: 0.825639
+  type: 'test'
+  ...
+# Subtest: existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+ok 3 - existing links keep opening: both link builders' formats answer 200 with the stored document byte for byte
+  ---
+  duration_ms: 1.297809
+  type: 'test'
+  ...
+# Subtest: privacy, cache and withdrawal policies are unchanged
+ok 4 - privacy, cache and withdrawal policies are unchanged
+  ---
+  duration_ms: 1.133223
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 81.220531

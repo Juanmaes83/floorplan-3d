@@ -1,0 +1,50 @@
+TAP version 13
+# Subtest: [defect] a published document cannot read, change or carry away what the app keeps in this browser
+ok 1 - [defect] a published document cannot read, change or carry away what the app keeps in this browser
+  ---
+  duration_ms: 2210.273374
+  type: 'test'
+  ...
+# Subtest: [defect] the page is isolated by its response: opaque origin, sandbox with only scripts and downloads; privacy and cache headers kept
+ok 2 - [defect] the page is isolated by its response: opaque origin, sandbox with only scripts and downloads; privacy and cache headers kept
+  ---
+  duration_ms: 210.315906
+  type: 'test'
+  ...
+# Subtest: the real client document keeps working when opened by its link: views, images, video, observations and the file download
+ok 3 - the real client document keeps working when opened by its link: views, images, video, observations and the file download
+  ---
+  duration_ms: 24423.685826
+  type: 'test'
+  ...
+# Subtest: [cambio] observations are not kept after a reload any more (no storage in an isolated page) and the page says so
+not ok 4 - [cambio] observations are not kept after a reload any more (no storage in an isolated page) and the page says so
+  ---
+  duration_ms: 22934.055905
+  type: 'test'
+  location: '<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the page warns that observations are only kept while it is open
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:149:50)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 50260.881323

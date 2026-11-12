@@ -1,0 +1,85 @@
+TAP version 13
+# Subtest: [defect] a published document cannot read, change or carry away what the app keeps in this browser
+not ok 1 - [defect] a published document cannot read, change or carry away what the app keeps in this browser
+  ---
+  duration_ms: 2231.312447
+  type: 'test'
+  location: '<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:63:1'
+  failureType: 'testCodeFailure'
+  error: 'the document reached «render-fixture-code-0123456789abcdef»: {"origin":"http://127.0.0.1:33137","local":{"rubik-sota-floorplan-project-v1":"{\\"name\\":\\"Proyecto ficticio de otra clienta\\",\\"rooms\\":[]}","rubik-share-publications-v1":"[{\\"page\\":\\"https://store42.public.blob.vercel-storage.com/rubik-share/otra-casa.html\\"}]","rubik-share-notes:otro-proyecto:v9":"{\\"notes\\":[{\\"text\\":\\"Nota privada de otra clienta\\"}]}","rubik-render-token":"render-fixture-c'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:76:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: [defect] the page is isolated by its response: opaque origin, sandbox with only scripts and downloads; privacy and cache headers kept
+not ok 2 - [defect] the page is isolated by its response: opaque origin, sandbox with only scripts and downloads; privacy and cache headers kept
+  ---
+  duration_ms: 179.243361
+  type: 'test'
+  location: '<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:87:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    sandbox directive: default-src 'none'; img-src data:; media-src https://store42.public.blob.vercel-storage.com; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'
+    + actual - expected
+    
+    + []
+    - [
+    -   'allow-downloads',
+    -   'allow-scripts'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'allow-downloads'
+    1: 'allow-scripts'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:93:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: the real client document keeps working when opened by its link: views, images, video, observations and the file download
+ok 3 - the real client document keeps working when opened by its link: views, images, video, observations and the file download
+  ---
+  duration_ms: 25669.37639
+  type: 'test'
+  ...
+# Subtest: [cambio] observations are not kept after a reload any more (no storage in an isolated page) and the page says so
+not ok 4 - [cambio] observations are not kept after a reload any more (no storage in an isolated page) and the page says so
+  ---
+  duration_ms: 24492.090323
+  type: 'test'
+  location: '<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the page warns that observations are only kept while it is open
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (<copia aislada de 9c00c81>/tests/gov08-view-isolation.browser.test.cjs:149:50)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 1
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 53095.110434

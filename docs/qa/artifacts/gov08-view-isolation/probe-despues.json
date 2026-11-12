@@ -1,0 +1,20 @@
+{
+ "probe": {
+  "origin": "null",
+  "local": "blocked:SecurityError",
+  "session": "blocked:SecurityError",
+  "cookie": "blocked:SecurityError",
+  "write": "blocked:SecurityError",
+  "idb": "blocked:SecurityError",
+  "popup": null,
+  "connect": "blocked:TypeError"
+ },
+ "appStorageAfter": [
+  "render-fixture-code-0123456789abcdef",
+  "{\"name\":\"Proyecto ficticio de otra clienta\",\"rooms\":[]}"
+ ],
+ "navigations": [
+  "https://attacker.invalid/c?d=blocked:SecurityError",
+  "https://attacker.invalid/c?d=blocked:SecurityError"
+ ]
+}
