@@ -1,0 +1,31 @@
+# ENT-01 I1A API seam: synthetic fixtures, mocked Blob, no real network or credentials.
+name: ENT-01 I1A - delivery API gate
+on:
+  pull_request:
+    paths:
+      - api/share.js
+      - api/unshare.js
+      - api/delivery.js
+      - tests/ent01-delivery-api.test.cjs
+      - .github/workflows/ent01-i1a-api.yml
+  push:
+    branches: [master]
+    paths:
+      - api/share.js
+      - api/unshare.js
+      - api/delivery.js
+      - tests/ent01-delivery-api.test.cjs
+      - .github/workflows/ent01-i1a-api.yml
+permissions:
+  contents: read
+jobs:
+  delivery-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Test read-only delivery API, isolation, permissions and selective withdrawal
+        run: node --test tests/ent01-delivery-api.test.cjs
