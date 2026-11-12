@@ -29,13 +29,14 @@
     'moved-without-position': 'recolocación sin posición',
     'invalid-proposal': 'propuesta no válida', 'plan-missing': 'propuesta incompleta'
   };
-  function reasonText(r) {
-    const [code, id] = r.split(':');
-    if (code === 'overlap-3d-with') return `choca en altura con «${id}»`;
-    if (code === 'clash-with-floor-object') return `queda por debajo de la parte alta del mueble «${id}»`;
-    if (code === 'vertical-overlap-unknown-with') return `se solapa en planta con «${id}» y falta una altura para saber si chocan`;
-    if (code === 'floor-object-height-unknown') return `pasa sobre el mueble «${id}», que no tiene altura conocida`;
-    if (code === 'proposal-height-unknown' || code === 'reference-unknown') return `pasa sobre «${id}» y falta la altura del elemento o la referencia`;
+  // labelOf turns an id into words for people (e.g. «la cama»); without it the id is shown.
+  function reasonText(r, labelOf = id => `«${id}»`) {
+    const [code, raw] = r.split(':'), id = raw === undefined ? '' : labelOf(raw);
+    if (code === 'overlap-3d-with') return `choca en altura con ${id}`;
+    if (code === 'clash-with-floor-object') return `queda por debajo de la parte alta de ${id}`;
+    if (code === 'vertical-overlap-unknown-with') return `se solapa en planta con ${id} y falta una altura para saber si chocan`;
+    if (code === 'floor-object-height-unknown') return `pasa sobre ${id}, que no tiene altura conocida`;
+    if (code === 'proposal-height-unknown' || code === 'reference-unknown') return `pasa sobre ${id} y falta la altura del elemento o la referencia`;
     return REASON[code] || r;
   }
   // ---- containment (NOT evaluated by the core) ----
@@ -56,7 +57,7 @@
 
   /* One proposal in its context. `accepted` are the requests already kept for review (they take part in the
      interference checks, exactly as the core does for several requests). */
-  function evaluate({ project, building = null, levelId = null, ceiling = null, request, accepted = [], options = {} }) {
+  function evaluate({ project, building = null, levelId = null, ceiling = null, request, accepted = [], options = {}, labelOf }) {
     const requests = accepted.filter(r => r.id !== request?.id).concat([request]);
     const r = E.propose({ project, building, levelId, ceiling, requests, options });
     if (!r.ok) return { ok: false, error: r.error, explanation: [`Datos no válidos (${r.error.code}${r.error.detail ? ', ' + r.error.detail : ''}).`] };
@@ -69,9 +70,9 @@
     if (containment === 'leaves-room') { state = 'blocked'; reasons = ['footprint-leaves-room', ...reasons]; }
     const explanation = [];
     if (state === 'candidate-reviewable') explanation.push(diff.relocated ? `Revisable tras recolocarlo a (${at.x}, ${at.y}) para no tocar muros.` : 'Revisable: sin obstáculos conocidos. Necesita revisión humana.');
-    else explanation.push((state === 'blocked' ? 'Bloqueado: ' : 'Pendiente de datos: ') + [...new Set(reasons.map(reasonText))].join('; ') + '.');
+    else explanation.push((state === 'blocked' ? 'Bloqueado: ' : 'Pendiente de datos: ') + [...new Set(reasons.map(r => reasonText(r, labelOf)))].join('; ') + '.');
     if (proposal.mount.status === 'computed') explanation.push(`Cotas desde ${evidence.vertical.reference === 'finished-floor' ? 'suelo acabado' : 'forjado'}: arriba ${proposal.mount.topMm} mm, abajo ${proposal.mount.bottomMm} mm${proposal.kind === 'curtain' ? `, punto más bajo ${proposal.mount.lowestPointMm} mm` : ''}.`);
-    for (const c of proposal.floorClearance) if (c.status === 'clear') explanation.push(`Holgura de ${c.clearanceMm} mm sobre «${c.objectId}».`);
+    for (const c of proposal.floorClearance) if (c.status === 'clear') explanation.push(`Holgura de ${c.clearanceMm} mm sobre ${labelOf ? labelOf(c.objectId) : `«${c.objectId}»`}.`);
     return { ok: true, evidence, proposal, diff, state, reasons, containment, explanation, vertical: evidence.vertical };
   }
 
@@ -98,7 +99,9 @@
     const out = [], max_ = Math.min(max, LIMITS.alternatives); let tried = 0;
     for (const c of cands) {
       if (out.length >= max_) break;
-      if (out.some(o => Math.hypot(o.position.x - c.p.x, o.position.y - c.p.y) < Math.max(q.size?.widthMm || 0, q.size?.depthMm || 0, step * 3) * 0.6)) continue;
+      // Alternatives must be distinct choices: never closer to each other than one footprint (or three grid steps).
+      const cat = E.CATALOG[q.type], span = Math.max(q.size?.widthMm ?? cat.widthMm, q.size?.depthMm ?? cat.depthMm, step * 3);
+      if (out.some(o => Math.hypot(o.position.x - c.p.x, o.position.y - c.p.y) < span)) continue;
       tried++;
       const ev = evaluate({ ...input, request: { ...q, position: c.p } });
       if (ev.ok && ev.state === 'candidate-reviewable' && !ev.diff.relocated) out.push({ position: c.p, distanceMm: Math.round(c.d), evaluation: ev });
