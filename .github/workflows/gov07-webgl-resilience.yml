@@ -53,3 +53,23 @@ jobs:
         run: |
           GOV07_METRICS="$RUNNER_TEMP/gov07-memory.json" node --test --test-concurrency=1 tests/gov07-evolution-resilience.browser.test.cjs tests/gov07-bench.browser.test.cjs
           cat "$RUNNER_TEMP/gov07-memory.json"
+          GOV07_BROWSER=chromium node --test tests/gov07-cross-browser.browser.test.cjs
+  # Firefox y WebKit de Playwright en el runner (sin GPU): humo entre navegadores. No sustituyen a Safari en iPhone ni a
+  # Firefox de escritorio con GPU real (matriz física del protocolo).
+  cross-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: ${{ matrix.browser }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.browser }}
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} node --test tests/gov07-cross-browser.browser.test.cjs

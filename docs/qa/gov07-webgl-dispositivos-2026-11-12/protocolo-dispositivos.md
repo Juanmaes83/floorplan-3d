@@ -17,6 +17,11 @@
 3. Mientras corre, mira la vista 3D y anota:
    - si se ve fluido, con tirones o a saltos;
    - si viste el aviso «Vista 3D interrumpida» y si la casa volvió.
+4. Cómo leer el resultado:
+   - la columna **Fuente** distingue lo **medido** en tu dispositivo de lo **declarado** por el navegador (que puede redondear u ocultar datos, como la memoria) y de lo **no disponible**;
+   - **Memoria GPU** se mide siempre en el mismo momento del plan: «sin geometrías huérfanas» es lo esperado; «POSIBLE FUGA» es un fallo que hay que anotar;
+   - **Resultado general** dice «Sin incidencias automáticas» o «Revisar: …» con los avisos. **No es un aprobado**: tu valoración manda;
+   - el JSON lleva una huella SHA-256 (`integrity.hex`) para comprobar después que no se ha modificado.
 
 ## B. Pruebas a mano (10 min)
 
@@ -32,20 +37,22 @@ Abre la Evolución del proyecto de prueba (`/evolucion/index.html?lab=1&case=B`)
 | B6 | Cambia 5 veces entre Proyecto, Evolución y Entrega, con ▶ puesto. | Nada se queda congelado; sin errores visibles. |
 | B7 | Activa «Reducir movimiento» del sistema y pulsa AUTO. | La casa no gira sola (OBR-01). |
 | B8 | Modo ahorro de energía o batería baja (si existe). | Puede bajar la fluidez; no deben aparecer errores ni una pantalla en blanco sin explicación. |
-| B9 | Si aparece «Calidad 3D reducida para mantener la vista estable». | La imagen se ve algo menos nítida, pero la casa y los colores siguen siendo correctos. |
+| B9 | Si aparece «Calidad 3D reducida para mantener la vista estable». | La imagen se ve algo menos nítida, pero la casa y los colores siguen siendo correctos. Tocar una tarea del plan sigue marcando sus elementos. |
+| B10 | En `/evolucion/index.html?lab=1`, cambia el proyecto de prueba (A → B → A) muy deprisa en el selector. | Al final se ve el último elegido (A), nunca uno anterior. |
+| B11 | Cambia 5 veces entre Proyecto y Evolución y después toca el nombre de una tarea del plan. | La tarjeta muestra esa tarea una sola vez y la casa la marca; nada parpadea ni se repite. |
 
 ## C. Matriz (para rellenar a mano)
 
 Basada en la matriz de hardware real de `docs/technical/ent01-client-delivery-contract.md` §5, ampliada con las pruebas de GOV-07. **Nada está marcado.**
 
-| Dispositivo | Navegador | Banco V | Banco H | B1 | B2 | B3 | B4 | B5 | B6 | B7 | B8 | B9 | Notas |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| iPhone reciente | Safari | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
-| iPhone de 4 años o más | Safari | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
-| Android de gama media | Chrome | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
-| iPad o tableta Android | Safari / Chrome | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
-| Portátil con GPU integrada | Chrome, Edge, Firefox, Safari | ☐ | — | ☐ | — | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
-| Escritorio con GPU dedicada | Chrome, Firefox | ☐ | — | ☐ | — | ☐ | ☐ | ☐ | ☐ | ☐ | — | ☐ | |
+| Dispositivo | Navegador | Banco V | Banco H | B1 | B2 | B3 | B4 | B5 | B6 | B7 | B8 | B9 | B10 | B11 | Notas |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| iPhone reciente | Safari | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
+| iPhone de 4 años o más | Safari | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
+| Android de gama media | Chrome | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
+| iPad o tableta Android | Safari / Chrome | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
+| Portátil con GPU integrada | Chrome, Edge, Firefox, Safari | ☐ | — | ☐ | — | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
+| Escritorio con GPU dedicada | Chrome, Firefox | ☐ | — | ☐ | — | ☐ | ☐ | ☐ | ☐ | ☐ | — | ☐ | ☐ | ☐ | |
 
 **Cómo entregar el resultado:**
 - adjunta los JSON del banco y una captura por fallo en el issue de coordinación;
@@ -56,4 +63,4 @@ Basada en la matriz de hardware real de `docs/technical/ent01-client-delivery-co
 | Navegador | Estado |
 |---|---|
 | Chromium | Automatizado (SwiftShader). |
-| Firefox y WebKit | No hay motores instalados en el entorno de CI de este carril. Quedan para la matriz física: Safari en iOS/macOS y Firefox de escritorio. |
+| Firefox y WebKit | Humo automático en el runner de GitHub (Playwright, sin GPU): carga, dibujo o aviso de «sin WebGL», pérdida/recuperación si el motor la permite y un clic = una selección. **No** equivale a Safari en iPhone ni a Firefox con GPU real: siguen en la matriz física. |

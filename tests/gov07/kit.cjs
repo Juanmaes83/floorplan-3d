@@ -2,7 +2,9 @@
 /* GOV-07 · kit de navegador: servidor estático local del repositorio y Chromium (SwiftShader: CPU, sin GPU real).
    Abre la Evolución real con las fixtures sintéticas de laboratorio (?lab=1&case=A..D). Cualquier petición fuera del
    servidor local se registra. GOV07_ROOT ejecuta las MISMAS pruebas sobre otro árbol (antes/después). */
-const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
+const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),playwright=require('playwright');
+// GOV07_BROWSER=firefox|webkit ejecuta las pruebas entre navegadores (en CI; aquí no hay esos motores). Por defecto, Chromium.
+const BROWSER=process.env.GOV07_BROWSER||'chromium';
 const TYPES={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.glb':'model/gltf-binary','.wasm':'application/wasm','.hdr':'application/octet-stream'};
 const ROOT=process.env.GOV07_ROOT?path.resolve(process.env.GOV07_ROOT):path.resolve(__dirname,'..','..');
 const ARGS=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist'];
@@ -11,7 +13,7 @@ async function start(){
     const file=path.resolve(ROOT,'.'+decodeURIComponent(p));if(!file.startsWith(ROOT+path.sep))throw Error('path');
     res.setHeader('Content-Type',TYPES[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});
   await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}/`;
-  const browser=await chromium.launch({...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),args:ARGS});
+  const browser=BROWSER==='chromium'?await playwright.chromium.launch({...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),args:ARGS}):await playwright[BROWSER].launch();
   return {base,browser,stop:async()=>{await browser.close();await new Promise(r=>server.close(r));}};
 }
 function watch(page,base){const w={errors:[],external:[]};
@@ -36,4 +38,4 @@ const drawn=page=>page.evaluate(()=>{const c=document.getElementById('stage');if
 const loseContext=page=>page.evaluate(()=>{const c=document.getElementById('stage');const gl=c.getContext('webgl2')||c.getContext('webgl');window.__gov07Ext=gl.getExtension('WEBGL_lose_context');window.__gov07Ext.loseContext();});
 const restoreContext=page=>page.evaluate(()=>window.__gov07Ext.restoreContext());
 const frames=(page,n=2)=>page.evaluate(n=>new Promise(r=>{let k=0;const f=()=>++k>=n?r():requestAnimationFrame(f);requestAnimationFrame(f);}),n);
-module.exports={ROOT,start,openEvolution,showEvolution,watch,drawn,loseContext,restoreContext,frames};
+module.exports={ROOT,BROWSER,start,openEvolution,showEvolution,watch,drawn,loseContext,restoreContext,frames};
