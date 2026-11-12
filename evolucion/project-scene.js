@@ -9,7 +9,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {buildIllustrative} from './illustrative-props.js';
 
-const RAW='#cfc9bf',GHOST='#7a8a99',DEMOLISH='#b23a2a';
+const RAW='#cfc9bf',GHOST='#7a8a99',DEMOLISH='#b23a2a',PREVIEW='#0f7f95';
 const ease=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
 const mats=new Map();
 const mat=(color,extra={})=>{const k=color+JSON.stringify(extra);if(!mats.has(k))mats.set(k,new THREE.MeshStandardMaterial({color,roughness:.9,...extra}));return mats.get(k);};
@@ -40,7 +40,7 @@ export function createProjectScene(canvas){
     for(const grp of [foot,marks]){grp.traverse(o=>o.geometry?.dispose());grp.clear();}}
   // World mapping identical to the editor: x=(xmm-OX)/1000, z=(ymm-OY)/1000, levels lifted by elevation.
   function load(inventory,illustrative=[]){
-    clear();frame={origin:inventory.origin};
+    clear();lastStates=null;frame={origin:inventory.origin};
     const levels=new Map(inventory.levels.map(l=>[l.levelId,l]));
     const wx=(x,l)=>(x+l.offsetMm.x-frame.origin.x)/1000,wz=(y,l)=>(y+l.offsetMm.y-frame.origin.y)/1000;
     for(const e of inventory.elements){
@@ -123,7 +123,9 @@ export function createProjectScene(canvas){
   const tint=(m,final,k)=>{if(!final)return;m.traverse(o=>{if(!o.isMesh)return;for(const x of [].concat(o.material))if(tintable(x))x.color.set(RAW).lerp(new THREE.Color(final),k);});};
   /* state: key -> {mode:'scheduled'|'pre-existing'|'unscheduled', build:0..1, layer:0..1|null, removal:0..1, present:0..1} */
   let visiblePieces=0;
+  let lastStates=null,lastPos=0;
   function setState(states,pos=0){
+    lastStates=states;lastPos=pos;
     for(const a of animators)a(pos);
     visiblePieces=0;
     for(const [key,o] of objects){
@@ -147,7 +149,25 @@ export function createProjectScene(canvas){
       o.parts.meshes.forEach(m=>{if(m.userData.final)tint(m,m.userData.final,layerK);});
       if(rem>0&&o.e.type!=='illustrative')o.parts.meshes.forEach(m=>m.traverse(x=>{if(x.isMesh)for(const y of [].concat(x.material))if(tintable(y))y.color.lerp(new THREE.Color(DEMOLISH),rem*.6);}));
     }
+    applyPreview();
   }
+  /* OBR-02 · fantasma de la SIGUIENTE tarea planificada: las aristas del propio elemento (las mismas del estado «sin
+     tarea»), en otro color y visibles a través de lo construido. Un elemento que todavía no existe se ve solo como
+     contorno; uno que ya existe (p. ej. un acabado) se ve con el contorno encima. Ilustrativo: es plan, no obra. */
+  const previewMat=new THREE.LineBasicMaterial({color:PREVIEW,transparent:true,opacity:.95,depthTest:false});
+  let previewKeys=new Set(),previewShown=0;
+  function applyPreview(){
+    previewShown=0;
+    for(const [key,o] of objects){
+      const on=previewKeys.has(key)&&!(o.g.userData.roof&&!roofVisible);
+      o.ghost.children.forEach(l=>{if(!l.userData.baseMat)l.userData.baseMat=l.material;l.material=on?previewMat:l.userData.baseMat;l.renderOrder=on?5:0;});
+      if(!on)continue;
+      if(!o.g.visible){o.g.visible=true;o.parts.meshes.forEach(m=>m.visible=false);}
+      o.ghost.visible=true;previewShown++;
+    }
+  }
+  // Cambiar la vista previa vuelve a aplicar el último estado, así lo que se mostró como fantasma vuelve a ser lo que era.
+  function setPreview(keys=[]){previewKeys=new Set(keys);if(lastStates)setState(lastStates,lastPos);else applyPreview();return previewShown;}
   // offset (NDC): where the target is drawn on screen. It shifts the PROJECTION (setViewOffset), not the world: the camera
   // keeps orbiting around the house's own centre and the house stays in the free part of the viewer at every angle.
   let viewOffset=null;
@@ -241,5 +261,5 @@ export function createProjectScene(canvas){
     load,setState,highlight,pick,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
-    get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};
+    get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf),setPreview,get preview(){return {keys:[...previewKeys],shown:previewShown};}};
 }
