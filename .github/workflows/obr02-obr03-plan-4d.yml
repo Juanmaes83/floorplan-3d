@@ -1,0 +1,51 @@
+# OBR-02 + OBR-03 (ola 2e): siguiente tarea planificada en fantasma, anillo «% del plan» y coste planificado a la fecha
+# sobre la Evolución 4D de FT3D-8. Datos sintéticos de laboratorio; sin publicar, sin credenciales; cualquier petición
+# fuera del servidor local hace fallar las pruebas. Plan ≠ ejecutado: lo comprueban las pruebas.
+name: OBR-02 + OBR-03 - planned 4D
+on:
+  pull_request:
+    paths:
+      - 'evolucion/**'
+      - 'js/construction-plan-preview-core.js'
+      - 'js/construction-schedule-core.js'
+      - 'js/construction-project-adapter.js'
+      - 'labs/ft3d-8/**'
+      - 'tests/obr02/**'
+      - 'tests/obr02-*.cjs'
+      - '.github/workflows/obr02-obr03-plan-4d.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'evolucion/**'
+      - 'js/construction-plan-preview-core.js'
+      - 'tests/obr02-*.cjs'
+      - '.github/workflows/obr02-obr03-plan-4d.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PLAYWRIGHT_VERSION: '1.62.1'
+jobs:
+  obr02:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: |
+          for m in project-scene fidelity-app plan-preview-ui; do node --input-type=module --check < evolucion/$m.js; done
+          node --check js/construction-plan-preview-core.js
+          for f in tests/obr02/*.cjs tests/obr02-*.cjs; do node --check "$f"; done
+      - name: Pure plan preview core
+        run: node --test tests/obr02-obr03-plan-preview-core.test.cjs
+      - name: Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Evolution 4D with the plan panel (desktop, mobile, recording, plan change, cancelled task)
+        run: node --test --test-concurrency=1 tests/obr02-obr03-plan-preview.browser.test.cjs

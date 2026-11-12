@@ -68,9 +68,13 @@ function render(s){
 function applyGhost(){
   const f=fid(),s=state.snapshot,rec=window.__ft3dDelivery?.state?.recording||document.body.classList.contains('capture');
   const keys=!rec&&state.ghost&&s?.next?.state==='planned'?[...new Set(s.next.tasks.flatMap(t=>t.previewElementIds))]:[];
-  if(keys.join('\u0000')===state.ghostKeys.join('\u0000')&&!rec)return;
+  if(rec)watchRecording();
+  if(keys.join('\u0000')===state.ghostKeys.join('\u0000'))return;
   state.ghostKeys=keys;state.shown=f?.scene?.setPreview?f.scene.setPreview(keys):0;
 }
+// Al terminar o cancelar la grabación se vuelve a poner el fantasma (sin esperar a que cambie el día).
+let waiting=0;
+function watchRecording(){if(waiting)return;waiting=setInterval(()=>{if(window.__ft3dDelivery?.state?.recording)return;clearInterval(waiting);waiting=0;applyGhost();},300);}
 box.addEventListener('change',e=>{if(e.target.classList.contains('pp-ghost')){state.ghost=e.target.checked;applyGhost();}});
 box.addEventListener('click',e=>{const b=e.target.closest('[data-task]');if(b)fid()?.selectTask(b.dataset.task);});
 function onMoment(m){
@@ -79,4 +83,9 @@ function onMoment(m){
   render(PP.snapshot({schedule:ctx.input?.schedule??null,date:m?.date??null,costReport:costs?.status==='available'?costs.report:null,costUnavailableReason:costs?.reason||null}));
 }
 window.addEventListener('ft3d8-moment',e=>onMoment(e.detail));
+// La grabación del vídeo para el cliente pinta cada cuadro con scene.renderNow(): antes del primer cuadro se quita el
+// fantasma (lo que ve el cliente no cambia) y, al terminar o cancelar, se vuelve a poner.
+const sc=fid()?.scene;
+if(sc?.renderNow){const rn=sc.renderNow;
+  sc.renderNow=(...a)=>{if(window.__ft3dDelivery?.state?.recording&&sc.preview?.keys.length){state.ghostKeys=[];state.shown=sc.setPreview([]);watchRecording();}return rn(...a);};}
 if(fid()?.last)onMoment(fid().last);
