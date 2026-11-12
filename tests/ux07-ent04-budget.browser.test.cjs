@@ -12,12 +12,22 @@ const prepare=async(page,after,before)=>{await page.selectOption('#budgetSel',af
   await page.getByRole('button',{name:'Preparar dossier'}).click();await page.waitForSelector('#dosOut:not([hidden])');};
 const bc=page=>page.evaluate(()=>({status:document.getElementById('bcOut').dataset.status,hidden:document.getElementById('bcOut').hidden,summary:document.getElementById('bcSummary').textContent,
   rows:[...document.querySelectorAll('#bcTable tbody tr')].map(r=>({item:r.dataset.item,status:r.dataset.status,cells:[...r.cells].map(c=>c.textContent)})),notes:document.getElementById('bcNotes').textContent}));
-const noHScroll=page=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1);
+// Con isMobile, Chromium ensancha el viewport de diseño hasta el contenido que desborda (innerWidth crece con él): se
+// mide contra el ancho real del dispositivo, no contra innerWidth.
+const noHScroll=(page,W)=>page.evaluate(W=>document.documentElement.scrollWidth<=W+1,W);
 
 for(const [label,opts] of [['escritorio 1440×900',{}],['móvil 390×844',{viewport:{width:390,height:844},isMobile:true,hasTouch:true}]]){
   test(`${label}: completa, parcial y no válida; el dossier 1.1.0 se verifica con los dos presupuestos`,{timeout:180000},async()=>{
     const {context,page,watch}=await K.openLab(env,opts);try{
       await page.getByRole('button',{name:'Comparar'}).click();await page.waitForSelector('#dosCard:not([hidden])');
+      // Ningún control del dossier se sale de la pantalla ni tapa a otro (independiente de las fuentes: en el CI, el
+      // selector nuevo, con textos largos, ensanchaba la rejilla y tapaba «Preparar dossier»).
+      const DW=opts.viewport?.width??1440;
+      const layout=await page.evaluate(W=>{const card=document.getElementById('dosCard');
+        const out=[...card.querySelectorAll('label,select,input,button')].filter(e=>e.offsetParent).filter(e=>e.getBoundingClientRect().right>W+1).map(e=>e.id||e.tagName);
+        const hit=b=>{b.scrollIntoView({block:'center'});const r=b.getBoundingClientRect(),t=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return t===b||b.contains(t);};
+        return {out,build:hit(document.getElementById('buildBtn')),selects:['budgetSel','budgetBeforeSel'].map(id=>hit(document.getElementById(id)))};},DW);
+      assert.deepEqual(layout,{out:[],build:true,selects:[true,true]},JSON.stringify(layout));
       // Completa: la diferencia es la de los dos informes C2 (calculada aquí con la autoridad existente, no con el laboratorio).
       await prepare(page,'test-complete','test-complete');let s=await bc(page);
       const nb=P.buildReport(F.budget('complete',F.before())).totals.net.amount,na=P.buildReport(F.budget('complete',F.after())).totals.net.amount;
@@ -28,12 +38,12 @@ for(const [label,opts] of [['escritorio 1440×900',{}],['móvil 390×844',{viewp
       const frame=page.frameLocator('#preview');assert.match(await frame.locator('section.budget-compare').innerText(),/Comparación completa/);
       if(opts.isMobile){
         // Cada partida es una ficha: la diferencia y su dependencia caben en la pantalla (antes quedaban fuera, sin aviso).
-        const out=await page.$$eval('#bcTable tbody td[data-label="Diferencia"],#bcTable tbody td[data-label="Depende de"]',t=>t.filter(x=>{const r=x.getBoundingClientRect();return r.right>window.innerWidth+1||r.width<1;}).length);
+        const out=await page.$$eval('#bcTable tbody td[data-label="Diferencia"],#bcTable tbody td[data-label="Depende de"]',(t,W)=>t.filter(x=>{const r=x.getBoundingClientRect();return r.right>W+1||r.width<1;}).length,DW);
         assert.equal(out,0,'ninguna celda de diferencia fuera de la pantalla');
         // El dossier descargado, abierto solo en el móvil, no desborda.
         const html=await page.evaluate(()=>window.__ux07.dossier.html),p2=await context.newPage();await p2.setContent(html);
-        assert.equal(await p2.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),true,'el dossier descargado no desborda en 390 px');
-        assert.equal(await p2.$$eval('table.lines td[data-label="Diferencia"]',t=>t.every(x=>x.getBoundingClientRect().right<=window.innerWidth+1)),true);await p2.close();}
+        assert.equal(await p2.evaluate(W=>document.documentElement.scrollWidth<=W+1,DW),true,'el dossier descargado no desborda en 390 px');
+        assert.equal(await p2.$$eval('table.lines td[data-label="Diferencia"]',(t,W)=>t.every(x=>x.getBoundingClientRect().right<=W+1),DW),true);await p2.close();}
       await page.getByRole('button',{name:'Verificar ahora'}).click();await page.waitForFunction(()=>/Dossier verificado/.test(document.getElementById('verifyOut').textContent));
       assert.match(await page.locator('#verifyOut').textContent(),/presupuesto de «antes» sin cambios/);
       assert.equal(await page.evaluate(()=>window.__ux07.dossier.manifest.version),'1.1.0');
@@ -50,7 +60,7 @@ for(const [label,opts] of [['escritorio 1440×900',{}],['móvil 390×844',{viewp
       // Sin presupuesto de «antes»: no hay sección de comparación (dossier como en la fase 1).
       await prepare(page,'test-complete','none');assert.equal((await bc(page)).hidden,true);
       assert.equal(await frame.locator('section.budget-compare').count(),0);
-      assert.equal(await noHScroll(page),true,'sin desplazamiento horizontal de la página');
+      assert.equal(await noHScroll(page,DW),true,'sin desplazamiento horizontal de la página');
       assert.deepEqual(watch.errors,[]);assert.deepEqual(watch.external,[]);
     }finally{await context.close();}
   });
