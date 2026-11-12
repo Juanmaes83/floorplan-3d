@@ -54,7 +54,11 @@ test('I1B mobile portrait: touch controls and responsive minimap; no horizontal 
  assert.equal(await client.locator('#deliveryWalk').isVisible(),true);
  await client.locator('#deliveryWalk').click();
  await client.waitForFunction(()=>window.View3D?.walking()&&!!document.querySelector('#deliveryMap'),null,{timeout:90000});
- assert.ok(await client.locator('#joy').isVisible(),'real 3D touch joystick');
+ assert.equal(await client.evaluate(()=>matchMedia('(pointer: coarse)').matches),true,'mobile test must emulate a coarse pointer');
+ assert.equal(await client.locator('#walkStart').isVisible(),true,'real 3D walk shows the explicit Start step');
+ await client.locator('#walkStart').click();
+ await client.locator('#joy').waitFor({state:'visible',timeout:15000});
+ assert.equal(await client.locator('#walkOverlay').isVisible(),false,'start action hides the walk entry card');
  assert.equal(await client.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth+2),false,'no horizontal overflow');
  const toggle=client.locator('#deliveryMapToggle');assert.equal(await toggle.isVisible(),true);
  await toggle.click();assert.equal(await client.locator('#deliveryMapPanel').isVisible(),false);
