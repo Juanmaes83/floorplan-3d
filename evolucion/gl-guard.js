@@ -20,20 +20,70 @@ const COPY={
 
 /* Sin WebGL, la Evolución se quedaba en «Cargando…» para siempre y el plan no se podía consultar. Ahora se crea una
    escena nula con la misma API (no dibuja nada) y el resto de la página funciona; el aviso lo pone attachGlGuard. */
+/* Crea la escena anotando lo que registra en el lienzo: si la creación falla, se retira todo (un renderer de Three a
+   medio crear deja escuchando la pérdida y la recuperación del contexto, y al recuperarse lanza una excepción). */
+function createClean(create,canvas){
+  const added=[],own=Object.prototype.hasOwnProperty.call(canvas,'addEventListener');
+  canvas.addEventListener=function(t,f,o){added.push([t,f,o]);return EventTarget.prototype.addEventListener.call(this,t,f,o);};
+  try{return create(canvas);}catch(error){for(const [t,f,o] of added)canvas.removeEventListener(t,f,o);throw error;}
+  finally{if(!own)delete canvas.addEventListener;}
+}
 export function createSceneSafely(create,canvas){
-  try{return create(canvas);}catch(error){return createUnavailableScene(canvas,error);}
+  try{return createClean(create,canvas);}catch(error){
+    // Contexto que ya llega PERDIDO al crear la escena (GPU reclamada por otra pestaña o app, el móvil volviendo del
+    // reposo): WebGL existe, solo falta que vuelva. Antes se trataba como «sin WebGL» (aviso falso, vista muerta para
+    // siempre y una excepción de Three al volver el contexto). Ahora: escena diferida que se completa al recuperarlo.
+    if(contextLostAtCreation(canvas))return createDeferredScene(create,canvas,error);
+    return createUnavailableScene(canvas,error);
+  }
+}
+/* ¿El lienzo tiene ya un contexto WebGL, perdido? (Three lo ha pedido antes de fallar: getContext devuelve ese mismo.) */
+function contextLostAtCreation(canvas){
+  for(const type of ['webgl2','webgl']){let gl=null;try{gl=canvas.getContext(type);}catch{}if(gl)return gl.isContextLost?.()===true;}
+  return false;
+}
+// Lo que la app fija en la escena y hay que volver a aplicar a la real cuando exista (el último valor de cada uno).
+const REPLAY=['setRoofVisible','setFootprint','load','setState','highlight','setAuto','setSuspended'];
+/* Escena diferida: misma identidad para la app (fidelity-app guarda `scene` una vez). Mientras el contexto sigue perdido
+   se comporta como la escena nula; al volver, crea la escena real en el MISMO lienzo, le aplica el estado guardado y
+   pide a la app que encuadre de nuevo (onResize). Lo que registró el intento fallido ya se retiró (createClean). */
+export function createDeferredScene(create,canvas,error=null){
+  let inner=createUnavailableScene(canvas,error),real=null,onResize=null;const last=new Map(),waiting=new Set();
+  const keep=e=>e.preventDefault();// sin preventDefault el navegador no devolvería nunca el contexto
+  canvas.addEventListener('webglcontextlost',keep);
+  const onRestored=()=>{let s;try{s=createClean(create,canvas);}catch{return;}// sigue sin poder: se espera a la próxima
+    canvas.removeEventListener('webglcontextrestored',onRestored);canvas.removeEventListener('webglcontextlost',keep);
+    real=s;inner=s;if(onResize)s.onResize=onResize;for(const k of REPLAY)if(last.has(k))s[k](...last.get(k));
+    s.resize();onResize?.();for(const fn of waiting)fn(s);waiting.clear();};
+  canvas.addEventListener('webglcontextrestored',onRestored);
+  return new Proxy({},{
+    get(_,k){
+      if(k==='pending')return !real;if(k==='unavailable')return false;if(k==='deferred')return true;
+      if(k==='whenReady')return fn=>{if(real)fn(real);else waiting.add(fn);};
+      if(k==='reason')return real?null:inner.reason;
+      const v=inner[k];if(typeof v!=='function')return v;
+      return (...a)=>{if(!real&&REPLAY.includes(k))last.set(k,a);return inner[k](...a);};
+    },
+    set(_,k,v){if(k==='onResize')onResize=v;inner[k]=v;return true;},
+    has(_,k){return k in inner||['pending','deferred','whenReady'].includes(k);},
+    ownKeys(){return Reflect.ownKeys(inner);},getOwnPropertyDescriptor(_,k){const d=Reflect.getOwnPropertyDescriptor(inner,k);return d&&{...d,configurable:true};},
+  });
 }
 export function createUnavailableScene(canvas,error=null){
   const pose={position:[12,9,12],target:[0,0,0],fov:45,offset:null};const noop=()=>{};
-  return {unavailable:true,reason:String(error?.message||error||'WebGL no disponible'),canvas,renderer:null,
+  // Mismo contrato que la escena real (#207/OBR-01): preferencia de movimiento en vivo, sin giro automático, dispose idempotente.
+  const rm=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;let disposed=false;
+  return {get reducedMotion(){return !!rm?.matches;},get autoRotating(){return false;},get disposed(){return disposed;},dispose(){disposed=true;},
+    unavailable:true,reason:String(error?.message||error||'WebGL no disponible'),canvas,renderer:null,
     get userMoved(){return false;},screenBounds:()=>null,set onResize(fn){},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load:noop,setState:noop,highlight:noop,pick:()=>null,hitsAt:()=>[],presentationPose:()=>({...pose}),setFootprint:noop,get footprintVisible(){return false;},
     setPose:noop,frameEnvelope:()=>({...pose}),resize:noop,inspect:()=>[],setRenderSize:noop,releaseRenderSize:noop,orbitPose:()=>({...pose}),renderNow:noop,
-    setSuspended:noop,setAuto:noop,setRoofVisible:noop,get roofVisible(){return true;},get pose(){return {...pose};},get visiblePieces(){return 0;},get objectCount(){return 0;},dispose:noop};
+    setSuspended:noop,setAuto:noop,setRoofVisible:noop,get roofVisible(){return true;},get pose(){return {...pose};},get visiblePieces(){return 0;},get objectCount(){return 0;}};
 }
 
 export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=globalThis.FloorPlanGlQuality,restoreTimeoutMs,governorOptions={},now=()=>performance.now(),reload=()=>location.reload()}={}){
   if(scene?.unavailable)return unavailableNotice(scene,host);
+  if(scene?.pending)return deferredGuard(scene,{host,core,restoreTimeoutMs,governorOptions,now,reload});
   const {renderer,canvas}=scene;if(!renderer||!canvas||!core)return null;
   const governor=core.createGovernor({...governorOptions,deviceRatio:window.devicePixelRatio||1});
   const monitor=core.createContextMonitor(restoreTimeoutMs?{restoreTimeoutMs}:{});
@@ -120,6 +170,30 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
     dispose(){ac.abort();ro?.disconnect();clearTimeout(placeT);cancelAnimationFrame(raf);clearTimeout(timer);renderer.render=render0;box.remove();veil.remove();chip.remove();},
   };
   return api;
+}
+
+/* Guarda de la escena diferida (contexto perdido al crear): el mismo objeto para toda la vida de la página. Mientras
+   espera, dice que la vista está interrumpida (no que el navegador no pueda) y, si no vuelve a tiempo, ofrece recargar;
+   cuando la escena real existe, delega en una guarda normal sobre ella (pérdidas futuras, degradación, DPR). */
+function deferredGuard(scene,opts){
+  const {host,core,now,reload}=opts;const monitor=core?.createContextMonitor(opts.restoreTimeoutMs?{restoreTimeoutMs:opts.restoreTimeoutMs}:{});
+  const events=[{t:Math.round(now()),type:'lost',atCreation:true}];monitor?.lost(now());
+  const box=document.createElement('div');box.className='gl-guard';box.id='glGuardMsg';box.setAttribute('role','status');box.setAttribute('aria-live','polite');box.dataset.state='lost';
+  Object.assign(box.style,{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:'min(440px,calc(100% - 32px))',boxSizing:'border-box',padding:'14px 16px',background:'#fff',color:'#1d2124',border:'1px solid #c9c6bf',borderLeft:'4px solid #a8621c',borderRadius:'6px',font:'14px/1.45 system-ui,sans-serif',zIndex:'7'});
+  const p=document.createElement('p');p.style.margin='0';p.innerHTML=COPY.lost;box.append(p);
+  const btn=document.createElement('button');btn.type='button';btn.className='btn';btn.textContent='Recargar la vista';btn.hidden=true;Object.assign(btn.style,{marginTop:'10px',minHeight:'44px',padding:'0 16px',cursor:'pointer'});
+  btn.addEventListener('click',()=>reload());box.append(btn);
+  if(host&&getComputedStyle(host).position==='static')host.style.position='relative';host?.append(box);scene.canvas.setAttribute('aria-describedby','glGuardMsg');
+  let impl=null,timer=0,state='lost';
+  const tick=()=>{const t=monitor?.tick(now());if(t?.changed&&t.state==='failed'){state='failed';box.dataset.state='failed';p.innerHTML=COPY.failed;btn.hidden=false;events.push({t:Math.round(now()),type:'failed'});}else if(state==='lost')timer=setTimeout(tick,250);};
+  timer=setTimeout(tick,250);
+  scene.whenReady(()=>{clearTimeout(timer);box.remove();scene.canvas.removeAttribute('aria-describedby');events.push({t:Math.round(now()),type:'restored',atCreation:true});
+    impl=attachGlGuard(scene,{...opts,host});});
+  const pick=(k,d)=>impl?impl[k]:d;
+  return {get state(){return impl?impl.state:state;},get degraded(){return pick('degraded',false);},get pixelRatio(){return pick('pixelRatio',null);},get shadows(){return pick('shadows',false);},
+    get governor(){return pick('governor',null);},get monitor(){return impl?impl.monitor:monitor?.snapshot();},get events(){return [...events,...(impl?impl.events:[])];},
+    get message(){return impl?impl.message:{state,text:p.textContent,action:btn.hidden?null:btn.textContent};},get chip(){return pick('chip',null);},get chipSpot(){return pick('chipSpot',null);},
+    get deferred(){return true;},dispose(){clearTimeout(timer);box.remove();impl?.dispose();}};
 }
 
 function unavailableNotice(scene,host){
