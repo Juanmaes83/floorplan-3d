@@ -1,7 +1,7 @@
 # ENT-01 — Visita 3D del cliente: auditoría de #166, contrato e integración con S1/S2
 
 **Fecha de investigación:** 10/11/2026. **Fecha de reconciliación:** 12/11/2026.
-**Base histórica:** `master@75615fd`. **Base actual de la PR #189:** `master@7aced448f001d288de12a3bd1f150f32c8e022ed`, que incluye los merges documentales #192 y el núcleo R03-I0. La base se actualizó mediante merge normal, sin reescribir los commits de ENT-01.
+**Base histórica:** `master@75615fd`. **Base actual de la PR #189:** `master@e5ae75386cece7c8432e0221de4e11c6f6becee4`, que incluye #192, R03-I0 y **ECO-01 #190 integrado**. La rama se reconcilió mediante merges normales, sin reescribir los commits de ENT-01.
 **Estado:** el contrato puro está implementado en la rama Draft #189; **no se ha fusionado, cargado en `index.html` ni publicado**. Las visitas del prototipo #166 no están integradas en el editor.
 
 PR comprobadas al empezar:
@@ -29,7 +29,7 @@ PR comprobadas al empezar:
 - **Prueba humana histórica:** se aprobó navegación/mini-mapa del prototipo [#166](https://github.com/Juanmaes83/floorplan-3d/pull/166), **no** la funcionalidad de #189 ni el futuro modo cliente. El prototipo #166 no debe fusionarse: solo sirve de referencia de UX. No extrapolar fps SwiftShader a dispositivo real.
 - **Pruebas humanas futuras:** Preview real y aislada con entrada a Recorrer, minimapa y salto a estancias; teclado y móvil; bloqueo del editor y acceso únicamente autorizado; retirada/cachés; pruebas en hardware real. La URL se proporciona **cuando exista un deployment de la integración**, nunca se inventa la Preview.
 - **Gates antes del merge I0:** diff limitado a los cuatro ficheros, compatibilidad exacta con `master`, CI del HEAD final (workflows generales + `ENT-01 - client delivery core gate`) y autorización humana de merge **específica**, incluido posible despliegue automático de Production; la autorización de preparar esta rama **no es autorización de fusionar**.
-- **Tras cualquier merge de ECO-01 en paralelo:** volver a reconciliar esta rama con el `master` resultante, revisar diff y reejecutar CI. Cada cambio de HEAD exige nueva verificación.
+- **ECO-01 #190 ya fusionado**: reconciliación ejecutada sobre `master@e5ae75386cece7c8432e0221de4e11c6f6becee4`, preservando el core y tests originales de ENT-01; **CI del nuevo HEAD debe volver a pasar**. Ante cualquier cambio posterior de `master`, auditar compatibilidad y revalidar el diff antes del merge.
 
 **Lectura histórica:** el inventario original que sigue está basado en la investigación del 10/11/2026 y cita SHA de PR anteriores; para estado actual de integración prevalece esta sección y el HEAD de GitHub.
 
