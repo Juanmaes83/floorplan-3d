@@ -34,7 +34,8 @@ pre{white-space:pre-wrap;word-break:break-all;background:var(--card);border:1px 
   <p id="status" role="status" aria-live="polite">Pulsa «Ejecutar banco». Repite en vertical y en horizontal.</p>
   <iframe id="evo" title="Evolución de obra (proyecto de prueba)"></iframe>
   <h2>Resultado</h2>
-  <table><thead><tr><th>Medida</th><th>Valor</th><th>Qué debe mirar la persona</th></tr></thead><tbody id="out"><tr><td colspan="3">Sin ejecutar.</td></tr></tbody></table>
+  <table><thead><tr><th>Medida</th><th>Valor</th><th>Fuente</th><th>Qué debe mirar la persona</th></tr></thead><tbody id="out"><tr><td colspan="4">Sin ejecutar.</td></tr></tbody></table>
+  <p class="note" id="legend"><strong>Fuente:</strong> «medido» = cronometrado o contado aquí, en este dispositivo; «declarado» = lo que dice el navegador (puede redondear u ocultar datos); «no disponible» = este navegador no lo ofrece. El JSON lleva una huella SHA-256 para comprobar que no se ha modificado.</p>
   <pre id="json" hidden></pre>
 </main>
 <script>
@@ -58,12 +59,21 @@ async function openEvo(caseId){
 }
 const frames=(w,ms)=>new Promise(r=>{const out=[];let last=0;const end=performance.now()+ms;const f=t=>{if(last)out.push(t-last);last=t;if(performance.now()<end)w.requestAnimationFrame(f);else r(out);};w.requestAnimationFrame(f);});
 const drawn=w=>{const c=w.document.getElementById('stage');if(!c?.width)return 0;const t=document.createElement('canvas');t.width=c.width;t.height=c.height;const g=t.getContext('2d');g.drawImage(c,0,0);const d=g.getImageData(0,0,t.width,t.height).data;let n=0;for(let i=0;i<d.length;i+=4*97)if(Math.abs(d[i]-0xe7)+Math.abs(d[i+1]-0xe6)+Math.abs(d[i+2]-0xe2)>30)n++;return n;};
-const mem=w=>{const r=w.__ft3dFidelity.scene.renderer;return r?{...r.info.memory,programs:r.info.programs.length,jsHeapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1e5)/10:null}:null;};
+/* Memoria GPU. Three cuenta las geometrías DIBUJADAS al menos una vez desde que se crearon, así que comparar dos fechas
+   del plan da crecimientos falsos (GOV-07: 53→116 sin fuga). Se mide siempre en el mismo momento (final del plan, tras
+   pintar) y, sobre todo, el invariante que sí delata una fuga: geometrías en la GPU ≤ geometrías en la escena. */
+const watchScene=w=>{const r=w.__ft3dFidelity.scene.renderer;if(!r||r.__benchWrapped)return;const r0=r.render;r.render=function(s,c){w.__gov07BenchScene=s;return r0.call(this,s,c);};r.__benchWrapped=true;};
+async function mem(w){
+  const f=w.__ft3dFidelity,r=f.scene.renderer;if(!r)return null;f.end();await frames(w,400);
+  const s=w.__gov07BenchScene,geo=new Set();s?.traverse(o=>{if(o.geometry)geo.add(o.geometry.id);});
+  return {gpuGeometries:r.info.memory.geometries,sceneGeometries:s?geo.size:null,textures:r.info.memory.textures,programs:r.info.programs.length,
+    jsHeapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1e5)/10:null};
+}
 async function run(){
   $('run').disabled=true;$('copy').disabled=$('save').disabled=true;const st=t=>$('status').textContent=t;
   const r={bench:'GOV-07',version:1,startedAt:new Date().toISOString(),page:location.pathname,case:$('caseSel').value,device:deviceInfo(),steps:{}};
   try{
-    st('1/5 Cargando la Evolución…');const {w,ms}=await openEvo(r.case);r.steps.load={ms};
+    st('1/5 Cargando la Evolución…');const {w,ms}=await openEvo(r.case);r.steps.load={ms};watchScene(w);
     const guard=()=>{const g=w.__ft3dGlGuard;return g?{state:g.state,pixelRatio:g.pixelRatio,shadows:g.shadows,degraded:g.degraded,history:g.governor?.history||[]}:null;};
     r.steps.initial={guard:guard(),drawnSamples:drawn(w)};
     st('2/5 Fluidez con la vista girando (8 s)…');w.__ft3dFidelity.scene.setAuto(true);r.steps.orbit={...stats(await frames(w,8000)),guard:guard()};
@@ -75,28 +85,54 @@ async function run(){
     else{const t0=performance.now();ext.loseContext();await sleep(800);const lostState=guard()?.state;const msg=w.__ft3dGlGuard?.message?.state||null;ext.restoreContext();
       for(let i=0;i<100&&w.__ft3dGlGuard?.state!=='ok';i++)await sleep(100);await frames(w,500);
       r.steps.contextLoss={available:true,stateWhileLost:lostState,messageWhileLost:msg,stateAfter:guard()?.state,restoreMs:Math.round(performance.now()-t0-800),drawnAfter:drawn(w)};}
-    st('5/5 Memoria: 5 ciclos de reabrir el proyecto…');const m0=mem(w);
+    st('5/5 Memoria: 5 ciclos de reabrir el proyecto…');const m0=await mem(w);
     for(let i=0;i<5;i++){await w.__ft3dFidelity.show(w.__ft3dFidelity.ctx.input,w.__ft3dFidelity.ctx.meta);w.__ft3dFidelity.setPos(i*5);await frames(w,300);}
-    r.steps.memory={before:m0,after:mem(w)};r.steps.final={guard:guard(),drawnSamples:drawn(w)};
+    const m1=await mem(w);r.steps.memory={before:m0,after:m1,gpuWithinScene:!!(m0&&m1&&m0.sceneGeometries!=null&&m0.gpuGeometries<=m0.sceneGeometries&&m1.gpuGeometries<=m1.sceneGeometries),
+      sameTextures:!!(m0&&m1&&m0.textures===m1.textures)};r.steps.final={guard:guard(),drawnSamples:drawn(w)};
     r.finishedAt=new Date().toISOString();st('Terminado. Copia o descarga el resultado y anota tu valoración en el protocolo.');
   }catch(e){r.error=String(e.message||e);st('Error: '+r.error);}
-  result=r;render(r);$('run').disabled=false;$('copy').disabled=$('save').disabled=false;
+  r.warnings=warnings(r);r.overall=r.error?'error':r.warnings.length?'revisar':'sin-incidencias-automaticas';
+  r.integrity=await integrity(r);result=r;render(r);$('run').disabled=false;$('copy').disabled=$('save').disabled=false;
+}
+// Avisos automáticos (umbrales orientativos, no un aprobado: la valoración la hace la persona con el protocolo).
+function warnings(r){
+  const s=r.steps,w=[];
+  if(!r.device.webgl)w.push('Sin WebGL: comprobar que la Evolución lo dice y que el plan funciona.');
+  if(s.load?.ms>15000)w.push(`Carga lenta: ${Math.round(s.load.ms/1000)} s.`);
+  if(s.orbit?.fps!=null&&s.orbit.fps<20)w.push(`Fluidez baja girando: ${s.orbit.fps} fps.`);
+  if(s.play?.fps!=null&&s.play.fps<20)w.push(`Fluidez baja reproduciendo: ${s.play.fps} fps.`);
+  if(s.contextLoss&&!s.contextLoss.available)w.push('Pérdida de contexto no simulable: hacer el paso manual del protocolo.');
+  if(s.contextLoss?.available&&s.contextLoss.stateAfter!=='ok')w.push(`La vista no volvió tras la pérdida (estado ${s.contextLoss.stateAfter}).`);
+  if(s.memory&&!s.memory.gpuWithinScene)w.push('Más geometrías en la GPU que en la escena: posible fuga.');
+  if(s.memory&&!s.memory.sameTextures)w.push('Las texturas cambiaron entre ciclos.');
+  if(s.final?.guard?.degraded)w.push('La vista se degradó (DPR 1, sin sombras): comprobar que la imagen sigue siendo aceptable.');
+  return w;
+}
+// Huella SHA-256 del resultado sin el propio campo (en un origen seguro; si no, se dice).
+async function integrity(r){
+  try{const {integrity:_,...rest}=r,bytes=new TextEncoder().encode(JSON.stringify(rest)),d=await crypto.subtle.digest('SHA-256',bytes);
+    return {algorithm:'SHA-256',of:'JSON.stringify(resultado sin «integrity»)',hex:[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('')};}
+  catch{return {algorithm:'SHA-256',hex:null,note:'Huella no disponible en este navegador u origen (requiere HTTPS o localhost).'};}
 }
 function render(r){
-  const s=r.steps,rows=[
-    ['Dispositivo',`${r.device.viewport} · DPR ${r.device.devicePixelRatio} · ${r.device.orientation}`,'Anota modelo y sistema exactos en el protocolo.'],
-    ['GPU / WebGL',`${r.device.gpu||'—'} · WebGL2 ${r.device.webgl2?'sí':'no'} · textura máx. ${r.device.maxTextureSize||'—'}`,'Si WebGL es «no», la Evolución debe decir que no puede mostrar el 3D y el plan debe funcionar.'],
-    ['Carga',s.load?`${s.load.ms} ms`:'—','¿Se tarda demasiado para enseñarlo a un cliente?'],
-    ['Resolución 3D',s.initial?.guard?`DPR interno ${s.initial.guard.pixelRatio}`:'—','—'],
-    ['Fluidez girando',s.orbit?`${s.orbit.fps} fps (mediana ${s.orbit.medianMs} ms, p90 ${s.orbit.p90Ms} ms)`:'—','¿Se ve fluido? ¿Tirones? Tu valoración manda sobre el número.'],
-    ['Fluidez reproduciendo',s.play?`${s.play.fps} fps (mediana ${s.play.medianMs} ms, p90 ${s.play.p90Ms} ms)`:'—','¿Avanza la obra sin saltos visibles?'],
-    ['DPR adaptativo',s.final?.guard?.history?.length?s.final.guard.history.map(h=>`${h.from}→${h.to} (${h.reason})`).join(', '):'sin cambios','Si bajó, ¿la imagen sigue siendo aceptable?'],
-    ['Pérdida de contexto',s.contextLoss?(s.contextLoss.available?`aviso: ${s.contextLoss.messageWhileLost||'ninguno'} · después: ${s.contextLoss.stateAfter} en ${s.contextLoss.restoreMs} ms`:'no simulable aquí'):'—','¿Se vio el aviso y volvió la casa?'],
-    ['Memoria (5 ciclos)',s.memory?.before?`geometrías ${s.memory.before.geometries}→${s.memory.after.geometries} · texturas ${s.memory.before.textures}→${s.memory.after.textures}${s.memory.after.jsHeapMB!=null?` · JS ${s.memory.before.jsHeapMB}→${s.memory.after.jsHeapMB} MB`:''}`:'—','Crecimientos grandes entre ciclos = posible fuga.'],
+  const s=r.steps,na='no disponible',rows=[
+    ['Dispositivo',`${r.device.viewport} · DPR ${r.device.devicePixelRatio} · ${r.device.orientation}`,'declarado','Anota modelo y sistema exactos en el protocolo.'],
+    ['Navegador',r.device.userAgent,'declarado','Anota la versión exacta.'],
+    ['GPU / WebGL',`${r.device.gpu||na} · WebGL2 ${r.device.webgl2?'sí':'no'} · textura máx. ${r.device.maxTextureSize||na}`,r.device.gpu?'declarado':na,'Si WebGL es «no», la Evolución debe decir que no puede mostrar el 3D y el plan debe funcionar.'],
+    ['Núcleos / memoria',`${r.device.cores??na} núcleos · ${r.device.deviceMemoryGB!=null?r.device.deviceMemoryGB+' GB (aprox.)':na}`,r.device.deviceMemoryGB!=null?'declarado':'declarado / '+na,'Solo orientativo: el navegador redondea o lo oculta.'],
+    ['Carga',s.load?`${s.load.ms} ms`:'—','medido','¿Se tarda demasiado para enseñarlo a un cliente?'],
+    ['Estado WebGL',s.final?.guard?`${s.final.guard.state} · DPR interno ${s.final.guard.pixelRatio} · sombras ${s.final.guard.shadows?'sí':'no'}${s.final.guard.degraded?' · degradado':''}`:'—','medido','—'],
+    ['Fluidez girando',s.orbit?`${s.orbit.fps} fps (mediana ${s.orbit.medianMs} ms, p90 ${s.orbit.p90Ms} ms)`:'—','medido','¿Se ve fluido? ¿Tirones? Tu valoración manda sobre el número.'],
+    ['Fluidez reproduciendo',s.play?`${s.play.fps} fps (mediana ${s.play.medianMs} ms, p90 ${s.play.p90Ms} ms)`:'—','medido','¿Avanza la obra sin saltos visibles?'],
+    ['DPR adaptativo',s.final?.guard?.history?.length?s.final.guard.history.map(h=>`${h.from}→${h.to} (${h.reason})`).join(', '):'sin cambios','medido','Si bajó, ¿la imagen sigue siendo aceptable?'],
+    ['Pérdida de contexto',s.contextLoss?(s.contextLoss.available?`aviso: ${s.contextLoss.messageWhileLost||'ninguno'} · después: ${s.contextLoss.stateAfter} en ${s.contextLoss.restoreMs} ms`:'no simulable aquí'):'—',s.contextLoss?.available?'medido':na,'¿Se vio el aviso y volvió la casa?'],
+    ['Memoria GPU (5 ciclos)',s.memory?.before?`en GPU/escena ${s.memory.before.gpuGeometries}/${s.memory.before.sceneGeometries} → ${s.memory.after.gpuGeometries}/${s.memory.after.sceneGeometries} · texturas ${s.memory.before.textures}→${s.memory.after.textures} · ${s.memory.gpuWithinScene?'sin geometrías huérfanas':'POSIBLE FUGA'}`:'—','medido','Siempre en el mismo momento del plan. Huérfanas = posible fuga.'],
+    ['Memoria JS',s.memory?.after?.jsHeapMB!=null?`${s.memory.before.jsHeapMB} → ${s.memory.after.jsHeapMB} MB`:na,s.memory?.after?.jsHeapMB!=null?'declarado (impreciso)':na,'Orientativa: el motor la redondea y no recoge memoria a demanda.'],
+    ['Resultado general',r.overall==='sin-incidencias-automaticas'?'Sin incidencias automáticas':r.overall==='error'?'Error':`Revisar: ${r.warnings.join(' ')}`,'medido','No es un aprobado: completa la valoración del protocolo.'],
   ];
-  if(r.error)rows.push(['Error',r.error,'Anótalo con una captura.']);
+  if(r.error)rows.push(['Error',r.error,'medido','Anótalo con una captura.']);
   const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-  $('out').innerHTML=rows.map(([a,b,c])=>`<tr><th scope="row">${esc(a)}</th><td class="v">${esc(b)}</td><td>${esc(c)}</td></tr>`).join('');
+  $('out').innerHTML=rows.map(([a,b,src,c])=>`<tr><th scope="row">${esc(a)}</th><td class="v">${esc(b)}</td><td>${esc(src)}</td><td>${esc(c)}</td></tr>`).join('');
   $('json').hidden=false;$('json').textContent=JSON.stringify(r,null,1);
 }
 $('run').onclick=run;

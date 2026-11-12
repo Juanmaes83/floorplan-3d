@@ -224,3 +224,33 @@ test('pérdidas múltiples y salir con la recuperación pendiente: una sola degr
     assert.equal(g.ratio,1);assert.equal(g.shadows,false);assert.ok(await K.drawn(page)>0);assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
+
+test('pestaña suspendida y pérdida de foco: el hueco largo entre cuadros no baja el DPR y la vista vuelve',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.openEvolution(env,{deviceScaleFactor:2});try{
+    const cdp=await context.newCDPSession(page);await page.waitForTimeout(1500);
+    await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
+    await cdp.send('Page.setWebLifecycleState',{state:'frozen'});await new Promise(r=>setTimeout(r,3000));await cdp.send('Page.setWebLifecycleState',{state:'active'});
+    await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await page.waitForTimeout(1500);await K.frames(page,6);
+    const g=await G(page);assert.equal(g.state,'ok');assert.equal(g.ratio,2,'sin bajada falsa por el hueco');assert.deepEqual(g.governor.history,[]);
+    assert.ok(await K.drawn(page)>0);assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});
+
+test('giros rápidos de orientación: cinco seguidos y el lienzo acaba con el tamaño de la vista, sin errores',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.openEvolution(env,{viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true});try{
+    for(let i=0;i<5;i++){await page.setViewportSize(i%2?{width:390,height:844}:{width:844,height:390});await page.waitForTimeout(60);}
+    await page.waitForTimeout(600);await K.frames(page,6);const c=await canvasInfo(page);
+    assert.ok(c.cw>0&&Math.abs(c.w-Math.floor(c.cw*c.ratio))<=1&&Math.abs(c.h-Math.floor(c.ch*c.ratio))<=1,JSON.stringify(c));
+    assert.ok(await page.evaluate(()=>document.scrollingElement.scrollWidth<=innerWidth+1));assert.ok(await K.drawn(page)>0);assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});
+
+test('degradado: la selección de un trabajo sigue marcando sus elementos y la escena conserva su aspecto básico',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.openEvolution(env,{deviceScaleFactor:2});try{
+    for(let i=0;i<2;i++){await K.loseContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='lost');await K.restoreContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='ok');}
+    assert.equal((await G(page)).degraded,true);
+    const r=await page.evaluate(()=>{const f=window.__ft3dFidelity,t=f.ctx.schedule.tasks.find(x=>x.elements?.length)||f.ctx.schedule.tasks[0];return f.selectTask(t.id);});
+    await K.frames(page,6);assert.ok(r.highlighted>0,'contorno de selección dibujado');assert.ok(await K.drawn(page)>0);
+    assert.equal(await page.evaluate(()=>window.__ft3dFidelity.visiblePieces>0),true);assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});

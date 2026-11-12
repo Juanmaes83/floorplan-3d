@@ -15,7 +15,12 @@ test(`banco GOV-07 completo ${vp.width}×${vp.height}`,{timeout:240000},async()=
     assert.ok(r.steps.load.ms>0);assert.ok(r.steps.orbit.frames>10&&r.steps.play.frames>10);
     assert.equal(r.steps.contextLoss.available,true);assert.equal(r.steps.contextLoss.messageWhileLost,'lost');assert.equal(r.steps.contextLoss.stateAfter,'ok');assert.ok(r.steps.contextLoss.drawnAfter>0);
     assert.equal(r.steps.memory.after.textures,r.steps.memory.before.textures);
-    assert.equal(await page.locator('#out tr').count(),9);
+    assert.equal(r.steps.memory.gpuWithinScene,true,JSON.stringify(r.steps.memory));assert.ok(r.steps.memory.after.sceneGeometries>0);
+    assert.ok(['sin-incidencias-automaticas','revisar'].includes(r.overall));assert.ok(Array.isArray(r.warnings));
+    // La huella del JSON se puede recomprobar fuera del dispositivo.
+    const {integrity,...rest}=r;assert.equal(integrity.hex,require('node:crypto').createHash('sha256').update(JSON.stringify(rest)).digest('hex'));
+    assert.equal(await page.locator('#out tr').count(),13);
+    assert.match(await page.locator('#out tr').last().innerText(),/Resultado general/);
     assert.ok(await page.evaluate(()=>document.scrollingElement.scrollWidth<=innerWidth+1),'sin scroll horizontal');
     assert.deepEqual(w.errors,[]);assert.deepEqual(w.external,[]);
     if(process.env.GOV07_BENCH_OUT)require('node:fs').writeFileSync(`${process.env.GOV07_BENCH_OUT}/bench-${vp.width}x${vp.height}.json`,JSON.stringify(r,null,1));
