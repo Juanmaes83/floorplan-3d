@@ -25,6 +25,11 @@ export function createProjectScene(canvas){
   Object.assign(sun.shadow.camera,{left:-25,right:25,top:25,bottom:-25,near:1,far:80});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;scene.add(sun);
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(300,300),mat('#e2e0da',{roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.002;ground.receiveShadow=true;scene.add(ground);
   const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.49;
+  /* OBR-01 · EX-11-k.6. prefers-reduced-motion: reduce stops the motion nobody asked for — the AUTO orbit (the view stays
+     on its fixed ISO framing) and the camera inertia after a drag. The user's own actions (drag, buttons, play) still
+     work. Followed live: changing the system preference during the session applies at once. */
+  const rmQuery=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;
+  let reducedMotion=!!rmQuery?.matches;
   const root=new THREE.Group();scene.add(root);
   // Outside root (never part of inspect() or of the model): the initial footprint and the selection outlines.
   const foot=new THREE.Group();foot.visible=false;scene.add(foot);
@@ -33,6 +38,11 @@ export function createProjectScene(canvas){
   const footLine=new THREE.LineBasicMaterial({color:0x2b3034});
   const markLine=new THREE.LineBasicMaterial({color:0x1f5a66,depthTest:false,transparent:true,opacity:.95});
   let objects=new Map(),roofVisible=true,frame={origin:{x:0,y:0}},auto=false,userMoved=false;
+  const applyMotion=()=>{controls.enableDamping=!reducedMotion;controls.autoRotate=auto&&!reducedMotion;};applyMotion();
+  // Callback con identidad estable: dispose() lo retira, así una escena destruida no conserva controles antiguos.
+  let disposed=false;
+  const onMotionPreference=e=>{if(disposed)return;reducedMotion=e.matches;applyMotion();};
+  rmQuery?.addEventListener?.('change',onMotionPreference);
   const glass=new THREE.MeshPhysicalMaterial({color:0xcfe6ef,roughness:.05,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide});
   const frameMat=mat('#5d6166',{roughness:.5,metalness:.4});
   const capMat=mat('#34312d',{roughness:.9});
@@ -205,7 +215,7 @@ export function createProjectScene(canvas){
   // While a video is encoded frame by frame the recorder renders explicitly (renderNow): the live loop is suspended.
   let raf=0,suspended=false;const tick=()=>{raf=requestAnimationFrame(tick);if(suspended)return;controls.update();renderer.render(scene,camera);};resize();tick();window.addEventListener('resize',resize);
   // The viewer's box follows the layout (window, mode, sections): re-size the renderer and tell the app (re-framing).
-  let onResize=null,roT=0;if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{if(fixedSize)return;resize();clearTimeout(roT);roT=setTimeout(()=>onResize?.(),120);}).observe(canvas);
+  let onResize=null,roT=0;const resizeObserver=typeof ResizeObserver!=='undefined'?new ResizeObserver(()=>{if(fixedSize||disposed)return;resize();clearTimeout(roT);roT=setTimeout(()=>onResize?.(),120);}):null;resizeObserver?.observe(canvas);
   // Read-only structural inspection: world-space bounding box of every rendered element (for fidelity checks).
   function inspect(){const out={};for(const [key,o] of objects){if(!o.g.visible||o.ghost.visible)continue;const b=new THREE.Box3();
     o.parts.meshes.forEach(m=>{if(m.visible)b.expandByObject(m);});if(b.isEmpty())continue;
@@ -221,25 +231,48 @@ export function createProjectScene(canvas){
     return marks.children.length;
   }
   // Element under a screen point (client coordinates), or null. Read-only: no association is created.
+  /* OBR-01 · EX-05.3. Only SOLID meshes decide what is under the pointer. Outlines (the grey "sin tarea" ghosts) are
+     LineSegments, and Three tests lines with a 1 m world threshold: a ghost outline up to 1 m away from the ray used to
+     win the click over the built wall behind it (T02 load-bearing walls of the example were never reachable with the
+     mouse). Now: 1) the nearest visible solid mesh wins; 2) only when no built element is under the pointer, an element
+     without a task is picked by its OWN (hidden) volume, nearest first. Lines never occlude and never catch a click. */
   const ray=new THREE.Raycaster();
-  function pick(clientX,clientY){
-    const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return null;
+  const keyOf=o=>{for(;o&&o!==root;o=o.parent)if(o.name&&objects.has(o.name)&&!o.userData.ghostOnly)return o.name;return null;};
+  const shown=o=>{for(;o;o=o.parent)if(!o.visible)return false;return true;};
+  // Read-only: what lies under a screen point, nearest first, each element once: kind 'solid' (visible mesh) or 'ghost'
+  // (an element without a task, by its own hidden volume). pick() = first solid, else first ghost.
+  function hitsAt(clientX,clientY){
+    const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return [];
     ray.setFromCamera(new THREE.Vector2((clientX-r.left)/r.width*2-1,-(clientY-r.top)/r.height*2+1),camera);
-    const hits=ray.intersectObjects(root.children,true).filter(h=>{for(let o=h.object;o;o=o.parent)if(!o.visible)return false;return true;});
-    for(const h of hits)for(let o=h.object;o&&o!==root;o=o.parent)if(o.name&&objects.has(o.name)&&!o.userData.ghostOnly)return o.name;
-    return null;
+    const out=[],seen=new Set();
+    for(const h of ray.intersectObjects(root.children,true)){if(!h.object.isMesh||!shown(h.object))continue;const k=keyOf(h.object);
+      if(k&&!seen.has(k)){seen.add(k);out.push({key:k,kind:'solid',distance:h.distance});}}
+    for(const [k,o] of objects){if(!o.ghost.visible||!shown(o.g)||seen.has(k))continue;
+      const h=ray.intersectObjects(o.parts.meshes,true).find(x=>x.object.isMesh);if(h){seen.add(k);out.push({key:k,kind:'ghost',distance:h.distance});}}
+    return out.sort((a,b)=>(a.kind===b.kind?0:a.kind==='solid'?-1:1)||a.distance-b.distance);
   }
+  function pick(clientX,clientY){return hitsAt(clientX,clientY)[0]?.key??null;}
   // Read-only: normalised screen box (NDC, -1..1) of what stands now among the keys with this prefix (framing checks).
-  function screenBounds(prefix='project/'){
+  // {exact:true}: only that element ("project/wal_ref-w1" is a prefix of "project/wal_ref-w10…w19").
+  function screenBounds(prefix='project/',{exact=false}={}){
     const all=new THREE.Box3(),tmp=new THREE.Box3();let any=false;
-    for(const [k,o] of objects){if(!k.startsWith(prefix)||!o.g.visible||o.ghost.visible)continue;tmp.setFromObject(o.g);if(tmp.isEmpty())continue;all.union(tmp);any=true;}
+    for(const [k,o] of objects){if(!(exact?k===prefix:k.startsWith(prefix))||!o.g.visible||o.ghost.visible)continue;tmp.setFromObject(o.g);if(tmp.isEmpty())continue;all.union(tmp);any=true;}
     if(!any)return null;camera.updateMatrixWorld();const r={x0:Infinity,x1:-Infinity,y0:Infinity,y1:-Infinity};
     for(const x of [all.min.x,all.max.x])for(const y of [all.min.y,all.max.y])for(const z of [all.min.z,all.max.z]){const q=new THREE.Vector3(x,y,z).project(camera);r.x0=Math.min(r.x0,q.x);r.x1=Math.max(r.x1,q.x);r.y0=Math.min(r.y0,q.y);r.y1=Math.max(r.y1,q.y);}
     return r;
   }
+  /* Ciclo de vida: retira TODO lo que la escena registró fuera de sí misma (preferencia de movimiento, resize de la
+     ventana, observador del lienzo, controles de órbita y los listeners de contexto que WebGLRenderer pone en el lienzo)
+     y para el bucle. Idempotente. renderer.dispose() libera recursos sin perder el contexto: el mismo lienzo puede
+     alojar una escena nueva. */
+  function dispose(){
+    if(disposed)return;disposed=true;cancelAnimationFrame(raf);clearTimeout(roT);
+    rmQuery?.removeEventListener?.('change',onMotionPreference);window.removeEventListener('resize',resize);
+    resizeObserver?.disconnect();controls.dispose();renderer.dispose();
+  }
   return {get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
-    load,setState,highlight,pick,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
-    setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
+    load,setState,highlight,pick,hitsAt,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
+    setAuto(v){auto=!!v;controls.autoRotateSpeed=.5;applyMotion();},get reducedMotion(){return reducedMotion;},get autoRotating(){return controls.autoRotate;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
-    get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};
+    get objectCount(){return objects.size;},renderer,dispose,get disposed(){return disposed;}};
 }

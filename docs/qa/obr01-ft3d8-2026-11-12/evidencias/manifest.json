@@ -1,0 +1,32 @@
+{
+ "generado": "2026-11-12T17:58:19.526Z",
+ "navegador": "Chromium (Playwright, SwiftShader)",
+ "datos": "obra sintética del examen FT3D-8; fixture territorial sintética",
+ "evidencias": [
+  {
+   "archivo": "ex05-3-muro-carga-T02-escritorio-1440x900.png",
+   "sha256": "e437c18f9f8eb30351beb8a3fbf98c3192c2020bfa2019da9c62565408f79df6",
+   "bytes": 194990,
+   "escenario": "EX-05.3",
+   "vista": "2027-05-13/top/false",
+   "panel": "project/wal_ref-w0",
+   "puntero": "ratón"
+  },
+  {
+   "archivo": "ex05-3-muro-carga-T02-movil-390x844.png",
+   "sha256": "672a3a9cec04fe0e73000ad02772bd593a5528155e4cf50c44795489b41c9bfa",
+   "bytes": 154911,
+   "escenario": "EX-05.3",
+   "vista": "2027-05-13/top/false",
+   "panel": "project/wal_ref-w0",
+   "puntero": "toque"
+  },
+  {
+   "archivo": "ex09-10-pnoa-mdt05-solo-metadatos-escritorio-1440x900.png",
+   "sha256": "b7fe3720041732bfc5f92e7c119de61558b121fabe16de662763d430882dcfe5",
+   "bytes": 200632,
+   "escenario": "EX-09.10",
+   "peticionesExternas": 0
+  }
+ ]
+}
