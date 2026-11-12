@@ -64,12 +64,72 @@ La CI repite el gate OBR-01 y `ft3d-8-e2-integration` (que se dispara con `evolu
 - `ex05-3-muro-carga-T02-movil-390x844.png`: el mismo con un **toque** real.
 - `ex09-10-pnoa-mdt05-solo-metadatos-escritorio-1440x900.png`: el expediente con «solo metadatos»; 0 peticiones externas.
 
+## Cierre de la auditoría de integración (ChatGPT, 12-11-2026)
+
+**Defecto señalado:** el listener de `prefers-reduced-motion` era anónimo y `dispose()` solo cancelaba el bucle, así que una escena destruida conservaba controles antiguos.
+
+**Corrección** (`evolucion/project-scene.js`):
+- el callback tiene ahora identidad estable;
+- `dispose()` es idempotente y retira la preferencia de movimiento, el `resize` de la ventana, el `ResizeObserver` del lienzo, los controles de órbita y los listeners de contexto de `WebGLRenderer` (`renderer.dispose()`, sin perder el contexto: el mismo lienzo aloja una escena nueva que dibuja).
+
+No se reescribe el visor ni cambia ninguna otra API.
+
+**Prueba nueva** (`tests/obr01-scene-lifecycle.browser.test.cjs`, en el gate OBR-01):
+- **Recorrido:** crear → alternar la preferencia → `dispose` → recrear sobre el mismo lienzo → cambiar la preferencia.
+- **Qué comprueba:**
+  - los registros activos quedan idénticos a la base;
+  - hay un único listener efectivo;
+  - la escena destruida nunca se actualiza;
+  - 5 ciclos seguidos no acumulan nada.
+- **Contra `9692a59` falla:** tras `dispose` quedaban 2 listeners de preferencia y 7 en el lienzo.
+
+**Regresión en el nuevo HEAD (local):**
+
+| Suite | Resultado |
+|---|---|
+| OBR-01 (5 archivos) | 14/14 |
+| `ft3d-8-fidelity` | 6/6 |
+| `ft3d-8-ux4d` | 20/20 |
+| `ft3d-8-delivery` | 6/6 |
+| `ft3d-8-dossier` | 6/6 |
+| `ft3d-8-fit` | 9/9 |
+| `ft3d-8-lab` | 2/2 |
+| INT-R1 | 1/1 |
+| Examen FT3D-8 | 20/20 |
+| `hallazgos-v4` | 2/2 |
+| `novato` | 2/2 |
+
+No se ha eliminado ni suavizado ninguna aserción.
+
+## Preview de revisión (datos sintéticos realmente accesibles)
+
+**Por qué hace falta:** la ruta `?lab=1&case=A` **no funciona en Vercel**, porque `.vercelignore` excluye `labs/`. Comprobado: `labs/ft3d-8/fidelity-fixtures.js` da 404 en la Preview.
+
+**Solución, sin tocar `.vercelignore` ni Production:**
+- una rama de revisión aparte, **`review/obr01-ft3d8-20261112`**, que desciende de esta PR y **no forma parte de ella**;
+- solo añade `review-obr01/` (página y datos generados) y su generador `tests/obr01/build-review-fixture.cjs`;
+- la página carga la obra sintética del examen en la biblioteca local del navegador y abre la Evolución real con `?source=library`;
+- si ya hay datos en ese dominio de Preview, pide confirmación y guarda una copia, que se puede restaurar.
+
+**URL:** `https://floorplan-3d-i49uv37jc-juanma-espinosas-projects.vercel.app/review-obr01/index.html` (Vercel, READY, `8f07968`; protegida por Vercel: abrir con sesión o con enlace de acceso).
+
+**Recorrido real sobre esa Preview** (`tests/obr01/preview-walkthrough.cjs`, Chromium en la nube; capturas en `evidencias/preview/` con `manifest.json`):
+
+| Paso | Escritorio 1440×900 | Móvil 390×844 (toque) |
+|---|---|---|
+| EX-05.3: clic real en el muro de carga de T02 → ficha «Muro · 02 Estructura» | ✓ `project/wal_ref-w0` | ✓ `project/wal_ref-w0` |
+| EX-11-k.6: AUTO con «reducir movimiento» quieto; sin la preferencia, gira | ✓ | ✓ |
+| EX-09.10: edificio con PNOA/MDT05 «solo metadatos» | ✓ | — |
+| Errores de página / peticiones a hosts externos | 0 / 0 | 0 / 0 |
+
+Navegador en la nube sin GPU: **no** es una prueba en un dispositivo físico.
+
 ## Recorrido humano sencillo (5 min)
 
-1. Abre la Preview de esta PR, carga la vivienda de ejemplo y crea un plan con una tarea «Estructura» que contenga los muros de carga cortos de la fachada trasera.
-2. En la Evolución, vista **PLANTA**, botón **INTERIOR**: haz clic sobre uno de esos muros. Debe abrirse su panel con la tarea «Estructura».
+1. Abre la Preview de revisión `…/review-obr01/index.html` y pulsa **«Cargar y abrir la vivienda»**.
+2. Pulsa **PLANTA** e **INTERIOR** y haz clic sobre un muro de carga corto de la fachada. Debe abrirse «Muro · 02 Estructura».
 3. Activa «Reducir movimiento» en el sistema (macOS: Accesibilidad › Pantalla; Windows: Efectos de animación; iOS/Android: Reducir movimiento) y pulsa **AUTO**: la casa debe quedarse quieta. Desactívalo: debe volver a girar.
-4. Arrastra la vista con el movimiento reducido activado: al soltar debe pararse en seco.
+4. Vuelve a la página de revisión y pulsa **«Cargar y abrir el edificio»**. En **Proyecto** se lee «Ortofoto/terreno: solo metadatos…».
 
 ## Pendiente y decisiones para ChatGPT
 

@@ -29,11 +29,14 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     log.push({paso:'EX-05.3 clic real en muro de carga',viewport:label,esperado:key,panel:picked?.key??null,ok:picked?.key===key});
     await shot(page,`1-muro-carga-T02-${label}`,{paso:'EX-05.3',panel:picked?.key??null});
     // 2 · movimiento reducido: AUTO quieto con la preferencia; gira sin ella.
+    // Cierra la ficha del elemento (como haría una persona) y lleva los botones de cámara a la vista.
+    await page.evaluate(()=>{document.querySelector('#pickInfo [data-pick-close]')?.click();document.querySelector('[data-view="auto"]')?.scrollIntoView({block:'center'});});await page.waitForTimeout(300);
+    const auto=()=>page.evaluate(()=>document.querySelector('[data-view="auto"]').click());
     const pose=()=>page.evaluate(()=>JSON.stringify(window.__ft3dFidelity.pose.position.map(v=>v.toFixed(4))));
     await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>window.__ft3dFidelity.scene.reducedMotion===true);
-    await page.locator('[data-view="auto"]').click();await page.waitForTimeout(400);const a0=await pose();await page.waitForTimeout(1500);const a1=await pose();
+    await auto();await page.waitForTimeout(400);const a0=await pose();await page.waitForTimeout(1500);const a1=await pose();
     await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForFunction(()=>window.__ft3dFidelity.scene.reducedMotion===false);
-    await page.locator('[data-view="auto"]').click();await page.waitForTimeout(400);const b0=await pose();await page.waitForTimeout(1500);const b1=await pose();
+    await auto();await page.waitForTimeout(400);const b0=await pose();await page.waitForTimeout(1500);const b1=await pose();
     log.push({paso:'EX-11-k.6 AUTO con «reducir movimiento»',viewport:label,quietoConPreferencia:a0===a1,giraSinPreferencia:b0!==b1,ok:a0===a1&&b0!==b1});
     // 3 · edificio con PNOA/MDT05 solo como metadatos (solo en escritorio).
     if(label.startsWith('escritorio')){

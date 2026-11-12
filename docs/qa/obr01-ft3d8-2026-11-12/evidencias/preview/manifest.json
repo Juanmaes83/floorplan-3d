@@ -1,0 +1,95 @@
+{
+ "generado": "2026-11-12T21:02:47.066Z",
+ "preview": "https://floorplan-3d-i49uv37jc-juanma-espinosas-projects.vercel.app",
+ "rama": "review/obr01-ft3d8-20261112",
+ "datos": "sintéticos (review-obr01/obra.js)",
+ "navegador": "Chromium (Playwright, SwiftShader) en la nube, no un dispositivo físico",
+ "pasos": [
+  {
+   "paso": "EX-05.3 clic real en muro de carga",
+   "viewport": "escritorio-1440x900",
+   "esperado": "project/wal_ref-w0",
+   "panel": "project/wal_ref-w0",
+   "ok": true
+  },
+  {
+   "paso": "EX-11-k.6 AUTO con «reducir movimiento»",
+   "viewport": "escritorio-1440x900",
+   "quietoConPreferencia": true,
+   "giraSinPreferencia": true,
+   "ok": true
+  },
+  {
+   "paso": "EX-09.10 PNOA/MDT05 solo metadatos",
+   "viewport": "escritorio-1440x900",
+   "ok": true
+  },
+  {
+   "paso": "errores de la página",
+   "viewport": "escritorio-1440x900",
+   "errores": [],
+   "ok": true
+  },
+  {
+   "paso": "hosts externos",
+   "viewport": "escritorio-1440x900",
+   "hosts": [],
+   "nota": "vercel.live es la barra de comentarios que Vercel inyecta en las Preview; la app no pide nada externo"
+  },
+  {
+   "paso": "EX-05.3 clic real en muro de carga",
+   "viewport": "movil-390x844",
+   "esperado": "project/wal_ref-w0",
+   "panel": "project/wal_ref-w0",
+   "ok": true
+  },
+  {
+   "paso": "EX-11-k.6 AUTO con «reducir movimiento»",
+   "viewport": "movil-390x844",
+   "quietoConPreferencia": true,
+   "giraSinPreferencia": true,
+   "ok": true
+  },
+  {
+   "paso": "errores de la página",
+   "viewport": "movil-390x844",
+   "errores": [],
+   "ok": true
+  },
+  {
+   "paso": "hosts externos",
+   "viewport": "movil-390x844",
+   "hosts": [],
+   "nota": "vercel.live es la barra de comentarios que Vercel inyecta en las Preview; la app no pide nada externo"
+  }
+ ],
+ "capturas": [
+  {
+   "archivo": "0-pagina-revision-escritorio-1440x900.png",
+   "sha256": "bd86204777c23b8ee5e352b9036b043b94f67a6ddd7ba65a5f34cd0608847d5e",
+   "paso": "página de revisión con datos sintéticos"
+  },
+  {
+   "archivo": "1-muro-carga-T02-escritorio-1440x900.png",
+   "sha256": "70e174f36e40a511ae8d8920bbf49ca170f3c45b2dae71223f010c2dd3a41032",
+   "paso": "EX-05.3",
+   "panel": "project/wal_ref-w0"
+  },
+  {
+   "archivo": "2-pnoa-mdt05-solo-metadatos-escritorio-1440x900.png",
+   "sha256": "186b075004550c298f34a1e5e235ad327c7e7d2140cb54eeb38a54af27ec97f7",
+   "paso": "EX-09.10"
+  },
+  {
+   "archivo": "0-pagina-revision-movil-390x844.png",
+   "sha256": "fd801f3c498d7d331261636f106d06cc87d423e5c33c1cd340b94449266d3de9",
+   "paso": "página de revisión con datos sintéticos"
+  },
+  {
+   "archivo": "1-muro-carga-T02-movil-390x844.png",
+   "sha256": "7f253b30e52c4ff9a4b7992c92a9ec643bf4aa84698abef0923ee2c050166c0b",
+   "paso": "EX-05.3",
+   "panel": "project/wal_ref-w0"
+  }
+ ]
+}
