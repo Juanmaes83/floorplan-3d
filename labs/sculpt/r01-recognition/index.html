@@ -24,6 +24,16 @@
  <p><span class="badge">LABORATORIO · NO VALIDADO</span> Planos sintéticos generados por código. Coordenadas en píxeles; nada se escribe en un proyecto. Izquierda: evidencia del donante (RecognitionEvidenceV1). Derecha: bandas de <code>rasterWallBands</code> con los parámetros de <code>detectPlan()</code>.</p>
  <div class="legend"><span><i style="background:var(--donor)"></i>muro donante</span><span><i style="background:#9aa3af"></i>muro aislado (no toca otro)</span><span><i style="background:var(--door)"></i>puerta (heurística)</span><span><i style="background:var(--win)"></i>ventana (heurística)</span><span><i style="background:var(--room)"></i>estancia</span><span><i style="background:var(--rubik)"></i>banda RUBIK</span></div>
 </header>
+<section id="cancelable" style="margin:16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px">
+ <h2 style="margin:0 0 8px;font-size:15px">Análisis cancelable en segundo plano (Web Worker)</h2>
+ <p style="margin:0 0 8px;color:var(--muted)">Plano sintético ampliado ×3 (1920×1440 px). El cálculo corre fuera de la página: puedes cancelarlo y la página sigue respondiendo. Mismo algoritmo y misma evidencia que en primer plano.</p>
+ <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+  <button id="runBtn" type="button" style="min-height:44px;padding:8px 14px">Analizar en segundo plano</button>
+  <button id="cancelBtn" type="button" style="min-height:44px;padding:8px 14px" disabled>Cancelar</button>
+  <span id="runState" role="status" style="font-weight:600">Listo.</span>
+  <span id="beat" style="color:var(--muted)"></span>
+ </div>
+</section>
 <main id="out"></main>
 <!-- RUBIK authorities in the app order (index.html): project-core and its dependencies, tracing-core, plan-intake. -->
 <script src="../../../js/project-schema.js"></script>
@@ -52,6 +62,7 @@
 <script src="recognition-evidence-core.js"></script>
 <script src="recognition-compare-core.js"></script>
 <script src="fixtures/synthetic-plans.js"></script>
+<script src="recognition-runner.js"></script>
 <script>
 (function(){
  'use strict';
@@ -78,6 +89,19 @@
   row('detectada fuera de muros',cmp.donor.walls.offWallLengthPx,cmp.rubik.walls.offWallLengthPx);
   sec.append(h,pair,t);document.getElementById('out').append(sec);
  }
+ // D2 · cancellable background analysis. The heartbeat counts animation frames: it keeps moving while the worker computes.
+ const big=(()=>{const p=F.plan('grey-walls-fills'),k=3,W=p.image.width*k,H=p.image.height*k,d=new Uint8ClampedArray(W*H*4);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const s=((Math.floor(y/k))*p.image.width+Math.floor(x/k))*4,t=(y*W+x)*4;d[t]=p.image.data[s];d[t+1]=p.image.data[s+1];d[t+2]=p.image.data[s+2];d[t+3]=255;}
+  return {width:W,height:H,data:d};})();
+ let job=null,frames=0,raf=0;const $=id=>document.getElementById(id);
+ const beat=()=>{frames++;$('beat').textContent=`página activa · ${frames} fotogramas`;raf=requestAnimationFrame(beat);};
+ const done=(text)=>{$('runState').textContent=text;$('runBtn').disabled=false;$('cancelBtn').disabled=true;cancelAnimationFrame(raf);job=null;};
+ $('runBtn').addEventListener('click',()=>{frames=0;$('runBtn').disabled=true;$('cancelBtn').disabled=false;$('runState').textContent='Analizando…';raf=requestAnimationFrame(beat);const t0=performance.now();
+  job=window.RubikRecognitionRunner.run(big,{},{workerUrl:'recognition-worker.js'});window.R01Job=job;
+  job.promise.then(ev=>done(`Hecho en ${Math.round(performance.now()-t0)} ms: ${ev.walls.length} muros, ${ev.openings.length} huecos, ${ev.rooms.length} estancias (sin revisar).`),
+   e=>done(e.code==='cancelled'?'Cancelado: no hay evidencia parcial.':`No se pudo analizar (${e.code}).`));});
+ $('cancelBtn').addEventListener('click',()=>{if(job)job.cancel();});
+ window.R01Big=big;
  document.body.dataset.ready='1';
 })();
 </script>
