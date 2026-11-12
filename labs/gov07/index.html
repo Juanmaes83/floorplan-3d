@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Banco GOV-07</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f4f3ef;--fg:#1d2124;--muted:#5b6166;--line:#d6d3cc;--card:#fff;--accent:#1f5a66;--warn:#a8621c}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16191b;--fg:#e9e7e2;--muted:#a3a8ac;--line:#33383c;--card:#1f2326;--accent:#6fb3c0;--warn:#e0a35c}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}h1{font-size:1.35rem;margin:.2em 0}p{margin:.4em 0}
+.note{border-left:4px solid var(--warn);background:var(--card);padding:10px 12px;border-radius:4px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+button,select{min-height:44px;padding:0 16px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}button:disabled{opacity:.5}
+iframe{width:100%;height:min(70vh,640px);border:1px solid var(--line);border-radius:6px;background:#e7e6e2}
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:.92rem}td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--muted)}td.v{font-variant-numeric:tabular-nums;word-break:break-word}
+pre{white-space:pre-wrap;word-break:break-all;background:var(--card);border:1px solid var(--line);padding:10px;border-radius:6px;font-size:12px;max-height:280px;overflow:auto}
+#status{min-height:1.5em;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Banco de pruebas GOV-07 · vista 3D en este dispositivo</h1>
+  <p class="note"><strong>Solo datos sintéticos de prueba.</strong> Este banco mide la Evolución real de RUBIK en el dispositivo en el que se abre. No envía nada a ningún servidor; el resultado solo se copia o se descarga si lo pides. <strong>Una medida no es un aprobado</strong>: la valoración la hace la persona que prueba, siguiendo el protocolo de GOV-07.</p>
+  <div class="row">
+    <label>Proyecto de prueba <select id="caseSel"><option value="A">A · vivienda una planta</option><option value="B">B · dos plantas</option><option value="C">C · reforma</option></select></label>
+    <button class="primary" id="run">Ejecutar banco (≈ 40 s)</button>
+    <button id="copy" disabled>Copiar resultado</button>
+    <button id="save" disabled>Descargar JSON</button>
+  </div>
+  <p id="status" role="status" aria-live="polite">Pulsa «Ejecutar banco». Repite en vertical y en horizontal.</p>
+  <iframe id="evo" title="Evolución de obra (proyecto de prueba)"></iframe>
+  <h2>Resultado</h2>
+  <table><thead><tr><th>Medida</th><th>Valor</th><th>Qué debe mirar la persona</th></tr></thead><tbody id="out"><tr><td colspan="3">Sin ejecutar.</td></tr></tbody></table>
+  <pre id="json" hidden></pre>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let result=null;
+const stats=a=>{const s=[...a].sort((x,y)=>x-y),q=p=>s.length?Math.round(s[Math.min(s.length-1,Math.floor(p*s.length))]*10)/10:null;return {frames:s.length,medianMs:q(.5),p90Ms:q(.9),worstMs:s.length?Math.round(s[s.length-1]):null,fps:s.length?Math.round(1000/q(.5)):null};};
+function deviceInfo(){
+  const c=document.createElement('canvas'),gl2=c.getContext('webgl2'),gl=gl2||c.getContext('webgl');let gpu=null,maxTex=null;
+  if(gl){const ext=gl.getExtension('WEBGL_debug_renderer_info');gpu=ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);maxTex=gl.getParameter(gl.MAX_TEXTURE_SIZE);gl.getExtension('WEBGL_lose_context')?.loseContext();}
+  return {userAgent:navigator.userAgent,screen:`${screen.width}×${screen.height}`,viewport:`${innerWidth}×${innerHeight}`,orientation:screen.orientation?.type||(innerWidth>innerHeight?'landscape':'portrait'),
+    devicePixelRatio:devicePixelRatio,cores:navigator.hardwareConcurrency||null,deviceMemoryGB:navigator.deviceMemory||null,webgl2:!!gl2,webgl:!!gl,gpu,maxTextureSize:maxTex,
+    reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches};
+}
+async function openEvo(caseId){
+  const f=$('evo');const t0=performance.now();f.src=`../../evolucion/index.html?lab=1&case=${caseId}`;
+  await new Promise(r=>f.onload=r);const w=f.contentWindow;
+  for(let i=0;i<600&&!(w.__ft3dFidelity?.ctx&&w.document.body.classList.contains('ready'));i++)await sleep(100);
+  if(!w.__ft3dFidelity?.ctx)throw Error('La Evolución no ha terminado de cargar en 60 s');
+  const ms=Math.round(performance.now()-t0);[...w.document.querySelectorAll('button')].find(b=>/Ver evolución/.test(b.textContent))?.click();await sleep(300);return {w,ms};
+}
+const frames=(w,ms)=>new Promise(r=>{const out=[];let last=0;const end=performance.now()+ms;const f=t=>{if(last)out.push(t-last);last=t;if(performance.now()<end)w.requestAnimationFrame(f);else r(out);};w.requestAnimationFrame(f);});
+const drawn=w=>{const c=w.document.getElementById('stage');if(!c?.width)return 0;const t=document.createElement('canvas');t.width=c.width;t.height=c.height;const g=t.getContext('2d');g.drawImage(c,0,0);const d=g.getImageData(0,0,t.width,t.height).data;let n=0;for(let i=0;i<d.length;i+=4*97)if(Math.abs(d[i]-0xe7)+Math.abs(d[i+1]-0xe6)+Math.abs(d[i+2]-0xe2)>30)n++;return n;};
+const mem=w=>{const r=w.__ft3dFidelity.scene.renderer;return r?{...r.info.memory,programs:r.info.programs.length,jsHeapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1e5)/10:null}:null;};
+async function run(){
+  $('run').disabled=true;$('copy').disabled=$('save').disabled=true;const st=t=>$('status').textContent=t;
+  const r={bench:'GOV-07',version:1,startedAt:new Date().toISOString(),page:location.pathname,case:$('caseSel').value,device:deviceInfo(),steps:{}};
+  try{
+    st('1/5 Cargando la Evolución…');const {w,ms}=await openEvo(r.case);r.steps.load={ms};
+    const guard=()=>{const g=w.__ft3dGlGuard;return g?{state:g.state,pixelRatio:g.pixelRatio,shadows:g.shadows,degraded:g.degraded,history:g.governor?.history||[]}:null;};
+    r.steps.initial={guard:guard(),drawnSamples:drawn(w)};
+    st('2/5 Fluidez con la vista girando (8 s)…');w.__ft3dFidelity.scene.setAuto(true);r.steps.orbit={...stats(await frames(w,8000)),guard:guard()};
+    st('3/5 Fluidez reproduciendo la obra a ×4 (8 s)…');w.document.querySelectorAll('.transport button, [data-speed]').forEach(b=>{if(/×4/.test(b.textContent))b.click();});
+    w.__ft3dFidelity.setPos(0);w.__ft3dFidelity.play();r.steps.play={...stats(await frames(w,8000)),guard:guard()};w.__ft3dFidelity.pause();
+    st('4/5 Pérdida y recuperación del contexto WebGL…');
+    const c=w.document.getElementById('stage'),gl=c.getContext('webgl2')||c.getContext('webgl'),ext=gl?.getExtension('WEBGL_lose_context');
+    if(!ext)r.steps.contextLoss={available:false,note:'Este navegador no permite simular la pérdida; usa el paso manual del protocolo.'};
+    else{const t0=performance.now();ext.loseContext();await sleep(800);const lostState=guard()?.state;const msg=w.__ft3dGlGuard?.message?.state||null;ext.restoreContext();
+      for(let i=0;i<100&&w.__ft3dGlGuard?.state!=='ok';i++)await sleep(100);await frames(w,500);
+      r.steps.contextLoss={available:true,stateWhileLost:lostState,messageWhileLost:msg,stateAfter:guard()?.state,restoreMs:Math.round(performance.now()-t0-800),drawnAfter:drawn(w)};}
+    st('5/5 Memoria: 5 ciclos de reabrir el proyecto…');const m0=mem(w);
+    for(let i=0;i<5;i++){await w.__ft3dFidelity.show(w.__ft3dFidelity.ctx.input,w.__ft3dFidelity.ctx.meta);w.__ft3dFidelity.setPos(i*5);await frames(w,300);}
+    r.steps.memory={before:m0,after:mem(w)};r.steps.final={guard:guard(),drawnSamples:drawn(w)};
+    r.finishedAt=new Date().toISOString();st('Terminado. Copia o descarga el resultado y anota tu valoración en el protocolo.');
+  }catch(e){r.error=String(e.message||e);st('Error: '+r.error);}
+  result=r;render(r);$('run').disabled=false;$('copy').disabled=$('save').disabled=false;
+}
+function render(r){
+  const s=r.steps,rows=[
+    ['Dispositivo',`${r.device.viewport} · DPR ${r.device.devicePixelRatio} · ${r.device.orientation}`,'Anota modelo y sistema exactos en el protocolo.'],
+    ['GPU / WebGL',`${r.device.gpu||'—'} · WebGL2 ${r.device.webgl2?'sí':'no'} · textura máx. ${r.device.maxTextureSize||'—'}`,'Si WebGL es «no», la Evolución debe decir que no puede mostrar el 3D y el plan debe funcionar.'],
+    ['Carga',s.load?`${s.load.ms} ms`:'—','¿Se tarda demasiado para enseñarlo a un cliente?'],
+    ['Resolución 3D',s.initial?.guard?`DPR interno ${s.initial.guard.pixelRatio}`:'—','—'],
+    ['Fluidez girando',s.orbit?`${s.orbit.fps} fps (mediana ${s.orbit.medianMs} ms, p90 ${s.orbit.p90Ms} ms)`:'—','¿Se ve fluido? ¿Tirones? Tu valoración manda sobre el número.'],
+    ['Fluidez reproduciendo',s.play?`${s.play.fps} fps (mediana ${s.play.medianMs} ms, p90 ${s.play.p90Ms} ms)`:'—','¿Avanza la obra sin saltos visibles?'],
+    ['DPR adaptativo',s.final?.guard?.history?.length?s.final.guard.history.map(h=>`${h.from}→${h.to} (${h.reason})`).join(', '):'sin cambios','Si bajó, ¿la imagen sigue siendo aceptable?'],
+    ['Pérdida de contexto',s.contextLoss?(s.contextLoss.available?`aviso: ${s.contextLoss.messageWhileLost||'ninguno'} · después: ${s.contextLoss.stateAfter} en ${s.contextLoss.restoreMs} ms`:'no simulable aquí'):'—','¿Se vio el aviso y volvió la casa?'],
+    ['Memoria (5 ciclos)',s.memory?.before?`geometrías ${s.memory.before.geometries}→${s.memory.after.geometries} · texturas ${s.memory.before.textures}→${s.memory.after.textures}${s.memory.after.jsHeapMB!=null?` · JS ${s.memory.before.jsHeapMB}→${s.memory.after.jsHeapMB} MB`:''}`:'—','Crecimientos grandes entre ciclos = posible fuga.'],
+  ];
+  if(r.error)rows.push(['Error',r.error,'Anótalo con una captura.']);
+  const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  $('out').innerHTML=rows.map(([a,b,c])=>`<tr><th scope="row">${esc(a)}</th><td class="v">${esc(b)}</td><td>${esc(c)}</td></tr>`).join('');
+  $('json').hidden=false;$('json').textContent=JSON.stringify(r,null,1);
+}
+$('run').onclick=run;
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify(result,null,1));$('status').textContent='Resultado copiado.';}catch{$('status').textContent='No se ha podido copiar: selecciona el texto de abajo.';}};
+$('save').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(result,null,1)],{type:'application/json'}));a.download=`gov07-${result.device.orientation}-${Date.now()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
+</script>
+</body>
+</html>

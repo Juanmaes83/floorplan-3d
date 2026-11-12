@@ -1,0 +1,55 @@
+# GOV-07 (ola 1): continuidad y calidad de la vista 3D de la Evolución — pérdida/recuperación del contexto WebGL,
+# sin WebGL, degradación controlada, DPR adaptativo, giro de pantalla, uso prolongado y banco para dispositivos.
+# Chromium + SwiftShader (CPU): NO sustituye a las pruebas en iPhone, Android ni GPU reales (protocolo GOV-07).
+# Datos sintéticos; no publica nada ni usa credenciales; cualquier petición fuera del servidor local hace fallar.
+name: GOV-07 - WebGL resilience
+on:
+  pull_request:
+    paths:
+      - 'evolucion/**'
+      - 'js/gl-quality-core.js'
+      - 'labs/gov07/**'
+      - 'labs/ft3d-8/fidelity-fixtures.js'
+      - 'tests/gov07/**'
+      - 'tests/gov07-*.cjs'
+      - '.github/workflows/gov07-webgl-resilience.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'evolucion/**'
+      - 'js/gl-quality-core.js'
+      - 'labs/gov07/**'
+      - 'tests/gov07/**'
+      - 'tests/gov07-*.cjs'
+      - '.github/workflows/gov07-webgl-resilience.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PLAYWRIGHT_VERSION: '1.62.1'
+jobs:
+  gov07:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: |
+          for m in gl-guard fidelity-app project-scene; do node --input-type=module --check < evolucion/$m.js; done
+          node --check js/gl-quality-core.js
+          for f in tests/gov07/*.cjs tests/gov07-*.cjs; do node --check "$f"; done
+      - name: Pure quality core
+        run: node --test tests/gov07-quality-core.test.cjs
+      - name: Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Context loss, no WebGL, degradation, DPR, rotation, prolonged use, device bench
+        run: |
+          GOV07_METRICS="$RUNNER_TEMP/gov07-memory.json" node --test --test-concurrency=1 tests/gov07-evolution-resilience.browser.test.cjs tests/gov07-bench.browser.test.cjs
+          cat "$RUNNER_TEMP/gov07-memory.json"
