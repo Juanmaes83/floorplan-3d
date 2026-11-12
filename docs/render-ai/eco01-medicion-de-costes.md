@@ -1,7 +1,8 @@
 # ECO-01 — Medición del consumo y del coste del Render IA
 
 **Fecha:** 10/11/2026.
-**Base:** `master@75615fd`.
+**Base histórica de investigación:** `master@75615fd`. **Base de integración reconciliada el 12/11/2026:** `master@de028ad082bfe1f40e0c1ae93fcf54825a00e2d6` mediante un merge normal, sin reescribir el historial de #190.
+**Estado actual:** PR #190 Draft, **NO INTEGRADA**; el corte propuesto añade únicamente tres archivos nuevos y el motor no está cargado en `index.html`. El merge no autoriza tarifas, facturación, recopilación de datos ni gasto de proveedores. **CI del HEAD actualizado pendiente de verificación terminal antes de decidir integración.**
 **Alcance:** un modelo de medición puro (`js/render-cost-core.js`) con pruebas, sin interfaz ni cambios en `api/render.js`.
 **Garantías:** no se ha llamado a ningún proveedor, no se han leído credenciales y ninguna tarifa es real. Las de las pruebas son ficticias.
 
