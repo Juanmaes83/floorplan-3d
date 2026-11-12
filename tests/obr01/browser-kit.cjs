@@ -20,10 +20,12 @@ function watch(page,base){const w={errors:[],external:[]};
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))w.errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))w.external.push(u);});return w;}
 /* Abre la Evolución con la obra sintética, en la pestaña «Evolución». */
-async function openEvolution(env,{viewport={width:1440,height:900},reducedMotion='no-preference',fixture={},isMobile=false,hasTouch=false,deviceScaleFactor=1}={}){
+async function openEvolution(env,{viewport={width:1440,height:900},reducedMotion='no-preference',fixture={},isMobile=false,hasTouch=false,deviceScaleFactor=1,init=null}={}){
   const o=await FX.build(fixture);
   const context=await env.browser.newContext({viewport,reducedMotion,isMobile,hasTouch,deviceScaleFactor});const page=await context.newPage();
   page.setDefaultTimeout(60000);const w=watch(page,env.base);
+  // init: script opcional que se instala ANTES que los de la página (p. ej. instrumentar listeners).
+  if(init)await page.addInitScript(init);
   await page.addInitScript(st=>{if(window.top!==window||sessionStorage.getItem('obr01-seeded'))return;localStorage.clear();for(const [k,v] of Object.entries(st))localStorage.setItem(k,v);sessionStorage.setItem('obr01-seeded','1');},o.storage);
   const t0=Date.now();await page.goto(env.base+o.url);
   await page.waitForFunction(()=>window.__ft3dFidelity?.ctx&&document.body.classList.contains('ready'),null,{timeout:180000});

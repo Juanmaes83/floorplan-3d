@@ -39,7 +39,10 @@ export function createProjectScene(canvas){
   const markLine=new THREE.LineBasicMaterial({color:0x1f5a66,depthTest:false,transparent:true,opacity:.95});
   let objects=new Map(),roofVisible=true,frame={origin:{x:0,y:0}},auto=false,userMoved=false;
   const applyMotion=()=>{controls.enableDamping=!reducedMotion;controls.autoRotate=auto&&!reducedMotion;};applyMotion();
-  rmQuery?.addEventListener?.('change',e=>{reducedMotion=e.matches;applyMotion();});
+  // Callback con identidad estable: dispose() lo retira, así una escena destruida no conserva controles antiguos.
+  let disposed=false;
+  const onMotionPreference=e=>{if(disposed)return;reducedMotion=e.matches;applyMotion();};
+  rmQuery?.addEventListener?.('change',onMotionPreference);
   const glass=new THREE.MeshPhysicalMaterial({color:0xcfe6ef,roughness:.05,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide});
   const frameMat=mat('#5d6166',{roughness:.5,metalness:.4});
   const capMat=mat('#34312d',{roughness:.9});
@@ -212,7 +215,7 @@ export function createProjectScene(canvas){
   // While a video is encoded frame by frame the recorder renders explicitly (renderNow): the live loop is suspended.
   let raf=0,suspended=false;const tick=()=>{raf=requestAnimationFrame(tick);if(suspended)return;controls.update();renderer.render(scene,camera);};resize();tick();window.addEventListener('resize',resize);
   // The viewer's box follows the layout (window, mode, sections): re-size the renderer and tell the app (re-framing).
-  let onResize=null,roT=0;if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{if(fixedSize)return;resize();clearTimeout(roT);roT=setTimeout(()=>onResize?.(),120);}).observe(canvas);
+  let onResize=null,roT=0;const resizeObserver=typeof ResizeObserver!=='undefined'?new ResizeObserver(()=>{if(fixedSize||disposed)return;resize();clearTimeout(roT);roT=setTimeout(()=>onResize?.(),120);}):null;resizeObserver?.observe(canvas);
   // Read-only structural inspection: world-space bounding box of every rendered element (for fidelity checks).
   function inspect(){const out={};for(const [key,o] of objects){if(!o.g.visible||o.ghost.visible)continue;const b=new THREE.Box3();
     o.parts.meshes.forEach(m=>{if(m.visible)b.expandByObject(m);});if(b.isEmpty())continue;
@@ -258,9 +261,18 @@ export function createProjectScene(canvas){
     for(const x of [all.min.x,all.max.x])for(const y of [all.min.y,all.max.y])for(const z of [all.min.z,all.max.z]){const q=new THREE.Vector3(x,y,z).project(camera);r.x0=Math.min(r.x0,q.x);r.x1=Math.max(r.x1,q.x);r.y0=Math.min(r.y0,q.y);r.y1=Math.max(r.y1,q.y);}
     return r;
   }
+  /* Ciclo de vida: retira TODO lo que la escena registró fuera de sí misma (preferencia de movimiento, resize de la
+     ventana, observador del lienzo, controles de órbita y los listeners de contexto que WebGLRenderer pone en el lienzo)
+     y para el bucle. Idempotente. renderer.dispose() libera recursos sin perder el contexto: el mismo lienzo puede
+     alojar una escena nueva. */
+  function dispose(){
+    if(disposed)return;disposed=true;cancelAnimationFrame(raf);clearTimeout(roT);
+    rmQuery?.removeEventListener?.('change',onMotionPreference);window.removeEventListener('resize',resize);
+    resizeObserver?.disconnect();controls.dispose();renderer.dispose();
+  }
   return {get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load,setState,highlight,pick,hitsAt,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=!!v;controls.autoRotateSpeed=.5;applyMotion();},get reducedMotion(){return reducedMotion;},get autoRotating(){return controls.autoRotate;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
-    get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};
+    get objectCount(){return objects.size;},renderer,dispose,get disposed(){return disposed;}};
 }
