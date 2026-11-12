@@ -33,3 +33,10 @@ iframe{width:100%;height:70vh;border:1px solid var(--line);border-radius:6px;bac
 .checks{list-style:none;padding:0}.checks li[data-ok=false]{color:var(--err)}.checks li.sum{font-weight:600}
 details{margin-top:12px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 @media (max-width:720px){.grid2,.cols,.side{grid-template-columns:1fr}h1{font-size:1.25rem}iframe{height:60vh}}
+/* Fase 2 · presupuestos comparados: la tabla se desplaza dentro de su caja en pantallas estrechas (sin scroll horizontal de la página). */
+.bc{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}.bc h3{margin:.2em 0 .4em}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}.tablewrap table{min-width:520px}
+.bc[data-status=incoherent] #bcSummary{border-left:4px solid var(--err);padding-left:8px}.bc[data-status=partial] #bcSummary{border-left:4px solid #a8621c;padding-left:8px}
+/* En pantallas estrechas cada partida es una ficha con sus rótulos: ninguna columna (la diferencia) queda fuera de la vista. */
+@media (max-width:720px){.tablewrap table{min-width:0}.bc thead{display:none}.bc tbody tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}
+.bc tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:2px 0;text-align:right}.bc tbody td::before{content:attr(data-label);font-weight:600;color:var(--muted);text-align:left}}

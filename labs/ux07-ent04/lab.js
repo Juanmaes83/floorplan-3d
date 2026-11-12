@@ -2,12 +2,12 @@
    través de un almacenamiento de solo lectura (cualquier escritura falla). No hay red, ni publicación, ni enlaces. */
 (function(){
 'use strict';
-const R=window.FloorPlanRevisionCompare,D=window.FloorPlanBeforeAfterDossier,L=window.FloorPlanLibrary,Core=window.FloorPlanCore,F=window.UX07Fixtures;
+const R=window.FloorPlanRevisionCompare,D=window.FloorPlanBeforeAfterDossier,RB=window.FloorPlanRevisionBudget,L=window.FloorPlanLibrary,Core=window.FloorPlanCore,F=window.UX07Fixtures;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const BUDGETS='rubik-budget-v1';
 const readOnly={getItem:k=>{try{return localStorage.getItem(k);}catch{return null;}},setItem(){throw Error('Laboratorio de solo lectura');},removeItem(){throw Error('Laboratorio de solo lectura');}};
-const state={src:'fixture',before:null,after:null,relation:null,comparison:null,files:{},library:null,dossier:null,budgets:{}};
+const state={src:'fixture',before:null,after:null,relation:null,comparison:null,files:{},library:null,dossier:null,budgets:{},budgetsBefore:{}};
 window.__ux07=state;
 
 // ── Orígenes ────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -76,23 +76,44 @@ function fillBudgets(){
   if(state.src==='fixture'){state.budgets['test-complete']=F.budget('complete');state.budgets['test-partial']=F.budget('partial');state.budgets['test-before']=F.budget('complete',state.before);
     opts.push(['test-complete','Prueba: todas las partidas con precio (ficticio)'],['test-partial','Prueba: partidas sin precio (ficticio)'],['test-before','Prueba: presupuesto hecho sobre «antes» (ficticio)']);}
   $('budgetSel').innerHTML=opts.map(([v,t])=>`<option value="${v}">${esc(t)}</option>`).join('');
+  // Fase 2: presupuesto de la primera revisión. Con el mismo proyecto, el guardado es UNO (RUBIK no guarda sobre qué revisión
+  // se hizo): se ofrece en los dos lados y la comparación dice a cuál corresponde de verdad.
+  const ob=[['none','No comparar presupuestos']];state.budgetsBefore={none:null};
+  try{const saved=JSON.parse(readOnly.getItem(BUDGETS)||'{}')[state.before.id];if(saved){state.budgetsBefore.saved=saved;ob.push(['saved','Presupuesto guardado de este proyecto']);}}catch{}
+  if(state.src==='fixture'){state.budgetsBefore['test-complete']=F.budget('complete',state.before);state.budgetsBefore['test-partial']=F.budget('partial',state.before);state.budgetsBefore['test-after']=F.budget('complete',state.after);
+    ob.push(['test-complete','Prueba: todas las partidas con precio (ficticio)'],['test-partial','Prueba: partidas sin precio (ficticio)'],['test-after','Prueba: presupuesto hecho sobre «después» (ficticio)']);}
+  $('budgetBeforeSel').innerHTML=ob.map(([v,t])=>`<option value="${v}">${esc(t)}</option>`).join('');
+}
+const STATUS_ES={complete:'Comparación completa',partial:'Comparación parcial',incoherent:'Comparación no válida','one-sided':'Comparación no disponible',none:'Sin presupuestos'};
+const CHANGE_ES={same:'igual',quantity:'cantidad',price:'precio','quantity-and-price':'cantidad y precio',added:'nueva',removed:'quitada'};
+const eur=v=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(v),sgn=v=>(v>0?'+':'')+eur(v);
+function renderBudgetComparison(bc){
+  $('bcOut').hidden=!bc;if(!bc)return;const c=state.comparison,T=bc.totals;$('bcOut').dataset.status=bc.status;
+  $('bcSummary').innerHTML=`<strong>${STATUS_ES[bc.status]}.</strong> `+(bc.status==='complete'?`Sin IVA: ${eur(T.net.before)} → ${eur(T.net.after)} (<strong>${sgn(T.net.delta)}</strong>). Con IVA: ${eur(T.gross.before)} → ${eur(T.gross.after)} (${sgn(T.gross.delta)}).`
+    :bc.status==='partial'?`Importes conocidos sin IVA: ${eur(T.knownNet.before)} y ${eur(T.knownNet.after)}. Diferencia de las ${T.comparable.items} partidas comparables: <strong>${sgn(T.comparable.netDelta)}</strong>. ${T.excluded.length} partida(s) fuera. No es la diferencia de coste total.`
+    :bc.status==='incoherent'?esc(T.statement)+' '+T.mismatched.map(x=>{const own=x.side==='before'?c.before.label:c.after.label,m=x.revisionMatch;
+      return esc(`El presupuesto de «${own}» ${m==='neither'?'no corresponde a ninguna de las dos revisiones':`tiene las cantidades de «${m==='before'?c.before.label:m==='after'?c.after.label:'las dos'}»`} (${x.differences} diferencia(s)).`);}).join(' ')
+    :esc(T.statement));
+  const amt=s=>s?s.net===null?'<em>sin precio</em>':eur(s.net):'—';
+  $('bcTable').innerHTML=bc.status==='complete'||bc.status==='partial'?`<table><thead><tr><th>Partida</th><th>Cambio</th><th>${esc(c.before.label)}</th><th>${esc(c.after.label)}</th><th>Dif.</th><th>Depende de</th></tr></thead><tbody>${bc.lines.filter(l=>l.change!=='same').map(l=>`<tr data-item="${esc(l.itemId)}" data-status="${l.status}"><td data-label="Partida">${esc(l.description)}</td><td data-label="Cambio">${CHANGE_ES[l.change]}</td><td data-label="${esc(c.before.label)}">${amt(l.before)}</td><td data-label="${esc(c.after.label)}">${amt(l.after)}</td><td data-label="Diferencia">${l.delta?sgn(l.delta.net):'<em>no comparable</em>'}</td><td data-label="Depende de">${l.explainedBy.length?esc(l.explainedBy.length+' cambio(s)'):'<strong>ninguno</strong>'}</td></tr>`).join('')}</tbody></table>`:'';
+  $('bcNotes').innerHTML=bc.notes.map(n=>`<li>${esc(n)}</li>`).join('');
 }
 const download=(name,text,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
 const slug=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'dossier';
 async function build(){
   $('dosError').textContent='';$('dosStatus').textContent='';$('verifyOut').innerHTML='';
-  try{const c=state.comparison,budget=state.budgets[$('budgetSel').value]||null;
-    const v=D.view(c,{beforeProject:state.before,afterProject:state.after,budget,title:$('dosTitleIn').value.trim()||null});
-    const out=await D.exportDossier(v,{beforeProject:state.before,afterProject:state.after,budget,comparison:c,beforeSvg:R.planSvg(c,'before',state.before),afterSvg:R.planSvg(c,'after',state.after)});
-    state.dossier={view:v,budget,...out};$('preview').srcdoc=out.html;$('dosOut').hidden=false;
+  try{const c=state.comparison,budget=state.budgets[$('budgetSel').value]||null,beforeBudget=state.budgetsBefore[$('budgetBeforeSel').value]||null;
+    const v=D.view(c,{beforeProject:state.before,afterProject:state.after,budget,beforeBudget,title:$('dosTitleIn').value.trim()||null});
+    const out=await D.exportDossier(v,{beforeProject:state.before,afterProject:state.after,budget,beforeBudget,comparison:c,beforeSvg:R.planSvg(c,'before',state.before),afterSvg:R.planSvg(c,'after',state.after)});
+    state.dossier={view:v,budget,beforeBudget,...out};renderBudgetComparison(v.budgetComparison);$('preview').srcdoc=out.html;$('dosOut').hidden=false;
     $('dosStatus').textContent=v.budget?`${v.budget.label}${v.budget.quantities==='differ'?' · las cantidades NO coinciden con «'+c.after.label+'»':' · cantidades comprobadas con «'+c.after.label+'»'}. Huella ${out.manifest.html.sha256.slice(0,12)}…`:`Sin presupuesto: el dossier no muestra importes. Huella ${out.manifest.html.sha256.slice(0,12)}…`;
-  }catch(e){$('dosError').textContent=e.message;$('dosOut').hidden=true;state.dossier=null;}
+  }catch(e){$('dosError').textContent=e.message;$('dosOut').hidden=true;state.dossier=null;renderBudgetComparison(null);}
 }
 const showChecks=(el,r)=>{el.innerHTML=r.checks.map(c=>`<li data-ok="${c.ok}">${c.ok?'✓':'✗'} ${esc(c.name)}</li>`).join('')+`<li class="sum" data-ok="${r.ok}">${r.ok?'Dossier verificado.':'El dossier NO coincide con su manifiesto o con los datos actuales.'}</li>`;};
 $('buildBtn').addEventListener('click',build);
 $('dlHtml').addEventListener('click',()=>download(slug(state.dossier.view.title)+'.html',state.dossier.html,'text/html'));
 $('dlManifest').addEventListener('click',()=>download(slug(state.dossier.view.title)+'.manifest.json',JSON.stringify(state.dossier.manifest,null,1),'application/json'));
-$('verifyBtn').addEventListener('click',async()=>showChecks($('verifyOut'),await D.verify(state.dossier.html,state.dossier.manifest,{beforeProject:state.before,afterProject:state.after,budget:state.dossier.budget})));
+$('verifyBtn').addEventListener('click',async()=>showChecks($('verifyOut'),await D.verify(state.dossier.html,state.dossier.manifest,{beforeProject:state.before,afterProject:state.after,budget:state.dossier.budget,beforeBudget:state.dossier.beforeBudget})));
 $('verifyFilesBtn').addEventListener('click',async()=>{try{const h=$('vHtml').files[0],m=$('vManifest').files[0];if(!h||!m)throw Error('Elige el HTML y su manifiesto.');
   showChecks($('verifyFilesOut'),await D.verify(await h.text(),JSON.parse(await m.text())));}catch(e){$('verifyFilesOut').innerHTML=`<li data-ok="false">✗ ${esc(e.message)}</li>`;}});
 updateDeclare();

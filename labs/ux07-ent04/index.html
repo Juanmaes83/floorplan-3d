@@ -69,11 +69,15 @@
     <p class="muted">Borrador para revisar. No hay botón de enviar ni de publicar: este laboratorio no crea enlaces de entrega.</p>
     <div class="grid2">
       <label>Título <input id="dosTitleIn" maxlength="120"></label>
-      <label>Presupuesto <select id="budgetSel"></select></label>
+      <label>Presupuesto de la segunda revisión <select id="budgetSel"></select></label>
+    </div>
+    <div class="grid2">
+      <label>Presupuesto de la primera revisión (opcional, para compararlos) <select id="budgetBeforeSel"></select></label>
     </div>
     <div class="row"><button class="btn primary" id="buildBtn" type="button">Preparar dossier</button></div>
     <p id="dosStatus" role="status" aria-live="polite"></p>
     <p id="dosError" class="error" role="alert"></p>
+    <section id="bcOut" class="bc" hidden aria-labelledby="bcTitle"><h3 id="bcTitle">Presupuestos comparados</h3><p id="bcSummary"></p><div class="tablewrap" id="bcTable"></div><ul id="bcNotes" class="muted"></ul></section>
     <div id="dosOut" hidden>
       <div class="row">
         <button class="btn" id="dlHtml" type="button">Descargar HTML</button>
@@ -118,6 +122,7 @@
 <script src="../../js/project-variants.js"></script>
 <script src="../../js/project-library.js"></script>
 <script src="../../js/revision-compare-core.js"></script>
+<script src="../../js/revision-budget-core.js"></script>
 <script src="../../js/before-after-dossier-core.js"></script>
 <script src="fixtures.js"></script>
 <script src="lab.js"></script>
