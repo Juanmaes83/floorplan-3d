@@ -221,24 +221,38 @@ export function createProjectScene(canvas){
     return marks.children.length;
   }
   // Element under a screen point (client coordinates), or null. Read-only: no association is created.
+  /* OBR-01 · EX-05.3. Only SOLID meshes decide what is under the pointer. Outlines (the grey "sin tarea" ghosts) are
+     LineSegments, and Three tests lines with a 1 m world threshold: a ghost outline up to 1 m away from the ray used to
+     win the click over the built wall behind it (T02 load-bearing walls of the example were never reachable with the
+     mouse). Now: 1) the nearest visible solid mesh wins; 2) only when no built element is under the pointer, an element
+     without a task is picked by its OWN (hidden) volume, nearest first. Lines never occlude and never catch a click. */
   const ray=new THREE.Raycaster();
-  function pick(clientX,clientY){
-    const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return null;
+  const keyOf=o=>{for(;o&&o!==root;o=o.parent)if(o.name&&objects.has(o.name)&&!o.userData.ghostOnly)return o.name;return null;};
+  const shown=o=>{for(;o;o=o.parent)if(!o.visible)return false;return true;};
+  // Read-only: what lies under a screen point, nearest first, each element once: kind 'solid' (visible mesh) or 'ghost'
+  // (an element without a task, by its own hidden volume). pick() = first solid, else first ghost.
+  function hitsAt(clientX,clientY){
+    const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return [];
     ray.setFromCamera(new THREE.Vector2((clientX-r.left)/r.width*2-1,-(clientY-r.top)/r.height*2+1),camera);
-    const hits=ray.intersectObjects(root.children,true).filter(h=>{for(let o=h.object;o;o=o.parent)if(!o.visible)return false;return true;});
-    for(const h of hits)for(let o=h.object;o&&o!==root;o=o.parent)if(o.name&&objects.has(o.name)&&!o.userData.ghostOnly)return o.name;
-    return null;
+    const out=[],seen=new Set();
+    for(const h of ray.intersectObjects(root.children,true)){if(!h.object.isMesh||!shown(h.object))continue;const k=keyOf(h.object);
+      if(k&&!seen.has(k)){seen.add(k);out.push({key:k,kind:'solid',distance:h.distance});}}
+    for(const [k,o] of objects){if(!o.ghost.visible||!shown(o.g)||seen.has(k))continue;
+      const h=ray.intersectObjects(o.parts.meshes,true).find(x=>x.object.isMesh);if(h){seen.add(k);out.push({key:k,kind:'ghost',distance:h.distance});}}
+    return out.sort((a,b)=>(a.kind===b.kind?0:a.kind==='solid'?-1:1)||a.distance-b.distance);
   }
+  function pick(clientX,clientY){return hitsAt(clientX,clientY)[0]?.key??null;}
   // Read-only: normalised screen box (NDC, -1..1) of what stands now among the keys with this prefix (framing checks).
-  function screenBounds(prefix='project/'){
+  // {exact:true}: only that element ("project/wal_ref-w1" is a prefix of "project/wal_ref-w10…w19").
+  function screenBounds(prefix='project/',{exact=false}={}){
     const all=new THREE.Box3(),tmp=new THREE.Box3();let any=false;
-    for(const [k,o] of objects){if(!k.startsWith(prefix)||!o.g.visible||o.ghost.visible)continue;tmp.setFromObject(o.g);if(tmp.isEmpty())continue;all.union(tmp);any=true;}
+    for(const [k,o] of objects){if(!(exact?k===prefix:k.startsWith(prefix))||!o.g.visible||o.ghost.visible)continue;tmp.setFromObject(o.g);if(tmp.isEmpty())continue;all.union(tmp);any=true;}
     if(!any)return null;camera.updateMatrixWorld();const r={x0:Infinity,x1:-Infinity,y0:Infinity,y1:-Infinity};
     for(const x of [all.min.x,all.max.x])for(const y of [all.min.y,all.max.y])for(const z of [all.min.z,all.max.z]){const q=new THREE.Vector3(x,y,z).project(camera);r.x0=Math.min(r.x0,q.x);r.x1=Math.max(r.x1,q.x);r.y0=Math.min(r.y0,q.y);r.y1=Math.max(r.y1,q.y);}
     return r;
   }
   return {get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
-    load,setState,highlight,pick,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
+    load,setState,highlight,pick,hitsAt,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
     get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};
