@@ -1,0 +1,21 @@
+name: R03 I0 - pure core gate
+on:
+  pull_request:
+    paths:
+      - js/r03-cabinet-core.js
+      - tests/r03-integration-core.test.cjs
+      - docs/licenses/r03-donor-MIT.txt
+      - .github/workflows/r03-i0-core.yml
+permissions:
+  contents: read
+jobs:
+  pure-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pure R03 core contract tests
+        run: node --test tests/r03-integration-core.test.cjs
