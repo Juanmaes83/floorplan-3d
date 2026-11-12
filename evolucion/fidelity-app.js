@@ -172,7 +172,11 @@ async function loadCase(id){const c=await FX.build(id);$('caseSel').value=id;ret
 const parseJson=(text,what)=>{try{return JSON.parse(text);}catch{throw new Error(what+': el archivo no es JSON válido');}};
 const parsers={
   project:text=>{const doc=parseJson(text,'Proyecto');A.validateSource(doc);return doc;},
-  schedule:text=>S.parse(text),
+  // OBR-03: el contrato 0.2.0 no tiene tareas «canceladas»; S.parse descartaría ese campo en silencio y la tarea contaría
+  // como planificada (Gantt, 4D y coste). Se rechaza el plan y se dice por qué.
+  schedule:text=>{const odd=window.FloorPlanPlanPreview?.unsupportedStates(parseJson(text,'Plan'))||[];
+    if(odd.length)throw new Error(`El plan marca ${odd.length} tarea(s) como ${[...new Set(odd.map(o=>`${o.field}=${o.value}`))].join(', ')}: este estado no existe en el plan de obra de RUBIK y se contaría como trabajo planificado. Quita esas tareas del plan antes de cargarlo.`);
+    return S.parse(text);},
   budget:text=>B.parseBudget(text),
   binding:text=>A.validateBinding(parseJson(text,'Vínculo'))};
 async function importText(text,{scheduleText=null,budgetText=null,bindingText=null}={}){
