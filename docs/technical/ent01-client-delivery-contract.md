@@ -1,8 +1,8 @@
 # ENT-01 — Visita 3D del cliente: auditoría de #166, contrato e integración con S1/S2
 
-**Fecha:** 10/11/2026.
-**Base:** `master@75615fd`. Desde `5f1df46` solo se han subido dos PDF de referencia.
-**Estado:** el contrato puro está implementado y probado en esta rama. **Nada está integrado en la aplicación ni publicado**: `js/client-delivery-core.js` no se carga desde `index.html`.
+**Fecha de investigación:** 10/11/2026. **Fecha de reconciliación:** 12/11/2026.
+**Base histórica:** `master@75615fd`. **Base actual de la PR #189:** `master@7aced448f001d288de12a3bd1f150f32c8e022ed`, que incluye los merges documentales #192 y el núcleo R03-I0. La base se actualizó mediante merge normal, sin reescribir los commits de ENT-01.
+**Estado:** el contrato puro está implementado en la rama Draft #189; **no se ha fusionado, cargado en `index.html` ni publicado**. Las visitas del prototipo #166 no están integradas en el editor.
 
 PR comprobadas al empezar:
 
@@ -13,6 +13,27 @@ PR comprobadas al empezar:
 | #188 (S2) | `fdf7fc4` | Apilada sobre S1 | Borrador, 5/5 checks |
 
 #166 no se ha modificado ni cerrado.
+
+## 0. Estado técnico de integración — 12/11/2026
+
+**Candidato aislado ENT-01-I0: contrato puro de entrega, sin modo cliente.** Se conservaron los SHA de blob originales:
+- `js/client-delivery-core.js` — `61eb45ed0d90bc62c21003fc37b49d53bfc09966`. No hay cambios en el código del motor respecto al HEAD original `67243d4`.
+- `tests/client-delivery-core.test.cjs` — `17df3cec53a633d063999af6964bd286bd4d1f94`; nueve pruebas de schema, privacidad, atomicidad, campos prohibidos, referencias válidas y normalización.
+- Este documento se actualiza para el `master` nuevo, y se añade `.github/workflows/ent01-core.yml` como cuarto fichero para ejecutar **explícitamente** `node --test tests/client-delivery-core.test.cjs` con Node 22.13.0. Los workflows genéricos Project-First no incluyen esa suite en `UNIT_TESTS`.
+
+### Qué está validado y qué queda fuera
+
+- El contrato puro **no** contiene red, almacenamiento, interfaz, controles del cliente ni APIs; tampoco toca `api/share.js`, `api/unshare.js`, `api/delivery.js`, `index.html` o configuración Vercel. No se publica ninguna visita.
+- La instantánea proyecta datos de proyectos/edificios existentes y descarta datos del plano fuente, ubicación/parcelas, mediciones de trabajo, notas de procedencia y `extensions`. La privacidad es **minimización**, no confidencialidad: un cliente puede inspeccionar todos los datos que sí reciba. La suite con fixtures sintéticos **no equivale a una auditoría de fuga de datos con proyectos reales**.
+- **Dependencias de publicación: GOV-08 S1 #187 → S2 #188**; además, antes de activar `/api/view` y el modo cliente hay que resolver el [aislamiento de origen #195](https://github.com/Juanmaes83/floorplan-3d/pull/195), pruebas de almacenamiento simulado, aislamiento de permisos, retirada y cachés. #187 mantiene la excepción de CI del `real-3d` sin autorizar saltarse los checks; S1/S2/#195 siguen Draft.
+- **Prueba humana histórica:** se aprobó navegación/mini-mapa del prototipo [#166](https://github.com/Juanmaes83/floorplan-3d/pull/166), **no** la funcionalidad de #189 ni el futuro modo cliente. El prototipo #166 no debe fusionarse: solo sirve de referencia de UX. No extrapolar fps SwiftShader a dispositivo real.
+- **Pruebas humanas futuras:** Preview real y aislada con entrada a Recorrer, minimapa y salto a estancias; teclado y móvil; bloqueo del editor y acceso únicamente autorizado; retirada/cachés; pruebas en hardware real. La URL se proporciona **cuando exista un deployment de la integración**, nunca se inventa la Preview.
+- **Gates antes del merge I0:** diff limitado a los cuatro ficheros, compatibilidad exacta con `master`, CI del HEAD final (workflows generales + `ENT-01 - client delivery core gate`) y autorización humana de merge **específica**, incluido posible despliegue automático de Production; la autorización de preparar esta rama **no es autorización de fusionar**.
+- **Tras cualquier merge de ECO-01 en paralelo:** volver a reconciliar esta rama con el `master` resultante, revisar diff y reejecutar CI. Cada cambio de HEAD exige nueva verificación.
+
+**Lectura histórica:** el inventario original que sigue está basado en la investigación del 10/11/2026 y cita SHA de PR anteriores; para estado actual de integración prevalece esta sección y el HEAD de GitHub.
+
+---
 
 ## 1. Inventario de #166 frente a master y S1/S2
 
