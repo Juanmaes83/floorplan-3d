@@ -109,6 +109,29 @@
   function prune(project) { const ext = extension(project), rooms = new Set((project.rooms || []).map(r => r.id)); if (ext.status !== 'present') return { ok: true, project: clone(project), removed: [] }; const gone = orphans(project); return { ...withExt(project, ext.verticalReferences.filter(r => r.scope !== 'room' || rooms.has(r.roomId)), ext.items.filter(i => rooms.has(i.roomId))), removed: gone }; }
   // The confirmed items as session requests (to show them, or to evaluate a new one against them).
   const asRequests = project => extension(project).items.map(it => ({ id: it.id, type: it.type, position: it.position, rotationDeg: it.rotationDeg, size: it.size, dropMm: it.dropMm, ...(it.curtainLengthMm !== null ? { curtainLengthMm: it.curtainLengthMm } : {}) }));
-  const api = { KEY, VERSION, extension, validateExtension, verticalFor, setVerticalReference, confirmItem, removeItem, orphans, prune, asRequests };
+  /* Reopening never trusts what was stored: every confirmed item is RE-EVALUATED with the references and the other
+   * confirmed items as they are in this file now. Read-only: nothing is moved, fixed or deleted; an item that no longer
+   * holds is reported with the reason so a person decides. */
+  function recheck(project, { labelOf } = {}) {
+    const ext = extension(project);
+    if (ext.status !== 'present') return { status: ext.status, items: [], holding: 0, failing: 0, orphans: [], ...(ext.issues ? { issues: ext.issues } : {}) };
+    // Orphans (room deleted by a reader that ignores the extension) are reported per item below; any other damage
+    // means the stored data cannot be trusted at all.
+    const damage = validateExtension(project).issues.filter(x => x.code !== 'orphan');
+    if (damage.length) return { status: 'invalid', items: [], holding: 0, failing: 0, orphans: [], issues: damage };
+    const reqs = asRequests(project), gone = new Set(orphans(project));
+    const items = ext.items.map((it, i) => {
+      if (gone.has(it.id)) return { id: it.id, type: it.type, roomId: it.roomId, position: { ...it.position }, holds: false, state: 'orphan', explanation: ['La estancia de este elemento ya no existe en el proyecto.'] };
+      const accepted = reqs.filter((_, j) => j !== i), ceiling = verticalFor(project, it.roomId);
+      const ev = S.evaluate({ project, ceiling, request: reqs[i], accepted, ...(labelOf ? { labelOf } : {}) });
+      const movedRoom = ev.ok && ev.proposal.roomId !== it.roomId;
+      const holds = ev.ok && ev.state === 'candidate-reviewable' && !ev.diff.relocated && !movedRoom;
+      return { id: it.id, type: it.type, roomId: it.roomId, position: { ...it.position }, holds, state: ev.ok ? ev.state : 'invalid',
+        explanation: movedRoom ? ['El elemento ya no queda dentro de su estancia guardada.'].concat(ev.explanation) : ev.explanation };
+    });
+    const holding = items.filter(x => x.holds).length;
+    return { status: 'present', items, holding, failing: items.length - holding, orphans: [...gone] };
+  }
+  const api = { KEY, VERSION, extension, validateExtension, verticalFor, setVerticalReference, confirmItem, removeItem, orphans, prune, asRequests, recheck };
   if (node && module.exports) module.exports = api; else root.RubikCeilingContract = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

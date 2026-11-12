@@ -89,12 +89,61 @@ test('B2 interference with a floor object: blocked with the reason in words, alt
   // Confirmation needs the explicit checkbox; then the item is re-checked and saved in the synthetic project only.
   assert.equal(await btn(page, 'Confirmar y guardar').isDisabled(), true);
   await page.check('#confirmChk'); await btn(page, 'Confirmar y guardar').click();
-  assert.match(await page.locator('#msg').innerText(), /Guardados 1 elementos/);
+  assert.match(await page.locator('#msg').innerText(), /Guardado 1 elemento en el proyecto/);
   const ext = await page.evaluate(() => R02Lab.project.extensions['x-r02a-ceiling']);
   assert.equal(ext.items.length, 1); assert.equal(ext.items[0].review, 'human-confirmed'); assert.equal(ext.verticalReferences[0].roomId, 'rom_master');
   assert.equal(await unchanged(page), true, 'walls, rooms and furniture untouched');
   assert.equal(await page.locator('#plan [data-role=confirmed]').count(), 1);
   await shot(page, 'r02a-confirmed-1440');
+});
+
+test('B.4 confirm an alternative, download the file, reopen it in a fresh page: same item, re-checked; a changed reference is reported, nothing moved', async t => {
+  const os = require('node:os');
+  const { page, errors } = await setup(t);
+  await confirmReference(page); await item(page, 'pendant', { h: 2300, drop: 0 });
+  await page.evaluate(() => R02Lab.place({ x: 8300, y: 1000 }));
+  assert.equal(await chip(page), 'Bloqueado');
+  await btn(page, 'Ver alternativas').click(); await btn(page, 'Usar alternativa 1').click();
+  await btn(page, 'Añadir a la propuesta revisable').click();
+  await page.check('#confirmChk'); await btn(page, 'Confirmar y guardar').click();
+  const saved = await page.evaluate(() => R02Lab.project.extensions['x-r02a-ceiling']);
+  assert.equal(saved.items.length, 1);
+  assert.equal(await page.locator('#savedList li[data-state=holds]').count(), 1);
+  await shot(page, 'r02a-roundtrip-1-saved-1440');
+  const [download] = await Promise.all([page.waitForEvent('download'), btn(page, 'Descargar proyecto JSON').click()]);
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'r02a-')), file = path.join(dir, download.suggestedFilename());
+  await download.saveAs(file);
+  const onDisk = JSON.parse(await fs.readFile(file, 'utf8'));
+  assert.deepEqual(onDisk.extensions['x-r02a-ceiling'], saved, 'the file carries the confirmed item and its reference');
+  // Fresh page: nothing saved until the file is opened through the real file input.
+  const { page: p2, errors: e2 } = await setup(t);
+  assert.match(await p2.locator('#savedList').innerText(), /Nada guardado/);
+  await p2.setInputFiles('#import', file);
+  await p2.waitForFunction(() => /Proyecto reabierto/.test(document.querySelector('#fileNote').textContent));
+  assert.match(await p2.locator('#fileNote').innerText(), /1 elemento guardado, comprobado de nuevo y revisable/);
+  assert.deepEqual(await p2.evaluate(() => R02Lab.project.extensions['x-r02a-ceiling']), saved, 'same stored data');
+  assert.match(await p2.locator('#refNote').innerText(), /2600 mm[\s\S]*medición sintética de prueba/, 'the reference and its source come back');
+  assert.equal(await p2.locator('#refKnown').getAttribute('aria-pressed'), 'true', 'the control says «Confirmada», not «Desconocida»');
+  assert.equal(await p2.inputValue('#source'), 'medición sintética de prueba');
+  assert.equal(await p2.locator('#savedList li[data-state=holds]').count(), 1);
+  assert.equal(await p2.locator('#plan [data-role=confirmed]').count(), 1, 'drawn in plan');
+  const m3 = (await p2.evaluate(() => R02Lab.meshes())).filter(m => m.role === 'confirmed');
+  assert.equal(m3.length, 1, 'drawn in 3D'); assert.ok(m3[0].max[1] <= 2.6 + 1e-6, 'hanging from the 2600 mm ceiling');
+  assert.equal(await unchanged(p2), true, 'walls, rooms and furniture untouched');
+  await shot(p2, 'r02a-roundtrip-2-reopened-1440');
+  // The same file with the reference lowered (re-measured, or edited): reopening re-checks and reports, moves nothing.
+  const lowered = structuredClone(onDisk); lowered.extensions['x-r02a-ceiling'].verticalReferences[0].clearHeightMm = 1800;
+  const file2 = path.join(dir, 'r02a-referencia-rebajada.json'); await fs.writeFile(file2, JSON.stringify(lowered));
+  await p2.setInputFiles('#import', file2);
+  await p2.waitForFunction(() => /ya no cumple/.test(document.querySelector('#fileNote').textContent));
+  assert.match(await p2.locator('#fileNote').innerText(), /1 elemento ya no cumple con los datos actuales\. Revísalo: no se ha movido ni borrado nada\./);
+  assert.equal(await p2.locator('#savedList li[data-state=blocked]').count(), 1);
+  assert.equal(await p2.locator('#plan [data-role=confirmed][data-failing="1"]').count(), 1, 'marked in plan');
+  assert.equal(await p2.locator('#section [data-role=ceiling]').count(), 1, 'the section shows the stored 1800 mm reference, not an unknown ceiling');
+  assert.match(await p2.locator('#savedList .why').innerText(), /Bloqueado|altura libre/);
+  assert.deepEqual((await p2.evaluate(() => R02Lab.project.extensions['x-r02a-ceiling'])).items, saved.items, 'the stored item is not moved or deleted');
+  await p2.locator('#fileNote').scrollIntoViewIfNeeded(); await shot(p2, 'r02a-roundtrip-3-reference-lowered-1440');
+  assert.deepEqual(errors, []); assert.deepEqual(e2, []);
 });
 
 test('B3 insufficient height: blocked, and alternatives say moving cannot help', async t => {
