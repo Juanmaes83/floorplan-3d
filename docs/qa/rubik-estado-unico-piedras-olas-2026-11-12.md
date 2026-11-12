@@ -4,7 +4,7 @@
 
 **Repositorio:** https://github.com/Juanmaes83/floorplan-3d
 
-**Método:** lectura del catálogo maestro v1.10 en PR #192, anexo SCULPT, roadmap Pascal, roadmap del MCP, documentos técnicos del producto y contrastes de rama `master`, PR Draft y checks de GitHub. Auditoría base realizada en lectura; esta consolidación documental se guarda únicamente en la rama Draft de #192. **No se ha realizado una inspección independiente del despliegue Production en Vercel**, ni se ha autorizado merge o modificación del producto.
+**Método:** lectura del catálogo maestro v1.10 en PR #192, anexo SCULPT, roadmap Pascal, roadmap del MCP, documentos técnicos del producto y contrastes de rama `master`, PR Draft y checks de GitHub. Auditoría base realizada en lectura; esta consolidación documental se guarda únicamente en la rama Draft de #192. La auditoría base original no inspeccionó Vercel, pero **el gate documental posterior del 12/11/2026 sí contrastó Production**: [Vercel `dpl_9s9H2dUnxXb3UYK7yFovoYTPtFtj` READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/9s9H2dUnxXb3UYK7yFovoYTPtFtj), asociado exactamente a `master@75615fdc6c96e7c43e52b13a24950b9652706f7d`. No equivale a inspección funcional completa ni autoriza merge, Promote o modificación del producto.
 
 ## 0. Acta de reconciliación y autoridad — 12/11/2026
 
@@ -59,7 +59,7 @@ RUBIK ya tiene editor 2D/3D, importadores, edificio, presentaciones, biblioteca 
 
 **Catálogo v1.10:** 97 filas activas de mejora, más 6 registros descartados X-01–X-06. Estados documentales: 8 E (integradas), 28 P (parciales), 56 N (nuevas/no ejecutadas), 4 R (investigación), 1 advertencia histórica GOV-09a. Esta clasificación no se ha actualizado automáticamente para los cambios recientes en ramas Draft.
 
-**Fuente del catálogo:** https://github.com/Juanmaes83/floorplan-3d/blob/f48a930838149e88bb53b372cc798a12afb52646/docs/product/rubik-catalogo-maestro-mejoras-2026-11-09.md
+**Fuente del catálogo (baseline anterior a la consolidación):** https://github.com/Juanmaes83/floorplan-3d/blob/f48a930838149e88bb53b372cc798a12afb52646/docs/product/rubik-catalogo-maestro-mejoras-2026-11-09.md · **Versión viva para revisión:** https://github.com/Juanmaes83/floorplan-3d/blob/docs/sculpt-catalogue-reconciliation-2026-11-10/docs/product/rubik-catalogo-maestro-mejoras-2026-11-09.md
 
 ## 2. Comparación: producto integrado vs laboratorios
 
@@ -221,7 +221,7 @@ X-01–X-06 se preservan como registro documental de ideas descartadas, **no son
 
 ## 8. Próximos datos pendientes para un estado verdaderamente comercial
 
-- Revisión del deploy Production de Vercel y variables/servicios **sin leer secretos**; este informe solo verifica GitHub y el historial documentado.
+- **Production Vercel:** comprobado el despliegue `dpl_9s9H2dUnxXb3UYK7yFovoYTPtFtj` `READY`, asociado a `master@75615fd` en la consulta del gate documental. Siguen pendientes la revisión funcional de Production, las variables y servicios por existencia/configuración **sin leer secretos**, y los gates de publicación comercial.
 - Disponibilidad de proyectos reales con autorización y escala confirmada para F2/MCP.
 - Aceptación comercial de borradores de observaciones no persistidos y política de enlaces antiguos.
 - Política de privacidad/retención, permisos de assets y consentimientos.
