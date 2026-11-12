@@ -1,0 +1,37 @@
+name: ENT-01 I1B - 3D visual preview gate
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'js/delivery-*.js'
+      - 'js/professional-workspace-ui.js'
+      - 'css/delivery-client.css'
+      - 'tests/ent01-preview*.test.cjs'
+      - '.github/workflows/ent01-preview.yml'
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  ent01-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax and unit invariants
+        run: |
+          node --check js/delivery-preview-ui.js
+          node --check js/delivery-client.js
+          node --check js/delivery-map-core.js
+          node --test tests/ent01-preview-unit.test.cjs tests/client-delivery-core.test.cjs
+      - name: Chromium pinned
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ent01-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ent01-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/ent01-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ent01-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Client preview desktop/mobile and no publication
+        run: node --test --test-concurrency=1 tests/ent01-preview.browser.test.cjs
