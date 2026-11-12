@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RUBIK · Armarios paramétricos (laboratorio R03)</title>
+<link rel="icon" href="data:,">
+<style>
+:root{--bg:#f4f2ee;--panel:#fffdf9;--ink:#20242b;--muted:#5c6470;--line:#ddd6ca;--accent:#2f5d8a;--accent-ink:#fff;--ok:#1d6b3c;--bad:#a8261b;--warn:#8a5a00;
+ --carcass:#e9dcc6;--cavity:#fffaf1;--board:#b99b74;--drawer:#d8bb92;--rod:#6b7f86;--door:rgba(47,93,138,.10);--door-line:#2f5d8a;--sel:rgba(47,93,138,.14);--radius:12px}
+*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:clip}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:env(safe-area-inset-bottom)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top h1{font-size:17px;margin:0}.banner{font-size:12.5px;font-weight:650;color:#7a1a10;background:#fbe9e6;border-radius:999px;padding:4px 10px}
+.layout{display:grid;gap:14px;padding:14px 16px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:1100px){.layout{grid-template-columns:300px minmax(0,1fr) 400px;align-items:start}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;min-width:0}
+.card h2{font-size:15px;margin:0 0 8px}
+.list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+@media(max-width:1099px){.list{flex-direction:row;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}.list li{scroll-snap-align:start;flex:0 0 auto}}
+.pick{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;min-height:52px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;text-align:left}
+.pick[aria-pressed=true]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:#f1f6fb}
+.pick small{color:var(--muted)}.pick .st{font-size:11.5px;font-weight:650;color:var(--muted)}.pick .st.saved{color:var(--ok)}
+.stage{display:grid;gap:12px;min-width:0}
+.views-tabs{display:none;gap:6px}
+@media(max-width:1099px){.views-tabs{display:flex}.pane[hidden]{display:none!important}.plan-desk{display:none}}
+@media(min-width:1100px){.pane[hidden]{display:block!important}.pane.pane-plan,.pane.pane-plan[hidden]{display:none!important}}
+.views-tabs button{flex:1;min-height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:600}
+.views-tabs button[aria-selected=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.pane{min-width:0}
+#view3d{width:100%;height:min(62vh,560px);display:block;border-radius:10px;background:linear-gradient(#eef1f4,#e3e0da);touch-action:none}
+@media(max-width:1099px){#view3d{height:min(56vh,460px)}}
+.note{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+.vcheck{font-size:13px;padding:6px 8px;border-radius:8px;margin-top:6px;background:#f3efe7}.vcheck.fits{background:#e8f4ec;color:var(--ok)}.vcheck.does-not-fit{background:#fbe9e6;color:var(--bad)}.vcheck.pending,.vcheck.unknown{color:var(--warn)}
+#plan,#planM{width:100%;height:auto;max-height:340px;display:block;background:#fff;border-radius:8px;border:1px solid var(--line)}
+/* editor */
+.r03-editor{display:flex;flex-direction:column;gap:10px}
+.r03-head h2{font-size:16px;margin:0}.r03-size{margin:2px 0;color:var(--muted)}
+.r03-prov{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0}.r03-tag{font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#fff}
+.r03-tag.is-assumed{color:var(--warn);border-color:#e7d1a6;background:#fdf6e7}.r03-tag.is-known{color:var(--ok);border-color:#b8dcc4;background:#eef8f1}
+.r03-figure{margin:0}.r03-figure figcaption{font-size:12.5px;color:var(--muted)}
+.r03-elev{width:100%;height:auto;max-height:min(66vh,620px);display:block;background:#fff;border:1px solid var(--line);border-radius:10px}
+.r03-carcass{fill:var(--carcass);stroke:#8d7d66;stroke-width:6}.r03-cavity{fill:var(--cavity)}.r03-bay{fill:transparent;stroke:none}.r03-bay.is-selected{fill:var(--sel);stroke:var(--accent);stroke-width:10}
+.r03-shelf{fill:var(--board)}.r03-divider{fill:#c7b192}.r03-rod{fill:var(--rod)}.r03-drawer{fill:var(--drawer);stroke:#9a7a52;stroke-width:4}.r03-handle{fill:#59636b}
+.r03-overlap{fill:#e0453a;fill-opacity:.55}.r03-door{fill:var(--door);stroke:var(--door-line);stroke-width:5;stroke-dasharray:22 14}.r03-door-edge{fill:var(--door-line);fill-opacity:.65}
+.r03-hinge{fill:none;stroke:var(--door-line);stroke-width:6}
+.r03-dim{font-size:46px;fill:#4a525d;text-anchor:middle;font-variant-numeric:tabular-nums}.r03-dim-in{font-size:40px;fill:#8a8070}.r03-dim-bay.is-selected{fill:var(--accent);font-weight:700}.r03-dim-total{font-size:52px;font-weight:600}
+.r03-msg{flex:1 0 100%;min-height:1.6em;margin:0;padding:6px 10px;border-radius:8px;font-size:14px}.r03-msg:empty{padding:0}
+.r03-msg.is-error{background:#fbe9e6;color:var(--bad);font-weight:550}.r03-msg.is-ok{background:#e8f4ec;color:var(--ok)}.r03-msg.is-info{background:#eef1f5;color:var(--muted)}
+.r03-controls{display:flex;flex-direction:column;gap:10px}
+.r03-group{border:1px solid var(--line);border-radius:10px;padding:8px 10px 10px;margin:0;min-width:0}.r03-group legend{font-weight:650;padding:0 4px}
+.r03-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.r03-field{display:inline-flex;align-items:center;gap:6px}.r03-field span:first-child{font-size:13.5px;color:var(--muted)}
+.r03-field input{min-width:9ch;min-height:44px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:#fff;font-variant-numeric:tabular-nums}
+.r03-unit{font-size:12.5px;color:var(--muted)}
+.r03-btn{min-height:44px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:550}
+.r03-btn:hover:not(:disabled){border-color:var(--accent)}.r03-btn:disabled{opacity:.45;cursor:default}
+.r03-btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.r03-btn-quiet{background:transparent}
+.r03-seg{display:flex;flex-wrap:wrap;gap:6px}.r03-seg-btn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.r03-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.r03-tab{min-width:52px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:650;cursor:pointer}
+.r03-tab[aria-selected=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.r03-bay h4{margin:12px 0 6px;font-size:14px}.r03-hint{font-weight:400;font-size:12.5px;color:var(--muted)}
+.r03-shelves{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:6px}.r03-shelf-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.r03-check{display:inline-flex;align-items:center;gap:8px;min-height:44px}.r03-check input{width:22px;height:22px}
+.r03-step{min-width:44px;padding:0;font-size:20px}.r03-count{min-width:2ch;text-align:center;font-weight:700;font-size:17px}.r03-label{font-size:13.5px;color:var(--muted)}
+.r03-warn{margin:8px 0 0;padding:6px 10px;border-radius:8px;background:#fdf6e7;color:var(--warn);font-size:13.5px}
+.r03-actions{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:var(--panel);padding:8px 0 4px;border-top:1px solid var(--line)}
+.r03-actions .r03-btn-primary{margin-left:auto}
+details.data pre{max-height:260px;overflow:auto;font-size:11.5px;background:#f8f6f2;border:1px solid var(--line);border-radius:8px;padding:8px}
+.vref{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.vref input,.vref select{min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:#fff;max-width:100%}
+.file-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.r03-dim-sub{font-size:38px;fill:#6b7480}
+@media(max-width:700px){.r03-dim{font-size:88px}.r03-dim-in{font-size:76px}.r03-dim-total{font-size:96px}.r03-dim-sub{font-size:72px}}
+/* Phones and tablets: the views stay in sight while the controls scroll under them, so every edit is seen at once. */
+@media(max-width:1099px){.layout{display:block}.layout>*{margin-bottom:14px}.stage{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0 8px;box-shadow:0 8px 12px -10px rgba(0,0,0,.25)}.stage .card{padding:8px}.stage .card h2,.stage figcaption,.stage .note{display:none}.r03-elev{max-height:34vh}#view3d{height:36vh}#planM{max-height:34vh}.vcheck{font-size:12px;margin-top:4px}}
+html{scroll-padding-bottom:190px}
+@media(max-height:560px){html{scroll-padding-bottom:0}.r03-actions{position:static}}
+/* Phones in landscape: views on the left (sticky, full height), controls on the right. */
+@media(max-width:1099px) and (max-height:560px) and (orientation:landscape){
+ .layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start;gap:10px}.layout>*{margin-bottom:0}
+ .layout>aside{grid-column:1/-1}.stage{top:0;max-height:100vh;box-shadow:none;padding-top:0}
+ .r03-elev{max-height:calc(100vh - 70px)}#view3d{height:calc(100vh - 100px)}#planM{max-height:calc(100vh - 70px)}}
+</style>
+</head>
+<body>
+<header class="top">
+ <h1>Armarios paramétricos · interiores</h1>
+ <span class="banner" role="note">LABORATORIO R03 — PROYECTO SINTÉTICO — NO GUARDA EN RUBIK — NO VÁLIDO PARA FABRICACIÓN NI PEDIDO</span>
+</header>
+<main class="layout">
+ <aside class="card" aria-labelledby="listTitle">
+  <h2 id="listTitle">1 · Elige un armario</h2>
+  <ul class="list" id="list"></ul>
+  <div class="plan-desk"><h2 style="margin-top:12px">Planta</h2>
+  <svg id="plan" class="plan" role="img" aria-label="Planta de la estancia con el armario seleccionado"></svg>
+  <p class="note">Contorno del armario, barrido de sus puertas abiertas (sector de 90°, experimental) y recorrido de cajones.</p></div>
+ </aside>
+ <section class="stage" aria-label="Vistas del armario">
+  <div class="views-tabs" role="tablist" aria-label="Vista">
+   <button role="tab" id="tab-elev" aria-selected="true" aria-controls="pane-elev">Alzado</button>
+   <button role="tab" id="tab-3d" aria-selected="false" aria-controls="pane-3d">3D</button>
+   <button role="tab" id="tab-plan" aria-selected="false" aria-controls="pane-plan">Planta</button>
+  </div>
+  <div class="card pane pane-plan" id="pane-plan" role="tabpanel" aria-labelledby="tab-plan" hidden><h2>Planta</h2>
+   <svg id="planM" class="plan" role="img" aria-label="Planta de la estancia con el armario seleccionado"></svg>
+   <p class="note">Contorno del armario, barrido de sus puertas abiertas (sector de 90°, experimental) y recorrido de cajones.</p></div>
+  <div class="card pane" id="pane-elev" role="tabpanel" aria-labelledby="tab-elev"><h2>2 · Alzado</h2><div id="elevHost"></div></div>
+  <div class="card pane" id="pane-3d" role="tabpanel" aria-labelledby="tab-3d" hidden>
+   <h2>3D · el mismo interior</h2>
+   <canvas id="view3d" aria-label="Vista 3D del armario seleccionado. Arrastra para girar."></canvas>
+   <p class="note" id="note3d">Muros de la estancia seccionados a 35 cm para ver el armario. Arrastra para girar; pellizca o rueda para acercar.</p>
+   <div id="vcheck" class="vcheck unknown" role="status"></div>
+  </div>
+ </section>
+ <section class="card" aria-labelledby="editTitle">
+  <h2 id="editTitle" class="sr" style="position:absolute;left:-9999px">3 · Configura el interior</h2>
+  <div id="editor"></div>
+  <details class="data" style="margin-top:10px"><summary>Referencia vertical (opcional)</summary>
+   <p class="note">Solo se compara contra una altura libre que tú confirmes. Sin ella, la altura al techo queda sin comprobar: no se supone ningún techo.</p>
+   <div class="vref">
+    <label>Altura libre <input id="vClear" type="number" inputmode="numeric" placeholder="mm" style="width:9ch"></label>
+    <label>desde <select id="vRef"><option value="finished-floor">suelo acabado</option><option value="level-floor">forjado</option></select></label>
+    <label>fuente <input id="vSource" placeholder="p. ej. medición del propietario" style="width:22ch"></label>
+    <button class="r03-btn" id="vApply" type="button">Usar referencia</button><button class="r03-btn r03-btn-quiet" id="vClearBtn" type="button">Quitar</button>
+   </div>
+  </details>
+  <details class="data"><summary>Datos guardados en el proyecto sintético (x-r03-cabinet)</summary>
+   <pre id="json"></pre>
+   <div class="file-row"><button class="r03-btn" id="export" type="button">Descargar proyecto JSON</button>
+    <label class="r03-btn" style="display:inline-flex;align-items:center">Reabrir JSON<input id="import" type="file" accept="application/json,.json" style="position:absolute;left:-9999px"></label></div>
+   <p class="note" id="fileNote" role="status"></p>
+  </details>
+ </section>
+</main>
+<script src="../../../js/project-schema.js"></script>
+<script src="../../../js/reference-project.js"></script>
+<script src="../../../js/parcel-core.js"></script>
+<script src="../../../js/orthophoto-core.js"></script>
+<script src="../../../js/terrain-core.js"></script>
+<script src="../../../js/territory-integration-core.js"></script>
+<script src="../../../js/territory-export-policy.js"></script>
+<script src="../../../js/territory-runtime.js"></script>
+<script src="../../../js/territory-renderer.js"></script>
+<script src="../../../js/geo-provider.js"></script>
+<script src="../../../js/catastro-parcel-provider.js"></script>
+<script src="../../../js/catastro-wfs-provider.js"></script>
+<script src="../../../js/pnoa-orthophoto-provider.js"></script>
+<script src="../../../js/ign-mdt05-terrain-provider.js"></script>
+<script src="../../../js/geo-site-adapter.js"></script>
+<script src="../../../js/parcel-site-adapter.js"></script>
+<script src="../../../js/orthophoto-site-adapter.js"></script>
+<script src="../../../js/terrain-site-adapter.js"></script>
+<script src="../../../js/project-core.js"></script>
+<script src="../../../js/r03-cabinet-core.js"></script>
+<script src="../../../js/r03-cabinet-contract.js"></script>
+<script src="../../../js/r03-cabinet-editor-core.js"></script>
+<script src="../../../js/r03-cabinet-geometry.js"></script>
+<script src="../../../js/r03-cabinet-three.js"></script>
+<script src="../../../js/r03-cabinet-editor-ui.js"></script>
+<script type="importmap">{"imports":{"three":"../../../vendor/three/build/three.module.js","three/addons/":"../../../vendor/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const K = RubikCabinetCore, X = RubikCabinetContract, E = RubikCabinetEditor, G = RubikCabinetGeometry, T3 = RubikCabinetThree, UI = RubikCabinetEditorUI, Core = FloorPlanCore;
+const $ = s => document.querySelector(s);
+const TYPE_LABEL = { wardrobe: 'Armario ropero', tallcab: 'Columna', cabinet: 'Aparador', shoecab: 'Zapatero' };
+const label = o => TYPE_LABEL[o.type] || o.type;
+const STATUS_LABEL = { none: 'sin interior guardado', ok: 'interior guardado', adapted: 'medidas cambiadas: revisar', stale: 'no cabe: revisar', invalid: 'datos dañados', future: 'versión posterior' };
+// Synthetic project: RUBIK's own reference flat (no client data). Nothing is read from or written to RUBIK's storage.
+let project = Core.initial(), selected = null, editor = null, vertical = null, lastSave = null;
+const cabinets = () => project.objects.filter(o => K.isCabinetType(o.type));
+
+// ---------- list ----------
+function renderList() {
+  $('#list').replaceChildren(...cabinets().map(o => {
+    const r = X.read(project, o.id), li = document.createElement('li'), b = document.createElement('button');
+    b.type = 'button'; b.className = 'pick'; b.dataset.id = o.id; b.setAttribute('aria-pressed', String(o.id === selected));
+    const nm = document.createElement('strong'); nm.textContent = `${label(o)} · ${o.size.widthMm} × ${o.size.depthMm}`;
+    const st = document.createElement('span'); st.className = 'st' + (r.status === 'ok' ? ' saved' : ''); st.textContent = STATUS_LABEL[r.status] || r.status;
+    const sm = document.createElement('small'); sm.textContent = `«${o.name}» · giro ${o.rotationDeg}°`;
+    b.append(nm, sm, st); b.addEventListener('click', () => select(o.id)); li.append(b); return li;
+  }));
+}
+// ---------- selection → editor ----------
+function select(id) {
+  selected = id; const r = X.read(project, id), o = project.objects.find(x => x.id === id);
+  const session = E.createSession({ objectId: id, objectType: o.type, outer: r.outer || { w: o.size.widthMm, d: o.size.depthMm }, cabinet: r.cabinet, provenance: r.provenance, readOnly: !!r.readOnly });
+  const msg = r.status === 'adapted' ? { kind: 'info', text: `El armario cambió de medidas (antes ${r.from.outer.w} × ${r.from.outer.d}). El interior se ha adaptado: revísalo y guarda.` }
+    : r.status === 'stale' ? { kind: 'error', text: 'El armario cambió de medidas y el interior guardado ya no cabe. Se muestra el interior guardado sin tocarlo; ajústalo y guarda.' }
+    : r.status === 'none' ? { kind: 'info', text: 'Interior por defecto (supuesto). Edítalo y pulsa «Guardar interior».' }
+    : r.status === 'invalid' || r.status === 'future' ? { kind: 'error', text: 'Este interior no se puede editar aquí (datos dañados o de una versión posterior).' } : null;
+  const mountOpts = { session, title: `${label(o)} «${o.name}»`, savedAlready: r.status === 'ok', elevationHost: $('#elevHost'), onChange: s => { draw3d(s); drawPlan(s); drawVertical(s); },
+    onSave: (res, s) => save(id, res, s), onCancel: () => { select(id); } };
+  if (editor) editor.destroy();
+  editor = UI.mount($('#editor'), mountOpts);
+  if (msg) editor.setSession(session, msg, r.status === 'ok');
+  renderList(); draw3d(session); drawPlan(session); drawVertical(session); showJson();
+}
+function save(id, res, s) {
+  const w = X.write(project, id, res.cabinet, { outer: res.outer, provenance: res.provenance });
+  lastSave = w;
+  if (!w.ok) return { message: { kind: 'error', text: 'No se ha guardado: ' + E.explain(w.issues, s.state).join(' ') } };
+  project = w.project;
+  // Reopen from what was stored: the editor now edits the saved state (history starts again).
+  const r = X.read(project, id), next = E.createSession({ objectId: id, objectType: r.object.type, outer: r.outer, cabinet: r.cabinet, provenance: r.provenance });
+  editor.setSession(next, { kind: 'ok', text: 'Interior guardado en el proyecto sintético.' }, true);
+  renderList(); showJson(); draw3d(next); drawPlan(next);
+  return null;
+}
+function showJson() { $('#json').textContent = JSON.stringify(project.extensions?.[X.KEY] ?? '(sin interiores guardados)', null, 2); }
+
+// ---------- vertical reference ----------
+function drawVertical(s) {
+  const o = project.objects.find(x => x.id === selected); if (!o) return;
+  const v = G.verticalCheck({ elevationMm: o.elevationMm }, s.state.cabinet, vertical);
+  $('#vcheck').className = 'vcheck ' + v.status; $('#vcheck').textContent = v.message;
+}
+$('#vApply').addEventListener('click', () => { vertical = { clearHeightMm: Number($('#vClear').value), reference: $('#vRef').value, source: $('#vSource').value }; if (editor) drawVertical(editor.session); });
+$('#vClearBtn').addEventListener('click', () => { vertical = null; if (editor) drawVertical(editor.session); });
+
+// ---------- plan ----------
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, a) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); return e; };
+const pts = P => P.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+function roomOf(o) {
+  const inside = (p, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j]; if ((a.y > p.y) !== (b.y > p.y) && p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x) c = !c; } return c; };
+  return project.rooms.find(r => r.id === o.roomId) || project.rooms.find(r => inside(o.position, r.polygon));
+}
+function drawPlan(s) {
+  for (const svg of [$('#plan'), $('#planM')]) drawPlanInto(svg, s);
+}
+function drawPlanInto(svg, s) {
+  const o = project.objects.find(x => x.id === selected); if (!o) return;
+  const object = { ...o, size: { ...o.size, widthMm: s.state.outer.w, depthMm: s.state.outer.d } }, room = roomOf(o);
+  const box = room ? room.polygon : G.footprint(object, s.state.outer), xs = box.map(p => p.x), ys = box.map(p => p.y), pad = 400;
+  const x0 = Math.min(...xs) - pad, y0 = Math.min(...ys) - pad, w = Math.max(...xs) - x0 + pad, h = Math.max(...ys) - y0 + pad;
+  svg.setAttribute('viewBox', `${x0} ${y0} ${w} ${h}`); svg.replaceChildren();
+  if (room) svg.append(el('polygon', { points: pts(room.polygon), fill: '#f6f1e8', stroke: '#c9bda9', 'stroke-width': 20 }));
+  for (const wall of project.walls) svg.append(el('line', { x1: wall.start.x, y1: wall.start.y, x2: wall.end.x, y2: wall.end.y, stroke: '#3b4350', 'stroke-width': wall.thicknessMm, 'stroke-linecap': 'square', opacity: .85 }));
+  for (const other of project.objects) if (other.id !== o.id && (!room || roomOf(other) === room)) {
+    const fp = K.toPlan(other, [{ x: -other.size.widthMm / 2, y: -other.size.depthMm / 2 }, { x: other.size.widthMm / 2, y: -other.size.depthMm / 2 }, { x: other.size.widthMm / 2, y: other.size.depthMm / 2 }, { x: -other.size.widthMm / 2, y: other.size.depthMm / 2 }]);
+    svg.append(el('polygon', { points: pts(fp), fill: '#e3e7ec', stroke: '#9aa3ad', 'stroke-width': 12 }));
+  }
+  const c = s.state.cabinet;
+  if (c.front === 'open') for (const sw of K.swing(s.state.outer, c)) svg.append(el('polygon', { points: pts(K.toPlan(object, sw.sector)), fill: 'rgba(47,93,138,.16)', stroke: '#2f5d8a', 'stroke-width': 10, 'data-role': 'swing' }));
+  if (c.front === 'open') for (const d of K.drawerReach(s.state.outer, c)) if (d.body) svg.append(el('polygon', { points: pts(K.toPlan(object, d.body)), fill: 'rgba(216,187,146,.55)', stroke: '#9a7a52', 'stroke-width': 10, 'data-role': 'drawer-reach' }));
+  svg.append(el('polygon', { points: pts(G.footprint(object, s.state.outer)), fill: '#d8bb92', stroke: '#2f5d8a', 'stroke-width': 24, 'data-role': 'cabinet' }));
+  const front = K.toPlan(object, [{ x: -s.state.outer.w / 2, y: s.state.outer.d / 2 }, { x: s.state.outer.w / 2, y: s.state.outer.d / 2 }]);
+  svg.append(el('line', { x1: front[0].x, y1: front[0].y, x2: front[1].x, y2: front[1].y, stroke: '#2f5d8a', 'stroke-width': 60, 'data-role': 'front' }));
+}
+
+// ---------- 3D ----------
+const canvas = $('#view3d');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(38, 1, .05, 200), orbit = new OrbitControls(camera, canvas);
+orbit.enableDamping = true; orbit.maxPolarAngle = Math.PI * .495;
+scene.background = new THREE.Color(0xeef0f2);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xcfc6b8, 2.2), new THREE.AmbientLight(0xffffff, .35));
+const sun = new THREE.DirectionalLight(0xfff6ea, 2.0); sun.position.set(4, 8, 6); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); scene.add(sun);
+const roomG = new THREE.Group(); scene.add(roomG);
+let cabinetG = null, framedFor = null;
+const W = (x, y) => ({ x: x / 1000, z: y / 1000 });
+function drawRoom(o) {
+  roomG.traverse(x => x.geometry && x.geometry.dispose()); roomG.clear();
+  const room = roomOf(o); if (!room) return;
+  const shape = new THREE.Shape(room.polygon.map(p => new THREE.Vector2(p.x / 1000, p.y / 1000)));
+  const floor = new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshStandardMaterial({ color: 0xe9e2d6, roughness: .9, side: THREE.DoubleSide }));
+  floor.rotation.x = Math.PI / 2; floor.receiveShadow = true; roomG.add(floor);
+  const cut = 0.35, wm = new THREE.MeshStandardMaterial({ color: 0xcfc8bb, roughness: .9 });
+  const near = room.polygon.reduce((b, p) => ({ x0: Math.min(b.x0, p.x), x1: Math.max(b.x1, p.x), y0: Math.min(b.y0, p.y), y1: Math.max(b.y1, p.y) }), { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity });
+  for (const w of project.walls) {
+    const mx = (w.start.x + w.end.x) / 2, my = (w.start.y + w.end.y) / 2;
+    if (mx < near.x0 - 400 || mx > near.x1 + 400 || my < near.y0 - 400 || my > near.y1 + 400) continue;
+    const len = Math.hypot(w.end.x - w.start.x, w.end.y - w.start.y) / 1000, m = new THREE.Mesh(new THREE.BoxGeometry(len, cut, w.thicknessMm / 1000), wm);
+    m.position.set(mx / 1000, cut / 2, my / 1000); m.rotation.y = -Math.atan2(w.end.y - w.start.y, w.end.x - w.start.x); m.castShadow = m.receiveShadow = true; roomG.add(m);
+  }
+}
+function frame(o, s) {
+  const c = s.state.cabinet, a = -o.rotationDeg * Math.PI / 180, n = new THREE.Vector3(Math.sin(a), 0, Math.cos(a));
+  const centre = new THREE.Vector3(o.position.x / 1000, ((o.elevationMm || 0) + c.height / 2) / 1000, o.position.y / 1000);
+  const side = new THREE.Vector3(Math.cos(a), 0, -Math.sin(a)), size = Math.max(s.state.outer.w, c.height) / 1000;
+  const dist = size / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * (camera.aspect < 1 ? 1.25 / camera.aspect : 1.35);
+  camera.position.copy(centre).addScaledVector(n, dist).addScaledVector(side, dist * .32).add(new THREE.Vector3(0, size * .18, 0));
+  orbit.target.copy(centre); orbit.update();
+}
+let drawnKey = null;
+function draw3d(s) {
+  const o = project.objects.find(x => x.id === selected); if (!o) return;
+  // A refused edit leaves the state as it was: nothing to rebuild.
+  const key = o.id + JSON.stringify(s.state); if (key === drawnKey && cabinetG) return; drawnKey = key;
+  if (cabinetG) { cabinetG.userData.dispose(); scene.remove(cabinetG); }
+  cabinetG = T3.place(T3.build(THREE, s.state.outer, s.state.cabinet, { color: o.color }), o);
+  scene.add(cabinetG);
+  if (framedFor !== o.id) { drawRoom(o); resize(); frame(o, s); framedFor = o.id; }
+}
+function resize() { const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return; renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); }
+new ResizeObserver(() => { resize(); }).observe(canvas);
+renderer.setAnimationLoop(() => { orbit.update(); renderer.render(scene, camera); });
+
+// ---------- view tabs (phones) ----------
+// Phones: keep focused or scrolled-to controls out from under the sticky views (WCAG 2.4.11).
+const stage = document.querySelector('.stage');
+new ResizeObserver(() => { document.documentElement.style.scrollPaddingTop = getComputedStyle(stage).position === 'sticky' ? `${stage.offsetHeight + 8}px` : ''; }).observe(stage);
+const VIEWS = [['#tab-elev', '#pane-elev'], ['#tab-3d', '#pane-3d'], ['#tab-plan', '#pane-plan']];
+for (const [tab] of VIEWS) $(tab).addEventListener('click', () => {
+  for (const [t, p] of VIEWS) { $(t).setAttribute('aria-selected', String(t === tab)); $(p).hidden = t !== tab; }
+  if (tab === '#tab-3d') { resize(); const o = project.objects.find(x => x.id === selected); if (o && editor) frame(o, editor.session); }
+});
+if (matchMedia('(min-width:1100px)').matches) $('#pane-3d').hidden = false;
+
+// ---------- JSON export / reopen ----------
+$('#export').addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' })); a.download = 'r03-proyecto-sintetico.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); });
+$('#import').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { const next = Core.prepare(await f.text()).project, rep = X.validateExtension(next); project = next; framedFor = null; drawnKey = null;
+    $('#fileNote').textContent = rep.ok ? `Proyecto reabierto: ${(next.extensions?.[X.KEY]?.entries || []).length} interiores.` : `Proyecto reabierto con avisos: ${rep.issues.map(i => i.message).join('; ')}`;
+    select(cabinets()[0].id);
+  } catch (err) { $('#fileNote').textContent = 'No se pudo abrir: ' + err.message; }
+  e.target.value = '';
+});
+
+// ---------- test and review hooks (read-only views of the lab state) ----------
+window.R03Lab = {
+  get project() { return structuredClone(project); }, get selected() { return selected; }, get session() { return editor && editor.session; }, get lastSave() { return lastSave; },
+  select, apply: op => editor.apply(op), load: p => { project = Core.prepare(JSON.stringify(p)).project; framedFor = null; drawnKey = null; select(cabinets()[0].id); },
+  parts3d: () => { const out = []; cabinetG?.updateMatrixWorld(true); cabinetG?.traverse(m => { if (m.isMesh && m.userData.r03) { const b = new THREE.Box3().setFromObject(m); out.push({ role: m.userData.r03.role, bay: m.userData.r03.bay, min: b.min.toArray(), max: b.max.toArray() }); } }); return out; },
+  group: () => cabinetG && { position: cabinetG.position.toArray(), rotationY: cabinetG.rotation.y },
+  frame: () => { const o = project.objects.find(x => x.id === selected); if (o) frame(o, editor.session); }
+};
+select(cabinets()[0].id);
+window.R03Lab.ready = true;
+</script>
+</body>
+</html>
