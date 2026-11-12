@@ -38,6 +38,8 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
   const governor=core.createGovernor({...governorOptions,deviceRatio:window.devicePixelRatio||1});
   const monitor=core.createContextMonitor(restoreTimeoutMs?{restoreTimeoutMs}:{});
   let applied=renderer.getPixelRatio(),lastFrame=0,timer=0,raf=0;
+  // Every listener of this guard goes with it: dispose() removes them all (no duplicated callbacks if re-attached).
+  const ac=new AbortController(),on={signal:ac.signal};
   const events=[];const note=(type,extra={})=>{events.push({t:Math.round(now()),type,...extra});if(events.length>50)events.shift();};
 
   // Aviso accesible dentro del escenario. No tapa los controles: el plan de debajo sigue usable.
@@ -70,10 +72,10 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
   }
 
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();const r=monitor.lost(now());if(!r.changed)return;show('lost');note('lost');
-    clearTimeout(timer);const wait=()=>{const t=monitor.tick(now());if(t.changed&&t.state==='failed'){show('failed');note('failed');}else if(monitor.state==='lost')timer=setTimeout(wait,250);};timer=setTimeout(wait,250);},false);
+    clearTimeout(timer);const wait=()=>{const t=monitor.tick(now());if(t.changed&&t.state==='failed'){show('failed');note('failed');}else if(monitor.state==='lost')timer=setTimeout(wait,250);};timer=setTimeout(wait,250);},on);
   canvas.addEventListener('webglcontextrestored',()=>{clearTimeout(timer);const r=monitor.restored(now());if(!r.changed)return;hide();note('restored');
     // Three ya ha reiniciado su estado GL; la escena se vuelve a subir en el siguiente render. Mismo tamaño y ratio.
-    renderer.setPixelRatio(applied);scene.resize();governor.resetWindow();if(r.degrade)degrade('repeated-context-loss');},false);
+    renderer.setPixelRatio(applied);scene.resize();governor.resetWindow();if(r.degrade)degrade('repeated-context-loss');},on);
 
   // Medición: solo cuadros reales de la vista visible, con el contexto vivo y con el tamaño que gobierna esta guarda.
   const owned=()=>{const cur=renderer.getPixelRatio();if(cur!==applied){
@@ -87,14 +89,14 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
     if(document.hidden||monitor.state!=='ok'||!owned()||!governor.adaptive)return;
     const ev=governor.sample(dt);if(ev){setRatio(ev.to);note('ratio',ev);}};
   raf=requestAnimationFrame(loop);
-  document.addEventListener('visibilitychange',()=>{lastFrame=0;governor.resetWindow();});
+  document.addEventListener('visibilitychange',()=>{lastFrame=0;governor.resetWindow();},on);
 
   const api={
     get state(){return monitor.state;},get degraded(){return monitor.degraded;},get pixelRatio(){return renderer.getPixelRatio();},get shadows(){return renderer.shadowMap.enabled;},
     get governor(){return governor.state();},get monitor(){return monitor.snapshot();},get events(){return events.map(e=>({...e}));},
     get message(){return box.hidden?null:{state:box.dataset.state,text:text.textContent,action:btn.hidden?null:btn.textContent};},
     get chip(){return chip.hidden?null:chip.textContent;},
-    dispose(){cancelAnimationFrame(raf);clearTimeout(timer);renderer.render=render0;box.remove();veil.remove();chip.remove();},
+    dispose(){ac.abort();cancelAnimationFrame(raf);clearTimeout(timer);renderer.render=render0;box.remove();veil.remove();chip.remove();},
   };
   return api;
 }

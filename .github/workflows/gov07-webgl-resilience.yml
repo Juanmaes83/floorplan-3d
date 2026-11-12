@@ -38,7 +38,7 @@ jobs:
           node-version: '22.13.0'
       - name: Syntax
         run: |
-          for m in gl-guard fidelity-app project-scene; do node --input-type=module --check < evolucion/$m.js; done
+          for m in gl-guard fidelity-app gantt-view project-scene; do node --input-type=module --check < evolucion/$m.js; done
           node --check js/gl-quality-core.js
           for f in tests/gov07/*.cjs tests/gov07-*.cjs; do node --check "$f"; done
       - name: Pure quality core

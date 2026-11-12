@@ -149,10 +149,17 @@ function setPos(p){
     window.dispatchEvent(new CustomEvent('ft3d8-moment',{detail:api.last}));}
 }
 // model/dossier: when a construction dossier (S1) was evaluated, its model is reused as is (one evaluation, one source).
+// GOV-07: selections can overlap (a new project chosen while the previous one is still being evaluated). Only the LAST
+// one asked is shown: an older evaluation that finishes later is discarded, never drawn over the newer selection.
+let showSeq=0;
 async function show(input,meta,preModel=null,dossier=null){
+  const seq=++showSeq;
   pause();lastDay=-1;selected=null;scene.highlight([]);
   const model=preModel||await A.evaluate(input);
+  if(seq!==showSeq)return {superseded:true,subject:model.subject};
   const schedule=model.planning.status==='available'?input.schedule:null,timeline=schedule?V.timeline(schedule):null;
+  // GOV-07: the previous Gantt is retired only now that the new selection evaluated (a rejected import keeps it working).
+  ctx?.gantt?.destroy();
   ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory,model.illustrative||[]);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
