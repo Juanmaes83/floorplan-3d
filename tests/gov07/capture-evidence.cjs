@@ -28,7 +28,9 @@ const OUT=path.join(K.ROOT,'docs/qa/gov07-webgl-dispositivos-2026-11-12/evidenci
       const context=await env.browser.newContext({viewport:opt.viewport||{width:1440,height:900},deviceScaleFactor:opt.deviceScaleFactor||1,isMobile:!!opt.isMobile,hasTouch:!!opt.hasTouch});const page=await context.newPage();
       await page.goto(env.base+'labs/gov07/index.html');await page.getByRole('button',{name:/Ejecutar banco/}).click();
       await page.waitForFunction(()=>/Terminado|Error/.test(document.getElementById('status').textContent),null,{timeout:200000});
-      await page.locator('h2').scrollIntoViewIfNeeded();await shot(page,`6-banco-resultado-${tag}`);await context.close();
+      // La tabla de resultados completa (medida, valor, fuente, qué mirar) y la leyenda.
+      const file=path.join(OUT,`6-banco-resultado-${tag}.png`);await page.locator('table').screenshot({path:file});
+      manifest.push({file:`6-banco-resultado-${tag}.png`,sha256:crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')});await context.close();
     }
   }finally{await env.stop();}
   fs.writeFileSync(path.join(OUT,'manifest.json'),JSON.stringify({generated:new Date().toISOString(),engine:'Chromium + SwiftShader (CPU, sin GPU real)',data:'fixture sintética A de laboratorio',files:manifest},null,1));

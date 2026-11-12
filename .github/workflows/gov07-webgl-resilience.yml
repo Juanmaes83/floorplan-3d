@@ -62,7 +62,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [firefox, webkit]
+        # Firefox tal cual (sin GPU desactiva WebGL: prueba el camino «sin WebGL»), Firefox con WebGL por software forzado
+        # (dibujo y pérdida de contexto) y WebKit.
+        include:
+          - browser: firefox
+            ffwebgl: ''
+          - browser: firefox
+            ffwebgl: '1'
+          - browser: webkit
+            ffwebgl: ''
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -72,4 +80,4 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.browser }}
-          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} node --test tests/gov07-cross-browser.browser.test.cjs
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_FF_WEBGL=${{ matrix.ffwebgl }} node --test tests/gov07-cross-browser.browser.test.cjs
