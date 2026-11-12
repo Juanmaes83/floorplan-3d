@@ -1,9 +1,12 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
-**Fecha:** 09/11/2026 · **Versión:** 1.10 (ficha R03 sincronizada con la PR #194, 11/11/2026; v1.9: ficha R02 sincronizada con la PR #193, 11/11/2026; v1.8: cinco referencias F12 registradas el 11/11/2026: cuatro verificadas y una URL no localizada; F11 y ficha R01 preservadas; ver §7–8) · **Estado: PROPUESTO** · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
-**Base de verificación:** `master@8df49ed` (= `5fb7a5c` + PR #183, #184 y #185). **Production:** `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` sobre `8df49ed` desde el 09/11/2026, con la Home de seis perfiles y Render IA D1 intacto (ver `docs/product/hom-01/cierre-hom-01-02-publicacion-2026-11-09.md` y `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`).
+**Fecha:** 09/11/2026 · **Versión:** 1.10 (ficha R03 sincronizada con la PR #194, 11/11/2026; v1.9: ficha R02 sincronizada con la PR #193, 11/11/2026; v1.8: cinco referencias F12 registradas el 11/11/2026: cuatro verificadas y una URL no localizada; F11 y ficha R01 preservadas; ver §7–8) · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
+**Referencia histórica verificada el 09/11/2026 (versión 1.4):** `master@8df49ed` (= `5fb7a5c` + PR #183, #184 y #185); Production `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` sobre `8df49ed`, con Home de seis perfiles y Render IA D1 (ver `docs/product/hom-01/cierre-hom-01-02-publicacion-2026-11-09.md` y `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`). **No es el último despliegue.**
+
+**Corte verificado el 12/11/2026 para el gate documental de #192:** `master@75615fdc6c96e7c43e52b13a24950b9652706f7d`, y [Production Vercel `dpl_9s9H2dUnxXb3UYK7yFovoYTPtFtj` en estado READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/9s9H2dUnxXb3UYK7yFovoYTPtFtj), asociada al mismo SHA. Comprobar una publicación en Vercel no acredita por sí solo seguridad, validez profesional ni aceptación comercial. #192 sigue siendo documentación propuesta sin autorización de merge o Promote.
 
 > **Estado único de auditoría al 12/11/2026:** [Auditoría consolidada de piedras, olas, PR y gates](../qa/rubik-estado-unico-piedras-olas-2026-11-12.md), incorporada a esta rama Draft por autorización expresa del propietario. Contrasta `master`, #191–#197, GOV-08/ENT-01, ECO-01 y MCP Etapa 2; fija la aceptación provisional de 250 verificaciones exclusivamente para laboratorio y registra como deuda la validación real. **Es un acta de coordinación/revisión, no una autorización de merge, integración, despliegue ni nueva ola.**
+
 ## 0. Para qué sirve y cómo usarlo
 
 Es **el único sitio** donde están juntas todas las mejoras propuestas para RUBIK. Cada una tiene:
