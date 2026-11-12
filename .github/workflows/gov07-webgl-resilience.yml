@@ -1,0 +1,106 @@
+# GOV-07 (ola 1): continuidad y calidad de la vista 3D de la Evolución — pérdida/recuperación del contexto WebGL,
+# sin WebGL, degradación controlada, DPR adaptativo, giro de pantalla, uso prolongado y banco para dispositivos.
+# Chromium + SwiftShader (CPU): NO sustituye a las pruebas en iPhone, Android ni GPU reales (protocolo GOV-07).
+# Datos sintéticos; no publica nada ni usa credenciales; cualquier petición fuera del servidor local hace fallar.
+name: GOV-07 - WebGL resilience
+on:
+  pull_request:
+    paths:
+      - 'evolucion/**'
+      - 'js/gl-quality-core.js'
+      - 'labs/gov07/**'
+      - 'labs/ft3d-8/fidelity-fixtures.js'
+      - 'tests/gov07/**'
+      - 'tests/gov07-*.cjs'
+      - '.github/workflows/gov07-webgl-resilience.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'evolucion/**'
+      - 'js/gl-quality-core.js'
+      - 'labs/gov07/**'
+      - 'tests/gov07/**'
+      - 'tests/gov07-*.cjs'
+      - '.github/workflows/gov07-webgl-resilience.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PLAYWRIGHT_VERSION: '1.62.1'
+jobs:
+  gov07:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: |
+          for m in gl-guard fidelity-app gantt-view project-scene; do node --input-type=module --check < evolucion/$m.js; done
+          node --check js/gl-quality-core.js
+          for f in tests/gov07/*.cjs tests/gov07-*.cjs; do node --check "$f"; done
+      - name: Pure quality core
+        run: node --test tests/gov07-quality-core.test.cjs
+      - name: Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Context loss, no WebGL, degradation, DPR, rotation, prolonged use, device bench
+        run: |
+          GOV07_METRICS="$RUNNER_TEMP/gov07-memory.json" node --test --test-concurrency=1 tests/gov07-evolution-resilience.browser.test.cjs tests/gov07-bench.browser.test.cjs
+          cat "$RUNNER_TEMP/gov07-memory.json"
+          GOV07_BROWSER=chromium node --test tests/gov07-cross-browser.browser.test.cjs
+  # Firefox y WebKit de Playwright en el runner (sin GPU): humo entre navegadores. No sustituyen a Safari en iPhone ni a
+  # Firefox de escritorio con GPU real (matriz física del protocolo).
+  cross-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        # Medido con tests/gov07/engine-probe.cjs en el runner: Firefox sin ventana no tiene WebGL (camino «sin WebGL»);
+        # con ventana (xvfb) tiene WebGL 2 por software (llvmpipe): dibujo, pérdida y recuperación. Cada variante declara
+        # el camino que debe recorrer (GOV07_EXPECT), para que ninguna pase en silencio por el otro.
+        include:
+          - browser: firefox
+            headful: ''
+            expect: unavailable
+          - browser: firefox
+            headful: '1'
+            expect: webgl
+          # WebKit: su GStreamer aborta la página cuando la Evolución consulta los formatos de vídeo al cargar (también en
+          # master; ver el paso de diagnóstico). El humo retira esas API para probar la vista 3D; la caída sigue a la vista.
+          - browser: webkit
+            headful: ''
+            expect: webgl
+            novideo: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: ${{ matrix.browser }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.browser }}
+          run=(node --test tests/gov07-cross-browser.browser.test.cjs)
+          if [ -n "${{ matrix.headful }}" ]; then run=(xvfb-run -a "${run[@]}"); fi
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=${{ matrix.headful }} GOV07_EXPECT=${{ matrix.expect }} GOV07_NO_VIDEO_APIS=${{ matrix.novideo }} "${run[@]}"
+      # Diagnóstico del motor (no decide el resultado): WebGL mínimo, Evolución con WebGL bloqueado y Evolución tal cual,
+      # sin ventana y con ventana (xvfb), en esta rama y en la base del PR, para separar «el motor de CI no da WebGL o
+      # cae» de «nuestro código lo hace caer».
+      - name: Engine probe (${{ matrix.browser }})
+        if: always() && matrix.headful == ''
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha || github.sha }}"
+          git worktree add --detach "$RUNNER_TEMP/base" FETCH_HEAD
+          for root in "$PWD" "$RUNNER_TEMP/base"; do
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} node tests/gov07/engine-probe.cjs
+            NODE_PATH="$RUNNER_TEMP/pw/node_modules" GOV07_ROOT="$root" GOV07_BROWSER=${{ matrix.browser }} GOV07_HEADFUL=1 xvfb-run -a node tests/gov07/engine-probe.cjs
+          done
+          # Bisección de la caída de WebKit (hecha en f4a4fd7; ver el acta §7): GOV07_BISECT=1 y, para la salida del motor,
+          # GOV07_STEPS=3 DEBUG=pw:browser.
