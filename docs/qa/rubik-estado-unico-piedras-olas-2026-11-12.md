@@ -6,6 +6,19 @@
 
 **Método:** lectura del catálogo maestro v1.10 en PR #192, anexo SCULPT, roadmap Pascal, roadmap del MCP, documentos técnicos del producto y contrastes de rama `master`, PR Draft y checks de GitHub. Auditoría base realizada en lectura; esta consolidación documental se guarda únicamente en la rama Draft de #192. La auditoría base original no inspeccionó Vercel, pero **el gate documental posterior del 12/11/2026 sí contrastó Production**: [Vercel `dpl_9s9H2dUnxXb3UYK7yFovoYTPtFtj` READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/9s9H2dUnxXb3UYK7yFovoYTPtFtj), asociado exactamente a `master@75615fdc6c96e7c43e52b13a24950b9652706f7d`. No equivale a inspección funcional completa ni autoriza merge, Promote o modificación del producto.
 
+## Actualización de integración verificada — 12/11/2026 (posterior al corte inicial)
+
+> **Precedencia:** esta sección es una **actualización aditiva** del estado actual del repositorio; las cifras y SHA históricos que siguen se conservan como fotografía de la auditoría inicial. No cambia el catálogo de 97 IDs ni renumera las olas.
+
+- **`master` vigente verificado:** `0680afa1fc1da3f2c7412ec5b38a24a404031ad6`, tras [merge de PR #198](https://github.com/Juanmaes83/floorplan-3d/pull/198), respecto al corte inicial `75615fd`.
+- **R03-I0 INTEGRADO ÚNICAMENTE COMO MOTOR PURO:** `js/r03-cabinet-core.js` junto con pruebas, workflow, atribución MIT y acta técnica. No está cargado desde el editor; no hay UI de interiores, persistencia ni nuevos campos de `FloorPlanProjectV1`. Por tanto, **SCULPT-R03 #194 permanece Draft/HOLD como piedra de laboratorio** y no debe declararse una mejora de armarios disponible en Production.
+- **Production Vercel comprobada:** [`dpl_CdMf1SPZsNQW38vx2N3hjbVqM58d`](https://vercel.com/juanma-espinosas-projects/floorplan-3d/CdMf1SPZsNQW38vx2N3hjbVqM58d) `READY`, desplegada desde ese SHA de `master`; el alias de `master` apunta a ella. El estado READY no demuestra la aceptación funcional de los armarios.
+- **CI:** 6/6 workflows verdes en el HEAD previo al merge de #198. En seguimiento tras el merge, Guided experience y Project-First resultaron SUCCESS, mientras Multiformat guided import seguía en ejecución en la consulta; revisar el cierre terminal por SHA antes de afirmar que todo está verde.
+- **Documentación posterior:** [PR #199](https://github.com/Juanmaes83/floorplan-3d/pull/199), un único Markdown, prepara la corrección del acta I0 que aún decía «no integrado». **No está fusionada** hasta el gate de su HEAD. [#192](https://github.com/Juanmaes83/floorplan-3d/pull/192) sigue Draft y requiere decisión de integración documental propia.
+- **Deudas intactas:** I1 contrato de interiores y compatibilidad V1, I2 interfaz con validación humana restante y móvil, I3 geometría 3D y alturas; GOV-05 comercial con riesgo residual; GOV-08/ENT-01 siguen sin autorización de producto; #195 y MCP Etapa 3/4 en HOLD.
+
+---
+
 ## 0. Acta de reconciliación y autoridad — 12/11/2026
 
 **Estado de esta acta:** cierre de auditoría documental autorizado por el propietario; NO es aprobación de merge, despliegue, una ola completa, ni integración de una piedra. Este documento se incorpora exclusivamente en la rama Draft de [PR #192](https://github.com/Juanmaes83/floorplan-3d/pull/192) como fotografía de estado y matriz de decisiones pendientes.
