@@ -36,6 +36,7 @@ input[type=number]{width:9ch}input.src{width:24ch}
 #plan{width:100%;height:auto;max-height:66vh;display:block;background:#fff;border:1px solid var(--line);border-radius:10px;touch-action:manipulation;cursor:crosshair}
 #section{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px}
 #view3d{width:100%;height:300px;display:block;border-radius:10px;background:#eef0f2;touch-action:none}
+.saved-h{font-size:13px;margin:14px 0 6px;color:var(--muted,#5a6168)}.saved-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.saved-list li{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13.5px}.saved-list .why{flex-basis:100%;color:#8a2a1f}.file-row{margin-top:10px}.file-btn{position:relative;display:inline-flex;align-items:center}.file-btn input{position:absolute;left:-9999px}
 @media(max-width:1099px){.layout{display:block}.layout>*{margin-bottom:14px}.views-tabs{display:flex}.views{display:block}.v[hidden]{display:none!important}
  .stage{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0 8px;box-shadow:0 8px 12px -10px rgba(0,0,0,.25)}.stage .card{padding:8px}.v h3{display:none}
  #plan{max-height:38vh}#section{max-height:38vh}#view3d{height:38vh}}
@@ -106,6 +107,11 @@ pre{max-height:220px;overflow:auto;font-size:11.5px;background:#f8f6f2;border:1p
    <label class="check"><input type="checkbox" id="confirmChk"><span>He revisado la propuesta y confirmo guardarla en el proyecto sintético</span></label>
    <button class="btn primary" id="confirmBtn" type="button" disabled>Confirmar y guardar</button>
    <p class="msg" id="msg" role="status"></p>
+   <h3 class="saved-h">Guardados en el proyecto · comprobados de nuevo con los datos actuales</h3>
+   <ul class="saved-list" id="savedList"></ul>
+   <div class="row file-row" aria-label="Archivo del proyecto sintético"><button class="btn" id="export" type="button">Descargar proyecto JSON</button>
+    <label class="btn file-btn">Reabrir JSON<input id="import" type="file" accept="application/json,.json"></label></div>
+   <p class="note" id="fileNote" role="status"></p>
    <details><summary>Datos guardados (x-r02a-ceiling)</summary><pre id="json"></pre></details>
   </div>
  </section>
@@ -162,6 +168,8 @@ syncType();
 const ceilingFor = () => X.verticalFor(project, roomId);
 function setRefMode(m) { refMode = m; $('#refUnknown').setAttribute('aria-pressed', String(m === 'unknown')); $('#refKnown').setAttribute('aria-pressed', String(m === 'known')); $('#refForm').hidden = m !== 'known'; refNote(); }
 function refNote() { const v = ceilingFor(); $('#refNote').textContent = v ? `Referencia de «${roomName(roomId)}»: ${v.clearHeightMm} mm desde ${v.reference === 'finished-floor' ? 'suelo acabado' : 'forjado'} (fuente: ${v.source}).` : 'Sin referencia confirmada no se calculan cotas ni se supone ningún techo.'; }
+// The control shows what the project holds for this room: a stored reference is «Confirmada», with its values.
+function syncRef() { const v = ceilingFor(); if (v) { $('#clear').value = v.clearHeightMm; $('#reference').value = v.reference; $('#source').value = v.source; } setRefMode(v ? 'known' : 'unknown'); }
 $('#refUnknown').addEventListener('click', () => setRefMode('unknown'));
 $('#refKnown').addEventListener('click', () => setRefMode('known'));
 $('#refSave').addEventListener('click', () => {
@@ -169,7 +177,7 @@ $('#refSave').addEventListener('click', () => {
   if (!r.ok) return message('bad', 'Referencia no válida: ' + r.issues.map(i => i.message).join('; '));
   project = r.project; message('ok', 'Referencia guardada para esta estancia (dato del proyecto sintético).'); refNote(); recompute();
 });
-$('#room').addEventListener('change', () => { roomId = $('#room').value; item = null; current = null; alts = []; refNote(); render(); frame3d(); });
+$('#room').addEventListener('change', () => { roomId = $('#room').value; item = null; current = null; alts = []; syncRef(); render(); frame3d(); });
 $('#type').addEventListener('change', () => { syncType(); recompute(); });
 for (const id of ['#w', '#d', '#h']) $(id).addEventListener('change', () => { $('#sizeTag').hidden = true; recompute(); });
 for (const id of ['#drop', '#curtain', '#rot']) $(id).addEventListener('change', () => recompute());
@@ -221,18 +229,49 @@ $('#confirmBtn').addEventListener('click', () => {
   let p = project; const done = [], failed = [];
   for (const r of review) { const w = X.confirmItem(p, r, { confirm: $('#confirmChk').checked }); if (w.ok) { p = w.project; done.push(r.id); } else failed.push(`${r.id}: ${w.issues[0].message}`); }
   project = p; review = review.filter(r => !done.includes(r.id)); $('#confirmChk').checked = false; $('#confirmBtn').disabled = true;
-  message(failed.length ? 'bad' : 'ok', failed.length ? `Guardados ${done.length}. No guardados: ${failed.join(' · ')}` : `Guardados ${done.length} elementos en el proyecto sintético, comprobados de nuevo al confirmar.`);
+  const n = k => k === 1 ? '1 elemento' : `${k} elementos`;
+  message(failed.length ? 'bad' : 'ok', failed.length ? `Guardado ${n(done.length)}. No guardados: ${failed.join(' · ')}` : `Guardado ${n(done.length)} en el proyecto sintético, comprobado de nuevo al confirmar.`);
   render();
 });
 function renderCompare() {
   const unchanged = JSON.stringify(JSON.parse(original).objects) === JSON.stringify(project.objects) && JSON.stringify(JSON.parse(original).walls) === JSON.stringify(project.walls);
   const saved = X.extension(project).items.length;
-  $('#cmpProject').textContent = saved ? `${saved} confirmados` : 'sin cambios';
+  $('#cmpProject').textContent = saved ? `${saved} confirmado${saved === 1 ? '' : 's'}` : 'sin cambios';
   $('#cmpReview').textContent = String(review.length);
   $('#reviewList').replaceChildren(...review.map(r => Object.assign(document.createElement('li'), { textContent: `${S.TYPE_LABEL[r.type]} en (${r.position.x}, ${r.position.y})` })));
   $('#confirmBtn').disabled = !$('#confirmChk').checked || !review.length;
   $('#json').textContent = JSON.stringify(project.extensions?.[X.KEY] ?? '(nada guardado)', null, 2) + (unchanged ? '\n\n// muros y muebles del proyecto: sin cambios' : '');
+  renderSaved();
 }
+// What the project carries, never taken on trust: every confirmed item is re-evaluated with the data as it is now.
+const SAVED_ES = { ...STATE_ES, orphan: 'Sin estancia', invalid: 'Datos no válidos' };
+function renderSaved() {
+  const rc = X.recheck(project, { labelOf });
+  const li = x => { const row = document.createElement('li'); row.dataset.state = x.holds ? 'holds' : x.state;
+    row.append(Object.assign(document.createElement('span'), { className: 'state ' + (x.holds ? 'candidate-reviewable' : x.state === 'pending' ? 'pending' : 'blocked'), textContent: x.holds ? 'Sigue siendo revisable' : SAVED_ES[x.state] || x.state }),
+      Object.assign(document.createElement('span'), { textContent: ` ${S.TYPE_LABEL[x.type] || x.type} en (${x.position.x}, ${x.position.y}) · ${roomName(x.roomId)}` }));
+    if (!x.holds) row.append(Object.assign(document.createElement('small'), { className: 'why', textContent: x.explanation[0] }));
+    return row; };
+  $('#savedList').replaceChildren(...(rc.status === 'present' ? rc.items.map(li) : [Object.assign(document.createElement('li'), { className: 'note', textContent: rc.status === 'absent' ? 'Nada guardado todavía.' : rc.status === 'future' ? 'Datos de una versión posterior: solo lectura, no se interpretan.' : 'Datos guardados dañados: no se usan. ' + (rc.issues || []).map(i => i.message).join('; ') })]));
+  return rc;
+}
+// ---------- project file: download, reopen (the stored items are re-checked, never trusted) ----------
+$('#export').addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' })); a.download = 'r02a-proyecto-sintetico.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); });
+$('#import').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const next = Core.prepare(await f.text()).project;
+    project = next; review = []; item = null; current = null; alts = [];
+    const first = X.extension(project).items[0];
+    if (first && project.rooms.some(r => r.id === first.roomId)) { roomId = first.roomId; $('#room').value = roomId; }
+    syncRef(); render(); frame3d();
+    const rc = X.recheck(project, { labelOf }), n = k => k === 1 ? '1 elemento' : `${k} elementos`;
+    $('#fileNote').textContent = rc.status !== 'present' ? `Proyecto reabierto. ${rc.status === 'absent' ? 'Sin elementos guardados.' : 'Los datos de techo guardados no se pueden usar (ver lista).'}`
+      : rc.failing ? `Proyecto reabierto: ${n(rc.items.length)} guardado${rc.items.length === 1 ? '' : 's'}; ${n(rc.failing)} ya no cumple${rc.failing === 1 ? '' : 'n'} con los datos actuales. Revísalo: no se ha movido ni borrado nada.`
+      : `Proyecto reabierto: ${n(rc.items.length)} guardado${rc.items.length === 1 ? '' : 's'}, comprobado${rc.items.length === 1 ? '' : 's'} de nuevo y revisable${rc.items.length === 1 ? '' : 's'}.`;
+  } catch (err) { $('#fileNote').textContent = 'No se pudo abrir: ' + err.message; }
+  e.target.value = '';
+});
 // ---------- plan ----------
 const NS = 'http://www.w3.org/2000/svg';
 const el = (t, a) => { const e = document.createElementNS(NS, t); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); return e; };
@@ -251,7 +290,8 @@ function drawPlan() {
     svg.append(el('polygon', { points: pts(fp), fill: '#dfe4ea', stroke: '#9aa3ad', 'stroke-width': 12 }));
     if (o.size.heightMm && D.footprint && r.polygon) { const t = el('text', { x: o.position.x, y: o.position.y + 60, 'font-size': 150, 'text-anchor': 'middle', fill: '#6b7480' }); t.textContent = `${o.size.heightMm}`; svg.append(t); }
   }
-  for (const it of X.asRequests(project)) svg.append(el('polygon', { points: pts(fpOf(it)), fill: 'rgba(32,36,43,.18)', stroke: '#20242b', 'stroke-width': 20, 'data-role': 'confirmed' }));
+  const failingPlan = new Set(X.recheck(project).items.filter(x => !x.holds).map(x => x.id));
+  for (const it of X.asRequests(project)) { const bad = failingPlan.has(it.id); svg.append(el('polygon', { points: pts(fpOf(it)), fill: bad ? 'rgba(180,35,24,.16)' : 'rgba(32,36,43,.18)', stroke: bad ? '#b42318' : '#20242b', 'stroke-width': 20, 'data-role': 'confirmed', ...(bad ? { 'data-failing': '1' } : {}) })); }
   for (const it of review) svg.append(el('polygon', { points: pts(fpOf(it)), fill: 'rgba(47,93,138,.18)', stroke: '#2f5d8a', 'stroke-width': 20, 'stroke-dasharray': '60 40', 'data-role': 'review' }));
   alts.forEach((a, i) => { svg.append(el('polygon', { points: pts(fpOf({ ...item, position: a.position })), fill: 'rgba(29,107,60,.12)', stroke: '#1d6b3c', 'stroke-width': 14, 'stroke-dasharray': '40 30', 'data-role': 'alternative' }));
     svg.append(el('circle', { cx: a.position.x, cy: a.position.y, r: 150, fill: '#1d6b3c' })); const t = el('text', { x: a.position.x, y: a.position.y + 55, 'font-size': 160, 'text-anchor': 'middle', fill: '#fff', 'font-weight': 700 }); t.textContent = String(i + 1); svg.append(t); });
@@ -275,7 +315,8 @@ $('#placeBtn').addEventListener('click', () => { const x = Number($('#px').value
 // ---------- section ----------
 function drawSection() {
   const svg = $('#section'); svg.replaceChildren();
-  const v = current?.ok ? current.vertical : null, clear = v && (v.status === 'declared' || v.status === 'derived') ? v.clearHeightMm : null;
+  // With an item, the evaluation's vertical data; without one, the room's stored reference (never an assumed one).
+  const stored = ceilingFor(), v = current?.ok ? current.vertical : stored ? { status: 'declared', clearHeightMm: stored.clearHeightMm, reference: stored.reference } : null, clear = v && (v.status === 'declared' || v.status === 'derived') ? v.clearHeightMm : null;
   const H = Math.max(clear || 2800, 2800) + 300, W = 3200; svg.setAttribute('viewBox', `-200 -200 ${W + 400} ${H + 400}`);
   const g = el('g', { transform: `translate(0 ${H}) scale(1 -1)` }); svg.append(g);
   const text = (x, y, t, a = {}) => { const e = el('text', { x, y: H - y, 'font-size': 110, fill: '#4a525d', ...a }); e.textContent = t; svg.append(e); };
@@ -322,7 +363,9 @@ function draw3d() {
     const fp = D.footprint({ cx: o.position.x, cy: o.position.y, w: o.size.widthMm, d: o.size.depthMm, rot: o.rotationDeg || 0 });
     world.add(boxAt(fp, o.elevationMm || 0, o.size.heightMm || 300, M(o.size.heightMm ? 0xdfe4ea : 0xf3e7cf, o.size.heightMm ? {} : { transparent: true, opacity: .6 }))); }
   const mountOf = q => { const e = S.evaluate({ project, ceiling: v, request: q }); return e.ok && e.proposal.mount.status === 'computed' ? e.proposal.mount : null; };
-  for (const q of X.asRequests(project).concat(review)) { const m = mountOf(q); if (m) world.add(boxAt(fpOf(q), m.bottomMm, m.topMm - m.bottomMm, M(0x20242b))); }
+  // Saved items that no longer hold with the current data are drawn in red, like the list says.
+  const confirmedIds = new Set(X.asRequests(project).map(q => q.id)), failing = new Set(X.recheck(project).items.filter(x => !x.holds).map(x => x.id));
+  for (const q of X.asRequests(project).concat(review)) { const m = mountOf(q); if (m) { const b = boxAt(fpOf(q), m.bottomMm, m.topMm - m.bottomMm, M(failing.has(q.id) ? 0xb42318 : 0x20242b)); b.userData.role = confirmedIds.has(q.id) ? 'confirmed' : 'review'; if (failing.has(q.id)) b.userData.failing = true; world.add(b); } }
   if (item && current?.ok && current.proposal.mount.status === 'computed') {
     const m = current.proposal.mount, col = new THREE.Color(COLOR[current.state]), b = boxAt(fpOf(item), m.bottomMm, m.topMm - m.bottomMm, M(col, { emissive: col, emissiveIntensity: .25 })); b.userData.role = 'proposal'; world.add(b);
     if (current.proposal.kind === 'curtain') world.add(boxAt(fpOf(item), m.lowestPointMm, m.bottomMm - m.lowestPointMm, M(col, { transparent: true, opacity: .35 })));
