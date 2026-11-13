@@ -95,3 +95,39 @@ test(`R03 dentro de RUBIK ${viewport.width}x${viewport.height}`,{timeout:420000}
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  assert.deepEqual(errors,[]);
 });
+
+// «Prueba C» del expediente R03, automatizada DENTRO de RUBIK (no sustituye a la del propietario: la deja preparada).
+// Escribiendo en los campos como lo haría una persona: dos baldas demasiado cerca → aviso rojo y nada cambia; cajones
+// que no caben → aviso con los números del cambio rechazado y nada cambia; Restablecer vuelve exactamente al estado
+// abierto; nada de esto toca el proyecto hasta «Guardar interior».
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])
+test(`R03 prueba C dentro de RUBIK ${viewport.width}x${viewport.height}`,{timeout:300000},async t=>{
+ const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
+ await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await require('./editor-fixture.cjs')(page);
+ await page.evaluate(id=>{select({kind:'furn',id});drawer('panel',true);},WARDROBE);await page.waitForTimeout(300);
+ const tap=async l=>{await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();await page.waitForTimeout(120);};
+ await tap(page.locator('#aInterior'));await page.locator('.r03-rubik-dialog').waitFor();
+ const state=()=>page.evaluate(()=>JSON.stringify(RubikCabinetRubikUI.current.session.state));const projectBefore=await page.evaluate(()=>JSON.stringify(project));
+ const msg=()=>page.locator('.r03-rubik-dialog .r03-msg').innerText();const original=await state();
+ // Una balda más para tener dos, y luego la segunda a 20 mm de la primera, tecleando.
+ await tap(page.locator('.r03-rubik-dialog button',{hasText:'Añadir balda'}).first());
+ const s0=await state(),y0=await page.locator('#r03-shelf-0').inputValue();
+ const f1=page.locator('#r03-shelf-1');await f1.scrollIntoViewIfNeeded();await f1.fill(String(Number(y0)+20));await f1.press('Enter');await page.waitForTimeout(150);
+ assert.match(await msg(),/60 mm/,'aviso de baldas demasiado cerca');assert.equal(await state(),s0,'baldas: nada cambia');
+ assert.equal(await f1.inputValue(),String(JSON.parse(s0).cabinet.columns[0].shelves[1]),'el campo vuelve a su valor');
+ // Cajones que no caben: altura máxima × máximo número.
+ const dh=page.locator('#r03-drawer-h');await dh.scrollIntoViewIfNeeded();await dh.fill('400');await dh.press('Enter');await page.waitForTimeout(150);
+ const afterH=await state();
+ // «+» hasta que el motor lo rechace: ese último clic no cambia nada y el aviso (rojo) da los números del cambio rechazado.
+ let refused=null;for(let i=0;i<8&&!refused;i++){const before=await state();await tap(page.locator('.r03-rubik-dialog button[aria-label="Un cajón más"]').first());
+   if(await page.locator('.r03-rubik-dialog .r03-msg.is-error').count())refused={before,after:await state(),text:await msg()};}
+ assert.ok(refused,'algún «+» se rechaza');assert.equal(refused.after,refused.before,'cajones: el rechazo no cambia nada');
+ // El motor da el motivo real: o no caben por altura («N cajones de 400 mm (…) no caben…») o chocan con la balda más
+ // baja («…60 mm libres… también sobre los cajones»). Las dos son explicaciones del rechazo, nunca un mensaje de éxito.
+ assert.match(refused.text,/cajones de 400 mm.*no caben|60 mm libres.*sobre los cajones/,`aviso con el motivo del rechazo: «${refused.text}»`);
+ // Restablecer: exactamente el estado al abrir.
+ await tap(page.locator('.r03-rubik-dialog button',{hasText:'Restablecer'}).first());assert.equal(await state(),original,'Restablecer vuelve al estado abierto');
+ assert.equal(await page.evaluate(()=>JSON.stringify(project)),projectBefore,'sin «Guardar interior» el proyecto no cambia');
+ assert.equal(JSON.parse(afterH).cabinet.columns[0].drawerHeight,400,'alto de cajón aceptado (400 mm)');assert.deepEqual(errors,[]);
+});
