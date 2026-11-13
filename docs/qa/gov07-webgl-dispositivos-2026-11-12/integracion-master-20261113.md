@@ -121,19 +121,37 @@ Local, Chromium con SwiftShader y cada suite aislada. Ver §5.
 
 Los fallos de `ux4d` 14, `delivery` 1 y 4 y `dossier` 5 son los de vídeo MP4: este Chromium no tiene codificador H.264. **Se reproducen idénticos en `master@8d9cb7b`**, comprobado con las mismas suites en un árbol de `master`; en CI usan su propio Chromium.
 
-**Árbol combinado con #211** (`fb61291` + `e2d5de8`):
+**Árbol combinado con #211**: rama + `e2d5de8`, local y sin publicar. Fusión limpia.
 
 | Suite | Resultado |
 |---|---|
 | `obr02-obr03-plan-preview-core` | 14/14 |
 | `obr02-obr03-plan-preview` | 10/10 |
 | `obr02-obr03-integration` | 6/6 |
-| `gov07-early-loss` | 4/4 |
+| `gov07-early-loss` | 5/5 |
+| `gov07-evolution-resilience` | **23/23 en tres ejecuciones seguidas** |
 | `gov07-bench` | 2/2 |
 | OBR-01 `ex05` | 4/4 |
-| `gov07-evolution-resilience` | **22/23 · EN INVESTIGACIÓN** |
+| OBR-01 `ex11` | 4/4 |
+| OBR-01 `scene-lifecycle` | 1/1 |
+| `ft3d-8-fidelity` | 6/6 |
+| INT-R1 | 1/1 |
 
-En `gov07-evolution-resilience` falló la prueba 14, «contexto perdido durante la reproducción». Corría con tres suites de navegador en paralelo; se repite aislada para separar la carga de una interacción real con la vista previa de #211. El resultado queda en este documento.
+Antes de H3, `gov07-evolution-resilience` fallaba de forma intermitente (22/23) por el error descrito en §2 · H3.
+
+**Tras H3, en la rama** (cabeza `e5cb394`):
+
+| Suite | Resultado |
+|---|---|
+| `gov07-quality-core` | 10/10 |
+| `gov07-early-loss` | 5/5 |
+| `gov07-evolution-resilience` | 23/23 |
+| `gov07-bench` | 2/2 |
+| `gov07-cross-browser` | 1/1 |
+| OBR-01 `ex11` | 4/4 |
+| OBR-01 `scene-lifecycle` | 1/1 |
+| OBR-01 `ex05` | 4/4 |
+| INT-R1 | 1/1 |
 
 ## 6. Riesgos y límites
 
