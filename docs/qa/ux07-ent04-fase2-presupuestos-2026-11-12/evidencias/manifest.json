@@ -1,0 +1,65 @@
+{
+ "generated": "2026-11-13T08:26:36.045Z",
+ "data": "fixtures sintéticas (vivienda de referencia) y precios FICTICIOS de laboratorio",
+ "navegador": "Chromium de Playwright; no es un dispositivo físico",
+ "files": [
+  {
+   "file": "1-laboratorio-completa-escritorio-1440x900.png",
+   "sha256": "ea5ce4873e4e4c292fb00e29487e81507d508152640f62cad563a3b986bb912e",
+   "status": "complete"
+  },
+  {
+   "file": "2-laboratorio-parcial-escritorio-1440x900.png",
+   "sha256": "bdacebfa302108d70b621d737fda43f34e90a543677bf5ccdad62dce039c4b4e",
+   "status": "partial"
+  },
+  {
+   "file": "3-laboratorio-no-valida-escritorio-1440x900.png",
+   "sha256": "46616c5bcdd368dcc513ad617a4fd035fcc50e6b950db695c9b90e253ea7c5e9",
+   "status": "incoherent"
+  },
+  {
+   "file": "4-verificado-escritorio-1440x900.png",
+   "sha256": "e7b2fc0f4dca457a12ddfccae4f0476cc0d1349efe0b6451c40bc7354a99f43e",
+   "version": "1.1.0"
+  },
+  {
+   "file": "5-dossier-descargado-seccion-presupuestos-escritorio-1440x900.png",
+   "sha256": "9d9c269ed8aa2a8ec7023be8720c7a537132fbd21a2f9776af2e7ebd8385cb07"
+  },
+  {
+   "file": "6-origen-cambiado-resultados-retirados-escritorio-1440x900.png",
+   "sha256": "f4157ed7417b5fb44dbc8366a79f5299416cfea4c8cb7cf7abbd0b316f14817c",
+   "comparacionVisible": false
+  },
+  {
+   "file": "1-laboratorio-completa-movil-390x844.png",
+   "sha256": "acc8e036aa87414b339aa0525c87639cffda27d61ff11049eec4667f40dd8220",
+   "status": "complete"
+  },
+  {
+   "file": "2-laboratorio-parcial-movil-390x844.png",
+   "sha256": "106553289bb8196f26ce9939f92cd3f03054f5074348d53b42332ce5485e7a7d",
+   "status": "partial"
+  },
+  {
+   "file": "3-laboratorio-no-valida-movil-390x844.png",
+   "sha256": "40c2b912bb51efa9831c3ba01a470ef1e2201b73c981b2af8f4e6d80fe9e7e05",
+   "status": "incoherent"
+  },
+  {
+   "file": "4-verificado-movil-390x844.png",
+   "sha256": "1e1476c6bb47e3857ebbc271f2f033164241b96aab089fc38ef14317425d2a7b",
+   "version": "1.1.0"
+  },
+  {
+   "file": "5-dossier-descargado-seccion-presupuestos-movil-390x844.png",
+   "sha256": "97977dc63936bc88527d47ac4d2213f0378997ae39687999308130f6b11bf807"
+  },
+  {
+   "file": "6-origen-cambiado-resultados-retirados-movil-390x844.png",
+   "sha256": "92e55b15ca6dda7468518465c107973e8c6808c5d896dcbffd46c7db34bf1e41",
+   "comparacionVisible": false
+  }
+ ]
+}

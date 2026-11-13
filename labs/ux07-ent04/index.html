@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Antes y después</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<header class="top">
+  <p class="badge">Laboratorio UX-07 + ENT-04 · aislado · no publica ni envía nada</p>
+  <h1>Antes y después de un proyecto</h1>
+  <p class="lead">Compara dos revisiones con el mismo encuadre, separa lo real de lo ilustrativo y prepara un dossier interno con su presupuesto rotulado.</p>
+</header>
+<main>
+  <section class="card" aria-labelledby="srcTitle">
+    <h2 id="srcTitle">1 · Revisiones</h2>
+    <fieldset class="sources"><legend>Origen</legend>
+      <label><input type="radio" name="src" value="fixture" checked> Proyecto de prueba (sintético)</label>
+      <label><input type="radio" name="src" value="library"> Biblioteca de este navegador (solo lectura)</label>
+      <label><input type="radio" name="src" value="files"> Dos archivos JSON del proyecto</label>
+    </fieldset>
+    <div class="grid2" id="pickLibrary" hidden>
+      <label>Antes <select id="libBefore"></select></label>
+      <label>Después <select id="libAfter"></select></label>
+    </div>
+    <div class="grid2" id="pickFiles" hidden>
+      <label>Antes <input type="file" id="fileBefore" accept=".json,application/json"></label>
+      <label>Después <input type="file" id="fileAfter" accept=".json,application/json"></label>
+    </div>
+    <div class="grid2">
+      <label>Nombre de la primera <input id="labelBefore" value="Antes" maxlength="40"></label>
+      <label>Nombre de la segunda <input id="labelAfter" value="Después" maxlength="40"></label>
+    </div>
+    <label class="declare" id="declareRow" hidden><input type="checkbox" id="declare"> Declaro que estos dos proyectos son revisiones de la misma obra</label>
+    <div class="row"><button class="btn primary" id="compareBtn" type="button">Comparar</button></div>
+    <p id="srcError" class="error" role="alert"></p>
+    <p id="srcStatus" class="muted" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="card" aria-labelledby="cmpTitle" id="cmpCard" hidden>
+    <h2 id="cmpTitle">2 · Comparación</h2>
+    <p id="cmpSource" class="badge-src"></p>
+    <p id="relation" class="muted"></p>
+    <div class="row" role="group" aria-label="Modo de comparación">
+      <button class="btn" type="button" data-mode="curtain" aria-pressed="true">Cortina</button>
+      <button class="btn" type="button" data-mode="side" aria-pressed="false">Lado a lado</button>
+    </div>
+    <div id="curtain" class="curtain">
+      <div class="layer" id="layerBefore"></div>
+      <div class="layer after" id="layerAfter"></div>
+      <span class="tag l" id="tagBefore"></span><span class="tag r" id="tagAfter"></span>
+      <div class="handle" id="handle" aria-hidden="true"></div>
+    </div>
+    <label class="slider" id="sliderRow">Cortina <input type="range" id="slider" min="0" max="100" value="50" step="1"></label>
+    <div id="side" class="side" hidden><figure><div id="sideBefore"></div><figcaption id="capBefore"></figcaption></figure><figure><div id="sideAfter"></div><figcaption id="capAfter"></figcaption></figure></div>
+    <p class="legend"><span class="k add"></span>añadido <span class="k del"></span>quitado o a demoler <span class="k mod"></span>cambiado · relleno de cada estancia: color de su suelo declarado</p>
+    <p id="perspective" class="muted"></p>
+    <div class="cols">
+      <div><h3 id="chgTitle">Cambios reales</h3><div id="changes"></div></div>
+      <div><h3>Materiales cambiados</h3><div id="materials"></div>
+        <h3>Lo que es ilustrativo</h3><ul id="illustrative"></ul>
+        <h3>Cifras</h3><div id="metrics"></div>
+        <h3>Límites</h3><ul id="limits" class="muted"></ul></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="dosTitle" id="dosCard" hidden>
+    <h2 id="dosTitle">3 · Dossier interno</h2>
+    <p class="muted">Borrador para revisar. No hay botón de enviar ni de publicar: este laboratorio no crea enlaces de entrega.</p>
+    <div class="grid2">
+      <label>Título <input id="dosTitleIn" maxlength="120"></label>
+      <label>Presupuesto de la segunda revisión <select id="budgetSel"></select></label>
+    </div>
+    <div class="grid2">
+      <label>Presupuesto de la primera revisión (opcional, para compararlos) <select id="budgetBeforeSel"></select></label>
+    </div>
+    <div class="row"><button class="btn primary" id="buildBtn" type="button">Preparar dossier</button></div>
+    <p id="dosStatus" role="status" aria-live="polite"></p>
+    <p id="dosError" class="error" role="alert"></p>
+    <section id="bcOut" class="bc" hidden aria-labelledby="bcTitle"><h3 id="bcTitle">Presupuestos comparados</h3><p id="bcSummary"></p><div class="tablewrap" id="bcTable"></div><ul id="bcNotes" class="muted"></ul></section>
+    <div id="dosOut" hidden>
+      <div class="row">
+        <button class="btn" id="dlHtml" type="button">Descargar HTML</button>
+        <button class="btn" id="dlManifest" type="button">Descargar manifiesto</button>
+        <button class="btn" id="verifyBtn" type="button">Verificar ahora</button>
+      </div>
+      <ul id="verifyOut" class="checks"></ul>
+      <iframe id="preview" title="Vista previa del dossier" sandbox></iframe>
+    </div>
+    <details class="verifyFiles"><summary>Verificar un dossier descargado</summary>
+      <div class="grid2"><label>HTML <input type="file" id="vHtml" accept=".html,text/html"></label><label>Manifiesto <input type="file" id="vManifest" accept=".json,application/json"></label></div>
+      <div class="row"><button class="btn" id="verifyFilesBtn" type="button">Verificar archivos</button></div>
+      <ul id="verifyFilesOut" class="checks"></ul>
+    </details>
+  </section>
+</main>
+<script src="../../js/project-schema.js"></script>
+<script src="../../js/reference-project.js"></script>
+<script src="../../js/parcel-core.js"></script>
+<script src="../../js/orthophoto-core.js"></script>
+<script src="../../js/terrain-core.js"></script>
+<script src="../../js/territory-integration-core.js"></script>
+<script src="../../js/geo-provider.js"></script>
+<script src="../../js/catastro-parcel-provider.js"></script>
+<script src="../../js/territory-export-policy.js"></script>
+<script src="../../js/guide-core.js"></script>
+<script src="../../js/geo-site-adapter.js"></script>
+<script src="../../js/parcel-site-adapter.js"></script>
+<script src="../../js/orthophoto-site-adapter.js"></script>
+<script src="../../js/terrain-site-adapter.js"></script>
+<script src="../../js/project-core.js"></script>
+<script src="../../js/exterior-core.js"></script>
+<script src="../../js/roof-core.js"></script>
+<script src="../../js/tracing-core.js"></script>
+<script src="../../js/layout-review.js"></script>
+<script src="../../js/building-core.js"></script>
+<script src="../../js/surface-core.js"></script>
+<script src="../../js/quantity-core.js"></script>
+<script src="../../js/budget-core.js"></script>
+<script src="../../js/budget-draft-core.js"></script>
+<script src="../../js/budget-presentation.js"></script>
+<script src="../../js/project-variants.js"></script>
+<script src="../../js/project-library.js"></script>
+<script src="../../js/revision-compare-core.js"></script>
+<script src="../../js/revision-budget-core.js"></script>
+<script src="../../js/before-after-dossier-core.js"></script>
+<script src="fixtures.js"></script>
+<script src="lab.js"></script>
+</body>
+</html>
