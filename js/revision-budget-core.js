@@ -93,18 +93,22 @@
     const lb=new Map((B?.report.lines||[]).map(l=>[l.id,l])),la=new Map((A?.report.lines||[]).map(l=>[l.id,l]));
     const ids=[...new Set([...lb.keys(),...la.keys()])];
     const deps=comparison.changes.map(c=>({change:c,items:dependsOn(c,beforeProject,afterProject)}));
+    // Incoherente: ningún dato económico por partida (ni diferencia, ni importes, ni «exacta»): solo las cantidades, que
+    // son las que explican por qué el presupuesto no corresponde a su revisión (auditoría #212).
+    const incoherent=status==='incoherent';
+    const quantityOnly=x=>x&&{quantity:x.quantity};
     const lines=ids.map(id=>{
-      const b=side(lb.get(id)),a=side(la.get(id)),src=la.get(id)||lb.get(id);
+      const b0=side(lb.get(id)),a0=side(la.get(id)),src=la.get(id)||lb.get(id),b=incoherent?quantityOnly(b0):b0,a=incoherent?quantityOnly(a0):a0;
       const qChanged=!!(b&&a)&&(b.quantity.unit!==a.quantity.unit||Math.abs(b.quantity.value-a.quantity.value)>EPS);
       // Cambio de precio solo entre dos precios conocidos; una partida sin precio es «parcial», no un cambio de precio.
-      const pChanged=!!(b&&a)&&b.unitPrice!==null&&a.unitPrice!==null&&b.unitPrice!==a.unitPrice;
+      const pChanged=!incoherent&&!!(b&&a)&&b.unitPrice!==null&&a.unitPrice!==null&&b.unitPrice!==a.unitPrice;
       const change=!b?'added':!a?'removed':qChanged&&pChanged?'quantity-and-price':qChanged?'quantity':pChanged?'price':'same';
       // Comparable (diferencia exacta) solo con importe conocido en los lados que existen.
-      const comparable=(!b||b.priced)&&(!a||a.priced)&&!!(B&&A);
-      const reason=!B||!A?'budget-missing':b&&!b.priced?(b.quantity.complete?'unpriced-before':'quantity-incomplete-before'):a&&!a.priced?(a.quantity.complete?'unpriced-after':'quantity-incomplete-after'):null;
+      const comparable=!incoherent&&(!b||b.priced)&&(!a||a.priced)&&!!(B&&A);
+      const reason=incoherent?'incoherent':!B||!A?'budget-missing':b&&!b.priced?(b.quantity.complete?'unpriced-before':'quantity-incomplete-before'):a&&!a.priced?(a.quantity.complete?'unpriced-after':'quantity-incomplete-after'):null;
       const explainedBy=deps.filter(d=>d.items.includes(id)).map(d=>d.change.entity+':'+d.change.entityId);
       return {itemId:id,description:src.description,chapterId:src.chapterId,change,before:b,after:a,
-        delta:comparable?{net:r2((a?.net||0)-(b?.net||0)),gross:r2((a?.gross||0)-(b?.gross||0))}:null,status:comparable?'exact':'partial',excludedReason:reason,
+        delta:comparable?{net:r2((a?.net||0)-(b?.net||0)),gross:r2((a?.gross||0)-(b?.gross||0))}:null,status:incoherent?'withheld':comparable?'exact':'partial',excludedReason:reason,
         explainedBy,unexplained:(change==='added'||change==='removed'||qChanged)&&!explainedBy.length};
     });
     const exact=lines.filter(l=>l.status==='exact'),excluded=lines.filter(l=>l.status!=='exact');

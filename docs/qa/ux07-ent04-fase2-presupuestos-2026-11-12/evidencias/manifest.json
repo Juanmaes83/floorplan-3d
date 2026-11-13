@@ -1,26 +1,26 @@
 {
- "generated": "2026-11-12T23:59:22.979Z",
+ "generated": "2026-11-13T08:26:36.045Z",
  "data": "fixtures sintéticas (vivienda de referencia) y precios FICTICIOS de laboratorio",
  "navegador": "Chromium de Playwright; no es un dispositivo físico",
  "files": [
   {
    "file": "1-laboratorio-completa-escritorio-1440x900.png",
-   "sha256": "9a5d03ca62d2675e1bb9d6acf1bb3ceb14192d7013cbb7e42852cfc39a8e4cb0",
+   "sha256": "ea5ce4873e4e4c292fb00e29487e81507d508152640f62cad563a3b986bb912e",
    "status": "complete"
   },
   {
    "file": "2-laboratorio-parcial-escritorio-1440x900.png",
-   "sha256": "55c5bf676db32e21e0f5ab34cf30ad29d5ffa1360cdca14b2a63b6d56626b32f",
+   "sha256": "bdacebfa302108d70b621d737fda43f34e90a543677bf5ccdad62dce039c4b4e",
    "status": "partial"
   },
   {
    "file": "3-laboratorio-no-valida-escritorio-1440x900.png",
-   "sha256": "5fd495257ab94aeb232edcce721833bed63b93d64d943358aa37fba7a32dbed8",
+   "sha256": "46616c5bcdd368dcc513ad617a4fd035fcc50e6b950db695c9b90e253ea7c5e9",
    "status": "incoherent"
   },
   {
    "file": "4-verificado-escritorio-1440x900.png",
-   "sha256": "3601f17a905afdc2cb5c24c188dfc468cd5ed09d08c951833ec62e0a8a2bc7e4",
+   "sha256": "e7b2fc0f4dca457a12ddfccae4f0476cc0d1349efe0b6451c40bc7354a99f43e",
    "version": "1.1.0"
   },
   {
@@ -28,28 +28,38 @@
    "sha256": "9d9c269ed8aa2a8ec7023be8720c7a537132fbd21a2f9776af2e7ebd8385cb07"
   },
   {
+   "file": "6-origen-cambiado-resultados-retirados-escritorio-1440x900.png",
+   "sha256": "f4157ed7417b5fb44dbc8366a79f5299416cfea4c8cb7cf7abbd0b316f14817c",
+   "comparacionVisible": false
+  },
+  {
    "file": "1-laboratorio-completa-movil-390x844.png",
-   "sha256": "15a6c9dc5b0ac30fca243b871bfecdc327f0dd60b9ae8f71f1c5eaa800e3bc73",
+   "sha256": "acc8e036aa87414b339aa0525c87639cffda27d61ff11049eec4667f40dd8220",
    "status": "complete"
   },
   {
    "file": "2-laboratorio-parcial-movil-390x844.png",
-   "sha256": "adc887d9bc4c3e246e67e77e60b99ed0dc6085292067c47e5f3bdaaecd866dbc",
+   "sha256": "106553289bb8196f26ce9939f92cd3f03054f5074348d53b42332ce5485e7a7d",
    "status": "partial"
   },
   {
    "file": "3-laboratorio-no-valida-movil-390x844.png",
-   "sha256": "454e8d2aab9ad77edcccdaa11ec6262d6c739759a5646113cd9f57b650b95e2c",
+   "sha256": "40c2b912bb51efa9831c3ba01a470ef1e2201b73c981b2af8f4e6d80fe9e7e05",
    "status": "incoherent"
   },
   {
    "file": "4-verificado-movil-390x844.png",
-   "sha256": "eb926723580a467f06e460dc779c3b6dd1765fb38895e498b75868a2aa56d9f6",
+   "sha256": "1e1476c6bb47e3857ebbc271f2f033164241b96aab089fc38ef14317425d2a7b",
    "version": "1.1.0"
   },
   {
    "file": "5-dossier-descargado-seccion-presupuestos-movil-390x844.png",
    "sha256": "97977dc63936bc88527d47ac4d2213f0378997ae39687999308130f6b11bf807"
+  },
+  {
+   "file": "6-origen-cambiado-resultados-retirados-movil-390x844.png",
+   "sha256": "92e55b15ca6dda7468518465c107973e8c6808c5d896dcbffd46c7db34bf1e41",
+   "comparacionVisible": false
   }
  ]
 }

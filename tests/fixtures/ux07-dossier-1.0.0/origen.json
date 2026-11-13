@@ -1,0 +1,12 @@
+{
+ "generadoCon": "lab/ux07-ent04-before-after (#209)",
+ "commit": "8a3cce85df71b1f242ff0c5ccb53b46ea67c0fa2",
+ "version": "1.0.0",
+ "fecha": "2026-11-12T12:00:00.000Z",
+ "entradas": {
+  "antes": "UX07Fixtures.before()",
+  "despues": "UX07Fixtures.after()",
+  "presupuesto": "UX07Fixtures.budget('complete') — precios FICTICIOS"
+ },
+ "nota": "No regenerar con el código actual: perdería su valor de prueba de compatibilidad."
+}
