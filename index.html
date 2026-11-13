@@ -1500,6 +1500,8 @@ function renderSel(){
   if (ui.sel?.kind === 'furn'){
     const f = getF(ui.sel.id);
     if (f){
+      // UX-08: cotas en vivo mientras se arrastra el mueble (o un momento tras moverlo con las flechas); debajo de las asas.
+      if (window.FloorPlanLiveDimensionsUI?.active(f.id, drag?.kind === 'move' && drag.moved && drag.id === f.id)) s += FloorPlanLiveDimensionsUI.markup(geometry, f, {k, coarse:COARSE, bounds:{x0:view.x0, y0:view.y0, x1:view.x0+svg.clientWidth*k, y1:view.y0+svg.clientHeight*k}});
       // 触屏上手柄更大、离家具更远，并各带一圈透明的大热区
       const p = 5*k, A = 'stroke="#b5653a" vector-effect="non-scaling-stroke"', hs = COARSE ? 1.7 : 1, ro = (COARSE ? 40 : 26)*k, hit = (COARSE ? 24 : 11)*k;
       const sx = f.w/2+p, sy = f.d/2+p;
@@ -2151,6 +2153,7 @@ document.addEventListener('keydown', e => {
   else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancelPick(); toast('Añadir hueco cancelado'); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
   else if (k.startsWith('arrow') && ui.sel?.kind === 'furn'){
     e.preventDefault(); const st = e.shiftKey ? 100 : 10;
+    window.FloorPlanLiveDimensionsUI?.nudge(ui.sel.id, renderSel);
     mutate(() => { const f = getF(ui.sel.id); if (k==='arrowleft') f.cx -= st; if (k==='arrowright') f.cx += st; if (k==='arrowup') f.cy -= st; if (k==='arrowdown') f.cy += st; });
   }
   else if (k === '+' || k === '=') zoomCenter(1.25);
@@ -5415,6 +5418,8 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/construction-plan-ui.js"></script>
 <script src="js/reference-prices-ui.js"></script>
 <script src="js/delivery-client.js"></script>
+<!-- UX-08 · cotas en vivo al mover muebles (solo dibujo en #gSel; no guarda nada) -->
+<script src="js/live-dimensions-core.js"></script><script src="js/live-dimensions-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->

@@ -1,0 +1,43 @@
+name: UX-08 live dimensions while moving furniture
+on:
+  pull_request:
+    paths:
+      - js/live-dimensions-*.js
+      - index.html
+      - js/project-core.js
+      - js/tracing-core.js
+      - tests/ux08-*.cjs
+      - .github/workflows/ux08-live-dimensions.yml
+permissions:
+  contents: read
+jobs:
+  ux08:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/live-dimensions-*.js tests/ux08-*.cjs; do node --check "$f"; done
+      - name: Geometry (pure)
+        run: node --test --test-concurrency=1 tests/ux08-live-dimensions.test.cjs
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ux08-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ux08-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/ux08-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux08-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real editor, mouse and touch (1440x900, 390x844, 820x1180)
+        env:
+          UX08_SHOTS: qa-results/ux08
+        run: node --test --test-concurrency=1 tests/ux08-live-dimensions.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ux08-${{ github.event.pull_request.head.sha }}
+          path: qa-results/ux08
+          if-no-files-found: warn
