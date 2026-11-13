@@ -15,12 +15,15 @@
  const t=(es,en)=>lang()==='en'?en:es;
  const $=s=>document.querySelector(s);
  const stage=$('#stage');if(!stage)return;
+ // Panel y minimapa viven en el contenedor del 3D (#view3d), como el joystick y la ayuda del paseo: solo existen con la
+ // escena y las capturas «sin interfaz» del 3D (p. ej. la referencia de fidelidad FT3D-8) los excluyen como al resto.
+ const host=$('#view3d')||stage;
  const make=(tag,attrs={},parent,text)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;parent?.append(n);return n;};
  const svg=(tag,attrs={},parent)=>{const n=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));parent?.append(n);return n;};
  const displayName=room=>{try{return roomDisplay(room);}catch{return room?.name||room?.id;}};
 
  // ── Panel ────────────────────────────────────────────────────────────────────────────────────────────────────────
- const panel=make('section',{id:'nav3d',class:'nav3d','aria-labelledby':'nav3dToggle',hidden:''},stage);
+ const panel=make('section',{id:'nav3d',class:'nav3d','aria-labelledby':'nav3dToggle',hidden:''},host);
  const toggle=make('button',{id:'nav3dToggle',type:'button',class:'btn nav3d-toggle','aria-expanded':'false','aria-controls':'nav3dBody'},panel);
  const body=make('div',{id:'nav3dBody',class:'nav3d-body'},panel);
  const row=(label,id)=>{const g=make('div',{class:'nav3d-row',role:'group','aria-labelledby':id},body);make('span',{id,class:'nav3d-label'},g,label);const box=make('div',{class:'nav3d-buttons'},g);return {g,box};};
@@ -43,7 +46,7 @@
  let open=matchMedia('(min-width: 1100px) and (min-height: 600px)').matches,userToggled=false;
 
  // ── Minimapa del paseo ───────────────────────────────────────────────────────────────────────────────────────────
- const map=make('section',{id:'nav3dMap',class:'nav3d-map','aria-labelledby':'nav3dMapToggle',hidden:''},stage);
+ const map=make('section',{id:'nav3dMap',class:'nav3d-map','aria-labelledby':'nav3dMapToggle',hidden:''},host);
  const mapToggle=make('button',{id:'nav3dMapToggle',type:'button',class:'btn nav3d-map-toggle','aria-expanded':'true','aria-controls':'nav3dMapPanel'},map);
  const mapPanel=make('div',{id:'nav3dMapPanel',class:'nav3d-map-panel'},map);
  const mapSvg=svg('svg',{id:'nav3dMapSvg',role:'img',preserveAspectRatio:'xMidYMid meet'},mapPanel);
