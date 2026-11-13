@@ -4,7 +4,7 @@
 
 | Rama | Base | PR |
 |---|---|---|
-| `integration/r02a-ceiling-on-master-20261113` | `master@1902b827d62f9fd2ad3cb059d458964596b15331` | Draft, **NO MERGE** |
+| `integration/r02a-ceiling-on-master-20261113` | `master@1902b827d62f9fd2ad3cb059d458964596b15331`, actualizada a `master@f119f1bbec4e3b3ee66a64c5e3aa2c7a6e4d72af` (R03 #222) | Draft, **NO MERGE** |
 
 **Estado:** conectado al editor principal, **EXPERIMENTAL**. Pendiente de:
 - ratificar el contrato `x-r02a-ceiling` y la referencia vertical;
@@ -113,7 +113,26 @@ Además, `js/tracing-ui.js` `apply()` hace la misma reconciliación, porque borr
 
 **Retirada:** quitar los seis `<script>` desactiva todo. Los demás puntos usan `?.` y no hacen nada sin el módulo.
 
-**Antes de pedir la integración:** cuando R03 llegue a `master`, hay que fusionar `master` en esta rama y repetir la batería. **No** se incorpora nada de la rama de R03.
+**Convivencia con R03 (actualizado, 13/11/2026):** R03 llegó a `master@f119f1b` (#222) y se integró en esta rama con un merge (`d115160`), sin conflictos de texto.
+
+Las guardas de R03 se adaptaron **sin relajarse**:
+- `tests/r02a-activation-manifest.cjs` enumera la activación R02-A exacta: 6 módulos, 6 puntos en `index.html` y 1 en `tracing-ui`, y 5 referencias al global.
+- La A4 de R03 sigue vetando R01, cualquier otro R02, `sculpt`, MCP, `labs/` y orígenes externos. Solo admite esos 6 módulos exactos.
+- `tests/r02a-activation.test.cjs` es el equivalente de I0/I1 para R02-A. Exige:
+  - el bloque R02-A contiguo, después de RUBIK y **antes** del bloque R03, que sigue siendo el último (I1 de R03);
+  - los puntos exactos;
+  - que ningún módulo de una línea use el global de la otra;
+  - que el esquema canónico no se amplíe.
+- Control: un séptimo script R02-A, un script R01, una referencia extra al global o quitar el punto de `tracing-ui` hacen fallar las guardas.
+
+`tests/r02a-r03-coexistence.browser.test.cjs` comprueba los dos en el mismo editor:
+- un interior de armario y un plafón en la misma estancia;
+- deshacer y rehacer;
+- duplicar y borrar el armario;
+- quitar la estancia, que retira solo el techo;
+- reabrir y ver los dos en 3D.
+
+**No** se incorporó nada de la rama de R03 fuera de lo que ya está en `master`.
 
 ## 6. Riesgos y decisiones pendientes
 

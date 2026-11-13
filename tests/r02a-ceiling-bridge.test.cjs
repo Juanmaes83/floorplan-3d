@@ -159,8 +159,9 @@ test('R1 adversarial: 1500 secuencias (confirmar, rechazar, mover muebles, borra
 test('R1 guardas: el editor carga EXACTAMENTE los módulos R02-A en orden; el puente no usa el DOM ni escribe sin pasar por el contrato', () => {
   const root = path.join(__dirname, '..'), html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   // Integración (13/11/2026): index.html carga R02-A. Antes la guarda exigía que no lo cargara; ahora exige el conjunto exacto.
-  const loaded = [...html.matchAll(/<script src="js\/(r02a-[^"]+)"><\/script>/g)].map(m => m[1]);
-  assert.deepEqual(loaded, ['r02a-donor-extracts.js', 'r02a-ceiling-core.js', 'r02a-ceiling-session.js', 'r02a-ceiling-contract.js', 'r02a-ceiling-bridge.js', 'r02a-ceiling-editor.js']);
+  // Lista y puntos de conexión: tests/r02a-activation-manifest.cjs (y tests/r02a-activation.test.cjs, que convive con I1/A4 de R03).
+  const M = require('./r02a-activation-manifest.cjs');
+  assert.deepEqual(M.loadedScripts(html).filter(s => /r02a/.test(s)), M.SCRIPTS);
   const ui = fs.readFileSync(path.join(root, 'js/r02a-ceiling-editor.js'), 'utf8');
   assert.doesNotMatch(ui, /extensions\s*\[|\.extensions\s*=|localStorage|fetch\(|XMLHttpRequest|sendBeacon/, 'el panel no escribe la extensión ni guarda ni envía nada: solo FloorPlanApp.applyCeiling con el puente');
   const src = fs.readFileSync(path.join(root, 'js/r02a-ceiling-bridge.js'), 'utf8');
