@@ -180,3 +180,41 @@ No se ha usado ningún dato real. Cuando el propietario autorice un expediente:
    - modificar una cota del proyecto: el plan pasa a «otra revisión»;
    - citar un elemento borrado: aparece `broken`.
 6. **Resultado:** acta con la huella del proyecto (no los datos) y la firma del profesional. Solo entonces cabría hablar de fidelidad documental de ese expediente.
+
+### 8.1 Dos defectos encontrados al integrar la procedencia y corregidos en el producto, con control negativo
+
+1. **CI de `6fa75ee`, job `obr01` (QA-22, ×28, plan denso).**
+   - **Síntoma:** el clic real en el muro de carga de la copia más lejana no seleccionaba nada.
+   - **Causa medida:** el punto de clic (1398, 390) está bajo el panel. La nueva fila «Fuentes y vínculos», que tiene controles, añadía 40 px y, con las fuentes del runner, caía encima del punto.
+   - **Corrección:** «Fuentes y vínculos» ocupa la línea de la nota que ya existía (cabecera de 24 px «Plan ≠ obra · coste ≠ gasto · Fuentes y vínculos»), y el rótulo del 100 % vuelve a caber en sus líneas («fin del plan, no obra terminada»).
+   - **Resultado:** el panel acaba en y = 343, frente a 337 en `e2d5de8`.
+2. **Recorrido de la Preview, móvil 390×844.**
+   - **Síntoma:** con «Siguiente tarea» desplegada, el toque real en el muro de carga caía en un **botón** del panel, que ocupaba el **84 %** del escenario.
+   - **Corrección:** el origen declarado ya no se repite en cada tarea (está en «Fuentes y vínculos»), y en el móvil el panel ocupa **como mucho el 45 %** del escenario, con desplazamiento propio. Esto también atiende la observación de UX del GO visual anterior.
+   - **Prueba nueva** en `provenance.browser`: falla sin la corrección («el panel ocupa 84 %»).
+
+Ninguna prueba existente se suavizó. La de procedencia exige ahora una cabecera de al menos 24 px (WCAG 2.5.8) en lugar de 36.
+
+### 8.2 Evidencias del recorrido
+
+`docs/integration/evidencias-obr02-obr03-2026-11-13-procedencia/`: 14 capturas con `manifest.json` y SHA-256, en escritorio 1440×900 y móvil 390×844, sobre la rama de revisión servida en local.
+
+| Paso | Escritorio | Móvil |
+|---|---|---|
+| Con presupuesto: % del calendario, coste planificado y fantasma = vínculos comprobados | ✓ | ✓ |
+| Fuentes y vínculos: origen declarado «Obra sintética OBR-01», huella, plan en borrador, presupuesto no verificable | ✓ | ✓ |
+| OBR-01: clic o toque real en el muro de carga con el fantasma encendido (bajo el punto: el lienzo) | ✓ | ✓ |
+| Sin presupuesto: «No disponible», nunca 0 | ✓ | ✓ |
+| Adversarial: «no existe en el proyecto: no se dibuja», «OTRA revisión», «Vista interna exploratoria», sin fantasma inventado | ✓ | ✓ |
+| Errores de página / hosts externos | 0 / 0 | 0 / 0 |
+
+La página de revisión abre los datos desde la **biblioteca**. En ese modo la Evolución no puede saber que son sintéticos y no lo afirma: lo dicen los propios datos (origen declarado de las tareas) y el aviso «DEMOSTRACIÓN SINTÉTICA» de la página. Con fixtures de laboratorio (`?lab=1`), el panel muestra «DATOS SINTÉTICOS de prueba».
+
+**Regresión local en `771f0ac`**, Chromium con SwiftShader:
+- OBR-02/03 núcleo y procedencia: 20/20;
+- OBR-02/03 navegador (3 archivos): 23/23;
+- OBR-01: 14/14;
+- FT3D-8 (fidelity, ux4d, delivery, dossier, fit, lab): 59/59;
+- examen, hallazgos-v4, novato e INT-R1 (con `CHROME` y `THREE_LOCAL_DIR`, como en CI): 25/25.
+
+Las suites de navegador se repitieron tras cada corrección del panel.
