@@ -92,7 +92,8 @@
  function viewChanged(){$('#traceStatus').hidden=is3D();$('#tip').hidden=!is3D()&&!!$('#traceStatus').textContent;}
  const status=text=>{$('#traceStatus').textContent=text;$('#traceStatus').title=text;viewChanged();};
  function report(e){toast(e.message||String(e),6000);status(e.message||String(e));}
- function apply(fn){const next=Core.clone(project),before=snap();fn(next);next.updatedAt=new Date(Math.max(Date.now(),Date.parse(next.createdAt))).toISOString();Core.validate(next);storage.setItem(STORE,JSON.stringify(next));project=next;undoStack.push(before);if(undoStack.length>150)undoStack.shift();redoStack.length=0;refreshProject();renderAll();return next;}
+ function apply(fn){let next=Core.clone(project);const before=snap();fn(next);next=window.RubikCeilingEditor?.reconcile(next)||next; // R02-A: retira el techo de una estancia eliminada en este mismo paso
+  next.updatedAt=new Date(Math.max(Date.now(),Date.parse(next.createdAt))).toISOString();Core.validate(next);storage.setItem(STORE,JSON.stringify(next));project=next;undoStack.push(before);if(undoStack.length>150)undoStack.shift();redoStack.length=0;refreshProject();renderAll();return next;}
  async function decode(bytes,info){let bitmap;try{bitmap=await createImageBitmap(new Blob([T.renderBytes(bytes,info)],{type:info.mediaType}));}catch{throw Error('La imagen está corrupta o no se pudo decodificar.');}try{if(bitmap.width!==info.widthPx||bitmap.height!==info.heightPx)throw Error('Dimensiones de imagen incoherentes.');}finally{bitmap.close();}}
  function urlsClear(){for(const entry of urls.values())URL.revokeObjectURL(entry.url);urls.clear();}
  // Every level of every building counts: an image is only removed when no stored project references it.

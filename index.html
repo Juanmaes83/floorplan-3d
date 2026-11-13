@@ -765,6 +765,13 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <!-- UX-07 · el editor solo necesita el adaptador para construir la dirección del comparador (comparar/); el resto vive allí -->
 <script src="js/revision-compare-core.js"></script>
 <script src="js/variants-compare-adapter.js"></script>
+<!-- R02-A · techos y elementos altos (EXPERIMENTAL, integración pendiente de GO): núcleo #193/#203, contrato candidato x-r02a-ceiling, puente #217 y su panel -->
+<script src="js/r02a-donor-extracts.js"></script>
+<script src="js/r02a-ceiling-core.js"></script>
+<script src="js/r02a-ceiling-session.js"></script>
+<script src="js/r02a-ceiling-contract.js"></script>
+<script src="js/r02a-ceiling-bridge.js"></script>
+<script src="js/r02a-ceiling-editor.js"></script>
 <script src="js/room-layout.js"></script>
 <script src="js/wall-assist.js"></script>
 <script src="js/raw-wall-export.js"></script>
@@ -1159,7 +1166,8 @@ function save(){
 }
 const snap = () => JSON.stringify(project);
 function commit(before){
-  try { project.updatedAt = new Date(Math.max(Date.now(), Date.parse(project.createdAt))).toISOString(); Core.validate(project); }
+  // R02-A: si este cambio ha quitado estancias, sus elementos y referencias de techo se retiran en el MISMO paso del deshacer.
+  try { const ceiling=window.RubikCeilingEditor?.reconcile(project); if(ceiling) project=ceiling; project.updatedAt = new Date(Math.max(Date.now(), Date.parse(project.createdAt))).toISOString(); Core.validate(project); }
   catch(e){ project=JSON.parse(before); refreshProject(); toast(tr('数据无效：','Invalid data: ') + e.message); return false; }
   // No change may create a new furniture–stair conflict (BW5): it is rolled back, the item keeps its last valid pose.
   const blocked = window.FloorPlanBuildingUI?.guard(before);
@@ -1529,6 +1537,7 @@ function renderAll(){window.FloorPlanTerritorySession?.sync(library?.activeId()|
   refreshProject(); buildDefs(); renderOpenings(); renderDims();
   renderGrid(); renderRooms(); renderFurn(); renderWalls(); renderLabels(); renderMeasure(); renderSel(); renderPanel(); updateHeader();
   window.View3D?.sync();
+  window.RubikCeilingEditor?.render();
   window.FloorPlanTraceUI?.render();
   window.FloorPlanGuideUI?.sync();
   window.FloorPlanBuildingUI?.render();
@@ -1557,7 +1566,7 @@ function renderPanel(){
   renderFab();
   const p = $('#panel');
   if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); return; } }
-  if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); return; }
+  if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); window.RubikCeilingEditor?.roomPanel(p, ui.sel.id); return; }
   if (ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.panel(p, ui.sel.id)) return;
   if (ui.sel?.kind === 'wall'){ const w = project.walls.find(w => w.id === ui.sel.id); if (w){ SafeDOM.markup(p, wallPanel(w)); bindWallPanel(w.id); return; } }
   SafeDOM.markup(p, overviewPanel()); bindOverview();
@@ -2512,6 +2521,8 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
+  // R02-A: los cambios de techo pasan por el commit de RUBIK (validación, deshacer, guardado). fn recibe una copia y devuelve {ok,project}.
+  applyCeiling(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
   async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),
@@ -2652,6 +2663,7 @@ function init(){
   levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof'; exteriorG = new THREE.Group(); exteriorG.name = 'derived-exterior-volumes';
   exteriorLineMat=new THREE.LineBasicMaterial({color:0x766e62,transparent:true,opacity:.55});
   scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG, exteriorG);
+  const ceilingG=window.RubikCeilingEditor?.create3D(THREE)?.group;if(ceilingG)scene.add(ceilingG); // R02-A: elementos de techo a sus cotas
   territoryRenderer=FloorPlanTerritoryRenderer.create(THREE);scene.add(territoryRenderer.group);FloorPlanTerritorySession.subscribe(()=>{if(active)syncTerritory();else territoryRenderer.dispose();});
 
   const cv = renderer.domElement; let downAt = null, look = null;
@@ -3800,6 +3812,7 @@ function sync(force){
   if(contactEnabled&&contactChanged)buildPresentationContactShadows();
   if (force || l !== sigLabels){ sigLabels = l; buildLabels(); }
   syncTerritory();
+  window.RubikCeilingEditor?.update3D({x:OX,y:OY});
 }
 
 // CSS2DRenderer 只看标签自身的 visible，不继承父级，所以逐个设置

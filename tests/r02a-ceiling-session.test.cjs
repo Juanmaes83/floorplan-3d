@@ -170,10 +170,13 @@ test('B.4 reopen: recheck() re-evaluates every stored item from the file as it i
   assert.equal(X.recheck(flat()).status, 'absent');
 });
 
-test('B guards: nothing in the product loads R02-A; the core is lab #193 verbatim except one require path; extracts byte-identical', () => {
+test('B guards: the editor loads the R02-A modules in dependency order; the core is lab #193 verbatim except one require path; extracts byte-identical', () => {
   const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
   const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-  for (const f of ['r02a-ceiling-core', 'r02a-donor-extracts', 'r02a-ceiling-session', 'r02a-ceiling-contract']) assert.ok(!html.includes(f));
+  // Integration (13/11/2026): the product loads R02-A. Dependency order: extracts → core → session → contract (→ bridge → editor).
+  const at = f => html.indexOf(`<script src="js/${f}.js">`), order = ['r02a-donor-extracts', 'r02a-ceiling-core', 'r02a-ceiling-session', 'r02a-ceiling-contract'].map(at);
+  assert.ok(order.every(i => i > 0) && order.every((v, i) => i === 0 || v > order[i - 1]), JSON.stringify(order));
+  assert.ok(at('r02a-ceiling-core') > at('project-core'), 'after FloorPlanCore');
   const sha = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, '..', f))).digest('hex');
   assert.equal(sha('js/r02a-donor-extracts.js'), '9cb9a794fc7427bee6bbeb6a7879b4f170a856eba925a912bb128baebf245f4d', 'same bytes as #193 workshop/donor-ceiling-extracts.js @7d8a626');
   const core = fs.readFileSync(path.join(__dirname, '..', 'js/r02a-ceiling-core.js'), 'utf8').replace("require('./r02a-donor-extracts.js')", "require('./workshop/donor-ceiling-extracts.js')");

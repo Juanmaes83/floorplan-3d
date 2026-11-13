@@ -156,9 +156,13 @@ test('R1 adversarial: 1500 secuencias (confirmar, rechazar, mover muebles, borra
   console.log('cobertura', JSON.stringify(cov));
 });
 
-test('R1 guardas: nada del producto carga el puente; el puente no usa el DOM ni escribe sin pasar por el contrato', () => {
+test('R1 guardas: el editor carga EXACTAMENTE los módulos R02-A en orden; el puente no usa el DOM ni escribe sin pasar por el contrato', () => {
   const root = path.join(__dirname, '..'), html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-  assert.doesNotMatch(html, /r02a-/, 'index.html no carga R02-A');
+  // Integración (13/11/2026): index.html carga R02-A. Antes la guarda exigía que no lo cargara; ahora exige el conjunto exacto.
+  const loaded = [...html.matchAll(/<script src="js\/(r02a-[^"]+)"><\/script>/g)].map(m => m[1]);
+  assert.deepEqual(loaded, ['r02a-donor-extracts.js', 'r02a-ceiling-core.js', 'r02a-ceiling-session.js', 'r02a-ceiling-contract.js', 'r02a-ceiling-bridge.js', 'r02a-ceiling-editor.js']);
+  const ui = fs.readFileSync(path.join(root, 'js/r02a-ceiling-editor.js'), 'utf8');
+  assert.doesNotMatch(ui, /extensions\s*\[|\.extensions\s*=|localStorage|fetch\(|XMLHttpRequest|sendBeacon/, 'el panel no escribe la extensión ni guarda ni envía nada: solo FloorPlanApp.applyCeiling con el puente');
   const src = fs.readFileSync(path.join(root, 'js/r02a-ceiling-bridge.js'), 'utf8');
   assert.doesNotMatch(src, /document\.|window\.|localStorage|fetch\(/, 'puro');
   assert.doesNotMatch(src, /extensions\s*\[|\.extensions\s*=/, 'no escribe la extensión por su cuenta: solo a través de RubikCeilingContract');
