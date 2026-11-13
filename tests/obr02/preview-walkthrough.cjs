@@ -58,7 +58,11 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
       return {next:document.querySelector('.plan-preview .pp-next').innerText.replace(/\s+/g,' '),src:d.innerText.replace(/\s+/g,' '),keys:window.__ft3dFidelity.scene.preview.keys,warn:P.provenance.warnings.map(w=>w.code)};});
     log.push({paso:'adversarial · plan no concordante (otra revisión + vínculo roto)',viewport:label,avisos:adv.warn,
       ok:/no existe en el proyecto: no se dibuja/.test(adv.next)&&!adv.keys.includes('project/wal_no-existe')&&/OTRA revisión/.test(adv.src)&&/Vista interna exploratoria/.test(adv.src)});
+    // Captura con lo que se afirma a la vista: la línea del vínculo roto (dentro del panel, que tiene su propio desplazamiento).
+    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;document.querySelector('.plan-preview .pp-links li')?.scrollIntoView({block:'center'});});await page.waitForTimeout(200);
     await shot(page,`4-adversarial-plan-no-concordante-${label}`,{avisos:adv.warn});
+    await page.evaluate(()=>{const d=document.querySelector('.plan-preview .pp-src-d');d.open=true;d.querySelector('.pp-warn')?.scrollIntoView({block:'center'});});await page.waitForTimeout(200);
+    await shot(page,`4b-adversarial-fuentes-y-avisos-${label}`);
     log.push({paso:'errores de la página',viewport:label,errores:errors,ok:errors.length===0});
     log.push({paso:'hosts externos',viewport:label,hosts:[...external]});
     await context.close();}
