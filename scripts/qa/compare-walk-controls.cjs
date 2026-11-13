@@ -8,18 +8,20 @@
    node scripts/qa/compare-walk-controls.cjs base.tap head.tap salida.json [base-controls.json head-controls.json] */
 const fs=require('node:fs');
 const [baseFile,headFile,outFile,baseSteps,headSteps]=process.argv.slice(2);
-const parse=file=>{const rows=new Map();for(const line of fs.readFileSync(file,'utf8').split('\n')){const m=line.match(/^(not ok|ok) \d+ - (.+?)(?: # .*)?$/);if(m)rows.set(m[2].trim(),m[1]==='ok');}return rows;};
+// Una prueba saltada (# SKIP / # TODO) no es un aprobado: se marca aparte y hace fallar la comparación.
+const parse=file=>{const rows=new Map();for(const line of fs.readFileSync(file,'utf8').split('\n')){const m=line.match(/^(not ok|ok) \d+ - (.+?)(?: # (SKIP|TODO)\b.*)?$/i);if(m)rows.set(m[2].trim(),m[3]?'skip':m[1]==='ok'?'pass':'fail');}return rows;};
 const base=parse(baseFile),head=parse(headFile),names=[...new Set([...base.keys(),...head.keys()])];
-const row=n=>({test:n,master:base.has(n)?(base.get(n)?'pass':'fail'):'absent',head:head.has(n)?(head.get(n)?'pass':'fail'):'absent'});
+const row=n=>({test:n,master:base.get(n)||'absent',head:head.get(n)||'absent'});
 const all=names.map(row);
 const report={historical:all.filter(r=>r.master==='fail'&&r.head==='fail').map(r=>r.test),fixed:all.filter(r=>r.master==='fail'&&r.head==='pass').map(r=>r.test),
-  newFailures:all.filter(r=>r.head==='fail'&&r.master!=='fail').map(r=>r.test),passing:all.filter(r=>r.master==='pass'&&r.head==='pass').map(r=>r.test),rows:all};
+  newFailures:[...all.filter(r=>r.head==='fail'&&r.master!=='fail').map(r=>r.test),...all.filter(r=>r.head==='skip'||r.master==='skip').map(r=>`${r.test} (saltada: no hay comparación)`)],passing:all.filter(r=>r.master==='pass'&&r.head==='pass').map(r=>r.test),rows:all};
 const steps=f=>{try{return JSON.parse(fs.readFileSync(f,'utf8'));}catch{return null;}};
 const bs=baseSteps&&steps(baseSteps),hs=headSteps&&steps(headSteps);
 if(baseSteps||headSteps){const k=r=>`${r.viewport} · ${r.control}`,bm=new Map((bs||[]).map(r=>[k(r),r.result]));
   report.steps=(hs||[]).map(r=>({step:k(r),master:bm.get(k(r))||'not reached',head:r.result}));
   report.newStepFailures=report.steps.filter(r=>r.head==='FAIL'&&r.master!=='FAIL').map(r=>`${r.step} (master: ${r.master})`);
-  if(!hs)report.newStepFailures.push('sin controls.json del HEAD');}
+  if(!hs||!hs.length)report.newStepFailures.push('sin pasos registrados en el HEAD (controls.json vacío o ausente)');
+  if(!bs||!bs.length)report.newStepFailures.push('sin pasos registrados en master (controls.json vacío o ausente)');}
 if(!all.length)report.newFailures.push('sin resultados TAP: la suite no llegó a ejecutarse');
 if(outFile)fs.writeFileSync(outFile,JSON.stringify(report,null,2));
 const md=['### walk-controls · master frente al HEAD','','| Prueba | master | HEAD |','|---|---|---|',...all.map(r=>`| ${r.test} | ${r.master} | ${r.head} |`),'',

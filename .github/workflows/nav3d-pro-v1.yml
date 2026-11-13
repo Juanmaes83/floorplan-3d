@@ -54,6 +54,7 @@ jobs:
           node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
       - name: Real editor - full journey (desktop, phone portrait and landscape), unreachable room, building, presentation and WebGL loss
         run: node --test --test-concurrency=1 tests/nav3d.browser.test.cjs
       - name: Existing walk and 3D controls keep working
@@ -80,6 +81,7 @@ jobs:
           node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
       - name: walk-controls on master (base)
         run: (cd base && WALK_ARTIFACTS="$GITHUB_WORKSPACE/qa-results/walk-controls/master" node --test --test-concurrency=1 --test-reporter=tap tests/walk-controls.browser.test.cjs) > walk-master.tap 2>&1 || true
       - name: walk-controls on this HEAD
@@ -112,6 +114,7 @@ jobs:
           node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
       - name: Record both journeys (real controls) and check them with ffprobe
         run: node scripts/qa/record-nav3d-v1.cjs
       - uses: actions/upload-artifact@v4
