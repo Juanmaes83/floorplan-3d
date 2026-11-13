@@ -1,0 +1,31 @@
+{
+ "generated": "2026-11-12T19:43:00.205Z",
+ "engine": "Chromium + SwiftShader",
+ "data": "fixtures sintéticas FT3D-8 (?lab=1), precios de tarifa FIXTURE",
+ "files": [
+  {
+   "file": "1-A-siguiente-cubierta-en-fantasma-escritorio-1440x900.png",
+   "sha256": "ffd36eb4c8317c4eef79ace4e6c550c5595fa4a1aac11a260b5f89a7e114b1ab"
+  },
+  {
+   "file": "2-A-avanzado-coste-planificado-escritorio-1440x900.png",
+   "sha256": "5e77b1d079fa25fc37d4a531f4dae52ffb8033fd70c5caae9a6bae97de388d37"
+  },
+  {
+   "file": "3-B-coste-no-disponible-escritorio-1440x900.png",
+   "sha256": "6bf457c321d550c5aaa9fa344a190bccb29c7b10c61db046b9a09f9946f5aa14"
+  },
+  {
+   "file": "1-A-siguiente-cubierta-en-fantasma-movil-390x844.png",
+   "sha256": "8ad42b8d374b6ac5682113eb383d43c9bd7551086ab3473460891e4bae863c3c"
+  },
+  {
+   "file": "2-A-avanzado-coste-planificado-movil-390x844.png",
+   "sha256": "67cd21a578e2c4393faf722df997b664c5b6493b198d34009ef284141de84b15"
+  },
+  {
+   "file": "3-B-coste-no-disponible-movil-390x844.png",
+   "sha256": "48efbbfd40078947254599e2ad07178fbbf634fb884e8949d9efd226314c89f3"
+  }
+ ]
+}
