@@ -84,15 +84,16 @@ test('UX-08 + R03 + R02-A, escritorio con ratón: cotas en la estancia con techo
 
     // D · Con las cotas VISIBLES (flecha del teclado), exportar: ni la lámina ni el PNG ni el JSON llevan cotas.
     await page.evaluate(W => select({ kind: 'furn', id: W }), WARDROBE); await page.locator('#plan').focus().catch(() => {});
-    await page.keyboard.press('ArrowRight'); await page.waitForTimeout(80);
+    await page.keyboard.press('ArrowRight'); await page.evaluate(() => { window.__ux08KeyAt = performance.now(); }); await page.waitForTimeout(80);
     assert.ok(await page.locator('#gSel .live-dims').count() > 0, 'cotas visibles antes de exportar');
     const out = await page.evaluate(() => {
       const sheet = window.FloorPlanSheet.preview(), sheetHtml = sheet ? (sheet.outerHTML || String(sheet)) : '';
       let pngSvg = ''; const orig = XMLSerializer.prototype.serializeToString;
       XMLSerializer.prototype.serializeToString = function (n) { const r = orig.call(this, n); if (n?.id === 'plan' || n?.querySelector?.('#gSel')) pngSvg = r; return r; };
+      // El PNG se rasteriza después (img.onload → canvas → toBlob) y avisa con «floorplan-export-ready»; sin descarga real.
       const dl = window.download; window.download = () => {};
+      window.__ux08PngDone = new Promise(r => addEventListener('floorplan-export-ready', () => { window.download = dl; r(true); }, { once: true }));
       try { exportPNG(); } finally { XMLSerializer.prototype.serializeToString = orig; }
-      setTimeout(() => { window.download = dl; }, 3000);
       return { sheetHtml, pngSvg, live: !!document.querySelector('#gSel .live-dims'), json: JSON.stringify(project), stored: Object.keys(localStorage).map(k => localStorage.getItem(k)).join('\n'), history: undoStack.join('\n') };
     });
     assert.ok(out.live, 'las cotas seguían en pantalla al exportar');
@@ -100,7 +101,12 @@ test('UX-08 + R03 + R02-A, escritorio con ratón: cotas en la estancia con techo
     assert.ok(out.pngSvg.length > 0, 'se capturó el SVG del PNG'); assert.doesNotMatch(out.pngSvg, DIMS, 'el PNG no lleva cotas');
     assert.match(out.pngSvg, /gCeiling/, 'el PNG conserva la capa de techo');
     for (const [name, txt] of [['JSON', out.json], ['almacén', out.stored], ['historial', out.history]]) assert.doesNotMatch(txt, DIMS, `${name} sin cotas`);
-    await page.waitForTimeout(1700); assert.equal(await page.locator('#gSel .live-dims').count(), 0, 'las cotas del teclado se ocultan solas');
+    assert.equal(await page.evaluate(() => window.__ux08PngDone), true, 'el PNG termina de generarse');
+    // Sin tocar nada, las cotas del teclado se ocultan solas (la rasterización del PNG ocupa el hilo de la página y puede
+    // retrasar el temporizador de 1,4 s en una máquina lenta; por eso se espera la condición, no un tiempo fijo).
+    await page.waitForFunction(() => !document.querySelector('#gSel .live-dims'), null, { timeout: 5000 }).catch(() => {});
+    const left = await page.evaluate(() => ({ n: document.querySelectorAll('#gSel .live-dims').length, ms: Math.round(performance.now() - window.__ux08KeyAt) }));
+    assert.equal(left.n, 0, `las cotas del teclado se ocultan solas (siguen ${left.ms} ms después de la flecha)`);
     s = await both(page); assert.deepEqual(s.r02a, s0.r02a); assert.deepEqual(s.r03, s0.r03); assert.deepEqual(s.keys, s0.keys);
 
     // B · Guardar y reabrir: interior R03 y techo R02-A intactos; ni rastro de cotas; se ven en 3D.
