@@ -27,8 +27,8 @@ jobs:
           node-version: '22.13.0'
       - name: Syntax
         run: for f in js/r03-*.js; do node --check "$f"; done
-      - name: A1 contract, A2 session, A3 geometry, A4 audit (and the I0 engine)
-        run: node --test --test-concurrency=1 tests/r03-integration-core.test.cjs tests/r03-cabinet-contract.test.cjs tests/r03-cabinet-editor.test.cjs tests/r03-cabinet-audit.test.cjs
+      - name: A1 contract, A2 session, A3 geometry, A4 audit, R1 bridge (and the I0 engine)
+        run: node --test --test-concurrency=1 tests/r03-integration-core.test.cjs tests/r03-cabinet-contract.test.cjs tests/r03-cabinet-editor.test.cjs tests/r03-cabinet-audit.test.cjs tests/r03-cabinet-bridge.test.cjs
   lab-browser:
     runs-on: ubuntu-latest
     timeout-minutes: 25
