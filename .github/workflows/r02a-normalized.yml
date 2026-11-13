@@ -24,8 +24,8 @@ jobs:
           node-version: '22.13.0'
       - name: Syntax
         run: for f in js/r02a-*.js; do node --check "$f"; done
-      - name: Lab #193 behaviour on the normalized core, session, alternatives and candidate contract
-        run: node --test --test-concurrency=1 tests/r02a-ceiling-core.test.cjs tests/r02a-ceiling-session.test.cjs
+      - name: Lab #193 behaviour on the normalized core, session, alternatives, candidate contract and R1 bridge
+        run: node --test --test-concurrency=1 tests/r02a-ceiling-core.test.cjs tests/r02a-ceiling-session.test.cjs tests/r02a-ceiling-bridge.test.cjs
   lab-browser:
     runs-on: ubuntu-latest
     timeout-minutes: 25
