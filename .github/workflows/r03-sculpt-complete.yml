@@ -1,0 +1,57 @@
+name: R03 SCULPT complete - contract, editor, 3D (lab)
+on:
+  pull_request:
+    paths:
+      - js/r03-*.js
+      - js/project-core.js
+      - js/project-schema.js
+      - js/building-core.js
+      - js/project-package.js
+      - js/client-delivery-core.js
+      - tests/r03-*.cjs
+      - labs/sculpt/r03-editor/**
+      - vendor/three/**
+      - .github/workflows/r03-sculpt-complete.yml
+permissions:
+  contents: read
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/r03-*.js; do node --check "$f"; done
+      - name: A1 contract, A2 session, A3 geometry, A4 audit, R1 bridge (and the I0 engine)
+        run: node --test --test-concurrency=1 tests/r03-integration-core.test.cjs tests/r03-cabinet-contract.test.cjs tests/r03-cabinet-editor.test.cjs tests/r03-cabinet-audit.test.cjs tests/r03-cabinet-bridge.test.cjs
+  lab-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      R03_ARTIFACTS: qa-results/r03-editor
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/r03-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/r03-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/r03-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/r03-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Editor lab, desktop and phone (1440, 1280, 390x844, 844x390)
+        run: node --test --test-concurrency=1 tests/r03-editor.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r03-editor-${{ github.event.pull_request.head.sha }}
+          path: qa-results/r03-editor
+          if-no-files-found: warn
