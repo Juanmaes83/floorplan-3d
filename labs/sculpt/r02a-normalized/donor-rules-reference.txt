@@ -1,0 +1,27 @@
+==== EXTRACT C · js/project-model.js:114-114 @324eb64 · sha256 451fb19b3f53e252178601720d5f0373e5d88ba354c95e60881478d159dda311 · reference: per-item bounds for layer, ceilingDrop, curtainLength
+    if (Array.isArray(list)) for (const f of list) { if(f?.layer!=null)assert(f.layer==='ceiling','布置图层无效');if(f?.ceilingDrop!=null)assert(finite(f.ceilingDrop,0,10000),'顶面距离无效');if(f?.curtainLength!=null)assert(finite(f.curtainLength,100,10000),'窗帘长度无效'); if (f?.model != null) { FM.validate(f.model); assert(finite(f.h,1,50000),'AI 模型需有效高度'); } if(f?.modelEvidence!=null) assert(text(f.modelEvidence,2000),'模型依据过长'); }
+==== END C
+
+==== EXTRACT D · js/project-model.js:168-168 @324eb64 · sha256 eb2506f79f84bc98be49b7d3764209ab70440b9456a19e64ead6d3bc811b2d48 · reference: drop + h + curtain <= height - floorFinish
+    for(const f of s.furniture.filter(f=>f.layer==='ceiling'))assert((f.ceilingDrop||0)+(f.h||100)+(f.curtainLength||0)<=p.height-p.floorFinish,'设备或窗帘超过室内净高，请调整高度');
+==== END D
+
+==== EXTRACT E · index.html:1668-1668 @324eb64 · sha256 2b11ce4d41de1b455261d13f987593e9f0305b7d04b0f60c4e9bdecefff0f309 · reference: defaults on creation (acwall drop 200, curtain length = clear - h - 20)
+  if (ceilingMode){f.layer='ceiling';f.ceilingDrop=type==='acwall'?200:0;if(['curtaintrack','curtainbox'].includes(type))f.curtainLength=Math.max(100,state.project.height-state.project.floorFinish-(it[5]||100)-20);}
+==== END E
+
+==== EXTRACT F · index.html:3173-3185 @324eb64 · sha256 1002273596e3948d164bd118ac3524e67ebf63a9b39189ef31ee3e8eeefc12f6 · reference: 3D vertical placement (top = H - drop, bottom = top - h, curtain below the track)
+  let baseY=0;
+  if(f.layer==='ceiling'){
+    const height=M(f.h||100),top=H-M(f.ceilingDrop||0);
+    baseY=top-height;
+    if(['curtaintrack','curtainbox'].includes(f.type)){
+      // Curtain belongs to the same group but is positioned below its track.
+      const length=M(f.curtainLength||2000),scale=g.scale.y||1;
+      const cloth=new THREE.Group();const n=Math.max(8,Math.ceil(w/.12));
+      for(let i=0;i<n;i++)cloth.add(box(w/n*.96,length,.025,fabric('#d1c4af'),-w/2+w/n*(i+.5),-length,(i%2?.025:-.025)));
+      cloth.scale.y=1/scale;g.add(cloth);
+    }
+  }
+  g.position.set(wx(f.cx), baseY, wz(f.cy));
+==== END F

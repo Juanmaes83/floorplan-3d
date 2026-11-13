@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RUBIK · Techos y equipos altos (laboratorio R02-A)</title>
+<link rel="icon" href="data:,">
+<style>
+:root{--bg:#f4f2ee;--panel:#fffdf9;--ink:#20242b;--muted:#5c6470;--line:#ddd6ca;--accent:#2f5d8a;--ok:#1d6b3c;--bad:#a8261b;--warn:#8a5a00;--radius:12px;
+ --cand:#1d6b3c;--pend:#b07d00;--block:#b42318;--review:#2f5d8a}
+*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:clip}html{scroll-padding-top:var(--stick,0px)}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit;color:inherit}:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top h1{font-size:17px;margin:0}.banner{font-size:12.5px;font-weight:650;color:#7a1a10;background:#fbe9e6;border-radius:999px;padding:4px 10px}
+.layout{display:grid;gap:14px;padding:14px 16px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 420px;align-items:start}.stage{position:sticky;top:8px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;min-width:0}
+.card h2{font-size:15px;margin:0 0 8px}.steps{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+label.f{display:inline-flex;align-items:center;gap:6px}label.f>span{font-size:13.5px;color:var(--muted)}
+input,select{min-height:44px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:#fff;max-width:100%}
+input[type=number]{width:9ch}input.src{width:24ch}
+.btn{min-height:44px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:550}
+.btn:hover:not(:disabled){border-color:var(--accent)}.btn:disabled{opacity:.45;cursor:default}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.seg{display:flex;flex-wrap:wrap;gap:6px}.seg .btn[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.note{font-size:12.5px;color:var(--muted);margin:6px 0 0}.tag{font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid #e7d1a6;background:#fdf6e7;color:var(--warn)}
+.state{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;font-size:13px;border:2px solid}
+.state.candidate-reviewable{color:var(--cand);border-color:var(--cand);background:#eef8f1}.state.pending{color:var(--pend);border-color:var(--pend);background:#fdf6e7}.state.blocked{color:var(--block);border-color:var(--block);background:#fbe9e6}
+.result p{margin:6px 0}.alts{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:6px}.alts li{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.badge{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--cand);color:#fff;font-weight:700;font-size:13px}
+.views-tabs{display:none;gap:6px;margin-bottom:8px}.views-tabs button{flex:1;min-height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:600}
+.views-tabs button[aria-selected=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.views{display:grid;gap:10px;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}.views>.v{min-width:0}
+.v h3{font-size:13.5px;margin:0 0 4px;color:var(--muted)}
+#plan{width:100%;height:auto;max-height:66vh;display:block;background:#fff;border:1px solid var(--line);border-radius:10px;touch-action:manipulation;cursor:crosshair}
+#section{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px}
+#view3d{width:100%;height:300px;display:block;border-radius:10px;background:#eef0f2;touch-action:none}
+/* `.row{display:flex}` must not override the hidden attribute (the reference form showed with «Desconocida»). */
+#refForm[hidden]{display:none}
+.limit{margin:10px 0 0;padding:8px 10px;border-radius:8px;background:#fdf6e7;border:1px solid #e7d1a6;color:#6b4a00;font-size:13px}
+.saved-h{font-size:13px;margin:14px 0 6px;color:var(--muted,#5a6168)}.saved-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.saved-list li{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13.5px}.saved-list .why{flex-basis:100%;color:#8a2a1f}.file-row{margin-top:10px}.file-btn{position:relative;display:inline-flex;align-items:center}.file-btn input{position:absolute;left:-9999px}
+@media(max-width:1099px){.layout{display:block}.layout>*{margin-bottom:14px}.views-tabs{display:flex}.views{display:block}.v[hidden]{display:none!important}
+ .stage{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0 8px;box-shadow:0 8px 12px -10px rgba(0,0,0,.25)}.stage .card{padding:8px}.v h3{display:none}
+ #plan{max-height:38vh}#section{max-height:38vh}#view3d{height:38vh}}
+@media(min-width:1100px){.v[hidden]{display:block!important}}
+@media(max-width:1099px) and (max-height:560px) and (orientation:landscape){.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start}.layout>*{margin-bottom:0}
+ .stage{order:-1;max-height:100vh;box-shadow:none;padding-top:0}#plan,#section{max-height:calc(100vh - 70px)}#view3d{height:calc(100vh - 80px)}}
+.stage-state{margin:8px 0 0;font-size:13.5px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.stage-state:empty{display:none}
+.review-list{margin:6px 0 0;padding-left:18px}.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cmp div{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff}
+.cmp b{display:block;font-size:12.5px;color:var(--muted)}.big{font-size:20px;font-weight:700}
+pre{max-height:220px;overflow:auto;font-size:11.5px;background:#f8f6f2;border:1px solid var(--line);border-radius:8px;padding:8px}
+.msg{margin:0;padding:6px 10px;border-radius:8px;font-size:14px;min-height:1.6em}.msg.ok{background:#e8f4ec;color:var(--ok)}.msg.bad{background:#fbe9e6;color:var(--bad)}
+.check{display:flex;gap:8px;align-items:center;min-height:44px}.check input{width:22px;height:22px;min-height:0}
+</style>
+</head>
+<body>
+<header class="top">
+ <h1>Techos y equipos altos · propuesta revisable</h1>
+ <span class="banner" role="note">LABORATORIO R02-A — PROYECTO SINTÉTICO — NO INTEGRADO EN RUBIK — NO ES DISEÑO MEP NI REGLAMENTARIO</span>
+</header>
+<main class="layout">
+ <section class="stage" aria-label="Vistas">
+  <div class="card">
+   <div class="views-tabs" role="tablist" aria-label="Vista">
+    <button role="tab" id="t-plan" aria-selected="true" aria-controls="v-plan">Planta</button>
+    <button role="tab" id="t-sec" aria-selected="false" aria-controls="v-sec">Sección</button>
+    <button role="tab" id="t-3d" aria-selected="false" aria-controls="v-3d">3D</button>
+   </div>
+   <div class="views">
+    <div class="v" id="v-plan" role="tabpanel" aria-labelledby="t-plan"><h3>Planta · toca dentro de la estancia para colocar</h3><svg id="plan" role="img" aria-label="Planta: estancia, muebles, propuesta y alternativas"></svg></div>
+    <div class="v" id="v-sec" role="tabpanel" aria-labelledby="t-sec" hidden><h3>Sección vertical por el elemento</h3><svg id="section" role="img" aria-label="Sección vertical con la referencia de techo"></svg>
+     <div class="v-3d-desk"></div></div>
+    <div class="v" id="v-3d" role="tabpanel" aria-labelledby="t-3d" hidden><h3>3D · techo a la altura confirmada (si la hay)</h3><canvas id="view3d" aria-label="Vista 3D de la estancia y la propuesta"></canvas></div>
+   </div>
+   <p class="stage-state" id="stageState" role="status"></p>
+  </div>
+ </section>
+ <section class="steps" aria-label="Pasos">
+  <div class="card"><h2>1 · Estancia</h2>
+   <label class="f"><span>Estancia</span><select id="room"></select></label>
+  </div>
+  <div class="card"><h2>2 · Referencia vertical</h2>
+   <div class="seg" role="group" aria-label="Referencia vertical"><button class="btn" id="refUnknown" aria-pressed="true" type="button">Desconocida</button><button class="btn" id="refKnown" aria-pressed="false" type="button">Confirmada</button></div>
+   <div id="refForm" class="row" hidden style="margin-top:8px">
+    <label class="f"><span>Altura libre</span><input id="clear" type="number" inputmode="numeric" value="2600"><span>mm</span></label>
+    <label class="f"><span>desde</span><select id="reference"><option value="finished-floor">suelo acabado</option><option value="level-floor">forjado</option></select></label>
+    <label class="f"><span>Fuente</span><input id="source" class="src" placeholder="p. ej. medición del propietario"></label>
+    <button class="btn" id="refSave" type="button">Usar en esta estancia</button>
+   </div>
+   <p class="note" id="refNote">Sin referencia confirmada no se calculan cotas ni se supone ningún techo.</p>
+  </div>
+  <div class="card"><h2>3 · Elemento</h2>
+   <div class="row"><label class="f"><span>Tipo</span><select id="type"></select></label><label class="f"><span>Giro</span><select id="rot"><option>0</option><option>45</option><option>90</option></select><span>°</span></label></div>
+   <div class="row" style="margin-top:8px"><label class="f"><span>Ancho</span><input id="w" type="number"></label><label class="f"><span>Fondo</span><input id="d" type="number"></label><label class="f"><span>Alto</span><input id="h" type="number"></label><span class="tag" id="sizeTag">medida de catálogo del donante, no medida</span></div>
+   <div class="row" style="margin-top:8px"><label class="f"><span>Descuelgue</span><input id="drop" type="number" placeholder="mm"><span>mm</span></label><label class="f" id="curtainField" hidden><span>Caída de cortina</span><input id="curtain" type="number" placeholder="mm"><span>mm</span></label></div>
+   <p class="note">Descuelgue vacío = desconocido (queda pendiente). Ningún valor se rellena por su cuenta.</p>
+   <div class="row" style="margin-top:8px"><label class="f"><span>Posición X</span><input id="px" type="number" inputmode="numeric" placeholder="mm"></label><label class="f"><span>Y</span><input id="py" type="number" inputmode="numeric" placeholder="mm"></label><button class="btn" id="placeBtn" type="button">Colocar</button></div>
+   <p class="note">O toca la planta dentro de la estancia.</p>
+  </div>
+  <div class="card result" aria-live="polite"><h2>4 · Resultado</h2>
+   <p><span id="stateChip" class="state pending">Toca la planta para colocar</span> <span id="pos" class="note"></span></p>
+   <div id="explain"></div>
+   <div class="row"><button class="btn" id="altBtn" type="button" disabled>Ver alternativas</button><button class="btn" id="addBtn" type="button" disabled>Añadir a la propuesta revisable</button></div>
+   <ol class="alts" id="alts"></ol>
+   <p class="limit" id="limitNote" role="note"><b>No comprueba la altura de paso para personas.</b> Solo compara con el techo, los muebles y otros elementos: una lámpara muy baja sobre una zona libre puede salir «Revisable». No es una validación de circulación, MEP ni normativa; siempre la revisa una persona.</p>
+  </div>
+  <div class="card"><h2>5 · Antes y después</h2>
+   <div class="cmp"><div><b>Proyecto (RUBIK)</b><span class="big" id="cmpProject">sin cambios</span></div><div><b>Propuesta revisable</b><span class="big" id="cmpReview">0</span> elementos</div></div>
+   <ul class="review-list" id="reviewList"></ul>
+   <label class="check"><input type="checkbox" id="confirmChk"><span>He revisado la propuesta y confirmo guardarla en el proyecto sintético</span></label>
+   <button class="btn primary" id="confirmBtn" type="button" disabled>Confirmar y guardar</button>
+   <p class="msg" id="msg" role="status"></p>
+   <h3 class="saved-h">Guardados en el proyecto · comprobados de nuevo con los datos actuales</h3>
+   <ul class="saved-list" id="savedList"></ul>
+   <div class="row file-row" aria-label="Archivo del proyecto sintético"><button class="btn" id="export" type="button">Descargar proyecto JSON</button>
+    <label class="btn file-btn">Reabrir JSON<input id="import" type="file" accept="application/json,.json"></label></div>
+   <p class="note" id="fileNote" role="status"></p>
+   <details><summary>Datos guardados (x-r02a-ceiling)</summary><pre id="json"></pre></details>
+  </div>
+ </section>
+</main>
+<script src="../../../js/project-schema.js"></script>
+<script src="../../../js/reference-project.js"></script>
+<script src="../../../js/parcel-core.js"></script>
+<script src="../../../js/orthophoto-core.js"></script>
+<script src="../../../js/terrain-core.js"></script>
+<script src="../../../js/territory-integration-core.js"></script>
+<script src="../../../js/territory-export-policy.js"></script>
+<script src="../../../js/territory-runtime.js"></script>
+<script src="../../../js/territory-renderer.js"></script>
+<script src="../../../js/geo-provider.js"></script>
+<script src="../../../js/catastro-parcel-provider.js"></script>
+<script src="../../../js/catastro-wfs-provider.js"></script>
+<script src="../../../js/pnoa-orthophoto-provider.js"></script>
+<script src="../../../js/ign-mdt05-terrain-provider.js"></script>
+<script src="../../../js/geo-site-adapter.js"></script>
+<script src="../../../js/parcel-site-adapter.js"></script>
+<script src="../../../js/orthophoto-site-adapter.js"></script>
+<script src="../../../js/terrain-site-adapter.js"></script>
+<script src="../../../js/project-core.js"></script>
+<script src="../../../js/r02a-donor-extracts.js"></script>
+<script src="../../../js/r02a-ceiling-core.js"></script>
+<script src="../../../js/r02a-ceiling-session.js"></script>
+<script src="../../../js/r02a-ceiling-contract.js"></script>
+<script type="importmap">{"imports":{"three":"../../../vendor/three/build/three.module.js","three/addons/":"../../../vendor/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const S = RubikCeilingSession, X = RubikCeilingContract, Core = FloorPlanCore, D = RubikR02DonorExtracts;
+const $ = s => document.querySelector(s);
+const ROOM_ES = { rom_master: 'Dormitorio principal', rom_mbath: 'Baño principal', rom_kid: 'Dormitorio infantil', rom_gbath: 'Baño', rom_laundry: 'Galería', rom_child: 'Dormitorio 2', rom_kitchen: 'Cocina', rom_dining: 'Comedor', rom_hall: 'Pasillo', rom_living: 'Salón', rom_balcony: 'Terraza', rom_bay1: 'Mirador 1', rom_bay2: 'Mirador 2' };
+const OBJ_ES = { bed: 'cama', wardrobe: 'armario', table: 'mesa', nightstand: 'mesilla', desk: 'escritorio', sofa: 'sofá', chair: 'silla', tvstand: 'mueble TV', cabinet: 'aparador' };
+const labelOf = id => { const o = project.objects.find(x => x.id === id); return o ? `la ${OBJ_ES[o.type] || o.type}`.replace('la sofá', 'el sofá').replace('la armario', 'el armario').replace('la escritorio', 'el escritorio').replace('la aparador', 'el aparador').replace('la mueble', 'el mueble') : id; };
+const STATE_ES = { 'candidate-reviewable': 'Revisable', pending: 'Pendiente de datos', blocked: 'Bloqueado' };
+// Synthetic project: RUBIK's reference flat; a few floor objects get synthetic heights so the clearance can be shown.
+let project = Core.initial();
+for (const o of project.objects) { if (o.type === 'bed') o.size.heightMm = 500; if (o.type === 'wardrobe') o.size.heightMm = 2200; if (o.type === 'table') o.size.heightMm = 750; }
+const original = JSON.stringify(project);
+let roomId = 'rom_master', refMode = 'unknown', item = null, current = null, alts = [], review = [], seq = 1;
+const roomName = id => ROOM_ES[id] || id;
+// ---------- controls ----------
+$('#room').replaceChildren(...project.rooms.map(r => { const o = document.createElement('option'); o.value = r.id; o.textContent = roomName(r.id); return o; }));
+$('#room').value = roomId;
+$('#type').replaceChildren(...Object.values(S.CATALOG).map(c => { const o = document.createElement('option'); o.value = c.type; o.textContent = S.TYPE_LABEL[c.type]; return o; }));
+function syncType(reset = true) {
+  const c = S.CATALOG[$('#type').value];
+  if (reset) { $('#w').value = c.widthMm; $('#d').value = c.depthMm; $('#h').value = c.heightMm; $('#sizeTag').hidden = false; }
+  $('#curtainField').hidden = c.kind !== 'curtain';
+}
+syncType();
+const ceilingFor = () => X.verticalFor(project, roomId);
+function setRefMode(m) { refMode = m; $('#refUnknown').setAttribute('aria-pressed', String(m === 'unknown')); $('#refKnown').setAttribute('aria-pressed', String(m === 'known')); $('#refForm').hidden = m !== 'known'; refNote(); }
+function refNote() { const v = ceilingFor(); $('#refNote').textContent = v ? `Referencia de «${roomName(roomId)}»: ${v.clearHeightMm} mm desde ${v.reference === 'finished-floor' ? 'suelo acabado' : 'forjado'} (fuente: ${v.source}).` : 'Sin referencia confirmada no se calculan cotas ni se supone ningún techo.'; }
+// The control shows what the project holds for this room: a stored reference is «Confirmada», with its values.
+function syncRef() { const v = ceilingFor(); if (v) { $('#clear').value = v.clearHeightMm; $('#reference').value = v.reference; $('#source').value = v.source; } setRefMode(v ? 'known' : 'unknown'); }
+$('#refUnknown').addEventListener('click', () => setRefMode('unknown'));
+$('#refKnown').addEventListener('click', () => setRefMode('known'));
+$('#refSave').addEventListener('click', () => {
+  const r = X.setVerticalReference(project, { scope: 'room', roomId, clearHeightMm: Number($('#clear').value), reference: $('#reference').value, source: $('#source').value.trim() });
+  if (!r.ok) return message('bad', 'Referencia no válida: ' + r.issues.map(i => i.message).join('; '));
+  project = r.project; message('ok', 'Referencia guardada para esta estancia (dato del proyecto sintético).'); refNote(); recompute();
+});
+$('#room').addEventListener('change', () => { roomId = $('#room').value; item = null; current = null; alts = []; syncRef(); render(); frame3d(); });
+$('#type').addEventListener('change', () => { syncType(); recompute(); });
+for (const id of ['#w', '#d', '#h']) $(id).addEventListener('change', () => { $('#sizeTag').hidden = true; recompute(); });
+for (const id of ['#drop', '#curtain', '#rot']) $(id).addEventListener('change', () => recompute());
+function request(at) {
+  const t = $('#type').value, c = S.CATALOG[t], num = v => v.trim() === '' ? undefined : Number(v);
+  const size = $('#sizeTag').hidden ? { widthMm: num($('#w').value), depthMm: num($('#d').value), heightMm: num($('#h').value) } : undefined;
+  return { id: 'cei_lab-' + seq, type: t, position: at, rotationDeg: Number($('#rot').value), ...(size ? { size } : {}), ...(num($('#drop').value) !== undefined ? { dropMm: num($('#drop').value) } : {}), ...(c.kind === 'curtain' && num($('#curtain').value) !== undefined ? { curtainLengthMm: num($('#curtain').value) } : {}) };
+}
+function recompute() { if (item) place(item.position); else render(); }
+function place(at) {
+  $('#px').value = at.x; $('#py').value = at.y;
+  item = request(at); alts = [];
+  current = S.evaluate({ project, ceiling: ceilingFor(), request: item, accepted: review.concat(X.asRequests(project)), labelOf });
+  render();
+}
+// ---------- result ----------
+function message(kind, text) { $('#msg').className = 'msg ' + kind; $('#msg').textContent = text; }
+function renderStageState() {
+  const st = $('#stageState');
+  if (!current) { st.replaceChildren(); return; }
+  const chip = Object.assign(document.createElement('span'), { className: 'state ' + (current.ok ? current.state : 'blocked'), textContent: current.ok ? STATE_ES[current.state] : 'Datos no válidos' });
+  st.replaceChildren(chip, Object.assign(document.createElement('span'), { textContent: current.explanation[0].replace(/^(Bloqueado|Pendiente de datos|Revisable): ?/, '') }));
+}
+function renderResult() {
+  renderStageState();
+  const chip = $('#stateChip'), ex = $('#explain');
+  if (!current) { chip.className = 'state pending'; chip.textContent = 'Toca la planta para colocar'; ex.replaceChildren(); $('#pos').textContent = ''; $('#altBtn').disabled = $('#addBtn').disabled = true; $('#alts').replaceChildren(); return; }
+  if (!current.ok) { chip.className = 'state blocked'; chip.textContent = 'Datos no válidos'; ex.replaceChildren(...current.explanation.map(t => Object.assign(document.createElement('p'), { textContent: t }))); $('#altBtn').disabled = $('#addBtn').disabled = true; return; }
+  chip.className = 'state ' + current.state; chip.textContent = STATE_ES[current.state];
+  $('#pos').textContent = `en (${item.position.x}, ${item.position.y}) mm · ${roomName(current.proposal.roomId || '—')}`;
+  ex.replaceChildren(...current.explanation.map(t => Object.assign(document.createElement('p'), { textContent: t })));
+  $('#addBtn').disabled = current.state !== 'candidate-reviewable' || current.diff.relocated;
+  $('#altBtn').disabled = current.state === 'candidate-reviewable';
+  $('#alts').replaceChildren(...alts.map((a, i) => { const li = document.createElement('li'), b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.textContent = `Usar alternativa ${i + 1}`; b.addEventListener('click', () => { place(a.position); message('ok', `Alternativa ${i + 1} aplicada a la propuesta (no al proyecto).`); });
+    li.append(Object.assign(document.createElement('span'), { className: 'badge', textContent: String(i + 1) }), Object.assign(document.createElement('span'), { textContent: `(${a.position.x}, ${a.position.y}) · a ${a.distanceMm} mm` }), b); return li; }));
+}
+$('#altBtn').addEventListener('click', () => {
+  const r = S.alternatives({ project, ceiling: ceilingFor(), request: item, accepted: review.concat(X.asRequests(project)) }, { max: 3 });
+  alts = r.alternatives;
+  if (!alts.length) message('bad', r.explanation || 'No hay alternativas revisables en esta estancia.'); else message('ok', `${alts.length} alternativas revisables en ${roomName(r.roomId)} (cada una comprobada de nuevo).`);
+  render();
+});
+$('#addBtn').addEventListener('click', () => {
+  review = review.concat([{ ...item, id: 'cei_lab-' + seq }]); seq++; item = null; current = null; alts = [];
+  message('ok', 'Añadido a la propuesta revisable. El proyecto no ha cambiado.'); render();
+});
+$('#confirmChk').addEventListener('change', () => { $('#confirmBtn').disabled = !$('#confirmChk').checked || !review.length; });
+$('#confirmBtn').addEventListener('click', () => {
+  let p = project; const done = [], failed = [];
+  for (const r of review) { const w = X.confirmItem(p, r, { confirm: $('#confirmChk').checked }); if (w.ok) { p = w.project; done.push(r.id); } else failed.push(`${r.id}: ${w.issues[0].message}`); }
+  project = p; review = review.filter(r => !done.includes(r.id)); $('#confirmChk').checked = false; $('#confirmBtn').disabled = true;
+  const n = k => k === 1 ? '1 elemento' : `${k} elementos`;
+  message(failed.length ? 'bad' : 'ok', failed.length ? `Guardado ${n(done.length)}. No guardados: ${failed.join(' · ')}` : `Guardado ${n(done.length)} en el proyecto sintético, comprobado de nuevo al confirmar.`);
+  render();
+});
+function renderCompare() {
+  const unchanged = JSON.stringify(JSON.parse(original).objects) === JSON.stringify(project.objects) && JSON.stringify(JSON.parse(original).walls) === JSON.stringify(project.walls);
+  const saved = X.extension(project).items.length;
+  $('#cmpProject').textContent = saved ? `${saved} confirmado${saved === 1 ? '' : 's'}` : 'sin cambios';
+  $('#cmpReview').textContent = String(review.length);
+  $('#reviewList').replaceChildren(...review.map(r => Object.assign(document.createElement('li'), { textContent: `${S.TYPE_LABEL[r.type]} en (${r.position.x}, ${r.position.y})` })));
+  $('#confirmBtn').disabled = !$('#confirmChk').checked || !review.length;
+  $('#json').textContent = JSON.stringify(project.extensions?.[X.KEY] ?? '(nada guardado)', null, 2) + (unchanged ? '\n\n// muros y muebles del proyecto: sin cambios' : '');
+  renderSaved();
+}
+// What the project carries, never taken on trust: every confirmed item is re-evaluated with the data as it is now.
+const SAVED_ES = { ...STATE_ES, orphan: 'Sin estancia', invalid: 'Datos no válidos' };
+function renderSaved() {
+  const rc = X.recheck(project, { labelOf });
+  const li = x => { const row = document.createElement('li'); row.dataset.state = x.holds ? 'holds' : x.state;
+    row.append(Object.assign(document.createElement('span'), { className: 'state ' + (x.holds ? 'candidate-reviewable' : x.state === 'pending' ? 'pending' : 'blocked'), textContent: x.holds ? 'Sigue siendo revisable' : SAVED_ES[x.state] || x.state }),
+      Object.assign(document.createElement('span'), { textContent: ` ${S.TYPE_LABEL[x.type] || x.type} en (${x.position.x}, ${x.position.y}) · ${roomName(x.roomId)}` }));
+    if (!x.holds) row.append(Object.assign(document.createElement('small'), { className: 'why', textContent: x.explanation[0] }));
+    return row; };
+  $('#savedList').replaceChildren(...(rc.status === 'present' ? rc.items.map(li) : [Object.assign(document.createElement('li'), { className: 'note', textContent: rc.status === 'absent' ? 'Nada guardado todavía.' : rc.status === 'future' ? 'Datos de una versión posterior: solo lectura, no se interpretan.' : 'Datos guardados dañados: no se usan. ' + (rc.issues || []).map(i => i.message).join('; ') })]));
+  return rc;
+}
+// ---------- project file: download, reopen (the stored items are re-checked, never trusted) ----------
+$('#export').addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' })); a.download = 'r02a-proyecto-sintetico.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); });
+$('#import').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const next = Core.prepare(await f.text()).project;
+    project = next; review = []; item = null; current = null; alts = [];
+    const first = X.extension(project).items[0];
+    if (first && project.rooms.some(r => r.id === first.roomId)) { roomId = first.roomId; $('#room').value = roomId; }
+    syncRef(); render(); frame3d();
+    const rc = X.recheck(project, { labelOf }), n = k => k === 1 ? '1 elemento' : `${k} elementos`;
+    $('#fileNote').textContent = rc.status !== 'present' ? `Proyecto reabierto. ${rc.status === 'absent' ? 'Sin elementos guardados.' : 'Los datos de techo guardados no se pueden usar (ver lista).'}`
+      : rc.failing ? `Proyecto reabierto: ${n(rc.items.length)} guardado${rc.items.length === 1 ? '' : 's'}; ${n(rc.failing)} ya no cumple${rc.failing === 1 ? '' : 'n'} con los datos actuales. Revísalo: no se ha movido ni borrado nada.`
+      : `Proyecto reabierto: ${n(rc.items.length)} guardado${rc.items.length === 1 ? '' : 's'}, comprobado${rc.items.length === 1 ? '' : 's'} de nuevo y revisable${rc.items.length === 1 ? '' : 's'}.`;
+  } catch (err) { $('#fileNote').textContent = 'No se pudo abrir: ' + err.message; }
+  e.target.value = '';
+});
+// ---------- plan ----------
+const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a) => { const e = document.createElementNS(NS, t); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); return e; };
+const pts = P => P.map(p => Array.isArray(p) ? `${p[0]},${p[1]}` : `${p.x},${p.y}`).join(' ');
+const room = () => project.rooms.find(r => r.id === roomId);
+const fpOf = q => D.footprint({ cx: q.position.x, cy: q.position.y, w: q.size?.widthMm ?? S.CATALOG[q.type].widthMm, d: q.size?.depthMm ?? S.CATALOG[q.type].depthMm, rot: q.rotationDeg || 0 });
+const COLOR = { 'candidate-reviewable': '#1d6b3c', pending: '#b07d00', blocked: '#b42318' };
+function drawPlan() {
+  const svg = $('#plan'), r = room(), xs = r.polygon.map(p => p.x), ys = r.polygon.map(p => p.y), pad = 500;
+  const x0 = Math.min(...xs) - pad, y0 = Math.min(...ys) - pad; svg.setAttribute('viewBox', `${x0} ${y0} ${Math.max(...xs) - x0 + pad} ${Math.max(...ys) - y0 + pad}`);
+  svg.replaceChildren();
+  for (const rm of project.rooms) svg.append(el('polygon', { points: pts(rm.polygon), fill: rm.id === roomId ? '#f6f1e8' : '#ece9e3', stroke: rm.id === roomId ? '#2f5d8a' : '#cfc6b8', 'stroke-width': rm.id === roomId ? 30 : 12 }));
+  for (const w of project.walls) svg.append(el('line', { x1: w.start.x, y1: w.start.y, x2: w.end.x, y2: w.end.y, stroke: '#3b4350', 'stroke-width': w.thicknessMm, opacity: .85 }));
+  for (const o of project.objects) {
+    const fp = D.footprint({ cx: o.position.x, cy: o.position.y, w: o.size.widthMm, d: o.size.depthMm, rot: o.rotationDeg || 0 });
+    svg.append(el('polygon', { points: pts(fp), fill: '#dfe4ea', stroke: '#9aa3ad', 'stroke-width': 12 }));
+    if (o.size.heightMm && D.footprint && r.polygon) { const t = el('text', { x: o.position.x, y: o.position.y + 60, 'font-size': 150, 'text-anchor': 'middle', fill: '#6b7480' }); t.textContent = `${o.size.heightMm}`; svg.append(t); }
+  }
+  const failingPlan = new Set(X.recheck(project).items.filter(x => !x.holds).map(x => x.id));
+  for (const it of X.asRequests(project)) { const bad = failingPlan.has(it.id); svg.append(el('polygon', { points: pts(fpOf(it)), fill: bad ? 'rgba(180,35,24,.16)' : 'rgba(32,36,43,.18)', stroke: bad ? '#b42318' : '#20242b', 'stroke-width': 20, 'data-role': 'confirmed', ...(bad ? { 'data-failing': '1' } : {}) })); }
+  for (const it of review) svg.append(el('polygon', { points: pts(fpOf(it)), fill: 'rgba(47,93,138,.18)', stroke: '#2f5d8a', 'stroke-width': 20, 'stroke-dasharray': '60 40', 'data-role': 'review' }));
+  alts.forEach((a, i) => { svg.append(el('polygon', { points: pts(fpOf({ ...item, position: a.position })), fill: 'rgba(29,107,60,.12)', stroke: '#1d6b3c', 'stroke-width': 14, 'stroke-dasharray': '40 30', 'data-role': 'alternative' }));
+    svg.append(el('circle', { cx: a.position.x, cy: a.position.y, r: 150, fill: '#1d6b3c' })); const t = el('text', { x: a.position.x, y: a.position.y + 55, 'font-size': 160, 'text-anchor': 'middle', fill: '#fff', 'font-weight': 700 }); t.textContent = String(i + 1); svg.append(t); });
+  if (item && current?.ok) {
+    const at = current.proposal.plan.suggestion?.position;
+    svg.append(el('polygon', { points: pts(fpOf(item)), fill: COLOR[current.state] + '33', stroke: COLOR[current.state], 'stroke-width': 26, 'data-role': 'proposal', 'data-state': current.state }));
+    if (at && current.diff.relocated) svg.append(el('polygon', { points: pts(fpOf({ ...item, position: at })), fill: 'none', stroke: '#2f5d8a', 'stroke-width': 18, 'stroke-dasharray': '30 20', 'data-role': 'relocated' }));
+  }
+}
+// Pointer events, not click: a tap while an input still has focus does not always produce a click on touch screens.
+let down = null;
+$('#plan').addEventListener('pointerdown', ev => { down = { x: ev.clientX, y: ev.clientY }; });
+$('#plan').addEventListener('pointerup', ev => {
+  if (!down || Math.hypot(ev.clientX - down.x, ev.clientY - down.y) > 10) { down = null; return; }
+  down = null; if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+  const svg = $('#plan'), pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse()); place({ x: Math.round(p.x), y: Math.round(p.y) });
+});
+// Keyboard and exact placement: the same action from two numbers.
+$('#placeBtn').addEventListener('click', () => { const x = Number($('#px').value), y = Number($('#py').value); if (Number.isFinite(x) && Number.isFinite(y) && $('#px').value !== '' && $('#py').value !== '') place({ x: Math.round(x), y: Math.round(y) }); else message('bad', 'Indica X e Y en mm.'); });
+// ---------- section ----------
+function drawSection() {
+  const svg = $('#section'); svg.replaceChildren();
+  // With an item, the evaluation's vertical data; without one, the room's stored reference (never an assumed one).
+  const stored = ceilingFor(), v = current?.ok ? current.vertical : stored ? { status: 'declared', clearHeightMm: stored.clearHeightMm, reference: stored.reference } : null, clear = v && (v.status === 'declared' || v.status === 'derived') ? v.clearHeightMm : null;
+  const H = Math.max(clear || 2800, 2800) + 300, W = 3200; svg.setAttribute('viewBox', `-200 -200 ${W + 400} ${H + 400}`);
+  const g = el('g', { transform: `translate(0 ${H}) scale(1 -1)` }); svg.append(g);
+  const text = (x, y, t, a = {}) => { const e = el('text', { x, y: H - y, 'font-size': 110, fill: '#4a525d', ...a }); e.textContent = t; svg.append(e); };
+  g.append(el('rect', { x: 0, y: -60, width: W, height: 60, fill: '#8d7d66' }));
+  if (clear != null) { g.append(el('rect', { x: 0, y: clear, width: W, height: 60, fill: '#c9bda9', 'data-role': 'ceiling' })); text(W - 40, clear + 100, `techo ${clear} mm (${v.reference === 'finished-floor' ? 'suelo acabado' : 'forjado'})`, { 'text-anchor': 'end' }); }
+  else { g.append(el('line', { x1: 0, y1: 2600, x2: W, y2: 2600, stroke: '#b07d00', 'stroke-width': 18, 'stroke-dasharray': '60 40' })); text(W - 40, 2700, 'techo desconocido: no se supone', { 'text-anchor': 'end', fill: '#8a5a00' }); }
+  if (!current?.ok) return;
+  const p = current.proposal, cx = W / 2, w = Math.min(1600, p.size.widthMm);
+  for (const c of p.floorClearance) { const o = project.objects.find(x => x.id === c.objectId); if (!o) continue; const h = o.size.heightMm || 0;
+    g.append(el('rect', { x: cx - 700, y: o.elevationMm || 0, width: 1400, height: h || 300, fill: h ? '#dfe4ea' : 'none', stroke: '#9aa3ad', 'stroke-width': 14, 'stroke-dasharray': h ? '' : '40 30' }));
+    const nm = labelOf(o.id).replace(/^(la|el) /, ''); text(cx - 680, (h || 300) + 60, h ? `${nm} · ${h} mm` : `${nm} · altura desconocida`); }
+  if (p.mount.status === 'computed') {
+    const col = COLOR[current.state];
+    g.append(el('rect', { x: cx - w / 2, y: p.mount.bottomMm, width: w, height: p.mount.topMm - p.mount.bottomMm, fill: col + '55', stroke: col, 'stroke-width': 18, 'data-role': 'item' }));
+    if (p.kind === 'curtain') g.append(el('rect', { x: cx - w / 2, y: p.mount.lowestPointMm, width: w, height: p.mount.bottomMm - p.mount.lowestPointMm, fill: col + '22', stroke: col, 'stroke-width': 10, 'stroke-dasharray': '30 20' }));
+    if (p.mount.topMm - p.mount.bottomMm < 260) text(cx + w / 2 + 40, p.mount.bottomMm - 140, `arriba ${p.mount.topMm} · abajo ${p.mount.bottomMm}`);
+    else { text(cx + w / 2 + 40, p.mount.bottomMm, `abajo ${p.mount.bottomMm}`); text(cx + w / 2 + 40, p.mount.topMm - 80, `arriba ${p.mount.topMm}`); }
+    if (p.kind === 'curtain') text(cx + w / 2 + 40, p.mount.lowestPointMm, `más bajo ${p.mount.lowestPointMm}`);
+  } else text(cx - 900, 1800, 'Cotas sin calcular: faltan datos verticales', { fill: '#8a5a00' });
+}
+// ---------- 3D ----------
+const canvas = $('#view3d'), renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xeef0f2);
+const camera = new THREE.PerspectiveCamera(45, 1, .05, 200), orbit = new OrbitControls(camera, canvas); orbit.enableDamping = true;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xcfc6b8, 2.2), new THREE.AmbientLight(0xffffff, .35)); const sun = new THREE.DirectionalLight(0xfff6ea, 1.6); sun.position.set(5, 9, 4); scene.add(sun);
+const world = new THREE.Group(); scene.add(world);
+const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .8, ...o });
+function boxAt(fp, y0, h, mat) {
+  const xs = fp.map(p => p[0]), zs = fp.map(p => p[1]), cx = (Math.min(...xs) + Math.max(...xs)) / 2, cz = (Math.min(...zs) + Math.max(...zs)) / 2;
+  const w = Math.hypot(fp[1][0] - fp[0][0], fp[1][1] - fp[0][1]), d = Math.hypot(fp[3][0] - fp[0][0], fp[3][1] - fp[0][1]), a = Math.atan2(fp[1][1] - fp[0][1], fp[1][0] - fp[0][0]);
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w / 1000, Math.max(h, 1) / 1000, d / 1000), mat); m.position.set(cx / 1000, (y0 + h / 2) / 1000, cz / 1000); m.rotation.y = -a; return m;
+}
+function draw3d() {
+  world.traverse(o => o.geometry && o.geometry.dispose()); world.clear();
+  const r = room(), v = ceilingFor();
+  const shape = new THREE.Shape(r.polygon.map(p => new THREE.Vector2(p.x / 1000, p.y / 1000)));
+  const floor = new THREE.Mesh(new THREE.ShapeGeometry(shape), M(0xe9e2d6, { side: THREE.DoubleSide })); floor.rotation.x = Math.PI / 2; world.add(floor);
+  if (v) { const ceil = new THREE.Mesh(new THREE.ShapeGeometry(shape), M(0x9fb3c8, { side: THREE.DoubleSide, transparent: true, opacity: .22, depthWrite: false })); ceil.rotation.x = Math.PI / 2; ceil.position.y = v.clearHeightMm / 1000; ceil.userData.role = 'ceiling'; world.add(ceil); }
+  const near = r.polygon.reduce((b, p) => ({ x0: Math.min(b.x0, p.x), x1: Math.max(b.x1, p.x), y0: Math.min(b.y0, p.y), y1: Math.max(b.y1, p.y) }), { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity });
+  for (const w of project.walls) { const mx = (w.start.x + w.end.x) / 2, my = (w.start.y + w.end.y) / 2; if (mx < near.x0 - 300 || mx > near.x1 + 300 || my < near.y0 - 300 || my > near.y1 + 300) continue;
+    const len = Math.hypot(w.end.x - w.start.x, w.end.y - w.start.y) / 1000, m = new THREE.Mesh(new THREE.BoxGeometry(len, .35, w.thicknessMm / 1000), M(0xcfc8bb)); m.position.set(mx / 1000, .175, my / 1000); m.rotation.y = -Math.atan2(w.end.y - w.start.y, w.end.x - w.start.x); world.add(m); }
+  for (const o of project.objects) { if (o.position.x < near.x0 || o.position.x > near.x1 || o.position.y < near.y0 || o.position.y > near.y1) continue;
+    const fp = D.footprint({ cx: o.position.x, cy: o.position.y, w: o.size.widthMm, d: o.size.depthMm, rot: o.rotationDeg || 0 });
+    world.add(boxAt(fp, o.elevationMm || 0, o.size.heightMm || 300, M(o.size.heightMm ? 0xdfe4ea : 0xf3e7cf, o.size.heightMm ? {} : { transparent: true, opacity: .6 }))); }
+  const mountOf = q => { const e = S.evaluate({ project, ceiling: v, request: q }); return e.ok && e.proposal.mount.status === 'computed' ? e.proposal.mount : null; };
+  // Saved items that no longer hold with the current data are drawn in red, like the list says.
+  const confirmedIds = new Set(X.asRequests(project).map(q => q.id)), failing = new Set(X.recheck(project).items.filter(x => !x.holds).map(x => x.id));
+  for (const q of X.asRequests(project).concat(review)) { const m = mountOf(q); if (m) { const b = boxAt(fpOf(q), m.bottomMm, m.topMm - m.bottomMm, M(failing.has(q.id) ? 0xb42318 : 0x20242b)); b.userData.role = confirmedIds.has(q.id) ? 'confirmed' : 'review'; if (failing.has(q.id)) b.userData.failing = true; world.add(b); } }
+  if (item && current?.ok && current.proposal.mount.status === 'computed') {
+    const m = current.proposal.mount, col = new THREE.Color(COLOR[current.state]), b = boxAt(fpOf(item), m.bottomMm, m.topMm - m.bottomMm, M(col, { emissive: col, emissiveIntensity: .25 })); b.userData.role = 'proposal'; world.add(b);
+    if (current.proposal.kind === 'curtain') world.add(boxAt(fpOf(item), m.lowestPointMm, m.bottomMm - m.lowestPointMm, M(col, { transparent: true, opacity: .35 })));
+  }
+}
+function frame3d() {
+  const r = room(), xs = r.polygon.map(p => p.x / 1000), zs = r.polygon.map(p => p.y / 1000), cx = (Math.min(...xs) + Math.max(...xs)) / 2, cz = (Math.min(...zs) + Math.max(...zs)) / 2, span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...zs) - Math.min(...zs));
+  orbit.target.set(cx, 1.1, cz); camera.position.set(cx + span * .9, span * .95 + 1.6, cz + span * 1.15); orbit.update();
+}
+function resize() { const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return; renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(canvas);
+renderer.setAnimationLoop(() => { orbit.update(); renderer.render(scene, camera); });
+// ---------- views ----------
+const VIEWS = [['#t-plan', '#v-plan'], ['#t-sec', '#v-sec'], ['#t-3d', '#v-3d']];
+for (const [t] of VIEWS) $(t).addEventListener('click', () => { for (const [tt, v] of VIEWS) { $(tt).setAttribute('aria-selected', String(tt === t)); $(v).hidden = tt !== t; } resize(); });
+const stage = document.querySelector('.stage');
+new ResizeObserver(() => { document.documentElement.style.setProperty('--stick', getComputedStyle(stage).position === 'sticky' && innerWidth < 1100 ? `${stage.offsetHeight + 8}px` : '0px'); }).observe(stage);
+function render() { drawPlan(); drawSection(); draw3d(); renderResult(); renderCompare(); }
+// ---------- review hooks ----------
+window.R02Lab = { get project() { return structuredClone(project); }, get current() { return current; }, get review() { return review.slice(); }, get alternatives() { return alts.slice(); }, original: JSON.parse(original),
+  place, setRoom: id => { $('#room').value = id; $('#room').dispatchEvent(new Event('change')); }, frame3d,
+  meshes: () => { const out = []; world.updateMatrixWorld(true); world.traverse(m => { if (m.isMesh && m.userData.role) { const b = new THREE.Box3().setFromObject(m); out.push({ role: m.userData.role, min: b.min.toArray(), max: b.max.toArray() }); } }); return out; } };
+render(); resize(); frame3d();
+window.R02Lab.ready = true;
+</script>
+</body>
+</html>

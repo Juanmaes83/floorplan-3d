@@ -1,0 +1,54 @@
+name: R02-A normalized - ceiling review session (lab)
+on:
+  pull_request:
+    paths:
+      - js/r02a-*.js
+      - js/project-core.js
+      - js/building-core.js
+      - tests/r02a-*.cjs
+      - labs/sculpt/r02a-normalized/**
+      - vendor/three/**
+      - .github/workflows/r02a-normalized.yml
+permissions:
+  contents: read
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/r02a-*.js; do node --check "$f"; done
+      - name: Lab #193 behaviour on the normalized core, session, alternatives, candidate contract and R1 bridge
+        run: node --test --test-concurrency=1 tests/r02a-ceiling-core.test.cjs tests/r02a-ceiling-session.test.cjs tests/r02a-ceiling-bridge.test.cjs
+  lab-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      R02A_ARTIFACTS: qa-results/r02a
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/r02a-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/r02a-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/r02a-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/r02a-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Review lab, desktop and phone
+        run: node --test --test-concurrency=1 tests/r02a-lab.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r02a-${{ github.event.pull_request.head.sha }}
+          path: qa-results/r02a
+          if-no-files-found: warn
