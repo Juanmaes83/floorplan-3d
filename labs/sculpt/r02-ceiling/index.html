@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SCULPT-R02-A · techos y equipos altos</title>
+<link rel="icon" href="data:,">
+<style>
+ :root{--bg:#f5f6f8;--ink:#1c2330;--muted:#596273;--card:#fff;--line:#d8dde5;--ceil:#1f6fd1;--donor:#b4561b;--wall:#3b4350;--floor:#7c8796;--bad:#b42318;--ok:#1b7a43;--warn:#9a6b00}
+ *{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+ header{padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line)}h1{margin:0 0 6px;font-size:18px}
+ .banner{display:block;padding:8px 10px;border-radius:8px;background:#fdecea;color:#7a1a10;font-weight:700;font-size:13px;letter-spacing:.2px}
+ header p{margin:6px 0 0;color:var(--muted)}label{font-weight:600}select{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line);max-width:100%}
+ main{padding:16px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+ section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}h2{margin:0 0 8px;font-size:15px}
+ svg,canvas{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:6px;background:#fff}
+ .wide{grid-column:1/-1}table{width:100%;border-collapse:collapse;font-size:12px}td,th{border-top:1px solid var(--line);padding:4px;text-align:left;vertical-align:top}
+ .tablewrap{overflow-x:auto}.ok{color:var(--ok)}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn)}.muted{color:var(--muted)}
+ .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:6px}.legend i{display:inline-block;width:12px;height:3px;margin-right:4px;vertical-align:middle}
+ ul{margin:4px 0 0 18px;padding:0}
+</style>
+</head>
+<body>
+<header>
+ <h1>SCULPT-R02-A · techos interiores, equipos altos y colocación 2D/3D</h1>
+ <span class="banner" role="note">LABORATORIO SCULPT-R02-A — NO INTEGRADO EN RUBIK — NO VALIDADO PARA DISEÑO TÉCNICO REGLAMENTARIO</span>
+ <p>Escenarios sintéticos generados por código. Las propuestas no se aplican a ningún proyecto. Sin cálculo eléctrico, luminotécnico ni de climatización.</p>
+ <p><label for="sc">Escenario</label> <select id="sc"></select></p>
+ <div class="legend"><span><i style="background:var(--ceil)"></i>candidata revisable</span><span><i style="background:var(--warn)"></i>pendiente de datos</span><span><i style="background:var(--bad)"></i>bloqueada</span><span><i style="background:var(--donor)"></i>donante (huella / recolocación)</span><span><i style="background:var(--floor)"></i>capa de suelo (solo lectura)</span><span><i style="background:var(--wall)"></i>muros</span></div>
+</header>
+<main>
+ <section><h2>A · Donante (comportamiento recuperado)</h2><svg id="planA" viewBox="0 0 10 10" role="img" aria-label="Planta del donante"></svg><div id="noteA" class="muted"></div></section>
+ <section><h2>B · Interpretación para RUBIK (CeilingLayoutEvidenceV1)</h2><svg id="planB" viewBox="0 0 10 10" role="img" aria-label="Planta de propuestas"></svg><div id="noteB" class="muted"></div></section>
+ <section><h2>Sección vertical</h2><svg id="section" viewBox="0 0 10 10" role="img" aria-label="Alturas"></svg></section>
+ <section><h2>3D (three.js r160 de RUBIK, local)</h2><canvas id="view3d" width="900" height="600" aria-label="Vista 3D"></canvas></section>
+ <section class="wide"><h2>C · Comparador</h2><div class="tablewrap"><table id="cmp"></table></div><div id="limits" class="muted"></div></section>
+</main>
+<!-- RUBIK authorities in the app order (index.html): project-core and its dependencies, tracing-core, layout-review, furniture-placement. -->
+<script src="../../../js/project-schema.js"></script>
+<script src="../../../js/reference-project.js"></script>
+<script src="../../../js/parcel-core.js"></script>
+<script src="../../../js/orthophoto-core.js"></script>
+<script src="../../../js/terrain-core.js"></script>
+<script src="../../../js/territory-integration-core.js"></script>
+<script src="../../../js/territory-export-policy.js"></script>
+<script src="../../../js/territory-runtime.js"></script>
+<script src="../../../js/territory-renderer.js"></script>
+<script src="../../../js/geo-provider.js"></script>
+<script src="../../../js/catastro-parcel-provider.js"></script>
+<script src="../../../js/catastro-wfs-provider.js"></script>
+<script src="../../../js/pnoa-orthophoto-provider.js"></script>
+<script src="../../../js/ign-mdt05-terrain-provider.js"></script>
+<script src="../../../js/geo-site-adapter.js"></script>
+<script src="../../../js/parcel-site-adapter.js"></script>
+<script src="../../../js/orthophoto-site-adapter.js"></script>
+<script src="../../../js/terrain-site-adapter.js"></script>
+<script src="../../../js/project-core.js"></script>
+<script src="../../../js/tracing-core.js"></script>
+<script src="../../../js/layout-review.js"></script>
+<script src="../../../js/furniture-placement.js"></script>
+<script src="workshop/donor-ceiling-extracts.js"></script>
+<script src="ceiling-layout-evidence-core.js"></script>
+<script src="ceiling-compare-core.js"></script>
+<script src="fixtures/ceiling-scenarios.js"></script>
+<script type="importmap">{"imports":{"three":"../../../vendor/three/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const F=window.RubikR02Scenarios,C=window.RubikR02Compare,E=window.RubikCeilingLayoutEvidence,D=window.RubikR02DonorExtracts;
+const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+const ruleText=(await (await fetch('workshop/donor-rules-reference.txt')).text()).match(/==== EXTRACT D[^\n]*\n([\s\S]*?)\n==== END D/)[1].trim();
+const sel=$('sc');for(const n of F.NAMES){const o=document.createElement('option');o.value=n;o.textContent=F.scenario(n).title;sel.append(o);}
+const sp=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);parent?.append(e);return e;};
+const poly=(pts,attrs,parent)=>sp('polygon',{points:pts.map(p=>Array.isArray(p)?p.join(','):p.x+','+p.y).join(' '),...attrs},parent);
+const txt=(x,y,s,size,parent,fill='#1c2330')=>{const t=sp('text',{x,y,'font-size':size,fill,'font-family':'system-ui'},parent);t.textContent=s;return t;};
+function planFrame(svg,project){
+ svg.replaceChildren();const xs=[],ys=[];
+ for(const w of project.walls){const s=E.wallShape(w);if(s)for(const [x,y] of s.poly){xs.push(x);ys.push(y);}}
+ const pad=400,x0=Math.min(...xs)-pad,y0=Math.min(...ys)-pad,W=Math.max(...xs)-x0+pad,H=Math.max(...ys)-y0+pad;
+ svg.setAttribute('viewBox',`${x0} ${y0} ${W} ${H}`);
+ for(const r of project.rooms)poly(r.polygon,{fill:'#f3f1ec',stroke:'#c9c3b8','stroke-width':10},svg);
+ for(const w of project.walls){const s=E.wallShape(w);if(s)poly(s.poly,{fill:'#3b4350'},svg);}
+ for(const o of project.objects||[]){const fp=D.footprint({cx:o.position.x,cy:o.position.y,w:o.size.widthMm,d:o.size.depthMm,rot:o.rotationDeg||0});poly(fp,{fill:'#7c879633',stroke:'#7c8796','stroke-width':12,'stroke-dasharray':'40 25'},svg);txt(o.position.x,o.position.y,(o.name||o.type)+(o.size.heightMm?` · ${o.size.heightMm}`:' · alto ?'),120,svg,'#596273');}
+ return {size:Math.max(W,H)};
+}
+const fmt=v=>v==null?'—':Math.round(v*10)/10;
+// Closing audit 11/11: the three previewDiff states.
+const STATE_ES={'candidate-reviewable':'candidata revisable',pending:'pendiente',blocked:'bloqueada'},STATE_COLOR={'candidate-reviewable':'#1f6fd1',pending:'#9a6b00',blocked:'#b42318'};
+const ES={declared:'declarada',derived:'derivada de la planta superior',unknown:'desconocida',contradictory:'contradictoria','finished-floor':'suelo acabado','level-floor':'suelo de la planta'};
+function render(name){
+ const s=F.scenario(name),r=C.compare(F.scenario(name),{ruleText}),ev=r.evidence;
+ const project=s.building?s.building.levels[0].project:s.project;
+ // A · donor: the donor's own footprints and relocation; heights by the donor 3D formula.
+ const A=$('planA'),fa=planFrame(A,project);
+ for(const p of ev.proposals){const fp=D.footprint({cx:p.position.x,cy:p.position.y,w:p.size.widthMm,d:p.size.depthMm,rot:p.rotationDeg});poly(fp,{fill:'#b4561b22',stroke:'#b4561b','stroke-width':14},A);
+  const sg=p.plan.suggestion;if(sg.donorPosition&&sg.status==='moved'){const g=D.footprint({cx:sg.donorPosition.x,cy:sg.donorPosition.y,w:p.size.widthMm,d:p.size.depthMm,rot:p.rotationDeg});poly(g,{fill:'none',stroke:'#b4561b','stroke-width':14,'stroke-dasharray':'60 40'},A);sp('line',{x1:p.position.x,y1:p.position.y,x2:sg.donorPosition.x,y2:sg.donorPosition.y,stroke:'#b4561b','stroke-width':12},A);}
+  txt(p.position.x+40,p.position.y-40,p.type,130,A,'#b4561b');}
+ $('noteA').textContent=r.rows.map(x=>`${x.id}: ${x.donor.topMm!=null?`techo−descuelgue ${x.donor.topMm}, base ${x.donor.bottomMm}, punto más bajo ${x.donor.lowestPointMm} mm; regla D ${x.donor.rule?'cumple':'NO cumple'}`:x.donor.note}${ev.proposals.find(p=>p.id===x.id).plan.suggestion.donorMessage?` · mensaje del donante: «${ev.proposals.find(p=>p.id===x.id).plan.suggestion.donorMessage}»`:''}`).join(' | ');
+ // B · RUBIK interpretation: evidence proposals, suggestions in integer mm, room and warnings.
+ const B=$('planB');planFrame(B,project);
+ const diff=E.previewDiff(ev),stateOf=id=>diff.find(d=>d.id===id);
+ for(const p of ev.proposals){const fp=D.footprint({cx:p.position.x,cy:p.position.y,w:p.size.widthMm,d:p.size.depthMm,rot:p.rotationDeg}),st=stateOf(p.id).state,col=STATE_COLOR[st];
+  poly(fp,{fill:col+'22',stroke:col,'stroke-width':16,...(st==='pending'?{'stroke-dasharray':'70 40'}:{})},B);txt(p.position.x+40,p.position.y+150,`${p.id} · ${STATE_ES[st]}${p.mount.status==='computed'?` ↓${p.mount.lowestPointMm}`:' · alto ?'}`,120,B,col);}
+ $('noteB').textContent=`Altura libre: ${ES[ev.vertical.status]}${ev.vertical.clearHeightMm!=null?` · ${ev.vertical.clearHeightMm} mm sobre ${ES[ev.vertical.reference]}`:''} · avisos generales: ${ev.warnings.join(', ')||'ninguno'}`;
+ // Section: heights against the ceiling plane, floor objects with known height.
+ const S=$('section');S.replaceChildren();const clear=ev.vertical.clearHeightMm,Hmax=Math.max(clear||2800,2800),n=ev.proposals.length,col=1400,Wd=Math.max(n,1)*col+600;
+ S.setAttribute('viewBox',`-300 -200 ${Wd} ${Hmax+700}`);const Y=h=>Hmax-h;
+ sp('line',{x1:-300,y1:Y(0),x2:Wd-300,y2:Y(0),stroke:'#3b4350','stroke-width':20},S);txt(-280,Y(0)+400,'suelo de referencia',110,S,'#596273');
+ if(clear!=null){sp('line',{x1:-300,y1:Y(clear),x2:Wd-300,y2:Y(clear),stroke:'#1f6fd1','stroke-width':14,'stroke-dasharray':'60 40'},S);txt(-280,Y(clear)-40,`techo ${clear} mm (${ES[ev.vertical.status]})`,110,S,'#1f6fd1');}
+ else txt(-280,Y(Hmax)-40,`techo ${ES[ev.vertical.status]}: no se dibuja ninguna altura`,110,S,'#b42318');
+ ev.proposals.forEach((p,i)=>{const x=i*col+100,m=p.mount;txt(x,Y(0)+260,p.id,100,S);
+  if(m.status!=='computed'){txt(x,Y(Hmax/2),'alto ?',110,S,'#9a6b00');return;}
+  sp('rect',{x,y:Y(m.topMm),width:900,height:Math.max(m.topMm-m.bottomMm,10),fill:'#1f6fd155',stroke:'#1f6fd1','stroke-width':10},S);
+  if(m.curtainLengthMm)sp('rect',{x:x+80,y:Y(m.bottomMm),width:740,height:m.curtainLengthMm,fill:'#d1c4af88',stroke:m.fitsClearHeight?'#9a8a6c':'#b42318','stroke-width':10},S);
+  txt(x,Y(m.lowestPointMm)+(m.lowestPointMm<200?-30:120),`${m.topMm}→${m.lowestPointMm}${m.fitsClearHeight?'':' NO CABE'}`,100,S,m.fitsClearHeight?'#1b7a43':'#b42318');
+  for(const c of p.floorClearance)if(c.objectTopMm!=null){sp('rect',{x:x+150,y:Y(c.objectTopMm),width:600,height:c.objectTopMm,fill:'#7c879633',stroke:'#7c8796','stroke-width':10},S);txt(x+170,Y(c.objectTopMm)+120,`${c.objectId} ${c.status}${c.clearanceMm!=null?' '+c.clearanceMm:''}`,90,S,c.status==='clash'?'#b42318':'#596273');}});
+ // Comparator table.
+ const T=$('cmp');T.replaceChildren();const head=T.insertRow();for(const h of ['Propuesta','Estado (previewDiff)','Posición / suger.','Tamaño','Alturas (techo→abajo)','Cabe','Donante (F/D) · paridad','Suelo / interferencias','RUBIK hoy','Avisos'])head.insertCell().outerHTML=`<th>${h}</th>`;
+ for(const row of r.rows){const p=ev.proposals.find(q=>q.id===row.id),tr=T.insertRow(),sg=p.plan.suggestion;
+  const d=stateOf(p.id);
+  const cells=[`${p.id} · ${p.type} (${p.kind})`,`${STATE_ES[d.state]}${d.op==='would-add'?' · would-add (no aplicada)':' · sin operación'}${d.reasons.length?' — '+d.reasons.join(', '):''}`,`${p.position.x}, ${p.position.y} · ${p.rotationDeg}° → ${sg.status}${sg.position?` (${sg.position.x}, ${sg.position.y})`:''}`,`${p.size.widthMm}×${p.size.depthMm}×${p.size.heightMm} (${p.sizeSource})`,
+   p.mount.status==='computed'?`${p.mount.topMm} → ${p.mount.bottomMm}${p.mount.curtainLengthMm?` · cortina ${p.mount.curtainLengthMm} → ${p.mount.lowestPointMm}`:''} (descuelgue ${p.mount.dropMm}, ${p.mount.dropSource})`:'desconocida',
+   p.mount.fitsClearHeight==null?'—':p.mount.fitsClearHeight?'sí':'NO',
+   row.parity?`F ${fmt(row.donor.topMm)}→${fmt(row.donor.lowestPointMm)} · D ${row.donor.rule?'cumple':'no'} · ${row.parity.vertical&&row.parity.rule?'= idéntico':'≠ DIVERGE'}`:'sin cálculo (dato ausente)',
+   [...p.floorClearance.map(c=>`${c.objectId}: ${c.status}${c.clearanceMm!=null?' '+c.clearanceMm:''}`),...p.interferences.map(x=>`${x.with}: ${x.kind}`)].join('; ')||'—',
+   `${row.rubikToday.problems.join(', ')||'sin conflictos'} · altura libre ${row.rubikToday.heightChecked?'comprobada':'NO comprobada'}${row.rubikToday.drawnAtMm===2200?' · dibuja a 2200 fijo':''}`,
+   p.warnings.join(', ')||'—'];
+  cells.forEach((c,i)=>{const td=tr.insertCell();td.textContent=c;if(i===1)td.className=d.state==='blocked'?'bad':d.state==='pending'?'warn':'ok';if(i===5)td.className=c==='NO'?'bad':c==='sí'?'ok':'';if(i===6&&/DIVERGE/.test(c))td.className='bad';});}
+ $('limits').innerHTML='<strong>Límites:</strong> '+ev.limits.join(' · ')+'. Fuera de alcance: circuitos, climatización, lux, incendios, estructura, normativa, falsos techos paramétricos.';
+ draw3d(project,ev);
+}
+// 3D: walls (translucent), ceiling plane only when known, proposals at their computed heights, curtains below the track.
+const renderer=new THREE.WebGLRenderer({canvas:$('view3d'),antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);
+function draw3d(project,ev){
+ const scene=new THREE.Scene();scene.background=new THREE.Color('#eef1f5');scene.add(new THREE.AmbientLight(0xffffff,.8));const dl=new THREE.DirectionalLight(0xffffff,.8);dl.position.set(5,10,7);scene.add(dl);
+ const m=v=>v/1000,clear=ev.vertical.clearHeightMm,wallH=clear||2600;const xs=[],ys=[];
+ const mat=(c,o=1)=>new THREE.MeshStandardMaterial({color:c,transparent:o<1,opacity:o});
+ for(const w of project.walls){const s=E.wallShape(w);if(!s)continue;const shape=new THREE.Shape(s.poly.map(([x,y])=>{xs.push(x);ys.push(y);return new THREE.Vector2(m(x),m(y));}));const g=new THREE.ExtrudeGeometry(shape,{depth:m(wallH),bevelEnabled:false});g.rotateX(Math.PI/2);g.translate(0,m(wallH),0);scene.add(new THREE.Mesh(g,mat('#8a93a1',.35)));}
+ for(const r of project.rooms){const shape=new THREE.Shape(r.polygon.map(p=>new THREE.Vector2(m(p.x),m(p.y))));const g=new THREE.ShapeGeometry(shape);g.rotateX(Math.PI/2);scene.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:'#efe9df',side:THREE.DoubleSide})));
+  if(clear!=null){const c=new THREE.ShapeGeometry(shape);c.rotateX(Math.PI/2);c.translate(0,m(clear),0);scene.add(new THREE.LineSegments(new THREE.EdgesGeometry(c),new THREE.LineBasicMaterial({color:'#1f6fd1'})));}}
+ const boxAt=(cx,cy,w,d,y0,h,rot,color,o=1)=>{const b=new THREE.Mesh(new THREE.BoxGeometry(m(w),m(h),m(d)),mat(color,o));b.position.set(m(cx),m(y0+h/2),m(cy));b.rotation.y=-rot*Math.PI/180;scene.add(b);};
+ for(const o of project.objects||[]){const h=o.size.heightMm;boxAt(o.position.x,o.position.y,o.size.widthMm,o.size.depthMm,0,h||50,o.rotationDeg||0,h?'#7c8796':'#c9ced6',h?.9:.5);}
+ for(const p of ev.proposals){const mt=p.mount;if(mt.status!=='computed')continue;boxAt(p.position.x,p.position.y,p.size.widthMm,p.size.depthMm,mt.bottomMm,mt.topMm-mt.bottomMm,p.rotationDeg,mt.fitsClearHeight?'#1f6fd1':'#b42318');
+  if(mt.curtainLengthMm)boxAt(p.position.x,p.position.y,p.size.widthMm,30,mt.lowestPointMm,mt.curtainLengthMm,p.rotationDeg,'#d1c4af',.85);}
+ const cx=m((Math.min(...xs)+Math.max(...xs))/2),cz=m((Math.min(...ys)+Math.max(...ys))/2),span=m(Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)));
+ // C4: frame the whole room and its height (the first version sat inside small rooms).
+ const dist=Math.max(span,m(wallH))*1.9,cam=new THREE.PerspectiveCamera(40,900/600,.1,200);cam.position.set(cx+dist*.62,m(wallH)+dist*.72,cz+dist*.95);cam.lookAt(cx,m(wallH)*.35,cz);renderer.setSize(900,600,false);renderer.render(scene,cam);
+}
+sel.onchange=()=>render(sel.value);
+const q=new URLSearchParams(location.search).get('scenario');if(q&&F.NAMES.includes(q))sel.value=q;
+render(sel.value);document.body.dataset.ready='1';
+</script>
+</body>
+</html>
