@@ -35,7 +35,10 @@ for (const vp of VIEWPORTS) test(`UX-08 cotas en vivo ${vp.width}x${vp.height} (
   const center = async (fid, s) => page.evaluate(([fid, s]) => { const f = getF(fid), r = document.querySelector('#plan').getBoundingClientRect(); view.s = s; view.x0 = f.cx - r.width / 2 / s; view.y0 = f.cy - r.height / 2 / s; applyView(); }, [fid, s]);
   const screen = fid => page.evaluate(fid => { const f = getF(fid), m = new DOMPoint(f.cx, f.cy).matrixTransform(document.querySelector('#plan').getScreenCTM()); return { x: m.x, y: m.y }; }, fid);
   const shown = () => page.$$eval('#gSel [data-live-dims="ok"] text[data-mm]', ts => Object.fromEntries(ts.map(t => [t.dataset.side, +t.dataset.mm])));
-  const expected = fid => page.evaluate(fid => Object.fromEntries(FloorPlanLiveDimensions.measure(geometry, getF(fid), { prefer: { top: .25 } }).sides.map(s => [s.side, s.mm])), fid);
+  // Cifras dibujadas y cifras del núcleo leídas en el MISMO turno de la página: entre dos lecturas separadas puede
+  // llegar un toque o movimiento pendiente y mover el mueble (carrera de la prueba, no del producto).
+  const pair = fid => page.evaluate(fid => ({ got: Object.fromEntries([...document.querySelectorAll('#gSel [data-live-dims="ok"] text[data-mm]')].map(t => [t.dataset.side, +t.dataset.mm])),
+    want: Object.fromEntries(FloorPlanLiveDimensions.measure(geometry, getF(fid), { prefer: { top: .25 } }).sides.map(s => [s.side, s.mm])) }), fid);
   const state = () => page.evaluate(() => ({ undo: undoStack.length, json: JSON.stringify(project), stored: localStorage.getItem(STORE) || '' }));
   const down = async p => { if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: p.x, y: p.y, id: 1 }] }); else { await page.mouse.move(p.x, p.y); await page.mouse.down(); } };
   const move = async p => { if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: p.x, y: p.y, id: 1 }] }); else await page.mouse.move(p.x, p.y, { steps: 3 }); await page.waitForTimeout(60); };
@@ -49,7 +52,7 @@ for (const vp of VIEWPORTS) test(`UX-08 cotas en vivo ${vp.width}x${vp.height} (
   await down(at); const seen = [];
   for (let i = 1; i <= 4; i++) {
     await move({ x: at.x + i * 14, y: at.y + i * 6 });
-    const got = await shown(), want = await expected(id);
+    const { got, want } = await pair(id);
     assert.ok(Object.keys(got).length >= 2, `paso ${i}: hay cotas (${JSON.stringify(got)})`);
     for (const [side, mm] of Object.entries(got)) assert.equal(mm, want[side], `paso ${i}, lado ${side}: la cifra es la del núcleo`);
     seen.push(JSON.stringify(got));
@@ -79,7 +82,7 @@ for (const vp of VIEWPORTS) test(`UX-08 cotas en vivo ${vp.width}x${vp.height} (
 
   // 3 · Zoom distinto: las cifras siguen siendo las del núcleo (mm reales, no píxeles).
   await center(id, 0.3); const at2 = await screen(id); await down(at2); await move({ x: at2.x - 20, y: at2.y }); await move({ x: at2.x - 30, y: at2.y + 4 });
-  const z = await shown(), zw = await expected(id); for (const [side, mm] of Object.entries(z)) assert.equal(mm, zw[side]); assert.ok(Object.keys(z).length >= 2);
+  const { got: z, want: zw } = await pair(id); for (const [side, mm] of Object.entries(z)) assert.equal(mm, zw[side]); assert.ok(Object.keys(z).length >= 2);
   await up();
 
   // 4 · Armario R03 con su interior guardado: también tiene cotas y moverlo no toca el interior.
