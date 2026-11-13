@@ -31,4 +31,8 @@ const standAt=(page,at,look)=>page.evaluate(([at,look])=>{const g=View3D.rendere
 const box=(page,sel)=>page.locator(sel).evaluate(n=>{const r=n.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};});
 const overlaps=(a,b)=>!!a&&!!b&&a.width>0&&b.width>0&&a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom;
 const hScroll=page=>page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
-module.exports={...K,KEY,closetProject,importBuilding,importProject,snapshot,open3D,settled,standAt,box,overlaps,hScroll};
+// Errores de la página y peticiones fuera del servidor local (mismo criterio que el kit de R02-A).
+function watch(page,base){const w={errors:[],external:[]};page.on('pageerror',e=>w.errors.push(e.message));
+  page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))w.errors.push(m.text());});
+  page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))w.external.push(u);});return w;}
+module.exports={...K,watch,KEY,closetProject,importBuilding,importProject,snapshot,open3D,settled,standAt,box,overlaps,hScroll};

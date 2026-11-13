@@ -181,6 +181,8 @@ test(`teléfono ${viewport.width}x${viewport.height}: panel plegable, estancia, 
     const map=await K.box(page,'#nav3dMap'),joy=await K.box(page,'#joy'),exit=await K.box(page,'#walkExit'),pill=await K.box(page,'#nav3d');
     assert.equal(K.overlaps(map,joy),false,'el minimapa no tapa el joystick');assert.equal(K.overlaps(map,exit),false,'ni «Salir del paseo»');
     assert.equal(K.overlaps(map,pill),false,'ni la pastilla del panel');assert.equal(K.overlaps(pill,joy),false);
+    // El minimapa solo informa: un dedo que empieza encima (arrastrar para mirar, tocar una puerta) llega a la escena.
+    assert.equal(await page.evaluate(()=>{const r=document.querySelector('#nav3dMapSvg').getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)?.tagName;}),'CANVAS','el minimapa deja pasar el gesto a la escena');
     // Joystick con un dedo real (eventos táctiles del navegador): hacia delante unos instantes; el marcador avanza.
     const m0=translate((await marker(page)).transform),cx=joy.left+joy.width/2,cy=joy.top+joy.height/2,cdp=await context.newCDPSession(page);
     await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:cx,y:cy,id:1}]});
@@ -208,8 +210,8 @@ test('Presentación y WebGL: el panel cede a la Presentación, el minimapa sirve
     // Paseo desde la Presentación: el mismo minimapa, por encima de su capa.
     assert.equal((await page.evaluate(()=>View3D.presentationWalkFrom())).ok!==false,true);
     await page.waitForFunction(()=>View3D.walking()&&!document.querySelector('#nav3dMap').hidden&&RubikNav3D.marker.state);
-    const top=await page.evaluate(()=>{const r=document.querySelector('#nav3dMap').getBoundingClientRect(),e=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return document.querySelector('#nav3dMap').contains(e);});
-    assert.equal(top,true,'el minimapa se ve por encima de la capa de la Presentación');
+    const top=await page.evaluate(()=>{const r=document.querySelector('#nav3dMapToggle').getBoundingClientRect(),e=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return document.querySelector('#nav3dMap').contains(e);});
+    assert.equal(top,true,'el minimapa (su botón) queda por encima de la capa de la Presentación');
     await page.evaluate(()=>View3D.presentationWalkEnd());await page.waitForFunction(()=>document.querySelector('#nav3dMap').hidden);
     await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);
     await page.waitForFunction(()=>!document.querySelector('#nav3d').hidden&&View3D.navState.white,null,{timeout:10000});

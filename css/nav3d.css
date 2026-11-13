@@ -22,7 +22,10 @@
 /* Escritorio: el panel queda bajo la barra de ayuda del 3D (#hint3d, arriba al centro) y por encima de las etiquetas.
    Minimapa del paseo: bajo «Capas de contexto» (arriba a la derecha) y por encima de la capa de la Presentación (z 15)
    para servir también a su paseo. */
-.nav3d-map{position:absolute;top:60px;right:8px;z-index:16;width:min(220px,calc(100% - 24px));padding:6px;background:rgba(255,253,249,.97);border:1px solid var(--line,#d8d2c8);border-radius:12px;box-shadow:0 8px 30px #2b282433;pointer-events:auto}
+.nav3d-map{position:absolute;top:60px;right:8px;z-index:16;width:min(220px,calc(100% - 24px));padding:6px;background:rgba(255,253,249,.97);border:1px solid var(--line,#d8d2c8);border-radius:12px;box-shadow:0 8px 30px #2b282433;pointer-events:none}
+/* El minimapa solo informa: deja pasar el dedo o el ratón a la escena (arrastrar para mirar, tocar una puerta);
+   únicamente su botón recibe toques. */
+.nav3d-map-toggle{pointer-events:auto}
 .nav3d-map.collapsed{width:auto}
 .nav3d-map-toggle{width:100%;min-height:36px;border:1px solid var(--line,#d8d2c8)}
 .nav3d-map-panel{margin-top:6px}
