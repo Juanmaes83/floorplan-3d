@@ -1,0 +1,9 @@
+{"executed_at": "2026-11-13T14:49Z", "master_before": "f5c08c7efc0aabb0204246da311504fe3b778ee8", "master_after": "f5c08c7efc0aabb0204246da311504fe3b778ee8",
+ "successor": {"pr": 218, "state": "closed", "merged": true, "merged_at": "2026-11-13T10:54:38Z", "head": "2afe74552b7af501127bc223b79f285684d16312"},
+ "closed": {
+  "216": {"head": "8e2a13fe6fece79a5e9d1b0e92babf2627a54fc2", "ancestor_of_master": true, "state": "closed", "merged": false, "closed_at": "2026-11-13T14:49:40Z",
+          "comment": "https://github.com/Juanmaes83/floorplan-3d/pull/216#issuecomment-6856406796", "branch": "lab/ux07-variants-adapter-20261113", "branch_after": "8e2a13fe6fece79a5e9d1b0e92babf2627a54fc2"},
+  "212": {"head": "fe300727035d2d13cad8da24b0e265e0c41d2eaf", "ancestor_of_master": true, "state": "closed", "merged": false, "closed_at": "2026-11-13T14:49:52Z",
+          "comment": "https://github.com/Juanmaes83/floorplan-3d/pull/212#issuecomment-6856409658", "branch": "lab/ux07-ent04-budget-coherence-20261112", "branch_after": "fe300727035d2d13cad8da24b0e265e0c41d2eaf"}},
+ "stack_check": "Única PR con base en esas ramas: #216 (base lab/ux07-ent04-budget-coherence-20261112), cerrada primero. Ninguna PR abierta tiene base en lab/ux07-variants-adapter-20261113.",
+ "open_prs_after": 65}

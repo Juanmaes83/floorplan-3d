@@ -1,0 +1,747 @@
+=== #90 head 794f13f77e92462cb1b052a3fe11a4206f5c4cc6
+  tests: ['tests/walk-controls.browser.test.cjs', 'tests/walk.browser.test.cjs']
+  en master: ['tests/walk-controls.browser.test.cjs', 'tests/walk.browser.test.cjs']
+  en CI: ['tests/walk-controls.browser.test.cjs', 'tests/walk.browser.test.cjs']
+  NO EN SQUASH: shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,p
+=== #88 head 1abdc467fb521c7a044e50d2df38376794834c24
+  tests: ['tests/presentation-overview.browser.test.cjs']
+  en master: ['tests/presentation-overview.browser.test.cjs']
+  en CI: ['tests/presentation-overview.browser.test.cjs']
+=== #87 head 72a38577a10bd2b3dba94713749f4720ce9ce7f1
+  tests: ['tests/furniture-overlaps.browser.test.cjs', 'tests/furniture-placement.test.cjs', 'tests/stair-conflicts.browser.test.cjs']
+  en master: ['tests/furniture-overlaps.browser.test.cjs', 'tests/furniture-placement.test.cjs', 'tests/stair-conflicts.browser.test.cjs']
+  en CI: ['tests/furniture-overlaps.browser.test.cjs', 'tests/furniture-placement.test.cjs', 'tests/stair-conflicts.browser.test.cjs']
+=== #86 head 01fc51f836c59f2d3102f8fe8447ee5c4265a102
+  tests: ['tests/guide-navigation.browser.test.cjs', 'tests/journey-orientation.browser.test.cjs']
+  en master: ['tests/guide-navigation.browser.test.cjs', 'tests/journey-orientation.browser.test.cjs']
+  en CI: ['tests/guide-navigation.browser.test.cjs', 'tests/journey-orientation.browser.test.cjs']
+=== #85 head e55bf0075b5c5baeea732dbf835e40850020fe98
+  tests: ['tests/panel-pattern.browser.test.cjs', 'tests/presentation-framing.browser.test.cjs']
+  en master: ['tests/panel-pattern.browser.test.cjs', 'tests/presentation-framing.browser.test.cjs']
+  en CI: ['tests/panel-pattern.browser.test.cjs', 'tests/presentation-framing.browser.test.cjs']
+=== #84 head f4eb5fa72a0e1d2a1ee1da6bd055769d1a82c880
+  tests: ['tests/presentation-framing.browser.test.cjs']
+  en master: ['tests/presentation-framing.browser.test.cjs']
+  en CI: ['tests/presentation-framing.browser.test.cjs']
+=== #83 head 84e6abdc1f4f5491d42165e9ddd8d5925ae73e32
+  tests: []
+  en master: []
+  en CI: []
+=== #82 head baec518dd6abdcb1377283927a2cdef6ef902a6f
+  tests: []
+  en master: []
+  en CI: []
+=== #81 head 5578aab12a0aced3990eef9b576290012bc6e339
+  tests: ['tests/delivery-image.browser.test.cjs', 'tests/delivery-image.test.cjs', 'tests/share-image.browser.test.cjs']
+  en master: ['tests/delivery-image.browser.test.cjs', 'tests/delivery-image.test.cjs', 'tests/share-image.browser.test.cjs']
+  en CI: ['tests/delivery-image.browser.test.cjs', 'tests/delivery-image.test.cjs', 'tests/share-image.browser.test.cjs']
+  NO EN SQUASH: shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,p
+=== #80 head 8e5cf9a010bbadb3536822b2ac88f02105fa19af
+  tests: []
+  en master: []
+  en CI: []
+=== #79 head 97c8578a6417524f81793eea4c2de31417a61154
+  tests: ['tests/browser.test.cjs', 'tests/first-paint-language.browser.test.cjs', 'tests/presentation.browser.test.cjs', 'tests/selection-scale.browser.test.cjs', 'tests/sheet.browser.test.cjs']
+  en master: ['tests/browser.test.cjs', 'tests/first-paint-language.browser.test.cjs', 'tests/presentation.browser.test.cjs', 'tests/selection-scale.browser.test.cjs', 'tests/sheet.browser.test.cjs']
+  en CI: ['tests/browser.test.cjs', 'tests/first-paint-language.browser.test.cjs', 'tests/presentation.browser.test.cjs', 'tests/selection-scale.browser.test.cjs', 'tests/sheet.browser.test.cjs']
+  NO EN SQUASH: function clear(){if(dialog.open)return;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=null;preview.removeAttribute('src');scroll.classList.remove('zoomed');current=null;focus?.focus?.({preve
+  NO EN SQUASH: function open(){if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Lámina'))return;try{focus=document.activeElement;sign?.refresh();current=build();relang();const level=app.levelContext;
+  NO EN SQUASH: const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico'
+=== #78 head bcf2ec6c03ebd0fa910567636217194ca44cb959
+  tests: ['tests/presentation-framing.browser.test.cjs', 'tests/share-image.browser.test.cjs']
+  en master: ['tests/presentation-framing.browser.test.cjs', 'tests/share-image.browser.test.cjs']
+  en CI: ['tests/presentation-framing.browser.test.cjs', 'tests/share-image.browser.test.cjs']
+  NO EN SQUASH: async function viewImage(){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');const shot=View3D.shot({...captureOptions,download:false});
+  NO EN SQUASH: const url=brandSnap?await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,label):shot.dataUrl;const blob=await (await fetch(url)).blob();return {url,label,file:new File([blob],'rubik-sota-vivienda.png',
+  NO EN SQUASH: try{const img=await viewImage(),name=(brandSnap?.title||app.project.name||'').trim(),text=tx(`${name?name+' · ':''}${img.label}. Imagen creada con Rubik Sota; medidas orientativas.`,`${name?name+' · '
+  NO EN SQUASH: // user-activation window is not spent while the PNG and the brand strip are being generated.
+  NO EN SQUASH: const preview=el('img',undefined,shareDialog,'share-preview');preview.src=img.url;preview.alt=img.label;
+  NO EN SQUASH: if(navigator.canShare?.({files:[img.file]})){const native=el('button',tx('Compartir…','Share…','分享…'),row,'btn primary');native.type='button';native.id='shareNative';
+  NO EN SQUASH: native.onclick=()=>{navigator.share({files:[img.file],title:name||'Rubik Sota',text}).then(()=>shareDialog.close(),e=>{if(e?.name!=='AbortError')toast(tx('El sistema no pudo compartir la imagen. Descá
+  NO EN SQUASH: const dl=el('a',tx('Descargar imagen','Download image','下载图片'),row,navigator.canShare?.({files:[img.file]})?'btn':'btn primary');dl.href=img.url;dl.download='rubik-sota-vivienda.png';dl.id='shareDownl
+  NO EN SQUASH: const wa=el('a',tx('WhatsApp','WhatsApp','WhatsApp'),row,'btn');wa.href='https://wa.me/?text='+encodeURIComponent(text);wa.target='_blank';wa.rel='noopener';wa.id='shareWhatsApp';
+  NO EN SQUASH: const mail=el('a',tx('Correo','E-mail','电子邮件'),row,'btn');mail.href='mailto:?subject='+encodeURIComponent(name||'Rubik Sota')+'&body='+encodeURIComponent(text+'\n\n'+tx('(Adjunta la imagen descargada.
+  NO EN SQUASH: shareDialog.showModal();h.focus();
+  NO EN SQUASH: assert.equal(d.suggestedFilename(),'rubik-sota-vivienda.png');assert.deepEqual([...bytes.subarray(0,4)],[0x89,0x50,0x4e,0x47],'a PNG');
+  NO EN SQUASH: assert.equal(shared.type,'image/png');assert.equal(shared.name,'rubik-sota-vivienda.png');assert.ok(shared.size>5000);assert.equal(shared.url,null,'no link');assert.match(shared.text,/medidas orientat
+=== #76 head f800c7d5b97080e0ea488e38c89a83bb9564da4e
+  tests: ['tests/browser.test.cjs', 'tests/professional-entry.browser.test.cjs']
+  en master: ['tests/browser.test.cjs', 'tests/professional-entry.browser.test.cjs']
+  en CI: ['tests/browser.test.cjs', 'tests/professional-entry.browser.test.cjs']
+=== #75 head dd2e81a74c664f5d4a6536b9942616d3f21bb431
+  tests: ['tests/client-review.browser.test.cjs', 'tests/presentation-framing.browser.test.cjs', 'tests/review-notes-core.test.cjs']
+  en master: ['tests/client-review.browser.test.cjs', 'tests/presentation-framing.browser.test.cjs', 'tests/review-notes-core.test.cjs']
+  en CI: ['tests/client-review.browser.test.cjs', 'tests/presentation-framing.browser.test.cjs', 'tests/review-notes-core.test.cjs']
+=== #74 head a815498c9c2333b6c557bf7a14bf3f7d8d6276f6
+  tests: ['tests/provenance-core.test.cjs', 'tests/provenance.browser.test.cjs']
+  en master: ['tests/provenance-core.test.cjs', 'tests/provenance.browser.test.cjs']
+  en CI: ['tests/provenance-core.test.cjs', 'tests/provenance.browser.test.cjs']
+=== #73 head 213b6ecad99452761e6851224c4a976b44db7595
+  tests: ['tests/browser.test.cjs', 'tests/professional-entry.browser.test.cjs']
+  en master: ['tests/browser.test.cjs', 'tests/professional-entry.browser.test.cjs']
+  en CI: ['tests/browser.test.cjs', 'tests/professional-entry.browser.test.cjs']
+  NO EN SQUASH: // Images the app draws itself (sheet preview, the real 3D capture of the welcome) are not injected markup.
+  NO EN SQUASH: const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview):not(.welcome-shot)').length,events:document.querySelectorAll('[onerror],
+  NO EN SQUASH: const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico'
+  NO EN SQUASH: res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');
+=== #72 head bb4639c0d8ba1c86c33ffb4613ebac22eb5bb66a
+  tests: ['tests/sheet-scale.browser.test.cjs']
+  en master: ['tests/sheet-scale.browser.test.cjs']
+  en CI: ['tests/sheet-scale.browser.test.cjs']
+  NO EN SQUASH: function clear(){scaleSelect.value=scaleChoice='0';if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=null;preview.removeAttribute('src');scroll.classList.remove('zoomed');current=null;focus?.fo
+  NO EN SQUASH: function open(){if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Lámina'))return;try{focus=document.activeElement;sign?.refresh();current=build(scaleValue());relang();const level=app.l
+=== #71 head aba44e387d9bd57b54fbd915a638347de0c83267
+  tests: ['tests/build-palette.browser.test.cjs', 'tests/editor-fixture.cjs', 'tests/journey-core.test.cjs', 'tests/journey-orientation.browser.test.cjs', 'tests/presentation.browser.test.cjs']
+  en master: ['tests/build-palette.browser.test.cjs', 'tests/editor-fixture.cjs', 'tests/journey-core.test.cjs', 'tests/journey-orientation.browser.test.cjs', 'tests/presentation.browser.test.cjs']
+  en CI: ['tests/build-palette.browser.test.cjs', 'tests/editor-fixture.cjs', 'tests/journey-core.test.cjs', 'tests/journey-orientation.browser.test.cjs', 'tests/presentation.browser.test.cjs']
+  NO EN SQUASH: | 1 | Ejemplo, sin revisar en 3D | Estás viendo un ejemplo | Ver en 3D | Crear mi vivienda desde el ejemplo | Abre 3D / crea la copia propia (sin tocar el ejemplo) |
+  NO EN SQUASH: | 2 | Ejemplo ya revisado en 3D | Estás viendo un ejemplo | Crear mi vivienda desde el ejemplo | — | Crea la copia propia |
+  NO EN SQUASH: | example.copy | Crear mi vivienda desde el ejemplo | Create my home from the example | 以示例创建我的住宅 |
+  NO EN SQUASH: const row=el('div',undefined,details,'actions');btn('guideAllTools',tx('Ver todas las herramientas','See all tools','查看所有工具'),()=>{details.close();fullEditor=true;state().fullTools=true;store();render
+  NO EN SQUASH: if(d.mode==='goal'){const t=d.task;currentTitle.textContent=label(t.title);currentInstruction.textContent=label(t.instruction);currentAction.textContent=primaryLabel(t);currentAction.onclick=()=>safe(
+  NO EN SQUASH: exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy';exampleNote.textContent=tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. 
+  NO EN SQUASH: const L={view3d:['Ver en 3D','View in 3D','在 3D 中查看'],copy:['Crear mi vivienda desde el ejemplo','Create my home from the example','以示例创建我的住宅'],calibrate:['Empezar a calibrar','Start calibrating','开始校
+  NO EN SQUASH: g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi vivienda desde el ejemp
+=== #70 head f28442e8c5182c968ace0c48d4e8fbac5a33bdc5
+  tests: ['tests/professional-entry.browser.test.cjs']
+  en master: ['tests/professional-entry.browser.test.cjs']
+  en CI: ['tests/professional-entry.browser.test.cjs']
+  NO EN SQUASH: .welcome-audience{margin-top:24px}.welcome-audience h2{font-size:16px;margin:0 0 4px}.welcome-audience p{font-size:12px;color:#645b50;margin:0 0 10px}.welcome-audience-options{display:flex;flex-wrap:w
+  NO EN SQUASH: Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco líneas de mejora de experiencia y entrega. [Alcance, orden, límites y decisiones abier
+  NO EN SQUASH: # Experiencia profesional y entrega al cliente — cortes propuestos
+  NO EN SQUASH: Estado: propuesta de producto del 21-10-2026. D-01 define como público inicial inmobiliarias, promotoras y estudios de arquitectura, y como segundo público reformas e interiorismo. La captura aportada
+  NO EN SQUASH: | Línea | Beneficio para D-01 | Primer corte verificable | Dependencia y límite |
+  NO EN SQUASH: | 1. Entrada por perfil | El profesional se reconoce desde la bienvenida. | Selector opcional «¿En qué trabajas?» con arquitectura, inmobiliaria, promotora, reformas e interiorismo. Las tres entradas 
+  NO EN SQUASH: | 2. Mostrar plano y experiencia | Permite explicar al cliente cómo el mismo proyecto pasa de plano a 3D y presentación. | Un ejemplo curado de una y dos plantas, con acciones explícitas para explorar
+  NO EN SQUASH: | 3. Revisión de cliente controlada | El cliente explora y deja observaciones; el profesional decide cambios. | Prototipo de paquete local de revisión con identidad de versión, comentarios anclados a 
+  NO EN SQUASH: | 4. Entrega interoperable | El estudio puede seguir trabajando en su software y entregar material identificable. | Inventario real de exportadores: JSON/ZIP y cadena Blender existente; validar un GLB
+  NO EN SQUASH: | 5. Asistencia IA opcional | Reduce esfuerzo para encontrar una acción y preparar revisiones concretas. | Primero un asistente contextual de solo lectura que explique estado, evidencia y siguiente pa
+  NO EN SQUASH: ## Orden y criterio de entrega
+  NO EN SQUASH: 1. Esta rama implementa **solo el selector de perfil**, debajo de las tres acciones iniciales para que sigan siendo el primer paso visible incluso en móvil horizontal. No añade un paso obligatorio ni 
+  NO EN SQUASH: 2. Reconciliar con el corte de orientación de Claude sobre el `master` que resulte. Inspeccionar en escritorio, móvil vertical y horizontal que el primer acceso sigue ofreciendo las tres entradas sin 
+  NO EN SQUASH: 3. Prototipar por separado la línea 2 y medir comprensión con inmobiliaria, promotora y estudio. Continuar una línea por PR con contrato, datos de ejemplo, criterios de aceptación y revisión humana. L
+  NO EN SQUASH: - ¿Qué roles se agrupan o se muestran en el lenguaje comercial? Este selector usa cinco opciones visibles para no esconder promotora ni interiorismo bajo otra profesión.
+  NO EN SQUASH: - ¿Quién puede acceder a una entrega de cliente y durante cuánto tiempo? ¿Se conserva el proyecto en el navegador o hay servicio alojado?
+  NO EN SQUASH: - ¿Qué formatos 3D concretos pide primero D-01 y con qué fidelidad mínima?
+  NO EN SQUASH: - ¿Puede enviarse un plano a un proveedor de IA? Si se permite, ¿qué operaciones estructuradas y presupuesto están autorizados?
+  NO EN SQUASH: La prioridad inmediata sigue siendo cerrar y auditar el corte de orientación de Claude. Esta rama no modifica `feat/journey-orientation`.
+  NO EN SQUASH: el('p',tx('Opcional. Elige tu perfil para identificarte; las herramientas son las mismas para todos.','Optional. Choose your field; everyone has access to the same tools.','可选。选择你的领域；所有人使用相同的工具。'),aud
+  NO EN SQUASH: res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');
+=== #36 head d7f0972149b5605f6092290c5f7c4adcbc5f9029
+  tests: []
+  en master: []
+  en CI: []
+  NO EN SQUASH: ## Casa Serra — preparación de mejoras visuales
+  NO EN SQUASH: Juanma autoriza incorporar las mejoras visuales de Casa Serra en Floorplan.
+  NO EN SQUASH: La preparación concreta incluye presentación por estancias desde el buscador
+  NO EN SQUASH: y «Revisar y guardar», materiales PBR selectivos y efectos opcionales posteriores.
+  NO EN SQUASH: **Es planificación; el modo presentación todavía no está implementado.**
+  NO EN SQUASH: Se reutilizan guía, capturas y exportador actuales, conservando el flujo de
+  NO EN SQUASH: render ya trabajado en Astra Labs como contexto, sin abrir una producción nueva
+  NO EN SQUASH: [Especificación y orden de integración](docs/technical/casa-serra-integration.md) ·
+  NO EN SQUASH: [Pruebas de aceptación pendientes](docs/qa/casa-serra-integration-plan.md).
+  NO EN SQUASH: ## 13. Incorporación autorizada de Casa Serra a Floorplan (13-10-2026)
+  NO EN SQUASH: Este alcance concreto responde a la instrucción de Juanma y su confirmación
+  NO EN SQUASH: de permisos de Casa Serra para Floorplan. El resto del Roadmap 2 mantiene sus
+  NO EN SQUASH: decisiones/prioridades abiertas. No se reabre ni renumera F0–F3.
+  NO EN SQUASH: [Diseño técnico preparado](technical/casa-serra-integration.md) ·
+  NO EN SQUASH: [Protocolo de aceptación](qa/casa-serra-integration-plan.md).
+  NO EN SQUASH: | Incremento | Alcance y puntos de integración | Estado |
+  NO EN SQUASH: | CS-1 | Modo presentación por estancias; acción del buscador y acceso en Revisar y guardar; vistas derivadas del plano; fichas y retorno exacto al editor | Preparado para implementación; código/prueb
+  NO EN SQUASH: | CS-2 | Piloto PBR de roble/mármol, validación de canales/UV y calidad con presupuesto; preservación de los 50 acabados y fallback | Preparado como incremento dependiente de CS-1; recurso fuente audi
+  NO EN SQUASH: | CS-3 | Dibujo→material opcional, recorrido interior con verificación de trayectoria y cámaras derivadas reutilizables | Diseño preparado; depende de restauración y presupuesto comprobados |
+  NO EN SQUASH: La primera entrega utiliza la escena/guía actuales, sin sustituir geometría por
+  NO EN SQUASH: Casa Serra ni duplicar Three. Las cámaras de la casa original son referencias
+  NO EN SQUASH: de diseño, no trayectorias válidas para proyectos arbitrarios. Las tareas y
+  NO EN SQUASH: porcentajes de la guía se mantienen separados de la posición del tour.
+  NO EN SQUASH: LAB v03 ya fue aprobado/fusionado en su rama operativa mediante LAB PR #4.
+  NO EN SQUASH: Las referencias anteriores a v03 pendiente/main documental son antecedentes.
+  NO EN SQUASH: El paquete offline #24 y el flujo render del LAB se preservan como contexto.
+  NO EN SQUASH: Esta incorporación se trabaja en Floorplan; no añade un sistema de vídeo,
+  NO EN SQUASH: nuevo backend, conexión de producto o tareas en Astra.
+  NO EN SQUASH: Esta revisión documental no ejecutó suites de producto ni generó una preview
+  NO EN SQUASH: con las mejoras. El gate siguiente es implementar/probar CS-1 y revisar su
+  NO EN SQUASH: deployment del SHA final. CS-2/CS-3 se entregan después de cerrar sus dependencias.
+  NO EN SQUASH: ## Casa Serra → Floorplan — preparación de integración (13-10-2026)
+  NO EN SQUASH: Juanma autoriza sumar las mejoras visuales de Casa Serra a Floorplan y confirma
+  NO EN SQUASH: permiso/licencia para su uso e integración en este proyecto. **Estado actual:
+  NO EN SQUASH: estudio y preparación documentados; implementación y pruebas de producto pendientes.**
+  NO EN SQUASH: No se asigna fase F4 ni se considera aprobado globalmente Roadmap 2.
+  NO EN SQUASH: La [especificación de integración](technical/casa-serra-integration.md) fija
+  NO EN SQUASH: fuentes por SHA, módulos reales, requisitos, restauración de estado y secuencia:
+  NO EN SQUASH: CS-1 presentación por estancias desde buscador/Revisar y guardar; CS-2 materiales
+  NO EN SQUASH: PBR selectivos y calidad; CS-3 efectos de dibujo y rutas interiores comprobadas.
+  NO EN SQUASH: Se reutilizan guía #34, capturas #29, variantes #30 y exportador #24.
+  NO EN SQUASH: Astra se conserva como contexto del flujo plano → render existente. La
+  NO EN SQUASH: [LAB PR #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) acredita
+  NO EN SQUASH: v03 aprobado en la rama operativa `feat/astra-blender-gate-1`, squash
+  NO EN SQUASH: `37df8472e6163263f435424f6989b6c0e10b8ad9`, con renders y reapertura Blender.
+  NO EN SQUASH: Las menciones históricas a main documental o LAB v03 como siguiente entrega
+  NO EN SQUASH: no describen esa rama operativa. Este seguimiento no modifica el LAB ni abre
+  NO EN SQUASH: otra producción de vídeo; PR #28/#32 conservan sus cierres documentales separados.
+  NO EN SQUASH: Se comprobaron bytes/hash y decodificación de seis mapas fuente; no se
+  NO EN SQUASH: incorporaron al catálogo ni se midió rendimiento. [Protocolo y casos pendientes](qa/casa-serra-integration-plan.md).
+  NO EN SQUASH: Primera implementación propuesta: CS-1. La revisión de cada entrega debe
+  NO EN SQUASH: preceder al siguiente incremento dependiente según el workflow vigente.
+  NO EN SQUASH: "sourceRepository": "Juanmaes83/casa-serra",
+  NO EN SQUASH: "sourceRevision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+  NO EN SQUASH: "method": "Authenticated GitHub file reader, base64 decode, JPEG header inspection, SHA-256 and Pillow full raster decode; no source modification",
+  NO EN SQUASH: "scope": "Six source JPEG maps only; not an integrated PBR or runtime performance test",
+  NO EN SQUASH: "path": "assets/tex-1k/oak_wood_planks/diff.jpg",
+  NO EN SQUASH: "sha256": "25c4362be85e32a85736313bf9a0955fbc02c447d6e27acfcc4aaf5df1588646",
+  NO EN SQUASH: "gitBlobSha": "02dcecf10223114d711adda1225126c66ebca96f",
+  NO EN SQUASH: "path": "assets/tex-1k/oak_wood_planks/nor.jpg",
+  NO EN SQUASH: "sha256": "0d9ad8bc2fc3b50006da9bc90f561429564d767c434b95a2cc19d459ffe66ca6",
+  NO EN SQUASH: "gitBlobSha": "e339a1d347ff26aea77ea2c8a4174f7529f65480",
+  NO EN SQUASH: "path": "assets/tex-1k/oak_wood_planks/arm.jpg",
+  NO EN SQUASH: "sha256": "78ae57bdfd94be276ec4ebe73211ae54a3bd6c268a396becea8ec2dd9935335a",
+  NO EN SQUASH: "gitBlobSha": "91021dd9c800652f0f37e280bf5eafd85c624eab",
+  NO EN SQUASH: "path": "assets/tex-1k/marble_01/diff.jpg",
+  NO EN SQUASH: "sha256": "76c50612b6db3ab5e059f0d666585311236bd73744f04669eb1b2cc0264f9f3c",
+  NO EN SQUASH: "gitBlobSha": "e254658c2fa49e45fd7d6399b2b5b2ed69bcefdb",
+  NO EN SQUASH: "path": "assets/tex-1k/marble_01/nor.jpg",
+  NO EN SQUASH: "sha256": "8cc887e0ac036f1727b51c256699466ec763d4e59a8176e1de52714f1412b1b8",
+  NO EN SQUASH: "gitBlobSha": "7d83fce0950ff398031739418901ef68bb089f85",
+  NO EN SQUASH: "path": "assets/tex-1k/marble_01/arm.jpg",
+  NO EN SQUASH: "sha256": "3396e4298865d27923e3d392bd0193e6537b61cee56430739b8378bbcf842d9c",
+  NO EN SQUASH: "gitBlobSha": "4f866b6b02b6a95c815fe889ab813aa07a5f5b5a",
+  NO EN SQUASH: "nominalRgbaBytesBeforeMipmaps": 25165824,
+  NO EN SQUASH: "integratedPbrTested": false
+  NO EN SQUASH: # Casa Serra → Floorplan: protocolo de aceptación
+  NO EN SQUASH: Fecha: 13-10-2026. **Estado: plan de pruebas; implementación y pruebas de producto NO EJECUTADAS.**
+  NO EN SQUASH: Alcance: [especificación](../technical/casa-serra-integration.md). Las entregas CS-1/CS-2/CS-3 se comprueban por separado y se revisan con el workflow vigente.
+  NO EN SQUASH: ## 1. Evidencia disponible de esta preparación
+  NO EN SQUASH: - Se leyeron documentos/código en Floorplan `88b0cb568e9824533764518ec42e235e9c2774a9`.
+  NO EN SQUASH: - Se leyeron los nueve módulos Casa Serra fijados a `b47b775fae642439e8d42d6201ab5d1677d67f99`.
+  NO EN SQUASH: - LAB PR #4 confirma merge/aprobación v03 hacia su rama operativa. Se leyó el informe; no se ejecutó Blender ni se regeneró un render.
+  NO EN SQUASH: - Se descargaron por el lector autenticado y decodificaron con Pillow seis mapas JPEG de dos candidatos, sin modificar originales. Hashes, tamaños, dimensiones y modo RGB: [auditoría](artifacts/casa-s
+  NO EN SQUASH: - Resultado de esa comprobación de recursos: 6/6 decodificaciones correctas; 794430 bytes. No valida normal +Y, correspondencia UV con la biblioteca ni aspecto PBR integrado.
+  NO EN SQUASH: - La navegación anterior por Casa Serra activó imagen/vídeo alternativos en el navegador cloud; no acredita rendimiento de su renderer en vivo.
+  NO EN SQUASH: - La preparación es documental: los resultados históricos de #24/#29/#34 y LAB v03 se atribuyen a sus informes, no se presentan como pruebas repetidas aquí.
+  NO EN SQUASH: | Ejemplo actual | Integración visual reconocible y transición existente |
+  NO EN SQUASH: | Proyecto vacío | Requisito de geometría y navegación a Distribuir |
+  NO EN SQUASH: | Asimétrico del exportador | Ejes, rotaciones, IDs y origen compartido |
+  NO EN SQUASH: | Polígono cóncavo + muro diagonal | Punto de enfoque, encuadre y clasificación de entidades |
+  NO EN SQUASH: | Dos estancias desconectadas / sin hueco | Ruta no disponible y alternativa aérea |
+  NO EN SQUASH: | Habitaciones pequeñas y pared alta | Cámara/clip plane/colisión |
+  NO EN SQUASH: | Variante y duplicado con documento parecido | Metadata separada por entrada local, invalidación y retorno |
+  NO EN SQUASH: | Modelo autorizado fallido / ausente | Sustituto genérico y aviso sin mutar assetRef |
+  NO EN SQUASH: | Oak / marble candidatos | Color, normal, AO/roughness, UV y presupuesto visual |
+  NO EN SQUASH: Utilizar fuentes sintéticas/no personales. Las pruebas no deben depender de un plano real para verificar el código. La evaluación de usuarios/dispositivos reales se registra aparte.
+  NO EN SQUASH: ## 3. CS-1: casos obligatorios
+  NO EN SQUASH: | ID | Acción | Resultado requerido | Estado |
+  NO EN SQUASH: | P01 | Buscar «presentar mi vivienda», «tour», «presentación en 3D» | Acción correcta; no cambiar objetivo ni confundir con abrir solo 3D | Pendiente |
+  NO EN SQUASH: | P02 | Abrir desde Revisar y guardar y editor completo | Misma configuración/estado; accesible con guía cerrada | Pendiente |
+  NO EN SQUASH: | P03 | Iniciar en proyecto vacío | Explicación y acción para crear distribución; documento intacto | Pendiente |
+  NO EN SQUASH: | P04 | Seleccionar y reordenar estancias; cancelar | Orden coherente; cancelar no cambia proyecto ni abre 3D | Pendiente |
+  NO EN SQUASH: | P05 | Reproducir vista general y paradas | IDs/datos del proyecto; encuadre correcto en cada viewport | Pendiente |
+  NO EN SQUASH: | P06 | Anterior/Siguiente, salto directo y pausa | Estado e indicador consistentes; límites primero/último | Pendiente |
+  NO EN SQUASH: | P07 | Escape, cerrar y Atrás durante carga/transición | Operaciones canceladas; retorno/foco; ninguna reapertura tardía | Pendiente |
+  NO EN SQUASH: | P08 | Iniciar en 2D y en 3D, incluyendo recorrido/pointer lock | Restauración de vista y configuración; pointer lock solo por gesto | Pendiente |
+  NO EN SQUASH: | P09 | Cambiar proyecto/variante o geometría | Detener/reconciliar; plan obsoleto no usa poses anteriores | Pendiente |
+  NO EN SQUASH: | P10 | Recargar y recuperar plan con roomId eliminado | Aviso y plan regenerable; no fallo ni datos cruzados | Pendiente |
+  NO EN SQUASH: | P11 | Asset 404/corrupto y pérdida de contexto | Aviso/fallback vigente; documento 2D recuperable | Pendiente |
+  NO EN SQUASH: | P12 | Visitar todas las paradas | Progreso del tour separado; objetivo no recibe evidencia falsa | Pendiente |
+  NO EN SQUASH: | P13 | Exportar PNG durante presentación | PNG real y dimensiones correctas; captura serializada; buffer recuperado | Pendiente |
+  NO EN SQUASH: | P14 | Resize/orientación y movimiento reducido | No estirar; aspectos actuales; alternativa sin movimiento obligatorio | Pendiente |
+  NO EN SQUASH: | P15 | Repetir entrada/salida diez veces | Sin crecimiento persistente de recursos propios/listeners/RAF | Pendiente |
+  NO EN SQUASH: | P16 | Nombres con caracteres HTML y longitud grande | Texto seguro y layout accesible sin desbordamiento | Pendiente |
+  NO EN SQUASH: Antes/después, comparar JSON completo, hash canónico, biblioteca/variantes, historial, selección, escala y asignaciones. Solo metadata propia de presentación y evidencia real de carga 3D pueden cambia
+  NO EN SQUASH: ## 4. CS-2: materiales y rendimiento
+  NO EN SQUASH: - Decodificación e integridad por mapa; firma/formato, dimensiones, bytes y hashes.
+  NO EN SQUASH: - Color sRGB para albedo y datos lineales para normal/ARM. Verificar eje Y de normal y patrón de iluminación.
+  NO EN SQUASH: - Correspondencia UV/crop/orientación de los tres canales. Compartir assetId no prueba alineación.
+  NO EN SQUASH: - Repetición en mm coherente y sin cambiar la estancia vecina.
+  NO EN SQUASH: - Preservación de los 50 IDs/asignaciones y apertura de JSON/ZIP anteriores.
+  NO EN SQUASH: - Carga bajo demanda; cancelación y dispose; fallo individual recupera albedo aprobado.
+  NO EN SQUASH: - Capturas iguales en geometría/cámara/luz para comparar calidad básica/mejorada.
+  NO EN SQUASH: - Regresión de catálogos/perfiles y exportador offline si se amplían canales. No asumir compatibilidad por la prueba diagnóstica PBR histórica.
+  NO EN SQUASH: - Medir bytes, tiempos, recursos activos, estimación de texturas/mipmaps y comportamiento tras cerrar.
+  NO EN SQUASH: - Baseline contra el master usado; registrar navegador/GPU/modelo real si existe. No presentar SwiftShader o emulación como rendimiento de teléfono.
+  NO EN SQUASH: Los límites propuestos de mapas son guards de admisión. Umbrales de rendimiento/producto se concretarán con la primera medición, antes de afirmar mejora o compatibilidad física.
+  NO EN SQUASH: ## 5. CS-3: efectos y recorrido interior
+  NO EN SQUASH: - Muros compartidos, suelos cóncavos, diagonales, instancias GLB y objetos sin material candidato.
+  NO EN SQUASH: - Activar/desactivar dibujo→material sin cambiar geometría, asignaciones, callbacks o UV originales.
+  NO EN SQUASH: - Fallos de shader/compilación/capabilities: renderer base disponible.
+  NO EN SQUASH: - Revisar interpolación completa, no solo waypoints: spline sin colisiones y sin salto de escala.
+  NO EN SQUASH: - Adyacencia a través de huecos transitables, puertas cerradas, muebles en pasos y estancias desconectadas.
+  NO EN SQUASH: - Si no existe ruta comprobada, utilizar la alternativa declarada; no atravesar paredes.
+  NO EN SQUASH: - Sidecar de cámaras: IDs/revisión, mismo centro del paquete #24, metros/glTF; rechazo de fuente obsoleta. Una ida y vuelta nueva con LAB requiere su evidencia propia.
+  NO EN SQUASH: - El recorrido opcional nunca ejecuta generación de vídeo o cambios en un repo externo.
+  NO EN SQUASH: ## 6. Regresiones y herramientas
+  NO EN SQUASH: Suites existentes relevantes, a seleccionar y ejecutar al implementar:
+  NO EN SQUASH: - `tests/guide.test.cjs`, `tests/guide.browser.test.cjs`, `tests/guide-navigation.browser.test.cjs`.
+  NO EN SQUASH: - `tests/capture-3d.browser.test.cjs`, `tests/browser.test.cjs`.
+  NO EN SQUASH: - `tests/surfaces.test.cjs`, `tests/surfaces.browser.test.cjs`.
+  NO EN SQUASH: - `tests/assets.test.cjs`, `tests/assets.browser.test.cjs`.
+  NO EN SQUASH: - `tests/variants*.test.cjs`, `tests/room-layout*.test.cjs` y `tests/interop.test.cjs` según los cambios.
+  NO EN SQUASH: - Nuevas pruebas propuestas: lógica pura de presentación, ciclo/restauración y navegador con captura real.
+  NO EN SQUASH: Ejecutar pruebas locales y checks exigidos por el repositorio. Registrar omitidas/fallidas con motivos y comparar fallos preexistentes con la misma base. No instalar otro framework o copiar números hi
+  NO EN SQUASH: ## 7. Revisión visual humana
+  NO EN SQUASH: Viewports mínimos: 1440×900, 390×844 y 844×390.
+  NO EN SQUASH: 1. Rama, SHA de código probado y SHA final.
+  NO EN SQUASH: 2. URL directa de preview y deployment READY con el SHA final.
+  NO EN SQUASH: 3. Protección/acceso real de la persona revisora.
+  NO EN SQUASH: 4. Capturas de configuración, vista general, ficha/parada, indicador y vuelta al editor.
+  NO EN SQUASH: 5. PNG descargado y lectura de dimensiones/contenido.
+  NO EN SQUASH: 6. Estado de la guía antes/después y original intacto.
+  NO EN SQUASH: 7. Calidad básica/mejorada y degradación.
+  NO EN SQUASH: 8. Feedback de Juanma y correcciones en la misma PR.
+  NO EN SQUASH: Una pantalla de carga o un READY no sustituyen la revisión. No avanzar a la entrega dependiente hasta el cierre correspondiente.
+  NO EN SQUASH: ## 8. Qué falta para estar listo para probar el producto
+  NO EN SQUASH: Implementar CS-1 y sus pruebas automatizadas, generar preview exacta y ejecutar la matriz anterior. CS-2/CS-3 siguen en planificación hasta su entrega. Esta documentación deja casos y resultados esper
+  NO EN SQUASH: ## 9. Verificación de la preparación documental
+  NO EN SQUASH: - `python3 scripts/check-documents.py docs/technical/casa-serra-integration.md docs/qa/casa-serra-integration-plan.md`: tablas, cercas, rutas y anclas correctas en los dos documentos nuevos.
+  NO EN SQUASH: - Validador temporal sobre README, roadmap canónico, Roadmap 2, especificación y protocolo: 81 enlaces internos comprobados contra el árbol Git fijado y los archivos nuevos; tablas/cercas/ancla histór
+  NO EN SQUASH: - `git diff --check` y `git diff --cached --check`: correctos tras quitar líneas vacías finales añadidas en los tres documentos existentes.
+  NO EN SQUASH: - La primera comprobación del ancla histórica F3 requirió materializar su documento en el snapshot de lectura; el archivo y ancla existen en el repositorio fijado. No era un fallo de enlace del produc
+  NO EN SQUASH: - El staging local contiene un snapshot documental parcial para estos controles; no se presenta como checkout completo de producto. Los archivos remotos se publican sobre el árbol base completo, conse
+  NO EN SQUASH: - No se ejecutaron suites de producto, Blender, normalizador ni rendering de las mejoras futuras. Sus matrices permanecen pendientes.
+  NO EN SQUASH: # Auditoría de Casa Serra y Casa Larga para mejorar Floor Plan
+  NO EN SQUASH: Informe para Juanma · 13 de octubre de 2026 · Investigación y propuesta de implementación
+  NO EN SQUASH: Casa Serra y Casa Larga aportan más que una transición vistosa entre plano y vivienda. Nos interesan su lenguaje de dibujo arquitectónico, la dirección de cámara, la presentación por estancias, la rel
+  NO EN SQUASH: Recomiendo desarrollar primero una presentación reversible sobre el proyecto real, acompañada de control de carga y degradación, navegación accesible, fichas de estancia y capturas útiles. Después, am
+  NO EN SQUASH: La preparación CS-1/CS-2/CS-3 de la PR #36 sigue siendo una base válida, pero deja varias oportunidades sin desarrollar: láminas y anotaciones exportables, encuadre de cámara reproducible, captura por
+  NO EN SQUASH: Las fichas, poses de cámara, movimiento reducido y parte del control de calidad ya están previstos en #36; aquí se concretan y refuerzan. Las ampliaciones nuevas más claras son la lámina exportable, l
+  NO EN SQUASH: **Paso previo del proyecto.** La PR #38 continúa abierta y en borrador, con las correcciones publicadas pero sin verificación integral final. Su HEAD es `3e1e1dd755e2ccae23cce799006eea3fae4bdfe7`. El 
+  NO EN SQUASH: ## 2 Fuentes y evidencia de la auditoría
+  NO EN SQUASH: Los repositorios se inspeccionaron en snapshots exactos. Los forks de Juanma y sus originales coinciden en los HEAD consultados. Se revisaron las fuentes HTML, CSS y JavaScript, el prompt, los puntos 
+  NO EN SQUASH: | Fuente | Referencia | Alcance comprobado |
+  NO EN SQUASH: | Casa Serra | `b47b775` | Demo publicada, prompt, escena, efectos, carga, puerta de capacidad y recursos |
+  NO EN SQUASH: | Casa Larga | `dee3068` | Código legible de modelo, cámara, lámina, materiales y primer checkpoint |
+  NO EN SQUASH: | Floor Plan master | `3fdbc0f` | Base integrada tras la reconciliación documental #37 |
+  NO EN SQUASH: | Floor Plan PR #38 | `3e1e1dd` | Integración candidata de importación multiformato y correcciones |
+  NO EN SQUASH: | Preparación Casa Serra PR #36 | `9d781f0` | Especificación CS-1/CS-2/CS-3, todavía en borrador |
+  NO EN SQUASH: **Evidencia visible.** Se abrió la página del prompt y ambas demos. Serra mostró correctamente su alternativa de imagen y vídeo. Larga permaneció en la pantalla de carga y su consola registró que este
+  NO EN SQUASH: **Inventario físico.** Se decodificaron 91 imágenes de los directorios de recursos: 79 de Serra y 12 de Larga. Se registraron dimensiones, bytes y SHA-256. Esta comprobación valida archivos, no escala
+  NO EN SQUASH: | Conjunto | Archivos | Bytes en disco | Dimensiones observadas |
+  NO EN SQUASH: | Serra perfil completo | 39 mapas | 37 311 432 | 33 de 2048×2048 y 6 con otra altura |
+  NO EN SQUASH: | Serra perfil reducido | 39 mapas | 11 607 066 | 1024×1024 |
+  NO EN SQUASH: | Serra fondo de cielo JPEG | 1 imagen | 163 056 | 4096×2048 |
+  NO EN SQUASH: | Larga texturas | 12 mapas | 9 581 267 | 9 de 1024×1024 y 3 de 2048×2048 |
+  NO EN SQUASH: Los 39 mapas reducidos de Serra representan unos **156 MiB nominales** si cada píxel ocupa cuatro bytes, o unos **208 MiB** incluyendo una cadena completa de mipmaps. El perfil completo ronda 625 MiB 
+  NO EN SQUASH: ## 3 Qué aportan realmente las dos referencias
+  NO EN SQUASH: ### Casa Serra como referencia de presentación
+  NO EN SQUASH: La escena está construida en código para una casa específica. Las estancias, muebles, coordenadas de cámara, fichas y zonas de revelado están fijados para ese proyecto. El sistema combina una vista de
+  NO EN SQUASH: Su puerta de capacidad comprueba WebGL2 y buffers HalfFloat con cuatro muestras. También distingue carga lenta, fallo de carga y pérdida de contexto, ofreciendo una imagen y un vídeo previamente prepa
+  NO EN SQUASH: ### Casa Larga como referencia de implementación legible
+  NO EN SQUASH: Casa Larga permite entender cómo se mantiene una misma casa durante la lámina, el levantamiento de muros y la entrada al vestíbulo. `rig.js` separa el progreso de la cámara; `sheet.js` construye anota
+  NO EN SQUASH: Su entrega termina dentro de la entrada. Aunque hay habitaciones posteriores definidas, no constituye un tour completo de salón, cocina y patio. El README y el prompt describen una experiencia de desa
+  NO EN SQUASH: ### Lo que Floor Plan ya tiene
+  NO EN SQUASH: Floor Plan ya deriva 2D y 3D de `FloorPlanProjectV1`; tiene transición de entrada y salida del 3D, corte de muros, recorrido manual, selección de habitaciones, puertas, luz diurna/nocturna, muebles ge
+  NO EN SQUASH: La mejora consiste en orquestar y extender estas piezas. La transición actual hace crecer grupos mediante escala vertical; no es el mismo mecanismo que un corte animado sobre una malla a altura comple
+  NO EN SQUASH: ## 4 Matriz de capacidades y prioridades
+  NO EN SQUASH: P1 significa primera tanda útil o condición de calidad; P2 requiere una entrega posterior o piloto; P3 queda como ampliación selectiva. S, M y L expresan complejidad relativa, sin compromiso de fechas
+  NO EN SQUASH: PBR es el tratamiento de materiales mediante propiedades como rugosidad y relieve. HDRI es una imagen con rango de luz ampliado que puede iluminar el entorno. FOV es el campo de visión de la cámara. U
+  NO EN SQUASH: | ID y capacidad | Encaje en Floor Plan | Prioridad y complejidad |
+  NO EN SQUASH: | M01 Presentación por estancias | Orquestar vistas existentes; núcleo de CS-1 | P1 · M |
+  NO EN SQUASH: | M02 Fichas y marcadores de estancia | Ampliar datos visibles del proyecto real | P1 · S–M |
+  NO EN SQUASH: | M03 Cámara y encuadre reproducibles | Sustituir coordenadas fijas por poses derivadas | P1 · M |
+  NO EN SQUASH: | M04 Movimiento reducido y controles | Integrar accesibilidad en la presentación | P1 · S–M |
+  NO EN SQUASH: | M05 Calidad y degradación por capacidad | Extender el fallback de 3D | P1 · M |
+  NO EN SQUASH: | M06 Carga por etapas y publicación segura | Ampliar estados de recursos existentes | P1 · M |
+  NO EN SQUASH: | M07 Lámina arquitectónica y anotaciones | Extender composición y exportación | P1 · M |
+  NO EN SQUASH: | M08 PBR selectivo y escala de textura | Ampliar el piloto de CS-2 | P2 · M |
+  NO EN SQUASH: | M09 HDRI y presets de iluminación | Ampliar el entorno y controles existentes | P2 · M |
+  NO EN SQUASH: | M10 Revelado de dibujo a materiales | Efecto por entidad, dentro de CS-3 | P2 · L |
+  NO EN SQUASH: | M11 Capturas y secuencia por estancias | Ampliar captura #29 y paquete #24 | P1 · M |
+  NO EN SQUASH: | M12 Comparación visual de variantes | Extender variantes #30 con cámaras iguales | P2 · M |
+  NO EN SQUASH: | M13 Plano pequeño de orientación | Nueva adaptación del vínculo 2D y cámara | P1 · M |
+  NO EN SQUASH: | M14 Espejo con reflejo selectivo | Piloto sobre un recurso identificado | P3 · M–L |
+  NO EN SQUASH: | M15 Sombras de contacto y efectos | Piloto visual con coste acotado | P2 · M–L |
+  NO EN SQUASH: | M16 Agrupación de geometría | Optimizar derivados conservando identidad | P2 · M–L |
+  NO EN SQUASH: | M17 Detalles procedurales de genéricos | Mejora selectiva del mobiliario actual | P3 · M |
+  NO EN SQUASH: | M18 Recorrido interior comprobado | Ampliación de CS-3 con colisiones | P2 · L |
+  NO EN SQUASH: | M19 Créditos y procedencia | Ampliar atribuciones y manifest por recurso | P1 · S |
+  NO EN SQUASH: | M20 Presentación portable | Propuesta de intercambio posterior | P3 · L |
+  NO EN SQUASH: ## 5 Navegación y presentación que conviene implementar
+  NO EN SQUASH: ### M01 Presentación reversible por estancias
+  NO EN SQUASH: **Por qué interesa.** Permite enseñar una vivienda importada o una variante sin manejar continuamente la cámara. Convierte el trabajo del editor en una presentación comprensible. Es el núcleo ya previ
+  NO EN SQUASH: **Cómo.** Añadir «Presentar mi vivienda» al buscador, a Revisar y guardar y al editor completo. La configuración incluye vista general y habitaciones elegidas, ordenables. `presentation-core.js` gener
+  NO EN SQUASH: **Aceptación.** Presentar ejemplo, DXF y proyecto propio; cerrar con botón, Escape y Atrás; comprobar documento, entrada activa, selección, historial y estado de guardado. El progreso del recorrido de
+  NO EN SQUASH: ### M02 Fichas y marcadores con información real
+  NO EN SQUASH: **Por qué interesa.** Las fichas de Serra relacionan una parada con información del espacio. En Floor Plan pueden explicar superficie, acabados y elementos relevantes, evitando que el usuario pierda l
+  NO EN SQUASH: **Cómo.** Usar `roomId` como vínculo; generar texto con nombre, área del polígono, material asignado y estado de escala. Ofrecer un marcador seleccionable y una ficha breve. Para muebles, declarar el 
+  NO EN SQUASH: **Aceptación.** Habitaciones cóncavas, nombres largos, muebles entre dos estancias y datos incompletos. La ficha debe abrirse con teclado, cerrarse conservando el foco y no ocultar las acciones princi
+  NO EN SQUASH: ### M03 Cámara con encuadre continuo y reproducible
+  NO EN SQUASH: **Por qué interesa.** Larga coordina distancia, campo de visión y centro para que el plano y la entrada formen una secuencia continua. Serra combina paradas con interpolación. Estas técnicas ayudan a 
+  NO EN SQUASH: **Cómo.** Derivar poses de la envolvente del proyecto y de cada polígono, usando el mismo origen que View3D. Guardar FOV vertical, aspecto, target y pose en un plan separado. Interpolar encuadre y dis
+  NO EN SQUASH: **Aceptación.** Vivienda pequeña y grande, importación desplazada del origen, diagonal, estancia estrecha y cambio vertical/horizontal. El resultado se repite para una misma revisión. Una spline suave
+  NO EN SQUASH: ### M04 Controles accesibles y movimiento reducido
+  NO EN SQUASH: **Por qué interesa.** La experiencia debe poder usarse sin scroll preciso, sin ratón y sin animaciones extensas. Serra consulta `prefers-reduced-motion`; Floor Plan necesita convertir esa preferencia 
+  NO EN SQUASH: **Cómo.** Dar prioridad a botones y selección directa de paradas. Ofrecer cambios inmediatos o transiciones breves al reducir movimiento; desactivar parallax y reproducción automática. Limitar los ata
+  NO EN SQUASH: **Aceptación.** Teclado, lector mediante etiquetas DOM, tacto, preferencia de movimiento reducido y Escape. No introducir Lenis ni secuestrar el scroll global del editor como requisito del tour.
+  NO EN SQUASH: ### M13 Orientación mediante un plano pequeño
+  NO EN SQUASH: **Por qué interesa.** Es una propuesta nueva derivada del plano común y los marcadores de progreso; las demos auditadas no demuestran este minimapa como función terminada. Permitiría saber qué estanci
+  NO EN SQUASH: **Cómo.** Renderizar una versión SVG simplificada del proyecto con estancia activa y dirección de cámara transformada al sistema de milímetros. Hacerlo plegable en móvil. Un clic sobre una estancia se
+  NO EN SQUASH: **Aceptación.** Plano girado, forma irregular, cambio de centro y variantes. La flecha debe corresponder a la cámara actual y desaparecer si la presentación queda obsoleta.
+  NO EN SQUASH: ## 6 Fiabilidad y rendimiento antes de añadir efectos
+  NO EN SQUASH: ### M05 Calidad por capacidad y degradación útil
+  NO EN SQUASH: **Por qué interesa.** Serra ofrece una alternativa visible cuando el render no puede empezar. Larga deja ver la importancia de ese mecanismo: en esta revisión no salió de carga tras el fallo de contex
+  NO EN SQUASH: **Cómo.** Crear perfiles Básica y Mejorada sobre el renderer actual, con capacidades por efecto. La falta de HalfFloat o MSAA debe desactivar el efecto que lo requiere; no expulsar de todo el 3D si el
+  NO EN SQUASH: **Aceptación.** Sin WebGL, falta de un buffer avanzado, contexto perdido, textura fallida y resize. La interfaz explica el estado y permite editar/guardar. La reducción de calidad no cambia asignacion
+  NO EN SQUASH: **Hallazgo concreto.** `fx-experience.js` contiene una reducción de `renderScale` por tiempo de frame, pero Serra configura inicialmente 0,5 y el ajuste solo actúa por encima de 0,5. Por ello, esa lóg
+  NO EN SQUASH: ### M06 Carga por etapas y publicación segura
+  NO EN SQUASH: **Por qué interesa.** El loader de Serra cuenta recursos, prepara texturas y compila materiales antes de presentar. Floor Plan ya tiene estados y validaciones; conviene darles una UX coordinada que no
+  NO EN SQUASH: **Cómo.** Separar geometría lista, materiales opcionales y modelos de catálogo. Publicar primero la escena básica y cargar solo recursos usados. Mostrar etapas reales y fallos por recurso; un porcenta
+  NO EN SQUASH: **Aceptación.** Red lenta, recurso corrupto, cancelación, cambio de proyecto durante carga y entrada/salida repetida. Un recurso tardío no debe aparecer en otra vivienda. Las texturas fallidas mantien
+  NO EN SQUASH: ### M16 Agrupación de geometría conservando IDs
+  NO EN SQUASH: **Por qué interesa.** Serra agrupa geometrías por material y Larga reduce caras internas en su sólido. Puede disminuir llamadas de dibujo, pero el editor necesita identificar cada pared y mueble. [S4,
+  NO EN SQUASH: **Cómo.** Medir primero las llamadas y tiempos del proyecto de control. Agrupar inicialmente elementos decorativos estáticos o instancias repetidas, manteniendo un índice de entidad por rango o instan
+  NO EN SQUASH: **Aceptación.** Selección, resaltado, arrastre, cambio de acabado, puerta animada y exportación conservan correspondencia exacta con IDs. `RectSolid` se estudia solo para una optimización ortogonal ac
+  NO EN SQUASH: ## 7 Dibujo materiales e iluminación
+  NO EN SQUASH: ### M07 Lámina arquitectónica y anotaciones exportables
+  NO EN SQUASH: **Por qué interesa.** La lámina de Larga integra nombres, cotas, puertas, escala gráfica, corte y cajetín. Floor Plan ya muestra parte de esa información, pero puede mejorar su composición y trasladar
+  NO EN SQUASH: **Cómo.** Crear un compositor derivado del proyecto para modo lámina y exportación. Reutilizar el SVG 2D y las cotas válidas; añadir título, revisión, leyenda de acabados y estado de escala. Calcular 
+  NO EN SQUASH: **Aceptación.** Exportación de habitaciones irregulares y texto en tres idiomas; coherencia entre superficie y geometría; lectura en móvil e imagen. El cajetín no inventa dirección, autor del plano, f
+  NO EN SQUASH: ### M08 Materiales PBR selectivos con repetición coherente
+  NO EN SQUASH: **Por qué interesa.** Normal, rugosidad y oclusión aportan volumen a acabados ya disponibles. Serra usa tríos diff/nor/arm; Larga muestra combinaciones legibles de color, normal y roughness. El objeti
+  NO EN SQUASH: **Cómo.** Empezar con los candidatos roble y mármol de #36. Comparar crop, orientación y UV frente a los albedos actuales: compartir nombre no prueba alineación. Extender manifest y SurfaceRenderer co
+  NO EN SQUASH: **Aceptación.** Una tabla de comparación con igual cámara y luz, orientación de normal, continuidad, memoria estimada y fallback. El helper PBR de Serra conecta ARM a AO y rugosidad, pero no conecta m
+  NO EN SQUASH: ### M09 HDRI y presets de luz reversibles
+  NO EN SQUASH: **Por qué interesa.** Serra usa un HDRI preparado mediante PMREM y un fondo de cielo; Larga usa un entorno sintético y luz cálida. Floor Plan ya tiene luz y noche, por lo que la aportación es un entor
+  NO EN SQUASH: **Cómo.** Añadir primero un HDRI autorizado y acotado con preset neutro y cálido. Separar iluminación de fondo visible: el usuario puede conservar fondo limpio. Usar el cargador oficial compatible con
+  NO EN SQUASH: **Aceptación.** Mismo material bajo ambos presets, captura con color consistente, fallo del HDRI y recuperación de la luz anterior. Los presets expresan apariencia; no acreditan asoleo real de una dir
+  NO EN SQUASH: ### M10 Revelado por entidades del proyecto
+  NO EN SQUASH: **Por qué interesa.** Ver un espacio pasar de dibujo a materiales puede explicar mejor la vivienda y sus acabados. El patrón de Larga es legible; Serra ofrece efectos más complejos. [L5, S2]
+  NO EN SQUASH: **Cómo.** Iniciar con un efecto sencillo en suelo y paredes de una sola estancia. Asociar mallas a `roomId`, `wallId` y objeto, con tratamiento explícito de las dos caras de paredes compartidas. Usar 
+  NO EN SQUASH: **Aceptación.** Estancia cóncava, muro diagonal, habitación contigua y modelo GLB. El efecto no revela otra estancia por una caja rectangular incorrecta. `roomOf` de las demos depende de rectángulos f
+  NO EN SQUASH: ### M15 Sombras de contacto y postprocesado acotado
+  NO EN SQUASH: **Por qué interesa.** Las sombras ayudan a situar muebles y leer volúmenes. Larga usa parches procedurales; Serra tiene AO y otros efectos. Floor Plan puede mejorar apoyo visual sin exigir toda la cad
+  NO EN SQUASH: **Cómo.** Probar primero sombras de contacto o AO en un proyecto de control, con intensidad moderada. Añadir una opción de presentación que vuelva al renderer base si falta capacidad. Medir coste y co
+  NO EN SQUASH: **Aceptación.** Mueble junto a muro, solape y escena sin geometría; comparar con la misma luz. Las sombras no modifican el análisis geométrico. La captura de #29 debe seguir reflejando el modo visible
+  NO EN SQUASH: ### M14 Reflejo de espejo selectivo
+  NO EN SQUASH: **Por qué interesa.** Serra renderiza una cámara reflejada a un target para un espejo concreto. Floor Plan usa materiales de apariencia reflectante con entorno, pero el punto auditado no genera una im
+  NO EN SQUASH: **Cómo.** Reservar un piloto posterior para un único espejo identificado. Renderizar solo cuando sea visible y la cámara o escena cambien, limitar resolución y frecuencia, ocultar el propio espejo y e
+  NO EN SQUASH: **Aceptación.** Reflejo orientado correctamente, estabilidad al moverse, captura y restauración del framebuffer. No activar para todos los objetos brillantes ni confundir un envMap con un reflejo exac
+  NO EN SQUASH: ### M17 Detalles procedurales en genéricos
+  NO EN SQUASH: **Por qué interesa.** Ambas casas crean mobiliario y decoración mediante geometría y semillas. Se pueden mejorar bordes, telas o apoyos de algunos genéricos cuando no haya una malla externa disponible
+  NO EN SQUASH: **Cómo.** Elegir dos o tres tipos existentes y generar un derivado visual con semilla estable, presupuesto de triángulos y misma envolvente del objeto. Mantener IDs, dimensiones y fallback actual. La 
+  NO EN SQUASH: **Aceptación.** Repetir render/exportación produce el mismo aspecto; selección y dimensiones no cambian. No inferir marca, modelo comercial o medidas oficiales de una silla construida en código.
+  NO EN SQUASH: ## 8 Entregables y comparación
+  NO EN SQUASH: ### M11 Capturas por estancias y secuencia reproducible
+  NO EN SQUASH: **Por qué interesa.** Una presentación debe producir imágenes útiles. Larga incorpora un modo de frame exacto para un grabador; Floor Plan ya tiene captura configurable y paquete para Blender. La ampl
+  NO EN SQUASH: **Cómo.** Empezar con «Capturar esta vista» y «Capturar estancias seleccionadas». Serializar animación y captura, esperar recursos requeridos e informar los faltantes. Reutilizar `View3D.shot`, su pre
+  NO EN SQUASH: **Aceptación.** PNG con dimensiones correctas, etiquetas presentes si se solicitan, orden estable y ausencia de mutación del proyecto/cámara. La reproducibilidad significa misma configuración y conten
+  NO EN SQUASH: ### M12 Comparación visual de variantes con cámara común
+  NO EN SQUASH: **Por qué interesa.** Es una propuesta nueva que combina la dirección visual de las demos con las variantes de Floor Plan. Permite evaluar acabados o distribución sin que un cambio de cámara altere la
+  NO EN SQUASH: **Cómo.** Compartir pose, FOV, exposición, perfil de calidad y tamaño de salida entre original y variante. Mantener sus entradas e IDs separados. Si las geometrías tienen distinto centro, almacenar pr
+  NO EN SQUASH: **Aceptación.** Diferencias de mobiliario y acabados visibles con encuadre igual; cambios de envolvente y escala tratados explícitamente. El render visual no sustituye métricas geométricas ni conviert
+  NO EN SQUASH: ### M20 Presentación portable como ampliación posterior
+  NO EN SQUASH: **Por qué interesa.** Una secuencia local podría compartirse fuera del editor. Las demos son páginas publicadas para casas fijas; no demuestran un exportador genérico de viviendas. Esta capacidad es u
+  NO EN SQUASH: **Cómo.** Investigar primero un paquete local con imágenes, manifest y plan de vistas. Un visor HTML portátil exigiría recursos empaquetados, compatibilidad y control de dependencias. Publicación web,
+  NO EN SQUASH: **Aceptación.** Reabrir el paquete autorizado y relacionar sus imágenes con la revisión exacta. Declarar qué es imagen, escena interactiva o archivo editable; no anunciar integración con CRM, Immersph
+  NO EN SQUASH: ## 9 Arquitectura de adaptación
+  NO EN SQUASH: **Fuente de verdad.** `FloorPlanProjectV1` conserva la geometría en milímetros. Cámaras, fichas, estilos, calidad y secuencia son derivados de una entrada local y una revisión. No se incorpora `Presen
+  NO EN SQUASH: La propuesta de módulos separa lógica pura, UI y renderer. Los nombres siguientes son puntos de implementación propuestos, salvo las piezas actuales que se identifican expresamente.
+  NO EN SQUASH: | Pieza | Responsabilidad | Integración |
+  NO EN SQUASH: | presentation core | Paradas, IDs, revisión, encuadres y estados | Lee proyecto y geometría canónicos |
+  NO EN SQUASH: | presentation UI | Configuración, fichas, controles y foco | Buscador y Revisar y guardar actuales |
+  NO EN SQUASH: | Adaptador de View3D | Capturar/restaurar estado, cancelar y aplicar poses | Extensión del módulo actual en index.html |
+  NO EN SQUASH: | quality controller | Capacidades por efecto y presupuestos | Renderer y métricas existentes |
+  NO EN SQUASH: | sheet composer | Anotaciones y composición de salida | SVG 2D y captura existente |
+  NO EN SQUASH: | Material presentation | Efectos reversibles y callbacks | SurfaceRenderer y cargador F3 actuales |
+  NO EN SQUASH: | presentation export | Imágenes y sidecar de poses | Captura #29 y exportador #24 |
+  NO EN SQUASH: **Contrato derivado propuesto.** `PresentationPlanV1` incluye versión, ID de entrada local, projectId, hash/revisión visual, roomIds ordenados, poses, FOV vertical, aspecto, duración, preset y calidad
+  NO EN SQUASH: **Ejes y escala.** Floor Plan utiliza X=(x−cx)/1000, Y=altura/1000 y Z=(y−cy)/1000. Larga usa metros con Z=−n; Serra centra su casa mediante desplazamientos fijos. Adaptar las poses al centro y signos
+  NO EN SQUASH: **Restauración.** Añadir APIs explícitas de guardar/restaurar vista y de transición cancelable. Los getters `cameraState` y `canvasState` actuales sirven para observar; no proporcionan por sí solos un
+  NO EN SQUASH: **Cancelación y revisión.** Cada operación captura entrada, revisión y token. Inicio, Atrás, salir, importar, editar o cambiar de variante invalidan resultados antiguos. Cancelar RAF, promesas y liste
+  NO EN SQUASH: **Dependencias.** Floor Plan usa Three 0.160.0 modular; Serra usa 0.160.1 global y Larga 0.170.0 modular. No añadir una segunda copia de Three. Adaptar cada mecanismo al runtime fijado; un upgrade nec
+  NO EN SQUASH: ## 10 Secuencia propuesta de implementación
+  NO EN SQUASH: La ampliación mantiene CS-1/CS-2/CS-3 como entregas ya documentadas y separa extensiones que aún no tenían alcance. No asigna una nueva F4 ni aprueba conjuntamente todas las capacidades.
+  NO EN SQUASH: | Entrega | Resultado verificable | Condición de avance |
+  NO EN SQUASH: | Cierre #38 | Importación y persistencia comprobadas en el commit final | Pruebas finales, preview, aprobación y merge |
+  NO EN SQUASH: | Reconciliación #36 | Preparación actualizada con esta auditoría | Base vigente y alcance de cada entrega claro |
+  NO EN SQUASH: | CS-1 | M01–M04 con mínimos de M05/M06/M19 | Retorno intacto, escritorio/móvil y revisión humana |
+  NO EN SQUASH: | Extensión de entregables | M07/M11 y piloto M13 | Capturas legibles y correspondencia con revisión |
+  NO EN SQUASH: | CS-2 | Piloto M08/M09 y calidad medida | Recursos, color, UV, fallback y presupuesto |
+  NO EN SQUASH: | CS-3 primera parte | M10 y piloto M15 | Reversibilidad y geometrías no rectangulares |
+  NO EN SQUASH: | CS-3 recorrido interior | M18 | Trayectoria comprobada y alternativa segura |
+  NO EN SQUASH: | Ampliaciones selectivas | M12/M14/M16/M17/M20 | Medición o caso de uso que justifique cada alcance |
+  NO EN SQUASH: **Primer checkpoint de CS-1.** Una vista general y una estancia del proyecto propio, controles manuales, ficha con datos reales, transición aérea y salida intacta. Grabar o capturar el resultado y rev
+  NO EN SQUASH: ### M18 Recorrido interior con comprobación geométrica
+  NO EN SQUASH: **Por qué interesa.** Caminar entre estancias es una de las aportaciones más atractivas de Serra. Para viviendas arbitrarias requiere más evidencia que las coordenadas de una casa preparada. [S2, S3]
+  NO EN SQUASH: **Cómo.** Crear conectividad desde huecos transitables y comprobar la cámara y segmentos contra muros, puertas y mobiliario. Definir altura y envolvente de cámara orientativas. Validar la trayectoria 
+  NO EN SQUASH: **Aceptación.** Puerta cerrada, hueco estrecho, muro diagonal, estancia desconectada y mueble en paso. Si no hay recorrido demostrado, usar vistas aéreas o cambio directo de parada. No prometer accesi
+  NO EN SQUASH: ## 11 Pruebas que deben cerrar cada entrega
+  NO EN SQUASH: | Área | Escenario mínimo | Resultado exigido |
+  NO EN SQUASH: | Estado | Entrar/salir con botón, Escape y Atrás | Proyecto e historial intactos; vista restaurada |
+  NO EN SQUASH: | Aislamiento | Dos entradas con mismo projectId | Presentaciones y recursos independientes |
+  NO EN SQUASH: | Carrera | Importar o editar durante carga | Operación antigua cancelada y sin reapertura |
+  NO EN SQUASH: | Geometría | Cóncava, diagonal y pared compartida | Ficha/revelado/cámara sobre la entidad correcta |
+  NO EN SQUASH: | Cámara | Plano pequeño, grande y origen desplazado | Encuadre derivado sin corte ni giro inesperado |
+  NO EN SQUASH: | Móvil | Vertical, horizontal y resize durante tour | Controles visibles y retorno usable |
+  NO EN SQUASH: | Accesibilidad | Teclado y movimiento reducido | Navegación completa sin animación obligatoria |
+  NO EN SQUASH: | Degradación | Sin WebGL o falta de efecto avanzado | 2D o render base disponibles sin pérdida |
+  NO EN SQUASH: | Materiales | Hash/bytes/normal/UV incorrectos | Rechazo o fallback con motivo visible |
+  NO EN SQUASH: | Captura | Pose, etiquetas, aspecto y tamaño | Imagen correcta y buffer/cámara restaurados |
+  NO EN SQUASH: | Variantes | Comparación con distinta envolvente | Referencia común y origen protegido |
+  NO EN SQUASH: | Recursos | Entradas/salidas repetidas | Sin acumulación persistente de recursos propios |
+  NO EN SQUASH: Las pruebas automatizadas se complementan con revisión de la preview del SHA exacto y un teléfono físico identificado. Registrar navegador, dispositivo, viewport, perfiles activos, tiempo de carga y d
+  NO EN SQUASH: La #38 todavía requiere las suites de su workflow de importación y regresiones y el recorrido final móvil/3D. Los resultados históricos de #29/#34 o la etiqueta READY no se presentan como pruebas nuev
+  NO EN SQUASH: ## 12 Créditos procedencia y reconciliación del roadmap
+  NO EN SQUASH: ### M19 Créditos por código técnica y recurso
+  NO EN SQUASH: **Por qué interesa.** Juanma solicita también identificar atribuciones. La adaptación debe permitir reconocer qué aporta Sam Aing, qué se construye para Rubik y qué procede de recursos de terceros, si
+  NO EN SQUASH: **Cómo.** Registrar por módulo adaptado autor, repo, SHA, archivos, cambios y base de autorización. Por recurso, registrar procedencia original, hash, canal, dimensiones, transformación y licencia dec
+  NO EN SQUASH: La PR #36 registra la autorización de Juanma para usar Casa Serra y conservar atribución a Sam Aing/Lintel. Los snapshots de Serra y Larga no contienen LICENSE/NOTICE. La incorporación literal de códi
+  NO EN SQUASH: **Aceptación.** Créditos visibles y metadata exportada coinciden con los recursos realmente incorporados. Conservar atribuciones actuales del catálogo, fuentes y bibliotecas; no declarar a toda la cop
+  NO EN SQUASH: ### Correcciones documentales necesarias
+  NO EN SQUASH: La PR #36 parte de `88b0cb5` y conserva referencias a #28/#32/#33 como abiertas. #37 ya reconcilió y cerró las dos primeras como sustituidas, y #33 está cerrada porque su CTA quedó incorporada. Actual
+  NO EN SQUASH: Roadmap 2 conserva frases sobre #23 pendiente de merge y LAB v03 como próxima entrega; el roadmap canónico ya registra esos cierres. La exportación técnica Rubik→Blender #24 tampoco debe volver a pres
+  NO EN SQUASH: Mantener F2 como experimental: cinco sesiones, veinte planos con referencias y umbrales pendientes. La evolución MCP, el adaptador Room Designer→CRM y el segmento comercial D-01 no quedan aprobados po
+  NO EN SQUASH: Estas correcciones deben actualizar el estado vigente y conservar los antecedentes fechados como históricos. [F9]
+  NO EN SQUASH: ## 13 Límites y capacidades que conviene posponer
+  NO EN SQUASH: La evidencia permite diseñar adaptaciones; todavía no demuestra su funcionamiento en Floor Plan. La demo completa de Serra no fue recorrida en WebGL durante esta auditoría. No se hicieron mediciones f
+  NO EN SQUASH: Posponer el traslado completo de `scene.js`, los muebles y cámaras fijos de las casas, el renderer/postprocesador entero, los 39 mapas simultáneos y el parser HDR personalizado. Tampoco adoptar el blo
+  NO EN SQUASH: El valor inicial está en enseñar y entregar mejor el proyecto que el usuario ya ha construido. La primera implementación debe demostrar una presentación de una estancia, con datos correctos y retorno 
+  NO EN SQUASH: ## 14 Referencias verificadas
+  NO EN SQUASH: Consulta del 13 de octubre de 2026. S y L identifican fuentes de las demos; F identifica Floor Plan; T identifica documentación primaria de apoyo. Los enlaces GitHub fijan las versiones inspeccionadas
+  NO EN SQUASH: - **S1 Prompt y antecedentes de Serra** — [README y metodología](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/README.md), [starter prompt](https://github.com/
+  NO EN SQUASH: - **S2 Escena de Serra** — [scene.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/scene.js). Casa fija, zonas de revelado, iluminación, espejo y anotaciones.
+  NO EN SQUASH: - **S3 Experiencia de Serra** — [fx-experience.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/shared/fx-experience.js). Cámara, fichas, carga, escala de ren
+  NO EN SQUASH: - **S4 Recursos y geometría de Serra** — [fx-core.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/shared/fx-core.js). Loader, PBR, UV, PMREM y Batch.
+  NO EN SQUASH: - **S5 Efectos de Serra** — [fx-post.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/shared/fx-post.js) y [fx-paint.js](https://github.com/Juanmaes83/casa-se
+  NO EN SQUASH: - **S6 Degradación de Serra** — [gate.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/gate.js) y [demo publicada](https://sam1983aing.github.io/casa-serra/).
+  NO EN SQUASH: - **S7 Luz de Serra** — [light-options.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/light-options.js).
+  NO EN SQUASH: - **S8 Mobiliario de Serra** — [staging.js](https://github.com/Juanmaes83/casa-serra/blob/b47b775fae642439e8d42d6201ab5d1677d67f99/staging.js).
+  NO EN SQUASH: - **L1 Alcance de Larga** — [README](https://github.com/Juanmaes83/casa-larga/blob/dee30681d465664a0aa714499cca7a15611f6eac/README.md) y [demo publicada](https://sam1983aing.github.io/casa-larga/).
+  NO EN SQUASH: - **L2 Cámara de Larga** — [rig.js](https://github.com/Juanmaes83/casa-larga/blob/dee30681d465664a0aa714499cca7a15611f6eac/js/rig.js).
+  NO EN SQUASH: - **L3 Geometría de Larga** — [house.js](https://github.com/Juanmaes83/casa-larga/blob/dee30681d465664a0aa714499cca7a15611f6eac/js/house.js) y [solid.js](https://github.com/Juanmaes83/casa-larga/blob/
+  NO EN SQUASH: - **L4 Lámina de Larga** — [sheet.js](https://github.com/Juanmaes83/casa-larga/blob/dee30681d465664a0aa714499cca7a15611f6eac/js/sheet.js) y [plan.js](https://github.com/Juanmaes83/casa-larga/blob/dee3
+  NO EN SQUASH: - **L5 Materiales de Larga** — [materials.js](https://github.com/Juanmaes83/casa-larga/blob/dee30681d465664a0aa714499cca7a15611f6eac/js/materials.js).
+  NO EN SQUASH: - **L6 Runtime de Larga** — [main.js](https://github.com/Juanmaes83/casa-larga/blob/dee30681d465664a0aa714499cca7a15611f6eac/js/main.js) e [index.html](https://github.com/Juanmaes83/casa-larga/blob/de
+  NO EN SQUASH: - **F1 Integración pendiente** — [PR #38](https://github.com/Juanmaes83/floorplan-3d/pull/38).
+  NO EN SQUASH: - **F2 Revisión de #38** — [informe y pendientes](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/docs/qa/pr38-review-2026-10-13.md).
+  NO EN SQUASH: - **F3 Preparación Casa Serra** — [PR #36](https://github.com/Juanmaes83/floorplan-3d/pull/36) y [especificación fijada](https://github.com/Juanmaes83/floorplan-3d/blob/9d781f0ac86df82b80b0b2580caa50d
+  NO EN SQUASH: - **F4 Editor y View3D** — [index.html](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/index.html).
+  NO EN SQUASH: - **F5 Captura integrada** — [capture-3d-phase-b.md](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/docs/technical/capture-3d-phase-b.md).
+  NO EN SQUASH: - **F6 Acabados actuales** — [surface-renderer.mjs](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/js/surface-renderer.mjs).
+  NO EN SQUASH: - **F7 Exportación integrada** — [post-F3-rubik-blender-candidate.md](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/docs/technical/post-F3-rubik-blender-cand
+  NO EN SQUASH: - **F8 Variantes actuales** — [variants-phase-c.md](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/docs/technical/variants-phase-c.md).
+  NO EN SQUASH: - **F9 Roadmaps vigentes** — [roadmap canónico](https://github.com/Juanmaes83/floorplan-3d/blob/3e1e1dd755e2ccae23cce799006eea3fae4bdfe7/docs/ROADMAP.md), [Roadmap 2](https://github.com/Juanmaes83/flo
+  NO EN SQUASH: - **T1 Gestión de color de Three** — [documentación oficial](https://threejs.org/manual/pages/color-management.html). Consultar las APIs contra la versión 0.160.0 usada por Floor Plan.
+  NO EN SQUASH: - **T2 Materiales de Three** — [documentación oficial](https://threejs.org/docs/pages/Material.html). Callbacks, caché de programas y liberación de recursos.
+  NO EN SQUASH: - **T3 WebGL** — [MDN WebGL best practices](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices). Capacidades, presupuestos y agrupación.
+  NO EN SQUASH: - **T4 Recursos de Poly Haven** — [licencia oficial](https://polyhaven.com/license). CC0 para assets; alcance separado del código y marcas de las demos.
+  NO EN SQUASH: Referencias completas de los snapshots: Casa Serra `b47b775fae642439e8d42d6201ab5d1677d67f99`; Casa Larga `dee30681d465664a0aa714499cca7a15611f6eac`; Floor Plan master `3fdbc0f34db9b545e5a2d4b037a66bc
+  NO EN SQUASH: # Casa Serra → Floorplan: integración visual y modo presentación
+  NO EN SQUASH: Fecha: 13-10-2026. **Estado: preparación técnica documentada; implementación y pruebas de producto pendientes.**
+  NO EN SQUASH: Juanma pide incorporar mejoras de Casa Serra a Floorplan, conservando sus funciones y su flujo plano → render ya trabajado en Astra Labs. Esta preparación define el alcance de las entregas y cómo comp
+  NO EN SQUASH: ## 1. Alcance y autorización
+  NO EN SQUASH: - Objetivo autorizado: sumar presentación visual, navegación por estancias, materiales y efectos de Casa Serra a Rubik Sota.
+  NO EN SQUASH: - Juanma confirma en esta conversación, el 13-10-2026, permisos y licencia para usar e integrar Casa Serra en Floorplan. Se toma como autorización para este proyecto; la ausencia de un archivo LICENSE
+  NO EN SQUASH: - Registrar autoría Sam Aing / Lintel y fuentes de los materiales al incorporar cada módulo o recurso. La autorización se documenta como declaración del propietario, sin atribuir una licencia SPDX no 
+  NO EN SQUASH: - Floorplan conserva su geometría editable, proyectos, guía, búsqueda, catálogo y exportaciones. Los estados de cámara/presentación son derivados separados.
+  NO EN SQUASH: - Astra se consulta como contexto del render existente; esta entrega no crea un sistema de vídeo ni modifica su repositorio.
+  NO EN SQUASH: - Aplicar el [workflow](../DEVELOPMENT-WORKFLOW.md): una entrega revisable cada vez, PR, pruebas y preview exacta para cambios visuales; merge tras aprobación humana.
+  NO EN SQUASH: ## 2. Fuentes verificadas y documentación vigente
+  NO EN SQUASH: | Fuente | Referencia fijada | Hecho que condiciona la integración |
+  NO EN SQUASH: | Floorplan master | `88b0cb568e9824533764518ec42e235e9c2774a9` | Snapshot de documentos y código utilizado en esta preparación |
+  NO EN SQUASH: | Experiencia guiada | PR #34, merge `92a1193fc1386d3f69566beab15923cc62836222` | Bienvenida, búsqueda de necesidades, cinco etapas, progreso y navegación ya integrados |
+  NO EN SQUASH: | Exportador offline | PR #24, merge `67b7f999c42b3a2960dac6caf94ab77dcc637819` | Paquete source-project / scene.glb / semantic / package; ejes e IDs comprobados en su fixture |
+  NO EN SQUASH: | Captura configurable | PR #29, merge `217ed068b90232907a40b8dff7748a11e6259e7f` | PNG configurable con restauración de cámara/buffer; no reconstruir el exportador |
+  NO EN SQUASH: | Variantes / MCP | PR #30 `3599e71432265860ba932147e1d9765f609b68c4`; PR #31 `88aef0bfeea8abb67865c3d2a33a484c909511ea` | Variantes locales y MCP de lectura integrados; mantener sus contratos |
+  NO EN SQUASH: | Casa Serra | `b47b775fae642439e8d42d6201ab5d1677d67f99` en fork y original | Misma copia publicada: casa, materiales y cámaras específicos, scripts minificados |
+  NO EN SQUASH: | LAB v03 aprobado | LAB PR #4, squash `37df8472e6163263f435424f6989b6c0e10b8ad9` hacia `feat/astra-blender-gate-1` | Escena Blender, renders, comprobaciones y reapertura ya entregados en ese piloto |
+  NO EN SQUASH: | Rama operativa LAB consultada | `7314803e0e71bde1e6f7816edff12c6c6a22e29e` | Es distinta del main histórico documental `245de018…`; no deducir estado actual del LAB leyendo solo main |
+  NO EN SQUASH: Fuentes de Floorplan: [roadmap canónico](../ROADMAP.md), [Roadmap 2](../ROADMAP-2-proposal.md), [guía integrada](guided-experience.md), [contrato](../contracts/FloorPlanProjectV1.md), [captura](captur
+  NO EN SQUASH: Estado remoto comprobado en esta sesión: #24/#29/#30/#31/#34 están fusionadas. PR #28 y #32 son cierres/propuestas documentales abiertos: se consultan, no se editan ni se integran incidentalmente. PR 
+  NO EN SQUASH: La [LAB PR #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) confirma aprobación y merge. Su [informe v03 fijado](https://github.com/Juanmaes83/lab-astra-sept-2026/blob/37df8472e6163263f43
+  NO EN SQUASH: ## 3. Qué hace Casa Serra y qué se adapta
+  NO EN SQUASH: | Módulo fuente en Casa Serra | Mecanismo leído | Integración en Floorplan |
+  NO EN SQUASH: | `scene.js` | Rectángulos/puertas definidos en código; claves de cámara fijas; corte variable; shader dibujo/material por zonas | Usar habitaciones, muros, huecos e IDs del proyecto. Extraer el patró
+  NO EN SQUASH: | `shared/fx-experience.js` | Interpolación Catmull-Rom, FOV/encuadre logarítmicos, paradas, fichas, reducción de resolución | Secuenciador de vistas sobre View3D; controles Siguiente/Anterior; movimi
+  NO EN SQUASH: | `shared/fx-core.js` | Texturas color/normal/ARM, repetición en unidades del mundo, geometría/batching auxiliar | Ampliación selectiva de SurfaceRenderer y catálogo; repetir en mm mediante el contrat
+  NO EN SQUASH: | `shared/fx-post.js` | Prepass, AO, bloom, grano, color, profundidad/efectos y buffers HalfFloat | Efectos opcionales y acotados después del piloto; mantener render base si no hay capacidades o presu
+  NO EN SQUASH: | `shared/fx-paint.js` | Finisher alternativo de dibujo/pintura | Está incluido en el HTML, pero la llamada de scene.js no selecciona PaintFinisher; no asumir que representa la ruta por defecto |
+  NO EN SQUASH: | `light-options.js` | Presets y cambios de exposición/luz/color asociados al recorrido | Presets de presentación reversibles, utilizando luz y tone mapping existentes |
+  NO EN SQUASH: | `hero-options.js` | Variantes tipográficas y dibujo progresivo del plano | Introducción opcional del ejemplo, con contenido de Rubik y salida rápida al editor |
+  NO EN SQUASH: | `gate.js` | Capacidad WebGL2/buffers, carga lenta, pérdida de contexto; imagen/vídeo alternativos | Degradación del proyecto actual a 2D o captura vigente. No mostrar la vivienda Casa Serra como sus
+  NO EN SQUASH: | `staging.js` | Decoración y mobiliario construidos para la casa fija | Conservar biblioteca/modelos Rubik. Incorporar recursos concretos solo si aportan valor y pasan el perfil propio |
+  NO EN SQUASH: Las claves originales de cámara dependen de coordenadas, alturas y puertas de Casa Serra. Su spline y `__checkPath` no constituyen un planificador de rutas para viviendas arbitrarias. Los shaders `roo
+  NO EN SQUASH: Casa utiliza THREE global 0.160.1; Rubik usa módulos Three 0.160.0. Adaptar módulos al entorno fijado y preservar callbacks/cache de materiales existentes. No añadir otra instancia de Three ni traslad
+  NO EN SQUASH: ## 4. Entrega CS-1: presentación por estancias
+  NO EN SQUASH: **Primera implementación propuesta**, sobre el master integrado; no depende de nuevas texturas ni del LAB.
+  NO EN SQUASH: ### Entrada y configuración
+  NO EN SQUASH: - Acción «Presentar mi vivienda» en el buscador: presentar, presentación, recorrido guiado, enseñar vivienda, presentation, tour.
+  NO EN SQUASH: - Acceso en «Revisar y guardar» y en el editor completo. Reutilizar requisitos reales de geometría y carga 3D.
+  NO EN SQUASH: - No cambiar el objetivo elegido al abrir esta acción. Presentación es opcional para los objetivos existentes.
+  NO EN SQUASH: - Configuración: vista general más estancias seleccionadas, reordenables; ejemplo preconfigurado y editable. Confirmar inicio; cancelar conserva documento y pantalla.
+  NO EN SQUASH: - Sin geometría útil: explicar y llevar a Distribuir. El ejemplo sigue identificado; no convertirlo silenciosamente en proyecto propio.
+  NO EN SQUASH: Secuencia base: plano actual → transición 3D existente → vista general → vistas de estancias → cierre. Mostrar «Vista 2 de 4 · Cocina», acceso directo a paradas, Anterior/Siguiente, Pausa si se ofrece
+  NO EN SQUASH: CS-1 utiliza vistas superiores/isométricas derivadas de la envolvente real. Estimar encuadre/FOV con el viewport y altura mural, sin copiar las coordenadas de Casa Serra. Los desplazamientos de cámara
+  NO EN SQUASH: La ficha de estancia toma nombre/superficie del proyecto y acabados asignados. No inventar prestaciones, precios, cotas rectangulares para polígonos irregulares ni medidas oficiales de los muebles. Ma
+  NO EN SQUASH: - Progreso del objetivo: el actual de Guide.evaluate.
+  NO EN SQUASH: - Progreso de presentación: posición/vistas visitadas, identificado como recorrido, sin sumar tareas necesarias ni completar el objetivo por pasar diapositivas.
+  NO EN SQUASH: - Carga de recursos: indicador independiente. Un asset que falla mantiene su sustituto genérico y un aviso; no fingir carga de su malla.
+  NO EN SQUASH: Estados propuestos: inactivo, configuración, cargando, mostrando, pausado, degradado, saliendo, invalidado. Cambiar de documento/variante o editar geometría invalida el plan derivado. Una operación ta
+  NO EN SQUASH: ## 5. Arquitectura de CS-1 y contrato derivado
+  NO EN SQUASH: | Punto existente | Adaptación propuesta |
+  NO EN SQUASH: | `js/guide-core.js` actions / resolve / evaluate | Acción presentation y sinónimos con prioridad frente a «ver 3D»; tarea opcional si se muestra en la guía; conservar goals/denominador |
+  NO EN SQUASH: | `js/guide-ui.js` execute / renderDetails / navegación | Lanzar la configuración desde búsqueda y Revisar y guardar; no usar setGoal por efecto lateral; gestionar foco y retorno |
+  NO EN SQUASH: | `index.html` módulo 3D: enter/exit, flyToRoom, camTween, setPose, applyGrow | Reutilizar transición y render loop; exponer una API de presentación con promesas de finalización/cancelación |
+  NO EN SQUASH: | `View3D.cameraState / canvasState` | Mantener getters de diagnóstico. La restauración requiere API nueva; no mutar los objetos devueltos ni usar globals de debug |
+  NO EN SQUASH: | `js/presentation-core.js` nuevo | Lógica pura: normalización de plan, IDs/revisión, paradas, encuadres y estado; no DOM ni mutaciones del plano |
+  NO EN SQUASH: | `js/presentation-ui.js` nuevo | Ficha/controles y configuración; se comunica con guía y API View3D |
+  NO EN SQUASH: | `css/presentation.css` nuevo | Espacio visual limpio, controles táctiles, estados, foco y movimiento reducido |
+  NO EN SQUASH: | `View3D.shot / shotSize` y exportPNG | Reutilizar captura configurable y recuperación del buffer; coordinar captura y animación, sin otra ruta de exportación |
+  NO EN SQUASH: | `FloorPlanProjectV1` / biblioteca / variantes | Conservar schema y documento. Plan de presentación en metadata separada, por entrada local y projectId |
+  NO EN SQUASH: Contrato propuesto `PresentationPlanV1` (aún no implementado): versión; ID de entrada de biblioteca y proyecto; revisión exacta de datos visuales/geometría; orden de paradas; roomId opcional; tipo de 
+  NO EN SQUASH: La clave local debe incluir la entrada de biblioteca, además de projectId, para separar variantes/duplicados. Reconciliar roomIds al reabrir: eliminar o marcar paradas inexistentes, informar y regener
+  NO EN SQUASH: Usar el mismo centro `Core.geometry(project).center` que View3D/exportador: X=(x-cx)/1000, Y=altura/1000, Z=(y-cy)/1000. Un cambio del centro obliga a regenerar poses. FOV en grados verticales y aspec
+  NO EN SQUASH: ### Invariantes y restauración
+  NO EN SQUASH: Abrir, avanzar, cancelar, Escape, Atrás o cerrar conserva JSON del proyecto, librería, asignaciones, geometría, calibración, selección e historial de edición. El estado separado de la presentación pue
+  NO EN SQUASH: Guardar y restaurar vista 2D/3D, cámara/target/FOV, modo órbita/recorrido, puertas visuales, corte mural, luz/noche, muebles/etiquetas, paneles, scroll/foco y recursos temporales. Tras resize conserva
+  NO EN SQUASH: Salir de pointer lock al entrar; no recuperarlo automáticamente al cerrar sin gesto del usuario. Restablecer modo y ofrecer continuar el recorrido. Cancelar RAF/promesas/listeners, soltar clones/textu
+  NO EN SQUASH: No suspender errores existentes ni marcar el plano guardado/exportado por una captura parcial. La evidencia view3d puede actualizarse por el evento real de carga de la misma revisión; el progreso de g
+  NO EN SQUASH: ## 6. Entrega CS-2: materiales y calidad visual selectivos
+  NO EN SQUASH: Dependencia: CS-1 revisada/integrada según workflow.
+  NO EN SQUASH: Dos candidatos comparten origen nominal con acabados ya existentes:
+  NO EN SQUASH: `oak_wood_planks` → `surface-oak-wood-planks` y
+  NO EN SQUASH: `marble_01` → `surface-marble-01`.
+  NO EN SQUASH: No se presume correspondencia de UV/crop por compartir nombre. Comparar albedos, orientación, escala de repetición y canales antes de asociar mapas.
+  NO EN SQUASH: Se leyeron y decodificaron seis JPEG físicos del directorio tex-1k: 1024×1024 RGB cada uno; 794430 bytes combinados. El cálculo nominal RGBA es 25165824 bytes antes de mipmaps/overhead; no es memoria 
+  NO EN SQUASH: PBR de origen: diff=color sRGB; nor=normal lineal; arm alimenta AO y roughness en FX.pbr. No hay metalnessMap en ese helper: no atribuir al canal B una integración que el código no realiza. Verificar 
+  NO EN SQUASH: - Preservar los 50 albedos aprobados y su identidad. Si el alineamiento falla, crear candidato distinto, no asociar una normal a un albedo incompatible.
+  NO EN SQUASH: - Admitir mapas opcionales normal/AO/roughness mediante validación explícita de catálogo y perfil web. No cambiar FloorPlanProjectV1 para transportar píxeles.
+  NO EN SQUASH: - Actualizar SurfaceRenderer: validar hash/bytes/dimensiones/formato por mapa; espacios de color; repetir todos los canales coherentemente; abort/cancel; dispose; estimaciones de memoria; fallback al 
+  NO EN SQUASH: - Como punto de partida de admisión, mantener ≤512 px/mapa y ≤512 KiB/mapa, coherentes con la biblioteca actual; medir conjunto activo y establecer su presupuesto con baseline. Estos máximos no son re
+  NO EN SQUASH: - Cargar solo los acabados usados; calidad básica conserva comportamiento actual. Calidad mejorada ofrece el subconjunto probado y puede bajar resolución sin cambiar asignaciones.
+  NO EN SQUASH: - Presets de luz de presentación reversibles. Comparación antes/después desde la misma cámara, geometría y hora; no confundir luz más cálida con precisión métrica.
+  NO EN SQUASH: - Conservar capturas con ACES/color iguales a la vista, buffers restaurados y regresiones de exporter/GLB. PBR del perfil offline #24 no acredita automáticamente PBR web ni viceversa.
+  NO EN SQUASH: ## 7. Entrega CS-3: efectos de dibujo y recorrido interior
+  NO EN SQUASH: Dependencias: CS-1 y presupuesto visual de CS-2 revisados/integrados.
+  NO EN SQUASH: - Vista dibujo→material opcional sobre IDs del proyecto. Asociar superficies/mallas a sus entidades; resolver ambas caras de paredes compartidas y suelos cóncavos. No usar los rectángulos fijos de roo
+  NO EN SQUASH: - Shaders/materiales de presentación aislados y reversibles; preservar callbacks, UV, skins admitidas/no admitidas y caches de GLB; no recompilar cada frame ni modificar topología canónica.
+  NO EN SQUASH: - Trasladar solo las piezas necesarias del postprocesado. Capabilities se comprueban por efecto; un fallo de HalfFloat/MSAA conserva el renderer base y la edición.
+  NO EN SQUASH: - Respetar prefers-reduced-motion y opción manual para reducir animaciones: cambios directos de vista, sin parallax o movimiento automático obligatorio.
+  NO EN SQUASH: - Recorrido interior: paradas configurables por estancia, graph de huecos transitables y comprobación de cámara/segmentos contra muros/puertas/mobiliario. Evaluar diagonales, habitaciones desconectada
+  NO EN SQUASH: - Catmull-Rom puede sobrepasar waypoints: verificar la trayectoria interpolada completa. Ante ruta incierta, ofrecer vista aérea o corte entre paradas; nunca atravesar una pared para cumplir el tour.
+  NO EN SQUASH: - Exportación de cámaras/sidecar reutilizable por el paquete actual solo después de comprobar ID/revisión/origen/ejes y rechazo de plan obsoleto. Mantener consumo LAB existente como contexto, no monta
+  NO EN SQUASH: La adopción de GSAP/Lenis o actualización de Three no es requisito previo de estas entregas. Evaluar necesidad concreta antes de introducir dependencias; el render loop e interpolación existentes cubr
+  NO EN SQUASH: ## 8. UX, accesibilidad y degradación
+  NO EN SQUASH: - Configuración breve y editable; CTA visible «Iniciar presentación»; «Volver a editar» accesible durante todo el modo.
+  NO EN SQUASH: - Ficha de estancia ligera; móvil usa panel expandible, sin tapar navegación. Teclas de navegación se aplican solo con foco fuera de inputs y se explican.
+  NO EN SQUASH: - Nombres de usuario se insertan como texto mediante SafeDOM/textContent; no trasladar innerHTML con datos libres.
+  NO EN SQUASH: - Escape/Atrás devuelven a la pantalla apropiada y restauran el foco; no alterar historial del documento ni volver a disparar importación.
+  NO EN SQUASH: - Sin WebGL o tras pérdida de contexto: conservar documento y ofrecer 2D. Solo utilizar una captura local si coincide con proyecto/revisión; etiquetar captura y no escena interactiva.
+  NO EN SQUASH: - No enviar imágenes/planos a servicios para esta integración. Una presentación local no es un enlace publicado ni un MP4 generado.
+  NO EN SQUASH: - Instrumentación local de carga, frame time y memoria estimada; sin bloquear la interfaz ni inventar FPS de un teléfono.
+  NO EN SQUASH: ## 9. Orden y criterio para avanzar
+  NO EN SQUASH: | Entrega | Resultado revisable | Condición antes de la siguiente |
+  NO EN SQUASH: | Preparación actual | Especificación, auditoría física acotada, actualización de roadmap y protocolo | Revisión del alcance; implementación no iniciada por esta documentación |
+  NO EN SQUASH: | CS-1 | Presentación real desde búsqueda/guía, ejemplo y proyecto propio; retorno intacto | Pruebas de estado/restauración, preview final y revisión humana |
+  NO EN SQUASH: | CS-2 | Dos materiales candidatos PBR y calidad acotada, comparación controlada | Recursos/UV/canales comprobados, presupuesto medido y revisión visual |
+  NO EN SQUASH: | CS-3 | Revelado opcional y recorrido interior comprobado; cámaras derivadas reutilizables | Trayectorias, compatibilidad, degradación y reversibilidad comprobadas |
+  NO EN SQUASH: No añadir numeración F4 ni mezclar esta secuencia con las fases A–G propuestas de Pascal, PR #28/#32 o tareas F2. Las cinco sesiones/veinte planos y rendimiento en teléfono siguen pendientes para sus 
+  NO EN SQUASH: [Pruebas y revisión a ejecutar](../qa/casa-serra-integration-plan.md). No marcar esta planificación como PASS de producto.
+  NO EN SQUASH: # Floor Plan — desarrollo continuo en terminal
+  NO EN SQUASH: Fecha: 14-10-2026. Destinatario: Codex CLI en el equipo de Juanma.
+  NO EN SQUASH: ## 1. Objetivo y autorización vigente
+  NO EN SQUASH: Juanma solicita implementar las mejoras de la auditoría Casa Serra / Casa Larga en una rama, siguiendo un roadmap y repitiendo implementación, pruebas y revisión visual mediante Chromium/Playwright. S
+  NO EN SQUASH: Esta instrucción autoriza desarrollo, pruebas locales, commits, publicación de la rama y una PR de revisión. Autoriza avanzar entre incrementos dentro de esa rama cuando su aceptación automatizada y r
+  NO EN SQUASH: No fusionar #38, #36 ni la PR nueva, ni promover manualmente producción. Mantener cualquier decisión posterior de Juanma como instrucción prioritaria. No cambiar facturación ni contratar servicios par
+  NO EN SQUASH: ## 2. Fuentes obligatorias
+  NO EN SQUASH: - [Auditoría Markdown](../research/Auditoria_Casa_Serra_Casa_Larga_Floor_Plan.md).
+  NO EN SQUASH: - [Auditoría Word](../research/Auditoria_Casa_Serra_Casa_Larga_Floor_Plan.docx).
+  NO EN SQUASH: - [Preparación técnica CS-1/CS-2/CS-3](casa-serra-integration.md).
+  NO EN SQUASH: - [Protocolo de aceptación](../qa/casa-serra-integration-plan.md).
+  NO EN SQUASH: - [Workflow](../DEVELOPMENT-WORKFLOW.md), contrato FloorPlanProjectV1, roadmap canónico y Roadmap 2.
+  NO EN SQUASH: - [Informe local de #38](https://github.com/Juanmaes83/floorplan-3d/blob/a1341eeef82c651914da08ff78328e668091ea78/docs/qa/pr38-local-final-2026-10-13.md), workflows, logs y capturas asociados. Tras co
+  NO EN SQUASH: Word y Markdown son dos formatos del mismo informe; no representan alcances distintos. Usar Markdown para trabajar y Word para contrastar el documento entregado. Conservar los snapshots históricos de 
+  NO EN SQUASH: ## 3. Estado inicial contrastado
+  NO EN SQUASH: - Repo: `Juanmaes83/floorplan-3d`.
+  NO EN SQUASH: - #38: abierta, en borrador; rama `feat/multiformat-guided-import`; HEAD observado `a1341eeef82c651914da08ff78328e668091ea78`.
+  NO EN SQUASH: - #38 documenta resultados locales: multiformato 176/0/1, guía 165/0/1, navegador 26/26 y 45/45. Las omisiones corresponden a Blender externo; móvil probado mediante emulación/SwiftShader.
+  NO EN SQUASH: - Preview #38: `https://floorplan-3d-g9sp4ez7b-juanma-espinosas-projects.vercel.app/`; status Vercel del SHA indica despliegue completado. El informe registra revisión visual local y de preview.
+  NO EN SQUASH: - Actions #38: runs `38472637063` y `38472637134`, sin runner y `steps: []`; anotación: cuenta bloqueada por facturación. No es CI aprobada.
+  NO EN SQUASH: - #36: rama documental `docs/casa-serra-floorplan-integration`; los dos informes se publicaron en `b889bbbe5ee3397c7934ee7359b2a0c852f0ba1c`. Sigue en borrador y sin fusionar.
+  NO EN SQUASH: Volver a comprobar remoto al iniciar: estos SHAs son referencias observadas, no instrucciones para sobrescribir avances posteriores.
+  NO EN SQUASH: ## 4. Preparación de la rama y aislamiento
+  NO EN SQUASH: 1. Inspeccionar `git status`, ramas, worktrees, remotos, PRs y AGENTS.md aplicables. Preservar trabajo existente.
+  NO EN SQUASH: 2. Si #38 sigue sin integrar y mantiene el HEAD probado, crear un worktree aislado con rama `feat/casa-serra-larga-improvements` desde `a1341ee`. Así contiene las correcciones verificadas y no altera 
+  NO EN SQUASH: 3. Si #38 ya está fusionada, partir del master que la contiene. Si avanzó sin fusionar, identificar los cambios y su evidencia antes de elegir base. No usar un checkout antiguo de `3e1e1dd` como basel
+  NO EN SQUASH: 4. Copiar de la rama documental las rutas necesarias de las dos auditorías, especificación, protocolo y este runbook, conservando contenido y procedencia. Evitar fusionar completa #36: sus roadmaps pa
+  NO EN SQUASH: 5. Si ya existe la rama de esta misión, reutilizarla tras comprobar propiedad, historia y checkpoint. No crear ramas duplicadas ni hacer reset/force push.
+  NO EN SQUASH: 6. Publicar una PR en borrador. Si la base #38 sigue abierta, dirigir inicialmente la PR a `feat/multiformat-guided-import` para mostrar solo las mejoras nuevas. Explicar la dependencia. Retargetear a
+  NO EN SQUASH: 7. Registrar los SHAs de base, fuentes y primer baseline local. Reutilizar Node/Playwright/Chromium compatibles del trabajo de terminal anterior y los comandos reales del repo.
+  NO EN SQUASH: ## 5. Roadmap de implementación
+  NO EN SQUASH: Crear `docs/qa/casa-serra-larga-progress.md` y su seguimiento estructurado antes de modificar la aplicación. Cada fila necesita estado, alcance concreto, dependencia, aceptación, SHA probado y evidenc
+  NO EN SQUASH: | Incremento | Capacidades de la auditoría | Resultado y gate para continuar |
+  NO EN SQUASH: | R0 Preparación | Baseline y continuidad | Rama aislada, fuentes presentes, regresiones de #38 comprobadas y mecanismo de reanudación listo |
+  NO EN SQUASH: | R1 CS-1 mínimo | M01–M04; mínimos M05/M06/M19 | Vista general + una estancia real; controles manuales y ficha; cancelación y retorno exacto; escritorio y móvil |
+  NO EN SQUASH: | R2 CS-1 completo | M01–M06/M19 | Selección/orden de estancias, cámara derivada, accesibilidad, carga cancelable y degradación; matriz P01–P16 del protocolo |
+  NO EN SQUASH: | R3 Entregables | M07/M11/M13 | Lámina con anotaciones, capturas por estancias y orientación mediante minimapa; exportación real y estado restaurado |
+  NO EN SQUASH: | R4 CS-2 | M08/M09 y control M05/M06 | Piloto PBR acotado, UV/color/canales coherentes, presets/HDRI reversibles; comparación visual y presupuesto medido |
+  NO EN SQUASH: | R5 CS-3 visual | M10/M15 | Revelado por IDs y piloto de sombras/efectos; geometría irregular, fallback y restauración sin mutación |
+  NO EN SQUASH: | R6 CS-3 recorrido | M18 | Ruta interior comprobada contra obstáculos; diagonales, puertas, pasos y muebles; alternativa aérea cuando no existe ruta segura |
+  NO EN SQUASH: | R7 Comparación y optimización | M12/M16 | Variantes con referencia común; batching solo si la medición justifica mejora y se conservan IDs/selección/exportación |
+  NO EN SQUASH: | R8 Mejoras selectivas | M14/M17/M20 | Reflejo selectivo, detalles genéricos y presentación portable, cada uno con piloto independiente, caso de uso y presupuesto |
+  NO EN SQUASH: | R9 Cierre de desarrollo | Todas las capacidades anteriores | Regresiones finales, evidencias por SHA, preview exacta revisada y matriz de pendientes; PR preparada para Juanma |
+  NO EN SQUASH: M19 se trabaja transversalmente: créditos de código, técnicas y recursos realmente incorporados. Adaptar conceptos de Casa Larga mediante implementación propia mientras no conste la base de autorizaci
+  NO EN SQUASH: El objetivo es implementar las capacidades autorizadas cuyo valor y aceptación se puedan demostrar. Un piloto sin beneficio medido, sin recursos disponibles o sin condición previa se registra como blo
+  NO EN SQUASH: ## 6. Loop obligatorio por tarea
+  NO EN SQUASH: 1. Leer el seguimiento y elegir la siguiente tarea con dependencias satisfechas.
+  NO EN SQUASH: 2. Escribir el criterio de aceptación observable antes de implementar. Comparar con el baseline pertinente.
+  NO EN SQUASH: 3. Implementar un cambio acotado usando los módulos existentes; añadir solo pruebas útiles para contratos, geometría, cancelación o regresiones reales.
+  NO EN SQUASH: 4. Ejecutar sintaxis y suites afectadas. Ante fallo, reproducir, corregir y repetir las comprobaciones afectadas. No rebajar umbrales ni omitir casos para obtener verde.
+  NO EN SQUASH: 5. Arrancar la aplicación y comprobarla con Chromium/Playwright. Inspeccionar las capturas con la capacidad de lectura de imágenes del agente; guardar PNG sin abrirlas no constituye revisión visual.
+  NO EN SQUASH: 6. Revisar escritorio 1440×900, móvil vertical 390×844 y horizontal 844×390. Añadir 360×800 para la ruta de importación de imagen y resize durante presentación.
+  NO EN SQUASH: 7. Recorrer entrada, configuración, reproducción, cambio de estancia, captura, cierre, Escape/Atrás, cambio de proyecto/variante y recuperación. Comprobar console/pageerror, controles visibles, canvas
+  NO EN SQUASH: 8. Para capturas/exportaciones: leer el archivo descargado, validar dimensiones/contenido y reimportar cuando el formato lo permita. Un evento download no demuestra bytes válidos.
+  NO EN SQUASH: 9. Comparar JSON canónico, IDs, biblioteca/variantes, historial, calibración y selección antes/después; verificar cámara/luces/corte/buffer restaurados según el viewport actual.
+  NO EN SQUASH: 10. Cuando se cumpla la aceptación, actualizar seguimiento y evidencia, hacer un commit coherente y publicar por push normal. Registrar el SHA de código probado y, si el último commit es solo document
+  NO EN SQUASH: 11. Revisar la preview exacta cuando esté disponible; READY no sustituye comprobar su interfaz. Repetir la revisión afectada después de cambios. Si está protegida, usar el acceso autorizado existente;
+  NO EN SQUASH: 12. Elegir el siguiente incremento sin pedir confirmación por decisiones rutinarias. Si se repite el mismo bloqueo durante tres intentos sin evidencia nueva, registrar diagnóstico y alternativa y cont
+  NO EN SQUASH: No ejecutar todas las suites después de cada ajuste trivial. Ejecutar las afectadas por cada cambio y las regresiones completas al cerrar un incremento material y al finalizar. El seguimiento debe per
+  NO EN SQUASH: ## 7. Invariantes de implementación
+  NO EN SQUASH: - FloorPlanProjectV1 y unidades canónicas siguen siendo la fuente del proyecto; la presentación utiliza sidecar por entrada local, projectId y revisión visual.
+  NO EN SQUASH: - Ejes: X=(x−cx)/1000, Y=altura/1000, Z=(y−cy)/1000. Comprobar con fixture asimétrico; regenerar poses si cambia el centro.
+  NO EN SQUASH: - API explícita de View3D para capturar/restaurar y cancelar operaciones; no utilizar getters de diagnóstico como setters ni globals de debug como interfaz de producto.
+  NO EN SQUASH: - Conservar edición, importación, navegación, guardado, variantes y exportador actuales. No completar tareas de la guía por visitar una parada.
+  NO EN SQUASH: - Un renderer/Three del runtime actual. No trasplantar la casa fija, el postprocesador completo ni las cámaras de las demos.
+  NO EN SQUASH: - Respetar movimiento reducido, teclado y touch. Context loss/fallo de assets debe permitir recuperar el documento.
+  NO EN SQUASH: - PBR/capturas/animaciones: identidad, UV, color, buffers, dispose y cancelación comprobados. No liberar recursos compartidos de la biblioteca.
+  NO EN SQUASH: - RoomPlan real, rendimiento en teléfonos físicos y validación empírica F2 siguen separados de la emulación; no inventar esos resultados.
+  NO EN SQUASH: - La evolución MCP, CRM, Astra/vídeo y otras fases del Roadmap 2 quedan fuera de esta misión.
+  NO EN SQUASH: ## 8. Checkpoints y recuperación
+  NO EN SQUASH: Guardar progreso después de cada tarea y antes de pruebas largas, publicación o cambio de incremento. Esto reduce la pérdida si el corte por créditos es abrupto: no depender de poder escribir un resum
+  NO EN SQUASH: El checkpoint debe contener:
+  NO EN SQUASH: - Repo/worktree/rama; base y HEAD; diff pendiente que pertenece a la misión.
+  NO EN SQUASH: - Incremento y capacidad en curso; último paso acabado y siguiente acción ejecutable.
+  NO EN SQUASH: - Comandos y resultados; SHA probado; logs, capturas y preview exacta.
+  NO EN SQUASH: - Pruebas pendientes y motivo; estado real de CI y revisión humana.
+  NO EN SQUASH: - Bloqueos y diagnósticos; intentos realizados; condiciones para retomarlos.
+  NO EN SQUASH: - Estado de continuidad: trabajando, esperando límite temporal, bloqueado, detenido por usuario o desarrollo terminado.
+  NO EN SQUASH: Mantener `docs/qa/casa-serra-larga-progress.md` en los commits del proyecto y un checkpoint JSON local para el supervisor. No publicar datos de autenticación, rutas sensibles ni logs privados completo
+  NO EN SQUASH: Al reanudar: comprobar Git y procesos activos, leer ambos checkpoints, validar el último commit y recuperar cambios propios sin borrar trabajo. No reiniciar el roadmap, no repetir entregas cerradas si
+  NO EN SQUASH: ## 9. Continuidad cuando se recuperen los créditos
+  NO EN SQUASH: Este archivo es un contrato de trabajo; por sí solo no inicia procesos en el PC. Codex CLI admite sesiones reanudables y, en versiones compatibles, Goals para continuar entre turnos. Un límite de pres
+  NO EN SQUASH: Por eso la primera tarea del Codex de terminal es configurar y probar la continuidad local antes del desarrollo prolongado:
+  NO EN SQUASH: 1. Comprobar `codex --version` y la ayuda instalada de `exec`, `exec resume` y los mecanismos disponibles de Goal. No asumir flags o funcionalidades de otra versión ni cambiar de modelo/proveedor para
+  NO EN SQUASH: 2. Preparar un supervisor local PowerShell, fuera de los archivos publicados de la aplicación. Debe conducir un único worker no interactivo en el worktree aislado, con ID de sesión fijo y checkpoint. 
+  NO EN SQUASH: 3. Preferir `codex exec --json` para obtener el ID de sesión y detectar el resultado; reanudar con `codex exec resume <SESSION_ID>`. Evitar `--last`: puede seleccionar otra tarea si hay varias sesione
+  NO EN SQUASH: 4. Mantener la autenticación y permisos ya autorizados. No usar bypass de sandbox/aprobaciones, no cambiar permisos globales y no añadir una API key de pago como fallback. Si un permiso requiere inter
+  NO EN SQUASH: 5. Si aparece un límite de uso/cuota temporal explícito, guardar el diagnóstico fuera del repo y esperar el tiempo de reset comunicado. Si no se comunica, reintentar como máximo una vez por hora. Un e
+  NO EN SQUASH: 6. Espera inicial máxima para reanudación automática: 72 horas, configurable por Juanma. Número de relanzamientos y tiempo quedan registrados; detener al vencer el plazo. No comprar créditos ni modifi
+  NO EN SQUASH: 7. Mientras se ejecuta normalmente, retomar la siguiente tarea solo después de que termine el worker anterior. No hacer polling que genere sesiones duplicadas ni nuevos procesos si el worker sigue act
+  NO EN SQUASH: 8. Probar primero un fixture de supervisor sin llamadas al modelo: límite temporal → espera simulada → reanudación con mismo ID; doble arranque bloqueado; STOP respetado; error de autenticación deteni
+  NO EN SQUASH: 9. Proveer una parada explícita mediante archivo STOP y explicar el comando de arranque y cómo comprobar PID/log. Dejar el supervisor en una consola o proceso persistente local identificado. No regist
+  NO EN SQUASH: 10. Confirmar en el informe si se configuró, se probó y está ejecutándose. Si no se puede poner en marcha, decirlo y dejar reanudación manual concreta, sin prometer automatismo.
+  NO EN SQUASH: El PC debe permanecer encendido, con conexión y proceso disponible; no hay ejecución local mientras esté apagado o suspendido. GitHub Actions bloqueado por facturación tampoco puede hospedar este loop
+  NO EN SQUASH: Documentación oficial consultada:
+  NO EN SQUASH: - [Goals](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex): continuación entre turnos, lifecycle y parada por presupuesto; confirmar soporte en la instalación.
+  NO EN SQUASH: - [Modo no interactivo](https://learn.chatgpt.com/docs/non-interactive-mode): `exec --json`, eventos de sesión y `exec resume <SESSION_ID>`.
+  NO EN SQUASH: Reanudación manual de emergencia: seleccionar la sesión de esta misión con `codex resume` o usar su ID conocido; indicar «Lee terminal-development-loop.md y el checkpoint; continúa desde la siguiente 
+  NO EN SQUASH: ## 10. Tratamiento de CI, preview y cierre
+  NO EN SQUASH: El bloqueo de Actions no impide este desarrollo en rama con evidencia local. Mantenerlo registrado y distinguir CI no ejecutada de tests locales aprobados. No relanzar workflows repetidamente mientras
+  NO EN SQUASH: - PR en borrador, rama publicada y estado del checkout descrito.
+  NO EN SQUASH: - Matriz M01–M20 con aceptación y evidencia o motivo de pendiente/diferido.
+  NO EN SQUASH: - Informe de regresiones finales y capturas visuales revisadas por viewport.
+  NO EN SQUASH: - Preview exacta y estado de acceso, si está disponible.
+  NO EN SQUASH: - Cambios de roadmap vigentes y snapshots históricos diferenciados.
+  NO EN SQUASH: - Riesgos/limitaciones comprobados y lista breve de lo que requiere Juanma.
+  NO EN SQUASH: - Supervisor detenido al terminar el alcance; sin loop indefinido ni trabajo adicional inventado.
+  NO EN SQUASH: No declarar «todo terminado» mientras falte una aceptación del alcance. Puede declararse «desarrollo listo para revisión» con CI o pruebas físicas pendientes, identificadas de forma explícita. La revi
+  NO EN SQUASH: ## 11. Instrucción de arranque para pegar en Codex de terminal
+  NO EN SQUASH: > Ejecuta la misión Floor Plan de `docs/technical/terminal-development-loop.md`. Recupera ese archivo y los dos informes desde la rama `docs/casa-serra-floorplan-integration` del repo `Juanmaes83/floo

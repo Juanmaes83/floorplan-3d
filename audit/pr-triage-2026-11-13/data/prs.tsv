@@ -1,0 +1,67 @@
+220	D	feat/ux07-variants-activation-20261113	6fba873	master	2026-11-13	2026-11-13	[DRAFT · ACTIVACIÓN PROPUESTA] UX-07 «Comparar con el original» en Variantes → comparador de solo lectura (mismo origen)
+219	D	integration/obr02-obr03-reconcile-20261113	b942a6d	master	2026-11-13	2026-11-13	OBR-02/03 · reconciliación final de #211 sobre master@f5c08c7 + cierre del adversarial
+217	D	lab/r02a-bridge-20261113	a258e11	lab/sculpt-r02a-normalized	2026-11-13	2026-11-13	[DRAFT][R02-A R1] Puente puro de techos con el editor (laboratorio)
+216	D	lab/ux07-variants-adapter-20261113	8e2a13f	lab/ux07-ent04-budget-coherence-20261112	2026-11-13	2026-11-13	UX-07 · Adaptador mínimo Variantes → comparador (puro) y apertura en solo lectura
+215	D	review/r03-editor-in-rubik-20261113	adce8f9	master	2026-11-13	2026-11-13	[REVISIÓN · NO FUSIONAR] R03 dentro del editor real: conexión propuesta en index.html
+212	D	lab/ux07-ent04-budget-coherence-20261112	fe30072	lab/ux07-ent04-before-after	2026-11-12	2026-11-13	ENT-04 fase 2 · Coherencia entre revisiones y presupuestos (laboratorio)
+211	D	integration/obr02-obr03-on-master-20261112	55c9bb0	master	2026-11-12	2026-11-13	Integración OBR-02/OBR-03 (#210) sobre master con OBR-01 (#207)
+210	D	lab/obr02-obr03-planned-4d	5cb4a32	master	2026-11-12	2026-11-12	OBR-02 + OBR-03 · Evolución 4D: siguiente tarea en fantasma, anillo «% del plan» y coste planificado
+205	D	lab/sculpt-r01-f2-readiness	2dca1c5	lab/sculpt-r01-recognition	2026-11-12	2026-11-12	[DRAFT][SCULPT-R01 · corte 2] cancelación real y puente al evaluador F2 (apilada sobre #191)
+204	D	lab/mcp-stage2-hardening	3e17a07	lab/mcp-stage2-empirical-validation	2026-11-12	2026-11-12	[DRAFT][MCP ETAPA 2 · ENDURECIMIENTO] (apilada sobre #197)
+203	D	lab/sculpt-r02a-normalized	501dcb3	master	2026-11-12	2026-11-13	SCULPT-R02-A normalizado · techos y equipos altos (laboratorio, NO fusionar)
+197	D	lab/mcp-stage2-empirical-validation	0ce3c44	lab/rubik-mcp-stage2-proposals	2026-11-11	2026-11-12	[DRAFT][MCP ETAPA 2 · VALIDACIÓN] stdio real, Playwright, vídeos y auditoría (apilada sobre #196)
+196	D	lab/rubik-mcp-stage2-proposals	316487c	master	2026-11-11	2026-11-12	[DRAFT][MCP ETAPA 2] Propuestas explicables de distribución sin escritura
+194	D	lab/sculpt-r03-cabinets	fc5a422	master	2026-11-11	2026-11-12	[LAB] SCULPT-R03 · armarios paramétricos
+193	D	lab/sculpt-r02-ceiling-layout	7d8a626	master	2026-11-10	2026-11-11	SCULPT-R02-A — LABORATORIO DE TECHOS Y EQUIPOS. NO INTEGRADO.
+191	D	lab/sculpt-r01-recognition	2158fd1	master	2026-11-10	2026-11-10	lab(sculpt-r01): reconocimiento raster del donante R01 — laboratorio NO VALIDADO
+169	D	feat/f03-facade-material-fidelity-v1	ce70f85	master	2026-11-05	2026-11-05	F03: fidelidad material reversible de fachadas
+167	D	feat/visual-families-hero-fidelity-v2	fe876c1	master	2026-11-04	2026-11-04	Rubik Hero Architectural Fidelity V2
+166	D	feat/delivery-client-3d-experience-v1	cef06ff	master	2026-11-04	2026-11-12	Delivery 3D Client Experience V1 — visita 3D desde «Entregar» (borrador)
+165	D	feat/vq-01-material-fidelity-foundation	894607b	master	2026-11-04	2026-11-04	VQ-01 CP2 — VISUAL_PARTIAL_ACCEPT_FOUNDATION · draft, NO MERGE
+164	D	docs/cp2-ci-green-visual-families-handoff-2026-11-04	4091b92	master	2026-11-04	2026-11-04	docs: cierre CP2 con aceptación parcial humana + roadmap Visual Families
+162	D	docs/vecinia-visual-lineage-references-2026-11-03	eb888c1	master	2026-11-03	2026-11-03	docs(research): trazabilidad visual VECINIA y registro de 3 referencias
+161	D	docs/legal-rubik-proteccion-extraccion-2026-11-03	8d591bb	master	2026-11-03	2026-11-03	docs(legal): propuesta de protección contra ingeniería inversa y extracción
+160	D	docs/multi-agent-ops-status-2026-11-02	91bb8d3	master	2026-11-02	2026-11-03	docs: reconcile current status and add multi-agent operating protocol
+151	D	feat/ft3d-1b-room-descent	9640263	feat/ft3d-1a-plan-reveal	2026-10-30	2026-10-30	FT3D-1b «Entrar en la estancia»: descenso continuo y reversible
+150	D	feat/ft3d-1a-plan-reveal	ac83460	master	2026-10-30	2026-10-30	FT3D-1a «Empezar desde el plano»: capítulo opcional de la Presentación
+149	D	feat/bc3-c3	f398f82	feat/budget-c2	2026-10-30	2026-10-30	Fase C · C3: precios de referencia desde un BC3 propio y exportación BC3
+148	D	feat/budget-c2	27629a5	feat/quantities-c1	2026-10-30	2026-10-30	Fase C · C2: presupuesto operativo
+147	D	feat/quantities-c1	782b985	feat/ai-alternatives-b8	2026-10-30	2026-10-30	Fase C · C1: cantidades del proyecto con estado y CSV
+146	D	feat/ai-alternatives-b8	d676ba3	feat/moodboard-b7	2026-10-29	2026-10-30	Fase B · B8: alternativas de materiales y estilo con IA
+145	D	feat/moodboard-b7	799e647	feat/anchored-comments-b6	2026-10-29	2026-10-30	Fase B · B7: material board
+143	D	feat/anchored-comments-b6	dc2886c	feat/plan-service-b5	2026-10-29	2026-10-30	Fase B · B6: comentarios anclados
+142	D	feat/plan-service-b5	5941966	feat/share-link-b4	2026-10-29	2026-10-30	Fase B · B5: «Envíanos tu plano»
+141	D	feat/share-link-b4	7c42bac	feat/tour-video-b3	2026-10-29	2026-10-30	Fase B · B4: enlace para el cliente (Vercel Blob) con vídeo
+140	D	feat/tour-video-b3	0788363	feat/ai-render-b2	2026-10-29	2026-10-30	Fase B · B3: vídeo del recorrido con vista previa y descarga
+139	R	feat/ai-render-b2	ce2cbc7	feat/client-share-b1	2026-10-29	2026-10-30	feat(product): Render IA desde vistas reales (Fase B · B2)
+138	R	feat/client-share-b1	3da88da	feat/project-first-dossier-a4	2026-10-29	2026-10-30	feat(product): archivo autocontenido para el cliente (Fase B · B1)
+137	R	feat/project-first-dossier-a4	51ab83f	feat/project-first-analyze-a3	2026-10-29	2026-10-30	feat(product): dossier profesional automático con estilos (A4)
+136	R	feat/project-first-analyze-a3	2a034f8	feat/project-first-views-a2	2026-10-29	2026-10-30	feat(product): Analizar visual e informe de orientación y emplazamiento (A3)
+135	R	feat/project-first-views-a2	6c8aa88	feat/project-first-experience-a1	2026-10-29	2026-10-30	feat(product): vistas automáticas reales del proyecto (A2)
+134	R	feat/project-first-experience-a1	b34b45d	feat/point-9-ux-professional-discoverability	2026-10-29	2026-10-30	feat(product): iniciar Project-First Experience (A1)
+133	R	feat/point-9-ux-professional-discoverability	164312a	master	2026-10-28	2026-10-30	feat(ux): Punto 9 — reorganización profesional y descubribilidad
+90	D	fix/walk-start	794f13f	master	2026-10-24	2026-10-25	fix(walk): real movement from the entrance, doors with E/tap, clear entry panel
+89	D	docs/recorrido-entrega-video-20261024	a9fb141	master	2026-10-24	2026-10-24	docs(product): recorrido protagonista, revisión profesional y vídeo entregable
+88	D	fix/duplex-overview-framing	1abdc46	master	2026-10-23	2026-10-23	Presentación: la vista general cabe entera junto a la tarjeta (hallazgo 13)
+87	D	fix/furniture-overlaps	72a3857	master	2026-10-23	2026-10-24	Muebles: añadir o duplicar nunca los superpone sin avisar (hallazgo 12)
+86	D	fix/guide-stage-follows-card	01fc51f	feat/solutions	2026-10-23	2026-10-24	Guía: etapa coherente con la tarjeta (apilada sobre #76)
+85	D	fix/editor-panels-desktop	e55bf00	master	2026-10-23	2026-10-24	Editor de escritorio: columnas abiertas por defecto y respeto de la elección
+84	D	fix/presentation-card-hierarchy	f4eb5fa	master	2026-10-23	2026-10-23	Tarjeta de presentación: navegación del cliente primero
+83	D	docs/tour-video-study	84e6abd	master	2026-10-22	2026-10-23	docs(product): vídeo del recorrido descargable y compartible — estudio
+82	D	docs/points-of-interest-study	baec518	master	2026-10-22	2026-10-23	docs(product): «Puntos de interés» — estudio
+81	D	feat/delivery-image	5578aab	feat/share-image	2026-10-22	2026-10-24	Imagen de entrega profesional (apilada sobre #78)
+80	D	docs/delivery-programme-20261022	8e5cf9a	master	2026-10-22	2026-10-23	docs(product): programa de creación y entrega profesional
+79	D	fix/master-regressions	97c8578	master	2026-10-22	2026-10-23	Corrige defectos que ya fallan en master (F1b, F2, P07, P13)
+78	D	feat/share-image	bcf2ec6	master	2026-10-22	2026-10-24	«Compartir imagen» desde la presentación (resultado 3)
+77	D	docs/exterior-location-video-20261022	aa01f79	master	2026-10-22	2026-10-22	docs(product): estudiar exterior, mobiliario 3D, visita, ubicación y vídeo
+76	D	feat/solutions	f800c7d	feat/professional-entry	2026-10-22	2026-10-23	Bienvenida: «Recórrela en 3D» y «Soluciones» (resultado 1)
+75	D	feat/client-review	dd2e81a	master	2026-10-22	2026-10-24	Observaciones del cliente por archivo, sin servidor
+74	D	feat/plan-provenance	a815498	master	2026-10-22	2026-10-22	«Del plano a la vivienda»: procedencia y precisión
+73	D	feat/professional-entry	213b6ec	feat/journey-orientation	2026-10-22	2026-10-23	Entrada profesional: #70 + respuesta del perfil (apilada sobre #71)
+72	D	feat/scaled-sheet	bb4639c	master	2026-10-22	2026-10-22	Lámina a escala 1:50/1:100/1:200 (resultado 4)
+71	D	feat/journey-orientation	aba44e3	master	2026-10-22	2026-10-24	Orientación del recorrido: la guía propone la siguiente acción real
+70	D	feat/professional-entry-enviz	f28442e	master	2026-10-21	2026-10-21	Entrada profesional opcional y plan de entrega al cliente
+64	D	docs/closeout-ux-roadmap-20261019	9e27dd1	master	2026-10-19	2026-10-19	docs: reconcile MCP route audit and UX roadmap status
+61	D	docs/handoff-floorplan-20261019	53e5c98	master	2026-10-19	2026-10-19	docs: handoff completo para continuar Floorplan
+48	D	docs/loralab-study-gate	a260abd	master	2026-10-17	2026-10-20	docs: estudio LoRA LAB para el gate de Roadmap 2 §3.4
+36	D	docs/casa-serra-floorplan-integration	d7f0972	master	2026-10-13	2026-10-14	docs: preparar integración visual de Casa Serra en Floorplan

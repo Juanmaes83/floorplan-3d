@@ -1,0 +1,27 @@
+tests/browser.test.cjs	79,76,73	
+tests/build-palette.browser.test.cjs	71	
+tests/client-review.browser.test.cjs	75	75
+tests/delivery-image.browser.test.cjs	81	
+tests/delivery-image.test.cjs	81	
+tests/editor-fixture.cjs	71	71
+tests/first-paint-language.browser.test.cjs	79	79
+tests/furniture-overlaps.browser.test.cjs	87	87
+tests/furniture-placement.test.cjs	87	87
+tests/guide-navigation.browser.test.cjs	86	
+tests/journey-core.test.cjs	71	71
+tests/journey-orientation.browser.test.cjs	86,71	86
+tests/panel-pattern.browser.test.cjs	85	85
+tests/presentation-framing.browser.test.cjs	85,84,78,75	
+tests/presentation-overview.browser.test.cjs	88	
+tests/presentation.browser.test.cjs	79,71	
+tests/professional-entry.browser.test.cjs	76,73,70	
+tests/provenance-core.test.cjs	74	74
+tests/provenance.browser.test.cjs	74	74
+tests/review-notes-core.test.cjs	75	
+tests/selection-scale.browser.test.cjs	79	79
+tests/share-image.browser.test.cjs	81,78	81
+tests/sheet-scale.browser.test.cjs	72	72
+tests/sheet.browser.test.cjs	79	79
+tests/stair-conflicts.browser.test.cjs	87	87
+tests/walk-controls.browser.test.cjs	90	90
+tests/walk.browser.test.cjs	90	90

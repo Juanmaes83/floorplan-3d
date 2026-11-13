@@ -1,0 +1,27 @@
+tests/build-palette.browser.test.cjs	rc=0	pass=3	fail=0	skip=0	193s
+tests/client-review.browser.test.cjs	rc=0	pass=5	fail=0	skip=0	101s
+tests/browser.test.cjs	rc=1	pass=37	fail=0	skip=0	506s
+tests/delivery-image.test.cjs	rc=0	pass=5	fail=0	skip=0	0s
+tests/first-paint-language.browser.test.cjs	rc=0	pass=1	fail=0	skip=0	4s
+tests/furniture-overlaps.browser.test.cjs	rc=0	pass=7	fail=0	skip=0	32s
+tests/furniture-placement.test.cjs	rc=0	pass=10	fail=0	skip=0 cancelled=0	1s
+tests/guide-navigation.browser.test.cjs	rc=0	pass=14	fail=0	skip=0 cancelled=0	49s
+tests/journey-core.test.cjs	rc=0	pass=8	fail=0	skip=0 cancelled=0	0s
+tests/delivery-image.browser.test.cjs	rc=0	pass=4	fail=0	skip=0	536s
+tests/panel-pattern.browser.test.cjs	rc=0	pass=12	fail=0	skip=0 cancelled=0	65s
+tests/journey-orientation.browser.test.cjs	rc=1	pass=11	fail=6	skip=0 cancelled=0	359s
+tests/presentation-overview.browser.test.cjs	rc=0	pass=4	fail=0	skip=0 cancelled=0	127s
+tests/presentation-framing.browser.test.cjs	rc=0	pass=11	fail=0	skip=0 cancelled=0	1348s
+tests/professional-entry.browser.test.cjs	rc=0	pass=11	fail=0	skip=0 cancelled=0	41s
+tests/provenance-core.test.cjs	rc=0	pass=4	fail=0	skip=0 cancelled=0	0s
+tests/provenance.browser.test.cjs	rc=0	pass=4	fail=0	skip=0 cancelled=0	9s
+tests/review-notes-core.test.cjs	rc=0	pass=3	fail=0	skip=0 cancelled=0	0s
+tests/selection-scale.browser.test.cjs	rc=0	pass=3	fail=0	skip=0 cancelled=0	7s
+tests/share-image.browser.test.cjs	rc=0	pass=3	fail=0	skip=0 cancelled=0	403s
+tests/sheet-scale.browser.test.cjs	rc=0	pass=4	fail=0	skip=0 cancelled=0	42s
+tests/sheet.browser.test.cjs	rc=0	pass=9	fail=0	skip=0 cancelled=0	25s
+tests/stair-conflicts.browser.test.cjs	rc=0	pass=4	fail=0	skip=0 cancelled=0	275s
+tests/presentation.browser.test.cjs	rc=124	pass=	fail=	skip= cancelled=	2400s
+tests/walk-controls.browser.test.cjs	rc=0	pass=8	fail=0	skip=0 cancelled=0	735s
+tests/walk.browser.test.cjs	rc=0	pass=2	fail=0	skip=0 cancelled=0	123s
+DONE
