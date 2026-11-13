@@ -110,6 +110,7 @@
   const short=h=>typeof h==='string'&&h.length>12?h.slice(0,12):h??null;
   const LINK_ES={ok:'vinculado y comprobado en el modelo',broken:'el identificador no existe en el proyecto: no se dibuja','not-representable':'existe en el proyecto pero no tiene representación 3D: no se dibuja',
     illustrative:'recurso ilustrativo del plan, no es geometría del proyecto: no se dibuja en fantasma','role-mismatch':'rol no admitido para ese recurso: no se dibuja'};
+  const WITHHELD_ES='existe en el proyecto, pero el plan es de otra revisión: no se dibuja hasta reconciliar las fuentes';
   const REVIEW_ES={draft:'borrador: fechas sin aprobar',reviewed:'revisado (declarado por el profesional, no acreditado)'};
   function provenance({snapshot,model,schedule=null,meta=null}={}){
     const out={schema:SCHEMA+'-provenance',version:VERSION,sources:[],next:[],ghostKeys:[],tasksWithoutElements:[],tasksWithoutBudget:[],brokenLinks:[],warnings:[],
@@ -131,7 +132,7 @@
       out.sources.push({kind:'plan',label:'Plan de obra (WBS)',id:canon.id,tasks:canon.tasks.length,review:canon.review.status,reviewLabel:REVIEW_ES[canon.review.status]||canon.review.status,
         projectRevision:short(canon.projectRef.revision),matchesProject:sameRev,declaredSources:srcs,status:sameRev?'present':'other-revision',
         detail:`${canon.tasks.length} tareas · ${REVIEW_ES[canon.review.status]||canon.review.status} · ${sameRev?'hecho sobre esta revisión del proyecto':'hecho sobre OTRA revisión del proyecto'}${srcs.length?' · origen declarado: '+srcs.join(' · '):''}`});
-      if(!sameRev)out.warnings.push({code:'plan-other-revision',message:'El plan se hizo sobre otra revisión del proyecto: sus vínculos pueden no corresponder a la geometría actual.'});
+      if(!sameRev)out.warnings.push({code:'plan-other-revision',message:'El plan se hizo sobre otra revisión del proyecto: sus vínculos pueden no corresponder a la geometría actual. No se dibuja ningún fantasma de este plan hasta reconciliar las fuentes.'});
       if(canon.review.status!=='reviewed')out.warnings.push({code:'plan-draft',message:'Plan en borrador: las fechas no están aprobadas.'});
     }else{const st=model.planning?.status==='rejected'?'rejected':'unavailable';
       out.sources.push({kind:'plan',label:'Plan de obra (WBS)',status:st,detail:model.planning?.message||'Sin plan: no hay % ni siguiente tarea.'});
@@ -154,9 +155,14 @@
     out.sources.push({kind:'delivery',label:'Nivel de la presentación',status:model.delivery?.level||'unknown',detail:model.delivery?.label||'—'});
     // Vínculos: la siguiente tarea y las tareas sin elementos o sin partidas.
     const links=model.links||[],key=(t,e)=>t+'\u0000'+e,byLink=new Map(links.map(l=>[key(l.taskId,l.elementKey),l]));
+    // Cierre del caso adversarial (auditoría #211): un plan hecho sobre OTRA revisión del proyecto no dibuja ningún fantasma,
+    // ni siquiera de los elementos que todavía existen (que existan no prueba que el plan se refiera a ellos tal y como
+    // están ahora). Cada elemento conserva su estado de vínculo y dice por qué no se dibuja, hasta reconciliar las fuentes.
+    const otherRevision=!!canon&&canon.projectRef.revision!==fp.project;
     for(const t of snapshot?.next?.state==='planned'?snapshot.next.tasks:[])for(const e of t.elements){
-      const l=byLink.get(key(t.id,e.elementId)),status=l?.status||'broken';
-      out.next.push({taskId:t.id,wbs:t.wbs,elementId:e.elementId,role:e.role,status,label:LINK_ES[status]||status,ghost:status==='ok'});}
+      const l=byLink.get(key(t.id,e.elementId)),status=l?.status||'broken',withheld=otherRevision&&status==='ok';
+      out.next.push({taskId:t.id,wbs:t.wbs,elementId:e.elementId,role:e.role,status,label:withheld?WITHHELD_ES:LINK_ES[status]||status,ghost:status==='ok'&&!otherRevision,
+        ...(withheld?{withheld:'plan-other-revision'}:{})});}
     out.ghostKeys=[...new Set(out.next.filter(x=>x.ghost).map(x=>x.elementId))];
     const tmeta=new Map((canon?.tasks||[]).map(t=>[t.id,t]));
     const named=id=>{const t=tmeta.get(id);return {taskId:id,wbs:t?.wbs??null,title:t?.title??null};};

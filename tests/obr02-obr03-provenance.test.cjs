@@ -95,3 +95,23 @@ test('provenance no muta el modelo, la instantánea ni el plan; sin modelo, lo d
   P.provenance({snapshot,model,schedule:c.schedule});assert.equal(JSON.stringify([model,snapshot,c.schedule]),snap);
   assert.deepEqual(codes(P.provenance({snapshot})),['no-model']);
 });
+
+test('cierre del adversarial: plan de OTRA revisión que cita elementos que SÍ existen → ningún fantasma hasta reconciliar',async()=>{
+  const c=await FX.build('A'),base=await view(c);
+  assert.ok(base.prov.ghostKeys.length>0,'control: con la misma revisión, los vínculos comprobados sí van al fantasma');
+  const s=clone(c.schedule);s.projectRef.revision='f'.repeat(64);
+  const {model,prov}=await view({...c,schedule:s});
+  // Los elementos existen y su vínculo es correcto («ok»)...
+  assert.ok(prov.next.length>0&&prov.next.every(x=>x.status==='ok'));
+  assert.ok(prov.next.every(x=>model.inventory.elements.some(e=>e.key===x.elementId&&e.representable)),'todos existen y tienen representación');
+  // ...pero el plan no es de esta revisión: ninguno se dibuja, y cada uno dice por qué.
+  assert.ok(prov.next.every(x=>x.ghost===false&&x.withheld==='plan-other-revision'));
+  assert.deepEqual(prov.ghostKeys,[]);
+  assert.ok(prov.next.every(x=>/existe en el proyecto, pero el plan es de otra revisión: no se dibuja hasta reconciliar las fuentes/.test(x.label)));
+  assert.ok(codes(prov).includes('plan-other-revision'));
+  assert.match(prov.warnings.find(w=>w.code==='plan-other-revision').message,/No se dibuja ningún fantasma de este plan hasta reconciliar las fuentes/);
+  assert.equal(src(prov,'plan').status,'other-revision');
+  // Nada se inventa: ni avance ejecutado ni importes nuevos (el coste planificado sigue siendo el del reparto del presupuesto).
+  assert.equal(base.snapshot.executed.status,'not-recorded');
+  assert.equal(src(prov,'delivery').status,model.delivery.level,'el nivel es el que calcula el adaptador, no se rebaja ni se eleva aquí');
+});

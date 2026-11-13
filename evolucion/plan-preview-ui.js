@@ -89,7 +89,8 @@ function linksHtml(t){
   if(!rows.length&&!t.previewElementIds.length)return '<p>Sin elementos del modelo vinculados: nada que mostrar en fantasma.</p>';
   if(!rows.length)return `<p>${t.previewElementIds.length} elemento(s) citados por el plan, <b>sin comprobar</b> contra el modelo: no se dibujan.</p>`;
   const ok=rows.filter(x=>x.ghost).length,bad=rows.filter(x=>!x.ghost),group={};for(const x of bad)(group[x.label]||=[]).push(x.elementId);
-  return `<p>${ok?`<b>${ok}</b> elemento(s) vinculados y comprobados en el modelo (en fantasma)`:'Ningún elemento comprobado en el modelo: no hay fantasma.'}</p>`
+  const withheld=rows.some(x=>x.withheld==='plan-other-revision');
+  return `<p>${ok?`<b>${ok}</b> elemento(s) vinculados y comprobados en el modelo (en fantasma)`:withheld?'<b>Sin fantasma:</b> el plan es de otra revisión del proyecto.':'Ningún elemento comprobado en el modelo: no hay fantasma.'}</p>`
     +(bad.length?`<ul class="pp-links">${Object.entries(group).map(([l,ids])=>`<li data-ghost="false">${ids.length} ${esc(l)} (${ids.map(esc).join(', ')})</li>`).join('')}</ul>`:'');
   // El origen declarado de las tareas está en «Fuentes y vínculos» (plan): repetirlo en cada tarea alargaba el panel, que
   // en el móvil tapaba la escena y sus botones recibían los toques destinados a los muros (recorrido de la Preview).

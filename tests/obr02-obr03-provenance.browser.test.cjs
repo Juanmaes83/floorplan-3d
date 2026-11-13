@@ -51,11 +51,44 @@ test('adversarial: plan sobre otra revisión y con un vínculo inexistente → a
     assert.ok(!s.preview.keys.includes('project/wal_no-existe'),'el vínculo roto no va al fantasma');
     assert.equal(s.preview.shown,s.prov.ghostKeys.length,'solo los vínculos comprobados producen fantasma');
     assert.deepEqual([...s.preview.keys].sort(),[...s.prov.ghostKeys].sort());
+    assert.deepEqual(s.prov.ghostKeys,[],'plan de otra revisión: ni siquiera los vínculos que existen se dibujan');
     await page.evaluate(()=>{document.querySelector('.plan-preview .pp-next-d').open=true;});
     assert.match(await page.locator('.plan-preview .pp-next').innerText(),/el identificador no existe en el proyecto: no se dibuja \(project\/wal_no-existe\)/);
     const txt=await openSources(page);
     assert.match(txt,/hecho sobre OTRA revisión del proyecto/);assert.match(txt,/apuntan a elementos que no existen en el proyecto/);
     assert.match(txt,/Nivel de la presentación\s*Vista interna exploratoria/);
+    assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});
+
+test('cierre del adversarial: plan de OTRA revisión que cita elementos que SÍ existen → sin fantasma, y el panel dice por qué',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.openEvolution(env);try{
+    await at(page,DATE);const base=await state(page);
+    assert.ok(base.prov.ghostKeys.length>0&&base.preview.shown===base.prov.ghostKeys.length,'control: misma revisión → hay fantasma');
+    const ids=base.prov.next.map(x=>x.elementId);
+    // Solo cambia la revisión declarada por el plan: los identificadores son los mismos y existen en el proyecto.
+    await page.evaluate(async d=>{const F=window.__ft3dFidelity,c=JSON.parse(JSON.stringify(F.ctx.input));c.schedule.projectRef.revision='f'.repeat(64);
+      await F.show(c,{...F.ctx.meta});F.scene.setAuto(false);F.setDate(d);await new Promise(r=>setTimeout(r,500));},DATE);
+    const s=await state(page);
+    assert.deepEqual(s.prov.next.map(x=>x.elementId),ids,'los mismos vínculos');
+    assert.ok(s.prov.next.every(x=>x.status==='ok'&&x.ghost===false&&x.withheld==='plan-other-revision'));
+    assert.deepEqual(s.prov.ghostKeys,[]);assert.deepEqual(s.preview.keys,[]);assert.equal(s.preview.shown,0,'ningún fantasma en la escena');
+    assert.deepEqual(await page.evaluate(()=>({k:window.__ft3dPlanPreview.ghostKeys,n:window.__ft3dPlanPreview.shown})),{k:[],n:0},'el panel tampoco aplica fantasma (aunque la casilla «Ver en fantasma» siga marcada)');
+    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-next-d').open=true;});
+    const next=await page.locator('.plan-preview .pp-next').innerText();
+    assert.match(next,/Sin fantasma: el plan es de otra revisión del proyecto/);
+    assert.match(next,/existe en el proyecto, pero el plan es de otra revisión: no se dibuja hasta reconciliar las fuentes/);
+    const txt=await openSources(page);
+    assert.match(txt,/hecho sobre OTRA revisión del proyecto/);assert.match(txt,/No se dibuja ningún fantasma de este plan hasta reconciliar las fuentes/);
+    // El nivel es el que calcula el adaptador FT3D-8 (no se toca aquí): un plan válido de otra revisión se queda en
+    // «orientativa», bloqueado por revisión no vigente; nunca sube a «plan con revisión declarada». Con un vínculo roto
+    // (prueba anterior) baja a «Vista interna exploratoria».
+    const lvl=await page.evaluate(()=>{const m=window.__ft3dFidelity.ctx.model;return {level:m.delivery.level,blockers:m.delivery.blockers};});
+    assert.equal(lvl.level,'orientative');assert.ok(lvl.blockers.includes('schedule-revision-not-current')||lvl.blockers.includes('project-revision-not-current'),JSON.stringify(lvl.blockers));
+    assert.match(txt,/Nivel de la presentación\s*Presentación orientativa \(plan sin revisión declarada o incompleto\)/);
+    // Nada inventado: ni avance ejecutado ni vínculos documentales.
+    assert.equal(await page.evaluate(()=>window.__ft3dPlanPreview.snapshot.executed.status),'not-recorded');
+    assert.match(txt,/RUBIK no registra avance real de obra; todo lo de aquí es plan/);
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
