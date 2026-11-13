@@ -5,7 +5,8 @@
  * propio deshacer (mutate). Así la cirugía de index.html se queda en unas pocas líneas.
  *
  * Teclado: el diálogo es modal. Sus teclas no llegan a RUBIK (si no, Ctrl+Z desharía a la vez la edición del armario y
- * el proyecto entero). Escape cierra (si hay cambios sin guardar, primero lo pide otra vez). El foco vuelve al botón que
+ * el proyecto entero). Escape o «Cerrar» cierran (si hay cambios sin guardar, primero lo piden otra vez;
+ * «Cancelar» descarta a propósito). El foco vuelve al botón que
  * lo abrió. */
 (function (root) {
   'use strict';
@@ -42,23 +43,33 @@
         if (!dialog.contains(document.activeElement)) sheet.focus({ preventScroll: true });
         return null;
       },
-      onCancel: () => close(),
+      onCancel: () => close(),// «Cancelar» es descartar a propósito: cierra sin preguntar
+      onChange: () => { delete dialog.dataset.confirmClose; },// un cambio nuevo vuelve a exigir confirmación
     });
     if (o.notice) editor.setSession(o.session, o.notice, savedAlready);
-    const onKey = e => {
-      if (e.key === 'Escape') { e.preventDefault();
-        if (E().dirty(editor.session) && dialog.dataset.confirmClose !== '1') { dialog.dataset.confirmClose = '1';
-          editor.setSession(editor.session, { kind: 'error', text: 'Hay cambios sin guardar. Pulsa Escape otra vez para cerrar sin guardarlos.' }, savedAlready); }
-        else close(); }
-      else if (e.key !== 'Tab') delete dialog.dataset.confirmClose;
-      e.stopPropagation();// modal: RUBIK no recibe estas teclas (Ctrl+Z, Supr, flechas…)
+    /* Cerrar con cambios sin guardar pide confirmación, igual con Escape que con el botón «Cerrar» (en el móvil no hay
+       Escape: antes el botón cerraba y los tiraba sin avisar). La segunda petición seguida cierra. */
+    const requestClose = how => {
+      if (E().dirty(editor.session) && dialog.dataset.confirmClose !== '1') { dialog.dataset.confirmClose = '1';
+        editor.setSession(editor.session, { kind: 'error', text: `Hay cambios sin guardar. ${how === 'key' ? 'Pulsa Escape' : 'Pulsa «Cerrar»'} otra vez para cerrar sin guardarlos.` }, savedAlready);
+        return false; }
+      close();return true;
     };
+    const onKey = e => {
+      if (e.key === 'Escape') { e.preventDefault();e.stopPropagation();requestClose('key');return; }
+      if (e.key !== 'Tab') delete dialog.dataset.confirmClose;
+      // Modal: RUBIK no recibe estas teclas (Ctrl+Z, Supr, flechas…). Dentro del diálogo siguen hasta el editor (su
+      // Ctrl+Z/Ctrl+Y deshace la edición del armario) y se paran en el propio diálogo, antes de llegar a RUBIK; fuera
+      // (foco perdido) se paran aquí. Antes se paraban todas aquí y el Ctrl+Z del editor no funcionaba.
+      if (!dialog.contains(e.target)) e.stopPropagation();
+    };
+    dialog.addEventListener('keydown', e => e.stopPropagation());
     // Escucha en el documento, en captura, mientras está abierto: aunque el foco se pierda (p. ej. al redibujarse tras
     // guardar), ninguna tecla llega a RUBIK y Escape sigue cerrando. Y el foco vuelve al diálogo si se escapa de él.
     document.addEventListener('keydown', onKey, true);
     const keepFocus = e => { if (!dialog.contains(e.target)) sheet.focus({ preventScroll: true }); };
     document.addEventListener('focusin', keepFocus, true);
-    dialog.querySelector('.r03-rubik-close').addEventListener('click', () => close());
+    dialog.querySelector('.r03-rubik-close').addEventListener('click', () => requestClose('button'));
     current = { dialog, editor, opener, objectId, off: () => { document.removeEventListener('keydown', onKey, true);document.removeEventListener('focusin', keepFocus, true); } };
     (body.querySelector('button,input,[tabindex]') || dialog.querySelector('.r03-rubik-close')).focus({ preventScroll: true });
     return { ok: true, status: o.status, readOnly: o.readOnly };
@@ -67,7 +78,9 @@
     if (!current) return false;
     const { dialog, editor, opener, off } = current;current = null;off();
     editor.destroy();dialog.remove();
-    if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+    // Tras guardar, RUBIK redibuja su panel y el botón que abrió el diálogo ya no existe: se busca el nuevo, por su id.
+    const back = opener?.isConnected ? opener : (opener?.id ? document.getElementById(opener.id) : null);
+    back?.focus({ preventScroll: true });
     return true;
   }
   root.RubikCabinetRubikUI = Object.freeze({ open, close, get current() { return current ? { objectId: current.objectId, session: current.editor.session } : null; } });
