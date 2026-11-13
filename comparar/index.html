@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comparar con el original · RUBIK SOTA</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../css/comparar.css">
+</head>
+<body>
+<header class="top">
+  <p class="badge">Comparador · solo lectura · borrador interno</p>
+  <h1>Comparar con el original</h1>
+  <p class="lead" id="scope">Dos distribuciones del mismo grupo de «Variantes».</p>
+  <p class="notice" id="savedNotice"><strong>Se compara lo guardado en este navegador.</strong> Este comparador no modifica proyectos, variantes ni presupuestos, y no envía nada: todo se queda en este navegador.</p>
+</header>
+<main>
+  <section class="card fatal" id="fatalCard" hidden aria-labelledby="fatalTitle">
+    <h2 id="fatalTitle">No se puede comparar</h2>
+    <p id="fatal" role="alert"></p>
+    <p class="muted">Vuelve al editor, abre «Proyectos» → «Comparar variantes» y pulsa «Comparar con el original» en la variante que quieras revisar.</p>
+  </section>
+
+  <section class="card" aria-labelledby="cmpTitle" id="cmpCard" hidden>
+    <h2 id="cmpTitle">Comparación</h2>
+    <p id="relation" class="muted"></p>
+    <ul id="notes" class="notes"></ul>
+    <div class="row" role="group" aria-label="Modo de comparación">
+      <button class="btn" type="button" data-mode="curtain" aria-pressed="true">Cortina</button>
+      <button class="btn" type="button" data-mode="side" aria-pressed="false">Lado a lado</button>
+    </div>
+    <div id="curtain" class="curtain">
+      <div class="layer" id="layerBefore"></div>
+      <div class="layer after" id="layerAfter"></div>
+      <span class="tag l" id="tagBefore"></span><span class="tag r" id="tagAfter"></span>
+      <div class="handle" id="handle" aria-hidden="true"></div>
+    </div>
+    <label class="slider" id="sliderRow">Cortina <input type="range" id="slider" min="0" max="100" value="50" step="1"></label>
+    <div id="side" class="side" hidden><figure><div id="sideBefore"></div><figcaption id="capBefore"></figcaption></figure><figure><div id="sideAfter"></div><figcaption id="capAfter"></figcaption></figure></div>
+    <p class="legend"><span class="k add"></span>añadido <span class="k del"></span>quitado o a demoler <span class="k mod"></span>cambiado · relleno de cada estancia: color de su suelo declarado</p>
+    <p id="perspective" class="muted"></p>
+    <div class="cols">
+      <div><h3 id="chgTitle">Cambios reales</h3><div id="changes"></div></div>
+      <div><h3>Materiales cambiados</h3><div id="materials"></div>
+        <h3>Lo que es ilustrativo</h3><ul id="illustrative"></ul>
+        <h3>Cifras</h3><div id="metrics"></div>
+        <h3>Límites</h3><ul id="limits" class="muted"></ul></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="bcTitle" id="bcCard" hidden>
+    <h2 id="bcTitle">Presupuestos guardados</h2>
+    <section id="bcOut" class="bc"><p id="bcSummary"></p><div class="tablewrap" id="bcTable"></div><ul id="bcNotes" class="muted"></ul></section>
+  </section>
+
+  <section class="card" aria-labelledby="dosTitle" id="dosCard" hidden>
+    <h2 id="dosTitle">Borrador interno</h2>
+    <p class="notice warn"><strong>BORRADOR INTERNO · no se envía al cliente.</strong> Se descarga en este equipo con su manifiesto SHA-256. No se publica, no se sube a ningún servidor y no crea enlaces.</p>
+    <div class="row"><button class="btn primary" id="buildBtn" type="button">Preparar borrador interno</button></div>
+    <p id="dosStatus" role="status" aria-live="polite"></p>
+    <p id="dosError" class="error" role="alert"></p>
+    <div id="dosOut" hidden>
+      <div class="row">
+        <button class="btn" id="dlHtml" type="button">Descargar HTML</button>
+        <button class="btn" id="dlManifest" type="button">Descargar manifiesto</button>
+        <button class="btn" id="verifyBtn" type="button">Verificar ahora</button>
+      </div>
+      <ul id="verifyOut" class="checks"></ul>
+      <iframe id="preview" title="Vista previa del borrador interno" sandbox></iframe>
+    </div>
+  </section>
+</main>
+<script src="../js/project-schema.js"></script>
+<script src="../js/reference-project.js"></script>
+<script src="../js/parcel-core.js"></script>
+<script src="../js/orthophoto-core.js"></script>
+<script src="../js/terrain-core.js"></script>
+<script src="../js/territory-integration-core.js"></script>
+<script src="../js/geo-provider.js"></script>
+<script src="../js/catastro-parcel-provider.js"></script>
+<script src="../js/territory-export-policy.js"></script>
+<script src="../js/guide-core.js"></script>
+<script src="../js/geo-site-adapter.js"></script>
+<script src="../js/parcel-site-adapter.js"></script>
+<script src="../js/orthophoto-site-adapter.js"></script>
+<script src="../js/terrain-site-adapter.js"></script>
+<script src="../js/project-core.js"></script>
+<script src="../js/exterior-core.js"></script>
+<script src="../js/roof-core.js"></script>
+<script src="../js/tracing-core.js"></script>
+<script src="../js/layout-review.js"></script>
+<script src="../js/building-core.js"></script>
+<script src="../js/surface-core.js"></script>
+<script src="../js/quantity-core.js"></script>
+<script src="../js/budget-core.js"></script>
+<script src="../js/budget-draft-core.js"></script>
+<script src="../js/budget-presentation.js"></script>
+<script src="../js/project-variants.js"></script>
+<script src="../js/project-library.js"></script>
+<script src="../js/revision-compare-core.js"></script>
+<script src="../js/revision-budget-core.js"></script>
+<script src="../js/before-after-dossier-core.js"></script>
+<script src="../js/variants-compare-adapter.js"></script>
+<script src="comparar.js"></script>
+</body>
+</html>

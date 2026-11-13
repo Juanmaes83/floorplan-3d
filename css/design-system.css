@@ -121,13 +121,20 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
 }
 @media (max-width:1100px) and (max-height:500px){
   /* Landscape phones: height is the scarce dimension, so the bar becomes a narrow column on the right. */
-  #mobileDock{top:calc(var(--shell-header-bottom,58px) + 6px);bottom:calc(30px + env(safe-area-inset-bottom));left:auto;right:6px;width:104px;grid-template-columns:1fr;grid-auto-rows:1fr;align-content:stretch;padding:3px}
+  /* Rows never shrink below the button height: in a short window with a mouse the header wraps to three rows and the
+     column had ~130 px for 160 px of buttons, so «Propiedades» was drawn UNDER «Escena 3D» (variants-visual 844×390).
+     If they do not fit, the column scrolls instead of overlapping. */
+  #mobileDock{top:calc(var(--shell-header-bottom,58px) + 6px);bottom:calc(30px + env(safe-area-inset-bottom));left:auto;right:6px;width:104px;grid-template-columns:1fr;grid-auto-rows:minmax(40px,1fr);align-content:stretch;padding:3px;overflow-y:auto;overscroll-behavior:contain}
   #mobileDock #viewSeg{grid-template-columns:1fr;grid-row:span 2}
   #mobileDock .btn{min-height:40px}
   .app>main{margin-bottom:0;margin-right:112px}
   aside.lib,aside.right{margin-bottom:0}aside.right.open{margin-right:112px}
   /* The guide bar spans the width under the header: its controls (close, «Ver más») stay left of the column. */
   .guide-bar{margin-right:112px}
+  /* No room for one column of four buttons (three-row header with a mouse): a 2×2 block, every button visible. */
+  body.dock-2col #mobileDock{width:212px;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(40px,auto);grid-auto-flow:row dense;align-content:start;bottom:auto}
+  body.dock-2col #mobileDock #viewSeg{grid-column:1 / -1;grid-row:auto;grid-template-columns:1fr 1fr}
+  body.dock-2col .app>main,body.dock-2col aside.right.open{margin-right:220px}body.dock-2col .guide-bar{margin-right:220px}
   /* The plan is narrower here: the building warning moves above the selection bar instead of sitting beside it. */
   #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}
 }

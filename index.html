@@ -762,6 +762,9 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/furniture-placement.js"></script>
 <script src="js/surface-core.js"></script>
 <script src="js/project-variants.js"></script>
+<!-- UX-07 · el editor solo necesita el adaptador para construir la dirección del comparador (comparar/); el resto vive allí -->
+<script src="js/revision-compare-core.js"></script>
+<script src="js/variants-compare-adapter.js"></script>
 <script src="js/room-layout.js"></script>
 <script src="js/wall-assist.js"></script>
 <script src="js/raw-wall-export.js"></script>
@@ -2487,6 +2490,11 @@ function renderVariants(){
     if(m.review.scaleConfidence!=='real')row('Escala','no confirmada: medidas orientativas','scale');
     const actions=document.createElement('div');actions.className='actions';
     if(g.id!==library.activeId()){const open=document.createElement('button');open.className='btn';open.dataset.action='open';open.textContent='Abrir';open.onclick=()=>{try{switchProject(library.open(g.id));$('#variantsDialog').close();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(open);}
+    /* UX-07 · «Comparar con el original» (propuesta de activación): abre el comparador de solo lectura en una pestaña nueva
+       del MISMO origen (comparte la biblioteca de este navegador). En la dirección solo van identificadores de la biblioteca.
+       No guarda nada al pulsar: el editor ya guarda cada cambio, y el comparador dice que compara lo guardado. */
+    if(g.variantOf&&window.FloorPlanVariantsCompare){const cmp=document.createElement('button');cmp.className='btn';cmp.dataset.action='compare';cmp.textContent='Comparar con el original';
+      cmp.onclick=()=>window.open('comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:group[0].id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId()),'_blank','noopener');actions.append(cmp);}
     if(g.variantOf){const del=document.createElement('button');del.className='btn danger';del.dataset.action='remove';del.textContent='Eliminar variante';del.onclick=()=>{
       const original=group[0].name;if(!confirm(`¿Eliminar la variante «${g.name}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`))return;
       try{const wasActive=g.id===library.activeId(),next=library.remove(g.id);if(wasActive)switchProject(next);window.FloorPlanTraceUI?.cleanup();renderVariants();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(del);}
