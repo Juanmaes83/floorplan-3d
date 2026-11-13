@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SCULPT-R01 · laboratorio de reconocimiento</title>
+<link rel="icon" href="data:,">
+<style>
+ :root{--bg:#f6f7f9;--ink:#1d2430;--muted:#5b6574;--card:#fff;--line:#d9dee6;--donor:#1f6fd1;--rubik:#d1341f;--room:#1b8a4a;--door:#c77700;--win:#7a3fd1}
+ *{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+ header{padding:16px;border-bottom:1px solid var(--line);background:var(--card)}h1{margin:0 0 4px;font-size:18px}
+ header p{margin:0;color:var(--muted)}.badge{display:inline-block;padding:1px 8px;border-radius:10px;background:#fde8e6;color:#8a1c10;font-weight:600;font-size:12px}
+ main{padding:16px;display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr))}
+ section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}h2{margin:0 0 8px;font-size:15px}
+ .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}figure{margin:0}figcaption{font-size:12px;color:var(--muted);margin-top:4px}
+ canvas{width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff;display:block}
+ table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}td,th{border-top:1px solid var(--line);padding:3px 4px;text-align:right}th:first-child,td:first-child{text-align:left}
+ .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;font-size:12px}.legend i{display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:4px}
+</style>
+</head>
+<body>
+<header>
+ <h1>SCULPT-R01 · reconocimiento raster: donante R01 frente a RUBIK</h1>
+ <p><span class="badge">LABORATORIO · NO VALIDADO</span> Planos sintéticos generados por código. Coordenadas en píxeles; nada se escribe en un proyecto. Izquierda: evidencia del donante (RecognitionEvidenceV1). Derecha: bandas de <code>rasterWallBands</code> con los parámetros de <code>detectPlan()</code>.</p>
+ <div class="legend"><span><i style="background:var(--donor)"></i>muro donante</span><span><i style="background:#9aa3af"></i>muro aislado (no toca otro)</span><span><i style="background:var(--door)"></i>puerta (heurística)</span><span><i style="background:var(--win)"></i>ventana (heurística)</span><span><i style="background:var(--room)"></i>estancia</span><span><i style="background:var(--rubik)"></i>banda RUBIK</span></div>
+</header>
+<main id="out"></main>
+<!-- RUBIK authorities in the app order (index.html): project-core and its dependencies, tracing-core, plan-intake. -->
+<script src="../../../js/project-schema.js"></script>
+<script src="../../../js/reference-project.js"></script>
+<script src="../../../js/parcel-core.js"></script>
+<script src="../../../js/orthophoto-core.js"></script>
+<script src="../../../js/terrain-core.js"></script>
+<script src="../../../js/territory-integration-core.js"></script>
+<script src="../../../js/territory-export-policy.js"></script>
+<script src="../../../js/territory-runtime.js"></script>
+<script src="../../../js/territory-renderer.js"></script>
+<script src="../../../js/geo-provider.js"></script>
+<script src="../../../js/catastro-parcel-provider.js"></script>
+<script src="../../../js/catastro-wfs-provider.js"></script>
+<script src="../../../js/pnoa-orthophoto-provider.js"></script>
+<script src="../../../js/ign-mdt05-terrain-provider.js"></script>
+<script src="../../../js/geo-site-adapter.js"></script>
+<script src="../../../js/parcel-site-adapter.js"></script>
+<script src="../../../js/orthophoto-site-adapter.js"></script>
+<script src="../../../js/terrain-site-adapter.js"></script>
+<script src="../../../js/project-core.js"></script>
+<script src="../../../js/tracing-core.js"></script>
+<script src="../../../js/plan-intake.js"></script>
+<script src="workshop/ocr-postprocess-rules.js"></script>
+<script src="workshop/recognition-core.js"></script>
+<script src="recognition-evidence-core.js"></script>
+<script src="recognition-compare-core.js"></script>
+<script src="fixtures/synthetic-plans.js"></script>
+<script>
+(function(){
+ 'use strict';
+ const F=window.RubikSyntheticPlans,C=window.RubikRecognitionCompare,css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+ const base=(img)=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.putImageData(new ImageData(new Uint8ClampedArray(img.data),img.width,img.height),0,0);x.fillStyle='rgba(255,255,255,.55)';x.fillRect(0,0,c.width,c.height);return [c,x];};
+ const rect=(x,r,color,w)=>{x.strokeStyle=color;x.lineWidth=w;x.strokeRect(r[0]+.5,r[1]+.5,r[2]-r[0]-1,r[3]-r[1]-1);};
+ const fig=(canvas,text)=>{const f=document.createElement('figure');const cap=document.createElement('figcaption');cap.textContent=text;f.append(canvas,cap);return f;};
+ for(const name of F.NAMES){
+  const p=F.plan(name),cmp=C.compare(p.image,{mmPerPx:p.mmPerPx,truth:p.truth}),donor=C.runDonor(p.image),rubik=C.runRubik(p.image,p.mmPerPx);
+  const [dc,dx]=base(p.image);const ev=donor.evidence;
+  for(const r of ev.rooms){dx.strokeStyle=css('--room');dx.lineWidth=2;dx.beginPath();r.poly.forEach(([a,b],i)=>i?dx.lineTo(a,b):dx.moveTo(a,b));dx.closePath();dx.stroke();}
+  for(const w of ev.walls)rect(dx,w.rect,w.touchesOtherWall?css('--donor'):'#9aa3af',2);
+  for(const o of ev.openings)rect(dx,o.rect,o.kind==='window'?css('--win'):css('--door'),3);
+  const [rc,rx]=base(p.image);rx.strokeStyle=css('--rubik');rx.lineWidth=3;
+  for(const s of rubik.segments){rx.beginPath();if(s.axis==='h'){rx.moveTo(s.from,s.pos);rx.lineTo(s.to,s.pos);}else{rx.moveTo(s.pos,s.from);rx.lineTo(s.pos,s.to);}rx.stroke();}
+  const sec=document.createElement('section');sec.dataset.plan=name;const h=document.createElement('h2');h.textContent=name+' · '+p.mmPerPx+' mm/px declarados';
+  const pair=document.createElement('div');pair.className='pair';
+  pair.append(fig(dc,`Donante: ${cmp.donor.counts.walls} muros (${cmp.donor.counts.isolatedWalls} aislados), ${cmp.donor.counts.openings} huecos, ${cmp.donor.counts.rooms} estancias`),
+   fig(rc,`RUBIK: ${cmp.rubik.counts.walls} bandas, ${cmp.rubik.counts.openings??'—'} huecos, ${cmp.rubik.counts.rooms??'—'} estancias`));
+  const t=document.createElement('table');const row=(k,a,b)=>{const tr=t.insertRow();for(const v of [k,a,b]){const td=tr.insertCell();td.textContent=v;}};
+  row('px (tolerancia '+cmp.tolerancePx+' px)','donante','RUBIK');
+  row('longitud real de muro',cmp.donor.walls.truthLengthPx,cmp.rubik.walls.truthLengthPx);
+  row('cubierta',cmp.donor.walls.coveredLengthPx,cmp.rubik.walls.coveredLengthPx);
+  row('detectada fuera de muros',cmp.donor.walls.offWallLengthPx,cmp.rubik.walls.offWallLengthPx);
+  sec.append(h,pair,t);document.getElementById('out').append(sec);
+ }
+ document.body.dataset.ready='1';
+})();
+</script>
+</body>
+</html>
