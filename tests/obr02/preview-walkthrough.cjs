@@ -63,7 +63,7 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
       return {next:document.querySelector('.plan-preview .pp-next').innerText.replace(/\s+/g,' '),src:d.innerText.replace(/\s+/g,' '),keys:window.__ft3dFidelity.scene.preview.keys,warn:P.provenance.warnings.map(w=>w.code)};});
     log.push({paso:'adversarial · plan no concordante (otra revisión + vínculo roto)',viewport:label,avisos:adv.warn,
       fantasma:adv.keys.length,
-      ok:/no existe en el proyecto: no se dibuja/.test(adv.next)&&adv.keys.length===0&&/Sin fantasma: el plan es de otra revisión/.test(adv.next)&&/OTRA revisión/.test(adv.src)&&/Vista interna exploratoria/.test(adv.src)});
+      ok:/no existe en el proyecto: no se dibuja/.test(adv.next)&&adv.keys.length===0&&/Sin fantasma: el plan es de otra revisión/.test(adv.next)&&/OTRA revisión/.test(adv.src)&&/Vista interna exploratoria · plan de otra revisión · no validado sobre la actual/.test(adv.src)});
     // Captura con lo que se afirma a la vista: la línea del vínculo roto (dentro del panel, que tiene su propio desplazamiento).
     await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;document.querySelector('.plan-preview .pp-links li')?.scrollIntoView({block:'center'});});await page.waitForTimeout(200);
     await shot(page,`4-adversarial-plan-no-concordante-${label}`,{avisos:adv.warn});
@@ -73,15 +73,23 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     await open(page,'Cargar y abrir el plan de otra revisión');await at(page,'2027-04-14','iso',false);
     const oth=await page.evaluate(()=>{const P=window.__ft3dPlanPreview,F=window.__ft3dFidelity;document.querySelector('.plan-preview .pp-next-d').open=true;const d=document.querySelector('.plan-preview .pp-src-d');d.open=true;
       return {next:document.querySelector('.plan-preview .pp-next').innerText.replace(/\s+/g,' '),src:d.innerText.replace(/\s+/g,' '),keys:F.scene.preview.keys,shown:F.scene.preview.shown,
-        estados:(P.provenance?.next||[]).map(x=>x.status+(x.withheld?'/'+x.withheld:'')),nivel:F.ctx.model.delivery.label};});
-    log.push({paso:'otra revisión con elementos existentes · ningún fantasma hasta reconciliar',viewport:label,fantasma:oth.shown,estados:[...new Set(oth.estados)],nivel:oth.nivel,
+        estados:(P.provenance?.next||[]).map(x=>x.status+(x.withheld?'/'+x.withheld:'')),nivel:F.ctx.model.delivery.label,
+        casilla:(i=>({deshabilitada:i.disabled,marcada:i.checked}))(document.querySelector('.plan-preview .pp-ghost')),motivo:document.getElementById('ppGhostWhy')?.textContent||null};});
+    log.push({paso:'otra revisión con elementos existentes · ningún fantasma hasta reconciliar',viewport:label,fantasma:oth.shown,estados:[...new Set(oth.estados)],nivel:oth.nivel,casilla:oth.casilla,
       ok:oth.estados.length>0&&oth.estados.every(x=>x==='ok/plan-other-revision')&&oth.keys.length===0&&oth.shown===0&&/Sin fantasma: el plan es de otra revisión/.test(oth.next)
-        &&/existe en el proyecto, pero el plan es de otra revisión/.test(oth.next)&&/OTRA revisión/.test(oth.src)&&/hasta reconciliar las fuentes/.test(oth.src)});
+        &&/existe en el proyecto, pero el plan es de otra revisión/.test(oth.next)&&/OTRA revisión/.test(oth.src)&&/hasta reconciliar las fuentes/.test(oth.src)
+        &&/Nivel de la presentación .*· plan de otra revisión · no validado sobre la actual/.test(oth.src)&&oth.casilla.deshabilitada&&!oth.casilla.marcada&&/No disponible: el plan es de otra revisión/.test(oth.motivo||'')});
     await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;});
     const vis5=await reveal(page,'.plan-preview .pp-next p',/Sin fantasma: el plan es de otra revisión/);await page.waitForTimeout(200);
     await shot(page,`5-otra-revision-sin-fantasma-${label}`,{nivel:oth.nivel,fraseALaVista:vis5});
     await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=true;});await reveal(page,'.plan-preview .pp-src-d .pp-warn li, .plan-preview .pp-src-d .pp-warn',/hasta reconciliar las fuentes/);await page.waitForTimeout(200);
     await shot(page,`5b-otra-revision-fuentes-y-avisos-${label}`);
+    // 5c · el nivel calculado por RUBIK, con la nota de otra revisión al lado; 5d · la casilla del fantasma deshabilitada y su motivo.
+    const vis5c=await reveal(page,'.plan-preview .pp-src dd',/no validado sobre la actual/);await page.waitForTimeout(200);
+    await shot(page,`5c-otra-revision-nivel-con-nota-${label}`,{fraseALaVista:vis5c});
+    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;});
+    const vis5d=await reveal(page,'.plan-preview .pp-ghost-why',/No disponible/);await page.waitForTimeout(200);
+    await shot(page,`5d-otra-revision-casilla-fantasma-deshabilitada-${label}`,{fraseALaVista:vis5d});
     log.push({paso:'errores de la página',viewport:label,errores:errors,ok:errors.length===0});
     log.push({paso:'hosts externos',viewport:label,hosts:[...external]});
     await context.close();}

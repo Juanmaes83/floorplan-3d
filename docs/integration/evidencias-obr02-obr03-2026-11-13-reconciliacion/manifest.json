@@ -1,7 +1,7 @@
 {
- "generado": "2026-11-13T12:50:48.614Z",
- "preview": "http://127.0.0.1:8791 (árbol de la rama servido en local; la Preview de Vercel está protegida para el navegador de esta sesión)",
- "rama": "review/obr02-obr03-reconcile-20261113@44587dd",
+ "generado": "2026-11-13T13:20:43.946Z",
+ "preview": "http://127.0.0.1:8791",
+ "rama": "review/obr02-obr03-reconcile-20261113@8e956fe",
  "datos": "sintéticos; precios FICTICIOS",
  "navegador": "Chromium (Playwright, SwiftShader) en la nube, no un dispositivo físico",
  "pasos": [
@@ -86,6 +86,10 @@
     "ok/plan-other-revision"
    ],
    "nivel": "Presentación orientativa (plan sin revisión declarada o incompleto)",
+   "casilla": {
+    "deshabilitada": true,
+    "marcada": false
+   },
    "ok": true
   },
   {
@@ -180,6 +184,10 @@
     "ok/plan-other-revision"
    ],
    "nivel": "Presentación orientativa (plan sin revisión declarada o incompleto)",
+   "casilla": {
+    "deshabilitada": true,
+    "marcada": false
+   },
    "ok": true
   },
   {
@@ -201,13 +209,13 @@
   },
   {
    "archivo": "1-con-presupuesto-siguiente-en-fantasma-escritorio-1440x900.png",
-   "sha256": "d4e8a3fabc575b83c5460c513c979f5f5950b707fb2a1a7c6511a433fb6e5595",
+   "sha256": "c36e646a41061117dda77d0173c18fbaa526ff995b44832355a4538f4d268e33",
    "pct": 48.1,
    "coste": 5499.32
   },
   {
    "archivo": "1b-fuentes-y-vinculos-escritorio-1440x900.png",
-   "sha256": "b1d33e500a8ce307963d56490ed52e76582feff64018a861d49623e6332e0a18"
+   "sha256": "e07cde67fd110c51ec57267d7f2a02d738be827a0f70911476184d000b2b180a"
   },
   {
    "archivo": "2-muro-carga-con-fantasma-escritorio-1440x900.png",
@@ -216,11 +224,11 @@
   },
   {
    "archivo": "3-sin-presupuesto-no-disponible-escritorio-1440x900.png",
-   "sha256": "60eda25976ce1e580d1d106ee80839cdaab0573eb0da4df05f88233f45767e40"
+   "sha256": "9d809f087b9c82f31c555fbe87f6aa641578b01516d25ee89169feabbb963654"
   },
   {
    "archivo": "4-adversarial-plan-no-concordante-escritorio-1440x900.png",
-   "sha256": "5e418d0e52f9193dac4ce00169073fbe145e1d4fdcb6dba7cdcf049389869a1b",
+   "sha256": "ed9cce328a9f71bac47fb3fa8b29ce3fabe270556d6eba1b8c5e293effa64221",
    "avisos": [
     "plan-other-revision",
     "plan-draft",
@@ -230,17 +238,27 @@
   },
   {
    "archivo": "4b-adversarial-fuentes-y-avisos-escritorio-1440x900.png",
-   "sha256": "b4b164b846708bbeb30854a71fe89b15309b0095af2a320b02655777e9e271e0"
+   "sha256": "beea7982ff2fd68412bc43d94ade40e10fae0afe3585e868fff2eb4ba503ed73"
   },
   {
    "archivo": "5-otra-revision-sin-fantasma-escritorio-1440x900.png",
-   "sha256": "e7aa96339c48915514fe63010c003d871ec01a0fc72a6e9b894504563b443cb9",
+   "sha256": "8359640b7c8eb51200cb8b2f52cec7096c54ead3c699f66411f6185099de2709",
    "nivel": "Presentación orientativa (plan sin revisión declarada o incompleto)",
    "fraseALaVista": true
   },
   {
    "archivo": "5b-otra-revision-fuentes-y-avisos-escritorio-1440x900.png",
-   "sha256": "2dc12b6fe5bc1ad1e519cf18fcca5181011b08c4dc9178b5b333d276ebc10adb"
+   "sha256": "12e688f257cc00437e2538f83ec811231025ac337b2511f141550c8d28b0a93b"
+  },
+  {
+   "archivo": "5c-otra-revision-nivel-con-nota-escritorio-1440x900.png",
+   "sha256": "62cfb37367be2726ad512db94e45d05a7793c047a64d52d4331f016811a7adb0",
+   "fraseALaVista": true
+  },
+  {
+   "archivo": "5d-otra-revision-casilla-fantasma-deshabilitada-escritorio-1440x900.png",
+   "sha256": "23b327c637df247acc0910ea05dd5b439be5f275676505d144748b71608b6585",
+   "fraseALaVista": true
   },
   {
    "archivo": "0-pagina-revision-movil-390x844.png",
@@ -248,13 +266,13 @@
   },
   {
    "archivo": "1-con-presupuesto-siguiente-en-fantasma-movil-390x844.png",
-   "sha256": "22ed38ddd2abc5a02ee66b7ec907e9f8ff2b0138b55c57310bfc5e8fd94837bc",
+   "sha256": "c479ae11afdad5fe00df296d8e337bc18201c749a6d3e2cf851cf8f05c955353",
    "pct": 48.1,
    "coste": 5499.32
   },
   {
    "archivo": "1b-fuentes-y-vinculos-movil-390x844.png",
-   "sha256": "b87f7d1e72673c477d3c58dc3109e68b73f53b596104ca5c5a4dd1e1fac20ffc"
+   "sha256": "736aa553b9f8636e615025e49e7f7bff961c8269e34a1df4baf778b546788532"
   },
   {
    "archivo": "2-muro-carga-con-fantasma-movil-390x844.png",
@@ -263,11 +281,11 @@
   },
   {
    "archivo": "3-sin-presupuesto-no-disponible-movil-390x844.png",
-   "sha256": "ed518b966b532b4f330891210847df72e1afe74fd3817552a92c4064bf7ef804"
+   "sha256": "24c8fb9589726b06c48a9deed50ffedd1cb48757a32c4ddd39dede00220a80e5"
   },
   {
    "archivo": "4-adversarial-plan-no-concordante-movil-390x844.png",
-   "sha256": "c357203bb1435857c610f4a143057bb74cc48bd230e23a3e424d0fbe83fd006a",
+   "sha256": "59868034f9d16fa192e5646fb3e6bfdf9cfdba9d449f46de8a1440f8fb087784",
    "avisos": [
     "plan-other-revision",
     "plan-draft",
@@ -277,17 +295,27 @@
   },
   {
    "archivo": "4b-adversarial-fuentes-y-avisos-movil-390x844.png",
-   "sha256": "9733c69cea5f4c67186d36848b478a78a1efb9e1846f94f8de4234ebd62e16fc"
+   "sha256": "f574731afe88d0f260f77a4aa1e1c32b0ba8afb9df4fd28140bf24bb5b3270a2"
   },
   {
    "archivo": "5-otra-revision-sin-fantasma-movil-390x844.png",
-   "sha256": "3596befebc9a537839f2691b47b2416862add717d3aa4196bba1c27b4e101601",
+   "sha256": "bc556f0e8ced13b8531ab600fa3c32018bc046498f079a88f856a7731a1fa8c6",
    "nivel": "Presentación orientativa (plan sin revisión declarada o incompleto)",
    "fraseALaVista": true
   },
   {
    "archivo": "5b-otra-revision-fuentes-y-avisos-movil-390x844.png",
-   "sha256": "0161e5b7dc1340884b355f8cf5e5322f6445840e148bb06ca1322c4b04259c1e"
+   "sha256": "de93037b6e184cec0396dc941beca8c3f534c41c9c6d760b930f0b5c22c4cbc7"
+  },
+  {
+   "archivo": "5c-otra-revision-nivel-con-nota-movil-390x844.png",
+   "sha256": "e6d871e59ae7d8ef3d94c2eec14c5c94f25c2ff9a46b7771bbb63da3dd0fa976",
+   "fraseALaVista": true
+  },
+  {
+   "archivo": "5d-otra-revision-casilla-fantasma-deshabilitada-movil-390x844.png",
+   "sha256": "d2de5e938718b85b1caf31c1829a8c673f592fa51353cbaed6ec6c6a222f3ea0",
+   "fraseALaVista": true
   }
  ]
 }

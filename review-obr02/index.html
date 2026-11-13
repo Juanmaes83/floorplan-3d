@@ -66,7 +66,7 @@ ol{padding-left:1.3em}li{margin:.3em 0}.muted{color:var(--muted)}#status{min-hei
     <button type="button" data-case="adversarial">Cargar y abrir el plan no concordante</button>
     <ol>
       <li>El plan es válido para el contrato, pero se hizo sobre <strong>otra revisión</strong> del proyecto y su tarea 10 cita un muro que <strong>no existe</strong>.</li>
-      <li>En <strong>Fuentes y vínculos</strong>: «hecho sobre OTRA revisión del proyecto», «vínculo(s) del plan apuntan a elementos que no existen» y el nivel baja a «Vista interna exploratoria».</li>
+      <li>En <strong>Fuentes y vínculos</strong>: «hecho sobre OTRA revisión del proyecto», «vínculo(s) del plan apuntan a elementos que no existen» y el nivel baja a «Vista interna exploratoria» (con la nota «plan de otra revisión · no validado sobre la actual»).</li>
       <li>Antes de la tarea 10, su «Siguiente tarea» lista «el identificador no existe en el proyecto: no se dibuja (project/wal_no-existe)». No aparece ningún fantasma: ni el inventado ni el de los elementos que sí existen, porque el plan es de otra revisión.</li>
     </ol>
   </section>
@@ -77,7 +77,8 @@ ol{padding-left:1.3em}li{margin:.3em 0}.muted{color:var(--muted)}#status{min-hei
     <ol>
       <li>El mismo plan del caso 1, sin vínculos rotos: solo cambia la revisión del proyecto sobre la que dice estar hecho.</li>
       <li>Los elementos que cita existen, pero <strong>no se dibuja ningún fantasma</strong> hasta reconciliar las fuentes: la «Siguiente tarea» dice «Sin fantasma: el plan es de otra revisión del proyecto» y lista cada elemento con «existe en el proyecto, pero el plan es de otra revisión».</li>
-      <li>En <strong>Fuentes y vínculos</strong>: «hecho sobre OTRA revisión del proyecto» y el aviso «No se dibuja ningún fantasma de este plan hasta reconciliar las fuentes». El nivel es el que calcula RUBIK (orientativo, bloqueado por revisión no vigente); no sube a plan declarado.</li>
+      <li>En <strong>Fuentes y vínculos</strong>: «hecho sobre OTRA revisión del proyecto» y el aviso «No se dibuja ningún fantasma de este plan hasta reconciliar las fuentes». El nivel es el que calcula RUBIK (orientativo, bloqueado por revisión no vigente; no sube a plan declarado) y a su lado dice «plan de otra revisión · no validado sobre la actual».</li>
+      <li>La casilla «Ver en fantasma» queda deshabilitada con su motivo: no hay nada dibujado. Con un plan concordante vuelve a estar marcada.</li>
     </ol>
   </section>
 
