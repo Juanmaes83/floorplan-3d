@@ -76,6 +76,18 @@ async function main() {
     { clearanceMm: z.number().positive().optional() },
     args => core.reviewLayout(reader, args));
 
+  registerReadTool(server, 'propose_layout', 'Proponer posición de un mueble (sin aplicar)',
+    'Etapa 2. Para un mueble (objectId) y un objetivo (goal: resolve-placement-conflict o clear-door-swing con openingId), propone UNA posición candidata buscada con FloorPlanPlacement y comprobada con FloorPlanPlacement y layout-review sobre una copia efímera. Exige expectedSha256 (de get_project_summary). Devuelve RubikLayoutProposalV1 con estado candidate-reviewable, pending, blocked o no-change-needed, evidencia, incertidumbre y lo no evaluado. Nunca aplica nada (applied:false), no escribe ni genera parches, no mueve otros muebles, no gira ni cambia de estancia. No es una certificación ni la posición óptima.',
+    {
+      objectId: z.string().min(1).max(160),
+      goal: z.enum(['resolve-placement-conflict', 'clear-door-swing']),
+      expectedSha256: z.string().regex(/^[0-9a-f]{64}$/),
+      openingId: z.string().min(1).max(160).optional(),
+      stepMm: z.number().int().min(10).max(1000).optional(),
+      maxCandidates: z.number().int().min(1).max(4000).optional(),
+    },
+    args => core.proposeLayout(reader, args));
+
   const transport = new StdioServerTransport();
   await server.connect(transport);
   process.stderr.write('Rubik MCP local de solo lectura iniciado.\n');

@@ -31,7 +31,7 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
 
   const listed = await client.listTools();
   assert.deepEqual(listed.tools.map(tool => tool.name).sort(), [
-    'check_route_2d', 'diagnose_project', 'get_project_element', 'get_project_summary', 'inspect_pair_clearance', 'list_project_elements', 'measure_elements', 'review_layout',
+    'check_route_2d', 'diagnose_project', 'get_project_element', 'get_project_summary', 'inspect_pair_clearance', 'list_project_elements', 'measure_elements', 'propose_layout', 'review_layout',
   ]);
   for (const tool of listed.tools) {
     assert.equal(tool.annotations?.readOnlyHint, true, tool.name);

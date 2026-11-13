@@ -36,6 +36,11 @@ El servidor vuelve a leer ese mismo archivo en cada consulta. Si exportas el pro
 - `inspect_pair_clearance`: inspecciona dos muebles con umbral explícito; distingue la distancia mínima recta, los obstáculos en ese segmento y una cadena de puertas documentada entre estancias. No certifica un paso.
 - `check_route_2d`: con dos puntos `{x,y}` explícitos y `widthMm` explícito, comprueba si un disco 2D de ese diámetro puede ir de uno a otro por estancias y huecos de paso documentados. Devuelve estado, trayectoria verificada, anchura limitante, razones y hash.
 
+- `propose_layout` (Etapa 2, laboratorio): propone una nueva posición para un mueble (`objectId`) con un objetivo acotado y `expectedSha256`.
+  - Objetivos: `resolve-placement-conflict`, o `clear-door-swing` con `openingId`.
+  - Devuelve un `RubikLayoutProposalV1` en uno de cuatro estados: `candidate-reviewable`, `pending`, `blocked` o `no-change-needed`.
+  - **Nunca aplica nada** (`applied:false`).
+
 Cada herramienta declara anotaciones MCP de solo lectura. No hay herramientas para mover, crear, borrar, guardar o exportar. La superficie se calcula desde polígonos guardados y no es una medición certificada.
 
 ### Relación por estancia (v0.1.1, primer corte de Etapa 1)
@@ -104,6 +109,30 @@ Ningún estado acredita accesibilidad, evacuación, normativa, altura libre ni t
 
 [Contrato, garantías, presupuestos y límites](../../docs/technical/local-mcp-route-2d.md).
 
+### Propuestas explicables (Etapa 2, laboratorio)
+
+```text
+get_project_summary()                       → snapshot.sha256
+propose_layout({"objectId":"obj_chair","goal":"clear-door-swing","openingId":"opn_door","expectedSha256":"<sha256>"})
+```
+
+**De dónde sale la candidata.** Del generador de `FloorPlanPlacement.find` (`FloorPlanPlacement.candidates`), con su mismo orden, prefiltro, redondeo, tolerancia y presupuesto: anillos de `stepMm` alrededor de la posición actual y, como máximo, `maxCandidates` posiciones. Si `layout-review` rechaza una posición que `FloorPlanPlacement` acepta, la búsqueda **sigue** con el mismo presupuesto (y un máximo de 250 verificaciones completas). La candidata es la primera que supera todas las comprobaciones, no la mejor.
+
+**Cómo se comprueba.** Sobre una copia efímera en memoria, con `FloorPlanPlacement` y `layout-review`. Una puerta se evalúa con la hoja precisa de `layout-review`.
+
+**Qué conserva y qué cambia.** Se conservan el ID, el tamaño, el giro y la estancia del mueble; solo cambia su posición. Un hash distinto devuelve `blocked/stale-source`.
+
+**Qué se informa como `pending`.** Se marcan `pending`, nunca como imposibilidad demostrada:
+
+- una búsqueda que agota el presupuesto o la cuadrícula;
+- una estancia ambigua;
+- una puerta sin `swing` (con `clear-door-swing`), o un conflicto que solo existe por el barrido **supuesto** de una puerta sin `swing` (`conflict-based-on-assumed-swing`);
+- una discrepancia entre los dos modelos.
+
+**Qué no genera.** No genera parches, no escribe ningún JSON ni crea variantes; eso corresponde a las Etapas 3 y 4.
+
+[Contrato y límites](../../docs/technical/local-mcp-stage2-proposals.md).
+
 ## Límites y privacidad
 
 - El proceso solo puede leer el archivo indicado al arrancar. Ninguna herramienta recibe rutas.
@@ -120,9 +149,24 @@ npm test
 npm run check
 ```
 
+`test/proposal.test.cjs` y `test/proposal-protocol.test.mjs` cubren `propose_layout`:
+
+- los cuatro estados;
+- las entradas inválidas y adversariales;
+- determinismo, mismos bytes y mismo hash;
+- ausencia de escrituras y de red;
+- el protocolo stdio real.
+
 Las pruebas comprueban validación, consultas y paginación, relaciones espaciales sintéticas, rechazo de symlinks, hash de la fuente, lectura sin mutaciones y reutilización de la revisión existente. Para `check_route_2d`:
 
 - una matriz sintética con medidas conocidas (`fixtures/route-projects.cjs`), cuyas trayectorias revisa un verificador independiente;
 - un contraste aleatorio con una búsqueda por fuerza bruta que no comparte código (`test/route-crosscheck.test.cjs`). En Windows sin privilegio de creación de symlinks se omite únicamente ese caso de seguridad; sigue ejecutándose en Linux CI. El rechazo de JSON inválido se comprueba por separado.
 
-El `package-lock.json` fija las dependencias de esta entrega. Se actualizó el SDK MCP a `1.32.1` tras detectar la alerta [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en la versión anterior; el servidor usa stdio y no el cliente OAuth afectado. `npm audit` queda sin vulnerabilidades reportadas para el lock actual.
+El `package-lock.json` fija las dependencias de esta entrega. Se actualizó el SDK MCP a `1.32.1` tras detectar la alerta [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en la versión anterior; el servidor usa stdio y no el cliente OAuth afectado. En aquel momento, `npm audit` no reportaba vulnerabilidades para el lock.
+
+**Revisión del 11-11-2026 (Etapa 2):** `npm audit` reporta avisos posteriores en dependencias transitivas del SDK:
+
+- `body-parser`, de la pila HTTP/express;
+- `fast-uri`, de la validación de esquemas.
+
+El transporte stdio no usa la pila HTTP. La actualización del lock queda pendiente de decisión y no forma parte de la Etapa 2.
