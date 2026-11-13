@@ -23,9 +23,9 @@
     const dialog = document.createElement('div');
     dialog.className = 'r03-scope r03-rubik-dialog';
     dialog.setAttribute('role', 'dialog');dialog.setAttribute('aria-modal', 'true');dialog.setAttribute('aria-labelledby', 'r03RubikTitle');
-    dialog.innerHTML = `<div class="r03-rubik-sheet"><header class="r03-rubik-head"><h2 id="r03RubikTitle"></h2>
-      <p class="r03-rubik-note">Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.</p>
-      <button type="button" class="r03-btn r03-btn-quiet r03-rubik-close" aria-label="Cerrar el editor de interior">Cerrar</button></header>
+    dialog.innerHTML = `<div class="r03-rubik-sheet"><div class="r03-rubik-head"><div class="r03-rubik-row"><h2 id="r03RubikTitle"></h2>
+      <button type="button" class="r03-btn r03-btn-quiet r03-rubik-close" aria-label="Cerrar el editor de interior">Cerrar</button></div>
+      <p class="r03-rubik-note">Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.</p></div>
       <div class="r03-rubik-body"></div></div>`;
     dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${TYPE[object.type] || object.type} «${object.name || objectId}» · ${object.size.widthMm} × ${object.size.depthMm} mm`;
     host.append(dialog);

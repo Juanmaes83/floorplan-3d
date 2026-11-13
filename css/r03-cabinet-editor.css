@@ -46,6 +46,7 @@
 .r03-rubik-dialog{position:fixed;inset:0;z-index:1000;display:flex;align-items:stretch;justify-content:center;background:rgba(20,24,30,.42);padding:0}
 .r03-rubik-sheet{background:var(--panel);width:100%;max-width:980px;height:100%;overflow:auto;overscroll-behavior:contain;padding:0 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 @media(min-width:1000px){.r03-rubik-dialog{padding:24px}.r03-rubik-sheet{border-radius:14px;height:auto;max-height:calc(100vh - 48px)}}
-.r03-rubik-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;position:sticky;top:0;background:var(--panel);padding:10px 0 6px;z-index:2;border-bottom:1px solid var(--line)}
-.r03-rubik-head h2{font-size:16px;margin:0;flex:1 1 260px}.r03-rubik-close{margin-left:auto}
-.r03-rubik-note{flex:1 0 100%;order:3;margin:0;font-size:12.5px;color:var(--warn)}
+.r03-rubik-sheet>*{flex-shrink:0}/* columna de altura fija: los hijos desbordan (con scroll), no se aplastan */
+.r03-rubik-head{position:sticky;top:0;background:var(--panel);padding:10px 0 6px;z-index:2;border-bottom:1px solid var(--line)}
+.r03-rubik-row{display:flex;align-items:center;gap:12px}.r03-rubik-head h2{font-size:16px;margin:0;flex:1 1 auto;min-width:0}.r03-rubik-close{flex:0 0 auto}
+.r03-rubik-note{margin:4px 0 0;font-size:12.5px;color:var(--warn)}
