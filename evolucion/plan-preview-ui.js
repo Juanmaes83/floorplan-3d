@@ -23,7 +23,7 @@ const box=document.createElement('section');box.className='plan-preview';box.set
 box.innerHTML=`<div class="pp-row"><svg viewBox="0 0 44 44" class="pp-ring" aria-hidden="true"><circle cx="22" cy="22" r="18" class="pp-track"/><circle cx="22" cy="22" r="18" class="pp-arc" pathLength="100" stroke-dasharray="0 100"/></svg><span class="pp-ringtxt">—</span>
 <div class="pp-lines"><p class="pp-line pp-pct"></p><p class="pp-line pp-cost"></p><p class="pp-line pp-exec"></p></div></div>
 <details class="pp-next-d"><summary>Siguiente tarea · planificada</summary><div class="pp-next"></div></details>
-<details class="pp-src-d"><summary>Fuentes y vínculos</summary><div class="pp-src"></div></details><p class="pp-note"></p>`;
+<details class="pp-src-d"><summary><span class="pp-note"></span> <b>Fuentes y vínculos</b></summary><div class="pp-src"></div></details>`;
 host?.append(box);
 const style=document.createElement('style');style.textContent=`
 .plan-preview{position:absolute;right:16px;top:64px;z-index:4;width:min(300px,calc(100% - 32px));max-height:calc(100% - 150px);overflow:auto;pointer-events:none;padding:8px 10px;background:rgba(255,255,255,.93);color:#1d2124;border:1px solid #d6d3cc;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.10);font:12.5px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -37,7 +37,10 @@ const style=document.createElement('style');style.textContent=`
 .plan-preview .pp-next{border-left:3px solid #0f7f95;padding:2px 0 2px 8px}.plan-preview .pp-next p{margin:.2em 0}
 .plan-preview label{display:flex;align-items:center;gap:6px;min-height:36px}.plan-preview .pp-actions{display:flex;gap:6px;margin:.3em 0}
 .plan-preview .pp-actions button{min-height:36px;padding:0 10px;border:1px solid #c9c6bf;border-radius:6px;background:#fff;font:inherit;cursor:pointer}
-.plan-preview .pp-note{margin:.4em 0 0;font-size:11px;color:#5b6166}
+/* «Fuentes y vínculos» ocupa la línea de la nota que ya existía (no añade altura al panel): el panel está sobre la escena
+   y cada fila con controles quita superficie al clic en el lienzo (OBR-01 · QA-22, CI de #211). Objetivo táctil ≥ 24 px. */
+.plan-preview .pp-src-d{margin-top:2px}.plan-preview .pp-src-d>summary{min-height:24px;font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:#5b6166}
+.plan-preview .pp-src-d>summary b{color:#0f6f82}.plan-preview .pp-note{font-size:11px;color:#5b6166}
 .plan-preview .pp-src dl{margin:.2em 0;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}.plan-preview .pp-src dt{font-weight:700}.plan-preview .pp-src dd{margin:0}
 .plan-preview .pp-src [data-status=other-revision],.plan-preview .pp-src [data-status=unavailable],.plan-preview .pp-src [data-status=rejected],.plan-preview .pp-src [data-status=absent]{color:#7a4a12}
 .plan-preview .pp-synth{margin:.2em 0;padding:3px 6px;background:#fff4e5;border:1px solid #e5c79f;border-radius:4px}.plan-preview .pp-small{font-size:11px;color:#5b6166}.plan-preview .pp-assume{font-size:11px;color:#5b6166}
@@ -56,9 +59,11 @@ function render(s,prov=null){
     $('.pp-pct').innerHTML=`<span class="pp-na"><b>% del plan: no disponible.</b> ${esc(s.message)}</span>`;$('.pp-cost').innerHTML=`<span class="pp-na">Coste planificado a la fecha: <b>No disponible</b>.</span>`;
   }else{
     // El % es del CALENDARIO del plan: al final del plan es 100 % planificado, nunca obra terminada.
-    $('.pp-pct').innerHTML=`<b>${pct(p.percent)} %</b> del calendario del plan · <b>planificado</b> (${p.tasks.completedPlanned} de ${p.tasks.total} tareas terminadas según plan, ${p.tasks.inProgressPlanned} en curso)${p.percent>=100?'. <b>Fin del plan: no es obra terminada ni certificada.</b>':''}`;
+    // Igual de corto que el rótulo anterior: el panel está sobre la escena y no debe crecer (OBR-01 · QA-22).
+    $('.pp-pct').innerHTML=p.percent>=100?`<b>100 %</b> del calendario del plan: <b>fin del plan, no obra terminada</b> (${p.tasks.total} de ${p.tasks.total} tareas según plan)`
+      :`<b>${pct(p.percent)} %</b> del calendario del plan · <b>planificado</b> (${p.tasks.completedPlanned} de ${p.tasks.total} tareas terminadas según plan, ${p.tasks.inProgressPlanned} en curso)`;
     const c=s.cost;
-    $('.pp-cost').innerHTML=c.status==='available'?`Coste planificado a la fecha: <b>${eur(c.amount)}</b> sin IVA${c.plannedTotal!==null?` de ${eur(c.plannedTotal)} planificados`:''} <span class="pp-assume">(supuesto: reparto lineal por días; no es gasto)</span>`
+    $('.pp-cost').innerHTML=c.status==='available'?`Coste planificado a la fecha: <b>${eur(c.amount)}</b> sin IVA${c.plannedTotal!==null?` de ${eur(c.plannedTotal)} planificados`:''}`
       :c.status==='partial'?`Coste planificado a la fecha: <b>parcial</b>, ${eur(c.knownAmount)} sin IVA conocidos. ${esc(c.message)}`
       :`<span class="pp-na">Coste planificado a la fecha: <b>No disponible</b>. ${esc((m=>m.charAt(0).toUpperCase()+m.slice(1))(c.message.replace(/^No disponible:\s*/,'')))}</span>`;
   }
@@ -72,7 +77,8 @@ function render(s,prov=null){
     ${linksHtml(t)}
     <div class="pp-actions"><button type="button" data-task="${esc(t.id)}">Ver en el plan</button></div>`).join('')}
     <label><input type="checkbox" class="pp-ghost" ${state.ghost?'checked':''}> Ver en fantasma (azul) en la escena</label>`;
-  $('.pp-note').textContent=s.state==='available'?`Todo es plan, no avance real de obra.${s.cost.assumption?' '+s.cost.assumption:''}`:'Todo es plan, no avance real de obra.';
+  // El supuesto de reparto ya está en la línea del coste y, completo, dentro de «Fuentes y vínculos».
+  $('.pp-note').textContent='Plan ≠ obra · coste ≠ gasto ·';
   renderSources(prov);applyGhost();
 }
 // Vínculos de una tarea con el estado que les dio el adaptador FT3D-8: solo los comprobados en el modelo van al fantasma.

@@ -26,7 +26,7 @@ test('caso A: fuentes con revisión y origen declarado; el fantasma son exactame
     assert.match(txt,/no verificable \(C1–C4 no guarda la revisión\)/);assert.match(txt,/Tareas sin elementos del modelo/);
     assert.match(txt,/no obra ejecutada ni certificada/);assert.match(txt,/no es gasto real/);
     assert.match(await page.locator('.plan-preview .pp-pct').innerText(),/del calendario del plan · planificado/);
-    assert.match(await page.locator('.plan-preview .pp-cost').innerText(),/supuesto: reparto lineal por días; no es gasto/);
+    assert.match(await page.locator('.plan-preview .pp-src-d > summary').innerText(),/Plan ≠ obra · coste ≠ gasto/,'se ve sin desplegar nada');
     assert.deepEqual(watch.errors,[]);assert.deepEqual(watch.external,[]);
   }finally{await context.close();}
 });
@@ -34,7 +34,7 @@ test('caso A: fuentes con revisión y origen declarado; el fantasma son exactame
 test('fin del plan: 100 % del calendario, dicho como plan y no como obra terminada',{timeout:180000},async()=>{
   const {context,page,watch}=await K.openEvolution(env);try{
     await at(page,'2028-06-01');const t=await page.locator('.plan-preview .pp-pct').innerText();
-    assert.match(t,/100 % del calendario del plan · planificado/);assert.match(t,/Fin del plan: no es obra terminada ni certificada/);
+    assert.match(t,/100 % del calendario del plan: fin del plan, no obra terminada/);
     assert.match(await page.locator('.plan-preview .pp-exec').innerText(),/Ejecutado: sin registrar/);
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
@@ -85,7 +85,7 @@ test('móvil 390×844: «Fuentes y vínculos» se abre con un toque y no desbord
   const {context,page,watch}=await K.openEvolution(env,{viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:2});try{
     await at(page,DATE);const sum=page.locator('.plan-preview .pp-src-d summary');await sum.scrollIntoViewIfNeeded();
     const hit=await sum.evaluate(el=>{const r=el.getBoundingClientRect(),t=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return {h:r.height,ok:t===el||el.contains(t)};});
-    assert.ok(hit.ok,'la cabecera recibe el toque');assert.ok(hit.h>=36);
+    assert.ok(hit.ok,'la cabecera recibe el toque');assert.ok(hit.h>=24,'objetivo táctil ≥ 24 px (WCAG 2.5.8)');
     await sum.tap();assert.equal(await page.evaluate(()=>document.querySelector('.plan-preview .pp-src-d').open),true);
     assert.equal(await page.evaluate(W=>document.documentElement.scrollWidth<=W+1&&document.querySelector('.plan-preview').getBoundingClientRect().right<=W+1,390),true,'sin desbordar el ancho real');
     assert.deepEqual(watch.errors,[]);
