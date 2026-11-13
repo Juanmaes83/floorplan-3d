@@ -93,14 +93,19 @@ test('A4 cost: the largest cabinet the core allows stays light for a phone (part
 // Before R03-I1 this test began by requiring that index.html loaded NONE of the R03 modules («nothing in RUBIK loads»).
 // The owner authorized the activation (R03-I1): what loads is now pinned to the exact activation manifest, and the rest of
 // the test, which protects ordinary furniture and legacy projects, is unchanged.
-test('A4 loading: index.html loads only the authorized R03-I1 activation, and no other SCULPT stone or laboratory', () => {
-  const A = require('./r03-activation-manifest.cjs'), html = A.indexHtml();
+// Integración R02-A (#223, pendiente del GO del propietario): la única otra piedra SCULPT que puede cargarse es la
+// activación R02-A EXACTA de tests/r02a-activation-manifest.cjs (seis módulos, en orden). Todo lo demás sigue vetado igual
+// que antes: R01, cualquier otro R02, «sculpt», MCP, laboratorios y orígenes externos.
+test('A4 loading: index.html loads only the authorized R03-I1 activation (and the exact R02-A activation), no other SCULPT stone or laboratory', () => {
+  const A = require('./r03-activation-manifest.cjs'), R02A = require('./r02a-activation-manifest.cjs'), html = A.indexHtml();
   const scripts = A.loadedScripts(html), styles = A.loadedStyles(html);
   assert.deepEqual(scripts.filter(s => /r03/i.test(s)), A.SCRIPTS);
   assert.deepEqual(styles.filter(s => /r03/i.test(s)), A.STYLES);
+  assert.deepEqual(scripts.filter(s => /r02/i.test(s)), R02A.SCRIPTS, 'R02-A: exactly its six modules, once each, in order');
+  const r02a = new Set(R02A.SCRIPTS);
   for (const src of [...scripts, ...styles]) {
     assert.doesNotMatch(src, /(^|\/)labs\//, `${src}: no laboratory code in the product`);
-    assert.doesNotMatch(src, /(^|\/)r0(?!3)\d|sculpt|r02a|mcp/i, `${src}: no other SCULPT stone (R01, R02, …) or MCP is activated`);
+    if (!r02a.has(src)) assert.doesNotMatch(src, /(^|\/)r0(?!3)\d|sculpt|r02a|mcp/i, `${src}: no other SCULPT stone (R01, R02, …) or MCP is activated`);
     assert.doesNotMatch(src, /^(https?:)?\/\//, `${src}: same origin`);
   }
   // The laboratory editor (labs/sculpt/r03-editor) is still only a laboratory.
