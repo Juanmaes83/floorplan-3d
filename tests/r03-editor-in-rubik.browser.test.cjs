@@ -64,7 +64,14 @@ test(`R03 dentro de RUBIK ${viewport.width}x${viewport.height}`,{timeout:420000}
   assert.ok(Math.abs(m.h-m.size.heightMm/1000)<0.01,`altura en 3D ${m.h} = ${m.size.heightMm} mm`);assert.ok(m.shelves>10,'piezas reales (casco, baldas, puertas…)');
   // Captura de cerca: la estancia del armario (sus puertas guardadas como «ocultas» dejan ver el interior).
   await page.evaluate(id=>{const f=getF(id);View3D.flyToRoom(roomOf(f.cx,f.cy).id);},WARDROBE);await page.waitForTimeout(1500);
-  await shot('3-3d');await page.evaluate(()=>setView('2d'));await page.waitForTimeout(400);
+  await shot('3-3d');
+  // Y de frente: la cámara delante del armario (su +z local en el mundo), a 1,3 m de altura, mirando a su centro.
+  if(shots)await page.evaluate(async id=>{const THREE=await import('three');const rec=window.__r03Models.filter(m=>m.fid===id&&m.group.parent).at(-1);
+    rec.group.updateWorldMatrix(true,true);const b=new THREE.Box3().setFromObject(rec.group),c=b.getCenter(new THREE.Vector3());
+    const front=new THREE.Vector3(0,0,1).transformDirection(rec.group.matrixWorld).setY(0).normalize(),cam=new THREE.PerspectiveCamera(50,1,.05,100);
+    cam.position.copy(c).addScaledVector(front,3.2).setY(1.2);cam.lookAt(c);
+    View3D.presentationRestorePose({position:cam.position.toArray(),quaternion:cam.quaternion.toArray(),target:c.toArray(),fov:50});},WARDROBE).catch(e=>t.diagnostic('vista frontal no disponible: '+e.message));
+  await page.waitForTimeout(400);await shot('3-3d-frente');await page.evaluate(()=>setView('2d'));await page.waitForTimeout(400);
  }else t.diagnostic('3D no comprobado: falta THREE_LOCAL_DIR');
  // 6 · Deshacer y rehacer de RUBIK.
  await page.evaluate(()=>undo());assert.equal((await proj()).status,'none','deshacer de RUBIK quita el interior');
