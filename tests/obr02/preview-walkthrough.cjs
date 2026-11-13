@@ -16,6 +16,11 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     const rt=document.getElementById('roofToggle');if(rt&&rt.checked===roof)rt.click();document.querySelector('.plan-preview .pp-next-d').open=true;await new Promise(r=>setTimeout(r,800));},[d,v,roofHidden]);
   const panel=page=>page.evaluate(()=>{const s=window.__ft3dPlanPreview.snapshot;return {pct:s.progress?.percent??null,cost:s.cost.status,amount:s.cost.amount,total:s.cost.plannedTotal??null,next:s.next?.tasks?.map(t=>t.wbs)||null,ghost:window.__ft3dFidelity.scene.preview.shown,
     text:document.querySelector('.plan-preview').innerText.replace(/\s+/g,' ').slice(0,300)};});
+  // Lleva a la vista una línea DENTRO del panel (que tiene su propio desplazamiento) sin mover la página: en móvil,
+  // scrollIntoView desplazaba toda la página y la frase quedaba fuera de la captura.
+  const reveal=(page,sel,re)=>page.evaluate(([sel,src])=>{window.scrollTo(0,0);const re=new RegExp(src),el=[...document.querySelectorAll(sel)].find(x=>re.test(x.textContent));if(!el)return false;
+    let sc=el.parentElement;while(sc&&sc!==document.body&&!(sc.scrollHeight>sc.clientHeight+1&&/(auto|scroll)/.test(getComputedStyle(sc).overflowY)))sc=sc.parentElement;
+    if(sc&&sc!==document.body)sc.scrollTop+=el.getBoundingClientRect().top-sc.getBoundingClientRect().top-8;return true;},[sel,re.source]);
   for(const [label,opts] of [['escritorio-1440x900',{viewport:{width:1440,height:900}}],['movil-390x844',{viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:2}]]){
     const context=await browser.newContext({...opts,ignoreHTTPSErrors:true});const page=await context.newPage();page.setDefaultTimeout(60000);
     const errors=[],external=new Set();page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
@@ -72,14 +77,15 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     log.push({paso:'otra revisión con elementos existentes · ningún fantasma hasta reconciliar',viewport:label,fantasma:oth.shown,estados:[...new Set(oth.estados)],nivel:oth.nivel,
       ok:oth.estados.length>0&&oth.estados.every(x=>x==='ok/plan-other-revision')&&oth.keys.length===0&&oth.shown===0&&/Sin fantasma: el plan es de otra revisión/.test(oth.next)
         &&/existe en el proyecto, pero el plan es de otra revisión/.test(oth.next)&&/OTRA revisión/.test(oth.src)&&/hasta reconciliar las fuentes/.test(oth.src)});
-    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;document.querySelector('.plan-preview .pp-next')?.scrollIntoView({block:'start'});});await page.waitForTimeout(200);
-    await shot(page,`5-otra-revision-sin-fantasma-${label}`,{nivel:oth.nivel});
-    await page.evaluate(()=>{const d=document.querySelector('.plan-preview .pp-src-d');d.open=true;d.querySelector('.pp-warn')?.scrollIntoView({block:'center'});});await page.waitForTimeout(200);
+    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;});
+    const vis5=await reveal(page,'.plan-preview .pp-next p',/Sin fantasma: el plan es de otra revisión/);await page.waitForTimeout(200);
+    await shot(page,`5-otra-revision-sin-fantasma-${label}`,{nivel:oth.nivel,fraseALaVista:vis5});
+    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=true;});await reveal(page,'.plan-preview .pp-src-d .pp-warn li, .plan-preview .pp-src-d .pp-warn',/hasta reconciliar las fuentes/);await page.waitForTimeout(200);
     await shot(page,`5b-otra-revision-fuentes-y-avisos-${label}`);
     log.push({paso:'errores de la página',viewport:label,errores:errors,ok:errors.length===0});
     log.push({paso:'hosts externos',viewport:label,hosts:[...external]});
     await context.close();}
   await browser.close();
-  await fs.writeFile(path.join(OUT,'manifest.json'),JSON.stringify({generado:new Date().toISOString(),preview:origin,rama:'review/obr02-obr03-integration-20261112',datos:'sintéticos; precios FICTICIOS',navegador:'Chromium (Playwright, SwiftShader) en la nube, no un dispositivo físico',pasos:log,capturas:shots},null,1));
+  await fs.writeFile(path.join(OUT,'manifest.json'),JSON.stringify({generado:new Date().toISOString(),preview:origin,rama:(()=>{try{const g=a=>require('node:child_process').execFileSync('git',a,{encoding:'utf8'}).trim();return g(['rev-parse','--abbrev-ref','HEAD'])+'@'+g(['rev-parse','--short','HEAD']);}catch{return null;}})(),datos:'sintéticos; precios FICTICIOS',navegador:'Chromium (Playwright, SwiftShader) en la nube, no un dispositivo físico',pasos:log,capturas:shots},null,1));
   console.log(JSON.stringify(log.map(({text,...x})=>x),null,1));
 })().catch(e=>{console.error(e);process.exit(1);});
