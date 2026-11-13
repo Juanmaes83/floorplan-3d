@@ -25,6 +25,13 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     await open(page,'Cargar y abrir con presupuesto');await at(page,'2027-04-14','iso',false);let p=await panel(page);
     log.push({paso:'con presupuesto · % plan, coste planificado y fantasma de la siguiente tarea',viewport:label,...p,ok:p.cost==='available'&&p.amount>0&&p.ghost>0&&/planificado/.test(p.text)&&/Ejecutado: sin registrar/.test(p.text)});
     await shot(page,`1-con-presupuesto-siguiente-en-fantasma-${label}`,{pct:p.pct,coste:p.amount});
+    // 1b · procedencia (auditoría 13/11): fuentes y vínculos, origen sintético declarado, fantasma = vínculos comprobados.
+    const prov=await page.evaluate(()=>{const P=window.__ft3dPlanPreview,d=document.querySelector('.plan-preview .pp-src-d');d.open=true;d.scrollIntoView({block:'nearest'});
+      return {text:d.innerText.replace(/\s+/g,' '),ghostKeys:P.provenance?.ghostKeys?.length??null,shown:window.__ft3dFidelity.scene.preview.shown,next:(P.provenance?.next||[]).map(x=>x.status)};});
+    log.push({paso:'procedencia · fuentes y vínculos (DATOS SINTÉTICOS, huella, plan en borrador, presupuesto no verificable)',viewport:label,fantasma:prov.shown,comprobados:prov.ghostKeys,estados:[...new Set(prov.next)],
+      ok:/DATOS SINTÉTICOS/.test(prov.text)&&/huella SHA-256 [0-9a-f]{12}/.test(prov.text)&&/borrador/.test(prov.text)&&/no verificable/.test(prov.text)&&prov.shown===prov.ghostKeys});
+    await shot(page,`1b-fuentes-y-vinculos-${label}`);
+    await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;});
     // 2 · OBR-01 con el fantasma encendido: clic/toque real en un muro de carga → su ficha.
     await at(page,'2027-04-14','top',true);const key='project/wal_ref-w0';
     const pt=await page.evaluate(k=>{const F=window.__ft3dFidelity,c=document.getElementById('stage').getBoundingClientRect(),b=F.scene.screenBounds(k,{exact:true});if(!b)return null;
@@ -38,6 +45,15 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     await open(page,'Cargar y abrir sin presupuesto');await at(page,'2027-04-14','iso',false);p=await panel(page);
     log.push({paso:'sin presupuesto · coste «No disponible»',viewport:label,...p,ok:p.cost==='unavailable'&&p.amount===null&&/No disponible/.test(p.text)&&!/0,00\s*€/.test(p.text)});
     await shot(page,`3-sin-presupuesto-no-disponible-${label}`);
+    // 4 · adversarial: plan sobre otra revisión con un vínculo a un muro inexistente → avisado y sin fantasma inventado.
+    await open(page,'Cargar y abrir el plan no concordante');
+    const d10=await page.evaluate(()=>{const t=window.__ft3dFidelity.ctx.canon.tasks.find(x=>x.id==='T10');return new Date(Date.parse(t.startDate+'T00:00:00Z')-86400000).toISOString().slice(0,10);});
+    await at(page,d10,'iso',false);
+    const adv=await page.evaluate(()=>{const P=window.__ft3dPlanPreview,d=document.querySelector('.plan-preview .pp-src-d');d.open=true;
+      return {next:document.querySelector('.plan-preview .pp-next').innerText.replace(/\s+/g,' '),src:d.innerText.replace(/\s+/g,' '),keys:window.__ft3dFidelity.scene.preview.keys,warn:P.provenance.warnings.map(w=>w.code)};});
+    log.push({paso:'adversarial · plan no concordante (otra revisión + vínculo roto)',viewport:label,avisos:adv.warn,
+      ok:/no existe en el proyecto: no se dibuja/.test(adv.next)&&!adv.keys.includes('project/wal_no-existe')&&/OTRA revisión/.test(adv.src)&&/Vista interna exploratoria/.test(adv.src)});
+    await shot(page,`4-adversarial-plan-no-concordante-${label}`,{avisos:adv.warn});
     log.push({paso:'errores de la página',viewport:label,errores:errors,ok:errors.length===0});
     log.push({paso:'hosts externos',viewport:label,hosts:[...external]});
     await context.close();}

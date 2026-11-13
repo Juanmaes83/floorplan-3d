@@ -3,7 +3,9 @@
    examen FT3D-8, la misma de las pruebas). Dos casos:
    - «con presupuesto»: un presupuesto C1–C4 generado por el borrador real (FloorPlanBudgetDraft) con PRECIOS FICTICIOS
      de prueba, cuyas partidas se asignan a tareas del plan (enlace verificable → coste planificado a la fecha);
-   - «sin presupuesto»: el mismo plan sin presupuesto (→ «No disponible», nunca 0).
+   - «sin presupuesto»: el mismo plan sin presupuesto (→ «No disponible», nunca 0);
+   - «adversarial»: el mismo presupuesto con un plan NO CONCORDANTE: hecho sobre otra revisión del proyecto y con un
+     vínculo de la tarea 10 a un elemento que no existe (→ avisos, sin fantasma inventado, presentación «interna»).
    Uso: node tests/obr02/build-review-fixture.cjs */
 const fs=require('node:fs'),path=require('node:path');
 const FX=require('../obr01/obra-fixture.cjs');
@@ -26,11 +28,17 @@ const TASK_OF={floors:'T09',walls:'T10',partitions:'T04',carpentry:'T07'};
   const store=R.putSchedule(R.empty(),base.entry.id,base.subject,validated,{at:'2026-11-12T10:00:00Z'});
   const conPresupuesto={...base.storage,[R.KEY]:JSON.stringify(store),'rubik-budget-v1':JSON.stringify({[project.id]:budget})};
   const sinPresupuesto={...base.storage,'rubik-budget-v1':JSON.stringify({})};
+  // Adversarial: plan válido según el contrato, pero no concordante con el proyecto (otra revisión + vínculo roto).
+  const bad=JSON.parse(JSON.stringify(validated));bad.id=bad.id+'-no-concordante';bad.projectRef.revision='0'.repeat(64);
+  const t10=bad.tasks.find(t=>t.id==='T10');t10.elements=[...t10.elements,{elementId:'project/wal_no-existe',role:'finish'}];
+  const storeBad=R.putSchedule(R.empty(),base.entry.id,base.subject,S.validate(bad),{at:'2026-11-12T10:00:00Z'});
+  const adversarial={...base.storage,[R.KEY]:JSON.stringify(storeBad),'rubik-budget-v1':JSON.stringify({[project.id]:budget})};
   const cases={
     con:{title:'Vivienda del examen con presupuesto de prueba (precios ficticios) enlazado al plan',storage:conPresupuesto,url:base.url},
     sin:{title:'La misma vivienda sin presupuesto',storage:sinPresupuesto,url:base.url},
+    adversarial:{title:'La misma vivienda con un plan NO concordante (otra revisión y un vínculo roto)',storage:adversarial,url:base.url},
   };
   const out=path.join(__dirname,'..','..','review-obr02','obra.js');
-  fs.writeFileSync(out,'/* GENERADO por tests/obr02/build-review-fixture.cjs — datos SINTÉTICOS y precios FICTICIOS de prueba, no de clientes. */\nwindow.OBR02_REVIEW='+JSON.stringify({generated:'2026-11-12',cases})+';\n');
+  fs.writeFileSync(out,'/* GENERADO por tests/obr02/build-review-fixture.cjs — datos SINTÉTICOS y precios FICTICIOS de prueba, no de clientes. */\nwindow.OBR02_REVIEW='+JSON.stringify({generated:'2026-11-13',cases})+';\n');
   console.log(out,fs.statSync(out).size,'bytes',budget.items.length,'partidas');
 })().catch(e=>{console.error(e);process.exit(1);});
