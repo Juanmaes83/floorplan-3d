@@ -91,3 +91,22 @@ test('móvil 390×844: «Fuentes y vínculos» se abre con un toque y no desbord
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
+
+/* Regresión hallada en el recorrido de la Preview (13/11): en el móvil, con «Siguiente tarea» desplegada, el panel tapaba
+   casi todo el escenario y uno de sus botones recibía el toque destinado al muro de carga (OBR-01 · EX-05.3). */
+test('móvil 390×844: con la siguiente tarea desplegada, el panel no pasa del 45 % del escenario y el toque en el muro lo selecciona',{timeout:240000},async()=>{
+  const O=require('./obr01/browser-kit.cjs'),env1=await O.start();
+  try{const {context,page,watch}=await O.openEvolution(env1,{viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:2});try{
+    const r=await page.evaluate(async()=>{const F=window.__ft3dFidelity;F.scene.setAuto(false);F.setDate('2027-04-14');document.querySelector('[data-view="top"]').click();
+      const rt=document.getElementById('roofToggle');if(rt&&rt.checked)rt.click();document.querySelector('.plan-preview .pp-next-d').open=true;await new Promise(r=>setTimeout(r,800));
+      const st=document.getElementById('stage').getBoundingClientRect(),pn=document.querySelector('.plan-preview').getBoundingClientRect();
+      const k='project/wal_ref-w0',b=F.scene.screenBounds(k,{exact:true});let pt=null;
+      if(b)outer:for(let i=0;i<=12;i++)for(let j=0;j<=12;j++){const nx=b.x0+(b.x1-b.x0)*i/12,ny=b.y0+(b.y1-b.y0)*j/12,x=st.left+(nx+1)/2*st.width,y=st.top+(1-ny)/2*st.height;
+        if(x>st.left&&x<st.right&&y>st.top&&y<st.bottom&&F.scene.pick(x,y)===k){pt={x,y};break outer;}}
+      return {ratio:pn.height/st.height,pt};});
+    assert.ok(r.ratio<=0.46,`el panel ocupa ${(r.ratio*100).toFixed(0)} % del escenario`);assert.ok(r.pt,'el muro es alcanzable');
+    await page.touchscreen.tap(r.pt.x,r.pt.y);await page.waitForTimeout(500);
+    assert.equal(await page.evaluate(()=>{const b=document.getElementById('pickInfo');return b.hidden?null:b.dataset.key;}),'project/wal_ref-w0');
+    assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}}finally{await env1.stop();}
+});
