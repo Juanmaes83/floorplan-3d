@@ -41,6 +41,7 @@ const style=document.createElement('style');style.textContent=`
 .plan-preview .pp-actions button{min-height:36px;padding:0 10px;border:1px solid #c9c6bf;border-radius:6px;background:#fff;font:inherit;cursor:pointer}
 /* «Fuentes y vínculos» ocupa la línea de la nota que ya existía (no añade altura al panel): el panel está sobre la escena
    y cada fila con controles quita superficie al clic en el lienzo (OBR-01 · QA-22, CI de #211). Objetivo táctil ≥ 24 px. */
+.plan-preview .pp-ghost-off{color:#5b6166}.plan-preview .pp-ghost-why{margin:.1em 0 .3em;color:#7a4a12}
 .plan-preview .pp-src-d{margin-top:2px}.plan-preview .pp-src-d>summary{min-height:24px;font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:#5b6166}
 .plan-preview .pp-src-d>summary b{color:#0f6f82}.plan-preview .pp-note{font-size:11px;color:#5b6166}
 .plan-preview .pp-src dl{margin:.2em 0;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}.plan-preview .pp-src dt{font-weight:700}.plan-preview .pp-src dd{margin:0}
@@ -80,10 +81,19 @@ function render(s,prov=null){
     <p>${t.dependsOn.length?'Depende de: '+t.dependsOn.map(d=>`${esc(d.wbs||'')} ${esc(d.title||d.taskId)} (${DEP[d.type]}${d.lagDays?`, ${d.lagDays>0?'+':''}${d.lagDays} d`:''}; ${PRED[d.predecessorPlanned]})`).join(' · '):'Sin dependencias declaradas.'}</p>
     ${linksHtml(t)}
     <div class="pp-actions"><button type="button" data-task="${esc(t.id)}">Ver en el plan</button></div>`).join('')}
-    <label><input type="checkbox" class="pp-ghost" ${state.ghost?'checked':''}> Ver en fantasma (azul) en la escena</label>`;
+    ${ghostToggle(prov)}`;
   // El supuesto de reparto ya está en la línea del coste y, completo, dentro de «Fuentes y vínculos».
   $('.pp-note').textContent='Plan ≠ obra · coste ≠ gasto ·\u00a0';
   renderSources(prov);applyGhost();
+}
+// Casilla del fantasma. Con un plan de otra revisión no se dibuja nada aunque la casilla esté marcada: se deshabilita y dice
+// por qué, para no dar a entender que hay algo dibujado (auditoría #219). La preferencia de la persona (state.ghost) se
+// conserva para cuando el plan vuelva a concordar.
+function ghostToggle(prov){
+  const blocked=(prov?.warnings||[]).some(w=>w.code==='plan-other-revision');
+  return blocked?`<label class="pp-ghost-off"><input type="checkbox" class="pp-ghost" disabled aria-describedby="ppGhostWhy"> Ver en fantasma (azul) en la escena</label>
+    <p id="ppGhostWhy" class="pp-ghost-why">No disponible: el plan es de otra revisión del proyecto; no se dibuja nada hasta reconciliar las fuentes.</p>`
+    :`<label><input type="checkbox" class="pp-ghost" ${state.ghost?'checked':''}> Ver en fantasma (azul) en la escena</label>`;
 }
 // Vínculos de una tarea con el estado que les dio el adaptador FT3D-8: solo los comprobados en el modelo van al fantasma.
 function linksHtml(t){

@@ -56,7 +56,8 @@ test('adversarial: plan sobre otra revisión y con un vínculo inexistente → a
     assert.match(await page.locator('.plan-preview .pp-next').innerText(),/el identificador no existe en el proyecto: no se dibuja \(project\/wal_no-existe\)/);
     const txt=await openSources(page);
     assert.match(txt,/hecho sobre OTRA revisión del proyecto/);assert.match(txt,/apuntan a elementos que no existen en el proyecto/);
-    assert.match(txt,/Nivel de la presentación\s*Vista interna exploratoria/);
+    assert.match(txt,/Nivel de la presentación\s*Vista interna exploratoria · plan de otra revisión · no validado sobre la actual/);
+    assert.equal(await page.locator('.plan-preview .pp-ghost').isDisabled(),true);
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
@@ -85,7 +86,17 @@ test('cierre del adversarial: plan de OTRA revisión que cita elementos que SÍ 
     // (prueba anterior) baja a «Vista interna exploratoria».
     const lvl=await page.evaluate(()=>{const m=window.__ft3dFidelity.ctx.model;return {level:m.delivery.level,blockers:m.delivery.blockers};});
     assert.equal(lvl.level,'orientative');assert.ok(lvl.blockers.includes('schedule-revision-not-current')||lvl.blockers.includes('project-revision-not-current'),JSON.stringify(lvl.blockers));
-    assert.match(txt,/Nivel de la presentación\s*Presentación orientativa \(plan sin revisión declarada o incompleto\)/);
+    assert.match(txt,/Nivel de la presentación\s*Presentación orientativa \(plan sin revisión declarada o incompleto\) · plan de otra revisión · no validado sobre la actual/);
+    // La casilla del fantasma no da a entender que hay algo dibujado: deshabilitada y con el motivo a la vista.
+    const tg=await page.evaluate(()=>{const i=document.querySelector('.plan-preview .pp-ghost'),w=document.getElementById(i.getAttribute('aria-describedby')||'');
+      return {disabled:i.disabled,checked:i.checked,why:w?.textContent||null,whyVisible:!!w&&w.getBoundingClientRect().height>0};});
+    assert.equal(tg.disabled,true);assert.equal(tg.checked,false);assert.ok(tg.whyVisible);
+    assert.match(tg.why,/No disponible: el plan es de otra revisión del proyecto; no se dibuja nada hasta reconciliar las fuentes/);
+    // Al volver a un plan concordante, la preferencia de la persona se conserva y el fantasma vuelve.
+    await page.evaluate(async d=>{const F=window.__ft3dFidelity,c=JSON.parse(JSON.stringify(F.ctx.input));c.schedule.projectRef.revision=F.ctx.model.fingerprints.project;
+      await F.show(c,{...F.ctx.meta});F.scene.setAuto(false);F.setDate(d);await new Promise(r=>setTimeout(r,500));},DATE);
+    const back=await page.evaluate(()=>{const i=document.querySelector('.plan-preview .pp-ghost');return {disabled:i.disabled,checked:i.checked,shown:window.__ft3dFidelity.scene.preview.shown};});
+    assert.deepEqual({disabled:back.disabled,checked:back.checked},{disabled:false,checked:true});assert.ok(back.shown>0,'con la revisión concordante vuelve el fantasma');
     // Nada inventado: ni avance ejecutado ni vínculos documentales.
     assert.equal(await page.evaluate(()=>window.__ft3dPlanPreview.snapshot.executed.status),'not-recorded');
     assert.match(txt,/RUBIK no registra avance real de obra; todo lo de aquí es plan/);
