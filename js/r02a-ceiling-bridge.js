@@ -23,6 +23,7 @@
     return pass(X.confirmItem(project, request, { confirm: true, ...(confirmedAt ? { confirmedAt } : {}) }));
   }
   const setReference = (project, ref) => pass(X.setVerticalReference(project, ref));
+  const clearReference = (project, scope) => pass(X.removeVerticalReference(project, scope));
   const remove = (project, id) => {
     if (!X.extension(project).items.some(i => i && i.id === id)) return refuse([{ code: 'unknown-item', message: 'Ese elemento de techo no está guardado.' }]);
     return pass(X.removeItem(project, id));
@@ -53,6 +54,6 @@
   const afterLoad = (project, opts) => X.recheck(project, opts);
   const NOTICE = Object.freeze({ kind: 'info', text: 'Elementos de techo experimentales: posición y altura revisables por una persona. No comprueba la altura de paso, instalaciones ni normativa.' });
 
-  const api = Object.freeze({ confirm, setReference, remove, afterRoomsChanged, afterEdit, afterLoad, NOTICE });
+  const api = Object.freeze({ confirm, setReference, clearReference, remove, afterRoomsChanged, afterEdit, afterLoad, NOTICE });
   if (node) module.exports = api; else root.RubikCeilingBridge = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

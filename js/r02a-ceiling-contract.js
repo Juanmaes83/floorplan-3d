@@ -103,6 +103,14 @@
     const item = { id: p.id, type: p.type, roomId: p.roomId, position: { ...p.position }, rotationDeg: p.rotationDeg, size: { ...p.size }, sizeSource: p.sizeSource, dropMm: p.mount.dropMm, curtainLengthMm: p.kind === 'curtain' ? p.mount.curtainLengthMm : null, review: 'human-confirmed', confirmedAt };
     return withExt(project, ext.verticalReferences, ext.items.filter(x => x.id !== item.id).concat([item]));
   }
+  // Integración R02-A (13/11/2026): retirar una referencia mal introducida. Sin ella, sus elementos pasan a «pendiente de
+  // datos» al recomprobarlos (no se mueven ni se borran); quitar algo que no existe es un rechazo explicado.
+  function removeVerticalReference(project, { scope, roomId } = {}) {
+    const blocked = writable(project); if (blocked) return blocked;
+    const ext = extension(project), match = v => v.scope === scope && (v.roomId || '') === (scope === 'room' ? roomId || '' : '');
+    if (!ext.verticalReferences.some(match)) return refuse([issue('unknown-reference', 'No hay ninguna referencia guardada con ese ámbito.')]);
+    return withExt(project, ext.verticalReferences.filter(v => !match(v)), ext.items);
+  }
   function removeItem(project, id) { const blocked = writable(project); if (blocked) return blocked; const ext = extension(project); return withExt(project, ext.verticalReferences, ext.items.filter(x => x.id !== id)); }
   // Entries whose room no longer exists (a reader that ignores the extension may delete rooms).
   function orphans(project) { const ext = extension(project), rooms = new Set((project.rooms || []).map(r => r.id)); return ext.status !== 'present' ? [] : [...ext.items.filter(i => isObj(i) && !rooms.has(i.roomId)).map(i => i.id), ...ext.verticalReferences.filter(r => isObj(r) && r.scope === 'room' && !rooms.has(r.roomId)).map(r => 'ref:' + r.roomId)]; }
@@ -132,6 +140,6 @@
     const holding = items.filter(x => x.holds).length;
     return { status: 'present', items, holding, failing: items.length - holding, orphans: [...gone] };
   }
-  const api = { KEY, VERSION, extension, validateExtension, verticalFor, setVerticalReference, confirmItem, removeItem, orphans, prune, asRequests, recheck };
+  const api = { KEY, VERSION, extension, validateExtension, verticalFor, setVerticalReference, removeVerticalReference, confirmItem, removeItem, orphans, prune, asRequests, recheck };
   if (node && module.exports) module.exports = api; else root.RubikCeilingContract = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
