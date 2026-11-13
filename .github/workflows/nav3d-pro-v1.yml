@@ -1,0 +1,57 @@
+name: NAV3D V1 - professional 3D navigation (Wave 2, cut 2a)
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/nav3d-*.js
+      - css/nav3d.css
+      - js/presentation-core.js
+      - js/presentation-ui.js
+      - js/building-ui.js
+      - js/project-core.js
+      - js/r02a-*.js
+      - js/r03-*.js
+      - css/design-system.css
+      - tests/nav3d*.cjs
+      - tests/nav3d/**
+      - tests/r02a/editor-kit.cjs
+      - tests/fixtures/building-fixture.cjs
+      - vendor/three/**
+      - .github/workflows/nav3d-pro-v1.yml
+permissions:
+  contents: read
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/nav3d-*.js; do node --check "$f"; done
+      - name: Navigation core and the activation guards of R03 and R02-A (I0/I1/A4) with NAV3D loaded
+        run: node --test --test-concurrency=1 tests/nav3d-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/nav3d-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real editor - full journey (desktop, phone portrait and landscape), unreachable room, building, presentation and WebGL loss
+        run: node --test --test-concurrency=1 tests/nav3d.browser.test.cjs
+      - name: Existing walk and 3D controls keep working
+        run: node --test --test-concurrency=1 tests/walk.browser.test.cjs tests/walk-controls.browser.test.cjs

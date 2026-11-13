@@ -1,0 +1,49 @@
+/* NAV3D V1 · panel de navegación 3D y minimapa del paseo (js/nav3d-ui.js). Escritorio: tarjeta compacta arriba a la
+   izquierda del escenario. Teléfono: una pastilla que se despliega como hoja superior con desplazamiento propio. El
+   minimapa del paseo va arriba a la derecha: nunca tapa el joystick (abajo izquierda) ni «Salir del paseo» (abajo
+   derecha) ni la barra del paseo de la Presentación (arriba al centro). */
+.nav3d{position:absolute;top:52px;left:12px;z-index:13;width:min(300px,calc(100% - 24px));max-height:calc(100% - 64px);display:flex;flex-direction:column;
+  background:rgba(255,253,249,.97);border:1px solid var(--line,#d8d2c8);border-radius:12px;box-shadow:0 8px 30px #2b282433;font-size:13px;color:var(--ink,#1f1d1a);min-width:0}
+.nav3d[hidden],.nav3d-map[hidden],.nav3d-map-panel[hidden],.nav3d-body[hidden],.nav3d-row[hidden]{display:none}
+.nav3d:not(.open){width:auto;max-width:calc(100% - 24px)}
+.nav3d-toggle{min-height:40px;width:100%;justify-content:flex-start;text-align:left;font-weight:700;border:0;background:transparent;padding:6px 12px}
+.nav3d-body{overflow-y:auto;overscroll-behavior:contain;padding:0 10px 10px;display:grid;gap:8px;min-width:0}
+.nav3d-row{display:grid;gap:4px;min-width:0}
+.nav3d-label{font-size:11px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--muted,#6b6257)}
+.nav3d-buttons{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
+.nav3d-buttons .btn{flex:1 1 auto;min-width:0;min-height:36px;border:1px solid var(--line,#d8d2c8);overflow-wrap:anywhere;padding:4px 8px}
+.nav3d-buttons .btn[aria-pressed=true]{background:#1f4d4f;color:#fff;border-color:#1f4d4f}
+.nav3d-buttons .btn:disabled{opacity:.5;cursor:not-allowed}
+.nav3d-buttons .btn:focus-visible,.nav3d select:focus-visible,.nav3d-toggle:focus-visible,.nav3d-map-toggle:focus-visible{outline:2px solid #103f9d;outline-offset:2px}
+.nav3d select{width:100%;min-width:0;min-height:36px;font:inherit;border:1px solid var(--line,#d8d2c8);border-radius:8px;background:#fff;padding:4px 6px}
+.nav3d-note{margin:0;font-size:12px;line-height:1.35;color:var(--muted,#6b6257)}
+.nav3d-status{margin:0;font-size:12px;line-height:1.35;min-height:1.35em;color:#184e52;font-weight:600}
+.nav3d-status:empty{display:none}
+/* Escritorio: el panel queda bajo la barra de ayuda del 3D (#hint3d, arriba al centro) y por encima de las etiquetas.
+   Minimapa del paseo: bajo «Capas de contexto» (arriba a la derecha) y por encima de la capa de la Presentación (z 15)
+   para servir también a su paseo. */
+.nav3d-map{position:absolute;top:60px;right:8px;z-index:16;width:min(220px,calc(100% - 24px));padding:6px;background:rgba(255,253,249,.97);border:1px solid var(--line,#d8d2c8);border-radius:12px;box-shadow:0 8px 30px #2b282433;pointer-events:auto}
+.nav3d-map.collapsed{width:auto}
+.nav3d-map-toggle{width:100%;min-height:36px;border:1px solid var(--line,#d8d2c8)}
+.nav3d-map-panel{margin-top:6px}
+.nav3d-map svg{display:block;width:100%;height:150px;background:#f2f0ea;border-radius:6px}
+.nav3d-map-room{fill:#dfded8;stroke:#605f5a;stroke-width:55;stroke-linejoin:round}
+.nav3d-map-room.active{fill:#9fcfca;stroke:#184e52;stroke-width:80}
+.nav3d-map-dot{fill:#d13932;stroke:#fff;stroke-width:40}
+.nav3d-map-cone{fill:#d13932;fill-opacity:.35;stroke:#d13932;stroke-width:30}
+.nav3d-map-caption{margin:4px 2px 0;font-size:12px;font-weight:600;overflow-wrap:anywhere;color:#184e52}
+.nav3d-map[data-state=unknown] .nav3d-map-caption,.nav3d-map[data-state=outside] .nav3d-map-caption{color:#7a3b10}
+@media (max-width:699px),(max-height:500px){
+  .nav3d{top:8px;left:8px;max-height:calc(100% - 96px);width:min(300px,calc(100% - 16px))}
+  .nav3d:not(.open){max-width:calc(100% - 16px - 150px)}
+  .nav3d-toggle{min-height:44px}
+  .nav3d-buttons .btn,.nav3d select{min-height:44px}
+  .nav3d-map{top:60px;right:8px;width:140px;padding:4px}
+  .nav3d-map svg{height:96px}
+  .nav3d-map-toggle{min-height:40px;font-size:12px;padding:2px 4px}
+}
+@media (max-height:500px){.nav3d{max-height:calc(100% - 16px);width:min(280px,45%)}.nav3d-map svg{height:80px}}
+/* Paseo en el teléfono: el joystick y «Salir del paseo» quedan por encima de la barra inferior fija (js/nav3d-ui.js mide
+   cuánto invade; 0 cuando no hay barra o no se camina). */
+#stage #joy,#stage #walkExit{bottom:calc(28px + var(--nav3d-dock-clear,0px))}
+@media (prefers-reduced-motion:reduce){.nav3d *{transition:none!important}}
