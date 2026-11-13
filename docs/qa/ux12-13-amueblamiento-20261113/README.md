@@ -81,3 +81,25 @@ Generar, cambiar de receta, ver en 2D/3D y descartar **no modifican el proyecto*
 - Usos con programa en V1: salón, dormitorio, comedor y despacho. Cocina y baño se rechazan con un mensaje.
 - El historial de deshacer de RUBIK es de la sesión: tras recargar no se puede deshacer lo aplicado antes, pero los muebles siguen y se borran uno a uno.
 - Pruebas con Chromium de Playwright, sin dispositivos físicos.
+
+## Evidencias
+
+**Capturas** del flujo real (generadas por `scripts/qa/record-smart-furnishing.cjs`):
+
+| | |
+|---|---|
+| ![Propuesta Nórdico claro](escritorio-1440x900-03-propuesta-nordico.png) Propuesta «Nórdico claro» en 2D, con cifras y reglas | ![Urbano compacto](escritorio-1440x900-05-urbano-diferencias.png) Cambio a «Urbano compacto»: diferencias enumeradas |
+| ![Propuesta en 3D](escritorio-1440x900-06-propuesta-3d.png) La propuesta en 3D antes de aplicar (cajas translúcidas) | ![Aplicado en 3D](escritorio-1440x900-08-aplicado-3d.png) Aplicada: muebles reales del editor en 3D |
+| ![Rechazo](escritorio-1440x900-12-rechazo-sin-espacio.png) Rechazo legítimo: no cabe, nada cambia | ![Móvil 2D](movil-390x844-04-propuesta-2d.png) ![Móvil 3D](movil-390x844-06-aplicado-3d.png) Móvil 390×844 táctil |
+
+**Vídeos** (escritorio 1440×900 y móvil 390×844), **todas las capturas** y **`manifest.json`**:
+- se suben como artefacto `smart-furnishing-<SHA>` del workflow *UX-12 + UX-13 smart furnishing*;
+- no se guardan en el repositorio.
+
+**Qué registra el manifiesto:**
+- HEAD y versión de Chromium;
+- resolución de cada vídeo;
+- cada paso con su resultado;
+- duración y tamaño medidos con `ffprobe`;
+- errores de consola y fallos de red;
+- los eventos del propio panel, que prueban que la propuesta y la aplicación salieron de los clics.
