@@ -132,4 +132,11 @@ $('verifyBtn').addEventListener('click',async()=>showChecks($('verifyOut'),await
 $('verifyFilesBtn').addEventListener('click',async()=>{try{const h=$('vHtml').files[0],m=$('vManifest').files[0];if(!h||!m)throw Error('Elige el HTML y su manifiesto.');
   showChecks($('verifyFilesOut'),await D.verify(await h.text(),JSON.parse(await m.text())));}catch(e){$('verifyFilesOut').innerHTML=`<li data-ok="false">✗ ${esc(e.message)}</li>`;}});
 updateDeclare();
+// Apertura desde Variantes (FloorPlanVariantsCompare.handoff): ?src=library&before=<entrada>&after=<entrada>. Solo lectura:
+// se eligen esas dos entradas de la biblioteca de este navegador y se compara; si no existen, se dice y no se muestra nada.
+(function(){const q=new URLSearchParams(location.search);if(q.get('src')!=='library'||!q.get('before')||!q.get('after'))return;
+  const radio=document.querySelector('input[name=src][value=library]');radio.checked=true;state.src='library';$('pickLibrary').hidden=false;$('pickFiles').hidden=true;fillLibrary();updateDeclare();
+  const ids=libraryEntries().map(e=>e.id),missing=[q.get('before'),q.get('after')].filter(id=>!ids.includes(id));
+  if(missing.length){$('srcError').textContent=`No están en la biblioteca de este navegador: ${missing.join(', ')}.`;return;}
+  $('libBefore').value=q.get('before');$('libAfter').value=q.get('after');doCompare();})();
 })();
