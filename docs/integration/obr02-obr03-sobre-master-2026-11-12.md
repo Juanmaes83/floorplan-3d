@@ -117,3 +117,66 @@ CI de la PR: ver la propia PR.
 | Errores de página / hosts externos | 0 / 0 | 0 / 0 |
 
 **Observación de UX para el GO visual (no bloquea):** en el móvil, con «Siguiente tarea» desplegada, el panel ocupa buena parte del escenario. Por defecto está plegado y deja pasar los clics a la escena.
+
+## 8. Procedencia verificable — auditoría del propietario del 13/11/2026
+
+**Objeción del propietario:** la vista 4D es útil, pero no debe presentarse como fiel a la obra sin trazabilidad desde proyecto/plano → tareas WBS → elementos 3D → partidas C1–C4.
+
+**Respuesta, sin autoridad nueva:** `FloorPlanPlanPreview.provenance()` ordena lo que el adaptador FT3D-8 **ya comprueba** (`FloorPlanConstructionProject.evaluate`: `links`, `coverage`, `fingerprints`, `planning`, `costs`, `delivery`). El panel «Plan a la fecha» lo muestra en la sección plegada **Fuentes y vínculos**.
+
+| Criterio del propietario | Cómo queda |
+|---|---|
+| 1 · Procedencia de los datos | Por cada fuente, se muestra lo siguiente.<br>**Proyecto:** nombre, huella SHA-256 y origen **declarado** por quien abre la vista («FIXTURE de prueba…», «Proyecto guardado en tu biblioteca», «importado»).<br>**Plan:** identificador, nº de tareas, borrador o revisado, si se hizo **sobre esta revisión** del proyecto y origen declarado de las tareas.<br>**Presupuesto C1–C4:** identificador, comprobación de revisión («no verificable: C1–C4 no guarda la revisión»), origen de los precios, % del importe conocido asignado a tareas y partidas sin tarea.<br>**Vínculo profesional y nivel de la presentación.** |
+| 2 · No inventar; planificado ≠ ejecutado | **Anillo:** «% del **calendario** del plan · planificado». Al final, «Fin del plan: no es obra terminada ni certificada».<br>**Coste:** «(supuesto: reparto lineal por días; no es gasto)».<br>**Ejecutado:** «sin registrar».<br>Sin presupuesto verificable, «No disponible», nunca 0. |
+| 3 · Sin vínculo fiable, sin fantasma | El fantasma usa **solo** los vínculos que el adaptador marca `ok`. Antes de este cambio, usaba cualquier `elementId` del plan.<br>`broken` (no existe), `not-representable` e `illustrative` se listan con su motivo y **no se dibujan**.<br>Las tareas sin elementos y sin partidas se nombran. |
+| 4 · Pruebas | Tarea → elementos 3D reales (selección y fantasma = vínculos `ok`).<br>Proyecto A → C sin fantasmas ni procedencia del anterior.<br>**Adversarial:** plan válido hecho sobre otra revisión y con un vínculo a un muro inexistente → avisos, sin fantasma y nivel «Vista interna exploratoria». |
+| 5 · Demostración rotulada SINTÉTICA | En la Evolución: «DATOS SINTÉTICOS de prueba» cuando el origen declarado es una fixture.<br>En la Preview de revisión: aviso «DEMOSTRACIÓN SINTÉTICA», tabla de fuentes y vínculos y caso 3 adversarial.<br>Protocolo para un expediente real autorizado: §9. |
+
+**Lo que esto no demuestra:** con datos sintéticos no se puede concluir ni la fidelidad a una obra real ni su falta. El dibujo técnico estilizado del 3D no equivale a una falta de correspondencia geométrica, y tampoco la prueba.
+
+**Pruebas nuevas:**
+- `tests/obr02-obr03-provenance.test.cjs` (6, núcleo):
+  - coherente;
+  - adversarial;
+  - sin representación (la cubierta real del caso D) e ilustrativo;
+  - sin plan, y plan o presupuesto de otro proyecto;
+  - reparto incompleto;
+  - no muta.
+- `tests/obr02-obr03-provenance.browser.test.cjs` (6):
+  - fuentes;
+  - fin del plan;
+  - adversarial en la Evolución;
+  - A → C;
+  - selección de tareas;
+  - móvil 390×844.
+
+**Pruebas existentes:** solo se precisaron selectores (ahora hay dos secciones plegables) y el texto del anillo al nuevo rótulo. No se suavizó ninguna aserción.
+
+## 9. Protocolo de prueba con un expediente real autorizado (pendiente de que exista)
+
+No se ha usado ningún dato real. Cuando el propietario autorice un expediente:
+
+1. **Autorización y custodia:**
+   - autorización escrita del titular;
+   - los datos se cargan **solo en la biblioteca local** de un navegador de prueba;
+   - no se suben al repositorio, ni a una Preview, ni a una captura sin anonimizar.
+2. **Entradas:**
+   - proyecto RUBIK dibujado desde los planos del expediente, con su escala verificada (dos cotas);
+   - plan WBS del profesional, con `task.source` apuntando al documento (p. ej. «Planning v3, 2026-10-02»);
+   - presupuesto C1–C4 con el origen real de los precios;
+   - vínculo profesional (`binding`) que fije las huellas de proyecto, plan y presupuesto.
+3. **Comprobaciones en «Fuentes y vínculos»:**
+   - huella del proyecto = la del vínculo;
+   - plan «hecho sobre esta revisión»;
+   - ningún vínculo `broken`;
+   - lista de tareas sin elementos o sin partidas revisada con el profesional (¿falta modelar o no aplica?);
+   - % del importe asignado a tareas;
+   - nivel de presentación declarado.
+4. **Contraste humano:** para 3 tareas, comparar con el documento original:
+   - elementos resaltados en 3D;
+   - fechas;
+   - partidas e importe asignado.
+5. **Adversarial con el expediente:**
+   - modificar una cota del proyecto: el plan pasa a «otra revisión»;
+   - citar un elemento borrado: aparece `broken`.
+6. **Resultado:** acta con la huella del proyecto (no los datos) y la firma del profesional. Solo entonces cabría hablar de fidelidad documental de ese expediente.
