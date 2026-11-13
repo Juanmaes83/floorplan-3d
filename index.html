@@ -1813,6 +1813,7 @@ function furnPanel(f){
     <div class="muted" style="margin-top:8px">${tr('占地面积','Footprint')} ${fmt(f.w*f.d/1e6)} m²</div></details>
   <details class="panel-group panel-help" data-group="furn-help"><summary>Cómo moverlo en el plano</summary><section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section></details></div>
   <div class="panel-foot actions"><div class="panel-foot-row"><button class="btn" id="aRot">${tr('旋转 90°','Rotate 90°')}</button><button class="btn" id="aDup">${tr('复制','Duplicate')}</button><button class="btn danger" id="aDel">${tr('删除','Delete')}</button></div>
+    ${window.RubikCabinetBridge?.isCabinet(project.objects.find(o=>o.id===f.id))?`<div class="panel-foot-row"><button class="btn" id="aInterior">Interior del armario…</button></div>`:''}
     <div class="panel-foot-row"><button class="btn" id="aTop">${tr('置于顶层','Bring to front')}</button><button class="btn" id="aBot">${tr('置于底层','Send to back')}</button></div></div></div>`;
 }
 function bindFurnPanel(f){
@@ -1829,6 +1830,8 @@ function bindFurnPanel(f){
   $('#aRot').onclick = () => rotateSel(90);
   $('#aDup').onclick = duplicateSel;
   $('#aDel').onclick = deleteSel;
+  $('#aInterior')?.addEventListener('click', e => window.RubikCabinetRubikUI.open({objectId:f.id, getProject:()=>project, opener:e.currentTarget,
+    commit:next => { let r=null; mutate(() => { r=next(); if (!r.ok) throw Error(r.explanation.join(' ')); project=r.project; }); return r?.ok ? r : {ok:false, message:r?.explanation?.join(' ')}; }}));
   $('#aTop').onclick = () => mutate(() => { const i = state.furniture.findIndex(g => g.id===f.id); state.furniture.push(...state.furniture.splice(i,1)); });
   $('#aBot').onclick = () => mutate(() => { const i = state.furniture.findIndex(g => g.id===f.id); state.furniture.unshift(...state.furniture.splice(i,1)); });
   const room = roomOf(f.cx, f.cy);bindPanelHead();
@@ -1844,13 +1847,13 @@ function showProperties(){ if (!narrow() && ui.sel) drawer('panel', true); }
 // Selecting a door or window opens its properties directly (decision 19-10-2026): no extra «Propiedades».
 function openOpening(id){ select({kind:'opening', id}); drawer('panel', true); $('#openingTitle')?.focus({preventScroll:true}); }
 function rotateSel(d){ if (ui.sel?.kind==='furn') mutate(() => { const f = getF(ui.sel.id); f.rot = norm(f.rot + d); }); }
-function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel = null; mutate(() => state.furniture = state.furniture.filter(f => f.id !== id)); } }
+function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel = null; mutate(() => { state.furniture = state.furniture.filter(f => f.id !== id); const r=window.RubikCabinetBridge?.afterDelete(project); if (r?.ok) project=r.project; }); } }
 function duplicateSel(){
   if (ui.sel?.kind !== 'furn') return;
   const f = getF(ui.sel.id), n = Core.decorate(Core.clone(f)); n.id=uid(); n.cx+=200; n.cy+=200;
   const place = placeFurniture(n, {x:n.cx, y:n.cy}); if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, n.name);
   if (place.unchanged) pushOut(n);
-  ui.sel = {kind:'furn', id:n.id}; mutate(() => state.furniture.push(n));
+  ui.sel = {kind:'furn', id:n.id}; mutate(() => { state.furniture.push(n); const r=window.RubikCabinetBridge?.afterDuplicate(project, f.id, n.id); if (r && !r.ok) throw Error(r.explanation.join(' ')); if (r?.ok) project=r.project; });
   toast((LANG === 'es' ? `Duplicado «${nm(n.name)}»` : tr(`已复制「${n.name}」`, `Duplicated "${nm(n.name)}"`)) + placedNote(place, n.id), place.crowded ? 6000 : place.distanceMm > 0 ? 4000 : 1800);
 }
 // 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
@@ -2892,7 +2895,9 @@ const plate = (g, r, x, y, z) => g.add(lathe([[0, 0], [r*.6, 0], [r*.72, .008], 
 function buildFurniture(f){
   const g = new THREE.Group(), w = M(f.w), d = M(f.d), c = f.color || '#ddd', bz = -d/2, R = rng(Math.round(f.w*7 + f.d*13 + f.cx + f.cy));
   const detailSeed = [...String(f.id)].reduce((seed,ch)=>Math.imul(seed^ch.charCodeAt(0),16777619)>>>0,2166136261), D = rng(detailSeed);
-  switch (f.type){
+  const r03 = window.RubikCabinetBridge?.model3D(THREE, project, f);
+  if (r03) g.add(r03.group);
+  else switch (f.type){
     case 'bed': {
       const fr = woodM('#8d7258'), fab = fabric(c), fh = .3, mt = .22, top = fh + mt, n = Math.max(3, Math.round(w/.28)), sw = (w - .04)/n;
       g.add(box(w - .12, .06, d - .14, '#4a3e33', 0, 0, .03), rbox(w, fh - .06, d - .08, fr, 0, .06, .04, .015));        // 内缩踢脚 + 床箱
@@ -3386,7 +3391,7 @@ function buildFurniture(f){
     }
     default: g.add(box(w, .8, d, c));
   }
-  if(f.size.heightMm){const bounds=new THREE.Box3().setFromObject(g), size=bounds.getSize(new THREE.Vector3());if(size.x>0&&size.y>0&&size.z>0){g.scale.set(M(f.w)/size.x,M(f.size.heightMm)/size.y,M(f.d)/size.z);g.children.forEach(child=>child.position.sub(new THREE.Vector3((bounds.min.x+bounds.max.x)/2,bounds.min.y,(bounds.min.z+bounds.max.z)/2)));}}
+  if(f.size.heightMm&&!r03){const bounds=new THREE.Box3().setFromObject(g), size=bounds.getSize(new THREE.Vector3());if(size.x>0&&size.y>0&&size.z>0){g.scale.set(M(f.w)/size.x,M(f.size.heightMm)/size.y,M(f.d)/size.z);g.children.forEach(child=>child.position.sub(new THREE.Vector3((bounds.min.x+bounds.max.x)/2,bounds.min.y,(bounds.min.z+bounds.max.z)/2)));}}
   g.position.set(wx(f.cx), M(f.elevationMm||0), wz(f.cy));
   g.rotation.y = -f.rot * Math.PI/180;       // 平面顺时针旋转 → 绕 Y 轴负向
   g.userData.fid = f.id;
@@ -5423,5 +5428,12 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/construction-plan-ui.js"></script>
 <script src="js/reference-prices-ui.js"></script>
 <script src="js/delivery-client.js"></script>
+<!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
+     guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
+     Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
+<link rel="stylesheet" href="css/r03-cabinet-editor.css">
+<script src="js/r03-cabinet-core.js"></script><script src="js/r03-cabinet-contract.js"></script><script src="js/r03-cabinet-editor-core.js"></script>
+<script src="js/r03-cabinet-editor-ui.js"></script><script src="js/r03-cabinet-geometry.js"></script><script src="js/r03-cabinet-three.js"></script>
+<script src="js/r03-cabinet-bridge.js"></script><script src="js/r03-cabinet-rubik-ui.js"></script>
 </body>
 </html>
