@@ -136,7 +136,12 @@ export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=global
   function setRatio(r){applied=r;renderer.setPixelRatio(r);scene.resize();}
   // La Evolución no expone su THREE.Scene: se observa la que Three recibe en cada render (solo para recompilar los
   // materiales al quitar las sombras). Se deshace en dispose().
-  let lastScene=null;const render0=renderer.render;renderer.render=function(s,c){lastScene=s;return render0.call(this,s,c);};
+  /* Y no se dibuja con el contexto ya perdido. La pérdida es inmediata pero el evento «webglcontextlost» llega después:
+     si en ese hueco un cuadro necesita compilar un material nuevo, Three r160 lo compila sobre el contexto perdido y,
+     al usarlo, getProgramInfoLog() devuelve null («Cannot read properties of null (reading 'trim')»). Medido: 2 de 15
+     pérdidas durante la reproducción con la vista previa de #211 (que compila materiales al reproducir); 0 de 30 así. */
+  const gl=renderer.getContext();
+  let lastScene=null;const render0=renderer.render;renderer.render=function(s,c){lastScene=s;if(gl.isContextLost?.())return;return render0.call(this,s,c);};
   function degrade(reason){
     const ev=governor.forceMin(reason);if(ev&&ev.to!==applied)setRatio(ev.to);
     if(renderer.shadowMap.enabled){renderer.shadowMap.enabled=false;

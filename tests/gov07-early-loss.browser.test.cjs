@@ -90,3 +90,17 @@ test('escena diferida: lo que otro módulo asigna a la escena antes de recuperar
     await K.frames(page,4);assert.ok(await K.drawn(page)>0);assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
+
+test('hueco entre la pérdida y su evento: un cuadro que compila materiales en ese instante no deja programas rotos (Three r160: getProgramInfoLog null)',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.openEvolution(env);try{
+    // La pérdida es inmediata y su evento llega en otra tarea. En la MISMA tarea se obliga a recompilar todos los
+    // materiales (en r160 el tono forma parte del programa) y se dibuja un cuadro: es lo que pasa cuando un material
+    // nuevo aparece justo al perderse la GPU (con #211, la vista previa del plan al reproducir).
+    await page.evaluate(()=>{const s=window.__ft3dFidelity.scene,r=s.renderer;window.__gov07Ext=r.getContext().getExtension('WEBGL_lose_context');
+      window.__gov07Ext.loseContext();r.toneMapping=(r.toneMapping+1)%5;s.renderNow();});
+    await page.waitForFunction(()=>window.__ft3dGlGuard.state==='lost');
+    await K.restoreContext(page);await page.waitForFunction(()=>window.__ft3dGlGuard.state==='ok');await K.frames(page,8);
+    assert.ok(await K.drawn(page)>0,'la casa vuelve');
+    assert.deepEqual(watch.errors,[],"sin «Cannot read properties of null (reading 'trim')»");
+  }finally{await context.close();}
+});
