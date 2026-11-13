@@ -104,3 +104,79 @@ test('hueco entre la pérdida y su evento: un cuadro que compila materiales en e
     assert.deepEqual(watch.errors,[],"sin «Cannot read properties of null (reading 'trim')»");
   }finally{await context.close();}
 });
+
+/* H4 · Ciclo de vida de la escena diferida (auditoría de #213): si la vista se cierra ANTES de que vuelva el contexto,
+   no puede sobrevivir nada. Antes, dispose() de la fachada solo marcaba la escena nula: los escuchadores del lienzo,
+   los avisos «cuando esté lista» y el estado pendiente seguían vivos; al volver el contexto se creaba una escena real
+   (con su bucle de dibujo) sobre una vista ya destruida y la guarda se volvía a enganchar con su propio bucle.
+   Banco aislado (sin la app: así cualquier requestAnimationFrame es de la escena o de la guarda), 5 ciclos. */
+const BENCH='evolucion/__gov07-lifecycle.html';
+async function openBench(){
+  const context=await env.browser.newContext({viewport:{width:900,height:600}});
+  await context.route(`${env.base}${BENCH}`,r=>r.fulfill({contentType:'text/html',body:`<!doctype html><meta charset="utf-8"><title>banco</title>
+<script type="importmap">{"imports":{"three":"../vendor/three/build/three.module.js","three/addons/":"../vendor/three/examples/jsm/"}}</script><body></body>`}));
+  const page=await context.newPage();page.setDefaultTimeout(60000);const watch=K.watch(page,env.base);await page.goto(`${env.base}${BENCH}`);
+  await page.evaluate(async()=>{
+    const [{createProjectScene},g]=await Promise.all([import('./project-scene.js'),import('./gl-guard.js')]);
+    // Contadores: escuchadores vivos por lienzo y llamadas a requestAnimationFrame.
+    const add0=EventTarget.prototype.addEventListener,rem0=EventTarget.prototype.removeEventListener,live=new WeakMap();
+    const key=(t,f,o)=>`${t}|${typeof o==='boolean'?o:!!o?.capture}`;
+    EventTarget.prototype.addEventListener=function(t,f,o){if(this instanceof HTMLCanvasElement&&f){const m=live.get(this)||new Map();live.set(this,m);
+      const k=key(t,f,o);const s=m.get(k)||new Set();s.add(f);m.set(k,s);}return add0.call(this,t,f,o);};
+    EventTarget.prototype.removeEventListener=function(t,f,o){if(this instanceof HTMLCanvasElement)live.get(this)?.get(key(t,f,o))?.delete(f);return rem0.call(this,t,f,o);};
+    let rafCalls=0;const raf0=window.requestAnimationFrame.bind(window);window.requestAnimationFrame=cb=>{rafCalls++;return raf0(cb);};
+    const once=(c,t,ms)=>new Promise(r=>{const f=()=>{clearTimeout(to);rem0.call(c,t,f);r(true);};const to=setTimeout(()=>{rem0.call(c,t,f);r(false);},ms);add0.call(c,t,f);});
+    const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+    const listeners=c=>[...(live.get(c)||new Map())].reduce((n,[,s])=>n+s.size,0);
+    /* Un ciclo: lienzo nuevo con el contexto perdido ANTES de crear la escena → escena y guarda diferidas → (dispose de
+       las dos) → el navegador entrega la pérdida → restaurar → medir. */
+    window.__gov07Cycle=async({dispose})=>{
+      const host=document.createElement('div');host.style.cssText='position:relative;width:400px;height:240px';const c=document.createElement('canvas');
+      c.style.cssText='width:400px;height:240px;display:block';host.append(c);document.body.append(host);
+      const ext=c.getContext('webgl2').getExtension('WEBGL_lose_context');ext.loseContext();
+      let creates=0,late=0;const scene=g.createSceneSafely(cv=>{const s=createProjectScene(cv);creates++;return s;},c);
+      const pending=scene.pending===true&&scene.deferred===true;scene.whenReady(()=>late++);
+      const guard=g.attachGlGuard(scene,{host,core:window.FloorPlanGlQuality,restoreTimeoutMs:60000});
+      const noticeBefore=host.querySelectorAll('.gl-guard').length;
+      // La pérdida llega mientras la escena vive (si no, nadie llamaría a preventDefault y el contexto no podría volver).
+      const lostSeen=await once(c,'webglcontextlost',3000);
+      if(dispose){guard.dispose();scene.dispose();}
+      await sleep(250);// sin esta pausa, Chromium no llega a entregar la restauración (medido en este banco)
+      rafCalls=0;ext.restoreContext();const restored=await once(c,'webglcontextrestored',3000);await sleep(400);
+      const r={pending,noticeBefore,lostSeen,restored,creates,late,rafCalls,listeners:listeners(c),host:host.childElementCount-1,
+        described:c.hasAttribute('aria-describedby'),state:guard.state,disposed:scene.disposed,stillPending:scene.pending};
+      if(!dispose){guard.dispose();scene.dispose();rafCalls=0;await sleep(300);r.rafAfterDispose=rafCalls;r.hostAfterDispose=host.childElementCount-1;}
+      host.remove();return r;};
+  });
+  return {context,page,watch};
+}
+
+test('ciclo de vida: escena y guarda diferidas destruidas ANTES de recuperar el contexto → 0 creaciones, 0 avisos tardíos, 0 escuchadores, 0 bucles (5 ciclos)',{timeout:180000},async()=>{
+  const {context,page,watch}=await openBench();try{
+    for(let i=1;i<=5;i++){
+      const r=await page.evaluate(()=>window.__gov07Cycle({dispose:true}));const at=`ciclo ${i}: ${JSON.stringify(r)}`;
+      assert.ok(r.pending&&r.noticeBefore===1&&r.lostSeen,`montaje: escena diferida con aviso y la pérdida entregada · ${at}`);
+      assert.equal(r.restored,true,`el contexto vuelve de verdad (el caso existe) · ${at}`);
+      assert.equal(r.creates,0,`no se crea una escena real sobre una vista destruida · ${at}`);
+      assert.equal(r.late,0,`ningún aviso «cuando esté lista» llega tarde · ${at}`);
+      assert.equal(r.host,0,`ni aviso ni guarda re-enganchada en el visor · ${at}`);
+      assert.equal(r.listeners,0,`ningún escuchador sobrevive en el lienzo · ${at}`);
+      assert.equal(r.rafCalls,0,`ningún bucle de dibujo · ${at}`);
+      assert.equal(r.described,false,`el lienzo no apunta a un aviso inexistente · ${at}`);
+      assert.equal(r.disposed,true);
+    }
+    assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});
+
+test('ciclo de vida (control): sin destruir, la recuperación sigue creando la escena real UNA vez, avisa una vez y engancha la guarda; destruir después lo para todo',{timeout:180000},async()=>{
+  const {context,page,watch}=await openBench();try{
+    for(let i=1;i<=2;i++){
+      const r=await page.evaluate(()=>window.__gov07Cycle({dispose:false}));const at=`ciclo ${i}: ${JSON.stringify(r)}`;
+      assert.ok(r.restored,at);assert.equal(r.creates,1,at);assert.equal(r.late,1,at);assert.equal(r.stillPending,false,at);assert.equal(r.state,'ok',at);
+      assert.ok(r.rafCalls>0,`la escena real dibuja · ${at}`);
+      assert.equal(r.rafAfterDispose,0,`tras dispose, ningún bucle · ${at}`);assert.equal(r.hostAfterDispose,0,`ni restos de la guarda · ${at}`);
+    }
+    assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});

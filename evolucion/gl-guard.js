@@ -54,21 +54,28 @@ export function createDeferredScene(create,canvas,error=null){
   const overrides=new Map();
   const keep=e=>e.preventDefault();// sin preventDefault el navegador no devolvería nunca el contexto
   canvas.addEventListener('webglcontextlost',keep);
-  const onRestored=()=>{let s;try{s=createClean(create,canvas);}catch{return;}// sigue sin poder: se espera a la próxima
-    canvas.removeEventListener('webglcontextrestored',onRestored);canvas.removeEventListener('webglcontextlost',keep);
-    real=s;inner=s;if(onResize)s.onResize=onResize;for(const k of REPLAY)if(last.has(k))s[k](...last.get(k));
+  /* Ciclo de vida: si la vista se cierra ANTES de que vuelva el contexto, dispose() retira los dos escuchadores, olvida
+     el estado pendiente y los avisos «cuando esté lista»: al volver el contexto no se crea nada ni se llama a nadie. */
+  let disposed=false;
+  const unlisten=()=>{canvas.removeEventListener('webglcontextrestored',onRestored);canvas.removeEventListener('webglcontextlost',keep);};
+  const dispose=()=>{if(disposed)return;disposed=true;unlisten();waiting.clear();last.clear();overrides.clear();onResize=null;inner.dispose?.();};
+  const onRestored=()=>{if(disposed)return;let s;try{s=createClean(create,canvas);}catch{return;}// sigue sin poder: se espera a la próxima
+    unlisten();
+    real=s;inner=s;if(onResize)s.onResize=onResize;for(const k of REPLAY)if(last.has(k))s[k]?.(...last.get(k));
     s.resize();onResize?.();for(const fn of waiting)fn(s);waiting.clear();};
   canvas.addEventListener('webglcontextrestored',onRestored);
   return new Proxy({},{
     get(_,k){
       if(k==='pending')return !real;if(k==='unavailable')return false;if(k==='deferred')return true;
-      if(k==='whenReady')return fn=>{if(real)fn(real);else waiting.add(fn);};
+      if(k==='whenReady')return fn=>{if(disposed)return ()=>{};if(real){fn(real);return ()=>{};}waiting.add(fn);return ()=>waiting.delete(fn);};
+      if(k==='dispose')return dispose;// también destruye la escena real si ya existe (inner es ella)
+      if(k==='disposed')return disposed;
       if(k==='reason')return real?null:inner.reason;
       if(overrides.has(k))return overrides.get(k);
       const v=inner[k];if(typeof v!=='function')return v;
       return (...a)=>{if(!real&&REPLAY.includes(k))last.set(k,a);return inner[k](...a);};
     },
-    set(_,k,v){if(k==='onResize'){onResize=v;inner.onResize=v;}else overrides.set(k,v);return true;},
+    set(_,k,v){if(disposed)return true;if(k==='onResize'){onResize=v;inner.onResize=v;}else overrides.set(k,v);return true;},
     has(_,k){return overrides.has(k)||k in inner||['pending','deferred','whenReady'].includes(k);},
     ownKeys(){return Reflect.ownKeys(inner);},getOwnPropertyDescriptor(_,k){const d=Reflect.getOwnPropertyDescriptor(inner,k);return d&&{...d,configurable:true};},
   });
@@ -193,16 +200,18 @@ function deferredGuard(scene,opts){
   const btn=document.createElement('button');btn.type='button';btn.className='btn';btn.textContent='Recargar la vista';btn.hidden=true;Object.assign(btn.style,{marginTop:'10px',minHeight:'44px',padding:'0 16px',cursor:'pointer'});
   btn.addEventListener('click',()=>reload());box.append(btn);
   if(host&&getComputedStyle(host).position==='static')host.style.position='relative';host?.append(box);scene.canvas.setAttribute('aria-describedby','glGuardMsg');
-  let impl=null,timer=0,state='lost';
-  const tick=()=>{const t=monitor?.tick(now());if(t?.changed&&t.state==='failed'){state='failed';box.dataset.state='failed';p.innerHTML=COPY.failed;btn.hidden=false;events.push({t:Math.round(now()),type:'failed'});}else if(state==='lost')timer=setTimeout(tick,250);};
+  let impl=null,timer=0,state='lost',closed=false;
+  const tick=()=>{if(closed||scene.disposed)return;const t=monitor?.tick(now());if(t?.changed&&t.state==='failed'){state='failed';box.dataset.state='failed';p.innerHTML=COPY.failed;btn.hidden=false;events.push({t:Math.round(now()),type:'failed'});}else if(state==='lost')timer=setTimeout(tick,250);};
   timer=setTimeout(tick,250);
-  scene.whenReady(()=>{clearTimeout(timer);box.remove();scene.canvas.removeAttribute('aria-describedby');events.push({t:Math.round(now()),type:'restored',atCreation:true});
+  // Si la guarda se cierra antes, se da de baja: la recuperación tardía no vuelve a enganchar una guarda (ni su bucle).
+  const unsubscribe=scene.whenReady(()=>{if(closed)return;clearTimeout(timer);box.remove();scene.canvas.removeAttribute('aria-describedby');events.push({t:Math.round(now()),type:'restored',atCreation:true});
     impl=attachGlGuard(scene,{...opts,host});});
   const pick=(k,d)=>impl?impl[k]:d;
   return {get state(){return impl?impl.state:state;},get degraded(){return pick('degraded',false);},get pixelRatio(){return pick('pixelRatio',null);},get shadows(){return pick('shadows',false);},
     get governor(){return pick('governor',null);},get monitor(){return impl?impl.monitor:monitor?.snapshot();},get events(){return [...events,...(impl?impl.events:[])];},
     get message(){return impl?impl.message:{state,text:p.textContent,action:btn.hidden?null:btn.textContent};},get chip(){return pick('chip',null);},get chipSpot(){return pick('chipSpot',null);},
-    get deferred(){return true;},dispose(){clearTimeout(timer);box.remove();impl?.dispose();}};
+    get deferred(){return true;},dispose(){if(closed)return;closed=true;unsubscribe?.();clearTimeout(timer);box.remove();
+      if(scene.canvas.getAttribute('aria-describedby')==='glGuardMsg')scene.canvas.removeAttribute('aria-describedby');impl?.dispose();impl=null;}};
 }
 
 function unavailableNotice(scene,host){

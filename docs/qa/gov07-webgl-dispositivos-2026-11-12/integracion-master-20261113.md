@@ -51,7 +51,7 @@ La rama de #208 no se toca. GOV-07 sigue **PARCIAL** hasta la matriz física.
 3. La guarda dice **«Vista 3D interrumpida»** (no «sin WebGL»). Si el contexto no vuelve en el plazo, ofrece **«Recargar la vista»**. Si vuelve tarde, la vista se completa igualmente y el aviso se retira. Desde ese momento delega en la guarda normal: avisa de las pérdidas siguientes, degrada y adapta el DPR.
 4. Lo que otros módulos asignan a la escena mientras espera vive en la fachada de la escena diferida, y vale igual antes y después de que llegue la real. Por ejemplo, #211 envuelve `renderNow` para quitar el fantasma del vídeo. Reaplicarlo a la escena real habría hecho que el envoltorio se llamara a sí mismo; perderlo habría dejado el fantasma en el vídeo para el cliente.
 
-**Pruebas** (`tests/gov07-early-loss.browser.test.cjs`): **5/5** aquí; las tres primeras dan **0/3** en `d451c23`. La cuarta cubre el caso de #211 y la quinta, H3.
+**Pruebas** (`tests/gov07-early-loss.browser.test.cjs`): **7/7** aquí. Las tres primeras dan **0/3** en `d451c23`; la cuarta cubre el caso de #211, la quinta H3 y las dos últimas H4.
 
 | Prueba | Qué comprueba |
 |---|---|
@@ -75,6 +75,42 @@ La rama de #208 no se toca. GOV-07 sigue **PARCIAL** hasta la matriz física.
 **Corrección** (en `gl-guard.js`, que ya envuelve `renderer.render`): no se dibuja mientras `gl.isContextLost()`. **Con #211: 0 de 30.**
 
 **Prueba determinista:** se pierde el contexto y, en la misma tarea, se obliga a recompilar todos los materiales y se dibuja. **Falla sin la corrección**, con ese mismo `TypeError`, y **pasa con ella**.
+
+### H4 · Vista destruida antes de recuperar el contexto (auditoría de ChatGPT sobre #213, 13/11)
+
+**Comprobado, tal como describía la auditoría.** Si la escena diferida y su guarda se destruyen mientras el contexto sigue perdido, al volver el contexto:
+
+| Medido en `09dd9ff` (5 ciclos, banco aislado) | Valor por ciclo |
+|---|---|
+| Escenas reales creadas sobre una vista destruida | **1** |
+| Avisos «cuando esté lista» que llegan tarde | **1** |
+| Guarda re-enganchada (aviso, velo y chip en el visor) | **3 nodos** |
+| Escuchadores vivos en el lienzo | **9** |
+| Llamadas a `requestAnimationFrame` en 400 ms | **48** (bucle de la escena y bucle de la guarda) |
+| `scene.disposed` | `false` |
+
+**Causa** (`evolucion/gl-guard.js`):
+- los dos escuchadores de la escena diferida (`webglcontextlost`, `webglcontextrestored`) solo se retiraban al recuperar;
+- `dispose()` de la fachada llegaba a la escena nula, que solo marcaba `disposed`: no limpiaba los avisos pendientes, el estado por reaplicar ni las asignaciones;
+- `onRestored` no miraba si la vista ya estaba destruida;
+- `dispose()` de la guarda diferida retiraba el aviso y el temporizador, pero su aviso «cuando esté lista» seguía apuntado y volvía a llamar a `attachGlGuard`.
+
+**Corrección**, solo en `gl-guard.js` (`project-scene.js` no se toca):
+1. La escena diferida tiene su propio `dispose()` idempotente: retira los dos escuchadores; olvida los avisos pendientes, el estado por reaplicar, las asignaciones y `onResize`; y destruye la escena que tenga dentro (la real, si ya existe). `disposed` refleja ese estado.
+2. `onRestored` no hace nada si la vista ya está destruida.
+3. `whenReady(fn)` devuelve una función para darse de baja. Tras `dispose()` no apunta nada.
+4. Tras `dispose()` se ignoran las asignaciones nuevas.
+5. La guarda diferida, al destruirse, se da de baja de `whenReady` y queda cerrada: un aviso tardío no vuelve a enganchar la guarda. Además retira `aria-describedby` si apuntaba a su aviso, y su temporizador se detiene si la escena ya está destruida.
+6. Robustez: el estado que se reaplica a la escena real se llama solo si la escena real tiene esa operación (`s[k]?.(…)`).
+
+**Pruebas** (`tests/gov07-early-loss.browser.test.cjs`, en un banco aislado sin la app, para que cualquier `requestAnimationFrame` sea de la escena o de la guarda):
+
+| Prueba | En `09dd9ff` | Con la corrección |
+|---|---|---|
+| Destruir escena y guarda **antes** de recuperar, 5 ciclos: 0 creaciones, 0 avisos tardíos, 0 nodos en el visor, 0 escuchadores, 0 `requestAnimationFrame`, sin `aria-describedby`, `disposed` | **Falla** en el ciclo 1 (valores de la tabla de arriba) | **Pasa** los 5 ciclos |
+| Control: sin destruir, recuperar crea la escena real **una** vez, avisa una vez, la guarda pasa a `ok` y la escena dibuja; destruir después lo para todo (0 `requestAnimationFrame`, 0 nodos) | Pasa | Pasa |
+
+En las dos pruebas, el contexto vuelve de verdad (se comprueba el evento `webglcontextrestored`): el caso no pasa por no haberse producido.
 
 ## 3. Ensayo con #211 (OBR-02/03, Claude B), local y sin publicar
 
@@ -153,9 +189,38 @@ Antes de H3, `gov07-evolution-resilience` fallaba de forma intermitente (22/23) 
 | OBR-01 `ex05` | 4/4 |
 | INT-R1 | 1/1 |
 
+**Tras H4, en la rama** (local, Chromium con SwiftShader, cada suite aislada):
+
+| Suite | Resultado |
+|---|---|
+| `gov07-quality-core` | 10/10 |
+| `gov07-early-loss` | **7/7** (las 2 nuevas de H4 incluidas) |
+| `gov07-evolution-resilience` | 23/23 |
+| `gov07-bench` | 2/2 |
+| `gov07-cross-browser` | 1/1 |
+| OBR-01 `ex05` · `ex09` · `ex11` · `qa22` · `scene-lifecycle` | 4/4 · 3/3 · 4/4 · 2/2 · 1/1 |
+| `ent01-preview` (navegador) | 3/3 |
+| `ft3d-8-fidelity` · `ft3d-8-fit` | 6/6 · 9/9 |
+| INT-R1 | 1/1 |
+
+**Tras H4, árbol combinado con #211** (rama + `e2d5de8`, fusión limpia, local y **sin publicar**; la rama de #211 no se toca):
+
+| Suite | Resultado |
+|---|---|
+| `obr02-obr03-plan-preview-core` | 14/14 |
+| `obr02-obr03-plan-preview` | 10/10 |
+| `obr02-obr03-integration` | 6/6 |
+| `gov07-early-loss` | 7/7: incluye el envoltorio de `renderNow` de #211 y `setPreview` tras recuperar |
+| `gov07-evolution-resilience` | **23/23 en tres ejecuciones seguidas** |
+| `gov07-bench` | 2/2 |
+| OBR-01 `ex05` · `ex11` · `scene-lifecycle` | 4/4 · 4/4 · 1/1 |
+| `ft3d-8-fidelity` | 6/6 |
+| INT-R1 | 1/1 |
+
 ## 6. Riesgos y límites
 
 - **Escena diferida:** solo actúa cuando el contexto llega **ya perdido** al crear la escena; el camino normal no cambia.
   - Si el navegador no dispara la recuperación (por ejemplo, un contexto creado perdido sin evento), la persona ve «Recargar la vista». Es lo honesto.
 - **Estado reaplicado:** el **último** valor de cada operación de estado. La cámara no se copia, porque mientras se espera no hay una pose real: se vuelve a encuadrar.
+- **Ciclo de vida (H4):** destruir la vista mientras el contexto está perdido ya no deja nada vivo. Si se destruye solo la guarda, la escena puede seguir y crearse al volver el contexto: eso lo decide su dueño, que debe destruirla también.
 - **Sin hardware real.** Nada de esto sustituye la matriz física, que sigue pendiente.
