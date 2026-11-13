@@ -28,8 +28,10 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     // 1b · procedencia (auditoría 13/11): fuentes y vínculos, origen sintético declarado, fantasma = vínculos comprobados.
     const prov=await page.evaluate(()=>{const P=window.__ft3dPlanPreview,d=document.querySelector('.plan-preview .pp-src-d');d.open=true;d.scrollIntoView({block:'nearest'});
       return {text:d.innerText.replace(/\s+/g,' '),ghostKeys:P.provenance?.ghostKeys?.length??null,shown:window.__ft3dFidelity.scene.preview.shown,next:(P.provenance?.next||[]).map(x=>x.status)};});
-    log.push({paso:'procedencia · fuentes y vínculos (DATOS SINTÉTICOS, huella, plan en borrador, presupuesto no verificable)',viewport:label,fantasma:prov.shown,comprobados:prov.ghostKeys,estados:[...new Set(prov.next)],
-      ok:/DATOS SINTÉTICOS/.test(prov.text)&&/huella SHA-256 [0-9a-f]{12}/.test(prov.text)&&/borrador/.test(prov.text)&&/no verificable/.test(prov.text)&&prov.shown===prov.ghostKeys});
+    // Abierto desde la BIBLIOTECA (no como fixture): la Evolución no puede saber que es sintético y no lo afirma; lo dicen
+    // los propios datos (origen declarado de las tareas) y el aviso de esta página de revisión.
+    log.push({paso:'procedencia · fuentes y vínculos (origen declarado sintético, huella, plan en borrador, presupuesto no verificable)',viewport:label,fantasma:prov.shown,comprobados:prov.ghostKeys,estados:[...new Set(prov.next)],
+      ok:/origen declarado: Obra sintética OBR-01/.test(prov.text)&&!/DATOS SINTÉTICOS/.test(prov.text)&&/huella SHA-256 [0-9a-f]{12}/.test(prov.text)&&/borrador/.test(prov.text)&&/no verificable/.test(prov.text)&&prov.shown===prov.ghostKeys});
     await shot(page,`1b-fuentes-y-vinculos-${label}`);
     await page.evaluate(()=>{document.querySelector('.plan-preview .pp-src-d').open=false;});
     // 2 · OBR-01 con el fantasma encendido: clic/toque real en un muro de carga → su ficha.
@@ -37,9 +39,12 @@ const proxy=process.env.HTTPS_PROXY?{server:process.env.HTTPS_PROXY}:undefined;
     const pt=await page.evaluate(k=>{const F=window.__ft3dFidelity,c=document.getElementById('stage').getBoundingClientRect(),b=F.scene.screenBounds(k,{exact:true});if(!b)return null;
       for(let i=0;i<=12;i++)for(let j=0;j<=12;j++){const nx=b.x0+(b.x1-b.x0)*i/12,ny=b.y0+(b.y1-b.y0)*j/12,x=c.left+(nx+1)/2*c.width,y=c.top+(1-ny)/2*c.height;if(x>c.left&&x<c.right&&y>c.top&&y<c.bottom&&F.scene.pick(x,y)===k)return {x,y};}return null;},key);
     const ghostOn=(await panel(page)).ghost;
+    // Qué hay bajo el punto en el momento del clic (si un control del panel lo tapa, el clic no llega al lienzo).
+    const debajo=pt?await page.evaluate(({x,y})=>{const e=document.elementFromPoint(x,y);return {el:e?(e.id||e.tagName)+(e.className?'.'+String(e.className).split(' ')[0]:''):null,scrollY:window.scrollY,
+      panel:(r=>[r.left,r.top,r.right,r.bottom].map(Math.round))(document.querySelector('.plan-preview').getBoundingClientRect())};},pt):null;
     if(pt){if(opts.hasTouch)await page.touchscreen.tap(pt.x,pt.y);else await page.mouse.click(pt.x,pt.y);await page.waitForTimeout(500);}
     const sel=await page.evaluate(()=>{const b=document.getElementById('pickInfo');return b.hidden?null:b.dataset.key;});
-    log.push({paso:'OBR-01 · clic real en muro de carga con el fantasma encendido',viewport:label,fantasma:ghostOn,panel:sel,ok:ghostOn>0&&sel===key});
+    log.push({paso:'OBR-01 · clic real en muro de carga con el fantasma encendido',viewport:label,fantasma:ghostOn,panel:sel,punto:pt,debajo,ok:ghostOn>0&&sel===key});
     await shot(page,`2-muro-carga-con-fantasma-${label}`,{panel:sel});
     // 3 · sin presupuesto: «No disponible», nunca 0.
     await open(page,'Cargar y abrir sin presupuesto');await at(page,'2027-04-14','iso',false);p=await panel(page);
