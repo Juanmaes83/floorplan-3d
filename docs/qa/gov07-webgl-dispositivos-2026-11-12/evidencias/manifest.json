@@ -1,0 +1,93 @@
+{
+ "generated": "2026-11-12T19:35:47.459Z",
+ "engine": "Chromium + SwiftShader (CPU, sin GPU real)",
+ "data": "fixture sintética A de laboratorio",
+ "files": [
+  {
+   "file": "0-normal-escritorio-1440x900.png",
+   "sha256": "05cda73fed46f11f6845fffd451e6ff1d9037958e066fecdc3f02e917abfe869"
+  },
+  {
+   "file": "1-perdida-aviso-escritorio-1440x900.png",
+   "sha256": "77363d1fde730f1d6e29de165bd7a2309972f53c34f552358c368c61e05b63c3"
+  },
+  {
+   "file": "2-recuperado-escritorio-1440x900.png",
+   "sha256": "3c3e56bb5542dddbf87549c15181a99a7bc8bb70c284d96bc7b0957794b15d01"
+  },
+  {
+   "file": "3-sin-respuesta-recargar-escritorio-1440x900.png",
+   "sha256": "324a5e26860a235a8a429f450232e112f8cb4e9f8ed634f0b426b54a317af880"
+  },
+  {
+   "file": "4-degradado-escritorio-1440x900.png",
+   "sha256": "f6434d9b872918eb683f473b8f05ab135d2c6d38a66e3945772f3ec2b0e43db2",
+   "errors": 0,
+   "external": 0
+  },
+  {
+   "file": "5-sin-webgl-escritorio-1440x900.png",
+   "sha256": "fb644ac7887b02018465b0e11dfb3347ee1d24171c0417a88a4712402b642f97"
+  },
+  {
+   "file": "0-normal-movil-390x844.png",
+   "sha256": "97f4828c1797f8aee8aa833ff0b0c2775799c1ca40ccc614ba2d7c169bddba70"
+  },
+  {
+   "file": "1-perdida-aviso-movil-390x844.png",
+   "sha256": "53b1d74c03f619d94b47f1f44b5fb8d968b1495cfc4455ac0a861e17d599ffaf"
+  },
+  {
+   "file": "2-recuperado-movil-390x844.png",
+   "sha256": "e5374107e63732d740ea6805e61f407ce3d14912d150a4830f12fcf847cee956"
+  },
+  {
+   "file": "3-sin-respuesta-recargar-movil-390x844.png",
+   "sha256": "5f966546f96454caaeadb032d8b41e89b5eec454be0232065b2cff1faf9fe0ab"
+  },
+  {
+   "file": "4-degradado-movil-390x844.png",
+   "sha256": "5f9fed67ac89be30e315e2d6e1a17c97fa3aada726c4e4f935fdb5ecb342bc2d",
+   "errors": 0,
+   "external": 0
+  },
+  {
+   "file": "5-sin-webgl-movil-390x844.png",
+   "sha256": "8e68c77682188638cc5ae2dc5375bd2abb8c6622cf3a19118dd2c9977174bb3e"
+  },
+  {
+   "file": "0-normal-movil-horizontal-844x390.png",
+   "sha256": "4b1ddbafe767efd1adf497cd28f415a6588b5373d08fa0c9e65b1ee1283eb121"
+  },
+  {
+   "file": "1-perdida-aviso-movil-horizontal-844x390.png",
+   "sha256": "203e4009a027efacf267a7380d4f5e73b0dc9cd3380609f91f5fbf7c53d5a1dd"
+  },
+  {
+   "file": "2-recuperado-movil-horizontal-844x390.png",
+   "sha256": "cdf975f20006c79c72310e50bf7142e53e82a05de62b017db64ddf0a43d0e731"
+  },
+  {
+   "file": "3-sin-respuesta-recargar-movil-horizontal-844x390.png",
+   "sha256": "b975db48f94dedffe8f4eab2a4c8c80e2eaea5968c1b4443ef98e134f0562985"
+  },
+  {
+   "file": "4-degradado-movil-horizontal-844x390.png",
+   "sha256": "6daefa77eb2475c8322fde1c0db82930aee4d55c6e7492edb431d2ac9ee60fab",
+   "errors": 0,
+   "external": 0
+  },
+  {
+   "file": "5-sin-webgl-movil-horizontal-844x390.png",
+   "sha256": "2afb2b556e33526f7822a06d6eb1a3af50ad1043c7567d493e49fc5b717a2f5b"
+  },
+  {
+   "file": "6-banco-resultado-escritorio-1440x900.png",
+   "sha256": "ad5eddb38745c58eb133a0e22239ee5bc74534b61d432bdeceaebac29f576ba5"
+  },
+  {
+   "file": "6-banco-resultado-movil-390x844.png",
+   "sha256": "feb8845efa27307a7e57def75873e9dcd331ddd1adaf621a87df86bb96e5019d"
+  }
+ ]
+}

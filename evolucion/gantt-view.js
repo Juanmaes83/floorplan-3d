@@ -29,14 +29,19 @@ export function createGanttView(container,{schedule,report,timeline,S,G,P,onPick
     const lab=cursor.querySelector('span');lab.textContent='PLAN · '+P.dateLabel(date);lab.style.transform=fr>.86?'translateX(-100%)':fr<.08?'translateX(0)':'translateX(-50%)';
     const st=S.stateAt(schedule,date);for(const row of container.querySelectorAll('.row')){const t=st.tasks.find(x=>x.id===row.dataset.task);row.dataset.phase=t.plannedPhase;row.querySelector('.fill').style.width=(t.visualProgress*100)+'%';}
   }
+  // GOV-07: one Gantt per selection. Its listeners live on the shared container (#gantt), so they are registered with
+  // a signal and removed by destroy() when the next selection replaces this Gantt (before: +4 listeners per reopen,
+  // each retaining the previous plan and firing onSelect/onPick again on every click).
+  const ac=new AbortController(),on={signal:ac.signal};let destroyed=false,arrowsRaf=0;
   let drag=false;const pick=e=>{const head=container.querySelector('.ghead .track');if(!head)return;const tr=head.getBoundingClientRect(),x=(e.clientX-tr.left)/tr.width;if(x>=0&&x<=1)onPick(Math.round(x*span-1));};
   // A task name or bar selects the task (its moment, its elements, its costs); the time scale moves the date.
   container.addEventListener('pointerdown',e=>{const row=e.target.closest('.row');
     if(row&&onSelect&&(e.target.closest('.lab')||e.target.closest('.bar'))){e.preventDefault();onSelect(row.dataset.task);return;}
-    if(e.target.closest('.lab'))return;drag=true;container.setPointerCapture(e.pointerId);pick(e);});
-  container.addEventListener('keydown',e=>{const lab=e.target.closest('.lab[role=button]');if(lab&&onSelect&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onSelect(lab.closest('.row').dataset.task);}});
-  container.addEventListener('pointermove',e=>{if(drag)pick(e);});container.addEventListener('pointerup',()=>{drag=false;});
-  requestAnimationFrame(drawArrows);
+    if(e.target.closest('.lab'))return;drag=true;container.setPointerCapture(e.pointerId);pick(e);},on);
+  container.addEventListener('keydown',e=>{const lab=e.target.closest('.lab[role=button]');if(lab&&onSelect&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onSelect(lab.closest('.row').dataset.task);}},on);
+  container.addEventListener('pointermove',e=>{if(drag)pick(e);},on);container.addEventListener('pointerup',()=>{drag=false;},on);
+  arrowsRaf=requestAnimationFrame(drawArrows);
   function select(taskId){for(const row of container.querySelectorAll('.row')){const on=row.dataset.task===taskId;row.classList.toggle('selected',on);row.setAttribute('aria-selected',String(on));}}
-  return {update,drawArrows,select,rows,links};
+  function destroy(){if(destroyed)return;destroyed=true;drag=false;ac.abort();cancelAnimationFrame(arrowsRaf);}
+  return {update,drawArrows,select,destroy,get destroyed(){return destroyed;},rows,links};
 }

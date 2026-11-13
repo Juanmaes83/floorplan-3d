@@ -4,6 +4,7 @@
    elements without a task -> grey outline "sin tarea", categories RUBIK does not model -> listed, not drawn. */
 import {createProjectScene} from './project-scene.js';
 import {createGanttView} from './gantt-view.js';
+import {attachGlGuard,createSceneSafely} from './gl-guard.js';
 const S=window.FloorPlanConstructionSchedule,V=window.FloorPlanConstructionVisualState,G=window.FloorPlanConstructionGantt,
   P=window.FloorPlanConstructionLabPresenter,B=window.FloorPlanBudget,A=window.FloorPlanConstructionProject,FX=window.FT3D8FidelityFixtures;
 const $=id=>document.getElementById(id),DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),iso=x=>new Date(x).toISOString().slice(0,10);
@@ -11,7 +12,12 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const LAYER=['finish','cladding'],APPEARS=['site','build','structure','envelope','services'];
 const q=new URLSearchParams(location.search),LIB=window.__ft3dSource?.mode==='library',RUBIK=LIB&&!!window.__ft3dSource?.embedded;
 if(q.get('capture')){const [w,h]=q.get('capture').split('x').map(Number);if(w&&h)document.documentElement.style.setProperty('--capture-w',w+'px'),document.documentElement.style.setProperty('--capture-h',h+'px'),document.body.classList.add('capture');}
-const scene=createProjectScene($('stage'));
+const scene=createSceneSafely(createProjectScene,$('stage'));
+// GOV-07: aviso y recuperación si se pierde el contexto WebGL, degradación controlada y DPR adaptativo.
+// Solo en laboratorio (?lab=1): tiempos de prueba para ejercitar la recuperación y el DPR en CI. El producto usa los
+// valores por defecto del núcleo.
+const glLab=q.get('lab')==='1',glNum=(k,min)=>glLab&&q.get(k)?Math.max(min,Number(q.get(k))||0):null;
+window.__ft3dGlGuard=attachGlGuard(scene,{...(glNum('glRestoreMs',500)?{restoreTimeoutMs:glNum('glRestoreMs',500)}:{}),governorOptions:glNum('glBudgetMs',1)?{budgetMs:glNum('glBudgetMs',1)}:{}});
 let ctx=null,pos=0,playing=false,speed=1,lastT=0,lastDay=-1;
 const api=window.__ft3dFidelity={last:null};
 
@@ -143,10 +149,17 @@ function setPos(p){
     window.dispatchEvent(new CustomEvent('ft3d8-moment',{detail:api.last}));}
 }
 // model/dossier: when a construction dossier (S1) was evaluated, its model is reused as is (one evaluation, one source).
+// GOV-07: selections can overlap (a new project chosen while the previous one is still being evaluated). Only the LAST
+// one asked is shown: an older evaluation that finishes later is discarded, never drawn over the newer selection.
+let showSeq=0;
 async function show(input,meta,preModel=null,dossier=null){
+  const seq=++showSeq;
   pause();lastDay=-1;selected=null;scene.highlight([]);
   const model=preModel||await A.evaluate(input);
+  if(seq!==showSeq)return {superseded:true,subject:model.subject};
   const schedule=model.planning.status==='available'?input.schedule:null,timeline=schedule?V.timeline(schedule):null;
+  // GOV-07: the previous Gantt is retired only now that the new selection evaluated (a rejected import keeps it working).
+  ctx?.gantt?.destroy();
   ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory,model.illustrative||[]);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
