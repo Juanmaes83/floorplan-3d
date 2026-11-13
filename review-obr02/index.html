@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisión OBR-02/03</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f4f3ef;--fg:#1d2124;--muted:#565c61;--line:#d6d3cc;--card:#fff;--accent:#1f5a66;--warn:#a8621c}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16191b;--fg:#e9e7e2;--muted:#a9aeb2;--line:#363b3f;--card:#1f2326;--accent:#7fbfcb;--warn:#e0a35c}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.3em 0}h2{font-size:1.1rem;margin:1.2em 0 .4em}
+.note{border-left:4px solid var(--warn);background:var(--card);padding:10px 12px;border-radius:4px}
+.synth{background:#fff4e5;border:2px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:1.05rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border-bottom:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}
+@media (max-width:640px){thead{display:none}tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}td{display:block;border:0;padding:2px 0}td:first-child{font-weight:700}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+button{font:inherit;min-height:44px;padding:0 16px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+button.secondary{background:var(--card);color:var(--fg);border-color:var(--line)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ol{padding-left:1.3em}li{margin:.3em 0}.muted{color:var(--muted)}#status{min-height:1.5em}
+</style>
+</head>
+<body>
+<main>
+  <h1>Revisión OBR-02 / OBR-03 · Plan a la fecha (reconciliación final sobre master con OBR-01, GOV-07, R03 y UX-07)</h1>
+  <p class="synth" role="note"><strong>DEMOSTRACIÓN SINTÉTICA.</strong> Ni el proyecto, ni el plan, ni el presupuesto son de una obra o un cliente reales. Sirve para comprobar la trazabilidad técnica, no la fidelidad a una obra.</p>
+  <p class="note"><strong>Solo datos sintéticos de prueba</strong> (la obra del examen FT3D-8) y, en el primer caso, un presupuesto con <strong>precios ficticios</strong>. Esta página carga esos datos en la biblioteca local de <strong>este navegador y este dominio de Preview</strong> y abre la Evolución real de RUBIK. No envía nada a ningún servidor ni toca Production.</p>
+
+  <section class="card" aria-labelledby="c0">
+    <h2 id="c0">Fuentes y vínculos de esta demostración</h2>
+    <table>
+      <thead><tr><th>Dato</th><th>De dónde sale</th><th>Qué es</th></tr></thead>
+      <tbody>
+        <tr><td>Proyecto y geometría</td><td>Vivienda «Vivienda QA obra nueva» de la obra sintética del examen FT3D-8 (biblioteca de este navegador)</td><td>Sintético. Huella SHA-256 visible en la Evolución → Plan a la fecha → Fuentes y vínculos.</td></tr>
+        <tr><td>Plan de obra (11 tareas WBS)</td><td>Plan sintético del examen, origen declarado «Obra sintética OBR-01», en borrador</td><td>Sintético; fechas sin aprobar. El % es del <strong>calendario</strong>, no obra ejecutada.</td></tr>
+        <tr><td>Vínculos tarea → elementos</td><td>Los IDs que el plan cita, comprobados por RUBIK contra el proyecto</td><td>Solo los comprobados se ven en azul; el resto se lista con su motivo.</td></tr>
+        <tr><td>Presupuesto C1–C4 (caso 1)</td><td>Borrador real de RUBIK con <strong>precios ficticios</strong>; cada capítulo asignado al 100 % a una tarea</td><td>Supuesto: coste repartido en línea recta por los días de cada tarea; no es gasto ni certificación. Revisión del proyecto no verificable (C1–C4 no la guarda).</td></tr>
+        <tr><td>No disponible</td><td>Planos o expedientes reales, avance ejecutado, certificaciones, gastos reales</td><td>No se representan ni se inventan.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" aria-labelledby="c1">
+    <h2 id="c1">1 · Con presupuesto enlazado al plan (coste planificado a la fecha)</h2>
+    <button type="button" data-case="con">Cargar y abrir con presupuesto</button>
+    <ol>
+      <li>Pulsa <strong>Ver evolución</strong>. Arriba a la derecha está <strong>Plan a la fecha</strong>: «% del calendario del plan», <strong>coste planificado a la fecha</strong> (supuesto: reparto lineal; no es gasto) y «Ejecutado: sin registrar».</li>
+      <li>Mueve la barra de tiempo hasta el final: 100 % del calendario y el aviso «Fin del plan: no es obra terminada ni certificada».</li>
+      <li>Despliega <strong>Fuentes y vínculos</strong>: «DATOS SINTÉTICOS», proyecto con su huella, plan en borrador «hecho sobre esta revisión del proyecto», presupuesto con su origen de precios y el % asignado a tareas, y las tareas sin elementos del modelo o sin partidas.</li>
+      <li>Despliega <strong>Siguiente tarea · planificada</strong>: su WBS, fechas y dependencias. Sus elementos se ven en <strong>azul</strong> en la escena; «Ver en el plan» la selecciona en el Gantt.</li>
+      <li>OBR-01 sigue funcionando con el fantasma encendido: en <strong>PLANTA</strong> + <strong>INTERIOR</strong>, un clic en un muro de carga corto abre «Muro · 02 Estructura».</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="c2">
+    <h2 id="c2">2 · Sin presupuesto</h2>
+    <button type="button" data-case="sin">Cargar y abrir sin presupuesto</button>
+    <ol>
+      <li>El anillo «% del plan» sigue (es plan, no dinero), pero el coste dice <strong>«No disponible»</strong> con su motivo: nunca 0 €.</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="c4">
+    <h2 id="c4">3 · Caso adversarial: plan no concordante</h2>
+    <button type="button" data-case="adversarial">Cargar y abrir el plan no concordante</button>
+    <ol>
+      <li>El plan es válido para el contrato, pero se hizo sobre <strong>otra revisión</strong> del proyecto y su tarea 10 cita un muro que <strong>no existe</strong>.</li>
+      <li>En <strong>Fuentes y vínculos</strong>: «hecho sobre OTRA revisión del proyecto», «vínculo(s) del plan apuntan a elementos que no existen» y el nivel baja a «Vista interna exploratoria».</li>
+      <li>Antes de la tarea 10, su «Siguiente tarea» lista «el identificador no existe en el proyecto: no se dibuja (project/wal_no-existe)». No aparece ningún fantasma: ni el inventado ni el de los elementos que sí existen, porque el plan es de otra revisión.</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="c5">
+    <h2 id="c5">4 · Plan de otra revisión que cita elementos que sí existen</h2>
+    <button type="button" data-case="otra-revision">Cargar y abrir el plan de otra revisión</button>
+    <ol>
+      <li>El mismo plan del caso 1, sin vínculos rotos: solo cambia la revisión del proyecto sobre la que dice estar hecho.</li>
+      <li>Los elementos que cita existen, pero <strong>no se dibuja ningún fantasma</strong> hasta reconciliar las fuentes: la «Siguiente tarea» dice «Sin fantasma: el plan es de otra revisión del proyecto» y lista cada elemento con «existe en el proyecto, pero el plan es de otra revisión».</li>
+      <li>En <strong>Fuentes y vínculos</strong>: «hecho sobre OTRA revisión del proyecto» y el aviso «No se dibuja ningún fantasma de este plan hasta reconciliar las fuentes». El nivel es el que calcula RUBIK (orientativo, bloqueado por revisión no vigente); no sube a plan declarado.</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="c3">
+    <h2 id="c3">Datos de este navegador</h2>
+    <p class="muted">Si ya había proyectos guardados en este dominio de Preview, se pide confirmación y se guarda una copia antes de sustituirlos.</p>
+    <button type="button" class="secondary" id="restore">Restaurar lo que había antes</button>
+    <button type="button" class="secondary" id="clear">Borrar los datos de esta revisión</button>
+  </section>
+  <p id="status" role="status" aria-live="polite"></p>
+</main>
+<script src="obra.js"></script>
+<script>
+'use strict';
+const KEYS=['rubik-sota-project-library-v1','rubik-construction-v1','rubik-budget-v1'],BACKUP='obr02-review-backup',MARK='obr02-review-loaded';
+const $=id=>document.getElementById(id),say=t=>$('status').textContent=t;
+const get=k=>{try{return localStorage.getItem(k);}catch{return null;}};
+function load(id){
+  const c=window.OBR02_REVIEW?.cases?.[id];if(!c){say('No se han encontrado los datos de revisión.');return;}
+  try{
+    const existing=KEYS.some(k=>get(k)!==null)&&get(MARK)===null;
+    if(existing&&!confirm('Este navegador ya tiene proyectos guardados en este dominio de Preview. Se guardará una copia y se sustituirán por los datos sintéticos de la revisión. ¿Continuar?'))return;
+    if(existing&&get(BACKUP)===null)localStorage.setItem(BACKUP,JSON.stringify(Object.fromEntries(KEYS.map(k=>[k,get(k)]))));
+    for(const [k,v] of Object.entries(c.storage))localStorage.setItem(k,v);
+    localStorage.setItem(MARK,id);
+    location.href='../'+c.url;
+  }catch(e){say('No se ha podido guardar en este navegador (modo privado o almacenamiento bloqueado): '+e.message);}
+}
+document.querySelectorAll('[data-case]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.case)));
+$('restore').addEventListener('click',()=>{try{const b=get(BACKUP);if(!b){say('No hay copia que restaurar.');return;}
+  for(const [k,v] of Object.entries(JSON.parse(b))){if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);}
+  localStorage.removeItem(BACKUP);localStorage.removeItem(MARK);say('Restaurado lo que había antes.');}catch(e){say('Error: '+e.message);}});
+$('clear').addEventListener('click',()=>{try{if(get(MARK)===null){say('No hay datos de esta revisión.');return;}
+  for(const k of KEYS)localStorage.removeItem(k);localStorage.removeItem(MARK);say('Datos de la revisión borrados.');}catch(e){say('Error: '+e.message);}});
+</script>
+</body>
+</html>
