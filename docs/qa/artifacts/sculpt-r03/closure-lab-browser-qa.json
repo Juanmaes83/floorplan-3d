@@ -1,0 +1,99 @@
+{
+ "results": [
+  "ok   1440×900: 17 scenarios (evidence = Node, parity, invariants), door states change the 3D, interactions, refused edits untouched, reset, focus, comparator, no console errors, no page scroll",
+  "ok   1280×800: 17 scenarios (evidence = Node, parity, invariants), door states change the 3D, interactions, refused edits untouched, reset, focus, comparator, no console errors, no page scroll",
+  "ok   390×844: 17 scenarios (evidence = Node, parity, invariants), door states change the 3D, interactions, refused edits untouched, reset, focus, comparator, no console errors, no page scroll",
+  "ok   844×390: 17 scenarios (evidence = Node, parity, invariants), door states change the 3D, interactions, refused edits untouched, reset, focus, comparator, no console errors, no page scroll",
+  "ok   no request left 127.0.0.1"
+ ],
+ "report": [
+  {
+   "viewport": "1440×900",
+   "doorStatePixelChange": {
+    "closedVsHidden": 0.268,
+    "closedVsOpen": 0.306,
+    "hiddenVsOpen": 0.089
+   },
+   "colours": 53
+  },
+  {
+   "viewport": "1440×900",
+   "comparator": {
+    "tableWidth": 1380,
+    "wrapperWidth": 1380,
+    "internalScroll": false
+   },
+   "focus": {
+    "tag": "SELECT",
+    "outline": "solid",
+    "width": "3px"
+   }
+  },
+  {
+   "viewport": "1280×800",
+   "doorStatePixelChange": {
+    "closedVsHidden": 0.268,
+    "closedVsOpen": 0.307,
+    "hiddenVsOpen": 0.089
+   },
+   "colours": 59
+  },
+  {
+   "viewport": "1280×800",
+   "comparator": {
+    "tableWidth": 1220,
+    "wrapperWidth": 1220,
+    "internalScroll": false
+   },
+   "focus": {
+    "tag": "SELECT",
+    "outline": "solid",
+    "width": "3px"
+   }
+  },
+  {
+   "viewport": "390×844",
+   "doorStatePixelChange": {
+    "closedVsHidden": 0.268,
+    "closedVsOpen": 0.311,
+    "hiddenVsOpen": 0.09
+   },
+   "colours": 72
+  },
+  {
+   "viewport": "390×844",
+   "comparator": {
+    "tableWidth": 760,
+    "wrapperWidth": 342,
+    "internalScroll": true
+   },
+   "focus": {
+    "tag": "SELECT",
+    "outline": "solid",
+    "width": "3px"
+   }
+  },
+  {
+   "viewport": "844×390",
+   "doorStatePixelChange": {
+    "closedVsHidden": 0.268,
+    "closedVsOpen": 0.306,
+    "hiddenVsOpen": 0.088
+   },
+   "colours": 55
+  },
+  {
+   "viewport": "844×390",
+   "comparator": {
+    "tableWidth": 784,
+    "wrapperWidth": 784,
+    "internalScroll": false
+   },
+   "focus": {
+    "tag": "SELECT",
+    "outline": "solid",
+    "width": "3px"
+   }
+  }
+ ]
+}

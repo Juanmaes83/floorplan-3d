@@ -1,0 +1,101 @@
+ok 1 - workshop keeps the donor files byte-identical to SOURCE EXACT (sha256 manifest of 2495d8e)
+ok 2 - the donor unit tests run UNCHANGED against the verbatim workshop design.js (13/13)
+ok 3 - the fetch script refuses unsafe destinations without touching them
+ok 4 - default cabinets are identical to the donor for every type over a grid of sizes
+ok 5 - validation parity on 3000 seeded mutations: the donor throws ⇔ issues exist, and issues[0] is the donor message
+ok 6 - resize and bay-width parity with the donor whenever the donor succeeds
+ok 7 - H1 reproduced: donor bayWidths/resizeCabinet leave the cabinet modified when they reject; the sculpt never mutates
+ok 8 - validation collects every issue with stable codes (donor stops at the first)
+ok 9 - NaN never becomes a valid value through an edit (structuredClone, not JSON)
+ok 10 - elevation never emits negative sizes; overlapping boards are reported as overlap
+ok 11 - split and merge keep the exterior doors and the width balance
+ok 12 - clear heights: openings + boards + drawers fill every bay exactly
+ok 13 - cabinet frame → plan uses the RUBIK footprint convention (clockwise, y down) at any rotation
+ok 14 - H2 reproduced: the donor door obstacle is an 18 mm slab and only exists while the 3D shows doors open
+ok 15 - H2 at scene level: a nightstand in the swing is seen by the evidence, not by the donor nor by RUBIK today
+ok 16 - door swing in a narrow corridor is reported through RUBIK placement (room + wall), never applied
+ok 17 - H3 confirmed: every default is a named donor assumption, independent of any measured input
+ok 18 - H4 reproduced: the donor ceiling comes from view calibration (default 2400, clamped ≥ 2100); the evidence uses only a given reference
+ok 19 - evidence invariants hold for every scenario and are deterministic and serialisable
+ok 20 - evidence validator rejects incoherent evidence
+ok 21 - previewDiff: the interior is blocked by the canonical schema; size.heightMm is only a reviewable candidate
+ok 22 - hinge/drawer conflicts are reported; the default layout never creates one
+ok 23 - RUBIK today: the box is placed by FloorPlanPlacement, drawn at a fixed height, with no interior and no swing
+ok 24 - guards: lab isolated from the product, no external requests, no product file references the lab
+ok 25 - [A-repro] low-ceiling: the expected result stays (2200 in 2150 → does not fit, −50)
+ok 26 - [A-repro] validate rejects a manipulated vertical result: fits:true when it does not fit (low-ceiling)
+ok 27 - [A-repro] validate rejects a manipulated vertical result: marginMm changed arbitrarily
+ok 28 - [A-repro] validate rejects a manipulated vertical result: topMm manipulated
+ok 29 - [A-repro] validate rejects a manipulated vertical result: cabinetHeightMm different from the height used
+ok 30 - [A-repro] validate rejects a manipulated vertical result: elevation without correspondence with the object
+ok 31 - [A-repro] validate rejects a manipulated vertical result: marginMm NaN serialised to null by JSON
+ok 32 - [A-repro] validate rejects a manipulated vertical result: fits Infinity
+ok 33 - [A-repro] validate rejects a manipulated vertical result: vertical clearHeightMm replaced after the fact
+ok 34 - [A-repro] fits:false when it fits (bedroom-default) is rejected
+ok 35 - [A-repro] a level-floor reference is not compared with a finished-floor object without a floor finish: pending, no invented fit
+ok 36 - [A-repro] a declared height without a stated source is not treated as verifiable
+ok 37 - [A-repro] a non-finite object elevation never produces a fit verdict
+ok 38 - [A-repro] an object heightMm that the canonical contract rejects is not reported as a plain difference
+ok 39 - [A-repro] non-finite or missing clear heights are invalid or unknown, never zero (protection that already existed)
+ok 40 - [B-repro] validate() answers with stable codes, without throwing: whole evidence null
+ok 41 - [B-repro] validate() answers with stable codes, without throwing: evidence is an array
+ok 42 - [B-repro] validate() answers with stable codes, without throwing: evidence is a string
+ok 43 - [B-repro] validate() answers with stable codes, without throwing: cabinet null
+ok 44 - [B-repro] validate() answers with stable codes, without throwing: cabinet.spec null
+ok 45 - [B-repro] validate() answers with stable codes, without throwing: cabinet.issues null
+ok 46 - [B-repro] validate() answers with stable codes, without throwing: cabinet.issues is an object
+ok 47 - [B-repro] validate() answers with stable codes, without throwing: object null
+ok 48 - [B-repro] validate() answers with stable codes, without throwing: object.size null
+ok 49 - [B-repro] validate() answers with stable codes, without throwing: object.size is an array
+ok 50 - [B-repro] validate() answers with stable codes, without throwing: computed null (valid cabinet)
+ok 51 - [B-repro] validate() answers with stable codes, without throwing: computed.cavity null
+ok 52 - [B-repro] validate() answers with stable codes, without throwing: computed.bays null
+ok 53 - [B-repro] validate() answers with stable codes, without throwing: computed.bays is an object
+ok 54 - [B-repro] validate() answers with stable codes, without throwing: computed.fronts null
+ok 55 - [B-repro] validate() answers with stable codes, without throwing: clearance null
+ok 56 - [B-repro] validate() answers with stable codes, without throwing: clearance.doors null
+ok 57 - [B-repro] validate() answers with stable codes, without throwing: clearance.drawers is a string
+ok 58 - [B-repro] validate() answers with stable codes, without throwing: height null
+ok 59 - [B-repro] validate() answers with stable codes, without throwing: height.vertical null
+ok 60 - [B-repro] validate() answers with stable codes, without throwing: previewDiff null
+ok 61 - [B-repro] validate() answers with stable codes, without throwing: previewDiff.candidates null
+ok 62 - [B-repro] validate() answers with stable codes, without throwing: previewDiff.candidates is an object
+ok 63 - [B-repro] validate() answers with stable codes, without throwing: notEvaluated null
+ok 64 - [B-repro] validate() answers with stable codes, without throwing: door plan with non-finite coordinates
+ok 65 - [B-repro] validate() answers with stable codes, without throwing: empty door polygon
+ok 66 - [B-repro] validate() answers with stable codes, without throwing: malformed polygon (numbers)
+ok 67 - [B-repro] validate() answers with stable codes, without throwing: unknown cabinet status
+ok 68 - [B-repro] validate() answers with stable codes, without throwing: candidate without op
+ok 69 - [B-repro] validate() answers with stable codes, without throwing: candidate without status
+ok 70 - [B-repro] validate() answers with stable codes, without throwing: bay width as a string
+ok 71 - [B-repro] validate() answers with stable codes, without throwing: cabinet.spec columns not an array
+ok 72 - [B-repro] computed values are checked against the pure engine, not only against each other
+ok 73 - [C-repro] taller object + ceiling too low → the height candidate is blocked (no would-set)
+ok 74 - [C-repro] taller object + unknown ceiling → pending, not presented as accepted
+ok 75 - [C-repro] a blocked candidate manipulated into candidate-reviewable is rejected
+ok 76 - [C-repro] a pending candidate manipulated into candidate-reviewable is rejected
+ok 77 - [C-repro] the level-floor reference does not make the height candidate reviewable
+ok 78 - [C-repro] a placement / swing problem is reported next to the height candidate, not hidden
+ok 79 - [nuevo] invalid interior + different object height → explicit blocked candidate (the old code omitted it)
+ok 80 - a reviewable candidate without blockers stays reviewable (would-set, never applied)
+ok 81 - the lab fixtures carry the same combinations the tests build independently
+ok 82 - [C] scenario matrix: bedroom-default → summary clear, height candidate none
+ok 83 - [C] scenario matrix: rotated-east-wall → summary clear, height candidate none
+ok 84 - [C] scenario matrix: low-ceiling → summary issues, height candidate none
+ok 85 - [C] scenario matrix: unknown-ceiling → summary clear-with-pending, height candidate none
+ok 86 - [C] scenario matrix: invalid-shelves → summary invalid, height candidate none
+ok 87 - [C] scenario matrix: nightstand-in-swing → summary issues, height candidate none
+ok 88 - [C] scenario matrix: narrow-corridor → summary issues, height candidate none
+ok 89 - [C] scenario matrix: height-mismatch → summary clear, height candidate candidate-reviewable
+ok 90 - [C] scenario matrix: derived-vertical → summary clear-with-pending, height candidate none
+ok 91 - [C] scenario matrix: mismatch-low-ceiling → summary issues, height candidate blocked
+ok 92 - [C] scenario matrix: mismatch-unknown-ceiling → summary clear-with-pending, height candidate pending
+ok 93 - [C] scenario matrix: mismatch-in-swing → summary issues, height candidate candidate-reviewable
+ok 94 - [C] scenario matrix: mismatch-invalid-interior → summary invalid, height candidate blocked
+ok 95 - [C] a candidate keeps placement and swing issues separate, with their authority, and does not let them decide the height
+ok 96 - [C] the conservative square and the exact sector are reported separately (a square-only finding is not a sector collision)
+ok 97 - validate(e, context) re-derives everything, including results that need the project
+ok 98 - readVertical distinguishes unknown, invalid (with a stable problem), unsourced and sourced references
+# tests 98
+# pass 98
+# fail 0
