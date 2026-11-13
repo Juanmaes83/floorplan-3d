@@ -1,0 +1,7 @@
+{"checked_at": "2026-11-13T16:44Z", "master": "10e025b5922bcfbf8a0700edead02240cefa307e", "previous_master": "f5c08c7efc0aabb0204246da311504fe3b778ee8",
+ "cause": "Merge de #219 (OBR-02/03) en master el 2026-11-13T14:57:59Z; no es una acción de esta operación.",
+ "auto_merged": {"210": "2026-11-13T14:58:01Z", "211": "2026-11-13T14:58:02Z"},
+ "new_open": {"221": "[DRAFT] integración controlada de #220 sobre master@10e025b (otra sesión); no tocada"},
+ "open_prs": 63,
+ "l2_l3_revalidation": "Ningún archivo del delta propio de las 38 PR de L2 y L3 cambia entre f5c08c7 y 10e025b (solape vacío). Todos los sucesores (L2), f3d7678 (L3) y #218 son ancestros de 10e025b. Las pruebas de L3 se ejecutaron sobre f5c08c7 y ninguna de esas suites ni de sus archivos cambia en 10e025b.",
+ "l1_still_ok": "Los HEAD de #212 y #216 siguen siendo ancestros de 10e025b; las dos siguen cerradas sin fusionar y sus ramas no han cambiado."}

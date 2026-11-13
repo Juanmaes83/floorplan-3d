@@ -4,6 +4,7 @@ import json, os, csv
 D = os.path.dirname(os.path.abspath(__file__)); U = 'https://github.com/Juanmaes83/floorplan-3d'
 dj = json.load(open(f'{D}/decisions.json')); dec = dj['decisions']; WHEN = dj['when']; MS = dj['master']
 l1 = json.load(open(f'{D}/l1-result.json'))
+rc = json.load(open(f'{D}/recheck.json')) if os.path.exists(f'{D}/recheck.json') else None
 l2 = {r['pr']: r for r in csv.DictReader(open(f'{D}/l2.tsv'), delimiter='\t')}
 l3 = {r['pr']: r for r in csv.DictReader(open(f'{D}/l3.tsv'), delimiter='\t')}
 P = lambda n: f'[#{n}]({U}/pull/{n})'
@@ -31,6 +32,15 @@ w(f"""
 - PR abiertas: 67 → **{l1['open_prs_after']}**.
 
 **Cambio externo detectado:** #219 (Claude B) tiene un HEAD nuevo, `a9d953fadee58ebd4a6e972a412a609553edaad3`; en el triaje era `b942a6d`. #210 y #211 siguen siendo ancestros de ese HEAD. No se ha tocado. Ninguna otra PR ha cambiado.
+
+### Recomprobación final ({rc['checked_at']}): `master` ha avanzado a `{rc['master'][:12]}`
+
+- **Causa:** {rc['cause']}
+- **#210 y #211:** GitHub las marca `merged` ({rc['auto_merged']['210']} y {rc['auto_merged']['211']}), porque sus HEAD están contenidos en #219. Es lo que preveía el lote L4.
+- **Nueva:** #221, {rc['new_open']['221']}.
+- **PR abiertas ahora: {rc['open_prs']}.**
+- **L1:** {rc['l1_still_ok']}
+- **L2 y L3:** {rc['l2_l3_revalidation']}
 
 ### L2 · Preparado, NO ejecutado (18 PR, pila #133–#151)
 

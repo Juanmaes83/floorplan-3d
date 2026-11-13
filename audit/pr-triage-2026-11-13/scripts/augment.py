@@ -24,6 +24,9 @@ for r in rows:
     else:
         r['estado_github'] = 'ABIERTA' + ('' if s and s[2]=='sin_cambios' else f' · HEAD CAMBIADO desde el triaje ({s[2] if s else "?"})')
         r['resultado_l1'] = ''
+        rc = json.load(open(f'{D}/recheck.json')) if os.path.exists(f'{D}/recheck.json') else {}
+        if n in rc.get('auto_merged', {}): r['estado_github'] = f"MERGED por contención en #219 ({rc['auto_merged'][n]})"
+        if n == '219' and rc: r['estado_github'] = 'MERGED en master@10e025b (2026-11-13T14:57:59Z)'
     r['ultima_comprobacion'] = f'{WHEN} · master@{MS}'
     if d:
         r['decision_lote'] = f"{d['lote']}: {d['decision']}" + (f" ({d['grupo']})" if d.get('grupo') else '')
