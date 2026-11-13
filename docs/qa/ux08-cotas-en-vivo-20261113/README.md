@@ -1,6 +1,6 @@
 # UX-08 · Cotas en vivo al mover muebles (ola 2, corte 2c)
 
-**Base:** `master@f119f1bbec4e3b3ee66a64c5e3aa2c7a6e4d72af`, con R03 ya integrado (#222). El enfoque es el de la auditoría M10 (`docs/product/auditoria-4-pdf-referencias-ui-ux-2026-11-09.md`): rayos ortogonales desde la huella orientada del mueble, con la misma geometría que `layout-review`.
+**Base:** creado sobre `master@f119f1bbec4e3b3ee66a64c5e3aa2c7a6e4d72af` (con R03, #222) y actualizado con `master@d69db22a1fa0c65b8706618a8cece37ab727ed93` (con R02-A, #223) por fusión normal, sin conflictos. El enfoque es el de la auditoría M10 (`docs/product/auditoria-4-pdf-referencias-ui-ux-2026-11-09.md`): rayos ortogonales desde la huella orientada del mueble, con la misma geometría que `layout-review`.
 
 ## Qué ve la persona
 
@@ -43,7 +43,7 @@ Un lado sin ningún límite delante tampoco tiene cota.
 |---|---|
 | `js/live-dimensions-core.js` | Núcleo puro: `measure(geometry, piece)`. Sin DOM, red ni almacenamiento; no muta nada |
 | `js/live-dimensions-ui.js` | Marcado SVG. Las cifras no tapan las asas de giro y tamaño, y si se saldrían de la pantalla se deslizan por su línea. Además, gestiona la aparición tras las flechas |
-| `index.html` (+5 líneas) | Carga de los dos scripts **antes** del bloque R03 (su orden autorizado no cambia), una línea en `renderSel` y una llamada en el manejador de las flechas |
+| `index.html` (+5 líneas) | Carga de los dos scripts **después** de los seis de R02-A y **antes** del bloque R03 (ningún orden autorizado cambia), una línea en `renderSel` y una llamada en el manejador de las flechas |
 
 **Se reutiliza, sin cambios:**
 - la geometría del proyecto (`FloorPlanCore.geometry`: estancias y muros);
@@ -66,6 +66,7 @@ Un lado sin ningún límite delante tampoco tiene cota.
 |---|---|
 | `tests/ux08-live-dimensions.test.cjs` (7) | Estancia rectangular con el mueble alineado, girado (contraste por fuerza bruta con rayos, también en L), estancia en L y tabique, junto a un muro, los casos sin cota, independencia del zoom y solo lectura con el proyecto de ejemplo |
 | `tests/ux08-live-dimensions.browser.test.cjs` (3) | Editor real a 1440×900 con ratón, 390×844 y 820×1180 con **táctil real**. Comprueba que las cifras cambian al arrastrar y coinciden con el núcleo, que no capturan el puntero, que la posición sigue siendo la de `snapMove` y que al soltar no queda nada y hay un paso de deshacer. También deshacer y rehacer, que el proyecto y el almacén guardados no llevan nada visual, otro zoom, un armario R03 con interior (cotas, interior intacto), las flechas (aparecen y se ocultan) y que no hay errores ni desplazamiento horizontal |
+| `tests/ux08-coexistence.browser.test.cjs` (2) | Convivencia con R03 y R02-A en el mismo editor: mover el armario con interior en la estancia con referencia vertical y plafón (ratón y táctil 390×844) da cotas del núcleo y deja intactas la capa de techo, `x-r03-cabinet` y `x-r02a-ceiling`, con un paso de deshacer. Con las cotas visibles, ni la lámina ni el PNG ni el JSON, historial o almacén las llevan. Reabrir conserva interior y techo, también en 3D |
 
 ## Límites
 
