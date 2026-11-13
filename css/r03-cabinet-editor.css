@@ -1,0 +1,51 @@
+/* SCULPT-R03 · estilos del editor de interiores de armario (js/r03-cabinet-editor-ui.js), para usarlo DENTRO de RUBIK.
+   Extraídos literalmente del laboratorio de #202 (labs/sculpt/r03-editor/index.html); sus variables viven en .r03-scope,
+   así no chocan con las de RUBIK. El laboratorio conserva su copia: este archivo no lo cambia. */
+.r03-scope{--bg:#f4f2ee;--panel:#fffdf9;--ink:#20242b;--muted:#5c6470;--line:#ddd6ca;--accent:#2f5d8a;--accent-ink:#fff;--ok:#1d6b3c;--bad:#a8261b;--warn:#8a5a00; --carcass:#e9dcc6;--cavity:#fffaf1;--board:#b99b74;--drawer:#d8bb92;--rod:#6b7f86;--door:rgba(47,93,138,.10);--door-line:#2f5d8a;--sel:rgba(47,93,138,.14);--radius:12px}
+.r03-scope{color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.r03-scope button,.r03-scope input,.r03-scope select{font:inherit;color:inherit}
+.r03-scope :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.r03-editor{display:flex;flex-direction:column;gap:10px}
+.r03-head h2{font-size:16px;margin:0}.r03-size{margin:2px 0;color:var(--muted)}
+.r03-prov{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0}.r03-tag{font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#fff}
+.r03-tag.is-assumed{color:var(--warn);border-color:#e7d1a6;background:#fdf6e7}.r03-tag.is-known{color:var(--ok);border-color:#b8dcc4;background:#eef8f1}
+.r03-figure{margin:0}.r03-figure figcaption{font-size:12.5px;color:var(--muted)}
+.r03-elev{width:100%;height:auto;max-height:min(66vh,620px);display:block;background:#fff;border:1px solid var(--line);border-radius:10px}
+.r03-carcass{fill:var(--carcass);stroke:#8d7d66;stroke-width:6}.r03-cavity{fill:var(--cavity)}.r03-bay{fill:transparent;stroke:none}.r03-bay.is-selected{fill:var(--sel);stroke:var(--accent);stroke-width:10}
+.r03-shelf{fill:var(--board)}.r03-divider{fill:#c7b192}.r03-rod{fill:var(--rod)}.r03-drawer{fill:var(--drawer);stroke:#9a7a52;stroke-width:4}.r03-handle{fill:#59636b}
+.r03-overlap{fill:#e0453a;fill-opacity:.55}.r03-door{fill:var(--door);stroke:var(--door-line);stroke-width:5;stroke-dasharray:22 14}.r03-door-edge{fill:var(--door-line);fill-opacity:.65}
+.r03-hinge{fill:none;stroke:var(--door-line);stroke-width:6}
+.r03-dim{font-size:46px;fill:#4a525d;text-anchor:middle;font-variant-numeric:tabular-nums}.r03-dim-in{font-size:40px;fill:#8a8070}.r03-dim-bay.is-selected{fill:var(--accent);font-weight:700}.r03-dim-total{font-size:52px;font-weight:600}
+.r03-msg{flex:1 0 100%;min-height:1.6em;margin:0;padding:6px 10px;border-radius:8px;font-size:14px}.r03-msg:empty{padding:0}
+.r03-msg.is-error{background:#fbe9e6;color:var(--bad);font-weight:550}.r03-msg.is-ok{background:#e8f4ec;color:var(--ok)}.r03-msg.is-info{background:#eef1f5;color:var(--muted)}
+.r03-controls{display:flex;flex-direction:column;gap:10px}
+.r03-group{border:1px solid var(--line);border-radius:10px;padding:8px 10px 10px;margin:0;min-width:0}.r03-group legend{font-weight:650;padding:0 4px}
+.r03-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.r03-field{display:inline-flex;align-items:center;gap:6px}.r03-field span:first-child{font-size:13.5px;color:var(--muted)}
+.r03-field input{min-width:9ch;min-height:44px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:#fff;font-variant-numeric:tabular-nums}
+.r03-unit{font-size:12.5px;color:var(--muted)}
+.r03-btn{min-height:44px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:550}
+.r03-btn:hover:not(:disabled){border-color:var(--accent)}.r03-btn:disabled{opacity:.45;cursor:default}
+.r03-btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.r03-btn-quiet{background:transparent}
+.r03-seg{display:flex;flex-wrap:wrap;gap:6px}.r03-seg-btn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.r03-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.r03-tab{min-width:52px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:650;cursor:pointer}
+.r03-tab[aria-selected=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.r03-bay h4{margin:12px 0 6px;font-size:14px}.r03-hint{font-weight:400;font-size:12.5px;color:var(--muted)}
+.r03-shelves{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:6px}.r03-shelf-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.r03-check{display:inline-flex;align-items:center;gap:8px;min-height:44px}.r03-check input{width:22px;height:22px}
+.r03-step{min-width:44px;padding:0;font-size:20px}.r03-count{min-width:2ch;text-align:center;font-weight:700;font-size:17px}.r03-label{font-size:13.5px;color:var(--muted)}
+.r03-warn{margin:8px 0 0;padding:6px 10px;border-radius:8px;background:#fdf6e7;color:var(--warn);font-size:13.5px}
+.r03-actions{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:var(--panel);padding:8px 0 4px;border-top:1px solid var(--line)}
+.r03-actions .r03-btn-primary{margin-left:auto}
+.r03-dim-sub{font-size:38px;fill:#6b7480}
+@media(max-width:700px){.r03-dim{font-size:88px}.r03-dim-in{font-size:76px}.r03-dim-total{font-size:96px}.r03-dim-sub{font-size:72px}}
+@media(max-height:560px){html{scroll-padding-bottom:0}.r03-actions{position:static}}
+.r03-elev{max-height:calc(100vh - 70px)}#view3d{height:calc(100vh - 100px)}#planM{max-height:calc(100vh - 70px)}}
+@media(max-height:560px){.r03-actions{position:static}}
+/* Diálogo dentro de RUBIK (js/r03-cabinet-rubik-ui.js): hoja a pantalla completa en el móvil, panel ancho en escritorio. */
+.r03-rubik-dialog{position:fixed;inset:0;z-index:1000;display:flex;align-items:stretch;justify-content:center;background:rgba(20,24,30,.42);padding:0}
+.r03-rubik-sheet{background:var(--panel);width:100%;max-width:980px;height:100%;overflow:auto;overscroll-behavior:contain;padding:12px 14px 0;display:flex;flex-direction:column;gap:8px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+@media(min-width:1000px){.r03-rubik-dialog{padding:24px}.r03-rubik-sheet{border-radius:14px;height:auto;max-height:calc(100vh - 48px)}}
+.r03-rubik-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;position:sticky;top:-12px;background:var(--panel);padding:6px 0;z-index:2;border-bottom:1px solid var(--line)}
+.r03-rubik-head h2{font-size:16px;margin:0;flex:1 1 260px}.r03-rubik-close{margin-left:auto}
+.r03-rubik-note{flex:1 0 100%;order:3;margin:0;font-size:12.5px;color:var(--warn)}
