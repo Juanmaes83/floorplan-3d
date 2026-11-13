@@ -10,6 +10,8 @@ on:
       - js/client-delivery-core.js
       - tests/r03-*.cjs
       - labs/sculpt/r03-editor/**
+      - index.html
+      - css/r03-*.css
       - vendor/three/**
       - .github/workflows/r03-sculpt-complete.yml
 permissions:
@@ -49,6 +51,13 @@ jobs:
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/r03-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Editor lab, desktop and phone (1440, 1280, 390x844, 844x390)
         run: node --test --test-concurrency=1 tests/r03-editor.browser.test.cjs
+      # Rama de revisión R03 Professional: el editor de interiores dentro del editor REAL de RUBIK (index.html con la
+      # conexión propuesta). three r160 desde vendor/ (la CDN no se usa en las pruebas).
+      - name: R03 inside RUBIK's real editor (1440x900, 390x844, 844x390)
+        env:
+          THREE_LOCAL_DIR: vendor/three
+          R03_RUBIK_SHOTS: qa-results/r03-editor/in-rubik
+        run: node --test --test-concurrency=1 tests/r03-editor-in-rubik.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
