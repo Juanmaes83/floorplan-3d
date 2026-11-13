@@ -45,7 +45,9 @@ const style=document.createElement('style');style.textContent=`
 .plan-preview .pp-src [data-status=other-revision],.plan-preview .pp-src [data-status=unavailable],.plan-preview .pp-src [data-status=rejected],.plan-preview .pp-src [data-status=absent]{color:#7a4a12}
 .plan-preview .pp-synth{margin:.2em 0;padding:3px 6px;background:#fff4e5;border:1px solid #e5c79f;border-radius:4px}.plan-preview .pp-small{font-size:11px;color:#5b6166}.plan-preview .pp-assume{font-size:11px;color:#5b6166}
 .plan-preview .pp-warn{margin:.3em 0;padding-left:1.1em;color:#7a4a12}.plan-preview .pp-links li[data-ghost=false]{color:#7a4a12}
-@media (max-width:760px){.plan-preview{top:auto;bottom:56px;left:8px;right:auto;width:min(300px,calc(100% - 16px));max-height:calc(100% - 72px)}}
+/* Móvil: el panel desplegado no puede tapar la escena (antes, hasta el 100 % menos 72 px): como mucho el 45 % del escenario,
+   con su propio desplazamiento. La escena sigue recibiendo los toques fuera de él. */
+@media (max-width:760px){.plan-preview{top:auto;bottom:56px;left:8px;right:auto;width:min(300px,calc(100% - 16px));max-height:45%}}
 body.capture .plan-preview{display:none!important}`;
 document.head.append(style);
 const $=s=>box.querySelector(s);
@@ -88,8 +90,9 @@ function linksHtml(t){
   if(!rows.length)return `<p>${t.previewElementIds.length} elemento(s) citados por el plan, <b>sin comprobar</b> contra el modelo: no se dibujan.</p>`;
   const ok=rows.filter(x=>x.ghost).length,bad=rows.filter(x=>!x.ghost),group={};for(const x of bad)(group[x.label]||=[]).push(x.elementId);
   return `<p>${ok?`<b>${ok}</b> elemento(s) vinculados y comprobados en el modelo (en fantasma)`:'Ningún elemento comprobado en el modelo: no hay fantasma.'}</p>`
-    +(bad.length?`<ul class="pp-links">${Object.entries(group).map(([l,ids])=>`<li data-ghost="false">${ids.length} ${esc(l)} (${ids.map(esc).join(', ')})</li>`).join('')}</ul>`:'')
-    +(t.source?`<p class="pp-small">Origen declarado de la tarea: ${esc(t.source)}</p>`:'');
+    +(bad.length?`<ul class="pp-links">${Object.entries(group).map(([l,ids])=>`<li data-ghost="false">${ids.length} ${esc(l)} (${ids.map(esc).join(', ')})</li>`).join('')}</ul>`:'');
+  // El origen declarado de las tareas está en «Fuentes y vínculos» (plan): repetirlo en cada tarea alargaba el panel, que
+  // en el móvil tapaba la escena y sus botones recibían los toques destinados a los muros (recorrido de la Preview).
 }
 function renderSources(prov){
   const el=$('.pp-src');if(!prov){el.innerHTML='<p>Sin datos de procedencia.</p>';return;}
