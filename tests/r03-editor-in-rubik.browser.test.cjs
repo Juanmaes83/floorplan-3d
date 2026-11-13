@@ -39,8 +39,10 @@ test(`R03 dentro de RUBIK ${viewport.width}x${viewport.height}`,{timeout:420000}
  await press('#aInterior');await page.locator('.r03-rubik-dialog').waitFor();
  assert.match(await page.locator('#r03RubikTitle').innerText(),/Interior · Armario ropero/);assert.match(await page.locator('.r03-rubik-note').innerText(),/no de fabricante/);
  assert.match(await msg(),/supuestos/);
- await dlgButton('Dividir módulo');assert.match(await msg(),/./);await dlgButton('Añadir balda');
+ await dlgButton('Dividir módulo');assert.match(await msg(),/./);
+ const afterSplit=await page.evaluate(()=>JSON.stringify(RubikCabinetRubikUI.current.session.state));await dlgButton('Añadir balda');
  const s1=await page.evaluate(()=>RubikCabinetRubikUI.current.session.state.cabinet.columns.length);
+ assert.notEqual(await page.evaluate(()=>JSON.stringify(RubikCabinetRubikUI.current.session.state)),afterSplit,'la balda cambia el interior');
  // Rechazo explicado: 6 cajones de la altura máxima no caben.
  const ok=await page.evaluate(()=>{const s=RubikCabinetRubikUI.current.session;return RubikCabinetEditor.apply(s,{type:'set-drawers',drawers:6,drawerHeight:400}).ok;});assert.equal(ok,false);
  // 3 · Ctrl+Z dentro del diálogo deshace la edición del armario, NUNCA el proyecto (modal).
@@ -49,6 +51,7 @@ test(`R03 dentro de RUBIK ${viewport.width}x${viewport.height}`,{timeout:420000}
  await page.keyboard.press('Control+z');await page.waitForTimeout(150);
  assert.deepEqual(await proj(),before,'Ctrl+Z en el diálogo no toca el proyecto');
  assert.equal(await page.evaluate(()=>RubikCabinetRubikUI.current.session.state.cabinet.columns.length),s1,'(deshace la balda, no la división)');
+ assert.equal(await page.evaluate(()=>JSON.stringify(RubikCabinetRubikUI.current.session.state)),afterSplit,'Ctrl+Z del diálogo deshace de verdad la balda');
  await dlgButton('Añadir balda');await dlgButton('Ocultas (ver interior)');await shot('2-dialog');
  // 4 · Guardar = un paso del deshacer de RUBIK.
  await dlgButton('Guardar interior');
@@ -130,4 +133,78 @@ test(`R03 prueba C dentro de RUBIK ${viewport.width}x${viewport.height}`,{timeou
  await tap(page.locator('.r03-rubik-dialog button',{hasText:'Restablecer'}).first());assert.equal(await state(),original,'Restablecer vuelve al estado abierto');
  assert.equal(await page.evaluate(()=>JSON.stringify(project)),projectBefore,'sin «Guardar interior» el proyecto no cambia');
  assert.equal(JSON.parse(afterH).cabinet.columns[0].drawerHeight,400,'alto de cajón aceptado (400 mm)');assert.deepEqual(errors,[]);
+});
+
+/* Auditoría de #215 · «Dividir módulo» y el cierre con cambios pendientes, en escritorio y en el móvil.
+   A) División válida: los módulos cambian de verdad, la sesión queda con cambios (dirty) y el primer Escape NO cierra
+      (pide confirmación); el segundo sí, sin tocar el proyecto. En el móvil no hay Escape: el botón «Cerrar» debe
+      pedir la misma confirmación (antes cerraba y tiraba los cambios sin avisar).
+   B) División rechazada sobre un armario guardado: módulos idénticos, aviso explícito en rojo, sin cambios (dirty
+      false) y un solo Escape cierra. Una división rechazada nunca cuenta como cambio, y tampoco borra uno anterior.
+   C) Guardar, deshacer y rehacer de RUBIK, y el 3D, con el interior dividido. */
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])
+test(`R03 «Dividir módulo» y cierre con cambios pendientes ${viewport.width}x${viewport.height}`,{timeout:420000},async t=>{
+ const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
+ await page.route('https://cdn.jsdelivr.net/**',async r=>{if(!process.env.THREE_LOCAL_DIR)return r.abort();try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
+ await page.goto(url);await require('./editor-fixture.cjs')(page);
+ const tap=async l=>{await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();await page.waitForTimeout(120);};
+ const dlg=()=>page.locator('.r03-rubik-dialog'),btn=text=>page.locator('.r03-rubik-dialog button',{hasText:text}).first();
+ const open=async()=>{await page.evaluate(id=>{select({kind:'furn',id});drawer('panel',true);},WARDROBE);await page.waitForTimeout(300);await tap(page.locator('#aInterior'));await dlg().waitFor();};
+ const widths=()=>page.evaluate(()=>RubikCabinetRubikUI.current.session.state.cabinet.columns.map(c=>c.width));
+ const dirty=()=>page.evaluate(()=>RubikCabinetEditor.dirty(RubikCabinetRubikUI.current.session));
+ const msg=async()=>({text:await page.locator('.r03-rubik-dialog .r03-msg').innerText(),kind:await page.locator('.r03-rubik-dialog .r03-msg').getAttribute('class')});
+ const proj=()=>page.evaluate(()=>JSON.stringify(project)),undoLen=()=>page.evaluate(()=>undoStack.length);
+ const saved=()=>page.evaluate(id=>{const r=RubikCabinetContract.read(project,id);return r.status==='ok'?r.cabinet.columns.length:r.status;},WARDROBE);
+ const focusIsOpener=()=>page.evaluate(()=>document.activeElement?.id==='aInterior');
+
+ // A · División válida → cambio real → primer Escape pide confirmación → segundo Escape cierra sin guardar.
+ const p0=await proj(),u0=await undoLen();await open();const w0=await widths();assert.equal(await dirty(),false);
+ await tap(btn('Dividir módulo'));const w1=await widths(),m1=await msg();
+ assert.equal(w1.length,w0.length+1,`un módulo más: ${w0} → ${w1}`);assert.notDeepEqual(w1,w0);
+ assert.match(m1.kind,/is-ok/);assert.match(m1.text,/Módulo dividido/);assert.equal(await dirty(),true,'dividir es un cambio sin guardar');
+ assert.equal(await proj(),p0,'sin guardar, el proyecto no cambia');
+ await page.keyboard.press('Escape');await page.waitForTimeout(150);
+ assert.equal(await dlg().count(),1,'el PRIMER Escape no cierra');assert.match((await msg()).text,/cambios sin guardar/);assert.deepEqual(await widths(),w1,'y no deshace nada');
+ await page.keyboard.press('Escape');await page.waitForTimeout(150);
+ assert.equal(await dlg().count(),0,'el segundo Escape cierra');assert.equal(await proj(),p0,'cerrar sin guardar no toca el proyecto');assert.equal(await undoLen(),u0);
+ assert.ok(await focusIsOpener(),'el foco vuelve a «Interior del armario…»');
+
+ // A' · Lo mismo con el botón «Cerrar» (lo único que hay en el móvil): primero confirma, luego cierra.
+ await open();await tap(btn('Dividir módulo'));assert.equal(await dirty(),true);
+ await tap(page.locator('.r03-rubik-close'));
+ assert.equal(await dlg().count(),1,'«Cerrar» con cambios sin guardar pide confirmación');assert.match((await msg()).text,/cambios sin guardar/);
+ await tap(page.locator('.r03-rubik-close'));assert.equal(await dlg().count(),0,'el segundo «Cerrar» cierra');assert.equal(await proj(),p0);
+ // A'' · Ctrl+Z dentro del diálogo deshace la división: ya no hay cambios y un solo Escape cierra.
+ await open();await tap(btn('Dividir módulo'));await btn('Dividir módulo').focus();await page.keyboard.press('Control+z');await page.waitForTimeout(150);
+ assert.deepEqual(await widths(),w0,'deshecha la división');assert.equal(await dirty(),false);assert.equal(await proj(),p0,'Ctrl+Z del diálogo no toca el proyecto');
+ await page.keyboard.press('Escape');await page.waitForTimeout(150);assert.equal(await dlg().count(),0,'sin cambios, un Escape cierra');
+
+ // B · Dividir hasta que el motor lo rechace; ese rechazo no cambia nada y conserva el «hay cambios» anterior.
+ await open();let rejected=null,valid=0;
+ for(let i=0;i<10&&!rejected;i++){const before=await widths();await tap(btn('Dividir módulo'));const m=await msg();
+   if(/is-error/.test(m.kind))rejected={before,after:await widths(),m};else valid++;}
+ assert.ok(rejected&&valid>=1,`se rechaza alguna división (válidas antes: ${valid})`);assert.deepEqual(rejected.after,rejected.before,'división rechazada: módulos idénticos');
+ assert.match(rejected.m.text,/150 mm|módulos/,`aviso explícito: «${rejected.m.text}»`);assert.doesNotMatch(rejected.m.text,/Módulo dividido/);
+ assert.equal(await dirty(),true,'las divisiones válidas anteriores siguen pendientes');
+ await page.keyboard.press('Escape');await page.waitForTimeout(150);assert.equal(await dlg().count(),1,'con cambios previos, el rechazo no permite cerrar de un Escape');
+ // Se guarda (un paso de RUBIK) y se vuelve a intentar dividir el módulo estrecho: rechazo SIN cambios.
+ await tap(btn('Guardar interior'));const nSaved=rejected.before.length;
+ assert.equal(await saved(),nSaved,'guardado con sus módulos');assert.equal(await undoLen(),u0+1,'un paso del deshacer de RUBIK');assert.equal(await dirty(),false);
+ const pSaved=await proj(),wSaved=await widths();await tap(btn('Dividir módulo'));const mr=await msg();
+ assert.match(mr.kind,/is-error/,'rechazo en rojo');assert.match(mr.text,/150 mm|módulos/);assert.deepEqual(await widths(),wSaved,'módulos idénticos');
+ assert.equal(await dirty(),false,'un rechazo no es un cambio');assert.equal(await proj(),pSaved,'ni toca el proyecto');assert.equal(await undoLen(),u0+1);
+ await page.keyboard.press('Escape');await page.waitForTimeout(150);assert.equal(await dlg().count(),0,'sin cambios, un Escape cierra');assert.ok(await focusIsOpener());
+
+ // C · Deshacer y rehacer de RUBIK con el interior dividido; 3D con el armario exacto.
+ await page.keyboard.press('Control+z');await page.waitForTimeout(200);assert.equal(await saved(),'none','Ctrl+Z de RUBIK quita el interior guardado');
+ await page.keyboard.press('Control+Shift+z');await page.waitForTimeout(200);assert.equal(await saved(),nSaved,'y rehacer lo devuelve');
+ if(process.env.THREE_LOCAL_DIR){
+  await page.evaluate(()=>{window.__r03Models=[];const m=RubikCabinetBridge.model3D;window.RubikCabinetBridge={...RubikCabinetBridge,model3D:(...a)=>{const r=m(...a);if(r)window.__r03Models.push({fid:a[2].id,group:r.group});return r;}};});
+  await page.evaluate(()=>setView('3d'));await page.waitForFunction(id=>window.__r03Models.some(m=>m.fid===id&&m.group.parent),WARDROBE,{timeout:60000});
+  const pieces=await page.evaluate(id=>{const g=window.__r03Models.filter(m=>m.fid===id).pop().group;let n=0;g.traverse(o=>{if(o.isMesh)n++;});return n;},WARDROBE);
+  assert.ok(pieces>10,`3D del armario dividido: ${pieces} piezas`);
+ }
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'sin desplazamiento horizontal');
+ assert.deepEqual(errors,[]);
 });
