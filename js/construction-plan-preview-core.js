@@ -110,6 +110,7 @@
   const short=h=>typeof h==='string'&&h.length>12?h.slice(0,12):h??null;
   const LINK_ES={ok:'vinculado y comprobado en el modelo',broken:'el identificador no existe en el proyecto: no se dibuja','not-representable':'existe en el proyecto pero no tiene representación 3D: no se dibuja',
     illustrative:'recurso ilustrativo del plan, no es geometría del proyecto: no se dibuja en fantasma','role-mismatch':'rol no admitido para ese recurso: no se dibuja'};
+  const OTHER_REVISION_ES='plan de otra revisión · no validado sobre la actual';
   const WITHHELD_ES='existe en el proyecto, pero el plan es de otra revisión: no se dibuja hasta reconciliar las fuentes';
   const REVIEW_ES={draft:'borrador: fechas sin aprobar',reviewed:'revisado (declarado por el profesional, no acreditado)'};
   function provenance({snapshot,model,schedule=null,meta=null}={}){
@@ -152,7 +153,12 @@
     const b=model.obsolescence||{};
     out.sources.push({kind:'binding',label:'Vínculo profesional',status:Object.values(b).some(v=>v!=='unknown')?'present':'absent',
       detail:Object.values(b).some(v=>v!=='unknown')?`proyecto ${b.project}, plan ${b.schedule}, presupuesto ${b.budget}`:'Sin vínculo: ningún profesional ha fijado las revisiones.'});
-    out.sources.push({kind:'delivery',label:'Nivel de la presentación',status:model.delivery?.level||'unknown',detail:model.delivery?.label||'—'});
+    // El nivel lo calcula el adaptador FT3D-8 y no se toca. Su rótulo «orientativa» habla de un plan «sin revisión declarada
+    // o incompleto»; si el plan SÍ declara revisión pero es OTRA, se dice al lado, sin ambigüedad (auditoría #219).
+    const planOtherRevision=!!canon&&model.planning?.status==='available'&&canon.projectRef.revision!==fp.project;
+    out.sources.push({kind:'delivery',label:'Nivel de la presentación',status:model.delivery?.level||'unknown',
+      ...(planOtherRevision?{planRevision:'other'}:{}),
+      detail:(model.delivery?.label||'—')+(planOtherRevision?' · '+OTHER_REVISION_ES:'')});
     // Vínculos: la siguiente tarea y las tareas sin elementos o sin partidas.
     const links=model.links||[],key=(t,e)=>t+'\u0000'+e,byLink=new Map(links.map(l=>[key(l.taskId,l.elementKey),l]));
     // Cierre del caso adversarial (auditoría #211): un plan hecho sobre OTRA revisión del proyecto no dibuja ningún fantasma,
@@ -173,5 +179,5 @@
     if(snapshot?.cost?.status==='partial')out.warnings.push({code:'cost-partial',message:'Coste planificado parcial: hay partidas sin importe en tareas ya empezadas.'});
     return out;
   }
-  return Object.freeze({SCHEMA,VERSION,snapshot,unsupportedStates,planKey,COST_REASONS,provenance,LINK_ES});
+  return Object.freeze({SCHEMA,VERSION,snapshot,unsupportedStates,planKey,COST_REASONS,provenance,LINK_ES,OTHER_REVISION_ES});
 });

@@ -114,4 +114,8 @@ test('cierre del adversarial: plan de OTRA revisión que cita elementos que SÍ 
   // Nada se inventa: ni avance ejecutado ni importes nuevos (el coste planificado sigue siendo el del reparto del presupuesto).
   assert.equal(base.snapshot.executed.status,'not-recorded');
   assert.equal(src(prov,'delivery').status,model.delivery.level,'el nivel es el que calcula el adaptador, no se rebaja ni se eleva aquí');
+  // Junto al nivel, sin ambigüedad: el plan SÍ declara revisión, pero es otra (auditoría #219). La misma revisión no lo dice.
+  assert.equal(src(prov,'delivery').planRevision,'other');
+  assert.equal(src(prov,'delivery').detail,model.delivery.label+' · plan de otra revisión · no validado sobre la actual');
+  assert.equal(src(base.prov,'delivery').planRevision,undefined);assert.doesNotMatch(src(base.prov,'delivery').detail,/otra revisión/);
 });
