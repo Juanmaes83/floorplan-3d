@@ -29,7 +29,7 @@
       <div class="r03-rubik-body"></div></div>`;
     dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${TYPE[object.type] || object.type} «${object.name || objectId}» · ${object.size.widthMm} × ${object.size.depthMm} mm`;
     host.append(dialog);
-    const body = dialog.querySelector('.r03-rubik-body');
+    const body = dialog.querySelector('.r03-rubik-body'), sheet = dialog.querySelector('.r03-rubik-sheet');sheet.tabIndex = -1;
     let savedAlready = o.status === 'ok';
     const editor = UI().mount(body, {
       session: o.session, title: `${TYPE[object.type] || object.type} «${object.name || objectId}»`, savedAlready,
@@ -39,6 +39,7 @@
         // Se sigue editando lo que quedó guardado (el historial de la edición empieza de nuevo; el de RUBIK tiene el paso).
         const again = B().open(getProject(), objectId);savedAlready = true;
         editor.setSession(again.session, { kind: 'ok', text: 'Interior guardado en el proyecto. Se puede deshacer con «Deshacer» de RUBIK.' }, true);
+        if (!dialog.contains(document.activeElement)) sheet.focus({ preventScroll: true });
         return null;
       },
       onCancel: () => close(),
@@ -52,15 +53,19 @@
       else if (e.key !== 'Tab') delete dialog.dataset.confirmClose;
       e.stopPropagation();// modal: RUBIK no recibe estas teclas (Ctrl+Z, Supr, flechas…)
     };
-    dialog.addEventListener('keydown', onKey);
+    // Escucha en el documento, en captura, mientras está abierto: aunque el foco se pierda (p. ej. al redibujarse tras
+    // guardar), ninguna tecla llega a RUBIK y Escape sigue cerrando. Y el foco vuelve al diálogo si se escapa de él.
+    document.addEventListener('keydown', onKey, true);
+    const keepFocus = e => { if (!dialog.contains(e.target)) sheet.focus({ preventScroll: true }); };
+    document.addEventListener('focusin', keepFocus, true);
     dialog.querySelector('.r03-rubik-close').addEventListener('click', () => close());
-    current = { dialog, editor, opener, objectId };
+    current = { dialog, editor, opener, objectId, off: () => { document.removeEventListener('keydown', onKey, true);document.removeEventListener('focusin', keepFocus, true); } };
     (body.querySelector('button,input,[tabindex]') || dialog.querySelector('.r03-rubik-close')).focus({ preventScroll: true });
     return { ok: true, status: o.status, readOnly: o.readOnly };
   }
   function close() {
     if (!current) return false;
-    const { dialog, editor, opener } = current;current = null;
+    const { dialog, editor, opener, off } = current;current = null;off();
     editor.destroy();dialog.remove();
     if (opener && opener.isConnected) opener.focus({ preventScroll: true });
     return true;
