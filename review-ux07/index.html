@@ -36,10 +36,12 @@
     <label class="declare" id="declareRow" hidden><input type="checkbox" id="declare"> Declaro que estos dos proyectos son revisiones de la misma obra</label>
     <div class="row"><button class="btn primary" id="compareBtn" type="button">Comparar</button></div>
     <p id="srcError" class="error" role="alert"></p>
+    <p id="srcStatus" class="muted" role="status" aria-live="polite"></p>
   </section>
 
   <section class="card" aria-labelledby="cmpTitle" id="cmpCard" hidden>
     <h2 id="cmpTitle">2 · Comparación</h2>
+    <p id="cmpSource" class="badge-src"></p>
     <p id="relation" class="muted"></p>
     <div class="row" role="group" aria-label="Modo de comparación">
       <button class="btn" type="button" data-mode="curtain" aria-pressed="true">Cortina</button>

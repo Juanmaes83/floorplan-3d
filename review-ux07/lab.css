@@ -40,3 +40,4 @@ details{margin-top:12px}summary{cursor:pointer;min-height:44px;display:flex;alig
 /* En pantallas estrechas cada partida es una ficha con sus rótulos: ninguna columna (la diferencia) queda fuera de la vista. */
 @media (max-width:720px){.tablewrap table{min-width:0}.bc thead{display:none}.bc tbody tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}
 .bc tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:2px 0;text-align:right}.bc tbody td::before{content:attr(data-label);font-weight:600;color:var(--muted);text-align:left}}
+.badge-src{display:inline-block;margin:0 0 6px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:.85rem}
