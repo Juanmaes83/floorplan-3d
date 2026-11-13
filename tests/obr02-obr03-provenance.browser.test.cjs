@@ -140,6 +140,16 @@ test('móvil 390×844: con la siguiente tarea desplegada, el panel no pasa del 4
     assert.ok(r.ratio<=0.46,`el panel ocupa ${(r.ratio*100).toFixed(0)} % del escenario`);assert.ok(r.pt,'el muro es alcanzable');
     await page.touchscreen.tap(r.pt.x,r.pt.y);await page.waitForTimeout(500);
     assert.equal(await page.evaluate(()=>{const b=document.getElementById('pickInfo');return b.hidden?null:b.dataset.key;}),'project/wal_ref-w0');
+    // La ficha que se acaba de abrir queda ENCIMA del panel del plan: su título y «Cerrar» se ven y se pueden tocar
+    // (antes el panel desplegado tapaba el título de la ficha en móvil; evidencia 2-muro-carga-con-fantasma-movil).
+    // El panel lleva pointer-events:none (deja pasar los clics al escenario), así que elementFromPoint lo atraviesa aunque
+    // esté pintado encima: para medir el ORDEN DE PINTADO se vuelve «tocable» solo durante la comprobación.
+    const top=await page.evaluate(()=>{const pick=document.getElementById('pickInfo'),probe=document.createElement('style');
+      probe.textContent='.plan-preview,.plan-preview *{pointer-events:auto!important}';document.head.append(probe);
+      const hit=el=>{const r=el.getBoundingClientRect(),e=document.elementFromPoint(r.left+Math.min(r.width/2,40),r.top+r.height/2);return !!e&&pick.contains(e);};
+      const h=pick.querySelector('h4'),close=[...pick.querySelectorAll('button')].find(b=>/Cerrar/.test(b.textContent));
+      const out={title:h?.textContent||null,titleOnTop:!!h&&hit(h),closeOnTop:!!close&&hit(close)};probe.remove();return out;});
+    assert.ok(top.titleOnTop,`el título de la ficha («${top.title}») no queda tapado por el panel del plan`);assert.ok(top.closeOnTop,'«Cerrar» de la ficha se puede tocar');
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}}finally{await env1.stop();}
 });

@@ -25,8 +25,10 @@ box.innerHTML=`<div class="pp-row"><svg viewBox="0 0 44 44" class="pp-ring" aria
 <details class="pp-next-d"><summary>Siguiente tarea · planificada</summary><div class="pp-next"></div></details>
 <details class="pp-src-d"><summary><span class="pp-note"></span> <b>Fuentes y vínculos</b></summary><div class="pp-src"></div></details>`;
 host?.append(box);
+// Capas: z-index 3 = por encima del rótulo y de los sellos de la escena (2) y, por orden en el DOM, de la tarjeta inicial
+// (.intro, 3); por DEBAJO de la ficha del elemento que la persona acaba de tocar (.pick, 4), que no debe quedar tapada.
 const style=document.createElement('style');style.textContent=`
-.plan-preview{position:absolute;right:16px;top:64px;z-index:4;width:min(300px,calc(100% - 32px));max-height:calc(100% - 150px);overflow:auto;pointer-events:none;padding:8px 10px;background:rgba(255,255,255,.93);color:#1d2124;border:1px solid #d6d3cc;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.10);font:12.5px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.plan-preview{position:absolute;right:16px;top:64px;z-index:3;width:min(300px,calc(100% - 32px));max-height:calc(100% - 150px);overflow:auto;pointer-events:none;padding:8px 10px;background:rgba(255,255,255,.93);color:#1d2124;border:1px solid #d6d3cc;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.10);font:12.5px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
 .plan-preview summary,.plan-preview button,.plan-preview label,.plan-preview input{pointer-events:auto}
 .plan-preview .pp-row{display:flex;gap:10px;align-items:flex-start;position:relative}
 .plan-preview .pp-ring{width:44px;height:44px;flex:none;transform:rotate(-90deg)}.plan-preview .pp-track{fill:none;stroke:#e4e1da;stroke-width:6}.plan-preview .pp-arc{fill:none;stroke:#0f7f95;stroke-width:6}
