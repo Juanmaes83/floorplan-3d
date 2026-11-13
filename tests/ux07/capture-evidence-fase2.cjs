@@ -18,7 +18,10 @@ const OUT=path.join(K.ROOT,'docs/qa/ux07-ent04-fase2-presupuestos-2026-11-12/evi
     await page.waitForFunction(()=>/Dossier verificado/.test(document.getElementById('verifyOut').textContent));
     await page.evaluate(()=>document.getElementById('verifyOut').scrollIntoView({block:'center'}));await shot(page,`4-verificado-${tag}`,{},{version:await page.evaluate(()=>window.__ux07.dossier.manifest.version)});
     const html=await page.evaluate(()=>window.__ux07.dossier.html);const p2=await context.newPage();await p2.setContent(html);
-    await p2.locator('section.budget-compare').scrollIntoViewIfNeeded();await shot(p2,`5-dossier-descargado-seccion-presupuestos-${tag}`,{},{});
+    await p2.locator('section.budget-compare').scrollIntoViewIfNeeded();await shot(p2,`5-dossier-descargado-seccion-presupuestos-${tag}`,{},{});await p2.close();
+    // 6 · auditoría #212: cambiar el origen retira la comparación y el dossier anteriores (nada se atribuye al origen nuevo).
+    await page.check('input[name=src][value=files]');await page.evaluate(()=>document.getElementById('srcTitle').scrollIntoView({block:'start'}));
+    await shot(page,`6-origen-cambiado-resultados-retirados-${tag}`,{},{comparacionVisible:await page.evaluate(()=>!document.getElementById('cmpCard').hidden)});
     await context.close();}}finally{await env.stop();}
   fs.writeFileSync(path.join(OUT,'manifest.json'),JSON.stringify({generated:new Date().toISOString(),data:'fixtures sintéticas (vivienda de referencia) y precios FICTICIOS de laboratorio',navegador:'Chromium de Playwright; no es un dispositivo físico',files},null,1));
   console.log(files.map(f=>f.file+' '+f.sha256.slice(0,8)+' '+(f.status||'')).join('\n'));

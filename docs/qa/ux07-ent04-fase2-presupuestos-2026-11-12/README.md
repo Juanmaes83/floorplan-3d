@@ -96,6 +96,18 @@ La fase 1 (#209) adjuntaba **un** presupuesto, el de «después», y avisaba si 
   - se comprueba con `elementFromPoint` que el botón y los selectores reciben el toque, sin depender de las fuentes.
 - **Control negativo:** sin la corrección, las dos pruebas fallan; la nueva enumera 6 controles fuera de la pantalla.
 
+## 4 bis. Correcciones de las auditorías del 13/11/2026 (ChatGPT y propietario)
+
+| Hallazgo | Corrección | Prueba (falla sin la corrección) |
+|---|---|---|
+| **A** · `compareBudgets` en `incoherent` devolvía diferencias y partidas «exactas» en el modelo, aunque la interfaz no las mostrara | En `incoherent`, cada partida queda `status:'withheld'`, `excludedReason:'incoherent'`, `delta:null` y **sin importes**: solo las cantidades, que explican la incoherencia. `counts.exact = 0`. | `ux07-ent04-budget-coherence` n.º 4: falla en `12ed08b` («ninguna diferencia por partida») |
+| **B** · La prueba «1.0.0» reetiquetaba un dossier 1.1.0 | Artefacto **auténtico** en `tests/fixtures/ux07-dossier-1.0.0/`, generado con la implementación de #209 (`8a3cce8`, `VERSION 1.0.0`) por `tests/ux07/build-dossier-1.0.0-fixture.cjs`, con `origen.json`. No debe regenerarse con el código actual. | `ux07-ent04-budget-coherence` n.º 12: el verificador actual acepta el par intacto, también contra sus entradas; detecta alteraciones; rechaza un presupuesto de «antes» que 1.0.0 no tenía |
+| **C** · Al cambiar el origen, la comparación sintética anterior seguía a la vista junto al origen nuevo (captura del propietario) | Al cambiar el origen, las entradas de biblioteca, los archivos o la declaración, se **retiran** la comparación, el dossier, los presupuestos y el estado, y se avisa en `#srcStatus`. Un error al comparar tampoco deja nada anterior. La comparación muestra su **origen** («Origen: …»). | `ux07-ent04-origin.browser` (4: escritorio, móvil, biblioteca y archivos). El escenario de escritorio falla contra el laboratorio de `12ed08b` |
+
+La discrepancia de archivos descargados del comentario anterior **no era un defecto**: el propietario había adjuntado por error la primera descarga, y el par correcto se verificó byte a byte. No se trata como bug.
+
+Comparaciones **parcial** e **incoherente** y la **presentación móvil** siguen cubiertas por `ux07-ent04-budget.browser`.
+
 ## 5. Evidencias
 
 En `evidencias/`, con `manifest.json` y SHA-256. Escritorio 1440×900 y móvil 390×844:
@@ -104,7 +116,8 @@ En `evidencias/`, con `manifest.json` y SHA-256. Escritorio 1440×900 y móvil 3
 2. comparación parcial;
 3. comparación no válida;
 4. dossier 1.1.0 verificado con los dos presupuestos;
-5. sección de presupuestos del dossier descargado, abierto solo.
+5. sección de presupuestos del dossier descargado, abierto solo;
+6. origen cambiado: la comparación y el dossier anteriores, retirados.
 
 Navegador sin GPU ni dispositivo físico. **Las pruebas verdes no son un GO visual.**
 

@@ -58,6 +58,13 @@ test('parcial: importes conocidos y diferencia de las partidas comparables, nunc
 test('incoherente: un presupuesto que no es de su revisión impide cualquier diferencia de importes',()=>{
   const {r}=cmp({fn:(b,a)=>({beforeBudget:F.budget('complete',a),afterBudget:F.budget('complete',a)})});
   assert.equal(r.status,'incoherent');assert.equal(r.totals.net,undefined);assert.equal(r.totals.comparable,undefined);
+  // Auditoría ChatGPT (#212): tampoco en el modelo por partida — ninguna diferencia, ninguna «exacta», ningún importe.
+  assert.ok(r.lines.length>0,'las partidas siguen para explicar el fallo');
+  assert.ok(r.lines.every(l=>l.delta===null),'ninguna diferencia por partida');
+  assert.ok(r.lines.every(l=>l.status==='withheld'&&l.excludedReason==='incoherent'),'ninguna rotulada exacta ni comparable');
+  assert.ok(r.lines.every(l=>[l.before,l.after].every(x=>x===null||(!('net' in x)&&!('gross' in x)&&!('unitPrice' in x)))),'sin importes por partida');
+  assert.ok(r.lines.some(l=>l.before?.quantity&&l.after?.quantity),'se conservan las cantidades que explican la incoherencia');
+  assert.equal(r.counts.exact,0);
   assert.deepEqual(r.totals.mismatched.map(m=>[m.side,m.revisionMatch]),[['before','after']]);
   // Cantidad tocada a mano en «después»: tampoco.
   const r2=cmp({fn:(b,a)=>{const x=F.budget('complete',a);x.items.find(i=>i.id==='paint').quantity.value*=1.1;return {beforeBudget:F.budget('complete',b),afterBudget:x};}}).r;
@@ -66,7 +73,7 @@ test('incoherente: un presupuesto que no es de su revisión impide cualquier dif
 
 test('uno o ningún presupuesto: no se inventa el que falta',()=>{
   const one=cmp({fn:(b,a)=>({afterBudget:F.budget('complete',a)})}).r;assert.equal(one.status,'one-sided');assert.match(one.totals.statement,/Solo hay presupuesto de «Después»/);
-  assert.ok(one.lines.every(l=>l.status==='partial'&&l.excludedReason==='budget-missing'));
+  assert.ok(one.lines.every(l=>l.status==='partial'&&l.excludedReason==='budget-missing'&&l.delta===null));
   const none=cmp().r;assert.equal(none.status,'none');assert.deepEqual(none.lines,[]);
   const {before,after,c}=pair();throwsCode(()=>RB.compareBudgets({comparison:c,beforeProject:before,afterProject:after,beforeBudget:(()=>{const x=F.budget('complete',before);x.subject.id='prj_otro';return x;})()}),'budget-subject-mismatch');
   throwsCode(()=>RB.compareBudgets({comparison:{},beforeProject:before,afterProject:after}),'comparison-required');
@@ -138,4 +145,22 @@ test('dossier 1.1.0: manifiesto con el presupuesto de «antes», verify lo compr
   const m10={...o10.manifest,version:'1.0.0'};delete m10.beforeBudget;
   assert.equal((await D.verify(o10.html,m10,{beforeProject:before,afterProject:after,budget,beforeBudget:null})).ok,true);
   assert.equal((await D.verify(o10.html,{...m10,version:'0.9.0'})).ok,false,'versión desconocida');
+});
+
+test('compatibilidad con un dossier 1.0.0 AUTÉNTICO de #209 (generado con su implementación, no reetiquetado)',async()=>{
+  const fs=require('node:fs'),path=require('node:path'),dir=path.join(__dirname,'fixtures','ux07-dossier-1.0.0');
+  const html=fs.readFileSync(path.join(dir,'dossier.html'),'utf8'),manifest=JSON.parse(fs.readFileSync(path.join(dir,'manifest.json'),'utf8')),origen=JSON.parse(fs.readFileSync(path.join(dir,'origen.json'),'utf8'));
+  assert.equal(origen.commit,'8a3cce85df71b1f242ff0c5ccb53b46ea67c0fa2','generado con #209 (lab/ux07-ent04-before-after@8a3cce8)');
+  assert.equal(manifest.version,'1.0.0');assert.equal('beforeBudget' in manifest,false,'el formato 1.0.0 no tenía presupuesto de «antes»');
+  assert.doesNotMatch(html,/budget-compare/,'el HTML 1.0.0 no tiene la sección de la fase 2');
+  // Con el verificador ACTUAL: el archivo intacto se verifica, también contra las entradas sintéticas que lo generaron.
+  const {before,after}=pair(),budget=F.budget('complete');
+  const ok=await D.verify(html,manifest,{beforeProject:before,afterProject:after,budget,beforeBudget:null});
+  assert.equal(ok.ok,true,JSON.stringify(ok.checks.filter(c=>!c.ok)));assert.ok(ok.checks.length>=9);
+  // Y cualquier alteración se sigue detectando.
+  const bad=await D.verify(html.replace('Presupuesto completo','Presupuesto parcial'),manifest);assert.equal(bad.ok,false);
+  assert.deepEqual(bad.checks.filter(c=>!c.ok).map(c=>c.name).sort(),['huella del HTML','tamaño del HTML'].sort());
+  const otherBudget=await D.verify(html,manifest,{budget:F.budget('partial')});assert.equal(otherBudget.ok,false);
+  // Un presupuesto de «antes» no puede colarse en un dossier 1.0.0, que no lo tenía.
+  assert.equal((await D.verify(html,manifest,{beforeBudget:F.budget('complete',before)})).ok,false);
 });

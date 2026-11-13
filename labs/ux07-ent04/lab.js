@@ -21,8 +21,22 @@ function fillLibrary(){
   const opts=list.length?list.map(e=>`<option value="${esc(e.id)}">${esc(e.name)}${e.variantOf?' (variante)':''}${e.building?' · planta activa':''}</option>`).join(''):'<option value="">No hay proyectos guardados en este navegador</option>';
   $('libBefore').innerHTML=opts;$('libAfter').innerHTML=opts;if(list.length>1)$('libAfter').selectedIndex=1;
 }
+/* Auditoría del propietario (#212, 13/11/2026): al cambiar el origen o lo elegido en él, la comparación y el dossier
+   anteriores se RETIRAN (no se quedan a la vista atribuidos al origen nuevo). Solo «Comparar» con el origen nuevo los vuelve a
+   crear; si ese origen no es válido, el error lo dice y no queda ningún resultado anterior. */
+const SRC_ES={fixture:'proyecto de prueba (sintético)',library:'biblioteca de este navegador',files:'dos archivos JSON'};
+function invalidate(why){
+  const had=!!state.comparison;
+  Object.assign(state,{before:null,after:null,relation:null,comparison:null,dossier:null,budgets:{},budgetsBefore:{}});
+  $('cmpCard').hidden=true;$('dosCard').hidden=true;$('dosOut').hidden=true;$('bcOut').hidden=true;
+  for(const id of ['layerBefore','layerAfter','sideBefore','sideAfter','changes','materials','illustrative','metrics','limits','relation','perspective','bcSummary','bcTable','bcNotes','verifyOut','dosStatus','dosError'])$(id).innerHTML='';
+  $('preview').removeAttribute('srcdoc');
+  $('srcStatus').textContent=had?`${why} La comparación y el dossier anteriores se han retirado: pulsa «Comparar» para ver los de ${SRC_ES[state.src]}.`:'';
+}
 for(const r of document.querySelectorAll('input[name=src]'))r.addEventListener('change',()=>{state.src=r.value;
-  $('pickLibrary').hidden=r.value!=='library';$('pickFiles').hidden=r.value!=='files';if(r.value==='library')fillLibrary();$('srcError').textContent='';updateDeclare();});
+  $('pickLibrary').hidden=r.value!=='library';$('pickFiles').hidden=r.value!=='files';if(r.value==='library')fillLibrary();$('srcError').textContent='';updateDeclare();
+  invalidate(`Origen cambiado a ${SRC_ES[r.value]}.`);});
+for(const id of ['libBefore','libAfter','fileBefore','fileAfter','declare'])$(id).addEventListener('change',()=>invalidate('Has cambiado lo elegido en el origen.'));
 async function readJson(input){const f=input.files[0];if(!f)throw Error('Elige los dos archivos.');const p=JSON.parse(await f.text());Core.validate(p);return p;}
 async function resolvePair(){
   if(state.src==='fixture')return {before:F.before(),after:F.after(),relation:'same-project'};
@@ -40,11 +54,12 @@ async function doCompare(){
   try{
     const p=await resolvePair();const relation=p.relation||(p.before.id===p.after.id?'same-project':$('declare').checked?'declared':null);
     const c=R.compare(p.before,p.after,{relation,beforeLabel:$('labelBefore').value.trim()||'Antes',afterLabel:$('labelAfter').value.trim()||'Después'});
-    Object.assign(state,{before:p.before,after:p.after,relation:c.relation,comparison:c,dossier:null});render();fillBudgets();
-  }catch(e){$('srcError').textContent=e.code==='relation-required'?e.message+' Marca la casilla si es así.':e.message;$('cmpCard').hidden=$('dosCard').hidden=true;}
+    Object.assign(state,{before:p.before,after:p.after,relation:c.relation,comparison:c,dossier:null,source:state.src});$('srcStatus').textContent='';render();fillBudgets();
+  }catch(e){invalidate('');$('srcStatus').textContent='';$('srcError').textContent=e.code==='relation-required'?e.message+' Marca la casilla si es así.':e.message;}
 }
 function render(){
   const c=state.comparison;$('cmpCard').hidden=false;$('dosCard').hidden=false;
+  $('cmpSource').textContent=`Origen: ${SRC_ES[state.src]}`;
   $('relation').textContent={'same-project':'Dos revisiones del mismo proyecto.','library-variant':'Original y variante enlazadas en la biblioteca.','declared':'Proyectos distintos declarados por ti como revisiones de la misma obra.'}[c.relation]+` «${c.before.label}»: ${c.before.name} · «${c.after.label}»: ${c.after.name}`;
   const sb=R.planSvg(c,'before',state.before,{title:`Planta «${c.before.label}»`}),sa=R.planSvg(c,'after',state.after,{title:`Planta «${c.after.label}»`});
   $('layerBefore').innerHTML=sb;$('layerAfter').innerHTML=sa;$('sideBefore').innerHTML=sb;$('sideAfter').innerHTML=sa;
