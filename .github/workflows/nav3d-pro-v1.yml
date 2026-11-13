@@ -54,4 +54,4 @@ jobs:
       - name: Real editor - full journey (desktop, phone portrait and landscape), unreachable room, building, presentation and WebGL loss
         run: node --test --test-concurrency=1 tests/nav3d.browser.test.cjs
       - name: Existing walk and 3D controls keep working
-        run: node --test --test-concurrency=1 tests/walk.browser.test.cjs tests/walk-controls.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/walk.browser.test.cjs

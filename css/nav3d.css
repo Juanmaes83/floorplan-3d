@@ -46,4 +46,6 @@
 /* Paseo en el teléfono: el joystick y «Salir del paseo» quedan por encima de la barra inferior fija (js/nav3d-ui.js mide
    cuánto invade; 0 cuando no hay barra o no se camina). */
 #stage #joy,#stage #walkExit{bottom:calc(28px + var(--nav3d-dock-clear,0px))}
+/* Escritorio: con el panel abierto durante el paseo en pausa, la tarjeta del paseo se centra en el espacio libre. */
+@media (min-width:1100px){#stage:has(#nav3d.open:not([hidden])) #walkOverlay{padding-left:320px}}
 @media (prefers-reduced-motion:reduce){.nav3d *{transition:none!important}}
