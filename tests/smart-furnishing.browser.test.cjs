@@ -90,7 +90,8 @@ test('rechazo legítimo por falta de sitio: mensaje claro y el proyecto no cambi
     await page.locator('#sfUse').selectOption('bedroom'); const s0 = await Q.state(page);
     await page.locator('#sfGenerate').click();
     assert.equal(await page.locator('#sfError').getAttribute('data-sf-status'), 'no-space');
-    assert.match(await page.locator('#sfError').innerText(), /No hay sitio[\s\S]*no cambia/);
+    const msg = await page.locator('#sfError').innerText();
+    assert.match(msg, /No hay sitio[\s\S]*no cambia/); assert.match(msg, /«Baño de invitados»/, 'el nombre que ve la persona, no el interno');
     assert.equal(await page.locator('#sfApply').count(), 0); assert.equal((await Q.state(page)).json, s0.json);
     assert.deepEqual(watch.errors, []);
   } finally { await context.close(); }

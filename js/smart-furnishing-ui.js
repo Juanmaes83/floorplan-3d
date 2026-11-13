@@ -67,8 +67,7 @@
   function generate(reason) {
     const project = app().project, room = project.rooms.find(r => r.id === st.roomId);
     const prev = proposalFor(st.roomId);
-    const r = SF.generate(project, { roomId: st.roomId, use: st.use || undefined, density: st.density, recipeId: st.recipeId, seed: st.seed, zones: zones() });
-    if (r.roomName !== undefined) r.roomName = label(room);
+    const r = SF.generate(project, { roomId: st.roomId, roomLabel: label(room), use: st.use || undefined, density: st.density, recipeId: st.recipeId, seed: st.seed, zones: zones() });
     st.result = r; st.ack = false; st.applied = null;
     st.diff = prev && r.ok && prev.recipe.id !== r.recipe.id ? differences(prev, r) : [];
     st.previous = prev && r.ok && prev.recipe.id !== r.recipe.id ? prev.recipe.label : null;

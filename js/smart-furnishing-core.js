@@ -134,7 +134,7 @@
     const [x0, y0, x1, y1] = box(room.poly); let shared = 0, total = 0; const others = sc.rooms.filter(r => r.id !== roomId);
     for (let x = x0 + 50; x < x1; x += 100) for (let y = y0 + 50; y < y1; y += 100) { const p = { x, y }; if (!inPoly(p, room.poly)) continue; total++; if (others.some(o => inPoly(p, o.poly))) shared++; }
     const source = project.rooms.find(r => r.id === roomId);
-    return { room, area, sharedRatio: total ? shared / total : 0, family: C.roomFamily(source), name: C.roomName ? C.roomName(source) : source.name };
+    return { room, area, sharedRatio: total ? shared / total : 0, family: C.roomFamily(source), name: source.name || roomId };
   }
 
   // Escena de validación: la de FloorPlanPlacement más los muebles que se van proponiendo (incremental, sin copiar).
@@ -320,6 +320,7 @@
     if (recipeProblems.length) return { ...base, status: 'invalid-recipe', message: 'La receta no se puede usar: ' + recipeProblems.join(' ') };
     const sc = P.scene(project, { zones: options.zones || [] }), info = roomInfo(project, sc, options.roomId);
     if (!info) return { ...base, status: 'no-room', message: 'La estancia indicada no existe en esta planta.' };
+    if (options.roomLabel) info.name = String(options.roomLabel); // el nombre que ve la persona (traducido en el editor)
     const use = options.use || USE_FROM_FAMILY[info.family];
     const head = { ...base, roomName: info.name, roomAreaM2: Math.round(info.area / 1e4) / 100, use, useLabel: USES[use]?.label, declaredFamily: info.family };
     if (info.sharedRatio > 0.02) return { ...head, status: 'ambiguous-room', message: 'Parte de esta estancia pertenece también a otra estancia: no se puede atribuir el mobiliario con certeza. Corrige los contornos antes de amueblar.' };

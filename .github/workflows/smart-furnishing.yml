@@ -1,0 +1,54 @@
+name: UX-12 + UX-13 smart furnishing (engine, real editor, video QA)
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/smart-furnishing-*.js
+      - js/furniture-placement.js
+      - js/layout-review.js
+      - js/generic-catalog.js
+      - js/project-core.js
+      - js/tracing-core.js
+      - js/r02a-*.js
+      - js/r03-*.js
+      - js/live-dimensions-*.js
+      - tests/smart-furnishing*.cjs
+      - tests/smart-furnishing/**
+      - tests/fixtures/smart-furnishing-demo.json
+      - tests/r02a/editor-kit.cjs
+      - scripts/qa/record-smart-furnishing.cjs
+      - .github/workflows/smart-furnishing.yml
+permissions:
+  contents: read
+jobs:
+  smart-furnishing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/smart-furnishing-*.js tests/smart-furnishing*.cjs tests/smart-furnishing/*.cjs scripts/qa/record-smart-furnishing.cjs; do node --check "$f"; done
+      - name: Engine and recipes (pure, independent verifier)
+        run: node --test --test-concurrency=1 tests/smart-furnishing.test.cjs
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/sf-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/sf-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          sudo apt-get install -y ffmpeg
+          echo "NODE_PATH=$RUNNER_TEMP/sf-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/sf-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real editor (desktop mouse, mobile touch, refusal, R03 + R02-A coexistence)
+        run: node --test --test-concurrency=1 tests/smart-furnishing.browser.test.cjs
+      - name: Recorded walkthrough (2 videos, screenshots, manifest; assertions included)
+        run: node scripts/qa/record-smart-furnishing.cjs qa-results/smart-furnishing
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smart-furnishing-${{ github.event.pull_request.head.sha }}
+          path: qa-results/smart-furnishing
+          if-no-files-found: warn
