@@ -58,4 +58,4 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Lab in the browser (desktop and mobile, downloads and verification)
-        run: node --test --test-concurrency=1 tests/ux07-ent04-lab.browser.test.cjs tests/ux07-ent04-budget.browser.test.cjs tests/ux07-ent04-origin.browser.test.cjs tests/ux07-variants-handoff.browser.test.cjs tests/ux07-activation.browser.test.cjs tests/variants-visual.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/ux07-ent04-lab.browser.test.cjs tests/ux07-ent04-budget.browser.test.cjs tests/ux07-ent04-origin.browser.test.cjs tests/ux07-variants-handoff.browser.test.cjs tests/ux07-activation.browser.test.cjs tests/ux07-integration-audit.browser.test.cjs tests/variants-visual.browser.test.cjs
