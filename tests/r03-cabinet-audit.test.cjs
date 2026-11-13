@@ -90,9 +90,24 @@ test('A4 cost: the largest cabinet the core allows stays light for a phone (part
   console.log(`# A4 cost: ${s.state.cabinet.columns.length} bays, ${parts.length} boxes, ${msPer.toFixed(3)} ms geometry per edit`);
 });
 
-test('A4 ordinary furniture and legacy projects: nothing in RUBIK loads or changes; non-cabinets are never touched', () => {
-  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-  for (const f of ['r03-cabinet-core', 'r03-cabinet-contract', 'r03-cabinet-editor-core', 'r03-cabinet-geometry', 'r03-cabinet-three', 'r03-cabinet-editor-ui']) assert.ok(!html.includes(f), `${f} is not loaded by index.html`);
+// Before R03-I1 this test began by requiring that index.html loaded NONE of the R03 modules («nothing in RUBIK loads»).
+// The owner authorized the activation (R03-I1): what loads is now pinned to the exact activation manifest, and the rest of
+// the test, which protects ordinary furniture and legacy projects, is unchanged.
+test('A4 loading: index.html loads only the authorized R03-I1 activation, and no other SCULPT stone or laboratory', () => {
+  const A = require('./r03-activation-manifest.cjs'), html = A.indexHtml();
+  const scripts = A.loadedScripts(html), styles = A.loadedStyles(html);
+  assert.deepEqual(scripts.filter(s => /r03/i.test(s)), A.SCRIPTS);
+  assert.deepEqual(styles.filter(s => /r03/i.test(s)), A.STYLES);
+  for (const src of [...scripts, ...styles]) {
+    assert.doesNotMatch(src, /(^|\/)labs\//, `${src}: no laboratory code in the product`);
+    assert.doesNotMatch(src, /(^|\/)r0(?!3)\d|sculpt|r02a|mcp/i, `${src}: no other SCULPT stone (R01, R02, …) or MCP is activated`);
+    assert.doesNotMatch(src, /^(https?:)?\/\//, `${src}: same origin`);
+  }
+  // The laboratory editor (labs/sculpt/r03-editor) is still only a laboratory.
+  assert.doesNotMatch(html, /r03-editor\/|sculpt\//);
+});
+
+test('A4 ordinary furniture and legacy projects: nothing changes on load; non-cabinets are never touched', () => {
   const p = Core.initial(), before = JSON.stringify(p);
   for (const o of p.objects) {
     const r = X.read(p, o.id);

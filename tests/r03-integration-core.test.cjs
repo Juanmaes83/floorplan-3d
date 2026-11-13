@@ -1,4 +1,6 @@
-// R03-I0 · pure engine integration gate. No editor, persistence or product UX wired.
+// R03-I0 · pure engine integration gate, and since R03-I1 also the activation gate.
+// I0 (unchanged): the canonical schema is never expanded for cabinets. I1 (activation): index.html binds the editor
+// ONLY through the explicit, enumerated R03-I1 activation (tests/r03-activation-manifest.cjs) and nothing else.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -56,11 +58,31 @@ test('I0: invalid overlapping shelves and rod are rejected atomically', () => {
   assert.equal(bad.cabinet,undefined);
   assert.deepEqual(original,before);
 });
-test('I0: no schema expansion or editor binding is implicitly authorized', () => {
+// Before R03-I1 this was one test, «I0: no schema expansion or editor binding is implicitly authorized», which also
+// required index.html NOT to load r03-cabinet-core.js. The owner authorized the activation (R03-I1), so the binding half
+// is replaced by I1 below, which allows exactly the enumerated activation and fails on anything else. The schema half
+// stays as it was: activating R03 does NOT authorize expanding the canonical schema.
+test('I0: no schema expansion is implicitly authorized (the interior lives only in extensions)', () => {
   assert.equal(Schema.$defs.object.additionalProperties,false);
   assert.equal(Schema.$defs.object.properties.cabinetInterior,undefined);
-  const html=fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8');
-  assert.doesNotMatch(html,/r03-cabinet-core\.js/);
+  for (const k of Object.keys(Schema.$defs.object.properties)) assert.doesNotMatch(k,/cabinet|interior|r03/i,`no R03 property on objects: ${k}`);
+  assert.deepEqual(Object.keys(Schema.$defs.extensions.patternProperties),['^x-[a-z0-9-]{1,40}$'],'extensions keep their generic x- namespace');
+  assert.equal(Schema.$defs.extensions.additionalProperties,false);
+});
+test('I1: the editor binding is exactly the explicit R03-I1 activation, nothing implicit', () => {
+  const A=require('./r03-activation-manifest.cjs');
+  const html=A.indexHtml(), scripts=A.loadedScripts(html), styles=A.loadedStyles(html);
+  const r03Scripts=scripts.filter(s=>/r03/i.test(s)), r03Styles=styles.filter(s=>/r03/i.test(s));
+  assert.deepEqual(r03Scripts,A.SCRIPTS,'the eight R03 modules, once each, in dependency order, from js/');
+  assert.deepEqual(r03Styles,A.STYLES,'one R03 stylesheet, from css/');
+  for (const f of [...A.SCRIPTS,...A.STYLES]) assert.ok(fs.existsSync(path.resolve(__dirname,'..',f)),`${f} exists`);
+  // The core must load after the RUBIK modules it is wired into (it is the last block of the page).
+  const firstR03=scripts.indexOf(A.SCRIPTS[0]);
+  assert.ok(firstR03>scripts.indexOf('js/project-core.js')&&firstR03>scripts.indexOf('js/delivery-client.js'),'R03 loads after RUBIK');
+  assert.equal(scripts.slice(firstR03).length,A.SCRIPTS.length,'nothing else loads after the R03 block');
+  for (const h of A.HOOKS) assert.equal((html.match(h.pattern)||[]).length,h.count,`hook: ${h.what}`);
+  assert.equal((html.match(/RubikCabinet[A-Za-z]*/g)||[]).length,A.GLOBAL_REFERENCES,'no other reference to the R03 globals');
+  assert.doesNotMatch(html,/labs\//,'nothing from labs/ (SCULPT laboratories stay out of the product)');
 });
 test('I0: original MIT attribution and contributor notice remain present', () => {
   const notice=fs.readFileSync(path.resolve(__dirname,'../docs/licenses/r03-donor-MIT.txt'),'utf8');
