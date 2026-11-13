@@ -123,12 +123,16 @@
     else if(status==='one-sided')totals={status,statement:`Solo hay presupuesto de «${B?comparison.before.label:comparison.after.label}»: no hay nada con qué compararlo.`};
     else totals={status,statement:'Sin presupuestos: no se muestran importes.'};
     const notes=[];
-    if(B&&A&&B.taxRatePercent!==A.taxRatePercent)notes.push(`El tipo de IVA cambia (${B.taxRatePercent} % → ${A.taxRatePercent} %): compárese la diferencia sin IVA.`);
-    if(B&&A&&(B.unreviewed.length||A.unreviewed.length))notes.push(`Hay precios sin revisar (${B.unreviewed.length} en «${comparison.before.label}», ${A.unreviewed.length} en «${comparison.after.label}»): son importes provisionales.`);
+    // Incoherente: ni importes ni notas de precios (sugerirían una comparación válida); solo el motivo de la incoherencia.
+    if(!incoherent&&B&&A&&B.taxRatePercent!==A.taxRatePercent)notes.push(`El tipo de IVA cambia (${B.taxRatePercent} % → ${A.taxRatePercent} %): compárese la diferencia sin IVA.`);
+    if(!incoherent&&B&&A&&(B.unreviewed.length||A.unreviewed.length))notes.push(`Hay precios sin revisar (${B.unreviewed.length} en «${comparison.before.label}», ${A.unreviewed.length} en «${comparison.after.label}»): son importes provisionales.`);
     const unexplained=lines.filter(l=>l.unexplained).map(l=>l.itemId);
     if(unexplained.length)notes.push(`${unexplained.length} partida(s) cambian sin ningún cambio del proyecto que lo explique: revisa si el presupuesto es de esa revisión.`);
     const dependencies=deps.map(d=>({entity:d.change.entity,entityId:d.change.entityId,summary:d.change.summary,items:d.items.filter(i=>lb.has(i)||la.has(i))}));
-    const strip=s=>s&&(({report,...rest})=>rest)(s);
+    /* Contrato interno before/after (auditoría de la activación, 13/11): en estado incoherente tampoco viajan los importes de
+       cada presupuesto (net/tax/gross ni listas de partidas por precio): restarlos daría una «diferencia» que no es válida. */
+    const strip=s=>{if(!s)return s;const {report,...rest}=s;if(!incoherent)return rest;
+      const {net,tax,gross,unpriced,incompleteQuantity,unreviewed,complete,...safe}=rest;return {...safe,amountsWithheld:true};};
     return {schema:SCHEMA,version:VERSION,status,before:strip(B),after:strip(A),lines,totals,dependencies,unexplained,notes,
       counts:{items:lines.length,exact:exact.length,partial:excluded.length,changed:lines.filter(l=>l.change!=='same').length}};
   }

@@ -22,8 +22,15 @@
  function edge(){header.classList.toggle('can-scroll-end',header.scrollWidth-header.clientWidth-header.scrollLeft>4);}
  // The landscape column starts where the header really ends: the header has one row with touch and wraps to three
  // rows in a narrow window with a mouse, so a fixed offset would cover its right-hand controls.
- const headerEnd=()=>document.documentElement.style.setProperty('--shell-header-bottom',`${Math.round(header.getBoundingClientRect().bottom)}px`);
+ // If the landscape column has no room for its four 40 px buttons (a short window with a mouse: three-row header and
+ // the work-area bar), it becomes a 2×2 block (body.dock-2col, design-system.css) instead of drawing one button over
+ // another. Measured from the column's real top (it may start under the work-area bar, professional-workspace.css).
+ const dockFit=()=>{const top=parseFloat(getComputedStyle(dock).top);
+  document.body.classList.toggle('dock-2col',innerWidth<=1100&&innerHeight<=500&&Number.isFinite(top)&&innerHeight-top-36<4*40+3*4+6);};
+ const headerEnd=()=>{document.documentElement.style.setProperty('--shell-header-bottom',`${Math.round(header.getBoundingClientRect().bottom)}px`);dockFit();};
  if(typeof ResizeObserver==='function')new ResizeObserver(headerEnd).observe(header);
+ // The work-area bar publishes its bottom in --professional-nav-bottom (inline style of <html>): re-check the column then.
+ if(typeof MutationObserver==='function')new MutationObserver(dockFit).observe(document.documentElement,{attributes:true,attributeFilter:['style']});
  header.addEventListener('scroll',edge,{passive:true});addEventListener('resize',()=>{edge();headerEnd();});headerEnd();
  // Top of the selection bar, for the temporary message to sit above it on phones (design-system.css).
  const fab=document.getElementById('fab');

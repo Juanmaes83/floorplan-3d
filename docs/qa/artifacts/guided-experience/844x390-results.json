@@ -27,33 +27,33 @@
     "overflow": false,
     "stage": {
       "x": 0,
-      "y": 184,
-      "width": 844,
-      "height": 182,
-      "top": 184,
-      "right": 844,
-      "bottom": 366,
+      "y": 212,
+      "width": 732,
+      "height": 148,
+      "top": 212,
+      "right": 732,
+      "bottom": 360,
       "left": 0
     },
     "bar": {
       "x": 0,
-      "y": 61,
-      "width": 844,
-      "height": 123,
-      "top": 61,
-      "right": 844,
-      "bottom": 184,
+      "y": 106,
+      "width": 732,
+      "height": 106,
+      "top": 106,
+      "right": 732,
+      "bottom": 212,
       "left": 0
     },
     "primary": {
-      "x": 627,
-      "y": 136,
-      "width": 196,
+      "x": 241.203125,
+      "y": 161.5,
+      "width": 197.171875,
       "height": 37,
-      "top": 136,
-      "right": 823,
-      "bottom": 173,
-      "left": 627
+      "top": 161.5,
+      "right": 438.375,
+      "bottom": 198.5,
+      "left": 241.203125
     }
   },
   "errors": []
