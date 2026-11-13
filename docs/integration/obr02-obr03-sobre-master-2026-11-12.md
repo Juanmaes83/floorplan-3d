@@ -53,7 +53,40 @@
 
 ## 5. Resultados
 
-RESULTADOS
+**Rama de integración**, todo local en Chromium con SwiftShader:
+
+| Suite | Resultado |
+|---|---|
+| Núcleo OBR-02/03 | 14/14 |
+| OBR-02/03 navegador + 6 combinadas | 16/16 |
+| OBR-01 (5 archivos, incluida la de ciclo de vida de #207) | 14/14 |
+| `ft3d-8-fidelity` | 6/6 |
+| `ft3d-8-ux4d` | 20/20 |
+| `ft3d-8-delivery` (grabación real) | 6/6 |
+| `ft3d-8-dossier` | 6/6 |
+| `ft3d-8-fit` | 9/9 |
+| `ft3d-8-lab` | 2/2 |
+| INT-R1 | 1/1 |
+| Examen FT3D-8 | 20/20 |
+| `hallazgos-v4` | 2/2 |
+| `novato` | 2/2 |
+
+**Ensayo local con #208** (`e2d0e84`, sin publicar):
+
+| Suite | Resultado |
+|---|---|
+| GOV-07 núcleo | 10/10 |
+| GOV-07 navegador (resiliencia y banco) | 25/25 |
+| OBR-02/03 navegador + combinadas | 16/16 |
+| OBR-01 | 14/14 |
+| `ft3d-8-delivery` | 6/6 |
+| Examen FT3D-8 | 20/20 |
+
+**Detección:**
+- la resolución ingenua del conflicto (sin el ciclo de vida de la vista previa) **falla** la prueba combinada 6;
+- no se ha eliminado ni suavizado ninguna aserción.
+
+CI de la PR: ver la propia PR.
 
 ## 6. Bloqueos y pendientes
 
@@ -64,4 +97,86 @@ RESULTADOS
 
 ## 7. Preview de revisión
 
-PREVIEW
+**Rama de revisión:** `review/obr02-obr03-integration-20261112` (`181e34b`). Desciende de esta rama y **no forma parte de la PR**.
+- Solo añade `review-obr02/` y su generador `tests/obr02/build-review-fixture.cjs`.
+- No cambia `.vercelignore`, no publica `labs/` y no toca Production.
+
+**Datos:** la obra sintética del examen en la biblioteca local del navegador, en dos casos:
+- **con** un presupuesto de **precios ficticios** (borrador real C1–C4) asignado a tareas del plan;
+- **sin** presupuesto.
+
+**URL:** `https://floorplan-3d-98fnb7d77-juanma-espinosas-projects.vercel.app/review-obr02/index.html` (protegida por Vercel: abrir con sesión o con enlace de acceso).
+
+**Recorrido real sobre la Preview** (`tests/obr02/preview-walkthrough.cjs`; capturas y `manifest.json` en `docs/integration/evidencias-obr02-obr03-2026-11-12/`):
+
+| Paso | Escritorio 1440×900 | Móvil 390×844 (toque) |
+|---|---|---|
+| Con presupuesto: 48,1 % planificado; coste planificado 5.499,32 € de 21.708,90 €; «Ejecutado: sin registrar»; siguiente tarea (05 y 07) y 3 elementos en fantasma | ✓ | ✓ |
+| OBR-01 con el fantasma encendido: clic o toque real en el muro de carga → `project/wal_ref-w0` | ✓ | ✓ |
+| Sin presupuesto: coste «No disponible», nunca 0 € | ✓ | ✓ |
+| Errores de página / hosts externos | 0 / 0 | 0 / 0 |
+
+**Observación de UX para el GO visual (no bloquea):** en el móvil, con «Siguiente tarea» desplegada, el panel ocupa buena parte del escenario. Por defecto está plegado y deja pasar los clics a la escena.
+
+## 8. Procedencia verificable — auditoría del propietario del 13/11/2026
+
+**Objeción del propietario:** la vista 4D es útil, pero no debe presentarse como fiel a la obra sin trazabilidad desde proyecto/plano → tareas WBS → elementos 3D → partidas C1–C4.
+
+**Respuesta, sin autoridad nueva:** `FloorPlanPlanPreview.provenance()` ordena lo que el adaptador FT3D-8 **ya comprueba** (`FloorPlanConstructionProject.evaluate`: `links`, `coverage`, `fingerprints`, `planning`, `costs`, `delivery`). El panel «Plan a la fecha» lo muestra en la sección plegada **Fuentes y vínculos**.
+
+| Criterio del propietario | Cómo queda |
+|---|---|
+| 1 · Procedencia de los datos | Por cada fuente, se muestra lo siguiente.<br>**Proyecto:** nombre, huella SHA-256 y origen **declarado** por quien abre la vista («FIXTURE de prueba…», «Proyecto guardado en tu biblioteca», «importado»).<br>**Plan:** identificador, nº de tareas, borrador o revisado, si se hizo **sobre esta revisión** del proyecto y origen declarado de las tareas.<br>**Presupuesto C1–C4:** identificador, comprobación de revisión («no verificable: C1–C4 no guarda la revisión»), origen de los precios, % del importe conocido asignado a tareas y partidas sin tarea.<br>**Vínculo profesional y nivel de la presentación.** |
+| 2 · No inventar; planificado ≠ ejecutado | **Anillo:** «% del **calendario** del plan · planificado». Al final, «Fin del plan: no es obra terminada ni certificada».<br>**Coste:** «(supuesto: reparto lineal por días; no es gasto)».<br>**Ejecutado:** «sin registrar».<br>Sin presupuesto verificable, «No disponible», nunca 0. |
+| 3 · Sin vínculo fiable, sin fantasma | El fantasma usa **solo** los vínculos que el adaptador marca `ok`. Antes de este cambio, usaba cualquier `elementId` del plan.<br>`broken` (no existe), `not-representable` e `illustrative` se listan con su motivo y **no se dibujan**.<br>Las tareas sin elementos y sin partidas se nombran. |
+| 4 · Pruebas | Tarea → elementos 3D reales (selección y fantasma = vínculos `ok`).<br>Proyecto A → C sin fantasmas ni procedencia del anterior.<br>**Adversarial:** plan válido hecho sobre otra revisión y con un vínculo a un muro inexistente → avisos, sin fantasma y nivel «Vista interna exploratoria». |
+| 5 · Demostración rotulada SINTÉTICA | En la Evolución: «DATOS SINTÉTICOS de prueba» cuando el origen declarado es una fixture.<br>En la Preview de revisión: aviso «DEMOSTRACIÓN SINTÉTICA», tabla de fuentes y vínculos y caso 3 adversarial.<br>Protocolo para un expediente real autorizado: §9. |
+
+**Lo que esto no demuestra:** con datos sintéticos no se puede concluir ni la fidelidad a una obra real ni su falta. El dibujo técnico estilizado del 3D no equivale a una falta de correspondencia geométrica, y tampoco la prueba.
+
+**Pruebas nuevas:**
+- `tests/obr02-obr03-provenance.test.cjs` (6, núcleo):
+  - coherente;
+  - adversarial;
+  - sin representación (la cubierta real del caso D) e ilustrativo;
+  - sin plan, y plan o presupuesto de otro proyecto;
+  - reparto incompleto;
+  - no muta.
+- `tests/obr02-obr03-provenance.browser.test.cjs` (6):
+  - fuentes;
+  - fin del plan;
+  - adversarial en la Evolución;
+  - A → C;
+  - selección de tareas;
+  - móvil 390×844.
+
+**Pruebas existentes:** solo se precisaron selectores (ahora hay dos secciones plegables) y el texto del anillo al nuevo rótulo. No se suavizó ninguna aserción.
+
+## 9. Protocolo de prueba con un expediente real autorizado (pendiente de que exista)
+
+No se ha usado ningún dato real. Cuando el propietario autorice un expediente:
+
+1. **Autorización y custodia:**
+   - autorización escrita del titular;
+   - los datos se cargan **solo en la biblioteca local** de un navegador de prueba;
+   - no se suben al repositorio, ni a una Preview, ni a una captura sin anonimizar.
+2. **Entradas:**
+   - proyecto RUBIK dibujado desde los planos del expediente, con su escala verificada (dos cotas);
+   - plan WBS del profesional, con `task.source` apuntando al documento (p. ej. «Planning v3, 2026-10-02»);
+   - presupuesto C1–C4 con el origen real de los precios;
+   - vínculo profesional (`binding`) que fije las huellas de proyecto, plan y presupuesto.
+3. **Comprobaciones en «Fuentes y vínculos»:**
+   - huella del proyecto = la del vínculo;
+   - plan «hecho sobre esta revisión»;
+   - ningún vínculo `broken`;
+   - lista de tareas sin elementos o sin partidas revisada con el profesional (¿falta modelar o no aplica?);
+   - % del importe asignado a tareas;
+   - nivel de presentación declarado.
+4. **Contraste humano:** para 3 tareas, comparar con el documento original:
+   - elementos resaltados en 3D;
+   - fechas;
+   - partidas e importe asignado.
+5. **Adversarial con el expediente:**
+   - modificar una cota del proyecto: el plan pasa a «otra revisión»;
+   - citar un elemento borrado: aparece `broken`.
+6. **Resultado:** acta con la huella del proyecto (no los datos) y la firma del profesional. Solo entonces cabría hablar de fidelidad documental de ese expediente.

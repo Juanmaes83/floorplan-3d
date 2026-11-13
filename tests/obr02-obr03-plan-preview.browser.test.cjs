@@ -14,7 +14,7 @@ test('A: anillo planificado, coste planificado a la fecha y siguiente tarea con 
   const {context,page,watch}=await K.openEvolution(env);try{
     const t2=await task(page,2);await setDate(page,t2.startDate);await K.frames(page,3);await openNext(page);const r=await PP(page);
     assert.equal(r.hidden,false);assert.equal(r.snap.state,'available');assert.equal(r.ring,new Intl.NumberFormat('es-ES',{maximumFractionDigits:1}).format(r.snap.progress.percent)+'%');
-    assert.match(r.text,/% del plan transcurrido · planificado/);assert.match(r.text,/Coste planificado a la fecha: [\d.,]+\s€ sin IVA de 19\.717,64\s€ planificados/);
+    assert.match(r.text,/% del calendario del plan · planificado/);assert.match(r.text,/Coste planificado a la fecha: [\d.,]+\s€ sin IVA de 19\.717,64\s€ planificados/);
     assert.match(r.text,/Ejecutado: sin registrar/);assert.ok(!/ejecutad[oa]\s*:\s*\d/i.test(r.text),'nunca un ejecutado con cifra');
     const n=r.snap.next.tasks[0];assert.match(r.text,new RegExp(`SIGUIENTE TAREA · PLANIFICADA[\\s\\S]*${n.wbs} `,'i'));assert.match(r.text,/Depende de:/);
     assert.deepEqual(r.ghost,n.previewElementIds);assert.deepEqual(r.scene.keys,n.previewElementIds);assert.ok(r.scene.shown>0,'fantasma en escena');
@@ -109,7 +109,7 @@ for(const vp of [{width:390,height:844},{width:844,height:390}])test(`móvil ${v
   const {context,page,watch}=await K.openEvolution(env,{viewport:vp,isMobile:true,hasTouch:true,deviceScaleFactor:2});try{
     const t2=await task(page,2);await setDate(page,t2.startDate);
     const d=page.locator('.plan-preview .pp-next-d');assert.equal(await d.evaluate(e=>e.open),false);assert.equal(await page.locator('.plan-preview .pp-ring').isVisible(),true);
-    const sum=page.locator('.plan-preview summary');const box=await sum.boundingBox();assert.ok(box.height>=36);
+    const sum=page.locator('.plan-preview .pp-next-d summary');const box=await sum.boundingBox();assert.ok(box.height>=36);
     await sum.tap();assert.equal(await d.evaluate(e=>e.open),true);assert.equal(await page.locator('.plan-preview .pp-next').isVisible(),true);
     const pb=await page.locator('.plan-preview').boundingBox();assert.ok(pb.x>=0&&pb.x+pb.width<=vp.width+1,'cabe en pantalla');
     assert.ok(await page.evaluate(()=>document.scrollingElement.scrollWidth<=innerWidth+1));assert.deepEqual(watch.errors,[]);

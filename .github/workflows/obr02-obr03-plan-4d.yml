@@ -41,7 +41,7 @@ jobs:
           node --check js/construction-plan-preview-core.js
           for f in tests/obr02/*.cjs tests/obr02-*.cjs; do node --check "$f"; done
       - name: Pure plan preview core
-        run: node --test tests/obr02-obr03-plan-preview-core.test.cjs
+        run: node --test tests/obr02-obr03-plan-preview-core.test.cjs tests/obr02-obr03-provenance.test.cjs
       - name: Chromium
         run: |
           npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
@@ -49,4 +49,4 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Evolution 4D with the plan panel + combined checks with OBR-01 (pick, lifecycle, recording, restore)
-        run: node --test --test-concurrency=1 tests/obr02-obr03-plan-preview.browser.test.cjs tests/obr02-obr03-integration.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/obr02-obr03-plan-preview.browser.test.cjs tests/obr02-obr03-integration.browser.test.cjs tests/obr02-obr03-provenance.browser.test.cjs
