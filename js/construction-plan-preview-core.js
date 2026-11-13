@@ -87,7 +87,7 @@
       message:canon.tasks.every(t=>ms(t.endDate)<day)?'El plan ya está completado en esta fecha.':'Ninguna tarea empieza después de esta fecha; las que quedan ya están en curso.'};
     else{const first=Math.min(...later.map(t=>ms(t.startDate)));
       const tasks=later.filter(t=>ms(t.startDate)===first).sort((a,b)=>a.wbs.localeCompare(b.wbs,'es',{numeric:true})||a.id.localeCompare(b.id)).map(t=>({
-        id:t.id,wbs:t.wbs,title:t.title,startDate:t.startDate,endDate:t.endDate,durationDays:dur(t),daysUntil:Math.round((ms(t.startDate)-day)/DAY),
+        id:t.id,wbs:t.wbs,title:t.title,source:t.source,startDate:t.startDate,endDate:t.endDate,durationDays:dur(t),daysUntil:Math.round((ms(t.startDate)-day)/DAY),
         dependsOn:t.dependsOn.map(d=>{const p=byId.get(d.taskId);return {taskId:d.taskId,wbs:p?.wbs??null,title:p?.title??null,type:d.type,lagDays:d.lagDays,
           predecessorPlanned:(frac.get(d.taskId)||0)>=1?'completed':(frac.get(d.taskId)||0)>0?'in-progress':'pending'};}),
         elements:t.elements.map(e=>({elementId:e.elementId,role:e.role})),
@@ -96,5 +96,76 @@
     return {schema:SCHEMA,version:VERSION,state:'available',date,scheduleId:canon.id,planKey:planKey(canon),progress,cost,next,executed:EXECUTED,
       disclaimer:'Plan de obra: el anillo, el coste y la siguiente tarea son PLANIFICADOS, no avance real ni certificación.'};
   }
-  return Object.freeze({SCHEMA,VERSION,snapshot,unsupportedStates,planKey,COST_REASONS});
+  /* Procedencia (auditoría del propietario, 13/11/2026). NO es una autoridad nueva: lee lo que el adaptador FT3D-8 ya
+     calculó (FloorPlanConstructionProject.evaluate → model: links, coverage, fingerprints, planning, costs, delivery) y lo
+     ordena para que la persona vea, por cada dato, de dónde sale, qué es un supuesto y qué no está disponible:
+     - fuentes: proyecto (huella SHA-256 actual), plan (revisión del proyecto sobre la que se hizo, estado de revisión,
+       origen declarado de las tareas), presupuesto C1–C4 (sujeto, comprobación de revisión, origen de los precios,
+       reparto a tareas), vínculo profesional y nivel de entrega;
+     - vínculos de la siguiente tarea: cada elemento con el estado que le dio el adaptador (ok | broken | not-representable
+       | illustrative). SOLO los «ok» se dibujan en fantasma: nunca se inventa geometría para un identificador roto, sin
+       representación o ilustrativo;
+     - tareas sin elementos del modelo y sin partidas (se dicen, no se dibujan ni se pagan);
+     - avisos: plan sobre otra revisión del proyecto, vínculos rotos, presupuesto no verificable, coste parcial, borrador. */
+  const short=h=>typeof h==='string'&&h.length>12?h.slice(0,12):h??null;
+  const LINK_ES={ok:'vinculado y comprobado en el modelo',broken:'el identificador no existe en el proyecto: no se dibuja','not-representable':'existe en el proyecto pero no tiene representación 3D: no se dibuja',
+    illustrative:'recurso ilustrativo del plan, no es geometría del proyecto: no se dibuja en fantasma','role-mismatch':'rol no admitido para ese recurso: no se dibuja'};
+  const REVIEW_ES={draft:'borrador: fechas sin aprobar',reviewed:'revisado (declarado por el profesional, no acreditado)'};
+  function provenance({snapshot,model,schedule=null,meta=null}={}){
+    const out={schema:SCHEMA+'-provenance',version:VERSION,sources:[],next:[],ghostKeys:[],tasksWithoutElements:[],tasksWithoutBudget:[],brokenLinks:[],warnings:[],
+      statements:{progress:'El % es del CALENDARIO del plan (días planificados), no obra ejecutada ni certificada: el 100 % al final del plan no significa obra terminada.',
+        cost:'Coste planificado = importe asignado a cada tarea repartido en línea recta por sus días (supuesto de planificación): no es gasto real ni certificación.',
+        executed:EXECUTED.label}};
+    if(!model){out.warnings.push({code:'no-model',message:'Sin modelo evaluado: no se puede comprobar ninguna procedencia.'});return out;}
+    let canon=null;try{canon=schedule?S.canonical(schedule):null;}catch{canon=null;}
+    const fp=model.fingerprints||{};
+    // Proyecto.
+    // Origen DECLARADO por quien abrió la vista (fixture de laboratorio, importación, biblioteca): no se deduce de los datos.
+    const origin=typeof meta?.origin==='string'?meta.origin:typeof meta?.text==='string'?meta.text:null;
+    out.synthetic=meta?.kind==='fixture'?'declared':'unknown';
+    out.sources.push({kind:'project',label:'Proyecto',name:model.subject?.name??null,id:model.subject?.id??null,updatedAt:model.subject?.updatedAt??null,origin,
+      fingerprint:short(fp.project),status:'present',detail:`${model.subject?.name||'—'} · geometría del proyecto guardado (FloorPlanCore), huella SHA-256 ${short(fp.project)||'—'}…${origin?' · origen: '+origin:''}`});
+    // Plan.
+    if(model.planning?.status==='available'&&canon){
+      const sameRev=canon.projectRef.revision===fp.project,srcs=[...new Set(canon.tasks.map(t=>t.source).filter(Boolean))];
+      out.sources.push({kind:'plan',label:'Plan de obra (WBS)',id:canon.id,tasks:canon.tasks.length,review:canon.review.status,reviewLabel:REVIEW_ES[canon.review.status]||canon.review.status,
+        projectRevision:short(canon.projectRef.revision),matchesProject:sameRev,declaredSources:srcs,status:sameRev?'present':'other-revision',
+        detail:`${canon.tasks.length} tareas · ${REVIEW_ES[canon.review.status]||canon.review.status} · ${sameRev?'hecho sobre esta revisión del proyecto':'hecho sobre OTRA revisión del proyecto'}${srcs.length?' · origen declarado: '+srcs.join(' · '):''}`});
+      if(!sameRev)out.warnings.push({code:'plan-other-revision',message:'El plan se hizo sobre otra revisión del proyecto: sus vínculos pueden no corresponder a la geometría actual.'});
+      if(canon.review.status!=='reviewed')out.warnings.push({code:'plan-draft',message:'Plan en borrador: las fechas no están aprobadas.'});
+    }else{const st=model.planning?.status==='rejected'?'rejected':'unavailable';
+      out.sources.push({kind:'plan',label:'Plan de obra (WBS)',status:st,detail:model.planning?.message||'Sin plan: no hay % ni siguiente tarea.'});
+      out.warnings.push({code:'plan-'+st,message:st==='rejected'?'El plan cargado no es válido o es de otro proyecto: no se usa (ni %, ni siguiente tarea, ni costes).':'Sin plan de obra: no hay % del plan, ni siguiente tarea, ni coste planificado.'});}
+    // Presupuesto C1–C4 y su reparto a tareas.
+    const costs=model.costs||{},rep=costs.report,cov=model.coverage?.budget;
+    if(costs.status==='available'&&rep){
+      const labels=[...new Set(rep.byTask.flatMap(t=>t.lines).map(l=>l.priceSource?.label).filter(Boolean))];
+      out.sources.push({kind:'budget',label:'Presupuesto C1–C4',id:rep.budgetId,status:'present',revisionCheck:rep.projectRevision.check,priceSources:labels,
+        allocatedPercentOfKnown:cov?.allocatedPercentOfKnown??null,unassignedItems:cov?.unassignedItemIds?.length??0,pendingAllocations:cov?.pendingAllocations?.length??0,
+        detail:`${rep.budgetId} · revisión del proyecto: ${rep.projectRevision.check==='match'?'coincide':rep.projectRevision.check==='mismatch'?'NO coincide':'no verificable (C1–C4 no guarda la revisión)'}`
+          +` · ${cov?.allocatedPercentOfKnown??'—'} % del importe conocido asignado a tareas${cov?.unassignedItemIds?.length?` · ${cov.unassignedItemIds.length} partida(s) sin tarea`:''}${labels.length?' · precios: '+labels.join(' · '):''}`});
+      if(rep.projectRevision.check!=='match')out.warnings.push({code:'budget-revision-'+rep.projectRevision.check,message:rep.projectRevision.check==='mismatch'?'El presupuesto es de otra revisión del proyecto.':'No se puede verificar sobre qué revisión del proyecto se hizo el presupuesto (C1–C4 no la guarda).'});
+      if(cov?.unassignedItemIds?.length||cov?.pendingAllocations?.length)out.warnings.push({code:'budget-allocation-incomplete',message:`Reparto incompleto: ${cov.unassignedItemIds.length} partida(s) sin tarea y ${cov.pendingAllocations.length} con reparto pendiente; su importe no entra en el coste planificado.`});
+    }else out.sources.push({kind:'budget',label:'Presupuesto C1–C4',status:'unavailable',reason:costs.reason||null,detail:'No disponible: '+(COST_REASONS[costs.reason]||costs.reason||'sin presupuesto')+'. No se muestra ningún importe.'});
+    // Vínculo profesional y nivel de entrega (lo calcula el adaptador; aquí solo se dice).
+    const b=model.obsolescence||{};
+    out.sources.push({kind:'binding',label:'Vínculo profesional',status:Object.values(b).some(v=>v!=='unknown')?'present':'absent',
+      detail:Object.values(b).some(v=>v!=='unknown')?`proyecto ${b.project}, plan ${b.schedule}, presupuesto ${b.budget}`:'Sin vínculo: ningún profesional ha fijado las revisiones.'});
+    out.sources.push({kind:'delivery',label:'Nivel de la presentación',status:model.delivery?.level||'unknown',detail:model.delivery?.label||'—'});
+    // Vínculos: la siguiente tarea y las tareas sin elementos o sin partidas.
+    const links=model.links||[],key=(t,e)=>t+'\u0000'+e,byLink=new Map(links.map(l=>[key(l.taskId,l.elementKey),l]));
+    for(const t of snapshot?.next?.state==='planned'?snapshot.next.tasks:[])for(const e of t.elements){
+      const l=byLink.get(key(t.id,e.elementId)),status=l?.status||'broken';
+      out.next.push({taskId:t.id,wbs:t.wbs,elementId:e.elementId,role:e.role,status,label:LINK_ES[status]||status,ghost:status==='ok'});}
+    out.ghostKeys=[...new Set(out.next.filter(x=>x.ghost).map(x=>x.elementId))];
+    const tmeta=new Map((canon?.tasks||[]).map(t=>[t.id,t]));
+    const named=id=>{const t=tmeta.get(id);return {taskId:id,wbs:t?.wbs??null,title:t?.title??null};};
+    out.tasksWithoutElements=(model.coverage?.tasks?.withoutElements||[]).map(named);
+    out.tasksWithoutBudget=(model.coverage?.tasks?.withoutBudget||[]).map(named);
+    out.brokenLinks=links.filter(l=>l.status==='broken').map(l=>({taskId:l.taskId,elementId:l.elementKey}));
+    if(out.brokenLinks.length)out.warnings.push({code:'broken-links',message:`${out.brokenLinks.length} vínculo(s) del plan apuntan a elementos que no existen en el proyecto: no se dibujan.`});
+    if(snapshot?.cost?.status==='partial')out.warnings.push({code:'cost-partial',message:'Coste planificado parcial: hay partidas sin importe en tareas ya empezadas.'});
+    return out;
+  }
+  return Object.freeze({SCHEMA,VERSION,snapshot,unsupportedStates,planKey,COST_REASONS,provenance,LINK_ES});
 });

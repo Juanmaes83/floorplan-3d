@@ -57,7 +57,7 @@ test('3 · el mismo proyecto sin plan después de uno con plan (mismos IDs): el 
 
 test('4 · setPreview([]) restaura exactamente imagen, inspección, piezas visibles y selección',{timeout:180000},async()=>{
   const {context,page,watch}=await K.openEvolution(env);try{
-    await at(page,MID);await page.locator('.plan-preview summary').click();await page.locator('.pp-ghost').uncheck();
+    await at(page,MID);await page.locator('.plan-preview .pp-next-d summary').click();await page.locator('.pp-ghost').uncheck();
     const A=await look(page);assert.equal((await preview(page)).shown,0);
     await page.locator('.pp-ghost').check();const B=await look(page);assert.ok((await preview(page)).shown>0);assert.notEqual(B.hash,A.hash,'el fantasma se ve');
     await page.locator('.pp-ghost').uncheck();const C=await look(page);
