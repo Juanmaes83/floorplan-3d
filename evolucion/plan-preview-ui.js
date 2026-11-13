@@ -80,7 +80,7 @@ function render(s,prov=null){
     <div class="pp-actions"><button type="button" data-task="${esc(t.id)}">Ver en el plan</button></div>`).join('')}
     <label><input type="checkbox" class="pp-ghost" ${state.ghost?'checked':''}> Ver en fantasma (azul) en la escena</label>`;
   // El supuesto de reparto ya está en la línea del coste y, completo, dentro de «Fuentes y vínculos».
-  $('.pp-note').textContent='Plan ≠ obra · coste ≠ gasto ·';
+  $('.pp-note').textContent='Plan ≠ obra · coste ≠ gasto ·\u00a0';
   renderSources(prov);applyGhost();
 }
 // Vínculos de una tarea con el estado que les dio el adaptador FT3D-8: solo los comprobados en el modelo van al fantasma.
