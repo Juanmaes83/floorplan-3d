@@ -50,7 +50,25 @@ Reúne los cinco puntos de conexión de la propuesta de #202 (§5) y los prueba 
 - **Modal de verdad:** escucha el teclado en el documento, en captura, mientras está abierto, y devuelve el foco al diálogo si se escapa.
   - Sin esto, Ctrl+Z desharía **a la vez** la edición del armario y el proyecto entero.
   - Al redibujarse tras guardar, el foco caía al `body` y Escape dejaba de cerrar. Lo encontró la prueba de extremo a extremo y está corregido.
-- **Cerrar:** Escape cierra; con cambios sin guardar, pide un segundo Escape. El foco vuelve al botón que lo abrió.
+- **Cerrar:** Escape o el botón «Cerrar» cierran; con cambios sin guardar, piden una segunda pulsación. «Cancelar» descarta a propósito y cierra sin preguntar. El foco vuelve al botón que lo abrió.
+
+#### Auditoría de #215 (13/11): «Dividir módulo» y cierre con cambios pendientes
+
+La auditoría pedía comprobar dividir, cambiar de verdad, primer Escape y confirmación. Escape ya funcionaba. Al probarlo en escritorio y en el móvil salieron **tres defectos del adaptador** (`js/r03-cabinet-rubik-ui.js`), corregidos aquí. Cada uno tiene una prueba que falla con `ac7df16` y pasa ahora:
+
+| # | Defecto | Impacto | Corrección |
+|---|---|---|---|
+| 1 | El botón **«Cerrar»** cerraba y **tiraba los cambios sin avisar**. Solo Escape pedía confirmación. | En el móvil no hay Escape: era la única forma de cerrar y se perdía el trabajo. | «Cerrar» pide la misma confirmación que Escape. Un cambio nuevo vuelve a exigirla. |
+| 2 | **Ctrl+Z dentro del diálogo no hacía nada.** La escucha modal del documento, en captura, paraba todas las teclas antes de que llegaran al editor. La prueba anterior solo contaba módulos, por eso no lo veía. Lo introdujo la corrección de foco de la noche anterior. | El editor anunciaba un deshacer que no funcionaba. | Dentro del diálogo, la tecla llega al editor y se para en el propio diálogo, antes de RUBIK. Fuera, se sigue parando en la captura. La prueba compara ahora el estado completo. |
+| 3 | Tras **«Guardar interior»**, al cerrar el foco caía al `body`. | Teclado y lector de pantalla perdían el sitio. | RUBIK redibuja su panel al guardar. Si el botón que abrió el diálogo ya no existe, se enfoca el nuevo, buscado por su `id`. |
+
+Comprobado en 1440×900 y 390×844:
+- **División válida:** un módulo más, aviso verde «Módulo dividido» y `dirty === true`. El proyecto no cambia. El primer Escape (o «Cerrar») no cierra y avisa de «cambios sin guardar»; el segundo cierra sin tocar el proyecto ni el deshacer de RUBIK.
+- **Ctrl+Z en el diálogo** deshace la división: `dirty === false` y un solo Escape cierra.
+- **División rechazada:** módulos idénticos y aviso rojo «Módulo 1: cada módulo necesita al menos 150 mm de anchura libre.».
+  - Si ya había cambios válidos, siguen pendientes y Escape sigue pidiendo confirmación.
+  - Sobre un interior recién guardado, el rechazo deja `dirty === false`, no toca el proyecto ni el deshacer, y un Escape cierra.
+- **RUBIK:** guardar es un paso del deshacer; Ctrl+Z quita el interior y Ctrl+Shift+Z lo devuelve. El 3D dibuja el armario dividido. Sin desplazamiento horizontal y sin errores.
 - **Aviso fijo:** «Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.»
 - **Estilos:** las reglas `.r03-*` del laboratorio, copiadas literalmente, con sus variables dentro de `.r03-scope` para no chocar con las de RUBIK. En el móvil, el diálogo es una hoja a pantalla completa.
 
@@ -82,6 +100,7 @@ Son **14 líneas** en seis puntos (`git diff` de `review/r03-editor-in-rubik-202
 - **recargar la página conserva el interior**;
 - duplicar con interior y borrar sin huérfanos;
 - Escape con cambios sin guardar pide confirmación;
+- **«Dividir módulo»** (auditoría de #215): división válida y rechazada, Escape y «Cerrar» con y sin cambios, Ctrl+Z del diálogo, guardar/deshacer/rehacer de RUBIK y 3D, en 1440×900 y 390×844;
 - el foco vuelve al botón;
 - sin desplazamiento horizontal;
 - 0 errores.
