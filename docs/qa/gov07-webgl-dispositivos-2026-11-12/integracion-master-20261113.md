@@ -51,7 +51,7 @@ La rama de #208 no se toca. GOV-07 sigue **PARCIAL** hasta la matriz física.
 3. La guarda dice **«Vista 3D interrumpida»** (no «sin WebGL»). Si el contexto no vuelve en el plazo, ofrece **«Recargar la vista»**. Si vuelve tarde, la vista se completa igualmente y el aviso se retira. Desde ese momento delega en la guarda normal: avisa de las pérdidas siguientes, degrada y adapta el DPR.
 4. Lo que otros módulos asignan a la escena mientras espera vive en la fachada de la escena diferida, y vale igual antes y después de que llegue la real. Por ejemplo, #211 envuelve `renderNow` para quitar el fantasma del vídeo. Reaplicarlo a la escena real habría hecho que el envoltorio se llamara a sí mismo; perderlo habría dejado el fantasma en el vídeo para el cliente.
 
-**Pruebas** (`tests/gov07-early-loss.browser.test.cjs`): **4/4** aquí y **0/3** de las tres primeras en `d451c23`. La cuarta cubre el caso de #211.
+**Pruebas** (`tests/gov07-early-loss.browser.test.cjs`): **5/5** aquí; las tres primeras dan **0/3** en `d451c23`. La cuarta cubre el caso de #211 y la quinta, H3.
 
 | Prueba | Qué comprueba |
 |---|---|
@@ -59,6 +59,22 @@ La rama de #208 no se toca. GOV-07 sigue **PARCIAL** hasta la matriz física.
 | Perdido al crear y recuperado | Aviso correcto; el plan sigue; la casa aparece **encuadrada** y en el mismo momento del plan; una pérdida posterior se avisa y se recupera; un clic = una selección; **0 errores** |
 | Perdido al crear sin vuelta | «Recargar la vista» tras el plazo; recuperación tardía correcta |
 | Asignaciones de otros módulos | Un envoltorio de `renderNow` puesto mientras espera se llama una vez tras recuperar, sin recursión |
+
+### H3 · Dibujar con el contexto ya perdido (encontrado en el ensayo con #211)
+
+**Síntoma.** De forma intermitente, `Cannot read properties of null (reading 'trim')` durante una pérdida de contexto mientras se reproduce. Pila: `WebGLProgram.getUniforms → onFirstUse → getProgramInfoLog(...).trim()`.
+
+**Causa.**
+- El contexto se pierde al instante, pero el evento `webglcontextlost` llega en otra tarea.
+- Si en ese hueco un cuadro necesita compilar un material nuevo, Three r160 lo compila sobre el contexto perdido y, al usarlo, `getProgramInfoLog()` devuelve `null`.
+- La vista previa de #211 compila materiales al reproducir. Medido, con 30 pérdidas en cada caso:
+  - **con #211: 2 de 15;**
+  - **sin #211: 0 de 30.**
+- Un reinicio real de la GPU produce el mismo hueco, con o sin #211.
+
+**Corrección** (en `gl-guard.js`, que ya envuelve `renderer.render`): no se dibuja mientras `gl.isContextLost()`. **Con #211: 0 de 30.**
+
+**Prueba determinista:** se pierde el contexto y, en la misma tarea, se obliga a recompilar todos los materiales y se dibuja. **Falla sin la corrección**, con ese mismo `TypeError`, y **pasa con ella**.
 
 ## 3. Ensayo con #211 (OBR-02/03, Claude B), local y sin publicar
 
