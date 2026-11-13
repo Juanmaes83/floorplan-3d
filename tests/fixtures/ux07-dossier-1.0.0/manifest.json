@@ -1,0 +1,36 @@
+{
+ "schema": "rubik-sota.before-after-dossier-manifest",
+ "version": "1.0.0",
+ "generatedAt": "2026-11-12T12:00:00.000Z",
+ "status": "draft-internal",
+ "publication": "none",
+ "relation": "same-project",
+ "before": {
+  "projectId": "prj_reference-home",
+  "name": "Vivienda de referencia (datos de prueba)",
+  "updatedAt": "2026-10-01T09:00:00Z",
+  "sha256": "1b41b865bda0990559d5ca2f249239c11290d5cc7393758e4cc849721d8e4a96"
+ },
+ "after": {
+  "projectId": "prj_reference-home",
+  "name": "Vivienda de referencia (datos de prueba)",
+  "updatedAt": "2026-10-15T09:00:00Z",
+  "sha256": "5dee6b16a2b5041b8097ae19b6c3b6d80b4f2940d12448afa0e5199f036d2615"
+ },
+ "comparison": {
+  "schema": "rubik-sota.revision-comparison",
+  "version": "1.0.0",
+  "changes": 7,
+  "sha256": "17b1f40d1b40e3b3da72f92ec07107228898b6586b7d3956e2134c9f2eec86df"
+ },
+ "budget": {
+  "budgetId": "bud_prj_reference-home",
+  "label": "Presupuesto completo",
+  "quantities": "match",
+  "sha256": "bfff1621b3d9e0b70b39b4c4d86bda2d8fc8f9971c17447550291fabd2065292"
+ },
+ "html": {
+  "bytes": 31865,
+  "sha256": "e088415cc03672da73e4d5fbd76a0cff1031b43f69e7f8f19578f42de9ca85a1"
+ }
+}

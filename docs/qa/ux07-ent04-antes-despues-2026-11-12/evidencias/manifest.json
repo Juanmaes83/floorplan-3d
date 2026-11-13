@@ -1,0 +1,46 @@
+{
+ "generated": "2026-11-12T18:39:26.180Z",
+ "data": "fixtures sintéticas (vivienda de referencia) y precios FICTICIOS de laboratorio",
+ "files": [
+  {
+   "file": "1-cortina-escritorio-1440x900.png",
+   "sha256": "118ddd614c3fdf5957ff72ecd286b47bf57f66e7974aff667f3400a937b29ff6"
+  },
+  {
+   "file": "2-cambios-materiales-escritorio-1440x900.png",
+   "sha256": "3f37e33a6c000431455c1c5913a581f6118894c87a97ca12bcefffaecf8a47cf"
+  },
+  {
+   "file": "3-lado-a-lado-escritorio-1440x900.png",
+   "sha256": "d4750c6566a9d927b37a136162f97aa219841bd6064779a70010618d08ed736a"
+  },
+  {
+   "file": "4-dossier-parcial-verificado-escritorio-1440x900.png",
+   "sha256": "6edaf4ef8df69e0d97293e18e36c974a604c6049e86d995055b24274c8181b6a"
+  },
+  {
+   "file": "5-dossier-descargado-escritorio-1440x900.png",
+   "sha256": "7dea5f8988ff605f3e584f5e9a393a2fa0608cacc8fcf356f289807037fb0276"
+  },
+  {
+   "file": "1-cortina-movil-390x844.png",
+   "sha256": "00e4a34ce1f87a5ce3b15593129dc9ce206ea992c2623418369ac37fe9bad759"
+  },
+  {
+   "file": "2-cambios-materiales-movil-390x844.png",
+   "sha256": "c61a23d129f44ba77890b17d0ddc8e7772b1efffa6ba3469390f06d3d13ac3e7"
+  },
+  {
+   "file": "3-lado-a-lado-movil-390x844.png",
+   "sha256": "ccf52cca9e70c0923166907f448801c21ff5a199339b7ff7a50f2d43c94746cd"
+  },
+  {
+   "file": "4-dossier-parcial-verificado-movil-390x844.png",
+   "sha256": "b0b4b4064154b590dca69287ab2107fa5f4749f5d369a2de7b1fa9f927d6f80d"
+  },
+  {
+   "file": "5-dossier-descargado-movil-390x844.png",
+   "sha256": "684ffbf21d78a46b5024e39cb037039db16e133cf4ee23c167dc35d44c22737a"
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+# UX-07 + ENT-04 (ola 2b): comparación antes/después de dos revisiones y dossier interno con presupuesto rotulado.
+# Laboratorio aislado (labs/ux07-ent04/), datos sintéticos y precios FICTICIOS de prueba; no publica, no crea enlaces,
+# no usa credenciales y cualquier petición fuera del servidor local hace fallar las pruebas.
+name: UX-07 + ENT-04 - before/after lab
+on:
+  pull_request:
+    paths:
+      - 'js/revision-compare-core.js'
+      - 'js/before-after-dossier-core.js'
+      - 'js/revision-budget-core.js'
+      - 'js/variants-compare-adapter.js'
+      - 'js/project-library.js'
+      - 'js/project-variants.js'
+      - 'js/budget-*.js'
+      - 'labs/ux07-ent04/**'
+      - 'tests/ux07/**'
+      - 'tests/ux07-*.cjs'
+      - 'tests/fixtures/ux07-dossier-1.0.0/**'
+      - '.github/workflows/ux07-ent04-before-after.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'js/revision-compare-core.js'
+      - 'js/before-after-dossier-core.js'
+      - 'js/revision-budget-core.js'
+      - 'labs/ux07-ent04/**'
+      - 'tests/ux07-*.cjs'
+      - '.github/workflows/ux07-ent04-before-after.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PLAYWRIGHT_VERSION: '1.62.1'
+jobs:
+  ux07:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/revision-compare-core.js js/before-after-dossier-core.js js/revision-budget-core.js js/variants-compare-adapter.js labs/ux07-ent04/*.js tests/ux07/*.cjs tests/ux07-*.cjs; do node --check "$f"; done
+      - name: Pure cores (comparison, dossier, verification)
+        run: node --test tests/ux07-ent04-core.test.cjs tests/ux07-ent04-budget-coherence.test.cjs tests/ux07-variants-adapter.test.cjs
+      - name: Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@$PLAYWRIGHT_VERSION
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Lab in the browser (desktop and mobile, downloads and verification)
+        run: node --test --test-concurrency=1 tests/ux07-ent04-lab.browser.test.cjs tests/ux07-ent04-budget.browser.test.cjs tests/ux07-ent04-origin.browser.test.cjs tests/ux07-variants-handoff.browser.test.cjs
