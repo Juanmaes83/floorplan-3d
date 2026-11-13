@@ -157,6 +157,7 @@ test(`R03 «Dividir módulo» y cierre con cambios pendientes ${viewport.width}x
  const proj=()=>page.evaluate(()=>JSON.stringify(project)),undoLen=()=>page.evaluate(()=>undoStack.length);
  const saved=()=>page.evaluate(id=>{const r=RubikCabinetContract.read(project,id);return r.status==='ok'?r.cabinet.columns.length:r.status;},WARDROBE);
  const focusIsOpener=()=>page.evaluate(()=>document.activeElement?.id==='aInterior');
+ const shot=async id=>{if(shots)await page.screenshot({path:path.join(shots,`${viewport.width}x${viewport.height}-split-${id}.png`)});};
 
  // A · División válida → cambio real → primer Escape pide confirmación → segundo Escape cierra sin guardar.
  const p0=await proj(),u0=await undoLen();await open();const w0=await widths();assert.equal(await dirty(),false);
@@ -165,7 +166,7 @@ test(`R03 «Dividir módulo» y cierre con cambios pendientes ${viewport.width}x
  assert.match(m1.kind,/is-ok/);assert.match(m1.text,/Módulo dividido/);assert.equal(await dirty(),true,'dividir es un cambio sin guardar');
  assert.equal(await proj(),p0,'sin guardar, el proyecto no cambia');
  await page.keyboard.press('Escape');await page.waitForTimeout(150);
- assert.equal(await dlg().count(),1,'el PRIMER Escape no cierra');assert.match((await msg()).text,/cambios sin guardar/);assert.deepEqual(await widths(),w1,'y no deshace nada');
+ await shot('1-confirmar');assert.equal(await dlg().count(),1,'el PRIMER Escape no cierra');assert.match((await msg()).text,/cambios sin guardar/);assert.deepEqual(await widths(),w1,'y no deshace nada');
  await page.keyboard.press('Escape');await page.waitForTimeout(150);
  assert.equal(await dlg().count(),0,'el segundo Escape cierra');assert.equal(await proj(),p0,'cerrar sin guardar no toca el proyecto');assert.equal(await undoLen(),u0);
  assert.ok(await focusIsOpener(),'el foco vuelve a «Interior del armario…»');
@@ -192,7 +193,7 @@ test(`R03 «Dividir módulo» y cierre con cambios pendientes ${viewport.width}x
  await tap(btn('Guardar interior'));const nSaved=rejected.before.length;
  assert.equal(await saved(),nSaved,'guardado con sus módulos');assert.equal(await undoLen(),u0+1,'un paso del deshacer de RUBIK');assert.equal(await dirty(),false);
  const pSaved=await proj(),wSaved=await widths();await tap(btn('Dividir módulo'));const mr=await msg();
- assert.match(mr.kind,/is-error/,'rechazo en rojo');assert.match(mr.text,/150 mm|módulos/);assert.deepEqual(await widths(),wSaved,'módulos idénticos');
+ await shot('2-rechazo');assert.match(mr.kind,/is-error/,'rechazo en rojo');assert.match(mr.text,/150 mm|módulos/);assert.deepEqual(await widths(),wSaved,'módulos idénticos');
  assert.equal(await dirty(),false,'un rechazo no es un cambio');assert.equal(await proj(),pSaved,'ni toca el proyecto');assert.equal(await undoLen(),u0+1);
  await page.keyboard.press('Escape');await page.waitForTimeout(150);assert.equal(await dlg().count(),0,'sin cambios, un Escape cierra');assert.ok(await focusIsOpener());
 
