@@ -162,7 +162,7 @@ test('MUE-01 + FOT-01 en teléfono 390×844: acceso, creación, colocación y co
 });
 
 test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto',{timeout:300000},async()=>{
-  const {context,page}=await K.editor(env);const w=K.watch(page,env.base);const api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
+  const {context,page}=await K.editor(env,{acceptDownloads:true});const w=K.watch(page,env.base);const api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
   try{
     const before=await K.snapshot(page);
     assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0,'sin <img> vacías al cargar');
@@ -197,6 +197,16 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     // Lenta + Cancelar.
     await page.locator('#photoReformScenario').selectOption('slow');await page.locator('#photoReformSimulate').click();await page.locator('#photoReformCancel:not([hidden])').click();
     await page.waitForFunction(()=>RubikPhotoReform.state?.status==='cancelled',null,{timeout:30000});assert.match(await page.locator('#photoReformStatus').innerText(),/Cancelado/);
+    // Trazabilidad: el registro de la sesión lista lo ocurrido y se descarga sin imagen ni nombre de archivo.
+    assert.match(await page.locator('#photoReformReady').innerText(),/SIN ACTIVAR/);
+    await page.locator('#photoReformTrace summary').click();
+    const events=await page.locator('#photoReformTraceList li').evaluateAll(l=>l.map(x=>x.dataset.event));
+    for(const ev of ['photo-rejected','photo-accepted','intent-set','consent-missing','run-started','item-done','run-finished','item-error','run-cancelled'])assert.ok(events.includes(ev),ev);
+    const [tdl]=await Promise.all([page.waitForEvent('download'),page.locator('#photoReformTraceDownload').click()]);
+    const traceText=fs.readFileSync(await tdl.path(),'utf8'),traceDoc=JSON.parse(traceText);
+    assert.equal(traceDoc.contract,'rubik-photo-reform-trace/1');assert.ok(traceDoc.entries.length>=9);
+    assert.ok(!/IMG_9876|salon|data:image|base64|Exif/i.test(traceText),'sin nombre de archivo ni contenido de imagen');
+    assert.ok(traceDoc.entries.filter(e=>e.event==='run-started').every(e=>e.mode==='simulated'&&e.adapter==='simulated-local'),'solo el adaptador simulado');
     // Descartar y cerrar: nada queda; el proyecto no ha cambiado; ninguna llamada a /api/.
     await page.locator('#photoReformDiscard').click();assert.equal(await page.locator('#photoReformResults').isHidden(),true);
     // Descartar A MITAD de una simulación, con la primera alternativa ya generada: se detiene, no quedan miniaturas

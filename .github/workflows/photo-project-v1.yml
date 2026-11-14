@@ -18,6 +18,7 @@ on:
       - tests/editor-fixture.cjs
       - vendor/three/**
       - scripts/qa/record-photo-project-v1.cjs
+      - docs/photo-project/**
       - .github/workflows/photo-project-v1.yml
 permissions:
   contents: read
@@ -34,8 +35,8 @@ jobs:
           node-version: '22.13.0'
       - name: Syntax
         run: for f in js/own-furniture-*.js js/photo-reform-*.js scripts/qa/record-photo-project-v1.cjs; do node --check "$f"; done
-      - name: MUE-01/FOT-01 cores and the guards of R03, R02-A (I0/I1/A4) and UX-08 with both features loaded
-        run: node --test --test-concurrency=1 tests/photo-project-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/ux08-live-dimensions.test.cjs
+      - name: MUE-01/FOT-01 cores, FOT-01 provider contract v1 against a LOCAL mock server (no provider is activated), and the guards of R03, R02-A (I0/I1/A4) and UX-08 with both features loaded
+        run: node --test --test-concurrency=1 tests/photo-project-core.test.cjs tests/photo-reform-provider.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/ux08-live-dimensions.test.cjs
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 45

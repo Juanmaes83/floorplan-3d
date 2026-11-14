@@ -86,6 +86,14 @@ async function mueDesktop(env,jpg){
     await page.keyboard.press('Control+z');await pause(page,800);const undo=(await selObj(page)).rotationDeg;
     await page.keyboard.press('Control+Shift+z');await pause(page,800);const redo=(await selObj(page)).rotationDeg;
     R.check('rotar, deshacer y rehacer',rot===90&&undo===0&&redo===90,`${rot}° → deshacer ${undo}° → rehacer ${redo}°`);
+    // 5b · Duplicar (Ctrl+D): la copia es otro «mi mueble» con la misma foto; deshacer la retira.
+    await page.keyboard.press('Control+d');await page.waitForFunction(()=>document.querySelector('#ownFurnPhotoState')?.dataset.state==='ok');await pause(page,900);
+    const copy=await selObj(page),ext2=await page.evaluate(e=>structuredClone(FloorPlanApp.project.extensions?.[e]??null),EXT);
+    await R.shot(page,'mue01-escritorio-04b-duplicado.png','Duplicado: la copia conserva medidas y foto de referencia');
+    R.check('duplicar conserva medidas y foto',copy.id!==o.id&&JSON.stringify(copy.size)===JSON.stringify(o.size)&&ext2.items.find(i=>i.objectId===copy.id)?.photo?.imageKey===ext2.items.find(i=>i.objectId===o.id)?.photo?.imageKey,`copia ${copy.id.slice(0,12)}… misma clave`);
+    await page.keyboard.press('Control+z');await pause(page,800);
+    R.check('deshacer el duplicado retira la copia y su referencia',!(await page.evaluate(([e,id])=>FloorPlanApp.project.objects.some(x=>x.id===id)||FloorPlanApp.project.extensions?.[e]?.items.some(i=>i.objectId===id),[EXT,copy.id])),'un paso');
+    { const gb=await page.locator(`#plan g.furn[data-fid="${o.id}"]`).boundingBox();await page.mouse.click(gb.x+gb.width/2,gb.y+gb.height/2);await pause(page,500); }
     // 6 · 3D.
     await K.open3D(page);await pause(page,2000);
     const in3d=await page.evaluate(id=>View3D.levelInspect().furniturePlan.find(f=>f.id===id),o.id);
@@ -216,6 +224,14 @@ async function fotDesktop(env,room){
     await page.locator('#photoReformScenario').selectOption('slow');await page.locator('#photoReformSimulate').click();await page.locator('#photoReformCancel:not([hidden])').click();
     await page.waitForFunction(()=>RubikPhotoReform.state?.status==='cancelled',null,{timeout:30000});
     R.check('cancelación',true,await page.locator('#photoReformStatus').innerText());
+    // Trazabilidad: registro de la sesión (sin imágenes) y su descarga.
+    await page.locator('#photoReformTrace summary').click();await page.locator('#photoReformTraceList').scrollIntoViewIfNeeded();await pause(page,300);
+    await R.shot(page,'fot01-escritorio-05-registro-sesion.png','Registro de la sesión: eventos con campos cerrados, sin imagen ni nombre de archivo');
+    const [tdl]=await Promise.all([page.waitForEvent('download'),page.locator('#photoReformTraceDownload').click()]);
+    fs.mkdirSync(path.join(OUT,'trace'),{recursive:true});const tfile=path.join(OUT,'trace','fot01-registro-sesion.json');fs.copyFileSync(await tdl.path(),tfile);
+    const ttext=fs.readFileSync(tfile,'utf8'),tdoc=JSON.parse(ttext);
+    R.check('registro descargable sin nombre de archivo ni imagen',tdoc.contract==='rubik-photo-reform-trace/1'&&tdoc.entries.length>=8&&!/IMG_9876|data:image|base64|Exif/i.test(ttext),`${tdoc.entries.length} eventos · trace/fot01-registro-sesion.json`);
+    R.check('integración del proveedor preparada y SIN ACTIVAR',/SIN ACTIVAR/.test(await page.locator('#photoReformReady').innerText())&&await page.locator('#photoReformReal').isDisabled(),'contrato v1; botón real desactivado');
     await page.locator('#photoReformDiscard').click();await page.locator('#photoReformClose').click();await page.locator('#photoReformDialog').waitFor({state:'hidden'});
     R.check('el proyecto no cambia y no hay llamadas a /api/',JSON.stringify(await K.snapshot(page))===JSON.stringify(before)&&!api.length,`api=${api.length}`);
     R.check('sin errores ni red externa',!w.errors.length&&!w.external.length,JSON.stringify({errors:w.errors,external:w.external}));
