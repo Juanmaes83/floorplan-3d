@@ -43,6 +43,22 @@ test('MUE-01 · extensión: el volumen va en el objeto canónico y la foto solo 
   p.objects=p.objects.filter(o=>o.id!=='obj_own-sofa-1');M.prune(p);assert.equal(p.extensions,undefined);Core.validate(p);
 });
 
+test('MUE-01 · duplicar: la copia comparte la referencia fotográfica (misma clave por hash); sin foto o datos ajenos, no se toca', () => {
+  const p=project();p.objects.push({id:'obj_own-sofa-2',type:'sofa',name:'Sofá propio',position:{x:6000,y:5000},rotationDeg:0,size:{widthMm:2140,depthMm:920,heightMm:830}});
+  M.attach(p,'obj_own-sofa-1',photo());assert.deepEqual(M.duplicate(p,'obj_own-sofa-1','obj_own-sofa-2'),{changed:true});Core.validate(p);
+  assert.deepEqual(p.extensions['x-mue01-furniture-photo'].items.map(i=>[i.objectId,i.photo.imageKey]),[['obj_own-sofa-1','mue01/'+sha],['obj_own-sofa-2','mue01/'+sha]]);
+  assert.equal(M.photoStatus(p,'obj_own-sofa-2',true).state,'ok');
+  // Un mueble que no es «mi mueble» no gana referencia al duplicarse.
+  const q=project();q.objects.push({id:'obj_bed-x',type:'bed',name:'Cama',position:{x:1,y:1},rotationDeg:0,size:{widthMm:900,depthMm:1900}});
+  assert.deepEqual(M.duplicate(q,'obj_bed-01','obj_bed-x'),{changed:false});assert.equal(q.extensions,undefined);
+  // Sin foto conservada: la copia también es «mi mueble» sin foto.
+  const n=project();n.objects.push({id:'obj_own-sofa-3',type:'sofa',name:'x',position:{x:1,y:1},rotationDeg:0,size:{widthMm:900,depthMm:900,heightMm:900}});
+  M.attach(n,'obj_own-sofa-1',null);M.duplicate(n,'obj_own-sofa-1','obj_own-sofa-3');assert.equal(M.photoStatus(n,'obj_own-sofa-3',false).state,'not-stored');
+  // Datos de otra versión: intactos.
+  const f=project();f.objects.push({id:'obj_own-sofa-4',type:'sofa',name:'x',position:{x:1,y:1},rotationDeg:0,size:{widthMm:900,depthMm:900,heightMm:900}});
+  f.extensions={'x-mue01-furniture-photo':{version:2,items:[]}};const before=JSON.stringify(f);assert.deepEqual(M.duplicate(f,'obj_own-sofa-1','obj_own-sofa-4'),{changed:false});assert.equal(JSON.stringify(f),before);
+});
+
 test('MUE-01 · datos dañados o de una versión futura: solo lectura, nunca se reescriben ni rompen el mueble', () => {
   for(const raw of [{version:2,items:[]},{version:1,items:'x'},{version:1,items:[{objectId:'obj_own-sofa-1',photo:photo({mediaType:'image/png'})}]},
     {version:1,items:[{objectId:'obj_own-sofa-1',photo:photo({imageKey:'otra/'+sha})}]},{version:1,items:[{objectId:'obj_own-sofa-1',photo:{...photo(),fileName:'IMG_1.jpg'}}]},'texto',null]){

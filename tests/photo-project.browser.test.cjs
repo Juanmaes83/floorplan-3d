@@ -72,6 +72,20 @@ test('MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con co
     assert.deepEqual(reopened.size,{widthMm:2140,depthMm:920,heightMm:830});
     const gr=page.locator(`#plan g.furn[data-fid="${o.id}"]`),br=await gr.boundingBox();await page.mouse.click(br.x+br.width/2,br.y+br.height/2);
     await page.waitForFunction(()=>document.querySelector('#ownFurnPhotoState')?.dataset.state==='ok');
+    // Duplicar (Ctrl+D) un mueble propio: la copia lleva la misma foto; es un solo paso del deshacer.
+    const undoBefore=await page.evaluate(()=>undoStack.length);
+    await page.keyboard.press('Control+d');const copy=await ownObj(page);
+    assert.notEqual(copy.id,o.id);assert.deepEqual(copy.size,{widthMm:2140,depthMm:920,heightMm:830});
+    assert.deepEqual(copy.ext.items.find(i=>i.objectId===copy.id)?.photo,copy.ext.items.find(i=>i.objectId===o.id)?.photo,'misma referencia fotográfica');
+    await page.waitForFunction(()=>document.querySelector('#ownFurnPhotoState')?.dataset.state==='ok');
+    assert.equal(await page.evaluate(()=>undoStack.length),undoBefore+1,'un paso del deshacer');
+    await page.keyboard.press('Control+z');
+    assert.equal(await page.evaluate(id=>FloorPlanApp.project.objects.some(o=>o.id===id),copy.id),false);
+    assert.equal(await page.evaluate(([e,id])=>FloorPlanApp.project.extensions[e].items.some(i=>i.objectId===id),[EXT,copy.id]),false,'deshacer retira también la referencia de la copia');
+    await page.keyboard.press('Control+Shift+z');
+    assert.equal(await page.evaluate(([e,id])=>FloorPlanApp.project.extensions[e].items.some(i=>i.objectId===id),[EXT,copy.id]),true,'rehacer la repone');
+    await page.keyboard.press('Control+z');
+    const gb=await page.locator(`#plan g.furn[data-fid="${o.id}"]`).boundingBox();await page.mouse.click(gb.x+gb.width/2,gb.y+gb.height/2);
     // Exportar: viaja la referencia, no la foto.
     await page.locator('details.menu summary').first().click();const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);
     const exported=fs.readFileSync(await dl.path(),'utf8'),json=JSON.parse(exported);
@@ -85,6 +99,10 @@ test('MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con co
     const g2=p2.locator(`#plan g.furn[data-fid="${o.id}"]`),b2=await g2.boundingBox();await p2.mouse.click(b2.x+b2.width/2,b2.y+b2.height/2);
     await p2.waitForFunction(()=>document.querySelector('#ownFurnPhotoState')?.dataset.state==='missing');
     assert.match(await p2.locator('#ownFurnPhotoState').innerText(),/Falta la foto en este navegador/);
+    // Recuperable: en ese navegador se vuelve a elegir la foto y el mueble queda completo.
+    const [chooser]=await Promise.all([p2.waitForEvent('filechooser'),p2.locator('#ownFurnPick',{hasText:'Volver a elegir la foto'}).click()]);
+    await chooser.setFiles(K.file('IMG_0042.jpg',jpg,'image/jpeg'));
+    await p2.waitForFunction(()=>document.querySelector('#ownFurnPhotoState')?.dataset.state==='ok',null,{timeout:30000});
     assert.deepEqual(w2.errors,[]);await other.close();
     assert.equal(await others(page),r03r02,'R03 y R02-A intactos');
     assert.deepEqual(w.errors,[]);assert.deepEqual(w.external,[]);
