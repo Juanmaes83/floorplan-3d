@@ -178,8 +178,9 @@
  discardBtn.onclick=()=>{hideResults();status.textContent=tx('Resultado descartado.','Result discarded.','结果已丢弃。');};
  closeBtn.onclick=()=>dlg.close();dlg.addEventListener('close',()=>{abort?.abort();});
  function open(){labels();fillRecipe();renderMask();refresh();dlg.showModal();file.focus();}
- // Entry: «Entregar» → card «Imágenes» (repainted when the area changes: added if missing).
- const addToCard=()=>{const card=document.querySelector('.professional-card[data-module="images"]');if(card&&!card.querySelector('#visualStudioCard')){const w=el('div',{class:'vs-card-entry'});const b=el('button',{type:'button',class:'btn primary',id:'visualStudioCard'},w,tx('Estudio de imágenes','Image studio','图像工作室'));b.onclick=open;el('small',{},w,tx('Propuesta visual con referencias de tu catálogo y revisión de fidelidad (simulación; generación real bloqueada).','Visual proposal with references from your catalogue and fidelity review (simulation; real generation blocked).','使用目录参考与保真审核的视觉方案（模拟；真实生成已锁定）。'));card.append(w);}};
+ // Entry: «Entregar» → card «Imágenes» (repainted when the area changes: added if missing). A SECONDARY button, like the
+ // FOT-01 entry: delivery cards keep an equal CTA hierarchy (no primary action inside any card; Point9 rule).
+ const addToCard=()=>{const card=document.querySelector('.professional-card[data-module="images"]');if(card&&!card.querySelector('#visualStudioCard')){const w=el('div',{class:'vs-card-entry'});const b=el('button',{type:'button',class:'btn',id:'visualStudioCard'},w,tx('Estudio de imágenes','Image studio','图像工作室'));b.onclick=open;el('small',{},w,tx('Propuesta visual con referencias de tu catálogo y revisión de fidelidad (simulación; generación real bloqueada).','Visual proposal with references from your catalogue and fidelity review (simulation; real generation blocked).','使用目录参考与保真审核的视觉方案（模拟；真实生成已锁定）。'));card.append(w);}};
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addToCard();});}).observe(document.body,{childList:true,subtree:true});addToCard();
  window.RubikVisualStudio={open,get sheet(){return sheet;},get request(){return request();}};
 })();
