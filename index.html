@@ -1567,7 +1567,7 @@ function renderPanel(){
   if(window.FloorPlanTraceUI?.editPanel())return;
   renderFab();
   const p = $('#panel');
-  if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); return; } }
+  if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); window.RubikOwnFurniture?.panel(p, f.id); return; } }
   if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); window.RubikCeilingEditor?.roomPanel(p, ui.sel.id); return; }
   if (ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.panel(p, ui.sel.id)) return;
   if (ui.sel?.kind === 'wall'){ const w = project.walls.find(w => w.id === ui.sel.id); if (w){ SafeDOM.markup(p, wallPanel(w)); bindWallPanel(w.id); return; } }
@@ -1855,7 +1855,7 @@ function duplicateSel(){
   const f = getF(ui.sel.id), n = Core.decorate(Core.clone(f)); n.id=uid(); n.cx+=200; n.cy+=200;
   const place = placeFurniture(n, {x:n.cx, y:n.cy}); if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, n.name);
   if (place.unchanged) pushOut(n);
-  ui.sel = {kind:'furn', id:n.id}; mutate(() => { state.furniture.push(n); const r=window.RubikCabinetBridge?.afterDuplicate(project, f.id, n.id); if (r && !r.ok) throw Error(r.explanation.join(' ')); if (r?.ok) project=r.project; });
+  ui.sel = {kind:'furn', id:n.id}; mutate(() => { state.furniture.push(n); const r=window.RubikCabinetBridge?.afterDuplicate(project, f.id, n.id); if (r && !r.ok) throw Error(r.explanation.join(' ')); if (r?.ok) project=r.project; window.RubikOwnFurnitureCore?.duplicate(project, f.id, n.id); });
   toast((LANG === 'es' ? `Duplicado «${nm(n.name)}»` : tr(`已复制「${n.name}」`, `Duplicated "${nm(n.name)}"`)) + placedNote(place, n.id), place.crowded ? 6000 : place.distanceMm > 0 ? 4000 : 1800);
 }
 // 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
@@ -2527,6 +2527,26 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
+  /* MUE-01 «Traer mi mueble»: un mueble propio (volumen genérico con las medidas declaradas) entra con la colocación
+     ordinaria (FloorPlanPlacement) y, en el MISMO paso del deshacer, `extra(project, objectId)` puede anotar su foto
+     en una extensión x-. Solo el objeto canónico y esa extensión cambian; nada se envía fuera del navegador. */
+  addOwnFurniture(spec,extra){
+    const chosen=spec.roomId?geometry.rooms.find(r=>r.id===spec.roomId):ui.sel?.kind==='room'?geometry.rooms.find(r=>r.id===ui.sel.id):null;
+    let p=null;if(chosen){const b=bbox(chosen.poly);p={x:(b[0]+b[2])/2,y:(b[1]+b[3])/2};}
+    else if(is3D()){const r=$('#stage').getBoundingClientRect();p=window.View3D.groundAt(r.left+r.width/2,r.top+r.height/2);}
+    if(!p)p={x:view.x0+svg.clientWidth/2/view.s,y:view.y0+svg.clientHeight/2/view.s};
+    const f=F(spec.type,spec.name,Math.round(p.x/10)*10,Math.round(p.y/10)*10,spec.w,spec.d,spec.rot||0,spec.color);f.size.heightMm=spec.h;
+    const place=placeFurniture(f,{x:f.cx,y:f.cy},{anyRoom:!chosen});
+    if(!place.ok){window.FloorPlanBuildingUI?.explainPlacement(place,spec.name);return {ok:false,reason:'no-space',message:place.message||null};}
+    if(place.unchanged)pushOut(f);
+    const before=snap();state.furniture.push(f);
+    try{extra?.(project,f.id);}catch(e){project=JSON.parse(before);refreshProject();return {ok:false,reason:'invalid',message:e.message};}
+    if(!commit(before))return {ok:false,reason:'invalid'};
+    ui.sel={kind:'furn',id:f.id};renderAll();
+    return {ok:true,id:f.id,crowded:!!place.crowded,note:placedNote(place,f.id)};
+  },
+  // MUE-01: cambiar o quitar la foto asociada (fn recibe una copia y devuelve {ok,project}); un paso del deshacer.
+  applyOwnFurniture(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;refreshProject();if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   // R02-A: los cambios de techo pasan por el commit de RUBIK (validación, deshacer, guardado). fn recibe una copia y devuelve {ok,project}.
   applyCeiling(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
@@ -5433,6 +5453,11 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/delivery-client.js"></script>
 <!-- UX-08 · cotas en vivo al mover muebles (solo dibujo en #gSel; no guarda nada) -->
 <script src="js/live-dimensions-core.js"></script><script src="js/live-dimensions-ui.js"></script>
+<!-- MUE-01 «Traer mi mueble» y FOT-01 «Reformar desde fotografía» (Ola 3, preparación). Fotos solo en este navegador
+     (sin metadatos, sin envíos); FOT-01 solo con proveedor SIMULADO hasta que haya uno autorizado. -->
+<link rel="stylesheet" href="css/photo-project.css">
+<script src="js/own-furniture-core.js"></script><script src="js/own-furniture-ui.js"></script>
+<script src="js/photo-reform-core.js"></script><script src="js/photo-reform-provider.js"></script><script src="js/photo-reform-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
