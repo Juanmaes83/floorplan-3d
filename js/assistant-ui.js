@@ -41,7 +41,7 @@
  function area(){const cur=document.querySelector('#professionalNav [aria-current="page"]');const k=cur?.id?.replace('workArea-','');return K.AREAS.includes(k)?k:'design';}
  // ----- Panel -----
  const panel=el('section',undefined,document.body,'assistant-panel');panel.id='assistantPanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','false');panel.setAttribute('aria-labelledby','assistantTitle');
- const head=el('header',undefined,panel,'assistant-head');const title=el('h2',undefined,head);title.id='assistantTitle';
+ const head=el('div',undefined,panel,'assistant-head');const title=el('h2',undefined,head);title.id='assistantTitle';
  const close=btn('×',head,'btn assistant-close');close.id='assistantClose';
  const mode=el('p',undefined,panel,'assistant-mode');mode.id='assistantMode';
  const ctxLine=el('p',undefined,panel,'assistant-context');ctxLine.id='assistantContext';
@@ -52,7 +52,7 @@
  const input=el('textarea',undefined,form);input.id='assistantInput';input.rows=2;input.maxLength=500;
  const send=el('button',undefined,form,'btn primary');send.type='submit';send.id='assistantSend';
  const stop=btn('',form,'btn');stop.id='assistantStop';stop.hidden=true;
- const foot=el('footer',undefined,panel,'assistant-foot');const clear=btn('',foot,'btn link');clear.id='assistantClear';
+ const foot=el('div',undefined,panel,'assistant-foot');const clear=btn('',foot,'btn link');clear.id='assistantClear';
  const opener=btn('',null,'btn assistant-open');opener.id='assistantOpen';
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
