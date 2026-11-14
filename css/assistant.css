@@ -2,7 +2,10 @@
 .assistant-open-btn,.assistant-open{min-height:40px;font-weight:700;margin-left:auto}
 .assistant-panel{position:fixed;z-index:60;top:var(--professional-nav-bottom,96px);right:8px;bottom:8px;width:min(420px,calc(100vw - 16px));
  display:flex;flex-direction:column;gap:8px;padding:12px 14px;box-sizing:border-box;border:1px solid var(--line,#d8d2c8);border-radius:12px;
- background:var(--surface-panel,#fffdf9);color:var(--ink,#2b2620);box-shadow:0 12px 32px rgba(40,30,20,.18);overflow:hidden}
+ background:var(--surface-panel,#fffdf9);color:var(--ink,#2b2620);box-shadow:0 12px 32px rgba(40,30,20,.18);overflow-y:auto;overscroll-behavior:contain}
+/* Only the conversation shrinks; the heading, the proposal and the input keep their size (the panel scrolls if needed). */
+.assistant-panel>*{flex:0 0 auto}
+.assistant-panel>.assistant-log{flex:1 1 auto;min-height:72px}
 .assistant-panel[hidden]{display:none}
 .assistant-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .assistant-head h2{margin:0;font-size:18px}
@@ -27,14 +30,19 @@
 .assistant-actions .btn,.assistant-form .btn{min-height:44px}
 .assistant-chips{display:flex;flex-wrap:wrap;gap:6px}
 .assistant-chips .chip{min-height:36px;padding:4px 10px;border:1px solid var(--line,#d8d2c8);border-radius:999px;background:#fff;font:inherit;font-size:12px;cursor:pointer}
-.assistant-form{display:flex;gap:6px;align-items:flex-end}
+.assistant-form{display:flex;gap:6px;align-items:flex-end;position:sticky;bottom:-12px;margin-bottom:-12px;padding:6px 0 12px;background:var(--surface-panel,#fffdf9);z-index:1}
 .assistant-form textarea{flex:1 1 auto;min-width:0;min-height:44px;font:inherit;padding:6px 8px;box-sizing:border-box;resize:vertical}
 .assistant-foot{display:flex;justify-content:flex-end}
 .assistant-foot .link{background:none;border:none;text-decoration:underline;font-size:12px;cursor:pointer;min-height:32px}
 .assistant-panel :focus-visible{outline:3px solid #184e52;outline-offset:2px}
 @media (max-width:720px){
  .assistant-panel{top:auto;left:0;right:0;bottom:0;width:100%;height:min(78dvh,640px);border-radius:14px 14px 0 0}
+ .assistant-panel:has(.assistant-proposal:not([hidden])) .assistant-chips{display:none}
 }
 @media (max-height:480px) and (orientation:landscape){
- .assistant-panel{top:8px;bottom:8px;height:auto;left:auto;right:8px;width:min(420px,60vw);border-radius:12px}
+ .assistant-panel{top:8px;bottom:8px;height:auto;left:auto;right:8px;width:min(420px,60vw);border-radius:12px;gap:6px;padding:8px 10px}
+ .assistant-mode{font-size:11px;padding:4px 6px}
+ .assistant-chips{display:none}
+ .assistant-panel>.assistant-log{min-height:48px}
+ .assistant-form{bottom:-8px;margin-bottom:-8px;padding-bottom:8px}
 }

@@ -102,6 +102,7 @@
   const row=el('div',undefined,card,'assistant-actions');
   const ok=btn(tx('Aplicar','Apply','应用'),row,'btn primary');ok.id='assistantApply';const no=btn(tx('Descartar','Discard','放弃'),row,'btn');no.id='assistantDiscard';
   ok.onclick=()=>apply(ok);no.onclick=()=>{state.proposal=null;card.hidden=true;push('assistant',tx('Propuesta descartada: el proyecto no ha cambiado.','Proposal discarded: the project has not changed.','已放弃建议：项目未更改。'));emit('discard',{proposalId:p.id});};
+  card.scrollIntoView({block:'nearest'});
   emit('proposal',{proposalId:p.id,operation:p.operation,diff:p.diff,baseRevision:p.baseRevision});
  }
  function apply(button){
@@ -123,8 +124,13 @@
  function showService(s){
   state.proposal=null;card.hidden=false;card.replaceChildren();card.dataset.state='service-'+s.state;
   el('h3',s.state==='available'?tx('Preparado, sin gasto','Prepared, no spending','已准备，未产生费用'):tx('No disponible','Not available','不可用'),card);
-  if(s.id==='render_views'&&s.state==='available'){const row=el('div',undefined,card,'assistant-actions');const b=btn(tx('Abrir Render IA','Open AI render','打开 AI 渲染'),row,'btn primary');b.id='assistantOpenRender';
-   b.onclick=()=>{emit('open-render',{style:s.request?.style||null});try{window.FloorPlanAIRender.open();}catch(e){push('assistant',tx('No se ha podido abrir Render IA.','Could not open AI render.','无法打开 AI 渲染。'));}};}
+  if(s.id==='render_views'&&s.state==='available'){
+   // The ONLY entry to Render IA is the existing one: Entregar → «Generar imágenes» → a real 3D view → «Render IA».
+   el('p',tx('Te llevo a Imágenes en Entregar: elige una vista 3D real y pulsa «Render IA». Ese diálogo pide tu código de acceso y confirmación antes de cada imagen.','I take you to Images in Deliver: choose a real 3D view and press «AI render». That dialog asks for your access code and a confirmation before each image.','带你前往交付中的图片：选择真实三维视图并点击“AI 渲染”。该对话框在每张图片前要求访问码和确认。'),card,'assistant-note');
+   const row=el('div',undefined,card,'assistant-actions');const b=btn(tx('Ir a Imágenes de Entregar','Go to Deliver images','前往交付图片'),row,'btn primary');b.id='assistantOpenRender';
+   b.onclick=()=>{emit('open-render',{style:s.request?.style||null});try{if(window.FloorPlanProfessionalUI?.area!=='deliver')window.FloorPlanProfessionalUI?.open('deliver');
+     const go=document.querySelector('#professionalWorkspace [data-route="images"]');if(!go)throw Error('sin ruta');go.click();go.scrollIntoView?.({block:'nearest'});}
+    catch{push('assistant',tx('No encuentro Imágenes en Entregar en esta página.','I cannot find Images in Deliver on this page.','此页面找不到交付图片。'));}};}
   emit('service',{id:s.id,state:s.state});
  }
  // ----- Open / close -----
