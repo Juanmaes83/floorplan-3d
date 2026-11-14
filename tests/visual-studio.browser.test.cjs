@@ -17,6 +17,9 @@ test('Estudio de imágenes escritorio: zona dibujada, referencias del catálogo,
  const {context,page}=await K.editor(env,{acceptDownloads:true});const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
  try{
   const before=await K.snapshot(page);await loadPilot(page,false);const afterCatalog=await K.snapshot(page);
+  // Entregar keeps equal CTA hierarchy: the new entry is secondary, no card gets a primary action.
+  await page.locator('#workArea-deliver').click();await page.locator('#visualStudioCard').waitFor();
+  assert.equal(await page.locator('#professionalWorkspace .professional-card .primary').count(),0,'delivery cards have equal CTA hierarchy');
   await openStudio(page,false);assert.match(await page.locator('#vsTruth').innerText(),/un parecido no certifica el producto \(SKU\)/);
   await page.locator('#vsFile').setInputFiles(K.file('IMG_0001.jpg',K.withExif(kitchen),'image/jpeg'));await page.locator('#vsStage').waitFor();
   // Recipe, zone, intensity and options.

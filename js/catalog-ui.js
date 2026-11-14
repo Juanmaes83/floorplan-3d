@@ -140,7 +140,7 @@
   const c=el('article',{class:'professional-card',id:'catalogStudioCard','data-module':'catalogs'},grid);el('h3',{},c,tx('Mis catálogos','My catalogues','我的目录'));
   const n=C.loadCatalogs(storage,'local').reduce((a,x)=>a+x.products.length,0);el('p',{class:'professional-state'},c,n?tx(`${n} fichas en este navegador`,`${n} sheets in this browser`,`本浏览器中 ${n} 份`):tx('Piloto local: productos y variantes con fuente','Local pilot: products and variants with source','本地试点：附来源的产品与款式'));
   el('p',{},c,tx('Fichas con SKU, medidas y precio con fuente y fecha, o «desconocido». Exporta fichas y congela selecciones.','Sheets with SKU, dimensions and dated, sourced price, or «unknown». Export sheets and freeze selections.','含 SKU、尺寸及带来源和日期的价格（或“未知”）。可导出资料并冻结选择。'));
-  const b=el('button',{type:'button',class:'btn primary',id:'catalogOpen'},c,tx('Abrir Mis catálogos','Open My catalogues','打开我的目录'));b.onclick=open;};
+  const b=el('button',{type:'button',class:'btn',id:'catalogOpen'},c,tx('Abrir Mis catálogos','Open My catalogues','打开我的目录'));b.onclick=open;};
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addCard();});}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['data-area']});addCard();
 
  window.RubikCatalogUI={open,get studioId(){return studioId;},get catalog(){return catalog&&JSON.parse(JSON.stringify(catalog));},

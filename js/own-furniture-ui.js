@@ -71,7 +71,9 @@
  function showErrors(errors){let first=null;for(const [k,msg] of Object.entries(errors)){const f=fields[k];if(!f)continue;f.err.textContent=msg;f.input.setAttribute('aria-invalid','true');first=first||f.input;}first?.focus();}
  function open(){form.reset();rot.value='0';clearErrors();pending=null;setPreview(null);fillRooms();busy=false;createBtn.disabled=false;dlg.showModal();name.focus();}
  openBtn.onclick=open;
- cancelBtn.onclick=()=>{dlg.close();setPreview(null);pending=null;};
+ cancelBtn.onclick=()=>{setPreview(null);pending=null;dlg.close();};
+ // Escape closes the dialog without «Cancelar»: the photo preview must not stay in the hidden dialog either.
+ dlg.addEventListener('cancel',()=>{setPreview(null);pending=null;});
  photo.onchange=async()=>{fields.photo.err.textContent='';photo.removeAttribute('aria-invalid');pending=null;setPreview(null);const file=photo.files?.[0];if(!file)return;
   status.textContent='Preparando la foto…';const r=await processPhoto(file);status.textContent='';
   if(!r.ok){fields.photo.err.textContent=r.message;photo.setAttribute('aria-invalid','true');photo.value='';return;}

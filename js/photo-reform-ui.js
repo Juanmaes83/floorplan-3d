@@ -180,7 +180,11 @@
  discardBtn.onclick=()=>{abort?.abort();abort=null;for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();altList.replaceChildren();note('discarded',{});status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
  // Solo para resultados GENERADOS por un proveedor autorizado (label.downloadable); una simulación nunca se descarga.
  dlBtn.onclick=()=>{const r=results[selected];if(!r?.url||!r.label.downloadable)return;const a=el('a',{href:r.url,download:`rubik-reforma-alternativa-${selected+1}.${r.mediaType==='image/png'?'png':r.mediaType==='image/webp'?'webp':'jpg'}`},document.body);a.click();a.remove();};
- closeBtn.onclick=()=>{dlg.close();};
+ // Cleanup is SYNCHRONOUS on close: the dialog's «close» event fires in a later task, so between close() and that event the
+ // hidden dialog still held the photo <img> (seen in CI). «Cerrar» resets first; Escape fires «cancel» synchronously before
+ // closing; the «close» listener stays as a safety net (reset is idempotent).
+ closeBtn.onclick=()=>{reset();dlg.close();};
+ dlg.addEventListener('cancel',reset);
  dlg.addEventListener('close',reset);
  function open(){reset();dlg.showModal();file.focus();}
 

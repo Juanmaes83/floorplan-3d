@@ -218,7 +218,14 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     assert.equal(await page.locator('#photoReformDialog img:not(#photoReformOriginal img)').count(),0,'sin miniaturas tras descartar');
     await page.waitForFunction(()=>!document.querySelector('#photoReformSimulate').hidden);await page.waitForTimeout(3000);
     assert.equal(await page.locator('#photoReformDialog img:not(#photoReformOriginal img)').count(),0,'la simulación detenida no añade nada después');
-    await page.locator('#photoReformClose').click();await page.locator('#photoReformDialog').waitFor({state:'hidden'});
+    // Cerrar limpia en la MISMA tarea (sin esperar al evento «close», que es asíncrono): ninguna <img> queda en el diálogo oculto.
+    assert.deepEqual(await page.evaluate(()=>{document.querySelector('#photoReformClose').click();const d=document.querySelector('#photoReformDialog');return {open:d.open,imgs:document.querySelectorAll('#photoReformDialog img').length};}),{open:false,imgs:0});
+    await page.locator('#photoReformDialog').waitFor({state:'hidden'});
+    // Escape (cancel): tampoco deja la foto.
+    await page.locator('details.menu summary').first().click();await page.locator('#photoReformMenu').click();await page.locator('#photoReformDialog[open]').waitFor();
+    await page.locator('#photoReformFile').setInputFiles(K.file('IMG_9876.jpg',jpg,'image/jpeg'));await page.locator('#photoReformOriginal:not([hidden])').waitFor();
+    await page.keyboard.press('Escape');await page.locator('#photoReformDialog').waitFor({state:'hidden'});
+    assert.equal(await page.evaluate(()=>document.querySelectorAll('#photoReformDialog img').length),0,'Escape no deja la foto en el diálogo');
     assert.deepEqual(await K.snapshot(page),before,'FOT-01 no modifica el proyecto');assert.deepEqual(api,[]);
     // Tras descartar no queda ninguna imagen de FOT-01 en la página (tampoco <img> vacías: tests/browser.test.cjs las vigila).
     assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0);
