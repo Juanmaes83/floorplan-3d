@@ -87,10 +87,15 @@
   const headers={'content-type':'application/json','x-rubik-contract':`photo-reform/${CONTRACT_VERSION}`,'x-rubik-photo-reform-token':accessCode};
   const post=(body,signal)=>doFetch(url,{method:'POST',headers,body:JSON.stringify(body),signal,credentials:'same-origin',referrerPolicy:'no-referrer',redirect:'error'});
   return Object.freeze({id:'server-v1',kind:'generated',
-   async run(request,image,{signal,onItem=()=>{}}={}){
+   // CAT-01: request.mode==='catalog' (js/visual-reform-core.js) sends the closed request as is and the reference
+   // images (Blobs, same order and SHA-256 as request.references) only in the «generate» step.
+   async run(request,image,{signal,onItem=()=>{},references=[]}={}){
     if(!request||request.version!==1||!image||!MEDIA.includes(image.type))return fail('bad-request');
-    const req={version:1,intent:request.intent,finish:request.finish??null,alternatives:request.alternatives};
+    const catalog=request.mode==='catalog';
+    const req=catalog?request:{version:1,intent:request.intent,finish:request.finish??null,alternatives:request.alternatives};
+    if(catalog&&(!Array.isArray(request.references)||references.length!==request.references.length))return fail('bad-request');
     const bytes=new Uint8Array(await image.arrayBuffer());if(!bytes.length||bytes.length>4*1024*1024||sniff(bytes)!==image.type)return fail('bad-request');
+    const refBytes=[];for(const r of references){const b=new Uint8Array(await r.arrayBuffer());if(!b.length||b.length>1024*1024||sniff(b)!==r.type)return fail('bad-request');refBytes.push({b,type:r.type});}
     const digest=hex(await (root.crypto||globalThis.crypto).subtle.digest('SHA-256',bytes));
     let res,quote;
     try{res=await post({action:'quote',request:req,imageSha256:digest,imageBytes:bytes.length},signal);}catch(e){if(e?.name==='AbortError')throw e;return fail('network');}
@@ -99,7 +104,9 @@
     if(!quote||quote.contract!=='photo-reform/1'||typeof quote.confirmationId!=='string'||!quote.estimate||!Number.isFinite(quote.estimate.amount))return fail('invalid-response');
     if(!(await confirm(Object.freeze({estimate:{...quote.estimate},budget:{...quote.budget},provider:{...quote.provider},model:quote.model,expiresAt:quote.expiresAt}))))return fail('not-confirmed');
     if(signal?.aborted)throw new DOMException('Cancelado','AbortError');
-    try{res=await post({action:'generate',confirmationId:quote.confirmationId,idempotencyKey:randomKey(),request:req,image:await toDataUrl(bytes,image.type)},signal);}
+    const gen={action:'generate',confirmationId:quote.confirmationId,idempotencyKey:randomKey(),request:req,image:await toDataUrl(bytes,image.type)};
+    if(catalog)gen.references=await Promise.all(refBytes.map(r=>toDataUrl(r.b,r.type)));
+    try{res=await post(gen,signal);}
     catch(e){if(e?.name==='AbortError')throw e;return fail('network');}
     if(!res.ok){const b=await res.json().catch(()=>null);return fail(SERVER_STATUS[res.status]||'provider-error',{status:res.status,code:typeof b?.error==='string'?b.error.slice(0,40):null});}
     let body;try{body=await res.json();}catch{return fail('invalid-response');}

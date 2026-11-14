@@ -1,0 +1,35 @@
+/* CAT-01 + FOT-01 visual «Estudio de imágenes» (js/visual-reform-ui.js). No horizontal scroll at 390 px; 44 px targets. */
+.visual-studio-dialog{width:min(980px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:14px 16px;border:1px solid var(--line,#d8d2c8);border-radius:14px;box-sizing:border-box;background:var(--surface-panel,#fffdf9);color:var(--ink,#1d2433)}
+.visual-studio{display:grid;gap:10px;min-width:0}
+.vs-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.vs-head h2{margin:0;font-size:19px}.vs-head .btn{min-height:44px;min-width:44px}
+.vs-truth{margin:0;padding:8px 10px;border-left:4px solid #8a5a00;background:#fff8e6;font-size:13px;line-height:1.4;color:#4a3500}
+.vs-step{border:1px solid var(--line,#d8d2c8);border-radius:10px;padding:8px 10px;display:grid;gap:6px;min-width:0}.vs-step[hidden],.vs-stage[hidden]{display:none}
+.vs-step h3{margin:0;font-size:15px}
+.vs-row{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.vs-field{display:grid;gap:3px;min-width:0;flex:1 1 180px;font-size:13px;font-weight:600}
+.visual-studio select,.visual-studio input[type=file]{min-height:44px;font:inherit;max-width:100%;min-width:0;box-sizing:border-box;width:100%}
+.vs-intensity{display:flex;flex-wrap:wrap;gap:6px;border:0;padding:0;margin:0}.vs-intensity legend{font-size:13px;font-weight:600;margin-bottom:4px}
+.vs-intensity label,.vs-keep-item,.vs-yesno label,.vs-ref-list label,.vs-consent{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 8px;border:1px solid var(--line,#d8d2c8);border-radius:8px;background:#fff;box-sizing:border-box}
+.vs-intensity input,.vs-keep input,.vs-yesno input,.vs-ref-list input,.vs-consent input{width:20px;height:20px}
+.vs-stage{position:relative;max-width:100%}.vs-stage canvas{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair;border-radius:8px}
+.vs-mask-list,.vs-ref-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.vs-mask-list li{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;overflow-wrap:anywhere}
+.vs-mask-list .btn.small,.vs-row .btn,.vs-actions .btn,#vsMaskClear,#vsOpenCatalogs{min-height:44px;min-width:44px}
+.vs-keep{display:flex;flex-wrap:wrap;gap:6px}.vs-keep-item.locked{background:#eef1f5;color:#3a4252}
+.vs-ref-list label{width:100%;overflow-wrap:anywhere}
+.vs-note,.vs-empty{margin:0;font-size:12px;color:var(--muted,#6b6257)}
+.vs-error{margin:0;font-weight:600;color:#a3261b}.vs-error:empty{display:none}
+.vs-cost{padding:8px 10px;border:1px solid #f0c36d;background:#fff7e6;border-radius:8px;font-size:13px}.vs-cost p{margin:4px 0 0}
+.vs-actions{display:flex;flex-wrap:wrap;gap:8px}
+.vs-status{margin:0;font-size:13px;font-weight:600;color:#184e52}
+.vs-alts{display:flex;flex-wrap:wrap;gap:6px}.vs-alt{min-height:44px;padding:0 12px;border:1px solid var(--line,#d8d2c8);border-radius:8px;background:#fff;font:inherit}.vs-alt[aria-pressed=true]{border-color:#184e52;box-shadow:0 0 0 2px #184e5233}
+.vs-compare{position:relative;margin:0;max-width:100%}.vs-compare canvas{display:block;width:100%;height:auto;border-radius:8px}.vs-compare canvas+canvas{position:absolute;inset:0}
+.vs-tag{position:absolute;top:8px;right:8px;background:#a3261b;color:#fff;font-weight:700;font-size:12px;padding:2px 8px;border-radius:999px}
+#vsSlider{width:100%;min-height:44px}
+.vs-auto{margin:0;font-size:13px;font-weight:600}
+.vs-review{border:1px solid var(--line,#d8d2c8);border-radius:8px;padding:6px 8px;margin:0;display:grid;gap:6px}.vs-review legend{font-weight:600;font-size:13px}
+.vs-yesno{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px}.vs-yesno>span{flex:1 1 200px}.vs-yesno select{width:auto;flex:1 1 160px}
+.vs-verdict{margin:0;font-weight:700}.vs-verdict[data-status=RECHAZADA]{color:#a3261b}.vs-verdict[data-status=ACEPTABLE]{color:#184e52}.vs-verdict[data-status=PENDIENTE]{color:#7a4b00}
+.vs-card-entry{display:grid;gap:4px;margin-top:8px}.vs-card-entry .btn{min-height:44px}
+.visual-studio .btn:disabled,.visual-studio .btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+@media (max-width:600px){.vs-yesno>span{flex-basis:100%}}

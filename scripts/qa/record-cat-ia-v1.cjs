@@ -3,19 +3,22 @@
    controles visibles (clics, dedo, teclado, archivos); las lecturas internas son comprobaciones posteriores.
    Corte C1 (CAT-02 «Mi estudio → Mis catálogos»): piloto sintético, búsqueda/filtros, ficha exportable, selección
    congelada, casos negativos uno a uno (assert + captura), separación por estudio, reabrir; 1440×900 y 1280×800 ES,
-   390×844 EN y 844×390 ZH. Fixtures SINTÉTICOS propios (assets/cat-ia/fixtures, LICENSE.txt); sin proveedor, sin gasto.
+   390×844 EN y 844×390 ZH. Corte C3 (CAT-01 + FOT visual «Entregar → Estudio de imágenes»): cocina SINTÉTICA, zona
+   dibujada, referencias del catálogo, coste bloqueado (STOP_GASTO), simulación rotulada (MOCK), revisión de fidelidad,
+   ficha; vídeo de errores y cancelación. No hay vídeo de proveedor real: la generación real sigue BLOQUEADA. Fixtures SINTÉTICOS propios (assets/cat-ia/fixtures, LICENSE.txt); sin proveedor, sin gasto.
    Salida (nunca se sube al repositorio; CI la publica como artefacto):
      qa-results/cat-ia-v1/video/*.webm|mp4   qa-results/cat-ia-v1/screens/*.png   qa-results/cat-ia-v1/downloads/*
      qa-results/cat-ia-v1/manifest.json      (campos exigidos por el encargo V2 §5)
    Uso: node scripts/qa/record-cat-ia-v1.cjs   (CHROME=<chromium> si no está en /usr/bin/chromium) */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{execFileSync}=require('node:child_process');
-const K=require('../../tests/photo-project/kit.cjs'),C=require('../../js/catalog-product-core.js');
+const K=require('../../tests/photo-project/kit.cjs'),C=require('../../js/catalog-product-core.js'),V=require('../../js/visual-reform-core.js'),S=require('../../tests/cat-ia/kit.cjs');
 const ROOT=path.resolve(__dirname,'../..'),OUT=path.join(ROOT,'qa-results/cat-ia-v1'),VID=path.join(OUT,'video'),SCR=path.join(OUT,'screens'),DL=path.join(OUT,'downloads');
 const PILOT=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/cat-ia/fixtures/pilot-collection.json'),'utf8'));
 const sh=(cmd,args)=>{try{return execFileSync(cmd,args,{encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim();}catch{return null;}};
 const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const clone=v=>JSON.parse(JSON.stringify(v));
 const pause=(page,ms=600)=>page.waitForTimeout(ms);
+let KITCHEN=null;
 const CLI=['node scripts/qa/record-cat-ia-v1.cjs'];
 
 function recorder(name){
@@ -135,6 +138,77 @@ async function mobile(env,{viewport,lang,video}){
  const file=v?`video/${name}.webm`:null;if(v)await v.saveAs(path.join(OUT,file));
  return {name,viewport,lang,file,steps:r.steps,shots:r.shots,failedCases:[],network:summarize(network)};
 }
+const run=(page)=>page.waitForFunction(()=>['done','error','cancelled'].includes(document.querySelector('#visualStudioDialog').dataset.run));
+async function studioPrepare(page,touch,{zoneByPreset=false}={}){
+ await S.loadPilot(page,touch);await S.openStudio(page,touch);
+ await page.locator('#vsFile').setInputFiles(K.file('IMG_0001.jpg',K.withExif(KITCHEN),'image/jpeg'));await page.locator('#vsStage').waitFor();
+ await page.locator('#vsRecipe').selectOption('kitchen-catalog-faithful');await page.locator('#vsZone').selectOption('appliance');
+ if(zoneByPreset){const b=page.locator('#vsPresetRight');await b.scrollIntoViewIfNeeded();await(touch?b.tap():b.click());}else await S.dragZone(page,[0.56,0.45],[0.76,0.71]);
+ const ref=page.locator('#vsRefList input[data-sku="QA-H60-INOX"]');await ref.scrollIntoViewIfNeeded();await(touch?ref.tap():ref.check());await page.waitForFunction(()=>RubikVisualStudio.request.references.length===1);
+}
+async function studioDesktop(env){
+ const viewport={width:1440,height:900},name='cat01-estudio-escritorio-1440x900-es',r=recorder(name);const {context,page,w,network,video:v}=await openContext(env,{viewport,video:true});const failed=[];
+ try{const before=await K.snapshot(page);await studioPrepare(page,false);
+  r.check('zona dibujada con el ratón',await page.locator('#vsMaskList li').count()===1);r.check('6 invariantes bloqueados',await page.locator('#vsKeep input[disabled]:checked').count()===6);
+  await page.locator('#vsStep1').scrollIntoViewIfNeeded();await pause(page);await r.shot(page,`${name}-01-zona.png`,'Cocina sintética con la zona del horno marcada');
+  await page.locator('#vsStep5').scrollIntoViewIfNeeded();await r.shot(page,`${name}-02-referencia.png`,'Referencia QA-H60-INOX del catálogo (familias de la receta)');
+  r.check('coste: real BLOQUEADA (STOP_GASTO), simulación «no aplica»',/STOP_GASTO/.test(await page.locator('#vsCost').innerText())&&/no aplica/.test(await page.locator('#vsCostSim').innerText()));
+  r.check('botón de proveedor real desactivado',await page.locator('#vsReal').isDisabled());
+  await page.locator('#vsStep6').scrollIntoViewIfNeeded();await r.shot(page,`${name}-03-coste-bloqueado.png`,'Preflight de coste: generación real bloqueada; simulación sin coste');
+  await page.locator('#vsAlternatives').selectOption('3');await page.locator('#vsConsent').check();await page.locator('#vsSimulate').click();await run(page);
+  r.check('3 opciones simuladas',await page.locator('#vsAlts .vs-alt').count()===3);
+  for(const i of [0,1,2]){await page.locator('#vsAlt'+i).click();await page.locator('#vsCompare').scrollIntoViewIfNeeded();await pause(page,400);await r.shot(page,`${name}-04-opcion-${i+1}.png`,`Opción ${i+1} (SIMULACIÓN) frente al original`);}
+  for(const pct of ['10','90']){await page.locator('#vsSlider').fill(pct);await pause(page,300);}await page.locator('#vsSlider').fill('50');
+  await page.locator('#vsOpenings-yes').check();await page.locator('#vsGeometry-yes').check();await page.locator('#vsMatch').selectOption('similar');
+  r.check('revisión ACEPTABLE (fuera de zona 0 %)',await page.locator('#vsVerdict').getAttribute('data-status')==='ACEPTABLE');
+  await page.locator('#vsAccept').click();const ok=await save(page,page.locator('#vsSheet'),`${name}-ficha-aceptada.json`);const sj=JSON.parse(ok.text);
+  r.check('ficha: simulación nunca entregable, coste «no aplica», SKU no certificado, receta con huella',sj.deliverable===false&&sj.result.costStatus==='not-applicable'&&sj.skuCertified===false&&sj.recipe.hash===V.compile(sj.request).hash);
+  r.check('descargar imagen desactivado (simulación)',await page.locator('#vsDownloadImage').isDisabled());
+  await page.locator('#vsStep7').scrollIntoViewIfNeeded();await r.shot(page,`${name}-05-aceptada.png`,'Revisión ACEPTABLE y decisión (sin descarga de imagen)');
+  // Negativo: cambio visual que borra una ventana (deriva) → RECHAZADA automáticamente.
+  await page.locator('#vsAlternatives').selectOption('1');await page.locator('#vsScenario').selectOption('drift');await page.locator('#vsSimulate').click();await run(page);
+  await page.locator('#vsOpenings-yes').check();await page.locator('#vsGeometry-yes').check();await page.locator('#vsSlider').fill('0');
+  try{r.check('negativo: borra una ventana → RECHAZADA aunque se marque «Sí»',await page.locator('#vsVerdict').getAttribute('data-status')==='RECHAZADA'&&await page.locator('#vsAccept').isDisabled());}catch(e){failed.push({case:'borra-ventana',error:e.message});}
+  await page.locator('#vsCompare').scrollIntoViewIfNeeded();await r.shot(page,`${name}-neg-borra-ventana.png`,'Deriva: la ventana desaparece fuera de la zona → RECHAZADA');
+  await page.locator('#vsReject').click();const rj=await save(page,page.locator('#vsSheet'),`${name}-ficha-rechazada.json`);r.check('ficha rechazada con motivo',JSON.parse(rj.text).review.reasons.includes('changes-outside-zone'));
+  const after=await K.snapshot(page);r.check('proyecto e historial intactos',after.project===before.project&&after.undo===before.undo);
+  r.check('sin peticiones externas ni errores',!w.external.length&&!w.errors.length,{external:w.external,errors:w.errors});
+ }finally{await context.close();}
+ const file=`video/${name}.webm`;await v.saveAs(path.join(OUT,file));return {name,viewport,lang:'es',file,steps:r.steps,shots:r.shots,failedCases:failed,network:summarize(network)};
+}
+async function studioMobile(env){
+ const viewport={width:390,height:844},name='cat01-estudio-movil-390x844-en',r=recorder(name);const {context,page,w,network,video:v}=await openContext(env,{viewport,mobile:true,video:true,lang:'en'});
+ try{await studioPrepare(page,true,{zoneByPreset:true});r.check('título EN',await page.locator('#vsTitle').innerText()==='Image studio');
+  await page.locator('#vsStep1').scrollIntoViewIfNeeded();await r.shot(page,`${name}-01-zona.png`,'Phone: zone shortcut over the oven');
+  const c=page.locator('#vsConsent');await c.scrollIntoViewIfNeeded();await c.tap();await page.locator('#vsSimulate').tap();await run(page);
+  await page.locator('#vsCompare').scrollIntoViewIfNeeded();await pause(page);await r.shot(page,`${name}-02-resultado.png`,'Phone: simulated option and comparison');
+  const o=await page.evaluate(()=>{const d=document.querySelector('#visualStudioDialog');return {dialog:d.scrollWidth>d.clientWidth+1,page:document.documentElement.scrollWidth>innerWidth+1};});r.check('sin desbordes',!o.dialog&&!o.page,o);
+  const yes=page.locator('#vsOpenings-yes');await yes.scrollIntoViewIfNeeded();await yes.tap();await page.locator('#vsGeometry-yes').tap();r.check('ACEPTABLE',await page.locator('#vsVerdict').getAttribute('data-status')==='ACEPTABLE');
+  await page.locator('#vsVerdict').scrollIntoViewIfNeeded();await r.shot(page,`${name}-03-revision.png`,'Phone: fidelity review');
+  r.check('sin peticiones externas ni errores',!w.external.length&&!w.errors.length,{external:w.external,errors:w.errors});
+ }finally{await context.close();}
+ const file=`video/${name}.webm`;await v.saveAs(path.join(OUT,file));return {name,viewport,lang:'en',file,steps:r.steps,shots:r.shots,failedCases:[],network:summarize(network)};
+}
+async function studioErrors(env){
+ const viewport={width:1280,height:800},name='cat01-errores-cancelacion-1280x800-es',r=recorder(name);const {context,page,w,network,video:v}=await openContext(env,{viewport,video:true});const failed=[];
+ const neg=async(id,fn,what)=>{try{await fn();}catch(e){failed.push({case:id,error:e.message});}await r.shot(page,`${name}-neg-${id}.png`,what);};
+ try{await S.loadPilot(page,false);await S.openStudio(page,false);
+  await neg('imagen-no-admitida',async()=>{await page.locator('#vsFile').setInputFiles(K.file('plano.pdf',Buffer.from('%PDF-1.7 sintético'),'application/pdf'));await page.waitForFunction(()=>!!document.querySelector('#vsFileError').textContent);r.check('negativo: archivo que no es imagen rechazado',true,await page.locator('#vsFileError').innerText());},'Archivo que no es imagen: rechazado');
+  await page.locator('#vsFile').setInputFiles(K.file('IMG_0001.jpg',K.withExif(KITCHEN),'image/jpeg'));await page.locator('#vsStage').waitFor();
+  await page.locator('#vsZone').selectOption('appliance');
+  await neg('sin-zona',async()=>{r.check('negativo: sin zona no se puede simular',await page.locator('#vsSimulate').isDisabled()&&/Marca al menos una zona/.test(await page.locator('#vsStatus').getAttribute('data-why')));},'Sin zona marcada: simulación desactivada');
+  await page.locator('#vsPresetRight').click();
+  await neg('demasiadas-referencias',async()=>{for(const s of ['QA-H60-INOX','QA-ENC-BASALTO','QA-LUMEN-160-RB'])await page.locator(`#vsRefList input[data-sku="${s}"]`).check();await page.locator('#vsRefList input[data-sku="QA-LUMEN-160-NG"]').click();r.check('negativo: más referencias que la receta → rechazada',/Máximo 3 referencias/.test(await page.locator('#vsStatus').innerText()));await page.locator('#vsStep5').scrollIntoViewIfNeeded();},'Cuarta referencia rechazada (máximo 3)');
+  await neg('gasto-sin-confirmacion',async()=>{await page.locator('#vsStep6').scrollIntoViewIfNeeded();r.check('negativo: no hay forma de gastar sin tope aprobado (real bloqueado)',await page.locator('#vsReal').isDisabled()&&/STOP_GASTO/.test(await page.locator('#vsCost').innerText()));},'Gasto real imposible: STOP_GASTO');
+  await neg('sin-consentimiento',async()=>{await page.locator('#vsSimulate').click();r.check('negativo: sin consentimiento no se procesa',/Falta el consentimiento/.test(await page.locator('#vsStatus').innerText()));},'Sin consentimiento: no se procesa');
+  await page.locator('#vsConsent').check();
+  await neg('cancelacion-a-mitad',async()=>{await page.locator('#vsScenario').selectOption('slow');await page.locator('#vsSimulate').click();await pause(page,500);await page.locator('#vsCancel').click();await run(page);r.check('negativo: cancelar a mitad no deja resultados',await page.locator('#vsStep7').isHidden()&&/Cancelado/.test(await page.locator('#vsStatus').innerText()));},'Cancelado a mitad: no queda nada');
+  await neg('error-proveedor',async()=>{await page.locator('#vsScenario').selectOption('error');await page.locator('#vsSimulate').click();await run(page);r.check('negativo: error del proveedor sin imagen ni coste',/no se ha generado nada y no hay coste/.test(await page.locator('#vsStatus').innerText())&&await page.locator('#vsAlts .vs-alt').count()===0);},'Error del proveedor (simulado): sin imagen ni coste');
+  await neg('huecos-alterados',async()=>{await page.locator('#vsScenario').selectOption('ok');await page.locator('#vsAlternatives').selectOption('1');await page.locator('#vsSimulate').click();await run(page);await page.locator('#vsOpenings-no').check();await page.locator('#vsGeometry-yes').check();r.check('negativo: huecos alterados → RECHAZADA',/RECHAZADA · Se han borrado o alterado ventanas/.test(await page.locator('#vsVerdict').innerText()));await page.locator('#vsVerdict').scrollIntoViewIfNeeded();},'Huecos alterados (revisión humana) → RECHAZADA');
+  r.check('sin peticiones externas ni errores',!w.external.length&&!w.errors.length,{external:w.external,errors:w.errors});
+ }finally{await context.close();}
+ const file=`video/${name}.webm`;await v.saveAs(path.join(OUT,file));return {name,viewport,lang:'es',file,steps:r.steps,shots:r.shots,failedCases:failed,network:summarize(network)};
+}
 function summarize(network){const same=new Map(),ext=[];for(const n of network){if(n.sameOrigin){const k=n.method+' '+n.path;same.set(k,(same.get(k)||0)+1);}else ext.push(n);}
  return {sameOriginPaths:[...same.keys()].sort(),api:[...same.keys()].filter(k=>/\/api\//.test(k)),external:ext};}
 function probe(file){
@@ -146,12 +220,13 @@ function probe(file){
 (async()=>{
  fs.rmSync(OUT,{recursive:true,force:true});for(const d of [VID,SCR,DL])fs.mkdirSync(d,{recursive:true});
  const env=await K.start(),runs=[],errors=[],started=new Date().toISOString();let chromium=null;
- try{chromium=env.browser.version();
+ try{chromium=env.browser.version();KITCHEN=await S.synthKitchen(env.browser);
   for(const [label,fn] of [
    ['escritorio-1440',()=>desktop(env,{viewport:{width:1440,height:900},video:true,full:true})],
    ['escritorio-1280',()=>desktop(env,{viewport:{width:1280,height:800},video:false,full:false})],
    ['movil-390-en',()=>mobile(env,{viewport:{width:390,height:844},lang:'en',video:true})],
-   ['apaisado-844-zh',()=>mobile(env,{viewport:{width:844,height:390},lang:'zh',video:false})]]){
+   ['apaisado-844-zh',()=>mobile(env,{viewport:{width:844,height:390},lang:'zh',video:false})],
+   ['estudio-escritorio',()=>studioDesktop(env)],['estudio-movil',()=>studioMobile(env)],['estudio-errores',()=>studioErrors(env)]]){
    try{runs.push(await fn());}catch(e){errors.push({run:label,error:String(e.message||e)});}
   }
  }finally{await env.stop();}
@@ -167,7 +242,7 @@ function probe(file){
  const version=(cmd)=>(sh(cmd,['-version'])||'').split('\n')[0]||null;
  const head=sh('git',['rev-parse','HEAD']),base=process.env.BASE_SHA||sh('git',['merge-base','HEAD','origin/master'])||null;
  const manifest={
-  purpose:'CAT-IA V1 · corte C1 (CAT-02 Mis catálogos) en el editor real',mode:'MOCK/LOCAL: sin proveedor de imágenes',
+  purpose:'CAT-IA V1 · cortes C1 (CAT-02 Mis catálogos) y C3 (CAT-01 + FOT visual, Estudio de imágenes) en el editor real',mode:'MOCK/LOCAL: simulación rotulada; ningún proveedor de imágenes real (STOP_GASTO)',
   headSha:head,baseSha:base,sourceShas:{},previewDeployment:process.env.PREVIEW_DEPLOYMENT||null,
   viewports:runs.map(r=>({run:r.name,viewport:r.viewport,lang:r.lang})),
   browser:{name:'chromium',version:chromium},PlaywrightVersion:(()=>{try{return require('playwright/package.json').version;}catch{return null;}})(),
@@ -179,8 +254,9 @@ function probe(file){
   downloads:fs.readdirSync(DL).map(f=>({file:`downloads/${f}`,sha256:sha(path.join(DL,f))})),
   failedCases,networkCalls:runs.map(r=>({run:r.name,...r.network})),
   providerRequestIds:[],outputsBilled:0,budgetCap:'STOP_GASTO: sin tope monetario aprobado por el propietario',estimate:null,invoiceObserved:null,
-  acceptanceDecision:'no aplica (CAT-02 no genera imágenes)',
-  privacyVerdict:'OK: fixtures sintéticos propios; sin fotos de clientes ni personas; sin peticiones externas ni a /api/; el proyecto no cambia',
+  acceptanceDecision:'simulaciones: una aceptada como prueba de recorrido (no entregable) y otras rechazadas (deriva fuera de zona, huecos alterados); ninguna imagen real',
+  recipes:V.RECIPES.map(r=>({id:r.id,version:r.version})),
+  privacyVerdict:'OK: fixtures sintéticos propios y cocina sintética dibujada por Chromium (EXIF inventado, eliminado); sin fotos de clientes ni personas; sin peticiones externas ni a /api/; el proyecto no cambia',
   ok:!errors.length&&!failedCases.length,errors,runs:runs.map(r=>({name:r.name,viewport:r.viewport,lang:r.lang,video:r.file,steps:r.steps.length}))};
  fs.writeFileSync(path.join(OUT,'manifest.json'),JSON.stringify(manifest,null,2));
  console.log(JSON.stringify({ok:manifest.ok,errors,failedCases,runs:manifest.runs,videos:manifest.videos},null,2));
