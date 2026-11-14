@@ -45,8 +45,7 @@
         "provenance": "Authored in metres without node transform: no scale or rotation is needed."
       },
       "extensionsRequired": []
-    },
-    "room": 1
+    }
   },
   {
     "id": "cat-ia-horno-h60",
@@ -94,7 +93,6 @@
         "provenance": "Authored in metres without node transform: no scale or rotation is needed."
       },
       "extensionsRequired": []
-    },
-    "room": 2
+    }
   }
 ]

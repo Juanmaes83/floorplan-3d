@@ -11,7 +11,7 @@ const cat=()=>C.importCollection(C.createCatalog({catalogId:'piloto-sintetico-qa
 const prod=(c,id,v)=>C.findProduct(c,id,v);
 
 test('the two CAT-03 GLBs (own manifest assets/f3/cat-ia.manifest.json, catalogue rubik-sota-local) are our own, pass the SAME asset pipeline and match their generator byte for byte',()=>{
- const e=entries();assert.deepEqual(e.map(x=>x.id),['cat-ia-aparador-lumen','cat-ia-horno-h60']);assert.deepEqual(e.map(x=>x.room),[1,2],'searchable in their furniture groups');
+ const e=entries();assert.deepEqual(e.map(x=>x.id),['cat-ia-aparador-lumen','cat-ia-horno-h60']);assert.deepEqual(e.map(x=>x.room),[undefined,undefined],'not in the generic furniture search: placed only through «Producto de mi estudio», which keeps the SKU link and price');
  for(const id of ['cat-ia-aparador-lumen','cat-ia-horno-h60']){const x=e.find(y=>y.id===id),bytes=fs.readFileSync(path.join(ROOT,x.url));
   assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),x.sha256);assert.equal(bytes.length,x.bytes);
   assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT,x.permissionUrl))).digest('hex'),x.permissionSha256);

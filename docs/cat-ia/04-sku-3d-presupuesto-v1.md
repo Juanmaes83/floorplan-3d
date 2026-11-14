@@ -13,6 +13,7 @@
   - Catálogo `rubik-sota-local`, con **las mismas reglas** de `FloorPlanAssets.adapt`: permiso para el uso objetivo, SHA-256 del modelo y del permiso, medidas en mm, normalización, GLB sin extensiones, `qaStatus: approved` y caducidad.
   - `js/asset-ui.js` lo lee como tercera fuente.
   - En 3D, el cargador de producción vuelve a comprobar los bytes, el permiso y las medidas (±20 mm).
+- Estas entradas **no aparecen en la búsqueda genérica de muebles** (no llevan `room`): solo se colocan con «Producto de mi estudio», que crea el vínculo de SKU, revisión y precio. Así no puede entrar un aparador de catálogo sin su vínculo.
 - El banco sintético y los modelos IKEA no cambian. Los GLB IKEA siguen siendo **solo de revisión**: no se usan para SKU.
 
 ## Vínculo (`js/catalog-placement-core.js`, `js/catalog-placement-ui.js`)
