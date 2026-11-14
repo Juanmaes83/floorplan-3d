@@ -196,7 +196,8 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     await page.waitForFunction(()=>RubikPhotoReform.state?.status==='error',null,{timeout:30000});assert.match(await page.locator('#photoReformStatus').innerText(),/error[\s\S]*no hay coste/);
     // Lenta + Cancelar.
     await page.locator('#photoReformScenario').selectOption('slow');await page.locator('#photoReformSimulate').click();await page.locator('#photoReformCancel:not([hidden])').click();
-    await page.waitForFunction(()=>RubikPhotoReform.state?.status==='cancelled',null,{timeout:30000});assert.match(await page.locator('#photoReformStatus').innerText(),/Cancelado/);
+    await page.waitForFunction(()=>RubikPhotoReform.state?.status==='cancelled',null,{timeout:30000});
+    assert.equal(await page.locator('#photoReformSlider').isHidden(),true,'sin resultado no hay deslizador');assert.equal(await page.locator('#photoReformResultNote').innerText(),'','ni nota de un resultado anterior');assert.match(await page.locator('#photoReformStatus').innerText(),/Cancelado/);
     // Trazabilidad: el registro de la sesión lista lo ocurrido y se descarga sin imagen ni nombre de archivo.
     assert.match(await page.locator('#photoReformReady').innerText(),/SIN ACTIVAR/);
     await page.locator('#photoReformTrace summary').click();

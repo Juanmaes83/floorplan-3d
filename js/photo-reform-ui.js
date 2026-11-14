@@ -56,7 +56,8 @@
  const altList=el('div',{class:'photo-reform-alts',id:'photoReformAlts'},s5);
  const compare=el('figure',{class:'photo-reform-compare',id:'photoReformCompare',hidden:true},s5);
  const cmpBase=lazyImg(compare,{alt:'Original',class:'photo-reform-cmp-base'},()=>compare.firstChild),cmpTop=lazyImg(compare,{alt:'Resultado simulado',class:'photo-reform-cmp-top'},()=>cmpBase.node?.nextSibling);
- const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);};
+ // Sin resultado que comparar no queda nada a la vista: ni deslizador, ni nota de un resultado anterior, ni descarga.
+ const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);slider.hidden=true;resultNote.textContent='';dlBtn.disabled=true;};
  el('span',{class:'photo-reform-tag photo-reform-tag-before'},compare,'Original');const cmpTag=el('span',{class:'photo-reform-tag photo-reform-tag-after',id:'photoReformCmpTag'},compare,'SIMULACIÓN');
  const slider=el('input',{type:'range',min:'0',max:'100',value:'50',id:'photoReformSlider','aria-label':'Comparar original y resultado'},s5);
  const resultNote=el('p',{id:'photoReformResultNote',class:'photo-reform-result-note'},s5);
@@ -136,7 +137,7 @@
    if(r?.url){const b=el('button',{type:'button',class:'photo-reform-alt-pick','aria-pressed':String(selected===it.index),'aria-label':`Comparar alternativa ${it.index+1} (simulación)`},card);el('img',{src:r.url,alt:`Alternativa ${it.index+1} · SIMULACIÓN`},b);b.onclick=()=>{selected=it.index;showCompare();renderAlts();};}
    el('figcaption',{},card,`Alternativa ${it.index+1} · ${({pending:'en espera',running:'preparando…',done:it.result?.badge,error:'error',cancelled:'cancelada',skipped:'no generada'})[it.status]||it.status}`);}
  }
- function showCompare(){const r=results[selected];if(!r?.url){hideCompare();return;}cmpBase.set(origUrl);cmpTop.set(r.url);compare.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
+ function showCompare(){const r=results[selected];if(!r?.url){hideCompare();return;}cmpBase.set(origUrl);cmpTop.set(r.url);compare.hidden=false;slider.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
   resultNote.textContent=`${r.label.badge}. Imagen ilustrativa, no medible. ${r.label.costText}`;dlBtn.disabled=!r.label.downloadable;}
  slider.oninput=()=>compare.style.setProperty('--cut',slider.value+'%');
  // El adaptador real solo se crearía si la puerta lo permite; en este despliegue nunca (botón desactivado y puerta cerrada).
