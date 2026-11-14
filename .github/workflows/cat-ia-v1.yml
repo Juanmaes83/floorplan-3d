@@ -1,0 +1,89 @@
+name: CAT-IA V1 - catalogue (CAT-02) and visual reform (no paid provider)
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/catalog-*.js
+      - css/catalog.css
+      - assets/cat-ia/**
+      - scripts/cat-ia/**
+      - scripts/qa/record-cat-ia-v1.cjs
+      - tests/catalog-*.cjs
+      - tests/photo-project/kit.cjs
+      - tests/r02a/editor-kit.cjs
+      - tests/editor-fixture.cjs
+      - js/brand-*.js
+      - js/professional-workspace-ui.js
+      - docs/cat-ia/**
+      - .github/workflows/cat-ia-v1.yml
+permissions:
+  contents: read
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/catalog-*.js scripts/qa/record-cat-ia-v1.cjs; do node --check "$f"; done
+      - name: Fixtures are reproducible (same pixels and collection from the generator; declared SHA-256 = committed files)
+        run: |
+          python3 -m pip install --quiet Pillow==12.3.0
+          python3 -I scripts/cat-ia/make-fixtures.py --check
+      - name: CatalogProductV1 core, and the guards of R03, R02-A and the photo project with the catalogue loaded
+        run: node --test --test-concurrency=1 tests/catalog-product-core.test.cjs tests/brand-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/photo-project-core.test.cjs tests/photo-reform-provider.test.cjs
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/cat-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/cat-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/cat-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/cat-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Real editor - My catalogues (desktop ES, phone EN, landscape ZH, negative cases)
+        run: node --test --test-concurrency=1 tests/catalog-ia.browser.test.cjs
+      - name: My studio, brand and the photo project keep working with the catalogue loaded
+        run: node --test --test-concurrency=1 tests/professional-workspace.browser.test.cjs tests/brand.browser.test.cjs tests/photo-project.browser.test.cjs
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime and ffmpeg
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          npm install --prefix "$RUNNER_TEMP/cat-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/cat-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/cat-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/cat-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Record the journeys with real controls (videos checked with ffprobe and a full ffmpeg decode), screenshots and manifest
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/qa/record-cat-ia-v1.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cat-ia-v1-${{ github.event.pull_request.head.sha }}
+          path: qa-results/cat-ia-v1
+          if-no-files-found: error

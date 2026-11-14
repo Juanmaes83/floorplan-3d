@@ -1,0 +1,52 @@
+/* CAT-02 «Mis catálogos» (js/catalog-ui.js). Mobile first: no horizontal scroll at 390 px; 44 px targets. */
+.catalog-dialog{width:min(980px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:14px 16px;border:1px solid var(--line,#d8d2c8);border-radius:14px;box-sizing:border-box;background:var(--surface-panel,#fffdf9);color:var(--ink,#1d2433)}
+.catalog{display:grid;gap:10px;min-width:0}
+.catalog-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.catalog-head h2{margin:0;font-size:19px}
+.catalog-head .btn{min-height:44px;min-width:44px}
+.catalog-truth{margin:0;padding:8px 10px;border-left:4px solid #8a5a00;background:#fff8e6;font-size:13px;line-height:1.4;color:#4a3500}
+.catalog-bar,.catalog-filters{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.catalog-field{display:grid;gap:3px;min-width:0;flex:1 1 200px;font-size:13px;font-weight:600}
+.catalog select,.catalog input[type=search]{min-height:44px;font:inherit;max-width:100%;min-width:0;box-sizing:border-box}
+.catalog-filters input[type=search]{flex:2 1 220px}.catalog-filters select{flex:1 1 150px}
+.catalog-revision,.catalog-count,.catalog-note{margin:0;font-size:12px;color:var(--muted,#6b6257);overflow-wrap:anywhere}
+.catalog-import,.catalog-find,.catalog-selection{border:1px solid var(--line,#d8d2c8);border-radius:10px;padding:8px 10px;display:grid;gap:6px;min-width:0}
+.catalog h3{margin:0;font-size:15px}
+.catalog-actions{display:flex;flex-wrap:wrap;gap:8px}
+.catalog-actions .btn,.catalog-file{min-height:44px}
+.catalog-file{display:inline-flex;align-items:center;position:relative;cursor:pointer}
+.catalog-file input{position:absolute;inset:0;opacity:0;width:100%;cursor:pointer}
+.catalog-file:focus-within{outline:2px solid #184e52;outline-offset:2px}
+.catalog-report:empty{display:none}
+.catalog-ok{margin:0;font-weight:600;color:#184e52}
+.catalog-error{margin:0;font-weight:600;color:#a3261b}
+.catalog-rejected{margin:0;padding-left:18px;font-size:13px;color:#7a1f14}
+.catalog-rejected li{overflow-wrap:anywhere}
+.catalog-body{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
+@media (min-width:860px){.catalog-body{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}}
+.catalog-list{list-style:none;margin:0;padding:0;display:grid;gap:6px;align-content:start;min-width:0}
+.catalog-item{display:flex;gap:10px;align-items:center;width:100%;min-height:64px;padding:6px 8px;border:1px solid var(--line,#d8d2c8);border-radius:10px;background:#fff;color:inherit;font:inherit;text-align:left;cursor:pointer;box-sizing:border-box}
+.catalog-item[aria-pressed=true]{border-color:#184e52;box-shadow:0 0 0 2px #184e5233}
+.catalog-item:focus-visible{outline:2px solid #184e52;outline-offset:2px}
+.catalog-thumb{flex:0 0 64px;width:64px;height:48px;border-radius:6px;background:#eef1f5;overflow:hidden}
+.catalog-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.catalog-item-text{display:grid;gap:2px;min-width:0}
+.catalog-item-text strong,.catalog-item-text small{overflow-wrap:anywhere}
+.catalog-badges{display:flex;flex-wrap:wrap;gap:4px}
+.catalog .badge{font-size:11px;padding:1px 6px;border-radius:999px;background:#eef1f5;color:#3a4252}
+.catalog .badge.warn{background:#fff1d6;color:#7a4b00}
+.catalog-empty{font-size:13px;color:var(--muted,#6b6257)}
+.catalog-preview{border:1px solid var(--line,#d8d2c8);border-radius:10px;padding:10px;display:grid;gap:8px;min-width:0;align-content:start}
+.catalog-preview[hidden]{display:none}
+.catalog-desc{margin:0}
+.catalog-figure{margin:0}.catalog-figure img{display:block;max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line,#d8d2c8)}
+.catalog-figure figcaption{font-size:12px;color:var(--muted,#6b6257)}
+.catalog-sheet{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px}
+.catalog-sheet th,.catalog-sheet td{padding:5px 6px;border-bottom:1px solid var(--line,#e2ddd3);text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.catalog-sheet th{width:42%;font-weight:600}
+.catalog-sheet td.unknown{color:#8a4b00;font-style:italic}
+.catalog-notices{padding:6px 10px;border:1px solid #f0c36d;background:#fff7e6;border-radius:8px;font-size:12px}
+.catalog-notices p{margin:2px 0}
+.catalog-selection ul{margin:0;padding-left:0;list-style:none;display:grid;gap:4px}
+.catalog-selection li{display:flex;justify-content:space-between;align-items:center;gap:8px;overflow-wrap:anywhere}
+.catalog-selection .btn.small{min-height:44px;min-width:44px}
