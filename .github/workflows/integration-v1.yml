@@ -1,0 +1,47 @@
+name: Integrated QA NAV3D+furnishing+photo
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/nav3d-*.js
+      - js/smart-furnishing-*.js
+      - js/own-furniture-*.js
+      - js/photo-reform-*.js
+      - tests/integration-v1.browser.test.cjs
+      - .github/workflows/integration-v1.yml
+permissions:
+  contents: read
+jobs:
+  integrated-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Playwright, Chromium and FFmpeg
+        run: |
+          npm install --prefix "$RUNNER_TEMP/integration-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/integration-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          sudo apt-get install -y ffmpeg
+          echo "NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Syntax
+        run: node --check tests/integration-v1.browser.test.cjs
+      - name: Combined real UI walkthroughs (desktop + mobile)
+        run: node --test --test-concurrency=1 tests/integration-v1.browser.test.cjs
+      - name: Verify actual video streams
+        if: success()
+        run: |
+          ffprobe -v error -show_entries format=duration,size -of json qa-results/integration-225-227/integracion-escritorio.webm
+          ffprobe -v error -show_entries format=duration,size -of json qa-results/integration-225-227/integracion-movil.webm
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: combined-qa-${{ github.event.pull_request.head.sha }}
+          path: qa-results/integration-225-227
+          if-no-files-found: warn
