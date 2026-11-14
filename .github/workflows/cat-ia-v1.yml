@@ -38,10 +38,18 @@ jobs:
           node-version: '22.13.0'
       - name: Syntax
         run: for f in js/catalog-*.js js/visual-reform-*.js api/photo-reform.js js/photo-reform-*.js scripts/qa/record-cat-ia-v1.cjs; do node --check "$f"; done
-      - name: Fixtures are reproducible (same pixels and collection from the generator; declared SHA-256 = committed files)
+      # The fixture generator runs isolated (-I: no user site-packages, no PYTHON* env). On the runner's system Python a plain
+      # «pip install» lands in the USER site-packages (system site is not writable), which -I ignores → ModuleNotFoundError.
+      # A dedicated interpreter has a writable site-packages, so Pillow is visible under -I.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pillow 12.3.0 for the fixture generator (installed into the setup-python interpreter, importable under -I)
         run: |
-          python3 -m pip install --quiet Pillow==12.3.0
-          python3 -I scripts/cat-ia/make-fixtures.py --check
+          python -m pip install --disable-pip-version-check Pillow==12.3.0
+          python -I -c "import PIL, sys; print('Pillow', PIL.__version__, 'at', PIL.__file__); sys.exit(PIL.__version__ != '12.3.0')"
+      - name: Fixtures are reproducible (same pixels and collection from the generator; declared SHA-256 = committed files)
+        run: python -I scripts/cat-ia/make-fixtures.py --check
       - name: photo-reform/1 server (closed by default) against a LOCAL fake provider, and its browser client without provider secrets
         run: node --test --test-concurrency=1 tests/photo-reform-api.test.cjs tests/photo-reform-provider.test.cjs tests/visual-reform-core.test.cjs
       - name: The browser bundle carries no provider secret path (no Authorization header, no Bearer adapter)
