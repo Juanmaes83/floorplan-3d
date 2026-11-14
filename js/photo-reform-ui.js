@@ -64,7 +64,7 @@
 
  let image=null,origUrl=null,results=[],runState=null,abort=null,selected=0;
  const revoke=()=>{if(origUrl)URL.revokeObjectURL(origUrl);origUrl=null;for(const r of results)if(r.url)URL.revokeObjectURL(r.url);results=[];};
- function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';s5.hidden=true;altList.replaceChildren();compare.hidden=true;simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
+ function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';s5.hidden=true;altList.replaceChildren();hideCompare();simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
  function refresh(){
   const r=C.request({image,intent:intentSel.value,finish:finishSel.hidden?null:finishSel.value,alternatives:altSel.value});
   sends.replaceChildren();never.replaceChildren();
@@ -130,16 +130,18 @@
   runState=C.start(C.run(r.request.alternatives));s5.hidden=false;simBtn.hidden=true;cancelBtn.hidden=false;status.textContent='Simulación en curso (local, sin envíos ni coste)…';renderAlts();
   for(let i=0;i<r.request.alternatives;i++){
    try{const out=await simulate(r.request,i,sig,scn);runState=C.itemDone(runState,i,{kind:out.kind});results[i]={url:URL.createObjectURL(out.blob),label:runState.items[i].result};if(i===0)showCompare();}
-   catch(e){if(e.name==='AbortError'){runState=C.cancel(runState);status.textContent='Cancelado: no se ha generado nada más y no hay coste.';}
+   catch(e){if(!runState)break; // descartado o cerrado durante la simulación: no queda nada que mostrar
+    if(e.name==='AbortError'){runState=C.cancel(runState);status.textContent='Cancelado: no se ha generado nada más y no hay coste.';}
     else{runState=C.itemError(runState,i,e.message);status.textContent=e.message;}break;}
    renderAlts();
   }
+  if(!runState){simBtn.hidden=false;cancelBtn.hidden=true;return;}
   renderAlts();abort=null;simBtn.hidden=false;cancelBtn.hidden=true;refresh();
   if(runState.status==='done')status.textContent=`Simulación terminada: ${results.filter(Boolean).length} alternativa(s), rotuladas como SIMULACIÓN. No se ha llamado a ningún proveedor.`;
   dlg.dataset.run=runState.status;
  };
  cancelBtn.onclick=()=>abort?.abort();
- discardBtn.onclick=()=>{for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
+ discardBtn.onclick=()=>{abort?.abort();abort=null;for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();altList.replaceChildren();status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
  dlBtn.onclick=()=>{};// nunca habilitado para simulaciones
  closeBtn.onclick=()=>{dlg.close();};
  dlg.addEventListener('close',reset);

@@ -181,6 +181,14 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     await page.waitForFunction(()=>RubikPhotoReform.state?.status==='cancelled',null,{timeout:30000});assert.match(await page.locator('#photoReformStatus').innerText(),/Cancelado/);
     // Descartar y cerrar: nada queda; el proyecto no ha cambiado; ninguna llamada a /api/.
     await page.locator('#photoReformDiscard').click();assert.equal(await page.locator('#photoReformResults').isHidden(),true);
+    // Descartar A MITAD de una simulación, con la primera alternativa ya generada: se detiene, no quedan miniaturas
+    // (sus URL ya están revocadas) y no hay errores.
+    await page.locator('#photoReformAlternatives').selectOption('3');await page.locator('#photoReformSimulate').click();
+    await page.locator('.photo-reform-alt[data-status="done"] img').first().waitFor({timeout:30000});
+    await page.locator('#photoReformDiscard').click();
+    assert.equal(await page.locator('#photoReformDialog img:not(#photoReformOriginal img)').count(),0,'sin miniaturas tras descartar');
+    await page.waitForFunction(()=>!document.querySelector('#photoReformSimulate').hidden);await page.waitForTimeout(3000);
+    assert.equal(await page.locator('#photoReformDialog img:not(#photoReformOriginal img)').count(),0,'la simulación detenida no añade nada después');
     await page.locator('#photoReformClose').click();await page.locator('#photoReformDialog').waitFor({state:'hidden'});
     assert.deepEqual(await K.snapshot(page),before,'FOT-01 no modifica el proyecto');assert.deepEqual(api,[]);
     // Tras descartar no queda ninguna imagen de FOT-01 en la página (tampoco <img> vacías: tests/browser.test.cjs las vigila).
