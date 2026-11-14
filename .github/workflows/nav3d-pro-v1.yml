@@ -1,0 +1,125 @@
+name: NAV3D V1 - professional 3D navigation (Wave 2, cut 2a)
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/nav3d-*.js
+      - css/nav3d.css
+      - js/presentation-core.js
+      - js/presentation-ui.js
+      - js/building-ui.js
+      - js/project-core.js
+      - js/r02a-*.js
+      - js/r03-*.js
+      - css/design-system.css
+      - tests/nav3d*.cjs
+      - tests/nav3d/**
+      - tests/r02a/editor-kit.cjs
+      - tests/fixtures/building-fixture.cjs
+      - vendor/three/**
+      - scripts/qa/record-nav3d-v1.cjs
+      - scripts/qa/compare-walk-controls.cjs
+      - tests/walk-controls.browser.test.cjs
+      - .github/workflows/nav3d-pro-v1.yml
+permissions:
+  contents: read
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/nav3d-*.js; do node --check "$f"; done
+      - name: Navigation core and the activation guards of R03 and R02-A (I0/I1/A4) with NAV3D loaded
+        run: node --test --test-concurrency=1 tests/nav3d-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/nav3d-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Real editor - full journey (desktop, phone portrait and landscape), unreachable room, building, presentation and WebGL loss
+        run: node --test --test-concurrency=1 tests/nav3d.browser.test.cjs
+      - name: Existing walk and 3D controls keep working
+        run: node --test --test-concurrency=1 tests/walk.browser.test.cjs
+  walk-controls-vs-master:
+    # walk-controls is in no other workflow and has historical failures on master. Run it on master and on this HEAD:
+    # the job fails only on NEW failures; historical and fixed ones are listed in the summary and in the artifact.
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/nav3d-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: walk-controls on master (base)
+        run: (cd base && WALK_ARTIFACTS="$GITHUB_WORKSPACE/qa-results/walk-controls/master" node --test --test-concurrency=1 --test-reporter=tap tests/walk-controls.browser.test.cjs) > walk-master.tap 2>&1 || true
+      - name: walk-controls on this HEAD
+        run: WALK_ARTIFACTS="$GITHUB_WORKSPACE/qa-results/walk-controls/head" node --test --test-concurrency=1 --test-reporter=tap tests/walk-controls.browser.test.cjs > walk-head.tap 2>&1 || true
+      - name: Historical vs new failures (fails only on new ones)
+        run: |
+          mkdir -p qa-results/walk-controls && cp walk-master.tap walk-head.tap qa-results/walk-controls/
+          node scripts/qa/compare-walk-controls.cjs walk-master.tap walk-head.tap qa-results/walk-controls/comparison.json qa-results/walk-controls/master/controls.json qa-results/walk-controls/head/controls.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nav3d-walk-controls-${{ github.event.pull_request.head.sha }}
+          path: qa-results/walk-controls
+          if-no-files-found: warn
+  video:
+    # Two short recordings of the real editor (desktop 1440x900, phone 390x844), published as an artifact: not committed.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime and ffmpeg
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          npm install --prefix "$RUNNER_TEMP/nav3d-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/nav3d-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/nav3d-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Record both journeys (real controls) and check them with ffprobe
+        run: node scripts/qa/record-nav3d-v1.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nav3d-videos-${{ github.event.pull_request.head.sha }}
+          path: qa-results/nav3d/video
+          if-no-files-found: error

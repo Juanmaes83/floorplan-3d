@@ -1,0 +1,62 @@
+name: Integrated QA NAV3D+furnishing+photo
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/**
+      - css/**
+      - tests/integration-v1.browser.test.cjs
+      - tests/photo-project/**
+      - tests/smart-furnishing/**
+      - tests/r02a/editor-kit.cjs
+      - tests/editor-fixture.cjs
+      - tests/fixtures/smart-furnishing-demo.json
+      - vendor/three/**
+      - .github/workflows/integration-v1.yml
+permissions:
+  contents: read
+jobs:
+  integrated-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Playwright, Chromium and FFmpeg
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          npm install --prefix "$RUNNER_TEMP/integration-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/integration-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Syntax and activation guards of R03 and R02-A on the combined tree
+        run: |
+          node --check tests/integration-v1.browser.test.cjs
+          node --test --test-concurrency=1 tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/ux08-live-dimensions.test.cjs
+      - name: Combined real UI journeys (desktop UX-12 chain, full chain with close/reopen, phone)
+        run: node --test --test-concurrency=1 tests/integration-v1.browser.test.cjs
+      - name: Check every video (ffprobe + full decode) and make MP4 copies only when ffmpeg succeeds
+        if: always()
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(qa-results/integration-225-227/*.webm)
+          [ ${#files[@]} -gt 0 ] || { echo "no videos"; exit 1; }
+          for f in "${files[@]}"; do
+            ffprobe -v error -show_entries stream=codec_name,width,height:format=duration,size -of json "$f" | tee "${f%.webm}.ffprobe.json"
+            ffmpeg -v error -i "$f" -f null -
+            ffmpeg -y -v error -i "$f" -c:v libx264 -pix_fmt yuv420p -movflags +faststart "${f%.webm}.mp4" || echo "MP4 not created for $f (WebM kept)"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: combined-qa-${{ github.event.pull_request.head.sha }}
+          path: qa-results/integration-225-227
+          if-no-files-found: error
