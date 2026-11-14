@@ -87,6 +87,8 @@
   busy=false;createBtn.disabled=false;
   if(!res?.ok){status.textContent=res?.message||'No se ha podido añadir el mueble: no hay sitio libre en esa estancia.';return;}
   dlg.close();setPreview(null);pending=null;
+  // Como al añadir desde la biblioteca: en pantallas estrechas se cierran los cajones para ver el mueble en el plano.
+  try{if(matchMedia('(max-width:1100px)').matches)closeDrawers();}catch{}
   const dimsText=`${v.spec.w} × ${v.spec.d} × ${v.spec.h} mm`;
   notify(`Añadido «${v.spec.name}» · ${dimsText}${res.note||''}`+(stored?'':' · No se ha podido guardar la foto en este navegador: el mueble se ha creado sin referencia fotográfica.'),stored?4500:8000);
  };
