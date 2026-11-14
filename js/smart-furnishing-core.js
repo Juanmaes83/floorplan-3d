@@ -29,6 +29,7 @@
   const DENSITIES = Object.freeze(['low', 'medium', 'high']);
   const DENSITY_LABEL = Object.freeze({ low: 'Baja', medium: 'Media', high: 'Alta' });
   const NON_BLOCKING = new Set(['rug', 'acwall']);
+  const EXACT_EPS = 1e-6; // mm: el umbral de solape de FloorPlanLayoutReview
   const CHECKED = Object.freeze(['la estancia completa (también en L)', 'los muros', 'el barrido de las puertas', 'la escalera y su hueco', 'los muebles existentes y los propuestos']);
   const NOT_CHECKED = Object.freeze(['accesibilidad', 'evacuación', 'paso libre o recorridos', 'altura libre', 'normativa', 'muebles de otras plantas']);
   const DISCLAIMER = 'Colocación geométrica orientativa, no diseño profesional certificado. No comprueba accesibilidad, evacuación, paso libre ni normativa.';
@@ -144,6 +145,16 @@
     const list = P.problemsIn(sc, pose, roomId, P.TOLERANCE_MM, false);
     // Atribución inequívoca: el centro de la pieza está en esta estancia y en ninguna otra.
     const at = P.roomsAt(sc, pose.position); if (at.length !== 1 || at[0].id !== roomId) list.push({ kind: 'room', detail: 'Su centro no queda solo en esta estancia.' });
+    // Entre muebles, el MISMO criterio que la revisión exacta al aplicar (FloorPlanLayoutReview: solape > 1e-6 mm), no la
+    // tolerancia de 1 mm de la búsqueda: si no, en estancias giradas una pieza pegada a otra puede solapar unas décimas
+    // tras redondear a mm enteros, la propuesta se mostraría como válida y «Aplicar» la rechazaría.
+    if (!list.length && !NON_BLOCKING.has(pose.type)) {
+      const fp = T.footprint(pose), fb = box(fp);
+      for (const f of sc.furniture) {
+        if (f.id === pose.id || fb[0] >= f.box[2] || f.box[0] >= fb[2] || fb[1] >= f.box[3] || f.box[1] >= fb[3]) continue;
+        if (!R.exclusion(pose, f) && R.penetration(fp, f.poly) > EXACT_EPS) { list.push({ kind: 'furniture', id: f.id, detail: `Solapa «${f.name}».` }); break; }
+      }
+    }
     return list;
   }
 
