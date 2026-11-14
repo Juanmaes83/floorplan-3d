@@ -3821,6 +3821,7 @@ function sync(force){
   if (force || l !== sigLabels){ sigLabels = l; buildLabels(); }
   syncTerritory();
   window.RubikCeilingEditor?.update3D({x:OX,y:OY});
+  navWhiteApply(); // NAV3D V1: la maqueta blanca sigue a las mallas reconstruidas
 }
 
 // CSS2DRenderer 只看标签自身的 visible，不继承父级，所以逐个设置
@@ -5331,6 +5332,41 @@ Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overview
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
+/* ── NAV3D V1 · Navegación 3D profesional (Ola 2 · corte 2a; panel en js/nav3d-ui.js) ─────────────────────────────
+   Estado TEMPORAL de la visita 3D: nada se escribe en el proyecto, el historial ni el almacenamiento.
+   · Maqueta blanca: cambia el material de las mallas visibles por uno blanco compartido (uno opaco y uno para el vidrio)
+     y guarda el original de cada malla para devolverlo; sin pipeline nuevo, sin materiales por malla (sin fugas de GPU).
+     Al reconstruirse la escena (sync) se aplica a las mallas nuevas; las retiradas se olvidan.
+   · Puertas: abre o cierra a la vez las hojas de la planta activa con el mismo estado (`open`) que el clic individual;
+     las colisiones del paseo siguen a la hoja girada (blocked() usa su ángulo actual). Al reconstruirse, vuelven abiertas.
+   · Estancias: encuadra (observación) o sitúa en un punto libre de la estancia (paseo, walkToRoom). Es un salto de cámara,
+     no un recorrido. */
+let navWhite=false,navWhiteMat=null,navWhiteGlass=null;const navWhiteSaved=new Map();
+function navWhiteApply(){
+  for(const [mesh,original] of navWhiteSaved)if(!navWhite||!mesh.parent){if(mesh.parent)mesh.material=original;navWhiteSaved.delete(mesh);}
+  if(!navWhite||!scene)return navWhiteSaved.size;
+  if(!navWhiteMat){navWhiteMat=new THREE.MeshStandardMaterial({color:0xfbfaf8,roughness:.9,metalness:0});navWhiteMat.userData.nav3dWhite=true;
+    navWhiteGlass=new THREE.MeshStandardMaterial({color:0xe6edf0,roughness:.15,transparent:true,opacity:.32,depthWrite:false,side:THREE.DoubleSide});navWhiteGlass.userData.nav3dWhite=true;}
+  const swap=m=>m===glassMat?navWhiteGlass:m?.transparent&&m.opacity<1?m:navWhiteMat;
+  for(const g of [archFloor,archUp,furnG,levelsG,lampG,roofG,exteriorG,...scene.children.filter(o=>o.userData?.r02a)])g?.traverse(o=>{
+    if(!o.isMesh||navWhiteSaved.has(o)||o.userData.hybridPresentation||o.material?.userData?.nav3dWhite)return;
+    navWhiteSaved.set(o,o.material);o.material=Array.isArray(o.material)?o.material.map(swap):swap(o.material);});
+  return navWhiteSaved.size;
+}
+function navSetWhite(on){if(on&&(!active||contextLost||window.FloorPlanPresentation?.active))return false;navWhite=!!on;navWhiteApply();return true;}
+const navDoors=()=>({total:doors.length,open:doors.filter(d=>d.open).length});
+function navSetAllDoors(open){if(!active||contextLost)return {ok:false,reason:'3d-unavailable'};let changed=0;for(const d of doors)if(d.open!==!!open){d.open=!!open;changed++;}return {ok:true,changed,...navDoors()};}
+function navSetMode(m){if(!active||contextLost||anim||window.FloorPlanPresentation?.active||!['orbit','walk'].includes(m))return false;if(opt.mode!==m)setMode(m);return true;}
+function navFocusRoom(id){
+  if(!active||contextLost)return {ok:false,reason:'3d-unavailable'};if(anim)return {ok:false,reason:'busy'};
+  const room=geometry.rooms.find(r=>r.id===id);if(!room||room.poly.length<3)return {ok:false,reason:'no-room'};
+  if(opt.mode==='walk')return walkToRoom(id)?{ok:true,how:'walk'}:{ok:false,reason:'no-free-spot'};
+  const roofHidden=!!opt.roof;if(roofHidden){opt.roof=false;syncRoofVisibility();}
+  flyToRoom(id);return {ok:true,how:'frame',roofHidden};
+}
+Object.assign(window.View3D,{setWhiteModel:navSetWhite,setAllDoors:navSetAllDoors,setNavMode:navSetMode,focusRoom:navFocusRoom,refreshWhiteModel:navWhiteApply});
+Object.defineProperty(window.View3D,'navState',{get:()=>({active,available:active&&!contextLost,mode:opt.mode,roof:!!opt.roof,roofStatus:roofResult?.status||'unavailable',roofReason:roofResult?.reason||null,
+  furniture:!!opt.furn,white:navWhite,whiteMeshes:navWhiteSaved.size,cut:opt.cut,levelView,doors:navDoors(),busy:!!anim||!!fly,presentation:!!window.FloorPlanPresentation?.active})});
 window.View3D.presentationVisitPlan=(roomId,region)=>{const r=roomVisitPlan(roomId,region);return r.ok?{ok:true,code:'clear',landing:r.landing,lengthMm:r.plan.lengthMm,doorIds:[...(r.plan.doorIds||[])],duration:r.moves.duration}:{ok:false,code:r.code,reason:r.reason};};
 Object.defineProperty(window.View3D,'presentationVisitInfo',{get:()=>storyRun?.visit?{roomId:storyRun.visit.roomId,route:{...storyRun.visit.route,points:storyRun.visit.route.points.map(p=>({...p}))},fullHeight:storyRun.visit.full,cut:opt.cut}:null});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
@@ -5433,6 +5469,10 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/delivery-client.js"></script>
 <!-- UX-08 · cotas en vivo al mover muebles (solo dibujo en #gSel; no guarda nada) -->
 <script src="js/live-dimensions-core.js"></script><script src="js/live-dimensions-ui.js"></script>
+<!-- NAV3D V1 · Navegación 3D profesional (Ola 2 · corte 2a): panel de modos, plantas, estancias y visualización y
+     minimapa del paseo. Solo estado temporal de la vista 3D; no escribe en el proyecto. -->
+<link rel="stylesheet" href="css/nav3d.css">
+<script src="js/nav3d-core.js"></script><script src="js/nav3d-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
