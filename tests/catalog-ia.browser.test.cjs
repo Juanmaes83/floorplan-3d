@@ -37,7 +37,10 @@ test('CAT-02 escritorio: piloto, búsqueda, ficha exportable, selección congela
  const {context,page}=await K.editor(env,{acceptDownloads:true});const w=K.watch(page,env.base);
  try{
   const before=await K.snapshot(page);
-  await openCatalogs(page);assert.match(await page.locator('#catalogRevision').innerText(),/Sin catálogo/);assert.match(await page.locator('#catalogTruth').innerText(),/ni separa estudios de forma segura/);
+  await openCatalogs(page);assert.match(await page.locator('#catalogRevision').innerText(),/Sin catálogo/);
+  // CTA hierarchy of «Mi estudio» is preserved: one primary action (identities); «Mis catálogos» is secondary.
+  assert.equal(await page.locator('#professionalWorkspace .professional-card .primary').count(),1,'one primary CTA in Mi estudio');
+  assert.equal(await page.locator('#catalogOpen').evaluate(b=>b.classList.contains('primary')),false);assert.match(await page.locator('#catalogTruth').innerText(),/ni separa estudios de forma segura/);
   await shot(page,'01-vacio');
   await page.locator('#catalogLoadPilot').click();await page.waitForFunction(()=>document.querySelector('#catalogDialog').dataset.imported==='5');
   assert.match(await page.locator('#catalogImportSummary').innerText(),/5 nuevas, 0 nuevas versiones, 0 sin cambios, 0 rechazadas/);
