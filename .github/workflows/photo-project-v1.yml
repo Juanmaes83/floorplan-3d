@@ -1,0 +1,87 @@
+name: Photo to project V1 - MUE-01 own furniture + FOT-01 photo reform (Wave 3)
+on:
+  pull_request:
+    paths:
+      - index.html
+      - js/own-furniture-*.js
+      - js/photo-reform-*.js
+      - css/photo-project.css
+      - js/local-images.js
+      - js/project-core.js
+      - js/building-ui.js
+      - js/r02a-*.js
+      - js/r03-*.js
+      - js/live-dimensions-*.js
+      - tests/photo-project*.cjs
+      - tests/photo-project/**
+      - tests/r02a/editor-kit.cjs
+      - tests/editor-fixture.cjs
+      - vendor/three/**
+      - scripts/qa/record-photo-project-v1.cjs
+      - .github/workflows/photo-project-v1.yml
+permissions:
+  contents: read
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/own-furniture-*.js js/photo-reform-*.js scripts/qa/record-photo-project-v1.cjs; do node --check "$f"; done
+      - name: MUE-01/FOT-01 cores and the guards of R03, R02-A (I0/I1/A4) and UX-08 with both features loaded
+        run: node --test --test-concurrency=1 tests/photo-project-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/ux08-live-dimensions.test.cjs
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/photo-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/photo-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/photo-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/photo-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Real editor - MUE-01 (desktop, storage failure, phone) and FOT-01 (desktop, phone)
+        run: node --test --test-concurrency=1 tests/photo-project.browser.test.cjs
+      - name: UX-08 live dimensions and the delivery images card keep working
+        run: node --test --test-concurrency=1 tests/ux08-live-dimensions.browser.test.cjs tests/delivery-image.browser.test.cjs
+  evidence:
+    # Two short recordings (desktop 1440x900 MUE-01, phone 390x844 MUE-01 + FOT-01) and screenshots of the real
+    # editor with SYNTHETIC photos, checked with ffprobe and published as an artifact: never committed.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install the browser test runtime and ffmpeg
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          npm install --prefix "$RUNNER_TEMP/photo-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/photo-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/photo-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/photo-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Record the journeys with real controls, take the screenshots and write the manifest
+        run: node scripts/qa/record-photo-project-v1.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: photo-project-v1-${{ github.event.pull_request.head.sha }}
+          path: qa-results/photo-project-v1
+          if-no-files-found: error
