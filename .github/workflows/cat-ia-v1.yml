@@ -81,10 +81,18 @@ jobs:
       - name: Real editor - My catalogues (desktop ES, phone EN, landscape ZH, negative cases)
         run: node --test --test-concurrency=1 tests/catalog-ia.browser.test.cjs
       - name: Real editor - Image studio (CAT-01 + FOT visual; labelled local simulation, real generation blocked)
+        if: ${{ !cancelled() }}
         run: node --test --test-concurrency=1 tests/visual-studio.browser.test.cjs
-      - name: Real editor - CAT-03 product from my studio (validated GLB or labelled generic volume, undo, duplicate, reopen, export/import, rotated plan) and the asset catalogue
-        run: node --test --test-concurrency=1 tests/catalog-placement.browser.test.cjs tests/assets.browser.test.cjs
+      - name: Real editor - CAT-03 product from my studio (validated GLB or labelled generic volume, undo, duplicate, reopen, export/import, rotated plan)
+        if: ${{ !cancelled() }}
+        run: node --test --test-concurrency=1 tests/catalog-placement.browser.test.cjs
+      # Asset catalogue suite in its own step: a failure here (see docs/cat-ia/05-assets-browser-reproduccion.md, same two
+      # tests fail on master c91d12d) still fails the job, but no longer hides the steps below. No test is skipped.
+      - name: Asset catalogue (F3 + CAT-03 manifest) - full assets.browser suite
+        if: ${{ !cancelled() }}
+        run: node --test --test-concurrency=1 tests/assets.browser.test.cjs
       - name: My studio, brand and the photo project keep working with the catalogue loaded
+        if: ${{ !cancelled() }}
         run: node --test --test-concurrency=1 tests/professional-workspace.browser.test.cjs tests/brand.browser.test.cjs tests/photo-project.browser.test.cjs
   evidence:
     runs-on: ubuntu-latest
