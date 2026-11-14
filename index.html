@@ -1856,7 +1856,7 @@ function duplicateSel(){
   const f = getF(ui.sel.id), n = Core.decorate(Core.clone(f)); n.id=uid(); n.cx+=200; n.cy+=200;
   const place = placeFurniture(n, {x:n.cx, y:n.cy}); if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, n.name);
   if (place.unchanged) pushOut(n);
-  ui.sel = {kind:'furn', id:n.id}; mutate(() => { state.furniture.push(n); const r=window.RubikCabinetBridge?.afterDuplicate(project, f.id, n.id); if (r && !r.ok) throw Error(r.explanation.join(' ')); if (r?.ok) project=r.project; window.RubikOwnFurnitureCore?.duplicate(project, f.id, n.id); });
+  ui.sel = {kind:'furn', id:n.id}; mutate(() => { state.furniture.push(n); const r=window.RubikCabinetBridge?.afterDuplicate(project, f.id, n.id); if (r && !r.ok) throw Error(r.explanation.join(' ')); if (r?.ok) project=r.project; window.RubikOwnFurnitureCore?.duplicate(project, f.id, n.id); window.RubikCatalogPlacement?.duplicate(project, f.id, n.id); });
   toast((LANG === 'es' ? `Duplicado «${nm(n.name)}»` : tr(`已复制「${n.name}」`, `Duplicated "${nm(n.name)}"`)) + placedNote(place, n.id), place.crowded ? 6000 : place.distanceMm > 0 ? 4000 : 1800);
 }
 // 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
@@ -5508,6 +5508,8 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- CAT-02 «Mi estudio → Mis catálogos» (piloto local; fichas con fuente; no toca el proyecto ni envía nada) -->
 <link rel="stylesheet" href="css/catalog.css">
 <script src="js/catalog-product-core.js"></script><script src="js/catalog-ui.js"></script>
+<!-- CAT-03 «Amueblar → Producto de mi estudio»: SKU → modelo 3D validado o volumen genérico rotulado; partidas solo con precio de ficha -->
+<script src="js/catalog-placement-core.js"></script><script src="js/catalog-placement-ui.js"></script>
 <!-- CAT-01 + FOT-01 visual «Entregar → Estudio de imágenes» (simulación local rotulada; generación real cerrada: STOP_GASTO) -->
 <link rel="stylesheet" href="css/visual-studio.css">
 <script src="js/visual-reform-core.js"></script><script src="js/visual-reform-ui.js"></script>

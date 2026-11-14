@@ -1,0 +1,100 @@
+[
+  {
+    "id": "cat-ia-aparador-lumen",
+    "brand": "Rubik Sota",
+    "productName": "Aparador Lumen 160 · sintético QA",
+    "category": "dresser",
+    "modelPath": "assets/f3/cat-ia-aparador-lumen.glb",
+    "format": "glb",
+    "dimensions": {
+      "width": 1600,
+      "height": 780,
+      "depth": 450,
+      "unit": "mm"
+    },
+    "qaStatus": "approved",
+    "licenseType": "own-permission",
+    "commercialUseAllowed": true,
+    "redistributionAllowed": true,
+    "brandUsageAllowed": true,
+    "attributionRequired": true,
+    "permissionDocumentRef": "assets/f3/LICENSE-cat-ia.txt",
+    "permissionScope": "worldwide",
+    "f3Evidence": {
+      "modelSha256": "a695baa6606f1404e885fc275c7fd67672b6647a507c029e83100c3db9d1cccb",
+      "bytes": 4116,
+      "permissionSha256": "7d930304478680e33a71fa9c9764b108f112358ebda86ef45480ea80d87f78f5",
+      "permission": {
+        "commercial": true,
+        "redistribution": true,
+        "streaming": true,
+        "modification": true,
+        "attribution": "Rubik Sota — CAT-03 synthetic fixtures; assets/f3/LICENSE-cat-ia.txt",
+        "territory": "worldwide",
+        "expires": null,
+        "brand": "own-no-third-party-mark"
+      },
+      "dimensionsSource": "Original generated rectangular geometry; generator source in scripts/cat-ia/make-glb-fixtures.py (metres, x=width, y=height, z=depth)",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "Authored in metres without node transform: no scale or rotation is needed."
+      },
+      "extensionsRequired": []
+    },
+    "room": 1
+  },
+  {
+    "id": "cat-ia-horno-h60",
+    "brand": "Rubik Sota",
+    "productName": "Horno H60 · sintético QA",
+    "category": "ovencol",
+    "modelPath": "assets/f3/cat-ia-horno-h60.glb",
+    "format": "glb",
+    "dimensions": {
+      "width": 595,
+      "height": 595,
+      "depth": 548,
+      "unit": "mm"
+    },
+    "qaStatus": "approved",
+    "licenseType": "own-permission",
+    "commercialUseAllowed": true,
+    "redistributionAllowed": true,
+    "brandUsageAllowed": true,
+    "attributionRequired": true,
+    "permissionDocumentRef": "assets/f3/LICENSE-cat-ia.txt",
+    "permissionScope": "worldwide",
+    "f3Evidence": {
+      "modelSha256": "6869f59b0c6c1caebfc07bf9972fd3a95a87503beb614acfd3d5c5a0f0ed8982",
+      "bytes": 2172,
+      "permissionSha256": "7d930304478680e33a71fa9c9764b108f112358ebda86ef45480ea80d87f78f5",
+      "permission": {
+        "commercial": true,
+        "redistribution": true,
+        "streaming": true,
+        "modification": true,
+        "attribution": "Rubik Sota — CAT-03 synthetic fixtures; assets/f3/LICENSE-cat-ia.txt",
+        "territory": "worldwide",
+        "expires": null,
+        "brand": "own-no-third-party-mark"
+      },
+      "dimensionsSource": "Original generated rectangular geometry; generator source in scripts/cat-ia/make-glb-fixtures.py (metres, x=width, y=height, z=depth)",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "Authored in metres without node transform: no scale or rotation is needed."
+      },
+      "extensionsRequired": []
+    },
+    "room": 2
+  }
+]

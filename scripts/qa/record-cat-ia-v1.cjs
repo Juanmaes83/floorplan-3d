@@ -209,6 +209,40 @@ async function studioErrors(env){
  }finally{await context.close();}
  const file=`video/${name}.webm`;await v.saveAs(path.join(OUT,file));return {name,viewport,lang:'es',file,steps:r.steps,shots:r.shots,failedCases:failed,network:summarize(network)};
 }
+async function placeFromPalette(page,key){const tab=page.locator('#paletteTabFurnish');if(await tab.getAttribute('aria-selected')!=='true')await tab.click();
+ const b=page.locator('#catalogPlaceOpen');await b.scrollIntoViewIfNeeded();await b.click();await page.locator('#catalogDialog[open]').waitFor();
+ await page.locator(`#catalogList .catalog-item[data-key="${key}"]`).click();await page.locator(`#catalogPreview[data-key="${key}"]`).waitFor();
+ await page.waitForFunction(()=>!!document.querySelector('#catalogPlaceNote')?.dataset.state);return page.locator('#catalogPlaceNote').getAttribute('data-state');}
+async function cat03(env){
+ const viewport={width:1440,height:900},name='cat03-producto-3d-1440x900-es',r=recorder(name);const {context,page,w,network,video:v}=await openContext(env,{viewport,video:true});const failed=[];
+ try{await S.loadPilot(page,false);try{await page.locator('#workArea-design').click();}catch{}
+  const placeNow=async()=>{await page.locator('#catalogPlace').click();await page.locator('#catalogDialog').waitFor({state:'hidden'});await pause(page);};
+  r.check('aparador roble: modelo 3D validado',await placeFromPalette(page,'aparador-lumen@roble')==='validated-model');await r.shot(page,`${name}-01-nota-validado.png`,'Ficha: se colocará con su modelo 3D validado');await placeNow();
+  await page.locator('#catLinkNote').waitFor();await r.shot(page,`${name}-02-panel.png`,'Panel del objeto: producto de catálogo, revisión y representación');
+  r.check('aparador nogal: volumen genérico rotulado',await placeFromPalette(page,'aparador-lumen@nogal')==='generic-volume');await r.shot(page,`${name}-03-nota-generico.png`,'Variante sin modelo: volumen genérico rotulado');await placeNow();
+  try{r.check('negativo: material no colocable',await placeFromPalette(page,'encimera-basalto@-')==='material-not-placeable'&&await page.locator('#catalogPlace').isDisabled());}catch(e){failed.push({case:'material-no-colocable',error:e.message});}
+  await r.shot(page,`${name}-neg-material.png`,'Encimera (material): no se coloca como objeto');await page.locator('#catalogClose').click();
+  r.check('horno: modelo validado',await placeFromPalette(page,'horno-h60@inox')==='validated-model');await placeNow();
+  await page.locator('#catalogPlaceOpen').click();await page.locator('#catalogDialog[open]').waitFor();await page.locator('#catalogBudgetBox').scrollIntoViewIfNeeded();
+  try{r.check('negativo: precio desconocido no suma',/incompleto: QA-H60-INOX/.test(await page.locator('#catalogBudgetTotal').innerText()));}catch(e){failed.push({case:'precio-desconocido',error:e.message});}
+  await r.shot(page,`${name}-04-partidas.png`,'Partidas: solo precios de ficha con fuente y fecha; el horno sin precio no suma');await page.locator('#catalogClose').click();
+  const id=await page.evaluate(()=>{const l=FloorPlanApp.project.extensions['x-cat03-catalog-link'].links;return Object.keys(l).find(k=>l[k].sku==='QA-LUMEN-160-RB');});
+  await K.open3D(page);await page.waitForFunction(id=>['ready','error'].includes(View3D.assetStatus(id)?.state),id,{timeout:60000});
+  r.check('3D: el GLB validado se carga con el cargador de producción',await page.evaluate(id=>View3D.assetStatus(id).state,id)==='ready');await pause(page,1200);await r.shot(page,`${name}-05-3d.png`,'Vista 3D con el aparador y el horno sintéticos validados');
+  r.check('sin peticiones externas ni errores',!w.external.length&&!w.errors.length,{external:w.external,errors:w.errors});
+ }finally{await context.close();}
+ // Negativos de activo: licencia vencida y unidades dudosas en el manifiesto servido → el pipeline los excluye → genérico.
+ const n=await openContext(env,{viewport,video:false});
+ try{const m=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/f3/cat-ia.manifest.json'),'utf8'));m.find(x=>x.id==='cat-ia-horno-h60').f3Evidence.permission.expires='2026-01-01';m.find(x=>x.id==='cat-ia-aparador-lumen').dimensions.unit='in';
+  await n.page.route('**/assets/f3/cat-ia.manifest.json',rt=>rt.fulfill({contentType:'application/json',body:JSON.stringify(m)}));await K.reopen(n.page);await S.loadPilot(n.page,false);try{await n.page.locator('#workArea-design').click();}catch{}
+  try{r.check('negativo: licencia vencida → volumen genérico',await placeFromPalette(n.page,'horno-h60@inox')==='generic-volume');}catch(e){failed.push({case:'licencia-vencida',error:e.message});}
+  await r.shot(n.page,`${name}-neg-licencia-vencida.png`,'Horno con licencia del modelo vencida: volumen genérico (el modelo no pasa el pipeline)');
+  await n.page.locator('#catalogList .catalog-item[data-key="aparador-lumen@roble"]').click();await n.page.locator('#catalogPreview[data-key="aparador-lumen@roble"]').waitFor();await n.page.waitForFunction(()=>!!document.querySelector('#catalogPlaceNote')?.dataset.state);
+  try{r.check('negativo: GLB con unidades dudosas → volumen genérico',await n.page.locator('#catalogPlaceNote').getAttribute('data-state')==='generic-volume');}catch(e){failed.push({case:'unidades-dudosas',error:e.message});}
+  await r.shot(n.page,`${name}-neg-unidades.png`,'GLB con unidades dudosas: excluido, volumen genérico');
+ }finally{await n.context.close();}
+ const file=`video/${name}.webm`;await v.saveAs(path.join(OUT,file));return {name,viewport,lang:'es',file,steps:r.steps,shots:r.shots,failedCases:failed,network:summarize(network)};
+}
 function summarize(network){const same=new Map(),ext=[];for(const n of network){if(n.sameOrigin){const k=n.method+' '+n.path;same.set(k,(same.get(k)||0)+1);}else ext.push(n);}
  return {sameOriginPaths:[...same.keys()].sort(),api:[...same.keys()].filter(k=>/\/api\//.test(k)),external:ext};}
 function probe(file){
@@ -226,7 +260,7 @@ function probe(file){
    ['escritorio-1280',()=>desktop(env,{viewport:{width:1280,height:800},video:false,full:false})],
    ['movil-390-en',()=>mobile(env,{viewport:{width:390,height:844},lang:'en',video:true})],
    ['apaisado-844-zh',()=>mobile(env,{viewport:{width:844,height:390},lang:'zh',video:false})],
-   ['estudio-escritorio',()=>studioDesktop(env)],['estudio-movil',()=>studioMobile(env)],['estudio-errores',()=>studioErrors(env)]]){
+   ['estudio-escritorio',()=>studioDesktop(env)],['estudio-movil',()=>studioMobile(env)],['estudio-errores',()=>studioErrors(env)],['cat03-producto-3d',()=>cat03(env)]]){
    try{runs.push(await fn());}catch(e){errors.push({run:label,error:String(e.message||e)});}
   }
  }finally{await env.stop();}
@@ -242,12 +276,13 @@ function probe(file){
  const version=(cmd)=>(sh(cmd,['-version'])||'').split('\n')[0]||null;
  const head=sh('git',['rev-parse','HEAD']),base=process.env.BASE_SHA||sh('git',['merge-base','HEAD','origin/master'])||null;
  const manifest={
-  purpose:'CAT-IA V1 · cortes C1 (CAT-02 Mis catálogos) y C3 (CAT-01 + FOT visual, Estudio de imágenes) en el editor real',mode:'MOCK/LOCAL: simulación rotulada; ningún proveedor de imágenes real (STOP_GASTO)',
+  purpose:'CAT-IA V1 · cortes C1 (CAT-02), C3 (CAT-01 + FOT visual) y C4 (CAT-03 SKU → 3D → partidas) en el editor real',mode:'MOCK/LOCAL: simulación rotulada; ningún proveedor de imágenes real (STOP_GASTO)',
   headSha:head,baseSha:base,sourceShas:{},previewDeployment:process.env.PREVIEW_DEPLOYMENT||null,
   viewports:runs.map(r=>({run:r.name,viewport:r.viewport,lang:r.lang})),
   browser:{name:'chromium',version:chromium},PlaywrightVersion:(()=>{try{return require('playwright/package.json').version;}catch{return null;}})(),
   versions:{node:process.version,ffprobe:version('ffprobe'),ffmpeg:version('ffmpeg')},
   CLIcommands:CLI,timestampsUtc:{started,finished:new Date().toISOString()},
+  models3d:JSON.parse(fs.readFileSync(path.join(ROOT,'assets/f3/cat-ia.manifest.json'),'utf8')).map(e=>({id:e.id,path:e.modelPath,sha256:e.f3Evidence.modelSha256,permission:e.permissionDocumentRef,dimensionsMm:e.dimensions})),
   fixturesWithLicense:PILOT.products.map(p=>({sku:p.sku,source:p.source,license:p.license,images:p.imageRefs.map(i=>({path:i.path,sha256:i.sha256,license:i.license}))})),
   steps:runs.map(r=>({run:r.name,asserts:r.steps})),
   images:runs.flatMap(r=>r.shots),videos:runs.filter(r=>r.file).map(r=>({run:r.name,webm:{file:r.file,...r.webm},decodeOk:r.decodeOk,mp4:r.mp4||null})),

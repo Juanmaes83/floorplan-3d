@@ -224,7 +224,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await context.addCookies([{name:'qa-preview',value:'authorized',url,httpOnly:true,sameSite:'Lax'}]);protectedAssets=true;t.after(()=>{protectedAssets=false;});
  await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);
  assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.filter(e=>e.catalog==='immersphere-asset-lab').length),20,JSON.stringify({responses,error:await page.evaluate(()=>FloorPlanAssetUI.error)}));
- assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.length),21);assert.equal(await page.evaluate(()=>FloorPlanAssetUI.error),null);
+ assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.length),23,'bench + 20 Asset Lab + 2 CAT-03 synthetic fixtures (assets/f3/cat-ia.manifest.json)');assert.equal(await page.evaluate(()=>FloorPlanAssetUI.error),null);
  for(const term of ['cómoda','puf']){
   await openLibrary(page);
   await page.locator('#furnitureSearch').fill(term);const card=page.locator('#searchResults .item[data-key^="asset:"]').filter({hasText:term==='cómoda'?'SONGESAND':'STOCKHOLM'});assert.equal(await card.count(),1);assert.match(await card.innerText(),/Modelo 3D autorizado/);

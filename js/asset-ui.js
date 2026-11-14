@@ -1,6 +1,7 @@
 /* Static authorized catalog, never project/image data. No asset data in projects. */
 (function(){
- const paths=['assets/f3/catalog.manifest.json','assets/f3/external.manifest.json'];
+ // Own local catalogue (rubik-sota-local): bench + CAT-03 synthetic fixtures (separate file, SAME rules); external lab last.
+ const paths=['assets/f3/catalog.manifest.json','assets/f3/external.manifest.json','assets/f3/cat-ia.manifest.json'];
  const api=window.FloorPlanAssetUI={entries:[],ready:false,error:null,diagnostics:paths.map(path=>({path,state:'loading',phase:'network'}))};
  async function readManifest(path,diagnostic){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
@@ -33,7 +34,7 @@
     const source=sources[i],diagnostic=api.diagnostics[i];if(source.status!=='fulfilled')continue;
     try{
      diagnostic.phase='adapt';const {data,revision}=source.value;
-     const result=i===0?FloorPlanAssets.adapt(data,{catalog:'rubik-sota-local',revision}):FloorPlanAssets.adapt(data.source,{catalog:'immersphere-asset-lab',revision:data.catalogRevision,evidence:data.evidence});
+     const result=i!==1?FloorPlanAssets.adapt(data,{catalog:'rubik-sota-local',revision}):FloorPlanAssets.adapt(data.source,{catalog:'immersphere-asset-lab',revision:data.catalogRevision,evidence:data.evidence});
      api.entries.push(...result.entries);api.excluded.push(...result.excluded);
      diagnostic.accepted=result.entries.length;diagnostic.excluded=result.excluded;
      diagnostic.state=result.excluded.length||!result.entries.length?'warning':'ready';

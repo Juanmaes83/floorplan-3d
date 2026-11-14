@@ -1,0 +1,6 @@
+CAT-03 synthetic 3D fixtures — own permission of this repository's owner.
+Applies only to assets/f3/cat-ia-aparador-lumen.glb and assets/f3/cat-ia-horno-h60.glb and their generator
+scripts/cat-ia/make-glb-fixtures.py. Original rectangular solids created for this project: no source models, no
+downloaded geometry, no brand or real product is represented.
+Permission: commercial use, streaming, redistribution and modification, worldwide, without expiry.
+Attribution: "Rubik Sota — CAT-03 synthetic fixtures; assets/f3/LICENSE-cat-ia.txt". No third-party trademarks granted.

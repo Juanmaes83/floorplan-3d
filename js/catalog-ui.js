@@ -41,6 +41,7 @@
  const selList=el('ul',{id:'catalogSelection'},selSec),selRow=el('div',{class:'catalog-actions'},selSec);
  const freezeBtn=el('button',{type:'button',class:'btn primary',id:'catalogFreeze',disabled:true},selRow),clearSelBtn=el('button',{type:'button',class:'btn',id:'catalogClearSel',disabled:true},selRow);
  const selNote=el('p',{id:'catalogSelNote',class:'catalog-note','aria-live':'polite'},selSec);
+ const budgetBox=el('section',{id:'catalogBudgetBox',class:'catalog-selection',hidden:!window.RubikCatalogPlacementUI},wrap); // CAT-03 line items
 
  let studioId='local',catalog=null,current=null,selection=[];
  const imageCache=new Map(); // path → {ok, url, dataUrl} after checking the SHA-256 declared by the sheet
@@ -101,6 +102,7 @@
   html.onclick=async()=>{const data={};for(const i of s.images){const ref2=s.product.imageRefs.find(r=>r.path===i.path),r=ref2&&await image(ref2);if(r?.ok)data[i.path]=r.dataUrl;}download(`rubik-ficha-${s.product.sku}.html`,'text/html',C.sheetHtml(s,{imageData:data}));};
   json.onclick=()=>download(`rubik-ficha-${s.product.sku}.json`,'application/json',JSON.stringify(s,null,1));
   add.onclick=()=>{const k=C.keyOf(s.product);const e=selection.find(x=>x.key===k);if(e)e.quantity+=1;else selection.push({key:k,productId:s.product.productId,variantId:s.product.variantId,name:s.product.displayName,sku:s.product.sku,quantity:1});renderSelection();};
+  window.RubikCatalogPlacementUI?.decorate(act,catalog,s.product); // CAT-03: «Colocar en el proyecto»
   for(const b of list.querySelectorAll('.catalog-item'))b.setAttribute('aria-pressed',String(b.dataset.key===C.keyOf(s.product)));
   // Una columna (teléfono, apaisado): la ficha queda debajo de la lista; se lleva a la vista.
   try{if(matchMedia('(max-width:859px)').matches)preview.scrollIntoView({block:'start'});}catch{}
@@ -131,7 +133,7 @@
  studioSel.onchange=()=>{studioId=studioSel.value;selection=[];current=null;preview.hidden=true;report.replaceChildren();fillCatalogs();renderRevision();renderList();renderSelection();};
  catSel.onchange=()=>{fillCatalogs(catSel.value);current=null;preview.hidden=true;selection=[];renderRevision();renderList();renderSelection();};
  closeBtn.onclick=()=>dlg.close();
- function open(){labels();fillStudios();fillCatalogs(catalog?.catalogId);renderRevision();renderList();renderSelection();preview.hidden=!current;if(current&&catalog&&C.findProduct(catalog,current.productId,current.variantId))show(current.productId,current.variantId);dlg.showModal();(catalog?q:pilotBtn).focus();}
+ function open(){labels();fillStudios();fillCatalogs(catalog?.catalogId);renderRevision();renderList();renderSelection();if(window.RubikCatalogPlacementUI){budgetBox.hidden=false;window.RubikCatalogPlacementUI.budget(budgetBox);}preview.hidden=!current;if(current&&catalog&&C.findProduct(catalog,current.productId,current.variantId))show(current.productId,current.variantId);dlg.showModal();(catalog?q:pilotBtn).focus();}
 
  // ── Entrada en «Mi estudio» (la tarjeta se vuelve a pintar al cambiar de área: se añade si falta) ───────────────────
  const addCard=()=>{const grid=document.querySelector('#professionalWorkspace[data-area="studio"] .professional-grid');if(!grid||grid.querySelector('#catalogStudioCard'))return;

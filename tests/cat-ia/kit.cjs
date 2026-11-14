@@ -16,4 +16,9 @@ async function openStudio(page,touch){const go=l=>touch?l.tap():l.click();await 
 async function dragZone(page,[x0,y0],[x1,y1]){const c=page.locator('#vsStageCanvas');await c.scrollIntoViewIfNeeded();const b=await c.boundingBox();
  await page.mouse.move(b.x+b.width*x0,b.y+b.height*y0);await page.mouse.down();await page.mouse.move(b.x+b.width*(x0+x1)/2,b.y+b.height*(y0+y1)/2,{steps:4});await page.mouse.move(b.x+b.width*x1,b.y+b.height*y1,{steps:4});await page.mouse.up();}
 async function sheetOf(page){const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#vsSheet').click()]);return JSON.parse(fs.readFileSync(await d.path(),'utf8'));}
-module.exports={synthKitchen,loadPilot,openStudio,dragZone,sheetOf};
+// Rotated copy of the sample plan (same helper as the UX-12 property test): every wall, room and object turned by deg.
+function rotatedProject(deg,dx=0,dy=0){const C=require('../../js/project-core.js'),q=C.clone(C.initial()),a=deg*Math.PI/180,c=Math.cos(a),s=Math.sin(a),T=pt=>({x:Math.round(pt.x*c-pt.y*s+dx),y:Math.round(pt.x*s+pt.y*c+dy)});
+ for(const w of q.walls){w.start=T(w.start);w.end=T(w.end);}for(const r of q.rooms){r.polygon=r.polygon.map(T);if(r.labelAt)r.labelAt=T(r.labelAt);}
+ for(const o of q.objects){o.position=T(o.position);o.rotationDeg=((Math.round(o.rotationDeg+deg)%360)+360)%360;}q.measurements=[];
+ for(let k=0;k<30;k++){try{C.validate(q);return q;}catch(e){const m=/openings\/([^:]+):/.exec(e.message);if(!m)throw e;q.openings=q.openings.filter(o=>o.id!==m[1]);}}throw Error('rotated plan not valid');}
+module.exports={synthKitchen,loadPilot,openStudio,dragZone,sheetOf,rotatedProject};

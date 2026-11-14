@@ -28,7 +28,10 @@
     "verifiedAt": null
    },
    "reviewStatus": "REVIEWED",
-   "model3dRef": null,
+   "model3dRef": {
+    "catalog": "rubik-sota-local",
+    "assetId": "cat-ia-aparador-lumen"
+   },
    "productId": "aparador-lumen",
    "variantId": "roble",
    "sku": "QA-LUMEN-160-RB",
@@ -168,7 +171,10 @@
     "verifiedAt": null
    },
    "reviewStatus": "REVIEWED",
-   "model3dRef": null,
+   "model3dRef": {
+    "catalog": "rubik-sota-local",
+    "assetId": "cat-ia-horno-h60"
+   },
    "productId": "horno-h60",
    "variantId": "inox",
    "sku": "QA-H60-INOX",
