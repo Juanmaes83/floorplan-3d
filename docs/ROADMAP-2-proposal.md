@@ -1,6 +1,12 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
-> **Estado vigente a 18-10-2026:** D-01 ya está decidida (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público). El contrato de edificio, opción D (#50), el primer corte de dos plantas (#51) y el cierre de solapes y recolocación (#52 → #53 → #54) están integrados. Los cortes MCP #40 → #41 → #43 también están fusionados (`master` `6728e16`), pero no demuestran todavía un trayecto transitable con anchura. Este resultado no aprueba los órdenes futuros 4–8, exterior, más plantas, recorrer la escalera ni las Etapas 2–4 del MCP. Claude Code continúa la revisión profunda de LoRA LAB como estudio en #48; las pruebas no verificadas no deben convertirse en requisitos implementados. Las referencias de abajo a decisiones abiertas o PR futuras describen el estado de su propuesta original.
+> **Estado vigente a 18-10-2026:** D-01 ya está decidida (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público). El contrato de edificio, opción D (#50), el primer corte de dos plantas (#51) y el cierre de solapes y recolocación (#52 → #53 → #54) están integrados. Los cortes MCP #40 → #41 → #43 también están fusionados (`master` `6728e16`), pero no demuestran todavía un trayecto transitable con anchura. Este resultado no aprueba los órdenes futuros 4–8, exterior, más plantas, recorrer la escalera ni las Etapas 2–4 del MCP. **Actualización 19-10-2026:**
+>
+> - El cuarto corte MCP #57 está fusionado (`bd153c7`); la Etapa 1 sigue sin cerrarse.
+> - El estudio LoRA LAB de #48 eligió un candidato, ya aprobado y en curso en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65): presentar las dos plantas en una sola presentación y un solo lote (§3.4).
+> - Las pruebas no verificadas de LoRA LAB no deben convertirse en requisitos implementados.
+>
+> Las referencias de abajo a decisiones abiertas o PR futuras describen el estado de su propuesta original.
 
 
 > **Estado de integración a 17-10-2026:** #38, #39 y #42 ya están fusionadas en `master` (último merge `05d5514`). El piloto Blender #42 amplía la salida offline del paquete #24; no convierte la propuesta de orden 5 en una integración completa de LAB Astra ni aprueba Roadmap 2. La visita guiada web y el vídeo offline coexisten con Candidate 04. Las alusiones a PR abiertas más abajo son antecedentes fechados. La evaluación profunda de LoRA LAB de §3.4 puede comenzar ahora como estudio transversal. Debe comparar creación/importación/guardado, niveles, exterior, recorrido libre e interacción, y probar escritorio y móvil; de sus resultados se escogerá una sola entrega mínima y se fijará su contrato antes de implementarla. La cadena MCP #40→#41→#43 sigue en revisión separada.
@@ -105,19 +111,27 @@ pendientes para la validación empírica final de F2 y no bloquearon esta entreg
 
 ### 3.4 LoRA LAB: siguiente evaluación de vivienda completa
 
-**Gate D-01, 17-10-2026:** Juanma eligió como público prioritario inmobiliarias, promotoras y estudios de arquitectura, y como segundo público profesionales de reformas e interiorismo. El problema priorizado es preparar y presentar viviendas completas con plano editable, mobiliario y vistas coherentes; la utilidad para viviendas de varias plantas se evaluará sin prometer precisión profesional ni documentación técnica. [Decisión acotada](product/F0-decisions.md). Esta elección permite evaluar el corte multipiso propuesto en #48; no confirma todavía que LoRA LAB cree o recorra una escalera ni aprueba el contrato 2.0. La prueba de Juanma del anexo A y el gate de contrato siguen antes de implementar. Los órdenes 4–8 no se reordenan automáticamente.
+**Gate D-01, 17-10-2026:** Juanma eligió como público prioritario inmobiliarias, promotoras y estudios de arquitectura, y como segundo público profesionales de reformas e interiorismo. El problema priorizado es preparar y presentar viviendas completas con plano editable, mobiliario y vistas coherentes; la utilidad para viviendas de varias plantas se evalúa sin prometer precisión profesional ni documentación técnica. [Decisión acotada](product/F0-decisions.md). El contrato de edificio (opción D) y su primer corte de dos plantas con escalera (#50/#51) ya están integrados. La sesión de LoRA LAB en Chrome de Juanma confirmó la descarga de una imagen PNG y de un JSON de villa con tres niveles; la descarga PNG quedó inicialmente mal nombrada como `villa-original.json`. No se han probado crear una planta, colocar una escalera, subirla en el recorrido, guardar/recargar ni los demás flujos B–E6. El estudio de [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48) ordenó esa evidencia (sin acceso directo a LoRA LAB; el vídeo de 104 s de #58 es evidencia secundaria) y propuso una sola mejora acotada, sin implementar toda la demo. Los órdenes 4–8 no se reordenan automáticamente.
+
+**Siguiente candidato aprobado y en curso (19-10-2026): presentar las dos plantas de un edificio en una sola presentación y un solo lote exportable.**
+
+- **Estado:** Juanma lo aprobó para implementación. Está en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65), en borrador y sin fusionar.
+- **Por qué:** hasta ahora, «Presentar mi vivienda» presenta una sola planta del edificio. La brecha está comprobada en el código de Rubik; no se atribuye a una capacidad validada de LoRA LAB.
+- **Contrato:** no cambian `FloorPlanProjectV1` ni el edificio. El manifiesto del lote pasa a versión 2 sólo para edificios.
+- **Fuera de alcance:** subir la escalera, tres o más plantas y exterior.
+- **Beneficio:** hipótesis no medida con personas del público D-01.
 
 La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-reference-2026-10-17.md) quedan registradas como **referencia separada**. Su demo muestra tres niveles, exterior/cubierta, controles de sol y presentación y recorrido en primera persona. La nota enumera candidatos para Rubik y un gate de revisión profunda en escritorio y móvil. La investigación comparativa es el siguiente estudio propuesto, no una nueva fase ni una orden de implementar todas las funciones. Tras la evaluación se escogería, si procede, una única entrega con contrato y pruebas propios. No hay evidencia de que esta demo implemente el CAD/Blender de Summerz3002.
 
 La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-video-gap-audit-2026-10-17.md) distingue funciones ejecutadas, controles visibles y pendientes. Frente al editor de una planta de Rubik, identifica como brecha estructural el **proyecto de varias plantas conectadas**, además de exterior y visita. Son candidatos para una decisión futura, **no el siguiente corte aprobado ni una alteración del orden orientativo 4–8**. La visita guiada de #39, el Candidato 04 de LAB Astra y Blender #42 conviven. No se duplican el importador, catálogo, materiales, JSON ni captura ya existentes o en PR.
 
-### 3.5 Experiencia contextual: huecos en el plano (19-10-2026, PR de implementación en borrador)
+### 3.5 Experiencia contextual: huecos en el plano (integrada por #60 y #62)
 
-**Primer corte implementado en una PR en borrador, pendiente de auditoría y revisión humana: «Seleccionar y editar una puerta o ventana donde está».**
+**Estado: integrada y revisada visualmente por Juanma.** La propuesta de [#59](https://github.com/Juanmaes83/floorplan-3d/pull/59) quedó cubierta por [#60](https://github.com/Juanmaes83/floorplan-3d/pull/60), y la mejora general de interfaz se completó en [#62](https://github.com/Juanmaes83/floorplan-3d/pull/62). #60 se integró primero y #62 después; ambas están en `master` desde `7ada526`.
 
 - Con «Seleccionar», un hueco se pulsa en el plano 2D y se edita en el panel con vista previa: tipo, posición, medidas, antepecho, y bisagra y sentido.
 - Desde una estancia se añade una puerta o ventana a uno de sus muros.
-- El [informe QA](qa/contextual-openings-2026-10-19.md) recoge la base medida en `master` (26 acciones, 12 para huecos y 4 cambios de modo) y el resultado de la rama.
+- El [informe QA de huecos](qa/contextual-openings-2026-10-19.md) recoge la base medida (26 acciones, 12 para huecos y 4 cambios de modo), las pruebas y los límites.
 - No cambia `FloorPlanProjectV1`.
 - No se afirma ninguna comparación de acciones con LoRA LAB.
 
@@ -129,7 +143,7 @@ La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-
 - **Prioridad de toque:** los objetivos ampliados no tapan muebles ni nombres de estancia, y entre huecos solapados gana el más cercano.
 - **Ventana de 3070 mm en el ejemplo:** es un dato de la plantilla, en la que cada hueco tiene su propio tramo de muro; el panel ahora lo explica.
 - [Detalle y pruebas](qa/contextual-openings-2026-10-19.md#7-cierre-funcional-segunda-ronda-19-10-2026).
-- La revisión general de interfaz (patrón de paneles en todo el editor, «Generar», castellano y calibración) va en una PR separada, apilada sobre esta.
+- La revisión general de interfaz (patrón de paneles en todo el editor, «Generar», castellano y calibración) se integró en #62. Véanse el [diseño](product/editor-ux-pattern-2026-10-19.md) y el [informe QA](qa/editor-ux-2026-10-19.md).
 
 **Siguiente candidato, separado y sin aprobar:**
 
@@ -137,11 +151,11 @@ La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-
 - nombres o tipos sugeridos;
 - muestras de acabados en una jerarquía más clara, incluida la elección de pared en el plano.
 
-Debe medirse con personas y decidir antes las reglas de unión de muros. No forma parte de esta PR.
+Debe medirse con personas y decidir antes las reglas de unión de muros. Sigue siendo un candidato futuro independiente; no está aprobado ni implementado por #60/#62.
 
-### 3.6 Patrón de paneles, «Generar», castellano y calibración (19-10-2026, PR en borrador apilada sobre #60)
+### 3.6 Patrón de paneles, «Generar», castellano y calibración (integrada por #62)
 
-Revisión general de la interfaz, separada del corte de huecos. [Diseño](product/editor-ux-pattern-2026-10-19.md) · [QA](qa/editor-ux-2026-10-19.md).
+Revisión general de la interfaz, separada del corte de huecos y completada después de #60. [Diseño](product/editor-ux-pattern-2026-10-19.md) · [QA](qa/editor-ux-2026-10-19.md). Juanma revisó y aprobó los flujos de escritorio y móvil en la preview.
 
 - **Panel automático.** Los huecos abren su panel al seleccionarse, por decisión de Juanma en #60. En escritorio, estancias y muebles muestran la columna de propiedades al seleccionarse. En móvil conservan «Propiedades» para no tapar el plano.
 - **Paneles y retorno.** Cabecera común con «Volver» primero y fijo. «Volver» sube un nivel: mueble → estancia → vista general, hueco → estancia, edición → herramientas de «Plano propio». En móvil, «Ver en el plano» va en la cabecera. Los grupos son plegables, las ayudas largas empiezan plegadas y hay acciones fijas donde hay un formulario.
@@ -154,9 +168,11 @@ Revisión general de la interfaz, separada del corte de huecos. [Diseño](produc
 
 - hoja inferior en teléfono vertical;
 - teclado dentro del plano SVG;
-- unificar «Plano propio» con el panel de estancia (siguiente candidato de §3.5);
+- unificar «Plano propio» con el panel de estancia (parte del candidato futuro de §3.5);
 - progreso propio para importaciones grandes;
 - validación con personas del público D-01.
+
+**Cierre documental de #58 y #59:** #59 es una propuesta ya entregada por #60/#62; no queda como trabajo de producto pendiente. La observación de vídeo de #58 se conserva como evidencia de apoyo al estudio LoRA LAB de #48; no certifica capacidades de LoRA LAB ni autoriza copiar su interfaz. El estudio de #48 reconcilió la evidencia útil de #58 y eligió el candidato de §3.4, en curso en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65). La evaluación de LoRA LAB sigue separada del MCP y sin prueba directa de la herramienta.
 
 ## 4. Especificación de las mejoras principales
 
