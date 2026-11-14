@@ -1530,6 +1530,7 @@ function renderSel(){
   } else if (ui.sel?.kind === 'room'){
     const r = geometry.rooms.find(r => r.id === ui.sel.id);
     s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+    s += window.FloorPlanSmartFurnishingUI?.planMarkup(r.id, k) || ''; // UX-12: propuesta sin aplicar (las exportaciones vacían #gSel)
   }
   s += window.FloorPlanOpeningUI?.overlay() || '';
   SafeDOM.markup($('#gSel'), s);
@@ -1568,7 +1569,7 @@ function renderPanel(){
   renderFab();
   const p = $('#panel');
   if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); return; } }
-  if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); window.RubikCeilingEditor?.roomPanel(p, ui.sel.id); return; }
+  if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); window.RubikCeilingEditor?.roomPanel(p, ui.sel.id); window.FloorPlanSmartFurnishingUI?.roomPanel(p, ui.sel.id); return; }
   if (ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.panel(p, ui.sel.id)) return;
   if (ui.sel?.kind === 'wall'){ const w = project.walls.find(w => w.id === ui.sel.id); if (w){ SafeDOM.markup(p, wallPanel(w)); bindWallPanel(w.id); return; } }
   SafeDOM.markup(p, overviewPanel()); bindOverview();
@@ -2529,6 +2530,8 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
   // R02-A: los cambios de techo pasan por el commit de RUBIK (validación, deshacer, guardado). fn recibe una copia y devuelve {ok,project}.
   applyCeiling(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+  // UX-12: la propuesta de amueblamiento se aplica igual, en un solo paso del commit (validación, deshacer y guardado).
+  applyFurnishing(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
   async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),
@@ -2670,6 +2673,7 @@ function init(){
   exteriorLineMat=new THREE.LineBasicMaterial({color:0x766e62,transparent:true,opacity:.55});
   scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG, exteriorG);
   const ceilingG=window.RubikCeilingEditor?.create3D(THREE)?.group;if(ceilingG)scene.add(ceilingG); // R02-A: elementos de techo a sus cotas
+  const furnishG=window.FloorPlanSmartFurnishingUI?.create3D(THREE)?.group;if(furnishG)scene.add(furnishG); // UX-12: propuesta sin aplicar
   territoryRenderer=FloorPlanTerritoryRenderer.create(THREE);scene.add(territoryRenderer.group);FloorPlanTerritorySession.subscribe(()=>{if(active)syncTerritory();else territoryRenderer.dispose();});
 
   const cv = renderer.domElement; let downAt = null, look = null;
@@ -3821,6 +3825,7 @@ function sync(force){
   if (force || l !== sigLabels){ sigLabels = l; buildLabels(); }
   syncTerritory();
   window.RubikCeilingEditor?.update3D({x:OX,y:OY});
+  window.FloorPlanSmartFurnishingUI?.update3D({x:OX,y:OY});
 }
 
 // CSS2DRenderer 只看标签自身的 visible，不继承父级，所以逐个设置
@@ -5433,6 +5438,8 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/delivery-client.js"></script>
 <!-- UX-08 · cotas en vivo al mover muebles (solo dibujo en #gSel; no guarda nada) -->
 <script src="js/live-dimensions-core.js"></script><script src="js/live-dimensions-ui.js"></script>
+<!-- UX-12 + UX-13 · amueblamiento inteligente V1 (propuesta por estancia; solo se guarda al «Aplicar», en un paso del commit) -->
+<script src="js/smart-furnishing-core.js"></script><script src="js/smart-furnishing-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
