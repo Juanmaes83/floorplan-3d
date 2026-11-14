@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rubik-sota.example/contracts/assistant-v1/AssistantToolResultV1.schema.json",
+  "title": "AssistantToolResultV1",
+  "description": "Contrato AssistantToolResultV1 v1.0.0 del Asistente IA RUBIK. Generado por scripts/assistant/write-schemas.cjs desde js/assistant-contracts.js: no editar a mano.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "callId",
+    "ok"
+  ],
+  "properties": {
+    "version": {
+      "const": "1.0.0"
+    },
+    "callId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "data": {},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "projectId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 150,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 150
+        },
+        "status": {
+          "enum": [
+            "measured",
+            "estimated",
+            "unavailable",
+            "mixed",
+            "not_applicable"
+          ]
+        },
+        "engine": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "asOf": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "budgetId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "maxLength": 2000
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "invalid_arguments",
+            "not_authorized",
+            "not_found",
+            "not_available",
+            "revision_mismatch",
+            "conflict",
+            "rate_limited",
+            "budget_exceeded",
+            "timeout",
+            "cancelled",
+            "provider_disabled",
+            "consent_required",
+            "unsupported_intent",
+            "internal"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    }
+  }
+}
