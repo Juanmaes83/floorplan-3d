@@ -11,6 +11,7 @@
  const C=window.RubikPhotoReformCore;if(!C)return;
  const $=s=>document.querySelector(s);
  const el=(tag,attrs={},parent,text)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))if(v!==undefined&&v!==null&&v!==false)n.setAttribute(k,v===true?'':v);if(text!==undefined)n.textContent=text;parent?.append(n);return n;};
+ const lazyImg=(parent,attrs,before)=>{let img=null;return {get node(){return img;},set(src){if(!src){img?.remove();img=null;return;}if(!img){img=el('img',attrs);parent.insertBefore(img,before()||null);}img.src=src;}};};
  // Estado del proveedor real en ESTE despliegue: ninguno configurado ni autorizado; gobierno pendiente.
  const PROVIDER=Object.freeze({configured:false,authorized:false}),GOVERNANCE=Object.freeze({gov05:false,img04:false});
 
@@ -25,7 +26,7 @@
  const file=el('input',{type:'file',id:'photoReformFile',accept:'image/jpeg,image/png,image/webp','aria-describedby':'photoReformFileHelp photoReformFileError'},s1);
  el('small',{id:'photoReformFileHelp'},s1,'JPEG, PNG o WebP · hasta 10 MB · lado menor ≥ 320 px. Se eliminan los metadatos (EXIF, ubicación) y no se guarda.');
  const fileErr=el('p',{id:'photoReformFileError',class:'photo-reform-error',role:'alert'},s1);
- const original=el('figure',{class:'photo-reform-original',id:'photoReformOriginal',hidden:true},s1);const originalImg=el('img',{alt:'Fotografía original (copia sin metadatos)'},original);const originalCap=el('figcaption',{},original);
+ const original=el('figure',{class:'photo-reform-original',id:'photoReformOriginal',hidden:true},s1);const originalImg=lazyImg(original,{alt:'Fotografía original (copia sin metadatos)'},()=>original.firstChild);const originalCap=el('figcaption',{},original);
  // 2 · Intención
  const s2=el('section',{class:'photo-reform-step','aria-labelledby':'pr2'},wrap);el('h3',{id:'pr2'},s2,'2 · Intención de reforma');
  const intentSel=el('select',{id:'photoReformIntent','aria-label':'Intención de reforma'},s2);el('option',{value:''},intentSel,'Elige qué quieres ver…');for(const i of C.INTENTS)el('option',{value:i.id},intentSel,i.label);
@@ -51,7 +52,8 @@
  const s5=el('section',{class:'photo-reform-step',id:'photoReformResults','aria-labelledby':'pr5',hidden:true},wrap);el('h3',{id:'pr5'},s5,'5 · Resultado y comparación');
  const altList=el('div',{class:'photo-reform-alts',id:'photoReformAlts'},s5);
  const compare=el('figure',{class:'photo-reform-compare',id:'photoReformCompare',hidden:true},s5);
- const cmpBase=el('img',{alt:'Original',class:'photo-reform-cmp-base'},compare),cmpTop=el('img',{alt:'Resultado simulado',class:'photo-reform-cmp-top'},compare);
+ const cmpBase=lazyImg(compare,{alt:'Original',class:'photo-reform-cmp-base'},()=>compare.firstChild),cmpTop=lazyImg(compare,{alt:'Resultado simulado',class:'photo-reform-cmp-top'},()=>cmpBase.node?.nextSibling);
+ const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);};
  el('span',{class:'photo-reform-tag photo-reform-tag-before'},compare,'Original');const cmpTag=el('span',{class:'photo-reform-tag photo-reform-tag-after',id:'photoReformCmpTag'},compare,'SIMULACIÓN');
  const slider=el('input',{type:'range',min:'0',max:'100',value:'50',id:'photoReformSlider','aria-label':'Comparar original y resultado'},s5);
  const resultNote=el('p',{id:'photoReformResultNote',class:'photo-reform-result-note'},s5);
@@ -62,7 +64,7 @@
 
  let image=null,origUrl=null,results=[],runState=null,abort=null,selected=0;
  const revoke=()=>{if(origUrl)URL.revokeObjectURL(origUrl);origUrl=null;for(const r of results)if(r.url)URL.revokeObjectURL(r.url);results=[];};
- function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.removeAttribute('src');intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';s5.hidden=true;altList.replaceChildren();compare.hidden=true;simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
+ function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';s5.hidden=true;altList.replaceChildren();compare.hidden=true;simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
  function refresh(){
   const r=C.request({image,intent:intentSel.value,finish:finishSel.hidden?null:finishSel.value,alternatives:altSel.value});
   sends.replaceChildren();never.replaceChildren();
@@ -84,7 +86,7 @@
   const c=document.createElement('canvas');c.width=dims.work.w;c.height=dims.work.h;c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);bmp.close?.();
   const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.88));
   image={mediaType:'image/jpeg',width:c.width,height:c.height,bytes:blob.size,canvas:c};origUrl=URL.createObjectURL(blob);
-  originalImg.src=origUrl;originalCap.textContent=`Original · ${c.width}×${c.height} px · sin metadatos`;original.hidden=false;refresh();
+  originalImg.set(origUrl);originalCap.textContent=`Original · ${c.width}×${c.height} px · sin metadatos`;original.hidden=false;refresh();
  };
  consent.onchange=()=>{if(consent.checked&&/consentimiento/.test(status.textContent))status.textContent='';};
 
@@ -115,7 +117,7 @@
    if(r?.url){const b=el('button',{type:'button',class:'photo-reform-alt-pick','aria-pressed':String(selected===it.index),'aria-label':`Comparar alternativa ${it.index+1} (simulación)`},card);el('img',{src:r.url,alt:`Alternativa ${it.index+1} · SIMULACIÓN`},b);b.onclick=()=>{selected=it.index;showCompare();renderAlts();};}
    el('figcaption',{},card,`Alternativa ${it.index+1} · ${({pending:'en espera',running:'preparando…',done:it.result?.badge,error:'error',cancelled:'cancelada',skipped:'no generada'})[it.status]||it.status}`);}
  }
- function showCompare(){const r=results[selected];if(!r?.url){compare.hidden=true;return;}cmpBase.src=origUrl;cmpTop.src=r.url;compare.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
+ function showCompare(){const r=results[selected];if(!r?.url){hideCompare();return;}cmpBase.set(origUrl);cmpTop.set(r.url);compare.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
   resultNote.textContent=`${r.label.badge}. Imagen ilustrativa, no medible. ${r.label.costText}`;dlBtn.disabled=!r.label.downloadable;}
  slider.oninput=()=>compare.style.setProperty('--cut',slider.value+'%');
  realBtn.onclick=()=>{const g=C.gate({mode:'real',consent:consent.checked,provider:PROVIDER,governance:GOVERNANCE});status.textContent='Bloqueado: '+g.reasons.join(' ');};
@@ -123,7 +125,7 @@
   const r=refresh();if(!r.ok){status.textContent=r.message;return;}
   const g=C.gate({mode:'simulated',consent:consent.checked});
   if(!g.allowed){status.textContent='No se procesa: '+g.reasons.join(' ');consent.focus();return;}
-  for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];selected=0;compare.hidden=true;
+  for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];selected=0;hideCompare();
   abort=new AbortController();const sig=abort.signal,scn=scenario.value;
   runState=C.start(C.run(r.request.alternatives));s5.hidden=false;simBtn.hidden=true;cancelBtn.hidden=false;status.textContent='Simulación en curso (local, sin envíos ni coste)…';renderAlts();
   for(let i=0;i<r.request.alternatives;i++){
@@ -137,7 +139,7 @@
   dlg.dataset.run=runState.status;
  };
  cancelBtn.onclick=()=>abort?.abort();
- discardBtn.onclick=()=>{for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;compare.hidden=true;status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
+ discardBtn.onclick=()=>{for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
  dlBtn.onclick=()=>{};// nunca habilitado para simulaciones
  closeBtn.onclick=()=>{dlg.close();};
  dlg.addEventListener('close',reset);

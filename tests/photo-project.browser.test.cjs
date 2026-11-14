@@ -147,6 +147,7 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
   const {context,page}=await K.editor(env);const w=K.watch(page,env.base);const api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
   try{
     const before=await K.snapshot(page);
+    assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0,'sin <img> vacías al cargar');
     await page.locator('details.menu summary').first().click();await page.locator('#photoReformMenu').click();await page.locator('#photoReformDialog[open]').waitFor();
     assert.match(await page.locator('.photo-reform-truth').innerText(),/no cambia tu proyecto[\s\S]*«Desde una imagen»/);
     // Archivos no válidos.
@@ -182,6 +183,8 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     await page.locator('#photoReformDiscard').click();assert.equal(await page.locator('#photoReformResults').isHidden(),true);
     await page.locator('#photoReformClose').click();await page.locator('#photoReformDialog').waitFor({state:'hidden'});
     assert.deepEqual(await K.snapshot(page),before,'FOT-01 no modifica el proyecto');assert.deepEqual(api,[]);
+    // Tras descartar no queda ninguna imagen de FOT-01 en la página (tampoco <img> vacías: tests/browser.test.cjs las vigila).
+    assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0);
     // También se llega desde «Entregar» → «Imágenes».
     await page.locator('#workArea-deliver').click();assert.equal(await page.locator('#photoReformCard').isVisible(),true);
     assert.deepEqual(w.errors,[]);assert.deepEqual(w.external,[]);

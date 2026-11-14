@@ -13,6 +13,7 @@
  const C=window.RubikOwnFurnitureCore,app=window.FloorPlanApp;if(!C||!app)return;
  const $=s=>document.querySelector(s);
  const el=(tag,attrs={},parent,text)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))if(v!==undefined&&v!==null&&v!==false)n.setAttribute(k,v===true?'':v);if(text!==undefined)n.textContent=text;parent?.append(n);return n;};
+ const lazyImg=(parent,attrs,before)=>{let img=null;return {get node(){return img;},set(src){if(!src){img?.remove();img=null;return;}if(!img){img=el('img',attrs);parent.insertBefore(img,before()||null);}img.src=src;}};};
  const notify=(text,ms=5000)=>{try{toast(text,ms);}catch{}};
  const shown=n=>{try{return nm(n);}catch{return n;}};
  const hex=buf=>[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -50,7 +51,8 @@
  const name=field('name','Nombre',el('input',{type:'text',maxlength:String(C.LIMITS.nameMax),autocomplete:'off',placeholder:'Sofá de la abuela'}));
  const type=field('type','Categoría',el('select'));el('option',{value:''},type,'Elige una categoría…');for(const c of C.CATEGORIES)el('option',{value:c.type},type,c.label);
  const photo=field('photo','Fotografía del mueble',el('input',{type:'file',accept:'image/jpeg,image/png,image/webp'}),'JPEG, PNG o WebP, hasta 12 MB. Se guarda una copia sin metadatos (EXIF ni ubicación) solo en este navegador; no se envía a nadie.');
- const preview=el('figure',{class:'own-furn-preview',hidden:true},form);const previewImg=el('img',{alt:'Vista previa de la foto del mueble'},preview);el('figcaption',{},preview,'Copia que se guardará (sin metadatos)');
+ const preview=el('figure',{class:'own-furn-preview',hidden:true},form);// Las <img> solo existen mientras hay una foto que mostrar (ninguna imagen vacía en la página).
+ const previewImg=lazyImg(preview,{alt:'Vista previa de la foto del mueble'},()=>preview.firstChild);el('figcaption',{},preview,'Copia que se guardará (sin metadatos)');
  const dims=el('div',{class:'own-furn-dims'},form);
  const num=(key,label,[lo,hi])=>{const i=field(key,label,el('input',{type:'number',inputmode:'numeric',min:String(lo),max:String(hi),step:'1'}),`${lo}–${hi} mm`);dims.append(i.parentElement);return i;};
  const w=num('widthMm','Anchura (mm)',C.LIMITS.widthMm),d=num('depthMm','Fondo (mm)',C.LIMITS.depthMm),h=num('heightMm','Altura (mm)',C.LIMITS.heightMm);
@@ -61,7 +63,7 @@
  const cancelBtn=el('button',{type:'button',class:'btn',id:'ownFurnCancel'},actions,'Cancelar');
  const createBtn=el('button',{type:'submit',class:'btn primary',id:'ownFurnCreate'},actions,'Crear mueble');
  let pending=null,previewUrl=null,busy=false;
- const setPreview=blob=>{if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=blob?URL.createObjectURL(blob):null;preview.hidden=!blob;if(blob)previewImg.src=previewUrl;else previewImg.removeAttribute('src');};
+ const setPreview=blob=>{if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=blob?URL.createObjectURL(blob):null;preview.hidden=!blob;previewImg.set(previewUrl);};
  function fillRooms(){room.replaceChildren();el('option',{value:''},room,'Donde estoy mirando ahora');
   for(const r of app.project.rooms){let label=r.name;try{label=roomDisplay(r);}catch{}el('option',{value:r.id},room,label);}
   const sel=(()=>{try{return ui.sel?.kind==='room'?ui.sel.id:'';}catch{return '';}})();room.value=sel||'';}
