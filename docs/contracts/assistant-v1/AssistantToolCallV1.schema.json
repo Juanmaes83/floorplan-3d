@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rubik-sota.example/contracts/assistant-v1/AssistantToolCallV1.schema.json",
+  "title": "AssistantToolCallV1",
+  "description": "Contrato AssistantToolCallV1 v1.0.0 del Asistente IA RUBIK. Generado por scripts/assistant/write-schemas.cjs desde js/assistant-contracts.js: no editar a mano.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "id",
+    "tool",
+    "args"
+  ],
+  "properties": {
+    "version": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "tool": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "args": {
+      "type": "object",
+      "maxProperties": 6
+    },
+    "projectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "revision": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    }
+  }
+}

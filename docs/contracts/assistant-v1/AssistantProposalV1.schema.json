@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rubik-sota.example/contracts/assistant-v1/AssistantProposalV1.schema.json",
+  "title": "AssistantProposalV1",
+  "description": "Contrato AssistantProposalV1 v1.0.0 del Asistente IA RUBIK. Generado por scripts/assistant/write-schemas.cjs desde js/assistant-contracts.js: no editar a mano.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "id",
+    "operation",
+    "params",
+    "baseRevision",
+    "projectId",
+    "state",
+    "diff"
+  ],
+  "properties": {
+    "version": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "operation": {
+      "enum": [
+        "set_room_floor_material",
+        "move_object"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "description": "set_room_floor_material: {roomId, materialId}; move_object: {objectId, dxMm?, dyMm?, rotationDeg?} (enteros; ±20 000 mm; 0–359°)."
+    },
+    "baseRevision": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "projectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "state": {
+      "enum": [
+        "proposed",
+        "rejected",
+        "stale",
+        "confirmed",
+        "applied",
+        "undone",
+        "failed"
+      ]
+    },
+    "diff": {
+      "type": "array",
+      "maxItems": 40,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "before": {},
+          "after": {},
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "maxItems": 40
+    },
+    "conflicts": {
+      "type": "array",
+      "maxItems": 40
+    },
+    "alternatives": {
+      "type": "array",
+      "maxItems": 40
+    },
+    "explanation": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 40
+    }
+  }
+}

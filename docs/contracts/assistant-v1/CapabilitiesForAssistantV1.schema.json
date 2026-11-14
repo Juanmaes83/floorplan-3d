@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rubik-sota.example/contracts/assistant-v1/CapabilitiesForAssistantV1.schema.json",
+  "title": "CapabilitiesForAssistantV1",
+  "description": "Contrato CapabilitiesForAssistantV1 v1.0.0 del Asistente IA RUBIK. Generado por scripts/assistant/write-schemas.cjs desde js/assistant-contracts.js: no editar a mano.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "generatedAt",
+    "operations"
+  ],
+  "properties": {
+    "version": {
+      "const": "1.0.0"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 40
+    },
+    "operations": {
+      "type": "array",
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "state",
+          "writes",
+          "preview",
+          "costUnknown",
+          "confirmation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150,
+            "pattern": "^[A-Za-z0-9_.:-]+$"
+          },
+          "kind": {
+            "enum": [
+              "read",
+              "proposal",
+              "visual",
+              "advanced"
+            ]
+          },
+          "state": {
+            "enum": [
+              "available",
+              "validation",
+              "preparation",
+              "blocked"
+            ]
+          },
+          "writes": {
+            "type": "boolean"
+          },
+          "preview": {
+            "type": "boolean"
+          },
+          "costUnknown": {
+            "type": "boolean"
+          },
+          "confirmation": {
+            "enum": [
+              "none",
+              "per-action",
+              "per-generation"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "mode"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "mode": {
+          "enum": [
+            "deterministic",
+            "mock",
+            "provider"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    }
+  }
+}

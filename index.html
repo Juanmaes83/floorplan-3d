@@ -2552,6 +2552,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   applyCeiling(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   // UX-12: la propuesta de amueblamiento se aplica igual, en un solo paso del commit (validación, deshacer y guardado).
   applyFurnishing(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+  applyAssistant(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;refreshProject();if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
   async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),
@@ -5513,6 +5514,11 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- CAT-01 + FOT-01 visual «Entregar → Estudio de imágenes» (simulación local rotulada; generación real cerrada: STOP_GASTO) -->
 <link rel="stylesheet" href="css/visual-studio.css">
 <script src="js/visual-reform-core.js"></script><script src="js/visual-reform-ui.js"></script>
+<!-- Asistente IA RUBIK V2 (AG-0…AG-5, Draft): consulta guiada SIN modelo de lenguaje sobre el proyecto abierto; las
+     propuestas solo se guardan al «Aplicar», en un paso del commit. Nada sale del navegador; proveedor de texto desactivado. -->
+<link rel="stylesheet" href="css/assistant.css">
+<script src="js/assistant-contracts.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
+<script src="js/assistant-proposals-core.js"></script><script src="js/assistant-runtime-core.js"></script><script src="js/assistant-session-core.js"></script><script src="js/assistant-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
