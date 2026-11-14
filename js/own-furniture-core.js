@@ -101,6 +101,14 @@
   r.items.set(objectId,photo);return write(project,r.items);
  }
  function detach(project,objectId){const r=read(project);if(!writable(r.status))throw Error('La referencia fotográfica de este proyecto es de otra versión o está dañada: no se modifica.');r.items.delete(objectId);return write(project,r.items);}
+ // «Duplicar» un mueble propio: la copia es otro «mi mueble» con la MISMA referencia fotográfica (la clave es el hash
+ // del contenido, así que ambos apuntan a los mismos bytes locales; ninguna acción de RUBIK borra esos bytes). Se
+ // llama dentro del mismo paso del deshacer que crea la copia. Datos de otra versión o dañados: no se tocan.
+ function duplicate(project,fromId,toId){
+  const r=read(project);if(!writable(r.status)||!r.items.has(fromId))return {changed:false};
+  if(!ID_RE.test(toId)||!(project.objects||[]).some(o=>o.id===toId))throw Error('La copia no existe en el proyecto.');
+  r.items.set(toId,r.items.get(fromId));write(project,r.items);return {changed:true};
+ }
  function prune(project){const r=read(project);return writable(r.status)?write(project,r.items):project;}
 
  // Qué ve el profesional en el panel del mueble.
@@ -115,6 +123,6 @@
   return {state:'ok',own:true,photo};
  }
 
- const api={EXT,VERSION,CATEGORIES,LIMITS,validateSpec,sniff,checkPhoto,fitSize,validatePhoto,read,attach,detach,prune,photoStatus};
+ const api={EXT,VERSION,CATEGORIES,LIMITS,validateSpec,sniff,checkPhoto,fitSize,validatePhoto,read,attach,detach,duplicate,prune,photoStatus};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikOwnFurnitureCore=api;
 })(globalThis);

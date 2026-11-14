@@ -72,9 +72,17 @@ Generar, cambiar de receta, ver en 2D/3D y descartar **no modifican el proyecto*
 
 | Suite | Qué acredita |
 |---|---|
-| `tests/smart-furnishing.test.cjs` (17) | Reproducibilidad y ausencia de cambios al generar. Semillas distintas dan distribuciones distintas. Estancia en L. Estancia pequeña. Barrido de puerta. Estancia ambigua. Escala estimada y sin calibrar. Uso. Muebles existentes. Armario R03 (`x-r03-cabinet` intacto). Techo R02-A (`x-r02a-ceiling` intacto). Cotas UX-08. Aplicar atómico y sin duplicados. Proyecto cambiado. Negativos: dimensiones, muro, id. Recetas en datos y dibujo, y la receta que solo cambia el nombre. Recursos no disponibles. Densidad. **Las posiciones finales las comprueba `tests/smart-furnishing/verify.cjs`, independiente del motor.** |
+| `tests/smart-furnishing.test.cjs` (18) | Reproducibilidad y ausencia de cambios al generar. Semillas distintas dan distribuciones distintas. Estancia en L. Estancia pequeña. Barrido de puerta. Estancia ambigua. Escala estimada y sin calibrar. Uso. Muebles existentes. Armario R03 (`x-r03-cabinet` intacto). Techo R02-A (`x-r02a-ceiling` intacto). Cotas UX-08. Aplicar atómico y sin duplicados. Proyecto cambiado. Negativos: dimensiones, muro, id. Recetas en datos y dibujo, y la receta que solo cambia el nombre. Recursos no disponibles. Densidad. **Las posiciones finales las comprueba `tests/smart-furnishing/verify.cjs`, independiente del motor.** Propiedad en plantas giradas 17°, 30° y 133°: toda propuesta mostrada se puede aplicar y el verificador no ve violaciones. |
 | `tests/smart-furnishing.browser.test.cjs` (4) | Editor real: flujo completo en escritorio (generar, receta, 3D, exportaciones, descartar, aplicar, editar una pieza, cotas al arrastrar, deshacer, rehacer, reabrir). Rechazo legítimo. Convivencia R03 + R02-A. Móvil 390×844 con toques reales. |
 | `scripts/qa/record-smart-furnishing.cjs` | Dos vídeos del flujo real, capturas y `manifest.json`, con comprobaciones en cada paso. |
+
+## Auditoría adversarial (14-11-2026)
+
+- **Método:** el piso de ejemplo, girado y desplazado (0°, 17°, 30°, 45°, 90°, 133°, 211° y 300°). Siete estancias con su uso, tres recetas, tres densidades y tres semillas: 1512 casos. En cada caso se comprueba que generar no modifica el proyecto y es determinista. Después se aplica la propuesta y se pasa por el verificador independiente.
+- **Defecto real encontrado:** en dormitorios girados (17° y 30°), 55 de 1512 propuestas se mostraban como válidas pero «Aplicar» las rechazaba. Tras redondear a mm enteros, la mesilla solapaba la cama entre 0,1 y 0,5 mm. La generación admitía 1 mm de tolerancia, pero la revisión del conjunto, al aplicar, no admite ninguna.
+- **Corrección:** la generación usa ahora el mismo criterio exacto de solape que `FloorPlanLayoutReview` al aplicar. Sin cambiar el contrato, ni las guardas, ni el catálogo.
+- **Resultado:** 1512 de 1512 propuestas se aplican, sin ninguna violación del verificador.
+- **Regresión:** una prueba de propiedad en `tests/smart-furnishing.test.cjs` falla con el código anterior y pasa con el corregido.
 
 ## Límites conocidos
 

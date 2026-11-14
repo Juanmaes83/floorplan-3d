@@ -13,7 +13,9 @@
  const el=(tag,attrs={},parent,text)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))if(v!==undefined&&v!==null&&v!==false)n.setAttribute(k,v===true?'':v);if(text!==undefined)n.textContent=text;parent?.append(n);return n;};
  const lazyImg=(parent,attrs,before)=>{let img=null;return {get node(){return img;},set(src){if(!src){img?.remove();img=null;return;}if(!img){img=el('img',attrs);parent.insertBefore(img,before()||null);}img.src=src;}};};
  // Estado del proveedor real en ESTE despliegue: ninguno configurado ni autorizado; gobierno pendiente.
- const PROVIDER=Object.freeze({configured:false,authorized:false}),GOVERNANCE=Object.freeze({gov05:false,img04:false});
+ // Configuración del proveedor de ESTE despliegue (sin proveedor): del contrato v1, no de constantes sueltas.
+ const P=window.RubikPhotoReformProvider,CFG=P?P.config():{configured:false,authorized:false,governance:{gov05:false,img04:false}};
+ const PROVIDER=Object.freeze({configured:CFG.configured,authorized:CFG.authorized}),GOVERNANCE=CFG.governance;
 
  const dlg=el('dialog',{id:'photoReformDialog',class:'photo-reform-dialog','aria-labelledby':'photoReformTitle'},document.body);
  const wrap=el('div',{class:'photo-reform'},dlg);
@@ -40,6 +42,7 @@
  const provider=el('div',{class:'photo-reform-provider',id:'photoReformProvider',role:'note'},s4);el('strong',{},provider,'Proveedor real: BLOQUEADO');const blockList=el('ul',{},provider);
  for(const r of C.gate({mode:'real',consent:true,provider:PROVIDER,governance:GOVERNANCE}).reasons)el('li',{},blockList,r);
  el('p',{},provider,'No se envía ninguna foto, no se usan credenciales y no hay gasto.');
+ el('p',{class:'photo-reform-ready',id:'photoReformReady'},provider,'Integración preparada y probada SIN ACTIVAR (contrato de proveedor v1): activarla requiere tu autorización expresa del proveedor y del gasto, y cerrar GOV-05 e IMG-04.');
  const consentLabel=el('label',{class:'photo-reform-consent'},s4);const consent=el('input',{type:'checkbox',id:'photoReformConsent'},consentLabel);
  consentLabel.append(' Entiendo que el resultado es una imagen ilustrativa, no medible, y doy mi consentimiento para procesar esta foto.');
  const scenario=el('select',{id:'photoReformScenario','aria-label':'Escenario de la simulación'},s4);for(const [v,t] of [['ok','Simulación: respuesta correcta'],['error','Simulación: el proveedor devuelve un error'],['slow','Simulación: respuesta lenta (para probar «Cancelar»)']])el('option',{value:v},scenario,t);
@@ -53,7 +56,8 @@
  const altList=el('div',{class:'photo-reform-alts',id:'photoReformAlts'},s5);
  const compare=el('figure',{class:'photo-reform-compare',id:'photoReformCompare',hidden:true},s5);
  const cmpBase=lazyImg(compare,{alt:'Original',class:'photo-reform-cmp-base'},()=>compare.firstChild),cmpTop=lazyImg(compare,{alt:'Resultado simulado',class:'photo-reform-cmp-top'},()=>cmpBase.node?.nextSibling);
- const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);};
+ // Sin resultado que comparar no queda nada a la vista: ni deslizador, ni nota de un resultado anterior, ni descarga.
+ const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);slider.hidden=true;resultNote.textContent='';dlBtn.disabled=true;};
  el('span',{class:'photo-reform-tag photo-reform-tag-before'},compare,'Original');const cmpTag=el('span',{class:'photo-reform-tag photo-reform-tag-after',id:'photoReformCmpTag'},compare,'SIMULACIÓN');
  const slider=el('input',{type:'range',min:'0',max:'100',value:'50',id:'photoReformSlider','aria-label':'Comparar original y resultado'},s5);
  const resultNote=el('p',{id:'photoReformResultNote',class:'photo-reform-result-note'},s5);
@@ -61,10 +65,22 @@
  const dlBtn=el('button',{type:'button',class:'btn',id:'photoReformDownload',disabled:true},rrow,'Descargar');
  const discardBtn=el('button',{type:'button',class:'btn',id:'photoReformDiscard'},rrow,'Descartar');
  el('small',{id:'photoReformDownloadWhy'},s5,'La descarga solo se habilitará con un proveedor autorizado: una simulación no es una propuesta para entregar.');
+ // 6 · Registro de la sesión (trazabilidad): qué se hizo y cuándo, sin imágenes ni nombres de archivo. Solo en memoria.
+ const traceBox=el('details',{class:'photo-reform-trace',id:'photoReformTrace'},wrap);el('summary',{},traceBox,'Registro de esta sesión (sin imágenes)');
+ const traceList=el('ol',{id:'photoReformTraceList'},traceBox);
+ const traceDl=el('button',{type:'button',class:'btn',id:'photoReformTraceDownload'},traceBox,'Descargar registro (JSON)');
+ el('small',{},traceBox,'Solo eventos y opciones cerradas: nunca la foto, su nombre, metadatos ni texto libre. Se borra al cerrar.');
 
- let image=null,origUrl=null,results=[],runState=null,abort=null,selected=0;
+ let image=null,origUrl=null,results=[],runState=null,abort=null,selected=0,log=[];
+ const TXT={'photo-accepted':'Foto aceptada (copia sin metadatos)','photo-rejected':'Foto rechazada','intent-set':'Intención elegida','gate-blocked':'Proveedor real bloqueado',
+  'consent-missing':'Falta el consentimiento','run-started':'Inicio','item-done':'Alternativa lista','item-error':'Error','run-cancelled':'Cancelado','run-finished':'Terminado','discarded':'Resultado descartado'};
+ function note(event,data){try{log=C.trace(log,event,data);}catch{return;}
+  const e=log[log.length-1],li=el('li',{'data-event':e.event},traceList);
+  li.textContent=`${e.at.slice(11,19)} · ${TXT[e.event]}${Object.entries(e).filter(([k])=>k!=='at'&&k!=='event').map(([k,v])=>` · ${k}: ${v}`).join('')}`;}
+ traceDl.onclick=()=>{const doc={contract:'rubik-photo-reform-trace/1',generatedAt:new Date().toISOString(),note:'Sin imágenes, nombres de archivo, metadatos ni texto libre.',entries:log};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(doc,null,2)],{type:'application/json'}));const a=el('a',{href:url,download:'rubik-reforma-foto-registro.json'},document.body);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  const revoke=()=>{if(origUrl)URL.revokeObjectURL(origUrl);origUrl=null;for(const r of results)if(r.url)URL.revokeObjectURL(r.url);results=[];};
- function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';s5.hidden=true;altList.replaceChildren();hideCompare();simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
+ function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';log=[];traceList.replaceChildren();s5.hidden=true;altList.replaceChildren();hideCompare();simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
  function refresh(){
   const r=C.request({image,intent:intentSel.value,finish:finishSel.hidden?null:finishSel.value,alternatives:altSel.value});
   sends.replaceChildren();never.replaceChildren();
@@ -72,20 +88,21 @@
   for(const t of sum.sends)el('li',{},sends,t);for(const t of sum.never)el('li',{},never,t);
   simBtn.disabled=!r.ok||runState?.status==='running';return r;
  }
- intentSel.onchange=()=>{const i=C.INTENTS.find(x=>x.id===intentSel.value);finishSel.replaceChildren();finishSel.hidden=!i?.finishes.length;if(i?.finishes.length){for(const f of i.finishes)el('option',{value:f.id},finishSel,f.label);}refresh();};
- finishSel.onchange=altSel.onchange=refresh;
+ const noteIntent=()=>{if(intentSel.value)note('intent-set',{intent:intentSel.value,finish:finishSel.hidden?null:finishSel.value,alternatives:+altSel.value});};
+ intentSel.onchange=()=>{const i=C.INTENTS.find(x=>x.id===intentSel.value);finishSel.replaceChildren();finishSel.hidden=!i?.finishes.length;if(i?.finishes.length){for(const f of i.finishes)el('option',{value:f.id},finishSel,f.label);}refresh();noteIntent();};
+ finishSel.onchange=altSel.onchange=()=>{refresh();noteIntent();};
  file.onchange=async()=>{
   fileErr.textContent='';file.removeAttribute('aria-invalid');revoke();image=null;original.hidden=true;s5.hidden=true;refresh();
   const f=file.files?.[0];if(!f)return;
   const chk=C.checkFile({size:f.size,head:new Uint8Array(await f.slice(0,16).arrayBuffer())});
-  if(!chk.ok){fileErr.textContent=chk.message;file.setAttribute('aria-invalid','true');file.value='';return;}
+  if(!chk.ok){note('photo-rejected',{reason:chk.reason});fileErr.textContent=chk.message;file.setAttribute('aria-invalid','true');file.value='';return;}
   let bmp;try{bmp=await createImageBitmap(f);}catch{bmp=null;}
   const dims=C.checkDimensions(bmp?.width,bmp?.height);
-  if(!dims.ok){bmp?.close?.();fileErr.textContent=dims.message;file.setAttribute('aria-invalid','true');file.value='';return;}
+  if(!dims.ok){bmp?.close?.();note('photo-rejected',{reason:dims.reason});fileErr.textContent=dims.message;file.setAttribute('aria-invalid','true');file.value='';return;}
   // Copia de trabajo sin metadatos: se dibuja el píxel, no el archivo.
   const c=document.createElement('canvas');c.width=dims.work.w;c.height=dims.work.h;c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);bmp.close?.();
   const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.88));
-  image={mediaType:'image/jpeg',width:c.width,height:c.height,bytes:blob.size,canvas:c};origUrl=URL.createObjectURL(blob);
+  image={mediaType:'image/jpeg',width:c.width,height:c.height,bytes:blob.size,canvas:c,blob};origUrl=URL.createObjectURL(blob);note('photo-accepted',{widthPx:c.width,heightPx:c.height});
   originalImg.set(origUrl);originalCap.textContent=`Original · ${c.width}×${c.height} px · sin metadatos`;original.hidden=false;refresh();
  };
  consent.onchange=()=>{if(consent.checked&&/consentimiento/.test(status.textContent))status.textContent='';};
@@ -110,6 +127,9 @@
    signal.addEventListener('abort',()=>{clearTimeout(t);reject(Object.assign(Error('cancelado'),{name:'AbortError'}));},{once:true});
   });
  }
+ // El adaptador simulado cumple la MISMA interfaz que el adaptador HTTP del contrato v1 (run → onItem por alternativa).
+ const simulatedAdapter=Object.freeze({id:'simulated-local',kind:'simulated',
+  async run(req,_blob,{signal,onItem,scenario:scn='ok'}){for(let i=0;i<req.alternatives;i++){const out=await simulate(req,i,signal,scn);onItem(i,{kind:'simulated',blob:out.blob});}return {ok:true};}});
  function renderAlts(){
   altList.replaceChildren();
   for(const it of runState.items){const card=el('figure',{class:'photo-reform-alt','data-status':it.status,'data-index':String(it.index)},altList);
@@ -117,32 +137,49 @@
    if(r?.url){const b=el('button',{type:'button',class:'photo-reform-alt-pick','aria-pressed':String(selected===it.index),'aria-label':`Comparar alternativa ${it.index+1} (simulación)`},card);el('img',{src:r.url,alt:`Alternativa ${it.index+1} · SIMULACIÓN`},b);b.onclick=()=>{selected=it.index;showCompare();renderAlts();};}
    el('figcaption',{},card,`Alternativa ${it.index+1} · ${({pending:'en espera',running:'preparando…',done:it.result?.badge,error:'error',cancelled:'cancelada',skipped:'no generada'})[it.status]||it.status}`);}
  }
- function showCompare(){const r=results[selected];if(!r?.url){hideCompare();return;}cmpBase.set(origUrl);cmpTop.set(r.url);compare.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
+ function showCompare(){const r=results[selected];if(!r?.url){hideCompare();return;}cmpBase.set(origUrl);cmpTop.set(r.url);compare.hidden=false;slider.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
   resultNote.textContent=`${r.label.badge}. Imagen ilustrativa, no medible. ${r.label.costText}`;dlBtn.disabled=!r.label.downloadable;}
  slider.oninput=()=>compare.style.setProperty('--cut',slider.value+'%');
- realBtn.onclick=()=>{const g=C.gate({mode:'real',consent:consent.checked,provider:PROVIDER,governance:GOVERNANCE});status.textContent='Bloqueado: '+g.reasons.join(' ');};
+ // El adaptador real solo se crearía si la puerta lo permite; en este despliegue nunca (botón desactivado y puerta cerrada).
+ realBtn.onclick=()=>{const g=C.gate({mode:'real',consent:consent.checked,provider:PROVIDER,governance:GOVERNANCE});note('gate-blocked',{mode:'real'});status.textContent='Bloqueado: '+g.reasons.join(' ');};
+ async function runWith(adapter,r,scn){
+  for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];selected=0;hideCompare();
+  abort=new AbortController();const sig=abort.signal,mode=adapter.kind==='simulated'?'simulated':'real';
+  runState=C.start(C.run(r.request.alternatives));s5.hidden=false;simBtn.hidden=true;cancelBtn.hidden=false;
+  status.textContent=mode==='simulated'?'Simulación en curso (local, sin envíos ni coste)…':'Generando con el proveedor…';renderAlts();
+  note('run-started',{mode,adapter:adapter.id,intent:r.request.intent,finish:r.request.finish??null,alternatives:r.request.alternatives});
+  const current=()=>runState?.items.findIndex(x=>x.status==='running')??-1;
+  try{
+   const out=await adapter.run(r.request,image.blob,{signal:sig,scenario:scn,onItem:(i,res)=>{
+    if(!runState||sig.aborted)return;
+    const blob=res.blob||new Blob([res.bytes],{type:res.mediaType});
+    runState=C.itemDone(runState,i,{kind:res.kind,provider:res.provider,cost:res.cost});if(runState.items[i]?.status!=='done')return;
+    results[i]={url:URL.createObjectURL(blob),label:runState.items[i].result,mediaType:blob.type};note('item-done',{index:i,costKnown:!!res.cost});
+    if(i===0)showCompare();renderAlts();}});
+   if(runState&&out?.ok===false){const k=current();runState=C.itemError(runState,Math.max(0,k),out.message);note('item-error',{index:Math.max(0,k),reason:out.reason});status.textContent=out.message;}
+   else if(runState?.status==='running'){const k=current();runState=C.itemError(runState,k,'El proveedor ha devuelto menos alternativas de las pedidas.');note('item-error',{index:k,reason:'missing-alternatives'});status.textContent=runState.error;}
+  }catch(e){
+   if(runState){
+    if(e?.name==='AbortError'){runState=C.cancel(runState);note('run-cancelled',{mode});status.textContent='Cancelado: no se ha generado nada más y no hay coste.';}
+    else{const k=current();runState=C.itemError(runState,Math.max(0,k),e.message);note('item-error',{index:Math.max(0,k),reason:'provider-error'});status.textContent=e.message;}
+   }
+  }
+  if(!runState){simBtn.hidden=false;cancelBtn.hidden=true;return;} // descartado o cerrado a mitad: no queda nada que mostrar
+  renderAlts();abort=null;simBtn.hidden=false;cancelBtn.hidden=true;refresh();
+  if(runState.status==='done'){note('run-finished',{mode,alternatives:results.filter(Boolean).length});
+   status.textContent=mode==='simulated'?`Simulación terminada: ${results.filter(Boolean).length} alternativa(s), rotuladas como SIMULACIÓN. No se ha llamado a ningún proveedor.`:`Listo: ${results.filter(Boolean).length} alternativa(s) generadas por el proveedor.`;}
+  dlg.dataset.run=runState.status;
+ }
  simBtn.onclick=async()=>{
   const r=refresh();if(!r.ok){status.textContent=r.message;return;}
   const g=C.gate({mode:'simulated',consent:consent.checked});
-  if(!g.allowed){status.textContent='No se procesa: '+g.reasons.join(' ');consent.focus();return;}
-  for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];selected=0;hideCompare();
-  abort=new AbortController();const sig=abort.signal,scn=scenario.value;
-  runState=C.start(C.run(r.request.alternatives));s5.hidden=false;simBtn.hidden=true;cancelBtn.hidden=false;status.textContent='Simulación en curso (local, sin envíos ni coste)…';renderAlts();
-  for(let i=0;i<r.request.alternatives;i++){
-   try{const out=await simulate(r.request,i,sig,scn);runState=C.itemDone(runState,i,{kind:out.kind});results[i]={url:URL.createObjectURL(out.blob),label:runState.items[i].result};if(i===0)showCompare();}
-   catch(e){if(!runState)break; // descartado o cerrado durante la simulación: no queda nada que mostrar
-    if(e.name==='AbortError'){runState=C.cancel(runState);status.textContent='Cancelado: no se ha generado nada más y no hay coste.';}
-    else{runState=C.itemError(runState,i,e.message);status.textContent=e.message;}break;}
-   renderAlts();
-  }
-  if(!runState){simBtn.hidden=false;cancelBtn.hidden=true;return;}
-  renderAlts();abort=null;simBtn.hidden=false;cancelBtn.hidden=true;refresh();
-  if(runState.status==='done')status.textContent=`Simulación terminada: ${results.filter(Boolean).length} alternativa(s), rotuladas como SIMULACIÓN. No se ha llamado a ningún proveedor.`;
-  dlg.dataset.run=runState.status;
+  if(!g.allowed){note('consent-missing',{mode:'simulated'});status.textContent='No se procesa: '+g.reasons.join(' ');consent.focus();return;}
+  await runWith(simulatedAdapter,r,scenario.value);
  };
  cancelBtn.onclick=()=>abort?.abort();
- discardBtn.onclick=()=>{abort?.abort();abort=null;for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();altList.replaceChildren();status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
- dlBtn.onclick=()=>{};// nunca habilitado para simulaciones
+ discardBtn.onclick=()=>{abort?.abort();abort=null;for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();altList.replaceChildren();note('discarded',{});status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
+ // Solo para resultados GENERADOS por un proveedor autorizado (label.downloadable); una simulación nunca se descarga.
+ dlBtn.onclick=()=>{const r=results[selected];if(!r?.url||!r.label.downloadable)return;const a=el('a',{href:r.url,download:`rubik-reforma-alternativa-${selected+1}.${r.mediaType==='image/png'?'png':r.mediaType==='image/webp'?'webp':'jpg'}`},document.body);a.click();a.remove();};
  closeBtn.onclick=()=>{dlg.close();};
  dlg.addEventListener('close',reset);
  function open(){reset();dlg.showModal();file.focus();}

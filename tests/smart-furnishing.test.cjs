@@ -218,3 +218,34 @@ test('densidad: más densidad, más piezas (mismo uso, receta y semilla)', () =>
   const p = emptied('rom_living'), n = d => ok(SF.generate(p, { roomId: 'rom_living', use: 'living', density: d, recipeId: 'nordico', seed: 1 })).items.length;
   const [lo, me, hi] = SF.DENSITIES.map(n); assert.ok(lo < me && me < hi, `${lo} < ${me} < ${hi}`);
 });
+
+// Propiedad (auditoría adversarial): en plantas GIRADAS a ángulos arbitrarios, toda propuesta generada se puede aplicar
+// (la revisión exacta del conjunto no la rechaza) y el verificador independiente no encuentra ninguna violación. Antes de
+// esta prueba, la mesilla pegada a la cama podía solapar 0,1–0,5 mm tras redondear a mm enteros en un dormitorio girado:
+// la propuesta se mostraba como válida y «Aplicar» la rechazaba.
+function rotated(p0, deg, dx, dy) {
+  const q = C.clone(p0), a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a), T = pt => ({ x: Math.round(pt.x * c - pt.y * s + dx), y: Math.round(pt.x * s + pt.y * c + dy) });
+  for (const w of q.walls) { w.start = T(w.start); w.end = T(w.end); }
+  for (const r of q.rooms) { r.polygon = r.polygon.map(T); if (r.labelAt) r.labelAt = T(r.labelAt); }
+  for (const o of q.objects) { o.position = T(o.position); o.rotationDeg = ((Math.round(o.rotationDeg + deg) % 360) + 360) % 360; }
+  q.measurements = [];
+  // Redondear a mm enteros puede dejar un hueco 1 mm más largo que su muro girado: solo ese hueco se retira (montaje de la prueba).
+  for (let k = 0; k < 30; k++) { try { C.validate(q); return q; } catch (e) { const m = /openings\/([^:]+):/.exec(e.message); if (!m) throw e; q.openings = q.openings.filter(o => o.id !== m[1]); } }
+  throw Error('planta girada no válida');
+}
+test('propiedad en plantas giradas (17°, 30°, 133°): toda propuesta se aplica y el verificador independiente no ve violaciones', () => {
+  let cases = 0;
+  for (const deg of [17, 30, 133]) {
+    const t = rotated(base(), deg, deg * 7, -deg * 3), ds = doors(t);
+    for (const [room, use] of [['rom_kid', 'bedroom'], ['rom_living', 'living'], ['rom_dining', 'dining']]) {
+      const sc = P.scene(t), p = C.clone(t); p.objects = p.objects.filter(o => !P.roomsAt(sc, o.position).some(r => r.id === room));
+      for (const recipeId of Object.keys(SF.RECIPES)) for (const density of ['medium', 'high']) {
+        const r = SF.generate(p, { roomId: room, use, density, recipeId, seed: 1 }); if (!r.ok) continue; cases++;
+        const a = SF.apply(p, r, { acceptEstimatedScale: true });
+        assert.ok(a.ok, `${deg}° ${room} ${recipeId}/${density}: «Aplicar» rechaza una propuesta mostrada: ${a.message}`);
+        assert.deepEqual(verify(a.project, a.added, ds), [], `${deg}° ${room} ${recipeId}/${density}`);
+      }
+    }
+  }
+  assert.ok(cases >= 40, `casos evaluados: ${cases}`);
+});

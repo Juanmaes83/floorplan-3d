@@ -78,13 +78,30 @@
 
  // Etiqueta obligatoria de cada resultado. Un resultado simulado nunca se presenta como generado; el coste se desconoce.
  function label(result={}){
-  const simulated=result.kind!=='generated';
-  return {kind:simulated?'simulated':'generated',badge:simulated?'SIMULACIÓN · no generada por IA':'Imagen generada por IA · ilustrativa, no medible',
-   cost:simulated?null:(Number.isFinite(result.cost)?result.cost:null),
-   costText:simulated?'Coste: no aplica (no se ha llamado a ningún proveedor).':(Number.isFinite(result.cost)?null:'Coste: desconocido (el proveedor no lo ha informado).'),
+  const simulated=result.kind!=='generated',name=typeof result.provider?.name==='string'?result.provider.name:null;
+  // Coste: número (compatibilidad) o {amount,currency} tal como lo informa el proveedor. Sin cifra, «desconocido».
+  const c=Number.isFinite(result.cost)?{amount:result.cost,currency:null}:result.cost&&Number.isFinite(result.cost.amount)?{amount:result.cost.amount,currency:result.cost.currency||null}:null;
+  return {kind:simulated?'simulated':'generated',
+   badge:simulated?'SIMULACIÓN · no generada por IA':`Imagen generada por IA${name?` (${name})`:''} · ilustrativa, no medible`,
+   cost:simulated?null:(c?(c.currency?c:c.amount):null),
+   costText:simulated?'Coste: no aplica (no se ha llamado a ningún proveedor).':c?`Coste informado por el proveedor: ${c.amount}${c.currency?' '+c.currency:''}.`:'Coste: desconocido (el proveedor no lo ha informado).',
    downloadable:!simulated,illustrative:true};
  }
 
- const api={VERSION,LIMITS,INTENTS,sniff,checkFile,checkDimensions,intentOf,request,gate,run,start,itemDone,itemError,cancel,label};
+ // Trazabilidad de la sesión: qué pasó y cuándo, con campos CERRADOS. Nunca el contenido de la imagen, el nombre del
+ // archivo, metadatos ni texto libre. Vive en memoria mientras el diálogo está abierto; no se guarda en el proyecto.
+ const TRACE_EVENTS=['photo-accepted','photo-rejected','intent-set','gate-blocked','consent-missing','run-started','item-done','item-error','run-cancelled','run-finished','discarded'];
+ const TRACE_FIELDS={mode:v=>v==='simulated'||v==='real',adapter:v=>/^[a-z0-9-]{1,32}$/.test(v),intent:v=>INTENTS.some(i=>i.id===v),finish:v=>v===null||typeof v==='string'&&/^[a-z-]{1,24}$/.test(v),
+  alternatives:v=>Number.isInteger(v)&&v>=1&&v<=LIMITS.alternatives[1],index:v=>Number.isInteger(v)&&v>=0&&v<LIMITS.alternatives[1],reason:v=>/^[a-z-]{1,32}$/.test(v),
+  widthPx:v=>Number.isInteger(v)&&v>0&&v<=LIMITS.maxSide,heightPx:v=>Number.isInteger(v)&&v>0&&v<=LIMITS.maxSide,costKnown:v=>typeof v==='boolean'};
+ const TRACE_MAX=200;
+ function trace(list,event,data={},at=new Date()){
+  if(!TRACE_EVENTS.includes(event))throw Error('Evento de traza desconocido.');
+  const entry={at:at.toISOString(),event};
+  for(const [k,v] of Object.entries(data)){if(v===undefined)continue;if(!TRACE_FIELDS[k]||!TRACE_FIELDS[k](v))throw Error(`Campo de traza no admitido: ${k}`);entry[k]=v;}
+  return [...(list||[]),entry].slice(-TRACE_MAX);
+ }
+
+ const api={VERSION,LIMITS,INTENTS,sniff,checkFile,checkDimensions,intentOf,request,gate,run,start,itemDone,itemError,cancel,label,trace,TRACE_EVENTS};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikPhotoReformCore=api;
 })(globalThis);

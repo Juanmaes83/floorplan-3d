@@ -53,3 +53,9 @@
 .photo-reform-result-note{margin:0;font-size:13px;font-weight:600;color:#7a0016}
 .photo-reform-card-entry{display:grid;gap:4px;margin-top:8px}
 .photo-reform-card-entry small{font-size:12px;color:var(--muted,#6b6257)}
+/* FOT-01 · integración preparada sin activar y registro de la sesión */
+.photo-reform-ready{margin:.5rem 0 0;font-size:.85rem;color:var(--muted,#5b5650)}
+.photo-reform-trace{margin-top:1rem;border-top:1px solid var(--line,#d8d2c8);padding-top:.75rem}
+.photo-reform-trace summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+.photo-reform-trace ol{margin:.5rem 0;padding-left:1.25rem;font-size:.85rem;max-height:12rem;overflow:auto}
+.photo-reform-trace small{display:block;margin-top:.4rem;color:var(--muted,#5b5650)}
