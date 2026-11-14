@@ -1,7 +1,8 @@
 'use strict';
-/* FOT-01 · contrato de proveedor v1 (js/photo-reform-provider.js), SIN ACTIVAR en el producto. El adaptador HTTP se
-   prueba aquí contra un servidor LOCAL simulado (127.0.0.1): ninguna llamada sale de la máquina, no hay claves reales
-   ni gasto. El «proveedor de prueba» es un doble de prueba: el producto nunca lo registra ni lo muestra. */
+/* FOT-01 · cliente del contrato photo-reform/1 (js/photo-reform-provider.js), SIN ACTIVAR en el producto. El adaptador
+   de servidor (serverAdapter, mismo origen, sin secretos del proveedor) se prueba aquí contra un servidor LOCAL simulado
+   (127.0.0.1) que imita /api/photo-reform: ninguna llamada sale de la máquina, no hay claves reales ni gasto. El
+   servidor real se prueba en tests/photo-reform-api.test.cjs. El «proveedor de prueba» es un doble de prueba. */
 const test=require('node:test'),assert=require('node:assert/strict');
 const http=require('node:http');
 const P=require('../js/photo-reform-provider.js'),C=require('../js/photo-reform-core.js');
@@ -12,55 +13,69 @@ const req=n=>C.request({image:{mediaType:'image/jpeg',width:1600,height:1200,byt
 const image=()=>new Blob([JPEG],{type:'image/jpeg'});
 const ok=(alts,cost={amount:0.08,currency:'USD'})=>({version:1,provider:{id:'proveedor-prueba',name:'Proveedor de prueba'},cost,alternatives:alts});
 
-// Servidor local: guarda lo recibido y responde lo que diga cada prueba.
-async function mock(handler){
+// Servidor local que imita /api/photo-reform: «quote» responde una estimación; «generate» lo decide cada prueba.
+const CODE='codigo-de-acceso-de-prueba-0123456789';
+const QUOTE={version:1,contract:'photo-reform/1',confirmationId:'nonce-de-prueba-0001.1999999999999.'+'s'.repeat(43),expiresAt:'2026-11-14T15:10:00.000Z',provider:{id:'proveedor-prueba',name:'Proveedor de prueba'},model:'modelo-prueba',
+ estimate:{amount:0.08,currency:'USD',basis:'price-per-image-env',priceDate:'2026-11-14',outputs:1},budget:{capUsd:0.5,maxOutputs:4,spentUsd:0,outputsUsed:0}};
+async function mock(handler,{quote=(res)=>json(res,200,QUOTE)}={}){
  const seen=[];
  const server=http.createServer(async(r,res)=>{
-  const chunks=[];for await(const c of r)chunks.push(c);const body=Buffer.concat(chunks);
-  const form=await new Request('http://local/',{method:'POST',headers:{'content-type':r.headers['content-type']},body}).formData();
-  seen.push({headers:r.headers,form});await handler(res,form);
+  const chunks=[];for await(const c of r)chunks.push(c);let body=null;try{body=JSON.parse(Buffer.concat(chunks).toString());}catch{}
+  seen.push({url:r.url,headers:r.headers,body});if(body?.action==='quote')return quote(res,body);await handler(res,body);
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
- return {url:`http://127.0.0.1:${server.address().port}/photo-reform`,seen,close:()=>new Promise(r=>server.close(r))};
+ return {origin:`http://127.0.0.1:${server.address().port}`,seen,close:()=>new Promise(r=>server.close(r))};
 }
+const adapter=(s,{confirm=async()=>true}={})=>P.serverAdapter({accessCode:CODE,origin:s.origin,confirm});
 const json=(res,status,obj)=>{res.writeHead(status,{'content-type':'application/json'});res.end(typeof obj==='string'?obj:JSON.stringify(obj));};
 
 test('configuración de este despliegue: sin proveedor; la puerta real sigue cerrada con sus cuatro motivos', () => {
   const cfg=P.config();assert.equal(cfg.configured,false);assert.equal(cfg.authorized,false);assert.equal(cfg.endpoint,null);assert.ok(Object.isFrozen(cfg));
   const g=C.gate({mode:'real',consent:true,provider:cfg,governance:cfg.governance});
   assert.equal(g.allowed,false);assert.equal(g.reasons.length,4);
-  assert.throws(()=>P.httpAdapter({endpoint:'http://ejemplo.test/x',token:'t'}),/Endpoint/,'solo https (o 127.0.0.1 en pruebas)');
-  assert.throws(()=>P.httpAdapter({endpoint:'https://ejemplo.test/x'}),/autorización/);
+  assert.equal(P.httpAdapter,undefined,'el antiguo adaptador con Bearer desde el navegador ya no existe');
+  assert.throws(()=>P.serverAdapter({accessCode:'corto',confirm:()=>true,origin:'https://rubik.test'}),/código de acceso/);
+  assert.throws(()=>P.serverAdapter({accessCode:CODE,origin:'https://rubik.test'}),/confirmación de gasto/);
+  assert.equal(P.ENDPOINT,'/api/photo-reform');
 });
 
-test('envío: solo la solicitud cerrada y la imagen recomprimida con nombre fijo; nunca el proyecto, el nombre ni texto libre', async () => {
+test('envío: mismo origen, sin secretos del proveedor; solo la solicitud cerrada y la imagen recomprimida; presupuesto confirmado antes de generar', async () => {
   const s=await mock((res)=>json(res,200,ok([{index:0,mediaType:'image/jpeg',data:JPEG.toString('base64')},{index:1,mediaType:'image/png',data:PNG.toString('base64')}])));
   try{
-    const items=[];const a=P.httpAdapter({endpoint:s.url,token:'token-de-prueba'});
+    const items=[],quotes=[];const a=adapter(s,{confirm:async q=>{quotes.push(q);return true;}});
     const out=await a.run(req(2),image(),{onItem:(i,r)=>items.push([i,r])});
-    assert.equal(out.ok,true);assert.equal(out.count,2);
-    const {headers,form}=s.seen[0];
-    assert.equal(headers.authorization,'Bearer token-de-prueba');assert.equal(headers['x-rubik-contract'],'photo-reform/1');
-    assert.deepEqual([...form.keys()].sort(),['image','request']);
-    assert.deepEqual(JSON.parse(form.get('request')),{version:1,intent:'floor',finish:'walnut',alternatives:2});
-    assert.equal(form.get('image').name,'photo.jpg');assert.equal(form.get('image').type,'image/jpeg');
-    assert.deepEqual(Buffer.from(await form.get('image').arrayBuffer()),JPEG);
+    assert.equal(out.ok,true);assert.equal(out.count,2);assert.equal(quotes.length,1);assert.equal(quotes[0].estimate.amount,0.08);
+    assert.deepEqual(s.seen.map(x=>[x.url,x.body.action]),[['/api/photo-reform','quote'],['/api/photo-reform','generate']]);
+    for(const {headers} of s.seen){assert.equal(headers.authorization,undefined,'nunca Authorization desde el navegador');assert.equal(headers['x-rubik-render-token'],undefined);
+      assert.equal(headers['x-rubik-photo-reform-token'],CODE);assert.equal(headers['x-rubik-contract'],'photo-reform/1');assert.match(headers['content-type'],/^application\/json/);}
+    const [q,g]=s.seen.map(x=>x.body);
+    assert.deepEqual(Object.keys(q).sort(),['action','imageBytes','imageSha256','request']);assert.deepEqual(q.request,{version:1,intent:'floor',finish:'walnut',alternatives:2});
+    assert.equal(q.imageSha256,require('node:crypto').createHash('sha256').update(JPEG).digest('hex'));assert.equal(q.imageBytes,JPEG.length);
+    assert.deepEqual(Object.keys(g).sort(),['action','confirmationId','idempotencyKey','image','request']);assert.equal(g.confirmationId,QUOTE.confirmationId);assert.match(g.idempotencyKey,/^[A-Za-z0-9_-]{16,64}$/);
+    assert.equal(g.image,'data:image/jpeg;base64,'+JPEG.toString('base64'));
+    assert.doesNotMatch(JSON.stringify(s.seen.map(x=>x.body)),/width|height|metadata|IMG_|exif|project/i,'ni metadatos, ni nombre, ni proyecto');
     // Resultado GENERADO (doble de prueba): rótulo con el proveedor, coste solo el informado, descargable.
     assert.deepEqual(items.map(([i,r])=>[i,r.kind,r.mediaType]),[[0,'generated','image/jpeg'],[1,'generated','image/png']]);
     const l=C.label({kind:'generated',provider:items[0][1].provider,cost:items[0][1].cost});
     assert.equal(l.badge,'Imagen generada por IA (Proveedor de prueba) · ilustrativa, no medible');
     assert.equal(l.costText,'Coste informado por el proveedor: 0.08 USD.');assert.equal(l.downloadable,true);
     assert.equal(C.label({kind:'generated',provider:{name:'X'},cost:null}).costText,'Coste: desconocido (el proveedor no lo ha informado).','sin cifra no se inventa');
+    // Si la persona no confirma el gasto estimado, no se envía la imagen.
+    const n=s.seen.length;const no=await adapter(s,{confirm:async()=>false}).run(req(1),image(),{});
+    assert.equal(no.reason,'not-confirmed');assert.deepEqual(s.seen.slice(n).map(x=>x.body.action),['quote']);
   }finally{await s.close();}
 });
 
 test('errores del proveedor: saldo, límite, desactivado, autorización y error interno; nunca hay imagen', async () => {
-  for(const [status,reason] of [[402,'payment'],[429,'limit'],[503,'disabled'],[401,'unauthorized'],[500,'provider-error']]){
-    const s=await mock(res=>json(res,status,{error:'x'}));
-    try{const items=[];const out=await P.httpAdapter({endpoint:s.url,token:'t'}).run(req(1),image(),{onItem:(...a)=>items.push(a)});
-      assert.equal(out.ok,false);assert.equal(out.reason,reason,String(status));assert.equal(items.length,0);}
+  for(const [status,reason] of [[402,'budget'],[409,'confirmation'],[429,'limit'],[503,'disabled'],[401,'unauthorized'],[500,'provider-error'],[502,'provider-error']]){
+    const s=await mock(res=>json(res,status,{error:'budget-exceeded'}));
+    try{const items=[];const out=await adapter(s).run(req(1),image(),{onItem:(...a)=>items.push(a)});
+      assert.equal(out.ok,false);assert.equal(out.reason,reason,String(status));assert.equal(items.length,0);assert.equal(out.code,'budget-exceeded');}
     finally{await s.close();}
   }
+  // El servidor cerrado (503) ya en el presupuesto: no se llega a generar.
+  const s=await mock(()=>assert.fail('no debe generar'),{quote:res=>json(res,503,{error:'budget-not-approved'})});
+  try{const out=await adapter(s).run(req(1),image(),{});assert.equal(out.reason,'disabled');assert.equal(out.code,'budget-not-approved');assert.equal(s.seen.length,1);}finally{await s.close();}
 });
 
 test('respuestas que no cumplen el contrato se descartan: nada se muestra ni se inventa', async () => {
@@ -80,7 +95,7 @@ test('respuestas que no cumplen el contrato se descartan: nada se muestra ni se 
   ];
   for(const body of bad){
     const s=await mock(res=>json(res,200,body));
-    try{const items=[];const out=await P.httpAdapter({endpoint:s.url,token:'t'}).run(req(1),image(),{onItem:(...a)=>items.push(a)});
+    try{const items=[];const out=await adapter(s).run(req(1),image(),{onItem:(...a)=>items.push(a)});
       assert.equal(out.ok,false,JSON.stringify(body).slice(0,80));assert.equal(out.reason,'invalid-response');assert.equal(items.length,0);}
     finally{await s.close();}
   }
@@ -91,15 +106,17 @@ test('cancelar a mitad: la petición se aborta y no llega ningún resultado', as
   const s=await mock(async res=>{await new Promise(r=>setTimeout(r,1500));json(res,200,ok([{index:0,mediaType:'image/jpeg',data:JPEG.toString('base64')}]));});
   try{
     const ctl=new AbortController(),items=[];setTimeout(()=>ctl.abort(),200);
-    await assert.rejects(P.httpAdapter({endpoint:s.url,token:'t'}).run(req(1),image(),{signal:ctl.signal,onItem:(...a)=>items.push(a)}),e=>e.name==='AbortError');
+    await assert.rejects(adapter(s).run(req(1),image(),{signal:ctl.signal,onItem:(...a)=>items.push(a)}),e=>e.name==='AbortError');
     assert.equal(items.length,0);
   }finally{await s.close();}
 });
 
 test('sin red: un endpoint que no responde es «network», no un resultado', async () => {
-  const out=await P.httpAdapter({endpoint:'http://127.0.0.1:9/nada',token:'t'}).run(req(1),image(),{});
+  const a=P.serverAdapter({accessCode:CODE,origin:'http://127.0.0.1:9',confirm:async()=>true});
+  const out=await a.run(req(1),image(),{});
   assert.equal(out.ok,false);assert.equal(out.reason,'network');
-  assert.equal((await P.httpAdapter({endpoint:'http://127.0.0.1:9/nada',token:'t'}).run(req(1),new Blob(['x'],{type:'text/plain'}),{})).reason,'bad-request');
+  assert.equal((await a.run(req(1),new Blob(['x'],{type:'text/plain'}),{})).reason,'bad-request');
+  assert.equal((await a.run(req(1),new Blob([PNG],{type:'image/jpeg'}),{})).reason,'bad-request','el tipo declarado no coincide con los bytes');
 });
 
 test('trazabilidad: campos cerrados; nunca nombre de archivo, contenido ni texto libre', () => {
