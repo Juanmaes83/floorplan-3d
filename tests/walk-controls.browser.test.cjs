@@ -129,7 +129,10 @@ test('phone: joystick, drag to look, tap a door, «Salir del recorrido» 390x844
  assert.ok(record(vp,'Tocar la puerta (cerrar)','la cierra (la imagen cambia) y no se puede pasar',JSON.stringify({open:await state(),changed:closedChanged,room:c1.room}),await state()===false&&closedChanged&&c1.room!=='Baño',await shot('tap-door-close')));
  // Into the room: the stick is tilted towards the target relative to the view (forward = up, right = right).
  const stickTo=async(w,ms)=>{const a=await where(),rel=Math.atan2(w[1]-a.p[1],w[0]-a.p[0])-Math.atan2(a.fwd[1],a.fwd[0]);await push(Math.sin(rel)*50,-Math.cos(rel)*50,ms);};
- const openChanged=await tapDoor();for(let n=0;n<14&&dist((await where()).p,[4850,1600])>200;n++)await stickTo([4850,1600],500);const inBath=await where();
+ // Pushes shorten with the remaining distance and stop once the person is well inside the bath: with fixed 500 ms
+ // pushes a slow CI runner moved ~1.3 m per push and the person bounced across the doorway (Baño ↔ Salón) without
+ // ever landing within 200 mm of the target, ending on whichever side the 14th push left it (seen in CI on #225).
+ const openChanged=await tapDoor();for(let n=0;n<20;n++){const w=await where(),d=dist(w.p,[4850,1600]);if(d<200||(w.room==='Baño'&&w.p[1]<1900))break;await stickTo([4850,1600],Math.max(120,Math.min(500,d*.35)));}const inBath=await where();
  assert.ok(record(vp,'Tocar la puerta (abrir)','la abre (la imagen cambia) y se puede pasar',JSON.stringify({open:await state(),changed:openChanged,room:inBath.room,at:inBath.p.map(Math.round),aim:await page.evaluate(()=>View3D.walkAim)}),await state()===true&&openChanged&&inBath.room==='Baño',await shot('tap-door-open')));
  await tap('#walkExit');await page.waitForTimeout(800);const out=await where();
  assert.ok(record(vp,'«Salir del recorrido»','vuelve a la vista aérea y oculta el joystick',JSON.stringify({mode:out.mode,joy:await page.locator('#joy').isVisible()}),out.mode==='orbit'&&!(await page.locator('#joy').isVisible()),await shot('exit')));
