@@ -47,7 +47,7 @@ test('«¿Cuánto cuesta este producto?»: ficha = referencia sin aplicar; tras 
  let r=SE.handle('¿Cuánto cuesta este producto?',{...before.ctx('es'),selection:sel});const t=r.messages[1].text;
  assert.match(t,/precio de ficha disponible como referencia, sin aplicar/);assert.match(t,/ficha 690 EUR\/ud \(Tarifa sintética QA/);assert.match(t,/sin precio activo en el presupuesto/);assert.match(t,/importe de la partida no disponible/);assert.match(t,/no tiene total completo: \d+ partidas sin precio/);oracle(r);
  const after=world({apply:true});r=SE.handle('How much does this product cost?',{...after.ctx('en'),selection:sel});const line=after.calc.lines.find(l=>l.id===RB);
- assert.equal(line.subtotalNet,1380);assert.match(r.messages[1].text,/active price in the budget 690 EUR \(not reviewed\)/);assert.match(r.messages[1].text,new RegExp(`item amount ${line.subtotalNet.toLocaleString('en-GB')} EUR excl\\. VAT`));
+ assert.equal(line.subtotalNet,1380);assert.match(r.messages[1].text,/active price in the budget 690 EUR\/ud \(not reviewed\)/);assert.match(r.messages[1].text,new RegExp(`item amount ${line.subtotalNet.toLocaleString('en-GB')} EUR excl\\. VAT`));
  assert.match(r.messages[1].text,new RegExp(`${after.calc.totals.unpricedItemIds.length} items without a price`));oracle(r);
  const z=SE.handle('这个产品多少钱？',{...after.ctx('zh'),selection:sel});assert.match(z.messages[1].text,/690 EUR/);oracle(z);
  const oven=SE.handle('¿Cuánto cuesta el horno H60?',after.ctx('es'));assert.match(oven.messages[1].text,/QA-H60-INOX.*la ficha no tiene precio; precio de ficha no disponible; sin precio activo en el presupuesto; importe de la partida no disponible/);oracle(oven);

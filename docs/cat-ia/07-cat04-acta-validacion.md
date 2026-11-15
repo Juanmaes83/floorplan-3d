@@ -294,3 +294,48 @@ La cabecera de la columna de Presupuestar dice «Precio €/ud» para todas las 
 - Un vínculo visual antiguo sin estudio se muestra «estudio desconocido» hasta que el profesional lo **quita y lo vuelve a vincular**. Ya no basta con volver a vincularlo, porque eso sería una reatribución silenciosa.
 
 **NO MERGE · NO PRODUCTION · STOP_GASTO.** #238 no se ha modificado.
+
+## 10. Addendum — corrección final de la auditoría cruzada F1–F7 (HEAD auditado `eb01c74`)
+
+**Alcance:**
+
+- se cierran los bloqueantes F1 y F2, y F3–F7 en el mismo pase;
+- **no** se añade ningún cálculo económico: todo sale de `FloorPlanBudget.calculateBudget()` y del documento de Presupuestar;
+- **no** se modifica #238;
+- **no** se activa ningún proveedor.
+
+### Reproducción en `eb01c74` (rojo) → corrección (verde)
+
+| | Rojo en `eb01c74` (texto real del Asistente) | Corrección | Prueba |
+|---|---|---|---|
+| **F1** total incompleto por cantidad o IVA | «El presupuesto está incompleto porque **0 partidas no tienen precio: .**» · «El total no se puede dar: **0 de 11 partidas sin precio**» (la causa real era una cantidad pendiente) | `get_budget_summary` (y `get_placed_products.total`) devuelven `incomplete` con las causas separadas: `unpriced`, `quantityPending` (con partidas y tipo: comercial o del plano), `quantityEstimated`, `taxPending`, `unreviewedPrices`, `netComputable` y `grossComputable`. `amount` sigue siendo `null` cuando no se puede calcular. Las intenciones `budget`, `budget_detail` y `product_cost` explican la causa real (ES/EN/ZH): «incompleto, pero no por precios: 1 partida con la cantidad pendiente de medición», «IVA sin definir». Nunca dicen «0 sin precio». En Presupuestar el total se rotula «Total parcial (…causas…)» siempre que no está completo | `tests/cat04-f1f2.test.cjs` 1–3 |
+| **F2** unidad y origen del precio | «precio activo en el presupuesto **180 EUR**» para un precio de 180 €/m, sin unidad, junto a «ficha 690 EUR/ud» | `get_placed_products` toma `quantity` y `unit` de la **partida de `FloorPlanBudget`**. `objectCount` (recuento de CAT-03) va aparte y rotulado. `price{unitPrice, unit, source{type, label, asOf}, reviewed, reference}` y `unitConflict{budgetUnit, sheetUnit}`. El Asistente dice «180 EUR/m (sin revisar) · origen del precio: precio propio · conflicto de unidad: unidad de la ficha (ud) distinta de la del precio (m) · 1 objeto colocado (recuento, no cantidad económica)». Nunca «€/ud» por defecto | `cat04-f1f2.test.cjs` 4–5 (€/m, €/m², ficha desaparecida) y `cat04-f1f2.browser` (escritorio ES/EN/ZH y móvil EN) |
+
+### Calidad, en el mismo pase y sin cambiar contratos ajenos
+
+- **F3:** `states()` devuelve `unit-conflict` cuando hay un precio (manual o aplicado desde S2) y la unidad de la partida ya no coincide con la de la ficha. Tiene prioridad sobre `applied-unreviewed` y `stale`. Rótulo en Presupuestar y en el Asistente (ES/EN/ZH). Prueba: `cat04-f1f2.test.cjs` 6 y `cat04-f1f2.browser` (`data-state="unit-conflict"`).
+- **F4:** «verificada» se precisa como «solo la huella visual: no certifica el producto ni la ficha comercial». Cada referencia muestra la ficha comercial y el **estudio**. El Asistente lo dice y la herramienta devuelve `studioId`.
+- **F5:** la cabecera «Precio €/ud» pasa a ser «Precio unitario (€ por la unidad de la partida)». Cada fila muestra su unidad real (`€/m`, `€/m²`, `€/ud`) en `[data-field="priceUnit"]` y en la etiqueta accesible.
+- **F6:** las advertencias de Presupuestar separan «cantidades del plano parciales», «cantidades del plano no disponibles» y «partidas comerciales con la cantidad pendiente de medición» (`data-kind`). El Asistente distingue «cantidad comercial» de «medición del plano».
+- **F7:** en `catalog-ia.browser` («CAT-02 escritorio», líneas 89 y 91) se espera al mensaje del `FileReader` asíncrono antes de leerlo. **Las aserciones son las mismas**: misma expresión y mismo elemento. Local: 3/3 en tres ejecuciones.
+
+### Cambios en aserciones existentes (ninguna se rebaja)
+
+- `cat04-assistant.test.cjs`: «active price in the budget 690 EUR (not reviewed)» pasa a «690 EUR**/ud** (not reviewed)». Es la consecuencia directa de F2, y la aserción queda más estricta.
+- Ninguna otra aserción cambia. La pregunta del nuevo test de navegador usa el SKU porque «aparador Lumen» es ambiguo (roble y nogal) y el Asistente pide aclaración, que es lo correcto.
+
+### Evidencias
+
+| Evidencia | Contenido |
+|---|---|
+| `tests/cat04-f1f2.test.cjs` | 6 pruebas puras con las herramientas y la sesión **reales** del Asistente |
+| `tests/cat04-f1f2.browser.test.cjs` | Editor real: escritorio 1440×900 en ES/EN/ZH y móvil 390×844 en EN |
+| TAP «antes» | Pruebas puras 0/6 y navegador 0/2 en `eb01c74` (guardados en local con la salida literal) |
+| TAP «después» | 6/6 y 2/2 |
+| `scripts/qa/record-cat04.cjs` | Ahora incluye las pruebas F1/F2: vídeos con `ffprobe` y decodificación completa, capturas `f1f2-01…07` y manifiesto con SHA-256 (artefacto `cat04-<sha>` de la CI) |
+
+### Límites
+
+- La causa «impuestos» se detecta como IVA del presupuesto sin definir. No se infiere ningún tipo.
+- El recuento de objetos nunca se convierte en cantidad económica de una partida por m o m²: la cantidad sigue pendiente hasta que el profesional la indique.
+- **Revisión independiente:** se pide a una ventana distinta de las autoras (esta sesión es autora de CAT-04; la de XR es autora del Asistente V2).

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* CAT-04 · evidencias del flujo completo en el editor REAL: ejecuta tests/cat04.browser.test.cjs y tests/cat04-xr.browser.test.cjs
+/* CAT-04 · evidencias del flujo completo en el editor REAL: ejecuta tests/cat04.browser.test.cjs, tests/cat04-xr.browser.test.cjs y tests/cat04-f1f2.browser.test.cjs (F1/F2)
    (auditoría cruzada XR-01/XR-02) (mismas aserciones) con
    vídeo (Playwright recordVideo) y capturas; comprueba cada vídeo con ffprobe y una decodificación completa con ffmpeg;
    escribe qa-results/cat04/manifest.json con SHA-256, duración, HEAD, versiones y el resultado de las pruebas.
@@ -8,7 +8,7 @@
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{execFileSync,spawnSync}=require('node:child_process');
 const ROOT=path.join(__dirname,'../..'),OUT=path.join(ROOT,'qa-results/cat04'),VID=path.join(OUT,'videos'),SHOTS=path.join(OUT,'screens');
 fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(VID,{recursive:true});fs.mkdirSync(SHOTS,{recursive:true});
-const FILES=['tests/cat04.browser.test.cjs','tests/cat04-xr.browser.test.cjs'];
+const FILES=['tests/cat04.browser.test.cjs','tests/cat04-xr.browser.test.cjs','tests/cat04-f1f2.browser.test.cjs'];
 const run=spawnSync(process.execPath,['--test','--test-concurrency=1',...FILES],{cwd:ROOT,env:{...process.env,CAT04_VIDEO:VID,CAT04_SHOTS:SHOTS},encoding:'utf8',maxBuffer:64<<20});
 const tap=run.stdout+run.stderr,count=k=>Number((new RegExp(`^# ${k} (\\d+)`,'m').exec(tap)||[])[1]||0);
 const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');

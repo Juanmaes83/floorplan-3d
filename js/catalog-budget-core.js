@@ -97,7 +97,11 @@
   const items=new Map((budget?.items||[]).map(i=>[i.id,i]));
   return report.map(r=>{const it=items.get(r.itemId)||null,ref=it?.priceReference||null,q=r.price.quote,fromCatalog=ref?.providerId===PROVIDER_ID;
    let state;
+   // F3 (cross-audit #237): a price (manual or applied from S2) whose item unit no longer matches the sheet unit is a
+   // UNIT CONFLICT, never «applied, pending review» nor «stale»: the price stays with its unit, without amount.
+   const unitConflict=!!it&&it.unitPrice!==null&&!r.retired&&!!r.unit&&it.quantity?.unit!==r.unit;
    if(!it)state='missing';
+   else if(unitConflict)state='unit-conflict';
    else if(it.unitPrice!==null&&it.priceSource?.type==='provider-reference'&&fromCatalog)state=q&&!sameRef(ref,q)?'stale':it.review.status==='reviewed'?'reviewed':'applied-unreviewed';
    else if(it.unitPrice!==null)state=it.review.status==='reviewed'?'reviewed':'other-price';
    else if(fromCatalog)state=q&&!sameRef(ref,q)?'stale':'reference-kept';

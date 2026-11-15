@@ -26,6 +26,16 @@
   const ARGS=Object.freeze({list_capabilities:[],get_project_summary:[],list_rooms:[],get_room:['roomId'],get_quantities:[],get_budget_summary:[],get_layout_review:['clearanceMm'],list_materials:[],list_objects:['roomId'],list_catalog_products:['query'],get_placed_products:[],get_visual_references:[]});
   const fold=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   const short=(v,n=120)=>typeof v==='string'?v.slice(0,n):null;
+  // F1 (cross-audit #237): WHY a total is not computable, each cause apart (never «0 unpriced» when the cause is another).
+  // Commercial quantities (catalogue items pending measurement) are told apart from geometric ones (F6).
+  const isCatItem=id=>/^cat:/.test(String(id));
+  function incompleteOf(budget,c){const t=c.totals,desc=new Map(budget.items.map(i=>[i.id,typeof i.description==='string'?i.description.slice(0,120):i.id]));
+   const pend=t.unavailableQuantityItemIds,est=t.incompleteQuantityItemIds.filter(id=>!pend.includes(id));
+   const taxPending=budget.taxRatePercent===null||budget.taxRatePercent===undefined;
+   return {netComputable:t.net.complete,grossComputable:t.gross.complete,unpriced:t.unpricedItemIds.length,
+    quantityPending:pend.length,quantityPendingItems:pend.slice(0,50).map(id=>({id,description:desc.get(id)||id,kind:isCatItem(id)?'commercial':'geometric'})),
+    quantityEstimated:est.length,taxPending,unreviewedPrices:t.unreviewedPriceItemIds.length};}
+  const UNIT_OF=u=>({unit:'ud',m:'m',m2:'m²',m3:'m³',kg:'kg'}[u]||u||null);
   const priceView=p=>p?{unitPrice:Number.isFinite(p.unitPrice)?p.unitPrice:null,unit:short(p.unit,8),label:short(p.label),asOf:short(p.asOf,10),edition:short(p.edition,40)}:null;
   const MAX_LIST=200;
   const isObj=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -96,7 +106,8 @@
         return result(callId,{budgetId:c.budgetId,currency:c.currency,saved:ctx.budgetSaved===true,counts:{items:c.lines.length,chapters:c.chapters.length},
           unpricedItems:t.unpricedItemIds.slice(0,50).map(id=>({id,description:desc.get(id)||id})),
           net:money(t.net),tax:money(t.tax),gross:money(t.gross),reviewComplete:t.reviewComplete,unpricedItemIds:t.unpricedItemIds.slice(0,MAX_LIST),
-          unreviewedPriceItemIds:t.unreviewedPriceItemIds.slice(0,MAX_LIST),incompleteQuantityItemIds:t.incompleteQuantityItemIds.slice(0,MAX_LIST)},
+          unreviewedPriceItemIds:t.unreviewedPriceItemIds.slice(0,MAX_LIST),incompleteQuantityItemIds:t.incompleteQuantityItemIds.slice(0,MAX_LIST),unavailableQuantityItemIds:t.unavailableQuantityItemIds.slice(0,MAX_LIST),
+          taxRatePercent:Number.isFinite(ctx.budget.taxRatePercent)?ctx.budget.taxRatePercent:null,incomplete:incompleteOf(ctx.budget,c)},
           prov(ctx,'FloorPlanBudget.calculateBudget',{engine:'FloorPlanBudget',budgetId:c.budgetId}),
           ['Presupuesto previsto, no gasto ejecutado ni presupuesto aprobado. Un precio o una cantidad que faltan no equivalen a cero.']);}
       if(tool==='get_layout_review'){
@@ -126,20 +137,30 @@
         if(ctx.budget.subject?.type!=='project'||ctx.budget.subject.id!==p.id)return failure(callId,'not_authorized','Presupuesto de otro proyecto o sujeto');
         const ids=new Set(p.objects.map(o=>o.id)),c=B.calculateBudget(ctx.budget),lines=new Map(c.lines.map(l=>[l.id,l])),items=new Map(ctx.budget.items.map(i=>[i.id,i]));
         const ch=c.chapters.find(x=>x.id==='catalog')||null;
-        const list=rep.filter(r=>isObj(r)&&typeof r.itemId==='string'&&Array.isArray(r.objects)&&r.objects.every(id=>ids.has(id))).slice(0,MAX_LIST).map(r=>{const l=lines.get(r.itemId)||null,it=items.get(r.itemId)||null;
-          return {itemId:r.itemId.slice(0,200),sku:short(r.sku,60),displayName:short(r.displayName),objects:r.objects.length,quantity:Number.isFinite(r.quantity)?r.quantity:null,unit:short(r.unit,8),quantityStatus:short(r.quantityStatus,30),retired:!!r.retired,
+        // F2 (cross-audit #237): the ECONOMIC quantity and unit are those of the budget item (FloorPlanBudget), never the
+        // CAT-03 object count; the count is reported apart (objectCount). The price carries its unit, source and review,
+        // and a sheet sold in another unit is a conflict (180 €/m is never «180 €/ud»).
+        const list=rep.filter(r=>isObj(r)&&typeof r.itemId==='string'&&Array.isArray(r.objects)&&r.objects.every(id=>ids.has(id))).slice(0,MAX_LIST).map(r=>{const l=lines.get(r.itemId)||null,it=items.get(r.itemId)||null,q=it?.quantity||null;
+          const unit=q?.unit||r.unit||null,conflict=it&&r.unit&&q&&!r.retired&&q.unit!==r.unit?{budgetUnit:short(q.unit,8),sheetUnit:short(r.unit,8)}:null;
+          return {itemId:r.itemId.slice(0,200),sku:short(r.sku,60),displayName:short(r.displayName),objects:r.objects.length,objectCount:r.objects.length,
+            quantity:it?(Number.isFinite(q?.value)?q.value:null):(Number.isFinite(r.quantity)?r.quantity:null),unit:short(unit,8),unitLabel:UNIT_OF(unit),quantitySource:it?'budget-item':'catalogue-count',quantityComplete:it?!!q?.complete:false,
+            quantityStatus:short(r.quantityStatus,30),retired:!!r.retired,
             state:short(r.state,30),inBudget:!!it,activeUnitPrice:it&&Number.isFinite(it.unitPrice)?it.unitPrice:null,reviewed:it?.review?.status==='reviewed',subtotalNet:l&&Number.isFinite(l.subtotalNet)?l.subtotalNet:null,
+            price:it&&Number.isFinite(it.unitPrice)?{unitPrice:it.unitPrice,unit:short(q?.unit,8),unitLabel:UNIT_OF(q?.unit),reviewed:it.review?.status==='reviewed',
+              source:{type:short(it.priceSource?.type,30),label:short(it.priceSource?.label),asOf:short(it.priceSource?.asOf,10)},
+              reference:it.priceReference?{code:short(it.priceReference.code,60),unit:short(it.priceReference.unit,8),edition:short(it.priceReference.source?.edition,40)}:null}:null,
+            unitConflict:conflict,
             reference:priceView(r.reference),sheetPrice:priceView(r.sheetPrice),sheetStatus:short(r.sheet?.status,30),versionChanged:!!r.versionChanged,synthetic:!!r.synthetic};});
         return result(callId,{budgetId:c.budgetId,currency:c.currency,saved:ctx.budgetSaved===true,products:list,count:list.length,
-          chapter:ch?{net:money(ch.totals.net),unpricedItemIds:ch.totals.unpricedItemIds.slice(0,MAX_LIST)}:null,total:{gross:money(c.totals.gross),unpricedItemIds:c.totals.unpricedItemIds.slice(0,MAX_LIST)}},
+          chapter:ch?{net:money(ch.totals.net),unpricedItemIds:ch.totals.unpricedItemIds.slice(0,MAX_LIST)}:null,total:{gross:money(c.totals.gross),unpricedItemIds:c.totals.unpricedItemIds.slice(0,MAX_LIST),incomplete:incompleteOf(ctx.budget,c)}},
           prov(ctx,'FloorPlanBudget.calculateBudget',{engine:'RubikCatalogBudget',budgetId:c.budgetId}),
-          ['Las cantidades son el recuento de objetos vinculados (CAT-03), no una medición del motor de cantidades.','Un precio de ficha no aplicado no cuenta; un precio desconocido no es cero; un precio sin revisar no es un presupuesto aprobado.']);}
+          ['La cantidad y la unidad son las de la partida del presupuesto; el recuento de objetos vinculados (CAT-03) se da aparte en objectCount y no es una medición.','Un precio va siempre con su unidad: nunca se convierte entre unidades.','Un precio de ficha no aplicado no cuenta; un precio desconocido no es cero; un precio sin revisar no es un presupuesto aprobado.']);}
       if(tool==='get_visual_references'){
         const refs=ctx.visualRefs;if(!Array.isArray(refs))return failure(callId,'not_available','El Estudio de imágenes no está cargado en esta página');
         const list=refs.slice(0,50).map(r=>({hash:short(r.hash,64),status:short(r.status,20),decision:short(r.decision,20),resultKind:short(r.resultKind,20),simulated:r.simulated===true,deliverable:r.deliverable===true,
-          reviewStatus:short(r.review?.status,20),linkedAt:short(r.linkedAt,30),references:(r.references||[]).slice(0,3).map(x=>({sku:short(x.sku,60),displayName:short(x.displayName),placed:x.placed===true,placedStatus:short(x.placedStatus,20),catalogStatus:short(x.catalogStatus,20)}))}));
+          reviewStatus:short(r.review?.status,20),linkedAt:short(r.linkedAt,30),references:(r.references||[]).slice(0,3).map(x=>({sku:short(x.sku,60),displayName:short(x.displayName),placed:x.placed===true,placedStatus:short(x.placedStatus,20),catalogStatus:short(x.catalogStatus,20),studioId:short(x.studioId,64)}))}));
         return result(callId,{references:list,count:list.length},prov(ctx,'RubikVisualReferences',{engine:'RubikVisualReferences'}),
-          ['Una referencia visual no es una medición, ni una ficha validada, ni un precio: no crea partidas.','No certifica un SKU por parecido. Una simulación no es una imagen generada por IA ni un entregable.']);}
+          ['«verified» se refiere solo a la huella visual de la ficha del Estudio: no verifica el producto ni la ficha comercial (ver catalogStatus y studioId).','Una referencia visual no es una medición, ni una ficha validada, ni un precio: no crea partidas.','No certifica un SKU por parecido. Una simulación no es una imagen generada por IA ni un entregable.']);}
       return failure(callId,'not_authorized','Herramienta no permitida');
     }catch(e){
       // Fail closed: never return stack traces, serialized projects or budget details.
