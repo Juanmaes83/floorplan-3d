@@ -80,7 +80,8 @@ test('stale sheet: a new price in the catalogue is detected and NEVER overwrites
 
 test('negatives: oven without price, worktop (material, m²) not placed, USD and invalid date rejected, per-m² sheet never multiplied by objects',async()=>{
  const cats=[catalog()],p=placed(cats,[['obj_template-023','horno-h60','inox']]);const d=draft(p,cats);
- assert.equal(d.states[0].state,'unknown-price');assert.equal(item(d.budget,H60).unitPrice,null);assert.equal((await CB.priceSources(cats)[0].quote('QA-H60-INOX')).state,'no-price');
+ assert.equal(d.states[0].state,'unknown-price');assert.equal(item(d.budget,H60).unitPrice,null);
+ {const c=B.calculateBudget(d.budget),id=item(d.budget,H60).id,line=c.lines.find(l=>l.id===id);assert.equal(line.subtotalNet,null,'unknown price → no subtotal, never 0');assert.ok(c.totals.unpricedItemIds.includes(id));assert.equal(c.totals.net.amount,null,'no total while a price is unknown');assert.notEqual(item(d.budget,H60).review?.status,'reviewed');assert.equal(item(d.budget,H60).priceReference??null,null,'no price reference invented');}assert.equal((await CB.priceSources(cats)[0].quote('QA-H60-INOX')).state,'no-price');
  assert.equal(P.plan(C.findProduct(cats[0],'encimera-basalto',null),[]).reason,'material-not-placeable');
  const usd=JSON.parse(JSON.stringify(PILOT.products[4]));usd.commercial.currency='USD';const r1=C.importCollection(C.createCatalog({catalogId:'usd',studioId:'local'}),[{...usd,catalogId:'usd'}],{today:'2026-11-14'});
  const t1=r1.catalog.products.length?CB.priceSources([r1.catalog])[0]:null;assert.ok(!t1||(await t1.quote(usd.sku)).state!=='found','USD never quoted into an EUR budget');
