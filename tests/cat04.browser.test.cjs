@@ -51,7 +51,7 @@ test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación
   assert.equal(await tr.locator('[data-field="price"]').inputValue(),'');assert.equal(await rowState(page,RB),'sheet-price-available');
   assert.match(await tr.locator('.cat04-sheet').innerText(),/Ficha: 690,00\s€\/ud · Tarifa sintética QA \(no es un precio de mercado\) · verificado 2026-11-14 · rev 1 · ficha v1 · synthetic-fixture/);
   assert.equal(await rowState(page,H60),'unknown-price');assert.equal((await truth(page,H60)).item.price,null,'unknown price is not 0');
-  await shot(page,'cat04-01-presupuesto-sin-precio');
+  await tr.scrollIntoViewIfNeeded();await shot(page,'cat04-01-presupuesto-sin-precio');
   // 7–8. Reference → provenance → preview → CANCEL (nothing changes) → preview → CONFIRM.
   await tr.locator('.cat04-price').click();const pd=page.locator('#pricesDialog');await pd.waitFor();
   const prov=await page.locator('#pricesProvenance').innerText();assert.match(prov,/Código\s+QA-LUMEN-160-RB/);assert.match(prov,/Edición\s+rev 1 · ficha v1/);assert.match(prov,/Precio\s+690,00\s€ sin IVA/);assert.match(prov,/Atribución\s+Piloto sintético QA · synthetic-fixture/);
@@ -63,7 +63,7 @@ test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación
   // 9. Subtotal = FloorPlanBudget.calculateBudget on the saved document.
   T=await truth(page,RB);assert.deepEqual(T.item,{qty:1,unit:'unit',price:690,review:'unreviewed',src:'provider-reference',refCode:'QA-LUMEN-160-RB',refEdition:'rev 1 · ficha v1'});assert.equal(T.subtotal,690);assert.equal(T.saved,true);
   assert.equal(await rowState(page,RB),'applied-unreviewed');await tr.locator('[data-field="review"]').check();assert.equal((await truth(page,RB)).item.review,'reviewed');assert.equal(await rowState(page,RB),'reviewed');
-  await shot(page,'cat04-03-precio-aplicado');await closeBudget(page);
+  await tr.scrollIntoViewIfNeeded();await shot(page,'cat04-03-precio-aplicado');await closeBudget(page);
   // 10. Duplicate → 2 units, one item, review invalidated (the quantity changed), price kept.
   await toEditor(page);await selectFurn(page,o1);const n0=await page.evaluate(()=>FloorPlanApp.project.objects.length);await page.keyboard.press('Control+d');await page.waitForFunction(n=>FloorPlanApp.project.objects.length===n+1,n0);
   await openBudget(page);T=await truth(page,RB);assert.deepEqual([T.item.qty,T.item.price,T.item.review,T.subtotal],[2,690,'unreviewed',1380]);assert.equal(T.catalogItems.filter(x=>x===RB).length,1);
@@ -81,7 +81,7 @@ test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación
   await page.waitForFunction(()=>/Revisión 2/.test(document.querySelector('#catalogRevision')?.textContent||''));await page.locator('#catalogClose').click();
   await openBudget(page);assert.equal(await rowState(page,RB),'stale');T=await truth(page,RB);assert.equal(T.item.price,690,'never overwritten');
   assert.match(await tr.locator('.cat04-sheet').innerText(),/710,00\s€\/ud .*rev 2 · ficha v2/);assert.match(await tr.locator('.cat04-stale').innerText(),/690,00\s€ · rev 1 · ficha v1/);assert.match(await tr.innerText(),/La ficha cambió después de colocar el producto/);
-  await shot(page,'cat04-04-ficha-cambiada');await closeBudget(page);
+  await tr.scrollIntoViewIfNeeded();await shot(page,'cat04-04-ficha-cambiada');await closeBudget(page);
   // 15. Assistant: «¿Cuánto cuesta este producto?» → same document, same calculation.
   await toEditor(page);await selectFurn(page,o1);const answer=await ask(page,'¿Cuánto cuesta este producto?');T=await truth(page,RB);
   assert.match(answer,/precio activo en el presupuesto 690 EUR/);assert.match(answer,new RegExp(`importe de la partida ${T.subtotal.toLocaleString('es-ES')} EUR sin IVA`));assert.match(answer,/la ficha ha cambiado y tu precio no se ha sustituido/);
@@ -126,7 +126,7 @@ test('CAT-04 Estudio de imágenes → referencia visual vinculada → reconocida
   assert.equal(await li.getAttribute('data-kind'),'simulated');assert.equal(await li.getAttribute('data-decision'),'accepted');assert.match(await li.innerText(),/SIMULACIÓN · aceptada en la revisión · verificada/);
   assert.match(await li.locator('.cat04-vref').innerText(),/QA-H60-INOX · .*NO colocado: no se presupuesta/);
   assert.deepEqual(await page.evaluate(()=>FloorPlanBudgetUI.current().budget.items.map(i=>i.id)),before,'a visual reference creates no budget item');
-  await shot(page,'cat04-08-referencias-en-presupuesto');
+  await page.locator('#cat04Visual').scrollIntoViewIfNeeded();await shot(page,'cat04-08-referencias-en-presupuesto');
   // «Abrir el Estudio de imágenes» from Presupuestar and back.
   await page.click('#cat04OpenStudio');await page.locator('#visualStudioDialog[open]').waitFor();await page.locator('#vsClose').click();await page.locator('#budgetDialog[open]').waitFor();await closeBudget(page);
   await toEditor(page);const a=await ask(page,'¿Tengo referencias del Estudio de imágenes vinculadas al proyecto?');assert.match(a,/Hay 1 referencia visual vinculada: simulación aceptada \(verificada\) · QA-H60-INOX no colocado: no se presupuesta/);
