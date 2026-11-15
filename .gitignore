@@ -25,3 +25,6 @@ tmp/
 # 环境变量
 .env
 .env.*
+
+# CAT-04 local evidence (videos/screens/manifest are CI artifacts, never committed)
+qa-results/cat04/
