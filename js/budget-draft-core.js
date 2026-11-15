@@ -24,24 +24,29 @@
  const CHAPTERS=['floors','walls','partitions','carpentry'];
  const sameQuantity=(a,b)=>a&&b&&a.unit===b.unit&&Math.abs(a.value-b.value)<1e-6;
  // previous: the budget kept for this project (or null). tariff: {tariffKey:{unitPrice,label}} the studio's own prices.
- function draft(project,{previous=null,tariff={},taxRatePercent=21,name=v=>v,labels,now=new Date().toISOString()}={}){
+ // extraLines / extraChapters (CAT-04): lines of other RUBIK sources (products placed from «Mis catálogos») with the
+ // same shape as lines(); they get exactly the same treatment (kept prices, references and reviews) and never a tariff
+ // price unless they declare a tariffKey. Without them the result is unchanged.
+ function draft(project,{previous=null,tariff={},taxRatePercent=21,name=v=>v,labels,now=new Date().toISOString(),extraLines=[],extraChapters=[]}={}){
   const prev=previous?B.validateBudget(B.upgradeBudget?B.upgradeBudget(previous):previous):null,old=new Map((prev?.items||[]).map(i=>[i.id,i]));
   const b=B.createBudget({id:prev?.id||`bud_${project.id}`,subject:{type:'project',id:project.id},title:labels.title,taxRatePercent:prev?prev.taxRatePercent:taxRatePercent});
   CHAPTERS.forEach((c,i)=>b.chapters.push(B.createChapter({id:c,title:labels.chapters[c],order:i})));
+  extraChapters.forEach((c,i)=>{if(!b.chapters.some(x=>x.id===c.id))b.chapters.push(B.createChapter({id:c.id,title:c.title,order:CHAPTERS.length+i}));});
+  const all=[...lines(project,{name,labels}),...extraLines];
   const changed=[];
-  for(const l of lines(project,{name,labels})){
+  for(const l of all){
    const before=old.get(l.key);let price=null,review=undefined;
    if(before&&before.unitPrice!==null){price={unitPrice:before.unitPrice,priceSource:before.priceSource};
     // A review holds only for the quantity it was made on.
     if(before.review?.status==='reviewed'&&sameQuantity(before.quantity,l.quantity))review=before.review;else if(before.review?.status==='reviewed')changed.push(l.key);}
-   else if(tariff[l.tariffKey]&&Number.isFinite(tariff[l.tariffKey].unitPrice))price={unitPrice:tariff[l.tariffKey].unitPrice,priceSource:{type:'manual',label:labels.tariff,asOf:tariff[l.tariffKey].asOf||null}};
+   else if(l.tariffKey&&tariff[l.tariffKey]&&Number.isFinite(tariff[l.tariffKey].unitPrice))price={unitPrice:tariff[l.tariffKey].unitPrice,priceSource:{type:'manual',label:labels.tariff,asOf:tariff[l.tariffKey].asOf||null}};
    // A reference price (BC3) stays attached while its unit still matches the item.
    const reference=before?.priceReference&&before.priceReference.unit===l.quantity.unit?before.priceReference:null;
    const active=price?.priceSource?.type==='provider-reference'&&!reference?null:price;
    b.items.push(B.createItem({id:l.key,chapterId:l.chapter,description:l.description,quantity:l.quantity,wastePercent:before?before.wastePercent:l.waste,unitPrice:active?.unitPrice??null,priceSource:active?.priceSource??null,priceReference:reference,review:active?review??{status:'unreviewed',reviewedAt:null}:{status:'unreviewed',reviewedAt:null}}));
   }
   b.chapters=b.chapters.filter(c=>b.items.some(i=>i.chapterId===c.id));
-  return {budget:B.validateBudget(b),reviewInvalidated:changed,tariffKeys:Object.fromEntries(lines(project,{name,labels}).map(l=>[l.key,l.tariffKey]))};
+  return {budget:B.validateBudget(b),reviewInvalidated:changed,tariffKeys:Object.fromEntries(all.filter(l=>l.tariffKey).map(l=>[l.key,l.tariffKey]))};
  }
  return {draft,lines,CHAPTERS};
 });
