@@ -53,13 +53,17 @@ test('CAT-03 escritorio: modelo validado / volumen genérico / no colocable, pan
   await page.locator('#catLinkNote').waitFor();assert.match(await page.locator('#catLinkNote').innerText(),/volumen genérico \(sin modelo 3D en la ficha\)/);
   // Oven: validated model, unknown price.
   await openFromPalette(page);const r3=await place(page,'horno-h60@inox',{expect:'validated-model'});assert.equal((await obj(page,r3.id)).assetRef.assetId,'cat-ia-horno-h60');
-  // Line items (only sourced prices).
+  // Line items: since CAT-04 they are Presupuestar's own figures (FloorPlanBudget.calculateBudget). The sheet price is
+  // only a REFERENCE until it is applied there with confirmation — the former parallel total (1435 €, sheet prices
+  // counted without confirmation) no longer exists by design (docs/cat-ia/06-cat04-diseno.md §2.5).
   await openFromPalette(page);const row=s=>page.locator(`#catalogBudgetTable tr[data-sku="${s}"]`);
-  assert.equal(await row('QA-H60-INOX').getAttribute('data-status'),'no-price');assert.match(await row('QA-LUMEN-160-RB').innerText(),/1 × .*690\.00 €/);
-  assert.match(await page.locator('#catalogBudgetTotal').innerText(),/1435\.00 € \(sin IVA\) · incompleto: QA-H60-INOX/);
+  assert.equal(await row('QA-H60-INOX').getAttribute('data-status'),'unknown-price');assert.equal(await row('QA-LUMEN-160-RB').getAttribute('data-status'),'sheet-price-available');
+  assert.match(await row('QA-LUMEN-160-RB').innerText(),/1 × .*ficha 690\.00 €\/ud .*en Presupuestar: sin importe/);
+  assert.match(await page.locator('#catalogBudgetTotal').innerText(),/Capítulo «Productos de mi estudio» en Presupuestar: — sin IVA · incompleto: 3 partida\(s\) sin precio aplicado/);
   await page.locator('#catalogBudgetBox').scrollIntoViewIfNeeded();await shot(page,'cat03-02-partidas');
   const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#catalogBudgetJson').click()]);const bj=JSON.parse(fs.readFileSync(await dl.path(),'utf8'));
-  assert.equal(bj.schema,'rubik-catalog-budget-lines/1');assert.equal(bj.netTotal,1435);assert.match(bj.basis,/nunca desde imágenes/);
+  assert.equal(bj.schema,'rubik-catalog-budget-lines/2');assert.equal(bj.lines.length,3);assert.ok(bj.lines.every(l=>l.activeUnitPrice===null&&l.subtotalNet===null),'no automatic price');
+  assert.equal(bj.lines.find(l=>l.sku==='QA-LUMEN-160-RB').sheetPrice.unitPrice,690);assert.match(bj.basis,/nunca desde imágenes/);
   await page.locator('#catalogClose').click();
   // Undo / redo of the oven placement.
   await page.locator('#undo').click();await page.waitForFunction(id=>!FloorPlanApp.project.objects.some(o=>o.id===id),r3.id);assert.equal((await links(page))[r3.id],undefined);
