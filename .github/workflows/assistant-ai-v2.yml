@@ -6,6 +6,9 @@ on:
       - api/assistant.js
       - js/assistant-*.js
       - js/cat04-ui.js
+      - api/assistant.js
+      - docs/product/assistant-ai-v3/**
+      - tests/assistant-*.cjs
       - js/catalog-budget-core.js
       - js/visual-reference-core.js
       - tests/cat04-assistant.test.cjs
@@ -44,7 +47,7 @@ jobs:
       - name: Published JSON Schemas match the validator
         run: node scripts/assistant/write-schemas.cjs --check
       - name: AG-0…AG-5 core (independent oracles) + coexistence (UX-12/13 incl. 1512-rotation property, R03 manifest, capability registry)
-        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs tests/assistant-agent-core.test.cjs tests/assistant-gen-api.test.cjs
       - name: Install the browser test runtime and FFmpeg
         run: |
           npm install --prefix "$RUNNER_TEMP/ag-playwright" --no-save playwright@1.62.1
@@ -55,7 +58,7 @@ jobs:
       - name: Tool versions
         run: node --version && NODE_PATH=$NODE_PATH node -e 'console.log("playwright", require("playwright/package.json").version)' && "$CHROME" --version && ffmpeg -version | head -1 && ffprobe -version | head -1 && uname -a
       - name: Real editor (desktop, areas, i18n, keyboard, latency, adversarial, mobile touch and landscape)
-        run: node --test --test-concurrency=1 tests/assistant-ai-v2.browser.test.cjs tests/smart-furnishing.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.browser.test.cjs tests/smart-furnishing.browser.test.cjs tests/assistant-gen.browser.test.cjs
       - name: Recorded walkthrough (4 videos, ffprobe + full ffmpeg decode, frames, manifest with sha256; assertions included)
         run: node scripts/qa/record-assistant.cjs qa-results/assistant-ai-v2
       - uses: actions/upload-artifact@v4

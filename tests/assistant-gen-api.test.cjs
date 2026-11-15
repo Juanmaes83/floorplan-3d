@@ -40,7 +40,7 @@ test('one step: server-owned policy and tool definitions, own key to the fixed e
  assert.equal(r.status,200);assert.equal(r.body.type,'tool_calls');assert.deepEqual(r.body.calls.map(c=>c.name),['get_budget_summary']);assert.equal(r.body.dropped.length,3,'unknown tool, missing required arg and unknown arg dropped');
  const sent=f.calls[0];assert.equal(sent.url,'https://api.openai.com/v1/chat/completions');assert.equal(sent.init.headers.authorization,'Bearer '+KEY);assert.notEqual(sent.init.headers.authorization,'Bearer '+ENV.OPENAI_API_KEY);
  assert.equal(sent.body.messages[0].role,'system');assert.equal(sent.body.messages[0].content.startsWith(Agent.SYSTEM_POLICY),true);assert.deepEqual(sent.body.tools.map(t=>t.function.name),['list_rooms','get_budget_summary','propose_floor_material'],'browser cannot add tools');
- assert.equal(sent.body.model,'gpt-test-mini');assert.equal(sent.body.max_completion_tokens,800);
+ assert.equal(sent.body.model,'gpt-test-mini');assert.equal(sent.body.store,false,'the provider must not store the conversation');assert.equal(sent.body.max_completion_tokens,800);
  assert.deepEqual([r.body.usage.inputTokens,r.body.usage.outputTokens],[900,60]);assert.equal(r.body.usage.costUsd,+((900*0.4+60*1.6)/1e6).toFixed(6));assert.match(r.body.usage.costBasis,/tarifa 2026-11-15/);
  assert.equal((await store.snapshot()).text,r.body.usage.costUsd,'text spend accounted separately from images');
  const log=r.logs.join('\n');for(const secret of [CODE,KEY,'incompleto','rom_living'])assert.equal(log.includes(secret),false,'log without content, code or key: '+secret);

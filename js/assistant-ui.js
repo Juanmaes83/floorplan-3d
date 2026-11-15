@@ -92,6 +92,9 @@
   push('user',text);emit('ask',{text:text.slice(0,120)});
   try{
    if(state.latencyMs)await new Promise((res,rej)=>{const t=setTimeout(res,state.latencyMs);ctl.signal.addEventListener('abort',()=>{clearTimeout(t);rej(new DOMException('aborted','AbortError'));},{once:true});});
+   // GEN-AI: in «Conversación con IA» mode (js/assistant-gen-ui.js) a real text model answers through /api/assistant,
+   // using the same tools, proposal card and apply/undo; otherwise the guided query below answers, as before.
+   const G=window.RubikAssistantGenUI;if(G?.active()){await G.ask(text,{ctx:context(),signal:ctl.signal,push,emit,showProposal});return;}
    const r=Sess.handle(text,context());
    push('assistant',r.messages[1].text,sourceLine(r));
    emit('answer',{intent:r.intent.intent,tools:r.audit.tools,providerCalls:r.audit.providerCalls,cost:r.audit.cost,figures:r.answer?.figures||[],provenance:r.answer?.provenance||[],error:r.audit.error||null,audit:r.audit});
@@ -149,7 +152,7 @@
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
- clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;emit('clear');};
+ clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  mountOpener();labels();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
  window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,

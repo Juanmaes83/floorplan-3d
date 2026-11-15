@@ -72,7 +72,8 @@ function providerBody(s,tools,messages,context){
  const sys=Agent.SYSTEM_POLICY+`\nWork area now: ${Agent.AREAS.includes(context?.area)?context.area:'design'}. Reply language preference: ${['es','en','zh'].includes(context?.lang)?context.lang:'es'}.`;
  const msgs=[{role:'system',content:sys},...messages.map(m=>m.role==='tool'?{role:'tool',tool_call_id:m.tool_call_id,content:String(m.content||'')}
   :m.tool_calls?{role:'assistant',content:m.content??null,tool_calls:m.tool_calls.map(c=>({id:c.id,type:'function',function:{name:c.name,arguments:c.arguments}}))}:{role:m.role,content:String(m.content||'')})];
- return {model:s.model,messages:msgs,tools:defs,tool_choice:'auto',max_completion_tokens:s.maxOut};
+ // store:false — the provider must not keep these completions (project data) for its own products or dashboards.
+ return {model:s.model,messages:msgs,tools:defs,tool_choice:'auto',max_completion_tokens:s.maxOut,store:false};
 }
 function parseProvider(json,tools){
  const msg=json?.choices?.[0]?.message;const u=json?.usage||{};

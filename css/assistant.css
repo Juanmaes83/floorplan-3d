@@ -46,3 +46,11 @@
  .assistant-panel>.assistant-log{min-height:48px}
  .assistant-form{bottom:-8px;margin-bottom:-8px;padding-bottom:8px}
 }
+/* Asistente generativo: selector de modo, estado del servicio, código y consentimiento. */
+.assistant-genbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px}
+.assistant-genbar .chip{min-height:44px}
+.assistant-genbar .chip[aria-checked="true"]{background:var(--action-soft,#e6f0f0);border-color:var(--action,#1f5f63);font-weight:600}
+.assistant-gen-status{flex-basis:100%;margin:2px 0;font-size:.82rem;color:var(--ink-muted,#555)}
+.assistant-gen-code{display:flex;gap:6px;flex-basis:100%}.assistant-gen-code input{flex:1;min-height:44px;min-width:0}
+.assistant-gen-consent{flex-basis:100%;display:grid;gap:4px;font-size:.82rem}.assistant-gen-consent .assistant-check{display:flex;gap:8px;align-items:flex-start;min-height:44px}
+.assistant-gen-routes{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.assistant-gen-routes .btn{min-height:44px}
