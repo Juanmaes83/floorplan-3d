@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rubik-sota.example/contracts/assistant-v1/AssistantMessageV1.schema.json",
+  "title": "AssistantMessageV1",
+  "description": "Contrato AssistantMessageV1 v1.0.0 del Asistente IA RUBIK. Generado por scripts/assistant/write-schemas.cjs desde js/assistant-contracts.js: no editar a mano.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "id",
+    "role",
+    "text",
+    "at"
+  ],
+  "properties": {
+    "version": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "role": {
+      "enum": [
+        "user",
+        "assistant",
+        "tool",
+        "system"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 40
+    },
+    "area": {
+      "enum": [
+        "design",
+        "analyze",
+        "budget",
+        "deliver",
+        "studio"
+      ]
+    },
+    "projectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "revision": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "toolCallIds": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 150,
+        "pattern": "^[A-Za-z0-9_.:-]+$"
+      }
+    },
+    "proposalId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "mode": {
+      "enum": [
+        "deterministic",
+        "mock",
+        "provider"
+      ]
+    }
+  }
+}

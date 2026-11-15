@@ -1,0 +1,9 @@
+RUBIK CAT-IA pilot fixtures (assets/cat-ia/fixtures/*.png, pilot-collection.json)
+
+Origin: drawn programmatically by scripts/cat-ia/make-fixtures.py in this repository (Pillow 12.3.0). They are not
+photographs, contain no people, no client data, no real products and no third-party marks. «RUBIK Sintético» and
+«RUBIK Fixtures QA» are synthetic test names, not a brand offered for sale.
+
+Permission (owner of this repository): use, modification and redistribution for catalogue sheets, reference images,
+QA, review previews and documentation of this project, worldwide, no expiry. Prices and dimensions are synthetic
+test values: they are not market prices nor specifications of any real product.

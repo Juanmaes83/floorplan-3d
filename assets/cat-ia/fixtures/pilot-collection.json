@@ -1,0 +1,363 @@
+{
+ "schema": "rubik-catalog-collection/1",
+ "catalogId": "piloto-sintetico-qa",
+ "name": "Piloto sintético QA",
+ "products": [
+  {
+   "catalogId": "piloto-sintetico-qa",
+   "manufacturer": "RUBIK Fixtures QA",
+   "brand": "RUBIK Sintético",
+   "brandKind": "synthetic",
+   "source": {
+    "kind": "synthetic-fixture",
+    "ref": "scripts/cat-ia/make-fixtures.py"
+   },
+   "affiliation": "none",
+   "license": {
+    "scope": [
+     "catalog-sheet",
+     "qa",
+     "review-preview"
+    ],
+    "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+    "expiresAt": null
+   },
+   "availability": {
+    "status": "unknown",
+    "source": null,
+    "verifiedAt": null
+   },
+   "reviewStatus": "REVIEWED",
+   "model3dRef": {
+    "catalog": "rubik-sota-local",
+    "assetId": "cat-ia-aparador-lumen"
+   },
+   "productId": "aparador-lumen",
+   "variantId": "roble",
+   "sku": "QA-LUMEN-160-RB",
+   "family": "mobiliario",
+   "kind": "furniture",
+   "collection": "Lumen",
+   "displayName": "Aparador Lumen 160 roble",
+   "description": "Aparador de tres puertas. Fixture sintético para pruebas de catálogo.",
+   "dimensionsMm": {
+    "width": 1600,
+    "height": 780,
+    "depth": 450
+   },
+   "dimensionsProvenance": "Fixture sintético: medidas de diseño definidas por RUBIK QA",
+   "commercial": {
+    "currency": "EUR",
+    "unit": "ud",
+    "netUnitPrice": 690,
+    "vatRate": 0.21,
+    "priceSource": "Tarifa sintética QA (no es un precio de mercado)",
+    "verifiedAt": "2026-11-14"
+   },
+   "imageRefs": [
+    {
+     "assetId": "img-lumen-roble",
+     "path": "assets/cat-ia/fixtures/aparador-lumen-roble.png",
+     "mediaType": "image/png",
+     "sha256": "aa144e58db9a60fc9a544ab7c966487b8968c00031c4a18a566b03cc536958f2",
+     "usageRights": "own",
+     "alt": "Aparador Lumen roble (dibujo sintético)",
+     "license": {
+      "scope": [
+       "catalog-sheet",
+       "reference-image",
+       "qa",
+       "review-preview"
+      ],
+      "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+      "expiresAt": null,
+      "attribution": "RUBIK QA · dibujo sintético propio"
+     }
+    }
+   ]
+  },
+  {
+   "catalogId": "piloto-sintetico-qa",
+   "manufacturer": "RUBIK Fixtures QA",
+   "brand": "RUBIK Sintético",
+   "brandKind": "synthetic",
+   "source": {
+    "kind": "synthetic-fixture",
+    "ref": "scripts/cat-ia/make-fixtures.py"
+   },
+   "affiliation": "none",
+   "license": {
+    "scope": [
+     "catalog-sheet",
+     "qa",
+     "review-preview"
+    ],
+    "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+    "expiresAt": null
+   },
+   "availability": {
+    "status": "unknown",
+    "source": null,
+    "verifiedAt": null
+   },
+   "reviewStatus": "REVIEWED",
+   "model3dRef": null,
+   "productId": "aparador-lumen",
+   "variantId": "nogal",
+   "sku": "QA-LUMEN-160-NG",
+   "family": "mobiliario",
+   "kind": "furniture",
+   "collection": "Lumen",
+   "displayName": "Aparador Lumen 160 nogal",
+   "description": "Variante nogal del aparador Lumen. Fixture sintético.",
+   "dimensionsMm": {
+    "width": 1600,
+    "height": 780,
+    "depth": 450
+   },
+   "dimensionsProvenance": "Fixture sintético: medidas de diseño definidas por RUBIK QA",
+   "commercial": {
+    "currency": "EUR",
+    "unit": "ud",
+    "netUnitPrice": 745,
+    "vatRate": 0.21,
+    "priceSource": "Tarifa sintética QA (no es un precio de mercado)",
+    "verifiedAt": "2026-11-14"
+   },
+   "imageRefs": [
+    {
+     "assetId": "img-lumen-nogal",
+     "path": "assets/cat-ia/fixtures/aparador-lumen-nogal.png",
+     "mediaType": "image/png",
+     "sha256": "76920be46394acfa9fb805f9b49ff11c3cdf6a723182df0f9a30963c1be69c00",
+     "usageRights": "own",
+     "alt": "Aparador Lumen nogal (dibujo sintético)",
+     "license": {
+      "scope": [
+       "catalog-sheet",
+       "reference-image",
+       "qa",
+       "review-preview"
+      ],
+      "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+      "expiresAt": null,
+      "attribution": "RUBIK QA · dibujo sintético propio"
+     }
+    }
+   ]
+  },
+  {
+   "catalogId": "piloto-sintetico-qa",
+   "manufacturer": "RUBIK Fixtures QA",
+   "brand": "RUBIK Sintético",
+   "brandKind": "synthetic",
+   "source": {
+    "kind": "synthetic-fixture",
+    "ref": "scripts/cat-ia/make-fixtures.py"
+   },
+   "affiliation": "none",
+   "license": {
+    "scope": [
+     "catalog-sheet",
+     "qa",
+     "review-preview"
+    ],
+    "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+    "expiresAt": null
+   },
+   "availability": {
+    "status": "unknown",
+    "source": null,
+    "verifiedAt": null
+   },
+   "reviewStatus": "REVIEWED",
+   "model3dRef": {
+    "catalog": "rubik-sota-local",
+    "assetId": "cat-ia-horno-h60"
+   },
+   "productId": "horno-h60",
+   "variantId": "inox",
+   "sku": "QA-H60-INOX",
+   "family": "electrodomesticos",
+   "kind": "appliance",
+   "collection": "Cocción QA",
+   "displayName": "Horno integrable H60 inox",
+   "description": "Horno integrable de 60 cm. Precio desconocido a propósito.",
+   "dimensionsMm": {
+    "width": 595,
+    "height": 595,
+    "depth": 548
+   },
+   "dimensionsProvenance": "Fixture sintético: medidas de diseño definidas por RUBIK QA",
+   "commercial": {
+    "currency": "EUR",
+    "unit": "ud",
+    "netUnitPrice": null,
+    "vatRate": null,
+    "priceSource": null,
+    "verifiedAt": null
+   },
+   "imageRefs": [
+    {
+     "assetId": "img-horno-h60",
+     "path": "assets/cat-ia/fixtures/horno-h60.png",
+     "mediaType": "image/png",
+     "sha256": "bb5240dcf081a122567fe00734ddbd7fa4c6efe807fa824648f96b8690c4a971",
+     "usageRights": "own",
+     "alt": "Horno H60 (dibujo sintético)",
+     "license": {
+      "scope": [
+       "catalog-sheet",
+       "reference-image",
+       "qa",
+       "review-preview"
+      ],
+      "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+      "expiresAt": null,
+      "attribution": "RUBIK QA · dibujo sintético propio"
+     }
+    }
+   ]
+  },
+  {
+   "catalogId": "piloto-sintetico-qa",
+   "manufacturer": "RUBIK Fixtures QA",
+   "brand": "RUBIK Sintético",
+   "brandKind": "synthetic",
+   "source": {
+    "kind": "synthetic-fixture",
+    "ref": "scripts/cat-ia/make-fixtures.py"
+   },
+   "affiliation": "none",
+   "license": {
+    "scope": [
+     "catalog-sheet",
+     "qa",
+     "review-preview"
+    ],
+    "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+    "expiresAt": null
+   },
+   "availability": {
+    "status": "unknown",
+    "source": null,
+    "verifiedAt": null
+   },
+   "reviewStatus": "REVIEWED",
+   "model3dRef": null,
+   "productId": "encimera-basalto",
+   "variantId": null,
+   "sku": "QA-ENC-BASALTO",
+   "family": "encimeras",
+   "kind": "material",
+   "collection": "Piedra QA",
+   "displayName": "Encimera cuarzo Basalto",
+   "description": "Material de encimera. Formato de tablero desconocido a propósito.",
+   "dimensionsMm": {
+    "width": null,
+    "height": null,
+    "depth": null
+   },
+   "dimensionsProvenance": null,
+   "commercial": {
+    "currency": "EUR",
+    "unit": "m2",
+    "netUnitPrice": 180,
+    "vatRate": 0.21,
+    "priceSource": "Tarifa sintética QA (no es un precio de mercado)",
+    "verifiedAt": "2026-11-14"
+   },
+   "imageRefs": [
+    {
+     "assetId": "img-encimera-basalto",
+     "path": "assets/cat-ia/fixtures/encimera-basalto.png",
+     "mediaType": "image/png",
+     "sha256": "3898e73f98bddc8d991272ce1ff9a1c995704edc1c422ab9e4823ad859a6ca81",
+     "usageRights": "own",
+     "alt": "Encimera Basalto (muestra sintética)",
+     "license": {
+      "scope": [
+       "catalog-sheet",
+       "reference-image",
+       "qa",
+       "review-preview"
+      ],
+      "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+      "expiresAt": null,
+      "attribution": "RUBIK QA · dibujo sintético propio"
+     }
+    }
+   ]
+  },
+  {
+   "catalogId": "piloto-sintetico-qa",
+   "manufacturer": "RUBIK Fixtures QA",
+   "brand": "RUBIK Sintético",
+   "brandKind": "synthetic",
+   "source": {
+    "kind": "synthetic-fixture",
+    "ref": "scripts/cat-ia/make-fixtures.py"
+   },
+   "affiliation": "none",
+   "license": {
+    "scope": [
+     "catalog-sheet",
+     "qa",
+     "review-preview"
+    ],
+    "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+    "expiresAt": null
+   },
+   "availability": {
+    "status": "unknown",
+    "source": null,
+    "verifiedAt": null
+   },
+   "reviewStatus": "REVIEWED",
+   "model3dRef": null,
+   "productId": "lampara-orbe",
+   "variantId": "ambar",
+   "sku": "QA-ORBE-40-AM",
+   "family": "iluminacion",
+   "kind": "lighting",
+   "collection": "Orbe",
+   "displayName": "Lámpara colgante Orbe 40 ámbar",
+   "description": "Lámpara colgante. Fixture sintético.",
+   "dimensionsMm": {
+    "width": 400,
+    "height": 300,
+    "depth": 400
+   },
+   "dimensionsProvenance": "Fixture sintético: medidas de diseño definidas por RUBIK QA",
+   "commercial": {
+    "currency": "EUR",
+    "unit": "ud",
+    "netUnitPrice": 95,
+    "vatRate": 0.21,
+    "priceSource": "Tarifa sintética QA (no es un precio de mercado)",
+    "verifiedAt": "2026-11-14"
+   },
+   "imageRefs": [
+    {
+     "assetId": "img-orbe-ambar",
+     "path": "assets/cat-ia/fixtures/lampara-orbe.png",
+     "mediaType": "image/png",
+     "sha256": "341d2bbcab0110055a90f1656a8a07349ceef2d176d120d023284fb455edd7b0",
+     "usageRights": "own",
+     "alt": "Lámpara Orbe (dibujo sintético)",
+     "license": {
+      "scope": [
+       "catalog-sheet",
+       "reference-image",
+       "qa",
+       "review-preview"
+      ],
+      "proofRef": "assets/cat-ia/fixtures/LICENSE.txt",
+      "expiresAt": null,
+      "attribution": "RUBIK QA · dibujo sintético propio"
+     }
+    }
+   ]
+  }
+ ]
+}

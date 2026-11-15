@@ -1,0 +1,62 @@
+name: Asistente IA RUBIK V2 (contracts, engine, real editor, video QA)
+on:
+  pull_request:
+    paths:
+      - index.html
+      - api/assistant.js
+      - js/assistant-*.js
+      - css/assistant.css
+      - js/quantity-core.js
+      - js/budget-core.js
+      - js/budget-ui.js
+      - js/layout-review.js
+      - js/furniture-placement.js
+      - js/project-core.js
+      - js/capability-registry.js
+      - js/professional-workspace-ui.js
+      - js/ai-render-ui.js
+      - docs/contracts/assistant-v1/**
+      - scripts/assistant/**
+      - scripts/qa/record-assistant.cjs
+      - tests/assistant-ai-v2*.cjs
+      - tests/r02a/editor-kit.cjs
+      - .github/workflows/assistant-ai-v2.yml
+permissions:
+  contents: read
+jobs:
+  assistant-ai-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Syntax
+        run: for f in js/assistant-*.js api/assistant.js scripts/assistant/*.cjs scripts/qa/record-assistant.cjs tests/assistant-ai-v2*.cjs; do node --check "$f"; done
+      - name: Published JSON Schemas match the validator
+        run: node scripts/assistant/write-schemas.cjs --check
+      - name: AG-0…AG-5 core (independent oracles) + coexistence (UX-12/13 incl. 1512-rotation property, R03 manifest, capability registry)
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs
+      - name: Install the browser test runtime and FFmpeg
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ag-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ag-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          sudo apt-get install -y ffmpeg
+          echo "NODE_PATH=$RUNNER_TEMP/ag-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ag-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Tool versions
+        run: node --version && NODE_PATH=$NODE_PATH node -e 'console.log("playwright", require("playwright/package.json").version)' && "$CHROME" --version && ffmpeg -version | head -1 && ffprobe -version | head -1 && uname -a
+      - name: Real editor (desktop, areas, i18n, keyboard, latency, adversarial, mobile touch and landscape)
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.browser.test.cjs tests/smart-furnishing.browser.test.cjs
+      - name: Recorded walkthrough (4 videos, ffprobe + full ffmpeg decode, frames, manifest with sha256; assertions included)
+        run: node scripts/qa/record-assistant.cjs qa-results/assistant-ai-v2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: assistant-ai-v2-${{ github.event.pull_request.head.sha }}
+          path: qa-results/assistant-ai-v2
+          if-no-files-found: error
