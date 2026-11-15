@@ -10,8 +10,9 @@
       distinta de la clave de Render IA: contabilidad, límite en el proveedor y revocación separados.
    5. Modelo RUBIK_ASSISTANT_MODEL, tarifa FECHADA (RUBIK_ASSISTANT_PRICE_INPUT_PER_MTOK, _OUTPUT_PER_MTOK,
       _PRICE_DATE) y TOPE RUBIK_ASSISTANT_BUDGET_CAP_USD > 0 aprobado por el propietario. Ningún precio está en el código.
-   6. Un ALMACÉN PERSISTENTE atómico inyectado (reserva/liquidación del gasto, idempotencia, límite por minuto). La función
-      desplegada usa store:null → 503 'store-not-configured' hasta que el propietario conecte uno (decisión pendiente).
+   6. Un ALMACÉN PERSISTENTE atómico (reserva/liquidación del gasto, idempotencia, límite por minuto): api/_spend-ledger.js,
+      Redis con scripts Lua atómicos. La función desplegada solo lo tiene si el propietario configura
+      RUBIK_SPEND_STORE_URL/_TOKEN; sin ellos → 503 'store-not-configured' (decisión pendiente, nada contratado).
    Protocolo:
    - {version:2, action:'status'} → {enabled, reason}; con código válido, además modelo, tope y gastado (sin secretos).
    - {version:2, action:'step', conversationId, idempotencyKey, consent:{question:true, projectData:true}, context, tools,
@@ -25,7 +26,7 @@
    registro es UNA línea JSON por petición, sin cuerpo, pregunta, proyecto, código, clave, IP ni agente de usuario. */
 'use strict';
 const {timingSafeEqual,createHash}=require('node:crypto');
-const Agent=require('../js/assistant-agent-core.js');
+const Agent=require('../js/assistant-agent-core.js'),Ledger=require('./_spend-ledger.js');
 const MAX_BYTES=96*1024,MIN_CODE=32,MAX_CODE=200,CONTRACT='rubik-assistant/2',TIMEOUT_MS=30000;
 // Closed list of text providers: id → fixed endpoint and request/response mapping. Adding one is a code change + review.
 const PROVIDERS=Object.freeze({'openai-chat':{endpoint:'https://api.openai.com/v1/chat/completions'}});
@@ -128,17 +129,17 @@ async function handler(req,res,{env=process.env,log=console.log,store=null,fetch
  if(!await store.setIfAbsent('idem:'+idem,{status:'in-progress'},24*3600e3))return send(res,409,{error:'already-processed'},log);
  if(!await store.rate('text',now(),s.perMinute))return send(res,429,{error:'rate_limited'},log);
  const pb=providerBody(s,tools,body.messages,body.context),estIn=inputTokenBound(pb),worst=costOf(s,estIn,s.maxOut);
- const id='txt_'+createHash('sha256').update(idem).digest('hex').slice(0,16),reservation=await store.reserve({id,family:'text',usd:worst,capUsd:s.cap});
+ const id='txt_'+createHash('sha256').update(idem).digest('hex').slice(0,16),reservation=await store.reserve({id,family:'text',usd:worst,capUsd:s.cap,meta:{model:s.model,tariffDate:s.date,estIn,maxOut:s.maxOut}});
  if(!reservation.ok){await store.set('idem:'+idem,{status:'refused-'+reservation.reason},24*3600e3);return send(res,402,{error:'budget_exceeded',message:'Se ha alcanzado el tope de gasto aprobado.',capUsd:s.cap},log,{model:s.model});}
  const t0=now(),ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),TIMEOUT_MS);let pres,json;
  try{pres=await f(s.endpoint,{method:'POST',signal:ctl.signal,headers:{'content-type':'application/json',authorization:'Bearer '+s.key},body:JSON.stringify(pb)});json=await pres.json().catch(()=>null);}
- catch{clearTimeout(timer);await store.settle(id,{usd:worst});await store.set('idem:'+idem,{status:'provider-unreachable-billing-unknown'},24*3600e3);
+ catch{clearTimeout(timer);await store.settle(id,{usd:worst,basis:'worst-case-unreachable',meta:{model:s.model,tariffDate:s.date}});await store.set('idem:'+idem,{status:'provider-unreachable-billing-unknown'},24*3600e3);
   return send(res,502,{error:'provider_unreachable',message:'El proveedor no ha respondido; se retiene el peor caso como gastado.'},log,{model:s.model,usd:worst,ms:now()-t0});}
  clearTimeout(timer);
- if(!pres.ok){const billedUnknown=pres.status>=500;await store.settle(id,{usd:billedUnknown?worst:0});await store.set('idem:'+idem,{status:'provider-'+pres.status},24*3600e3);
+ if(!pres.ok){const billedUnknown=pres.status>=500;await store.settle(id,{usd:billedUnknown?worst:0,basis:billedUnknown?'worst-case-5xx':'not-billed-4xx',meta:{model:s.model,tariffDate:s.date}});await store.set('idem:'+idem,{status:'provider-'+pres.status},24*3600e3);
   return send(res,502,{error:'provider_error',status:pres.status},log,{model:s.model,pstatus:pres.status,usd:billedUnknown?worst:0});}
  const out=parseProvider(json,tools),inTok=out.usage.inputTokens,outTok=out.usage.outputTokens,known=inTok!==null&&outTok!==null,usd=known?costOf(s,inTok,outTok):worst;
- const st=await store.settle(id,{usd});await store.set('idem:'+idem,{status:out.type},24*3600e3);
+ const st=await store.settle(id,{usd,basis:known?'usage':'worst-case',meta:{model:s.model,tariffDate:s.date}});await store.set('idem:'+idem,{status:out.type},24*3600e3);
  // H-TOK vigilada: un consumo por encima de lo reservado abre el disyuntor (se pierde como mucho UN paso de holgura).
  const over=known&&(inTok>estIn||outTok>s.maxOut);if(over)await store.set(BREAKER,{reason:inTok>estIn?'input-over-bound':'output-over-limit',at:new Date(now()).toISOString(),estIn,inTok,maxOut:s.maxOut,outTok},BREAKER_TTL);
  const usage={inputTokens:inTok,outputTokens:outTok,costUsd:usd,costBasis:known?`tarifa ${s.date}`:'peor caso (uso no informado)',spentUsd:st?.spentUsd??null,capUsd:s.cap};
@@ -155,5 +156,7 @@ function memoryStore({now=Date.now}={}){
   async settle(id,{usd}){const r=res.get(id);if(r&&!r.done){r.done=true;spent[r.family]=+(spent[r.family]+usd).toFixed(6);}return {spentUsd:+(spent.text+spent.image).toFixed(6),text:spent.text,image:spent.image};},
   async snapshot(){return {spentUsd:+(spent.text+spent.image).toFixed(6),text:spent.text,image:spent.image};}};
 }
-module.exports=(req,res)=>handler(req,res,{store:null});
+// Despliegue: almacén persistente SOLO si el propietario configura RUBIK_SPEND_STORE_URL/_TOKEN (Upstash Redis REST,
+// api/_spend-ledger.js). Sin ellos → null → 503 'store-not-configured'. Las demás puertas siguen cerradas por defecto.
+module.exports=(req,res)=>handler(req,res,{store:Ledger.storeFromEnv(process.env)});
 Object.assign(module.exports,{handler,settings,checkMessages,providerBody,parseProvider,memoryStore,inputTokenBound,BOUND,PROVIDERS,CONTRACT,MAX_BYTES});

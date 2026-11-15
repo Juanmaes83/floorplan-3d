@@ -4,6 +4,10 @@ on:
     paths:
       - index.html
       - api/assistant.js
+      - api/_spend-ledger.js
+      - tests/spend-ledger.test.cjs
+      - scripts/qa/assistant-eval*.cjs
+      - scripts/qa/token-bound-evidence.cjs
       - js/assistant-*.js
       - js/cat04-ui.js
       - api/assistant.js
@@ -43,11 +47,16 @@ jobs:
         with:
           node-version: '22.13.0'
       - name: Syntax
-        run: for f in js/assistant-*.js api/assistant.js scripts/assistant/*.cjs scripts/qa/record-assistant.cjs tests/assistant-ai-v2*.cjs; do node --check "$f"; done
+        run: for f in js/assistant-*.js api/assistant.js api/_spend-ledger.js scripts/qa/assistant-eval*.cjs scripts/qa/token-bound-evidence.cjs scripts/assistant/*.cjs scripts/qa/record-assistant.cjs tests/assistant-ai-v2*.cjs; do node --check "$f"; done
       - name: Published JSON Schemas match the validator
         run: node scripts/assistant/write-schemas.cjs --check
       - name: AG-0…AG-5 core (independent oracles) + coexistence (UX-12/13 incl. 1512-rotation property, R03 manifest, capability registry)
-        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs tests/assistant-agent-core.test.cjs tests/assistant-gen-api.test.cjs
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs tests/assistant-agent-core.test.cjs tests/assistant-gen-api.test.cjs tests/assistant-gen-eval.test.cjs
+      - name: Common AI spend ledger on a REAL local Redis (atomic Lua scripts, concurrency; no network, no paid service)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq redis-server
+          node --test --test-concurrency=1 tests/spend-ledger.test.cjs
       - name: Install the browser test runtime and FFmpeg
         run: |
           npm install --prefix "$RUNNER_TEMP/ag-playwright" --no-save playwright@1.62.1
