@@ -27,7 +27,9 @@
  function apply(fn){state.budget=B.validateBudget(fn(state.budget));save();}
  // Current budget of the open project, rebuilt over the project quantities (keeps prices, waste and valid reviews).
  function load(){const saved=read(BUDGETS)[app.project.id]||null;let previous=null;try{previous=saved?B.parseBudget(JSON.stringify(saved)):null;}catch{previous=null;}
-  const r=D.draft(app.project,{previous,tariff:read(TARIFF),name:local,labels:labels()});return {...r,savedBefore:!!previous};}
+  // CAT-04: products placed from «Mis catálogos» enter THIS document (same draft, same calculation), never a parallel one.
+  let catalog=null;try{catalog=window.RubikCat04?.extraLines?.(app.project,previous)||null;}catch(e){console.warn('[Presupuesto] catálogo:',e?.message||e);catalog=null;}
+  const r=D.draft(app.project,{previous,tariff:read(TARIFF),name:local,labels:labels(),...(catalog?{extraLines:catalog.lines,extraChapters:catalog.chapters}:{})});return {...r,savedBefore:!!previous,catalog};}
  function save(){const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
  function say(m){const s=dialog.querySelector('#budgetStatus');if(s)s.textContent=m;}
  // D-04: a hand-made price change is also written to the project's price history (same record as reference prices).
@@ -64,6 +66,7 @@
     r.onchange=()=>{setItem(it.id,x=>r.checked?B.markReviewed(x,{reviewedAt:new Date().toISOString()}):B.setManualPrice(x,{unitPrice:x.unitPrice,label:x.priceSource?.label||tx('Precio propio','Own price','自有价格'),asOf:x.priceSource?.asOf||null}));draw(`${it.id}|review`);};
     // M2 (FT3D-8 S4): optional, read-only decoration of the row (linked tasks/elements of the construction plan).
     try{window.FloorPlanBudgetLinks?.decorate?.(th,it.id);}catch{}
+    try{window.RubikCat04?.decorateRow?.(th,it,state);}catch(e){console.warn('[Presupuesto] CAT-04:',e?.message||e);}
     if(openRef===it.id&&base)refPanel(tb,it);}}
   if(X&&Bridge){const ref=el('details',undefined,undefined,'budget-bc3');bar.after(ref);ref.id='budgetBc3';ref.open=!!base;el('summary',tx('Precios de referencia (BC3)','Reference prices (BC3)','参考价格 (BC3)'),ref);
    el('p',tx('Carga una base de precios en formato BC3 que tengas (tu tarifa o una base de precios que hayas obtenido). Se lee en este navegador: Rubik no la sube ni la guarda. Tú respondes de su licencia de uso. Un precio de referencia nunca se da por revisado.','Load a BC3 price base you have. It is read in this browser: Rubik does not upload or keep it. You answer for its licence. A reference price never counts as reviewed.','载入您拥有的 BC3 价格库，仅在本浏览器读取。'),ref,'budget-bc3-note');
@@ -82,9 +85,10 @@
   if(c.taxRatePercent===null)el('li',tx('No has indicado el IVA.','You have not set the VAT.','未设置增值税。'),warn);
   if(c.totals.incompleteQuantityItemIds.length)el('li',tx(`${c.totals.incompleteQuantityItemIds.length} cantidades parciales (⚠): parte de la geometría no se pudo medir.`,`${c.totals.incompleteQuantityItemIds.length} partial quantities (⚠).`,'部分数量不完整。'),warn);
   if(!warn.children.length)el('li',tx('Todas las partidas tienen precio revisado.','Every item has a reviewed price.','所有条目均已审核。'),warn,'is-ok');
+  try{window.RubikCat04?.budgetSections?.(dialog,state);}catch(e){console.warn('[Presupuesto] CAT-04:',e?.message||e);}
   const row=el('div',undefined,dialog,'tour-video-actions');
   const keep=btn(tx('Guardar mis precios en la tarifa del estudio','Save my prices to the studio tariff','保存到工作室价目'),row);keep.id='budgetTariff';
-  keep.onclick=()=>{const tariff=read(TARIFF);let n=0;for(const it of state.budget.items)if(it.unitPrice!==null){tariff[state.tariffKeys[it.id]]={unitPrice:it.unitPrice,asOf:new Date().toISOString().slice(0,10)};n++;}write(TARIFF,tariff);say(tx(`${n} precios guardados en tu tarifa: se propondrán (sin revisar) en tus próximos presupuestos.`,`${n} prices saved to your tariff.`,`已保存 ${n} 个价格。`));};
+  keep.onclick=()=>{const tariff=read(TARIFF);let n=0;for(const it of state.budget.items)if(it.unitPrice!==null&&state.tariffKeys[it.id]){tariff[state.tariffKeys[it.id]]={unitPrice:it.unitPrice,asOf:new Date().toISOString().slice(0,10)};n++;}write(TARIFF,tariff);say(tx(`${n} precios guardados en tu tarifa: se propondrán (sin revisar) en tus próximos presupuestos.`,`${n} prices saved to your tariff.`,`已保存 ${n} 个价格。`));};
   const csv=btn(tx('Descargar presupuesto (CSV)','Download budget (CSV)','下载预算 (CSV)'),row,'btn primary');csv.id='budgetCsv';
   csv.onclick=()=>download(new Blob([P.toCsv(state.budget,{delimiter:';',bom:true})],{type:'text/csv;charset=utf-8'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.csv`);
   const js=btn(tx('Descargar presupuesto (JSON)','Download budget (JSON)','下载预算 (JSON)'),row);js.id='budgetJson';
@@ -111,5 +115,7 @@
  // as this dialog; only the open project's own budget is accepted (identity by subject id, never by name).
  function commit(budget){const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
   const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(b));if(!write(BUDGETS,all))throw Error(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));if(state)state.budget=b;return b;}
- window.FloorPlanBudgetUI={open,summary,current,commit,get budget(){return state?.budget||null;}};
+ // CAT-04: redraw the open dialog from the saved document (after «Precios de referencia» or a catalogue action).
+ function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;state=load();save();draw();dialog.scrollTop=keep;}
+ window.FloorPlanBudgetUI={open,summary,current,commit,refresh,get budget(){return state?.budget||null;}};
 })();

@@ -104,8 +104,8 @@
  function priceSources(catalogs,{studioId=null}={}){
   return validCatalogs(catalogs).filter(c=>!studioId||c.studioId===studioId).map((c,i)=>{
    const prov=P.costProvider(()=>[c]),dates=c.products.map(p=>p.commercial?.verifiedAt).filter(Boolean).sort();
-   const source=Object.freeze({id:`src_cat_${i}_${c.studioId}_${c.catalogId}`,kind:'studio-catalog',kindLabel:'Catálogo del estudio (fichas CatalogProductV1)',label:`Mi catálogo · ${c.name||c.catalogId}`,providerId:PROVIDER_ID,
-    edition:`rev ${c.revision}`,region:null,asOf:dates.at(-1)||null,license:Object.freeze({status:'not-applicable',name:null,url:null,note:'Fichas del propio estudio (piloto local)'}),attribution:null,sourceUrl:null,
+   const source=Object.freeze({id:`src_cat_${i}_${c.studioId}_${c.catalogId}`,kind:'studio-catalog',kindLabel:'Catálogo del estudio (fichas CatalogProductV1)',label:`Mi catálogo · ${c.name||c.catalogId} · rev ${c.revision}`,providerId:PROVIDER_ID,
+    edition:null,region:null,asOf:dates.at(-1)||null,license:Object.freeze({status:'not-applicable',name:null,url:null,note:'Fichas del propio estudio (piloto local)'}),attribution:null,sourceUrl:null,
     legal:Object.freeze({status:'OWN',mode:'studio-catalog'}),columns:Object.freeze([]),column:null,families:Object.freeze([...new Set(c.products.map(p=>p.family))].sort()),count:c.products.filter(p=>p.commercial?.netUnitPrice!=null).length,
     studioId:c.studioId,catalogId:c.catalogId});
    const fold=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
@@ -116,5 +116,10 @@
       return {status:r.status,state:r.status==='not-found'?'not-found':r.reason==='currency'?'currency-mismatch':'no-price',reason:r.reason||null};}};
   });
  }
- return Object.freeze({VERSION,CHAPTER,PREFIX,PROVIDER_ID,UNIT,isCatalogItem,reconcile,states,priceSources,countLabel,pendingLabel});
+ // Synchronous quote for one catalogue item (identity), for pre-filling the S2 comparison in Presupuestar.
+ function quoteFor(catalogs,itemId){const id=P.parseItemId(itemId);if(!id)return {state:'not-found',quote:null,code:null};
+  const c=validCatalogs(catalogs).find(x=>x.studioId===id.studioId&&x.catalogId===id.catalogId);if(!c)return {state:'catalog-unavailable',quote:null,code:null};
+  const p=c.products.find(x=>x.productId===id.productId&&(x.variantId||null)===id.variantId);if(!p)return {state:'not-found',quote:null,code:null};
+  const r=P.costProvider(()=>[c]).getPrice(itemId);return {state:r.status==='available'?'found':r.reason==='currency'?'currency-mismatch':'no-price',quote:r.quote||null,code:p.sku,catalogId:c.catalogId};}
+ return Object.freeze({VERSION,CHAPTER,PREFIX,PROVIDER_ID,UNIT,isCatalogItem,reconcile,states,priceSources,quoteFor,countLabel,pendingLabel});
 });
