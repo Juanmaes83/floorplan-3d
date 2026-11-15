@@ -63,3 +63,24 @@ test('status: tells whether the generative assistant is available without reveal
  const s2=await call({body:{version:2,action:'status'},store:API.memoryStore()});assert.equal(s2.body.enabled,true);assert.equal(s2.body.model,'gpt-test-mini');assert.equal(s2.body.capUsd,0.05);assert.equal(JSON.stringify(s2.body).includes(KEY),false);
  const s3=await call({body:{version:2,action:'status'},store:null});assert.deepEqual([s3.body.enabled,s3.body.reason],[false,'store-not-configured']);
 });
+
+test('reservation bound H-TOK: ≥ UTF-8 bytes of everything sent, with adversarial Unicode/history/tools; never the old length/3 heuristic',()=>{
+ const s={model:'m',maxOut:800},tools=Agent.NAMES.slice();
+ const adversarial=['中文客厅预算为什么不完整'.repeat(400),'🛋️👨‍👩‍👧‍👦🏳️‍🌈'.repeat(300),'"\\\n\t\u0000'.repeat(500),'1234567890'.repeat(800),' '.repeat(6000),'ﷺ𒐫꧅'.repeat(500)];
+ for(const a of adversarial){const msgs=[{role:'user',content:a},{role:'assistant',content:null,tool_calls:[{id:'c1',type:'function',function:{name:'list_rooms',arguments:'{}'}}]},{role:'tool',tool_call_id:'c1',name:'list_rooms',content:JSON.stringify({ok:true,data:{rooms:[{name:a.slice(0,300)}]}})},{role:'user',content:a}];
+  const pb=API.providerBody(s,tools,msgs,{area:'budget',lang:'zh'}),b=API.inputTokenBound(pb),bytes=Buffer.byteLength(JSON.stringify(pb),'utf8');
+  assert.ok(b>=bytes+API.BOUND.base+API.BOUND.perMessage*pb.messages.length,'bound ≥ bytes + chat overhead');
+  for(const m of pb.messages){if(typeof m.content==='string')assert.ok(b>=Buffer.byteLength(m.content,'utf8'),'every message text fits in the bound');}
+  assert.ok(b>Math.ceil(JSON.stringify(pb).length/3)+200,'stricter than the former heuristic');}
+ const small=API.providerBody(s,tools,[{role:'user',content:'a'}],{}),big=API.providerBody(s,tools,[{role:'user',content:'a'.repeat(1000)}],{});assert.ok(API.inputTokenBound(big)-API.inputTokenBound(small)>=999,'monotone');
+});
+
+test('breaker: a provider usage above the reservation (input) or above max_completion_tokens (output) stops every later call until reviewed',async()=>{
+ for(const usage of [{prompt_tokens:10_000_000,completion_tokens:10},{prompt_tokens:100,completion_tokens:5000}]){
+  const store=API.memoryStore(),f=fakeProvider([textResp('ok',usage),textResp('ok')]);const env={...ENV,RUBIK_ASSISTANT_BUDGET_CAP_USD:'100'};
+  const r1=await call({body:step(),env,store,fetch:f});assert.equal(r1.status,200,'the billed answer is still returned');assert.equal(r1.body.usage.costUsd,+((usage.prompt_tokens*0.4+usage.completion_tokens*1.6)/1e6).toFixed(6),'real usage is settled, not the reservation');
+  const r2=await call({body:step(),env,store,fetch:f});assert.deepEqual([r2.status,r2.body.error],[503,'breaker_open']);assert.equal(f.calls.length,1,'no further provider call');
+  const st=await call({body:{version:2,action:'status'},env,store});assert.deepEqual([st.body.enabled,st.body.reason],[false,'breaker']);
+  assert.match(r1.logs.join('\n'),/"over":true/);}
+ const store=API.memoryStore(),f=fakeProvider([textResp('ok'),textResp('ok')]);await call({body:step(),store,fetch:f});assert.equal((await call({body:step(),store,fetch:f})).status,200,'normal usage never opens it');
+});

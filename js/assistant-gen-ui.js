@@ -72,8 +72,9 @@
   state.history=r.history;
   const used=[...new Set(r.steps.filter(s=>s.ok).map(s=>TOOL_LABEL()[s.tool]||s.tool))];
   const src=(used.length?tx('Consultado en RUBIK: ','Looked up in RUBIK: ','已在 RUBIK 中查询：')+used.join(' · '):tx('Sin consultas a RUBIK','No RUBIK lookups','未查询 RUBIK'))
-   +` · ${tx('IA','AI','AI')}: ${r.usage.inputTokens+r.usage.outputTokens} tokens · ${tx('coste estimado','estimated cost','估算费用')} ${r.usage.costKnown?fmt(r.usage.costUsd)+' USD':tx('desconocido','unknown','未知')}`;
-  push('assistant',r.answer.text+(r.answer.grounded?'':'\n'+tx('⚠ Cifras no verificadas por RUBIK: ','⚠ Figures not verified by RUBIK: ','⚠ 未经 RUBIK 验证的数字：')+r.answer.unverified.join(', ')+tx('. Compruébalas antes de usarlas.','. Check them before using them.','。使用前请核实。')),src);
+   +` · ${tx('IA','AI','AI')}: ${r.usage.inputTokens+r.usage.outputTokens} tokens · ${tx('coste estimado','estimated cost','估算费用')} ${r.usage.costKnown?fmt(r.usage.costUsd)+' USD':tx('desconocido','unknown','未知')}`
+   +' · '+tx('comprobación parcial de cifras: no certifica a qué partida se atribuye cada una','partial figure check: it does not certify which item each figure belongs to','数字仅部分核对：不保证每个数字对应的条目');
+  push('assistant',r.answer.text+(r.answer.grounded?'':'\n'+tx('⚠ Cifras que no aparecen en los datos consultados en RUBIK: ','⚠ Figures not found in the data looked up in RUBIK: ','⚠ 在 RUBIK 查询数据中未找到的数字：')+r.answer.unverified.join(', ')+tx('. Compruébalas antes de usarlas.','. Check them before using them.','。使用前请核实。')),src);
   emit('gen-answer',{tools:r.steps.map(s=>s.tool),grounded:r.answer.grounded,unverified:r.answer.unverified,providerCalls:r.providerCalls,usage:r.usage,proposals:r.proposals.length,actions:r.actions.map(a=>a.route)});
   if(r.proposals.length)showProposal(r.proposals[0].proposal);
   if(r.actions.length){const box=el('div',undefined,null,'assistant-actions assistant-gen-routes');box.id='assistantGenRoutes';

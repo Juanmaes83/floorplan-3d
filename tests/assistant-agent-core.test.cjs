@@ -76,3 +76,18 @@ test('full chain: browser agent → /api/assistant (all gates) → provider (Ope
  assert.equal(r.usage.costUsd,+(((1200*0.4+30*1.6)+(1600*0.4+50*1.6))/1e6).toFixed(6));assert.equal((await store.snapshot()).text,r.usage.costUsd,'same figure in the server ledger');
  const st=await adapter.status();assert.equal(st.requiresCode,true,'status without code reveals nothing but that a code is needed');assert.equal(st.model,undefined);
 });
+
+test('figure check with budget oracles: amounts must come from monetary fields; counts with a noun are checked; declared PARTIAL with its limits',async()=>{
+ const ctx=world(),c=B.calculateBudget(ctx.budget),n=c.totals.unpricedItemIds.length,partial=c.totals.net.partialAmount??c.lines.filter(l=>l.subtotalNet!==null).reduce((a,l)=>a+l.subtotalNet,0);
+ const paint=c.lines.find(l=>l.id==='paint'),qty=paint.quantity?.value??paint.quantity;assert.ok(n>1&&n<=10,'fixture: a small count (formerly skipped)');
+ const turn=async text=>(await A.runTurn({question:'¿Cómo está el presupuesto?',ctx,consent,adapter:A.scriptedAdapter([call('get_budget_summary'),say(text)])})).answer;
+ const es=v=>v.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
+ let a=await turn(`Hay ${n} partidas sin precio; lo ya valorado suma ${es(partial)} €.`);assert.equal(a.grounded,true,JSON.stringify(a));assert.equal(a.check,'partial');assert.ok(a.limits.length>=2);
+ a=await turn(`Hay ${n-1} partidas sin precio.`);assert.deepEqual(a.unverified,[String(n-1)],'a wrong small count with its noun is now caught');
+ a=await turn(`La pintura cuesta ${es(qty)} €.`);assert.equal(a.grounded,false,'a quantity (m²) presented as euros is caught: amounts must match a monetary field');assert.deepEqual(a.unverifiedAmounts,[es(qty)]);
+ a=await turn(`El total es ${es(partial+1000)} EUR.`);assert.equal(a.grounded,false);
+ a=await turn('Puedes revisarlo en 2 pasos.');assert.equal(a.grounded,true,'bare small numbers without unit or noun are not flagged');
+ // LÍMITE DECLARADO (no comportamiento deseado): una cifra monetaria real atribuida a OTRO concepto no se detecta.
+ // Por eso la interfaz dice «comprobación parcial» y nunca «verificado». La prueba C debe medirlo con oráculos.
+ a=await turn(`Las puertas cuestan ${es(partial)} €.`);assert.equal(a.grounded,true,'known limitation: attribution is not checked');assert.match(a.limits.join(' '),/no vincula/);
+});

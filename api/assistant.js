@@ -89,6 +89,17 @@ function parseProvider(json,tools){
  return {type:'error',code:'provider_error',dropped,usage};
 }
 const costOf=(s,inTok,outTok)=>+((inTok*s.pin+outTok*s.pout)/1e6).toFixed(6);
+// Cota superior de tokens de entrada (hipótesis H-TOK, verificable y vigilada): los tokenizadores BPE a nivel de byte
+// (OpenAI cl100k/o200k) producen como mucho 1 token por byte UTF-8 del texto. El cuerpo JSON contiene todo el texto que
+// el proveedor tokeniza (los escapes JSON solo AÑADEN bytes) y además campos que no se tokenizan; se suma un margen
+// por el formato del chat (marcas de rol por mensaje y renderizado de herramientas y parámetros). NO es la heurística
+// length/3: es una cota por bytes, ~3× más conservadora. Si el proveedor informara alguna vez más tokens de los
+// reservados, el disyuntor (breaker:text) detiene TODAS las llamadas siguientes hasta que el propietario lo revise.
+const BOUND=Object.freeze({base:64,perMessage:8,perTool:32,perProperty:8});
+function inputTokenBound(pb){const bytes=Buffer.byteLength(JSON.stringify(pb),'utf8'),tools=Array.isArray(pb.tools)?pb.tools:[];
+ const props=tools.reduce((a,t)=>a+Object.keys(t?.function?.parameters?.properties||{}).length,0);
+ return bytes+BOUND.base+BOUND.perMessage*(pb.messages?.length||0)+BOUND.perTool*tools.length+BOUND.perProperty*props;}
+const BREAKER='breaker:text',BREAKER_TTL=365*24*3600e3;
 async function handler(req,res,{env=process.env,log=console.log,store=null,fetch:f=globalThis.fetch,now=Date.now}={}){
  if(req.method!=='POST'){res.setHeader('Allow','POST');return send(res,405,{error:'method'},log);}
  if(!sameSite(req))return send(res,403,{error:'origin'},log);
@@ -101,20 +112,22 @@ async function handler(req,res,{env=process.env,log=console.log,store=null,fetch
  if(body.action==='status'&&body.version===2){
   if(!g.ok)return send(res,200,{enabled:false,reason:g.error},log,{action:'status'});
   if(!codeOk(req.headers['x-rubik-assistant-code'],g.s.code))return send(res,200,{enabled:true,reason:'code-required',requiresCode:true},log,{action:'status'});
-  const st=store?.snapshot?await store.snapshot('text'):null;
+  const st=store?.snapshot?await store.snapshot('text'):null,br=store?.get?await store.get(BREAKER):null;
+  if(br)return send(res,200,{enabled:false,reason:'breaker',breaker:{reason:br.reason,at:br.at}},log,{action:'status'});
   return send(res,200,{enabled:!!store,reason:store?'ok':'store-not-configured',model:g.s.model,priceDate:g.s.date,capUsd:g.s.cap,spentUsd:st?.spentUsd??null},log,{action:'status'});}
  if(!g.ok)return send(res,g.status,{error:g.error,message:g.message},log);
  const s=g.s;
  if(req.headers['x-rubik-contract']!==CONTRACT||body.version!==2||body.action!=='step')return send(res,400,{error:'contract'},log);
  if(!codeOk(req.headers['x-rubik-assistant-code'],s.code)){const n=store?.fail?await store.fail('code',now()):0;return send(res,n>20?429:401,{error:n>20?'too_many_attempts':'code'},log);}
  if(!store||typeof store.reserve!=='function')return send(res,503,{error:'store-not-configured',message:'Falta el almacén persistente de gasto y límites.'},log);
+ {const br=await store.get(BREAKER);if(br)return send(res,503,{error:'breaker_open',message:'Disyuntor de gasto abierto: un consumo superó la reserva. Requiere revisión del propietario.',reason:br.reason},log);}
  if(body.consent?.question!==true||body.consent?.projectData!==true)return send(res,400,{error:'consent_required'},log);
  const tools=Array.isArray(body.tools)?body.tools.filter(n=>Agent.NAMES.includes(n)):[];
  const bad=checkMessages(body.messages,tools);if(bad)return send(res,400,{error:'messages',detail:bad},log);
  const idem=String(body.idempotencyKey||'');if(!/^[A-Za-z0-9_.:-]{8,120}$/.test(idem))return send(res,400,{error:'idempotency'},log);
  if(!await store.setIfAbsent('idem:'+idem,{status:'in-progress'},24*3600e3))return send(res,409,{error:'already-processed'},log);
  if(!await store.rate('text',now(),s.perMinute))return send(res,429,{error:'rate_limited'},log);
- const pb=providerBody(s,tools,body.messages,body.context),estIn=Math.ceil(JSON.stringify(pb).length/3)+200,worst=costOf(s,estIn,s.maxOut);
+ const pb=providerBody(s,tools,body.messages,body.context),estIn=inputTokenBound(pb),worst=costOf(s,estIn,s.maxOut);
  const id='txt_'+createHash('sha256').update(idem).digest('hex').slice(0,16),reservation=await store.reserve({id,family:'text',usd:worst,capUsd:s.cap});
  if(!reservation.ok){await store.set('idem:'+idem,{status:'refused-'+reservation.reason},24*3600e3);return send(res,402,{error:'budget_exceeded',message:'Se ha alcanzado el tope de gasto aprobado.',capUsd:s.cap},log,{model:s.model});}
  const t0=now(),ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),TIMEOUT_MS);let pres,json;
@@ -126,8 +139,10 @@ async function handler(req,res,{env=process.env,log=console.log,store=null,fetch
   return send(res,502,{error:'provider_error',status:pres.status},log,{model:s.model,pstatus:pres.status,usd:billedUnknown?worst:0});}
  const out=parseProvider(json,tools),inTok=out.usage.inputTokens,outTok=out.usage.outputTokens,known=inTok!==null&&outTok!==null,usd=known?costOf(s,inTok,outTok):worst;
  const st=await store.settle(id,{usd});await store.set('idem:'+idem,{status:out.type},24*3600e3);
+ // H-TOK vigilada: un consumo por encima de lo reservado abre el disyuntor (se pierde como mucho UN paso de holgura).
+ const over=known&&(inTok>estIn||outTok>s.maxOut);if(over)await store.set(BREAKER,{reason:inTok>estIn?'input-over-bound':'output-over-limit',at:new Date(now()).toISOString(),estIn,inTok,maxOut:s.maxOut,outTok},BREAKER_TTL);
  const usage={inputTokens:inTok,outputTokens:outTok,costUsd:usd,costBasis:known?`tarifa ${s.date}`:'peor caso (uso no informado)',spentUsd:st?.spentUsd??null,capUsd:s.cap};
- return send(res,out.type==='error'?502:200,{...out,usage,model:s.model},log,{model:s.model,type:out.type,inTok,outTok,usd,dropped:(out.dropped||[]).length,ms:now()-t0});
+ return send(res,out.type==='error'?502:200,{...out,usage,model:s.model},log,{model:s.model,type:out.type,inTok,outTok,estIn,over,usd,dropped:(out.dropped||[]).length,ms:now()-t0});
 }
 // In-memory store for TESTS ONLY (not durable across instances): same interface a persistent store must implement.
 function memoryStore({now=Date.now}={}){
@@ -141,4 +156,4 @@ function memoryStore({now=Date.now}={}){
   async snapshot(){return {spentUsd:+(spent.text+spent.image).toFixed(6),text:spent.text,image:spent.image};}};
 }
 module.exports=(req,res)=>handler(req,res,{store:null});
-Object.assign(module.exports,{handler,settings,checkMessages,providerBody,parseProvider,memoryStore,PROVIDERS,CONTRACT,MAX_BYTES});
+Object.assign(module.exports,{handler,settings,checkMessages,providerBody,parseProvider,memoryStore,inputTokenBound,BOUND,PROVIDERS,CONTRACT,MAX_BYTES});

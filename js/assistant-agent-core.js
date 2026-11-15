@@ -90,11 +90,30 @@
  function parseNum(tok){const t=tok.replace(/^-/,'');let n;
   if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(t))n=Number(t.replace(/\./g,'').replace(',','.'));else if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(t))n=Number(t.replace(/,/g,''));else n=Number(t.replace(',','.'));
   return tok.startsWith('-')?-n:n;}
+ // Comprobación PARCIAL y heurística de cifras (no certifica): (1) cada importe con moneda (€, EUR, USD, $) debe
+ // coincidir con un valor de un campo MONETARIO consultado (precio, importe, subtotal, total, coste), no con cualquier
+ // número; (2) el resto de cifras debe aparecer en lo consultado o en la pregunta; (3) los enteros ≤10 solo se omiten
+ // si no llevan moneda, unidad ni sustantivo de recuento («3 partidas», «2 m²» sí se comprueban). Límites declarados:
+ // NO vincula una cifra con la partida, estancia o SKU a la que el texto la atribuye, y no verifica afirmaciones sin cifras.
+ const MONEY_KEY=/price|precio|amount|importe|net|gross|subtotal|total|cost|usd|eur/i;
+ const CURRENCY_AFTER=/^\s?(€|eur\b|euros?\b|usd\b|dólares|dollars|元|欧元|美元)/i,CURRENCY_BEFORE=/(€|\$|US\$)\s?$/;
+ const UNIT_AFTER=/^\s?(%|m²|m2\b|m\b|cm\b|mm\b|ud\b|uds\b|unidades|units?\b|partidas?|items?\b|estancias?|rooms?\b|productos?|products?\b|objetos?|objects?\b|tokens?\b|puertas?|doors?\b|ventanas?|windows?\b|plantas?|levels?\b|个|项|间|件|扇|层|平方米)/i;
+ const GROUNDING_LIMITS=Object.freeze(['parcial: no vincula cada cifra con la partida, estancia o SKU a la que se atribuye','no verifica afirmaciones sin cifras']);
  function grounding(text,steps,question=''){
-  const known=new Set();const walk=v=>{if(typeof v==='number'&&Number.isFinite(v)){for(const d of [0,1,2])known.add(Number(v.toFixed(d)));known.add(Math.round(v/10)/100);known.add(Math.round(v*100)/100);}else if(typeof v==='string'){for(const t of numberTokens(v))known.add(parseNum(t));}else if(Array.isArray(v)){known.add(v.length);v.forEach(walk);}else if(isObj(v))Object.values(v).forEach(walk);};
-  for(const s of steps)walk(s.result);for(const t of numberTokens(question))known.add(parseNum(t));
-  const unverified=[];for(const tok of numberTokens(text)){const n=parseNum(tok);if(!Number.isFinite(n)||Math.abs(n)<=10&&Number.isInteger(n))continue;if(!known.has(n)&&!known.has(Math.round(n*100)/100))unverified.push(tok);}
-  return {grounded:unverified.length===0,unverified:[...new Set(unverified)].slice(0,10)};
+  const known=new Set(),money=new Set();
+  const addNum=(set,v)=>{for(const d of [0,1,2])set.add(Number(v.toFixed(d)));set.add(Math.round(v/10)/100);set.add(Math.round(v*100)/100);};
+  const walk=(v,isMoney)=>{if(typeof v==='number'&&Number.isFinite(v)){addNum(known,v);if(isMoney)addNum(money,v);}
+   else if(typeof v==='string'){for(const t of numberTokens(v)){const n=parseNum(t);known.add(n);if(isMoney)money.add(n);}}
+   else if(Array.isArray(v)){known.add(v.length);v.forEach(x=>walk(x,isMoney));}
+   else if(isObj(v))for(const [k,x] of Object.entries(v))walk(x,isMoney||MONEY_KEY.test(k));};
+  for(const s of steps)walk(s.result,false);const asked=new Set(numberTokens(question).map(parseNum));
+  const clean=String(text).replace(/\b[A-Z]{2,}[\w-]*\d[\w-]*\b/g,m=>' '.repeat(m.length)).replace(/\b\d{4}-\d{2}-\d{2}\b/g,m=>' '.repeat(m.length));
+  const unverified=[],amounts=[],re=/-?\d+(?:[.,]\d+)*/g;let m;
+  while((m=re.exec(clean))){const tok=m[0],n=parseNum(tok);if(!Number.isFinite(n))continue;const after=clean.slice(m.index+tok.length,m.index+tok.length+14),before=clean.slice(Math.max(0,m.index-4),m.index);
+   const isMoney=CURRENCY_AFTER.test(after)||CURRENCY_BEFORE.test(before),hasUnit=isMoney||UNIT_AFTER.test(after),r2=Math.round(n*100)/100;
+   if(!hasUnit&&Number.isInteger(n)&&Math.abs(n)<=10)continue;if(asked.has(n))continue;
+   if(isMoney?!(money.has(n)||money.has(r2)):!(known.has(n)||known.has(r2))){unverified.push(tok);if(isMoney)amounts.push(tok);}}
+  return {grounded:unverified.length===0,unverified:[...new Set(unverified)].slice(0,10),unverifiedAmounts:[...new Set(amounts)].slice(0,10),check:'partial',limits:GROUNDING_LIMITS};
  }
  // Execute ONE whitelisted tool locally with RUBIK's engines. Never mutates ctx.project.
  function execute(name,args,ctx,callId){
@@ -137,7 +156,7 @@
    if(r.type==='message'){
     const text=String(r.text||'').slice(0,LIMITS.maxMessageChars).trim();if(!text)return fail('internal','Respuesta vacía del modelo.',{steps,proposals,actions,providerCalls});
     const g=grounding(text,steps,question);messages.push({role:'assistant',content:text});
-    return {ok:true,version:VERSION,answer:{text,grounded:g.grounded,unverified:g.unverified},steps,proposals,actions,usage,providerCalls,durationMs:Date.now()-t0,history:messages,
+    return {ok:true,version:VERSION,answer:{text,grounded:g.grounded,unverified:g.unverified,unverifiedAmounts:g.unverifiedAmounts,check:g.check,limits:g.limits},steps,proposals,actions,usage,providerCalls,durationMs:Date.now()-t0,history:messages,
      audit:{version:K.VERSION,runId:'gen_'+t0.toString(36),at:new Date(t0).toISOString(),mode:'provider',area:ctx.area,projectId:ctx.project.id,tools:steps.map(s=>s.tool).slice(0,K.LIMITS.tools),providerCalls,cost:{estimatedUsd:usage.costUsd,billedUsd:null,basis:'tarifa fechada del servidor; la factura del proveedor manda'}}};
    }
    if(r.type!=='tool_calls'||!Array.isArray(r.calls)||!r.calls.length)return fail('internal','Respuesta del modelo no reconocida.',{steps,proposals,actions,providerCalls});
