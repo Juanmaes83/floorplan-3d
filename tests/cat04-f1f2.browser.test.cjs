@@ -89,3 +89,80 @@ test('F1/F2 móvil 390×844 EN: la unidad del precio y la causa del total incomp
   assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}
 });
+
+// F8 · VAT per item. budget-core lets an item carry its own taxRatePercent (overrides the budget's; never null). The only
+// way such a document reaches the Presupuestar screen is the public FloorPlanBudgetUI.commit() followed by a redraw of the
+// open dialog (here: the user sets the general VAT selector to «No indicado»). The «VAT not set» cause must follow the rate EFFECTIVELY
+// applicable to each line, and (F8-C) reopening Presupuestar must keep each item's own rate.
+test('F8 escritorio: IVA general vacío pero IVA propio en partidas — la causa del total parcial es la real (ES/EN/ZH)',{timeout:300000},async()=>{
+ const {context,page}=await K.editor(env,rec({width:1440,height:900}));const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
+ const totals=()=>page.locator('#budgetTotals').innerText(),warns=()=>page.locator('#budgetWarnings').innerText();
+ const commitVat=own=>page.evaluate(own=>{const cur=FloorPlanBudgetUI.current().budget;FloorPlanBudgetUI.commit({...cur,taxRatePercent:21,items:cur.items.map((i,k)=>{const p=i.unitPrice===null?FloorPlanBudget.setManualPrice(i,{unitPrice:10,label:'Precio propio'}):i;if(own===null||k<own)return {...p,taxRatePercent:10};const {taxRatePercent,...inherit}=p;return inherit;})});return cur.items.length;},own);// items past `own` explicitly inherit (F8-C keeps earlier own rates)
+ const clearGeneralVat=async()=>{const v=page.locator('#budgetVat');await v.selectOption('');await v.dispatchEvent('change');await page.waitForFunction(()=>FloorPlanBudgetUI.budget?.taxRatePercent===null);};
+ try{
+  await loadPilot(page,false);await toEditor(page);await place(page,'aparador-lumen@roble');await setSheetUnit(page,'ml');
+  await openBudget(page);await page.locator(`#budgetDialog tr[data-item="${RB}"]`).waitFor();
+  // A · every item has its own 10 % VAT, general VAT emptied; the ONLY cause left is the pending quantity of the ml sheet.
+  await commitVat(null);await clearGeneralVat();
+  const c=await page.evaluate(()=>{const c=FloorPlanBudget.calculateBudget(FloorPlanBudgetUI.budget);return {nullVat:c.lines.filter(l=>l.effectiveTaxRatePercent===null).length,unpriced:c.totals.unpricedItemIds.length,pending:c.totals.unavailableQuantityItemIds.length};});
+  assert.deepEqual(c,{nullVat:0,unpriced:0,pending:1});
+  assert.match(await totals(),/Total parcial \(1 con cantidad pendiente\)/);assert.doesNotMatch(await totals(),/IVA sin definir|sin IVA/);
+  assert.doesNotMatch(await warns(),/No has indicado el IVA|sin IVA aplicable/);assert.doesNotMatch(await page.locator('#budgetTotals div').nth(1).innerText(),/—/);
+  await shot(page,'f8-01-iva-propio-es');
+  await page.evaluate(()=>{try{setLang('en');}catch{}});await clearGeneralVat();
+  assert.match(await totals(),/Partial total \(1 quantity pending\)/);assert.doesNotMatch(await totals(),/VAT not set|without VAT/);assert.doesNotMatch(await warns(),/You have not set the VAT|applicable VAT/);
+  await page.evaluate(()=>{try{setLang('zh');}catch{}});await clearGeneralVat();assert.doesNotMatch(await warns(),/未设置增值税|没有适用的增值税/);
+  // A′ · only the first 3 items carry their own VAT: the cause names the items with NO applicable rate, with their count.
+  await page.evaluate(()=>{try{setLang('es');}catch{}});const n=await commitVat(3);await clearGeneralVat();const miss=n-3;
+  assert.match(await totals(),new RegExp(`Total parcial \\(1 con cantidad pendiente · ${miss} sin IVA\\)`));
+  assert.match(await warns(),new RegExp(`${miss} partidas sin IVA aplicable`));assert.doesNotMatch(await warns(),/No has indicado el IVA/);
+  await shot(page,'f8-02-iva-parcial-es');
+  await page.evaluate(()=>{try{setLang('en');}catch{}});await clearGeneralVat();assert.match(await totals(),new RegExp(`${miss} without VAT`));assert.match(await warns(),new RegExp(`${miss} items without an applicable VAT`));
+  await page.evaluate(()=>{try{setLang('zh');}catch{}});await clearGeneralVat();assert.match(await warns(),new RegExp(`${miss} 个条目没有适用的增值税`));
+  // F8-C: reopening Presupuestar (load → draft → save) keeps the 3 own rates; the general VAT stays empty, so the cause
+  // is still «N items without an applicable VAT», never «You have not set the VAT». The assistant reads the same document.
+  await page.evaluate(()=>{try{setLang('es');}catch{}});await closeBudget(page);await openBudget(page);
+  assert.equal(await page.evaluate(()=>FloorPlanBudgetUI.current().budget.items.filter(i=>Object.prototype.hasOwnProperty.call(i,'taxRatePercent')&&i.taxRatePercent===10).length),3);
+  assert.match(await warns(),new RegExp(`${miss} partidas sin IVA aplicable`));assert.doesNotMatch(await warns(),/No has indicado el IVA/);
+  await shot(page,'f8-03-reabrir-conserva-iva-propio');await closeBudget(page);await toEditor(page);
+  const a=await ask(page,'¿Por qué el presupuesto está incompleto?');assert.match(a,new RegExp(`IVA sin definir en ${miss} partidas`),a);
+  assert.deepEqual(api,[]);assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
+ }finally{await context.close();}
+});
+
+// F8-C (P1) · a budget saved with per-item VAT (10 %, 0 % and inherited) is opened in the REAL Presupuestar (load → draft →
+// save), edited explicitly (price, general VAT) and reopened: the persisted document and the computed amounts keep every
+// own rate and its provenance. Opening without editing must leave the stored budget byte-for-byte identical.
+test('F8-C escritorio: presupuesto guardado con IVA por partida — abrir, editar y reabrir sin perder tipos ni importes',{timeout:300000},async()=>{
+ const {context,page}=await K.editor(env,rec({width:1440,height:900}));const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
+ const stored=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('rubik-budget-v1'))[FloorPlanApp.project.id]);
+ const money=b=>page.evaluate(b=>{const c=FloorPlanBudget.calculateBudget(b);return {lines:c.lines.map(l=>[l.id,l.effectiveTaxRatePercent,l.taxAmount,l.subtotalGross]),tax:c.totals.tax.amount,gross:c.totals.gross.amount};},b);
+ const vat=b=>Object.fromEntries(b.items.map(i=>[i.id,Object.prototype.hasOwnProperty.call(i,'taxRatePercent')?i.taxRatePercent:'inherit']));
+ const cents=t=>t.replace(/[^0-9]/g,'');
+ try{
+  await toEditor(page);await openBudget(page);await closeBudget(page);
+  // A budget saved earlier with its own VAT per item (same validated document Presupuestar writes).
+  const seeded=await page.evaluate(()=>{const id=FloorPlanApp.project.id,all=JSON.parse(localStorage.getItem('rubik-budget-v1'));const b=all[id];b.taxRatePercent=21;
+   b.items=b.items.map((i,k)=>{const p=i.unitPrice===null?FloorPlanBudget.setManualPrice(i,{unitPrice:10+k,label:'Precio propio'}):i;return k%3===0?{...p,taxRatePercent:10}:k%3===1?{...p,taxRatePercent:0}:p;});
+   all[id]=JSON.parse(FloorPlanBudget.serializeBudget(FloorPlanBudget.validateBudget(b)));localStorage.setItem('rubik-budget-v1',JSON.stringify(all));return all[id];});
+  const v0=vat(seeded),m0=await money(seeded);assert.ok(Object.values(v0).includes(10)&&Object.values(v0).includes(0)&&Object.values(v0).includes('inherit'));
+  // 1 · open without editing → identical document and amounts; the screen shows the same VAT.
+  await openBudget(page);const s1=await stored();assert.deepEqual(s1,seeded,'opening Presupuestar must not rewrite the per-item VAT');assert.deepEqual(await money(s1),m0);
+  assert.equal(cents(await page.locator('#budgetTotals div').nth(1).locator('dd').innerText()),String(Math.round(m0.tax*100)));
+  assert.doesNotMatch(await page.locator('#budgetWarnings').innerText(),/IVA/);
+  await shot(page,'f8c-01-abrir-sin-editar');
+  // 2 · explicit price edit on an own-10 % item → its rate stays.
+  const first=seeded.items[0].id,pr=page.locator(`#budgetDialog tr[data-item="${first}"] [data-field="price"]`);await pr.fill('77');await pr.dispatchEvent('change');
+  await page.waitForFunction(id=>JSON.parse(localStorage.getItem('rubik-budget-v1'))[FloorPlanApp.project.id].items.find(i=>i.id===id).unitPrice===77,first);
+  assert.deepEqual(vat(await stored()),v0);
+  // 3 · general VAT 21 → 4 %: own rates kept, inherited lines follow.
+  await page.locator('#budgetVat').selectOption('4');await page.waitForFunction(()=>JSON.parse(localStorage.getItem('rubik-budget-v1'))[FloorPlanApp.project.id].taxRatePercent===4);
+  const s3=await stored(),m3=await money(s3);assert.deepEqual(vat(s3),v0);
+  for(const [id,eff] of m3.lines)assert.equal(eff,v0[id]==='inherit'?4:v0[id],`line ${id}`);
+  // 4 · close and reopen → identical to what was saved; the assistant's source (current()) has the same rates.
+  await closeBudget(page);await openBudget(page);const s4=await stored();assert.deepEqual(s4,s3,'reopen keeps the edited document');assert.deepEqual(await money(s4),m3);
+  assert.deepEqual(vat(await page.evaluate(()=>FloorPlanBudgetUI.current().budget)),v0);
+  await shot(page,'f8c-02-reabrir-tras-editar');
+  assert.deepEqual(api,[]);assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
+ }finally{await context.close();}
+});

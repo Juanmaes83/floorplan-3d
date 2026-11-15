@@ -90,3 +90,74 @@ test('F3 · a price applied from S2 whose unit changed is reported as a unit con
  const ctx=ctxOf({p,budget,cats});const row=ctx.catalogReport.find(r=>r.itemId===RB);assert.equal(row.state,'unit-conflict');
  const t=ask('¿Cuánto cuesta este producto?',ctx,{selection:{kind:'furn',id:'obj_template-029'}});assert.match(t,/conflicto de unidad/i);assert.doesNotMatch(t,/pendiente de revisión/);
 });
+
+// ---------- F8 (final cross-audit): VAT per item ----------
+// budget-core contract: an item MAY carry its own taxRatePercent (0–100), which overrides the budget's; an item's own
+// rate can never be null (rejected by validateItem). The tax cause of an incomplete total must come from the EFFECTIVE
+// rate of each line (calculateBudget → line.effectiveTaxRatePercent), not from the global rate alone.
+const withVat=(budget,fn)=>B.validateBudget({...budget,items:budget.items.map((i,k)=>{const r=fn(i,k);return r===undefined?i:{...i,taxRatePercent:r};})});
+test('F8-A · global VAT null but EVERY item has its own valid VAT: the total is complete; nothing says «VAT not set» (ES/EN/ZH)',()=>{
+ const p=Core.initial();const budget=withVat({...priceAll(D.draft(p,{labels}).budget),taxRatePercent:null},()=>10);const c=B.calculateBudget(budget);
+ assert.equal(c.totals.gross.complete,true,'contract: per-item VAT makes the gross computable');
+ const ctx=ctxOf({p,budget,cats:[]});
+ for(const [q,lang] of [['¿Cuánto cuesta?','es'],['How much does it cost?','en'],['总共多少钱？','zh']]){const t=ask(q,{...ctx,lang});assert.doesNotMatch(t,/IVA sin definir|VAT not set|增值税未设定/,t);}
+ const s=T.execute('get_budget_summary',{},{project:p,budget,budgetSaved:true,expectedProjectId:p.id}).data;assert.equal(s.incomplete.taxPending,false);assert.equal(s.gross.amount,c.totals.gross.amount);
+});
+test('F8-A · global VAT null, every item with its own VAT, one quantity pending: the cause is the quantity, NOT the VAT (ES/EN/ZH)',()=>{
+ const {p,budget:b0}=f1World();const budget=withVat({...b0,taxRatePercent:null},()=>21);assert.equal(B.calculateBudget(budget).totals.gross.complete,false);
+ const ctx=ctxOf({p,budget,cats:[]});
+ for(const [q,lang,cause] of [['¿Por qué el presupuesto está incompleto?','es',/cantidad pendiente de medición/],['Why is my budget incomplete?','en',/quantity pending measurement/],['为什么预算不完整？','zh',/待测量/],['¿Cuánto cuesta?','es',/cantidad pendiente de medición/]]){
+  const t=ask(q,{...ctx,lang});assert.match(t,cause,t);assert.doesNotMatch(t,/IVA sin definir|VAT not set|增值税未设定/,`${lang} «${q}» must not blame the VAT → ${t}`);}
+ assert.equal(T.execute('get_budget_summary',{},{project:p,budget,budgetSaved:true,expectedProjectId:p.id}).data.incomplete.taxPending,false);
+});
+test('F8-A · global VAT null and only SOME items with their own VAT: the VAT cause counts the items without an applicable rate (ES/EN/ZH)',()=>{
+ const p=Core.initial();const b0={...priceAll(D.draft(p,{labels}).budget),taxRatePercent:null};const budget=withVat(b0,(i,k)=>k<3?10:undefined);
+ const c=B.calculateBudget(budget),missing=c.lines.filter(l=>l.effectiveTaxRatePercent===null).length;assert.ok(missing>0&&missing<c.lines.length);
+ const s=T.execute('get_budget_summary',{},{project:p,budget,budgetSaved:true,expectedProjectId:p.id}).data;assert.equal(s.incomplete.taxPending,true);assert.equal(s.incomplete.taxMissingItems,missing);
+ const ctx=ctxOf({p,budget,cats:[]});
+ for(const [q,lang,re] of [['¿Cuánto cuesta?','es',new RegExp(`IVA sin definir en ${missing} partidas`)],['How much does it cost?','en',new RegExp(`VAT not set on ${missing} items`)],['总共多少钱？','zh',new RegExp(`${missing} 个条目增值税未设定`)]])assert.match(ask(q,{...ctx,lang}),re);
+});
+test('F8-B · an item VAT explicitly null is NOT a valid budget (contract): it is rejected, never summarised as if it were valid',()=>{
+ const p=Core.initial();const ok=priceAll(D.draft(p,{labels}).budget);const bad={...ok,taxRatePercent:21,items:ok.items.map((i,k)=>k===0?{...i,taxRatePercent:null}:i)};
+ assert.throws(()=>B.validateBudget(bad),/item\.taxRatePercent must be between 0 and 100/);assert.throws(()=>B.calculateBudget(bad),/item\.taxRatePercent/);
+ const r=T.execute('get_budget_summary',{},{project:p,budget:bad,budgetSaved:true,expectedProjectId:p.id});assert.equal(r.ok,false,'no summary is fabricated from an invalid budget');
+});
+
+// ---------- F8-C (P1): per-item VAT must never be lost silently ----------
+// Presupuestar rebuilds its document with draft() each time it opens (load) and saves it (save). An item's own VAT is
+// economic data: it must survive draft(), load(), open(), explicit edits, save and reopen, with its provenance (own rate
+// stays own; an inherited rate stays inherited and follows the general one). An unedited budget must come back identical.
+const own=i=>Object.prototype.hasOwnProperty.call(i,'taxRatePercent');
+const vatMap=b=>Object.fromEntries(b.items.map(i=>[i.id,own(i)?i.taxRatePercent:'inherit']));
+const money=b=>{const c=B.calculateBudget(b);return {lines:c.lines.map(l=>[l.id,l.effectiveTaxRatePercent,l.taxAmount,l.subtotalGross]),tax:c.totals.tax.amount,gross:c.totals.gross.amount,complete:c.totals.gross.complete};};
+const store=b=>JSON.parse(B.serializeBudget(b));
+test('F8-C · a saved budget with per-item VAT (10 %, 0 % and inherited) opened WITHOUT editing keeps every rate, its provenance and its amounts; document identical',()=>{
+ const p=Core.initial();const saved=store(withVat({...priceAll(D.draft(p,{labels}).budget),taxRatePercent:21},(i,k)=>k%3===0?10:k%3===1?0:undefined));
+ const v0=vatMap(saved),m0=money(saved);assert.ok(Object.values(v0).includes(0)&&Object.values(v0).includes(10)&&Object.values(v0).includes('inherit'),'fixture mixes 10 %, 0 % and inherited');
+ const once=store(D.draft(p,{labels,previous:saved}).budget),twice=store(D.draft(p,{labels,previous:once}).budget);
+ assert.deepEqual(vatMap(once),v0,'open #1 keeps own rates and inherited ones');assert.deepEqual(money(once),m0,'open #1 keeps the computed amounts');
+ assert.deepEqual(once,saved,'an unedited budget comes back identical (load → save)');assert.deepEqual(twice,saved,'and stays identical on reopen');
+ // The assistant reads the same figures.
+ const sum=b=>{const d=T.execute('get_budget_summary',{},{project:p,budget:b,budgetSaved:true,expectedProjectId:p.id}).data;return [d.tax.amount,d.gross.amount,d.incomplete.taxPending];};
+ assert.deepEqual(sum(once),sum(saved));
+});
+test('F8-C · explicit edits (price, waste, general VAT) keep each item\'s own VAT; inherited lines follow the general rate; save and reopen',()=>{
+ const p=Core.initial();let b=store(withVat({...priceAll(D.draft(p,{labels}).budget),taxRatePercent:21},(i,k)=>k===0?10:k===1?0:undefined));
+ const [a,z,inh]=b.items.map(i=>i.id);
+ b=B.validateBudget({...b,taxRatePercent:4,items:b.items.map(i=>i.id===a?B.setManualPrice(i,{unitPrice:33,label:'Precio propio'}):i.id===z?{...i,wastePercent:7}:i)});
+ const re=D.draft(p,{labels,previous:store(b)}).budget,c=B.calculateBudget(re),line=id=>c.lines.find(l=>l.id===id);
+ assert.equal(re.items.find(i=>i.id===a).unitPrice,33);assert.equal(re.items.find(i=>i.id===z).wastePercent,7);
+ assert.deepEqual([line(a).effectiveTaxRatePercent,line(z).effectiveTaxRatePercent,line(inh).effectiveTaxRatePercent],[10,0,4],'own 10 % and own 0 % kept; inherited follows the new general 4 %');
+ assert.equal(line(z).taxAmount,0,'an own 0 % VAT is a rate, not a missing value');assert.equal(own(re.items.find(i=>i.id===inh)),false,'an inherited rate is never turned into an own one');
+ assert.deepEqual(money(re),money(b),'amounts after save + reopen = amounts of the edited budget');
+});
+test('F8-C · catalogue item with its own VAT keeps it through reconciliation, a unit conflict (XR-01) and retention at 0 ud',()=>{
+ const p=Core.initial(),cM=catalogWith('ml');for(const o of ['obj_template-029','obj_template-031'])P.attach(p,o,P.linkOf(cM,C.findProduct(cM,'aparador-lumen','roble'),{representation:'generic-volume',fallbackReason:'no-model',asset:null}));
+ const ex=(r)=>({extraLines:r.lines,extraChapters:[{id:'catalog',title:'P'}]});
+ let r=CB.reconcile(p,[cM],{studioId:'local'});let b=manual(D.draft(p,{labels,...ex(r)}).budget,RB,180);b=B.validateBudget({...b,items:b.items.map(i=>i.id===RB?{...i,taxRatePercent:4}:i)});
+ const cU=catalogWith(null,2);r=CB.reconcile(p,[cU],{studioId:'local',previous:b});const d=D.draft(p,{labels,previous:store(b),...ex(r)});
+ assert.equal(d.unitConflicts.length,1);const it=d.budget.items.find(i=>i.id===RB);assert.deepEqual([it.unitPrice,it.quantity.unit,it.taxRatePercent],[180,'m',4],'unit conflict keeps price, unit AND own VAT');
+ p.objects=p.objects.filter(o=>!['obj_template-029','obj_template-031'].includes(o.id));// both placed objects deleted
+ const r2=CB.reconcile(p,[cU],{studioId:'local',previous:d.budget}),kept=D.draft(p,{labels,previous:store(d.budget),...ex(r2)}).budget.items.find(i=>i.id===RB);
+ assert.ok(kept,'priced item retained');assert.equal(kept.taxRatePercent,4,'retained item keeps its own VAT');
+});

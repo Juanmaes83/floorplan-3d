@@ -336,6 +336,73 @@ La cabecera de la columna de Presupuestar dice «Precio €/ud» para todas las 
 
 ### Límites
 
-- La causa «impuestos» se detecta como IVA del presupuesto sin definir. No se infiere ningún tipo.
+- La causa «impuestos» se detecta como IVA del presupuesto sin definir. No se infiere ningún tipo. *(Superado en §11: la causa se determina por el tipo aplicable a cada partida.)*
 - El recuento de objetos nunca se convierte en cantidad económica de una partida por m o m²: la cantidad sigue pendiente hasta que el profesional la indique.
 - **Revisión independiente:** se pide a una ventana distinta de las autoras (esta sesión es autora de CAT-04; la de XR es autora del Asistente V2).
+
+## 11. Addendum — F8: IVA por partida y F8-C · P1 pérdida silenciosa de IVA por partida (HEAD auditado `0babb48`)
+
+**Petición:**
+- la causa de un total incompleto debe salir de los tipos de IVA **efectivamente aplicables a cada partida**, no solo de que exista un IVA general;
+- **F8-C (revisión independiente):** un presupuesto guardado con IVA por partida no debe perderlo por el simple hecho de abrirse.
+
+### Contrato real (`js/budget-core.js`)
+
+| Elemento | Regla |
+|---|---|
+| `budget.taxRatePercent` | 0–100 o `null` (`validatePercent(…,{nullable:true})`) |
+| `item.taxRatePercent` | **Opcional**. Si existe: 0–100, **nunca `null`** (sin `nullable`: `createItem` y `validateBudget` lanzan «item.taxRatePercent must be between 0 and 100») |
+| Tipo aplicable | `calculateItem`: el de la partida si existe (`hasOwn`); si no, el general. `taxAmount=null` si no hay subtotal o el tipo aplicable es `null` |
+| Mutadores del núcleo | `setManualPrice`, `clearPrice` y `markReviewed` usan `clone(validateItem(item))` y **conservan** el campo. `serializeBudget` y `upgradeBudget` también |
+
+### F8-C · P1 — pérdida silenciosa de IVA por partida (**reproducido y corregido**)
+
+**Defecto en `0babb48`:**
+- `budget-draft-core.draft()` reconstruía cada partida con `createItem({…})` **sin** `taxRatePercent`.
+- `budget-ui` llama a `load()` → `draft(previous)` → `save()` cada vez que se abre Presupuestar.
+- Resultado: un presupuesto guardado con IVA propio (10 %, 0 %…) **perdía esos tipos sin que el usuario editara nada**. Las líneas pasaban al IVA general y los importes cambiaban.
+- Lo mismo ocurría al reabrir tras cualquier edición y con las partidas de catálogo (conciliación, conflicto de unidad XR-01 y partida retenida a 0 ud).
+
+`draft()` es el único sitio que reconstruye partidas: es el único llamador de `createItem` fuera del núcleo. S2 (`FloorPlanCostCatalog.apply`), el puente de precios y la conciliación de catálogo editan sobre la partida o generan líneas en bruto que pasan por `draft()`.
+
+**Corrección mínima (`js/budget-draft-core.js`):** si la partida anterior tiene `taxRatePercent` propio, se conserva **tal cual**. Si no lo tiene, no se crea: sigue heredando el general.
+- **Procedencia:** un tipo propio sigue siendo propio, y un tipo heredado nunca se convierte en propio.
+- No se infiere ningún tipo.
+- El documento sigue siendo `FloorPlanBudgetV1`, sin cambio de contrato.
+
+**Exportaciones y dossier:** ya usaban el tipo efectivo por línea: CSV `tax_rate_percent = effectiveTaxRatePercent` y dossier `line.effectiveTaxRatePercent`. Sin cambios.
+
+### Caso A — IVA general `null`, todas las partidas con IVA propio válido
+
+**Alcanzable**: por contrato, y tras F8-C también en el editor, porque abrir y reabrir conserva el IVA propio. Por eso el Asistente lo ve a través de `current()`. **Era un defecto de diagnóstico:**
+
+| Dónde | Antes (`0babb48`) | Después |
+|---|---|---|
+| `assistant-domain-tools-core.js` · `incompleteOf` | `taxPending = (budget.taxRatePercent == null)`, aunque toda línea tuviera tipo | `taxPending` = alguna línea con `effectiveTaxRatePercent === null`, más `taxMissingItems` y `taxItems` |
+| `assistant-intents-core.js` · causas | «IVA sin definir» siempre que el general fuera `null`; con una cantidad pendiente culpaba **también** al IVA | Sin líneas sin tipo, no se cita el IVA. Con cobertura parcial: «IVA sin definir en N partidas (ni propio ni general)» / «VAT not set on N items…» / «N 个条目增值税未设定…». Si no hay tipo en ninguna línea, el texto anterior sin cambios |
+| `budget-ui.js` · total y avisos | «Total parcial (1 con cantidad pendiente · **IVA sin definir**)» con la fila IVA en **628,34 €**, más el aviso «No has indicado el IVA.» | Por línea: «Total parcial (1 con cantidad pendiente)». Con cobertura parcial: «N sin IVA» y «N partidas sin IVA aplicable». «No has indicado el IVA.» solo si ninguna línea tiene tipo |
+
+### Caso B — IVA general válido, una partida con IVA propio explícitamente `null`
+
+**No alcanzable por contrato:** el presupuesto es inválido.
+- `validateBudget` y `calculateBudget` lanzan.
+- `T.execute('get_budget_summary')` devuelve `ok:false` y no inventa un resumen.
+- `commit()` lo rechaza porque valida.
+- `draft()` solo copia un tipo propio ya validado.
+
+### Pruebas (rojo en `0babb48` → verde)
+
+| Prueba | `0babb48` | Corrección |
+|---|---|---|
+| Pura F8-A ×3: total completo sin causa IVA; solo la cantidad pendiente; cobertura parcial con recuento (ES/EN/ZH) | **0/3** | 3/3 |
+| Pura F8-B: `null` por partida rechazado sin resumen inventado | 1/1 | 1/1 |
+| Pura F8-C ×3: abrir sin editar con 10 %, 0 % y heredado da un **documento idéntico** y los mismos importes (dos aperturas), Asistente incluido; ediciones explícitas (precio, merma, IVA general 21→4: los propios se mantienen y los heredados lo siguen; 0 % sigue siendo un tipo); partida de catálogo con IVA propio tras conciliación, conflicto de unidad y retención a 0 ud | **0/3** | 3/3 |
+| Navegador F8, editor real 1440×900: `commit()` + IVA general «Sin IVA indicado»; A y A′ en ES/EN/ZH; al reabrir se conservan los 3 tipos propios y el Asistente responde «IVA sin definir en N partidas» | **0/1** («… · IVA sin definir» con IVA 628,34 €) | 1/1 |
+| Navegador F8-C, editor real 1440×900: presupuesto guardado con IVA por partida → abrir sin editar: `localStorage` **idéntico** e importes iguales; editar precio; IVA general 21→4; reabrir: documento igual a lo guardado; `current()` con los mismos tipos | **0/1** (abrir reescribe el documento sin `taxRatePercent: 10`) | 1/1 |
+
+**Aserciones existentes:** ninguna se modifica ni se rebaja.
+- Cuando ninguna línea tiene tipo, los textos de siempre se mantienen exactamente.
+- La prueba F8-B ya no afirma que `draft()` descarta el IVA propio. Era una aserción nueva de esta misma ronda, que todavía no se había publicado, y describía justo el defecto F8-C. Su verificación inversa vive en F8-C.
+- El fixture A′ del navegador quita explícitamente el tipo propio a las partidas que deben heredar, porque ahora el tipo propio anterior se conserva.
+
+**Estado:** F8 y F8-C quedan corregidos con pruebas. **No es GO de fusión.**

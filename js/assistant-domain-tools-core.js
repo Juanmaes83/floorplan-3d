@@ -31,10 +31,11 @@
   const isCatItem=id=>/^cat:/.test(String(id));
   function incompleteOf(budget,c){const t=c.totals,desc=new Map(budget.items.map(i=>[i.id,typeof i.description==='string'?i.description.slice(0,120):i.id]));
    const pend=t.unavailableQuantityItemIds,est=t.incompleteQuantityItemIds.filter(id=>!pend.includes(id));
-   const taxPending=budget.taxRatePercent===null||budget.taxRatePercent===undefined;
+   // F8: the tax cause comes from the rate EFFECTIVELY applicable to each line (own item rate, else the budget's), not from the global rate alone.
+   const taxMissing=(c.lines||[]).filter(l=>l.effectiveTaxRatePercent===null||l.effectiveTaxRatePercent===undefined).length,taxPending=taxMissing>0;
    return {netComputable:t.net.complete,grossComputable:t.gross.complete,unpriced:t.unpricedItemIds.length,
     quantityPending:pend.length,quantityPendingItems:pend.slice(0,50).map(id=>({id,description:desc.get(id)||id,kind:isCatItem(id)?'commercial':'geometric'})),
-    quantityEstimated:est.length,taxPending,unreviewedPrices:t.unreviewedPriceItemIds.length};}
+    quantityEstimated:est.length,taxPending,taxMissingItems:taxMissing,taxItems:(c.lines||[]).length,unreviewedPrices:t.unreviewedPriceItemIds.length};}
   const UNIT_OF=u=>({unit:'ud',m:'m',m2:'m²',m3:'m³',kg:'kg'}[u]||u||null);
   const priceView=p=>p?{unitPrice:Number.isFinite(p.unitPrice)?p.unitPrice:null,unit:short(p.unit,8),label:short(p.label),asOf:short(p.asOf,10),edition:short(p.edition,40)}:null;
   const MAX_LIST=200;

@@ -51,7 +51,10 @@
    // A reference price (BC3) stays attached while its unit still matches the item.
    const reference=before?.priceReference&&before.priceReference.unit===l.quantity.unit?before.priceReference:null;
    const active=price?.priceSource?.type==='provider-reference'&&!reference?null:price;
-   b.items.push(B.createItem({id:l.key,chapterId:l.chapter,description:l.description,quantity:l.quantity,wastePercent:before?before.wastePercent:l.waste,unitPrice:active?.unitPrice??null,priceSource:active?.priceSource??null,priceReference:reference,review:active?review??{status:'unreviewed',reviewedAt:null}:{status:'unreviewed',reviewedAt:null}}));
+   b.items.push(B.createItem({id:l.key,chapterId:l.chapter,description:l.description,quantity:l.quantity,wastePercent:before?before.wastePercent:l.waste,unitPrice:active?.unitPrice??null,priceSource:active?.priceSource??null,priceReference:reference,review:active?review??{status:'unreviewed',reviewedAt:null}:{status:'unreviewed',reviewedAt:null},
+    // F8-C: an item's own VAT (budget-core: optional, 0–100) is economic data — kept as is, with its provenance: an own
+    // rate stays own; an item without one keeps inheriting the budget's rate. Never invented, never dropped on reopen.
+    ...(before&&Object.prototype.hasOwnProperty.call(before,'taxRatePercent')?{taxRatePercent:before.taxRatePercent}:{})}));
   }
   b.chapters=b.chapters.filter(c=>b.items.some(i=>i.chapterId===c.id));
   return {budget:B.validateBudget(b),reviewInvalidated:changed,unitConflicts,tariffKeys:Object.fromEntries(all.filter(l=>l.tariffKey).map(l=>[l.key,l.tariffKey]))};

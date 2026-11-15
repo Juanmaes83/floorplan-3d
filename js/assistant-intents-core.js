@@ -149,7 +149,10 @@
     :P_(inc.unpriced,'partida sin precio','partidas sin precio','item without a price','items without a price','个条目无价格'));}
    if(inc.quantityPending){fig(inc.quantityPending,'items','not_applicable',src,tx(lang,'cantidad pendiente','quantity pending','数量待测量'));
     out.push(P_(inc.quantityPending,'partida con la cantidad pendiente de medición','partidas con la cantidad pendiente de medición','item with the quantity pending measurement','items with the quantity pending measurement','个条目数量待测量')+tx(lang,' (una cantidad desconocida no es cero)',' (an unknown quantity is not zero)','（未知数量不等于零）'));}
-   if(inc.taxPending)out.push(tx(lang,'IVA sin definir: no se pueden calcular los impuestos','VAT not set: tax cannot be computed','增值税未设定：无法计算税额'));
+   // F8: VAT is judged per line (an item's own rate applies when present). Some lines covered → name how many are not.
+   if(inc.taxPending){const n=inc.taxMissingItems,all=!(n>0&&inc.taxItems>n);
+    out.push(all?tx(lang,'IVA sin definir: no se pueden calcular los impuestos','VAT not set: tax cannot be computed','增值税未设定：无法计算税额')
+     :tx(lang,`IVA sin definir en ${n} ${n===1?'partida':'partidas'} (ni propio ni general): no se pueden calcular sus impuestos`,`VAT not set on ${n} ${n===1?'item':'items'} (no item rate nor a budget rate): their tax cannot be computed`,`${n} 个条目增值税未设定（既无条目税率也无总税率）：无法计算其税额`));}
    return out;};
   const pendingNames=inc=>(inc?.quantityPendingItems||[]).slice(0,8).map(i=>`${i.description}${i.kind==='commercial'?tx(lang,' (cantidad comercial)',' (commercial quantity)','（商业数量）'):tx(lang,' (medición del plano)',' (plan measurement)','（图纸测量）')}`).join('; ');
   if(intent.intent==='budget'){const b=take(results[0]);if(!b)return err(firstError,lang);

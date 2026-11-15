@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* CAT-04 · evidencias del flujo completo en el editor REAL: ejecuta tests/cat04.browser.test.cjs, tests/cat04-xr.browser.test.cjs y tests/cat04-f1f2.browser.test.cjs (F1/F2)
+/* CAT-04 · evidencias del flujo completo en el editor REAL: ejecuta tests/cat04.browser.test.cjs, tests/cat04-xr.browser.test.cjs y tests/cat04-f1f2.browser.test.cjs (F1/F2/F8/F8-C)
    (auditoría cruzada XR-01/XR-02) (mismas aserciones) con
    vídeo (Playwright recordVideo) y capturas; comprueba cada vídeo con ffprobe y una decodificación completa con ffmpeg;
    escribe qa-results/cat04/manifest.json con SHA-256, duración, HEAD, versiones y el resultado de las pruebas.
