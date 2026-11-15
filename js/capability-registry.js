@@ -4,6 +4,8 @@
    advertise a module that is not in the code. Pure data and lookups: no DOM, storage, network or project access.
    States: 'available' (in master and in Production, covered by tests), 'validation' (in master, pending a review),
    'preparation' (planned, not usable). Only 'available' entries get an access button in the Home.
+   HOM-03: AI_SERVICES («Nuevos servicios IA») use four states — available (accredited in Production), pilot,
+   simulation, preparation — and aiServices() never returns work behind a `gate` (CAT-04, not approved).
    UMD: window.FloorPlanCapabilities / module.exports. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanCapabilities=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
@@ -74,6 +76,76 @@
    'available','area:design',['js/furniture-search.js','js/surface-ui.js','js/moodboard-ui.js'],['tests/surfaces.browser.test.cjs','tests/furniture-search.test.cjs','tests/moodboard.browser.test.cjs'],
    ['interior'])
  ]);
+ // HOM-03 · «Nuevos servicios IA». Each service carries the state it REALLY has, verified on code, contract, tests and
+ // the effective Production configuration (docs/product/hom-03/matriz-hom-03-auditoria-2026-11-15.md):
+ //   available  → active and accredited in Production (needs `production` evidence: deployment, SHA and check);
+ //   pilot      → usable in this browser, without multi-user infrastructure or commercial guarantees;
+ //   simulation → demonstration only: no provider is called and no real result is produced;
+ //   preparation→ incomplete or blocked: shown without any access.
+ // `gate` keeps texts prepared for work that is not approved yet (CAT-04): gated entries are NEVER returned by
+ // aiServices(), so the Home cannot show them until the gate is removed together with a verified state.
+ // `access` is the existing place that opens the service; the Home only offers it if that module is on the page.
+ const AI_GROUPS=Object.freeze(['available','pilot','simulation','preparation']);
+ const AI_VERIFIED_AT='b9f761326a554e0a7a58d0b88e823771e36b5a7c';
+ const S=(id,state,name,what,isNot,limits,access,modules,tests,professions,extra={})=>Object.freeze({id,state,name,what,isNot,limits,access,modules,tests,professions,production:extra.production||null,gate:extra.gate||null,verifiedAt:AI_VERIFIED_AT});
+ const ALL=['architecture','real-estate','developer','renovation','interior','construction','general'];
+ const AI_SERVICES=Object.freeze([
+  S('render-ai','available',['Render IA fotorrealista','Photorealistic AI render','照片级 AI 渲染'],
+   ['Genera una imagen fotorrealista con un proveedor de IA a partir de una vista 3D real de tu proyecto.','Generates a photorealistic image with an AI provider from a real 3D view of your project.','由 AI 服务商根据项目的真实 3D 视图生成照片级图片。'],
+   ['Es una imagen orientativa: no cambia ni sustituye la geometría del proyecto.','It is an indicative image: it does not change or replace the project geometry.','这是参考图片：不会改变或替代项目几何。'],
+   ['Necesita el código de acceso de tu estudio y cada imagen consume créditos de IA.','It needs your studio access code and each image uses AI credits.','需要工作室访问码，每张图片消耗 AI 额度。'],
+   'render-band',['js/ai-render-ui.js','api/render.js'],['tests/ai-render-api.test.cjs','tests/ai-render.browser.test.cjs'],
+   ['interior','renovation','real-estate','developer','general'],
+   {production:Object.freeze({deployment:'dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV',sha:'8df49ed7110215eb3723788aee6da42d5eb095cb',checkedAt:'2026-11-09',check:'POST /api/render sin código → 401 token (proveedor no llamado); RUBIK_RENDER_ENABLED=1 en Production (metadatos, 2026-11-15)'})}),
+  S('assistant','pilot',['Asistente RUBIK · consulta guiada','RUBIK Assistant · guided query','RUBIK 助手 · 引导式查询'],
+   ['Responde sobre el proyecto abierto (superficies, presupuesto, materiales, muebles) con los motores de RUBIK y la fuente de cada cifra; propone cambios que revisas, aplicas y deshaces.','Answers about the open project (areas, budget, materials, furniture) with RUBIK engines and the source of every figure; it proposes changes you review, apply and undo.','使用 RUBIK 引擎回答当前项目的问题（面积、预算、材料、家具）并注明每个数字的来源；提出可审核、应用和撤销的修改。'],
+   ['No es un chat con IA generativa: no hay ningún modelo de lenguaje conectado y entiende un conjunto cerrado de preguntas.','It is not a generative AI chat: no language model is connected and it understands a closed set of questions.','这不是生成式 AI 聊天：未连接任何语言模型，只能理解固定范围的问题。'],
+   ['Funciona en este navegador y no envía nada; la conversación se guarda solo aquí.','It works in this browser and sends nothing; the conversation is stored only here.','在此浏览器中运行，不发送任何内容；对话仅保存在此处。'],
+   'assistant',['js/assistant-ui.js','js/assistant-intents-core.js','js/assistant-proposals-core.js','api/assistant.js'],['tests/assistant-ai-v2.test.cjs','tests/assistant-ai-v2.browser.test.cjs'],
+   ['architecture','renovation','construction','interior','general']),
+  S('catalogs','pilot',['Mis catálogos','My catalogues','我的目录'],
+   ['Fichas de producto con SKU, medidas y precio con fuente y fecha (o «desconocido»); las colocas en el plano desde Amueblar con sus medidas verificadas.','Product sheets with SKU, dimensions and a sourced, dated price (or «unknown»); you place them on the plan from Furnish with their verified dimensions.','含 SKU、尺寸及带来源和日期价格（或“未知”）的产品资料；可在“布置家具”中按核实尺寸放入平面图。'],
+   ['No es un catálogo de fabricantes ni un servicio en la nube: son tus fichas en este navegador.','It is not a manufacturers’ catalogue or a cloud service: they are your sheets in this browser.','这不是厂商目录或云服务：它们是你在此浏览器中的资料。'],
+   ['Piloto local: el selector de estudio separa catálogos pero no es control de acceso entre usuarios.','Local pilot: the studio selector separates catalogues but is not access control between users.','本地试点：工作室选择器只区分目录，不是用户之间的访问控制。'],
+   'catalogs',['js/catalog-ui.js','js/catalog-product-core.js','js/catalog-placement-ui.js'],['tests/catalog-ia.browser.test.cjs','tests/catalog-placement.browser.test.cjs'],
+   ['interior','developer','renovation','architecture']),
+  S('visual-studio','simulation',['Estudio de imágenes','Image studio','图像工作室'],
+   ['Prepara una propuesta visual sobre una foto: zona a cambiar, referencias de tus catálogos e intensidad, con revisión de fidelidad.','Prepares a visual proposal on a photo: area to change, references from your catalogues and intensity, with a fidelity review.','在照片上准备视觉方案：要修改的区域、目录参考和强度，并进行保真审核。'],
+   ['Simulación: no llama a ningún proveedor de IA y el resultado no se descarga ni se entrega como imagen.','Simulation: it calls no AI provider and the result is not downloaded or delivered as an image.','模拟：不调用任何 AI 服务商，结果不能下载或作为图片交付。'],
+   ['La generación real está cerrada mientras no haya proveedor autorizado y tope de gasto.','Real generation is closed until there is an authorised provider and a spending cap.','在有授权服务商和费用上限之前，真实生成保持关闭。'],
+   'visual-studio',['js/visual-reform-ui.js','js/visual-reform-core.js'],['tests/visual-studio.browser.test.cjs','tests/visual-reform-core.test.cjs'],
+   ['interior','renovation','real-estate']),
+  S('photo-reform','simulation',['Reformar desde fotografía','Renovate from a photo','从照片改造'],
+   ['Recorre con una foto de la estancia todo el proceso de una reforma visual: intención, consentimiento, alternativas y comparación antes/después.','Takes a photo of the room through the whole visual renovation process: intent, consent, alternatives and before/after comparison.','用房间照片走完视觉改造的全过程：意图、同意、备选方案和前后对比。'],
+   ['Simulación: las alternativas se dibujan en el navegador, llevan el rótulo «SIMULACIÓN» y no las genera una IA.','Simulation: the alternatives are drawn in the browser, carry the «SIMULATION» label and are not generated by AI.','模拟：备选方案在浏览器中绘制，带有“模拟”标记，并非 AI 生成。'],
+   ['La foto no sale del navegador y no se guarda; el proyecto no cambia.','The photo does not leave the browser and is not stored; the project does not change.','照片不会离开浏览器，也不会被保存；项目不会改变。'],
+   'photo-reform',['js/photo-reform-ui.js','js/photo-reform-provider.js','api/photo-reform.js'],['tests/photo-project.browser.test.cjs','tests/photo-reform-api.test.cjs'],
+   ['renovation','interior','real-estate']),
+  S('assistant-llm','preparation',['Asistente conversacional con IA','Conversational AI assistant','对话式 AI 助手'],
+   ['Preguntas libres sobre el proyecto respondidas por un modelo de lenguaje, con las mismas fuentes y propuestas reversibles.','Free questions about the project answered by a language model, with the same sources and reversible proposals.','由语言模型回答关于项目的自由提问，保留相同的来源和可撤销的提议。'],
+   ['Hoy no existe: no hay modelo de texto autorizado ni cuentas de usuario.','It does not exist today: there is no authorised text model and no user accounts.','目前不存在：没有授权的文本模型，也没有用户账户。'],
+   ['Pendiente de proveedor, tope de gasto, sesiones autenticadas y privacidad.','Pending provider, spending cap, authenticated sessions and privacy.','待定：服务商、费用上限、身份验证会话和隐私。'],
+   null,['api/assistant.js','js/assistant-runtime-core.js'],['tests/assistant-ai-v2.test.cjs'],ALL),
+  S('photo-real','preparation',['Imágenes reales desde tu foto','Real images from your photo','基于照片的真实图像'],
+   ['Generar con un proveedor de IA las alternativas que hoy solo se simulan en el Estudio de imágenes.','Generating with an AI provider the alternatives that are only simulated today in the Image studio.','用 AI 服务商生成目前仅在图像工作室中模拟的备选方案。'],
+   ['Hoy no se genera ninguna imagen real desde una foto.','No real image is generated from a photo today.','目前不会根据照片生成任何真实图片。'],
+   ['Pendiente de proveedor autorizado, tope de gasto y revisión de privacidad de las fotos.','Pending an authorised provider, a spending cap and a privacy review of photos.','待定：授权服务商、费用上限和照片隐私审查。'],
+   null,['api/photo-reform.js','js/photo-reform-provider.js'],['tests/photo-reform-api.test.cjs','tests/photo-reform-provider.test.cjs'],['renovation','interior','real-estate']),
+  // CAT-04 (in progress elsewhere, not approved): prepared texts only. Never returned while `gate` is set.
+  S('catalog-budget','preparation',['Tus fichas en Presupuestar','Your sheets in Budget','你的资料进入预算'],
+   ['Los productos de tus catálogos colocados en el plano aportan su precio con fuente y fecha a las partidas del presupuesto.','The products from your catalogues placed on the plan bring their sourced, dated price to the budget items.','放入平面图的目录产品将其带来源和日期的价格带入预算条目。'],
+   ['Un precio desconocido sigue siendo desconocido: el presupuesto se muestra como parcial.','An unknown price stays unknown: the budget is shown as partial.','未知价格仍为未知：预算显示为部分预算。'],
+   ['Pendiente de CAT-04.','Pending CAT-04.','待 CAT-04。'],
+   null,['js/catalog-placement-core.js','js/cost-catalog-core.js'],['tests/catalog-placement-core.test.cjs'],['renovation','construction','interior','architecture'],{gate:'CAT-04'}),
+  S('assistant-catalogs','preparation',['El Asistente consulta tus catálogos','The Assistant looks up your catalogues','助手查询你的目录'],
+   ['Preguntar al Asistente por los productos de tus fichas y su precio, con la fuente de cada dato.','Ask the Assistant about the products in your sheets and their price, with the source of every figure.','向助手询问资料中的产品及其价格，并注明每个数据的来源。'],
+   ['Sigue siendo una consulta guiada sin modelo de lenguaje.','It is still a guided query without a language model.','仍然是没有语言模型的引导式查询。'],
+   ['Pendiente de CAT-04.','Pending CAT-04.','待 CAT-04。'],
+   null,['js/assistant-domain-tools-core.js','js/catalog-product-core.js'],['tests/assistant-ai-v2.test.cjs'],['interior','renovation'],{gate:'CAT-04'})
+ ]);
+ // The services the Home may show, grouped by state, the ones relevant to the chosen profession first in each group.
+ function aiServices(audience){const rel=s=>s.professions.includes(audience||'general')?0:1;
+  return AI_SERVICES.filter(s=>!s.gate).map((s,i)=>[s,i]).sort((a,b)=>AI_GROUPS.indexOf(a[0].state)-AI_GROUPS.indexOf(b[0].state)||rel(a[0])-rel(b[0])||a[1]-b[1]).map(([s])=>s);}
  // The 3–4 capabilities each profession sees first, in order. The Home never hides the others: they stay reachable.
  const ORDER=Object.freeze({
   general:['import','walk3d','render-ai','budget'],
@@ -86,5 +158,5 @@
  });
  const byId=id=>CAPABILITIES.find(c=>c.id===id)||null;
  function forAudience(audience){return (ORDER[audience]||ORDER.general).map(byId).filter(Boolean);}
- return {VERIFIED_AT,STATES,CAPABILITIES,ORDER,byId,forAudience};
+ return {VERIFIED_AT,STATES,CAPABILITIES,ORDER,byId,forAudience,AI_GROUPS,AI_VERIFIED_AT,AI_SERVICES,aiServices};
 });
