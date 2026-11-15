@@ -161,7 +161,7 @@
    audience=audience===id?'':id;
    try{if(audience)originalStorage.setItem(audienceKey,audience);else originalStorage.removeItem(audienceKey);}catch{}
    for(const node of audienceOptions.children)node.setAttribute('aria-pressed',String(node.id==='welcomeAudience-'+audience));
-   showPurpose();renderHero();renderCapabilities();
+   showPurpose();renderHero();renderCapabilities();renderServices();
   },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));}
   // The chosen field answers «what is it for me» and offers the same first action as the entries above.
   const purpose=el('div',undefined,audienceSection,'welcome-audience-purpose');purpose.id='welcomeAudiencePurpose';purpose.setAttribute('aria-live','polite');
@@ -201,6 +201,35 @@
    btn('welcomeRenderAIGo',tx('Abrir Entregar','Open Deliver','打开交付'),()=>goArea('deliver'),text,true);
    const fig=el('figure',undefined,band,'welcome-render-ai-visual');const img=el('img',undefined,fig,'welcome-render-ai-shot');img.src='assets/welcome/example-3d.webp';img.loading='lazy';img.alt=tx('Vista 3D real del proyecto de ejemplo, punto de partida del Render IA','Real 3D view of the example project, starting point of the AI render','示例项目的真实 3D 视图，AI 渲染的起点');
    el('figcaption',tx('Vista 3D real de Rubik: el punto de partida del Render IA','Real Rubik 3D view: the starting point of the AI render','Rubik 真实 3D 视图：AI 渲染的起点'),fig);}
+  // HOM-03 · «Nuevos servicios IA»: what is really available, what is a pilot in this browser, what is only a
+  // simulation and what is in preparation — straight from the verified registry (FloorPlanCapabilities.aiServices).
+  // Render IA is not repeated: its card points to the band above. A service only gets a button if the module that
+  // opens it is on this page; «En preparación» never gets one. Nothing here calls a provider.
+  const services=el('section',undefined,shell,'welcome-ai-services');services.id='welcomeAIServices';services.setAttribute('aria-labelledby','welcomeAIServicesTitle');
+  function renderServices(){services.replaceChildren();const list=CAPS?.aiServices?.(audience||'general')||[];services.hidden=!list.length;if(!list.length)return;
+   const head=el('h2',tx('Nuevos servicios IA','New AI services','新 AI 服务'),services);head.id='welcomeAIServicesTitle';head.tabIndex=-1;
+   el('p',tx('Qué funciona hoy en RUBIK, qué es un piloto en este navegador y qué es solo una simulación. Nada se ejecuta hasta que lo abres.','What works in RUBIK today, what is a pilot in this browser and what is only a simulation. Nothing runs until you open it.','哪些功能今天已在 RUBIK 可用，哪些是此浏览器中的试点，哪些只是模拟。打开之前不会运行任何内容。'),services,'welcome-ai-lead');
+   const GROUP={available:[['Disponible','Available','可用'],['Activo en RUBIK, con sus condiciones.','Active in RUBIK, with its conditions.','已在 RUBIK 启用，附带条件。']],
+    pilot:[['Piloto en este navegador','Pilot in this browser','此浏览器中的试点'],['Funciona aquí, sin cuentas de usuario ni garantías comerciales.','Works here, without user accounts or commercial guarantees.','可在此使用，没有用户账户或商业保证。']],
+    simulation:[['Simulación','Simulation','模拟'],['Demostración del proceso: no hay IA real ni resultado entregable.','A demonstration of the process: no real AI and no deliverable result.','流程演示：没有真实 AI，也没有可交付结果。']],
+    preparation:[['En preparación','In preparation','准备中'],['Todavía no se puede usar.','It cannot be used yet.','暂时无法使用。']]};
+   const OPEN={'render-band':[tx('Ver Render IA','See AI render','查看 AI 渲染'),()=>!!document.getElementById('welcomeRenderAI'),()=>{const b=document.getElementById('welcomeRenderAI'),t=document.getElementById('welcomeRenderAITitle');if(t)t.tabIndex=-1;b?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});t?.focus({preventScroll:true});}],
+    assistant:[tx('Abrir el Asistente','Open the Assistant','打开助手'),()=>!!window.RubikAssistantUI,()=>{closeWelcome();window.RubikAssistantUI.open();}],
+    catalogs:[tx('Abrir Mis catálogos','Open My catalogues','打开我的目录'),()=>!!(window.RubikCatalogUI&&window.FloorPlanProfessionalUI),()=>{goArea('studio');window.RubikCatalogUI.open();}],
+    'visual-studio':[tx('Ver la simulación','See the simulation','查看模拟'),()=>!!(window.RubikVisualStudio&&window.FloorPlanProfessionalUI),()=>{goArea('deliver');window.RubikVisualStudio.open();}],
+    'photo-reform':[tx('Ver la simulación','See the simulation','查看模拟'),()=>!!(window.RubikPhotoReform&&window.FloorPlanProfessionalUI),()=>{goArea('deliver');window.RubikPhotoReform.open();}]};
+   const grid=el('div',undefined,services,'ai-service-groups');
+   for(const g of CAPS.AI_GROUPS){const items=list.filter(s=>s.state===g);if(!items.length)continue;
+    const col=el('section',undefined,grid,'ai-service-group');col.dataset.state=g;col.setAttribute('aria-labelledby','welcomeAIGroup-'+g);
+    const gh=el('h3',undefined,col,'ai-service-group-title');gh.id='welcomeAIGroup-'+g;el('span',label(GROUP[g][0]),gh,'capability-state').dataset.state=g;
+    el('p',label(GROUP[g][1]),col,'ai-service-group-note');const ul=el('ul',undefined,col,'ai-service-list');
+    for(const s of items){const li=el('li',undefined,ul,'ai-service');li.dataset.service=s.id;li.dataset.state=s.state;
+     el('h4',label(s.name),li);el('p',label(s.what),li,'ai-service-what');el('p',label(s.isNot),li,'ai-service-not');el('p',label(s.limits),li,'ai-service-limits');
+     const o=s.state!=='preparation'&&OPEN[s.access];
+     if(o&&o[1]()){const b=btn('welcomeAI-'+s.id,o[0],()=>safe(o[2]),li);b.classList.add('ai-service-go');}}}
+   el('p',tx('Las simulaciones no llaman a ningún proveedor de IA y nunca se entregan como imagen real.','Simulations call no AI provider and are never delivered as a real image.','模拟不调用任何 AI 服务商，也绝不会作为真实图片交付。'),services,'capability-note');}
+  // The services' modules load after this script: their buttons appear once the page has finished loading.
+  renderServices();if(document.readyState!=='complete')addEventListener('load',()=>{if(services.isConnected)renderServices();},{once:true});
   // Line icons (24×24, stroke = currentColor) for the walk band, the phases and the field cards.
   const ICON={upload:'<path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/>',ruler:'<path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2m1-5 2 2m1-5 2 2"/>',plan:'<path d="M3 4h18v16H3z"/><path d="M3 12h8v8M11 4v5m4 3h6"/>',sofa:'<path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z"/><path d="M6 18v2m12-2v2"/>',cube:'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12 4 7.5M12 12l8-4.5M12 12v9"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="m9 21 3-7 3 3v4m-6-9 3-3 3 2 3 1M8 12l1-4"/>',compass:'<path d="M12 3 7 21m5-18 5 18M8 16h8"/><circle cx="12" cy="3" r="1"/>',key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9m-4 4 3 3m-6 0 2 2"/>',building:'<path d="M4 21V5l8-3v19M12 9h8v12M7 8h2m-2 4h2m-2 4h2m6-3h2m-2 4h2M2 21h20"/>',hammer:'<path d="m14 6 4 4M3 21l9-9M12 5l3-3 7 7-3 3z"/>',palette:'<path d="M12 3a9 9 0 1 0 0 18c1 0 2-1 1.5-2s.5-2 1.5-2h2a4 4 0 0 0 4-4c0-5.5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="8" r="1"/>'};
   const icon=(name,parent,cls='icon')=>{const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('class',cls);SafeDOM.markup(svg,ICON[name]);parent.append(svg);return svg;};
