@@ -14,7 +14,7 @@ const sheet=(o={})=>V.resultSheet({source:{kind:'photo',sha256:SHA2,width:1200,h
 const labels={title:'Presupuesto',floor:'Pavimento',skirting:'Rodapié',paint:'Pintura',newWalls:'Tabique',demolition:'Demolición',door:'Puerta',slidingDoor:'Corredera',window:'Ventana',tariff:'Tarifa',chapters:{floors:'P',walls:'W',partitions:'T',carpentry:'C'}};
 
 test('link: verified sheet stored as metadata + hash in project.extensions, idempotent; read back as a SIMULATION, not deliverable, no amount, SKU not certified',()=>{
- const p=Core.initial(),s=sheet();VR.link(p,s,{at:'2026-11-15T09:05:00Z'});VR.link(p,s,{at:'2026-11-15T09:06:00Z'});
+ const p=Core.initial(),s=sheet();VR.link(p,s,{at:'2026-11-15T09:05:00Z',studioId:'local'});VR.link(p,s,{at:'2026-11-15T09:06:00Z',studioId:'local'});
  assert.deepEqual(Object.keys(p.extensions[VR.EXT].refs),[s.hash]);assert.equal(p.extensions[VR.EXT].refs[s.hash].projectId,p.id);
  assert.doesNotThrow(()=>Core.validate(p),'the project stays valid (x- extension)');
  const [r]=VR.list(p,{catalogs:[cat()]});assert.equal(r.status,'verified');assert.equal(r.simulated,true);assert.equal(r.deliverable,false);assert.equal(r.monetary,false);assert.equal(r.skuCertified,false);
@@ -24,7 +24,7 @@ test('link: verified sheet stored as metadata + hash in project.extensions, idem
 });
 
 test('the visual reference never creates a budget item; placing the product is what creates it (two distinct relations)',()=>{
- const c=cat(),p=Core.initial();VR.link(p,sheet());
+ const c=cat(),p=Core.initial();VR.link(p,sheet(),{studioId:'local'});
  const r1=CB.reconcile(p,[c],{studioId:'local'});assert.equal(r1.lines.length,0,'referenced but not placed → not budgeted');
  const b1=D.draft(p,{labels,extraLines:r1.lines}).budget;assert.equal(b1.items.some(i=>CB.isCatalogItem(i.id)),false);
  P.attach(p,'obj_template-023',P.linkOf(c,C.findProduct(c,'horno-h60','inox'),{representation:'generic-volume',fallbackReason:'no-model',asset:null}));
@@ -32,7 +32,7 @@ test('the visual reference never creates a budget item; placing the product is w
 });
 
 test('negatives: tampered sheet → unverifiable; rejected simulation shown as rejected; foreign project; sheet with pixels/EXIF refused; older catalogue revision and missing sheet flagged',()=>{
- const p=Core.initial(),s=sheet();VR.link(p,s);
+ const p=Core.initial(),s=sheet();VR.link(p,s,{studioId:'local'});
  const t=JSON.parse(JSON.stringify(p));t.extensions[VR.EXT].refs[s.hash].sheet.decision='rejected';assert.equal(VR.list(t)[0].status,'unverifiable');assert.equal(VR.list(t)[0].decision,null,'nothing read from a sheet that does not verify');
  const rej=sheet({review:bad,decision:'rejected'});const p2=Core.initial();VR.link(p2,rej);assert.equal(VR.list(p2)[0].decision,'rejected');assert.equal(VR.list(p2)[0].review.status,'RECHAZADA');
  const moved={...JSON.parse(JSON.stringify(p)),id:'prj_other'};assert.equal(VR.list(moved)[0].status,'other-project');
@@ -42,4 +42,27 @@ test('negatives: tampered sheet → unverifiable; rejected simulation shown as r
  const c2=C.importCollection(cat(),[{...JSON.parse(JSON.stringify(PILOT.products[2])),description:'cambio'}],{today:'2026-11-15'}).catalog;assert.equal(VR.list(p,{catalogs:[c2]})[0].references[0].catalogStatus,'older-revision');
  assert.equal(VR.list(p,{catalogs:[]})[0].references[0].catalogStatus,'catalog-missing');
  assert.deepEqual(VR.unlink(p,s.hash),{changed:true});assert.deepEqual(VR.list(p),[]);assert.deepEqual(VR.unlink(p,s.hash),{changed:false});
+});
+
+// Audit #237 (case 2): two studios with the SAME catalogId / productId / variantId. A visual reference made with studio B's
+// catalogue must not be reported «placed» or «current sheet» because of studio A's product, and a link without a studio
+// (sheets of rubik-visual-result-sheet/1 do not carry one) must never claim either.
+test('studio identity: same catalogue/product/variant ids in studios A and B are never confused; a link without studio is ambiguous, not «placed»/«current»',()=>{
+ const cA=cat(),cB=C.importCollection(C.createCatalog({catalogId:'piloto-sintetico-qa',studioId:'brd-estudio-b'}),PILOT,{today:'2026-11-14'}).catalog;
+ assert.equal(cA.catalogId,cB.catalogId);const p=Core.initial();
+ // Studio A's oven is placed in the project.
+ P.attach(p,'obj_template-023',P.linkOf(cA,C.findProduct(cA,'horno-h60','inox'),{representation:'generic-volume',fallbackReason:'no-model',asset:null}));
+ // A reference made with studio B's catalogue (same ids).
+ VR.link(p,sheet(),{studioId:'brd-estudio-b'});
+ let x=VR.list(p,{catalogs:[cA],studioId:'local'})[0].references[0];
+ assert.deepEqual([x.placed,x.placedStatus,x.catalogStatus,x.studioId],[false,'not-placed','other-studio','brd-estudio-b'],'B’s reference is not A’s placed product nor A’s current sheet');
+ x=VR.list(p,{catalogs:[cB],studioId:'brd-estudio-b'})[0].references[0];assert.deepEqual([x.placed,x.catalogStatus],[false,'current'],'in studio B the sheet is B’s; still not placed (the placed oven is A’s)');
+ // Same studio → placed and current, as validated before.
+ const q=Core.initial();P.attach(q,'obj_template-023',P.linkOf(cA,C.findProduct(cA,'horno-h60','inox'),{representation:'generic-volume',fallbackReason:'no-model',asset:null}));VR.link(q,sheet(),{studioId:'local'});
+ x=VR.list(q,{catalogs:[cA],studioId:'local'})[0].references[0];assert.deepEqual([x.placed,x.placedStatus,x.catalogStatus],[true,'placed','current']);
+ // Legacy link without studio: ambiguous placement and no sheet claim.
+ const r=Core.initial();P.attach(r,'obj_template-023',P.linkOf(cA,C.findProduct(cA,'horno-h60','inox'),{representation:'generic-volume',fallbackReason:'no-model',asset:null}));VR.link(r,sheet());
+ x=VR.list(r,{catalogs:[cA,cB],studioId:'local'})[0].references[0];assert.deepEqual([x.placed,x.placedStatus,x.catalogStatus,x.studioId],[false,'ambiguous','studio-unknown',null]);
+ assert.equal(VR.list(r,{catalogs:[cA]})[0].monetary,false);
+ assert.throws(()=>VR.link(Core.initial(),sheet(),{studioId:'Bad Studio!'}),/studio/);
 });

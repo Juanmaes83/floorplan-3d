@@ -137,7 +137,7 @@
       if(tool==='get_visual_references'){
         const refs=ctx.visualRefs;if(!Array.isArray(refs))return failure(callId,'not_available','El Estudio de imágenes no está cargado en esta página');
         const list=refs.slice(0,50).map(r=>({hash:short(r.hash,64),status:short(r.status,20),decision:short(r.decision,20),resultKind:short(r.resultKind,20),simulated:r.simulated===true,deliverable:r.deliverable===true,
-          reviewStatus:short(r.review?.status,20),linkedAt:short(r.linkedAt,30),references:(r.references||[]).slice(0,3).map(x=>({sku:short(x.sku,60),displayName:short(x.displayName),placed:x.placed===true,catalogStatus:short(x.catalogStatus,20)}))}));
+          reviewStatus:short(r.review?.status,20),linkedAt:short(r.linkedAt,30),references:(r.references||[]).slice(0,3).map(x=>({sku:short(x.sku,60),displayName:short(x.displayName),placed:x.placed===true,placedStatus:short(x.placedStatus,20),catalogStatus:short(x.catalogStatus,20)}))}));
         return result(callId,{references:list,count:list.length},prov(ctx,'RubikVisualReferences',{engine:'RubikVisualReferences'}),
           ['Una referencia visual no es una medición, ni una ficha validada, ni un precio: no crea partidas.','No certifica un SKU por parecido. Una simulación no es una imagen generada por IA ni un entregable.']);}
       return failure(callId,'not_authorized','Herramienta no permitida');
