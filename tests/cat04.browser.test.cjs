@@ -22,7 +22,9 @@ async function place(page,key,touch=false){const it=page.locator(`#catalogList .
  await page.waitForFunction(()=>!!document.querySelector('#catalogPlaceNote')?.dataset.state);const before=new Set(await page.evaluate(()=>FloorPlanApp.project.objects.map(o=>o.id)));
  const b=page.locator('#catalogPlace');await b.scrollIntoViewIfNeeded();await go(b,touch);await page.locator('#catalogDialog').waitFor({state:'hidden'});
  return (await page.evaluate(()=>FloorPlanApp.project.objects.map(o=>o.id))).find(x=>!before.has(x));}
-async function selectFurn(page,id){const pt=await page.evaluate(id=>{const g=document.querySelector(`#plan g.furn[data-fid="${id}"]`),r=g.getBoundingClientRect();
+// The click is computed on the DRAWN plan: wait until the plan has been redrawn (two frames) so that a previous delete or
+// re-render cannot leave a stale position (CI flake on #238: the click landed on the room under a just-removed object).
+async function selectFurn(page,id){await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));const pt=await page.evaluate(id=>{const g=document.querySelector(`#plan g.furn[data-fid="${id}"]`),r=g.getBoundingClientRect();
  for(let i=1;i<20;i++)for(let j=1;j<20;j++){const x=r.left+r.width*i/20,y=r.top+r.height*j/20,e=document.elementFromPoint(x,y);if(e?.closest('g.furn')?.dataset.fid===id)return {x,y};}return null;},id);
  if(!pt)throw Error('object not reachable '+id);await page.mouse.click(pt.x,pt.y);await page.waitForFunction(id=>ui.sel?.kind==='furn'&&ui.sel.id===id,id);}
 async function openBudget(page,touch=false){await go(page.locator('#workArea-budget'),touch);const b=page.locator('[data-route="budget-edit"]');await b.waitFor();await b.scrollIntoViewIfNeeded();await go(b,touch);await page.locator('#budgetDialog[open]').waitFor();}
@@ -97,7 +99,7 @@ test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación
   await shot(page,'cat04-06-dossier');await page.keyboard.press('Escape');
   // 14. Remove both linked objects: the priced item stays with 0 units (undo-safe), no active orphan; «Retirar partida».
   await toEditor(page);const ids=await page.evaluate(()=>Object.entries(FloorPlanApp.project.extensions['x-cat03-catalog-link'].links).filter(([,l])=>l.sku==='QA-LUMEN-160-RB').map(([id])=>id).filter(id=>FloorPlanApp.project.objects.some(o=>o.id===id)));
-  for(const id of ids){await selectFurn(page,id);await page.keyboard.press('Delete');await page.waitForFunction(id=>!FloorPlanApp.project.objects.some(o=>o.id===id),id);}
+  for(const id of ids){await selectFurn(page,id);await page.keyboard.press('Delete');await page.waitForFunction(id=>!FloorPlanApp.project.objects.some(o=>o.id===id)&&!document.querySelector(`#plan g.furn[data-fid="${id}"]`),id);}
   await openBudget(page);T=await truth(page,RB);assert.deepEqual([T.item.qty,T.item.price,T.subtotal],[0,690,0]);assert.match(await tr.innerText(),/Sin objetos colocados \(0 ud\)/);assert.match(await page.locator('#cat04Orphans').innerText(),/2 vínculo\(s\) de objetos ya borrados: no se cuentan/);
   await tr.locator('.cat04-retire').click();await page.waitForFunction(id=>!document.querySelector(`#budgetDialog tr[data-item="${id}"]`),RB);assert.equal((await truth(page,RB)).item,null);
   // 17. Export: the project carries the links; the budget is a separate document (rubik-budget-v1 / JSON download).

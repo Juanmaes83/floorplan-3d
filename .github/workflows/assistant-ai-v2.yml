@@ -8,6 +8,9 @@ on:
       - tests/spend-ledger.test.cjs
       - scripts/qa/assistant-eval*.cjs
       - scripts/qa/token-bound-evidence.cjs
+      - scripts/qa/assistant-ledger-reconcile.cjs
+      - tests/cat04.browser.test.cjs
+      - scripts/qa/record-cat04.cjs
       - js/assistant-*.js
       - js/cat04-ui.js
       - api/assistant.js
@@ -47,7 +50,7 @@ jobs:
         with:
           node-version: '22.13.0'
       - name: Syntax
-        run: for f in js/assistant-*.js api/assistant.js api/_spend-ledger.js scripts/qa/assistant-eval*.cjs scripts/qa/token-bound-evidence.cjs scripts/assistant/*.cjs scripts/qa/record-assistant.cjs tests/assistant-ai-v2*.cjs; do node --check "$f"; done
+        run: for f in js/assistant-*.js api/assistant.js api/_spend-ledger.js scripts/qa/assistant-eval*.cjs scripts/qa/token-bound-evidence.cjs scripts/qa/assistant-ledger-reconcile.cjs scripts/assistant/*.cjs scripts/qa/record-assistant.cjs tests/assistant-ai-v2*.cjs; do node --check "$f"; done
       - name: Published JSON Schemas match the validator
         run: node scripts/assistant/write-schemas.cjs --check
       - name: AG-0…AG-5 core (independent oracles) + coexistence (UX-12/13 incl. 1512-rotation property, R03 manifest, capability registry)

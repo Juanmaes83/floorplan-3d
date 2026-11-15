@@ -91,3 +91,11 @@ test('figure check with budget oracles: amounts must come from monetary fields; 
  // Por eso la interfaz dice «comprobación parcial» y nunca «verificado». La prueba C debe medirlo con oráculos.
  a=await turn(`Las puertas cuestan ${es(partial)} €.`);assert.equal(a.grounded,true,'known limitation: attribution is not checked');assert.match(a.limits.join(' '),/no vincula/);
 });
+
+test('privacy: the free question is sent with recognisable emails, phones, links and data: URIs redacted; measures and amounts kept; names are NOT detected (documented limit)',async()=>{
+ const r=A.redactQuestion('Cliente Ana: ana.perez@correo.es, +34 612 345 678, 612345678, https://x.es/a?b=1 www.y.com data:image/png;base64,AAAA; salón 85 m², 12.400 €, referencia 2026-11-15');
+ assert.deepEqual(r.redacted.sort(),['data','email','phone','url']);for(const x of ['ana.perez','612 345 678','612345678','https://','www.y.com','base64'])assert.equal(r.text.includes(x),false,x);
+ for(const x of ['85 m²','12.400 €','2026-11-15','Ana'])assert.ok(r.text.includes(x),x);
+ const seen=[];await A.runTurn({question:'Llama al 612 345 678 o escribe a a@b.es',ctx:world(),consent,adapter:A.scriptedAdapter([req=>{seen.push(JSON.stringify(req.messages));return say('Vale.');}])});
+ assert.equal(seen[0].includes('612 345 678')||seen[0].includes('a@b.es'),false,'what reaches the adapter is the redacted question');
+});

@@ -16,7 +16,16 @@ En «Conversación con IA»:
 - Puede **ofrecer botones** a los flujos reales: Presupuestar, Precios de referencia, Dossier económico, Estudio de imágenes, Render IA, Mis catálogos y Analizar. No abre nada por su cuenta y nada gasta: Render IA sigue confirmando cada imagen con su código.
 - Mantiene el hilo de la conversación («¿y cuál es la más grande?»), con memoria acotada.
 - Cada respuesta indica tokens y coste estimado, y el estado muestra lo gastado frente al tope.
-- Antes de enviar nada pide **consentimiento**: la pregunta, y los datos del proyecto que el asistente consulte. Nunca fotos ni datos de contacto.
+- Antes de enviar nada pide **consentimiento**, ligado al estudio y al proyecto abiertos: la pregunta y los datos del proyecto que el asistente consulte.
+  - RUBIK no adjunta fotos ni contactos, y oculta los correos, teléfonos y enlaces que reconoce en la pregunta.
+  - No promete más: los nombres o direcciones que se peguen no se detectan.
+- **Aislamiento.** Al cambiar de proyecto o de estudio:
+  - se corta la petición en curso;
+  - se borra el historial;
+  - se invalidan las propuestas y rutas;
+  - se pide de nuevo el consentimiento.
+
+  No viaja nada del ámbito anterior (acta 05).
 - Si el servicio no está autorizado, lo dice («preparada, pero desactivada en este despliegue…») y la consulta guiada sigue igual.
 
 ## 2. Arquitectura (plan maestro IA, §4.3, sin sobredimensionar)
@@ -91,7 +100,7 @@ api/assistant.js ── puertas cerradas por defecto, política y definiciones d
 - El presupuesto común efectivo: Render IA aún no anota en el libro (PR aparte, doc 02 §4).
 - El texto de consentimiento y la evaluación de privacidad: **para revisión** (doc 03).
 
-**C — Verificado con modelo real:** **nada**. Requiere un GO separado.
+**C — Verificado con modelo real:** **nada**. Requiere un GO separado. Propuesta definitiva de la prueba: doc 06. Acta de esta entrega: doc 05.
 
 ## 5. Estado de las decisiones (propietario, coordinación del 2026-11-15)
 

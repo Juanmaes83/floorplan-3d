@@ -13,7 +13,7 @@ test.after(async()=>{await env?.stop();});
 async function fakeGateway(page,{status={enabled:true,reason:'ok',model:'test-double',priceDate:'2026-11-15',capUsd:0.05,spentUsd:0},queue=[]}={}){
  const seen=[];await page.route('**/api/assistant',async route=>{const req=route.request(),body=JSON.parse(req.postData()||'{}');seen.push({body,headers:req.headers()});
   if(body.action==='status')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(status)});
-  const next=queue.shift();const out=typeof next==='function'?next(body):next||{type:'error',code:'internal',message:'queue empty'};
+  const next=queue.shift();const out=typeof next==='function'?await next(body):next||{type:'error',code:'internal',message:'queue empty'};
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({...out,usage:{inputTokens:700,outputTokens:60,costUsd:0.0004,costBasis:'tarifa 2026-11-15',spentUsd:0.0004,capUsd:0.05},model:'test-double'})});});
  return seen;}
 const call=(name,args={})=>({type:'tool_calls',calls:[{id:'call_'+name,name,arguments:JSON.stringify(args)}]});
@@ -90,6 +90,80 @@ test('móvil 390×844 EN: modo IA, consentimiento y respuesta dentro de la panta
   const t=await page.evaluate(()=>RubikAssistantUI.state.log.at(-1).text),rooms=await page.evaluate(()=>FloorPlanApp.project.rooms.length);assert.equal(t,`The project has ${rooms} rooms.`);
   const box=await page.locator('#assistantPanel').boundingBox();assert.ok(box.y>=0&&box.y+box.height<=844.5&&box.x+box.width<=390.5,'panel inside the screen');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
+  assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
+
+// AISLAMIENTO entre ámbitos (revisión del propietario en #238): conversación, resultados de herramientas, propuestas,
+// rutas y consentimiento pertenecen a un estudio + proyecto. Se comprueba sobre los cuerpos REALES que salen hacia
+// /api/assistant: ninguna pregunta, herramienta, dato ni respuesta de A llega en B; tampoco tras cerrar y reabrir el
+// panel; una respuesta de A que llega con B abierto se descarta; y lo mismo al cambiar de estudio.
+test('aislamiento: proyecto A → B → C y estudio → estudio: nada de A viaja a B, se exige consentimiento de nuevo, la respuesta en curso se descarta; la consulta guiada sigue igual',{timeout:240000},async()=>{
+ const {context,page,watch}=await kit.editor(env);
+ try{
+  const A_Q='ZORRO-A pregunta sobre el salón',A_ANS='ZORRO-A respuesta',S_Q='ZORRO-S1 pregunta de estudio';
+  const idA=await page.evaluate(()=>FloorPlanApp.project.id);
+  const mat=await page.evaluate(()=>{const p=FloorPlanApp.project,r=p.rooms.find(x=>x.id==='rom_living');return p.materials.find(m=>m.id!==r.floorMaterialId&&m.category==='floor').id;});
+  let release;const held=new Promise(r=>release=r);
+  const seen=await fakeGateway(page,{queue:[
+   {type:'tool_calls',calls:[{id:'callA1',name:'get_project_summary',arguments:'{}'}]},{type:'message',text:`${A_ANS}: el proyecto tiene estancias.`},
+   {type:'tool_calls',calls:[{id:'callA2',name:'propose_floor_material',arguments:JSON.stringify({roomId:'rom_living',materialId:mat})},{id:'callA3',name:'offer_route',arguments:JSON.stringify({route:'budget-edit',reason:'Abrir Presupuestar'})}]},{type:'message',text:'Propuesta preparada.'},
+   {type:'tool_calls',calls:[{id:'callB1',name:'list_rooms',arguments:'{}'}]},{type:'message',text:'Respuesta en B.'},{type:'message',text:'Otra respuesta en B tras reabrir.'},
+   async()=>{await held;return {type:'message',text:'ZORRO-TARDÍA respuesta que llega tarde'};},
+   {type:'message',text:'Respuesta en C.'},{type:'message',text:'Respuesta de estudio 1.'},{type:'message',text:'Respuesta de estudio 2.'}]});
+  const steps=()=>seen.filter(s=>s.body.action==='step');
+  const consentBoth=async()=>{await page.check('#assistantConsentQuestion');await page.check('#assistantConsentData');};
+  const variant=async()=>{const before=await page.evaluate(()=>FloorPlanApp.project.id);await page.evaluate(()=>document.querySelector('#projectsBtn').click());await page.locator('#projectsDialog[open]').waitFor();
+   await page.evaluate(()=>document.querySelector('#projectVariant').click());await page.waitForFunction(b=>FloorPlanApp.project.id!==b,before);await page.evaluate(()=>document.querySelector('#projectsDialog')?.close());return page.evaluate(()=>FloorPlanApp.project.id);};
+  // ── A: conversation with tool data, a pending proposal and a route.
+  await open(page);await page.click('#assistantModeGen');await page.waitForFunction(()=>RubikAssistantGenUI.active());await consentBoth();
+  let m=await ask(page,A_Q);assert.match(m.text,/ZORRO-A respuesta/);
+  await ask(page,'Cambia el suelo del salón');await page.locator('#assistantProposal[data-state="proposed"]').waitFor();await page.locator('#assistantGenRoutes').waitFor();
+  const nA=steps().length;assert.ok(JSON.stringify(steps().map(s=>s.body)).includes('ZORRO-A'),'sanity: A content did travel in A');
+  // ── Switch to B (real switchProject via «Crear variante»).
+  const idB=await variant();assert.notEqual(idB,idA);
+  assert.equal(await page.locator('#assistantProposal').isHidden(),true,'pending proposal of A invalidated');assert.equal(await page.locator('#assistantGenRoutes').count(),0,'routes of A removed');
+  assert.deepEqual(await page.evaluate(()=>[document.querySelector('#assistantConsentQuestion').checked,document.querySelector('#assistantConsentData').checked,RubikAssistantGenUI.state.history.length,RubikAssistantGenUI.state.resets>=1,RubikAssistantUI.state.proposal]),[false,false,0,true,null]);
+  assert.equal((await page.evaluate(()=>RubikAssistantUI.state.log.map(x=>x.text).join('\n'))).includes('ZORRO-A'),false,'the log shown in B is B’s');
+  // Asking in B without re-consenting sends nothing.
+  m=await ask(page,'¿Cuántas estancias tiene?');assert.match(m.text,/marca los dos consentimientos/);assert.equal(steps().length,nA,'no request without consent in the new scope');
+  await consentBoth();m=await ask(page,'¿Cuántas estancias tiene?');assert.match(m.text,/Respuesta en B/);
+  // Close and reopen the panel: still nothing from A.
+  await page.click('#assistantClose');await open(page);m=await ask(page,'¿Y la cocina?');assert.match(m.text,/tras reabrir/);
+  const bodiesB=steps().slice(nA).map(s=>JSON.stringify(s.body));assert.equal(bodiesB.length,3);
+  for(const b of bodiesB){for(const leak of ['ZORRO-A','callA1','callA2','callA3','Propuesta preparada'])assert.equal(b.includes(leak),false,'leak of '+leak+' into B');}
+  assert.equal(JSON.parse(bodiesB[0]).messages[0].content,'¿Cuántas estancias tiene?','B starts a fresh conversation');
+  // ── In-flight: a B turn is waiting for the provider; the project changes to C; the late answer is discarded.
+  const nBefore=steps().length;await page.fill('#assistantInput','Pregunta lenta en B');await page.click('#assistantSend');await page.waitForFunction(n=>RubikAssistantUI.state.pending,nBefore);
+  const idC=await variant();assert.notEqual(idC,idB);release();await page.waitForFunction(()=>!RubikAssistantUI.state.pending);
+  assert.equal((await page.evaluate(()=>RubikAssistantUI.state.log.map(x=>x.text).join('\n'))).includes('ZORRO-TARDÍA'),false,'late answer of B not shown in C');
+  assert.equal(await page.evaluate(()=>RubikAssistantGenUI.state.history.length),0);assert.equal(steps().length,nBefore+1,'no further step after the switch');
+  await consentBoth();m=await ask(page,'Hola desde C');assert.match(m.text,/Respuesta en C/);assert.equal(JSON.parse(JSON.stringify(steps().at(-1).body)).messages.length,1,'C starts clean');
+  // ── Studio change (same project): scope changes too.
+  await consentBoth().catch(()=>{});m=await ask(page,S_Q);assert.match(m.text,/estudio 1/);const nS=steps().length;
+  await page.evaluate(()=>{const s=document.querySelector('#catalogStudio');const o=document.createElement('option');o.value='brd-estudio-b';o.textContent='Estudio B';s.append(o);s.value='brd-estudio-b';s.dispatchEvent(new Event('change'));});
+  assert.equal(await page.evaluate(()=>RubikCatalogUI.studioId),'brd-estudio-b');
+  m=await ask(page,'¿Y ahora?');assert.match(m.text,/marca los dos consentimientos/,'new studio: consent again');assert.equal(steps().length,nS);
+  await consentBoth();m=await ask(page,'¿Y ahora?');assert.match(m.text,/estudio 2/);assert.equal(JSON.stringify(steps().at(-1).body).includes('ZORRO-S1'),false,'nothing from the previous studio');
+  // Guided mode unchanged.
+  await page.click('#assistantModeGuided');m=await ask(page,'¿Cuántas estancias hay?');assert.match(m.text,/estancias/);
+  assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
+
+test('privacidad: la pregunta libre se envía sin correos, teléfonos ni enlaces reconocibles; el aviso no promete más de lo que se cumple (ES/EN/ZH)',async()=>{
+ const {context,page,watch}=await kit.editor(env);
+ try{
+  const seen=await fakeGateway(page,{queue:[{type:'message',text:'De acuerdo.'}]});
+  await open(page);await page.click('#assistantModeGen');await page.waitForFunction(()=>RubikAssistantGenUI.active());await page.check('#assistantConsentQuestion');await page.check('#assistantConsentData');
+  const warn=await page.textContent('#assistantGenPrivacy');assert.match(warn,/no puede detectar nombres, direcciones/);assert.match(warn,/solo proyectos sintéticos/);assert.doesNotMatch(await page.textContent('#assistantGenConsent'),/Nunca fotos ni datos de contacto/);
+  const m=await ask(page,'Mi cliente Ana (ana.perez@correo.es, +34 612 345 678, https://ejemplo.es/ficha) quiere un salón de 85 m²');
+  const sent=JSON.stringify(seen.filter(s=>s.body.action==='step').map(s=>s.body.messages));
+  for(const x of ['ana.perez@correo.es','612 345 678','https://ejemplo.es'])assert.equal(sent.includes(x),false,'redacted: '+x);
+  assert.ok(sent.includes('85 m²'),'measures are kept');assert.ok(sent.includes('Ana'),'names are NOT detected (documented limit)');
+  assert.match(m.text,/Se ocultaron en tu pregunta antes de enviarla: .*email/);
+  for(const [lang,re] of [['en',/cannot detect names, addresses/],['zh',/无法识别姓名、地址/]]){await page.evaluate(l=>{try{setLang(l);}catch{}},lang);await page.click('#assistantClose');await open(page);
+   assert.match(await page.textContent('#assistantGenPrivacy'),re);}
   assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
  }finally{await context.close();}
 });

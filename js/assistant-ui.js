@@ -145,7 +145,13 @@
   emit('service',{id:s.id,state:s.state});
  }
  // ----- Open / close -----
- function openPanel(){state.open=true;panel.hidden=false;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
+ // Scope isolation: changing project (or studio, via the generative mode) cuts the request in flight and discards the
+ // pending proposal and the undo of the previous project; the visible log is the one of the project now open.
+ let scopeProject=app.project?.id||null;
+ function invalidate(reason='scope-changed'){state.pending?.abort();state.proposal=null;state.applied=null;card.hidden=true;card.replaceChildren();card.dataset.state='invalidated';
+  scopeProject=app.project?.id||null;if(state.open)restoreLog();emit('invalidated',{reason});}
+ addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
+ function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
  function closePanel(){state.open=false;panel.hidden=true;document.body.classList.remove('assistant-open');labels();state.pending?.abort();opener.focus({preventScroll:true});emit('close');}
  opener.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closePanel();}});
@@ -155,7 +161,7 @@
  clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  mountOpener();labels();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
- window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,
+ window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
   get trace(){return state.trace.map(e=>structuredClone(e));},setLatency(ms){state.latencyMs=Math.max(0,Math.min(10000,Number(ms)||0));}});
 })();

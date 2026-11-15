@@ -2442,7 +2442,7 @@ $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 if(libraryError)toast('No se pudo abrir la colección local: '+libraryError,6000);
 if(loadedProject.message)toast(loadedProject.message,6000);
-function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();}
+function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
 function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
@@ -2574,7 +2574,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     if(entry.focus?.isConnected)entry.focus.focus({preventScroll:true});
     return true;
   },
-  importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
+  importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
 <script src="js/opening-ui.js"></script>

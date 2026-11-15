@@ -69,3 +69,14 @@ test('reconcile: open reservations flag review; families add up to a single comm
  assert.equal(L.storeFromEnv({RUBIK_SPEND_STORE_URL:'https://x.upstash.io',RUBIK_SPEND_STORE_TOKEN:'short'}),null);
  assert.equal(L.storeFromEnv({RUBIK_SPEND_STORE_URL:'https://x.upstash.io',RUBIK_SPEND_STORE_TOKEN:'t'.repeat(30)}).kind,'redis','configured by the owner → persistent store');
 });
+
+test('offline reconciliation CLI: ok / review / blocking exit codes with synthetic exports; bad input refused',()=>{
+ const CLI=require('../scripts/qa/assistant-ledger-reconcile.cjs'),os=require('node:os'),fs=require('node:fs'),path=require('node:path');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'rec-')),w=(n,c)=>{const f=path.join(dir,n);fs.writeFileSync(f,c);return f;};
+ const log=w('log.json',JSON.stringify([{op:'reserve',id:'t1',family:'text',usd:0.01,at:'2026-11-20T10:00:00Z'},{op:'settle',id:'t1',usd:0.003,at:'2026-11-20T10:00:02Z'}]));
+ const quiet=f=>{const a=console.log,b=console.table,c=console.error;console.log=console.table=console.error=()=>{};try{return f();}finally{console.log=a;console.table=b;console.error=c;}};
+ assert.equal(quiet(()=>CLI.main([log,w('ok.csv','fecha,familia,usd\n2026-11-20,text,0.0029\n')])),0);
+ assert.equal(quiet(()=>CLI.main([log,w('bad.csv','fecha,familia,usd\n2026-11-20,text,0.5\n')])),2,'provider bill above the ledger → blocking');
+ const open=w('open.json',JSON.stringify([{op:'reserve',id:'t2',family:'text',usd:0.01,at:'2026-11-20T11:00:00Z'}]));assert.equal(quiet(()=>CLI.main([open,w('z.csv','fecha,familia,usd\n')])),3,'open reservation → review');
+ assert.equal(quiet(()=>CLI.main([log,w('h.csv','a,b\n1,2\n')])),1);assert.equal(quiet(()=>CLI.main([])),1);
+});

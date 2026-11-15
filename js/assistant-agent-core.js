@@ -84,6 +84,14 @@
   if(isObj(v)){const o={};for(const [k,x] of Object.entries(v)){if(/^(image|photo|dataUrl|base64|exif|email|phone|address|token|key|secret)$/i.test(k))continue;o[k]=scrub(x,depth+1);}return o;}
   return v;
  }
+ // The person's own question is free text: it may contain data they paste. RUBIK redacts what it can RECOGNISE
+ // (emails, phone numbers, links, data: URIs) before sending; names, addresses or other personal data cannot be
+ // detected reliably, which is why the consent text asks not to paste them (it never promises «nothing personal leaves»).
+ function redactQuestion(q){const kinds=new Set();let t=String(q);
+  t=t.replace(/data:[^\s"']+/gi,()=>{kinds.add('data');return '[data]';}).replace(/https?:\/\/\S+|www\.\S+/gi,()=>{kinds.add('url');return '[url]';})
+   .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,()=>{kinds.add('email');return '[email]';})
+   .replace(/\+?\d[\d\s().-]{7,}\d/g,m=>/\d{9,}/.test(m.replace(/\D/g,''))?(kinds.add('phone'),'[phone]'):m);
+  return {text:t,redacted:[...kinds]};}
  function compact(result){let s=JSON.stringify(scrub(result));if(s.length>LIMITS.maxResultChars)s=JSON.stringify({truncated:true,note:'result too large; ask a narrower question',preview:s.slice(0,LIMITS.maxResultChars-120)});return s;}
  // Numbers in the answer that appear in no tool result nor in the question → «not verified».
  const numberTokens=s=>(String(s).replace(/\b[A-Z]{2,}[\w-]*\d[\w-]*\b/g,' ').replace(/\b\d{4}-\d{2}-\d{2}\b/g,' ').match(/-?\d+(?:[.,]\d+)*/g)||[]);
@@ -145,7 +153,7 @@
   if(!ctx?.project)return fail('not_available','No hay ningún proyecto abierto.');
   if(!adapter||typeof adapter.step!=='function')return fail('provider_disabled','El modelo de texto no está conectado.');
   const tools=(toolNames||NAMES).filter(n=>NAMES.includes(n)&&(toolSpec(n).requires!=='catalog'||ctx.catalog||ctx.catalogReport||ctx.visualRefs));
-  const messages=[...trimHistory(history),{role:'user',content:question}];
+  const rq=redactQuestion(question);const messages=[...trimHistory(history),{role:'user',content:rq.text}];
   const steps=[],proposals=[],actions=[];let providerCalls=0;
   for(let i=0;i<LIMITS.maxSteps;i++){
    if(signal?.aborted)return fail('cancelled','Cancelado.',{steps,proposals,actions,providerCalls});
@@ -156,7 +164,7 @@
    if(r.type==='message'){
     const text=String(r.text||'').slice(0,LIMITS.maxMessageChars).trim();if(!text)return fail('internal','Respuesta vacía del modelo.',{steps,proposals,actions,providerCalls});
     const g=grounding(text,steps,question);messages.push({role:'assistant',content:text});
-    return {ok:true,version:VERSION,answer:{text,grounded:g.grounded,unverified:g.unverified,unverifiedAmounts:g.unverifiedAmounts,check:g.check,limits:g.limits},steps,proposals,actions,usage,providerCalls,durationMs:Date.now()-t0,history:messages,
+    return {ok:true,version:VERSION,redacted:rq.redacted,answer:{text,grounded:g.grounded,unverified:g.unverified,unverifiedAmounts:g.unverifiedAmounts,check:g.check,limits:g.limits},steps,proposals,actions,usage,providerCalls,durationMs:Date.now()-t0,history:messages,
      audit:{version:K.VERSION,runId:'gen_'+t0.toString(36),at:new Date(t0).toISOString(),mode:'provider',area:ctx.area,projectId:ctx.project.id,tools:steps.map(s=>s.tool).slice(0,K.LIMITS.tools),providerCalls,cost:{estimatedUsd:usage.costUsd,billedUsd:null,basis:'tarifa fechada del servidor; la factura del proveedor manda'}}};
    }
    if(r.type!=='tool_calls'||!Array.isArray(r.calls)||!r.calls.length)return fail('internal','Respuesta del modelo no reconocida.',{steps,proposals,actions,providerCalls});
@@ -187,5 +195,5 @@
  /* Scripted test double. It is NOT a language model and is labelled as such: it replays a fixed list of steps to test the
     orchestration (tool execution, proposals, limits, grounding, injection). Never offered to professionals as «AI». */
  function scriptedAdapter(script){let i=0;return {kind:'scripted-test',async step(req){const s=typeof script[i]==='function'?script[i](req):script[i];i++;return s||{type:'error',code:'internal',message:'script exhausted'};}};}
- return Object.freeze({VERSION,LIMITS,AREAS,ROUTES,TOOLS,NAMES,SYSTEM_POLICY,toolSpec,checkArgs,scrub,compact,grounding,execute,trimHistory,runTurn,httpAdapter,scriptedAdapter});
+ return Object.freeze({VERSION,LIMITS,AREAS,ROUTES,TOOLS,NAMES,SYSTEM_POLICY,toolSpec,checkArgs,scrub,redactQuestion,compact,grounding,execute,trimHistory,runTurn,httpAdapter,scriptedAdapter});
 });

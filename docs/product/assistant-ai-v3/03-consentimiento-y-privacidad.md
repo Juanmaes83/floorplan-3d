@@ -9,7 +9,9 @@
 | Finalidad | Responder preguntas del profesional sobre **su proyecto en RUBIK** y preparar propuestas reversibles |
 | Quién inicia | El profesional, eligiendo «Conversación con IA» y marcando los dos consentimientos |
 | Datos que salen del navegador | (a) La **pregunta** escrita. (b) Los **resultados de las herramientas** que el modelo pide: estancias, superficies, materiales, partidas y estado del presupuesto, productos de Mis catálogos, referencias visuales (solo metadatos), revisión de distribución. (c) El historial acotado de la conversación (8 turnos) |
-| Datos que NUNCA salen | Fotos e imágenes, el documento del proyecto completo, datos de contacto, nombres de clientes del CRM, códigos, claves |
+| Lo que RUBIK nunca adjunta | Fotos e imágenes, el documento del proyecto completo, datos de contacto del CRM, códigos y claves |
+| **Lo que NO se puede garantizar** | La **pregunta libre** se envía como la escribe el profesional. RUBIK oculta los correos, teléfonos (≥ 9 dígitos), enlaces y `data:` que **reconoce** (`redactQuestion`, probado), pero **no detecta nombres, direcciones ni otros datos personales**. Por eso la interfaz pide no pegarlos y usar solo proyectos sintéticos en las pruebas. **No se promete que nunca salgan datos personales** |
+| Aislamiento por ámbito | Historial, resultados de herramientas, propuestas, rutas y consentimiento pertenecen a **un estudio + proyecto**. Al cambiar de ámbito se corta la petición en curso, se borra el historial, se invalidan las propuestas y rutas y se pide el consentimiento de nuevo. Una respuesta que llega de otro ámbito se descarta. Prueba de navegador A → B → C y estudio → estudio, más la demostración de la fuga antes de la corrección (acta 05) |
 | Minimización técnica | `scrub` elimina URL, correos, teléfonos y `data:`, y corta textos a 300 caracteres; listas ≤ 60 elementos; resultado ≤ 6000 caracteres; sin `walls` ni geometría completa |
 | Destinatarios | La pasarela RUBIK (función de Vercel del mismo origen) → **un único proveedor de texto de lista cerrada** (propuesta: OpenAI Chat Completions) |
 | Conservación en RUBIK | **Ninguna del contenido**: la pasarela no guarda preguntas ni respuestas. El libro de gasto guarda solo importes, modelo, tarifa y hora. Los registros de función son una línea sin cuerpo |
@@ -17,34 +19,34 @@
 | Transferencia internacional | Probable (proveedor fuera del EEE). Requiere verificar las garantías del proveedor (DPA y cláusulas). Pendiente |
 | Base | Consentimiento explícito del profesional por sesión. Los datos del proyecto pueden ser datos de **su cliente** final: el profesional debe tener base para compartirlos |
 
-## 2. Texto de consentimiento propuesto (versión para revisión)
+## 2. Texto de consentimiento (implementado en esta entrega, ES/EN/ZH; pendiente de aprobación del propietario)
 
-**ES**
-> **Conversación con IA (prueba).** Para responderte, RUBIK enviará a un proveedor externo de IA de texto **tu pregunta** y **solo los datos del proyecto que el asistente consulte**: estancias, medidas, materiales, partidas del presupuesto y productos de tus catálogos. **Nunca** envía fotos, el proyecto completo ni datos de contacto. El proveedor no debe guardar la conversación (`store:false`), pero se aplican sus condiciones. RUBIK no guarda tus preguntas ni las respuestas. Las respuestas pueden contener errores: revisa las cifras, que se comprueban solo de forma parcial. Cada consulta tiene un coste y un tope aprobado.
-> ☐ Acepto enviar mi pregunta. ☐ Acepto enviar los datos del proyecto que se consulten y confirmo que puedo compartirlos.
+**Casillas:**
 
-**EN**
-> **AI conversation (trial).** To answer you, RUBIK will send an external text AI provider **your question** and **only the project data the assistant looks up**: rooms, measures, materials, budget items and products from your catalogues. It **never** sends photos, the whole project or contact data. The provider is asked not to store the conversation (`store:false`), but its terms apply. RUBIK does not store your questions or answers. Answers may contain mistakes: check the figures, which are only partially checked. Each query has a cost and an approved cap.
-> ☐ I agree to send my question. ☐ I agree to send the project data looked up and confirm I may share it.
+| Idioma | Casilla 1 | Casilla 2 |
+|---|---|---|
+| ES | «Envío mi pregunta al proveedor de IA de texto.» | «Permito enviar los datos de ESTE proyecto que el asistente consulte (estancias, medidas, presupuesto, productos). RUBIK no adjunta fotos ni contactos.» |
+| EN | «I send my question to the text AI provider.» | «I allow sending the data of THIS project that the assistant looks up (rooms, measures, budget, products). RUBIK attaches no photos or contacts.» |
+| ZH | «我同意将问题发送给文本 AI 服务商。» | «我允许发送助手查询的“此项目”数据（房间、尺寸、预算、产品）。RUBIK 不附加照片或联系方式。» |
 
-**ZH**
-> **AI 对话（试用）。** 为了回答您，RUBIK 会把**您的问题**和**助手查询到的项目数据**（房间、尺寸、材料、预算条目、目录产品）发送给外部文本 AI 服务商。**绝不**发送照片、完整项目或联系方式。已要求服务商不保存对话（`store:false`），但其条款仍然适用。RUBIK 不保存您的问题和回答。回答可能有误，数字仅部分核对，请自行检查。每次查询都有费用和已批准的上限。
-> ☐ 我同意发送问题。☐ 我同意发送所查询的项目数据，并确认有权分享。
+**Aviso visible** (`#assistantGenPrivacy`):
+> ES: «Tu pregunta se envía como la escribas: RUBIK oculta correos, teléfonos y enlaces que reconoce, pero no puede detectar nombres, direcciones u otros datos personales. No los pegues. En las pruebas, usa solo proyectos sintéticos. El proveedor recibe store:false, pero se aplican sus condiciones de retención.»
+>
+> EN / ZH: traducciones equivalentes, probadas en el navegador al cambiar de idioma.
 
-**Diferencias con el texto actual de la interfaz:**
+Si se ocultó algo de la pregunta, la respuesta lo indica: «ℹ Se ocultaron en tu pregunta antes de enviarla: email, phone…».
 
-- añade «prueba», la retención del proveedor, la ausencia de almacenamiento en RUBIK, la comprobación parcial de cifras, el coste y tope, y la confirmación de que puede compartir los datos;
-- **no se cambia la interfaz** hasta que el propietario apruebe el texto.
+El consentimiento **queda ligado al estudio y al proyecto**: al cambiar de ámbito, las casillas se desmarcan y no se envía nada hasta marcarlas de nuevo.
 
 ## 3. Riesgos y medidas
 
 | Riesgo | Medida actual | Pendiente |
 |---|---|---|
-| Datos del cliente final llegan al proveedor | Minimización por herramientas + `scrub` + consentimiento con confirmación | DPA del proveedor; aviso en las condiciones de RUBIK |
+| Datos del cliente final llegan al proveedor | Minimización por herramientas + `scrub` + ocultación en la pregunta + consentimiento por ámbito + aviso honesto | DPA del proveedor; aviso en las condiciones de RUBIK |
 | Instrucciones incrustadas en nombres de estancias o productos | Política del servidor, lista blanca, URL eliminadas, `not_authorized` | Medición con modelo real (prueba C, escenario `injection`) |
 | Cifras erróneas presentadas como ciertas | Comprobación parcial con oráculo monetario; la interfaz dice «parcial» | Medición en la prueba C |
 | Gasto no autorizado | Puertas cerradas, código propio, tope, cota por bytes, disyuntor, libro común | GO separado; almacén; integración de Render IA |
-| Reidentificación por historial | Historial ≤ 8 turnos, solo en la sesión del navegador | — |
+| Reidentificación por historial / mezcla de expedientes | Historial ≤ 8 turnos, en la sesión del navegador y **aislado por estudio y proyecto** (corregido y probado) | — |
 | Acceso indebido | Código de acceso provisional | **GOV-06a** (sesiones, tenants, roles, cuotas) antes de Production |
 
 ## 4. Decisiones del propietario
