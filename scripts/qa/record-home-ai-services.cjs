@@ -28,23 +28,26 @@ const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex'
  async function page(ctx,audience){const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));
   await p.route('https://cdn.jsdelivr.net/**',r=>r.abort());await p.route('**/api/**',r=>{api.push(r.request().url());return r.abort();});
   if(audience)await p.addInitScript(a=>localStorage.setItem('rubik-professional-audience-v1',a),audience);
-  await p.goto(url,{waitUntil:'load'});await p.locator('#welcomeDialog[open]').waitFor();await p.locator('#welcomeAIServices .ai-service-go').first().waitFor();return p;}
+  await home(p);return p;}
+ async function home(p){await p.goto(url,{waitUntil:'load'});await p.locator('#welcomeDialog[open]').waitFor();await p.locator('#welcomeAIServices .ai-service-go').first().waitFor();}
  try{
   for(const vp of SIZES)for(const a of PROFILES){const narrow=vp.width<=1100,ctx=await browser.newContext({viewport:vp,isMobile:narrow,hasTouch:narrow});
    const p=await page(ctx,a);await p.evaluate(()=>document.getElementById('welcomeAIServices').scrollIntoView({block:'start'}));await p.waitForTimeout(150);
    const f=path.join(out,`home-ai-${vp.width}x${vp.height}-${a||'neutral'}.jpg`);await p.screenshot({path:f,type:'jpeg',quality:82});files.push(f);await ctx.close();}
   const vp={width:1440,height:900};
   const ctx=await browser.newContext({viewport:vp,recordVideo:{dir:out,size:vp}});
-  for(const s of R.aiServices('general')){const row={id:s.id,state:s.state,name:s.name[0],button:null,opens:null,ok:false};
-   const p=await page(ctx,'');const b=p.locator('#welcomeAI-'+s.id);
+  // One continuous video: the same tab returns to the Home before each service.
+  const p=await page(ctx,'');
+  for(const [i,s] of R.aiServices('general').entries()){const row={id:s.id,state:s.state,name:s.name[0],button:null,opens:null,ok:false};
+   if(i)await home(p);const b=p.locator('#welcomeAI-'+s.id);
    if(await b.count()){row.button=(await b.textContent()).trim();await b.scrollIntoViewIfNeeded();await p.waitForTimeout(500);await b.click();
     await p.waitForFunction(OPENS[s.id].check,null,{timeout:15000});row.opens=OPENS[s.id].place;row.ok=true;await p.waitForTimeout(900);
     const f=path.join(out,`opens-${s.id}.jpg`);await p.screenshot({path:f,type:'jpeg',quality:82});files.push(f);}
    else{row.ok=s.state==='preparation';row.opens='— (sin botón: '+(s.state==='preparation'?'en preparación':'módulo ausente')+')';}
-   matrix.push(row);await p.close();}
-  await ctx.close();
+   matrix.push(row);}
+  await p.close();await ctx.close();
  }finally{await browser.close();server.close();}
- const videos=fs.readdirSync(out).filter(f=>f.endsWith('.webm')).map(f=>path.join(out,f));
+ const videos=fs.readdirSync(out).filter(f=>f.endsWith('.webm')).map(f=>{const to=path.join(out,'home-ai-services-1440x900.webm');fs.renameSync(path.join(out,f),to);return to;});
  const checks=[];for(const v of videos){try{const d=execFileSync('ffprobe',['-v','error','-show_entries','format=duration','-of','csv=p=0',v]).toString().trim();execFileSync('ffmpeg',['-v','error','-i',v,'-f','null','-']);checks.push({file:path.basename(v),durationS:Number(d),decoded:true});}catch(e){checks.push({file:path.basename(v),decoded:false,error:String(e.message).slice(0,200)});}}
  const manifest={tree:execFileSync('git',['rev-parse','HEAD'],{cwd:root}).toString().trim(),dirty:execFileSync('git',['status','--porcelain'],{cwd:root}).toString().trim().length>0,createdAt:new Date().toISOString(),
   matrix,gatedNotShown:R.AI_SERVICES.filter(s=>s.gate).map(s=>s.id),apiRequests:api,pageErrors:errors,videos:checks,
