@@ -11,7 +11,7 @@ En «Conversación con IA»:
 
 - Se escribe en lenguaje natural, sin comandos: «Estoy diseñando un salón para un cliente: revisa la distribución y dime qué mejorarías», «¿qué sofá de Mis catálogos encaja en el salón y cuánto supondría?» o «explícame por qué el presupuesto está incompleto antes de entregarlo».
 - Un **modelo de lenguaje real** interpreta la pregunta y **consulta RUBIK** con sus herramientas reales. Cada respuesta muestra qué se consultó: «Consultado en RUBIK: presupuesto · estancias».
-- Las cifras salen de RUBIK. Si el modelo escribe una cifra que no está en lo consultado, se avisa: «⚠ Cifras no verificadas por RUBIK».
+- Las cifras salen de RUBIK. Una **comprobación parcial** avisa si el modelo escribe una cifra que no aparece en lo consultado: «⚠ Cifras que no aparecen en los datos consultados en RUBIK». Los importes deben coincidir con campos monetarios. **No certifica** a qué partida se atribuye cada cifra, y la interfaz lo dice.
 - Cuando procede un cambio, el asistente **prepara una propuesta** con su diff. El profesional la aplica o la descarta; aplicarla es un paso que se puede deshacer, el mismo mecanismo de AG-3.
 - Puede **ofrecer botones** a los flujos reales: Presupuestar, Precios de referencia, Dossier económico, Estudio de imágenes, Render IA, Mis catálogos y Analizar. No abre nada por su cuenta y nada gasta: Render IA sigue confirmando cada imagen con su código.
 - Mantiene el hilo de la conversación («¿y cuál es la más grande?»), con memoria acotada.
@@ -57,9 +57,10 @@ api/assistant.js ── puertas cerradas por defecto, política y definiciones d
 | Production solo con `RUBIK_ASSISTANT_ALLOW_PRODUCTION=1` | servidor | probado |
 | Proveedor de lista cerrada con endpoint fijo; clave propia `RUBIK_ASSISTANT_PROVIDER_KEY` ≠ `OPENAI_API_KEY` (Render IA) | servidor | probado |
 | Modelo, tarifa fechada por millón de tokens y tope `RUBIK_ASSISTANT_BUDGET_CAP_USD` aprobados por el propietario (ningún precio en el código) | servidor | probado |
-| Reserva atómica del peor caso antes de llamar; liquidación con `usage`; peor caso si el uso es desconocido o el proveedor no responde; 4xx sin cargo | servidor | probado con almacén de pruebas |
+| Reserva del peor caso con **cota por bytes UTF-8** (H-TOK; sustituye a la heurística `length/3`, que fallaba en 4 de 8 casos adversarios medidos con o200k/cl100k) antes de llamar; liquidación con `usage`; peor caso si el uso es desconocido o el proveedor no responde; 4xx sin cargo | servidor | probado (doc 04 §4) |
+| **Disyuntor**: un uso por encima de lo reservado o de `max_completion_tokens` detiene todas las llamadas siguientes hasta revisión | servidor | probado |
 | Idempotencia (no hay segunda llamada con la misma clave) y límite por minuto | servidor | probado |
-| Contabilidad por familia `text` / `image` con un tope común | interfaz del almacén | probado en memoria; Render IA aún no anota en ella |
+| Almacén persistente atómico (Redis, scripts Lua) con **tope común** `text` + `image`, registro sin contenido y conciliación con la factura (`api/_spend-ledger.js`) | servidor | probado sobre **Redis real local** con concurrencia; **no contratado**; Render IA aún no anota (doc 02 §4) |
 | Consentimiento explícito (pregunta + datos del proyecto) en el navegador y en el servidor | ambos | probado |
 | `store:false` al proveedor | servidor | probado |
 | Registro: una línea sin cuerpo, pregunta, proyecto, código, clave, IP ni agente | servidor | probado |
@@ -69,36 +70,39 @@ api/assistant.js ── puertas cerradas por defecto, política y definiciones d
 
 **A — Implementado y verificado sin gasto:**
 
-- Orquestador de agente: bucle, lista blanca, validación de argumentos, minimización, memoria, límites, cancelación, consentimiento y fundamento de cifras. 6 pruebas puras.
-- Pasarela con todas sus puertas, reserva y liquidación, idempotencia, límite, estado sin secretos y registros sin contenido. 4 pruebas puras con proveedor falso en el **formato real** de Chat Completions.
-- **Cadena completa** agente → pasarela (todas las puertas) → proveedor falso → herramientas reales de RUBIK → respuesta fundamentada, con el mismo coste en el libro del servidor (prueba 6 de `assistant-agent-core`).
-- Interfaz en el editor real con un doble rotulado del servidor (4 pruebas de navegador):
-  - estado del servicio, consentimiento, respuesta y coste;
-  - propuesta → aplicar → deshacer, y ruta real a Presupuestar;
-  - errores (tope, herramienta prohibida);
-  - móvil 390×844 EN;
-  - 0 peticiones sin elegir la IA.
-- La consulta guiada sigue intacta: `assistant-ai-v2` 21 pruebas puras y 5 de navegador; CAT-04 4 de navegador.
+- **Orquestador de agente:** bucle, lista blanca, validación de argumentos, minimización, memoria, límites, cancelación y consentimiento. Incluye la comprobación parcial de cifras con oráculos de presupuesto y su límite declarado.
+- **Pasarela:**
+  - todas sus puertas;
+  - la cota de tokens por bytes, con evidencia de tokenizadores reales;
+  - el disyuntor;
+  - reserva y liquidación, idempotencia, límite, estado sin secretos y registros sin contenido.
+  - Se prueba con un proveedor falso en el **formato real** de Chat Completions.
+- **Cadena completa** agente → pasarela → proveedor falso → herramientas reales de RUBIK.
+- **Almacén persistente y libro común** sobre un **Redis real local**: atomicidad con 20 conexiones simultáneas y conciliación.
+- **Interfaz en el editor real** con un doble rotulado (4 pruebas de navegador).
+- **Protocolo de la prueba C** (30 preguntas ES/EN/ZH): el arnés está validado. La referencia pasa 30/30 y el simulador defectuoso se detecta en 30/30.
+- **La consulta guiada sigue intacta.**
 
-**B — Preparado para el proveedor, pendiente de validación real autorizada:**
+**B — Preparado, pendiente de validación real autorizada:**
 
-- Llamada real a OpenAI Chat Completions con herramientas: el mapeo de petición y respuesta está implementado y probado contra el formato, pero **no se ha llamado al proveedor**.
-- **La comprensión generativa real NO está demostrada.** Los dobles de prueba repiten guiones y no entienden nada. La calidad de las respuestas, la elección de herramientas por un modelo real, el seguimiento de la política y la resistencia a instrucciones incrustadas con un modelo real están **sin verificar**.
-- Almacén persistente: la interfaz está definida (`get/set/setIfAbsent/rate/fail/reserve/settle/snapshot`) y probada en memoria. **No hay adaptador a un almacén real** porque el proveedor de almacén es una decisión del propietario. Sin él, la función desplegada responde 503 `store-not-configured`.
+- La llamada real al proveedor de texto: el mapeo está implementado, pero **no se ha llamado**.
+- **La comprensión generativa real NO está demostrada.** Los simuladores no entienden nada.
+- El almacén en la nube (Upstash Redis): el adaptador REST está implementado, pero **no hay base creada**.
+- El presupuesto común efectivo: Render IA aún no anota en el libro (PR aparte, doc 02 §4).
+- El texto de consentimiento y la evaluación de privacidad: **para revisión** (doc 03).
 
-**C — Verificado con modelo real:** **nada**. No hay autorización para esa prueba.
+**C — Verificado con modelo real:** **nada**. Requiere un GO separado.
 
-## 5. Qué falta autorizar o decidir (propietario) para la prueba real (C)
+## 5. Estado de las decisiones (propietario, coordinación del 2026-11-15)
 
-1. **Proveedor y modelo de texto.** Propuesta: OpenAI Chat Completions con un modelo pequeño con *function calling*.
-2. **Clave propia.** Una clave de un **proyecto OpenAI separado** solo para el asistente, con **límite de gasto mensual duro en el panel del proveedor**, guardada como `RUBIK_ASSISTANT_PROVIDER_KEY` **solo en Preview**. Debe ser distinta de la de Render IA.
-3. **Saldo real.** Verificar el saldo de la cuenta. Los 10 USD históricos con recarga automática desactivada **no se pueden dar por disponibles**.
-4. **Tarifa y tope.** La tarifa vigente verificada con su fecha (`RUBIK_ASSISTANT_PRICE_*`) y el tope de validación, por ejemplo 1 USD (`RUBIK_ASSISTANT_BUDGET_CAP_USD`).
-5. **Almacén persistente atómico** (por ejemplo Upstash Redis o Vercel KV desde Marketplace) y el adaptador de la interfaz definida: es un trabajo corto. Sin él no hay tope global garantizado entre instancias.
-6. **Código de acceso** `RUBIK_ASSISTANT_TOKEN` en Preview. Es un control provisional; **GOV-06a** (sesiones, tenants, roles, cuotas por profesional y proyecto) sigue pendiente y es requisito antes de Production.
-7. **Texto de consentimiento y política de datos.** Revisión del texto del consentimiento y de la retención del proveedor (`store:false` ya se envía).
-8. **Presupuesto común de imágenes y texto.** Conectar Render IA (`api/render.js`) al mismo libro de gasto, familia `image`. No se ha tocado `api/render.js`.
-9. **Protocolo de la prueba C.** Una batería fija de 20–30 preguntas reales en ES/EN/ZH sobre un proyecto sintético, sin datos de clientes. Medir herramientas usadas, fundamento de cifras, resistencia a instrucciones incrustadas, propuestas correctas y coste por turno, con el tope de validación.
+1. **Proveedor de texto:** OpenAI *se puede estudiar*; **no hay ningún modelo ni clave autorizados** para llamadas reales.
+2. **Saldo:** los 10 USD históricos **no se dan por disponibles**.
+3. **1 USD:** es solo una **propuesta** de presupuesto de prueba, **no una autorización de gasto**.
+4. **Almacén:** investigado y documentado (doc 02). Recomendación: Upstash Redis del Marketplace, solo en Preview. **No se ha contratado ni activado.**
+5. **Presupuesto común Render IA + Asistente:** libro y conciliación implementados (doc 02). Falta integrar `api/render.js` (PR aparte).
+6. **Consentimiento y privacidad:** preparados para revisión (doc 03).
+7. **Prueba C:** 30 preguntas sintéticas y un protocolo validado con simuladores (doc 04). **No se ejecuta** contra proveedores reales sin GO.
+8. **Production:** bloqueado por **GOV-06a** y las demás condiciones de seguridad.
 
 ## 6. Relación con CAT-04
 
@@ -108,12 +112,14 @@ api/assistant.js ── puertas cerradas por defecto, política y definiciones d
 
 ## 7. Dictamen
 
-**NO hemos alcanzado todavía la meta generativa.** RUBIK tiene la capacidad **implementada y verificada sin gasto (A)** y **preparada para el proveedor (B)**:
+**NO hemos alcanzado todavía la meta generativa.** La infraestructura está **implementada y verificada sin gasto (A)**:
 
-- un agente con modelo real;
-- una pasarela segura cerrada por defecto;
-- herramientas reales de RUBIK en lista blanca;
-- propuestas reversibles;
-- control de gasto, consentimiento e interfaz integrada.
+- agente;
+- pasarela cerrada por defecto;
+- cota verificable con disyuntor;
+- almacén atómico y libro común;
+- comprobación parcial de cifras con sus límites;
+- interfaz;
+- protocolo C validado.
 
-La comprensión generativa con un modelo real **no está demostrada (C)**. Depende de las autorizaciones del §5 y de la prueba controlada. La Home (HOM-03) **no debe anunciar** un asistente de IA generativa hasta superar la prueba C.
+La comprensión generativa con un modelo real **no está demostrada (C)**. Las pruebas con simuladores **no deben confundirse** con comprensión. La Home (HOM-03) **no debe anunciar** un asistente de IA generativa hasta superar la prueba C con los umbrales del doc 04.
