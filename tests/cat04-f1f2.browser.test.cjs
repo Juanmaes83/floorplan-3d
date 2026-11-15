@@ -9,6 +9,8 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const K=require('./photo-project/kit.cjs'),{loadPilot}=require('./cat-ia/kit.cjs');
 const VID=process.env.CAT04_VIDEO||null,rec=size=>VID?{recordVideo:{dir:VID,size}}:{};
 const OUT=process.env.CAT04_SHOTS||null,shot=async(page,name)=>{if(!OUT)return;fs.mkdirSync(OUT,{recursive:true});await page.screenshot({path:path.join(OUT,name+'.png')});};
+// Evidence of totals/warnings: bring them into the frame first (screenshots only; assertions read the text).
+const shotTotals=async(page,name)=>{if(!OUT)return;await page.evaluate(()=>document.querySelector('#budgetTotals')?.scrollIntoView({block:'center'}));await shot(page,name);};
 const RB='cat:local:piloto-sintetico-qa:aparador-lumen:roble';
 let env;
 test.before(async()=>{env=await K.start();});
@@ -53,7 +55,7 @@ test('F1/F2/F3/F5/F6 escritorio: 180 €/m nunca 180 €/ud; recuento aparte; co
   await page.evaluate(id=>{const cur=FloorPlanBudgetUI.current().budget;FloorPlanBudgetUI.commit({...cur,items:cur.items.map(i=>i.id!==id&&i.unitPrice===null?FloorPlanBudget.setManualPrice(i,{unitPrice:10,label:'Precio propio'}):i)});},RB);
   await page.evaluate(()=>FloorPlanBudgetUI.refresh());assert.equal(await page.evaluate(()=>FloorPlanBudget.calculateBudget(FloorPlanBudgetUI.current().budget).totals.unpricedItemIds.length),0);
   assert.match(await page.locator('#budgetTotals').innerText(),/Total parcial \(1 con cantidad pendiente\)/);assert.doesNotMatch(await page.locator('#budgetTotals').innerText(),/sin precio/);
-  await shot(page,'f1f2-03-total-parcial-por-cantidad');await closeBudget(page);await toEditor(page);
+  await shotTotals(page,'f1f2-03-total-parcial-por-cantidad');await closeBudget(page);await toEditor(page);
   // Assistant (guided: real tools, no provider).
   let a=await ask(page,'¿Cuánto cuesta el QA-LUMEN-160-RB?');
   assert.match(a,/180 EUR\/m\b/);assert.doesNotMatch(a,/180 EUR\/ud|180 EUR(?!\/)/);assert.match(a,/conflicto de unidad: unidad de la ficha \(ud\) distinta de la del precio \(m\)/);assert.match(a,/1 objeto colocado/);assert.match(a,/origen del precio: precio propio/);
@@ -108,7 +110,7 @@ test('F8 escritorio: IVA general vacío pero IVA propio en partidas — la causa
   assert.deepEqual(c,{nullVat:0,unpriced:0,pending:1});
   assert.match(await totals(),/Total parcial \(1 con cantidad pendiente\)/);assert.doesNotMatch(await totals(),/IVA sin definir|sin IVA/);
   assert.doesNotMatch(await warns(),/No has indicado el IVA|sin IVA aplicable/);assert.doesNotMatch(await page.locator('#budgetTotals div').nth(1).innerText(),/—/);
-  await shot(page,'f8-01-iva-propio-es');
+  await shotTotals(page,'f8-01-iva-propio-es');
   await page.evaluate(()=>{try{setLang('en');}catch{}});await clearGeneralVat();
   assert.match(await totals(),/Partial total \(1 quantity pending\)/);assert.doesNotMatch(await totals(),/VAT not set|without VAT/);assert.doesNotMatch(await warns(),/You have not set the VAT|applicable VAT/);
   await page.evaluate(()=>{try{setLang('zh');}catch{}});await clearGeneralVat();assert.doesNotMatch(await warns(),/未设置增值税|没有适用的增值税/);
@@ -116,7 +118,7 @@ test('F8 escritorio: IVA general vacío pero IVA propio en partidas — la causa
   await page.evaluate(()=>{try{setLang('es');}catch{}});const n=await commitVat(3);await clearGeneralVat();const miss=n-3;
   assert.match(await totals(),new RegExp(`Total parcial \\(1 con cantidad pendiente · ${miss} sin IVA\\)`));
   assert.match(await warns(),new RegExp(`${miss} partidas sin IVA aplicable`));assert.doesNotMatch(await warns(),/No has indicado el IVA/);
-  await shot(page,'f8-02-iva-parcial-es');
+  await shotTotals(page,'f8-02-iva-parcial-es');
   await page.evaluate(()=>{try{setLang('en');}catch{}});await clearGeneralVat();assert.match(await totals(),new RegExp(`${miss} without VAT`));assert.match(await warns(),new RegExp(`${miss} items without an applicable VAT`));
   await page.evaluate(()=>{try{setLang('zh');}catch{}});await clearGeneralVat();assert.match(await warns(),new RegExp(`${miss} 个条目没有适用的增值税`));
   // F8-C: reopening Presupuestar (load → draft → save) keeps the 3 own rates; the general VAT stays empty, so the cause
@@ -124,7 +126,7 @@ test('F8 escritorio: IVA general vacío pero IVA propio en partidas — la causa
   await page.evaluate(()=>{try{setLang('es');}catch{}});await closeBudget(page);await openBudget(page);
   assert.equal(await page.evaluate(()=>FloorPlanBudgetUI.current().budget.items.filter(i=>Object.prototype.hasOwnProperty.call(i,'taxRatePercent')&&i.taxRatePercent===10).length),3);
   assert.match(await warns(),new RegExp(`${miss} partidas sin IVA aplicable`));assert.doesNotMatch(await warns(),/No has indicado el IVA/);
-  await shot(page,'f8-03-reabrir-conserva-iva-propio');await closeBudget(page);await toEditor(page);
+  await shotTotals(page,'f8-03-reabrir-conserva-iva-propio');await closeBudget(page);await toEditor(page);
   const a=await ask(page,'¿Por qué el presupuesto está incompleto?');assert.match(a,new RegExp(`IVA sin definir en ${miss} partidas`),a);
   assert.deepEqual(api,[]);assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}
@@ -150,7 +152,7 @@ test('F8-C escritorio: presupuesto guardado con IVA por partida — abrir, edita
   await openBudget(page);const s1=await stored();assert.deepEqual(s1,seeded,'opening Presupuestar must not rewrite the per-item VAT');assert.deepEqual(await money(s1),m0);
   assert.equal(cents(await page.locator('#budgetTotals div').nth(1).locator('dd').innerText()),String(Math.round(m0.tax*100)));
   assert.doesNotMatch(await page.locator('#budgetWarnings').innerText(),/IVA/);
-  await shot(page,'f8c-01-abrir-sin-editar');
+  await shotTotals(page,'f8c-01-abrir-sin-editar');
   // 2 · explicit price edit on an own-10 % item → its rate stays.
   const first=seeded.items[0].id,pr=page.locator(`#budgetDialog tr[data-item="${first}"] [data-field="price"]`);await pr.fill('77');await pr.dispatchEvent('change');
   await page.waitForFunction(id=>JSON.parse(localStorage.getItem('rubik-budget-v1'))[FloorPlanApp.project.id].items.find(i=>i.id===id).unitPrice===77,first);
@@ -162,7 +164,7 @@ test('F8-C escritorio: presupuesto guardado con IVA por partida — abrir, edita
   // 4 · close and reopen → identical to what was saved; the assistant's source (current()) has the same rates.
   await closeBudget(page);await openBudget(page);const s4=await stored();assert.deepEqual(s4,s3,'reopen keeps the edited document');assert.deepEqual(await money(s4),m3);
   assert.deepEqual(vat(await page.evaluate(()=>FloorPlanBudgetUI.current().budget)),v0);
-  await shot(page,'f8c-02-reabrir-tras-editar');
+  await shotTotals(page,'f8c-02-reabrir-tras-editar');
   assert.deepEqual(api,[]);assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}
 });
