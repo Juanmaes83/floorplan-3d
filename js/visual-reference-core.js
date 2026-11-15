@@ -34,30 +34,38 @@
  }
  const extOf=project=>{const e=project?.extensions?.[EXT];return isObj(e)&&e.version===VERSION&&isObj(e.refs)?e:null;};
  // Link (inside the editor's commit: one undo step). Idempotent by sheet hash.
- function link(project,sheet,{at}={}){
+ // Studio of the catalogue the references were taken from. rubik-visual-result-sheet/1 does not carry it (its hash must
+ // not change), so RUBIK records it in the LINK entry; a link without it cannot claim «placed» or «current sheet».
+ const STUDIO=/^[a-z0-9][a-z0-9-]{0,63}$/;
+ function link(project,sheet,{at,studioId}={}){if(studioId!==undefined&&studioId!==null&&!STUDIO.test(String(studioId)))throw Object.assign(Error('invalid studio id'),{code:'studio'});
   const v=verify(sheet);if(!v.ok)throw Object.assign(Error('visual sheet refused: '+v.reason),{code:v.reason});
   project.extensions=isObj(project.extensions)?project.extensions:{};
   const ext=extOf(project)||{version:VERSION,refs:{}};
   if(!ext.refs[sheet.hash]&&Object.keys(ext.refs).length>=MAX_REFS)throw Object.assign(Error('too many visual references'),{code:'too-many'});
-  ext.refs={...ext.refs,[sheet.hash]:{sheet:clone(sheet),projectId:project.id,linkedAt:at||new Date().toISOString()}};
+  ext.refs={...ext.refs,[sheet.hash]:{sheet:clone(sheet),projectId:project.id,linkedAt:at||new Date().toISOString(),...(studioId?{studioId:String(studioId)}:{})}};
   project.extensions[EXT]=ext;return project;
  }
  function unlink(project,hash){const ext=extOf(project);if(!ext?.refs?.[hash])return {changed:false};const refs={...ext.refs};delete refs[hash];project.extensions[EXT]={version:VERSION,refs};return {changed:true};}
  // What Presupuestar and the assistant may read: statuses only, never an amount.
- function list(project,{catalogs=[]}={}){
+ function list(project,{catalogs=[],studioId=null}={}){
   const ext=extOf(project);if(!ext)return [];
-  const active=Object.values(P.links(project).active),idOf=x=>`${x.catalogId}|${x.productId}|${x.variantId||'-'}`,placed=new Set(active.map(idOf));
+  const active=Object.values(P.links(project).active),idOf=x=>`${x.catalogId}|${x.productId}|${x.variantId||'-'}`;
   return Object.entries(ext.refs).map(([hash,e])=>{
-   const s=e?.sheet,v=verify(s||{}),otherProject=e?.projectId!==project.id;
+   const s=e?.sheet,v=verify(s||{}),otherProject=e?.projectId!==project.id,refStudio=STUDIO.test(String(e?.studioId||''))?e.studioId:null;
    const status=!v.ok||s.hash!==hash?'unverifiable':otherProject?'other-project':'verified';
    const ok=status!=='unverifiable';
    return {hash,status,reason:v.ok?(s.hash!==hash?'key-mismatch':null):v.reason,linkedAt:e?.linkedAt||null,
     decision:ok?s.decision:null,resultKind:ok?s.result?.kind:null,simulated:ok?s.result?.kind==='simulated':null,deliverable:ok?!!s.deliverable:false,label:ok?s.label:null,
     review:ok?{status:s.review?.status||null,reasons:(s.review?.reasons||[]).slice(0,10)}:null,recipe:ok?{id:s.recipe?.recipeId||s.request?.recipeId||null,zone:s.request?.zone||null,intensity:s.request?.intensity||null}:null,
     generatedAt:ok?s.generatedAt:null,skuCertified:false,monetary:false,
-    references:ok?(s.references||[]).map(r=>{const cat=(catalogs||[]).find(c=>c.catalogId===r.catalogId);const prod=cat?.products?.find(p=>p.productId===r.productId&&(p.variantId||null)===(r.variantId||null));
-     return {sku:r.sku,displayName:r.displayName,catalogId:r.catalogId,catalogRevision:r.catalogRevision,productId:r.productId,variantId:r.variantId??null,imageSha256:r.imageSha256,
-      placed:placed.has(idOf(r)),catalogStatus:!cat?'catalog-missing':!prod?'sheet-missing':cat.revision===r.catalogRevision?'current':'older-revision'};}):[]};
+    references:ok?(s.references||[]).map(r=>{
+     // Placement and sheet are checked ONLY within the studio of the link: same catalogue/product/variant ids in another
+     // studio are a different product. Without a studio the relation is ambiguous and nothing is claimed.
+     const same=active.filter(a=>idOf(a)===idOf(r)),placedStatus=!same.length?'not-placed':!refStudio?'ambiguous':same.some(a=>a.studioId===refStudio)?'placed':'not-placed';
+     const cat=refStudio?(catalogs||[]).find(c=>c.studioId===refStudio&&c.catalogId===r.catalogId):null;const prod=cat?.products?.find(p=>p.productId===r.productId&&(p.variantId||null)===(r.variantId||null));
+     const catalogStatus=!refStudio?'studio-unknown':studioId&&studioId!==refStudio?'other-studio':!cat?'catalog-missing':!prod?'sheet-missing':cat.revision===r.catalogRevision?'current':'older-revision';
+     return {sku:r.sku,displayName:r.displayName,catalogId:r.catalogId,catalogRevision:r.catalogRevision,productId:r.productId,variantId:r.variantId??null,imageSha256:r.imageSha256,studioId:refStudio,
+      placed:placedStatus==='placed',placedStatus,catalogStatus};}):[]};
   }).sort((a,b)=>String(a.linkedAt).localeCompare(String(b.linkedAt)));
  }
  return Object.freeze({EXT,VERSION,MAX_REFS,verify,link,unlink,list});

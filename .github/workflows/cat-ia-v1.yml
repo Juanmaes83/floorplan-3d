@@ -101,7 +101,7 @@ jobs:
       # tests fail on master c91d12d) still fails the job, but no longer hides the steps below. No test is skipped.
       - name: Real editor - CAT-04 catalogue → Presupuestar → assistant → dossier, Image studio references (desktop ES, phone EN, landscape ZH)
         if: ${{ !cancelled() }}
-        run: node --test --test-concurrency=1 tests/cat04.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/cat04.browser.test.cjs tests/cat04-failsafe.browser.test.cjs
       - name: Presupuestar, reference prices (S2/M2) and economic dossier keep working with CAT-04 loaded
         if: ${{ !cancelled() }}
         run: node --test --test-concurrency=1 tests/budget-ui.browser.test.cjs tests/m2-s4.browser.test.cjs tests/economic-dossier.browser.test.cjs

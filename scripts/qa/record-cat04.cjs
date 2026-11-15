@@ -16,7 +16,7 @@ const videos=fs.readdirSync(VID).filter(f=>f.endsWith('.webm')).sort().map(f=>{c
  return {file:path.relative(ROOT,p),sha256:sha(p),bytes:fs.statSync(p).size,durationS:Math.round(Number(probe.format.duration)*10)/10,codec:st.codec_name,width:st.width,height:st.height,fullDecode:'ok'};});
 const screens=fs.readdirSync(SHOTS).filter(f=>f.endsWith('.png')).sort().map(f=>({file:path.relative(ROOT,path.join(SHOTS,f)),sha256:sha(path.join(SHOTS,f))}));
 const head=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();
-const manifest={schema:'rubik-cat04-evidence/1',head,generatedAt:new Date().toISOString(),tests:{file:'tests/cat04.browser.test.cjs',pass:count('pass'),fail:count('fail'),exit:run.status},
+const manifest={schema:'rubik-cat04-evidence/1',head,generatedAt:new Date().toISOString(),tests:{file:'tests/cat04.browser.test.cjs',pass:count('pass'),fail:count('fail'),exit:run.status,failures:(tap.match(/^not ok .*$/gm)||[]).map(l=>l.slice(0,200)),errors:(tap.match(/^\s+error: .*$/gm)||[]).map(l=>l.trim().slice(0,300))},
  tools:{node:process.version,ffmpeg:execFileSync('ffmpeg',['-version'],{encoding:'utf8'}).split('\n')[0]},network:'local server only; external requests aborted; 0 calls to /api/ asserted by the tests',spend:'STOP_GASTO · 0 provider calls',
  data:'synthetic QA catalogue (assets/cat-ia/fixtures, synthetic-fixture) and a synthetic kitchen photo; no client data',videos,screens};
 fs.writeFileSync(path.join(OUT,'manifest.json'),JSON.stringify(manifest,null,1));

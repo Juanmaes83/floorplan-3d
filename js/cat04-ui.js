@@ -66,7 +66,7 @@
  /* ---------- Referencias visuales (Presupuestar) ---------- */
  const VSTATE=()=>({verified:tx('verificada','verified','已验证'),unverifiable:tx('no se puede verificar (huella distinta)','cannot be verified (hash differs)','无法验证'),'other-project':tx('de otro proyecto','from another project','属于其他项目')});
  const DEC=()=>({accepted:tx('aceptada en la revisión','accepted in the review','审核已接受'),rejected:tx('rechazada','rejected','已拒绝'),discarded:tx('descartada','discarded','已丢弃')});
- function visualRefs(){return VR?VR.list(app.project,{catalogs:catalogs()}):[];}
+ function visualRefs(){return VR?VR.list(app.project,{catalogs:catalogs(),studioId:studioId()}):[];}
  function budgetSections(dialog,state){
   // Catalogue summary: what is linked but not countable, orphans, and the rule.
   const cat=state?.catalog;if(cat&&(cat.report.length||cat.orphans.length)){const s=el('section',undefined,dialog,'cat04-section');s.id='cat04Products';el('h3',chapterTitle(),s);
@@ -80,7 +80,7 @@
    el('strong',`${r.simulated?tx('SIMULACIÓN','SIMULATION','模拟'):r.resultKind||'—'} · ${DEC()[r.decision]||'—'} · ${VSTATE()[r.status]}`,li);
    el('span',` · ${tx('huella','hash','指纹')} ${r.hash.slice(0,12)}… · ${(r.linkedAt||'').slice(0,10)}`,li);
    if(r.label)el('small',r.label,li,'budget-source');
-   for(const x of r.references){const sm=el('small',`${x.sku} · ${x.displayName||''} · rev ${x.catalogRevision} · ${x.placed?tx('colocado en el proyecto','placed in the project','已放入项目'):tx('NO colocado: no se presupuesta','NOT placed: not budgeted','未放置：不计入预算')} · ${x.catalogStatus==='current'?tx('ficha vigente','current sheet','资料有效'):x.catalogStatus==='older-revision'?tx('revisión anterior del catálogo','older catalogue revision','目录旧版本'):tx('ficha no disponible','sheet not available','资料不可用')}`,li,'budget-source cat04-vref');sm.dataset.sku=x.sku;sm.dataset.placed=String(x.placed);}
+   for(const x of r.references){const sm=el('small',`${x.sku} · ${x.displayName||''} · rev ${x.catalogRevision} · ${x.placed?tx('colocado en el proyecto','placed in the project','已放入项目'):x.placedStatus==='ambiguous'?tx('colocación no verificable: la referencia no indica el estudio','placement cannot be verified: the reference does not record the studio','无法验证放置：参考未记录工作室'):tx('NO colocado: no se presupuesta','NOT placed: not budgeted','未放置：不计入预算')} · ${x.catalogStatus==='current'?tx('ficha vigente','current sheet','资料有效'):x.catalogStatus==='older-revision'?tx('revisión anterior del catálogo','older catalogue revision','目录旧版本'):x.catalogStatus==='other-studio'?tx('ficha de otro estudio: no se comprueba aquí','sheet of another studio: not checked here','其他工作室的资料：此处不核对'):x.catalogStatus==='studio-unknown'?tx('estudio desconocido: no se comprueba la ficha','unknown studio: the sheet is not checked','工作室未知：不核对资料'):tx('ficha no disponible','sheet not available','资料不可用')}`,li,'budget-source cat04-vref');sm.dataset.sku=x.sku;sm.dataset.placed=String(x.placed);sm.dataset.placedStatus=x.placedStatus||'';sm.dataset.catalogStatus=x.catalogStatus||'';}
    const un=btn(tx('Quitar vínculo','Unlink','取消关联'),li,'btn budget-small');un.dataset.unlink=r.hash;un.onclick=()=>{unlinkVisual(r.hash);window.FloorPlanBudgetUI?.refresh?.();};}
   const row=el('div',undefined,sec,'cat04-actions');const open=btn(tx('Abrir el Estudio de imágenes','Open the Image studio','打开图像工作室'),row);open.id='cat04OpenStudio';
   open.onclick=()=>{returnToBudget=true;dialog.close();window.RubikVisualStudio?.open();};
@@ -88,7 +88,7 @@
  let returnToBudget=false;
  /* ---------- Estudio de imágenes: link the reviewed sheet explicitly ---------- */
  function linkVisual(sheet){if(!VR||!sheet)return {ok:false,reason:'no-sheet'};const v=VR.verify(sheet);if(!v.ok)return {ok:false,reason:v.reason};
-  const r=app.applyExtension?.(p=>{VR.link(p,sheet,{at:new Date().toISOString()});return {ok:true,project:p};});return r?.ok?{ok:true}:{ok:false,reason:r?.explanation?.[0]||'not-saved'};}
+  const r=app.applyExtension?.(p=>{VR.link(p,sheet,{at:new Date().toISOString(),studioId:studioId()});return {ok:true,project:p};});return r?.ok?{ok:true}:{ok:false,reason:r?.explanation?.[0]||'not-saved'};}
  function unlinkVisual(hash){if(!VR)return;app.applyExtension?.(p=>{const r=VR.unlink(p,hash);return r.changed?{ok:true,project:p}:{ok:false};});}
  function studioButton(){const dlg=document.querySelector('#visualStudioDialog'),dl=dlg?.querySelector('#vsSheet');if(!dl||dlg.querySelector('#vsLinkProject'))return;
   const b=btn(tx('Vincular al proyecto (Presupuestar)','Link to the project (Budget)','关联到项目（预算）'),undefined,'btn');b.id='vsLinkProject';b.disabled=true;dl.after(b);

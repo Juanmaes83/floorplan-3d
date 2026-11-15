@@ -28,8 +28,15 @@
  // Current budget of the open project, rebuilt over the project quantities (keeps prices, waste and valid reviews).
  function load(){const saved=read(BUDGETS)[app.project.id]||null;let previous=null;try{previous=saved?B.parseBudget(JSON.stringify(saved)):null;}catch{previous=null;}
   // CAT-04: products placed from «Mis catálogos» enter THIS document (same draft, same calculation), never a parallel one.
-  let catalog=null;try{catalog=window.RubikCat04?.extraLines?.(app.project,previous)||null;}catch(e){console.warn('[Presupuesto] catálogo:',e?.message||e);catalog=null;}
-  const r=D.draft(app.project,{previous,tariff:read(TARIFF),name:local,labels:labels(),...(catalog?{extraLines:catalog.lines,extraChapters:catalog.chapters}:{})});return {...r,savedBefore:!!previous,catalog};}
+  // CAT-04 fail-closed (audit #237): if the reconciliation fails, or the module is missing while the saved budget has
+  // catalogue items, those items are kept EXACTLY as saved (price, reference, review) and nothing is saved automatically;
+  // Presupuestar shows the error. The draft never drops a confirmed catalogue price silently.
+  let catalog=null,catalogError=null;try{catalog=window.RubikCat04?.extraLines?.(app.project,previous)||null;}catch(e){console.warn('[Presupuesto] catálogo:',e?.message||e);catalog=null;catalogError='reconcile-failed';}
+  const isCat=id=>{try{const f=window.RubikCatalogBudget?.isCatalogItem;return f?f(id):/^cat:/.test(id);}catch{return /^cat:/.test(id);}};
+  const prevCat=(previous?.items||[]).filter(i=>isCat(i.id));
+  if(!catalog&&prevCat.length){catalogError=catalogError||'module-unavailable';
+   catalog={lines:prevCat.map(i=>({key:i.id,chapter:i.chapterId,description:i.description,quantity:i.quantity,waste:i.wastePercent})),chapters:(previous.chapters||[]).filter(c=>prevCat.some(i=>i.chapterId===c.id)).map(c=>({id:c.id,title:c.title})),report:[],orphans:[],preserved:true};}
+  const r=D.draft(app.project,{previous,tariff:read(TARIFF),name:local,labels:labels(),...(catalog?{extraLines:catalog.lines,extraChapters:catalog.chapters}:{})});return {...r,savedBefore:!!previous,catalog,catalogError};}
  function save(){const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
  function say(m){const s=dialog.querySelector('#budgetStatus');if(s)s.textContent=m;}
  // D-04: a hand-made price change is also written to the project's price history (same record as reference prices).
@@ -39,11 +46,12 @@
  function setItem(id,fn){const i=state.budget.items.findIndex(x=>x.id===id);const next={...state.budget,items:state.budget.items.slice()};next.items[i]=fn(next.items[i]);state.budget=B.validateBudget(next);save();}
  const dialog=el('dialog',undefined,document.body,'ai-render-dialog budget-dialog');dialog.id='budgetDialog';dialog.setAttribute('aria-labelledby','budgetTitle');
  dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
- function open(){returnFocus=document.activeElement;state=load();save();draw();dialog.showModal();dialog.querySelector('#budgetTitle')?.focus();}
+ function open(){returnFocus=document.activeElement;state=load();if(!state.catalogError)save();draw();dialog.showModal();dialog.querySelector('#budgetTitle')?.focus();}
  function draw(focusId=null){
   const c=B.calculateBudget(state.budget),st=STATUS(),u=UNIT(),lines=new Map(c.lines.map(l=>[l.id,l])),scroll=dialog.scrollTop;dialog.replaceChildren();
   const head=el('div',undefined,dialog,'ai-render-head');const h=el('h2',tx('Presupuesto','Budget','预算'),head);h.id='budgetTitle';h.tabIndex=-1;
   const close=btn(tx('Cerrar','Close','关闭'),head);close.id='budgetClose';close.onclick=()=>dialog.close();
+  if(state.catalogError){const e=el('p',tx('No se han podido conciliar los productos de «Mis catálogos». Se muestran las partidas de catálogo tal como estaban guardadas y no se ha guardado nada automáticamente: tus precios, referencias y revisiones se conservan. Si editas algo, se guardará con estas partidas.','The products from «My catalogues» could not be reconciled. Catalogue items are shown as they were saved and nothing has been saved automatically: your prices, references and reviews are kept. If you edit something, it will be saved with these items.','无法核对“我的目录”中的产品。目录条目按已保存的状态显示，未自动保存任何内容：您的价格、参考和审核均保留。如有编辑，将连同这些条目一起保存。'),dialog,'budget-warn');e.id='cat04ReconcileError';e.setAttribute('role','alert');e.dataset.reason=state.catalogError;}
   el('p',tx('Las cantidades salen del proyecto (con su estado); los precios son sólo tuyos y ninguno se da por revisado hasta que lo marcas. Rubik no certifica el coste real. Si cambias el proyecto, al volver a abrir se actualizan las cantidades y se conservan tus precios.','Quantities come from the project (with their status); prices are only yours and none counts as reviewed until you mark it. Rubik does not certify actual cost. If you change the project, reopening updates quantities and keeps your prices.','数量来自项目；价格只由您填写，标记前均未审核。'),dialog,'ai-render-note').id='budgetNote';
   if(state.reviewInvalidated.length)el('p',tx(`La cantidad de ${state.reviewInvalidated.length} partida(s) ha cambiado desde tu revisión: revísalas de nuevo.`,`The quantity of ${state.reviewInvalidated.length} item(s) changed since your review: review them again.`,'部分条目数量已变化，请重新审核。'),dialog,'budget-warn').id='budgetInvalidated';
   const bar=el('div',undefined,dialog,'budget-bar');const vl=el('label',undefined,bar);el('span',tx('IVA','VAT','增值税'),vl);const vat=el('select',undefined,vl);vat.id='budgetVat';
@@ -116,6 +124,6 @@
  function commit(budget){const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
   const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(b));if(!write(BUDGETS,all))throw Error(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));if(state)state.budget=b;return b;}
  // CAT-04: redraw the open dialog from the saved document (after «Precios de referencia» or a catalogue action).
- function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;state=load();save();draw();dialog.scrollTop=keep;}
+ function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;state=load();if(!state.catalogError)save();draw();dialog.scrollTop=keep;}
  window.FloorPlanBudgetUI={open,summary,current,commit,refresh,get budget(){return state?.budget||null;}};
 })();
