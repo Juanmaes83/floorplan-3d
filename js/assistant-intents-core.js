@@ -10,7 +10,7 @@
    UMD: window.RubikAssistantIntents / module.exports. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikAssistantIntents=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
- const INTENTS=Object.freeze(['rooms_count','room_area','missing_data','layout_review','budget','set_floor_material','move_object','render','photo_reform','catalog','advanced','help','unsupported','ambiguous']);
+ const INTENTS=Object.freeze(['rooms_count','room_area','missing_data','layout_review','budget','set_floor_material','move_object','render','photo_reform','catalog','placed_products','product_cost','budget_detail','visual_refs','advanced','help','unsupported','ambiguous']);
  const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
  const has=(t,list)=>list.some(w=>t.includes(w));
  const W={
@@ -29,6 +29,17 @@
   render:['render','renders','imagen fotorrealista','fotorrealista','photoreal','效果图','渲染'],
   photo:['foto reformada','reforma desde foto','reformar desde fotografia','desde una foto','from a photo','photo reform','照片改造','照片'],
   catalog:['catalogo','producto','productos','sku','catalog','product','产品','目录'],
+  // CAT-04 (closed lists, ES/EN/ZH): products placed, units, inclusion, unpriced items, provenance, sheet changes, visual references.
+  placed:['he colocado','colocado','colocados','coloque','placed','have i placed','已放置','放置了','放置'],
+  units:['cuantas unidades','cuantos unidades','unidades','how many units','units of','几件','多少件'],
+  included:['incluido','incluida','esta en el presupuesto','included','in the budget','包含在预算','包含'],
+  unpriced:['sin precio','no tienen precio','siguen sin precio','without a price','no price','still have no price','unpriced','没有价格','无价格','还没有价格'],
+  incomplete:['incompleto','incompleta','incomplete','不完整'],
+  verified:['procede de mi catalogo','cuando se verifico','verifico','verificado','verified','comes from my catalogue','核实'],
+  changed:['ha cambiado la ficha','cambiado la ficha','la ficha ha cambiado','cambio la ficha','sheet changed','has the product sheet changed','has the sheet changed','资料变','资料是否变','资料变了'],
+  visual:['estudio de imagenes','referencias visuales','referencia visual','resultado visual','image studio','visual reference','visual result','图像工作室','视觉参考','视觉结果'],
+  simulation:['simulacion','imagen real','simulation','real image','模拟','真实图像'],
+  search:['busca','buscar','encuentra','search for','search','find','查找','搜索','找'],
   advanced:['optimiza','optimizar','genera una distribucion','generar distribucion','distribucion automatica','foto a mueble','mueble 3d desde','optimize','generate a layout','generate layout','photo to furniture','生成布局','优化布局'],
   help:['ayuda','que puedes hacer','que sabes hacer','help','what can you do','帮助','你能做什么'],
   here:['esta estancia','este cuarto','esta habitacion','la seleccionada','la estancia seleccionada','this room','selected room','这个房间','当前房间'],
@@ -38,6 +49,7 @@
  const UNIT=[['mm',1],['毫米',1],['cm',10],['厘米',10],['m',1000],['米',1000],['metro',1000],['metros',1000]];
  // Best entity for the text: a whole visible label scores above a single distinctive word of it («roble» in «Parqué de
  // roble»). A tie between different entities is ambiguous: the assistant asks instead of guessing.
+ const SEARCH_STOP=new Set(['el','la','los','las','un','una','de','del','en','mi','mis','me','por','favor','the','a','an','my','for','me','please','catalogo','catalog','catalogue','producto','product','的','我的']);
  const STOP=new Set(['de','del','la','el','los','las','con','y','en','the','of','and','with','for','room','estancia','parque','baldosa']);
  function match(t,entities){
   const words=new Set(t.split(/[^\p{L}\p{N}]+/u).filter(Boolean));const hits=[];
@@ -64,9 +76,23 @@
   const room=()=>{if(has(t,W.here)&&sel?.kind==='room')return {kind:'one',id:sel.id};return match(t,ctx.rooms);};
   const obj=()=>{const m=match(t,ctx.objects);if(m.kind==='many'&&sel?.kind==='furn'&&m.ids.includes(sel.id))return {kind:'one',id:sel.id};if(m.kind==='none'&&has(t,W.thisObj)&&sel?.kind==='furn')return {kind:'one',id:sel.id};return m;};
   if(has(t,W.advanced))return {intent:'advanced'};
+  // CAT-04 routing, before photo/render (an «estudio de imágenes» question is not a photo reform request).
+  if(has(t,W.visual)||(has(t,W.simulation)&&has(t,['resultado','imagen','image','result','图像','结果'])))return {intent:'visual_refs',focus:has(t,W.simulation)?'kind':'list'};
+  // A named product wins; otherwise the selected object's product only when the question points at one («este/ese
+  // producto», «this/that product», «它/这个») or asks about a single product (cost, inclusion). Listing questions never narrow.
+  const words=new Set(t.split(/[^\p{L}\p{N}]+/u).filter(Boolean)),deictic=['este','ese','esta','esa','this','that','it'].some(w=>words.has(w))||['它','这个','该','那个'].some(w=>t.includes(w));
+  const product=useSel=>{const m=match(t,ctx.products);if(m.kind!=='none')return m;const sid=useSel&&sel?.kind==='furn'?ctx.objectProduct?.[sel.id]:null;return sid?{kind:'one',id:sid}:m;};
+  const productIntent=(intent,focus,useSel)=>{const m=product(useSel);if(m.kind==='many')return {intent:'ambiguous',need:'product',candidates:m.ids,then:intent};return {intent,focus,productKey:m.kind==='one'?m.id:null};};
+  if(has(t,W.unpriced)||(has(t,W.incomplete)&&has(t,W.budget)))return {intent:'budget_detail',focus:has(t,W.unpriced)?'unpriced':'incomplete'};
+  const cat=has(t,W.catalog);
+  if((cat||has(t,W.units))&&(has(t,W.placed)||has(t,W.units)||has(t,W.changed))){const f=has(t,W.changed)?'changed':has(t,W.units)?'units':'list';return productIntent('placed_products',f,f!=='list'&&(deictic||f==='units'));}
+  if(has(t,W.changed))return productIntent('placed_products','changed',deictic);
+  if((cat&&(has(t,W.budget)||has(t,W.verified)))||has(t,W.included)){const f=has(t,W.verified)?'provenance':has(t,W.included)?'included':'cost';return productIntent('product_cost',f,f!=='provenance');}
+  if(has(t,W.budget)&&match(t,ctx.products).kind!=='none')return productIntent('product_cost','cost',false);
+  if(has(t,W.search)&&!has(t,W.move)){const q=t.replace(/[^\p{L}\p{N}\s-]+/gu,' ').split(/\s+/).filter(w=>w&&!W.search.some(v=>v===w)&&!SEARCH_STOP.has(w)).join(' ').slice(0,80);return {intent:'catalog',query:q||null};}
   if(has(t,W.photo))return {intent:'photo_reform'};
   if(has(t,W.render))return {intent:'render'};
-  if(has(t,W.catalog))return {intent:'catalog'};
+  if(has(t,W.catalog))return {intent:'catalog',query:null};
   if(has(t,W.move)||has(t,W.rotate)){
    const o=obj();if(o.kind==='none')return {intent:'ambiguous',need:'object',reason:'no_object'};if(o.kind==='many')return {intent:'ambiguous',need:'object',candidates:o.ids};
    let rot=null;if(has(t,W.rotate)){const m=/(\d{1,3})\s*(°|º|grados|degrees|deg|度)?/.exec(t);const a=m?Number(m[1]):90;if(!(a>0&&a<360))return {intent:'ambiguous',need:'angle'};rot=a;}
@@ -127,6 +153,55 @@
    if(ur){fig(ur,'items','not_applicable',src,tx(lang,'precio sin revisar','unreviewed price','价格未审核'));out.text+=' '+tx(lang,`${ur} precio${ur===1?'':'s'} sin revisar.`,`${ur} unreviewed price${ur===1?'':'s'}.`,`${ur} 个价格未审核。`);}
    out.text+=' '+(b.reviewComplete?tx(lang,'Revisión completa.','Review complete.','审核完成。'):tx(lang,'No es un presupuesto aprobado.','It is not an approved budget.','这不是已批准的预算。'))
     +(b.saved?'':' '+tx(lang,'Borrador generado desde el proyecto: aún no se ha guardado en Presupuestar.','Draft generated from the project: not yet saved in Budget.','根据项目生成的草稿：尚未在预算中保存。'));return out;}
+  // ----- CAT-04: catalogue, placed products, product cost, unpriced items, visual references (figures from tools only) -----
+  const money=(v,cur='EUR')=>v===null||v===undefined?tx(lang,'no disponible','not available','不可用'):`${fmt(v,lang)} ${cur}`;
+  const STATE={'sheet-price-available':tx(lang,'precio de ficha disponible como referencia, sin aplicar','sheet price available as a reference, not applied','资料价格可作参考，未应用'),'reference-kept':tx(lang,'referencia de ficha guardada, sin aplicar','sheet reference kept, not applied','已保存资料参考，未应用'),
+   'applied-unreviewed':tx(lang,'precio de ficha aplicado, pendiente de revisión','sheet price applied, pending review','已应用资料价格，待审核'),reviewed:tx(lang,'precio revisado','reviewed price','价格已审核'),stale:tx(lang,'la ficha ha cambiado y tu precio no se ha sustituido','the sheet changed and your price was not replaced','资料已变更，您的价格未被替换'),
+   'unknown-price':tx(lang,'la ficha no tiene precio','the sheet has no price','资料无价格'),'sheet-unavailable':tx(lang,'ficha no disponible','sheet not available','资料不可用'),'other-studio':tx(lang,'ficha de otro estudio','sheet of another studio','其他工作室的资料'),ambiguous:tx(lang,'SKU ambiguo','ambiguous SKU','SKU 不明确'),
+   'other-price':tx(lang,'precio propio o de otra fuente','own price or another source','自有或其他来源价格'),missing:tx(lang,'no está en el presupuesto','not in the budget','不在预算中')};
+  const pick=(list,key)=>key?list.filter(x=>x.itemId===key||x.key===key):list;
+  if(intent.intent==='catalog'){const c=take(results[0]);if(!c)return err(firstError,lang);
+   const nCat=c.catalogs.length,nProd=c.catalogs.reduce((a,x)=>a+x.products,0);fig(nCat,'catalogs','not_applicable','CatalogCapabilitiesForAssistantV1',tx(lang,'catálogos','catalogues','目录'));fig(nProd,'products','not_applicable','CatalogCapabilitiesForAssistantV1',tx(lang,'productos','products','产品'));
+   if(!nCat){out.text=tx(lang,'No tienes catálogos en «Mis catálogos» para este estudio. Puedes importarlos desde Mi estudio → Mis catálogos.','You have no catalogues in «My catalogues» for this studio. Import them from My studio → My catalogues.','此工作室在“我的目录”中没有目录。可在“我的工作室 → 我的目录”中导入。');return out;}
+   const shown=c.matches.slice(0,8).map(m=>`${m.sku} · ${m.displayName}${m.sheetPrice&&m.sheetPrice.unitPrice!==null?` · ${tx(lang,'ficha','sheet','资料')} ${money(m.sheetPrice.unitPrice)}/${m.sheetPrice.unit}`:` · ${tx(lang,'sin precio en la ficha','no price on the sheet','资料无价格')}`}${m.synthetic?tx(lang,' (sintético QA)',' (synthetic QA)','（合成测试）'):''}`);
+   out.items=c.matches.slice(0,20);
+   if(c.query){out.text=c.total?tx(lang,`Encuentro ${c.total} producto${c.total===1?'':'s'} para «${c.query}»: `,`I find ${c.total} product${c.total===1?'':'s'} for «${c.query}»: `,`找到 ${c.total} 个“${c.query}”相关产品：`)+shown.join(' · ')+(c.total>1?' '+tx(lang,'Dime cuál (SKU) si quieres más detalle.','Tell me which one (SKU) for more detail.','请告诉我是哪一个（SKU）。'):''):tx(lang,`No encuentro productos para «${c.query}» en tus catálogos.`,`I find no products for «${c.query}» in your catalogues.`,`在您的目录中找不到“${c.query}”。`);return out;}
+   out.text=tx(lang,`Tienes ${nCat} catálogo${nCat===1?'':'s'} con ${nProd} producto${nProd===1?'':'s'}: `,`You have ${nCat} catalogue${nCat===1?'':'s'} with ${nProd} product${nProd===1?'':'s'}: `,`您有 ${nCat} 个目录，共 ${nProd} 个产品：`)+c.catalogs.map(x=>`${x.name||x.catalogId} (rev ${x.revision})`).join(', ')+'. '+shown.join(' · ')+'.';return out;}
+  if(intent.intent==='placed_products'){const r=take(results[0]);if(!r)return err(firstError,lang);const list=pick(r.products,intent.productKey).filter(x=>!x.retired);
+   if(!list.length){out.text=intent.productKey?tx(lang,'Ese producto no está colocado en este proyecto.','That product is not placed in this project.','该产品未放入此项目。'):tx(lang,'No hay productos de tus catálogos colocados en este proyecto.','No products from your catalogues are placed in this project.','此项目中没有放置您目录中的产品。');return out;}
+   if(intent.focus==='changed'){const ch=list.filter(x=>x.versionChanged||x.state==='stale');fig(ch.length,'products','not_applicable','RubikCatalogBudget',tx(lang,'fichas cambiadas','changed sheets','已变更资料'));
+    out.text=ch.length?tx(lang,'La ficha ha cambiado desde que colocaste: ','The sheet changed since you placed: ','放置后资料已变更：')+ch.map(x=>`${x.sku}${x.sheetPrice&&x.sheetPrice.unitPrice!==null?` (${tx(lang,'ficha actual','current sheet','当前资料')} ${money(x.sheetPrice.unitPrice)} · ${x.sheetPrice.edition})`:''}`).join(', ')+'. '+tx(lang,'Ningún precio aceptado se sustituye sin tu confirmación.','No accepted price is replaced without your confirmation.','未经确认不会替换已接受的价格。'):tx(lang,'Las fichas no han cambiado desde que colocaste los productos.','The sheets have not changed since you placed the products.','放置后资料未变更。');return out;}
+   for(const x of list)if(x.quantity!==null)fig(x.quantity,'units','measured','RubikCatalogBudget',x.sku);
+   out.text=(intent.focus==='units'&&list.length===1?'':tx(lang,'Productos colocados en este proyecto: ','Products placed in this project: ','此项目中放置的产品：'))+list.map(x=>x.quantity===null?`${x.sku} · ${x.displayName}: ${tx(lang,'pendiente de medición (precio por superficie o longitud)','pending measurement (priced per area or length)','待测量（按面积或长度计价）')}`
+    :tx(lang,`${x.sku} · ${x.displayName}: ${x.quantity} ${x.quantity===1?'unidad':'unidades'}`,`${x.sku} · ${x.displayName}: ${x.quantity} unit${x.quantity===1?'':'s'}`,`${x.sku} · ${x.displayName}：${x.quantity} 件`)).join('; ')+'. '+tx(lang,'Recuento de objetos vinculados en el proyecto, no una medición.','Count of linked objects in the project, not a measurement.','项目中已关联对象的计数，非测量。');return out;}
+  if(intent.intent==='product_cost'){const r=take(results[0]);if(!r)return err(firstError,lang);const list=pick(r.products,intent.productKey),cur=r.currency;
+   if(!list.length){out.text=intent.productKey?tx(lang,'Ese producto no está colocado en este proyecto, así que no está en el presupuesto. El precio de una ficha solo cuenta cuando el producto está colocado y aplicas su precio en Presupuestar.','That product is not placed in this project, so it is not in the budget. A sheet price only counts once the product is placed and you apply its price in Budget.','该产品未放入此项目，因此不在预算中。'):tx(lang,'No hay productos de tus catálogos en el presupuesto de este proyecto.','There are no products from your catalogues in this project budget.','此项目预算中没有您目录中的产品。');return out;}
+   const one=x=>{const parts=[`${x.sku} · ${x.displayName}: ${STATE[x.state]||x.state}`];
+    if(x.sheetPrice&&x.sheetPrice.unitPrice!==null){fig(x.sheetPrice.unitPrice,cur,'estimated','CatalogProductV1',tx(lang,'precio de ficha','sheet price','资料价格'));parts.push(`${tx(lang,'ficha','sheet','资料')} ${money(x.sheetPrice.unitPrice,cur)}/${x.sheetPrice.unit} (${x.sheetPrice.label}, ${tx(lang,'verificado','verified','核实于')} ${x.sheetPrice.asOf}, ${x.sheetPrice.edition})`);}
+    else parts.push(tx(lang,'precio de ficha no disponible','sheet price not available','资料价格不可用'));
+    if(x.reference&&x.reference.unitPrice!==null&&(!x.sheetPrice||x.reference.unitPrice!==x.sheetPrice.unitPrice||x.reference.edition!==x.sheetPrice.edition)){fig(x.reference.unitPrice,cur,'estimated','FloorPlanBudget',tx(lang,'referencia guardada','kept reference','已存参考'));parts.push(`${tx(lang,'referencia guardada','kept reference','已存参考')} ${money(x.reference.unitPrice,cur)} (${x.reference.edition||x.reference.label})`);}
+    if(x.activeUnitPrice!==null){fig(x.activeUnitPrice,cur,x.reviewed?'measured':'estimated','FloorPlanBudget',tx(lang,'precio activo','active price','有效价格'));parts.push(`${tx(lang,'precio activo en el presupuesto','active price in the budget','预算中的有效价格')} ${money(x.activeUnitPrice,cur)}${x.reviewed?'':' '+tx(lang,'(sin revisar)','(not reviewed)','（未审核）')}`);}
+    else parts.push(tx(lang,'sin precio activo en el presupuesto','no active price in the budget','预算中无有效价格'));
+    if(x.subtotalNet!==null){fig(x.subtotalNet,cur,x.reviewed?'measured':'estimated','FloorPlanBudget.calculateBudget',tx(lang,'importe de la partida','item amount','条目金额'));parts.push(`${tx(lang,'importe de la partida','item amount','条目金额')} ${money(x.subtotalNet,cur)} ${tx(lang,'sin IVA','excl. VAT','不含税')}`);}
+    else parts.push(tx(lang,'importe de la partida no disponible','item amount not available','条目金额不可用'));
+    parts.push(x.inBudget?tx(lang,'incluido en el presupuesto como partida','included in the budget as an item','已作为条目计入预算'):tx(lang,'no incluido en el presupuesto','not included in the budget','未计入预算'));return parts.join('; ');};
+   out.text=list.slice(0,6).map(one).join(' — ')+'. ';
+   const tot=r.total.gross;if(tot.complete){fig(tot.amount,cur,'estimated','FloorPlanBudget.calculateBudget',tx(lang,'total con IVA','total incl. VAT','含税合计'));out.text+=tx(lang,`Total del presupuesto con IVA: ${money(tot.amount,cur)}.`,`Budget total incl. VAT: ${money(tot.amount,cur)}.`,`预算含税合计：${money(tot.amount,cur)}。`);}
+   else{const n=r.total.unpricedItemIds.length;fig(n,'items','not_applicable','FloorPlanBudget.calculateBudget',tx(lang,'partidas sin precio','unpriced items','无价格条目'));out.text+=tx(lang,`El presupuesto no tiene total completo: ${n} partida${n===1?'':'s'} sin precio (un precio desconocido no es cero).`,`The budget has no complete total: ${n} item${n===1?'':'s'} without a price (an unknown price is not zero).`,`预算没有完整合计：${n} 个条目无价格（未知价格不等于零）。`);}
+   return out;}
+  if(intent.intent==='budget_detail'){const b=take(results[0]);if(!b)return err(firstError,lang);const r=results[1]?.ok?take(results[1]):null,n=b.unpricedItemIds.length;
+   fig(n,'items','not_applicable','FloorPlanBudget.calculateBudget',tx(lang,'partidas sin precio','unpriced items','无价格条目'));
+   if(!n&&b.gross.complete){out.text=tx(lang,'Todas las partidas tienen precio.','Every item has a price.','所有条目都有价格。')+(b.unreviewedPriceItemIds.length?' '+tx(lang,`${b.unreviewedPriceItemIds.length} precio${b.unreviewedPriceItemIds.length===1?'':'s'} sin revisar.`,`${b.unreviewedPriceItemIds.length} unreviewed price${b.unreviewedPriceItemIds.length===1?'':'s'}.`,`${b.unreviewedPriceItemIds.length} 个价格未审核。`):'');return out;}
+   const cat=new Map((r?.products||[]).map(x=>[x.itemId,x]));
+   const names=(b.unpricedItems||[]).slice().sort((x,y)=>(cat.has(y.id)?1:0)-(cat.has(x.id)?1:0)).slice(0,10).map(i=>{const x=cat.get(i.id);return x?`${i.description} (${STATE[x.state]||x.state})`:i.description;});
+   out.text=tx(lang,`El presupuesto está incompleto porque ${n} partida${n===1?'':'s'} no tiene${n===1?'':'n'} precio: `,`The budget is incomplete because ${n} item${n===1?' has':'s have'} no price: `,`预算不完整，因为 ${n} 个条目没有价格：`)+names.join('; ')+'. '+tx(lang,'Un precio desconocido no es cero; un precio de ficha solo cuenta cuando lo aplicas y lo revisas en Presupuestar.','An unknown price is not zero; a sheet price only counts once you apply and review it in Budget.','未知价格不等于零；资料价格需在预算中应用并审核后才计入。');
+   if(b.unreviewedPriceItemIds.length)out.text+=' '+tx(lang,`${b.unreviewedPriceItemIds.length} precio${b.unreviewedPriceItemIds.length===1?'':'s'} sin revisar.`,`${b.unreviewedPriceItemIds.length} unreviewed price${b.unreviewedPriceItemIds.length===1?'':'s'}.`,`${b.unreviewedPriceItemIds.length} 个价格未审核。`);return out;}
+  if(intent.intent==='visual_refs'){const v=take(results[0]);if(!v)return err(firstError,lang);fig(v.count,'references','not_applicable','RubikVisualReferences',tx(lang,'referencias visuales','visual references','视觉参考'));
+   const kind=tx(lang,'Los resultados del Estudio de imágenes son una SIMULACIÓN local rotulada: no son imágenes generadas por IA ni imágenes reales, no se entregan, no certifican un SKU ni crean importes. La generación real está bloqueada (STOP_GASTO).','Image studio results are a labelled local SIMULATION: they are not AI-generated or real images, they are not delivered, they certify no SKU and create no amounts. Real generation is blocked (STOP_GASTO).','图像工作室的结果是标注的本地模拟：不是 AI 生成或真实图像，不交付，不认证 SKU，也不产生金额。真实生成已锁定。');
+   if(!v.count){out.text=tx(lang,'No hay referencias visuales vinculadas a este proyecto. Puedes crear una en Entregar → Estudio de imágenes y pulsar «Vincular al proyecto». ','No visual references are linked to this project. Create one in Deliver → Image studio and press «Link to the project». ','此项目没有关联的视觉参考。可在“交付 → 图像工作室”中创建并点击“关联到项目”。')+kind;return out;}
+   const D={accepted:tx(lang,'aceptada','accepted','已接受'),rejected:tx(lang,'rechazada','rejected','已拒绝'),discarded:tx(lang,'descartada','discarded','已丢弃')},S={verified:tx(lang,'verificada','verified','已验证'),unverifiable:tx(lang,'no verificable','unverifiable','无法验证'),'other-project':tx(lang,'de otro proyecto','from another project','属于其他项目')};
+   out.text=(intent.focus==='kind'?kind+' ':'')+tx(lang,`Hay ${v.count} referencia${v.count===1?'':'s'} visual${v.count===1?'':'es'} vinculada${v.count===1?'':'s'}: `,`There ${v.count===1?'is':'are'} ${v.count} linked visual reference${v.count===1?'':'s'}: `,`共有 ${v.count} 个已关联的视觉参考：`)
+    +v.references.slice(0,5).map(r=>`${r.simulated?tx(lang,'simulación','simulation','模拟'):r.resultKind} ${D[r.decision]||'—'} (${S[r.status]||r.status})${r.references.length?' · '+r.references.map(x=>`${x.sku} ${x.placed?tx(lang,'colocado','placed','已放置'):tx(lang,'no colocado: no se presupuesta','not placed: not budgeted','未放置：不计入预算')}`).join(', '):''}`).join('; ')+'.'+(intent.focus==='kind'?'':' '+tx(lang,'Son evidencia visual sin importe.','They are visual evidence with no amount.','仅为视觉证据，无金额。'));return out;}
   return err(firstError,lang);
  }
  function err(r,lang){

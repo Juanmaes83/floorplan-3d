@@ -64,6 +64,10 @@
   const op=(id,kind,st,extra)=>({id,kind,state:st,writes:false,preview:false,costUnknown:false,confirmation:'none',owner:'claude-code-1',...extra});
   const ops=[
    ...['list_capabilities','get_project_summary','list_rooms','get_room','get_quantities','get_budget_summary','get_layout_review','list_materials','list_objects'].map(id=>op(id,'read','available',{source:'RubikAssistantDomainTools'})),
+   // CAT-04: read-only access to «Mis catálogos», the catalogue items of the same budget and the linked visual references,
+   // available only where CAT-IA is loaded (module flag). No writes, no provider, no cost.
+   ...['list_catalog_products','get_placed_products','get_visual_references'].map(id=>m.catalog?op(id,'read','available',{owner:'claude-code-2',source:'CAT-04 (CatalogCapabilitiesForAssistantV1 · RubikCatalogBudget · RubikVisualReferences)'})
+    :op(id,'read','blocked',{owner:'claude-code-2',source:'CAT-04',reason:'«Mis catálogos» no está cargado en esta página.'})),
    op('set_room_floor_material','proposal','available',{writes:true,preview:true,confirmation:'per-action',source:'RubikAssistantProposals'}),
    op('move_object','proposal','available',{writes:true,preview:true,confirmation:'per-action',source:'RubikAssistantProposals'}),
    m.render&&state('render-ai')==='available'
@@ -71,7 +75,7 @@
     :op('render_views','visual','blocked',{costUnknown:true,confirmation:'per-generation',reason:'Render IA no está disponible en esta página.',source:'FloorPlanAIRender (B2/B8)'}),
    op('photo_reform','visual',m.photoReform?(m.photoReformConfigured?'validation':'blocked'):'preparation',{costUnknown:true,confirmation:'per-generation',owner:'claude-code-2',source:'RubikPhotoReform (FOT-01)',
     reason:m.photoReform?(m.photoReformConfigured?'Proveedor configurado pendiente de validación.':'FOT-01 está en master sin proveedor autorizado: solo el simulador rotulado.'):'FOT-01 no está cargado en esta página.'}),
-   op('catalog_products','visual',m.catalog?'validation':'preparation',{costUnknown:true,confirmation:'per-action',owner:'claude-code-2',source:'CAT-IA (CatalogForAssistantV1)',reason:'CAT-IA se desarrolla en paralelo (Claude Code 2): el asistente solo tiene el contrato.'}),
+   op('catalog_products','read',m.catalog?'available':'blocked',{owner:'claude-code-2',source:'CAT-IA (CatalogCapabilitiesForAssistantV1)',reason:m.catalog?'Lectura de Mis catálogos, de sus partidas en Presupuestar y de las referencias visuales vinculadas; el precio se aplica solo en Presupuestar con confirmación.':'«Mis catálogos» no está cargado en esta página.'}),
    op('photo_to_furniture_3d','advanced','preparation',{costUnknown:true,source:'MUE-02',reason:'MUE-02 no está aprobado ni implementado.'}),
    op('generate_layout','advanced','preparation',{costUnknown:true,source:'GEN-01',reason:'GEN-01 no está aprobado ni implementado.'}),
    op('optimize_layout','advanced','preparation',{costUnknown:true,source:'GEN-01',reason:'Requiere criterios y pruebas propios (GEN-01).'})
@@ -89,7 +93,7 @@
    confirmation:'El diálogo de Render IA pide confirmación y el código de acceso antes de cada generación.',spendsNow:false}};
  }
  function photoReformRequest(cap){return {ok:false,error:{code:'not_available',message:cap?.reason||'FOT-01 sin proveedor autorizado.'}};}
- function catalogRequest(cap){return {ok:false,error:{code:'not_available',message:cap?.reason||'CAT-IA en preparación.'}};}
+ function catalogRequest(cap){return {ok:false,error:{code:'not_available',message:cap?.reason||'«Mis catálogos» no está cargado en esta página.'}};}
  // AG-5: closed refusal with what would be needed. Never «operational» because a mock exists.
  const ADVANCED_DECISIONS=Object.freeze(['Aprobar MUE-02 (foto → mueble 3D) con su presupuesto de IA y su validación de medidas.','Aprobar GEN-01 (generador de distribuciones) con criterios, restricciones y pruebas propias.','Decidir proveedor y tope de gasto para cada capacidad.','Revisión legal y de privacidad de fotos (GOV-05).']);
  function advancedRefusal(id){return {ok:false,error:{code:'not_available',message:`«${id}» está en preparación: no se ejecuta.`},decisions:ADVANCED_DECISIONS};}
