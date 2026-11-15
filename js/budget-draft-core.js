@@ -33,12 +33,20 @@
   CHAPTERS.forEach((c,i)=>b.chapters.push(B.createChapter({id:c,title:labels.chapters[c],order:i})));
   extraChapters.forEach((c,i)=>{if(!b.chapters.some(x=>x.id===c.id))b.chapters.push(B.createChapter({id:c.id,title:c.title,order:CHAPTERS.length+i}));});
   const all=[...lines(project,{name,labels}),...extraLines];
-  const changed=[];
-  for(const l of all){
-   const before=old.get(l.key);let price=null,review=undefined;
+  const changed=[],unitConflicts=[];
+  const conflictLabel=(from,to)=>(typeof labels.unitConflict==='function'?labels.unitConflict(from,to):`La unidad de la partida ha cambiado (${from} → ${to}): se conserva tu precio por ${from} con su origen y la cantidad queda pendiente; revisa la partida o quita el precio para usar la nueva unidad`);
+  for(const raw of all){
+   const before=old.get(raw.key);let price=null,review=undefined;
+   // XR-01: a price belongs to the unit it was set for. If the line now comes in another unit, the price is never
+   // carried over (no €/m² or €/m becomes €/ud): the item keeps its previous unit, price and provenance, its quantity
+   // becomes unknown (no amount) and its review is withdrawn. Only an explicit decision — removing that price — lets
+   // the new unit in. Geometric lines never change unit, so they are not affected.
+   const unitConflict=!!before&&before.unitPrice!==null&&before.quantity?.unit!==raw.quantity.unit;
+   const l=unitConflict?{...raw,quantity:{value:null,unit:before.quantity.unit,status:'unavailable',complete:false,source:{type:'manual',label:conflictLabel(before.quantity.unit,raw.quantity.unit)}}}:raw;
+   if(unitConflict)unitConflicts.push({key:l.key,from:before.quantity.unit,to:raw.quantity.unit,unitPrice:before.unitPrice,priceSource:JSON.parse(JSON.stringify(before.priceSource))});
    if(before&&before.unitPrice!==null){price={unitPrice:before.unitPrice,priceSource:before.priceSource};
-    // A review holds only for the quantity it was made on.
-    if(before.review?.status==='reviewed'&&sameQuantity(before.quantity,l.quantity))review=before.review;else if(before.review?.status==='reviewed')changed.push(l.key);}
+    // A review holds only for the quantity (and unit) it was made on.
+    if(before.review?.status==='reviewed'&&!unitConflict&&sameQuantity(before.quantity,l.quantity))review=before.review;else if(before.review?.status==='reviewed')changed.push(l.key);}
    else if(l.tariffKey&&tariff[l.tariffKey]&&Number.isFinite(tariff[l.tariffKey].unitPrice))price={unitPrice:tariff[l.tariffKey].unitPrice,priceSource:{type:'manual',label:labels.tariff,asOf:tariff[l.tariffKey].asOf||null}};
    // A reference price (BC3) stays attached while its unit still matches the item.
    const reference=before?.priceReference&&before.priceReference.unit===l.quantity.unit?before.priceReference:null;
@@ -46,7 +54,7 @@
    b.items.push(B.createItem({id:l.key,chapterId:l.chapter,description:l.description,quantity:l.quantity,wastePercent:before?before.wastePercent:l.waste,unitPrice:active?.unitPrice??null,priceSource:active?.priceSource??null,priceReference:reference,review:active?review??{status:'unreviewed',reviewedAt:null}:{status:'unreviewed',reviewedAt:null}}));
   }
   b.chapters=b.chapters.filter(c=>b.items.some(i=>i.chapterId===c.id));
-  return {budget:B.validateBudget(b),reviewInvalidated:changed,tariffKeys:Object.fromEntries(all.filter(l=>l.tariffKey).map(l=>[l.key,l.tariffKey]))};
+  return {budget:B.validateBudget(b),reviewInvalidated:changed,unitConflicts,tariffKeys:Object.fromEntries(all.filter(l=>l.tariffKey).map(l=>[l.key,l.tariffKey]))};
  }
  return {draft,lines,CHAPTERS};
 });

@@ -39,12 +39,23 @@
  const STUDIO=/^[a-z0-9][a-z0-9-]{0,63}$/;
  function link(project,sheet,{at,studioId}={}){if(studioId!==undefined&&studioId!==null&&!STUDIO.test(String(studioId)))throw Object.assign(Error('invalid studio id'),{code:'studio'});
   const v=verify(sheet);if(!v.ok)throw Object.assign(Error('visual sheet refused: '+v.reason),{code:v.reason});
+  // XR-02: the studio of an existing link is never re-assigned silently. The same sheet (same hash) linked again from
+  // another studio — or without a studio over a studio link, or with a studio over a legacy link without one — is
+  // refused; the explicit path is «Quitar vínculo» and link again. The same studio is idempotent (the original link,
+  // date and studio, is kept). The sheet (rubik-visual-result-sheet/1) and its hash are never modified.
+  const c=conflictOf(project,sheet,{studioId});
+  if(c.conflict)throw Object.assign(Error(`visual sheet already linked ${c.linkedStudioId?'from studio '+c.linkedStudioId:'without studio (legacy link)'}: unlink it before linking it from another studio`),{code:'studio-conflict',linkedStudioId:c.linkedStudioId});
+  if(c.reason==='already-linked'&&extOf(project).refs[sheet.hash].projectId===project.id)return project;
   project.extensions=isObj(project.extensions)?project.extensions:{};
   const ext=extOf(project)||{version:VERSION,refs:{}};
   if(!ext.refs[sheet.hash]&&Object.keys(ext.refs).length>=MAX_REFS)throw Object.assign(Error('too many visual references'),{code:'too-many'});
   ext.refs={...ext.refs,[sheet.hash]:{sheet:clone(sheet),projectId:project.id,linkedAt:at||new Date().toISOString(),...(studioId?{studioId:String(studioId)}:{})}};
   project.extensions[EXT]=ext;return project;
  }
+ // Would linking this sheet re-attribute an existing link? (UI pre-check; link() enforces the same rule.)
+ function conflictOf(project,sheet,{studioId=null}={}){const e=extOf(project)?.refs?.[sheet?.hash];if(!isObj(e))return {conflict:false,reason:null,linkedStudioId:null};
+  const has='studioId' in e,linked=has&&STUDIO.test(String(e.studioId))?e.studioId:null,asked=studioId===undefined||studioId===null?null:String(studioId);
+  return (has?linked!==null&&linked===asked:asked===null)?{conflict:false,reason:'already-linked',linkedStudioId:linked}:{conflict:true,reason:'studio-conflict',linkedStudioId:linked};}
  function unlink(project,hash){const ext=extOf(project);if(!ext?.refs?.[hash])return {changed:false};const refs={...ext.refs};delete refs[hash];project.extensions[EXT]={version:VERSION,refs};return {changed:true};}
  // What Presupuestar and the assistant may read: statuses only, never an amount.
  function list(project,{catalogs=[],studioId=null}={}){
@@ -68,5 +79,5 @@
       placed:placedStatus==='placed',placedStatus,catalogStatus};}):[]};
   }).sort((a,b)=>String(a.linkedAt).localeCompare(String(b.linkedAt)));
  }
- return Object.freeze({EXT,VERSION,MAX_REFS,verify,link,unlink,list});
+ return Object.freeze({EXT,VERSION,MAX_REFS,verify,link,unlink,list,conflictOf});
 });

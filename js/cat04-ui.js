@@ -50,6 +50,9 @@
   if(!CB.isCatalogItem(it.id))return;const rep=state?.catalog?.report?.find(r=>r.itemId===it.id);if(!rep)return;
   const st=CB.states(state.budget,[rep])[0],box=el('small',undefined,th,'budget-source cat04-row');box.dataset.state=st.state;box.dataset.sku=rep.sku||'';box.dataset.quantityStatus=rep.quantityStatus;
   const what=rep.retired?tx('Sin objetos colocados (0 ud)','No placed objects (0 pcs)','无已放置对象（0 件）')
+   :it.unitPrice!==null&&it.quantity?.unit!==rep.unit?tx(`Unidad cambiada (${it.quantity.unit} → ${rep.unit}): precio conservado sin importe; revisa o quita el precio`,`Unit changed (${it.quantity.unit} → ${rep.unit}): price kept without amount; review or remove the price`,`单位已变更（${it.quantity.unit} → ${rep.unit}）：保留价格不计金额；请审核或移除价格`)
+   :rep.quantityStatus==='unit-from-history'?tx(`Ficha no disponible: se conserva la unidad ${rep.rawUnit} y la cantidad queda pendiente`,`Sheet unavailable: the unit ${rep.rawUnit} is kept and the quantity stays pending`,`资料不可用：保留单位 ${rep.rawUnit}，数量待定`)
+   :rep.quantityStatus==='unit-unverifiable'?tx('Ficha no disponible: unidad no verificable, cantidad pendiente','Sheet unavailable: unit not verifiable, quantity pending','资料不可用：单位无法核实，数量待定')
    :rep.quantityStatus==='pending-measurement'?tx(`Pendiente de medición: la ficha tiene precio por ${rep.rawUnit}`,`Pending measurement: the sheet is priced per ${rep.rawUnit}`,`待测量：资料按 ${rep.rawUnit} 计价`)
    :tx(`${rep.count} objeto(s) en el proyecto`,`${rep.count} object(s) in the project`,`项目中 ${rep.count} 个对象`);
   box.textContent=`${tx('Producto de mi estudio','Product from my studio','我的工作室产品')} · ${rep.sku||''} · ${what} · ${stateText(st.state)}`;
@@ -88,6 +91,12 @@
  let returnToBudget=false;
  /* ---------- Estudio de imágenes: link the reviewed sheet explicitly ---------- */
  function linkVisual(sheet){if(!VR||!sheet)return {ok:false,reason:'no-sheet'};const v=VR.verify(sheet);if(!v.ok)return {ok:false,reason:v.reason};
+  // XR-02: never re-attribute an existing link to another studio; say how to do it explicitly.
+  const c=VR.conflictOf?.(app.project,sheet,{studioId:studioId()});if(c?.conflict)return {ok:false,code:'studio-conflict',reason:c.linkedStudioId
+   ?tx(`esta ficha ya está vinculada desde el estudio «${c.linkedStudioId}». Para vincularla desde este estudio, quita antes ese vínculo en Presupuestar → «Referencias visuales del proyecto».`,`this sheet is already linked from studio «${c.linkedStudioId}». To link it from this studio, first remove that link in Budget → «Visual references of the project».`,`此资料已从工作室「${c.linkedStudioId}」关联。如需从本工作室关联，请先在预算 →“项目视觉参考”中移除该关联。`)
+   :tx('esta ficha ya está vinculada sin estudio (vínculo anterior). Para atribuirla a este estudio, quita antes ese vínculo en Presupuestar → «Referencias visuales del proyecto».','this sheet is already linked without a studio (older link). To attribute it to this studio, first remove that link in Budget → «Visual references of the project».','此资料已在无工作室的情况下关联（旧关联）。如需归属到本工作室，请先在预算 →“项目视觉参考”中移除该关联。')};
+  // Same sheet, same studio, same project: already linked — no editor step, nothing to save.
+  if(c?.reason==='already-linked'&&app.project.extensions?.[VR.EXT]?.refs?.[sheet.hash]?.projectId===app.project.id)return {ok:true,already:true};
   const r=app.applyExtension?.(p=>{VR.link(p,sheet,{at:new Date().toISOString(),studioId:studioId()});return {ok:true,project:p};});return r?.ok?{ok:true}:{ok:false,reason:r?.explanation?.[0]||'not-saved'};}
  function unlinkVisual(hash){if(!VR)return;app.applyExtension?.(p=>{const r=VR.unlink(p,hash);return r.changed?{ok:true,project:p}:{ok:false};});}
  function studioButton(){const dlg=document.querySelector('#visualStudioDialog'),dl=dlg?.querySelector('#vsSheet');if(!dl||dlg.querySelector('#vsLinkProject'))return;
