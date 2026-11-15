@@ -17,7 +17,16 @@ on:
       - assets/cat-ia/**
       - scripts/cat-ia/**
       - scripts/qa/record-cat-ia-v1.cjs
+      - scripts/qa/record-cat04.cjs
       - tests/catalog-*.cjs
+      # CAT-04: catalogue → budget → assistant and visual references
+      - js/cat04-ui.js
+      - js/visual-reference-core.js
+      - js/budget-*.js
+      - js/reference-prices-ui.js
+      - js/cost-*.js
+      - js/assistant-*.js
+      - tests/cat04*.cjs
       - tests/photo-project/kit.cjs
       - tests/r02a/editor-kit.cjs
       - tests/editor-fixture.cjs
@@ -39,7 +48,7 @@ jobs:
         with:
           node-version: '22.13.0'
       - name: Syntax
-        run: for f in js/catalog-*.js js/visual-reform-*.js api/photo-reform.js js/photo-reform-*.js scripts/qa/record-cat-ia-v1.cjs; do node --check "$f"; done
+        run: for f in js/catalog-*.js js/visual-reform-*.js js/visual-reference-core.js js/cat04-ui.js api/photo-reform.js js/photo-reform-*.js scripts/qa/record-cat-ia-v1.cjs; do node --check "$f"; done
       # The fixture generator runs isolated (-I: no user site-packages, no PYTHON* env). On the runner's system Python a plain
       # «pip install» lands in the USER site-packages (system site is not writable), which -I ignores → ModuleNotFoundError.
       # A dedicated interpreter has a writable site-packages, so Pillow is visible under -I.
@@ -59,6 +68,8 @@ jobs:
       - name: The browser bundle carries no provider secret path (no Authorization header, no Bearer adapter)
         run: |
           if grep -nE "authorization:|Authorization:|httpAdapter\\(" js/photo-reform-*.js; then echo "provider secret path in browser code"; exit 1; fi
+      - name: CAT-04 pure - catalogue lines in the one budget, S2 explicit apply, visual references, assistant (figure oracle)
+        run: node --test --test-concurrency=1 tests/catalog-budget-core.test.cjs tests/visual-reference-core.test.cjs tests/cat04-assistant.test.cjs tests/budget-draft.test.cjs tests/budget-cost-bridge.test.cjs tests/cost-catalog-core.test.cjs tests/assistant-ai-v2.test.cjs
       - name: CatalogProductV1 core, and the guards of R03, R02-A and the photo project with the catalogue loaded
         run: node --test --test-concurrency=1 tests/catalog-product-core.test.cjs tests/catalog-placement-core.test.cjs tests/assets.test.cjs tests/furniture-search.test.cjs tests/cost-provider.test.cjs tests/brand-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/photo-project-core.test.cjs tests/photo-reform-provider.test.cjs
   browser:
@@ -88,6 +99,12 @@ jobs:
         run: node --test --test-concurrency=1 tests/catalog-placement.browser.test.cjs
       # Asset catalogue suite in its own step: a failure here (see docs/cat-ia/05-assets-browser-reproduccion.md, same two
       # tests fail on master c91d12d) still fails the job, but no longer hides the steps below. No test is skipped.
+      - name: Real editor - CAT-04 catalogue → Presupuestar → assistant → dossier, Image studio references (desktop ES, phone EN, landscape ZH)
+        if: ${{ !cancelled() }}
+        run: node --test --test-concurrency=1 tests/cat04.browser.test.cjs
+      - name: Presupuestar, reference prices (S2/M2) and economic dossier keep working with CAT-04 loaded
+        if: ${{ !cancelled() }}
+        run: node --test --test-concurrency=1 tests/budget-ui.browser.test.cjs tests/m2-s4.browser.test.cjs tests/economic-dossier.browser.test.cjs
       - name: Asset catalogue (F3 + CAT-03 manifest) - full assets.browser suite
         if: ${{ !cancelled() }}
         run: node --test --test-concurrency=1 tests/assets.browser.test.cjs
@@ -96,7 +113,7 @@ jobs:
         run: node --test --test-concurrency=1 tests/professional-workspace.browser.test.cjs tests/brand.browser.test.cjs tests/photo-project.browser.test.cjs
   evidence:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -122,4 +139,13 @@ jobs:
         with:
           name: cat-ia-v1-${{ github.event.pull_request.head.sha }}
           path: qa-results/cat-ia-v1
+          if-no-files-found: error
+      - name: CAT-04 evidence - full catalogue → budget → assistant → dossier flow and Image studio references, desktop and phone (videos ffprobe + full decode, manifest)
+        if: ${{ !cancelled() }}
+        run: node scripts/qa/record-cat04.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cat04-${{ github.event.pull_request.head.sha }}
+          path: qa-results/cat04
           if-no-files-found: error

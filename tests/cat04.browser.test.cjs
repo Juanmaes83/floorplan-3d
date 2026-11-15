@@ -6,6 +6,7 @@
    importe → consultada por el Asistente. Móvil 390×844 EN y apaisado 844×390 ZH. Ninguna petición externa ni a /api/. */
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const K=require('./photo-project/kit.cjs'),{synthKitchen,loadPilot,openStudio,dragZone}=require('./cat-ia/kit.cjs');
+const VID=process.env.CAT04_VIDEO||null,rec=size=>VID?{recordVideo:{dir:VID,size}}:{};
 const OUT=process.env.CAT04_SHOTS||null,RB='cat:local:piloto-sintetico-qa:aparador-lumen:roble',H60='cat:local:piloto-sintetico-qa:horno-h60:inox';
 const PILOT=JSON.parse(fs.readFileSync(path.join(__dirname,'../assets/cat-ia/fixtures/pilot-collection.json'),'utf8'));
 let env;
@@ -37,7 +38,7 @@ async function ask(page,q){await page.waitForFunction(()=>!!window.RubikAssistan
  return page.evaluate(()=>RubikAssistantUI.state.log.at(-1)?.text||'');}
 
 test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación → duplicar/deshacer/rehacer/reabrir → ficha nueva → Asistente y dossier con las mismas cifras → borrar → exportar',{timeout:600000},async()=>{
- const {context,page}=await K.editor(env,{acceptDownloads:true});const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
+ const {context,page}=await K.editor(env,{acceptDownloads:true,...rec({width:1440,height:900})});const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
  try{
   // 1–3. Catalogue (synthetic QA fixtures) and placement from «Producto de mi estudio».
   await loadPilot(page,false);await toEditor(page);await openFromPalette(page);const o1=await place(page,'aparador-lumen@roble');
@@ -108,7 +109,7 @@ test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación
 });
 
 test('CAT-04 Estudio de imágenes → referencia visual vinculada → reconocida en Presupuestar sin importe → consultada por el Asistente → persiste al reabrir',{timeout:400000},async()=>{
- const {context,page}=await K.editor(env,{acceptDownloads:true});const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
+ const {context,page}=await K.editor(env,{acceptDownloads:true,...rec({width:1440,height:900})});const w=K.watch(page,env.base),api=[];page.on('request',r=>{if(/\/api\//.test(r.url()))api.push(r.url());});
  try{
   const kitchen=await synthKitchen(env.browser);await loadPilot(page,false);await openStudio(page,false);
   await page.locator('#vsFile').setInputFiles(K.file('IMG_0001.jpg',K.withExif(kitchen),'image/jpeg'));await page.locator('#vsStage').waitFor();
@@ -142,7 +143,7 @@ test('CAT-04 Estudio de imágenes → referencia visual vinculada → reconocida
 
 for(const [vp,lang,label] of [[{width:390,height:844},'en','móvil 390×844 EN'],[{width:844,height:390},'zh','apaisado 844×390 ZH']]){
  test(`CAT-04 ${label}: colocar con toques, partida en Presupuestar, sin desbordes, objetivos táctiles y Asistente en su idioma`,{timeout:300000},async()=>{
-  const {context,page}=await K.editor(env,{viewport:vp,isMobile:true,hasTouch:true});const w=K.watch(page,env.base);
+  const {context,page}=await K.editor(env,{viewport:vp,isMobile:true,hasTouch:true,...rec(vp)});const w=K.watch(page,env.base);
   try{
    await page.evaluate(l=>{try{setLang(l);}catch{window.LANG=l;}},lang);await page.waitForFunction(l=>typeof LANG==='undefined'||LANG===l,lang).catch(()=>{});
    await loadPilot(page,true);try{await page.locator('#workArea-design').tap();}catch{}await page.locator('#professionalWorkspace').waitFor({state:'hidden'}).catch(()=>{});

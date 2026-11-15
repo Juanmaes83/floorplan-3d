@@ -5,6 +5,10 @@ on:
       - index.html
       - api/assistant.js
       - js/assistant-*.js
+      - js/cat04-ui.js
+      - js/catalog-budget-core.js
+      - js/visual-reference-core.js
+      - tests/cat04-assistant.test.cjs
       - css/assistant.css
       - js/quantity-core.js
       - js/budget-core.js
@@ -40,7 +44,7 @@ jobs:
       - name: Published JSON Schemas match the validator
         run: node scripts/assistant/write-schemas.cjs --check
       - name: AG-0…AG-5 core (independent oracles) + coexistence (UX-12/13 incl. 1512-rotation property, R03 manifest, capability registry)
-        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs
       - name: Install the browser test runtime and FFmpeg
         run: |
           npm install --prefix "$RUNNER_TEMP/ag-playwright" --no-save playwright@1.62.1
