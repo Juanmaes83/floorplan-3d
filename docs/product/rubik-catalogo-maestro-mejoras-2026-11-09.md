@@ -9,6 +9,8 @@
 
 > **Estado único de auditoría al 12/11/2026:** [Auditoría consolidada de piedras, olas, PR y gates](../qa/rubik-estado-unico-piedras-olas-2026-11-12.md), incorporada a esta rama Draft por autorización expresa del propietario. Contrasta `master`, #191–#197, GOV-08/ENT-01, ECO-01 y MCP Etapa 2; fija la aceptación provisional de 250 verificaciones exclusivamente para laboratorio y registra como deuda la validación real. **Es un acta de coordinación/revisión, no una autorización de merge, integración, despliegue ni nueva ola.**
 
+> **Precedencia desde el 16/11/2026:** el estado actual de cada mejora tras la consolidación #241 (`master@1296aac`) está en el [Estado maestro de RUBIK SOTA](ESTADO-MAESTRO-RUBIK-SOTA.md). Este catálogo sigue siendo la autoridad de nombres, IDs y olas, y sus estados conservan la fecha de su versión.
+
 ## 0. Para qué sirve y cómo usarlo
 
 Es **el único sitio** donde están juntas todas las mejoras propuestas para RUBIK. Cada una tiene:
