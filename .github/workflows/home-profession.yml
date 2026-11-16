@@ -2,6 +2,10 @@
 # and the welcome, guide, work-area and Render IA regressions that share these files. No AI provider is called.
 # HOM-03: «Nuevos servicios IA» (four verified states, every button opens the real service, CAT-04 never shown).
 name: Home por profesión
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     paths: ['index.html', 'js/guide-ui.js', 'js/guide-core.js', 'js/capability-registry.js', 'js/professional-workspace-ui.js', 'js/ai-render-ui.js', 'css/guided-experience.css', 'tests/capability-registry.test.cjs', 'tests/welcome-capabilities.browser.test.cjs', 'tests/professional-entry.browser.test.cjs', 'tests/welcome-generar.browser.test.cjs', 'tests/welcome-ai-services.browser.test.cjs', 'js/assistant-ui.js', 'js/catalog-ui.js', 'js/visual-reform-ui.js', 'js/photo-reform-ui.js', '.github/workflows/home-profession.yml']

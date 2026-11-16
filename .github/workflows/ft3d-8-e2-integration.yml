@@ -1,6 +1,10 @@
 # RUBIK SOTA E2 · FT3D-8 integration gate: the FT3D-8 suites validated in the preflight, on the real integration SHA.
 # Runs on the isolated integration branch and on pull requests to master that touch FT3D-8 or the shared files.
 name: FT3D-8 E2 integration
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   push:
     branches: ['integration/ft3d-8-e2-*']
@@ -51,6 +55,11 @@ jobs:
         run: |
           grep -qx 'labs/' .vercelignore
           if git ls-files 'docs/qa/ft3d-8-*' 'docs/product/ft3d-8-*' | grep -E '\.(webm|mp4|png|jpg|jpeg)$'; then echo 'FT3D-8 multimedia evidence must stay in the QA branches'; exit 1; fi
+      - name: Local Redis for the spend-ledger suite (real redis-server, no network service, no paid provider; same as assistant-ai-v2)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq redis-server
+          redis-server --version
       - name: Every pure test of the repository
         run: node --test $(ls tests/*.test.cjs | grep -v browser)
 

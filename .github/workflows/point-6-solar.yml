@@ -1,4 +1,8 @@
 name: Point 6 solar and compatibility
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     branches: [master]
@@ -18,6 +22,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
+      - name: Local Redis for the spend-ledger suite (real redis-server, no network service, no paid provider; same as assistant-ai-v2)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq redis-server
+          redis-server --version
       - name: Unit regressions
         run: |
           git diff --check

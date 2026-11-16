@@ -1,5 +1,9 @@
 # RUBIK SOTA E2: independent quality gate for the real Hybrid V2 + corrected Section combination.
 name: E2 Hybrid V2 + Section integration
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     branches: [master]

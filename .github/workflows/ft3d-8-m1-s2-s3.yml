@@ -1,4 +1,8 @@
 name: FT3D-8 M1 · S2 prices (BCCA/BC3) + S3 Catastro direct
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   push:
     branches: [feat/ft3d-8-s2-s3-m1-2026-11-05]

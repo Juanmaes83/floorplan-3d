@@ -18,6 +18,11 @@ jobs:
         run: |
           for f in js/construction-*.js js/cost-catalog-core.js js/catastro-wfs-provider.js js/reference-prices-ui.js js/budget-ui.js js/geo-provider.js js/territory-ui.js js/economic-dossier-ui.js js/professional-workspace-ui.js evolucion/library-source.js tests/m2-s4.browser.test.cjs; do node --check "$f"; done
           for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < evolucion/$m.js; done
+      - name: Local Redis for the spend-ledger suite (real redis-server, no network service, no paid provider; same as assistant-ai-v2)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq redis-server
+          redis-server --version
       - name: Every pure test of the repository
         run: node --test $(ls tests/*.test.cjs | grep -v browser)
   m2:

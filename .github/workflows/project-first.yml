@@ -1,5 +1,9 @@
 # Project-First and Phase B browser and unit tests. Each cut of the stacked chain adds its own test files below.
 name: Project-First regressions
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
   push:
