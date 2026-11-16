@@ -88,7 +88,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  const link2=await dialog.locator('#shareLinkUrl').inputValue();assert.notEqual(link2,link);
  const html=[...store.entries()].filter(([p])=>p.endsWith('.html')).pop()[1].bytes.toString();
  assert.match(html,new RegExp(`media-src https://${HOST.replace(/\./g,'\\.')}`));assert.match(html,new RegExp(`<video[^>]+src="https://${HOST.replace(/\./g,'\\.')}/rubik-share/`));
- const client2=await context.newPage();await client2.goto(link2);await client2.locator('#shareTour video').waitFor();assert.match(await client2.locator('.share-top').innerText(),/el vídeo necesita conexión/);
+ const client2=await context.newPage();await client2.goto(link2);await client2.locator('#shareTour video').waitFor();assert.match(await client2.locator('.share-top').innerText(),/No necesita instalar nada; el vídeo o la visita 3D necesitan conexión/,'the client page states it needs a connection for the published media (js/client-share-ui.js)');
  const played=await client2.evaluate(async()=>{const v=document.querySelector('#shareTour video');if(v.readyState<1)await new Promise((ok,ko)=>{v.onloadedmetadata=ok;v.onerror=()=>ko(Error('video blocked'));});return [v.videoWidth,v.videoHeight];});
  assert.deepEqual(played,[1280,720],'the published page plays the tour video under its CSP');
  await shot(client2,'b4-1440-client-page');await client2.close();

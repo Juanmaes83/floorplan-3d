@@ -26,9 +26,10 @@
  const slug=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'proyecto';
  let state=null,returnFocus=null,base=null,baseColumn=0,openRef=null;
  const X=window.FloorPlanBc3Budget,Bridge=window.FloorPlanBudgetCostBridge;
- function apply(fn){state.budget=B.validateBudget(fn(state.budget));save();}
+ function apply(fn){requireSafeIdentity();state.budget=B.validateBudget(fn(state.budget));save();}
  // Current budget of the open project, rebuilt over the project quantities (keeps prices, waste and valid reviews).
- function load(){const saved=read(BUDGETS)[app.project.id]||null;let previous=null;try{previous=saved?B.parseBudget(JSON.stringify(saved)):null;}catch{previous=null;}
+ // `over` (CON-03): a validated budget to draft over INSTEAD of the saved one — the import preview; nothing is saved here.
+ function load(over=null){const saved=read(BUDGETS)[app.project.id]||null;let previous=null;try{previous=over||(saved?B.parseBudget(JSON.stringify(saved)):null);}catch{previous=null;}
   // CAT-04: products placed from «Mis catálogos» enter THIS document (same draft, same calculation), never a parallel one.
   // CAT-04 fail-closed (audit #237): if the reconciliation fails, or the module is missing while the saved budget has
   // catalogue items, those items are kept EXACTLY as saved (price, reference, review) and nothing is saved automatically;
@@ -39,22 +40,38 @@
   if(!catalog&&prevCat.length){catalogError=catalogError||'module-unavailable';
    catalog={lines:prevCat.map(i=>({key:i.id,chapter:i.chapterId,description:i.description,quantity:i.quantity,waste:i.wastePercent})),chapters:(previous.chapters||[]).filter(c=>prevCat.some(i=>i.chapterId===c.id)).map(c=>({id:c.id,title:c.title})),report:[],orphans:[],preserved:true};}
   const r=D.draft(app.project,{previous,tariff:read(TARIFF),name:local,labels:labels(),...(catalog?{extraLines:catalog.lines,extraChapters:catalog.chapters}:{})});return {...r,savedBefore:!!previous,catalog,catalogError};}
- function save(){const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
+ // CON-02: names of the OTHER local projects (single projects or building levels) stored with the open project's id. Read-only.
+ function sharedWith(){try{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')),pid=app.project.id,me=app.entryId;
+  return (lib?.entries||[]).filter(e=>e.id!==me&&(e.kind==='building'?(e.building?.levels||[]).some(l=>l.project?.id===pid):e.project?.id===pid)).map(e=>local(String(e.name||'')).slice(0,60));}catch{return [];}}
+ function identityUnsafe(){
+  if(app.identityMigration?.failed)return true;
+  try{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1'));
+   const ids=(lib?.entries||[]).flatMap(e=>e.kind==='building'?(e.building?.levels||[]).map(l=>l.project?.id):[e.project?.id]);
+   return ids.filter(id=>id===app.project.id).length>1;
+  }catch{return false;}
+ }
+ const identityError=()=>tx('Presupuesto bloqueado: hay proyectos con el mismo identificador y no se pudo guardar su separación. Libera espacio de este navegador y vuelve a abrir RUBIK; comprueba que cada proyecto tiene su presupuesto antes de editar.','Budget locked: projects share an identity and their separation could not be saved. Free browser storage and reopen RUBIK; check each project budget before editing.','预算已锁定：项目共用标识且无法保存分离结果。请释放浏览器存储空间并重新打开 RUBIK。');
+ function requireSafeIdentity(){if(identityUnsafe())throw Error(identityError());}
+ function save(){requireSafeIdentity();const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
  function say(m){const s=dialog.querySelector('#budgetStatus');if(s)s.textContent=m;}
  // D-04: a hand-made price change is also written to the project's price history (same record as reference prices).
  function logManualPrice(it,prev,revB){try{const Ctx=window.FloorPlanConstructionContext,now=state.budget.items.find(x=>x.id===it.id)?.unitPrice??null;if(!Ctx?.store||prev===now)return;
   const revA=window.FloorPlanCostCatalog?.revisionTag?.(state.budget)||null,pid=app.project.id;
   Ctx.snapshot().then(snap=>{if(snap?.entry&&snap.subject)Ctx.store().addPriceChange(snap.entry.id,snap.subject,pid,{label:now===null?'Precio retirado a mano':'Precio propio cambiado a mano',itemId:it.id,description:it.description,as:'manual',before:{unitPrice:prev},after:{unitPrice:now},code:null,source:'manual',revBefore:revB,revAfter:revA});}).catch(e=>console.warn('[Presupuesto] historial de precios:',e?.message||e));}catch(e){console.warn('[Presupuesto] historial de precios:',e?.message||e);}}
- function setItem(id,fn){const i=state.budget.items.findIndex(x=>x.id===id);const next={...state.budget,items:state.budget.items.slice()};next.items[i]=fn(next.items[i]);state.budget=B.validateBudget(next);save();}
+ function setItem(id,fn){requireSafeIdentity();const i=state.budget.items.findIndex(x=>x.id===id);const next={...state.budget,items:state.budget.items.slice()};next.items[i]=fn(next.items[i]);state.budget=B.validateBudget(next);save();}
  const dialog=el('dialog',undefined,document.body,'ai-render-dialog budget-dialog');dialog.id='budgetDialog';dialog.setAttribute('aria-labelledby','budgetTitle');
  dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
- function open(){returnFocus=document.activeElement;state=load();if(!state.catalogError)save();draw();dialog.showModal();dialog.querySelector('#budgetTitle')?.focus();}
+ function open(){returnFocus=document.activeElement;pendingImport=null;state=load();if(!state.catalogError&&!identityUnsafe())save();draw();dialog.showModal();dialog.querySelector('#budgetTitle')?.focus();}
  function draw(focusId=null){
   const c=B.calculateBudget(state.budget),st=STATUS(),u=UNIT(),lines=new Map(c.lines.map(l=>[l.id,l])),scroll=dialog.scrollTop;dialog.replaceChildren();
   const head=el('div',undefined,dialog,'ai-render-head');const h=el('h2',tx('Presupuesto','Budget','预算'),head);h.id='budgetTitle';h.tabIndex=-1;
   const close=btn(tx('Cerrar','Close','关闭'),head);close.id='budgetClose';close.onclick=()=>dialog.close();
+  if(identityUnsafe()){const warning=el('p',identityError(),dialog,'budget-warn');warning.id='budgetIdentityBlocked';warning.setAttribute('role','alert');}
   if(state.catalogError){const e=el('p',tx('No se han podido conciliar los productos de «Mis catálogos». Se muestran las partidas de catálogo tal como estaban guardadas y no se ha guardado nada automáticamente: tus precios, referencias y revisiones se conservan. Si editas algo, se guardará con estas partidas.','The products from «My catalogues» could not be reconciled. Catalogue items are shown as they were saved and nothing has been saved automatically: your prices, references and reviews are kept. If you edit something, it will be saved with these items.','无法核对“我的目录”中的产品。目录条目按已保存的状态显示，未自动保存任何内容：您的价格、参考和审核均保留。如有编辑，将连同这些条目一起保存。'),dialog,'budget-warn');e.id='cat04ReconcileError';e.setAttribute('role','alert');e.dataset.reason=state.catalogError;}
   el('p',tx('Las cantidades salen del proyecto (con su estado); los precios son sólo tuyos y ninguno se da por revisado hasta que lo marcas. Rubik no certifica el coste real. Si cambias el proyecto, al volver a abrir se actualizan las cantidades y se conservan tus precios.','Quantities come from the project (with their status); prices are only yours and none counts as reviewed until you mark it. Rubik does not certify actual cost. If you change the project, reopening updates quantities and keeps your prices.','数量来自项目；价格只由您填写，标记前均未审核。'),dialog,'ai-render-note').id='budgetNote';
+  // CON-02: this document is keyed by project.id, and a project file imported where that id already exists keeps its id
+  // (client review by file depends on it), so both local projects read and write THIS budget. Never silent: say it.
+  const twins=identityUnsafe()?[]:sharedWith();if(twins.length){const w=el('p',tx(`Este presupuesto está compartido con ${twins.length===1?'otro proyecto local':twins.length+' proyectos locales'} que ${twins.length===1?'es copia':'son copias'} del mismo archivo (${twins.map(n=>'«'+n+'»').join(', ')}): lo que cambies aquí cambia también allí. Para un presupuesto independiente usa «Duplicar» en Proyectos.`,`This budget is shared with ${twins.length===1?'another local project':twins.length+' local projects'} copied from the same file (${twins.map(n=>'«'+n+'»').join(', ')}): what you change here changes there too. For an independent budget use «Duplicate» in Projects.`,`此预算与来自同一文件的 ${twins.length} 个本地项目共享（${twins.map(n=>'«'+n+'»').join('、')}）：此处的更改也会影响它们。如需独立预算，请在“项目”中使用“复制”。`),dialog,'budget-warn');w.id='budgetSharedProject';w.setAttribute('role','alert');w.dataset.count=String(twins.length);}
   // XR-01: a priced item whose unit changed keeps its old unit and price, without amount, until the professional decides.
   if(state.unitConflicts?.length)el('p',tx(`${state.unitConflicts.length} partida(s) con precio han cambiado de unidad: no se convierte ningún precio (por ejemplo €/m² en €/ud). Se conserva tu precio con su unidad y su origen, sin importe, hasta que lo revises o lo quites.`,`${state.unitConflicts.length} priced item(s) changed unit: no price is converted (e.g. €/m² into €/pcs). Your price is kept with its unit and source, without amount, until you review or remove it.`,`${state.unitConflicts.length} 个有价格的条目单位已变更：不会换算任何价格（例如 €/m² 换成 €/件）。保留价格及其单位和来源，不计金额，直至您审核或移除。`),dialog,'budget-warn').id='budgetUnitConflict';
   if(state.reviewInvalidated.length)el('p',tx(`La cantidad de ${state.reviewInvalidated.length} partida(s) ha cambiado desde tu revisión: revísalas de nuevo.`,`The quantity of ${state.reviewInvalidated.length} item(s) changed since your review: review them again.`,'部分条目数量已变化，请重新审核。'),dialog,'budget-warn').id='budgetInvalidated';
@@ -112,8 +129,14 @@
   csv.onclick=()=>download(new Blob([P.toCsv(state.budget,{delimiter:';',bom:true})],{type:'text/csv;charset=utf-8'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.csv`);
   const js=btn(tx('Descargar presupuesto (JSON)','Download budget (JSON)','下载预算 (JSON)'),row);js.id='budgetJson';
   js.onclick=()=>download(new Blob([B.serializeBudget(state.budget)],{type:'application/json'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.json`);
+  // CON-03: the reader of that same JSON. Preview first; the budget only changes on «Importar» (same document, same draft).
+  const imp=btn(tx('Importar presupuesto (JSON)…','Import budget (JSON)…','导入预算 (JSON)…'),row);imp.id='budgetImport';const impFile=el('input',undefined,row);impFile.type='file';impFile.id='budgetImportFile';impFile.accept='.json,application/json';impFile.hidden=true;
+  imp.onclick=()=>impFile.click();impFile.onchange=()=>{const f=impFile.files[0];impFile.value='';if(f)importFile(f);};
+  if(state.catalogError)imp.disabled=true;
+  if(pendingImport)importPreview();
   if(X){const bc=btn(tx('Descargar presupuesto (BC3)','Download budget (BC3)','下载预算 (BC3)'),row);bc.id='budgetBc3Export';bc.onclick=()=>{try{const out=X.exportBudget(state.budget,{title:local(app.project.name)});download(new Blob([out.bytes],{type:'application/octet-stream'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.bc3`);say(tx(`BC3 generado: ${out.check.concepts.length} conceptos. Las partidas sin precio van sin precio.`,`BC3 generated: ${out.check.concepts.length} concepts.`,'BC3 已生成。'));}catch(e){say(e.message);}};}
   const status=el('p','',dialog,'ai-render-status');status.id='budgetStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+  if(identityUnsafe())for(const control of dialog.querySelectorAll('button,input,select,textarea'))if(control!==close)control.disabled=true;
   dialog.scrollTop=scroll;
   if(focusId){const [id,field]=focusId.split('|');if(field==='refq'){dialog.querySelector('#budgetRefQuery')?.focus({preventScroll:true});return;}(field?dialog.querySelector(`tr[data-item="${CSS.escape(id)}"] [data-field="${field}"]`):dialog.querySelector('#'+id))?.focus({preventScroll:true});}
  }
@@ -126,15 +149,47 @@
     const use=btn(tx('Usar este precio','Use this price','使用此价格'),li,'btn budget-small');use.dataset.code=r.code;use.onclick=()=>{try{apply(b=>Bridge.setPriceFromQuote(b,it.id,X.quote(base,r.code,baseColumn)));openRef=null;draw(`${it.id}|price`);say(tx('Precio de referencia aplicado, sin revisar.','Reference price applied, not reviewed.','已应用参考价格。'));}catch(e){say(e.message);}};
     const keep=btn(tx('Sólo como referencia','Reference only','仅作参考'),li,'btn budget-small');keep.onclick=()=>{try{apply(b=>Bridge.setPriceReferenceFromQuote(b,it.id,X.quote(base,r.code,baseColumn)));openRef=null;draw(`${it.id}|ref`);}catch(e){say(e.message);}};}};
   q.oninput=show;show();}
+ /* CON-03 · «Importar presupuesto (JSON)»: the file Presupuestar itself downloads. It is validated as FloorPlanBudgetV1,
+    drafted over the OPEN project (quantities always from the project; prices, waste, VAT and references by item id) and
+    shown as a preview with what is applied, what is not and what it replaces. Nothing is saved until «Importar»; a
+    file of another project needs an explicit tick and comes without any review. */
+ let pendingImport=null;
+ async function importFile(file){pendingImport=null;
+  try{if(file.size>2*1024*1024)throw Error(tx('El archivo supera 2 MB.','The file exceeds 2 MB.','文件超过 2 MB。'));
+   let incoming;try{incoming=B.parseBudget(await file.text());}catch(e){throw Error(tx('No es un presupuesto de RUBIK válido: ','Not a valid RUBIK budget: ','不是有效的 RUBIK 预算：')+(e?.message||e));}
+   const pid=app.project.id,a=D.adopt(incoming,app.project),r=load(a.previous);
+   if(r.catalogError)throw Error(tx('No se han podido conciliar los productos de «Mis catálogos»: no se importa nada.','The products from «My catalogues» could not be reconciled: nothing is imported.','无法核对目录产品：未导入。'));
+   pendingImport={name:file.name,pid,sameSubject:a.sameSubject,sourceSubjectId:a.sourceSubjectId,result:r,base:B.serializeBudget(state.budget),summary:D.importSummary(state.budget,a.previous,r.budget)};draw('budgetImportConfirm');dialog.querySelector('#budgetImportPreview')?.scrollIntoView({block:'center'});
+  }catch(e){draw('budgetImport');say(tx('Importación rechazada: ','Import rejected: ','导入被拒绝：')+(e?.message||e));}}
+ function importPreview(){const p=pendingImport,s=p.summary,box=el('section',undefined,dialog,'budget-warn');box.id='budgetImportPreview';box.setAttribute('role','group');box.dataset.sameSubject=String(p.sameSubject);
+  for(const k of ['applied','withoutObjects','notInProject','notCarried','replaced','removed','ownVat'])box.dataset[k]=String(s[k].length);
+  const vatT=v=>v===null?tx('sin IVA indicado','no VAT set','未设置'):num(v,0)+' %',tot=t=>!t?'—':t.net===null?tx('sin importe','no amount','无金额'):`${eur(t.net)} ${tx('sin IVA','excl. VAT','不含税')}${t.netComplete?'':tx(' · parcial',' · partial',' · 部分')}`;
+  el('h3',tx(`Vista previa de la importación · ${p.name}`,`Import preview · ${p.name}`,`导入预览 · ${p.name}`),box);const ul=el('ul',undefined,box);
+  el('li',tx(`${s.applied.length} precio(s) del archivo se aplican a partidas de este proyecto. Las cantidades salen siempre del proyecto abierto, no del archivo.`,`${s.applied.length} price(s) of the file apply to items of this project. Quantities always come from the open project, not from the file.`,`文件中的 ${s.applied.length} 个价格将应用于本项目条目。数量始终来自当前项目。`),ul);
+  if(s.notInProject.length)el('li',tx(`${s.notInProject.length} partida(s) con precio del archivo no existen en este proyecto: no se importan.`,`${s.notInProject.length} priced item(s) of the file do not exist in this project: not imported.`,`文件中 ${s.notInProject.length} 个有价格的条目在本项目中不存在：不导入。`),ul).dataset.kind='not-in-project';
+  if(s.withoutObjects.length)el('li',tx(`${s.withoutObjects.length} partida(s) de «Mis catálogos» del archivo no tienen objetos colocados en este proyecto: entran con 0 ud (0 €) y puedes retirarlas.`,`${s.withoutObjects.length} «My catalogues» item(s) of the file have no objects placed in this project: they come in with 0 pcs (0 €) and can be removed.`,`文件中 ${s.withoutObjects.length} 个目录条目在本项目中没有对象：以 0 件导入，可移除。`),ul).dataset.kind='without-objects';
+  if(s.notCarried.length)el('li',tx(`${s.notCarried.length} precio(s) del archivo no se aplican tal cual (su unidad o su referencia no coincide con la partida actual): revísalos tras importar.`,`${s.notCarried.length} price(s) of the file are not applied as they are (unit or reference does not match the current item): check them after importing.`,`文件中 ${s.notCarried.length} 个价格无法原样应用：导入后请检查。`),ul).dataset.kind='not-carried';
+  if(s.replaced.length||s.removed.length)el('li',tx(`Tu presupuesto actual cambia: ${s.replaced.length} precio(s) se sustituyen por los del archivo y ${s.removed.length} quedan sin precio.`,`Your current budget changes: ${s.replaced.length} price(s) are replaced by the file's and ${s.removed.length} become unpriced.`,`当前预算将变更：${s.replaced.length} 个价格被替换，${s.removed.length} 个变为无价格。`),ul).dataset.kind='replaces';
+  el('li',tx(`IVA: ${vatT(s.vat.before)} → ${vatT(s.vat.after)}${s.ownVat.length?` · ${s.ownVat.length} partida(s) con IVA propio`:''}.`,`VAT: ${vatT(s.vat.before)} → ${vatT(s.vat.after)}${s.ownVat.length?` · ${s.ownVat.length} item(s) with their own VAT`:''}.`,`增值税：${vatT(s.vat.before)} → ${vatT(s.vat.after)}。`),ul).dataset.kind='vat';
+  el('li',tx(`Base imponible: ${tot(s.before)} → ${tot(s.after)}.`,`Net total: ${tot(s.before)} → ${tot(s.after)}.`,`税前合计：${tot(s.before)} → ${tot(s.after)}。`),ul).dataset.kind='totals';
+  const actions=el('div',undefined,box,'tour-video-actions'),ok=btn(tx('Importar','Import','导入'),actions,'btn primary');ok.id='budgetImportConfirm';
+  if(!p.sameSubject){const lab=el('label',undefined,box),chk=el('input',undefined,lab);chk.type='checkbox';chk.id='budgetImportOther';el('span',tx(' Este archivo es el presupuesto de OTRO proyecto. Quiero usar sus precios aquí; todas las partidas entran sin revisar.',' This file is the budget of ANOTHER project. I want to use its prices here; every item comes in unreviewed.',' 此文件是其他项目的预算。我要在此使用其价格；所有条目均为未审核。'),lab);
+   ok.disabled=true;chk.onchange=()=>{ok.disabled=!chk.checked;};box.insertBefore(lab,actions);}
+  const no=btn(tx('Cancelar','Cancel','取消'),actions);no.id='budgetImportCancel';no.onclick=()=>{pendingImport=null;draw('budgetImport');say(tx('Importación cancelada: el presupuesto no ha cambiado.','Import cancelled: the budget has not changed.','已取消导入：预算未更改。'));};
+  ok.onclick=()=>{const q=pendingImport;pendingImport=null;
+   // The preview is only valid for the project and the budget it was computed on.
+   if(!q||q.pid!==app.project.id||q.base!==B.serializeBudget(state.budget)){draw('budgetImport');say(tx('El presupuesto o el proyecto han cambiado desde la vista previa: vuelve a elegir el archivo.','The budget or the project changed since the preview: choose the file again.','预览后预算或项目已更改：请重新选择文件。'));return;}
+   state={...q.result,savedBefore:true};save();draw('budgetImport');say(tx(`Presupuesto importado de ${q.name}: ${q.summary.applied.length} precio(s) aplicados. Revisa las partidas antes de entregarlo.`,`Budget imported from ${q.name}: ${q.summary.applied.length} price(s) applied. Review the items before delivering it.`,`已从 ${q.name} 导入预算：应用了 ${q.summary.applied.length} 个价格。`));};
+ }
  function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);}
  function summary(){try{const r=load();return B.calculateBudget(r.budget);}catch{return null;}}
  // C4: read-only access to the same draft summary() uses, plus whether a budget was ever prepared. Never saves.
  function current(){try{const r=load();return {budget:r.budget,saved:r.savedBefore};}catch{return null;}}
  // M2 (FT3D-8 S4): the single write path for other Presupuestar tools (reference prices). Same storage and validation
  // as this dialog; only the open project's own budget is accepted (identity by subject id, never by name).
- function commit(budget){const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
+ function commit(budget){requireSafeIdentity();const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
   const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(b));if(!write(BUDGETS,all))throw Error(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));if(state)state.budget=b;return b;}
  // CAT-04: redraw the open dialog from the saved document (after «Precios de referencia» or a catalogue action).
- function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;state=load();if(!state.catalogError)save();draw();dialog.scrollTop=keep;}
+ function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;pendingImport=null;state=load();if(!state.catalogError&&!identityUnsafe())save();draw();dialog.scrollTop=keep;}
  window.FloorPlanBudgetUI={open,summary,current,commit,refresh,get budget(){return state?.budget||null;}};
 })();

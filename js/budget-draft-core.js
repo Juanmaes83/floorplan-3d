@@ -59,5 +59,35 @@
   b.chapters=b.chapters.filter(c=>b.items.some(i=>i.chapterId===c.id));
   return {budget:B.validateBudget(b),reviewInvalidated:changed,unitConflicts,tariffKeys:Object.fromEntries(all.filter(l=>l.tariffKey).map(l=>[l.key,l.tariffKey]))};
  }
- return {draft,lines,CHAPTERS};
+ /* CON-03 · bring a budget FILE (the JSON Presupuestar downloads) back as the `previous` of draft(). Nothing is
+    computed here: the file is validated as FloorPlanBudgetV1 and handed to the same draft, which takes quantities from
+    the open project and keeps prices, waste, VAT and references by item id (XR-01 unit rule included).
+    - Same project (subject.id): returned as is — reviews hold only where draft() finds the same quantity.
+    - Another project: allowed only as an explicit decision of the professional (`sameSubject:false` is for the caller
+      to confirm). The copy is re-addressed to the open project and EVERY review is withdrawn: a review made on another
+      project is never shown as made on this one. Building or other subjects are refused. */
+ function adopt(incoming,project){
+  const b=B.validateBudget(B.upgradeBudget?B.upgradeBudget(incoming):incoming);
+  if(b.subject?.type!=='project'||typeof b.subject.id!=='string')throw Error('El archivo no es el presupuesto de un proyecto.');
+  const same=b.subject.id===project.id,out=JSON.parse(B.serializeBudget(b));
+  if(!same){out.id=`bud_${project.id}`;out.subject={type:'project',id:project.id};for(const it of out.items)it.review={status:'unreviewed',reviewedAt:null};}
+  return {previous:B.validateBudget(out),sameSubject:same,sourceSubjectId:b.subject.id};
+ }
+ /* What importing would change, from the three documents involved (all read with B.calculateBudget, no other sums):
+    current = the budget Presupuestar shows now; incoming = adopt().previous; candidate = draft() over incoming. */
+ function importSummary(current,incoming,candidate){
+  const cur=new Map((current?.items||[]).map(i=>[i.id,i])),cand=new Map(candidate.items.map(i=>[i.id,i])),carries=i=>i.unitPrice!==null||!!i.priceReference;
+  const total=b=>{const t=B.calculateBudget(b).totals;return {net:t.net.amount,netComplete:t.net.complete,gross:t.gross.amount,grossComplete:t.gross.complete};};
+  // CAT-04 keeps a priced catalogue item whose objects are not in the project with 0 units (it can be retired there).
+  const empty=i=>cand.get(i.id)?.quantity?.value===0;
+  return {applied:incoming.items.filter(i=>i.unitPrice!==null&&cand.get(i.id)?.unitPrice===i.unitPrice&&!empty(i)).map(i=>i.id),
+   withoutObjects:incoming.items.filter(i=>carries(i)&&cand.has(i.id)&&empty(i)).map(i=>i.id),
+   notInProject:incoming.items.filter(i=>carries(i)&&!cand.has(i.id)).map(i=>i.id),
+   notCarried:incoming.items.filter(i=>i.unitPrice!==null&&cand.has(i.id)&&cand.get(i.id).unitPrice!==i.unitPrice).map(i=>i.id),
+   replaced:[...cur.values()].filter(i=>i.unitPrice!==null&&cand.has(i.id)&&cand.get(i.id).unitPrice!==null&&cand.get(i.id).unitPrice!==i.unitPrice).map(i=>i.id),
+   removed:[...cur.values()].filter(i=>i.unitPrice!==null&&(!cand.has(i.id)||cand.get(i.id).unitPrice===null)).map(i=>i.id),
+   ownVat:candidate.items.filter(i=>Object.prototype.hasOwnProperty.call(i,'taxRatePercent')).map(i=>i.id),
+   vat:{before:current?current.taxRatePercent:null,after:candidate.taxRatePercent},before:current?total(current):null,after:total(candidate)};
+ }
+ return {draft,lines,CHAPTERS,adopt,importSummary};
 });

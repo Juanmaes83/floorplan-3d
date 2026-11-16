@@ -2,6 +2,10 @@
 # sobre la Evolución 4D de FT3D-8. Datos sintéticos de laboratorio; sin publicar, sin credenciales; cualquier petición
 # fuera del servidor local hace fallar las pruebas. Plan ≠ ejecutado: lo comprueban las pruebas.
 name: OBR-02 + OBR-03 - planned 4D
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     paths:

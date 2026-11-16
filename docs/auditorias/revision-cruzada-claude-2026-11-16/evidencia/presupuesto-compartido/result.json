@@ -1,0 +1,32 @@
+{
+ "original": {
+  "libId": "prj_c3c2600a3c4c4079a97aedd5c739beac",
+  "projectId": "prj_reference-home",
+  "price": 11
+ },
+ "importedCopy": {
+  "libId": "prj_6ba40464f41244f68b1367619b0d7f48",
+  "projectId": "prj_reference-home",
+  "priceSeen": 11
+ },
+ "originalAfterEditingCopy": {
+  "libId": "prj_c3c2600a3c4c4079a97aedd5c739beac",
+  "projectId": "prj_reference-home",
+  "price": 99,
+  "label": "Precio de la copia",
+  "budgetKeys": [
+   "prj_reference-home"
+  ],
+  "entries": [
+   {
+    "lib": "prj_c3c2600a3c4c4079a97aedd5c739beac",
+    "project": "prj_reference-home"
+   },
+   {
+    "lib": "prj_6ba40464f41244f68b1367619b0d7f48",
+    "project": "prj_reference-home"
+   }
+  ]
+ },
+ "SHARED_BUDGET": true
+}

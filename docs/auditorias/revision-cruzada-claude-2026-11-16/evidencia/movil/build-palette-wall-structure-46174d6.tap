@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: creation palette 1440x900
+ok 1 - creation palette 1440x900
+  ---
+  duration_ms: 66595.338816
+  type: 'test'
+  ...
+# Subtest: creation palette 390x844
+not ok 2 - creation palette 390x844
+  ---
+  duration_ms: 57256.823941
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:16:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.tap: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('#paletteTabBuild').first()[22m
+    [2m    - locator resolved to <button role="tab" tabindex="0" type="button" class="palette-tab" id="paletteTabBuild" aria-selected="true" aria-controls="paletteBuild">Construir</button>[22m
+    [2m  - attempting tap action[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <button type="button" id="nav3dToggle" aria-expanded="false" class="btn nav3d-toggle" aria-controls="nav3dBody">▸ Navegación</button> from <main id="stage" class="is3d">…</main> subtree intercepts pointer events[22m
+    [2m    - retrying tap action[22m
+    [2m    - waiting 20ms[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <button type="button" id="nav3dToggle" aria-expanded="false" class="btn nav3d-toggle" aria-controls="nav3dBody">▸ Navegación</button> from <main id="stage" class="is3d">…</main> subtree intercepts pointer events[22m
+    [2m    - retrying tap action[22m
+    [2m      - waiting 100ms[22m
+    [2m    35 × waiting for element to be visible, enabled and stable[22m
+    [2m       - element is visible, enabled and stable[22m
+    [2m       - scrolling into view if needed[22m
+    [2m       - done scrolling[22m
+    [2m       - <button type="button" id="nav3dToggle" aria-expanded="false" class="btn nav3d-toggle" aria-controls="nav3dBody">▸ Navegación</button> from <main id="stage" class="is3d">…</main> subtree intercepts pointer events[22m
+    [2m     - retrying tap action[22m
+    [2m       - waiting 500ms[22m
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    press (/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:23:111)
+    async openPalette (/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:24:114)
+    async TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:110:176)
+  ...
+# Subtest: creation palette 844x390
+not ok 3 - creation palette 844x390
+  ---
+  duration_ms: 57102.991633
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:16:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.tap: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('#paletteTabBuild').first()[22m
+    [2m    - locator resolved to <button role="tab" tabindex="0" type="button" class="palette-tab" id="paletteTabBuild" aria-selected="true" aria-controls="paletteBuild">Construir</button>[22m
+    [2m  - attempting tap action[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <button type="button" id="nav3dToggle" aria-expanded="false" class="btn nav3d-toggle" aria-controls="nav3dBody">▸ Navegación</button> from <main id="stage" class="is3d">…</main> subtree intercepts pointer events[22m
+    [2m    - retrying tap action[22m
+    [2m    - waiting 20ms[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <button type="button" id="nav3dToggle" aria-expanded="false" class="btn nav3d-toggle" aria-controls="nav3dBody">▸ Navegación</button> from <main id="stage" class="is3d">…</main> subtree intercepts pointer events[22m
+    [2m    - retrying tap action[22m
+    [2m      - waiting 100ms[22m
+    [2m    37 × waiting for element to be visible, enabled and stable[22m
+    [2m       - element is visible, enabled and stable[22m
+    [2m       - scrolling into view if needed[22m
+    [2m       - done scrolling[22m
+    [2m       - <button type="button" id="nav3dToggle" aria-expanded="false" class="btn nav3d-toggle" aria-controls="nav3dBody">▸ Navegación</button> from <main id="stage" class="is3d">…</main> subtree intercepts pointer events[22m
+    [2m     - retrying tap action[22m
+    [2m       - waiting 500ms[22m
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    press (/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:23:111)
+    async openPalette (/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:24:114)
+    async TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/build-palette.browser.test.cjs:110:176)
+  ...
+# Subtest: declared wall type from the normal editor, example project 1440x900
+ok 4 - declared wall type from the normal editor, example project 1440x900
+  ---
+  duration_ms: 9911.191956
+  type: 'test'
+  ...
+# Subtest: declared wall type from the normal editor, example project 390x844
+not ok 5 - declared wall type from the normal editor, example project 390x844
+  ---
+  duration_ms: 2699.392359
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/wall-structure.browser.test.cjs:15:72'
+  failureType: 'testCodeFailure'
+  error: 'Inicio keeps a gutter from scrolled controls'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/wall-structure.browser.test.cjs:40:89)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 2
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 194657.366169

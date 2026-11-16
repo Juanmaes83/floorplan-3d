@@ -138,7 +138,10 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  const tmp=await fs.mkdtemp(path.join(require('node:os').tmpdir(),'bld-ui-'));await fs.writeFile(path.join(tmp,'edificio.json'),json.bytes);
  const count=(await lib(page)).entries.length;await page.locator('#fileIn').setInputFiles(path.join(tmp,'edificio.json'));
  await page.waitForFunction(n=>JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.length===n+1,count);
- data=await lib(page);const imported=data.entries.find(e=>e.id===data.activeId);assert.equal(imported.kind,'building');assert.equal(digest(imported.building.levels),digest(beforeReload.levels));
+ data=await lib(page);const imported=data.entries.find(e=>e.id===data.activeId);assert.equal(imported.kind,'building');// Identity contract (js/project-library.js): a building file imported where its levels are already stored keeps every
+ // level, geometry and id EXCEPT the project ids already taken, which are new (two stored projects never share a budget).
+ {const strip=ls=>ls.map(l=>({...l,project:{...l.project,id:''}}));assert.equal(digest(strip(imported.building.levels)),digest(strip(beforeReload.levels)));
+  imported.building.levels.forEach((l,i)=>assert.notEqual(l.project.id,beforeReload.levels[i].project.id));}
  const tampered=new Map([...entries].map(([k,v])=>[k,new Uint8Array(v)]));const b2=JSON.parse(new TextDecoder().decode(tampered.get('building.json')));b2.stairs[0].toLevelId='lvl_missing';tampered.set('building.json',new TextEncoder().encode(JSON.stringify(b2)));
  await fs.writeFile(path.join(tmp,'manipulado.zip'),Buffer.from(await P.zip(tampered,{check:B.packagePath}).arrayBuffer()));
  const raw=await page.evaluate(k=>localStorage.getItem(k),KEY);await page.locator('#uploadIn').setInputFiles(path.join(tmp,'manipulado.zip'));

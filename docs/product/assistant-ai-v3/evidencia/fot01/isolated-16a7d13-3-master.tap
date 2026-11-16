@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto
+ok 1 - FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto
+  ---
+  duration_ms: 18621.985441
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19294.873864

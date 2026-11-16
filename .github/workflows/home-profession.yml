@@ -1,9 +1,14 @@
 # HOM-01/HOM-02 · Home por profesión: capability registry (GOV-03 minimum), hero and capabilities per profession,
 # and the welcome, guide, work-area and Render IA regressions that share these files. No AI provider is called.
+# HOM-03: «Nuevos servicios IA» (four verified states, every button opens the real service, CAT-04 never shown).
 name: Home por profesión
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
-    paths: ['index.html', 'js/guide-ui.js', 'js/guide-core.js', 'js/capability-registry.js', 'js/professional-workspace-ui.js', 'js/ai-render-ui.js', 'css/guided-experience.css', 'tests/capability-registry.test.cjs', 'tests/welcome-capabilities.browser.test.cjs', 'tests/professional-entry.browser.test.cjs', 'tests/welcome-generar.browser.test.cjs', '.github/workflows/home-profession.yml']
+    paths: ['index.html', 'js/guide-ui.js', 'js/guide-core.js', 'js/capability-registry.js', 'js/professional-workspace-ui.js', 'js/ai-render-ui.js', 'css/guided-experience.css', 'tests/capability-registry.test.cjs', 'tests/welcome-capabilities.browser.test.cjs', 'tests/professional-entry.browser.test.cjs', 'tests/welcome-generar.browser.test.cjs', 'tests/welcome-ai-services.browser.test.cjs', 'js/assistant-ui.js', 'js/catalog-ui.js', 'js/visual-reform-ui.js', 'js/photo-reform-ui.js', '.github/workflows/home-profession.yml']
   push:
     branches: [master]
     paths: ['js/guide-ui.js', 'js/capability-registry.js', 'css/guided-experience.css', '.github/workflows/home-profession.yml']
@@ -34,3 +39,6 @@ jobs:
       - name: Work areas and Render IA (mocked provider)
         if: always()
         run: node --test --test-concurrency=1 tests/professional-workspace.browser.test.cjs tests/ai-render.browser.test.cjs
+      - name: Nuevos servicios IA (HOM-03)
+        if: always()
+        run: node --test --test-concurrency=1 tests/welcome-ai-services.browser.test.cjs

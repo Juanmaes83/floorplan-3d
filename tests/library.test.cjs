@@ -13,7 +13,9 @@ test('renaming a project updates its portable name without altering independent 
 test('file import preserves the visible original atomically, even when the incoming document has the same ID',()=>{
  const {library,storage}=fixture(),originalId=library.activeId(),visible=library.project();visible.objects.pop();
  const incoming=Core.initial();incoming.name='Importado';let writes=0;const write=storage.setItem;storage.setItem=(k,v)=>{writes++;write(k,v);};
- const imported=library.importProject(visible,incoming,'Importado');assert.equal(writes,1);assert.notEqual(library.activeId(),originalId);assert.deepEqual(imported,incoming);
+ const imported=library.importProject(visible,incoming,'Importado');assert.equal(writes,1);assert.notEqual(library.activeId(),originalId);
+ // Identity contract: same content, never the id of a project already stored (they would share one budget).
+ assert.notEqual(imported.id,incoming.id);assert.match(imported.id,/^prj_[0-9a-f]{32}$/);assert.deepEqual({...imported,id:incoming.id},incoming);assert.equal(library.origin(),incoming.id);
  const reloaded=Library.load(storage,Core.initial());assert.equal(reloaded.list().length,2);reloaded.open(originalId);assert.deepEqual(reloaded.project(),visible);
 });
 test('failed or invalid file imports leave every entry and the active project unchanged',()=>{

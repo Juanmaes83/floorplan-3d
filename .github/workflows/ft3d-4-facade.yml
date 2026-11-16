@@ -2,6 +2,10 @@
 # reverse, scrub, building, phones). The default façade is the most expressive one of the project (owner decision
 # 2026-11-06): on the example, façade B, never an invented one.
 name: FT3D-4 façade
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     branches: [master]

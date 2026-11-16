@@ -1,6 +1,6 @@
-/* ENT-01 I1B: visual preview only (index.html?entrega=vista-previa).
+/* ENT-01: read-only preview or published 3D visit (index.html?entrega=…).
    The same Rubik app, in a read-only client mode started by the boot script in <head> (in-memory storage, editor chrome
-   hidden): this file loads the authorised delivery snapshot (FloorPlanDelivery contract) from the professional's same-origin opener only (no /api/delivery access in I1B) — imports it through Rubik's own
+   hidden): this file loads the authorised delivery snapshot from the same-origin opener or /api/delivery, then imports it through Rubik's own
    importer, and offers the client exactly what the delivery says is available:
    - «Explorar la vivienda»: Rubik's 3D view and its walk mode (keyboard + mouse on a computer, joystick + swipe on a
      phone), with doors and collisions, unchanged;
@@ -179,7 +179,8 @@
     window.opener.postMessage({type:'rubik-delivery-ready'},location.origin);
    });
   }
-  throw Error('missing'); // I1B cannot fetch a publicly shared visit; that requires a separately approved release.
+  const r=await fetch('api/delivery?f='+encodeURIComponent(D.source),{cache:'no-store'});
+  if(r.status===404)throw Error('missing');if(!r.ok)throw Error('network');return r.json();
  }
  async function load(){
   render('loading');

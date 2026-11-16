@@ -3,6 +3,10 @@
 # Chromium + SwiftShader (CPU): NO sustituye a las pruebas en iPhone, Android ni GPU reales (protocolo GOV-07).
 # Datos sintéticos; no publica nada ni usa credenciales; cualquier petición fuera del servidor local hace fallar.
 name: GOV-07 - WebGL resilience
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     paths:

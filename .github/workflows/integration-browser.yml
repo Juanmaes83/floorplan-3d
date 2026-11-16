@@ -1,5 +1,9 @@
 # CI integration gate. Product code is unchanged; the recorder smoke runs reduced resolution on hosted software rendering.
 name: Integrated browser regressions
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
   pull_request:
     branches: [integration/2026-10-23-full, master]

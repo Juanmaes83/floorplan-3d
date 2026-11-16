@@ -13,14 +13,16 @@ test('directional marker normalizes heading and refuses malformed pose',()=>{
  assert.equal(Map.marker({x:0,y:0,dx:0,dy:0},1000),null);
  assert.equal(Map.marker({x:0,y:0,dx:NaN,dy:1},1000),null);
 });
-test('client boot is preview-only and forbids remote delivery loading',()=>{
+test('client boot isolates preview and validated remote delivery before app modules load',()=>{
  const index=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
  const client=fs.readFileSync(path.join(__dirname,'../js/delivery-client.js'),'utf8');
  const ui=fs.readFileSync(path.join(__dirname,'../js/delivery-preview-ui.js'),'utf8');
- assert.match(index,/query\.get\('entrega'\)!=='vista-previa'/);
+ assert.match(index,/const source=query\.get\('entrega'\)/);
+ assert.match(index,/source\.length>2048/);
  assert.match(index,/Object\.defineProperty\(window,'localStorage'/);
  assert.match(client,/FloorPlanClientDelivery/);
- assert.doesNotMatch(client,/fetch\('api\/delivery/);
+ assert.match(client,/fetch\('api\/delivery\?f='/);
+ assert.match(client,/Delivery\.validate\(raw\)/);
  assert.doesNotMatch(ui,/fetch\('api\/share|fetch\('api\/unshare|x-rubik-share-token/i);
  assert.match(ui,/event\.origin!==location\.origin/);
  assert.match(ui,/event\.source/);

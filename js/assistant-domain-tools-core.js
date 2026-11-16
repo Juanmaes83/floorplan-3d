@@ -36,6 +36,13 @@
    return {netComputable:t.net.complete,grossComputable:t.gross.complete,unpriced:t.unpricedItemIds.length,
     quantityPending:pend.length,quantityPendingItems:pend.slice(0,50).map(id=>({id,description:desc.get(id)||id,kind:isCatItem(id)?'commercial':'geometric'})),
     quantityEstimated:est.length,taxPending,taxMissingItems:taxMissing,taxItems:(c.lines||[]).length,unreviewedPrices:t.unreviewedPriceItemIds.length};}
+  // REC-238 (F8/F8-C for any model): the VAT of each item with its provenance — an own rate (0 % included: a rate,
+  // not a missing value) or the budget's inherited one. Without it a model only sees the general rate.
+  const ownVat=i=>Object.prototype.hasOwnProperty.call(i,'taxRatePercent')&&Number.isFinite(i.taxRatePercent);
+  function vatOf(budget,c){const desc=new Map(budget.items.map(i=>[i.id,typeof i.description==='string'?i.description.slice(0,120):i.id])),own=budget.items.filter(ownVat);
+   return {budgetRatePercent:Number.isFinite(budget.taxRatePercent)?budget.taxRatePercent:null,ownRateItems:own.slice(0,50).map(i=>({id:i.id,description:desc.get(i.id)||i.id,ratePercent:i.taxRatePercent})),
+    inheritingItems:budget.items.length-own.length,withoutRateItems:(c.lines||[]).filter(l=>l.effectiveTaxRatePercent===null||l.effectiveTaxRatePercent===undefined).slice(0,50).map(l=>({id:l.id,description:desc.get(l.id)||l.id}))};}
+  const lineVat=(it,l)=>it?{ratePercent:Number.isFinite(l?.effectiveTaxRatePercent)?l.effectiveTaxRatePercent:null,source:ownVat(it)?'item':Number.isFinite(l?.effectiveTaxRatePercent)?'budget':null}:null;
   const UNIT_OF=u=>({unit:'ud',m:'m',m2:'m²',m3:'m³',kg:'kg'}[u]||u||null);
   const priceView=p=>p?{unitPrice:Number.isFinite(p.unitPrice)?p.unitPrice:null,unit:short(p.unit,8),label:short(p.label),asOf:short(p.asOf,10),edition:short(p.edition,40)}:null;
   const MAX_LIST=200;
@@ -108,9 +115,9 @@
           unpricedItems:t.unpricedItemIds.slice(0,50).map(id=>({id,description:desc.get(id)||id})),
           net:money(t.net),tax:money(t.tax),gross:money(t.gross),reviewComplete:t.reviewComplete,unpricedItemIds:t.unpricedItemIds.slice(0,MAX_LIST),
           unreviewedPriceItemIds:t.unreviewedPriceItemIds.slice(0,MAX_LIST),incompleteQuantityItemIds:t.incompleteQuantityItemIds.slice(0,MAX_LIST),unavailableQuantityItemIds:t.unavailableQuantityItemIds.slice(0,MAX_LIST),
-          taxRatePercent:Number.isFinite(ctx.budget.taxRatePercent)?ctx.budget.taxRatePercent:null,incomplete:incompleteOf(ctx.budget,c)},
+          taxRatePercent:Number.isFinite(ctx.budget.taxRatePercent)?ctx.budget.taxRatePercent:null,vat:vatOf(ctx.budget,c),incomplete:incompleteOf(ctx.budget,c)},
           prov(ctx,'FloorPlanBudget.calculateBudget',{engine:'FloorPlanBudget',budgetId:c.budgetId}),
-          ['Presupuesto previsto, no gasto ejecutado ni presupuesto aprobado. Un precio o una cantidad que faltan no equivalen a cero.']);}
+          ['Presupuesto previsto, no gasto ejecutado ni presupuesto aprobado. Un precio o una cantidad que faltan no equivalen a cero.','IVA por partida: las de vat.ownRateItems llevan su IVA propio (un 0 % es un tipo, no un dato que falta); las demás heredan el general (vat.budgetRatePercent); las de vat.withoutRateItems no tienen IVA aplicable.']);}
       if(tool==='get_layout_review'){
         if(args.clearanceMm!==undefined&&!(typeof args.clearanceMm==='number'&&Number.isFinite(args.clearanceMm)&&args.clearanceMm>0&&args.clearanceMm<=3000))
           return failure(callId,'invalid_arguments','clearanceMm debe ser un número entre 0 y 3000 mm');
@@ -150,7 +157,7 @@
             price:it&&Number.isFinite(it.unitPrice)?{unitPrice:it.unitPrice,unit:short(q?.unit,8),unitLabel:UNIT_OF(q?.unit),reviewed:it.review?.status==='reviewed',
               source:{type:short(it.priceSource?.type,30),label:short(it.priceSource?.label),asOf:short(it.priceSource?.asOf,10)},
               reference:it.priceReference?{code:short(it.priceReference.code,60),unit:short(it.priceReference.unit,8),edition:short(it.priceReference.source?.edition,40)}:null}:null,
-            unitConflict:conflict,
+            unitConflict:conflict,vat:lineVat(it,l),
             reference:priceView(r.reference),sheetPrice:priceView(r.sheetPrice),sheetStatus:short(r.sheet?.status,30),versionChanged:!!r.versionChanged,synthetic:!!r.synthetic};});
         return result(callId,{budgetId:c.budgetId,currency:c.currency,saved:ctx.budgetSaved===true,products:list,count:list.length,
           chapter:ch?{net:money(ch.totals.net),unpricedItemIds:ch.totals.unpricedItemIds.slice(0,MAX_LIST)}:null,total:{gross:money(c.totals.gross),unpricedItemIds:c.totals.unpricedItemIds.slice(0,MAX_LIST),incomplete:incompleteOf(ctx.budget,c)}},

@@ -25,7 +25,9 @@ after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));if
 const COLOR_FNS=`const rgb=c=>{const m=String(c).match(/[\\d.]+/g)||[];return m.slice(0,3).map(Number).join(',')+(m[3]!==undefined&&+m[3]<1?'@'+m[3]:'');};
  const lum=c=>{const [r,g,b]=String(c).match(/[\\d.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4;});return .2126*r+.7152*g+.0722*b;};
  const contrast=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
- const action=(()=>{const p=document.createElement('i');p.style.color='var(--action)';document.body.append(p);const c=getComputedStyle(p).color;p.remove();return rgb(c);})();`;
+ const action=(()=>{const p=document.createElement('i');p.style.color='var(--action)';(document.querySelector('.app')||document.body).append(p);const c=getComputedStyle(p).color;p.remove();return rgb(c);})();`;
+// --action is resolved inside .app: the workspace theme (css/professional-workspace.css) redefines it there
+// (--rubik-petrol), and every control the checks look at lives in that scope.
 
 // 844×390 runs twice: with touch (phone, one-row header) and with a mouse (narrow window, the header wraps to three rows).
 for(const [viewport,touch] of [[{width:1440,height:900},false],[{width:390,height:844},true],[{width:844,height:390},true],[{width:844,height:390},false]])
@@ -72,26 +74,36 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
  await shot('01-editor');
  // The phone bar never covers another visible control (its part not clipped by a scrolling container): full editor,
  // both drawers open, and the guided editor.
- const coveredByDock=()=>page.evaluate(()=>{const dock=document.querySelector('#mobileDock');return [...document.querySelectorAll('button,summary,select,input:not([type=hidden]):not([type=file]),a[href]')].filter(e=>!dock.contains(e)&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{let b=e.getBoundingClientRect(),l=b.left,t=b.top,r=b.right,bo=b.bottom;for(let a=e.parentElement;a;a=a.parentElement){const st=getComputedStyle(a);if(/auto|scroll|hidden|clip/.test(st.overflow+st.overflowX+st.overflowY)){const c=a.getBoundingClientRect();l=Math.max(l,c.left);t=Math.max(t,c.top);r=Math.min(r,c.right);bo=Math.min(bo,c.bottom);}}l=Math.max(l,0);t=Math.max(t,0);r=Math.min(r,innerWidth);bo=Math.min(bo,innerHeight);if(r-l<2||bo-t<2)return false;const hit=document.elementFromPoint((l+r)/2,(t+bo)/2);return hit&&dock.contains(hit);}).map(e=>e.id||e.textContent.trim().slice(0,30));});
+ const coveredByDock=()=>page.evaluate(()=>{const dock=document.querySelector('#mobileDock');return [...document.querySelectorAll('button,summary,select,input:not([type=hidden]):not([type=file]),a[href]')].filter(e=>!dock.contains(e)&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&e.checkVisibility()).filter(e=>{let b=e.getBoundingClientRect(),l=b.left,t=b.top,r=b.right,bo=b.bottom;for(let a=e.parentElement;a;a=a.parentElement){const st=getComputedStyle(a);if(/auto|scroll|hidden|clip/.test(st.overflow+st.overflowX+st.overflowY)){const c=a.getBoundingClientRect();l=Math.max(l,c.left);t=Math.max(t,c.top);r=Math.min(r,c.right);bo=Math.min(bo,c.bottom);}}l=Math.max(l,0);t=Math.max(t,0);r=Math.min(r,innerWidth);bo=Math.min(bo,innerHeight);if(r-l<2||bo-t<2)return false;const hit=document.elementFromPoint((l+r)/2,(t+bo)/2);return hit&&dock.contains(hit);}).map(e=>e.id||e.textContent.trim().slice(0,30));});
  if(mobile){
   assert.deepEqual(await coveredByDock(),[],'editor: nothing under the bar');
+  // A closed menu is not rendered (checkVisibility() is false) even though its buttons keep a layout box; what a person
+  // can see is the OPEN menu, so that is checked too: none of its controls may lie under the bar.
+  await page.evaluate(()=>{document.querySelector('details.menu').open=true;});await page.waitForTimeout(150);assert.deepEqual(await coveredByDock(),[],'open «Archivo» menu: nothing under the bar');await close();await page.waitForTimeout(150);
   for(const side of ['lib','panel']){await page.evaluate(s=>drawer(s,true),side);await page.waitForTimeout(450);assert.deepEqual(await coveredByDock(),[],`${side} drawer: nothing under the bar`);await page.evaluate(()=>drawer(null));await page.waitForTimeout(400);}
   await page.evaluate(()=>document.querySelector('#guideResume').click());await page.waitForTimeout(600);
   assert.deepEqual(await coveredByDock(),[],'guided editor: nothing under the bar');await shot('01b-guided');
   await page.evaluate(()=>{document.querySelector('#guideDetails').click();document.querySelector('#guideAllTools').click();drawer(null);});await page.waitForTimeout(600);
  }
 
- // 3. Hierarchy with something to present: «Presentar mi vivienda» is the only action-filled control.
- assert.deepEqual(await filledWithAction(),['presentationBtn'],'one dominant action in the editor with rooms');
+ // 3. Hierarchy with something to present. Since the human review (css/professional-workspace.css «contextual controls
+ // remain secondary to product areas»), «Presentar mi vivienda» is a SECONDARY, outlined control: no control of the
+ // header, palette or FAB is filled with the action colour, so none competes with the product areas.
+ assert.deepEqual(await filledWithAction(),[],'no action-filled control competes in the editor with rooms');
+ const pres=await page.evaluate(new Function(`${COLOR_FNS} const b=document.querySelector('#presentationBtn'),s=b&&getComputedStyle(b);return b&&{visible:!!b.getClientRects().length&&s.visibility!=='hidden',bg:rgb(s.backgroundColor),border:s.borderTopStyle,action};`));
+ assert.ok(pres&&pres.visible,'«Presentar mi vivienda» is present and visible');assert.notEqual(pres.bg,pres.action,'presentation is secondary, not action-filled');assert.equal(pres.border,'solid','presentation keeps its outline');
  assert.notEqual(await page.evaluate(new Function(`${COLOR_FNS} return rgb(getComputedStyle(document.querySelector('#uploadPlanBtn')).backgroundColor);`)),await page.evaluate(new Function(`${COLOR_FNS} return action;`)),'«Subir plano» is secondary');
  assert.equal(await page.locator('#uploadPlanBtn').count(),1);
 
  // 4. Selection is not drawn with the action colour, and text roles keep AA.
  const roles=await page.evaluate(new Function(`${COLOR_FNS}
   const bg=s=>getComputedStyle(document.querySelector(s)).backgroundColor,fg=s=>getComputedStyle(document.querySelector(s)).color;
+  // Contrast is measured against the background the text is really drawn on: an outlined control has a transparent
+  // background, so the first opaque ancestor is used (comparing with rgba(0,0,0,0) would measure against black).
+  const ebg=s=>{for(let n=document.querySelector(s);n;n=n.parentElement){const c=getComputedStyle(n).backgroundColor,m=c.match(/[\\d.]+/g)||[];if(m.length<4||+m[3]===1)return c;}return getComputedStyle(document.body).backgroundColor;};
   const panel=getComputedStyle(document.querySelector('aside.right')).backgroundColor;
   return {pill:rgb(bg('#viewSeg .pill')),tool:rgb(bg('header [data-tool="select"]')),chip:rgb(bg('#tgPanel')),action,
-   cta:contrast(fg('#presentationBtn'),bg('#presentationBtn')),tool_contrast:contrast(fg('header [data-tool="select"]'),bg('header [data-tool="select"]')),
+   cta:contrast(fg('#presentationBtn'),ebg('#presentationBtn')),tool_contrast:contrast(fg('header [data-tool="select"]'),ebg('header [data-tool="select"]')),
    help:contrast(getComputedStyle(document.querySelector('.palette-help')).color,getComputedStyle(document.querySelector('aside.lib')).backgroundColor),
    muted:(()=>{const i=document.createElement('i');i.style.color='var(--ink-muted)';document.body.append(i);const c=getComputedStyle(i).color;i.remove();return contrast(c,panel);})()};`));
  for(const k of ['pill','tool','chip'])assert.notEqual(roles[k],roles.action,`${k}: selection must not use the action colour`);

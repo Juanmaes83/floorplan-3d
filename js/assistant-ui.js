@@ -92,6 +92,9 @@
   push('user',text);emit('ask',{text:text.slice(0,120)});
   try{
    if(state.latencyMs)await new Promise((res,rej)=>{const t=setTimeout(res,state.latencyMs);ctl.signal.addEventListener('abort',()=>{clearTimeout(t);rej(new DOMException('aborted','AbortError'));},{once:true});});
+   // GEN-AI: in «Conversación con IA» mode (js/assistant-gen-ui.js) a real text model answers through /api/assistant,
+   // using the same tools, proposal card and apply/undo; otherwise the guided query below answers, as before.
+   const G=window.RubikAssistantGenUI;if(G?.active()){await G.ask(text,{ctx:context(),signal:ctl.signal,push,emit,showProposal});return;}
    const r=Sess.handle(text,context());
    push('assistant',r.messages[1].text,sourceLine(r));
    emit('answer',{intent:r.intent.intent,tools:r.audit.tools,providerCalls:r.audit.providerCalls,cost:r.audit.cost,figures:r.answer?.figures||[],provenance:r.answer?.provenance||[],error:r.audit.error||null,audit:r.audit});
@@ -142,17 +145,23 @@
   emit('service',{id:s.id,state:s.state});
  }
  // ----- Open / close -----
- function openPanel(){state.open=true;panel.hidden=false;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
+ // Scope isolation: changing project cuts the request in flight, pending proposal and undo.
+ // The in-memory log must always belong to the current project, even while the panel is closed.
+ let scopeProject=app.project?.id||null;
+ function invalidate(reason='scope-changed'){state.pending?.abort();state.proposal=null;state.applied=null;card.hidden=true;card.replaceChildren();card.dataset.state='invalidated';
+  scopeProject=app.project?.id||null;restoreLog();emit('invalidated',{reason});}
+ addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
+ function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
  function closePanel(){state.open=false;panel.hidden=true;document.body.classList.remove('assistant-open');labels();state.pending?.abort();opener.focus({preventScroll:true});emit('close');}
  opener.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closePanel();}});
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
- clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;emit('clear');};
+ clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  mountOpener();labels();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
- window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,
+ window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
   get trace(){return state.trace.map(e=>structuredClone(e));},setLatency(ms){state.latencyMs=Math.max(0,Math.min(10000,Number(ms)||0));}});
 })();

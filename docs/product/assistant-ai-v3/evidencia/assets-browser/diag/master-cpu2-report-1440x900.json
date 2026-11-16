@@ -1,0 +1,247 @@
+{
+ "schema": "rubik-assets-lab-diagnose/1",
+ "viewport": {
+  "width": 1440,
+  "height": 900
+ },
+ "loaderTimeoutMs": 8000,
+ "final": [
+  {
+   "id": "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+   "state": "error",
+   "reason": "Loading aborted",
+   "durationMs": null
+  },
+  {
+   "id": "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+   "state": "error",
+   "reason": "Loading aborted",
+   "durationMs": null
+  },
+  {
+   "id": "ikea-skogsta-mesa-acacia-demo",
+   "state": "error",
+   "reason": "Loading aborted",
+   "durationMs": null
+  },
+  {
+   "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+   "state": "error",
+   "reason": "Loading aborted",
+   "durationMs": null
+  },
+  {
+   "id": "ikea-stockholm-2025-aparador-chapa-roble-demo",
+   "state": "error",
+   "reason": "Loading aborted",
+   "durationMs": null
+  },
+  {
+   "id": "ikea-nordli-comoda-de-5-cajones-blanco-demo",
+   "state": "error",
+   "reason": "Loading aborted",
+   "durationMs": null
+  }
+ ],
+ "aborted": [
+  "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+  "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+  "ikea-skogsta-mesa-acacia-demo",
+  "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+  "ikea-stockholm-2025-aparador-chapa-roble-demo",
+  "ikea-nordli-comoda-de-5-cajones-blanco-demo"
+ ],
+ "machine": {
+  "cpus": 4,
+  "model": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "affinity": "0,1",
+  "memTotalMB": 16088,
+  "memFreeMB": 14684,
+  "loadavgStart": 2.68,
+  "cpuBusyDuringScene": [
+   0.92,
+   0.87,
+   0,
+   0
+  ]
+ },
+ "versions": {
+  "node": "v22.23.4",
+  "playwright": "1.63.0",
+  "chrome": "153.0.8010.12",
+  "os": "Linux 6.18.44-fc-v470"
+ },
+ "timeline": [
+  {
+   "ms": 7048,
+   "states": [
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    }
+   ],
+   "loadavg": 2.68
+  },
+  {
+   "ms": 7773,
+   "states": [
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    }
+   ],
+   "loadavg": 2.68
+  },
+  {
+   "ms": 9204,
+   "states": [
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    },
+    {
+     "state": "loading",
+     "reason": null,
+     "durationMs": null
+    }
+   ],
+   "loadavg": 2.68
+  },
+  {
+   "ms": 9805,
+   "states": [
+    {
+     "state": "error",
+     "reason": "Loading aborted",
+     "durationMs": null
+    },
+    {
+     "state": "error",
+     "reason": "Loading aborted",
+     "durationMs": null
+    },
+    {
+     "state": "error",
+     "reason": "Loading aborted",
+     "durationMs": null
+    },
+    {
+     "state": "error",
+     "reason": "Loading aborted",
+     "durationMs": null
+    },
+    {
+     "state": "error",
+     "reason": "Loading aborted",
+     "durationMs": null
+    },
+    {
+     "state": "error",
+     "reason": "Loading aborted",
+     "durationMs": null
+    }
+   ],
+   "loadavg": 2.68
+  }
+ ],
+ "console": [
+  {
+   "t": 1794821027497,
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+   "t": 1794821033622,
+   "type": "warning",
+   "text": "[.WebGL-0x181402314c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  },
+  {
+   "t": 1794821035080,
+   "type": "warning",
+   "text": "[.WebGL-0x181402314c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  },
+  {
+   "t": 1794821035598,
+   "type": "warning",
+   "text": "[.WebGL-0x181402314c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  },
+  {
+   "t": 1794821036322,
+   "type": "warning",
+   "text": "[.WebGL-0x181402314c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  }
+ ]
+}

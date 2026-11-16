@@ -1,0 +1,186 @@
+{
+ "tree": "e94e6daa3c64286a91f563864e1f6052a56a7fd5",
+ "dirty": false,
+ "createdAt": "2026-11-15T11:59:25.354Z",
+ "matrix": [
+  {
+   "id": "render-ai",
+   "state": "available",
+   "name": "Render IA fotorrealista",
+   "button": "Ver Render IA",
+   "opens": "Home → banda «Render IA» existente (sin abrir el diálogo de pago)",
+   "ok": true
+  },
+  {
+   "id": "assistant",
+   "state": "pilot",
+   "name": "Asistente RUBIK · consulta guiada",
+   "button": "Abrir el Asistente",
+   "opens": "Editor → panel «Asistente» (#assistantPanel)",
+   "ok": true
+  },
+  {
+   "id": "catalogs",
+   "state": "pilot",
+   "name": "Mis catálogos",
+   "button": "Abrir Mis catálogos",
+   "opens": "Mi estudio → «Mis catálogos» (#catalogDialog)",
+   "ok": true
+  },
+  {
+   "id": "visual-studio",
+   "state": "simulation",
+   "name": "Estudio de imágenes",
+   "button": "Ver la simulación",
+   "opens": "Entregar → «Estudio de imágenes» (#visualStudioDialog, simulación)",
+   "ok": true
+  },
+  {
+   "id": "photo-reform",
+   "state": "simulation",
+   "name": "Reformar desde fotografía",
+   "button": "Ver la simulación",
+   "opens": "Entregar → «Reformar desde fotografía» (#photoReformDialog, simulación)",
+   "ok": true
+  },
+  {
+   "id": "assistant-llm",
+   "state": "preparation",
+   "name": "Asistente conversacional con IA",
+   "button": null,
+   "opens": "— (sin botón: en preparación)",
+   "ok": true
+  },
+  {
+   "id": "photo-real",
+   "state": "preparation",
+   "name": "Imágenes reales desde tu foto",
+   "button": null,
+   "opens": "— (sin botón: en preparación)",
+   "ok": true
+  }
+ ],
+ "gatedNotShown": [
+  "catalog-budget",
+  "assistant-catalogs"
+ ],
+ "apiRequests": [],
+ "pageErrors": [],
+ "videos": [
+  {
+   "file": "home-ai-services-1440x900.webm",
+   "durationS": 16.96,
+   "decoded": true
+  }
+ ],
+ "files": [
+  {
+   "file": "home-ai-1440x900-neutral.jpg",
+   "sha256": "982b03ce76aac7ddf57556a112263493fe980bdf562a90af4fef5e03bf95e709"
+  },
+  {
+   "file": "home-ai-1440x900-architecture.jpg",
+   "sha256": "9f76dbffa35ddc57e60229a0767ed87819b24b381e6dd77773e1c7fef7d55ed8"
+  },
+  {
+   "file": "home-ai-1440x900-real-estate.jpg",
+   "sha256": "1da98f7dcaffd90f2d04d60e949bc98b4f93f3aca694535b1133c00f2bfe27a7"
+  },
+  {
+   "file": "home-ai-1440x900-developer.jpg",
+   "sha256": "406102f4acad5896d3c02ecba9018dd836478a1d0d8caf3079b6bbb05142ee66"
+  },
+  {
+   "file": "home-ai-1440x900-renovation.jpg",
+   "sha256": "0a307db1c073c79b36efee63dbfcabd27ca5876a00781d6d6b7093dd3e50ff59"
+  },
+  {
+   "file": "home-ai-1440x900-interior.jpg",
+   "sha256": "0a307db1c073c79b36efee63dbfcabd27ca5876a00781d6d6b7093dd3e50ff59"
+  },
+  {
+   "file": "home-ai-1440x900-construction.jpg",
+   "sha256": "157e84991ce1d334ef94bd738c1e3f60e62d1414fb1a82a709ab58378c87ce03"
+  },
+  {
+   "file": "home-ai-390x844-neutral.jpg",
+   "sha256": "d500f4ede2944e4f4aafcef3ddf7560cb3ba41d96c9ff483eaeb2c3d8bf8c462"
+  },
+  {
+   "file": "home-ai-390x844-architecture.jpg",
+   "sha256": "3a1ceac168b5000152d77311a277132b6760956739a7e5472d869082005e7eb6"
+  },
+  {
+   "file": "home-ai-390x844-real-estate.jpg",
+   "sha256": "375b523d392cd636ba7219570259827427deb2b258cc8982db774bebf8088a37"
+  },
+  {
+   "file": "home-ai-390x844-developer.jpg",
+   "sha256": "bc48c58ad8ec98ebaf2277d9e9f303f38478219276bf8dca36d3ea72352115a1"
+  },
+  {
+   "file": "home-ai-390x844-renovation.jpg",
+   "sha256": "3315d859865ffd53d96ca7c0f9cf0fb7ff06d610f8e72f8109a8f918a5fb634d"
+  },
+  {
+   "file": "home-ai-390x844-interior.jpg",
+   "sha256": "c77186f4de25d904ec7c403602724806cd70cd87ff50f9f6eaa389608fab76b0"
+  },
+  {
+   "file": "home-ai-390x844-construction.jpg",
+   "sha256": "d500f4ede2944e4f4aafcef3ddf7560cb3ba41d96c9ff483eaeb2c3d8bf8c462"
+  },
+  {
+   "file": "home-ai-844x390-neutral.jpg",
+   "sha256": "6e8ab3cd8425f265fa7cf14dbe510b6e13597a8700631240d153cb44e70ce841"
+  },
+  {
+   "file": "home-ai-844x390-architecture.jpg",
+   "sha256": "f76bcd365a84c4202633cc8a5afce7019e4e83029382fc89bd6cc0839415a598"
+  },
+  {
+   "file": "home-ai-844x390-real-estate.jpg",
+   "sha256": "7832a23b13699def540d8c9f786c248adb220fef21fae0be3f31aed99e4cf0f9"
+  },
+  {
+   "file": "home-ai-844x390-developer.jpg",
+   "sha256": "3c144bdab5ef8f8f5c9bdc6ee3b414bbac7f06091db001bc942474af847c57e2"
+  },
+  {
+   "file": "home-ai-844x390-renovation.jpg",
+   "sha256": "fc696e8651f4fdc1ab17823a35183669a7b40491914c90f349d6a3570f3cab64"
+  },
+  {
+   "file": "home-ai-844x390-interior.jpg",
+   "sha256": "43fe5ef093726c8b6193d7140f836bf0140de0641614d570f6aad56438646939"
+  },
+  {
+   "file": "home-ai-844x390-construction.jpg",
+   "sha256": "fc696e8651f4fdc1ab17823a35183669a7b40491914c90f349d6a3570f3cab64"
+  },
+  {
+   "file": "opens-render-ai.jpg",
+   "sha256": "af12e9c6335a64593c2f12ae241cacfce3c3c76ecc1766715f394e2d807a1cb1"
+  },
+  {
+   "file": "opens-assistant.jpg",
+   "sha256": "d69da1aa981f0fe206fe70e7294b42c11429bbff992938f5031ceeb53dd1034d"
+  },
+  {
+   "file": "opens-catalogs.jpg",
+   "sha256": "c987ff0354e325c66682c0d0299c1208f050a94cc3e255ab871552ff2b959b95"
+  },
+  {
+   "file": "opens-visual-studio.jpg",
+   "sha256": "1e946f0bc7b22e29b0b913a234d81f09666814cbe3b77a8ee581fdc0485e3713"
+  },
+  {
+   "file": "opens-photo-reform.jpg",
+   "sha256": "1ad1802a24e4302687b3b72201334d4f3a329b65e369794481871bfb430a613c"
+  },
+  {
+   "file": "home-ai-services-1440x900.webm",
+   "sha256": "c12e13d013d5b30d57d3d8fcdb0c521a2740097ef847fbd6861bed3d2d515dfe"
+  }
+ ]
+}
