@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "docs/auditoria-consolidacion-2026-11-16": false
+    }
+  }
+}
