@@ -71,7 +71,7 @@ jobs:
       - name: Tool versions
         run: node --version && NODE_PATH=$NODE_PATH node -e 'console.log("playwright", require("playwright/package.json").version)' && "$CHROME" --version && ffmpeg -version | head -1 && ffprobe -version | head -1 && uname -a
       - name: Real editor (desktop, areas, i18n, keyboard, latency, adversarial, mobile touch and landscape)
-        run: node --test --test-concurrency=1 tests/assistant-ai-v2.browser.test.cjs tests/smart-furnishing.browser.test.cjs tests/assistant-gen.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.browser.test.cjs tests/smart-furnishing.browser.test.cjs tests/assistant-gen.browser.test.cjs tests/assistant-gen-cat04.browser.test.cjs
       - name: Recorded walkthrough (4 videos, ffprobe + full ffmpeg decode, frames, manifest with sha256; assertions included)
         run: node scripts/qa/record-assistant.cjs qa-results/assistant-ai-v2
       - uses: actions/upload-artifact@v4

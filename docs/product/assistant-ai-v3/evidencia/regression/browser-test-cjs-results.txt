@@ -1,0 +1,40 @@
+tests/browser.test.cjs in the regression run (16a7d13): 39 tests · ok 39 · fail 0 · skip 0 · missing 0
+ok #19 2D reference drawing and actual edit/duplicate/history/persistence remain functional
+ok #20 actual file import and export preserve full F0 contract including optional data
+ok #21 room finishes, measurements/history and wall demolition update the canonical project
+ok #22 opening and exporting a project does not add absent optional fields
+ok #23 file handler rejects invalid inputs atomically with visible element-specific errors
+ok #24 hostile names and material names stay text; ID/color payloads cannot create events
+ok #25 browser legacy migration is repeatable and keeps the original key
+ok #26 mobile touch placement and responsive 2D are usable in emulation
+ok #27 3D renders the same project, follows imported geometry and returns to 2D
+ok #28 F1 completion: local project UI, reload, isolation, confirmation and full import/export
+ok #29 F1 completion: touch 2D/3D 390x844
+ok #30 F1 completion: touch 2D/3D 844x390
+ok #31 F1 completion: no WebGL gives readable message and keeps 2D editable
+ok #32 F1 completion: collection adopts F1a migration and preserves both historical keys
+ok #33 F1b full workflow 390x844
+ok #34 F1b full workflow 844x390
+ok #35 F1b full workflow 1440x900
+ok #36 F1b storage/image editing and shared-reference deletion stay local and recoverable
+ok #37 F1b rejects signature-valid but corrupt image payload without changing projects
+ok #38 F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history
+ok #39 image import clarity and complete WebP workflow 360x800
+ok #40 image import clarity and complete WebP workflow 390x844
+ok #41 image import clarity and complete WebP workflow 844x390
+ok #42 image import clarity and complete WebP workflow 1440x900
+ok #43 image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration
+ok #44 image import failures preserve current project, collection and image keys atomically
+ok #45 upload control label and accessible help follow Spanish, English and Chinese
+ok #46 F2 local wall assistance privacy/review 360x800
+ok #47 F2 local wall assistance privacy/review 390x844
+ok #48 F2 local wall assistance privacy/review 844x390
+ok #49 F2 local wall assistance privacy/review 1440x900
+ok #50 F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits
+ok #51 F2 raw export private snapshot 360x800
+ok #52 F2 raw export private snapshot 390x844
+ok #53 F2 raw export private snapshot 844x390
+ok #54 F2 raw export private snapshot 1440x900
+ok #55 F2 raw export invalidates pending download on reference, scale, image, project and review changes
+ok #56 room labels and guide selection preserve legacy names and prefer explicit family
+ok #57 room properties show localized legacy name without saving and distinguish unspecified type

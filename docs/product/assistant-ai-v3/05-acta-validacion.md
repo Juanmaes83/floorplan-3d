@@ -1,6 +1,6 @@
 # ASISTENTE GENERATIVO — ACTA DE VALIDACIÓN (sin gasto)
 
-**PR:** [Juanmaes83/floorplan-3d#238](https://github.com/Juanmaes83/floorplan-3d/pull/238) (Draft, apilada sobre #237).
+**PR:** [Juanmaes83/floorplan-3d#238](https://github.com/Juanmaes83/floorplan-3d/pull/238) (Draft). Desde el 2026-11-16 reconciliada con `master@46174d6`, que ya contiene #237: ver doc 07.
 **MAXIMA SEGURIDAD · STOP_GASTO · NO MERGE · NO PRODUCTION.**
 
 El SHA, la CI y el Preview del HEAD definitivo se registran en la descripción de #238 cuando termina su CI.

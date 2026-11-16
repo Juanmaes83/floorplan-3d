@@ -115,9 +115,10 @@ api/assistant.js ── puertas cerradas por defecto, política y definiciones d
 
 ## 6. Relación con CAT-04
 
-- Esta rama se **apila** sobre #237 y usa sus herramientas de solo lectura (`list_catalog_products`, `get_placed_products`, `get_visual_references`) sin duplicarlas.
-- No modifica los núcleos de CAT-04. En `js/assistant-ui.js` (compartido con CAT-04) añade solo el enganche del modo IA y el borrado del historial.
-- Orden de integración propuesto: #237 primero, después esta PR.
+- #237 ya está en `master` (`46174d6`). Esta rama se ha **reconciliado** con ese `master` mediante un merge sin reescribir historia (doc 07), y usa sus herramientas de solo lectura (`list_catalog_products`, `get_placed_products`, `get_visual_references`) sin duplicarlas.
+- En `js/assistant-ui.js` (compartido con CAT-04) añade solo el enganche del modo IA y el borrado del historial.
+- **Único cambio en una herramienta de CAT-04 (aditivo):** `get_budget_summary` y `get_placed_products` exponen el **IVA de cada partida con su procedencia** (propio o heredado). Sin ese dato, un modelo solo veía el IVA general y no podía distinguir un 10 % o un 0 % propio. Las respuestas guiadas no cambian. Detalle y pruebas en el doc 07.
+- La comprobación parcial de cifras detecta además un **precio por unidad en otra unidad** («180 €/ud» cuando el precio es 180 €/m) y un **recuento presentado como medición** («2 m» a partir de 2 objetos colocados).
 
 ## 7. Dictamen
 
