@@ -1,6 +1,6 @@
 // HOM-03 · «Nuevos servicios IA» in the Home. The section comes from the verified registry and separates four states
 // (available in Production, pilot in this browser, simulation, in preparation). Every button opens the real place
-// where the service lives; Render IA is not duplicated (its card points to the existing band); CAT-04 work is never
+// where the service lives; Render IA is not duplicated (its card points to the existing band); CAT-04 in master is
 // shown; nothing calls /api; the project never changes; no horizontal scroll in the 3 sizes; ES/EN/ZH; keyboard.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const {createServer}=require('node:http'),fs=require('node:fs/promises'),path=require('node:path'),{chromium}=require('playwright');
@@ -25,7 +25,7 @@ const PROFILES=['architecture','real-estate','developer','renovation','interior'
 const noScroll=page=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&[...document.querySelectorAll('#welcomeAIServices *')].every(n=>n.getBoundingClientRect().right<=innerWidth+1));
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
-test(`four verified states, honest texts, no duplicate Render IA, no CAT-04, no /api ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
+test(`four verified states, honest texts, CAT-04 pilot, no duplicate Render IA, no /api ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const {page,errors,api}=await open(t,viewport);
  const g=await groups(page);
  assert.deepEqual(g.map(x=>x.state),['available','pilot','simulation','preparation']);
@@ -33,9 +33,10 @@ test(`four verified states, honest texts, no duplicate Render IA, no CAT-04, no 
  assert.deepEqual(g.flatMap(x=>x.ids),R.aiServices('general').map(s=>s.id),'straight from the registry');
  assert.deepEqual(g[0].ids,['render-ai'],'only Render IA is presented as available');
  assert.deepEqual(g[3].buttons,[],'nothing in preparation has a button');
- assert.deepEqual(g.slice(0,3).flatMap(x=>x.buttons),['welcomeAI-render-ai','welcomeAI-assistant','welcomeAI-catalogs','welcomeAI-visual-studio','welcomeAI-photo-reform']);
+ assert.deepEqual(g.slice(0,3).flatMap(x=>x.buttons),['welcomeAI-render-ai','welcomeAI-assistant','welcomeAI-catalogs','welcomeAI-catalog-budget','welcomeAI-assistant-catalogs','welcomeAI-visual-studio','welcomeAI-photo-reform']);
  const text=await page.locator('#welcomeAIServices').textContent();
- assert.doesNotMatch(text,/Presupuestar|consulta tus catálogos|CAT-04/,'CAT-04 work is not announced');
+ assert.match(text,/Presupuestar/,'CAT-04 in master is announced as a pilot');
+ assert.doesNotMatch(text,/Pendiente de CAT-04/,'obsolete gate is removed');
  assert.match(text,/ningún modelo de lenguaje/);assert.match(text,/no llama a ningún proveedor de IA/);assert.match(text,/no las genera una IA/);
  assert.doesNotMatch(text,/garantiza|en tiempo real|exclusiv|certificad/i);
  // Render IA keeps a single paid entry: the existing band. Its card has no «Abrir Entregar» of its own.
@@ -48,7 +49,7 @@ test(`four verified states, honest texts, no duplicate Render IA, no CAT-04, no 
  assert.deepEqual(api,[]);assert.deepEqual(errors,[]);
 });
 
-test('every button opens the real service: Render IA band, Assistant, My catalogues, Image studio and FOT-01 (simulations) 1440x900',{timeout:150000},async t=>{
+test('every button opens the real service: Render IA band, Assistant, CAT-04, Image studio and FOT-01 (simulations) 1440x900',{timeout:150000},async t=>{
  const vp={width:1440,height:900};
  {const {page,errors,api,press}=await open(t,vp);await press('#welcomeAI-render-ai');
   await page.waitForFunction(()=>document.activeElement?.id==='welcomeRenderAITitle');
@@ -58,6 +59,12 @@ test('every button opens the real service: Render IA band, Assistant, My catalog
   await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&!document.querySelector('#assistantPanel').hidden);
   assert.match(await page.locator('#assistantPanel').textContent(),/modelo de lenguaje/i,'the panel itself says there is no language model');
   assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),project);assert.deepEqual(api,[]);assert.deepEqual(errors,[]);}
+ {const {page,errors,api,press}=await open(t,vp);const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await press('#welcomeAI-catalog-budget');
+  await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&window.FloorPlanProfessionalUI?.area==='budget'&&document.querySelector('#budgetDialog')?.open);
+  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),project);assert.deepEqual(api,[]);assert.deepEqual(errors,[]);}
+ {const {page,errors,api,press}=await open(t,vp);await press('#welcomeAI-assistant-catalogs');
+  await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&!document.querySelector('#assistantPanel').hidden);
+  assert.deepEqual(api,[]);assert.deepEqual(errors,[]);}
  for(const [id,area,dialog,must] of [['catalogs','studio','#catalogDialog',/catálogo/i],['visual-studio','deliver','#visualStudioDialog',/SIMULACIÓN|simulación/],['photo-reform','deliver','#photoReformDialog',/simulad|SIMULACIÓN|simulación/i]]){
   const {page,errors,api,press}=await open(t,vp);const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await press('#welcomeAI-'+id);
   await page.waitForFunction(([a,d])=>!document.querySelector('#welcomeDialog').open&&window.FloorPlanProfessionalUI?.area===a&&document.querySelector(d)?.open,[area,dialog]);
@@ -73,7 +80,7 @@ test(`six professions: same four states, relevant services first, project untouc
  for(const p of PROFILES){await press('#welcomeAudience-'+p);
   const g=await groups(page);assert.deepEqual(g.map(x=>x.state),['available','pilot','simulation','preparation'],p);
   assert.deepEqual(g.flatMap(x=>x.ids),R.aiServices(p).map(s=>s.id),p+' order from the registry');
-  assert.equal(await page.locator('#welcomeAIServices .ai-service-go').count(),5,p+' same real accesses');
+  assert.equal(await page.locator('#welcomeAIServices .ai-service-go').count(),7,p+' same real accesses');
   assert.equal(await noScroll(page),true,p+' no horizontal scroll');
   await press('#welcomeAudience-'+p);}
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),project);assert.deepEqual(api,[]);assert.deepEqual(errors,[]);
@@ -88,9 +95,9 @@ test('EN and ZH: section, states and buttons translated; keyboard reaches every 
   assert.deepEqual(api,[]);assert.deepEqual(errors,[]);}
  const {page,errors}=await open(t,{width:1440,height:900});
  await page.locator('#welcomeAudience-construction').focus();
- const seen=new Set();for(let i=0;i<200&&seen.size<5;i++){await page.keyboard.press('Tab');const id=await page.evaluate(()=>document.activeElement?.id||'');
+ const seen=new Set();for(let i=0;i<220&&seen.size<7;i++){await page.keyboard.press('Tab');const id=await page.evaluate(()=>document.activeElement?.id||'');
   if(id.startsWith('welcomeAI-')){seen.add(id);const focus=await page.evaluate(()=>{const s=getComputedStyle(document.activeElement);return s.outlineStyle!=='none'||s.boxShadow!=='none';});assert.equal(focus,true,id+' visible focus');}}
- assert.equal(seen.size,5,'all five buttons reachable with Tab');
+ assert.equal(seen.size,7,'all seven buttons reachable with Tab');
  await page.locator('#welcomeAI-render-ai').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.activeElement?.id==='welcomeRenderAITitle');
  assert.deepEqual(errors,[]);
 });

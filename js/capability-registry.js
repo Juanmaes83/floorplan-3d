@@ -82,11 +82,11 @@
  //   pilot      → usable in this browser, without multi-user infrastructure or commercial guarantees;
  //   simulation → demonstration only: no provider is called and no real result is produced;
  //   preparation→ incomplete or blocked: shown without any access.
- // `gate` keeps texts prepared for work that is not approved yet (CAT-04): gated entries are NEVER returned by
+ // `gate` keeps texts prepared for work that is not approved yet: gated entries are NEVER returned by
  // aiServices(), so the Home cannot show them until the gate is removed together with a verified state.
  // `access` is the existing place that opens the service; the Home only offers it if that module is on the page.
  const AI_GROUPS=Object.freeze(['available','pilot','simulation','preparation']);
- const AI_VERIFIED_AT='b9f761326a554e0a7a58d0b88e823771e36b5a7c';
+ const AI_VERIFIED_AT='46174d6918e336119a79f5bda9fd2733aa5464c4';
  const S=(id,state,name,what,isNot,limits,access,modules,tests,professions,extra={})=>Object.freeze({id,state,name,what,isNot,limits,access,modules,tests,professions,production:extra.production||null,gate:extra.gate||null,verifiedAt:AI_VERIFIED_AT});
  const ALL=['architecture','real-estate','developer','renovation','interior','construction','general'];
  const AI_SERVICES=Object.freeze([
@@ -131,17 +131,17 @@
    ['Hoy no se genera ninguna imagen real desde una foto.','No real image is generated from a photo today.','目前不会根据照片生成任何真实图片。'],
    ['Pendiente de proveedor autorizado, tope de gasto y revisión de privacidad de las fotos.','Pending an authorised provider, a spending cap and a privacy review of photos.','待定：授权服务商、费用上限和照片隐私审查。'],
    null,['api/photo-reform.js','js/photo-reform-provider.js'],['tests/photo-reform-api.test.cjs','tests/photo-reform-provider.test.cjs'],['renovation','interior','real-estate']),
-  // CAT-04 (in progress elsewhere, not approved): prepared texts only. Never returned while `gate` is set.
-  S('catalog-budget','preparation',['Tus fichas en Presupuestar','Your sheets in Budget','你的资料进入预算'],
+  // CAT-04 was merged into master by #237. These are local pilot functions, not a paid or cloud service.
+  S('catalog-budget','pilot',['Tus fichas en Presupuestar','Your sheets in Budget','你的资料进入预算'],
    ['Los productos de tus catálogos colocados en el plano aportan su precio con fuente y fecha a las partidas del presupuesto.','The products from your catalogues placed on the plan bring their sourced, dated price to the budget items.','放入平面图的目录产品将其带来源和日期的价格带入预算条目。'],
    ['Un precio desconocido sigue siendo desconocido: el presupuesto se muestra como parcial.','An unknown price stays unknown: the budget is shown as partial.','未知价格仍为未知：预算显示为部分预算。'],
-   ['Pendiente de CAT-04.','Pending CAT-04.','待 CAT-04。'],
-   null,['js/catalog-placement-core.js','js/cost-catalog-core.js'],['tests/catalog-placement-core.test.cjs'],['renovation','construction','interior','architecture'],{gate:'CAT-04'}),
-  S('assistant-catalogs','preparation',['El Asistente consulta tus catálogos','The Assistant looks up your catalogues','助手查询你的目录'],
+   ['Funciona con el proyecto y las fichas guardadas en este navegador; revisa precios y unidades antes de aplicarlos.','Uses the project and sheets saved in this browser; review prices and units before applying them.','使用保存在此浏览器中的项目和资料；应用前请核对价格和单位。'],
+   'area:budget',['js/catalog-budget-core.js','js/cat04-ui.js'],['tests/cat04.browser.test.cjs'],['renovation','construction','interior','architecture']),
+  S('assistant-catalogs','pilot',['El Asistente consulta tus catálogos','The Assistant looks up your catalogues','助手查询你的目录'],
    ['Preguntar al Asistente por los productos de tus fichas y su precio, con la fuente de cada dato.','Ask the Assistant about the products in your sheets and their price, with the source of every figure.','向助手询问资料中的产品及其价格，并注明每个数据的来源。'],
    ['Sigue siendo una consulta guiada sin modelo de lenguaje.','It is still a guided query without a language model.','仍然是没有语言模型的引导式查询。'],
-   ['Pendiente de CAT-04.','Pending CAT-04.','待 CAT-04。'],
-   null,['js/assistant-domain-tools-core.js','js/catalog-product-core.js'],['tests/assistant-ai-v2.test.cjs'],['interior','renovation'],{gate:'CAT-04'})
+   ['Consulta guiada local; el modo generativo requiere activación independiente y consentimiento.','Local guided query; generative mode requires separate activation and consent.','本地引导式查询；生成模式需要单独启用和同意。'],
+   'assistant',['js/assistant-domain-tools-core.js','js/catalog-product-core.js'],['tests/assistant-ai-v2.test.cjs'],['interior','renovation'])
  ]);
  // The services the Home may show, grouped by state, the ones relevant to the chosen profession first in each group.
  function aiServices(audience){const rel=s=>s.professions.includes(audience||'general')?0:1;

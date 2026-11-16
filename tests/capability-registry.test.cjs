@@ -57,7 +57,7 @@ test('AI services: «available» needs Production evidence; pilots and simulatio
   if(s.state==='available'){assert.match(s.production.deployment,/^dpl_\w+$/,s.id);assert.match(s.production.sha,/^[0-9a-f]{40}$/,s.id);assert.match(s.production.checkedAt,/^\d{4}-\d{2}-\d{2}$/,s.id);assert.ok(s.production.check.length>10,s.id);}
   else assert.equal(s.production,null,s.id+' claims no Production evidence');
   if(s.state==='preparation')assert.equal(s.access,null,s.id+' no access while in preparation');
-  else assert.match(s.access,/^(render-band|assistant|catalogs|visual-studio|photo-reform)$/,s.id+' existing entry');
+  else assert.match(s.access,/^(render-band|assistant|catalogs|area:budget|visual-studio|photo-reform)$/,s.id+' existing entry');
  }
  assert.deepEqual(R.AI_SERVICES.filter(s=>s.state==='available').map(s=>s.id),['render-ai'],'only Render IA is active in Production');
 });
@@ -69,8 +69,9 @@ test('AI services: no simulation passes for real generation, and the assistant n
  for(const banned of ['garantiza','en tiempo real','exclusiv','certificad','gpt','openai'])assert.ok(!text.includes(banned),banned);
 });
 
-test('AI services: CAT-04 stays behind its gate, groups keep their order and the profession only reorders within a group',()=>{
- const gated=R.AI_SERVICES.filter(s=>s.gate);assert.deepEqual(gated.map(s=>s.gate),['CAT-04','CAT-04']);
+test('AI services: CAT-04 in master is accessible as a local pilot; groups keep their order',()=>{
+ const gated=R.AI_SERVICES.filter(s=>s.gate);assert.deepEqual(gated,[]);
+ assert.deepEqual(R.aiServices('general').filter(s=>s.id==='catalog-budget'||s.id==='assistant-catalogs').map(s=>s.state),['pilot','pilot']);
  for(const p of [...PROFESSIONS,'general',undefined,'unknown']){
   const list=R.aiServices(p);assert.ok(!list.some(s=>s.gate),'gated never returned');
   assert.equal(list.length,R.AI_SERVICES.length-gated.length);

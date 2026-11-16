@@ -216,6 +216,7 @@
    const OPEN={'render-band':[tx('Ver Render IA','See AI render','查看 AI 渲染'),()=>!!document.getElementById('welcomeRenderAI'),()=>{const b=document.getElementById('welcomeRenderAI'),t=document.getElementById('welcomeRenderAITitle');if(t)t.tabIndex=-1;b?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});t?.focus({preventScroll:true});}],
     assistant:[tx('Abrir el Asistente','Open the Assistant','打开助手'),()=>!!window.RubikAssistantUI,()=>{closeWelcome();window.RubikAssistantUI.open();}],
     catalogs:[tx('Abrir Mis catálogos','Open My catalogues','打开我的目录'),()=>!!(window.RubikCatalogUI&&window.FloorPlanProfessionalUI),()=>{goArea('studio');window.RubikCatalogUI.open();}],
+    'area:budget':[tx('Abrir Presupuestar','Open Budget','打开预算'),()=>!!(window.FloorPlanBudgetUI&&window.FloorPlanProfessionalUI),()=>{goArea('budget');window.FloorPlanBudgetUI.open();}],
     'visual-studio':[tx('Ver la simulación','See the simulation','查看模拟'),()=>!!(window.RubikVisualStudio&&window.FloorPlanProfessionalUI),()=>{goArea('deliver');window.RubikVisualStudio.open();}],
     'photo-reform':[tx('Ver la simulación','See the simulation','查看模拟'),()=>!!(window.RubikPhotoReform&&window.FloorPlanProfessionalUI),()=>{goArea('deliver');window.RubikPhotoReform.open();}]};
    const grid=el('div',undefined,services,'ai-service-groups');
