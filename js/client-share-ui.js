@@ -25,6 +25,13 @@
   el('h2',tx('Recorrido en vídeo','Video tour','视频漫游'),s);const v=el('video',undefined,s);v.controls=true;v.playsInline=true;v.preload='metadata';v.src=video.url;v.setAttribute('aria-label',tx('Recorrido de la vivienda','Tour of the home','住宅漫游'));
   el('p',tx('Recorrido por las estancias de la propuesta, grabado desde el modelo 3D del proyecto.','Tour of the proposal rooms, recorded from the project 3D model.','根据项目三维模型录制的方案房间漫游。'),s,'share-tour-note');
  }
+ // The optional online 3D visit is linked only in a published document; downloaded files stay offline.
+ function visit(parent,v){
+  const s=el('section',undefined,undefined,'dossier-page share-visit');const first=parent.querySelector('.dossier-page');first?first.after(s):parent.prepend(s);s.id='shareVisit';
+  el('h2',tx('Recorre tu vivienda en 3D','Explore your home in 3D','三维参观住宅'),s);
+  el('p',tx('Visita de solo lectura. Necesita conexión; cualquiera con el enlace puede verla.','Read-only visit. It needs a connection; anyone with the link can view it.','只读参观，需要联网；任何持有链接的人都可查看。'),s,'share-visit-note');
+  const a=el('a',tx('Entrar en la visita 3D','Enter the 3D visit','进入三维参观'),s,'share-visit-link');a.href=v.url;a.id='shareVisitLink';a.rel='noreferrer';
+ }
  // The client's observations form, as DOM (labels in the project's language). Its behaviour is the inline script.
  function form(parent){
   const s=el('section',undefined,undefined,'dossier-page share-review');const foot=parent.querySelector('.dossier-foot');foot?parent.insertBefore(s,foot):parent.append(s);s.id='shareReview';el('h2',tx('Tus observaciones','Your observations','您的意见'),s);
@@ -86,13 +93,14 @@ draw()})();`;
   // The client never sees instructions meant for the professional: an images page without images is left out.
   paper.querySelectorAll('.dossier-views').forEach(p=>{if(!p.querySelector('img'))p.remove();});
   if(opts.video)tour(paper,opts.video);
+  if(opts.experience)visit(paper,opts.experience);
   form(paper);commentViews(paper);
   const [dossierCss,siteCss,reviewCore]=await Promise.all(['css/project-dossier.css','css/site-report.css','js/review-notes-core.js'].map(text));
   const config={projectId:app.project.id,projectName:name(),versionCode:FloorPlanReviewNotes.versionCode(revision()),text:{point:tx('Punto del plano','Point on the plan','平面图上的点'),marked:tx('Punto marcado. Escribe tu observación sobre él.','Point marked. Write your observation about it.','已标记位置，请写下意见。'),home:tx('Toda la vivienda','The whole home','整个住宅'),remove:tx('Quitar','Remove','删除'),count:tx('{n} observaciones preparadas. Guarda el archivo y envíaselo al profesional.','{n} observations ready. Save the file and send it to the professional.','已准备 {n} 条意见。请保存文件并发送给专业人员。'),saved:tx('Archivo guardado. Envíaselo al profesional por el canal que uséis.','File saved. Send it to the professional through your usual channel.','文件已保存，请通过常用渠道发送给专业人员。')}};
   const brand=window.FloorPlanBrandUI?.snapshot()?.profile,lang=typeof LANG==='string'?LANG:'es',title=`${name()} · ${tx('Propuesta','Proposal','方案')}${brand?.name?' · '+brand.name:''}`;
   const top=tx(`Documento de sólo lectura preparado con Rubik Sota${brand?.name?' por '+brand.name:''} el ${new Date().toLocaleDateString(({es:'es-ES',en:'en-GB',zh:'zh-CN'})[lang]||'es-ES')}. Versión ${config.versionCode}. No necesita conexión ni instalar nada.`,`Read-only document prepared with Rubik Sota${brand?.name?' by '+brand.name:''}. Version ${config.versionCode}. No connection or installation needed.`,`由 Rubik Sota 准备的只读文档。版本 ${config.versionCode}。无需联网或安装。`);
   // A published link plays its video from the store: it does need a connection, so the line says so.
-  const topLine=opts.video?top.replace(tx('No necesita conexión ni instalar nada.','No connection or installation needed.','无需联网或安装。'),tx('No necesita instalar nada; el vídeo necesita conexión.','No installation needed; the video needs a connection.','无需安装；视频需要联网。')):top;
+  const topLine=opts.video||opts.experience?top.replace(tx('No necesita conexión ni instalar nada.','No connection or installation needed.','无需联网或安装。'),tx('No necesita instalar nada; el vídeo o la visita 3D necesitan conexión.','No installation needed; the video or 3D visit needs a connection.','无需安装；视频或三维参观需要联网。')):top;
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
   const html=`<!doctype html><html lang="${esc(lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="${opts.video?CSP.replace("img-src data:;",`img-src data:; media-src https://${opts.video.host};`):CSP}"><meta name="generator" content="Rubik Sota"><meta name="robots" content="noindex"><title>${esc(title)}</title><style>${dossierCss}\n${siteCss}\n${SHARE_CSS}</style></head><body class="rubik-client-file"><p class="share-top">${esc(topLine)}</p>${paper.outerHTML}<script type="application/json" id="rubik-share">${safe(JSON.stringify(config))}</script><script>${reviewCore}</script><script>${SCRIPT}</script></body></html>`;
   return {html,bytes:new Blob([html]).size,views:views.length,versionCode:config.versionCode};

@@ -2,12 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<script>/* ENT-01 I1B: a short-lived, same-origin preview, not a published or remotely loaded visit.
-   Replace browser storage before any application module can access professional data. */
+<meta name="referrer" content="no-referrer">
+<script>/* ENT-01: isolate the read-only preview or published delivery before application boot. */
 (function(){
  try {
   const query=new URLSearchParams(location.search);
-  if(query.get('entrega')!=='vista-previa')return;
+  const source=query.get('entrega');if(!source)return;
+  const preview=source==='vista-previa';
+  if(!preview && (source.length>2048||!/^https:\/\/[^/?#]+\/rubik-share\/[\w-]+\.delivery\.json$/.test(source)))return;
   function memory(){
    const entries=new Map();
    return {getItem:k=>entries.has(String(k))?entries.get(String(k)):null,
@@ -16,7 +18,7 @@
   }
   Object.defineProperty(window,'localStorage',{value:memory(),configurable:false});
   Object.defineProperty(window,'sessionStorage',{value:memory(),configurable:false});
-  window.RUBIK_DELIVERY=Object.freeze({preview:true,fromDocument:false,source:'vista-previa'});
+  window.RUBIK_DELIVERY=Object.freeze({preview,fromDocument:!preview&&location.hash==='#desde-documento',historyStart:history.length,source});
   document.documentElement.classList.add('delivery-client');
  }catch(e){document.documentElement.dataset.deliveryBootError='1';}
 })();</script>

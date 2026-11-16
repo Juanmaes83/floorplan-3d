@@ -4,6 +4,13 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const R=require('../js/share-registry-core.js');
 const mem=()=>{const m=new Map();return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k),raw:()=>m.get(R.KEY)};};
 const P='https://abc.public.blob.vercel-storage.com/rubik-share/casa-r1.html',V='https://abc.public.blob.vercel-storage.com/rubik-share/casa-r2.webm';
+const D='https://abc.public.blob.vercel-storage.com/rubik-share/casa-r3.delivery.json';
+
+test('ENT-01 register keeps the 3D snapshot with its page and video for one withdrawal',()=>{
+ const s=mem(),list=R.add([],{page:P,video:V,delivery:D,code:'secret'},new Date('2026-11-10T10:00:00Z'));
+ assert.ok(R.save(s,list));assert.deepEqual(R.toRemove(R.load(s)[0]),[P,V,D]);assert.ok(!s.raw().includes('secret'));
+ const orphan=R.addOrphanFiles([],{files:[V,D],project:'Casa Serra'});assert.deepEqual(R.toRemove(orphan[0]),[V,D]);
+});
 
 test('S2 register: add, save and load keep only whitelisted fields — never a code',()=>{
  const s=mem();let list=R.add(R.load(s),{page:P,video:V,link:'https://rubik.example/api/view?f=x',project:'Casa Serra',versionCode:'v3',code:'share-secret',token:'t',project_json:'{walls}'},new Date('2026-11-10T10:00:00Z'));

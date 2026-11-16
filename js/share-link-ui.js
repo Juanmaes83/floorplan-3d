@@ -20,19 +20,34 @@
  const name=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
  const video=()=>{const r=window.FloorPlanTourVideo?.result;return r&&r.blob.size<=LIMIT?r:null;};
  async function upload(kind,body,code){
-  let r;try{r=await fetch('api/share',{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':'application/octet-stream','x-rubik-share-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name()).slice(0,120)},body});}
+  let r;try{r=await fetch('api/share',{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':kind==='delivery'?'application/json; charset=utf-8':'application/octet-stream','x-rubik-share-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name()).slice(0,120)},body});}
   catch{throw Error(ERRORS()['storage-unreachable']);}
   if(r.status===404)throw Error(ERRORS().unavailable);
   const out=await r.json().catch(()=>null);if(!r.ok||!out?.url)throw Error(ERRORS()[out?.error]||ERRORS()['storage-error']);return out.url;
  }
  // Video first (the page links to it), then the page itself. The link opens the page through /api/view.
- async function publish({withVideo,code}){
-  let tour=null;const v=withVideo?video():null;
-  if(v){const url=await upload(v.extension,v.blob,code);tour={url,host:new URL(url).hostname,type:v.blob.type};}
-  let out,page;
-  try{out=await FloorPlanClientShare.build(tour?{video:tour}:{});if(out.bytes>LIMIT)throw Error(ERRORS().size);page=await upload('html',new Blob([out.html],{type:'text/html'}),code);}
-  catch(e){if(!tour)throw e;throw Error(e.message+' '+await cleanOrphanVideo(tour.url,code));}
-  return {link:new URL('api/view?f='+encodeURIComponent(page),location.href).href,page,video:!!tour,videoUrl:tour?.url||null,bytes:out.bytes,versionCode:out.versionCode};
+ async function publish({withVideo,with3d=false,code}){
+  const stored=[];let tour=null,delivery=null;
+  try{
+   const v=withVideo?video():null;
+   if(v){const url=await upload(v.extension,v.blob,code);stored.push(url);tour={url,host:new URL(url).hostname,type:v.blob.type};}
+   if(with3d){
+    const snap=window.FloorPlanDeliveryPreview?.snapshot();if(!snap)throw Error('Visita 3D no disponible');
+    const body=JSON.stringify(snap);if(new Blob([body]).size>LIMIT)throw Error(ERRORS().size);
+    delivery=await upload('delivery',body,code);stored.push(delivery);
+   }
+   const experience=delivery?{url:new URL('./?entrega='+encodeURIComponent(delivery)+'#desde-documento',location.href).href}:null;
+   const out=await FloorPlanClientShare.build({...(tour?{video:tour}:{}),...(experience?{experience}:{})});
+   if(out.bytes>LIMIT)throw Error(ERRORS().size);
+   const page=await upload('html',new Blob([out.html],{type:'text/html'}),code);
+   return {link:new URL('api/view?f='+encodeURIComponent(page),location.href).href,page,delivery,video:!!tour,videoUrl:tour?.url||null,bytes:out.bytes,versionCode:out.versionCode};
+  }catch(e){
+   if(stored.length===1&&tour&&!delivery)throw Error(e.message+' '+await cleanOrphanVideo(tour.url,code));
+   let untracked=[];
+   if(stored.length){try{const out=await unshareUrls(stored,code);const left=out.failed.map(f=>f?.url||f);if(left.length&&!REG.save(store(),REG.addOrphanFiles(REG.load(store()),{files:left,project:name()})))untracked=left;}
+    catch{if(!REG.save(store(),REG.addOrphanFiles(REG.load(store()),{files:stored,project:name()})))untracked=stored;}}
+   throw Error(e.message+(untracked.length?' '+tx('No se pudieron guardar los archivos pendientes de retirada; retíralos en Vercel Blob: ','Pending files could not be recorded; withdraw them in Vercel Blob: ','无法记录待撤回文件；请在 Vercel Blob 中撤回：')+untracked.join(' '):''));
+  }
  }
  // S2: local register and withdrawal. The register keeps no code; the code typed above is sent only in the header.
  const REG=window.FloorPlanShareRegistry,store=()=>{try{return window.localStorage;}catch{return null;}};
@@ -74,7 +89,10 @@
   const v=window.FloorPlanTourVideo?.result,vl=el('label',undefined,form,'ai-render-consent');const vc=el('input',undefined,vl);vc.type='checkbox';vc.id='shareLinkVideo';
   if(v&&v.blob.size<=LIMIT){vc.checked=true;el('span',tx(`Incluir el vídeo del recorrido (${v.extension.toUpperCase()}, ${(v.blob.size/1048576).toFixed(1).replace('.',',')} MB)`,`Include the tour video (${v.extension.toUpperCase()}, ${(v.blob.size/1048576).toFixed(1)} MB)`,'包含漫游视频'),vl);}
   else{vc.disabled=true;el('span',v?tx('El vídeo supera 4 MB: se publica sin vídeo.','The video is over 4 MB: published without video.','视频超过 4 MB，将不含视频发布。'):tx('Sin vídeo: grábalo en la presentación («Grabar vídeo») si quieres incluirlo.','No video: record it in the presentation («Record video») to include it.','无视频：可在展示中录制。'),vl);}
-  const ok=el('label',undefined,form,'ai-render-consent');const cb=el('input',undefined,ok);cb.type='checkbox';cb.id='shareLinkAgree';el('span',tx('Entiendo que cualquiera con el enlace podrá ver este documento.','I understand anyone with the link can see this document.','我了解任何拥有链接的人都可查看此文档。'),ok);
+  const dl=el('label',undefined,form,'ai-render-consent'),dc=el('input',undefined,dl);dc.type='checkbox';dc.id='shareLink3d';
+  dc.disabled=!window.FloorPlanDeliveryPreview?.eligible?.();
+  el('span',dc.disabled?tx('Visita 3D no disponible para este proyecto.','3D visit unavailable for this project.','此项目无法进行三维参观。'):tx('Incluir visita 3D de solo lectura (necesita conexión).','Include a read-only 3D visit (needs a connection).','包含只读三维参观（需要联网）。'),dl);
+  const ok=el('label',undefined,form,'ai-render-consent');const cb=el('input',undefined,ok);cb.type='checkbox';cb.id='shareLinkAgree';el('span',tx('Entiendo que cualquiera con el enlace podrá ver este documento y, si la incluyo, una copia 3D de esta versión.','I understand anyone with the link can see this document and, if included, a 3D copy of this version.','我了解任何持有链接的人都可查看文档及所选的三维副本。'),ok);
   const go=btn(tx('Publicar enlace','Publish link','发布链接'),form,'btn primary');go.id='shareLinkGo';
   const status=el('p',message,dialog,'ai-render-status');status.id='shareLinkStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   if(last){const box=el('div',undefined,dialog,'share-link-result');const out=el('input',undefined,box);out.id='shareLinkUrl';out.readOnly=true;out.value=last.link;out.setAttribute('aria-label',tx('Enlace para el cliente','Link for the client','客户链接'));
@@ -86,7 +104,7 @@
    if(!cb.checked){status.textContent=tx('Confirma que entiendes quién podrá verlo.','Confirm you understand who can see it.','请确认您了解谁可以查看。');cb.focus();return;}
    const code=ti.value.trim();if(!code){status.textContent=tx('Introduce el código de publicación.','Enter the publishing code.','请输入发布码。');ti.focus();return;}
    sessionCode=code;go.disabled=true;status.textContent=tx('Publicando…','Publishing…','正在发布…');
-   try{last=await publish({withVideo:vc.checked,code});if(REG)REG.save(store(),REG.add(REG.load(store()),{page:last.page,video:last.videoUrl,link:last.link,project:name(),versionCode:last.versionCode}));draw(tx('Enlace publicado. Ábrelo para comprobarlo antes de enviarlo.','Link published. Open it to check it before sending it.','链接已发布。发送前请先打开检查。'));dialog.querySelector('#shareLinkCopy')?.focus();}
+   try{last=await publish({withVideo:vc.checked,with3d:dc.checked&&!dc.disabled,code});if(REG)REG.save(store(),REG.add(REG.load(store()),{page:last.page,video:last.videoUrl,delivery:last.delivery,link:last.link,project:name(),versionCode:last.versionCode}));draw(tx('Enlace publicado. Ábrelo para comprobarlo antes de enviarlo.','Link published. Open it to check before sending it.','链接已发布。发送前请先打开检查。'));dialog.querySelector('#shareLinkCopy')?.focus();}
    catch(e){if(e.message.startsWith(ERRORS().token)){sessionCode='';typedCode=null;}draw(e.message);}
   };
  }
@@ -108,7 +126,7 @@
   for(const e of list){
    const li=el('li',undefined,ul,'share-publication');li.dataset.pub=e.id;li.dataset.state=e.state;li.tabIndex=-1;
    el('strong',`${e.project||tx('Proyecto','Project','项目')}${e.versionCode?' · '+tx('versión','version','版本')+' '+e.versionCode:''}`,li);
-   el('span',`${tx('Publicado','Published','发布于')} ${fmt(e.publishedAt)} · ${e.kind==='orphan-video'?tx('Vídeo sin documento (la publicación falló)','Video without document (publishing failed)','无文档的视频（发布失败）'):e.kind==='html+video'?tx('Documento para el cliente con vídeo','Client document with video','含视频的客户文档'):tx('Documento para el cliente','Client document','客户文档')}`,li,'share-publication-meta');
+   el('span',`${tx('Publicado','Published','发布于')} ${fmt(e.publishedAt)} · ${e.kind==='orphan-video'?tx('Vídeo sin documento (la publicación falló)','Video without document (publishing failed)','无文档的视频（发布失败）'):e.kind==='orphan-files'?tx('Archivos sin documento (la publicación falló)','Files without document (publishing failed)','无文档文件（发布失败）'):e.kind==='html+video'?tx('Documento para el cliente con vídeo','Client document with video','含视频的客户文档'):tx('Documento para el cliente','Client document','客户文档')}`,li,'share-publication-meta');
    const st=e.state==='withdrawn'?tx(`Retirado el ${fmt(e.withdrawnAt)}`,`Withdrawn on ${fmt(e.withdrawnAt)}`,'已撤回'):e.state==='partial'?tx(`Retirada incompleta: faltan ${e.pending.length} archivo(s). Vuelve a pulsar «Retirar».`,`Incomplete withdrawal: ${e.pending.length} file(s) left. Press «Withdraw» again.`,'撤回未完成'):tx('Publicado','Published','已发布');
    el('span',st,li,'share-publication-state');
    if(e.state==='withdrawn')continue;
