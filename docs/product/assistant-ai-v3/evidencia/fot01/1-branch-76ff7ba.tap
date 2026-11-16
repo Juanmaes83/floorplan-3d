@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con cotas, deshacer/rehacer, guardar y reabrir, exportar e importar sin la foto
+ok 1 - MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con cotas, deshacer/rehacer, guardar y reabrir, exportar e importar sin la foto
+  ---
+  duration_ms: 33006.723557
+  type: 'test'
+  ...
+# Subtest: MUE-01: si la foto no puede guardarse el mueble se crea igual y se avisa; quitar foto; estancia sin espacio
+ok 2 - MUE-01: si la foto no puede guardarse el mueble se crea igual y se avisa; quitar foto; estancia sin espacio
+  ---
+  duration_ms: 4501.07803
+  type: 'test'
+  ...
+# Subtest: MUE-01 + FOT-01 en teléfono 390×844: acceso, creación, colocación y cotas; reforma con consentimiento y simulación rotulada
+ok 3 - MUE-01 + FOT-01 en teléfono 390×844: acceso, creación, colocación y cotas; reforma con consentimiento y simulación rotulada
+  ---
+  duration_ms: 7426.215003
+  type: 'test'
+  ...
+# Subtest: FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto
+ok 4 - FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto
+  ---
+  duration_ms: 14959.929267
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 60437.678717

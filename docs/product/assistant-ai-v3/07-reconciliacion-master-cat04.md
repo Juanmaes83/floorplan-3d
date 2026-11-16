@@ -129,7 +129,7 @@ Mientras no se resuelva, la intermitencia es **compartida con `master`** y se do
 | Navegador: regresión de los workflows afectados (`assistant-ai-v2`, `cat-ia-v1` sin `assets.browser`, `project-first`, `integration-browser`, `photo-project-v1`, `ux07-activation` y `tests/browser.test.cjs`; 42 ficheros) | **180 pasan / 1 falla / 7 omitidas** (188).
 - Las omitidas necesitan `THREE_LOCAL_DIR` (three.js local), como en ejecuciones anteriores.
 - El fallo es «FOT-01 escritorio» (`photo-project.browser`, línea 233: `isVisible()` de la tarjeta de «Entregar» justo tras el clic, sin espera). El test es idéntico en `master` y #238 no toca esa ruta.
-- **Repetido aislado: 3/3 en `master` y 3/3 en la rama.** Se registra como intermitencia bajo la carga de una ejecución larga, no atribuible a #238.
+- Comparación FOT-01 detallada en §7.4. **No reproducido** en 12 ejecuciones posteriores (6 en `master`, 6 en la rama). No se ha demostrado su causa: queda como **limitación** (intermitencia no reproducida).
 - Evidencias: `evidencia/regression/`. |
 | `assets.browser` | §3: intermitencia **compartida con `master`** |
 
@@ -163,3 +163,95 @@ Requieren el piloto #239, **no autorizado**.
   - la comprensión con un modelo real no está demostrada.
 
 El HEAD definitivo, su CI completa, la Preview y los artefactos se registran en la descripción de #238.
+
+## 7. Cierre del acta
+
+### 7.1 SHA
+
+| | SHA |
+|---|---|
+| `master` de referencia | `46174d6918e336119a79f5bda9fd2733aa5464c4` |
+| HEAD anterior de #238 | `5e3a2e987f89e95a83d4888b08e64a4758d42f26` |
+| **Commit de reconciliación** (merge) | `eb6cc573344da6442f95da58c2c37d4789a22d92` |
+| Contratos económicos (corrección y pruebas) | `16a7d131…` (`16a7d13`) |
+| **Corte definitivo de código y pruebas** | `76ff7ba…` (`76ff7ba`) |
+| HEAD publicado | El commit que contiene este cierre: hijo directo de `76ff7ba`, que **solo añade documentación y evidencias** (`git diff --stat 76ff7ba HEAD`). Su SHA completo se registra en la descripción de #238 |
+
+### 7.2 Diff exclusivo contra `master` (`git diff --name-only 46174d6 76ff7ba`)
+
+Son 30 ficheros, además de 64 de evidencias en `docs/product/assistant-ai-v3/evidencia/`:
+
+- **Los 25 propios de #238**, con su mismo cambio:
+  - `api/assistant.js`, `api/_spend-ledger.js`;
+  - `js/assistant-agent-core.js`, `js/assistant-gen-ui.js`, `js/assistant-ui.js`, `css/assistant.css`, `index.html`;
+  - docs 01–06 y `eval/questions.json`;
+  - `scripts/qa/assistant-eval*.cjs`, `assistant-ledger-reconcile.cjs`, `token-bound-evidence.cjs`;
+  - las pruebas `assistant-agent-core`, `assistant-ai-v2`, `assistant-gen-api`, `assistant-gen-eval`, `assistant-gen.browser` y `spend-ledger`;
+  - el workflow `assistant-ai-v2.yml`, que conserva además F1–F8.
+- **Nuevos en esta reconciliación:**
+  - `js/assistant-domain-tools-core.js` (campo **aditivo** `vat`);
+  - `tests/assistant-gen-cat04-economics.test.cjs` y `tests/assistant-gen-cat04.browser.test.cjs`;
+  - `scripts/qa/assets-lab-diagnose.cjs` (diagnóstico; no es una prueba);
+  - este doc 07.
+- **Sin cambios respecto a `master`:**
+  - los núcleos y la UI de CAT-04: `budget-core`, `budget-draft-core` (F8-C), `budget-ui`, `catalog-budget-core`, `assistant-intents-core`, `visual-reference-core` y `cat04-ui`;
+  - sus pruebas: `cat04-f1f2` (puras y navegador), `cat04-xr`, `cat04-failsafe` y `cat04-assistant`;
+  - `cat-ia-v1.yml` y el acta de CAT-04.
+
+### 7.3 Resultados
+
+| Grupo | Resultado |
+|---|---|
+| **Pruebas puras** (131 ficheros; código de `76ff7ba`) | **1350 pasan / 0 fallan / 2 omitidas** (1352; las 2 omitidas, de Blender, son preexistentes) |
+| **Regresión de navegador completa** (42 ficheros; código de `76ff7ba`; `evidencia/regression/`) | **180 pasan / 1 falla / 7 omitidas** (188). Las omitidas necesitan `THREE_LOCAL_DIR`. El fallo es FOT-01 escritorio (§7.4) |
+| `tests/browser.test.cjs` (dentro de la regresión) | **Ejecutado realmente con Chromium:** **39/39** pasan, 0 omitidas, 431 s en total (2–70 s por prueba). Lista en `evidencia/regression/browser-test-cjs-results.txt` |
+| CAT-04 F1–F8 / F8-C / XR en navegador | Pasan dentro de la regresión: F8 escritorio, F8-C escritorio, XR-01 y XR-02, más `cat04`, `cat04-failsafe` y `cat04-f1f2` |
+| Asistente V3 en navegador | `assistant-gen` (aislamiento, privacidad, consentimiento, propuesta → aplicar → deshacer, móvil) y `assistant-gen-cat04` (escritorio y móvil) pasan |
+
+### 7.4 Comparación FOT-01 escritorio (`photo-project.browser.test.cjs:233`)
+
+- **Condiciones equivalentes:** fichero **completo**, secuencial y alternado `master` ↔ rama, en el mismo contenedor (4 CPU Intel Xeon @ 2,10 GHz, 16 GB, Node v22.23.4, Playwright 1.63.0, Chrome for Testing 153.0.8010.12).
+- **Comando:** `CHROME=/opt/pw-browsers/chromium node --test --test-concurrency=1 --test-reporter=tap tests/photo-project.browser.test.cjs`.
+- **Evidencias:** `evidencia/fot01/`, con TAP y `.env` de cada ejecución, el script y el resumen.
+
+| Ejecución | `master@46174d6` | Rama `76ff7ba` |
+|---|---|---|
+| 1 | ✓ (15 172 ms) · fichero 4/4 · 60,5 s | ✓ (14 960 ms) · fichero 4/4 · 62,8 s |
+| 2 | ✓ (15 440 ms) · fichero 4/4 · 62,6 s | ✓ (15 325 ms) · fichero 4/4 · 62,2 s |
+| 3 | ✓ (15 070 ms) · fichero 4/4 · 60,6 s | ✓ (14 790 ms) · fichero 4/4 · 60,6 s |
+
+- Además, 3 + 3 ejecuciones aisladas (`--test-name-pattern`, código de `16a7d13`): ✓ en todas.
+- Solo ha fallado **una vez**, en la regresión larga de 42 ficheros (67 min). La aserción comprueba `isVisible()` de `#photoReformCard` justo tras el clic en «Entregar», sin espera.
+- El test es idéntico en `master` y **ningún cambio de #238 toca esa ruta**: el paso a «Entregar» y la tarjeta de fotos no aparecen en el diff.
+- **Dictamen:**
+  - no se ha reproducido;
+  - no es posible demostrar su causa con una sola ocurrencia;
+  - no hay ninguna evidencia que lo vincule con #238;
+  - se documenta como **limitación (intermitencia no reproducida)**, sin tocar la prueba.
+
+### 7.5 `assets.browser`
+
+- Intermitencia **compartida con `master`** y dependiente de la CPU disponible: §3, con CI, 4 CPU, 2 CPU, A/B y vídeos.
+- Con 4 CPU, como CI: `master` falla 3 de 3 ejecuciones y la rama 2 de 3, siempre en `next Asset Lab cohort … 1440x900`, con el mismo modelo abortado.
+- **Abierta**, sin cambiar ningún límite. Propuesta de resolución independiente en §3.4.
+
+### 7.6 Contratos económicos corregidos
+
+1. **IVA propio por partida** visible para cualquier modelo, con su procedencia (`vat`).
+2. Un **precio por unidad en otra unidad** («180 €/ud» frente a 180 €/m) se marca como no verificado.
+3. Un **recuento presentado como medición** («2 m» a partir de 2 objetos) se marca como no verificado.
+
+Rojo → verde: puras 2/6 → 6/6; navegador 0/2 → 2/2 (§2).
+
+### 7.7 Defectos y límites pendientes
+
+- `assets.browser` 1440×900: intermitencia compartida con `master` (§3). Depende de una decisión del responsable del pipeline de activos.
+- FOT-01 escritorio: una ocurrencia no reproducida (§7.4).
+- Bajo estrés de 2 CPU, `furniture search … 1440x900` también falla en ambos árboles (§3.2). No se observó con 4 CPU.
+- 7 pruebas omitidas en local por falta de `THREE_LOCAL_DIR`. La CI las ejecuta con su propia configuración.
+- Comprobación de cifras **parcial**: no detecta afirmaciones sin cifras ni la atribución de una cifra real a otra partida (§2).
+- **Comprensión con un modelo real no demostrada (C):** requiere el piloto #239, no autorizado.
+- Production bloqueada por GOV-06a y las demás condiciones de seguridad.
+
+**#238 queda en Draft, dirigida a `master`, y no es apta para merge.**
+

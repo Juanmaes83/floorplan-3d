@@ -1,0 +1,6 @@
+1 master 46174d6 exit=0 file:[# pass 4 # fail 0 # skipped 0 ] FOT-01-escritorio=ok 15171.943302ms
+1 branch 76ff7ba exit=0 file:[# pass 4 # fail 0 # skipped 0 ] FOT-01-escritorio=ok 14959.929267ms
+2 master 46174d6 exit=0 file:[# pass 4 # fail 0 # skipped 0 ] FOT-01-escritorio=ok 15439.569518ms
+2 branch 76ff7ba exit=0 file:[# pass 4 # fail 0 # skipped 0 ] FOT-01-escritorio=ok 15325.225046ms
+3 master 46174d6 exit=0 file:[# pass 4 # fail 0 # skipped 0 ] FOT-01-escritorio=ok 15070.294684ms
+3 branch 76ff7ba exit=0 file:[# pass 4 # fail 0 # skipped 0 ] FOT-01-escritorio=ok 14790.056502ms
