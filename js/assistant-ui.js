@@ -31,12 +31,20 @@
   for(const r of p.rooms)rooms[r.id]=[...new Set([disp(r),...names(r.name),famLabel(r)].filter(Boolean))];
   const shown=n=>{try{return typeof nm==='function'?nm(n):n;}catch{return n;}};
   for(const o of p.objects)objects[o.id]=[...new Set([shown(o.name),...names(o.name),o.type].filter(Boolean))];
+  // CAT-04: products of «Mis catálogos» (names, SKU, collection) and which object is linked to which product.
+  const products={},objectProduct={};let catalog=null,catalogReport=null,visualRefs=null;
+  try{const C4=window.RubikCat04;if(C4){const ac=C4.assistantContext(),cats=C4.catalogs(),P=window.RubikCatalogPlacement;
+   const all=cats.flatMap(c=>c.products.map(x=>({key:P.itemIdOf({...x,studioId:c.studioId,catalogId:c.catalogId}),catalogId:c.catalogId,catalogRevision:c.revision,productId:x.productId,variantId:x.variantId||null,sku:x.sku,displayName:x.displayName,collection:x.collection||null,kind:x.kind,placeable:x.kind!=='material'&&x.dimensionsStatus==='verified',synthetic:x.source?.kind==='synthetic-fixture',
+    sheetPrice:x.commercial?.netUnitPrice!=null?{unitPrice:x.commercial.netUnitPrice,unit:x.commercial.unit,label:x.commercial.priceSource,asOf:x.commercial.verifiedAt,edition:`rev ${c.revision} · ficha v${x.productVersion}`}:null})));
+   for(const x of all)products[x.key]=[...new Set([shown(x.displayName),x.sku,x.collection].filter(Boolean))];
+   for(const [oid,l] of Object.entries(P.links(p).active))objectProduct[oid]=P.itemIdOf(l);
+   catalog={studioId:ac.studioId,catalogs:ac.catalogs,products:all};const sm=C4.summary();catalogReport=sm?sm.items:[];visualRefs=C4.visualRefs();}}catch(e){console.warn('[Asistente] CAT-04:',e?.message||e);}
   for(const m of p.materials||[]){const base=[...new Set([shown(m.name),...names(m.name)].filter(Boolean))];const extra=SYN.filter(([re])=>base.some(b=>re.test(b))).flatMap(([,w])=>w);materials[m.id]=[...base,...extra];}
   let budget=null,saved=false;try{const c=window.FloorPlanBudgetUI?.current?.();if(c){budget=c.budget;saved=!!c.saved;}}catch{}
   let selection=null;try{selection=app.capturePresentationEntry?.().selection||null;}catch{}
   const levels=window.FloorPlanBuildingUI?.presentationSources?.()?.levels||null;
-  const caps=RT.capabilities({registry:window.FloorPlanCapabilities,modules:{render:!!window.FloorPlanAIRender,photoReform:!!window.RubikPhotoReformProvider||!!window.RubikPhotoReformCore,photoReformConfigured:false,catalog:false}});
-  return {project:p,budget,budgetSaved:saved,levels,selection,area:area(),lang:L(),labels:{rooms,objects,materials},caps,renderStyles:window.FloorPlanAIRender?.STYLES?.()||[]};
+  const caps=RT.capabilities({registry:window.FloorPlanCapabilities,modules:{render:!!window.FloorPlanAIRender,photoReform:!!window.RubikPhotoReformProvider||!!window.RubikPhotoReformCore,photoReformConfigured:false,catalog:!!window.RubikCat04}});
+  return {project:p,budget,budgetSaved:saved,levels,selection,area:area(),lang:L(),labels:{rooms,objects,materials,products,objectProduct},caps,catalog,catalogReport,visualRefs,renderStyles:window.FloorPlanAIRender?.STYLES?.()||[]};
  }
  function area(){const cur=document.querySelector('#professionalNav [aria-current="page"]');const k=cur?.id?.replace('workArea-','');return K.AREAS.includes(k)?k:'design';}
  // ----- Panel -----

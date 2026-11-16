@@ -27,8 +27,15 @@
   const c=UI.current();if(!c?.budget){window.toast?.('El presupuesto no está disponible para este proyecto.',5000);return;}
   if(state.projectId!==app.project.id){state.sources=[];state.columns={};state.proposal=null;}   // never carry sources across projects
   state.budget=c.budget;state.projectId=app.project.id;state.selected=itemId||state.selected&&item(state.selected)?.id||c.budget.items[0]?.id||null;state.quotes=[];state.preview=null;state.msg='';state.err='';
+  // CAT-04: «Mi catálogo» (sheets of the current studio) is always a source, refreshed on every open; for a catalogue
+  // item its own sheet quote is shown at once for comparison. Nothing is applied until «Confirmar».
+  const C4=window.RubikCat04;if(C4){state.sources=[...C4.priceSources(),...state.sources.filter(s=>s.source.kind!=='studio-catalog')];state.detail=undefined;
+   catalogQuote();}
   draw();if(!dialog.open)dialog.showModal();dialog.querySelector('#pricesTitle').focus();
  }
+ // CAT-04: for a catalogue item, its own sheet quote (same identity) is put in the comparison; still nothing applied.
+ function catalogQuote(){const C4=window.RubikCat04;if(!C4?.isCatalogItem(state.selected))return;const q=C4.quoteFor(state.selected),src=state.sources.find(s=>s.source.kind==='studio-catalog'&&s.source.catalogId===q.catalogId);
+  if(src&&q.code){state.quotes=[{source:src.source,code:q.code,state:q.state,quote:q.quote}];state.detail=q.quote?0:undefined;}}
  async function record(change,label){
   try{const snap=await Ctx.snapshot();Ctx.store().addPriceChange(snap.entry.id,snap.subject,app.project.id,{label,...change});}catch(e){state.err='El cambio se aplicó al presupuesto, pero no se pudo anotar en el historial: '+(window.FloorPlanConstructionRecord?.human(e)||e.message);}
  }
@@ -52,7 +59,7 @@
    if(it.id===state.selected)b.style.background='var(--action-soft)';el('strong',it.description,b).style.display='block';
    const ref=it.priceReference,src=it.priceSource?.type==='provider-reference'?'Precio de referencia · '+(ref?.code||''):it.priceSource?.type==='manual'?it.priceSource.label||'Precio propio':'Sin precio';
    el('small',`${it.unitPrice===null?'Sin precio':eur(it.unitPrice)+' / '+uq(it.quantity.unit)} · ${src} · importe ${lines.get(it.id).subtotalNet===null?'desconocido':eur(lines.get(it.id).subtotalNet)}${it.unitPrice!==null&&it.review.status!=='reviewed'?' · sin revisar':''}`,b).style.display='block';
-   b.onclick=()=>{state.selected=it.id;state.quotes=[];state.preview=null;draw();};}
+   b.onclick=()=>{state.selected=it.id;state.quotes=[];state.preview=null;state.detail=undefined;catalogQuote();draw();};}
   // Sources
   el('h3','Fuentes de precios',right);
   const srow=el('div',undefined,right);srow.style.cssText='display:flex;flex-wrap:wrap;gap:8px';
@@ -67,8 +74,8 @@
   const managed=Cat.managedStatus(),mg=el('div',undefined,right,'cx-banner warn');mg.id='pricesManaged';mg.dataset.enabled=String(managed.enabled);
   el('b','Catálogo BCCA gestionado por RUBIK: no disponible',mg);el('span',`RUBIK no descarga, aloja ni actualiza la BCCA mientras el permiso de ese uso no esté documentado (estado legal: ${managed.legal==='UNKNOWN'?'sin acreditar':managed.legal}). Puedes usar el BC3 de la BCCA que tú obtengas.`,mg);
   if(state.sources.length){const sl=el('ul',undefined,right);sl.id='pricesSources';
-   for(const s of state.sources){const src=s.source,li=el('li',undefined,sl);li.dataset.source=src.id;chip(src.kind==='bcca'?'BCCA':src.kind==='tariff'?'Tarifa propia':'BC3',li,'info');el('b',' '+nice(src.label),li);
-    el('small',` · ${src.edition?'edición '+src.edition+' · ':''}precios a ${fmtDate(src.asOf)} · ${src.count} partidas · licencia ${licenseText(src.license.status)}`,li);
+   for(const s of state.sources){const src=s.source,li=el('li',undefined,sl);li.dataset.source=src.id;chip(src.kind==='bcca'?'BCCA':src.kind==='tariff'?'Tarifa propia':src.kind==='studio-catalog'?'Mi catálogo':'BC3',li,'info');el('b',' '+nice(src.label),li);
+    el('small',` · ${src.edition?'edición '+src.edition+' · ':''}precios a ${fmtDate(src.asOf)} · ${src.count} partidas · licencia ${src.kind==='studio-catalog'?'no aplica (fichas de tu estudio)':licenseText(src.license.status)}`,li);
     if(src.columns.length>1){const l=el('label',undefined,li,'cx-field');el('span','Columna de precios',l);const sel=el('select',undefined,l);sel.dataset.col=src.id;el('option','Elige una columna…',sel).value='';src.columns.forEach((c,i)=>{const o=el('option',c,sel);o.value=String(i);});sel.value=state.columns[src.id]===undefined||state.columns[src.id]===null?'':String(state.columns[src.id]);sel.onchange=()=>{state.columns[src.id]=sel.value===''?null:Number(sel.value);};}
     if(src.edition){const u=btn('Comprobar actualización con esta edición',li,'cx-link');u.dataset.update=src.id;u.onclick=async()=>{state.proposal=await Cat.proposeEditionUpdate(state.budget,s);draw();dialog.querySelector('#pricesUpdates')?.scrollIntoView({block:'nearest'});};}}}
   // Search for the selected item
@@ -111,7 +118,7 @@
    const sc=el('td',undefined,tr);chip(Cat.describe(o.state).title,sc,Cat.STATES[o.state]?.tone==='ok'?'ok':'warn');const ac=el('td',undefined,tr);
    if(o.unitPrice!==null&&o.unitPrice!==undefined){const b=btn('Procedencia y decisión',ac,'cx-link');b.dataset.detail=String(i);b.onclick=()=>{state.detail=i;draw();};}});
   if(state.detail!==undefined&&state.quotes[state.detail]?.quote){const q=state.quotes[state.detail],s=q.quote.source,u=Cat.unitCheck(it.quantity.unit,q.quote.unit),dl=el('dl',undefined,box,'cx-prov');dl.id='pricesProvenance';
-   for(const [k,v] of [['Fuente',nice(s.label)],['Tipo',q.source.kindLabel],['Código',q.quote.code],['Descripción',q.quote.description],['Unidad',uq(q.quote.unit)+(u.ok?'':' · distinta de la partida')],['Moneda',q.quote.currency],['Precio',eur(q.quote.unitPrice)+' sin IVA'],['Edición',s.edition||'no indicada'],['Región o columna',s.region||'no indicada'],['Fecha del precio',fmtDate(s.asOf)],['Licencia',licenseText(s.licenseStatus)],['Atribución',s.attribution||'no indicada por la fuente']]){el('dt',k,dl);el('dd',v,dl);}
+   for(const [k,v] of [['Fuente',nice(s.label)],['Tipo',q.source.kindLabel],['Código',q.quote.code],['Descripción',q.quote.description],['Unidad',uq(q.quote.unit)+(u.ok?'':' · distinta de la partida')],['Moneda',q.quote.currency],['Precio',eur(q.quote.unitPrice)+' sin IVA'],['Edición',s.edition||'no indicada'],['Región o columna',s.region||'no indicada'],['Fecha del precio',fmtDate(s.asOf)],['Licencia',q.source.kind==='studio-catalog'?'no aplica (fichas de tu estudio; el origen se indica en «Atribución»)':licenseText(s.licenseStatus)],['Atribución',s.attribution||'no indicada por la fuente']]){el('dt',k,dl);el('dd',v,dl);}
    el('p','Es un precio de referencia: no es una oferta ni un coste de obra ejecutada.',box,'cx-status').style.color='var(--ink-muted)';
    const acts=el('div',undefined,box);acts.style.cssText='display:flex;gap:8px;flex-wrap:wrap';
    const asP=btn('Usar como precio de la partida…',acts,'btn primary');asP.id='pricesAsPrice';asP.onclick=()=>{state.preview=Cat.previewApply(state.budget,it.id,q.quote,{as:'price',upgrade:true});draw();dialog.querySelector('#pricesPreview')?.scrollIntoView({block:'nearest'});};

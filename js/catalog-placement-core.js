@@ -61,18 +61,36 @@
  // Copy the link when the editor duplicates an object (same SKU, new object id), inside the same mutate.
  function duplicate(project,fromId,toId){const ext=project?.extensions?.[EXT];const l=ext?.links?.[fromId];if(!l)return {changed:false};ext.links[toId]={...clone(l),linkedAt:new Date().toISOString()};return {changed:true};}
 
- // C1–C4 cost provider: quotes the sheet's own sourced price (EUR only, as the C1–C4 contract requires).
+ // Commercial identity of a link or product (never the SKU alone: the same SKU may exist in another catalogue/studio).
+ const identityOf=x=>({studioId:x.studioId,catalogId:x.catalogId,productId:x.productId,variantId:x.variantId||null});
+ const itemIdOf=x=>`cat:${x.studioId}:${x.catalogId}:${x.productId}:${x.variantId||'-'}`;
+ function parseItemId(id){const m=/^cat:([^:]+):([^:]+):([^:]+):([^:]+)$/.exec(String(id||''));return m?{studioId:m[1],catalogId:m[2],productId:m[3],variantId:m[4]==='-'?null:m[4]}:null;}
+ // Resolve a sheet: by full identity (cat:studio:catalog:product:variant) or by a SKU that is UNIQUE in the given
+ // catalogues. Several matches → ambiguous (never the first one); none → not-found.
+ function resolve(getCatalogs,itemId){
+  const cats=getCatalogs()||[],id=parseItemId(itemId);
+  if(id){const c=cats.find(x=>x.studioId===id.studioId&&x.catalogId===id.catalogId);if(!c)return {status:'not-found',reason:'catalog-missing'};
+   const p=c.products.find(x=>x.productId===id.productId&&(x.variantId||null)===id.variantId);return p?{status:'found',c,p}:{status:'not-found',reason:'sheet-missing'};}
+  const hits=[];for(const c of cats)for(const p of c.products)if(p.sku===itemId)hits.push({c,p});
+  if(hits.length>1)return {status:'ambiguous',reason:'ambiguous-sku',candidates:hits.map(h=>itemIdOf({...h.p,studioId:h.c.studioId,catalogId:h.c.catalogId}))};
+  return hits.length?{status:'found',...hits[0]}:{status:'not-found',reason:'sheet-missing'};
+ }
+ // C1–C4 cost provider: quotes the sheet's own sourced price (EUR only, as the C1–C4 contract requires). The quote
+ // carries the identity (itemId), the SKU (code), the sheet's own unit notation (ud/m2/ml: the budget side decides
+ // compatibility by notation, never by conversion) and the catalogue revision + sheet version as `edition`.
  function costProvider(getCatalogs){
-  const find=sku=>{for(const c of getCatalogs()||[])for(const p of c.products)if(p.sku===sku)return {c,p};return null;};
   return Object.freeze({id:PROVIDER_ID,
    getCapabilities(){return {search:false,getItem:false,getPrice:true,network:'none'};},
    getSourceMetadata(){return {providerId:PROVIDER_ID,label:'Catálogo del estudio',kind:'commercial',sourceName:'Fichas CatalogProductV1 (precio con fuente y fecha)',sourceUrl:null,edition:null,region:null,attribution:null,license:{status:'not-applicable',name:null,url:null}};},
    getPrice(itemId){
-    const hit=find(itemId);if(!hit)return {status:'not-found',providerId:PROVIDER_ID};
+    const hit=resolve(getCatalogs,itemId);
+    if(hit.status==='ambiguous')return {status:'unavailable',providerId:PROVIDER_ID,reason:'ambiguous-sku'};
+    if(hit.status!=='found')return {status:'not-found',providerId:PROVIDER_ID};
     const c=hit.p.commercial;if(c.netUnitPrice==null||!c.priceSource||!c.verifiedAt)return {status:'unavailable',providerId:PROVIDER_ID,reason:'price-unknown'};
     if(c.currency!==Cost.CURRENCY)return {status:'unsupported',providerId:PROVIDER_ID,reason:'currency'};
-    const quote={providerId:PROVIDER_ID,itemId,code:hit.p.sku,description:hit.p.displayName,unit:c.unit==='ud'?'u':c.unit,unitPrice:c.netUnitPrice,currency:'EUR',priceKind:'reference',
-     source:{label:c.priceSource,asOf:c.verifiedAt,retrievedAt:null,licenseStatus:'not-applicable'}};
+    const synthetic=hit.p.source?.kind==='synthetic-fixture';
+    const quote={providerId:PROVIDER_ID,itemId:itemIdOf({...hit.p,studioId:hit.c.studioId,catalogId:hit.c.catalogId}),code:hit.p.sku,description:hit.p.displayName,unit:c.unit,unitPrice:c.netUnitPrice,currency:'EUR',priceKind:'reference',
+     source:{label:c.priceSource,asOf:c.verifiedAt,retrievedAt:null,edition:`rev ${hit.c.revision} · ficha v${hit.p.productVersion}`,region:null,attribution:`${hit.c.name||hit.c.catalogId}${synthetic?' · synthetic-fixture':''}`,licenseStatus:'not-applicable'}};
     try{return {status:'available',providerId:PROVIDER_ID,quote:Cost.validateQuote(quote,PROVIDER_ID)};}catch{return {status:'invalid',providerId:PROVIDER_ID,reason:'invalid-quote'};}
    }});
  }
@@ -93,5 +111,5 @@
   return {lines,netTotal:Math.round(total*100)/100,currency:'EUR',complete:lines.every(l=>l.status==='sourced'),excluded:lines.filter(l=>l.status!=='sourced').map(l=>l.sku),
    basis:'precio de la ficha con fuente y fecha; nunca desde imágenes; sin IVA'};
  }
- return Object.freeze({EXT,VERSION,TOLERANCE_MM,PROVIDER_ID,TYPE,plan,linkOf,attach,links,duplicate,costProvider,budgetLines});
+ return Object.freeze({EXT,VERSION,TOLERANCE_MM,PROVIDER_ID,TYPE,plan,linkOf,attach,links,duplicate,identityOf,itemIdOf,parseItemId,resolve,costProvider,budgetLines});
 });

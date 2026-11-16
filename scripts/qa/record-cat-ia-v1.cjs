@@ -224,7 +224,12 @@ async function cat03(env){
   await r.shot(page,`${name}-neg-material.png`,'Encimera (material): no se coloca como objeto');await page.locator('#catalogClose').click();
   r.check('horno: modelo validado',await placeFromPalette(page,'horno-h60@inox')==='validated-model');await placeNow();
   await page.locator('#catalogPlaceOpen').click();await page.locator('#catalogDialog[open]').waitFor();await page.locator('#catalogBudgetBox').scrollIntoViewIfNeeded();
-  try{r.check('negativo: precio desconocido no suma',/incompleto: QA-H60-INOX/.test(await page.locator('#catalogBudgetTotal').innerText()));}catch(e){failed.push({case:'precio-desconocido',error:e.message});}
+  try{const horno=page.locator('#catalogBudgetTable tr[data-sku="QA-H60-INOX"]');// Oráculo de negocio (no solo texto): el horno sin precio NO tiene precio aplicado, no tiene subtotal (ni 0), figura
+  // como partida sin precio y el capítulo no tiene total. Un precio desconocido nunca equivale a 0 ni a un precio aplicado.
+  const unk=await page.evaluate(()=>{const s=RubikCat04.summary(),x=s.items.find(i=>i.sku==='QA-H60-INOX'),c=FloorPlanBudget.calculateBudget(s.budget),line=c.lines.find(l=>l.id===x.itemId)||null;
+   return {state:x.state,active:x.activeUnitPrice,sub:x.line?.subtotalNet,calcSub:line?line.subtotalNet:'absent',unpriced:c.totals.unpricedItemIds.includes(x.itemId),chapterNet:s.chapter?.totals?.net?.amount,chapterComplete:s.chapter?.totals?.net?.complete,missing:!!s.chapter?.totals?.net?.missingItemIds?.includes(x.itemId)&&!!c.totals.net.missingItemIds.includes(x.itemId),budgetComplete:c.totals.net.complete,reviewed:x.reviewed,sheet:x.sheetPrice};});
+  r.check('negativo: precio desconocido no suma',await horno.getAttribute('data-status')==='unknown-price'&&/sin importe/.test(await horno.innerText())&&/— sin IVA · incompleto: \d+ partida\(s\) sin precio aplicado/.test(await page.locator('#catalogBudgetTotal').innerText())
+   &&unk.state==='unknown-price'&&unk.active===null&&unk.sub===null&&unk.calcSub===null&&unk.unpriced===true&&unk.missing===true&&unk.chapterComplete===false&&unk.budgetComplete===false&&unk.reviewed===false&&unk.sheet===null,unk);}catch(e){failed.push({case:'precio-desconocido',error:e.message});}
   await r.shot(page,`${name}-04-partidas.png`,'Partidas: solo precios de ficha con fuente y fecha; el horno sin precio no suma');await page.locator('#catalogClose').click();
   const id=await page.evaluate(()=>{const l=FloorPlanApp.project.extensions['x-cat03-catalog-link'].links;return Object.keys(l).find(k=>l[k].sku==='QA-LUMEN-160-RB');});
   await K.open3D(page);await page.waitForFunction(id=>['ready','error'].includes(View3D.assetStatus(id)?.state),id,{timeout:60000});
