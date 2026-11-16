@@ -95,6 +95,7 @@ body.guided #newRoomBtn{display:none}
 /* Compact guide: passive information hidden; goal, current task and actions remain. */
 .guide-bar.guide-compact .guide-steps,.guide-bar.guide-compact .guide-progress-line,.guide-bar.guide-compact .guide-current p,.guide-bar.guide-compact .guide-example>span{display:none}
 .guide-bar.guide-compact{padding-top:6px;padding-bottom:6px}.guide-bar.guide-compact .guide-current{padding:6px 10px;margin-top:4px}.guide-bar.guide-compact .guide-current h2{margin:0;font-size:13px}.guide-bar.guide-compact .guide-example{padding-top:3px}
+@media(max-width:600px){.guide-bar.guide-compact{padding-block:3px}}
 #guideCompact{border:1px solid var(--line)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 /* Welcome «El plano | La vivienda en 3D»: segmented control over the example; the selected view uses the selection role. */

@@ -2,6 +2,8 @@
  "_": "Browser tests that no other workflow runs (cross review of #240: 39 of 145). `blocking` must be green on every PR. `historical` shards run on every PR but do NOT block: they were never in CI, so each red must first be classified (pre-existing defect, obsolete assertion or new regression) in `classification`; a file moves to `blocking` once it is green and classified. scripts/qa/check-browser-test-coverage.cjs fails when a *.browser.test.cjs is neither named in a workflow nor listed here.",
  "blocking": [
   "tests/project-identity.browser.test.cjs",
+  "tests/delivery-3d-link.browser.test.cjs",
+  "tests/build-palette.browser.test.cjs",
   "tests/consolidacion-transversal.browser.test.cjs",
   "tests/client-review.browser.test.cjs",
   "tests/variants.browser.test.cjs",
@@ -27,7 +29,6 @@
   ],
   "editor": [
    "tests/build-measure-search.browser.test.cjs",
-   "tests/build-palette.browser.test.cjs",
    "tests/furniture-overlaps.browser.test.cjs",
    "tests/journey-orientation.browser.test.cjs",
    "tests/layout-review.browser.test.cjs",
@@ -54,8 +55,8 @@
   ]
  },
  "classification": {
-  "tests/build-palette.browser.test.cjs": "pre-existing product defect on master 46174d6 (390x844, 844x390): #nav3dToggle covers the «Construir» tab in 3D with the drawer open. Fix pending in this branch (P3); then blocking.",
+  "tests/build-palette.browser.test.cjs": "Fixed by 6d19ee5 on #241: NAV3D no longer covers the palette on 390x844 or 844x390; local browser verification 2026-11-16, 9/9 together with nav3d.browser.test.cjs. Promoted to blocking.",
   "tests/wall-structure.browser.test.cjs": "pre-existing on master 46174d6 (390x844): «Inicio» loses its 10 px margin with the drawer open. Cosmetic, P2.",
-  "tests/journey-orientation.browser.test.cjs": "pre-existing on master 46174d6: 6 failures reported by the cross review (T1/T9/T10 per viewport, T8, T11 guide height 176>170, T13 highlights «Diseñar»). Run was cut at 25 min; each must be classified obsolete vs regression individually — not done yet."
+  "tests/journey-orientation.browser.test.cjs": "Six individually verified on #241 (2026-11-16, selective 6/6): T1/T9/T10 1440x900, 390x844 and 844x390 each failed because the historical background-color probe counted off-flow smart-furnishing buttons; assertion now scopes the guide, and each full case passes. T8 had the same obsolete probe and passes. T11 was a real mobile layout defect (176 px vs 170 px); compact padding reduced by 6 px and the full case passes. T13 expected the superseded stage label Distribuir; the current five-stage guide uses Diseñar and still offers Ver conflictos; updated assertion passes. Full journey suite was not rerun and remains historical."
  }
 }

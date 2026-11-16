@@ -23,7 +23,7 @@ async function open(t,viewport,{three=false}={}){
  const closeDrawers=async()=>{for(const [a,toggle] of [['aside.lib','#tgLib'],['aside.right','#tgPanel']])if(await page.evaluate(s=>matchMedia('(max-width:1100px)').matches&&document.querySelector(s).classList.contains('open'),a))await press(toggle);await page.waitForTimeout(400);};
  const firstRoom=async(n='Salón')=>{await press('#welcomeBlank');await page.locator('#roomDesignName').fill(n);await press('#roomDesignReview');await press('#roomDesignConfirm');await page.waitForTimeout(400);await closeDrawers();};
  const upload=async(button,file)=>{const fc=page.waitForEvent('filechooser');await press(button);await (await fc).setFiles(file);};
- const filled=()=>page.evaluate(()=>{const i=document.createElement('i');i.style.color='var(--action)';document.body.append(i);const c=getComputedStyle(i).color;i.remove();return [...document.querySelectorAll('button')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden'&&getComputedStyle(b).backgroundColor===c&&!b.closest('dialog:not([open]),[hidden]')).map(b=>b.id||b.textContent.trim());});
+ const filled=()=>page.evaluate(()=>[...document.querySelectorAll('#guideBar button.primary')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden').map(b=>b.id||b.textContent.trim()));
  const shot=n=>page.screenshot({path:path.join(shots,`${name}-${n}.png`)});
  return {page,errors,narrow,name,press,guide,project,closeDrawers,firstRoom,upload,filled,shot};
 }
@@ -159,10 +159,10 @@ test('T12 guided header keeps every control on screen in 2D, 3D and with two lev
 
 // A duplex with conflicts: the card asks to resolve them and the highlighted stage is «Distribuir», where the layout is
 // fixed, not «Revisar y guardar».
-test('T13 building conflicts highlight «Distribuir» 1440x900',{timeout:180000},async t=>{
+test('T13 building conflicts highlight «Diseñar» 1440x900',{timeout:180000},async t=>{
  const c=await open(t,{width:1440,height:900}),{page,guide}=c;await c.upload('#welcomeUpload',duplex);
  await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(500);
  const g=await guide();assert.equal(g.primary,'Ver conflictos');
- assert.equal(await page.evaluate(()=>document.querySelector('#guideBar [aria-current="step"] .step-label')?.textContent),'Distribuir');
+ assert.equal(await page.evaluate(()=>document.querySelector('#guideBar [aria-current="step"] .step-label')?.textContent),'Diseñar');
  assert.deepEqual(c.errors,[]);
 });
