@@ -7,7 +7,8 @@
      cannot collide with the geometric items (floor:…, skirting, paint, opening:…).
    - Quantity: the number of linked objects that exist, as a MANUAL-source quantity with an explicit label (the C1–C4
      quantity engine does not count objects; the count is not attributed to it). A sheet priced per m² or ml is never
-     multiplied by a number of objects: its quantity stays «unavailable — pending measurement».
+     multiplied by a number of objects: its quantity stays «unavailable — pending measurement». Without a sheet the
+     unit already budgeted is kept and an unverifiable unit leaves the quantity unknown (cross audit XR-01).
    - Price: never automatic. Placing a product creates an item WITHOUT active price; the sheet price is offered as a
      reference through FloorPlanCostCatalog.previewApply/apply (explicit confirmation) by `priceSources()`.
    - A line whose objects were all removed is kept with 0 units only while it carries a price or a reference (so an
@@ -32,6 +33,11 @@
  const validCatalogs=list=>(Array.isArray(list)?list:[]).filter(c=>isObj(c)&&c.schema===C.CATALOG_SCHEMA&&Array.isArray(c.products));
  function countLabel(n,lang){return L(lang,`Recuento automático de ${n} objeto(s) vinculado(s) en el proyecto (CAT-03); no es una medición del motor de cantidades`,
   `Automatic count of ${n} linked object(s) in the project (CAT-03); not a quantity-engine measurement`,`项目中 ${n} 个已关联对象的自动计数（CAT-03），非数量引擎测量`);}
+ const NOTATION={unit:'ud',m2:'m2',m:'ml'};
+ function unverifiableLabel(histUnit,lang){const u=histUnit?NOTATION[histUnit]||histUnit:null;
+  return u?L(lang,`Ficha no disponible: se conserva la unidad ya presupuestada (${u}); la cantidad queda pendiente y ningún recuento de objetos se convierte en ${u}`,
+   `Sheet unavailable: the unit already budgeted (${u}) is kept; the quantity stays pending and no object count is turned into ${u}`,`资料不可用：保留已预算的单位（${u}）；数量待定，对象数量不会换算为 ${u}`)
+  :L(lang,'Ficha no disponible: la unidad comercial no es verificable; la cantidad queda pendiente','Sheet unavailable: the commercial unit cannot be verified; the quantity stays pending','资料不可用：无法核实计价单位；数量待定');}
  function pendingLabel(unit,lang){return L(lang,`Pendiente de medición: la ficha tiene precio por ${unit}; un número de objetos no es una ${unit==='m2'?'superficie':'longitud'}`,
   `Pending measurement: the sheet is priced per ${unit}; a number of objects is not ${unit==='m2'?'an area':'a length'}`,`待测量：资料按 ${unit} 计价，对象数量不是${unit==='m2'?'面积':'长度'}`);}
  // Sheet behind a link, checked against the catalogues of the CURRENT studio only.
@@ -58,15 +64,20 @@
   const lines=[],report=[];
   for(const g of [...groups.values()].sort((a,b)=>a.link.sku<b.link.sku?-1:a.link.sku>b.link.sku?1:a.itemId<b.itemId?-1:1)){
    const sheet=sheetOf(cats,g.link,studioId),p=sheet.product,before=prevItems.get(g.itemId);
-   const rawUnit=p?.commercial?.unit||null,unit=rawUnit?UNIT[rawUnit]||null:before?.quantity?.unit||'unit';
-   const n=g.objects.length,countable=!rawUnit||rawUnit==='ud';
+   // XR-01: the unit comes from the sheet. Without a sheet (catalogue or sheet gone, SKU changed) the commercial unit is
+   // NOT verifiable: the unit already budgeted for this item is the only evidence and is kept (a price per m² or per m
+   // never comes back counted in units); with no history at all the quantity stays unknown, never «N ud».
+   const rawUnit=p?.commercial?.unit||null,histUnit=!rawUnit&&before?.quantity?.unit||null;
+   const unit=rawUnit?UNIT[rawUnit]||null:histUnit||'unit';
+   const n=g.objects.length,countable=rawUnit?rawUnit==='ud':histUnit?histUnit==='unit':sheet.status==='found';
+   const quantityStatus=countable?'counted':rawUnit?'pending-measurement':histUnit?'unit-from-history':'unit-unverifiable';
    const quantity=countable?{value:n,unit:'unit',status:'measured',complete:true,source:{type:'manual',label:countLabel(n,lang)}}
-    :{value:null,unit,status:'unavailable',complete:false,source:{type:'manual',label:pendingLabel(rawUnit,lang)}};
+    :{value:null,unit,status:'unavailable',complete:false,source:{type:'manual',label:rawUnit?pendingLabel(rawUnit,lang):unverifiableLabel(histUnit,lang)}};
    const name=p?.displayName||g.link.displayName||g.link.sku,synthetic=p?.source?.kind==='synthetic-fixture';
    lines.push({key:g.itemId,tariffKey:null,chapter:CHAPTER,description:`${name} · ${g.link.sku}${synthetic?L(lang,' · ficha sintética QA',' · synthetic QA sheet',' · 合成测试资料'):''}`.slice(0,200),quantity,waste:0});
    const price=sheet.status==='found'?priceOf([sheet.catalog],g.itemId):{status:sheet.status==='other-studio'?'other-studio':'unavailable',quote:null};
-   report.push({itemId:g.itemId,identity:P.identityOf(g.link),sku:g.link.sku,displayName:name,objects:g.objects.slice().sort(),quantity:countable?n:null,count:n,unit:quantity.unit,rawUnit,
-    quantityStatus:countable?'counted':'pending-measurement',retired:false,synthetic,
+   report.push({itemId:g.itemId,identity:P.identityOf(g.link),sku:g.link.sku,displayName:name,objects:g.objects.slice().sort(),quantity:countable?n:null,count:n,unit:quantity.unit,rawUnit:rawUnit||(histUnit?NOTATION[histUnit]:null),
+    quantityStatus,retired:false,synthetic,
     sheet:{status:sheet.status,catalogRevision:sheet.catalog?.revision??null,revisionHash:sheet.catalog?.revisionHash??null,productVersion:p?.productVersion??null,vatRate:p?.commercial?.vatRate??null},
     linked:{catalogRevisions:[...g.linkedRevisions].sort(),productVersions:[...g.linkedVersions].sort(),revisionHash:g.link.revisionHash||null},
     versionChanged:!!p&&[...g.linkedVersions].some(v=>v!==p.productVersion),revisionChanged:!!sheet.catalog&&[...g.linkedRevisions].some(r=>r!==sheet.catalog.revision),
@@ -86,7 +97,11 @@
   const items=new Map((budget?.items||[]).map(i=>[i.id,i]));
   return report.map(r=>{const it=items.get(r.itemId)||null,ref=it?.priceReference||null,q=r.price.quote,fromCatalog=ref?.providerId===PROVIDER_ID;
    let state;
+   // F3 (cross-audit #237): a price (manual or applied from S2) whose item unit no longer matches the sheet unit is a
+   // UNIT CONFLICT, never «applied, pending review» nor «stale»: the price stays with its unit, without amount.
+   const unitConflict=!!it&&it.unitPrice!==null&&!r.retired&&!!r.unit&&it.quantity?.unit!==r.unit;
    if(!it)state='missing';
+   else if(unitConflict)state='unit-conflict';
    else if(it.unitPrice!==null&&it.priceSource?.type==='provider-reference'&&fromCatalog)state=q&&!sameRef(ref,q)?'stale':it.review.status==='reviewed'?'reviewed':'applied-unreviewed';
    else if(it.unitPrice!==null)state=it.review.status==='reviewed'?'reviewed':'other-price';
    else if(fromCatalog)state=q&&!sameRef(ref,q)?'stale':'reference-kept';

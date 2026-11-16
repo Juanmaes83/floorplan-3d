@@ -69,7 +69,7 @@ jobs:
         run: |
           if grep -nE "authorization:|Authorization:|httpAdapter\\(" js/photo-reform-*.js; then echo "provider secret path in browser code"; exit 1; fi
       - name: CAT-04 pure - catalogue lines in the one budget, S2 explicit apply, visual references, assistant (figure oracle)
-        run: node --test --test-concurrency=1 tests/catalog-budget-core.test.cjs tests/visual-reference-core.test.cjs tests/cat04-assistant.test.cjs tests/budget-draft.test.cjs tests/budget-cost-bridge.test.cjs tests/cost-catalog-core.test.cjs tests/assistant-ai-v2.test.cjs
+        run: node --test --test-concurrency=1 tests/cat04-f1f2.test.cjs tests/cat04-xr.test.cjs tests/cat04-cross-review.test.cjs tests/catalog-budget-core.test.cjs tests/visual-reference-core.test.cjs tests/cat04-assistant.test.cjs tests/budget-draft.test.cjs tests/budget-cost-bridge.test.cjs tests/cost-catalog-core.test.cjs tests/assistant-ai-v2.test.cjs
       - name: CatalogProductV1 core, and the guards of R03, R02-A and the photo project with the catalogue loaded
         run: node --test --test-concurrency=1 tests/catalog-product-core.test.cjs tests/catalog-placement-core.test.cjs tests/assets.test.cjs tests/furniture-search.test.cjs tests/cost-provider.test.cjs tests/brand-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/photo-project-core.test.cjs tests/photo-reform-provider.test.cjs
   browser:
@@ -101,7 +101,7 @@ jobs:
       # tests fail on master c91d12d) still fails the job, but no longer hides the steps below. No test is skipped.
       - name: Real editor - CAT-04 catalogue → Presupuestar → assistant → dossier, Image studio references (desktop ES, phone EN, landscape ZH)
         if: ${{ !cancelled() }}
-        run: node --test --test-concurrency=1 tests/cat04.browser.test.cjs tests/cat04-failsafe.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/cat04.browser.test.cjs tests/cat04-failsafe.browser.test.cjs tests/cat04-f1f2.browser.test.cjs tests/cat04-xr.browser.test.cjs
       - name: Presupuestar, reference prices (S2/M2) and economic dossier keep working with CAT-04 loaded
         if: ${{ !cancelled() }}
         run: node --test --test-concurrency=1 tests/budget-ui.browser.test.cjs tests/m2-s4.browser.test.cjs tests/economic-dossier.browser.test.cjs

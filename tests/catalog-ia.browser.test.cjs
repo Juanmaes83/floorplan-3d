@@ -85,10 +85,13 @@ test('CAT-02 escritorio: piloto, búsqueda, ficha exportable, selección congela
   await page.locator('#catalogList .catalog-item[data-key="aparador-lumen@roble"]').click();await page.locator('#catalogPreview[data-key="aparador-lumen@roble"]').waitFor();
   assert.match(await cell('price').innerText(),/710/);assert.match(await cell('version').innerText(),/v2 · revisión de catálogo 2/);assert.equal(frozen.items[1].product.commercial.netUnitPrice,690);
   // Archivo que no es una colección / no es JSON.
+  // F7 (cross-audit #237): the import reads the file with an asynchronous FileReader; wait for THIS file's message (same
+  // regex, same element) before asserting, instead of reading the previous file's message. The assertion is unchanged.
+  const importError=async re=>{await page.waitForFunction(src=>new RegExp(src).test(document.querySelector('#catalogImportError')?.innerText||''),re.source,{timeout:10000}).catch(()=>{});return page.locator('#catalogImportError').innerText();};
   await page.locator('#catalogImportFile').setInputFiles({name:'x.json',mimeType:'application/json',buffer:Buffer.from('{"schema":"otra/1"}')});
-  assert.match(await page.locator('#catalogImportError').innerText(),/no es una colección RUBIK/);
+  assert.match(await importError(/no es una colección RUBIK/),/no es una colección RUBIK/);
   await page.locator('#catalogImportFile').setInputFiles({name:'x.json',mimeType:'application/json',buffer:Buffer.from('{roto')});
-  assert.match(await page.locator('#catalogImportError').innerText(),/no es JSON válido/);
+  assert.match(await importError(/no es JSON válido/),/no es JSON válido/);
   // Otro estudio (perfil de marca) no ve este catálogo; el catálogo de «este navegador» sigue intacto.
   await page.locator('#catalogClose').click();
   await page.evaluate(()=>FloorPlanBrand.saveProfile(FloorPlanBrandUI.store,{name:'Estudio Sur QA'}));

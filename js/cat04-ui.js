@@ -43,6 +43,7 @@
   'other-studio':tx('Ficha de otro estudio: no se usa aquí','Sheet of another studio: not used here','其他工作室的资料：此处不使用'),
   ambiguous:tx('SKU ambiguo: elige la ficha','Ambiguous SKU: choose the sheet','SKU 不明确：请选择资料'),
   'other-price':tx('Precio propio o de otra fuente (no de la ficha)','Own price or from another source (not the sheet)','自有或其他来源价格（非资料）'),
+  'unit-conflict':tx('Conflicto de unidad: la ficha se vende ahora por otra unidad; tu precio se conserva con su unidad y sin importe','Unit conflict: the sheet is now sold in another unit; your price is kept with its unit and no amount','单位冲突：资料现按其他单位销售；保留您的价格及其单位，无金额'),
   missing:tx('No está en el presupuesto','Not in the budget','不在预算中')});
  const stateText=s=>STATE()[s]||s;
  // Row decoration in Presupuestar (catalogue items only): identity, count, price state and the explicit action.
@@ -50,6 +51,9 @@
   if(!CB.isCatalogItem(it.id))return;const rep=state?.catalog?.report?.find(r=>r.itemId===it.id);if(!rep)return;
   const st=CB.states(state.budget,[rep])[0],box=el('small',undefined,th,'budget-source cat04-row');box.dataset.state=st.state;box.dataset.sku=rep.sku||'';box.dataset.quantityStatus=rep.quantityStatus;
   const what=rep.retired?tx('Sin objetos colocados (0 ud)','No placed objects (0 pcs)','无已放置对象（0 件）')
+   :it.unitPrice!==null&&it.quantity?.unit!==rep.unit?tx(`Unidad cambiada (${it.quantity.unit} → ${rep.unit}): precio conservado sin importe; revisa o quita el precio`,`Unit changed (${it.quantity.unit} → ${rep.unit}): price kept without amount; review or remove the price`,`单位已变更（${it.quantity.unit} → ${rep.unit}）：保留价格不计金额；请审核或移除价格`)
+   :rep.quantityStatus==='unit-from-history'?tx(`Ficha no disponible: se conserva la unidad ${rep.rawUnit} y la cantidad queda pendiente`,`Sheet unavailable: the unit ${rep.rawUnit} is kept and the quantity stays pending`,`资料不可用：保留单位 ${rep.rawUnit}，数量待定`)
+   :rep.quantityStatus==='unit-unverifiable'?tx('Ficha no disponible: unidad no verificable, cantidad pendiente','Sheet unavailable: unit not verifiable, quantity pending','资料不可用：单位无法核实，数量待定')
    :rep.quantityStatus==='pending-measurement'?tx(`Pendiente de medición: la ficha tiene precio por ${rep.rawUnit}`,`Pending measurement: the sheet is priced per ${rep.rawUnit}`,`待测量：资料按 ${rep.rawUnit} 计价`)
    :tx(`${rep.count} objeto(s) en el proyecto`,`${rep.count} object(s) in the project`,`项目中 ${rep.count} 个对象`);
   box.textContent=`${tx('Producto de mi estudio','Product from my studio','我的工作室产品')} · ${rep.sku||''} · ${what} · ${stateText(st.state)}`;
@@ -64,7 +68,7 @@
    b.onclick=()=>{try{const next={...state.budget,items:state.budget.items.filter(x=>x.id!==it.id)};next.chapters=next.chapters.filter(c=>next.items.some(x=>x.chapterId===c.id));window.FloorPlanBudgetUI.commit(next);window.FloorPlanBudgetUI.refresh?.();}catch(e){console.warn('[CAT-04]',e?.message||e);}};}
  }
  /* ---------- Referencias visuales (Presupuestar) ---------- */
- const VSTATE=()=>({verified:tx('verificada','verified','已验证'),unverifiable:tx('no se puede verificar (huella distinta)','cannot be verified (hash differs)','无法验证'),'other-project':tx('de otro proyecto','from another project','属于其他项目')});
+ const VSTATE=()=>({verified:tx('verificada (solo la huella visual: no certifica el producto ni la ficha comercial)','verified (visual fingerprint only: it does not certify the product or the commercial sheet)','已验证（仅视觉指纹，不认证产品或商业资料）'),unverifiable:tx('no se puede verificar (huella distinta)','cannot be verified (hash differs)','无法验证'),'other-project':tx('de otro proyecto','from another project','属于其他项目')});
  const DEC=()=>({accepted:tx('aceptada en la revisión','accepted in the review','审核已接受'),rejected:tx('rechazada','rejected','已拒绝'),discarded:tx('descartada','discarded','已丢弃')});
  function visualRefs(){return VR?VR.list(app.project,{catalogs:catalogs(),studioId:studioId()}):[];}
  function budgetSections(dialog,state){
@@ -80,7 +84,7 @@
    el('strong',`${r.simulated?tx('SIMULACIÓN','SIMULATION','模拟'):r.resultKind||'—'} · ${DEC()[r.decision]||'—'} · ${VSTATE()[r.status]}`,li);
    el('span',` · ${tx('huella','hash','指纹')} ${r.hash.slice(0,12)}… · ${(r.linkedAt||'').slice(0,10)}`,li);
    if(r.label)el('small',r.label,li,'budget-source');
-   for(const x of r.references){const sm=el('small',`${x.sku} · ${x.displayName||''} · rev ${x.catalogRevision} · ${x.placed?tx('colocado en el proyecto','placed in the project','已放入项目'):x.placedStatus==='ambiguous'?tx('colocación no verificable: la referencia no indica el estudio','placement cannot be verified: the reference does not record the studio','无法验证放置：参考未记录工作室'):tx('NO colocado: no se presupuesta','NOT placed: not budgeted','未放置：不计入预算')} · ${x.catalogStatus==='current'?tx('ficha vigente','current sheet','资料有效'):x.catalogStatus==='older-revision'?tx('revisión anterior del catálogo','older catalogue revision','目录旧版本'):x.catalogStatus==='other-studio'?tx('ficha de otro estudio: no se comprueba aquí','sheet of another studio: not checked here','其他工作室的资料：此处不核对'):x.catalogStatus==='studio-unknown'?tx('estudio desconocido: no se comprueba la ficha','unknown studio: the sheet is not checked','工作室未知：不核对资料'):tx('ficha no disponible','sheet not available','资料不可用')}`,li,'budget-source cat04-vref');sm.dataset.sku=x.sku;sm.dataset.placed=String(x.placed);sm.dataset.placedStatus=x.placedStatus||'';sm.dataset.catalogStatus=x.catalogStatus||'';}
+   for(const x of r.references){const sm=el('small',`${x.sku} · ${x.displayName||''} · rev ${x.catalogRevision} · ${x.placed?tx('colocado en el proyecto','placed in the project','已放入项目'):x.placedStatus==='ambiguous'?tx('colocación no verificable: la referencia no indica el estudio','placement cannot be verified: the reference does not record the studio','无法验证放置：参考未记录工作室'):tx('NO colocado: no se presupuesta','NOT placed: not budgeted','未放置：不计入预算')} · ${x.catalogStatus==='current'?tx('ficha vigente','current sheet','资料有效'):x.catalogStatus==='older-revision'?tx('revisión anterior del catálogo','older catalogue revision','目录旧版本'):x.catalogStatus==='other-studio'?tx('ficha de otro estudio: no se comprueba aquí','sheet of another studio: not checked here','其他工作室的资料：此处不核对'):x.catalogStatus==='studio-unknown'?tx('estudio desconocido: no se comprueba la ficha','unknown studio: the sheet is not checked','工作室未知：不核对资料'):tx('ficha no disponible','sheet not available','资料不可用')} · ${tx('estudio','studio','工作室')} ${x.studioId||tx('desconocido','unknown','未知')}`,li,'budget-source cat04-vref');sm.dataset.sku=x.sku;sm.dataset.placed=String(x.placed);sm.dataset.placedStatus=x.placedStatus||'';sm.dataset.catalogStatus=x.catalogStatus||'';}
    const un=btn(tx('Quitar vínculo','Unlink','取消关联'),li,'btn budget-small');un.dataset.unlink=r.hash;un.onclick=()=>{unlinkVisual(r.hash);window.FloorPlanBudgetUI?.refresh?.();};}
   const row=el('div',undefined,sec,'cat04-actions');const open=btn(tx('Abrir el Estudio de imágenes','Open the Image studio','打开图像工作室'),row);open.id='cat04OpenStudio';
   open.onclick=()=>{returnToBudget=true;dialog.close();window.RubikVisualStudio?.open();};
@@ -88,6 +92,12 @@
  let returnToBudget=false;
  /* ---------- Estudio de imágenes: link the reviewed sheet explicitly ---------- */
  function linkVisual(sheet){if(!VR||!sheet)return {ok:false,reason:'no-sheet'};const v=VR.verify(sheet);if(!v.ok)return {ok:false,reason:v.reason};
+  // XR-02: never re-attribute an existing link to another studio; say how to do it explicitly.
+  const c=VR.conflictOf?.(app.project,sheet,{studioId:studioId()});if(c?.conflict)return {ok:false,code:'studio-conflict',reason:c.linkedStudioId
+   ?tx(`esta ficha ya está vinculada desde el estudio «${c.linkedStudioId}». Para vincularla desde este estudio, quita antes ese vínculo en Presupuestar → «Referencias visuales del proyecto».`,`this sheet is already linked from studio «${c.linkedStudioId}». To link it from this studio, first remove that link in Budget → «Visual references of the project».`,`此资料已从工作室「${c.linkedStudioId}」关联。如需从本工作室关联，请先在预算 →“项目视觉参考”中移除该关联。`)
+   :tx('esta ficha ya está vinculada sin estudio (vínculo anterior). Para atribuirla a este estudio, quita antes ese vínculo en Presupuestar → «Referencias visuales del proyecto».','this sheet is already linked without a studio (older link). To attribute it to this studio, first remove that link in Budget → «Visual references of the project».','此资料已在无工作室的情况下关联（旧关联）。如需归属到本工作室，请先在预算 →“项目视觉参考”中移除该关联。')};
+  // Same sheet, same studio, same project: already linked — no editor step, nothing to save.
+  if(c?.reason==='already-linked'&&app.project.extensions?.[VR.EXT]?.refs?.[sheet.hash]?.projectId===app.project.id)return {ok:true,already:true};
   const r=app.applyExtension?.(p=>{VR.link(p,sheet,{at:new Date().toISOString(),studioId:studioId()});return {ok:true,project:p};});return r?.ok?{ok:true}:{ok:false,reason:r?.explanation?.[0]||'not-saved'};}
  function unlinkVisual(hash){if(!VR)return;app.applyExtension?.(p=>{const r=VR.unlink(p,hash);return r.changed?{ok:true,project:p}:{ok:false};});}
  function studioButton(){const dlg=document.querySelector('#visualStudioDialog'),dl=dlg?.querySelector('#vsSheet');if(!dl||dlg.querySelector('#vsLinkProject'))return;
