@@ -5,7 +5,7 @@
    A. 2D: muro nuevo desde «Construir» → 3D → 2D.            B. Mobiliario: dos productos de «Mis catálogos».
    C. Presupuestar: precio de ficha confirmado, IVA.           D. Cerrar y reabrir: todo sigue igual.
    E. Asistente V2: las mismas cifras que Presupuestar.        F. Exportar proyecto y presupuesto (dos documentos).
-   G. CON-02 (abierto): el mismo archivo importado otra vez conserva su id y comparte presupuesto; Presupuestar lo avisa.
+   G. Identidad: el mismo archivo importado otra vez es un proyecto independiente (id propio, sin precios heredados).
    H. Proyecto B: no ve nada de A; A no cambia.
    I. Navegador limpio: importar proyecto → CON-01 (la cantidad sin ficha no se inventa al reabrir) → CON-03 «Importar
       presupuesto (JSON)» con vista previa, cancelar, confirmar → mismas cifras que en origen → Asistente igual.
@@ -68,18 +68,18 @@ test('CONSOLIDACIÓN · un mismo proyecto: 2D/3D → catálogo → presupuesto c
   // F (project). «Exportar JSON»: links travel, prices do not (the budget is its own document).
   await page.locator('details.menu summary').first().click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);projectJson=fs.readFileSync(await pd.path(),'utf8');
   assert.equal(JSON.parse(projectJson).id,A.pid);assert.equal(projectJson.includes('unitPrice'),false);
-  // G. CON-02 (open, owner decision): the same file imported again keeps its project.id — client review by file needs
-  // that — so the copy and the original read and write ONE budget. It is no longer silent: Presupuestar names the twin.
-  await importProject(page,'copia.json',projectJson);let c=await facts(page);assert.notEqual(c.entry,A.entry);assert.equal(c.pid,A.pid,'the portable id is kept');
-  assert.deepEqual([c.walls,c.objects,c.links,c.net,c.gross],[A.walls,A.objects,A.links,A.net,A.gross]);
-  await openBudget(page);const warn=page.locator('#budgetSharedProject');await warn.waitFor();assert.equal(await warn.getAttribute('data-count'),'1');assert.match(await warn.innerText(),/compartido con otro proyecto local/);await shot(page,'02b-presupuesto-compartido');await closeBudget(page);
+  // G. Identity contract: the same file imported again is an independent project — own id, no inherited prices, and
+  // Presupuestar has no shared document to warn about.
+  await importProject(page,'copia.json',projectJson);let c=await facts(page);assert.notEqual(c.entry,A.entry);assert.notEqual(c.pid,A.pid,'a stored id is never reused');
+  assert.deepEqual([c.walls,c.objects,c.links,c.saved,c.rb[3],c.net],[A.walls,A.objects,A.links,false,null,null],'same content, no prices of the original');
+  await openBudget(page);assert.equal(await page.locator('#budgetSharedProject').count(),0);await closeBudget(page);
   // H. Project B (new template): nothing of A; then back to A, which is still exactly A.
   await toEditor(page);await page.locator('#projectsBtn').click();await page.locator('#projectsDialog[open]').waitFor();await page.fill('#projectName','Proyecto B');await page.click('#projectCreate');await page.waitForFunction(e=>FloorPlanApp.entryId!==e,c.entry);
   const b=await facts(page);assert.deepEqual([b.links,b.saved,b.net,b.items.some(i=>i.startsWith('cat:'))],[[],false,null,false]);assert.notEqual(b.pid,A.pid);if(await page.locator('#projectsDialog[open]').count())await page.locator('#projectClose').click();await openBudget(page);assert.equal(await page.locator('#budgetSharedProject').count(),0,'B shares nothing');await closeBudget(page);await toEditor(page);
   if(await page.locator('#projectsDialog[open]').count())await page.locator('#projectClose').click();
   await page.locator('#projectsBtn').click();await page.locator('#projectsDialog[open]').waitFor();await page.selectOption('#projectList',A.entry);await page.click('#projectOpen');await page.waitForFunction(e=>FloorPlanApp.entryId===e,A.entry);
   if(await page.locator('#projectsDialog[open]').count())await page.locator('#projectClose').click();
-  assert.deepEqual(await facts(page),{...A,stored:[A.pid,b.pid].sort()},'A is unchanged after working on B');
+  assert.deepEqual(await facts(page),{...A,stored:[A.pid,b.pid,c.pid].sort()},'A is unchanged after working on its copy and on B');
   assert.deepEqual(api,[]);assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}}
 
@@ -139,11 +139,9 @@ test('CONSOLIDACIÓN · proyecto propio (id único) llevado a otro navegador: co
  }finally{await context.close();}}
 });
 
-// CON-02 · reproduced defect kept visible for the owner's decision (it does not fail the run): two local projects made
-// from the same file share one budget, so a price typed in the copy changes the original. Giving the copy a new id fixes
-// this but breaks client review by file (tests/client-review.browser.test.cjs binds the notes to project.id); the real
-// fix is a budget identity per library entry, which is a storage change that needs its own cut and GO.
-test('CON-02 · TODO: a price typed in an imported copy must not change the budget of the original',{todo:'budget identity per library entry — owner decision',timeout:300000},async()=>{
+// CON-02 (closed by the identity contract, js/project-library.js): a price typed in an imported copy does not change the
+// budget of the original. Red on master 46174d6 (7 → 5 in the original).
+test('CON-02 · a price typed in an imported copy does not change the budget of the original',{timeout:300000},async()=>{
  const {context,page}=await K.editor(env,{acceptDownloads:true});
  try{
   await openBudget(page);const price=()=>page.locator('#budgetDialog tr[data-item="paint"] [data-field="price"]');await price().fill('7');await price().press('Tab');await page.waitForFunction(()=>FloorPlanBudgetUI.current().budget.items.find(i=>i.id==='paint').unitPrice===7);await closeBudget(page);await toEditor(page);

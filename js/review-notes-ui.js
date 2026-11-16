@@ -23,7 +23,10 @@
  const anchorViews=()=>[...(window.FloorPlanProjectViews?.current()||[]).map(v=>({id:v.id,label:v.label})),...(window.FloorPlanAIRender?.results||[]).map(r=>({id:['ai',r.viewId,r.style,r.floor,r.walls].filter(Boolean).join(':'),label:tx('Render IA · ','AI render · ','AI 渲染 · ')+r.label+(r.floor||r.walls?tx(' · alternativa',' · alternative',' · 替代'):'')}))];
  const anchorGroups=()=>window.FloorPlanReviewAnchors?FloorPlanReviewAnchors.groups(app.project,{names:NAMES(),views:anchorViews()}):[{key:'project',items:[{label:NAMES().project,anchor:{kind:'project'}}]},{key:'rooms',label:NAMES().rooms,items:app.project.rooms.map(r=>({label:roomName(r),anchor:{kind:'room',roomId:r.id,label:roomName(r)}}))}];
  const where=(a,missing=false)=>(a.kind==='project'?NAMES().project:a.label||NAMES().project)+(missing?tx(' (ya no existe)',' (no longer exists)','（已不存在）'):'');
- function draft(s){if(!s.draft||s.draft.versionCode!==R.versionCode(revision()))s.draft=R.create(app.project,revision(),{reviewer:s.draft?.reviewer||''});return s.draft;}
+ // Identity contract: a project file imported where its id was already taken gets a new local id; the review still
+ // answers to the project the FILE came from (FloorPlanApp.originProjectId), so professional and client keep matching.
+ const subject=()=>{const o=app.originProjectId;return o?{...app.project,id:o}:app.project;};
+ function draft(s){if(!s.draft||s.draft.versionCode!==R.versionCode(revision()))s.draft=R.create(subject(),revision(),{reviewer:s.draft?.reviewer||''});return s.draft;}
 
  // Points marked by the client, numbered as in the list, over the current plan (they keep their position in mm).
  function pointsMap(parent,notes){const P=window.FloorPlanProjectPreview;const pts=notes.map((n,i)=>({n,i})).filter(x=>x.n.anchor.kind==='point');if(!P||!pts.length)return;
@@ -65,7 +68,7 @@
   const afile=el('input',undefined,ans);afile.type='file';afile.accept='.json,application/json';afile.id='reviewAnswerFile';afile.hidden=true;
   button(tx('Abrir respuesta…','Open answer…','打开回复…'),ans,()=>afile.click()).id='reviewAnswerImport';
   afile.onchange=async()=>{const f=afile.files[0];afile.value='';if(!f)return;try{if(f.size>1024*1024)throw Error(tx('El archivo es demasiado grande.','The file is too large.','文件过大。'));
-    const r=R.readResponse(await f.text());if(r.projectId!==app.project.id)throw Error(tx(`Esta respuesta es de otro proyecto («${r.projectName}»).`,`This answer belongs to another project (“${r.projectName}”).`,`此回复属于另一个项目（“${r.projectName}”）。`));
+    const r=R.readResponse(await f.text());if(r.projectId!==subject().id)throw Error(tx(`Esta respuesta es de otro proyecto («${r.projectName}»).`,`This answer belongs to another project (“${r.projectName}”).`,`此回复属于另一个项目（“${r.projectName}”）。`));
     s.answers=[r,...s.answers.filter(x=>x.answeredAt!==r.answeredAt)];save(all);render();}catch(e){say(e instanceof SyntaxError?tx('El archivo no es JSON válido.','The file is not valid JSON.','文件不是有效的 JSON。'):e.message,7000);}};
   const open_=R.versionCode(revision());
   for(const r of s.answers.slice(0,1)){const ul=el('ul',undefined,ans,'review-list');ul.id='reviewAnswerList';
@@ -79,7 +82,7 @@
   button(tx('Importar observaciones…','Import observations…','导入意见…'),recv,()=>file.click()).id='reviewImport';
   file.onchange=async()=>{const f=file.files[0];file.value='';if(!f)return;try{
     if(f.size>1024*1024)throw Error(tx('El archivo es demasiado grande.','The file is too large.','文件过大。'));
-    const doc=R.read(await f.text()),m=R.match(doc,app.project,revision());
+    const doc=R.read(await f.text()),m=R.match(doc,subject(),revision());
     if(!m.sameProject)throw Error(tx(`Estas observaciones son de otro proyecto («${doc.projectName}»). Ábrelo para revisarlas.`,`These observations belong to another project (“${doc.projectName}”). Open it to review them.`,`这些意见属于另一个项目（“${doc.projectName}”）。请打开该项目查看。`));
     s.received=s.received.filter(x=>!(x.doc.createdAt===doc.createdAt&&x.doc.reviewer===doc.reviewer&&x.doc.versionCode===doc.versionCode));
     s.received.push({doc,importedAt:new Date().toISOString(),decisions:Object.fromEntries(doc.notes.map(n=>[n.id,'pending']))});save(all);render();
@@ -90,7 +93,7 @@
    const who=entry.doc.reviewer||tx('Cliente','Client','客户');
    el('p',`${who} · ${tx('versión','version','版本')} ${entry.doc.versionCode} · ${entry.doc.notes.length} ${tx('observaciones','observations','条意见')}`,box,'review-from');
    const v=el('p',entry.doc.versionCode===current?tx('Se refieren a la versión abierta.','They refer to the open version.','针对当前版本。'):tx(`Se refieren a la versión ${entry.doc.versionCode}; la vivienda ha cambiado desde entonces (ahora ${current}).`,`They refer to version ${entry.doc.versionCode}; the home has changed since (now ${current}).`,`针对版本 ${entry.doc.versionCode}；住宅此后已更改（现为 ${current}）。`),box,entry.doc.versionCode===current?'review-ok':'review-warn');v.setAttribute('role','status');
-   const gone=new Set(R.match(entry.doc,app.project,revision()).missing||[]);pointsMap(box,entry.doc.notes);
+   const gone=new Set(R.match(entry.doc,subject(),revision()).missing||[]);pointsMap(box,entry.doc.notes);
    const ul=el('ul',undefined,box,'review-list');
    for(const [k,n] of entry.doc.notes.entries()){const li=el('li',undefined,ul);li.dataset.note=n.id;
     el('strong',(n.anchor.kind==='point'?`${k+1}. `:'')+where(n.anchor,gone.has(n.id))+': ',li);el('span',n.text,li);const acts=el('span',undefined,li,'review-decide');
@@ -103,7 +106,7 @@
    const counts=Object.values(entry.decisions).reduce((c,k)=>(c[k]=(c[k]||0)+1,c),{});
    const doneCount=Object.keys(entry.implemented||{}).length;
    el('p',tx(`Implementadas: ${doneCount} · se incorporarán: ${(counts.incorporate||0)-doneCount} · descartadas: ${counts.discard||0} · sin decidir: ${counts.pending||0}`,`Implemented: ${doneCount} · to incorporate: ${(counts.incorporate||0)-doneCount} · discarded: ${counts.discard||0} · undecided: ${counts.pending||0}`,`已实现：${doneCount} · 将采纳：${(counts.incorporate||0)-doneCount} · 已放弃：${counts.discard||0} · 未决定：${counts.pending||0}`),box,'review-counts');
-   button(tx('Descargar respuesta al cliente','Download answer for the client','下载给客户的回复'),box,()=>{try{const r=R.respond(entry.doc,entry.decisions,entry.implemented,app.project,revision());download(r,`respuesta-observaciones-${r.versionCode}.json`);say(tx('Envía al cliente esta respuesta y, si hay cambios hechos, el proyecto de esta versión.','Send the client this answer and, if changes were made, the project of this version.','请将此回复发送给客户；如有已完成的修改，请同时发送此版本的项目。'),7000);}catch(e){say(e.message,6000);}},'btn review-answer').dataset.index=i;
+   button(tx('Descargar respuesta al cliente','Download answer for the client','下载给客户的回复'),box,()=>{try{const r=R.respond(entry.doc,entry.decisions,entry.implemented,subject(),revision());download(r,`respuesta-observaciones-${r.versionCode}.json`);say(tx('Envía al cliente esta respuesta y, si hay cambios hechos, el proyecto de esta versión.','Send the client this answer and, if changes were made, the project of this version.','请将此回复发送给客户；如有已完成的修改，请同时发送此版本的项目。'),7000);}catch(e){say(e.message,6000);}},'btn review-answer').dataset.index=i;
    button(tx('Quitar este archivo','Remove this file','移除此文件'),box,()=>{s.received.splice(i,1);save(all);render();},'btn review-small');
   });
   // A client with an answer sees it first, under the copy notice.

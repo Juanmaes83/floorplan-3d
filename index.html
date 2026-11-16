@@ -2391,7 +2391,7 @@ let importSequence=0;
 function beginFileImport(){return {sequence:++importSequence,entryId:library?.activeId(),snapshot:snap(),route:window.FloorPlanGuideUI?.captureImport()};}
 function fileImportCurrent(operation){return !!operation&&operation.sequence===importSequence&&operation.entryId===library?.activeId()&&operation.snapshot===snap()&&(!operation.route||window.FloorPlanGuideUI?.importRouteCurrent(operation.route));}
 function cancelFileImport(){++importSequence;window.FloorPlanUpload?.cancelDialogs();}
-function fileImportCompleted(operation,origin){window.FloorPlanGuideUI?.imported(operation.route,origin);}
+function fileImportCompleted(operation,origin){window.FloorPlanGuideUI?.imported(operation.route,origin);window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));}
 $('#fileIn').onchange = e => {const file=e.target.files[0];e.target.value='';if(file)importProjectFile(file);};
 async function importProjectFile(file,{fromUpload=false,transaction}={}){
   const operation=transaction||beginFileImport();
@@ -2441,8 +2441,12 @@ buildDefs(); buildLib(); renderOpenings(); renderDims();
 $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 if(libraryError)toast('No se pudo abrir la colección local: '+libraryError,6000);
+// Identity contract: tell the person, once, what the load-time migration did (or that it could not be saved).
+{const m=library?.migration?.(),say3=(zh,en,es)=>LANG==='en'?en:LANG==='es'?es:zh,n=m?.reidentified?.length||0;
+ if(m?.failed)toast(say3('部分本地项目共用同一标识和预算；此浏览器无法保存分离结果。','Some local projects share one identity and one budget; this browser could not save their separation.','Algunos proyectos locales comparten identidad y presupuesto; este navegador no ha podido guardar su separación.'),9000);
+ else if(n)toast(say3(`已将 ${n} 个共用标识的本地项目分离：每个项目现在拥有自己的预算副本。`,`${n} local project(s) that shared an identity are now independent: each keeps its own copy of the budget.`,`${n} proyecto(s) local(es) que compartían identidad ya son independientes: cada uno conserva su propia copia del presupuesto.`),9000);}
 if(loadedProject.message)toast(loadedProject.message,6000);
-function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();}
+function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
 function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
@@ -2528,6 +2532,8 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
+  // Identity contract (js/project-library.js): id of the file the open entry was imported from when it had to be re-identified here.
+  get originProjectId(){return library?.origin?.()||null;},
   /* MUE-01 «Traer mi mueble»: un mueble propio (volumen genérico con las medidas declaradas) entra con la colocación
      ordinaria (FloorPlanPlacement) y, en el MISMO paso del deshacer, `extra(project, objectId)` puede anotar su foto
      en una extensión x-. Solo el objeto canónico y esa extensión cambian; nada se envía fuera del navegador. */
