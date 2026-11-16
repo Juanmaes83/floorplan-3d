@@ -29,8 +29,9 @@
 @media (max-height:500px){.presentation-brand img{max-height:24px}.presentation-intro{display:none}}
 
 /* Phone editor shell: «Inicio» is sticky inside the horizontally scrolling header. Keep an opaque gutter to its
-   right so scrolled controls never read as if they were underneath/overlapping it (390×844 wall-properties case). */
+   right so scrolled controls never read as if they were underneath/overlapping it (390×844 wall-properties case).
+   Applies with and without the guide: closing it («Ocultar guía») leaves the full editor, whose header is the widest. */
 @media (max-width:600px) and (pointer:coarse){
-  body.guided #welcomeBtn{z-index:12;margin-right:10px;background:var(--surface-panel);box-shadow:10px 0 0 var(--surface-panel),14px 0 12px -12px rgba(20,26,30,.32)}
-  body.guided header{scroll-padding-inline-start:94px}
+  #welcomeBtn{z-index:12;margin-right:10px;background:var(--surface-panel);box-shadow:10px 0 0 var(--surface-panel),14px 0 12px -12px rgba(20,26,30,.32)}
+  header{scroll-padding-inline-start:94px}
 }
