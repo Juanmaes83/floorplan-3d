@@ -52,3 +52,7 @@
 /* Escritorio: con el panel abierto durante el paseo en pausa, la tarjeta del paseo se centra en el espacio libre. */
 @media (min-width:1100px){#stage:has(#nav3d.open:not([hidden])) #walkOverlay{padding-left:320px}}
 @media (prefers-reduced-motion:reduce){.nav3d *{transition:none!important}}
+/* Narrow screens: an open drawer (the palette or the properties panel) slides over the stage. The NAV3D pill and sheet
+   used to stay above it (z-index 13 > drawer 6) and covered the «Construir» tab of the palette in 3D. While a drawer is
+   open they go under it; nothing is hidden or removed, and they are back on top as soon as the drawer closes. */
+@media (max-width:1100px){.app:has(aside.lib.open) .nav3d,.app:has(aside.right.open) .nav3d{z-index:5}}
