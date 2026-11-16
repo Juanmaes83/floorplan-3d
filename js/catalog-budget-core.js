@@ -67,7 +67,12 @@
    // XR-01: the unit comes from the sheet. Without a sheet (catalogue or sheet gone, SKU changed) the commercial unit is
    // NOT verifiable: the unit already budgeted for this item is the only evidence and is kept (a price per m² or per m
    // never comes back counted in units); with no history at all the quantity stays unknown, never «N ud».
-   const rawUnit=p?.commercial?.unit||null,histUnit=!rawUnit&&before?.quantity?.unit||null;
+   // CON-01: only a unit that was once verified is history. The placeholder this function itself emits when nothing
+   // is verifiable («unit», unknown value) is saved by Presupuestar on open; read back as history it would come out
+   // as «N ud · measured» on the next open (also for a sheet priced per m²). A sheet in ud is always counted, so an
+   // unknown quantity in «unit» can only be that placeholder: it is not evidence, whatever price was typed on it.
+   const bq=before?.quantity,placeholder=!!bq&&bq.unit==='unit'&&bq.value===null&&bq.status==='unavailable';
+   const rawUnit=p?.commercial?.unit||null,histUnit=!rawUnit&&!placeholder&&bq?.unit||null;
    const unit=rawUnit?UNIT[rawUnit]||null:histUnit||'unit';
    const n=g.objects.length,countable=rawUnit?rawUnit==='ud':histUnit?histUnit==='unit':sheet.status==='found';
    const quantityStatus=countable?'counted':rawUnit?'pending-measurement':histUnit?'unit-from-history':'unit-unverifiable';
