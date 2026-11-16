@@ -168,7 +168,7 @@
     ['Una vivienda dibujada a grafito se convierte, estancia a estancia, en un espacio 3D con sus materiales.','A home drawn in graphite turns, room by room, into a 3D space with its materials.','一座石墨绘制的住宅逐个房间变成带材料的 3D 空间。'],
     ['La misma presentación que puedes hacer con tu proyecto. Sin IA.','The same presentation you can make with your project. No AI.','与你可以用自己项目制作的演示相同。不使用 AI。'],['Ver demo de dibujo vivo','See the living drawing demo','查看活绘演示'],'?demo=dibujo-vivo']]){
    const card=el('article',undefined,demoCards,'demo-card');card.dataset.demo=id;
-   const fig=el('figure',undefined,card);const im=el('img',undefined,fig);im.src=img;im.loading='lazy';im.alt=label(title)+' · '+tx('captura real de RUBIK','real RUBIK capture','RUBIK 真实截图');
+   const fig=el('figure',undefined,card);const im=el('img',undefined,fig,'welcome-demo-shot');im.src=img;im.loading='lazy';im.alt=label(title)+' · '+tx('captura real de RUBIK','real RUBIK capture','RUBIK 真实截图');
    const body=el('div',undefined,card,'demo-card-body');el('p',label(kicker),body,'demo-card-kicker');el('h3',label(title),body);el('p',label(text),body);el('p',label(note),body,'demo-card-note');
    btn('welcomeDemo-'+id,label(action),()=>{location.href=href;},body,true).classList.add('demo-card-go');}
   const audienceSection=el('section',undefined,shell,'welcome-audience');
