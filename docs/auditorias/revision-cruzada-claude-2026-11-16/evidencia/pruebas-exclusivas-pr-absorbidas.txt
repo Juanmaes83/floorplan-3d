@@ -1,0 +1,8 @@
+#225: 4 test files changed vs merge-base; titles absent from master: 0
+#226: 5 test files changed vs merge-base; titles absent from master: 0
+#227: 4 test files changed vs merge-base; titles absent from master: 1
+   tests/photo-reform-provider.test.cjs :: envío: solo la solicitud cerrada y la imagen recomprimida con nombre fijo; nunca el proyecto, el nombre ni texto libre
+#215: 1 test files changed vs merge-base; titles absent from master: 0
+#86: 8 test files changed vs merge-base; titles absent from master: 0
+#71: 5 test files changed vs merge-base; titles absent from master: 0
+#217: 0 test files changed vs merge-base; titles absent from master: 0

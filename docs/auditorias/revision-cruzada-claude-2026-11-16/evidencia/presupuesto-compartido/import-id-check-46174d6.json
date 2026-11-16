@@ -1,0 +1,20 @@
+{
+ "entries": [
+  "Proyecto inicial",
+  "Importado 1",
+  "Importado 2",
+  "Duplicado",
+  "Duplicado · Variante 1"
+ ],
+ "projectIds": [
+  "prj_reference-home",
+  "prj_reference-home",
+  "prj_reference-home",
+  "prj_56e427fe9a02486d98cecb2c2a9f22b6",
+  "prj_b865804cd52446bf90b8353ab37b473b"
+ ],
+ "originalId": "prj_reference-home",
+ "importKeepsId": 3,
+ "duplicateNewId": true,
+ "variantNewId": true
+}

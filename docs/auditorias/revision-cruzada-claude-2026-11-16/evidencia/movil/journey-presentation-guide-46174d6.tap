@@ -1,0 +1,452 @@
+TAP version 13
+# Subtest: native Back, visible home, explicit reopening and task return 1440x900
+ok 1 - native Back, visible home, explicit reopening and task return 1440x900
+  ---
+  duration_ms: 4565.097758
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 390x844
+ok 2 - native Back, visible home, explicit reopening and task return 390x844
+  ---
+  duration_ms: 4532.17733
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 844x390
+ok 3 - native Back, visible home, explicit reopening and task return 844x390
+  ---
+  duration_ms: 4160.427971
+  type: 'test'
+  ...
+# Subtest: cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+ok 4 - cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+  ---
+  duration_ms: 2374.532661
+  type: 'test'
+  ...
+# Subtest: guide stage follows the card 1440x900
+ok 5 - guide stage follows the card 1440x900
+  ---
+  duration_ms: 2138.896197
+  type: 'test'
+  ...
+# Subtest: guide stage follows the card 390x844
+ok 6 - guide stage follows the card 390x844
+  ---
+  duration_ms: 2166.026172
+  type: 'test'
+  ...
+# Subtest: a changed example says so and its copy keeps the change 1440x900
+ok 7 - a changed example says so and its copy keeps the change 1440x900
+  ---
+  duration_ms: 2028.342183
+  type: 'test'
+  ...
+# Subtest: a changed example says so and its copy keeps the change 390x844
+ok 8 - a changed example says so and its copy keeps the change 390x844
+  ---
+  duration_ms: 2189.683062
+  type: 'test'
+  ...
+# Subtest: the example asks for the copy in place 1440x900
+ok 9 - the example asks for the copy in place 1440x900
+  ---
+  duration_ms: 3238.849828
+  type: 'test'
+  ...
+# Subtest: the example asks for the copy in place 390x844
+ok 10 - the example asks for the copy in place 390x844
+  ---
+  duration_ms: 3207.500018
+  type: 'test'
+  ...
+# Subtest: trying the example again reuses it or keeps the changed one apart 1440x900
+ok 11 - trying the example again reuses it or keeps the changed one apart 1440x900
+  ---
+  duration_ms: 3322.70704
+  type: 'test'
+  ...
+# Subtest: delivery is reachable from the guide 1440x900
+ok 12 - delivery is reachable from the guide 1440x900
+  ---
+  duration_ms: 2936.598047
+  type: 'test'
+  ...
+# Subtest: delivery is reachable from the guide 390x844
+ok 13 - delivery is reachable from the guide 390x844
+  ---
+  duration_ms: 2724.121365
+  type: 'test'
+  ...
+# Subtest: delivery is reachable from the guide 844x390
+ok 14 - delivery is reachable from the guide 844x390
+  ---
+  duration_ms: 2742.100359
+  type: 'test'
+  ...
+# Subtest: T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 1440x900
+not ok 15 - T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 1440x900
+  ---
+  duration_ms: 3730.243292
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:31:33'
+  failureType: 'testCodeFailure'
+  error: |-
+    a single dominant action
+    + actual - expected
+    
+    + []
+    - [
+    -   'guidePrimary'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'guidePrimary'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:38:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 390x844
+not ok 16 - T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 390x844
+  ---
+  duration_ms: 3681.654647
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:31:33'
+  failureType: 'testCodeFailure'
+  error: |-
+    a single dominant action
+    + actual - expected
+    
+    + []
+    - [
+    -   'guidePrimary'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'guidePrimary'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:38:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 844x390
+not ok 17 - T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 844x390
+  ---
+  duration_ms: 3686.888153
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:31:33'
+  failureType: 'testCodeFailure'
+  error: |-
+    a single dominant action
+    + actual - expected
+    
+    + []
+    - [
+    -   'guidePrimary'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'guidePrimary'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:38:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 1440x900
+ok 18 - T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 1440x900
+  ---
+  duration_ms: 2497.314928
+  type: 'test'
+  ...
+# Subtest: T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 390x844
+ok 19 - T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 390x844
+  ---
+  duration_ms: 2953.856749
+  type: 'test'
+  ...
+# Subtest: T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 844x390
+ok 20 - T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 844x390
+  ---
+  duration_ms: 3063.888673
+  type: 'test'
+  ...
+# Subtest: T4 back to the first task and reload: a done task says so and its button goes on with what is left
+ok 21 - T4 back to the first task and reload: a done task says so and its button goes on with what is left
+  ---
+  duration_ms: 4377.021175
+  type: 'test'
+  ...
+# Subtest: T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 1440x900
+ok 22 - T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 1440x900
+  ---
+  duration_ms: 3094.706386
+  type: 'test'
+  ...
+# Subtest: T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 390x844
+ok 23 - T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 390x844
+  ---
+  duration_ms: 3084.954474
+  type: 'test'
+  ...
+# Subtest: T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 390x844
+ok 24 - T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 390x844
+  ---
+  duration_ms: 9379.935135
+  type: 'test'
+  ...
+# Subtest: T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 844x390
+ok 25 - T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 844x390
+  ---
+  duration_ms: 9285.032573
+  type: 'test'
+  ...
+# Subtest: T8 guided header: «Rehacer» next to «Deshacer»; the presentation entry is present but not a second dominant action
+not ok 26 - T8 guided header: «Rehacer» next to «Deshacer»; the presentation entry is present but not a second dominant action
+  ---
+  duration_ms: 3409.174899
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:101:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   'guidePrimary'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'guidePrimary'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:105:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 1440x900
+ok 27 - T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 1440x900
+  ---
+  duration_ms: 103987.564382
+  type: 'test'
+  ...
+# Subtest: T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 390x844
+ok 28 - T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 390x844
+  ---
+  duration_ms: 75363.427835
+  type: 'test'
+  ...
+# Subtest: T11 phone guide (M4): one row of controls, every control on screen, more plan visible; desktop header keeps one line and one presentation entry
+not ok 29 - T11 phone guide (M4): one row of controls, every control on screen, more plan visible; desktop header keeps one line and one presentation entry
+  ---
+  duration_ms: 3553.404973
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:130:1'
+  failureType: 'testCodeFailure'
+  error: 'guide height 176 px ≤ 170 (master: 217)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:133:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: T12 guided header keeps every control on screen in 2D, 3D and with two levels 1440x900
+ok 30 - T12 guided header keeps every control on screen in 2D, 3D and with two levels 1440x900
+  ---
+  duration_ms: 21871.792748
+  type: 'test'
+  ...
+# Subtest: T13 building conflicts highlight «Distribuir» 1440x900
+not ok 31 - T13 building conflicts highlight «Distribuir» 1440x900
+  ---
+  duration_ms: 2169.165104
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:162:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'Diseñar'
+    - 'Distribuir'
+          ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Distribuir'
+  actual: 'Diseñar'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/journey-orientation.browser.test.cjs:166:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 1440x900
+ok 32 - R2 P01/P02 search and closed-guide entry preserve the project 1440x900
+  ---
+  duration_ms: 33251.553832
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 390x844
+ok 33 - R2 P01/P02 search and closed-guide entry preserve the project 390x844
+  ---
+  duration_ms: 23296.719359
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 844x390
+ok 34 - R2 P01/P02 search and closed-guide entry preserve the project 844x390
+  ---
+  duration_ms: 23595.722546
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 360x800
+ok 35 - R2 P01/P02 search and closed-guide entry preserve the project 360x800
+  ---
+  duration_ms: 22216.306198
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 1440x900
+ok 36 - R2 P13 presentation PNG is real and restores the view 1440x900
+  ---
+  duration_ms: 144988.556208
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 390x844
+ok 37 - R2 P13 presentation PNG is real and restores the view 390x844
+  ---
+  duration_ms: 63745.434203
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 844x390
+ok 38 - R2 P13 presentation PNG is real and restores the view 844x390
+  ---
+  duration_ms: 73937.371649
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 360x800
+ok 39 - R2 P13 presentation PNG is real and restores the view 360x800
+  ---
+  duration_ms: 83403.402904
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 1440x900
+ok 40 - presentation starts from a real room and restores 2D 1440x900
+  ---
+  duration_ms: 76652.6854
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 390x844
+ok 41 - presentation starts from a real room and restores 2D 390x844
+  ---
+  duration_ms: 35433.592791
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 844x390
+ok 42 - presentation starts from a real room and restores 2D 844x390
+  ---
+  duration_ms: 37697.062237
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 360x800
+ok 43 - presentation starts from a real room and restores 2D 360x800
+  ---
+  duration_ms: 36021.300352
+  type: 'test'
+  ...
+# Subtest: R2 P06/P12 manual jumps and revisits count completed stops without guide evidence
+ok 44 - R2 P06/P12 manual jumps and revisits count completed stops without guide evidence
+  ---
+  duration_ms: 61781.413141
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 1440x900
+ok 45 - R2 P11 missing GLB keeps generic furniture and warns 1440x900
+  ---
+  duration_ms: 67036.402449
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 390x844
+ok 46 - R2 P11 missing GLB keeps generic furniture and warns 390x844
+  ---
+  duration_ms: 34195.269625
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 844x390
+ok 47 - R2 P11 missing GLB keeps generic furniture and warns 844x390
+  ---
+  duration_ms: 35140.014323
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 360x800
+ok 48 - R2 P11 missing GLB keeps generic furniture and warns 360x800
+  ---
+  duration_ms: 32091.898537
+  type: 'test'
+  ...
+# Subtest: R2 P11 corrupt GLB also keeps the generic and the project
+ok 49 - R2 P11 corrupt GLB also keeps the generic and the project
+  ---
+  duration_ms: 20420.358094
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 1440x900
+ok 50 - R2 P11 WebGL context loss returns intact 2D 1440x900
+  ---
+  duration_ms: 18396.566386
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 390x844
+ok 51 - R2 P11 WebGL context loss returns intact 2D 390x844
+  ---
+  duration_ms: 16151.379458
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 844x390
+ok 52 - R2 P11 WebGL context loss returns intact 2D 844x390
+  ---
+  duration_ms: 14892.755445
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 360x800
+ok 53 - R2 P11 WebGL context loss returns intact 2D 360x800
+  ---
+  duration_ms: 14912.515367
+  type: 'test'
+  ...
+# Subtest: R2 P11 context loss while 3D starts cannot reopen the presentation
+ok 54 - R2 P11 context loss while 3D starts cannot reopen the presentation
+  ---
+  duration_ms: 8600.503184
+  type: 'test'
+  ...
+# Subtest: R2 P14 reduced motion and four resize aspects keep the active stop framed
+ok 55 - R2 P14 reduced motion and four resize aspects keep the active stop framed
+  ---
+  duration_ms: 70870.990098
+  type: 'test'
+  ...
+# Subtest: R2 P14 presentation entered from 3D restores camera and final viewport aspect
+ok 56 - R2 P14 presentation entered from 3D restores camera and final viewport aspect
+  ---
+  duration_ms: 37664.304101
+  type: 'test'
+  ...
