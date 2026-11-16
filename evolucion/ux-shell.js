@@ -14,6 +14,8 @@ const ui=window.__ft3dUI={};
 function go(tab){
   if(!TABS.includes(tab))return;
   if(document.body.dataset.mode==='client'&&tab==='proyecto')tab='evolucion';
+  // Public demo (?demo=obra): the evolution is the only section shown.
+  if(window.__ft3dSource?.mode==='demo')tab='evolucion';
   document.body.dataset.tab=tab;
   for(const b of document.querySelectorAll('.tabs [role=tab]')){const on=b.dataset.tab===tab;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;}
   // The canvas was hidden: size it again and redraw the Gantt arrows (the date, task and camera are untouched).

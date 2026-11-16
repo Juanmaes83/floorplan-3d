@@ -21,6 +21,26 @@
  .linkbtn:focus-visible{outline:2px solid var(--focus,#2f7f8c);outline-offset:2px}
  .pick-items{font-size:.92em}
  html[data-source=library] .lab-only,html[data-source=library] .pload,html[data-source=library] #fidelityMode,html[data-source=library] #labBrandForm,html[data-source=library] #heroFixture{display:none!important}
+ /* Public demo (?demo=obra): only the evolution of the example house; no lab tools, no professional tabs or delivery. */
+ html:not([data-source=demo]) .demo-only{display:none!important}
+ html[data-source=demo] .tabs,html[data-source=demo] .modes,html[data-source=demo] #origin,html[data-source=demo] a.demo,html[data-source=demo] #readiness,
+ html[data-source=demo] .lab-only,html[data-source=demo] .pload,html[data-source=demo] .pro-only,html[data-source=demo] #panel-proyecto,html[data-source=demo] #panel-entrega,
+ html[data-source=demo] footer.credits{display:none!important}
+ .demo-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto;font-size:13px}
+ .demo-bar .demo-tag{padding:3px 8px;border-radius:999px;background:var(--action-soft,#e3eef0);color:var(--ink,#1d2326);font-weight:600}
+ .demo-bar a,.demo-bar button{min-height:36px}
+ .demo-bar a{display:inline-flex;align-items:center;padding:0 12px;border:1px solid var(--line,#d6d0c6);border-radius:8px;background:#fff;color:var(--action,#1f5a66);font-weight:600;text-decoration:none}
+ /* Phones (portrait or landscape): the plan-progress panel (no amounts in the demo) would cover the house; the moment card and the plan stay. */
+ @media (max-width:760px),(max-height:500px){html[data-source=demo] .plan-preview{display:none!important}}
+ .page-notice{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:30;max-width:min(560px,calc(100% - 24px));padding:12px 14px;border-radius:10px;
+  background:#fff;color:#1d2326;border:1px solid #c9b8a8;box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:14px;line-height:1.45}
+ .page-notice a{color:var(--action,#1f5a66);font-weight:600;margin-left:4px}
+ .demo-help{max-width:min(460px,calc(100vw - 32px));border:1px solid var(--line,#d6d0c6);border-radius:12px;padding:18px 20px}
+ .demo-help ul{padding-left:18px;margin:8px 0 14px}.demo-help li{margin:4px 0}
+ .demo-end{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:31;width:min(440px,calc(100% - 24px));padding:18px 20px;border-radius:12px;
+  background:#fff;color:#1d2326;border:1px solid var(--line,#d6d0c6);box-shadow:0 14px 40px rgba(20,26,30,.24)}
+ .demo-end[hidden]{display:none}.demo-end h2{margin:0 0 8px;font-size:19px}.demo-end p{margin:0 0 8px;line-height:1.45;font-size:14px}
+ .demo-end-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.demo-end-actions .btn{min-height:42px}
 </style>
 <script type="importmap">
 {"imports":{"three":"../vendor/three/build/three.module.js","three/addons/":"../vendor/three/examples/jsm/"}}
@@ -64,6 +84,7 @@
 <script src="../js/construction-mp4-muxer.js"></script>
 <script src="../js/construction-dossier-core.js"></script>
 <script src="../js/construction-record-core.js"></script>
+<script src="../js/construction-demo-core.js"></script>
 <script src="./library-source.js"></script>
 <!-- Synthetic fixtures are for QA only (?lab=1). The product opens the saved project (?source=library) and never loads them. -->
 <script>if(new URLSearchParams(location.search).get('lab')==='1')document.write('<script src="../labs/ft3d-8/fidelity-fixtures.js"><\/script><script src="../labs/ft3d-8/dossier-fixtures.js"><\/script>');</script>
@@ -72,6 +93,9 @@
 <script type="module" src="./dossier-ui.js"></script>
 <script type="module" src="./ux-shell.js"></script>
 <script type="module" src="./plan-preview-ui.js"></script>
+<script src="./demo-ui.js" defer></script>
+<script>if(window.__ft3dSource?.mode==='demo')document.title='Demostración · Evolución de una obra — RUBIK';
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('demoHelpOpen')?.addEventListener('click',()=>document.getElementById('demoHelp').showModal()));</script>
 </head>
 <body data-stage="inicio" data-tab="evolucion" data-mode="pro">
 <a class="skip" href="#stage">Ir al visor 3D</a>
@@ -86,7 +110,24 @@
   <span class="modes" role="group" aria-label="Modo"><button data-mode="pro" aria-pressed="true">Profesional</button><button data-mode="client" aria-pressed="false">Presentación</button></span>
   <span class="origin pro-only" id="origin" data-kind="fixture" role="status"></span>
   <a class="demo pro-only" href="./demo.html">Demo</a>
+  <span class="demo-bar demo-only" role="group" aria-label="Demostración">
+    <span class="demo-tag">Demostración · datos de ejemplo</span>
+    <button type="button" class="btn" id="demoHelpOpen" aria-haspopup="dialog">Cómo se usa</button>
+    <a class="btn" href="../">Volver a RUBIK</a>
+  </span>
 </header>
+<dialog class="demo-help demo-only" id="demoHelp" aria-labelledby="demoHelpTitle">
+  <h2 id="demoHelpTitle">Cómo evoluciona una obra</h2>
+  <p>La vivienda de ejemplo de RUBIK, planificada como obra nueva. Fechas ilustrativas y sin presupuesto: no es un proyecto real.</p>
+  <ul>
+    <li><b>Reproducir o pausar:</b> botón ▶ o barra espaciadora.</li>
+    <li><b>Ir atrás o adelante:</b> ‹ › un día, « » una semana, o arrastra la línea de tiempo.</li>
+    <li><b>Elegir una semana:</b> el selector de semanas.</li>
+    <li><b>Inspeccionar:</b> pulsa una tarea del plan o un elemento de la vivienda.</li>
+    <li><b>Salir:</b> «Volver a RUBIK».</li>
+  </ul>
+  <form method="dialog"><button class="btn primary">Entendido</button></form>
+</dialog>
 <main>
   <section class="tabpanel" id="panel-proyecto" role="tabpanel" aria-labelledby="tab-proyecto" data-panel="proyecto">
     <div class="psum" id="projSummary" aria-live="polite"></div>
@@ -161,6 +202,7 @@
       <button type="button" class="btn primary" id="introPlay">▶ Reproducir evolución</button>
     </div>
     <div class="pick" id="pickInfo" hidden role="dialog" aria-label="Trabajos del elemento"></div>
+    <div class="page-notice" id="pageNotice" role="alert" hidden></div>
     
   </section>
     <nav class="transport" aria-label="Controles de reproducción">

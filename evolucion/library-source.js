@@ -8,7 +8,8 @@
 (function(){
  'use strict';
  const q=new URLSearchParams(location.search),R=window.FloorPlanConstructionRecord,A=window.FloorPlanConstructionProject,B=window.FloorPlanBudget,Brand=window.FloorPlanBrand;
- const mode=q.get('source')==='library'?'library':q.get('lab')==='1'?'lab':'none';
+ // ?demo=obra: public demo of the example house (js/construction-demo-core.js), built in memory; never reads or writes storage.
+ const mode=q.get('source')==='library'?'library':q.get('demo')!==null?'demo':q.get('lab')==='1'?'lab':'none';
  document.documentElement.dataset.source=mode;
  const src=window.__ft3dSource={mode,error:null,entry:null,subject:null,record:null,input:null,requestedRevision:q.get('revision')||null,initialDate:q.get('date')||null,initialTask:q.get('task')||null};
  const fail=m=>{src.error=m;};
@@ -29,6 +30,12 @@
    src.input={project:doc,budgets,selectedBudgetIds:null,schedule:record?.schedule||null,binding:record?.binding||null,
     brand:snapshot?{snapshot,appliesTo:{type:subject.type,id:subject.id}}:null,registeredParcel:null,parcelDocument:null};
   }catch(e){fail(e.message);}
+ }
+ if(mode==='demo'){
+  const D=window.FloorPlanConstructionDemo;
+  src.demo=q.get('demo');
+  src.ready=(D?D.build(src.demo):Promise.reject(Error('La demostración no está disponible en esta versión.'))).then(input=>{src.input=input;return input;})
+   .catch(e=>{fail('No se ha podido preparar la demostración: '+(e&&e.message||e)+'. Vuelve a la página de inicio de RUBIK e inténtalo de nuevo.');return null;});
  }
  // Messages to RUBIK (same origin only). RUBIK opens its own dialogs over this page; closing them returns here.
  src.toRubik=(action,data={})=>{if(window.parent!==window)window.parent.postMessage({type:'rubik-construction',action,...data},location.origin);return window.parent!==window;};

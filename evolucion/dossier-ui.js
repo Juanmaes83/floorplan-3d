@@ -210,7 +210,18 @@ if(SRC.mode==='library'){
     if(SRC.initialDate&&f.ctx?.timeline)f.setDate(SRC.initialDate);if(SRC.initialTask&&f.ctx?.canon?.tasks.some(t=>t.id===SRC.initialTask))f.selectTask(SRC.initialTask);
     window.dispatchEvent(new CustomEvent('ft3d8-library',{detail:summary()}));})
    .catch(e=>{state.error={code:e.code,message:e.message};render();document.body.classList.add('ready');});
+}else if(SRC.mode==='demo'){
+  // Public demo (?demo=obra): the example house and an example plan built in memory, evaluated by the same engine.
+  const notice=m=>{const n=$('pageNotice');if(n){n.textContent=m;n.hidden=false;}};
+  Promise.resolve(SRC.ready).then(input=>{if(!input)throw Object.assign(new Error(SRC.error||'No se ha podido preparar la demostración.'),{code:'demo-unavailable'});
+    return apply(input,{caseId:null,text:'Demostración · vivienda de ejemplo de RUBIK (datos de ejemplo)',kind:'demo'});})
+   .then(()=>{document.body.dataset.state='demo';window.dispatchEvent(new CustomEvent('ft3d8-demo',{detail:summary()}));})
+   .catch(e=>{state.error={code:e.code||'demo-unavailable',message:e.message};render();notice(e.message);document.body.classList.add('ready');document.body.dataset.state='demo-error';});
 }else if(SRC.mode==='none'){state.error={code:'no-project',message:'Abre un proyecto desde tu biblioteca de RUBIK para ver su evolución.'};render();document.body.classList.add('ready');document.body.dataset.state='no-project';}
+// ?lab=1 needs the QA fixtures of labs/, which are not published (.vercelignore): say so instead of failing.
+else if(!q.get('case')&&!X){const m='Los datos de laboratorio no se publican en esta versión. Para ver cómo evoluciona una obra, abre la demostración con la vivienda de ejemplo.';
+  state.error={code:'lab-unavailable',message:m};render();const n=$('pageNotice');if(n){n.innerHTML='';n.append(m+' ');const a=document.createElement('a');a.href='./?demo=obra';a.textContent='Abrir la demostración';n.append(a);n.hidden=false;}
+  document.body.classList.add('ready');document.body.dataset.state='lab-unavailable';}
 else if(!q.get('case')){const id=SCENARIOS[q.get('dossier')]?q.get('dossier'):'K';
   loadScenario(id).then(()=>{const f=Fid();if(q.get('date')&&f.ctx?.timeline)f.setDate(q.get('date'));if(q.get('end')==='1'&&f.ctx?.timeline)f.end();})
     .catch(e=>{state.error={code:e.code,message:e.message};render();document.body.classList.add('ready');});}
