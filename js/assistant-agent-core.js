@@ -105,21 +105,32 @@
  // NO vincula una cifra con la partida, estancia o SKU a la que el texto la atribuye, y no verifica afirmaciones sin cifras.
  const MONEY_KEY=/price|precio|amount|importe|net|gross|subtotal|total|cost|usd|eur/i;
  const CURRENCY_AFTER=/^\s?(€|eur\b|euros?\b|usd\b|dólares|dollars|元|欧元|美元)/i,CURRENCY_BEFORE=/(€|\$|US\$)\s?$/;
- const UNIT_AFTER=/^\s?(%|m²|m2\b|m\b|cm\b|mm\b|ud\b|uds\b|unidades|units?\b|partidas?|items?\b|estancias?|rooms?\b|productos?|products?\b|objetos?|objects?\b|tokens?\b|puertas?|doors?\b|ventanas?|windows?\b|plantas?|levels?\b|个|项|间|件|扇|层|平方米)/i;
+ const UNIT_AFTER=/^\s?(%|m²|m2\b|m\b|cm\b|mm\b|ud\b|uds\b|unidades|units?\b|partidas?|items?\b|estancias?|rooms?\b|productos?|products?\b|objetos?|objects?\b|tokens?\b|puertas?|doors?\b|ventanas?|windows?\b|plantas?|levels?\b|个|项|间|件|扇|层|平方米|米|metros?\b|meters?\b|metres?\b|ml\b)/i;
+ // REC-238 (CAT-04 × any model): a per-unit price keeps the unit it was given in («180 €/m» is never «180 €/ud»), and a
+ // figure presented as a measurement (m, m², metres, 米…) must come from a measured value, never from a count of objects
+ // or items (2 placed objects are not «2 m»), nor from a number inside a label («rev 2»): RUBIK tools give measures as numbers.
+ const PER_UNIT=/^\s?(?:€|eur\b|euros?\b|欧元)?\s?(?:\/|por\s|per\s|每)\s?(m²|m2\b|m³|m3\b|ml\b|m\b|ud\b|uds\b|unidad(?:es)?\b|units?\b|件|个|平方米|米)/i;
+ const MEASURE_AFTER=/^\s?(m²|m2\b|m³|m3\b|ml\b|m\b|metros?\b|meters?\b|metres?\b|平方米|米)/i;
+ const COUNT_KEY=/(count|objects|items|chapters|pending|unpriced|prices|estimated)$/i;
+ const canonUnit=u=>{const t=String(u||'').trim().toLowerCase();return /^(m²|m2|平方米)$/.test(t)?'m2':/^(m³|m3)$/.test(t)?'m3':/^(m|ml|米)$/.test(t)?'m':/^(ud|uds|unidad|unidades|unit|units|件|个)$/.test(t)?'unit':t;};
  const GROUNDING_LIMITS=Object.freeze(['parcial: no vincula cada cifra con la partida, estancia o SKU a la que se atribuye','no verifica afirmaciones sin cifras']);
  function grounding(text,steps,question=''){
-  const known=new Set(),money=new Set();
+  const known=new Set(),money=new Set(),measures=new Set(),perUnit=new Set();
   const addNum=(set,v)=>{for(const d of [0,1,2])set.add(Number(v.toFixed(d)));set.add(Math.round(v/10)/100);set.add(Math.round(v*100)/100);};
-  const walk=(v,isMoney)=>{if(typeof v==='number'&&Number.isFinite(v)){addNum(known,v);if(isMoney)addNum(money,v);}
+  const walk=(v,isMoney,isCount=false)=>{if(typeof v==='number'&&Number.isFinite(v)){addNum(known,v);if(isMoney)addNum(money,v);if(!isCount)addNum(measures,v);}
    else if(typeof v==='string'){for(const t of numberTokens(v)){const n=parseNum(t);known.add(n);if(isMoney)money.add(n);}}
-   else if(Array.isArray(v)){known.add(v.length);v.forEach(x=>walk(x,isMoney));}
-   else if(isObj(v))for(const [k,x] of Object.entries(v))walk(x,isMoney||MONEY_KEY.test(k));};
+   else if(Array.isArray(v)){known.add(v.length);v.forEach(x=>walk(x,isMoney,isCount));}
+   else if(isObj(v)){if(typeof v.unitPrice==='number'&&Number.isFinite(v.unitPrice))for(const u of [v.unit,v.unitLabel])if(typeof u==='string'&&u)perUnit.add(`${Math.round(v.unitPrice*100)/100}|${canonUnit(u)}`);
+    for(const [k,x] of Object.entries(v))walk(x,isMoney||MONEY_KEY.test(k),COUNT_KEY.test(k));}};
   for(const s of steps)walk(s.result,false);const asked=new Set(numberTokens(question).map(parseNum));
   const clean=String(text).replace(/\b[A-Z]{2,}[\w-]*\d[\w-]*\b/g,m=>' '.repeat(m.length)).replace(/\b\d{4}-\d{2}-\d{2}\b/g,m=>' '.repeat(m.length));
   const unverified=[],amounts=[],re=/-?\d+(?:[.,]\d+)*/g;let m;
   while((m=re.exec(clean))){const tok=m[0],n=parseNum(tok);if(!Number.isFinite(n))continue;const after=clean.slice(m.index+tok.length,m.index+tok.length+14),before=clean.slice(Math.max(0,m.index-4),m.index);
    const isMoney=CURRENCY_AFTER.test(after)||CURRENCY_BEFORE.test(before),hasUnit=isMoney||UNIT_AFTER.test(after),r2=Math.round(n*100)/100;
    if(!hasUnit&&Number.isInteger(n)&&Math.abs(n)<=10)continue;if(asked.has(n))continue;
+   const pu=isMoney&&PER_UNIT.exec(clean.slice(m.index+tok.length,m.index+tok.length+24));
+   if(pu){if(!perUnit.has(`${r2}|${canonUnit(pu[1])}`)){unverified.push(tok);amounts.push(tok);}continue;}
+   if(!isMoney&&MEASURE_AFTER.test(after)){if(!(measures.has(n)||measures.has(r2)))unverified.push(tok);continue;}
    if(isMoney?!(money.has(n)||money.has(r2)):!(known.has(n)||known.has(r2))){unverified.push(tok);if(isMoney)amounts.push(tok);}}
   return {grounded:unverified.length===0,unverified:[...new Set(unverified)].slice(0,10),unverifiedAmounts:[...new Set(amounts)].slice(0,10),check:'partial',limits:GROUNDING_LIMITS};
  }

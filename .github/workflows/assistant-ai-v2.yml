@@ -55,7 +55,7 @@ jobs:
       - name: Published JSON Schemas match the validator
         run: node scripts/assistant/write-schemas.cjs --check
       - name: AG-0…AG-5 core (independent oracles) + coexistence (UX-12/13 incl. 1512-rotation property, R03 manifest, capability registry)
-        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs tests/cat04-f1f2.test.cjs tests/assistant-agent-core.test.cjs tests/assistant-gen-api.test.cjs tests/assistant-gen-eval.test.cjs
+        run: node --test --test-concurrency=1 tests/assistant-ai-v2.test.cjs tests/smart-furnishing.test.cjs tests/r03-integration-core.test.cjs tests/capability-registry.test.cjs tests/cat04-assistant.test.cjs tests/cat04-f1f2.test.cjs tests/assistant-agent-core.test.cjs tests/assistant-gen-api.test.cjs tests/assistant-gen-eval.test.cjs tests/assistant-gen-cat04-economics.test.cjs
       - name: Common AI spend ledger on a REAL local Redis (atomic Lua scripts, concurrency; no network, no paid service)
         run: |
           sudo apt-get update -qq
