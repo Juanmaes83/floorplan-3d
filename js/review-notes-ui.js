@@ -15,7 +15,8 @@
  const save=all=>{try{localStorage.setItem(KEY,JSON.stringify(all));}catch{say(tx('No se pudieron guardar las observaciones en este navegador.','Observations could not be saved in this browser.','无法在此浏览器中保存意见。'),6000);}};
  const revision=()=>FloorPlanGuide.revision(app.project);
  const local=v=>typeof nm==='function'?nm(v):v,roomName=r=>local(r.name);
- function slot(){const all=load(),id=app.project.id;all[id]=all[id]||{draft:null,received:[],answers:[]};all[id].answers=all[id].answers||[];return {all,s:all[id]};}
+ // The review thread belongs to the project the file came from (see subject() below): every local copy of it reads the same thread.
+ function slot(){const all=load(),id=subject().id;all[id]=all[id]||{draft:null,received:[],answers:[]};all[id].answers=all[id].answers||[];return {all,s:all[id]};}
  const download=(obj,name)=>{const blob=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);};
  const STATUS_TEXT=v=>({received:tx('Recibida, sin decidir','Received, not decided','已收到，未决定'),planned:tx('Se incorporará (aún no está en la vivienda)','Will be incorporated (not yet in the home)','将采纳（尚未体现在住宅中）'),discarded:tx('Descartada','Discarded','已放弃'),implemented:tx(`Implementada en la versión ${v}`,`Implemented in version ${v}`,`已在版本 ${v} 中实现`)});
  // B6: what an observation can point at (FloorPlanReviewAnchors) and how each anchor reads in a list.

@@ -22,7 +22,9 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const sentProject=JSON.parse(sent.text);
  // 2. The client opens it and writes two observations; the project does not change.
  await client.page.locator('#fileIn').setInputFiles({name:sent.name,mimeType:'application/json',buffer:Buffer.from(sent.text)});
- await client.page.waitForFunction(id=>FloorPlanApp.project.id===id,sentProject.id);
+ // Identity contract: the client's browser already stores a project with that id (the sample), so the imported file gets
+ // a local id of its own and remembers the file's id; the observations still answer to the professional's project (below).
+ await client.page.waitForFunction(id=>FloorPlanApp.originProjectId===id&&FloorPlanApp.project.id!==id,sentProject.id);
  const clientBefore=await client.project();
  await client.openMenu();await client.press('#reviewNotesBtn');await client.page.locator('#reviewDialog[open]').waitFor();
  assert.match(await client.page.locator('#reviewCopyNote').textContent(),/esta es tu copia de la vivienda\. Lo que cambies en ella no llega al profesional/);
