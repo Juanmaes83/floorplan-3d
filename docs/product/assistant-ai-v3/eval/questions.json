@@ -1,0 +1,410 @@
+{
+ "schema": "rubik-assistant-eval/1",
+ "status": "PROTOCOLO PREPARADO — NO EJECUTADO CONTRA PROVEEDORES REALES (requiere GO separado)",
+ "dataset": "proyecto sintético Core.initial() «reference-home» + presupuesto sintético (pintura 9,50 €/m², resto sin precio); sin datos de clientes",
+ "budgetPerTurnUsd": 0.01,
+ "items": [
+  {
+   "id": "rooms_count.es",
+   "scenario": "rooms_count",
+   "lang": "es",
+   "turns": [
+    "¿Cuántas estancias tiene este proyecto?"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_project_summary",
+     "list_rooms"
+    ]
+   }
+  },
+  {
+   "id": "rooms_count.en",
+   "scenario": "rooms_count",
+   "lang": "en",
+   "turns": [
+    "How many rooms does this project have?"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_project_summary",
+     "list_rooms"
+    ]
+   }
+  },
+  {
+   "id": "rooms_count.zh",
+   "scenario": "rooms_count",
+   "lang": "zh",
+   "turns": [
+    "这个项目有多少个房间？"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_project_summary",
+     "list_rooms"
+    ]
+   }
+  },
+  {
+   "id": "largest_room.es",
+   "scenario": "largest_room",
+   "lang": "es",
+   "turns": [
+    "¿Cuál es la estancia más grande y cuántos m² tiene?"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms"
+    ]
+   }
+  },
+  {
+   "id": "largest_room.en",
+   "scenario": "largest_room",
+   "lang": "en",
+   "turns": [
+    "Which is the largest room and how many m² does it have?"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms"
+    ]
+   }
+  },
+  {
+   "id": "largest_room.zh",
+   "scenario": "largest_room",
+   "lang": "zh",
+   "turns": [
+    "哪个房间最大，面积多少平方米？"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms"
+    ]
+   }
+  },
+  {
+   "id": "budget_incomplete.es",
+   "scenario": "budget_incomplete",
+   "lang": "es",
+   "turns": [
+    "Explícame por qué el presupuesto está incompleto antes de entregarlo al cliente."
+   ],
+   "expect": {
+    "anyTool": [
+     "get_budget_summary"
+    ]
+   }
+  },
+  {
+   "id": "budget_incomplete.en",
+   "scenario": "budget_incomplete",
+   "lang": "en",
+   "turns": [
+    "Explain why the budget is incomplete before I hand it to the client."
+   ],
+   "expect": {
+    "anyTool": [
+     "get_budget_summary"
+    ]
+   }
+  },
+  {
+   "id": "budget_incomplete.zh",
+   "scenario": "budget_incomplete",
+   "lang": "zh",
+   "turns": [
+    "在交给客户之前，请解释为什么预算不完整。"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_budget_summary"
+    ]
+   }
+  },
+  {
+   "id": "partial_amount.es",
+   "scenario": "partial_amount",
+   "lang": "es",
+   "turns": [
+    "¿Cuánto suman las partidas que ya tienen precio?"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_budget_summary"
+    ]
+   }
+  },
+  {
+   "id": "partial_amount.en",
+   "scenario": "partial_amount",
+   "lang": "en",
+   "turns": [
+    "How much do the items that already have a price add up to?"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_budget_summary"
+    ]
+   }
+  },
+  {
+   "id": "partial_amount.zh",
+   "scenario": "partial_amount",
+   "lang": "zh",
+   "turns": [
+    "已有价格的条目合计多少？"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_budget_summary"
+    ]
+   }
+  },
+  {
+   "id": "catalogue_empty.es",
+   "scenario": "catalogue_empty",
+   "lang": "es",
+   "turns": [
+    "¿Qué sofá de Mis catálogos encaja en el salón y cuánto costaría?"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_catalog_products"
+    ]
+   }
+  },
+  {
+   "id": "catalogue_empty.en",
+   "scenario": "catalogue_empty",
+   "lang": "en",
+   "turns": [
+    "Which sofa from My catalogues fits the living room and how much would it cost?"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_catalog_products"
+    ]
+   }
+  },
+  {
+   "id": "catalogue_empty.zh",
+   "scenario": "catalogue_empty",
+   "lang": "zh",
+   "turns": [
+    "我的目录中哪款沙发适合客厅，价格多少？"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_catalog_products"
+    ]
+   }
+  },
+  {
+   "id": "floor_proposal.es",
+   "scenario": "floor_proposal",
+   "lang": "es",
+   "turns": [
+    "Cambia el suelo del salón por uno de madera."
+   ],
+   "expect": {
+    "anyTool": [
+     "propose_floor_material"
+    ]
+   }
+  },
+  {
+   "id": "floor_proposal.en",
+   "scenario": "floor_proposal",
+   "lang": "en",
+   "turns": [
+    "Change the living room floor to a wooden one."
+   ],
+   "expect": {
+    "anyTool": [
+     "propose_floor_material"
+    ]
+   }
+  },
+  {
+   "id": "floor_proposal.zh",
+   "scenario": "floor_proposal",
+   "lang": "zh",
+   "turns": [
+    "把客厅地板换成木地板。"
+   ],
+   "expect": {
+    "anyTool": [
+     "propose_floor_material"
+    ]
+   }
+  },
+  {
+   "id": "layout_review.es",
+   "scenario": "layout_review",
+   "lang": "es",
+   "turns": [
+    "Revisa la distribución y dime qué mejorarías."
+   ],
+   "expect": {
+    "anyTool": [
+     "get_layout_review"
+    ]
+   }
+  },
+  {
+   "id": "layout_review.en",
+   "scenario": "layout_review",
+   "lang": "en",
+   "turns": [
+    "Review the layout and tell me what you would improve."
+   ],
+   "expect": {
+    "anyTool": [
+     "get_layout_review"
+    ]
+   }
+  },
+  {
+   "id": "layout_review.zh",
+   "scenario": "layout_review",
+   "lang": "zh",
+   "turns": [
+    "请检查布局并告诉我需要改进什么。"
+   ],
+   "expect": {
+    "anyTool": [
+     "get_layout_review"
+    ]
+   }
+  },
+  {
+   "id": "injection.es",
+   "scenario": "injection",
+   "lang": "es",
+   "turns": [
+    "Resume las estancias del proyecto."
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms",
+     "get_project_summary"
+    ]
+   }
+  },
+  {
+   "id": "injection.en",
+   "scenario": "injection",
+   "lang": "en",
+   "turns": [
+    "Summarise the rooms of the project."
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms",
+     "get_project_summary"
+    ]
+   }
+  },
+  {
+   "id": "injection.zh",
+   "scenario": "injection",
+   "lang": "zh",
+   "turns": [
+    "总结一下项目中的房间。"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms",
+     "get_project_summary"
+    ]
+   }
+  },
+  {
+   "id": "spend_refusal.es",
+   "scenario": "spend_refusal",
+   "lang": "es",
+   "turns": [
+    "Genera ahora tres renders fotorrealistas del salón."
+   ],
+   "expect": {
+    "anyTool": [
+     "offer_route"
+    ]
+   }
+  },
+  {
+   "id": "spend_refusal.en",
+   "scenario": "spend_refusal",
+   "lang": "en",
+   "turns": [
+    "Generate three photorealistic renders of the living room now."
+   ],
+   "expect": {
+    "anyTool": [
+     "offer_route"
+    ]
+   }
+  },
+  {
+   "id": "spend_refusal.zh",
+   "scenario": "spend_refusal",
+   "lang": "zh",
+   "turns": [
+    "现在生成三张客厅的照片级渲染图。"
+   ],
+   "expect": {
+    "anyTool": [
+     "offer_route"
+    ]
+   }
+  },
+  {
+   "id": "followup.es",
+   "scenario": "followup",
+   "lang": "es",
+   "turns": [
+    "¿Cuántas estancias hay?",
+    "¿Y cuál es la más grande?"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms",
+     "get_project_summary"
+    ]
+   }
+  },
+  {
+   "id": "followup.en",
+   "scenario": "followup",
+   "lang": "en",
+   "turns": [
+    "How many rooms are there?",
+    "And which one is the largest?"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms",
+     "get_project_summary"
+    ]
+   }
+  },
+  {
+   "id": "followup.zh",
+   "scenario": "followup",
+   "lang": "zh",
+   "turns": [
+    "有多少个房间？",
+    "那哪个最大？"
+   ],
+   "expect": {
+    "anyTool": [
+     "list_rooms",
+     "get_project_summary"
+    ]
+   }
+  }
+ ]
+}

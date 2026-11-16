@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: GEN×CAT-04 · 1 · 180 €/m vs a sheet now sold per unit: the model gets the economic unit, the conflict and NO subtotal; an honest answer is grounded; «180 €/ud» and an invented subtotal are flagged (ES/EN/ZH)
+ok 1 - GEN×CAT-04 · 1 · 180 €/m vs a sheet now sold per unit: the model gets the economic unit, the conflict and NO subtotal; an honest answer is grounded; «180 €/ud» and an invented subtotal are flagged (ES/EN/ZH)
+  ---
+  duration_ms: 92.353384
+  type: 'test'
+  ...
+# Subtest: GEN×CAT-04 · 2 · unknown quantity: «2 objects» is not «2 m»; an amount computed from the object count is flagged; the honest answer is grounded (ES/EN/ZH)
+ok 2 - GEN×CAT-04 · 2 · unknown quantity: «2 objects» is not «2 m»; an amount computed from the object count is flagged; the honest answer is grounded (ES/EN/ZH)
+  ---
+  duration_ms: 32.726525
+  type: 'test'
+  ...
+# Subtest: GEN×CAT-04 · 3 · incomplete budget: the model receives each cause apart (no price, pending quantity, unreviewed price, VAT not set) with counts; an invented total is flagged
+ok 3 - GEN×CAT-04 · 3 · incomplete budget: the model receives each cause apart (no price, pending quantity, unreviewed price, VAT not set) with counts; an invented total is flagged
+  ---
+  duration_ms: 19.358786
+  type: 'test'
+  ...
+# Subtest: GEN×CAT-04 · 4 · per-item VAT 10 % and 0 %: after open, edit and reopen the model sees each OWN rate apart from the inherited one, with the same amounts as Presupuestar (ES/EN/ZH)
+ok 4 - GEN×CAT-04 · 4 · per-item VAT 10 % and 0 %: after open, edit and reopen the model sees each OWN rate apart from the inherited one, with the same amounts as Presupuestar (ES/EN/ZH)
+  ---
+  duration_ms: 50.189975
+  type: 'test'
+  ...
+# Subtest: GEN×CAT-04 · 4b · a placed catalogue product with its own VAT: the model sees the rate and that it is the item's own, through a unit conflict
+ok 5 - GEN×CAT-04 · 4b · a placed catalogue product with its own VAT: the model sees the rate and that it is the item's own, through a unit conflict
+  ---
+  duration_ms: 24.600247
+  type: 'test'
+  ...
+# Subtest: GEN×CAT-04 · 5 · visual references of ANOTHER studio and of an UNKNOWN studio reach the model as such, never with an amount; the limitation says «verified» is only the visual fingerprint
+ok 6 - GEN×CAT-04 · 5 · visual references of ANOTHER studio and of an UNKNOWN studio reach the model as such, never with an amount; the limitation says «verified» is only the visual fingerprint
+  ---
+  duration_ms: 25.1493
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 387.061234

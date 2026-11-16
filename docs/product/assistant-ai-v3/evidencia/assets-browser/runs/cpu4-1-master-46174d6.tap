@@ -1,0 +1,183 @@
+TAP version 13
+# Subtest: normalized Asset Lab cohort passes the production loader and searchable catalog
+ok 1 - normalized Asset Lab cohort passes the production loader and searchable catalog
+  ---
+  duration_ms: 3634.22431
+  type: 'test'
+  ...
+# [{"id":"ikea-solvinden-solar-floor-lamp-outdoor-beige","state":"ready","dimensions":{"width":258.3181858062744,"height":1199.9977827072144,"depth":249.98927116394043},"triangles":10614,"geometryBytes":321684,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":20.600000000093132},{"id":"ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo","state":"ready","dimensions":{"width":1506.15394115448,"height":469.66224908828735,"depth":2054.051399230957},"triangles":51468,"geometryBytes":7467120,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064},"durationMs":115.39999999990687},{"id":"ikea-malm-comoda-6-cajones-blanco-demo","state":"ready","dimensions":{"width":1603.4276485443115,"height":780.1331609953195,"depth":483.19125175476074},"triangles":1484,"geometryBytes":267144,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":213835,"decodedBytes":8912896,"textureBytes":11883864},"durationMs":44.200000000186265},{"id":"ikea-lisabo-mesa-chapa-fresno-demo","state":"ready","dimensions":{"width":1400.066614151001,"height":740.1560282723949,"depth":780.1506519317627},"triangles":2705,"geometryBytes":368166,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":125172,"decodedBytes":8380416,"textureBytes":11173888},"durationMs":40.5},{"id":"ikea-lisabo-silla-negrotallmyra-negro-gris-demo","state":"ready","dimensions":{"width":455.4198682308197,"height":804.3492709184648,"depth":520.6692218780518},"triangles":40079,"geometryBytes":4874202,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":53.700000000186265},{"id":"ikea-nammaro-garden-table-light-brown","state":"ready","dimensions":{"width":750.0013709068298,"height":750.0013995689869,"depth":629.8308372497559},"triangles":17479,"geometryBytes":2223882,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":221178,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":47},{"id":"ikea-frotorp-coffee-table-white-chrome-white-glass-demo","state":"ready","dimensions":{"width":883.0379247665405,"height":349.0002187031678,"depth":883.0379247665405},"triangles":13363,"geometryBytes":1539666,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":397925,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":53.200000000186265},{"id":"ikea-morum-indoor-outdoor-rug-beige","state":"ready","dimensions":{"width":1594.3176746368408,"height":15.856813319260255,"depth":2319.483757019043},"triangles":2997,"geometryBytes":284670,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":294800,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":34.3000000002794},{"id":"ikea-hemnes-tv-unit-white-light-brown-stain-demo","state":"ready","dimensions":{"width":1477.000117301941,"height":570.0464844703674,"depth":488.45672607421875},"triangles":14030,"geometryBytes":1832916,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":203157,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":43.200000000186265},{"id":"ikea-lauters-floor-lamp-brown-ash-demo","state":"ready","dimensions":{"width":719.1447615623474,"height":1434.8737001419067,"depth":552.7368783950806},"triangles":8880,"geometryBytes":1077888,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":151466,"decodedBytes":8380416,"textureBytes":11173888},"durationMs":39.89999999990687},{"id":"ikea-vasman-armchair-outdoor-brown","state":"ready","dimensions":{"width":570.9385275840759,"height":920.1855431310833,"depth":636.5417242050171},"triangles":87017,"geometryBytes":8040684,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":186621,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":71.79999999981374},{"id":"ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey","state":"ready","dimensions":{"width":1270.4079151153564,"height":797.7755069732666,"depth":742.5639629364014},"triangles":7147,"geometryBytes":1359810,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320},"durationMs":63.60000000009313},{"id":"ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","state":"ready","dimensions":{"width":1234.5600128173828,"height":765.8446405694121,"depth":794.253945350647},"triangles":22464,"geometryBytes":5071872,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":70.89999999990687},{"id":"ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","state":"ready","dimensions":{"width":813.6633634567261,"height":1012.4751202092739,"depth":978.3613085746765},"triangles":32982,"geometryBytes":7988484,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294},"durationMs":78.60000000009313},{"id":"ikea-skogsta-mesa-acacia-demo","state":"ready","dimensions":{"width":1600.0772714614868,"height":743.3429698321561,"depth":805.1661252975464},"triangles":15929,"geometryBytes":2266902,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":42.700000000186265},{"id":"ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","state":"ready","dimensions":{"width":1220.0418710708618,"height":909.427577545948,"depth":610.2815866470337},"triangles":26900,"geometryBytes":3905592,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":54.200000000186265},{"id":"ikea-stockholm-2025-aparador-chapa-roble-demo","state":"ready","dimensions":{"width":1608.0906391143799,"height":831.9707121925148,"depth":432.0829510688782},"triangles":5219,"geometryBytes":787890,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":35},{"id":"ikea-nordli-comoda-de-5-cajones-blanco-demo","state":"ready","dimensions":{"width":1201.849102973938,"height":1690.7002112129703,"depth":477.1896302700043},"triangles":8974,"geometryBytes":3416148,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320},"durationMs":52.5}]
+# Subtest: every normalized model retains identity through edit, reload, JSON import and deletion
+ok 2 - every normalized model retains identity through edit, reload, JSON import and deletion
+  ---
+  duration_ms: 20884.58992
+  type: 'test'
+  ...
+# Subtest: normalized Asset Lab mixed scene 1440x900
+ok 3 - normalized Asset Lab mixed scene 1440x900
+  ---
+  duration_ms: 14883.661377
+  type: 'test'
+  ...
+# {"viewport":{"width":1440,"height":900},"states":[{"state":"ready","bytes":195384,"triangles":10614,"durationMs":3215.600000000093,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0}},{"state":"ready","bytes":3301296,"triangles":51468,"durationMs":7970.600000000093,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064}},{"state":"ready","bytes":2054416,"triangles":40079,"durationMs":5551.200000000186,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":780996,"triangles":7147,"durationMs":7315.100000000093,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320}}]}
+# Subtest: normalized Asset Lab mixed scene 390x844
+ok 4 - normalized Asset Lab mixed scene 390x844
+  ---
+  duration_ms: 11663.56326
+  type: 'test'
+  ...
+# {"viewport":{"width":390,"height":844},"states":[{"state":"ready","bytes":195384,"triangles":10614,"durationMs":3114.399999999907,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0}},{"state":"ready","bytes":3301296,"triangles":51468,"durationMs":6235.600000000093,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064}},{"state":"ready","bytes":2054416,"triangles":40079,"durationMs":3916.600000000093,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":780996,"triangles":7147,"durationMs":5743.199999999721,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320}}]}
+# Subtest: next Asset Lab cohort renders and persists 1440x900
+not ok 5 - next Asset Lab cohort renders and persists 1440x900
+  ---
+  duration_ms: 11507.379476
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-master/tests/assets.browser.test.cjs:59:95'
+  failureType: 'testCodeFailure'
+  error: '[{"state":"ready","bytes":1810356,"permissionBytes":1265,"triangles":22464,"geometryBytes":5071872,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":7116.699999999721,"normalizedDimensionsMm":{"width":1234.5600128173828,"height":765.8446405694121,"depth":794.253945350647},"instanceDimensionsMm":{"width":1235,"height":766,"depth":794},"attribution":"IKEA — IKEA GLOSTAD · sofá de dos plazas gris oscuro; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."},{"state":"ready","bytes":2682460,"permissionBytes":1265,"triangles":32982,"geometryBytes":7988484,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294},"durationMs":7894.5,"normalizedDimensionsMm":{"width":813.6633634567261,"height":1012.4751202092739,"depth":978.3613085746765},"instanceDimensionsMm":{"width":814,"height":1012,"depth":978},"attribution":"IKEA — IKEA STRANDMON · sillón orejero beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."},{"state":"ready","bytes":1057164,"permissionBytes":1265,"triangles":15929,"geometryBytes":2266902,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":6128.199999999721,"normalizedDimensionsMm":{"width":1600.0772714614868,"height":743.3429698321561,"depth":805.1661252975464},"instanceDimensionsMm":{"width":1600,"height":743,"depth":805},"attribution":"IKEA — IKEA SKOGSTA · mesa de acacia; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."},{"state":"ready","bytes":1627956,"permissionBytes":1265,"triangles":26900,"geometryBytes":3905592,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":7096.399999999907,"normalizedDimensionsMm":{"width":1220.0418710708618,"height":909.427577545948,"depth":610.2815866470337},"instanceDimensionsMm":{"width":1220,"height":909,"depth":610},"attribution":"IKEA — IKEA KNOXHULT · armario bajo blanco; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."},{"state":"ready","bytes":490828,"permissionBytes":1265,"triangles":5219,"geometryBytes":787890,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":6094.600000000093,"normalizedDimensionsMm":{"width":1608.0906391143799,"height":831.9707121925148,"depth":432.0829510688782},"instanceDimensionsMm":{"width":1608,"height":832,"depth":432},"attribution":"IKEA — IKEA STOCKHOLM 2025 · aparador de roble; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."},{"state":"error","reason":"Loading aborted"}]'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/rec238/wt-master/tests/assets.browser.test.cjs:66:107)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: next Asset Lab cohort renders and persists 390x844
+ok 6 - next Asset Lab cohort renders and persists 390x844
+  ---
+  duration_ms: 12216.279003
+  type: 'test'
+  ...
+# {"viewport":{"width":390,"height":844},"ids":["ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","ikea-skogsta-mesa-acacia-demo","ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","ikea-stockholm-2025-aparador-chapa-roble-demo","ikea-nordli-comoda-de-5-cajones-blanco-demo"],"states":[{"state":"ready","bytes":1810356,"triangles":22464,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":2682460,"triangles":32982,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294}},{"state":"ready","bytes":1057164,"triangles":15929,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1627956,"triangles":26900,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":490828,"triangles":5219,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1171204,"triangles":8974,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320}}]}
+# Subtest: next Asset Lab cohort renders and persists 844x390
+ok 7 - next Asset Lab cohort renders and persists 844x390
+  ---
+  duration_ms: 11314.26482
+  type: 'test'
+  ...
+# {"viewport":{"width":844,"height":390},"ids":["ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","ikea-skogsta-mesa-acacia-demo","ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","ikea-stockholm-2025-aparador-chapa-roble-demo","ikea-nordli-comoda-de-5-cajones-blanco-demo"],"states":[{"state":"ready","bytes":1810356,"triangles":22464,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":2682460,"triangles":32982,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294}},{"state":"ready","bytes":1057164,"triangles":15929,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1627956,"triangles":26900,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":490828,"triangles":5219,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1171204,"triangles":8974,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320}}]}
+# Subtest: F3 authorized load, dimensions, state and offline fallback 390x844
+ok 8 - F3 authorized load, dimensions, state and offline fallback 390x844
+  ---
+  duration_ms: 12894.380437
+  type: 'test'
+  ...
+# {"viewport":{"width":390,"height":844},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2387.5,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":5}}
+# Subtest: F3 authorized load, dimensions, state and offline fallback 844x390
+ok 9 - F3 authorized load, dimensions, state and offline fallback 844x390
+  ---
+  duration_ms: 12080.419059
+  type: 'test'
+  ...
+# {"viewport":{"width":844,"height":390},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2404.7000000001863,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":5}}
+# Subtest: F3 authorized load, dimensions, state and offline fallback 1440x900
+ok 10 - F3 authorized load, dimensions, state and offline fallback 1440x900
+  ---
+  duration_ms: 20889.369878
+  type: 'test'
+  ...
+# {"viewport":{"width":1440,"height":900},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2798.7999999998137,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":5}}
+# Subtest: F3 loader rejects bad headers, extensions, external dependencies, integrity, dimensions and timeout
+ok 11 - F3 loader rejects bad headers, extensions, external dependencies, integrity, dimensions and timeout
+  ---
+  duration_ms: 1984.873218
+  type: 'test'
+  ...
+# Subtest: F3 missing reference, broken URL and stale asynchronous success keep a generic editor
+ok 12 - F3 missing reference, broken URL and stale asynchronous success keep a generic editor
+  ---
+  duration_ms: 9776.085334
+  type: 'test'
+  ...
+# Subtest: F3 core embedded JPEG loads without blob URLs; budgets, MIME and external resources fail closed
+ok 13 - F3 core embedded JPEG loads without blob URLs; budgets, MIME and external resources fail closed
+  ---
+  duration_ms: 8827.530988
+  type: 'test'
+  ...
+# Subtest: F3 cancellation during image decoding closes late resources and shared disposal is unique
+ok 14 - F3 cancellation during image decoding closes late resources and shared disposal is unique
+  ---
+  duration_ms: 1946.873516
+  type: 'test'
+  ...
+# Subtest: F3 external textured catalog end-to-end 1440x900
+ok 15 - F3 external textured catalog end-to-end 1440x900
+  ---
+  duration_ms: 26927.833763
+  type: 'test'
+  ...
+# Subtest: F3 external textured catalog end-to-end 390x844
+ok 16 - F3 external textured catalog end-to-end 390x844
+  ---
+  duration_ms: 23019.478112
+  type: 'test'
+  ...
+# Subtest: F3 external textured catalog end-to-end 844x390
+ok 17 - F3 external textured catalog end-to-end 844x390
+  ---
+  duration_ms: 21882.652414
+  type: 'test'
+  ...
+# Subtest: furniture search filters insertion persistence and touch/keyboard 1440x900
+ok 18 - furniture search filters insertion persistence and touch/keyboard 1440x900
+  ---
+  duration_ms: 25590.409932
+  type: 'test'
+  ...
+# Search remains local; 3D rendered with SwiftShader software.
+# Subtest: furniture search filters insertion persistence and touch/keyboard 390x844
+ok 19 - furniture search filters insertion persistence and touch/keyboard 390x844
+  ---
+  duration_ms: 22438.54961
+  type: 'test'
+  ...
+# Search remains local; 3D rendered with SwiftShader software.
+# Subtest: furniture search filters insertion persistence and touch/keyboard 844x390
+ok 20 - furniture search filters insertion persistence and touch/keyboard 844x390
+  ---
+  duration_ms: 22501.671971
+  type: 'test'
+  ...
+# Search remains local; 3D rendered with SwiftShader software.
+# Subtest: search keeps generics during catalog pending/exclusion and unavailable model fallback
+ok 21 - search keeps generics during catalog pending/exclusion and unavailable model fallback
+  ---
+  duration_ms: 12205.890851
+  type: 'test'
+  ...
+# Subtest: protected preview session keeps both authorized catalogs and textured assets 1440x900
+ok 22 - protected preview session keeps both authorized catalogs and textured assets 1440x900
+  ---
+  duration_ms: 19329.443459
+  type: 'test'
+  ...
+# Subtest: protected preview session keeps both authorized catalogs and textured assets 390x844
+ok 23 - protected preview session keeps both authorized catalogs and textured assets 390x844
+  ---
+  duration_ms: 16656.866292
+  type: 'test'
+  ...
+# Subtest: protected preview session keeps both authorized catalogs and textured assets 844x390
+ok 24 - protected preview session keeps both authorized catalogs and textured assets 844x390
+  ---
+  duration_ms: 16629.349237
+  type: 'test'
+  ...
+# Subtest: catalog failures and exclusions cannot silently leave generic search results
+ok 25 - catalog failures and exclusions cannot silently leave generic search results
+  ---
+  duration_ms: 6022.958736
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 24
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 368339.208771

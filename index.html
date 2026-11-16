@@ -2580,7 +2580,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     if(entry.focus?.isConnected)entry.focus.focus({preventScroll:true});
     return true;
   },
-  importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
+  importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
 <script src="js/opening-ui.js"></script>
@@ -5530,6 +5530,9 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <link rel="stylesheet" href="css/assistant.css">
 <script src="js/assistant-contracts.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
 <script src="js/assistant-proposals-core.js"></script><script src="js/assistant-runtime-core.js"></script><script src="js/assistant-session-core.js"></script><script src="js/assistant-ui.js"></script>
+<!-- Asistente generativo (rubik-agent/1): conversación con un modelo de texto real vía /api/assistant (cerrado por defecto:
+     sin autorización del propietario, solo la consulta guiada). El navegador nunca tiene la clave del proveedor. -->
+<script src="js/assistant-agent-core.js"></script><script src="js/assistant-gen-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->

@@ -1,0 +1,17 @@
+TAP version 13
+# Subtest: normalized Asset Lab mixed scene 1440x900
+ok 1 - normalized Asset Lab mixed scene 1440x900
+  ---
+  duration_ms: 14960.116957
+  type: 'test'
+  ...
+# {"viewport":{"width":1440,"height":900},"states":[{"state":"ready","bytes":195384,"triangles":10614,"durationMs":3518.7999999998137,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0}},{"state":"ready","bytes":3301296,"triangles":51468,"durationMs":7963.5999999996275,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064}},{"state":"ready","bytes":2054416,"triangles":40079,"durationMs":5654,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":780996,"triangles":7147,"durationMs":7381.700000000186,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320}}]}
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15550.965537

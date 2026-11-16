@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: IVA por partida en modo IA 1440x900: abrir Presupuestar conserva los tipos; el modelo recibe el propio y el heredado; un total inventado se avisa; nada se modifica
+not ok 1 - IVA por partida en modo IA 1440x900: abrir Presupuestar conserva los tipos; el modelo recibe el propio y el heredado; un total inventado se avisa; nada se modifica
+  ---
+  duration_ms: 36630.819354
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-eb6/tests/assistant-gen-cat04.browser.test.cjs:25:72'
+  failureType: 'testCodeFailure'
+  error: 'page.waitForFunction: Timeout 30000ms exceeded.'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    ask (/tmp/claude-0/rec238/wt-eb6/tests/assistant-gen-cat04.browser.test.cjs:21:111)
+    async TestContext.<anonymous> (/tmp/claude-0/rec238/wt-eb6/tests/assistant-gen-cat04.browser.test.cjs:40:9)
+  ...
+# Subtest: IVA por partida en modo IA 390x844: abrir Presupuestar conserva los tipos; el modelo recibe el propio y el heredado; un total inventado se avisa; nada se modifica
+not ok 2 - IVA por partida en modo IA 390x844: abrir Presupuestar conserva los tipos; el modelo recibe el propio y el heredado; un total inventado se avisa; nada se modifica
+  ---
+  duration_ms: 33557.690446
+  type: 'test'
+  location: '/tmp/claude-0/rec238/wt-eb6/tests/assistant-gen-cat04.browser.test.cjs:25:72'
+  failureType: 'testCodeFailure'
+  error: 'page.waitForFunction: Timeout 30000ms exceeded.'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    ask (/tmp/claude-0/rec238/wt-eb6/tests/assistant-gen-cat04.browser.test.cjs:21:111)
+    async TestContext.<anonymous> (/tmp/claude-0/rec238/wt-eb6/tests/assistant-gen-cat04.browser.test.cjs:40:9)
+  ...
+# Error: Test hook "before" at tests/assistant-gen-cat04.browser.test.cjs:11:6 generated asynchronous activity after the test ended. This activity created the error "TypeError: Cannot read properties of undefined (reading 'ownRateItems')" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+# Error: Test hook "before" at tests/assistant-gen-cat04.browser.test.cjs:11:6 generated asynchronous activity after the test ended. This activity created the error "TypeError: Cannot read properties of undefined (reading 'ownRateItems')" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70723.878481

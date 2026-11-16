@@ -179,13 +179,17 @@ test('AG-0 · /api/assistant: perímetro cerrado y NUNCA llama a un proveedor (d
  assert.equal((await call('GET')).status,405);
  assert.equal((await call('POST',{headers:{origin:'https://evil.example','content-type':'application/json'},body:'{}'})).status,403);
  assert.equal((await call('POST',{headers:{'content-type':'text/plain'},body:'{}'})).status,415);
- assert.equal((await call('POST',{headers:{'content-type':'application/json'},body:'x'.repeat(17000)})).status,413);
+ assert.equal((await call('POST',{headers:{'content-type':'application/json'},body:'x'.repeat(API.MAX_BYTES+1)})).status,413);
  assert.equal((await call('POST',{headers:{'content-type':'application/json'},body:'[1]'})).status,400);
  const secret='{"question":"¿Cuánto cuesta el piso de Ana López?","projectId":"prj_x","expectedProjectId":"prj_x"}';
  const off=await call('POST',{headers:{'content-type':'application/json',authorization:'Bearer abc'},body:secret});assert.equal(off.status,503);assert.equal(off.body.error,'provider_disabled');
  const on=await call('POST',{headers:{'content-type':'application/json',origin:'https://rubik.example'},body:secret,env:{RUBIK_ASSISTANT_ENABLED:'1'}});assert.equal(on.status,501);assert.equal(on.body.error,'auth_unavailable');
  for(const r of [off,on]){assert.equal(r.headers['access-control-allow-origin'],undefined,'sin CORS');assert.ok(r.logs.every(l=>!/Ana|abc|cuesta|prj_x/.test(l)),'el registro no lleva cuerpo ni cabeceras');}
- const src=require('node:fs').readFileSync(path.join(__dirname,'../api/assistant.js'),'utf8');assert.doesNotMatch(src,/fetch\(|https:\/\/api\.|OPENAI|ANTHROPIC|require\(['"]https?['"]\)/,'sin cliente de proveedor');
+ // GEN-AI (rubik-assistant/2): the gateway now HAS a provider client, but only behind every gate (tests/assistant-gen-api.test.cjs).
+ // What stays forbidden in the source: any endpoint outside the closed PROVIDERS list, other providers, and using the
+ // Render IA key (OPENAI_API_KEY appears only to REFUSE it as the assistant key).
+ const src=require('node:fs').readFileSync(path.join(__dirname,'../api/assistant.js'),'utf8');assert.deepEqual(src.match(/https:\/\/[^'"\s]+/g).filter(u=>!u.startsWith('https://api.openai.com/v1/chat/completions')),[],'only the closed provider endpoint');
+ assert.doesNotMatch(src,/ANTHROPIC|require\(['"]https?['"]\)/);assert.deepEqual(src.match(/OPENAI_API_KEY/g),['OPENAI_API_KEY'],'OPENAI_API_KEY only compared to refuse it');assert.match(src,/key===env\.OPENAI_API_KEY\)return \{ok:false/);
 });
 // ---------- AG-4 / AG-5 ----------
 test('AG-4/AG-5 · CapabilitiesForAssistantV1 válido; Render IA solo «available» con registro y módulo; avanzado en preparación',()=>{
