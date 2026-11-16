@@ -26,7 +26,7 @@
  const slug=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'proyecto';
  let state=null,returnFocus=null,base=null,baseColumn=0,openRef=null;
  const X=window.FloorPlanBc3Budget,Bridge=window.FloorPlanBudgetCostBridge;
- function apply(fn){state.budget=B.validateBudget(fn(state.budget));save();}
+ function apply(fn){requireSafeIdentity();state.budget=B.validateBudget(fn(state.budget));save();}
  // Current budget of the open project, rebuilt over the project quantities (keeps prices, waste and valid reviews).
  // `over` (CON-03): a validated budget to draft over INSTEAD of the saved one — the import preview; nothing is saved here.
  function load(over=null){const saved=read(BUDGETS)[app.project.id]||null;let previous=null;try{previous=over||(saved?B.parseBudget(JSON.stringify(saved)):null);}catch{previous=null;}
@@ -43,25 +43,35 @@
  // CON-02: names of the OTHER local projects (single projects or building levels) stored with the open project's id. Read-only.
  function sharedWith(){try{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')),pid=app.project.id,me=app.entryId;
   return (lib?.entries||[]).filter(e=>e.id!==me&&(e.kind==='building'?(e.building?.levels||[]).some(l=>l.project?.id===pid):e.project?.id===pid)).map(e=>local(String(e.name||'')).slice(0,60));}catch{return [];}}
- function save(){const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
+ function identityUnsafe(){
+  if(app.identityMigration?.failed)return true;
+  try{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1'));
+   const ids=(lib?.entries||[]).flatMap(e=>e.kind==='building'?(e.building?.levels||[]).map(l=>l.project?.id):[e.project?.id]);
+   return ids.filter(id=>id===app.project.id).length>1;
+  }catch{return false;}
+ }
+ const identityError=()=>tx('Presupuesto bloqueado: hay proyectos con el mismo identificador y no se pudo guardar su separación. Libera espacio de este navegador y vuelve a abrir RUBIK; comprueba que cada proyecto tiene su presupuesto antes de editar.','Budget locked: projects share an identity and their separation could not be saved. Free browser storage and reopen RUBIK; check each project budget before editing.','预算已锁定：项目共用标识且无法保存分离结果。请释放浏览器存储空间并重新打开 RUBIK。');
+ function requireSafeIdentity(){if(identityUnsafe())throw Error(identityError());}
+ function save(){requireSafeIdentity();const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
  function say(m){const s=dialog.querySelector('#budgetStatus');if(s)s.textContent=m;}
  // D-04: a hand-made price change is also written to the project's price history (same record as reference prices).
  function logManualPrice(it,prev,revB){try{const Ctx=window.FloorPlanConstructionContext,now=state.budget.items.find(x=>x.id===it.id)?.unitPrice??null;if(!Ctx?.store||prev===now)return;
   const revA=window.FloorPlanCostCatalog?.revisionTag?.(state.budget)||null,pid=app.project.id;
   Ctx.snapshot().then(snap=>{if(snap?.entry&&snap.subject)Ctx.store().addPriceChange(snap.entry.id,snap.subject,pid,{label:now===null?'Precio retirado a mano':'Precio propio cambiado a mano',itemId:it.id,description:it.description,as:'manual',before:{unitPrice:prev},after:{unitPrice:now},code:null,source:'manual',revBefore:revB,revAfter:revA});}).catch(e=>console.warn('[Presupuesto] historial de precios:',e?.message||e));}catch(e){console.warn('[Presupuesto] historial de precios:',e?.message||e);}}
- function setItem(id,fn){const i=state.budget.items.findIndex(x=>x.id===id);const next={...state.budget,items:state.budget.items.slice()};next.items[i]=fn(next.items[i]);state.budget=B.validateBudget(next);save();}
+ function setItem(id,fn){requireSafeIdentity();const i=state.budget.items.findIndex(x=>x.id===id);const next={...state.budget,items:state.budget.items.slice()};next.items[i]=fn(next.items[i]);state.budget=B.validateBudget(next);save();}
  const dialog=el('dialog',undefined,document.body,'ai-render-dialog budget-dialog');dialog.id='budgetDialog';dialog.setAttribute('aria-labelledby','budgetTitle');
  dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
- function open(){returnFocus=document.activeElement;pendingImport=null;state=load();if(!state.catalogError)save();draw();dialog.showModal();dialog.querySelector('#budgetTitle')?.focus();}
+ function open(){returnFocus=document.activeElement;pendingImport=null;state=load();if(!state.catalogError&&!identityUnsafe())save();draw();dialog.showModal();dialog.querySelector('#budgetTitle')?.focus();}
  function draw(focusId=null){
   const c=B.calculateBudget(state.budget),st=STATUS(),u=UNIT(),lines=new Map(c.lines.map(l=>[l.id,l])),scroll=dialog.scrollTop;dialog.replaceChildren();
   const head=el('div',undefined,dialog,'ai-render-head');const h=el('h2',tx('Presupuesto','Budget','预算'),head);h.id='budgetTitle';h.tabIndex=-1;
   const close=btn(tx('Cerrar','Close','关闭'),head);close.id='budgetClose';close.onclick=()=>dialog.close();
+  if(identityUnsafe()){const warning=el('p',identityError(),dialog,'budget-warn');warning.id='budgetIdentityBlocked';warning.setAttribute('role','alert');}
   if(state.catalogError){const e=el('p',tx('No se han podido conciliar los productos de «Mis catálogos». Se muestran las partidas de catálogo tal como estaban guardadas y no se ha guardado nada automáticamente: tus precios, referencias y revisiones se conservan. Si editas algo, se guardará con estas partidas.','The products from «My catalogues» could not be reconciled. Catalogue items are shown as they were saved and nothing has been saved automatically: your prices, references and reviews are kept. If you edit something, it will be saved with these items.','无法核对“我的目录”中的产品。目录条目按已保存的状态显示，未自动保存任何内容：您的价格、参考和审核均保留。如有编辑，将连同这些条目一起保存。'),dialog,'budget-warn');e.id='cat04ReconcileError';e.setAttribute('role','alert');e.dataset.reason=state.catalogError;}
   el('p',tx('Las cantidades salen del proyecto (con su estado); los precios son sólo tuyos y ninguno se da por revisado hasta que lo marcas. Rubik no certifica el coste real. Si cambias el proyecto, al volver a abrir se actualizan las cantidades y se conservan tus precios.','Quantities come from the project (with their status); prices are only yours and none counts as reviewed until you mark it. Rubik does not certify actual cost. If you change the project, reopening updates quantities and keeps your prices.','数量来自项目；价格只由您填写，标记前均未审核。'),dialog,'ai-render-note').id='budgetNote';
   // CON-02: this document is keyed by project.id, and a project file imported where that id already exists keeps its id
   // (client review by file depends on it), so both local projects read and write THIS budget. Never silent: say it.
-  const twins=sharedWith();if(twins.length){const w=el('p',tx(`Este presupuesto está compartido con ${twins.length===1?'otro proyecto local':twins.length+' proyectos locales'} que ${twins.length===1?'es copia':'son copias'} del mismo archivo (${twins.map(n=>'«'+n+'»').join(', ')}): lo que cambies aquí cambia también allí. Para un presupuesto independiente usa «Duplicar» en Proyectos.`,`This budget is shared with ${twins.length===1?'another local project':twins.length+' local projects'} copied from the same file (${twins.map(n=>'«'+n+'»').join(', ')}): what you change here changes there too. For an independent budget use «Duplicate» in Projects.`,`此预算与来自同一文件的 ${twins.length} 个本地项目共享（${twins.map(n=>'«'+n+'»').join('、')}）：此处的更改也会影响它们。如需独立预算，请在“项目”中使用“复制”。`),dialog,'budget-warn');w.id='budgetSharedProject';w.setAttribute('role','alert');w.dataset.count=String(twins.length);}
+  const twins=identityUnsafe()?[]:sharedWith();if(twins.length){const w=el('p',tx(`Este presupuesto está compartido con ${twins.length===1?'otro proyecto local':twins.length+' proyectos locales'} que ${twins.length===1?'es copia':'son copias'} del mismo archivo (${twins.map(n=>'«'+n+'»').join(', ')}): lo que cambies aquí cambia también allí. Para un presupuesto independiente usa «Duplicar» en Proyectos.`,`This budget is shared with ${twins.length===1?'another local project':twins.length+' local projects'} copied from the same file (${twins.map(n=>'«'+n+'»').join(', ')}): what you change here changes there too. For an independent budget use «Duplicate» in Projects.`,`此预算与来自同一文件的 ${twins.length} 个本地项目共享（${twins.map(n=>'«'+n+'»').join('、')}）：此处的更改也会影响它们。如需独立预算，请在“项目”中使用“复制”。`),dialog,'budget-warn');w.id='budgetSharedProject';w.setAttribute('role','alert');w.dataset.count=String(twins.length);}
   // XR-01: a priced item whose unit changed keeps its old unit and price, without amount, until the professional decides.
   if(state.unitConflicts?.length)el('p',tx(`${state.unitConflicts.length} partida(s) con precio han cambiado de unidad: no se convierte ningún precio (por ejemplo €/m² en €/ud). Se conserva tu precio con su unidad y su origen, sin importe, hasta que lo revises o lo quites.`,`${state.unitConflicts.length} priced item(s) changed unit: no price is converted (e.g. €/m² into €/pcs). Your price is kept with its unit and source, without amount, until you review or remove it.`,`${state.unitConflicts.length} 个有价格的条目单位已变更：不会换算任何价格（例如 €/m² 换成 €/件）。保留价格及其单位和来源，不计金额，直至您审核或移除。`),dialog,'budget-warn').id='budgetUnitConflict';
   if(state.reviewInvalidated.length)el('p',tx(`La cantidad de ${state.reviewInvalidated.length} partida(s) ha cambiado desde tu revisión: revísalas de nuevo.`,`The quantity of ${state.reviewInvalidated.length} item(s) changed since your review: review them again.`,'部分条目数量已变化，请重新审核。'),dialog,'budget-warn').id='budgetInvalidated';
@@ -126,6 +136,7 @@
   if(pendingImport)importPreview();
   if(X){const bc=btn(tx('Descargar presupuesto (BC3)','Download budget (BC3)','下载预算 (BC3)'),row);bc.id='budgetBc3Export';bc.onclick=()=>{try{const out=X.exportBudget(state.budget,{title:local(app.project.name)});download(new Blob([out.bytes],{type:'application/octet-stream'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.bc3`);say(tx(`BC3 generado: ${out.check.concepts.length} conceptos. Las partidas sin precio van sin precio.`,`BC3 generated: ${out.check.concepts.length} concepts.`,'BC3 已生成。'));}catch(e){say(e.message);}};}
   const status=el('p','',dialog,'ai-render-status');status.id='budgetStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+  if(identityUnsafe())for(const control of dialog.querySelectorAll('button,input,select,textarea'))if(control!==close)control.disabled=true;
   dialog.scrollTop=scroll;
   if(focusId){const [id,field]=focusId.split('|');if(field==='refq'){dialog.querySelector('#budgetRefQuery')?.focus({preventScroll:true});return;}(field?dialog.querySelector(`tr[data-item="${CSS.escape(id)}"] [data-field="${field}"]`):dialog.querySelector('#'+id))?.focus({preventScroll:true});}
  }
@@ -176,9 +187,9 @@
  function current(){try{const r=load();return {budget:r.budget,saved:r.savedBefore};}catch{return null;}}
  // M2 (FT3D-8 S4): the single write path for other Presupuestar tools (reference prices). Same storage and validation
  // as this dialog; only the open project's own budget is accepted (identity by subject id, never by name).
- function commit(budget){const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
+ function commit(budget){requireSafeIdentity();const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
   const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(b));if(!write(BUDGETS,all))throw Error(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));if(state)state.budget=b;return b;}
  // CAT-04: redraw the open dialog from the saved document (after «Precios de referencia» or a catalogue action).
- function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;pendingImport=null;state=load();if(!state.catalogError)save();draw();dialog.scrollTop=keep;}
+ function refresh(){if(!dialog.open)return;const keep=dialog.scrollTop;pendingImport=null;state=load();if(!state.catalogError&&!identityUnsafe())save();draw();dialog.scrollTop=keep;}
  window.FloorPlanBudgetUI={open,summary,current,commit,refresh,get budget(){return state?.budget||null;}};
 })();

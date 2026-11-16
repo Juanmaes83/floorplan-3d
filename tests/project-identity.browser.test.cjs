@@ -94,3 +94,33 @@ test('IDENTIDAD · migración: una colección anterior con dos entradas y un sol
   assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}
 });
+
+test('IDENTIDAD · si falla la migración, presupuestar queda de solo lectura y no comparte escrituras',{timeout:180000},async()=>{
+ const p=Core.initial(),lib=JSON.stringify({version:1,activeId:'prj_legacy2',entries:[
+  {id:'prj_legacy1',name:'Original',project:p},
+  {id:'prj_legacy2',name:'Copia',project:Core.clone(p)}]});
+ const D=require('../js/budget-draft-core.js'),B=require('../js/budget-core.js');
+ const {budget}=D.draft(p,{labels:{title:'Presupuesto',floor:'Pavimento',skirting:'Rodapié',paint:'Pintura',newWalls:'Tabique',demolition:'Demolición',door:'Puerta',slidingDoor:'Corredera',window:'Ventana',tariff:'Tarifa',chapters:{floors:'Pavimentos',walls:'Paredes',partitions:'Tabiquería',carpentry:'Carpintería'}}});
+ const bud=JSON.stringify({[p.id]:JSON.parse(B.serializeBudget(budget))});
+ const context=await env.browser.newContext({viewport:{width:1440,height:900}});
+ await context.addInitScript(([lk,lv,bk,bv])=>{
+  if(!localStorage.getItem(lk)){
+   const original=Storage.prototype.setItem;original.call(localStorage,lk,lv);original.call(localStorage,bk,bv);
+   Storage.prototype.setItem=function(k,v){if(k===lk)throw new DOMException('Storage full','QuotaExceededError');return original.call(this,k,v);};
+  }
+ },[LIB,lib,BUD,bud]);
+ const page=await context.newPage();
+ try{
+  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.FloorPlanBudgetUI);
+  assert.equal(await page.evaluate(()=>FloorPlanApp.identityMigration.failed),true);
+  assert.equal(new Set(await projects(page)).size,1,'both project ids remain duplicated after the failed write');
+  const before=await page.evaluate(k=>localStorage.getItem(k),BUD);
+  await openBudget(page);
+  assert.match(await page.locator('#budgetIdentityBlocked').innerText(),/Presupuesto bloqueado/);
+  assert.equal(await page.locator('#budgetDialog tr[data-item="paint"] [data-field="price"]').isDisabled(),true);
+  assert.equal(await page.locator('#budgetImport').isDisabled(),true);
+  assert.match(await page.evaluate(()=>{try{FloorPlanBudgetUI.commit(FloorPlanBudgetUI.current().budget);return '';}catch(e){return e.message;}}),/Presupuesto bloqueado/);
+  assert.equal(await page.evaluate(k=>localStorage.getItem(k),BUD),before,'failed migration and attempted edit leave saved budget byte-identical');
+  await closeBudget(page);
+ }finally{await context.close();}
+});

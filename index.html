@@ -2534,6 +2534,8 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
+  // A failed identity migration leaves old shared project ids in storage. Economic writers must fail closed.
+  get identityMigration(){return library?.migration?.()||null;},
   // Identity contract (js/project-library.js): id of the file the open entry was imported from when it had to be re-identified here.
   get originProjectId(){return library?.origin?.()||null;},
   /* MUE-01 «Traer mi mueble»: un mueble propio (volumen genérico con las medidas declaradas) entra con la colocación
