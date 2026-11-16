@@ -86,7 +86,7 @@
  // aiServices(), so the Home cannot show them until the gate is removed together with a verified state.
  // `access` is the existing place that opens the service; the Home only offers it if that module is on the page.
  const AI_GROUPS=Object.freeze(['available','pilot','simulation','preparation']);
- const AI_VERIFIED_AT='46174d6918e336119a79f5bda9fd2733aa5464c4';
+ const AI_VERIFIED_AT='8e6a5a842b37fcbc78a58160859304da9b3efa1a';
  const S=(id,state,name,what,isNot,limits,access,modules,tests,professions,extra={})=>Object.freeze({id,state,name,what,isNot,limits,access,modules,tests,professions,production:extra.production||null,gate:extra.gate||null,verifiedAt:AI_VERIFIED_AT});
  const ALL=['architecture','real-estate','developer','renovation','interior','construction','general'];
  const AI_SERVICES=Object.freeze([
