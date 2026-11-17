@@ -1,7 +1,7 @@
 {
  "schema": "rubik-lab-bloques-qa/1",
- "fecha": "2026-11-17T21:43:58.259Z",
- "pass": 8,
+ "fecha": "2026-11-17T22:00:34.912Z",
+ "pass": 10,
  "fail": 0,
  "cases": [
   {
@@ -132,6 +132,26 @@
      "incompleta": []
     }
    ]
+  },
+  {
+   "id": "B-09 regresión falso positivo de exclusión textual",
+   "want": "0 títulos de capítulo en las aportaciones; el exportador sigue buscándolos",
+   "result": "PASS",
+   "detalle": {
+    "hits": [],
+    "exportadorConserva": true
+   }
+  },
+  {
+   "id": "B-10 compose: inglés pedido y bloqueado",
+   "want": "código 3; ES publicado; sin PDF EN del documento bloqueado ni entrega EN",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 3,
+    "bloqueados": [
+     "commercial-proposal-client-v3.en"
+    ]
+   }
   }
  ]
 }

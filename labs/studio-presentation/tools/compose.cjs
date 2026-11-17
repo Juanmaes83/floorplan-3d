@@ -312,6 +312,7 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
  for(const [id,html,lang] of jobs){const baseId=id.replace(/\.en$/,'');const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[baseId]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
   const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);
+  if(lang==='en'&&process.env.STUDIO_EN_FAULT&&id==='commercial-proposal-client-v3.en')await pg.evaluate(()=>{const p=document.createElement('p');p.textContent='Esta frase de prueba no tiene traducción en el diccionario.';document.querySelector('section.page').append(p);}); // prueba negativa §5
   let i18n=null;if(lang==='en')i18n=await pg.evaluate(`(${I18N_JS})(${JSON.stringify(EN_DICT)},${JSON.stringify(I18N_DATA)},'translate')`);
   if(process.env.FLOW_FAULT==='multi'&&id==='commercial-proposal-client-v3')await pg.evaluate(()=>{const t=document.querySelector('table.flow');t.after(t.cloneNode(true));}); // negative test: two flow tables in one page
   const flow=await pg.evaluate(`(${FLOW_JS})()`);if(flow.tables){fs.writeFileSync(f,'<!doctype html>\n'+(await pg.evaluate(()=>document.documentElement.outerHTML)));}
@@ -378,4 +379,6 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
  if(EN_ON)fs.writeFileSync(path.join(outDir,'i18n-datos.json'),JSON.stringify(I18N_DATA)); // para el QA del consumidor (no va en ninguna entrega)
  for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'flow',JSON.stringify(v.flow),'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
- console.log('meta',JSON.stringify(meta));if(qa.blocked){console.log('BLOQUEADO',JSON.stringify(qa.blocked));process.exitCode=2;}await browser.close();})().catch(e=>{console.error(e);process.exit(1);});
+ console.log('meta',JSON.stringify(meta));if(qa.blocked){console.log('BLOQUEADO',JSON.stringify(qa.blocked));process.exitCode=2;}
+ // v1.4 §5: inglés pedido y bloqueado (restos en español o cifras distintas) → código 3: la entrega ES sale, la EN no, y quien llama lo sabe.
+ if(EN_ON&&enBlocked.length&&!qa.blocked){console.log('INGLES-BLOQUEADO',JSON.stringify(enBlocked.map(b=>b.doc)));process.exitCode=3;}await browser.close();})().catch(e=>{console.error(e);process.exit(1);});

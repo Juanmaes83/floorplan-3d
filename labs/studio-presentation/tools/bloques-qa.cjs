@@ -20,5 +20,17 @@ const cases=[];const add=(id,want,ok,det)=>cases.push({id,want,result:ok?'PASS':
 // resolvedor sobre la entrega compuesta: estado emitible con las aportaciones compuestas
 {const ctx=RC.contexto(LAB,path.join(LAB,'out/v3/entrega'),null);const st=['RP01','RP04','RP06','RP08','RP11','RP12'].map(k=>{const x=RC.resolver(k,ctx,'es');return {k,estado:x.estado,incompleta:x.incompleta};});
  add('B-08 resolvedor','RP01/RP04/RP06/RP11 emitibles sin campos aportados pendientes (los de corte E2/E4 se declaran)',st.filter(x=>['RP01','RP04','RP06','RP11'].includes(x.k)).every(x=>x.estado.startsWith('emitible')&&!x.incompleta.some(i=>['alcanceServicios','honorarios','precioInmueble','impuestosCompra','referenciasMoodboard','catalogoProductos'].includes(i))),st);}
+// REGRESIÓN (falso positivo de exclusión textual, 17/11): un texto de aportación que repite el título de un capítulo
+// («materiales y mobiliario») hacía que el exportador bloquease las recetas comerciales sin materiales. Ninguna aportación de la
+// fixture puede contener títulos de capítulos que el exportador busca como rastro de lo excluido; el título sigue detectándose.
+{const TITLES=['Cómo avanzará la obra','plan de obra','Recorrer la vivienda','Lo que hay que decidir','Materiales y mobiliario','Del dibujo a la imagen'];
+ const txt=JSON.stringify(AP0.campos).toLowerCase();const hits=TITLES.filter(t=>txt.includes(t.toLowerCase()));
+ const exp=fs.readFileSync(path.join(__dirname,'exportar.cjs'),'utf8');const still=TITLES.every(t=>exp.includes(`'${t}'`));
+ add('B-09 regresión falso positivo de exclusión textual','0 títulos de capítulo en las aportaciones; el exportador sigue buscándolos',!hits.length&&still,{hits,exportadorConserva:still});}
+// estado de salida de compose cuando el inglés pedido se bloquea (código 3, sin ocultarlo con 0)
+if(process.argv.includes('--compose')){const os=require('os'),{spawnSync}=require('child_process');const W=fs.mkdtempSync(path.join(os.tmpdir(),'en-fault-'));
+ const r=spawnSync('node',[path.join(__dirname,'compose.cjs'),path.join(LAB,'snapshot'),W],{encoding:'utf8',env:{...process.env,STUDIO_EN_FAULT:'1'},maxBuffer:1<<26});
+ const q=JSON.parse(fs.readFileSync(path.join(W,'qa.json'),'utf8'));
+ add('B-10 compose: inglés pedido y bloqueado','código 3; ES publicado; sin PDF EN del documento bloqueado ni entrega EN',r.status===3&&q.en.blocked.some(b=>b.doc==='commercial-proposal-client-v3.en')&&fs.existsSync(path.join(W,'entrega/index.html'))&&!fs.existsSync(path.join(W,'commercial-proposal-client-v3.en.pdf'))&&!fs.existsSync(path.join(W,'entrega-en')),{codigo:r.status,bloqueados:q.en.blocked.map(b=>b.doc)});fs.rmSync(W,{recursive:true,force:true});}
 const out={schema:'rubik-lab-bloques-qa/1',fecha:new Date().toISOString(),pass:cases.filter(c=>c.result==='PASS').length,fail:cases.filter(c=>c.result==='FAIL').length,cases};
 fs.writeFileSync(path.join(LAB,'evidence/recetas/bloques-qa.json'),JSON.stringify(out,null,1));for(const c of cases)console.log(c.result,c.id,c.result==='FAIL'?JSON.stringify(c.detalle):'');console.log(out.pass+'/'+cases.length);process.exit(out.fail?1:0);
