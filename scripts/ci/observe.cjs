@@ -12,7 +12,9 @@ function observe(base,head,changes,{forceFull=false}={}){
   forceFull:forceFull||!!unknownOwnership});
  result.mode='observe';result.omissionEnabled=false;
  result.unknownOwnership={base:base.unresolvedOwnership,head:head.unresolvedOwnership};
- result.coverage=tests.map(test=>({test,workflows:head.ownership[test]||base.ownership[test]||[],decision:result.tests.includes(test)?'PENDING':'NOT_APPLICABLE',reason:result.tests.includes(test)?'current execution required':'not selected by conservative closure; no PASS claimed',fingerprint:fingerprint(new Set([...closure(test,head.dependencies),...closure(test,base.dependencies)]),head.texts,environment)}));
+ const selected=new Set(result.tests),notRequired=new Map(result.notRequired.map(row=>[row.test,row]));
+ // Selected suites require execution: hashing a large browser closure for each one cannot establish reuse and wastes CPU.
+ result.coverage=tests.map(test=>({test,workflows:head.ownership[test]||base.ownership[test]||[],decision:selected.has(test)?'PENDING':'NOT_APPLICABLE',reason:selected.has(test)?'current execution required':'not selected by conservative closure; no PASS claimed',fingerprint:selected.has(test)?null:notRequired.get(test)?.dependencyFingerprint||null}));
  result.workflowCount=Object.keys(head.workflows).length;
  result.environment={node:process.version,platform:process.platform,arch:process.arch};
  return result;
