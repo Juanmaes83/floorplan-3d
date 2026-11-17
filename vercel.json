@@ -3,7 +3,8 @@
   "git": {
     "deploymentEnabled": {
       "claude/vibrant-clarke-woev1u": false,
-      "docs/auditoria-consolidacion-2026-11-16": false
+      "docs/auditoria-consolidacion-2026-11-16": false,
+      "lab/studio-presentation-e0e1": false
     }
   }
 }
