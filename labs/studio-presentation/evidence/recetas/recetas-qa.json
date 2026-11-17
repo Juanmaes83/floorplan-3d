@@ -1,16 +1,18 @@
 {
  "schema": "rubik-lab-recetas-qa/1",
- "fecha": "2026-11-17T19:51:16.739Z",
+ "fecha": "2026-11-17T20:12:53.065Z",
  "catalogo": "rubik-lab-recetas/1",
  "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+ "registroSha256": "cd0e46c8c0e5c6f2b3fa9381a131b8276a88d52c0d0cc7ebdd36e7d4c3a8caac",
  "partes": [
   "esquema",
-  "negativos",
   "exportar",
+  "negativos",
   "ui"
  ],
- "total": 110,
- "pass": 109,
+ "solo": null,
+ "total": 112,
+ "pass": 112,
  "casos": [
   {
    "id": "Q01-claves",
@@ -353,152 +355,6 @@
    "id": "Q02-filtro-desconocido-rechazado",
    "ok": true,
    "detalle": 2
-  },
-  {
-   "id": "NEG-receta-desconocida",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "desconocida",
-    "motivo": [
-     "Receta desconocida: \"RP99\". Admitidas: RP01–RP21."
-    ]
-   }
-  },
-  {
-   "id": "NEG-receta-minusculas",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "desconocida",
-    "motivo": [
-     "Receta desconocida: \"rp07\". Admitidas: RP01–RP21."
-    ]
-   }
-  },
-  {
-   "id": "NEG-idioma-no-valido",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "idioma-no-valido",
-    "motivo": [
-     "Idioma no válido: \"fr\"."
-    ]
-   }
-  },
-  {
-   "id": "NEG-seleccion-obsoleta",
-   "ok": true,
-   "detalle": "{\n \"exportado\": false,\n \"tipo\": \"selección inválida\",\n \"motivo\": [\n  \"La selección se preparó sobre otro snapshot (huella distinta): está obsoleta.\"\n ]\n}\n"
-  },
-  {
-   "id": "NEG-sin-reconocer",
-   "ok": true,
-   "detalle": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"SIN RECONOCER · Identidad del estudio: Perfil sintético del laboratorio (estudio@example.invalid).\",\n  \"SIN RECONOCER · Presupuesto revisado: 0 de 11 partidas revisadas; precios de prueba de "
-  },
-  {
-   "id": "NEG-rp13-contrato-cumplido-sin-emision",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "contrato-cumplido-sin-emision",
-    "motivo": [
-     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Los requisitos están aportados, pero la emisión necesita su corte de producto y un GO."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp13-moneda-incompatible",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "no-elegible",
-    "motivo": [
-     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Ofertas independientes comparables. Moneda, IVA o alcance no comparables: no se homologa por suposición."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp13-mismo-proveedor",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "no-elegible",
-    "motivo": [
-     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Ofertas independientes comparables. Dos ofertas del mismo proveedor no son independientes."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp13-una-oferta",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "no-elegible",
-    "motivo": [
-     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Ofertas independientes comparables. Hacen falta al menos dos ofertas independientes."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp13-sin-atribucion",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "no-elegible",
-    "motivo": [
-     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Ofertas independientes comparables. Aportación sin atribución: no se acepta."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp15-observacion-sin-autor",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "no-elegible",
-    "motivo": [
-     "Contrato de laboratorio (E3/E6 + OBR): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Observaciones de obra reales (fecha, autor). Cada observación necesita fecha y autor.",
-     "Falta: Certificaciones de obra aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp20-futura-aunque-haya-datos",
-   "ok": true,
-   "detalle": {
-    "code": 2,
-    "estado": "no-disponible",
-    "motivo": [
-     "Función futura (corte futuro): solo contrato y prueba de indisponibilidad.",
-     "Los requisitos están aportados, pero la emisión necesita su corte de producto y un GO."
-    ]
-   }
-  },
-  {
-   "id": "NEG-rp01-aportacion-no-completa-L",
-   "ok": true,
-   "detalle": [
-    "Alcance parcial: falta Alcance, fases y entregables del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
-    "Alcance parcial: falta Honorarios aportados por fase. El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
-    "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
-    "Alcance parcial: falta Validez de la oferta. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
-    "Aportación de fixture «honorarios» no compuesta: los documentos actuales no la muestran."
-   ]
-  },
-  {
-   "id": "NEG-sin-importes-guarda",
-   "ok": true,
-   "detalle": [
-    "La receta es sin importes y su selección arrastra el presupuesto."
-   ]
   },
   {
    "id": "Q02-rp01-es-exporta",
@@ -1407,12 +1263,170 @@
   {
    "id": "Q02-rp02-rp09-es-misma-salida",
    "ok": true,
-   "detalle": "mismos archivos y huellas de contenido; distinto estado de receta (emitible-parcial / emitible-parcial)"
+   "detalle": {
+    "identidad": true,
+    "seleccion": true,
+    "manifiesto": true,
+    "inventario": true,
+    "distintas": []
+   }
   },
   {
    "id": "Q02-rp02-rp09-en-misma-salida",
    "ok": true,
-   "detalle": "mismos archivos y huellas de contenido; distinto estado de receta (emitible-parcial / emitible-parcial)"
+   "detalle": {
+    "identidad": true,
+    "seleccion": true,
+    "manifiesto": true,
+    "inventario": true,
+    "distintas": []
+   }
+  },
+  {
+   "id": "NEG-receta-desconocida",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "desconocida",
+    "motivo": [
+     "Receta desconocida: \"RP99\". Admitidas: RP01–RP21."
+    ]
+   }
+  },
+  {
+   "id": "NEG-receta-minusculas",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "desconocida",
+    "motivo": [
+     "Receta desconocida: \"rp07\". Admitidas: RP01–RP21."
+    ]
+   }
+  },
+  {
+   "id": "NEG-idioma-no-valido",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "idioma-no-valido",
+    "motivo": [
+     "Idioma no válido: \"fr\"."
+    ]
+   }
+  },
+  {
+   "id": "NEG-seleccion-obsoleta",
+   "ok": true,
+   "detalle": "{\n \"exportado\": false,\n \"tipo\": \"selección inválida\",\n \"motivo\": [\n  \"La selección se preparó sobre otro snapshot (huella distinta): está obsoleta.\"\n ]\n}\n"
+  },
+  {
+   "id": "NEG-sin-reconocer",
+   "ok": true,
+   "detalle": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"SIN RECONOCER · Identidad del estudio: Perfil sintético del laboratorio (estudio@example.invalid).\",\n  \"SIN RECONOCER · Presupuesto revisado: 0 de 11 partidas revisadas; precios de prueba de "
+  },
+  {
+   "id": "NEG-rp13-contrato-cumplido-sin-emision",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "contrato-cumplido-sin-emision",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Los requisitos están aportados, pero la emisión necesita su corte de producto y un GO."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-moneda-incompatible",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Moneda, IVA o alcance no comparables: no se homologa por suposición."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-mismo-proveedor",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Dos ofertas del mismo proveedor no son independientes."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-una-oferta",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Hacen falta al menos dos ofertas independientes."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-sin-atribucion",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Aportación sin atribución: no se acepta."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp15-observacion-sin-autor",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (E3/E6 + OBR): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Observaciones de obra reales (fecha, autor). Cada observación necesita fecha y autor.",
+     "Falta: Certificaciones de obra aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp20-futura-aunque-haya-datos",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "motivo": [
+     "Función futura (corte futuro): solo contrato y prueba de indisponibilidad.",
+     "Los requisitos están aportados, pero la emisión necesita su corte de producto y un GO."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp01-aportacion-no-completa-L",
+   "ok": true,
+   "detalle": [
+    "Alcance parcial: falta Alcance, fases y entregables del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+    "Alcance parcial: falta Honorarios aportados por fase. El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
+    "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+    "Alcance parcial: falta Validez de la oferta. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+    "Aportación de fixture «honorarios» no compuesta: los documentos actuales no la muestran."
+   ]
+  },
+  {
+   "id": "NEG-sin-importes-guarda",
+   "ok": true,
+   "detalle": [
+    "La receta es sin importes y su selección arrastra el presupuesto."
+   ]
   },
   {
    "id": "UI-escritorio-filtros",
@@ -1439,10 +1453,20 @@
   },
   {
    "id": "UI-rp07-artefacto-real-igual-al-adaptador",
-   "ok": false,
+   "ok": true,
    "detalle": {
     "code": 0,
-    "iguales": false
+    "verificado": true,
+    "adaptador": true,
+    "registroSha256": "cd0e46c8c0e5c6f2b3fa9381a131b8276a88d52c0d0cc7ebdd36e7d4c3a8caac",
+    "estable": true,
+    "comparacion": {
+     "identidad": true,
+     "seleccion": true,
+     "manifiesto": true,
+     "inventario": true,
+     "distintas": []
+    }
    }
   },
   {
@@ -1454,8 +1478,26 @@
    "id": "UI-rp13-sin-descarga",
    "ok": true,
    "detalle": {
-    "dis": 1
+    "dis": 1,
+    "blocked": true,
+    "hidden": true,
+    "status": "Selección activa: RP07 (modificada). Receta consultada: RP13. Sin selección descargable para esta consulta."
    }
+  },
+  {
+   "id": "UI-rp16-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "dis": 1,
+    "blocked": true,
+    "hidden": true,
+    "status": "Selección activa: RP07 (modificada). Receta consultada: RP16. Sin selección descargable para esta consulta."
+   }
+  },
+  {
+   "id": "UI-seleccion-activa-recuperada",
+   "ok": true,
+   "detalle": "A partir de la receta RP07 (rubik-lab-recetas/1), modificada por el estudio: no es la receta."
   },
   {
    "id": "UI-rp05-cambio-de-receta",

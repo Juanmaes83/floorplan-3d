@@ -6,9 +6,9 @@ Rama exclusiva `lab/studio-presentation-e0e1`. Base de continuidad `101fe167bd92
 
 - Mandatos acumulativos y huellas en `mandatos/INDICE-MANDATOS.md`, con v1.2 recuperada.
 - Trabajo activo, evidencias y bloqueos en `reports/15-REGISTRO-v1.4.md`. Se han recibido V13-01–V13-09 y CONT-01–CONT-03.
-- Primer gate: en un único entorno Linux, desde la raíz del lab, ejecutar `node tools/compose.cjs snapshot out/v3` y luego `RECETAS_SOLO=RP07 node tools/recetas-qa.cjs /tmp/rq exportar,ui`. Conservar la composición durante toda la comparación.
+- N01 y CONT-01/02 verificados: RP07 22/22 y recetas 112/112. Desde el laboratorio: `node tools/compose.cjs snapshot out/v3` y `node tools/recetas-qa.cjs /tmp/rq2` en la misma composición.
 - La receta de reconstrucción y dependencias está en `RECETA.md`.
-- Pendientes del candidato: cierre N01, reejecución N05, N02–N04/N06–N08, RP-Q, comparación con baseline, inspección y distribución de ZIP y revisión de propietario.
+- Pendientes del candidato: CONT-03, N02–N04/N06–N08, RP-Q, comparación con baseline, inspección y distribución de ZIP y revisión de propietario.
 
 ## Histórico
 

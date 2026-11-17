@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-estado-qa/1",
- "fecha": "2026-11-17T19:48:39.037Z",
+ "fecha": "2026-11-17T20:13:20.802Z",
  "total": 23,
  "pass": 23,
  "casos": [
@@ -33,11 +33,11 @@
    "id": "E-congela-receta-y-huellas",
    "ok": true,
    "detalle": {
-    "zipSha256": "c86ea10f0f4a9b48492209cca160e1f932af54faecd19360a0d809d828cdfe78",
-    "manifestSha256": "eecb3f25a3d34f96e8782e950b8f23e71d7c6ec47920da7ee2b5252818d744a1",
+    "zipSha256": "afd796511bee256d938ec9b9446f999fa24a3bee2d94937396f519f981861854",
+    "manifestSha256": "7e497b5311ba9acc0f69a435fa1d516f35c68735959265ba06183f23fc547e21",
     "seleccionSha256": "78b591963d0b2389ceb6174fd1b0819df9951bb30ebf1d12dc9bf66762c77505",
     "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
-    "registroSha256": "0d4dcd7e48777bfa3a11849a2643313a35b9238a578fb80c05ab5e815b22a9b9",
+    "registroSha256": "cd0e46c8c0e5c6f2b3fa9381a131b8276a88d52c0d0cc7ebdd36e7d4c3a8caac",
     "idioma": "es",
     "modo": "cliente",
     "receta": {
@@ -225,23 +225,23 @@
    "detalle": [
     {
      "estado": "preparado",
-     "fecha": "2026-11-17T19:47:47.215Z"
+     "fecha": "2026-11-17T20:12:57.540Z"
     },
     {
      "estado": "verificado",
-     "fecha": "2026-11-17T19:47:47.443Z",
+     "fecha": "2026-11-17T20:12:57.663Z",
      "integra": true,
      "vigente": true
     },
     {
      "estado": "emitido-simulado",
-     "fecha": "2026-11-17T19:47:47.788Z",
+     "fecha": "2026-11-17T20:12:57.865Z",
      "rotulo": "SIMULACIÓN DE LABORATORIO: no se ha enviado nada a ningún cliente; no hay aceptación ni firma.",
      "motivo": "QA de laboratorio"
     },
     {
      "estado": "sustituido",
-     "fecha": "2026-11-17T19:48:28.888Z",
+     "fecha": "2026-11-17T20:13:16.070Z",
      "por": "cand-e"
     }
    ]

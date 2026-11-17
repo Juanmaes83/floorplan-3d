@@ -346,7 +346,7 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
   // v1.4 · N01: recetas resueltas sobre ESTA entrega (registro y snapshot reales), en ES y EN. La página solo las muestra y
   // aplica su selección; quien decide es la exportación.
   {const RC=require('./recetas.cjs');const rctx=RC.contexto(path.resolve(__dirname,'..'),OUT);const nm=(ids)=>ids.map(i=>RC.FUENTES[i].es);
-   const pack=(r,l)=>{const x=RC.resolver(r.key,rctx,l);return {estado:x.estado,emitible:x.emitible,sel:x.seleccion?{tipo:x.seleccion.tipo,capitulos:x.seleccion.capitulos,documentos:x.seleccion.documentos,nota:x.seleccion.nota}:null,
+   const pack=(r,l)=>{const x=RC.resolver(r.key,rctx,l);return {estado:x.estado,emitible:x.emitible,sel:x.seleccion?{tipo:x.seleccion.tipo,capitulos:x.seleccion.capitulos,documentos:x.seleccion.documentos,omitir:x.seleccion.omitir,nota:x.seleccion.nota}:null,
     falta:nm(x.falta),incompleta:nm(x.incompleta),omitidas:nm(x.omitidas),motivo:x.motivo,contrato:x.contrato||null,proyeccion:x.proyeccion||null};};
    DATA.recetas={version:RC.VERSION,perfiles:RC.PERFILES,fases:RC.FASES,lista:RC.RECETAS.map(r=>({key:r.key,es:r.es,en:r.en,nivel:r.nivel,fases:r.fases,perfiles:r.perfiles,familia:RC.FAMILIAS[r.familia].es,tipo:r.tipo,modulos:r.modulos,corte:r.corte,autoridad:r.autoridad.es,res:{es:pack(r,'es'),en:pack(r,'en')}}))};}
   const css=`:root{--ink:#1f2326;--muted:#5b6266;--rule:#d9dcdc;--surface:#f4f5f4;--paper:#fff;--action:#1f5a66;--warn:#7a5200;--warnSoft:#fff4dc;--ok:#2f6e4a;--block:#9b2c2c}
@@ -358,6 +358,7 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
 .check{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding:9px 0;border-top:1px solid var(--surface);font-size:13.5px}.check b{font-size:13.5px}.pill{font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;align-self:start;white-space:nowrap}
 .ok{background:#e6f1ea;color:var(--ok)}.warn{background:var(--warnSoft);color:var(--warn)}.block{background:#f8e1e1;color:var(--block)}.info{background:#e7eef0;color:var(--action)}
 .btn{display:inline-block;font:inherit;font-weight:700;border:1px solid var(--ink);background:var(--paper);border-radius:8px;padding:9px 14px;cursor:pointer;text-decoration:none;color:inherit}.btn.primary{background:var(--action);border-color:var(--action);color:#fff}.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn[hidden]{display:none}.btn:disabled{opacity:.55;cursor:not-allowed}
 .preview{display:flex;flex-direction:column;min-width:0}.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--rule);background:var(--paper);font-size:13.5px}.bar .seg{margin-left:auto;display:flex;gap:4px}.bar button{font:inherit;border:1px solid var(--rule);background:var(--paper);border-radius:6px;padding:5px 10px;cursor:pointer}.bar button[aria-pressed=true]{border-color:var(--ink);font-weight:700}
 .stage{flex:1;overflow:auto;display:flex;justify-content:center;padding:16px}iframe{border:1px solid var(--rule);background:#fff;height:100%;min-height:600px;width:100%;}
 table{width:100%;border-collapse:collapse;font-size:12px}td{border-top:1px solid var(--surface);padding:5px 6px 5px 0;vertical-align:top}td code{font-size:12px;color:var(--muted);word-break:break-all}
@@ -371,27 +372,31 @@ table{width:100%;border-collapse:collapse;font-size:12px}td{border-top:1px solid
 const ALL=Object.keys(D.ch).filter(c=>c!=='portada');
 function drawOpts(){ $('#chs').innerHTML=ALL.map(c=>'<label><input type=checkbox data-ch="'+c+'"'+(tipo.ch.includes(c)?' checked':'')+'> '+D.ch[c]+'</label>').join('');
  $('#dcs').innerHTML=D.docs.map(d=>'<label><input type=checkbox data-doc="'+d.id+'"'+(tipo.docs.includes(d.id)?' checked':'')+'> <span>'+d.name+(d.pages?' <small>('+d.pages+(d.pages===1?' pág., ':' págs., ')+d.size+')</small>':'')+'</span></label>').join('');}
-function sel(){return {ch:[...document.querySelectorAll('[data-ch]:checked')].map(x=>x.dataset.ch),docs:[...document.querySelectorAll('[data-doc]:checked')].map(x=>x.dataset.doc)};}
+function sel(){return {ch:[...document.querySelectorAll('[data-ch]:checked')].map(x=>x.dataset.ch),docs:[...document.querySelectorAll('[data-doc]:checked')].map(x=>x.dataset.doc),omit:[...document.querySelectorAll('[data-omit]:checked')].map(x=>x.dataset.omit)};}
 function push(){const s=sel();fr.contentWindow.postMessage({rubikHide:ALL.filter(c=>!s.ch.includes(c)),rubikDocs:s.docs,rubikKind:tipo.name,rubikLead:tipo.lead},(location.protocol==='file:'||location.origin==='null')?'*':location.origin);
  const same=s.ch.length===tipo.ch.filter(c=>c!=='portada').length&&s.ch.every(c=>tipo.ch.includes(c))&&s.docs.length===tipo.docs.length&&s.docs.every(d=>tipo.docs.includes(d));
  $('#custom').textContent=same?'Contenido del tipo «'+tipo.name+'».':'Contenido personalizado a partir de «'+tipo.name+'».';
- const f=D.files.find(x=>x.tipo===tipo.id);$('#open').href='../entrega/'+f.file;}
+ const f=D.files.find(x=>x.tipo===tipo.id);$('#open').href='../entrega/'+f.file;recSync();}
 document.addEventListener('change',e=>{if(e.target.name==='tipo'){tipo=D.tipos.find(t=>t.id===e.target.value);drawOpts();}push();});
 fr.addEventListener('load',push);
 for(const b of document.querySelectorAll('[data-w]'))b.onclick=()=>{fr.style.width=b.dataset.w;document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
-$('#reg').onclick=()=>{const s=sel(),now=new Date().toISOString();
- const r={tipo:tipo.id,capitulos:s.ch,documentos:s.docs,omitir:[...document.querySelectorAll('[data-omit]:checked')].map(x=>x.dataset.omit),modo:document.querySelector('[name=modo]:checked').value,idioma:document.querySelector('[name=idioma]:checked').value,reconocidos:[],seleccionadaEn:now,base:{proyecto:D.project.id,revision:D.project.revision,snapshotSha256:D.project.snapshotSha256},nota:recNota()||'Selección para tools/preparar.cjs. No es el registro de la entrega: el registro es el MANIFIESTO.json que escribe la exportación, con las comprobaciones recalculadas sobre los archivos finales.'};
+$('#reg').onclick=()=>{if(!candidateReady())return;const s=sel(),now=new Date().toISOString();
+ const r={tipo:tipo.id,capitulos:s.ch,documentos:s.docs,omitir:s.omit,modo:document.querySelector('[name=modo]:checked').value,idioma:lang(),reconocidos:[],seleccionadaEn:now,base:{proyecto:D.project.id,revision:D.project.revision,snapshotSha256:D.project.snapshotSha256},nota:recNota()||'Selección para tools/preparar.cjs. No es el registro de la entrega: el registro es el MANIFIESTO.json que escribe la exportación, con las comprobaciones recalculadas sobre los archivos finales.'};
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(r,null,1)],{type:'application/json'}));a.download='seleccion-'+tipo.id+'-'+now.slice(0,10)+'.json';document.body.append(a);a.click();a.remove();
  const li=document.createElement('li');li.textContent=now.slice(0,16).replace('T',' ')+', '+tipo.name+': '+(r.capitulos.length+1)+' capítulos, '+s.docs.length+' documentos, modo '+r.modo;$('#log').prepend(li);};
 // v1.4 · N01 · recetas: filtro reversible por perfil y fase; aplicar = rellenar la selección libre con la de la receta
 const RX=D.recetas,PILL={emitible:['ok','Lista'],'emitible-parcial':['warn','Parcial'],bloqueada:['block','Bloqueada'],'no-elegible':['info','Contrato'],'contrato-cumplido-sin-emision':['info','Contrato'],'no-disponible':['info','Futura']};
-let rec=null;const lang=()=>document.querySelector('[name=idioma]:checked').value;const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let rec=null,activeRecipe=null;
+const lang=()=>document.querySelector('[name=idioma]:checked').value;
+const recipe=key=>RX.lista.find(r=>r.key===key)?.res[lang()];
+const candidateReady=()=>(!rec||rec===activeRecipe)&&(!activeRecipe||recipe(activeRecipe)?.emitible===true);
+const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function recDraw(){const p=$('#fPerfil').value,f=$('#fFase').value;const l=RX.lista.filter(r=>(!p||r.perfiles.includes(p))&&(!f||r.fases.includes(f)));
  $('#recList').innerHTML=l.map(r=>{const x=r.res[lang()],pl=PILL[x.estado]||['info',x.estado];return '<button type="button" data-rec="'+r.key+'" aria-pressed="'+(rec===r.key)+'"><span class="code">'+r.key+'</span><span>'+esc2(r.es)+'</span><span class="pill '+pl[0]+'">'+pl[1]+'</span><small>'+r.familia+' · '+(r.tipo||'sin tipo documental')+' · '+r.nivel+'</small></button>';}).join('');
  $('#recCount').textContent=l.length+' de '+RX.lista.length+' recetas';}
-function recSame(){if(!rec)return false;const x=RX.lista.find(r=>r.key===rec).res[lang()];if(!x.sel)return false;const s=sel();
- return tipo.id===x.sel.tipo&&s.ch.length===x.sel.capitulos.length&&s.ch.every(c=>x.sel.capitulos.includes(c))&&s.docs.length===x.sel.documentos.length&&s.docs.every(d=>x.sel.documentos.includes(d));}
-function recNota(){if(!rec)return null;const r=RX.lista.find(q=>q.key===rec),x=r.res[lang()];return recSame()?x.sel.nota:'A partir de la receta '+r.key+' ('+RX.version+'), modificada por el estudio: no es la receta.';}
+function recSame(){const x=recipe(activeRecipe);if(!x?.sel)return false;const s=sel();
+ return tipo.id===x.sel.tipo&&s.omit.length===0&&s.ch.length===x.sel.capitulos.length&&s.ch.every(c=>x.sel.capitulos.includes(c))&&s.docs.length===x.sel.documentos.length&&s.docs.every(d=>x.sel.documentos.includes(d));}
+function recNota(){if(!activeRecipe)return null;return recSame()?recipe(activeRecipe).sel.nota:'A partir de la receta '+activeRecipe+' ('+RX.version+'), modificada por el estudio: no es la receta.';}
 function recShow(){const d=$('#recDetail');if(!rec){d.innerHTML='';return;}const r=RX.lista.find(q=>q.key===rec),x=r.res[lang()],li=a=>a.map(t=>'<li>'+esc2(t)+'</li>').join('');
  const docName=id=>(D.docs.find(q=>q.id===id)||{name:id}).name,tn=id=>(D.tipos.find(t=>t.id===id)||{name:id}).name;
  let h='<h3>'+r.key+' · '+esc2(r.es)+'</h3><p style="margin:0 0 6px;color:var(--muted)">'+esc2(r.en)+' · fases '+r.fases.join(', ')+' · perfiles '+r.perfiles.join(', ')+' · módulos '+r.modulos.join(', ')+' · corte '+esc2(r.corte)+'</p>';
@@ -401,13 +406,22 @@ function recShow(){const d=$('#recDetail');if(!rec){d.innerHTML='';return;}const
  else{h+='<b>'+(x.estado==='bloqueada'?'No se puede emitir':'Sin descarga de cliente')+'</b><ul>'+li(x.motivo)+'</ul>';if(x.contrato)h+='<b>Qué exigirá</b><ul>'+li(x.contrato)+'</ul>';
   if(x.proyeccion&&Object.keys(x.proyeccion).length)h+='<b>Datos disponibles hoy (proyección)</b><ul>'+li(Object.values(x.proyeccion))+'</ul>';h+='<button class="btn" type="button" disabled aria-disabled="true">Aplicar la receta</button>';}
  d.innerHTML=h;const b=$('#recApply');if(b)b.onclick=()=>{const t=document.querySelector('input[name=tipo][value="'+x.sel.tipo+'"]');t.checked=true;tipo=D.tipos.find(q=>q.id===x.sel.tipo);drawOpts();
-  document.querySelectorAll('[data-ch]').forEach(c=>c.checked=x.sel.capitulos.includes(c.dataset.ch));document.querySelectorAll('[data-doc]').forEach(c=>c.checked=x.sel.documentos.includes(c.dataset.doc));push();recMark();};}
-function recMark(){const n=$('#custom');if(rec)n.textContent=(recSame()?'Contenido de la receta '+rec+'.':'Contenido modificado a partir de la receta '+rec+'.')+' '+n.textContent;}
-$('#recList').addEventListener('click',e=>{const b=e.target.closest('[data-rec]');if(!b)return;rec=b.dataset.rec;recDraw();recShow();document.querySelector('[data-rec="'+rec+'"]').focus();});
+  document.querySelectorAll('[data-ch]').forEach(c=>c.checked=x.sel.capitulos.includes(c.dataset.ch));document.querySelectorAll('[data-doc]').forEach(c=>c.checked=x.sel.documentos.includes(c.dataset.doc));document.querySelectorAll('[data-omit]').forEach(c=>c.checked=x.sel.omitir.includes(c.dataset.omit));activeRecipe=rec;push();};}
+function recSync(){
+ const ready=candidateReady();
+ const active=activeRecipe?(recSame()?activeRecipe:activeRecipe+' (modificada)'):'libre';
+ $('#candidateStatus').textContent='Selección activa: '+active+'. '+(ready?'Selección disponible para preparar.':rec&&rec!==activeRecipe?'Receta consultada: '+rec+'. Sin selección descargable para esta consulta.':'La receta activa no está disponible en este idioma.');
+ $('#reg').disabled=!ready;$('#open').hidden=!ready;
+ const back=$('#clearRecipe');back.hidden=ready;
+ back.textContent=activeRecipe&&recipe(activeRecipe)?.emitible?'Volver a la selección activa':'Continuar con la selección libre';
+}
+$('#clearRecipe').onclick=()=>{rec=null;if(!recipe(activeRecipe)?.emitible)activeRecipe=null;recDraw();recShow();recSync();$('#reg').focus();};
+$('#recList').addEventListener('click',e=>{const b=e.target.closest('[data-rec]');if(!b)return;rec=b.dataset.rec;recDraw();recShow();recSync();document.querySelector('[data-rec="'+rec+'"]').focus();});
 $('#fPerfil').addEventListener('change',recDraw);$('#fFase').addEventListener('change',recDraw);
-document.addEventListener('change',e=>{if(e.target.name==='idioma'){recDraw();recShow();}if(e.target.matches('[data-ch],[data-doc],[name=tipo]'))recMark();});
+document.addEventListener('change',e=>{if(e.target.name==='idioma'){recDraw();recShow();}});
 recDraw();
-drawOpts();`;
+drawOpts();
+recSync();`;
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Preparar entrega, ${esc(TITLE)}</title><style>${FONT_CSS}\n${css}</style></head><body>
 <div class="app"><aside class="side"><header><h1>Preparar entrega</h1><p>${esc(TITLE)} · revisión ${esc(rev)} · ${esc(STUDIO)}</p></header>
 <section class="step" aria-labelledby="recH"><h2 id="recH"><span>1</span>Partir de una receta <small style="font-weight:400;color:var(--muted)">(opcional)</small></h2>
@@ -423,7 +437,8 @@ drawOpts();`;
 <div class="opts" style="margin-top:8px"><b style="font-size:13.5px">Idioma</b><label><input type="radio" name="idioma" value="es" checked> Español</label><label><input type="radio" name="idioma" value="en"> Inglés (solo si la entrega está compuesta en inglés)</label></div>
 <div class="opts" style="margin-top:8px"><b style="font-size:13.5px">Omitir aunque el capítulo vaya</b><label><input type="checkbox" data-omit="imagenes-ia"> Imágenes generadas con IA</label><label><input type="checkbox" data-omit="videos"> Vídeos (obra y recorrido)</label></div>
 <div class="opts" style="margin-top:8px"><label><input type="radio" name="modo" value="cliente" checked> Cliente: los avisos deben reconocerse</label><label><input type="radio" name="modo" value="borrador"> Borrador: rotulado «no apto para enviar»</label></div>
-<div class="row"><a class="btn" id="open" href="../entrega/index.html" target="_blank">Abrir la página del tipo</a><button class="btn primary" id="reg" type="button">Descargar la selección (JSON)</button></div>
+<p id="candidateStatus" role="status"></p>
+<div class="row"><a class="btn" id="open" href="../entrega/index.html" target="_blank">Abrir la página del tipo</a><button class="btn primary" id="reg" type="button" aria-describedby="candidateStatus">Descargar la selección (JSON)</button><button class="btn" id="clearRecipe" type="button" hidden>Continuar con la selección libre</button></div>
 <h2 style="margin-top:16px">Selecciones de esta sesión</h2><ul id="log" style="padding-left:18px;margin:0"></ul>
 <h2 style="margin-top:16px">Solo para el estudio</h2><p style="font-size:13.5px;margin:0"><a href="propuesta-estudio.pdf">Propuesta económica del estudio</a>: origen de cada precio, merma y estado de revisión. No va en ninguna entrega de cliente.</p>
 <details style="margin-top:14px"><summary style="font-size:13.5px;font-weight:700;cursor:pointer">Piezas y huellas SHA-256 (${pieces.length})</summary><table><tbody>${pieces.map(x=>`<tr><td>${esc(x.file)}</td><td><code>${x.sha256.slice(0,16)}…</code></td></tr>`).join('')}</tbody></table></details></section></aside>

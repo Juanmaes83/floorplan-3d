@@ -1,18 +1,47 @@
 // v1.4 · N01 · QA DE RECETAS (RP-Q01 taxonomía, RP-Q02 selector y elegibilidad, parte de RP-Q03/RP-Q08 y RP-Q10).
 // Confronta los ZIP finales, no el DOM: cada receta L se exporta de verdad en ES y EN, se verifica con verificar-entrega
 // y se comprueba su contenido contra la resolución. C y F deben rechazarse sin dejar descarga.
-// Uso: node tools/recetas-qa.cjs [dirTrabajo] [partes=esquema,exportar,negativos]  → evidence/recetas/recetas-qa.json
+// Uso: node tools/recetas-qa.cjs [dirTrabajo] [partes=esquema,exportar,negativos,ui] → evidence/recetas/recetas-qa.json
 'use strict';
 const fs=require('fs'),path=require('path'),os=require('os'),{spawnSync,execFileSync}=require('child_process');
+const {createHash}=require('crypto'),{isDeepStrictEqual}=require('util');
 const RC=require('./recetas.cjs'),CAT=require('./catalogo-entrega.cjs');
 const LAB=path.resolve(__dirname,'..'),SRC=path.join(LAB,'out/v3/entrega'),EV=path.join(LAB,'evidence/recetas');
-const W=path.resolve(process.argv[2]||fs.mkdtempSync(path.join(os.tmpdir(),'rubik-recetas-')));fs.rmSync(W,{recursive:true,force:true});fs.mkdirSync(W,{recursive:true});fs.mkdirSync(EV,{recursive:true});
-const PARTS=(process.argv[3]||'esquema,exportar,negativos').split(',');
+const root=path.resolve(process.argv[2]||os.tmpdir());
+fs.mkdirSync(root,{recursive:true});
+const W=fs.mkdtempSync(path.join(root,'rubik-recetas-'));fs.mkdirSync(EV,{recursive:true});
+const PARTS=(process.argv[3]||'esquema,exportar,negativos,ui').split(',');
 const ACK='Identidad del estudio,Presupuesto revisado,Imágenes IA,Plan de obra'; // reconocimiento explícito del QA, como en package.sh
 const casos=[];const caso=(id,ok,detalle)=>{casos.push({id,ok:!!ok,detalle});console.log(`${ok?'PASS':'FAIL'} ${id}${ok?'':' · '+JSON.stringify(detalle).slice(0,300)}`);};
 const ctx=RC.contexto(LAB,SRC);const REG=ctx.REG;
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const registroSha=()=>hash(fs.readFileSync(path.join(SRC,'entrega.json')));
+const frozen=registroSha();
 const run=(args,env={})=>spawnSync('node',args,{encoding:'utf8',env:{...process.env,...env}});
 const exists=p=>fs.existsSync(p);
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const verify=out=>run([path.join(__dirname,'verificar-entrega.cjs'),'--zip',out+'.zip','--digest',out+'.digest.json']);
+const manifest=out=>read(path.join(out,'MANIFIESTO.json'));
+function inventory(files){
+ const entries=new Map();
+ for(const file of files){
+  const normalized=path.posix.normalize(file.path.replaceAll('\\','/'));
+  if(entries.has(normalized))throw new Error('Ruta duplicada en el inventario: '+normalized);
+  entries.set(normalized,{...file,path:normalized});
+ }
+ return entries;
+}
+function compare(a,b){
+ const project={id:REG.project.id,revision:REG.project.revision};
+ const base={snapshotSha256:REG.snapshot.sha256,registroSha256:frozen};
+ const identify=m=>m.project?.id===project.id&&m.project?.revision===project.revision&&isDeepStrictEqual(m.base,base);
+ const canonical=s=>({...s,...Object.fromEntries(['capitulos','documentos','omitidos','excluidos','reconocidos'].map(k=>[k,[...s[k]].sort()]))});
+ const {files:left,seleccion:ls,...lm}=a,{files:right,seleccion:rs,...rm}=b;
+ const A=inventory(left),B=inventory(right);
+ return {identidad:identify(a)&&identify(b),seleccion:isDeepStrictEqual(canonical(ls),canonical(rs)),
+  manifiesto:isDeepStrictEqual(lm,rm),inventario:A.size>0&&isDeepStrictEqual(A,B),
+  distintas:[...new Set([...A.keys(),...B.keys()])].filter(k=>!isDeepStrictEqual(A.get(k),B.get(k))).sort()};
+}
 // ---------------------------------------------------------------- RP-Q01 esquema y compatibilidad
 if(PARTS.includes('esquema')){
  const R=RC.RECETAS,keys=R.map(r=>r.key);
@@ -54,7 +83,8 @@ if(PARTS.includes('esquema')){
 // Texto examinado: un «EUR» dentro de un binario base64 no es un importe; el resto (scripts incluidos) sí se examina.
 const textOf=(dir,f)=>{const p=path.join(dir,f);if(/\.pdf$/.test(f))return execFileSync('pdftotext',[p,'-']).toString();if(/\.(html|txt|json)$/.test(f))return fs.readFileSync(p,'utf8').replace(/data:[a-z]+\/[a-z0-9.+-]+;base64,[A-Za-z0-9+\/=]+/g,'«binario embebido»');return '';};
 const MONEY=/€|\bEUR\b|\d[\d.,]*\s?(?:€|EUR)/;
-const salidas=(()=>{try{return JSON.parse(fs.readFileSync(path.join(EV,'salidas.json'),'utf8'));}catch{return {};}})();
+const salidas={};
+const verified=new Map();
 if(PARTS.includes('exportar')){
  for(const r of RC.RECETAS)for(const lang of ['es','en']){
   if(process.env.RECETAS_SOLO&&!process.env.RECETAS_SOLO.split(',').includes(r.key))continue; // reejecución acotada de lo afectado
@@ -65,8 +95,9 @@ if(PARTS.includes('exportar')){
    caso(`Q02-${name}-sin-descarga`,p.status===2&&!exists(out)&&!exists(out+'.zip')&&!exists(out+'.digest.json')&&rj&&rj.exportado===false&&rj.falta.length>0&&rj.estado===(r.nivel==='C'?'no-elegible':'no-disponible'),{code:p.status,estado:rj?.estado,falta:rj?.falta});continue;}
   const ev=exists(out+'.receta.json')?JSON.parse(fs.readFileSync(out+'.receta.json','utf8')):null;
   if(p.status!==0||!ev){caso(`Q02-${name}-exporta`,false,{code:p.status,out:p.stdout.slice(0,400),err:p.stderr.slice(0,300)});continue;}
-  const v=run([path.join(__dirname,'verificar-entrega.cjs'),'--zip',out+'.zip','--digest',out+'.digest.json']);
-  const man=JSON.parse(fs.readFileSync(path.join(out,'MANIFIESTO.json'),'utf8'));const files=man.files.map(f=>f.path);
+  const v=verify(out);
+  const man=manifest(out);const files=man.files.map(f=>f.path);
+  if(v.status===0)verified.set(name,man);
   const suf=lang==='en'?'.en':'';const expDocs=ev.seleccion.documentos.map(d=>`documentos/${d}${suf}.pdf`).sort();const gotDocs=files.filter(f=>/^documentos\/.*\.pdf$/.test(f)).sort();
   const docsOk=JSON.stringify(expDocs)===JSON.stringify(gotDocs);
   const chOk=man.seleccion.tipo===r.sel.tipo&&JSON.stringify(man.seleccion.capitulos.filter(c=>c!=='portada').sort())===JSON.stringify([...ev.seleccion.capitulos].sort());
@@ -76,10 +107,12 @@ if(PARTS.includes('exportar')){
   caso(`Q02-${name}-evidencia`,!!ev.exportacion.digest?.zipSha256&&ev.estado===(ev.incompleta.length?'emitible-parcial':'emitible'),{estado:ev.estado,incompleta:ev.incompleta});
   if(r.economia==='sin-importes'||r.economia==='sin-economia-del-plan'){const hits=files.filter(f=>MONEY.test(textOf(out,f)));caso(`Q06-${name}-sin-importes`,!hits.length,hits);}
   salidas[name]={zipSha256:ev.exportacion.digest.zipSha256,ms,files:Object.fromEntries(man.files.map(f=>[f.path,f.sha256])),estado:ev.estado,incompleta:ev.incompleta};}
- // misma selección → mismos bytes (RP02 y RP09): se acredita con las huellas del manifiesto, no se duplica salida
- for(const lang of ['es','en']){const a=salidas[`rp02-${lang}`],b=salidas[`rp09-${lang}`];
-  if(a&&b){const fa=Object.entries(a.files).filter(([k])=>k!=='MANIFIESTO.json'&&k!=='LEEME.txt'&&k!=='README.txt'),fb=Object.entries(b.files).filter(([k])=>k!=='MANIFIESTO.json'&&k!=='LEEME.txt'&&k!=='README.txt');
-   caso(`Q02-rp02-rp09-${lang}-misma-salida`,JSON.stringify(fa)===JSON.stringify(fb),'mismos archivos y huellas de contenido; distinto estado de receta ('+a.estado+' / '+b.estado+')');}}
+ // RP02 y RP09 tienen recibos de receta distintos y un mismo contenido para el cliente.
+ const selected=process.env.RECETAS_SOLO?.split(',');
+ if(!selected||['RP02','RP09'].every(k=>selected.includes(k)))for(const lang of ['es','en']){
+  const a=verified.get(`rp02-${lang}`),b=verified.get(`rp09-${lang}`);
+  const eq=a&&b?compare(a,b):null;
+  caso(`Q02-rp02-rp09-${lang}-misma-salida`,eq?.identidad===true&&eq.seleccion&&eq.manifiesto&&eq.inventario,eq);}
  fs.writeFileSync(path.join(EV,'salidas.json'),JSON.stringify(salidas,null,1));}
 // ---------------------------------------------------------------- negativos (RP-Q02/RP-Q03/RP-Q08)
 if(PARTS.includes('negativos')){
@@ -134,14 +167,26 @@ if(PARTS.includes('ui')){
   caso('UI-rp07-aplicada',same(s7,r7)&&s7.nota===r7.nota&&s7.reconocidos.length===0&&s7.idioma==='es'&&/Obtendrás/.test(det),{tipo:s7.tipo,nota:s7.nota});
   await p.locator('#recH').scrollIntoViewIfNeeded();await p.screenshot({path:path.join(SH,'preparar-recetas-escritorio.png')});
   const sf=path.join(W,'ui-rp07.json');fs.writeFileSync(sf,JSON.stringify({...s7,reconocidos:ACK.split(',')}));const pe=run([path.join(__dirname,'exportar.cjs'),sf,path.join(W,'ui-rp07')]);
-  let eq=null;if(pe.status===0&&salidas['rp07-es']){const m=JSON.parse(fs.readFileSync(path.join(W,'ui-rp07','MANIFIESTO.json'),'utf8'));const f=Object.fromEntries(m.files.filter(x=>!/MANIFIESTO|LEEME|README/.test(x.path)).map(x=>[x.path,x.sha256]));
-   const g=Object.fromEntries(Object.entries(salidas['rp07-es'].files).filter(([k])=>!/MANIFIESTO|LEEME|README/.test(k)));eq=JSON.stringify(f)===JSON.stringify(g);}
-  caso('UI-rp07-artefacto-real-igual-al-adaptador',pe.status===0&&eq!==false,{code:pe.status,iguales:eq});
+  const out=path.join(W,'ui-rp07'),reference=verified.get('rp07-es');
+  const vi=pe.status===0&&verify(out).status===0;
+  const eq=vi&&reference?compare(manifest(out),reference):null;
+  const unchanged=registroSha()===frozen;
+  const equal=eq?.identidad===true&&eq.seleccion&&eq.manifiesto&&eq.inventario&&unchanged;
+  caso('UI-rp07-artefacto-real-igual-al-adaptador',equal===true,{code:pe.status,verificado:vi,adaptador:!!reference,registroSha256:frozen,estable:unchanged,comparacion:eq});
   // modificada tras aplicar
   await p.locator('[data-ch=recorrido]').uncheck();const sm=await dl();caso('UI-rp07-modificada',/modificada/.test(sm.nota)&&!sm.capitulos.includes('recorrido'),sm.nota);
   // cambio a una receta C tras previsualizar: no aplica nada y explica
-  const before=await dl();await p.locator('[data-rec=RP13]').click();const dis=await p.locator('#recDetail button[disabled]').count();const d13=await p.locator('#recDetail').innerText();const after=await dl();
-  caso('UI-rp13-sin-descarga',dis===1&&/Sin descarga de cliente/.test(d13)&&/Ofertas independientes/.test(d13)&&same(before,after),{dis});
+  const before=await dl();
+  for(const key of ['RP13','RP16']){
+   await p.locator(`[data-rec=${key}]`).click();
+   const dis=await p.locator('#recDetail button[disabled]').count(),detail=await p.locator('#recDetail').innerText();
+   const blocked=await p.locator('#reg').isDisabled(),hidden=await p.locator('#open').isHidden();
+   const status=await p.locator('#candidateStatus').innerText();
+   const required=key==='RP13'?/Ofertas independientes/.test(detail):true;
+   caso(`UI-${key.toLowerCase()}-sin-descarga`,dis===1&&blocked&&hidden&&required&&/Sin descarga de cliente/.test(detail)&&status.includes('RP07')&&status.includes(key),{dis,blocked,hidden,status});}
+  await p.locator('#clearRecipe').click();
+  const after=await dl();
+  caso('UI-seleccion-activa-recuperada',same(before,after)&&before.nota===after.nota&&after.nota.includes('RP07'),after.nota);
   // otra receta L; luego inglés
   await p.locator('[data-rec=RP05]').click();await p.locator('#recApply').click();const s5=await dl();caso('UI-rp05-cambio-de-receta',same(s5,RC.resolver('RP05',ctx,'es').seleccion)&&/RP05/.test(s5.nota),s5.nota);
   await p.locator('[name=idioma][value=en]').check();await p.waitForTimeout(200);const s5e=await dl();caso('UI-rp05-ingles',s5e.idioma==='en'&&same(s5e,RC.resolver('RP05',ctx,'en').seleccion)&&s5e.nota===RC.resolver('RP05',ctx,'en').seleccion.nota,{idioma:s5e.idioma});
@@ -152,10 +197,7 @@ if(PARTS.includes('ui')){
   caso('UI-teclado',on==='RP01'&&pressed==='true'&&fv,{on,pressed,foco:fv});
   caso('UI-red-y-errores',!ext.length&&!errs.length,{ext,errs});await c.close();}
  await b.close();}
-const res={schema:'rubik-lab-recetas-qa/1',fecha:new Date().toISOString(),catalogo:RC.VERSION,snapshotSha256:REG.snapshot.sha256,partes:PARTS,total:casos.length,pass:casos.filter(c=>c.ok).length,casos};
-const prev=(()=>{try{return JSON.parse(fs.readFileSync(path.join(EV,'recetas-qa.json'),'utf8'));}catch{return null;}})();
-// varias partes por separado: se acumulan por id
-if(prev&&prev.catalogo===res.catalogo&&prev.snapshotSha256===res.snapshotSha256){const m=new Map(prev.casos.map(c=>[c.id,c]));for(const c of casos)m.set(c.id,c);res.casos=[...m.values()];res.total=res.casos.length;res.pass=res.casos.filter(c=>c.ok).length;res.partes=[...new Set([...(prev.partes||[]),...PARTS])];}
+const res={schema:'rubik-lab-recetas-qa/1',fecha:new Date().toISOString(),catalogo:RC.VERSION,snapshotSha256:REG.snapshot.sha256,registroSha256:frozen,partes:PARTS,solo:process.env.RECETAS_SOLO||null,total:casos.length,pass:casos.filter(c=>c.ok).length,casos};
 fs.writeFileSync(path.join(EV,'recetas-qa.json'),JSON.stringify(res,null,1));
 console.log(`${res.pass}/${res.total}`);process.exit(casos.every(c=>c.ok)?0:1);
 })();

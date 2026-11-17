@@ -1,11 +1,11 @@
 {
  "rp01-es": {
-  "zipSha256": "5b2ce0bfd3a8656ec1ad55429c86a62586d22fd45eac28b95327ac9a4603fbc1",
-  "ms": 8805,
+  "zipSha256": "facefec8aa1356a99d9dc8655fe84d559076cd1d2a006e05cced93e65b5ef06d",
+  "ms": 4370,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/commercial-proposal-client-v3.pdf": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
-   "index.html": "5b8ace15760ba91a5014f9516e9922cf4ca5a037445d0b4258d345f86af635da",
+   "documentos/commercial-proposal-client-v3.pdf": "8e7668cf832019404de4ddf42066df031b5cdf01eb7fa8bb435739e6388d3001",
+   "index.html": "e6d2d36fe117c38e80872f736475061cde4c26feeac95bab22da85730396dc34",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   "estado": "emitible-parcial",
@@ -17,12 +17,12 @@
   ]
  },
  "rp01-en": {
-  "zipSha256": "4a38fa218aa17c5224b88b6f264bda8d0caa7e194399506cd529d3e28acc5682",
-  "ms": 9551,
+  "zipSha256": "df77af059d685c879ef1d46780b572301adf343f411ac0d4a285b7b1e39e97ae",
+  "ms": 4488,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/commercial-proposal-client-v3.en.pdf": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
-   "index.html": "8ddaab000e82b727e00fe3071edf7f1a8cd311dcf2b835ae04392e670cee3378",
+   "documentos/commercial-proposal-client-v3.en.pdf": "5addb682219e0e7a32c1fad6b89225b3e4c72c441523329a746a54675bd1f5d7",
+   "index.html": "1377fa42ac7f65ca6f11b7d674a2f310ddfdc1a4cc3dd98d9aca9827df6cb8d3",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   "estado": "emitible-parcial",
@@ -34,13 +34,13 @@
   ]
  },
  "rp02-es": {
-  "zipSha256": "b5207fbfed1cd64c275b8eeb45b92dd018512926f0aee47de7b6ced0144c982d",
-  "ms": 6314,
+  "zipSha256": "f7e54d24080414022cfc901c7b353befed5216e8df9a44a128cacfcd1b779e84",
+  "ms": 3836,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/architecture-book.pdf": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
-   "documentos/architecture-sheet-strip.pdf": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
-   "index.html": "336513f1ea0dace386b63828c963a62a536311a6f2d63d6cd40c475f0318231c",
+   "documentos/architecture-book.pdf": "b4dd199a0f9aa71779bf180897c89b9acaddb7b49ac626c58ffa280b4c110f47",
+   "documentos/architecture-sheet-strip.pdf": "b3793b4a458cfe80853a9bb4bdba7dfcbb75b52e0e17c71b07af4552fbd8564e",
+   "index.html": "b1e7e464194f912677c1b7b3b151e490adaf5a618584b1e35f654b1ecd842023",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -56,13 +56,13 @@
   ]
  },
  "rp02-en": {
-  "zipSha256": "1576464fc0253780ee06ea02ec4ce601ee9bc2a74b17ed029302df16dc151e7d",
-  "ms": 7032,
+  "zipSha256": "579a5e91477aa6cb43815510715290102d7ae4493b356a785faee5ace207d093",
+  "ms": 3966,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/architecture-book.en.pdf": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
-   "documentos/architecture-sheet-strip.en.pdf": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
-   "index.html": "33c19a60209f4293986c2c19f71e19508f6ff17854696a497001b9bd624e9b88",
+   "documentos/architecture-book.en.pdf": "3878c5903bccb06fa40dddedccebdbf2c081a5fe574713de319ed99cc1b7d0e7",
+   "documentos/architecture-sheet-strip.en.pdf": "9dbfb2dd6e30e5e15ae11af0d91386baef1e4b229667953bb4332a46fc2d2cb9",
+   "index.html": "206390ee4c350824edb4f6268ec0b8572c290a482448e4ced0ce9b88a032b43d",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -78,19 +78,19 @@
   ]
  },
  "rp03-es": {
-  "zipSha256": "b1069ec7c20dcad2ec6b376a960fc582457210c68ee05369a4e9194668a3c82d",
-  "ms": 14417,
+  "zipSha256": "76d577e06071bb673a85d8fc83cf2d0203e9aeddde1458523045f06122f4d257",
+  "ms": 7746,
   "files": {
    "LEEME.txt": "d86bbfe0a1126dc4ad29a8d9be94458cd7315bbe815160c8d1b517d39ef63511",
-   "documentos/architecture-book.pdf": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
-   "documentos/architecture-sheet-strip.pdf": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
-   "documentos/commercial-proposal-client-v3.pdf": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
-   "documentos/entrega-integral.pdf": "27897e711a370018251736e8fd200ad66ea8c6057b695e5b3568a6a2bbf2aff6",
-   "documentos/interior-book-v3.pdf": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
-   "documentos/materials-furniture-book-v3.pdf": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
+   "documentos/architecture-book.pdf": "b4dd199a0f9aa71779bf180897c89b9acaddb7b49ac626c58ffa280b4c110f47",
+   "documentos/architecture-sheet-strip.pdf": "b3793b4a458cfe80853a9bb4bdba7dfcbb75b52e0e17c71b07af4552fbd8564e",
+   "documentos/commercial-proposal-client-v3.pdf": "8e7668cf832019404de4ddf42066df031b5cdf01eb7fa8bb435739e6388d3001",
+   "documentos/entrega-integral.pdf": "00436120efd18c991df6614da0989d7a87b93ac2c8aef181054be428cbd23c10",
+   "documentos/interior-book-v3.pdf": "0e19ef063c22bca8882c3842a6f30a414c82ec7b6246c0690303012238f519e2",
+   "documentos/materials-furniture-book-v3.pdf": "d1f0b675e26fcbef7009cd34ee048a3e7d646bd8d85beeb302f7f1cd77a14303",
    "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
-   "documentos/real-estate-sheet-v3.pdf": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
-   "index.html": "41b782f74bdab5504f33bd0d44aa33a9cf29ca3a58f7069589c3934b9b10b32f",
+   "documentos/real-estate-sheet-v3.pdf": "1658cfbc319784b4e2146e560edfdb2a143732fa9ad40232909716fda0e0af2b",
+   "index.html": "cb19569992e79251ea08f2417c556654321e3ae8a3fdb63f1ce02e420af26f56",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -118,19 +118,19 @@
   ]
  },
  "rp03-en": {
-  "zipSha256": "9497321c5bd2b1c944a46c8d1f6f31d6a188218447f12adad7e1aa313e06e5e6",
-  "ms": 14028,
+  "zipSha256": "61830066d6204e69b2217e241eefe2a1d8393de2e90dc64215ed3e5504d0c9b2",
+  "ms": 7622,
   "files": {
    "README.txt": "6587ac337cbb032b5e5a454d0dd8f645711a964f2a55ba74f3d01f219bd18663",
-   "documentos/architecture-book.en.pdf": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
-   "documentos/architecture-sheet-strip.en.pdf": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
-   "documentos/commercial-proposal-client-v3.en.pdf": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
-   "documentos/entrega-integral.en.pdf": "a94184e9623249f98f3d37673e0b238581c8f89b7fd61ae0f746df4b9eea4da2",
-   "documentos/interior-book-v3.en.pdf": "2fd9b90a0fe5300e773072944a8235e74853db35146fe25a558e2168667b29eb",
-   "documentos/materials-furniture-book-v3.en.pdf": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
+   "documentos/architecture-book.en.pdf": "3878c5903bccb06fa40dddedccebdbf2c081a5fe574713de319ed99cc1b7d0e7",
+   "documentos/architecture-sheet-strip.en.pdf": "9dbfb2dd6e30e5e15ae11af0d91386baef1e4b229667953bb4332a46fc2d2cb9",
+   "documentos/commercial-proposal-client-v3.en.pdf": "5addb682219e0e7a32c1fad6b89225b3e4c72c441523329a746a54675bd1f5d7",
+   "documentos/entrega-integral.en.pdf": "788594a49c0966e8de48723445160224f0cfee434e9e94545c20681208a7b555",
+   "documentos/interior-book-v3.en.pdf": "fde1fd08c0a8695567d2c5df7d49f089c07b5050a9fb23b7b13f8cfe847742f6",
+   "documentos/materials-furniture-book-v3.en.pdf": "f79c998bc8b14dae98e12327a9a9e8f1501c69c4261a7afe4e562950a35c94b2",
    "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
-   "documentos/real-estate-sheet-v3.en.pdf": "a8bfa7c3c70c17aa08cd313271a21ea337bd6e982175a2c33b048d9174427af9",
-   "index.html": "fc58c1ea8731597e45ae458983ab3438aa39b8c2387f86198b40f85b85fd7953",
+   "documentos/real-estate-sheet-v3.en.pdf": "68489909d143bbb201d2843581359065b00ae7da44589207aef371d6f199f2d9",
+   "index.html": "5faf13eb4b4921618493a748c9446b27e6a04eb7003c3a5e38a66c2fb7f17fad",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -158,11 +158,11 @@
   ]
  },
  "rp04-es": {
-  "zipSha256": "ba6d0f9f51f6cc8290d444b85045750f4e30eca74591cdc1c2571c7a6405d575",
-  "ms": 9048,
+  "zipSha256": "6f474b57c1f73bacfd96e8a962f571a687b22166d8a76dd3ed6c122866706a95",
+  "ms": 4897,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/real-estate-sheet-v3.pdf": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
+   "documentos/real-estate-sheet-v3.pdf": "1658cfbc319784b4e2146e560edfdb2a143732fa9ad40232909716fda0e0af2b",
    "index.html": "7b0eb074b8417b66d5826ffa7fca4c1004e7d1a2d5acffbeb6634f1ca58b7222",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
@@ -188,11 +188,11 @@
   ]
  },
  "rp04-en": {
-  "zipSha256": "f8df2a8e3a29b1d429b5749611f0d844b88e2ba7c766002d5dbb8fa0680ca8b1",
-  "ms": 9653,
+  "zipSha256": "a774de21b09280598abab3da7a5fd3ef4a6a1853939770cc98903e2962367077",
+  "ms": 4801,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/real-estate-sheet-v3.en.pdf": "a8bfa7c3c70c17aa08cd313271a21ea337bd6e982175a2c33b048d9174427af9",
+   "documentos/real-estate-sheet-v3.en.pdf": "68489909d143bbb201d2843581359065b00ae7da44589207aef371d6f199f2d9",
    "index.html": "2f961781ec4a0d531619256fb895ae7e31782fcca3b65fde79face03fd14eff5",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
@@ -218,37 +218,37 @@
   ]
  },
  "rp05-es": {
-  "zipSha256": "0426fd5e9914851caa199c16d64be0acd62594e33c1db08d12f8b4afb1d37ca0",
-  "ms": 8558,
+  "zipSha256": "a12bd2ad413c349dbec5b9bd015ccd140cbf1a3a6ffe43aaf80cce1fe08853f5",
+  "ms": 4345,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/commercial-proposal-client-v3.pdf": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
-   "index.html": "b1f5370dc1685f83c10557593965ae3ac53d02aebf476612a6c05cc416435f2d",
+   "documentos/commercial-proposal-client-v3.pdf": "8e7668cf832019404de4ddf42066df031b5cdf01eb7fa8bb435739e6388d3001",
+   "index.html": "8d67cc00a3a6c08cc9923538442badd783a35d07a06aa21bbeaee5d3b979e251",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   "estado": "emitible",
   "incompleta": []
  },
  "rp05-en": {
-  "zipSha256": "f6d358194ece60b80aaefff81130ebb9bd7fc332465c0eb25b445f4938b2dbc3",
-  "ms": 8761,
+  "zipSha256": "137a15ddf20bfd6374c17a0f9c56c0290f4a56402e19ad020436fe6f97cf4610",
+  "ms": 4387,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/commercial-proposal-client-v3.en.pdf": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
-   "index.html": "9382cb4ecfbccfbb499a33a93592f13e701b64d40033b0a10f3dd9638c53236a",
+   "documentos/commercial-proposal-client-v3.en.pdf": "5addb682219e0e7a32c1fad6b89225b3e4c72c441523329a746a54675bd1f5d7",
+   "index.html": "f99155efd53ae986803507e7d324690102dc9cf320f88ab2acb90dc5cee17151",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   "estado": "emitible",
   "incompleta": []
  },
  "rp06-es": {
-  "zipSha256": "242b120ec63a24e83d6c587e5ca299d79eae49eceae3bd50aa786fdb00c8ca71",
-  "ms": 6982,
+  "zipSha256": "9af65bf2be76ee0ea6b85f670e1d305986e37a2c9ab46e12ffcb3c7d95814f7b",
+  "ms": 4173,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/interior-book-v3.pdf": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
-   "documentos/materials-furniture-book-v3.pdf": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
-   "index.html": "adef5d70a389704f9bd938a74e6e9ea6540ac74b6fb4c247d591387a2e15d3f5",
+   "documentos/interior-book-v3.pdf": "0e19ef063c22bca8882c3842a6f30a414c82ec7b6246c0690303012238f519e2",
+   "documentos/materials-furniture-book-v3.pdf": "d1f0b675e26fcbef7009cd34ee048a3e7d646bd8d85beeb302f7f1cd77a14303",
+   "index.html": "e77f17b7357d6f51a75039c8d1c62c8f1edf1266549040538a0b053703f2f339",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -265,13 +265,13 @@
   ]
  },
  "rp06-en": {
-  "zipSha256": "47f8624d58b3587d9424878e8a4cf75ecd722e82eaab84b71bd896b9bb8949cc",
-  "ms": 5581,
+  "zipSha256": "5ebfd534e187f3757fefee980938480b75c31a97a0fe29a3d4ec2780f857c567",
+  "ms": 4222,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/interior-book-v3.en.pdf": "2fd9b90a0fe5300e773072944a8235e74853db35146fe25a558e2168667b29eb",
-   "documentos/materials-furniture-book-v3.en.pdf": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
-   "index.html": "00eac8314907c2fa68c75e01a2971b947722060c1384348fe3ddefa4f7151bf0",
+   "documentos/interior-book-v3.en.pdf": "fde1fd08c0a8695567d2c5df7d49f089c07b5050a9fb23b7b13f8cfe847742f6",
+   "documentos/materials-furniture-book-v3.en.pdf": "f79c998bc8b14dae98e12327a9a9e8f1501c69c4261a7afe4e562950a35c94b2",
+   "index.html": "49569792e7a4b508bbc3a4eba1c205f790ad9cf5b038fb8cb0b060930757ae52",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -288,11 +288,11 @@
   ]
  },
  "rp07-es": {
-  "zipSha256": "369ecb9a828379aab265be7c57061a60f433e4f0a857e531d1b55ef5b34ee97b",
-  "ms": 6799,
+  "zipSha256": "5aab00ed86bef64ed570e19e5f440f89433e8e9912fc2f01b95aacbc6542c534",
+  "ms": 3913,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/real-estate-sheet-v3-sin-presupuesto.pdf": "fe50ae08da74af32cff933ae6e352e55d563f1402a696640235d21a024c4ad73",
+   "documentos/real-estate-sheet-v3-sin-presupuesto.pdf": "097a20c43f70cb35f0a76e91c27e3c43363a96f415332dc9c8b23f3925644254",
    "index.html": "ba89286ba8351da1b7e84ce7b54d9a4159b7b51624f56b0ddf232987ac4b8843",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
@@ -314,11 +314,11 @@
   "incompleta": []
  },
  "rp07-en": {
-  "zipSha256": "d88377096d169e9e046e0f19ea54a28079bf4a3e137749ce671241fb77f1c18c",
-  "ms": 7205,
+  "zipSha256": "986c168d6714bd50e6cd7e641a2da04ed438dacd259b90944a0a971ca0df647b",
+  "ms": 4041,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf": "fd13ebbdb575f8f6edf1ef4f5edd995b1f9acaf58fa2a8ce2a64b27c3ed2c70b",
+   "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf": "7a4d1e053631d3d9d5e87f52d9db597132d41fb7cabd5041b4acbac6ced514c5",
    "index.html": "46ab5c20721d5c3653722a8a0f95e53616777bc979a5d7166370f02938af2d65",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
@@ -340,11 +340,11 @@
   "incompleta": []
  },
  "rp08-es": {
-  "zipSha256": "b07a74d6428603de35bc7e9b74244ef77e8ba2bdae6a10b52249aa32f692947a",
-  "ms": 12554,
+  "zipSha256": "68f6ef84c6abc4a8e409cbee280ab7dcbef0041d0c7432948fc179a83ab2c771",
+  "ms": 6479,
   "files": {
    "LEEME.txt": "2c1a39372993e283aabe8d424638a6c571bf4907e9429fc980eecea762ca5283",
-   "documentos/architecture-sheet-strip.pdf": "2c81aab157ea7cd233ef64f459667e95fede87a0c8ddab674de2a62bbefb58a4",
+   "documentos/architecture-sheet-strip.pdf": "b3793b4a458cfe80853a9bb4bdba7dfcbb75b52e0e17c71b07af4552fbd8564e",
    "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
    "index.html": "f75d2a69cd8eb2e270cd6de3bf98b2219d9c22ec6e99f205b31b1ab86a3fb1d9",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
@@ -362,11 +362,11 @@
   ]
  },
  "rp08-en": {
-  "zipSha256": "7f3ee2e6e113e5fd0f3804734d5768358612b3276eb7deaa967eeeefa48adbef",
-  "ms": 12914,
+  "zipSha256": "75262f471abf97f6d7945fc926bea66260e7dab16fbea9f016a075ca2aa066b0",
+  "ms": 6526,
   "files": {
    "README.txt": "357a4bcea18042061871baf9173bd64f9375227f11310a9cbf07b469f70ac41c",
-   "documentos/architecture-sheet-strip.en.pdf": "adc5d7f5c9c1dedf653026197449ea9c87aa11a56dddd97aca075ff679b9ab58",
+   "documentos/architecture-sheet-strip.en.pdf": "9dbfb2dd6e30e5e15ae11af0d91386baef1e4b229667953bb4332a46fc2d2cb9",
    "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
    "index.html": "ab13f63289d62483c05ca9166d14378b6432d13db133888b9e1b969ef0a407d2",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
@@ -384,13 +384,13 @@
   ]
  },
  "rp09-es": {
-  "zipSha256": "41c1567d412ac1472142fcc8cc8511bf25fbfb249bac538ab04dcc119204fea7",
-  "ms": 5997,
+  "zipSha256": "da7bc43e3d75dbb55c88899a1d8d0490f57b685fc3119c816a914be8fb44a893",
+  "ms": 3963,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/architecture-book.pdf": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
-   "documentos/architecture-sheet-strip.pdf": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
-   "index.html": "336513f1ea0dace386b63828c963a62a536311a6f2d63d6cd40c475f0318231c",
+   "documentos/architecture-book.pdf": "b4dd199a0f9aa71779bf180897c89b9acaddb7b49ac626c58ffa280b4c110f47",
+   "documentos/architecture-sheet-strip.pdf": "b3793b4a458cfe80853a9bb4bdba7dfcbb75b52e0e17c71b07af4552fbd8564e",
+   "index.html": "b1e7e464194f912677c1b7b3b151e490adaf5a618584b1e35f654b1ecd842023",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -406,13 +406,13 @@
   ]
  },
  "rp09-en": {
-  "zipSha256": "56b70f5be92ebd53a848982d98bb425bb6a1e258de34802a6f5f67e73bb2a375",
-  "ms": 5868,
+  "zipSha256": "8c535595da6a35643138f287519218bf2e75cf2df19ecf4e261c5d1ecc8f273d",
+  "ms": 4120,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/architecture-book.en.pdf": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
-   "documentos/architecture-sheet-strip.en.pdf": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
-   "index.html": "33c19a60209f4293986c2c19f71e19508f6ff17854696a497001b9bd624e9b88",
+   "documentos/architecture-book.en.pdf": "3878c5903bccb06fa40dddedccebdbf2c081a5fe574713de319ed99cc1b7d0e7",
+   "documentos/architecture-sheet-strip.en.pdf": "9dbfb2dd6e30e5e15ae11af0d91386baef1e4b229667953bb4332a46fc2d2cb9",
+   "index.html": "206390ee4c350824edb4f6268ec0b8572c290a482448e4ced0ce9b88a032b43d",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -428,12 +428,12 @@
   ]
  },
  "rp10-es": {
-  "zipSha256": "676f9a3f93ab880f84065adab0e6ac7bc6355c03ed51190ca54c197d3bf1cbed",
-  "ms": 6405,
+  "zipSha256": "1b41befb606504978ce5306a59edc180086f511aa0afdfd635c6b3c48aae2d7e",
+  "ms": 3897,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/architecture-book.pdf": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
-   "index.html": "3a62b866d63dc88e88f1ea9d335051a526fcdb7bc06d1cce86123d8229cb279d",
+   "documentos/architecture-book.pdf": "b4dd199a0f9aa71779bf180897c89b9acaddb7b49ac626c58ffa280b4c110f47",
+   "index.html": "03b0a0a31770d6a326ae4d2f7b1fd973a3a6103f393cc6e3856a85d076d1cb86",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -448,12 +448,12 @@
   ]
  },
  "rp10-en": {
-  "zipSha256": "511b7e844d79e16622acdbd1789fe24e66a2df0f3eb2d66f59fffb44d16bf53c",
-  "ms": 6306,
+  "zipSha256": "633bedcdbb09ac653b54720460e5d0dc97f0b7ab7f03b783fa2d1ab85d47429c",
+  "ms": 3843,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/architecture-book.en.pdf": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
-   "index.html": "26926b33c70cf9b5d0a038ab56d7b5c06704b766d8bb843fe116215fa08c2903",
+   "documentos/architecture-book.en.pdf": "3878c5903bccb06fa40dddedccebdbf2c081a5fe574713de319ed99cc1b7d0e7",
+   "index.html": "1aa6369971bffe6eca51cc669333abc35c8246992aac57727d38f2566af49213",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -468,12 +468,12 @@
   ]
  },
  "rp11-es": {
-  "zipSha256": "adfb1d7a7bb497429afac8e9c7aabcbe031286a5a00b283cdfcaf2cd0f69a05e",
-  "ms": 6482,
+  "zipSha256": "e6d8745d1ed6390d5f45faba533492eebc8a4c32e39dd70e2db31eaed4f2860a",
+  "ms": 3860,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/materials-furniture-book-v3.pdf": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
-   "index.html": "9009163f547928927eabf3480e29d7e9fd41351dbad171e6720070c38c6dbd58",
+   "documentos/materials-furniture-book-v3.pdf": "d1f0b675e26fcbef7009cd34ee048a3e7d646bd8d85beeb302f7f1cd77a14303",
+   "index.html": "37fb9f5dd4d4bba3987f182066319537bc94da32ac0171c923715a3f6bb1be9e",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -489,12 +489,12 @@
   ]
  },
  "rp11-en": {
-  "zipSha256": "31c53f1f05f3a98c7568974851aa418f702af8bea44dc5fcbe46af8fd859d0f6",
-  "ms": 6173,
+  "zipSha256": "636601e3c6bc73b115f7e46bbf3c271d5a96293354b2b438e0ad79a56a4415d1",
+  "ms": 3840,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/materials-furniture-book-v3.en.pdf": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
-   "index.html": "04d295e730ccd8ef80ffe370b0602bbf4db3234246ed2dc1bf9e11791d14347f",
+   "documentos/materials-furniture-book-v3.en.pdf": "f79c998bc8b14dae98e12327a9a9e8f1501c69c4261a7afe4e562950a35c94b2",
+   "index.html": "147e046ea79ab354e3256b5f5e4f840415e6dcbd9032dafe9f55fbc4c05b1682",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
    "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
    "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
@@ -510,12 +510,12 @@
   ]
  },
  "rp12-es": {
-  "zipSha256": "39c0d3e332f63da661d6dfb8b22e69481438c974d99147b6856904a21e1834b1",
-  "ms": 9404,
+  "zipSha256": "388ca3eabb9a6a4c5f2c2545213bb31dde90d6b8f771f7d2595f52cc568ba5b0",
+  "ms": 4409,
   "files": {
    "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-   "documentos/commercial-proposal-client-v3.pdf": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
-   "index.html": "7fd7c603856cfee157453b5d786da9567c48899cc66aaa250009f68362d5eb9b",
+   "documentos/commercial-proposal-client-v3.pdf": "8e7668cf832019404de4ddf42066df031b5cdf01eb7fa8bb435739e6388d3001",
+   "index.html": "5fddd090477b6080ba0ae16eec34fcf6957d18d8f2f994317418da2ac047bd5a",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   "estado": "emitible-parcial",
@@ -524,12 +524,12 @@
   ]
  },
  "rp12-en": {
-  "zipSha256": "f0adf1d78a5a049cc688ca6ef9f45aef039b225fe0a1e95acc0415204991ab54",
-  "ms": 8462,
+  "zipSha256": "dbc1195784a2eb436865d7bd68aecb2f93ba1c70a9e84f626e8dbf1605cfc673",
+  "ms": 4267,
   "files": {
    "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-   "documentos/commercial-proposal-client-v3.en.pdf": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
-   "index.html": "aa3c52fef525e180b615f3c3406f6112f78fa4bace3d0c2ecb04322413d747a3",
+   "documentos/commercial-proposal-client-v3.en.pdf": "5addb682219e0e7a32c1fad6b89225b3e4c72c441523329a746a54675bd1f5d7",
+   "index.html": "6484050e769627743f012ceb75de938e0206081ccba5f121c620dbe549297271",
    "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   "estado": "emitible-parcial",
