@@ -36,6 +36,7 @@ const tint=(h,k)=>toHex(hex2rgb(h).map(v=>1-(1-v)*k));
 const VIEW_NOTE='Vista del modelo 3D del proyecto generada por RUBIK. No es una fotografía.';
 const STATUS_AREA=`Superficies calculadas por RUBIK sobre el modelo, con escala ${P.scale==='estimated'?'estimada':'verificada'}. No sustituyen a una medición en obra.`;
 let views=[];const viewBy=l=>views.find(v=>v.label===l);
+const VW={}; // viewport width (px at 96 dpi) per document, from its page size: A4 landscape 1123, A4 portrait 794, A3 landscape 1588
 // ---------- geometry helpers ----------
 const centroid=r=>r.labelAt||{x:r.polygon.reduce((s,p)=>s+p.x,0)/r.polygon.length,y:r.polygon.reduce((s,p)=>s+p.y,0)/r.polygon.length};
 const bbox=pts=>({x0:Math.min(...pts.map(p=>p.x)),y0:Math.min(...pts.map(p=>p.y)),x1:Math.max(...pts.map(p=>p.x)),y1:Math.max(...pts.map(p=>p.y))});
@@ -112,8 +113,9 @@ function axo({w=180,h=120,H=1100,label=true}={}){
 // ---------- document frame ----------
 function doc(id,title,style,pages,{size='A4L'}={}){
  const N=pages.length,studio=prof.name||'Estudio sin nombre';
- const body=pages.map((p,i)=>`<section class="page ${p.cls||''}" data-page="${i+1}">${p.html}${p.foot===false?'':`<footer class="foot"><span>${esc(studio)}</span><span>${esc(TITLE)}</span><span>Revisión ${esc(rev)}</span><span>${esc(date)}</span><span class="pg">${i+1} / ${N}</span></footer>`}</section>`).join('\n');
- const page=size==='A3L'?`@page{size:420mm 297mm;margin:0}:root{--page-w:420mm;--page-h:297mm}`:'';
+ const body=pages.map((p,i)=>`<section class="page ${p.cls||''}" data-page="${i+1}">${p.html}${p.foot===false?'':`<footer class="foot">${p.note?`<span style="color:var(--d-ink);font-weight:700">${esc(p.note)}</span>`:`<span>${esc(studio)}</span><span>${esc(TITLE)}</span><span>Revisión ${esc(rev)}</span><span>${esc(date)}</span>`}<span class="pg">${i+1} / ${N}</span></footer>`}</section>`).join('\n');
+ VW[id]=size==='A3L'?1588:size==='A4P'?794:1123;
+ const page=size==='A3L'?`@page{size:420mm 297mm;margin:0}:root{--page-w:420mm;--page-h:297mm}`:size==='A4P'?`@page{size:210mm 297mm;margin:0}:root{--page-w:210mm;--page-h:297mm;--m-side:14mm}`:'';
  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>${esc(title)}, ${esc(TITLE)}</title><style>${FONT_CSS}\n${CSS}\n${page}</style></head><body data-doc="${id}" data-style="${style}">${body}</body></html>`;}
 const fig=(n,u,l,p,cls='')=>`<div class="fig ${cls}"><div class="n">${n}<span class="u">${u}</span></div><div class="l">${esc(l)}</div>${p?`<div class="caption">${esc(p)}</div>`:''}</div>`;
 const img=(v,style='')=>`<img class="img" src="${v.src}" alt="${esc(v.label)}" style="${v.fit==='contain'?'object-fit:contain;':''}${style}">`;
@@ -128,7 +130,7 @@ const coverDrawing=(kind,sub)=>({head:false,html:`<div class="grid"><div class="
  <div class="c5-12" style="display:flex;align-items:center;justify-content:center">${axo({w:178,h:176})}</div></div>`});
 const coverFigure=(kind,sub)=>{const p=plan({w:100,h:110,callouts:false,labels:false});return {head:false,html:`<div class="grid"><div class="c1-7" style="display:flex;flex-direction:column;justify-content:space-between;height:180mm">
  <p class="meta" style="color:var(--d-ink);font-weight:700">${esc(prof.name)}</p>
- <div><div style="font-weight:700;font-size:96pt;line-height:.9;letter-spacing:-.04em">${num(area)}<span style="font-size:30pt;font-weight:400;margin-left:2mm">m²</span></div><p class="meta" style="margin-top:3mm">Superficie útil estimada por RUBIK sobre el modelo</p></div>
+ <div><div style="font-weight:700;font-size:96pt;line-height:1;letter-spacing:-.04em">${num(area)}<span style="font-size:30pt;font-weight:400;margin-left:2mm">m²</span></div><p class="meta" style="margin-top:3mm">Superficie útil estimada por RUBIK sobre el modelo</p></div>
  <div><h1 class="h1">${esc(TITLE)}</h1><p class="lead" style="margin-top:2mm">${esc(kind)}</p><p class="meta" style="margin-top:4mm">${esc(sub)}</p></div></div>
  <div class="c8-12" style="display:flex;align-items:center">${p.svg}</div></div>`};};
 // ---------- shared pages ----------
@@ -215,6 +217,9 @@ function build(){
   <div style="position:absolute;left:18mm;bottom:14mm;width:200mm">${legend(p,`<span><svg width="7mm" height="3mm"><rect x=".3mm" y=".3mm" width="6.4mm" height="2.4mm" fill="none" stroke="${T.muted}" stroke-width=".2mm"/></svg>Mobiliario</span>`)}</div>
   <div class="tb">${tb('Proyecto',TITLE)}${tb('Dirección',null)}${tb('Cliente',null)}${tb('Organización',prof.name)}${tb('Título','Planta de distribución propuesta','wide')}${tb('Dibujado por',prof.person)}${tb('Revisado por',null)}${tb('Fecha',date)}${tb('Revisión',rev)}
    <div class="side"><div><small>Lámina</small><span class="num">A-01</span></div><div><small>Escala</small><span style="font-size:12.8pt;font-weight:700">1:50</span></div><div><small>Formato</small>A3, escala sobre medidas del modelo</div></div></div>`}],{size:'A3L'});}
+ // B1 (v3): more designs per deliverable, built by tools/b1.cjs from the same snapshot and the same helpers.
+ if(process.env.STUDIO_B1!=='0'){const b1=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
+  nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage});Object.assign(D,b1.D);Object.assign(meta,b1.meta);}
  return {D,meta};}
 // ---------- Huashu design_lint, ported: same probe (read from the donor file), print floors 12 px body / 9.3 px label ----------
 const PROBE=(()=>{try{const s=fs.readFileSync(HUASHU_LINT,'utf8'),k='COLLECT_JS = r"""',i=s.indexOf(k)+k.length;return s.slice(i,s.indexOf('"""',i));}catch{return null;}})();
@@ -229,7 +234,7 @@ function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes 
    const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
    views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
  const {D,meta}=build();const qa={meta,probe:!!PROBE,docs:{}};
- for(const [id,html] of Object.entries(D)){const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=id==='architecture-sheet'?1588:1123;
+ for(const [id,html] of Object.entries(D)){const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[id]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
   const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);
   const H=await pg.evaluate(()=>document.documentElement.scrollHeight);await pg.setViewportSize({width:vw,height:Math.min(H,16000)});
@@ -239,10 +244,25 @@ function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes 
     const foot=p.querySelector('.foot')?.getBoundingClientRect();if(foot)for(const el of p.querySelectorAll(':scope > :not(.foot):not(.runhead) *')){if(el.closest('svg')&&el.tagName!=='svg')continue;const r=el.getBoundingClientRect();if(r.height&&r.bottom>foot.top+.5&&r.top<foot.top)over.push({page:p.dataset.page,collides:'foot',tag:el.tagName,text:(el.textContent||'').trim().slice(0,30)});}}
    let blockOverlaps=[];for(const p of pages){const kids=[...p.children].filter(e=>!e.classList.contains('sheet-frame')).map(e=>({e,r:e.getBoundingClientRect()}));for(let i=0;i<kids.length;i++)for(let j=i+1;j<kids.length;j++){const a=kids[i].r,b=kids[j].r;if(a.width&&b.width&&a.left<b.right-.5&&b.left<a.right-.5&&a.top<b.bottom-.5&&b.top<a.bottom-.5)blockOverlaps.push({page:p.dataset.page,a:kids[i].e.className||kids[i].e.tagName,b:kids[j].e.className||kids[j].e.tagName});}}
    const tags=[...document.querySelectorAll('svg.plan g, svg.axo g')].map(g=>g.getBoundingClientRect());let tagOverlaps=0;for(let i=0;i<tags.length;i++)for(let j=i+1;j<tags.length;j++){const a=tags[i],b=tags[j];if(a.left<b.right-.5&&b.left<a.right-.5&&a.top<b.bottom-.5&&b.top<a.bottom-.5)tagOverlaps++;}
-   return {pages:pages.length,blockOverlaps,overflowCount:over.length,overflow:over.slice(0,12),tagOverlaps,fontsLoaded:[...document.fonts].filter(f=>f.status==='loaded').map(f=>`${f.family} ${f.weight} ${f.style}`)};});
+   // B1 QA: text lines that overlap each other inside a page (a caption running into the next row, a label over a title).
+   // Line boxes of every visible text node outside SVG; two boxes of different text nodes may touch but not intersect.
+   const textOverlaps=[];for(const p of pages){const boxes=[];const w=document.createTreeWalker(p,NodeFilter.SHOW_TEXT);let n;
+    while((n=w.nextNode())){if(!n.textContent.trim()||n.parentElement.closest('svg'))continue;const st=getComputedStyle(n.parentElement);if(st.visibility==='hidden'||st.display==='none')continue;
+     const rg=document.createRange();rg.selectNodeContents(n);const fs=parseFloat(st.fontSize),k=fs>=48?.15:0; // display type: the glyph box is taller than the line; compare its inner 70 %
+     for(const r of rg.getClientRects())if(r.width>1&&r.height>1)boxes.push({n,r:{left:r.left,right:r.right,top:r.top+r.height*k,bottom:r.bottom-r.height*k},t:n.textContent.trim().slice(0,30)});}
+    for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){if(boxes[i].n===boxes[j].n)continue;const a=boxes[i].r,b=boxes[j].r;const ix=Math.min(a.right,b.right)-Math.max(a.left,b.left),iy=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+     if(ix>1&&iy>1.5)textOverlaps.push({page:p.dataset.page,a:boxes[i].t,b:boxes[j].t});}}
+   // B1 QA: a child that runs out of the bottom of a fixed-height box (grid row, card) whose overflow is visible.
+   const spill=[];for(const p of pages)for(const el of p.querySelectorAll('*')){if(el.closest('svg'))continue;const st=getComputedStyle(el);if(st.overflow!=='visible'||st.display==='inline'||!el.children.length)continue;
+    const r=el.getBoundingClientRect();if(!r.height)continue;for(const c of el.children){const cs=getComputedStyle(c);if(cs.position==='absolute'||cs.position==='fixed')continue;const k=c.getBoundingClientRect();
+     if(k.height&&k.bottom>r.bottom+1.5){spill.push({page:p.dataset.page,box:(el.className||el.tagName).toString().slice(0,20),child:(c.textContent||c.tagName).trim().slice(0,30),by:+(k.bottom-r.bottom).toFixed(1)});break;}}}
+   // B1 QA: SVG text cut by its own canvas (a value label past the end of a chart, a dimension past a footprint box).
+   const svgClip=[];for(const sv of document.querySelectorAll('.page svg')){const b=sv.getBoundingClientRect();for(const t of sv.querySelectorAll('text')){const r=t.getBoundingClientRect();
+    if(r.width&&(r.right>b.right+.8||r.left<b.left-.8||r.bottom>b.bottom+.8||r.top<b.top-.8)){svgClip.push({page:sv.closest('.page').dataset.page,text:t.textContent.slice(0,30)});}}}
+   return {pages:pages.length,blockOverlaps,svgClipCount:svgClip.length,svgClip:svgClip.slice(0,8),spillCount:spill.length,spill:spill.slice(0,8),textOverlapCount:textOverlaps.length,textOverlaps:textOverlaps.slice(0,8),overflowCount:over.length,overflow:over.slice(0,12),tagOverlaps,fontsLoaded:[...document.fonts].filter(f=>f.status==='loaded').map(f=>`${f.family} ${f.weight} ${f.style}`)};});
   let lint=null;if(PROBE){const facts=await pg.evaluate(`(${PROBE})()`);lint={...judge(facts),fonts:facts.fonts,display:facts.display,body:facts.body};}
   await pg.emulateMedia({media:'print'});await pg.pdf({path:path.join(outDir,id+'.pdf'),preferCSSPageSize:true,printBackground:true});
   qa.docs[id]={...m,external:ext,errors,lint};await ctx.close();}
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
- for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
+ for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
  console.log('meta',JSON.stringify(meta));await browser.close();})().catch(e=>{console.error(e);process.exit(1);});
