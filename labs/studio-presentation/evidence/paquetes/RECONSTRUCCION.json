@@ -1,0 +1,28 @@
+{
+ "pdfs": 25,
+ "igualesAB": 25,
+ "igualesEmpaquetado": 25,
+ "distintos": [],
+ "qaProblemas": {
+  "a": 0,
+  "b": 0
+ },
+ "idiomas": {
+  "a": [
+   "es",
+   "en"
+  ],
+  "b": [
+   "es",
+   "en"
+  ]
+ },
+ "medios": {
+  "n": 20,
+  "iguales": 20
+ },
+ "snapshot": {
+  "a": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+  "b": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+ }
+}

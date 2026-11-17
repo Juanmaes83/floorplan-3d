@@ -41,3 +41,38 @@ Selección: `{"tipo","modo":"cliente|borrador","idioma":"es|en","base":{"proyect
 
 ## 4. Orden recomendado
 1) Cerrar Architecture Book (lint + revisión visual) y recomponer; reejecutar exportar-qa. 2) Concepto. 3) Inglés. 4) QA consumidor/visual/rendimiento. 5) Paquetes+receta+reconstrucción ×2. 6) Informes, registro vivo, cierre con GO/NO-GO graduado (sin autoaprobar). Commit y push tras cada paso.
+
+---
+## 5. Estado tras la sesión del 17/11/2026 (tarde). Leer esto primero.
+
+**HEAD de esta sección:** ver `git log -1` de la rama. Los commits de esta sesión, del más antiguo al más reciente:
+
+| Commit | Qué |
+|---|---|
+| `802c15e` | Architecture Book cerrado |
+| `b967d44` | Concepto |
+| `1ec6314` | Inglés |
+| `d4f2df3` | Render IA y perfiles de marca |
+| `4d94931` | Vista previa en `file://`, consumidor y paquetes |
+| `6731e2d` | Auditoría v1.4 |
+
+| Paso del §4 | Estado | Evidencia |
+|---|---|---|
+| 1 Architecture Book | HECHO. Lint 0. Sección con la banda de estancias a 3,2 mm, numerada si el nombre no cabe. Plantas por estancia sobre una línea base común. | `out/v3/architecture-book.pdf` |
+| 2 Concepto | HECHO. Texto del estudio atribuido y marcado `lang="es"`. Si no hay texto, no hay capítulo en ningún tipo (probado). | `out/v3/entrega/*.html` |
+| 3 Inglés | HECHO, con varias piezas. <br>• Diccionario: `i18n/en.exact.cjs`, `en.rules.cjs`, `es-words.cjs`. <br>• Traductor en el DOM antes de paginar: `tools/i18n.js`. Protege los nombres del proyecto mientras actúan las reglas. <br>• Gate: 0 palabras españolas fuera de los datos, CSS `content` incluido, y las mismas cifras decimales ES/EN. Si falla, no se publica en inglés y el español sale igual. <br>• Salidas: `*.en.pdf` (8), `*.en.html` (7), `entrega.json` → `idiomas`. <br>• Exportador con `idioma: en`: usa los `.en`, escribe `README.txt` y declara qué exporta el producto en español. | `evidence/i18n/gate-en.json` |
+| Editorial extra | HECHO. Ficha de trazabilidad de Render IA (PDF integral pág. 8 y web, capítulo «Procedencia»). Perfiles de marca: `tools/perfiles-marca.cjs` (4 perfiles, ES/EN, QA 0). Aviso de contraste del logotipo en «Preparar entrega». | `evidence/perfiles/` |
+| 4 QA | HECHO. <br>• `tools/consumidor-qa.cjs`: 14/14 paquetes, 7 tipos × ES/EN × 5 vistas (70). <br>• Carga p50 173–212 ms y p95 193–258 ms; exportación p50 8,0 s y p95 12,8 s. <br>• postMessage: el emisor ajeno se ignora y la página obedece. <br>• `exportar-qa` 72/72. `entrega-qa` 14 web × 3 vistas a cero. `preparar-qa` en escritorio y móvil. <br>• **Defecto corregido:** en `file://` la vista previa ignoraba al emisor legítimo, porque el origen es opaco tanto en el emisor como en el receptor. | `evidence/consumidor/consumidor-qa.json` |
+| 5 Paquetes y receta | HECHO. <br>• `tools/package.sh`: ZIP de cliente ES y EN exactos, verificados y sin añadidos; ZIP del laboratorio saneado (`SANEAMIENTO.json`), sin metadatos en los vídeos de evidencia y con fechas fijas. <br>• `RECETA.md` y `tools/reconstruir.sh` (dos composiciones desde el ZIP del laboratorio y comparación). | `dist/` (no versionado), `RECONSTRUCCION.json` |
+| 6 Informes | Hechos en esta sesión: <br>• `reports/13-REGISTRO-VIVO-v1.3.md`; <br>• `reports/14-AUDITORIA-MANDATO-v1.4.md`. <br>Falta actualizar 00, 07, 09, 10 y 11 con lo anterior y dar el GO/NO-GO graduado. | — |
+
+**Siguiente:** cerrar el paso 6 y empezar v1.4 según `mandatos/` y el plan de `reports/14` §5. N01 es lo primero.
+
+**Comandos nuevos:**
+
+```bash
+node tools/consumidor-qa.cjs <trabajo> evidence/consumidor [paquetes,rendimiento,postmessage]
+node tools/perfiles-marca.cjs <trabajo> evidence/perfiles
+bash tools/package.sh
+bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip <trabajo>
+```

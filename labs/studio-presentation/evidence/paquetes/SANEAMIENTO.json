@@ -1,0 +1,82 @@
+{
+ "regla": "Rutas absolutas del entorno sustituidas por marcadores en la COPIA empaquetada; el repositorio no cambia.",
+ "sustituciones": [
+  "<LABORATORIO>",
+  "<REPOSITORIO>",
+  "<REPOSITORIO-OTRA-SESION>",
+  "<HOME>",
+  "<HOME>",
+  "<TMP>",
+  "<TMP>",
+  "<NAVEGADORES>"
+ ],
+ "archivos": [
+  {
+   "archivo": "HANDOFF-v1.3.md",
+   "sustituciones": 3
+  },
+  {
+   "archivo": "HANDOFF.md",
+   "sustituciones": 2
+  },
+  {
+   "archivo": "PROMPT-CONTINUACION.md",
+   "sustituciones": 3
+  },
+  {
+   "archivo": "reports/12-MATRIZ-QA-v1.2.md",
+   "sustituciones": 1
+  },
+  {
+   "archivo": "reports/B1-DISENOS-POR-ENTREGABLE.md",
+   "sustituciones": 2
+  },
+  {
+   "archivo": "evidence/brand-identity/font-audit-Inter-Regular.json",
+   "sustituciones": 1
+  },
+  {
+   "archivo": "evidence/brand-identity/font-audit-source-serif-4-latin-400-normal.json",
+   "sustituciones": 1
+  }
+ ],
+ "videos": [
+  {
+   "archivo": "evidence/entrega/v1.2/recorrido-escritorio.webm",
+   "antes": "347074e8dd1034d49510f1284ee52d815cdf4b0e23ad603c5e8070f5f39e101b",
+   "despues": "4b9bc3f52ef34c458453a560695f884e1d2144970f484475c62ff3592e02a2a7",
+   "cambio": "sin metadatos de fecha (creation_time) ni etiquetas"
+  },
+  {
+   "archivo": "evidence/entrega/v1.2/recorrido-movil.webm",
+   "antes": "ca3c4c17b4f7ba348fc1d43e71810383ffd692b114f6190e725a39ae26617b9e",
+   "despues": "3b75f3a7dc174341103b297afeb4e04f26088142257838ba8634b578987e6b41",
+   "cambio": "sin metadatos de fecha (creation_time) ni etiquetas"
+  },
+  {
+   "archivo": "evidence/consumidor/recorrido-integral-en-1440x900.webm",
+   "antes": "f2b98e3e641de97a6174cfba4f7012f994d4e6242eb08f73f90920a3936864f5",
+   "despues": "96bc0f4cd16c6c1d6462082b46fa7dba956a746e3a806c88daa82be29c1f2980",
+   "cambio": "sin metadatos de fecha (creation_time) ni etiquetas"
+  },
+  {
+   "archivo": "evidence/consumidor/recorrido-integral-en-320x640.webm",
+   "antes": "fa1f742df3f488ae4b2135034c095fbe38d874a43fbc3541c673f7a56b7766a0",
+   "despues": "4e1b92608225a6078fefd52d7803be63760f1a8c7b40ed4ed9a40b7ab7cbd65e",
+   "cambio": "sin metadatos de fecha (creation_time) ni etiquetas"
+  },
+  {
+   "archivo": "evidence/consumidor/recorrido-integral-es-1440x900.webm",
+   "antes": "db963776f241c06c22f051da0425ee6f878de75367c49cc9478091b6f3fb17b5",
+   "despues": "b23ccf94d1898e5e329ba96cc0c6918ed591fdec533ff3cd5bb628dd1a22941b",
+   "cambio": "sin metadatos de fecha (creation_time) ni etiquetas"
+  },
+  {
+   "archivo": "evidence/consumidor/recorrido-integral-es-320x640.webm",
+   "antes": "19be513f74a60e99240eff3ec4328887863fb12f621be0e35ce8b84096e9624a",
+   "despues": "2e1e7b4c37966036acef939879c8f652e0ed9b878ddd327cc8a272f37fa24f2a",
+   "cambio": "sin metadatos de fecha (creation_time) ni etiquetas"
+  }
+ ],
+ "intactos": "out/v3/entrega/** (su registro de huellas debe seguir valiendo)"
+}

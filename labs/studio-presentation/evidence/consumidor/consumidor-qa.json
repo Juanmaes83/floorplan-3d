@@ -1,12 +1,2786 @@
 {
- "generated": "2026-11-17T18:38:35.285Z",
+ "generated": "2026-11-17T18:40:13.732Z",
  "navegadores": {
   "chromium": "Playwright 1.63 (instalado)",
   "firefox": "no instalado (prohibido instalar navegadores en este entorno): pendiente en dispositivos reales",
   "webkit": "ídem"
  },
- "paquetes": [],
- "rendimiento": [],
+ "paquetes": [
+  {
+   "paquete": "integral-es",
+   "tipo": "integral",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 11182,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 31,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "integral-en",
+   "tipo": "integral",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 12647,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 18,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      },
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 3
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 31,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "primera-reunion-es",
+   "tipo": "primera-reunion",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 6232,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 12,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 0
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 12,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 0
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 1
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 12,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 0
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 1
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 13,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "primera-reunion-en",
+   "tipo": "primera-reunion",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 5827,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 12,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 0
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 12,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 0
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 1
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 12,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 0
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 10,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 1
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 13,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "propuesta-comercial-es",
+   "tipo": "propuesta-comercial",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 7818,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 2
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 2
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 2
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 12,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "propuesta-comercial-en",
+   "tipo": "propuesta-comercial",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 9926,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 2
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 2
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 2
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 12,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "dossier-tecnico-es",
+   "tipo": "dossier-tecnico",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 7978,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 14,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "dossier-tecnico-en",
+   "tipo": "dossier-tecnico",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 9863,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 4
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 7,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 14,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "interiorismo-es",
+   "tipo": "interiorismo",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 6054,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 20,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "interiorismo-en",
+   "tipo": "interiorismo",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 5838,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 14,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 14,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 20,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "inmobiliaria-es",
+   "tipo": "inmobiliaria",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 5984,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 5
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 5
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 5
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Vídeo del recorrido por la vivienda"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 17,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "inmobiliaria-en",
+   "tipo": "inmobiliaria",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 5964,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 5
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 5
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 5
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 11,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 56,
+       "label": "Video of the walk through the home"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 6
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 17,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "obra-es",
+   "tipo": "obra",
+   "idioma": "es",
+   "exportado": true,
+   "exportMs": 12050,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 7
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 7
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 8
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 7
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Vídeo de la evolución de la obra"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "es",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 8
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 11,
+   "leeme": true,
+   "ok": true
+  },
+  {
+   "paquete": "obra-en",
+   "tipo": "obra",
+   "idioma": "en",
+   "exportado": true,
+   "exportMs": 12809,
+   "vistas": [
+    {
+     "vista": "1440x900",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 7
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "820x1180",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 7
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "390x844",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 8
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "844x390",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 7
+     },
+     "externas": 0,
+     "errores": []
+    },
+    {
+     "vista": "320x640",
+     "imagenes": 5,
+     "rotas": 0,
+     "sinAlt": 0,
+     "videos": [
+      {
+       "reproduce": true,
+       "dur": 24,
+       "label": "Video of the works evolution"
+      }
+     ],
+     "desbordeX": 0,
+     "lang": "en",
+     "langOk": true,
+     "contrasteBajo": [],
+     "contrasteBajoN": 0,
+     "textoBajo12": [],
+     "textoBajo12N": 0,
+     "landmarks": {
+      "header": 1,
+      "nav": 1,
+      "main": 1,
+      "footer": 1,
+      "h1": 1,
+      "saltosDeTitulo": 0
+     },
+     "scripts": 0,
+     "restosEspanol": 0,
+     "restosMuestra": [],
+     "foco": {
+      "recorridos": 13,
+      "sinFocoVisible": 0,
+      "fueraDePantalla": 8
+     },
+     "externas": 0,
+     "errores": []
+    }
+   ],
+   "zipValido": true,
+   "archivos": 11,
+   "leeme": true,
+   "ok": true
+  }
+ ],
+ "rendimiento": [
+  {
+   "idioma": "es",
+   "vista": "1440x900",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 173,
+    "p95": 193
+   },
+   "primeraPinturaMs": {
+    "p50": 128,
+    "p95": 144
+   }
+  },
+  {
+   "idioma": "es",
+   "vista": "820x1180",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 176,
+    "p95": 214
+   },
+   "primeraPinturaMs": {
+    "p50": 140,
+    "p95": 160
+   }
+  },
+  {
+   "idioma": "es",
+   "vista": "390x844",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 183,
+    "p95": 225
+   },
+   "primeraPinturaMs": {
+    "p50": 136,
+    "p95": 160
+   }
+  },
+  {
+   "idioma": "es",
+   "vista": "844x390",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 193,
+    "p95": 227
+   },
+   "primeraPinturaMs": {
+    "p50": 132,
+    "p95": 148
+   }
+  },
+  {
+   "idioma": "es",
+   "vista": "320x640",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 187,
+    "p95": 222
+   },
+   "primeraPinturaMs": {
+    "p50": 136,
+    "p95": 160
+   }
+  },
+  {
+   "idioma": "en",
+   "vista": "1440x900",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 212,
+    "p95": 258
+   },
+   "primeraPinturaMs": {
+    "p50": 160,
+    "p95": 192
+   }
+  },
+  {
+   "idioma": "en",
+   "vista": "820x1180",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 198,
+    "p95": 226
+   },
+   "primeraPinturaMs": {
+    "p50": 152,
+    "p95": 172
+   }
+  },
+  {
+   "idioma": "en",
+   "vista": "390x844",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 192,
+    "p95": 217
+   },
+   "primeraPinturaMs": {
+    "p50": 152,
+    "p95": 176
+   }
+  },
+  {
+   "idioma": "en",
+   "vista": "844x390",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 177,
+    "p95": 199
+   },
+   "primeraPinturaMs": {
+    "p50": 128,
+    "p95": 156
+   }
+  },
+  {
+   "idioma": "en",
+   "vista": "320x640",
+   "repeticiones": 10,
+   "cargaMs": {
+    "p50": 191,
+    "p95": 200
+   },
+   "primeraPinturaMs": {
+    "p50": 136,
+    "p95": 148
+   }
+  }
+ ],
  "postMessage": {
   "antes": 11,
   "trasEmisorAjeno": 11,
@@ -15,15 +2789,30 @@
   "paginaObedecida": true
  },
  "rendimientoExportacion": {
-  "repeticiones": 0
+  "repeticiones": 14,
+  "p50": 7978,
+  "p95": 12809
  },
  "resumen": {
-  "paquetes": 0,
-  "correctos": 0,
-  "vistas": 0,
-  "rendimiento": [],
+  "paquetes": 14,
+  "correctos": 14,
+  "vistas": 70,
+  "rendimiento": [
+   "es 1440x900: carga p50 173 ms, p95 193 ms",
+   "es 820x1180: carga p50 176 ms, p95 214 ms",
+   "es 390x844: carga p50 183 ms, p95 225 ms",
+   "es 844x390: carga p50 193 ms, p95 227 ms",
+   "es 320x640: carga p50 187 ms, p95 222 ms",
+   "en 1440x900: carga p50 212 ms, p95 258 ms",
+   "en 820x1180: carga p50 198 ms, p95 226 ms",
+   "en 390x844: carga p50 192 ms, p95 217 ms",
+   "en 844x390: carga p50 177 ms, p95 199 ms",
+   "en 320x640: carga p50 191 ms, p95 200 ms"
+  ],
   "exportacion": {
-   "repeticiones": 0
+   "repeticiones": 14,
+   "p50": 7978,
+   "p95": 12809
   }
  }
 }
