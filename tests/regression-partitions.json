@@ -15,7 +15,9 @@
   "presentation-a": [
    "tests/building-presentation.browser.test.cjs",
    "tests/presentation-axon.browser.test.cjs",
-   "tests/presentation-batch.browser.test.cjs",
+   "tests/presentation-batch.browser.test.cjs"
+  ],
+  "presentation-e": [
    "tests/presentation-contact.browser.test.cjs",
    "tests/presentation-framing.browser.test.cjs",
    "tests/presentation-overview.browser.test.cjs"
