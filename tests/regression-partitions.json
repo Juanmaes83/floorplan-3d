@@ -8,25 +8,31 @@
   "tests/client-review.browser.test.cjs",
   "tests/variants.browser.test.cjs",
   "tests/building.browser.test.cjs",
-    "tests/evolution-demo.browser.test.cjs",
-    "tests/home-demos.browser.test.cjs"
+  "tests/evolution-demo.browser.test.cjs",
+  "tests/home-demos.browser.test.cjs"
  ],
  "historical": {
   "presentation-a": [
    "tests/building-presentation.browser.test.cjs",
    "tests/presentation-axon.browser.test.cjs",
-   "tests/presentation-batch.browser.test.cjs",
+   "tests/presentation-batch.browser.test.cjs"
+  ],
+  "presentation-e": [
    "tests/presentation-contact.browser.test.cjs",
    "tests/presentation-framing.browser.test.cjs",
-   "tests/presentation-light.browser.test.cjs"
+   "tests/presentation-overview.browser.test.cjs"
   ],
   "presentation-b": [
+   "tests/presentation-light.browser.test.cjs",
    "tests/presentation-minimap.browser.test.cjs",
-   "tests/presentation-overview.browser.test.cjs",
    "tests/presentation-reveal.browser.test.cjs",
-   "tests/presentation-route.browser.test.cjs",
+   "tests/presentation-route.browser.test.cjs"
+  ],
+  "presentation-c": [
    "tests/presentation-section.browser.test.cjs",
-   "tests/presentation-visit.browser.test.cjs",
+   "tests/presentation-visit.browser.test.cjs"
+  ],
+  "presentation-d": [
    "tests/presentation.browser.test.cjs"
   ],
   "editor": [
@@ -47,7 +53,9 @@
    "tests/material-detail.browser.test.cjs",
    "tests/mirror-pilot.browser.test.cjs",
    "tests/panel-pattern.browser.test.cjs",
-   "tests/premium-shell.browser.test.cjs",
+   "tests/premium-shell.browser.test.cjs"
+  ],
+  "details": [
    "tests/procedural-details.browser.test.cjs",
    "tests/render-budget.browser.test.cjs",
    "tests/share-image.browser.test.cjs",

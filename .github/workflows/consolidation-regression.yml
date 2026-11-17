@@ -69,6 +69,11 @@ jobs:
       fail-fast: false
       matrix:
         shard: ${{ fromJSON(needs.guard.outputs.shards) }}
+    env:
+      # No GPU on the runner: the 3D view is drawn by SwiftShader on the CPU, so — as in presentation-ux-stability.yml —
+      # every time budget, never an assertion, is multiplied by 3 (tests/helpers/render-budget.cjs). The per-file cap (1100 s × scale = 55 min, under the 60-min job limit; presentation.browser.test.cjs needs ~43–45 min)
+      # scales with it. Owner approval for this workflow change: 17/11/2026.
+      RENDER_TIME_SCALE: '3'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -87,7 +92,7 @@ jobs:
         run: |
           mkdir -p qa-results/historical; status=0
           for f in $(node scripts/qa/check-browser-test-coverage.cjs --list "${{ matrix.shard }}"); do
-            if timeout 900 node --test --test-concurrency=1 "$f" > "qa-results/historical/$(basename "$f").tap" 2>&1; then r=ok; else r=RED; status=1; fi
+            if timeout $((1100*RENDER_TIME_SCALE)) node --test --test-concurrency=1 "$f" > "qa-results/historical/$(basename "$f").tap" 2>&1; then r=ok; else r=RED; status=1; fi
             echo "$r $f $(grep -E '^# (pass|fail)' "qa-results/historical/$(basename "$f").tap" | tr '\n' ' ')" | tee -a qa-results/historical/summary-${{ matrix.shard }}.txt
           done
           exit $status
