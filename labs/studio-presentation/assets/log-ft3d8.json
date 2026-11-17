@@ -1,0 +1,248 @@
+{
+ "generated": "2026-11-17T14:43:34.772Z",
+ "url": "local",
+ "items": [
+  {
+   "file": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+   "bytes": 3526585,
+   "sha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+   "kind": "video",
+   "producer": "RUBIK · Evolución de obra (FT3D-8) · Entrega · Generar vídeo",
+   "declaredSha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+   "matchesDeclared": true,
+   "width": 1280,
+   "height": 720,
+   "durationMs": 24000
+  },
+  {
+   "file": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.html",
+   "bytes": 4712149,
+   "sha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+   "kind": "client-presentation",
+   "producer": "RUBIK · Evolución de obra (FT3D-8) · Entrega · presentación de solo lectura"
+  },
+  {
+   "file": "assets/ft3d8/entrega-dlv_f4567d79bd21c1fc.json",
+   "bytes": 5787,
+   "sha256": "4f6345f04f6fe3a613014fcc95d1069a35b1ede98fcf663de97447ea144e44f0",
+   "kind": "manifest",
+   "producer": "RUBIK · Evolución de obra (FT3D-8) · Entrega · manifiesto"
+  }
+ ],
+ "ft3d8": {
+  "path": "biblioteca → Plan de obra (importar plan de la demo) → Evolución (?source=library) → Entrega",
+  "importMsg": null,
+  "ident": {
+   "entryId": "prj_98881695c3254f17a83e052a8fd3f6f1",
+   "subject": {
+    "entryId": "prj_98881695c3254f17a83e052a8fd3f6f1",
+    "type": "project",
+    "id": "prj_reference-home",
+    "name": "Proyecto de ejemplo",
+    "activeLevelId": null,
+    "levels": [
+     {
+      "id": null,
+      "name": null,
+      "order": 0,
+      "projectId": "prj_reference-home"
+     }
+    ]
+   },
+   "revision": "2f755be470b38048b197d07e285d057de9758a9900bbd27ef92f985e12303448",
+   "scheduleId": "sch_demo-obra",
+   "projectRevisionRubik": "rv1-0f3e96422fd20e08"
+  },
+  "frame": {
+   "mode": "library",
+   "entry": {
+    "id": "prj_98881695c3254f17a83e052a8fd3f6f1",
+    "name": "Proyecto de ejemplo",
+    "activeLevelId": null
+   },
+   "subject": {
+    "entryId": "prj_98881695c3254f17a83e052a8fd3f6f1",
+    "type": "project",
+    "id": "prj_reference-home",
+    "name": "Proyecto de ejemplo",
+    "activeLevelId": null,
+    "levels": [
+     {
+      "id": null,
+      "name": null,
+      "order": 0,
+      "projectId": "prj_reference-home"
+     }
+    ]
+   },
+   "brand": "dossier",
+   "planning": "available"
+  },
+  "errors": [],
+  "manifest": {
+   "schema": "rubik-sota.construction-delivery",
+   "schemaVersion": "0.2.0",
+   "generatedAt": "2026-11-17T14:44:55.351Z",
+   "title": "La obra de tu vivienda, paso a paso",
+   "intro": "Cómo se construiría la vivienda de ejemplo, fase a fase. Fechas de ejemplo.",
+   "project": {
+    "type": "project",
+    "id": "prj_reference-home",
+    "name": "Proyecto de ejemplo",
+    "updatedAt": "2026-09-30T00:00:00Z",
+    "fingerprint": "2f755be470b38048b197d07e285d057de9758a9900bbd27ef92f985e12303448"
+   },
+   "plan": {
+    "id": "sch_demo-obra",
+    "fingerprint": "88779bf4e56962b219d4b4bdc52ab5b84e2eb4f951b488a3bd6dab1c37ccc9d8",
+    "evidence": "plan-estimated",
+    "startDate": "2027-03-01",
+    "endDate": "2027-07-09",
+    "phases": [
+     {
+      "id": "implantacion",
+      "wbs": "01",
+      "title": "Implantación de la obra: vallado y caseta",
+      "startDate": "2027-03-01",
+      "endDate": "2027-03-05"
+     },
+     {
+      "id": "cimentacion",
+      "wbs": "02",
+      "title": "Cimentación (no se dibuja: RUBIK no la modela)",
+      "startDate": "2027-03-08",
+      "endDate": "2027-03-19"
+     },
+     {
+      "id": "estructura",
+      "wbs": "03",
+      "title": "Estructura y muros de fachada",
+      "startDate": "2027-03-22",
+      "endDate": "2027-04-16"
+     },
+     {
+      "id": "cubierta",
+      "wbs": "04",
+      "title": "Cubierta (no se dibuja: este ejemplo no tiene envolvente superior derivable)",
+      "startDate": "2027-04-19",
+      "endDate": "2027-04-30"
+     },
+     {
+      "id": "tabiqueria",
+      "wbs": "05",
+      "title": "Tabiquería interior",
+      "startDate": "2027-04-12",
+      "endDate": "2027-05-07"
+     },
+     {
+      "id": "carpinteria",
+      "wbs": "06",
+      "title": "Puertas y ventanas",
+      "startDate": "2027-05-10",
+      "endDate": "2027-05-28"
+     },
+     {
+      "id": "instalaciones",
+      "wbs": "07",
+      "title": "Instalaciones (no se dibujan: RUBIK no las modela)",
+      "startDate": "2027-05-10",
+      "endDate": "2027-06-04"
+     },
+     {
+      "id": "acabados",
+      "wbs": "08",
+      "title": "Revestimientos y pintura",
+      "startDate": "2027-06-07",
+      "endDate": "2027-06-25"
+     },
+     {
+      "id": "pavimentos",
+      "wbs": "09",
+      "title": "Pavimentos",
+      "startDate": "2027-06-14",
+      "endDate": "2027-07-02"
+     },
+     {
+      "id": "retirada",
+      "wbs": "10",
+      "title": "Retirada del andamio, la caseta y el vallado",
+      "startDate": "2027-07-05",
+      "endDate": "2027-07-09"
+     }
+    ]
+   },
+   "budget": {
+    "id": "bud_prj_reference-home",
+    "fingerprint": "504096dd67c48dc8b1bcdb74013d27057ec7144e7e0f2fc8f6b916bac331993b",
+    "revisionCheck": "unverifiable"
+   },
+   "binding": null,
+   "delivery": {
+    "level": "orientative",
+    "label": "Presentación orientativa (plan sin revisión declarada o incompleto)",
+    "approval": "sin vinculo",
+    "scopeNotice": "Alcance parcial: RUBIK no modela foundation, excavation, structural-frame, pitched-roof-covering, wall-layers, site-temporary-works; esas partes no se representan ni se presupuestan aqui"
+   },
+   "costs": {
+    "mode": "none",
+    "allowed": true,
+    "summary": null,
+    "rows": [],
+    "warnings": [],
+    "reasons": []
+   },
+   "brand": {
+    "present": true,
+    "name": "Estudio Ejemplo",
+    "tagline": "Arquitectura e interiorismo",
+    "logo": null,
+    "contact": "",
+    "fields": [],
+    "credit": "Preparado por Estudio Ejemplo con Rubik Sota",
+    "takenAt": "2026-11-17T14:43:38.930Z",
+    "fingerprint": "2ca1a1e53bbe0fa944e9c5f661833f219adf12e2b5bf1651ebbe89626a4532ba"
+   },
+   "warnings": [
+    "Simulación planificada e ilustrativa de la evolución de obra: no muestra obra ejecutada ni certificada",
+    "Alcance parcial: RUBIK no modela foundation, excavation, structural-frame, pitched-roof-covering, wall-layers, site-temporary-works; esas partes no se representan ni se presupuestan aqui",
+    "Aprobacion: sin vinculo",
+    "element-unscheduled: project/rom_master (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_mbath (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_kid (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_gbath (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_laundry (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_child (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_kitchen (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_dining (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_hall (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_living (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_balcony (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_bay1 (floor) no tiene tarea que lo construya: se muestra como pendiente",
+    "element-unscheduled: project/rom_bay2 (floor) no tiene tarea que lo construya: se muestra como pendiente"
+   ],
+   "dossier": {
+    "id": "dos_5ee6496e4c6a50ed",
+    "fingerprint": "4d5f1b8ebc399a7d6a5fc48b945deadab107c541cc286db3e88600ca28d86800",
+    "integrity": "not-packaged",
+    "route": "local-documents",
+    "budgetScope": "project",
+    "budgetIds": [
+     "bud_prj_reference-home"
+    ]
+   },
+   "territory": null,
+   "video": {
+    "filename": "",
+    "type": "video/mp4",
+    "bytes": 3526585,
+    "width": 1280,
+    "height": 720,
+    "durationMs": 24000,
+    "sha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980"
+   },
+   "id": "dlv_f4567d79bd21c1fc",
+   "fingerprint": "f4567d79bd21c1fc43019619639632e60c8fbb5f93884a246c4c82255a300ff1"
+  }
+ },
+ "blocked": []
+}

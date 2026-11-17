@@ -1,5 +1,5 @@
 {
- "source": "Datos de ejemplo de RUBIK: vivienda de ejemplo como obra nueva, fechas ilustrativas, sin presupuesto. No es un proyecto de cliente.",
+ "source": "Datos de ejemplo de RUBIK: vivienda de ejemplo como obra nueva, fechas ilustrativas, sin presupuesto. No es un proyecto de cliente. Ajuste del laboratorio: sin los vínculos estructura/obra a muros, que en el proyecto guardado son existentes (reglas de FT3D-8).",
  "projectId": "prj_reference-home",
  "scheduleId": "sch_demo-obra",
  "projectRef": {
@@ -37,7 +37,7 @@
    "dependsOn": [
     "cimentacion"
    ],
-   "elements": 46
+   "elements": 1
   },
   {
    "id": "cubierta",
@@ -127,5 +127,6 @@
    ],
    "elements": 3
   }
- ]
+ ],
+ "adjusted": "assets/ft3d8-plan-ajuste.json"
 }

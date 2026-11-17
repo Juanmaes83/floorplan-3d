@@ -24,12 +24,23 @@ const TYPES={js:'text/javascript',mjs:'text/javascript',css:'text/css',json:'app
   const before=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));
   let clickErr=null;try{await c.locator('#deliveryMapToggle').click({timeout:8000});}catch(e){clickErr=e.message.split('\n').slice(0,6).join(' | ');}
   const afterClick=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));step('mouse/touch toggle',{before,afterClick,changed:before!==afterClick,clickErr});
+  step('frames per second',await c.evaluate(()=>new Promise(r=>{let n=0;const t0=performance.now();const f=()=>{n++;if(performance.now()-t0<3000)requestAnimationFrame(f);else r(+(n/((performance.now()-t0)/1000)).toFixed(2));};requestAnimationFrame(f);})));
+  {const b=await c.locator('#deliveryMapToggle').boundingBox();const before2=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));
+   if(vp.mobile)await c.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);else await c.mouse.click(b.x+b.width/2,b.y+b.height/2);await c.waitForTimeout(800);
+   const after2=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));step('pointer at coordinates toggle',{before:before2,after:after2,changed:before2!==after2});
+   if(after2!==before2)await c.evaluate(()=>document.getElementById('deliveryMapToggle').click());}
+  if(!vp.mobile){const st=await c.evaluate(()=>({locked:document.pointerLockElement?.tagName||null,hint:(document.getElementById('hint3d')?.textContent||'').trim(),overlay:getComputedStyle(document.getElementById('walkOverlay')).display}));step('desktop pointer lock',st);
+   await c.keyboard.press('Escape');await c.waitForTimeout(800);const st2=await c.evaluate(()=>({locked:document.pointerLockElement?.tagName||null,overlay:getComputedStyle(document.getElementById('walkOverlay')).display,overlayText:(document.getElementById('walkOverlay')?.innerText||'').trim().slice(0,160)}));step('after Escape',st2);
+   const b=await c.locator('#deliveryMapToggle').boundingBox();const be=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));await c.mouse.click(b.x+b.width/2,b.y+b.height/2);await c.waitForTimeout(800);
+   const af=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));step('mouse toggle after Escape',{before:be,after:af,changed:be!==af});if(af!==be)await c.mouse.click(b.x+b.width/2,b.y+b.height/2);await c.waitForTimeout(500);
+   await c.screenshot({path:path.join(out,'minimapa-escritorio-tras-esc.png')});}
   await c.locator('#deliveryMapToggle').focus();await c.keyboard.press('Enter');const afterKey=await c.evaluate(()=>document.getElementById('deliveryMapToggle').getAttribute('aria-expanded'));step('keyboard toggle',{afterKey,changed:afterKey!==afterClick});
   if(await c.evaluate(()=>document.getElementById('deliveryMapPanel').hidden)){await c.evaluate(()=>document.getElementById('deliveryMapToggle').click());}
   await c.screenshot({path:path.join(out,`minimapa-${vp.name}-abierto.png`)});
   const target=await c.evaluate(()=>{const here=View3D.walkPose?.()?.roomId;const polys=[...document.querySelectorAll('#deliveryMapPanel polygon[data-room-id]')];const p=polys.find(x=>x.dataset.roomId!==here&&/kitchen|living|master/.test(x.dataset.roomId))||polys.find(x=>x.dataset.roomId!==here);return p&&{id:p.dataset.roomId,here};});
   step('room hit-test',await hit(`#deliveryMapPanel polygon[data-room-id="${target.id}"]`));
-  let roomErr=null;try{await c.locator(`#deliveryMapPanel polygon[data-room-id="${target.id}"]`).click({timeout:8000});}catch(e){roomErr=e.message.split('\n').slice(0,4).join(' | ');}
-  await c.waitForTimeout(3500);const pose=await c.evaluate(()=>({room:View3D.walkPose?.()?.roomId,here:document.getElementById('deliveryMapHere').textContent}));step('room click',{target,pose,moved:pose.room===target.id,roomErr});
+  if(!vp.mobile){if(await c.evaluate(()=>!!document.pointerLockElement)){await c.keyboard.press('Escape');await c.waitForTimeout(600);}}
+  let roomErr=null;{const pb=await c.locator(`#deliveryMapPanel polygon[data-room-id="${target.id}"]`).boundingBox();if(vp.mobile)await c.touchscreen.tap(pb.x+pb.width/2,pb.y+pb.height/2);else await c.mouse.click(pb.x+pb.width/2,pb.y+pb.height/2);}
+  await c.waitForTimeout(3500);const pose=await c.evaluate(()=>({here:document.getElementById('deliveryMapHere').textContent,active:document.querySelector('#deliveryMapPanel polygon[aria-current=true]')?.dataset.roomId||null}));step('room click (pointer at coordinates)',{target,pose,moved:pose.active===target.id||new RegExp('Dormitorio principal').test(pose.here),roomErr});
   await c.screenshot({path:path.join(out,`minimapa-${vp.name}-tras-ir.png`)});report.runs.push(run);await ctx.close();}
  await fs.writeFile(path.join(out,'minimap-probe.json'),JSON.stringify(report,null,1));await browser.close();server.close();})().catch(e=>{console.error(e);process.exit(1);});

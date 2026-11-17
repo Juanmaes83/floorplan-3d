@@ -1,0 +1,11 @@
+{
+ "motivo": "El producto bloquea la entrega: rol structure incompatible con muro existente (role-status-mismatch). En la demo los muros son obra nueva; en el proyecto guardado son existentes.",
+ "quitado": 45,
+ "porTarea": {
+  "estructura": 45
+ },
+ "roles": [
+  "structure"
+ ],
+ "sinCambios": "tareas, fechas, dependencias y el resto de vínculos"
+}

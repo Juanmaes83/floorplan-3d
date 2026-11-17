@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-registro-entrega/0.1",
- "registradoEn": "2026-11-17T14:35:59.337Z",
+ "registradoEn": "2026-11-17T14:40:21.914Z",
  "tipo": "obra",
  "tipoNombre": "Explicación de la obra",
  "proyecto": {
@@ -110,7 +110,7 @@
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "9eeeda52023ef61572cc3a7eff7e5ee502f11cfe0360d7b34c4de14ee31db4d0"
+   "sha256": "1a970bdfe6a80717467cc3e3a34c81aeafb37d9d16b466b569eb639e87563ac9"
   }
  ],
  "nota": "Registro local del laboratorio: no se ha enviado ni publicado nada."

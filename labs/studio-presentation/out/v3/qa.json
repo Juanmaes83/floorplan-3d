@@ -48,8 +48,8 @@
    ],
    "drawing": true,
    "tour": true,
-   "obra": false,
-   "ftDoc": false,
+   "obra": true,
+   "ftDoc": true,
    "tasks": 10
   }
  },
@@ -623,8 +623,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 6659,
-     "RUBIK Serif": 867
+     "RUBIK Inter": 6669,
+     "RUBIK Serif": 856
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"

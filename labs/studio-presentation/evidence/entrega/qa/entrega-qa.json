@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T14:33:31.486Z",
+ "generated": "2026-11-17T14:45:31.736Z",
  "runs": [
   {
    "file": "index.html",
@@ -12,6 +12,12 @@
    "brokenImgs": [],
    "vids": [
     {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    },
+    {
      "src": "media/recorrido.mp4",
      "ready": 4,
      "dur": 56,
@@ -37,7 +43,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 12098,
+   "H": 12501,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -53,46 +59,11 @@
    "brokenImgs": [],
    "vids": [
     {
-     "src": "media/recorrido.mp4",
+     "src": "media/obra.mp4",
      "ready": 4,
-     "dur": 56,
+     "dur": 24,
      "w": 1280
-    }
-   ],
-   "small": [],
-   "smallCount": 0,
-   "svgSmall": [],
-   "svgSmallCount": 0,
-   "overlaps": [],
-   "overlapCount": 0,
-   "sections": [
-    "portada",
-    "vivienda",
-    "dibujo",
-    "estancias",
-    "materiales",
-    "presupuesto",
-    "obra",
-    "recorrido",
-    "decisiones",
-    "documentos",
-    "procedencia"
-   ],
-   "H": 15736,
-   "brokenLinks": [],
-   "external": [],
-   "errors": []
-  },
-  {
-   "file": "index.html",
-   "viewport": "movil",
-   "scrollW": 390,
-   "W": 390,
-   "pageOverflow": false,
-   "over": [],
-   "overCount": 0,
-   "brokenImgs": [],
-   "vids": [
+    },
     {
      "src": "media/recorrido.mp4",
      "ready": 4,
@@ -119,7 +90,54 @@
     "documentos",
     "procedencia"
    ],
-   "H": 17132,
+   "H": 16667,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "index.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 17217,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -148,7 +166,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 5588,
+   "H": 5591,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -177,7 +195,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 6475,
+   "H": 6481,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -206,7 +224,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 7348,
+   "H": 7029,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -278,7 +296,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 8673,
+   "H": 8656,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -314,7 +332,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 8927,
+   "H": 8873,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -390,7 +408,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 11438,
+   "H": 11425,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -428,7 +446,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 11874,
+   "H": 11824,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -442,7 +460,14 @@
    "over": [],
    "overCount": 0,
    "brokenImgs": [],
-   "vids": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    }
+   ],
    "small": [],
    "smallCount": 0,
    "svgSmall": [],
@@ -457,7 +482,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 5751,
+   "H": 6151,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -471,7 +496,14 @@
    "over": [],
    "overCount": 0,
    "brokenImgs": [],
-   "vids": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    }
+   ],
    "small": [],
    "smallCount": 0,
    "svgSmall": [],
@@ -486,7 +518,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 6392,
+   "H": 7333,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -500,7 +532,14 @@
    "over": [],
    "overCount": 0,
    "brokenImgs": [],
-   "vids": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    }
+   ],
    "small": [],
    "smallCount": 0,
    "svgSmall": [],
@@ -515,7 +554,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 7464,
+   "H": 7965,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -573,7 +612,7 @@
     "decisiones",
     "procedencia"
    ],
-   "H": 10345,
+   "H": 10325,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -602,7 +641,7 @@
     "decisiones",
     "procedencia"
    ],
-   "H": 10914,
+   "H": 10858,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -633,7 +672,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 9345,
+   "H": 9348,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -664,7 +703,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 11477,
+   "H": 11464,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -695,7 +734,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 13340,
+   "H": 12942,
    "brokenLinks": [],
    "external": [],
    "errors": []

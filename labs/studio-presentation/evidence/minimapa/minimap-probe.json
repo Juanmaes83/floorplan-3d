@@ -1,0 +1,227 @@
+{
+ "generated": "2026-11-17T14:49:16.066Z",
+ "runs": [
+  {
+   "viewport": "escritorio",
+   "steps": [
+    {
+     "k": "toggle hit-test",
+     "v": {
+      "box": [
+       192,
+       73,
+       111,
+       40
+      ],
+      "receiver": [
+       "#deliveryMapToggle",
+       "div.delivery-map-head",
+       "#deliveryMap",
+       "#stage"
+      ],
+      "own": true
+     }
+    },
+    {
+     "k": "map styles",
+     "v": {
+      "map": {
+       "position": "absolute",
+       "zIndex": "20",
+       "pointerEvents": "auto",
+       "parent": "stage"
+      },
+      "canvas": {
+       "position": "static",
+       "zIndex": "auto",
+       "parent": "view3d"
+      }
+     }
+    },
+    {
+     "k": "mouse/touch toggle",
+     "v": {
+      "before": "true",
+      "afterClick": "true",
+      "changed": false,
+      "clickErr": "locator.click: Timeout 8000ms exceeded. | Call log: | \u001b[2m  - waiting for locator('#deliveryMapToggle')\u001b[22m | \u001b[2m    - locator resolved to <button type=\"button\" aria-expanded=\"true\" id=\"deliveryMapToggle\" class=\"btn delivery-map-toggle\" aria-controls=\"deliveryMapPanel\">Ocultar plano</button>\u001b[22m | \u001b[2m  - attempting click action\u001b[22m | \u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m"
+     }
+    },
+    {
+     "k": "frames per second",
+     "v": 4.07
+    },
+    {
+     "k": "pointer at coordinates toggle",
+     "v": {
+      "before": "true",
+      "after": "true",
+      "changed": false
+     }
+    },
+    {
+     "k": "desktop pointer lock",
+     "v": {
+      "locked": "BODY",
+      "hint": "WASD para moverse · ratón para mirar · Mayús para correr · E abre o cierra una puerta · Esc para pausar",
+      "overlay": "none"
+     }
+    },
+    {
+     "k": "after Escape",
+     "v": {
+      "locked": null,
+      "overlay": "flex",
+      "overlayText": "Recorre la vivienda\n\nVisita libre a la altura de los ojos, desde la entrada. No cambia nada del proyecto.\n\nW A S D moverse · ratón mirar · Mayús correr\n\nE abre "
+     }
+    },
+    {
+     "k": "mouse toggle after Escape",
+     "v": {
+      "before": "true",
+      "after": "false",
+      "changed": true
+     }
+    },
+    {
+     "k": "keyboard toggle",
+     "v": {
+      "afterKey": "false",
+      "changed": true
+     }
+    },
+    {
+     "k": "room hit-test",
+     "v": {
+      "box": [
+       174,
+       137,
+       64,
+       59
+      ],
+      "receiver": [
+       "polygon.presentation-minimap-room",
+       "svg",
+       "#deliveryMapPanel",
+       "#deliveryMap"
+      ],
+      "own": true
+     }
+    },
+    {
+     "k": "room click (pointer at coordinates)",
+     "v": {
+      "target": {
+       "id": "rom_master"
+      },
+      "pose": {
+       "here": "Dormitorio principal",
+       "active": null
+      },
+      "moved": true,
+      "roomErr": null
+     }
+    }
+   ]
+  },
+  {
+   "viewport": "movil",
+   "steps": [
+    {
+     "k": "toggle hit-test",
+     "v": {
+      "box": [
+       92,
+       73,
+       111,
+       40
+      ],
+      "receiver": [
+       "#deliveryMapToggle",
+       "div.delivery-map-head",
+       "#deliveryMap",
+       "#stage"
+      ],
+      "own": true
+     }
+    },
+    {
+     "k": "map styles",
+     "v": {
+      "map": {
+       "position": "absolute",
+       "zIndex": "20",
+       "pointerEvents": "auto",
+       "parent": "stage"
+      },
+      "canvas": {
+       "position": "static",
+       "zIndex": "auto",
+       "parent": "view3d"
+      }
+     }
+    },
+    {
+     "k": "mouse/touch toggle",
+     "v": {
+      "before": "true",
+      "afterClick": "false",
+      "changed": true,
+      "clickErr": null
+     }
+    },
+    {
+     "k": "frames per second",
+     "v": 1.31
+    },
+    {
+     "k": "pointer at coordinates toggle",
+     "v": {
+      "before": "false",
+      "after": "true",
+      "changed": true
+     }
+    },
+    {
+     "k": "keyboard toggle",
+     "v": {
+      "afterKey": "true",
+      "changed": true
+     }
+    },
+    {
+     "k": "room hit-test",
+     "v": {
+      "box": [
+       119,
+       133,
+       40,
+       37
+      ],
+      "receiver": [
+       "polygon.presentation-minimap-room",
+       "svg",
+       "#deliveryMapPanel",
+       "#deliveryMap"
+      ],
+      "own": true
+     }
+    },
+    {
+     "k": "room click (pointer at coordinates)",
+     "v": {
+      "target": {
+       "id": "rom_master"
+      },
+      "pose": {
+       "here": "Dormitorio principal",
+       "active": null
+      },
+      "moved": true,
+      "roomErr": null
+     }
+    }
+   ]
+  }
+ ]
+}

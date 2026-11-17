@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.1",
- "generated": "2026-11-17T14:39:19.829Z",
+ "generated": "2026-11-17T14:45:31.241Z",
  "project": {
   "id": "prj_reference-home",
   "name": "Proyecto de ejemplo",
@@ -234,37 +234,60 @@
    "sha256": "694f23bfecf1120acd8e5861b90e0fb41f31a601a21d919a4385912b5e7bb5e6"
   },
   {
+   "file": "media/obra.mp4",
+   "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+   "sourceSha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+   "sha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+   "producer": "RUBIK · Evolución de obra (FT3D-8) · Entrega · Generar vídeo",
+   "transcoded": false
+  },
+  {
+   "file": "documentos/obra-presentacion.html",
+   "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.html",
+   "sha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+   "producer": "RUBIK · Evolución de obra (FT3D-8) · Presentación de solo lectura"
+  },
+  {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "0f8a371fce3678a5df9b590af48156b325ee128aede9789977be45cda2d8de1d",
+   "sha256": "c5e0a64d8312a524ed1d1f804e6c3f06996b3992c4cdc8ea8e1aefa02050c272",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "af39a457c636c1dafb11f5c330ee190d71e2e7b232a1edda226b57f313720cd1",
+   "sha256": "3fa972b77fb6a23f0b09790f8d19112b324e1133d66172bed0b170cf0749c7fd",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "14c43b7b7bf9919a8817364a7412f4a8f7148fb31c07795fbaca11f321e14452",
+   "sha256": "7f46529b414832cc9f197df80b797ae5f4fab650c051025c122b3aa496ce7fae",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "70dfddcc063ac009be2d3a47a38ea049028b4eee45777844646691bb1226f370",
+   "sha256": "2ed902e4f42ce1930cee76cc9369314850a5307a16a67bcfa8de829663889e26",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "1a970bdfe6a80717467cc3e3a34c81aeafb37d9d16b466b569eb639e87563ac9",
+   "sha256": "05e5d221387c13399f09d5c2c91810a4d2f612a65ca40e925c57b51414896a26",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "5e203e56481847924e13bf5de6abd74050d80e91cd235cd1772cf320c51b8966",
+   "sha256": "f4ee058627c3dee7bcd778de9949a30709550abfcdaa7c9e1c0e31cd3d17a44a",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   }
  ],
- "ft3d8": null,
+ "ft3d8": {
+  "manifestId": "dlv_f4567d79bd21c1fc",
+  "project": {
+   "type": "project",
+   "id": "prj_reference-home",
+   "name": "Proyecto de ejemplo",
+   "updatedAt": "2026-09-30T00:00:00Z",
+   "fingerprint": "2f755be470b38048b197d07e285d057de9758a9900bbd27ef92f985e12303448"
+  }
+ },
  "orientative": [
   "imágenes IA",
   "plan y vídeo de obra (ejemplo, fechas ilustrativas, sin presupuesto)",

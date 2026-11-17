@@ -9,3 +9,13 @@ Siguiente: B2 (robustez). Donantes privados clonados en esta sesión: impeccable
 
 ## B2 cerrado
 Variantes (`tools/variants.cjs`): vacío, sin presupuesto/vistas/marca, nombres largos, logotipo. Las 4 + el canónico con QA a cero. Detalle y límites: `reports/B2-ROBUSTEZ.md`. Siguiente: B3 (motores de PDF y ADR).
+
+## B3 cerrado
+Banco CSS Print / Paged.js / Typst (`tools/engines/bench.mjs`), ADR 06 (`reports/06-ADR-MOTOR.md`): CSS Print + paginación medida (`tools/flow.js`) con invariante de filas en el QA; Paged.js descartado (pierde texto y no repite cabecera); Typst reservado para E2. Nueva variante `long-budget`.
+
+## Ampliación: entrega integral (cerrada en esta sesión)
+- Activos reales del producto: `tools/delivery-assets.cjs <repoRoot> <labDir> [ft3d8|living|drawing|all]` → `assets/` (logs con SHA-256). FT3D-8 por el camino real de biblioteca; plan de la demo ajustado (`assets/ft3d8-plan-ajuste.json`).
+- Correspondencia proyecto ↔ demo: `tools/correspondence.cjs` → `evidence/correspondencia/`. Trazabilidad Render IA: `evidence/render-ia/trazabilidad.json`.
+- Entrega: `tools/entrega.cjs` (llamado por compose) → `out/v3/entrega/` (web cliente, 7 tipos), `out/v3/entrega-integral.pdf`, `out/v3/profesional/preparar-entrega.html`.
+- QA: `tools/entrega-qa.cjs`, `tools/preparar-qa.cjs`, `tools/minimap-probe.cjs`. Empaquetado: `tools/package.sh` → `dist/` (no versionado).
+- Informes: 07 (matriz), 09 (riesgos y notas), 10 (entrega integral), 11 (propuesta E2), 00 (resumen y GO/NO-GO).

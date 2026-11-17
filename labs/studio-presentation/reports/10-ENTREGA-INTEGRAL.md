@@ -55,8 +55,8 @@ Todos los activos salen del producto (código de esta rama) en Chromium local, c
 | Dibujo vivo | `assets/dibujo-vivo/00-overview.png` | «Presentar mi vivienda» con Dibujo vivo. Fotograma del lienzo en la apertura. | `assets/log-living.json` |
 | Recorrido | `assets/recorrido/*.mp4` (55,7 s, 1280×720, H.264) y 4 fotogramas | El botón **«Grabar vídeo»** del producto (FloorPlanTourRecorder) en la misma presentación | `assets/log-living.json` |
 | Render IA | `evidence/render-ia/render-ia-{1,2,3}.png` | Las 3 peticiones autorizadas (D7), con el flujo real | `evidence/render-ia/manifest.json`, `trazabilidad.json` |
-| Evolución de obra | `assets/ft3d8/*` (vídeo, presentación de solo lectura y manifiesto) | Camino real: ejemplo → biblioteca → Presupuestar → Plan de obra → «Importar plan (JSON)» → Guardar → Ver evolución (`?source=library`) → Entrega | `assets/log-ft3d8.json` |
-| Plan de obra | `assets/ft3d8-plan-demo.json` y `.schedule.json` | El plan que construye `js/construction-demo-core.js` para este proyecto, serializado por `FloorPlanConstructionSchedule` | — |
+| Evolución de obra | `assets/ft3d8/*` (vídeo, presentación de solo lectura y manifiesto) | Camino real: ejemplo → biblioteca → Presupuestar → Plan de obra → «Importar plan (JSON)» → Guardar → Ver evolución (`?source=library`) → Entrega (nivel orientativo) | `assets/log-ft3d8.json`, `assets/ft3d8-plan-ajuste.json` |
+| Plan de obra | `assets/ft3d8-plan-demo.schedule.json`, la versión ajustada `.reforma.schedule.json` y su resumen `ft3d8-plan-demo.json` | El plan que construye `js/construction-demo-core.js` para este proyecto, serializado y validado por `FloorPlanConstructionSchedule` | `assets/ft3d8-plan-ajuste.json` |
 
 ### Hallazgos de producto al producir los activos
 
@@ -65,10 +65,12 @@ Todos los activos salen del producto (código de esta rama) en Chromium local, c
    - «Grabar vídeo» graba el render normal aunque Dibujo vivo esté activado.
    - Por eso **no existe exportación de Dibujo vivo**, ni imagen ni vídeo. Se confirma la limitación conocida.
    - El fotograma de la entrega es una captura del lienzo hecha por el laboratorio.
-2. **La demo pública `?demo=obra` no ofrece la entrega.** El CSS oculta `#panel-entrega` y `go()` fuerza la pestaña de evolución.
-   - Exportar la obra de este proyecto exige el camino de la biblioteca, con un plan guardado.
-   - Al importar el plan de la demo, el producto avisa: «Plan importado de otra revisión del proyecto: revisa sus vínculos». La demo trata los muros como obra nueva, y su huella difiere de la del proyecto guardado.
-   - Se guarda igualmente y se rotula en la entrega como **ejemplo ilustrativo, sin presupuesto**.
+2. **La demo pública `?demo=obra` no ofrece la entrega.** El CSS oculta `#panel-entrega` y `go()` fuerza la pestaña de evolución. Exportar la obra de este proyecto exige el camino real: biblioteca → Plan de obra → Evolución (`?source=library`) → Entrega.
+   - Al importar el plan de la demo, el producto avisa: «Plan importado de otra revisión del proyecto: revisa sus vínculos». Al guardarlo, lo ancla a la revisión actual.
+   - **El producto bloqueó la entrega.** Dio 45 errores `role-status-mismatch` («Rol structure incompatible con wall existing»).
+   - Motivo: la demo trata la casa como obra nueva (muros `new`), pero en el proyecto guardado los muros son `existing`. Las reglas de FT3D-8 solo admiten acabado o revestimiento sobre muros existentes. Es una salvaguarda correcta.
+   - El laboratorio hizo lo que haría el profesional ante ese aviso: quitar esos 45 vínculos (`assets/ft3d8-plan-ajuste.json`). Las tareas, las fechas, las dependencias y el resto de vínculos quedan como estaban. Después, el plan se importó con la interfaz del producto.
+   - Con ese ajuste, el producto permite la entrega en **nivel «orientativo»**, con sus motivos a la vista: plan en borrador, vínculo sin revisar, aprobación no autenticada y elementos sin tarea. La entrega lo rotula así.
 3. **Con renderizado por software, cada fotograma del lienzo tarda unos 15 s.** No se puede filmar aquí la animación de Dibujo vivo. En un navegador con GPU sí sería posible.
 
 ## 4. Correspondencia: un solo proyecto, autoridades distintas (auditoría 1)
@@ -90,7 +92,7 @@ Las autoridades son distintas y nunca se mezclan:
 
 - **Superficies, planta y mediciones:** el proyecto, revisión `rv1-0f3e96422fd20e08`.
 - **Presupuesto:** precios de prueba de laboratorio (`budget.test`), pendientes de revisión.
-- **Plan y vídeo de obra:** ejemplo ilustrativo de la demo, sin partidas.
+- **Plan y vídeo de obra:** plan de ejemplo de la demo aplicado a este proyecto, sin partidas; la entrega de obra es de nivel «orientativo».
 
 El caso sintético A (`?lab=1&case=A`) **no aparece en ninguna entrega**.
 
@@ -118,7 +120,16 @@ Proporciones: las vistas son de 1600×820 y los renders de 1536×1024. La franja
 
 ## 6. Minimapa de la visita inmersiva (auditoría 3)
 
-Prueba: `tools/minimap-probe.cjs`, en escritorio y móvil. Mide qué elemento recibe el clic en el botón «Ver/Ocultar plano» y en cada estancia, y prueba ratón, teclado y toque, y si «ir a la estancia» mueve al visitante. Resultados en la sección 9.
+Prueba: `tools/minimap-probe.cjs`. Resultado: `evidence/minimapa/minimap-probe.json` y capturas.
+
+- **Móvil (táctil):** «Ver/Ocultar plano» y tocar una estancia funcionan; el visitante llega a la estancia.
+- **Escritorio:** durante el paseo, el ratón está capturado (`PointerLockControls` sobre `body`), así que un clic sobre el minimapa **no llega al botón**.
+  - Tras pulsar **Esc**, el clic funciona: el plano se abre y se cierra, y la estancia elegida lleva al visitante. El teclado (Tab + Intro) funciona siempre.
+  - La pista en pantalla dice «Esc para pausar», pero no dice que el plano necesite Esc.
+- **Propuesta (no aplicada: el producto queda fuera de la misión):**
+  - una pista «Esc para usar el plano» junto al minimapa en escritorio;
+  - o liberar el puntero al acercarlo al minimapa;
+  - o un atajo de teclado (M).
 
 ## 7. QA
 
@@ -168,6 +179,6 @@ Correcciones:
 |---|---|---|
 | 1 | No mezclar el caso A con `prj_reference-home` | **Hecho**: correspondencia probada; ningún entregable usa el caso A; autoridades separadas y rotuladas |
 | 2 | Render ↔ vista de origen | **Hecho** hasta donde llega la evidencia: 2 idénticas y 1 de la misma estancia, escrito |
-| 3 | Minimapa durante la visita | Ver `evidence/minimapa/minimap-probe.json` y el informe 00 |
+| 3 | Minimapa durante la visita | **Revisado**: el táctil funciona; en escritorio, el clic necesita Esc antes (el puntero está bloqueado) y no se avisa. Propuesta en §6. |
 | 4 | D7 con el resultado real | **Hecho** (`DECISIONES-PENDIENTES.md`) |
 | 5 | Credenciales y datos privados | Revisado el repositorio: no hay secretos publicados. El código de acceso sigue en los secretos de red del entorno: **lo debe borrar el propietario** (menú del entorno → Editar → Secretos de red) |

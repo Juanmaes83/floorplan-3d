@@ -27,7 +27,7 @@ const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
   await p.evaluate(pr=>{const x=FloorPlanBrand.saveProfile(localStorage,{name:pr.name,person:pr.person,email:pr.email,web:pr.web,tagline:pr.tagline});
    FloorPlanBrand.setDelivery(localStorage,FloorPlanApp.entryId,{profileId:x.id,title:'La obra de tu vivienda, paso a paso',intro:'Cómo se construiría la vivienda de ejemplo, fase a fase. Fechas de ejemplo.'});},prof);
   await p.locator('#workArea-budget').click();await p.locator('[data-route="construction-plan"]').click();await p.waitForSelector('#planDialog[open]');
-  await p.locator('#planDialog input[type=file]').first().setInputFiles(path.join(lab,'assets/ft3d8-plan-demo.schedule.json'));
+  await p.locator('#planDialog input[type=file]').first().setInputFiles(path.join(lab,'assets/ft3d8-plan-demo.reforma.schedule.json'));
   const importMsg=(await p.locator('#planDialog').innerText()).match(/Plan importado[^\n]*/)?.[0]||null;
   await p.locator('#planSave').click();await p.waitForFunction(()=>/Plan guardado/.test(document.getElementById('planStatus')?.textContent||''));
   const ident=await p.evaluate(async()=>{const s=await FloorPlanConstructionContext.snapshot();return {entryId:s.entry.id,subject:s.subject,revision:s.revision,scheduleId:s.record?.selectedScheduleId||null,projectRevisionRubik:window.RubikAssistantDomainTools?.revision?RubikAssistantDomainTools.revision(FloorPlanApp.project):null};});
@@ -38,6 +38,9 @@ const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
   const f=p.frames().find(x=>x.url().includes('/evolucion/'));
   await f.evaluate(()=>{window.__ft3dUI.reveal('#deliverPanel');document.querySelectorAll('#deliverPanel details:not(#publishBox)').forEach(d=>d.open=true);});
   const fsrc=await f.evaluate(()=>({mode:window.__ft3dSource?.mode,entry:window.__ft3dSource?.entry,subject:window.__ft3dSource?.subject,brand:window.__ft3dDelivery.state.source,planning:window.__ft3dFidelity.ctx.model?.planning?.status}));console.log('frame',JSON.stringify(fsrc));
+  const dossier=await f.evaluate(()=>{const d=window.__ft3dFidelity.ctx.dossier;return d?{usable:d.usable,level:d.delivery?.level,blockers:d.delivery?.blockers,issues:d.issues.map(i=>({code:i.code,severity:i.severity,message:i.message}))}:null;});
+  console.log('dossier',JSON.stringify(dossier));
+  if(dossier&&!dossier.usable.delivery){log.ft3d8={blocked:true,dossier,ident,importMsg};throw Error('Entrega bloqueada por el expediente: '+JSON.stringify(dossier.issues.filter(i=>i.severity==='error')));}
   if(await f.locator('#costMode').isVisible())await f.locator('#costMode').selectOption('none');
   await f.locator('#videoGo').click();
   await f.waitForFunction(()=>window.__ft3dDelivery.state.video||/cancelad|no válido|no generó|no puede/.test(document.getElementById('videoStatus').textContent),null,{timeout:1200000});
