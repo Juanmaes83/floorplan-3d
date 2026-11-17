@@ -1,0 +1,169 @@
+{
+ "meta": {
+  "plan": {
+   "callouts": 2,
+   "dropped": 0
+  },
+  "sheet": {
+   "callouts": 2,
+   "dropped": 0
+  }
+ },
+ "probe": true,
+ "docs": {
+  "directions": {
+   "pages": 3,
+   "blockOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 881,
+     "RUBIK Serif": 124
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Serif"
+   }
+  },
+  "interior-book": {
+   "pages": 6,
+   "blockOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 3430,
+     "RUBIK Serif": 324
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "materials-furniture-book": {
+   "pages": 5,
+   "blockOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 4419,
+     "RUBIK Serif": 420
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Serif"
+   }
+  },
+  "commercial-proposal": {
+   "pages": 3,
+   "blockOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal",
+    "RUBIK Serif 400 italic"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 2257,
+     "RUBIK Serif": 384
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "real-estate": {
+   "pages": 5,
+   "blockOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 2556,
+     "RUBIK Serif": 250
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Serif"
+   }
+  },
+  "architecture-sheet": {
+   "pages": 1,
+   "blockOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 1118,
+     "RUBIK Serif": 21
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  }
+ }
+}

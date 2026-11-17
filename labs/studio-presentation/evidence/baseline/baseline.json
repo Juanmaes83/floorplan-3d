@@ -1,0 +1,159 @@
+{
+ "sha": "f31f303",
+ "ids": {
+  "profile": "brd_hw3bdcozfwwg",
+  "entry": "prj_0d4a06a110f5441db647849917b7e5a9"
+ },
+ "external": [],
+ "errors": [],
+ "findings": {
+  "H01": {
+   "inventoryKeys": [
+    "cover",
+    "sheet",
+    "surfaces",
+    "orientation",
+    "site",
+    "exterior",
+    "views",
+    "review",
+    "sources"
+   ],
+   "inventoryHasEconomic": false,
+   "economicReady": true,
+   "renderedEconomicPage": true,
+   "pagesRendered": [
+    "dossier-cover",
+    "dossier-sheet",
+    "dossier-surfaces",
+    "dossier-orientation",
+    "dossier-exterior",
+    "dossier-views",
+    "dossier-economic",
+    "dossier-sources"
+   ]
+  },
+  "H02": {
+   "snapshotShape": [
+    "profile",
+    "title",
+    "intro",
+    "takenAt"
+   ],
+   "snapshotHasTopLevelName": false,
+   "profileName": "Estudio Ejemplo (datos de prueba)",
+   "econBrandLineShown": false,
+   "econBrandText": null
+  },
+  "H04-technical": {
+   "stylesheets": [
+    {
+     "href": "http://127.0.0.1:41953/css/project-dossier.css",
+     "rules": 74
+    },
+    {
+     "href": "http://127.0.0.1:41953/css/site-report.css",
+     "rules": 62
+    }
+   ]
+  },
+  "H04-client": {
+   "stylesheets": [
+    {
+     "href": "http://127.0.0.1:41953/css/project-dossier.css",
+     "rules": 74
+    },
+    {
+     "href": "http://127.0.0.1:41953/css/site-report.css",
+     "rules": 62
+    }
+   ]
+  },
+  "H04-realestate": {
+   "stylesheets": [
+    {
+     "href": "http://127.0.0.1:41953/css/project-dossier.css",
+     "rules": 74
+    },
+    {
+     "href": "http://127.0.0.1:41953/css/site-report.css",
+     "rules": 62
+    }
+   ]
+  },
+  "H04-studio": {
+   "stylesheets": [
+    {
+     "href": "http://127.0.0.1:41953/css/project-dossier.css",
+     "rules": 74
+    },
+    {
+     "href": "http://127.0.0.1:41953/css/site-report.css",
+     "rules": 62
+    }
+   ]
+  }
+ },
+ "captures": [
+  "01-mi-estudio",
+  "02-entregar",
+  "03-presupuestar",
+  "04-presupuesto-editor",
+  "05-dossier-economico",
+  "06-dossier-technical-dialogo",
+  "06-dossier-client-dialogo",
+  "06-dossier-realestate-dialogo",
+  "06-dossier-studio-dialogo",
+  "08-lamina",
+  "09-ficha-superficies",
+  "10-material-board"
+ ],
+ "project": {
+  "id": "prj_reference-home",
+  "name": "Proyecto de ejemplo",
+  "rooms": 13,
+  "walls": 70,
+  "objects": 46
+ },
+ "budget": {
+  "items": 11,
+  "priced": 0,
+  "status": null,
+  "total": null,
+  "keys": [
+   "schema",
+   "schemaVersion",
+   "budgetId",
+   "subject",
+   "title",
+   "currency",
+   "taxRatePercent",
+   "lines",
+   "chapters",
+   "unassigned",
+   "totals"
+  ]
+ },
+ "views": [
+  {
+   "kind": "overview",
+   "label": "Vista general"
+  },
+  {
+   "kind": "room",
+   "label": "Salón"
+  },
+  {
+   "kind": "room",
+   "label": "Dormitorio principal"
+  },
+  {
+   "kind": "room",
+   "label": "Dormitorio juvenil"
+  },
+  {
+   "kind": "room",
+   "label": "Dormitorio infantil"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+Contraste WCAG medido con brand-identity colorlib.contrast_ratio (texto ≥4.5, grande ≥3, UI ≥3)
+d-ink                    #2d332f  on #fffdf8 12.70  on #fff 12.91  OKLCH L0.314 C0.011 h156.5  Lab D50 L*20.6
+d-muted                  #626457  on #fffdf8  5.94  on #fff  6.03  OKLCH L0.497 C0.020 h114.2  Lab D50 L*41.9
+d-rule                   #cbc2b3  on #fffdf8  1.73  on #fff  1.76  OKLCH L0.817 C0.023 h 80.7  Lab D50 L*78.9
+petrol(technical)        #205b60  on #fffdf8  7.58  on #fff  7.70  OKLCH L0.435 C0.060 h203.0  Lab D50 L*35.1
+clay(client)             #875936  on #fffdf8  5.88  on #fff  5.98  OKLCH L0.506 C0.079 h 57.1  Lab D50 L*42.4
+ink(realestate)          #2d332f  on #fffdf8 12.70  on #fff 12.91  OKLCH L0.314 C0.011 h156.5  Lab D50 L*20.6
+lab-ink-3 (v1)           #6b6660  on #fffdf8  5.59  on #fff  5.68  OKLCH L0.513 C0.011 h 72.6  Lab D50 L*43.5
+lab-accent v1 (roble)    #75634b  on #fffdf8  5.67  on #fff  5.76  OKLCH L0.511 C0.043 h 74.6  Lab D50 L*43.3
+greyscale L* gap accent vs ink (one-ink proof):
+  #205b60 ΔL* vs ink 14.7
+  #875936 ΔL* vs ink 21.5

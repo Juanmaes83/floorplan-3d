@@ -1,0 +1,78 @@
+/* RUBIK Studio Presentation · common editorial system v0.2 (lab, E0). Print-first, millimetre-based.
+   GSP EXTEND: RUBIK's existing dossier tokens (css/project-dossier.css: --d-ink, --d-muted, --d-rule, --d-paper,
+   accents per style) are KEPT with their names; this file only adds DELTA tokens (print geometry, pt type scale,
+   embedded faces). Decisions and evidence: reports/04-SISTEMA-EDITORIAL.md. Fonts are embedded by the composer. */
+:root{
+  /* KEEP · RUBIK product tokens (unchanged values and names) */
+  --d-ink:#2d332f; --d-muted:#626457; --d-rule:#cbc2b3; --d-paper:#fffdf8; --d-accent:#875936;
+  /* DELTA · surfaces derived from the kept tokens */
+  --d-field:#f4f0e8; --d-ink-strong:#1f2420;
+  /* DELTA · type families. Replaces system-ui/Georgia, which cannot be embedded or vary by machine (non-deterministic PDF) */
+  --f-tech:'RUBIK Inter',system-ui,sans-serif; --f-read:'RUBIK Serif',Georgia,serif;
+  /* DELTA · print type scale (pt). Text steps ×1.2, display steps ×1.5. Floors (Arch Studio minimum_type_pt 9; Huashu lint ported): reading and captions ≥ 9 pt; 7–7.5 pt only for running head/foot and title-block field names */
+  --t-micro:7.5pt; --t-caption:9pt; --t-table:9pt; --t-body:9.5pt; --t-read:10.5pt; --t-lead:13pt; --t-h3:10pt; --t-h2:20pt; --t-h1:30pt; --t-figure:30pt;
+  /* DELTA · space (mm) and page geometry (A4 landscape book) */
+  --s1:1mm; --s2:2mm; --s3:3mm; --s4:4mm; --s6:6mm; --s8:8mm; --s12:12mm; --s16:16mm;
+  --page-w:297mm; --page-h:210mm; --m-top:14mm; --m-side:16mm; --m-foot:16mm; --gutter:5mm;
+}
+/* KEEP · accent per product dossier style (project-dossier.css data-style) */
+body[data-style=technical]{--d-accent:#205b60}
+body[data-style=client]{--d-accent:#875936}
+body[data-style=realestate]{--d-accent:#2d332f}
+@page{size:297mm 210mm;margin:0}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{margin:0;background:#8d8a86}
+body{font-family:var(--f-tech);font-size:var(--t-body);line-height:1.45;color:var(--d-ink);font-kerning:normal;font-variant-numeric:tabular-nums lining-nums}
+@media print{html,body{background:none}}
+.page{width:var(--page-w);height:var(--page-h);background:var(--d-paper);position:relative;overflow:hidden;margin:0 auto 6mm;break-after:page;padding:var(--m-top) var(--m-side) var(--m-foot)}
+@media print{.page{margin:0}}
+.page.bleed{padding:0}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--gutter);height:100%}
+.c1-4{grid-column:1/5}.c1-5{grid-column:1/6}.c1-6{grid-column:1/7}.c1-7{grid-column:1/8}.c1-8{grid-column:1/9}.c1-12{grid-column:1/13}
+.c5-12{grid-column:5/13}.c6-12{grid-column:6/13}.c7-12{grid-column:7/13}.c8-12{grid-column:8/13}.c9-12{grid-column:9/13}
+/* Running head/foot: identity, project, revision, date, page n/N. Separated by space, never by "·" chains (Huashu lint) */
+.runhead,.foot{position:absolute;left:var(--m-side);right:var(--m-side);display:flex;gap:var(--s8);font-size:var(--t-micro);color:var(--d-muted)}
+.runhead{top:6mm}.runhead span:last-child{margin-left:auto}
+.foot{bottom:7mm;border-top:.2mm solid var(--d-rule);padding-top:1.6mm}
+.foot .pg{margin-left:auto;color:var(--d-ink);font-weight:700}
+.h1{font-family:var(--f-read);font-weight:600;font-size:var(--t-h1);line-height:1.06;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.h2{font-family:var(--f-read);font-weight:600;font-size:var(--t-h2);line-height:1.12;margin:0 0 var(--s4);text-wrap:balance}
+.h3{font-family:var(--f-tech);font-weight:700;font-size:var(--t-h3);line-height:1.3;margin:0 0 var(--s2)}
+.lead{font-family:var(--f-read);font-size:var(--t-lead);line-height:1.4;color:var(--d-ink);margin:0;max-width:52ch;text-wrap:pretty}
+.read{font-family:var(--f-read);font-size:var(--t-read);line-height:1.5;color:var(--d-ink);max-width:62ch;margin:0 0 var(--s3);text-wrap:pretty}
+.meta{font-size:var(--t-caption);color:var(--d-muted);margin:0}
+.caption{font-size:var(--t-caption);color:var(--d-muted);margin:var(--s2) 0 0;line-height:1.35}
+.caption b{color:var(--d-ink);font-weight:700}
+.note{font-size:var(--t-caption);line-height:1.4;color:var(--d-ink);border-top:.35mm solid var(--d-ink);padding-top:var(--s2);margin:0}
+.fig{border-top:.35mm solid var(--d-ink);padding-top:var(--s2)}
+.fig .n{font-weight:700;font-size:var(--t-figure);line-height:1;letter-spacing:-.02em}
+.fig .u{font-size:var(--t-lead);font-weight:400;margin-left:1mm}
+.fig .l{font-size:var(--t-body);margin-top:var(--s2);font-weight:700}
+.fig .caption{font-size:var(--t-caption);color:var(--d-muted);margin-top:.6mm}
+.fig.focal .n{color:var(--d-accent)}
+figure{margin:0}
+.img{display:block;width:100%;height:100%;object-fit:cover}
+.frame{overflow:hidden;background:var(--d-field)}
+/* Tables: tabular numerals, end-aligned figures, units in headers, unknowns explicit; Inter cv08 (serifed I) against I/l confusion measured by Brand Identity font audit */
+table{border-collapse:collapse;width:100%;font-size:var(--t-table);font-feature-settings:'cv08' 1,'tnum' 1}
+th{font-weight:700;text-align:left;font-size:var(--t-caption);border-bottom:.35mm solid var(--d-ink);padding:1.4mm 1.6mm 1.4mm 0;vertical-align:bottom}
+td{border-bottom:.2mm solid var(--d-rule);padding:1.25mm 1.6mm 1.25mm 0;vertical-align:top}
+td.num,th.num{text-align:right;white-space:nowrap}
+tr.chap td{font-weight:700;border-bottom:.2mm solid var(--d-ink);padding-top:3mm}
+tr.sub td{font-weight:700;border-bottom:none}
+tr.total td{font-weight:700;font-size:10pt;border-top:.35mm solid var(--d-ink);border-bottom:none;padding-top:2mm}
+.muted{color:var(--d-muted)}
+.unk{color:var(--d-muted);font-style:italic}
+.status{display:inline-block;font-size:var(--t-caption);font-weight:700;border:.25mm solid var(--d-ink);padding:.4mm 1.6mm}
+.sw{display:grid;grid-template-columns:22mm 1fr;column-gap:var(--s3);align-items:start;padding:var(--s3) 0;border-bottom:.2mm solid var(--d-rule);break-inside:avoid}
+.sw i{display:block;height:22mm;border:.2mm solid rgba(0,0,0,.12)}
+.plan text,.axo text{font-family:var(--f-tech)}
+.legend{display:flex;gap:var(--s6);align-items:center;font-size:var(--t-caption);color:var(--d-ink);border-top:.2mm solid var(--d-rule);padding-top:var(--s2)}
+.legend span{display:inline-flex;align-items:center;gap:var(--s2)}
+/* Title block: IFC Sheet standard (180×50 mm, 5 rows, 50 mm side panel; weights 0.5/0.35/0.18 mm) */
+.tb{position:absolute;right:10mm;bottom:10mm;width:180mm;height:50mm;border:.5mm solid var(--d-ink);display:grid;grid-template-columns:65mm 65mm 50mm;grid-template-rows:repeat(5,10mm);font-size:9.9pt;background:var(--d-paper);font-feature-settings:'cv08' 1}
+.tb div{border-right:.18mm solid var(--d-ink);border-bottom:.18mm solid var(--d-ink);padding:.8mm 2mm;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb small{display:block;font-size:var(--t-micro);color:var(--d-muted);line-height:1.1}
+.tb .wide{grid-column:1/3}
+.tb .side{grid-column:3;grid-row:1/6;border-right:none;border-bottom:none;border-left:.35mm solid var(--d-ink);display:flex;flex-direction:column;justify-content:space-between;white-space:normal}
+.tb .num{font-size:25.5pt;font-weight:700;line-height:1;color:var(--d-accent)}

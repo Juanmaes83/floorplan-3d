@@ -1,0 +1,248 @@
+// E0 · Composer v2 of the Studio Presentation prototypes from the canonical snapshot (snapshot.json). Lab only.
+// Regla de oro: every figure, name, line and image comes from the snapshot (RUBIK's own engines). The composer only
+// formats, lays out and does labelled arithmetic. Unknown data is printed as unknown, never filled in.
+// v2 applies: GSP EXTEND (RUBIK tokens kept), Brand Identity audits (cv08, ZH gap declared), Huashu (no "·" chains,
+// lint port, three-direction gate), Diagram Design (tag backing, ≤2 italic callouts, legend strip, axonometric plan).
+// Usage: node compose.cjs <snapshotDir> <outDir>   → <outDir>/<id>.html + .pdf + qa.json
+const fs=require('node:fs'),path=require('node:path'),{chromium}=require('playwright');
+const [snapDir,outDir]=process.argv.slice(2);fs.mkdirSync(outDir,{recursive:true});
+const S=JSON.parse(fs.readFileSync(path.join(snapDir,'snapshot.json'),'utf8'));
+const LAB=path.resolve(__dirname,'..');
+const IFC_FONTS=process.env.IFC_FONTS||'/home/user/donors/ifc-sheet/packages/ifcsheet/fonts';
+const FS4=path.join(__dirname,'node_modules/@fontsource/source-serif-4/files');
+const HUASHU_LINT=process.env.HUASHU_LINT||'/home/user/juanmaes83/huashu-design-3.0-agent-/scripts/design_lint.py';
+const b64=f=>fs.readFileSync(f).toString('base64');
+const FONT_CSS=[
+ ['RUBIK Inter',400,'normal',path.join(IFC_FONTS,'Inter-Regular.ttf'),'truetype'],
+ ['RUBIK Inter',700,'normal',path.join(IFC_FONTS,'Inter-Bold.ttf'),'truetype'],
+ ['RUBIK Serif',400,'normal',path.join(FS4,'source-serif-4-latin-400-normal.woff2'),'woff2'],
+ ['RUBIK Serif',600,'normal',path.join(FS4,'source-serif-4-latin-600-normal.woff2'),'woff2'],
+ ['RUBIK Serif',400,'italic',path.join(FS4,'source-serif-4-latin-400-italic.woff2'),'woff2'],
+].map(([fam,w,st,f,fmt])=>`@font-face{font-family:'${fam}';font-weight:${w};font-style:${st};font-display:block;src:url(data:font/${fmt==='woff2'?'woff2':'ttf'};base64,${b64(f)}) format('${fmt}')}`).join('\n');
+const CSS=fs.readFileSync(path.join(LAB,'system/rubik-editorial.css'),'utf8');
+const T={ink:'#2d332f',muted:'#626457',rule:'#cbc2b3',paper:'#fffdf8',field:'#f4f0e8',partition:'#626457',low:'#8d8a7f'};
+const nf=d=>new Intl.NumberFormat('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d,useGrouping:true});
+const eur=v=>nf(2).format(v)+' €',num=(v,d=2)=>nf(d).format(v);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const date=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Madrid'}).format(new Date(S.brand.takenAt||S.takenAt));
+const P=S.project,B=S.brand,prof=B.profile||{},rev=P.revision||'sin revisión',TITLE=B.title||P.name;
+const rooms=S.geometry.rooms,counted=rooms.filter(r=>r.counted),area=S.surfaces.areaM2;
+const matById=Object.fromEntries(S.materials.map(m=>[m.id,m]));
+const byName=re=>rooms.filter(r=>re.test(r.name)).length;
+const floors=[...S.board.floors].sort((a,b)=>b.areaM2-a.areaM2);
+const hex2rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
+const toHex=c=>'#'+c.map(v=>Math.round(Math.max(0,Math.min(1,v))*255).toString(16).padStart(2,'0')).join('');
+const tint=(h,k)=>toHex(hex2rgb(h).map(v=>1-(1-v)*k));
+const VIEW_NOTE='Vista del modelo 3D del proyecto generada por RUBIK. No es una fotografía.';
+const STATUS_AREA=`Superficies calculadas por RUBIK sobre el modelo, con escala ${P.scale==='estimated'?'estimada':'verificada'}. No sustituyen a una medición en obra.`;
+let views=[];const viewBy=l=>views.find(v=>v.label===l);
+// ---------- geometry helpers ----------
+const centroid=r=>r.labelAt||{x:r.polygon.reduce((s,p)=>s+p.x,0)/r.polygon.length,y:r.polygon.reduce((s,p)=>s+p.y,0)/r.polygon.length};
+const bbox=pts=>({x0:Math.min(...pts.map(p=>p.x)),y0:Math.min(...pts.map(p=>p.y)),x1:Math.max(...pts.map(p=>p.x)),y1:Math.max(...pts.map(p=>p.y))});
+const wallById=Object.fromEntries(S.geometry.walls.map(x=>[x.id,x]));
+const W_COLOR={'load-bearing':T.ink,exterior:T.ink,partition:T.partition,low:T.low};
+// Room tags (Diagram Design): fixed sizes, opaque paper backing with hairline, never shrunk to fit. If a tag does not fit
+// its room on one or two lines it becomes an italic-serif callout in the margin with a dashed leader (max 2 per drawing).
+function tagLayout(u){const fsN=7.5*u,fsA=7.5*u,cw=.6;const out=[];
+ for(const r of rooms){const b=bbox(r.polygon),c=centroid(r),availW=b.x1-b.x0-260,availH=b.y1-b.y0-260;
+  const areaTxt=r.areaM2==null?'sin área':num(r.areaM2)+' m²'+(r.counted?'':', no computa');
+  // Balanced breaks into 1–3 lines at spaces or after hyphens (never shrinking the type).
+  const toks=r.name.match(/[^\s-]+-?/g)||[r.name],join=a=>a.reduce((s,t,i)=>s+(i&&!a[i-1].endsWith('-')?' ':'')+t,'');
+  const splits=n=>{if(n===1)return [[join(toks)]];const res=[];const rec=(i,acc)=>{if(acc.length===n-1){res.push([...acc,join(toks.slice(i))]);return;}for(let j=i+1;j<toks.length;j++)rec(j,[...acc,join(toks.slice(i,j))]);};rec(0,[]);return res.filter(l=>l.length===n&&l.every(x=>x));};
+  const cands=[1,2,3].map(n=>splits(n).sort((a,b)=>Math.max(...a.map(x=>x.length))-Math.max(...b.map(x=>x.length)))[0]).filter(Boolean);
+  const size=lines=>({w:Math.max(...lines.map(l=>l.length*fsN*cw),areaTxt.length*fsA*.56)+2.4*u,h:lines.length*fsN*1.2+fsA*1.3+2.4*u});
+  let lines=null;for(const L of cands){const s=size(L);if(s.w<=availW&&s.h<=availH){lines=L;break;}}
+  out.push({r,c,lines,areaTxt,fsN,fsA,callout:!lines,box:lines?size(lines):null});}
+ return out;}
+function tagSvg(t,u,at){const {lines,areaTxt,fsN,fsA}=t,box=t.box,x=at.x,y=at.y-box.h/2;
+ return `<g><rect x="${x-box.w/2}" y="${y}" width="${box.w}" height="${box.h}" fill="${T.paper}" stroke="${T.rule}" stroke-width="${.15*u}"/>${lines.map((l,i)=>`<text x="${x}" y="${y+1.2*u+fsN*(i+1)}" text-anchor="middle" font-size="${fsN}" font-weight="700" fill="${T.ink}">${esc(l)}</text>`).join('')}<text x="${x}" y="${y+1.2*u+fsN*1.2*lines.length+fsA*1.05}" text-anchor="middle" font-size="${fsA}" fill="${T.muted}">${esc(areaTxt)}</text></g>`;}
+// ---------- orthographic plan from canonical geometry ----------
+function plan({w=170,h=150,objects=false,floorTint=true,scale=null,callouts=true,labels=true,pad=400}={}){
+ const pts=[...S.geometry.walls.flatMap(x=>[x.start,x.end]),...rooms.flatMap(r=>r.polygon)];const b=bbox(pts);
+ // Callout text is wrapped (≤3 lines) and the right margin is sized to it, so nothing is clipped.
+ const callLines=t=>{const toks=t.r.name.split(' ');const L=[];let cur='';for(const w of toks){if((cur+' '+w).trim().length>12&&cur){L.push(cur);cur=w;}else cur=(cur+' '+w).trim();}if(cur)L.push(cur);return L;};
+ const callArea=t=>t.r.areaM2==null?['sin área']:[num(t.r.areaM2)+' m²',...(t.r.counted?[]:['no computa'])];
+ let right=0,vbW,vbH,pw,ph;const minX=b.x0-pad,minY=b.y0-pad;vbH=b.y1-b.y0+2*pad;
+ for(let it=0;it<4;it++){vbW=b.x1-b.x0+2*pad+right;if(scale){pw=vbW/scale;ph=vbH/scale;}else{const k=Math.min(w/vbW,h/vbH);pw=vbW*k;ph=vbH*k;}
+  const uu=.3528/(pw/vbW),callers=callouts&&labels?tagLayout(uu).filter(t=>t.callout).slice(0,2):[];if(!callers.length)break;
+  const need=900+Math.max(...callers.flatMap(t=>[...callLines(t).map(l=>l.length*9*uu*.5),...callArea(t).map(l=>l.length*7.5*uu*.56)]));if(Math.abs(need-right)<20)break;right=need;}
+ const mmPerUnit=pw/vbW,u=.3528/mmPerUnit; // u = model units per pt
+ const out=[`<title>Planta de ${esc(TITLE)}</title><desc>Planta dibujada desde la geometría de RUBIK: ${S.geometry.walls.length} muros, ${S.geometry.openings.length} huecos y ${rooms.length} estancias.</desc>`];
+ for(const r of rooms){const m=matById[r.floorMaterialId];out.push(`<polygon points="${r.polygon.map(p=>p.x+','+p.y).join(' ')}" fill="${floorTint&&m?tint(m.color,.5):T.paper}"/>`);}
+ if(objects)for(const o of S.geometry.objects)out.push(`<rect x="${-o.size.widthMm/2}" y="${-o.size.depthMm/2}" width="${o.size.widthMm}" height="${o.size.depthMm}" fill="none" stroke="${T.muted}" stroke-width="${.35*u}" transform="translate(${o.position.x} ${o.position.y}) rotate(${o.rotationDeg})"/>`);
+ for(const x of S.geometry.walls)out.push(`<line x1="${x.start.x}" y1="${x.start.y}" x2="${x.end.x}" y2="${x.end.y}" stroke="${W_COLOR[x.structure]||T.ink}" stroke-width="${x.thicknessMm}" stroke-linecap="square"/>`);
+ for(const o of S.geometry.openings){const x=wallById[o.wallId];if(!x)continue;const L=Math.hypot(x.end.x-x.start.x,x.end.y-x.start.y)||1,d={x:(x.end.x-x.start.x)/L,y:(x.end.y-x.start.y)/L};
+  const a={x:x.start.x+d.x*o.offsetMm,y:x.start.y+d.y*o.offsetMm},c={x:a.x+d.x*o.widthMm,y:a.y+d.y*o.widthMm};
+  out.push(`<line x1="${a.x}" y1="${a.y}" x2="${c.x}" y2="${c.y}" stroke="${T.paper}" stroke-width="${x.thicknessMm+2}" stroke-linecap="butt"/>`);
+  if(o.kind==='window'){const n={x:-d.y,y:d.x},t=x.thicknessMm/2;for(const s of [-t,0,t])out.push(`<line x1="${a.x+n.x*s}" y1="${a.y+n.y*s}" x2="${c.x+n.x*s}" y2="${c.y+n.y*s}" stroke="${T.ink}" stroke-width="${(s?.5:.25)*u}"/>`);}
+  else out.push(`<line x1="${a.x}" y1="${a.y}" x2="${c.x}" y2="${c.y}" stroke="${T.ink}" stroke-width="${.25*u}" stroke-dasharray="${2*u} ${1.5*u}"/>`);}
+ const tags=tagLayout(u);let ci=0,lastY=-1e9;const callX=b.x1+pad+400,MAX_CALLOUTS=2; // Diagram Design: max 2 annotation callouts. A dropped tag is reported in qa.meta and blocks acceptance
+ for(const t of labels?[...tags].sort((p,q)=>p.c.y-q.c.y):[]){if(!t.callout){out.push(tagSvg(t,u,t.c));continue;}
+  if(!callouts||ci>=MAX_CALLOUTS){t.dropped=true;continue;}
+  const ty=Math.max(t.c.y,lastY+9*u*1.6);ci++;
+  out.push(`<path d="M ${t.c.x} ${t.c.y} Q ${(t.c.x+callX)/2} ${t.c.y} ${callX-150} ${ty}" fill="none" stroke="${T.ink}" stroke-opacity=".45" stroke-width="${.3*u}" stroke-dasharray="${1.4*u} ${1*u}"/><circle cx="${t.c.x}" cy="${t.c.y}" r="${.7*u}" fill="${T.ink}"/>`);
+  const cl=callLines(t);out.push(`<text font-family="RUBIK Serif" font-style="italic" font-size="${9*u}" fill="${T.ink}">${cl.map((l,i)=>`<tspan x="${callX}" y="${ty+i*9*u*1.15}">${esc(l)}</tspan>`).join('')}</text><text font-size="${7.5*u}" fill="${T.muted}">${callArea(t).map((l,i)=>`<tspan x="${callX}" y="${ty+cl.length*9*u*1.15+i*7.5*u*1.2}">${esc(l)}</tspan>`).join('')}</text>`);lastY=ty+cl.length*9*u*1.15+callArea(t).length*7.5*u*1.2;}
+ return {svg:`<svg class="plan" viewBox="${minX} ${minY} ${vbW} ${vbH}" width="${pw}mm" height="${ph}mm" role="img">${out.join('')}</svg>`,pw,ph,mmPerUnit,callouts:ci,dropped:tags.filter(t=>t.dropped).length};}
+function scaleBar(mmPerUnit,metres=2){const seg=1000*mmPerUnit,len=metres*seg;return `<svg width="${len+16}mm" height="7mm" viewBox="-3 0 ${len+16} 7"><g font-family="RUBIK Inter" font-size="2.6" fill="${T.ink}">${Array.from({length:metres+1},(_,i)=>`<text x="${i*seg}" y="2.6" text-anchor="middle">${i}</text>`).join('')}<text x="${len+3}" y="2.6">m</text></g>${Array.from({length:metres},(_,i)=>`<rect x="${i*seg}" y="4" width="${seg}" height="1.4" fill="${i%2?T.paper:T.ink}" stroke="${T.ink}" stroke-width=".25"/>`).join('')}</svg>`;}
+// ---------- axonometric plan (Diagram Design type-axonometric-plan: 2:1 dimetric, walls cut at a drawing height) ----------
+function axo({w=180,h=120,H=1100,label=true}={}){
+ const iso=(x,y,z)=>[x-y,(x+y)/2-z];const prisms=[],flat=[];
+ for(const r of rooms){const m=matById[r.floorMaterialId];flat.push({pts:r.polygon.map(p=>iso(p.x,p.y,0)),fill:m?tint(m.color,.55):T.field});}
+ for(const o of S.geometry.objects){const a=(o.rotationDeg||0)*Math.PI/180,cs=Math.cos(a),sn=Math.sin(a),hw=o.size.widthMm/2,hd=o.size.depthMm/2;
+  flat.push({pts:[[-hw,-hd],[hw,-hd],[hw,hd],[-hw,hd]].map(([dx,dy])=>iso(o.position.x+dx*cs-dy*sn,o.position.y+dx*sn+dy*cs,0)),fill:'none',stroke:T.muted});}
+ for(const x of S.geometry.walls){const L=Math.hypot(x.end.x-x.start.x,x.end.y-x.start.y)||1,d={x:(x.end.x-x.start.x)/L,y:(x.end.y-x.start.y)/L},n={x:-d.y,y:d.x},t=x.thicknessMm/2;
+  const cuts=S.geometry.openings.filter(o=>o.wallId===x.id).map(o=>[o.offsetMm,o.offsetMm+o.widthMm]).sort((p,q)=>p[0]-q[0]);
+  let s=-t;const segs=[];for(const [a,b] of cuts){if(a>s)segs.push([s,a]);s=Math.max(s,b);}if(L+t>s)segs.push([s,L+t]);
+  for(const [a,b] of segs){const p=k=>({x:x.start.x+d.x*k,y:x.start.y+d.y*k});const A=p(a),Bp=p(b);
+   const foot=[{x:A.x+n.x*t,y:A.y+n.y*t},{x:Bp.x+n.x*t,y:Bp.y+n.y*t},{x:Bp.x-n.x*t,y:Bp.y-n.y*t},{x:A.x-n.x*t,y:A.y-n.y*t}];
+   prisms.push({foot,key:Math.max(...foot.map(q=>q.x+q.y)),top:x.structure==='partition'||x.structure==='low'?T.partition:T.ink});}}
+ prisms.sort((p,q)=>p.key-q.key);
+ const all=[...flat.flatMap(f=>f.pts),...prisms.flatMap(p=>p.foot.flatMap(q=>[iso(q.x,q.y,0),iso(q.x,q.y,H)]))];
+ const X=all.map(p=>p[0]),Y=all.map(p=>p[1]),pad=300,minX=Math.min(...X)-pad,minY=Math.min(...Y)-pad,vbW=Math.max(...X)-minX+pad,vbH=Math.max(...Y)-minY+pad;
+ const k=Math.min(w/vbW,h/vbH),u=.3528/k,poly=(pts,fill,stroke='none',sw=0)=>`<polygon points="${pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+ const out=[`<title>Axonometría de ${esc(TITLE)}</title><desc>Dibujo axonométrico generado desde la geometría de RUBIK; muros seccionados a ${num(H/1000)} m por convención de dibujo; mobiliario como huella en planta.</desc>`];
+ for(const f of flat)out.push(f.fill==='none'?poly(f.pts,'none',f.stroke,.3*u):poly(f.pts,f.fill));
+ for(const p of prisms){const F=p.foot,cx=F.reduce((s,q)=>s+q.x,0)/4,cy=F.reduce((s,q)=>s+q.y,0)/4;for(let i=0;i<4;i++){const a=F[i],b=F[(i+1)%4];const ex=b.x-a.x,ey=b.y-a.y,nx=ey,ny=-ex;
+   const sg=((a.x+b.x)/2-cx)*nx+((a.y+b.y)/2-cy)*ny>0?1:-1,vx=nx*sg,vy=ny*sg;if(vx+vy<=0)continue;
+   out.push(poly([iso(a.x,a.y,0),iso(b.x,b.y,0),iso(b.x,b.y,H),iso(a.x,a.y,H)],vx>Math.abs(vy)?'#bdb5a7':'#ddd6ca',T.ink,.12*u));}
+  out.push(poly(F.map(q=>iso(q.x,q.y,H)),p.top));}
+ if(label){const placed=[];for(const t of tagLayout(u)){if(t.callout)continue;let [x,y]=iso(t.c.x,t.c.y,0);const one={...t,lines:[t.r.name]};one.box={w:Math.max(t.r.name.length*t.fsN*.6,t.areaTxt.length*t.fsA*.56)+2.4*u,h:t.fsN*1.2+t.fsA*1.3+2.4*u};
+  const hit=(x,y)=>placed.some(q=>Math.abs(q.x-x)<(q.w+one.box.w)/2+1.5*u&&Math.abs(q.y-y)<(q.h+one.box.h)/2+1.5*u);for(let k=0;k<12&&hit(x,y);k++)y+=(k%2?-1:1)*(k+1)*(one.box.h/2+u);placed.push({x,y,w:one.box.w,h:one.box.h});out.push(tagSvg(one,u,{x,y}));}}
+ return `<svg class="axo" viewBox="${minX} ${minY} ${vbW} ${vbH}" width="${vbW*k}mm" height="${vbH*k}mm" role="img">${out.join('')}</svg>`;}
+// ---------- document frame ----------
+function doc(id,title,style,pages,{size='A4L'}={}){
+ const N=pages.length,studio=prof.name||'Estudio sin nombre';
+ const body=pages.map((p,i)=>`<section class="page ${p.cls||''}" data-page="${i+1}">${p.html}${p.foot===false?'':`<footer class="foot"><span>${esc(studio)}</span><span>${esc(TITLE)}</span><span>Revisión ${esc(rev)}</span><span>${esc(date)}</span><span class="pg">${i+1} / ${N}</span></footer>`}</section>`).join('\n');
+ const page=size==='A3L'?`@page{size:420mm 297mm;margin:0}:root{--page-w:420mm;--page-h:297mm}`:'';
+ return `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>${esc(title)}, ${esc(TITLE)}</title><style>${FONT_CSS}\n${CSS}\n${page}</style></head><body data-doc="${id}" data-style="${style}">${body}</body></html>`;}
+const fig=(n,u,l,p,cls='')=>`<div class="fig ${cls}"><div class="n">${n}<span class="u">${u}</span></div><div class="l">${esc(l)}</div>${p?`<div class="caption">${esc(p)}</div>`:''}</div>`;
+const img=(v,style='')=>`<img class="img" src="${v.src}" alt="${esc(v.label)}" style="${v.fit==='contain'?'object-fit:contain;':''}${style}">`;
+// ---------- covers: the three directions (Huashu gate) ----------
+const coverImage=(kind,sub,view)=>({cls:'bleed',head:false,html:`<div style="position:absolute;inset:0 0 auto 0;height:150mm;background:${view.bg}" class="frame">${img(view)}</div>
+ <div style="position:absolute;left:16mm;right:16mm;top:157mm;height:auto" class="grid"><div class="c1-7"><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(prof.name)}</p><h1 class="h1" style="margin-top:2mm">${esc(TITLE)}</h1><p class="lead" style="margin-top:1.5mm">${esc(kind)}</p></div>
+ <div class="c8-12"><p class="meta">${esc(sub)}</p><p class="caption">${esc(view.label)}. ${VIEW_NOTE}</p></div></div>`});
+const coverDrawing=(kind,sub)=>({head:false,html:`<div class="grid"><div class="c1-4" style="display:flex;flex-direction:column;justify-content:space-between;height:180mm">
+ <div><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(prof.name)}</p><p class="meta">${esc(prof.tagline||'')}</p></div>
+ <div><h1 class="h1">${esc(TITLE)}</h1><p class="lead" style="margin-top:3mm">${esc(kind)}</p><p class="meta" style="margin-top:6mm">${esc(sub)}</p></div>
+ <p class="caption">Axonometría dibujada desde la geometría del proyecto en RUBIK. Muros seccionados a 1,10 m; mobiliario en huella.</p></div>
+ <div class="c5-12" style="display:flex;align-items:center;justify-content:center">${axo({w:178,h:176})}</div></div>`});
+const coverFigure=(kind,sub)=>{const p=plan({w:100,h:110,callouts:false,labels:false});return {head:false,html:`<div class="grid"><div class="c1-7" style="display:flex;flex-direction:column;justify-content:space-between;height:180mm">
+ <p class="meta" style="color:var(--d-ink);font-weight:700">${esc(prof.name)}</p>
+ <div><div style="font-weight:700;font-size:96pt;line-height:.9;letter-spacing:-.04em">${num(area)}<span style="font-size:30pt;font-weight:400;margin-left:2mm">m²</span></div><p class="meta" style="margin-top:3mm">Superficie útil estimada por RUBIK sobre el modelo</p></div>
+ <div><h1 class="h1">${esc(TITLE)}</h1><p class="lead" style="margin-top:2mm">${esc(kind)}</p><p class="meta" style="margin-top:4mm">${esc(sub)}</p></div></div>
+ <div class="c8-12" style="display:flex;align-items:center">${p.svg}</div></div>`};};
+// ---------- shared pages ----------
+const legend=(p,extra='')=>`<div class="legend" style="margin-top:3mm">${scaleBar(p.mmPerUnit)}<span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.ink}"/></svg>Portante y fachada</span><span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.partition}"/></svg>Tabique</span><span><svg width="7mm" height="3mm"><line x1="0" y1="1.5mm" x2="7mm" y2="1.5mm" stroke="${T.ink}" stroke-width=".3mm"/><line x1="0" y1=".4mm" x2="7mm" y2=".4mm" stroke="${T.ink}" stroke-width=".15mm"/><line x1="0" y1="2.6mm" x2="7mm" y2="2.6mm" stroke="${T.ink}" stroke-width=".15mm"/></svg>Ventana</span><span><svg width="7mm" height="3mm"><line x1="0" y1="1.5mm" x2="7mm" y2="1.5mm" stroke="${T.ink}" stroke-width=".15mm" stroke-dasharray="1.2 1"/></svg>Puerta o paso</span>${extra}</div>`;
+function planPage(title){const p=plan({w:172,h:142});
+ const rowsHtml=rooms.map(r=>`<tr><td>${esc(r.name)}</td><td class="num">${r.areaM2==null?'<span class="unk">sin área</span>':num(r.areaM2)}</td><td>${r.counted?'Sí':'No'}</td></tr>`).join('');
+ return {html:`<div class="grid"><div class="c1-8" style="display:flex;flex-direction:column">${p.svg}${legend(p)}</div>
+ <div class="c9-12"><h2 class="h2">${esc(title)}</h2><table><thead><tr><th>Estancia</th><th class="num">m²</th><th>Computa</th></tr></thead><tbody>${rowsHtml}<tr class="total"><td>Superficie útil computada</td><td class="num">${num(area)}</td><td></td></tr></tbody></table>
+ <p class="caption">${esc(STATUS_AREA)} ${counted.length} de ${rooms.length} estancias computan según el cálculo de superficies de RUBIK. El color de fondo de cada estancia es su pavimento (página de materiales).</p></div></div>`,meta:{callouts:p.callouts,dropped:p.dropped}};}
+function materialsPage(title){const tot=floors.reduce((s,f)=>s+f.areaM2,0);
+ const bar=floors.map(f=>`<div style="flex:${f.areaM2};background:${f.color};border-right:.4mm solid ${T.paper}"></div>`).join('');
+ const list=floors.map(f=>`<div class="sw"><i style="background:${f.color}"></i><div><div class="h3" style="margin:0">${esc(f.name)}</div><div class="meta">${num(f.areaM2)} m², ${num(f.areaM2/tot*100,0)} % del pavimento modelado</div><div class="meta">${esc(f.rooms.join(', '))}</div></div></div>`).join('');
+ return {html:`<div class="grid"><div class="c1-4"><h2 class="h2">${esc(title)}</h2><p class="read">Pavimentos asignados en el modelo, ordenados por superficie. La barra reparte los ${num(tot)} m² de pavimento modelado entre materiales.</p>
+  <div style="display:flex;height:9mm;margin:4mm 0 2mm;border:.2mm solid rgba(0,0,0,.12)">${bar}</div><p class="caption">Incluye los miradores, que no computan como superficie útil: por eso suma ${num(tot)} m² y no ${num(area)} m².</p>
+  <p class="note" style="margin-top:8mm"><b>Color del modelo, no muestra física.</b> Los tonos son los del material en el modelo 3D. La elección final requiere la muestra real del fabricante.</p></div>
+  <div class="c6-12" style="columns:2;column-gap:6mm">${list}</div></div>`};}
+function objectRows(){const map=new Map();S.objects.forEach((o,i)=>{const g=S.geometry.objects[i];const sz=g?.size?`${num(g.size.widthMm,0)} × ${num(g.size.depthMm,0)}`:null;const k=(o.room||'')+'|'+o.name+'|'+sz;
+  if(!map.has(k))map.set(k,{room:o.room||'Fuera de los recintos',name:o.name,size:sz,qty:0,ref:o.catalogRef});map.get(k).qty++;});
+ const order=rooms.map(r=>r.name);return [...map.values()].sort((a,b)=>(order.indexOf(a.room)+1||99)-(order.indexOf(b.room)+1||99)).map((r,i)=>({...r,tag:'M-'+String(i+1).padStart(2,'0')}));}
+function schedulePages(title){const rows=objectRows(),n=Math.ceil(rows.length/20),per=Math.ceil(rows.length/n),pages=[];
+ for(let i=0;i<rows.length;i+=per){const chunk=rows.slice(i,i+per);let last='';
+  const tr=chunk.map(r=>{const roomCell=r.room!==last?esc(r.room):'';last=r.room;return `<tr><td class="muted">${r.tag}</td><td>${roomCell}</td><td>${esc(r.name)}</td><td class="num">${r.qty}</td><td class="num">${r.size?r.size:'<span class="unk">sin medida</span>'}</td><td>${r.ref?esc(r.ref):'<span class="unk">Sin referencia de producto</span>'}</td></tr>`;}).join('');
+  pages.push({html:`<div class="grid"><div class="c1-4"><h2 class="h2">${esc(title)}</h2>${n>1?`<p class="caption" style="margin:-2mm 0 4mm">Parte ${i/per+1} de ${n}</p>`:''}${i===0?`<p class="read">${S.objects.length} objetos colocados en el modelo, agrupados en ${rows.length} líneas por estancia y medida.</p><p class="note" style="margin-top:6mm"><b>Sin productos asignados.</b> Los objetos del proyecto no tienen referencia de fabricante, acabado ni precio. RUBIK no los inventa: la columna queda abierta hasta que el estudio los elija.</p><p class="caption" style="margin-top:4mm">Estancia de cada objeto: la que contiene su posición en el plano (regla del producto). Medidas en mm, ancho por fondo.</p>`:`<p class="caption">Continúa el listado de la página anterior.</p>`}</div>
+   <div class="c5-12"><table><thead><tr><th>Ref.</th><th>Estancia</th><th>Objeto</th><th class="num">Ud.</th><th class="num">Medida (mm)</th><th>Producto</th></tr></thead><tbody>${tr}</tbody></table></div></div>`});}
+ return pages;}
+const BV=S.budget?.test?.view?.professional;
+function budgetPage(title){const sm=BV.summary,unit={m2:'m²',m:'m',unit:'ud'};
+ const body=BV.chapters.map(c=>{const lines=c.lines.map(l=>`<tr><td>${esc(l.description)}</td><td class="num">${num(l.quantity.value,l.quantity.unit==='unit'?0:2)} ${unit[l.quantity.unit]||esc(l.quantity.unit)}${l.quantity.status==='estimated'?' <span class="muted">est.</span>':''}</td><td class="num">${num(l.wastePercent||0,0)} %</td><td class="num">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)}</td><td class="num">${eur(l.unitPrice)}</td><td class="num">${eur(l.subtotalNet)}</td></tr>`).join('');
+  return `<tr class="chap"><td colspan="6">${esc(c.title)}</td></tr>${lines}<tr class="sub"><td colspan="5">Subtotal</td><td class="num">${eur(c.lines.reduce((s,l)=>s+l.subtotalNet,0))}</td></tr>`;}).join('');
+ return {html:`<div class="grid"><div class="c1-8"><table><thead><tr><th>Partida</th><th class="num">Medición</th><th class="num">Merma</th><th class="num">Cantidad</th><th class="num">Precio unitario*</th><th class="num">Importe neto</th></tr></thead><tbody>${body}
+  <tr class="total"><td colspan="5">Base imponible</td><td class="num">${eur(sm.net.amount)}</td></tr><tr><td colspan="5">IVA ${num(sm.tax.ratePercent,0)} %</td><td class="num">${eur(sm.tax.amount)}</td></tr><tr class="total"><td colspan="5">Total con IVA</td><td class="num">${eur(sm.gross.amount)}</td></tr></tbody></table></div>
+  <div class="c9-12"><h2 class="h2">${esc(title)}</h2>${fig(nf(2).format(sm.gross.amount),'€','Total con IVA','Suma de las partidas con precio de prueba','focal')}
+  <div style="margin-top:6mm"><span class="status">Pendiente de revisión profesional</span><p class="caption">${sm.items-sm.unreviewed} de ${sm.items} partidas revisadas por el estudio.</p></div>
+  <p class="note" style="margin-top:6mm"><b>* Precios de prueba de laboratorio, fechados el 17/11/2026.</b> ${esc(S.budget.test.label)} Mediciones calculadas por RUBIK sobre el modelo, con la merma indicada.</p></div></div>`};}
+const imagePage=v=>({html:`<figure style="height:150mm;background:${v.bg}" class="frame">${img(v)}</figure><div class="grid" style="height:auto;margin-top:3mm"><div class="c1-4"><h2 class="h2" style="margin:0">${esc(v.label)}</h2></div><div class="c5-12"><p class="caption" style="margin:0">${esc(v.label)}, ${num(rooms.find(r=>r.name===v.label)?.areaM2||0)} m². ${VIEW_NOTE}</p></div></div>`});
+const studioBlock=()=>`<div class="note"><b>${esc(prof.name)}</b><br>${esc(prof.person||'')}<br>${esc(prof.email||'')}<br>${esc((prof.web||'').replace(/^https?:\/\//,''))}${prof.phone?'<br>'+esc(prof.phone):''}</div><p class="caption">Datos del perfil de marca del estudio en RUBIK. Logotipo: no facilitado.</p>`;
+// ---------- deliverables ----------
+function build(){
+ const hero=viewBy('Salón')||views[0],over=views.find(v=>v.kind==='overview')||views[0],bedrooms=views.filter(v=>/Dormitorio/.test(v.label));
+ const D={},meta={};
+ const pp=planPage('Planta');meta.plan=pp.meta;if(pp.meta.dropped)throw new Error('plan: room tags dropped '+pp.meta.dropped);
+ D['directions']=doc('directions','Direcciones de portada','client',[coverImage('Dirección A: la vista 3D',`Libro de interiorismo, ${date}`,over),coverDrawing('Dirección B: el dibujo',`Libro de interiorismo, ${date}`),coverFigure('Dirección C: la cifra',`Libro de interiorismo, ${date}`)]);
+ D['interior-book']=doc('interior-book','Libro de interiorismo','client',[
+  coverDrawing('Libro de interiorismo',`Presentado por ${prof.person||prof.name}, ${date}`),
+  {html:`<div class="grid"><div class="c1-6" style="display:flex;flex-direction:column;justify-content:space-between;height:176mm"><div><h2 class="h2">El proyecto</h2><p class="read">${esc(B.intro)}</p><p class="caption">Texto del profesional en la ficha de entrega.</p></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6mm"><div>${studioBlock()}</div><p class="note"><b>Estado de los datos.</b> ${esc(STATUS_AREA)}</p></div></div>
+   <div class="c8-12" style="display:grid;grid-template-columns:1fr 1fr;gap:9mm 5mm;align-content:start">
+    ${fig(num(area),'m²','Superficie útil estimada',`${counted.length} estancias computadas`)}${fig(rooms.length,'','Estancias en el plano',`${rooms.length-counted.length} no computan`)}
+    ${fig(byName(/^Dormitorio/),'','Dormitorios','Según el nombre de las estancias')}${fig(byName(/^Baño/),'','Baños','Según el nombre de las estancias')}
+    ${fig(S.objects.length,'','Objetos colocados','Mobiliario y equipamiento del modelo')}${fig(views.length,'','Vistas del modelo 3D','Generadas por RUBIK')}</div></div>`},
+  pp,imagePage(hero),
+  {html:`<div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:5mm;height:164mm">${bedrooms.map((v,i)=>`<figure style="${i===0?'grid-row:1/3;':''}display:flex;flex-direction:column;min-height:0"><div class="frame" style="flex:1;min-height:0;background:${v.bg}">${img(v)}</div><p class="caption"><b>${esc(v.label)}</b>, ${num(rooms.find(r=>r.name===v.label)?.areaM2||0)} m²</p></figure>`).join('')}</div><p class="caption" style="margin-top:1mm">${VIEW_NOTE}</p>`},
+  materialsPage('Materiales de pavimento')]);
+ D['materials-furniture-book']=doc('materials-furniture-book','Libro de materiales y mobiliario','client',[
+  coverImage('Materiales y mobiliario',`${S.materials.length} materiales, ${S.objects.length} objetos, ${date}`,hero),
+  materialsPage('Materiales de pavimento'),
+  {html:`<div class="grid"><div class="c1-4"><h2 class="h2">Dónde va cada objeto</h2><p class="read">Planta con la huella de los ${S.objects.length} objetos del modelo, en su posición y tamaño.</p><p class="caption">Las referencias M-01 y siguientes del listado siguen el orden de las estancias.</p></div><div class="c5-12">${plan({w:182,h:160,objects:true}).svg}</div></div>`},
+  ...schedulePages('Mobiliario y equipamiento')]);
+ D['commercial-proposal']=doc('commercial-proposal','Propuesta económica','client',[
+  {html:`<div class="grid"><div class="c1-6" style="display:flex;flex-direction:column;justify-content:space-between;height:178mm"><div><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(prof.name)}</p><p class="meta">${esc(prof.tagline||'')}</p></div>
+   <div><h1 class="h1">Propuesta económica</h1><p class="lead" style="margin-top:3mm">${esc(TITLE)}</p></div>
+   <div class="grid" style="grid-template-columns:repeat(6,1fr);height:auto"><div style="grid-column:1/4">${fig(nf(2).format(BV.summary.gross.amount),'€','Total con IVA','Con precios de prueba de laboratorio','focal')}</div><div style="grid-column:4/7">${fig(num(area),'m²','Superficie útil estimada','Calculada sobre el modelo')}</div></div></div>
+   <div class="c7-12" style="display:flex;flex-direction:column">${axo({w:146,h:120})}<p class="caption">Axonometría dibujada desde la geometría del proyecto en RUBIK.</p><p class="meta" style="margin-top:auto">Preparada por ${esc(prof.person||prof.name)}, ${esc(prof.email||'')}, ${esc(date)}</p></div></div>`},
+  {html:`<div class="grid"><div class="c1-6"><h2 class="h2">Alcance</h2><p class="read">${esc(B.intro)}</p><p class="caption">Texto del profesional en la ficha de entrega.</p>
+   <h3 class="h3" style="margin-top:10mm">Qué incluye este presupuesto</h3><table><thead><tr><th>Capítulo</th><th class="num">Partidas</th><th class="num">Importe neto</th></tr></thead><tbody>${BV.chapters.map(c=>`<tr><td>${esc(c.title)}</td><td class="num">${c.lines.length}</td><td class="num">${eur(c.lines.reduce((s,l)=>s+l.subtotalNet,0))}</td></tr>`).join('')}</tbody></table></div>
+   <div class="c8-12"><h3 class="h3">Qué no incluye</h3><p class="read">Mobiliario, equipamiento y honorarios: el proyecto no tiene precios ni referencias para ellos y RUBIK no los estima.</p><h3 class="h3" style="margin-top:8mm">Condiciones</h3><p class="read unk">El estudio no ha facilitado condiciones, plazos ni forma de pago. Esta sección queda vacía a propósito.</p><div style="margin-top:10mm">${studioBlock()}</div></div></div>`},
+  budgetPage('Presupuesto')]);
+ D['real-estate']=doc('real-estate','Presentación inmobiliaria','realestate',[
+  coverImage('Presentación de la vivienda',`Propuesta de reforma, ${date}`,hero),
+  {html:`<div class="grid"><div class="c1-4"><h2 class="h2">La vivienda en cifras</h2><p class="read">${esc(B.intro)}</p><p class="note" style="margin-top:10mm"><b>No disponibles en el proyecto:</b> ubicación, precio de venta, año de construcción, orientación y certificado energético. No se muestran.</p></div>
+   <div class="c6-12" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10mm 6mm;align-content:start">
+    ${fig(num(area),'m²','Superficie útil estimada','Calculada sobre el modelo')}${fig(byName(/^Dormitorio/),'','Dormitorios','Según el nombre de las estancias')}${fig(byName(/^Baño/),'','Baños','Según el nombre de las estancias')}
+    ${fig(byName(/^Balc/),'','Balcones','Según el nombre de las estancias')}${fig(num(rooms.find(r=>r.name==='Salón')?.areaM2||0),'m²','Salón','La estancia mayor')}${fig(nf(0).format(BV.summary.gross.amount),'€','Reforma propuesta, IVA incluido','Precios de prueba de laboratorio')}
+    <div style="grid-column:1/4">${fig(nf(2).format(BV.summary.gross.amount/area),'€/m²','Coste de la reforma por m² útil','Cálculo: total con IVA dividido por la superficie útil estimada. Con precios de prueba, solo ilustra el formato.')}</div></div></div>`},
+  {html:`<div class="grid"><div class="c1-4"><h2 class="h2">La distribución</h2><p class="read">Axonometría dibujada desde la geometría del proyecto.</p><p class="caption">Muros seccionados a 1,10 m por convención de dibujo; el mobiliario se muestra como huella en planta. Los nombres de todas las estancias están en la planta de la página siguiente.</p></div><div class="c5-12" style="display:flex;justify-content:center">${axo({w:182,h:170})}</div></div>`},
+  pp,
+  {html:`<div style="display:grid;grid-template-columns:1fr 1fr;gap:5mm;height:164mm">${[over,...bedrooms.slice(0,3)].map(v=>`<figure style="display:flex;flex-direction:column;min-height:0"><div class="frame" style="flex:1;min-height:0;background:${v.bg}">${img(v)}</div><p class="caption"><b>${esc(v.label)}</b></p></figure>`).join('')}</div><p class="caption" style="margin-top:1mm">${VIEW_NOTE}</p>`}]);
+ {const p=plan({scale:50,objects:true,floorTint:false,pad:160});meta.sheet={callouts:p.callouts,dropped:p.dropped};const tb=(c,v,cls='')=>`<div class="${cls}"><small>${c}</small>${v?esc(v):'<span class="unk">No facilitado</span>'}</div>`;
+  D['architecture-sheet']=doc('architecture-sheet','Lámina de arquitectura','technical',[{head:false,foot:false,html:`
+  <div class="sheet-frame" style="position:absolute;inset:10mm;border:.7mm solid var(--d-ink)"></div>
+  <div style="position:absolute;left:18mm;top:11mm;line-height:0">${p.svg}</div>
+  <div style="position:absolute;right:16mm;top:16mm;left:${(18+p.pw+8).toFixed(1)}mm"><h2 class="h2" style="font-size:16pt">Cuadro de superficies</h2><table><thead><tr><th>Estancia</th><th class="num">m²</th><th>Computa</th></tr></thead><tbody>${rooms.map(r=>`<tr><td>${esc(r.name)}</td><td class="num">${num(r.areaM2)}</td><td>${r.counted?'Sí':'No'}</td></tr>`).join('')}<tr class="total"><td>Superficie útil computada</td><td class="num">${num(area)}</td><td></td></tr></tbody></table>
+   <p class="caption">${esc(STATUS_AREA)}</p></div>
+  <div style="position:absolute;left:18mm;bottom:14mm;width:200mm">${legend(p,`<span><svg width="7mm" height="3mm"><rect x=".3mm" y=".3mm" width="6.4mm" height="2.4mm" fill="none" stroke="${T.muted}" stroke-width=".2mm"/></svg>Mobiliario</span>`)}</div>
+  <div class="tb">${tb('Proyecto',TITLE)}${tb('Dirección',null)}${tb('Cliente',null)}${tb('Organización',prof.name)}${tb('Título','Planta de distribución propuesta','wide')}${tb('Dibujado por',prof.person)}${tb('Revisado por',null)}${tb('Fecha',date)}${tb('Revisión',rev)}
+   <div class="side"><div><small>Lámina</small><span class="num">A-01</span></div><div><small>Escala</small><span style="font-size:12.8pt;font-weight:700">1:50</span></div><div><small>Formato</small>A3, escala sobre medidas del modelo</div></div></div>`}],{size:'A3L'});}
+ return {D,meta};}
+// ---------- Huashu design_lint, ported: same probe (read from the donor file), print floors 12 px body / 9.3 px label ----------
+const PROBE=(()=>{try{const s=fs.readFileSync(HUASHU_LINT,'utf8'),k='COLLECT_JS = r"""',i=s.indexOf(k)+k.length;return s.slice(i,s.indexOf('"""',i));}catch{return null;}})();
+function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes rotas ${f.broken.length}`);if(f.bodySmall.length)red.push(`texto de lectura bajo el mínimo ${f.bodySmall.length}: ${JSON.stringify(f.bodySmall.slice(0,2))}`);
+ if(f.small.length>=3)red.push(`texto bajo el mínimo de etiqueta ${f.small.length}: ${JSON.stringify(f.small.slice(0,3))}`);if(f.lowContrast.length)red.push(`contraste insuficiente ${f.lowContrast.length}: ${JSON.stringify(f.lowContrast.slice(0,3))}`);
+ const chrome=[];if(f.eyebrows.length>=3)chrome.push(`etiquetas en mayúsculas espaciadas ${f.eyebrows.length}`);if(f.dots>=2)chrome.push(`cadenas «A · B · C» ${f.dots}`);if(f.emDashLabels)chrome.push(`etiquetas «WORD — texto» ${f.emDashLabels}`);if(f.arrows>=2)chrome.push(`flechas de cola ${f.arrows}`);if(f.monoSmall>=4)chrome.push(`mono pequeña ${f.monoSmall}`);
+ if(chrome.length)yellow.push('decoración de plantilla: '+chrome.join('; '));if(f.accentWord.length)yellow.push(`una palabra del titular en otro color ${f.accentWord.length}`);if(f.numbered.length>=3)yellow.push(`numeración 01/02/03 ${f.numbered.length}`);
+ if(f.display&&/^(inter|roboto|arial|helvetica|system-ui|-apple-system|rubik inter)$/i.test(f.display))yellow.push(`la mayor tipografía de la página es ${f.display} (fuente de interfaz como display)`);return {red,yellow};}
+// ---------- render + QA ----------
+(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox']});
+ {const pg=await browser.newPage();for(const v of S.views){const src='data:image/png;base64,'+b64(path.join(snapDir,v.file));
+   const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
+   views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
+ const {D,meta}=build();const qa={meta,probe:!!PROBE,docs:{}};
+ for(const [id,html] of Object.entries(D)){const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=id==='architecture-sheet'?1588:1123;
+  const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
+  const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);
+  const H=await pg.evaluate(()=>document.documentElement.scrollHeight);await pg.setViewportSize({width:vw,height:Math.min(H,16000)});
+  const m=await pg.evaluate(()=>{const pages=[...document.querySelectorAll('.page')];const over=[];
+   for(const p of pages){const box=p.getBoundingClientRect();for(const el of p.querySelectorAll('*')){if(el.closest('svg')&&el.tagName!=='svg')continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;
+     if(r.right>box.right+.5||r.bottom>box.bottom+.5||r.left<box.left-.5)over.push({page:p.dataset.page,tag:el.tagName,text:(el.textContent||'').trim().slice(0,40)});}
+    const foot=p.querySelector('.foot')?.getBoundingClientRect();if(foot)for(const el of p.querySelectorAll(':scope > :not(.foot):not(.runhead) *')){if(el.closest('svg')&&el.tagName!=='svg')continue;const r=el.getBoundingClientRect();if(r.height&&r.bottom>foot.top+.5&&r.top<foot.top)over.push({page:p.dataset.page,collides:'foot',tag:el.tagName,text:(el.textContent||'').trim().slice(0,30)});}}
+   let blockOverlaps=[];for(const p of pages){const kids=[...p.children].filter(e=>!e.classList.contains('sheet-frame')).map(e=>({e,r:e.getBoundingClientRect()}));for(let i=0;i<kids.length;i++)for(let j=i+1;j<kids.length;j++){const a=kids[i].r,b=kids[j].r;if(a.width&&b.width&&a.left<b.right-.5&&b.left<a.right-.5&&a.top<b.bottom-.5&&b.top<a.bottom-.5)blockOverlaps.push({page:p.dataset.page,a:kids[i].e.className||kids[i].e.tagName,b:kids[j].e.className||kids[j].e.tagName});}}
+   const tags=[...document.querySelectorAll('svg.plan g, svg.axo g')].map(g=>g.getBoundingClientRect());let tagOverlaps=0;for(let i=0;i<tags.length;i++)for(let j=i+1;j<tags.length;j++){const a=tags[i],b=tags[j];if(a.left<b.right-.5&&b.left<a.right-.5&&a.top<b.bottom-.5&&b.top<a.bottom-.5)tagOverlaps++;}
+   return {pages:pages.length,blockOverlaps,overflowCount:over.length,overflow:over.slice(0,12),tagOverlaps,fontsLoaded:[...document.fonts].filter(f=>f.status==='loaded').map(f=>`${f.family} ${f.weight} ${f.style}`)};});
+  let lint=null;if(PROBE){const facts=await pg.evaluate(`(${PROBE})()`);lint={...judge(facts),fonts:facts.fonts,display:facts.display,body:facts.body};}
+  await pg.emulateMedia({media:'print'});await pg.pdf({path:path.join(outDir,id+'.pdf'),preferCSSPageSize:true,printBackground:true});
+  qa.docs[id]={...m,external:ext,errors,lint};await ctx.close();}
+ fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
+ for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
+ console.log('meta',JSON.stringify(meta));await browser.close();})().catch(e=>{console.error(e);process.exit(1);});

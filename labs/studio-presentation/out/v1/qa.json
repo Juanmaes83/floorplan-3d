@@ -1,0 +1,80 @@
+{
+ "accent": {
+  "hex": "#75634b",
+  "soft": "#f4ebde",
+  "from": "Parqué de roble",
+  "contrastOnWhite": 5.76
+ },
+ "docs": {
+  "interior-book": {
+   "pages": 6,
+   "overflow": [],
+   "overflowCount": 0,
+   "minFontPx": 9.33333,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "minFontPt": 7,
+   "external": []
+  },
+  "materials-furniture-book": {
+   "pages": 6,
+   "overflow": [],
+   "overflowCount": 0,
+   "minFontPx": 9.33333,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "minFontPt": 7,
+   "external": []
+  },
+  "commercial-proposal": {
+   "pages": 3,
+   "overflow": [],
+   "overflowCount": 0,
+   "minFontPx": 9.33333,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal",
+    "RUBIK Serif 400 italic"
+   ],
+   "minFontPt": 7,
+   "external": []
+  },
+  "real-estate": {
+   "pages": 4,
+   "overflow": [],
+   "overflowCount": 0,
+   "minFontPx": 9.33333,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "minFontPt": 7,
+   "external": []
+  },
+  "architecture-sheet": {
+   "pages": 1,
+   "overflow": [],
+   "overflowCount": 0,
+   "minFontPx": 9.33333,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "minFontPt": 7,
+   "external": []
+  }
+ }
+}

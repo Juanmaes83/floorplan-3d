@@ -1,0 +1,5739 @@
+{
+ "schema": "rubik-studio-lab.snapshot",
+ "version": 1,
+ "takenAt": "2026-11-17T11:46:44.057Z",
+ "project": {
+  "id": "prj_reference-home",
+  "name": "Proyecto de ejemplo",
+  "revision": "rv1-0f3e96422fd20e08",
+  "rooms": 13,
+  "walls": 70,
+  "openings": 22,
+  "objects": 46,
+  "scale": "estimated"
+ },
+ "brand": {
+  "profile": {
+   "id": "brd_pzmwxtgomkud",
+   "name": "Estudio Ejemplo",
+   "person": "Profesional de prueba",
+   "phone": "",
+   "email": "estudio@example.invalid",
+   "web": "https://example.invalid",
+   "tagline": "Arquitectura e interiorismo",
+   "logo": null,
+   "updatedAt": "2026-11-17T11:46:13.381Z"
+  },
+  "title": "Vivienda de ejemplo",
+  "intro": "Reorganización de una vivienda de tres dormitorios: zona de día abierta, dos baños y almacenamiento a medida.",
+  "takenAt": "2026-11-17T11:46:44.032Z"
+ },
+ "summary": {
+  "areaM2": 87.18280000000001,
+  "roomsCounted": 11,
+  "complete": true,
+  "status": "estimated",
+  "scale": "estimated"
+ },
+ "surfaces": {
+  "areaM2": 87.18280000000001,
+  "status": "estimated",
+  "levels": [
+   {
+    "name": null,
+    "rooms": [
+     {
+      "id": "rom_master",
+      "name": "Dormitorio principal",
+      "areaM2": 12.3679,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_mbath",
+      "name": "Baño en suite",
+      "areaM2": 3.2032,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_kid",
+      "name": "Dormitorio infantil",
+      "areaM2": 9.3012,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_gbath",
+      "name": "Baño de invitados",
+      "areaM2": 2.8944,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_laundry",
+      "name": "Balcón-lavadero",
+      "areaM2": 2.9212,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_child",
+      "name": "Dormitorio juvenil",
+      "areaM2": 10.89372,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_kitchen",
+      "name": "Cocina",
+      "areaM2": 6.0386,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_dining",
+      "name": "Comedor",
+      "areaM2": 7.03296,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_hall",
+      "name": "Pasillo",
+      "areaM2": 5.70912,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_living",
+      "name": "Salón",
+      "areaM2": 21.5275,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_balcony",
+      "name": "Balcón de estar",
+      "areaM2": 5.293,
+      "counted": true,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_bay1",
+      "name": "Mirador del dormitorio principal",
+      "areaM2": 1.4148,
+      "counted": false,
+      "status": "estimated"
+     },
+     {
+      "id": "rom_bay2",
+      "name": "Mirador del dormitorio juvenil",
+      "areaM2": 1.1742,
+      "counted": false,
+      "status": "estimated"
+     }
+    ]
+   }
+  ]
+ },
+ "plan": {
+  "sheet": "assets/sheet.svg",
+  "plan": "assets/plan.svg"
+ },
+ "views": [
+  {
+   "kind": "overview",
+   "label": "Vista general",
+   "roomId": null,
+   "provenance": "Vista del modelo 3D real del proyecto (RUBIK), no fotografía",
+   "file": "assets/view-01-overview.png"
+  },
+  {
+   "kind": "room",
+   "label": "Salón",
+   "roomId": "rom_living",
+   "provenance": "Vista del modelo 3D real del proyecto (RUBIK), no fotografía",
+   "file": "assets/view-02-room.png"
+  },
+  {
+   "kind": "room",
+   "label": "Dormitorio principal",
+   "roomId": "rom_master",
+   "provenance": "Vista del modelo 3D real del proyecto (RUBIK), no fotografía",
+   "file": "assets/view-03-room.png"
+  },
+  {
+   "kind": "room",
+   "label": "Dormitorio juvenil",
+   "roomId": "rom_child",
+   "provenance": "Vista del modelo 3D real del proyecto (RUBIK), no fotografía",
+   "file": "assets/view-04-room.png"
+  },
+  {
+   "kind": "room",
+   "label": "Dormitorio infantil",
+   "roomId": "rom_kid",
+   "provenance": "Vista del modelo 3D real del proyecto (RUBIK), no fotografía",
+   "file": "assets/view-05-room.png"
+  }
+ ],
+ "board": {
+  "floors": [
+   {
+    "materialId": "mat_tile800",
+    "name": "Baldosa 800",
+    "color": "#ebe6dc",
+    "preset": "tile-800",
+    "sample": null,
+    "areaM2": 34.27,
+    "rooms": [
+     "Comedor",
+     "Pasillo",
+     "Salón"
+    ]
+   },
+   {
+    "materialId": "mat_wood",
+    "name": "Parqué de roble",
+    "color": "#d8b88a",
+    "preset": "wood",
+    "sample": null,
+    "areaM2": 32.56,
+    "rooms": [
+     "Dormitorio principal",
+     "Dormitorio infantil",
+     "Dormitorio juvenil"
+    ]
+   },
+   {
+    "materialId": "mat_antislip",
+    "name": "Baldosa antideslizante 300",
+    "color": "#d3d8d4",
+    "preset": "tile-300",
+    "sample": null,
+    "areaM2": 9.02,
+    "rooms": [
+     "Baño en suite",
+     "Baño de invitados",
+     "Balcón-lavadero"
+    ]
+   },
+   {
+    "materialId": "mat_tile600",
+    "name": "Baldosa 600",
+    "color": "#dfe3e1",
+    "preset": "tile-600",
+    "sample": null,
+    "areaM2": 6.04,
+    "rooms": [
+     "Cocina"
+    ]
+   },
+   {
+    "materialId": "mat_walnut",
+    "name": "Parqué de nogal",
+    "color": "#9b7250",
+    "preset": "walnut",
+    "sample": null,
+    "areaM2": 5.29,
+    "rooms": [
+     "Balcón de estar"
+    ]
+   },
+   {
+    "materialId": "mat_marble",
+    "name": "Mármol",
+    "color": "#f1eee8",
+    "preset": "marble",
+    "sample": null,
+    "areaM2": 2.59,
+    "rooms": [
+     "Mirador del dormitorio principal",
+     "Mirador del dormitorio juvenil"
+    ]
+   }
+  ],
+  "walls": [],
+  "palette": [
+   {
+    "color": "#d9cbb8",
+    "weightM2": 4.68,
+    "count": 1,
+    "names": [
+     "Alfombra"
+    ]
+   },
+   {
+    "color": "#efe6d8",
+    "weightM2": 4.51,
+    "count": 5,
+    "names": [
+     "Armario",
+     "Aparador",
+     "Zapatero"
+    ]
+   },
+   {
+    "color": "#e2cfb4",
+    "weightM2": 4.12,
+    "count": 6,
+    "names": [
+     "Escritorio",
+     "Estantería",
+     "Mesa de comedor"
+    ]
+   },
+   {
+    "color": "#c9d6df",
+    "weightM2": 3.6,
+    "count": 1,
+    "names": [
+     "Cama doble"
+    ]
+   },
+   {
+    "color": "#d8c7dc",
+    "weightM2": 3,
+    "count": 1,
+    "names": [
+     "Cama doble"
+    ]
+   },
+   {
+    "color": "#b7c4b0",
+    "weightM2": 2.7,
+    "count": 1,
+    "names": [
+     "Sofá de 3 plazas"
+    ]
+   },
+   {
+    "color": "#e9e5de",
+    "weightM2": 2.61,
+    "count": 2,
+    "names": [
+     "Encimera"
+    ]
+   },
+   {
+    "color": "#e8d5b5",
+    "weightM2": 2.4,
+    "count": 1,
+    "names": [
+     "Cama individual"
+    ]
+   }
+  ],
+  "furniture": 46,
+  "empty": false
+ },
+ "objects": [
+  {
+   "id": "obj_template-001",
+   "name": "Cama doble",
+   "type": "bed",
+   "roomId": "rom_master",
+   "room": "Dormitorio principal",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1800,
+    "depthMm": 2000
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-002",
+   "name": "Mesilla",
+   "type": "nightstand",
+   "roomId": "rom_master",
+   "room": "Dormitorio principal",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 400
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-003",
+   "name": "Mesilla",
+   "type": "nightstand",
+   "roomId": "rom_master",
+   "room": "Dormitorio principal",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 400
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-004",
+   "name": "Armario",
+   "type": "wardrobe",
+   "roomId": "rom_master",
+   "room": "Dormitorio principal",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 2400,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-005",
+   "name": "Colchoneta para mirador",
+   "type": "baycushion",
+   "roomId": "rom_bay1",
+   "room": "Mirador del dormitorio principal",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 520,
+    "depthMm": 1800
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-006",
+   "name": "Ducha",
+   "type": "shower",
+   "roomId": "rom_mbath",
+   "room": "Baño en suite",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 900,
+    "depthMm": 900
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-007",
+   "name": "Inodoro",
+   "type": "toilet",
+   "roomId": "rom_mbath",
+   "room": "Baño en suite",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 400,
+    "depthMm": 700
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-008",
+   "name": "Mueble de baño",
+   "type": "vanity",
+   "roomId": "rom_mbath",
+   "room": "Baño en suite",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 800,
+    "depthMm": 500
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-009",
+   "name": "Cama individual",
+   "type": "bed",
+   "roomId": "rom_kid",
+   "room": "Dormitorio infantil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1200,
+    "depthMm": 2000
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-010",
+   "name": "Escritorio",
+   "type": "desk",
+   "roomId": "rom_kid",
+   "room": "Dormitorio infantil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1200,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-011",
+   "name": "Silla",
+   "type": "chair",
+   "roomId": "rom_kid",
+   "room": "Dormitorio infantil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-012",
+   "name": "Armario",
+   "type": "wardrobe",
+   "roomId": "rom_kid",
+   "room": "Dormitorio infantil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1600,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-013",
+   "name": "Estantería",
+   "type": "bookshelf",
+   "roomId": "rom_kid",
+   "room": "Dormitorio infantil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 800,
+    "depthMm": 300
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-014",
+   "name": "Zona de ducha",
+   "type": "shower",
+   "roomId": "rom_gbath",
+   "room": "Baño de invitados",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 900,
+    "depthMm": 1340
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-015",
+   "name": "Inodoro",
+   "type": "toilet",
+   "roomId": "rom_gbath",
+   "room": "Baño de invitados",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 400,
+    "depthMm": 700
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-016",
+   "name": "Mueble de baño",
+   "type": "vanity",
+   "roomId": "rom_gbath",
+   "room": "Baño de invitados",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 700,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-017",
+   "name": "Lavadora",
+   "type": "washer",
+   "roomId": "rom_laundry",
+   "room": "Balcón-lavadero",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 600,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-018",
+   "name": "Pila de lavar",
+   "type": "vanity",
+   "roomId": "rom_laundry",
+   "room": "Balcón-lavadero",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 600,
+    "depthMm": 500
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-019",
+   "name": "Encimera",
+   "type": "counter",
+   "roomId": "rom_kitchen",
+   "room": "Cocina",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 2770,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-020",
+   "name": "Encimera",
+   "type": "counter",
+   "roomId": "rom_kitchen",
+   "room": "Cocina",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1580,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-021",
+   "name": "Placa de gas",
+   "type": "stove",
+   "roomId": "rom_kitchen",
+   "room": "Cocina",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 750,
+    "depthMm": 450
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-022",
+   "name": "Fregadero",
+   "type": "ksink",
+   "roomId": "rom_kitchen",
+   "room": "Cocina",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 800,
+    "depthMm": 450
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-023",
+   "name": "Frigorífico",
+   "type": "fridge",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 700,
+    "depthMm": 700
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-024",
+   "name": "Mesa de comedor",
+   "type": "table",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1400,
+    "depthMm": 800
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-025",
+   "name": "Silla de comedor",
+   "type": "chair",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-026",
+   "name": "Silla de comedor",
+   "type": "chair",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-027",
+   "name": "Silla de comedor",
+   "type": "chair",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-028",
+   "name": "Silla de comedor",
+   "type": "chair",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-029",
+   "name": "Aparador",
+   "type": "cabinet",
+   "roomId": "rom_dining",
+   "room": "Comedor",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1600,
+    "depthMm": 350
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-030",
+   "name": "Alfombra",
+   "type": "rug",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 2600,
+    "depthMm": 1800
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-031",
+   "name": "Mueble de TV",
+   "type": "tvstand",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 2400,
+    "depthMm": 400
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-032",
+   "name": "Sofá de 3 plazas",
+   "type": "sofa",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 3000,
+    "depthMm": 900
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-033",
+   "name": "Mesa de centro",
+   "type": "coffeetable",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1300,
+    "depthMm": 650
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-034",
+   "name": "Butaca",
+   "type": "armchair",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 850,
+    "depthMm": 850
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-035",
+   "name": "Zapatero",
+   "type": "shoecab",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1000,
+    "depthMm": 350
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-036",
+   "name": "Planta",
+   "type": "plant",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 500,
+    "depthMm": 500
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-037",
+   "name": "Planta",
+   "type": "plant",
+   "roomId": "rom_living",
+   "room": "Salón",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 500,
+    "depthMm": 500
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-038",
+   "name": "Cama doble",
+   "type": "bed",
+   "roomId": "rom_child",
+   "room": "Dormitorio juvenil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1500,
+    "depthMm": 2000
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-039",
+   "name": "Armario",
+   "type": "wardrobe",
+   "roomId": "rom_child",
+   "room": "Dormitorio juvenil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 2000,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-040",
+   "name": "Escritorio",
+   "type": "desk",
+   "roomId": "rom_child",
+   "room": "Dormitorio juvenil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 1200,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-041",
+   "name": "Silla",
+   "type": "chair",
+   "roomId": "rom_child",
+   "room": "Dormitorio juvenil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 450,
+    "depthMm": 480
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-042",
+   "name": "Colchoneta para mirador",
+   "type": "baycushion",
+   "roomId": "rom_bay2",
+   "room": "Mirador del dormitorio juvenil",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 520,
+    "depthMm": 1575
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-043",
+   "name": "Mesa auxiliar",
+   "type": "roundtable",
+   "roomId": "rom_balcony",
+   "room": "Balcón de estar",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 600,
+    "depthMm": 600
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-044",
+   "name": "Sillón de descanso",
+   "type": "armchair",
+   "roomId": "rom_balcony",
+   "room": "Balcón de estar",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 750,
+    "depthMm": 750
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-045",
+   "name": "Sillón de descanso",
+   "type": "armchair",
+   "roomId": "rom_balcony",
+   "room": "Balcón de estar",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 750,
+    "depthMm": 750
+   },
+   "materialId": null,
+   "catalogRef": null
+  },
+  {
+   "id": "obj_template-046",
+   "name": "Planta",
+   "type": "plant",
+   "roomId": "rom_balcony",
+   "room": "Balcón de estar",
+   "roomRule": "FloorPlanReviewAnchors.roomAt (posición en el plano)",
+   "size": {
+    "widthMm": 500,
+    "depthMm": 500
+   },
+   "materialId": null,
+   "catalogRef": null
+  }
+ ],
+ "geometry": {
+  "walls": [
+   {
+    "id": "wal_ref-w0",
+    "start": {
+     "x": 1580,
+     "y": -120
+    },
+    "end": {
+     "x": 2120,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w1",
+    "start": {
+     "x": 1700,
+     "y": 0
+    },
+    "end": {
+     "x": 1700,
+     "y": 300
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w2",
+    "start": {
+     "x": 2120,
+     "y": -120
+    },
+    "end": {
+     "x": 4580,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w3",
+    "start": {
+     "x": 4580,
+     "y": -120
+    },
+    "end": {
+     "x": 5140,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w4",
+    "start": {
+     "x": 5760,
+     "y": -120
+    },
+    "end": {
+     "x": 6050,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w5",
+    "start": {
+     "x": 6050,
+     "y": -120
+    },
+    "end": {
+     "x": 6600,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w6",
+    "start": {
+     "x": 6480,
+     "y": 0
+    },
+    "end": {
+     "x": 6480,
+     "y": 300
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w7",
+    "start": {
+     "x": 6600,
+     "y": -120
+    },
+    "end": {
+     "x": 9960,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w8",
+    "start": {
+     "x": 9960,
+     "y": -120
+    },
+    "end": {
+     "x": 10510,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w9",
+    "start": {
+     "x": 10390,
+     "y": 0
+    },
+    "end": {
+     "x": 10390,
+     "y": 300
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w10",
+    "start": {
+     "x": 10390,
+     "y": 300
+    },
+    "end": {
+     "x": 10390,
+     "y": 800
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w11",
+    "start": {
+     "x": 10390,
+     "y": 2600
+    },
+    "end": {
+     "x": 10390,
+     "y": 3090
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w12",
+    "start": {
+     "x": 10390,
+     "y": 3090
+    },
+    "end": {
+     "x": 10390,
+     "y": 4260
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w13",
+    "start": {
+     "x": 10390,
+     "y": 5740
+    },
+    "end": {
+     "x": 10390,
+     "y": 6370
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w14",
+    "start": {
+     "x": 9960,
+     "y": 6490
+    },
+    "end": {
+     "x": 10510,
+     "y": 6490
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w15",
+    "start": {
+     "x": 10390,
+     "y": 6610
+    },
+    "end": {
+     "x": 10390,
+     "y": 7400
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w16",
+    "start": {
+     "x": 10390,
+     "y": 9770
+    },
+    "end": {
+     "x": 10390,
+     "y": 10560
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w17",
+    "start": {
+     "x": 9960,
+     "y": 10680
+    },
+    "end": {
+     "x": 10510,
+     "y": 10680
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w18",
+    "start": {
+     "x": 4580,
+     "y": 10680
+    },
+    "end": {
+     "x": 9960,
+     "y": 10680
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w19",
+    "start": {
+     "x": 10510,
+     "y": 10680
+    },
+    "end": {
+     "x": 12090,
+     "y": 10680
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w20",
+    "start": {
+     "x": 11970,
+     "y": 9960
+    },
+    "end": {
+     "x": 11970,
+     "y": 10560
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w21",
+    "start": {
+     "x": 4700,
+     "y": 9200
+    },
+    "end": {
+     "x": 4700,
+     "y": 10560
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w22",
+    "start": {
+     "x": 4700,
+     "y": 7960
+    },
+    "end": {
+     "x": 4700,
+     "y": 8310
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w23",
+    "start": {
+     "x": 3620,
+     "y": 8080
+    },
+    "end": {
+     "x": 4580,
+     "y": 8080
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w24",
+    "start": {
+     "x": 2180,
+     "y": 8080
+    },
+    "end": {
+     "x": 3620,
+     "y": 8080
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w25",
+    "start": {
+     "x": 2300,
+     "y": 7590
+    },
+    "end": {
+     "x": 2300,
+     "y": 7960
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w26",
+    "start": {
+     "x": 2180,
+     "y": 7495
+    },
+    "end": {
+     "x": 2420,
+     "y": 7495
+    },
+    "thicknessMm": 190,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w27",
+    "start": {
+     "x": -240,
+     "y": 8080
+    },
+    "end": {
+     "x": 2180,
+     "y": 8080
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w28",
+    "start": {
+     "x": -120,
+     "y": 3610
+    },
+    "end": {
+     "x": -120,
+     "y": 7960
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w29",
+    "start": {
+     "x": 100,
+     "y": 4950
+    },
+    "end": {
+     "x": 100,
+     "y": 5190
+    },
+    "thicknessMm": 200,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w30",
+    "start": {
+     "x": 200,
+     "y": 5070
+    },
+    "end": {
+     "x": 1275,
+     "y": 5070
+    },
+    "thicknessMm": 240,
+    "structure": "low",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w31",
+    "start": {
+     "x": 1580,
+     "y": 3598
+    },
+    "end": {
+     "x": 2420,
+     "y": 3598
+    },
+    "thicknessMm": 455,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w32",
+    "start": {
+     "x": 2300,
+     "y": 4430
+    },
+    "end": {
+     "x": 2300,
+     "y": 5796
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w33",
+    "start": {
+     "x": 2135,
+     "y": 4950
+    },
+    "end": {
+     "x": 2135,
+     "y": 5190
+    },
+    "thicknessMm": 90,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w34",
+    "start": {
+     "x": 2420,
+     "y": 5070
+    },
+    "end": {
+     "x": 4580,
+     "y": 5070
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w35",
+    "start": {
+     "x": 4700,
+     "y": 3280
+    },
+    "end": {
+     "x": 4700,
+     "y": 4075
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w36",
+    "start": {
+     "x": 4700,
+     "y": 4860
+    },
+    "end": {
+     "x": 4700,
+     "y": 5190
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w37",
+    "start": {
+     "x": 2420,
+     "y": 3490
+    },
+    "end": {
+     "x": 4580,
+     "y": 3490
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w38",
+    "start": {
+     "x": 4700,
+     "y": 0
+    },
+    "end": {
+     "x": 4700,
+     "y": 2400
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w39",
+    "start": {
+     "x": 4820,
+     "y": 2200
+    },
+    "end": {
+     "x": 6360,
+     "y": 2200
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w40",
+    "start": {
+     "x": 6480,
+     "y": 300
+    },
+    "end": {
+     "x": 6480,
+     "y": 1198
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w41",
+    "start": {
+     "x": 6480,
+     "y": 1983
+    },
+    "end": {
+     "x": 6480,
+     "y": 2400
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w42",
+    "start": {
+     "x": 6083,
+     "y": 3538
+    },
+    "end": {
+     "x": 6600,
+     "y": 3538
+    },
+    "thicknessMm": 337,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w43",
+    "start": {
+     "x": 6360,
+     "y": 3325
+    },
+    "end": {
+     "x": 6600,
+     "y": 3325
+    },
+    "thicknessMm": 90,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w44",
+    "start": {
+     "x": 6600,
+     "y": 3490
+    },
+    "end": {
+     "x": 9960,
+     "y": 3490
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w45",
+    "start": {
+     "x": 9960,
+     "y": 3490
+    },
+    "end": {
+     "x": 10270,
+     "y": 3490
+    },
+    "thicknessMm": 240,
+    "structure": "load-bearing",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w46",
+    "start": {
+     "x": 6203,
+     "y": 4600
+    },
+    "end": {
+     "x": 6203,
+     "y": 6610
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-w47",
+    "start": {
+     "x": 6323,
+     "y": 6490
+    },
+    "end": {
+     "x": 9960,
+     "y": 6490
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-0",
+    "start": {
+     "x": 5140,
+     "y": -120
+    },
+    "end": {
+     "x": 5760,
+     "y": -120
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-1",
+    "start": {
+     "x": 1700,
+     "y": 300
+    },
+    "end": {
+     "x": 1700,
+     "y": 3370
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-2",
+    "start": {
+     "x": -240,
+     "y": 3490
+    },
+    "end": {
+     "x": 1580,
+     "y": 3490
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-3",
+    "start": {
+     "x": 2300,
+     "y": 3825
+    },
+    "end": {
+     "x": 2300,
+     "y": 4430
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-4",
+    "start": {
+     "x": 10510,
+     "y": 6490
+    },
+    "end": {
+     "x": 12090,
+     "y": 6490
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-5",
+    "start": {
+     "x": 11970,
+     "y": 6610
+    },
+    "end": {
+     "x": 11970,
+     "y": 9960
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-6",
+    "start": {
+     "x": 10510,
+     "y": 710
+    },
+    "end": {
+     "x": 11130,
+     "y": 710
+    },
+    "thicknessMm": 100,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-7",
+    "start": {
+     "x": 11080,
+     "y": 760
+    },
+    "end": {
+     "x": 11080,
+     "y": 2650
+    },
+    "thicknessMm": 100,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-8",
+    "start": {
+     "x": 10510,
+     "y": 2700
+    },
+    "end": {
+     "x": 11130,
+     "y": 2700
+    },
+    "thicknessMm": 100,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-9",
+    "start": {
+     "x": 10510,
+     "y": 4160
+    },
+    "end": {
+     "x": 11130,
+     "y": 4160
+    },
+    "thicknessMm": 100,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-10",
+    "start": {
+     "x": 11080,
+     "y": 4210
+    },
+    "end": {
+     "x": 11080,
+     "y": 5785
+    },
+    "thicknessMm": 100,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-window-11",
+    "start": {
+     "x": 10510,
+     "y": 5835
+    },
+    "end": {
+     "x": 11130,
+     "y": 5835
+    },
+    "thicknessMm": 100,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-door-0",
+    "start": {
+     "x": 4700,
+     "y": 2400
+    },
+    "end": {
+     "x": 4700,
+     "y": 3280
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-door-1",
+    "start": {
+     "x": 6480,
+     "y": 2400
+    },
+    "end": {
+     "x": 6480,
+     "y": 3280
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-door-2",
+    "start": {
+     "x": 6480,
+     "y": 1198
+    },
+    "end": {
+     "x": 6480,
+     "y": 1983
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-door-3",
+    "start": {
+     "x": 4700,
+     "y": 4075
+    },
+    "end": {
+     "x": 4700,
+     "y": 4860
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-door-4",
+    "start": {
+     "x": 6203,
+     "y": 3707
+    },
+    "end": {
+     "x": 6203,
+     "y": 4600
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-door-5",
+    "start": {
+     "x": 4700,
+     "y": 8310
+    },
+    "end": {
+     "x": 4700,
+     "y": 9200
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-slide-0",
+    "start": {
+     "x": 10390,
+     "y": 7400
+    },
+    "end": {
+     "x": 10390,
+     "y": 9770
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-slide-1",
+    "start": {
+     "x": 1275,
+     "y": 5070
+    },
+    "end": {
+     "x": 2090,
+     "y": 5070
+    },
+    "thicknessMm": 240,
+    "structure": "partition",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-bay-0",
+    "start": {
+     "x": 10390,
+     "y": 800
+    },
+    "end": {
+     "x": 10390,
+     "y": 2600
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   },
+   {
+    "id": "wal_ref-bay-1",
+    "start": {
+     "x": 10390,
+     "y": 4260
+    },
+    "end": {
+     "x": 10390,
+     "y": 5740
+    },
+    "thicknessMm": 240,
+    "structure": "exterior",
+    "status": "existing"
+   }
+  ],
+  "openings": [
+   {
+    "id": "opn_window-0",
+    "wallId": "wal_ref-window-0",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 620,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-1",
+    "wallId": "wal_ref-window-1",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 3070,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-2",
+    "wallId": "wal_ref-window-2",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 1820,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-3",
+    "wallId": "wal_ref-window-3",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 605,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-4",
+    "wallId": "wal_ref-window-4",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 1580,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-5",
+    "wallId": "wal_ref-window-5",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 3350,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-6",
+    "wallId": "wal_ref-window-6",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 620,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-7",
+    "wallId": "wal_ref-window-7",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 1890,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-8",
+    "wallId": "wal_ref-window-8",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 620,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-9",
+    "wallId": "wal_ref-window-9",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 620,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-10",
+    "wallId": "wal_ref-window-10",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 1575,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_window-11",
+    "wallId": "wal_ref-window-11",
+    "kind": "window",
+    "offsetMm": 0,
+    "widthMm": 620,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_door-0",
+    "wallId": "wal_ref-door-0",
+    "kind": "door",
+    "offsetMm": 0,
+    "widthMm": 880,
+    "swing": {
+     "hinge": "end",
+     "side": "right"
+    },
+    "isEntrance": false
+   },
+   {
+    "id": "opn_door-1",
+    "wallId": "wal_ref-door-1",
+    "kind": "door",
+    "offsetMm": 0,
+    "widthMm": 880,
+    "swing": {
+     "hinge": "end",
+     "side": "left"
+    },
+    "isEntrance": false
+   },
+   {
+    "id": "opn_door-2",
+    "wallId": "wal_ref-door-2",
+    "kind": "door",
+    "offsetMm": 0,
+    "widthMm": 785,
+    "swing": {
+     "hinge": "start",
+     "side": "right"
+    },
+    "isEntrance": false
+   },
+   {
+    "id": "opn_door-3",
+    "wallId": "wal_ref-door-3",
+    "kind": "door",
+    "offsetMm": 0,
+    "widthMm": 785,
+    "swing": {
+     "hinge": "end",
+     "side": "right"
+    },
+    "isEntrance": false
+   },
+   {
+    "id": "opn_door-4",
+    "wallId": "wal_ref-door-4",
+    "kind": "door",
+    "offsetMm": 0,
+    "widthMm": 893,
+    "swing": {
+     "hinge": "end",
+     "side": "left"
+    },
+    "isEntrance": false
+   },
+   {
+    "id": "opn_door-5",
+    "wallId": "wal_ref-door-5",
+    "kind": "door",
+    "offsetMm": 0,
+    "widthMm": 890,
+    "swing": {
+     "hinge": "end",
+     "side": "left"
+    },
+    "isEntrance": true
+   },
+   {
+    "id": "opn_slide-0",
+    "wallId": "wal_ref-slide-0",
+    "kind": "sliding-door",
+    "offsetMm": 0,
+    "widthMm": 2370,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_slide-1",
+    "wallId": "wal_ref-slide-1",
+    "kind": "sliding-door",
+    "offsetMm": 0,
+    "widthMm": 815,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_bay-0",
+    "wallId": "wal_ref-bay-0",
+    "kind": "opening",
+    "offsetMm": 0,
+    "widthMm": 1800,
+    "swing": null,
+    "isEntrance": false
+   },
+   {
+    "id": "opn_bay-1",
+    "wallId": "wal_ref-bay-1",
+    "kind": "opening",
+    "offsetMm": 0,
+    "widthMm": 1480,
+    "swing": null,
+    "isEntrance": false
+   }
+  ],
+  "rooms": [
+   {
+    "id": "rom_master",
+    "name": "Dormitorio principal",
+    "polygon": [
+     {
+      "x": 6600,
+      "y": 0
+     },
+     {
+      "x": 10270,
+      "y": 0
+     },
+     {
+      "x": 10270,
+      "y": 3370
+     },
+     {
+      "x": 6600,
+      "y": 3370
+     }
+    ],
+    "labelAt": {
+     "x": 8435,
+     "y": 2420
+    },
+    "floorMaterialId": "mat_wood",
+    "areaM2": 12.3679,
+    "counted": true
+   },
+   {
+    "id": "rom_mbath",
+    "name": "Baño en suite",
+    "polygon": [
+     {
+      "x": 4820,
+      "y": 0
+     },
+     {
+      "x": 6360,
+      "y": 0
+     },
+     {
+      "x": 6360,
+      "y": 2080
+     },
+     {
+      "x": 4820,
+      "y": 2080
+     }
+    ],
+    "labelAt": {
+     "x": 5980,
+     "y": 1780
+    },
+    "floorMaterialId": "mat_antislip",
+    "areaM2": 3.2032,
+    "counted": true
+   },
+   {
+    "id": "rom_kid",
+    "name": "Dormitorio infantil",
+    "polygon": [
+     {
+      "x": 1820,
+      "y": 0
+     },
+     {
+      "x": 4580,
+      "y": 0
+     },
+     {
+      "x": 4580,
+      "y": 3370
+     },
+     {
+      "x": 1820,
+      "y": 3370
+     }
+    ],
+    "labelAt": {
+     "x": 3380,
+     "y": 2330
+    },
+    "floorMaterialId": "mat_wood",
+    "areaM2": 9.3012,
+    "counted": true
+   },
+   {
+    "id": "rom_gbath",
+    "name": "Baño de invitados",
+    "polygon": [
+     {
+      "x": 2420,
+      "y": 3610
+     },
+     {
+      "x": 4580,
+      "y": 3610
+     },
+     {
+      "x": 4580,
+      "y": 4950
+     },
+     {
+      "x": 2420,
+      "y": 4950
+     }
+    ],
+    "labelAt": {
+     "x": 3760,
+     "y": 4620
+    },
+    "floorMaterialId": "mat_antislip",
+    "areaM2": 2.8944,
+    "counted": true
+   },
+   {
+    "id": "rom_laundry",
+    "name": "Balcón-lavadero",
+    "polygon": [
+     {
+      "x": 0,
+      "y": 3610
+     },
+     {
+      "x": 2180,
+      "y": 3610
+     },
+     {
+      "x": 2180,
+      "y": 4950
+     },
+     {
+      "x": 0,
+      "y": 4950
+     }
+    ],
+    "labelAt": {
+     "x": 1250,
+     "y": 4330
+    },
+    "floorMaterialId": "mat_antislip",
+    "areaM2": 2.9212,
+    "counted": true
+   },
+   {
+    "id": "rom_child",
+    "name": "Dormitorio juvenil",
+    "polygon": [
+     {
+      "x": 6323,
+      "y": 3610
+     },
+     {
+      "x": 10270,
+      "y": 3610
+     },
+     {
+      "x": 10270,
+      "y": 6370
+     },
+     {
+      "x": 6323,
+      "y": 6370
+     }
+    ],
+    "labelAt": {
+     "x": 8850,
+     "y": 4850
+    },
+    "floorMaterialId": "mat_wood",
+    "areaM2": 10.89372,
+    "counted": true
+   },
+   {
+    "id": "rom_kitchen",
+    "name": "Cocina",
+    "polygon": [
+     {
+      "x": 0,
+      "y": 5190
+     },
+     {
+      "x": 2180,
+      "y": 5190
+     },
+     {
+      "x": 2180,
+      "y": 7960
+     },
+     {
+      "x": 0,
+      "y": 7960
+     }
+    ],
+    "labelAt": {
+     "x": 1300,
+     "y": 6500
+    },
+    "floorMaterialId": "mat_tile600",
+    "areaM2": 6.0386,
+    "counted": true
+   },
+   {
+    "id": "rom_dining",
+    "name": "Comedor",
+    "polygon": [
+     {
+      "x": 2420,
+      "y": 5190
+     },
+     {
+      "x": 4820,
+      "y": 5190
+     },
+     {
+      "x": 4820,
+      "y": 7960
+     },
+     {
+      "x": 2420,
+      "y": 7960
+     },
+     {
+      "x": 2420,
+      "y": 7400
+     },
+     {
+      "x": 2180,
+      "y": 7400
+     },
+     {
+      "x": 2180,
+      "y": 5796
+     },
+     {
+      "x": 2420,
+      "y": 5796
+     }
+    ],
+    "labelAt": {
+     "x": 3900,
+     "y": 5520
+    },
+    "floorMaterialId": "mat_tile800",
+    "areaM2": 7.03296,
+    "counted": true
+   },
+   {
+    "id": "rom_hall",
+    "name": "Pasillo",
+    "polygon": [
+     {
+      "x": 4820,
+      "y": 2320
+     },
+     {
+      "x": 6360,
+      "y": 2320
+     },
+     {
+      "x": 6360,
+      "y": 3370
+     },
+     {
+      "x": 6083,
+      "y": 3370
+     },
+     {
+      "x": 6083,
+      "y": 6610
+     },
+     {
+      "x": 4820,
+      "y": 6610
+     }
+    ],
+    "labelAt": {
+     "x": 5450,
+     "y": 4450
+    },
+    "floorMaterialId": "mat_tile800",
+    "areaM2": 5.70912,
+    "counted": true
+   },
+   {
+    "id": "rom_living",
+    "name": "Salón",
+    "polygon": [
+     {
+      "x": 4820,
+      "y": 6610
+     },
+     {
+      "x": 10270,
+      "y": 6610
+     },
+     {
+      "x": 10270,
+      "y": 10560
+     },
+     {
+      "x": 4820,
+      "y": 10560
+     }
+    ],
+    "labelAt": {
+     "x": 7600,
+     "y": 7560
+    },
+    "floorMaterialId": "mat_tile800",
+    "areaM2": 21.5275,
+    "counted": true
+   },
+   {
+    "id": "rom_balcony",
+    "name": "Balcón de estar",
+    "polygon": [
+     {
+      "x": 10510,
+      "y": 6610
+     },
+     {
+      "x": 11850,
+      "y": 6610
+     },
+     {
+      "x": 11850,
+      "y": 10560
+     },
+     {
+      "x": 10510,
+      "y": 10560
+     }
+    ],
+    "labelAt": {
+     "x": 11180,
+     "y": 9450
+    },
+    "floorMaterialId": "mat_walnut",
+    "areaM2": 5.293,
+    "counted": true
+   },
+   {
+    "id": "rom_bay1",
+    "name": "Mirador del dormitorio principal",
+    "polygon": [
+     {
+      "x": 10270,
+      "y": 800
+     },
+     {
+      "x": 10510,
+      "y": 800
+     },
+     {
+      "x": 10510,
+      "y": 760
+     },
+     {
+      "x": 11030,
+      "y": 760
+     },
+     {
+      "x": 11030,
+      "y": 2650
+     },
+     {
+      "x": 10510,
+      "y": 2650
+     },
+     {
+      "x": 10510,
+      "y": 2600
+     },
+     {
+      "x": 10270,
+      "y": 2600
+     }
+    ],
+    "labelAt": null,
+    "floorMaterialId": "mat_marble",
+    "areaM2": 1.4148,
+    "counted": false
+   },
+   {
+    "id": "rom_bay2",
+    "name": "Mirador del dormitorio juvenil",
+    "polygon": [
+     {
+      "x": 10270,
+      "y": 4260
+     },
+     {
+      "x": 10510,
+      "y": 4260
+     },
+     {
+      "x": 10510,
+      "y": 4210
+     },
+     {
+      "x": 11030,
+      "y": 4210
+     },
+     {
+      "x": 11030,
+      "y": 5785
+     },
+     {
+      "x": 10510,
+      "y": 5785
+     },
+     {
+      "x": 10510,
+      "y": 5740
+     },
+     {
+      "x": 10270,
+      "y": 5740
+     }
+    ],
+    "labelAt": null,
+    "floorMaterialId": "mat_marble",
+    "areaM2": 1.1742,
+    "counted": false
+   }
+  ],
+  "objects": [
+   {
+    "id": "obj_template-001",
+    "type": "bed",
+    "position": {
+     "x": 8300,
+     "y": 1000
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 1800,
+     "depthMm": 2000
+    }
+   },
+   {
+    "id": "obj_template-002",
+    "type": "nightstand",
+    "position": {
+     "x": 7150,
+     "y": 220
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 400
+    }
+   },
+   {
+    "id": "obj_template-003",
+    "type": "nightstand",
+    "position": {
+     "x": 9450,
+     "y": 220
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 400
+    }
+   },
+   {
+    "id": "obj_template-004",
+    "type": "wardrobe",
+    "position": {
+     "x": 8800,
+     "y": 3070
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 2400,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-005",
+    "type": "baycushion",
+    "position": {
+     "x": 10770,
+     "y": 1705
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 520,
+     "depthMm": 1800
+    }
+   },
+   {
+    "id": "obj_template-006",
+    "type": "shower",
+    "position": {
+     "x": 5270,
+     "y": 450
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 900,
+     "depthMm": 900
+    }
+   },
+   {
+    "id": "obj_template-007",
+    "type": "toilet",
+    "position": {
+     "x": 5170,
+     "y": 1500
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 400,
+     "depthMm": 700
+    }
+   },
+   {
+    "id": "obj_template-008",
+    "type": "vanity",
+    "position": {
+     "x": 6110,
+     "y": 700
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 800,
+     "depthMm": 500
+    }
+   },
+   {
+    "id": "obj_template-009",
+    "type": "bed",
+    "position": {
+     "x": 2420,
+     "y": 1000
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 1200,
+     "depthMm": 2000
+    }
+   },
+   {
+    "id": "obj_template-010",
+    "type": "desk",
+    "position": {
+     "x": 2120,
+     "y": 2700
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 1200,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-011",
+    "type": "chair",
+    "position": {
+     "x": 2700,
+     "y": 2700
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-012",
+    "type": "wardrobe",
+    "position": {
+     "x": 4280,
+     "y": 1000
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 1600,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-013",
+    "type": "bookshelf",
+    "position": {
+     "x": 3500,
+     "y": 150
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 800,
+     "depthMm": 300
+    }
+   },
+   {
+    "id": "obj_template-014",
+    "type": "shower",
+    "position": {
+     "x": 2870,
+     "y": 4280
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 900,
+     "depthMm": 1340
+    }
+   },
+   {
+    "id": "obj_template-015",
+    "type": "toilet",
+    "position": {
+     "x": 3560,
+     "y": 3960
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 400,
+     "depthMm": 700
+    }
+   },
+   {
+    "id": "obj_template-016",
+    "type": "vanity",
+    "position": {
+     "x": 4150,
+     "y": 3850
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 700,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-017",
+    "type": "washer",
+    "position": {
+     "x": 300,
+     "y": 3960
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 600,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-018",
+    "type": "vanity",
+    "position": {
+     "x": 250,
+     "y": 4600
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 600,
+     "depthMm": 500
+    }
+   },
+   {
+    "id": "obj_template-019",
+    "type": "counter",
+    "position": {
+     "x": 300,
+     "y": 6575
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 2770,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-020",
+    "type": "counter",
+    "position": {
+     "x": 1390,
+     "y": 7660
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 1580,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-021",
+    "type": "stove",
+    "position": {
+     "x": 300,
+     "y": 6200
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 750,
+     "depthMm": 450
+    }
+   },
+   {
+    "id": "obj_template-022",
+    "type": "ksink",
+    "position": {
+     "x": 1400,
+     "y": 7680
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 800,
+     "depthMm": 450
+    }
+   },
+   {
+    "id": "obj_template-023",
+    "type": "fridge",
+    "position": {
+     "x": 2770,
+     "y": 5540
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 700,
+     "depthMm": 700
+    }
+   },
+   {
+    "id": "obj_template-024",
+    "type": "table",
+    "position": {
+     "x": 3600,
+     "y": 6650
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 1400,
+     "depthMm": 800
+    }
+   },
+   {
+    "id": "obj_template-025",
+    "type": "chair",
+    "position": {
+     "x": 2940,
+     "y": 6320
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-026",
+    "type": "chair",
+    "position": {
+     "x": 2940,
+     "y": 6980
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-027",
+    "type": "chair",
+    "position": {
+     "x": 4260,
+     "y": 6320
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-028",
+    "type": "chair",
+    "position": {
+     "x": 4260,
+     "y": 6980
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-029",
+    "type": "cabinet",
+    "position": {
+     "x": 3500,
+     "y": 7785
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 1600,
+     "depthMm": 350
+    }
+   },
+   {
+    "id": "obj_template-030",
+    "type": "rug",
+    "position": {
+     "x": 7600,
+     "y": 8950
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 2600,
+     "depthMm": 1800
+    }
+   },
+   {
+    "id": "obj_template-031",
+    "type": "tvstand",
+    "position": {
+     "x": 7600,
+     "y": 6810
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 2400,
+     "depthMm": 400
+    }
+   },
+   {
+    "id": "obj_template-032",
+    "type": "sofa",
+    "position": {
+     "x": 7600,
+     "y": 10110
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 3000,
+     "depthMm": 900
+    }
+   },
+   {
+    "id": "obj_template-033",
+    "type": "coffeetable",
+    "position": {
+     "x": 7600,
+     "y": 8900
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 1300,
+     "depthMm": 650
+    }
+   },
+   {
+    "id": "obj_template-034",
+    "type": "armchair",
+    "position": {
+     "x": 9500,
+     "y": 8900
+    },
+    "rotationDeg": 90,
+    "size": {
+     "widthMm": 850,
+     "depthMm": 850
+    }
+   },
+   {
+    "id": "obj_template-035",
+    "type": "shoecab",
+    "position": {
+     "x": 4995,
+     "y": 9900
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 1000,
+     "depthMm": 350
+    }
+   },
+   {
+    "id": "obj_template-036",
+    "type": "plant",
+    "position": {
+     "x": 9950,
+     "y": 10250
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 500,
+     "depthMm": 500
+    }
+   },
+   {
+    "id": "obj_template-037",
+    "type": "plant",
+    "position": {
+     "x": 5250,
+     "y": 7050
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 500,
+     "depthMm": 500
+    }
+   },
+   {
+    "id": "obj_template-038",
+    "type": "bed",
+    "position": {
+     "x": 7323,
+     "y": 5500
+    },
+    "rotationDeg": 270,
+    "size": {
+     "widthMm": 1500,
+     "depthMm": 2000
+    }
+   },
+   {
+    "id": "obj_template-039",
+    "type": "wardrobe",
+    "position": {
+     "x": 8500,
+     "y": 3910
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 2000,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-040",
+    "type": "desk",
+    "position": {
+     "x": 9500,
+     "y": 6070
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 1200,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-041",
+    "type": "chair",
+    "position": {
+     "x": 9500,
+     "y": 5480
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 450,
+     "depthMm": 480
+    }
+   },
+   {
+    "id": "obj_template-042",
+    "type": "baycushion",
+    "position": {
+     "x": 10770,
+     "y": 4997
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 520,
+     "depthMm": 1575
+    }
+   },
+   {
+    "id": "obj_template-043",
+    "type": "roundtable",
+    "position": {
+     "x": 11180,
+     "y": 8200
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 600,
+     "depthMm": 600
+    }
+   },
+   {
+    "id": "obj_template-044",
+    "type": "armchair",
+    "position": {
+     "x": 11180,
+     "y": 7520
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 750,
+     "depthMm": 750
+    }
+   },
+   {
+    "id": "obj_template-045",
+    "type": "armchair",
+    "position": {
+     "x": 11180,
+     "y": 8880
+    },
+    "rotationDeg": 180,
+    "size": {
+     "widthMm": 750,
+     "depthMm": 750
+    }
+   },
+   {
+    "id": "obj_template-046",
+    "type": "plant",
+    "position": {
+     "x": 11550,
+     "y": 10250
+    },
+    "rotationDeg": 0,
+    "size": {
+     "widthMm": 500,
+     "depthMm": 500
+    }
+   }
+  ]
+ },
+ "materials": [
+  {
+   "id": "mat_wood",
+   "name": "Parqué de roble",
+   "color": "#d8b88a",
+   "preset": "wood"
+  },
+  {
+   "id": "mat_walnut",
+   "name": "Parqué de nogal",
+   "color": "#9b7250",
+   "preset": "walnut"
+  },
+  {
+   "id": "mat_tile800",
+   "name": "Baldosa 800",
+   "color": "#ebe6dc",
+   "preset": "tile-800"
+  },
+  {
+   "id": "mat_tile600",
+   "name": "Baldosa 600",
+   "color": "#dfe3e1",
+   "preset": "tile-600"
+  },
+  {
+   "id": "mat_marble",
+   "name": "Mármol",
+   "color": "#f1eee8",
+   "preset": "marble"
+  },
+  {
+   "id": "mat_antislip",
+   "name": "Baldosa antideslizante 300",
+   "color": "#d3d8d4",
+   "preset": "tile-300"
+  },
+  {
+   "id": "mat_terrazzo",
+   "name": "Terrazo",
+   "color": "#e6dfd3",
+   "preset": "terrazzo"
+  },
+  {
+   "id": "mat_carpet",
+   "name": "Moqueta",
+   "color": "#c9c3d3",
+   "preset": "carpet"
+  }
+ ],
+ "budget": {
+  "original": {
+   "items": 11,
+   "priced": 0,
+   "view": {
+    "variant": "professional",
+    "subject": {
+     "type": "project",
+     "id": "prj_reference-home"
+    },
+    "title": "Presupuesto",
+    "currency": "EUR",
+    "summary": {
+     "net": {
+      "amount": null,
+      "complete": false
+     },
+     "tax": {
+      "state": "incomplete",
+      "amount": null,
+      "complete": false,
+      "ratePercent": 21,
+      "missing": 11
+     },
+     "gross": {
+      "amount": null,
+      "complete": false,
+      "final": false
+     },
+     "chapters": 3,
+     "items": 11,
+     "unassigned": 0,
+     "unpriced": 11,
+     "unavailable": 0,
+     "incomplete": 0,
+     "unreviewed": 0,
+     "reviewComplete": false,
+     "empty": false
+    },
+    "chapters": [
+     {
+      "title": "Pavimentos y rodapiés",
+      "id": "floors",
+      "lines": [
+       {
+        "description": "Pavimento Parqué de roble",
+        "quantity": {
+         "value": 32.56282,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 34.190961,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "floor:mat_wood"
+       },
+       {
+        "description": "Pavimento Baldosa antideslizante 300",
+        "quantity": {
+         "value": 9.018799999999999,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 9.46974,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "floor:mat_antislip"
+       },
+       {
+        "description": "Pavimento Baldosa 600",
+        "quantity": {
+         "value": 6.0386,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 6.34053,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "floor:mat_tile600"
+       },
+       {
+        "description": "Pavimento Baldosa 800",
+        "quantity": {
+         "value": 34.269580000000005,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 35.983059000000004,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "floor:mat_tile800"
+       },
+       {
+        "description": "Pavimento Parqué de nogal",
+        "quantity": {
+         "value": 5.293,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 5.557650000000001,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "floor:mat_walnut"
+       },
+       {
+        "description": "Pavimento Mármol",
+        "quantity": {
+         "value": 2.589,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 2.7184500000000003,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "floor:mat_marble"
+       },
+       {
+        "description": "Rodapié (perímetro de estancias, sin descontar puertas)",
+        "quantity": {
+         "value": 132.76399999999998,
+         "unit": "m",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 5,
+        "budgetQuantity": 139.4022,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "skirting"
+       }
+      ],
+      "totals": {
+       "net": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "floor:mat_wood",
+         "floor:mat_antislip",
+         "floor:mat_tile600",
+         "floor:mat_tile800",
+         "floor:mat_walnut",
+         "floor:mat_marble",
+         "skirting"
+        ]
+       },
+       "tax": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "floor:mat_wood",
+         "floor:mat_antislip",
+         "floor:mat_tile600",
+         "floor:mat_tile800",
+         "floor:mat_walnut",
+         "floor:mat_marble",
+         "skirting"
+        ]
+       },
+       "gross": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "floor:mat_wood",
+         "floor:mat_antislip",
+         "floor:mat_tile600",
+         "floor:mat_tile800",
+         "floor:mat_walnut",
+         "floor:mat_marble",
+         "skirting"
+        ]
+       },
+       "complete": false,
+       "unpriced": 7,
+       "unavailable": 0,
+       "incomplete": 0,
+       "unreviewed": 0
+      }
+     },
+     {
+      "title": "Acabados de paredes",
+      "id": "walls",
+      "lines": [
+       {
+        "description": "Pintura plástica en paredes (caras netas)",
+        "quantity": {
+         "value": 374.67670000000004,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 0,
+        "budgetQuantity": 374.67670000000004,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "paint"
+       }
+      ],
+      "totals": {
+       "net": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "paint"
+        ]
+       },
+       "tax": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "paint"
+        ]
+       },
+       "gross": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "paint"
+        ]
+       },
+       "complete": false,
+       "unpriced": 1,
+       "unavailable": 0,
+       "incomplete": 0,
+       "unreviewed": 0
+      }
+     },
+     {
+      "title": "Carpintería",
+      "id": "carpentry",
+      "lines": [
+       {
+        "description": "Puerta de paso",
+        "quantity": {
+         "value": 6,
+         "unit": "unit",
+         "status": "measured",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 0,
+        "budgetQuantity": 6,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "opening:door"
+       },
+       {
+        "description": "Puerta corredera",
+        "quantity": {
+         "value": 2,
+         "unit": "unit",
+         "status": "measured",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 0,
+        "budgetQuantity": 2,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "opening:sliding-door"
+       },
+       {
+        "description": "Ventana",
+        "quantity": {
+         "value": 12,
+         "unit": "unit",
+         "status": "measured",
+         "complete": true,
+         "source": "project",
+         "sourceLabel": null
+        },
+        "context": null,
+        "wastePercent": 0,
+        "budgetQuantity": 12,
+        "unitPrice": null,
+        "origin": "none",
+        "review": null,
+        "taxRatePercent": 21,
+        "subtotalNet": null,
+        "taxAmount": null,
+        "subtotalGross": null,
+        "pricingComplete": false,
+        "taxComplete": false,
+        "id": "opening:window"
+       }
+      ],
+      "totals": {
+       "net": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "opening:door",
+         "opening:sliding-door",
+         "opening:window"
+        ]
+       },
+       "tax": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "opening:door",
+         "opening:sliding-door",
+         "opening:window"
+        ]
+       },
+       "gross": {
+        "amount": null,
+        "complete": false,
+        "missingItemIds": [
+         "opening:door",
+         "opening:sliding-door",
+         "opening:window"
+        ]
+       },
+       "complete": false,
+       "unpriced": 3,
+       "unavailable": 0,
+       "incomplete": 0,
+       "unreviewed": 0
+      }
+     }
+    ],
+    "unassigned": null,
+    "warnings": [
+     {
+      "code": "unpriced-items",
+      "count": 11,
+      "items": [
+       "Pavimento Parqué de roble",
+       "Pavimento Baldosa antideslizante 300",
+       "Pavimento Baldosa 600",
+       "Pavimento Baldosa 800",
+       "Pavimento Parqué de nogal",
+       "Pavimento Mármol",
+       "Rodapié (perímetro de estancias, sin descontar puertas)",
+       "Pintura plástica en paredes (caras netas)",
+       "Puerta de paso",
+       "Puerta corredera",
+       "Ventana"
+      ]
+     },
+     {
+      "code": "tax-incomplete",
+      "count": 11,
+      "items": [
+       "Pavimento Parqué de roble",
+       "Pavimento Baldosa antideslizante 300",
+       "Pavimento Baldosa 600",
+       "Pavimento Baldosa 800",
+       "Pavimento Parqué de nogal",
+       "Pavimento Mármol",
+       "Rodapié (perímetro de estancias, sin descontar puertas)",
+       "Pintura plástica en paredes (caras netas)",
+       "Puerta de paso",
+       "Puerta corredera",
+       "Ventana"
+      ]
+     }
+    ],
+    "budgetId": "bud_prj_reference-home",
+    "trace": {
+     "projectQuantities": 11,
+     "manualQuantities": 0,
+     "ownPrices": 0,
+     "referencePrices": 0,
+     "contrastReferences": 0,
+     "sources": []
+    }
+   }
+  },
+  "test": {
+   "label": "Precios de prueba de laboratorio. No son precios de mercado ni una oferta.",
+   "taxRatePercent": 21,
+   "prices": [
+    {
+     "id": "floor:mat_wood",
+     "description": "Pavimento Parqué de roble",
+     "price": 46
+    },
+    {
+     "id": "floor:mat_antislip",
+     "description": "Pavimento Baldosa antideslizante 300",
+     "price": 34
+    },
+    {
+     "id": "floor:mat_tile600",
+     "description": "Pavimento Baldosa 600",
+     "price": 34
+    },
+    {
+     "id": "floor:mat_tile800",
+     "description": "Pavimento Baldosa 800",
+     "price": 34
+    },
+    {
+     "id": "floor:mat_walnut",
+     "description": "Pavimento Parqué de nogal",
+     "price": 46
+    },
+    {
+     "id": "floor:mat_marble",
+     "description": "Pavimento Mármol",
+     "price": 92
+    },
+    {
+     "id": "skirting",
+     "description": "Rodapié (perímetro de estancias, sin descontar puertas)",
+     "price": 11
+    },
+    {
+     "id": "paint",
+     "description": "Pintura plástica en paredes (caras netas)",
+     "price": 8.5
+    },
+    {
+     "id": "opening:door",
+     "description": "Puerta de paso",
+     "price": 310
+    },
+    {
+     "id": "opening:sliding-door",
+     "description": "Puerta corredera",
+     "price": 540
+    },
+    {
+     "id": "opening:window",
+     "description": "Ventana",
+     "price": 480
+    }
+   ],
+   "report": {
+    "reportVersion": "1.0.0",
+    "budgetId": "bud_prj_reference-home",
+    "subject": {
+     "type": "project",
+     "id": "prj_reference-home"
+    },
+    "title": "Presupuesto",
+    "currency": "EUR",
+    "taxRatePercent": 21,
+    "lines": [
+     {
+      "id": "floor:mat_wood",
+      "chapterId": "floors",
+      "description": "Pavimento Parqué de roble",
+      "quantity": {
+       "value": 32.56282,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "floorMaterial",
+         "materialId": "mat_wood"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 46,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 34.190961,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 1572.78,
+      "taxAmount": 330.28,
+      "subtotalGross": 1903.06,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "floor:mat_antislip",
+      "chapterId": "floors",
+      "description": "Pavimento Baldosa antideslizante 300",
+      "quantity": {
+       "value": 9.018799999999999,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "floorMaterial",
+         "materialId": "mat_antislip"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 34,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 9.46974,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 321.97,
+      "taxAmount": 67.61,
+      "subtotalGross": 389.58,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "floor:mat_tile600",
+      "chapterId": "floors",
+      "description": "Pavimento Baldosa 600",
+      "quantity": {
+       "value": 6.0386,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "floorMaterial",
+         "materialId": "mat_tile600"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 34,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 6.34053,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 215.58,
+      "taxAmount": 45.27,
+      "subtotalGross": 260.85,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "floor:mat_tile800",
+      "chapterId": "floors",
+      "description": "Pavimento Baldosa 800",
+      "quantity": {
+       "value": 34.269580000000005,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "floorMaterial",
+         "materialId": "mat_tile800"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 34,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 35.983059000000004,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 1223.42,
+      "taxAmount": 256.92,
+      "subtotalGross": 1480.34,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "floor:mat_walnut",
+      "chapterId": "floors",
+      "description": "Pavimento Parqué de nogal",
+      "quantity": {
+       "value": 5.293,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "floorMaterial",
+         "materialId": "mat_walnut"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 46,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 5.557650000000001,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 255.65,
+      "taxAmount": 53.69,
+      "subtotalGross": 309.34,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "floor:mat_marble",
+      "chapterId": "floors",
+      "description": "Pavimento Mármol",
+      "quantity": {
+       "value": 2.589,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "floorMaterial",
+         "materialId": "mat_marble"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 92,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 2.7184500000000003,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 250.1,
+      "taxAmount": 52.52,
+      "subtotalGross": 302.62,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "skirting",
+      "chapterId": "floors",
+      "description": "Rodapié (perímetro de estancias, sin descontar puertas)",
+      "quantity": {
+       "value": 132.76399999999998,
+       "unit": "m",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "roomPerimeter"
+        }
+       }
+      },
+      "wastePercent": 5,
+      "unitPrice": 11,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 139.4022,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 1533.42,
+      "taxAmount": 322.02,
+      "subtotalGross": 1855.44,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "paint",
+      "chapterId": "walls",
+      "description": "Pintura plástica en paredes (caras netas)",
+      "quantity": {
+       "value": 374.67670000000004,
+       "unit": "m2",
+       "status": "estimated",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "walls",
+         "statuses": [
+          "existing",
+          "new"
+         ],
+         "field": "wallSurfaceNetArea"
+        }
+       }
+      },
+      "wastePercent": 0,
+      "unitPrice": 8.5,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 374.67670000000004,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 3184.75,
+      "taxAmount": 668.8,
+      "subtotalGross": 3853.55,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "opening:door",
+      "chapterId": "carpentry",
+      "description": "Puerta de paso",
+      "quantity": {
+       "value": 6,
+       "unit": "unit",
+       "status": "measured",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "openings",
+         "kind": "door"
+        }
+       }
+      },
+      "wastePercent": 0,
+      "unitPrice": 310,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 6,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 1860,
+      "taxAmount": 390.6,
+      "subtotalGross": 2250.6,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "opening:sliding-door",
+      "chapterId": "carpentry",
+      "description": "Puerta corredera",
+      "quantity": {
+       "value": 2,
+       "unit": "unit",
+       "status": "measured",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "openings",
+         "kind": "sliding-door"
+        }
+       }
+      },
+      "wastePercent": 0,
+      "unitPrice": 540,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 2,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 1080,
+      "taxAmount": 226.8,
+      "subtotalGross": 1306.8,
+      "pricingComplete": true,
+      "taxComplete": true
+     },
+     {
+      "id": "opening:window",
+      "chapterId": "carpentry",
+      "description": "Ventana",
+      "quantity": {
+       "value": 12,
+       "unit": "unit",
+       "status": "measured",
+       "complete": true,
+       "source": {
+        "type": "quantity-engine",
+        "engine": "FloorPlanQuantities",
+        "ref": {
+         "scope": "openings",
+         "kind": "window"
+        }
+       }
+      },
+      "wastePercent": 0,
+      "unitPrice": 480,
+      "priceSource": {
+       "type": "manual",
+       "label": "Precio de prueba (laboratorio RUBIK)",
+       "asOf": "2026-11-17"
+      },
+      "review": {
+       "status": "unreviewed",
+       "reviewedAt": null
+      },
+      "priceReference": null,
+      "budgetQuantity": 12,
+      "effectiveTaxRatePercent": 21,
+      "subtotalNet": 5760,
+      "taxAmount": 1209.6,
+      "subtotalGross": 6969.6,
+      "pricingComplete": true,
+      "taxComplete": true
+     }
+    ],
+    "chapters": [
+     {
+      "id": "floors",
+      "title": "Pavimentos y rodapiés",
+      "order": 0,
+      "itemIds": [
+       "floor:mat_wood",
+       "floor:mat_antislip",
+       "floor:mat_tile600",
+       "floor:mat_tile800",
+       "floor:mat_walnut",
+       "floor:mat_marble",
+       "skirting"
+      ],
+      "lines": [
+       {
+        "id": "floor:mat_wood",
+        "chapterId": "floors",
+        "description": "Pavimento Parqué de roble",
+        "quantity": {
+         "value": 32.56282,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "floorMaterial",
+           "materialId": "mat_wood"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 46,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 34.190961,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 1572.78,
+        "taxAmount": 330.28,
+        "subtotalGross": 1903.06,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "floor:mat_antislip",
+        "chapterId": "floors",
+        "description": "Pavimento Baldosa antideslizante 300",
+        "quantity": {
+         "value": 9.018799999999999,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "floorMaterial",
+           "materialId": "mat_antislip"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 34,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 9.46974,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 321.97,
+        "taxAmount": 67.61,
+        "subtotalGross": 389.58,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "floor:mat_tile600",
+        "chapterId": "floors",
+        "description": "Pavimento Baldosa 600",
+        "quantity": {
+         "value": 6.0386,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "floorMaterial",
+           "materialId": "mat_tile600"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 34,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 6.34053,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 215.58,
+        "taxAmount": 45.27,
+        "subtotalGross": 260.85,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "floor:mat_tile800",
+        "chapterId": "floors",
+        "description": "Pavimento Baldosa 800",
+        "quantity": {
+         "value": 34.269580000000005,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "floorMaterial",
+           "materialId": "mat_tile800"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 34,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 35.983059000000004,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 1223.42,
+        "taxAmount": 256.92,
+        "subtotalGross": 1480.34,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "floor:mat_walnut",
+        "chapterId": "floors",
+        "description": "Pavimento Parqué de nogal",
+        "quantity": {
+         "value": 5.293,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "floorMaterial",
+           "materialId": "mat_walnut"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 46,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 5.557650000000001,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 255.65,
+        "taxAmount": 53.69,
+        "subtotalGross": 309.34,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "floor:mat_marble",
+        "chapterId": "floors",
+        "description": "Pavimento Mármol",
+        "quantity": {
+         "value": 2.589,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "floorMaterial",
+           "materialId": "mat_marble"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 92,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 2.7184500000000003,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 250.1,
+        "taxAmount": 52.52,
+        "subtotalGross": 302.62,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "skirting",
+        "chapterId": "floors",
+        "description": "Rodapié (perímetro de estancias, sin descontar puertas)",
+        "quantity": {
+         "value": 132.76399999999998,
+         "unit": "m",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "roomPerimeter"
+          }
+         }
+        },
+        "wastePercent": 5,
+        "unitPrice": 11,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 139.4022,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 1533.42,
+        "taxAmount": 322.02,
+        "subtotalGross": 1855.44,
+        "pricingComplete": true,
+        "taxComplete": true
+       }
+      ],
+      "totals": {
+       "net": {
+        "amount": 5372.92,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "tax": {
+        "amount": 1128.31,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "gross": {
+        "amount": 6501.23,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "unpricedItemIds": [],
+       "unavailableQuantityItemIds": [],
+       "incompleteQuantityItemIds": [],
+       "unreviewedPriceItemIds": [
+        "floor:mat_wood",
+        "floor:mat_antislip",
+        "floor:mat_tile600",
+        "floor:mat_tile800",
+        "floor:mat_walnut",
+        "floor:mat_marble",
+        "skirting"
+       ],
+       "reviewComplete": false
+      }
+     },
+     {
+      "id": "walls",
+      "title": "Acabados de paredes",
+      "order": 1,
+      "itemIds": [
+       "paint"
+      ],
+      "lines": [
+       {
+        "id": "paint",
+        "chapterId": "walls",
+        "description": "Pintura plástica en paredes (caras netas)",
+        "quantity": {
+         "value": 374.67670000000004,
+         "unit": "m2",
+         "status": "estimated",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "walls",
+           "statuses": [
+            "existing",
+            "new"
+           ],
+           "field": "wallSurfaceNetArea"
+          }
+         }
+        },
+        "wastePercent": 0,
+        "unitPrice": 8.5,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 374.67670000000004,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 3184.75,
+        "taxAmount": 668.8,
+        "subtotalGross": 3853.55,
+        "pricingComplete": true,
+        "taxComplete": true
+       }
+      ],
+      "totals": {
+       "net": {
+        "amount": 3184.75,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "tax": {
+        "amount": 668.8,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "gross": {
+        "amount": 3853.55,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "unpricedItemIds": [],
+       "unavailableQuantityItemIds": [],
+       "incompleteQuantityItemIds": [],
+       "unreviewedPriceItemIds": [
+        "paint"
+       ],
+       "reviewComplete": false
+      }
+     },
+     {
+      "id": "carpentry",
+      "title": "Carpintería",
+      "order": 3,
+      "itemIds": [
+       "opening:door",
+       "opening:sliding-door",
+       "opening:window"
+      ],
+      "lines": [
+       {
+        "id": "opening:door",
+        "chapterId": "carpentry",
+        "description": "Puerta de paso",
+        "quantity": {
+         "value": 6,
+         "unit": "unit",
+         "status": "measured",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "openings",
+           "kind": "door"
+          }
+         }
+        },
+        "wastePercent": 0,
+        "unitPrice": 310,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 6,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 1860,
+        "taxAmount": 390.6,
+        "subtotalGross": 2250.6,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "opening:sliding-door",
+        "chapterId": "carpentry",
+        "description": "Puerta corredera",
+        "quantity": {
+         "value": 2,
+         "unit": "unit",
+         "status": "measured",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "openings",
+           "kind": "sliding-door"
+          }
+         }
+        },
+        "wastePercent": 0,
+        "unitPrice": 540,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 2,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 1080,
+        "taxAmount": 226.8,
+        "subtotalGross": 1306.8,
+        "pricingComplete": true,
+        "taxComplete": true
+       },
+       {
+        "id": "opening:window",
+        "chapterId": "carpentry",
+        "description": "Ventana",
+        "quantity": {
+         "value": 12,
+         "unit": "unit",
+         "status": "measured",
+         "complete": true,
+         "source": {
+          "type": "quantity-engine",
+          "engine": "FloorPlanQuantities",
+          "ref": {
+           "scope": "openings",
+           "kind": "window"
+          }
+         }
+        },
+        "wastePercent": 0,
+        "unitPrice": 480,
+        "priceSource": {
+         "type": "manual",
+         "label": "Precio de prueba (laboratorio RUBIK)",
+         "asOf": "2026-11-17"
+        },
+        "review": {
+         "status": "unreviewed",
+         "reviewedAt": null
+        },
+        "priceReference": null,
+        "budgetQuantity": 12,
+        "effectiveTaxRatePercent": 21,
+        "subtotalNet": 5760,
+        "taxAmount": 1209.6,
+        "subtotalGross": 6969.6,
+        "pricingComplete": true,
+        "taxComplete": true
+       }
+      ],
+      "totals": {
+       "net": {
+        "amount": 8700,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "tax": {
+        "amount": 1827,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "gross": {
+        "amount": 10527,
+        "complete": true,
+        "missingItemIds": []
+       },
+       "unpricedItemIds": [],
+       "unavailableQuantityItemIds": [],
+       "incompleteQuantityItemIds": [],
+       "unreviewedPriceItemIds": [
+        "opening:door",
+        "opening:sliding-door",
+        "opening:window"
+       ],
+       "reviewComplete": false
+      }
+     }
+    ],
+    "unassigned": {
+     "itemIds": [],
+     "lines": [],
+     "totals": {
+      "net": {
+       "amount": null,
+       "complete": true,
+       "missingItemIds": []
+      },
+      "tax": {
+       "amount": null,
+       "complete": true,
+       "missingItemIds": []
+      },
+      "gross": {
+       "amount": null,
+       "complete": true,
+       "missingItemIds": []
+      },
+      "unpricedItemIds": [],
+      "unavailableQuantityItemIds": [],
+      "incompleteQuantityItemIds": [],
+      "unreviewedPriceItemIds": [],
+      "reviewComplete": true
+     }
+    },
+    "contexts": [],
+    "unscopedItemIds": [
+     "floor:mat_wood",
+     "floor:mat_antislip",
+     "floor:mat_tile600",
+     "floor:mat_tile800",
+     "floor:mat_walnut",
+     "floor:mat_marble",
+     "skirting",
+     "paint",
+     "opening:door",
+     "opening:sliding-door",
+     "opening:window"
+    ],
+    "totals": {
+     "net": {
+      "amount": 17257.67,
+      "complete": true,
+      "missingItemIds": []
+     },
+     "tax": {
+      "amount": 3624.11,
+      "complete": true,
+      "missingItemIds": []
+     },
+     "gross": {
+      "amount": 20881.78,
+      "complete": true,
+      "missingItemIds": []
+     },
+     "unpricedItemIds": [],
+     "unavailableQuantityItemIds": [],
+     "incompleteQuantityItemIds": [],
+     "unreviewedPriceItemIds": [
+      "floor:mat_wood",
+      "floor:mat_antislip",
+      "floor:mat_tile600",
+      "floor:mat_tile800",
+      "floor:mat_walnut",
+      "floor:mat_marble",
+      "skirting",
+      "paint",
+      "opening:door",
+      "opening:sliding-door",
+      "opening:window"
+     ],
+     "reviewComplete": false
+    },
+    "warnings": [
+     {
+      "code": "unreviewed-prices",
+      "itemIds": [
+       "floor:mat_wood",
+       "floor:mat_antislip",
+       "floor:mat_tile600",
+       "floor:mat_tile800",
+       "floor:mat_walnut",
+       "floor:mat_marble",
+       "skirting",
+       "paint",
+       "opening:door",
+       "opening:sliding-door",
+       "opening:window"
+      ]
+     }
+    ]
+   },
+   "view": {
+    "professional": {
+     "variant": "professional",
+     "subject": {
+      "type": "project",
+      "id": "prj_reference-home"
+     },
+     "title": "Presupuesto",
+     "currency": "EUR",
+     "summary": {
+      "net": {
+       "amount": 17257.67,
+       "complete": true
+      },
+      "tax": {
+       "state": "defined",
+       "amount": 3624.11,
+       "complete": true,
+       "ratePercent": 21,
+       "mixed": false,
+       "missing": 0
+      },
+      "gross": {
+       "amount": 20881.78,
+       "complete": true,
+       "final": true
+      },
+      "chapters": 3,
+      "items": 11,
+      "unassigned": 0,
+      "unpriced": 0,
+      "unavailable": 0,
+      "incomplete": 0,
+      "unreviewed": 11,
+      "reviewComplete": false,
+      "empty": false
+     },
+     "chapters": [
+      {
+       "title": "Pavimentos y rodapiés",
+       "id": "floors",
+       "lines": [
+        {
+         "description": "Pavimento Parqué de roble",
+         "quantity": {
+          "value": 32.56282,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 34.190961,
+         "unitPrice": 46,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1572.78,
+         "taxAmount": 330.28,
+         "subtotalGross": 1903.06,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "floor:mat_wood"
+        },
+        {
+         "description": "Pavimento Baldosa antideslizante 300",
+         "quantity": {
+          "value": 9.018799999999999,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 9.46974,
+         "unitPrice": 34,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 321.97,
+         "taxAmount": 67.61,
+         "subtotalGross": 389.58,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "floor:mat_antislip"
+        },
+        {
+         "description": "Pavimento Baldosa 600",
+         "quantity": {
+          "value": 6.0386,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 6.34053,
+         "unitPrice": 34,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 215.58,
+         "taxAmount": 45.27,
+         "subtotalGross": 260.85,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "floor:mat_tile600"
+        },
+        {
+         "description": "Pavimento Baldosa 800",
+         "quantity": {
+          "value": 34.269580000000005,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 35.983059000000004,
+         "unitPrice": 34,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1223.42,
+         "taxAmount": 256.92,
+         "subtotalGross": 1480.34,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "floor:mat_tile800"
+        },
+        {
+         "description": "Pavimento Parqué de nogal",
+         "quantity": {
+          "value": 5.293,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 5.557650000000001,
+         "unitPrice": 46,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 255.65,
+         "taxAmount": 53.69,
+         "subtotalGross": 309.34,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "floor:mat_walnut"
+        },
+        {
+         "description": "Pavimento Mármol",
+         "quantity": {
+          "value": 2.589,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 2.7184500000000003,
+         "unitPrice": 92,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 250.1,
+         "taxAmount": 52.52,
+         "subtotalGross": 302.62,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "floor:mat_marble"
+        },
+        {
+         "description": "Rodapié (perímetro de estancias, sin descontar puertas)",
+         "quantity": {
+          "value": 132.76399999999998,
+          "unit": "m",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 139.4022,
+         "unitPrice": 11,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1533.42,
+         "taxAmount": 322.02,
+         "subtotalGross": 1855.44,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "skirting"
+        }
+       ],
+       "totals": {
+        "net": {
+         "amount": 5372.92,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "tax": {
+         "amount": 1128.31,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "gross": {
+         "amount": 6501.23,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "complete": true,
+        "unpriced": 0,
+        "unavailable": 0,
+        "incomplete": 0,
+        "unreviewed": 7
+       }
+      },
+      {
+       "title": "Acabados de paredes",
+       "id": "walls",
+       "lines": [
+        {
+         "description": "Pintura plástica en paredes (caras netas)",
+         "quantity": {
+          "value": 374.67670000000004,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 374.67670000000004,
+         "unitPrice": 8.5,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 3184.75,
+         "taxAmount": 668.8,
+         "subtotalGross": 3853.55,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "paint"
+        }
+       ],
+       "totals": {
+        "net": {
+         "amount": 3184.75,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "tax": {
+         "amount": 668.8,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "gross": {
+         "amount": 3853.55,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "complete": true,
+        "unpriced": 0,
+        "unavailable": 0,
+        "incomplete": 0,
+        "unreviewed": 1
+       }
+      },
+      {
+       "title": "Carpintería",
+       "id": "carpentry",
+       "lines": [
+        {
+         "description": "Puerta de paso",
+         "quantity": {
+          "value": 6,
+          "unit": "unit",
+          "status": "measured",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 6,
+         "unitPrice": 310,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1860,
+         "taxAmount": 390.6,
+         "subtotalGross": 2250.6,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "opening:door"
+        },
+        {
+         "description": "Puerta corredera",
+         "quantity": {
+          "value": 2,
+          "unit": "unit",
+          "status": "measured",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 2,
+         "unitPrice": 540,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1080,
+         "taxAmount": 226.8,
+         "subtotalGross": 1306.8,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "opening:sliding-door"
+        },
+        {
+         "description": "Ventana",
+         "quantity": {
+          "value": 12,
+          "unit": "unit",
+          "status": "measured",
+          "complete": true,
+          "source": "project",
+          "sourceLabel": null
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 12,
+         "unitPrice": 480,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 5760,
+         "taxAmount": 1209.6,
+         "subtotalGross": 6969.6,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         },
+         "id": "opening:window"
+        }
+       ],
+       "totals": {
+        "net": {
+         "amount": 8700,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "tax": {
+         "amount": 1827,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "gross": {
+         "amount": 10527,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "complete": true,
+        "unpriced": 0,
+        "unavailable": 0,
+        "incomplete": 0,
+        "unreviewed": 3
+       }
+      }
+     ],
+     "unassigned": null,
+     "warnings": [
+      {
+       "code": "unreviewed-prices",
+       "count": 11,
+       "items": [
+        "Pavimento Parqué de roble",
+        "Pavimento Baldosa antideslizante 300",
+        "Pavimento Baldosa 600",
+        "Pavimento Baldosa 800",
+        "Pavimento Parqué de nogal",
+        "Pavimento Mármol",
+        "Rodapié (perímetro de estancias, sin descontar puertas)",
+        "Pintura plástica en paredes (caras netas)",
+        "Puerta de paso",
+        "Puerta corredera",
+        "Ventana"
+       ]
+      }
+     ],
+     "budgetId": "bud_prj_reference-home",
+     "trace": {
+      "projectQuantities": 11,
+      "manualQuantities": 0,
+      "ownPrices": 11,
+      "referencePrices": 0,
+      "contrastReferences": 0,
+      "sources": []
+     }
+    },
+    "client": {
+     "variant": "client",
+     "subject": {
+      "type": "project"
+     },
+     "title": "Presupuesto",
+     "currency": "EUR",
+     "summary": {
+      "net": {
+       "amount": 17257.67,
+       "complete": true
+      },
+      "tax": {
+       "state": "defined",
+       "amount": 3624.11,
+       "complete": true,
+       "ratePercent": 21,
+       "mixed": false,
+       "missing": 0
+      },
+      "gross": {
+       "amount": 20881.78,
+       "complete": true,
+       "final": true
+      },
+      "chapters": 3,
+      "items": 11,
+      "unassigned": 0,
+      "unpriced": 0,
+      "unavailable": 0,
+      "incomplete": 0,
+      "unreviewed": 11,
+      "reviewComplete": false,
+      "empty": false
+     },
+     "chapters": [
+      {
+       "title": "Pavimentos y rodapiés",
+       "lines": [
+        {
+         "description": "Pavimento Parqué de roble",
+         "quantity": {
+          "value": 32.56282,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 34.190961,
+         "unitPrice": 46,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1572.78,
+         "taxAmount": 330.28,
+         "subtotalGross": 1903.06,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Pavimento Baldosa antideslizante 300",
+         "quantity": {
+          "value": 9.018799999999999,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 9.46974,
+         "unitPrice": 34,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 321.97,
+         "taxAmount": 67.61,
+         "subtotalGross": 389.58,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Pavimento Baldosa 600",
+         "quantity": {
+          "value": 6.0386,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 6.34053,
+         "unitPrice": 34,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 215.58,
+         "taxAmount": 45.27,
+         "subtotalGross": 260.85,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Pavimento Baldosa 800",
+         "quantity": {
+          "value": 34.269580000000005,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 35.983059000000004,
+         "unitPrice": 34,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1223.42,
+         "taxAmount": 256.92,
+         "subtotalGross": 1480.34,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Pavimento Parqué de nogal",
+         "quantity": {
+          "value": 5.293,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 5.557650000000001,
+         "unitPrice": 46,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 255.65,
+         "taxAmount": 53.69,
+         "subtotalGross": 309.34,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Pavimento Mármol",
+         "quantity": {
+          "value": 2.589,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 2.7184500000000003,
+         "unitPrice": 92,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 250.1,
+         "taxAmount": 52.52,
+         "subtotalGross": 302.62,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Rodapié (perímetro de estancias, sin descontar puertas)",
+         "quantity": {
+          "value": 132.76399999999998,
+          "unit": "m",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 5,
+         "budgetQuantity": 139.4022,
+         "unitPrice": 11,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1533.42,
+         "taxAmount": 322.02,
+         "subtotalGross": 1855.44,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        }
+       ],
+       "totals": {
+        "net": {
+         "amount": 5372.92,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "tax": {
+         "amount": 1128.31,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "gross": {
+         "amount": 6501.23,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "complete": true,
+        "unpriced": 0,
+        "unavailable": 0,
+        "incomplete": 0,
+        "unreviewed": 7
+       }
+      },
+      {
+       "title": "Acabados de paredes",
+       "lines": [
+        {
+         "description": "Pintura plástica en paredes (caras netas)",
+         "quantity": {
+          "value": 374.67670000000004,
+          "unit": "m2",
+          "status": "estimated",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 374.67670000000004,
+         "unitPrice": 8.5,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 3184.75,
+         "taxAmount": 668.8,
+         "subtotalGross": 3853.55,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        }
+       ],
+       "totals": {
+        "net": {
+         "amount": 3184.75,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "tax": {
+         "amount": 668.8,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "gross": {
+         "amount": 3853.55,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "complete": true,
+        "unpriced": 0,
+        "unavailable": 0,
+        "incomplete": 0,
+        "unreviewed": 1
+       }
+      },
+      {
+       "title": "Carpintería",
+       "lines": [
+        {
+         "description": "Puerta de paso",
+         "quantity": {
+          "value": 6,
+          "unit": "unit",
+          "status": "measured",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 6,
+         "unitPrice": 310,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1860,
+         "taxAmount": 390.6,
+         "subtotalGross": 2250.6,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Puerta corredera",
+         "quantity": {
+          "value": 2,
+          "unit": "unit",
+          "status": "measured",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 2,
+         "unitPrice": 540,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 1080,
+         "taxAmount": 226.8,
+         "subtotalGross": 1306.8,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        },
+        {
+         "description": "Ventana",
+         "quantity": {
+          "value": 12,
+          "unit": "unit",
+          "status": "measured",
+          "complete": true,
+          "source": "project"
+         },
+         "context": null,
+         "wastePercent": 0,
+         "budgetQuantity": 12,
+         "unitPrice": 480,
+         "origin": "own",
+         "review": "pending",
+         "taxRatePercent": 21,
+         "subtotalNet": 5760,
+         "taxAmount": 1209.6,
+         "subtotalGross": 6969.6,
+         "pricingComplete": true,
+         "taxComplete": true,
+         "ownSource": {
+          "label": "Precio de prueba (laboratorio RUBIK)",
+          "asOf": "2026-11-17"
+         }
+        }
+       ],
+       "totals": {
+        "net": {
+         "amount": 8700,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "tax": {
+         "amount": 1827,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "gross": {
+         "amount": 10527,
+         "complete": true,
+         "missingItemIds": []
+        },
+        "complete": true,
+        "unpriced": 0,
+        "unavailable": 0,
+        "incomplete": 0,
+        "unreviewed": 3
+       }
+      }
+     ],
+     "unassigned": null,
+     "warnings": []
+    }
+   }
+  }
+ },
+ "source": {
+  "sha": "f31f303",
+  "external": []
+ }
+}
