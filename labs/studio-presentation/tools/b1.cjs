@@ -140,7 +140,8 @@ module.exports=function b1(C){
    ${t.map((x,i)=>{const y=i*rowH+2,L=bw*x.net/max;return `<text x="${label-2.5}" y="${y+barH/2}" text-anchor="end" dominant-baseline="middle" font-size="3.4" fill="${T.ink}">${esc(x.title)}</text>
     <path d="M ${label} ${y} h ${Math.max(L-1,0)} a 1 1 0 0 1 1 1 v ${barH-2} a 1 1 0 0 1 -1 1 h ${-Math.max(L-1,0)} z" fill="${T.ink}"/>
     <text x="${label+L+2}" y="${y+barH/2}" dominant-baseline="middle" font-size="3.4" font-weight="700" fill="${T.ink}">${eur(x.net)}</text>
-    <text x="${label+L+2}" y="${y+barH/2+4.6}" dominant-baseline="middle" font-size="3.2" fill="${T.muted}">${num(x.net/V.summary.net.amount*100,0)} % de la base, ${x.n} partidas</text>`;}).join('')}</svg>`;}
+    ${(()=>{const s=`${num(x.net/V.summary.net.amount*100,0)} % de la base, ${x.n} partidas`,fit=label+L+2+s.length*1.85<=w; // Inter 3.2 ≈ 1.85 per char; past the canvas it ends at the right edge
+     return `<text x="${fit?label+L+2:w-.5}" y="${y+barH/2+4.6}"${fit?'':' text-anchor="end"'} dominant-baseline="middle" font-size="3.2" fill="${T.muted}">${s}</text>`;})()}`;}).join('')}</svg>`;}
  const TEST=S.budget?.test?.label||'';
  function summaryPage(V,{variant}){const sm=V.summary;
   return {html:`<div class="grid"><div class="c1-5" style="display:flex;flex-direction:column;justify-content:space-between;height:178mm">
@@ -162,10 +163,10 @@ module.exports=function b1(C){
     :`<tr><td>${esc(l.description)}</td><td class="num">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)} ${unit[l.quantity.unit]||''}</td><td class="num">${eur(l.unitPrice)}</td><td class="num">${eur(l.subtotalNet)}</td></tr>`;}).join('')}
    <tr class="sub"><td colspan="${cols-1}">Subtotal ${esc(c.title.toLowerCase())}</td><td class="num">${eur(c.lines.reduce((s,l)=>s+l.subtotalNet,0))}</td></tr>`).join('');
   const sm=V.summary;
-  return {html:`<div class="grid"><div class="c1-${prof?'12':'8'}"><h2 class="h2">${prof?'Detalle para el estudio':'Detalle del presupuesto'}</h2><table><thead><tr>${head}</tr></thead><tbody>${body}
+  return {html:`<div class="grid"><div class="c1-${prof?'12':'8'}"><h2 class="h2">${prof?'Detalle para el estudio':'Detalle del presupuesto'}</h2><p class="caption" data-flow-part hidden></p><table class="flow"><thead><tr>${head}</tr></thead><tbody>${body}
    <tr class="total"><td colspan="${cols-1}">Base imponible</td><td class="num">${eur(sm.net.amount)}</td></tr><tr><td colspan="${cols-1}">IVA ${num(sm.tax.ratePercent,0)} %</td><td class="num">${eur(sm.tax.amount)}</td></tr><tr class="total"><td colspan="${cols-1}">Total con IVA</td><td class="num">${eur(sm.gross.amount)}</td></tr></tbody></table>
-   <p class="caption">${prof?'Medición: cantidad calculada por RUBIK sobre el modelo (est. = escala estimada). El importe aplica la merma a la medición.':'Cantidad: medición del modelo más la merma de obra. Precios de prueba de laboratorio, no de mercado.'}</p></div>
-   ${prof?'':`<div class="c9-12"><p class="note"><b>Lo que ve el cliente.</b> Partida, cantidad, precio e importe. El origen de cada precio, su revisión y los avisos internos quedan en la versión del estudio.</p></div>`}</div>`};}
+   <p class="caption" data-flow-last>${prof?'Medición: cantidad calculada por RUBIK sobre el modelo (est. = escala estimada). El importe aplica la merma a la medición.':'Cantidad: medición del modelo más la merma de obra. Precios de prueba de laboratorio, no de mercado.'}</p></div>
+   ${prof?'':`<div class="c9-12"><p class="note" data-flow-first><b>Lo que ve el cliente.</b> Partida, cantidad, precio e importe. El origen de cada precio, su revisión y los avisos internos quedan en la versión del estudio.</p></div>`}</div>`};}
  D['commercial-proposal-client-v3']=doc('commercial-proposal-client-v3','Propuesta económica, versión cliente','client',BC?[summaryPage(BC,{variant:'client'}),detailPage(BC,{variant:'client'})]:[noBudgetPage('Propuesta económica')]);
  D['commercial-proposal-studio-v3']=doc('commercial-proposal-studio-v3','Propuesta económica, versión estudio','technical',BV?[summaryPage(BV,{variant:'professional'}),detailPage(BV,{variant:'professional'})]:[noBudgetPage('Propuesta económica')]);
  // ---------- real-estate A4 portrait, one page: figures with their origin under each ----------

@@ -62,6 +62,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -95,6 +102,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -126,13 +140,20 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 1,
+    "rows": 40,
+    "pagesAdded": 1,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 4483,
+     "RUBIK Inter": 4489,
      "RUBIK Serif": 420
     },
     "display": "RUBIK Serif",
@@ -158,6 +179,13 @@
     "RUBIK Serif 600 normal",
     "RUBIK Serif 400 italic"
    ],
+   "flow": {
+    "tables": 1,
+    "rows": 20,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -189,6 +217,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -219,6 +254,13 @@
     "RUBIK Inter 700 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -252,6 +294,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -283,6 +332,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -314,6 +370,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 1,
+    "rows": 20,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -345,6 +408,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 1,
+    "rows": 20,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -376,6 +446,13 @@
     "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
@@ -406,6 +483,13 @@
     "RUBIK Inter 700 normal",
     "RUBIK Serif 600 normal"
    ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
    "external": [],
    "errors": [],
    "lint": {
