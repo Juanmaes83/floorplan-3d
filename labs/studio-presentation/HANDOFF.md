@@ -1,6 +1,16 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · traspaso del candidato v1.4
+## Vigente · v1.4 auditoría ampliada (en curso)
+
+Mandato: `mandatos/RUBIK-SOTA-CIERRE-INTEGRAL-PROFESIONAL-v1.4-AUDITORIA-AMPLIADA.md`. Base: el candidato v1.4 de la sección siguiente sigue siendo válido y no se repite.
+
+**Hecho en este bloque:** auditoría §3 con oráculo independiente sobre los PDF finales: `node tools/auditoria-recetas.cjs` → `reports/16-AUDITORIA-RECETAS-v1.4.md` y `evidence/recetas/auditoria-completitud.json`.
+Resultado: **2/12 recetas L completas documentalmente** (RP05, RP07). Incompletas: RP01 (alcance de servicios, validez), RP02, RP04 (precio, impuestos de compra), RP06 (concepto, moodboard), RP08 (plan de obra, oferta técnica, exclusiones, vínculo), RP09, RP10, RP11 (catálogo, precios verificados), RP12 (presupuesto revisado); RP03 sin documento propio. La fase P no tiene ninguna receta L en los seis perfiles (6/18 combinaciones).
+Nota de alcance: `revisionAnterior`, `variantesGuardadas`, `dimensionesHuecos` y `fotosAportadas` dependen de E2/E4; marcarlos «corte» y no implementarlos. El resto (RP01, RP04, RP06, RP08, RP10, RP11, RP12) es el trabajo §4 con fixtures sintéticas rotuladas.
+
+**Siguiente, en orden:** (1) §4 bloques documentales RP01/RP04/RP06/RP08/RP10/RP11/RP12 en `tools/b1.cjs`/`compose.cjs` alimentados por aportaciones rotuladas (el resolvedor `tools/recetas.cjs` ya las recibe y hoy las ignora), con casos presente/ausente/parcial/incompatible/obsoleto, y reejecutar `auditoria-recetas.cjs` hasta que cada L represente sus campos o declare su corte; (2) §5 seis escenarios económicos por el recorrido real del exportador + ZIP/digest; (3) §6 recibo de receta; (4) §7 FF&E y QA tipográfico de todas las láminas; (5) §8 localización del selector; (6) §9 inventario de Skills for Architects (pin a9c4355) y donantes; (7) §10 RP13–RP21; (8) §11 negativos N08; (9) §12 registro F01–F16, paquetes, dossier y hoja de aceptación; dictamen.
+
+## Anterior · traspaso del candidato v1.4
 
 Rama exclusiva `lab/studio-presentation-e0e1`. Candidato empaquetado `26297e7b67b7c3c497ce3761b5bbf3f72f0b61da`. El commit posterior de la rama contiene este handoff y el acta de distribución. Base de lectura de producto `master@8525025a1470d48d52d8e365070e5a0acf116134`.
 

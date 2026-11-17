@@ -28,3 +28,5 @@ Restricciones comunes a los tres:
 - sin master, PR, merge, Production, Vercel ni secretos;
 - sin IA de pago;
 - sin tocar a Codex.
+
+| `RUBIK-SOTA-CIERRE-INTEGRAL-PROFESIONAL-v1.4-AUDITORIA-AMPLIADA.md` | Mandato vigente desde el 17/11/2026 (resumen operativo transcrito; el texto íntegro es el mensaje del propietario). Amplía el cierre v1.4 con F01–F16. |

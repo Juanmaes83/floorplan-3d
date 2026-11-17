@@ -1,0 +1,1358 @@
+{
+ "schema": "rubik-lab-auditoria-recetas/1",
+ "fecha": "2026-11-17T21:21:45.644Z",
+ "catalogo": "rubik-lab-recetas/1",
+ "oraculo": "patrones de contenido sobre pdftotext de los PDF finales de out/v3 (ES y .en)",
+ "recetas": [
+  {
+   "key": "RP01",
+   "nivel": "L",
+   "finalidad": "Alcance, servicios y honorarios",
+   "perfiles": [
+    "AR",
+    "AT",
+    "IN",
+    "RE"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "comercial",
+   "tipo": "Commercial Proposal",
+   "corte": "E3",
+   "documentos": [
+    "commercial-proposal-client-v3"
+   ],
+   "requeridas": [
+    "presupuesto",
+    "marca"
+   ],
+   "opcionales": [
+    "concepto"
+   ],
+   "completas": [
+    "alcanceServicios",
+    "honorarios",
+    "exclusiones",
+    "validezOferta"
+   ],
+   "evidencia": [
+    {
+     "campo": "presupuesto",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "marca",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "alcanceServicios",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "honorarios",
+     "tipo": "complementaria",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "exclusiones",
+     "tipo": "complementaria",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "validezOferta",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "alcanceServicios",
+    "validezOferta"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (alcanceServicios, validezOferta)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP02",
+   "nivel": "L",
+   "finalidad": "Viabilidad y estado actual",
+   "perfiles": [
+    "AR",
+    "AT",
+    "IM"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "tecnica",
+   "tipo": "Architecture Book",
+   "corte": "E3/E4",
+   "documentos": [
+    "architecture-book",
+    "architecture-sheet-strip"
+   ],
+   "requeridas": [
+    "geometria",
+    "superficies"
+   ],
+   "opcionales": [
+    "vistas3d"
+   ],
+   "completas": [
+    "revisionAnterior",
+    "fotosAportadas"
+   ],
+   "evidencia": [
+    {
+     "campo": "geometria",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "superficies",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "revisionAnterior",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "fotosAportadas",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "revisionAnterior",
+    "fotosAportadas"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (revisionAnterior, fotosAportadas)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP03",
+   "nivel": "L",
+   "finalidad": "Anteproyecto integral y opciones",
+   "perfiles": [
+    "AR",
+    "IN",
+    "RE"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "editorial",
+   "tipo": "Interior Design Book",
+   "corte": "E2/E3",
+   "documentos": [],
+   "requeridas": [
+    "geometria",
+    "vistas3d"
+   ],
+   "opcionales": [
+    "concepto",
+    "presupuesto",
+    "planObra",
+    "imagenesIA",
+    "dibujoVivo",
+    "recorrido"
+   ],
+   "completas": [
+    "variantesGuardadas"
+   ],
+   "evidencia": [
+    {
+     "campo": "geometria",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "vistas3d",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "variantesGuardadas",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "geometria",
+    "vistas3d",
+    "variantesGuardadas"
+   ],
+   "estado": "L sin documento propio: incompleta",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP04",
+   "nivel": "L",
+   "finalidad": "Vivienda y potencial de reforma",
+   "perfiles": [
+    "IM",
+    "RE"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "comercial",
+   "tipo": "Real Estate Presentation",
+   "corte": "E3",
+   "documentos": [
+    "real-estate-sheet-v3"
+   ],
+   "requeridas": [
+    "geometria",
+    "superficies"
+   ],
+   "opcionales": [
+    "presupuesto",
+    "recorrido",
+    "dibujoVivo"
+   ],
+   "completas": [
+    "precioInmueble",
+    "impuestosCompra",
+    "revisionAnterior"
+   ],
+   "evidencia": [
+    {
+     "campo": "geometria",
+     "tipo": "requerida",
+     "es": true,
+     "en": false
+    },
+    {
+     "campo": "superficies",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "precioInmueble",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "impuestosCompra",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "revisionAnterior",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "precioInmueble",
+    "impuestosCompra",
+    "revisionAnterior"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (precioInmueble, impuestosCompra, revisionAnterior)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP05",
+   "nivel": "L",
+   "finalidad": "Estimación económica inicial",
+   "perfiles": [
+    "AT",
+    "RE",
+    "CO"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "comercial",
+   "tipo": "Commercial Proposal",
+   "corte": "E3",
+   "documentos": [
+    "commercial-proposal-client-v3"
+   ],
+   "requeridas": [
+    "presupuesto"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "presupuesto",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    }
+   ],
+   "faltan": [],
+   "estado": "L completa documentalmente (pendiente revisión humana)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP06",
+   "nivel": "L",
+   "finalidad": "Concepto, moodboard y opciones",
+   "perfiles": [
+    "IN",
+    "AR"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "editorial",
+   "tipo": "Interior Design Book",
+   "corte": "E3/E4",
+   "documentos": [
+    "interior-book-v3",
+    "materials-furniture-book-v3"
+   ],
+   "requeridas": [
+    "vistas3d",
+    "materiales"
+   ],
+   "opcionales": [
+    "imagenesIA",
+    "dibujoVivo"
+   ],
+   "completas": [
+    "concepto",
+    "referenciasMoodboard"
+   ],
+   "evidencia": [
+    {
+     "campo": "vistas3d",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "materiales",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "concepto",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "referenciasMoodboard",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "concepto",
+    "referenciasMoodboard"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (concepto, referenciasMoodboard)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP07",
+   "nivel": "L",
+   "finalidad": "Ficha comercial de vivienda",
+   "perfiles": [
+    "IM"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "comercial",
+   "tipo": "Real Estate Presentation",
+   "corte": "E3",
+   "documentos": [
+    "real-estate-sheet-v3-sin-presupuesto"
+   ],
+   "requeridas": [
+    "geometria",
+    "superficies",
+    "vistas3d"
+   ],
+   "opcionales": [
+    "recorrido",
+    "dibujoVivo",
+    "norte",
+    "revisionAnterior"
+   ],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "geometria",
+     "tipo": "requerida",
+     "es": true,
+     "en": false
+    },
+    {
+     "campo": "superficies",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "vistas3d",
+     "tipo": "requerida",
+     "es": true,
+     "en": false
+    }
+   ],
+   "faltan": [],
+   "estado": "L completa documentalmente (pendiente revisión humana)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP08",
+   "nivel": "L",
+   "finalidad": "Oferta técnica y planificación",
+   "perfiles": [
+    "CO",
+    "RE"
+   ],
+   "fases": [
+    "A"
+   ],
+   "familia": "comercial",
+   "tipo": "Commercial Proposal",
+   "corte": "E3/E4",
+   "documentos": [
+    "architecture-sheet-strip"
+   ],
+   "requeridas": [
+    "planObra"
+   ],
+   "opcionales": [],
+   "completas": [
+    "ofertaTecnica",
+    "exclusiones",
+    "vinculoPlanPresupuesto"
+   ],
+   "evidencia": [
+    {
+     "campo": "planObra",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "ofertaTecnica",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "exclusiones",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "vinculoPlanPresupuesto",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "planObra",
+    "ofertaTecnica",
+    "exclusiones",
+    "vinculoPlanPresupuesto"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (planObra, ofertaTecnica, exclusiones, vinculoPlanPresupuesto)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP09",
+   "nivel": "L",
+   "finalidad": "Architecture Book y juego de láminas",
+   "perfiles": [
+    "AR",
+    "AT",
+    "RE"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "tecnica",
+   "tipo": "Architecture Book",
+   "corte": "E4",
+   "documentos": [
+    "architecture-book",
+    "architecture-sheet-strip"
+   ],
+   "requeridas": [
+    "geometria",
+    "superficies"
+   ],
+   "opcionales": [
+    "seccionFachadas"
+   ],
+   "completas": [
+    "revisionAnterior",
+    "dimensionesHuecos"
+   ],
+   "evidencia": [
+    {
+     "campo": "geometria",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "superficies",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "revisionAnterior",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "dimensionesHuecos",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "revisionAnterior",
+    "dimensionesHuecos"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (revisionAnterior, dimensionesHuecos)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP10",
+   "nivel": "L",
+   "finalidad": "Memoria descriptiva y superficies",
+   "perfiles": [
+    "AR",
+    "AT"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "tecnica",
+   "tipo": "Architecture Book",
+   "corte": "E4",
+   "documentos": [
+    "architecture-book"
+   ],
+   "requeridas": [
+    "geometria",
+    "superficies"
+   ],
+   "opcionales": [
+    "concepto"
+   ],
+   "completas": [
+    "revisionAnterior"
+   ],
+   "evidencia": [
+    {
+     "campo": "geometria",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "superficies",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "revisionAnterior",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "revisionAnterior"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (revisionAnterior)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP11",
+   "nivel": "L",
+   "finalidad": "Libro FF&E y fichas de activos",
+   "perfiles": [
+    "IN",
+    "AR",
+    "IM"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "editorial",
+   "tipo": "Materials & Furniture Book",
+   "corte": "E4",
+   "documentos": [
+    "materials-furniture-book-v3"
+   ],
+   "requeridas": [
+    "objetos",
+    "materiales"
+   ],
+   "opcionales": [
+    "imagenesIA"
+   ],
+   "completas": [
+    "catalogoProductos",
+    "preciosVerificados"
+   ],
+   "evidencia": [
+    {
+     "campo": "objetos",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "materiales",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "catalogoProductos",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "preciosVerificados",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "catalogoProductos",
+    "preciosVerificados"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (catalogoProductos, preciosVerificados)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP12",
+   "nivel": "L",
+   "finalidad": "Mediciones y presupuesto detallado",
+   "perfiles": [
+    "AT",
+    "AR",
+    "RE",
+    "CO"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "comercial",
+   "tipo": "Commercial Proposal",
+   "corte": "E3/E5",
+   "documentos": [
+    "commercial-proposal-client-v3"
+   ],
+   "requeridas": [
+    "presupuesto"
+   ],
+   "opcionales": [],
+   "completas": [
+    "presupuestoRevisado"
+   ],
+   "evidencia": [
+    {
+     "campo": "presupuesto",
+     "tipo": "requerida",
+     "es": true,
+     "en": true
+    },
+    {
+     "campo": "presupuestoRevisado",
+     "tipo": "complementaria",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "presupuestoRevisado"
+   ],
+   "estado": "L exportable, INCOMPLETA documentalmente (presupuestoRevisado)",
+   "ausenciaRotulada": true
+  },
+  {
+   "key": "RP13",
+   "nivel": "C",
+   "finalidad": "Comparativo de ofertas homologadas",
+   "perfiles": [
+    "AT",
+    "CO",
+    "RE"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "comercial",
+   "tipo": "Commercial Proposal",
+   "corte": "corte económico específico",
+   "documentos": [],
+   "requeridas": [
+    "ofertasIndependientes",
+    "presupuesto"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "ofertasIndependientes",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    },
+    {
+     "campo": "presupuesto",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    }
+   ],
+   "faltan": [
+    "presupuesto"
+   ],
+   "estado": "C: contrato y bloqueo (no implementar motor)",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP14",
+   "nivel": "C",
+   "finalidad": "Orden de cambio de diseño u obra",
+   "perfiles": [
+    "RE",
+    "AR",
+    "AT",
+    "IN",
+    "CO"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "tecnica",
+   "tipo": "Architecture Book",
+   "corte": "E2/E3 (ENT-04)",
+   "documentos": [],
+   "requeridas": [
+    "revisionAnterior",
+    "motivoCambio"
+   ],
+   "opcionales": [
+    "planObra"
+   ],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "revisionAnterior",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "motivoCambio",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [
+    "revisionAnterior"
+   ],
+   "estado": "C: contrato y bloqueo (no implementar motor)",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP15",
+   "nivel": "C",
+   "finalidad": "Seguimiento y certificaciones de obra",
+   "perfiles": [
+    "CO",
+    "AT",
+    "RE",
+    "IM"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "tecnica",
+   "tipo": "Architecture Book",
+   "corte": "E3/E6 + OBR",
+   "documentos": [],
+   "requeridas": [
+    "planObra",
+    "observacionesObra",
+    "certificadosObra"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "planObra",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "observacionesObra",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    },
+    {
+     "campo": "certificadosObra",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [
+    "planObra"
+   ],
+   "estado": "C: contrato y bloqueo (no implementar motor)",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP16",
+   "nivel": "F",
+   "finalidad": "Visita, actas, RFI y decisiones",
+   "perfiles": [
+    "AR",
+    "AT",
+    "CO",
+    "RE"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "tecnica",
+   "tipo": null,
+   "corte": "OBR futuro",
+   "documentos": [],
+   "requeridas": [
+    "actasVisita"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "actasVisita",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [],
+   "estado": "F: futuro, dependencias registradas",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP17",
+   "nivel": "C",
+   "finalidad": "Personalización y especificación técnica",
+   "perfiles": [
+    "IN",
+    "AR",
+    "IM"
+   ],
+   "fases": [
+    "D"
+   ],
+   "familia": "editorial",
+   "tipo": "Materials & Furniture Book",
+   "corte": "E4 (ENT-05)",
+   "documentos": [],
+   "requeridas": [
+    "materiales",
+    "objetos",
+    "catalogoProductos",
+    "especificacionValidada"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "materiales",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "objetos",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "catalogoProductos",
+     "tipo": "requerida",
+     "es": false,
+     "en": false
+    },
+    {
+     "campo": "especificacionValidada",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [
+    "materiales",
+    "objetos",
+    "catalogoProductos"
+   ],
+   "estado": "C: contrato y bloqueo (no implementar motor)",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP18",
+   "nivel": "F",
+   "finalidad": "Recepción y remates",
+   "perfiles": [
+    "RE",
+    "CO",
+    "AT"
+   ],
+   "fases": [
+    "P"
+   ],
+   "familia": "tecnica",
+   "tipo": null,
+   "corte": "OBR futuro",
+   "documentos": [],
+   "requeridas": [
+    "punchList"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "punchList",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [],
+   "estado": "F: futuro, dependencias registradas",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP19",
+   "nivel": "F",
+   "finalidad": "As-built y manual de mantenimiento",
+   "perfiles": [
+    "AR",
+    "AT",
+    "CO",
+    "RE"
+   ],
+   "fases": [
+    "P"
+   ],
+   "familia": "tecnica",
+   "tipo": null,
+   "corte": "E6 / alcance futuro",
+   "documentos": [],
+   "requeridas": [
+    "revisionEjecutada",
+    "manualesGarantias"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "revisionEjecutada",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    },
+    {
+     "campo": "manualesGarantias",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [],
+   "estado": "F: futuro, dependencias registradas",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP20",
+   "nivel": "F",
+   "finalidad": "Liquidación, garantías y entrega de llaves",
+   "perfiles": [
+    "CO",
+    "AT",
+    "RE",
+    "IM"
+   ],
+   "fases": [
+    "P"
+   ],
+   "familia": "comercial",
+   "tipo": null,
+   "corte": "corte futuro",
+   "documentos": [],
+   "requeridas": [
+    "costeLiquidado",
+    "manualesGarantias",
+    "actasEntrega"
+   ],
+   "opcionales": [],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "costeLiquidado",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    },
+    {
+     "campo": "manualesGarantias",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    },
+    {
+     "campo": "actasEntrega",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [],
+   "estado": "F: futuro, dependencias registradas",
+   "ausenciaRotulada": false
+  },
+  {
+   "key": "RP21",
+   "nivel": "C",
+   "finalidad": "Dossier del propietario y portfolio final",
+   "perfiles": [
+    "IM",
+    "IN",
+    "RE",
+    "AR"
+   ],
+   "fases": [
+    "P"
+   ],
+   "familia": "editorial",
+   "tipo": "Interior Design Book",
+   "corte": "E6/E7",
+   "documentos": [],
+   "requeridas": [
+    "evidenciaEjecutada",
+    "archivoPropietario"
+   ],
+   "opcionales": [
+    "imagenesIA",
+    "recorrido"
+   ],
+   "completas": [],
+   "evidencia": [
+    {
+     "campo": "evidenciaEjecutada",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    },
+    {
+     "campo": "archivoPropietario",
+     "tipo": "requerida",
+     "oraculo": "sin patrón"
+    }
+   ],
+   "faltan": [],
+   "estado": "C: contrato y bloqueo (no implementar motor)",
+   "ausenciaRotulada": false
+  }
+ ],
+ "combinaciones": [
+  {
+   "perfil": "AR",
+   "fase": "A",
+   "recetas": [
+    "RP01",
+    "RP02",
+    "RP03",
+    "RP06"
+   ],
+   "L": [
+    "RP01",
+    "RP02",
+    "RP03",
+    "RP06"
+   ]
+  },
+  {
+   "perfil": "AR",
+   "fase": "D",
+   "recetas": [
+    "RP09",
+    "RP10",
+    "RP11",
+    "RP12",
+    "RP14",
+    "RP16",
+    "RP17"
+   ],
+   "L": [
+    "RP09",
+    "RP10",
+    "RP11",
+    "RP12"
+   ]
+  },
+  {
+   "perfil": "AR",
+   "fase": "P",
+   "recetas": [
+    "RP19",
+    "RP21"
+   ],
+   "L": []
+  },
+  {
+   "perfil": "AT",
+   "fase": "A",
+   "recetas": [
+    "RP01",
+    "RP02",
+    "RP05"
+   ],
+   "L": [
+    "RP01",
+    "RP02",
+    "RP05"
+   ]
+  },
+  {
+   "perfil": "AT",
+   "fase": "D",
+   "recetas": [
+    "RP09",
+    "RP10",
+    "RP12",
+    "RP13",
+    "RP14",
+    "RP15",
+    "RP16"
+   ],
+   "L": [
+    "RP09",
+    "RP10",
+    "RP12"
+   ]
+  },
+  {
+   "perfil": "AT",
+   "fase": "P",
+   "recetas": [
+    "RP18",
+    "RP19",
+    "RP20"
+   ],
+   "L": []
+  },
+  {
+   "perfil": "IN",
+   "fase": "A",
+   "recetas": [
+    "RP01",
+    "RP03",
+    "RP06"
+   ],
+   "L": [
+    "RP01",
+    "RP03",
+    "RP06"
+   ]
+  },
+  {
+   "perfil": "IN",
+   "fase": "D",
+   "recetas": [
+    "RP11",
+    "RP14",
+    "RP17"
+   ],
+   "L": [
+    "RP11"
+   ]
+  },
+  {
+   "perfil": "IN",
+   "fase": "P",
+   "recetas": [
+    "RP21"
+   ],
+   "L": []
+  },
+  {
+   "perfil": "RE",
+   "fase": "A",
+   "recetas": [
+    "RP01",
+    "RP03",
+    "RP04",
+    "RP05",
+    "RP08"
+   ],
+   "L": [
+    "RP01",
+    "RP03",
+    "RP04",
+    "RP05",
+    "RP08"
+   ]
+  },
+  {
+   "perfil": "RE",
+   "fase": "D",
+   "recetas": [
+    "RP09",
+    "RP12",
+    "RP13",
+    "RP14",
+    "RP15",
+    "RP16"
+   ],
+   "L": [
+    "RP09",
+    "RP12"
+   ]
+  },
+  {
+   "perfil": "RE",
+   "fase": "P",
+   "recetas": [
+    "RP18",
+    "RP19",
+    "RP20",
+    "RP21"
+   ],
+   "L": []
+  },
+  {
+   "perfil": "CO",
+   "fase": "A",
+   "recetas": [
+    "RP05",
+    "RP08"
+   ],
+   "L": [
+    "RP05",
+    "RP08"
+   ]
+  },
+  {
+   "perfil": "CO",
+   "fase": "D",
+   "recetas": [
+    "RP12",
+    "RP13",
+    "RP14",
+    "RP15",
+    "RP16"
+   ],
+   "L": [
+    "RP12"
+   ]
+  },
+  {
+   "perfil": "CO",
+   "fase": "P",
+   "recetas": [
+    "RP18",
+    "RP19",
+    "RP20"
+   ],
+   "L": []
+  },
+  {
+   "perfil": "IM",
+   "fase": "A",
+   "recetas": [
+    "RP02",
+    "RP04",
+    "RP07"
+   ],
+   "L": [
+    "RP02",
+    "RP04",
+    "RP07"
+   ]
+  },
+  {
+   "perfil": "IM",
+   "fase": "D",
+   "recetas": [
+    "RP11",
+    "RP15",
+    "RP17"
+   ],
+   "L": [
+    "RP11"
+   ]
+  },
+  {
+   "perfil": "IM",
+   "fase": "P",
+   "recetas": [
+    "RP20",
+    "RP21"
+   ],
+   "L": []
+  }
+ ],
+ "resumen": {
+  "L": 12,
+  "LCompletas": 2,
+  "LIncompletas": [
+   "RP01",
+   "RP02",
+   "RP03",
+   "RP04",
+   "RP06",
+   "RP08",
+   "RP09",
+   "RP10",
+   "RP11",
+   "RP12"
+  ],
+  "combinaciones": 18,
+  "combinacionesSinL": [
+   "AR·P",
+   "AT·P",
+   "IN·P",
+   "RE·P",
+   "CO·P",
+   "IM·P"
+  ]
+ }
+}
