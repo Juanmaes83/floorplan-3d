@@ -1,0 +1,28 @@
+/* HOM-04 (provisional) · «Descubre RUBIK en acción»: the two visual cards of the Home and the discreet layer of the
+   «Dibujo vivo» demo (js/home-demos.js). Role tokens of css/design-system.css. */
+.welcome-in-action{margin-top:28px}
+.welcome-in-action>p.lead{margin:4px 0 14px;color:var(--ink-muted)}
+.demo-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.demo-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--surface-panel);overflow:hidden}
+.demo-card figure{margin:0;aspect-ratio:16/9;background:#ece8e1;overflow:hidden}
+.demo-card img{display:block;width:100%;height:100%;object-fit:cover}
+.demo-card .demo-card-body{display:flex;flex-direction:column;gap:6px;padding:16px 18px 18px;flex:1}
+.demo-card .demo-card-kicker{margin:0;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--action)}
+.demo-card h3{margin:0;font-size:19px}
+.demo-card p{margin:0}
+.demo-card .demo-card-note{font-size:12.5px;color:var(--ink-muted)}
+.demo-card .demo-card-go{align-self:flex-start;margin-top:auto;min-height:44px;padding:0 16px}
+@media (max-width:760px){.demo-cards{grid-template-columns:1fr}}
+.home-demo-bar{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:2147483000;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;
+ max-width:calc(100vw - 16px);padding:6px 8px 6px 12px;border-radius:999px;background:rgba(255,255,255,.96);border:1px solid var(--line);box-shadow:0 4px 18px rgba(20,26,30,.16);font-size:13px}
+.home-demo-tag{font-weight:600}
+.home-demo-bar .btn{min-height:36px;padding:0 12px;border:1px solid var(--line);background:var(--surface-panel)}
+.home-demo-card{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2147483001;width:min(440px,calc(100vw - 32px));padding:20px 22px;border-radius:14px;
+ background:var(--surface-panel);border:1px solid var(--line);box-shadow:0 14px 40px rgba(20,26,30,.24)}
+.home-demo-card[hidden]{display:none}
+.home-demo-card h2{margin:0 0 8px;font-size:20px}
+.home-demo-card p{margin:0 0 8px;line-height:1.45}
+.home-demo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.home-demo-actions .btn{min-height:44px;padding:0 14px;border:1px solid var(--line)}
+.home-demo-actions .btn.primary{background:var(--action);color:var(--action-ink,#fff);border-color:var(--action)}
+@media (max-width:600px){.home-demo-bar{top:64px;flex-wrap:nowrap;padding:4px;gap:6px}.home-demo-tag{display:none}.home-demo-bar .btn{min-height:34px;padding:0 10px;font-size:12.5px}}

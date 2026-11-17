@@ -529,6 +529,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <link rel="stylesheet" href="css/guided-experience.css">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/brand.css">
+<link rel="stylesheet" href="css/home-demos.css">
 <link rel="stylesheet" href="css/surface-sheet.css">
 <!-- The editor markup carries its original (Chinese) labels and is translated by script; until that has run, nothing
      is painted, so the first frame is never in the wrong language. If a script fails, the page shows after 3 s anyway. -->
@@ -5537,6 +5538,9 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- Asistente generativo (rubik-agent/1): conversación con un modelo de texto real vía /api/assistant (cerrado por defecto:
      sin autorización del propietario, solo la consulta guiada). El navegador nunca tiene la clave del proveedor. -->
 <script src="js/assistant-agent-core.js"></script><script src="js/assistant-gen-ui.js"></script>
+<!-- HOM-04 (provisional) · «Descubre RUBIK en acción»: arranque directo de la demo «Dibujo vivo» (?demo=dibujo-vivo) con el
+     ejemplo y la presentación existentes. Sin ?demo no hace nada. -->
+<script src="js/home-demos.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
