@@ -50,3 +50,5 @@ Validación pública adicional de biblioteca y presupuesto: 4/4 pruebas de ident
 Comprobación pública dirigida de presentación: abre la configuración, cancela, conserva el proyecto, cero peticiones API y cero errores de página. [Resultado](../qa/evidencias-cierre-2026-11-17/public-presentation.txt). La primera sonda usó el cierre del reproductor en lugar de «Cancelar» de la configuración y se corrigió en el ensayo; no fue un defecto de producto. No acredita exportación ni reproducción completa.
 
 CI en observación publicada en [#247](https://github.com/Juanmaes83/floorplan-3d/pull/247), independiente de este cierre. El resultado de sus checks debe verificarse sobre su propio HEAD; no se reutilizan como si pertenecieran a #246.
+
+**Decisión expresa posterior del propietario:** conservar por ahora las dos variables temporales exclusivas de Preview de la rama S3 (`BLOB_READ_WRITE_TOKEN` y `RUBIK_SHARE_TOKEN`). No se retiraron, no se leyeron valores y no se modificó ninguna variable de Production. Su retirada futura necesita nueva autorización; retirar variables no garantiza revocar las credenciales de deployments ya construidos.
