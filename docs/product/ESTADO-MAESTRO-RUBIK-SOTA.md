@@ -4,6 +4,8 @@
 
 **Consolidación técnica posterior:** `master@403e6b74c95a81e23c17badb276abeca9f8c3fd1` incorpora #245 el 17/11. Su HEAD `bcd9692` superó todas las comprobaciones, incluidos los ocho grupos históricos, en la ejecución [44092050036](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44092050036). Se conservan los mismos 35 archivos históricos y la partición bloqueante. Los ajustes afectan al reparto y a los presupuestos de tiempo de render por CPU. Esta evidencia de CI no sustituye las pruebas funcionales históricas ni la validación aislada pendiente de GOV-08 S3 (#244).
 
+**Corte GOV-08 S3 / ENT-02 (#244):** incorpora caducidad de 7/30/90 días, 30 por defecto, registro del almacén y limpieza manual con simulación previa. Preserva archivos vigentes, históricos e incoherentes, y rechaza listados incompletos o sin confirmación booleana de fin de paginación. Las pruebas locales dirigidas de Codex pasan 56/56 en servidor y 4/4 en navegador. La validación real debe ejecutarse exclusivamente en Preview y Blob de prueba, conforme al [protocolo](../security/gov08-s3-validacion-preview.md), antes de integrar esta PR. Esta nota describe el alcance del corte y su gate, sin atribuir una prueba contra Production. Siguen pendientes S4, S5 y GOV-06a. No hay Cron ni limpieza automática.
+
 **Qué es este documento.** Es la fotografía **vigente** del producto. Responde a qué está terminado, qué es experimental, qué está simulado o desactivado y qué falta.
 
 **Qué no es.** No es una auditoría nueva, un roadmap nuevo ni una autorización. Ningún estado de este documento autoriza merge, despliegue, gasto ni activación de proveedores.

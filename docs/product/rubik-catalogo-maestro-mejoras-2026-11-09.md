@@ -105,7 +105,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | GOV-06a | **Autenticación y cuotas mínimas por profesional** para los servicios IA de pago (sustituir el código compartido; cuota y gasto por cuenta) | F1 §1, IMG-04 | N | ★★★★★ | A | GOV-05 | 2 | ☐ |
 | GOV-06b | Plataforma multiusuario avanzada: equipos, roles, organizaciones, portal | C-03, ENT-07 | N | ★★★ | MA | GOV-06a | 5 | ☐ |
 | GOV-07 | Pruebas en hardware real (iOS, Android, GPU de escritorio), DPR adaptativo y contexto WebGL | G4 | N | ★★★★ | M | — | 1 | ☐ |
-| GOV-08 | **Publicación de enlaces de cliente segura en conjunto** (`api/share.js`, que guarda en Vercel Blob). **Hecho comprobado el 09/11:** al rotar el código de Production para el render, **publicar enlaces de cliente también pasó a depender del código nuevo**; hoy no son independientes. Lo principal: (1) dejar de depender del **código compartido** del render (permiso de publicación propio, por profesional cuando exista GOV-06a); (2) **revocación individual sencilla** de cada enlace desde RUBIK, hoy solo posible borrando a mano en el panel de Vercel Blob; (3) caducidad opcional; (4) tamaño y cuota de almacenamiento; (5) registro de qué se publicó y cuándo. Además, comparación del código en tiempo constante (hoy usa `!==`), un detalle menor frente a lo anterior. **No** reutilizar el interruptor del Render IA. | F10, ENT-02 | P | ★★★★★ | M | GOV-06a para (1) por profesional | 1 | ☐ |
+| GOV-08 | **Publicación de enlaces de cliente segura en conjunto** (`api/share.js`, Vercel Blob). Corte 17/11: S1 separa el permiso de publicación del render; S2 permite retirar enlaces y aísla el visor. #244 incorpora S3: caducidad 7/30/90 días (30 por defecto), registro del almacén y limpieza manual con simulación, protección de vigentes e históricos y rechazo de listados incompletos. Su integración exige validación aislada y CI. Quedan S4 cuotas, S5 almacén privado/enlaces opacos y permisos por profesional. Los enlaces Blob públicos mantienen sus límites documentados. | F10, ENT-02 | P | ★★★★★ | M | GOV-06a para permisos por profesional | 1 | ☐ |
 
 ### B · Home y descubrimiento
 
@@ -121,7 +121,7 @@ Editor 2D/3D, estancias, muros con estado y **tipo declarado**, huecos y mobilia
 | ID | Mejora | Alias | Estado | Valor | Dif. | Depende | Ola | Decisión |
 |---|---|---|---|---|---|---|---|---|
 | ENT-01 | Visita 3D del cliente desde «Entregar» (PR #166): ponerla al día con master y revisarla | C-01, W2, G1 | R | ★★★★★ | A | — | 1 | ☐ |
-| ENT-02 | Seguridad del enlace de cliente: caducidad, revocación, aislamiento y borrado | G2 | P | ★★★★★ | A | ENT-01, GOV-05 | 1 | ☐ |
+| ENT-02 | Seguridad del enlace de cliente: revocación y aislamiento existentes; #244 incorpora caducidad y limpieza manual controlada con validación aislada previa. Borrado programado fuera del alcance aprobado de S3. | G2 | P | ★★★★★ | A | ENT-01, GOV-05 | 1 | ☐ |
 | ENT-03 | Story y plantillas profesionales también hacia el cliente | FT3D-7, G3 | N | ★★★★ | A | ENT-01 | 2 | ☐ |
 | ENT-04 | Dossier comercial antes/después, con presupuesto rotulado (parcial o completo) | C-02 | P | ★★★★★ | M | UX-07 | 2 | ☐ |
 | ENT-05 | Fichas de imagen: original, final, materiales, versión y leyenda IA | IMG-17, CAT-G4 | N | ★★★★ | M | IMG-12, ENT-01 | 3 | ☐ |
