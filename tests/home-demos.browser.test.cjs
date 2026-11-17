@@ -56,12 +56,25 @@ test('Dibujo vivo demo from the Home: intro → play → end card → how to →
  await page.waitForFunction(()=>window.FloorPlanPresentation.story?.kind==='living-drawing'&&View3D.presentationStoryInfo?.living);
  assert.equal(await page.evaluate(()=>View3D.presentationLivingDrawingInfo.active),true,'the existing Hybrid V2 engine draws');
  await page.waitForTimeout(4000);await shot(page,'03-dibujo-playing');
+ // Hold the final camera handoff so replay is requested while the internal control is disabled.
+ await page.evaluate(()=>{
+  const go=View3D.presentationGo;
+  View3D.presentationGo=async function(...args){
+   View3D.presentationGo=go;
+   const settled=go.apply(this,args);
+   await new Promise(resolve=>{window.releaseHomeDemoCamera=resolve;});
+   return settled;
+  };
+ });
  await page.waitForFunction(()=>window.RubikHomeDemos.state.ended,null,{timeout:300000});
  for(const id of ['#homeDemoReplay','#homeDemoHowTo','#homeDemoExplore'])assert.equal(await page.locator(id).isVisible(),true,id);await shot(page,'04-dibujo-end');
  await page.locator('#homeDemoHowTo').click();assert.match(await page.locator('#homeDemoCard').innerText(),/Dibujo vivo[\s\S]*Iniciar|inicia la presentación/);
  await page.locator('#homeDemoCard .btn',{hasText:/^Volver$/}).click();
  // «Volver a ver» replays the same scene.
- await page.locator('#homeDemoReplay').click();await page.waitForFunction(()=>window.FloorPlanPresentation.story?.kind==='living-drawing');
+ assert.equal(await page.locator('#presentationLivingPlay').isDisabled(),true,'the presentation is still settling');
+ await page.locator('#homeDemoReplay').click();
+ await page.evaluate(()=>window.releaseHomeDemoCamera());
+ await page.waitForFunction(()=>window.FloorPlanPresentation.story?.kind==='living-drawing'&&View3D.presentationLivingDrawingInfo.active);
  // Back to start: the presentation closes, the visitor's own project is open again and nothing of theirs changed.
  await page.locator('#homeDemoHome').click();await page.waitForURL(u=>!u.search);await page.locator('#welcomeBlank').waitFor({state:'attached'});
  const after=await projects(page);assert.equal(after.active,mine,'the visitor\'s project is the open one again');
