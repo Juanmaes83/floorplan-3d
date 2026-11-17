@@ -54,9 +54,15 @@ function plan({changes, baseSha, headSha, tests, dependencies, previousDependenc
   file.startsWith('tests/helpers/');
  if (changes.some(isCritical)) return full('security, shared runtime, workflow or fundamental contract changed');
 
+ const combined = {}, reverse = {};
+ for (const file of new Set([...Object.keys(dependencies), ...Object.keys(previousDependencies)])) {
+  combined[file] = [...new Set([...(dependencies[file] || []), ...(previousDependencies[file] || [])])];
+  for(const dependency of combined[file])(reverse[dependency] ||= []).push(file);
+ }
+ const consumersOf = files => {const reached=new Set(),pending=[...files];while(pending.length){const file=pending.pop();if(reached.has(file))continue;reached.add(file);pending.push(...(reverse[file]||[]));}return reached;};
+ const affected=consumersOf(changes);
  const informational = new Set(informationalDocuments);
- const documentConsumed = changes.some(file => tests.some(test =>
-  closure(test, dependencies).has(file) || closure(test, previousDependencies).has(file)));
+ const documentConsumed = tests.some(test=>affected.has(test));
  const documentationOnly = !documentConsumed && changes.every(file =>
   /\.md$/.test(file) && file.startsWith('docs/') && informational.has(file));
  if (documentationOnly) {
@@ -66,19 +72,13 @@ function plan({changes, baseSha, headSha, tests, dependencies, previousDependenc
    evidenceStatus:'historical evidence remains historical; no current test execution claimed'};
  }
 
- const combined = {};
- for (const file of new Set([...Object.keys(dependencies), ...Object.keys(previousDependencies)])) {
-  combined[file] = [...new Set([...(dependencies[file] || []), ...(previousDependencies[file] || [])])];
- }
- const changed = new Set(changes);
  if (changes.some(file => !tests.includes(file) && !(file in combined))) {
   return full('changed file has no audited dependency entry');
  }
- const footprints = new Map(allTests.map(test => [test, closure(test, combined)]));
- const selected = allTests.filter(test => [...footprints.get(test)].some(file => changed.has(file)));
+ const selected = allTests.filter(test => affected.has(test));
  if (selected.length === 0) return full('no test accounts for the changed module');
- const uncertain = new Set(uncertainFiles);
- if (selected.some(test => [...footprints.get(test)].some(file => uncertain.has(file)))) {
+ const uncertainConsumers = consumersOf(uncertainFiles);
+ if (selected.some(test => uncertainConsumers.has(test))) {
   return full('affected dependency closure contains unresolved or dynamic edges');
  }
  if (selected.some(test => !(ownership[test] || []).length)) {
@@ -86,7 +86,7 @@ function plan({changes, baseSha, headSha, tests, dependencies, previousDependenc
  }
  const notRequired = allTests.filter(test => !selected.includes(test)).map(test => ({test,
   reason:'unchanged source closure in both base and candidate',
-  dependencyFingerprint:fingerprint(footprints.get(test), contents, environment),
+  dependencyFingerprint:fingerprint(closure(test,combined), contents, environment),
   status:'not executed on candidate; no PASS inferred'}));
  if (notRequired.some(row => row.dependencyFingerprint === null)) {
   return full('incomplete content evidence for a potentially reusable dependency closure');

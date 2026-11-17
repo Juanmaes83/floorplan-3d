@@ -64,7 +64,7 @@ jobs:
           name: ci-impact-${{ github.event.pull_request.head.sha || github.sha }}
           path: qa-results/impact
   integration-gate:
-    if: always()
+    if: always() && !cancelled()
     needs: observe
     runs-on: ubuntu-latest
     steps:
