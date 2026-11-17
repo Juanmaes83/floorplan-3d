@@ -1,0 +1,7 @@
+PASS token belongs exclusively to isolated test store
+PASS isolated store complete and empty before retention test
+PASS real Blob lists synthetic active, expired and historical publications separately
+PASS dry run selects only expired file and preserves exact store contents
+PASS confirmed purge deletes exactly expired file and retains active and historical files
+PASS active and historical links still open after purge
+PASS cleanup removes only files created by this test and verifies empty store

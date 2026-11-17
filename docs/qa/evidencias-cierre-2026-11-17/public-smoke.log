@@ -1,0 +1,12 @@
+PASS 1440x900 Home sin perfil: cabecera original, 3 entradas, 4 capacidades, banda Render IA, sin scroll horizontal 
+PASS 1440x900 seis perfiles: cabecera propia, capacidades del registro, proyecto intacto, sin scroll horizontal 
+PASS 390x844 Home sin perfil: cabecera original, 3 entradas, 4 capacidades, banda Render IA, sin scroll horizontal 
+PASS 390x844 seis perfiles: cabecera propia, capacidades del registro, proyecto intacto, sin scroll horizontal 
+PASS preferencia persistida en localStorage y fuera del proyecto 
+PASS accesos reales: Presupuestar, Entregar, Analizar, Mi estudio, selector de archivos y recorrido del ejemplo; el diálogo de Render IA no se abre por detrás 
+PASS teclado: selector de profesión con Enter 
+PASS proyecto de ejemplo en 2D y 3D 
+PASS áreas Diseñar, Analizar, Presupuestar, Entregar y Mi estudio 
+PASS Render IA: el diálogo real se abre desde Entregar → Vistas del proyecto y se cierra sin enviar nada; geometría intacta 
+PASS ninguna petición a /api/render ni /api/share durante toda la prueba 
+ALL PASS 11
