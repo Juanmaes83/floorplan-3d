@@ -12,7 +12,7 @@
 1. `git fetch origin lab/studio-presentation-e0e1 && git worktree add ../studio lab/studio-presentation-e0e1`, o haz checkout de la rama. Lee `HANDOFF.md` y `reports/01`, `03`, `04` y `05`.
 2. Donantes, solo lectura:
    - Públicos: `git clone --depth 1 https://github.com/Juanmaes83/<repo> /home/user/juanmaes83/<repo>` para `brand-identity-skill`, `get-shit-pretty`, `huashu-design-3.0-agent-`, `brand-system-skill` y `diagram-design`.
-   - Públicos de terceros, en `/home/user/donors`: `alpaca-labs/skills-for-architects`, `ifc-sheet`, `invoify` y `papora`. Comprueba sus SHA en `reports/01`.
+   - En `/home/user/donors`: `Juanmaes83/skills-for-architects`, `Juanmaes83/ifc-sheet`, `Juanmaes83/invoify` y `bilalmlkdev/papora`. Comprueba sus SHA en `reports/01`.
    - Privados: `add_repo` (lectura) y clon en `/home/user/<repo>` para `impeccable`, `designer-skills`, `design-system`, `power-design`, `guizang-ppt-skill`, `100-layout-compositions`, `open-design`, `baoyu-design`, `anydesign`, `design-dna`, `mono-color-skill`, `skill.color-expert`, `400-free-design-resources`, `casebook-pro-v2-spatial-storytelling-system`, `product-editorial-showcase` y `portafolios-premium_rubik-sota`.
    - No llames a `register_repo_root`.
 3. Fuentes: `cd tools && npm i --no-save @fontsource/inter@5.1.1 @fontsource/newsreader@5.1.1 @fontsource/source-serif-4@5.1.1`.
