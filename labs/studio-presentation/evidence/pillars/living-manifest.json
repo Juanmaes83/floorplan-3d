@@ -1,0 +1,113 @@
+{
+ "head": "1a2409f5f4ed419d8778d81b0110698cc397551f",
+ "dirty": false,
+ "chromium": "153.0.8010.12",
+ "entries": [
+  {
+   "viewport": "1440x900",
+   "mode": "on",
+   "stop": 0,
+   "kind": "overview",
+   "roomId": null,
+   "file": "1440x900-on-00-overview.png",
+   "drawing": {
+    "active": true,
+    "reason": null,
+    "precision": "float",
+    "width": 1440,
+    "height": 900,
+    "frames": 8,
+    "auxMaterials": 71,
+    "aoSamples": 12,
+    "lineStep": 1,
+    "restored": true,
+    "landing": {
+     "seeds": 16,
+     "objects": 23,
+     "rooms": 4,
+     "map": [
+      327,
+      294
+     ],
+     "done": [
+      {
+       "roomIndex": 10,
+       "done": 10.999,
+       "end": 11
+      },
+      {
+       "roomIndex": 8,
+       "done": 16.360000000000003,
+       "end": 16.5
+      },
+      {
+       "roomIndex": 7,
+       "done": 21.999,
+       "end": 22
+      },
+      {
+       "roomIndex": 1,
+       "done": 26.999,
+       "end": 27
+      }
+     ]
+    },
+    "time": 14.568699999999907,
+    "liveSeeds": 4
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "mode": "on",
+   "stop": 1,
+   "kind": "room",
+   "roomId": "rom_master",
+   "file": "1440x900-on-01-master.png",
+   "drawing": {
+    "active": false
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "mode": "on",
+   "stop": 2,
+   "kind": "room",
+   "roomId": "rom_kitchen",
+   "file": "1440x900-on-02-kitchen.png",
+   "drawing": {
+    "active": false
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "mode": "on",
+   "stop": 3,
+   "kind": "room",
+   "roomId": "rom_dining",
+   "file": "1440x900-on-03-dining.png",
+   "drawing": {
+    "active": false
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "mode": "on",
+   "stop": 4,
+   "kind": "room",
+   "roomId": "rom_living",
+   "file": "1440x900-on-04-living.png",
+   "drawing": {
+    "active": false
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "mode": "on",
+   "closed": true,
+   "drawingAfterClose": {
+    "active": false
+   },
+   "errors": []
+  }
+ ]
+}
