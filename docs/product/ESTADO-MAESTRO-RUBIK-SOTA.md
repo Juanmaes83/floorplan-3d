@@ -7,7 +7,7 @@
 **Qué no es.** No es una auditoría nueva, un roadmap nuevo ni una autorización. Ningún estado de este documento autoriza merge, despliegue, gasto ni activación de proveedores.
 
 **Autoridades.**
-- **Nombres, IDs y olas:** el [catálogo maestro v1.10](rubik-catalogo-maestro-mejoras-2026-11-09.md), con sus 97 códigos y sus seis descartes X-01 a X-06, que no se renumeran.
+- **Nombres, IDs y olas:** el [catálogo maestro v1.11](rubik-catalogo-maestro-mejoras-2026-11-09.md), con sus 98 códigos (v1.11 añade HOM-04) y sus seis descartes X-01 a X-06, que no se renumeran.
 - **Estado posterior al 12/11/2026:** este documento.
 - **Documentos históricos:** conservan su fecha y su validez. No estaban equivocados: describen un corte anterior.
 
@@ -27,10 +27,10 @@
 |---|---|
 | `master` | `40b4ae5d724ef83d0e70651545b4f5e4832becd3` [M] |
 | Consolidación | [#241](https://github.com/Juanmaes83/floorplan-3d/pull/241), fusionada el 16/11/2026, con HEAD `200b936`. Integra identidad de proyectos, presupuestos independientes, importación de presupuesto, Asistente V3 (#238), HOM-03 (#236), lector y enlace de #166 y las auditorías (#240) |
-| HOM-04 (provisional) | [#242](https://github.com/Juanmaes83/floorplan-3d/pull/242), fusionada el 17/11/2026, con HEAD `5fcb252`. Sección «Descubre RUBIK en acción» en la Home con dos demos guiadas: Evolución 4D (`/evolucion/?demo=obra`) y Dibujo vivo (`/?demo=dibujo-vivo`). Corrige el error de `/evolucion/?lab=1&dossier=K` en Production |
+| HOM-04 | [#242](https://github.com/Juanmaes83/floorplan-3d/pull/242), fusionada el 17/11/2026, con HEAD `5fcb252`. Sección «Descubre RUBIK en acción» en la Home con dos demos guiadas: Evolución 4D (`/evolucion/?demo=obra`) y Dibujo vivo (`/?demo=dibujo-vivo`). Corrige el error de `/evolucion/?lab=1&dossier=K` en Production |
 | Despliegue Production | `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs`, sobre `40b4ae5`, **READY** [M, consultado en Vercel el 17/11]. El de #241 era `dpl_t1AALQZxQEtEoBeT5HBoTyYF2z2e` |
 | **URL pública `floorplan-3d-alpha.vercel.app`** | **Apunta a `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` (`40b4ae5`) desde el 17/11/2026**, por autorización del propietario [M, consultado en Vercel el 17/11]. Abre sin pedir acceso. Antes estaba en `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (09/11, `master@8df49ed`): para revertir, basta con reasignarle ese despliegue |
-| PR abiertas | **21** (#242 se abrió y se fusionó el 17/11). Detalle en la §F [M, 17/11] |
+| PR abiertas | **0**. El 17/11 el propietario decidió archivar las 21 que quedaban: se cerraron sin fusionar y sin borrar ramas. Detalle en el [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md) y en la §F [M, 17/11] |
 
 **Capacidades principales comprobadas (navegador real, 17/11):**
 
@@ -84,7 +84,7 @@ Es una declaración del propietario, **no** una prueba automatizada ejecutada po
 | UX-12/UX-13 Amueblar por estancia y recetas (#226 vía #228) | INTEGRADO_EXPERIMENTAL | Propuesta reproducible por semilla y densidad, con recetas, que solo se aplica tras confirmarla | Biblioteca con licencias (BIB-01); aceptación visual | [M] `js/smart-furnishing-*`, `tests/smart-furnishing*` | — |
 | MUE-01 «Trae tu mueble» (#227 vía #228) | INTEGRADO_VALIDADO | Foto y medidas convertidas en un volumen genérico; la foto queda solo como referencia | Reconstrucción 3D (MUE-02, ola 5) | [M] `tests/photo-project*.cjs` (MUE-01) | — |
 | OBR-01 Pendientes de FT3D-8 (#207) | INTEGRADO_VALIDADO | EX-05.3, EX-11-k.6, QA-22 y EX-09.10 cerrados | — | [H] `docs/qa/obr01-ft3d8-2026-11-12/README.md` | — |
-| HOM-04 (provisional) Demos guiadas (#242) | INTEGRADO_VALIDADO | Desde la Home, sin cuenta: Evolución 4D con la vivienda de ejemplo como obra nueva (10 tareas, fechas ilustrativas, **sin importes**) y Dibujo vivo con la presentación existente. No leen ni cambian los proyectos del visitante | ID en el catálogo (ver §H). La demo 4D no representa la cubierta | [M] `js/construction-demo-core.js`, `js/home-demos.js`, `evolucion/demo-ui.js`, `tests/evolution-demo.browser.test.cjs`, `tests/home-demos.browser.test.cjs` | Formalizar el ID [D] |
+| HOM-04 Demostraciones guiadas en la Home (#242) | INTEGRADO_VALIDADO | Desde la Home, sin cuenta: Evolución 4D con la vivienda de ejemplo como obra nueva (10 tareas, fechas ilustrativas, **sin importes**) y Dibujo vivo con la presentación existente. No leen ni cambian los proyectos del visitante | Revisión visual humana final. La demo 4D no representa la cubierta | [M] `js/construction-demo-core.js`, `js/home-demos.js`, `evolucion/demo-ui.js`, `tests/evolution-demo.browser.test.cjs`, `tests/home-demos.browser.test.cjs` | — |
 | OBR-02/03 Fantasma de la tarea y % del plan (#219) | INTEGRADO_VALIDADO | En «Evolución», solo con un plan de la misma revisión | — | [M] `evolucion/plan-preview-ui.js`, `tests/obr02-obr03-*` | — |
 | GOV-07 Resiliencia WebGL (#208/#213) | PARCIAL | Degradación controlada y pérdida de contexto en la Evolución | Matriz física iOS, Android y GPU | [M] `tests/gov07-*` | Banco de dispositivos [D] |
 
@@ -107,7 +107,7 @@ Los estados de la Home salen de `js/capability-registry.js`. Ese archivo aún ti
 | HOM-03 «Nuevos servicios IA» (#236 vía #241) | INTEGRADO_VALIDADO | Cuatro estados honestos: render disponible; asistente, catálogos y fichas en piloto; estudio de imágenes y reforma por foto en simulación; IA conversacional y foto real en preparación | Actualizar `VERIFIED_AT` (la URL pública ya lo muestra desde el 17/11) | [M] `js/capability-registry.js`, `tests/welcome-ai-services.browser.test.cjs` | — |
 | CAT-02 «Mis catálogos» (fichas, SKU y medidas; #230 vía #234) | INTEGRADO_EXPERIMENTAL, piloto | Catálogo propio por estudio local | Identidad de estudio autenticada (GOV-06a) y licencias (K11) | [M] `js/catalog-ui.js`, `js/catalog-product-core.js` | — |
 | CAT-03 SKU → objeto 3D validado o volumen genérico → partidas (#233 vía #234) | PARCIAL, piloto | Colocar y presupuestar en C1–C4 sin editarlo | Productos 3D validados a escala comercial | [M] `js/catalog-placement-*`, `tests/catalog-placement*` | — |
-| «CAT-04» catálogo → Presupuestar → Asistente (#237) | INTEGRADO_VALIDADO, piloto | La misma partida C1–C4, IVA por partida y revisión del precio | Reabrirlo en un proyecto real | [M] `js/catalog-budget-core.js`, `js/cat04-ui.js`, `tests/cat04*` | **El código CAT-04 no está en el catálogo v1.10** (ver §H) |
+| «CAT-04» (nombre de trabajo; avance parcial de CAT-03) catálogo → Presupuestar → Asistente (#237) | INTEGRADO_VALIDADO, piloto | La misma partida C1–C4, IVA por partida y revisión del precio | Reabrirlo en un proyecto real | [M] `js/catalog-budget-core.js`, `js/cat04-ui.js`, `tests/cat04*` | — (catálogo v1.11: no es un ID propio) |
 | CAT-01 Referencias del catálogo en el render; IMG-10, IMG-14 e IMG-15 (fidelidad, zona y referencias; #232 vía #234) | SIMULACIÓN | «Estudio de imágenes» rotulado como simulación local; la generación real está bloqueada | Proveedor, gasto (IMG-04, ECO-01) y GOV-05 | [M] `tests/visual-studio.browser.test.cjs`; registro `visual-studio: simulation` | Gate de gasto [D] |
 | FOT-01 Reforma sobre foto (#227, #231) | SIMULACIÓN | Validaciones y simulación rotulada, solo con consentimiento | Proveedor real: `api/photo-reform.js` está cerrado por defecto y no hay ningún proveedor activo | [M] `tests/photo-reform-*`, `tests/photo-project*.cjs` (FOT-01) | Gate de gasto [D] |
 | ECO-01 Medición de coste (#190) | PARCIAL | Nada en la interfaz | Medición real y aceptación por imagen | [M] `js/render-cost-core.js` (no cargado) | — |
@@ -147,7 +147,7 @@ Los estados de la Home salen de `js/capability-registry.js`. Ese archivo aún ti
 
 | Piedra | Estado | Qué hay | Límites | Decisiones pendientes |
 |---|---|---|---|---|
-| **R01** Reconocimiento de planos | LABORATORIO | [#191](https://github.com/Juanmaes83/floorplan-3d/pull/191) y [#205](https://github.com/Juanmaes83/floorplan-3d/pull/205), Draft y no integrados | **No anunciar como conversión fiable de planos** | Validación F2 con planos reales autorizados (cinco sesiones y 20 planos), OCR, escala, permisos GOV-05 y encaje en G-01/G-06 [D] |
+| **R01** Reconocimiento de planos | LABORATORIO | [#191](https://github.com/Juanmaes83/floorplan-3d/pull/191) y [#205](https://github.com/Juanmaes83/floorplan-3d/pull/205), no integrados; archivados el 17/11 con sus ramas conservadas | **No anunciar como conversión fiable de planos** | Validación F2 con planos reales autorizados (cinco sesiones y 20 planos), OCR, escala, permisos GOV-05 y encaje en G-01/G-06 [D] |
 | **R02-A** Techos y elementos altos | INTEGRADO_EXPERIMENTAL | [#223](https://github.com/Juanmaes83/floorplan-3d/pull/223): núcleo, sesión, contrato candidato `x-r02a-ceiling`, referencias verticales y editor conectados; un solo paso de deshacer; sin tocar el esquema canónico [M] `js/r02a-ceiling-*` | No es diseño de instalaciones (MEP), luminotecnia, normativa ni certificación, y **no comprueba la altura de paso**. Los laboratorios #193 y #203 conservan evidencia | Ratificar el contrato definitivo y la referencia vertical, validación profesional, ID funcional y R02-B, que no se ha iniciado [D] |
 | **R03** Armarios paramétricos | INTEGRADO_EXPERIMENTAL | [#222](https://github.com/Juanmaes83/floorplan-3d/pull/222): «Interior del armario…» en el editor, persistencia en `x-r03-cabinet`, deshacer, duplicar y borrar sin huérfanos, armario exacto en el 3D [M] `js/r03-cabinet-*` | Medidas supuestas: no es fabricación, presupuesto automático ni CAT-03 comercial. El interior no viaja en la entrega al cliente | Aceptación visual, validación profesional y el riesgo residual GOV-05 [D] |
 
@@ -155,13 +155,13 @@ Los estados de la Home salen de `js/capability-registry.js`. Ese archivo aún ti
 
 ## E. Olas 0–5
 
-Mantienen la numeración y los IDs del catálogo v1.10: 97 códigos en total, repartidos 10 / 8 / 28 / 22 / 14 / 15. **Ninguna ola está completa.**
+Mantienen la numeración y los IDs del catálogo: 98 códigos en la v1.11 (97 en la v1.10 más HOM-04), repartidos 10 / 9 / 28 / 22 / 14 / 15. **Ninguna ola está completa.**
 
 | Ola | Objetivo | Avances desde el v1.10 (12/11) | Pendientes principales | Dependencias | Siguiente corte razonable |
 |---|---|---|---|---|---|
-| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 a 21 PR abiertas. GOV-03 se amplió con HOM-03. GOV-04: catálogo y auditorías en `master` (#192 y #241) | GOV-02: decidir las 21 restantes. GOV-03: `VERIFIED_AT` desfasado y registro global | — | Actualizar el registro (alias ya movido el 17/11) |
-| **1** Vender lo que ya existe | Entregar al cliente con seguridad | GOV-08 S1/S2/aislamiento, ENT-01 de alcance mínimo, OBR-01 cerrado y GOV-07 de software | ENT-02 caducidad, GOV-08 S3–S5, GOV-05 legal y GOV-07 con dispositivos físicos | GOV-05 (externo) y GOV-06a | **GOV-08 S3** caducidad y registro de publicaciones |
-| **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. Demos guiadas HOM-04 (provisional) en la Home. ECO-01 como núcleo puro. ENT-04 como núcleo sin activar | ENT-04 en la interfaz, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | **ENT-04**: activar el dossier |
+| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 a **0 PR abiertas** (las 21 últimas, archivadas el 17/11: [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md)). GOV-03 se amplió con HOM-03 y sus sellos se actualizaron el 17/11. GOV-04: catálogo v1.11 y auditorías en `master` (#192 y #241) | GOV-03: registro global de capacidades | — | — |
+| **1** Vender lo que ya existe | Entregar al cliente con seguridad | GOV-08 S1/S2/aislamiento, ENT-01 de alcance mínimo, OBR-01 cerrado, GOV-07 de software y **HOM-04** (demos guiadas en la Home, en Production desde el 17/11) | ENT-02 caducidad, GOV-08 S3–S5, GOV-05 legal y GOV-07 con dispositivos físicos | GOV-05 (externo) y GOV-06a | **GOV-08 S3** caducidad y registro de publicaciones |
+| **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. ECO-01 como núcleo puro. ENT-04 como núcleo sin activar | ENT-04 en la interfaz, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | **ENT-04**: activar el dossier |
 | **3** Servicios cobrables | Diferenciación comercial | UX-12/13 experimental, MUE-01 integrado, FOT-01 y CAT-01 en simulación, y AG-0 parcial (V2) | FOT-01 real, CAT-01 real, ENT-05/06, IMG-09/13/15/16/22, PRE-01, UX-11, UX-24, AST-01, ECO-02/03 y PER-01 | GOV-05, ECO-01, IMG-04 y presupuesto de prueba | ECO-01 real con IMG-04 |
 | **4** Interoperabilidad y asistente | Confianza y productividad | AG-1 y AG-2 validados sin LLM. CAT-02 en piloto. IMG-14 en simulación | G-01, G-02, G-08, PER-02/03, PAN-01, UX-10/21/26, OBR-05 y AG-1 con LLM | GOV-06a y prueba C | Prueba C, solo con GO de gasto |
 | **5** Investigación y escala | Solo con decisión expresa | AG-3 local validado (V2). CAT-03 parcial en piloto. AG-4 parcial | AG-5, FOT-02, MUE-02, PAN-02, VID-02, GEN-01, UX-14, LUZ-01, G-04, G-07, ENT-07 y GOV-06b | Decisión y presupuesto | — |
@@ -174,19 +174,16 @@ Mantienen la numeración y los IDs del catálogo v1.10: 97 códigos en total, re
 
 **MCP:**
 - **Etapa 1:** integrada, con ocho herramientas de lectura en `tools/rubik-mcp` [M]. No está validada con proyectos reales a escala.
-- **Etapa 2** (`propose_layout`): LABORATORIO en [#196](https://github.com/Juanmaes83/floorplan-3d/pull/196), [#197](https://github.com/Juanmaes83/floorplan-3d/pull/197) y [#204](https://github.com/Juanmaes83/floorplan-3d/pull/204). **No está en `master`.** Su integración queda pendiente de validarla con un proyecto autorizado.
+- **Etapa 2** (`propose_layout`): LABORATORIO en [#196](https://github.com/Juanmaes83/floorplan-3d/pull/196), [#197](https://github.com/Juanmaes83/floorplan-3d/pull/197) y [#204](https://github.com/Juanmaes83/floorplan-3d/pull/204), archivadas el 17/11 con sus ramas conservadas. **No está en `master`.** Retomarla exige validarla con un proyecto autorizado.
 - **Etapas 3 y 4:** ni implementadas ni aprobadas.
 
 **Otras líneas:**
-- **[#166](https://github.com/Juanmaes83/floorplan-3d/pull/166):** PARCIAL. Solo se portaron el lector y el enlace; de sus 78 archivos, 2 coinciden con `master`. **Su rama antigua no se fusiona.**
-- **Calidad visual y familias residenciales:** LABORATORIO en [#165](https://github.com/Juanmaes83/floorplan-3d/pull/165), [#167](https://github.com/Juanmaes83/floorplan-3d/pull/167) y [#169](https://github.com/Juanmaes83/floorplan-3d/pull/169), pendiente de aceptación visual.
+- **[#166](https://github.com/Juanmaes83/floorplan-3d/pull/166):** PARCIAL. Solo se portaron el lector y el enlace; de sus 78 archivos, 2 coinciden con `master`. **Su rama antigua no se fusiona** (PR archivada el 17/11).
+- **Calidad visual y familias residenciales:** LABORATORIO en [#165](https://github.com/Juanmaes83/floorplan-3d/pull/165), [#167](https://github.com/Juanmaes83/floorplan-3d/pull/167) y [#169](https://github.com/Juanmaes83/floorplan-3d/pull/169), archivadas el 17/11; retomarlas exige aceptación visual y licencias.
 - **Vídeo, imágenes y funciones generativas avanzadas** (vídeo de recorrido generativo VID-02, imágenes reales desde foto FOT-01 real y PAN-01/02): sujetos a sus gates de gasto, legales y de proveedor.
 - **Identidad multiestudio y permisos (GOV-06a):** dependencia transversal de catálogos, Asistente, Render y GOV-08.
 
-**Las otras 15 PR abiertas:**
-- B parcial: #215, #193 y #194; su evidencia se conserva.
-- E laboratorio: #191 y #205.
-- F documental: #164, #162, #161, #160, #89, #77, #64, #61 y #48. Pueden archivarse cuando el propietario decida [D].
+**Archivo de PR (17/11/2026).** Por decisión del propietario, las 21 PR que quedaban abiertas se cerraron sin fusionar y **sin borrar ninguna rama**: 9 de documentación histórica, 4 ya sustituidas en `master` (#166, #193, #194 y #215) y 8 laboratorios sin validar. Qué contiene cada una y qué haría falta para retomarla: [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md). #161 se conserva como material de partida para GOV-05.
 
 ---
 
@@ -214,7 +211,8 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 - los tests citados en cada fila.
 
 **Evidencia histórica [H]:**
-- [catálogo v1.10](rubik-catalogo-maestro-mejoras-2026-11-09.md);
+- [catálogo v1.11](rubik-catalogo-maestro-mejoras-2026-11-09.md);
+- [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md);
 - [estado de piedras y olas del 12/11](../qa/rubik-estado-unico-piedras-olas-2026-11-12.md);
 - [ROADMAP](../ROADMAP.md);
 - [acta AG-0…AG-5](assistant-ai-v2/acta-ag0-ag5-2026-11-14.md);
@@ -240,7 +238,7 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 | #234 | V2 y CAT-IA |
 | #237 | CAT-04 |
 | #241 | Consolidación |
-| #242 | HOM-04 (provisional): demos guiadas |
+| #242 | HOM-04: demostraciones guiadas en la Home |
 
 **Comunicado por el propietario [P]:** aceptación manual de la entrega (publicar, abrir en incógnito y revocar: PASS).
 
@@ -252,10 +250,9 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 - GOV-05 y GOV-06a;
 - contrato definitivo de R02-A;
 - aceptación visual de R03;
-- destino de las 21 PR;
-- formalización de los códigos CAT-04 y HOM-04.
+- «CON-03» (importación de presupuesto): código de trabajo, sin ID en el catálogo.
 
 **Contradicciones abiertas:**
-- **CAT-04** (#237) y la numeración de ramas de CAT-IA (#230 dice «CAT-02 Mis catálogos») no coinciden exactamente con el catálogo v1.10. Este documento usa el significado del catálogo (CAT-01 referencias, CAT-02 fichas y SKU, CAT-03 productos 3D y partidas). Trata «CAT-04» como alias de trabajo, **sin crear un ID nuevo**, hasta que el propietario decida. Lo mismo vale para «CON-03» (importación de presupuesto de #241): es un código de trabajo, no un ID del catálogo.
+- La numeración de ramas de CAT-IA (#230 dice «CAT-02 Mis catálogos») no coincide exactamente con el catálogo. Este documento usa el significado del catálogo (CAT-01 referencias, CAT-02 fichas y SKU, CAT-03 productos 3D y partidas). **Resuelto en la v1.11 para «CAT-04»:** es un nombre de trabajo y un avance parcial de CAT-03, sin ID propio. «CON-03» sigue como código de trabajo, pendiente de decisión.
 - **`js/capability-registry.js`** declara `VERIFIED_AT=5fb7a5c` y define «available» como «en Production», mientras la URL pública sirve `40b4ae5` desde el 17/11.
-- **HOM-04** no existe en el catálogo v1.10, que llega a HOM-03. Es un nombre provisional para las demos de #242, **sin crear un ID nuevo**, hasta que el propietario decida.
+- **Resuelto en la v1.11:** HOM-04 se dio de alta en el catálogo (ola 1, hecho y en Production desde el 17/11).
