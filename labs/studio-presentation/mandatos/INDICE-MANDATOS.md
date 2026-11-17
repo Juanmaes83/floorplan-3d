@@ -30,3 +30,5 @@ Restricciones comunes a los tres:
 - sin tocar a Codex.
 
 | `RUBIK-SOTA-CIERRE-INTEGRAL-PROFESIONAL-v1.4-AUDITORIA-AMPLIADA.md` | Mandato vigente desde el 17/11/2026 (resumen operativo transcrito; el texto íntegro es el mensaje del propietario). Amplía el cierre v1.4 con F01–F16. |
+
+| `BORRADOR-MANDATO-E2.md` | BORRADOR (17/11/2026) del mandato E2 · comparativas profesionales (ENT-04). No autoriza nada: requiere el cierre de la consolidación de Codex, el SHA base de master y el GO específico. |
