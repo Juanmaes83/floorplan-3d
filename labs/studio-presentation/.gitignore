@@ -1,2 +1,4 @@
 tools/node_modules/
 out/*/*.html
+out/v3/b2/*/*.pdf
+out/v3/b2/*/*.html
