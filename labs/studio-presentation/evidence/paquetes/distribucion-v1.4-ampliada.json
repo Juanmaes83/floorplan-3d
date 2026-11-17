@@ -1,0 +1,163 @@
+{
+ "schema": "rubik-lab-distribucion-v1.4-ampliada/1",
+ "commit": "ed58207fb8ef49e9febbc12797ddf059c433062d",
+ "paquetes": [
+  {
+   "archivo": "entrega-vivienda-de-ejemplo-en.digest.json",
+   "bytes": 509,
+   "sha256": "e6c93ba48b365dd8c5ed8241b8d1a24d7d7cf2596c4b0b325ff0b8854d269975"
+  },
+  {
+   "archivo": "entrega-vivienda-de-ejemplo-en.zip",
+   "bytes": 13018163,
+   "sha256": "bf7284d7fc226fa740f7bc62857e15f981443ddb00be22b550ca8c6fadefeb4f"
+  },
+  {
+   "archivo": "entrega-vivienda-de-ejemplo-es.digest.json",
+   "bytes": 516,
+   "sha256": "35af981546c26c43423150d7a2613bd419e2bf1cac057601689110a3f499bb5e"
+  },
+  {
+   "archivo": "entrega-vivienda-de-ejemplo-es.zip",
+   "bytes": 13016079,
+   "sha256": "a8816cbde20c7689a454f42cbabe5159f664ac4d3b4ccdb79821784397f61b23"
+  },
+  {
+   "archivo": "rubik-studio-presentation-lab.zip",
+   "bytes": 145167508,
+   "sha256": "2d621cce70bd25d66285c5708b87fe72519a6808c7340e59783ab5c7c8e03a84"
+  },
+  {
+   "archivo": "economia/economia-after-en.digest.json",
+   "bytes": 467,
+   "sha256": "b371bdfc6e7c179633ee10d155b5ac6aeb93ae285521353b64f317d668d9c607"
+  },
+  {
+   "archivo": "economia/economia-after-en.zip",
+   "bytes": 778930,
+   "sha256": "6e2f9b4953d307b5278a352ba33202cf567d5abae2aee3467d07c1f21287d34c"
+  },
+  {
+   "archivo": "economia/economia-after-es.digest.json",
+   "bytes": 474,
+   "sha256": "67b07f5e9dba101c3391578d8ad6ced16b1e20f4106124341e40f00cb7ea0e93"
+  },
+  {
+   "archivo": "economia/economia-after-es.zip",
+   "bytes": 778054,
+   "sha256": "54c106380d14399141d94114b28ee74d40c0b28320ed74b4ffdeeabcf794eed8"
+  },
+  {
+   "archivo": "economia/economia-before-en.digest.json",
+   "bytes": 470,
+   "sha256": "1ab2f8508bc644b1fa9ecdefca1093d2223ffc0b8fc6825d31b8ba84c31bb2ae"
+  },
+  {
+   "archivo": "economia/economia-before-en.zip",
+   "bytes": 779130,
+   "sha256": "f7a6be189da9071a4f70bb79990ba41552e7152de82fa5d96c6d14e28f2a3a6f"
+  },
+  {
+   "archivo": "economia/economia-before-es.digest.json",
+   "bytes": 477,
+   "sha256": "6c4669b0f31f57fa0cc94a7f34c6286501594dbe8393df663e33b904040d95a6"
+  },
+  {
+   "archivo": "economia/economia-before-es.zip",
+   "bytes": 778262,
+   "sha256": "18ef1bcaa4f15b614aaaa1a31107b4bc4dd1ff72bdedfe5c852918d752c8b525"
+  },
+  {
+   "archivo": "economia/economia-complete-en.digest.json",
+   "bytes": 476,
+   "sha256": "e4b0288fcc9d0fbb040e0aa03a40af30f9b30b7c8983cd6b91fe0788d406e1ed"
+  },
+  {
+   "archivo": "economia/economia-complete-en.zip",
+   "bytes": 778892,
+   "sha256": "7c9c524276e04e53c637e3148a3705632f85d63440bfdc6706a986f1a65043a1"
+  },
+  {
+   "archivo": "economia/economia-complete-es.digest.json",
+   "bytes": 483,
+   "sha256": "16c7c6406f155e5122bb7fab59869f1bebb6ad70e10edd8171c36c1e886561fa"
+  },
+  {
+   "archivo": "economia/economia-complete-es.zip",
+   "bytes": 777837,
+   "sha256": "8026eea800059a13901bb31bf2f7b88411e3291aff185eba3172dea0c612dfbd"
+  },
+  {
+   "archivo": "economia/economia-incoherent-en.digest.json",
+   "bytes": 482,
+   "sha256": "2e44f79e2036934bff5198c3fd19ed7f3711828d70ff001f150442d795c29ea0"
+  },
+  {
+   "archivo": "economia/economia-incoherent-en.zip",
+   "bytes": 775383,
+   "sha256": "a0cf097597accf7221c7913674a96ac7295e7f3b0ce8d306d43a5172702d9d64"
+  },
+  {
+   "archivo": "economia/economia-incoherent-es.digest.json",
+   "bytes": 489,
+   "sha256": "c5508ae65961d6fa52658dda90d9e224d05ed83fdf125880da26603abf8d65a8"
+  },
+  {
+   "archivo": "economia/economia-incoherent-es.zip",
+   "bytes": 774168,
+   "sha256": "3a60ad237eab413d4baf06c8d90925cdd881dd14a0eb2eaa566f9f8155f0355f"
+  },
+  {
+   "archivo": "economia/economia-none-en.digest.json",
+   "bytes": 464,
+   "sha256": "6f66f482b8fd5da666b2b11c4e6746a72f855a3eb4dd4710dafd00e0ee015abc"
+  },
+  {
+   "archivo": "economia/economia-none-en.zip",
+   "bytes": 771897,
+   "sha256": "e399fb36f95cbee537f4a78d4421b79e9100dd4449466f74ea9c82dededc87cf"
+  },
+  {
+   "archivo": "economia/economia-none-es.digest.json",
+   "bytes": 471,
+   "sha256": "276e878ddf87cc2d719859c1c02fbace7effd92ff7d3c68dec3749f5ff8bf896"
+  },
+  {
+   "archivo": "economia/economia-none-es.zip",
+   "bytes": 770652,
+   "sha256": "2925c606f34680c19ac13f2ddaa6b0e1c2584c78a42eada0873fa67d4fba5a3a"
+  },
+  {
+   "archivo": "economia/economia-partial-en.digest.json",
+   "bytes": 473,
+   "sha256": "9cd0986249916ae98cb48c5733223b3c610b0dc1070eeeed81de41772a7efad7"
+  },
+  {
+   "archivo": "economia/economia-partial-en.zip",
+   "bytes": 779004,
+   "sha256": "db88c7709baa8590bd378ff1b5003e595aeb56e2714353c036267eabe9addcb4"
+  },
+  {
+   "archivo": "economia/economia-partial-es.digest.json",
+   "bytes": 480,
+   "sha256": "4a4dc04c3e291bb241d69b9a86b1332bd967b86c4ba76a25f53ceddb53cf1335"
+  },
+  {
+   "archivo": "economia/economia-partial-es.zip",
+   "bytes": 777493,
+   "sha256": "411b27739df4dc8ae1ae551d3a13510491db69514c11eb2834f88b27b7ba2b37"
+  }
+ ],
+ "reconstrucciones": [
+  {
+   "ok": true,
+   "zipSha256": "2d621cce70bd25d66285c5708b87fe72519a6808c7340e59783ab5c7c8e03a84",
+   "pdfComparados": 42
+  },
+  {
+   "ok": true,
+   "zipSha256": "2d621cce70bd25d66285c5708b87fe72519a6808c7340e59783ab5c7c8e03a84",
+   "pdfComparados": 42
+  }
+ ]
+}
