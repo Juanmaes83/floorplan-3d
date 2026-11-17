@@ -18,37 +18,37 @@
       "fixture": 1,
       "paginas": 3,
       "fichas": 1,
-      "sha256": "91f5e2ba4f5949d0bc9e9b80b002423b6ef3a01a47946470c39b825071ccb17d"
+      "sha256": "7489bfc3679a6e9ca9ee2ea78357c765d8f28cadff3bdf8adaddf72650f7c6a9"
     },
     {
       "fixture": 50,
       "paginas": 15,
       "fichas": 50,
-      "sha256": "03cb1f097302606bc945a0f018fe0ae2c8f28c604209548f1c9158aa9e87a86e"
+      "sha256": "eedf6a2b4b39e2d28d0fb6ae44b187e9438633bd8a35e3feeecfde692e2dc0c9"
     },
     {
       "fixture": 200,
       "paginas": 52,
       "fichas": 200,
-      "sha256": "1550a549b8763463bc9f2194814bd597f38113c8f3f2c2c7486a78a5f60b4a85"
+      "sha256": "af4a2becd5c42f23d517fbe6db310db3641e5614b975a955a1e137fa47d68c36"
     },
     {
       "fixture": 500,
       "paginas": 127,
       "fichas": 500,
-      "sha256": "fca68f5de73a04f68a165be5919da1309b2d844d3f7af9f3f00fbaa1588de597"
+      "sha256": "3c8580c74f7f439e814153ca6e69d558debbc3077eb25ff684c994d792a2c0ca"
     },
     {
       "candidato": "es",
       "paginas": 12,
       "fichas": 40,
-      "sha256": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097"
+      "sha256": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b"
     },
     {
       "candidato": "en",
       "paginas": 12,
       "fichas": 40,
-      "sha256": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b"
+      "sha256": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c"
     }
   ]
 }

@@ -1,9 +1,9 @@
 {
  "schema": "rubik-lab-recetas-qa/1",
- "fecha": "2026-11-17T20:42:07.976Z",
+ "fecha": "2026-11-17T20:58:19.308Z",
  "catalogo": "rubik-lab-recetas/1",
  "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
- "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f",
+ "registroSha256": "5c4dcb1546b724569614b01a0ab4a9a9ae36dd9ec84c786dc75837144d5a596b",
  "partes": [
   "esquema",
   "exportar",
@@ -1516,7 +1516,7 @@
     "code": 0,
     "verificado": true,
     "adaptador": true,
-    "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f",
+    "registroSha256": "5c4dcb1546b724569614b01a0ab4a9a9ae36dd9ec84c786dc75837144d5a596b",
     "estable": true,
     "comparacion": {
      "identidad": true,

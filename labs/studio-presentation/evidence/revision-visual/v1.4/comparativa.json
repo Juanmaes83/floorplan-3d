@@ -4,7 +4,7 @@
   "documentos": [
     {
       "archivo": "architecture-book.en.pdf",
-      "sha256": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+      "sha256": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
       "baseline": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
       "paginas": [
         {
@@ -21,73 +21,73 @@
         },
         {
           "pagina": 3,
-          "rasterSha256": "402b9619175ece2e0f529080a20395141fe99ca5a84970e068e2bfd362bbc0a5",
+          "rasterSha256": "c0a7993c27090319172ad57b77a1675648a3aa58dc537ee32d388c018f5b52a5",
           "anterior": "2186933e25f5c6dcaeedf3640879fdf44613f0152113262899adba4c079f24e1",
           "estado": "modificada"
         },
         {
           "pagina": 4,
-          "rasterSha256": "d84716eaa9e8a22eeb392081a3dc4f9096bfc084acd01b16a6a87a94dfb4ead2",
+          "rasterSha256": "9968966abc11b0ca113e9c648ef2d6bc54a95b98f693612dc7a1e61c9b3b64cf",
           "anterior": "26c25641b6c9a6db3c2603d633c85b16b8cd9807f7912d259c79f1d582055b03",
           "estado": "modificada"
         },
         {
           "pagina": 5,
-          "rasterSha256": "2293dcac14c8e690d147f56b4d7b67e9bc8c5dc0ac506837c98ec8a09e2447b3",
+          "rasterSha256": "7df6c009cfe55b5ffb6f96711feba5ca603beadd78985f63099c4664162f1551",
           "anterior": "e70df3cebe96bb36eca147b3240bb31cf62daee7f1b553b5a90ee03fe9299f64",
           "estado": "modificada"
         },
         {
           "pagina": 6,
-          "rasterSha256": "0fb56f358295c3d16b0fc5eece7adf857d6454701ad4619dd4468d87ee16fb9c",
+          "rasterSha256": "2f702e0ce04d8f2a01b78a0f3004301eec7462a8bb382ed52e99a2c2ce333479",
           "anterior": "b70e22ddc8bd847465e4f389b08bb0cb5ae64aec2f10f9fda05381847ed8ecae",
           "estado": "modificada"
         },
         {
           "pagina": 7,
-          "rasterSha256": "1386e7f40440e82a795661ea21e38157f37d5a43f1c077e85cfa283765b74cd0",
+          "rasterSha256": "be3f537c68e2fec380ecaa31c0c57b6c93b4e931be768c2ff6f6061c9c8b3a4d",
           "anterior": "cc44af2ceaed6c59464a6de378f445c7a434cfa069995965b84a256de1b4613d",
           "estado": "modificada"
         },
         {
           "pagina": 8,
-          "rasterSha256": "8c184fe3f8bff0fed731768939e7678beae4d38abf6f9257d39efcc6e3ef44da",
+          "rasterSha256": "ba742aaec660d70269259936a8c132e3738ad89ac6b620c3990bfb5f34ac32c7",
           "anterior": "0745a66d99f3cc4b2b0c06741c8beee6e6c86356cbb6abd1d95c0a723c3c81bb",
           "estado": "modificada"
         },
         {
           "pagina": 9,
-          "rasterSha256": "41fa2e7d8e8e09578f7f77b66744ada2bff1875848bbf898db1995e77d05ef27",
+          "rasterSha256": "1e31b329ab1f7638ff0009be35bdb1ef4343bec09374feff4b97a559d921ad9d",
           "anterior": "9b2b7c045721b64115dc3b3c0470742e890394f3d6b22dcafc9787ada9f49f94",
           "estado": "modificada"
         },
         {
           "pagina": 10,
-          "rasterSha256": "fc93ed4df6f0ad9fee016f65df57b24cb8dc68113657e73257793a8a1c9fbce0",
+          "rasterSha256": "0b672b0ea3ffee4596cb724c2897b13a2f6344c318fb564f15c337d6d2cc355a",
           "anterior": "369b7fee261279c1a570bd6674ef6963a004d469bdd0823a94c276a2f7e7da79",
           "estado": "modificada"
         },
         {
           "pagina": 11,
-          "rasterSha256": "ba86ac14794bef7360b6920a107f660b29e7ec9663261d89ac60ce443f2f3a5e",
+          "rasterSha256": "3632cc91a8a8fa9d8f486e9d7cb35e2759c67f67a96cd6e322d964daea40925c",
           "anterior": "7639d58ceacdc52762785523091f189f41351c03fdd9d09e57fcc46a3434c974",
           "estado": "modificada"
         },
         {
           "pagina": 12,
-          "rasterSha256": "3de4877f745effb12556c3344e81e17345f0f5b30a7e90006265cb4593c71388",
+          "rasterSha256": "4f5851508d0fca498aee73eb32e0fd74f409d3229d13364c4ae4a34ad683a10f",
           "anterior": "c98a4568f15165146eed571597165dd70877573501e40718923ad46886a2d4bb",
           "estado": "modificada"
         },
         {
           "pagina": 13,
-          "rasterSha256": "52c58ce2d7fce049feb335f47d77af9f8eb61f67094b4c2f3b65ddfac6a5ea66",
+          "rasterSha256": "b9180d16a2a8e6768bb52d0516ba0e80b1e9fc794df65e24e6799b0e56f0cee3",
           "anterior": "c79d8b51586eaeaab95f622ac8f756919ec161e1fcbf4548de8ec4eb51869c5a",
           "estado": "modificada"
         },
         {
           "pagina": 14,
-          "rasterSha256": "5f4fce832dd41958faf4fa5689778b45734578a24e022a2c6f10700198968c2a",
+          "rasterSha256": "73d19079049a5d00d09c8ff9441d21d9e7c1e9777eb43e53f41191b9f456e5fe",
           "anterior": "98b4ff5350cfddc41caf911df690a851850a59eb486728f44b955e1a9ad3185c",
           "estado": "modificada"
         }
@@ -96,7 +96,7 @@
     },
     {
       "archivo": "architecture-book.pdf",
-      "sha256": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+      "sha256": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
       "baseline": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
       "paginas": [
         {
@@ -188,7 +188,7 @@
     },
     {
       "archivo": "architecture-sheet-strip.en.pdf",
-      "sha256": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+      "sha256": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
       "baseline": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
       "paginas": [
         {
@@ -202,7 +202,7 @@
     },
     {
       "archivo": "architecture-sheet-strip.pdf",
-      "sha256": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+      "sha256": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
       "baseline": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
       "paginas": [
         {
@@ -216,7 +216,7 @@
     },
     {
       "archivo": "commercial-proposal-client-v3.en.pdf",
-      "sha256": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+      "sha256": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
       "baseline": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
       "paginas": [
         {
@@ -236,7 +236,7 @@
     },
     {
       "archivo": "commercial-proposal-client-v3.pdf",
-      "sha256": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+      "sha256": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
       "baseline": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
       "paginas": [
         {
@@ -256,7 +256,7 @@
     },
     {
       "archivo": "entrega-integral.en.pdf",
-      "sha256": "990260f926bd35765b95cbb9284d52ac92b00e2d55658fa7f24104bd79165463",
+      "sha256": "4a9caa18a7bc098c156da3f632d25762c49adb6008092250009774ffb15c0ba9",
       "baseline": "a94184e9623249f98f3d37673e0b238581c8f89b7fd61ae0f746df4b9eea4da2",
       "paginas": [
         {
@@ -336,7 +336,7 @@
     },
     {
       "archivo": "entrega-integral.pdf",
-      "sha256": "dce981f3365c35ddffb4316e09052dcfe8430938175d8030dc8bb2f8bfec364e",
+      "sha256": "7d2647fac1740bcc958ebf18f8d87746c27bb0b60fbafa6b71bb6d295f918db0",
       "baseline": "27897e711a370018251736e8fd200ad66ea8c6057b695e5b3568a6a2bbf2aff6",
       "paginas": [
         {
@@ -416,7 +416,7 @@
     },
     {
       "archivo": "interior-book-v3.en.pdf",
-      "sha256": "92eb598e5870fb6fefec60722b6e1ed0ae291e61b176acd17ccc8c320ffb791c",
+      "sha256": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
       "baseline": "2fd9b90a0fe5300e773072944a8235e74853db35146fe25a558e2168667b29eb",
       "paginas": [
         {
@@ -508,7 +508,7 @@
     },
     {
       "archivo": "interior-book-v3.pdf",
-      "sha256": "81567b61c6b0b89596f2e5994d64a4bbbf41f293d3fd9e2ce416f6fcecafa52f",
+      "sha256": "0146b05abcf6944c92c98efa8ce514ad9b57f79bab9c1cafd28fec1dfb80b8de",
       "baseline": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
       "paginas": [
         {
@@ -600,7 +600,7 @@
     },
     {
       "archivo": "materials-furniture-book-v3.en.pdf",
-      "sha256": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b",
+      "sha256": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
       "baseline": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
       "paginas": [
         {
@@ -680,7 +680,7 @@
     },
     {
       "archivo": "materials-furniture-book-v3.pdf",
-      "sha256": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097",
+      "sha256": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
       "baseline": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
       "paginas": [
         {
@@ -760,7 +760,7 @@
     },
     {
       "archivo": "real-estate-sheet-v3-sin-presupuesto.en.pdf",
-      "sha256": "2e84430fce38a0c9e672bb5919ef7b1aac3e391bc2c1992a7618226173e93a2b",
+      "sha256": "6bfb71f34851d8f29dbc709d0b14356b1d8a7bef6662ad0216e4a4c328b48588",
       "baseline": "a38915dbf2d3db51f0e0e8c6604fe8ed9cc371fa6ea612e74fee2364a0786406",
       "paginas": [
         {
@@ -774,7 +774,7 @@
     },
     {
       "archivo": "real-estate-sheet-v3-sin-presupuesto.pdf",
-      "sha256": "604cbb1179680dcae0fc8a87b3930c4884449ef1ca517bbe227f2a9b7702ac68",
+      "sha256": "1bbe142099039418db2a406231a15db26a0abf1837f22be414ec9c2e8dd809da",
       "baseline": "049e34c3e6f3b4c8cbd53f3490e2104055424a7d4be1a51e71a2b3951d4a028a",
       "paginas": [
         {
@@ -788,7 +788,7 @@
     },
     {
       "archivo": "real-estate-sheet-v3.en.pdf",
-      "sha256": "f90dfa3c246544d8bfd62bb0122579401a9404fe7cea26b6e3fe87bddcdb608c",
+      "sha256": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
       "baseline": "a8bfa7c3c70c17aa08cd313271a21ea337bd6e982175a2c33b048d9174427af9",
       "paginas": [
         {
@@ -802,7 +802,7 @@
     },
     {
       "archivo": "real-estate-sheet-v3.pdf",
-      "sha256": "85b199e212f61f0b9fb7ea09cbea154915d95071684199bdebac3dadf0599178",
+      "sha256": "aaa4aef6d67dd0671bc783028ba01641c9d9bb1be3eb23eabbda60e0377c2ca6",
       "baseline": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
       "paginas": [
         {

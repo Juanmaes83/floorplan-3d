@@ -1,11 +1,11 @@
 {
  "schema": "rubik-lab-exportar-qa/2",
- "ran": "2026-11-17T20:42:22.882Z",
+ "ran": "2026-11-17T20:58:34.324Z",
  "entorno": {
   "node": "v24.20.0",
   "plataforma": "linux"
  },
- "ms": 152426,
+ "ms": 155560,
  "pass": 72,
  "fail": 0,
  "cases": [
@@ -19,10 +19,10 @@
      "schema": "rubik-lab-entrega-digest/2",
      "folder": "pc",
      "manifest": "pc/MANIFIESTO.json",
-     "manifestSha256": "4af2c6c79562eeb2a33edfe00a8879b79369c97af08877e1fde64f07c1ab9815",
+     "manifestSha256": "eec40c460c63dc140baadcc79bca50b4eded73a4b8155255c2ec7949a4d3bf90",
      "zip": "pc.zip",
-     "zipSha256": "02fde6d520750038eb601b15bbb787f96d9bb47987dfe42f5a4af41ff7ddea1c",
-     "zipBytes": 2719195,
+     "zipSha256": "d1e141269af26ce927a40e6a832fbb07b97e5be1adfb390e5170603285ce3881",
+     "zipBytes": 2719203,
      "files": 12,
      "alcance": "Huellas SHA-256 del manifiesto y del ZIP de reparto exacto. Integridad, no firma ni autenticidad."
     },
@@ -769,8 +769,8 @@
    "want": "huella del manifiesto idéntica en dos exportaciones",
    "result": "PASS",
    "detail": {
-    "a": "4af2c6c79562eeb2a33edfe00a8879b79369c97af08877e1fde64f07c1ab9815",
-    "b": "4af2c6c79562eeb2a33edfe00a8879b79369c97af08877e1fde64f07c1ab9815",
+    "a": "eec40c460c63dc140baadcc79bca50b4eded73a4b8155255c2ec7949a4d3bf90",
+    "b": "eec40c460c63dc140baadcc79bca50b4eded73a4b8155255c2ec7949a4d3bf90",
     "nota": "El ZIP cambia solo por el nombre de la carpeta interior."
    }
   },
@@ -790,137 +790,137 @@
  "timings": [
   {
    "name": "pc",
-   "ms": 6440,
+   "ms": 6077,
    "code": 0
   },
   {
    "name": "tipo-integral",
-   "ms": 8359,
+   "ms": 8947,
    "code": 0
   },
   {
    "name": "tipo-primera-reunion",
-   "ms": 4504,
+   "ms": 4433,
    "code": 0
   },
   {
    "name": "tipo-propuesta-comercial",
-   "ms": 5194,
+   "ms": 5092,
    "code": 0
   },
   {
    "name": "tipo-dossier-tecnico",
-   "ms": 5478,
+   "ms": 5998,
    "code": 0
   },
   {
    "name": "tipo-interiorismo",
-   "ms": 4466,
+   "ms": 4776,
    "code": 0
   },
   {
    "name": "tipo-inmobiliaria",
-   "ms": 4484,
+   "ms": 4574,
    "code": 0
   },
   {
    "name": "tipo-obra",
-   "ms": 6850,
+   "ms": 6973,
    "code": 0
   },
   {
    "name": "pc-sin-presupuesto",
-   "ms": 4194,
+   "ms": 4539,
    "code": 0
   },
   {
    "name": "pc-incoherente",
-   "ms": 2260,
+   "ms": 2429,
    "code": 2
   },
   {
    "name": "integral-parcial",
-   "ms": 2456,
+   "ms": 2625,
    "code": 2
   },
   {
    "name": "pc-sin-ack",
-   "ms": 2802,
+   "ms": 2867,
    "code": 2
   },
   {
    "name": "pc-borrador",
-   "ms": 5410,
+   "ms": 5379,
    "code": 0
   },
   {
    "name": "sin-marca",
-   "ms": 2070,
+   "ms": 2157,
    "code": 2
   },
   {
    "name": "cruzado",
-   "ms": 3244,
+   "ms": 3309,
    "code": 2
   },
   {
    "name": "cruzado-rev",
-   "ms": 42,
+   "ms": 45,
    "code": 2
   },
   {
    "name": "datos",
-   "ms": 3137,
+   "ms": 3178,
    "code": 2
   },
   {
    "name": "sel-16",
-   "ms": 43,
-   "code": 2
-  },
-  {
-   "name": "sel-17",
-   "ms": 44,
-   "code": 2
-  },
-  {
-   "name": "sel-18",
    "ms": 41,
    "code": 2
   },
   {
-   "name": "sel-19",
-   "ms": 45,
-   "code": 2
-  },
-  {
-   "name": "sel-20",
-   "ms": 48,
-   "code": 2
-  },
-  {
-   "name": "sel-21",
-   "ms": 48,
-   "code": 2
-  },
-  {
-   "name": "sel-22",
-   "ms": 45,
-   "code": 2
-  },
-  {
-   "name": "sel-23",
+   "name": "sel-17",
    "ms": 43,
    "code": 2
   },
   {
-   "name": "sel-24",
+   "name": "sel-18",
+   "ms": 46,
+   "code": 2
+  },
+  {
+   "name": "sel-19",
+   "ms": 50,
+   "code": 2
+  },
+  {
+   "name": "sel-20",
    "ms": 45,
    "code": 2
   },
   {
+   "name": "sel-21",
+   "ms": 43,
+   "code": 2
+  },
+  {
+   "name": "sel-22",
+   "ms": 43,
+   "code": 2
+  },
+  {
+   "name": "sel-23",
+   "ms": 47,
+   "code": 2
+  },
+  {
+   "name": "sel-24",
+   "ms": 61,
+   "code": 2
+  },
+  {
    "name": "sel-25",
-   "ms": 56,
+   "ms": 51,
    "code": 2
   },
   {
@@ -930,27 +930,27 @@
   },
   {
    "name": "sel-27",
-   "ms": 44,
+   "ms": 43,
    "code": 2
   },
   {
    "name": "sel-28",
-   "ms": 46,
+   "ms": 49,
    "code": 2
   },
   {
    "name": "sel-29",
-   "ms": 48,
+   "ms": 46,
    "code": 2
   },
   {
    "name": "idioma-en",
-   "ms": 4005,
+   "ms": 4343,
    "code": 0
   },
   {
    "name": "pc",
-   "ms": 47,
+   "ms": 46,
    "code": 1
   },
   {
@@ -960,112 +960,112 @@
   },
   {
    "name": "src-img",
-   "ms": 2009,
+   "ms": 2071,
    "code": 2
   },
   {
    "name": "src-pdf",
-   "ms": 2010,
+   "ms": 2140,
    "code": 2
   },
   {
    "name": "src-mp4",
-   "ms": 2103,
+   "ms": 2112,
    "code": 2
   },
   {
    "name": "src-web",
-   "ms": 82,
+   "ms": 72,
    "code": 2
   },
   {
    "name": "src-noreg",
-   "ms": 2193,
+   "ms": 2192,
    "code": 2
   },
   {
    "name": "src-link",
-   "ms": 2030,
+   "ms": 2065,
    "code": 2
   },
   {
    "name": "src-ext",
-   "ms": 3121,
+   "ms": 3355,
    "code": 2
   },
   {
    "name": "src-js",
-   "ms": 3199,
+   "ms": 3456,
    "code": 2
   },
   {
    "name": "src-origen",
-   "ms": 1979,
+   "ms": 2104,
    "code": 2
   },
   {
    "name": "src-ft",
-   "ms": 3239,
+   "ms": 3145,
    "code": 2
   },
   {
    "name": "src-snap",
-   "ms": 51,
+   "ms": 46,
    "code": 2
   },
   {
    "name": "src-snapfuera",
-   "ms": 49,
+   "ms": 40,
    "code": 2
   },
   {
    "name": "carrera",
-   "ms": 2324,
+   "ms": 2318,
    "code": 2
   },
   {
    "name": "carrera2",
-   "ms": 2185,
+   "ms": 2125,
    "code": 2
   },
   {
    "name": "sin-obra",
-   "ms": 5149,
+   "ms": 5629,
    "code": 0
   },
   {
    "name": "sin-ia",
-   "ms": 4856,
+   "ms": 4885,
    "code": 0
   },
   {
    "name": "sin-video",
-   "ms": 6249,
+   "ms": 6395,
    "code": 0
   },
   {
    "name": "sin-video-integral",
-   "ms": 3779,
+   "ms": 3743,
    "code": 2
   },
   {
    "name": "sin-documentos",
-   "ms": 3848,
+   "ms": 3842,
    "code": 0
   },
   {
    "name": "combinada",
-   "ms": 5006,
+   "ms": 4985,
    "code": 0
   },
   {
    "name": "ficha-con-presupuesto",
-   "ms": 2258,
+   "ms": 2273,
    "code": 2
   },
   {
    "name": "pc-bis",
-   "ms": 5492,
+   "ms": 5360,
    "code": 0
   }
  ]

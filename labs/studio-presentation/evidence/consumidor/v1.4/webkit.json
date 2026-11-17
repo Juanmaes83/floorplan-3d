@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T20:47:10.377Z",
+ "generated": "2026-11-17T20:55:59.259Z",
  "navegador": "webkit",
  "playwright": "1.63.0",
  "paquetes": [
@@ -8,7 +8,7 @@
    "tipo": "integral",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 7903,
+   "exportMs": 9248,
    "vistas": [
     {
      "vista": "1440x900",
@@ -266,7 +266,7 @@
    "tipo": "integral",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 8348,
+   "exportMs": 8406,
    "vistas": [
     {
      "vista": "1440x900",
@@ -534,7 +534,7 @@
    "tipo": "primera-reunion",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 3877,
+   "exportMs": 4043,
    "vistas": [
     {
      "vista": "1440x900",
@@ -727,7 +727,7 @@
    "tipo": "primera-reunion",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 4117,
+   "exportMs": 4172,
    "vistas": [
     {
      "vista": "1440x900",
@@ -930,7 +930,7 @@
    "tipo": "propuesta-comercial",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 5003,
+   "exportMs": 5315,
    "vistas": [
     {
      "vista": "1440x900",
@@ -1123,7 +1123,7 @@
    "tipo": "propuesta-comercial",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 5213,
+   "exportMs": 5321,
    "vistas": [
     {
      "vista": "1440x900",
@@ -1326,7 +1326,7 @@
    "tipo": "dossier-tecnico",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 5521,
+   "exportMs": 5775,
    "vistas": [
     {
      "vista": "1440x900",
@@ -1519,7 +1519,7 @@
    "tipo": "dossier-tecnico",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 5155,
+   "exportMs": 5820,
    "vistas": [
     {
      "vista": "1440x900",
@@ -1722,7 +1722,7 @@
    "tipo": "interiorismo",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 4500,
+   "exportMs": 4807,
    "vistas": [
     {
      "vista": "1440x900",
@@ -1950,7 +1950,7 @@
    "tipo": "interiorismo",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 4748,
+   "exportMs": 4578,
    "vistas": [
     {
      "vista": "1440x900",
@@ -2188,7 +2188,7 @@
    "tipo": "inmobiliaria",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 3936,
+   "exportMs": 4078,
    "vistas": [
     {
      "vista": "1440x900",
@@ -2416,7 +2416,7 @@
    "tipo": "inmobiliaria",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 3924,
+   "exportMs": 4228,
    "vistas": [
     {
      "vista": "1440x900",
@@ -2654,7 +2654,7 @@
    "tipo": "obra",
    "idioma": "es",
    "exportado": true,
-   "exportMs": 6871,
+   "exportMs": 6995,
    "vistas": [
     {
      "vista": "1440x900",
@@ -2882,7 +2882,7 @@
    "tipo": "obra",
    "idioma": "en",
    "exportado": true,
-   "exportMs": 6493,
+   "exportMs": 6802,
    "vistas": [
     {
      "vista": "1440x900",
@@ -3121,8 +3121,8 @@
  "versionNavegador": "26.6",
  "rendimientoExportacion": {
   "repeticiones": 14,
-  "p50": 5155,
-  "p95": 8348
+  "p50": 5321,
+  "p95": 9248
  },
  "resumen": {
   "paquetes": 14,
@@ -3131,8 +3131,8 @@
   "rendimiento": [],
   "exportacion": {
    "repeticiones": 14,
-   "p50": 5155,
-   "p95": 8348
+   "p50": 5321,
+   "p95": 9248
   }
  }
 }

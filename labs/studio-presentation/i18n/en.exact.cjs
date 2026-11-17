@@ -4,7 +4,7 @@ module.exports={
 'Fotograma de Dibujo vivo de RUBIK. Apertura de la presentación del modelo.':'RUBIK Living Drawing frame. Opening of the model presentation.',
 'Fotograma de Dibujo vivo de RUBIK':'RUBIK Living Drawing frame',
 'Apertura de la presentación del modelo.':'Opening of the model presentation.',
-'Código':'Code','Demolición':'Demolition',
+'Código':'Code','Demolición':'Demolition','Contacto':'Contact','Tipo':'Type',
 'Anchos de huecos del modelo':'Opening widths from the model',
 'Anchos registrados para los huecos de la planta general. Altura y sentido no se detallan en este cuadro.':'Recorded widths for the openings on the general plan. Height and swing are outside the scope of this schedule.',
 'Ancho (mm)':'Width (mm)','Puerta':'Door','Puerta corredera':'Sliding door','Hueco':'Opening',

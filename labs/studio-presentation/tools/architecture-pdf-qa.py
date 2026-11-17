@@ -3,6 +3,7 @@
 import hashlib
 import json
 import math
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -38,6 +39,11 @@ def audit(path, expected, lang):
              for annotation in reader.pages[1].get("/Annots", [])}
     text = subprocess.check_output(["pdftotext", "-layout", path, "-"]).decode()
     pages = text.split("\f")
+    if lang == "en":
+        if re.search(r"\b(Contacto|Tipo)\b", text) or "Contact" not in pages[general]:
+            raise ValueError("en: quedan rótulos del cajetín o del cuadro de huecos sin traducir")
+        if expected["anchosProgramados"] and "Type" not in text:
+            raise ValueError("en: falta el encabezado del cuadro de huecos")
     destinations = {}
     for sheet in expected["indice"]:
         code = sheet["code"]

@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-motor-qa/1",
- "ran": "2026-11-17T20:44:05.536Z",
+ "ran": "2026-11-17T21:00:16.908Z",
  "entorno": {
   "node": "v24.20.0",
   "poppler": "pdfinfo version 24.02.0"
@@ -121,7 +121,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 3851
+    "ms": 3698
    }
   },
   {
@@ -237,7 +237,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 3862
+    "ms": 3855
    }
   },
   {
@@ -353,7 +353,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 6356
+    "ms": 6494
    }
   },
   {
@@ -469,7 +469,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 31402
+    "ms": 31456
    }
   },
   {
@@ -539,7 +539,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 3281
+    "ms": 3265
    }
   },
   {
@@ -655,7 +655,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 4028
+    "ms": 4026
    }
   },
   {
@@ -680,7 +680,7 @@
     "times": {
      "snapDir": "fila-desmesurada",
      "out": "fila-desmesurada",
-     "ms": 3386,
+     "ms": 3362,
      "code": 2
     }
    }
@@ -690,7 +690,7 @@
    "want": "código 0; entrega/ con registro y documentos",
    "result": "PASS",
    "detail": {
-    "ms": 10794
+    "ms": 11105
    }
   },
   {
@@ -749,7 +749,7 @@
    "want": "código 0; nueva entrega publicada; la anterior en entrega-anterior/; sin informe de rechazo",
    "result": "PASS",
    "detail": {
-    "ms": 10656
+    "ms": 10675
    }
   }
  ],
@@ -758,72 +758,72 @@
    {
     "snapDir": "filas-1",
     "out": "filas-1",
-    "ms": 3851,
+    "ms": 3698,
     "code": 0
    },
    {
     "snapDir": "filas-50",
     "out": "filas-50",
-    "ms": 3862,
+    "ms": 3855,
     "code": 0
    },
    {
     "snapDir": "filas-200",
     "out": "filas-200",
-    "ms": 6356,
+    "ms": 6494,
     "code": 0
    },
    {
     "snapDir": "filas-500",
     "out": "filas-500",
-    "ms": 31402,
+    "ms": 31456,
     "code": 0
    },
    {
     "snapDir": "sin-presupuesto",
     "out": "sin-presupuesto",
-    "ms": 3281,
+    "ms": 3265,
     "code": 0
    },
    {
     "snapDir": "multilinea-es-en",
     "out": "multilinea-es-en",
-    "ms": 4028,
+    "ms": 4026,
     "code": 0
    },
    {
     "snapDir": "fila-desmesurada",
     "out": "fila-desmesurada",
-    "ms": 3386,
+    "ms": 3362,
     "code": 2
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 10794,
+    "ms": 11105,
     "code": 0
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 9968,
+    "ms": 9741,
     "code": 2
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 9870,
+    "ms": 9807,
     "code": 2
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 10656,
+    "ms": 10675,
     "code": 0
    }
   ],
-  "p50": 6356,
-  "max": 31402,
+  "p50": 6494,
+  "max": 31456,
   "muestras": 11,
   "nota": "Composiciones distintas (no repeticiones del mismo caso): orientativo, no un p95."
  }

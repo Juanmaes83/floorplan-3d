@@ -1,0 +1,40 @@
+{
+  "es": {
+    "zipSha256": "e689d0eeb64408c8c1583e215ea72999a001c8435bc7c719653babb24a53dd21",
+    "videos": [
+      {
+        "archivo": "media/obra.mp4",
+        "sha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+        "duracionS": 24.0,
+        "decodificacionCompleta": true,
+        "salidaPrueba": "sumidero nulo con marcas de tiempo de salida normalizadas"
+      },
+      {
+        "archivo": "media/recorrido.mp4",
+        "sha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+        "duracionS": 55.6397,
+        "decodificacionCompleta": true,
+        "salidaPrueba": "sumidero nulo con marcas de tiempo de salida normalizadas"
+      }
+    ]
+  },
+  "en": {
+    "zipSha256": "5e469df638a2894c13149b08b0cbafcdb45c241d1b6ee355c9b1922e8ac21ef4",
+    "videos": [
+      {
+        "archivo": "media/obra.mp4",
+        "sha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+        "duracionS": 24.0,
+        "decodificacionCompleta": true,
+        "salidaPrueba": "sumidero nulo con marcas de tiempo de salida normalizadas"
+      },
+      {
+        "archivo": "media/recorrido.mp4",
+        "sha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+        "duracionS": 55.6397,
+        "decodificacionCompleta": true,
+        "salidaPrueba": "sumidero nulo con marcas de tiempo de salida normalizadas"
+      }
+    ]
+  }
+}

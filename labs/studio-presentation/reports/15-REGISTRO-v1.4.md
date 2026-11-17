@@ -135,7 +135,7 @@ Entorno del candidato: Ubuntu 24.04 en contenedor local, Node 24.20.0, Playwrigh
 
 ## RP-Q del candidato congelado
 
-Registro de composición SHA-256 `614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f`. Snapshot `fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390`.
+Registro de composición SHA-256 `5c4dcb1546b724569614b01a0ab4a9a9ae36dd9ec84c786dc75837144d5a596b`. Snapshot `fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390`.
 
 | Gate | Resultado y prueba | Limitación |
 |---|---|---|
@@ -152,6 +152,8 @@ Registro de composición SHA-256 `614739a7208426ddca3953304ee31fb09dec3196a348e2
 | RP-Q11 · Impacto | EXECUTED_PASS del mapa. 21 recetas, 105 archivos comunes con huellas, 12 gates, 24 artefactos de ejecución. | Las huellas de dependencias no sustituyen los ensayos ni modifican CI. |
 | RP-Q12 · Continuidad | Comparativa contra `585fd9c`, dos reconstrucciones intermedias y comparación final archivada de forma externa al ZIP. | Evidencia y acta posterior al empaquetado en el cierre de distribución. |
 
+La comprobación final añadió cobertura sobre los rótulos ingleses de contacto y tipo en el PDF. El ajuste modificó 12 páginas de Architecture Book en inglés. Los otros 102 raster no cambiaron.
+
 Los informes 12 y 13 conservan la matriz D01–D18/ST01–ST09 y el registro acumulativo H01–H08/A01–A29. La tabla anterior actualiza la cobertura del laboratorio. H01/H02, H03, H06–H08, D02 de producto y ST01 de producto conservan su ámbito y condiciones de fase. D08 del propietario, dispositivos físicos D09, publicación D15 y PDF/A D18 permanecen fuera de lo acreditado aquí.
 
 **Separación de salida**. Auditar el candidato de laboratorio con los archivos y huellas de distribución. La aceptación visual humana, la aprobación documental de producto y las decisiones H08 y E2 requieren al propietario. La fiscalidad, la ejecución de obra y la relación contractual quedan limitadas a sus fuentes y al estado declarado.
@@ -166,8 +168,8 @@ Los informes 12 y 13 conservan la matriz D01–D18/ST01–ST09 y el registro acu
 
 Firefox comprobó alcance y retroceso de foco en su perfil de prueba. WebKit reproduce los vídeos con gesto real. La secuencia parte del documento para alcanzar también los enlaces anteriores al vídeo. El menú envuelve sus enlaces en todas las anchuras, el encabezado estrecho va con el documento y el desplazamiento del foco es inmediato. Se corrigieron así las dos causas observadas de foco fuera de pantalla.
 
-Los ZIP exactos ES/EN pasaron bajo Chromium en seis configuraciones por idioma, incluido reflujo 200 % emulado (720 CSS px a escala de dispositivo 2). Sin recursos externos, medios rotos, enlaces internos rotos, errores o desborde horizontal en esa prueba. Ver `evidence/paquetes/navegador-v1.4-{es,en}.json`, con SHA-256 de cada ZIP.
+Los ZIP exactos ES/EN pasaron bajo Chromium en seis configuraciones por idioma, incluido reflujo 200 % emulado (720 CSS px a escala de dispositivo 2). Sin recursos externos, medios rotos, enlaces internos rotos, errores o desborde horizontal en esa prueba. Ver `evidence/paquetes/navegador-v1.4-{es,en}.json`, con SHA-256 de cada ZIP. `decodificacion-v1.4.json` acredita los dos MP4 completos mediante decodificación, además de su reproducción medida en los tres navegadores.
 
-Chromium registró apertura p50 de 85–104 ms y p95 de 88–144 ms, 10 repeticiones por configuración e idioma. Exportación de 14 modalidades/idiomas: p50 5,37 s y p95 9,26 s. Muestras del contenedor Linux, sin SLA ni comparación de velocidad entre entornos.
+Chromium registró apertura p50 de 86–103 ms y p95 de 88–125 ms, 10 repeticiones por configuración e idioma. Exportación de 14 modalidades/idiomas: p50 5.64 s y p95 9.34 s. Muestras del contenedor Linux, sin SLA ni comparación de velocidad entre entornos.
 
 **Dictamen**. Candidato apto para revisión independiente del laboratorio con sus límites declarados. D08, H08, escala de impresión física, dispositivos reales y GO de producto siguen pendientes. La paridad HTML/PDF económica se acredita en fixtures ES. La equivalencia comparativa por estado en ZIP y la redistribución del núcleo no están acreditadas.

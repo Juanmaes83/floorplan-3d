@@ -1,7 +1,7 @@
 {
   "es": {
-    "sha256": "36966b24c3850e5a0dd71b72ed1e63c8566f8051e9cabbd237ecaead2010c9eb",
-    "manifiestoSha256": "93ff064b1a045255ba205580664ada97e1727d70170f8c29465420b56e508762",
+    "sha256": "e689d0eeb64408c8c1583e215ea72999a001c8435bc7c719653babb24a53dd21",
+    "manifiestoSha256": "ca8dca007fc8b33076f2d3da9fcee1717bf084379ca66f3cc8305f12a23d7632",
     "gates": [
       {
         "k": "Identidad del estudio",
@@ -54,7 +54,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+        "composedSha256": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -63,7 +63,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+        "composedSha256": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -72,7 +72,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+        "composedSha256": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -81,7 +81,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "dce981f3365c35ddffb4316e09052dcfe8430938175d8030dc8bb2f8bfec364e",
+        "composedSha256": "7d2647fac1740bcc958ebf18f8d87746c27bb0b60fbafa6b71bb6d295f918db0",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -90,7 +90,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "81567b61c6b0b89596f2e5994d64a4bbbf41f293d3fd9e2ce416f6fcecafa52f",
+        "composedSha256": "0146b05abcf6944c92c98efa8ce514ad9b57f79bab9c1cafd28fec1dfb80b8de",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -99,7 +99,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097",
+        "composedSha256": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -117,7 +117,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "85b199e212f61f0b9fb7ea09cbea154915d95071684199bdebac3dadf0599178",
+        "composedSha256": "aaa4aef6d67dd0671bc783028ba01641c9d9bb1be3eb23eabbda60e0377c2ca6",
         "origenComprobado": "pieza producida por el compositor",
         "capitulo": null
       },
@@ -310,8 +310,8 @@
     }
   },
   "en": {
-    "sha256": "11464438852dfb10e2f8fe22bfa0b680e7cfc7a00489b8963c4712abe41a0b18",
-    "manifiestoSha256": "82bbeb6b0a0c6e88cf0e2aa35ffc4f8ce7d662da29b88f8ee7ea70ed484b7bb8",
+    "sha256": "5e469df638a2894c13149b08b0cbafcdb45c241d1b6ee355c9b1922e8ac21ef4",
+    "manifiestoSha256": "435dae893ab548726bf22d511f5609b1b1f2f6a12bc9d2eb050b66594f242371",
     "gates": [
       {
         "k": "Identidad del estudio",
@@ -364,7 +364,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+        "composedSha256": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -373,7 +373,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+        "composedSha256": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -382,7 +382,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+        "composedSha256": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -391,7 +391,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "990260f926bd35765b95cbb9284d52ac92b00e2d55658fa7f24104bd79165463",
+        "composedSha256": "4a9caa18a7bc098c156da3f632d25762c49adb6008092250009774ffb15c0ba9",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -400,7 +400,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "92eb598e5870fb6fefec60722b6e1ed0ae291e61b176acd17ccc8c320ffb791c",
+        "composedSha256": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -409,7 +409,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b",
+        "composedSha256": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -427,7 +427,7 @@
         "from": null,
         "sourceSha256": null,
         "transform": null,
-        "composedSha256": "f90dfa3c246544d8bfd62bb0122579401a9404fe7cea26b6e3fe87bddcdb608c",
+        "composedSha256": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
         "origenComprobado": "Produced by the composer",
         "capitulo": null
       },
@@ -618,6 +618,5 @@
         "capitulo": null
       }
     }
-  },
-  "mandatoV12Sha256": "22c097c3db403d66bca7df402fe96e64dbc78da004944ae5ff390f302569cfdf"
+  }
 }
