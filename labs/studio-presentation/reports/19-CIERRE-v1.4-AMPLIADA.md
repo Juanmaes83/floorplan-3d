@@ -54,15 +54,37 @@ Están en el informe 16, que se regenera con `node tools/auditoria-recetas.cjs`.
 
 | # | Qué revisar | Dónde | Resultado |
 |---|---|---|---|
-| 1 | Páginas nuevas de RP01 y RP12 en la propuesta, ES y EN | `dist/` → ZIP del cliente → `documentos/commercial-proposal-client-v3*.pdf` | ☐ Aceptado ☐ Cambios |
-| 2 | «Compra y reforma» de la ficha inmobiliaria | `real-estate-sheet-v3*.pdf`, página 2 | ☐ / ☐ |
-| 3 | «Concepto y referencias» del libro de interiorismo | `interior-book-v3*.pdf`, penúltima página | ☐ / ☐ |
-| 4 | Oferta técnica en la lámina A3 | `architecture-sheet-strip*.pdf`, página 2 | ☐ / ☐ |
-| 5 | Memoria descriptiva | `architecture-book*.pdf` | ☐ / ☐ |
-| 6 | Productos con referencia | `materials-furniture-book-v3*.pdf`, penúltima página | ☐ / ☐ |
-| 7 | Seis escenarios económicos | `dist/economia/*.zip` | ☐ / ☐ |
-| 8 | Selector de recetas con la interfaz en inglés | `out/v3/profesional/preparar-entrega.html` | ☐ / ☐ |
+| 1 | Páginas nuevas de RP01 y RP12 en la propuesta, ES y EN | `dist/` → ZIP del cliente → `documentos/commercial-proposal-client-v3*.pdf` | ✔ Aceptado (propietario, 17/11, candidato ca9fcc1) |
+| 2 | «Compra y reforma» de la ficha inmobiliaria | `real-estate-sheet-v3*.pdf`, página 2 | ✔ Aceptado (propietario) |
+| 3 | «Concepto y referencias» del libro de interiorismo | `interior-book-v3*.pdf`, penúltima página | ✔ Aceptado (propietario) |
+| 4 | Oferta técnica en la lámina A3 | `architecture-sheet-strip*.pdf`, página 2 | ✔ Aceptado (propietario) |
+| 5 | Memoria descriptiva | `architecture-book*.pdf` | ✔ Aceptado (propietario) |
+| 6 | Productos con referencia | `materials-furniture-book-v3*.pdf`, penúltima página | ✔ Aceptado (propietario) |
+| 7 | Seis escenarios económicos | `dist/economia/*.zip` | ✔ Aceptado (propietario) |
+| 8 | Selector de recetas con la interfaz en inglés | `out/v3/profesional/preparar-entrega.html` | ✔ Aceptado (propietario) |
 | 9 | Impresión a escala física, Safari real y dispositivos físicos | No probados | ☐ Pendiente |
 | 10 | H08: exposición VIS en Git y licencia del núcleo económico | Decisión del propietario | ☐ Pendiente |
 
 **Contenido de la fixture.** Los datos de la fixture son inventados y están rotulados en cada página. Antes de cualquier uso real, el estudio aporta los suyos.
+
+## Aceptación visual del propietario (17/11/2026)
+
+El propietario declara de forma expresa que ha **revisado y aprobado visualmente** los entregables profesionales de Studio Presentation v1.4 ampliada del **candidato `ca9fcc1`** (`ca9fcc19…`). Esta acta solo registra esa declaración. No se ha regenerado ni modificado ningún entregable.
+
+Las huellas originales de distribución siguen siendo las de `evidence/paquetes/distribucion-v1.4-ampliada.json`, que lista 29 archivos e incluye los 12 ZIP económicos y sus digest:
+
+| Paquete | SHA-256 |
+|---|---|
+| `entrega-vivienda-de-ejemplo-es.zip` | `a8816cbde20c7689a454f42cbabe5159f664ac4d3b4ccdb79821784397f61b23` |
+| `entrega-vivienda-de-ejemplo-en.zip` | `bf7284d7fc226fa740f7bc62857e15f981443ddb00be22b550ca8c6fadefeb4f` |
+| `rubik-studio-presentation-lab.zip` | `2d621cce70bd25d66285c5708b87fe72519a6808c7340e59783ab5c7c8e03a84` |
+
+| Ámbito | Estado |
+|---|---|
+| Aceptación visual (D08, puntos 1–8 de la hoja) | **ACEPTADO por el propietario** sobre `ca9fcc1` |
+| Impresión a escala física, Safari real y dispositivos físicos | **No probados**. Fuera de esta aceptación. |
+| H08 (exposición VIS en Git e historial) | **Decisión del propietario pendiente**. Inventario y propuesta conservados. |
+| Derechos de redistribución del núcleo económico | **No acreditados**. El núcleo se ejecuta desde el pin en solo lectura y no se redistribuye. |
+| E2–E7 | Solo diagnóstico y plan. Requieren mandato y GO específicos. |
+
+**Desarrollo autorizado de E0/E1: TERMINADO.** No se empieza ningún corte de integración hasta recibir el mandato y el GO específicos.

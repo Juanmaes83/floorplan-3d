@@ -2,6 +2,8 @@
 
 ## Vigente · v1.4 ampliada (§3–§12)
 
+**CIERRE E0/E1 (17/11/2026):** el propietario ha aceptado visualmente los entregables del candidato `ca9fcc1` (D08). Acta y huellas: informe 19 y `evidence/paquetes/distribucion-v1.4-ampliada.json`. No regenerar ni modificar los entregables aprobados. **El desarrollo autorizado de E0/E1 está terminado.** Siguen pendientes, fuera de la aceptación: escala física, Safari real y dispositivos; H08; derechos del núcleo económico. No empezar ningún corte de integración (E2–E7) sin el mandato y el GO específicos. La base estable de integración la fija la comprobación del cierre de Codex.
+
 Mandato: `mandatos/RUBIK-SOTA-CIERRE-INTEGRAL-PROFESIONAL-v1.4-AUDITORIA-AMPLIADA.md`. Todo el trabajo autorizado está implementado; no repetir §3–§11.
 Registro y dictamen: `reports/19-CIERRE-v1.4-AMPLIADA.md` (F01–F16, dossier, hoja de aceptación). Matriz: informe 16. Donantes: informe 17. Roadmap RP13–RP21: informe 18.
 Pruebas (comando → resultado): `auditoria-recetas` 12/12 L · `bloques-qa [--compose]` 10/10 · `recetas-qa` 117/117 · `exportar-qa` 72/72 · `economia-zip-qa <repo>` 24/24 · `recibo-qa` 6/6 · `selector-ui-qa` 7/7 · `laminas-qa.py` ok · `impacto-qa` 5/5 · `verificar-impacto` vigente.

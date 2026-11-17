@@ -115,7 +115,7 @@ La especificación y los hallazgos llegaron en la continuidad v1.4. Su estado ac
 | D02, D03 | NO_VERIFICADO en el laboratorio; diagnosticado en el producto | D02 reproducido en `evidence/e2` |
 | D04 | PASS (parcial) | Además: cifras ES = EN en los 8 PDF ingleses (gate de cifras) |
 | D05–D07 | PASS (lab) | — |
-| D08 | PASS (agente) / HUMANO | Revisión de las 116 páginas ES/EN (`evidence/revision-visual/`); dos defectos encontrados y corregidos |
+| D08 | **ACEPTADO por el propietario** (17/11/2026, candidato `ca9fcc1`, v1.4 ampliada); antes PASS (agente) | Revisión del agente de las páginas ES/EN (`evidence/revision-visual/`) y aceptación visual expresa del propietario (informe 19). Impresión física y dispositivos: no incluidos |
 | D09 | PASS (Chromium) | Ampliado: 7 modalidades × ES/EN × 5 vistas (1440, 820, 390, 844 en horizontal, 320), con landmarks, títulos, `lang`, `alt` y foco. Firefox y WebKit: NO_VERIFICADO (no instalados; el entorno prohíbe instalar navegadores). |
 | D10 | PASS | — |
 | D11 | PASS (lab) | — |
