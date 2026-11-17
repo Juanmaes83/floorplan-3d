@@ -1,0 +1,231 @@
+{
+ "schema": "rubik-lab-exportar-qa/1",
+ "ran": "2026-11-17T15:50:33.845Z",
+ "workdir": "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/exp",
+ "pass": 16,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "ST04-a tipo completo exporta y verifica",
+   "want": "exportado y verificador válido",
+   "result": "PASS",
+   "detail": {
+    "export": {
+     "schema": "rubik-lab-entrega-digest/1",
+     "folder": "pc",
+     "manifestSha256": "819e6f80a245bcc99f863834b113a265e8e8626f4a6adfbd6ca98b5af446a7b6",
+     "zip": "pc.zip",
+     "zipSha256": "e5353c2dc0208c8df455ea1b41cad632cb21bf753adb38243946808448025e01",
+     "zipBytes": 2722194,
+     "files": 10
+    },
+    "verificador": {
+     "carpeta": "pc",
+     "valido": true,
+     "archivos": 10,
+     "errores": []
+    }
+   }
+  },
+  {
+   "id": "ST02-b los 7 tipos exportan y verifican",
+   "want": "7/7 exportados y válidos",
+   "result": "PASS",
+   "detail": [
+    {
+     "tipo": "integral",
+     "code": 0,
+     "verificador": 0,
+     "files": 28
+    },
+    {
+     "tipo": "primera-reunion",
+     "code": 0,
+     "verificador": 0,
+     "files": 11
+    },
+    {
+     "tipo": "propuesta-comercial",
+     "code": 0,
+     "verificador": 0,
+     "files": 10
+    },
+    {
+     "tipo": "dossier-tecnico",
+     "code": 0,
+     "verificador": 0,
+     "files": 5
+    },
+    {
+     "tipo": "interiorismo",
+     "code": 0,
+     "verificador": 0,
+     "files": 18
+    },
+    {
+     "tipo": "inmobiliaria",
+     "code": 0,
+     "verificador": 0,
+     "files": 15
+    },
+    {
+     "tipo": "obra",
+     "code": 0,
+     "verificador": 0,
+     "files": 9
+    }
+   ]
+  },
+  {
+   "id": "ST02-a presupuesto desmarcado: ausencia física",
+   "want": "0 coincidencias de importes en toda la carpeta",
+   "result": "PASS",
+   "detail": {
+    "hits": [],
+    "cifras": [
+     "20.881,78",
+     "17.257,67",
+     "3624,11"
+    ]
+   }
+  },
+  {
+   "id": "ST03-a PDF con capítulo excluido",
+   "want": "bloquea (código 2)",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Selección coherente: «commercial-proposal-client-v3» contiene presupuesto, que no están elegidos: regenerar el PDF sin esas secciones o no incluirlo.",
+    "BLOQUEA · Lo excluido no está: Contenido de capítulos excluidos presente: «20.881,78» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «17.257,67» (presupuesto) en documentos/commercial-proposal-client-v3.pdf."
+   ]
+  },
+  {
+   "id": "ST03-b PDF integral con secciones excluidas",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Selección coherente: «entrega-integral» contiene dibujo, materiales, presupuesto, obra, recorrido, decisiones, documentos, procedencia, que no están elegidos: regenerar el PDF sin esas secciones o no incluirlo.",
+    "BLOQUEA · Lo excluido no está: Contenido de capítulos excluidos presente: «20.881,78» (presupuesto) en documentos/entrega-integral.pdf; «17.257,67» (presupuesto) en documentos/entrega-integral.pdf; «Cómo avanzará la obra» (obra) en documentos/entrega-integral.pdf; «plan de obra» (obra) en documentos/entrega-integral.pdf; «Lo que hay que decidir» (decisiones) en documentos/entrega-integral.pdf."
+   ]
+  },
+  {
+   "id": "ST03-c avisos sin reconocer (cliente)",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "SIN RECONOCER · Identidad del estudio: Perfil sintético del laboratorio (estudio@example.invalid).",
+    "SIN RECONOCER · Presupuesto revisado: 0 de 11 partidas revisadas; precios de prueba de laboratorio.",
+    "SIN RECONOCER · Imágenes IA: Imágenes orientativas generadas con IA, rotuladas y siempre junto a la vista del modelo."
+   ]
+  },
+  {
+   "id": "ST03-d borrador",
+   "want": "exporta rotulado BORRADOR",
+   "result": "PASS",
+   "detail": {
+    "schema": "rubik-lab-entrega-digest/1",
+    "folder": "pc-borrador",
+    "manifestSha256": "3a59b79a2b10a1ef39ac18c6b48dc0fb3f23aff303bd97a76de1a0e19e16cee7",
+    "zip": "pc-borrador.zip",
+    "zipSha256": "f8177982826ee44b9f0d4503725dd87c1fa49b001e386492712377d7774e840f",
+    "zipBytes": 2722256,
+    "files": 10
+   }
+  },
+  {
+   "id": "ST03-e sin identidad",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Identidad del estudio: Falta el perfil de «Mi estudio»: la entrega saldría sin firma.",
+    "BLOQUEA · Datos personales: Contactos que no son del estudio: estudio@example.invalid (index.html), estudio@example.invalid (documentos/real-estate-sheet-v3-sin-presupuesto.pdf)."
+   ]
+  },
+  {
+   "id": "ST03-f obra de otro proyecto",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Mismo proyecto y revisión: El vídeo/presentación de obra declara el proyecto prj_otro-proyecto, no prj_reference-home."
+   ]
+  },
+  {
+   "id": "ST03-g revisión cruzada",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Mismo proyecto y revisión: El registro de la entrega (prj_reference-home rv1-otra) no coincide con el snapshot (prj_reference-home rv1-0f3e96422fd20e08)."
+   ]
+  },
+  {
+   "id": "ST06-a dato personal y geometría editable en anexo",
+   "want": "bloquea por ambos",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Sin proyecto editable: Geometría editable o código de la aplicación en: documentos/obra-presentacion.html.",
+    "BLOQUEA · Datos personales: Contactos que no son del estudio: cliente.real@correo.es (documentos/obra-presentacion.html)."
+   ]
+  },
+  {
+   "id": "ST04-b byte alterado",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "Huella distinta: media/dibujo-vivo.jpg"
+   ]
+  },
+  {
+   "id": "ST04-c archivo añadido",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "Archivo no declarado: nota.txt"
+   ]
+  },
+  {
+   "id": "ST04-d manifiesto reescrito",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "MANIFIESTO.json no coincide con el resumen externo",
+    "Archivo no declarado: media/dibujo-vivo.jpg",
+    "Archivo no declarado: media/ia-1.jpg",
+    "Archivo no declarado: media/ia-2.jpg",
+    "Archivo no declarado: media/vista-02-room.jpg",
+    "Archivo no declarado: media/vista-03-room.jpg",
+    "Archivo no declarado: media/vista-04-room.jpg",
+    "Archivo no declarado: media/vista-05-room.jpg",
+    "Referencia sin archivo en index.html: media/dibujo-vivo.jpg",
+    "Referencia sin archivo en index.html: media/vista-02-room.jpg",
+    "Referencia sin archivo en index.html: media/ia-1.jpg",
+    "Referencia sin archivo en index.html: media/vista-03-room.jpg",
+    "Referencia sin archivo en index.html: media/ia-2.jpg",
+    "Referencia sin archivo en index.html: media/vista-04-room.jpg",
+    "Referencia sin archivo en index.html: media/vista-05-room.jpg"
+   ]
+  },
+  {
+   "id": "ST06-b sin scripts ni listener en la web final",
+   "want": "0 <script> y 0 addEventListener(message)",
+   "result": "PASS",
+   "detail": null
+  },
+  {
+   "id": "A02 registro = selección",
+   "want": "sin vídeos ni PDF no elegidos; capítulo presupuesto en excluidos",
+   "result": "PASS",
+   "detail": {
+    "files": [
+     "documentos/interior-book-v3.pdf",
+     "index.html",
+     "media/dibujo-vivo.jpg",
+     "media/ia-1.jpg",
+     "media/ia-2.jpg",
+     "media/vista-02-room.jpg",
+     "media/vista-03-room.jpg",
+     "media/vista-04-room.jpg",
+     "media/vista-05-room.jpg"
+    ]
+   }
+  }
+ ]
+}

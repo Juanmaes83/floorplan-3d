@@ -16,7 +16,7 @@ module.exports=function entrega(C){
  for(const d of [OUT,MEDIA,DOCS])fs.mkdirSync(d,{recursive:true});
  const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
  const exists=f=>{try{return fs.statSync(f).size>0;}catch{return false;}};
- const ff=args=>execFileSync('ffmpeg',['-y','-v','error',...args]);
+ const ff=args=>execFileSync('ffmpeg',['-y','-v','error',...args.slice(0,-1),'-map_metadata','-1','-fflags','+bitexact','-flags','+bitexact',args[args.length-1]]);
  const kb=f=>{const b=fs.statSync(f).size;return b>=1048576?(b/1048576).toFixed(1).replace('.',',')+' MB':Math.round(b/1024)+' KB';};
  const reg=[];// registro de piezas
  const jpg=(src,name,w=1600)=>{const dst=path.join(MEDIA,name);if(!exists(src))return null;ff(['-i',src,'-vf',`scale='min(${w},iw)':-2`,'-q:v','3',dst]);reg.push({file:'media/'+name,from:path.relative(LAB,src),sourceSha256:sha(src),sha256:sha(dst)});return 'media/'+name;};
@@ -30,14 +30,14 @@ module.exports=function entrega(C){
  const VW={};for(const v of S.views)VW[v.label]=jpg(path.join(LAB,'snapshot',v.file),`vista-${v.file.replace(/^.*view-|\.png$/g,'')}.jpg`);
  const drawing=jpg(path.join(A,'dibujo-vivo/00-overview.png'),'dibujo-vivo.jpg',1800);
  const tourDir=path.join(A,'recorrido'),tourVideo=fs.existsSync(tourDir)?fs.readdirSync(tourDir).find(f=>/\.(mp4|webm)$/.test(f)):null;
- const tour=tourVideo?(()=>{const src=path.join(tourDir,tourVideo),dst=path.join(MEDIA,'recorrido.mp4');fs.copyFileSync(src,dst);ff(['-ss','12','-i',dst,'-frames:v','1','-q:v','3',path.join(MEDIA,'recorrido-poster.jpg')]);
+ const tour=tourVideo?(()=>{const src=path.join(tourDir,tourVideo),dst=path.join(MEDIA,'recorrido.mp4');ff(['-i',src,'-c','copy','-movflags','+faststart',dst]);ff(['-ss','12','-i',dst,'-frames:v','1','-q:v','3',path.join(MEDIA,'recorrido-poster.jpg')]);
   reg.push({file:'media/recorrido.mp4',from:path.relative(LAB,src),sha256:sha(dst),producer:'RUBIK · Presentar mi vivienda · Grabar vídeo'});return {video:'media/recorrido.mp4',poster:'media/recorrido-poster.jpg',dur:+execFileSync('ffprobe',['-v','error','-show_entries','format=duration','-of','csv=p=0',dst]).toString()};})():null;
  const tourFrames=fs.existsSync(tourDir)?fs.readdirSync(tourDir).filter(f=>/^\d\d-.*\.png$/.test(f)).sort().map(f=>({id:'rom_'+f.slice(3,-4),src:jpg(path.join(tourDir,f),'recorrido-'+f.replace('.png','.jpg'),1200)})):[];
  // FT3D-8: exportaciones del producto (vídeo, presentación de solo lectura, manifiesto)
  const ftDir=path.join(A,'ft3d8'),ftFiles=fs.existsSync(ftDir)?fs.readdirSync(ftDir):[];
  const ftVid=ftFiles.find(f=>/\.(mp4|webm)$/.test(f)),ftDoc=ftFiles.find(f=>/\.html$/.test(f)),ftMan=ftFiles.find(f=>/\.json$/.test(f));
  const obra=ftVid?(()=>{const src=path.join(ftDir,ftVid),dst=path.join(MEDIA,'obra.mp4');
-  if(/\.mp4$/.test(ftVid))fs.copyFileSync(src,dst);else ff(['-i',src,'-c:v','libx264','-pix_fmt','yuv420p','-crf','26','-movflags','+faststart','-an',dst]);
+  if(/\.mp4$/.test(ftVid))ff(['-i',src,'-c','copy','-movflags','+faststart',dst]);else ff(['-i',src,'-c:v','libx264','-pix_fmt','yuv420p','-crf','26','-movflags','+faststart','-an',dst]);
   const dur=+execFileSync('ffprobe',['-v','error','-show_entries','format=duration','-of','csv=p=0',dst]).toString();
   const stills=[.12,.4,.68,.96].map((k,i)=>{const n=`obra-${i+1}.jpg`;ff(['-ss',String(Math.max(0,dur*k-.2)),'-i',dst,'-frames:v','1','-q:v','3',path.join(MEDIA,n)]);return 'media/'+n;});
   reg.push({file:'media/obra.mp4',from:path.relative(LAB,src),sourceSha256:sha(src),sha256:sha(dst),producer:'RUBIK · Evolución de obra (FT3D-8) · Entrega · Generar vídeo',transcoded:!/\.mp4$/.test(ftVid)});
@@ -51,7 +51,8 @@ module.exports=function entrega(C){
   {id:'interior-book-v3',name:'Libro de interiorismo',what:'Estancia por estancia: planta a escala, objetos numerados y vista 3D.'},
   {id:'materials-furniture-book-v3',name:'Libro de materiales y mobiliario',what:'Pavimentos por estancia y una ficha por cada línea del listado de mobiliario.'},
   {id:'commercial-proposal-client-v3',name:'Propuesta económica',what:'Resumen por capítulos y detalle de partidas con precio.'},
-  {id:'real-estate-sheet-v3',name:'Ficha inmobiliaria',what:'Una página: vista, cifras con su origen y planta.'},
+  {id:'real-estate-sheet-v3',name:'Ficha inmobiliaria',what:'Una página: vista, cifras con su origen (incluido el coste de la reforma) y planta.'},
+  {id:'real-estate-sheet-v3-sin-presupuesto',name:'Ficha inmobiliaria',what:'Una página: vista, cifras con su origen y planta. Sin cifras económicas.'},
   {id:'architecture-sheet-strip',name:'Lámina de arquitectura A3',what:'Planta a escala con cajetín; alzados y secciones no incluidos.'},
   {id:'entrega-integral',name:'Presentación integral (PDF)',what:'Esta misma entrega, paginada para imprimir o adjuntar.'}];
  const docRef=d=>({...d,href:`documentos/${d.id}.pdf`});
@@ -59,12 +60,12 @@ module.exports=function entrega(C){
  // ---------- tipos de entrega ----------
  const CH={portada:'Portada',vivienda:'La vivienda',dibujo:'Del dibujo a la imagen',estancias:'Estancia por estancia',materiales:'Materiales',presupuesto:'Presupuesto',obra:'Cómo avanzará la obra',recorrido:'Recorrer la vivienda',decisiones:'Lo que hay que decidir',documentos:'Documentos',procedencia:'De dónde sale cada cosa'};
  const TIPOS=[
-  {id:'integral',name:'Documentación integral',lead:'Todo el proyecto en una entrega: la vivienda, sus estancias, materiales, presupuesto, la obra prevista y los documentos.',ch:Object.keys(CH),docs:DOCLIST.map(d=>d.id)},
-  {id:'primera-reunion',name:'Primera reunión',lead:'Un primer vistazo para hablar del proyecto: la distribución, cómo se ve y qué queda por decidir.',ch:['portada','vivienda','dibujo','estancias','decisiones','procedencia'],docs:['real-estate-sheet-v3']},
-  {id:'propuesta-comercial',name:'Propuesta comercial',lead:'La propuesta del estudio con el presupuesto por capítulos y los documentos que la acompañan.',ch:['portada','vivienda','estancias','materiales','presupuesto','decisiones','documentos','procedencia'],docs:['commercial-proposal-client-v3','interior-book-v3','entrega-integral']},
+  {id:'integral',name:'Documentación integral',lead:'Todo el proyecto en una entrega: la vivienda, sus estancias, materiales, presupuesto, la obra prevista y los documentos.',ch:Object.keys(CH),docs:DOCLIST.map(d=>d.id).filter(d=>d!=='real-estate-sheet-v3-sin-presupuesto')},
+  {id:'primera-reunion',name:'Primera reunión',lead:'Un primer vistazo para hablar del proyecto: la distribución, cómo se ve y qué queda por decidir.',ch:['portada','vivienda','dibujo','estancias','decisiones','procedencia'],docs:['real-estate-sheet-v3-sin-presupuesto']},
+  {id:'propuesta-comercial',name:'Propuesta comercial',lead:'La propuesta del estudio con el presupuesto por capítulos y los documentos que la acompañan.',ch:['portada','vivienda','estancias','materiales','presupuesto','decisiones','documentos','procedencia'],docs:['commercial-proposal-client-v3','interior-book-v3']},
   {id:'dossier-tecnico',name:'Dossier técnico',lead:'Planta, superficies, materiales y mediciones con precio, para revisar el proyecto con detalle.',ch:['portada','vivienda','materiales','presupuesto','documentos','procedencia'],docs:['architecture-sheet-strip','materials-furniture-book-v3','commercial-proposal-client-v3']},
   {id:'interiorismo',name:'Presentación de interiorismo',lead:'Cómo se verán las estancias: vistas del modelo, imágenes orientativas, materiales y un recorrido.',ch:['portada','dibujo','estancias','materiales','recorrido','decisiones','documentos','procedencia'],docs:['interior-book-v3','materials-furniture-book-v3']},
-  {id:'inmobiliaria',name:'Presentación inmobiliaria',lead:'La vivienda para presentarla: imagen, cifras con su origen, planta y recorrido.',ch:['portada','vivienda','estancias','recorrido','documentos','procedencia'],docs:['real-estate-sheet-v3']},
+  {id:'inmobiliaria',name:'Presentación inmobiliaria',lead:'La vivienda para presentarla: imagen, cifras con su origen, planta y recorrido.',ch:['portada','vivienda','estancias','recorrido','documentos','procedencia'],docs:['real-estate-sheet-v3-sin-presupuesto']},
   {id:'obra',name:'Explicación de la obra',lead:'Cómo se construirá la vivienda, fase a fase, con un ejemplo ilustrativo del plan de obra.',ch:['portada','vivienda','obra','decisiones','documentos','procedencia'],docs:['architecture-sheet-strip']}];
 
  // ---------- textos y datos derivados ----------
@@ -89,7 +90,7 @@ module.exports=function entrega(C){
   ...(Object.keys(ai).length?[{q:'Las imágenes con IA',d:'Son orientativas: sirven para imaginar el ambiente. Las decisiones se toman sobre el modelo del proyecto y las muestras reales.',where:'estancias',state:'Solo informativo'}]:[])];
 
  // ---------- piezas visuales comunes ----------
- const planSvg=plan({w:170,h:132}).svg;
+ const planSvg=plan({w:130,h:101}).svg; // web: dibujo más compacto para que los rótulos se vean ≥ 12 px al escalarlo (medido en navegador)
  const gridSvg=({w=250,h=96}={})=>{if(!tasks.length)return '';const L=86,tw=w-L-2,rowH=(h-10)/tasks.length,x=d=>L+tw*(Date.parse(d)-t0)/(t1-t0);
   const ms=[];for(let d=new Date(t0);d<=t1;d.setUTCMonth(d.getUTCMonth()+1,1)){const t=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),1);if(t>=t0)ms.push(t);}
   return `<svg width="${w}mm" height="${h}mm" viewBox="0 0 ${w} ${h}" role="img" aria-label="Plan de obra de ejemplo por fases"><title>Plan de obra de ejemplo, ${tasks.length} fases</title>
@@ -101,7 +102,7 @@ module.exports=function entrega(C){
  const WEB_CSS=`:root{--ink:${T.ink};--muted:${T.muted};--rule:${T.rule};--paper:${T.paper};--field:${T.field};--accent:#875936;--read:'RUBIK Serif',Georgia,serif;--tech:'RUBIK Inter',system-ui,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--tech);font-variant-numeric:tabular-nums lining-nums}
-img,video,svg{max-width:100%;display:block}a{color:inherit}
+img,video,svg{max-width:100%;display:block}a{color:inherit}:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
 .top{position:sticky;top:0;z-index:10;background:rgba(255,253,248,.95);border-bottom:1px solid var(--rule)}
 .top .wrap{display:flex;align-items:center;gap:20px;min-height:56px}
@@ -126,7 +127,7 @@ h1{font-size:clamp(34px,5.2vw,60px);line-height:1.04}h2{font-size:clamp(28px,3.6
 figure{margin:0}figure svg{width:100%;height:auto}figcaption{margin-top:8px}
 table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;font-size:12.5px;color:var(--muted);font-weight:700;border-bottom:1.5px solid var(--ink);padding:8px 10px 8px 0}
 td{border-bottom:1px solid var(--rule);padding:8px 10px 8px 0;vertical-align:top}td.num,th.num{text-align:right;white-space:nowrap;padding-right:0}tr.tot td{font-weight:700;border-bottom:1.5px solid var(--ink)}tr.chap td{font-weight:700;padding-top:16px}
-.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}@media (max-width:600px){.scroll table{min-width:560px}}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.qm{display:none}@media (max-width:600px){.budget :is(th,td):nth-child(2):nth-last-child(3),.budget :is(th,td):nth-child(3):nth-last-child(2){display:none}.qm{display:block;font-size:13px;color:var(--muted);margin-top:2px}}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}.pair img{width:100%;aspect-ratio:3/2;object-fit:cover;background:#e9e5dc}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border:1px solid currentColor;border-radius:999px;margin-bottom:8px}
 .tag.ia{color:var(--accent)}.room{padding:32px 0;border-top:1px solid var(--rule)}.room:first-of-type{border-top:0}
@@ -177,7 +178,7 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    <div class="cols"><div class="s5"><div class="total">${nf(2).format(totalGross)}<small> €</small></div><p style="margin:6px 0 0"><b>Total con IVA</b></p><p class="cap">Base ${eur(V.summary.net.amount)} más IVA ${num(V.summary.tax.ratePercent,0)} % (${eur(V.summary.tax.amount)}).</p>
     <p class="note" style="margin-top:20px"><b>${V.summary.reviewComplete?'Revisado por el estudio.':'Pendiente de revisión del estudio.'}</b> ${esc(PRICE_NOTE)}</p></div>
    <figure class="s7"><div class="pan">${chapterChart(V,{w:150})}</div><figcaption>Importe neto por capítulo, de mayor a menor.</figcaption></figure>
-   <div class="s12 scroll"><table><thead><tr><th>Partida</th><th class="num">Cantidad</th><th class="num">Precio unitario</th><th class="num">Importe neto</th></tr></thead><tbody>${V.chapters.map(c=>`<tr class="chap"><td colspan="4">${esc(c.title)}</td></tr>${c.lines.map(l=>`<tr><td>${esc(l.description)}</td><td class="num">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)} ${({m2:'m²',m:'m',unit:'ud'})[l.quantity.unit]||''}</td><td class="num">${eur(l.unitPrice)}</td><td class="num">${eur(l.subtotalNet)}</td></tr>`).join('')}`).join('')}
+   <div class="s12"><table class="budget"><thead><tr><th>Partida</th><th class="num">Cantidad</th><th class="num">Precio unitario</th><th class="num">Importe neto</th></tr></thead><tbody>${V.chapters.map(c=>`<tr class="chap"><td colspan="4">${esc(c.title)}</td></tr>${c.lines.map(l=>`<tr><td>${esc(l.description)}<span class="qm">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)} ${({m2:'m²',m:'m',unit:'ud'})[l.quantity.unit]||''} × ${eur(l.unitPrice)}</span></td><td class="num">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)} ${({m2:'m²',m:'m',unit:'ud'})[l.quantity.unit]||''}</td><td class="num">${eur(l.unitPrice)}</td><td class="num">${eur(l.subtotalNet)}</td></tr>`).join('')}`).join('')}
     <tr class="tot"><td colspan="3">Base imponible</td><td class="num">${eur(V.summary.net.amount)}</td></tr><tr><td colspan="3">IVA ${num(V.summary.tax.ratePercent,0)} %</td><td class="num">${eur(V.summary.tax.amount)}</td></tr><tr class="tot"><td colspan="3">Total con IVA</td><td class="num">${eur(V.summary.gross.amount)}</td></tr></tbody></table></div></div>`),
   obra:n=>chap('obra',n,`<h2>%N%Cómo avanzará la obra</h2><p class="lead">Un ejemplo para explicar el proceso: las fases de una obra sobre esta misma vivienda. <b>Las fechas son ilustrativas y el plan no tiene presupuesto vinculado.</b></p>
    <div class="cols"><div class="s8">${videoFig(obra,'Vídeo de la evolución de la obra','Vídeo exportado por la Evolución de obra de RUBIK sobre este mismo proyecto, con su plan de obra.')}</div>
@@ -190,7 +191,7 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    <div class="s4"><p class="note"><b>La visita 3D interactiva</b> se abre con un enlace que te envía el estudio. Esta entrega no la incluye: es una carpeta para ver sin conexión y no contiene el proyecto editable.</p>
    ${tourFrames.length?`<div class="stills" style="grid-template-columns:1fr 1fr">${tourFrames.map(f=>`<img src="${f.src}" alt="${esc(rooms.find(r=>r.id===f.id)?.name||'Estancia')} en el recorrido" loading="lazy">`).join('')}</div>`:''}</div></div>`),
   decisiones:n=>chap('decisiones',n,`<h2>%N%Lo que hay que decidir</h2><p class="lead">Lo que el proyecto deja abierto, para hablarlo con el estudio. Nada de esto está decidido todavía. Los pavimentos se confirman sobre la muestra real del fabricante, no sobre el color del modelo.</p>
-   <ol class="dec" style="margin-top:28px">${decisions.map(d=>`<li><div><b>${esc(d.q)}</b><p>${esc(d.d)}</p></div><span class="st">${esc(d.state)}</span></li>`).join('')}</ol>
+   <ol class="dec" style="margin-top:28px">${decisions.map(d=>`<li data-needs="${d.where}"><div><b>${esc(d.q)}</b><p>${esc(d.d)}</p></div><span class="st">${esc(d.state)}</span></li>`).join('')}</ol>
    <p class="cap" style="margin-top:20px">Para responder, escribe al estudio${prof.email?` (${esc(prof.email)})`:''}.</p>`),
   documentos:(n,t)=>chap('documentos',n,`<h2>%N%Documentos</h2><p class="lead">Los documentos de esta entrega, para leer, imprimir o reenviar.</p>
    <div class="docs">${DOCLIST.filter(d=>t.docs.includes(d.id)).map(docRef).map(d=>`<a class="doc" data-doc="${d.id}" href="${d.href}"><b>${esc(d.name)}</b><p>${esc(d.what)}</p><span>PDF${d.pages?`, ${d.pages} ${d.pages===1?'pág.':'págs.'}`:''}${d.size?`, ${d.size}`:''}</span></a>`).join('')}</div>`),
@@ -200,11 +201,11 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    <tr><td>Vistas 3D y recorrido</td><td>Vistas del modelo 3D del proyecto generadas por RUBIK. No son fotografías.</td></tr>
    <tr><td>Dibujo</td><td>Fotograma de la apertura de la presentación con Dibujo vivo de RUBIK.</td></tr>
    ${Object.keys(ai).length?`<tr><td>Imágenes con IA</td><td>${Object.keys(ai).length} imágenes generadas con IA a partir de vistas del modelo. Orientativas: pueden cambiar objetos, materiales y lo que queda fuera del encuadre.</td></tr>`:''}
-   ${V?`<tr><td>Presupuesto</td><td>Mediciones de RUBIK sobre el modelo, con la merma indicada. ${esc(PRICE_NOTE)} ${V.summary.reviewComplete?'':'Pendiente de revisión del estudio.'}</td></tr>`:''}
-   ${planDemo?`<tr><td>Plan y vídeo de obra</td><td>Plan de ejemplo de RUBIK aplicado a este mismo proyecto y exportado por su Evolución de obra como entrega orientativa: plan en borrador, sin revisar y sin presupuesto vinculado; fechas ilustrativas. No es un calendario de obra.</td></tr>`:''}
+   ${V?`<tr data-needs="presupuesto"><td>Presupuesto</td><td>Mediciones de RUBIK sobre el modelo, con la merma indicada. ${esc(PRICE_NOTE)} ${V.summary.reviewComplete?'':'Pendiente de revisión del estudio.'}</td></tr>`:''}
+   ${planDemo?`<tr data-needs="obra"><td>Plan y vídeo de obra</td><td>Plan de ejemplo de RUBIK aplicado a este mismo proyecto y exportado por su Evolución de obra como entrega orientativa: plan en borrador, sin revisar y sin presupuesto vinculado; fechas ilustrativas. No es un calendario de obra.</td></tr>`:''}
    <tr><td>Esta entrega</td><td>Carpeta de solo lectura para ver sin conexión. No contiene el proyecto editable ni datos de otros proyectos.</td></tr></tbody></table></div></div>`)};
  const pdfInfo=id=>{const f=path.join(outDir,id+'.pdf');if(!exists(f))return {};try{return {pages:+/Pages:\s+(\d+)/.exec(execFileSync('pdfinfo',[f]).toString())[1],size:kb(f)};}catch{return {};}};
- const web=t=>{const list=t.ch.filter(c=>c!=='portada'&&sections[c]);
+ const web=(t,{preview=false}={})=>{const list=t.ch.filter(c=>c!=='portada'&&sections[c]);
   for(const d of DOCLIST)Object.assign(d,pdfInfo(d.id));
   const body=list.map((c,i)=>sections[c](i+1,t)).join('\n');
   const hero=`<section class="hero" id="portada"><div class="wrap"><div><p class="studio">${prof.logo?.dataUrl?`<img src="${prof.logo.dataUrl}" alt="${esc(prof.logo.label||'Logotipo del estudio')}" style="max-height:44px;width:auto;margin-bottom:8px">`:''}${esc(STUDIO)}<span>${esc(prof.tagline||'')}</span></p>
@@ -213,14 +214,16 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    <div class="fig"><div class="n">${rooms.length}</div><div class="l">Estancias</div><div class="s">${counted.length} computan</div></div>
    ${V?`<div class="fig" data-needs="presupuesto"${t.ch.includes('presupuesto')?'':' hidden'}><div class="n">${nf(0).format(Math.round(totalGross))}<small>€</small></div><div class="l">Presupuesto con IVA</div><div class="s">Precios de prueba, sin revisar</div></div>`:''}<div class="fig" data-unless="presupuesto"${t.ch.includes('presupuesto')&&V?' hidden':''}><div class="n">${floors.length}</div><div class="l">Pavimentos</div><div class="s">Asignados en el modelo</div></div></div></div>
    <figure>${drawing?`<img src="${drawing}" alt="Dibujo de la vivienda (Dibujo vivo de RUBIK)"><figcaption>La vivienda en la apertura de la presentación con Dibujo vivo. Dibujo del modelo, no fotografía.</figcaption>`:`${axo({w:178,h:150})}`}</figure></div></section>`;
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(TITLE)}, ${esc(t.name)}</title>
+  const out_=`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">${preview?'<base href="../entrega/">':''}<title>${esc(TITLE)}, ${esc(t.name)}</title>
 <style>${FONT_CSS}\n${WEB_CSS}</style></head><body data-tipo="${t.id}"><header class="top"><div class="wrap"><b>${esc(STUDIO)} <span>${esc(TITLE)}</span></b><nav class="toc" aria-label="Capítulos">${list.map(c=>`<a href="#${c}">${esc(CH[c])}</a>`).join('')}</nav></div></header>
 <main>${hero}\n${body}</main><footer><div class="wrap"><b>${esc(STUDIO)}</b>${[prof.person,prof.email,(prof.web||'').replace(/^https?:\/\//,'')].filter(Boolean).map(x=>'<br>'+esc(x)).join('')}<p>${esc(t.name)}, ${esc(date)}. Revisión del proyecto ${esc(rev)}. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.</p></div></footer>
-<script>(()=>{const links=[...document.querySelectorAll('.toc a')];const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){links.forEach(a=>a.setAttribute('aria-current',String(a.hash==='#'+e.target.id)));const a=links.find(a=>a.hash==='#'+e.target.id);a&&a.scrollIntoView({block:'nearest',inline:'nearest'});}},{rootMargin:'-40% 0px -55% 0px'});document.querySelectorAll('section.ch').forEach(s=>io.observe(s));
- if(window.parent!==window)addEventListener('message',e=>{const d=e.data||{};if(d.rubikHide){document.querySelectorAll('section.ch').forEach(s=>s.hidden=d.rubikHide.includes(s.id));links.forEach(a=>a.hidden=d.rubikHide.includes(a.hash.slice(1)));
+${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a')];const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){links.forEach(a=>a.setAttribute('aria-current',String(a.hash==='#'+e.target.id)));const a=links.find(a=>a.hash==='#'+e.target.id);a&&a.scrollIntoView({block:'nearest',inline:'nearest'});}},{rootMargin:'-40% 0px -55% 0px'});document.querySelectorAll('section.ch').forEach(s=>io.observe(s));
+ /*PREVIEW*/if(window.parent!==window&&document.body.dataset.preview==='1')addEventListener('message',e=>{if(e.source!==window.parent||(location.origin!=='null'&&e.origin!==location.origin))return;const d=e.data||{};if(d.rubikHide&&!Array.isArray(d.rubikHide))return;if(d.rubikHide){document.querySelectorAll('section.ch').forEach(s=>s.hidden=d.rubikHide.includes(s.id));links.forEach(a=>a.hidden=d.rubikHide.includes(a.hash.slice(1)));
    document.querySelectorAll('[data-needs]').forEach(x=>x.hidden=d.rubikHide.includes(x.dataset.needs));document.querySelectorAll('[data-unless]').forEach(x=>x.hidden=!d.rubikHide.includes(x.dataset.unless)&&!!document.querySelector('[data-needs='+x.dataset.unless+']'));}
   if(d.rubikLead){const l=document.getElementById('tipoLead');if(l)l.textContent=d.rubikLead;}
-  if(d.rubikDocs)document.querySelectorAll('.doc').forEach(a=>a.hidden=!d.rubikDocs.includes(a.dataset.doc));if(d.rubikKind){const k=document.querySelector('.hero .kind');if(k)k.textContent=d.rubikKind;}});})();</script></body></html>`;};
+  if(d.rubikDocs)document.querySelectorAll('.doc').forEach(a=>a.hidden=!d.rubikDocs.includes(a.dataset.doc));if(d.rubikKind){const k=document.querySelector('.hero .kind');if(k)k.textContent=d.rubikKind;}});})();</script></body></html>`;
+  // A05: solo la copia de vista previa del profesional escucha mensajes; la web del cliente no lleva ese código.
+  return preview?out_.replace('<body data-tipo=','<body data-preview="1" data-tipo='):out_.replace(/ \/\*PREVIEW\*\/[\s\S]*?\}\}\);\}\)\(\);<\/script>/,'})();</script>');};
 
  // ---------- presentación integral paginada (A4 apaisado, portada B: D1) ----------
  const im=(rel,alt,style='')=>rel?`<img class="img" src="${dataUri(rel)}" alt="${esc(alt)}" style="${style}">`:`<div class="note">${esc(alt)}: no disponible.</div>`;
@@ -260,6 +263,7 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    notIncluded:['proyecto editable','visita 3D interactiva (requiere enlace publicado)','datos de otros proyectos']},null,1));
   const PRO=path.join(outDir,'profesional');fs.mkdirSync(PRO,{recursive:true});
   if(exists(path.join(outDir,'commercial-proposal-studio-v3.pdf')))fs.copyFileSync(path.join(outDir,'commercial-proposal-studio-v3.pdf'),path.join(PRO,'propuesta-estudio.pdf'));
+  fs.writeFileSync(path.join(PRO,'vista-previa.html'),web(TIPOS[0],{preview:true}));
   fs.writeFileSync(path.join(PRO,'preparar-entrega.html'),prepararPage(files,pieces));
   return files;};
 
@@ -303,30 +307,30 @@ const ALL=Object.keys(D.ch).filter(c=>c!=='portada');
 function drawOpts(){ $('#chs').innerHTML=ALL.map(c=>'<label><input type=checkbox data-ch="'+c+'"'+(tipo.ch.includes(c)?' checked':'')+'> '+D.ch[c]+'</label>').join('');
  $('#dcs').innerHTML=D.docs.map(d=>'<label><input type=checkbox data-doc="'+d.id+'"'+(tipo.docs.includes(d.id)?' checked':'')+'> <span>'+d.name+(d.pages?' <small>('+d.pages+(d.pages===1?' pág., ':' págs., ')+d.size+')</small>':'')+'</span></label>').join('');}
 function sel(){return {ch:[...document.querySelectorAll('[data-ch]:checked')].map(x=>x.dataset.ch),docs:[...document.querySelectorAll('[data-doc]:checked')].map(x=>x.dataset.doc)};}
-function push(){const s=sel();fr.contentWindow.postMessage({rubikHide:ALL.filter(c=>!s.ch.includes(c)),rubikDocs:s.docs,rubikKind:tipo.name,rubikLead:tipo.lead},'*');
+function push(){const s=sel();fr.contentWindow.postMessage({rubikHide:ALL.filter(c=>!s.ch.includes(c)),rubikDocs:s.docs,rubikKind:tipo.name,rubikLead:tipo.lead},location.origin==='null'?'*':location.origin);
  const same=s.ch.length===tipo.ch.filter(c=>c!=='portada').length&&s.ch.every(c=>tipo.ch.includes(c))&&s.docs.length===tipo.docs.length&&s.docs.every(d=>tipo.docs.includes(d));
  $('#custom').textContent=same?'Contenido del tipo «'+tipo.name+'».':'Contenido personalizado a partir de «'+tipo.name+'».';
  const f=D.files.find(x=>x.tipo===tipo.id);$('#open').href='../entrega/'+f.file;}
 document.addEventListener('change',e=>{if(e.target.name==='tipo'){tipo=D.tipos.find(t=>t.id===e.target.value);drawOpts();}push();});
 fr.addEventListener('load',push);
 for(const b of document.querySelectorAll('[data-w]'))b.onclick=()=>{fr.style.width=b.dataset.w;document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
-$('#reg').onclick=()=>{const s=sel(),now=new Date().toISOString();const used=new Set(['index.html',...s.docs.map(d=>'documentos/'+d+'.pdf')]);
- const r={schema:'rubik-lab-registro-entrega/0.1',registradoEn:now,tipo:tipo.id,tipoNombre:tipo.name,proyecto:D.project,estudio:D.studio,capitulos:['portada',...s.ch],documentos:s.docs,
-  avisos:D.checks.filter(c=>c.s!=='ok').map(c=>({que:c.k,estado:c.s,detalle:c.t})),piezas:D.pieces.filter(p=>p.file.startsWith('media/')||used.has(p.file)),nota:'Registro local del laboratorio: no se ha enviado ni publicado nada.'};
- const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(r,null,1)],{type:'application/json'}));a.download='registro-entrega-'+tipo.id+'-'+now.slice(0,10)+'.json';document.body.append(a);a.click();a.remove();
- const li=document.createElement('li');li.textContent=now.slice(0,16).replace('T',' ')+' · '+tipo.name+' · '+r.capitulos.length+' capítulos, '+s.docs.length+' documentos, '+r.avisos.length+' avisos';$('#log').prepend(li);};
+$('#reg').onclick=()=>{const s=sel(),now=new Date().toISOString();
+ const r={tipo:tipo.id,capitulos:s.ch,documentos:s.docs,modo:document.querySelector('[name=modo]:checked').value,reconocidos:[],seleccionadaEn:now,proyecto:D.project,nota:'Selección para tools/exportar.cjs. No es el registro de la entrega: el registro es el MANIFIESTO.json que escribe la exportación, con las comprobaciones recalculadas sobre los archivos finales.'};
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(r,null,1)],{type:'application/json'}));a.download='seleccion-'+tipo.id+'-'+now.slice(0,10)+'.json';document.body.append(a);a.click();a.remove();
+ const li=document.createElement('li');li.textContent=now.slice(0,16).replace('T',' ')+', '+tipo.name+': '+(r.capitulos.length+1)+' capítulos, '+s.docs.length+' documentos, modo '+r.modo;$('#log').prepend(li);};
 drawOpts();`;
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Preparar entrega, ${esc(TITLE)}</title><style>${FONT_CSS}\n${css}</style></head><body>
 <div class="app"><aside class="side"><header><h1>Preparar entrega</h1><p>${esc(TITLE)} · revisión ${esc(rev)} · ${esc(STUDIO)}</p></header>
 <section class="step"><h2><span>1</span>Tipo de entrega</h2><div class="types">${TIPOS.map((t,i)=>`<label><input type="radio" name="tipo" value="${t.id}"${i?'':' checked'}>${esc(t.name)}<small>${esc(t.lead)}</small></label>`).join('')}</div></section>
 <section class="step"><h2><span>2</span>Contenido</h2><p id="custom" class="opts" style="color:var(--muted);font-size:13.5px;margin:0 0 8px"></p><div class="opts" id="chs"></div><h2 style="margin-top:14px">Documentos que acompañan</h2><div class="opts" id="dcs"></div></section>
-<section class="step"><h2><span>3</span>Comprobaciones antes de enviar</h2>${checks.map(c=>`<div class="check"><span class="pill ${c.s==='block'?'block':c.s}">${({ok:'Correcto',warn:'Revisar',block:'Bloquea',info:'A saber'})[c.s]}</span><div><b>${esc(c.k)}</b><div>${esc(c.t)}</div></div></div>`).join('')}</section>
-<section class="step"><h2><span>4</span>Entregar y registrar</h2><p style="font-size:13.5px;margin:0">La entrega es la carpeta <code>entrega/</code>: se abre sin conexión en el ordenador, la tableta o el móvil del cliente, en la reunión o después. Nada se publica desde aquí.</p>
-<div class="row"><a class="btn" id="open" href="../entrega/index.html" target="_blank">Abrir como la verá el cliente</a><button class="btn primary" id="reg" type="button">Registrar la entrega (JSON)</button></div>
-<h2 style="margin-top:16px">Registro de esta sesión</h2><ul id="log" style="padding-left:18px;margin:0"></ul>
+<section class="step"><h2><span>3</span>Comprobaciones previas</h2><p style="font-size:13.5px;margin:0 0 6px;color:var(--muted)">Resumen orientativo calculado al componer. Quien decide es la exportación: recalcula cada comprobación sobre los archivos finales, bloquea los fallos y exige reconocer los avisos en modo cliente.</p>${checks.map(c=>`<div class="check"><span class="pill ${c.s==='block'?'block':c.s}">${({ok:'Correcto',warn:'Revisar',block:'Bloquea',info:'A saber'})[c.s]}</span><div><b>${esc(c.k)}</b><div>${esc(c.t)}</div></div></div>`).join('')}</section>
+<section class="step"><h2><span>4</span>Exportar</h2><p style="font-size:13.5px;margin:0">La vista de la derecha es una <b>simulación</b>: oculta en pantalla lo no elegido. La entrega real la genera <code>node tools/exportar.cjs seleccion.json salida</code>: elimina del HTML lo no elegido, copia solo los archivos que se usan, comprueba que no queda rastro de lo excluido y escribe el manifiesto. Nada se publica.</p>
+<div class="opts" style="margin-top:8px"><label><input type="radio" name="modo" value="cliente" checked> Cliente: los avisos deben reconocerse</label><label><input type="radio" name="modo" value="borrador"> Borrador: rotulado «no apto para enviar»</label></div>
+<div class="row"><a class="btn" id="open" href="../entrega/index.html" target="_blank">Abrir la página del tipo</a><button class="btn primary" id="reg" type="button">Descargar la selección (JSON)</button></div>
+<h2 style="margin-top:16px">Selecciones de esta sesión</h2><ul id="log" style="padding-left:18px;margin:0"></ul>
 <h2 style="margin-top:16px">Solo para el estudio</h2><p style="font-size:13.5px;margin:0"><a href="propuesta-estudio.pdf">Propuesta económica del estudio</a>: origen de cada precio, merma y estado de revisión. No va en ninguna entrega de cliente.</p>
 <details style="margin-top:14px"><summary style="font-size:13.5px;font-weight:700;cursor:pointer">Piezas y huellas SHA-256 (${pieces.length})</summary><table><tbody>${pieces.map(x=>`<tr><td>${esc(x.file)}</td><td><code>${x.sha256.slice(0,16)}…</code></td></tr>`).join('')}</tbody></table></details></section></aside>
 <main class="preview"><div class="bar"><b>Vista del cliente</b><span style="color:var(--muted)">la entrega tal como la recibe, sin la interfaz de RUBIK</span><div class="seg"><button data-w="100%" aria-pressed="true">Escritorio</button><button data-w="820px" aria-pressed="false">Tableta</button><button data-w="390px" aria-pressed="false">Móvil</button></div></div>
-<div class="stage"><iframe id="pv" src="../entrega/index.html" title="Vista previa de la entrega del cliente"></iframe></div></main></div><script>${js}</script></body></html>`;};
+<div class="stage"><iframe id="pv" src="vista-previa.html" title="Vista previa de la entrega del cliente"></iframe></div></main></div><script>${js}</script></body></html>`;};
  return {D:Dout,writeWeb,TIPOS,CH,meta:{entrega:{ai:Object.keys(ai),drawing:!!drawing,tour:!!tour,obra:!!obra,ftDoc:!!ftDoc,tasks:tasks.length}}};
 };

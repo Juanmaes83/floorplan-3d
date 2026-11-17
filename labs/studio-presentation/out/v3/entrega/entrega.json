@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.1",
- "generated": "2026-11-17T14:45:31.241Z",
+ "generated": "2026-11-17T16:01:10.332Z",
  "project": {
   "id": "prj_reference-home",
   "name": "Proyecto de ejemplo",
@@ -55,7 +55,7 @@
     "procedencia"
    ],
    "documents": [
-    "real-estate-sheet-v3"
+    "real-estate-sheet-v3-sin-presupuesto"
    ]
   },
   {
@@ -74,8 +74,7 @@
    ],
    "documents": [
     "commercial-proposal-client-v3",
-    "interior-book-v3",
-    "entrega-integral"
+    "interior-book-v3"
    ]
   },
   {
@@ -128,7 +127,7 @@
     "procedencia"
    ],
    "documents": [
-    "real-estate-sheet-v3"
+    "real-estate-sheet-v3-sin-presupuesto"
    ]
   },
   {
@@ -153,91 +152,91 @@
    "file": "media/ia-1.jpg",
    "from": "evidence/render-ia/render-ia-1-salon.png",
    "sourceSha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
-   "sha256": "76027ae68113928e44bc878bef664c9bd2a90447b43e5a2b2c9074645d99f3e5"
+   "sha256": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446"
   },
   {
    "file": "media/ia-2.jpg",
    "from": "evidence/render-ia/render-ia-2-dormitorio-principal.png",
    "sourceSha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
-   "sha256": "b92e64cb06caf927198abee750288b16d6f8a2887721c5f9f56d5f87b6988842"
+   "sha256": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772"
   },
   {
    "file": "media/ia-3.jpg",
    "from": "evidence/render-ia/render-ia-3-vista-general.png",
    "sourceSha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
-   "sha256": "6049003934f0f4b2a8c732dd049ff56e0d42a78bb5170992e1eb453ccd9b68ce"
+   "sha256": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec"
   },
   {
    "file": "media/vista-01-overview.jpg",
    "from": "snapshot/assets/view-01-overview.png",
    "sourceSha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2",
-   "sha256": "72a025ed27bb00eb6366db55c5aaba3d4c7b863be49ad7e2aad6d0f6fe6ea195"
+   "sha256": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731"
   },
   {
    "file": "media/vista-02-room.jpg",
    "from": "snapshot/assets/view-02-room.png",
    "sourceSha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4",
-   "sha256": "52676b877f20e29d616ce7afdbb473739f36b76fa33dc7475e0f74b26b7f54a9"
+   "sha256": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71"
   },
   {
    "file": "media/vista-03-room.jpg",
    "from": "snapshot/assets/view-03-room.png",
    "sourceSha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3",
-   "sha256": "64c838d7d90546cc57ed255c5160a83035283e56fd71bbe64d33b80c0882b73d"
+   "sha256": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e"
   },
   {
    "file": "media/vista-04-room.jpg",
    "from": "snapshot/assets/view-04-room.png",
    "sourceSha256": "af317e4e4d00ab067ff2695bb95969b11ebfbd3564bc55514075e0c117198c29",
-   "sha256": "8def9bfa9c253fb1f3930162f6e74cc7578edbac46e4801c1ec56ddeeb8f7cb1"
+   "sha256": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149"
   },
   {
    "file": "media/vista-05-room.jpg",
    "from": "snapshot/assets/view-05-room.png",
    "sourceSha256": "2cbb35e397e4e5188a3e420dee53d25e41debb1a10bddd2ab63d354cf7964231",
-   "sha256": "2bdee371aa3f129af3791d3673129bb590f8b819c2a1ce171d4c08ecafef793a"
+   "sha256": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
   },
   {
    "file": "media/dibujo-vivo.jpg",
    "from": "assets/dibujo-vivo/00-overview.png",
    "sourceSha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952",
-   "sha256": "9dd582d26dec3a37fe370f73a0e16d3284bb5cec2b2eeab37120adf05e8d759e"
+   "sha256": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
   },
   {
    "file": "media/recorrido.mp4",
    "from": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
-   "sha256": "ae93eb6338f2b36a0c61a55ad0ca9758ec5aff017d4cb83c4ea5b1240d5994c0",
+   "sha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
    "producer": "RUBIK · Presentar mi vivienda · Grabar vídeo"
   },
   {
    "file": "media/recorrido-01-master.jpg",
    "from": "assets/recorrido/01-master.png",
    "sourceSha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698",
-   "sha256": "24d52b61f06716f5b9788ea28873538116d893caac3fe7c13800a275df75591d"
+   "sha256": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef"
   },
   {
    "file": "media/recorrido-02-kitchen.jpg",
    "from": "assets/recorrido/02-kitchen.png",
    "sourceSha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315",
-   "sha256": "044937777a68242bbbbc7702d180bbbf02dca21c6e1478d10a885840a4a7fe78"
+   "sha256": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579"
   },
   {
    "file": "media/recorrido-03-dining.jpg",
    "from": "assets/recorrido/03-dining.png",
    "sourceSha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0",
-   "sha256": "33f052bbc68160a844252d5cd5b3e459c572291ff775291b49f5694d81c48dee"
+   "sha256": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9"
   },
   {
    "file": "media/recorrido-04-living.jpg",
    "from": "assets/recorrido/04-living.png",
    "sourceSha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4",
-   "sha256": "694f23bfecf1120acd8e5861b90e0fb41f31a601a21d919a4385912b5e7bb5e6"
+   "sha256": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace"
   },
   {
    "file": "media/obra.mp4",
    "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
    "sourceSha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
-   "sha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+   "sha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
    "producer": "RUBIK · Evolución de obra (FT3D-8) · Entrega · Generar vídeo",
    "transcoded": false
   },
@@ -249,32 +248,37 @@
   },
   {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "c5e0a64d8312a524ed1d1f804e6c3f06996b3992c4cdc8ea8e1aefa02050c272",
+   "sha256": "9acc27fb73d26bdbaaf7587e0a7627aa28ee60ed7fd05a88ed912221e9ecbe07",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "3fa972b77fb6a23f0b09790f8d19112b324e1133d66172bed0b170cf0749c7fd",
+   "sha256": "fbb80eed47b14ea2e5658dbfafe4f7ec1776c13c000819ea55458a41c5f8639f",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "7f46529b414832cc9f197df80b797ae5f4fab650c051025c122b3aa496ce7fae",
+   "sha256": "64adb4ed88916dd1f7e76408798014fc88044ff56400367d20d627b05f04e6b1",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "2ed902e4f42ce1930cee76cc9369314850a5307a16a67bcfa8de829663889e26",
+   "sha256": "34f7ed6e73d00c85f3c1e516d6acd1cb21298e5196d08d8cb4ef4ffa9ad66298",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
+   "sha256": "ecf8f22bf3f4b4121d9a7a9df4d2daba5c9e70ad71f4ed545d50b2df62720996",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "05e5d221387c13399f09d5c2c91810a4d2f612a65ca40e925c57b51414896a26",
+   "sha256": "8bbc31fbfbf80539e057eb3474650c45b2b1727d32d1000594fb1b6b2329152d",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "f4ee058627c3dee7bcd778de9949a30709550abfcdaa7c9e1c0e31cd3d17a44a",
+   "sha256": "5e53a12e4a8c1cca5ded920d9048484417761ef98a5007e2d64e07ae51fd8b83",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   }
  ],
