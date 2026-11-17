@@ -153,7 +153,7 @@
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
   // B5: the human-assisted service, for whoever prefers not to convert the plan themselves.
   const service=el('p',undefined,shell,'welcome-service');el('span',tx('¿Prefieres que lo preparemos nosotros? ','Prefer us to prepare it? ','希望由我们来准备？'),service);btn('welcomeService',tx('Envíanos tu plano','Send us your plan','发送平面图'),()=>window.FloorPlanPlanService?.open(),service).classList.add('guide-link');
-  // HOM-04 (provisional) · «Descubre RUBIK en acción»: the two most visual capabilities, as guided demos with the example
+  // HOM-04 · «Descubre RUBIK en acción»: the two most visual capabilities, as guided demos with the example
   // home, right after the ways to start. No account, no project of the visitor and no AI: 4D build (evolucion/?demo=obra,
   // built in memory) and «Dibujo vivo» (?demo=dibujo-vivo, the existing presentation of the example; js/home-demos.js).
   const inAction=el('section',undefined,shell,'welcome-in-action');inAction.id='welcomeInAction';inAction.setAttribute('aria-labelledby','welcomeInActionTitle');

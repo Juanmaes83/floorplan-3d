@@ -5,11 +5,16 @@
    States: 'available' (in master and in Production, covered by tests), 'validation' (in master, pending a review),
    'preparation' (planned, not usable). Only 'available' entries get an access button in the Home.
    HOM-03: AI_SERVICES («Nuevos servicios IA») use four states — available (accredited in Production), pilot,
-   simulation, preparation — and aiServices() never returns work behind a `gate` (CAT-04, not approved).
+   simulation, preparation — and aiServices() never returns work behind a `gate` (none today: «CAT-04», the working name of a partial advance of
+   CAT-03 in catalogue v1.11, became a local pilot).
+   Verification SHAs (17/11/2026): every module and test below exists at master@40b4ae5, and the cited tests passed on
+   that tree (CI of #242 on the identical tree 5fcb252, plus the pure tests locally). They do NOT re-accredit
+   Production by themselves: Render IA's `production` evidence was re-checked on 17/11 with the same no-cost check on
+   the current public deployment; its real-image accreditation is still D1 of 09/11.
    UMD: window.FloorPlanCapabilities / module.exports. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanCapabilities=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
- const VERIFIED_AT='5fb7a5c1387c85614666367238510934167d4809';
+ const VERIFIED_AT='40b4ae5d724ef83d0e70651545b4f5e4832becd3';
  const STATES=Object.freeze(['available','validation','preparation']);
  // access: how the Home opens it, always through an existing entry point.
  //   upload → the «Subir un plano» entry · walk → the existing 3D walk of the example · area:<key> → a professional
@@ -86,7 +91,7 @@
  // aiServices(), so the Home cannot show them until the gate is removed together with a verified state.
  // `access` is the existing place that opens the service; the Home only offers it if that module is on the page.
  const AI_GROUPS=Object.freeze(['available','pilot','simulation','preparation']);
- const AI_VERIFIED_AT='8e6a5a842b37fcbc78a58160859304da9b3efa1a';
+ const AI_VERIFIED_AT='40b4ae5d724ef83d0e70651545b4f5e4832becd3';
  const S=(id,state,name,what,isNot,limits,access,modules,tests,professions,extra={})=>Object.freeze({id,state,name,what,isNot,limits,access,modules,tests,professions,production:extra.production||null,gate:extra.gate||null,verifiedAt:AI_VERIFIED_AT});
  const ALL=['architecture','real-estate','developer','renovation','interior','construction','general'];
  const AI_SERVICES=Object.freeze([
@@ -96,7 +101,7 @@
    ['Necesita el código de acceso de tu estudio y cada imagen consume créditos de IA.','It needs your studio access code and each image uses AI credits.','需要工作室访问码，每张图片消耗 AI 额度。'],
    'render-band',['js/ai-render-ui.js','api/render.js'],['tests/ai-render-api.test.cjs','tests/ai-render.browser.test.cjs'],
    ['interior','renovation','real-estate','developer','general'],
-   {production:Object.freeze({deployment:'dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV',sha:'8df49ed7110215eb3723788aee6da42d5eb095cb',checkedAt:'2026-11-09',check:'POST /api/render sin código → 401 token (proveedor no llamado); RUBIK_RENDER_ENABLED=1 en Production (metadatos, 2026-11-15)'})}),
+   {production:Object.freeze({deployment:'dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs',sha:'40b4ae5d724ef83d0e70651545b4f5e4832becd3',checkedAt:'2026-11-17',check:'Comprobación sin gasto del 17/11: POST /api/render sin código en la URL pública → 401 token (proveedor no llamado, no genera imagen); RUBIK_RENDER_ENABLED=1 en Production (metadatos). NO es una acreditación con imagen: la acreditación real es la D1 del 09/11 (docs/render-ai/d1-acta-de-cierre-2026-11-09.md)'})}),
   S('assistant','pilot',['Asistente RUBIK · consulta guiada','RUBIK Assistant · guided query','RUBIK 助手 · 引导式查询'],
    ['Responde sobre el proyecto abierto (superficies, presupuesto, materiales, muebles) con los motores de RUBIK y la fuente de cada cifra; propone cambios que revisas, aplicas y deshaces.','Answers about the open project (areas, budget, materials, furniture) with RUBIK engines and the source of every figure; it proposes changes you review, apply and undo.','使用 RUBIK 引擎回答当前项目的问题（面积、预算、材料、家具）并注明每个数字的来源；提出可审核、应用和撤销的修改。'],
    ['No es un chat con IA generativa: no hay ningún modelo de lenguaje conectado y entiende un conjunto cerrado de preguntas.','It is not a generative AI chat: no language model is connected and it understands a closed set of questions.','这不是生成式 AI 聊天：未连接任何语言模型，只能理解固定范围的问题。'],

@@ -6,6 +6,8 @@
 
 **Método:** lectura del catálogo maestro v1.10 en PR #192, anexo SCULPT, roadmap Pascal, roadmap del MCP, documentos técnicos del producto y contrastes de rama `master`, PR Draft y checks de GitHub. Auditoría base realizada en lectura; esta consolidación documental se guarda únicamente en la rama Draft de #192. La auditoría base original no inspeccionó Vercel, pero **el gate documental posterior del 12/11/2026 sí contrastó Production**: [Vercel `dpl_9s9H2dUnxXb3UYK7yFovoYTPtFtj` READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/9s9H2dUnxXb3UYK7yFovoYTPtFtj), asociado exactamente a `master@75615fdc6c96e7c43e52b13a24950b9652706f7d`. No equivale a inspección funcional completa ni autoriza merge, Promote o modificación del producto.
 
+> **Precedencia desde el 16/11/2026:** esta auditoría describe el estado del 12/11/2026 y conserva esa validez. Los cambios posteriores (R02-A #223, R03 #222, NAV3D, UX-08, CAT-IA, Asistente V2 y V3, y la consolidación #241) están en el [Estado maestro de RUBIK SOTA](../product/ESTADO-MAESTRO-RUBIK-SOTA.md).
+
 ## Actualización de integración verificada — 12/11/2026 (posterior al corte inicial)
 
 > **Precedencia:** esta sección es una **actualización aditiva** del estado actual del repositorio; las cifras y SHA históricos que siguen se conservan como fotografía de la auditoría inicial. No cambia el catálogo de 97 IDs ni renumera las olas.

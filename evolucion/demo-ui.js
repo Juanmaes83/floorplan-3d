@@ -1,4 +1,4 @@
-/* HOM-04 (provisional) · demo «Descubre cómo evoluciona una obra» (?demo=obra): the closing card of the guided demo.
+/* HOM-04 · demo «Descubre cómo evoluciona una obra» (?demo=obra): the closing card of the guided demo.
    When the example plan reaches its end it offers «Volver a ver», «Cómo hacerlo con mi proyecto», «Volver al inicio»
    and «Explorar la obra». It only uses the page's own player (window.__ft3dFidelity); outside the demo it does nothing. */
 (function(){
