@@ -1,0 +1,35 @@
+✔ reuse requires all authorities and never becomes EXECUTED_PASS (0.4714ms)
+✔ ordinary documentation requires fast checks and labels every functional test as not required (1.1013ms)
+✔ direct and indirect consumers are selected together (0.5095ms)
+✔ documentation consumed by a test cannot bypass that dependency (0.1425ms)
+✔ unknown documentation is conservative despite its extension and path (0.111ms)
+✔ shared dependencies reach every consumer and are never treated as a leaf-only change (0.1008ms)
+✔ deleted and renamed dependencies use the union of old and current graphs (0.0931ms)
+✔ full regression for shared or security authority api/publications.js (0.0586ms)
+✔ full regression for shared or security authority index.html (0.0396ms)
+✔ full regression for shared or security authority vendor/three/build/three.module.js (0.451ms)
+✔ full regression for shared or security authority .github/workflows/project-first.yml (0.0916ms)
+✔ full regression for shared or security authority docs/contracts/project.md (0.0683ms)
+✔ full regression for shared or security authority docs/security/publications.md (0.0468ms)
+✔ full regression for shared or security authority tests/helpers/render-budget.cjs (0.0295ms)
+✔ a fundamental domain authority forces full validation (0.0735ms)
+✔ unknown changed files force full regression (0.0475ms)
+✔ dynamic dependencies in an affected closure force full regression (0.0696ms)
+✔ missing ownership cannot silently omit a selected test (0.04ms)
+✔ missing content hashes cannot certify an unexecuted closure (0.0671ms)
+✔ environment changes invalidate evidence fingerprints (0.0954ms)
+✔ changed dependency bytes invalidate evidence fingerprints (0.0772ms)
+✔ periodic full validation overrides documentation selection (0.0391ms)
+✔ invalid source identity and path traversal fail conservatively (0.0338ms)
+✔ observation never enables omission or fabricates a PASS (1.0515ms)
+✔ unowned commands force full even for an informational document (0.1213ms)
+✔ consumer of documentation remains selected (0.5154ms)
+✔ selector, workflow, security, contract, unknown and deletion force full (0.2656ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 68.9052

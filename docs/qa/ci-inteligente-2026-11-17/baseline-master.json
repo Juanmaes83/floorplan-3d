@@ -1,0 +1,236 @@
+{
+  "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+  "queriedAt": "2026-11-17T17:25:49.610Z",
+  "mode": "observe",
+  "omissionEnabled": false,
+  "runs": [
+    {
+      "runId": 44129633794,
+      "name": "GOV-07 - WebGL resilience",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:50:52Z",
+      "queueMs": 0,
+      "wallMs": 244000,
+      "jobs": [
+        {
+          "id": 134202805658,
+          "name": "cross-browser (firefox, 1, webgl)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:47:43Z",
+          "queueMs": 2000,
+          "runnerMs": 53000
+        },
+        {
+          "id": 134202806426,
+          "name": "gov07",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:50:51Z",
+          "queueMs": 2000,
+          "runnerMs": 241000
+        },
+        {
+          "id": 134202806436,
+          "name": "cross-browser (firefox, unavailable)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:48:22Z",
+          "queueMs": 2000,
+          "runnerMs": 92000
+        },
+        {
+          "id": 134202806893,
+          "name": "cross-browser (webkit, webgl, 1)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:48:46Z",
+          "queueMs": 2000,
+          "runnerMs": 116000
+        }
+      ]
+    },
+    {
+      "runId": 44129633840,
+      "name": "OBR-02 + OBR-03 - planned 4D",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:48:17Z",
+      "queueMs": 0,
+      "wallMs": 89000,
+      "jobs": [
+        {
+          "id": 134202805843,
+          "name": "obr02",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:48:16Z",
+          "queueMs": 2000,
+          "runnerMs": 86000
+        }
+      ]
+    },
+    {
+      "runId": 44129634018,
+      "name": "OBR-01 - FT3D-8 reliability",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:48:34Z",
+      "queueMs": 0,
+      "wallMs": 106000,
+      "jobs": [
+        {
+          "id": 134202809474,
+          "name": "obr01",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:48:34Z",
+          "queueMs": 2000,
+          "runnerMs": 104000
+        }
+      ]
+    },
+    {
+      "runId": 44129634500,
+      "name": "ENT-01 I1B - 3D visual preview gate",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:49:04Z",
+      "queueMs": 0,
+      "wallMs": 136000,
+      "jobs": [
+        {
+          "id": 134202810664,
+          "name": "ent01-preview",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:51Z",
+          "completedAt": "2026-11-17T16:49:03Z",
+          "queueMs": 2000,
+          "runnerMs": 132000
+        }
+      ]
+    },
+    {
+      "runId": 44129634114,
+      "name": "Guided experience",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:47:09Z",
+      "queueMs": 0,
+      "wallMs": 21000,
+      "jobs": [
+        {
+          "id": 134202809613,
+          "name": "goals-and-editor",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:47:09Z",
+          "queueMs": 1000,
+          "runnerMs": 19000
+        }
+      ]
+    },
+    {
+      "runId": 44129633922,
+      "name": "ENT-01 I1A - delivery API gate",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:47:07Z",
+      "queueMs": 0,
+      "wallMs": 19000,
+      "jobs": [
+        {
+          "id": 134202806163,
+          "name": "delivery-api",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:47:06Z",
+          "queueMs": 2000,
+          "runnerMs": 16000
+        }
+      ]
+    },
+    {
+      "runId": 44129633892,
+      "name": "Project-First regressions",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T16:58:29Z",
+      "queueMs": 0,
+      "wallMs": 701000,
+      "jobs": [
+        {
+          "id": 134202805735,
+          "name": "project-first",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:46:50Z",
+          "completedAt": "2026-11-17T16:58:29Z",
+          "queueMs": 2000,
+          "runnerMs": 699000
+        }
+      ]
+    },
+    {
+      "runId": 44129634202,
+      "name": "Multiformat guided import",
+      "sha": "8525025a1470d48d52d8e365070e5a0acf116134",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T16:46:48Z",
+      "startedAt": "2026-11-17T16:46:48Z",
+      "updatedAt": "2026-11-17T17:02:58Z",
+      "queueMs": 0,
+      "wallMs": 970000,
+      "jobs": [
+        {
+          "id": 134203241270,
+          "name": "import-and-regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:47:29Z",
+          "completedAt": "2026-11-17T17:02:58Z",
+          "queueMs": 3000,
+          "runnerMs": 929000
+        }
+      ]
+    }
+  ],
+  "totalJobs": 11,
+  "completedJobRunnerMinutes": 41.45,
+  "measuredAvoidedJobs": 0,
+  "measuredSavedRunnerMinutes": 0,
+  "billedCost": null,
+  "limitations": "API elapsed job durations are not billed minutes. Pending runs incomplete; no claim of before/after equivalence or reduction in observation mode. Workflow durations overlap; their sum is not PR wall time."
+}
