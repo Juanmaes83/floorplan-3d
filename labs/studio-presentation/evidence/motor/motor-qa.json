@@ -1,8 +1,8 @@
 {
  "schema": "rubik-lab-motor-qa/1",
- "ran": "2026-11-17T17:18:00.651Z",
+ "ran": "2026-11-17T20:44:05.536Z",
  "entorno": {
-  "node": "v22.23.4",
+  "node": "v24.20.0",
   "poppler": "pdfinfo version 24.02.0"
  },
  "pass": 11,
@@ -121,7 +121,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 5719
+    "ms": 3851
    }
   },
   {
@@ -237,7 +237,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 6001
+    "ms": 3862
    }
   },
   {
@@ -353,7 +353,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 9939
+    "ms": 6356
    }
   },
   {
@@ -380,7 +380,7 @@
       "id": "commercial-proposal",
       "flow": {
        "rows": 509,
-       "pagesAdded": 26,
+       "pagesAdded": 25,
        "ok": true,
        "oversized": 0
       },
@@ -446,7 +446,7 @@
      },
      {
       "f": "commercial-proposal.pdf",
-      "paginas": 29,
+      "paginas": 28,
       "tamanos": 1,
       "enBlanco": [],
       "fuentes": 5,
@@ -469,7 +469,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 50732
+    "ms": 31402
    }
   },
   {
@@ -539,7 +539,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 4791
+    "ms": 3281
    }
   },
   {
@@ -655,7 +655,7 @@
       "noEmbebidas": 0
      }
     ],
-    "ms": 5895
+    "ms": 4028
    }
   },
   {
@@ -680,7 +680,7 @@
     "times": {
      "snapDir": "fila-desmesurada",
      "out": "fila-desmesurada",
-     "ms": 5025,
+     "ms": 3386,
      "code": 2
     }
    }
@@ -690,7 +690,7 @@
    "want": "código 0; entrega/ con registro y documentos",
    "result": "PASS",
    "detail": {
-    "ms": 9845
+    "ms": 10794
    }
   },
   {
@@ -712,11 +712,19 @@
       "celdas impresas distintas del documento"
      ],
      [
+      "commercial-proposal-client-v3.en",
+      "celdas impresas distintas del documento"
+     ],
+     [
       "commercial-proposal-studio-v3",
       "celdas impresas distintas del documento"
      ],
      [
       "entrega-integral",
+      "celdas impresas distintas del documento"
+     ],
+     [
+      "entrega-integral.en",
       "celdas impresas distintas del documento"
      ]
     ],
@@ -741,7 +749,7 @@
    "want": "código 0; nueva entrega publicada; la anterior en entrega-anterior/; sin informe de rechazo",
    "result": "PASS",
    "detail": {
-    "ms": 9537
+    "ms": 10656
    }
   }
  ],
@@ -750,72 +758,72 @@
    {
     "snapDir": "filas-1",
     "out": "filas-1",
-    "ms": 5719,
+    "ms": 3851,
     "code": 0
    },
    {
     "snapDir": "filas-50",
     "out": "filas-50",
-    "ms": 6001,
+    "ms": 3862,
     "code": 0
    },
    {
     "snapDir": "filas-200",
     "out": "filas-200",
-    "ms": 9939,
+    "ms": 6356,
     "code": 0
    },
    {
     "snapDir": "filas-500",
     "out": "filas-500",
-    "ms": 50732,
+    "ms": 31402,
     "code": 0
    },
    {
     "snapDir": "sin-presupuesto",
     "out": "sin-presupuesto",
-    "ms": 4791,
+    "ms": 3281,
     "code": 0
    },
    {
     "snapDir": "multilinea-es-en",
     "out": "multilinea-es-en",
-    "ms": 5895,
+    "ms": 4028,
     "code": 0
    },
    {
     "snapDir": "fila-desmesurada",
     "out": "fila-desmesurada",
-    "ms": 5025,
+    "ms": 3386,
     "code": 2
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 9845,
+    "ms": 10794,
     "code": 0
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 9325,
+    "ms": 9968,
     "code": 2
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 8784,
+    "ms": 9870,
     "code": 2
    },
    {
     "snapDir": "snapshot",
     "out": "canonico",
-    "ms": 9537,
+    "ms": 10656,
     "code": 0
    }
   ],
-  "p50": 8784,
-  "max": 50732,
+  "p50": 6356,
+  "max": 31402,
   "muestras": 11,
   "nota": "Composiciones distintas (no repeticiones del mismo caso): orientativo, no un p95."
  }

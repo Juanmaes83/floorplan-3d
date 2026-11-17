@@ -1,0 +1,139 @@
+{
+ "schema": "rubik-lab-recetas-qa/1",
+ "fecha": "2026-11-17T20:48:17.362Z",
+ "catalogo": "rubik-lab-recetas/1",
+ "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+ "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f",
+ "partes": [
+  "ui"
+ ],
+ "solo": null,
+ "total": 16,
+ "pass": 15,
+ "casos": [
+  {
+   "id": "UI-escritorio-filtros",
+   "ok": true,
+   "detalle": {
+    "all": 21,
+    "im": 8,
+    "imP": 2,
+    "back": 21
+   }
+  },
+  {
+   "id": "UI-escritorio-sin-desborde",
+   "ok": true,
+   "detalle": 0
+  },
+  {
+   "id": "UI-rp07-aplicada",
+   "ok": true,
+   "detalle": {
+    "tipo": "inmobiliaria",
+    "nota": "Receta RP07 (RP07 v1, rubik-lab-recetas/1): Ficha comercial de vivienda. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
+   }
+  },
+  {
+   "id": "UI-rp07-artefacto-real-igual-al-adaptador",
+   "ok": false,
+   "detalle": {
+    "code": 0,
+    "verificado": true,
+    "adaptador": false,
+    "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f",
+    "estable": true,
+    "comparacion": null
+   }
+  },
+  {
+   "id": "UI-rp07-modificada",
+   "ok": true,
+   "detalle": "A partir de la receta RP07 (rubik-lab-recetas/1), modificada por el estudio: no es la receta."
+  },
+  {
+   "id": "UI-rp13-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "dis": 1,
+    "blocked": true,
+    "hidden": true,
+    "status": "Selección activa: RP07 (modificada). Receta consultada: RP13. Sin selección descargable para esta consulta."
+   }
+  },
+  {
+   "id": "UI-rp16-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "dis": 1,
+    "blocked": true,
+    "hidden": true,
+    "status": "Selección activa: RP07 (modificada). Receta consultada: RP16. Sin selección descargable para esta consulta."
+   }
+  },
+  {
+   "id": "UI-seleccion-activa-recuperada",
+   "ok": true,
+   "detalle": "A partir de la receta RP07 (rubik-lab-recetas/1), modificada por el estudio: no es la receta."
+  },
+  {
+   "id": "UI-rp05-cambio-de-receta",
+   "ok": true,
+   "detalle": "Receta RP05 (RP05 v1, rubik-lab-recetas/1): Estimación económica inicial. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
+  },
+  {
+   "id": "UI-rp05-ingles",
+   "ok": true,
+   "detalle": {
+    "idioma": "en"
+   }
+  },
+  {
+   "id": "UI-teclado",
+   "ok": true,
+   "detalle": {
+    "on": "RP01",
+    "pressed": "true",
+    "foco": true
+   }
+  },
+  {
+   "id": "UI-red-y-errores",
+   "ok": true,
+   "detalle": {
+    "ext": [],
+    "errs": []
+   }
+  },
+  {
+   "id": "UI-movil-filtros",
+   "ok": true,
+   "detalle": {
+    "all": 21,
+    "im": 8,
+    "imP": 2,
+    "back": 21
+   }
+  },
+  {
+   "id": "UI-movil-sin-desborde",
+   "ok": true,
+   "detalle": 0
+  },
+  {
+   "id": "UI-estrecho-filtros",
+   "ok": true,
+   "detalle": {
+    "all": 21,
+    "im": 8,
+    "imP": 2,
+    "back": 21
+   }
+  },
+  {
+   "id": "UI-estrecho-sin-desborde",
+   "ok": true,
+   "detalle": 0
+  }
+ ]
+}

@@ -1,0 +1,599 @@
+{
+ "zip": "entrega-vivienda-de-ejemplo-es.zip",
+ "sha256": "36966b24c3850e5a0dd71b72ed1e63c8566f8051e9cabbd237ecaead2010c9eb",
+ "carpeta": "(temporal, fuera del repositorio)",
+ "vistas": [
+  {
+   "vista": "escritorio",
+   "w": 1440,
+   "h": 900,
+   "escalaEmulada": 1,
+   "imagenes": 18,
+   "rotas": [],
+   "videos": [
+    {
+     "src": "media/obra.mp4",
+     "duration": 24,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "duration": 55.6,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    }
+   ],
+   "desbordeX": 0,
+   "enlacesRotos": [],
+   "contrasteBajo": [],
+   "textoBajo12px": [],
+   "scripts": 0,
+   "externas": 0,
+   "errores": [],
+   "foco": [
+    {
+     "tag": "A",
+     "txt": "Concepto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "La vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Del dibujo a la imagen",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Estancia por estancia",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Materiales",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Presupuesto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Cómo avanzará la obra",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Recorrer la vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Lo que hay que decidir",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Documentos",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "De dónde sale cada cosa",
+     "visible": true
+    },
+    {
+     "tag": "VIDEO",
+     "txt": "",
+     "visible": true
+    }
+   ],
+   "capturas": "escritorio-1440x900.png",
+   "video": "recorrido-escritorio.webm"
+  },
+  {
+   "vista": "tableta",
+   "w": 820,
+   "h": 1180,
+   "escalaEmulada": 1,
+   "imagenes": 18,
+   "rotas": [],
+   "videos": [
+    {
+     "src": "media/obra.mp4",
+     "duration": 24,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "duration": 55.6,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    }
+   ],
+   "desbordeX": 0,
+   "enlacesRotos": [],
+   "contrasteBajo": [],
+   "textoBajo12px": [],
+   "scripts": 0,
+   "externas": 0,
+   "errores": [],
+   "foco": [
+    {
+     "tag": "A",
+     "txt": "Concepto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "La vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Del dibujo a la imagen",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Estancia por estancia",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Materiales",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Presupuesto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Cómo avanzará la obra",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Recorrer la vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Lo que hay que decidir",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Documentos",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "De dónde sale cada cosa",
+     "visible": true
+    },
+    {
+     "tag": "VIDEO",
+     "txt": "",
+     "visible": true
+    }
+   ],
+   "capturas": "tableta-820x1180.png",
+   "video": null
+  },
+  {
+   "vista": "movil",
+   "w": 390,
+   "h": 844,
+   "escalaEmulada": 1,
+   "imagenes": 18,
+   "rotas": [],
+   "videos": [
+    {
+     "src": "media/obra.mp4",
+     "duration": 24,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "duration": 55.6,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    }
+   ],
+   "desbordeX": 0,
+   "enlacesRotos": [],
+   "contrasteBajo": [],
+   "textoBajo12px": [],
+   "scripts": 0,
+   "externas": 0,
+   "errores": [],
+   "foco": [
+    {
+     "tag": "A",
+     "txt": "Concepto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "La vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Del dibujo a la imagen",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Estancia por estancia",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Materiales",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Presupuesto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Cómo avanzará la obra",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Recorrer la vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Lo que hay que decidir",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Documentos",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "De dónde sale cada cosa",
+     "visible": true
+    },
+    {
+     "tag": "DIV",
+     "txt": "Planta de Vivienda de ej",
+     "visible": true
+    }
+   ],
+   "capturas": "movil-390x844.png",
+   "video": "recorrido-movil.webm"
+  },
+  {
+   "vista": "movil-horizontal",
+   "w": 844,
+   "h": 390,
+   "escalaEmulada": 1,
+   "imagenes": 18,
+   "rotas": [],
+   "videos": [
+    {
+     "src": "media/obra.mp4",
+     "duration": 24,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "duration": 55.6,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    }
+   ],
+   "desbordeX": 0,
+   "enlacesRotos": [],
+   "contrasteBajo": [],
+   "textoBajo12px": [],
+   "scripts": 0,
+   "externas": 0,
+   "errores": [],
+   "foco": [
+    {
+     "tag": "A",
+     "txt": "Concepto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "La vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Del dibujo a la imagen",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Estancia por estancia",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Materiales",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Presupuesto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Cómo avanzará la obra",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Recorrer la vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Lo que hay que decidir",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Documentos",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "De dónde sale cada cosa",
+     "visible": true
+    },
+    {
+     "tag": "VIDEO",
+     "txt": "",
+     "visible": true
+    }
+   ],
+   "capturas": "movil-horizontal-844x390.png",
+   "video": null
+  },
+  {
+   "vista": "estrecho",
+   "w": 320,
+   "h": 640,
+   "escalaEmulada": 1,
+   "imagenes": 18,
+   "rotas": [],
+   "videos": [
+    {
+     "src": "media/obra.mp4",
+     "duration": 24,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "duration": 55.6,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    }
+   ],
+   "desbordeX": 0,
+   "enlacesRotos": [],
+   "contrasteBajo": [],
+   "textoBajo12px": [],
+   "scripts": 0,
+   "externas": 0,
+   "errores": [],
+   "foco": [
+    {
+     "tag": "A",
+     "txt": "Concepto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "La vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Del dibujo a la imagen",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Estancia por estancia",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Materiales",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Presupuesto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Cómo avanzará la obra",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Recorrer la vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Lo que hay que decidir",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Documentos",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "De dónde sale cada cosa",
+     "visible": true
+    },
+    {
+     "tag": "DIV",
+     "txt": "Planta de Vivienda de ej",
+     "visible": true
+    }
+   ],
+   "capturas": "estrecho-320x640.png",
+   "video": null
+  },
+  {
+   "vista": "reflow-200-por-ciento",
+   "w": 720,
+   "h": 450,
+   "escalaEmulada": 2,
+   "imagenes": 18,
+   "rotas": [],
+   "videos": [
+    {
+     "src": "media/obra.mp4",
+     "duration": 24,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "duration": 55.6,
+     "w": 1280,
+     "h": 720,
+     "reproduce": true,
+     "error": null
+    }
+   ],
+   "desbordeX": 0,
+   "enlacesRotos": [],
+   "contrasteBajo": [],
+   "textoBajo12px": [],
+   "scripts": 0,
+   "externas": 0,
+   "errores": [],
+   "foco": [
+    {
+     "tag": "A",
+     "txt": "Concepto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "La vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Del dibujo a la imagen",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Estancia por estancia",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Materiales",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Presupuesto",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Cómo avanzará la obra",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Recorrer la vivienda",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Lo que hay que decidir",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "Documentos",
+     "visible": true
+    },
+    {
+     "tag": "A",
+     "txt": "De dónde sale cada cosa",
+     "visible": true
+    },
+    {
+     "tag": "VIDEO",
+     "txt": "",
+     "visible": true
+    }
+   ],
+   "capturas": "reflow-200-por-ciento-720x450.png",
+   "video": null
+  }
+ ],
+ "resumen": {
+  "rotas": 0,
+  "videosSinReproducir": 0,
+  "externas": 0,
+  "errores": 0,
+  "desbordeX": 0,
+  "enlacesRotos": 0,
+  "contrasteBajo": 0,
+  "focoInvisible": 0
+ }
+}

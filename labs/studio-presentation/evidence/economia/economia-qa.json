@@ -130,12 +130,14 @@
       "documentos": [
         {
           "archivo": "commercial-proposal-client-v3.pdf",
-          "sha256": "707af7e775baeb2272c12b73934214c8faf3e2c5c842b0c07a30887951051ce8",
+          "sha256": "a09f2cd573191323ad31b7bdf91a070b7847ffa57e63bc91a885fdf4f0dbf6f3",
+          "htmlSha256": "58fcb7dd934d11367554aba8882c5c9de1789236a8666beae2c418d98f4a6711",
           "paginas": 1
         },
         {
           "archivo": "real-estate-sheet-v3.pdf",
-          "sha256": "f5c17240a565f81e9d73b92c696ac604d93c4f4383943c12d9687d60ff1d48b3",
+          "sha256": "272a8da2ba252b97e3ba658e5e614ff69e054e74985a60d19feeaf46437eb222",
+          "htmlSha256": "4cafb2703a1a236646cbb95abb981f683a23367935c2827bbc2595e6ebc3ea66",
           "paginas": 1
         }
       ]
@@ -151,12 +153,14 @@
       "documentos": [
         {
           "archivo": "commercial-proposal-client-v3.pdf",
-          "sha256": "5e728eb1351c55434180e9623e1c9fb6514048da51d0548688cdf5128fdec12f",
+          "sha256": "6d513bc6f3709cdb00a609cbc7c7bd1a949d9311dfd03aa6d712d1cb4265195c",
+          "htmlSha256": "1b002855bb1e31a3351ab75e50b1a11f42e463c801be3dcf2d5ccf21a68436ce",
           "paginas": 1
         },
         {
           "archivo": "real-estate-sheet-v3.pdf",
-          "sha256": "7e0ee788709cff5223ad3ae18bbf422d25c3c715ec41ac7f5fc19334ce9835cb",
+          "sha256": "a870f9ad8176bce769d85115881f7cb72ba38ad6a168b15f4c3f95d704930867",
+          "htmlSha256": "c04691e97c5538ceab110bc877e3a505efd83db537d0b577d3a8d61cb780c7f7",
           "paginas": 1
         }
       ]
@@ -168,12 +172,14 @@
       "documentos": [
         {
           "archivo": "commercial-proposal-client-v3.pdf",
-          "sha256": "fa5ee16fb067d48017d9625170fd7df0b4cbd5a9d25927b5232faefdd2d3b646",
+          "sha256": "35d226e242f54881c937f975c8da8a6889eec95015c13a21304a130fb40cf3c5",
+          "htmlSha256": "0fd6a67db1921812f95629bc25feab0c385e84cf11a82551cc95c640dc8ec0db",
           "paginas": 1
         },
         {
           "archivo": "real-estate-sheet-v3.pdf",
-          "sha256": "bfd9b0afab349a03558b31a56d2d93a66c899858c1fe72801c2001d132d68cf9",
+          "sha256": "41c7c46184553d7a42e63326d99b52b732d657847a49a96b673fa18e7a587d6b",
+          "htmlSha256": "6489e277bbcf94547b7c5cf3e206988c3d28d4f51165c7fadaeb89d5cff45470",
           "paginas": 1
         }
       ]
@@ -189,12 +195,14 @@
       "documentos": [
         {
           "archivo": "commercial-proposal-client-v3.pdf",
-          "sha256": "0c37d6ce084b07f7a8c44d2da5c868268ccbc9c2808134879e8abebc541ebc34",
+          "sha256": "a2738afb8d7cecf9797a714f1a54678e35c0a6041234a3fa0b4f2f2b792158dc",
+          "htmlSha256": "9c557fae332301b4aed4c15bd0a1a05e78f03d429e45a90ecdbe9e9c3f20d46f",
           "paginas": 1
         },
         {
           "archivo": "real-estate-sheet-v3.pdf",
-          "sha256": "ec9d8901036b19f47ba7ab4516815321c46a3fc0f82f9bf629cc8abd25d0ea75",
+          "sha256": "6c09208756e2d16fb1f84cace5144e88711f79a7248650fc13c61be910346e20",
+          "htmlSha256": "a01d9634afc9a5354cd1173739151d56c03ac19a73009f513c135036ab86c879",
           "paginas": 1
         }
       ]
@@ -210,12 +218,14 @@
       "documentos": [
         {
           "archivo": "commercial-proposal-client-v3.pdf",
-          "sha256": "a62ae804f778fff3d2664ebd90d6b9d95562c486c28084244f7a7785a6d5f88f",
+          "sha256": "92fe8735217d78ddf0277c9c3060d367e8214cdc7ec211be2ab973b5a5c85c37",
+          "htmlSha256": "d8b4ffc3bc346fb64a638baf60e85828749adddb374d9d883af475df5220fb84",
           "paginas": 1
         },
         {
           "archivo": "real-estate-sheet-v3.pdf",
-          "sha256": "223b6e6aeaa45d1fc93b21b0bbdc11f91f4e438068103e0b742e7e7733f92ac7",
+          "sha256": "a4d6e080df433be1f2c4b28b72b3c76b2fb0d546028fb288a918e025cdb6c345",
+          "htmlSha256": "cbb379cc61f858f5790838b919f7c2103c47a5798aba842406b3f1c93be631ce",
           "paginas": 1
         }
       ]
@@ -227,12 +237,14 @@
       "documentos": [
         {
           "archivo": "commercial-proposal-client-v3.pdf",
-          "sha256": "7508c914347ef97dd177faccaed892a6270e4ada530e6be2a4b17b6a6a92d214",
+          "sha256": "475b2bb446dd1967469213eb7c41ac2fe3eafced21cbc8c235ebd7164d7b41a3",
+          "htmlSha256": "681b243f9d8718428891548de2c403408b8f54fb7bab00fbc25d39e945da9b35",
           "paginas": 1
         },
         {
           "archivo": "real-estate-sheet-v3.pdf",
-          "sha256": "6a442ff08ad30bbf59240e406dc749ddadb0930f49607a04433bffb117e7f49b",
+          "sha256": "616d3f7e53e873872ea854c1ec15c0e29f9003a9aa8e8bb6af37091b90d52a8a",
+          "htmlSha256": "60b67c54326f88419310550ef16128ae5049c9b0441d5c7c3d15c3cc9b828a91",
           "paginas": 1
         }
       ]

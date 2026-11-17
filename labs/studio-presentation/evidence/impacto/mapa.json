@@ -1,0 +1,3698 @@
+{
+  "schema": "rubik-lab-impacto/1",
+  "identidad": {
+    "proyecto": "prj_reference-home",
+    "revision": "rv1-0f3e96422fd20e08",
+    "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+    "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f"
+  },
+  "entorno": {
+    "node": "v24.20.0",
+    "plataforma": "linux",
+    "arquitectura": "x64",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "playwright": "1.63.0",
+    "poppler": "pdftotext version 24.02.0",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "python": "Python 3.12.3",
+    "tz": "UTC"
+  },
+  "dependenciasComunes": {
+    "assets/dibujo-vivo/00-overview.png": {
+      "sha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952",
+      "gitBlob": "014c580b59716f6ebbe7e790c970cd09c95da004",
+      "bytes": 1641203
+    },
+    "assets/ft3d8-plan-ajuste.json": {
+      "sha256": "626a636c13ac802d0206e03cf9b368373ecdc3562b4e1f4c9e0a68f977b2a339",
+      "gitBlob": "af5d4839752aa2e08bdda558523c3254e2497561",
+      "bytes": 350
+    },
+    "assets/ft3d8-plan-demo.json": {
+      "sha256": "1112bdced5c895b2039474fceb925a3d6af261188e11e823bd638a63d180ce51",
+      "gitBlob": "e22691d7afcb99757cd0952561269f9efef0dedc",
+      "bytes": 2799
+    },
+    "assets/ft3d8-plan-demo.reforma.schedule.json": {
+      "sha256": "368ba302fcf595542be8bd0d071fe82024fba579bb2b7746474c4565324c5780",
+      "gitBlob": "f11f065ac2efe4b800070f143afd2f806f845414",
+      "bytes": 8086
+    },
+    "assets/ft3d8-plan-demo.schedule.json": {
+      "sha256": "56dd95a64b32b921c73e2a9a687e562bba9103e3ac1d9bff46dcc065366a1e52",
+      "gitBlob": "9fa9ca23a2a7aa745b078d5b30385a5fda0a5918",
+      "bytes": 11812
+    },
+    "assets/ft3d8/entrega-dlv_f4567d79bd21c1fc.json": {
+      "sha256": "4f6345f04f6fe3a613014fcc95d1069a35b1ede98fcf663de97447ea144e44f0",
+      "gitBlob": "df045e38140081dc7cff69c61d1b16fc4a35f906",
+      "bytes": 5787
+    },
+    "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.html": {
+      "sha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+      "gitBlob": "b68f1eab1201a56c464721c580b386f720bbe946",
+      "bytes": 4712149
+    },
+    "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4": {
+      "sha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+      "gitBlob": "d4e55b2503cfcf72f06409555758f69faf4a9fb9",
+      "bytes": 3526585
+    },
+    "assets/log-ft3d8.json": {
+      "sha256": "48bfeefc1476ae9e8dc208bfcba6961880e149521df5da9c2ebd20c2ae760b88",
+      "gitBlob": "bfe984660281dd3da6f45950c8732e1946d8ad7f",
+      "bytes": 8566
+    },
+    "assets/log-living.json": {
+      "sha256": "cc58a379cd03fb34a49b7eed274b4d765ceee0cf1c857434371728573a20c79f",
+      "gitBlob": "17de2ba881d47dbfc743c8b0a291fc941ba781b5",
+      "bytes": 3347
+    },
+    "assets/recorrido/01-master.png": {
+      "sha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698",
+      "gitBlob": "75598737f02b487cb6ae7276e65a76c8237ea92e",
+      "bytes": 205195
+    },
+    "assets/recorrido/02-kitchen.png": {
+      "sha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315",
+      "gitBlob": "56e984cab756a08565642072a4b038c03f9eaff8",
+      "bytes": 216011
+    },
+    "assets/recorrido/03-dining.png": {
+      "sha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0",
+      "gitBlob": "f88997083e97e07add6811e65c5ecf2c5e40f4e1",
+      "bytes": 270379
+    },
+    "assets/recorrido/04-living.png": {
+      "sha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4",
+      "gitBlob": "a8a3e901e4c0d5af3fd2185b90990c34dbfc8a89",
+      "bytes": 319246
+    },
+    "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4": {
+      "sha256": "ae93eb6338f2b36a0c61a55ad0ca9758ec5aff017d4cb83c4ea5b1240d5994c0",
+      "gitBlob": "5fb71af8572980317f6632f00255f48bf761ed4a",
+      "bytes": 226221
+    },
+    "evidence/render-ia/dialogo-1.png": {
+      "sha256": "64809305f4966448cc4f5039f590ae00437f8e5abf43fbc84ab35d4804f2aa27",
+      "gitBlob": "7a3ad20668444d616e5b5420fcacde6171dc9995",
+      "bytes": 242886
+    },
+    "evidence/render-ia/dialogo-2.png": {
+      "sha256": "d23e54ebedd76bdcf0c3893e4378acb1f9ec25264ec1f3ec31fc8a92eeb08c93",
+      "gitBlob": "edc18bc3ea3c28425489a4adf95f72882d637251",
+      "bytes": 219843
+    },
+    "evidence/render-ia/dialogo-3.png": {
+      "sha256": "66e2632b955a2115f37a27b36f9c7311cdb598dccbdebc2fa18a037fd507d294",
+      "gitBlob": "8bad6ac5c724894be73ab50a9ea0ba76a8232203",
+      "bytes": 212738
+    },
+    "evidence/render-ia/manifest.json": {
+      "sha256": "154091e3ebc470264e5bafedbe451fe3ac9a12b0de19f42a402dd6cd45c7f4c2",
+      "gitBlob": "69890797a3370c4fdb4205999720e1f5ae534968",
+      "bytes": 2025
+    },
+    "evidence/render-ia/render-ia-1-salon.png": {
+      "sha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
+      "gitBlob": "94479a3394bc3ba34aa33d70e3ddb29c8f5f5579",
+      "bytes": 2586954
+    },
+    "evidence/render-ia/render-ia-2-dormitorio-principal.png": {
+      "sha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
+      "gitBlob": "39b3f2e04b3d52d5bd2e9648226c2fc43800be16",
+      "bytes": 2007314
+    },
+    "evidence/render-ia/render-ia-3-vista-general.png": {
+      "sha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
+      "gitBlob": "fb038dfe59740168fc0d0d77abf6748b424d0473",
+      "bytes": 2086508
+    },
+    "evidence/render-ia/resultado-1.png": {
+      "sha256": "d17084ab0580a10b976686a1b8fe69b244817ae42bc0ddbdef2226301916ecc7",
+      "gitBlob": "588484ce3abced629c08a1159e342b6d5de056f1",
+      "bytes": 412870
+    },
+    "evidence/render-ia/resultado-2.png": {
+      "sha256": "5ff8419e0f3b01cbb7bcdc39771c6ac65793d854be4884d8446bb3e2996277a2",
+      "gitBlob": "df5b829871f9fd615fe9fe7c22ca21357970e59b",
+      "bytes": 356993
+    },
+    "evidence/render-ia/traza-1.png": {
+      "sha256": "d4a4d4713f73839e3b54df2f43693326fe4f15f800e910f53db9a6c28c36d2ef",
+      "gitBlob": "871a02c90012619836610386677f6b3add472375",
+      "bytes": 564754
+    },
+    "evidence/render-ia/traza-2.png": {
+      "sha256": "6c13b8106b23be7fc789875a73fd0084505a36191fa2a8ec52529f0e62efae44",
+      "gitBlob": "8d7f9361f304759c324caa563b1345ef874d4a48",
+      "bytes": 413802
+    },
+    "evidence/render-ia/traza-3.png": {
+      "sha256": "8672fa6f51d6e2cf13bb094d45edb9faee0b59225020b08e2a0f1c69546987d6",
+      "gitBlob": "2e2587eccd90262fe8b57e78401a89b76fcba078",
+      "bytes": 406832
+    },
+    "evidence/render-ia/trazabilidad.json": {
+      "sha256": "b99f9ad64905e01188cbefe50217c91cf0ebd3c65b69d1294c61cdc3b591e5b8",
+      "gitBlob": "eb7f26748937f292e7a0c5c33211e0623b9ed2f6",
+      "bytes": 2462
+    },
+    "i18n/cadenas.json": {
+      "sha256": "063110fd409543bbb51984dd64265bba3f0c56cf6294f1af60aa315d39627d3c",
+      "gitBlob": "739de4eca6cd5769505dd37d6b96afdde9c10988",
+      "bytes": 53915
+    },
+    "i18n/en.exact.cjs": {
+      "sha256": "b6570a80409d66a9cbc7e7412cb1419a76421157461fc58ee74021147345b6cd",
+      "gitBlob": "bfc14519686357523b25d4aa1b241412078b2d04",
+      "bytes": 31362
+    },
+    "i18n/en.manifest.cjs": {
+      "sha256": "c611222fa79a29fd11a066ae1d5fb29816229423bc9967f853c83f09be851d65",
+      "gitBlob": "5d993ff5e70253ccf2f34df014f52623fdc59b68",
+      "bytes": 3170
+    },
+    "i18n/en.rules.cjs": {
+      "sha256": "7bf495e031dc052ab11e2c703906d0bdce5a5d933110072d9f79b7419772bb63",
+      "gitBlob": "663214779afa1d7101998eeb09eccf17830ae713",
+      "bytes": 12160
+    },
+    "i18n/es-words.cjs": {
+      "sha256": "af78d14620253a55847ee5d8800b86cf0f3f9205c65795850fb5c7d761aa2a56",
+      "gitBlob": "166db93f5828af8e90ad386ccbd8b65e61a93c1c",
+      "bytes": 1064
+    },
+    "snapshot/assets/plan.svg": {
+      "sha256": "6cbec91b601f146b40e4fa67cb7f9d12393a385b0523edcb656b3cc26cb62339",
+      "gitBlob": "dccd74c05f45279173ebf989a52976989790d001",
+      "bytes": 5722
+    },
+    "snapshot/assets/sheet.svg": {
+      "sha256": "fcaa8bf06d99567d369fdde8cdf9a25148b3d44b20b1d1ff357224639a9e613c",
+      "gitBlob": "11d288997c037fd7a66047eac413dbdf6adba752",
+      "bytes": 84729
+    },
+    "snapshot/assets/view-01-overview.png": {
+      "sha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2",
+      "gitBlob": "c6485e6109baebc1fb83667c8425429da8737f7f",
+      "bytes": 287035
+    },
+    "snapshot/assets/view-02-room.png": {
+      "sha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4",
+      "gitBlob": "287809aceb1c17e85799407c6ab6434f2d91d272",
+      "bytes": 546307
+    },
+    "snapshot/assets/view-03-room.png": {
+      "sha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3",
+      "gitBlob": "5be66e00bc6ea188cafe21717a9040ed267e8f7e",
+      "bytes": 444651
+    },
+    "snapshot/assets/view-04-room.png": {
+      "sha256": "af317e4e4d00ab067ff2695bb95969b11ebfbd3564bc55514075e0c117198c29",
+      "gitBlob": "c2bb328ad5066e079d2a83edf06ff40fbacfd832",
+      "bytes": 423895
+    },
+    "snapshot/assets/view-05-room.png": {
+      "sha256": "2cbb35e397e4e5188a3e420dee53d25e41debb1a10bddd2ab63d354cf7964231",
+      "gitBlob": "cc0977d8acb05f1f4f8cbe057190c7ac07d47e9e",
+      "bytes": 412865
+    },
+    "snapshot/derivados/ft3d3-seccion.json": {
+      "sha256": "9badc99e82eaf56ffddba12c7855b8d8f5ac01cb01829fde2bd945ecfd71785b",
+      "gitBlob": "e7f2ae57d45f37e9a43bf91891177aa7968993fe",
+      "bytes": 3466
+    },
+    "snapshot/derivados/ft3d4-fachadas.json": {
+      "sha256": "a234187eafae8cd837319139d5dc4985b66eb9784c751e63f9402aad4602cbbf",
+      "gitBlob": "1d6bfe43114e626b98dd7133adade89bee604329",
+      "bytes": 6582
+    },
+    "snapshot/snapshot.json": {
+      "sha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+      "gitBlob": "f1e9b3d014c21141f65000663ab86e1f336365d0",
+      "bytes": 120737
+    },
+    "system/rubik-editorial.css": {
+      "sha256": "110b21d6066ef2e277a9cc7c1e31568c32d8cf7a4f09ee4944e9a01f0e9b50e3",
+      "gitBlob": "f277988aa95c5077243d460f0091b192af891c34",
+      "bytes": 8057
+    },
+    "tools/architecture-book.cjs": {
+      "sha256": "4b4350b2ce6cfad6ae099e27fedc778e9add74cd9dcad0670d6c449e712dca24",
+      "gitBlob": "7c3f1c8416886ca7525e97e30ae588797dca44ca",
+      "bytes": 18570
+    },
+    "tools/architecture-pdf-qa.py": {
+      "sha256": "f473cb362f098ff5d846f7415d3ade4b902c8fc15f34b4bfb8c2f89957e0a254",
+      "gitBlob": "8a667c6e4bbd52d7c03c63c28fb217bd32179697",
+      "bytes": 3387
+    },
+    "tools/b1.cjs": {
+      "sha256": "f8541b8c8922ab97d4b4ec537348306195eb9f8afceb6f7e6d728a18f1ea8bd0",
+      "gitBlob": "22e551855fad3444b1796dd47053c81782cf9c62",
+      "bytes": 43481
+    },
+    "tools/baseline.cjs": {
+      "sha256": "2735f0e35dc7d2b1ba65bfb315bcefaadbb3b1b8f6afc67aaf3452b2bf2d0e18",
+      "gitBlob": "e8bb28e15187fd38917c59708809a38057fdae20",
+      "bytes": 7841
+    },
+    "tools/catalogo-entrega.cjs": {
+      "sha256": "41c1a5b01f6b46b8756576bea5504e989d6908f2764259d2a114988a7ae15452",
+      "gitBlob": "ebb2748edfe28331c031b15ac75d96ab2b7db470",
+      "bytes": 4691
+    },
+    "tools/classify-refs.py": {
+      "sha256": "6b0212649aa2a047bdfeacadc925fff44a1bea85f9ba01a1953d0630f347b0fa",
+      "gitBlob": "f75ca7f794d24d8ff3205d8a1fad2d00327ec7e7",
+      "bytes": 13968
+    },
+    "tools/compose.cjs": {
+      "sha256": "f9598d0a29881408ff7135d3ad6527ebfe4c6ebb1db4a04bdfeb4f099ee14636",
+      "gitBlob": "ae7926fcd9d97d008546eb3081bc17e16ffe9518",
+      "bytes": 65132
+    },
+    "tools/conciliacion.cjs": {
+      "sha256": "e127107599fa62d4cf5a4dc8dd1ea84ec9df6a77c931d574a8ae12520a7d4684",
+      "gitBlob": "56c61f4e7e86bfa21720301d1039f2caa22228f1",
+      "bytes": 2670
+    },
+    "tools/consumidor-qa.cjs": {
+      "sha256": "c7d89668d1ad3546d53d6c2b5ed5c5f025ef1539402e484fd936118293439c6f",
+      "gitBlob": "9aab016d3d14378da2a961c2bf31656179cdce04",
+      "bytes": 16776
+    },
+    "tools/contact.py": {
+      "sha256": "a5d9c4850ff9539c7c16b47afa25fb34d25bafc1b1c33451943f66397985a5cc",
+      "gitBlob": "599f3f1313835a772a9d82229507c4966614a1c9",
+      "bytes": 896
+    },
+    "tools/correspondence.cjs": {
+      "sha256": "3711e5a9495a77816a178b9b178cfc6ab25b23a8ce4dff618554c9251401aee1",
+      "gitBlob": "a6237819752b851ed92f0fbfe3bbb6df7265773f",
+      "bytes": 2844
+    },
+    "tools/delivery-assets.cjs": {
+      "sha256": "fecb0060f53f5d03c1dd57d56429c339f86ff9427db23c81b956fd58e88bc096",
+      "gitBlob": "b04b09c54b512851ac95942d0572f90e0bbc72ea",
+      "bytes": 14757
+    },
+    "tools/derivados-producto.cjs": {
+      "sha256": "83b3524d84157e83fefe56acdd5d9f42dfdbcdaa4e61916404cf8284c2ff3c47",
+      "gitBlob": "8226f45507df859deddd42e25c1c19c62699f522",
+      "bytes": 3281
+    },
+    "tools/dna-refs.py": {
+      "sha256": "00c13eebdc5679270ac5ebfb120ee676e26ddd11f417fcb98fabe47c4be35d21",
+      "gitBlob": "2850508b7e07714a2f6aefe90ae3c05475f4b575",
+      "bytes": 5781
+    },
+    "tools/economia-documental.cjs": {
+      "sha256": "e6aa4ed9cd9e390fdfc0dc17628316efae54dcfe3e12443751ef24baf67c1de1",
+      "gitBlob": "bf7be8a802da9f1a7ca7108ec3ffc7ef07e3066f",
+      "bytes": 2875
+    },
+    "tools/economia-qa.cjs": {
+      "sha256": "faa21e1039cd54d0dced9cb17feb5255986902f798fff74680a395d147077c84",
+      "gitBlob": "60d2047a544b78a252d5bbb85f87be0a4229b536",
+      "bytes": 5180
+    },
+    "tools/engines/bench.mjs": {
+      "sha256": "2afced6475aa5a8f4430f5a04172bfe7c70568bb31a1377bc71668df127f6779",
+      "gitBlob": "921e2a77c69a5ff9d71d008ccab5f23e2d7fd7a4",
+      "bytes": 6811
+    },
+    "tools/engines/typst-wasm.mjs": {
+      "sha256": "a8df5de80941c22fa16484e5b8c466a20849b6e19cbb616527cfd4fb4d46e71b",
+      "gitBlob": "c2b01e72ae3bdc76f9d14c2133fb05d5fae22365",
+      "bytes": 964
+    },
+    "tools/entrega-qa.cjs": {
+      "sha256": "91b0cfed2b5b64db9d91fc1d52eeb7c52ec3add41c582511a1765f33e2db460d",
+      "gitBlob": "b8b922f3d0f03e6d7d05cf4f8b113c3464883592",
+      "bytes": 5459
+    },
+    "tools/entrega.cjs": {
+      "sha256": "83c3ad4485a94d6ccaacf8f77b148ba1cdf56329ac7f9e51b830ccb1f5ae76b6",
+      "gitBlob": "b3f22ef04a231636b53cc8d3a424bf92ef734edb",
+      "bytes": 82869
+    },
+    "tools/estado-entrega.cjs": {
+      "sha256": "8400b9e3e3df937875456510ff5d5f9f1cbcf42df6d720d52a66035d94eae126",
+      "gitBlob": "2cb10a51474ddc4e25f2631d618740f5b84d46ee",
+      "bytes": 8029
+    },
+    "tools/estado-qa.cjs": {
+      "sha256": "ff4859adb2937646b9a3a7c66bb23285ccbf23713a631f0f529415e01a557b97",
+      "gitBlob": "b50f22ca7ccaea97dfa2f0b032d63746e6acfb61",
+      "bytes": 5250
+    },
+    "tools/estampar-borrador.py": {
+      "sha256": "e387da6f435403991329b0f30761254ca843981c4e183cdeedd947dfec46bf5f",
+      "gitBlob": "1f33a954af4961115c7b74e47addcdd7fa1da485",
+      "bytes": 1810
+    },
+    "tools/exportar-qa.cjs": {
+      "sha256": "7edb92e5f4bd45779fddcd682ccd9ec96af153fb0e478ac38e7678e9391d09a7",
+      "gitBlob": "504f363649fb7407db882420c02313d2ce15a3a3",
+      "bytes": 27996
+    },
+    "tools/exportar.cjs": {
+      "sha256": "ef03625e83eca552d0d8d9e42e4766e67e27430f3e7f1c0a8a8b5c8eec38d98b",
+      "gitBlob": "7c900e20d0a6827d716fb4d6f6fdab1c8cbcc20c",
+      "bytes": 33218
+    },
+    "tools/ffe-qa.cjs": {
+      "sha256": "c7c322bd2952a48ad8159613116d7a447e293eab69b33e3382ead1d9059671ee",
+      "gitBlob": "777cfd5a50ef2e65ccc87857ea9cc03041a43907",
+      "bytes": 4384
+    },
+    "tools/ffe.cjs": {
+      "sha256": "bff4af8f002999e75912d64cabd27b481e45e2f633960e4de0dd77ee9557cc75",
+      "gitBlob": "dea0a060298efa610ad4c52c979f737975dbf3f4",
+      "bytes": 2587
+    },
+    "tools/flow.js": {
+      "sha256": "ce8b05411ce0efdfe01fed75ca624fefb671f4238a73b080f463d5937f0d0c5e",
+      "gitBlob": "fc95d46597a8eee1d3af5a910fec82bdd55e77cd",
+      "bytes": 5612
+    },
+    "tools/i18n-extract.cjs": {
+      "sha256": "520c783be0c26da51a67d33e85223bc17f872811340c0e433b242b0c1e768155",
+      "gitBlob": "7851c8d4f10474b832bb4c3c8c24470d7feb4ed5",
+      "bytes": 2852
+    },
+    "tools/i18n.js": {
+      "sha256": "38eebad7c74e4438baedd0c345c422d6492680e4b4086f7fad63d52ad34c9969",
+      "gitBlob": "608d10dda87649273aa9e028e6c9f8753db9c210",
+      "bytes": 4705
+    },
+    "tools/inspeccionar-paquete.py": {
+      "sha256": "3ad6dea0d1ab878ec9de88964590882706e3ddb97c8106c1a78ca853ddbeb73c",
+      "gitBlob": "6987f48c0c195fd873b4d95a281e336d2f6e5806",
+      "bytes": 7151
+    },
+    "tools/mapa-impacto.cjs": {
+      "sha256": "9a4867f6baffa5958bec572810a2ad34562a591a0f77c054ec102e80882cf14d",
+      "gitBlob": "49384e0d2e3b9d660e23082e0840ef119e14154e",
+      "bytes": 5768
+    },
+    "tools/minimap-probe.cjs": {
+      "sha256": "52e5c9c98807d3d74f1ff1ee592776123037577868041c3909b5eb239badbcb1",
+      "gitBlob": "0e1a9bf61df836fb7d9403c732e03a9a52b4acab",
+      "bytes": 8602
+    },
+    "tools/motor-qa.cjs": {
+      "sha256": "8a878ab058234df4fc4144dbc4f8edd67296970bfc9839c24df95cb95a9e2b89",
+      "gitBlob": "1c03e58c3378185eea7db865c2c696e914d37ce4",
+      "bytes": 10217
+    },
+    "tools/package-lock.json": {
+      "sha256": "2eb22cfe4a9207df6042bbb66f8a771dc9d8a606157b72f923cbcf955350ee4c",
+      "gitBlob": "7f5d28adf63ca5e262e5f4d762d661f36985b21c",
+      "bytes": 2234
+    },
+    "tools/package.json": {
+      "sha256": "9482835cecc97655de23d1ddaebf0493b94bcee3517d6609c7fb5eb5622056fa",
+      "gitBlob": "74630d343bb167478cb9718846de99d4236fb633",
+      "bytes": 545
+    },
+    "tools/package.sh": {
+      "sha256": "0a051957d89d1b2eb1f80b2bcb4775f26895e3b53bf666c5ff403275faab0c6f",
+      "gitBlob": "b0b8ddc2f8ac151adc5baa9eefa305fd34549b81",
+      "bytes": 6219
+    },
+    "tools/paquete-navegador-qa.cjs": {
+      "sha256": "a0f1a0a082e53565c91df31215f25c35f2faf86934ee86c7f230efd8bdcaeafd",
+      "gitBlob": "ccd6b5b18710eaeda7e90605b368d117c4d5e0cb",
+      "bytes": 7305
+    },
+    "tools/perfiles-marca.cjs": {
+      "sha256": "464b804609968f46158daa43cece9bde7acd0665c6dc56806118926b1bc9dd55",
+      "gitBlob": "6ffbde4f02bbbcdd5e952a88f3e5f2a27cfc95f5",
+      "bytes": 4677
+    },
+    "tools/pick.py": {
+      "sha256": "158c5013dde033cabf4f51f6d6ba12c105898dd5da809f71db7bb48481414103",
+      "gitBlob": "d3c4fb1077f70d2a451c86e782c58323b1488775",
+      "bytes": 921
+    },
+    "tools/pillars-capture.cjs": {
+      "sha256": "e09973c09f64ab2da13db2a9fa653a7ed14ac0b90a902cd1fb0a04374deb5147",
+      "gitBlob": "6abd3fb6bc46fef54d8a382dec3ec0c3835133af",
+      "bytes": 5929
+    },
+    "tools/preparar-qa.cjs": {
+      "sha256": "ce3c639a289d125423b8b553021a0aa251b257bb8f639b7b7c82a6bdbf85b362",
+      "gitBlob": "d13a699836806f42c042bad8fe5a17aab1e353c5",
+      "bytes": 3084
+    },
+    "tools/preparar.cjs": {
+      "sha256": "08b8018afeb7a03d312bd14dff8ef65363809bc8f8aeefcf2934f15172b3e5e7",
+      "gitBlob": "55d7c6447b9bc6d686180c6154566c93b16ee663",
+      "bytes": 8813
+    },
+    "tools/receta-exportar.cjs": {
+      "sha256": "a00b5d697f10c29c74277eafed40f8ab11fa8366c9b7f620d83b84207026670d",
+      "gitBlob": "972abfd7b6d9fa12411148c190e970c2e42e3d7e",
+      "bytes": 3544
+    },
+    "tools/recetas-qa.cjs": {
+      "sha256": "d91f6cd214f1eb29c8a95ec081743c7143d85005cf488fd4798e8bfe6b50f70c",
+      "gitBlob": "2c6019419337d9b007d618121a7c3b8e53bc4735",
+      "bytes": 22736
+    },
+    "tools/recetas.cjs": {
+      "sha256": "0f9e70d9620ab1d72f646c4e4a8edb71846811e7deb0c4504701e1489f31abb7",
+      "gitBlob": "820d172a794044c73a6e0255c3ee6e1dd1b78f0b",
+      "bytes": 32018
+    },
+    "tools/reconstruccion-qa.py": {
+      "sha256": "a7d8a65217b354e59626e868d9d50ad9a525ad8e9bef78b448debb6b52b5da54",
+      "gitBlob": "841110e707f4ad08705e0c8da00cb742303449c1",
+      "bytes": 8670
+    },
+    "tools/reconstruir.sh": {
+      "sha256": "8514afd28d695b7f0c692f084de730c9b36fa78ae593f8d60fb118defc0c5d6f",
+      "gitBlob": "70879f5fcfb32e6214790e7d7d6b4045b77589ce",
+      "bytes": 940
+    },
+    "tools/render-ia-generate.cjs": {
+      "sha256": "d934cbc4afb6d827c85bdf016c99a8641a26eb618d76a2042fddd725fe493491",
+      "gitBlob": "fdcd90ad3978e7b4190cecca98b60e9469492ed7",
+      "bytes": 6275
+    },
+    "tools/revision-visual-qa.py": {
+      "sha256": "9c10b68703f35665933793ddbfc20dd90a35dc5e6be9e1369a0fcb006f720485",
+      "gitBlob": "87d7c8b7b21168381131d80e3a4a123d1db1d24d",
+      "bytes": 2592
+    },
+    "tools/serve.cjs": {
+      "sha256": "a0bb8274a9f43ca2d878cd4c9d8bf155ae3c49f3f7a870ad67ac3a482a887ee2",
+      "gitBlob": "9462553875f0004a472fccc11aec72f329086da0",
+      "bytes": 1336
+    },
+    "tools/snapshot.cjs": {
+      "sha256": "c988764398dafede2d87981a0d92ba0d31a9409318a307fc959bc94543257026",
+      "gitBlob": "0c0da6c4fdf392a53896b3d16ebe8e42b18a1fa4",
+      "bytes": 8823
+    },
+    "tools/spreads.py": {
+      "sha256": "eaf6a99b56862fb01d1dccc9159fd160cd56eadc6ba508438ceee8a45aecbc96",
+      "gitBlob": "eebb24c8e241b473de12c1c4cd9f7ac811cea1a6",
+      "bytes": 1039
+    },
+    "tools/variants.cjs": {
+      "sha256": "0537151a245104f5a4ed77221fafc9cce1ff7e508fb572afdae7d4a4162c3b11",
+      "gitBlob": "79d4f0609fba1e737a71fc0bd2bfd3c80f6cf4ef",
+      "bytes": 5206
+    },
+    "tools/verificar-entrega.cjs": {
+      "sha256": "ecbdbf0bb88f722e6c72f74d562b551ca0248fa0c33239a8507f6fb5ce26c7c6",
+      "gitBlob": "dd8d1ce5795d0e9c1d64fdc967612880a7b58ed2",
+      "bytes": 8242
+    },
+    "vendor/PROCEDENCIA.md": {
+      "sha256": "bbbbf608f5d6a8feba26154be53f2f7fc60ab14e581495208dd6c23694b1b233",
+      "gitBlob": "397008603f4b2153e23b73e8eb3979e0c498eb50",
+      "bytes": 1562
+    },
+    "vendor/fonts/inter/Inter-Bold.ttf": {
+      "sha256": "fbe825cbfc749317f57a1433d3905aa9d3f388732fd29b8e8a36f34845e3bc3e",
+      "gitBlob": "ae2c2d4368cd43af31c8bc80eb3fb4c61dfdd408",
+      "bytes": 344072
+    },
+    "vendor/fonts/inter/Inter-OFL.txt": {
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57",
+      "gitBlob": "21f6aff961064c2e429f570995e446bcdd555422",
+      "bytes": 4377
+    },
+    "vendor/fonts/inter/Inter-Regular.ttf": {
+      "sha256": "a414b48aa577ef2c62ebb135341ddeef33ee26a4f5dc9f787f93c1aab08ebb50",
+      "gitBlob": "9a53a64e570218c116ccc5712bd9df613411622e",
+      "bytes": 342408
+    },
+    "vendor/huashu/LICENSE": {
+      "sha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+      "gitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a",
+      "bytes": 1086
+    },
+    "vendor/huashu/design-lint-collect.js": {
+      "sha256": "508381bd81e2041db6a113588b5a36e2ae2b26ca9906d8fe829fd675b83e8275",
+      "gitBlob": "d0fad5070efaa9a05eca99f6b8826688e60f26fd",
+      "bytes": 8805
+    }
+  },
+  "recetas": [
+    {
+      "receta": "RP01",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "marca"
+          ]
+        },
+        {
+          "id": "02",
+          "capitulos": [
+            "concepto"
+          ],
+          "fuentes": [
+            "concepto",
+            "alcanceServicios"
+          ]
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "presupuesto",
+            "honorarios"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": [
+            "marca",
+            "validezOferta"
+          ]
+        }
+      ],
+      "fuentes": {
+        "presupuesto": {
+          "estado": "disponible",
+          "autoridad": "motor económico del producto (precios de prueba)",
+          "nota": "11 partidas en 3 capítulos; precios de prueba del laboratorio.",
+          "vinculo": "relación declarada"
+        },
+        "marca": {
+          "estado": "parcial",
+          "autoridad": "perfil sintético del laboratorio",
+          "nota": "Estudio Ejemplo",
+          "vinculo": "relación declarada"
+        },
+        "alcanceServicios": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        },
+        "honorarios": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
+          "vinculo": "relación declarada"
+        },
+        "exclusiones": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "dependencia indirecta de la receta"
+        },
+        "validezOferta": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        },
+        "concepto": {
+          "estado": "disponible",
+          "autoridad": "texto del profesional, atribuido",
+          "nota": "No se traduce ni se reescribe.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "propuesta-comercial",
+            "capitulos": [
+              "concepto",
+              "presupuesto",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "commercial-proposal-client-v3"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP01 (RP01 v1, rubik-lab-recetas/1): Alcance, servicios y honorarios. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "2c47e83a378e6ef7a5ff32ed449e5b7a76e67d911db6e026b0940f0e779edad0",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/commercial-proposal-client-v3.pdf": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+              "index.html": "2cc9e471b9df7ab2560a0fda2fde06ee7582b650686461dae14c44553be00000",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "propuesta-comercial",
+            "capitulos": [
+              "concepto",
+              "presupuesto",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "commercial-proposal-client-v3"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP01 (RP01 v1, rubik-lab-recetas/1): Alcance, servicios y honorarios. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "4e349be0d9e0c5e6f990a3c31d1e4442e367b5e9231b6076c0f10e38d07f0cd3",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/commercial-proposal-client-v3.en.pdf": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+              "index.html": "64292d1143505d191d070355ab92ad5b2ef0cbf9dcf227de8ff5d87a324869b9",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q06",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP02",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "geometria",
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": [
+            "revisionAnterior",
+            "fotosAportadas",
+            "superficies"
+          ]
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "geometria": {
+          "estado": "disponible",
+          "autoridad": "núcleo del proyecto",
+          "nota": "70 muros, 22 huecos, 13 estancias; revisión rv1-0f3e96422fd20e08.",
+          "vinculo": "relación declarada"
+        },
+        "superficies": {
+          "estado": "disponible",
+          "autoridad": "cálculo del producto, escala estimada",
+          "nota": "11 estancias computadas; escala estimada.",
+          "vinculo": "relación declarada"
+        },
+        "revisionAnterior": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+          "vinculo": "relación declarada"
+        },
+        "fotosAportadas": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        },
+        "vistas3d": {
+          "estado": "disponible",
+          "autoridad": "modelo 3D del producto",
+          "nota": "5 vistas.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "vivienda",
+              "estancias",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-book",
+              "architecture-sheet-strip"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP02 (RP02 v1, rubik-lab-recetas/1): Viabilidad y estado actual. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "7e8f2211989d30398e4d96a34a99b67391d54e0f4a3aef9d521b5fd78dbc81b0",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/architecture-book.pdf": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+              "documentos/architecture-sheet-strip.pdf": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+              "index.html": "d474c4b5588b748c4ce54be594c8e7c49f29d01660690fbc296d7497a0ca7adf",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "vivienda",
+              "estancias",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-book",
+              "architecture-sheet-strip"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP02 (RP02 v1, rubik-lab-recetas/1): Viabilidad y estado actual. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "ef5866e76a2d7d079ccc7a70bf9771c99fc98fbb8838a2e4aec2492ca470451c",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/architecture-book.en.pdf": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+              "documentos/architecture-sheet-strip.en.pdf": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+              "index.html": "72e0cd92b0339762c3cd30448bcdbe35105d020c6da2940e9273c8b26f6995b2",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP03",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "geometria",
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "02",
+          "capitulos": [
+            "concepto"
+          ],
+          "fuentes": [
+            "concepto"
+          ]
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": []
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": [
+            "geometria",
+            "variantesGuardadas"
+          ]
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": [
+            "geometria",
+            "dibujoVivo",
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "vistas3d",
+            "imagenesIA",
+            "recorrido"
+          ]
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "presupuesto"
+          ]
+        },
+        {
+          "id": "09",
+          "capitulos": [
+            "obra"
+          ],
+          "fuentes": [
+            "planObra"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "geometria": {
+          "estado": "disponible",
+          "autoridad": "núcleo del proyecto",
+          "nota": "70 muros, 22 huecos, 13 estancias; revisión rv1-0f3e96422fd20e08.",
+          "vinculo": "relación declarada"
+        },
+        "vistas3d": {
+          "estado": "disponible",
+          "autoridad": "modelo 3D del producto",
+          "nota": "5 vistas.",
+          "vinculo": "relación declarada"
+        },
+        "variantesGuardadas": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot es un único proyecto: no se presenta como si fueran dos opciones.",
+          "vinculo": "relación declarada"
+        },
+        "concepto": {
+          "estado": "disponible",
+          "autoridad": "texto del profesional, atribuido",
+          "nota": "No se traduce ni se reescribe.",
+          "vinculo": "relación declarada"
+        },
+        "presupuesto": {
+          "estado": "disponible",
+          "autoridad": "motor económico del producto (precios de prueba)",
+          "nota": "11 partidas en 3 capítulos; precios de prueba del laboratorio.",
+          "vinculo": "relación declarada"
+        },
+        "planObra": {
+          "estado": "parcial",
+          "autoridad": "planificación simulada, sin partidas vinculadas",
+          "nota": "Fechas ilustrativas del plan demo ajustado al proyecto.",
+          "vinculo": "relación declarada"
+        },
+        "imagenesIA": {
+          "estado": "disponible",
+          "autoridad": "orientativa",
+          "nota": "3 imágenes, siempre junto a su vista del modelo.",
+          "vinculo": "relación declarada"
+        },
+        "dibujoVivo": {
+          "estado": "disponible",
+          "autoridad": "fotograma auténtico del producto",
+          "nota": "Un fotograma; no es una exportación de la transformación.",
+          "vinculo": "relación declarada"
+        },
+        "recorrido": {
+          "estado": "disponible",
+          "autoridad": "vídeo exportado por el producto",
+          "nota": "MP4 local; no es la visita 3D interactiva.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "integral",
+            "capitulos": [
+              "concepto",
+              "vivienda",
+              "dibujo",
+              "estancias",
+              "materiales",
+              "presupuesto",
+              "obra",
+              "recorrido",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "interior-book-v3",
+              "materials-furniture-book-v3",
+              "commercial-proposal-client-v3",
+              "real-estate-sheet-v3",
+              "architecture-book",
+              "architecture-sheet-strip",
+              "entrega-integral"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP03 (RP03 v1, rubik-lab-recetas/1): Anteproyecto integral y opciones. Selección de laboratorio sobre la modalidad «Documentación integral»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "eb6affa63459c7754348183b33f7d22a893abb8bf3740a143b44c6facf8bea9f",
+            "archivos": {
+              "LEEME.txt": "d86bbfe0a1126dc4ad29a8d9be94458cd7315bbe815160c8d1b517d39ef63511",
+              "documentos/architecture-book.pdf": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+              "documentos/architecture-sheet-strip.pdf": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+              "documentos/commercial-proposal-client-v3.pdf": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+              "documentos/entrega-integral.pdf": "dce981f3365c35ddffb4316e09052dcfe8430938175d8030dc8bb2f8bfec364e",
+              "documentos/interior-book-v3.pdf": "81567b61c6b0b89596f2e5994d64a4bbbf41f293d3fd9e2ce416f6fcecafa52f",
+              "documentos/materials-furniture-book-v3.pdf": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097",
+              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+              "documentos/real-estate-sheet-v3.pdf": "85b199e212f61f0b9fb7ea09cbea154915d95071684199bdebac3dadf0599178",
+              "index.html": "e1a592b4f99868a0cedea8065a8cdbdfbaacf817c508f57bf1da72bf6de59495",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
+              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
+              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
+              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
+              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "integral",
+            "capitulos": [
+              "concepto",
+              "vivienda",
+              "dibujo",
+              "estancias",
+              "materiales",
+              "presupuesto",
+              "obra",
+              "recorrido",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "interior-book-v3",
+              "materials-furniture-book-v3",
+              "commercial-proposal-client-v3",
+              "real-estate-sheet-v3",
+              "architecture-book",
+              "architecture-sheet-strip",
+              "entrega-integral"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP03 (RP03 v1, rubik-lab-recetas/1): Anteproyecto integral y opciones. Selección de laboratorio sobre la modalidad «Documentación integral»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "147256b12723f81f6155f5a122584a3978b874184b7a5fd5e9635cceebd0e1e1",
+            "archivos": {
+              "README.txt": "6587ac337cbb032b5e5a454d0dd8f645711a964f2a55ba74f3d01f219bd18663",
+              "documentos/architecture-book.en.pdf": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+              "documentos/architecture-sheet-strip.en.pdf": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+              "documentos/commercial-proposal-client-v3.en.pdf": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+              "documentos/entrega-integral.en.pdf": "990260f926bd35765b95cbb9284d52ac92b00e2d55658fa7f24104bd79165463",
+              "documentos/interior-book-v3.en.pdf": "92eb598e5870fb6fefec60722b6e1ed0ae291e61b176acd17ccc8c320ffb791c",
+              "documentos/materials-furniture-book-v3.en.pdf": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b",
+              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+              "documentos/real-estate-sheet-v3.en.pdf": "f90dfa3c246544d8bfd62bb0122579401a9404fe7cea26b6e3fe87bddcdb608c",
+              "index.html": "665fa6a521aaafe98bcd2e59c55204f80632af68446b5a93167de236cdc38323",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
+              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
+              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
+              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
+              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q04",
+        "RP-Q05",
+        "RP-Q06",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP04",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "geometria"
+          ]
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": [
+            "revisionAnterior",
+            "superficies"
+          ]
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": [
+            "geometria",
+            "superficies"
+          ]
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": [
+            "geometria",
+            "dibujoVivo"
+          ]
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "recorrido"
+          ]
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "presupuesto",
+            "precioInmueble",
+            "impuestosCompra"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "geometria": {
+          "estado": "disponible",
+          "autoridad": "núcleo del proyecto",
+          "nota": "70 muros, 22 huecos, 13 estancias; revisión rv1-0f3e96422fd20e08.",
+          "vinculo": "relación declarada"
+        },
+        "superficies": {
+          "estado": "disponible",
+          "autoridad": "cálculo del producto, escala estimada",
+          "nota": "11 estancias computadas; escala estimada.",
+          "vinculo": "relación declarada"
+        },
+        "precioInmueble": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Precio no consta (no es cero).",
+          "vinculo": "relación declarada"
+        },
+        "impuestosCompra": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "No constan: no se infieren del precio.",
+          "vinculo": "relación declarada"
+        },
+        "revisionAnterior": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+          "vinculo": "relación declarada"
+        },
+        "presupuesto": {
+          "estado": "disponible",
+          "autoridad": "motor económico del producto (precios de prueba)",
+          "nota": "11 partidas en 3 capítulos; precios de prueba del laboratorio.",
+          "vinculo": "relación declarada"
+        },
+        "recorrido": {
+          "estado": "disponible",
+          "autoridad": "vídeo exportado por el producto",
+          "nota": "MP4 local; no es la visita 3D interactiva.",
+          "vinculo": "relación declarada"
+        },
+        "dibujoVivo": {
+          "estado": "disponible",
+          "autoridad": "fotograma auténtico del producto",
+          "nota": "Un fotograma; no es una exportación de la transformación.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "inmobiliaria",
+            "capitulos": [
+              "vivienda",
+              "dibujo",
+              "estancias",
+              "presupuesto",
+              "recorrido",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "real-estate-sheet-v3"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP04 (RP04 v1, rubik-lab-recetas/1): Vivienda y potencial de reforma. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "4e314f30c3282d9b0cb48eeb26412b06da44601cbb3fe9f19c99cd12fe93507f",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/real-estate-sheet-v3.pdf": "85b199e212f61f0b9fb7ea09cbea154915d95071684199bdebac3dadf0599178",
+              "index.html": "3acfdd23feeb660579863aa8ce3f89152256827e55416feb66995e9bd3aac87b",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "inmobiliaria",
+            "capitulos": [
+              "vivienda",
+              "dibujo",
+              "estancias",
+              "presupuesto",
+              "recorrido",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "real-estate-sheet-v3"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP04 (RP04 v1, rubik-lab-recetas/1): Vivienda y potencial de reforma. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "04ed94ad5e47dbeeaa6ed0b79d83a9d9246a1873a3628288bdf9285a09ea65d1",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/real-estate-sheet-v3.en.pdf": "f90dfa3c246544d8bfd62bb0122579401a9404fe7cea26b6e3fe87bddcdb608c",
+              "index.html": "d0ea40d182a351539137c775fcaca96dbd089e89c68a2a8e8a939749106a5571",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q04",
+        "RP-Q06",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP05",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "presupuesto"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "presupuesto": {
+          "estado": "disponible",
+          "autoridad": "motor económico del producto (precios de prueba)",
+          "nota": "11 partidas en 3 capítulos; precios de prueba del laboratorio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible",
+          "seleccion": {
+            "tipo": "propuesta-comercial",
+            "capitulos": [
+              "presupuesto",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "commercial-proposal-client-v3"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP05 (RP05 v1, rubik-lab-recetas/1): Estimación económica inicial. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "400c0210127da3c9ef68d08a3a9c3fa30aca1ccae92f798ea977266201743bd7",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/commercial-proposal-client-v3.pdf": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+              "index.html": "20e5a93344619982e301b39c111095a48df7f25c735cbea5f8782813eae4d84e",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible",
+          "seleccion": {
+            "tipo": "propuesta-comercial",
+            "capitulos": [
+              "presupuesto",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "commercial-proposal-client-v3"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP05 (RP05 v1, rubik-lab-recetas/1): Estimación económica inicial. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "ef0c7f874d487a5d4b452fd2740078966a6e73786bb9f91d26f7353e2946bded",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/commercial-proposal-client-v3.en.pdf": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+              "index.html": "bea88eccb2794c40d4fd49d8c11da151acc25c2c9444357a21bd1d6a9b92f4a1",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q06",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP06",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "02",
+          "capitulos": [
+            "concepto"
+          ],
+          "fuentes": [
+            "concepto"
+          ]
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "vistas3d",
+            "imagenesIA"
+          ]
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": [
+            "materiales",
+            "referenciasMoodboard"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "vistas3d": {
+          "estado": "disponible",
+          "autoridad": "modelo 3D del producto",
+          "nota": "5 vistas.",
+          "vinculo": "relación declarada"
+        },
+        "materiales": {
+          "estado": "disponible",
+          "autoridad": "colores del modelo, no muestras físicas",
+          "nota": "8 materiales.",
+          "vinculo": "relación declarada"
+        },
+        "concepto": {
+          "estado": "disponible",
+          "autoridad": "texto del profesional, atribuido",
+          "nota": "No se traduce ni se reescribe.",
+          "vinculo": "relación declarada"
+        },
+        "referenciasMoodboard": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Sin referencias aportadas: no se buscan ni se generan imágenes.",
+          "vinculo": "relación declarada"
+        },
+        "imagenesIA": {
+          "estado": "disponible",
+          "autoridad": "orientativa",
+          "nota": "3 imágenes, siempre junto a su vista del modelo.",
+          "vinculo": "relación declarada"
+        },
+        "dibujoVivo": {
+          "estado": "disponible",
+          "autoridad": "fotograma auténtico del producto",
+          "nota": "Un fotograma; no es una exportación de la transformación.",
+          "vinculo": "dependencia indirecta de la receta"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "interiorismo",
+            "capitulos": [
+              "concepto",
+              "dibujo",
+              "estancias",
+              "materiales",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "interior-book-v3",
+              "materials-furniture-book-v3"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP06 (RP06 v1, rubik-lab-recetas/1): Concepto, moodboard y opciones. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "6a6f76b677397e047255fa8649a2b1d33eda96b431f3422bec100887d212872f",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/interior-book-v3.pdf": "81567b61c6b0b89596f2e5994d64a4bbbf41f293d3fd9e2ce416f6fcecafa52f",
+              "documentos/materials-furniture-book-v3.pdf": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097",
+              "index.html": "8f55231f0a814ecf9196c3ca86d95f09c5f53a415b4960624dcec9dfce10e711",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "interiorismo",
+            "capitulos": [
+              "concepto",
+              "dibujo",
+              "estancias",
+              "materiales",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "interior-book-v3",
+              "materials-furniture-book-v3"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP06 (RP06 v1, rubik-lab-recetas/1): Concepto, moodboard y opciones. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "2e8bba18a028d633d3b39bc112269de15e2c7cd679072665357cb832aad738da",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/interior-book-v3.en.pdf": "92eb598e5870fb6fefec60722b6e1ed0ae291e61b176acd17ccc8c320ffb791c",
+              "documentos/materials-furniture-book-v3.en.pdf": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b",
+              "index.html": "85a04da44732d77be3a08518ca06b053c2d8174a293a64ce54324f0ff1d0a9a1",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q04",
+        "RP-Q05",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP07",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "geometria",
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": [
+            "revisionAnterior",
+            "superficies"
+          ]
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": [
+            "geometria",
+            "dibujoVivo",
+            "vistas3d"
+          ]
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "vistas3d",
+            "recorrido"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "geometria": {
+          "estado": "disponible",
+          "autoridad": "núcleo del proyecto",
+          "nota": "70 muros, 22 huecos, 13 estancias; revisión rv1-0f3e96422fd20e08.",
+          "vinculo": "relación declarada"
+        },
+        "superficies": {
+          "estado": "disponible",
+          "autoridad": "cálculo del producto, escala estimada",
+          "nota": "11 estancias computadas; escala estimada.",
+          "vinculo": "relación declarada"
+        },
+        "vistas3d": {
+          "estado": "disponible",
+          "autoridad": "modelo 3D del producto",
+          "nota": "5 vistas.",
+          "vinculo": "relación declarada"
+        },
+        "recorrido": {
+          "estado": "disponible",
+          "autoridad": "vídeo exportado por el producto",
+          "nota": "MP4 local; no es la visita 3D interactiva.",
+          "vinculo": "relación declarada"
+        },
+        "dibujoVivo": {
+          "estado": "disponible",
+          "autoridad": "fotograma auténtico del producto",
+          "nota": "Un fotograma; no es una exportación de la transformación.",
+          "vinculo": "relación declarada"
+        },
+        "norte": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El proyecto no tiene norte: no se indica orientación.",
+          "vinculo": "dependencia indirecta de la receta"
+        },
+        "revisionAnterior": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible",
+          "seleccion": {
+            "tipo": "inmobiliaria",
+            "capitulos": [
+              "vivienda",
+              "dibujo",
+              "estancias",
+              "recorrido",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "real-estate-sheet-v3-sin-presupuesto"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP07 (RP07 v1, rubik-lab-recetas/1): Ficha comercial de vivienda. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "1bdb42ac0dfb43c2001ba2315e12ff3ed738a16ad367074d8aff874389fff12d",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/real-estate-sheet-v3-sin-presupuesto.pdf": "604cbb1179680dcae0fc8a87b3930c4884449ef1ca517bbe227f2a9b7702ac68",
+              "index.html": "8baa53aeb7f42fabe3a771eec06db243118b0232c6be271d3798df56fa950fa0",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible",
+          "seleccion": {
+            "tipo": "inmobiliaria",
+            "capitulos": [
+              "vivienda",
+              "dibujo",
+              "estancias",
+              "recorrido",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "real-estate-sheet-v3-sin-presupuesto"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP07 (RP07 v1, rubik-lab-recetas/1): Ficha comercial de vivienda. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "2387ea38823b81cce25f8c56706d64f0862b5d1b0ce1156cdf6037f9c50fbba2",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf": "2e84430fce38a0c9e672bb5919ef7b1aac3e391bc2c1992a7618226173e93a2b",
+              "index.html": "f97d71e31300314b7a78bbb441f6199c1db2091d23bd4cd51c8dcce947b7c91f",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP08",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "09",
+          "capitulos": [
+            "obra"
+          ],
+          "fuentes": [
+            "planObra",
+            "vinculoPlanPresupuesto"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "planObra": {
+          "estado": "parcial",
+          "autoridad": "planificación simulada, sin partidas vinculadas",
+          "nota": "Fechas ilustrativas del plan demo ajustado al proyecto.",
+          "vinculo": "relación declarada"
+        },
+        "ofertaTecnica": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "dependencia indirecta de la receta"
+        },
+        "exclusiones": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "dependencia indirecta de la receta"
+        },
+        "vinculoPlanPresupuesto": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El plan de ejemplo no tiene partidas vinculadas: la economía del plan no se puede mostrar.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "obra",
+            "capitulos": [
+              "vivienda",
+              "obra",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-sheet-strip"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP08 (RP08 v1, rubik-lab-recetas/1): Oferta técnica y planificación. Selección de laboratorio sobre la modalidad «Explicación de la obra»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "44bfdce00eee8550fb6fe55f3f1379eb8bc4b0863505cec21d4983c0a2f1ad61",
+            "archivos": {
+              "LEEME.txt": "2c1a39372993e283aabe8d424638a6c571bf4907e9429fc980eecea762ca5283",
+              "documentos/architecture-sheet-strip.pdf": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+              "index.html": "43ec40a778518939cdcf0876d44f98a2faf119dcb7e84a84cd1ef077066a990c",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
+              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
+              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
+              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
+              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "obra",
+            "capitulos": [
+              "vivienda",
+              "obra",
+              "decisiones",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-sheet-strip"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP08 (RP08 v1, rubik-lab-recetas/1): Oferta técnica y planificación. Selección de laboratorio sobre la modalidad «Explicación de la obra»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "d0bf46ead2eeafd42cc2643f27a6dcc05ffff977b1f7f94a19c88bbed9eae540",
+            "archivos": {
+              "README.txt": "357a4bcea18042061871baf9173bd64f9375227f11310a9cbf07b469f70ac41c",
+              "documentos/architecture-sheet-strip.en.pdf": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+              "index.html": "8d8c0fb3ef7f50fa1d286fab5be5e783465302631260a6b623d1b79abb2482f9",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
+              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
+              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
+              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
+              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q06",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP09",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "geometria"
+          ]
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": [
+            "revisionAnterior",
+            "superficies"
+          ]
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": [
+            "geometria",
+            "superficies",
+            "dimensionesHuecos",
+            "seccionFachadas"
+          ]
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": [
+            "geometria"
+          ]
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "geometria": {
+          "estado": "disponible",
+          "autoridad": "núcleo del proyecto",
+          "nota": "70 muros, 22 huecos, 13 estancias; revisión rv1-0f3e96422fd20e08.",
+          "vinculo": "relación declarada"
+        },
+        "superficies": {
+          "estado": "disponible",
+          "autoridad": "cálculo del producto, escala estimada",
+          "nota": "11 estancias computadas; escala estimada.",
+          "vinculo": "relación declarada"
+        },
+        "revisionAnterior": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+          "vinculo": "relación declarada"
+        },
+        "dimensionesHuecos": {
+          "estado": "parcial",
+          "autoridad": "modelo",
+          "nota": "Ancho en 22 de 22 huecos; alto en 0. Sin alto no hay hoja de carpintería.",
+          "vinculo": "relación declarada"
+        },
+        "seccionFachadas": {
+          "estado": "disponible",
+          "autoridad": "derivados del producto, esquemáticos",
+          "nota": "No son sección constructiva ni alzados.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "vivienda",
+              "estancias",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-book",
+              "architecture-sheet-strip"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP09 (RP09 v1, rubik-lab-recetas/1): Architecture Book y juego de láminas. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "3b3d84f193697c9bee6a7ea3080589b0922a608ffa4d20f835389b24222a73ee",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/architecture-book.pdf": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+              "documentos/architecture-sheet-strip.pdf": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+              "index.html": "d474c4b5588b748c4ce54be594c8e7c49f29d01660690fbc296d7497a0ca7adf",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "vivienda",
+              "estancias",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-book",
+              "architecture-sheet-strip"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP09 (RP09 v1, rubik-lab-recetas/1): Architecture Book y juego de láminas. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "140350228e9ac62b9cff604b31f6439e6658d2b179d1764dc0ccf4fc186f8b49",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/architecture-book.en.pdf": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+              "documentos/architecture-sheet-strip.en.pdf": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+              "index.html": "72e0cd92b0339762c3cd30448bcdbe35105d020c6da2940e9273c8b26f6995b2",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q04",
+        "RP-Q05",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP10",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": [
+            "geometria"
+          ]
+        },
+        {
+          "id": "02",
+          "capitulos": [
+            "concepto"
+          ],
+          "fuentes": [
+            "concepto"
+          ]
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": [
+            "revisionAnterior",
+            "superficies"
+          ]
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": [
+            "geometria",
+            "superficies"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "geometria": {
+          "estado": "disponible",
+          "autoridad": "núcleo del proyecto",
+          "nota": "70 muros, 22 huecos, 13 estancias; revisión rv1-0f3e96422fd20e08.",
+          "vinculo": "relación declarada"
+        },
+        "superficies": {
+          "estado": "disponible",
+          "autoridad": "cálculo del producto, escala estimada",
+          "nota": "11 estancias computadas; escala estimada.",
+          "vinculo": "relación declarada"
+        },
+        "revisionAnterior": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+          "vinculo": "relación declarada"
+        },
+        "concepto": {
+          "estado": "disponible",
+          "autoridad": "texto del profesional, atribuido",
+          "nota": "No se traduce ni se reescribe.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "concepto",
+              "vivienda",
+              "estancias",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-book"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP10 (RP10 v1, rubik-lab-recetas/1): Memoria descriptiva y superficies. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "608dc1c2edf612fd8df15e6efd64c413cd37b62f42a210a4a001ffe1cb682d9e",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/architecture-book.pdf": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+              "index.html": "2e39f0a35fb695ce9380aa0eff821210b06781eb8044cd71d40d66754d4e1d7b",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "concepto",
+              "vivienda",
+              "estancias",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "architecture-book"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP10 (RP10 v1, rubik-lab-recetas/1): Memoria descriptiva y superficies. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "c53908271b973b697f5ddacb97e75c82965ab08678fe3b0e1ffc9914f3e58284",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/architecture-book.en.pdf": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+              "index.html": "ca18fc78978c17e0519c974fd3bfb6360af422bd6b54ff637fd8ea8fcb125133",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q04",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP11",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "imagenesIA"
+          ]
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": [
+            "materiales",
+            "objetos",
+            "catalogoProductos",
+            "preciosVerificados"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "objetos": {
+          "estado": "disponible",
+          "autoridad": "instancias del modelo",
+          "nota": "46 instancias.",
+          "vinculo": "relación declarada"
+        },
+        "materiales": {
+          "estado": "disponible",
+          "autoridad": "colores del modelo, no muestras físicas",
+          "nota": "8 materiales.",
+          "vinculo": "relación declarada"
+        },
+        "catalogoProductos": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Ninguno de los 46 objetos tiene referencia de catálogo: son genéricos del modelo.",
+          "vinculo": "relación declarada"
+        },
+        "preciosVerificados": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Sin precios de producto: «no valorado», nunca cero.",
+          "vinculo": "relación declarada"
+        },
+        "imagenesIA": {
+          "estado": "disponible",
+          "autoridad": "orientativa",
+          "nota": "3 imágenes, siempre junto a su vista del modelo.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "interiorismo",
+            "capitulos": [
+              "estancias",
+              "materiales",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "materials-furniture-book-v3"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP11 (RP11 v1, rubik-lab-recetas/1): Libro FF&E y fichas de activos. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "2cafa17d07031910df74aec5512ec00a7ab5f1f14a6296b922d5b0d370bb9db5",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/materials-furniture-book-v3.pdf": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097",
+              "index.html": "71aa795d73aa3494b5d8f642ba350996299d3406a875e91bb3610ad04fc90ef7",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "interiorismo",
+            "capitulos": [
+              "estancias",
+              "materiales",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "materials-furniture-book-v3"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP11 (RP11 v1, rubik-lab-recetas/1): Libro FF&E y fichas de activos. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "2e47bacfe170d30cf026fafcbe6e916d9cd9d9ce7efd4bd2ffc0dcc1334bafe8",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/materials-furniture-book-v3.en.pdf": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b",
+              "index.html": "c5b6fe7fc2d40c782f45ebf8d2c1b05ba363e6501d10ed62110dc2cd48cf236c",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q05",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP12",
+      "nivel": "L",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "presupuesto",
+            "presupuestoRevisado"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "presupuesto": {
+          "estado": "disponible",
+          "autoridad": "motor económico del producto (precios de prueba)",
+          "nota": "11 partidas en 3 capítulos; precios de prueba del laboratorio.",
+          "vinculo": "relación declarada"
+        },
+        "presupuestoRevisado": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "11 de 11 partidas sin revisar por el estudio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "vivienda",
+              "presupuesto",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "commercial-proposal-client-v3"
+            ],
+            "omitir": [],
+            "idioma": "es",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP12 (RP12 v1, rubik-lab-recetas/1): Mediciones y presupuesto detallado. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "c6891b3de524d6db2841b76fad32e2c5c559e408f637fd71cba7597467b4142f",
+            "archivos": {
+              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
+              "documentos/commercial-proposal-client-v3.pdf": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+              "index.html": "85f26a52e35f2bfed837f170c68b6eabc2686f370e333e841384daa6a7bb5926",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        },
+        "en": {
+          "estado": "emitible-parcial",
+          "seleccion": {
+            "tipo": "dossier-tecnico",
+            "capitulos": [
+              "vivienda",
+              "presupuesto",
+              "documentos",
+              "procedencia"
+            ],
+            "documentos": [
+              "commercial-proposal-client-v3"
+            ],
+            "omitir": [],
+            "idioma": "en",
+            "base": {
+              "proyecto": "prj_reference-home",
+              "revision": "rv1-0f3e96422fd20e08",
+              "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+            },
+            "nota": "Receta RP12 (RP12 v1, rubik-lab-recetas/1): Mediciones y presupuesto detallado. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
+          },
+          "artefacto": {
+            "zipSha256": "50b13aaf40e5ac865969d134f0834b0327fccf0620cf9e72ed02c2d351396c09",
+            "archivos": {
+              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
+              "documentos/commercial-proposal-client-v3.en.pdf": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+              "index.html": "e2fb9d1fe069e646d2a5c1c71ee8d8576e3fe9c504aa15ef7aeca5820a43b82d",
+              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+            }
+          },
+          "evidencia": "ejecutada y ligada al registro"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q06",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP13",
+      "nivel": "C",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "presupuesto",
+            "ofertasIndependientes"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "ofertasIndependientes": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Sin ofertas aportadas: no se compara el presupuesto consigo mismo.",
+          "vinculo": "relación declarada"
+        },
+        "presupuesto": {
+          "estado": "disponible",
+          "autoridad": "motor económico del producto (precios de prueba)",
+          "nota": "11 partidas en 3 capítulos; precios de prueba del laboratorio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q06",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP14",
+      "nivel": "C",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": [
+            "revisionAnterior"
+          ]
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "09",
+          "capitulos": [
+            "obra"
+          ],
+          "fuentes": [
+            "planObra"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": [
+            "motivoCambio"
+          ]
+        }
+      ],
+      "fuentes": {
+        "revisionAnterior": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+          "vinculo": "relación declarada"
+        },
+        "motivoCambio": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        },
+        "planObra": {
+          "estado": "parcial",
+          "autoridad": "planificación simulada, sin partidas vinculadas",
+          "nota": "Fechas ilustrativas del plan demo ajustado al proyecto.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q04",
+        "RP-Q06",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP15",
+      "nivel": "C",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "09",
+          "capitulos": [
+            "obra"
+          ],
+          "fuentes": [
+            "planObra",
+            "observacionesObra",
+            "certificadosObra"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "planObra": {
+          "estado": "parcial",
+          "autoridad": "planificación simulada, sin partidas vinculadas",
+          "nota": "Fechas ilustrativas del plan demo ajustado al proyecto.",
+          "vinculo": "relación declarada"
+        },
+        "observacionesObra": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "No hay registros de obra: una proyección no es avance.",
+          "vinculo": "relación declarada"
+        },
+        "certificadosObra": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q06",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP16",
+      "nivel": "F",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "09",
+          "capitulos": [
+            "obra"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "actasVisita": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "dependencia indirecta de la receta"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP17",
+      "nivel": "C",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "04",
+          "capitulos": [
+            "vivienda",
+            "estancias"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": [
+            "materiales",
+            "objetos",
+            "catalogoProductos",
+            "especificacionValidada"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "materiales": {
+          "estado": "disponible",
+          "autoridad": "colores del modelo, no muestras físicas",
+          "nota": "8 materiales.",
+          "vinculo": "relación declarada"
+        },
+        "objetos": {
+          "estado": "disponible",
+          "autoridad": "instancias del modelo",
+          "nota": "46 instancias.",
+          "vinculo": "relación declarada"
+        },
+        "catalogoProductos": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Ninguno de los 46 objetos tiene referencia de catálogo: son genéricos del modelo.",
+          "vinculo": "relación declarada"
+        },
+        "especificacionValidada": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q04",
+        "RP-Q05",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP18",
+      "nivel": "F",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "09",
+          "capitulos": [
+            "obra"
+          ],
+          "fuentes": [
+            "punchList"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": []
+        }
+      ],
+      "fuentes": {
+        "punchList": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP19",
+      "nivel": "F",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": []
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": [
+            "manualesGarantias"
+          ]
+        }
+      ],
+      "fuentes": {
+        "revisionEjecutada": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "dependencia indirecta de la receta"
+        },
+        "manualesGarantias": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q05",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP20",
+      "nivel": "F",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "08",
+          "capitulos": [
+            "presupuesto"
+          ],
+          "fuentes": [
+            "costeLiquidado"
+          ]
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": [
+            "actasEntrega",
+            "manualesGarantias"
+          ]
+        }
+      ],
+      "fuentes": {
+        "costeLiquidado": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "No se infiere del presupuesto.",
+          "vinculo": "relación declarada"
+        },
+        "manualesGarantias": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "vinculo": "relación declarada"
+        },
+        "actasEntrega": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "No se simula ninguna firma ni aceptación.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-disponible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q05",
+        "RP-Q06",
+        "RP-Q08",
+        "RP-Q07"
+      ]
+    },
+    {
+      "receta": "RP21",
+      "nivel": "C",
+      "modulos": [
+        {
+          "id": "01",
+          "capitulos": [
+            "portada"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "03",
+          "capitulos": [],
+          "fuentes": []
+        },
+        {
+          "id": "05",
+          "capitulos": [
+            "dibujo"
+          ],
+          "fuentes": [
+            "evidenciaEjecutada"
+          ]
+        },
+        {
+          "id": "06",
+          "capitulos": [
+            "estancias",
+            "recorrido"
+          ],
+          "fuentes": [
+            "imagenesIA",
+            "recorrido",
+            "evidenciaEjecutada"
+          ]
+        },
+        {
+          "id": "07",
+          "capitulos": [
+            "materiales"
+          ],
+          "fuentes": []
+        },
+        {
+          "id": "10",
+          "capitulos": [
+            "decisiones",
+            "documentos",
+            "procedencia"
+          ],
+          "fuentes": [
+            "archivoPropietario"
+          ]
+        }
+      ],
+      "fuentes": {
+        "evidenciaEjecutada": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Las imágenes del diseño no son evidencia de lo ejecutado.",
+          "vinculo": "relación declarada"
+        },
+        "archivoPropietario": {
+          "estado": "ausente",
+          "autoridad": null,
+          "nota": "Un ZIP no es un portal: el archivo del propietario requiere contrato (E6/E7).",
+          "vinculo": "relación declarada"
+        },
+        "imagenesIA": {
+          "estado": "disponible",
+          "autoridad": "orientativa",
+          "nota": "3 imágenes, siempre junto a su vista del modelo.",
+          "vinculo": "relación declarada"
+        },
+        "recorrido": {
+          "estado": "disponible",
+          "autoridad": "vídeo exportado por el producto",
+          "nota": "MP4 local; no es la visita 3D interactiva.",
+          "vinculo": "relación declarada"
+        }
+      },
+      "salida": {
+        "es": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        },
+        "en": {
+          "estado": "no-elegible",
+          "seleccion": null,
+          "artefacto": null,
+          "evidencia": "contrato sin artefacto de cliente"
+        }
+      },
+      "gates": [
+        "RP-Q01",
+        "RP-Q02",
+        "RP-Q03",
+        "RP-Q10",
+        "RP-Q11",
+        "RP-Q12",
+        "RP-Q09",
+        "RP-Q08",
+        "RP-Q05",
+        "RP-Q07"
+      ]
+    }
+  ],
+  "gates": {
+    "RP-Q01": {
+      "pruebas": [
+        "tools/recetas-qa.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q02": {
+      "pruebas": [
+        "tools/recetas-qa.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q03": {
+      "pruebas": [
+        "tools/recetas-qa.cjs",
+        "tools/exportar-qa.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q04": {
+      "pruebas": [
+        "tools/architecture-pdf-qa.py"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q05": {
+      "pruebas": [
+        "tools/ffe-qa.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q06": {
+      "pruebas": [
+        "tools/economia-qa.cjs",
+        "tools/recetas-qa.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q07": {
+      "pruebas": [
+        "tools/estado-qa.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q08": {
+      "pruebas": [
+        "tools/recetas-qa.cjs",
+        "evidence/e2/diagnostico.json"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q09": {
+      "pruebas": [
+        "tools/consumidor-qa.cjs",
+        "evidence/revision-visual/index.html"
+      ],
+      "humano": true,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q10": {
+      "pruebas": [
+        "tools/exportar-qa.cjs",
+        "tools/inspeccionar-paquete.py",
+        "tools/reconstruir.sh"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q11": {
+      "pruebas": [
+        "tools/mapa-impacto.cjs"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    },
+    "RP-Q12": {
+      "pruebas": [
+        "tools/motor-qa.cjs",
+        "tools/reconstruir.sh"
+      ],
+      "humano": false,
+      "reutilizacion": "Solo con identidad verificada de fuentes, entorno y artefacto."
+    }
+  }
+}

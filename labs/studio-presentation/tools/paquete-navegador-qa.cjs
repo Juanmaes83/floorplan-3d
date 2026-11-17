@@ -4,16 +4,21 @@
 // vídeos que cargan metadatos y avanzan al reproducirse, errores de consola, desbordamiento horizontal, enlaces internos rotos,
 // orden de tabulación con foco visible y contraste del texto. Además graba un vídeo real del recorrido en escritorio y móvil.
 // Uso: node tools/paquete-navegador-qa.cjs <zip> <dirEvidencias>
-const fs=require('fs'),path=require('path'),os=require('os'),{execFileSync}=require('child_process'),{chromium}=require('playwright');
+const fs=require('fs'),path=require('path'),os=require('os'),{createHash}=require('crypto'),{execFileSync}=require('child_process'),{chromium}=require('playwright');
 const [zip,evd]=process.argv.slice(2);const EV=path.resolve(evd);fs.mkdirSync(EV,{recursive:true});
 const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cliente-limpio-'));execFileSync('unzip',['-q',path.resolve(zip),'-d',dir]);
-const VIEWS=[['escritorio',1440,900],['tableta',820,1180],['movil',390,844],['movil-horizontal',844,390]];
-(async()=>{const b=await chromium.launch({args:['--no-sandbox','--autoplay-policy=no-user-gesture-required']});const out={zip:path.basename(zip),carpeta:'(temporal, fuera del repositorio)',vistas:[]};
- for(const [name,w,h] of VIEWS){const rec=name==='escritorio'||name==='movil';
-  const ctx=await b.newContext({viewport:{width:w,height:h},deviceScaleFactor:1,locale:'es-ES',...(rec?{recordVideo:{dir:EV,size:{width:w,height:h}}}:{})});
+const entries=fs.readdirSync(dir,{withFileTypes:true});
+const root=entries.length===1&&entries[0].isDirectory()?path.join(dir,entries[0].name):dir;
+const VIEWS=[['escritorio',1440,900],['tableta',820,1180],['movil',390,844],['movil-horizontal',844,390],
+ ['estrecho',320,640],['reflow-200-por-ciento',720,450,2]];
+(async()=>{const b=await chromium.launch({args:['--no-sandbox','--autoplay-policy=no-user-gesture-required']});
+ const out={zip:path.basename(zip),sha256:createHash('sha256').update(fs.readFileSync(zip)).digest('hex'),
+  carpeta:'(temporal, fuera del repositorio)',vistas:[]};
+ for(const [name,w,h,dsf=1] of VIEWS){const rec=name==='escritorio'||name==='movil';
+  const ctx=await b.newContext({viewport:{width:w,height:h},deviceScaleFactor:dsf,locale:'es-ES',...(rec?{recordVideo:{dir:EV,size:{width:w,height:h}}}:{})});
   const ext=[],errs=[];await ctx.route('**/*',r=>{const u=r.request().url();if(/^(file|data|blob):/.test(u))return r.continue();ext.push(u);return r.abort();});
   const pg=await ctx.newPage();pg.on('console',m=>{if(m.type()==='error')errs.push(m.text().slice(0,160));});pg.on('pageerror',e=>errs.push(e.message.slice(0,160)));
-  await pg.goto('file://'+path.join(dir,'index.html'));await pg.evaluate(()=>document.fonts.ready);
+  await pg.goto('file://'+path.join(root,'index.html'));await pg.evaluate(()=>document.fonts.ready);
   // cargar todas las imágenes perezosas recorriendo la página (también sirve de vídeo de recorrido)
   const H=await pg.evaluate(()=>document.documentElement.scrollHeight);for(let y=0;y<H;y+=Math.round(h*.8)){await pg.evaluate(y=>window.scrollTo(0,y),y);await pg.waitForTimeout(rec?350:120);}
   await pg.evaluate(()=>window.scrollTo(0,0));await pg.waitForTimeout(300);
@@ -35,7 +40,9 @@ const VIEWS=[['escritorio',1440,900],['tableta',820,1180],['movil',390,844],['mo
   const focus=[];for(let i=0;i<12;i++){await pg.keyboard.press('Tab');focus.push(await pg.evaluate(()=>{const e=document.activeElement;if(!e||e===document.body)return null;const cs=getComputedStyle(e);const vis=cs.outlineStyle!=='none'&&parseFloat(cs.outlineWidth)>0||cs.boxShadow!=='none';return {tag:e.tagName,txt:(e.textContent||'').trim().slice(0,24),visible:vis||e.tagName==='VIDEO',nota:!vis&&e.tagName==='VIDEO'?'foco dentro de los controles nativos del vídeo (anillo del navegador); el contenedor tiene :focus-visible con contorno 2 px, verificado aparte':undefined};}));}
   const vpath=rec?await pg.video().path():null;await ctx.close();
   if(vpath){const dst=path.join(EV,`recorrido-${name}.webm`);fs.renameSync(vpath,dst);}
-  out.vistas.push({vista:name,w,h,...m,externas:ext.length,errores:errs,foco:focus.filter(Boolean),capturas:`${name}-${w}x${h}.png`,video:rec?`recorrido-${name}.webm`:null});}
+  out.vistas.push({vista:name,w,h,escalaEmulada:dsf,...m,externas:ext.length,errores:errs,foco:focus.filter(Boolean),capturas:`${name}-${w}x${h}.png`,video:rec?`recorrido-${name}.webm`:null});}
  await b.close();
  out.resumen={rotas:out.vistas.reduce((s,v)=>s+v.rotas.length,0),videosSinReproducir:out.vistas.reduce((s,v)=>s+v.videos.filter(x=>!x.reproduce).length,0),externas:out.vistas.reduce((s,v)=>s+v.externas,0),errores:out.vistas.reduce((s,v)=>s+v.errores.length,0),desbordeX:Math.max(...out.vistas.map(v=>v.desbordeX)),enlacesRotos:out.vistas.reduce((s,v)=>s+v.enlacesRotos.length,0),contrasteBajo:out.vistas.reduce((s,v)=>s+v.contrasteBajo.length,0),focoInvisible:out.vistas.reduce((s,v)=>s+v.foco.filter(f=>!f.visible).length,0)};
- fs.writeFileSync(path.join(EV,'navegador-qa.json'),JSON.stringify(out,null,1));fs.rmSync(dir,{recursive:true});console.log(JSON.stringify(out.resumen),JSON.stringify(out.vistas.map(v=>({v:v.vista,img:v.imagenes,videos:v.videos.map(x=>x.reproduce+':'+x.duration),small:v.textoBajo12px,scripts:v.scripts}))));})().catch(e=>{console.error(e);process.exit(1);});
+ fs.writeFileSync(path.join(EV,'navegador-qa.json'),JSON.stringify(out,null,1));fs.rmSync(dir,{recursive:true});console.log(JSON.stringify(out.resumen),JSON.stringify(out.vistas.map(v=>({v:v.vista,img:v.imagenes,videos:v.videos.map(x=>x.reproduce+':'+x.duration),small:v.textoBajo12px,scripts:v.scripts}))));
+ if(Object.values(out.resumen).some(value=>value>0))process.exitCode=2;
+})().catch(e=>{console.error(e);process.exit(1);});

@@ -49,6 +49,7 @@ for(const [id,status,beforeBudget,afterBudget] of cases){
  const folder=path.join(work,id);
  fs.mkdirSync(folder);fs.mkdirSync(path.join(folder,'inputs'));
  const s0={...s,variant:'fixture-economia-'+id,brand:{...s.brand,title:'Fixture de laboratorio económica'},
+  project:{...s.project,id:comparison.after.projectId,name:comparison.after.name,revision:null},
   views:[],budget:null,economiaComparada:canonical};
  fs.writeFileSync(path.join(folder,'inputs/snapshot.json'),JSON.stringify(s0));
  const expected=[];
@@ -64,16 +65,19 @@ for(const [id,status,beforeBudget,afterBudget] of cases){
    env:{...process.env,STUDIO_FIXTURE_DOC:doc},maxBuffer:16*1024*1024
   });
   const pdf=path.join(dest,doc+'.pdf');
+  const html=read(path.join(dest,doc+'.html'));
   const text=execFileSync('pdftotext',['-layout',pdf,'-'],{encoding:'utf8'});
   for(const phrase of ['Datos sintéticos','Honorarios: no aportados','Compra del inmueble','Impuestos de compra'])assert(text.includes(phrase),phrase);
-  assert.deepEqual(amounts(text),expected.filter(Number.isFinite).sort((a,b)=>a-b),id+': importes PDF');
+  const amountsExpected=expected.filter(Number.isFinite).sort((a,b)=>a-b);
+  assert.deepEqual(amounts(html.toString('utf8')),amountsExpected,id+': importes HTML');
+  assert.deepEqual(amounts(text),amountsExpected,id+': importes PDF');
   if(!expected.length)assert(!text.includes('€'),id);
   if(id==='partial')assert(text.replace(/\s+/g,' ').includes('No es la diferencia de coste total.'));
   if(id==='before'||id==='after')assert(!text.includes('Diferencia con IVA'));
   const docQa=JSON.parse(read(path.join(dest,'qa.json'))).docs[doc];
   assert.equal(docQa.overflowCount+docQa.textOverlapCount+docQa.spillCount+docQa.svgClipCount,0,id);
   assert.deepEqual(docQa.lint.red,[]);
-  documents.push({archivo:doc+'.pdf',sha256:sha(read(pdf)),paginas:docQa.pages});
+  documents.push({archivo:doc+'.pdf',sha256:sha(read(pdf)),htmlSha256:sha(html),paginas:docQa.pages});
  }
  result.casos.push({id,status,importeVerificado:expected,documentos:documents});
  console.log('PASS',id,'propuesta e inmobiliaria');

@@ -1,9 +1,9 @@
 {
  "schema": "rubik-lab-recetas-qa/1",
- "fecha": "2026-11-17T20:12:53.065Z",
+ "fecha": "2026-11-17T20:42:07.976Z",
  "catalogo": "rubik-lab-recetas/1",
  "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
- "registroSha256": "cd0e46c8c0e5c6f2b3fa9381a131b8276a88d52c0d0cc7ebdd36e7d4c3a8caac",
+ "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f",
  "partes": [
   "esquema",
   "exportar",
@@ -11,8 +11,8 @@
   "ui"
  ],
  "solo": null,
- "total": 112,
- "pass": 112,
+ "total": 117,
+ "pass": 117,
  "casos": [
   {
    "id": "Q01-claves",
@@ -1345,7 +1345,43 @@
     "estado": "no-elegible",
     "motivo": [
      "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Ofertas independientes comparables. Moneda, IVA o alcance no comparables: no se homologa por suposición."
+     "Falta: Ofertas independientes comparables. Moneda, IVA, unidad, método o alcance no comparables."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-unidad-incompatible",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Moneda, IVA, unidad, método o alcance no comparables."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-revision-ajena",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Hay una oferta de otro proyecto o revisión."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-ambito-distinto",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Moneda, IVA, unidad, método o alcance no comparables."
     ]
    }
   },
@@ -1393,9 +1429,31 @@
     "estado": "no-elegible",
     "motivo": [
      "Contrato de laboratorio (E3/E6 + OBR): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
-     "Falta: Observaciones de obra reales (fecha, autor). Cada observación necesita fecha y autor.",
+     "Falta: Observaciones de obra reales (fecha, autor). Cada observación necesita fecha, autor y ubicación.",
      "Falta: Certificaciones de obra aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
     ]
+   }
+  },
+  {
+   "id": "NEG-rp15-simulacion-no-es-observacion",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (E3/E6 + OBR): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Observaciones de obra reales (fecha, autor). Una previsión, simulación, declaración u otra revisión no acredita una observación.",
+     "Falta: Certificaciones de obra aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp15-plan-de-otro-proyecto",
+   "ok": true,
+   "detalle": {
+    "estado": "incompatible",
+    "autoridad": null,
+    "nota": "El proyecto o revisión del plan de la entrega no coincide."
    }
   },
   {
@@ -1458,7 +1516,7 @@
     "code": 0,
     "verificado": true,
     "adaptador": true,
-    "registroSha256": "cd0e46c8c0e5c6f2b3fa9381a131b8276a88d52c0d0cc7ebdd36e7d4c3a8caac",
+    "registroSha256": "614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f",
     "estable": true,
     "comparacion": {
      "identidad": true,

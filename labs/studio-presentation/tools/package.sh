@@ -34,7 +34,7 @@ while IFS= read -r f; do mkdir -p "$STAGE/$(dirname "$f")"; cp -p "$f" "$STAGE/$
 python3 -I - "$STAGE" "$LAB" "$DIST/SANEAMIENTO.json" <<'PY'
 import sys,os,re,json,subprocess,hashlib
 stage,lab,report=sys.argv[1:4];repo=os.path.dirname(os.path.dirname(lab));home=os.path.expanduser('~')
-subs=[(lab,'<LABORATORIO>'),(repo,'<REPOSITORIO>'),('/home/user/studio','<REPOSITORIO-OTRA-SESION>'),('/home/user','<HOME>'),(home,'<HOME>'),('/tmp/claude-0','<TMP>'),('/tmp','<TMP>'),('/opt/pw-browsers','<NAVEGADORES>')]
+subs=[(lab,'<LABORATORIO>'),(repo,'<REPOSITORIO>'),('/home/user/studio','<REPOSITORIO-OTRA-SESION>'),('/home/user','<HOME>'),(home,'<HOME>'),('/tmp/claude-0','<TMP>'),('/opt/pw-browsers','<NAVEGADORES>')]
 KEEP={'tools/package.sh','tools/inspeccionar-paquete.py'}  # contienen estos patrones como código: reescribirlos los rompería
 TEXT=('.md','.json','.cjs','.js','.mjs','.py','.sh','.txt','.html','.csv','.svg')
 out={'regla':'Rutas absolutas del entorno sustituidas por marcadores en la COPIA empaquetada; el repositorio no cambia.','sustituciones':[s[1] for s in subs],'archivos':[],'videos':[],'intactos':'out/v3/entrega/** (su registro de huellas debe seguir valiendo)'}

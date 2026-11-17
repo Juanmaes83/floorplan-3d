@@ -1,14 +1,15 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · continuidad v1.4
+## Vigente · candidato de laboratorio v1.4
 
-Rama exclusiva `lab/studio-presentation-e0e1`. Base de continuidad `101fe167bd920c94c7e27938dfd3c22526dd9728`. Producto de solo lectura `master@8525025a1470d48d52d8e365070e5a0acf116134`.
+Rama exclusiva `lab/studio-presentation-e0e1`. Producto de solo lectura en `master@8525025a1470d48d52d8e365070e5a0acf116134`. Mandatos acumulativos y huellas en `mandatos/INDICE-MANDATOS.md`.
 
-- Mandatos acumulativos y huellas en `mandatos/INDICE-MANDATOS.md`, con v1.2 recuperada.
-- Trabajo activo, evidencias y bloqueos en `reports/15-REGISTRO-v1.4.md`. Se han recibido V13-01–V13-09 y CONT-01–CONT-03.
-- N01 y CONT-01/02 verificados: RP07 22/22 y recetas 112/112. Desde el laboratorio: `node tools/compose.cjs snapshot out/v3` y `node tools/recetas-qa.cjs /tmp/rq2` en la misma composición.
-- CONT-03 verificado en el ZIP intermedio N01/N05 con dos reconstrucciones y un negativo. La receta de reconstrucción y dependencias está en `RECETA.md`.
-- Pendientes del candidato: N02–N04/N06–N08, RP-Q, comparación con baseline, inspección y distribución de ZIP y revisión de propietario.
+- Estado, pruebas, comparativa, dictamen y límites en `reports/15-REGISTRO-v1.4.md`. Matrices históricas en los informes 12 y 13.
+- Verificación desde la raíz del laboratorio: `node tools/recetas-qa.cjs /tmp/recetas` y `node tools/estado-qa.cjs /tmp/estados`. Ambas suites usan la composición congelada publicada en `out/v3`.
+- Reconstrucción limpia: `bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip /tmp/reconstruccion`. Receta en `RECETA.md`.
+- La prueba económica reproduce el pin de producto con `node tools/economia-qa.cjs <checkout-con-el-objeto-Git> <evidencia.json>`. La fuente se carga temporalmente en QA y no se redistribuye.
+- Los ZIP de distribución, digest externos y revisión visual se entregan fuera de Git. El registro posterior al empaquetado identifica los bytes exactos en `evidence/paquetes/`.
+- Pendientes de decisión: aceptación visual humana, H08 y GO de producto. E2–E7 tienen plan y rollback en `reports/11-PROPUESTA-E2.md`.
 
 ## Histórico
 

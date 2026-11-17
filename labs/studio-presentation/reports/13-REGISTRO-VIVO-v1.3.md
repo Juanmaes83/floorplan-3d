@@ -98,7 +98,9 @@ La inspección (`evidence/paquetes/inspeccion-laboratorio.json`) no bloquea nada
 | `tools/inspeccionar-paquete.py` | Patrón de ruta absoluta | Aceptado: código | Es el patrón que busca rutas. Reescribirlo rompería el inspector. |
 | `tools/package.sh` (×3) | `/home/user`, `/tmp/claude-0`, `/home/user/studio` | Aceptado: código | Son las rutas que el saneador sustituye. Reescribirlas rompería el saneado. |
 
-## Fuentes que faltan (bloqueos registrados)
+## Fuentes ausentes en v1.3 (histórico)
+
+La especificación y los hallazgos llegaron en la continuidad v1.4. Su estado actual está en `reports/15-REGISTRO-v1.4.md`.
 
 | Fuente | Estado |
 |---|---|

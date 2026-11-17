@@ -95,7 +95,7 @@ La fuente v1.2 está en `mandatos/` con su huella original. El bloqueo por ausen
 |---|---|---|
 | N02 · Architecture Book | Índice con destinos internos AB-01–AB-11 medidos en PDF ES/EN, índice A-01–A-08, cuadro de 22 anchos, cajetines y localizador del mirador. `evidence/architecture/pdf-qa.json`. | Escalas del modelo estimado. FT3D-3/4 esquemáticos. Alturas, sentidos, replanteo, instalaciones y demolición sin autoridad propia. |
 | N03 · FF&E | 46 instancias únicas, 40 fichas ES/EN, procedencia por revisión, agrupación por estancia, dimensiones, material y referencia de catálogo. `evidence/ffe/ffe-qa.json`, `out/v3/qa.json`. Negativos de duplicado, revisiones, cantidad y SKU; 1/50/200/500 fichas cotejadas en PDF. | M-xx estable frente a reorden de entrada en la revisión congelada. Las 46 son instancias genéricas; sin fabricante, precio o instalación acreditada. |
-| N04 · Economía | Seis escenarios canónicos (complete, partial, incoherent, ambas direcciones one-sided, none) en propuesta e inmobiliaria, 12 PDF de fixture rotulada. Los valores impresos coinciden por multiconjunto con la salida canónica. `evidence/economia/economia-qa.json`. | GitHub declara `licenseInfo: null` en el origen y el pin carece de fichero de licencia. QA lee temporalmente el producto fijado con paridad de blobs y SHA-256; el núcleo y sus dependencias quedan fuera del ZIP. El ZIP es autónomo para reconstruir el candidato, y el QA económico exige el objeto Git de producto. Escenarios comparativos de fixture en ES. |
+| N04 · Economía | Seis escenarios canónicos (complete, partial, incoherent, ambas direcciones one-sided, none) en propuesta e inmobiliaria, 12 pares HTML/PDF de fixture rotulada. Los valores coinciden por multiconjunto con la salida canónica. `evidence/economia/economia-qa.json`. | GitHub declara `licenseInfo: null` en el origen y el pin carece de fichero de licencia. QA lee temporalmente el producto fijado con paridad de blobs y SHA-256; el núcleo y sus dependencias quedan fuera del ZIP. El ZIP es autónomo para reconstruir el candidato, y el QA económico exige el objeto Git de producto. Escenarios comparativos de fixture en ES. |
 | N06 · Autoridad | Las ofertas cotejan fuente, revisión, ámbito, unidad, método, moneda e IVA. Una simulación se rechaza como observación. Plan ajeno incompatible. Recetas C/F con evaluación y bloqueo, con lectura de A25/A26 en `evidence/e2/diagnostico.json`. | Diagnóstico v1.3 heredado de producto. RP13–RP21 continúan como contratos; sus proyecciones no acreditan obra o emisión. |
 | N07 · Editorial | Portada técnica con planta ortográfica, interiorismo con axonometría y entrega integral con el fotograma auténtico de Dibujo vivo. Paleta con ID de pavimento y fuente en QA. Pies del sistema a 9 pt con el color de tinta. Láminas y fichas retienen referencias y D1–D5. | Uso de la escala gráfica de 9,63 pt y rótulos de 9,49 pt acreditado en el plano general AB ES/EN. Otras escalas y rótulos de variantes heredadas pueden usar cuerpos menores. |
 | N08 · Impacto | `tools/mapa-impacto.cjs` cruza receta, módulo, fuente, selección, archivo y gate con huellas de dependencias y registro del candidato. `evidence/impacto/mapa.json`. | Las dependencias compartidas implican cobertura conservadora. Aceptación humana D08 pendiente. |
@@ -116,7 +116,7 @@ La fuente v1.2 está en `mandatos/` con su huella original. El bloqueo por ausen
 
 **Diferencial**. PDF distribuidos desde `585fd9c` frente al candidato: 16 documentos, 114 páginas rasterizadas a 110 dpi, las 114 modificadas respecto a su página de referencia. Se revisaron planchas con todas las páginas, con mediciones PDF específicas en Architecture Book. Las figuras, composición, recortes y pies se contrastaron en ES/EN. Revisión independiente del propietario y prueba física de escala siguen pendientes. Comparativa por página en `evidence/revision-visual/v1.4/comparativa.json`.
 
-**H08**. Recuento de 68 archivos en Git público en `master@8525025` confirmado por árbol Git. `.vercelignore` en ese pin excluye `labs/`; no declara la carpeta VIS de raíz. Esto acredita exposición en Git y alcance de la configuración examinada, no accesibilidad HTTP real. Se mantiene el inventario anterior. Revisión de derechos, aislamiento y posible exclusión en deploy requieren decisión independiente. Los originales VIS no forman parte de los ZIP.
+**H08**. Recuento de 68 archivos en Git público en `master@8525025` confirmado por árbol Git. `.vercelignore` en ese pin excluye `labs/`; no declara la carpeta VIS de raíz. Esto acredita exposición en Git y alcance de la configuración examinada, no accesibilidad HTTP real. Se mantiene el inventario anterior. Revisión de derechos, aislamiento y posible exclusión en deploy requieren decisión independiente. La inspección del paquete confirmó cero archivos VIS y la huella íntegra del mandato v1.2.
 
 ## Reconciliación de la fuente recuperada v1.2
 
@@ -125,10 +125,49 @@ La fuente v1.2 está en `mandatos/` con su huella original. El bloqueo por ausen
 | §0–2, §4 | Taxonomía preservada en `catalogo-entrega.cjs` y `recetas.cjs`. Autoridades de proyecto, revisión y módulos; A06/ST07 muestran los grados de los cuatro pilares. | Dibujo vivo conserva fotograma auténtico, sin exportación de su transformación. Visita interactiva sigue fuera de la entrega offline. |
 | §3 | H01–H08 en `reports/13` y actualización H08 de este registro. A25/A26 solo diagnóstico. | Reproducir la carrera de B1 en producto y cambios del comparador, con GO de E2. |
 | §5 | Capas editoriales y trazabilidad en N02/N03/N07. Revisadas las 114 páginas distribuidas. | D08 del propietario y escala de impresión física. |
-| §6 | Composición y selección por snapshot. Economía de comparación cotejada en PDF con cifras canónicas de fixtures. | Paridad comparativa de HTML y ZIP por estado económico fuera de la prueba PDF actual. |
+| §6 | Composición y selección por snapshot. Economía de comparación cotejada en PDF con cifras canónicas de fixtures. | La paridad HTML/PDF de cada estado se comprobó en las fixtures. Falta un ZIP de prueba por estado comparativo. |
 | §7 | Procedencia y licencias en `reports/01` y `vendor/PROCEDENCIA.md`; revisión diferencial de skills fijadas. | Sin licencia declarada para redistribuir la fuente de producto usada en N04. |
 | §8 y §12 | Cortes y rollback en `reports/11`; decisiones D1–D7 heredadas. | E2–E7 solo plan. H08 y aceptación humana requieren decisión del propietario. |
 | §9–11 | Matrices H/A/D/ST heredadas, pruebas de recetas, exportación, motor, paquetes y reconstrucción. | Evaluación completa por navegador y escala indicada en RP-Q. |
 | §13 | Fuente maestra y anexos versionados con huella, archivos, procedencia y grado de evidencia registrados. | Las referencias de auditoría de producto son lectura histórica salvo revalidación declarada. |
 
 Entorno del candidato: Ubuntu 24.04 en contenedor local, Node 24.20.0, Playwright 1.63.0 con Chromium 1243, Poppler 24.02, ffmpeg 6.1.1, Python 3.12.3 con Pillow 12.3.0 y pypdf 6.17.0. Linux se eligió para conservar los contratos Info-ZIP, Poppler y shell de la receta existente.
+
+## RP-Q del candidato congelado
+
+Registro de composición SHA-256 `614739a7208426ddca3953304ee31fb09dec3196a348e2e737deb4acb356725f`. Snapshot `fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390`.
+
+| Gate | Resultado y prueba | Limitación |
+|---|---|---|
+| RP-Q01 · Taxonomía | EXECUTED_PASS. 21 claves, tres familias, cinco documentos, diez módulos, siete modalidades, cinco Story, seis perfiles y tres fases. `evidence/recetas/recetas-qa.json`. | Ejes de catálogo de laboratorio. |
+| RP-Q02 · Selector | EXECUTED_PASS. 117/117 en la suite de recetas. 24 exportaciones L, más rechazo ES/EN de las nueve C/F. RP07 verifica identidad y todo el inventario entre adaptador y UI. | Las L parciales enumeran sus fuentes ausentes. |
+| RP-Q03 · Autoridad | EXECUTED_PASS para selección y exportación lab. Revisión cruzada, plan ajeno, fuente obsoleta, campos opcionales ausentes y 72/72 del exportador. | H03/B1 y mutaciones de producto corresponden a E2. |
+| RP-Q04 · Architecture Book | EXECUTED_PASS. Índice, destinos internos y tipografía efectiva ES/EN, anchos a partir del modelo, cajetín y avisos. | Escalas estimadas. Medición en impresión física pendiente. |
+| RP-Q05 · FF&E | EXECUTED_PASS. Oráculo 46/40, fichas ES/EN y extremos 1/50/200/500. | Categoría instalados y catálogo comercial sin fuente demostrada en el caso. |
+| RP-Q06 · Comercial | EXECUTED_PASS en 12 pares HTML/PDF de fixture sobre seis escenarios. RP07 queda sin importes, incluido el inventario físico. | Pendientes ZIP por cada escenario comparativo, publicación comercial y redistribución del núcleo N04. |
+| RP-Q07 · Estados | EXECUTED_PASS. 23/23 en `evidence/estados/estado-qa.json`. Dos preparaciones concurrentes en el exportador y negativos de obsolescencia/integridad. | Emisión simulada y rotulada. |
+| RP-Q08 · Conciliación | EXECUTED_PASS para contratos y negativos RP13–RP21 en laboratorio. A25/A26 tienen registro de diagnóstico anterior, sin ejecución de E2 en este corte. | Comparación informativa y alcance C/F preservados. |
+| RP-Q09 · Diseño y accesibilidad | 114 páginas ES/EN revisadas por el agente. Los cuatro perfiles de marca se recompusieron ES/EN sin problemas de composición. Ver matriz de navegador y ZIP exacto. | Aceptación humana y dispositivos físicos pendientes. Reflujo al 200 % emulado. |
+| RP-Q10 · Exportación y seguridad | Suites 72/72 exportador, 11/11 motor y verificadores de los ZIP exactos. Prueba CONT-01 sin adaptador devolvió 1. Los ZIP ES/EN incluyen sus manifiestos y tienen digest externo. | Revisión de propietario H08 sobre el banco Git. |
+| RP-Q11 · Impacto | EXECUTED_PASS del mapa. 21 recetas, 105 archivos comunes con huellas, 12 gates, 24 artefactos de ejecución. | Las huellas de dependencias no sustituyen los ensayos ni modifican CI. |
+| RP-Q12 · Continuidad | Comparativa contra `585fd9c`, dos reconstrucciones intermedias y comparación final archivada de forma externa al ZIP. | Evidencia y acta posterior al empaquetado en el cierre de distribución. |
+
+Los informes 12 y 13 conservan la matriz D01–D18/ST01–ST09 y el registro acumulativo H01–H08/A01–A29. La tabla anterior actualiza la cobertura del laboratorio. H01/H02, H03, H06–H08, D02 de producto y ST01 de producto conservan su ámbito y condiciones de fase. D08 del propietario, dispositivos físicos D09, publicación D15 y PDF/A D18 permanecen fuera de lo acreditado aquí.
+
+**Separación de salida**. Auditar el candidato de laboratorio con los archivos y huellas de distribución. La aceptación visual humana, la aprobación documental de producto y las decisiones H08 y E2 requieren al propietario. La fiscalidad, la ejecución de obra y la relación contractual quedan limitadas a sus fuentes y al estado declarado.
+
+### Navegadores y ZIP exacto
+
+| Navegador emulado | Resultado | Evidencia |
+|---|---|---|
+| chromium 153.0.8010.12 | EXECUTED_PASS, 14/14 paquetes y 70 aperturas | `evidence/consumidor/v1.4/chromium.json` |
+| firefox 155.0 | EXECUTED_PASS, 14/14 paquetes y 70 aperturas | `evidence/consumidor/v1.4/firefox.json` |
+| webkit 26.6 | EXECUTED_PASS, 14/14 paquetes y 70 aperturas | `evidence/consumidor/v1.4/webkit.json` |
+
+Firefox comprobó alcance y retroceso de foco en su perfil de prueba. WebKit reproduce los vídeos con gesto real. La secuencia parte del documento para alcanzar también los enlaces anteriores al vídeo. El menú envuelve sus enlaces en todas las anchuras, el encabezado estrecho va con el documento y el desplazamiento del foco es inmediato. Se corrigieron así las dos causas observadas de foco fuera de pantalla.
+
+Los ZIP exactos ES/EN pasaron bajo Chromium en seis configuraciones por idioma, incluido reflujo 200 % emulado (720 CSS px a escala de dispositivo 2). Sin recursos externos, medios rotos, enlaces internos rotos, errores o desborde horizontal en esa prueba. Ver `evidence/paquetes/navegador-v1.4-{es,en}.json`, con SHA-256 de cada ZIP.
+
+Chromium registró apertura p50 de 85–104 ms y p95 de 88–144 ms, 10 repeticiones por configuración e idioma. Exportación de 14 modalidades/idiomas: p50 5,37 s y p95 9,26 s. Muestras del contenedor Linux, sin SLA ni comparación de velocidad entre entornos.
+
+**Dictamen**. Candidato apto para revisión independiente del laboratorio con sus límites declarados. D08, H08, escala de impresión física, dispositivos reales y GO de producto siguen pendientes. La paridad HTML/PDF económica se acredita en fixtures ES. La equivalencia comparativa por estado en ZIP y la redistribución del núcleo no están acreditadas.

@@ -1,0 +1,623 @@
+{
+  "es": {
+    "sha256": "36966b24c3850e5a0dd71b72ed1e63c8566f8051e9cabbd237ecaead2010c9eb",
+    "manifiestoSha256": "93ff064b1a045255ba205580664ada97e1727d70170f8c29465420b56e508762",
+    "gates": [
+      {
+        "k": "Identidad del estudio",
+        "s": "warn",
+        "t": "Perfil sintético del laboratorio (estudio@example.invalid)."
+      },
+      {
+        "k": "Plan de obra",
+        "s": "warn",
+        "t": "Plan de ejemplo importado: fechas ilustrativas y sin presupuesto vinculado (rotulado en la entrega)."
+      },
+      {
+        "k": "Mismo proyecto y revisión",
+        "s": "ok",
+        "t": "prj_reference-home, revisión rv1-0f3e96422fd20e08."
+      },
+      {
+        "k": "Presupuesto revisado",
+        "s": "warn",
+        "t": "0 de 11 partidas revisadas; precios de prueba de laboratorio."
+      },
+      {
+        "k": "Imágenes IA",
+        "s": "warn",
+        "t": "Imágenes orientativas generadas con IA, rotuladas y siempre junto a la vista del modelo."
+      },
+      {
+        "k": "Sin proyecto editable",
+        "s": "ok",
+        "t": "Ningún archivo de proyecto ni geometría en bruto."
+      },
+      {
+        "k": "Datos personales",
+        "s": "ok",
+        "t": "Solo el contacto del estudio."
+      },
+      {
+        "k": "Lo excluido no está",
+        "s": "ok",
+        "t": "Entrega completa."
+      }
+    ],
+    "nota": "Integridad, no autenticidad ni veracidad: las huellas prueban que los archivos no han cambiado desde la exportación. El resumen externo no es una firma digital.",
+    "detalleFuentes": {
+      "LEEME.txt": {
+        "producer": "tools/exportar.cjs"
+      },
+      "documentos/architecture-book.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "ce6a93d1f6ee99d9d82fe481bb562de2803f2ddb27a9dc7d80d3432ba7a969fa",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "documentos/architecture-sheet-strip.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "35a9a10eb28f24ff5b47775d2e1cb6bcd7b97c0f7493828b0a2c841bcfa8d0fd",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "documentos/commercial-proposal-client-v3.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "2adb6dd1affb51377072ef6002cb94c41c1557ee93d7ef7e8c6e8453fd4484c8",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "documentos/entrega-integral.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "dce981f3365c35ddffb4316e09052dcfe8430938175d8030dc8bb2f8bfec364e",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "documentos/interior-book-v3.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "81567b61c6b0b89596f2e5994d64a4bbbf41f293d3fd9e2ce416f6fcecafa52f",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "documentos/materials-furniture-book-v3.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "documentos/obra-presentacion.html": {
+        "producer": "RUBIK · Evolución de obra (FT3D-8) · Presentación de solo lectura",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.html",
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "obra"
+      },
+      "documentos/real-estate-sheet-v3.pdf": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "85b199e212f61f0b9fb7ea09cbea154915d95071684199bdebac3dadf0599178",
+        "origenComprobado": "pieza producida por el compositor",
+        "capitulo": null
+      },
+      "index.html": {
+        "producer": "tools/exportar.cjs",
+        "transform": "HTML final podado (sin scripts) a partir de index.html",
+        "from": "entrega compuesta",
+        "sourceSha256": "74e96410c19a4cb6e4f9d3e3baf8b89bf79d37cd3e593910984dc73e2d00c80f"
+      },
+      "media/dibujo-vivo.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/dibujo-vivo/00-overview.png",
+        "sourceSha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952",
+        "transform": null,
+        "composedSha256": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+        "origenComprobado": "comprobado",
+        "capitulo": "portada"
+      },
+      "media/ia-1.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "evidence/render-ia/render-ia-1-salon.png",
+        "sourceSha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
+        "transform": null,
+        "composedSha256": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+        "origenComprobado": "comprobado",
+        "capitulo": "estancias"
+      },
+      "media/ia-2.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "evidence/render-ia/render-ia-2-dormitorio-principal.png",
+        "sourceSha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
+        "transform": null,
+        "composedSha256": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+        "origenComprobado": "comprobado",
+        "capitulo": "estancias"
+      },
+      "media/ia-3.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "evidence/render-ia/render-ia-3-vista-general.png",
+        "sourceSha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
+        "transform": null,
+        "composedSha256": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+        "origenComprobado": "comprobado",
+        "capitulo": "estancias"
+      },
+      "media/obra-1.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "fotograma al 12 % del vídeo",
+        "composedSha256": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "obra"
+      },
+      "media/obra-2.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "fotograma al 40 % del vídeo",
+        "composedSha256": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "obra"
+      },
+      "media/obra-3.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "fotograma al 68 % del vídeo",
+        "composedSha256": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "obra"
+      },
+      "media/obra-4.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "fotograma al 96 % del vídeo",
+        "composedSha256": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "obra"
+      },
+      "media/obra.mp4": {
+        "producer": "RUBIK · Evolución de obra (FT3D-8) · Entrega · Generar vídeo",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+        "transform": null,
+        "composedSha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+        "origenComprobado": "comprobado",
+        "capitulo": "obra"
+      },
+      "media/recorrido-01-master.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/recorrido/01-master.png",
+        "sourceSha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698",
+        "transform": null,
+        "composedSha256": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+        "origenComprobado": "comprobado",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-02-kitchen.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/recorrido/02-kitchen.png",
+        "sourceSha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315",
+        "transform": null,
+        "composedSha256": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+        "origenComprobado": "comprobado",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-03-dining.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/recorrido/03-dining.png",
+        "sourceSha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0",
+        "transform": null,
+        "composedSha256": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+        "origenComprobado": "comprobado",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-04-living.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/recorrido/04-living.png",
+        "sourceSha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4",
+        "transform": null,
+        "composedSha256": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+        "origenComprobado": "comprobado",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-poster.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+        "sourceSha256": null,
+        "transform": "fotograma del segundo 12 del vídeo",
+        "composedSha256": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido.mp4": {
+        "producer": "RUBIK · Presentar mi vivienda · Grabar vídeo",
+        "from": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+        "origenComprobado": "sin huella de origen registrada",
+        "capitulo": "recorrido"
+      },
+      "media/vista-01-overview.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "snapshot/assets/view-01-overview.png",
+        "sourceSha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2",
+        "transform": null,
+        "composedSha256": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+        "origenComprobado": "comprobado",
+        "capitulo": null
+      },
+      "media/vista-02-room.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "snapshot/assets/view-02-room.png",
+        "sourceSha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4",
+        "transform": null,
+        "composedSha256": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+        "origenComprobado": "comprobado",
+        "capitulo": null
+      },
+      "media/vista-03-room.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "snapshot/assets/view-03-room.png",
+        "sourceSha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3",
+        "transform": null,
+        "composedSha256": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+        "origenComprobado": "comprobado",
+        "capitulo": null
+      },
+      "media/vista-04-room.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "snapshot/assets/view-04-room.png",
+        "sourceSha256": "af317e4e4d00ab067ff2695bb95969b11ebfbd3564bc55514075e0c117198c29",
+        "transform": null,
+        "composedSha256": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+        "origenComprobado": "comprobado",
+        "capitulo": null
+      },
+      "media/vista-05-room.jpg": {
+        "producer": "compositor del laboratorio (tools/compose.cjs)",
+        "from": "snapshot/assets/view-05-room.png",
+        "sourceSha256": "2cbb35e397e4e5188a3e420dee53d25e41debb1a10bddd2ab63d354cf7964231",
+        "transform": null,
+        "composedSha256": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92",
+        "origenComprobado": "comprobado",
+        "capitulo": null
+      }
+    }
+  },
+  "en": {
+    "sha256": "11464438852dfb10e2f8fe22bfa0b680e7cfc7a00489b8963c4712abe41a0b18",
+    "manifiestoSha256": "82bbeb6b0a0c6e88cf0e2aa35ffc4f8ce7d662da29b88f8ee7ea70ed484b7bb8",
+    "gates": [
+      {
+        "k": "Identidad del estudio",
+        "s": "warn",
+        "t": "Synthetic laboratory profile (estudio@example.invalid)."
+      },
+      {
+        "k": "Plan de obra",
+        "s": "warn",
+        "t": "Imported example works plan, with illustrative dates and no linked budget, labelled in the delivery."
+      },
+      {
+        "k": "Mismo proyecto y revisión",
+        "s": "ok",
+        "t": "prj_reference-home, revision rv1-0f3e96422fd20e08."
+      },
+      {
+        "k": "Presupuesto revisado",
+        "s": "warn",
+        "t": "0 of 11 items reviewed. Laboratory test prices."
+      },
+      {
+        "k": "Imágenes IA",
+        "s": "warn",
+        "t": "Illustrative AI-generated images are labelled and shown alongside the model view."
+      },
+      {
+        "k": "Sin proyecto editable",
+        "s": "ok",
+        "t": "No editable project file or raw geometry."
+      },
+      {
+        "k": "Datos personales",
+        "s": "ok",
+        "t": "Only the studio contact details are included."
+      },
+      {
+        "k": "Lo excluido no está",
+        "s": "ok",
+        "t": "Complete delivery."
+      }
+    ],
+    "nota": "These fingerprints verify file integrity since export. They do not certify authorship or accuracy. The external digest is not a digital signature.",
+    "detalleFuentes": {
+      "README.txt": {
+        "producer": "tools/exportar.cjs"
+      },
+      "documentos/architecture-book.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "219c7cfd0d80ee440973f0c832778ef6cd9c206edaaab1e1319923ee089f6311",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "documentos/architecture-sheet-strip.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "ed9d0a326cdc43dd1dacd5d38845312edd98e45033dca9000b6865ec2669e9a7",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "documentos/commercial-proposal-client-v3.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "443f8954bedc987707f474cb1ca628c498ae71fc050c5531e94940462c746faf",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "documentos/entrega-integral.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "990260f926bd35765b95cbb9284d52ac92b00e2d55658fa7f24104bd79165463",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "documentos/interior-book-v3.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "92eb598e5870fb6fefec60722b6e1ed0ae291e61b176acd17ccc8c320ffb791c",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "documentos/materials-furniture-book-v3.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "documentos/obra-presentacion.html": {
+        "producer": "RUBIK · Works progress (FT3D-8) · Read-only presentation",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.html",
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "obra"
+      },
+      "documentos/real-estate-sheet-v3.en.pdf": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": null,
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "f90dfa3c246544d8bfd62bb0122579401a9404fe7cea26b6e3fe87bddcdb608c",
+        "origenComprobado": "Produced by the composer",
+        "capitulo": null
+      },
+      "index.html": {
+        "producer": "tools/exportar.cjs",
+        "transform": "Final script-free HTML pruned from index.en.html",
+        "from": "Composed delivery",
+        "sourceSha256": "e2dd3cd1d5d65a72a2aa567d472f1a868873c33d78ae28ce5eecf7f01d8684cc"
+      },
+      "media/dibujo-vivo.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/dibujo-vivo/00-overview.png",
+        "sourceSha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952",
+        "transform": null,
+        "composedSha256": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
+        "origenComprobado": "Verified",
+        "capitulo": "portada"
+      },
+      "media/ia-1.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "evidence/render-ia/render-ia-1-salon.png",
+        "sourceSha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
+        "transform": null,
+        "composedSha256": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
+        "origenComprobado": "Verified",
+        "capitulo": "estancias"
+      },
+      "media/ia-2.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "evidence/render-ia/render-ia-2-dormitorio-principal.png",
+        "sourceSha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
+        "transform": null,
+        "composedSha256": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
+        "origenComprobado": "Verified",
+        "capitulo": "estancias"
+      },
+      "media/ia-3.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "evidence/render-ia/render-ia-3-vista-general.png",
+        "sourceSha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
+        "transform": null,
+        "composedSha256": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
+        "origenComprobado": "Verified",
+        "capitulo": "estancias"
+      },
+      "media/obra-1.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "Frame at 12% of the video",
+        "composedSha256": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "obra"
+      },
+      "media/obra-2.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "Frame at 40% of the video",
+        "composedSha256": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "obra"
+      },
+      "media/obra-3.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "Frame at 68% of the video",
+        "composedSha256": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "obra"
+      },
+      "media/obra-4.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": null,
+        "transform": "Frame at 96% of the video",
+        "composedSha256": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "obra"
+      },
+      "media/obra.mp4": {
+        "producer": "RUBIK · Works progress (FT3D-8) · Delivery · Generate video",
+        "from": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+        "sourceSha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+        "transform": null,
+        "composedSha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+        "origenComprobado": "Verified",
+        "capitulo": "obra"
+      },
+      "media/recorrido-01-master.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/recorrido/01-master.png",
+        "sourceSha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698",
+        "transform": null,
+        "composedSha256": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
+        "origenComprobado": "Verified",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-02-kitchen.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/recorrido/02-kitchen.png",
+        "sourceSha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315",
+        "transform": null,
+        "composedSha256": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
+        "origenComprobado": "Verified",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-03-dining.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/recorrido/03-dining.png",
+        "sourceSha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0",
+        "transform": null,
+        "composedSha256": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
+        "origenComprobado": "Verified",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-04-living.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/recorrido/04-living.png",
+        "sourceSha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4",
+        "transform": null,
+        "composedSha256": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
+        "origenComprobado": "Verified",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido-poster.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+        "sourceSha256": null,
+        "transform": "Frame at second 12 of the video",
+        "composedSha256": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "recorrido"
+      },
+      "media/recorrido.mp4": {
+        "producer": "RUBIK · Present my home · Record video",
+        "from": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+        "sourceSha256": null,
+        "transform": null,
+        "composedSha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+        "origenComprobado": "No source fingerprint recorded",
+        "capitulo": "recorrido"
+      },
+      "media/vista-01-overview.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "snapshot/assets/view-01-overview.png",
+        "sourceSha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2",
+        "transform": null,
+        "composedSha256": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
+        "origenComprobado": "Verified",
+        "capitulo": null
+      },
+      "media/vista-02-room.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "snapshot/assets/view-02-room.png",
+        "sourceSha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4",
+        "transform": null,
+        "composedSha256": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
+        "origenComprobado": "Verified",
+        "capitulo": null
+      },
+      "media/vista-03-room.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "snapshot/assets/view-03-room.png",
+        "sourceSha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3",
+        "transform": null,
+        "composedSha256": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
+        "origenComprobado": "Verified",
+        "capitulo": null
+      },
+      "media/vista-04-room.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "snapshot/assets/view-04-room.png",
+        "sourceSha256": "af317e4e4d00ab067ff2695bb95969b11ebfbd3564bc55514075e0c117198c29",
+        "transform": null,
+        "composedSha256": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
+        "origenComprobado": "Verified",
+        "capitulo": null
+      },
+      "media/vista-05-room.jpg": {
+        "producer": "Laboratory composer (tools/compose.cjs)",
+        "from": "snapshot/assets/view-05-room.png",
+        "sourceSha256": "2cbb35e397e4e5188a3e420dee53d25e41debb1a10bddd2ab63d354cf7964231",
+        "transform": null,
+        "composedSha256": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92",
+        "origenComprobado": "Verified",
+        "capitulo": null
+      }
+    }
+  },
+  "mandatoV12Sha256": "22c097c3db403d66bca7df402fe96e64dbc78da004944ae5ff390f302569cfdf"
+}
