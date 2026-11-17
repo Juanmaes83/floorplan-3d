@@ -1,0 +1,51 @@
+{
+ "authorizedBy": "Propietario, 17/11/2026: 3 peticiones a Production, con coste",
+ "endpoint": "https://floorplan-3d-alpha.vercel.app/api/render",
+ "requestsSent": 3,
+ "requestResult": "200 en las 3 (el script solo guarda la imagen con respuesta 200)",
+ "productFlow": "App de la rama lab/studio-presentation-e0e1 (producto f31f303), proyecto de ejemplo, Entregar → vistas preparadas → Render IA; solo /api/render reenviado a Production por el proxy, que inyecta el código de acceso",
+ "records": [
+  {
+   "file": "render-ia-1-salon.png",
+   "sourceView": "Salón",
+   "style": "natural (Luz natural)",
+   "floor": null,
+   "walls": null,
+   "size": [
+    1536,
+    1024
+   ],
+   "sha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
+   "tokensShownInUI": 1738
+  },
+  {
+   "file": "render-ia-2-dormitorio-principal.png",
+   "sourceView": "Dormitorio principal",
+   "style": "natural (Luz natural)",
+   "floor": null,
+   "walls": null,
+   "size": [
+    1536,
+    1024
+   ],
+   "sha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
+   "tokensShownInUI": null
+  },
+  {
+   "file": "render-ia-3-vista-general.png",
+   "sourceView": "Vista general",
+   "style": "natural (Luz natural)",
+   "floor": null,
+   "walls": null,
+   "size": [
+    1536,
+    1024
+   ],
+   "sha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
+   "tokensShownInUI": null
+  }
+ ],
+ "missing": "Modelo, uso detallado y coste por imagen: la salida del script se perdió al agotarse su tiempo antes de escribir este manifiesto. Solo consta en pantalla el consumo de la imagen 1 (resultado-1.png). No se repite ninguna petición para recuperarlo.",
+ "label": "Imagen generada con IA a partir de una vista 3D real del proyecto. Orientativa: no reproduce con exactitud la geometría ni los materiales.",
+ "observed": "La imagen 1 añade en primer plano un dormitorio (cama) que en la vista real pertenece a otra estancia: ejemplo de por qué se entrega siempre junto a su vista real."
+}
