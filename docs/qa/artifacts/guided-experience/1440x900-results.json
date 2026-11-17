@@ -26,34 +26,34 @@
     "width": 1440,
     "overflow": false,
     "stage": {
-      "x": 0,
-      "y": 249,
-      "width": 1140,
-      "height": 621,
-      "top": 249,
+      "x": 256,
+      "y": 338.5,
+      "width": 884,
+      "height": 531.5,
+      "top": 338.5,
       "right": 1140,
       "bottom": 870,
-      "left": 0
+      "left": 256
     },
     "bar": {
       "x": 0,
-      "y": 64,
+      "y": 115,
       "width": 1440,
-      "height": 185,
-      "top": 64,
+      "height": 223.5,
+      "top": 115,
       "right": 1440,
-      "bottom": 249,
+      "bottom": 338.5,
       "left": 0
     },
     "primary": {
-      "x": 1233,
-      "y": 189.5,
-      "width": 175,
+      "x": 688.984375,
+      "y": 269,
+      "width": 178.8125,
       "height": 38,
-      "top": 189.5,
-      "right": 1408,
-      "bottom": 227.5,
-      "left": 1233
+      "top": 269,
+      "right": 867.796875,
+      "bottom": 307,
+      "left": 688.984375
     }
   },
   "errors": []

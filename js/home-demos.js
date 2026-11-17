@@ -1,4 +1,4 @@
-/* HOM-04 (provisional) · «Descubre RUBIK en acción»: arranque directo de Hybrid V2 «Dibujo vivo» (?demo=dibujo-vivo).
+/* HOM-04 · «Descubre RUBIK en acción»: arranque directo de Hybrid V2 «Dibujo vivo» (?demo=dibujo-vivo).
    Reutiliza exactamente el recorrido que ya existe —«Probar el ejemplo» → Presentar → «Dibujo vivo» → Iniciar
    presentación— sobre la vivienda de ejemplo; no reimplementa el efecto ni toca su motor (presentation-living-drawing).
    - Introducción corta, controles discretos y, al terminar: «Volver a ver», «Cómo hacerlo con mi proyecto» y

@@ -99,12 +99,12 @@ Es una declaración del propietario, **no** una prueba automatizada ejecutada po
 
 ### B.3 IA, imágenes y catálogos
 
-Los estados de la Home salen de `js/capability-registry.js`. Ese archivo aún tiene `VERIFIED_AT=5fb7a5c` y sus servicios IA definen «available» como «acreditado en Production».
+Los estados de la Home salen de `js/capability-registry.js`. Sus sellos (`VERIFIED_AT` y `AI_VERIFIED_AT`) se actualizaron el 17/11 a `40b4ae5`: los módulos y los 40 tests que cita existen en ese corte y pasaron (CI de #242 sobre el árbol idéntico `5fcb252` y tests puros en local, 119/119). Sus servicios IA definen «available» como «acreditado en Production»: la evidencia de Render IA se repitió el 17/11 sobre el despliegue público actual con la comprobación sin gasto (401 sin código, `RUBIK_RENDER_ENABLED=1`); la acreditación con imagen real sigue siendo la D1 del 09/11.
 
 | Código | Estado | Qué puede usar hoy el usuario | Qué falta | Evidencia | Próxima decisión |
 |---|---|---|---|---|---|
 | Render IA D1 (GOV-01a/b/c, IMG-01, IMG-02) | INTEGRADO_VALIDADO, de pago y operativo | Render con listas cerradas, código de acceso y límites por instancia | Tope global (IMG-04) y cuotas por profesional (GOV-06a) | [H] acta D1 del 09/11; registro `render-ai: available` [M] | — |
-| HOM-03 «Nuevos servicios IA» (#236 vía #241) | INTEGRADO_VALIDADO | Cuatro estados honestos: render disponible; asistente, catálogos y fichas en piloto; estudio de imágenes y reforma por foto en simulación; IA conversacional y foto real en preparación | Actualizar `VERIFIED_AT` (la URL pública ya lo muestra desde el 17/11) | [M] `js/capability-registry.js`, `tests/welcome-ai-services.browser.test.cjs` | — |
+| HOM-03 «Nuevos servicios IA» (#236 vía #241) | INTEGRADO_VALIDADO | Cuatro estados honestos: render disponible; asistente, catálogos y fichas en piloto; estudio de imágenes y reforma por foto en simulación; IA conversacional y foto real en preparación | — (la URL pública lo muestra y su sello se actualizó el 17/11) | [M] `js/capability-registry.js`, `tests/welcome-ai-services.browser.test.cjs` | — |
 | CAT-02 «Mis catálogos» (fichas, SKU y medidas; #230 vía #234) | INTEGRADO_EXPERIMENTAL, piloto | Catálogo propio por estudio local | Identidad de estudio autenticada (GOV-06a) y licencias (K11) | [M] `js/catalog-ui.js`, `js/catalog-product-core.js` | — |
 | CAT-03 SKU → objeto 3D validado o volumen genérico → partidas (#233 vía #234) | PARCIAL, piloto | Colocar y presupuestar en C1–C4 sin editarlo | Productos 3D validados a escala comercial | [M] `js/catalog-placement-*`, `tests/catalog-placement*` | — |
 | «CAT-04» (nombre de trabajo; avance parcial de CAT-03) catálogo → Presupuestar → Asistente (#237) | INTEGRADO_VALIDADO, piloto | La misma partida C1–C4, IVA por partida y revisión del precio | Reabrirlo en un proyecto real | [M] `js/catalog-budget-core.js`, `js/cat04-ui.js`, `tests/cat04*` | — (catálogo v1.11: no es un ID propio) |
@@ -159,7 +159,7 @@ Mantienen la numeración y los IDs del catálogo: 98 códigos en la v1.11 (97 en
 
 | Ola | Objetivo | Avances desde el v1.10 (12/11) | Pendientes principales | Dependencias | Siguiente corte razonable |
 |---|---|---|---|---|---|
-| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 a **0 PR abiertas** (las 21 últimas, archivadas el 17/11: [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md)). GOV-03 se amplió con HOM-03 y sus sellos se actualizaron el 17/11. GOV-04: catálogo v1.11 y auditorías en `master` (#192 y #241) | GOV-03: registro global de capacidades | — | — |
+| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 a **0 PR abiertas** (las 21 últimas, archivadas el 17/11: [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md)). GOV-03 se amplió con HOM-03 y sus sellos se actualizaron el 17/11 a `40b4ae5`. GOV-04: catálogo v1.11 y auditorías en `master` (#192 y #241) | GOV-03: registro global de capacidades | — | — |
 | **1** Vender lo que ya existe | Entregar al cliente con seguridad | GOV-08 S1/S2/aislamiento, ENT-01 de alcance mínimo, OBR-01 cerrado, GOV-07 de software y **HOM-04** (demos guiadas en la Home, en Production desde el 17/11) | ENT-02 caducidad, GOV-08 S3–S5, GOV-05 legal y GOV-07 con dispositivos físicos | GOV-05 (externo) y GOV-06a | **GOV-08 S3** caducidad y registro de publicaciones |
 | **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. ECO-01 como núcleo puro. ENT-04 como núcleo sin activar | ENT-04 en la interfaz, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | **ENT-04**: activar el dossier |
 | **3** Servicios cobrables | Diferenciación comercial | UX-12/13 experimental, MUE-01 integrado, FOT-01 y CAT-01 en simulación, y AG-0 parcial (V2) | FOT-01 real, CAT-01 real, ENT-05/06, IMG-09/13/15/16/22, PRE-01, UX-11, UX-24, AST-01, ECO-02/03 y PER-01 | GOV-05, ECO-01, IMG-04 y presupuesto de prueba | ECO-01 real con IMG-04 |
@@ -254,5 +254,5 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 
 **Contradicciones abiertas:**
 - La numeración de ramas de CAT-IA (#230 dice «CAT-02 Mis catálogos») no coincide exactamente con el catálogo. Este documento usa el significado del catálogo (CAT-01 referencias, CAT-02 fichas y SKU, CAT-03 productos 3D y partidas). **Resuelto en la v1.11 para «CAT-04»:** es un nombre de trabajo y un avance parcial de CAT-03, sin ID propio. «CON-03» sigue como código de trabajo, pendiente de decisión.
-- **`js/capability-registry.js`** declara `VERIFIED_AT=5fb7a5c` y define «available» como «en Production», mientras la URL pública sirve `40b4ae5` desde el 17/11.
+- **Resuelto el 17/11:** los sellos de `js/capability-registry.js` apuntan a `40b4ae5`, el corte que sirve la URL pública.
 - **Resuelto en la v1.11:** HOM-04 se dio de alta en el catálogo (ola 1, hecho y en Production desde el 17/11).
