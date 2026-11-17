@@ -1,15 +1,26 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · candidato de laboratorio v1.4
+## Vigente · traspaso del candidato v1.4
 
-Rama exclusiva `lab/studio-presentation-e0e1`. Producto de solo lectura en `master@8525025a1470d48d52d8e365070e5a0acf116134`. Mandatos acumulativos y huellas en `mandatos/INDICE-MANDATOS.md`.
+Rama exclusiva `lab/studio-presentation-e0e1`. Candidato empaquetado `26297e7b67b7c3c497ce3761b5bbf3f72f0b61da`. El commit posterior de la rama contiene este handoff y el acta de distribución. Base de lectura de producto `master@8525025a1470d48d52d8e365070e5a0acf116134`.
 
-- Estado, pruebas, comparativa, dictamen y límites en `reports/15-REGISTRO-v1.4.md`. Matrices históricas en los informes 12 y 13.
-- Verificación desde la raíz del laboratorio: `node tools/recetas-qa.cjs /tmp/recetas` y `node tools/estado-qa.cjs /tmp/estados`. Ambas suites usan la composición congelada publicada en `out/v3`.
-- Reconstrucción limpia: `bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip /tmp/reconstruccion`. Receta en `RECETA.md`.
-- La prueba económica reproduce el pin de producto con `node tools/economia-qa.cjs <checkout-con-el-objeto-Git> <evidencia.json>`. La fuente se carga temporalmente en QA y no se redistribuye.
-- Los ZIP de distribución, digest externos y revisión visual se entregan fuera de Git. El registro posterior al empaquetado identifica los bytes exactos en `evidence/paquetes/`.
-- Pendientes de decisión: aceptación visual humana, H08 y GO de producto. E2–E7 tienen plan y rollback en `reports/11-PROPUESTA-E2.md`.
+### Estado comprobado
+
+- Mandato v1.2 recuperado byte a byte. Índice acumulativo en `mandatos/INDICE-MANDATOS.md`. Registro de H/A/D/ST anterior preservado en los informes 12 y 13. El informe 15 registra N01–N08, V13-01–09, CONT-01–03 y RP-Q01–12.
+- Recetas 117/117, exportador 72/72, motor 11/11 y estados 23/23. Chromium, Firefox y WebKit: 14 paquetes y 70 aperturas por navegador. ZIP de cliente exactos ES/EN probados sin red en seis configuraciones cada uno. Escala de dispositivo al 200 % emulada.
+- Architecture Book ES/EN: 11 destinos internos, 9,63 pt de escala y 9,49 pt de rótulos del plano general. FF&E: 46 instancias en 40 fichas y ensayos de 1/50/200/500 fichas. 114 páginas ES/EN revisadas por el agente.
+- N04: seis escenarios con salida canónica, 12 pares HTML/PDF de fixture ES. Propuesta e inmobiliaria conservan importes y avisos. El núcleo se ejecuta desde el pin de producto de solo lectura. Su licencia de redistribución no consta.
+- Tres ZIP verificados. Dos reconstrucciones limpias del ZIP de laboratorio pasaron, con 42 rutas PDF, 20 medios, QA, snapshot e idiomas comprobados. La fecha interna de PDF es la única variación binaria aceptada.
+- El repositorio contiene código, composición, informes y evidencias. Los ZIP y digest de distribución son archivos locales de `dist/`. `evidence/paquetes/distribucion-v1.4.json` identifica tamaños, huellas y candidato. La comparativa de páginas está en `evidence/revision-visual/v1.4/`.
+
+### Pendientes y siguiente paso
+
+1. Revisar con el propietario los ZIP ES/EN y aceptar visualmente las páginas (D08). Las pruebas de dispositivos y de impresión a escala física siguen pendientes.
+2. Si se requiere completar RP-Q06, añadir QA de ZIP por cada escenario económico a partir de fixtures rotuladas, preservando el exportador y la identidad. La licencia del núcleo debe acreditarse antes de redistribuirlo. Hoy puede comprobarse con `node tools/economia-qa.cjs <checkout-con-el-pin-de-producto> <evidencia.json>`.
+3. H08 queda en manos del propietario. Hay 68 archivos VIS en Git público en el pin examinado. Las exclusiones de deploy y la licencia deben decidirse por separado. El banco VIS está fuera de los paquetes.
+4. `reports/11-PROPUESTA-E2.md` conserva diagnóstico, gates y rollback E2–E7. E2 requiere GO separado y una base acordada. No modificar producto, ramas de Codex, producción o Vercel desde este laboratorio.
+
+Para comprobar la entrega desde el laboratorio, en Linux con `RECETA.md`: `bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip /tmp/reconstruccion`. Si no están disponibles los ZIP locales, usar el candidato empaquetado y preparar el entorno de la receta antes de ejecutar `bash tools/package.sh`. Verificar siempre la huella nueva. Conservar la carpeta de trabajo si falla un caso.
 
 ## Histórico
 

@@ -1,0 +1,213 @@
+{
+ "schema": "rubik-lab-inspeccion/1",
+ "zip": "entrega-vivienda-de-ejemplo-en.zip",
+ "tipo": "cliente",
+ "archivos": 31,
+ "bytes": 15004402,
+ "bloquea": 0,
+ "revisar": 0,
+ "info": 0,
+ "hallazgos": [],
+ "files": [
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/MANIFIESTO.json",
+   "bytes": 18524,
+   "sha256": "435dae893ab548726bf22d511f5609b1b1f2f6a12bc9d2eb050b66594f242371"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/README.txt",
+   "bytes": 1061,
+   "sha256": "6587ac337cbb032b5e5a454d0dd8f645711a964f2a55ba74f3d01f219bd18663"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/architecture-book.en.pdf",
+   "bytes": 110608,
+   "sha256": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
+   "pdf": {
+    "Title": "Architecture book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/architecture-sheet-strip.en.pdf",
+   "bytes": 31346,
+   "sha256": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
+   "pdf": {
+    "Title": "Architecture sheet, title block strip, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/commercial-proposal-client-v3.en.pdf",
+   "bytes": 32374,
+   "sha256": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
+   "pdf": {
+    "Title": "Cost proposal, client version, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/entrega-integral.en.pdf",
+   "bytes": 1539919,
+   "sha256": "4a9caa18a7bc098c156da3f632d25762c49adb6008092250009774ffb15c0ba9",
+   "pdf": {
+    "Title": "Complete presentation, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/interior-book-v3.en.pdf",
+   "bytes": 1177745,
+   "sha256": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
+   "pdf": {
+    "Title": "Interior design book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/materials-furniture-book-v3.en.pdf",
+   "bytes": 74322,
+   "sha256": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
+   "pdf": {
+    "Title": "Materials and furniture book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/obra-presentacion.html",
+   "bytes": 4712149,
+   "sha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/documentos/real-estate-sheet-v3.en.pdf",
+   "bytes": 386698,
+   "sha256": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
+   "pdf": {
+    "Title": "Real estate sheet, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/index.html",
+   "bytes": 1155472,
+   "sha256": "665fa6a521aaafe98bcd2e59c55204f80632af68446b5a93167de236cdc38323"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/dibujo-vivo.jpg",
+   "bytes": 254994,
+   "sha256": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/ia-1.jpg",
+   "bytes": 236348,
+   "sha256": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/ia-2.jpg",
+   "bytes": 164897,
+   "sha256": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/ia-3.jpg",
+   "bytes": 167135,
+   "sha256": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/obra-1.jpg",
+   "bytes": 44772,
+   "sha256": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/obra-2.jpg",
+   "bytes": 94170,
+   "sha256": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/obra-3.jpg",
+   "bytes": 94883,
+   "sha256": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/obra-4.jpg",
+   "bytes": 49822,
+   "sha256": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/obra.mp4",
+   "bytes": 3526771,
+   "sha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+   "videoTags": {
+    "major_brand": "isom",
+    "minor_version": "512",
+    "compatible_brands": "isomiso2avc1mp41"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/recorrido-01-master.jpg",
+   "bytes": 51380,
+   "sha256": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/recorrido-02-kitchen.jpg",
+   "bytes": 64374,
+   "sha256": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/recorrido-03-dining.jpg",
+   "bytes": 70999,
+   "sha256": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/recorrido-04-living.jpg",
+   "bytes": 84709,
+   "sha256": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/recorrido-poster.jpg",
+   "bytes": 51752,
+   "sha256": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/recorrido.mp4",
+   "bytes": 226149,
+   "sha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+   "videoTags": {
+    "major_brand": "isom",
+    "minor_version": "512",
+    "compatible_brands": "isomiso2avc1mp41"
+   }
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/vista-01-overview.jpg",
+   "bytes": 107100,
+   "sha256": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/vista-02-room.jpg",
+   "bytes": 143852,
+   "sha256": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/vista-03-room.jpg",
+   "bytes": 104745,
+   "sha256": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/vista-04-room.jpg",
+   "bytes": 110005,
+   "sha256": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149"
+  },
+  {
+   "path": "entrega-vivienda-de-ejemplo-en/media/vista-05-room.jpg",
+   "bytes": 115327,
+   "sha256": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+  }
+ ]
+}

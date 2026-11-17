@@ -1,0 +1,2958 @@
+{
+ "schema": "rubik-lab-inspeccion/1",
+ "zip": "rubik-studio-presentation-lab.zip",
+ "tipo": "laboratorio",
+ "archivos": 523,
+ "bytes": 167486641,
+ "bloquea": 0,
+ "revisar": 10,
+ "info": 0,
+ "hallazgos": [
+  {
+   "archivo": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+   "que": "etiquetas de vídeo",
+   "detalle": "{\"creation_time\": \"2026-11-17T14:20:33.000000Z\"}",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "evidence/entrega/qa/exportar-qa.json",
+   "que": "contacto fuera de la allowlist",
+   "detalle": "persona.ajena@correo.example",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "evidence/paquetes/inspeccion-laboratorio.json",
+   "que": "contacto fuera de la allowlist",
+   "detalle": "persona.ajena@correo.example",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "evidence/paquetes/inspeccion-laboratorio.json",
+   "que": "ruta absoluta del entorno",
+   "detalle": "/tmp/claude|C:\\\\\\\\Users\\\\\\\\)[^\\\\s",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "reports/13-REGISTRO-VIVO-v1.3.md",
+   "que": "contacto fuera de la allowlist",
+   "detalle": "persona.ajena@correo.example",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "tools/exportar-qa.cjs",
+   "que": "contacto fuera de la allowlist",
+   "detalle": "persona.ajena@correo.example",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "tools/inspeccionar-paquete.py",
+   "que": "ruta absoluta del entorno",
+   "detalle": "/home/user|/root/|/tmp/claude|C:\\\\Users\\\\)[^\\s",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "tools/package.sh",
+   "que": "ruta absoluta del entorno",
+   "detalle": "/home/user/studio",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "tools/package.sh",
+   "que": "ruta absoluta del entorno",
+   "detalle": "/home/user",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "tools/package.sh",
+   "que": "ruta absoluta del entorno",
+   "detalle": "/tmp/claude-0",
+   "gravedad": "revisar"
+  }
+ ],
+ "files": [
+  {
+   "path": "HANDOFF-v1.3.md",
+   "bytes": 10021,
+   "sha256": "52a2a667d8a06f67ef74da4d1add641bc3bd214ca889fa33cee85f895506b43c"
+  },
+  {
+   "path": "HANDOFF-v1.4.md",
+   "bytes": 5873,
+   "sha256": "136c7d4d74f0caf4e7948468d2c1c8d59981f248cd412856f49049eeb7917e05"
+  },
+  {
+   "path": "HANDOFF.md",
+   "bytes": 6046,
+   "sha256": "4dd0fb90da6ae532ab096900c5eb761b7729f159dd11c13d1189ff300196e4fc"
+  },
+  {
+   "path": "PROMPT-CONTINUACION.md",
+   "bytes": 6024,
+   "sha256": "ec457449f3120a3ee8f961d36e91f2c0acf4e4c3ead39643962c62a58aa610b6"
+  },
+  {
+   "path": "RECETA.md",
+   "bytes": 2797,
+   "sha256": "e1a43bfb0060e548362b00367bd1b9537e6aad4d823aa50ba7bd02b09fe33ee5"
+  },
+  {
+   "path": "SANEAMIENTO.json",
+   "bytes": 2991,
+   "sha256": "339173ee1d6fd8e941d6e1be52f7160f290d47cf3408de718c91c6237fc63acf"
+  },
+  {
+   "path": "assets/dibujo-vivo/00-overview.png",
+   "bytes": 1641203,
+   "sha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952"
+  },
+  {
+   "path": "assets/ft3d8-plan-ajuste.json",
+   "bytes": 350,
+   "sha256": "626a636c13ac802d0206e03cf9b368373ecdc3562b4e1f4c9e0a68f977b2a339"
+  },
+  {
+   "path": "assets/ft3d8-plan-demo.json",
+   "bytes": 2799,
+   "sha256": "1112bdced5c895b2039474fceb925a3d6af261188e11e823bd638a63d180ce51"
+  },
+  {
+   "path": "assets/ft3d8-plan-demo.reforma.schedule.json",
+   "bytes": 8086,
+   "sha256": "368ba302fcf595542be8bd0d071fe82024fba579bb2b7746474c4565324c5780"
+  },
+  {
+   "path": "assets/ft3d8-plan-demo.schedule.json",
+   "bytes": 11812,
+   "sha256": "56dd95a64b32b921c73e2a9a687e562bba9103e3ac1d9bff46dcc065366a1e52"
+  },
+  {
+   "path": "assets/ft3d8/entrega-dlv_f4567d79bd21c1fc.json",
+   "bytes": 5787,
+   "sha256": "4f6345f04f6fe3a613014fcc95d1069a35b1ede98fcf663de97447ea144e44f0"
+  },
+  {
+   "path": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.html",
+   "bytes": 4712149,
+   "sha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893"
+  },
+  {
+   "path": "assets/ft3d8/rubik-sota-evolucion-proyecto-de-ejemplo-2f755be4.mp4",
+   "bytes": 3526585,
+   "sha256": "7bb5b7da217a016d167bd2fe065f60c531aaff1fc021150fd19826292265a980",
+   "videoTags": {
+    "major_brand": "isom",
+    "minor_version": "512",
+    "compatible_brands": "isomiso2avc1mp41"
+   }
+  },
+  {
+   "path": "assets/log-ft3d8.json",
+   "bytes": 8566,
+   "sha256": "48bfeefc1476ae9e8dc208bfcba6961880e149521df5da9c2ebd20c2ae760b88"
+  },
+  {
+   "path": "assets/log-living.json",
+   "bytes": 3347,
+   "sha256": "cc58a379cd03fb34a49b7eed274b4d765ceee0cf1c857434371728573a20c79f"
+  },
+  {
+   "path": "assets/recorrido/01-master.png",
+   "bytes": 205195,
+   "sha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698"
+  },
+  {
+   "path": "assets/recorrido/02-kitchen.png",
+   "bytes": 216011,
+   "sha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315"
+  },
+  {
+   "path": "assets/recorrido/03-dining.png",
+   "bytes": 270379,
+   "sha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0"
+  },
+  {
+   "path": "assets/recorrido/04-living.png",
+   "bytes": 319246,
+   "sha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4"
+  },
+  {
+   "path": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+   "bytes": 226221,
+   "sha256": "ae93eb6338f2b36a0c61a55ad0ca9758ec5aff017d4cb83c4ea5b1240d5994c0",
+   "videoTags": {
+    "major_brand": "isom",
+    "minor_version": "512",
+    "compatible_brands": "isomiso6iso2avc1mp41",
+    "creation_time": "2026-11-17T14:20:33.000000Z"
+   }
+  },
+  {
+   "path": "diagnostico/e2-diagnostico.cjs",
+   "bytes": 10808,
+   "sha256": "1f3f30475b350ef3e82cd566540bfad3d9777fbe13ccb6a054b16767a7bf964e"
+  },
+  {
+   "path": "diagnostico/h01-h02.cjs",
+   "bytes": 3352,
+   "sha256": "6324b1b3af7245d398e923f003767fe9dcedb937e25eb5bcc17fada915678dd3"
+  },
+  {
+   "path": "diagnostico/identidad-fixture.cjs",
+   "bytes": 3102,
+   "sha256": "0031071cd6e74debd93cb5a485f0ddf945b6267d9444519aae6d7207827a495b"
+  },
+  {
+   "path": "evidence/architecture/pdf-qa.json",
+   "bytes": 917,
+   "sha256": "54b07a664040cbbc302e1bdc416d06f0835baeaf33b0f056e03822f81b414454"
+  },
+  {
+   "path": "evidence/b3/fila-mas-alta-que-una-pagina.png",
+   "bytes": 416677,
+   "sha256": "c8330a83ab042ccacbf63519c699e1779e5628c817ea94b3dac61a546c6aa087"
+  },
+  {
+   "path": "evidence/b3/listado-mobiliario-paginado.png",
+   "bytes": 106269,
+   "sha256": "3ec96ffe2f7367497b055834b61829d48db5de125d6eec6093c383c31bf293de"
+  },
+  {
+   "path": "evidence/b3/presupuesto-largo-paginado.png",
+   "bytes": 196033,
+   "sha256": "f1a596967ae41322530a7fc530b6a6feac10e1bbff0c0e52c9f09722a83e53a7"
+  },
+  {
+   "path": "evidence/baseline/01-mi-estudio.png",
+   "bytes": 158614,
+   "sha256": "e7f2e5cea15405894cb7531d5a9a0a528e870f59b66e533914c17b7edcf27a62"
+  },
+  {
+   "path": "evidence/baseline/02-entregar.png",
+   "bytes": 114790,
+   "sha256": "3b8bd0b9f2f2a4a4044e3a5394a54644cc5d804b517447918eddebf8763cb911"
+  },
+  {
+   "path": "evidence/baseline/03-presupuestar.png",
+   "bytes": 112098,
+   "sha256": "624b01d7614f7d071bedbaf48e55ab43f787aa1437ed594dd422154082f96654"
+  },
+  {
+   "path": "evidence/baseline/04-presupuesto-editor.png",
+   "bytes": 134039,
+   "sha256": "7887871b7911def01e3734d680ee3191331c1e6011aaa46d893d3e8ebeb502bb"
+  },
+  {
+   "path": "evidence/baseline/05-dossier-economico.png",
+   "bytes": 172471,
+   "sha256": "522fc8c3a627e461eff0b419c01ef4df6741cbf3afd57f6d4a31cc873bc448a9"
+  },
+  {
+   "path": "evidence/baseline/06-dossier-client-dialogo.png",
+   "bytes": 201376,
+   "sha256": "595b6e73159fe91d12e8e478c23f82e04ef4e4f67f2222f2606a5c9d1427ac19"
+  },
+  {
+   "path": "evidence/baseline/06-dossier-realestate-dialogo.png",
+   "bytes": 203076,
+   "sha256": "0675215497d0c03991299e0e76af0f800149be0b697472b4a6fbce9cc94aa9ff"
+  },
+  {
+   "path": "evidence/baseline/06-dossier-studio-dialogo.png",
+   "bytes": 202845,
+   "sha256": "7fd367693b6f7b155b624809c086564722c253ef9de3d0648ab5a1d564e7454d"
+  },
+  {
+   "path": "evidence/baseline/06-dossier-technical-dialogo.png",
+   "bytes": 200981,
+   "sha256": "cb90b6fb73a5bdd5c6ca1a1fe554e30920abe2a0dfba8c068d289c05af7d9bbd"
+  },
+  {
+   "path": "evidence/baseline/07-dossier-client-ventana-impresion.png",
+   "bytes": 192438,
+   "sha256": "9ce93f553699710deb28c5f828da46345d72cadf584a9666305424c7dc5caa19"
+  },
+  {
+   "path": "evidence/baseline/07-dossier-client.pdf",
+   "bytes": 1978540,
+   "sha256": "1ec254c0c6397baa2b46187652b78f5e81cc90e5bf26d0ed551e768e57a8fa89",
+   "pdf": {
+    "Title": "Dossier del proyecto · Proyecto de ejemplo",
+    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "evidence/baseline/07-dossier-realestate-ventana-impresion.png",
+   "bytes": 188414,
+   "sha256": "4be7be9fd39c2e4d6b4d3f6841360e2a355df88bda2737a70858d6138e536524"
+  },
+  {
+   "path": "evidence/baseline/07-dossier-realestate.pdf",
+   "bytes": 1975385,
+   "sha256": "07d0b961af63cef923afff99772a1e6cfb26d5e69a6c1b06dbd95b4db15702a5",
+   "pdf": {
+    "Title": "Dossier del proyecto · Proyecto de ejemplo",
+    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "evidence/baseline/07-dossier-studio-ventana-impresion.png",
+   "bytes": 182509,
+   "sha256": "8e8e79500acb1285e149fdcdb797e1e30f5a0348448d184f387242fa2d466128"
+  },
+  {
+   "path": "evidence/baseline/07-dossier-studio.pdf",
+   "bytes": 1983884,
+   "sha256": "e67415886b16a3fc30a8a01d01302d934cbcb4a7dc36a8d6050cb302a89e6e1f",
+   "pdf": {
+    "Title": "Dossier del proyecto · Proyecto de ejemplo",
+    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "evidence/baseline/07-dossier-technical-ventana-impresion.png",
+   "bytes": 184877,
+   "sha256": "482870b5a6113024227a2682945dc05380237b61a1255a3049319a06eec11083"
+  },
+  {
+   "path": "evidence/baseline/07-dossier-technical.pdf",
+   "bytes": 1997678,
+   "sha256": "9e1b4eea7e5676509768956ae5988b5c66294495bbed22057302d41b8517aef8",
+   "pdf": {
+    "Title": "Dossier del proyecto · Proyecto de ejemplo",
+    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "evidence/baseline/08-lamina.png",
+   "bytes": 161238,
+   "sha256": "21e2fded4741b844986243ad6263018aab15ee8ba9f48cc89eda14d47f2681c3"
+  },
+  {
+   "path": "evidence/baseline/09-ficha-superficies.png",
+   "bytes": 131518,
+   "sha256": "88654c4dee58ce4398936df4d60a40b06f02f9801f88f5de9eb85eef8b3bbf43"
+  },
+  {
+   "path": "evidence/baseline/10-material-board.png",
+   "bytes": 174712,
+   "sha256": "3d21f50ae99f3be1c720dabf9c6dc6cdd6d8a5123222bb8ec310bfe4216a20a6"
+  },
+  {
+   "path": "evidence/baseline/11-archivo-cliente-B1.html",
+   "bytes": 1021368,
+   "sha256": "dc8adfa2c6dc6d47765a96024e5b0567d46e1063d25c2ee06c3273784a5f464c"
+  },
+  {
+   "path": "evidence/baseline/11-archivo-cliente-B1.png",
+   "bytes": 1678881,
+   "sha256": "a8de627dbe33293d91913cb5b43251ab5e9cd7bac1cac870bb4e013d7d165e33"
+  },
+  {
+   "path": "evidence/baseline/baseline.json",
+   "bytes": 2841,
+   "sha256": "467214e622454f6375e49f651387f1086c12aa2b2dae2b14339a7867b1e40014"
+  },
+  {
+   "path": "evidence/baseline/contact-client.png",
+   "bytes": 286590,
+   "sha256": "150db07ee9fb0845d5ff6ce265e86ce78bb40ee753b92665ee9556a8be5f259b"
+  },
+  {
+   "path": "evidence/baseline/contact-realestate.png",
+   "bytes": 189468,
+   "sha256": "5db71cdcc89c545a9dfd143c44de29b7dd993f1d43e1982899d23bfbad6f20e6"
+  },
+  {
+   "path": "evidence/baseline/contact-studio.png",
+   "bytes": 212747,
+   "sha256": "e30e5b7c902d0b6367de9391f06ef533061623169142ed7102a51890177873f9"
+  },
+  {
+   "path": "evidence/baseline/contact-technical.png",
+   "bytes": 213178,
+   "sha256": "553745cf4427e4d749682da121a9a1b0e9c01838a3c7c6de88574acc3c063dad"
+  },
+  {
+   "path": "evidence/brand-identity/font-audit-Inter-Regular.json",
+   "bytes": 3190,
+   "sha256": "a40d97f7a906a01b72efc9e252f0cf5ce0a393c5344747e79673e0df6ce187ac"
+  },
+  {
+   "path": "evidence/brand-identity/font-audit-source-serif-4-latin-400-normal.json",
+   "bytes": 2871,
+   "sha256": "6542d6b1053af35ae09a43b6a9ac444d900cca0d6facd8b9648133328b0ab7dc"
+  },
+  {
+   "path": "evidence/brand-identity/token-contrast.txt",
+   "bytes": 1084,
+   "sha256": "5f768f5dcbc42cfbeaa3e5a9508a7f2fb538d91c385fda81f41d109edd20c7e6"
+  },
+  {
+   "path": "evidence/consumidor/consumidor-qa.json",
+   "bytes": 53937,
+   "sha256": "2c7ffd81c8da07b1a65271cbe7d8fa2484f932ca84e0308f5bac46f207df2c87"
+  },
+  {
+   "path": "evidence/consumidor/dossier-tecnico-en-390x844.jpg",
+   "bytes": 498338,
+   "sha256": "a45d40c87c5efe435a0c42c68ae320be81ebe62edb6c175b487061d3fd023383"
+  },
+  {
+   "path": "evidence/consumidor/dossier-tecnico-es-390x844.jpg",
+   "bytes": 517031,
+   "sha256": "43310ff0d393ea60d073fae6c9d509f8a6fad93e486cfdf2d16c892f9eba554f"
+  },
+  {
+   "path": "evidence/consumidor/inmobiliaria-en-390x844.jpg",
+   "bytes": 373742,
+   "sha256": "12e7e127f49ae7484d05bdfe3bcc8223848a1e74fe57c5ea6ac9ed0e95d31d2c"
+  },
+  {
+   "path": "evidence/consumidor/inmobiliaria-es-390x844.jpg",
+   "bytes": 385794,
+   "sha256": "91443011ff137b3f4c92107afacf527495f8877b78dc2879c9b690a7ff1e0b79"
+  },
+  {
+   "path": "evidence/consumidor/integral-en-1440x900.jpg",
+   "bytes": 1116826,
+   "sha256": "a9f2b76c591fbae64fb9c6fdce3b1309e423a023a3168408ff5692602ebbb90d"
+  },
+  {
+   "path": "evidence/consumidor/integral-en-320x640.jpg",
+   "bytes": 748844,
+   "sha256": "2127aa965385f61f6b7abeb295f86cb46edaaabc8edb9d143f4252af29a0eed0"
+  },
+  {
+   "path": "evidence/consumidor/integral-en-390x844.jpg",
+   "bytes": 814550,
+   "sha256": "99ae07cc85ccaf1630a210d4f8af2378c7a548901339fc8a0eb601ab2b618c7a"
+  },
+  {
+   "path": "evidence/consumidor/integral-en-820x1180.jpg",
+   "bytes": 1170360,
+   "sha256": "977618fe5dc7bf434bf5aafa88a509c3300507b3639c19312c6031d41e9e03e3"
+  },
+  {
+   "path": "evidence/consumidor/integral-en-844x390.jpg",
+   "bytes": 1194989,
+   "sha256": "26f236fc89336070d2fcc78920e0a21ac05d79fe6a058c9d40024d8423233b62"
+  },
+  {
+   "path": "evidence/consumidor/integral-es-1440x900.jpg",
+   "bytes": 1144007,
+   "sha256": "aa66946b4bddc83ed556784b15869da44d1620ed1a16df69e59407ddddf744ad"
+  },
+  {
+   "path": "evidence/consumidor/integral-es-320x640.jpg",
+   "bytes": 774221,
+   "sha256": "1f9352f8a8aca194ffe6dc32431121f1d3d6e83c8947215e0a5867c92923b289"
+  },
+  {
+   "path": "evidence/consumidor/integral-es-390x844.jpg",
+   "bytes": 838965,
+   "sha256": "f2de2c93b77e463fb0f69349770784e3371920b6748a244272b480fa0a65232b"
+  },
+  {
+   "path": "evidence/consumidor/integral-es-820x1180.jpg",
+   "bytes": 1199710,
+   "sha256": "4866029b11ababf0b57629bfca187cc9e5f0e69261637ee01aad9e9c50fdf6a5"
+  },
+  {
+   "path": "evidence/consumidor/integral-es-844x390.jpg",
+   "bytes": 1229674,
+   "sha256": "3404d7af87336f95c54d103db173e27b9ecfe8fd4be733aaf7a58eaa7feabb48"
+  },
+  {
+   "path": "evidence/consumidor/interiorismo-en-390x844.jpg",
+   "bytes": 530753,
+   "sha256": "a6651ead8ee2e3d0cc96de198944d6b3496520c550853c7538773fec3e0a0142"
+  },
+  {
+   "path": "evidence/consumidor/interiorismo-es-390x844.jpg",
+   "bytes": 550329,
+   "sha256": "20b58f35b101edba64233c087fe542483924f5ee25f9fc380bcffab3a1b7a1d3"
+  },
+  {
+   "path": "evidence/consumidor/obra-en-390x844.jpg",
+   "bytes": 323263,
+   "sha256": "e75c653789671f5888e41a7fff319f3458519e841f2584678e46b85dabb7340f"
+  },
+  {
+   "path": "evidence/consumidor/obra-es-390x844.jpg",
+   "bytes": 330657,
+   "sha256": "dfa7db9536642d6c56b29b3bfa2745c2216325dcf0c00117fd090d835aadd6e9"
+  },
+  {
+   "path": "evidence/consumidor/primera-reunion-en-390x844.jpg",
+   "bytes": 452381,
+   "sha256": "4f8b75bb2cdd2353fbf321229ddb74759d82a92f3c3e718dc0d72e21ddb9f9b1"
+  },
+  {
+   "path": "evidence/consumidor/primera-reunion-es-390x844.jpg",
+   "bytes": 466145,
+   "sha256": "d13526e318d6592c7f7f16daf62f19cd6fbf01eaf7e3f0a84aa6e60a4540535f"
+  },
+  {
+   "path": "evidence/consumidor/propuesta-comercial-en-390x844.jpg",
+   "bytes": 582957,
+   "sha256": "c4783c01beddfe6ca00399ee8f49e29c5e8c6e3fde813f1548b32623116918da"
+  },
+  {
+   "path": "evidence/consumidor/propuesta-comercial-es-390x844.jpg",
+   "bytes": 605816,
+   "sha256": "1730c2258cc1f83c34895e120903b31cd43b79f1de937fd6f9ac20e696495a6a"
+  },
+  {
+   "path": "evidence/consumidor/recorrido-integral-en-1440x900.webm",
+   "bytes": 3343262,
+   "sha256": "96bc0f4cd16c6c1d6462082b46fa7dba956a746e3a806c88daa82be29c1f2980",
+   "videoTags": {
+    "encoder": "Lavf"
+   }
+  },
+  {
+   "path": "evidence/consumidor/recorrido-integral-en-320x640.webm",
+   "bytes": 3717837,
+   "sha256": "4e1b92608225a6078fefd52d7803be63760f1a8c7b40ed4ed9a40b7ab7cbd65e",
+   "videoTags": {
+    "encoder": "Lavf"
+   }
+  },
+  {
+   "path": "evidence/consumidor/recorrido-integral-es-1440x900.webm",
+   "bytes": 3518939,
+   "sha256": "b23ccf94d1898e5e329ba96cc0c6918ed591fdec533ff3cd5bb628dd1a22941b",
+   "videoTags": {
+    "encoder": "Lavf"
+   }
+  },
+  {
+   "path": "evidence/consumidor/recorrido-integral-es-320x640.webm",
+   "bytes": 3757310,
+   "sha256": "2e1e7b4c37966036acef939879c8f652e0ed9b878ddd327cc8a272f37fa24f2a",
+   "videoTags": {
+    "encoder": "Lavf"
+   }
+  },
+  {
+   "path": "evidence/consumidor/v1.4/chromium.json",
+   "bytes": 66258,
+   "sha256": "c441a15e0b0b38b3f33e1b99633b9cf46e38f2f5aa2521be5fa58f83d94fe2e9"
+  },
+  {
+   "path": "evidence/consumidor/v1.4/firefox.json",
+   "bytes": 63950,
+   "sha256": "caca9862f807a92c40ae7d78719903ac03743fb0a71a3cfc0145251b32bf751d"
+  },
+  {
+   "path": "evidence/consumidor/v1.4/webkit.json",
+   "bytes": 65034,
+   "sha256": "211a5851fc2029226d9dcf1c26927023dc7a30b42429543d6f20975b67820180"
+  },
+  {
+   "path": "evidence/correspondencia/correspondencia.json",
+   "bytes": 3906,
+   "sha256": "701230ad1da9c29d15989624fb7afd4b3a383844d196095b0490ef78fb5a188d"
+  },
+  {
+   "path": "evidence/e2/diagnostico.json",
+   "bytes": 3063,
+   "sha256": "79e5d29323ab779c4f9218086e2a57051d47bb3edf3297956a17428b21204bf5"
+  },
+  {
+   "path": "evidence/e2/h01-h02.json",
+   "bytes": 1607,
+   "sha256": "a00f08dd2467b43be7068afe5f5acd999300b7caf3161183f4a5d77aed986d2b"
+  },
+  {
+   "path": "evidence/e2/identidad-fixture.json",
+   "bytes": 981,
+   "sha256": "30453ac36845c8912e09e9b1dafcbb5972899ba87e473d357166c4b604d36ec6"
+  },
+  {
+   "path": "evidence/economia/economia-qa.json",
+   "bytes": 9026,
+   "sha256": "9fff2c6facb363a5d02ced5f8a6b403a6afc2a67ffbf076facbb1e5ef4f86715"
+  },
+  {
+   "path": "evidence/entrega/antes-despues.png",
+   "bytes": 583209,
+   "sha256": "b4a8ff5dc4ed913e9a5fa923421516c330c426727031ab9eb8ac0e5a5de470c4"
+  },
+  {
+   "path": "evidence/entrega/profesional/preparar-escritorio-vista-movil.png",
+   "bytes": 257605,
+   "sha256": "5b4522ff03f6b42aff4d4ae741960362ec041fad497bc20da69ee34ff7bcee4d"
+  },
+  {
+   "path": "evidence/entrega/profesional/preparar-escritorio.png",
+   "bytes": 356659,
+   "sha256": "5449bd1c71af8b6c56e7293f91dcaf40c6229da3989c611aa5ef1cddad6d0596"
+  },
+  {
+   "path": "evidence/entrega/profesional/preparar-movil.png",
+   "bytes": 391218,
+   "sha256": "cdd560baf190d0c404ca0c13d347ddddb2fccc4fcdf45e2e8cd66fc8d2c11d7d"
+  },
+  {
+   "path": "evidence/entrega/profesional/preparar-qa.json",
+   "bytes": 2752,
+   "sha256": "9ceb5b6dd4a5dade5216eb6671ec12b3981e06abd8bc779837740c5c2067cf28"
+  },
+  {
+   "path": "evidence/entrega/profesional/registro-escritorio.json",
+   "bytes": 648,
+   "sha256": "9761d65bc92820aeac79194e6cd539f848f003f70346c3715855c075d2e6105f"
+  },
+  {
+   "path": "evidence/entrega/profesional/registro-movil.json",
+   "bytes": 648,
+   "sha256": "583192ec792dffc3982f620e6631e8105392fa9776782b9ed2b20f56e17265fa"
+  },
+  {
+   "path": "evidence/entrega/qa/entrega-qa.json",
+   "bytes": 26113,
+   "sha256": "1396bfdbdf370dd90cb45d7a1737555f61e4f81ca32d949c8b46dd7dcf1cd0ab"
+  },
+  {
+   "path": "evidence/entrega/qa/exportar-qa.json",
+   "bytes": 26248,
+   "sha256": "53fa50afbc2e8382a6afd6cc317a4866b03c4ba6c7d7efd424e76df7240b53e5"
+  },
+  {
+   "path": "evidence/entrega/qa/index-escritorio.jpg",
+   "bytes": 1316630,
+   "sha256": "999905f83f36299a5870a47c472f6ca558b6c24b279f62953afe7affbe940bd1"
+  },
+  {
+   "path": "evidence/entrega/qa/index-movil.jpg",
+   "bytes": 965772,
+   "sha256": "c3e24951f87f7ab5c5297ccc0f0a4a46c9fa90b4c09d94bbf86d56cd9453d7d5"
+  },
+  {
+   "path": "evidence/entrega/qa/index-tableta.jpg",
+   "bytes": 1394152,
+   "sha256": "e9dee7fd19ff04b9a467a368cc1dba8fc66b217a306f4ecd80c932ccc766cabe"
+  },
+  {
+   "path": "evidence/entrega/qa/index.en-movil.jpg",
+   "bytes": 937951,
+   "sha256": "6b68a5d2a1aa84c0e8c2a590cf5236346bf268056364240a2c626c926b796020"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-dossier-tecnico-movil.jpg",
+   "bytes": 605597,
+   "sha256": "75e68a5f3fc33ad9b87414528e86cf97c89acf69b9706b3908ed955eeda1df95"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-dossier-tecnico.en-movil.jpg",
+   "bytes": 582545,
+   "sha256": "b0324620f7f026c84fdf0d5c19523de788afcecbefcb090878be080a6d91c24f"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-inmobiliaria-movil.jpg",
+   "bytes": 480975,
+   "sha256": "8723335bed73d16cb94fe7beced8d7c79bd8d4b7f09a9dcac9946573ff5fbed7"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-inmobiliaria.en-movil.jpg",
+   "bytes": 463105,
+   "sha256": "c05b1062cbc072631949da279bf531fdf7163ac5ca5f33aaec25b45718164157"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-interiorismo-movil.jpg",
+   "bytes": 686661,
+   "sha256": "0f915ac055c27fc3f5a06690a27f989bab689fae5689e20c252631ca84f8e168"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-interiorismo.en-movil.jpg",
+   "bytes": 661748,
+   "sha256": "b5ff0bd6310c3738b8fe1df074cebd02094a08fef01963e5c1a02a49b80648ee"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-obra-movil.jpg",
+   "bytes": 451474,
+   "sha256": "6e67f080b1afc1d8909742c788c20cfad50ffd0ba8e56f1b775a90cc32440323"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-obra.en-movil.jpg",
+   "bytes": 437487,
+   "sha256": "6b1a0670c36f4ddf81c4323d6be2b81ace1a9589deaaf634bf86621fbc69be1d"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-primera-reunion-movil.jpg",
+   "bytes": 635304,
+   "sha256": "60430a86d8ddf9da29862113b80f6bedf17bc530fa7433e72028cb0e58ede0f5"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-primera-reunion.en-movil.jpg",
+   "bytes": 610275,
+   "sha256": "9558006aa731a834f969cf0fbb024fd451ea00c1011d4c4db7fe10d9a8edaa48"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-propuesta-comercial-movil.jpg",
+   "bytes": 719307,
+   "sha256": "edd110517fb186a9742f915fb5d9fcbde0cf36eec882d79779403d493e654443"
+  },
+  {
+   "path": "evidence/entrega/qa/tipo-propuesta-comercial.en-movil.jpg",
+   "bytes": 691976,
+   "sha256": "55a9151ce8c4f957213e283069cf1ab6954554639d686e207b6712f93c4ea286"
+  },
+  {
+   "path": "evidence/entrega/v1.2/escritorio-1440x900.png",
+   "bytes": 2643267,
+   "sha256": "e0d68f0dc45ab79b7fd6393c6d68e4904db99f9e994e73a6f765f4138df6e0cc"
+  },
+  {
+   "path": "evidence/entrega/v1.2/movil-390x844.png",
+   "bytes": 1946868,
+   "sha256": "6c72b5277ac5ee8f7736361097e34614faf595a812c62bab1f332d23a61ad3cd"
+  },
+  {
+   "path": "evidence/entrega/v1.2/movil-horizontal-844x390.png",
+   "bytes": 3569709,
+   "sha256": "0b062d2593cfc249d217398d4d4f418ebb41d40e5c6fd82fd5b580d5c6856172"
+  },
+  {
+   "path": "evidence/entrega/v1.2/navegador-qa.json",
+   "bytes": 7275,
+   "sha256": "4d7502152a60da59c47fb51e81aeec00344483105fb7f1f7c5fe4aec8f29df2b"
+  },
+  {
+   "path": "evidence/entrega/v1.2/recorrido-escritorio.webm",
+   "bytes": 3269801,
+   "sha256": "4b9bc3f52ef34c458453a560695f884e1d2144970f484475c62ff3592e02a2a7",
+   "videoTags": {
+    "encoder": "Lavf"
+   }
+  },
+  {
+   "path": "evidence/entrega/v1.2/recorrido-movil.webm",
+   "bytes": 3126904,
+   "sha256": "3b75f3a7dc174341103b297afeb4e04f26088142257838ba8634b578987e6b41",
+   "videoTags": {
+    "encoder": "Lavf"
+   }
+  },
+  {
+   "path": "evidence/entrega/v1.2/tableta-820x1180.png",
+   "bytes": 3430439,
+   "sha256": "058299c07085d4a1ae0b39dc143e8c38de5026dc469c97d4366af03cdd4c3ccd"
+  },
+  {
+   "path": "evidence/estados/estado-qa.json",
+   "bytes": 6857,
+   "sha256": "226ee2ea753f128ecc67e634c2e81b1b8356e3f514f96cbb48a299aafce346b0"
+  },
+  {
+   "path": "evidence/ffe/ffe-qa.json",
+   "bytes": 1347,
+   "sha256": "71ad999ca8d6dc4c065241e752e180822b57e403013593c604fbf088795cae63"
+  },
+  {
+   "path": "evidence/h08/inventario-vis.json",
+   "bytes": 26968,
+   "sha256": "2cedf8f0ead3c8358cadd22fde265cb38a642e4f77f46f415a46768e0f25b364"
+  },
+  {
+   "path": "evidence/i18n/gate-en.json",
+   "bytes": 2611,
+   "sha256": "3746f740ffda557605716192fd701aef8f76740ffb9dc27d4b05bb9991fe6847"
+  },
+  {
+   "path": "evidence/i18n/pdf-en-muestra.jpg",
+   "bytes": 437592,
+   "sha256": "4fd8bad52548bc97132bea7e01317ff35c7847e83432ee8db6efaef44ebe073c"
+  },
+  {
+   "path": "evidence/i18n/web-en-escritorio.jpg",
+   "bytes": 239639,
+   "sha256": "05c8a51fa7cfef2e906b93e593bffb7a81aa9197626a30550d8eee6d3134bfc4"
+  },
+  {
+   "path": "evidence/i18n/web-en-movil.jpg",
+   "bytes": 341310,
+   "sha256": "aa2c3cddea3a341dbe69ebbaef20a4b0705bc6d03553a4db7a3a1fa16046ea6b"
+  },
+  {
+   "path": "evidence/impacto/mapa.json",
+   "bytes": 133168,
+   "sha256": "8557c83e03bf9677241059a6d9b5419eee49107cd8d2133fc7da070ffcf76c87"
+  },
+  {
+   "path": "evidence/minimapa/minimap-probe.json",
+   "bytes": 4498,
+   "sha256": "2704329f15fc03e9c41a9b94a808ff8db18d49a3ea6da477b057f12e5606a797"
+  },
+  {
+   "path": "evidence/minimapa/minimapa-escritorio-abierto.png",
+   "bytes": 80076,
+   "sha256": "aef6a8537d77fa93fe52775f403fc4ee882574c4fd3896edc4df82b0639fc216"
+  },
+  {
+   "path": "evidence/minimapa/minimapa-escritorio-tras-esc.png",
+   "bytes": 79565,
+   "sha256": "5ea3779099f2e7dad4fcee6250a3de76ba51c02e31b553b066294d3699d9ec4b"
+  },
+  {
+   "path": "evidence/minimapa/minimapa-escritorio-tras-ir.png",
+   "bytes": 107212,
+   "sha256": "f55c3a6a4c24ab654f9d4a1aaa79ce8f476143af55ef23b5e2852fbf32f31da3"
+  },
+  {
+   "path": "evidence/minimapa/minimapa-movil-abierto.png",
+   "bytes": 194982,
+   "sha256": "2865b7d5c83ff951b2c540fba618b37eaa8fbe9d8a6f19847d7eac91488e8b24"
+  },
+  {
+   "path": "evidence/minimapa/minimapa-movil-tras-ir.png",
+   "bytes": 124450,
+   "sha256": "868f55ee627c2981d98e4d7d092ed1fe13b1fe089f46e7eb2ce5d91856a2e40b"
+  },
+  {
+   "path": "evidence/motor/motor-qa.json",
+   "bytes": 16684,
+   "sha256": "8cb0a3d2579e74fca2767af6e76d92a7e7c2d329698a31b7e271369c283f1b80"
+  },
+  {
+   "path": "evidence/paquetes/INDICE.json",
+   "bytes": 907,
+   "sha256": "f52aee17e1b28f988a9e28b3fc3c7da7c841279fe2054f3844d4c959ca04c8e6"
+  },
+  {
+   "path": "evidence/paquetes/RECONSTRUCCION-v1.4-N01.json",
+   "bytes": 77372,
+   "sha256": "614c2a2d603be8bc01ffa42f7d9247e6dc6c742a89dae41e4688d4dbc43ffab0"
+  },
+  {
+   "path": "evidence/paquetes/RECONSTRUCCION-v1.4-negativo.json",
+   "bytes": 472,
+   "sha256": "c0c416613ab96f098373681493999d14a2376a6f1f096e1ffe55a08294f57075"
+  },
+  {
+   "path": "evidence/paquetes/RECONSTRUCCION.json",
+   "bytes": 410,
+   "sha256": "7c128c5e8d4a42edd7621de1c5492455aed0e5722fee4a154d7ce8ff2df5fab0"
+  },
+  {
+   "path": "evidence/paquetes/SANEAMIENTO.json",
+   "bytes": 2988,
+   "sha256": "5b51b4ec0ed12581ac08c33bf3ddad1b8ad39e913e5ad89bd3aa4ea87f3eb842"
+  },
+  {
+   "path": "evidence/paquetes/SHA256SUMS",
+   "bytes": 520,
+   "sha256": "a5a3201b52c6fc1fa18a40d6bf8b494cf2b8621d4e4646e4fa2df9610e7e3a07"
+  },
+  {
+   "path": "evidence/paquetes/decodificacion-v1.4.json",
+   "bytes": 1425,
+   "sha256": "f9aab6d2fc2eaba2482fc7762dae559b62ff53fee317362621bf80f6f8dce181"
+  },
+  {
+   "path": "evidence/paquetes/inspeccion-cliente-en.json",
+   "bytes": 6997,
+   "sha256": "6e87e8e00388e7e16c565230db33b6d357b3a9aad417f09ab2317775a6c7d010"
+  },
+  {
+   "path": "evidence/paquetes/inspeccion-cliente-es.json",
+   "bytes": 7000,
+   "sha256": "f5cbef0b5de5d148ef51e8c8aa82b383d9303ad6c592dd0cdd1c454ca32efcdd"
+  },
+  {
+   "path": "evidence/paquetes/inspeccion-laboratorio.json",
+   "bytes": 87169,
+   "sha256": "484bfa61fad577612b0c816fb881c45b7f5527c0b79d7495c989588ce78889eb"
+  },
+  {
+   "path": "evidence/paquetes/manifiestos-v1.4.json",
+   "bytes": 28865,
+   "sha256": "11e1caafdd0e79529239750e2cebcfcaccc88809602598a400dfc464c048b203"
+  },
+  {
+   "path": "evidence/paquetes/navegador-v1.4-en.json",
+   "bytes": 10124,
+   "sha256": "91eecaaf7662fb0f7f93f9a789ed2c85f946542d7aae6b1ea18a51f1b4b5a497"
+  },
+  {
+   "path": "evidence/paquetes/navegador-v1.4-es.json",
+   "bytes": 10256,
+   "sha256": "1c6ba2ca106efddabbef407031355d89901f124c7422d597b94a923694c7d331"
+  },
+  {
+   "path": "evidence/paquetes/verificacion-en.json",
+   "bytes": 99,
+   "sha256": "ea1112e597919bad04382297b089c547e2d95b223a463f1aa23f845c4159bb15"
+  },
+  {
+   "path": "evidence/paquetes/verificacion-es.json",
+   "bytes": 99,
+   "sha256": "9527a8832fc88330d5255e36ecac3a5e0b2ff9300ab85afc6c5e74bd95c6d437"
+  },
+  {
+   "path": "evidence/perfiles/perfiles-marca-v1.4.json",
+   "bytes": 3962,
+   "sha256": "0df8559845a2740cb0a0e792c3c7bbaa2e7afb12f5f7c322cbf1d0b20d905040"
+  },
+  {
+   "path": "evidence/perfiles/perfiles-marca.json",
+   "bytes": 3970,
+   "sha256": "6e7caaa174d69587625f0020350dca2415ac7331906c986c6f05b1ae704bf8ae"
+  },
+  {
+   "path": "evidence/perfiles/portadas.jpg",
+   "bytes": 293178,
+   "sha256": "4a47e46e1bff5cefdd195922e935fa9d1b9f3bd8afd9e71833235d65873ae503"
+  },
+  {
+   "path": "evidence/pillars/README.md",
+   "bytes": 1896,
+   "sha256": "83ea4b4148fa6c791804fa2d1664ff570c104cd97ece0344a0ba3d2ee502b042"
+  },
+  {
+   "path": "evidence/pillars/ft3d8-1-evolucion-caso-A.png",
+   "bytes": 209796,
+   "sha256": "db1fb0abb778bbbcd4b1f8308b22e6cb5ed2a5139d596866d910884c0da02d19"
+  },
+  {
+   "path": "evidence/pillars/ft3d8-2-expediente-caso-A.png",
+   "bytes": 143980,
+   "sha256": "15e9cab72f78b96de1233b87df0d04ea33e872329386413f2b569d40b3fcd602"
+  },
+  {
+   "path": "evidence/pillars/living-1-dibujo-vivo-grafito.png",
+   "bytes": 1289023,
+   "sha256": "40f462b0ade93066835a8bf8d8029351426fe34b57718e42f9252762d6e8b90e"
+  },
+  {
+   "path": "evidence/pillars/living-2-dibujo-vivo-salon-color.png",
+   "bytes": 301567,
+   "sha256": "91b2ed026e04d10b82279986df5851fce704d02d09a848f90be7bad782c2c80e"
+  },
+  {
+   "path": "evidence/pillars/living-manifest.json",
+   "bytes": 1945,
+   "sha256": "122e0c7bcbcb51f3012fb07e7196a5c714069f3b810481f69311d261a1b6f67d"
+  },
+  {
+   "path": "evidence/pillars/render-1-vistas-preparadas.png",
+   "bytes": 259003,
+   "sha256": "5d5b2016f6e276bafb27b889a766053933cdbaf6bdea68cf3cdbbce5fe81628b"
+  },
+  {
+   "path": "evidence/pillars/render-2-dialogo-render-ia.png",
+   "bytes": 214046,
+   "sha256": "5a5d4af673fe9d7773f98bfaa0387495ef566ef9bca881b1492d933d2ca32133"
+  },
+  {
+   "path": "evidence/pillars/visita-1-entregar.png",
+   "bytes": 158924,
+   "sha256": "3ba444e234b3d27afeede3c5c9803b9870a6974cef2ac1aaf484769326aed0bb"
+  },
+  {
+   "path": "evidence/pillars/visita-2-cliente-inicio.png",
+   "bytes": 90480,
+   "sha256": "9bf7cbf66e3624fbe5152785eda782d57ab6fba1a4360a4a5c0d4b4735d057fa"
+  },
+  {
+   "path": "evidence/pillars/visita-3-recorrido.png",
+   "bytes": 162805,
+   "sha256": "9b020605818e516f1d8fe2106cc3ae767ff489440442456101df3a3db17e6569"
+  },
+  {
+   "path": "evidence/recetas/capturas/preparar-recetas-escritorio.png",
+   "bytes": 327433,
+   "sha256": "16dbf25af5b7905cc08e60253f70d3ea502c3b47715846028a7efa226c918ed9"
+  },
+  {
+   "path": "evidence/recetas/capturas/preparar-recetas-estrecho.png",
+   "bytes": 46973,
+   "sha256": "09bec880d5304fbd1cc50f068b3a5899fb43a106f46ec0c01c0809bce6aad039"
+  },
+  {
+   "path": "evidence/recetas/capturas/preparar-recetas-movil.png",
+   "bytes": 58358,
+   "sha256": "cab0d55541c411f50b67c609ff14edf05545cefd0ff7a104cd262eb52ba87b52"
+  },
+  {
+   "path": "evidence/recetas/cont01-sin-referencia.json",
+   "bytes": 3009,
+   "sha256": "dd542f1092dd18166d1460707eafbc2b56ad6afb30b72c6cb6b0819916bf6cac"
+  },
+  {
+   "path": "evidence/recetas/filtros.json",
+   "bytes": 1871,
+   "sha256": "728d8e13827800243b5d9d8f531fe36e8a06871f6b470373a9342967381332db"
+  },
+  {
+   "path": "evidence/recetas/matriz-recetas.json",
+   "bytes": 19541,
+   "sha256": "fa0f4dff6e3d276edf92b9359b580ebaac4aa880e187a7217c372c1696656b58"
+  },
+  {
+   "path": "evidence/recetas/recetas-qa.json",
+   "bytes": 31743,
+   "sha256": "8165c80056a01c58b5dcb889a22fb3bb38fbf510d96ca4ffe9177a37339a3203"
+  },
+  {
+   "path": "evidence/recetas/salidas.json",
+   "bytes": 35167,
+   "sha256": "66baba138e81cd8faf61c1aa59e8cbb8ae64acf1f5aaf3f08ad75470d35ddecc"
+  },
+  {
+   "path": "evidence/render-ia/dialogo-1.png",
+   "bytes": 242886,
+   "sha256": "64809305f4966448cc4f5039f590ae00437f8e5abf43fbc84ab35d4804f2aa27"
+  },
+  {
+   "path": "evidence/render-ia/dialogo-2.png",
+   "bytes": 219843,
+   "sha256": "d23e54ebedd76bdcf0c3893e4378acb1f9ec25264ec1f3ec31fc8a92eeb08c93"
+  },
+  {
+   "path": "evidence/render-ia/dialogo-3.png",
+   "bytes": 212738,
+   "sha256": "66e2632b955a2115f37a27b36f9c7311cdb598dccbdebc2fa18a037fd507d294"
+  },
+  {
+   "path": "evidence/render-ia/manifest.json",
+   "bytes": 2025,
+   "sha256": "154091e3ebc470264e5bafedbe451fe3ac9a12b0de19f42a402dd6cd45c7f4c2"
+  },
+  {
+   "path": "evidence/render-ia/render-ia-1-salon.png",
+   "bytes": 2586954,
+   "sha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a"
+  },
+  {
+   "path": "evidence/render-ia/render-ia-2-dormitorio-principal.png",
+   "bytes": 2007314,
+   "sha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde"
+  },
+  {
+   "path": "evidence/render-ia/render-ia-3-vista-general.png",
+   "bytes": 2086508,
+   "sha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8"
+  },
+  {
+   "path": "evidence/render-ia/resultado-1.png",
+   "bytes": 412870,
+   "sha256": "d17084ab0580a10b976686a1b8fe69b244817ae42bc0ddbdef2226301916ecc7"
+  },
+  {
+   "path": "evidence/render-ia/resultado-2.png",
+   "bytes": 356993,
+   "sha256": "5ff8419e0f3b01cbb7bcdc39771c6ac65793d854be4884d8446bb3e2996277a2"
+  },
+  {
+   "path": "evidence/render-ia/traza-1.png",
+   "bytes": 564754,
+   "sha256": "d4a4d4713f73839e3b54df2f43693326fe4f15f800e910f53db9a6c28c36d2ef"
+  },
+  {
+   "path": "evidence/render-ia/traza-2.png",
+   "bytes": 413802,
+   "sha256": "6c13b8106b23be7fc789875a73fd0084505a36191fa2a8ec52529f0e62efae44"
+  },
+  {
+   "path": "evidence/render-ia/traza-3.png",
+   "bytes": 406832,
+   "sha256": "8672fa6f51d6e2cf13bb094d45edb9faee0b59225020b08e2a0f1c69546987d6"
+  },
+  {
+   "path": "evidence/render-ia/trazabilidad.json",
+   "bytes": 2462,
+   "sha256": "b99f9ad64905e01188cbefe50217c91cf0ebd3c65b69d1294c61cdc3b591e5b8"
+  },
+  {
+   "path": "evidence/revision-visual/index.html",
+   "bytes": 21516,
+   "sha256": "7a8eeaca0704f6c4e7d5e421166f3b3a6e6a74ce8fabcbe829d1a93d89595d51"
+  },
+  {
+   "path": "evidence/revision-visual/indice.json",
+   "bytes": 7567,
+   "sha256": "25d027cb5bfca78194802abe2a0cd8a279e6ac9fa29e0e9ce89e055b2726fc55"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-01.jpg",
+   "bytes": 46633,
+   "sha256": "7c0641ef02535b7d8258bf04af806435bd2b787879da26894d70500ab2c23631"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-02.jpg",
+   "bytes": 38040,
+   "sha256": "402df42ea2885ef62d38bb4835deaacea5ffc1b2a2cd94943368eae11c2935e6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-03.jpg",
+   "bytes": 56355,
+   "sha256": "a258022e515de5d04857f398e4b0fa5043fdea35cef4962a55e13cfec80edc45"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-04.jpg",
+   "bytes": 55747,
+   "sha256": "415369b92693b8d2101df689b8ada3d732fbb2c8505d962d14e0784b72843516"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-05.jpg",
+   "bytes": 39108,
+   "sha256": "3a61548f84a49015d18fbded80af261fe578e6f6777840cbc15c88fb17129b3a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-06.jpg",
+   "bytes": 39124,
+   "sha256": "a041d2fbcc36bb7d6ff05cef9c92227d2a517530ca95b514e62eaff110ee8e0c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-07.jpg",
+   "bytes": 38977,
+   "sha256": "28732417e0ff1813c801c8f7cd34839a0ae3e0c737ced456e13a98057267df39"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-08.jpg",
+   "bytes": 38560,
+   "sha256": "c6bdf9c1f3b9541e1bc9a88dcaff27f83c5ef6587b2a855d6e61823035be0e00"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-09.jpg",
+   "bytes": 39282,
+   "sha256": "0d5706a2398926d88413056d3c1c4659460f5e1c937ba282fe3db71d24b4676d"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-10.jpg",
+   "bytes": 36944,
+   "sha256": "a20eebfb9d37627795d52a4a2d445cb470668e6801383edc6025b9a604a0aef3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-11.jpg",
+   "bytes": 27789,
+   "sha256": "ffcadfcf6a855cc52b540b4c813e3da74501f23578b7505f5383e4d0bb56014f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-12.jpg",
+   "bytes": 46832,
+   "sha256": "33a00bfc8e904f7807ca76d889ae290d3000a4629d5585de0124262a5aa41cb6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-13.jpg",
+   "bytes": 53754,
+   "sha256": "6a910282b92e3b296634d8f30246626b5c87754b2f74b384396209528b24279b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-14.jpg",
+   "bytes": 43761,
+   "sha256": "680ed8834627c61b03d934d52ae34d0a490714758ae9d6263a8318dfe9a2bb40"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-01.jpg",
+   "bytes": 47264,
+   "sha256": "761a7ce5dabdfdd3e338af3ef87bab3763238301dcc529a6020f8f4c83c380fc"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-02.jpg",
+   "bytes": 40342,
+   "sha256": "3f7596b0f4c1f00aca81cb66a132b70f8d9ab24ad323ea2a7cf78920c79ef68d"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-03.jpg",
+   "bytes": 56370,
+   "sha256": "ca599af9aff44ede6caa7bb26e2973b963f3b80b223d5a928dec1485ba10e4e8"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-04.jpg",
+   "bytes": 58839,
+   "sha256": "68430234ab82b6531d4329ea7aaf32f9a32df7d2df637bdd3f99829b8e0573af"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-05.jpg",
+   "bytes": 40466,
+   "sha256": "3ce597732af8684e54c9f898eb6f6469bdd74cc218818a3505b3c3eea5b21ac2"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-06.jpg",
+   "bytes": 40602,
+   "sha256": "b8a40bea050d2ac882f7012731a75d0444644733d0bef177d0a4c43a3941db63"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-07.jpg",
+   "bytes": 40386,
+   "sha256": "60f09953a0870d761606121f80774d2e3e47db4ee751da40cb04230adfe09c89"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-08.jpg",
+   "bytes": 40073,
+   "sha256": "e11feb01179bd6c4774d5c22aab03b88692c8fb1effe40a16749feb4c8e0965a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-09.jpg",
+   "bytes": 40922,
+   "sha256": "e19610bab7fe1572fde347bf267eae41ade4afea9b27c470ead10217ebf20007"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-10.jpg",
+   "bytes": 38519,
+   "sha256": "fc766253e5598da60a7e72b4d80f7a806f39cf2be865622fa75b35d4f06bc172"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-11.jpg",
+   "bytes": 29239,
+   "sha256": "d3a193ad814ae08f1d6b0d40b92672b69b9894860a0954ea059e3c06d04e958f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-12.jpg",
+   "bytes": 46813,
+   "sha256": "801974b3ee4da40dbde67b92308e8112a03dd86cf9993859bba01650d1ccdc15"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-13.jpg",
+   "bytes": 54691,
+   "sha256": "517faf832372ec5d929eb2330c6a1cc9795d53099126b5356f4af8d069aceef7"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-14.jpg",
+   "bytes": 42496,
+   "sha256": "54fc482788571c2d0b1004f003a98d27d61a40911346aec123516d2b2e04cd76"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-sheet-strip-en-1.jpg",
+   "bytes": 103066,
+   "sha256": "cae71ddcbe31ff097af754e158235e02cead965863f7ef6c67e5b697c8d2a136"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-sheet-strip-es-1.jpg",
+   "bytes": 104036,
+   "sha256": "1c93a6b01124e49fd5e544355bcdba0104455f33da5015023631147a07b1138c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-en-1.jpg",
+   "bytes": 39732,
+   "sha256": "b7e113e5ec043fbbd99823188648435e54ff96348890049a201cabfc669a61e5"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-en-2.jpg",
+   "bytes": 60644,
+   "sha256": "ce99d02baf5b4f6673d64a585708e56cd49b47f76beb7b07e98f1d0bb5878636"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-es-1.jpg",
+   "bytes": 41118,
+   "sha256": "b58b3324a46730bf51032bc8fc922eee6296e0272113d3ded82a886a4f2328ed"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-es-2.jpg",
+   "bytes": 62844,
+   "sha256": "9ab233ff7e6379501f698733481e5482c0273334698b935e0c2dbc1a8d2f114f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-studio-v3-es-1.jpg",
+   "bytes": 46196,
+   "sha256": "557188e3d5b16ab6bd5a81f487d041aebcda6de4d4f1bcd2a43cdcd2240c91ff"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-studio-v3-es-2.jpg",
+   "bytes": 83201,
+   "sha256": "e9e39cc2ae8e599e7c210561c3583b0f6ef9a65873af059a2e670603ad0d251a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-01.jpg",
+   "bytes": 45757,
+   "sha256": "237d5262e9a94286a9d2f74e06168b2694fc3e954fb7fec59f64f57cfec4ff2e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-02.jpg",
+   "bytes": 44926,
+   "sha256": "b07d14a0cfaad6b0f3d0489618e514ef989af419be9a2fd6a8e8c1d0cc2bdbf5"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-03.jpg",
+   "bytes": 30610,
+   "sha256": "f0360893c8e101a1cd21d4658f26cd02f69e882ac107e5bf6357e4dcfd8e273b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-04.jpg",
+   "bytes": 57271,
+   "sha256": "0899bafc2499f90a3ad6cf2f148a615306d62f44a42dea1a113ee9df82ce6a9d"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-05.jpg",
+   "bytes": 63371,
+   "sha256": "6b4d422793c215e4723fcbd09397510468f2b017869de1fd6b6aa96a9cf33388"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-06.jpg",
+   "bytes": 59624,
+   "sha256": "0ef8d0eebbd7409d6c5951f2e486dcb30d6052f5ef53bc8bbe5d86df832afec5"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-07.jpg",
+   "bytes": 51839,
+   "sha256": "d9656ade7f370381c2e0f7586076a39d8ada746219d0abf8b52d59635ed3ec32"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-08.jpg",
+   "bytes": 46892,
+   "sha256": "3999c6278223e73f6a827246a013148b805ab6477800a29538d9f7b1db9b46ca"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-09.jpg",
+   "bytes": 43084,
+   "sha256": "8cb94915c5857f11403217c000ce812bed3c3f2ef722621f4e77fb885293be32"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-10.jpg",
+   "bytes": 28279,
+   "sha256": "49f83b52bd78c0a1ed5423d2baa75fc3bcc61d69940e7b2d724526a9cd4ba76b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-11.jpg",
+   "bytes": 60509,
+   "sha256": "a78f4e837c9127fe4026f2ae763bc3cb88edb93ea8c7a37faa82b4006313cfa6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-12.jpg",
+   "bytes": 47655,
+   "sha256": "19fc20aa92ef312d795b9907290dcd0ea2f2d7003466f0944afb3d5ac1db1a91"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-01.jpg",
+   "bytes": 46156,
+   "sha256": "018b803340e17eb41b3a632db430222bfbc71b781d6543863443c0ccca6a6508"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-02.jpg",
+   "bytes": 46718,
+   "sha256": "e80a99fe1107fb99e31857064a137943cd2f1369b1175e8cf47f7997ceb37bcc"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-03.jpg",
+   "bytes": 30924,
+   "sha256": "1897a9303ed41936d22f4a4c4f6635d76973efa62afdaed5ee9c435e7c42e069"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-04.jpg",
+   "bytes": 57710,
+   "sha256": "f41ef4d431d76115a547bc6f491dbc31753ff1dd4fa0656243fbe4649b4e3d98"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-05.jpg",
+   "bytes": 63885,
+   "sha256": "d3229c0a9ef0806c3adef4dd1439c1788d8119097f1b84f031c744a7d9c4e1b6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-06.jpg",
+   "bytes": 60560,
+   "sha256": "953331901e35e4278e0b34d75b6f011f246d7c2ff62992eb963fdb723e9f0400"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-07.jpg",
+   "bytes": 52541,
+   "sha256": "9affb02f2eb879415ad7328696bf57766d565bb9a87c7976a5f8b57936d93a46"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-08.jpg",
+   "bytes": 47762,
+   "sha256": "c8eac9e5b6e131717d77fe26042804c712fbb98e1c11cdbf42cdb74d941f9656"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-09.jpg",
+   "bytes": 43976,
+   "sha256": "1143b4eb29175534f8b6ca5717bed51ec7e2a1a233733edc85a36fb685f969c3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-10.jpg",
+   "bytes": 30100,
+   "sha256": "12aea143358ed39c35e8a13e89acd2e6df00b8db17622e6a3399a0e4105d29a1"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-11.jpg",
+   "bytes": 64418,
+   "sha256": "71dabe4a2b7e64683f836a6a31136e48c6dcbeda5818a514aa9b1d10ea5bc648"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-12.jpg",
+   "bytes": 50559,
+   "sha256": "5f5d9d702cd54b7f29bee75324e7651e770d2226b281d735a5c09448036f00fd"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-01.jpg",
+   "bytes": 46132,
+   "sha256": "1850c25aeb778ff99f828da25471c1d9be5dd3914dc91b4a7074ca2419623731"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-02.jpg",
+   "bytes": 36486,
+   "sha256": "5e2efc82fdb047e959842605fd000a75462732c2e0e993482892e8f57b6b802a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-03.jpg",
+   "bytes": 47677,
+   "sha256": "89dddedd677a665716030aab16b54ab3368b918cf032e149c39cd20e7888859b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-04.jpg",
+   "bytes": 48104,
+   "sha256": "2f2fb882c04f86c67771ce0813c23ad1b3ab4b53c76dd09ea4eacd936032e07e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-05.jpg",
+   "bytes": 56168,
+   "sha256": "888a9b110465d2c98e16a29cf7ee340474e6dd3f61d6101ce74e1beb99696b43"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-06.jpg",
+   "bytes": 41810,
+   "sha256": "2dcc9344cec1899c2ae6b541a4d5d9fcb3c5d2b69068bd40a0a165ed4351b677"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-07.jpg",
+   "bytes": 47052,
+   "sha256": "c8bdb0a2f160b6611725da2ebe415567c03b6c7c0630c4ba8b1307576609843a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-08.jpg",
+   "bytes": 45022,
+   "sha256": "449eb142c5241fadc286ffb2a3fbec75586fb1daf0032c2ba2d6de52dae9bb1b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-09.jpg",
+   "bytes": 50213,
+   "sha256": "02f4cc3536f65a4ba49d46e080aa4bf7dfdfdaef0c4b28e75dcb1734710f4d4c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-10.jpg",
+   "bytes": 45136,
+   "sha256": "62d226076d72d0731957a669b4a92fc2b18fadebf5005ac380c683e6b4c74cc1"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-11.jpg",
+   "bytes": 55843,
+   "sha256": "4d72280de67f74124ec0025fc5ddb5d050efc9efba4297254eb9b4b61a95d7bd"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-12.jpg",
+   "bytes": 54944,
+   "sha256": "75727d20f15b64ca9d354873dc16d32d176bbe73269d1400550e99387f25d7c3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-13.jpg",
+   "bytes": 45232,
+   "sha256": "aa4a40cd10c42c29ba3ef4b6d6996c8c9e8f2cb26c5783f98b5807515cddc44e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-14.jpg",
+   "bytes": 32286,
+   "sha256": "14be939f878cc69bc57592b76e0baeb9be2c859cb9e6a894ae88c50dc9a943ca"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-01.jpg",
+   "bytes": 46966,
+   "sha256": "2e032b1efc39562e3b8026bf531a2a62279608ccaba40ca0d560471416ca91f3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-02.jpg",
+   "bytes": 37546,
+   "sha256": "bd7d1c4fdd570827471f684bd461c9705a17bc5e8a87918ad85e926815597185"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-03.jpg",
+   "bytes": 48223,
+   "sha256": "da30b863d46409052e5c51178c43f81990486000783fe95fe3c6541558f83376"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-04.jpg",
+   "bytes": 49060,
+   "sha256": "a1533aea5a5022e6e64121ae7669f098855bf4b1cc30990d71bb318d23edb915"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-05.jpg",
+   "bytes": 56340,
+   "sha256": "e2327d56dee99e42201756a0f3e169d178cdfcbbca0900612b895496df0f34d1"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-06.jpg",
+   "bytes": 42957,
+   "sha256": "a9efaa6434cca24669629b7d144f95c8d043d74fe5f2724a0b07320ef7b99331"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-07.jpg",
+   "bytes": 47256,
+   "sha256": "b1706c987dfff527e15d54e811ea258da62d4c46043f741982d558117d22b1d0"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-08.jpg",
+   "bytes": 46108,
+   "sha256": "64b1ddb19b9530cc2bbdee4b24c9e5e0aa600520acb202e63019d892a758d555"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-09.jpg",
+   "bytes": 50394,
+   "sha256": "175cb81d033e7783bac0397b269c924798dd2263861ddf607d7829fc5e196cbb"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-10.jpg",
+   "bytes": 46282,
+   "sha256": "5c1c4e811073e662cecf912bf7c00dcd16575c577c543fba490783fd393024fa"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-11.jpg",
+   "bytes": 56053,
+   "sha256": "7518a71eed48a31d60615c51aad18af52d72ec3b5da856e7e0caa287ff3faa8c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-12.jpg",
+   "bytes": 56375,
+   "sha256": "7a5c62031e4471823f2b3083163c703f89c81c65417cd00ca46a214eb06b8dcd"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-13.jpg",
+   "bytes": 46897,
+   "sha256": "9da69d99d675687d6c0e3cf256f61f58680dd47a4ca62157d7da45aef71345a0"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-14.jpg",
+   "bytes": 31896,
+   "sha256": "4484da2a62b897048dabdd64dfec98611b9901fda02739f4e0d8896db440f3b7"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-01.jpg",
+   "bytes": 28632,
+   "sha256": "73dc53c259bac64ec84843b4dcf4663b44239e8649e4c126311cf402e7c40e70"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-02.jpg",
+   "bytes": 51910,
+   "sha256": "d5766a31b22e14e68da6646020da7817c0680b8d1860696ea7da96af7b36e33e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-03.jpg",
+   "bytes": 67244,
+   "sha256": "510ffbdf27f97c17e79c8cc37a984e2eddd4e9e393ad5e0376955c06180a7c3f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-04.jpg",
+   "bytes": 58802,
+   "sha256": "a6576a16975f9fa9ea3b85d1efbb5e3568a82d5f1a90d16d37a66945e6f9e7cf"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-05.jpg",
+   "bytes": 58314,
+   "sha256": "de1b124c69df5893f88e4a6e9a43f255dac87f36aa41486bd3a3a1dd95553d60"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-06.jpg",
+   "bytes": 58132,
+   "sha256": "2089bf6d899d9ada0737d8ad914bdd2818fb700b888221c9f50bbe728461eb18"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-07.jpg",
+   "bytes": 58407,
+   "sha256": "e1e13ebc5923f46184c3a2d84086520130ab50c7a21d92b95bbea18eb1580057"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-08.jpg",
+   "bytes": 56960,
+   "sha256": "977ee089eee2fb316f0a7d465df9f76b5e7fa4ccd357338788408d2199c83198"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-09.jpg",
+   "bytes": 58102,
+   "sha256": "29c765831283aefd2d69274e199e35c3450a83e3df73fa3e56a5f1374e2073ae"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-10.jpg",
+   "bytes": 58221,
+   "sha256": "7505bb0157868f3381f3df073def2de0bec86d125de5896db951561c2e06dc4f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-11.jpg",
+   "bytes": 57061,
+   "sha256": "f4925576a573dc241ed4289aabdbf8ded2b8a009b3b1a6a96a72a0e316bc67b6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-12.jpg",
+   "bytes": 60739,
+   "sha256": "c7723fcbeae58791b05ab32ca9b14f216bb4b3ead89724b722f51ffc4c772e3e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-01.jpg",
+   "bytes": 29816,
+   "sha256": "989406dd631e87c65c0c5f2d567a2a1be14ad04be9154f1495ab84d14cae4434"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-02.jpg",
+   "bytes": 53276,
+   "sha256": "f1d2a8ea856fa4a947e7ea8db2dc7c6038ea850387008b2e68d24d93c215b444"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-03.jpg",
+   "bytes": 68740,
+   "sha256": "442b375abe533d4f8b34ddde4f22daa6d56266dddf3dedb9944cd1edab4d7524"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-04.jpg",
+   "bytes": 60551,
+   "sha256": "b461935f4d4b61d13e5fb47ff1994a4d964b2aebebe7383ff5a43b3b5ed072b8"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-05.jpg",
+   "bytes": 59924,
+   "sha256": "ca5da73b1d106cfe42bb9542d7dca068d48575ff2ad63860727034d933a7baa2"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-06.jpg",
+   "bytes": 59728,
+   "sha256": "5debb48a7dc40fae84427d16bfc463a2a33f7f0cb892107e85509be99f387cb8"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-07.jpg",
+   "bytes": 60311,
+   "sha256": "4a788cc3ec5f14a5bbf0c17dd551bda028483fbb12d5bf7fff644bd6ccc5cb17"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-08.jpg",
+   "bytes": 58620,
+   "sha256": "fd119b6dd5da3793d48f8549aa221eec4470fc3e27458a7ac866605a000bc833"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-09.jpg",
+   "bytes": 59682,
+   "sha256": "0dfad8e077598ebd74c382cbfabf0e9897ad1c8b141a01f2ac2f2c99fcfd263b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-10.jpg",
+   "bytes": 60145,
+   "sha256": "d240a2385be7f6780f32fedc6b3117bd630e510947d0ef9c300418c3da61e334"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-11.jpg",
+   "bytes": 58670,
+   "sha256": "f2e3a3a0b96c9c4f14bf056a47a07b1b2818372d99c9a9f62a9320853aa51268"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-12.jpg",
+   "bytes": 62400,
+   "sha256": "3fcf06a974d2eeb78bbbcacca2b111a27878073833d3141654e5797d48683d1e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-en-1.jpg",
+   "bytes": 64820,
+   "sha256": "801603d587e7a0068f33652646461c1c8570f1395318356154880fbb895da324"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-es-1.jpg",
+   "bytes": 66339,
+   "sha256": "6c304c8c6603b2f1e585ebe6d10e2a949104cabb09d926b1846db3430f77e496"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-sin-presupuesto-en-1.jpg",
+   "bytes": 63867,
+   "sha256": "252b37b80299f8fe7a225ba452d8e7f95897ebac22cade07e0983ebe5a0ada07"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-sin-presupuesto-es-1.jpg",
+   "bytes": 65436,
+   "sha256": "d44957da5b75b1421a4aa92eb209721ff246e1cd041f0ac74753618623b87de5"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/comparativa.json",
+   "bytes": 34458,
+   "sha256": "ea99d86678d8ac246d5f4585eb245942dbae758f01980a772de0e16e252d2e78"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-01.jpg",
+   "bytes": 240850,
+   "sha256": "8ade7f0c33caf8817931ac460ea3c67acf8d66451553fcb923bcb0f45e46bd13"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-02.jpg",
+   "bytes": 252536,
+   "sha256": "0c8c16e258e0d768e58990f8a49323ac61196853cdfd2969bc989a8cb4cb81d1"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-03.jpg",
+   "bytes": 263442,
+   "sha256": "140f8b3a56cf5c8becfa1b1b2638fa750517170098a407eee16d570fe8dda6b7"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-04.jpg",
+   "bytes": 252216,
+   "sha256": "86e28ba8d3ee1c34da58c25d5aad94a532317832cabcd1c040fcd0817cefbdbf"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-05.jpg",
+   "bytes": 259832,
+   "sha256": "3993b6e31e420ccbdfcdcb0c0293424046ae9e361c00fa2aecb60ca90fb595c1"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-06.jpg",
+   "bytes": 276330,
+   "sha256": "36016a6b4ac99995ef3011838939794e5d3d3cbff19641f9f61e1e1c0dee9fcc"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-07.jpg",
+   "bytes": 278337,
+   "sha256": "356074a4bf8d80ba180c5e17f3d0cca2bdbdd24e6be6705d4df9e3b03354a525"
+  },
+  {
+   "path": "evidence/revision-visual/v1.4/revision-08.jpg",
+   "bytes": 54296,
+   "sha256": "eec248b6383f2c58da31634da8ab15424465c0e386aa75e606c66db584935920"
+  },
+  {
+   "path": "evidence/v2/contact-color.png",
+   "bytes": 1002565,
+   "sha256": "6391e895f2a102c6bef6f4d40ba85c5d7a2ff02517f50cf93740abdfcad240ff"
+  },
+  {
+   "path": "evidence/v2/contact-one-ink.png",
+   "bytes": 828646,
+   "sha256": "5cf7fde3a4684dea68d5130c98ba04856f9d696100bbbcef9de358af023e50d5"
+  },
+  {
+   "path": "evidence/v3/b1-directions-portrait.png",
+   "bytes": 106320,
+   "sha256": "3e0006815e2732de8eda0fde9cf98d06bd1869201cc09b6834c6e95ec882c0a8"
+  },
+  {
+   "path": "evidence/v3/b1-directions.png",
+   "bytes": 224627,
+   "sha256": "6397c8e1fcdb08987394c513e5481caf2e4be0aaf07a017c38622745706c1e75"
+  },
+  {
+   "path": "evidence/v3/b1-interior-spreads.png",
+   "bytes": 450892,
+   "sha256": "351c1792b24fb27e7ec33ade286f34ade2ae8d3b1ce9c95c366535cc1ef4c4cc"
+  },
+  {
+   "path": "evidence/v3/b1-materials.png",
+   "bytes": 185812,
+   "sha256": "6b4248b09fed1cf5e0785e31d223f0f30c59c6ea21d87ef66e3cc013dca877f8"
+  },
+  {
+   "path": "evidence/v3/b1-one-ink.png",
+   "bytes": 117639,
+   "sha256": "86ea90d485b283256f91a44bd1ec939c01f1dd12fa46042509a691b2726ceb4a"
+  },
+  {
+   "path": "evidence/v3/b1-proposal-client.png",
+   "bytes": 78023,
+   "sha256": "992a340f890bdf44b35d616a75a5a25c0bd3c731b34f54fc00d8b26984cdeb96"
+  },
+  {
+   "path": "evidence/v3/b1-proposal-studio.png",
+   "bytes": 96909,
+   "sha256": "af0e01ec58975544cced2203ecc83d7fa1a53b61a8f10baff437ff1cd2322795"
+  },
+  {
+   "path": "evidence/v3/b1-real-estate-a4.png",
+   "bytes": 115861,
+   "sha256": "34e61b6ddc363afb60e8028bda47dce5fe11ecba924d939bbef109e5e7d95f41"
+  },
+  {
+   "path": "evidence/v3/b1-sheet-strip.png",
+   "bytes": 54767,
+   "sha256": "231190867d27878f5794fec03a1802bae5b9be8755a4c164223895c827ea04cc"
+  },
+  {
+   "path": "evidence/v3/b2-canonical-cover.png",
+   "bytes": 70630,
+   "sha256": "1d40cf063a5c84bd165ea167712569405c4ff03b3b2b11c6780dd57f9d2a3ec2"
+  },
+  {
+   "path": "evidence/v3/b2-empty.png",
+   "bytes": 100325,
+   "sha256": "5c3cfbe03533a9456caa1ee7012dc2d6a869cfeba076a1044c720e00aeeb68f8"
+  },
+  {
+   "path": "evidence/v3/b2-logo.png",
+   "bytes": 214619,
+   "sha256": "d45779a16ee4d0df7217d72df577df279265062c35cf6c9024b7c1e5e4053760"
+  },
+  {
+   "path": "evidence/v3/b2-long-names.png",
+   "bytes": 371911,
+   "sha256": "a94588744a97f6177e5279107bafc4affb23c6b77b5930dcb0731172ea57841b"
+  },
+  {
+   "path": "evidence/v3/b2-no-budget-views-brand.png",
+   "bytes": 125079,
+   "sha256": "8e7139f9829e0e4a913b6b3dab2e96b75c269992eeafcebe226c9e0d504319dd"
+  },
+  {
+   "path": "i18n/cadenas.json",
+   "bytes": 53915,
+   "sha256": "063110fd409543bbb51984dd64265bba3f0c56cf6294f1af60aa315d39627d3c"
+  },
+  {
+   "path": "i18n/en.exact.cjs",
+   "bytes": 31397,
+   "sha256": "b8619604a80fa55cb5d7bc00c0bbcbb2a5ec43d7ae2550a996f4eae1919fdcf8"
+  },
+  {
+   "path": "i18n/en.manifest.cjs",
+   "bytes": 3170,
+   "sha256": "c611222fa79a29fd11a066ae1d5fb29816229423bc9967f853c83f09be851d65"
+  },
+  {
+   "path": "i18n/en.rules.cjs",
+   "bytes": 12160,
+   "sha256": "7bf495e031dc052ab11e2c703906d0bdce5a5d933110072d9f79b7419772bb63"
+  },
+  {
+   "path": "i18n/es-words.cjs",
+   "bytes": 1064,
+   "sha256": "af78d14620253a55847ee5d8800b86cf0f3f9205c65795850fb5c7d761aa2a56"
+  },
+  {
+   "path": "mandatos/INDICE-MANDATOS.md",
+   "bytes": 2372,
+   "sha256": "6f983f2dfd04585d1bdbd4bac37ecce4086fdb84bfa7b85585ae3ff0f65aae10"
+  },
+  {
+   "path": "mandatos/RUBIK-SOTA-ANEXO-ENTREGABLES-PROFESIONALES-v1.4.md",
+   "bytes": 43659,
+   "sha256": "6241ac2f1074f20984b361914f877a2dde00eb9f7b1f8a93153477905021636d"
+  },
+  {
+   "path": "mandatos/RUBIK-SOTA-MISION-STUDIO-PRESENTATION-v1.2-REVISADA.md",
+   "bytes": 80369,
+   "sha256": "22c097c3db403d66bca7df402fe96e64dbc78da004944ae5ff390f302569cfdf"
+  },
+  {
+   "path": "mandatos/RUBIK-SOTA-PROMPT-CLAUDE-CIERRE-INTEGRAL-E0E1-v1.3.md",
+   "bytes": 42430,
+   "sha256": "c2f16097b21eef089bdf414db9c463385ae081828bec282311ad98e594a552a4"
+  },
+  {
+   "path": "mandatos/RUBIK-SOTA-PROMPT-CLAUDE-DELTA-DOCUMENTAL-v1.4.md",
+   "bytes": 13410,
+   "sha256": "bfff73fcc4a63ea7c1489733a252d0831c68305c5be481ec1c326e569b7878de"
+  },
+  {
+   "path": "out/v3/architecture-book.en.pdf",
+   "bytes": 110608,
+   "sha256": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
+   "pdf": {
+    "Title": "Architecture book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/architecture-book.pdf",
+   "bytes": 110714,
+   "sha256": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
+   "pdf": {
+    "Title": "Libro de arquitectura, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/architecture-sheet-strip.en.pdf",
+   "bytes": 31346,
+   "sha256": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
+   "pdf": {
+    "Title": "Architecture sheet, title block strip, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/architecture-sheet-strip.pdf",
+   "bytes": 32152,
+   "sha256": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
+   "pdf": {
+    "Title": "Lámina de arquitectura, cajetín en franja, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/architecture-sheet.pdf",
+   "bytes": 32318,
+   "sha256": "a5c278521926f7189de62ae88b893d2ac81ac731bd083e31eb74118ce557945c",
+   "pdf": {
+    "Title": "Lámina de arquitectura, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/b2/empty/qa.json",
+   "bytes": 11040,
+   "sha256": "3fd6801e893f402e022a8a96f1841aadf3ee98637e0098d227496cb68d92bff3"
+  },
+  {
+   "path": "out/v3/b2/logo/qa.json",
+   "bytes": 11706,
+   "sha256": "4a9e5ebd77d57e8ea31fef4121e89f0e1a59cc146fb0efc5e5e473c4f4875e18"
+  },
+  {
+   "path": "out/v3/b2/long-budget/qa.json",
+   "bytes": 11710,
+   "sha256": "3f7814a1c320ee6e9af902c631b1e19896dbad5354e82c66218469dd7ed5d510"
+  },
+  {
+   "path": "out/v3/b2/long-names/qa.json",
+   "bytes": 12618,
+   "sha256": "a344d597fecd90eb4242c4392c3aa13674086b57abf35d964daee3ab08dd8327"
+  },
+  {
+   "path": "out/v3/b2/no-budget-views-brand/qa.json",
+   "bytes": 11230,
+   "sha256": "3a9027f34fe5c1f7fd0b6635466d0dc0ebba16f2a8f6164ff8bb358b5e001d6d"
+  },
+  {
+   "path": "out/v3/b2/oversized-row/qa.json",
+   "bytes": 17686,
+   "sha256": "3d8a2c39abed8549d2f40872372bd5b68303c2abd8ffb3b554a560a76a62af6e"
+  },
+  {
+   "path": "out/v3/b3/bench-naive-css.json",
+   "bytes": 7625,
+   "sha256": "087c5d7832769aecf2424bd740d06e162b8a279f00d25115bdf5720c892a99ad"
+  },
+  {
+   "path": "out/v3/b3/bench.json",
+   "bytes": 8557,
+   "sha256": "8690dbf02cc07a9c2144bb534ef15fa111ade1faf6f36f7edfa0c15b03893b36"
+  },
+  {
+   "path": "out/v3/commercial-proposal-client-v3.en.pdf",
+   "bytes": 32374,
+   "sha256": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
+   "pdf": {
+    "Title": "Cost proposal, client version, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/commercial-proposal-client-v3.pdf",
+   "bytes": 31586,
+   "sha256": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
+   "pdf": {
+    "Title": "Propuesta económica, versión cliente, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/commercial-proposal-studio-v3.pdf",
+   "bytes": 33548,
+   "sha256": "431fba232c3c55254066fa2fe8338a73fe303459cc0be7feb509752e2aefc759",
+   "pdf": {
+    "Title": "Propuesta económica, versión estudio, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/commercial-proposal.pdf",
+   "bytes": 55080,
+   "sha256": "5f890b6d4e01df32b25ec862596a6a82fb8dc8e54657767a43d6a0fab55bc4d4",
+   "pdf": {
+    "Title": "Propuesta económica, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/directions-b1-portrait.pdf",
+   "bytes": 751919,
+   "sha256": "a124d2f4807a3232ead55dc6fa854b4d7aafb182b4502204da70798bc4eded38",
+   "pdf": {
+    "Title": "Direcciones B1, ficha inmobiliaria, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/directions-b1.pdf",
+   "bytes": 739049,
+   "sha256": "7597a4c115c475274637f6466d50f834ba7139e2843f40d563e3283943ad1d12",
+   "pdf": {
+    "Title": "Direcciones B1 por tipo de página, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/directions.pdf",
+   "bytes": 209542,
+   "sha256": "b9744ca80ad88312fb9ae07497f51bb1427052d9e21d3550cf9683196cd675e1",
+   "pdf": {
+    "Title": "Direcciones de portada, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega-integral.en.pdf",
+   "bytes": 1539919,
+   "sha256": "4a9caa18a7bc098c156da3f632d25762c49adb6008092250009774ffb15c0ba9",
+   "pdf": {
+    "Title": "Complete presentation, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega-integral.pdf",
+   "bytes": 1539594,
+   "sha256": "7d2647fac1740bcc958ebf18f8d87746c27bb0b60fbafa6b71bb6d295f918db0",
+   "pdf": {
+    "Title": "Presentación integral, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/architecture-book.en.pdf",
+   "bytes": 110608,
+   "sha256": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
+   "pdf": {
+    "Title": "Architecture book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/architecture-book.pdf",
+   "bytes": 110714,
+   "sha256": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
+   "pdf": {
+    "Title": "Libro de arquitectura, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/architecture-sheet-strip.en.pdf",
+   "bytes": 31346,
+   "sha256": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
+   "pdf": {
+    "Title": "Architecture sheet, title block strip, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/architecture-sheet-strip.pdf",
+   "bytes": 32152,
+   "sha256": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
+   "pdf": {
+    "Title": "Lámina de arquitectura, cajetín en franja, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/commercial-proposal-client-v3.en.pdf",
+   "bytes": 32374,
+   "sha256": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
+   "pdf": {
+    "Title": "Cost proposal, client version, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/commercial-proposal-client-v3.pdf",
+   "bytes": 31586,
+   "sha256": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
+   "pdf": {
+    "Title": "Propuesta económica, versión cliente, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/entrega-integral.en.pdf",
+   "bytes": 1539919,
+   "sha256": "4a9caa18a7bc098c156da3f632d25762c49adb6008092250009774ffb15c0ba9",
+   "pdf": {
+    "Title": "Complete presentation, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/entrega-integral.pdf",
+   "bytes": 1539594,
+   "sha256": "7d2647fac1740bcc958ebf18f8d87746c27bb0b60fbafa6b71bb6d295f918db0",
+   "pdf": {
+    "Title": "Presentación integral, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/interior-book-v3.en.pdf",
+   "bytes": 1177745,
+   "sha256": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
+   "pdf": {
+    "Title": "Interior design book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/interior-book-v3.pdf",
+   "bytes": 1176606,
+   "sha256": "0146b05abcf6944c92c98efa8ce514ad9b57f79bab9c1cafd28fec1dfb80b8de",
+   "pdf": {
+    "Title": "Libro de interiorismo, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/materials-furniture-book-v3.en.pdf",
+   "bytes": 74322,
+   "sha256": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
+   "pdf": {
+    "Title": "Materials and furniture book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/materials-furniture-book-v3.pdf",
+   "bytes": 73870,
+   "sha256": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
+   "pdf": {
+    "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/obra-presentacion.html",
+   "bytes": 4712149,
+   "sha256": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893"
+  },
+  {
+   "path": "out/v3/entrega/documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf",
+   "bytes": 386503,
+   "sha256": "6bfb71f34851d8f29dbc709d0b14356b1d8a7bef6662ad0216e4a4c328b48588",
+   "pdf": {
+    "Title": "Real estate sheet, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
+   "bytes": 386724,
+   "sha256": "1bbe142099039418db2a406231a15db26a0abf1837f22be414ec9c2e8dd809da",
+   "pdf": {
+    "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/real-estate-sheet-v3.en.pdf",
+   "bytes": 386698,
+   "sha256": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
+   "pdf": {
+    "Title": "Real estate sheet, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/documentos/real-estate-sheet-v3.pdf",
+   "bytes": 386813,
+   "sha256": "aaa4aef6d67dd0671bc783028ba01641c9d9bb1be3eb23eabbda60e0377c2ca6",
+   "pdf": {
+    "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/entrega/entrega.json",
+   "bytes": 16199,
+   "sha256": "5c4dcb1546b724569614b01a0ab4a9a9ae36dd9ec84c786dc75837144d5a596b"
+  },
+  {
+   "path": "out/v3/entrega/index.en.html",
+   "bytes": 1156952,
+   "sha256": "e2dd3cd1d5d65a72a2aa567d472f1a868873c33d78ae28ce5eecf7f01d8684cc"
+  },
+  {
+   "path": "out/v3/entrega/index.html",
+   "bytes": 1151749,
+   "sha256": "74e96410c19a4cb6e4f9d3e3baf8b89bf79d37cd3e593910984dc73e2d00c80f"
+  },
+  {
+   "path": "out/v3/entrega/media/dibujo-vivo.jpg",
+   "bytes": 254994,
+   "sha256": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
+  },
+  {
+   "path": "out/v3/entrega/media/ia-1.jpg",
+   "bytes": 236348,
+   "sha256": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446"
+  },
+  {
+   "path": "out/v3/entrega/media/ia-2.jpg",
+   "bytes": 164897,
+   "sha256": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772"
+  },
+  {
+   "path": "out/v3/entrega/media/ia-3.jpg",
+   "bytes": 167135,
+   "sha256": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec"
+  },
+  {
+   "path": "out/v3/entrega/media/obra-1.jpg",
+   "bytes": 44772,
+   "sha256": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287"
+  },
+  {
+   "path": "out/v3/entrega/media/obra-2.jpg",
+   "bytes": 94170,
+   "sha256": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e"
+  },
+  {
+   "path": "out/v3/entrega/media/obra-3.jpg",
+   "bytes": 94883,
+   "sha256": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7"
+  },
+  {
+   "path": "out/v3/entrega/media/obra-4.jpg",
+   "bytes": 49822,
+   "sha256": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d"
+  },
+  {
+   "path": "out/v3/entrega/media/obra.mp4",
+   "bytes": 3526771,
+   "sha256": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
+   "videoTags": {
+    "major_brand": "isom",
+    "minor_version": "512",
+    "compatible_brands": "isomiso2avc1mp41"
+   }
+  },
+  {
+   "path": "out/v3/entrega/media/recorrido-01-master.jpg",
+   "bytes": 51380,
+   "sha256": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef"
+  },
+  {
+   "path": "out/v3/entrega/media/recorrido-02-kitchen.jpg",
+   "bytes": 64374,
+   "sha256": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579"
+  },
+  {
+   "path": "out/v3/entrega/media/recorrido-03-dining.jpg",
+   "bytes": 70999,
+   "sha256": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9"
+  },
+  {
+   "path": "out/v3/entrega/media/recorrido-04-living.jpg",
+   "bytes": 84709,
+   "sha256": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace"
+  },
+  {
+   "path": "out/v3/entrega/media/recorrido-poster.jpg",
+   "bytes": 51752,
+   "sha256": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3"
+  },
+  {
+   "path": "out/v3/entrega/media/recorrido.mp4",
+   "bytes": 226149,
+   "sha256": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
+   "videoTags": {
+    "major_brand": "isom",
+    "minor_version": "512",
+    "compatible_brands": "isomiso2avc1mp41"
+   }
+  },
+  {
+   "path": "out/v3/entrega/media/vista-01-overview.jpg",
+   "bytes": 107100,
+   "sha256": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731"
+  },
+  {
+   "path": "out/v3/entrega/media/vista-02-room.jpg",
+   "bytes": 143852,
+   "sha256": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71"
+  },
+  {
+   "path": "out/v3/entrega/media/vista-03-room.jpg",
+   "bytes": 104745,
+   "sha256": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e"
+  },
+  {
+   "path": "out/v3/entrega/media/vista-04-room.jpg",
+   "bytes": 110005,
+   "sha256": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149"
+  },
+  {
+   "path": "out/v3/entrega/media/vista-05-room.jpg",
+   "bytes": 115327,
+   "sha256": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
+  },
+  {
+   "path": "out/v3/entrega/tipo-dossier-tecnico.en.html",
+   "bytes": 1145794,
+   "sha256": "9284601fb8e90483670a713b0cf3e5eb0ea365417619a8a4168b9ff64cbf6fab"
+  },
+  {
+   "path": "out/v3/entrega/tipo-dossier-tecnico.html",
+   "bytes": 1140422,
+   "sha256": "c2351c9c8e3205804fff0fed5bf66f888e33209351e453a7c6c80e4e6196633c"
+  },
+  {
+   "path": "out/v3/entrega/tipo-inmobiliaria.en.html",
+   "bytes": 1139287,
+   "sha256": "a3b44cd91aaae1d1eb811c24b2bb21bad83f4a241ed8504860bbbcf777d5fd2b"
+  },
+  {
+   "path": "out/v3/entrega/tipo-inmobiliaria.html",
+   "bytes": 1133848,
+   "sha256": "95ddd27d1c3fca9e92501c8045fe119416ef4810c6e499c766dc7b2bb4a36fda"
+  },
+  {
+   "path": "out/v3/entrega/tipo-interiorismo.en.html",
+   "bytes": 1121782,
+   "sha256": "4607314fddb7348ae97f653ad0c236a1133c933e6beac7104e025c142eb9f2fc"
+  },
+  {
+   "path": "out/v3/entrega/tipo-interiorismo.html",
+   "bytes": 1117496,
+   "sha256": "10fe8e7db2a9c200a27d6b0f89c5fd513e940b38f068f771f16805fe0a39ce9c"
+  },
+  {
+   "path": "out/v3/entrega/tipo-obra.en.html",
+   "bytes": 1043107,
+   "sha256": "05b8195145a19d34888dfaea3a1cf4637c7d61e2e7f522e08fc622b0db39d3bd"
+  },
+  {
+   "path": "out/v3/entrega/tipo-obra.html",
+   "bytes": 1042402,
+   "sha256": "e3a1badc2c1a8c62b9c801f8852a5ebdac8e6414c162a19b6d1aab0fd6e2a80e"
+  },
+  {
+   "path": "out/v3/entrega/tipo-primera-reunion.en.html",
+   "bytes": 1142396,
+   "sha256": "c70b3ec2cb6f156f9719a9a9fee63c30d9e00d8a830ce743bae2a7fa9b390da3"
+  },
+  {
+   "path": "out/v3/entrega/tipo-primera-reunion.html",
+   "bytes": 1137108,
+   "sha256": "27fb342a072a8fe5047efe09688efe99965cc3d12798a692a9e77bc4d90f6e93"
+  },
+  {
+   "path": "out/v3/entrega/tipo-propuesta-comercial.en.html",
+   "bytes": 1148468,
+   "sha256": "914edfc795d05c53d5de2f6ca8cc1466dec4216c724ab46e7b0129090b2c8b8d"
+  },
+  {
+   "path": "out/v3/entrega/tipo-propuesta-comercial.html",
+   "bytes": 1143213,
+   "sha256": "e2adb7045c0773f011581f2cca73d7d526a24ad5da04ff518cfe2628dab4baab"
+  },
+  {
+   "path": "out/v3/i18n-datos.json",
+   "bytes": 4652,
+   "sha256": "1b96b1a146ffc8d2a25ce013e5ffe201d19589f17391032ea188432900b2b01c"
+  },
+  {
+   "path": "out/v3/interior-book-v3.en.pdf",
+   "bytes": 1177745,
+   "sha256": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
+   "pdf": {
+    "Title": "Interior design book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/interior-book-v3.pdf",
+   "bytes": 1176606,
+   "sha256": "0146b05abcf6944c92c98efa8ce514ad9b57f79bab9c1cafd28fec1dfb80b8de",
+   "pdf": {
+    "Title": "Libro de interiorismo, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/interior-book.pdf",
+   "bytes": 990960,
+   "sha256": "8e206f7d48b8600af493b5a1581826165b9b5362248fb539ec007a5c94cb0565",
+   "pdf": {
+    "Title": "Libro de interiorismo, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/materials-furniture-book-v3.en.pdf",
+   "bytes": 74322,
+   "sha256": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
+   "pdf": {
+    "Title": "Materials and furniture book, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/materials-furniture-book-v3.pdf",
+   "bytes": 73870,
+   "sha256": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
+   "pdf": {
+    "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/materials-furniture-book.pdf",
+   "bytes": 411032,
+   "sha256": "6f426f709d4511d4f1585db3d999a1d93a94f3d435b60d8546c6bc8efb52c0c5",
+   "pdf": {
+    "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/profesional/preparar-entrega.html",
+   "bytes": 1076280,
+   "sha256": "5d3370b352f42d0e6c947543f2cde6f1e282996f8f3293422a4ef39f88505237"
+  },
+  {
+   "path": "out/v3/profesional/propuesta-estudio.pdf",
+   "bytes": 33548,
+   "sha256": "431fba232c3c55254066fa2fe8338a73fe303459cc0be7feb509752e2aefc759",
+   "pdf": {
+    "Title": "Propuesta económica, versión estudio, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/profesional/vista-previa.html",
+   "bytes": 1152958,
+   "sha256": "0420b1b6895d62801efdf9a22024c423f176a96323d49c6b150da7880117391e"
+  },
+  {
+   "path": "out/v3/qa.json",
+   "bytes": 38625,
+   "sha256": "b56908ca696c83c44a85f5d5571ea4a59f091fd909589db745603fc9c8f7f58a"
+  },
+  {
+   "path": "out/v3/real-estate-sheet-v3-sin-presupuesto.en.pdf",
+   "bytes": 386503,
+   "sha256": "6bfb71f34851d8f29dbc709d0b14356b1d8a7bef6662ad0216e4a4c328b48588",
+   "pdf": {
+    "Title": "Real estate sheet, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/real-estate-sheet-v3-sin-presupuesto.pdf",
+   "bytes": 386724,
+   "sha256": "1bbe142099039418db2a406231a15db26a0abf1837f22be414ec9c2e8dd809da",
+   "pdf": {
+    "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/real-estate-sheet-v3.en.pdf",
+   "bytes": 386698,
+   "sha256": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
+   "pdf": {
+    "Title": "Real estate sheet, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/real-estate-sheet-v3.pdf",
+   "bytes": 386813,
+   "sha256": "aaa4aef6d67dd0671bc783028ba01641c9d9bb1be3eb23eabbda60e0377c2ca6",
+   "pdf": {
+    "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "out/v3/real-estate.pdf",
+   "bytes": 1462403,
+   "sha256": "0cee7839c885e33c71cebd7de00175795d88f47e84ae2dba8a9d1c681efbd11f",
+   "pdf": {
+    "Title": "Presentación inmobiliaria, Vivienda de ejemplo",
+    "Creator": "Chromium",
+    "Producer": "Skia/PDF m153"
+   }
+  },
+  {
+   "path": "reports/00-RESUMEN-EJECUTIVO.md",
+   "bytes": 15221,
+   "sha256": "8f74f661485d4d751f1a47fa0365b658dae2a866efa6ea5f00775c7163018dd4"
+  },
+  {
+   "path": "reports/01-INVENTARIO-DONANTES.md",
+   "bytes": 8442,
+   "sha256": "45cabf829d681799e1c3a7a9e923d37955552e6e5232e6dd08ef76b460f34378"
+  },
+  {
+   "path": "reports/02-REFERENCIAS-VISUALES.json",
+   "bytes": 27301,
+   "sha256": "f3f7e87aa87bd6dd11f2440ac3a273bd3d97729d148557cf07ab7ee7b2ecb186"
+  },
+  {
+   "path": "reports/03-CLASIFICACION-REFERENCIAS.json",
+   "bytes": 21258,
+   "sha256": "4d84128942778daa06a136dced8acb990b4ea06fbef2e3bd807b8fb76a84c9e8"
+  },
+  {
+   "path": "reports/04-SISTEMA-EDITORIAL.md",
+   "bytes": 2552,
+   "sha256": "c55b1f9456faa94708686963fb4df442507fed1a12f4788fc8eb484776326ce9"
+  },
+  {
+   "path": "reports/05-DNA-ENTREGABLES.json",
+   "bytes": 6603,
+   "sha256": "937ed4bef9f8b181efd8817ea296d8f8cb180d150c52405e0465e0c5261eb0ac"
+  },
+  {
+   "path": "reports/06-ADR-MOTOR.md",
+   "bytes": 6817,
+   "sha256": "8dbd7cbb261b5bdaaef62ab12e9702b4d9813e7fa39bfafe1cf60f7ecbd0589e"
+  },
+  {
+   "path": "reports/07-MATRIZ-EXISTE-AMPLIAR-FALTA.md",
+   "bytes": 5131,
+   "sha256": "0800bfbbec624b73cdc16ede432ef94c2040a7a68c94c38bc1fb9e4acf7c50f1"
+  },
+  {
+   "path": "reports/09-RIESGOS-LIMITES-NOTAS.md",
+   "bytes": 5802,
+   "sha256": "0e9f0c4e25eaaddd39bf9222b9bd78ce78b62d6339fc8ebcb9fd65a09fe7bf6a"
+  },
+  {
+   "path": "reports/10-ENTREGA-INTEGRAL.md",
+   "bytes": 13854,
+   "sha256": "47529507d3baafbb2df397ab24eead8e47a98c935f3353f41247a2d87fe49da3"
+  },
+  {
+   "path": "reports/11-PROPUESTA-E2.md",
+   "bytes": 9727,
+   "sha256": "21cafad5462e2f6dcb051067be0874409e94c3ba00d1754f6c13b47a55078557"
+  },
+  {
+   "path": "reports/12-MATRIZ-QA-v1.2.md",
+   "bytes": 5320,
+   "sha256": "87298be79276891940c1d99276adb9895555b303bb64b104c8276d45b5c520cb"
+  },
+  {
+   "path": "reports/13-REGISTRO-VIVO-v1.3.md",
+   "bytes": 14387,
+   "sha256": "16b0292f843846c532b393e55a9b525a7554d7773c435b7b34fa070a34608079"
+  },
+  {
+   "path": "reports/14-AUDITORIA-MANDATO-v1.4.md",
+   "bytes": 7584,
+   "sha256": "e3884de04b11776ed7fe82bc5571b2436d51a8bb6a0db84577f058599e76ff28"
+  },
+  {
+   "path": "reports/15-REGISTRO-v1.4.md",
+   "bytes": 22817,
+   "sha256": "894f1b03a4aa9df36b57ed57881eb9b3103f7100ad346b383488fd2e2e65458f"
+  },
+  {
+   "path": "reports/B1-DISENOS-POR-ENTREGABLE.md",
+   "bytes": 8181,
+   "sha256": "9c0f2c1d9386821d4d7b383d0273a201c3f5b695acf96526d6c78c1816405c3b"
+  },
+  {
+   "path": "reports/B2-ROBUSTEZ.md",
+   "bytes": 6304,
+   "sha256": "7856a8828b6c420b57de207fec5af3c7af3562e332e74faefe59109ed1bdcab1"
+  },
+  {
+   "path": "reports/DECISIONES-PENDIENTES.md",
+   "bytes": 2670,
+   "sha256": "50d66da7824a1e8620bad10c43a84273e32dc45c3859b03cb5fb02edc269f1c1"
+  },
+  {
+   "path": "snapshot/assets/plan.svg",
+   "bytes": 5722,
+   "sha256": "6cbec91b601f146b40e4fa67cb7f9d12393a385b0523edcb656b3cc26cb62339"
+  },
+  {
+   "path": "snapshot/assets/sheet.svg",
+   "bytes": 84729,
+   "sha256": "fcaa8bf06d99567d369fdde8cdf9a25148b3d44b20b1d1ff357224639a9e613c"
+  },
+  {
+   "path": "snapshot/assets/view-01-overview.png",
+   "bytes": 287035,
+   "sha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2"
+  },
+  {
+   "path": "snapshot/assets/view-02-room.png",
+   "bytes": 546307,
+   "sha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4"
+  },
+  {
+   "path": "snapshot/assets/view-03-room.png",
+   "bytes": 444651,
+   "sha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3"
+  },
+  {
+   "path": "snapshot/assets/view-04-room.png",
+   "bytes": 423895,
+   "sha256": "af317e4e4d00ab067ff2695bb95969b11ebfbd3564bc55514075e0c117198c29"
+  },
+  {
+   "path": "snapshot/assets/view-05-room.png",
+   "bytes": 412865,
+   "sha256": "2cbb35e397e4e5188a3e420dee53d25e41debb1a10bddd2ab63d354cf7964231"
+  },
+  {
+   "path": "snapshot/derivados/ft3d3-seccion.json",
+   "bytes": 3466,
+   "sha256": "9badc99e82eaf56ffddba12c7855b8d8f5ac01cb01829fde2bd945ecfd71785b"
+  },
+  {
+   "path": "snapshot/derivados/ft3d4-fachadas.json",
+   "bytes": 6582,
+   "sha256": "a234187eafae8cd837319139d5dc4985b66eb9784c751e63f9402aad4602cbbf"
+  },
+  {
+   "path": "snapshot/snapshot.json",
+   "bytes": 120737,
+   "sha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+  },
+  {
+   "path": "system/rubik-editorial.css",
+   "bytes": 8057,
+   "sha256": "110b21d6066ef2e277a9cc7c1e31568c32d8cf7a4f09ee4944e9a01f0e9b50e3"
+  },
+  {
+   "path": "tools/architecture-book.cjs",
+   "bytes": 18570,
+   "sha256": "4b4350b2ce6cfad6ae099e27fedc778e9add74cd9dcad0670d6c449e712dca24"
+  },
+  {
+   "path": "tools/architecture-pdf-qa.py",
+   "bytes": 3748,
+   "sha256": "a84c671c22ea941b06edee551f457d4f26cb6acbf33efc79907888728e5c60c7"
+  },
+  {
+   "path": "tools/b1.cjs",
+   "bytes": 43481,
+   "sha256": "f8541b8c8922ab97d4b4ec537348306195eb9f8afceb6f7e6d728a18f1ea8bd0"
+  },
+  {
+   "path": "tools/baseline.cjs",
+   "bytes": 7841,
+   "sha256": "2735f0e35dc7d2b1ba65bfb315bcefaadbb3b1b8f6afc67aaf3452b2bf2d0e18"
+  },
+  {
+   "path": "tools/catalogo-entrega.cjs",
+   "bytes": 4691,
+   "sha256": "41c1a5b01f6b46b8756576bea5504e989d6908f2764259d2a114988a7ae15452"
+  },
+  {
+   "path": "tools/classify-refs.py",
+   "bytes": 13968,
+   "sha256": "6b0212649aa2a047bdfeacadc925fff44a1bea85f9ba01a1953d0630f347b0fa"
+  },
+  {
+   "path": "tools/compose.cjs",
+   "bytes": 65132,
+   "sha256": "f9598d0a29881408ff7135d3ad6527ebfe4c6ebb1db4a04bdfeb4f099ee14636"
+  },
+  {
+   "path": "tools/conciliacion.cjs",
+   "bytes": 2670,
+   "sha256": "e127107599fa62d4cf5a4dc8dd1ea84ec9df6a77c931d574a8ae12520a7d4684"
+  },
+  {
+   "path": "tools/consumidor-qa.cjs",
+   "bytes": 16776,
+   "sha256": "c7d89668d1ad3546d53d6c2b5ed5c5f025ef1539402e484fd936118293439c6f"
+  },
+  {
+   "path": "tools/contact.py",
+   "bytes": 896,
+   "sha256": "a5d9c4850ff9539c7c16b47afa25fb34d25bafc1b1c33451943f66397985a5cc"
+  },
+  {
+   "path": "tools/correspondence.cjs",
+   "bytes": 2844,
+   "sha256": "3711e5a9495a77816a178b9b178cfc6ab25b23a8ce4dff618554c9251401aee1"
+  },
+  {
+   "path": "tools/delivery-assets.cjs",
+   "bytes": 14757,
+   "sha256": "fecb0060f53f5d03c1dd57d56429c339f86ff9427db23c81b956fd58e88bc096"
+  },
+  {
+   "path": "tools/derivados-producto.cjs",
+   "bytes": 3281,
+   "sha256": "83b3524d84157e83fefe56acdd5d9f42dfdbcdaa4e61916404cf8284c2ff3c47"
+  },
+  {
+   "path": "tools/dna-refs.py",
+   "bytes": 5781,
+   "sha256": "00c13eebdc5679270ac5ebfb120ee676e26ddd11f417fcb98fabe47c4be35d21"
+  },
+  {
+   "path": "tools/economia-documental.cjs",
+   "bytes": 2875,
+   "sha256": "e6aa4ed9cd9e390fdfc0dc17628316efae54dcfe3e12443751ef24baf67c1de1"
+  },
+  {
+   "path": "tools/economia-qa.cjs",
+   "bytes": 5180,
+   "sha256": "faa21e1039cd54d0dced9cb17feb5255986902f798fff74680a395d147077c84"
+  },
+  {
+   "path": "tools/engines/bench.mjs",
+   "bytes": 6811,
+   "sha256": "2afced6475aa5a8f4430f5a04172bfe7c70568bb31a1377bc71668df127f6779"
+  },
+  {
+   "path": "tools/engines/typst-wasm.mjs",
+   "bytes": 964,
+   "sha256": "a8df5de80941c22fa16484e5b8c466a20849b6e19cbb616527cfd4fb4d46e71b"
+  },
+  {
+   "path": "tools/entrega-qa.cjs",
+   "bytes": 5459,
+   "sha256": "91b0cfed2b5b64db9d91fc1d52eeb7c52ec3add41c582511a1765f33e2db460d"
+  },
+  {
+   "path": "tools/entrega.cjs",
+   "bytes": 82869,
+   "sha256": "83c3ad4485a94d6ccaacf8f77b148ba1cdf56329ac7f9e51b830ccb1f5ae76b6"
+  },
+  {
+   "path": "tools/estado-entrega.cjs",
+   "bytes": 8029,
+   "sha256": "8400b9e3e3df937875456510ff5d5f9f1cbcf42df6d720d52a66035d94eae126"
+  },
+  {
+   "path": "tools/estado-qa.cjs",
+   "bytes": 5250,
+   "sha256": "ff4859adb2937646b9a3a7c66bb23285ccbf23713a631f0f529415e01a557b97"
+  },
+  {
+   "path": "tools/estampar-borrador.py",
+   "bytes": 1810,
+   "sha256": "e387da6f435403991329b0f30761254ca843981c4e183cdeedd947dfec46bf5f"
+  },
+  {
+   "path": "tools/exportar-qa.cjs",
+   "bytes": 28004,
+   "sha256": "92808b303e628e374d6578c435672205f40895db39997030ef40e1d509199eec"
+  },
+  {
+   "path": "tools/exportar.cjs",
+   "bytes": 33218,
+   "sha256": "ef03625e83eca552d0d8d9e42e4766e67e27430f3e7f1c0a8a8b5c8eec38d98b"
+  },
+  {
+   "path": "tools/ffe-qa.cjs",
+   "bytes": 4384,
+   "sha256": "c7c322bd2952a48ad8159613116d7a447e293eab69b33e3382ead1d9059671ee"
+  },
+  {
+   "path": "tools/ffe.cjs",
+   "bytes": 2587,
+   "sha256": "bff4af8f002999e75912d64cabd27b481e45e2f633960e4de0dd77ee9557cc75"
+  },
+  {
+   "path": "tools/flow.js",
+   "bytes": 5612,
+   "sha256": "ce8b05411ce0efdfe01fed75ca624fefb671f4238a73b080f463d5937f0d0c5e"
+  },
+  {
+   "path": "tools/i18n-extract.cjs",
+   "bytes": 2852,
+   "sha256": "520c783be0c26da51a67d33e85223bc17f872811340c0e433b242b0c1e768155"
+  },
+  {
+   "path": "tools/i18n.js",
+   "bytes": 4705,
+   "sha256": "38eebad7c74e4438baedd0c345c422d6492680e4b4086f7fad63d52ad34c9969"
+  },
+  {
+   "path": "tools/inspeccionar-paquete.py",
+   "bytes": 7151,
+   "sha256": "3ad6dea0d1ab878ec9de88964590882706e3ddb97c8106c1a78ca853ddbeb73c"
+  },
+  {
+   "path": "tools/mapa-impacto.cjs",
+   "bytes": 5768,
+   "sha256": "9a4867f6baffa5958bec572810a2ad34562a591a0f77c054ec102e80882cf14d"
+  },
+  {
+   "path": "tools/minimap-probe.cjs",
+   "bytes": 8602,
+   "sha256": "52e5c9c98807d3d74f1ff1ee592776123037577868041c3909b5eb239badbcb1"
+  },
+  {
+   "path": "tools/motor-qa.cjs",
+   "bytes": 10217,
+   "sha256": "8a878ab058234df4fc4144dbc4f8edd67296970bfc9839c24df95cb95a9e2b89"
+  },
+  {
+   "path": "tools/package-lock.json",
+   "bytes": 2234,
+   "sha256": "2eb22cfe4a9207df6042bbb66f8a771dc9d8a606157b72f923cbcf955350ee4c"
+  },
+  {
+   "path": "tools/package.json",
+   "bytes": 545,
+   "sha256": "9482835cecc97655de23d1ddaebf0493b94bcee3517d6609c7fb5eb5622056fa"
+  },
+  {
+   "path": "tools/package.sh",
+   "bytes": 6219,
+   "sha256": "0a051957d89d1b2eb1f80b2bcb4775f26895e3b53bf666c5ff403275faab0c6f"
+  },
+  {
+   "path": "tools/paquete-navegador-qa.cjs",
+   "bytes": 7305,
+   "sha256": "a0f1a0a082e53565c91df31215f25c35f2faf86934ee86c7f230efd8bdcaeafd"
+  },
+  {
+   "path": "tools/perfiles-marca.cjs",
+   "bytes": 4677,
+   "sha256": "464b804609968f46158daa43cece9bde7acd0665c6dc56806118926b1bc9dd55"
+  },
+  {
+   "path": "tools/pick.py",
+   "bytes": 921,
+   "sha256": "158c5013dde033cabf4f51f6d6ba12c105898dd5da809f71db7bb48481414103"
+  },
+  {
+   "path": "tools/pillars-capture.cjs",
+   "bytes": 5929,
+   "sha256": "e09973c09f64ab2da13db2a9fa653a7ed14ac0b90a902cd1fb0a04374deb5147"
+  },
+  {
+   "path": "tools/preparar-qa.cjs",
+   "bytes": 3084,
+   "sha256": "ce3c639a289d125423b8b553021a0aa251b257bb8f639b7b7c82a6bdbf85b362"
+  },
+  {
+   "path": "tools/preparar.cjs",
+   "bytes": 8813,
+   "sha256": "08b8018afeb7a03d312bd14dff8ef65363809bc8f8aeefcf2934f15172b3e5e7"
+  },
+  {
+   "path": "tools/receta-exportar.cjs",
+   "bytes": 3544,
+   "sha256": "a00b5d697f10c29c74277eafed40f8ab11fa8366c9b7f620d83b84207026670d"
+  },
+  {
+   "path": "tools/recetas-qa.cjs",
+   "bytes": 22736,
+   "sha256": "d91f6cd214f1eb29c8a95ec081743c7143d85005cf488fd4798e8bfe6b50f70c"
+  },
+  {
+   "path": "tools/recetas.cjs",
+   "bytes": 32018,
+   "sha256": "0f9e70d9620ab1d72f646c4e4a8edb71846811e7deb0c4504701e1489f31abb7"
+  },
+  {
+   "path": "tools/reconstruccion-qa.py",
+   "bytes": 8670,
+   "sha256": "a7d8a65217b354e59626e868d9d50ad9a525ad8e9bef78b448debb6b52b5da54"
+  },
+  {
+   "path": "tools/reconstruir.sh",
+   "bytes": 940,
+   "sha256": "8514afd28d695b7f0c692f084de730c9b36fa78ae593f8d60fb118defc0c5d6f"
+  },
+  {
+   "path": "tools/render-ia-generate.cjs",
+   "bytes": 6275,
+   "sha256": "d934cbc4afb6d827c85bdf016c99a8641a26eb618d76a2042fddd725fe493491"
+  },
+  {
+   "path": "tools/revision-visual-qa.py",
+   "bytes": 2592,
+   "sha256": "9c10b68703f35665933793ddbfc20dd90a35dc5e6be9e1369a0fcb006f720485"
+  },
+  {
+   "path": "tools/serve.cjs",
+   "bytes": 1336,
+   "sha256": "a0bb8274a9f43ca2d878cd4c9d8bf155ae3c49f3f7a870ad67ac3a482a887ee2"
+  },
+  {
+   "path": "tools/snapshot.cjs",
+   "bytes": 8823,
+   "sha256": "c988764398dafede2d87981a0d92ba0d31a9409318a307fc959bc94543257026"
+  },
+  {
+   "path": "tools/spreads.py",
+   "bytes": 1039,
+   "sha256": "eaf6a99b56862fb01d1dccc9159fd160cd56eadc6ba508438ceee8a45aecbc96"
+  },
+  {
+   "path": "tools/variants.cjs",
+   "bytes": 5206,
+   "sha256": "0537151a245104f5a4ed77221fafc9cce1ff7e508fb572afdae7d4a4162c3b11"
+  },
+  {
+   "path": "tools/verificar-entrega.cjs",
+   "bytes": 8242,
+   "sha256": "ecbdbf0bb88f722e6c72f74d562b551ca0248fa0c33239a8507f6fb5ce26c7c6"
+  },
+  {
+   "path": "vendor/PROCEDENCIA.md",
+   "bytes": 1562,
+   "sha256": "bbbbf608f5d6a8feba26154be53f2f7fc60ab14e581495208dd6c23694b1b233"
+  },
+  {
+   "path": "vendor/fonts/inter/Inter-Bold.ttf",
+   "bytes": 344072,
+   "sha256": "fbe825cbfc749317f57a1433d3905aa9d3f388732fd29b8e8a36f34845e3bc3e"
+  },
+  {
+   "path": "vendor/fonts/inter/Inter-OFL.txt",
+   "bytes": 4377,
+   "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"
+  },
+  {
+   "path": "vendor/fonts/inter/Inter-Regular.ttf",
+   "bytes": 342408,
+   "sha256": "a414b48aa577ef2c62ebb135341ddeef33ee26a4f5dc9f787f93c1aab08ebb50"
+  },
+  {
+   "path": "vendor/huashu/LICENSE",
+   "bytes": 1086,
+   "sha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96"
+  },
+  {
+   "path": "vendor/huashu/design-lint-collect.js",
+   "bytes": 8805,
+   "sha256": "508381bd81e2041db6a113588b5a36e2ae2b26ca9906d8fe829fd675b83e8275"
+  }
+ ]
+}

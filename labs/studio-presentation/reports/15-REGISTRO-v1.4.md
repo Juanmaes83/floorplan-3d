@@ -173,3 +173,19 @@ Los ZIP exactos ES/EN pasaron bajo Chromium en seis configuraciones por idioma, 
 Chromium registró apertura p50 de 86–103 ms y p95 de 88–125 ms, 10 repeticiones por configuración e idioma. Exportación de 14 modalidades/idiomas: p50 5.64 s y p95 9.34 s. Muestras del contenedor Linux, sin SLA ni comparación de velocidad entre entornos.
 
 **Dictamen**. Candidato apto para revisión independiente del laboratorio con sus límites declarados. D08, H08, escala de impresión física, dispositivos reales y GO de producto siguen pendientes. La paridad HTML/PDF económica se acredita en fixtures ES. La equivalencia comparativa por estado en ZIP y la redistribución del núcleo no están acreditadas.
+
+## Distribución verificada
+
+Candidato empaquetado `26297e7b67b7c3c497ce3761b5bbf3f72f0b61da`. Este registro posterior al empaquetado se publica por separado para evitar autorreferencias. Los ZIP ES/EN que se abrieron sin red son byte a byte los mismos que se entregan.
+
+| Archivo | Bytes | SHA-256 |
+|---|---:|---|
+| `entrega-vivienda-de-ejemplo-en.zip` | 12631551 | `5e469df638a2894c13149b08b0cbafcdb45c241d1b6ee355c9b1922e8ac21ef4` |
+| `entrega-vivienda-de-ejemplo-es.zip` | 12629937 | `e689d0eeb64408c8c1583e215ea72999a001c8435bc7c719653babb24a53dd21` |
+| `rubik-studio-presentation-lab.zip` | 143441943 | `b27fab2e032d5253aa29cd88ae3985a3c6d9da3b4cb33636ab035aeceb8b64a2` |
+| `entrega-vivienda-de-ejemplo-en.digest.json` | 509 | `3172e536aef2481210cff1b46be1be289f5e0b41961641a19874e54efd24d527` |
+| `entrega-vivienda-de-ejemplo-es.digest.json` | 516 | `eebc5bb7ca997622840081a1002aed336808c1e0a629c2e505d7151755cb9690` |
+
+El ZIP del laboratorio tiene 523 archivos, cero referencias VIS y el mandato v1.2 con su huella original. La inspección no obtuvo bloqueos. Los avisos corresponden a la fecha del vídeo original, contactos sintéticos de negativos y patrones citados por el inspector. Las dos reconstrucciones limpias pasaron en Ubuntu 24.04. Inventarios y 20 medios exactos, QA a cero, mismo snapshot e idiomas. Las 42 rutas PDF (incluidas copias) coinciden en fichero salvo fecha interna, texto, número de páginas y raster a 110 dpi. Ver `evidence/paquetes/RECONSTRUCCION-v1.4.json` y `SHA256SUMS-v1.4`.
+
+La revisión editorial del agente abarcó las 114 páginas distribuidas. La aceptación independiente del propietario queda pendiente.
