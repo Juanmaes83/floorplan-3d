@@ -27,9 +27,15 @@ def inventory(ref):
  deps={p:[] for p in files};uncertain=[]
  for p,s in texts.items():
   edges=set()
+  if p.endswith(('.js','.cjs','.mjs')) and (re.search(r'(?:readFile|readFileSync|readdir|glob)\s*\(',s) or re.search(r'(?:require|import)\s*\(\s*[^\s\x22\x27`]',s)):
+   uncertain.append(p)
   for literal in re.findall(r'[\x22\x27`]([^\x22\x27`\n]+)[\x22\x27`]',s):
    for q in [literal,posixpath.normpath(posixpath.join(posixpath.dirname(p),literal))]:
-    if q in deps and q!=p:edges.add(q)
+    for candidate in [q,q+'.js',q+'.cjs',q+'/index.js']:
+     if candidate in deps and candidate!=p:edges.add(candidate)
+  for literal in re.findall(r'require\s*\(\s*[\x22\x27](\.[^\x22\x27]+)[\x22\x27]\s*\)',s):
+   q=posixpath.normpath(posixpath.join(posixpath.dirname(p),literal))
+   if not any(x in deps for x in [q,q+'.js',q+'.cjs',q+'/index.js']):uncertain.append(p)
   # Browser fixtures serve arbitrary UMD scripts/assets through index/global state: all runtime is intentional.
   if p in tests and ('.browser.' in p or 'playwright' in s or 'puppeteer' in s): edges.update(runtime)
   # Dynamic docs readers are not assumed independent of any document merely because a literal is absent.
