@@ -1,0 +1,31 @@
+PASS 0 pre-flight (no write yet): store listing answers 200, names the test store and is complete · {"status":200,"store":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com","truncated":false}
+PASS 0 the test store is EMPTY before starting (no active, expired, legacy or inconsistent publication) · {"active":0,"expired":0,"legacy":0,"inconsistent":0}
+PASS 1 publish 7 days: stored on the test store · {"status":200,"host":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com"}
+PASS 1 the date is now + 7 days, written in the stored name · {"header":"9a716c8149fe4c68a4d3be4e.x202611241450","expiresAt":"2026-11-24T14:50:00.000Z"}
+PASS 2 opens through /api/view with the isolated CSP · {"status":200}
+PASS 3 early withdrawal removes exactly that file · {"status":200}
+PASS 3 after withdrawal: store listing answers 200, names the test store and is complete · {"status":200,"store":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com","truncated":false}
+PASS 3 the withdrawn link answers 404 and is gone from the store
+PASS 4 tour video: stored on the test store · {"status":200,"host":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com"}
+PASS 4 3D visit: stored on the test store · {"status":200,"host":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com"}
+PASS 4 page: stored on the test store · {"status":200,"host":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com"}
+PASS 4 page, 3D visit and video share ONE publication id and ONE date · [["html",true,true],["delivery.json",true,true],["webm",true,true]]
+PASS 5 before the date: page 200, 3D visit 200, video 200
+PASS 6 after the date: page 410 and 3D visit 410 expired
+PASS 6 S5 limit, as documented: the video is still reachable DIRECTLY until it is deleted
+PASS 7 register: store listing answers 200, names the test store and is complete · {"status":200,"store":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com","truncated":false}
+PASS 7 the publication is listed as expired with exactly its 3 files; nothing inconsistent · {"active":0,"expired":1,"legacy":0,"inconsistent":0}
+PASS 8 dry run: complete, this store, no further batch · {"status":200,"more":false}
+PASS 8 dry run plans EXACTLY the 3 expected files (otherwise the confirmed purge is NOT run) · ["https://xjvwmqwr1vybua0p.public.blob.vercel-storage.com/rubik-share/validacion-s3--e0cc7450612903165a30f83f--x202611171453-6bgH20LztoWSdQC1Y2OZY2EEGTHwPJ.html","https://xjvwmqwr1vybua0p.public.blob.vercel-storage.com/rubik-share/validacion-s3--e0cc7450612903
+PASS 8 after the dry run: store listing answers 200, names the test store and is complete · {"status":200,"store":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com","truncated":false}
+PASS 8 the dry run deleted NOTHING (same file set; otherwise the confirmed purge is NOT run) · {"before":3,"after":3}
+PASS 9 confirmed purge: complete, this store, no further batch · {"status":200,"more":false}
+PASS 9 confirmed purge removed EXACTLY the planned files, with no failure · {"removed":3,"failed":[]}
+PASS 9 after the purge: store listing answers 200, names the test store and is complete · {"status":200,"store":"xjvwmqwr1vybua0p.public.blob.vercel-storage.com","truncated":false}
+PASS 9 nothing else was touched: the store is empty again · {"active":0,"expired":0,"legacy":0,"inconsistent":0}
+PASS 9 after deletion the video is no longer reachable directly (CDN cache up to ~1 min allowed)
+PASS 10 no code / wrong code / other origin are refused · [401,401,403]
+PASS 12 UI 1440: 7/30/90 with 30 checked
+PASS 12 UI 390: 7/30/90 with 30 checked
+PASS cleanup verified: the test store is empty again · {"status":200,"counts":{"active":0,"expired":0,"legacy":0,"inconsistent":0}}
+30/30 PASS
