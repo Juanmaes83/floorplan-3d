@@ -42,7 +42,7 @@ test('S1-adv: browser requests from another origin are refused even with the rig
  // A spoofed forwarded host list only counts its first entry (set by the platform, not by a browser).
  assert.equal((await share(req({headers:{'x-rubik-share-token':SHARE,origin:'https://evil.example','x-forwarded-host':'rubik.example, evil.example'}}))).status,403);
  // Same host (the app itself) and server-side tools without Origin are judged by the code alone.
- for(const headers of [{origin:'https://rubik.example'},{}]){const calls=[];const r=await share(req({headers:{'x-rubik-share-token':SHARE,...headers}}),env,async(u,i)=>{calls.push(u);return {ok:true,json:async()=>({url:'https://abc123.public.blob.vercel-storage.com/rubik-share/casa-Xy.html'})};});assert.equal(r.status,200);assert.equal(calls.length,1);}
+ for(const headers of [{origin:'https://rubik.example'},{}]){const calls=[];const r=await share(req({headers:{'x-rubik-share-token':SHARE,...headers}}),env,async(u,i)=>{calls.push(u);return {ok:true,json:async()=>({url:'https://abc123.public.blob.vercel-storage.com'+new URL(u).pathname.replace(/\.html$/,'-Xy.html')})};});assert.equal(r.status,200);assert.equal(calls.length,1);}
 });
 test('S1-adv: the publishing code never authorises the AI render, and the render code never publishes',async()=>{
  const renderEnv={OPENAI_API_KEY:OPENAI,RUBIK_RENDER_TOKEN:RENDER,RUBIK_RENDER_ENABLED:'1',RUBIK_SHARE_TOKEN:SHARE};

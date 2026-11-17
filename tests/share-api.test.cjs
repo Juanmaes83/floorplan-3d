@@ -9,7 +9,9 @@ const HOST='abc123.public.blob.vercel-storage.com',HTML='<!doctype html><html><b
 function res(){return {statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k.toLowerCase()]=v;},end(b){this.body=b;}};}
 function req(body,{token=SHARE,header='x-rubik-share-token',kind='html',name='Casa Serra',method='POST',origin}={}){const r=Readable.from([Buffer.from(body)]);r.method=method;r.headers={host:'rubik.example'};if(origin!==undefined)r.headers.origin=origin;if(token!==null)r.headers[header]=token;if(kind!==null)r.headers['x-rubik-share-kind']=kind;r.headers['x-rubik-share-name']=name;return r;}
 async function share(r,opts){const out=res();await Share.handler(r,out,opts);return {status:out.statusCode,json:JSON.parse(out.body)};}
-const stored=calls=>async(url,init)=>{calls.push({url,init});return {ok:true,status:200,json:async()=>({url:`https://${HOST}/rubik-share/casa-serra-Xy12.html`})};};
+// Like Vercel Blob: the stored URL is the requested name plus the provider's random suffix before the extension.
+const stored=calls=>async(url,init)=>{calls.push({url,init});const p=new URL(url).pathname.replace(/\.(html|mp4|webm)$/,'-Xy12.$1');return {ok:true,status:200,json:async()=>({url:`https://${HOST}${p}`})};};
+const NAMED=/--[0-9a-f]{24}--x\d{12}/; // GOV-08 S3: <slug>--<publication>--x<expiry>
 
 test('share refuses unless configured, POST, with the access code and a known kind',async()=>{
  const none=()=>assert.fail('no storage call');
@@ -24,8 +26,8 @@ test('share refuses unless configured, POST, with the access code and a known ki
 
 test('share stores the file with a random suffix and returns its URL, never the storage token',async()=>{
  const calls=[],r=await share(req(HTML),{env,fetchImpl:stored(calls)});
- assert.equal(r.status,200);assert.equal(r.json.url,`https://${HOST}/rubik-share/casa-serra-Xy12.html`);assert.ok(!JSON.stringify(r.json).includes('secret'));
- assert.equal(calls.length,1);assert.equal(calls[0].url,'https://blob.vercel-storage.com/rubik-share/casa-serra.html');
+ assert.equal(r.status,200);assert.match(r.json.url,new RegExp(`^https://${HOST.replace(/\./g,'\\.')}/rubik-share/casa-serra${NAMED.source}-Xy12\\.html$`));assert.ok(!JSON.stringify(r.json).includes('secret'));
+ assert.equal(calls.length,1);assert.match(calls[0].url,new RegExp(`^https://blob\\.vercel-storage\\.com/rubik-share/casa-serra${NAMED.source}\\.html$`));
  assert.equal(calls[0].init.method,'PUT');assert.equal(calls[0].init.headers.authorization,'Bearer vercel_blob_rw_AbC123_secret');
  assert.equal(calls[0].init.headers['x-add-random-suffix'],'1');assert.equal(calls[0].init.headers['x-content-type'],'text/html; charset=utf-8');
  assert.equal(calls[0].init.body.toString(),HTML);

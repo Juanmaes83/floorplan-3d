@@ -3,6 +3,7 @@
  "blocking": [
   "tests/project-identity.browser.test.cjs",
   "tests/delivery-3d-link.browser.test.cjs",
+  "tests/gov08-s3-expiry.browser.test.cjs",
   "tests/build-palette.browser.test.cjs",
   "tests/consolidacion-transversal.browser.test.cjs",
   "tests/client-review.browser.test.cjs",

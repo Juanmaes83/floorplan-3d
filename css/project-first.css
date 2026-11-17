@@ -132,3 +132,17 @@
 @media(max-width:700px){.budget-table thead{display:none}.budget-table tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;padding:8px 0;border-bottom:1px solid #e3dccf}.budget-table th[scope=row]{grid-column:1/-1;border:0;padding:0}.budget-table td{border:0;padding:0;display:grid;gap:2px;text-align:left}.budget-table td.is-num{text-align:left}.budget-table td::before{content:attr(data-label);font-size:11px;color:#6b6a5f}.budget-input{width:100%}}
 .budget-small{display:block;min-height:32px;padding:0 10px;font-size:12px;margin-top:6px}.budget-ref-list .budget-small{display:inline-block;margin-top:0}.budget-ref{color:#205b60}.budget-bc3{border:1px solid #d8d0c2;border-radius:4px;padding:8px 12px;margin:0 0 12px}.budget-bc3 summary{font-weight:600;cursor:pointer}.budget-bc3-note{font-size:12px;color:#4f5249}.budget-bc3 label{display:grid;gap:4px;font-size:13px;font-weight:600;max-width:280px}.budget-bc3 select{min-height:40px}
 .budget-ref-row td{background:#f6f2e9}.budget-ref-q{width:100%;min-height:40px;padding:0 10px;border:1px solid #978b79;border-radius:4px;font:inherit}.budget-ref-list{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}.budget-ref-list li{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}
+/* GOV-08 S3: link expiry choice and the publications store. */
+.share-link-ttl{border:1px solid #d8d6cc;border-radius:8px;margin:4px 0;padding:6px 10px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center}
+.share-link-ttl legend{font-size:13px;font-weight:600;padding:0 4px}
+.share-link-ttl label{display:inline-flex;gap:6px;align-items:center;min-height:32px;font-size:13px}
+.share-link-ttl small{flex-basis:100%;font-size:12px;color:#4f5249}
+.share-publication[data-expiry="expired"] .share-publication-state{color:#8a3b12;font-weight:600}
+.share-publication[data-expiry="legacy"] .share-publication-state{color:#5b4a12}
+.share-store{border-top:1px solid #d8d6cc;margin-top:14px;padding-top:10px}.share-store h3{font-size:15px;margin:0 0 4px}
+.share-store-actions{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+.share-store-summary{font-size:13px;margin:0 0 6px}.share-store-legacy{font-size:12px;color:#5b4a12;margin:0 0 8px}
+.share-store .btn{min-height:36px}
+.ai-render-form .share-link-ttl label{display:inline-flex;flex-direction:row;font-weight:500}
+.ai-render-form .share-link-ttl input[type=radio]{width:18px;height:18px;min-height:0;margin:0;padding:0;flex:none}
+.share-link-ttl label span{white-space:nowrap}

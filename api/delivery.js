@@ -1,9 +1,12 @@
 /* ENT-01 I1A: read-only, strictly validated 3D delivery snapshot API.
    Anyone with a public link can inspect its minimal content. No authentication on read.
-   Writes remain gated by GOV-08 S1; deletion by S2. No production rollout from this Draft branch. */
+   Writes remain gated by GOV-08 S1; deletion by S2. No production rollout from this Draft branch.
+   GOV-08 S3: a 3D visit published with an expiry date answers 410 {error:'expired'} from that minute on, before
+   reading the store; visits published before S3 have no date and keep opening (no retroactive expiry). */
 'use strict';
 const Core=require('../js/client-delivery-core.js');
 const {storeHost}=require('./view.js');
+const Expiry=require('../js/share-expiry-core.js'); // GOV-08 S3
 const MAX_BYTES=Core.MAX_BYTES,MAX_URL=2048;
 function send(res,status,body){
  res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');
@@ -34,12 +37,13 @@ async function limitedBytes(response){
  }
  return null;
 }
-async function handler(req,res,{env=process.env,fetchImpl=globalThis.fetch}={}){
+async function handler(req,res,{env=process.env,fetchImpl=globalThis.fetch,now=Date.now}={}){
  if(req.method!=='GET')return send(res,405,{error:'method'});
  const host=storeHost(env.BLOB_READ_WRITE_TOKEN);if(!host)return send(res,503,{error:'not-configured'});
  let params;try{params=new URL(req.url,'http://local').searchParams;}catch{return send(res,404,{error:'not-available'});}
  const url=params.size===1&&params.getAll('f').length===1?target(params.get('f'),host):null;
  if(!url)return send(res,404,{error:'not-available'});
+ if(Expiry.isExpired(url,now()))return send(res,410,{error:'expired'}); // GOV-08 S3: before any storage read
  let response;try{response=await fetchImpl(url,{cache:'no-store'});}catch{return send(res,502,{error:'storage-unreachable'});}
  if(!response?.ok)return send(res,404,{error:'not-available'});
  let bytes;try{bytes=await limitedBytes(response);}catch{return send(res,502,{error:'storage-unreachable'});}
