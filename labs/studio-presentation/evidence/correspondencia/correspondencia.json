@@ -1,0 +1,201 @@
+{
+ "generated": "2026-11-17T14:14:25.602Z",
+ "snapshot": {
+  "project": {
+   "id": "prj_reference-home",
+   "name": "Proyecto de ejemplo",
+   "revision": "rv1-0f3e96422fd20e08",
+   "rooms": 13,
+   "walls": 70,
+   "openings": 22,
+   "objects": 46,
+   "scale": "estimated"
+  },
+  "takenAt": "2026-11-17T11:46:44.057Z",
+  "sourceSha": "f31f303"
+ },
+ "sets": {
+  "canonico": {
+   "id": "prj_reference-home",
+   "name": "三室两厅两卫",
+   "counts": {
+    "rooms": 13,
+    "walls": 70,
+    "openings": 22,
+    "objects": 46
+   },
+   "comparisons": [
+    {
+     "label": "walls",
+     "snapshot": 70,
+     "proyecto": 70,
+     "fieldsCompared": 420,
+     "extra": [],
+     "diffs": [],
+     "diffCount": 0,
+     "diffFields": []
+    },
+    {
+     "label": "openings",
+     "snapshot": 22,
+     "proyecto": 22,
+     "fieldsCompared": 122,
+     "extra": [],
+     "diffs": [],
+     "diffCount": 0,
+     "diffFields": []
+    },
+    {
+     "label": "rooms",
+     "snapshot": 13,
+     "proyecto": 13,
+     "fieldsCompared": 63,
+     "extra": [],
+     "diffs": [
+      {
+       "id": "rom_master",
+       "field": "name",
+       "snapshot": "Dormitorio principal",
+       "proyecto": "主卧室"
+      },
+      {
+       "id": "rom_mbath",
+       "field": "name",
+       "snapshot": "Baño en suite",
+       "proyecto": "主卫浴"
+      },
+      {
+       "id": "rom_kid",
+       "field": "name",
+       "snapshot": "Dormitorio infantil",
+       "proyecto": "小孩房"
+      },
+      {
+       "id": "rom_gbath",
+       "field": "name",
+       "snapshot": "Baño de invitados",
+       "proyecto": "客卫浴"
+      },
+      {
+       "id": "rom_laundry",
+       "field": "name",
+       "snapshot": "Balcón-lavadero",
+       "proyecto": "洗衣阳台"
+      },
+      {
+       "id": "rom_child",
+       "field": "name",
+       "snapshot": "Dormitorio juvenil",
+       "proyecto": "子女房"
+      }
+     ],
+     "diffCount": 13,
+     "diffFields": [
+      "name"
+     ]
+    },
+    {
+     "label": "objects",
+     "snapshot": 46,
+     "proyecto": 46,
+     "fieldsCompared": 230,
+     "extra": [],
+     "diffs": [],
+     "diffCount": 0,
+     "diffFields": []
+    }
+   ]
+  },
+  "demo-obra": {
+   "id": "prj_reference-home",
+   "name": "Vivienda de ejemplo de RUBIK",
+   "counts": {
+    "rooms": 13,
+    "walls": 70,
+    "openings": 22,
+    "objects": 46
+   },
+   "comparisons": [
+    {
+     "label": "walls",
+     "snapshot": 70,
+     "proyecto": 70,
+     "fieldsCompared": 420,
+     "extra": [],
+     "diffs": [
+      {
+       "id": "wal_ref-w0",
+       "field": "status",
+       "snapshot": "existing",
+       "proyecto": "new"
+      },
+      {
+       "id": "wal_ref-w1",
+       "field": "status",
+       "snapshot": "existing",
+       "proyecto": "new"
+      },
+      {
+       "id": "wal_ref-w2",
+       "field": "status",
+       "snapshot": "existing",
+       "proyecto": "new"
+      },
+      {
+       "id": "wal_ref-w3",
+       "field": "status",
+       "snapshot": "existing",
+       "proyecto": "new"
+      },
+      {
+       "id": "wal_ref-w4",
+       "field": "status",
+       "snapshot": "existing",
+       "proyecto": "new"
+      },
+      {
+       "id": "wal_ref-w5",
+       "field": "status",
+       "snapshot": "existing",
+       "proyecto": "new"
+      }
+     ],
+     "diffCount": 70,
+     "diffFields": [
+      "status"
+     ]
+    },
+    {
+     "label": "openings",
+     "snapshot": 22,
+     "proyecto": 22,
+     "fieldsCompared": 122,
+     "extra": [],
+     "diffs": [],
+     "diffCount": 0,
+     "diffFields": []
+    },
+    {
+     "label": "rooms",
+     "snapshot": 13,
+     "proyecto": 13,
+     "fieldsCompared": 63,
+     "extra": [],
+     "diffs": [],
+     "diffCount": 0,
+     "diffFields": []
+    },
+    {
+     "label": "objects",
+     "snapshot": 46,
+     "proyecto": 46,
+     "fieldsCompared": 230,
+     "extra": [],
+     "diffs": [],
+     "diffCount": 0,
+     "diffFields": []
+    }
+   ]
+  }
+ }
+}

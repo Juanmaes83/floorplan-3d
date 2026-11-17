@@ -1,0 +1,112 @@
+{
+ "generated": "2026-11-17T14:16:58.257Z",
+ "url": "local",
+ "items": [
+  {
+   "file": "assets/dibujo-vivo/00-overview.png",
+   "bytes": 1641203,
+   "sha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952",
+   "kind": "frame",
+   "producer": "Presentar mi vivienda + Dibujo vivo (lienzo 3D, interfaz oculta)",
+   "stop": 0,
+   "roomId": null,
+   "stopName": null,
+   "note": "Fotograma de la apertura con Dibujo vivo (único momento en que el producto lo activa: la parada de vista general). Capturado del lienzo 3D con el resto de la interfaz oculta; el producto no exporta Dibujo vivo como imagen ni vídeo."
+  },
+  {
+   "file": "assets/recorrido/01-master.png",
+   "bytes": 205195,
+   "sha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698",
+   "kind": "frame",
+   "producer": "Presentar mi vivienda (lienzo 3D, interfaz oculta)",
+   "stop": 1,
+   "roomId": "rom_master",
+   "stopName": null
+  },
+  {
+   "file": "assets/recorrido/02-kitchen.png",
+   "bytes": 216011,
+   "sha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315",
+   "kind": "frame",
+   "producer": "Presentar mi vivienda (lienzo 3D, interfaz oculta)",
+   "stop": 2,
+   "roomId": "rom_kitchen",
+   "stopName": null
+  },
+  {
+   "file": "assets/recorrido/03-dining.png",
+   "bytes": 270379,
+   "sha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0",
+   "kind": "frame",
+   "producer": "Presentar mi vivienda (lienzo 3D, interfaz oculta)",
+   "stop": 3,
+   "roomId": "rom_dining",
+   "stopName": null
+  },
+  {
+   "file": "assets/recorrido/04-living.png",
+   "bytes": 319246,
+   "sha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4",
+   "kind": "frame",
+   "producer": "Presentar mi vivienda (lienzo 3D, interfaz oculta)",
+   "stop": 4,
+   "roomId": "rom_living",
+   "stopName": null
+  },
+  {
+   "file": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+   "bytes": 226221,
+   "sha256": "ae93eb6338f2b36a0c61a55ad0ca9758ec5aff017d4cb83c4ea5b1240d5994c0",
+   "kind": "video",
+   "producer": "Presentar mi vivienda · Grabar vídeo (FloorPlanTourRecorder)"
+  }
+ ],
+ "living": {
+  "ident": {
+   "projectId": "prj_reference-home",
+   "revision": "rv1-0f3e96422fd20e08"
+  },
+  "stops": [
+   {
+    "kind": "overview",
+    "roomId": null,
+    "name": null
+   },
+   {
+    "kind": "room",
+    "roomId": "rom_master",
+    "name": null
+   },
+   {
+    "kind": "room",
+    "roomId": "rom_kitchen",
+    "name": null
+   },
+   {
+    "kind": "room",
+    "roomId": "rom_dining",
+    "name": null
+   },
+   {
+    "kind": "room",
+    "roomId": "rom_living",
+    "name": null
+   }
+  ],
+  "frames": [
+   "00-overview.png",
+   "01-master.png",
+   "02-kitchen.png",
+   "03-dining.png",
+   "04-living.png"
+  ],
+  "video": "rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+  "errors": []
+ },
+ "blocked": [],
+ "findings": [
+  "Dibujo vivo solo está activo en la parada de vista general (presentationLivingDrawingInfo.active=false en las paradas de estancia), por diseño de C1.",
+  "«Grabar vídeo» (FloorPlanTourRecorder) graba el render normal aunque Dibujo vivo esté activado: el vídeo es el recorrido de 4 estancias, no el dibujo.",
+  "Con renderizado por software, cada captura del lienzo tarda ~15 s: no se puede filmar la animación de dibujo como secuencia en este entorno."
+ ]
+}

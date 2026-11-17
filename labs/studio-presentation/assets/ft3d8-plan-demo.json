@@ -1,0 +1,131 @@
+{
+ "source": "Datos de ejemplo de RUBIK: vivienda de ejemplo como obra nueva, fechas ilustrativas, sin presupuesto. No es un proyecto de cliente.",
+ "projectId": "prj_reference-home",
+ "scheduleId": "sch_demo-obra",
+ "projectRef": {
+  "type": "project",
+  "id": "prj_reference-home",
+  "revision": "15145f33a76bafda3ed066eec3aa20fcaa0f8b905e39e5941c1ef2f8e7a215be"
+ },
+ "tasks": [
+  {
+   "id": "implantacion",
+   "wbs": "01",
+   "title": "Implantación de la obra: vallado y caseta",
+   "start": "2027-03-01",
+   "end": "2027-03-05",
+   "dependsOn": [],
+   "elements": 2
+  },
+  {
+   "id": "cimentacion",
+   "wbs": "02",
+   "title": "Cimentación (no se dibuja: RUBIK no la modela)",
+   "start": "2027-03-08",
+   "end": "2027-03-19",
+   "dependsOn": [
+    "implantacion"
+   ],
+   "elements": 0
+  },
+  {
+   "id": "estructura",
+   "wbs": "03",
+   "title": "Estructura y muros de fachada",
+   "start": "2027-03-22",
+   "end": "2027-04-16",
+   "dependsOn": [
+    "cimentacion"
+   ],
+   "elements": 46
+  },
+  {
+   "id": "cubierta",
+   "wbs": "04",
+   "title": "Cubierta (no se dibuja: este ejemplo no tiene envolvente superior derivable)",
+   "start": "2027-04-19",
+   "end": "2027-04-30",
+   "dependsOn": [
+    "estructura"
+   ],
+   "elements": 0
+  },
+  {
+   "id": "tabiqueria",
+   "wbs": "05",
+   "title": "Tabiquería interior",
+   "start": "2027-04-12",
+   "end": "2027-05-07",
+   "dependsOn": [
+    {
+     "taskId": "estructura",
+     "type": "SS",
+     "lagDays": 14
+    }
+   ],
+   "elements": 0
+  },
+  {
+   "id": "carpinteria",
+   "wbs": "06",
+   "title": "Puertas y ventanas",
+   "start": "2027-05-10",
+   "end": "2027-05-28",
+   "dependsOn": [
+    "cubierta",
+    "tabiqueria"
+   ],
+   "elements": 0
+  },
+  {
+   "id": "instalaciones",
+   "wbs": "07",
+   "title": "Instalaciones (no se dibujan: RUBIK no las modela)",
+   "start": "2027-05-10",
+   "end": "2027-06-04",
+   "dependsOn": [
+    "tabiqueria"
+   ],
+   "elements": 0
+  },
+  {
+   "id": "acabados",
+   "wbs": "08",
+   "title": "Revestimientos y pintura",
+   "start": "2027-06-07",
+   "end": "2027-06-25",
+   "dependsOn": [
+    "carpinteria",
+    "instalaciones"
+   ],
+   "elements": 70
+  },
+  {
+   "id": "pavimentos",
+   "wbs": "09",
+   "title": "Pavimentos",
+   "start": "2027-06-14",
+   "end": "2027-07-02",
+   "dependsOn": [
+    {
+     "taskId": "acabados",
+     "type": "SS",
+     "lagDays": 5
+    }
+   ],
+   "elements": 0
+  },
+  {
+   "id": "retirada",
+   "wbs": "10",
+   "title": "Retirada del andamio, la caseta y el vallado",
+   "start": "2027-07-05",
+   "end": "2027-07-09",
+   "dependsOn": [
+    "acabados",
+    "pavimentos"
+   ],
+   "elements": 3
+  }
+ ]
+}

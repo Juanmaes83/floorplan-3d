@@ -1,0 +1,278 @@
+{
+ "schema": "rubik-lab-entrega/0.1",
+ "generated": "2026-11-17T14:39:19.829Z",
+ "project": {
+  "id": "prj_reference-home",
+  "name": "Proyecto de ejemplo",
+  "revision": "rv1-0f3e96422fd20e08",
+  "rooms": 13,
+  "walls": 70,
+  "openings": 22,
+  "objects": 46,
+  "scale": "estimated"
+ },
+ "studio": {
+  "name": "Estudio Ejemplo",
+  "synthetic": true
+ },
+ "tipos": [
+  {
+   "tipo": "integral",
+   "name": "Documentación integral",
+   "file": "index.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "interior-book-v3",
+    "materials-furniture-book-v3",
+    "commercial-proposal-client-v3",
+    "real-estate-sheet-v3",
+    "architecture-sheet-strip",
+    "entrega-integral"
+   ]
+  },
+  {
+   "tipo": "primera-reunion",
+   "name": "Primera reunión",
+   "file": "tipo-primera-reunion.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "decisiones",
+    "procedencia"
+   ],
+   "documents": [
+    "real-estate-sheet-v3"
+   ]
+  },
+  {
+   "tipo": "propuesta-comercial",
+   "name": "Propuesta comercial",
+   "file": "tipo-propuesta-comercial.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "commercial-proposal-client-v3",
+    "interior-book-v3",
+    "entrega-integral"
+   ]
+  },
+  {
+   "tipo": "dossier-tecnico",
+   "name": "Dossier técnico",
+   "file": "tipo-dossier-tecnico.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "materiales",
+    "presupuesto",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "architecture-sheet-strip",
+    "materials-furniture-book-v3",
+    "commercial-proposal-client-v3"
+   ]
+  },
+  {
+   "tipo": "interiorismo",
+   "name": "Presentación de interiorismo",
+   "file": "tipo-interiorismo.html",
+   "chapters": [
+    "portada",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "interior-book-v3",
+    "materials-furniture-book-v3"
+   ]
+  },
+  {
+   "tipo": "inmobiliaria",
+   "name": "Presentación inmobiliaria",
+   "file": "tipo-inmobiliaria.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "recorrido",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "real-estate-sheet-v3"
+   ]
+  },
+  {
+   "tipo": "obra",
+   "name": "Explicación de la obra",
+   "file": "tipo-obra.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "obra",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "architecture-sheet-strip"
+   ]
+  }
+ ],
+ "pieces": [
+  {
+   "file": "media/ia-1.jpg",
+   "from": "evidence/render-ia/render-ia-1-salon.png",
+   "sourceSha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
+   "sha256": "76027ae68113928e44bc878bef664c9bd2a90447b43e5a2b2c9074645d99f3e5"
+  },
+  {
+   "file": "media/ia-2.jpg",
+   "from": "evidence/render-ia/render-ia-2-dormitorio-principal.png",
+   "sourceSha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
+   "sha256": "b92e64cb06caf927198abee750288b16d6f8a2887721c5f9f56d5f87b6988842"
+  },
+  {
+   "file": "media/ia-3.jpg",
+   "from": "evidence/render-ia/render-ia-3-vista-general.png",
+   "sourceSha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
+   "sha256": "6049003934f0f4b2a8c732dd049ff56e0d42a78bb5170992e1eb453ccd9b68ce"
+  },
+  {
+   "file": "media/vista-01-overview.jpg",
+   "from": "snapshot/assets/view-01-overview.png",
+   "sourceSha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2",
+   "sha256": "72a025ed27bb00eb6366db55c5aaba3d4c7b863be49ad7e2aad6d0f6fe6ea195"
+  },
+  {
+   "file": "media/vista-02-room.jpg",
+   "from": "snapshot/assets/view-02-room.png",
+   "sourceSha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4",
+   "sha256": "52676b877f20e29d616ce7afdbb473739f36b76fa33dc7475e0f74b26b7f54a9"
+  },
+  {
+   "file": "media/vista-03-room.jpg",
+   "from": "snapshot/assets/view-03-room.png",
+   "sourceSha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3",
+   "sha256": "64c838d7d90546cc57ed255c5160a83035283e56fd71bbe64d33b80c0882b73d"
+  },
+  {
+   "file": "media/vista-04-room.jpg",
+   "from": "snapshot/assets/view-04-room.png",
+   "sourceSha256": "af317e4e4d00ab067ff2695bb95969b11ebfbd3564bc55514075e0c117198c29",
+   "sha256": "8def9bfa9c253fb1f3930162f6e74cc7578edbac46e4801c1ec56ddeeb8f7cb1"
+  },
+  {
+   "file": "media/vista-05-room.jpg",
+   "from": "snapshot/assets/view-05-room.png",
+   "sourceSha256": "2cbb35e397e4e5188a3e420dee53d25e41debb1a10bddd2ab63d354cf7964231",
+   "sha256": "2bdee371aa3f129af3791d3673129bb590f8b819c2a1ce171d4c08ecafef793a"
+  },
+  {
+   "file": "media/dibujo-vivo.jpg",
+   "from": "assets/dibujo-vivo/00-overview.png",
+   "sourceSha256": "aca65b513dd3d2f62550ed44b4db484cce6b9010cc7eb79e6236f472f789a952",
+   "sha256": "9dd582d26dec3a37fe370f73a0e16d3284bb5cec2b2eeab37120adf05e8d759e"
+  },
+  {
+   "file": "media/recorrido.mp4",
+   "from": "assets/recorrido/rubik-sota-recorrido-proyecto-de-ejemplo.mp4",
+   "sha256": "ae93eb6338f2b36a0c61a55ad0ca9758ec5aff017d4cb83c4ea5b1240d5994c0",
+   "producer": "RUBIK · Presentar mi vivienda · Grabar vídeo"
+  },
+  {
+   "file": "media/recorrido-01-master.jpg",
+   "from": "assets/recorrido/01-master.png",
+   "sourceSha256": "b9c7120c76d08a957f40cc7186ba6b4e39f96f32edc972f3c7967a885caa3698",
+   "sha256": "24d52b61f06716f5b9788ea28873538116d893caac3fe7c13800a275df75591d"
+  },
+  {
+   "file": "media/recorrido-02-kitchen.jpg",
+   "from": "assets/recorrido/02-kitchen.png",
+   "sourceSha256": "cdce18dfe11f6351c0f78fda520a2e7c244edeb3551d284116e0f24be46e1315",
+   "sha256": "044937777a68242bbbbc7702d180bbbf02dca21c6e1478d10a885840a4a7fe78"
+  },
+  {
+   "file": "media/recorrido-03-dining.jpg",
+   "from": "assets/recorrido/03-dining.png",
+   "sourceSha256": "2873685f50490b9016cbfa906ab39ba52f03c3f243048beb22dcea2bc2e56dd0",
+   "sha256": "33f052bbc68160a844252d5cd5b3e459c572291ff775291b49f5694d81c48dee"
+  },
+  {
+   "file": "media/recorrido-04-living.jpg",
+   "from": "assets/recorrido/04-living.png",
+   "sourceSha256": "24a3a18629cd185aaa6ce4abdfcc2a15074db05500c4a854c92674341180f1e4",
+   "sha256": "694f23bfecf1120acd8e5861b90e0fb41f31a601a21d919a4385912b5e7bb5e6"
+  },
+  {
+   "file": "documentos/interior-book-v3.pdf",
+   "sha256": "0f8a371fce3678a5df9b590af48156b325ee128aede9789977be45cda2d8de1d",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/materials-furniture-book-v3.pdf",
+   "sha256": "af39a457c636c1dafb11f5c330ee190d71e2e7b232a1edda226b57f313720cd1",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/commercial-proposal-client-v3.pdf",
+   "sha256": "14c43b7b7bf9919a8817364a7412f4a8f7148fb31c07795fbaca11f321e14452",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/real-estate-sheet-v3.pdf",
+   "sha256": "70dfddcc063ac009be2d3a47a38ea049028b4eee45777844646691bb1226f370",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/architecture-sheet-strip.pdf",
+   "sha256": "1a970bdfe6a80717467cc3e3a34c81aeafb37d9d16b466b569eb639e87563ac9",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/entrega-integral.pdf",
+   "sha256": "5e203e56481847924e13bf5de6abd74050d80e91cd235cd1772cf320c51b8966",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  }
+ ],
+ "ft3d8": null,
+ "orientative": [
+  "imágenes IA",
+  "plan y vídeo de obra (ejemplo, fechas ilustrativas, sin presupuesto)",
+  "precios (de prueba de laboratorio)"
+ ],
+ "notIncluded": [
+  "proyecto editable",
+  "visita 3D interactiva (requiere enlace publicado)",
+  "datos de otros proyectos"
+ ]
+}

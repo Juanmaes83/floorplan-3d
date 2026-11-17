@@ -1,0 +1,146 @@
+{
+ "steps": [
+  {
+   "k": "escritorio integral",
+   "v": [
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ]
+  },
+  {
+   "k": "escritorio obra",
+   "v": {
+    "visible": [
+     "vivienda",
+     "obra",
+     "decisiones",
+     "documentos",
+     "procedencia"
+    ],
+    "kind": "Explicación de la obra",
+    "docs": [
+     "architecture-sheet-strip"
+    ],
+    "note": "Contenido del tipo «Explicación de la obra»."
+   }
+  },
+  {
+   "k": "escritorio sin decisiones",
+   "v": {
+    "visible": [
+     "vivienda",
+     "obra",
+     "documentos",
+     "procedencia"
+    ],
+    "note": "Contenido personalizado a partir de «Explicación de la obra»."
+   }
+  },
+  {
+   "k": "escritorio registro",
+   "v": {
+    "file": "registro-entrega-obra-2026-11-17.json",
+    "tipo": "obra",
+    "capitulos": [
+     "portada",
+     "vivienda",
+     "obra",
+     "documentos",
+     "procedencia"
+    ],
+    "documentos": [
+     "architecture-sheet-strip"
+    ],
+    "avisos": 6,
+    "piezas": 15,
+    "log": 1
+   }
+  },
+  {
+   "k": "escritorio red/errores",
+   "v": {
+    "ext": 0,
+    "errors": []
+   }
+  },
+  {
+   "k": "movil integral",
+   "v": [
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ]
+  },
+  {
+   "k": "movil obra",
+   "v": {
+    "visible": [
+     "vivienda",
+     "obra",
+     "decisiones",
+     "documentos",
+     "procedencia"
+    ],
+    "kind": "Explicación de la obra",
+    "docs": [
+     "architecture-sheet-strip"
+    ],
+    "note": "Contenido del tipo «Explicación de la obra»."
+   }
+  },
+  {
+   "k": "movil sin decisiones",
+   "v": {
+    "visible": [
+     "vivienda",
+     "obra",
+     "documentos",
+     "procedencia"
+    ],
+    "note": "Contenido personalizado a partir de «Explicación de la obra»."
+   }
+  },
+  {
+   "k": "movil registro",
+   "v": {
+    "file": "registro-entrega-obra-2026-11-17.json",
+    "tipo": "obra",
+    "capitulos": [
+     "portada",
+     "vivienda",
+     "obra",
+     "documentos",
+     "procedencia"
+    ],
+    "documentos": [
+     "architecture-sheet-strip"
+    ],
+    "avisos": 6,
+    "piezas": 15,
+    "log": 1
+   }
+  },
+  {
+   "k": "movil red/errores",
+   "v": {
+    "ext": 0,
+    "errors": []
+   }
+  }
+ ]
+}

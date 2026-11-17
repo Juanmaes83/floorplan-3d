@@ -1,0 +1,40 @@
+{
+ "method": "La miniatura de la vista de origen visible en el diálogo real de Render IA (captura dialogo-n.png) se compara con cada vista del snapshot reescalada al ancho de la miniatura; se busca el mejor alineamiento y se mide la diferencia media absoluta por canal (0–255). No hay otra evidencia de la imagen enviada: el producto no guarda la vista de origen junto al render.",
+ "renderAspect": "Las vistas son 1600×820 (≈1,95:1); el render es 1536×1024 (1,5:1). La franja que la vista no contiene la completa la IA: en el Salón añade un dormitorio que no está en el encuadre real.",
+ "pairs": [
+  {
+   "render": "render-ia-1-salon.png",
+   "renderSha256": "93bda6d4797a088882c144304fb297367e48d8e25a526f4d34dcacd7de05ec6a",
+   "sourceViewLabel": "Salón",
+   "snapshotView": "snapshot/assets/view-02-room.png",
+   "snapshotViewSha256": "1de77a3a395c483aefca65777ee3f9bb0469ec85a54b413a79f080de99d50aa4",
+   "dialogEvidence": "dialogo-1.png",
+   "meanAbsDiff0to255": 29.6,
+   "verdict": "misma estancia y encuadre, no idéntica píxel a píxel",
+   "comparison": "traza-1.png",
+   "note": "Búsqueda libre de escala y desplazamiento: mejor diferencia 17,1 (frente a 2–3 en las otras dos). La vista enviada fue otra cámara de la misma estancia, preparada en esa sesión; el producto no guardó esa imagen. En la entrega se presenta junto a la vista del Salón del snapshot como «vista del modelo de la misma estancia», nunca como «la imagen de origen»."
+  },
+  {
+   "render": "render-ia-2-dormitorio-principal.png",
+   "renderSha256": "e7c34da598ba2ac19f0d4f14e8377947653bc9f38f3b01f79d9affbfd1fa4fde",
+   "sourceViewLabel": "Dormitorio principal",
+   "snapshotView": "snapshot/assets/view-03-room.png",
+   "snapshotViewSha256": "800669f167daeff1d28a10b895054f7868223fb4b84219ded7b556ae4cdf6dd3",
+   "dialogEvidence": "dialogo-2.png",
+   "meanAbsDiff0to255": 2.3,
+   "verdict": "idéntica (diferencia de reescalado)",
+   "comparison": "traza-2.png"
+  },
+  {
+   "render": "render-ia-3-vista-general.png",
+   "renderSha256": "abddbe43ec3bdf0d94b4eb63b53f559eb39f199d09aea2a0ca8a0103ce9db5e8",
+   "sourceViewLabel": "Vista general",
+   "snapshotView": "snapshot/assets/view-01-overview.png",
+   "snapshotViewSha256": "0f80a7141b36354b7e9e7173a8afc0bc443f492b638218002b96a4ecb00efdf2",
+   "dialogEvidence": "dialogo-3.png",
+   "meanAbsDiff0to255": 3.1,
+   "verdict": "idéntica (diferencia de reescalado)",
+   "comparison": "traza-3.png"
+  }
+ ]
+}

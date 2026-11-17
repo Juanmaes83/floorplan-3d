@@ -39,6 +39,18 @@
    "callouts": 2,
    "dropped": 0,
    "keyed": 0
+  },
+  "entrega": {
+   "ai": [
+    "Salón",
+    "Dormitorio principal",
+    "Vista general"
+   ],
+   "drawing": true,
+   "tour": true,
+   "obra": false,
+   "ftDoc": false,
+   "tasks": 10
   }
  },
  "probe": true,
@@ -579,6 +591,177 @@
     "display": "RUBIK Serif",
     "body": "RUBIK Serif"
    }
+  },
+  "entrega-integral": {
+   "pages": 10,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "flow": {
+    "tables": 1,
+    "rows": 11,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "ok": true
+   },
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 6659,
+     "RUBIK Serif": 867
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
   }
- }
+ },
+ "entregaWeb": [
+  {
+   "tipo": "integral",
+   "name": "Documentación integral",
+   "file": "index.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "interior-book-v3",
+    "materials-furniture-book-v3",
+    "commercial-proposal-client-v3",
+    "real-estate-sheet-v3",
+    "architecture-sheet-strip",
+    "entrega-integral"
+   ]
+  },
+  {
+   "tipo": "primera-reunion",
+   "name": "Primera reunión",
+   "file": "tipo-primera-reunion.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "decisiones",
+    "procedencia"
+   ],
+   "documents": [
+    "real-estate-sheet-v3"
+   ]
+  },
+  {
+   "tipo": "propuesta-comercial",
+   "name": "Propuesta comercial",
+   "file": "tipo-propuesta-comercial.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "commercial-proposal-client-v3",
+    "interior-book-v3",
+    "entrega-integral"
+   ]
+  },
+  {
+   "tipo": "dossier-tecnico",
+   "name": "Dossier técnico",
+   "file": "tipo-dossier-tecnico.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "materiales",
+    "presupuesto",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "architecture-sheet-strip",
+    "materials-furniture-book-v3",
+    "commercial-proposal-client-v3"
+   ]
+  },
+  {
+   "tipo": "interiorismo",
+   "name": "Presentación de interiorismo",
+   "file": "tipo-interiorismo.html",
+   "chapters": [
+    "portada",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "interior-book-v3",
+    "materials-furniture-book-v3"
+   ]
+  },
+  {
+   "tipo": "inmobiliaria",
+   "name": "Presentación inmobiliaria",
+   "file": "tipo-inmobiliaria.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "recorrido",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "real-estate-sheet-v3"
+   ]
+  },
+  {
+   "tipo": "obra",
+   "name": "Explicación de la obra",
+   "file": "tipo-obra.html",
+   "chapters": [
+    "portada",
+    "vivienda",
+    "obra",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "documents": [
+    "architecture-sheet-strip"
+   ]
+  }
+ ]
 }

@@ -257,7 +257,12 @@ function build(){
  if(process.env.STUDIO_B1!=='0'){const b1=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage});Object.assign(D,b1.D);Object.assign(meta,b1.meta);}
- return {D,meta};}
+ let E=null;if(process.env.STUDIO_B1!=='0'&&!S.variant&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
+  nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
+  STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage}).helpers;
+  E=require('./entrega.cjs')({S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
+  Object.assign(D,E.D);Object.assign(meta,E.meta);}
+ return {D,meta,E};}
 // ---------- Huashu design_lint, ported: same probe (read from the donor file), print floors 12 px body / 9.3 px label ----------
 const PROBE=(()=>{try{const s=fs.readFileSync(HUASHU_LINT,'utf8'),k='COLLECT_JS = r"""',i=s.indexOf(k)+k.length;return s.slice(i,s.indexOf('"""',i));}catch{return null;}})();
 function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes rotas ${f.broken.length}`);if(f.bodySmall.length)red.push(`texto de lectura bajo el mínimo ${f.bodySmall.length}: ${JSON.stringify(f.bodySmall.slice(0,2))}`);
@@ -271,7 +276,7 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
  {const pg=await browser.newPage();for(const v of S.views){const src='data:image/png;base64,'+b64(path.join(snapDir,v.file));
    const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
    views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
- const {D,meta}=build();const qa={meta,probe:!!PROBE,docs:{}};
+ const {D,meta,E}=build();const qa={meta,probe:!!PROBE,docs:{}};
  for(const [id,html] of Object.entries(D)){const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[id]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
   const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);
@@ -303,6 +308,7 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
   let lint=null;if(PROBE){const facts=await pg.evaluate(`(${PROBE})()`);lint={...judge(facts),fonts:facts.fonts,display:facts.display,body:facts.body};}
   await pg.emulateMedia({media:'print'});await pg.pdf({path:path.join(outDir,id+'.pdf'),preferCSSPageSize:true,printBackground:true});
   qa.docs[id]={...m,flow,external:ext,errors,lint};await ctx.close();}
+ if(E)qa.entregaWeb=E.writeWeb();
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
  for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'flow',JSON.stringify(v.flow),'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
  console.log('meta',JSON.stringify(meta));await browser.close();})().catch(e=>{console.error(e);process.exit(1);});

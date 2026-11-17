@@ -229,5 +229,5 @@ module.exports=function b1(C){
   withMark(giantCover('Materiales',`${S.board.floors.length} pavimentos y ${S.objects.length} objetos del modelo, ${date}`),'Portada de materiales A: palabra gigante',true),withMark(coverB(),'Portada de materiales B: campo de muestras',false),withMark(coverC(),'Portada de materiales C: axonometría',false)]);
  D['directions-b1-portrait']=doc('directions-b1-portrait','Direcciones B1, ficha inmobiliaria','realestate',[
   withMark(reSheet(),'Ficha inmobiliaria A: la vista arriba',true),withMark(reB(),'Ficha inmobiliaria B: el dibujo arriba',false),withMark(reC(),'Ficha inmobiliaria C: la cifra',false)],{size:'A4P'});}else meta['directions-b1']=S.variant?'omitidas: las direcciones se comparan sobre el proyecto canónico, no sobre variantes de prueba':'omitidas: el proyecto no tiene vistas de estancia, objetos o presupuesto que comparar';
- return {D,meta};
+ return {D,meta,helpers:{roomPlan,chapterChart,chapterTotals}};
 };
