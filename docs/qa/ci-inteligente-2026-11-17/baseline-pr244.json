@@ -1,0 +1,1316 @@
+{
+  "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+  "queriedAt": "2026-11-17T17:26:54.220Z",
+  "mode": "observe",
+  "omissionEnabled": false,
+  "runs": [
+    {
+      "runId": 44105767832,
+      "name": "Home por profesión",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:04:45Z",
+      "queueMs": 0,
+      "wallMs": 1431000,
+      "jobs": [
+        {
+          "id": 134117568758,
+          "name": "home",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:47:27Z",
+          "completedAt": "2026-11-17T15:04:45Z",
+          "queueMs": 393000,
+          "runnerMs": 1038000
+        }
+      ]
+    },
+    {
+      "runId": 44105767971,
+      "name": "R03 SCULPT complete - contract, editor, 3D (lab)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:58:53Z",
+      "queueMs": 0,
+      "wallMs": 1079000,
+      "jobs": [
+        {
+          "id": 134117569734,
+          "name": "lab-browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:45:59Z",
+          "completedAt": "2026-11-17T14:51:29Z",
+          "queueMs": 305000,
+          "runnerMs": 330000
+        },
+        {
+          "id": 134117570284,
+          "name": "pure",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:58:26Z",
+          "completedAt": "2026-11-17T14:58:52Z",
+          "queueMs": 1052000,
+          "runnerMs": 26000
+        }
+      ]
+    },
+    {
+      "runId": 44105767823,
+      "name": "Integrated QA NAV3D+furnishing+photo",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:59:28Z",
+      "queueMs": 0,
+      "wallMs": 1114000,
+      "jobs": [
+        {
+          "id": 134117568947,
+          "name": "integrated-browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:55:12Z",
+          "completedAt": "2026-11-17T14:59:27Z",
+          "queueMs": 858000,
+          "runnerMs": 255000
+        }
+      ]
+    },
+    {
+      "runId": 44105768478,
+      "name": "UX-08 live dimensions while moving furniture",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:00:47Z",
+      "queueMs": 0,
+      "wallMs": 1193000,
+      "jobs": [
+        {
+          "id": 134117570362,
+          "name": "ux08",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:59:24Z",
+          "completedAt": "2026-11-17T15:00:47Z",
+          "queueMs": 1110000,
+          "runnerMs": 83000
+        }
+      ]
+    },
+    {
+      "runId": 44105767813,
+      "name": "Photo to project V1 - MUE-01 own furniture + FOT-01 photo reform (Wave 3)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:01:13Z",
+      "queueMs": 0,
+      "wallMs": 1219000,
+      "jobs": [
+        {
+          "id": 134117570048,
+          "name": "pure",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:52:09Z",
+          "completedAt": "2026-11-17T14:52:29Z",
+          "queueMs": 675000,
+          "runnerMs": 20000
+        },
+        {
+          "id": 134117570515,
+          "name": "evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:53:27Z",
+          "completedAt": "2026-11-17T14:56:24Z",
+          "queueMs": 753000,
+          "runnerMs": 177000
+        },
+        {
+          "id": 134117570634,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:55:00Z",
+          "completedAt": "2026-11-17T15:01:12Z",
+          "queueMs": 846000,
+          "runnerMs": 372000
+        }
+      ]
+    },
+    {
+      "runId": 44105767802,
+      "name": "CAT-IA V1 - catalogue (CAT-02) and visual reform (no paid provider)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:10:39Z",
+      "queueMs": 0,
+      "wallMs": 1785000,
+      "jobs": [
+        {
+          "id": 134117568008,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:52:30Z",
+          "completedAt": "2026-11-17T15:10:38Z",
+          "queueMs": 696000,
+          "runnerMs": 1088000
+        },
+        {
+          "id": 134117568761,
+          "name": "pure",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:53:44Z",
+          "completedAt": "2026-11-17T14:54:13Z",
+          "queueMs": 770000,
+          "runnerMs": 29000
+        },
+        {
+          "id": 134117568830,
+          "name": "evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:53:16Z",
+          "completedAt": "2026-11-17T14:57:47Z",
+          "queueMs": 742000,
+          "runnerMs": 271000
+        }
+      ]
+    },
+    {
+      "runId": 44105768030,
+      "name": "OBR-02 + OBR-03 - planned 4D",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:53:16Z",
+      "queueMs": 0,
+      "wallMs": 742000,
+      "jobs": [
+        {
+          "id": 134117570409,
+          "name": "obr02",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:51:31Z",
+          "completedAt": "2026-11-17T14:53:15Z",
+          "queueMs": 637000,
+          "runnerMs": 104000
+        }
+      ]
+    },
+    {
+      "runId": 44105768042,
+      "name": "UX-12 + UX-13 smart furnishing (engine, real editor, video QA)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:53:15Z",
+      "queueMs": 0,
+      "wallMs": 741000,
+      "jobs": [
+        {
+          "id": 134117569531,
+          "name": "smart-furnishing",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:49:59Z",
+          "completedAt": "2026-11-17T14:53:14Z",
+          "queueMs": 545000,
+          "runnerMs": 195000
+        }
+      ]
+    },
+    {
+      "runId": 44105767864,
+      "name": "Project-First regressions",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:53:43Z",
+      "queueMs": 0,
+      "wallMs": 769000,
+      "jobs": [
+        {
+          "id": 134117569513,
+          "name": "project-first",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:41:32Z",
+          "completedAt": "2026-11-17T14:53:42Z",
+          "queueMs": 38000,
+          "runnerMs": 730000
+        }
+      ]
+    },
+    {
+      "runId": 44105767815,
+      "name": "Point 8C-C orthophoto context",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:53:46Z",
+      "queueMs": 0,
+      "wallMs": 772000,
+      "jobs": [
+        {
+          "id": 134117568685,
+          "name": "orthophoto",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:52:07Z",
+          "completedAt": "2026-11-17T14:53:45Z",
+          "queueMs": 673000,
+          "runnerMs": 98000
+        }
+      ]
+    },
+    {
+      "runId": 44105767979,
+      "name": "R02-A - ceiling and high items (lab + editor integration)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:55:11Z",
+      "queueMs": 0,
+      "wallMs": 857000,
+      "jobs": [
+        {
+          "id": 134117569106,
+          "name": "pure",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:46:21Z",
+          "completedAt": "2026-11-17T14:47:51Z",
+          "queueMs": 327000,
+          "runnerMs": 90000
+        },
+        {
+          "id": 134117569739,
+          "name": "lab-browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:52:15Z",
+          "completedAt": "2026-11-17T14:55:10Z",
+          "queueMs": 681000,
+          "runnerMs": 175000
+        }
+      ]
+    },
+    {
+      "runId": 44105767909,
+      "name": "UX-07 + ENT-04 - before/after lab",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:49:57Z",
+      "queueMs": 0,
+      "wallMs": 543000,
+      "jobs": [
+        {
+          "id": 134117569390,
+          "name": "ux07",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:48:53Z",
+          "completedAt": "2026-11-17T14:49:56Z",
+          "queueMs": 479000,
+          "runnerMs": 63000
+        }
+      ]
+    },
+    {
+      "runId": 44105767845,
+      "name": "ENT-01 I1B - 3D visual preview gate",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:50:26Z",
+      "queueMs": 0,
+      "wallMs": 572000,
+      "jobs": [
+        {
+          "id": 134117569186,
+          "name": "ent01-preview",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:47:57Z",
+          "completedAt": "2026-11-17T14:50:25Z",
+          "queueMs": 423000,
+          "runnerMs": 148000
+        }
+      ]
+    },
+    {
+      "runId": 44105767849,
+      "name": "Multiformat guided import",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:56:13Z",
+      "queueMs": 0,
+      "wallMs": 919000,
+      "jobs": [
+        {
+          "id": 134117568507,
+          "name": "import-and-regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:41:12Z",
+          "completedAt": "2026-11-17T14:56:12Z",
+          "queueMs": 18000,
+          "runnerMs": 900000
+        }
+      ]
+    },
+    {
+      "runId": 44105767965,
+      "name": "Point 8C-D terrain context",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:46:55Z",
+      "queueMs": 0,
+      "wallMs": 361000,
+      "jobs": [
+        {
+          "id": 134117569296,
+          "name": "terrain",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:43:35Z",
+          "completedAt": "2026-11-17T14:46:54Z",
+          "queueMs": 161000,
+          "runnerMs": 199000
+        }
+      ]
+    },
+    {
+      "runId": 44105767966,
+      "name": "Guided experience",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T14:47:34Z",
+      "queueMs": 0,
+      "wallMs": 400000,
+      "jobs": [
+        {
+          "id": 134117569543,
+          "name": "goals-and-editor",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:47:15Z",
+          "completedAt": "2026-11-17T14:47:33Z",
+          "queueMs": 381000,
+          "runnerMs": 18000
+        }
+      ]
+    },
+    {
+      "runId": 44105767942,
+      "name": "Consolidation regression",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T16:16:25Z",
+      "queueMs": 0,
+      "wallMs": 5731000,
+      "jobs": [
+        {
+          "id": 134117570124,
+          "name": "guard",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:56:14Z",
+          "completedAt": "2026-11-17T14:56:34Z",
+          "queueMs": 920000,
+          "runnerMs": 20000
+        },
+        {
+          "id": 134117570768,
+          "name": "contract",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:06:41Z",
+          "completedAt": "2026-11-17T15:17:28Z",
+          "queueMs": 1547000,
+          "runnerMs": 647000
+        },
+        {
+          "id": 134127849453,
+          "name": "historical (shell-and-details)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:09:55Z",
+          "completedAt": "2026-11-17T15:30:27Z",
+          "queueMs": 801000,
+          "runnerMs": 1232000
+        },
+        {
+          "id": 134127849465,
+          "name": "historical (presentation-a)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:12:15Z",
+          "completedAt": "2026-11-17T15:43:58Z",
+          "queueMs": 941000,
+          "runnerMs": 1903000
+        },
+        {
+          "id": 134127849503,
+          "name": "historical (presentation-b)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:27:56Z",
+          "completedAt": "2026-11-17T16:16:24Z",
+          "queueMs": 1882000,
+          "runnerMs": 2908000
+        },
+        {
+          "id": 134127849510,
+          "name": "historical (details)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:12:16Z",
+          "completedAt": "2026-11-17T15:29:22Z",
+          "queueMs": 942000,
+          "runnerMs": 1026000
+        },
+        {
+          "id": 134127849511,
+          "name": "historical (presentation-d)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:15:06Z",
+          "completedAt": "2026-11-17T16:00:36Z",
+          "queueMs": 1112000,
+          "runnerMs": 2730000
+        },
+        {
+          "id": 134127849599,
+          "name": "historical (presentation-e)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:15:14Z",
+          "completedAt": "2026-11-17T15:33:59Z",
+          "queueMs": 1120000,
+          "runnerMs": 1125000
+        },
+        {
+          "id": 134127849640,
+          "name": "historical (editor)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:29:24Z",
+          "completedAt": "2026-11-17T15:42:36Z",
+          "queueMs": 1970000,
+          "runnerMs": 792000
+        },
+        {
+          "id": 134127851674,
+          "name": "historical (presentation-c)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:30:13Z",
+          "completedAt": "2026-11-17T15:59:27Z",
+          "queueMs": 2019000,
+          "runnerMs": 1754000
+        }
+      ]
+    },
+    {
+      "runId": 44105768043,
+      "name": "Integrated browser regressions",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:34:40Z",
+      "queueMs": 0,
+      "wallMs": 3226000,
+      "jobs": [
+        {
+          "id": 134117571940,
+          "name": "recorder-focus-and-labels",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:57:37Z",
+          "completedAt": "2026-11-17T15:12:13Z",
+          "queueMs": 1002000,
+          "runnerMs": 876000
+        },
+        {
+          "id": 134117572172,
+          "name": "presentation-story",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:06:20Z",
+          "completedAt": "2026-11-17T15:34:38Z",
+          "queueMs": 1525000,
+          "runnerMs": 1698000
+        }
+      ]
+    },
+    {
+      "runId": 44105767885,
+      "name": "FT3D-8 E2 integration",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:29:45Z",
+      "queueMs": 0,
+      "wallMs": 2931000,
+      "jobs": [
+        {
+          "id": 134117569523,
+          "name": "exam-novice",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:51:34Z",
+          "completedAt": "2026-11-17T14:58:25Z",
+          "queueMs": 640000,
+          "runnerMs": 411000
+        },
+        {
+          "id": 134117569893,
+          "name": "shared-regression",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:01:28Z",
+          "completedAt": "2026-11-17T15:14:36Z",
+          "queueMs": 1234000,
+          "runnerMs": 788000
+        },
+        {
+          "id": 134117570092,
+          "name": "app-m2-gate-d",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:14:38Z",
+          "completedAt": "2026-11-17T15:24:59Z",
+          "queueMs": 2024000,
+          "runnerMs": 621000
+        },
+        {
+          "id": 134117570139,
+          "name": "pure",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:10:16Z",
+          "completedAt": "2026-11-17T15:12:14Z",
+          "queueMs": 1762000,
+          "runnerMs": 118000
+        },
+        {
+          "id": 134117570141,
+          "name": "real-3d",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:20:53Z",
+          "completedAt": "2026-11-17T15:29:44Z",
+          "queueMs": 2399000,
+          "runnerMs": 531000
+        }
+      ]
+    },
+    {
+      "runId": 44105767799,
+      "name": "FT3D-6 templates and review evidence",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:54Z",
+      "startedAt": "2026-11-17T14:40:54Z",
+      "updatedAt": "2026-11-17T15:31:31Z",
+      "queueMs": 0,
+      "wallMs": 3037000,
+      "jobs": [
+        {
+          "id": 134117569906,
+          "name": "templates-and-evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:54:15Z",
+          "completedAt": "2026-11-17T15:31:30Z",
+          "queueMs": 801000,
+          "runnerMs": 2235000
+        }
+      ]
+    },
+    {
+      "runId": 44105767609,
+      "name": "GOV-07 - WebGL resilience",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T15:10:26Z",
+      "queueMs": 0,
+      "wallMs": 1773000,
+      "jobs": [
+        {
+          "id": 134117568731,
+          "name": "gov07",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:52:41Z",
+          "completedAt": "2026-11-17T14:56:26Z",
+          "queueMs": 707000,
+          "runnerMs": 225000
+        },
+        {
+          "id": 134117568950,
+          "name": "cross-browser (webkit, webgl, 1)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:49:49Z",
+          "completedAt": "2026-11-17T14:51:32Z",
+          "queueMs": 535000,
+          "runnerMs": 103000
+        },
+        {
+          "id": 134117569040,
+          "name": "cross-browser (firefox, 1, webgl)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:09:22Z",
+          "completedAt": "2026-11-17T15:10:25Z",
+          "queueMs": 1708000,
+          "runnerMs": 63000
+        },
+        {
+          "id": 134117569179,
+          "name": "cross-browser (firefox, unavailable)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:57:20Z",
+          "completedAt": "2026-11-17T14:58:25Z",
+          "queueMs": 986000,
+          "runnerMs": 65000
+        }
+      ]
+    },
+    {
+      "runId": 44105767537,
+      "name": "E2 Hybrid V2 + Section integration",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T15:12:34Z",
+      "queueMs": 0,
+      "wallMs": 1901000,
+      "jobs": [
+        {
+          "id": 134117567215,
+          "name": "section-handover-browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:57:49Z",
+          "completedAt": "2026-11-17T15:09:20Z",
+          "queueMs": 1015000,
+          "runnerMs": 691000
+        },
+        {
+          "id": 134117567599,
+          "name": "living-browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:58:33Z",
+          "completedAt": "2026-11-17T15:12:34Z",
+          "queueMs": 1059000,
+          "runnerMs": 841000
+        },
+        {
+          "id": 134117567743,
+          "name": "living-section-combined-browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:58:33Z",
+          "completedAt": "2026-11-17T15:07:41Z",
+          "queueMs": 1059000,
+          "runnerMs": 548000
+        },
+        {
+          "id": 134117567902,
+          "name": "living-and-visit-unit",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:05:55Z",
+          "completedAt": "2026-11-17T15:06:18Z",
+          "queueMs": 1501000,
+          "runnerMs": 23000
+        }
+      ]
+    },
+    {
+      "runId": 44105767506,
+      "name": "OBR-01 - FT3D-8 reliability",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T14:52:08Z",
+      "queueMs": 0,
+      "wallMs": 675000,
+      "jobs": [
+        {
+          "id": 134117566697,
+          "name": "obr01",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:50:27Z",
+          "completedAt": "2026-11-17T14:52:07Z",
+          "queueMs": 573000,
+          "runnerMs": 100000
+        }
+      ]
+    },
+    {
+      "runId": 44105767692,
+      "name": "ENT-01 I1A - delivery API gate",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T14:55:03Z",
+      "queueMs": 0,
+      "wallMs": 850000,
+      "jobs": [
+        {
+          "id": 134117568310,
+          "name": "delivery-api",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:54:44Z",
+          "completedAt": "2026-11-17T14:55:02Z",
+          "queueMs": 830000,
+          "runnerMs": 18000
+        }
+      ]
+    },
+    {
+      "runId": 44105767759,
+      "name": "Point 6 solar and compatibility",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T14:56:07Z",
+      "queueMs": 0,
+      "wallMs": 914000,
+      "jobs": [
+        {
+          "id": 134117568382,
+          "name": "solar",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:41:01Z",
+          "completedAt": "2026-11-17T14:56:07Z",
+          "queueMs": 7000,
+          "runnerMs": 906000
+        }
+      ]
+    },
+    {
+      "runId": 44105767541,
+      "name": "Asistente IA RUBIK V2 (contracts, engine, real editor, video QA)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T14:52:06Z",
+      "queueMs": 0,
+      "wallMs": 673000,
+      "jobs": [
+        {
+          "id": 134117567403,
+          "name": "assistant-ai-v2",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:47:52Z",
+          "completedAt": "2026-11-17T14:52:06Z",
+          "queueMs": 418000,
+          "runnerMs": 254000
+        }
+      ]
+    },
+    {
+      "runId": 44105767512,
+      "name": "NAV3D V1 - professional 3D navigation (Wave 2, cut 2a)",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T15:15:13Z",
+      "queueMs": 0,
+      "wallMs": 2060000,
+      "jobs": [
+        {
+          "id": 134117568883,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:07:43Z",
+          "completedAt": "2026-11-17T15:14:10Z",
+          "queueMs": 1609000,
+          "runnerMs": 387000
+        },
+        {
+          "id": 134117569131,
+          "name": "video",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:10:40Z",
+          "completedAt": "2026-11-17T15:13:52Z",
+          "queueMs": 1786000,
+          "runnerMs": 192000
+        },
+        {
+          "id": 134117569140,
+          "name": "walk-controls-vs-master",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:56:35Z",
+          "completedAt": "2026-11-17T15:15:12Z",
+          "queueMs": 941000,
+          "runnerMs": 1117000
+        },
+        {
+          "id": 134117569236,
+          "name": "pure",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:14:46Z",
+          "completedAt": "2026-11-17T15:15:05Z",
+          "queueMs": 2032000,
+          "runnerMs": 19000
+        }
+      ]
+    },
+    {
+      "runId": 44105767616,
+      "name": "E2 Presentation UX stability",
+      "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-17T14:40:53Z",
+      "startedAt": "2026-11-17T14:40:53Z",
+      "updatedAt": "2026-11-17T16:37:18Z",
+      "queueMs": 0,
+      "wallMs": 6985000,
+      "jobs": [
+        {
+          "id": 134117569137,
+          "name": "ux-stability-browser (whole story 1280x800$)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:55:57Z",
+          "completedAt": "2026-11-17T14:59:22Z",
+          "queueMs": 903000,
+          "runnerMs": 205000
+        },
+        {
+          "id": 134117569518,
+          "name": "ux-stability-browser (Dibujo vivo» in the new panel 390x844)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:56:27Z",
+          "completedAt": "2026-11-17T14:58:32Z",
+          "queueMs": 933000,
+          "runnerMs": 125000
+        },
+        {
+          "id": 134117569528,
+          "name": "presentation-regressions-base (presentation-reveal)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T14:56:08Z",
+          "completedAt": "2026-11-17T15:09:44Z",
+          "queueMs": 914000,
+          "runnerMs": 816000
+        },
+        {
+          "id": 134117569627,
+          "name": "presentation-regressions-base (presentation-contact)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:14:11Z",
+          "completedAt": "2026-11-17T15:20:17Z",
+          "queueMs": 1997000,
+          "runnerMs": 366000
+        },
+        {
+          "id": 134117569683,
+          "name": "presentation-regressions-base (material-detail)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:09:06Z",
+          "completedAt": "2026-11-17T15:20:52Z",
+          "queueMs": 1692000,
+          "runnerMs": 706000
+        },
+        {
+          "id": 134117569712,
+          "name": "presentation-regressions (presentation)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:10:27Z",
+          "completedAt": "2026-11-17T16:03:33Z",
+          "queueMs": 1773000,
+          "runnerMs": 3186000
+        },
+        {
+          "id": 134117569723,
+          "name": "presentation-regressions-base (presentation-route)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:20:19Z",
+          "completedAt": "2026-11-17T15:38:21Z",
+          "queueMs": 2365000,
+          "runnerMs": 1082000
+        },
+        {
+          "id": 134117569804,
+          "name": "presentation-regressions (brand)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:17:32Z",
+          "completedAt": "2026-11-17T15:21:34Z",
+          "queueMs": 2198000,
+          "runnerMs": 242000
+        },
+        {
+          "id": 134117569808,
+          "name": "presentation-regressions-base (brand)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:44:00Z",
+          "completedAt": "2026-11-17T15:47:25Z",
+          "queueMs": 3786000,
+          "runnerMs": 205000
+        },
+        {
+          "id": 134117569843,
+          "name": "presentation-regressions-base (presentation-light)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:23:33Z",
+          "completedAt": "2026-11-17T15:42:58Z",
+          "queueMs": 2559000,
+          "runnerMs": 1165000
+        },
+        {
+          "id": 134117569848,
+          "name": "ux-stability-browser (whole story 1440x900)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:26:30Z",
+          "completedAt": "2026-11-17T15:30:11Z",
+          "queueMs": 2736000,
+          "runnerMs": 221000
+        },
+        {
+          "id": 134117569894,
+          "name": "ux-stability-browser (whole story 390x844$)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:25:48Z",
+          "completedAt": "2026-11-17T15:27:55Z",
+          "queueMs": 2694000,
+          "runnerMs": 127000
+        },
+        {
+          "id": 134117569896,
+          "name": "ux-stability-browser (whole story 844x390)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:34:40Z",
+          "completedAt": "2026-11-17T15:37:27Z",
+          "queueMs": 3226000,
+          "runnerMs": 167000
+        },
+        {
+          "id": 134117569905,
+          "name": "ux-stability-browser (Dibujo vivo» in the new panel 1280x800)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:18:13Z",
+          "completedAt": "2026-11-17T15:25:47Z",
+          "queueMs": 2239000,
+          "runnerMs": 454000
+        },
+        {
+          "id": 134117569916,
+          "name": "ux-stability-browser (reduced motion)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:04:10Z",
+          "completedAt": "2026-11-17T16:08:13Z",
+          "queueMs": 4996000,
+          "runnerMs": 243000
+        },
+        {
+          "id": 134117569937,
+          "name": "presentation-regressions-base (presentation-visit)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:45:43Z",
+          "completedAt": "2026-11-17T15:54:21Z",
+          "queueMs": 3889000,
+          "runnerMs": 518000
+        },
+        {
+          "id": 134117570030,
+          "name": "presentation-regressions-base (presentation-visit-handover)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:43:23Z",
+          "completedAt": "2026-11-17T15:52:53Z",
+          "queueMs": 3749000,
+          "runnerMs": 570000
+        },
+        {
+          "id": 134117570058,
+          "name": "presentation-regressions (presentation-route)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:38:23Z",
+          "completedAt": "2026-11-17T15:52:57Z",
+          "queueMs": 3449000,
+          "runnerMs": 874000
+        },
+        {
+          "id": 134117570069,
+          "name": "presentation-regressions-base (presentation)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:44:25Z",
+          "completedAt": "2026-11-17T16:37:17Z",
+          "queueMs": 3811000,
+          "runnerMs": 3172000
+        },
+        {
+          "id": 134117570118,
+          "name": "presentation-regressions (presentation-reveal)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:52:59Z",
+          "completedAt": "2026-11-17T16:04:08Z",
+          "queueMs": 4325000,
+          "runnerMs": 669000
+        },
+        {
+          "id": 134117570227,
+          "name": "presentation-regressions (presentation-section)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:38:57Z",
+          "completedAt": "2026-11-17T15:55:34Z",
+          "queueMs": 3483000,
+          "runnerMs": 997000
+        },
+        {
+          "id": 134117570238,
+          "name": "presentation-regressions (presentation-overview)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:36:36Z",
+          "completedAt": "2026-11-17T15:38:56Z",
+          "queueMs": 3342000,
+          "runnerMs": 140000
+        },
+        {
+          "id": 134117570260,
+          "name": "presentation-regressions (presentation-batch)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:57:38Z",
+          "completedAt": "2026-11-17T16:05:19Z",
+          "queueMs": 4604000,
+          "runnerMs": 461000
+        },
+        {
+          "id": 134117570267,
+          "name": "presentation-regressions-base (presentation-batch)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:03:35Z",
+          "completedAt": "2026-11-17T16:09:54Z",
+          "queueMs": 4961000,
+          "runnerMs": 379000
+        },
+        {
+          "id": 134117570283,
+          "name": "presentation-regressions (presentation-light)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:53:44Z",
+          "completedAt": "2026-11-17T16:13:08Z",
+          "queueMs": 4370000,
+          "runnerMs": 1164000
+        },
+        {
+          "id": 134117570301,
+          "name": "presentation-regressions (presentation-axon)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:42:38Z",
+          "completedAt": "2026-11-17T15:53:50Z",
+          "queueMs": 3704000,
+          "runnerMs": 672000
+        },
+        {
+          "id": 134117570347,
+          "name": "presentation-regressions (presentation-minimap)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:47:27Z",
+          "completedAt": "2026-11-17T15:57:37Z",
+          "queueMs": 3993000,
+          "runnerMs": 610000
+        },
+        {
+          "id": 134117570430,
+          "name": "presentation-regressions (presentation-visit)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:42:59Z",
+          "completedAt": "2026-11-17T15:52:09Z",
+          "queueMs": 3725000,
+          "runnerMs": 550000
+        },
+        {
+          "id": 134117570434,
+          "name": "presentation-regressions (presentation-framing)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:48:24Z",
+          "completedAt": "2026-11-17T16:00:06Z",
+          "queueMs": 4050000,
+          "runnerMs": 702000
+        },
+        {
+          "id": 134117570450,
+          "name": "presentation-regressions (presentation-elevation)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T15:53:52Z",
+          "completedAt": "2026-11-17T16:13:47Z",
+          "queueMs": 4378000,
+          "runnerMs": 1195000
+        },
+        {
+          "id": 134117570478,
+          "name": "presentation-regressions (building-presentation)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:00:38Z",
+          "completedAt": "2026-11-17T16:11:37Z",
+          "queueMs": 4784000,
+          "runnerMs": 659000
+        },
+        {
+          "id": 134117570639,
+          "name": "presentation-regressions (material-detail)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:06:07Z",
+          "completedAt": "2026-11-17T16:13:37Z",
+          "queueMs": 5113000,
+          "runnerMs": 450000
+        },
+        {
+          "id": 134117570705,
+          "name": "presentation-regressions (presentation-contact)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:05:20Z",
+          "completedAt": "2026-11-17T16:13:42Z",
+          "queueMs": 5066000,
+          "runnerMs": 502000
+        },
+        {
+          "id": 134117570754,
+          "name": "presentation-regressions (delivery-image)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:06:23Z",
+          "completedAt": "2026-11-17T16:16:07Z",
+          "queueMs": 5129000,
+          "runnerMs": 584000
+        },
+        {
+          "id": 134117570761,
+          "name": "presentation-regressions-base (presentation-minimap)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-17T16:03:05Z",
+          "completedAt": "2026-11-17T16:11:07Z",
+          "queueMs": 4931000,
+          "runnerMs": 482000
+        }
+      ]
+    }
+  ],
+  "totalJobs": 91,
+  "completedJobRunnerMinutes": 967.2666666666667,
+  "measuredAvoidedJobs": 0,
+  "measuredSavedRunnerMinutes": 0,
+  "billedCost": null,
+  "limitations": "API elapsed job durations are not billed minutes. Pending runs incomplete; no claim of before/after equivalence or reduction in observation mode. Workflow durations overlap; their sum is not PR wall time."
+}

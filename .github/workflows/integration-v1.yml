@@ -4,6 +4,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - index.html
@@ -24,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
@@ -61,6 +62,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: combined-qa-${{ github.event.pull_request.head.sha }}
+          name: combined-qa-${{ github.event.pull_request.head.sha || github.sha }}
           path: qa-results/integration-225-227
           if-no-files-found: error
