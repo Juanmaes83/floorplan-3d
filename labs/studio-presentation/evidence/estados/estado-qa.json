@@ -1,0 +1,268 @@
+{
+ "schema": "rubik-lab-estado-qa/1",
+ "fecha": "2026-11-17T19:48:39.037Z",
+ "total": 23,
+ "pass": 23,
+ "casos": [
+  {
+   "id": "E-exportado",
+   "ok": true,
+   "detalle": "{\n \"receta\": \"RP05\",\n \"exportado\": true,\n \"estado\": \"emitible\",\n \"codigo\": 0,\n \"zip\": \"cand-a.zip\",\n \"motivo\": []\n}\n"
+  },
+  {
+   "id": "E-sin-preparar-no-verifica",
+   "ok": true,
+   "detalle": {
+    "accion": "verificar",
+    "hecho": false,
+    "motivo": "No hay candidato preparado."
+   }
+  },
+  {
+   "id": "E-preparado",
+   "ok": true,
+   "detalle": {
+    "accion": "preparar",
+    "hecho": true,
+    "id": "cand-a",
+    "estado": "preparado",
+    "sustituye": null
+   }
+  },
+  {
+   "id": "E-congela-receta-y-huellas",
+   "ok": true,
+   "detalle": {
+    "zipSha256": "c86ea10f0f4a9b48492209cca160e1f932af54faecd19360a0d809d828cdfe78",
+    "manifestSha256": "eecb3f25a3d34f96e8782e950b8f23e71d7c6ec47920da7ee2b5252818d744a1",
+    "seleccionSha256": "78b591963d0b2389ceb6174fd1b0819df9951bb30ebf1d12dc9bf66762c77505",
+    "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+    "registroSha256": "0d4dcd7e48777bfa3a11849a2643313a35b9238a578fb80c05ab5e815b22a9b9",
+    "idioma": "es",
+    "modo": "cliente",
+    "receta": {
+     "key": "RP05",
+     "version": 1,
+     "catalogo": "rubik-lab-recetas/1",
+     "estado": "emitible"
+    }
+   }
+  },
+  {
+   "id": "E-registro-fuera-del-zip",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "id": "E-no-se-reprepara",
+   "ok": true,
+   "detalle": {
+    "accion": "preparar",
+    "hecho": false,
+    "motivo": "Este candidato ya está preparado. Un cambio exige un candidato nuevo; el anterior no se modifica."
+   }
+  },
+  {
+   "id": "E-verificado",
+   "ok": true,
+   "detalle": {
+    "accion": "verificar",
+    "hecho": true,
+    "id": "cand-a",
+    "estado": "verificado",
+    "integridad": "íntegro",
+    "vigencia": "vigente",
+    "motivo": []
+   }
+  },
+  {
+   "id": "E-nunca-firmar",
+   "ok": true,
+   "detalle": {
+    "accion": "firmar",
+    "hecho": false,
+    "motivo": "«firmar» exige hechos y autorizaciones separados (persona, documento, fecha). No se infiere de una descarga, una huella, un aviso reconocido ni un QA, y esta misión no lo autoriza."
+   }
+  },
+  {
+   "id": "E-nunca-aceptar",
+   "ok": true,
+   "detalle": {
+    "accion": "aceptar",
+    "hecho": false,
+    "motivo": "«aceptar» exige hechos y autorizaciones separados (persona, documento, fecha). No se infiere de una descarga, una huella, un aviso reconocido ni un QA, y esta misión no lo autoriza."
+   }
+  },
+  {
+   "id": "E-nunca-certificar",
+   "ok": true,
+   "detalle": {
+    "accion": "certificar",
+    "hecho": false,
+    "motivo": "«certificar» exige hechos y autorizaciones separados (persona, documento, fecha). No se infiere de una descarga, una huella, un aviso reconocido ni un QA, y esta misión no lo autoriza."
+   }
+  },
+  {
+   "id": "E-nunca-ejecutar",
+   "ok": true,
+   "detalle": {
+    "accion": "ejecutar",
+    "hecho": false,
+    "motivo": "«ejecutar» exige hechos y autorizaciones separados (persona, documento, fecha). No se infiere de una descarga, una huella, un aviso reconocido ni un QA, y esta misión no lo autoriza."
+   }
+  },
+  {
+   "id": "E-emision-real-rechazada",
+   "ok": true,
+   "detalle": {
+    "accion": "emitir",
+    "hecho": false,
+    "motivo": "La emisión real a un cliente no está autorizada en esta misión. Solo existe la simulación rotulada (--simulacion \"motivo\")."
+   }
+  },
+  {
+   "id": "E-emitido-simulado-rotulado",
+   "ok": true,
+   "detalle": {
+    "accion": "emitir",
+    "hecho": true,
+    "id": "cand-a",
+    "estado": "emitido-simulado",
+    "rotulo": "SIMULACIÓN DE LABORATORIO"
+   }
+  },
+  {
+   "id": "E-doble-emision-rechazada",
+   "ok": true,
+   "detalle": {
+    "accion": "emitir",
+    "hecho": false,
+    "motivo": "Este candidato ya tiene una emisión (simulada). Otra emisión exige un candidato nuevo que lo sustituya."
+   }
+  },
+  {
+   "id": "E-historial",
+   "ok": true,
+   "detalle": [
+    "preparado",
+    "verificado",
+    "emitido-simulado"
+   ]
+  },
+  {
+   "id": "E-integro-pero-desactualizado",
+   "ok": true,
+   "detalle": {
+    "accion": "verificar",
+    "hecho": false,
+    "id": "cand-b",
+    "estado": "verificado-desactualizado",
+    "integridad": "íntegro",
+    "vigencia": "desactualizado",
+    "motivo": [
+     "Íntegro, pero las fuentes han cambiado desde que se preparó: no es la versión vigente. Preparar un candidato nuevo."
+    ]
+   }
+  },
+  {
+   "id": "E-desactualizado-no-se-emite",
+   "ok": true,
+   "detalle": {
+    "accion": "emitir",
+    "hecho": false,
+    "estado": "verificado-desactualizado",
+    "motivo": [
+     "Solo se emite un candidato verificado y vigente.",
+     "Íntegro, pero las fuentes han cambiado desde que se preparó: no es la versión vigente. Preparar un candidato nuevo."
+    ]
+   }
+  },
+  {
+   "id": "E-zip-alterado-invalido",
+   "ok": true,
+   "detalle": {
+    "accion": "verificar",
+    "hecho": false,
+    "id": "cand-c",
+    "estado": "invalido",
+    "integridad": "alterado",
+    "vigencia": "vigente",
+    "motivo": [
+     "Los bytes no coinciden con lo congelado o el verificador los rechaza.",
+     "El ZIP no coincide con el resumen externo (huella distinta)"
+    ]
+   }
+  },
+  {
+   "id": "E-terminos-alterados-invalido",
+   "ok": true,
+   "detalle": {
+    "accion": "verificar",
+    "hecho": false,
+    "id": "cand-d",
+    "estado": "invalido",
+    "integridad": "alterado",
+    "vigencia": "vigente",
+    "motivo": [
+     "Los bytes no coinciden con lo congelado o el verificador los rechaza."
+    ]
+   }
+  },
+  {
+   "id": "E-sustituye",
+   "ok": true,
+   "detalle": {
+    "accion": "sustituir",
+    "hecho": true,
+    "id": "cand-e",
+    "estado": "preparado",
+    "sustituye": "cand-a"
+   }
+  },
+  {
+   "id": "E-anterior-intacto-y-enlazado",
+   "ok": true,
+   "detalle": [
+    {
+     "estado": "preparado",
+     "fecha": "2026-11-17T19:47:47.215Z"
+    },
+    {
+     "estado": "verificado",
+     "fecha": "2026-11-17T19:47:47.443Z",
+     "integra": true,
+     "vigente": true
+    },
+    {
+     "estado": "emitido-simulado",
+     "fecha": "2026-11-17T19:47:47.788Z",
+     "rotulo": "SIMULACIÓN DE LABORATORIO: no se ha enviado nada a ningún cliente; no hay aceptación ni firma.",
+     "motivo": "QA de laboratorio"
+    },
+    {
+     "estado": "sustituido",
+     "fecha": "2026-11-17T19:48:28.888Z",
+     "por": "cand-e"
+    }
+   ]
+  },
+  {
+   "id": "E-doble-sustitucion-rechazada",
+   "ok": true,
+   "detalle": {
+    "accion": "sustituir",
+    "hecho": false,
+    "motivo": "Este candidato ya está preparado. Un cambio exige un candidato nuevo; el anterior no se modifica."
+   }
+  },
+  {
+   "id": "E-borrador-no-se-emite",
+   "ok": true,
+   "detalle": {
+    "accion": "emitir",
+    "hecho": false,
+    "motivo": "Un borrador no se emite."
+   }
+  }
+ ]
+}

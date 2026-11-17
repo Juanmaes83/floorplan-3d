@@ -1,0 +1,910 @@
+[
+ {
+  "key": "RP01",
+  "es": "Alcance, servicios y honorarios",
+  "en": "Scope, services and fees",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "AR",
+   "AT",
+   "IN",
+   "RE"
+  ],
+  "familia": "comercial",
+  "tipo": "Commercial Proposal",
+  "modulos": [
+   "01",
+   "02",
+   "08",
+   "10"
+  ],
+  "corte": "E3",
+  "estado": "emitible-parcial",
+  "modalidad": "propuesta-comercial",
+  "capitulos": [
+   "concepto",
+   "presupuesto",
+   "decisiones",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "commercial-proposal-client-v3"
+  ],
+  "falta": [],
+  "incompleta": [
+   "alcanceServicios",
+   "honorarios",
+   "exclusiones",
+   "validezOferta"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Alcance, fases y entregables del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+   "Alcance parcial: falta Honorarios aportados por fase. El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
+   "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+   "Alcance parcial: falta Validez de la oferta. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP02",
+  "es": "Viabilidad y estado actual",
+  "en": "Feasibility and current state",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "AR",
+   "AT",
+   "IM"
+  ],
+  "familia": "tecnica",
+  "tipo": "Architecture Book",
+  "modulos": [
+   "01",
+   "03",
+   "06",
+   "10"
+  ],
+  "corte": "E3/E4",
+  "estado": "emitible-parcial",
+  "modalidad": "dossier-tecnico",
+  "capitulos": [
+   "vivienda",
+   "estancias",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "architecture-book",
+   "architecture-sheet-strip"
+  ],
+  "falta": [],
+  "incompleta": [
+   "revisionAnterior",
+   "fotosAportadas"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Revisión anterior vinculada y comparable (estado actual). El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+   "Alcance parcial: falta Fotos del estado actual aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP03",
+  "es": "Anteproyecto integral y opciones",
+  "en": "Integrated outline design and options",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "AR",
+   "IN",
+   "RE"
+  ],
+  "familia": "editorial",
+  "tipo": "Interior Design Book",
+  "modulos": [
+   "01",
+   "02",
+   "03",
+   "04",
+   "05",
+   "06",
+   "07",
+   "08",
+   "09",
+   "10"
+  ],
+  "corte": "E2/E3",
+  "estado": "emitible-parcial",
+  "modalidad": "integral",
+  "capitulos": [
+   "concepto",
+   "vivienda",
+   "dibujo",
+   "estancias",
+   "materiales",
+   "presupuesto",
+   "obra",
+   "recorrido",
+   "decisiones",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "interior-book-v3",
+   "materials-furniture-book-v3",
+   "commercial-proposal-client-v3",
+   "real-estate-sheet-v3",
+   "architecture-book",
+   "architecture-sheet-strip",
+   "entrega-integral"
+  ],
+  "falta": [],
+  "incompleta": [
+   "variantesGuardadas"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Variantes guardadas del proyecto (opciones). El snapshot es un único proyecto: no se presenta como si fueran dos opciones."
+  ]
+ },
+ {
+  "key": "RP04",
+  "es": "Vivienda y potencial de reforma",
+  "en": "Home and renovation potential",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "IM",
+   "RE"
+  ],
+  "familia": "comercial",
+  "tipo": "Real Estate Presentation",
+  "modulos": [
+   "01",
+   "03",
+   "04",
+   "05",
+   "06",
+   "08",
+   "10"
+  ],
+  "corte": "E3",
+  "estado": "emitible-parcial",
+  "modalidad": "inmobiliaria",
+  "capitulos": [
+   "vivienda",
+   "dibujo",
+   "estancias",
+   "presupuesto",
+   "recorrido",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "real-estate-sheet-v3"
+  ],
+  "falta": [],
+  "incompleta": [
+   "precioInmueble",
+   "impuestosCompra",
+   "revisionAnterior"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Precio del inmueble aportado. Precio no consta (no es cero).",
+   "Alcance parcial: falta Impuestos de compra aportados. No constan: no se infieren del precio.",
+   "Alcance parcial: falta Revisión anterior vinculada y comparable (estado actual). El snapshot tiene una sola revisión: no hay estado actual ni antes/después."
+  ]
+ },
+ {
+  "key": "RP05",
+  "es": "Estimación económica inicial",
+  "en": "Initial cost estimate",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "AT",
+   "RE",
+   "CO"
+  ],
+  "familia": "comercial",
+  "tipo": "Commercial Proposal",
+  "modulos": [
+   "01",
+   "08",
+   "10"
+  ],
+  "corte": "E3",
+  "estado": "emitible",
+  "modalidad": "propuesta-comercial",
+  "capitulos": [
+   "presupuesto",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "commercial-proposal-client-v3"
+  ],
+  "falta": [],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": []
+ },
+ {
+  "key": "RP06",
+  "es": "Concepto, moodboard y opciones",
+  "en": "Concept, moodboard and options",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "IN",
+   "AR"
+  ],
+  "familia": "editorial",
+  "tipo": "Interior Design Book",
+  "modulos": [
+   "01",
+   "02",
+   "04",
+   "06",
+   "07",
+   "10"
+  ],
+  "corte": "E3/E4",
+  "estado": "emitible-parcial",
+  "modalidad": "interiorismo",
+  "capitulos": [
+   "concepto",
+   "dibujo",
+   "estancias",
+   "materiales",
+   "decisiones",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "interior-book-v3",
+   "materials-furniture-book-v3"
+  ],
+  "falta": [],
+  "incompleta": [
+   "referenciasMoodboard"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Referencias de moodboard con derechos. Sin referencias aportadas: no se buscan ni se generan imágenes."
+  ]
+ },
+ {
+  "key": "RP07",
+  "es": "Ficha comercial de vivienda",
+  "en": "Home sales sheet",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "IM"
+  ],
+  "familia": "comercial",
+  "tipo": "Real Estate Presentation",
+  "modulos": [
+   "01",
+   "03",
+   "05",
+   "06",
+   "10"
+  ],
+  "corte": "E3",
+  "estado": "emitible",
+  "modalidad": "inmobiliaria",
+  "capitulos": [
+   "vivienda",
+   "dibujo",
+   "estancias",
+   "recorrido",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "real-estate-sheet-v3-sin-presupuesto"
+  ],
+  "falta": [],
+  "incompleta": [],
+  "omitidas": [
+   "norte",
+   "revisionAnterior"
+  ],
+  "motivo": []
+ },
+ {
+  "key": "RP08",
+  "es": "Oferta técnica y planificación",
+  "en": "Technical offer and planning",
+  "nivel": "L",
+  "fases": [
+   "A"
+  ],
+  "perfiles": [
+   "CO",
+   "RE"
+  ],
+  "familia": "comercial",
+  "tipo": "Commercial Proposal",
+  "modulos": [
+   "01",
+   "08",
+   "09",
+   "10"
+  ],
+  "corte": "E3/E4",
+  "estado": "emitible-parcial",
+  "modalidad": "obra",
+  "capitulos": [
+   "vivienda",
+   "obra",
+   "decisiones",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "architecture-sheet-strip"
+  ],
+  "falta": [],
+  "incompleta": [
+   "ofertaTecnica",
+   "exclusiones",
+   "vinculoPlanPresupuesto"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Oferta técnica aportada. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+   "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+   "Alcance parcial: falta Vínculo acreditado entre plan y presupuesto. El plan de ejemplo no tiene partidas vinculadas: la economía del plan no se puede mostrar."
+  ]
+ },
+ {
+  "key": "RP09",
+  "es": "Architecture Book y juego de láminas",
+  "en": "Architecture Book and sheet set",
+  "nivel": "L",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "AR",
+   "AT",
+   "RE"
+  ],
+  "familia": "tecnica",
+  "tipo": "Architecture Book",
+  "modulos": [
+   "01",
+   "03",
+   "04",
+   "05",
+   "06",
+   "07",
+   "10"
+  ],
+  "corte": "E4",
+  "estado": "emitible-parcial",
+  "modalidad": "dossier-tecnico",
+  "capitulos": [
+   "vivienda",
+   "estancias",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "architecture-book",
+   "architecture-sheet-strip"
+  ],
+  "falta": [],
+  "incompleta": [
+   "revisionAnterior",
+   "dimensionesHuecos"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Revisión anterior vinculada y comparable (estado actual). El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+   "Alcance parcial: falta Dimensiones completas de huecos (ancho, alto, sentido). Ancho en 22 de 22 huecos; alto en 0. Sin alto no hay hoja de carpintería."
+  ]
+ },
+ {
+  "key": "RP10",
+  "es": "Memoria descriptiva y superficies",
+  "en": "Descriptive report and areas",
+  "nivel": "L",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "AR",
+   "AT"
+  ],
+  "familia": "tecnica",
+  "tipo": "Architecture Book",
+  "modulos": [
+   "01",
+   "02",
+   "03",
+   "04",
+   "10"
+  ],
+  "corte": "E4",
+  "estado": "emitible-parcial",
+  "modalidad": "dossier-tecnico",
+  "capitulos": [
+   "concepto",
+   "vivienda",
+   "estancias",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "architecture-book"
+  ],
+  "falta": [],
+  "incompleta": [
+   "revisionAnterior"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Revisión anterior vinculada y comparable (estado actual). El snapshot tiene una sola revisión: no hay estado actual ni antes/después."
+  ]
+ },
+ {
+  "key": "RP11",
+  "es": "Libro FF&E y fichas de activos",
+  "en": "FF&E book and asset sheets",
+  "nivel": "L",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "IN",
+   "AR",
+   "IM"
+  ],
+  "familia": "editorial",
+  "tipo": "Materials & Furniture Book",
+  "modulos": [
+   "01",
+   "06",
+   "07",
+   "10"
+  ],
+  "corte": "E4",
+  "estado": "emitible-parcial",
+  "modalidad": "interiorismo",
+  "capitulos": [
+   "estancias",
+   "materiales",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "materials-furniture-book-v3"
+  ],
+  "falta": [],
+  "incompleta": [
+   "catalogoProductos",
+   "preciosVerificados"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Referencias de producto acreditadas (SKU, marca). Ninguno de los 46 objetos tiene referencia de catálogo: son genéricos del modelo.",
+   "Alcance parcial: falta Precios de producto verificados. Sin precios de producto: «no valorado», nunca cero."
+  ]
+ },
+ {
+  "key": "RP12",
+  "es": "Mediciones y presupuesto detallado",
+  "en": "Quantities and detailed budget",
+  "nivel": "L",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "AT",
+   "AR",
+   "RE",
+   "CO"
+  ],
+  "familia": "comercial",
+  "tipo": "Commercial Proposal",
+  "modulos": [
+   "01",
+   "03",
+   "08",
+   "10"
+  ],
+  "corte": "E3/E5",
+  "estado": "emitible-parcial",
+  "modalidad": "dossier-tecnico",
+  "capitulos": [
+   "vivienda",
+   "presupuesto",
+   "documentos",
+   "procedencia"
+  ],
+  "documentos": [
+   "commercial-proposal-client-v3"
+  ],
+  "falta": [],
+  "incompleta": [
+   "presupuestoRevisado"
+  ],
+  "omitidas": [],
+  "motivo": [
+   "Alcance parcial: falta Presupuesto revisado por el estudio. 11 de 11 partidas sin revisar por el estudio."
+  ]
+ },
+ {
+  "key": "RP13",
+  "es": "Comparativo de ofertas homologadas",
+  "en": "Comparison of standardised offers",
+  "nivel": "C",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "AT",
+   "CO",
+   "RE"
+  ],
+  "familia": "comercial",
+  "tipo": "Commercial Proposal",
+  "modulos": [
+   "01",
+   "08",
+   "10"
+  ],
+  "corte": "corte económico específico",
+  "estado": "no-elegible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "ofertasIndependientes"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+   "Falta: Ofertas independientes comparables. Sin ofertas aportadas: no se compara el presupuesto consigo mismo."
+  ]
+ },
+ {
+  "key": "RP14",
+  "es": "Orden de cambio de diseño u obra",
+  "en": "Design or works change order",
+  "nivel": "C",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "RE",
+   "AR",
+   "AT",
+   "IN",
+   "CO"
+  ],
+  "familia": "tecnica",
+  "tipo": "Architecture Book",
+  "modulos": [
+   "01",
+   "03",
+   "04",
+   "05",
+   "08",
+   "09",
+   "10"
+  ],
+  "corte": "E2/E3 (ENT-04)",
+  "estado": "no-elegible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "revisionAnterior",
+   "motivoCambio"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Contrato de laboratorio (E2/E3 (ENT-04)): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+   "Falta: Revisión anterior vinculada y comparable (estado actual). El snapshot tiene una sola revisión: no hay estado actual ni antes/después.",
+   "Falta: Motivo del cambio atribuido. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP15",
+  "es": "Seguimiento y certificaciones de obra",
+  "en": "Works monitoring and progress certificates",
+  "nivel": "C",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "CO",
+   "AT",
+   "RE",
+   "IM"
+  ],
+  "familia": "tecnica",
+  "tipo": "Architecture Book",
+  "modulos": [
+   "01",
+   "05",
+   "06",
+   "08",
+   "09",
+   "10"
+  ],
+  "corte": "E3/E6 + OBR",
+  "estado": "no-elegible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "observacionesObra",
+   "certificadosObra"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Contrato de laboratorio (E3/E6 + OBR): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+   "Falta: Observaciones de obra reales (fecha, autor). No hay registros de obra: una proyección no es avance.",
+   "Falta: Certificaciones de obra aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP16",
+  "es": "Visita, actas, RFI y decisiones",
+  "en": "Site visit, minutes, RFIs and decisions",
+  "nivel": "F",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "AR",
+   "AT",
+   "CO",
+   "RE"
+  ],
+  "familia": "tecnica",
+  "tipo": null,
+  "modulos": [
+   "01",
+   "06",
+   "09",
+   "10"
+  ],
+  "corte": "OBR futuro",
+  "estado": "no-disponible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "actasVisita"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Función futura (OBR futuro): solo contrato y prueba de indisponibilidad.",
+   "Falta: Actas de visita, RFI y decisiones. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP17",
+  "es": "Personalización y especificación técnica",
+  "en": "Customisation and technical specification",
+  "nivel": "C",
+  "fases": [
+   "D"
+  ],
+  "perfiles": [
+   "IN",
+   "AR",
+   "IM"
+  ],
+  "familia": "editorial",
+  "tipo": "Materials & Furniture Book",
+  "modulos": [
+   "01",
+   "04",
+   "06",
+   "07",
+   "10"
+  ],
+  "corte": "E4 (ENT-05)",
+  "estado": "no-elegible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "catalogoProductos",
+   "especificacionValidada"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Contrato de laboratorio (E4 (ENT-05)): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+   "Falta: Referencias de producto acreditadas (SKU, marca). Ninguno de los 46 objetos tiene referencia de catálogo: son genéricos del modelo.",
+   "Falta: Especificación de ejecución validada por técnico competente. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP18",
+  "es": "Recepción y remates",
+  "en": "Handover and punch list",
+  "nivel": "F",
+  "fases": [
+   "P"
+  ],
+  "perfiles": [
+   "RE",
+   "CO",
+   "AT"
+  ],
+  "familia": "tecnica",
+  "tipo": null,
+  "modulos": [
+   "01",
+   "06",
+   "09",
+   "10"
+  ],
+  "corte": "OBR futuro",
+  "estado": "no-disponible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "punchList"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Función futura (OBR futuro): solo contrato y prueba de indisponibilidad.",
+   "Falta: Lista de remates observada. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP19",
+  "es": "As-built y manual de mantenimiento",
+  "en": "As-built and maintenance manual",
+  "nivel": "F",
+  "fases": [
+   "P"
+  ],
+  "perfiles": [
+   "AR",
+   "AT",
+   "CO",
+   "RE"
+  ],
+  "familia": "tecnica",
+  "tipo": null,
+  "modulos": [
+   "01",
+   "03",
+   "07",
+   "10"
+  ],
+  "corte": "E6 / alcance futuro",
+  "estado": "no-disponible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "revisionEjecutada",
+   "manualesGarantias"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Función futura (E6 / alcance futuro): solo contrato y prueba de indisponibilidad.",
+   "Falta: Revisión ejecutada y validada (as-built). El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+   "Falta: Manuales y garantías aportados. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+  ]
+ },
+ {
+  "key": "RP20",
+  "es": "Liquidación, garantías y entrega de llaves",
+  "en": "Final account, warranties and key handover",
+  "nivel": "F",
+  "fases": [
+   "P"
+  ],
+  "perfiles": [
+   "CO",
+   "AT",
+   "RE",
+   "IM"
+  ],
+  "familia": "comercial",
+  "tipo": null,
+  "modulos": [
+   "01",
+   "07",
+   "08",
+   "10"
+  ],
+  "corte": "corte futuro",
+  "estado": "no-disponible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "costeLiquidado",
+   "manualesGarantias",
+   "actasEntrega"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Función futura (corte futuro): solo contrato y prueba de indisponibilidad.",
+   "Falta: Coste real liquidado. No se infiere del presupuesto.",
+   "Falta: Manuales y garantías aportados. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+   "Falta: Actas de entrega y aceptación. No se simula ninguna firma ni aceptación."
+  ]
+ },
+ {
+  "key": "RP21",
+  "es": "Dossier del propietario y portfolio final",
+  "en": "Owner dossier and final portfolio",
+  "nivel": "C",
+  "fases": [
+   "P"
+  ],
+  "perfiles": [
+   "IM",
+   "IN",
+   "RE",
+   "AR"
+  ],
+  "familia": "editorial",
+  "tipo": "Interior Design Book",
+  "modulos": [
+   "01",
+   "03",
+   "05",
+   "06",
+   "07",
+   "10"
+  ],
+  "corte": "E6/E7",
+  "estado": "no-elegible",
+  "modalidad": null,
+  "capitulos": null,
+  "documentos": null,
+  "falta": [
+   "evidenciaEjecutada",
+   "archivoPropietario"
+  ],
+  "incompleta": [],
+  "omitidas": [],
+  "motivo": [
+   "Contrato de laboratorio (E6/E7): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+   "Falta: Evidencia de lo ejecutado (fotos reales de obra). Las imágenes del diseño no son evidencia de lo ejecutado.",
+   "Falta: Archivo del propietario disponible por contrato. Un ZIP no es un portal: el archivo del propietario requiere contrato (E6/E7)."
+  ]
+ }
+]

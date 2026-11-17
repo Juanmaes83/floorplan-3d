@@ -1,0 +1,1520 @@
+{
+ "schema": "rubik-lab-recetas-qa/1",
+ "fecha": "2026-11-17T19:51:16.739Z",
+ "catalogo": "rubik-lab-recetas/1",
+ "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
+ "partes": [
+  "esquema",
+  "negativos",
+  "exportar",
+  "ui"
+ ],
+ "total": 110,
+ "pass": 109,
+ "casos": [
+  {
+   "id": "Q01-claves",
+   "ok": true,
+   "detalle": [
+    "RP01",
+    "RP02",
+    "RP03",
+    "RP04",
+    "RP05",
+    "RP06",
+    "RP07",
+    "RP08",
+    "RP09",
+    "RP10",
+    "RP11",
+    "RP12",
+    "RP13",
+    "RP14",
+    "RP15",
+    "RP16",
+    "RP17",
+    "RP18",
+    "RP19",
+    "RP20",
+    "RP21"
+   ]
+  },
+  {
+   "id": "Q01-niveles",
+   "ok": true,
+   "detalle": {
+    "L": [
+     "RP01",
+     "RP02",
+     "RP03",
+     "RP04",
+     "RP05",
+     "RP06",
+     "RP07",
+     "RP08",
+     "RP09",
+     "RP10",
+     "RP11",
+     "RP12"
+    ],
+    "C": [
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP17",
+     "RP21"
+    ],
+    "F": [
+     "RP16",
+     "RP18",
+     "RP19",
+     "RP20"
+    ]
+   }
+  },
+  {
+   "id": "Q01-campos",
+   "ok": true,
+   "detalle": []
+  },
+  {
+   "id": "Q01-modalidades-intactas",
+   "ok": true,
+   "detalle": [
+    "integral",
+    "primera-reunion",
+    "propuesta-comercial",
+    "dossier-tecnico",
+    "interiorismo",
+    "inmobiliaria",
+    "obra"
+   ]
+  },
+  {
+   "id": "Q01-modulos-10",
+   "ok": true,
+   "detalle": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10"
+   ]
+  },
+  {
+   "id": "Q01-tipos-5-story-5",
+   "ok": true,
+   "detalle": {
+    "tipos": [
+     "Architecture Book",
+     "Interior Design Book",
+     "Materials & Furniture Book",
+     "Commercial Proposal",
+     "Real Estate Presentation"
+    ],
+    "story": [
+     "real-estate",
+     "developer",
+     "architecture",
+     "renovation",
+     "interior-design"
+    ]
+   }
+  },
+  {
+   "id": "Q01-sin-ids-nuevos-de-producto",
+   "ok": true,
+   "detalle": []
+  },
+  {
+   "id": "Q02-filtros-cubren",
+   "ok": true,
+   "detalle": {
+    "AR": [
+     "RP01",
+     "RP02",
+     "RP03",
+     "RP06",
+     "RP09",
+     "RP10",
+     "RP11",
+     "RP12",
+     "RP14",
+     "RP16",
+     "RP17",
+     "RP19",
+     "RP21"
+    ],
+    "ARA": [
+     "RP01",
+     "RP02",
+     "RP03",
+     "RP06"
+    ],
+    "ARD": [
+     "RP09",
+     "RP10",
+     "RP11",
+     "RP12",
+     "RP14",
+     "RP16",
+     "RP17"
+    ],
+    "ARP": [
+     "RP19",
+     "RP21"
+    ],
+    "AT": [
+     "RP01",
+     "RP02",
+     "RP05",
+     "RP09",
+     "RP10",
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16",
+     "RP18",
+     "RP19",
+     "RP20"
+    ],
+    "ATA": [
+     "RP01",
+     "RP02",
+     "RP05"
+    ],
+    "ATD": [
+     "RP09",
+     "RP10",
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16"
+    ],
+    "ATP": [
+     "RP18",
+     "RP19",
+     "RP20"
+    ],
+    "IN": [
+     "RP01",
+     "RP03",
+     "RP06",
+     "RP11",
+     "RP14",
+     "RP17",
+     "RP21"
+    ],
+    "INA": [
+     "RP01",
+     "RP03",
+     "RP06"
+    ],
+    "IND": [
+     "RP11",
+     "RP14",
+     "RP17"
+    ],
+    "INP": [
+     "RP21"
+    ],
+    "RE": [
+     "RP01",
+     "RP03",
+     "RP04",
+     "RP05",
+     "RP08",
+     "RP09",
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16",
+     "RP18",
+     "RP19",
+     "RP20",
+     "RP21"
+    ],
+    "REA": [
+     "RP01",
+     "RP03",
+     "RP04",
+     "RP05",
+     "RP08"
+    ],
+    "RED": [
+     "RP09",
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16"
+    ],
+    "REP": [
+     "RP18",
+     "RP19",
+     "RP20",
+     "RP21"
+    ],
+    "CO": [
+     "RP05",
+     "RP08",
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16",
+     "RP18",
+     "RP19",
+     "RP20"
+    ],
+    "COA": [
+     "RP05",
+     "RP08"
+    ],
+    "COD": [
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16"
+    ],
+    "COP": [
+     "RP18",
+     "RP19",
+     "RP20"
+    ],
+    "IM": [
+     "RP02",
+     "RP04",
+     "RP07",
+     "RP11",
+     "RP15",
+     "RP17",
+     "RP20",
+     "RP21"
+    ],
+    "IMA": [
+     "RP02",
+     "RP04",
+     "RP07"
+    ],
+    "IMD": [
+     "RP11",
+     "RP15",
+     "RP17"
+    ],
+    "IMP": [
+     "RP20",
+     "RP21"
+    ],
+    "A": [
+     "RP01",
+     "RP02",
+     "RP03",
+     "RP04",
+     "RP05",
+     "RP06",
+     "RP07",
+     "RP08"
+    ],
+    "D": [
+     "RP09",
+     "RP10",
+     "RP11",
+     "RP12",
+     "RP13",
+     "RP14",
+     "RP15",
+     "RP16",
+     "RP17"
+    ],
+    "P": [
+     "RP18",
+     "RP19",
+     "RP20",
+     "RP21"
+    ]
+   }
+  },
+  {
+   "id": "Q02-filtros-no-mutan",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "id": "Q02-filtro-desconocido-rechazado",
+   "ok": true,
+   "detalle": 2
+  },
+  {
+   "id": "NEG-receta-desconocida",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "desconocida",
+    "motivo": [
+     "Receta desconocida: \"RP99\". Admitidas: RP01–RP21."
+    ]
+   }
+  },
+  {
+   "id": "NEG-receta-minusculas",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "desconocida",
+    "motivo": [
+     "Receta desconocida: \"rp07\". Admitidas: RP01–RP21."
+    ]
+   }
+  },
+  {
+   "id": "NEG-idioma-no-valido",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "idioma-no-valido",
+    "motivo": [
+     "Idioma no válido: \"fr\"."
+    ]
+   }
+  },
+  {
+   "id": "NEG-seleccion-obsoleta",
+   "ok": true,
+   "detalle": "{\n \"exportado\": false,\n \"tipo\": \"selección inválida\",\n \"motivo\": [\n  \"La selección se preparó sobre otro snapshot (huella distinta): está obsoleta.\"\n ]\n}\n"
+  },
+  {
+   "id": "NEG-sin-reconocer",
+   "ok": true,
+   "detalle": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"SIN RECONOCER · Identidad del estudio: Perfil sintético del laboratorio (estudio@example.invalid).\",\n  \"SIN RECONOCER · Presupuesto revisado: 0 de 11 partidas revisadas; precios de prueba de "
+  },
+  {
+   "id": "NEG-rp13-contrato-cumplido-sin-emision",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "contrato-cumplido-sin-emision",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Los requisitos están aportados, pero la emisión necesita su corte de producto y un GO."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-moneda-incompatible",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Moneda, IVA o alcance no comparables: no se homologa por suposición."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-mismo-proveedor",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Dos ofertas del mismo proveedor no son independientes."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-una-oferta",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Hacen falta al menos dos ofertas independientes."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp13-sin-atribucion",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (corte económico específico): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Ofertas independientes comparables. Aportación sin atribución: no se acepta."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp15-observacion-sin-autor",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "motivo": [
+     "Contrato de laboratorio (E3/E6 + OBR): se evalúa la elegibilidad, no se emite ninguna pieza de cliente.",
+     "Falta: Observaciones de obra reales (fecha, autor). Cada observación necesita fecha y autor.",
+     "Falta: Certificaciones de obra aportadas. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp20-futura-aunque-haya-datos",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "motivo": [
+     "Función futura (corte futuro): solo contrato y prueba de indisponibilidad.",
+     "Los requisitos están aportados, pero la emisión necesita su corte de producto y un GO."
+    ]
+   }
+  },
+  {
+   "id": "NEG-rp01-aportacion-no-completa-L",
+   "ok": true,
+   "detalle": [
+    "Alcance parcial: falta Alcance, fases y entregables del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+    "Alcance parcial: falta Honorarios aportados por fase. El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
+    "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+    "Alcance parcial: falta Validez de la oferta. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+    "Aportación de fixture «honorarios» no compuesta: los documentos actuales no la muestran."
+   ]
+  },
+  {
+   "id": "NEG-sin-importes-guarda",
+   "ok": true,
+   "detalle": [
+    "La receta es sin importes y su selección arrastra el presupuesto."
+   ]
+  },
+  {
+   "id": "Q02-rp01-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp01-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "alcanceServicios",
+     "honorarios",
+     "exclusiones",
+     "validezOferta"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp01-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp01-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "alcanceServicios",
+     "honorarios",
+     "exclusiones",
+     "validezOferta"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp02-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.pdf",
+     "documentos/architecture-sheet-strip.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.pdf",
+     "documentos/architecture-sheet-strip.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp02-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "revisionAnterior",
+     "fotosAportadas"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp02-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.en.pdf",
+     "documentos/architecture-sheet-strip.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.en.pdf",
+     "documentos/architecture-sheet-strip.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp02-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "revisionAnterior",
+     "fotosAportadas"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp03-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.pdf",
+     "documentos/architecture-sheet-strip.pdf",
+     "documentos/commercial-proposal-client-v3.pdf",
+     "documentos/entrega-integral.pdf",
+     "documentos/interior-book-v3.pdf",
+     "documentos/materials-furniture-book-v3.pdf",
+     "documentos/real-estate-sheet-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.pdf",
+     "documentos/architecture-sheet-strip.pdf",
+     "documentos/commercial-proposal-client-v3.pdf",
+     "documentos/entrega-integral.pdf",
+     "documentos/interior-book-v3.pdf",
+     "documentos/materials-furniture-book-v3.pdf",
+     "documentos/real-estate-sheet-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp03-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "variantesGuardadas"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp03-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.en.pdf",
+     "documentos/architecture-sheet-strip.en.pdf",
+     "documentos/commercial-proposal-client-v3.en.pdf",
+     "documentos/entrega-integral.en.pdf",
+     "documentos/interior-book-v3.en.pdf",
+     "documentos/materials-furniture-book-v3.en.pdf",
+     "documentos/real-estate-sheet-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.en.pdf",
+     "documentos/architecture-sheet-strip.en.pdf",
+     "documentos/commercial-proposal-client-v3.en.pdf",
+     "documentos/entrega-integral.en.pdf",
+     "documentos/interior-book-v3.en.pdf",
+     "documentos/materials-furniture-book-v3.en.pdf",
+     "documentos/real-estate-sheet-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp03-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "variantesGuardadas"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp04-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/real-estate-sheet-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/real-estate-sheet-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp04-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "precioInmueble",
+     "impuestosCompra",
+     "revisionAnterior"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp04-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/real-estate-sheet-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/real-estate-sheet-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp04-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "precioInmueble",
+     "impuestosCompra",
+     "revisionAnterior"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp05-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp05-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
+   }
+  },
+  {
+   "id": "Q02-rp05-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp05-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
+   }
+  },
+  {
+   "id": "Q02-rp06-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/interior-book-v3.pdf",
+     "documentos/materials-furniture-book-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/interior-book-v3.pdf",
+     "documentos/materials-furniture-book-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp06-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "referenciasMoodboard"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp06-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/interior-book-v3.en.pdf",
+     "documentos/materials-furniture-book-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/interior-book-v3.en.pdf",
+     "documentos/materials-furniture-book-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp06-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "referenciasMoodboard"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp07-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/real-estate-sheet-v3-sin-presupuesto.pdf"
+    ],
+    "gotDocs": [
+     "documentos/real-estate-sheet-v3-sin-presupuesto.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp07-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
+   }
+  },
+  {
+   "id": "Q06-rp07-es-sin-importes",
+   "ok": true,
+   "detalle": []
+  },
+  {
+   "id": "Q02-rp07-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp07-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
+   }
+  },
+  {
+   "id": "Q06-rp07-en-sin-importes",
+   "ok": true,
+   "detalle": []
+  },
+  {
+   "id": "Q02-rp08-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-sheet-strip.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-sheet-strip.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp08-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "ofertaTecnica",
+     "exclusiones",
+     "vinculoPlanPresupuesto"
+    ]
+   }
+  },
+  {
+   "id": "Q06-rp08-es-sin-importes",
+   "ok": true,
+   "detalle": []
+  },
+  {
+   "id": "Q02-rp08-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-sheet-strip.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-sheet-strip.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp08-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "ofertaTecnica",
+     "exclusiones",
+     "vinculoPlanPresupuesto"
+    ]
+   }
+  },
+  {
+   "id": "Q06-rp08-en-sin-importes",
+   "ok": true,
+   "detalle": []
+  },
+  {
+   "id": "Q02-rp09-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.pdf",
+     "documentos/architecture-sheet-strip.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.pdf",
+     "documentos/architecture-sheet-strip.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp09-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "revisionAnterior",
+     "dimensionesHuecos"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp09-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.en.pdf",
+     "documentos/architecture-sheet-strip.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.en.pdf",
+     "documentos/architecture-sheet-strip.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp09-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "revisionAnterior",
+     "dimensionesHuecos"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp10-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp10-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "revisionAnterior"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp10-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/architecture-book.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/architecture-book.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp10-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "revisionAnterior"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp11-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/materials-furniture-book-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/materials-furniture-book-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp11-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "catalogoProductos",
+     "preciosVerificados"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp11-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/materials-furniture-book-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/materials-furniture-book-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp11-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "catalogoProductos",
+     "preciosVerificados"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp12-es-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp12-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "presupuestoRevisado"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp12-en-exporta",
+   "ok": true,
+   "detalle": {
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp12-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible-parcial",
+    "incompleta": [
+     "presupuestoRevisado"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp13-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "ofertasIndependientes"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp13-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "ofertasIndependientes"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp14-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "revisionAnterior",
+     "motivoCambio"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp14-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "revisionAnterior",
+     "motivoCambio"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp15-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "observacionesObra",
+     "certificadosObra"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp15-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "observacionesObra",
+     "certificadosObra"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp16-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "actasVisita"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp16-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "actasVisita"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp17-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "catalogoProductos",
+     "especificacionValidada"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp17-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "catalogoProductos",
+     "especificacionValidada"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp18-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "punchList"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp18-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "punchList"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp19-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "revisionEjecutada",
+     "manualesGarantias"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp19-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "revisionEjecutada",
+     "manualesGarantias"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp20-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "costeLiquidado",
+     "manualesGarantias",
+     "actasEntrega"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp20-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-disponible",
+    "falta": [
+     "costeLiquidado",
+     "manualesGarantias",
+     "actasEntrega"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp21-es-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "evidenciaEjecutada",
+     "archivoPropietario"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp21-en-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "code": 2,
+    "estado": "no-elegible",
+    "falta": [
+     "evidenciaEjecutada",
+     "archivoPropietario"
+    ]
+   }
+  },
+  {
+   "id": "Q02-rp02-rp09-es-misma-salida",
+   "ok": true,
+   "detalle": "mismos archivos y huellas de contenido; distinto estado de receta (emitible-parcial / emitible-parcial)"
+  },
+  {
+   "id": "Q02-rp02-rp09-en-misma-salida",
+   "ok": true,
+   "detalle": "mismos archivos y huellas de contenido; distinto estado de receta (emitible-parcial / emitible-parcial)"
+  },
+  {
+   "id": "UI-escritorio-filtros",
+   "ok": true,
+   "detalle": {
+    "all": 21,
+    "im": 8,
+    "imP": 2,
+    "back": 21
+   }
+  },
+  {
+   "id": "UI-escritorio-sin-desborde",
+   "ok": true,
+   "detalle": 0
+  },
+  {
+   "id": "UI-rp07-aplicada",
+   "ok": true,
+   "detalle": {
+    "tipo": "inmobiliaria",
+    "nota": "Receta RP07 (RP07 v1, rubik-lab-recetas/1): Ficha comercial de vivienda. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
+   }
+  },
+  {
+   "id": "UI-rp07-artefacto-real-igual-al-adaptador",
+   "ok": false,
+   "detalle": {
+    "code": 0,
+    "iguales": false
+   }
+  },
+  {
+   "id": "UI-rp07-modificada",
+   "ok": true,
+   "detalle": "A partir de la receta RP07 (rubik-lab-recetas/1), modificada por el estudio: no es la receta."
+  },
+  {
+   "id": "UI-rp13-sin-descarga",
+   "ok": true,
+   "detalle": {
+    "dis": 1
+   }
+  },
+  {
+   "id": "UI-rp05-cambio-de-receta",
+   "ok": true,
+   "detalle": "Receta RP05 (RP05 v1, rubik-lab-recetas/1): Estimación económica inicial. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
+  },
+  {
+   "id": "UI-rp05-ingles",
+   "ok": true,
+   "detalle": {
+    "idioma": "en"
+   }
+  },
+  {
+   "id": "UI-teclado",
+   "ok": true,
+   "detalle": {
+    "on": "RP01",
+    "pressed": "true",
+    "foco": true
+   }
+  },
+  {
+   "id": "UI-red-y-errores",
+   "ok": true,
+   "detalle": {
+    "ext": [],
+    "errs": []
+   }
+  },
+  {
+   "id": "UI-movil-filtros",
+   "ok": true,
+   "detalle": {
+    "all": 21,
+    "im": 8,
+    "imP": 2,
+    "back": 21
+   }
+  },
+  {
+   "id": "UI-movil-sin-desborde",
+   "ok": true,
+   "detalle": 0
+  },
+  {
+   "id": "UI-estrecho-filtros",
+   "ok": true,
+   "detalle": {
+    "all": 21,
+    "im": 8,
+    "imP": 2,
+    "back": 21
+   }
+  },
+  {
+   "id": "UI-estrecho-sin-desborde",
+   "ok": true,
+   "detalle": 0
+  }
+ ]
+}
