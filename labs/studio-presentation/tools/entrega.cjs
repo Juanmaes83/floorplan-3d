@@ -391,24 +391,32 @@ $('#reg').onclick=()=>{if(!candidateReady())return;const s=sel(),now=new Date().
 // v1.4 · N01 · recetas: filtro reversible por perfil y fase; aplicar = rellenar la selección libre con la de la receta
 const RX=D.recetas,PILL={emitible:['ok','Lista'],'emitible-parcial':['warn','Parcial'],bloqueada:['block','Bloqueada'],'no-elegible':['info','Contrato'],'contrato-cumplido-sin-emision':['info','Contrato'],'no-disponible':['info','Futura']};
 let rec=null,activeRecipe=null;
-const lang=()=>document.querySelector('[name=idioma]:checked').value;
+const lang=()=>document.querySelector('[name=idioma]:checked').value; // idioma del DOCUMENTO (estado y emisión)
+// v1.4 §8 · idioma de la INTERFAZ, independiente del idioma del documento
+const ui=()=>document.querySelector('[name=uilang]:checked')?.value||'es';
+const UI={es:{intro:'Una receta es una selección de piezas que ya existen, pensada para un momento del encargo. El perfil y la fase solo filtran la lista: no cambian los datos ni la marca, y puedes seguir eligiendo libremente.',perfil:'Perfil',fase:'Fase',todos:'Todos',todas:'Todas',de:'de',recetas:'recetas',sinTipo:'sin tipo documental',fases:'fases',perfiles:'perfiles',modulos:'módulos',corte:'corte',obtendras:'Obtendrás',modalidad:'Modalidad',capitulos:'capítulos',documentos:'Documentos',falta:'Falta para la receta completa',omite:'Se omite (fuente optativa ausente)',verifica:'Verifica',recalcula:'La exportación recalcula las comprobaciones y exige reconocer los avisos.',aplicar:'Aplicar la receta',noEmitir:'No se puede emitir',sinDescarga:'Sin descarga de cliente',exigira:'Qué exigirá',proyeccion:'Datos disponibles hoy (proyección)',docLang:'Estado para el documento en',pill:{emitible:'Lista','emitible-parcial':'Parcial',bloqueada:'Bloqueada','no-elegible':'Contrato','contrato-cumplido-sin-emision':'Contrato','no-disponible':'Futura'}},
+ en:{intro:'A recipe is a selection of pieces that already exist, designed for a moment of the commission. Profile and phase only filter the list: they change neither the data nor the brand, and you can keep choosing freely.',perfil:'Profile',fase:'Phase',todos:'All',todas:'All',de:'of',recetas:'recipes',sinTipo:'no document type',fases:'phases',perfiles:'profiles',modulos:'modules',corte:'cut',obtendras:'You will get',modalidad:'Modality',capitulos:'chapters',documentos:'Documents',falta:'Missing for the full recipe',omite:'Left out (optional source absent)',verifica:'Check',recalcula:'Export recalculates the checks and requires acknowledging the warnings.',aplicar:'Apply the recipe',noEmitir:'Cannot be issued',sinDescarga:'No client download',exigira:'What it will require',proyeccion:'Data available today (projection)',docLang:'Status for the document in',pill:{emitible:'Ready','emitible-parcial':'Partial',bloqueada:'Blocked','no-elegible':'Contract','contrato-cumplido-sin-emision':'Contract','no-disponible':'Future'}}};
+const u=k=>UI[ui()][k];
+function uiApply(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=u(e.dataset.t));const fp=$('#fPerfil'),ff=$('#fFase'),vp=fp.value,vf=ff.value;
+ fp.innerHTML='<option value="">'+u('todos')+'</option>'+Object.entries(RX.perfiles).map(([k,v])=>'<option value="'+k+'">'+esc2(v[ui()])+'</option>').join('');fp.value=vp;
+ ff.innerHTML='<option value="">'+u('todas')+'</option>'+Object.entries(RX.fases).map(([k,v])=>'<option value="'+k+'">'+esc2(v[ui()])+'</option>').join('');ff.value=vf;document.documentElement.lang=ui();}
 const recipe=key=>RX.lista.find(r=>r.key===key)?.res[lang()];
 const candidateReady=()=>(!rec||rec===activeRecipe)&&(!activeRecipe||recipe(activeRecipe)?.emitible===true);
 const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function recDraw(){const p=$('#fPerfil').value,f=$('#fFase').value;const l=RX.lista.filter(r=>(!p||r.perfiles.includes(p))&&(!f||r.fases.includes(f)));
- $('#recList').innerHTML=l.map(r=>{const x=r.res[lang()],pl=PILL[x.estado]||['info',x.estado];return '<button type="button" data-rec="'+r.key+'" aria-pressed="'+(rec===r.key)+'"><span class="code">'+r.key+'</span><span>'+esc2(r.es)+'</span><span class="pill '+pl[0]+'">'+pl[1]+'</span><small>'+r.familia+' · '+(r.tipo||'sin tipo documental')+' · '+r.nivel+'</small></button>';}).join('');
- $('#recCount').textContent=l.length+' de '+RX.lista.length+' recetas';}
+ $('#recList').innerHTML=l.map(r=>{const x=r.res[lang()],pl=PILL[x.estado]||['info',x.estado];return '<button type="button" data-rec="'+r.key+'" aria-pressed="'+(rec===r.key)+'"><span class="code">'+r.key+'</span><span>'+esc2(r[ui()])+'</span><span class="pill '+pl[0]+'">'+(u('pill')[x.estado]||x.estado)+'</span><small>'+r.familia+' · '+(r.tipo||u('sinTipo'))+' · '+r.nivel+'</small></button>';}).join('');
+ $('#recCount').textContent=l.length+' '+u('de')+' '+RX.lista.length+' '+u('recetas');}
 function recSame(){const x=recipe(activeRecipe);if(!x?.sel)return false;const s=sel();
  return tipo.id===x.sel.tipo&&s.omit.length===0&&s.ch.length===x.sel.capitulos.length&&s.ch.every(c=>x.sel.capitulos.includes(c))&&s.docs.length===x.sel.documentos.length&&s.docs.every(d=>x.sel.documentos.includes(d));}
 function recNota(){if(!activeRecipe)return null;return recSame()?recipe(activeRecipe).sel.nota:'A partir de la receta '+activeRecipe+' ('+RX.version+'), modificada por el estudio: no es la receta.';}
-function recShow(){const d=$('#recDetail');if(!rec){d.innerHTML='';return;}const r=RX.lista.find(q=>q.key===rec),x=r.res[lang()],li=a=>a.map(t=>'<li>'+esc2(t)+'</li>').join('');
+function recShow(){const d=$('#recDetail');if(!rec){d.innerHTML='';return;}const r=RX.lista.find(q=>q.key===rec),x=r.res[lang()],xu=r.res[ui()],li=a=>a.map(t=>'<li>'+esc2(t)+'</li>').join('');
  const docName=id=>(D.docs.find(q=>q.id===id)||{name:id}).name,tn=id=>(D.tipos.find(t=>t.id===id)||{name:id}).name;
- let h='<h3>'+r.key+' · '+esc2(r.es)+'</h3><p style="margin:0 0 6px;color:var(--muted)">'+esc2(r.en)+' · fases '+r.fases.join(', ')+' · perfiles '+r.perfiles.join(', ')+' · módulos '+r.modulos.join(', ')+' · corte '+esc2(r.corte)+'</p>';
- if(x.emitible){h+='<b>Obtendrás</b><ul><li>Modalidad «'+esc2(tn(x.sel.tipo))+'», '+x.sel.capitulos.length+' capítulos.</li><li>Documentos: '+x.sel.documentos.map(q=>esc2(docName(q))).join(', ')+'.</li></ul>';
-  if(x.incompleta.length)h+='<b>Falta para la receta completa</b><ul>'+li(x.incompleta)+'</ul>';if(x.omitidas.length)h+='<b>Se omite (fuente optativa ausente)</b><ul>'+li(x.omitidas)+'</ul>';
-  h+='<b>Verifica</b><ul><li>'+esc2(r.autoridad)+'</li><li>La exportación recalcula las comprobaciones y exige reconocer los avisos.</li></ul><button class="btn primary" type="button" id="recApply">Aplicar la receta</button>';}
- else{h+='<b>'+(x.estado==='bloqueada'?'No se puede emitir':'Sin descarga de cliente')+'</b><ul>'+li(x.motivo)+'</ul>';if(x.contrato)h+='<b>Qué exigirá</b><ul>'+li(x.contrato)+'</ul>';
-  if(x.proyeccion&&Object.keys(x.proyeccion).length)h+='<b>Datos disponibles hoy (proyección)</b><ul>'+li(Object.values(x.proyeccion))+'</ul>';h+='<button class="btn" type="button" disabled aria-disabled="true">Aplicar la receta</button>';}
+ let h='<h3>'+r.key+' · '+esc2(r[ui()])+'</h3><p style="margin:0 0 6px;color:var(--muted)">'+u('fases')+' '+r.fases.join(', ')+' · '+u('perfiles')+' '+r.perfiles.join(', ')+' · '+u('modulos')+' '+r.modulos.join(', ')+' · '+u('corte')+' '+esc2(r.corte)+' · '+u('docLang')+' '+lang().toUpperCase()+'</p>';
+ if(x.emitible){h+='<b>'+u('obtendras')+'</b><ul><li>'+u('modalidad')+' «'+esc2(tn(x.sel.tipo))+'», '+x.sel.capitulos.length+' '+u('capitulos')+'.</li><li>'+u('documentos')+': '+x.sel.documentos.map(q=>esc2(docName(q))).join(', ')+'.</li></ul>';
+  if(x.incompleta.length)h+='<b>'+u('falta')+'</b><ul>'+li(x.incompleta)+'</ul>';if(x.omitidas.length)h+='<b>'+u('omite')+'</b><ul>'+li(x.omitidas)+'</ul>';
+  h+='<b>'+u('verifica')+'</b><ul><li>'+esc2(xu.autoridad||r.autoridad)+'</li><li>'+u('recalcula')+'</li></ul><button class="btn primary" type="button" id="recApply">'+u('aplicar')+'</button>';}
+ else{h+='<b>'+(x.estado==='bloqueada'?u('noEmitir'):u('sinDescarga'))+'</b><ul>'+li(xu.estado===x.estado?xu.motivo:x.motivo)+'</ul>';if(x.contrato)h+='<b>'+u('exigira')+'</b><ul>'+li(x.contrato)+'</ul>';
+  if(x.proyeccion&&Object.keys(x.proyeccion).length)h+='<b>'+u('proyeccion')+'</b><ul>'+li(Object.values(x.proyeccion))+'</ul>';h+='<button class="btn" type="button" disabled aria-disabled="true">'+u('aplicar')+'</button>';}
  d.innerHTML=h;const b=$('#recApply');if(b)b.onclick=()=>{const t=document.querySelector('input[name=tipo][value="'+x.sel.tipo+'"]');t.checked=true;tipo=D.tipos.find(q=>q.id===x.sel.tipo);drawOpts();
   document.querySelectorAll('[data-ch]').forEach(c=>c.checked=x.sel.capitulos.includes(c.dataset.ch));document.querySelectorAll('[data-doc]').forEach(c=>c.checked=x.sel.documentos.includes(c.dataset.doc));document.querySelectorAll('[data-omit]').forEach(c=>c.checked=x.sel.omitir.includes(c.dataset.omit));activeRecipe=rec;push();};}
 function recSync(){
@@ -422,16 +430,18 @@ function recSync(){
 $('#clearRecipe').onclick=()=>{rec=null;if(!recipe(activeRecipe)?.emitible)activeRecipe=null;recDraw();recShow();recSync();$('#reg').focus();};
 $('#recList').addEventListener('click',e=>{const b=e.target.closest('[data-rec]');if(!b)return;rec=b.dataset.rec;recDraw();recShow();recSync();document.querySelector('[data-rec="'+rec+'"]').focus();});
 $('#fPerfil').addEventListener('change',recDraw);$('#fFase').addEventListener('change',recDraw);
-document.addEventListener('change',e=>{if(e.target.name==='idioma'){recDraw();recShow();}});
+document.addEventListener('change',e=>{if(e.target.name==='idioma'||e.target.name==='uilang'){if(e.target.name==='uilang')uiApply();recDraw();recShow();}});
+uiApply();
 recDraw();
 drawOpts();
 recSync();`;
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Preparar entrega, ${esc(TITLE)}</title><style>${FONT_CSS}\n${css}</style></head><body>
 <div class="app"><aside class="side"><header><h1>Preparar entrega</h1><p>${esc(TITLE)} · revisión ${esc(rev)} · ${esc(STUDIO)}</p></header>
 <section class="step" aria-labelledby="recH"><h2 id="recH"><span>1</span>Partir de una receta <small style="font-weight:400;color:var(--muted)">(opcional)</small></h2>
-<p style="font-size:13.5px;margin:0 0 10px;color:var(--muted)">Una receta es una selección de piezas que ya existen, pensada para un momento del encargo. El perfil y la fase solo filtran la lista: no cambian los datos ni la marca, y puedes seguir eligiendo libremente.</p>
-<div class="filters"><label for="fPerfil">Perfil<select id="fPerfil"><option value="">Todos</option>${Object.entries(DATA.recetas.perfiles).map(([k,v])=>`<option value="${k}">${esc(v.es)}</option>`).join('')}</select></label>
-<label for="fFase">Fase<select id="fFase"><option value="">Todas</option>${Object.entries(DATA.recetas.fases).map(([k,v])=>`<option value="${k}">${esc(v.es)}</option>`).join('')}</select></label></div>
+<div class="opts" role="radiogroup" aria-label="Idioma de la interfaz (Interface language)" style="margin:0 0 8px"><label><input type="radio" name="uilang" value="es" checked> Interfaz en español</label><label><input type="radio" name="uilang" value="en"> Interface in English</label></div>
+<p style="font-size:13.5px;margin:0 0 10px;color:var(--muted)" data-t="intro">Una receta es una selección de piezas que ya existen, pensada para un momento del encargo. El perfil y la fase solo filtran la lista: no cambian los datos ni la marca, y puedes seguir eligiendo libremente.</p>
+<div class="filters"><label for="fPerfil"><span data-t="perfil">Perfil</span><select id="fPerfil"></select></label>
+<label for="fFase"><span data-t="fase">Fase</span><select id="fFase"></select></label></div>
 <div class="recipes" id="recList" role="group" aria-label="Recetas"></div><p id="recCount" style="font-size:12px;color:var(--muted);margin:6px 0 0"></p>
 <div id="recDetail" aria-live="polite"></div></section>
 <section class="step"><h2><span>2</span>Tipo de entrega</h2><div class="types">${TIPOS.map((t,i)=>`<label><input type="radio" name="tipo" value="${t.id}"${i?'':' checked'}>${esc(t.name)}<small>${esc(t.lead)}</small></label>`).join('')}</div></section>

@@ -1,0 +1,62 @@
+{
+ "schema": "rubik-lab-selector-ui-qa/1",
+ "navegador": "Chromium (Playwright, emulado)",
+ "pass": 7,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "UI-01 interfaz en inglés con documento en español: idiomas independientes",
+   "result": "PASS",
+   "detalle": {
+    "docLang": "es",
+    "muestra": "A recipe is a selection of pieces that already exist, designed for a moment of the commission. Profile and phase only filter the list: they change neither the data nor the brand, and you can keep choosing freely.\nProfile\nAll\nArchitecture\nBuilding surveying\nInterior design\nRenovation\nConstruction\nRea"
+   }
+  },
+  {
+   "id": "UI-02 sin restos en español en el selector con interfaz en inglés (nombres de documento y datos aparte)",
+   "result": "PASS",
+   "detalle": {
+    "resid": [
+     "del",
+     "obra"
+    ]
+   }
+  },
+  {
+   "id": "UI-03 estados, errores y contratos localizados (RP13, contrato)",
+   "result": "PASS",
+   "detalle": {
+    "c13": "RP13 · Comparison of standardised offers\n\nphases D · profiles AT, CO, RE · modules 01, 08, 10 · cut corte económico específico · Status for the document in ES\n\nNo client download\nContrato de laborator"
+   }
+  },
+  {
+   "id": "UI-04 teclado: el foco avanza y es visible",
+   "result": "PASS",
+   "detalle": {
+    "tag": "INPUT",
+    "outline": "auto",
+    "ow": "1px",
+    "boxShadow": "none"
+   }
+  },
+  {
+   "id": "UI-05 reflujo 320px (escala 1): sin desplazamiento horizontal",
+   "result": "PASS",
+   "detalle": {
+    "ov": 0
+   }
+  },
+  {
+   "id": "UI-05 reflujo 640px (escala 2): sin desplazamiento horizontal",
+   "result": "PASS",
+   "detalle": {
+    "ov": 0
+   }
+  },
+  {
+   "id": "UI-06 sin errores de página",
+   "result": "PASS",
+   "detalle": []
+  }
+ ]
+}

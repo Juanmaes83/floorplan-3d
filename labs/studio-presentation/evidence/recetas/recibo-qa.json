@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-recibo-qa/1",
- "fecha": "2026-11-17T22:07:17.389Z",
+ "fecha": "2026-11-17T22:10:43.738Z",
  "pass": 6,
  "fail": 0,
  "cases": [
@@ -10,7 +10,7 @@
    "detalle": {
     "rec": {
      "schema": "rubik-lab-recibo-receta/1",
-     "fecha": "2026-11-17T22:06:53.216Z",
+     "fecha": "2026-11-17T22:10:18.897Z",
      "receta": "RP01",
      "version": 1,
      "versionCatalogo": 1,
@@ -29,10 +29,10 @@
      ],
      "estadoPreparacion": "exportado",
      "candidato": {
-      "nombre": "propuesta-comercial-20261117t220641-cliente",
-      "zip": "propuesta-comercial-20261117t220641-cliente.zip",
-      "zipSha256": "5866a833c2ea6aad17f34e9db26bc251463803c41c715ba3abfdc9532bcd8926",
-      "manifestSha256": "b877b74c1f4ef048c7afe42f827f20806e3e678621eb1991199f6a3fb2a5371c"
+      "nombre": "propuesta-comercial-20261117t221007-cliente",
+      "zip": "propuesta-comercial-20261117t221007-cliente.zip",
+      "zipSha256": "fc1eed742ccb93227b871b609299b0fdbf2ffc6063858bef357ecb14960aabb6",
+      "manifestSha256": "5e681f9b3388f4d64dab3d1f639663ea360a515f72db0fae6f920cf096b8e601"
      },
      "alcance": "Recibo interno del laboratorio. El ZIP del cliente no lo contiene; su manifiesto no cambia de esquema."
     }
