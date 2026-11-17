@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-auditoria-recetas/1",
- "fecha": "2026-11-17T21:21:45.644Z",
+ "fecha": "2026-11-17T21:34:00.285Z",
  "catalogo": "rubik-lab-recetas/1",
  "oraculo": "patrones de contenido sobre pdftotext de los PDF finales de out/v3 (ES y .en)",
  "recetas": [
@@ -19,7 +19,7 @@
    ],
    "familia": "comercial",
    "tipo": "Commercial Proposal",
-   "corte": "E3",
+   "corte": [],
    "documentos": [
     "commercial-proposal-client-v3"
    ],
@@ -52,33 +52,38 @@
     {
      "campo": "alcanceServicios",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "honorarios",
      "tipo": "complementaria",
      "es": true,
-     "en": true
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "exclusiones",
      "tipo": "complementaria",
      "es": true,
-     "en": true
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "validezOferta",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     }
    ],
-   "faltan": [
-    "alcanceServicios",
-    "validezOferta"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (alcanceServicios, validezOferta)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -95,7 +100,10 @@
    ],
    "familia": "tecnica",
    "tipo": "Architecture Book",
-   "corte": "E3/E4",
+   "corte": [
+    "revisionAnterior → E2 (ENT-04)",
+    "fotosAportadas → E4"
+   ],
    "documentos": [
     "architecture-book",
     "architecture-sheet-strip"
@@ -137,11 +145,8 @@
      "en": false
     }
    ],
-   "faltan": [
-    "revisionAnterior",
-    "fotosAportadas"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (revisionAnterior, fotosAportadas)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); corte: revisionAnterior → E2 (ENT-04), fotosAportadas → E4; pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -158,8 +163,17 @@
    ],
    "familia": "editorial",
    "tipo": "Interior Design Book",
-   "corte": "E2/E3",
-   "documentos": [],
+   "corte": [
+    "variantesGuardadas → E2 (UX-07)"
+   ],
+   "documentos": [
+    "interior-book-v3",
+    "materials-furniture-book-v3",
+    "commercial-proposal-client-v3",
+    "real-estate-sheet-v3",
+    "architecture-book",
+    "architecture-sheet-strip"
+   ],
    "requeridas": [
     "geometria",
     "vistas3d"
@@ -179,14 +193,14 @@
     {
      "campo": "geometria",
      "tipo": "requerida",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true
     },
     {
      "campo": "vistas3d",
      "tipo": "requerida",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true
     },
     {
      "campo": "variantesGuardadas",
@@ -195,13 +209,9 @@
      "en": false
     }
    ],
-   "faltan": [
-    "geometria",
-    "vistas3d",
-    "variantesGuardadas"
-   ],
-   "estado": "L sin documento propio: incompleta",
-   "ausenciaRotulada": false
+   "faltan": [],
+   "estado": "[documentos heredados de «integral»] L completa documentalmente (ES y EN); corte: variantesGuardadas → E2 (UX-07); pendiente revisión humana",
+   "ausenciaRotulada": true
   },
   {
    "key": "RP04",
@@ -216,7 +226,9 @@
    ],
    "familia": "comercial",
    "tipo": "Real Estate Presentation",
-   "corte": "E3",
+   "corte": [
+    "revisionAnterior → E2 (ENT-04)"
+   ],
    "documentos": [
     "real-estate-sheet-v3"
    ],
@@ -239,7 +251,7 @@
      "campo": "geometria",
      "tipo": "requerida",
      "es": true,
-     "en": false
+     "en": true
     },
     {
      "campo": "superficies",
@@ -250,14 +262,18 @@
     {
      "campo": "precioInmueble",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "impuestosCompra",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "revisionAnterior",
@@ -266,12 +282,8 @@
      "en": false
     }
    ],
-   "faltan": [
-    "precioInmueble",
-    "impuestosCompra",
-    "revisionAnterior"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (precioInmueble, impuestosCompra, revisionAnterior)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); corte: revisionAnterior → E2 (ENT-04); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -288,7 +300,7 @@
    ],
    "familia": "comercial",
    "tipo": "Commercial Proposal",
-   "corte": "E3",
+   "corte": [],
    "documentos": [
     "commercial-proposal-client-v3"
    ],
@@ -306,7 +318,7 @@
     }
    ],
    "faltan": [],
-   "estado": "L completa documentalmente (pendiente revisión humana)",
+   "estado": "L completa documentalmente (ES y EN); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -322,7 +334,7 @@
    ],
    "familia": "editorial",
    "tipo": "Interior Design Book",
-   "corte": "E3/E4",
+   "corte": [],
    "documentos": [
     "interior-book-v3",
     "materials-furniture-book-v3"
@@ -355,21 +367,20 @@
     {
      "campo": "concepto",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true
     },
     {
      "campo": "referenciasMoodboard",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     }
    ],
-   "faltan": [
-    "concepto",
-    "referenciasMoodboard"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (concepto, referenciasMoodboard)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -384,7 +395,7 @@
    ],
    "familia": "comercial",
    "tipo": "Real Estate Presentation",
-   "corte": "E3",
+   "corte": [],
    "documentos": [
     "real-estate-sheet-v3-sin-presupuesto"
    ],
@@ -405,7 +416,7 @@
      "campo": "geometria",
      "tipo": "requerida",
      "es": true,
-     "en": false
+     "en": true
     },
     {
      "campo": "superficies",
@@ -417,11 +428,11 @@
      "campo": "vistas3d",
      "tipo": "requerida",
      "es": true,
-     "en": false
+     "en": true
     }
    ],
    "faltan": [],
-   "estado": "L completa documentalmente (pendiente revisión humana)",
+   "estado": "L completa documentalmente (ES y EN); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -437,7 +448,9 @@
    ],
    "familia": "comercial",
    "tipo": "Commercial Proposal",
-   "corte": "E3/E4",
+   "corte": [
+    "vinculoPlanPresupuesto → E3/E6 (FT3D-8)"
+   ],
    "documentos": [
     "architecture-sheet-strip"
    ],
@@ -454,20 +467,24 @@
     {
      "campo": "planObra",
      "tipo": "requerida",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true
     },
     {
      "campo": "ofertaTecnica",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "exclusiones",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "vinculoPlanPresupuesto",
@@ -476,13 +493,8 @@
      "en": false
     }
    ],
-   "faltan": [
-    "planObra",
-    "ofertaTecnica",
-    "exclusiones",
-    "vinculoPlanPresupuesto"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (planObra, ofertaTecnica, exclusiones, vinculoPlanPresupuesto)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); corte: vinculoPlanPresupuesto → E3/E6 (FT3D-8); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -499,7 +511,10 @@
    ],
    "familia": "tecnica",
    "tipo": "Architecture Book",
-   "corte": "E4",
+   "corte": [
+    "revisionAnterior → E2 (ENT-04)",
+    "dimensionesHuecos → E4"
+   ],
    "documentos": [
     "architecture-book",
     "architecture-sheet-strip"
@@ -541,11 +556,8 @@
      "en": false
     }
    ],
-   "faltan": [
-    "revisionAnterior",
-    "dimensionesHuecos"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (revisionAnterior, dimensionesHuecos)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); corte: revisionAnterior → E2 (ENT-04), dimensionesHuecos → E4; pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -561,7 +573,9 @@
    ],
    "familia": "tecnica",
    "tipo": "Architecture Book",
-   "corte": "E4",
+   "corte": [
+    "revisionAnterior → E2 (ENT-04)"
+   ],
    "documentos": [
     "architecture-book"
    ],
@@ -595,10 +609,8 @@
      "en": false
     }
    ],
-   "faltan": [
-    "revisionAnterior"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (revisionAnterior)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); corte: revisionAnterior → E2 (ENT-04); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -615,7 +627,7 @@
    ],
    "familia": "editorial",
    "tipo": "Materials & Furniture Book",
-   "corte": "E4",
+   "corte": [],
    "documentos": [
     "materials-furniture-book-v3"
    ],
@@ -646,21 +658,22 @@
     {
      "campo": "catalogoProductos",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     },
     {
      "campo": "preciosVerificados",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true,
+     "valoresES": true,
+     "valoresEN": true
     }
    ],
-   "faltan": [
-    "catalogoProductos",
-    "preciosVerificados"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (catalogoProductos, preciosVerificados)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -678,7 +691,7 @@
    ],
    "familia": "comercial",
    "tipo": "Commercial Proposal",
-   "corte": "E3/E5",
+   "corte": [],
    "documentos": [
     "commercial-proposal-client-v3"
    ],
@@ -699,14 +712,12 @@
     {
      "campo": "presupuestoRevisado",
      "tipo": "complementaria",
-     "es": false,
-     "en": false
+     "es": true,
+     "en": true
     }
    ],
-   "faltan": [
-    "presupuestoRevisado"
-   ],
-   "estado": "L exportable, INCOMPLETA documentalmente (presupuestoRevisado)",
+   "faltan": [],
+   "estado": "L completa documentalmente (ES y EN); pendiente revisión humana",
    "ausenciaRotulada": true
   },
   {
@@ -723,7 +734,7 @@
    ],
    "familia": "comercial",
    "tipo": "Commercial Proposal",
-   "corte": "corte económico específico",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "ofertasIndependientes",
@@ -766,7 +777,9 @@
    ],
    "familia": "tecnica",
    "tipo": "Architecture Book",
-   "corte": "E2/E3 (ENT-04)",
+   "corte": [
+    "revisionAnterior → E2 (ENT-04)"
+   ],
    "documentos": [],
    "requeridas": [
     "revisionAnterior",
@@ -789,9 +802,7 @@
      "oraculo": "sin patrón"
     }
    ],
-   "faltan": [
-    "revisionAnterior"
-   ],
+   "faltan": [],
    "estado": "C: contrato y bloqueo (no implementar motor)",
    "ausenciaRotulada": false
   },
@@ -810,7 +821,7 @@
    ],
    "familia": "tecnica",
    "tipo": "Architecture Book",
-   "corte": "E3/E6 + OBR",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "planObra",
@@ -858,7 +869,7 @@
    ],
    "familia": "tecnica",
    "tipo": null,
-   "corte": "OBR futuro",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "actasVisita"
@@ -890,7 +901,7 @@
    ],
    "familia": "editorial",
    "tipo": "Materials & Furniture Book",
-   "corte": "E4 (ENT-05)",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "materiales",
@@ -917,7 +928,9 @@
      "campo": "catalogoProductos",
      "tipo": "requerida",
      "es": false,
-     "en": false
+     "en": false,
+     "valoresES": false,
+     "valoresEN": false
     },
     {
      "campo": "especificacionValidada",
@@ -947,7 +960,7 @@
    ],
    "familia": "tecnica",
    "tipo": null,
-   "corte": "OBR futuro",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "punchList"
@@ -980,7 +993,7 @@
    ],
    "familia": "tecnica",
    "tipo": null,
-   "corte": "E6 / alcance futuro",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "revisionEjecutada",
@@ -1019,7 +1032,7 @@
    ],
    "familia": "comercial",
    "tipo": null,
-   "corte": "corte futuro",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "costeLiquidado",
@@ -1064,7 +1077,7 @@
    ],
    "familia": "editorial",
    "tipo": "Interior Design Book",
-   "corte": "E6/E7",
+   "corte": [],
    "documentos": [],
    "requeridas": [
     "evidenciaEjecutada",
@@ -1332,19 +1345,8 @@
  ],
  "resumen": {
   "L": 12,
-  "LCompletas": 2,
-  "LIncompletas": [
-   "RP01",
-   "RP02",
-   "RP03",
-   "RP04",
-   "RP06",
-   "RP08",
-   "RP09",
-   "RP10",
-   "RP11",
-   "RP12"
-  ],
+  "LCompletas": 12,
+  "LIncompletas": [],
   "combinaciones": 18,
   "combinacionesSinL": [
    "AR·P",

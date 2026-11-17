@@ -1,0 +1,29 @@
+{
+ "schema": "rubik-lab-aportaciones/1",
+ "rotulo": "FIXTURE SINTÉTICA DE LABORATORIO. Datos inventados para probar la composición; no son de ningún estudio, cliente, inmueble ni fabricante.",
+ "proyecto": "prj_reference-home",
+ "revision": "rv1-0f3e96422fd20e08",
+ "campos": {
+  "alcanceServicios": {"atribucion": "Estudio Ejemplo (fixture de laboratorio)", "valor": [
+   {"fase": "Anteproyecto", "entregables": "Distribución, superficies y dos vistas del modelo"},
+   {"fase": "Proyecto de interiorismo", "entregables": "Libro de interiorismo y selección de acabados"},
+   {"fase": "Dirección de obra", "entregables": "Visitas quincenales y actas (no incluidas en este laboratorio)"}]},
+  "honorarios": {"atribucion": "Estudio Ejemplo (fixture de laboratorio)", "valor": [
+   {"fase": "Anteproyecto", "importe": 1800, "moneda": "EUR"},
+   {"fase": "Proyecto de interiorismo", "importe": 3200, "moneda": "EUR"},
+   {"fase": "Dirección de obra", "importe": 2400, "moneda": "EUR"}]},
+  "exclusiones": {"atribucion": "Estudio Ejemplo (fixture de laboratorio)", "valor": ["Licencias y tasas municipales", "Proyecto de instalaciones", "Mobiliario y equipamiento"]},
+  "validezOferta": {"atribucion": "Estudio Ejemplo (fixture de laboratorio)", "valor": {"dias": 30}},
+  "precioInmueble": {"atribucion": "Propiedad (fixture de laboratorio)", "valor": {"importe": 245000, "moneda": "EUR"}},
+  "impuestosCompra": {"atribucion": "Asesor fiscal de la propiedad (fixture de laboratorio)", "valor": {"importe": 24500, "moneda": "EUR", "concepto": "Impuesto de transmisiones aportado (10 % en la fixture)"}},
+  "referenciasMoodboard": {"atribucion": "Vistas del modelo del propio proyecto (RUBIK); sin imágenes de terceros", "valor": [
+   {"vista": "Salón", "nota": "Tonos cálidos del pavimento de nogal"},
+   {"vista": "Dormitorio principal", "nota": "Parqué de roble y paredes claras"}]},
+  "ofertaTecnica": {"atribucion": "Estudio Ejemplo (fixture de laboratorio)", "valor": {"metodo": "Obra por fases sobre el plan de ejemplo de RUBIK, con visitas quincenales", "plazoSemanas": 14}},
+  "catalogoProductos": {"atribucion": "Ficha de catálogo de fixture (fabricante ficticio)", "valor": [
+   {"objectId": "obj_template-001", "fabricante": "Fabricante Ficticio LAB", "sku": "LAB-FIX-CAMA-160", "acabado": "Roble natural", "estado": "referencia"},
+   {"objectId": "obj_template-004", "fabricante": "Fabricante Ficticio LAB", "sku": "LAB-FIX-ARM-200", "acabado": "Lacado blanco", "estado": "producto elegido"}]},
+  "preciosVerificados": {"atribucion": "Tarifa de fixture del fabricante ficticio, no de mercado", "valor": [
+   {"sku": "LAB-FIX-CAMA-160", "importe": 890, "moneda": "EUR"}]}
+ }
+}

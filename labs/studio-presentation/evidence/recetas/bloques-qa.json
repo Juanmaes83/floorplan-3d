@@ -1,0 +1,137 @@
+{
+ "schema": "rubik-lab-bloques-qa/1",
+ "fecha": "2026-11-17T21:33:34.515Z",
+ "pass": 8,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "B-01 presente",
+   "want": "los 7 bloques con sus valores",
+   "result": "PASS",
+   "detalle": [
+    "commercial-proposal-client-v3",
+    "real-estate-sheet-v3",
+    "interior-book-v3",
+    "architecture-sheet-strip",
+    "architecture-book",
+    "materials-furniture-book-v3"
+   ]
+  },
+  {
+   "id": "B-02 ausente",
+   "want": "sin bloques de aportaciones; solo los derivados del proyecto (RP10 memoria, RP12 revisión)",
+   "result": "PASS",
+   "detalle": [
+    "commercial-proposal-client-v3",
+    "architecture-book"
+   ]
+  },
+  {
+   "id": "B-03 parcial",
+   "want": "sin honorarios: «No consta» y nunca derivados del presupuesto; sin validez: «no consta»",
+   "result": "PASS",
+   "detalle": null
+  },
+  {
+   "id": "B-04 incompatible",
+   "want": "honorarios sin moneda y precio sin atribución se descartan (no se componen)",
+   "result": "PASS",
+   "detalle": {
+    "alcanceServicios": [
+     "commercial-proposal-client-v3"
+    ],
+    "exclusiones": [
+     "commercial-proposal-client-v3",
+     "architecture-sheet-strip"
+    ],
+    "validezOferta": [
+     "commercial-proposal-client-v3"
+    ],
+    "presupuestoRevisado": [
+     "commercial-proposal-client-v3"
+    ],
+    "impuestosCompra": [
+     "real-estate-sheet-v3"
+    ],
+    "referenciasMoodboard": [
+     "interior-book-v3"
+    ],
+    "concepto": [
+     "interior-book-v3"
+    ],
+    "ofertaTecnica": [
+     "architecture-sheet-strip"
+    ],
+    "catalogoProductos": [
+     "materials-furniture-book-v3"
+    ],
+    "preciosVerificados": [
+     "materials-furniture-book-v3"
+    ]
+   }
+  },
+  {
+   "id": "B-05 obsoleto (otra revisión)",
+   "want": "ninguna aportación compuesta",
+   "result": "PASS",
+   "detalle": {
+    "presupuestoRevisado": [
+     "commercial-proposal-client-v3"
+    ]
+   }
+  },
+  {
+   "id": "B-06 precio no verificado",
+   "want": "«No valorado», nunca cero ni estimado",
+   "result": "PASS",
+   "detalle": null
+  },
+  {
+   "id": "B-07 autoridades separadas",
+   "want": "compra, impuestos y reforma en filas con su origen; sin suma",
+   "result": "PASS",
+   "detalle": null
+  },
+  {
+   "id": "B-08 resolvedor",
+   "want": "RP01/RP04/RP06/RP11 emitibles sin campos aportados pendientes (los de corte E2/E4 se declaran)",
+   "result": "PASS",
+   "detalle": [
+    {
+     "k": "RP01",
+     "estado": "emitible",
+     "incompleta": []
+    },
+    {
+     "k": "RP04",
+     "estado": "emitible-parcial",
+     "incompleta": [
+      "revisionAnterior"
+     ]
+    },
+    {
+     "k": "RP06",
+     "estado": "emitible",
+     "incompleta": []
+    },
+    {
+     "k": "RP08",
+     "estado": "emitible-parcial",
+     "incompleta": [
+      "vinculoPlanPresupuesto"
+     ]
+    },
+    {
+     "k": "RP11",
+     "estado": "emitible",
+     "incompleta": []
+    },
+    {
+     "k": "RP12",
+     "estado": "emitible",
+     "incompleta": []
+    }
+   ]
+  }
+ ]
+}

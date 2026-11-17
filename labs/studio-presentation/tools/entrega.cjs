@@ -310,7 +310,7 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
   const web_=files.flatMap(x=>[x.file,...(x.fileEn?[x.fileEn]:[])]).map(f=>({file:f,sha256:sha(path.join(OUT,f))}));
   const OWNER=f=>/^media\/obra|^documentos\/obra-/.test(f)?'obra':/^media\/recorrido/.test(f)?'recorrido':/^media\/ia-/.test(f)?'estancias':/^media\/dibujo-vivo/.test(f)?'portada':/^media\/vista-/.test(f)?null:undefined;
   const ftManSrc=ftMan?path.join(ftDir,ftMan):null;
-  fs.writeFileSync(path.join(OUT,'entrega.json'),JSON.stringify({schema:'rubik-lab-entrega/0.2',generated:new Date().toISOString(),idiomas,i18n:enReport,project:S.project,snapshot:{file:path.relative(LAB,C.snapFile),sha256:sha(C.snapFile)},web:web_,studio:{name:STUDIO,synthetic:/\.invalid/.test(prof.email||'')},
+  fs.writeFileSync(path.join(OUT,'entrega.json'),JSON.stringify({schema:'rubik-lab-entrega/0.2',generated:new Date().toISOString(),idiomas,i18n:enReport,project:S.project,snapshot:{file:path.relative(LAB,C.snapFile),sha256:sha(C.snapFile)},aportaciones:C.aportaciones||null,web:web_,studio:{name:STUDIO,synthetic:/\.invalid/.test(prof.email||'')},
    tipos:files,pieces:pieces.map(x=>{const o=OWNER(x.file);return o===undefined?x:{...x,capitulo:o};}),ft3d8:ftManifest?{manifestId:ftManifest.id,project:ftManifest.project||ftManifest.projectRef||null,file:path.relative(LAB,ftManSrc),sha256:sha(ftManSrc)}:null,
    orientative:['imágenes IA','plan y vídeo de obra (ejemplo, fechas ilustrativas, sin presupuesto)','precios (de prueba de laboratorio)'],
    notIncluded:['proyecto editable','visita 3D interactiva (requiere enlace publicado)','datos de otros proyectos']},null,1));

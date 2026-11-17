@@ -143,6 +143,7 @@ function axo({w=180,h=120,H=1100,label=true}={}){
  return Object.assign(new String(`<svg class="axo" viewBox="${minX} ${minY} ${vbW} ${vbH}" width="${vbW*k}mm" height="${vbH*k}mm" role="img">${out.join('')}</svg>`),{keys:keys.sort((a,b)=>a.n-b.n)});}
 // ---------- document frame ----------
 function doc(id,title,style,pages,{size='A4L'}={}){
+ if(BR&&BR.pages[id]){const x=BR.pages[id];pages=pages.length>2?[...pages.slice(0,-1),...x,pages[pages.length-1]]:[...pages,...x];} // v1.4 §4: bloques de receta antes de la última página
  const N=pages.length,studio=STUDIO;
  const body=pages.map((p,i)=>`<section class="page ${p.cls||''}" data-page="${i+1}">${p.html}${p.foot===false?'':`<footer class="foot">${p.note?`<span style="color:var(--d-ink);font-weight:700">${esc(p.note)}</span>`:`<span>${esc(studio)}</span><span>${esc(TITLE)}</span><span>Revisión ${esc(rev)}</span><span>${esc(date)}</span>`}<span class="pg">${i+1} / ${N}</span></footer>`}</section>`).join('\n');
  VW[id]=size==='A3L'?1588:size==='A4P'?794:1123;
@@ -206,7 +207,14 @@ function budgetPage(title){if(!BV)return noBudgetPage(title);const sm=BV.summary
 const imagePage=v=>({html:`<figure style="height:${v.label.length>40?140:150}mm;background:${v.bg}" class="frame">${img(v)}</figure><div class="grid" style="height:auto;margin-top:3mm"><div class="${v.label.length>40?'c1-7':'c1-4'}"><h2 class="h2" style="margin:0;${v.label.length>40?'font-size:var(--t-lead)':''}">${esc(v.label)}</h2></div><div class="${v.label.length>40?'c8-12':'c5-12'}"><p class="caption" style="margin:0">${esc(v.label)}, ${roomArea(rooms.find(r=>r.id===v.roomId))}. ${VIEW_NOTE}</p></div></div>`});
 const studioBlock=()=>B.profile?`<div class="note">${LOGO(12,44)}<b style="display:block;margin-top:${prof.logo?'2mm':'0'}">${esc(STUDIO)}</b>${[prof.person,prof.email,(prof.web||'').replace(/^https?:\/\//,''),prof.phone].filter(Boolean).map(esc).join('<br>')}</div><p class="caption">Datos del perfil de marca del estudio en RUBIK.${prof.logo?'':' Logotipo: no facilitado.'}</p>`:`<p class="note"><b>Perfil de estudio no facilitado.</b> El proyecto no tiene datos del estudio: nombre, contacto ni logotipo.</p>`;
 // ---------- deliverables ----------
+let BR=null; // v1.4 §4: bloques documentales de las recetas L (tools/bloques-receta.cjs)
 function build(){
+ BR=null;if(!S.variant||process.env.APORTACIONES){const apf=process.env.APORTACIONES||path.join(snapDir,'aportaciones.json');let AP=null;try{AP=JSON.parse(fs.readFileSync(apf,'utf8'));}catch{}
+  if(AP&&(AP.proyecto!==S.project.id||AP.revision!==S.project.revision))AP=null; // aportaciones de otro proyecto o revisión: no se componen
+  if(AP){const RC=require('./recetas.cjs'),ok={};for(const [k,v] of Object.entries(AP.campos||{})){const f=RC.FUENTES[k];if(!f)continue;const e=f.eval({S,REG:null,aportaciones:{[k]:v}});if(e.estado==='disponible'||e.estado==='parcial')ok[k]=v;}AP={...AP,campos:ok};} // solo aportaciones válidas y atribuidas
+  let planDemo=null;try{planDemo=JSON.parse(fs.readFileSync(path.join(LAB,'assets/ft3d8-plan-demo.json'),'utf8'));}catch{}
+  BR=require('./bloques-receta.cjs')({S,esc,num,nf,date,rev,STUDIO,views,AP,planDemo});BR.file=AP?apf:null;
+  Object.assign(EN_DICT.exact,BR.en);for(const x of BR.data){I18N_DATA.all.push(x);I18N_DATA.mask.push(x);}}
  const hero=(biggest&&views.find(v=>v.roomId===biggest.id))||views.find(v=>v.kind==='room')||views[0]||null,over=views.find(v=>v.kind==='overview')||views[0]||null,bedrooms=views.filter(v=>v.kind==='room'&&v!==hero);
  const D={},meta={};
  const pp=planPage('Planta');meta.plan=pp.meta;if(pp.meta.dropped)throw new Error('plan: room tags dropped '+pp.meta.dropped);
@@ -264,7 +272,7 @@ function build(){
  let E=null;if(process.env.STUDIO_B1!=='0'&&!S.variant&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage}).helpers;
-  E=require('./entrega.cjs')({snapFile:path.resolve(snapDir,'snapshot.json'),S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverImage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
+  E=require('./entrega.cjs')({aportaciones:BR&&BR.file?{file:path.relative(LAB,BR.file),sha256:require('crypto').createHash('sha256').update(fs.readFileSync(BR.file)).digest('hex'),compuestas:BR.compuestas}:null,snapFile:path.resolve(snapDir,'snapshot.json'),S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverImage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
   Object.assign(D,E.D);Object.assign(meta,E.meta);}
  return {D,meta,E};}
 // ---------- Huashu design_lint, ported: same probe (read from the donor file), print floors 12 px body / 9.3 px label ----------

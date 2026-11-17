@@ -22,7 +22,7 @@
    "10"
   ],
   "corte": "E3",
-  "estado": "emitible-parcial",
+  "estado": "emitible",
   "modalidad": "propuesta-comercial",
   "capitulos": [
    "concepto",
@@ -35,19 +35,9 @@
    "commercial-proposal-client-v3"
   ],
   "falta": [],
-  "incompleta": [
-   "alcanceServicios",
-   "honorarios",
-   "exclusiones",
-   "validezOferta"
-  ],
+  "incompleta": [],
   "omitidas": [],
-  "motivo": [
-   "Alcance parcial: falta Alcance, fases y entregables del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
-   "Alcance parcial: falta Honorarios aportados por fase. El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
-   "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
-   "Alcance parcial: falta Validez de la oferta. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio."
-  ]
+  "motivo": []
  },
  {
   "key": "RP02",
@@ -195,14 +185,10 @@
   ],
   "falta": [],
   "incompleta": [
-   "precioInmueble",
-   "impuestosCompra",
    "revisionAnterior"
   ],
   "omitidas": [],
   "motivo": [
-   "Alcance parcial: falta Precio del inmueble aportado. Precio no consta (no es cero).",
-   "Alcance parcial: falta Impuestos de compra aportados. No constan: no se infieren del precio.",
    "Alcance parcial: falta Revisión anterior vinculada y comparable (estado actual). El snapshot tiene una sola revisión: no hay estado actual ni antes/después."
   ]
  },
@@ -265,7 +251,7 @@
    "10"
   ],
   "corte": "E3/E4",
-  "estado": "emitible-parcial",
+  "estado": "emitible",
   "modalidad": "interiorismo",
   "capitulos": [
    "concepto",
@@ -281,13 +267,9 @@
    "materials-furniture-book-v3"
   ],
   "falta": [],
-  "incompleta": [
-   "referenciasMoodboard"
-  ],
+  "incompleta": [],
   "omitidas": [],
-  "motivo": [
-   "Alcance parcial: falta Referencias de moodboard con derechos. Sin referencias aportadas: no se buscan ni se generan imágenes."
-  ]
+  "motivo": []
  },
  {
   "key": "RP07",
@@ -366,14 +348,10 @@
   ],
   "falta": [],
   "incompleta": [
-   "ofertaTecnica",
-   "exclusiones",
    "vinculoPlanPresupuesto"
   ],
   "omitidas": [],
   "motivo": [
-   "Alcance parcial: falta Oferta técnica aportada. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
-   "Alcance parcial: falta Exclusiones del encargo. El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
    "Alcance parcial: falta Vínculo acreditado entre plan y presupuesto. El plan de ejemplo no tiene partidas vinculadas: la economía del plan no se puede mostrar."
   ]
  },
@@ -490,7 +468,7 @@
    "10"
   ],
   "corte": "E4",
-  "estado": "emitible-parcial",
+  "estado": "emitible",
   "modalidad": "interiorismo",
   "capitulos": [
    "estancias",
@@ -502,15 +480,9 @@
    "materials-furniture-book-v3"
   ],
   "falta": [],
-  "incompleta": [
-   "catalogoProductos",
-   "preciosVerificados"
-  ],
+  "incompleta": [],
   "omitidas": [],
-  "motivo": [
-   "Alcance parcial: falta Referencias de producto acreditadas (SKU, marca). Ninguno de los 46 objetos tiene referencia de catálogo: son genéricos del modelo.",
-   "Alcance parcial: falta Precios de producto verificados. Sin precios de producto: «no valorado», nunca cero."
-  ]
+  "motivo": []
  },
  {
   "key": "RP12",
@@ -535,7 +507,7 @@
    "10"
   ],
   "corte": "E3/E5",
-  "estado": "emitible-parcial",
+  "estado": "emitible",
   "modalidad": "dossier-tecnico",
   "capitulos": [
    "vivienda",
@@ -547,13 +519,9 @@
    "commercial-proposal-client-v3"
   ],
   "falta": [],
-  "incompleta": [
-   "presupuestoRevisado"
-  ],
+  "incompleta": [],
   "omitidas": [],
-  "motivo": [
-   "Alcance parcial: falta Presupuesto revisado por el estudio. 11 de 11 partidas sin revisar por el estudio."
-  ]
+  "motivo": []
  },
  {
   "key": "RP13",

@@ -191,10 +191,16 @@ const filtrar=({perfil,fase}={})=>{if(perfil&&!PERFILES[perfil])throw new Error(
 function resolver(key,ctx,lang='es'){
  const r=RECETAS.find(x=>x.key===key);if(!r)return {key,estado:'desconocida',emitible:false,motivo:[`Receta desconocida: ${JSON.stringify(key)}. Admitidas: RP01–RP21.`]};
  if(!CAT.IDIOMAS.includes(lang))return {key,estado:'idioma-no-valido',emitible:false,motivo:[`Idioma no válido: ${JSON.stringify(lang)}.`]};
- // En una receta L las aportaciones de fixture NO cuentan: los documentos actuales no las componen, y declararlas
- // cumplidas sería prometer en la etiqueta lo que los bytes no llevan (se registran aparte, N04).
- const ids=[...new Set([...r.requeridas,...r.completas,...r.opcionales])],F=evalFuentes(r.nivel==='L'?{...ctx,aportaciones:null}:ctx,ids);
- const aportIgnoradas=r.nivel==='L'&&ctx.aportaciones?Object.keys(ctx.aportaciones).filter(k=>ids.includes(k)):[];
+ // v1.4 §4: en una receta L solo cuentan las aportaciones COMPUESTAS en los documentos de la receta, según el registro de la
+ // entrega (entrega.json → aportaciones.compuestas, con la huella del archivo de aportaciones). Las que llegan por la línea de
+ // órdenes y no están en los bytes se ignoran y se dice (no se promete en la etiqueta lo que el PDF no lleva).
+ const ids=[...new Set([...r.requeridas,...r.completas,...r.opcionales])];
+ const reg=ctx.REG?.aportaciones,docsR=r.sel?.documentos||[];let apL=null;
+ if(r.nivel==='L'&&reg){try{const raw=fs.readFileSync(path.resolve(ctx.LAB||path.join(__dirname,'..'),reg.file));if(sha(raw)===reg.sha256){const camp=JSON.parse(raw).campos||{};
+  apL=Object.fromEntries(Object.entries(camp).filter(([k])=>(reg.compuestas[k]||[]).some(dd=>docsR.includes(dd))));}}catch{}}
+ const F=evalFuentes(r.nivel==='L'?{...ctx,aportaciones:apL}:ctx,ids);
+ for(const k of Object.keys(reg?.compuestas||{}))if(r.nivel==='L'&&ids.includes(k)&&F[k]&&F[k].estado==='ausente'&&(reg.compuestas[k]||[]).some(dd=>docsR.includes(dd)))F[k]={estado:'disponible',autoridad:'compuesto desde fuentes del proyecto',nota:'Bloque compuesto en el documento de la receta.'};
+ const aportIgnoradas=r.nivel==='L'&&ctx.aportaciones?Object.keys(ctx.aportaciones).filter(k=>ids.includes(k)&&!(apL&&k in apL&&JSON.stringify(apL[k])===JSON.stringify(ctx.aportaciones[k]))):[];
  const falta=r.requeridas.filter(i=>F[i].estado!=='disponible'&&F[i].estado!=='parcial');
  const incompleta=r.completas.filter(i=>F[i].estado!=='disponible');
  const omitidas=r.opcionales.filter(i=>F[i].estado!=='disponible'&&F[i].estado!=='parcial');

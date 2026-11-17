@@ -148,9 +148,9 @@ if(PARTS.includes('negativos')){
  const r15=RC.resolver('RP15',foreignPlan,'es');
  caso('NEG-rp15-plan-de-otro-proyecto',r15.estado==='no-elegible'&&r15.fuentes.planObra.estado==='incompatible',r15.fuentes.planObra);
  neg('rp20-futura-aunque-haya-datos',['RP20','es','OUT','--aportaciones',fx('liq',{costeLiquidado:{atribucion:'Fixture.',valor:1},manualesGarantias:{atribucion:'Fixture.',valor:1},actasEntrega:{atribucion:'Fixture.',valor:1}})],rj=>rj?.estado==='no-disponible');
- // L con aportación: sigue parcial y lo dice (los documentos no la componen)
+ // v1.4 §4: L cuenta solo lo COMPUESTO (registro); una aportación distinta de la compuesta se ignora y se dice
  const r1=RC.resolver('RP01',RC.contexto(LAB,SRC,{honorarios:{atribucion:'Fixture.',valor:[{fase:'Proyecto básico',importe:1000,moneda:'EUR'}]}}),'es');
- caso('NEG-rp01-aportacion-no-completa-L',r1.estado==='emitible-parcial'&&r1.incompleta.includes('honorarios')&&r1.motivo.some(m=>/no compuesta/.test(m)),r1.motivo);
+ caso('NEG-rp01-aportacion-no-completa-L',r1.fuentes.honorarios.estado==='disponible'&&/fixture/.test(r1.fuentes.honorarios.autoridad)&&r1.motivo.some(m=>/honorarios.*no compuesta/.test(m)),r1.motivo);
  // una receta sin importes que arrastrase el presupuesto se bloquea (guarda del resolvedor sobre una copia alterada)
  const R7=RC.RECETAS.find(r=>r.key==='RP07'),orig=JSON.stringify(R7.sel);R7.sel={...R7.sel,documentos:['real-estate-sheet-v3'],capitulos:[...R7.sel.capitulos]};
  const g=RC.resolver('RP07',ctx,'es');R7.sel=JSON.parse(orig);caso('NEG-sin-importes-guarda',g.estado==='bloqueada'&&!g.emitible,g.motivo);}
