@@ -1,0 +1,142 @@
+{
+ "idiomas": [
+  "es",
+  "en"
+ ],
+ "web": [
+  {
+   "file": "index.en.html",
+   "residual": 0,
+   "sample": []
+  },
+  {
+   "file": "tipo-primera-reunion.en.html",
+   "residual": 0,
+   "sample": []
+  },
+  {
+   "file": "tipo-propuesta-comercial.en.html",
+   "residual": 0,
+   "sample": []
+  },
+  {
+   "file": "tipo-dossier-tecnico.en.html",
+   "residual": 0,
+   "sample": []
+  },
+  {
+   "file": "tipo-interiorismo.en.html",
+   "residual": 0,
+   "sample": []
+  },
+  {
+   "file": "tipo-inmobiliaria.en.html",
+   "residual": 0,
+   "sample": []
+  },
+  {
+   "file": "tipo-obra.en.html",
+   "residual": 0,
+   "sample": []
+  }
+ ],
+ "documentos": {
+  "interior-book-v3.en": {
+   "nodes": 545,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 20,
+    "en": 20,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "materials-furniture-book-v3.en": {
+   "nodes": 1408,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 13,
+    "en": 13,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "commercial-proposal-client-v3.en": {
+   "nodes": 129,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 32,
+    "en": 32,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "real-estate-sheet-v3.en": {
+   "nodes": 44,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 2,
+    "en": 2,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "real-estate-sheet-v3-sin-presupuesto.en": {
+   "nodes": 43,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 2,
+    "en": 2,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "architecture-sheet-strip.en": {
+   "nodes": 112,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 14,
+    "en": 14,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "architecture-book.en": {
+   "nodes": 559,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 20,
+    "en": 20,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  },
+  "entrega-integral.en": {
+   "nodes": 380,
+   "residual": [],
+   "residualCount": 0,
+   "figures": {
+    "es": 25,
+    "en": 25,
+    "missing": [],
+    "extra": [],
+    "ok": true
+   }
+  }
+ },
+ "nota": "Gate: 0 palabras españolas fuera de los datos del proyecto (incluido texto CSS content) y mismo conjunto de cifras decimales que la versión española. Prueba negativa: antes del diccionario el mismo gate bloqueó los 8 documentos (hasta 682 restos por documento) y la web («de obra»); el texto CSS «Desliza…» lo vio la revisión visual y motivó ampliar el gate a CSS."
+}

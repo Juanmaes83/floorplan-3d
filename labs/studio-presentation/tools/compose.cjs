@@ -272,17 +272,43 @@ function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes 
  if(chrome.length)yellow.push('decoración de plantilla: '+chrome.join('; '));if(f.accentWord.length)yellow.push(`una palabra del titular en otro color ${f.accentWord.length}`);if(f.numbered.length>=3)yellow.push(`numeración 01/02/03 ${f.numbered.length}`);
  if(f.display&&/^(inter|roboto|arial|helvetica|system-ui|-apple-system|rubik inter)$/i.test(f.display))yellow.push(`la mayor tipografía de la página es ${f.display} (fuente de interfaz como display)`);return {red,yellow};}
 // ---------- render + QA ----------
+// v1.3 · inglés: los documentos de cliente se componen también en inglés (mismo HTML, traducido en el DOM antes de paginar).
+const I18N_JS=fs.readFileSync(path.join(__dirname,'i18n.js'),'utf8').replace(/^\/\/.*$/mg,'').trim().replace(/^function I18N\(/,'function(');
+const EN_DICT={exact:require('../i18n/en.exact.cjs'),rules:require('../i18n/en.rules.cjs'),spanishWords:require('../i18n/es-words.cjs')};
+const EN_DOCS=new Set(['interior-book-v3','materials-furniture-book-v3','commercial-proposal-client-v3','real-estate-sheet-v3','real-estate-sheet-v3-sin-presupuesto','architecture-book','architecture-sheet-strip','entrega-integral']);
+const EN_ON=process.env.STUDIO_EN!=='0'&&!S.variant;
+// Datos del proyecto que no se traducen: nombres (y sus trozos, que los rótulos del plano parten en líneas), materiales, objetos,
+// partidas y capítulos del presupuesto, tareas del plan de obra, estudio, título y texto del estudio.
+const I18N_DATA=(()=>{const out=new Set();const add=x=>{if(x&&String(x).trim())out.add(String(x).trim());};
+ for(const r of S.geometry.rooms){add(r.name);const w=r.name.split(/\s+/);for(let a=0;a<w.length;a++)for(let b=a+1;b<=w.length;b++)add(w.slice(a,b).join(' '));for(const h of r.name.split('-').slice(0,-1))add(h+'-');for(const h of r.name.split('-').slice(1))add(h);}
+ for(const m of S.materials)add(m.name);for(const f of S.board?.floors||[])add(f.name);for(const o of S.objects){add(o.name);add(o.name[0].toLowerCase()+o.name.slice(1));}
+ for(const v of S.views)add(v.label);for(const V of Object.values(S.budget?.test?.view||{}))for(const c of V.chapters||[]){add(c.title);add(c.title.toLowerCase());for(const l of c.lines)add(l.description);}
+ add(S.project.name);add(B.title);add(B.intro);for(const k of ['name','person','tagline','email'])add(prof[k]);
+ try{const pd=JSON.parse(fs.readFileSync(path.join(LAB,'assets/ft3d8-plan-demo.json'),'utf8'));for(const t of pd.tasks){add(t.title);add(t.title.replace(/\s*\(no se dibuja[^)]*\)/,''));}}catch{}
+ return [...out];})();
+const figs=(txt,lang)=>new Set([...txt.matchAll(lang==='en'?/\d{1,3}(?:,\d{3})*\.\d+/g:/\d{1,3}(?:\.\d{3})*,\d+/g)].map(m=>String(parseFloat(lang==='en'?m[0].replace(/,/g,''):m[0].replace(/\./g,'').replace(',','.')))));
+const FIGS={};
 const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\/\/.*$/mg,'').trim().replace(/^function paginateFlow\(\)/,'function()');
 (async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox']});
  {const pg=await browser.newPage();for(const v of S.views){const src='data:image/png;base64,'+b64(path.join(snapDir,v.file));
    const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
    views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
  const {D,meta,E}=build();const qa={meta,probe:!!PROBE,docs:{}};const fresh=new Set();
- for(const [id,html] of Object.entries(D)){const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[id]||1123;
+ const jobs=Object.entries(D).flatMap(([id,html])=>EN_ON&&EN_DOCS.has(id)?[[id,html,'es'],[id+'.en',html,'en']]:[[id,html,'es']]);const enBlocked=[];
+ for(const [id,html,lang] of jobs){const baseId=id.replace(/\.en$/,'');const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[baseId]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
   const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);
+  let i18n=null;if(lang==='en')i18n=await pg.evaluate(`(${I18N_JS})(${JSON.stringify(EN_DICT)},${JSON.stringify(I18N_DATA)},'translate')`);
   if(process.env.FLOW_FAULT==='multi'&&id==='commercial-proposal-client-v3')await pg.evaluate(()=>{const t=document.querySelector('table.flow');t.after(t.cloneNode(true));}); // negative test: two flow tables in one page
   const flow=await pg.evaluate(`(${FLOW_JS})()`);if(flow.tables){fs.writeFileSync(f,'<!doctype html>\n'+(await pg.evaluate(()=>document.documentElement.outerHTML)));}
+  if(lang==='en'){await pg.evaluate(()=>document.querySelectorAll('[data-flow-part]').forEach(e=>e.textContent=e.textContent.replace(/^Parte (\d+) de (\d+)$/,'Part $1 of $2')));
+   const chk=await pg.evaluate(`(${I18N_JS})(${JSON.stringify(EN_DICT)},${JSON.stringify(I18N_DATA)},'check')`);
+   const mine=figs(await pg.evaluate(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('[lang="es"]:not(html),script,style').forEach(x=>x.remove());const w=document.createTreeWalker(c,NodeFilter.SHOW_TEXT);let t='',n;while((n=w.nextNode()))t+=' '+n.textContent;return t;}),'en'),theirs=FIGS[baseId]||new Set();
+   const missing=[...theirs].filter(x=>!mine.has(x)),extra=[...mine].filter(x=>!theirs.has(x));
+   i18n={...i18n,residual:chk.residual.slice(0,20),residualCount:chk.residual.length,figures:{es:theirs.size,en:mine.size,missing,extra,ok:!missing.length&&!extra.length}};
+   if(i18n.residualCount||!i18n.figures.ok)enBlocked.push({doc:id,residual:i18n.residualCount,figures:i18n.figures});
+   fs.writeFileSync(f,'<!doctype html>\n'+(await pg.evaluate(()=>document.documentElement.outerHTML)));}
+  else FIGS[id]=figs(await pg.evaluate(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('[lang="es"]:not(html),script,style').forEach(x=>x.remove());const w=document.createTreeWalker(c,NodeFilter.SHOW_TEXT);let t='',n;while((n=w.nextNode()))t+=' '+n.textContent;return t;}),'es');
   const H=await pg.evaluate(()=>document.documentElement.scrollHeight);await pg.setViewportSize({width:vw,height:Math.min(H,16000)});
   const m=await pg.evaluate(()=>{const pages=[...document.querySelectorAll('.page')];const over=[];
    for(const p of pages){const box=p.getBoundingClientRect();for(const el of p.querySelectorAll('*')){if(el.closest('svg')&&el.tagName!=='svg')continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;
@@ -311,7 +337,8 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
   // v1.2 · A04/ST05: a table that breaks the invariant (row lost, duplicated or taller than a page) never becomes a PDF.
   const {rowText,...flowRec}=flow;const pdfPath=path.join(outDir,id+'.pdf');let pdfRows=null;
   if(fs.existsSync(pdfPath))fs.rmSync(pdfPath); // v1.3 A11: nunca queda un PDF de una ejecución anterior
-  if(!flow.ok){qa.blocked=(qa.blocked||[]).concat({doc:id,reason:flow.oversized.length?'fila más alta que una página':flow.multiTable.length?'varias tablas paginables en una página (no soportado)':flow.postOverflow.length?'desborde tras escribir las etiquetas de continuación':flow.orphanHeads.length?'cabecera de capítulo huérfana':'invariante de filas',oversized:flow.oversized,labelErrors:flow.labelErrors,multiTable:flow.multiTable,postOverflow:flow.postOverflow,orphanHeads:flow.orphanHeads});}
+  if(lang==='en'&&enBlocked.some(b=>b.doc===id)){/* inglés con restos o cifras distintas: no se publica en inglés */}
+  else if(!flow.ok){qa.blocked=(qa.blocked||[]).concat({doc:id,reason:flow.oversized.length?'fila más alta que una página':flow.multiTable.length?'varias tablas paginables en una página (no soportado)':flow.postOverflow.length?'desborde tras escribir las etiquetas de continuación':flow.orphanHeads.length?'cabecera de capítulo huérfana':'invariante de filas',oversized:flow.oversized,labelErrors:flow.labelErrors,multiTable:flow.multiTable,postOverflow:flow.postOverflow,orphanHeads:flow.orphanHeads});}
   else{if(process.env.FLOW_FAULT==='print')await pg.addStyleTag({content:'@media print{table.flow tbody tr:nth-child(4){visibility:hidden}}'}); // negative test of ST05 only
    await pg.emulateMedia({media:'print'});const tmpPdf=pdfPath+'.'+process.pid+'.tmp';await pg.pdf({path:tmpPdf,preferCSSPageSize:true,printBackground:true});
    // ST05: compare every row with the text actually printed. Count each row's main text in the final DOM and in the PDF.
@@ -328,11 +355,12 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
     if(!pdfRows.ok)qa.blocked=(qa.blocked||[]).concat({doc:id,reason:'celdas impresas distintas del documento',mismatches:bad.slice(0,10)});}
    // v1.3 A11: el PDF solo se publica (renombrado atómico) si ha pasado todas sus pruebas; si no, se borra el temporal.
    if(pdfRows&&!pdfRows.ok)fs.rmSync(tmpPdf);else{fs.renameSync(tmpPdf,pdfPath);fresh.add(id);}}
-  qa.docs[id]={...m,flow:flowRec,pdfRows,external:ext,errors,lint};await ctx.close();}
+  qa.docs[id]={...m,flow:flowRec,pdfRows,i18n,external:ext,errors,lint};await ctx.close();}
+ qa.en={on:EN_ON,blocked:enBlocked};
  // v1.3 A11: con un documento bloqueado NO se publica la entrega: se descarta la preparación y se escribe un informe de
  // rechazo aparte. La entrega anterior aprobada (si existe) queda intacta. Solo se copian los PDF producidos en ESTA ejecución.
  if(E){if(qa.blocked){E.discard();fs.writeFileSync(path.join(outDir,'entrega-rechazo.json'),JSON.stringify({schema:'rubik-lab-entrega-rechazo/1',generated:new Date().toISOString(),project:S.project.id,revision:S.project.revision,blocked:qa.blocked,note:'No se ha publicado la entrega. La anterior, si existe, sigue en entrega/ sin cambios.'},null,1));}
-  else{qa.entregaWeb=E.writeWeb(fresh);if(fs.existsSync(path.join(outDir,'entrega-rechazo.json')))fs.rmSync(path.join(outDir,'entrega-rechazo.json'));}}
+  else{qa.entregaWeb=await E.writeWeb(fresh,EN_ON&&!enBlocked.length?{dict:EN_DICT,data:I18N_DATA,js:I18N_JS,browser}:null);if(fs.existsSync(path.join(outDir,'entrega-rechazo.json')))fs.rmSync(path.join(outDir,'entrega-rechazo.json'));}}
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
  for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'flow',JSON.stringify(v.flow),'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
  console.log('meta',JSON.stringify(meta));if(qa.blocked){console.log('BLOQUEADO',JSON.stringify(qa.blocked));process.exitCode=2;}await browser.close();})().catch(e=>{console.error(e);process.exit(1);});

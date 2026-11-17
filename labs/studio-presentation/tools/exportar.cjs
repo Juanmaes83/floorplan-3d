@@ -56,9 +56,10 @@ else{const KEYS=['tipo','capitulos','documentos','omitir','modo','idioma','recon
 if(errs.length)reject(2,'selección inválida',errs);
 const TIPOS=Object.fromEntries(REG.tipos.map(t=>[t.tipo,t])),base=TIPOS[SEL.tipo];
 const ALLCH=TIPOS.integral.chapters.filter(c=>c!=='portada');
+const EN=SEL.idioma==='en',SUF=EN?'.en':''; // v1.3: en inglés se usan la web y los PDF compuestos en inglés (*.en.html, *.en.pdf)
 const ch=(SEL.capitulos||base.chapters).filter(c=>c!=='portada'),docs=SEL.documentos||base.documents,mode=SEL.modo,ack=new Set(SEL.reconocidos||[]);
 for(const c of ch)if(!ALLCH.includes(c))E(`Capítulo desconocido o no compuesto: ${c}.`);
-for(const d of docs){if(!CAT.DOCUMENTOS[d])E(`Documento desconocido: ${d}.`);else if(!REG.pieces.some(p=>p.file===`documentos/${d}.pdf`))E(`Documento no disponible en esta entrega compuesta: ${d}.`);}
+for(const d of docs){if(!CAT.DOCUMENTOS[d])E(`Documento desconocido: ${d}.`);else if(!REG.pieces.some(p=>p.file===`documentos/${d}${SUF}.pdf`))E(`Documento no disponible en esta entrega compuesta: ${d}.`);}
 if(docs.length&&!ch.includes('documentos'))E('Hay documentos elegidos pero no el capítulo «Documentos»: el cliente no tendría cómo abrirlos. Elegir el capítulo o quitar los documentos.');
 const omit=SEL.omitir||[];for(const o of omit)if(!CAT.RECURSOS[o])E(`Recurso que no se puede omitir: ${o}. Admitidos: ${Object.keys(CAT.RECURSOS).join(', ')}.`);
 for(const r of ack)if(!CAT.AVISOS.includes(r))E(`Reconocimiento de un aviso que no existe: ${r}. Los bloqueos no se reconocen.`);
@@ -79,13 +80,14 @@ const excluded=ALLCH.filter(c=>!ch.includes(c));
 const custom=(SEL.omitir||[]).length>0||!(ch.length===base.chapters.filter(c=>c!=='portada').length&&ch.every(c=>base.chapters.includes(c))&&docs.length===base.documents.length&&docs.every(d=>base.documents.includes(d)));
 // Idioma: la web y los documentos se componen por idioma; uno que no existe se bloquea (nunca se mezclan idiomas).
 const idiomas=REG.idiomas||['es'];if(!idiomas.includes(SEL.idioma))gate('Idioma','block',`La entrega no está compuesta en «${SEL.idioma}» (disponible: ${idiomas.join(', ')}).`);
-const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path.join(SRC,TIPOS[t].file),'utf8'));return m?m[1].replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>'):'';};
+const NAME_EN={integral:'Complete documentation','primera-reunion':'First meeting','propuesta-comercial':'Commercial proposal','dossier-tecnico':'Technical dossier',interiorismo:'Interior design presentation',inmobiliaria:'Real estate presentation',obra:'Works explained'};
+const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path.join(SRC,TIPOS[t][EN?'fileEn':'file']),'utf8'));return m?m[1].replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>'):'';};
 (async()=>{
  const {chromium}=require('playwright');
  // ---------- (4) HTML final: podar en el DOM y serializar; referencias recogidas por el parser del navegador ----------
  const browser=await chromium.launch({args:['--no-sandbox']});const ctx=await browser.newContext({javaScriptEnabled:true});const ext=[];
  await ctx.route('**/*',r=>{const u=r.request().url();if(/^(file|data|about|blob):/.test(u))return r.continue();ext.push(u);return r.abort();});
- const pg=await ctx.newPage();await pg.goto('file://'+path.join(SRC,'index.html'));
+ const pg=await ctx.newPage();await pg.goto('file://'+path.join(SRC,EN?TIPOS.integral.fileEn:'index.html'));
  const {html,refs:rawRefs}=await pg.evaluate(({excluded,docs,kind,lead,marks})=>{
   for(const m of marks){document.querySelectorAll(`[data-res~="${m}"]`).forEach(x=>x.remove());document.querySelectorAll(`[data-res-sin~="${m}"]`).forEach(x=>x.hidden=false);}
   document.querySelectorAll('[data-res-sin][hidden]').forEach(x=>x.remove());
@@ -106,7 +108,7 @@ const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path
   const css=[...document.querySelectorAll('style')].map(s=>s.textContent).concat([...document.querySelectorAll('[style]')].map(e=>e.getAttribute('style'))).join('\n');
   for(const m of css.matchAll(/url\(\s*(['"]?)([^'")]+)\1\s*\)/g))add(m[2],'css url()');for(const m of css.matchAll(/@import\s+(['"])([^'"]+)\1/g))add(m[2],'css @import');
   return {html:'<!doctype html>\n'+document.documentElement.outerHTML,refs};
- },{marks:omit.map(o=>CAT.RECURSOS[o].marca),excluded,docs,kind:custom?`Selección personalizada a partir de «${base.name}»`:base.name,lead:custom?`Contenido elegido por el estudio: ${ch.length} capítulos y ${docs.length} documentos${omit.length?` (sin ${omit.map(o=>({'imagenes-ia':'imágenes IA','videos':'vídeos'})[o]).join(' ni ')})`:''}.`:leadOf(SEL.tipo)});
+ },{marks:omit.map(o=>CAT.RECURSOS[o].marca),excluded,docs,kind:EN?(custom?`Custom selection based on «${NAME_EN[base.tipo]||base.name}»`:(NAME_EN[base.tipo]||base.name)):custom?`Selección personalizada a partir de «${base.name}»`:base.name,lead:custom?(EN?`Content chosen by the studio: ${ch.length} chapters and ${docs.length} documents${omit.length?` (without ${omit.map(o=>({'imagenes-ia':'AI images','videos':'videos'})[o]).join(' or ')})`:''}.`:`Contenido elegido por el estudio: ${ch.length} capítulos y ${docs.length} documentos${omit.length?` (sin ${omit.map(o=>({'imagenes-ia':'imágenes IA','videos':'vídeos'})[o]).join(' ni ')})`:''}.`):leadOf(SEL.tipo)});
  // ---------- (5a) referencias: esquema, confinamiento, existencia, registro ----------
  const refs=new Set();
  for(const {u,where} of rawRefs){if(/^data:/i.test(u))continue;if(/^mailto:/i.test(u))continue;
@@ -114,7 +116,7 @@ const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path
   let r;try{r=decodeURI(u.split(/[?#]/)[0]);}catch{gate('Rutas válidas','block',`Ruta mal codificada: ${u.slice(0,80)}`);continue;}
   const n=path.posix.normalize(r);if(n.startsWith('/')||n.startsWith('..')||r.includes('\\')||!CAT.RUTA.test(n)){gate('Rutas válidas','block',`Ruta no permitida (${where}): ${u.slice(0,80)}`);continue;}
   refs.add(n);}
- for(const d of docs)refs.add(`documentos/${d}.pdf`);
+ for(const d of docs)refs.add(`documentos/${d}${SUF}.pdf`);
  const files=[...refs].sort();let total=0;
  for(const r of files){const f=path.join(SRC,r),ext_=r.split('.').pop().toLowerCase();
   if(!CAT.FORMATOS[ext_]||ext_==='json'||ext_==='txt'){gate('Formato permitido','block',`Formato no admitido en la entrega: ${r}.`);continue;}
@@ -129,10 +131,10 @@ const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path
  if(files.length>CAT.LIMITES.archivos)gate('Tamaño','block',`Más de ${CAT.LIMITES.archivos} archivos.`);if(total>CAT.LIMITES.bytesTotal)gate('Tamaño','block','La entrega supera el tamaño máximo documentado.');
  // ---------- (5b) grafo de contenido: ningún archivo de un capítulo excluido, ningún documento que lo contenga ----------
  const graphLeaks=[];for(const r of files){const p=PIECE[r];
-  if(r.startsWith('documentos/')&&r.endsWith('.pdf')){const c=CAT.DOCUMENTOS[r.slice(11,-4)]?.contiene;const need=c==='*'?ALLCH:c||[];const miss=need.filter(x=>excluded.includes(x));if(miss.length)graphLeaks.push(`${r} contiene ${miss.join(', ')}`);}
+  if(r.startsWith('documentos/')&&r.endsWith('.pdf')){const c=CAT.DOCUMENTOS[r.slice(11).replace(/(\.en)?\.pdf$/,'')]?.contiene;const need=c==='*'?ALLCH:c||[];const miss=need.filter(x=>excluded.includes(x));if(miss.length)graphLeaks.push(`${r} contiene ${miss.join(', ')}`);}
   else if(p&&p.capitulo&&excluded.includes(p.capitulo))graphLeaks.push(`${r} pertenece a «${p.capitulo}»`);}
  for(const r of files){for(const o of omit)if(CAT.RECURSOS[o].archivos.test(r))graphLeaks.push(`${r} es un recurso omitido («${o}»)`);
-  if(r.startsWith('documentos/')&&r.endsWith('.pdf'))for(const o of (CAT.DOCUMENTOS[r.slice(11,-4)]?.recursos||[]).filter(x=>omit.includes(x)))graphLeaks.push(`${r} contiene el recurso omitido «${o}»`);}
+  if(r.startsWith('documentos/')&&r.endsWith('.pdf'))for(const o of (CAT.DOCUMENTOS[r.slice(11).replace(/(\.en)?\.pdf$/,'')]?.recursos||[]).filter(x=>omit.includes(x)))graphLeaks.push(`${r} contiene el recurso omitido «${o}»`);}
  if(graphLeaks.length)gate('Lo excluido no está','block',`Por el grafo de contenido: ${graphLeaks.join('; ')}.`);
  // ---------- (5c) lectura real de cada archivo (los errores de herramienta bloquean) ----------
  const texts=[['index.html',html]];
@@ -189,7 +191,7 @@ const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path
  if(mode==='borrador'&&files.some(r=>r.endsWith('.pdf'))){const st=spawnSync('python3',['-I',path.join(__dirname,'estampar-borrador.py'),DIR,...files.filter(r=>r.endsWith('.pdf'))],{encoding:'utf8'});
   if(st.status!==0)reject(1,'entorno',`No se pudo rotular «borrador» en los PDF: ${(st.stderr||'').slice(0,200)}`);}
  const fecha=new Intl.DateTimeFormat('es-ES',{dateStyle:'long',timeZone:'Europe/Madrid'}).format(new Date(REG.generated));
- fs.writeFileSync(path.join(DIR,'LEEME.txt'),[`${S.brand?.title||S.project.name}. Entrega de ${prof.name||'estudio'} (${custom?'selección personalizada':base.name}).`,mode==='borrador'?'BORRADOR: no apto para enviar al cliente.':'',
+ if(!EN)fs.writeFileSync(path.join(DIR,'LEEME.txt'),[`${S.brand?.title||S.project.name}. Entrega de ${prof.name||'estudio'} (${custom?'selección personalizada':base.name}).`,mode==='borrador'?'BORRADOR: no apto para enviar al cliente.':'',
   `Proyecto ${S.project.id}, revisión ${S.project.revision}. Compuesta el ${fecha}.`,'',
   'Cómo abrirla: descomprimir la carpeta y abrir index.html en un navegador. Funciona sin conexión y sin instalar nada.',
   'Qué contiene y con qué huella: MANIFIESTO.json, dentro de esta carpeta, lista cada archivo con su tamaño y su SHA-256.',
@@ -197,10 +199,21 @@ const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path
   'no una firma digital: demuestra que los archivos no han cambiado desde la exportación, no quién los firma ni que sean ciertos.','',
   'No contiene el proyecto editable ni la visita 3D interactiva (esa necesita un enlace publicado).',
   /\.invalid$/.test(studioEmail)?'Datos de laboratorio: estudio sintético y precios de prueba.':''].filter((x,i,a)=>x!==''||a[i-1]!=='').join('\n')+'\n');
+ else{const fechaEn=new Intl.DateTimeFormat('en-GB',{dateStyle:'long',timeZone:'Europe/Madrid'}).format(new Date(REG.generated));
+  fs.writeFileSync(path.join(DIR,'README.txt'),[`${S.brand?.title||S.project.name}. Delivery from ${prof.name||'the studio'} (${custom?'custom selection':(NAME_EN[base.tipo]||base.name)}).`,mode==='borrador'?'DRAFT: not fit to send to the client.':'',
+   `Project ${S.project.id}, revision ${S.project.revision}. Composed on ${fechaEn}.`,'',
+   'How to open it: unzip the folder and open index.html in a browser. It works offline and needs nothing installed.',
+   'What it contains and with which fingerprint: MANIFIESTO.json, inside this folder, lists each file with its size and SHA-256.',
+   'The fingerprints of the manifest and of the ZIP are in the external summary (.digest.json file), delivered separately. It is an integrity check,',
+   'not a digital signature: it shows the files have not changed since export, not who signs them or that they are true.','',
+   'It does not contain the editable project or the interactive 3D visit (that needs a published link).',
+   'Names of rooms, materials, objects and budget items are the project data, in the language they were written in.',
+   'The works presentation (documentos/obra-presentacion.html) and the captions of the works video are exported by RUBIK in Spanish.',
+   /\.invalid$/.test(studioEmail)?'Laboratory data: synthetic studio and test prices.':''].filter((x,i,a)=>x!==''||a[i-1]!=='').join('\n')+'\n');}
  const listFiles=d=>{const o=[];const w=(x,r='')=>{for(const f of fs.readdirSync(x).sort()){const p=path.join(x,f),rel=r?r+'/'+f:f;fs.statSync(p).isDirectory()?w(p,rel):o.push(rel);}};w(d);return o;};
  const mfiles=listFiles(DIR).map(rel=>{const b=fs.readFileSync(path.join(DIR,rel)),p=PIECE[rel],e=rel.split('.').pop().toLowerCase();
-  const origin=rel==='index.html'?{producer:'tools/exportar.cjs',transform:'HTML final podado (sin scripts) a partir de '+TIPOS.integral.file,from:'entrega compuesta',sourceSha256:REG.web.find(w=>w.file===TIPOS.integral.file).sha256}
-   :rel==='LEEME.txt'?{producer:'tools/exportar.cjs'}
+  const srcWeb=EN?TIPOS.integral.fileEn:TIPOS.integral.file;const origin=rel==='index.html'?{producer:'tools/exportar.cjs',transform:'HTML final podado (sin scripts) a partir de '+srcWeb,from:'entrega compuesta',sourceSha256:REG.web.find(w=>w.file===srcWeb).sha256}
+   :(rel==='LEEME.txt'||rel==='README.txt')?{producer:'tools/exportar.cjs'}
    :{producer:p.producer||'compositor del laboratorio (tools/compose.cjs)',from:p.from||null,sourceSha256:p.sourceSha256||null,transform:p.transform||(mode==='borrador'&&e==='pdf'?'rótulo de borrador estampado':null),composedSha256:p.sha256,origenComprobado:p._origen||(p.from?'sin huella de origen registrada':'pieza producida por el compositor'),capitulo:p.capitulo??null};
   return {path:rel,bytes:b.length,sha256:sha(b),type:CAT.FORMATOS[e].mime,origin};});
  const manifest={schema:'rubik-lab-entrega-manifiesto/2',generated:REG.generated,project:{id:S.project.id,name:S.project.name,revision:S.project.revision},

@@ -1,11 +1,11 @@
 {
  "schema": "rubik-lab-exportar-qa/2",
- "ran": "2026-11-17T17:47:40.962Z",
+ "ran": "2026-11-17T18:06:52.597Z",
  "entorno": {
   "node": "v22.23.4",
   "plataforma": "linux"
  },
- "ms": 225154,
+ "ms": 207184,
  "pass": 72,
  "fail": 0,
  "cases": [
@@ -19,10 +19,10 @@
      "schema": "rubik-lab-entrega-digest/2",
      "folder": "pc",
      "manifest": "pc/MANIFIESTO.json",
-     "manifestSha256": "0742e2dee0d5031b4869bf1a7ced194c3690bc1fcd955b47fb02c21f1a3cc649",
+     "manifestSha256": "bc23cad3cea9aade1e5b11efae0a0cddc9956c4f10abac4e20cb261f8672dc83",
      "zip": "pc.zip",
-     "zipSha256": "0497f893b4b83f6e94bd31f59af2efeca7e7f9a154106f58260ea31e24596b0c",
-     "zipBytes": 2722469,
+     "zipSha256": "b1ddad326750945d5b7523cc3de79db90c9399b5e5fde1daf513244680335d88",
+     "zipBytes": 2722909,
      "files": 12,
      "alcance": "Huellas SHA-256 del manifiesto y del ZIP de reparto exacto. Integridad, no firma ni autenticidad."
     },
@@ -114,7 +114,7 @@
    "want": "bloquea",
    "result": "PASS",
    "detail": [
-    "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/entrega-integral.pdf contiene dibujo, materiales, presupuesto, obra, recorrido, decisiones, procedencia.",
+    "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/entrega-integral.pdf contiene concepto, dibujo, materiales, presupuesto, obra, recorrido, decisiones, procedencia.",
     "BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Del dibujo a la imagen» (dibujo) en documentos/entrega-integral.pdf; «Materiales y mobiliario» (materiales) en documentos/entrega-integral.pdf; «20.881,78» (presupuesto) en documentos/entrega-integral.pdf; «17.257,67» (presupuesto) en documentos/entrega-integral.pdf; «Cómo avanzará la obra» (obra) en documentos/entrega-integral.pdf; «plan de obra» (obra) en documentos/entrega-integral.pdf; «Lo que hay que decidir» (decisiones) en documentos/entrega-integral.pdf."
    ]
   },
@@ -388,10 +388,7 @@
    "want": "exporta si la entrega está compuesta en inglés; si no, bloquea sin mezclar idiomas",
    "result": "PASS",
    "detail": {
-    "compuestaEn": false,
-    "motivo": [
-     "BLOQUEA · Idioma: La entrega no está compuesta en «en» (disponible: es)."
-    ]
+    "compuestaEn": true
    }
   },
   {
@@ -772,8 +769,8 @@
    "want": "huella del manifiesto idéntica en dos exportaciones",
    "result": "PASS",
    "detail": {
-    "a": "0742e2dee0d5031b4869bf1a7ced194c3690bc1fcd955b47fb02c21f1a3cc649",
-    "b": "0742e2dee0d5031b4869bf1a7ced194c3690bc1fcd955b47fb02c21f1a3cc649",
+    "a": "bc23cad3cea9aade1e5b11efae0a0cddc9956c4f10abac4e20cb261f8672dc83",
+    "b": "bc23cad3cea9aade1e5b11efae0a0cddc9956c4f10abac4e20cb261f8672dc83",
     "nota": "El ZIP cambia solo por el nombre de la carpeta interior."
    }
   },
@@ -793,87 +790,87 @@
  "timings": [
   {
    "name": "pc",
-   "ms": 8383,
+   "ms": 9018,
    "code": 0
   },
   {
    "name": "tipo-integral",
-   "ms": 13673,
+   "ms": 10167,
    "code": 0
   },
   {
    "name": "tipo-primera-reunion",
-   "ms": 5945,
+   "ms": 5385,
    "code": 0
   },
   {
    "name": "tipo-propuesta-comercial",
-   "ms": 8308,
+   "ms": 7354,
    "code": 0
   },
   {
    "name": "tipo-dossier-tecnico",
-   "ms": 8190,
+   "ms": 8061,
    "code": 0
   },
   {
    "name": "tipo-interiorismo",
-   "ms": 5848,
+   "ms": 5650,
    "code": 0
   },
   {
    "name": "tipo-inmobiliaria",
-   "ms": 6003,
+   "ms": 5856,
    "code": 0
   },
   {
    "name": "tipo-obra",
-   "ms": 11824,
+   "ms": 10585,
    "code": 0
   },
   {
    "name": "pc-sin-presupuesto",
-   "ms": 6744,
+   "ms": 5641,
    "code": 0
   },
   {
    "name": "pc-incoherente",
-   "ms": 3511,
+   "ms": 2854,
    "code": 2
   },
   {
    "name": "integral-parcial",
-   "ms": 3786,
+   "ms": 2673,
    "code": 2
   },
   {
    "name": "pc-sin-ack",
-   "ms": 2866,
+   "ms": 2948,
    "code": 2
   },
   {
    "name": "pc-borrador",
-   "ms": 8735,
+   "ms": 8656,
    "code": 0
   },
   {
    "name": "sin-marca",
-   "ms": 2455,
+   "ms": 2951,
    "code": 2
   },
   {
    "name": "cruzado",
-   "ms": 5154,
+   "ms": 4743,
    "code": 2
   },
   {
    "name": "cruzado-rev",
-   "ms": 52,
+   "ms": 57,
    "code": 2
   },
   {
    "name": "datos",
-   "ms": 6222,
+   "ms": 4815,
    "code": 2
   },
   {
@@ -883,37 +880,37 @@
   },
   {
    "name": "sel-17",
-   "ms": 64,
+   "ms": 59,
    "code": 2
   },
   {
    "name": "sel-18",
-   "ms": 70,
+   "ms": 68,
    "code": 2
   },
   {
    "name": "sel-19",
-   "ms": 61,
+   "ms": 70,
    "code": 2
   },
   {
    "name": "sel-20",
-   "ms": 57,
+   "ms": 62,
    "code": 2
   },
   {
    "name": "sel-21",
-   "ms": 61,
+   "ms": 55,
    "code": 2
   },
   {
    "name": "sel-22",
-   "ms": 60,
+   "ms": 49,
    "code": 2
   },
   {
    "name": "sel-23",
-   "ms": 61,
+   "ms": 55,
    "code": 2
   },
   {
@@ -923,92 +920,92 @@
   },
   {
    "name": "sel-25",
-   "ms": 60,
+   "ms": 68,
    "code": 2
   },
   {
    "name": "sel-26",
-   "ms": 69,
+   "ms": 55,
    "code": 2
   },
   {
    "name": "sel-27",
-   "ms": 67,
+   "ms": 54,
    "code": 2
   },
   {
    "name": "sel-28",
-   "ms": 72,
+   "ms": 67,
    "code": 2
   },
   {
    "name": "sel-29",
-   "ms": 62,
+   "ms": 60,
    "code": 2
   },
   {
    "name": "idioma-en",
-   "ms": 2868,
-   "code": 2
+   "ms": 6328,
+   "code": 0
   },
   {
    "name": "pc",
-   "ms": 71,
+   "ms": 61,
    "code": 1
   },
   {
    "name": "pc",
-   "ms": 105,
+   "ms": 62,
    "code": 2
   },
   {
    "name": "src-img",
-   "ms": 3575,
+   "ms": 3110,
    "code": 2
   },
   {
    "name": "src-pdf",
-   "ms": 3091,
+   "ms": 2826,
    "code": 2
   },
   {
    "name": "src-mp4",
-   "ms": 3364,
+   "ms": 2996,
    "code": 2
   },
   {
    "name": "src-web",
-   "ms": 72,
+   "ms": 81,
    "code": 2
   },
   {
    "name": "src-noreg",
-   "ms": 2662,
+   "ms": 2890,
    "code": 2
   },
   {
    "name": "src-link",
-   "ms": 3352,
+   "ms": 3035,
    "code": 2
   },
   {
    "name": "src-ext",
-   "ms": 5313,
+   "ms": 4478,
    "code": 2
   },
   {
    "name": "src-js",
-   "ms": 6512,
+   "ms": 5183,
    "code": 2
   },
   {
    "name": "src-origen",
-   "ms": 3191,
+   "ms": 3088,
    "code": 2
   },
   {
    "name": "src-ft",
-   "ms": 5217,
+   "ms": 4648,
    "code": 2
   },
   {
@@ -1018,57 +1015,57 @@
   },
   {
    "name": "src-snapfuera",
-   "ms": 61,
+   "ms": 60,
    "code": 2
   },
   {
    "name": "carrera",
-   "ms": 3318,
+   "ms": 2993,
    "code": 2
   },
   {
    "name": "carrera2",
-   "ms": 3256,
+   "ms": 3238,
    "code": 2
   },
   {
    "name": "sin-obra",
-   "ms": 9463,
+   "ms": 8282,
    "code": 0
   },
   {
    "name": "sin-ia",
-   "ms": 7410,
+   "ms": 6064,
    "code": 0
   },
   {
    "name": "sin-video",
-   "ms": 9794,
+   "ms": 8596,
    "code": 0
   },
   {
    "name": "sin-video-integral",
-   "ms": 3161,
+   "ms": 2899,
    "code": 2
   },
   {
    "name": "sin-documentos",
-   "ms": 6028,
+   "ms": 6301,
    "code": 0
   },
   {
    "name": "combinada",
-   "ms": 8898,
+   "ms": 7773,
    "code": 0
   },
   {
    "name": "ficha-con-presupuesto",
-   "ms": 3467,
+   "ms": 2745,
    "code": 2
   },
   {
    "name": "pc-bis",
-   "ms": 9289,
+   "ms": 8284,
    "code": 0
   }
  ]

@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T14:45:31.736Z",
+ "generated": "2026-11-17T18:07:31.398Z",
  "runs": [
   {
    "file": "index.html",
@@ -32,6 +32,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -43,7 +44,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 12501,
+   "H": 13074,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -79,6 +80,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -90,7 +92,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 16667,
+   "H": 17452,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -126,6 +128,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -137,7 +140,241 @@
     "documentos",
     "procedencia"
    ],
-   "H": 17217,
+   "H": 18435,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "index.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 12941,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "index.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 17428,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "index.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    },
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "obra",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 18310,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-dossier-tecnico.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 7912,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-dossier-tecnico.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 10147,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-dossier-tecnico.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 11549,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -161,12 +398,13 @@
    "sections": [
     "portada",
     "vivienda",
+    "estancias",
     "materiales",
     "presupuesto",
     "documentos",
     "procedencia"
    ],
-   "H": 5591,
+   "H": 7974,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -190,12 +428,13 @@
    "sections": [
     "portada",
     "vivienda",
+    "estancias",
     "materiales",
     "presupuesto",
     "documentos",
     "procedencia"
    ],
-   "H": 6481,
+   "H": 10214,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -219,12 +458,121 @@
    "sections": [
     "portada",
     "vivienda",
+    "estancias",
     "materiales",
     "presupuesto",
     "documentos",
     "procedencia"
    ],
-   "H": 7029,
+   "H": 11646,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-inmobiliaria.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "recorrido",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 6343,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-inmobiliaria.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "recorrido",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 8789,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-inmobiliaria.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "estancias",
+    "recorrido",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 9052,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -260,7 +608,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 6344,
+   "H": 6405,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -296,7 +644,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 8656,
+   "H": 8830,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -332,7 +680,124 @@
     "documentos",
     "procedencia"
    ],
-   "H": 8873,
+   "H": 9087,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-interiorismo.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 8897,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-interiorismo.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 11984,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-interiorismo.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/recorrido.mp4",
+     "ready": 4,
+     "dur": 56,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "dibujo",
+    "estancias",
+    "materiales",
+    "recorrido",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 12439,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -362,6 +827,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "dibujo",
     "estancias",
     "materiales",
@@ -370,7 +836,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 8451,
+   "H": 8980,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -400,6 +866,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "dibujo",
     "estancias",
     "materiales",
@@ -408,7 +875,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 11425,
+   "H": 12025,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -438,6 +905,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "dibujo",
     "estancias",
     "materiales",
@@ -446,7 +914,115 @@
     "documentos",
     "procedencia"
    ],
-   "H": 11824,
+   "H": 12505,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-obra.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "obra",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 6102,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-obra.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "obra",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 7367,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-obra.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [
+    {
+     "src": "media/obra.mp4",
+     "ready": 4,
+     "dur": 24,
+     "w": 1280
+    }
+   ],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "vivienda",
+    "obra",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 8005,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -482,7 +1058,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 6151,
+   "H": 6195,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -518,7 +1094,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 7333,
+   "H": 7350,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -554,7 +1130,100 @@
     "documentos",
     "procedencia"
    ],
-   "H": 7965,
+   "H": 7983,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-primera-reunion.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 8147,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-primera-reunion.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 11265,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-primera-reunion.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "dibujo",
+    "estancias",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 11843,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -577,13 +1246,15 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
     "decisiones",
+    "documentos",
     "procedencia"
    ],
-   "H": 7202,
+   "H": 8230,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -606,13 +1277,15 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
     "decisiones",
+    "documentos",
     "procedencia"
    ],
-   "H": 10325,
+   "H": 11306,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -635,13 +1308,111 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
     "decisiones",
+    "documentos",
     "procedencia"
    ],
-   "H": 10858,
+   "H": 11910,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-propuesta-comercial.en.html",
+   "viewport": "escritorio",
+   "scrollW": 1440,
+   "W": 1440,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 9744,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-propuesta-comercial.en.html",
+   "viewport": "tableta",
+   "scrollW": 820,
+   "W": 820,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 11851,
+   "brokenLinks": [],
+   "external": [],
+   "errors": []
+  },
+  {
+   "file": "tipo-propuesta-comercial.en.html",
+   "viewport": "movil",
+   "scrollW": 390,
+   "W": 390,
+   "pageOverflow": false,
+   "over": [],
+   "overCount": 0,
+   "brokenImgs": [],
+   "vids": [],
+   "small": [],
+   "smallCount": 0,
+   "svgSmall": [],
+   "svgSmallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "sections": [
+    "portada",
+    "concepto",
+    "vivienda",
+    "estancias",
+    "materiales",
+    "presupuesto",
+    "decisiones",
+    "documentos",
+    "procedencia"
+   ],
+   "H": 13624,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -664,6 +1435,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "estancias",
     "materiales",
@@ -672,7 +1444,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 9348,
+   "H": 9828,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -695,6 +1467,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "estancias",
     "materiales",
@@ -703,7 +1476,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 11464,
+   "H": 11892,
    "brokenLinks": [],
    "external": [],
    "errors": []
@@ -726,6 +1499,7 @@
    "overlapCount": 0,
    "sections": [
     "portada",
+    "concepto",
     "vivienda",
     "estancias",
     "materiales",
@@ -734,7 +1508,7 @@
     "documentos",
     "procedencia"
    ],
-   "H": 12942,
+   "H": 13741,
    "brokenLinks": [],
    "external": [],
    "errors": []

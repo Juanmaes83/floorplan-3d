@@ -1,0 +1,2603 @@
+{
+ "data": [
+  "Proyecto de ejemplo",
+  "Vivienda de ejemplo",
+  "Reorganización de una vivienda de tres dormitorios: zona de día abierta, dos baños y almacenamiento a medida.",
+  "Estudio Ejemplo",
+  "Profesional de prueba",
+  "Arquitectura e interiorismo",
+  "estudio@example.invalid",
+  "Dormitorio principal",
+  "Baño en suite",
+  "Dormitorio infantil",
+  "Baño de invitados",
+  "Balcón-lavadero",
+  "Dormitorio juvenil",
+  "Cocina",
+  "Comedor",
+  "Pasillo",
+  "Salón",
+  "Balcón de estar",
+  "Mirador del dormitorio principal",
+  "Mirador del dormitorio juvenil",
+  "Parqué de roble",
+  "Parqué de nogal",
+  "Baldosa 800",
+  "Baldosa 600",
+  "Mármol",
+  "Baldosa antideslizante 300",
+  "Terrazo",
+  "Moqueta",
+  "Cama doble",
+  "Mesilla",
+  "Armario",
+  "Colchoneta para mirador",
+  "Ducha",
+  "Inodoro",
+  "Mueble de baño",
+  "Cama individual",
+  "Escritorio",
+  "Silla",
+  "Estantería",
+  "Zona de ducha",
+  "Lavadora",
+  "Pila de lavar",
+  "Encimera",
+  "Placa de gas",
+  "Fregadero",
+  "Frigorífico",
+  "Mesa de comedor",
+  "Silla de comedor",
+  "Aparador",
+  "Alfombra",
+  "Mueble de TV",
+  "Sofá de 3 plazas",
+  "Mesa de centro",
+  "Butaca",
+  "Zapatero",
+  "Planta",
+  "Mesa auxiliar",
+  "Sillón de descanso",
+  "Vista general",
+  "Pavimentos y rodapiés",
+  "Pavimento Parqué de roble",
+  "Pavimento Baldosa antideslizante 300",
+  "Pavimento Baldosa 600",
+  "Pavimento Baldosa 800",
+  "Pavimento Parqué de nogal",
+  "Pavimento Mármol",
+  "Rodapié (perímetro de estancias, sin descontar puertas)",
+  "Acabados de paredes",
+  "Pintura plástica en paredes (caras netas)",
+  "Carpintería",
+  "Puerta de paso",
+  "Puerta corredera",
+  "Ventana"
+ ],
+ "strings": [
+  {
+   "t": "; aquí, sus fotogramas",
+   "files": 3
+  },
+  {
+   "t": "; Salón y Dormitorio principal también con una imagen orientativa generada con IA, siempre junto a la vista del modelo",
+   "files": 6
+  },
+  {
+   "t": "(no computa)",
+   "files": 6
+  },
+  {
+   "t": "(su nombre no cabe en el plano): 11 Balcón de estar, 5,29 m².",
+   "files": 1
+  },
+  {
+   "t": "(su nombre no cabe en el plano): 12 Mirador del dormitorio principal, 1,41 m², no computa; 13 Mirador del dormitorio juvenil, 1,17 m², no computa.",
+   "files": 1
+  },
+  {
+   "t": "0 de 11 partidas revisadas.",
+   "files": 1
+  },
+  {
+   "t": "1 mar. – 5 mar.",
+   "files": 2
+  },
+  {
+   "t": "1 objeto: M-39",
+   "files": 1
+  },
+  {
+   "t": "1 objeto: M-40",
+   "files": 1
+  },
+  {
+   "t": "1 ud.",
+   "files": 1
+  },
+  {
+   "t": "1,17 m², no computa. Mármol.",
+   "files": 1
+  },
+  {
+   "t": "1,17 m², no computa. Mármol. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "1,41 m², no computa. Mármol.",
+   "files": 1
+  },
+  {
+   "t": "1,41 m², no computa. Mármol. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "1:100 del modelo, escala estimada",
+   "files": 1
+  },
+  {
+   "t": "1:100 sobre las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "1:150 del modelo, escala estimada",
+   "files": 1
+  },
+  {
+   "t": "1:50 del modelo, escala estimada",
+   "files": 1
+  },
+  {
+   "t": "1:50 sobre las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "1:50 y 1:75 sobre las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "1:75 del modelo, escala estimada",
+   "files": 1
+  },
+  {
+   "t": "1:75 sobre las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "1.000 × 350 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.200 × 2.000 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.200 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.300 × 650 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.400 × 800 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.500 × 2.000 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.580 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.600 × 350 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.600 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "1.800 × 2.000 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "10 may. – 28 may., no se ve en el modelo",
+   "files": 2
+  },
+  {
+   "t": "10 may. – 4 jun., no se ve en el modelo",
+   "files": 2
+  },
+  {
+   "t": "10,89 m². Parqué de roble. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "11 computan",
+   "files": 7
+  },
+  {
+   "t": "11 partidas medidas por RUBIK sobre el modelo, agrupadas en 3 capítulos.",
+   "files": 3
+  },
+  {
+   "t": "11 partidas medidas por RUBIK sobre el modelo, en 3 capítulos: pavimentos y rodapiés, acabados de paredes, carpintería.",
+   "files": 1
+  },
+  {
+   "t": "11 partidas, 20.881,78 € con IVA. El estudio aún no ha revisado ninguna de ellas: te pedirá la aprobación cuando lo haga.",
+   "files": 6
+  },
+  {
+   "t": "12 abr. – 7 may., no se ve en el modelo",
+   "files": 2
+  },
+  {
+   "t": "12 ud",
+   "files": 4
+  },
+  {
+   "t": "12 ud × 480,00 €",
+   "files": 3
+  },
+  {
+   "t": "12,37 m², Parqué de roble",
+   "files": 1
+  },
+  {
+   "t": "12,37 m². Parqué de roble. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "13 estancias y 87,18 m² útiles computados, medidos por RUBIK sobre el modelo del proyecto.",
+   "files": 6
+  },
+  {
+   "t": "13 estancias y 87,18 m² útiles computados. ¿Encaja con cómo vas a vivir la casa?",
+   "files": 6
+  },
+  {
+   "t": "14 jun. – 2 jul., no se ve en el modelo",
+   "files": 2
+  },
+  {
+   "t": "17 de noviembre de 2026",
+   "files": 7
+  },
+  {
+   "t": "17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08.",
+   "files": 7
+  },
+  {
+   "t": "18 % de la base, 1 partida",
+   "files": 5
+  },
+  {
+   "t": "19 abr. – 30 abr., no se ve en el modelo",
+   "files": 2
+  },
+  {
+   "t": "2 × encimera, placa de gas, fregadero.",
+   "files": 2
+  },
+  {
+   "t": "2 no computan",
+   "files": 2
+  },
+  {
+   "t": "2 objetos: M-15, M-16",
+   "files": 1
+  },
+  {
+   "t": "2 ud",
+   "files": 4
+  },
+  {
+   "t": "2 ud × 540,00 €",
+   "files": 3
+  },
+  {
+   "t": "2 ud.",
+   "files": 1
+  },
+  {
+   "t": "2,59 m² en Mirador del dormitorio principal, Mirador del dormitorio juvenil.",
+   "files": 6
+  },
+  {
+   "t": "2,59 m², 3 % del pavimento modelado",
+   "files": 5
+  },
+  {
+   "t": "2,89 m². Baldosa antideslizante 300.",
+   "files": 1
+  },
+  {
+   "t": "2,89 m². Baldosa antideslizante 300. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "2,92 m². Baldosa antideslizante 300.",
+   "files": 1
+  },
+  {
+   "t": "2,92 m². Baldosa antideslizante 300. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "2.000 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "2.400 × 400 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "2.400 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "2.600 × 1.800 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "2.770 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "21,53 m², Baldosa 800",
+   "files": 1
+  },
+  {
+   "t": "21,53 m². Baldosa 800. 1:75 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "22 mar. – 16 abr.",
+   "files": 2
+  },
+  {
+   "t": "3 imágenes generadas con IA a partir de vistas del modelo. Orientativas: pueden cambiar objetos, materiales y lo que queda fuera del encuadre.",
+   "files": 7
+  },
+  {
+   "t": "3 objetos: M-04, M-05, M-06",
+   "files": 1
+  },
+  {
+   "t": "3 objetos: M-12, M-13, M-14",
+   "files": 1
+  },
+  {
+   "t": "3,20 m². Baldosa antideslizante 300.",
+   "files": 1
+  },
+  {
+   "t": "3,20 m². Baldosa antideslizante 300. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "3.000 × 900 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "31 % de la base, 7 partidas",
+   "files": 5
+  },
+  {
+   "t": "32,56 m² en Dormitorio principal, Dormitorio infantil, Dormitorio juvenil.",
+   "files": 6
+  },
+  {
+   "t": "32,56 m², 36 % del pavimento modelado",
+   "files": 5
+  },
+  {
+   "t": "34,27 m² en Comedor, Pasillo, Salón.",
+   "files": 6
+  },
+  {
+   "t": "34,27 m², 38 % del pavimento modelado",
+   "files": 5
+  },
+  {
+   "t": "4 estancias con vista 3D",
+   "files": 6
+  },
+  {
+   "t": "4 fachadas agrupadas por orientación, calculadas por la Presentación 3D de RUBIK (FT3D-4). En negro, la que el producto elige por defecto: la de huecos más expresivos, no una «fachada principal».",
+   "files": 1
+  },
+  {
+   "t": "4 objetos: M-01, M-02, M-03",
+   "files": 1
+  },
+  {
+   "t": "4 objetos: M-17, M-18, M-19, M-20",
+   "files": 1
+  },
+  {
+   "t": "4 objetos: M-21, M-22, M-23, M-24",
+   "files": 1
+  },
+  {
+   "t": "4 objetos: M-36, M-37, M-38",
+   "files": 1
+  },
+  {
+   "t": "4 ud.",
+   "files": 1
+  },
+  {
+   "t": "40 líneas de mobiliario, todavía sin producto elegido. El estudio te propondrá referencias; cuéntale tus prioridades (estilo, medidas, presupuesto).",
+   "files": 6
+  },
+  {
+   "t": "400 × 700 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "450 × 400 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "450 × 480 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "5 jul. – 9 jul.",
+   "files": 2
+  },
+  {
+   "t": "5 objetos: M-07, M-08, M-09, M-10, M-11",
+   "files": 1
+  },
+  {
+   "t": "5,29 m² en Balcón de estar.",
+   "files": 6
+  },
+  {
+   "t": "5,29 m², 6 % del pavimento modelado",
+   "files": 5
+  },
+  {
+   "t": "5,29 m². Parqué de nogal.",
+   "files": 1
+  },
+  {
+   "t": "5,29 m². Parqué de nogal. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "5,71 m². Baldosa 800.",
+   "files": 1
+  },
+  {
+   "t": "5,71 m². Baldosa 800. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "50 % de la base, 3 partidas",
+   "files": 5
+  },
+  {
+   "t": "500 × 500 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "520 × 1.575 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "520 × 1.800 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "6 estancias van numeradas en el dibujo porque su nombre no cabe; sus nombres están en la planta.",
+   "files": 3
+  },
+  {
+   "t": "6 pavimentos asignados en el modelo, de mayor a menor superficie.",
+   "files": 4
+  },
+  {
+   "t": "6 pavimentos y 46 objetos del modelo, 17 de noviembre de 2026",
+   "files": 1
+  },
+  {
+   "t": "6 ud",
+   "files": 4
+  },
+  {
+   "t": "6 ud × 310,00 €",
+   "files": 3
+  },
+  {
+   "t": "6,04 m² en Cocina.",
+   "files": 6
+  },
+  {
+   "t": "6,04 m², 7 % del pavimento modelado",
+   "files": 5
+  },
+  {
+   "t": "6,04 m². Baldosa 600.",
+   "files": 1
+  },
+  {
+   "t": "6,04 m². Baldosa 600. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "600 × 500 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "600 × 600 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "7 jun. – 25 jun.",
+   "files": 2
+  },
+  {
+   "t": "7 objetos: M-25, M-26, M-27, M-28",
+   "files": 1
+  },
+  {
+   "t": "7,03 m². Baldosa 800.",
+   "files": 1
+  },
+  {
+   "t": "7,03 m². Baldosa 800. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "700 × 480 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "700 × 700 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "750 × 450 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "750 × 750 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "8 mar. – 19 mar., no se ve en el modelo",
+   "files": 2
+  },
+  {
+   "t": "8 objetos: M-29, M-30, M-31, M-32, M-33, M-34, M-35",
+   "files": 1
+  },
+  {
+   "t": "800 × 300 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "800 × 450 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "800 × 500 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "850 × 850 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "9 estancias sin vista 3D",
+   "files": 1
+  },
+  {
+   "t": "9,02 m² en Baño en suite, Baño de invitados, Balcón-lavadero.",
+   "files": 6
+  },
+  {
+   "t": "9,02 m², 10 % del pavimento modelado",
+   "files": 5
+  },
+  {
+   "t": "9,30 m². Parqué de roble. 1:50 sobre las medidas del modelo (escala estimada).",
+   "files": 1
+  },
+  {
+   "t": "900 × 1.340 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "900 × 900 mm (ancho × fondo)",
+   "files": 1
+  },
+  {
+   "t": "AB-01",
+   "files": 1
+  },
+  {
+   "t": "AB-02",
+   "files": 1
+  },
+  {
+   "t": "AB-03",
+   "files": 1
+  },
+  {
+   "t": "AB-04",
+   "files": 1
+  },
+  {
+   "t": "AB-05",
+   "files": 1
+  },
+  {
+   "t": "AB-06",
+   "files": 1
+  },
+  {
+   "t": "AB-07",
+   "files": 1
+  },
+  {
+   "t": "AB-08",
+   "files": 1
+  },
+  {
+   "t": "AB-09",
+   "files": 1
+  },
+  {
+   "t": "AB-10",
+   "files": 1
+  },
+  {
+   "t": "AB-11",
+   "files": 1
+  },
+  {
+   "t": "abril",
+   "files": 3
+  },
+  {
+   "t": "Abrir la presentación de la obra",
+   "files": 2
+  },
+  {
+   "t": "Acabado",
+   "files": 1
+  },
+  {
+   "t": "Alfombra, mueble de TV, sofá de 3 plazas, mesa de centro, butaca, zapatero, 2 × planta.",
+   "files": 1
+  },
+  {
+   "t": "Altura",
+   "files": 1
+  },
+  {
+   "t": "Altura (m)",
+   "files": 1
+  },
+  {
+   "t": "Año 2027, fechas de ejemplo. Línea discontinua: fases que el modelo no dibuja.",
+   "files": 2
+  },
+  {
+   "t": "Apertura de la presentación con Dibujo vivo de RUBIK: el modelo dibujado a lápiz.",
+   "files": 4
+  },
+  {
+   "t": "Asignados en el modelo",
+   "files": 7
+  },
+  {
+   "t": "Axonometría de Vivienda de ejemplo",
+   "files": 3
+  },
+  {
+   "t": "Axonometría dibujada desde la geometría del proyecto en RUBIK. Muros seccionados a 1,10 m; mobiliario en huella.",
+   "files": 3
+  },
+  {
+   "t": "Balcón",
+   "files": 2
+  },
+  {
+   "t": "Balcón de estar, planta a 1:150 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Balcón de estar, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Balcón-",
+   "files": 3
+  },
+  {
+   "t": "Balcón-lavadero, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Balcón-lavadero, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Baldosa 600, 6,04 m²",
+   "files": 1
+  },
+  {
+   "t": "Baldosa 800, 21,53 m²",
+   "files": 1
+  },
+  {
+   "t": "Baldosa 800, 5,71 m²",
+   "files": 1
+  },
+  {
+   "t": "Baldosa 800, 7,03 m²",
+   "files": 1
+  },
+  {
+   "t": "Baldosa antideslizante 300, 2,89 m²",
+   "files": 1
+  },
+  {
+   "t": "Baldosa antideslizante 300, 2,92 m²",
+   "files": 1
+  },
+  {
+   "t": "Baldosa antideslizante 300, 3,20 m²",
+   "files": 1
+  },
+  {
+   "t": "Baño de",
+   "files": 3
+  },
+  {
+   "t": "Baño de invitados, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Baño de invitados, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Baño en",
+   "files": 9
+  },
+  {
+   "t": "Baño en suite, Baño de invitados, Balcón-lavadero",
+   "files": 5
+  },
+  {
+   "t": "Baño en suite, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Baño en suite, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Baños",
+   "files": 2
+  },
+  {
+   "t": "Base 17.257,67 € más IVA 21 %",
+   "files": 1
+  },
+  {
+   "t": "Base 17.257,67 € más IVA 21 % (3.624,11 €)",
+   "files": 1
+  },
+  {
+   "t": "Base 17.257,67 € más IVA 21 % (3.624,11 €).",
+   "files": 3
+  },
+  {
+   "t": "Base imponible",
+   "files": 4
+  },
+  {
+   "t": "Cada bloque es un pavimento del modelo, con altura proporcional a su superficie. Colores del modelo, no muestras físicas.",
+   "files": 1
+  },
+  {
+   "t": "Calculada por RUBIK sobre el modelo",
+   "files": 7
+  },
+  {
+   "t": "Cama doble, 2 × mesilla, armario.",
+   "files": 1
+  },
+  {
+   "t": "Cama doble, armario, escritorio, silla.",
+   "files": 1
+  },
+  {
+   "t": "Cama individual, escritorio, silla, armario, estantería.",
+   "files": 1
+  },
+  {
+   "t": "Cantidad",
+   "files": 5
+  },
+  {
+   "t": "Cantidad: medición del modelo más la merma de obra. Precios de prueba de laboratorio, no de mercado.",
+   "files": 1
+  },
+  {
+   "t": "Capítulos",
+   "files": 7
+  },
+  {
+   "t": "Carpeta de solo lectura para ver sin conexión. No contiene el proyecto editable ni datos de otros proyectos.",
+   "files": 7
+  },
+  {
+   "t": "Cimentación",
+   "files": 3
+  },
+  {
+   "t": "Cimentación: del 8 mar. al 19 mar.",
+   "files": 2
+  },
+  {
+   "t": "Cocina en el recorrido",
+   "files": 3
+  },
+  {
+   "t": "Cocina, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Cocina, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Colchoneta para mirador.",
+   "files": 2
+  },
+  {
+   "t": "Color del modelo, no muestra física.",
+   "files": 5
+  },
+  {
+   "t": "Comedor en el recorrido",
+   "files": 3
+  },
+  {
+   "t": "Comedor, Pasillo, Salón",
+   "files": 5
+  },
+  {
+   "t": "Comedor, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Comedor, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Cómo avanzará la obra",
+   "files": 3
+  },
+  {
+   "t": "Cómo se construirá la vivienda, fase a fase, con un ejemplo ilustrativo del plan de obra.",
+   "files": 1
+  },
+  {
+   "t": "Cómo se verán las estancias: vistas del modelo, imágenes orientativas, materiales y un recorrido.",
+   "files": 1
+  },
+  {
+   "t": "Computa",
+   "files": 2
+  },
+  {
+   "t": "Computa como superficie útil",
+   "files": 1
+  },
+  {
+   "t": "Concepto",
+   "files": 5
+  },
+  {
+   "t": "Contenido",
+   "files": 2
+  },
+  {
+   "t": "Corresponde a esta vista del modelo: comparación visual de miniaturas (diferencia media 2,3 sobre 255); la imagen enviada no se conservó.",
+   "files": 6
+  },
+  {
+   "t": "Corresponde a la vista de la izquierda (comparación visual de miniaturas, diferencia media 2,3/255; la imagen enviada no se conservó). La geometría válida es la del modelo.",
+   "files": 1
+  },
+  {
+   "t": "Cotas, alzados técnicos, secciones constructivas, forjados, estructura, instalaciones y carpinterías detalladas: el modelo no los acredita y RUBIK no los inventa. Las escalas se refieren a las medidas del modelo y son estimadas: no sirven para medir sobre el papel.",
+   "files": 1
+  },
+  {
+   "t": "Cuadro de superficies",
+   "files": 1
+  },
+  {
+   "t": "Cubierta",
+   "files": 3
+  },
+  {
+   "t": "Cubierta: del 19 abr. al 30 abr.",
+   "files": 2
+  },
+  {
+   "t": "Datos del estudio y procedencia",
+   "files": 1
+  },
+  {
+   "t": "Datos del perfil de marca del estudio en RUBIK. Logotipo: no facilitado.",
+   "files": 1
+  },
+  {
+   "t": "de",
+   "files": 2
+  },
+  {
+   "t": "De dónde sale cada cosa",
+   "files": 7
+  },
+  {
+   "t": "De dónde sale cada dato",
+   "files": 1
+  },
+  {
+   "t": "De dónde sale cada dato.",
+   "files": 1
+  },
+  {
+   "t": "de obra",
+   "files": 7
+  },
+  {
+   "t": "Del dibujo a la imagen",
+   "files": 4
+  },
+  {
+   "t": "Descripción y planta",
+   "files": 1
+  },
+  {
+   "t": "Detalle del presupuesto",
+   "files": 1
+  },
+  {
+   "t": "Dibujo",
+   "files": 8
+  },
+  {
+   "t": "Dibujo axonométrico generado desde la geometría de RUBIK; muros seccionados a 1,10 m por convención de dibujo; mobiliario como huella en planta.",
+   "files": 3
+  },
+  {
+   "t": "Dibujo de la vivienda (Dibujo vivo de RUBIK)",
+   "files": 7
+  },
+  {
+   "t": "Dibujo vivo de la vivienda",
+   "files": 3
+  },
+  {
+   "t": "Dibujo, modelo 3D e imagen orientativa de la misma vivienda.",
+   "files": 1
+  },
+  {
+   "t": "Dibujo.",
+   "files": 3
+  },
+  {
+   "t": "Documentación integral",
+   "files": 1
+  },
+  {
+   "t": "Documentación integral, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Documento de solo lectura exportado por RUBIK, con las fases y las fechas.",
+   "files": 2
+  },
+  {
+   "t": "Documentos",
+   "files": 8
+  },
+  {
+   "t": "Documentos y procedencia",
+   "files": 1
+  },
+  {
+   "t": "dormitorio",
+   "files": 8
+  },
+  {
+   "t": "Dormitorio",
+   "files": 9
+  },
+  {
+   "t": "Dormitorio infantil, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 2
+  },
+  {
+   "t": "Dormitorio infantil, planta a 1:75 de las medidas del modelo (escala estimada)",
+   "files": 6
+  },
+  {
+   "t": "Dormitorio juvenil, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 2
+  },
+  {
+   "t": "Dormitorio juvenil, planta a 1:75 de las medidas del modelo (escala estimada)",
+   "files": 6
+  },
+  {
+   "t": "Dormitorio principal en el recorrido",
+   "files": 3
+  },
+  {
+   "t": "Dormitorio principal, Dormitorio infantil, Dormitorio juvenil",
+   "files": 5
+  },
+  {
+   "t": "Dormitorio principal, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 2
+  },
+  {
+   "t": "Dormitorio principal, planta a 1:75 de las medidas del modelo (escala estimada)",
+   "files": 6
+  },
+  {
+   "t": "Dormitorios",
+   "files": 2
+  },
+  {
+   "t": "Dossier técnico",
+   "files": 1
+  },
+  {
+   "t": "Dossier técnico, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Ducha, inodoro, mueble de baño.",
+   "files": 2
+  },
+  {
+   "t": "Ejemplo ilustrativo del plan de obra y su vídeo.",
+   "files": 1
+  },
+  {
+   "t": "El mismo proyecto en dos grados de verdad: el dibujo y el modelo 3D medido.",
+   "files": 3
+  },
+  {
+   "t": "El mismo proyecto en tres grados de verdad: el dibujo, el modelo 3D medido y una imagen orientativa del ambiente.",
+   "files": 3
+  },
+  {
+   "t": "El pavimento de cada estancia y las referencias de los objetos que contiene.",
+   "files": 1
+  },
+  {
+   "t": "El plan que ves es un ejemplo para explicar el proceso. El calendario real se fija con la licencia y la empresa constructora.",
+   "files": 6
+  },
+  {
+   "t": "El planteamiento del estudio, con sus palabras.",
+   "files": 1
+  },
+  {
+   "t": "El presupuesto",
+   "files": 6
+  },
+  {
+   "t": "El producto no dibuja alzados técnicos; esta lámina solo dice qué fachadas reconoce y cuántos huecos tiene cada una.",
+   "files": 1
+  },
+  {
+   "t": "El proyecto",
+   "files": 1
+  },
+  {
+   "t": "El proyecto no tiene acabados de pared asignados: no se muestra ninguno.",
+   "files": 1
+  },
+  {
+   "t": "El resto de estancias",
+   "files": 1
+  },
+  {
+   "t": "El vídeo de la obra no se incluye en esta entrega. Debajo, cuatro fotogramas suyos.",
+   "files": 2
+  },
+  {
+   "t": "El vídeo del recorrido no se incluye en esta entrega.",
+   "files": 3
+  },
+  {
+   "t": "En la estancia: alfombra, mueble de TV, sofá de 3 plazas, mesa de centro, butaca, zapatero, 2 × planta.",
+   "files": 1
+  },
+  {
+   "t": "En la estancia: cama doble, 2 × mesilla, armario.",
+   "files": 1
+  },
+  {
+   "t": "Entrega al cliente, 17 de noviembre de 2026",
+   "files": 1
+  },
+  {
+   "t": "Entrega de solo lectura. No contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Es el planteamiento del estudio, no una medición.",
+   "files": 4
+  },
+  {
+   "t": "Escala",
+   "files": 1
+  },
+  {
+   "t": "Escala 1:50 sobre las medidas del modelo, impreso al 100 %",
+   "files": 1
+  },
+  {
+   "t": "Escala 1:75 sobre las medidas del modelo, impreso al 100 %",
+   "files": 1
+  },
+  {
+   "t": "Escala estimada.",
+   "files": 1
+  },
+  {
+   "t": "Esquema, no sección constructiva.",
+   "files": 1
+  },
+  {
+   "t": "Esta entrega",
+   "files": 8
+  },
+  {
+   "t": "Esta misma entrega, paginada para imprimir o adjuntar.",
+   "files": 1
+  },
+  {
+   "t": "Estado",
+   "files": 1
+  },
+  {
+   "t": "Estado de los datos",
+   "files": 1
+  },
+  {
+   "t": "Estado de los datos.",
+   "files": 1
+  },
+  {
+   "t": "Estancia",
+   "files": 9
+  },
+  {
+   "t": "Estancia mayor",
+   "files": 2
+  },
+  {
+   "t": "Estancia por estancia",
+   "files": 6
+  },
+  {
+   "t": "Estancia por estancia: planta, objetos numerados y vista 3D.",
+   "files": 4
+  },
+  {
+   "t": "Estancias",
+   "files": 8
+  },
+  {
+   "t": "Estancias 1–2 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias 11–12 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias 13 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias 3–4 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias 5–6 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias 7–8 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias 9–10 de 13",
+   "files": 1
+  },
+  {
+   "t": "Estancias en el plano",
+   "files": 2
+  },
+  {
+   "t": "Estancias numeradas en el dibujo",
+   "files": 2
+  },
+  {
+   "t": "estar",
+   "files": 2
+  },
+  {
+   "t": "Estimada por RUBIK sobre el modelo",
+   "files": 2
+  },
+  {
+   "t": "Estructura y muros de fachada",
+   "files": 3
+  },
+  {
+   "t": "Estructura y muros de fachada: del 22 mar. al 16 abr.",
+   "files": 2
+  },
+  {
+   "t": "Estudio",
+   "files": 1
+  },
+  {
+   "t": "Estudio Ejemplo, Profesional de prueba. Texto escrito por el estudio para esta entrega.",
+   "files": 4
+  },
+  {
+   "t": "Estudio Ejemplo, Profesional de prueba. Texto escrito por el estudio para esta entrega. Es su planteamiento, no una medición: las cifras del proyecto están en las páginas siguientes.",
+   "files": 1
+  },
+  {
+   "t": "example.invalid",
+   "files": 10
+  },
+  {
+   "t": "Explicación de la obra",
+   "files": 1
+  },
+  {
+   "t": "Explicación de la obra, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Fachada",
+   "files": 1
+  },
+  {
+   "t": "Fachada A",
+   "files": 1
+  },
+  {
+   "t": "Fachada B (por defecto)",
+   "files": 1
+  },
+  {
+   "t": "Fachada C",
+   "files": 1
+  },
+  {
+   "t": "Fachada D",
+   "files": 1
+  },
+  {
+   "t": "Fachadas",
+   "files": 1
+  },
+  {
+   "t": "Fachadas que reconoce el modelo",
+   "files": 1
+  },
+  {
+   "t": "Fase 1",
+   "files": 1
+  },
+  {
+   "t": "Fase 2",
+   "files": 1
+  },
+  {
+   "t": "Fase 3",
+   "files": 1
+  },
+  {
+   "t": "Fase 4",
+   "files": 1
+  },
+  {
+   "t": "Fases del plan de ejemplo",
+   "files": 2
+  },
+  {
+   "t": "Fecha",
+   "files": 1
+  },
+  {
+   "t": "Fechas ilustrativas; sin presupuesto vinculado; no es un calendario de obra.",
+   "files": 1
+  },
+  {
+   "t": "Ficha inmobiliaria",
+   "files": 4
+  },
+  {
+   "t": "Ficha inmobiliaria, Vivienda de ejemplo",
+   "files": 2
+  },
+  {
+   "t": "Fichas de mobiliario",
+   "files": 1
+  },
+  {
+   "t": "Fotograma de la apertura de la presentación con Dibujo vivo de RUBIK.",
+   "files": 7
+  },
+  {
+   "t": "Fotogramas del vídeo exportado por la Evolución de obra (24 s), incluido en la versión para pantalla.",
+   "files": 1
+  },
+  {
+   "t": "Frigorífico, mesa de comedor, 4 × silla de comedor, aparador.",
+   "files": 2
+  },
+  {
+   "t": "Generada a partir de otra vista del modelo de la misma estancia (la enviada no se conservó). Añade en primer plano un dormitorio que no forma parte de esta estancia y cambia la proporción del encuadre: no sirve para juzgar la distribución.",
+   "files": 6
+  },
+  {
+   "t": "Generada a partir de otra vista del modelo de la misma estancia (la enviada no se conservó). Añade en primer plano un dormitorio que no forma parte de esta estancia y cambia la proporción del encuadre: no sirve para juzgar la distribución. La geometría válida es la del modelo.",
+   "files": 1
+  },
+  {
+   "t": "Generada con IA; corresponde visualmente a la vista del modelo de su izquierda (la imagen enviada no se conservó). Puede alterar detalles; la geometría válida es la del modelo.",
+   "files": 4
+  },
+  {
+   "t": "Geometría del proyecto en RUBIK, revisión rv1-0f3e96422fd20e08. Superficies calculadas por RUBIK sobre el modelo, con escala estimada. No sustituyen a una medición en obra.",
+   "files": 7
+  },
+  {
+   "t": "Geometría del proyecto en RUBIK: 70 muros, 22 huecos, 13 estancias y 46 objetos.",
+   "files": 1
+  },
+  {
+   "t": "Huecos",
+   "files": 1
+  },
+  {
+   "t": "Huecos y mobiliario según el modelo",
+   "files": 1
+  },
+  {
+   "t": "Huella en planta a 1:100 de las medidas del modelo",
+   "files": 1
+  },
+  {
+   "t": "Huella en planta a 1:150 de las medidas del modelo",
+   "files": 1
+  },
+  {
+   "t": "Huella en planta a 1:50 de las medidas del modelo",
+   "files": 1
+  },
+  {
+   "t": "Huella en planta a 1:75 de las medidas del modelo",
+   "files": 1
+  },
+  {
+   "t": "Imagen IA orientativa",
+   "files": 7
+  },
+  {
+   "t": "Imagen IA orientativa: Dormitorio principal",
+   "files": 7
+  },
+  {
+   "t": "Imagen IA orientativa: Salón",
+   "files": 7
+  },
+  {
+   "t": "Imagen IA orientativa.",
+   "files": 1
+  },
+  {
+   "t": "Imagen orientativa generada con IA",
+   "files": 3
+  },
+  {
+   "t": "Imágenes con IA",
+   "files": 7
+  },
+  {
+   "t": "Implantación de la obra: vallado y caseta",
+   "files": 3
+  },
+  {
+   "t": "Implantación de la obra: vallado y caseta: del 1 mar. al 5 mar.",
+   "files": 2
+  },
+  {
+   "t": "Importe neto",
+   "files": 4
+  },
+  {
+   "t": "Importe neto por capítulo",
+   "files": 5
+  },
+  {
+   "t": "Importe neto por capítulo, de mayor a menor",
+   "files": 5
+  },
+  {
+   "t": "Importe neto por capítulo, de mayor a menor.",
+   "files": 3
+  },
+  {
+   "t": "Importe neto por capítulo. El detalle de partidas está en la propuesta económica.",
+   "files": 1
+  },
+  {
+   "t": "Importe por capítulos con precios de prueba.",
+   "files": 1
+  },
+  {
+   "t": "Incluye 2 estancias que no computan como superficie útil (Mirador del dormitorio principal, Mirador del dormitorio juvenil): por eso suma 89,77 m² y no 87,18 m².",
+   "files": 1
+  },
+  {
+   "t": "infantil",
+   "files": 9
+  },
+  {
+   "t": "Instalaciones",
+   "files": 3
+  },
+  {
+   "t": "Instalaciones: del 10 may. al 4 jun.",
+   "files": 2
+  },
+  {
+   "t": "invitados",
+   "files": 3
+  },
+  {
+   "t": "IVA 21 %",
+   "files": 4
+  },
+  {
+   "t": "julio",
+   "files": 3
+  },
+  {
+   "t": "junio",
+   "files": 3
+  },
+  {
+   "t": "Junto a este PDF, la carpeta de la entrega contiene una versión para pantalla (index.html) con los vídeos, para ver sin conexión.",
+   "files": 1
+  },
+  {
+   "t": "juvenil",
+   "files": 2
+  },
+  {
+   "t": "La calcula la Presentación 3D de RUBIK (FT3D-3) con lo que el modelo sabe: muros, alturas y huecos. Sin forjados, cubierta, cimentación ni cotas.",
+   "files": 1
+  },
+  {
+   "t": "La distribución",
+   "files": 6
+  },
+  {
+   "t": "La lámina A3 de arquitectura se entrega aparte.",
+   "files": 1
+  },
+  {
+   "t": "La propuesta del estudio con el presupuesto por capítulos y los documentos que la acompañan.",
+   "files": 1
+  },
+  {
+   "t": "La visita 3D interactiva",
+   "files": 3
+  },
+  {
+   "t": "La vivienda",
+   "files": 7
+  },
+  {
+   "t": "La vivienda en la apertura de la presentación con Dibujo vivo. Dibujo del modelo, no fotografía.",
+   "files": 7
+  },
+  {
+   "t": "La vivienda para presentarla: imagen, cifras con su origen, planta y recorrido.",
+   "files": 1
+  },
+  {
+   "t": "Lámina",
+   "files": 1
+  },
+  {
+   "t": "Lámina de arquitectura A3",
+   "files": 4
+  },
+  {
+   "t": "Las estancias de las que el proyecto no tiene vista 3D, con su recorte de planta, pavimento y objetos.",
+   "files": 1
+  },
+  {
+   "t": "Las fechas de obra",
+   "files": 6
+  },
+  {
+   "t": "Las fechas son ilustrativas y el plan no tiene presupuesto vinculado.",
+   "files": 2
+  },
+  {
+   "t": "Las imágenes con IA",
+   "files": 6
+  },
+  {
+   "t": "Las superficies, estancias y cifras del proyecto están en «La vivienda» y en los documentos.",
+   "files": 4
+  },
+  {
+   "t": "lavadero",
+   "files": 3
+  },
+  {
+   "t": "Lavadora, pila de lavar.",
+   "files": 2
+  },
+  {
+   "t": "Libro de arquitectura",
+   "files": 4
+  },
+  {
+   "t": "Libro de arquitectura, Vivienda de ejemplo",
+   "files": 1
+  },
+  {
+   "t": "Libro de interiorismo",
+   "files": 5
+  },
+  {
+   "t": "Libro de interiorismo, Vivienda de ejemplo",
+   "files": 1
+  },
+  {
+   "t": "Libro de materiales y mobiliario",
+   "files": 4
+  },
+  {
+   "t": "Libro de materiales y mobiliario, Vivienda de ejemplo",
+   "files": 1
+  },
+  {
+   "t": "Línea de corte sobre la planta: plano paralelo al eje X, al 50 % del contorno.",
+   "files": 1
+  },
+  {
+   "t": "Línea discontinua: fases que el modelo no dibuja.",
+   "files": 1
+  },
+  {
+   "t": "Lo que el proyecto deja abierto, para hablarlo con el estudio.",
+   "files": 1
+  },
+  {
+   "t": "Lo que el proyecto deja abierto, para hablarlo con el estudio. Nada de esto está decidido todavía. Los pavimentos se confirman sobre la muestra real del fabricante, no sobre el color del modelo.",
+   "files": 5
+  },
+  {
+   "t": "Lo que el proyecto deja abierto.",
+   "files": 1
+  },
+  {
+   "t": "Lo que es medida del proyecto y lo que es ilustrativo, para que sepas cuánto fiarte de cada pieza.",
+   "files": 7
+  },
+  {
+   "t": "Lo que este libro no contiene",
+   "files": 1
+  },
+  {
+   "t": "Lo que este libro no contiene.",
+   "files": 1
+  },
+  {
+   "t": "Lo que hay que decidir",
+   "files": 6
+  },
+  {
+   "t": "Lo que ve el cliente.",
+   "files": 1
+  },
+  {
+   "t": "Longitud (m)",
+   "files": 1
+  },
+  {
+   "t": "Los documentos de esta entrega, para leer, imprimir o reenviar.",
+   "files": 7
+  },
+  {
+   "t": "Los números del plano son las referencias del listado de mobiliario. Superficies calculadas por RUBIK sobre el modelo, con escala estimada. No sustituyen a una medición en obra.",
+   "files": 1
+  },
+  {
+   "t": "Los pavimentos se confirman sobre la muestra real del fabricante, no sobre el color del modelo.",
+   "files": 1
+  },
+  {
+   "t": "Los tonos son los del material en el modelo 3D. La elección final requiere la muestra real del fabricante.",
+   "files": 1
+  },
+  {
+   "t": "Los tonos son los del material en el modelo 3D. La elección final se hace con la muestra real del fabricante.",
+   "files": 4
+  },
+  {
+   "t": "M-01 a M-04 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-05 a M-08 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-09 a M-12 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-13 a M-16 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-17 a M-20 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-21 a M-24 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-25 a M-28 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-29 a M-32 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-33 a M-36 de M-40",
+   "files": 1
+  },
+  {
+   "t": "M-37 a M-40 de M-40",
+   "files": 1
+  },
+  {
+   "t": "Mármol, 1,17 m²",
+   "files": 1
+  },
+  {
+   "t": "Mármol, 1,41 m²",
+   "files": 1
+  },
+  {
+   "t": "marzo",
+   "files": 3
+  },
+  {
+   "t": "Materiales",
+   "files": 5
+  },
+  {
+   "t": "Materiales de pavimento",
+   "files": 1
+  },
+  {
+   "t": "Materiales por estancia",
+   "files": 1
+  },
+  {
+   "t": "mayo",
+   "files": 3
+  },
+  {
+   "t": "Mediciones de RUBIK sobre el modelo, con la merma indicada. Precios de prueba de laboratorio. No son precios de mercado ni una oferta. Pendiente de revisión del estudio.",
+   "files": 7
+  },
+  {
+   "t": "Medida",
+   "files": 1
+  },
+  {
+   "t": "Medida (mm)",
+   "files": 1
+  },
+  {
+   "t": "Mesa auxiliar, 2 × sillón de descanso, planta.",
+   "files": 2
+  },
+  {
+   "t": "Mirador del",
+   "files": 8
+  },
+  {
+   "t": "Mirador del dormitorio juvenil, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Mirador del dormitorio juvenil, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Mirador del dormitorio juvenil: el nombre no cabe en su tramo.",
+   "files": 1
+  },
+  {
+   "t": "Mirador del dormitorio principal, Mirador del dormitorio juvenil",
+   "files": 5
+  },
+  {
+   "t": "Mirador del dormitorio principal, planta a 1:100 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Mirador del dormitorio principal, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Mobiliario y equipamiento del modelo",
+   "files": 2
+  },
+  {
+   "t": "Mobiliario y productos",
+   "files": 6
+  },
+  {
+   "t": "Mobiliario, equipamiento y honorarios: el proyecto no tiene precios para ellos y RUBIK no los estima.",
+   "files": 1
+  },
+  {
+   "t": "Modelo",
+   "files": 1
+  },
+  {
+   "t": "Modelo 3D",
+   "files": 6
+  },
+  {
+   "t": "Modelo 3D: Dormitorio principal",
+   "files": 1
+  },
+  {
+   "t": "Modelo 3D: Salón",
+   "files": 1
+  },
+  {
+   "t": "Modelo 3D.",
+   "files": 1
+  },
+  {
+   "t": "Modelo.",
+   "files": 3
+  },
+  {
+   "t": "Momento 1 del vídeo de la obra",
+   "files": 2
+  },
+  {
+   "t": "Momento 2 del vídeo de la obra",
+   "files": 2
+  },
+  {
+   "t": "Momento 3 del vídeo de la obra",
+   "files": 2
+  },
+  {
+   "t": "Momento 4 del vídeo de la obra",
+   "files": 2
+  },
+  {
+   "t": "Muros que corta el plano, con su espesor visto en la línea de corte y su altura; en blanco, los huecos que atraviesa. Debajo, las estancias que recorre.",
+   "files": 1
+  },
+  {
+   "t": "Ningún objeto del proyecto tiene fabricante, acabado ni precio. RUBIK no los inventa: quedan abiertos hasta que el estudio los elija.",
+   "files": 1
+  },
+  {
+   "t": "ninguno de estos objetos tiene fabricante, acabado ni precio en el proyecto.",
+   "files": 1
+  },
+  {
+   "t": "No",
+   "files": 2
+  },
+  {
+   "t": "no computa",
+   "files": 8
+  },
+  {
+   "t": "No definida en el modelo",
+   "files": 1
+  },
+  {
+   "t": "No disponibles en el proyecto:",
+   "files": 2
+  },
+  {
+   "t": "No se decide aún",
+   "files": 6
+  },
+  {
+   "t": "No son alzados.",
+   "files": 1
+  },
+  {
+   "t": "Objeto",
+   "files": 1
+  },
+  {
+   "t": "Objetos colocados",
+   "files": 2
+  },
+  {
+   "t": "Para comentar",
+   "files": 6
+  },
+  {
+   "t": "Para responder, escribe al estudio (estudio@example.invalid).",
+   "files": 6
+  },
+  {
+   "t": "Paredes.",
+   "files": 1
+  },
+  {
+   "t": "Parqué de nogal, 5,29 m²",
+   "files": 1
+  },
+  {
+   "t": "Parqué de roble, 10,89 m²",
+   "files": 1
+  },
+  {
+   "t": "Parqué de roble, 12,37 m²",
+   "files": 1
+  },
+  {
+   "t": "Parqué de roble, 9,30 m²",
+   "files": 1
+  },
+  {
+   "t": "Partida",
+   "files": 4
+  },
+  {
+   "t": "Partida, cantidad, precio e importe. El origen de cada precio, su revisión y los avisos internos quedan en la versión del estudio.",
+   "files": 1
+  },
+  {
+   "t": "Pasillo, planta a 1:150 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Pasillo, planta a 1:50 de las medidas del modelo (escala estimada)",
+   "files": 1
+  },
+  {
+   "t": "Pavimento",
+   "files": 1
+  },
+  {
+   "t": "Pavimento: Baldosa 600",
+   "files": 6
+  },
+  {
+   "t": "Pavimento: Baldosa 800",
+   "files": 6
+  },
+  {
+   "t": "Pavimento: Baldosa antideslizante 300",
+   "files": 6
+  },
+  {
+   "t": "Pavimento: Mármol",
+   "files": 6
+  },
+  {
+   "t": "Pavimento: Parqué de nogal",
+   "files": 6
+  },
+  {
+   "t": "Pavimento: Parqué de roble",
+   "files": 6
+  },
+  {
+   "t": "Pavimento.",
+   "files": 1
+  },
+  {
+   "t": "Pavimentos",
+   "files": 8
+  },
+  {
+   "t": "Pavimentos asignados en el modelo, ordenados por superficie. La barra reparte los 89,77 m² de pavimento modelado entre materiales.",
+   "files": 1
+  },
+  {
+   "t": "Pavimentos por estancia y una ficha por cada línea del listado de mobiliario.",
+   "files": 4
+  },
+  {
+   "t": "Pavimentos por superficie",
+   "files": 1
+  },
+  {
+   "t": "Pavimentos: del 14 jun. al 2 jul.",
+   "files": 2
+  },
+  {
+   "t": "PDF, 1 pág., 31 KB",
+   "files": 3
+  },
+  {
+   "t": "PDF, 1 pág., 378 KB",
+   "files": 3
+  },
+  {
+   "t": "PDF, 11 págs., 1,5 MB",
+   "files": 1
+  },
+  {
+   "t": "PDF, 12 págs., 74 KB",
+   "files": 3
+  },
+  {
+   "t": "PDF, 14 págs., 1,1 MB",
+   "files": 3
+  },
+  {
+   "t": "PDF, 14 págs., 112 KB",
+   "files": 2
+  },
+  {
+   "t": "PDF, 2 págs., 32 KB",
+   "files": 3
+  },
+  {
+   "t": "Pendiente de revisión del estudio.",
+   "files": 4
+  },
+  {
+   "t": "Pendiente de revisión profesional",
+   "files": 1
+  },
+  {
+   "t": "Pendiente del estudio",
+   "files": 6
+  },
+  {
+   "t": "Plan",
+   "files": 7
+  },
+  {
+   "t": "Plan de ejemplo de RUBIK aplicado a esta misma vivienda en la Evolución de obra.",
+   "files": 1
+  },
+  {
+   "t": "Plan de ejemplo de RUBIK aplicado a este mismo proyecto y exportado por su Evolución de obra como entrega orientativa: plan en borrador, sin revisar y sin presupuesto vinculado; fechas ilustrativas. No es un calendario de obra.",
+   "files": 7
+  },
+  {
+   "t": "Plan de obra de ejemplo por fases",
+   "files": 1
+  },
+  {
+   "t": "Plan de obra de ejemplo, 10 fases",
+   "files": 1
+  },
+  {
+   "t": "Planta 1:50 sobre las medidas del modelo (escala estimada), con cajetín; alzados y secciones no incluidos.",
+   "files": 4
+  },
+  {
+   "t": "Planta a 1:75 de las medidas del modelo (escala estimada; no sirve para medir sobre la pantalla). Alfombra, mueble de TV, sofá de 3 plazas, mesa de centro, butaca, zapatero, 2 × planta.",
+   "files": 6
+  },
+  {
+   "t": "Planta a 1:75 de las medidas del modelo (escala estimada; no sirve para medir sobre la pantalla). Cama doble, 2 × mesilla, armario.",
+   "files": 6
+  },
+  {
+   "t": "Planta a 1:75 de las medidas del modelo (escala estimada; no sirve para medir sobre la pantalla). Cama doble, armario, escritorio, silla.",
+   "files": 6
+  },
+  {
+   "t": "Planta a 1:75 de las medidas del modelo (escala estimada; no sirve para medir sobre la pantalla). Cama individual, escritorio, silla, armario, estantería.",
+   "files": 6
+  },
+  {
+   "t": "Planta de Vivienda de ejemplo",
+   "files": 11
+  },
+  {
+   "t": "Planta del proyecto; cada estancia lleva el color de su pavimento.",
+   "files": 1
+  },
+  {
+   "t": "Planta dibujada desde la geometría de RUBIK: 70 muros, 22 huecos y 13 estancias.",
+   "files": 11
+  },
+  {
+   "t": "Planta dibujada desde la geometría del proyecto.",
+   "files": 2
+  },
+  {
+   "t": "Planta dibujada desde la geometría del proyecto. El color de cada estancia es su pavimento.",
+   "files": 6
+  },
+  {
+   "t": "Planta general",
+   "files": 1
+  },
+  {
+   "t": "Planta general, cuadro de superficies, cada estancia con sus objetos, sección esquemática y fachadas que reconoce el modelo. Sin cotas.",
+   "files": 3
+  },
+  {
+   "t": "Planta y superficies medidas sobre el modelo.",
+   "files": 1
+  },
+  {
+   "t": "Planta, muros, huecos, estancias, superficies y objetos: proyecto en RUBIK, revisión rv1-0f3e96422fd20e08. Superficies calculadas por RUBIK sobre el modelo, con escala estimada. No sustituyen a una medición en obra.",
+   "files": 1
+  },
+  {
+   "t": "Planta, pavimento, objetos y vista 3D",
+   "files": 1
+  },
+  {
+   "t": "Planta, superficies y estancias",
+   "files": 7
+  },
+  {
+   "t": "Planta, superficies y mediciones: geometría del proyecto en RUBIK, revisión rv1-0f3e96422fd20e08. Vistas: modelo 3D del proyecto, no fotografías. Imágenes con IA: orientativas, a partir de vistas del modelo. Precios de prueba de laboratorio. No son precios de mercado ni una oferta. Plan de obra: ejemplo ilustrativo sin presupuesto.",
+   "files": 1
+  },
+  {
+   "t": "Planta, superficies, estancias, sección y fachadas del modelo, 17 de noviembre de 2026",
+   "files": 1
+  },
+  {
+   "t": "Planta, superficies, materiales y mediciones con precio, para revisar el proyecto con detalle.",
+   "files": 1
+  },
+  {
+   "t": "Por confirmar",
+   "files": 6
+  },
+  {
+   "t": "Por el nombre de las estancias",
+   "files": 2
+  },
+  {
+   "t": "Portante y fachada",
+   "files": 2
+  },
+  {
+   "t": "Precio",
+   "files": 1
+  },
+  {
+   "t": "Precio unitario",
+   "files": 4
+  },
+  {
+   "t": "Precios de prueba de laboratorio. No son precios de mercado ni una oferta.",
+   "files": 5
+  },
+  {
+   "t": "Precios de prueba, sin revisar",
+   "files": 7
+  },
+  {
+   "t": "Precios de prueba, solo ilustran el formato",
+   "files": 1
+  },
+  {
+   "t": "Presentación de interiorismo",
+   "files": 1
+  },
+  {
+   "t": "Presentación de interiorismo, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Presentación inmobiliaria",
+   "files": 1
+  },
+  {
+   "t": "Presentación inmobiliaria, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Presentación integral",
+   "files": 1
+  },
+  {
+   "t": "Presentación integral (PDF)",
+   "files": 1
+  },
+  {
+   "t": "Presentación integral, Vivienda de ejemplo",
+   "files": 1
+  },
+  {
+   "t": "Presentado por Profesional de prueba, 17 de noviembre de 2026",
+   "files": 1
+  },
+  {
+   "t": "Presupuesto",
+   "files": 8
+  },
+  {
+   "t": "Presupuesto con IVA",
+   "files": 7
+  },
+  {
+   "t": "Primera reunión",
+   "files": 1
+  },
+  {
+   "t": "Primera reunión, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "principal",
+   "files": 8
+  },
+  {
+   "t": "Procedencia",
+   "files": 1
+  },
+  {
+   "t": "Producto",
+   "files": 1
+  },
+  {
+   "t": "Propuesta comercial",
+   "files": 1
+  },
+  {
+   "t": "Propuesta comercial, 17 de noviembre de 2026. Revisión del proyecto rv1-0f3e96422fd20e08. Documento de solo lectura preparado con RUBIK; no contiene el proyecto editable.",
+   "files": 1
+  },
+  {
+   "t": "Propuesta económica",
+   "files": 5
+  },
+  {
+   "t": "Propuesta económica, versión cliente, Vivienda de ejemplo",
+   "files": 1
+  },
+  {
+   "t": "Proyecto",
+   "files": 1
+  },
+  {
+   "t": "Proyecto Vivienda de ejemplo, revisión rv1-0f3e96422fd20e08. 13 estancias, 11 computan; superficie útil 87,18 m².",
+   "files": 1
+  },
+  {
+   "t": "Puerta o paso",
+   "files": 1
+  },
+  {
+   "t": "Puertas y ventanas",
+   "files": 3
+  },
+  {
+   "t": "Puertas y ventanas: del 10 may. al 28 may.",
+   "files": 2
+  },
+  {
+   "t": "Qué",
+   "files": 1
+  },
+  {
+   "t": "Qué acompaña a esta entrega y de dónde sale cada cosa.",
+   "files": 1
+  },
+  {
+   "t": "Qué incluye",
+   "files": 1
+  },
+  {
+   "t": "Qué no incluye",
+   "files": 1
+  },
+  {
+   "t": "Recorrer la vivienda",
+   "files": 3
+  },
+  {
+   "t": "Recorte de la planta de RUBIK alrededor de cada estancia; el resto del plano se ve como contexto.",
+   "files": 1
+  },
+  {
+   "t": "Recorte de la planta de RUBIK alrededor de la estancia; el resto del plano se muestra como contexto.",
+   "files": 8
+  },
+  {
+   "t": "Ref.",
+   "files": 1
+  },
+  {
+   "t": "Referencias de fabricante, acabados de pared, alzados y secciones: el proyecto no los tiene y RUBIK no los inventa.",
+   "files": 1
+  },
+  {
+   "t": "Reforma, IVA incluido",
+   "files": 1
+  },
+  {
+   "t": "Resumen por capítulos y detalle de partidas con precio.",
+   "files": 4
+  },
+  {
+   "t": "Retirada del andamio, la caseta y el vallado",
+   "files": 3
+  },
+  {
+   "t": "Retirada del andamio, la caseta y el vallado: del 5 jul. al 9 jul.",
+   "files": 2
+  },
+  {
+   "t": "Revestimientos y pintura",
+   "files": 3
+  },
+  {
+   "t": "Revestimientos y pintura: del 7 jun. al 25 jun.",
+   "files": 2
+  },
+  {
+   "t": "Revisión",
+   "files": 1
+  },
+  {
+   "t": "Revisión rv1-0f3e96422fd20e08",
+   "files": 5
+  },
+  {
+   "t": "RUBIK no conoce la escala real del dibujo de partida: las medidas son las del modelo. Cada lámina lo indica en su cajetín.",
+   "files": 1
+  },
+  {
+   "t": "RUBIK solo muestra las vistas que el profesional ha generado en el proyecto: 4 estancias tienen una. No se fabrica ninguna imagen para las demás.",
+   "files": 1
+  },
+  {
+   "t": "rv1-0f3e96422fd20e08",
+   "files": 1
+  },
+  {
+   "t": "Salón en el recorrido",
+   "files": 3
+  },
+  {
+   "t": "Salón, planta a 1:75 de las medidas del modelo (escala estimada)",
+   "files": 8
+  },
+  {
+   "t": "Salón. Vista del modelo 3D del proyecto generada por RUBIK. No es una fotografía.",
+   "files": 2
+  },
+  {
+   "t": "se abre con un enlace que te envía el estudio. Esta entrega no la incluye: es una carpeta para ver sin conexión y no contiene el proyecto editable.",
+   "files": 3
+  },
+  {
+   "t": "Sección de la Presentación 3D",
+   "files": 1
+  },
+  {
+   "t": "Sección esquemática",
+   "files": 1
+  },
+  {
+   "t": "Sección y fachadas: descriptores calculados por el producto (Presentación 3D, FT3D-3 y FT3D-4) sobre esta misma revisión, en la versión 8525025.",
+   "files": 1
+  },
+  {
+   "t": "Sí",
+   "files": 2
+  },
+  {
+   "t": "Sin cotas: el modelo no las acredita. Medir sobre el papel no sustituye a una medición en obra.",
+   "files": 1
+  },
+  {
+   "t": "Sin escala",
+   "files": 1
+  },
+  {
+   "t": "Sin material asignado",
+   "files": 1
+  },
+  {
+   "t": "Sin objetos",
+   "files": 1
+  },
+  {
+   "t": "Sin objetos colocados.",
+   "files": 1
+  },
+  {
+   "t": "Sin objetos.",
+   "files": 1
+  },
+  {
+   "t": "Sin orientación geográfica: el proyecto no tiene norte, así que las fachadas se nombran A, B, C… y no norte, sur…",
+   "files": 1
+  },
+  {
+   "t": "Sin precio",
+   "files": 1
+  },
+  {
+   "t": "Sin productos asignados.",
+   "files": 1
+  },
+  {
+   "t": "Sin referencia de producto",
+   "files": 1
+  },
+  {
+   "t": "Sin referencia de producto:",
+   "files": 1
+  },
+  {
+   "t": "Sin vista 3D.",
+   "files": 1
+  },
+  {
+   "t": "Situación en la planta",
+   "files": 1
+  },
+  {
+   "t": "Solo informativo",
+   "files": 6
+  },
+  {
+   "t": "Son orientativas: sirven para imaginar el ambiente. Las decisiones se toman sobre el modelo del proyecto y las muestras reales.",
+   "files": 6
+  },
+  {
+   "t": "Subtotal acabados de paredes",
+   "files": 1
+  },
+  {
+   "t": "Subtotal carpintería",
+   "files": 1
+  },
+  {
+   "t": "Subtotal pavimentos y rodapiés",
+   "files": 1
+  },
+  {
+   "t": "suite",
+   "files": 9
+  },
+  {
+   "t": "Superficie",
+   "files": 1
+  },
+  {
+   "t": "Superficie de cada estancia calculada por RUBIK sobre el modelo.",
+   "files": 1
+  },
+  {
+   "t": "Superficie útil",
+   "files": 9
+  },
+  {
+   "t": "Superficie útil computada",
+   "files": 7
+  },
+  {
+   "t": "Superficie útil computada (11 estancias)",
+   "files": 1
+  },
+  {
+   "t": "Superficies calculadas por RUBIK sobre el modelo, con escala estimada. No sustituyen a una medición en obra.",
+   "files": 8
+  },
+  {
+   "t": "Superficies calculadas por RUBIK sobre el modelo, con escala estimada. No sustituyen a una medición en obra. 11 de 13 estancias computan según el cálculo de superficies de RUBIK. El color de fondo de cada estancia es su pavimento (página de materiales).",
+   "files": 1
+  },
+  {
+   "t": "Superficies, estancias, objetos, materiales y vistas proceden del proyecto en RUBIK (revisión rv1-0f3e96422fd20e08). Las vistas son del modelo 3D, no fotografías; los colores de material son los del modelo, no muestras físicas.",
+   "files": 1
+  },
+  {
+   "t": "Tabique",
+   "files": 2
+  },
+  {
+   "t": "Tabiquería interior",
+   "files": 3
+  },
+  {
+   "t": "Tabiquería interior: del 12 abr. al 7 may.",
+   "files": 2
+  },
+  {
+   "t": "Texto del profesional en la ficha de entrega.",
+   "files": 1
+  },
+  {
+   "t": "Todo el proyecto en una entrega: la vivienda, sus estancias, materiales, presupuesto, la obra prevista y los documentos.",
+   "files": 2
+  },
+  {
+   "t": "Total con IVA",
+   "files": 5
+  },
+  {
+   "t": "ubicación, precio de venta, año, orientación, planta del edificio y certificado energético.",
+   "files": 2
+  },
+  {
+   "t": "Ud.",
+   "files": 1
+  },
+  {
+   "t": "Un ejemplo para explicar el proceso: las fases de una obra sobre esta misma vivienda.",
+   "files": 2
+  },
+  {
+   "t": "Un primer vistazo para hablar del proyecto: la distribución, cómo se ve y qué queda por decidir.",
+   "files": 1
+  },
+  {
+   "t": "Un recorrido por 4 estancias, grabado por RUBIK desde el modelo del proyecto",
+   "files": 3
+  },
+  {
+   "t": "Una ficha por línea del listado: lo que el modelo sabe del objeto y, escrito, lo que no sabe.",
+   "files": 1
+  },
+  {
+   "t": "Una página: vista, cifras con su origen (incluido el coste de la reforma) y planta.",
+   "files": 2
+  },
+  {
+   "t": "Una página: vista, cifras con su origen y planta. Sin cifras económicas.",
+   "files": 3
+  },
+  {
+   "t": "Vídeo de la evolución de la obra",
+   "files": 2
+  },
+  {
+   "t": "Vídeo del recorrido por la vivienda",
+   "files": 3
+  },
+  {
+   "t": "Vídeo exportado por «Presentar mi vivienda» de RUBIK: solo la vista 3D, sin interfaz. Duración 56 s.",
+   "files": 3
+  },
+  {
+   "t": "Vídeo exportado por la Evolución de obra de RUBIK sobre este mismo proyecto, con su plan de obra. Duración 24 s.",
+   "files": 2
+  },
+  {
+   "t": "Vista del modelo 3D del proyecto generada por RUBIK. No es una fotografía.",
+   "files": 5
+  },
+  {
+   "t": "Vista del modelo 3D: Dormitorio infantil",
+   "files": 6
+  },
+  {
+   "t": "Vista del modelo 3D: Dormitorio juvenil",
+   "files": 6
+  },
+  {
+   "t": "Vista del modelo 3D: Dormitorio principal",
+   "files": 6
+  },
+  {
+   "t": "Vista del modelo 3D: Salón",
+   "files": 6
+  },
+  {
+   "t": "Vista del modelo del proyecto.",
+   "files": 6
+  },
+  {
+   "t": "Vista del modelo junto a su imagen IA orientativa.",
+   "files": 1
+  },
+  {
+   "t": "Vista general del modelo 3D",
+   "files": 3
+  },
+  {
+   "t": "Vistas 3D y recorrido",
+   "files": 7
+  },
+  {
+   "t": "Vistas del modelo 3D del proyecto generadas por RUBIK. No son fotografías.",
+   "files": 7
+  },
+  {
+   "t": "Vivienda de ejemplo, Documentación integral",
+   "files": 1
+  },
+  {
+   "t": "Vivienda de ejemplo, Dossier técnico",
+   "files": 1
+  },
+  {
+   "t": "Vivienda de ejemplo, Explicación de la obra",
+   "files": 1
+  },
+  {
+   "t": "Vivienda de ejemplo, Presentación de interiorismo",
+   "files": 1
+  },
+  {
+   "t": "Vivienda de ejemplo, Presentación inmobiliaria",
+   "files": 1
+  },
+  {
+   "t": "Vivienda de ejemplo, Primera reunión",
+   "files": 1
+  },
+  {
+   "t": "Vivienda de ejemplo, Propuesta comercial",
+   "files": 1
+  },
+  {
+   "t": "y vídeo",
+   "files": 7
+  },
+  {
+   "t": "Zona de ducha, inodoro, mueble de baño.",
+   "files": 2
+  }
+ ]
+}

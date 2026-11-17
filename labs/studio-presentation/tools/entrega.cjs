@@ -162,17 +162,18 @@ video{width:100%;background:#111;border-radius:2px}
 footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:var(--ink)}
 .missing{border:1px dashed var(--rule);padding:18px;color:var(--muted);font-size:14px}
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero .studio{margin-bottom:24px}.cols>*{grid-column:span 12!important}.stills{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.pan{overflow-x:auto;-webkit-overflow-scrolling:touch}.pan svg{width:640px;max-width:none}.pan+figcaption::before{content:'Desliza para ver el dibujo completo. '}.top b span{display:none}.figs{grid-template-columns:1fr 1fr}.pair{grid-template-columns:1fr}.gantt{grid-template-columns:1fr;row-gap:2px}.gantt .track{margin-bottom:10px}
+@media (min-width:601px){.pan-hint{display:none}}
+@media (max-width:600px){.pan{overflow-x:auto;-webkit-overflow-scrolling:touch}.pan svg{width:640px;max-width:none}.pan-hint{display:inline}.top b span{display:none}.figs{grid-template-columns:1fr 1fr}.pair{grid-template-columns:1fr}.gantt{grid-template-columns:1fr;row-gap:2px}.gantt .track{margin-bottom:10px}
  .dec li{grid-template-columns:34px 1fr}.dec .st{grid-column:2;justify-self:start}.prov td:first-child{width:auto}.prov tr{display:grid}.prov td{border:0;padding:2px 0}.prov tr{border-bottom:1px solid var(--rule);padding:10px 0}}`;
  const mediaFig=(src,alt,cap,cls='')=>src?`<figure class="${cls}"><img src="${src}" alt="${esc(alt)}" loading="lazy"><figcaption>${cap}</figcaption></figure>`:`<div class="missing">${esc(alt)}: no disponible en esta entrega.</div>`;
  const videoFig=(o,label,cap)=>o?`<figure><video controls playsinline preload="metadata" poster="${o.poster}" aria-label="${esc(label)}"><source src="${o.video}" type="video/mp4"></video><figcaption>${cap} Duración ${Math.round(o.dur)} s.</figcaption></figure>`:`<div class="missing">${esc(label)}: el vídeo no está disponible en esta entrega.</div>`;
  const chap=(id,n,body)=>`<section class="ch" id="${id}"><div class="wrap">${body.replace('%N%','')}</div></section>`;
  const sections={
-  concepto:n=>!PRO_TEXT?'':chap('concepto',n,`<h2>%N%Concepto</h2><div class="cols"><figure class="s8 concept"><blockquote><p>${esc(PRO_TEXT)}</p></blockquote>
+  concepto:n=>!PRO_TEXT?'':chap('concepto',n,`<h2>%N%Concepto</h2><div class="cols"><figure class="s8 concept"><blockquote lang="es"><p>${esc(PRO_TEXT)}</p></blockquote>
    <figcaption>${esc(STUDIO)}${prof.person?`, ${esc(prof.person)}`:''}. Texto escrito por el estudio para esta entrega.</figcaption></figure>
    <div class="s4"><p class="note"><b>Es el planteamiento del estudio, no una medición.</b> Las superficies, estancias y cifras del proyecto están en «La vivienda» y en los documentos.</p></div></div>`),
   vivienda:n=>chap('vivienda',n,`<h2>%N%La vivienda</h2><p class="lead">${rooms.length} estancias y ${AREA} m² útiles computados, medidos por RUBIK sobre el modelo del proyecto.</p>
-   <div class="cols"><figure class="s8"><div class="pan">${planSvg}</div><figcaption>Planta dibujada desde la geometría del proyecto. El color de cada estancia es su pavimento.</figcaption></figure>
+   <div class="cols"><figure class="s8"><div class="pan">${planSvg}</div><figcaption><span class="pan-hint">Desliza para ver el dibujo completo. </span>Planta dibujada desde la geometría del proyecto. El color de cada estancia es su pavimento.</figcaption></figure>
    <div class="s4"><table><thead><tr><th>Estancia</th><th class="num">m²</th></tr></thead><tbody>${rooms.map(r=>`<tr><td>${esc(r.name)}${r.counted?'':' <span class="small">(no computa)</span>'}</td><td class="num">${r.areaM2==null?'—':num(r.areaM2)}</td></tr>`).join('')}<tr class="tot"><td>Superficie útil computada</td><td class="num">${AREA}</td></tr></tbody></table><p class="cap">${esc(STATUS_AREA)}</p></div></div>`),
   dibujo:n=>{const g=ai['Vista general'];return chap('dibujo',n,`<h2>%N%Del dibujo a la imagen</h2><p class="lead"><span data-res="ia">El mismo proyecto en tres grados de verdad: el dibujo, el modelo 3D medido y una imagen orientativa del ambiente.</span><span data-res-sin="ia" hidden>El mismo proyecto en dos grados de verdad: el dibujo y el modelo 3D medido.</span></p>
    <div class="cols"><div class="s4">${mediaFig(drawing,'Dibujo vivo de la vivienda','<b>Dibujo.</b> Apertura de la presentación con Dibujo vivo de RUBIK: el modelo dibujado a lápiz.')}</div>
@@ -188,7 +189,7 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
   presupuesto:n=>!V?chap('presupuesto',n,`<h2>%N%Presupuesto</h2><p class="lead">El proyecto todavía no tiene presupuesto con precios. No se muestra ningún importe.</p>`):chap('presupuesto',n,`<h2>%N%Presupuesto</h2><p class="lead">${V.summary.items} partidas medidas por RUBIK sobre el modelo, agrupadas en ${V.chapters.length} capítulos.</p>
    <div class="cols"><div class="s5"><div class="total">${nf(2).format(totalGross)}<small> €</small></div><p style="margin:6px 0 0"><b>Total con IVA</b></p><p class="cap">Base ${eur(V.summary.net.amount)} más IVA ${num(V.summary.tax.ratePercent,0)} % (${eur(V.summary.tax.amount)}).</p>
     <p class="note" style="margin-top:20px"><b>${V.summary.reviewComplete?'Revisado por el estudio.':'Pendiente de revisión del estudio.'}</b> ${esc(PRICE_NOTE)}</p></div>
-   <figure class="s7"><div class="pan">${chapterChart(V,{w:150})}</div><figcaption>Importe neto por capítulo, de mayor a menor.</figcaption></figure>
+   <figure class="s7"><div class="pan">${chapterChart(V,{w:150})}</div><figcaption><span class="pan-hint">Desliza para ver el dibujo completo. </span>Importe neto por capítulo, de mayor a menor.</figcaption></figure>
    <div class="s12"><table class="budget"><thead><tr><th>Partida</th><th class="num">Cantidad</th><th class="num">Precio unitario</th><th class="num">Importe neto</th></tr></thead><tbody>${V.chapters.map(c=>`<tr class="chap"><td colspan="4">${esc(c.title)}</td></tr>${c.lines.map(l=>`<tr><td>${esc(l.description)}<span class="qm">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)} ${({m2:'m²',m:'m',unit:'ud'})[l.quantity.unit]||''} × ${eur(l.unitPrice)}</span></td><td class="num">${num(l.budgetQuantity,l.quantity.unit==='unit'?0:2)} ${({m2:'m²',m:'m',unit:'ud'})[l.quantity.unit]||''}</td><td class="num">${eur(l.unitPrice)}</td><td class="num">${eur(l.subtotalNet)}</td></tr>`).join('')}`).join('')}
     <tr class="tot"><td colspan="3">Base imponible</td><td class="num">${eur(V.summary.net.amount)}</td></tr><tr><td colspan="3">IVA ${num(V.summary.tax.ratePercent,0)} %</td><td class="num">${eur(V.summary.tax.amount)}</td></tr><tr class="tot"><td colspan="3">Total con IVA</td><td class="num">${eur(V.summary.gross.amount)}</td></tr></tbody></table></div></div>`),
   obra:n=>chap('obra',n,`<h2>%N%Cómo avanzará la obra</h2><p class="lead">Un ejemplo para explicar el proceso: las fases de una obra sobre esta misma vivienda. <b>Las fechas son ilustrativas y el plan no tiene presupuesto vinculado.</b></p>
@@ -213,7 +214,7 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    <tr><td>Dibujo</td><td>Fotograma de la apertura de la presentación con Dibujo vivo de RUBIK.</td></tr>
    ${Object.keys(ai).length?`<tr data-res="ia"><td>Imágenes con IA</td><td>${Object.keys(ai).length} imágenes generadas con IA a partir de vistas del modelo. Orientativas: pueden cambiar objetos, materiales y lo que queda fuera del encuadre.</td></tr>`:''}
    ${V?`<tr data-needs="presupuesto"><td>Presupuesto</td><td>Mediciones de RUBIK sobre el modelo, con la merma indicada. ${esc(PRICE_NOTE)} ${V.summary.reviewComplete?'':'Pendiente de revisión del estudio.'}</td></tr>`:''}
-   ${planDemo?`<tr data-needs="obra"><td>Plan<span data-res="video"> y vídeo</span> de obra</td><td>Plan de ejemplo de RUBIK aplicado a este mismo proyecto y exportado por su Evolución de obra como entrega orientativa: plan en borrador, sin revisar y sin presupuesto vinculado; fechas ilustrativas. No es un calendario de obra.</td></tr>`:''}
+   ${planDemo?`<tr data-needs="obra"><td>Plan de obra<span data-res="video"> y vídeo</span></td><td>Plan de ejemplo de RUBIK aplicado a este mismo proyecto y exportado por su Evolución de obra como entrega orientativa: plan en borrador, sin revisar y sin presupuesto vinculado; fechas ilustrativas. No es un calendario de obra.</td></tr>`:''}
    <tr><td>Esta entrega</td><td>Carpeta de solo lectura para ver sin conexión. No contiene el proyecto editable ni datos de otros proyectos.</td></tr></tbody></table></div></div>`)};
  const pdfInfo=id=>{const f=path.join(outDir,id+'.pdf');if(!exists(f))return {};try{return {pages:+/Pages:\s+(\d+)/.exec(execFileSync('pdfinfo',[f]).toString())[1],size:kb(f)};}catch{return {};}};
  const web=(t,{preview=false}={})=>{const list=t.ch.filter(c=>c!=='portada'&&sections[c]);
@@ -244,7 +245,7 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
   ...(planDemo?[['Cómo avanzará la obra','Ejemplo ilustrativo del plan de obra y su vídeo.']]:[]),...(V?[['Presupuesto','Importe por capítulos con precios de prueba.']]:[]),['Lo que hay que decidir','Lo que el proyecto deja abierto.'],['Documentos y procedencia','Qué acompaña a esta entrega y de dónde sale cada cosa.']];
  P.push({html:`<div class="grid"><div class="c1-4"><h2 class="h2">Esta entrega</h2><p class="read">${esc(TIPOS[0].lead)}</p><p class="caption" style="margin-top:6mm">Junto a este PDF, la carpeta de la entrega contiene una versión para pantalla (index.html) con los vídeos, para ver sin conexión.</p></div>
   <div class="c6-12"><table style="font-size:10.5pt"><tbody>${idx.map(([a,b],i)=>`<tr><td style="padding:2.4mm 0;width:10mm;font-family:var(--f-read);font-size:14pt">${i+1}</td><td style="padding:2.4mm 0"><b>${esc(a)}</b><br><span class="muted">${esc(b)}</span></td></tr>`).join('')}</tbody></table></div></div>`});
- if(PRO_TEXT)P.push({html:`<div class="grid" style="align-content:center"><div style="grid-column:1 / span 3"><h2 class="h2">Concepto</h2></div><div style="grid-column:4 / span 8"><p style="font-family:var(--f-read);font-size:24pt;line-height:1.3;letter-spacing:-.01em;margin:0">${esc(PRO_TEXT)}</p>
+ if(PRO_TEXT)P.push({html:`<div class="grid" style="align-content:center"><div style="grid-column:1 / span 3"><h2 class="h2">Concepto</h2></div><div style="grid-column:4 / span 8"><p lang="es" style="font-family:var(--f-read);font-size:24pt;line-height:1.3;letter-spacing:-.01em;margin:0">${esc(PRO_TEXT)}</p>
   <p class="caption" style="margin-top:6mm">${esc(STUDIO)}${prof.person?`, ${esc(prof.person)}`:''}. Texto escrito por el estudio para esta entrega. Es su planteamiento, no una medición: las cifras del proyecto están en las páginas siguientes.</p></div></div>`});
  P.push(planPage('La vivienda'));
  const g=ai['Vista general'];
@@ -268,15 +269,27 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
 
  // ---------- escribir la web (los PDF se copian en documentos/ cuando existen: compose escribe la web después de imprimir) ----------
  const discard=()=>fs.rmSync(OUT,{recursive:true,force:true});
- const writeWeb=(fresh)=>{for(const d of DOCLIST){const f=path.join(outDir,d.id+'.pdf');if(fresh.has(d.id)&&exists(f)){fs.copyFileSync(f,path.join(DOCS,d.id+'.pdf'));}}
+ const writeWeb=async(fresh,en)=>{for(const d of DOCLIST){const f=path.join(outDir,d.id+'.pdf');if(fresh.has(d.id)&&exists(f)){fs.copyFileSync(f,path.join(DOCS,d.id+'.pdf'));}}
   const files=[];for(const t of TIPOS){const name=t.id==='integral'?'index.html':`tipo-${t.id}.html`;fs.writeFileSync(path.join(OUT,name),web(t));files.push({tipo:t.id,name:t.name,file:name,chapters:t.ch,documents:t.docs});}
-  const pieces=[...reg,...DOCLIST.filter(d=>exists(path.join(DOCS,d.id+'.pdf'))).map(d=>({file:`documentos/${d.id}.pdf`,sha256:sha(path.join(DOCS,d.id+'.pdf')),producer:'compositor del laboratorio (tools/compose.cjs)'}))];
+  // v1.3 · inglés: solo si TODOS los documentos de cliente pasaron en inglés (el compositor lo decide). La web se traduce en el
+  // DOM con el mismo diccionario; los enlaces van a los PDF ingleses; si queda español o falta un PDF, no se publica en inglés.
+  let idiomas=['es'],enReport=null;
+  if(en){const docsEn=DOCLIST.filter(d=>fresh.has(d.id+'.en')&&exists(path.join(outDir,d.id+'.en.pdf')));
+   if(docsEn.length===DOCLIST.filter(d=>fresh.has(d.id)).length){for(const d of docsEn)fs.copyFileSync(path.join(outDir,d.id+'.en.pdf'),path.join(DOCS,d.id+'.en.pdf'));
+    const pg=await en.browser.newPage();enReport=[];
+    for(const x of files){const src=path.join(OUT,x.file),dst=x.file.replace(/\.html$/,'.en.html');await pg.goto('file://'+path.resolve(src));
+     const r=await pg.evaluate(`(${en.js})(${JSON.stringify(en.dict)},${JSON.stringify(en.data)})`);
+     await pg.evaluate(()=>{for(const a of document.querySelectorAll('a.doc[href$=".pdf"]'))a.setAttribute('href',a.getAttribute('href').replace(/\.pdf$/,'.en.pdf'));});
+     fs.writeFileSync(path.join(OUT,dst),'<!doctype html>\n'+(await pg.evaluate(()=>document.documentElement.outerHTML)));x.fileEn=dst;enReport.push({file:dst,residual:r.residual.length,sample:r.residual.slice(0,8)});}
+    await pg.close();
+    if(enReport.every(r=>!r.residual))idiomas=['es','en'];else for(const x of files){fs.rmSync(path.join(OUT,x.fileEn),{force:true});delete x.fileEn;}}}
+  const pieces=[...reg,...DOCLIST.flatMap(d=>[d.id+'.pdf',...(idiomas.includes('en')?[d.id+'.en.pdf']:[])]).filter(f=>exists(path.join(DOCS,f))).map(f=>({file:`documentos/${f}`,sha256:sha(path.join(DOCS,f)),producer:'compositor del laboratorio (tools/compose.cjs)',...(f.endsWith('.en.pdf')?{idioma:'en'}:{})}))];
   // v1.3 A07/A08: el registro liga la entrega al snapshot exacto (huella del archivo), declara la huella de cada página web
   // y el capítulo propietario de cada pieza (grafo de contenido que usa la exportación).
-  const web_=files.map(x=>({file:x.file,sha256:sha(path.join(OUT,x.file))}));
+  const web_=files.flatMap(x=>[x.file,...(x.fileEn?[x.fileEn]:[])]).map(f=>({file:f,sha256:sha(path.join(OUT,f))}));
   const OWNER=f=>/^media\/obra|^documentos\/obra-/.test(f)?'obra':/^media\/recorrido/.test(f)?'recorrido':/^media\/ia-/.test(f)?'estancias':/^media\/dibujo-vivo/.test(f)?'portada':/^media\/vista-/.test(f)?null:undefined;
   const ftManSrc=ftMan?path.join(ftDir,ftMan):null;
-  fs.writeFileSync(path.join(OUT,'entrega.json'),JSON.stringify({schema:'rubik-lab-entrega/0.2',generated:new Date().toISOString(),project:S.project,snapshot:{file:path.relative(LAB,C.snapFile),sha256:sha(C.snapFile)},web:web_,studio:{name:STUDIO,synthetic:/\.invalid/.test(prof.email||'')},
+  fs.writeFileSync(path.join(OUT,'entrega.json'),JSON.stringify({schema:'rubik-lab-entrega/0.2',generated:new Date().toISOString(),idiomas,i18n:enReport,project:S.project,snapshot:{file:path.relative(LAB,C.snapFile),sha256:sha(C.snapFile)},web:web_,studio:{name:STUDIO,synthetic:/\.invalid/.test(prof.email||'')},
    tipos:files,pieces:pieces.map(x=>{const o=OWNER(x.file);return o===undefined?x:{...x,capitulo:o};}),ft3d8:ftManifest?{manifestId:ftManifest.id,project:ftManifest.project||ftManifest.projectRef||null,file:path.relative(LAB,ftManSrc),sha256:sha(ftManSrc)}:null,
    orientative:['imágenes IA','plan y vídeo de obra (ejemplo, fechas ilustrativas, sin presupuesto)','precios (de prueba de laboratorio)'],
    notIncluded:['proyecto editable','visita 3D interactiva (requiere enlace publicado)','datos de otros proyectos']},null,1));
