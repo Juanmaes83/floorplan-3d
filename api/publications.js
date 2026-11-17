@@ -4,6 +4,8 @@
    (js/share-expiry-core.js). Nothing else is kept anywhere: no project data, no client data, no code, no extra index.
    - Same authorisation as publishing and withdrawing (api/_share-auth.js): RUBIK_SHARE_TOKEN only, same origin, JSON
      body only. The code and the Blob token are never logged nor returned.
+   - Every answer names the store host (`store`, e.g. abc.public.blob.vercel-storage.com). It is not a secret — it is in
+     every published URL — and lets a validation prove which store it is talking to before writing anything.
    - {"action":"list"} → every publication with its state (active / expired / legacy), expiry date and files
      (URL, size, upload date). Files published before S3 carry no date: they are reported as LEGACY, one by one.
    - {"action":"purge-expired"} is a DRY RUN by default: it reports what would be deleted. Only with "confirm":true
@@ -90,15 +92,15 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,now=D
  try{listed=await listStore(env,fetchImpl,host);}catch{return send(res,502,{error:'storage-error'});}
  const pubs=group(listed.files,t);
  const counts={active:pubs.filter(p=>p.state==='active').length,expired:pubs.filter(p=>p.state==='expired').length,legacy:pubs.filter(p=>p.state==='legacy').length,inconsistent:pubs.filter(p=>p.state==='inconsistent').length};
- if(b.action==='list')return send(res,200,{checkedAt:new Date(t).toISOString(),counts,truncated:listed.truncated,publications:pubs});
+ if(b.action==='list')return send(res,200,{store:host,checkedAt:new Date(t).toISOString(),counts,truncated:listed.truncated,publications:pubs});
  // Only expired publications, and within them only files whose OWN date has passed (defence in depth).
  const expiredFiles=pubs.filter(p=>p.state==='expired').flatMap(p=>p.files.filter(f=>Expiry.isExpired(f.url,t)).map(f=>f.url));
  const batch=expiredFiles.slice(0,MAX_DELETE),more=expiredFiles.length>MAX_DELETE||listed.truncated;
- if(b.confirm!==true)return send(res,200,{dryRun:true,checkedAt:new Date(t).toISOString(),counts,wouldRemove:batch,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
+ if(b.confirm!==true)return send(res,200,{store:host,truncated:listed.truncated,dryRun:true,checkedAt:new Date(t).toISOString(),counts,wouldRemove:batch,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
  const removed=[],failed=[];
  for(const url of batch){const error=await remove(url,env,fetchImpl);if(error)failed.push({url,error});else removed.push(url);}
  const status=!batch.length||!failed.length?200:removed.length?207:502;
- return send(res,status,{dryRun:false,checkedAt:new Date(t).toISOString(),counts,removed,failed,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
+ return send(res,status,{store:host,truncated:listed.truncated,dryRun:false,checkedAt:new Date(t).toISOString(),counts,removed,failed,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
 }
 module.exports=(req,res)=>handler(req,res);
 module.exports.handler=handler;module.exports.group=group;module.exports.MAX_DELETE=MAX_DELETE;module.exports.MAX_PAGES=MAX_PAGES;

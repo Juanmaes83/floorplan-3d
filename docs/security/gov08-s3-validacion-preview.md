@@ -33,24 +33,46 @@ Comprobación de metadatos del 17/11/2026, sin leer ningún valor:
 
 ## 3. Pruebas (guion `scripts/qa/gov08-s3-preview-validation.cjs`)
 
+**Variables de entorno:**
+- `PREVIEW_SHARE_URL`: el enlace compartido del Preview.
+- `RUBIK_S3_TEST_CODE`: el código de prueba. Nunca se imprime.
+- `TEST_STORE_HOST`: el host público del almacén de prueba.
+- `PRODUCTION_STORE_HOST`: el host público del almacén de Production, tomado de los metadatos de Vercel, nunca de su token.
+
+**Protecciones.** Cualquier fallo de estas se cuenta como FAIL y el guion termina con código 1:
+1. **Aislamiento probado antes de escribir:** `/api/publications` debe nombrar exactamente `TEST_STORE_HOST`, distinto de Production, con un listado completo (sin truncar). Si no, se detiene **sin escribir nada**.
+2. **Almacén exclusivo y vacío:** ninguna publicación activa, caducada, histórica ni incoherente antes de empezar. Si no, se detiene sin escribir y **no borra nada que no sea suyo**.
+3. **Cada archivo creado debe estar en el almacén de prueba.** Si no, se detiene y retira lo creado.
+4. **Listado truncado o limpieza con `more`:** el guion se detiene.
+5. **La simulación no borra:** el conjunto de archivos del almacén es idéntico antes y después.
+6. **Coincidencia exacta:**
+   - lo previsto (`wouldRemove`) son exactamente la página, la visita 3D y el vídeo caducados;
+   - lo borrado (`removed`) es exactamente lo previsto, sin fallos;
+   - después, el almacén queda vacío.
+7. **Limpieza final verificada:** retira lo que quede del propio guion y exige que el almacén esté vacío. Si no lo está, FAIL.
+
 En el servidor real no se puede adelantar el reloj. La caducidad se prueba con una publicación cuya fecha queda a **3 minutos**, algo que el contrato permite: cualquier fecha entre «ahora» y 90 días.
 
 | # | Prueba | Esperado |
 |---|---|---|
-| 1 | Publicar una página sintética con 7 días | `200`; nombre con `--<id>--x<fecha>`; `publication.expiresAt` igual a ahora + 7 días |
-| 2 | Abrirla por `/api/view` | `200` con la CSP aislada (`sandbox` sin `allow-same-origin`) |
-| 3 | Revocación anticipada: retirarla con `/api/unshare` | `200`; `/api/view` responde `404` |
-| 4 | Publicar página y visita 3D con una fecha a 3 minutos (misma publicación) | `200` las dos, con el mismo identificador y la misma fecha |
-| 5 | Antes de esa fecha | página `200` y visita 3D `200` |
-| 6 | Después de esa fecha | página `410` y visita 3D `410 {error:'expired'}` |
-| 7 | Revisar el almacén (`list`) | La publicación caducada aparece como `expired`; ninguna `inconsistent` |
-| 8 | Limpieza simulada (`purge-expired` sin confirmar) | `wouldRemove` = los 2 archivos; el almacén no cambia |
-| 9 | Limpieza confirmada | `200`, `removed` = los 2; un nuevo `list` ya no los incluye |
-| 10 | Accesos no autorizados (sin código, código erróneo, otro origen) | `401`/`403`; nada cambia |
-| 11 | Fallos parciales | **No se fuerzan contra el almacén real.** Están cubiertos con el almacén simulado: un reintento por archivo; `207` y repetición; `502` |
-| 12 | Interfaz real en el navegador (1440×900 y 390×844) | Selector 7/30/90 con 30 marcado; «Mis publicaciones» con fecha; «Almacén de publicaciones» con recuentos. Capturas |
+| 0 | Comprobación previa sin escritura | Almacén de prueba, completo y vacío |
+| 1–3 | Publicar a 7 días, abrir y retirar antes de la fecha | Fecha correcta, CSP aislada, retirada exacta; `404` y fuera del almacén |
+| 4 | Vídeo, visita 3D y página con fecha a 3 minutos | Los tres en el almacén de prueba, con **un** identificador y **una** fecha |
+| 5 | Antes de la fecha | Página `200`, visita 3D `200`, vídeo `200` |
+| 6 | Después de la fecha | Página `410` y visita 3D `410`. **Límite S5:** el vídeo sigue accesible directamente hasta que se borra |
+| 7 | Registro | La publicación caducada aparece con exactamente sus 3 archivos y sin incoherencias |
+| 8 | Limpieza simulada | Prevé exactamente esos 3 y no borra nada |
+| 9 | Limpieza confirmada | Borra exactamente lo previsto; el almacén queda vacío; el vídeo deja de responder directamente (tolerancia de caché ≈1 min) |
+| 10 | Accesos no autorizados | `401`/`401`/`403` |
+| 11 | Fallos parciales | **No se fuerzan contra el almacén real.** Cubiertos con el almacén simulado: un reintento por archivo; `207` y repetición; `502` |
+| 12 | Interfaz real (1440×900 y 390×844) | Selector 7/30/90 con 30 marcado; capturas |
 
-El guion termina limpiando lo que haya creado, incluso si una prueba falla. Al acabar, el almacén de prueba queda vacío.
+**Ensayo local del guion** (17/11/2026), contra las funciones reales sobre un almacén simulado y sin ningún almacén real:
+- recorrido completo: **30/30 PASS**;
+- almacén que no es el de prueba: **se detiene en el paso 0, sin escribir**;
+- almacén no vacío: **se detiene en el paso 0, sin escribir ni borrar nada ajeno**.
+
+La variable `REHEARSAL_BLOB_BASE` existe solo para ese ensayo: tiene que apuntar a `127.0.0.1` y una ejecución real no la define.
 
 ## 4. Después de la prueba
 

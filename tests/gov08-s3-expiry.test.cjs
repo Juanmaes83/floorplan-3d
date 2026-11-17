@@ -122,7 +122,7 @@ async function storeWithEverything(){
 }
 test('register: lists the whole store by publication, identifies legacy files, and returns only minimal data',async()=>{
  const s=await storeWithEverything(),r=await pubs(s.b,{action:'list'},{now:T0+8*DAY});
- assert.equal(r.status,200);assert.deepEqual(r.json.counts,{active:1,expired:1,legacy:2,inconsistent:0});assert.equal(r.headers['cache-control'],'no-store');
+ assert.equal(r.status,200);assert.deepEqual(r.json.counts,{active:1,expired:1,legacy:2,inconsistent:0});assert.equal(r.json.store,HOST,'the store host (public, in every URL) is named so a validation can prove which store it uses');assert.equal(r.json.truncated,false);assert.equal(r.headers['cache-control'],'no-store');
  const exp=r.json.publications.find(p=>p.state==='expired');assert.deepEqual(exp.files.map(f=>f.url),[s.expiring[0],s.expiring[1]],'page first, then video');
  assert.equal(exp.expiresAt,new Date(T0+7*DAY).toISOString());
  assert.deepEqual(r.json.publications.filter(p=>p.state==='legacy').map(p=>[p.expiresAt,p.files[0].url]).sort(),s.legacy.map(u=>[null,u]).sort());
@@ -137,7 +137,7 @@ test('register: before the date everything is active; pagination is followed; a 
 });
 test('purge: a dry run by default — reports what would go and deletes nothing',async()=>{
  const s=await storeWithEverything(),before=s.b.files.size,r=await pubs(s.b,{action:'purge-expired'},{now:T0+8*DAY});
- assert.equal(r.status,200);assert.equal(r.json.dryRun,true);assert.deepEqual(r.json.wouldRemove,s.expiring);assert.equal(r.json.legacyUntouched,2);
+ assert.equal(r.status,200);assert.equal(r.json.dryRun,true);assert.equal(r.json.store,HOST);assert.deepEqual(r.json.wouldRemove,s.expiring);assert.equal(r.json.legacyUntouched,2);
  assert.equal(s.b.files.size,before);assert.equal(s.b.calls.filter(c=>c.url.endsWith('/delete')).length,0);
 });
 test('purge: with confirm:true deletes ONLY expired files — never active or legacy ones',async()=>{
