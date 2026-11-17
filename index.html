@@ -3782,7 +3782,23 @@ function buildLevels(){
   }
 }
 
-const assetStates=new Map(),assetRequests=new Map();let assetGeneration=0;
+const assetStates=new Map(),assetRequests=new Map(),assetQueue=[];
+const MAX_ACTIVE_ASSET_LOADS=2;
+let assetGeneration=0,activeAssetLoads=0;
+
+function cancelFurnitureAssets(){
+  assetGeneration++;assetQueue.length=0;
+  assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
+}
+function pumpFurnitureAssets(){
+  // Download, verification, JPEG decoding and parsing share a per-load deadline.
+  // Start it only when a slot is available for the model.
+  while(activeAssetLoads<MAX_ACTIVE_ASSET_LOADS&&assetQueue.length){
+    const load=assetQueue.shift();
+    activeAssetLoads++;
+    load().finally(()=>{activeAssetLoads--;pumpFurnitureAssets();});
+  }
+}
 
 function publishAsset(id,value){assetStates.set(id,value);dispatchEvent(new Event('floorplan-asset-status'));}
 function loadFurnitureAsset(g,f,generation){
@@ -3791,13 +3807,14 @@ function loadFurnitureAsset(g,f,generation){
   if(!entry){publishAsset(f.id,{state:'error',reason:'Referencia no disponible o no autorizada'});return;}
   const controller=new AbortController();assetRequests.set(f.id,controller);publishAsset(f.id,{state:'loading'});
   const bounds=new THREE.Box3().setFromObject(g),height=f.size.heightMm?M(f.size.heightMm):bounds.max.y-bounds.min.y;
-  AssetLoader.load(entry,{signal:controller.signal}).then(result=>{
+  assetQueue.push(()=>AssetLoader.load(entry,{signal:controller.signal}).then(result=>{
     if(generation!==assetGeneration||controller.signal.aborted||g.parent!==furnG){AssetLoader.dispose(result.scene);return;}
     const position=g.position.clone(),rotation=g.rotation.clone();clearGroup(g);g.scale.set(1,1,1);
     result.scene.scale.set(f.w/result.dimensionsMm.width,height*1000/result.dimensionsMm.height,f.d/result.dimensionsMm.depth);
     g.add(result.scene);g.position.copy(position);g.rotation.copy(rotation);g.userData.authorizedAsset=true;
     publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
-  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
+  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);}));
+  pumpFurnitureAssets();
 }
 function batchFurniturePrimitives(group){
   const families=new Map();
@@ -3820,7 +3837,7 @@ function batchFurniturePrimitives(group){
   }
 }
 function buildFurn(){
-  assetGeneration++;assetRequests.forEach(c=>c.abort());assetRequests.clear();assetStates.clear();
+  cancelFurnitureAssets();assetStates.clear();
   furnG.children.forEach(g=>{if(g.userData.authorizedAsset)AssetLoader.dispose(g);});
   clearGroup(furnG);
   const canInstance=renderer.capabilities.isWebGL2||!!renderer.extensions.get('ANGLE_instanced_arrays');
@@ -4090,7 +4107,7 @@ function abort3D(){
   if(raf)cancelAnimationFrame(raf);raf=0;
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
-  assetGeneration++;assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
+  cancelFurnitureAssets();
   surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
   active=false;stage.classList.remove('is3d','animating');
