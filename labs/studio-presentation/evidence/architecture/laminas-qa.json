@@ -1,0 +1,481 @@
+{
+ "schema": "rubik-lab-laminas-qa/1",
+ "umbralPt": 6.0,
+ "docs": {
+  "architecture-book": [
+   {
+    "pagina": 1,
+    "palabras": 36,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 2,
+    "palabras": 183,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 3,
+    "palabras": 132,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 4,
+    "palabras": 181,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 5,
+    "palabras": 110,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 6,
+    "palabras": 112,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 7,
+    "palabras": 108,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 8,
+    "palabras": 111,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 9,
+    "palabras": 115,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 10,
+    "palabras": 112,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 11,
+    "palabras": 100,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 12,
+    "palabras": 142,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 13,
+    "palabras": 151,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 14,
+    "palabras": 98,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 15,
+    "palabras": 223,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "codigosAB": [
+     "AB-01",
+     "AB-02",
+     "AB-03",
+     "AB-04",
+     "AB-05",
+     "AB-06",
+     "AB-07",
+     "AB-08",
+     "AB-09",
+     "AB-10",
+     "AB-11"
+    ]
+   }
+  ],
+  "architecture-book.en": [
+   {
+    "pagina": 1,
+    "palabras": 31,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 2,
+    "palabras": 176,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 3,
+    "palabras": 124,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 4,
+    "palabras": 178,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 5,
+    "palabras": 102,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 6,
+    "palabras": 104,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 7,
+    "palabras": 100,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 8,
+    "palabras": 103,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 9,
+    "palabras": 107,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 10,
+    "palabras": 104,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 11,
+    "palabras": 93,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 12,
+    "palabras": 136,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 13,
+    "palabras": 147,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 14,
+    "palabras": 94,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 15,
+    "palabras": 222,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "codigosAB": [
+     "AB-01",
+     "AB-02",
+     "AB-03",
+     "AB-04",
+     "AB-05",
+     "AB-06",
+     "AB-07",
+     "AB-08",
+     "AB-09",
+     "AB-10",
+     "AB-11"
+    ]
+   }
+  ],
+  "architecture-sheet-strip": [
+   {
+    "pagina": 1,
+    "palabras": 214,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 2,
+    "palabras": 185,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   }
+  ],
+  "architecture-sheet-strip.en": [
+   {
+    "pagina": 1,
+    "palabras": 213,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 2,
+    "palabras": 180,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   }
+  ],
+  "materials-furniture-book-v3": [
+   {
+    "pagina": 1,
+    "palabras": 37,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 2,
+    "palabras": 205,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 3,
+    "palabras": 226,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 4,
+    "palabras": 192,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 5,
+    "palabras": 190,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 6,
+    "palabras": 191,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 7,
+    "palabras": 188,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 8,
+    "palabras": 185,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 9,
+    "palabras": 187,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 10,
+    "palabras": 190,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 11,
+    "palabras": 186,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 12,
+    "palabras": 127,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 13,
+    "palabras": 199,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   }
+  ],
+  "materials-furniture-book-v3.en": [
+   {
+    "pagina": 1,
+    "palabras": 38,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 2,
+    "palabras": 202,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 3,
+    "palabras": 223,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 4,
+    "palabras": 189,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 5,
+    "palabras": 187,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 6,
+    "palabras": 188,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 7,
+    "palabras": 185,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 8,
+    "palabras": 182,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 9,
+    "palabras": 184,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 10,
+    "palabras": 187,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 11,
+    "palabras": 183,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 12,
+    "palabras": 124,
+    "alturaMinPt": 10.89,
+    "recortadas": [],
+    "pequenas": []
+   },
+   {
+    "pagina": 13,
+    "palabras": 196,
+    "alturaMinPt": 8.91,
+    "recortadas": [],
+    "pequenas": []
+   }
+  ]
+ },
+ "ffe": {
+  "instancias": 46,
+  "lineasFicha": 40,
+  "catalogoLigado": true,
+  "skuEnPresupuesto": [],
+  "estados": [
+   "producto elegido",
+   "referencia"
+  ],
+  "instaladoDeclarado": true
+ },
+ "fallos": [],
+ "ok": true
+}

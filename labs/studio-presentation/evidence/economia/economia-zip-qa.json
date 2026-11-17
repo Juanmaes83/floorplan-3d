@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-economia-zip-qa/1",
- "fecha": "2026-11-17T22:05:16.366Z",
+ "fecha": "2026-11-17T22:08:13.022Z",
  "producto": "8525025a1470d48d52d8e365070e5a0acf116134",
  "fuentes": [
   {
@@ -93,7 +93,7 @@
   }
  ],
  "licencia": "Núcleo ejecutado desde el pin en una carpeta temporal y borrado al terminar; no se copia al laboratorio ni a ningún ZIP. Derechos de redistribución: no acreditados.",
- "pass": 4,
+ "pass": 24,
  "fail": 0,
  "cases": [
   {
@@ -204,6 +204,287 @@
     "hits": [],
     "salida": null
    }
+  },
+  {
+   "id": "partial: estructura HTML (filas, conceptos, importes, orden)",
+   "result": "PASS",
+   "detalle": {
+    "esperado": [
+     [
+      "Revisión base",
+      "Base conocida",
+      "14.561,06 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Base conocida",
+      "7.652,19 €"
+     ],
+     [
+      "Comparación",
+      "Diferencia de partidas comparables con IVA",
+      "476,59 €"
+     ]
+    ],
+    "obtenido": [
+     [
+      "Revisión base",
+      "Base conocida",
+      "14.561,06 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Base conocida",
+      "7.652,19 €"
+     ],
+     [
+      "Comparación",
+      "Diferencia de partidas comparables con IVA",
+      "476,59 €"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "partial/es: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "partial/en: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "partial/RP07: sin importes económicos en ningún recurso distribuido",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 0,
+    "hits": [],
+    "salida": null
+   }
+  },
+  {
+   "id": "incoherent: estructura HTML (filas, conceptos, importes, orden)",
+   "result": "PASS",
+   "detalle": {
+    "esperado": [],
+    "obtenido": []
+   }
+  },
+  {
+   "id": "incoherent/es: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "incoherent/en: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "incoherent/RP07: sin importes económicos en ningún recurso distribuido",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 0,
+    "hits": [],
+    "salida": null
+   }
+  },
+  {
+   "id": "before: estructura HTML (filas, conceptos, importes, orden)",
+   "result": "PASS",
+   "detalle": {
+    "esperado": [
+     [
+      "Revisión base",
+      "Base imponible",
+      "14.561,06 €"
+     ],
+     [
+      "Revisión base",
+      "IVA",
+      "3.057,83 €"
+     ],
+     [
+      "Revisión base",
+      "Total con IVA",
+      "17.618,89 €"
+     ]
+    ],
+    "obtenido": [
+     [
+      "Revisión base",
+      "Base imponible",
+      "14.561,06 €"
+     ],
+     [
+      "Revisión base",
+      "IVA",
+      "3.057,83 €"
+     ],
+     [
+      "Revisión base",
+      "Total con IVA",
+      "17.618,89 €"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "before/es: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "before/en: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "before/RP07: sin importes económicos en ningún recurso distribuido",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 0,
+    "hits": [],
+    "salida": null
+   }
+  },
+  {
+   "id": "after: estructura HTML (filas, conceptos, importes, orden)",
+   "result": "PASS",
+   "detalle": {
+    "esperado": [
+     [
+      "Revisión propuesta",
+      "Base imponible",
+      "15.319,94 €"
+     ],
+     [
+      "Revisión propuesta",
+      "IVA",
+      "3.217,20 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Total con IVA",
+      "18.537,14 €"
+     ]
+    ],
+    "obtenido": [
+     [
+      "Revisión propuesta",
+      "Base imponible",
+      "15.319,94 €"
+     ],
+     [
+      "Revisión propuesta",
+      "IVA",
+      "3.217,20 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Total con IVA",
+      "18.537,14 €"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "after/es: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "after/en: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "after/RP07: sin importes económicos en ningún recurso distribuido",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 0,
+    "hits": [],
+    "salida": null
+   }
+  },
+  {
+   "id": "none: estructura HTML (filas, conceptos, importes, orden)",
+   "result": "PASS",
+   "detalle": {
+    "esperado": [],
+    "obtenido": []
+   }
+  },
+  {
+   "id": "none/es: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "none/en: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "none/RP07: sin importes económicos en ningún recurso distribuido",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 0,
+    "hits": [],
+    "salida": null
+   }
   }
  ],
  "paquetes": [
@@ -211,15 +492,85 @@
    "escenario": "complete",
    "idioma": "es",
    "zip": "economia-complete-es.zip",
-   "sha256": "fb0c86884ddc41a72781cd97b4c9436d493c6d9e32dfb2db9708746ba75aee72",
+   "sha256": "8026eea800059a13901bb31bf2f7b88411e3291aff185eba3172dea0c612dfbd",
    "digest": "economia-complete-es.digest.json"
   },
   {
    "escenario": "complete",
    "idioma": "en",
    "zip": "economia-complete-en.zip",
-   "sha256": "a016c0a31697b7647edee74b2e0eee0e2c9007a2f42b1eea1c5ef4766f2479b7",
+   "sha256": "7c9c524276e04e53c637e3148a3705632f85d63440bfdc6706a986f1a65043a1",
    "digest": "economia-complete-en.digest.json"
+  },
+  {
+   "escenario": "partial",
+   "idioma": "es",
+   "zip": "economia-partial-es.zip",
+   "sha256": "411b27739df4dc8ae1ae551d3a13510491db69514c11eb2834f88b27b7ba2b37",
+   "digest": "economia-partial-es.digest.json"
+  },
+  {
+   "escenario": "partial",
+   "idioma": "en",
+   "zip": "economia-partial-en.zip",
+   "sha256": "db88c7709baa8590bd378ff1b5003e595aeb56e2714353c036267eabe9addcb4",
+   "digest": "economia-partial-en.digest.json"
+  },
+  {
+   "escenario": "incoherent",
+   "idioma": "es",
+   "zip": "economia-incoherent-es.zip",
+   "sha256": "3a60ad237eab413d4baf06c8d90925cdd881dd14a0eb2eaa566f9f8155f0355f",
+   "digest": "economia-incoherent-es.digest.json"
+  },
+  {
+   "escenario": "incoherent",
+   "idioma": "en",
+   "zip": "economia-incoherent-en.zip",
+   "sha256": "a0cf097597accf7221c7913674a96ac7295e7f3b0ce8d306d43a5172702d9d64",
+   "digest": "economia-incoherent-en.digest.json"
+  },
+  {
+   "escenario": "before",
+   "idioma": "es",
+   "zip": "economia-before-es.zip",
+   "sha256": "18ef1bcaa4f15b614aaaa1a31107b4bc4dd1ff72bdedfe5c852918d752c8b525",
+   "digest": "economia-before-es.digest.json"
+  },
+  {
+   "escenario": "before",
+   "idioma": "en",
+   "zip": "economia-before-en.zip",
+   "sha256": "f7a6be189da9071a4f70bb79990ba41552e7152de82fa5d96c6d14e28f2a3a6f",
+   "digest": "economia-before-en.digest.json"
+  },
+  {
+   "escenario": "after",
+   "idioma": "es",
+   "zip": "economia-after-es.zip",
+   "sha256": "54c106380d14399141d94114b28ee74d40c0b28320ed74b4ffdeeabcf794eed8",
+   "digest": "economia-after-es.digest.json"
+  },
+  {
+   "escenario": "after",
+   "idioma": "en",
+   "zip": "economia-after-en.zip",
+   "sha256": "6e2f9b4953d307b5278a352ba33202cf567d5abae2aee3467d07c1f21287d34c",
+   "digest": "economia-after-en.digest.json"
+  },
+  {
+   "escenario": "none",
+   "idioma": "es",
+   "zip": "economia-none-es.zip",
+   "sha256": "2925c606f34680c19ac13f2ddaa6b0e1c2584c78a42eada0873fa67d4fba5a3a",
+   "digest": "economia-none-es.digest.json"
+  },
+  {
+   "escenario": "none",
+   "idioma": "en",
+   "zip": "economia-none-en.zip",
+   "sha256": "e399fb36f95cbee537f4a78d4421b79e9100dd4449466f74ea9c82dededc87cf",
+   "digest": "economia-none-en.digest.json"
   }
  ]
 }
