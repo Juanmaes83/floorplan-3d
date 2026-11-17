@@ -39,6 +39,8 @@ test('S2 focus: after cancel, withdrawal, a wrong code and the history buttons, 
  // Wrong code → focus on the code field (the message asks to type it again).
  await d.locator('#shareLinkToken').fill(RENDER);await entry().getByRole('button',{name:'Retirar'}).focus();await page.keyboard.press('Enter');
  let answered=page.waitForResponse(r=>r.url().startsWith(url+'api/unshare'));await page.keyboard.press('Enter');await answered;
+ // The refusal is drawn after the response arrives: wait for its message (drawn together with the focus move) before reading the focus.
+ await page.waitForFunction(()=>/código de publicación no es correcto/.test(document.querySelector('#shareLinkStatus')?.textContent||''));
  w=await where();assert.ok(w.inDialog,'focus left the dialog after a refused withdrawal');assert.equal(w.id,'shareLinkToken');
  // Partial → focus on the entry's «Retirar» (to retry), visible.
  await d.locator('#shareLinkToken').fill(SHARE);failOn.add(new URL(second).pathname);

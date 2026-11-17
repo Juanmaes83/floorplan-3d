@@ -113,8 +113,8 @@ test('client document: read-only, api/view-compatible, no editable project, hone
   // The existing api/share accepts it (mocked storage, no real upload).
   const calls=[];const res={headers:{},setHeader(k,v){this.headers[k]=v;},end(b){this.body=b;}};
   await Share.handler({method:'POST',headers:{'x-rubik-share-token':'share-fixture-code-0123456789abcdef','x-rubik-share-kind':'html','x-rubik-share-name':'x'},body:Buffer.from(html)},res,
-    {env:{BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_abc_secret',RUBIK_SHARE_TOKEN:'share-fixture-code-0123456789abcdef',RUBIK_RENDER_TOKEN:'render-fixture-code-0123456789abcdef'},fetchImpl:async(url,o)=>{calls.push({url,o});return {ok:true,json:async()=>({url:'https://abc.public.blob.vercel-storage.com/rubik-share/x-r.html'})};}});
-  assert.equal(res.statusCode,200);assert.match(calls[0].url,/rubik-share\/x\.html$/);
+    {env:{BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_abc_secret',RUBIK_SHARE_TOKEN:'share-fixture-code-0123456789abcdef',RUBIK_RENDER_TOKEN:'render-fixture-code-0123456789abcdef'},fetchImpl:async(url,o)=>{calls.push({url,o});return {ok:true,json:async()=>({url:'https://abc.public.blob.vercel-storage.com'+new URL(url).pathname.replace(/\.html$/,'-r.html')})};}}); // like Blob: requested name + suffix
+  assert.equal(res.statusCode,200);assert.match(calls[0].url,/rubik-share\/x--[0-9a-f]{24}--x\d{12}\.html$/,'GOV-08 S3: default 30-day expiry in the name');
   assert.match(View.csp('abc.public.blob.vercel-storage.com'),/media-src https:\/\/abc\.public\.blob\.vercel-storage\.com/);
 });
 test('publish errors map the real api/share responses; endpoints are absolute',()=>{

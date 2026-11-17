@@ -41,10 +41,11 @@
   const card=el('div',undefined,gate,'delivery-card');header(card);
   if(state==='loading'){el('p',tx('Preparando tu vivienda…','Preparing your home…','正在准备您的住宅…'),card,'delivery-status').setAttribute('role','status');return;}
   if(state==='error'){
-   el('h1',detail==='missing'?tx('Esta visita ya no está disponible','This visit is no longer available','该参观已不可用'):tx('No se pudo abrir la visita','The visit could not be opened','无法打开参观'),card,'delivery-title');
+   el('h1',detail==='missing'?tx('Esta visita ya no está disponible','This visit is no longer available','该参观已不可用'):detail==='expired'?tx('Esta visita ha caducado','This visit has expired','该参观已到期'):tx('No se pudo abrir la visita','The visit could not be opened','无法打开参观'),card,'delivery-title');
    el('p',detail==='missing'?tx('Puede que el profesional la haya retirado o que el enlace esté incompleto. Pídele un enlace nuevo.','The professional may have withdrawn it, or the link is incomplete. Ask for a new link.','专业人员可能已撤回，或链接不完整。请索取新链接。')
+    :detail==='expired'?tx('El enlace llegó a su fecha de caducidad. Pide al profesional un enlace nuevo.','The link reached its expiry date. Ask the professional for a new link.','链接已到期。请向专业人员索取新链接。')
     :tx('Comprueba tu conexión y vuelve a intentarlo.','Check your connection and try again.','请检查网络后重试。'),card,'delivery-lead');
-   const row=el('div',undefined,card,'delivery-actions');if(detail!=='missing'){const r=btn(tx('Reintentar','Try again','重试'),row,'btn primary');r.id='deliveryRetry';r.onclick=load;}back(row);return;
+   const row=el('div',undefined,card,'delivery-actions');if(detail!=='missing'&&detail!=='expired'){const r=btn(tx('Reintentar','Try again','重试'),row,'btn primary');r.id='deliveryRetry';r.onclick=load;}back(row);return;
   }
   // ready / no-3d
   const fig=el('figure',undefined,card,'delivery-hero');
@@ -180,7 +181,7 @@
    });
   }
   const r=await fetch('api/delivery?f='+encodeURIComponent(D.source),{cache:'no-store'});
-  if(r.status===404)throw Error('missing');if(!r.ok)throw Error('network');return r.json();
+  if(r.status===404)throw Error('missing');if(r.status===410)throw Error('expired');if(!r.ok)throw Error('network');return r.json();
  }
  async function load(){
   render('loading');
@@ -192,7 +193,7 @@
    const file=new File([JSON.stringify(content)],'entrega.json',{type:'application/json'});
    if(!await app.importProjectFile(file))throw Error('import');
    render(webgl?'ready':'no-3d');
-  }catch(e){snap=snap&&snap.content?snap:null;render('error',/missing/.test(e.message)?'missing':'network');}
+  }catch(e){snap=snap&&snap.content?snap:null;render('error',/missing/.test(e.message)?'missing':/expired/.test(e.message)?'expired':'network');}
  }
  let interrupted=false;
  addEventListener('webglcontextlost',()=>{if(mode!=='gate'){interrupted=true;leave();}},true);

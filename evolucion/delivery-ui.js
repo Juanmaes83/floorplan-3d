@@ -302,11 +302,14 @@ function renderShare(message=null){
   if(state.published){$('publishResult').hidden=false;$('publishUrl').value=state.published.link;$('publishOpen').href=state.published.link;}else $('publishResult').hidden=true;
   if(message!==null)$('publishStatus').textContent=message;
 }
-async function upload(kind,body,code,name){
-  let r;try{r=await fetch(D.ENDPOINTS.share,{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':'application/octet-stream','x-rubik-share-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name).slice(0,120)},body});}
+// GOV-08 S3: no TTL is sent, so the server applies its default (30 days; never unlimited). The page reuses the
+// publication of the video (x-rubik-share-publication) so both expire together; `pub` keeps what the server returned.
+async function upload(kind,body,code,name,pub={}){
+  let r;try{r=await fetch(D.ENDPOINTS.share,{method:'POST',headers:{'Content-Type':kind==='html'?'text/html; charset=utf-8':'application/octet-stream','x-rubik-share-token':code,'x-rubik-share-kind':kind,'x-rubik-share-name':encodeURIComponent(name).slice(0,120),...(pub.header?{'x-rubik-share-publication':pub.header}:{})},body});}
   catch{throw Error(D.PUBLISH_ERRORS['storage-unreachable']);}
   const out=await r.json().catch(()=>null);
   if(!r.ok||typeof out?.url!=='string'||!out.url.startsWith('https://'))throw Object.assign(Error(D.publishError(r.status,out?.error)),{status:r.status});
+  if(out.publication?.header&&!pub.header){pub.header=out.publication.header;pub.expiresAt=out.publication.expiresAt;}
   return out.url;
 }
 async function publish({code,agree,withVideo}){
@@ -315,14 +318,15 @@ async function publish({code,agree,withVideo}){
   if(!state.doc)await prepareDocument();
   const m=state.manifest,v=withVideo?state.video:null;
   if(v&&v.bytes>D.SHARE_LIMIT_BYTES)throw Error(D.PUBLISH_ERRORS.size);
-  let video=null;
-  if(v){const url=await upload(v.ext,v.blob,code,m.project.name);video={src:url,type:v.type};}
+  let video=null;const pub={};
+  if(v){const url=await upload(v.ext,v.blob,code,m.project.name,pub);video={src:url,type:v.type};}
   const html=D.clientDocument(m,{video});const bytes=new Blob([html]).size;
   if(bytes>D.SHARE_LIMIT_BYTES)throw Error(D.PUBLISH_ERRORS.size+(video?' (el vídeo ya subido queda en el almacén Blob; puedes borrarlo desde su panel)':''));
-  let page;try{page=await upload('html',new Blob([html],{type:'text/html'}),code,m.project.name);}
+  let page;try{page=await upload('html',new Blob([html],{type:'text/html'}),code,m.project.name,pub);}
   catch(e){if(video)e.message+=' El vídeo sí se subió y queda en el almacén Blob: bórralo desde su panel si no lo vas a usar.';throw e;}
   const link=new URL(D.ENDPOINTS.view+'?f='+encodeURIComponent(page),location.origin).href;
-  state.published={link,page,video:video?.src||null,manifestId:m.id,bytes};renderShare('Enlace publicado. Ábrelo y compruébalo antes de enviarlo. Si cambias el proyecto, genera una entrega nueva: este enlace no se actualiza.');
+  const until=pub.expiresAt?new Date(pub.expiresAt).toLocaleString('es-ES',{dateStyle:'short',timeStyle:'short'}):null;
+  state.published={link,page,video:video?.src||null,manifestId:m.id,bytes,expiresAt:pub.expiresAt||null};renderShare('Enlace publicado'+(until?` (caduca el ${until})`:'')+'. Ábrelo y compruébalo antes de enviarlo. Si cambias el proyecto, genera una entrega nueva: este enlace no se actualiza.');
   return state.published;
 }
 

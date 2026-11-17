@@ -15,8 +15,14 @@
    Cierre #195 — universal notice: documents published before #195 carry no notice of their own, so this function
    inserts ONE fixed paragraph (NOTICE, no input of any kind) right before their observations form. Only documents with
    the form (id="shareReview" + <div class="share-form">) and without their own notice (id="shareVolatile") are touched;
-   the stored copy is never changed, and removing the paragraph gives back the stored bytes exactly. */
+   the stored copy is never changed, and removing the paragraph gives back the stored bytes exactly.
+   GOV-08 S3 — expiry: a page published with an expiry date (in its stored name, js/share-expiry-core.js) is no longer
+   served from that minute on: 410 «ha caducado», answered BEFORE reading the store, with no-store. This closes the
+   VIEWER only: until the file is deleted (S2 withdrawal or the purge of /api/publications) the Blob URL inside the
+   link still opens it directly. Pages published before S3 have no date and keep opening: nothing expires
+   retroactively. */
 'use strict';
+const Expiry=require('../js/share-expiry-core.js'); // GOV-08 S3
 function storeHost(token){const m=/^vercel_blob_rw_([a-z0-9]+)_/i.exec(String(token||''));return m?`${m[1].toLowerCase()}.public.blob.vercel-storage.com`:null;}
 function csp(host){return `default-src 'none'; img-src data:; media-src https://${host}; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'; sandbox allow-scripts allow-downloads`;}
 // The client-experience contract; js/client-share-ui.js shows the same text in documents built since #195.
@@ -34,11 +40,13 @@ function target(raw,host){
  if(u.protocol!=='https:'||u.hostname!==host||u.search||u.hash)return null;
  return /^\/rubik-share\/[\w-]+\.html$/.test(u.pathname)?u.href:null;
 }
-async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
+const EXPIRED='Este enlace ha caducado. Pide al profesional un enlace nuevo.';
+async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,now=Date.now}={}){
  if(req.method!=='GET')return fail(res,405,'Método no permitido.');
  const host=storeHost(env.BLOB_READ_WRITE_TOKEN);if(!host)return fail(res,503,'Enlaces no configurados en este servidor.');
  const query=new URL(req.url,'http://local').searchParams,url=target(query.get('f'),host);
  if(!url)return fail(res,404,'Este enlace no existe o ya no está disponible.');
+ if(Expiry.isExpired(url,now()))return fail(res,410,EXPIRED); // GOV-08 S3: before any storage read
  let r;try{r=await fetchImpl(url);}catch{return fail(res,502,'No se pudo abrir el documento. Vuelve a intentarlo.');}
  if(!r.ok)return fail(res,404,'Este enlace no existe o ya no está disponible.');
  const html=await r.text();
@@ -47,4 +55,4 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  res.end(withNotice(html));
 }
 module.exports=(req,res)=>handler(req,res);
-module.exports.handler=handler;module.exports.storeHost=storeHost;module.exports.csp=csp;module.exports.NOTICE=NOTICE;module.exports.withNotice=withNotice;
+module.exports.handler=handler;module.exports.storeHost=storeHost;module.exports.csp=csp;module.exports.NOTICE=NOTICE;module.exports.withNotice=withNotice;module.exports.EXPIRED=EXPIRED;

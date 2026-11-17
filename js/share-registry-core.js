@@ -2,13 +2,16 @@
    IMPORTANT: it lives only in THIS browser. It is a convenience to find and withdraw what was published from here,
    not an authoritative record: another computer or browser does not see it, and clearing site data empties it.
    It stores only what is needed to show and withdraw a link: never a code, a token or project content (fields are
-   whitelisted and URLs must be https). UMD: window.FloorPlanShareRegistry / module.exports. */
+   whitelisted and URLs must be https). UMD: window.FloorPlanShareRegistry / module.exports.
+   GOV-08 S3: an entry also keeps `expiresAt` (the date the server wrote into the stored names). An entry without it
+   was published before S3: statusAt() reports it as 'legacy' — no expiry date — and never invents one. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanShareRegistry=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
  const KEY='rubik-share-publications-v1',MAX=50,STATES=Object.freeze(['active','withdrawn','partial']);
  const https=u=>{try{const x=new URL(String(u));return x.protocol==='https:'&&!x.username&&!x.password?x.href:null;}catch{return null;}};
  const text=(v,n=120)=>typeof v==='string'?v.slice(0,n):'';
- const iso=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toISOString():null;};
+ // An absent date stays absent: new Date(null) is 1970, which would turn a legacy link (no expiry) into an expired one.
+ const iso=v=>{if(v===null||v===undefined||v==='')return null;const d=new Date(v);return Number.isFinite(d.getTime())?d.toISOString():null;};
  // Only whitelisted fields survive: anything else (a code, a token, project data) is dropped.
  function clean(e){
   if(!e||typeof e!=='object')return null;
@@ -17,13 +20,14 @@
   const files=(Array.isArray(e.files)?e.files:[page,e.video,e.delivery]).map(https).filter(Boolean);
   const state=STATES.includes(e.state)?e.state:'active';
   return {id:page,page,video:https(e.video),delivery:https(e.delivery),link,files:[...new Set(files)].slice(0,8),kind:['html+video','orphan-video','orphan-files'].includes(e.kind)?e.kind:'html',
-   project:text(e.project),versionCode:text(e.versionCode,40),publishedAt,state,withdrawnAt:iso(e.withdrawnAt),pending:(Array.isArray(e.pending)?e.pending:[]).map(https).filter(Boolean)};
+   project:text(e.project),versionCode:text(e.versionCode,40),publishedAt,state,withdrawnAt:iso(e.withdrawnAt),pending:(Array.isArray(e.pending)?e.pending:[]).map(https).filter(Boolean),
+   expiresAt:iso(e.expiresAt),ttlDays:[7,30,90].includes(e.ttlDays)?e.ttlDays:null};
  }
  function load(storage){try{const raw=JSON.parse(storage?.getItem(KEY)||'[]');return Array.isArray(raw)?raw.map(clean).filter(Boolean).slice(0,MAX):[];}catch{return [];}}
  function save(storage,list){try{storage?.setItem(KEY,JSON.stringify(list.map(clean).filter(Boolean).slice(0,MAX)));return true;}catch{return false;}}
  // A new publication goes first; the oldest are dropped beyond MAX.
  function add(list,p,now=new Date()){
-  const e=clean({page:p.page,video:p.video||null,delivery:p.delivery||null,link:p.link,files:[p.page,p.video,p.delivery].filter(Boolean),kind:p.video?'html+video':'html',project:p.project,versionCode:p.versionCode,publishedAt:now,state:'active'});
+  const e=clean({page:p.page,video:p.video||null,delivery:p.delivery||null,link:p.link,files:[p.page,p.video,p.delivery].filter(Boolean),kind:p.video?'html+video':'html',project:p.project,versionCode:p.versionCode,publishedAt:now,state:'active',expiresAt:p.expiresAt,ttlDays:p.ttlDays});
   return e?[e,...list.filter(x=>x.id!==e.id)].slice(0,MAX):list;
  }
  // A tour video uploaded for a publication whose page then failed and could not be cleaned up automatically: kept so
@@ -45,5 +49,11 @@
    return left.length?{...e,state:'partial',pending:left}:{...e,state:'withdrawn',withdrawnAt:iso(now),pending:[]};});
  }
  const toRemove=e=>e.state==='partial'&&e.pending.length?e.pending:e.files;
- return Object.freeze({KEY,MAX,STATES,clean,load,save,add,addOrphan,addOrphanFiles,applyWithdrawal,toRemove,clear});
+ // GOV-08 S3: what «Mis publicaciones» shows. withdrawn / partial come from S2; otherwise the expiry date decides, and
+ // an entry with no date is a legacy publication (before S3). `now` in ms; at the exact expiry minute it is expired.
+ function statusAt(e,now=Date.now()){
+  if(!e)return null;if(e.state==='withdrawn'||e.state==='partial')return e.state;
+  if(!e.expiresAt)return 'legacy';return now>=new Date(e.expiresAt).getTime()?'expired':'active';
+ }
+ return Object.freeze({KEY,MAX,STATES,clean,load,save,add,addOrphan,addOrphanFiles,applyWithdrawal,toRemove,clear,statusAt});
 });

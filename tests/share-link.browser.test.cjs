@@ -59,7 +59,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  uploads.length=0;await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkGo').click();await dialog.locator('#shareLinkUrl').waitFor({timeout:120000});
  assert.deepEqual(uploads.map(u=>[u.kind,u.token]),[['html',SHARE]],'only the finished client file travels');assert.ok(uploads.every(u=>u.renderHeader===undefined),'the render header is never sent');assert.equal(uploads[0].head,'<!doctype html>');
  const link=await dialog.locator('#shareLinkUrl').inputValue();assert.match(link,new RegExp('^'+url.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'api/view\\?f=https%3A%2F%2F'+HOST.replace(/\./g,'\\.')+'%2Frubik-share%2F'));
- assert.match(await dialog.locator('#shareLinkMeta').innerText(),/^Versión \S+\. Si cambias el proyecto, publica un enlace nuevo/);
+ assert.match(await dialog.locator('#shareLinkMeta').innerText(),/^Versión \S+ · caduca el \d{2}\/\d{2}\/\d{2}, \d{1,2}:\d{2}\. Si cambias el proyecto, publica un enlace nuevo/); // GOV-08 S3: the date is shown
  await shot(page,'b4-1440-published');
  // The link opens the read-only document as a page, with its observations form and no network.
  const client=await context.newPage(),clientErrors=[];client.on('pageerror',e=>clientErrors.push(e.message));const resp=await client.goto(link);

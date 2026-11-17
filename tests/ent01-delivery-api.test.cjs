@@ -45,7 +45,7 @@ async function withdraw(st,url,token=SHARE_CODE){
 test('I1A publication is independently authorized, validated before Blob, and preserves the exact .delivery.json suffix',async()=>{
  const st=fixture(),s=snapshot(),out=await publish(st,s);
  assert.equal(out.status,200);assert.equal(out.body.kind,'delivery');
- assert.match(out.body.url,new RegExp('^https://'+HOST.replace(/\./g,'\\.')+'/rubik-share/casa-prueba-[a-f0-9]{24}\\.delivery\\.json$'));
+ assert.match(out.body.url,new RegExp('^https://'+HOST.replace(/\./g,'\\.')+'/rubik-share/casa-prueba--[a-f0-9]{24}--x\\d{12}\\.delivery\\.json$'));
  assert.equal(Delivery.target(out.body.url,HOST),out.body.url);
  const put=st.calls.find(x=>x.options.method==='PUT');
  assert.equal(put.options.headers['x-add-random-suffix'],'0');
