@@ -1,8 +1,10 @@
 # GOV-08 S3 / ENT-02 · Caducidad de los enlaces de cliente
 
+**Corte verificado 17/11/2026:** master `8525025a1470d48d52d8e365070e5a0acf116134`, #243/#244/#245 fusionadas; 11 checks de master correctos. Árbol `5441db02b71407ab03731216054165eee24940c0`, idéntico a #244 `28a01b0`. La evidencia recuperada del Preview aislado acredita 30/30 comprobaciones reales y 7/7 de conservación, sin usar Blob de Production. [Evidencia original](../qa/evidencias-s3-2026-11-17/result.json). Tras autorización expresa del propietario en esta sesión, se promovió `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`; el alias público ya apunta a ese deployment. El anterior `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` se conserva como recuperación. S4, S5 y GOV-06a siguen pendientes.
+
 **Fecha:** 17/11/2026 · **Base:** `master@40b4ae5`, reconciliada con `master@f31f303` (referencias editoriales del propietario, sin cambios de código). Rama `feat/gov08-s3-caducidad-20261117`, independiente de #243.
 
-**Estado:** implementación local con pruebas. **Pendiente de la aprobación del propietario.**
+**Estado:** integrado mediante #244; evidencia de aceptación aislada recuperada.
 
 **No autoriza:** merge, despliegue, Production, cambios de variables de entorno ni borrado de ninguna publicación real. Todas las pruebas usan datos sintéticos, códigos ficticios y un almacén Blob simulado en memoria.
 
