@@ -1,6 +1,6 @@
-# RUBIK SOTA — Estado maestro tras la consolidación #241
+# RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
-**Fecha:** 16/11/2026 · **Corte:** `master@1296aaca75363789751fba3650847df4042d2877`.
+**Fecha:** 17/11/2026 · **Corte:** `master@40b4ae5d724ef83d0e70651545b4f5e4832becd3`. Primera versión redactada el 16/11 sobre `1296aac` y actualizada el 17/11 tras fusionar #242 y mover la URL pública.
 
 **Qué es este documento.** Es la fotografía **vigente** del producto. Responde a qué está terminado, qué es experimental, qué está simulado o desactivado y qué falta.
 
@@ -14,7 +14,7 @@
 **Precedencia:** decisión del propietario > código de `master` > PR y actas con SHA > documentos anteriores.
 
 **Clave de evidencia:**
-- **[M]** hecho verificado en `master@1296aac`: el archivo existe y se carga, o la prueba existe;
+- **[M]** hecho verificado en `master@40b4ae5`: el archivo existe y se carga, o la prueba existe;
 - **[H]** evidencia histórica, de un acta o una PR con su SHA;
 - **[P]** resultado comunicado por el propietario;
 - **[D]** pendiente de decisión.
@@ -25,17 +25,19 @@
 
 | Elemento | Valor |
 |---|---|
-| `master` | `1296aaca75363789751fba3650847df4042d2877` [M] |
+| `master` | `40b4ae5d724ef83d0e70651545b4f5e4832becd3` [M] |
 | Consolidación | [#241](https://github.com/Juanmaes83/floorplan-3d/pull/241), fusionada el 16/11/2026, con HEAD `200b936`. Integra identidad de proyectos, presupuestos independientes, importación de presupuesto, Asistente V3 (#238), HOM-03 (#236), lector y enlace de #166 y las auditorías (#240) |
-| Despliegue Production | `dpl_t1AALQZxQEtEoBeT5HBoTyYF2z2e`, sobre `1296aac`, **READY**, servido en el alias `floorplan-3d-git-master-…vercel.app` [M] |
-| **URL pública `floorplan-3d-alpha.vercel.app`** | **Sigue en `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (09/11, `master@8df49ed`)** [M, consultado en Vercel el 16/11]. La URL pública **no muestra** la consolidación. Moverla es un cambio de Production que el propietario debe autorizar [D] |
-| PR abiertas | **21**. Ninguna se ha fusionado por separado; detalle en la §F [M] |
+| HOM-04 (provisional) | [#242](https://github.com/Juanmaes83/floorplan-3d/pull/242), fusionada el 17/11/2026, con HEAD `5fcb252`. Sección «Descubre RUBIK en acción» en la Home con dos demos guiadas: Evolución 4D (`/evolucion/?demo=obra`) y Dibujo vivo (`/?demo=dibujo-vivo`). Corrige el error de `/evolucion/?lab=1&dossier=K` en Production |
+| Despliegue Production | `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs`, sobre `40b4ae5`, **READY** [M, consultado en Vercel el 17/11]. El de #241 era `dpl_t1AALQZxQEtEoBeT5HBoTyYF2z2e` |
+| **URL pública `floorplan-3d-alpha.vercel.app`** | **Apunta a `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` (`40b4ae5`) desde el 17/11/2026**, por autorización del propietario [M, consultado en Vercel el 17/11]. Abre sin pedir acceso. Antes estaba en `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (09/11, `master@8df49ed`): para revertir, basta con reasignarle ese despliegue |
+| PR abiertas | **21** (#242 se abrió y se fusionó el 17/11). Detalle en la §F [M, 17/11] |
 
-**Capacidades principales comprobadas en `1296aac`:**
+**Capacidades principales comprobadas (navegador real, 17/11):**
 
 | Capacidad | Evidencia |
 |---|---|
-| Inicio, editor 2D, 3D, presentación y ZIP portable | Navegador real sobre el despliegue Production (alias `git-master`): **17/17** [H: prueba sintética de Claude, 16/11] |
+| Inicio, editor 2D, 3D, presentación y ZIP portable; presupuestos, importación y puertas de seguridad | Aceptación general **17/17** sobre el despliegue Production de `40b4ae5` y **17/17** sobre la URL pública [H: prueba sintética de Claude, 17/11; la misma pasó 17/17 en `1296aac` el 16/11] |
+| Demos guiadas HOM-04 | **17/17** en la Preview `5fcb252`, en Production y en la URL pública: Home, Evolución 4D, Dibujo vivo, móviles 390×844 y 844×390, `localStorage` intacto, `labs/` en 404, sin errores ni peticiones a terceros [H: prueba sintética de Claude, 17/11] |
 | Identidad de proyectos | La copia importada recibe un id nuevo y registra su origen (`library.origin()`). Pruebas: `tests/project-identity*.cjs` [M] |
 | Presupuesto independiente | 99 € en la copia y 11 € en el original, persistentes. Pruebas: `tests/con-03-budget-import.test.cjs` [M] |
 | Puertas de seguridad | Asistente generativo cerrado (`503 provider_disabled`). Publicar y revocar sin código, o con un código falso, devuelve `401`. Enlace inexistente: `404` [H, 16/11] |
@@ -45,7 +47,7 @@
 - apertura en incógnito: **PASS**;
 - revocación del enlace: **PASS**.
 
-Es una declaración del propietario, **no** una prueba automatizada ejecutada por Claude. No consta en qué URL se hizo. Si se hizo en la URL pública, corresponde al despliegue del 09/11 y no a `1296aac` [D].
+Es una declaración del propietario, **no** una prueba automatizada ejecutada por Claude. No consta en qué URL se hizo. Si se hizo en la URL pública antes del 17/11, corresponde al despliegue del 09/11 y no a la consolidación [D].
 
 **Excepciones de CI conocidas y no bloqueantes:**
 - Los shards *historical* agotan el tiempo sin `RENDER_TIME_SCALE` y con un corte de 900 s por fichero. Los mismos tests pasan en sus jobs dedicados.
@@ -66,7 +68,7 @@ Es una declaración del propietario, **no** una prueba automatizada ejecutada po
 | `PENDIENTE` | No desarrollado |
 | `BLOQUEADO` | Necesita una decisión, una dependencia, datos, privacidad o autorización |
 
-**«Validado» no significa disponible comercialmente.** Las pruebas son de Chromium con SwiftShader y datos sintéticos, sin dispositivos físicos (GOV-07). Además, la URL pública aún no muestra este corte.
+**«Validado» no significa disponible comercialmente.** Las pruebas son de Chromium con SwiftShader y datos sintéticos, sin dispositivos físicos (GOV-07).
 
 ### B.1 Producto base y editor
 
@@ -82,6 +84,7 @@ Es una declaración del propietario, **no** una prueba automatizada ejecutada po
 | UX-12/UX-13 Amueblar por estancia y recetas (#226 vía #228) | INTEGRADO_EXPERIMENTAL | Propuesta reproducible por semilla y densidad, con recetas, que solo se aplica tras confirmarla | Biblioteca con licencias (BIB-01); aceptación visual | [M] `js/smart-furnishing-*`, `tests/smart-furnishing*` | — |
 | MUE-01 «Trae tu mueble» (#227 vía #228) | INTEGRADO_VALIDADO | Foto y medidas convertidas en un volumen genérico; la foto queda solo como referencia | Reconstrucción 3D (MUE-02, ola 5) | [M] `tests/photo-project*.cjs` (MUE-01) | — |
 | OBR-01 Pendientes de FT3D-8 (#207) | INTEGRADO_VALIDADO | EX-05.3, EX-11-k.6, QA-22 y EX-09.10 cerrados | — | [H] `docs/qa/obr01-ft3d8-2026-11-12/README.md` | — |
+| HOM-04 (provisional) Demos guiadas (#242) | INTEGRADO_VALIDADO | Desde la Home, sin cuenta: Evolución 4D con la vivienda de ejemplo como obra nueva (10 tareas, fechas ilustrativas, **sin importes**) y Dibujo vivo con la presentación existente. No leen ni cambian los proyectos del visitante | ID en el catálogo (ver §H). La demo 4D no representa la cubierta | [M] `js/construction-demo-core.js`, `js/home-demos.js`, `evolucion/demo-ui.js`, `tests/evolution-demo.browser.test.cjs`, `tests/home-demos.browser.test.cjs` | Formalizar el ID [D] |
 | OBR-02/03 Fantasma de la tarea y % del plan (#219) | INTEGRADO_VALIDADO | En «Evolución», solo con un plan de la misma revisión | — | [M] `evolucion/plan-preview-ui.js`, `tests/obr02-obr03-*` | — |
 | GOV-07 Resiliencia WebGL (#208/#213) | PARCIAL | Degradación controlada y pérdida de contexto en la Evolución | Matriz física iOS, Android y GPU | [M] `tests/gov07-*` | Banco de dispositivos [D] |
 
@@ -101,7 +104,7 @@ Los estados de la Home salen de `js/capability-registry.js`. Ese archivo aún ti
 | Código | Estado | Qué puede usar hoy el usuario | Qué falta | Evidencia | Próxima decisión |
 |---|---|---|---|---|---|
 | Render IA D1 (GOV-01a/b/c, IMG-01, IMG-02) | INTEGRADO_VALIDADO, de pago y operativo | Render con listas cerradas, código de acceso y límites por instancia | Tope global (IMG-04) y cuotas por profesional (GOV-06a) | [H] acta D1 del 09/11; registro `render-ai: available` [M] | — |
-| HOM-03 «Nuevos servicios IA» (#236 vía #241) | INTEGRADO_VALIDADO | Cuatro estados honestos: render disponible; asistente, catálogos y fichas en piloto; estudio de imágenes y reforma por foto en simulación; IA conversacional y foto real en preparación | Que la URL pública lo muestre; actualizar `VERIFIED_AT` | [M] `js/capability-registry.js`, `tests/welcome-ai-services.browser.test.cjs` | Alias [D] |
+| HOM-03 «Nuevos servicios IA» (#236 vía #241) | INTEGRADO_VALIDADO | Cuatro estados honestos: render disponible; asistente, catálogos y fichas en piloto; estudio de imágenes y reforma por foto en simulación; IA conversacional y foto real en preparación | Actualizar `VERIFIED_AT` (la URL pública ya lo muestra desde el 17/11) | [M] `js/capability-registry.js`, `tests/welcome-ai-services.browser.test.cjs` | — |
 | CAT-02 «Mis catálogos» (fichas, SKU y medidas; #230 vía #234) | INTEGRADO_EXPERIMENTAL, piloto | Catálogo propio por estudio local | Identidad de estudio autenticada (GOV-06a) y licencias (K11) | [M] `js/catalog-ui.js`, `js/catalog-product-core.js` | — |
 | CAT-03 SKU → objeto 3D validado o volumen genérico → partidas (#233 vía #234) | PARCIAL, piloto | Colocar y presupuestar en C1–C4 sin editarlo | Productos 3D validados a escala comercial | [M] `js/catalog-placement-*`, `tests/catalog-placement*` | — |
 | «CAT-04» catálogo → Presupuestar → Asistente (#237) | INTEGRADO_VALIDADO, piloto | La misma partida C1–C4, IVA por partida y revisión del precio | Reabrirlo en un proyecto real | [M] `js/catalog-budget-core.js`, `js/cat04-ui.js`, `tests/cat04*` | **El código CAT-04 no está en el catálogo v1.10** (ver §H) |
@@ -156,9 +159,9 @@ Mantienen la numeración y los IDs del catálogo v1.10: 97 códigos en total, re
 
 | Ola | Objetivo | Avances desde el v1.10 (12/11) | Pendientes principales | Dependencias | Siguiente corte razonable |
 |---|---|---|---|---|---|
-| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 a 21 PR abiertas. GOV-03 se amplió con HOM-03. GOV-04: catálogo y auditorías en `master` (#192 y #241) | GOV-02: decidir las 21 restantes. GOV-03: `VERIFIED_AT` desfasado y registro global | — | Actualizar el registro tras mover el alias |
+| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 a 21 PR abiertas. GOV-03 se amplió con HOM-03. GOV-04: catálogo y auditorías en `master` (#192 y #241) | GOV-02: decidir las 21 restantes. GOV-03: `VERIFIED_AT` desfasado y registro global | — | Actualizar el registro (alias ya movido el 17/11) |
 | **1** Vender lo que ya existe | Entregar al cliente con seguridad | GOV-08 S1/S2/aislamiento, ENT-01 de alcance mínimo, OBR-01 cerrado y GOV-07 de software | ENT-02 caducidad, GOV-08 S3–S5, GOV-05 legal y GOV-07 con dispositivos físicos | GOV-05 (externo) y GOV-06a | **GOV-08 S3** caducidad y registro de publicaciones |
-| **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. ECO-01 como núcleo puro. ENT-04 como núcleo sin activar | ENT-04 en la interfaz, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | **ENT-04**: activar el dossier |
+| **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. Demos guiadas HOM-04 (provisional) en la Home. ECO-01 como núcleo puro. ENT-04 como núcleo sin activar | ENT-04 en la interfaz, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | **ENT-04**: activar el dossier |
 | **3** Servicios cobrables | Diferenciación comercial | UX-12/13 experimental, MUE-01 integrado, FOT-01 y CAT-01 en simulación, y AG-0 parcial (V2) | FOT-01 real, CAT-01 real, ENT-05/06, IMG-09/13/15/16/22, PRE-01, UX-11, UX-24, AST-01, ECO-02/03 y PER-01 | GOV-05, ECO-01, IMG-04 y presupuesto de prueba | ECO-01 real con IMG-04 |
 | **4** Interoperabilidad y asistente | Confianza y productividad | AG-1 y AG-2 validados sin LLM. CAT-02 en piloto. IMG-14 en simulación | G-01, G-02, G-08, PER-02/03, PAN-01, UX-10/21/26, OBR-05 y AG-1 con LLM | GOV-06a y prueba C | Prueba C, solo con GO de gasto |
 | **5** Investigación y escala | Solo con decisión expresa | AG-3 local validado (V2). CAT-03 parcial en piloto. AG-4 parcial | AG-5, FOT-02, MUE-02, PAN-02, VID-02, GEN-01, UX-14, LUZ-01, G-04, G-07, ENT-07 y GOV-06b | Decisión y presupuesto | — |
@@ -191,7 +194,7 @@ Mantienen la numeración y los IDs del catálogo v1.10: 97 códigos en total, re
 
 Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, coste y facilidad de validación. **Son propuestas, no autorizaciones.**
 
-**Decisión previa, que no es un corte:** que el propietario autorice mover `floorplan-3d-alpha.vercel.app` al despliegue `dpl_t1AALQZxQEtEoBeT5HBoTyYF2z2e`. Hoy el público ve el producto del 09/11.
+**Decisión previa ya resuelta:** el 17/11 el propietario autorizó mover `floorplan-3d-alpha.vercel.app`; hoy el público ve `40b4ae5`.
 
 1. **GOV-08 S3 / ENT-02:** caducidad y registro de publicaciones. Completa la entrega segura de la ola 1. Riesgo bajo, sin coste de API y fácil de validar.
 2. **ENT-04:** activar el dossier antes/después con presupuesto rotulado. El núcleo y el laboratorio ya están en `master`; cierra el corte 2b.
@@ -203,9 +206,10 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 
 ## H. Fuentes y trazabilidad
 
-**Hechos verificados en `master@1296aac` [M]:**
+**Hechos verificados en `master@40b4ae5` [M]:**
 - `index.html`, que carga los módulos de §B;
 - `js/capability-registry.js`, `js/project-library.js`, `api/assistant.js`, `api/_share-auth.js` y `api/delivery.js`;
+- `js/construction-demo-core.js`, `js/home-demos.js` y `evolucion/demo-ui.js`;
 - `js/r02a-ceiling-*`, `js/r03-cabinet-*`, `js/nav3d-*`, `js/smart-furnishing-*`, `js/catalog-*` y `js/cat04-ui.js`;
 - los tests citados en cada fila.
 
@@ -236,11 +240,11 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 | #234 | V2 y CAT-IA |
 | #237 | CAT-04 |
 | #241 | Consolidación |
+| #242 | HOM-04 (provisional): demos guiadas |
 
 **Comunicado por el propietario [P]:** aceptación manual de la entrega (publicar, abrir en incógnito y revocar: PASS).
 
 **Pendiente de decisión [D]:**
-- alias público;
 - origen de la aceptación manual;
 - activación de ENT-04;
 - GOV-08 S3;
@@ -249,8 +253,9 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 - contrato definitivo de R02-A;
 - aceptación visual de R03;
 - destino de las 21 PR;
-- formalización del código CAT-04.
+- formalización de los códigos CAT-04 y HOM-04.
 
 **Contradicciones abiertas:**
 - **CAT-04** (#237) y la numeración de ramas de CAT-IA (#230 dice «CAT-02 Mis catálogos») no coinciden exactamente con el catálogo v1.10. Este documento usa el significado del catálogo (CAT-01 referencias, CAT-02 fichas y SKU, CAT-03 productos 3D y partidas). Trata «CAT-04» como alias de trabajo, **sin crear un ID nuevo**, hasta que el propietario decida. Lo mismo vale para «CON-03» (importación de presupuesto de #241): es un código de trabajo, no un ID del catálogo.
-- **`js/capability-registry.js`** declara `VERIFIED_AT=5fb7a5c` y define «available» como «en Production». La URL pública sirve el 09/11.
+- **`js/capability-registry.js`** declara `VERIFIED_AT=5fb7a5c` y define «available» como «en Production», mientras la URL pública sirve `40b4ae5` desde el 17/11.
+- **HOM-04** no existe en el catálogo v1.10, que llega a HOM-03. Es un nombre provisional para las demos de #242, **sin crear un ID nuevo**, hasta que el propietario decida.
