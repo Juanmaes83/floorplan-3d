@@ -153,6 +153,24 @@
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
   // B5: the human-assisted service, for whoever prefers not to convert the plan themselves.
   const service=el('p',undefined,shell,'welcome-service');el('span',tx('¿Prefieres que lo preparemos nosotros? ','Prefer us to prepare it? ','希望由我们来准备？'),service);btn('welcomeService',tx('Envíanos tu plano','Send us your plan','发送平面图'),()=>window.FloorPlanPlanService?.open(),service).classList.add('guide-link');
+  // HOM-04 (provisional) · «Descubre RUBIK en acción»: the two most visual capabilities, as guided demos with the example
+  // home, right after the ways to start. No account, no project of the visitor and no AI: 4D build (evolucion/?demo=obra,
+  // built in memory) and «Dibujo vivo» (?demo=dibujo-vivo, the existing presentation of the example; js/home-demos.js).
+  const inAction=el('section',undefined,shell,'welcome-in-action');inAction.id='welcomeInAction';inAction.setAttribute('aria-labelledby','welcomeInActionTitle');
+  el('h2',tx('Descubre RUBIK en acción','See RUBIK in action','观看 RUBIK 实际效果'),inAction).id='welcomeInActionTitle';
+  el('p',tx('Dos demostraciones con la vivienda de ejemplo. No necesitas cuenta ni crear un proyecto, y no cambian nada.','Two demos with the example home. No account or project needed, and they change nothing.','两个使用示例住宅的演示。无需账户或创建项目，也不会更改任何内容。'),inAction,'lead');
+  const demoCards=el('div',undefined,inAction,'demo-cards');
+  for(const [id,img,kicker,title,text,note,action,href] of [
+   ['evolucion-obra','assets/welcome/demo-evolucion-4d.webp',['Evolución de obra 4D','4D construction','4D 施工'],['Descubre cómo evoluciona una obra','See how a build evolves','查看施工如何推进'],
+    ['Una vivienda que se construye virtualmente semana a semana: vista 3D, fases y planificación de obra.','A home built virtually week by week: 3D view, phases and the construction plan.','一座逐周虚拟建造的住宅：3D 视图、阶段与施工计划。'],
+    ['Datos de ejemplo: fechas ilustrativas y sin importes.','Example data: illustrative dates, no amounts.','示例数据：日期仅供说明，不含金额。'],['Ver demo de evolución 4D','See the 4D build demo','查看 4D 施工演示'],'evolucion/?demo=obra'],
+   ['dibujo-vivo','assets/welcome/demo-dibujo-vivo.webp',['Dibujo vivo','Living drawing','活绘'],['Del dibujo a la realidad','From drawing to reality','从图纸到现实'],
+    ['Una vivienda dibujada a grafito se convierte, estancia a estancia, en un espacio 3D con sus materiales.','A home drawn in graphite turns, room by room, into a 3D space with its materials.','一座石墨绘制的住宅逐个房间变成带材料的 3D 空间。'],
+    ['La misma presentación que puedes hacer con tu proyecto. Sin IA.','The same presentation you can make with your project. No AI.','与你可以用自己项目制作的演示相同。不使用 AI。'],['Ver demo de dibujo vivo','See the living drawing demo','查看活绘演示'],'?demo=dibujo-vivo']]){
+   const card=el('article',undefined,demoCards,'demo-card');card.dataset.demo=id;
+   const fig=el('figure',undefined,card);const im=el('img',undefined,fig,'welcome-demo-shot');im.src=img;im.loading='lazy';im.alt=label(title)+' · '+tx('captura real de RUBIK','real RUBIK capture','RUBIK 真实截图');
+   const body=el('div',undefined,card,'demo-card-body');el('p',label(kicker),body,'demo-card-kicker');el('h3',label(title),body);el('p',label(text),body);el('p',label(note),body,'demo-card-note');
+   btn('welcomeDemo-'+id,label(action),()=>{location.href=href;},body,true).classList.add('demo-card-go');}
   const audienceSection=el('section',undefined,shell,'welcome-audience');
   const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
   el('p',tx('Opcional. Te mostramos para qué te sirve Rubik. Las herramientas son las mismas para todos y tu proyecto no cambia.','Optional. We show what Rubik does for you. Everyone has the same tools and your project does not change.','可选。我们会说明 Rubik 对你的用途。所有人使用相同的工具，你的项目不会改变。'),audienceSection);

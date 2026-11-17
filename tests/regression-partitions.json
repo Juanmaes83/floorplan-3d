@@ -7,7 +7,9 @@
   "tests/consolidacion-transversal.browser.test.cjs",
   "tests/client-review.browser.test.cjs",
   "tests/variants.browser.test.cjs",
-  "tests/building.browser.test.cjs"
+  "tests/building.browser.test.cjs",
+    "tests/evolution-demo.browser.test.cjs",
+    "tests/home-demos.browser.test.cjs"
  ],
  "historical": {
   "presentation-a": [

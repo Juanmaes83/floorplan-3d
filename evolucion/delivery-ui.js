@@ -14,7 +14,7 @@ const state={labStore:memory(),labProfileId:null,copies:{},source:'none',title:'
   // Read-only history of what was actually produced: never cleared when the project or dossier changes.
   history:[]};
 const api=window.__ft3dDelivery={state};
-const browserProfiles=()=>{try{return B.readProfiles(window.localStorage).profiles;}catch{return [];}};
+const browserProfiles=()=>{if(window.__ft3dSource?.mode==='demo')return [];try{return B.readProfiles(window.localStorage).profiles;}catch{return [];}};
 const entryKey=()=>'ft3d8:'+(Fid().ctx?.model.subject.id||'none');
 const sizeText=b=>b>=1048576?(b/1048576).toFixed(2).replace('.',',')+' MB':Math.max(1,Math.round(b/1024))+' KB';
 const secs=ms=>(Math.round(ms/100)/10).toString().replace('.',',')+' s';
