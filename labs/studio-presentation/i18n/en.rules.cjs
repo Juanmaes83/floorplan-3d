@@ -74,6 +74,7 @@ module.exports=[
  ['^Corresponde a esta vista del modelo: comparación visual de miniaturas \\(diferencia media (.+) sobre 255\\); la imagen enviada no se conservó\\.$','Matches this view of the model: visual comparison of thumbnails (mean difference $1 out of 255); the image sent was not kept.'],
  ['^Corresponde a la vista de la izquierda \\(comparación visual de miniaturas, diferencia media (.+)/255; la imagen enviada no se conservó\\)\\.$','Matches the view on the left (visual comparison of thumbnails, mean difference $1/255; the image sent was not kept).'],
  // portadas, pies y títulos
+ ['Estudio no facilitado','Studio not provided'],
  ['^Presentado por (.+), (\\d.+)$','Presented by $1, $2'],
  ['^Planta, superficies, estancias, sección y fachadas del modelo, ','Plan, areas, rooms, section and facades of the model, '],
  ['^Entrega al cliente, ','Client delivery, '],
@@ -84,5 +85,11 @@ module.exports=[
  ['^Libro de arquitectura, (.+)$','Architecture book, $1'],['^Libro de interiorismo, (.+)$','Interior design book, $1'],['^Libro de materiales y mobiliario, (.+)$','Materials and furniture book, $1'],
  ['^Ficha inmobiliaria, (.+)$','Real estate sheet, $1'],['^Lámina de arquitectura, cajetín en franja, (.+)$','Architecture sheet, title block strip, $1'],['^Lámina de arquitectura, (.+)$','Architecture sheet, $1'],['^Presentación integral, (.+)$','Complete presentation, $1'],['^Propuesta económica, versión cliente, (.+)$','Cost proposal, client version, $1'],
  ['^; (.+) también con una imagen orientativa generada con IA, siempre junto a la vista del modelo$','; $1 also with an indicative AI image, always next to the model view'],
- [' y (?=[A-ZÁÉÍÓÚ])',' and '],
+ ['^Misma vista \\(diferencia (.+)\\)$','Same view (difference $1)'],['^Misma estancia, otra cámara \\(diferencia (.+)\\)$','Same room, another camera (difference $1)'],
+ ['^Misma vista del modelo \\(diferencia (.+) sobre 255\\)$','Same model view (difference $1 out of 255)'],['^Otra cámara de la misma estancia \\(diferencia (.+) sobre 255\\)$','Another camera of the same room (difference $1 out of 255)'],
+ ['^Modelo y coste por imagen; consumo$','Model, cost per image and usage'],['^Modelo y coste por imagen$','Model and cost per image'],
+ ['^Imagen IA: (.+)$','AI image: $1'],['^Vista: (.+)$','View: $1'],
+ ['^Huellas SHA-256 de cada imagen y de su vista en el registro de la entrega\\.$','SHA-256 fingerprints of each image and its view in the delivery record.'],
+ ['^(.+): (\\d[\\d.]*) tokens mostrados por el producto\\.$','$1: $2 tokens shown by the product.'],
+ [' y (?=[A-ZÁÉÍÓÚ\\u0001])',' and '],
 ];

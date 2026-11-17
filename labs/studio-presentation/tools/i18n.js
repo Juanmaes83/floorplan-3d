@@ -8,16 +8,22 @@
 // traducen: el texto del estudio se marca lang="es". Devuelve las cifras y los restos en español para el gate del compositor.
 function I18N(dict,data,mode){
  const norm=s=>s.replace(/\s+/g,' ').trim();
- const dataSet=new Set(data.map(norm));
+ const ALL=Array.isArray(data)?data:data.all,MASK=Array.isArray(data)?[]:data.mask;
+ const dataSet=new Set(ALL.map(norm));
+ // Los nombres del proyecto se protegen con marcadores mientras actúan las reglas (p. ej. « y » → « and » no debe tocar
+ // «Fernández y Sánchez»); se restauran al final. La búsqueda exacta va antes, sobre el texto sin proteger.
+ const masks=MASK.map(norm).filter(x=>x.length>=4).sort((a,b)=>b.length-a.length);
+ const protect=t=>{const keep=[];for(const m of masks){if(!t.includes(m))continue;t=t.split(m).join('\u0001'+keep.length+'\u0002');keep.push(m);}return [t,keep];};
+ const restore=(t,keep)=>t.replace(/\u0001(\d+)\u0002/g,(_,i)=>keep[+i]);
  const rules=dict.rules.map(([p,r,f])=>[new RegExp(p,f||'g'),r]);
  const exact=dict.exact;
  const esNum=/(?<![\w:.,/-])(\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+,\d+)(?![\w:]|[.,]\d)/g;
  const toEn=s=>s.replace(esNum,m=>m.replace(/\./g,'§').replace(',','.').replace(/§/g,','));
- const rule=s=>{for(const [re,r] of rules)s=s.replace(re,r);return s;};
+ const rule=s0=>{let [s,keep]=protect(s0);for(const [re,r] of rules)s=s.replace(re,r);return restore(toEn(s),keep);};
  // frase exacta → cada frase (exacta o reglas) → reglas sobre el conjunto
- const phrase=n=>{if(exact[n]!==undefined)return exact[n];const parts=n.split(/(?<=[.?!])\s+(?=[A-ZÁÉÍÓÚÑ¿«(0-9])/);
-  if(parts.length>1)return parts.map(x=>exact[x]!==undefined?exact[x]:rule(x)).join(' ');return rule(n);};
- const tr=t=>{const n=norm(t);if(!n||dataSet.has(n))return t;const lead=t.match(/^\s*/)[0],trail=t.match(/\s*$/)[0];return lead+toEn(phrase(n))+trail;};
+ const phrase=n=>{if(exact[n]!==undefined)return toEn(exact[n]);const parts=n.split(/(?<=[.?!])\s+(?=[A-ZÁÉÍÓÚÑ¿«(0-9])/);
+  if(parts.length>1)return parts.map(x=>exact[x]!==undefined?toEn(exact[x]):rule(x)).join(' ');return rule(n);};
+ const tr=t=>{const n=norm(t);if(!n||dataSet.has(n))return t;const lead=t.match(/^\s*/)[0],trail=t.match(/\s*$/)[0];return lead+phrase(n)+trail;};
  let n;const nodes=[];
  if(mode!=='check'){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   while((n=w.nextNode())){if(n.parentElement.closest('script,style,[lang="es"]:not(html)'))continue;nodes.push(n);}
@@ -26,8 +32,8 @@ function I18N(dict,data,mode){
   document.title=tr(document.title);document.documentElement.lang='en';}
  if(mode==='translate')return {nodes:nodes.length};
  // gate: se enmascaran los datos del proyecto (los más largos primero, sin distinguir mayúsculas) y se buscan palabras españolas
- const ES=new Set(dict.spanishWords);const masks=[...dataSet].filter(x=>x.length>1).sort((a,b)=>b.length-a.length).map(x=>new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'));
- const residual=[];const check=(txt,where)=>{let m=txt;for(const re of masks)m=m.replace(re,' ');
+ const ES=new Set(dict.spanishWords);const gateMasks=[...dataSet].filter(x=>x.length>1).sort((a,b)=>b.length-a.length).map(x=>new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'));
+ const residual=[];const check=(txt,where)=>{let m=txt;for(const re of gateMasks)m=m.replace(re,' ');
   for(const wd of m.toLowerCase().split(/[^a-záéíóúüñ¿¡]+/i)){if(!wd)continue;if(ES.has(wd)||/[áéíóúñ¿¡]/.test(wd))residual.push({w:wd,t:txt.slice(0,90),where});}};
  const w2=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  while((n=w2.nextNode())){if(n.parentElement.closest('script,style,[lang="es"]:not(html)'))continue;const t=norm(n.textContent);if(t)check(t,'texto');}

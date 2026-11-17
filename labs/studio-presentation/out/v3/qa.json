@@ -1209,7 +1209,7 @@
    }
   },
   "entrega-integral": {
-   "pages": 11,
+   "pages": 12,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
@@ -1252,15 +1252,15 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7553,
-     "RUBIK Serif": 973
+     "RUBIK Inter": 8330,
+     "RUBIK Serif": 1082
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "entrega-integral.en": {
-   "pages": 11,
+   "pages": 12,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
@@ -1297,12 +1297,12 @@
     "ok": true
    },
    "i18n": {
-    "nodes": 380,
+    "nodes": 413,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 25,
-     "en": 25,
+     "es": 27,
+     "en": 27,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1314,8 +1314,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7139,
-     "RUBIK Serif": 882
+     "RUBIK Inter": 7872,
+     "RUBIK Serif": 999
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"

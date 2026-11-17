@@ -1,0 +1,237 @@
+{
+ "generated": "2026-11-17T18:16:11.601Z",
+ "perfiles": {
+  "sin-marca": {
+   "exit": 0,
+   "docs": 25,
+   "pages": 151,
+   "qaProblemas": [],
+   "bloqueados": null,
+   "ingles": {
+    "bloqueados": [],
+    "idiomas": [
+     "es",
+     "en"
+    ]
+   },
+   "entregaPublicada": true,
+   "comprobaciones": [
+    {
+     "estado": "block",
+     "que": "Identidad del estudio"
+    },
+    {
+     "estado": "ok",
+     "que": "Mismo proyecto en todas las piezas"
+    },
+    {
+     "estado": "warn",
+     "que": "Presupuesto revisado"
+    },
+    {
+     "estado": "warn",
+     "que": "Imágenes IA"
+    },
+    {
+     "estado": "warn",
+     "que": "Plan de obra"
+    },
+    {
+     "estado": "ok",
+     "que": "Sin el proyecto editable"
+    },
+    {
+     "estado": "warn",
+     "que": "Peso y formato"
+    },
+    {
+     "estado": "info",
+     "que": "Enlace para el cliente"
+    },
+    {
+     "estado": "info",
+     "que": "Visita 3D interactiva"
+    },
+    {
+     "estado": "ok",
+     "que": "Datos personales"
+    }
+   ]
+  },
+  "logo": {
+   "exit": 0,
+   "docs": 25,
+   "pages": 151,
+   "qaProblemas": [],
+   "bloqueados": null,
+   "ingles": {
+    "bloqueados": [],
+    "idiomas": [
+     "es",
+     "en"
+    ]
+   },
+   "entregaPublicada": true,
+   "comprobaciones": [
+    {
+     "estado": "warn",
+     "que": "Identidad del estudio"
+    },
+    {
+     "estado": "ok",
+     "que": "Mismo proyecto en todas las piezas"
+    },
+    {
+     "estado": "warn",
+     "que": "Presupuesto revisado"
+    },
+    {
+     "estado": "warn",
+     "que": "Imágenes IA"
+    },
+    {
+     "estado": "warn",
+     "que": "Plan de obra"
+    },
+    {
+     "estado": "ok",
+     "que": "Sin el proyecto editable"
+    },
+    {
+     "estado": "warn",
+     "que": "Peso y formato"
+    },
+    {
+     "estado": "info",
+     "que": "Enlace para el cliente"
+    },
+    {
+     "estado": "info",
+     "que": "Visita 3D interactiva"
+    },
+    {
+     "estado": "ok",
+     "que": "Datos personales"
+    }
+   ]
+  },
+  "nombres-largos": {
+   "exit": 0,
+   "docs": 25,
+   "pages": 151,
+   "qaProblemas": [],
+   "bloqueados": null,
+   "ingles": {
+    "bloqueados": [],
+    "idiomas": [
+     "es",
+     "en"
+    ]
+   },
+   "entregaPublicada": true,
+   "comprobaciones": [
+    {
+     "estado": "warn",
+     "que": "Identidad del estudio"
+    },
+    {
+     "estado": "ok",
+     "que": "Mismo proyecto en todas las piezas"
+    },
+    {
+     "estado": "warn",
+     "que": "Presupuesto revisado"
+    },
+    {
+     "estado": "warn",
+     "que": "Imágenes IA"
+    },
+    {
+     "estado": "warn",
+     "que": "Plan de obra"
+    },
+    {
+     "estado": "ok",
+     "que": "Sin el proyecto editable"
+    },
+    {
+     "estado": "warn",
+     "que": "Peso y formato"
+    },
+    {
+     "estado": "info",
+     "que": "Enlace para el cliente"
+    },
+    {
+     "estado": "info",
+     "que": "Visita 3D interactiva"
+    },
+    {
+     "estado": "ok",
+     "que": "Datos personales"
+    }
+   ]
+  },
+  "logo-poco-contraste": {
+   "exit": 0,
+   "docs": 25,
+   "pages": 151,
+   "qaProblemas": [],
+   "bloqueados": null,
+   "ingles": {
+    "bloqueados": [],
+    "idiomas": [
+     "es",
+     "en"
+    ]
+   },
+   "entregaPublicada": true,
+   "comprobaciones": [
+    {
+     "estado": "warn",
+     "que": "Contraste del logotipo"
+    },
+    {
+     "estado": "warn",
+     "que": "Identidad del estudio"
+    },
+    {
+     "estado": "ok",
+     "que": "Mismo proyecto en todas las piezas"
+    },
+    {
+     "estado": "warn",
+     "que": "Presupuesto revisado"
+    },
+    {
+     "estado": "warn",
+     "que": "Imágenes IA"
+    },
+    {
+     "estado": "warn",
+     "que": "Plan de obra"
+    },
+    {
+     "estado": "ok",
+     "que": "Sin el proyecto editable"
+    },
+    {
+     "estado": "warn",
+     "que": "Peso y formato"
+    },
+    {
+     "estado": "info",
+     "que": "Enlace para el cliente"
+    },
+    {
+     "estado": "info",
+     "que": "Visita 3D interactiva"
+    },
+    {
+     "estado": "ok",
+     "que": "Datos personales"
+    }
+   ]
+  }
+ }
+}

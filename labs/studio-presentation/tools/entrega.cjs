@@ -28,6 +28,11 @@ module.exports=function entrega(C){
  const V=S.budget?.test?.view?.client||null,BVp=S.budget?.test?.view?.professional||null;
  const viewFile=l=>{const v=S.views.find(x=>x.label===l);return v?path.join(LAB,'snapshot',v.file):null;};
  const renders=(()=>{try{const t=JSON.parse(fs.readFileSync(path.join(LAB,'evidence/render-ia/trazabilidad.json'),'utf8'));return t.pairs;}catch{return [];}})();
+ const aiManifest=(()=>{try{return JSON.parse(fs.readFileSync(path.join(LAB,'evidence/render-ia/manifest.json'),'utf8'));}catch{return null;}})();
+ // Ficha de trazabilidad de Render IA: lo que consta de cada imagen y lo que NO consta (se escribe, no se rellena).
+ const aiTrace=()=>renders.map(p=>{const m=aiManifest?.records?.find(r=>r.file===p.render)||{};const x=ai[p.sourceViewLabel];
+  return {label:p.sourceViewLabel,render:x?.web,view:VW[p.sourceViewLabel],exact:x?.exact,diff:p.meanAbsDiff0to255,style:(m.style||'').replace(/^.*\((.+)\)$/,'$1')||null,
+   tokens:m.tokensShownInUI||null,sha:p.renderSha256,viewSha:p.snapshotViewSha256};});
  const ai=Object.fromEntries(renders.map((p,i)=>[p.sourceViewLabel,{...p,web:jpg(path.join(LAB,'evidence/render-ia',p.render),`ia-${i+1}.jpg`),exact:p.meanAbsDiff0to255<8}]));
  const VW={};for(const v of S.views)VW[v.label]=jpg(path.join(LAB,'snapshot',v.file),`vista-${v.file.replace(/^.*view-|\.png$/g,'')}.jpg`);
  const drawing=jpg(path.join(A,'dibujo-vivo/00-overview.png'),'dibujo-vivo.jpg',1800);
@@ -215,7 +220,9 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
    ${Object.keys(ai).length?`<tr data-res="ia"><td>Imágenes con IA</td><td>${Object.keys(ai).length} imágenes generadas con IA a partir de vistas del modelo. Orientativas: pueden cambiar objetos, materiales y lo que queda fuera del encuadre.</td></tr>`:''}
    ${V?`<tr data-needs="presupuesto"><td>Presupuesto</td><td>Mediciones de RUBIK sobre el modelo, con la merma indicada. ${esc(PRICE_NOTE)} ${V.summary.reviewComplete?'':'Pendiente de revisión del estudio.'}</td></tr>`:''}
    ${planDemo?`<tr data-needs="obra"><td>Plan de obra<span data-res="video"> y vídeo</span></td><td>Plan de ejemplo de RUBIK aplicado a este mismo proyecto y exportado por su Evolución de obra como entrega orientativa: plan en borrador, sin revisar y sin presupuesto vinculado; fechas ilustrativas. No es un calendario de obra.</td></tr>`:''}
-   <tr><td>Esta entrega</td><td>Carpeta de solo lectura para ver sin conexión. No contiene el proyecto editable ni datos de otros proyectos.</td></tr></tbody></table></div></div>`)};
+   <tr><td>Esta entrega</td><td>Carpeta de solo lectura para ver sin conexión. No contiene el proyecto editable ni datos de otros proyectos.</td></tr></tbody></table></div>
+   ${renders.length?`<div class="s12" data-res="ia"><h3 style="margin:28px 0 12px">Las imágenes con IA, una por una</h3><div class="scroll"><table><thead><tr><th>Imagen</th><th>De qué vista sale</th><th>Estilo</th><th>No consta</th></tr></thead><tbody>${aiTrace().map(t=>`<tr><td>${esc(t.label)}</td><td>${t.exact?`Misma vista del modelo (diferencia ${num(t.diff,1)} sobre 255)`:`Otra cámara de la misma estancia (diferencia ${num(t.diff,1)} sobre 255)`}</td><td>${t.style?esc(t.style):'No consta'}</td><td>Modelo y coste por imagen${t.tokens?'':'; consumo'}</td></tr>`).join('')}</tbody></table></div>
+   <p class="cap">Correspondencia medida con la miniatura de la vista de origen que muestra el diálogo de Render IA; la imagen enviada no se conserva.</p></div>`:''}</div>`)};
  const pdfInfo=id=>{const f=path.join(outDir,id+'.pdf');if(!exists(f))return {};try{return {pages:+/Pages:\s+(\d+)/.exec(execFileSync('pdfinfo',[f]).toString())[1],size:kb(f)};}catch{return {};}};
  const web=(t,{preview=false}={})=>{const list=t.ch.filter(c=>c!=='portada'&&sections[c]);
   for(const d of DOCLIST)Object.assign(d,pdfInfo(d.id));
@@ -256,6 +263,11 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
    <div class="c1-6" style="margin-top:4mm">${im(VW[l],'Modelo 3D: '+l,'width:100%;height:100mm;object-fit:cover')}<p class="caption"><b>Modelo 3D.</b> ${esc(VIEW_NOTE)}</p></div>
    <div class="c7-12" style="margin-top:4mm">${im(x.web,'Imagen IA orientativa: '+l,'width:100%;height:100mm;object-fit:cover')}<p class="caption"><b>Imagen IA orientativa.</b> ${x.exact?`Corresponde a la vista de la izquierda (comparación visual de miniaturas, diferencia media ${num(x.meanAbsDiff0to255,1)}/255; la imagen enviada no se conservó).`:'Generada a partir de otra vista del modelo de la misma estancia (la enviada no se conservó).'}${/Salón/.test(l)?' Añade en primer plano un dormitorio que no forma parte de esta estancia y cambia la proporción del encuadre: no sirve para juzgar la distribución.':''} La geometría válida es la del modelo.</p></div>
    ${r?`<div class="c1-12"><p class="caption">En la estancia: ${esc(roomObjs(r)||'sin objetos colocados')}.</p></div>`:''}</div>`});}
+ if(renders.length){const T=aiTrace();P.push({html:`<div class="grid" style="align-content:start"><div class="c1-4"><h2 class="h2">Trazabilidad de las imágenes IA</h2><p class="read">De qué vista del modelo sale cada imagen y qué datos de su generación constan.</p>
+  <p class="caption" style="margin-top:4mm">Correspondencia medida comparando la miniatura de la vista de origen que muestra el diálogo de Render IA con la vista del proyecto (diferencia media por canal, 0–255). La imagen enviada no se conserva: el producto no la guarda junto al render.</p></div>
+  <div class="c5-12"><table><thead><tr><th>Imagen IA</th><th>Vista del modelo</th><th>Correspondencia</th><th>Estilo</th><th>No consta</th></tr></thead><tbody>${T.map(t=>`<tr><td>${im(t.render,'Imagen IA: '+t.label,'width:30mm;height:20mm;object-fit:cover')}<span class="muted">${esc(t.label)}</span></td><td>${im(t.view,'Vista: '+t.label,'width:30mm;height:20mm;object-fit:cover')}</td>
+   <td>${t.exact?`Misma vista (diferencia ${num(t.diff,1)})`:`Misma estancia, otra cámara (diferencia ${num(t.diff,1)})`}</td><td>${t.style?esc(t.style):'<span class="unk">No consta</span>'}</td><td>Modelo y coste por imagen${t.tokens?'':'; consumo'}</td></tr>`).join('')}</tbody></table>
+  <p class="caption" style="margin-top:3mm">Huellas SHA-256 de cada imagen y de su vista en el registro de la entrega. ${T.filter(t=>t.tokens).map(t=>`${esc(t.label)}: ${nf(0).format(t.tokens)} tokens mostrados por el producto.`).join(' ')}</p></div></div>`});}
  if(planDemo)P.push({html:`<div class="grid" style="align-content:start"><div class="c1-12"><h2 class="h2">Cómo avanzará la obra</h2><p class="read" style="max-width:200mm">Plan de ejemplo de RUBIK aplicado a esta misma vivienda en la Evolución de obra. <b>Fechas ilustrativas; sin presupuesto vinculado; no es un calendario de obra.</b></p></div>
   <div class="c1-8" style="margin-top:3mm">${gridSvg({w:172,h:84})}<p class="caption">Línea discontinua: fases que el modelo no dibuja.</p></div>
   <div class="c9-12" style="margin-top:3mm;display:grid;grid-template-columns:1fr 1fr;gap:2mm;align-content:start">${obra?obra.stills.map((s,i)=>im(s,'Fase '+(i+1),'width:100%;height:26mm;object-fit:cover')).join(''):''}<p class="caption" style="grid-column:1/-1">${obra?`Fotogramas del vídeo exportado por la Evolución de obra (${Math.round(obra.dur)} s), incluido en la versión para pantalla.`:'El vídeo de obra no está disponible en esta entrega.'}</p></div></div>`});
@@ -269,7 +281,12 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
 
  // ---------- escribir la web (los PDF se copian en documentos/ cuando existen: compose escribe la web después de imprimir) ----------
  const discard=()=>fs.rmSync(OUT,{recursive:true,force:true});
- const writeWeb=async(fresh,en)=>{for(const d of DOCLIST){const f=path.join(outDir,d.id+'.pdf');if(fresh.has(d.id)&&exists(f)){fs.copyFileSync(f,path.join(DOCS,d.id+'.pdf'));}}
+ const writeWeb=async(fresh,en,browser)=>{
+  // Logotipo: se muestra tal como lo da el estudio (sin recolorear). Se mide su contraste sobre el papel para avisar, no para corregir.
+  let logoContrast=null;if(browser&&prof.logo?.dataUrl){const pg=await browser.newPage();try{logoContrast=await pg.evaluate(async([src,paper])=>{const im=new Image();im.src=src;await im.decode();const W=Math.min(im.naturalWidth||400,600),H=Math.max(1,Math.round(W*(im.naturalHeight||100)/(im.naturalWidth||400)));const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle=paper;x.fillRect(0,0,W,H);x.drawImage(im,0,0,W,H);const d=x.getImageData(0,0,W,H).data;
+   const lum=(r,g,b)=>{const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);};return .2126*f(r)+.7152*f(g)+.0722*f(b);};const pr=parseInt(paper.slice(1,3),16),pg_=parseInt(paper.slice(3,5),16),pb=parseInt(paper.slice(5,7),16),Lp=lum(pr,pg_,pb);const cs=[];
+   for(let i=0;i<d.length;i+=4){if(Math.abs(d[i]-pr)+Math.abs(d[i+1]-pg_)+Math.abs(d[i+2]-pb)<6)continue;const L=lum(d[i],d[i+1],d[i+2]);cs.push((Math.max(L,Lp)+.05)/(Math.min(L,Lp)+.05));}
+   if(!cs.length)return 1;cs.sort((a,b)=>a-b);return +cs[Math.floor(cs.length*.9)].toFixed(2);},[prof.logo.dataUrl,T.paper]);}catch{logoContrast=null;}await pg.close();}for(const d of DOCLIST){const f=path.join(outDir,d.id+'.pdf');if(fresh.has(d.id)&&exists(f)){fs.copyFileSync(f,path.join(DOCS,d.id+'.pdf'));}}
   const files=[];for(const t of TIPOS){const name=t.id==='integral'?'index.html':`tipo-${t.id}.html`;fs.writeFileSync(path.join(OUT,name),web(t));files.push({tipo:t.id,name:t.name,file:name,chapters:t.ch,documents:t.docs});}
   // v1.3 · inglés: solo si TODOS los documentos de cliente pasaron en inglés (el compositor lo decide). La web se traduce en el
   // DOM con el mismo diccionario; los enlaces van a los PDF ingleses; si queda español o falta un PDF, no se publica en inglés.
@@ -297,7 +314,7 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
   if(exists(path.join(outDir,'commercial-proposal-studio-v3.pdf')))fs.copyFileSync(path.join(outDir,'commercial-proposal-studio-v3.pdf'),path.join(PRO,'propuesta-estudio.pdf'));
   fs.writeFileSync(path.join(PRO,'vista-previa.html'),web(TIPOS[0],{preview:true}));
   // publicación: la anterior se conserva como entrega-anterior/, la nueva entra por renombrado
-  const prep=prepararPage(files,pieces);
+  const prep=prepararPage(files,pieces,logoContrast);
   const PREV=path.join(outDir,'entrega-anterior');if(fs.existsSync(FINAL)){fs.rmSync(PREV,{recursive:true,force:true});fs.renameSync(FINAL,PREV);}
   fs.renameSync(OUT,FINAL);
   fs.writeFileSync(path.join(PRO,'preparar-entrega.html'),prep);
@@ -307,19 +324,21 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
  // El profesional elige el tipo de entrega, ajusta capítulos y documentos, ve la entrega del cliente tal cual (iframe de la
  // web integral con lo no elegido oculto), repasa las comprobaciones previas y descarga el registro de la entrega (JSON con
  // SHA-256 de cada pieza). Todo local: no envía ni publica nada.
- const prepararPage=(files,pieces)=>{const MB=b=>(b/1048576).toFixed(1).replace('.',',')+' MB';
-  const folderBytes=(()=>{let t=0;const walk=d=>{for(const f of fs.readdirSync(d)){const x=path.join(d,f),st=fs.statSync(x);st.isDirectory()?walk(x):t+=st.size;}};walk(OUT);return t;})();
+ const prepararPage=(files,pieces,logoContrast=null)=>{const MB=b=>(b/1048576).toFixed(1).replace('.',',')+' MB';
+  const folderBytes=(()=>{let t=0;const walk=d=>{for(const f of fs.readdirSync(d)){const x=path.join(d,f),st=fs.statSync(x);if(/\.en\.(html|pdf)$/.test(f)||f==='entrega.json')continue; // una entrega lleva un solo idioma: se mide la española
+   st.isDirectory()?walk(x):t+=st.size;}};walk(OUT);return t;})();
   const vids=[obra&&{n:'Vídeo de la obra',f:path.join(OUT,obra.video)},tour&&{n:'Vídeo del recorrido',f:path.join(OUT,tour.video)}].filter(Boolean).map(v=>({...v,b:fs.statSync(v.f).size}));
   const ftRev=ftManifest?JSON.stringify(ftManifest).match(/"revision"\s*:\s*"([^"]+)"/)?.[1]||null:null;
   const synthetic=/\.invalid/.test(prof.email||'');
   const checks=[
+   ...(logoContrast!=null&&logoContrast<3?[{k:'Contraste del logotipo',s:'warn',t:`El logotipo tiene poco contraste sobre el papel de la entrega (${String(logoContrast).replace('.',',')}:1; para leerse bien conviene 3:1 o más). Se muestra tal como lo da el estudio, sin recolorear: pedir una versión para fondo claro.`}]:[]),
    {k:'Identidad del estudio',s:!prof.name?'block':synthetic?'warn':'ok',t:!prof.name?'Falta el perfil de «Mi estudio»: la entrega saldría sin firma.':synthetic?`${STUDIO}: perfil sintético del laboratorio (dominio .invalid). En una entrega real se usa el perfil de «Mi estudio» sin cambiar el logotipo ni la identidad.`:STUDIO},
    {k:'Mismo proyecto en todas las piezas',s:'ok',t:`Proyecto ${S.project.id}, revisión ${rev}. Las vistas, la planta, el presupuesto y el recorrido salen de esa revisión.${ftManifest?` El vídeo de obra declara en su manifiesto el mismo proyecto${ftRev?` (huella ${ftRev.slice(0,12)}…)`:''}.`:' Vídeo de obra: no incluido.'}`},
    ...(V?[{k:'Presupuesto revisado',s:V.summary.reviewComplete?'ok':'warn',t:`${V.summary.items-V.summary.unreviewed} de ${V.summary.items} partidas revisadas. El cliente verá «Pendiente de revisión del estudio». ${PRICE_NOTE}`}]:[{k:'Presupuesto',s:'info',t:'El proyecto no tiene presupuesto con precios: ningún capítulo muestra importes.'}]),
    ...(Object.keys(ai).length?[{k:'Imágenes IA',s:Object.values(ai).every(x=>x.exact)?'ok':'warn',t:`${Object.keys(ai).length} imágenes, siempre junto a una vista del modelo y rotuladas «orientativa». ${Object.entries(ai).filter(([,x])=>!x.exact).map(([l])=>`${l}: generada desde otra vista de la misma estancia (la imagen enviada no se conservó).`).join(' ')} RUBIK guarda los renders solo en la memoria de la sesión: guárdalos antes de cerrar.`}]:[]),
    ...(planDemo?[{k:'Plan de obra',s:'warn',t:'Plan de ejemplo de la demo de RUBIK importado al proyecto: fechas ilustrativas, sin partidas vinculadas. Rotulado así en la entrega; no es un calendario de obra.'}]:[]),
    {k:'Sin el proyecto editable',s:'ok',t:'La carpeta de la entrega no contiene el archivo del proyecto. Ojo: la descarga «Vistas + proyecto ZIP» de RUBIK sí incluye el proyecto editable; no la adjuntes a una entrega de cliente.'},
-   {k:'Peso y formato',s:folderBytes>25*1048576?'warn':'ok',t:`Carpeta completa: ${MB(folderBytes)}. ${vids.map(v=>`${v.n}: MP4 H.264, ${MB(v.b)}${v.b>12*1048576?' (supera los 12 MB que RUBIK incrusta en la presentación de obra)':''}`).join('; ')}. ${folderBytes>25*1048576?'Supera lo que admite un correo habitual: envíala como ZIP por un servicio de archivos o en mano.':'Cabe en un correo habitual comprimida en ZIP.'}`},
+   {k:'Peso y formato',s:folderBytes>25*1048576?'warn':'ok',t:`Carpeta completa en un idioma: ${MB(folderBytes)}. ${vids.map(v=>`${v.n}: MP4 H.264, ${MB(v.b)}${v.b>12*1048576?' (supera los 12 MB que RUBIK incrusta en la presentación de obra)':''}`).join('; ')}. ${folderBytes>25*1048576?'Supera lo que admite un correo habitual: envíala como ZIP por un servicio de archivos o en mano.':'Cabe en un correo habitual comprimida en ZIP.'}`},
    {k:'Enlace para el cliente',s:'info',t:'Esta entrega es una carpeta para ver sin conexión. La publicación remota de la entrega de obra está desactivada hasta la decisión DEC-05. Si se publica un enlace: «no indexado» no es privado (lo abre cualquiera que lo tenga) y la caducidad del almacenamiento depende de #244.'},
    {k:'Visita 3D interactiva',s:'info',t:'No va en la carpeta: necesita un enlace publicado. Este proyecto es de una planta; en edificios de varias plantas la visita del cliente tiene restricciones.'},
    {k:'Datos personales',s:'ok',t:'Sin datos de clientes ni de otros proyectos. Solo el contacto del estudio.'}];

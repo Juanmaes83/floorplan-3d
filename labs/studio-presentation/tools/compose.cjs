@@ -279,13 +279,13 @@ const EN_DOCS=new Set(['interior-book-v3','materials-furniture-book-v3','commerc
 const EN_ON=process.env.STUDIO_EN!=='0'&&!S.variant;
 // Datos del proyecto que no se traducen: nombres (y sus trozos, que los rótulos del plano parten en líneas), materiales, objetos,
 // partidas y capítulos del presupuesto, tareas del plan de obra, estudio, título y texto del estudio.
-const I18N_DATA=(()=>{const out=new Set();const add=x=>{if(x&&String(x).trim())out.add(String(x).trim());};
+const I18N_DATA=(()=>{const out=new Set(),mask=new Set();const add=(x,m=true)=>{if(x&&String(x).trim()){out.add(String(x).trim());if(m)mask.add(String(x).trim());}};
  for(const r of S.geometry.rooms){add(r.name);const w=r.name.split(/\s+/);for(let a=0;a<w.length;a++)for(let b=a+1;b<=w.length;b++)add(w.slice(a,b).join(' '));for(const h of r.name.split('-').slice(0,-1))add(h+'-');for(const h of r.name.split('-').slice(1))add(h);}
- for(const m of S.materials)add(m.name);for(const f of S.board?.floors||[])add(f.name);for(const o of S.objects){add(o.name);add(o.name[0].toLowerCase()+o.name.slice(1));}
+ for(const m of S.materials)add(m.name);for(const f of S.board?.floors||[])add(f.name);for(const o of S.objects){add(o.name,false);add(o.name[0].toLowerCase()+o.name.slice(1),false);} // objetos: palabras sueltas («Planta») que chocan con el texto; no se protegen
  for(const v of S.views)add(v.label);for(const V of Object.values(S.budget?.test?.view||{}))for(const c of V.chapters||[]){add(c.title);add(c.title.toLowerCase());for(const l of c.lines)add(l.description);}
- add(S.project.name);add(B.title);add(B.intro);for(const k of ['name','person','tagline','email'])add(prof[k]);
+ add(S.project.name);add(B.title);add(B.intro);for(const k of ['name','person','tagline','email'])add(prof[k]);add(prof.logo?.label);
  try{const pd=JSON.parse(fs.readFileSync(path.join(LAB,'assets/ft3d8-plan-demo.json'),'utf8'));for(const t of pd.tasks){add(t.title);add(t.title.replace(/\s*\(no se dibuja[^)]*\)/,''));}}catch{}
- return [...out];})();
+ return {all:[...out],mask:[...mask]};})();
 const figs=(txt,lang)=>new Set([...txt.matchAll(lang==='en'?/\d{1,3}(?:,\d{3})*\.\d+/g:/\d{1,3}(?:\.\d{3})*,\d+/g)].map(m=>String(parseFloat(lang==='en'?m[0].replace(/,/g,''):m[0].replace(/\./g,'').replace(',','.')))));
 const FIGS={};
 const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\/\/.*$/mg,'').trim().replace(/^function paginateFlow\(\)/,'function()');
@@ -360,7 +360,7 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
  // v1.3 A11: con un documento bloqueado NO se publica la entrega: se descarta la preparación y se escribe un informe de
  // rechazo aparte. La entrega anterior aprobada (si existe) queda intacta. Solo se copian los PDF producidos en ESTA ejecución.
  if(E){if(qa.blocked){E.discard();fs.writeFileSync(path.join(outDir,'entrega-rechazo.json'),JSON.stringify({schema:'rubik-lab-entrega-rechazo/1',generated:new Date().toISOString(),project:S.project.id,revision:S.project.revision,blocked:qa.blocked,note:'No se ha publicado la entrega. La anterior, si existe, sigue en entrega/ sin cambios.'},null,1));}
-  else{qa.entregaWeb=await E.writeWeb(fresh,EN_ON&&!enBlocked.length?{dict:EN_DICT,data:I18N_DATA,js:I18N_JS,browser}:null);if(fs.existsSync(path.join(outDir,'entrega-rechazo.json')))fs.rmSync(path.join(outDir,'entrega-rechazo.json'));}}
+  else{qa.entregaWeb=await E.writeWeb(fresh,EN_ON&&!enBlocked.length?{dict:EN_DICT,data:I18N_DATA,js:I18N_JS,browser}:null,browser);if(fs.existsSync(path.join(outDir,'entrega-rechazo.json')))fs.rmSync(path.join(outDir,'entrega-rechazo.json'));}}
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
  for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'flow',JSON.stringify(v.flow),'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
  console.log('meta',JSON.stringify(meta));if(qa.blocked){console.log('BLOQUEADO',JSON.stringify(qa.blocked));process.exitCode=2;}await browser.close();})().catch(e=>{console.error(e);process.exit(1);});
