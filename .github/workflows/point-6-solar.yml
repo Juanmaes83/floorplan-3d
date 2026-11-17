@@ -4,6 +4,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
+  workflow_dispatch:
   pull_request:
     branches: [master]
     paths: ['index.html', 'js/**', 'css/solar.css', 'vendor/suncalc/**', 'tests/**', 'docs/contracts/**', '.github/workflows/point-6-solar.yml']
@@ -18,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
@@ -45,6 +46,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: point-6-${{ github.event.pull_request.head.sha }}
+          name: point-6-${{ github.event.pull_request.head.sha || github.sha }}
           path: output/playwright/point-6/
           if-no-files-found: ignore

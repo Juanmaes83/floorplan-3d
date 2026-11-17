@@ -5,6 +5,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 on:
+  workflow_dispatch:
   pull_request:
     branches: [master]
     paths:
@@ -23,11 +24,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
-      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
@@ -45,12 +46,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       LIVING_ARTIFACTS: qa-results/e2-hv2-living
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
@@ -76,12 +77,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       HANDOVER_ARTIFACTS: qa-results/e2-hv2-handover
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
@@ -107,12 +108,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       INTEGRATION_ARTIFACTS: qa-results/e2-hv2-section-combined
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'

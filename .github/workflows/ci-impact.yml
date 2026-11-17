@@ -1,0 +1,86 @@
+name: CI impact observation
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install PyYAML==6.0.3
+      - name: Universal fast validation
+        run: |
+          node --check scripts/ci/impact-plan.cjs
+          node --check scripts/ci/observe.cjs
+          node --test scripts/ci/*.test.cjs
+          node --test tests/project-identity.test.cjs tests/budget-core.test.cjs tests/gov08-s3-expiry.test.cjs
+          node scripts/qa/check-browser-test-coverage.cjs
+      - name: Inventory base and candidate, including indirect consumers
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          mkdir -p qa-results/impact
+          if ! git cat-file -e "$BASE^{commit}"; then BASE="$HEAD"; fi
+          python scripts/ci/inventory.py "$BASE" > /tmp/ci-base.json
+          python scripts/ci/inventory.py "$HEAD" > /tmp/ci-head.json
+          python scripts/ci/check-inventory.py /tmp/ci-head.json
+          node scripts/ci/observe.cjs /tmp/ci-base.json /tmp/ci-head.json "$BASE" "$HEAD" qa-results/impact/plan.json
+          node scripts/ci/representative.cjs /tmp/ci-base.json /tmp/ci-head.json qa-results/impact/cases.json
+          python scripts/ci/matrix.py /tmp/ci-head.json qa-results/impact
+          python scripts/ci/prove-workflows.py "$BASE" "$HEAD" qa-results/impact/workflow-preservation.json
+      - name: Snapshot real Actions timings (incomplete runs remain pending)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node scripts/ci/measure.cjs "$REPO" "$HEAD" qa-results/impact/measurement.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-impact-${{ github.event.pull_request.head.sha || github.sha }}
+          path: qa-results/impact
+  integration-gate:
+    if: always()
+    needs: observe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stable gate, including empty or documentation-only impact
+        env:
+          RESULT: ${{ needs.observe.result }}
+        run: test "$RESULT" = success
+  full-regression:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dispatch original regression workflows; no application Cron
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          for file in .github/workflows/*.yml; do
+            [ "$(basename "$file")" = ci-impact.yml ] && continue
+            gh workflow run "$(basename "$file")" --ref "$REF"
+          done
