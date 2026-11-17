@@ -1,0 +1,156 @@
+[
+  {
+    "ref": "VIS-01",
+    "file": "referencias/VIS-01-plano-actual-propuesta-fotografias.jpg",
+    "dimensions_px": [
+      1400,
+      991
+    ],
+    "sha256": "2f7bd4da204d931b68afdcdfa347105af31ea411333ab246b392ffff0b2a02ab",
+    "observed": "Planta actual y propuesta; fotografías de estado existente.",
+    "proposal": "Lámina técnica comparativa con fotos autorizadas."
+  },
+  {
+    "ref": "VIS-02",
+    "file": "referencias/VIS-02-dossier-editorial-arquitectura.jpg",
+    "dimensions_px": [
+      1920,
+      1358
+    ],
+    "sha256": "1fe5599f2cf7ee4b86242aa5011fdb84fb808271c1ce721451b2e3aab5a3b7a6",
+    "observed": "Doble página editorial; texto y fotografía de detalle.",
+    "proposal": "Jerarquía tipográfica y narrativa de proyecto."
+  },
+  {
+    "ref": "VIS-03",
+    "file": "referencias/VIS-03-presupuesto-comercial.jpg",
+    "dimensions_px": [
+      640,
+      828
+    ],
+    "sha256": "9503d0bfeef867090cc9da3a821c64b5e3f7666d8d1c8b7fa1575518366ad137",
+    "observed": "Tabla resumida por categorías y contacto.",
+    "proposal": "Resumen económico legible, sin sustituir las partidas canónicas."
+  },
+  {
+    "ref": "VIS-04",
+    "file": "referencias/VIS-04-propuesta-terra.jpg",
+    "dimensions_px": [
+      2048,
+      1536
+    ],
+    "sha256": "3f78795f55989fede0da8c2c804293d9165396df3899ddec5017623ef348fb65",
+    "observed": "Propuesta editorial cálida: equipo, inspiración, condiciones y siguientes pasos.",
+    "proposal": "Plantilla premium y secciones opcionales de estudio."
+  },
+  {
+    "ref": "VIS-05",
+    "file": "referencias/VIS-05-alcance-honorarios.jpg",
+    "dimensions_px": [
+      1024,
+      1024
+    ],
+    "sha256": "f8998d1b243711d0859173558e7fe9a871f7f998f4f21b4549d461929c062da1",
+    "observed": "Portada fotográfica, alcance de servicios, honorarios y descripción.",
+    "proposal": "Separar honorarios del coste de ejecución."
+  },
+  {
+    "ref": "VIS-06",
+    "file": "referencias/VIS-06-plano-antes-despues.jpg",
+    "dimensions_px": [
+      2048,
+      1270
+    ],
+    "sha256": "ac001bc7a361e11809e0aee427d3eab9f7c232ce5e71947d69662ac43fe37a3e",
+    "observed": "Dos plantas comparadas, composición limpia.",
+    "proposal": "Misma escala y encuadre cuando corresponda; indicar las excepciones."
+  },
+  {
+    "ref": "VIS-07",
+    "file": "referencias/VIS-07-dossier-integral.jpg",
+    "dimensions_px": [
+      1680,
+      1680
+    ],
+    "sha256": "8d6dd9008feab9ad4479ada2b93e656b20cabac1bb81c5343c622d5c78cc916c",
+    "observed": "Sistema editorial con presupuesto, plazos, materiales y objetivos.",
+    "proposal": "Referencia principal del dossier integral modular."
+  },
+  {
+    "ref": "VIS-08",
+    "file": "referencias/VIS-08-comparacion-planos-3d.jpg",
+    "dimensions_px": [
+      980,
+      693
+    ],
+    "sha256": "2286b19b9ca7f3e51a6a046cdd6894ff75964ff48367a2d8aa09d61a9e4e567c",
+    "observed": "Estado inicial y propuesta en planta y axonometría.",
+    "proposal": "Vistas 2D y 3D coherentes, con encuadre comparable."
+  },
+  {
+    "ref": "VIS-09",
+    "file": "referencias/VIS-09-propuesta-mobiliario.jpg",
+    "dimensions_px": [
+      1400,
+      984
+    ],
+    "sha256": "0c669cca6a7297cb537ce544b4d3cd1aaf5536f1caddc6d852ef5053af0cdb30",
+    "observed": "Alcance, precios, plazo y visualizaciones de cocina.",
+    "proposal": "Variante comercial orientada a mobiliario y catálogos."
+  },
+  {
+    "ref": "VIS-10",
+    "file": "referencias/VIS-10-vision-materiales-presupuesto.jpg",
+    "dimensions_px": [
+      640,
+      640
+    ],
+    "sha256": "17f80fb69119936d4e519a2d144822b102a970cceb04fe04b95675e9bcd7a642",
+    "observed": "Cuatro páginas: concepto, plano, materiales y propuesta.",
+    "proposal": "Plantilla de diseño con paleta y cifras trazables."
+  },
+  {
+    "ref": "VIS-11",
+    "file": "referencias/VIS-11-dossier-arquitectura-tecnico.jpg",
+    "dimensions_px": [
+      2048,
+      2048
+    ],
+    "sha256": "b4a4994f8968ae3c8edf1f7c008cc7076bca1514461e65fbbef34013065b0c87",
+    "observed": "Visualizaciones, planos con cotas e indicadores económicos.",
+    "proposal": "Documentación técnica y métricas verificadas."
+  },
+  {
+    "ref": "VIS-12",
+    "file": "referencias/VIS-12-propuesta-inmobiliaria-reforma.jpg",
+    "dimensions_px": [
+      2000,
+      1414
+    ],
+    "sha256": "651eb9f94844e3d488257c01ce40826300d2a8cb0df9ca4e7eaf6b510cc057aa",
+    "observed": "Vivienda existente, reforma, vistas y simulación económica.",
+    "proposal": "Separar precio del inmueble, reforma y otros costes; no inventar financiación."
+  },
+  {
+    "ref": "VIS-13",
+    "file": "referencias/VIS-13-dossier-interiorismo-minimal.jpg",
+    "dimensions_px": [
+      900,
+      900
+    ],
+    "sha256": "4f81a48da4de77434dae05bb7163194e7f2b04401b94d4a91949e692d9700b15",
+    "observed": "Portada, alcance, estimación y siguientes pasos.",
+    "proposal": "Sistema visual limpio, adaptable al estudio."
+  },
+  {
+    "ref": "VIS-14",
+    "file": "referencias/VIS-14-axonometria-antes-despues.jpg",
+    "dimensions_px": [
+      716,
+      506
+    ],
+    "sha256": "4c90a4e80019c48e68f809879f9ae6442aad22af4e804dcf1c180469a89f663f",
+    "observed": "Dos modelos 3D comparables con llamadas explicativas.",
+    "proposal": "Anotaciones ancladas a cambios reales y revisión del profesional."
+  }
+]
