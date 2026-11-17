@@ -1,4 +1,4 @@
-// HOM-04 (provisional) · «Descubre RUBIK en acción»: two large visual cards right after the ways to start, and the
+// HOM-04 · «Descubre RUBIK en acción»: two large visual cards right after the ways to start, and the
 // direct start of «Dibujo vivo» (?demo=dibujo-vivo) with the example home and the existing presentation (Hybrid V2).
 // The demo opens with a short intro, plays, ends with «Volver a ver» / «Cómo hacerlo con mi proyecto» / «Volver al
 // inicio», changes none of the visitor's projects, publishes nothing and calls no AI provider. labs/ answers 404.
