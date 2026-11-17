@@ -2,10 +2,10 @@
  "schema": "rubik-lab-inspeccion/1",
  "zip": "rubik-studio-presentation-lab.zip",
  "tipo": "laboratorio",
- "archivos": 340,
- "bytes": 157718370,
+ "archivos": 468,
+ "bytes": 164262865,
  "bloquea": 0,
- "revisar": 7,
+ "revisar": 9,
  "info": 0,
  "hallazgos": [
   {
@@ -16,6 +16,18 @@
   },
   {
    "archivo": "evidence/entrega/qa/exportar-qa.json",
+   "que": "contacto fuera de la allowlist",
+   "detalle": "persona.ajena@correo.example",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "evidence/paquetes/inspeccion-laboratorio.json",
+   "que": "contacto fuera de la allowlist",
+   "detalle": "persona.ajena@correo.example",
+   "gravedad": "revisar"
+  },
+  {
+   "archivo": "reports/13-REGISTRO-VIVO-v1.3.md",
    "que": "contacto fuera de la allowlist",
    "detalle": "persona.ajena@correo.example",
    "gravedad": "revisar"
@@ -35,12 +47,6 @@
   {
    "archivo": "tools/package.sh",
    "que": "ruta absoluta del entorno",
-   "detalle": "/home/user",
-   "gravedad": "revisar"
-  },
-  {
-   "archivo": "tools/package.sh",
-   "que": "ruta absoluta del entorno",
    "detalle": "/tmp/claude-0",
    "gravedad": "revisar"
   },
@@ -49,18 +55,24 @@
    "que": "ruta absoluta del entorno",
    "detalle": "/home/user/studio",
    "gravedad": "revisar"
+  },
+  {
+   "archivo": "tools/package.sh",
+   "que": "ruta absoluta del entorno",
+   "detalle": "/home/user",
+   "gravedad": "revisar"
   }
  ],
  "files": [
   {
    "path": "HANDOFF-v1.3.md",
-   "bytes": 5288,
-   "sha256": "4e56d525292c0d12eb87e64bc0ede24114f3ac533b0fb60297cffa4006afc233"
+   "bytes": 10024,
+   "sha256": "2af6dcb88132894d3a71146da71f4b51973c95678ee6758114cd157f9a7981dd"
   },
   {
    "path": "HANDOFF.md",
-   "bytes": 3799,
-   "sha256": "e51b211f60d2e6d35bea23056de7c109d9c60edc2f193a3360a461fd5a8825a2"
+   "bytes": 4879,
+   "sha256": "d40d225b508726cf9a66af574f50900d35184ebce414cf3e0e5958e8b3acd557"
   },
   {
    "path": "PROMPT-CONTINUACION.md",
@@ -69,13 +81,13 @@
   },
   {
    "path": "RECETA.md",
-   "bytes": 1688,
-   "sha256": "54d3818fecb74b6e83182c3a05c60bfd6d9588fc7175e1fff81b1f546a09d538"
+   "bytes": 2586,
+   "sha256": "641ba4c1eb223198715ce7667438e9a05c37cbddfa27111c372771bebff2af45"
   },
   {
    "path": "SANEAMIENTO.json",
-   "bytes": 2813,
-   "sha256": "c6680a098e26d24d871166e8158c0a4266ba6f76c8214984c026da6c424a3ea9"
+   "bytes": 2988,
+   "sha256": "5b51b4ec0ed12581ac08c33bf3ddad1b8ad39e913e5ad89bd3aa4ea87f3eb842"
   },
   {
    "path": "assets/dibujo-vivo/00-overview.png",
@@ -567,93 +579,93 @@
   },
   {
    "path": "evidence/entrega/qa/entrega-qa.json",
-   "bytes": 26111,
-   "sha256": "b3b360c49d42013f9250d3a02f791b5e13415786433e9297dc3e03f0984a10ea"
+   "bytes": 26113,
+   "sha256": "1396bfdbdf370dd90cb45d7a1737555f61e4f81ca32d949c8b46dd7dcf1cd0ab"
   },
   {
    "path": "evidence/entrega/qa/exportar-qa.json",
-   "bytes": 26234,
-   "sha256": "dcfbc25fea14e101b790fdf3cfb578fca9183b7c38263f0f730b3c70e4fb4205"
+   "bytes": 26235,
+   "sha256": "209e2006680babf6db9405b3845bdd73475e9d99e9d85c9d3e2015d6a4cd0d2a"
   },
   {
    "path": "evidence/entrega/qa/index-escritorio.jpg",
-   "bytes": 1279135,
-   "sha256": "4dff52fe6d1a0170456e8574f1c4d39ecf14f1d1799f49bfae5daee6333b10bc"
+   "bytes": 1316630,
+   "sha256": "999905f83f36299a5870a47c472f6ca558b6c24b279f62953afe7affbe940bd1"
   },
   {
    "path": "evidence/entrega/qa/index-movil.jpg",
-   "bytes": 935702,
-   "sha256": "4847f94fbb6f780d03e634cb6f999f393aee6543e756f4486300261526a29859"
+   "bytes": 965772,
+   "sha256": "c3e24951f87f7ab5c5297ccc0f0a4a46c9fa90b4c09d94bbf86d56cd9453d7d5"
   },
   {
    "path": "evidence/entrega/qa/index-tableta.jpg",
-   "bytes": 1359289,
-   "sha256": "485531cbe412f1252065e5cb6fc3dd3328bc6bd71856c1c42cbb5ea68b8d0f12"
+   "bytes": 1394152,
+   "sha256": "e9dee7fd19ff04b9a467a368cc1dba8fc66b217a306f4ecd80c932ccc766cabe"
   },
   {
    "path": "evidence/entrega/qa/index.en-movil.jpg",
-   "bytes": 906884,
-   "sha256": "b92dd4e1bc0db96c0ed1801b19bd413336fa3a34d76bb84a3525459dd5659ab8"
+   "bytes": 937951,
+   "sha256": "6b68a5d2a1aa84c0e8c2a590cf5236346bf268056364240a2c626c926b796020"
   },
   {
    "path": "evidence/entrega/qa/tipo-dossier-tecnico-movil.jpg",
-   "bytes": 574024,
-   "sha256": "ea508d32f6969e9f1f3996dd18ec3d712193205ae252068a706bd22acfa7bc0d"
+   "bytes": 605597,
+   "sha256": "75e68a5f3fc33ad9b87414528e86cf97c89acf69b9706b3908ed955eeda1df95"
   },
   {
    "path": "evidence/entrega/qa/tipo-dossier-tecnico.en-movil.jpg",
-   "bytes": 551544,
-   "sha256": "cfd5e90260dcc6547672d3536ad28966df844a015cf290ae7d2738f35f2f89f6"
+   "bytes": 582545,
+   "sha256": "b0324620f7f026c84fdf0d5c19523de788afcecbefcb090878be080a6d91c24f"
   },
   {
    "path": "evidence/entrega/qa/tipo-inmobiliaria-movil.jpg",
-   "bytes": 449576,
-   "sha256": "c1a17a549a553bc2ae5a9fda0ad16d0b7ce7317d63c35513d20b9d5874c93d2e"
+   "bytes": 480975,
+   "sha256": "8723335bed73d16cb94fe7beced8d7c79bd8d4b7f09a9dcac9946573ff5fbed7"
   },
   {
    "path": "evidence/entrega/qa/tipo-inmobiliaria.en-movil.jpg",
-   "bytes": 432585,
-   "sha256": "74051ad77e9aaa12a576a5ecc68c0be15541ae4306213e376259eefe4217a05c"
+   "bytes": 463105,
+   "sha256": "c05b1062cbc072631949da279bf531fdf7163ac5ca5f33aaec25b45718164157"
   },
   {
    "path": "evidence/entrega/qa/tipo-interiorismo-movil.jpg",
-   "bytes": 653540,
-   "sha256": "e841ac59860179cf0983f8a04ea1968e7f07410e489286ec861684bb0300ff2b"
+   "bytes": 686661,
+   "sha256": "0f915ac055c27fc3f5a06690a27f989bab689fae5689e20c252631ca84f8e168"
   },
   {
    "path": "evidence/entrega/qa/tipo-interiorismo.en-movil.jpg",
-   "bytes": 629724,
-   "sha256": "c8fd75a946a8c5441dcd71f214235080ab6040b212f6d8e0da24775f770f279a"
+   "bytes": 661748,
+   "sha256": "b5ff0bd6310c3738b8fe1df074cebd02094a08fef01963e5c1a02a49b80648ee"
   },
   {
    "path": "evidence/entrega/qa/tipo-obra-movil.jpg",
-   "bytes": 420096,
-   "sha256": "b5f24e8e4cb3bba696affecec4a84e8b1d3e8e267d479291397f6ac3119c2e7f"
+   "bytes": 451474,
+   "sha256": "6e67f080b1afc1d8909742c788c20cfad50ffd0ba8e56f1b775a90cc32440323"
   },
   {
    "path": "evidence/entrega/qa/tipo-obra.en-movil.jpg",
-   "bytes": 407436,
-   "sha256": "8f5102c9eb5a55c6184670ec5a78ec8b75f7775fcc6bdbe7ced6264598023527"
+   "bytes": 437487,
+   "sha256": "6b1a0670c36f4ddf81c4323d6be2b81ace1a9589deaaf634bf86621fbc69be1d"
   },
   {
    "path": "evidence/entrega/qa/tipo-primera-reunion-movil.jpg",
-   "bytes": 604016,
-   "sha256": "023496dab44d8e68fe5b67f83541a8884970ef5912240c581df4d616d3c49260"
+   "bytes": 635304,
+   "sha256": "60430a86d8ddf9da29862113b80f6bedf17bc530fa7433e72028cb0e58ede0f5"
   },
   {
    "path": "evidence/entrega/qa/tipo-primera-reunion.en-movil.jpg",
-   "bytes": 579741,
-   "sha256": "b98c9e7e0ffb8389ca7d7e484b20fabda2d0f7d75f2fa0b45f598c9fc0509458"
+   "bytes": 610275,
+   "sha256": "9558006aa731a834f969cf0fbb024fd451ea00c1011d4c4db7fe10d9a8edaa48"
   },
   {
    "path": "evidence/entrega/qa/tipo-propuesta-comercial-movil.jpg",
-   "bytes": 687086,
-   "sha256": "a7d78868323d45a542fd3df685109ed1cdb8e4fb2a81690cf8a90b6a69cffa52"
+   "bytes": 719307,
+   "sha256": "edd110517fb186a9742f915fb5d9fcbde0cf36eec882d79779403d493e654443"
   },
   {
    "path": "evidence/entrega/qa/tipo-propuesta-comercial.en-movil.jpg",
-   "bytes": 659206,
-   "sha256": "e602eece4ba50b90f2527000d89ff7f23126c3d2b97fa4e67284fcb72929f5b6"
+   "bytes": 691976,
+   "sha256": "55a9151ce8c4f957213e283069cf1ab6954554639d686e207b6712f93c4ea286"
   },
   {
    "path": "evidence/entrega/v1.2/escritorio-1440x900.png",
@@ -695,6 +707,11 @@
    "path": "evidence/entrega/v1.2/tableta-820x1180.png",
    "bytes": 3430439,
    "sha256": "058299c07085d4a1ae0b39dc143e8c38de5026dc469c97d4366af03cdd4c3ccd"
+  },
+  {
+   "path": "evidence/h08/inventario-vis.json",
+   "bytes": 26968,
+   "sha256": "2cedf8f0ead3c8358cadd22fde265cb38a642e4f77f46f415a46768e0f25b364"
   },
   {
    "path": "evidence/i18n/gate-en.json",
@@ -750,6 +767,51 @@
    "path": "evidence/motor/motor-qa.json",
    "bytes": 16483,
    "sha256": "63a4d0d7ec64a21692bb8689fe0e79b947b7929246a61c6835fe27155a5983ee"
+  },
+  {
+   "path": "evidence/paquetes/INDICE.json",
+   "bytes": 907,
+   "sha256": "50ebf0d787d713ba8278ba64a2575c77dd803fae83de003b5d19ee6ee2a7580a"
+  },
+  {
+   "path": "evidence/paquetes/RECONSTRUCCION.json",
+   "bytes": 410,
+   "sha256": "7c128c5e8d4a42edd7621de1c5492455aed0e5722fee4a154d7ce8ff2df5fab0"
+  },
+  {
+   "path": "evidence/paquetes/SANEAMIENTO.json",
+   "bytes": 2813,
+   "sha256": "c6680a098e26d24d871166e8158c0a4266ba6f76c8214984c026da6c424a3ea9"
+  },
+  {
+   "path": "evidence/paquetes/SHA256SUMS",
+   "bytes": 520,
+   "sha256": "e11df94653ce82bf35fc566604e5c53afc4b46546c2e4aababdb0c3c16f4ef85"
+  },
+  {
+   "path": "evidence/paquetes/inspeccion-cliente-en.json",
+   "bytes": 7704,
+   "sha256": "039dc793ff561abf08f248b2dd31dd922847d7666d367c1f55123fc4edd93069"
+  },
+  {
+   "path": "evidence/paquetes/inspeccion-cliente-es.json",
+   "bytes": 7707,
+   "sha256": "9e71922d2a20efa55619957f8cdf008dcef19947bab5295527a1563de7e514c6"
+  },
+  {
+   "path": "evidence/paquetes/inspeccion-laboratorio.json",
+   "bytes": 67613,
+   "sha256": "2684f2d4a9ccae724dc615864f429bb52a870579eda90374f43b7c618aa93435"
+  },
+  {
+   "path": "evidence/paquetes/verificacion-en.json",
+   "bytes": 99,
+   "sha256": "ea1112e597919bad04382297b089c547e2d95b223a463f1aa23f845c4159bb15"
+  },
+  {
+   "path": "evidence/paquetes/verificacion-es.json",
+   "bytes": 99,
+   "sha256": "9527a8832fc88330d5255e36ecac3a5e0b2ff9300ab85afc6c5e74bd95c6d437"
   },
   {
    "path": "evidence/perfiles/perfiles-marca.json",
@@ -882,6 +944,596 @@
    "sha256": "b99f9ad64905e01188cbefe50217c91cf0ebd3c65b69d1294c61cdc3b591e5b8"
   },
   {
+   "path": "evidence/revision-visual/index.html",
+   "bytes": 21516,
+   "sha256": "7a8eeaca0704f6c4e7d5e421166f3b3a6e6a74ce8fabcbe829d1a93d89595d51"
+  },
+  {
+   "path": "evidence/revision-visual/indice.json",
+   "bytes": 7567,
+   "sha256": "25d027cb5bfca78194802abe2a0cd8a279e6ac9fa29e0e9ce89e055b2726fc55"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-01.jpg",
+   "bytes": 46633,
+   "sha256": "7c0641ef02535b7d8258bf04af806435bd2b787879da26894d70500ab2c23631"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-02.jpg",
+   "bytes": 38040,
+   "sha256": "402df42ea2885ef62d38bb4835deaacea5ffc1b2a2cd94943368eae11c2935e6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-03.jpg",
+   "bytes": 56355,
+   "sha256": "a258022e515de5d04857f398e4b0fa5043fdea35cef4962a55e13cfec80edc45"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-04.jpg",
+   "bytes": 55747,
+   "sha256": "415369b92693b8d2101df689b8ada3d732fbb2c8505d962d14e0784b72843516"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-05.jpg",
+   "bytes": 39108,
+   "sha256": "3a61548f84a49015d18fbded80af261fe578e6f6777840cbc15c88fb17129b3a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-06.jpg",
+   "bytes": 39124,
+   "sha256": "a041d2fbcc36bb7d6ff05cef9c92227d2a517530ca95b514e62eaff110ee8e0c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-07.jpg",
+   "bytes": 38977,
+   "sha256": "28732417e0ff1813c801c8f7cd34839a0ae3e0c737ced456e13a98057267df39"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-08.jpg",
+   "bytes": 38560,
+   "sha256": "c6bdf9c1f3b9541e1bc9a88dcaff27f83c5ef6587b2a855d6e61823035be0e00"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-09.jpg",
+   "bytes": 39282,
+   "sha256": "0d5706a2398926d88413056d3c1c4659460f5e1c937ba282fe3db71d24b4676d"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-10.jpg",
+   "bytes": 36944,
+   "sha256": "a20eebfb9d37627795d52a4a2d445cb470668e6801383edc6025b9a604a0aef3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-11.jpg",
+   "bytes": 27789,
+   "sha256": "ffcadfcf6a855cc52b540b4c813e3da74501f23578b7505f5383e4d0bb56014f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-12.jpg",
+   "bytes": 46832,
+   "sha256": "33a00bfc8e904f7807ca76d889ae290d3000a4629d5585de0124262a5aa41cb6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-13.jpg",
+   "bytes": 53754,
+   "sha256": "6a910282b92e3b296634d8f30246626b5c87754b2f74b384396209528b24279b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-en-14.jpg",
+   "bytes": 43761,
+   "sha256": "680ed8834627c61b03d934d52ae34d0a490714758ae9d6263a8318dfe9a2bb40"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-01.jpg",
+   "bytes": 47264,
+   "sha256": "761a7ce5dabdfdd3e338af3ef87bab3763238301dcc529a6020f8f4c83c380fc"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-02.jpg",
+   "bytes": 40342,
+   "sha256": "3f7596b0f4c1f00aca81cb66a132b70f8d9ab24ad323ea2a7cf78920c79ef68d"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-03.jpg",
+   "bytes": 56370,
+   "sha256": "ca599af9aff44ede6caa7bb26e2973b963f3b80b223d5a928dec1485ba10e4e8"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-04.jpg",
+   "bytes": 58839,
+   "sha256": "68430234ab82b6531d4329ea7aaf32f9a32df7d2df637bdd3f99829b8e0573af"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-05.jpg",
+   "bytes": 40466,
+   "sha256": "3ce597732af8684e54c9f898eb6f6469bdd74cc218818a3505b3c3eea5b21ac2"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-06.jpg",
+   "bytes": 40602,
+   "sha256": "b8a40bea050d2ac882f7012731a75d0444644733d0bef177d0a4c43a3941db63"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-07.jpg",
+   "bytes": 40386,
+   "sha256": "60f09953a0870d761606121f80774d2e3e47db4ee751da40cb04230adfe09c89"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-08.jpg",
+   "bytes": 40073,
+   "sha256": "e11feb01179bd6c4774d5c22aab03b88692c8fb1effe40a16749feb4c8e0965a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-09.jpg",
+   "bytes": 40922,
+   "sha256": "e19610bab7fe1572fde347bf267eae41ade4afea9b27c470ead10217ebf20007"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-10.jpg",
+   "bytes": 38519,
+   "sha256": "fc766253e5598da60a7e72b4d80f7a806f39cf2be865622fa75b35d4f06bc172"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-11.jpg",
+   "bytes": 29239,
+   "sha256": "d3a193ad814ae08f1d6b0d40b92672b69b9894860a0954ea059e3c06d04e958f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-12.jpg",
+   "bytes": 46813,
+   "sha256": "801974b3ee4da40dbde67b92308e8112a03dd86cf9993859bba01650d1ccdc15"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-13.jpg",
+   "bytes": 54691,
+   "sha256": "517faf832372ec5d929eb2330c6a1cc9795d53099126b5356f4af8d069aceef7"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-book-es-14.jpg",
+   "bytes": 42496,
+   "sha256": "54fc482788571c2d0b1004f003a98d27d61a40911346aec123516d2b2e04cd76"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-sheet-strip-en-1.jpg",
+   "bytes": 103066,
+   "sha256": "cae71ddcbe31ff097af754e158235e02cead965863f7ef6c67e5b697c8d2a136"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/architecture-sheet-strip-es-1.jpg",
+   "bytes": 104036,
+   "sha256": "1c93a6b01124e49fd5e544355bcdba0104455f33da5015023631147a07b1138c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-en-1.jpg",
+   "bytes": 39732,
+   "sha256": "b7e113e5ec043fbbd99823188648435e54ff96348890049a201cabfc669a61e5"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-en-2.jpg",
+   "bytes": 60644,
+   "sha256": "ce99d02baf5b4f6673d64a585708e56cd49b47f76beb7b07e98f1d0bb5878636"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-es-1.jpg",
+   "bytes": 41118,
+   "sha256": "b58b3324a46730bf51032bc8fc922eee6296e0272113d3ded82a886a4f2328ed"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-client-v3-es-2.jpg",
+   "bytes": 62844,
+   "sha256": "9ab233ff7e6379501f698733481e5482c0273334698b935e0c2dbc1a8d2f114f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-studio-v3-es-1.jpg",
+   "bytes": 46196,
+   "sha256": "557188e3d5b16ab6bd5a81f487d041aebcda6de4d4f1bcd2a43cdcd2240c91ff"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/commercial-proposal-studio-v3-es-2.jpg",
+   "bytes": 83201,
+   "sha256": "e9e39cc2ae8e599e7c210561c3583b0f6ef9a65873af059a2e670603ad0d251a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-01.jpg",
+   "bytes": 45757,
+   "sha256": "237d5262e9a94286a9d2f74e06168b2694fc3e954fb7fec59f64f57cfec4ff2e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-02.jpg",
+   "bytes": 44926,
+   "sha256": "b07d14a0cfaad6b0f3d0489618e514ef989af419be9a2fd6a8e8c1d0cc2bdbf5"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-03.jpg",
+   "bytes": 30610,
+   "sha256": "f0360893c8e101a1cd21d4658f26cd02f69e882ac107e5bf6357e4dcfd8e273b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-04.jpg",
+   "bytes": 57271,
+   "sha256": "0899bafc2499f90a3ad6cf2f148a615306d62f44a42dea1a113ee9df82ce6a9d"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-05.jpg",
+   "bytes": 63371,
+   "sha256": "6b4d422793c215e4723fcbd09397510468f2b017869de1fd6b6aa96a9cf33388"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-06.jpg",
+   "bytes": 59624,
+   "sha256": "0ef8d0eebbd7409d6c5951f2e486dcb30d6052f5ef53bc8bbe5d86df832afec5"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-07.jpg",
+   "bytes": 51839,
+   "sha256": "d9656ade7f370381c2e0f7586076a39d8ada746219d0abf8b52d59635ed3ec32"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-08.jpg",
+   "bytes": 46892,
+   "sha256": "3999c6278223e73f6a827246a013148b805ab6477800a29538d9f7b1db9b46ca"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-09.jpg",
+   "bytes": 43084,
+   "sha256": "8cb94915c5857f11403217c000ce812bed3c3f2ef722621f4e77fb885293be32"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-10.jpg",
+   "bytes": 28279,
+   "sha256": "49f83b52bd78c0a1ed5423d2baa75fc3bcc61d69940e7b2d724526a9cd4ba76b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-11.jpg",
+   "bytes": 60509,
+   "sha256": "a78f4e837c9127fe4026f2ae763bc3cb88edb93ea8c7a37faa82b4006313cfa6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-en-12.jpg",
+   "bytes": 47655,
+   "sha256": "19fc20aa92ef312d795b9907290dcd0ea2f2d7003466f0944afb3d5ac1db1a91"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-01.jpg",
+   "bytes": 46156,
+   "sha256": "018b803340e17eb41b3a632db430222bfbc71b781d6543863443c0ccca6a6508"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-02.jpg",
+   "bytes": 46718,
+   "sha256": "e80a99fe1107fb99e31857064a137943cd2f1369b1175e8cf47f7997ceb37bcc"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-03.jpg",
+   "bytes": 30924,
+   "sha256": "1897a9303ed41936d22f4a4c4f6635d76973efa62afdaed5ee9c435e7c42e069"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-04.jpg",
+   "bytes": 57710,
+   "sha256": "f41ef4d431d76115a547bc6f491dbc31753ff1dd4fa0656243fbe4649b4e3d98"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-05.jpg",
+   "bytes": 63885,
+   "sha256": "d3229c0a9ef0806c3adef4dd1439c1788d8119097f1b84f031c744a7d9c4e1b6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-06.jpg",
+   "bytes": 60560,
+   "sha256": "953331901e35e4278e0b34d75b6f011f246d7c2ff62992eb963fdb723e9f0400"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-07.jpg",
+   "bytes": 52541,
+   "sha256": "9affb02f2eb879415ad7328696bf57766d565bb9a87c7976a5f8b57936d93a46"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-08.jpg",
+   "bytes": 47762,
+   "sha256": "c8eac9e5b6e131717d77fe26042804c712fbb98e1c11cdbf42cdb74d941f9656"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-09.jpg",
+   "bytes": 43976,
+   "sha256": "1143b4eb29175534f8b6ca5717bed51ec7e2a1a233733edc85a36fb685f969c3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-10.jpg",
+   "bytes": 30100,
+   "sha256": "12aea143358ed39c35e8a13e89acd2e6df00b8db17622e6a3399a0e4105d29a1"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-11.jpg",
+   "bytes": 64418,
+   "sha256": "71dabe4a2b7e64683f836a6a31136e48c6dcbeda5818a514aa9b1d10ea5bc648"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/entrega-integral-es-12.jpg",
+   "bytes": 50559,
+   "sha256": "5f5d9d702cd54b7f29bee75324e7651e770d2226b281d735a5c09448036f00fd"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-01.jpg",
+   "bytes": 46132,
+   "sha256": "1850c25aeb778ff99f828da25471c1d9be5dd3914dc91b4a7074ca2419623731"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-02.jpg",
+   "bytes": 36486,
+   "sha256": "5e2efc82fdb047e959842605fd000a75462732c2e0e993482892e8f57b6b802a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-03.jpg",
+   "bytes": 47677,
+   "sha256": "89dddedd677a665716030aab16b54ab3368b918cf032e149c39cd20e7888859b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-04.jpg",
+   "bytes": 48104,
+   "sha256": "2f2fb882c04f86c67771ce0813c23ad1b3ab4b53c76dd09ea4eacd936032e07e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-05.jpg",
+   "bytes": 56168,
+   "sha256": "888a9b110465d2c98e16a29cf7ee340474e6dd3f61d6101ce74e1beb99696b43"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-06.jpg",
+   "bytes": 41810,
+   "sha256": "2dcc9344cec1899c2ae6b541a4d5d9fcb3c5d2b69068bd40a0a165ed4351b677"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-07.jpg",
+   "bytes": 47052,
+   "sha256": "c8bdb0a2f160b6611725da2ebe415567c03b6c7c0630c4ba8b1307576609843a"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-08.jpg",
+   "bytes": 45022,
+   "sha256": "449eb142c5241fadc286ffb2a3fbec75586fb1daf0032c2ba2d6de52dae9bb1b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-09.jpg",
+   "bytes": 50213,
+   "sha256": "02f4cc3536f65a4ba49d46e080aa4bf7dfdfdaef0c4b28e75dcb1734710f4d4c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-10.jpg",
+   "bytes": 45136,
+   "sha256": "62d226076d72d0731957a669b4a92fc2b18fadebf5005ac380c683e6b4c74cc1"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-11.jpg",
+   "bytes": 55843,
+   "sha256": "4d72280de67f74124ec0025fc5ddb5d050efc9efba4297254eb9b4b61a95d7bd"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-12.jpg",
+   "bytes": 54944,
+   "sha256": "75727d20f15b64ca9d354873dc16d32d176bbe73269d1400550e99387f25d7c3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-13.jpg",
+   "bytes": 45232,
+   "sha256": "aa4a40cd10c42c29ba3ef4b6d6996c8c9e8f2cb26c5783f98b5807515cddc44e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-en-14.jpg",
+   "bytes": 32286,
+   "sha256": "14be939f878cc69bc57592b76e0baeb9be2c859cb9e6a894ae88c50dc9a943ca"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-01.jpg",
+   "bytes": 46966,
+   "sha256": "2e032b1efc39562e3b8026bf531a2a62279608ccaba40ca0d560471416ca91f3"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-02.jpg",
+   "bytes": 37546,
+   "sha256": "bd7d1c4fdd570827471f684bd461c9705a17bc5e8a87918ad85e926815597185"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-03.jpg",
+   "bytes": 48223,
+   "sha256": "da30b863d46409052e5c51178c43f81990486000783fe95fe3c6541558f83376"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-04.jpg",
+   "bytes": 49060,
+   "sha256": "a1533aea5a5022e6e64121ae7669f098855bf4b1cc30990d71bb318d23edb915"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-05.jpg",
+   "bytes": 56340,
+   "sha256": "e2327d56dee99e42201756a0f3e169d178cdfcbbca0900612b895496df0f34d1"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-06.jpg",
+   "bytes": 42957,
+   "sha256": "a9efaa6434cca24669629b7d144f95c8d043d74fe5f2724a0b07320ef7b99331"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-07.jpg",
+   "bytes": 47256,
+   "sha256": "b1706c987dfff527e15d54e811ea258da62d4c46043f741982d558117d22b1d0"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-08.jpg",
+   "bytes": 46108,
+   "sha256": "64b1ddb19b9530cc2bbdee4b24c9e5e0aa600520acb202e63019d892a758d555"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-09.jpg",
+   "bytes": 50394,
+   "sha256": "175cb81d033e7783bac0397b269c924798dd2263861ddf607d7829fc5e196cbb"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-10.jpg",
+   "bytes": 46282,
+   "sha256": "5c1c4e811073e662cecf912bf7c00dcd16575c577c543fba490783fd393024fa"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-11.jpg",
+   "bytes": 56053,
+   "sha256": "7518a71eed48a31d60615c51aad18af52d72ec3b5da856e7e0caa287ff3faa8c"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-12.jpg",
+   "bytes": 56375,
+   "sha256": "7a5c62031e4471823f2b3083163c703f89c81c65417cd00ca46a214eb06b8dcd"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-13.jpg",
+   "bytes": 46897,
+   "sha256": "9da69d99d675687d6c0e3cf256f61f58680dd47a4ca62157d7da45aef71345a0"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/interior-book-v3-es-14.jpg",
+   "bytes": 31896,
+   "sha256": "4484da2a62b897048dabdd64dfec98611b9901fda02739f4e0d8896db440f3b7"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-01.jpg",
+   "bytes": 28632,
+   "sha256": "73dc53c259bac64ec84843b4dcf4663b44239e8649e4c126311cf402e7c40e70"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-02.jpg",
+   "bytes": 51910,
+   "sha256": "d5766a31b22e14e68da6646020da7817c0680b8d1860696ea7da96af7b36e33e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-03.jpg",
+   "bytes": 67244,
+   "sha256": "510ffbdf27f97c17e79c8cc37a984e2eddd4e9e393ad5e0376955c06180a7c3f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-04.jpg",
+   "bytes": 58802,
+   "sha256": "a6576a16975f9fa9ea3b85d1efbb5e3568a82d5f1a90d16d37a66945e6f9e7cf"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-05.jpg",
+   "bytes": 58314,
+   "sha256": "de1b124c69df5893f88e4a6e9a43f255dac87f36aa41486bd3a3a1dd95553d60"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-06.jpg",
+   "bytes": 58132,
+   "sha256": "2089bf6d899d9ada0737d8ad914bdd2818fb700b888221c9f50bbe728461eb18"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-07.jpg",
+   "bytes": 58407,
+   "sha256": "e1e13ebc5923f46184c3a2d84086520130ab50c7a21d92b95bbea18eb1580057"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-08.jpg",
+   "bytes": 56960,
+   "sha256": "977ee089eee2fb316f0a7d465df9f76b5e7fa4ccd357338788408d2199c83198"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-09.jpg",
+   "bytes": 58102,
+   "sha256": "29c765831283aefd2d69274e199e35c3450a83e3df73fa3e56a5f1374e2073ae"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-10.jpg",
+   "bytes": 58221,
+   "sha256": "7505bb0157868f3381f3df073def2de0bec86d125de5896db951561c2e06dc4f"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-11.jpg",
+   "bytes": 57061,
+   "sha256": "f4925576a573dc241ed4289aabdbf8ded2b8a009b3b1a6a96a72a0e316bc67b6"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-en-12.jpg",
+   "bytes": 60739,
+   "sha256": "c7723fcbeae58791b05ab32ca9b14f216bb4b3ead89724b722f51ffc4c772e3e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-01.jpg",
+   "bytes": 29816,
+   "sha256": "989406dd631e87c65c0c5f2d567a2a1be14ad04be9154f1495ab84d14cae4434"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-02.jpg",
+   "bytes": 53276,
+   "sha256": "f1d2a8ea856fa4a947e7ea8db2dc7c6038ea850387008b2e68d24d93c215b444"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-03.jpg",
+   "bytes": 68740,
+   "sha256": "442b375abe533d4f8b34ddde4f22daa6d56266dddf3dedb9944cd1edab4d7524"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-04.jpg",
+   "bytes": 60551,
+   "sha256": "b461935f4d4b61d13e5fb47ff1994a4d964b2aebebe7383ff5a43b3b5ed072b8"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-05.jpg",
+   "bytes": 59924,
+   "sha256": "ca5da73b1d106cfe42bb9542d7dca068d48575ff2ad63860727034d933a7baa2"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-06.jpg",
+   "bytes": 59728,
+   "sha256": "5debb48a7dc40fae84427d16bfc463a2a33f7f0cb892107e85509be99f387cb8"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-07.jpg",
+   "bytes": 60311,
+   "sha256": "4a788cc3ec5f14a5bbf0c17dd551bda028483fbb12d5bf7fff644bd6ccc5cb17"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-08.jpg",
+   "bytes": 58620,
+   "sha256": "fd119b6dd5da3793d48f8549aa221eec4470fc3e27458a7ac866605a000bc833"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-09.jpg",
+   "bytes": 59682,
+   "sha256": "0dfad8e077598ebd74c382cbfabf0e9897ad1c8b141a01f2ac2f2c99fcfd263b"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-10.jpg",
+   "bytes": 60145,
+   "sha256": "d240a2385be7f6780f32fedc6b3117bd630e510947d0ef9c300418c3da61e334"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-11.jpg",
+   "bytes": 58670,
+   "sha256": "f2e3a3a0b96c9c4f14bf056a47a07b1b2818372d99c9a9f62a9320853aa51268"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/materials-furniture-book-v3-es-12.jpg",
+   "bytes": 62400,
+   "sha256": "3fcf06a974d2eeb78bbbcacca2b111a27878073833d3141654e5797d48683d1e"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-en-1.jpg",
+   "bytes": 64820,
+   "sha256": "801603d587e7a0068f33652646461c1c8570f1395318356154880fbb895da324"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-es-1.jpg",
+   "bytes": 66339,
+   "sha256": "6c304c8c6603b2f1e585ebe6d10e2a949104cabb09d926b1846db3430f77e496"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-sin-presupuesto-en-1.jpg",
+   "bytes": 63867,
+   "sha256": "252b37b80299f8fe7a225ba452d8e7f95897ebac22cade07e0983ebe5a0ada07"
+  },
+  {
+   "path": "evidence/revision-visual/paginas/real-estate-sheet-v3-sin-presupuesto-es-1.jpg",
+   "bytes": 65436,
+   "sha256": "d44957da5b75b1421a4aa92eb209721ff246e1cd041f0ac74753618623b87de5"
+  },
+  {
    "path": "evidence/v2/contact-color.png",
    "bytes": 1002565,
    "sha256": "6391e895f2a102c6bef6f4d40ba85c5d7a2ff02517f50cf93740abdfcad240ff"
@@ -968,8 +1620,8 @@
   },
   {
    "path": "i18n/en.exact.cjs",
-   "bytes": 29200,
-   "sha256": "a1df31a87e57f6e94619eda61c4745a96a214bd59a4cf83193783c62e7de66b9"
+   "bytes": 29219,
+   "sha256": "68f520438f584cb774690b0347bb4923f17b2e89e6603e417eb01bc9eaae78c3"
   },
   {
    "path": "i18n/en.rules.cjs",
@@ -978,56 +1630,56 @@
   },
   {
    "path": "i18n/es-words.cjs",
-   "bytes": 1032,
-   "sha256": "f18ac0624ffc9758a1e9e12d603a8b2dfd6525076b3e2a8908eb21a3992e177d"
+   "bytes": 1064,
+   "sha256": "af78d14620253a55847ee5d8800b86cf0f3f9205c65795850fb5c7d761aa2a56"
   },
   {
    "path": "out/v3/architecture-book.en.pdf",
-   "bytes": 113496,
-   "sha256": "8969c45dfa26b4d3119e85f184b354798137693b63d33a26d515445ea8639f48",
+   "bytes": 113323,
+   "sha256": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
    "pdf": {
     "Title": "Architecture book, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/architecture-book.pdf",
-   "bytes": 114309,
-   "sha256": "ce43b41d6981d52adc083c05def545cdcd20186e358cbfa90e2572364283a1f1",
+   "bytes": 114176,
+   "sha256": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
    "pdf": {
     "Title": "Libro de arquitectura, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/architecture-sheet-strip.en.pdf",
-   "bytes": 31518,
-   "sha256": "ceaaa6a4ff86c73bad495d7c01f77c4d698f2970a241ada7c9d19927662d6302",
+   "bytes": 31413,
+   "sha256": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
    "pdf": {
     "Title": "Architecture sheet, title block strip, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/architecture-sheet-strip.pdf",
-   "bytes": 32288,
-   "sha256": "8e48b12e84db11d60469a938789001b22f150558adf0c06ed7a8255b7b5ce373",
+   "bytes": 32183,
+   "sha256": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
    "pdf": {
     "Title": "Lámina de arquitectura, cajetín en franja, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/architecture-sheet.pdf",
-   "bytes": 32761,
-   "sha256": "31ba167b2c79f91342faab8c0eb8b3dd0b0baca0b9f53dd1c5ea577885cde2e0",
+   "bytes": 32615,
+   "sha256": "b22323c1814d6054cca242c28156f26785bc294a013af507d166fe2bcd60a46e",
    "pdf": {
     "Title": "Lámina de arquitectura, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
@@ -1073,211 +1725,211 @@
   },
   {
    "path": "out/v3/commercial-proposal-client-v3.en.pdf",
-   "bytes": 33812,
-   "sha256": "983b1d2094b4a1cecc5f48d9ca6edd9bb7005fb55634da9139a30a3be3d7b7ab",
+   "bytes": 33707,
+   "sha256": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
    "pdf": {
     "Title": "Cost proposal, client version, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/commercial-proposal-client-v3.pdf",
-   "bytes": 32972,
-   "sha256": "b0da42aaa185695ec39a1ed48d958a9add90047cb637b8690be9b87fdad431ed",
+   "bytes": 32867,
+   "sha256": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
    "pdf": {
     "Title": "Propuesta económica, versión cliente, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/commercial-proposal-studio-v3.pdf",
-   "bytes": 34905,
-   "sha256": "0248f340e35826fc430e696744047d6c59c50501f04541b15708155584a28c23",
+   "bytes": 34800,
+   "sha256": "e2ac0e97435ee0b73a651e9eed1e198b336588bde0a7ba58172b01776d6e6523",
    "pdf": {
     "Title": "Propuesta económica, versión estudio, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/commercial-proposal.pdf",
-   "bytes": 56431,
-   "sha256": "1e5445cc1c2db96853e28e6fef40ef6801519d46a05cbae4cef7725882a17ca1",
+   "bytes": 56326,
+   "sha256": "2c3d68961731295e297bb699b918a36cf6542a91b2a04b5d5292966750f9f519",
    "pdf": {
     "Title": "Propuesta económica, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/directions-b1-portrait.pdf",
-   "bytes": 752973,
-   "sha256": "cf2421a9e907b088ee46b1a5d38e3836ba72ab82b4829767c5d1879ce6567498",
+   "bytes": 752868,
+   "sha256": "1031a8097d4ab418a5d68e73ae492649dc2e7dc2842a09fa9442615edf357864",
    "pdf": {
     "Title": "Direcciones B1, ficha inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/directions-b1.pdf",
-   "bytes": 740452,
-   "sha256": "830c665803b1bd57b4cc46f156f9aea2b8401c3d6689f4e3736447d756eb160f",
+   "bytes": 740337,
+   "sha256": "e495a7f9101bda3adb39bd52e2e699cb86dfb93314ab09e2ac1fbfc084dae280",
    "pdf": {
     "Title": "Direcciones B1 por tipo de página, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/directions.pdf",
-   "bytes": 210062,
-   "sha256": "88a0ef01f602196bc2ba6be14a3667592827aacbb201bc54f593812273e7d980",
+   "bytes": 209957,
+   "sha256": "8ba1f0ef1cce2f1bfd2be8f4223160ca6fb99363c6e231e5e6ac651748b73afe",
    "pdf": {
     "Title": "Direcciones de portada, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega-integral.en.pdf",
-   "bytes": 1558196,
-   "sha256": "0cc8b85b3d845ce9258c58947e96b0f3159b2253de3078eba83a54debdf8ffd8",
+   "bytes": 1558056,
+   "sha256": "a94184e9623249f98f3d37673e0b238581c8f89b7fd61ae0f746df4b9eea4da2",
    "pdf": {
     "Title": "Complete presentation, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega-integral.pdf",
-   "bytes": 1557812,
-   "sha256": "3f9507968948451181299b412a8ae8ae9541c2cef5801bdbc0adc9b995a5d056",
+   "bytes": 1557707,
+   "sha256": "27897e711a370018251736e8fd200ad66ea8c6057b695e5b3568a6a2bbf2aff6",
    "pdf": {
     "Title": "Presentación integral, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/architecture-book.en.pdf",
-   "bytes": 113496,
-   "sha256": "8969c45dfa26b4d3119e85f184b354798137693b63d33a26d515445ea8639f48",
+   "bytes": 113323,
+   "sha256": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
    "pdf": {
     "Title": "Architecture book, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/architecture-book.pdf",
-   "bytes": 114309,
-   "sha256": "ce43b41d6981d52adc083c05def545cdcd20186e358cbfa90e2572364283a1f1",
+   "bytes": 114176,
+   "sha256": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
    "pdf": {
     "Title": "Libro de arquitectura, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/architecture-sheet-strip.en.pdf",
-   "bytes": 31518,
-   "sha256": "ceaaa6a4ff86c73bad495d7c01f77c4d698f2970a241ada7c9d19927662d6302",
+   "bytes": 31413,
+   "sha256": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
    "pdf": {
     "Title": "Architecture sheet, title block strip, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/architecture-sheet-strip.pdf",
-   "bytes": 32288,
-   "sha256": "8e48b12e84db11d60469a938789001b22f150558adf0c06ed7a8255b7b5ce373",
+   "bytes": 32183,
+   "sha256": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
    "pdf": {
     "Title": "Lámina de arquitectura, cajetín en franja, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/commercial-proposal-client-v3.en.pdf",
-   "bytes": 33812,
-   "sha256": "983b1d2094b4a1cecc5f48d9ca6edd9bb7005fb55634da9139a30a3be3d7b7ab",
+   "bytes": 33707,
+   "sha256": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
    "pdf": {
     "Title": "Cost proposal, client version, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/commercial-proposal-client-v3.pdf",
-   "bytes": 32972,
-   "sha256": "b0da42aaa185695ec39a1ed48d958a9add90047cb637b8690be9b87fdad431ed",
+   "bytes": 32867,
+   "sha256": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
    "pdf": {
     "Title": "Propuesta económica, versión cliente, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/entrega-integral.en.pdf",
-   "bytes": 1558196,
-   "sha256": "0cc8b85b3d845ce9258c58947e96b0f3159b2253de3078eba83a54debdf8ffd8",
+   "bytes": 1558056,
+   "sha256": "a94184e9623249f98f3d37673e0b238581c8f89b7fd61ae0f746df4b9eea4da2",
    "pdf": {
     "Title": "Complete presentation, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/entrega-integral.pdf",
-   "bytes": 1557812,
-   "sha256": "3f9507968948451181299b412a8ae8ae9541c2cef5801bdbc0adc9b995a5d056",
+   "bytes": 1557707,
+   "sha256": "27897e711a370018251736e8fd200ad66ea8c6057b695e5b3568a6a2bbf2aff6",
    "pdf": {
     "Title": "Presentación integral, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/interior-book-v3.en.pdf",
-   "bytes": 1180554,
-   "sha256": "92172a4055857ba2f08374af5f1e174074fdc14186f3af0fdf00aa7f8771437e",
+   "bytes": 1180427,
+   "sha256": "2fd9b90a0fe5300e773072944a8235e74853db35146fe25a558e2168667b29eb",
    "pdf": {
     "Title": "Interior design book, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/interior-book-v3.pdf",
-   "bytes": 1179809,
-   "sha256": "2f9defa3cdfddd48f76911ac3349ebb7f3636ac6e4cc64fae44de9ce6adb8fad",
+   "bytes": 1179665,
+   "sha256": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
    "pdf": {
     "Title": "Libro de interiorismo, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/materials-furniture-book-v3.en.pdf",
-   "bytes": 76037,
-   "sha256": "ef6831dced8b3090ce4549ee71f9c3d062f0079c99b9146daf42a75b56939701",
+   "bytes": 75932,
+   "sha256": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
    "pdf": {
     "Title": "Materials and furniture book, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/materials-furniture-book-v3.pdf",
-   "bytes": 75659,
-   "sha256": "f5fac2c065b359c6d29b6ab4369318ecdbbedace407e91a404380579d1b9d9ff",
+   "bytes": 75554,
+   "sha256": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
    "pdf": {
     "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
@@ -1288,58 +1940,58 @@
   },
   {
    "path": "out/v3/entrega/documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf",
-   "bytes": 387062,
-   "sha256": "7da71e723ed84d12864126a1cbf30c87ed01d70937c00105d4687cff73a041f7",
+   "bytes": 386957,
+   "sha256": "a38915dbf2d3db51f0e0e8c6604fe8ed9cc371fa6ea612e74fee2364a0786406",
    "pdf": {
     "Title": "Real estate sheet, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "bytes": 387351,
-   "sha256": "495fbfecb2eac602256799acca61977dd4a07f1c7fa302d8683204c620570929",
+   "bytes": 387246,
+   "sha256": "049e34c3e6f3b4c8cbd53f3490e2104055424a7d4be1a51e71a2b3951d4a028a",
    "pdf": {
     "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/real-estate-sheet-v3.en.pdf",
-   "bytes": 387330,
-   "sha256": "0b92fb169561133bbe50b44e0c19bbd3ea47c42dd535cac88c29c6a38c865e3f",
+   "bytes": 387225,
+   "sha256": "a8bfa7c3c70c17aa08cd313271a21ea337bd6e982175a2c33b048d9174427af9",
    "pdf": {
     "Title": "Real estate sheet, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/documentos/real-estate-sheet-v3.pdf",
-   "bytes": 387474,
-   "sha256": "bd69c6c48b5739a2bd587eef10a4885965746cbf42101b0ebf83f5da587ad17c",
+   "bytes": 387369,
+   "sha256": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
    "pdf": {
     "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/entrega/entrega.json",
    "bytes": 16199,
-   "sha256": "5f11f7ea65af808b7754cd336bc13cbe7212ccc0cede123422a0938760320c5a"
+   "sha256": "0d4dcd7e48777bfa3a11849a2643313a35b9238a578fb80c05ab5e815b22a9b9"
   },
   {
    "path": "out/v3/entrega/index.en.html",
    "bytes": 1156857,
-   "sha256": "d72f5d0985ee82733d6cb353b15af8a88d0a32ebd170fb8c76ec385ea76abbf9"
+   "sha256": "fdc3ed0f71e58a8473ae0c56e8cc5ca56b95be6be3410d3b3ff02faef69594ea"
   },
   {
    "path": "out/v3/entrega/index.html",
    "bytes": 1151654,
-   "sha256": "5011cb1f8ee4b4d83d31ad00f726da6a5825326511360eea4b5cb1bfb21ce3cc"
+   "sha256": "04c45f3618984152a30ce5da1c5e16e3a5d09809062878ad3060bc8ac3b52844"
   },
   {
    "path": "out/v3/entrega/media/dibujo-vivo.jpg",
@@ -1454,12 +2106,12 @@
   {
    "path": "out/v3/entrega/tipo-dossier-tecnico.en.html",
    "bytes": 1145699,
-   "sha256": "3cb4ed05fd798223ccec6e5421c69908eecec30e77b8745c8b71446e9d3e047b"
+   "sha256": "a227292653d7719d9c51ecab25163d45d570625723e462ca0fbb5dfe3522fba3"
   },
   {
    "path": "out/v3/entrega/tipo-dossier-tecnico.html",
    "bytes": 1140327,
-   "sha256": "e32b713561d62bd84b40759c1f19d39dc350b6cad031d6d19b774cddf4a599c1"
+   "sha256": "cfc477daeb450f8bebc2becceff03c606617f64b8bc5838219395e33e97289d7"
   },
   {
    "path": "out/v3/entrega/tipo-inmobiliaria.en.html",
@@ -1484,12 +2136,12 @@
   {
    "path": "out/v3/entrega/tipo-obra.en.html",
    "bytes": 1043012,
-   "sha256": "050c25a7874c7c4eef36338b4bbfaa728669d8224310a522407bd66f5f94aa85"
+   "sha256": "2c0bf0838eeeb19b59a53c3ceaefe997f3ae1cd449a3bf63ec37559fb9b67c88"
   },
   {
    "path": "out/v3/entrega/tipo-obra.html",
    "bytes": 1042307,
-   "sha256": "2aad982ed7b274a99c68251d8287c643862a6bca32471b640cc180108591e6fa"
+   "sha256": "130ddf2426b264bda83c27b5a5a980499f571e0ccfb7e9ea54e16ddc58cfe624"
   },
   {
    "path": "out/v3/entrega/tipo-primera-reunion.en.html",
@@ -1513,143 +2165,143 @@
   },
   {
    "path": "out/v3/interior-book-v3.en.pdf",
-   "bytes": 1180554,
-   "sha256": "92172a4055857ba2f08374af5f1e174074fdc14186f3af0fdf00aa7f8771437e",
+   "bytes": 1180427,
+   "sha256": "2fd9b90a0fe5300e773072944a8235e74853db35146fe25a558e2168667b29eb",
    "pdf": {
     "Title": "Interior design book, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/interior-book-v3.pdf",
-   "bytes": 1179809,
-   "sha256": "2f9defa3cdfddd48f76911ac3349ebb7f3636ac6e4cc64fae44de9ce6adb8fad",
+   "bytes": 1179665,
+   "sha256": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
    "pdf": {
     "Title": "Libro de interiorismo, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/interior-book.pdf",
-   "bytes": 992187,
-   "sha256": "9b5262cf249551ea638c75d29280a786eab1d620cd2f42b75da19e54a4452428",
+   "bytes": 992082,
+   "sha256": "d9fb32ce8e48a4bbfae26fd1d22a3122e633b841f4e066c5c8a002a8aa8bd4ab",
    "pdf": {
     "Title": "Libro de interiorismo, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/materials-furniture-book-v3.en.pdf",
-   "bytes": 76037,
-   "sha256": "ef6831dced8b3090ce4549ee71f9c3d062f0079c99b9146daf42a75b56939701",
+   "bytes": 75932,
+   "sha256": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
    "pdf": {
     "Title": "Materials and furniture book, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/materials-furniture-book-v3.pdf",
-   "bytes": 75659,
-   "sha256": "f5fac2c065b359c6d29b6ab4369318ecdbbedace407e91a404380579d1b9d9ff",
+   "bytes": 75554,
+   "sha256": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
    "pdf": {
     "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/materials-furniture-book.pdf",
-   "bytes": 412141,
-   "sha256": "15e2b6675c659db05596f181efb82e648f0a6782520f07f3a3060350b6ddcbc7",
+   "bytes": 412036,
+   "sha256": "02bf733a153739cd67fc35b65ec67f0b5442fd29142cb5278ebda17e10b1d0f0",
    "pdf": {
     "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/profesional/preparar-entrega.html",
    "bytes": 1028800,
-   "sha256": "f3df939413d751aa06b5ee44b732da133e7a692746e777da6d9ce10b45437b1b"
+   "sha256": "ee655f1eea6312b6917b56773f9afef82d4b4c0b2b17dea9cc3e6d0c6ff26fb9"
   },
   {
    "path": "out/v3/profesional/propuesta-estudio.pdf",
-   "bytes": 34905,
-   "sha256": "0248f340e35826fc430e696744047d6c59c50501f04541b15708155584a28c23",
+   "bytes": 34800,
+   "sha256": "e2ac0e97435ee0b73a651e9eed1e198b336588bde0a7ba58172b01776d6e6523",
    "pdf": {
     "Title": "Propuesta económica, versión estudio, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/profesional/vista-previa.html",
    "bytes": 1152863,
-   "sha256": "d85cd7d9f70db8089908a059531b2dea93dd0420c603217063a473bbc3d8251b"
+   "sha256": "c2ff2ed6f5e4e5087fd548a56c680e5d012cd556068e6418ac61b6c2ffa8cb1e"
   },
   {
    "path": "out/v3/qa.json",
    "bytes": 28218,
-   "sha256": "486016198ceca8c006f384099684ac7782dcb41acb10048955ea1da41a1dd873"
+   "sha256": "47dc602d597f9b7c200dab31ee17afbe399ab6104b193408e588b05e054d78bf"
   },
   {
    "path": "out/v3/real-estate-sheet-v3-sin-presupuesto.en.pdf",
-   "bytes": 387062,
-   "sha256": "7da71e723ed84d12864126a1cbf30c87ed01d70937c00105d4687cff73a041f7",
+   "bytes": 386957,
+   "sha256": "a38915dbf2d3db51f0e0e8c6604fe8ed9cc371fa6ea612e74fee2364a0786406",
    "pdf": {
     "Title": "Real estate sheet, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "bytes": 387351,
-   "sha256": "495fbfecb2eac602256799acca61977dd4a07f1c7fa302d8683204c620570929",
+   "bytes": 387246,
+   "sha256": "049e34c3e6f3b4c8cbd53f3490e2104055424a7d4be1a51e71a2b3951d4a028a",
    "pdf": {
     "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/real-estate-sheet-v3.en.pdf",
-   "bytes": 387330,
-   "sha256": "0b92fb169561133bbe50b44e0c19bbd3ea47c42dd535cac88c29c6a38c865e3f",
+   "bytes": 387225,
+   "sha256": "a8bfa7c3c70c17aa08cd313271a21ea337bd6e982175a2c33b048d9174427af9",
    "pdf": {
     "Title": "Real estate sheet, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/real-estate-sheet-v3.pdf",
-   "bytes": 387474,
-   "sha256": "bd69c6c48b5739a2bd587eef10a4885965746cbf42101b0ebf83f5da587ad17c",
+   "bytes": 387369,
+   "sha256": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
    "pdf": {
     "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "out/v3/real-estate.pdf",
-   "bytes": 1463307,
-   "sha256": "f77875a19761acae619493a7a4ca29a58e3717bae4220d1e9fad345dcde8847c",
+   "bytes": 1463202,
+   "sha256": "d372e78776ea5aa19bf43a9f2fb6a96bfe5e49cb5c56e27882d39cefd3c1275d",
    "pdf": {
     "Title": "Presentación inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "reports/00-RESUMEN-EJECUTIVO.md",
-   "bytes": 12401,
-   "sha256": "b5869042f3fce65692a1905fe378282d0da3e1a8ad5bf06fb5214d623452c6d0"
+   "bytes": 15221,
+   "sha256": "8f74f661485d4d751f1a47fa0365b658dae2a866efa6ea5f00775c7163018dd4"
   },
   {
    "path": "reports/01-INVENTARIO-DONANTES.md",
@@ -1683,33 +2335,33 @@
   },
   {
    "path": "reports/07-MATRIZ-EXISTE-AMPLIAR-FALTA.md",
-   "bytes": 4373,
-   "sha256": "1d523524b5fa2f9a99735762d8f62f80f9f6593f714a0ee47b5903ed8ec87e94"
+   "bytes": 5131,
+   "sha256": "0800bfbbec624b73cdc16ede432ef94c2040a7a68c94c38bc1fb9e4acf7c50f1"
   },
   {
    "path": "reports/09-RIESGOS-LIMITES-NOTAS.md",
-   "bytes": 4934,
-   "sha256": "e2795cfaf8c8d8d095e173206c29c54fe97f96f2249122c90caa4400963099d8"
+   "bytes": 5802,
+   "sha256": "0e9f0c4e25eaaddd39bf9222b9bd78ce78b62d6339fc8ebcb9fd65a09fe7bf6a"
   },
   {
    "path": "reports/10-ENTREGA-INTEGRAL.md",
-   "bytes": 13485,
-   "sha256": "d7b3d143df8d09d75768237850d5d56da09646ca394e70f060b26d263df6c19b"
+   "bytes": 13854,
+   "sha256": "47529507d3baafbb2df397ab24eead8e47a98c935f3353f41247a2d87fe49da3"
   },
   {
    "path": "reports/11-PROPUESTA-E2.md",
-   "bytes": 7308,
-   "sha256": "be8751bed0f89acf61468e3d8d18514c361ffe6f428e2fbd99366e5e96242400"
+   "bytes": 7805,
+   "sha256": "14bf5d55b83014f74ca6e112087ec7c0a01a0bc0c6ebe123d2c6693794d24c70"
   },
   {
    "path": "reports/12-MATRIZ-QA-v1.2.md",
-   "bytes": 5097,
-   "sha256": "78d9847f79187b948a5fd097285674820765eb3ad92c0d3c69d09e271be63429"
+   "bytes": 5321,
+   "sha256": "080dd88696244169205981ded4e1dfc9c053b3a8c7797e3e67c4da4d32ea6233"
   },
   {
    "path": "reports/13-REGISTRO-VIVO-v1.3.md",
-   "bytes": 6524,
-   "sha256": "c9d014887dbb90036da1502b72cadaac3292809df3c593cc659d9f427f677549"
+   "bytes": 13476,
+   "sha256": "85a2e0c87b1d38a59fef11092f09ec5ba137a5bfb59b0ebee50962994e7577e0"
   },
   {
    "path": "reports/14-AUDITORIA-MANDATO-v1.4.md",
@@ -1783,18 +2435,18 @@
   },
   {
    "path": "system/rubik-editorial.css",
-   "bytes": 7969,
-   "sha256": "02173a3d3099ea3044cf5442d134629d4d79eeeac28f8f93239ac0096e1730cd"
+   "bytes": 7988,
+   "sha256": "42c184aeac8f0227d82c220871b24d1db344fe5700df6165699ef84ddd2e5590"
   },
   {
    "path": "tools/architecture-book.cjs",
-   "bytes": 14967,
-   "sha256": "e5cacacf833cfd64d50e0984c8df477baddeeea6876db792c510e60b7bb5ca89"
+   "bytes": 15042,
+   "sha256": "f27aa5460b910236c462c01f78374529e65a47830bc56ead623ba3e85f02d747"
   },
   {
    "path": "tools/b1.cjs",
-   "bytes": 43107,
-   "sha256": "6c90f4ae8b3ef8873a49b6468cf713443424c1fdb044f33a5b32b91330ed4c61"
+   "bytes": 43131,
+   "sha256": "03098cefa8f6bd8ddbb10093e8f50bfa0a6483a585955ec838ccb7013f4db264"
   },
   {
    "path": "tools/baseline.cjs",
@@ -1813,8 +2465,8 @@
   },
   {
    "path": "tools/compose.cjs",
-   "bytes": 64602,
-   "sha256": "16b226139cca771518f826b7c790ca08d86f2200b4d7ced62415a0ccf4313ac2"
+   "bytes": 64634,
+   "sha256": "f06cc06a7e135d59f6a4c357eb1307a1cd4825b90c4eb33601730f82555868bf"
   },
   {
    "path": "tools/consumidor-qa.cjs",
@@ -1893,8 +2545,8 @@
   },
   {
    "path": "tools/i18n.js",
-   "bytes": 4432,
-   "sha256": "f960a9b99d496d1e4f6e7059ac14f15337630e0240a82b5b4035c5e3eea3dea1"
+   "bytes": 4705,
+   "sha256": "38eebad7c74e4438baedd0c345c422d6492680e4b4086f7fad63d52ad34c9969"
   },
   {
    "path": "tools/inspeccionar-paquete.py",
@@ -1913,13 +2565,13 @@
   },
   {
    "path": "tools/package-lock.json",
-   "bytes": 1305,
-   "sha256": "d0d2b3f2cd411dc91c855d046aef7148005874a1654e874b4894ece3523b2b69"
+   "bytes": 2234,
+   "sha256": "2eb22cfe4a9207df6042bbb66f8a771dc9d8a606157b72f923cbcf955350ee4c"
   },
   {
    "path": "tools/package.json",
-   "bytes": 484,
-   "sha256": "ffee555f9bf170326973c3e2616ab3dd04ae93278e2a685f80d1d0370767a334"
+   "bytes": 545,
+   "sha256": "9482835cecc97655de23d1ddaebf0493b94bcee3517d6609c7fb5eb5622056fa"
   },
   {
    "path": "tools/package.sh",

@@ -76,3 +76,20 @@ node tools/perfiles-marca.cjs <trabajo> evidence/perfiles
 bash tools/package.sh
 bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip <trabajo>
 ```
+
+---
+## 6. Residual v1.3 cerrado (17/11/2026, noche). Leer esto primero.
+
+- **Mandatos versionados** en `mandatos/` con su SHA-256 e índice (`INDICE-MANDATOS.md`). La especificación v1.2 y los hallazgos V13-01 a V13-09 **no llegaron**: BLOCKED.
+- **Revisión visual de las 116 páginas** ES/EN (`evidence/revision-visual/index.html`). Dos defectos corregidos:
+  - la leyenda del plano general del Architecture Book se partía en columnas de 4-5 líneas;
+  - «Ventana» quedaba en español en la leyenda inglesa porque coincidía con una partida del presupuesto. Los rótulos de interfaz llevan ahora `data-ui`: se traducen y el gate los revisa.
+- **Reconciliación** de A10, A22, A23 y A27–A29 contra las secciones §4–§7 del mandato: `reports/13`.
+- **H08**: inventario en `evidence/h08/inventario-vis.json`.
+- **Avisos del ZIP del laboratorio** clasificados en `reports/13`.
+- **`HANDOFF.md`**: sección vigente nueva; la receta v2 y las rutas de donantes quedan como histórico rotulado.
+- **Playwright 1.63.0** fijado en `tools/package-lock.json`; entorno en `RECETA.md`.
+- **Informes** 00 (con GO/NO-GO v1.3), 07, 09, 10, 11 y 12 actualizados.
+- Paquetes y dos reconstrucciones rehechos con estos cambios: `evidence/paquetes/`.
+
+**Siguiente:** v1.4, N01 (catálogo de recetas RP01–RP21), con las correcciones V1–V5 de `reports/14`.

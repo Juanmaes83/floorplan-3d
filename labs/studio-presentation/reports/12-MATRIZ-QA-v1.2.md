@@ -6,6 +6,8 @@
 
 No se han probado dispositivos físicos, Firefox ni WebKit. Ninguna fila acredita el producto.
 
+> **Vigente: `reports/13-REGISTRO-VIVO-v1.3.md`.** Esta matriz es el estado del cierre v1.2. Los cambios de v1.3 (D04, D08, D09, D12, D14, ST07, ST08, ST09) están en la tabla «D01–D18 y ST01–ST09» del registro vivo.
+
 | ID | Estado | Evidencia / comando | Nota |
 |---|---|---|---|
 | D01 Identidad proyecto/revisión | PASS (lab) | `node tools/exportar-qa.cjs`: ST03-f y g | Obra de otro proyecto y revisión cruzada bloquean. En el producto: E2. |

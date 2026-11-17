@@ -14,6 +14,21 @@ Todo sale de este ZIP: snapshot del proyecto, activos exportados por el producto
 | zip / unzip | Info-ZIP 3.0 |
 | Fuentes | Inter 4 (OFL, `vendor/fonts/inter`), Source Serif 4 5.1.1 (`@fontsource`, OFL, `tools/package-lock.json`) |
 
+## Preparar el entorno (una vez, con red)
+
+Comprobado en Ubuntu 24.04 (glibc 2.39). Con otras versiones el texto de los PDF puede variar en detalles de fuentes del sistema; la comparación de `reconstruir.sh` lo detecta.
+
+```bash
+sudo apt-get install -y nodejs poppler-utils ffmpeg zip unzip python3 python3-pip
+python3 -m pip install pillow==12.3.0 pypdf==6.17.0
+cd tools && npm ci                       # fuentes y Playwright 1.63.0, fijados en package-lock.json
+npx playwright install chromium          # el Chromium que corresponde a Playwright 1.63.0 (build 1243)
+```
+
+Si el entorno ya trae ese Chromium (como el contenedor donde se comprobó, con `PLAYWRIGHT_BROWSERS_PATH`), el último paso sobra. Otro ejecutable de Chromium se puede indicar con la variable `CHROME`.
+
+La instalación inicial exige red (apt, PyPI, npm y la descarga de Chromium). La reconstrucción posterior no la exige.
+
 ## Un solo comando
 
 ```bash

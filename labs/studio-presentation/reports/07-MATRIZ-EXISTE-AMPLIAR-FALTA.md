@@ -10,6 +10,14 @@ Cómo se usan las etiquetas:
 
 Fuentes de cada fila: baseline E0 (`evidence/baseline/`), activos de esta ampliación (`assets/`, `assets/log-*.json`) e informes B1–B3 y 10.
 
+**Actualización v1.3.** El producto no ha cambiado (lectura en `master@8525025`). En el laboratorio se añaden tres filas:
+
+| Pieza | Estado en el producto | Qué aporta el laboratorio | Evidencia |
+|---|---|---|---|
+| Libro técnico de arquitectura | FALTA (solo la lámina A3 del laboratorio y el dossier) | Architecture Book de 14 páginas: planta, superficies, estancias, sección y fachadas que calcula la Presentación 3D | `out/v3/architecture-book.pdf` |
+| Documentos en inglés | AMPLIAR (interfaz en inglés; documentos solo en español) | 8 PDF y 7 webs en inglés con gate de residuo y de cifras | `evidence/i18n/` |
+| Concepto del profesional | FALTA | Capítulo optativo con el texto del estudio, marcado como suyo | `entrega-integral.pdf` |
+
 ## Por pieza de la entrega
 
 | Pieza | Estado | Qué hay hoy | Qué aporta o propone el laboratorio | Evidencia |

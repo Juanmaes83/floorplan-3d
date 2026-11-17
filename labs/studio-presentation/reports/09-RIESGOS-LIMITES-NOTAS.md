@@ -18,6 +18,16 @@ Cada límite está escrito donde afecta. Ninguno se oculta.
 | La demo pública de obra no permite entregar | Informe 10 §3 | Se usa el camino real de la biblioteca |
 | El plan de la demo no encaja con los muros existentes del proyecto guardado | Informe 10 §3 | Se quitan los vínculos incompatibles (`assets/ft3d8-plan-ajuste.json`) y la entrega queda en nivel orientativo |
 
+**Límites añadidos en v1.3:**
+
+| Límite | Dónde se nota | Cómo lo trata la entrega |
+|---|---|---|
+| El texto del profesional no se traduce | Capítulo «Concepto» de la versión inglesa | Queda en español, marcado `lang="es"`; el README inglés lo dice |
+| La presentación de obra FT3D-8 y los rótulos de los vídeos están en español | Versión inglesa | El README inglés lo dice |
+| Un rótulo de interfaz puede coincidir con un dato del proyecto («Ventana») | Leyendas de los planos | Los rótulos de interfaz se marcan `data-ui`: se traducen y el gate los revisa |
+| Sin colores ni tipografía de marca (H07) | Portadas por perfil | El logotipo va tal cual; aviso si su contraste baja de 3:1 |
+| Imágenes VIS en el Git público sin licencia acreditada (H08) | Repositorio, no la entrega | Inventario en `evidence/h08/`; decisión del propietario |
+
 ## Riesgos
 
 | Riesgo | Probabilidad | Impacto | Mitigación |

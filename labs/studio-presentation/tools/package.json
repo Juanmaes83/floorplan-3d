@@ -1,7 +1,7 @@
 {
   "name": "tools",
   "version": "1.0.0",
-  "description": "Laboratorio Studio Presentation: fuentes OFL fijadas. Playwright y Chromium los aporta el entorno (1.63.0).",
+  "description": "Laboratorio Studio Presentation: fuentes OFL y Playwright 1.63.0 fijados. Chromium 1243: npx playwright install chromium, o el del entorno.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,8 @@
   "dependencies": {
     "@fontsource/inter": "5.1.1",
     "@fontsource/newsreader": "5.1.1",
-    "@fontsource/source-serif-4": "5.1.1"
+    "@fontsource/source-serif-4": "5.1.1",
+    "playwright": "1.63.0"
   },
   "private": true
 }

@@ -4,6 +4,8 @@ Ampliación estratégica sobre el mismo proyecto de ejemplo (`prj_reference-home
 
 Rama `lab/studio-presentation-e0e1`, cortes E0/E1. Nada de esto toca el producto (`js/`, `css/`, `api/`, `index.html`). Todo vive en `labs/studio-presentation/`.
 
+> **Actualización v1.3.** La entrega integral añade el capítulo «Concepto», la ficha «Trazabilidad de las imágenes IA» (PDF y web), el Architecture Book entre los documentos y la versión inglesa completa (`*.en.pdf`, `*.en.html`). El registro `entrega.json` declara `idiomas: ["es","en"]` solo si los 8 PDF ingleses pasan el gate. Resultados en `reports/13`.
+
 ## 1. Visión
 
 Hoy RUBIK tiene las piezas de una gran entrega:

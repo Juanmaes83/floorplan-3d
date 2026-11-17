@@ -28,8 +28,16 @@
    "sustituciones": 1
   },
   {
+   "archivo": "reports/13-REGISTRO-VIVO-v1.3.md",
+   "sustituciones": 3
+  },
+  {
    "archivo": "reports/B1-DISENOS-POR-ENTREGABLE.md",
    "sustituciones": 2
+  },
+  {
+   "archivo": "evidence/paquetes/inspeccion-laboratorio.json",
+   "sustituciones": 6
   },
   {
    "archivo": "evidence/brand-identity/font-audit-Inter-Regular.json",

@@ -1,4 +1,4 @@
-# 00 · Cierre E0/E1 de Studio Presentation (especificación v1.2)
+# 00 · Cierre E0/E1 de Studio Presentation (v1.2 y v1.3)
 
 **Fecha:** 17/11/2026 · **Ejecutor:** Claude Code · **Revisión independiente:** pendiente (ChatGPT) · **Decisión:** propietario.
 
@@ -13,6 +13,39 @@
 - No hay nuevas generaciones IA de pago.
 - No se ha abierto ninguna PR ni se ha hecho merge.
 - No se han tocado las ramas de Codex (#243/#244).
+
+## 0. Actualización v1.3 (vigente)
+
+Las secciones 1 a 8 son el cierre v1.2 y se conservan como histórico. Lo que cambia con el mandato v1.3 está aquí. Detalle por requisito: `reports/13-REGISTRO-VIVO-v1.3.md`. Mandatos y huellas: `mandatos/INDICE-MANDATOS.md`.
+
+| Bloque v1.3 | Resultado | Evidencia |
+|---|---|---|
+| Architecture Book (A21) | Libro de 14 páginas, distinto de la lámina A3; sección y fachadas solo con lo que calcula el producto; lint 0 | `out/v3/architecture-book.pdf`, `out/v3/qa.json` |
+| Concepto (módulo 02) | Optativo, texto del profesional marcado como suyo, separado de los datos; sin texto, el capítulo no aparece | `out/v3/entrega-integral.pdf` p. 3 |
+| Inglés (A22/A23) | 8 PDF y 7 webs; residuo español 0; cifras ES = EN; si el inglés falla, el español se publica igual | `evidence/i18n/`, `out/v3/qa.json` → `en` |
+| Marca | 4 perfiles en ES y EN con QA 0; aviso de contraste del logotipo | `evidence/perfiles/` |
+| QA de consumidor | 7 modalidades × ES/EN × 5 vistas, en Chromium; teclado, foco, landmarks; `postMessage` de un emisor ajeno ignorado; p50/p95 | `evidence/consumidor/` |
+| Revisión visual (A28) | 116 páginas ES/EN; 2 defectos encontrados y corregidos | `evidence/revision-visual/index.html` |
+| Paquetes (A10/A29) | ZIP del cliente ES y EN; ZIP del laboratorio por lista de permitidos y saneado; receta con versiones fijadas; dos reconstrucciones iguales | `evidence/paquetes/`, `RECETA.md` |
+| H08 | Inventario: 68 archivos VIS en el Git público, sin licencia acreditada y sin exclusión de deploy | `evidence/h08/inventario-vis.json` |
+| E2 (A24–A27) | Informe 11 reescrito sobre el código de `master@8525025`; A25 ×4 y A26 ×2 reproducidos | `reports/11-PROPUESTA-E2.md`, `evidence/e2/` |
+
+**Pendiente y delimitado:**
+
+- Estados económicos parcial, incoherente y de una cara en el laboratorio: pasan a N04 (v1.4).
+- Firefox, WebKit y dispositivos físicos: NO_VERIFICADO.
+- Revisión humana de las páginas y la web (D08).
+- Especificación v1.2 revisada y hallazgos V13-01 a V13-09: **no recibidos**; registrados como BLOCKED.
+
+### Recomendación v1.3 (graduada; no es autoaprobación)
+
+| Pieza | Recomendación |
+|---|---|
+| **Cierre técnico v1.3 del laboratorio** | **GO para revisión independiente y humana**, con los pendientes de arriba. No acredita el producto. |
+| **v1.4 (N01–N08, RP-Q01–RP-Q12)** | **GO para ejecutar en el laboratorio**, con las correcciones V1–V5 de `reports/14`. |
+| **E2 (ENT-04)** | **GO condicionado**: GO explícito del propietario y base consolidada con Codex. Corte según `reports/11`. |
+| **H08** | **Decisión del propietario** (licencia, historial, exclusión de deploy). Nada se borra por iniciativa propia. |
+| **Publicación remota, gasto, Production, dependencias nuevas en el producto** | **NO GO** |
 
 ## 1. Qué es cada cosa
 

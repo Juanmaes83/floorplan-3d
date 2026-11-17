@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T19:02:48.492Z",
+ "generated": "2026-11-17T19:36:36.851Z",
  "node": "v22.23.4",
  "idiomas": [
   "es",
@@ -8,22 +8,22 @@
  "zips": [
   {
    "zip": "entrega-vivienda-de-ejemplo-en.zip",
-   "bytes": 12662179
+   "bytes": 12661385
   },
   {
    "zip": "entrega-vivienda-de-ejemplo-es.zip",
-   "bytes": 12661277
+   "bytes": 12660567
   },
   {
    "zip": "rubik-studio-presentation-lab.zip",
-   "bytes": 136266921
+   "bytes": 141343443
   }
  ],
  "sha256": [
-  "35e2e1178bb59f622ce5424501515b9afbad57d541567913e7bd69ccfd11e12d  entrega-vivienda-de-ejemplo-en.zip",
-  "65afaf322a85facad73b947306d8148aa391880aac4cbf850a4e8ca0f234f728  entrega-vivienda-de-ejemplo-es.zip",
-  "969183361a58ae6d753a71d88f1707b504c6513af07f5cfcb178617c8a1c4c7c  rubik-studio-presentation-lab.zip",
-  "943c29113ae51b45c7a716bac90094a839bdffc42cf9d725ad4e3c335ce8fde3  entrega-vivienda-de-ejemplo-en.digest.json",
-  "f73921c63719f2519395899aa5756bc09097d02b34fa547ea64393062a495795  entrega-vivienda-de-ejemplo-es.digest.json"
+  "7a19c71a443e97e46ce047f8bdbf72bbbb8164e70f9798b9c860e89ac2301258  entrega-vivienda-de-ejemplo-en.zip",
+  "a3f9958a048c308de3134a4851ada2d3c503976f8e3657e28b35d6931377bbe8  entrega-vivienda-de-ejemplo-es.zip",
+  "309e077bf5afdb656bd031733527b47828c86d5a1659f8dfb2a30ea5c5ec1b07  rubik-studio-presentation-lab.zip",
+  "5c3601958bb36ca2c8dcf2d9bb7b7a22a654858c796752345cc0f594dcfc7316  entrega-vivienda-de-ejemplo-en.digest.json",
+  "4235ab7c3ee01eee684501c36ce01146fdd0389e3cc0e9bde1e986033cef4da6  entrega-vivienda-de-ejemplo-es.digest.json"
  ]
 }

@@ -27,11 +27,11 @@ Las cifras proceden de los archivos de evidencia citados, no de la memoria.
 | H05 | Dos contratos HTML (ENT-04 sin scripts y B1 con scripts) | Confirmado por lectura | `reports/00` §3 |
 | H06 | Revisión ≠ coincidencia de cantidades | Confirmado. **Corrección:** `revision-budget-core` sí se carga, en `comparar/index.html`, no en `index.html`. | `HANDOFF-v1.3.md` §2 |
 | H07 | Sin colores ni tipografía de marca | Reproducido. Mitigado en el laboratorio con un **aviso de contraste del logotipo**: el logotipo se muestra tal cual y se avisa si su contraste baja de 3:1. | `evidence/perfiles/perfiles-marca.json` |
-| H08 | Referencias públicas en Git | Riesgo confirmado; requiere decisión del propietario | `reports/00` §3 |
+| H08 | Referencias públicas en Git | Inventario hecho: 68 archivos (64 imágenes) en el Git público de master, presentes desde `01c73ba`; licencia no acreditada; `.vercelignore` solo excluye `labs/`, así que **no** están excluidas del deploy. 0 archivos VIS en el ZIP del laboratorio. No se borra ni se reescribe historial: decisión del propietario. | `evidence/h08/inventario-vis.json` |
 
 ## A01–A29 (hallazgos de auditoría)
 
-Los enunciados completos de A07–A29 están en el mandato v1.3, que no se versionó en la rama. La columna «Qué cubre» resume lo que el **código** cita con ese identificador; no se reconstruyen enunciados.
+El mandato v1.3 ya está versionado en `mandatos/` (SHA-256 `c2f16097…52a4`, índice en `mandatos/INDICE-MANDATOS.md`). El mandato **no da un enunciado por identificador**: agrupa los A por secciones (§2 A01–A03/A07–A09/A12–A19, §4 A06/A21–A23, §5 A22/A23/A27/A28, §6 A10/A29, §7 A24–A27). Para A10, A22, A23 y A27–A29 se reconcilia contra los requisitos de su sección, citados abajo; no se inventa un enunciado individual.
 
 | ID | Qué cubre (según el código y los informes) | Estado | Evidencia |
 |---|---|---|---|
@@ -48,7 +48,62 @@ Los enunciados completos de A07–A29 están en el mandato v1.3, que no se versi
 | A20 | QA del motor de PDF | REUTILIZADO 11/11 (`motor-qa`). El código de `flow.js` no ha cambiado desde entonces. | `evidence/motor/motor-qa.json` |
 | A21 | Architecture Book | PASS: 14 láminas; sección con la banda de estancias legible; plantas por estancia sobre línea base común; lint 0 rojos | `out/v3/qa.json`, `out/v3/architecture-book.pdf` |
 | A24–A26 | Diagnóstico del producto en el comparador ENT-04 | Diagnóstico hecho: A25 ×4, A26 ×2. Corregir es E2. | `evidence/e2/diagnostico.json` |
-| A10, A22, A23, A27–A29 | Enunciado solo en el mandato v1.3 | NO_VERIFICADO aquí | Pedir el enunciado al propietario |
+| A10, A29 | §6: paquetes reproducibles, licencias, documentación y limpieza. Ver la tabla de reconciliación. | PASS (lab), con limitaciones | `evidence/paquetes/`, `RECETA.md`, `HANDOFF.md` |
+| A22, A23 | §4.1 (ES/EN, marca y sistema editorial) y §5 (QA, accesibilidad, estados económicos). Ver la tabla. | PASS parcial: estados económicos PENDIENTE (N04); Firefox y WebKit NO_VERIFICADO | `evidence/i18n/`, `evidence/perfiles/`, `evidence/consumidor/` |
+| A27 | §7 (E2 corregido desde la raíz) y §5 | Diagnóstico y plan hechos; implementar es E2 y requiere GO | `reports/11-PROPUESTA-E2.md`, `evidence/e2/` |
+| A28 | §5: rendimiento y revisión visual de todas las páginas | PASS (agente); aceptación HUMANO | `evidence/consumidor/`, `evidence/revision-visual/` |
+
+## Reconciliación de A10, A22, A23 y A27–A29 contra el mandato v1.3
+
+Cada fila es un requisito escrito en la sección del mandato. «Ámbito» distingue laboratorio y producto.
+
+| ID | Requisito (§ del mandato) | Ámbito | Resultado | Evidencia | Limitación |
+|---|---|---|---|---|---|
+| A10/A29 | ZIP del cliente inequívoco, README dentro del inventario, manifiesto y resumen (§6) | lab | PASS: un ZIP por idioma (ES, EN), verificado con su resumen externo; no se le añade nada después | `evidence/paquetes/verificacion-*.json`, `SHA256SUMS` | Los ZIP de `dist/` no se versionan |
+| A10/A29 | ZIP del laboratorio por lista de permitidos, con activos, snapshot, fuentes, código, pruebas, evidencias, receta (§6) | lab | PASS | `evidence/paquetes/INDICE.json`, `inspeccion-laboratorio.json` | Avisos «revisar» explicados en `HANDOFF-v1.3.md` |
+| A10/A29 | Sin `node_modules`, secretos, referencias sin licencia ni proyecto editable (§6) | lab | PASS: inspección por tipo; 0 archivos VIS | `inspeccion-*.json`, `evidence/h08/` | — |
+| A10/A29 | `HANDOFF.md` sin la receta v2 ni rutas absolutas en la sección vigente; histórico rotulado (§6) | lab | PASS | `HANDOFF.md` | — |
+| A10/A29 | Receta portable con versiones fijadas (Playwright/Chromium, Poppler, FFmpeg, Python/Pillow); instalación con red declarada (§6) | lab | PASS: versiones fijadas en `RECETA.md`; Playwright 1.63.0 fijado en el lockfile | `RECETA.md`, `tools/package-lock.json` | Chromium lo instala `npx playwright install` o el entorno |
+| A10/A29 | Comando único de reconstrucción desde carpeta limpia, dos veces, comparando contenido y no bytes (§6) | lab | PASS | `evidence/paquetes/RECONSTRUCCION.json` | Los PDF llevan fecha de creación: igualdad por texto y páginas |
+| A10/A29 | Saneamiento de rutas y metadatos sin destruir evidencia (§6) | lab | PASS: copia saneada, el repositorio no cambia; vídeos de evidencia sin fecha | `evidence/paquetes/SANEAMIENTO.json` | — |
+| A10/A29 | H08: inventario VIS por hash, licencia y exposición (§6) | producto | Hecho; decisión pendiente | `evidence/h08/inventario-vis.json` | Exclusión de deploy y licencia: decisión del propietario |
+| A22/A23 | Cinco documentos representativos en ES y EN; cifras iguales; marca y textos del profesional sin traducir (§4.1) | lab | PASS: 8 PDF y 7 webs en inglés, residuo español 0, cifras ES = EN | `out/v3/qa.json` → `en`, `evidence/i18n/` | Textos del profesional quedan en español, marcados `lang="es"` |
+| A22/A23 | Perfiles de marca: sin marca, logo, nombres largos, logo pálido (§4.1) | lab | PASS: 4 perfiles, ES y EN, QA 0; aviso de contraste del logotipo | `evidence/perfiles/` | Colores y tipografía de marca: H07, deuda E3 |
+| A22/A23 | QA de consumidor por modalidad e idioma, 5 vistas, teclado, landmarks, foco (§5) | lab | PASS (Chromium) | `evidence/consumidor/consumidor-qa.json` | Firefox, WebKit y dispositivos físicos: NO_VERIFICADO |
+| A22/A23 | Estados económicos completo, parcial, incoherente, de una cara y ninguno (§5) | lab | **PENDIENTE.** Solo «ninguno» está cubierto (ficha sin presupuesto). Se ejecuta en N04 con el núcleo del producto copiado y su huella (`reports/14`, V4). | — | El snapshot tiene un solo presupuesto completo |
+| A27 | E2 corregido: lectura del código actual, A25 y A26 reproducidos, corte mínimo, sin tocar producto (§7) | producto | Diagnóstico y plan hechos | `reports/11-PROPUESTA-E2.md`, `evidence/e2/` | Implementar requiere GO y base con Codex |
+| A28 | Tamaños y tiempos p50/p95 de apertura y exportación (§5) | lab | PASS (medido) | `evidence/consumidor/consumidor-qa.json` → `rendimiento` | Sin SLA aprobado |
+| A28 | Revisión visual de **todas** las páginas ES/EN, con dossier e índice (§5) | lab | PASS (agente): 116 páginas; corregidos la leyenda del Architecture Book y «Ventana» sin traducir | `evidence/revision-visual/index.html` | La aceptación es humana (D08) |
+
+**Paquetes de este cierre** (`evidence/paquetes/SHA256SUMS`):
+
+| ZIP | Bytes | SHA-256 |
+|---|---|---|
+| `entrega-vivienda-de-ejemplo-es.zip` | 12.660.567 | `a3f9958a…7bbe8` |
+| `entrega-vivienda-de-ejemplo-en.zip` | 12.661.385 | `7a19c71a…01258` |
+| `rubik-studio-presentation-lab.zip` | 141.343.443 | `309e077b…c1b07` |
+
+La evidencia de un paquete no puede estar dentro de él: el ZIP del laboratorio lleva la evidencia y el registro tal como estaban al empaquetar, y los resultados de su propia inspección y reconstrucción se versionan después en `evidence/paquetes/`.
+
+## Avisos «revisar» del ZIP del laboratorio, clasificados
+
+La inspección (`evidence/paquetes/inspeccion-laboratorio.json`) no bloquea nada y deja 9 avisos para revisión humana (468 archivos). Ninguno es un dato personal ni una ruta de esta sesión.
+
+| Archivo | Aviso | Clasificación | Por qué se deja |
+|---|---|---|---|
+| `assets/recorrido/…-proyecto-de-ejemplo.mp4` | Etiqueta `creation_time` del vídeo | Aceptado: procedencia | Es el vídeo tal como lo exportó el producto. Quitar la etiqueta cambia su huella, y la entrega y `assets/log-*.json` registran la original. La fecha es la de exportación. |
+| `evidence/entrega/qa/exportar-qa.json` | Contacto fuera de la lista de permitidos | Aceptado: dato de prueba | `persona.ajena@correo.example` es el contacto sintético del caso negativo que debe bloquearse. El dominio `.example` está reservado. |
+| `tools/exportar-qa.cjs` | Ídem | Aceptado: dato de prueba | El código que crea ese caso negativo. |
+| `evidence/paquetes/inspeccion-laboratorio.json`, `reports/13-REGISTRO-VIVO-v1.3.md` | Ídem | Aceptado: cita | La inspección anterior y este registro citan ese mismo contacto sintético. |
+| `tools/inspeccionar-paquete.py` | Patrón de ruta absoluta | Aceptado: código | Es el patrón que busca rutas. Reescribirlo rompería el inspector. |
+| `tools/package.sh` (×3) | `/home/user`, `/tmp/claude-0`, `/home/user/studio` | Aceptado: código | Son las rutas que el saneador sustituye. Reescribirlas rompería el saneado. |
+
+## Fuentes que faltan (bloqueos registrados)
+
+| Fuente | Estado |
+|---|---|
+| Especificación maestra v1.2 revisada | **BLOCKED: no recibida.** Se usa lo que citan v1.3, v1.4 y los informes 00 y 12. |
+| Hallazgos V13-01 a V13-09 (auditoría externa) | **BLOCKED: no recibidos.** Ningún hallazgo se da por cerrado ni se inventa su contenido. Al recibirlos, se añaden aquí con su resultado. |
 
 ## D01–D18 y ST01–ST09 (actualizado respecto a `reports/12`)
 
@@ -58,7 +113,7 @@ Los enunciados completos de A07–A29 están en el mandato v1.3, que no se versi
 | D02, D03 | NO_VERIFICADO en el laboratorio; diagnosticado en el producto | D02 reproducido en `evidence/e2` |
 | D04 | PASS (parcial) | Además: cifras ES = EN en los 8 PDF ingleses (gate de cifras) |
 | D05–D07 | PASS (lab) | — |
-| D08 | PASS (agente) / HUMANO | Revisión página a página del Architecture Book, de los PDF ingleses y de las portadas por perfil de marca |
+| D08 | PASS (agente) / HUMANO | Revisión de las 116 páginas ES/EN (`evidence/revision-visual/`); dos defectos encontrados y corregidos |
 | D09 | PASS (Chromium) | Ampliado: 7 modalidades × ES/EN × 5 vistas (1440, 820, 390, 844 en horizontal, 320), con landmarks, títulos, `lang`, `alt` y foco. Firefox y WebKit: NO_VERIFICADO (no instalados; el entorno prohíbe instalar navegadores). |
 | D10 | PASS | — |
 | D11 | PASS (lab) | — |
@@ -80,4 +135,6 @@ Los enunciados completos de A07–A29 están en el mandato v1.3, que no se versi
 1. **Revisión humana** de las páginas y de la web (D08).
 2. **Firefox, WebKit y dispositivos físicos** (D09).
 3. **ST01 / H03 en el producto** (E2).
-4. **Enunciados de A10, A22, A23 y A27–A29** (mandato v1.3 no versionado).
+4. **Estados económicos en el laboratorio** (§5): pasan a N04.
+5. **Especificación v1.2 y hallazgos V13-01 a V13-09**: no recibidos.
+6. **H08**: decisión del propietario sobre licencia, historial y exclusión de deploy.

@@ -3,7 +3,7 @@
  "zip": "entrega-vivienda-de-ejemplo-es.zip",
  "tipo": "cliente",
  "archivos": 31,
- "bytes": 15032504,
+ "bytes": 15031702,
  "bloquea": 0,
  "revisar": 0,
  "info": 0,
@@ -17,65 +17,65 @@
   {
    "path": "entrega-vivienda-de-ejemplo-es/MANIFIESTO.json",
    "bytes": 18855,
-   "sha256": "4338458605a06cacf3b92e3f87d58c44b1b462d027a2baafa60f4e7ecfb7f964"
+   "sha256": "98472a8110000f6c50100a18db9ad1227d28d11d3aaa19c29996841b4e6b17a9"
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/architecture-book.pdf",
-   "bytes": 114309,
-   "sha256": "ce43b41d6981d52adc083c05def545cdcd20186e358cbfa90e2572364283a1f1",
+   "bytes": 114176,
+   "sha256": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
    "pdf": {
     "Title": "Libro de arquitectura, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/architecture-sheet-strip.pdf",
-   "bytes": 32288,
-   "sha256": "8e48b12e84db11d60469a938789001b22f150558adf0c06ed7a8255b7b5ce373",
+   "bytes": 32183,
+   "sha256": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
    "pdf": {
     "Title": "Lámina de arquitectura, cajetín en franja, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/commercial-proposal-client-v3.pdf",
-   "bytes": 32972,
-   "sha256": "b0da42aaa185695ec39a1ed48d958a9add90047cb637b8690be9b87fdad431ed",
+   "bytes": 32867,
+   "sha256": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
    "pdf": {
     "Title": "Propuesta económica, versión cliente, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/entrega-integral.pdf",
-   "bytes": 1557812,
-   "sha256": "3f9507968948451181299b412a8ae8ae9541c2cef5801bdbc0adc9b995a5d056",
+   "bytes": 1557707,
+   "sha256": "27897e711a370018251736e8fd200ad66ea8c6057b695e5b3568a6a2bbf2aff6",
    "pdf": {
     "Title": "Presentación integral, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/interior-book-v3.pdf",
-   "bytes": 1179809,
-   "sha256": "2f9defa3cdfddd48f76911ac3349ebb7f3636ac6e4cc64fae44de9ce6adb8fad",
+   "bytes": 1179665,
+   "sha256": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
    "pdf": {
     "Title": "Libro de interiorismo, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/materials-furniture-book-v3.pdf",
-   "bytes": 75659,
-   "sha256": "f5fac2c065b359c6d29b6ab4369318ecdbbedace407e91a404380579d1b9d9ff",
+   "bytes": 75554,
+   "sha256": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
    "pdf": {
     "Title": "Libro de materiales y mobiliario, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
@@ -86,18 +86,18 @@
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/documentos/real-estate-sheet-v3.pdf",
-   "bytes": 387474,
-   "sha256": "bd69c6c48b5739a2bd587eef10a4885965746cbf42101b0ebf83f5da587ad17c",
+   "bytes": 387369,
+   "sha256": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
    "pdf": {
     "Title": "Ficha inmobiliaria, Vivienda de ejemplo",
-    "Creator": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "Creator": "Chromium",
     "Producer": "Skia/PDF m153"
    }
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/index.html",
    "bytes": 1156138,
-   "sha256": "eb2cd5d1c6ed20dc3b1d943c0da19d0e32a98477eff11ec8adac0134124481bc"
+   "sha256": "41b782f74bdab5504f33bd0d44aa33a9cf29ca3a58f7069589c3934b9b10b32f"
   },
   {
    "path": "entrega-vivienda-de-ejemplo-es/media/dibujo-vivo.jpg",
