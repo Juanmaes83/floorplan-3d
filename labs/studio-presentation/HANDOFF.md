@@ -1,6 +1,20 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente (cierre v1.3, 17/11/2026)
+## Vigente · continuidad v1.4
+
+Rama exclusiva `lab/studio-presentation-e0e1`. Base de continuidad `101fe167bd920c94c7e27938dfd3c22526dd9728`. Producto de solo lectura `master@8525025a1470d48d52d8e365070e5a0acf116134`.
+
+- Mandatos acumulativos y huellas en `mandatos/INDICE-MANDATOS.md`, con v1.2 recuperada.
+- Trabajo activo, evidencias y bloqueos en `reports/15-REGISTRO-v1.4.md`. Se han recibido V13-01–V13-09 y CONT-01–CONT-03.
+- Primer gate: en un único entorno Linux, desde la raíz del lab, ejecutar `node tools/compose.cjs snapshot out/v3` y luego `RECETAS_SOLO=RP07 node tools/recetas-qa.cjs /tmp/rq exportar,ui`. Conservar la composición durante toda la comparación.
+- La receta de reconstrucción y dependencias está en `RECETA.md`.
+- Pendientes del candidato: cierre N01, reejecución N05, N02–N04/N06–N08, RP-Q, comparación con baseline, inspección y distribución de ZIP y revisión de propietario.
+
+## Histórico
+
+Los handoffs `HANDOFF-v1.3.md` y `HANDOFF-v1.4.md` conservan el estado de sus sesiones. Para continuar se usa la sección vigente.
+
+### Cierre v1.3 (17/11/2026)
 
 Rama `lab/studio-presentation-e0e1`. Sin PR, sin merge, sin cambios en el producto.
 
@@ -9,10 +23,6 @@ Rama `lab/studio-presentation-e0e1`. Sin PR, sin merge, sin cambios en el produc
 - **Componer dentro del laboratorio:** `node tools/compose.cjs snapshot out/v3`. Las fuentes y la sonda de lint están en `vendor/`. No hace falta ninguna ruta de donantes.
 - **Empaquetar:** `bash tools/package.sh` → `dist/` (no versionado): ZIP del cliente en ES y EN y ZIP del laboratorio, con `SHA256SUMS`.
 - **Estado y pendientes:** `HANDOFF-v1.3.md` y `reports/13-REGISTRO-VIVO-v1.3.md`. Mandatos vigentes y sus huellas: `mandatos/INDICE-MANDATOS.md`.
-
-## Histórico (no vigente)
-
-Las secciones siguientes se conservan como registro. Sus recetas, comandos y rutas absolutas de donantes **ya no se usan**: los sustituye la sección «Vigente».
 
 ### Inicio (E0)
 Rama `lab/studio-presentation-e0e1` (desde master `f31f303`). Sin PR. Regenerar: `cd labs/studio-presentation/tools && npm i --no-save @fontsource/inter@5.1.1 @fontsource/newsreader@5.1.1 @fontsource/source-serif-4@5.1.1`; `node tools/snapshot.cjs <repoRoot> snapshot`; `node tools/compose.cjs snapshot out/v2` (requiere IFC Sheet en /home/user/donors/ifc-sheet y Huashu en /home/user/juanmaes83/huashu-design-3.0-agent-, o variables IFC_FONTS/HUASHU_LINT).

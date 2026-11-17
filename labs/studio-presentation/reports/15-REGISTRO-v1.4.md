@@ -55,3 +55,24 @@
 | F no disponible (sin descarga) | RP16, RP18, RP19, RP20 |
 
 Resultados de las pruebas: ver la sección «RP-Q» más abajo.
+
+## Continuidad del 17/11/2026
+
+Rama remota y punto de partida `101fe167bd920c94c7e27938dfd3c22526dd9728`. Referencia de producto de solo lectura `8525025a1470d48d52d8e365070e5a0acf116134`. Las PR abiertas #246 y #247 apuntaban a master desde otras ramas. Se verificó un checkout limpio y disperso del laboratorio para evitar las rutas largas de las referencias VIS en Windows.
+
+La fuente v1.2 está en `mandatos/` con su huella original. El bloqueo por ausencia de fuente de `reports/13` es histórico. Su §3.3 se sigue en H01–H08, §9 en D01–D18 y ST01–ST09, y §11 en A01–A06 más las ampliaciones v1.3. Las dos brechas editoriales de tamaño y contraste y la diferencia entre reconstrucción textual y visual se vuelven a evaluar con V13 y CONT. Se conservan E2–E7 como diagnóstico y planificación y D08 como decisión humana pendiente.
+
+| ID | Requisito recuperado | Evidencia inicial y siguiente comprobación |
+|---|---|---|
+| V13-01 | Medir el texto efectivo de la escala gráfica, contando transformaciones SVG. | Aproximadamente 1,96 pt en PDF del candidato `cbdd24c`. Medir de nuevo en PDF, ES y EN. N02/N08. |
+| V13-02 | Elevar la legibilidad de rótulos, usar números y leyendas donde falte espacio. | Rango observado 6,2–7,5 pt en `cbdd24c`. Reextraer del PDF y revisar visualmente. N02/N08. |
+| V13-03 | Mejorar tamaño y contraste de pies editoriales. | Observación del candidato `cbdd24c`. Medir tipografía y contraste en la salida actual. N07/RP-Q09. |
+| V13-04 | Recomponer láminas de estancias pequeñas, en especial el mirador, con localizador y escala honesta. | Observación visual de `cbdd24c`. Contrastar páginas ES/EN actuales. N02/N07. |
+| V13-05 | Diferenciar Architecture Book, Interior Design Book y presentación integral por jerarquía y composición. | Observación visual de `cbdd24c`. Comparar las tres portadas. N07. |
+| V13-06 | Revalidar foco visible efectivo, desplazamiento, navegación por teclado y zoom. | Incidencias del consumidor de `cbdd24c`. Reejecutar sobre paquetes reales. RP-Q09. |
+| V13-07 | Entregar ZIP lab y digest externos ES/EN del candidato exacto. | Auditoría `cbdd24c`. Validar bytes e inventarios del cierre final. RP-Q10/RP-Q12. |
+| V13-08 | Localizar textos y avisos de lector del manifiesto EN preservando claves, IDs y datos. | Auditoría `cbdd24c`. Inspeccionar ZIP inglés recién exportado. RP-Q09/RP-Q10. |
+| V13-09 | Una sección vigente de handoff e histórico explícito. | Auditoría `cbdd24c`. El puntero de continuidad se actualiza desde `HANDOFF.md`. |
+| CONT-01 | Comparación obligatoria y afirmativa de las rutas, huellas, selección e identidad común del adaptador y la UI. | Lectura estática `101fe167`: `eq !== false` también pasa con `null`. Pendiente prueba RP07 congelada. |
+| CONT-02 | Separar receta consultada, selección activa y candidato descargable. | Lectura estática `101fe167`: al consultar C/F, el manejador de descarga sigue disponible. Pendiente prueba UI. |
+| CONT-03 | Dos reconstrucciones independientes, conjuntos exactos, integridad, QA, idiomas, visual y salida no cero al discrepar. | Lectura estática `101fe167`: comparación de texto y páginas, medios A/B por intersección y sin puerta de salida. Pendiente ampliar y aplicar a ZIP final. |
