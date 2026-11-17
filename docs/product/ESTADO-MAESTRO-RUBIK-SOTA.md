@@ -128,7 +128,7 @@ El campo `production` del registro guarda la comprobación del 17/11 y remite a 
 
 | Línea | Estado | Detalle |
 |---|---|---|
-| **V2: consulta guiada sin LLM** (AG-1) | INTEGRADO_VALIDADO | 9 herramientas de dominio con procedencia (motor, estado y revisión) en ES, EN y ZH. Si el presupuesto está incompleto no da total. [M] `js/assistant-domain-tools-core.js`, `js/assistant-intents-core.js` |
+| **V2: consulta guiada sin LLM** (AG-1) | INTEGRADO_VALIDADO | Usa **7 de las 12 herramientas de dominio** del núcleo, con procedencia (motor, estado y revisión) en ES, EN y ZH: 4 de AG-1 y 3 de catálogo de CAT-04. Si el presupuesto está incompleto no da total. Desglose verificado después de la tabla. [M] `js/assistant-session-core.js`, `js/assistant-domain-tools-core.js`, `js/assistant-intents-core.js` |
 | **V2: propuestas tipadas** (AG-2) | INTEGRADO_VALIDADO, 2 operaciones | `set_room_floor_material` y `move_object`, con un diff legible y sin escribir nada. [M] `js/assistant-proposals-core.js` |
 | **V2: aplicar, confirmar y deshacer** (AG-3) | INTEGRADO_VALIDADO, solo local | Un paso del editor, revalidado contra la revisión actual. No se puede aplicar en remoto porque no hay sesiones. [H] [acta AG-0…AG-5](assistant-ai-v2/acta-ag0-ag5-2026-11-14.md) |
 | **V2: contratos y perímetro** (AG-0) | PARCIAL | Faltan sesiones, tenant, roles, cuotas durables y CSRF (GOV-06a) |
@@ -142,6 +142,29 @@ El campo `production` del registro guarda la comprobación del 17/11 y remite a 
 | Libro común con Render IA | PENDIENTE | `api/render.js` aún no anota en el libro: necesita una PR aparte |
 | AG-4 Orquestar lo visual | PARCIAL | Prepara el render sin gasto y lleva a la entrada existente. Falta el lote con coste previo (IMG-04) |
 | AG-5 Capacidades avanzadas | BLOQUEADO | Foto → mueble 3D y generar u optimizar distribuciones dependen de MUE-02, GEN-01, el proveedor y GOV-05 |
+
+**Herramientas de dominio del Asistente (verificado el 17/11/2026 en el código de `master`):**
+
+`js/assistant-domain-tools-core.js` declara **12 herramientas de solo lectura**. Hay que distinguir dónde se usan y qué las prueba:
+- **Origen:** 9 se crearon con AG-1 (14/11) y 3 de catálogo las añadió CAT-04 (`3b64982`, 15/11).
+- **Uso:** la consulta guiada V2 (`js/assistant-session-core.js`, sin modelo de lenguaje) llama solo a 7. Las otras 5 solo se ofrecen al agente V3, que está **desactivado**.
+
+| Herramienta | Origen | La usa la consulta guiada V2 | Pruebas |
+|---|---|---|---|
+| `get_project_summary` | AG-1 | Sí (nº de estancias, datos que faltan, superficie total) | `assistant-ai-v2`, `assistant-agent-core` |
+| `get_room` | AG-1 | Sí (superficie de una estancia) | `assistant-ai-v2`, con oráculo de Gauss |
+| `get_layout_review` | AG-1 | Sí (conflictos de distribución) | `assistant-ai-v2` |
+| `get_budget_summary` | AG-1 | Sí (coste, detalle de presupuesto) | `assistant-ai-v2`, con oráculo C1–C4; `cat04-f1f2` |
+| `list_catalog_products` | CAT-04 | Sí («Mis catálogos») | `cat04-assistant` |
+| `get_placed_products` | CAT-04 | Sí (productos colocados y su coste) | `cat04-assistant`, `cat04-f1f2`, `assistant-gen-cat04-economics` |
+| `get_visual_references` | CAT-04 | Sí (referencias visuales) | `cat04-assistant` |
+| `list_capabilities` | AG-1 | No: ninguna consulta V2 la llama (sí aparece en la lista de capacidades y en V3) | `assistant-ai-v2` (lista blanca) |
+| `list_rooms` | AG-1 | No (solo V3, desactivado) | `assistant-agent-core` y `assistant-gen`, con proveedor simulado |
+| `get_quantities` | AG-1 | No (solo V3, desactivado) | **Ninguna prueba propia** |
+| `list_materials` | AG-1 | No (solo V3, desactivado) | **Ninguna prueba propia** |
+| `list_objects` | AG-1 | No (solo V3, desactivado) | **Ninguna prueba propia** |
+
+Por tanto, la cifra correcta para la V2 es **7 herramientas expuestas y verificadas** de 12 implementadas. Antes de exponer a usuarios `get_quantities`, `list_materials` y `list_objects`, hacen falta pruebas propias.
 
 ---
 
