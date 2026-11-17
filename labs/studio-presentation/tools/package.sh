@@ -25,7 +25,7 @@ LIST="$DIST/allowlist-laboratorio.txt"
   find reports system snapshot i18n vendor diagnostico assets mandatos -type f 2>/dev/null
   find tools -maxdepth 2 -type f \( -name '*.cjs' -o -name '*.js' -o -name '*.mjs' -o -name '*.py' -o -name '*.sh' -o -name 'package.json' -o -name 'package-lock.json' \) -not -path '*/node_modules/*'
   find evidence -type f
-  find out/v3 -maxdepth 1 -type f \( -name '*.pdf' -o -name 'qa.json' \)
+  find out/v3 -maxdepth 1 -type f \( -name '*.pdf' -o -name 'qa.json' -o -name 'i18n-datos.json' \)
   find out/v3/b2 out/v3/b3 -type f -name '*.json' 2>/dev/null
   find out/v3/entrega out/v3/profesional -type f
 } | LC_ALL=C sort -u > "$LIST"

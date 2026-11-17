@@ -46,7 +46,7 @@ const roomNo=r=>rooms.indexOf(r)+1;
 const sheetTable=()=>LONG_ROOMS?`<table><thead><tr><th>N.º</th><th class="num">m²</th><th>Computa</th></tr></thead><tbody>${rooms.map(r=>`<tr><td>${roomNo(r)}</td><td class="num">${r.areaM2==null?'<span class="unk">—</span>':num(r.areaM2)}</td><td>${r.counted?'Sí':'No'}</td></tr>`).join('')}<tr class="total"><td>Útil computada</td><td class="num">${AREA}</td><td></td></tr></tbody></table><p class="caption">Los nombres de las estancias son largos para la lámina: están en el cuadro completo de la página siguiente, con el mismo número que en el dibujo.</p>`:null;
 const annexPage=(sheetNo)=>({foot:true,html:`<div class="grid"><div class="c1-4"><h2 class="h2">Cuadro de superficies</h2><p class="read">Anexo a la lámina ${sheetNo}. Cada número es el de la estancia en el dibujo.</p><p class="caption">${esc(STATUS_AREA)}</p></div><div class="c5-12"><table><thead><tr><th>N.º</th><th>Estancia</th><th class="num">m²</th><th>Computa</th></tr></thead><tbody>${rooms.map(r=>`<tr><td class="muted">${roomNo(r)}</td><td>${esc(r.name)}</td><td class="num">${r.areaM2==null?'<span class="unk">—</span>':num(r.areaM2)}</td><td>${r.counted?'Sí':'No'}</td></tr>`).join('')}<tr class="total"><td colspan="2">Superficie útil computada</td><td class="num">${AREA}</td><td></td></tr></tbody></table></div></div>`});
 const keyList=k=>k&&k.length?`<p class="caption"><b>Estancias numeradas en el dibujo</b> (su nombre no cabe en el plano): ${k.map(x=>`${x.n} ${esc(x.name)}, ${esc(x.area)}`).join('; ')}.</p>`:'';
-const keySvg=(t,u,at)=>`<g><circle cx="${at.x}" cy="${at.y}" r="${6.5*u}" fill="${T.paper}" stroke="${T.ink}" stroke-width="${.5*u}"/><text x="${at.x}" y="${at.y+2.6*u}" text-anchor="middle" font-size="${7.4*u}" font-weight="700" fill="${T.ink}">${roomNo(t.r)}</text></g>`;
+const keySvg=(t,u,at,pt=7.4)=>`<g><circle cx="${at.x}" cy="${at.y}" r="${.88*pt*u}" fill="${T.paper}" stroke="${T.ink}" stroke-width="${.5*u}"/><text x="${at.x}" y="${at.y+.35*pt*u}" text-anchor="middle" font-size="${pt*u}" font-weight="700" fill="${T.ink}">${roomNo(t.r)}</text></g>`;
 const matById=Object.fromEntries(S.materials.map(m=>[m.id,m]));
 const byName=re=>rooms.filter(r=>re.test(r.name)).length;
 const floors=[...S.board.floors].sort((a,b)=>b.areaM2-a.areaM2);
@@ -64,7 +64,7 @@ const wallById=Object.fromEntries(S.geometry.walls.map(x=>[x.id,x]));
 const W_COLOR={'load-bearing':T.ink,exterior:T.ink,partition:T.partition,low:T.low};
 // Room tags (Diagram Design): fixed sizes, opaque paper backing with hairline, never shrunk to fit. If a tag does not fit
 // its room on one or two lines it becomes an italic-serif callout in the margin with a dashed leader (max 2 per drawing).
-function tagLayout(u){const fsN=7.5*u,fsA=7.5*u,cw=.6;const out=[];
+function tagLayout(u,labelPt=7.5){const fsN=labelPt*u,fsA=labelPt*u,cw=.6;const out=[];
  for(const r of rooms){const b=bbox(r.polygon),c=centroid(r),availW=b.x1-b.x0-260,availH=b.y1-b.y0-260;
   const areaTxt=r.areaM2==null?'sin área':num(r.areaM2)+' m²'+(r.counted?'':', no computa');
   // Balanced breaks into 1–3 lines at spaces or after hyphens (never shrinking the type).
@@ -79,7 +79,7 @@ function tagLayout(u){const fsN=7.5*u,fsA=7.5*u,cw=.6;const out=[];
 function tagSvg(t,u,at){const {lines,areaTxt,fsN,fsA}=t,box=t.box,x=at.x,y=at.y-box.h/2;
  return `<g><rect x="${x-box.w/2}" y="${y}" width="${box.w}" height="${box.h}" fill="${T.paper}" stroke="${T.rule}" stroke-width="${.15*u}"/>${lines.map((l,i)=>`<text x="${x}" y="${y+1.2*u+fsN*(i+1)}" text-anchor="middle" font-size="${fsN}" font-weight="700" fill="${T.ink}">${esc(l)}</text>`).join('')}<text x="${x}" y="${y+1.2*u+fsN*1.2*lines.length+fsA*1.05}" text-anchor="middle" font-size="${fsA}" fill="${T.muted}">${esc(areaTxt)}</text></g>`;}
 // ---------- orthographic plan from canonical geometry ----------
-function plan({w=170,h=150,objects=false,floorTint=true,scale=null,callouts=true,labels=true,pad=400}={}){
+function plan({w=170,h=150,objects=false,floorTint=true,scale=null,callouts=true,labels=true,pad=400,labelPt=7.5,highlight=[]}={}){
  if(NOGEO)return {svg:emptyDrawing(w,h,NO_GEO_TEXT),pw:w,ph:h,mmPerUnit:1/50,callouts:0,dropped:0,keys:[]};
  const pts=[...S.geometry.walls.flatMap(x=>[x.start,x.end]),...rooms.flatMap(r=>r.polygon)];const b=bbox(pts);
  // Callout text is wrapped (≤3 lines) and the right margin is sized to it, so nothing is clipped.
@@ -91,7 +91,7 @@ function plan({w=170,h=150,objects=false,floorTint=true,scale=null,callouts=true
   const need=900+Math.max(...callers.flatMap(t=>[...callLines(t).map(l=>l.length*9*uu*.5),...callArea(t).map(l=>l.length*7.5*uu*.56)]));if(Math.abs(need-right)<20)break;right=need;}
  const mmPerUnit=pw/vbW,u=.3528/mmPerUnit; // u = model units per pt
  const out=[`<title>Planta de ${esc(TITLE)}</title><desc>Planta dibujada desde la geometría de RUBIK: ${S.geometry.walls.length} muros, ${S.geometry.openings.length} huecos y ${rooms.length} estancias.</desc>`];
- for(const r of rooms){const m=matById[r.floorMaterialId];out.push(`<polygon points="${r.polygon.map(p=>p.x+','+p.y).join(' ')}" fill="${floorTint&&m?tint(m.color,.5):T.paper}"/>`);}
+ for(const r of rooms){const m=matById[r.floorMaterialId];out.push(`<polygon points="${r.polygon.map(p=>p.x+','+p.y).join(' ')}" fill="${highlight.includes(r.id)?tint(T.ink,.55):floorTint&&m?tint(m.color,.5):T.paper}"/>`);}
  if(objects)for(const o of S.geometry.objects)out.push(`<rect x="${-o.size.widthMm/2}" y="${-o.size.depthMm/2}" width="${o.size.widthMm}" height="${o.size.depthMm}" fill="none" stroke="${T.muted}" stroke-width="${.35*u}" transform="translate(${o.position.x} ${o.position.y}) rotate(${o.rotationDeg})"/>`);
  for(const x of S.geometry.walls)out.push(`<line x1="${x.start.x}" y1="${x.start.y}" x2="${x.end.x}" y2="${x.end.y}" stroke="${W_COLOR[x.structure]||T.ink}" stroke-width="${x.thicknessMm}" stroke-linecap="square"/>`);
  for(const o of S.geometry.openings){const x=wallById[o.wallId];if(!x)continue;const L=Math.hypot(x.end.x-x.start.x,x.end.y-x.start.y)||1,d={x:(x.end.x-x.start.x)/L,y:(x.end.y-x.start.y)/L};
@@ -99,14 +99,18 @@ function plan({w=170,h=150,objects=false,floorTint=true,scale=null,callouts=true
   out.push(`<line x1="${a.x}" y1="${a.y}" x2="${c.x}" y2="${c.y}" stroke="${T.paper}" stroke-width="${x.thicknessMm+2}" stroke-linecap="butt"/>`);
   if(o.kind==='window'){const n={x:-d.y,y:d.x},t=x.thicknessMm/2;for(const s of [-t,0,t])out.push(`<line x1="${a.x+n.x*s}" y1="${a.y+n.y*s}" x2="${c.x+n.x*s}" y2="${c.y+n.y*s}" stroke="${T.ink}" stroke-width="${(s?.5:.25)*u}"/>`);}
   else out.push(`<line x1="${a.x}" y1="${a.y}" x2="${c.x}" y2="${c.y}" stroke="${T.ink}" stroke-width="${.25*u}" stroke-dasharray="${2*u} ${1.5*u}"/>`);}
- const tags=tagLayout(u);let ci=0,lastY=-1e9;const callX=b.x1+pad+400,MAX_CALLOUTS=2; // Diagram Design: max 2 annotation callouts. A dropped tag is reported in qa.meta and blocks acceptance
+ const tags=tagLayout(u,labelPt);let ci=0,lastY=-1e9;const callX=b.x1+pad+400,MAX_CALLOUTS=2; // Diagram Design: max 2 annotation callouts. A dropped tag is reported in qa.meta and blocks acceptance
  for(const t of labels?[...tags].sort((p,q)=>p.c.y-q.c.y):[]){if(!t.callout){out.push(tagSvg(t,u,t.c));continue;}
-  if(!callouts||ci>=MAX_CALLOUTS){t.keyed=true;out.push(keySvg(t,u,t.c));continue;}
+  if(!callouts||ci>=MAX_CALLOUTS){t.keyed=true;out.push(keySvg(t,u,t.c,labelPt===7.5?7.4:labelPt));continue;}
   const ty=Math.max(t.c.y,lastY+9*u*1.6);ci++;
   out.push(`<path d="M ${t.c.x} ${t.c.y} Q ${(t.c.x+callX)/2} ${t.c.y} ${callX-150} ${ty}" fill="none" stroke="${T.ink}" stroke-opacity=".45" stroke-width="${.3*u}" stroke-dasharray="${1.4*u} ${1*u}"/><circle cx="${t.c.x}" cy="${t.c.y}" r="${.7*u}" fill="${T.ink}"/>`);
   const cl=callLines(t);out.push(`<text font-family="RUBIK Serif" font-style="italic" font-size="${9*u}" fill="${T.ink}">${cl.map((l,i)=>`<tspan x="${callX}" y="${ty+i*9*u*1.15}">${esc(l)}</tspan>`).join('')}</text><text font-size="${7.5*u}" fill="${T.muted}">${callArea(t).map((l,i)=>`<tspan x="${callX}" y="${ty+cl.length*9*u*1.15+i*7.5*u*1.2}">${esc(l)}</tspan>`).join('')}</text>`);lastY=ty+cl.length*9*u*1.15+callArea(t).length*7.5*u*1.2;}
  return {svg:`<svg class="plan" viewBox="${minX} ${minY} ${vbW} ${vbH}" width="${pw}mm" height="${ph}mm" role="img">${out.join('')}</svg>`,pw,ph,mmPerUnit,callouts:ci,dropped:tags.filter(t=>t.dropped).length,keys:labels?tags.filter(t=>t.keyed).sort((a,b)=>roomNo(a.r)-roomNo(b.r)).map(t=>({n:roomNo(t.r),name:t.r.name,area:t.areaTxt})):[]};}
-function scaleBar(mmPerUnit,metres=2){const seg=1000*mmPerUnit,len=metres*seg;return `<svg width="${len+16}mm" height="7mm" viewBox="-3 0 ${len+16} 7"><g font-family="RUBIK Inter" font-size="2.6" fill="${T.ink}">${Array.from({length:metres+1},(_,i)=>`<text x="${i*seg}" y="2.6" text-anchor="middle">${i}</text>`).join('')}<text x="${len+3}" y="2.6">m</text></g>${Array.from({length:metres},(_,i)=>`<rect x="${i*seg}" y="4" width="${seg}" height="1.4" fill="${i%2?T.paper:T.ink}" stroke="${T.ink}" stroke-width=".25"/>`).join('')}</svg>`;}
+function scaleBar(mmPerUnit,metres=2,technical=false){
+ const seg=1000*mmPerUnit,len=metres*seg;
+ if(!technical)return `<svg width="${len+16}mm" height="7mm" viewBox="-3 0 ${len+16} 7"><g font-family="RUBIK Inter" font-size="2.6" fill="${T.ink}">${Array.from({length:metres+1},(_,i)=>`<text x="${i*seg}" y="2.6" text-anchor="middle">${i}</text>`).join('')}<text x="${len+3}" y="2.6">m</text></g>${Array.from({length:metres},(_,i)=>`<rect x="${i*seg}" y="4" width="${seg}" height="1.4" fill="${i%2?T.paper:T.ink}" stroke="${T.ink}" stroke-width=".25"/>`).join('')}</svg>`;
+ return `<svg class="scale-bar" width="${len+14}mm" height="8mm" viewBox="-3 0 ${len+14} 8"><g font-family="RUBIK Inter" font-size="3.4" fill="${T.ink}">${Array.from({length:metres+1},(_,i)=>`<text x="${i*seg}" y="3.6" text-anchor="middle">${i}</text>`).join('')}<text x="${len+3}" y="3.6">m</text></g>${Array.from({length:metres},(_,i)=>`<rect x="${i*seg}" y="5" width="${seg}" height="1.4" fill="${i%2?T.paper:T.ink}" stroke="${T.ink}" stroke-width=".25"/>`).join('')}</svg>`;
+}
 // ---------- axonometric plan (Diagram Design type-axonometric-plan: 2:1 dimetric, walls cut at a drawing height) ----------
 function axo({w=180,h=120,H=1100,label=true}={}){
  if(NOGEO)return Object.assign(new String(emptyDrawing(w,h,NO_GEO_TEXT)),{keys:[]});
@@ -149,7 +153,7 @@ const img=(v,style='')=>`<img class="img" src="${v.src}" alt="${esc(v.label)}" s
 // ---------- covers: the three directions (Huashu gate) ----------
 const coverImage=(kind,sub,view)=>!view?coverDrawing(kind,sub):({cls:'bleed',head:false,html:`<div style="position:absolute;inset:0 0 auto 0;height:150mm;background:${view.bg}" class="frame">${img(view)}</div>
  <div style="position:absolute;left:16mm;right:16mm;top:157mm;height:auto" class="grid"><div class="c1-7">${LOGO(10,40)}<p class="meta" style="color:var(--d-ink);font-weight:700;margin-top:${prof.logo?'2mm':'0'}">${esc(STUDIO)}</p>${H1(TITLE,"margin-top:2mm")}<p class="lead" style="margin-top:1.5mm">${esc(kind)}</p></div>
- <div class="c8-12"><p class="meta">${esc(sub)}</p><p class="caption">${esc(view.label)}. ${VIEW_NOTE}</p></div></div>`});
+ <div class="c8-12"><p class="meta">${esc(sub)}</p><p class="caption">${esc(view.label)}. ${esc(view.note||VIEW_NOTE)}</p></div></div>`});
 const coverDrawing=(kind,sub)=>{const a=axo({w:178,h:176});return {head:false,html:`<div class="grid"><div class="c1-4" style="display:flex;flex-direction:column;justify-content:space-between;height:180mm">
  <div>${LOGO()}<p class="meta" style="color:var(--d-ink);font-weight:700;margin-top:${prof.logo?'3mm':'0'}">${esc(STUDIO)}</p><p class="meta">${esc(prof.tagline||'')}</p></div>
  <div>${H1(TITLE)}<p class="lead" style="margin-top:3mm">${esc(kind)}</p><p class="meta" style="margin-top:6mm">${esc(sub)}</p></div>
@@ -182,9 +186,8 @@ function materialsPage(title){if(!floors.length)return {html:`<div class="grid">
   <div style="display:flex;height:9mm;margin:4mm 0 2mm;border:.2mm solid rgba(0,0,0,.12)">${bar}</div>${diff?`<p class="caption">${diff}</p>`:''}
   <p class="note" style="margin-top:8mm"><b>Color del modelo, no muestra física.</b> Los tonos son los del material en el modelo 3D. La elección final requiere la muestra real del fabricante.</p></div>
   <div class="c6-12" style="columns:2;column-gap:6mm">${list}</div></div>`};}
-function objectRows(){const map=new Map();S.objects.forEach((o,i)=>{const g=S.geometry.objects[i];const sz=g?.size?`${num(g.size.widthMm,0)} × ${num(g.size.depthMm,0)}`:null;const k=(o.room||'')+'|'+o.name+'|'+sz;
-  if(!map.has(k))map.set(k,{room:o.room||'Fuera de los recintos',name:o.name,size:sz,qty:0,ref:o.catalogRef});map.get(k).qty++;});
- const order=rooms.map(r=>r.name);return [...map.values()].sort((a,b)=>(order.indexOf(a.room)+1||99)-(order.indexOf(b.room)+1||99)).map((r,i)=>({...r,tag:'M-'+String(i+1).padStart(2,'0')}));}
+const inventory = require('./ffe.cjs').objectRows(S, value => num(value,0));
+const objectRows = () => inventory;
 function schedulePages(title){const rows=objectRows();if(!rows.length)return [{html:`<div class="grid"><div class="c1-6"><h2 class="h2">${esc(title)}</h2><p class="read">El proyecto no tiene objetos colocados. No hay listado de mobiliario.</p></div></div>`}];let last='';
  // B3: one page; the measured pagination (flow.js) splits it where the rows really stop fitting, whatever the name lengths.
  const tr=rows.map(r=>{const roomCell=r.room!==last?esc(r.room):'';last=r.room;return `<tr><td class="muted" style="white-space:nowrap">${r.tag}</td><td data-repeat="${esc(r.room)}">${roomCell}</td><td>${esc(r.name)}</td><td class="num">${r.qty}</td><td class="num">${r.size?r.size:'<span class="unk">sin medida</span>'}</td><td>${r.ref?esc(r.ref):'<span class="unk">Sin referencia de producto</span>'}</td></tr>`;}).join('');
@@ -257,11 +260,11 @@ function build(){
  if(process.env.STUDIO_B1!=='0'){const b1=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage});Object.assign(D,b1.D);Object.assign(meta,b1.meta);
-  {const ab=require('./architecture-book.cjs')({S,T,doc,plan,roomPlan:b1.helpers.roomPlan,esc,num,date,rev,rooms,counted,AREA,STATUS_AREA,STUDIO,TITLE,NOGEO,coverDrawing,keyList,matById,snapDir,roomArea,scaleBar});Object.assign(D,ab.D);Object.assign(meta,ab.meta);}}
+  {const ab=require('./architecture-book.cjs')({S,T,doc,plan,roomPlan:b1.helpers.roomPlan,esc,num,date,rev,rooms,counted,AREA,STATUS_AREA,STUDIO,TITLE,NOGEO,matById,snapDir,roomArea,scaleBar,LOGO,prof});Object.assign(D,ab.D);Object.assign(meta,ab.meta);}}
  let E=null;if(process.env.STUDIO_B1!=='0'&&!S.variant&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage}).helpers;
-  E=require('./entrega.cjs')({snapFile:path.resolve(snapDir,'snapshot.json'),S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
+  E=require('./entrega.cjs')({snapFile:path.resolve(snapDir,'snapshot.json'),S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverImage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
   Object.assign(D,E.D);Object.assign(meta,E.meta);}
  return {D,meta,E};}
 // ---------- Huashu design_lint, ported: same probe (read from the donor file), print floors 12 px body / 9.3 px label ----------
@@ -294,7 +297,10 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
    const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
    views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
  const {D,meta,E}=build();const qa={meta,probe:!!PROBE,docs:{}};const fresh=new Set();
- const jobs=Object.entries(D).flatMap(([id,html])=>EN_ON&&EN_DOCS.has(id)?[[id,html,'es'],[id+'.en',html,'en']]:[[id,html,'es']]);const enBlocked=[];
+ const fixtureDoc=process.env.STUDIO_FIXTURE_DOC;
+ if(fixtureDoc&&(!S.variant||E||!Object.hasOwn(D,fixtureDoc)))throw new Error('STUDIO_FIXTURE_DOC solo admite un documento existente de una fixture sin entrega');
+ const jobs=Object.entries(D).filter(([id])=>!fixtureDoc||id===fixtureDoc)
+  .flatMap(([id,html])=>EN_ON&&EN_DOCS.has(id)?[[id,html,'es'],[id+'.en',html,'en']]:[[id,html,'es']]);const enBlocked=[];
  for(const [id,html,lang] of jobs){const baseId=id.replace(/\.en$/,'');const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[baseId]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
   const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);

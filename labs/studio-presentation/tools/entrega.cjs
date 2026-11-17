@@ -11,7 +11,7 @@
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),{execFileSync}=require('child_process');
 module.exports=function entrega(C){
  const {S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,
-  STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverDrawing,FONT_CSS,b64,outDir,LAB,roomPlan,chapterChart,chapterTotals}=C;
+  STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverImage,coverDrawing,FONT_CSS,b64,outDir,LAB,roomPlan,chapterChart,chapterTotals}=C;
  // v1.3 A11: todo se prepara en una carpeta temporal exclusiva; solo writeWeb() la publica (renombrado) si compose no ha
  // bloqueado nada. La entrega publicada anterior pasa a entrega-anterior/ (se conserva exactamente una).
  const FINAL=path.join(outDir,'entrega'),OUT=fs.mkdtempSync(path.join(outDir,'.entrega-preparacion-')),MEDIA=path.join(OUT,'media'),DOCS=path.join(OUT,'documentos'),A=path.join(LAB,'assets');
@@ -112,15 +112,17 @@ module.exports=function entrega(C){
 
  // ---------- web ----------
  const WEB_CSS=`:root{--ink:${T.ink};--muted:${T.muted};--rule:${T.rule};--paper:${T.paper};--field:${T.field};--accent:#875936;--read:'RUBIK Serif',Georgia,serif;--tech:'RUBIK Inter',system-ui,sans-serif}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
+*{box-sizing:border-box}html{scroll-padding-top:104px;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--tech);font-variant-numeric:tabular-nums lining-nums}
 img,video,svg{max-width:100%;display:block}a{color:inherit}:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
 .top{position:sticky;top:0;z-index:10;background:rgba(255,253,248,.95);border-bottom:1px solid var(--rule)}
 .top .wrap{display:flex;align-items:center;gap:20px;min-height:56px}
 .top b{font-size:14px;white-space:nowrap}.top b span{font-weight:400;color:var(--muted)}
-.toc{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto;min-width:0}.toc::-webkit-scrollbar{display:none}
+.toc{display:flex;flex-wrap:wrap;gap:2px;margin-left:auto;min-width:0}
 .toc a{font-size:13px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.toc a:focus-visible{outline-offset:-2px}
+@media(max-width:820px){html{scroll-padding-top:12px}.top{position:static}.top .wrap{display:block;padding-block:8px}.toc{margin:2px 0 0}}
 .toc a[aria-current=true]{color:var(--ink);background:var(--field)}
 h1,h2,h3{font-family:var(--read);font-weight:600;letter-spacing:-.01em;margin:0}
 h1{font-size:clamp(34px,5.2vw,60px);line-height:1.04}h2{font-size:clamp(28px,3.6vw,40px);line-height:1.1}h3{font-size:21px;line-height:1.25}
@@ -247,7 +249,9 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
  // ---------- presentación integral paginada (A4 apaisado, portada B: D1) ----------
  const im=(rel,alt,style='')=>rel?`<img class="img" src="${dataUri(rel)}" alt="${esc(alt)}" style="${style}">`:`<div class="note">${esc(alt)}: no disponible.</div>`;
  const P=[];
- P.push(coverDrawing('Presentación integral',`Entrega al cliente, ${date}`));
+ P.push(drawing?coverImage('Presentación integral',`Entrega al cliente, ${date}`,
+  {src:dataUri(drawing),label:'Fotograma de Dibujo vivo de RUBIK',bg:T.field,fit:'contain',note:'Apertura de la presentación del modelo.'})
+  :coverDrawing('Presentación integral',`Entrega al cliente, ${date}`));
  const idx=[...(PRO_TEXT?[['Concepto','El planteamiento del estudio, con sus palabras.']]:[]),['La vivienda','Planta y superficies medidas sobre el modelo.'],['Del dibujo a la imagen','Dibujo, modelo 3D e imagen orientativa de la misma vivienda.'],...ROOM_IA.map(l=>[l,'Vista del modelo junto a su imagen IA orientativa.']),
   ...(planDemo?[['Cómo avanzará la obra','Ejemplo ilustrativo del plan de obra y su vídeo.']]:[]),...(V?[['Presupuesto','Importe por capítulos con precios de prueba.']]:[]),['Lo que hay que decidir','Lo que el proyecto deja abierto.'],['Documentos y procedencia','Qué acompaña a esta entrega y de dónde sale cada cosa.']];
  P.push({html:`<div class="grid"><div class="c1-4"><h2 class="h2">Esta entrega</h2><p class="read">${esc(TIPOS[0].lead)}</p><p class="caption" style="margin-top:6mm">Junto a este PDF, la carpeta de la entrega contiene una versión para pantalla (index.html) con los vídeos, para ver sin conexión.</p></div>

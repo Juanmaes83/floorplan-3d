@@ -35,6 +35,417 @@
     }
    ]
   },
+  "materials-furniture-book-v3": {
+   "project": "prj_reference-home",
+   "revision": "rv1-0f3e96422fd20e08",
+   "instancias": 46,
+   "fichas": [
+    {
+     "tag": "M-01",
+     "roomId": "rom_master",
+     "instanceIds": [
+      "obj_template-001"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-02",
+     "roomId": "rom_master",
+     "instanceIds": [
+      "obj_template-002",
+      "obj_template-003"
+     ],
+     "qty": 2,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-03",
+     "roomId": "rom_master",
+     "instanceIds": [
+      "obj_template-004"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-04",
+     "roomId": "rom_mbath",
+     "instanceIds": [
+      "obj_template-006"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-05",
+     "roomId": "rom_mbath",
+     "instanceIds": [
+      "obj_template-007"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-06",
+     "roomId": "rom_mbath",
+     "instanceIds": [
+      "obj_template-008"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-07",
+     "roomId": "rom_kid",
+     "instanceIds": [
+      "obj_template-009"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-08",
+     "roomId": "rom_kid",
+     "instanceIds": [
+      "obj_template-010"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-09",
+     "roomId": "rom_kid",
+     "instanceIds": [
+      "obj_template-011"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-10",
+     "roomId": "rom_kid",
+     "instanceIds": [
+      "obj_template-012"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-11",
+     "roomId": "rom_kid",
+     "instanceIds": [
+      "obj_template-013"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-12",
+     "roomId": "rom_gbath",
+     "instanceIds": [
+      "obj_template-014"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-13",
+     "roomId": "rom_gbath",
+     "instanceIds": [
+      "obj_template-015"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-14",
+     "roomId": "rom_gbath",
+     "instanceIds": [
+      "obj_template-016"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-15",
+     "roomId": "rom_laundry",
+     "instanceIds": [
+      "obj_template-017"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-16",
+     "roomId": "rom_laundry",
+     "instanceIds": [
+      "obj_template-018"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-17",
+     "roomId": "rom_child",
+     "instanceIds": [
+      "obj_template-038"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-18",
+     "roomId": "rom_child",
+     "instanceIds": [
+      "obj_template-039"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-19",
+     "roomId": "rom_child",
+     "instanceIds": [
+      "obj_template-040"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-20",
+     "roomId": "rom_child",
+     "instanceIds": [
+      "obj_template-041"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-21",
+     "roomId": "rom_kitchen",
+     "instanceIds": [
+      "obj_template-019"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-22",
+     "roomId": "rom_kitchen",
+     "instanceIds": [
+      "obj_template-020"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-23",
+     "roomId": "rom_kitchen",
+     "instanceIds": [
+      "obj_template-021"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-24",
+     "roomId": "rom_kitchen",
+     "instanceIds": [
+      "obj_template-022"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-25",
+     "roomId": "rom_dining",
+     "instanceIds": [
+      "obj_template-023"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-26",
+     "roomId": "rom_dining",
+     "instanceIds": [
+      "obj_template-024"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-27",
+     "roomId": "rom_dining",
+     "instanceIds": [
+      "obj_template-025",
+      "obj_template-026",
+      "obj_template-027",
+      "obj_template-028"
+     ],
+     "qty": 4,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-28",
+     "roomId": "rom_dining",
+     "instanceIds": [
+      "obj_template-029"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-29",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-030"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-30",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-031"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-31",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-032"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-32",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-033"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-33",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-034"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-34",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-035"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-35",
+     "roomId": "rom_living",
+     "instanceIds": [
+      "obj_template-036",
+      "obj_template-037"
+     ],
+     "qty": 2,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-36",
+     "roomId": "rom_balcony",
+     "instanceIds": [
+      "obj_template-043"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-37",
+     "roomId": "rom_balcony",
+     "instanceIds": [
+      "obj_template-044",
+      "obj_template-045"
+     ],
+     "qty": 2,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-38",
+     "roomId": "rom_balcony",
+     "instanceIds": [
+      "obj_template-046"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-39",
+     "roomId": "rom_bay1",
+     "instanceIds": [
+      "obj_template-005"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    },
+    {
+     "tag": "M-40",
+     "roomId": "rom_bay2",
+     "instanceIds": [
+      "obj_template-042"
+     ],
+     "qty": 1,
+     "authority": "generic"
+    }
+   ],
+   "paleta": [
+    {
+     "materialId": "mat_tile800",
+     "color": "#ebe6dc",
+     "rol": "pavimento del modelo",
+     "fuente": "snapshot.board.floors"
+    },
+    {
+     "materialId": "mat_wood",
+     "color": "#d8b88a",
+     "rol": "pavimento del modelo",
+     "fuente": "snapshot.board.floors"
+    },
+    {
+     "materialId": "mat_antislip",
+     "color": "#d3d8d4",
+     "rol": "pavimento del modelo",
+     "fuente": "snapshot.board.floors"
+    },
+    {
+     "materialId": "mat_tile600",
+     "color": "#dfe3e1",
+     "rol": "pavimento del modelo",
+     "fuente": "snapshot.board.floors"
+    },
+    {
+     "materialId": "mat_walnut",
+     "color": "#9b7250",
+     "rol": "pavimento del modelo",
+     "fuente": "snapshot.board.floors"
+    },
+    {
+     "materialId": "mat_marble",
+     "color": "#f1eee8",
+     "rol": "pavimento del modelo",
+     "fuente": "snapshot.board.floors"
+    }
+   ]
+  },
   "architecture-sheet-strip": {
    "callouts": 2,
    "dropped": 0,
@@ -42,6 +453,195 @@
   },
   "architecture-book": {
    "laminas": 11,
+   "indice": [
+    {
+     "code": "AB-01",
+     "name": "Planta general",
+     "page": 3
+    },
+    {
+     "code": "AB-02",
+     "name": "Cuadro de superficies",
+     "page": 4
+    },
+    {
+     "code": "AB-03",
+     "name": "Estancias 1–2 de 13",
+     "page": 5
+    },
+    {
+     "code": "AB-04",
+     "name": "Estancias 3–4 de 13",
+     "page": 6
+    },
+    {
+     "code": "AB-05",
+     "name": "Estancias 5–6 de 13",
+     "page": 7
+    },
+    {
+     "code": "AB-06",
+     "name": "Estancias 7–8 de 13",
+     "page": 8
+    },
+    {
+     "code": "AB-07",
+     "name": "Estancias 9–10 de 13",
+     "page": 9
+    },
+    {
+     "code": "AB-08",
+     "name": "Estancias 11–12 de 13",
+     "page": 10
+    },
+    {
+     "code": "AB-09",
+     "name": "Estancias 13 de 13",
+     "page": 11
+    },
+    {
+     "code": "AB-10",
+     "name": "Sección esquemática",
+     "page": 12
+    },
+    {
+     "code": "AB-11",
+     "name": "Fachadas",
+     "page": 13
+    }
+   ],
+   "correspondencia": [
+    [
+     "A-01",
+     "Planta y superficies",
+     "AB-01, AB-02"
+    ],
+    [
+     "A-02",
+     "Demolición",
+     "—"
+    ],
+    [
+     "A-03",
+     "Nueva tabiquería",
+     "—"
+    ],
+    [
+     "A-04",
+     "Mobiliario del modelo",
+     "AB-03, AB-04, AB-05, AB-06, AB-07, AB-08, AB-09"
+    ],
+    [
+     "A-05",
+     "Pavimentos asignados",
+     "AB-02"
+    ],
+    [
+     "A-06",
+     "Instalaciones",
+     "—"
+    ],
+    [
+     "A-07",
+     "Huecos en planta",
+     "AB-01"
+    ],
+    [
+     "A-08",
+     "Sección y fachadas esquemáticas",
+     "AB-10, AB-11"
+    ]
+   ],
+   "anchosProgramados": [
+    {
+     "id": "opn_window-0",
+     "mm": 620
+    },
+    {
+     "id": "opn_window-1",
+     "mm": 3070
+    },
+    {
+     "id": "opn_window-2",
+     "mm": 1820
+    },
+    {
+     "id": "opn_window-3",
+     "mm": 605
+    },
+    {
+     "id": "opn_window-4",
+     "mm": 1580
+    },
+    {
+     "id": "opn_window-5",
+     "mm": 3350
+    },
+    {
+     "id": "opn_window-6",
+     "mm": 620
+    },
+    {
+     "id": "opn_window-7",
+     "mm": 1890
+    },
+    {
+     "id": "opn_window-8",
+     "mm": 620
+    },
+    {
+     "id": "opn_window-9",
+     "mm": 620
+    },
+    {
+     "id": "opn_window-10",
+     "mm": 1575
+    },
+    {
+     "id": "opn_window-11",
+     "mm": 620
+    },
+    {
+     "id": "opn_door-0",
+     "mm": 880
+    },
+    {
+     "id": "opn_door-1",
+     "mm": 880
+    },
+    {
+     "id": "opn_door-2",
+     "mm": 785
+    },
+    {
+     "id": "opn_door-3",
+     "mm": 785
+    },
+    {
+     "id": "opn_door-4",
+     "mm": 893
+    },
+    {
+     "id": "opn_door-5",
+     "mm": 890
+    },
+    {
+     "id": "opn_slide-0",
+     "mm": 2370
+    },
+    {
+     "id": "opn_slide-1",
+     "mm": 815
+    },
+    {
+     "id": "opn_bay-0",
+     "mm": 1800
+    },
+    {
+     "id": "opn_bay-1",
+     "mm": 1480
+    }
+   ],
    "seccion": true,
    "fachadas": true
   },
@@ -486,7 +1086,7 @@
     "yellow": [],
     "fonts": {
      "RUBIK Serif": 421,
-     "RUBIK Inter": 11784
+     "RUBIK Inter": 11753
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -524,7 +1124,7 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 1408,
+    "nodes": 1407,
     "residual": [],
     "residualCount": 0,
     "figures": {
@@ -542,7 +1142,7 @@
     "yellow": [],
     "fonts": {
      "RUBIK Serif": 385,
-     "RUBIK Inter": 11059
+     "RUBIK Inter": 11008
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -1056,7 +1656,7 @@
     "yellow": [],
     "fonts": {
      "RUBIK Serif": 375,
-     "RUBIK Inter": 4066
+     "RUBIK Inter": 4035
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -1145,8 +1745,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 8873,
-     "RUBIK Serif": 1354
+     "RUBIK Inter": 9744,
+     "RUBIK Serif": 1268
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -1184,12 +1784,12 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 559,
+    "nodes": 682,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 20,
-     "en": 20,
+     "es": 19,
+     "en": 19,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1201,8 +1801,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 8429,
-     "RUBIK Serif": 1268
+     "RUBIK Inter": 9218,
+     "RUBIK Serif": 1194
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -1252,11 +1852,11 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 8330,
+     "RUBIK Inter": 8023,
      "RUBIK Serif": 1082
     },
     "display": "RUBIK Serif",
-    "body": "RUBIK Inter"
+    "body": "RUBIK Serif"
    }
   },
   "entrega-integral.en": {
@@ -1297,12 +1897,12 @@
     "ok": true
    },
    "i18n": {
-    "nodes": 413,
+    "nodes": 387,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 27,
-     "en": 27,
+     "es": 26,
+     "en": 26,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1314,11 +1914,11 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7871,
+     "RUBIK Inter": 7554,
      "RUBIK Serif": 999
     },
     "display": "RUBIK Serif",
-    "body": "RUBIK Inter"
+    "body": "RUBIK Serif"
    }
   }
  },

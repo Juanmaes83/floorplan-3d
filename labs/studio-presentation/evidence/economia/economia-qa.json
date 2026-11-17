@@ -1,0 +1,241 @@
+{
+  "schema": "rubik-lab-economia-qa/1",
+  "producto": "8525025a1470d48d52d8e365070e5a0acf116134",
+  "fuentes": [
+    {
+      "archivo": "js/budget-core.js",
+      "sha256": "b2d31ff12a49f54c1135d6547737e6b86964d5512c3a1d2e03b22e39c9c85204",
+      "gitBlob": "72f4b8d1e1818bc97bf6cef3fd3f480bd0759f96"
+    },
+    {
+      "archivo": "js/budget-draft-core.js",
+      "sha256": "fd47b9609b810799d378d50fcc649ce0a24db5c64d31b2e911360bedaff9c8e8",
+      "gitBlob": "6196f55d76a5e768381ae6f1d09a06b17e5f1185"
+    },
+    {
+      "archivo": "js/budget-presentation.js",
+      "sha256": "2dd858cabb2897a3602897f98871dbbb7dd6a9a701519948c5acbe7b3eba5fb2",
+      "gitBlob": "71a0ee299c03eb1c1e220acd1988fa4059ad7f84"
+    },
+    {
+      "archivo": "js/geo-provider.js",
+      "sha256": "7fdd099a9cdf6f248a10312b51dac91d16bd7cd800fa6ab1d6af5cd5a8d26bfc",
+      "gitBlob": "0feed44c280189da4ffd0ad6cb6355ec20aba398"
+    },
+    {
+      "archivo": "js/layout-review.js",
+      "sha256": "e710522940edff6f9d5150e7ffaf4b7c58e639bdd11587a40c17ee2037d86aa1",
+      "gitBlob": "3ed7534abb6118d4aa679fd3eaf619a5e0d12833"
+    },
+    {
+      "archivo": "js/orthophoto-core.js",
+      "sha256": "118f6dfb5115e28dc1bfd3bb44c79aa3532138d28515d7aa4964bdc65bcefecb",
+      "gitBlob": "4e1a72b2482d389068714f12f822754d6b5314da"
+    },
+    {
+      "archivo": "js/orthophoto-site-adapter.js",
+      "sha256": "aca90c4985826b722d5f4c2c8fbaf8cef6bdfd36e1a499792c567666993ddcdd",
+      "gitBlob": "32ddb9e3de5162d76506cce3b4d0a595759081fd"
+    },
+    {
+      "archivo": "js/parcel-core.js",
+      "sha256": "0c889a6a4e8f992ed708763a79f61ce839faf2da97396a503b3de314ef0c3c28",
+      "gitBlob": "37c1433a78659024433099054e6c7214f536033c"
+    },
+    {
+      "archivo": "js/parcel-site-adapter.js",
+      "sha256": "e226426bb2eebc2131cffbb07bbb85a4683d2dd074d68e025d991919a96000bd",
+      "gitBlob": "b1c7f963e7ce32d4bc73900499fdbd150c1c0919"
+    },
+    {
+      "archivo": "js/project-core.js",
+      "sha256": "054316463ec8975cc47e20429dc8159b36b9e5242932a7b657203e8c857a07e3",
+      "gitBlob": "2d2841ebae1e93c4307d75e99de5f6b470afab61"
+    },
+    {
+      "archivo": "js/project-schema.js",
+      "sha256": "3c38a51424a48b9999ad635fed2425502dd499a0c392f63fbce61adde38b74c1",
+      "gitBlob": "f8a1b79d8591ba7424308be94c72b390048e6da3"
+    },
+    {
+      "archivo": "js/project-variants.js",
+      "sha256": "950c8cab69ed7b7ce07d45425ab8050d1a4f5201cbc026a5e833859dee7fbc74",
+      "gitBlob": "d7ddbac9720c0b69b19a1232aea34080231024ac"
+    },
+    {
+      "archivo": "js/quantity-core.js",
+      "sha256": "115aaca5b92a42f8d42231d013d73d6a39fd2fa737766f4702e509a84e2f951e",
+      "gitBlob": "2470f82e84728b03ef876e0cfab6d4ff9c56007e"
+    },
+    {
+      "archivo": "js/reference-project.js",
+      "sha256": "63a1d5367241a9ba022510de8a1b60830415274401e94095574ae3dcbd07a5d8",
+      "gitBlob": "1952f1c201ba6772cd28799b4a74030fa9161cb2"
+    },
+    {
+      "archivo": "js/revision-budget-core.js",
+      "sha256": "2c77daadd12fbc3afae74cd2e97cb3ccdbcafccef979774fd1162097955857e2",
+      "gitBlob": "ce3bcd118c55c8978ab1b71e8ca645a832995058"
+    },
+    {
+      "archivo": "js/revision-compare-core.js",
+      "sha256": "dab5f141b9b92a4e1abf85bbea49dfb036f958df560fd56c6113fc27f3c94da4",
+      "gitBlob": "80b71ddbb8bad07099217ae4c6319c7ecdd67dfd"
+    },
+    {
+      "archivo": "js/surface-core.js",
+      "sha256": "09d52a1adbecae3522df89dc8aec7c97b5799b17de314106f063616908b543c2",
+      "gitBlob": "9b68409bb69c0c118e6e82b1be26bcd183f4a533"
+    },
+    {
+      "archivo": "js/terrain-core.js",
+      "sha256": "d4846f70a82b307e7d37586334ec51d58a35f9ac8d492ca0adac61cc6450f095",
+      "gitBlob": "4cfd57caf3709a12f7e4a27c5e46a745b7457f1a"
+    },
+    {
+      "archivo": "js/terrain-site-adapter.js",
+      "sha256": "9a05c5bee419f116e118566cc668fa81ff1664d3868e78c0d7c9959abceb6c3f",
+      "gitBlob": "7c1327b828498e5c0f3a40254639ca08e09db31d"
+    },
+    {
+      "archivo": "js/territory-integration-core.js",
+      "sha256": "517c1d73b6a44197e680020ed15a88fa331ae20e7bb55b121a448858d4a39448",
+      "gitBlob": "5c8ec1931325caebc2d639da7b2b30f122a95d4c"
+    },
+    {
+      "archivo": "js/tracing-core.js",
+      "sha256": "86b8a900ff6b34512cb71eb5284cfc54311a8c69b8517f19a28ea16af53f2e72",
+      "gitBlob": "d93861f5647c09e9d4d698f9763b58d2bf5cbf02"
+    },
+    {
+      "archivo": "labs/ux07-ent04/fixtures.js",
+      "sha256": "283fe6f88dd6ce18d42e58fea40c0f1485509b1262398dc6ff668e8b46328a44",
+      "gitBlob": "31fad44b80f49d66c00c0e0168ef54c6edf62d40"
+    }
+  ],
+  "licencia": "No consta licencia en el repositorio de origen; se verifica y usa localmente el pin de producto.",
+  "casos": [
+    {
+      "id": "complete",
+      "status": "complete",
+      "importeVerificado": [
+        14561.06,
+        3057.83,
+        17618.89,
+        15319.94,
+        3217.2,
+        18537.14,
+        918.25
+      ],
+      "documentos": [
+        {
+          "archivo": "commercial-proposal-client-v3.pdf",
+          "sha256": "707af7e775baeb2272c12b73934214c8faf3e2c5c842b0c07a30887951051ce8",
+          "paginas": 1
+        },
+        {
+          "archivo": "real-estate-sheet-v3.pdf",
+          "sha256": "f5c17240a565f81e9d73b92c696ac604d93c4f4383943c12d9687d60ff1d48b3",
+          "paginas": 1
+        }
+      ]
+    },
+    {
+      "id": "partial",
+      "status": "partial",
+      "importeVerificado": [
+        14561.06,
+        7652.19,
+        476.59
+      ],
+      "documentos": [
+        {
+          "archivo": "commercial-proposal-client-v3.pdf",
+          "sha256": "5e728eb1351c55434180e9623e1c9fb6514048da51d0548688cdf5128fdec12f",
+          "paginas": 1
+        },
+        {
+          "archivo": "real-estate-sheet-v3.pdf",
+          "sha256": "7e0ee788709cff5223ad3ae18bbf422d25c3c715ec41ac7f5fc19334ce9835cb",
+          "paginas": 1
+        }
+      ]
+    },
+    {
+      "id": "incoherent",
+      "status": "incoherent",
+      "importeVerificado": [],
+      "documentos": [
+        {
+          "archivo": "commercial-proposal-client-v3.pdf",
+          "sha256": "fa5ee16fb067d48017d9625170fd7df0b4cbd5a9d25927b5232faefdd2d3b646",
+          "paginas": 1
+        },
+        {
+          "archivo": "real-estate-sheet-v3.pdf",
+          "sha256": "bfd9b0afab349a03558b31a56d2d93a66c899858c1fe72801c2001d132d68cf9",
+          "paginas": 1
+        }
+      ]
+    },
+    {
+      "id": "before",
+      "status": "one-sided",
+      "importeVerificado": [
+        14561.06,
+        3057.83,
+        17618.89
+      ],
+      "documentos": [
+        {
+          "archivo": "commercial-proposal-client-v3.pdf",
+          "sha256": "0c37d6ce084b07f7a8c44d2da5c868268ccbc9c2808134879e8abebc541ebc34",
+          "paginas": 1
+        },
+        {
+          "archivo": "real-estate-sheet-v3.pdf",
+          "sha256": "ec9d8901036b19f47ba7ab4516815321c46a3fc0f82f9bf629cc8abd25d0ea75",
+          "paginas": 1
+        }
+      ]
+    },
+    {
+      "id": "after",
+      "status": "one-sided",
+      "importeVerificado": [
+        15319.94,
+        3217.2,
+        18537.14
+      ],
+      "documentos": [
+        {
+          "archivo": "commercial-proposal-client-v3.pdf",
+          "sha256": "a62ae804f778fff3d2664ebd90d6b9d95562c486c28084244f7a7785a6d5f88f",
+          "paginas": 1
+        },
+        {
+          "archivo": "real-estate-sheet-v3.pdf",
+          "sha256": "223b6e6aeaa45d1fc93b21b0bbdc11f91f4e438068103e0b742e7e7733f92ac7",
+          "paginas": 1
+        }
+      ]
+    },
+    {
+      "id": "none",
+      "status": "none",
+      "importeVerificado": [],
+      "documentos": [
+        {
+          "archivo": "commercial-proposal-client-v3.pdf",
+          "sha256": "7508c914347ef97dd177faccaed892a6270e4ada530e6be2a4b17b6a6a92d214",
+          "paginas": 1
+        },
+        {
+          "archivo": "real-estate-sheet-v3.pdf",
+          "sha256": "6a442ff08ad30bbf59240e406dc749ddadb0930f49607a04433bffb117e7f49b",
+          "paginas": 1
+        }
+      ]
+    }
+  ]
+}

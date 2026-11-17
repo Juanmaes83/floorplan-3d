@@ -106,7 +106,7 @@ if(PARTS.includes('exportar')){
   // estado parcial declarado igual en ES y EN; la receta queda ligada al ZIP por su huella
   caso(`Q02-${name}-evidencia`,!!ev.exportacion.digest?.zipSha256&&ev.estado===(ev.incompleta.length?'emitible-parcial':'emitible'),{estado:ev.estado,incompleta:ev.incompleta});
   if(r.economia==='sin-importes'||r.economia==='sin-economia-del-plan'){const hits=files.filter(f=>MONEY.test(textOf(out,f)));caso(`Q06-${name}-sin-importes`,!hits.length,hits);}
-  salidas[name]={zipSha256:ev.exportacion.digest.zipSha256,ms,files:Object.fromEntries(man.files.map(f=>[f.path,f.sha256])),estado:ev.estado,incompleta:ev.incompleta};}
+  salidas[name]={zipSha256:ev.exportacion.digest.zipSha256,registroSha256:frozen,ms,files:Object.fromEntries(man.files.map(f=>[f.path,f.sha256])),estado:ev.estado,incompleta:ev.incompleta};}
  // RP02 y RP09 tienen recibos de receta distintos y un mismo contenido para el cliente.
  const selected=process.env.RECETAS_SOLO?.split(',');
  if(!selected||['RP02','RP09'].every(k=>selected.includes(k)))for(const lang of ['es','en']){
@@ -132,13 +132,21 @@ if(PARTS.includes('negativos')){
  // aportaciones (fixtures rotuladas): C cumple requisitos pero NO emite; incompatibles se rechazan; L no las da por compuestas
  const fx=(n,o)=>{const f=path.join(W,n+'.json');fs.writeFileSync(f,JSON.stringify(o));return f;};
  const ofertas=v=>({ofertasIndependientes:{atribucion:'Fixture de laboratorio: ofertas sintéticas para probar el contrato RP13.',valor:v}});
- const ok2=[{proveedor:'Proveedor A (sintético)',moneda:'EUR',ivaIncluido:false,alcance:'reforma integral'},{proveedor:'Proveedor B (sintético)',moneda:'EUR',ivaIncluido:false,alcance:'reforma integral'}];
+ const oferta={moneda:'EUR',ivaIncluido:false,alcance:'reforma integral',ambito:'vivienda',unidad:'m2',metodo:'partidas homologadas',fecha:'2026-11-17',proyecto:ctx.S.project.id,revision:ctx.S.project.revision};
+ const ok2=[{...oferta,proveedor:'Proveedor A (sintético)'},{...oferta,proveedor:'Proveedor B (sintético)'}];
  neg('rp13-contrato-cumplido-sin-emision',['RP13','es','OUT','--aportaciones',fx('of-ok',ofertas(ok2))],rj=>rj?.estado==='contrato-cumplido-sin-emision'&&rj.fuentes.ofertasIndependientes.estado==='disponible');
  neg('rp13-moneda-incompatible',['RP13','es','OUT','--aportaciones',fx('of-mon',ofertas([ok2[0],{...ok2[1],moneda:'USD'}]))],rj=>rj?.estado==='no-elegible'&&rj.fuentes.ofertasIndependientes.estado==='incompatible');
+ neg('rp13-unidad-incompatible',['RP13','es','OUT','--aportaciones',fx('of-unit',ofertas([ok2[0],{...ok2[1],unidad:'ud'}]))],rj=>rj?.fuentes.ofertasIndependientes.estado==='incompatible');
+ neg('rp13-revision-ajena',['RP13','es','OUT','--aportaciones',fx('of-rev',ofertas([ok2[0],{...ok2[1],revision:'otra'}]))],rj=>rj?.fuentes.ofertasIndependientes.estado==='incompatible');
+ neg('rp13-ambito-distinto',['RP13','es','OUT','--aportaciones',fx('of-ambito',ofertas([ok2[0],{...ok2[1],ambito:'edificio'}]))],rj=>rj?.fuentes.ofertasIndependientes.estado==='incompatible');
  neg('rp13-mismo-proveedor',['RP13','es','OUT','--aportaciones',fx('of-dup',ofertas([ok2[0],{...ok2[0]}]))],rj=>rj?.fuentes.ofertasIndependientes.estado==='incompatible');
  neg('rp13-una-oferta',['RP13','es','OUT','--aportaciones',fx('of-one',ofertas([ok2[0]]))],rj=>rj?.fuentes.ofertasIndependientes.estado==='incompatible');
  neg('rp13-sin-atribucion',['RP13','es','OUT','--aportaciones',fx('of-noattr',{ofertasIndependientes:{valor:ok2}})],rj=>rj?.fuentes.ofertasIndependientes.estado==='incompatible');
  neg('rp15-observacion-sin-autor',['RP15','es','OUT','--aportaciones',fx('obs',{observacionesObra:{atribucion:'Fixture de laboratorio.',valor:[{fecha:'2026-11-17'}]}})],rj=>rj?.fuentes.observacionesObra.estado==='incompatible');
+ neg('rp15-simulacion-no-es-observacion',['RP15','es','OUT','--aportaciones',fx('obs-simulada',{observacionesObra:{atribucion:'Fixture de laboratorio.',valor:[{fecha:'2026-11-17',autor:'Fixture',ubicacion:'Estancia',proyecto:ctx.S.project.id,revision:ctx.S.project.revision,autoridad:'simulado'}]}})],rj=>rj?.fuentes.observacionesObra.estado==='incompatible');
+ const foreignPlan={...ctx,REG:{...ctx.REG,ft3d8:{...ctx.REG.ft3d8,project:{id:'otro'}}}};
+ const r15=RC.resolver('RP15',foreignPlan,'es');
+ caso('NEG-rp15-plan-de-otro-proyecto',r15.estado==='no-elegible'&&r15.fuentes.planObra.estado==='incompatible',r15.fuentes.planObra);
  neg('rp20-futura-aunque-haya-datos',['RP20','es','OUT','--aportaciones',fx('liq',{costeLiquidado:{atribucion:'Fixture.',valor:1},manualesGarantias:{atribucion:'Fixture.',valor:1},actasEntrega:{atribucion:'Fixture.',valor:1}})],rj=>rj?.estado==='no-disponible');
  // L con aportación: sigue parcial y lo dice (los documentos no la componen)
  const r1=RC.resolver('RP01',RC.contexto(LAB,SRC,{honorarios:{atribucion:'Fixture.',valor:[{fase:'Proyecto básico',importe:1000,moneda:'EUR'}]}}),'es');

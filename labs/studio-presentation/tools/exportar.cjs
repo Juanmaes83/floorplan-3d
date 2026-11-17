@@ -220,13 +220,15 @@ const leadOf=t=>{const m=/id="tipoLead"[^>]*>([^<]*)</.exec(fs.readFileSync(path
   base:{snapshotSha256:REG.snapshot.sha256,registroSha256:sha(REGRAW)},studio:{name:prof.name||null,synthetic:/\.invalid$/.test(studioEmail)},seleccion:sel,gates,files:mfiles,
   notIncluded:['proyecto editable','visita 3D interactiva (requiere enlace publicado)','datos de otros proyectos',...excluded.map(c=>'capítulo '+c),...omit.map(o=>'recurso '+o)],
   note:'Integridad, no autenticidad ni veracidad: las huellas prueban que los archivos no han cambiado desde la exportación. El resumen externo no es una firma digital.'};
+ if(EN)require('../i18n/en.manifest.cjs').localizeManifest(manifest);
  const mb=Buffer.from(JSON.stringify(manifest,null,1));fs.writeFileSync(path.join(DIR,'MANIFIESTO.json'),mb);
  // ZIP reproducible: entradas ordenadas, fecha fija (la de composición), sin atributos extra
  const t=new Date(REG.generated);for(const rel of [...listFiles(DIR)])fs.utimesSync(path.join(DIR,rel),t,t);
  const ZIP=path.join(stage,NAME+'.zip');const list=listFiles(DIR).map(r=>NAME+'/'+r);
  execFileSync('zip',['-qX','-D',ZIP,'-@'],{cwd:stage,input:list.join('\n')});
  const zb=fs.readFileSync(ZIP);const digest={schema:'rubik-lab-entrega-digest/2',folder:NAME,manifest:`${NAME}/MANIFIESTO.json`,manifestSha256:sha(mb),zip:NAME+'.zip',zipSha256:sha(zb),zipBytes:zb.length,files:mfiles.length+1,
-  alcance:'Huellas SHA-256 del manifiesto y del ZIP de reparto exacto. Integridad, no firma ni autenticidad.'};
+  alcance:EN?'SHA-256 fingerprints of the manifest and the exact distribution ZIP. Integrity check only.':
+   'Huellas SHA-256 del manifiesto y del ZIP de reparto exacto. Integridad, no firma ni autenticidad.'};
  fs.writeFileSync(path.join(stage,NAME+'.digest.json'),JSON.stringify(digest,null,1));
  // gancho SOLO de pruebas: simula un cambio de las fuentes mientras se prepara (carrera)
  if(process.env.RUBIK_LAB_TEST==='1'&&process.env.RUBIK_LAB_TEST_HOOK)require(path.resolve(process.env.RUBIK_LAB_TEST_HOOK))({SRC,LAB,DIR,stage});

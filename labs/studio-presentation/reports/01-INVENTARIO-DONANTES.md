@@ -32,3 +32,9 @@ Visibilidad: **priv.** = privado del propietario (añadido con `add_repo`); **p�
 | papora (púb.) | 9789f2f6addd | README, src | PDF desde los mismos datos de la vista previa | Principio aplicado: un snapshot → todos los PDF | — | MIT |
 
 Banco «REFERENCIAS VISUALES»: 64 imágenes, 49 SHA únicos, **46 diseños distintos** (3 duplicados perceptuales: R02=R47, R04=R49, R33=R48). Clasificación por 10 criterios: reports/03-CLASIFICACION-REFERENCIAS.json. Sin licencia comercial: solo referencia interna.
+
+## Consulta diferencial v1.4
+
+Las diez fuentes `SKILL.md` de Skills for Architects se localizaron con HTTP 200 en el pin `a9c4355a6d5bff526786d590ed1f04b687b880a6`. Patrones contrastados con la implementación local: cobertura contra el inventario de origen (FF&E), conservación de variantes y vínculos, identidad y huella de la fuente por ficha, alcance/unidad/método para conciliar, distinción de observación y declaración, y bloques independientes de alcance y condiciones. La paleta utiliza los materiales del snapshot con rol y fuente. Las portadas toman jerarquía y ritmo del sistema editorial propio. Visitas, actas y especificaciones futuras conservan fecha, autor, ámbito y autoridad como datos de entrada. Se reutilizó la revisión existente de IFC Sheet, Invoify y Papora. La consulta fue estática y no se incorporó ningún código ni activo del nuevo pin.
+
+El pin de producto `8525025a1470d48d52d8e365070e5a0acf116134` no declara licencia en GitHub ni tiene fichero de licencia en la raíz. La prueba N04 ejecuta los módulos originales extraídos temporalmente y compara sus huellas contra el pin. `evidence/economia/economia-qa.json` lista los blobs y dependencias transitivas. El paquete distribuye el adaptador editorial y la prueba, con los resultados de fixture, sin redistribuir los módulos del producto.

@@ -16,6 +16,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),crypto=require('crypto');
 const CAT=require('./catalogo-entrega.cjs');
+const conciliacion=require('./conciliacion.cjs');
 const VERSION='rubik-lab-recetas/1';
 
 const PERFILES={AR:{es:'Arquitectura',en:'Architecture'},AT:{es:'Arquitectura técnica',en:'Building surveying'},IN:{es:'Interiorismo',en:'Interior design'},
@@ -34,9 +35,10 @@ const SIN_CAMPO='El contrato del proyecto (snapshot) no tiene este dato. Solo pu
 // Aportación de laboratorio: {valor, atribucion}. Sin atribución no se acepta.
 const aport=(ctx,id,validar)=>{const a=ctx.aportaciones?.[id];if(!a)return null;
  if(!a.atribucion||typeof a.atribucion!=='string')return {estado:'incompatible',autoridad:null,nota:'Aportación sin atribución: no se acepta.'};
- const v=validar?validar(a.valor):null;if(v)return {estado:'incompatible',autoridad:null,nota:v};
+ const v=validar?validar(a.valor,ctx):null;if(v)return {estado:'incompatible',autoridad:null,nota:v};
  return {estado:'disponible',autoridad:'aportado (fixture de laboratorio)',nota:a.atribucion};};
 const absentOr=(id,validar,nota=SIN_CAMPO)=>ctx=>aport(ctx,id,validar)||no(nota);
+const authority=(id,kinds,nota)=>absentOr(id,(value,ctx)=>conciliacion.validity(value,ctx,kinds),nota);
 const budget=ctx=>ctx.S.budget?.test?.view?.client||null;
 const pieces=(ctx,re)=>(ctx.REG?.pieces||[]).filter(p=>re.test(p.file));
 const composed=(ctx,c)=>(ctx.REG?.tipos||[]).find(t=>t.tipo==='integral')?.chapters.includes(c);
@@ -60,7 +62,10 @@ const FUENTES={
  presupuestoRevisado:{es:'Presupuesto revisado por el estudio',en:'Budget reviewed by the studio',
   eval:ctx=>{const s=budget(ctx)?.summary;if(!s)return no('Sin presupuesto.');return s.unreviewed?no(`${s.unreviewed} de ${s.items} partidas sin revisar por el estudio.`):ok('revisado por el estudio',`${s.items} partidas revisadas.`);}},
  planObra:{es:'Plan de obra (FT3D-8)',en:'Works plan (FT3D-8)',
-  eval:ctx=>composed(ctx,'obra')?parcial('orientativo: plan de ejemplo, fechas ilustrativas, sin partidas vinculadas','Plan importado de la demo y ajustado al proyecto (assets/ft3d8-plan-ajuste.json).'):no('Sin plan de obra.')},
+  eval:ctx=>{if(!composed(ctx,'obra'))return no('Sin plan de obra.');
+   if(ctx.REG.ft3d8?.project?.id!==ctx.S.project.id||ctx.REG.project.revision!==ctx.S.project.revision)
+    return {estado:'incompatible',autoridad:null,nota:'El proyecto o revisión del plan de la entrega no coincide.'};
+   return parcial('planificación simulada, sin partidas vinculadas','Fechas ilustrativas del plan demo ajustado al proyecto.');}},
  vinculoPlanPresupuesto:{es:'Vínculo acreditado entre plan y presupuesto',en:'Proven link between plan and budget',eval:absentOr('vinculoPlanPresupuesto',null,'El plan de ejemplo no tiene partidas vinculadas: la economía del plan no se puede mostrar.')},
  concepto:{es:'Concepto del estudio (texto aportado)',en:'Studio concept (contributed text)',eval:ctx=>(ctx.S.brand?.intro||'').trim()?ok('texto del profesional, atribuido','No se traduce ni se reescribe.'):no('El estudio no ha escrito el concepto.')},
  marca:{es:'Identidad del estudio',en:'Studio identity',eval:ctx=>{const p=ctx.S.brand?.profile;return p?.name?(/\.invalid$/.test(p.email||'')?parcial('perfil sintético del laboratorio',p.name):ok('perfil de «Mi estudio»',p.name)):no('Sin perfil del estudio.');}},
@@ -71,7 +76,7 @@ const FUENTES={
   eval:ctx=>{const o=ctx.S.geometry?.openings||[];if(!o.length)return no('Sin huecos.');const h=o.filter(x=>isNum(x.heightMm)).length;
    return h===o.length?ok('modelo','Ancho y alto en todos los huecos.'):parcial('modelo',`Ancho en ${o.filter(x=>isNum(x.widthMm)).length} de ${o.length} huecos; alto en ${h}. Sin alto no hay hoja de carpintería.`);}},
  revisionAnterior:{es:'Revisión anterior vinculada y comparable (estado actual)',en:'Linked, comparable previous revision (current state)',
-  eval:absentOr('revisionAnterior',v=>v?.revision&&v?.proyecto?null:'La revisión aportada no declara proyecto y revisión.','El snapshot tiene una sola revisión: no hay estado actual ni antes/después.')},
+  eval:absentOr('revisionAnterior',conciliacion.revisionAnterior,'El snapshot tiene una sola revisión: no hay estado actual ni antes/después.')},
  variantesGuardadas:{es:'Variantes guardadas del proyecto (opciones)',en:'Saved project variants (options)',eval:absentOr('variantesGuardadas',v=>Array.isArray(v)&&v.length>=2?null:'Hacen falta al menos dos variantes guardadas.','El snapshot es un único proyecto: no se presenta como si fueran dos opciones.')},
  fotosAportadas:{es:'Fotos del estado actual aportadas',en:'Contributed photos of the current state',eval:absentOr('fotosAportadas')},
  norte:{es:'Norte u orientación con fuente',en:'North or orientation with a source',eval:absentOr('norte',null,'El proyecto no tiene norte: no se indica orientación.')},
@@ -88,21 +93,18 @@ const FUENTES={
   eval:ctx=>{const n=(ctx.S.objects||[]).filter(o=>o.catalogRef).length;return n?parcial('catálogo acreditado',`${n} de ${ctx.S.objects.length} objetos con referencia.`):aport(ctx,'catalogoProductos')||no(`Ninguno de los ${(ctx.S.objects||[]).length} objetos tiene referencia de catálogo: son genéricos del modelo.`);}},
  preciosVerificados:{es:'Precios de producto verificados',en:'Verified product prices',eval:absentOr('preciosVerificados',null,'Sin precios de producto: «no valorado», nunca cero.')},
  ofertasIndependientes:{es:'Ofertas independientes comparables',en:'Comparable independent offers',
-  eval:absentOr('ofertasIndependientes',v=>{if(!Array.isArray(v)||v.length<2)return 'Hacen falta al menos dos ofertas independientes.';
-   const k=x=>[x.moneda,x.ivaIncluido,x.alcance].join('|');if(!v.every(x=>x.proveedor&&x.moneda&&typeof x.ivaIncluido==='boolean'&&x.alcance))return 'Cada oferta necesita proveedor, moneda, IVA y alcance.';
-   if(new Set(v.map(x=>x.proveedor)).size<v.length)return 'Dos ofertas del mismo proveedor no son independientes.';
-   if(new Set(v.map(k)).size>1)return 'Moneda, IVA o alcance no comparables: no se homologa por suposición.';return null;},'Sin ofertas aportadas: no se compara el presupuesto consigo mismo.')},
- motivoCambio:{es:'Motivo del cambio atribuido',en:'Attributed reason for the change',eval:absentOr('motivoCambio')},
- observacionesObra:{es:'Observaciones de obra reales (fecha, autor)',en:'Real site observations (date, author)',eval:absentOr('observacionesObra',v=>Array.isArray(v)&&v.every(x=>x.fecha&&x.autor)?null:'Cada observación necesita fecha y autor.','No hay registros de obra: una proyección no es avance.')},
- certificadosObra:{es:'Certificaciones de obra aportadas',en:'Contributed progress certificates',eval:absentOr('certificadosObra')},
+  eval:absentOr('ofertasIndependientes',conciliacion.offers,'Sin ofertas aportadas: no se compara el presupuesto consigo mismo.')},
+ motivoCambio:{es:'Motivo del cambio atribuido',en:'Attributed reason for the change',eval:authority('motivoCambio',['declarado'])},
+ observacionesObra:{es:'Observaciones de obra reales (fecha, autor)',en:'Real site observations (date, author)',eval:absentOr('observacionesObra',conciliacion.observations,'No hay registros de obra: una proyección no es avance.')},
+ certificadosObra:{es:'Certificaciones de obra aportadas',en:'Contributed progress certificates',eval:authority('certificadosObra',['declarado'])},
  actasVisita:{es:'Actas de visita, RFI y decisiones',en:'Site visit minutes, RFIs and decisions',eval:absentOr('actasVisita')},
  especificacionValidada:{es:'Especificación de ejecución validada por técnico competente',en:'Execution specification validated by a competent professional',eval:absentOr('especificacionValidada')},
  punchList:{es:'Lista de remates observada',en:'Observed punch list',eval:absentOr('punchList')},
- revisionEjecutada:{es:'Revisión ejecutada y validada (as-built)',en:'Executed and validated revision (as-built)',eval:absentOr('revisionEjecutada')},
+ revisionEjecutada:{es:'Revisión ejecutada y validada (as-built)',en:'Executed and validated revision (as-built)',eval:authority('revisionEjecutada',['observado'])},
  manualesGarantias:{es:'Manuales y garantías aportados',en:'Contributed manuals and warranties',eval:absentOr('manualesGarantias')},
  costeLiquidado:{es:'Coste real liquidado',en:'Settled actual cost',eval:absentOr('costeLiquidado',null,'No se infiere del presupuesto.')},
  actasEntrega:{es:'Actas de entrega y aceptación',en:'Handover and acceptance records',eval:absentOr('actasEntrega',null,'No se simula ninguna firma ni aceptación.')},
- evidenciaEjecutada:{es:'Evidencia de lo ejecutado (fotos reales de obra)',en:'Evidence of the executed works (real site photos)',eval:absentOr('evidenciaEjecutada',null,'Las imágenes del diseño no son evidencia de lo ejecutado.')},
+ evidenciaEjecutada:{es:'Evidencia de lo ejecutado (fotos reales de obra)',en:'Evidence of the executed works (real site photos)',eval:authority('evidenciaEjecutada',['observado'],'Las imágenes del diseño no son evidencia de lo ejecutado.')},
  archivoPropietario:{es:'Archivo del propietario disponible por contrato',en:'Owner archive available by contract',eval:absentOr('archivoPropietario',null,'Un ZIP no es un portal: el archivo del propietario requiere contrato (E6/E7).')}};
 
 // ---------------------------------------------------------------- recetas

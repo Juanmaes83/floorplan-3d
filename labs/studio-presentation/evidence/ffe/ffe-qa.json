@@ -1,0 +1,54 @@
+{
+  "casos": [
+    "46 instancias en 40 fichas",
+    "SKU coincidente con distinto acabado o variante conserva fichas separadas",
+    "cantidad cero",
+    "proyecto ajeno",
+    "revisión ajena",
+    "ID repetido",
+    "PDF con 1 fichas",
+    "PDF con 50 fichas",
+    "PDF con 200 fichas",
+    "PDF con 500 fichas",
+    "PDF canónico ES",
+    "PDF canónico .en"
+  ],
+  "paginas": [
+    {
+      "fixture": 1,
+      "paginas": 3,
+      "fichas": 1,
+      "sha256": "91f5e2ba4f5949d0bc9e9b80b002423b6ef3a01a47946470c39b825071ccb17d"
+    },
+    {
+      "fixture": 50,
+      "paginas": 15,
+      "fichas": 50,
+      "sha256": "03cb1f097302606bc945a0f018fe0ae2c8f28c604209548f1c9158aa9e87a86e"
+    },
+    {
+      "fixture": 200,
+      "paginas": 52,
+      "fichas": 200,
+      "sha256": "1550a549b8763463bc9f2194814bd597f38113c8f3f2c2c7486a78a5f60b4a85"
+    },
+    {
+      "fixture": 500,
+      "paginas": 127,
+      "fichas": 500,
+      "sha256": "fca68f5de73a04f68a165be5919da1309b2d844d3f7af9f3f00fbaa1588de597"
+    },
+    {
+      "candidato": "es",
+      "paginas": 12,
+      "fichas": 40,
+      "sha256": "a06ed99477476e252d4ca3bd28fd3e712df8ec911be175fe9dceaf4e559e0097"
+    },
+    {
+      "candidato": "en",
+      "paginas": 12,
+      "fichas": 40,
+      "sha256": "7b730fdcc3f5c2b4f937bb6735c2ffdf6414969a651c171eb63c7472353b7f9b"
+    }
+  ]
+}

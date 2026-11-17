@@ -91,3 +91,16 @@ No se sustituyen B1, Story, C4 ni la visita.
 2. ¿H01 y H02 van dentro del corte E2 o aparte?
 3. DEC-05 (publicación remota de la obra).
 4. H08: exposición de las referencias VIS en el Git público (`reports/13`).
+
+## 6. Condiciones de corte tras el laboratorio v1.4
+
+| Corte | Gate de entrada | Rollback propuesto |
+|---|---|---|
+| E2 | GO de propietario. Usar `comparar/`, compatibilidad de manifiesto 1.0/1.1 y storage intacto. A25: casos en ambos sentidos one-sided, presupuesto incoherente sin importes. A26: volver a leer biblioteca, presupuesto y marca antes de preparar y descargar. | Retirar acceso en Entregar y revertir la capa de vigencia; conservar comparador, archivos y datos guardados. |
+| E3 | Aceptación visual y pruebas de identidad, snapshot, cambio de marca y exclusiones físicas en rutas profesionales. Las recetas C/F quedan como contratos. | Retirar selector y adaptadores, mantener presets y perfiles de marca previos. |
+| E4 | Acreditar geometría, escala, origen visual, vínculo de inventario y licencia por activo. Probar índice/destinos y PDF en ambos idiomas. | Retirar los documentos nuevos conservando lámina, vistas, catálogos, FF&E y adjuntos anteriores. |
+| E5 | ADR comparativo sobre el mismo corpus y extremos de paginación 1/50/200/500. Conservar paridad de números y tablas y declarar perfil de salida. | Volver a CSS Print con el contrato documental versionado. |
+| E6 | Inspección de paquetes, además de GOV-05 y controles de acceso, caducidad, revocación y cuotas del corte GOV-08 que corresponda. | Desactivar la distribución nueva y conservar la entrega local previa. Aislar los enlaces creados según su política de revocación. |
+| E7 | GO separado, GOV-06b, identidad, revisión jurídica y evidencia de emisión/aceptación. | Desactivar el flujo futuro preservando el histórico contractual conforme a la política aprobada. |
+
+El laboratorio aporta evidencias de recetas, autoridad, composición y distribución offline. La prueba económica usa el núcleo del producto de solo lectura y fixtures rotuladas. H08 y la aceptación humana permanecen en manos del propietario.

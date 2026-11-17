@@ -33,7 +33,7 @@ body{font-family:var(--f-tech);font-size:var(--t-body);line-height:1.45;color:va
 /* Running head/foot: identity, project, revision, date, page n/N. Separated by space, never by "·" chains (Huashu lint) */
 .runhead,.foot{position:absolute;left:var(--m-side);right:var(--m-side);display:flex;gap:var(--s8);font-size:var(--t-micro);color:var(--d-muted)}
 .runhead{top:6mm}.runhead span:last-child{margin-left:auto}
-.foot{bottom:7mm;border-top:.2mm solid var(--d-rule);padding-top:1.6mm}
+.foot{bottom:6mm;border-top:.2mm solid var(--d-rule);padding-top:1.2mm;font-size:9pt;color:var(--d-ink)}
 .foot .pg{margin-left:auto;color:var(--d-ink);font-weight:700}
 .h1{font-family:var(--f-read);font-weight:600;font-size:var(--t-h1);line-height:1.06;letter-spacing:-.01em;margin:0;text-wrap:balance}
 .h2{font-family:var(--f-read);font-weight:600;font-size:var(--t-h2);line-height:1.12;margin:0 0 var(--s4);text-wrap:balance}
@@ -69,6 +69,7 @@ tr.total td{font-weight:700;font-size:10pt;border-top:.35mm solid var(--d-ink);b
 .plan text,.axo text{font-family:var(--f-tech)}
 .legend{display:flex;gap:var(--s6);align-items:center;font-size:var(--t-caption);color:var(--d-ink);border-top:.2mm solid var(--d-rule);padding-top:var(--s2)}
 .legend span{display:inline-flex;align-items:center;gap:var(--s2);white-space:nowrap}
+.scale-bar{display:block;flex:none}
 /* Title block: IFC Sheet standard (180×50 mm, 5 rows, 50 mm side panel; weights 0.5/0.35/0.18 mm) */
 .tb{position:absolute;right:10mm;bottom:10mm;width:180mm;height:50mm;border:.5mm solid var(--d-ink);display:grid;grid-template-columns:65mm 65mm 50mm;grid-template-rows:repeat(5,10mm);font-size:9.9pt;background:var(--d-paper);font-feature-settings:'cv08' 1}
 .tb div{border-right:.18mm solid var(--d-ink);border-bottom:.18mm solid var(--d-ink);padding:.8mm 2mm;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}

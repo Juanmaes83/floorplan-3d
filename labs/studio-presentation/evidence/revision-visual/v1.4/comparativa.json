@@ -1,0 +1,818 @@
+{
+  "baselineCommit": "585fd9c",
+  "dpi": 110,
+  "documentos": [
+    {
+      "archivo": "architecture-book.en.pdf",
+      "sha256": "58c4bbc92d688fc93c718ecca393a46bc557f5c8d8559f077b20044eabda9afc",
+      "baseline": "824795c2b4f108cd4e83418afabad2b49203d69f68fe5c8fb1fce9fb8f733c6b",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "4db02f242b0458ff7d77e9f8b86f4063d3754c80e05f3abbe6942a04a92b439b",
+          "anterior": "a2224cc6b1d29ac776770859aebe5b80499aba64e0fc02bd8d730a503ca8b1bb",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "e8d8b95d055898f64c3969fd1189ce7ee2c6e3da980b9fd9b973f8d706381fa4",
+          "anterior": "420fdad2c03458ca6fe2640b2d4f15765d6545beb5135ce2f12b549817dae65e",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "402b9619175ece2e0f529080a20395141fe99ca5a84970e068e2bfd362bbc0a5",
+          "anterior": "2186933e25f5c6dcaeedf3640879fdf44613f0152113262899adba4c079f24e1",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "d84716eaa9e8a22eeb392081a3dc4f9096bfc084acd01b16a6a87a94dfb4ead2",
+          "anterior": "26c25641b6c9a6db3c2603d633c85b16b8cd9807f7912d259c79f1d582055b03",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "2293dcac14c8e690d147f56b4d7b67e9bc8c5dc0ac506837c98ec8a09e2447b3",
+          "anterior": "e70df3cebe96bb36eca147b3240bb31cf62daee7f1b553b5a90ee03fe9299f64",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "0fb56f358295c3d16b0fc5eece7adf857d6454701ad4619dd4468d87ee16fb9c",
+          "anterior": "b70e22ddc8bd847465e4f389b08bb0cb5ae64aec2f10f9fda05381847ed8ecae",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "1386e7f40440e82a795661ea21e38157f37d5a43f1c077e85cfa283765b74cd0",
+          "anterior": "cc44af2ceaed6c59464a6de378f445c7a434cfa069995965b84a256de1b4613d",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "8c184fe3f8bff0fed731768939e7678beae4d38abf6f9257d39efcc6e3ef44da",
+          "anterior": "0745a66d99f3cc4b2b0c06741c8beee6e6c86356cbb6abd1d95c0a723c3c81bb",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "41fa2e7d8e8e09578f7f77b66744ada2bff1875848bbf898db1995e77d05ef27",
+          "anterior": "9b2b7c045721b64115dc3b3c0470742e890394f3d6b22dcafc9787ada9f49f94",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "fc93ed4df6f0ad9fee016f65df57b24cb8dc68113657e73257793a8a1c9fbce0",
+          "anterior": "369b7fee261279c1a570bd6674ef6963a004d469bdd0823a94c276a2f7e7da79",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "ba86ac14794bef7360b6920a107f660b29e7ec9663261d89ac60ce443f2f3a5e",
+          "anterior": "7639d58ceacdc52762785523091f189f41351c03fdd9d09e57fcc46a3434c974",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "3de4877f745effb12556c3344e81e17345f0f5b30a7e90006265cb4593c71388",
+          "anterior": "c98a4568f15165146eed571597165dd70877573501e40718923ad46886a2d4bb",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 13,
+          "rasterSha256": "52c58ce2d7fce049feb335f47d77af9f8eb61f67094b4c2f3b65ddfac6a5ea66",
+          "anterior": "c79d8b51586eaeaab95f622ac8f756919ec161e1fcbf4548de8ec4eb51869c5a",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 14,
+          "rasterSha256": "5f4fce832dd41958faf4fa5689778b45734578a24e022a2c6f10700198968c2a",
+          "anterior": "98b4ff5350cfddc41caf911df690a851850a59eb486728f44b955e1a9ad3185c",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "architecture-book.pdf",
+      "sha256": "3052f5d686141826c5f607c7d763ff1679e6459c1928cde482e78fa64c87b153",
+      "baseline": "923736555545ef720915294dcd68a150a29a49689f1c0538f28af31dedee18d5",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "e920945f4af9b38a406602850f367ed2fa43a6af73890f0e83419a7ea9c47486",
+          "anterior": "4a4f2a13e9fe14fcacebee3019b87d4dd1b11c9e6146ade071fd860e1475ba84",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "d4bd0c159125a1589b9eb0affc754fd7b4ee3592a27d4bf40abba0dad9540aa1",
+          "anterior": "c1c4a6d78f77fa5987071bfe1e7ff256d8493f4cb196a71a8edb79420ee32ea2",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "d0c38c1f0df00f53708dfb74525e3153e78e3886591ab869dd7e7e0db6d12821",
+          "anterior": "723c730ee19c7c727371847d8000235e273e1170feac124143e8e6a47a8e4cca",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "df6177e90057723479c6af5875acc1ff41f88aac5cd8649534f0cff58669f4a4",
+          "anterior": "67b7ae7dd53f46900abc8b760fdb9dc3231a61a9fa8f24d251426d89e7f78b20",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "e39cf222bc3b31f9a7f0f280c9c4502b8e33ee8fac24fb252f926d2080e42148",
+          "anterior": "d207a65d7ce816897c7af8e5958c6bbafc8ae3bcd0c75020a44055841904b522",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "061349ae3c858550b7333d5fea6aa898ba65dcfe9d089ce0ad779a68c502f268",
+          "anterior": "9844d1e289bc95be5cb49e64529872f330394c6926d9ae60d980fe4259a96f7b",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "25c373ec32d3d61c8881b8c5047b5afe329bd727c67c1ecc0662e1d1371fc125",
+          "anterior": "832a461cec436d60e1aff4853cb545deaf502ffded221cef23354954470d84aa",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "8978a076b89a58fc1533b872796f2a5cd3193fb035db80c14f8982ab38994911",
+          "anterior": "82c6d66212964255197cb72c6d0c6a519d47ff7bde5f08bb79994722461290a6",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "c906eb04d2c853f00cf1ce606d7fa962a1d57971cf64cb5c752d3ac1005ef87b",
+          "anterior": "3f10226cc357ecf8217f15c2b932ba5d75182fc0fc5d5fad7d2eea8dcc019e27",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "1b2d535da7f0df4dc0a2a26c3fee047e638531103308ee0faf79efe1e148bc91",
+          "anterior": "b0dac027dc407bfe0163e23549aef1a808ac42bf1583f3594b99dbfe41802f97",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "0cf00029c81f99408ce2fc89180b45a0979522ca0d71ec138eb6155f5932e36a",
+          "anterior": "e29130534b47be5b992a6c0278fdc7c25fe4883740376ebdcab88429f8e632db",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "18c9ef65e90a77cd241d9cdf7cc16f786086323f4b6d9f2245a7740f9361190c",
+          "anterior": "10806986ee8bcc0a1450bbda5bf8fef69492a2475a6f7fe8cb22095f16c8b016",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 13,
+          "rasterSha256": "622451ff928673233040b8e1dbfd9a1d587ed43fa8450f54c8c7b653d864bc73",
+          "anterior": "55445dd7a24d68646607ced9ecf8e1eba379c6d6a06b0f0beb848073cff453c8",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 14,
+          "rasterSha256": "700ef1af9a88e18aef58b1da1e6b1741f542ef895ab4ff23b35dc0a3ecc4134f",
+          "anterior": "9bf0d44a692b3eac045cbd198660f49c608003b0dffb5d04fbbc25e49347dac4",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "architecture-sheet-strip.en.pdf",
+      "sha256": "aee3b9e78d2b7738186a44c93a63e5cc70f3cf41722f19f3836c27800b6938ad",
+      "baseline": "68dba5eea0c4da8a486589bd0699e13be6814b257eaef88d1d4ef2e350a249bc",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "4189bc290c90deedaf227ea0249bfcde104e767c5f1dd601ec52d0cb35664290",
+          "anterior": "0b8462c5e9c1d7bd90ef6627e1a96c1ad8abe4fa22aac49023d44be8df387839",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "architecture-sheet-strip.pdf",
+      "sha256": "a70a3a3497e90a5ba5b23af95da29f8b092b5f502a87fd4181baf4593a3f5716",
+      "baseline": "ef2992606b8fae9e146f12d7a85b39245eb37469c6749cf718e4ba937aa46ade",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "810a93f2df093df719b02dea545442f61e17a21e557baf1c1e5c9a88e8e73c26",
+          "anterior": "da9868f982762831c0ce902a6899d233b8e7d2d0103461e676a53e9634018aa6",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "commercial-proposal-client-v3.en.pdf",
+      "sha256": "3f674a665dab2d657973b9de6f26bbfda03e25896d08341370e41bc23e448719",
+      "baseline": "2c0a8f4ab97e8dad92abc9e4529c90c54592b7f802de24f6006bf8434367f346",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "0c851b46cac92a1ed3c0d5d19b8cfed0bc1218a2973ee3d6f90a22d76859d6be",
+          "anterior": "1a5d5103d7144e7f73852c9d5944729be1563994b375e4b9f4a0d2a155a1fcf5",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "ef2c348dfa710f6e25bbf0a3f417927f7898cee946a8f8e4e362e9df8cb6f413",
+          "anterior": "5998d75a46dae906e32c0ed4686a0d40c7080aca43e2f8d5700d639adac61b64",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "commercial-proposal-client-v3.pdf",
+      "sha256": "dd51e21992a3a132b7e0c9b1abadf6b39ac99280e5ac093a14f553f4a0acf48a",
+      "baseline": "ca541b6de719e789b16e94a7a6dab6403cec8e0de8732704c57ee6af1e018b6b",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "78e42efbba4b8f1211ad1b3ddbe2eebf68c200a34ecbced04aedbcc4b0fe32f2",
+          "anterior": "42da9f4b9b3967d3c8309995f70f9cf12e5ef45ba0055a2c5a82fcc384885451",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "ac28e03ebce016a74d03927b63682de26b519271194836c3e35630012bb19811",
+          "anterior": "a6ac4a7e96405b0cef6f35709c047342c6d19fe0409ab5fbdde2a925ab710f10",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "entrega-integral.en.pdf",
+      "sha256": "3a4b641e2fe38d59cca6f16ce867c7cba9b6d2818b3375dbf1e7aa66da66bdb1",
+      "baseline": "a94184e9623249f98f3d37673e0b238581c8f89b7fd61ae0f746df4b9eea4da2",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "e183afc7ae83d173197017e0cb74409620c83136b6c59645518d45cdd38c8045",
+          "anterior": "dfe73df0e7a8522b5dcb2f16f809a803ef6dfc570f20fc864b0d37c1a1068335",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "40bbab376be5cf1972ffd942cde355f486514884527a442d12ef2b4f96de8427",
+          "anterior": "73ea7c8ca556bdbfce015921e3aff3c07f92ad775c3664845537d604d0eea6d7",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "bc3742ef55571043611999ea60cdadbb2de146f38a1518d31b67738f1b9f34b3",
+          "anterior": "34974f4792e42ac6cf420c4ed087ec4fe9595aa52de7b09bd1412062785e4a9a",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "9ad17821bc7b089a73e74b9672353019182a999264aa595a2bc11d5eac722b90",
+          "anterior": "e3081058fd8b6061f3ced01b980dc81dfde0805043966b3fe00075f3a2aa0636",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "56226f1d6a2a933327c2f8f13c01c1ce9d9702c56fa4aa54782d68ba6d0fde3f",
+          "anterior": "9e1449430bfbf11187b9ece4fc49e5f9fbfb09b66be266b33c1365097437f895",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "909fe051c822904aff42da5bf5b7924e35f905c2812940b21d3f00263e846fe0",
+          "anterior": "3335eba44fca5299293f386d76eb4914152d2585c62f08143efe91d370117c51",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "98c474f58f5eb912a36947028742754bef372307badac51dfc7c16dba21d5957",
+          "anterior": "098a29fe92e6cba83e562e1c10e4380e4a5ee7c5f6819b54d393069cd0e6705f",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "2753f7640c363c874148e8284d50d13a2a8a37c2738b4f21745cec5f81f596cf",
+          "anterior": "eface666877e7532886f8cd8b76c1b771683f5eac6f97a79aa133d1ea241d240",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "0c1605c99836046f6823a08b0b53af52c6db5d71368b1a38a0cef5a211d510de",
+          "anterior": "627c0e8748f25ea9df30226f6eadc381401d846a61e289435cf1b5e663feeea7",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "e9c20a0e475efd515bd14247520142fb2d950381b999242360d440408becfd65",
+          "anterior": "567f564c1e25f1933aa372a7ac87912635a13a1cd15e4e4d868f69a50b1417bf",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "bceedd12cf67488b4ea889de154ac76fae50358b65f6aa21b7efbf3df384af4c",
+          "anterior": "24acf2f624e34f81b259216e71fd253d19a7fbf37dc90e3bb346af763d403b70",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "8c69aa8c9534b2f3d0005bf99af904681eb07194436bba77a7111294ed0cdb45",
+          "anterior": "2842a483566c7d9da25210e336c2b37f243ac7c03c7c710fd7cdb1858ac0c9ad",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "entrega-integral.pdf",
+      "sha256": "f4dd66f3e155f5198ba0acf98dbdcad505500468cfc24b400798f9c4c39f9fbf",
+      "baseline": "27897e711a370018251736e8fd200ad66ea8c6057b695e5b3568a6a2bbf2aff6",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "1289bdaac440dc0e4115861f3636684c7b170806e46013ac6a84e02cb4a7817c",
+          "anterior": "e2d1487b7d0860bc89f931c223be6f4932e983c2b71e7e9b39fcac9c62765e41",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "bb37afb348a5b117f4cdeddce11a7946d584c4eac173ef48540842b9a61431b5",
+          "anterior": "4575fecf44045ca1310296eaec9ee75bcfdce7d4f33d5cb7b4f289c25a2a4819",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "a1d45df7d9c8d597d164f7f08f9646cae9deddfe793a08937f5541b45902c1e1",
+          "anterior": "469245e06c7627abbe7c0007feedccc35f02303892f05bceb8947d0de5b02bc0",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "9012281ba30a87416c1126ded16bfe62f7f80af68fdea1d9dd90772db5f714d2",
+          "anterior": "7014b0d2f0e7faea89d97554f3914210b3eee19f6dddfe5247092374f4fbca55",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "62653b0a32a760ac9f22fcba2951a62c11da582aec96ab241095d955355fbe71",
+          "anterior": "6a30100a7f1a7e40b51e43287cde3ce4dc62972e6c95b978c2d4c709f5805b75",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "4d5a985418cd8a2b2c3b5ea243ecce9fd0329819e547392dc1cbed8214727af5",
+          "anterior": "708b0a093d35047d49a90401bdacdf3b98f21491b2ab2e18c5c6995a9f977918",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "5345774ab5006969a53367fc13dd77a31fcefaf02223d4a216fd0fff5d044b9f",
+          "anterior": "245188b491f03c712bfc0fc31d90ac010bcb399a2b8d0332c84b9bf990dfcae9",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "666fbd3922cf538364e35b20722c0d5becbc415c9817bcce3abbfe50b8e28e74",
+          "anterior": "5a601d2fc2163f4f477bad7f2f305c690c2923ee3063d505cb7f2cc93fd1850d",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "6dcd5d4b39cb9b291145ea237f0db41bd75c2c278a5f1fa296be78b933cbaaae",
+          "anterior": "0b6ebba28de1fa174dcce435e4cde422a7a832f7a6cdd8a901946bb68c9025bb",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "04956d595aa786c1e44ca9202106c5357cda092bf0ff0d754e007286272278c5",
+          "anterior": "1d3054e2e85f272018da25fea3c3214de561d4c819c78215fbdee227fb123aff",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "f0522a61f1ce789c41db11ce09589c311fdfadc576c5196f117e1c97c7a9c739",
+          "anterior": "7656ad59ae90c0af7259dad2cc62ab427b24adeb81f8f5fd0f2c5f8749c94f76",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "44a0e56afb4e7cd010ba5f771985eff69d514a2a9d246818f800e263b7394d1c",
+          "anterior": "58477c19fc1e78acd152801e23a512be84b970160d6d4b97bbd4c8424a577151",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "interior-book-v3.en.pdf",
+      "sha256": "fac2010c46ecfb4c33d3f3adc2fff5317ae38fd9735271e56c2aaa06e5bbb190",
+      "baseline": "2fd9b90a0fe5300e773072944a8235e74853db35146fe25a558e2168667b29eb",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "dcfe5dda44993326c0f3d18c1b48af524d9dd6cf69f75203b1327345a6631268",
+          "anterior": "8cf60f7d725cdfec87048514718f4c7d018e96a28f46b55a957ac9020e521a1b",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "f472129d26d88d42680cf8753ba84392b0997bb3d5fe204bc177692485fcd572",
+          "anterior": "a00c67c1b02744f3e6b545f951c2109f81782b6eca3222cb2d62f1fa8647344c",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "c9257d9c63d308296c9bc3c87ede2304f4754eab4983842aba2dbec859c3a09d",
+          "anterior": "df2d24a778487795cca7d03fe42dd7f7132b34de016eacc2e7ae7343de74d52a",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "399e89e237066712c55e93636d055879dd8bf66438f210f31639d833c4f4d639",
+          "anterior": "ccd68bb695080ef2b48e19e583a3bca576e9bff017a68999c82317aac7209910",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "c9d87c3e68ab3494a737708f3b1956592b8321de0e395e1f7fac345c926470ea",
+          "anterior": "6d63422bda1f68b245e596305aeb0e6aa522ab9e58dad94ae27ae2387feff028",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "0434f156db106632c10613d38b1bdc6ec072e3414a44dcab0a1ccbe339e4d5b4",
+          "anterior": "edd3ad08f61559f3c2dab92d9258d273a9f5d7219f682ded0d61d7e52dc1bf7e",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "30f6c6b863cdeac8801dba5eac0b80abad3efa0227a20dd186b76537185b8da8",
+          "anterior": "33096dfe547b0a0f71ca12abef4cc76d443beb5b68f675f074d9027e55c52f38",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "66b504421f3144ee02c7572e908acdbeff0c14ccfdc0bde1f0a2c6455b56efd8",
+          "anterior": "7ce5e2ac5901a125643f7897d2d2c9af7f7d10a0066014f6a72e5586ac76978a",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "380954f4e22fe1b938477b451c67550e7863d9d2b7bbd90230c4fbf8d1b6c6ad",
+          "anterior": "c939fcb5a15d2e0bfb644367b4c913a3b5a1d06e1f595f65b5d1259dc3d08a95",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "ed4935110732e08a425fd8e21556b057a5fefada2374866fef7c9771fcc0beb5",
+          "anterior": "96e11d5e9a870c2327474f8ca796c282d7c05b78d6cd82437c2cb73ca27674d1",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "3899bd19a373c06aca068a73304da39732afb42443df2f62135a185ccf019437",
+          "anterior": "303f890d617de2eea492903ebe89cf0e37f0de5bf0d3337bee4b3a73e45274de",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "867425cd26bce23c87e0447c84581e567f8700851f8540ede4aa513f6c536f7a",
+          "anterior": "813a742679150af366f2d55f8f6986e2e607025b2419075db155808b38111a24",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 13,
+          "rasterSha256": "3d710ae020ead36d6b3baf01d4190f199d4ef6a0b4c09c53ffcfe94169ee4c0a",
+          "anterior": "c4909a550e5705797466976ea49fe5d8f7c328357ca85ae5d3682d12d570007d",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 14,
+          "rasterSha256": "ebf132cf9c6aca494be8066a2a797579ab72a3117728042f47d5e96c35db1f97",
+          "anterior": "51c1f5fcebb9fcda84ac3354c5fbe12020c5e3fbe57d31db3cdfcad39b8778ec",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "interior-book-v3.pdf",
+      "sha256": "e2236938e757580a5dbbe125b2d35adf27dd374c7b4a4ae1eafcf1cb6991bdfb",
+      "baseline": "b3098c5753819fb1e621b73bf9f23e1c904a421e3810280afbed2101e752262c",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "ecdfc95ad3354daab314cedeb34ecb77d6760e59a44c4f03ffb47e7fbf1f54a0",
+          "anterior": "2c6b9a249fd210e1d17495875b092945e90c781b00b0f99d4a156552872107f5",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "627921c888578cbde1417f711e54b03012a547f9a5a1124b823474ffb1907f1b",
+          "anterior": "2ffff89f2351dfb474dbd8b8c59703674e9f7ffc72d49104ff1f6f45a50f88ec",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "58bdd108c97b09aa3661192aff70fec7c63c8698bb31f8b705db697c8caa46c7",
+          "anterior": "cec27f87bebfacd58becc2afcb74890734df3d746e27d8333e881588b64ede27",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "da2b7d1628ae67aee7e0d92ba318c8574b90689ade23e3e35dfb74e2734c30ed",
+          "anterior": "2f839b52c65c546a65e9faddbda2c2cec927298c0030d9de15a8d7c1dc311d5b",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "520216eadee1ee1752d1919d61c91166749f2876a3ed2030f48f07d93081c0ea",
+          "anterior": "30500f42d562d9af19a4d1137ca79e6f35b476e027142bb2325a5532352c3466",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "7525a800b98dac6cd09a0d94ba96103ce93ee36b03f618173d40c80cf8af1018",
+          "anterior": "827f007996765a603122e1629ecfb7bbf919581733a4b81f4ea6d7431fef801c",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "aed2c1d9b4bde546618cc9899563d3087e24ba7418f1a45c198a7013e8b83945",
+          "anterior": "74e3d4f9fe4c615e1db669a343d6bb5b55edf2431687cc87725054cb6a72a5e1",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "2b3f1e2d193cb576f2952c2ef62a274a3280e27ab0e04fcc6280bb58bc1efc79",
+          "anterior": "16dc50e656aa803fbf24473fe016f0dd767c83d6d9c66224d9c3f4e1b6db38b2",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "d16b9cf980ea0c1d4be25638af364fa3c7f6e8e5c7bdb173d5ac960c566a1d54",
+          "anterior": "d632ed0d14e61ca304193c7c3084b5301e952d096cce4888ab4755dc451a2049",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "7b8c1f19417d5fea2078fb3eeeed6126113d758d5fefc12ca163f957a84bc60c",
+          "anterior": "8696645e8c2e89563cdbed1727872c494f8ee18fc57e0e5d0d0a342d3bfe60d0",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "1841daa4c9569b62c1447645c6afbc74e87c3eb90ad89577ce7e518e1f926118",
+          "anterior": "1515185500f77d505022fd9330531b131c5f650d5281f82e341bc695f7620ad9",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "b8f63e5afcc8ed3bad7480720527178c3d65ec3139ba1e8e7bb695ffcfa4fa07",
+          "anterior": "1f91be0cfe645d39a0019be36080d76c3ed84e80b839c86112ba9b05c0c55948",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 13,
+          "rasterSha256": "40b300a26b31269e59b851ae6696c2746266620265b20663faf7cf323906fdf3",
+          "anterior": "3e4c1fdb8d778b07b0bb54f3ffcd4d944a648cddc71d3dcc9d2e515d348205c6",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 14,
+          "rasterSha256": "6af38abfd413f5d86fa6ac141458aee0b9855ffe4345ee534aa246ae6168ca33",
+          "anterior": "ecee9a0e1e8d610a80ebf30a98ea0eec273f654ce1b4a5bc1ac548640e2eaca6",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "materials-furniture-book-v3.en.pdf",
+      "sha256": "adc6ad174daac7499cc0d73201ff228b512f92e7f1095669d2f2ec9433e48c7e",
+      "baseline": "259429011031070da4f9d84e4302b52d38c39ba7386a6be91c099cff3be9df0a",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "87bf95cb74ed5341ccf0b00dc86c5c916ffeffa6b1ccd87f97f6c0053efaa434",
+          "anterior": "4f77d3e8df07037854a54c9053267e2a62b965f01b68056c2fe15ab2649aa5ba",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "bb23cdb14e9bcf0a017f4ae6c5f1e69eeb705859a9445db644eb967eef6c05b5",
+          "anterior": "386d0677549f60c4e530fa18bc1c93776056834d8c9e86e7de13011b176c841e",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "2c6ff34ffbc836ae539159d2095b8a068ebb593d72db4c4ad0c4af2c4c363f52",
+          "anterior": "fca2df0371c086d4ab590aa0fa92b056b24d593199334d85c334bebbc02c09aa",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "4e5f5941518b431f9f2ba0facda833e4b70f77df9fc0e574da1bd009401cc326",
+          "anterior": "285ced8d2293e983f44cfc90dd6d97cde682abe250e520e3dc74d16e5d58a023",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "096558721c55b75705e44e8ad9e460b0da024177fae5d63efdb9b0aea6e7f9b2",
+          "anterior": "258a337ea6a8e3a3360923946c7aad48180defc167233fe4bc62c80683fb21ea",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "f7d0691fd57c7a38d3deaf8a8411a6a5ac1e79a337333fe0efff09980a401677",
+          "anterior": "f8029fbbec14c869c5249bd8524a4db21b40a4b67a354a5cfefb393b172f999b",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "b925e753d21ff4806b3a8005f5e15c3f02430c2ddc57dd4a58889724331fb378",
+          "anterior": "f1ac3034343e4138508868566297debdfbae8baf7430ea4531fadee56163a884",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "652c872737ea5e6657caebc8541d5478f6044fe05756ff084c7ce73e1660dc23",
+          "anterior": "e8b2bb0dae99ab57d4cb35dfcb2d206dc125f992c67d4b9527a80d85ac1fe5aa",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "2ebb71d32e27fff458e4de4eed7f06c4c9e2034d3662349d77c970f347527aab",
+          "anterior": "1d8a208290ce1d3def5f462f7f8a35507ecbe8247837aba0f9c20ffc258502ac",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "eab78eac326a868759de6117649f368aba9adddc6bed98ca4a79e7d256f39146",
+          "anterior": "bda482a5637a41176fb6b8324537500795bf025a68eb0ca80ea4c675dcf3f23d",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "28e74285f7a6722b5f6dad75539e92f35f483d8793ee7d88b661768e4772a364",
+          "anterior": "e73bae2b9cdf209c3dffd61a64f2859088e449728766a575a51025864d86e04d",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "73eb5a042628654e506fb665fd618cdbb574c6849938227e3eac363faa34f72e",
+          "anterior": "f7767547e7cd139a3f55c65a6457bf830f60a70b5f0732eddae857abc0929e0b",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "materials-furniture-book-v3.pdf",
+      "sha256": "883eb779fc2d89b74d9742d9e25fd6e693c24595430079eb0fd62d122b70fd30",
+      "baseline": "ad06cb1a2ec9e58d76208eef381ca7cbf6b825efb98e132ad24b6158d8ee3ff0",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "034545cd729aa7e1a010e5472e6ad5ba82d6f10f8de000845eec58105d7e9877",
+          "anterior": "1c28fdf030a9909c517e1cec0c72f00d62e69ac64c94130f2b63492c1379fd63",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 2,
+          "rasterSha256": "fdecf1d2d01f0949b2a4db06316dd90d99dc9608d6ac0ca475008ffecca8a0d9",
+          "anterior": "2936b33da01947451929a79d24f6c50bb798f2c4483f75a103272381abc4129e",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 3,
+          "rasterSha256": "4a9e391661bdc9609080dae56adb07a453a3019dfb6c718c6acdebdaecd03b41",
+          "anterior": "f815951e9c195780810f334329cefba2810b57a309c8afc841ed723d74fe6351",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 4,
+          "rasterSha256": "b764c80b67bc1fcb2dff53f27e6181d9507f53949747482d66535d640579dfb9",
+          "anterior": "e536a07a07b64057cf2410689a181d505de3f2041ae837eac7cc81e9f86e9ace",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 5,
+          "rasterSha256": "aaae576be812ee28070383d56ebcb67e98544566e7854fefea27bffbe9f637cd",
+          "anterior": "3f116861cde57960aca1ab0577eec952fb6566f68be369695487feadd54c86aa",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 6,
+          "rasterSha256": "6598a8a6f07b9c00c689a51946dd913476d0fad472e7fc20ab873005d2f2d415",
+          "anterior": "e28a560e5c7ac919af2d1d8645faf86afbe4dcb1be13b30e4ea40148c60d652f",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 7,
+          "rasterSha256": "d6a5b5c0d61204599094154b0dc9de66d0ba7f753a7fa01e9f6e9c45a57ef2bc",
+          "anterior": "169d5c3e9ae72d9e349d8aef87c9f0e90abc44f02df39843b5ebc858f92f03ac",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 8,
+          "rasterSha256": "c9622ac9da7f4a65f6a4c32db2a876dcc41b31a41379a74505fa9e97fb2e2505",
+          "anterior": "7fac763062d0135fa9eaed14116299d98bd902a2bd735ed3dfdaa7973c0a55f9",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 9,
+          "rasterSha256": "bb299fae83454960e04f63cd40aa54c2bcf3dad65d4a3fb98c17330b16a51a61",
+          "anterior": "30d5f73a94b1974da33158c06bf474aa81d3f3274914c8f14f20d68a5593d46e",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 10,
+          "rasterSha256": "0472de79911d279a06b52adb6c8147f34f57df5f6829e574cc7839674b7be0a7",
+          "anterior": "bc8fc47e51ccdfeaf15f39f7e7109747bfc397729d48e9658b526f8b198cd839",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 11,
+          "rasterSha256": "47cee918073b33fb25ab66c4936aa3b7ea32fc870f7a8e528787062709085e1c",
+          "anterior": "045b813eef3f128b3423edc2193bfb42cdf1e318134117e83d8eba8024c40411",
+          "estado": "modificada"
+        },
+        {
+          "pagina": 12,
+          "rasterSha256": "564182bfa12d63d20794e80b81fe613819c5395a3e3b2211dbb42cd835d23753",
+          "anterior": "9be596acf9894ca26f1c9b8624c98a46db084cbbcd5d8914e02c185c194a6cfb",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "real-estate-sheet-v3-sin-presupuesto.en.pdf",
+      "sha256": "031c6c2c53baab5bae0c812cee7c67ac676c346013c30b46f6c06cb9b9180e14",
+      "baseline": "a38915dbf2d3db51f0e0e8c6604fe8ed9cc371fa6ea612e74fee2364a0786406",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "585a8a2d861d99e4855432d119501591219e4c939444cb7d8ef535fa6479c38b",
+          "anterior": "c8b977b5e29146eaf5a7741876fef43f095d4f449789ebff1cb304496874a0e7",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "real-estate-sheet-v3-sin-presupuesto.pdf",
+      "sha256": "ba77108023a84d5fcd1683d3cef7f05b73e8033b2074e931290bcf947f776fc8",
+      "baseline": "049e34c3e6f3b4c8cbd53f3490e2104055424a7d4be1a51e71a2b3951d4a028a",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "361de4ce0ade37344dd729d48cc74232601b33e06248b2f683a6577210c8a762",
+          "anterior": "1899f02772de17aae6f159e451e37b0acf36d8030353d71dbe49ffc8f40d6eac",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "real-estate-sheet-v3.en.pdf",
+      "sha256": "45c9c82720044c4d6bae2f907b14828966847a7ea2a01e4d0427d12be8189865",
+      "baseline": "a8bfa7c3c70c17aa08cd313271a21ea337bd6e982175a2c33b048d9174427af9",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "3fd2e3235cd0ed346a5a08b0a6af48500fe3dd7cb70360672087240972e9292b",
+          "anterior": "f407735d0deb577d7333a03e828cc356272608ab5c20bd17b056765c2a742abc",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    },
+    {
+      "archivo": "real-estate-sheet-v3.pdf",
+      "sha256": "b27247973913adf2755c0324b4ce109fed99500a5cc4f416d2c2a79137237480",
+      "baseline": "7bcd53e8496ecf6c9921c09454b61c429a2f99d411160682db30b3b7b5d74a2d",
+      "paginas": [
+        {
+          "pagina": 1,
+          "rasterSha256": "75ce902c04a4b8ebb1946ce77d6c20ebbdec000c14d94e08084475b94860c1be",
+          "anterior": "571f17c96f6da61e7737fd9fb7f310db2d4e0368de8c6596afde16e1191ae986",
+          "estado": "modificada"
+        }
+      ],
+      "paginasRetiradas": 0
+    }
+  ]
+}
