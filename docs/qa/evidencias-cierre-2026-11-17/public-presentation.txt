@@ -1,0 +1,1 @@
+{"sha":"8525025a1470d48d52d8e365070e5a0acf116134","date":"2026-11-17T17:28:27.444Z","url":"https://floorplan-3d-alpha.vercel.app/#inicio","checks":{"presentationConfiguration":"PASS","close":"PASS","projectUnchanged":"PASS","noApiRequests":"PASS","noPageErrors":"PASS"},"limits":"Does not certify complete playback, export or sharing"}
