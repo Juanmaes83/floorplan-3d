@@ -1,8 +1,10 @@
 # Continuidad Codex — CI inteligente en observación
 
-17/11/2026. Base `master@8525025a1470d48d52d8e365070e5a0acf116134`. Rama `feat/ci-inteligente-observacion-20261117`. PR documental #246 independiente, no fusionada. Studio Presentation permanece en la rama de Claude, sin intervención.
+17/11/2026, actualizado el 18/11/2026. Base `master@8525025a1470d48d52d8e365070e5a0acf116134`. Rama `feat/ci-inteligente-observacion-20261117`. PR documental #246 independiente, no fusionada. Studio Presentation permanece en la rama de Claude, sin intervención.
 
 Se recuperaron `impact-plan.cjs` y sus 22 tests, se versionaron en scripts/ci y se añadieron pruebas de observación y reutilización. Se conecta inventario Git de base/candidato, matriz de impacto conservadora, medición de Actions, verificación de conservación de workflows y gate universal. Los 36 workflows originales conservan la ejecución; se habilita dispatch manual/completo y ronda semanal Actions. **No hay omisiones activas ni ahorro conseguido durante observación.** La política y reproducción están en [ci-inteligente](../technical/ci-inteligente.md).
+
+Histórico del SHA `d943117`: 36/37 workflows correctos. El fallo de Asset Lab se conserva en la evidencia de ese SHA. Para el cierre documental y la evidencia pública original, consultar [el handoff de #246](https://github.com/Juanmaes83/floorplan-3d/blob/c7e8702dd0604d2eecc7fbe3bbc655bbb84a5c4d/docs/integration/HANDOFF-CODEX-RUBIK-SOTA.md). El handoff de CI tiene un nombre propio para que puedan integrarse ambos archivos.
 
 Siguiente operación: revisar artefactos `ci-impact-SHA`, contrastar el inventario con las ejecuciones reales y clasificar cualquier fallo sin confundir timeout, entorno y aserción. La propuesta selectiva no sustituye checks originales. No autoriza merge, promoción ni cambios de protección de master. Si el gate o inventario falla, corregir antes de recomendar aceptación. Una activación posterior de omisiones requiere evidencia representativa y cambio independiente revisable.
 

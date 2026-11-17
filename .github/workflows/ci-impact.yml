@@ -84,9 +84,24 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REF: ${{ github.ref_name }}
+          FULL_REF: ${{ github.ref }}
+          EXPECTED_SHA: ${{ github.sha }}
+          REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
+          require_expected_ref() {
+            local actual
+            actual=$(git ls-remote origin "$FULL_REF" "$FULL_REF^{}" | awk 'END {print $1}')
+            if [ "$actual" != "$EXPECTED_SHA" ]; then
+              echo "::error::Dispatch ref $FULL_REF moved. Expected $EXPECTED_SHA, observed ${actual:-missing}."
+              return 1
+            fi
+          }
           for file in .github/workflows/*.yml; do
-            [ "$(basename "$file")" = ci-impact.yml ] && continue
-            gh workflow run "$(basename "$file")" --ref "$REF"
+            workflow=$(basename "$file")
+            [ "$workflow" = ci-impact.yml ] && continue
+            require_expected_ref
+            echo "Requesting $workflow for $EXPECTED_SHA ($FULL_REF)"
+            gh workflow run "$workflow" --repo "$REPO" --ref "$REF"
+            require_expected_ref
           done

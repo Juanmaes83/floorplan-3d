@@ -26,13 +26,13 @@ Estados de evidencia: `EXECUTED_PASS`, `EXECUTED_FAIL`, `REUSED_VERIFIED`, `NOT_
 
 1. Universal: sintaxis de selector, pruebas propias, contratos esenciales de proyecto/presupuesto/seguridad, inventario y guarda de cobertura.
 2. Impacto conservador: cierre transitivo sobre unión de grafos base/candidato; resultado por test `PENDING` o `NOT_APPLICABLE`. La propuesta no omite trabajo todavía.
-3. Integral: autoridades críticas, desconocidos, selector/CI y ejecución manual/periódica. El dispatch completo usa los workflows originales, sin cambiar sus pasos. La ronda semanal es un schedule de **GitHub Actions**, no Cron de Production, y solo se activa al integrar el workflow en la rama por defecto.
+3. Integral: autoridades críticas, desconocidos, selector/CI y ejecución manual/periódica. El dispatch completo usa los workflows originales, sin cambiar sus pasos. El orquestador comprueba el SHA del ref antes y después de cada dispatch. El envío sigue usando un ref de GitHub y la verificación final se hace sobre los runs del SHA solicitado. La ronda semanal es un schedule de **GitHub Actions**, no Cron de Production, y solo se activa al integrar el workflow en la rama por defecto.
 
 `integration-gate` acredita la validación universal y la generación correcta del informe. **No sustituye los checks funcionales originales ni convierte sus fallos en éxito**; hasta aprobar selección y gobernanza, deben revisarse todos los checks pertinentes. No se modifican protecciones administrativas.
 
 ## Evidencia y medición
 
-`measure.cjs owner/repo SHA output.json` consulta paginado por un SHA exacto: jobs, estados, tiempos en cola, duración y suma de minutos de jobs completados. No mezcla candidatos ni presenta minutos como facturación. Las ejecuciones pendientes no tienen duración final. El campo de coste queda `null` sin datos de facturación. El total de duraciones solapadas no es el tiempo de PR ni el camino crítico.
+`measure.cjs owner/repo SHA output.json` consulta por un SHA exacto los jobs del último intento de cada run, con estados, cola y duraciones de los jobs completados. `compare.cjs` exige identidad de SHA entre plan, medición y runs, y distingue fallos, pendientes, cancelados y otros estados sin éxito. No mezcla candidatos ni presenta minutos como facturación. Las ejecuciones pendientes no tienen duración final. El campo de coste queda `null` sin datos de facturación. El total de duraciones solapadas no es el tiempo de PR ni el camino crítico.
 
 `representative.cjs` produce casos de documentación, estilos, módulo, core, seguridad, contratos, desconocido, simultáneo, renombrado, selector y workflow. Los 22 casos originales del prototipo y las pruebas nuevas comprueban negativos. `prove-workflows.py` acredita que los 36 contratos de ejecución originales permanecen iguales en este corte.
 
