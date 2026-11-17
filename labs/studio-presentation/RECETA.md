@@ -35,9 +35,9 @@ La instalación inicial exige red (apt, PyPI, npm y la descarga de Chromium). La
 bash tools/reconstruir.sh rubik-studio-presentation-lab.zip /tmp/reconstruccion
 ```
 
-Descomprime en una carpeta limpia, instala las fuentes (`npm ci`), compone dos veces y escribe `RECONSTRUCCION.json`: páginas y texto de cada PDF iguales entre las dos composiciones y con los PDF empaquetados, problemas de QA, idiomas y huellas de los medios.
+Extrae el ZIP dos veces e instala en cada copia las dependencias fijadas mediante `npm ci`. Compara los inventarios de ambas reconstrucciones con el paquete, verifica todas las piezas del registro y comprueba medios, snapshot, ES/EN y QA. El informe `RECONSTRUCCION.json` liga los resultados al SHA-256 del ZIP. Una discrepancia devuelve un código distinto de cero.
 
-Los PDF no son idénticos byte a byte (llevan su fecha de creación): se compara su contenido página a página.
+Para cada PDF registra la huella original y la huella con solo las fechas de creación y modificación neutralizadas. Exige además el mismo texto, número de páginas y rasterización de todas las páginas a 110 dpi.
 
 ## Qué no reconstruye
 

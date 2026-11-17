@@ -21,8 +21,8 @@ for L in $LANGS; do
 done
 # ---------- laboratorio: lista de permitidos ----------
 LIST="$DIST/allowlist-laboratorio.txt"
-{ ls HANDOFF.md HANDOFF-v1.3.md PROMPT-CONTINUACION.md 2>/dev/null
-  find reports system snapshot i18n vendor diagnostico assets -type f 2>/dev/null
+{ ls HANDOFF.md HANDOFF-v1.3.md HANDOFF-v1.4.md PROMPT-CONTINUACION.md RECETA.md
+  find reports system snapshot i18n vendor diagnostico assets mandatos -type f 2>/dev/null
   find tools -maxdepth 2 -type f \( -name '*.cjs' -o -name '*.js' -o -name '*.mjs' -o -name '*.py' -o -name '*.sh' -o -name 'package.json' -o -name 'package-lock.json' \) -not -path '*/node_modules/*'
   find evidence -type f
   find out/v3 -maxdepth 1 -type f \( -name '*.pdf' -o -name 'qa.json' \)
@@ -46,7 +46,7 @@ for root,_,files in os.walk(stage):
         t=open(p,encoding='utf-8',errors='replace').read()
         if any(a in t for a,_ in subs):raise SystemExit(f'BLOQUEA: ruta absoluta dentro de la entrega compuesta: {rel}')
       continue
-    if rel in KEEP:continue
+    if rel in KEEP or rel.startswith('mandatos/RUBIK-SOTA-'):continue
     if f.endswith(TEXT):
       t=open(p,encoding='utf-8',errors='surrogateescape').read();n=0
       for a,b in subs:
@@ -60,7 +60,7 @@ for root,_,files in os.walk(stage):
 json.dump(out,open(report,'w'),ensure_ascii=False,indent=1)
 print('saneados',len(out['archivos']),'archivos;',len(out['videos']),'vídeos')
 PY
-cp "$DIST/SANEAMIENTO.json" "$STAGE/SANEAMIENTO.json";cp "$LAB/RECETA.md" "$STAGE/RECETA.md" 2>/dev/null || true
+cp "$DIST/SANEAMIENTO.json" "$STAGE/SANEAMIENTO.json"
 find "$STAGE" -exec touch -h -d "@$SOURCE_DATE_EPOCH" {} +
 ( cd "$STAGE" && find . -type f | sed 's|^\./||' | LC_ALL=C sort | zip -qX -D "$DIST/rubik-studio-presentation-lab.zip" -@ )
 rm -rf "$STAGE"

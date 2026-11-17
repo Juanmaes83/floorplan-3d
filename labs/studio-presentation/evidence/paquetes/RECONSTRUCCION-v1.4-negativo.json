@@ -1,0 +1,30 @@
+{
+  "zipSha256": "fixture",
+  "resolucionVisualDpi": 110,
+  "errores": [
+    "Pieza ausente, duplicada o alterada: media/dibujo-vivo.jpg"
+  ],
+  "qaProblemas": {
+    "a": [],
+    "b": [],
+    "paquete": []
+  },
+  "idiomas": {
+    "a": [
+      "es",
+      "en"
+    ],
+    "b": [
+      "es",
+      "en"
+    ],
+    "paquete": [
+      "es",
+      "en"
+    ]
+  },
+  "snapshot": {
+    "a": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+  },
+  "ok": false
+}

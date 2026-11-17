@@ -84,3 +84,7 @@ La fuente v1.2 está en `mandatos/` con su huella original. El bloqueo por ausen
 - CONT-02: la consulta de RP13/RP16 mantiene identificada la selección activa, bloquea su descarga durante la consulta y requiere una acción expresa para recuperarla. Los ensayos cubren ambos niveles y el retorno a RP07.
 - RP07 final acotado 22/22. Suite completa 112/112, 21 recetas, exportaciones ES/EN, Chromium a 1440/390/320 px. Evidencia en `evidence/recetas/recetas-qa.json` y `salidas.json`. Composición `cd0e46c8c0e5c6f2b3fa9381a131b8276a88d52c0d0cc7ebdd36e7d4c3a8caac`.
 - N05 reejecutado: 23/23 (integridad, obsolescencia y emisión simulada). Evidencia en `evidence/estados/estado-qa.json`.
+
+### CONT-03 · Reconstrucción del corte N01/N05
+
+`bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip /tmp/recon` pasó sobre el ZIP intermedio `d3a4ba06b60a2bff7f48c9e3e7ee1a84e3c1cf53a2a507a042672f06c4b10093`. Dos extracciones con instalación y composición independientes. Coinciden los inventarios, los 20 medios en sus bytes, los 42 PDF por ruta (incluidas copias) en bytes salvo fechas, texto, páginas y raster a 110 dpi. Ningún PDF coincide en los tres SHA binarios originales. QA a cero y mismo snapshot e idiomas en los tres inventarios. El negativo, con un medio alterado en la copia B, devolvió 2 y registró el archivo. Evidencias en `evidence/paquetes/RECONSTRUCCION-v1.4-N01.json` y `RECONSTRUCCION-v1.4-negativo.json`. La reconstrucción del candidato final se repite tras el delta editorial.
