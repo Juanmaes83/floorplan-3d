@@ -1,48 +1,13 @@
 {
-  "productionBlobMetadataUnchanged": true,
-  "production": {
-    "id": "PYqCpmDAK6iMyFpH",
-    "key": "BLOB_READ_WRITE_TOKEN",
-    "type": "encrypted",
-    "target": [
-      "production",
-      "preview",
-      "development"
-    ],
-    "contentHint": {
-      "type": "blob-read-write-token",
-      "storeId": "store_D7G3dOnxKGUwRxa6"
-    },
-    "updatedAt": 1793451816652
-  },
-  "branch": [
-    {
-      "id": "NAMEDsmQJnwVHJ2V",
-      "key": "BLOB_READ_WRITE_TOKEN",
-      "type": "encrypted",
-      "target": [
-        "preview"
-      ],
-      "gitBranch": "feat/gov08-s3-caducidad-20261117",
-      "contentHint": {
-        "type": "blob-read-write-token",
-        "storeId": "store_xjVWMQWR1VybuA0P"
-      },
-      "updatedAt": 1794926746940
-    },
-    {
-      "id": "X8UeewEAxjULoxLU",
-      "key": "RUBIK_SHARE_TOKEN",
-      "type": "sensitive",
-      "target": [
-        "preview"
-      ],
-      "gitBranch": "feat/gov08-s3-caducidad-20261117",
-      "updatedAt": 1794923931984
-    }
-  ],
-  "testHost": "xjvwmqwr1vybua0p.public.blob.vercel-storage.com",
-  "productionHost": "d7g3donxkguwrxa6.public.blob.vercel-storage.com",
+  "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c",
   "deploymentId": "dpl_BLpr8QmGMd6mUxn1Wfaf5cCmLkep",
-  "sha": "28a01b0b0195593d966729d385ab97d32bc16c6c"
+  "productionBlobMetadataUnchanged": true,
+  "distinctStores": true,
+  "testScope": {
+    "target": [
+      "preview"
+    ],
+    "gitBranch": "feat/gov08-s3-caducidad-20261117"
+  },
+  "omitted": "Account, user, environment-variable and Blob-store IDs, hostnames and timestamps omitted for minimization. Original retained locally; no credential values were in the source."
 }
