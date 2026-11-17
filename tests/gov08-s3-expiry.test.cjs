@@ -170,6 +170,24 @@ test('purge: a TRUNCATED or INCOMPLETE listing refuses any confirmed purge — z
  assert.deepEqual([out.statusCode,JSON.parse(out.body).error],[409,'incomplete-listing']);assert.equal(deletes(c),0);assert.equal(c.files.size,1);
  const list=res();await Pubs.handler(req({action:'list'},{'content-type':'application/json','x-rubik-share-token':SHARE}),list,{env,fetchImpl:noCursor,now:()=>T0+8*DAY});assert.equal(JSON.parse(list.body).truncated,true);
 });
+test('purge: missing or malformed pagination completion flag cannot authorize deletion',async()=>{
+ for(const flag of [undefined,null,0,'false',{},[]]){
+  const b=blob();await share(b,{ttl:'7'});
+  const fetchImpl=async(url,init={})=>{
+   const response=await b.fetchImpl(url,init);
+   if(!url.startsWith('https://blob.vercel-storage.com/?'))return response;
+   const body=await response.json();
+   return {ok:true,json:async()=>({...body,hasMore:flag})};
+  };
+  const out=res();
+  await Pubs.handler(req({action:'purge-expired',confirm:true},{'content-type':'application/json','x-rubik-share-token':SHARE}),out,{env,fetchImpl,now:()=>T0+8*DAY});
+  assert.equal(out.statusCode,409,`flag ${JSON.stringify(flag)}`);
+  assert.equal(JSON.parse(out.body).error,'incomplete-listing');
+  assert.equal(b.calls.filter(c=>c.url==='https://blob.vercel-storage.com/delete').length,0);
+  assert.equal(b.files.size,1);
+ }
+});
+
 test('register and purge: same permission as publishing; bad requests touch nothing',async()=>{
  const s=await storeWithEverything(),n=s.b.files.size;
  const cases=[[{'x-rubik-share-token':RENDER},401],[{'x-rubik-share-token':''},401],[{'x-rubik-render-token':SHARE,'x-rubik-share-token':undefined},401],[{origin:'https://evil.example'},403],[{'content-type':'text/plain'},415]];

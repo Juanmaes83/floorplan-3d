@@ -51,7 +51,10 @@ async function listStore(env,fetchImpl,host){
    const at=new Date(b.uploadedAt);
    files.push({url:`https://${host}${u.pathname}`,size:Number.isFinite(b.size)?b.size:null,uploadedAt:Number.isFinite(at.getTime())?at.toISOString():null,info});
   }
-  if(!out.hasMore)break;
+  // Only an explicit false proves that the last page was received.
+  // Missing or malformed pagination metadata must never authorize deletion.
+  if(typeof out.hasMore!=='boolean'){truncated=true;break;}
+  if(out.hasMore===false)break;
   // «More» without a way to read it is an INCOMPLETE listing, never a complete one.
   if(!out.cursor){truncated=true;break;}cursor=String(out.cursor);
  }

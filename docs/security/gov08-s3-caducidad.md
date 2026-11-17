@@ -159,6 +159,15 @@ Hoy el Preview comparte el almacén con Production y no tiene código de publica
 
 ## 10. Política fijada por el propietario y decisiones pendientes
 
+### Revisión residual de Codex del 17/11/2026
+
+El listado exige un `hasMore` booleano y solo considera completa una respuesta con `hasMore: false`.
+Una respuesta sin ese indicador, o con un valor de otro tipo, queda marcada como incompleta.
+La limpieza confirmada responde `409 incomplete-listing` y no envía ninguna petición de borrado.
+La prueba añadida reproduce el fallo anterior y cubre seis valores ausentes o malformados.
+Validación local de esta corrección sobre almacén simulado, sin conexiones a Production,
+con 56/56 pruebas de servidor y 4/4 pruebas de navegador S3 correctas.
+
 **Fijado el 17/11/2026:**
 - **Caducidad:** opciones de 7, 30 y 90 días; **30 por defecto**.
 - **Publicaciones históricas:** **no se modifican ni se borran**. Siguen abriéndose y solo se identifican como «sin fecha de caducidad».
