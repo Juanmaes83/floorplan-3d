@@ -3,3 +3,8 @@ out/*/.entrega-preparacion-*/
 out/*/entrega-rechazo.json
 out/*/*.pdf.*.tmp
 .exportando-*/
+out/**/*.html
+!out/v3/entrega/**
+!out/v3/profesional/**
+out/v3/b2/
+out/v3/architecture-book.pdf
