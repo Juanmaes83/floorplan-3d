@@ -1,0 +1,491 @@
+{
+ "carpeta": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL",
+ "master": "8525025",
+ "licencia": "No acreditada: el README de la carpeta dice «No hay licencia de reutilización comercial acreditada. No publicar las imágenes»",
+ "exposicion": {
+  "gitPublico": 68,
+  "historial": "presente desde 01c73ba 2026-11-17 (borrarlo exigiría reescribir el historial: no se hace por iniciativa propia)",
+  "deployVercel": "NO excluida por .vercelignore (solo labs/ lo está): una URL 404 no prueba exclusión global",
+  "gitPublicoImagenes": 64
+ },
+ "usoEnLaboratorio": "Solo hashes y clasificación (reports/02, 03). Ninguna imagen VIS va en los paquetes de cliente ni de laboratorio (allowlist de tools/package.sh).",
+ "imagenes": 64,
+ "archivos": [
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/0wvT9U-OvO6cNwfxj-oa5HAjUzH6PVXn0Tj5p4DQX_5M2Zy5pk8aiuweoPelP_XDTeZfMjzXY7vtUOnr2pn3v5p7sLFqKx0RPRktzQjZ9_H0u14iQqvYaIC-u-rVs8B4woDAqMzzhVsbzSjdyumTBd6ElLdjWTAs2zpQGZxIJywNOy_JrJgJFGxm17oqithk.jpg",
+   "bytes": 62661,
+   "sha256": "86c345c29caa6b3f395c00f9cb94a0b7b20c4201cd448a0d4cb26e36628622d4",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/1OlSNyXnVWGmhuv9GyD0TKfKk_PApNpQs5RXEdMWMf-fmc6pLp6GzxL3DmuioVIwHec-ykUIWKAYXJEqBGODYDaY4Cv9j4oRrlyiyiemV7YkQpmkb4jEHVKiyJWZrYN-z5ed6Z0wDGnutsIgHTH_eQGV745PnneC9MS6y5BXnWdfRIw58lBlQEQmy1AjVjYQ.jpg",
+   "bytes": 522663,
+   "sha256": "f07bef389d9937e9ceb846179e4ff7fcc9186d718f93f9f4cefa3c466319c0f5",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/20CmdxQUvQOfmEkIEcZUe7O53nhvp8btHtAgHudciJ1AQ2FObUF-Sfp4WqSDhk2bHCiDPo5FiRcxVCiqJwz056hdj55h6msQlBOSJ6JYxV8imKK8JzDo8Y3OTsI5ZSTz4fB6AptMX8Ry_00gZenqMVoAw3Fx24WcCrPEXoBWGSB43uPEBQ29H17HmUCsZjgw.jpg",
+   "bytes": 141883,
+   "sha256": "d0db6370af16fd27a2c2a70ef5f3e9072b5b103f0872867230cd156e1f8fbbbd",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/4jk0LbP6eaOtoFDGTdRX0WuBfq-f3uxwuVGolzOS1vwafPAsb5iIl6bnGmiXcShcj4t8Cw02oNZ0ZsHmixG480d-sWqQmGAU9KxEd9stmkomkm1Ig7UvMgZX2VUgA2J_KfSh7AGLtBcn6x3vj-2jaayste6n4DVziIR3jWGCKJ9ZiPsO0M8dnGSwY08ELYuh.jpg",
+   "bytes": 250253,
+   "sha256": "5f15a963bc466d9ce412021865c6bd115063d890d638be14c9f8f42051662f14",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/7-Qh61YjM94q9myY9SFg8EKQrjgSnvX9HLsXrQUyMnSyTsooc_tYIvXyFhCKbrjcXZjkPlChomkrci__p2raeqm2eeknXLdcMN5Fl5eU6vVDCm7LrEJa532p10Ow7lE70_LWO14idbntQ8EUdNittxBJJPfhwEMntQORdAblLmZNnexHtlHT7OdTdLtTfPSs.jpg",
+   "bytes": 105116,
+   "sha256": "4b276091da3b683bab09c47af53d6ce75511fbbe1eff6bd08a542ad6aac45e1d",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/8-bl-XniA68gfdN2BzzgqafSEvg4huo3jJzrBoPPPBngaIF0I8KoJ7iDHuy0e-u-LrTnZ_LQW10L-FX60phKNUoFNb9ZaJHivYXpmLPwnYk1XtxTXFn8Y1HuFMA9u0rA2MXxJx9aj6eg9bCvBFeTvwJjNrQTvcyBxVj6o3jWtaV9v8YySbkcqEod4kPyoQ65.jpg",
+   "bytes": 75607,
+   "sha256": "f8998d1b243711d0859173558e7fe9a871f7f998f4f21b4549d461929c062da1",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/8KsFiX4WudfBwVZ3vdZ75ardM-r02YH9n-uf5TGmoVxDXfVvvlzHwjh3Pq6WC6RjIRFMKcEd1OEbPJ_-b07WprTrDptQBr2z8hickSmBKApbhZVr5le2td-YHI9nzrgC3t4E68uGoNZfFRdk2WvTH_G-FpqiIEK6lRFBrlm61KK5FX4o5ij8JS3K5guBo7Pf.jpg",
+   "bytes": 490487,
+   "sha256": "8cb14ded128ead9bce9e39748bee6c9250e47119bcad13599bafba87ba1ae507",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/9R1eY4JEmSxP6_lLlSnl7sJ1gAlrf9qSJA1UyEY-6rDlnZOJv6ns4f1bRIsvPzOEPn4pRP2BBIdfbGZKQkJVH8qj5xg7-CfnKSVLzrmgdJkthrUMJoRc2_x8bnXnFutqqcWUYnJC2dTmgAEW0fo8xUgEk9NiOJZCp5bzlaoaGrTZ-tocoqNNmDtq0EHdLY3H.jpg",
+   "bytes": 332550,
+   "sha256": "1fe5599f2cf7ee4b86242aa5011fdb84fb808271c1ce721451b2e3aab5a3b7a6",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/DBIU8MgnGvTveAJXEuzKCi74X2qw4Y85CbqlntwtTpEy6EAUfoUQqO9p43MXx4hDps8VzJ-OBmKIbDz9vxcWXAGygBJRt6fpHmZ0qMhB9WDrsaWWHoDzlmii8urFw_IzPQGLiZJRjAwgt13o9urGoJj08FAB6jjqFIvefEWALUlp9CcFZIBKOXLUM--Xkp06.jpg",
+   "bytes": 64107,
+   "sha256": "30b88f973994e0cb099e69196f25ed732af786661b9d87841dd8319b907bd7f6",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/E_C6Tx5CIWfhhROYo1xQWldNW8uGGF1R8-XsXn4zyAVgM8BWJ9ofYRX8PZgtykk6t6wQzU_JP9aBSQZ7Po3jGgfY1uOIdNW67ZGeO7xhj137Dz3MyEgVUqDppCUg5q2Npf8DM19dnGHWhH55nhkkhkA-LEymRhjiX1jhhV8FCQIkSFmAgYrKkupY6etAb711.jpg",
+   "bytes": 259972,
+   "sha256": "a148f179b0d938de3de083e196926dc76598a8b4f66b379d89fd2524a69511c5",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/Hb3d-9OUheLNG5Mi9JcxYE0qfJKHB13o3CN72mZBFwYIoL2pQXBjT7hVJOWwoz5O2j3pvMmA6CWNJNliAsCSnQtnLtMKUYg9SSW0qV7iu0ovJ9hHl_0SmjGvkWdod05ryuZYIKvH1DA0Jz9I2QOQG3A6ZiPRG3tTzYiIRUvplX1jnXoa2Krgi89gi3irp2qn (1).jpg",
+   "bytes": 40698,
+   "sha256": "4c90a4e80019c48e68f809879f9ae6442aad22af4e804dcf1c180469a89f663f",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/Hb3d-9OUheLNG5Mi9JcxYE0qfJKHB13o3CN72mZBFwYIoL2pQXBjT7hVJOWwoz5O2j3pvMmA6CWNJNliAsCSnQtnLtMKUYg9SSW0qV7iu0ovJ9hHl_0SmjGvkWdod05ryuZYIKvH1DA0Jz9I2QOQG3A6ZiPRG3tTzYiIRUvplX1jnXoa2Krgi89gi3irp2qn.jpg",
+   "bytes": 40698,
+   "sha256": "4c90a4e80019c48e68f809879f9ae6442aad22af4e804dcf1c180469a89f663f",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/IsgPOz4kpa-9BohgGlXrMtlGTLgzsdr2Mm5Oy59jwSru66ygRTbHpxUoe4McUGTjt9y2QRx2MbYmWAJ8NhfRLlHRYn4rMkVhB1S6i27r7WySLbayRtNe6VhUuV7IcTxKpMv66EJ7nYtrLmrChqCo_buLA1lOuvpDS19mZ911_jwJNH0IN-hfjhRj1xhxqLp_.jpg",
+   "bytes": 704246,
+   "sha256": "a2ff626d6e7d0cd9e41ea6f376ba7e00b99a15076f293a64d90c70b92104beea",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/KEEP ADD",
+   "bytes": 1,
+   "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+   "enMasterPublico": true,
+   "tipo": "texto"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/KGzmIJJ0SsEf5BnEiKgoZc3J7LN52vU7VbFBYMrjCXesJaQ6Usmons6iiwoWTbD3WzQSRZlHQ_18cTfQsnrEBZQvgJfkDfoRcsMZ_2vKhMgPAurs_tlK8qDZYAb3fsRUX6RcchduzFLK-o3A4oHV9M-KX1FPpSDMUVhtkv-7x5Ejg6i800eGztBbP4OqZdRu (1).jpg",
+   "bytes": 57258,
+   "sha256": "17f80fb69119936d4e519a2d144822b102a970cceb04fe04b95675e9bcd7a642",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/KGzmIJJ0SsEf5BnEiKgoZc3J7LN52vU7VbFBYMrjCXesJaQ6Usmons6iiwoWTbD3WzQSRZlHQ_18cTfQsnrEBZQvgJfkDfoRcsMZ_2vKhMgPAurs_tlK8qDZYAb3fsRUX6RcchduzFLK-o3A4oHV9M-KX1FPpSDMUVhtkv-7x5Ejg6i800eGztBbP4OqZdRu.jpg",
+   "bytes": 57258,
+   "sha256": "17f80fb69119936d4e519a2d144822b102a970cceb04fe04b95675e9bcd7a642",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/LoR5bUxrnAG3MGzRAvu3ixK5vrbH_F9AbQ3707wuTgilBkbfm1BajveUHMc6FQo9w8WeOwv1Qb3-mCJJXgl0yBju7ESLnnUjY8u06OCmi844g5cBQ7OtD_yq3zS7HwKC6xEQ8HAqv8HZ0oI7LQh3nJqMLBdGNTuuQJ_xRvHMBtBRIoF5VK3pKNbgcJF15X4t.jpg",
+   "bytes": 109634,
+   "sha256": "4a8ad7647331706aaf237daad29ff9564fe7fc20ce75ab4435eccfe4cdfa66cf",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/OzziCzIvHg0RyRw4fJbNuBOrO3JC1kPPfNwJPWdZfzyp0HybBe4axrCjcv-BI8X6pQQpHQI5Xz6o7E6uqYYmnVP7TdGLrHYZE2cTp9L9VfeR1EgxYf297IrP35Uc1YKD0zQkTQfoVW4-XFkVOQLjo5EIEh_h7kNs0-cNs_bF46T9FyTYpCP0dBSG-14_hEN0.jpg",
+   "bytes": 354533,
+   "sha256": "ea604212b168add49c15a19b8f570374ea70ebcbd35a3fc99c883f2c446a733f",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/PLYYwV4Imk6LMXuCP1r_vtL2DWXQlkOvslWdsgdpMBMla0gOTJ14PltXHOluY8h293-uEidFgWvU5leh1ndWfgJ6_efrh6QxAvcxQlLECBjrdn2q3-ohrcV-EW-VAU38YKlSDcANUr4XrjH_XPYuv04_iU9uL69u35ewh4otFvLtWSjbfSGcGFZ8hENW78OK.jpg",
+   "bytes": 72743,
+   "sha256": "f162fab675d0a51a93b9fe018932de075ca37c5d2de03d67b91f1c9b0fdbdfe9",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/PQQDlfDf4_uCtH9wehjUqqiyVbnXorPKPt_8D_FSPNDQ6cdXtjAH3PqJ5kK9sHcWlhAaNa0EWBZpuZk33cHKotXy5BOopzQIBVOZu_ddFZCOQm9fks7BaJ_GG8ycaPGSYtnp4FQ54E1dLcyJKIDOjlwC_rm7_BZLK7degO-UVlVRq-L_KiU0iyZwolbcZg3Z.jpg",
+   "bytes": 339711,
+   "sha256": "6ef4133c650f03b3ae0ad5056e0bddddb7f7e43e05a1e279bb7b6c42a3e472f7",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/Q6svL6si8KGg3-SIwQAnl5HrPxqA_89CGl2WwkmSx7S6zjodFYp3hiQO13NsmKjAMJdufywClUDWgKRnTdowAfTR7A-HpDHFGHUIm6jbYtOYT79FKnUdJpxKyU_xx-YruHOaGYNFOjg8CoV63DM23gGP9n1Xh8CGKGHwKwCzGKe8FNYXceUMeZ1vy7t9cUMe.jpg",
+   "bytes": 107382,
+   "sha256": "7216c8e0fb3c8a94dc87373d3abecdfb911502fab6f9b5655196ae811f760d33",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/QRAGrxtYZ13ylZjvqRZ7-DXTPJiL3bZp8GfszsNJzEH1zQkF-dDQ9lFw7sqT0kCfn8NPxNLpGJNEKoAeQi_-OYsbtQbis1f092OlP-6g3IG8myschiUb-kjNC8a1_dAytMteXVDp-0gbSQPl_MW2xqRIt7kejQhP4xBqrFupCa5SCdpn6HQYpuJHDSFZtNBC.jpg",
+   "bytes": 365913,
+   "sha256": "9b1852f2f082ffe37d66bc1bd71ffeff7080a7c5e9466eff830a0d6409b1f1da",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/README.md",
+   "bytes": 8009,
+   "sha256": "3ff23ca2fddb179008ce74d9125fe46d0ae538ddb22a3ba6965e90566fdeabf0",
+   "enMasterPublico": true,
+   "tipo": "texto"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/RUBIK_REFERENCIAS_ENTREGA_PROFESIONAL.md",
+   "bytes": 8009,
+   "sha256": "3ff23ca2fddb179008ce74d9125fe46d0ae538ddb22a3ba6965e90566fdeabf0",
+   "enMasterPublico": true,
+   "tipo": "texto"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/RfPybMqLIo2l2bWnGQyLiFUYYsKg07HyKfnv2UplcB8sFWtOTv54A-YE3LdrZke08w4fRZjTEmUidtjJ_pp6LMI9UnOKkRnD-c03hy4RwxevcBrrNbCQVn7F7mvOueOO7Gn6wi7HvG1xCTa9ZJ_49Jqa0sIpRcN0FGo57t03r_EI3FuHSMsKRXCLLx1SI1Ot.jpg",
+   "bytes": 57166,
+   "sha256": "df36318431c9c4cf1b8270e37a5b8dd673e5205ed10d625849bbdb2138c93cd1",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/SRiE_heQp3Qd2-6oZsKuXOJrDxAlU2D5xSTThPDOEjcVoqZpJgb5IeZhkQh_GDNlNpWpIVMi0vVmIxpPiiwCGjZxqkcHpI_tm5pPdMnts1a6lKhbJHua8abw7aMFoeCrmtoOpWpTiTo4NPviexZa5SUEG22ar_Q7uxaAZ30UPupndHOsq6Pa6a8xLkIkk16I.jpg",
+   "bytes": 353950,
+   "sha256": "09643381e3f7e9f80e35acba34848fb6690e48bac5e428a1199a2e6b6bee69a7",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/UbyuBLicueXHB26enDHSutsOfFa0cUQFcOL4dUdsgJPIWA0LD_ReB37WXoMF8lsYNk_VrqH32vqCoUbXAkdGNjV4MGjsmdAih8h0LjLmL-i7R53eYa4hKpR5UF31tuDIsZBM2QhYfnRqdq0vJITVsQQjUoxFS_ePX0ts1o_Ga8ps5X4Wc9n0S3Vvr83fc_Tb.jpg",
+   "bytes": 74473,
+   "sha256": "6037fbd8041b85c080fef2151b92ffc26f9bfcf969e17e3482742ad4e39f9adb",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/XEruvu7CR84JoFiz4Yi6hhs28ofoOqQvnllDu7vi68AVN84DbQcUpaj9SRcE9z7VcRda2rY4S5l9pSQ-LxON6y8OV3HYxagbLp9cyhJkY_YIMkScvaUxgHiH5sq5JRJM62szI-AvOsaL3hwHMnFdOfzBTTJ5Z4GYWCHlMeEQM_OLUPKmFhQ6T80FRs72bez0.jpg",
+   "bytes": 75140,
+   "sha256": "2286b19b9ca7f3e51a6a046cdd6894ff75964ff48367a2d8aa09d61a9e4e567c",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/ZMZtv5_CK5tsLqvdK3algbsAlOhOL9RpCZaQjMUDbQZ4pNBSyARClhvvZ9m9KCk1STqF5mCwp5X21QJlUxh0T6uQUaB4Gytkh0oE8JRWALo9BJD_CwLyrr6MRRi3VOE3Nx92N_Z009Zt7f1a7LaABfq_-_1qlsIdy4Bbaw74poNDM1ns9JJk0NP0vpzP9VDy.jpg",
+   "bytes": 182122,
+   "sha256": "ab9e459821ad077827cbb3d68f7cc50b5e56521a60c2af19eadb68500186f1d3",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/bEMnNVwZLDAsLSXS0BI9C0432AOKGY2RMQFs8JD18ZvLwL3A3o7RRwMANi1Jap4_3V1AVGQ4fOpodQEs8up8xffubXdBWADAlJfd33CHEZrqENjTXI8qOoIAwzxgqm_x1WzMcrcSxTkpL6xJulfakRW3zfNLCBsQg2AW16ayQ9VsoJ-JI9kIw-W1uHDNkGIp.jpg",
+   "bytes": 75056,
+   "sha256": "4f81a48da4de77434dae05bb7163194e7f2b04401b94d4a91949e692d9700b15",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/cAtxzGmCYumUjvCvXhm97IUUQVY90-dVzZci6xIjG3F1LY4P2THXHSohP3jpPAt6HAsCG4bYomhmMilWSnIZ-2LbTnBczcta_4On4puZ2L7TqnauiwqQLdPq7T5_42_UrZMj1xr8jxxzwoYry24msk2TAQ4Gsa_MpYIdvnr0Qg-EfyY_xXIlDmc9WihwAJRe.jpg",
+   "bytes": 39133,
+   "sha256": "9503d0bfeef867090cc9da3a821c64b5e3f7666d8d1c8b7fa1575518366ad137",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/dOC5FtltEl4LQWFFJYvIwKQsJJyyVnoFJiELs-y4h48pYhfiZ1NyN7T25YY46MiCpKwFvn6vh1z6E1y-SbzS-SGkPT0zszUFAT5ygCQ0ZgtVDp6gQTqq1-3rhMAovyle7_zlh4KT6fw78qo0W2Y9KSssSa-3YKFDov-Ej_5lirHyxnrOpne1ObE5PnyLySK0.jpg",
+   "bytes": 132902,
+   "sha256": "2f7bd4da204d931b68afdcdfa347105af31ea411333ab246b392ffff0b2a02ab",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/eCgEvL5Vf-kxzgIzv1Q_TO7cZ77hWChiA1MM8zGsTdENdE3en-4e91o-pD5tZlVkEXcXPkclR2-o43mvsy_bMp0uPNy7SdHHWDhg5PCTvl0zWpUwUE6QNFOOFuIuX6YqzeWFCx8B6LHhItZRd6dSvppzijpn4jPOP3Gmo-iDdPaboWBOrfiKIhfH9qT9RKzf.jpg",
+   "bytes": 715661,
+   "sha256": "2291a2d1a739562c0c52099110556ea8dff9f14e797eef36e8dbf2b218f9e00f",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/eTqL4DiSz_IIt4Jb-cX0cl6DVqmbm8wJqIGHFBRpJjO39jNR4siTGWbpA15q8YDPjcTjZMR_Rvo6rx3WdkpH1BKnxL7TlfuJ4MPCic8ZEoPqzzVF6IpKrGoPB7MkTXBRLbNKNCo8MDxBmKTmwDczlXw0QBJ4kyPGoahnkKi5MRTnoJmunx_Cmt1Gdr-JVFmh.jpg",
+   "bytes": 186625,
+   "sha256": "6d6faf5bd1a5e8ef625779b35b176ea555344327ad9b156c3b8571258f745cb2",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/g6_5hGnt3KQLMGE9JRpiN_q0FVag0eNeCAKwPbvl4L8Hd3JksaRSjgQYdwit5Latfhg-WnOOnqcP95VbIQxjW2hUCqb9fIuiThu2UtssMZ6aCEVnNIydOGgNZIUOvmrQLuzltJhbcdwegWUl5FcJA7aApkwcp74V9KIxmodceObTqPdnJU8o5FJaXweCzWKu (1).jpg",
+   "bytes": 82637,
+   "sha256": "0c669cca6a7297cb537ce544b4d3cd1aaf5536f1caddc6d852ef5053af0cdb30",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/g6_5hGnt3KQLMGE9JRpiN_q0FVag0eNeCAKwPbvl4L8Hd3JksaRSjgQYdwit5Latfhg-WnOOnqcP95VbIQxjW2hUCqb9fIuiThu2UtssMZ6aCEVnNIydOGgNZIUOvmrQLuzltJhbcdwegWUl5FcJA7aApkwcp74V9KIxmodceObTqPdnJU8o5FJaXweCzWKu.jpg",
+   "bytes": 82637,
+   "sha256": "0c669cca6a7297cb537ce544b4d3cd1aaf5536f1caddc6d852ef5053af0cdb30",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/gnIUa_0TEHAsJrB4VX9p05LdyChyRrehMoaa-t5IR_qOFBC9QcUrB2exSNIdGUJsHy7BJKMRAwRQcH2xwo3vScLjrNVkZo3egwblPfa_lQeRxcTwTSgZ-rwz2z227EfR1DVaUbsIRbw7ElDdvfWhiTL5i6QaAUF_PEqXUY_E1B1Ky8lPyU83XDvj9mpAPuf6.jpg",
+   "bytes": 381196,
+   "sha256": "b29459c37dc527b79fa09727e88ea7894e6d64b05e00bcb4ed475fa0e94cdf1e",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/hShBA09S0kiYNFEyhoQvZb5PeenHjeV7pgNkwD0UboZcQAWUJ4U__2r_oaj-ndbU9zKzTo8A19j8VS2hKNlk_U0VoR18-kOSSDgF2BekA5V2FQdbCvAKcxRxQ1nvENtAhp8rHicQmRER3uhzsWqFLULJpl2koXJv5tOzsMwcXCXMxBYzcKR1OTfAh53wUUcR.jpg",
+   "bytes": 344485,
+   "sha256": "8d6dd9008feab9ad4479ada2b93e656b20cabac1bb81c5343c622d5c78cc916c",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/hgRzaO4TlAe4MAWgYgDEAhZyf6zbKmVAwH_gnnHN7B1loa7uIMcXy6hx59w-KEHgIRPdZGRWfJZRTvU5IKPyws6eYRE0PYTeyu95OiW6X0bp-6uewu19_NkUMM9vyeBpNfVyP25W1Qk2mGRvh0twao5Ud0uAoterwFJDQ-dWHZQiEWsZcnAe6YK2je_O_62b.jpg",
+   "bytes": 143748,
+   "sha256": "a742fad3b67617a8a4eb9c6004e2fe2f5fa2243f43d9ab10d8538d24221ed263",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/j_ENAhw-dC4EkcweaQog-EPx04dOMs7IcV6ueLTHHuh1_KuCJ2RXZPByiP_Y5Gsc8Avd2dLPnv5oFhR_D13g3wauo2SFGwP8NnMKRFsyx8px6OOXudBGDxvVXGcWKJTJjlWcRH5PZ03rTP1D7qtxh0e47gilzFohxz0BddjApRBszv9n4DkFrqa42WfzSKgH.jpg",
+   "bytes": 524391,
+   "sha256": "0a7e790ea7865a1efdae2d072e2e648c4573ecc43c5986259791e543aed13ae1",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/klzbfS1I2cz0GKpj-oGrs_0Nqyops7woCyux_SK8d252OFwOILcZsk5koJ1AEJ2UuJ_dFEFNHGG454Xwt1xPUyBfQcaBw1x_XLIu4LvGRqkCs4sijzH2WCwM30CgeU89vzo-xyyPIFA8X5R22ME8-S-M5e5vYJ1TTQJQNJeDYlw3wREMKGrvvkodmMTAe9jI.jpg",
+   "bytes": 292836,
+   "sha256": "162bd89fdf7153848559b1e0c273ef895bbf490761d4c1f13aeeefc9d9cde137",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/lKO_BI6TL9TQVxJAjJBE0W5z34VrwQFfXH88NRDoSUdIMOKK7nnkWW34sfyL9ZWv1QqsFp0_3SnBRpqNjMEsFngwv7-jr_RT8peRUPw4ELUZohosLuSdvdG_BeYYfxhrC9vodOe5gdDoRcG93svsabNjI12xxnYmwVn0HRpbfloyKvn5TgUXmnpCW2Pc-3P_.jpg",
+   "bytes": 714581,
+   "sha256": "5935d047c9b40077cd8f1075428ff4bcb8fbef97c2bbcdd9a566d3c8e7164ff9",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/manifest.json",
+   "bytes": 5302,
+   "sha256": "f5713087fd4a83a3afa742d2a7e473378c60a3a53ab73864aaffdcec651f75cc",
+   "enMasterPublico": true,
+   "tipo": "texto"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/o9wqu1vN8DDY0f96MxB_hAS-SYh0sXrFYordJ5g9a_ks-1xVy3wxxVo0iWWSgdFYyHOLfM6rAlXrXpT1l7EvTU-mBLQWcSQDbvyT3VgYFklyGTTEKt3MsRIh5Q14oVap9Cin-2etmdGr8sJyekSeHnV-pdXpSOZHYJyDnsceorxiEQ2sDKIe2JVEkUDxDPXi.jpg",
+   "bytes": 300988,
+   "sha256": "6d64df1d778dedcbba65bc09c71a3e16b9b40b6b4adc248dde5cebcf66c27b0a",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/oWl8TL_Dab7tdoFCa22tzOmr5IuzAUh0Gh-TUqlIg_0AOhe2l2Djm1i5il_rB5FCyeoFDJzhFp5F23zHT-hQwDYe7vzR5953fTjJkYrXpEefHKTwlz4FnbbmTJHCgyfZcbibj1m8lKtnqv4g6GjyjnvCUdQmxPFDHuRxu5GEdpshBxUqyPIpOCOf1ggM90Il.jpg",
+   "bytes": 552013,
+   "sha256": "a2ebd754daee2b571dac3cbcbe5a581b883eae1a683163090f2a2cfcb017682b",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/pOSPkRsO-diILCIt8-HP0mVuHmiZoNyKx6J6c81wz03WRNIeg3xLi7UAtyIYKyjOoYGClnwxyhCy32arJHjSY2CqRQkZQvmsDb4slJTNjlVuPCQd_Qt5G0DjVHGrZFxd2qMYlYgr1hYtWpXMYl7p5uNvna9rfIZuuCID6WbJAR7nN9BWKLqysJXk3z5CU8Kj.jpg",
+   "bytes": 187497,
+   "sha256": "dde93aefc5e2fddbccdb39c634c139a82f211593d9d321e9a27949e8db7008d0",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/qKhOe6DqPXOO0GI7CJrPO4sev2HXvHvah2kdqwAeSljwtDUet21A9aQPkpvvKuxIR1mRVU6lJmEOPmmHBuRfBej-geHVoiR1ZHHB-mome_dnezMjVWbHTmAMhjK07EMxtE8Ygra8-w1D3_BJD5NhI91Ckpli__e14jmYOZ1F7pPZrxaBWo-xxkgR1s1kGZrR.jpg",
+   "bytes": 101081,
+   "sha256": "fe358aebfa1eec881c2fa17b09261061e1a20e66648abf6cda2585bcaf448907",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/sTJtmBSF0AURdizywKfb9oPk-5XAq0tTIk54QyYOhQhqq-a37OOA76w1-8yPgJbWRFymGV5_5FG6KnCh5A9fslquT_6MQNtZ8G69-Mu9rF5EuQw77bWHYaBPB1aLVbeY9mHqiDlCWU18u2Ko4GyoUcddUp0Ujx15blm45q1V6A-1N7AVIUK-3vUJVSI8vZe_ (1).jpg",
+   "bytes": 263867,
+   "sha256": "651eb9f94844e3d488257c01ce40826300d2a8cb0df9ca4e7eaf6b510cc057aa",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/sTJtmBSF0AURdizywKfb9oPk-5XAq0tTIk54QyYOhQhqq-a37OOA76w1-8yPgJbWRFymGV5_5FG6KnCh5A9fslquT_6MQNtZ8G69-Mu9rF5EuQw77bWHYaBPB1aLVbeY9mHqiDlCWU18u2Ko4GyoUcddUp0Ujx15blm45q1V6A-1N7AVIUK-3vUJVSI8vZe_.jpg",
+   "bytes": 263867,
+   "sha256": "651eb9f94844e3d488257c01ce40826300d2a8cb0df9ca4e7eaf6b510cc057aa",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/tWk8sWx6vNh-Vasfn5Yy9GnG2Zk1L3z7cXiklIKn4jTTT8DJ92VHTS6cMiyJpWkMuzaxNRtVHiS3YGi_UpIUWxBiClBJWXd3AX848-xjrBletYtC0JAvgK0LSdv8BAUlwGlWgeiLxEd-rklv3EoJy1bgeVd8mzsZSeL3bWQcyyumuQhLkrT8Fny0_Bt8hv49.jpg",
+   "bytes": 324908,
+   "sha256": "11ff9b1929a92637335166b1aa539f97ae951039adf83c7124be17f86bb5b10d",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/uQcfP1Z4pgtE-rzTfoFbLqP1piwA_v9nmHceNk2F41fVFhvXI6elLs5JdNmXGdgpYTKX0jr9hdNY6lHzLW1BkvA3j523DS0wIOK_hL9Z35EMBCokl459QbYzXOwYM4dlEG5JnL2Gzf9zzyRCBM809qZ_hlktjgJMB4qlBLJq3xcKDhCMuGmDb-afR2LQ62N0.jpg",
+   "bytes": 53577,
+   "sha256": "c854e44d4b75ab4d1f0e839eed428c381a6c0f2f7d3d2f5bda2e047c9984bee8",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/vqxq-6AmOZ_j7DbslaTQWFmZ1HPmtuc0h8cosScknk_JEUudpqdAUykNkHCkPvfudz9la3v3NkRRFMB65XtxyDk2pDbKDmKZvY5KoAm4brAtN0viCPGFVZSlcs-Buv0kvlmuupLNtIL1R5dIJuHaI0gjdEgjYIPSQHl_hU4XgplwCpbMRVqHiq641K0Rpe-z.jpg",
+   "bytes": 41323,
+   "sha256": "9e995532a94a576a73483f7ba07c181e38923063a261aa8e948345998636255a",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/wXqyCj5dlGRiaq1cuDCsB_Vox4-rb_2MyF8YJSQTHDxo7SNRjWOgjRlmJfRn0GMezS0qodtDT_kgaRRUHJ9MG1LoeEF2vF7bXnU8_b5muOFXqtfzVwajPdKP2NYlr4SZQE0wj8Y-bYjfQNwUZPnV4LHmEizKQw2EcLca5lX7kaGv9dMd49HxHDLCPTr3C5YA.jpg",
+   "bytes": 51608,
+   "sha256": "ebc86d2aabab230a877ad95a99df485f95c0ca7b0c5861450cd97c72b8972960",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/x9n_6eKtPe040OSYB4iEdcgI60YIDhhkWAmb5wo9vJz_5299hhr3AVUm8rlVCRH2qACF21fUUaP9wwiRPjLwE_0PSkuHCBKAsC9FAEGubwj7XVRVTscp86Rrb6ynXwLqVSwX4IMc046MLfeeXvywDnndDGdkWqbcGHTi1Q4ZzDtyq62vOfSGDG_lEsfc6nqz.jpg",
+   "bytes": 41957,
+   "sha256": "e3b8b15db180b7ca7a070e323a5c0927205a7b5d953d5db1e708eaa5a75c3aa2",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-01-plano-actual-propuesta-fotografias.jpg",
+   "bytes": 132902,
+   "sha256": "2f7bd4da204d931b68afdcdfa347105af31ea411333ab246b392ffff0b2a02ab",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-02-dossier-editorial-arquitectura.jpg",
+   "bytes": 332550,
+   "sha256": "1fe5599f2cf7ee4b86242aa5011fdb84fb808271c1ce721451b2e3aab5a3b7a6",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-03-presupuesto-comercial.jpg",
+   "bytes": 39133,
+   "sha256": "9503d0bfeef867090cc9da3a821c64b5e3f7666d8d1c8b7fa1575518366ad137",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-04-propuesta-terra.jpg",
+   "bytes": 508574,
+   "sha256": "3f78795f55989fede0da8c2c804293d9165396df3899ddec5017623ef348fb65",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-05-alcance-honorarios.jpg",
+   "bytes": 75607,
+   "sha256": "f8998d1b243711d0859173558e7fe9a871f7f998f4f21b4549d461929c062da1",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-06-plano-antes-despues.jpg",
+   "bytes": 196147,
+   "sha256": "ac001bc7a361e11809e0aee427d3eab9f7c232ce5e71947d69662ac43fe37a3e",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-07-dossier-integral.jpg",
+   "bytes": 344485,
+   "sha256": "8d6dd9008feab9ad4479ada2b93e656b20cabac1bb81c5343c622d5c78cc916c",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-08-comparacion-planos-3d.jpg",
+   "bytes": 75140,
+   "sha256": "2286b19b9ca7f3e51a6a046cdd6894ff75964ff48367a2d8aa09d61a9e4e567c",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-09-propuesta-mobiliario.jpg",
+   "bytes": 82637,
+   "sha256": "0c669cca6a7297cb537ce544b4d3cd1aaf5536f1caddc6d852ef5053af0cdb30",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-10-vision-materiales-presupuesto.jpg",
+   "bytes": 57258,
+   "sha256": "17f80fb69119936d4e519a2d144822b102a970cceb04fe04b95675e9bcd7a642",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-11-dossier-arquitectura-tecnico.jpg",
+   "bytes": 399935,
+   "sha256": "b4a4994f8968ae3c8edf1f7c008cc7076bca1514461e65fbbef34013065b0c87",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-12-propuesta-inmobiliaria-reforma.jpg",
+   "bytes": 263867,
+   "sha256": "651eb9f94844e3d488257c01ce40826300d2a8cb0df9ca4e7eaf6b510cc057aa",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-13-dossier-interiorismo-minimal.jpg",
+   "bytes": 75056,
+   "sha256": "4f81a48da4de77434dae05bb7163194e7f2b04401b94d4a91949e692d9700b15",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  },
+  {
+   "archivo": "REFERENCIAS VISUALES ENTREGA CLIENTE DISEÑO EDITORIAL/referencias/VIS-14-axonometria-antes-despues.jpg",
+   "bytes": 40698,
+   "sha256": "4c90a4e80019c48e68f809879f9ae6442aad22af4e804dcf1c180469a89f663f",
+   "enMasterPublico": true,
+   "tipo": "imagen"
+  }
+ ]
+}

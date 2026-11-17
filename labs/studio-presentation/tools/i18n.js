@@ -10,6 +10,8 @@ function I18N(dict,data,mode){
  const norm=s=>s.replace(/\s+/g,' ').trim();
  const ALL=Array.isArray(data)?data:data.all,MASK=Array.isArray(data)?[]:data.mask;
  const dataSet=new Set(ALL.map(norm));
+ // Un texto dentro de [data-ui] es interfaz aunque coincida con un dato (la leyenda «Ventana» frente a la partida «Ventana»):
+ // se traduce y el gate no lo enmascara.
  // Los nombres del proyecto se protegen con marcadores mientras actúan las reglas (p. ej. « y » → « and » no debe tocar
  // «Fernández y Sánchez»); se restauran al final. La búsqueda exacta va antes, sobre el texto sin proteger.
  const masks=MASK.map(norm).filter(x=>x.length>=4).sort((a,b)=>b.length-a.length);
@@ -23,20 +25,20 @@ function I18N(dict,data,mode){
  // frase exacta → cada frase (exacta o reglas) → reglas sobre el conjunto
  const phrase=n=>{if(exact[n]!==undefined)return toEn(exact[n]);const parts=n.split(/(?<=[.?!])\s+(?=[A-ZÁÉÍÓÚÑ¿«(0-9])/);
   if(parts.length>1)return parts.map(x=>exact[x]!==undefined?toEn(exact[x]):rule(x)).join(' ');return rule(n);};
- const tr=t=>{const n=norm(t);if(!n||dataSet.has(n))return t;const lead=t.match(/^\s*/)[0],trail=t.match(/\s*$/)[0];return lead+phrase(n)+trail;};
+ const tr=(t,ui)=>{const n=norm(t);if(!n||(!ui&&dataSet.has(n)))return t;const lead=t.match(/^\s*/)[0],trail=t.match(/\s*$/)[0];return lead+phrase(n)+trail;};
  let n;const nodes=[];
  if(mode!=='check'){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   while((n=w.nextNode())){if(n.parentElement.closest('script,style,[lang="es"]:not(html)'))continue;nodes.push(n);}
-  for(const t of nodes)t.textContent=tr(t.textContent);
+  for(const t of nodes)t.textContent=tr(t.textContent,!!t.parentElement.closest('[data-ui]'));
   for(const e of document.querySelectorAll('[alt],[aria-label],[title]'))for(const a of ['alt','aria-label','title'])if(e.getAttribute(a)&&!e.closest('[lang="es"]:not(html)'))e.setAttribute(a,tr(e.getAttribute(a)));
   document.title=tr(document.title);document.documentElement.lang='en';}
  if(mode==='translate')return {nodes:nodes.length};
  // gate: se enmascaran los datos del proyecto (los más largos primero, sin distinguir mayúsculas) y se buscan palabras españolas
  const ES=new Set(dict.spanishWords);const gateMasks=[...dataSet].filter(x=>x.length>1).sort((a,b)=>b.length-a.length).map(x=>new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'));
- const residual=[];const check=(txt,where)=>{let m=txt;for(const re of gateMasks)m=m.replace(re,' ');
+ const residual=[];const check=(txt,where,ui)=>{let m=txt;if(!ui)for(const re of gateMasks)m=m.replace(re,' ');
   for(const wd of m.toLowerCase().split(/[^a-záéíóúüñ¿¡]+/i)){if(!wd)continue;if(ES.has(wd)||/[áéíóúñ¿¡]/.test(wd))residual.push({w:wd,t:txt.slice(0,90),where});}};
  const w2=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
- while((n=w2.nextNode())){if(n.parentElement.closest('script,style,[lang="es"]:not(html)'))continue;const t=norm(n.textContent);if(t)check(t,'texto');}
+ while((n=w2.nextNode())){if(n.parentElement.closest('script,style,[lang="es"]:not(html)'))continue;const t=norm(n.textContent);if(t)check(t,'texto',!!n.parentElement.closest('[data-ui]'));}
  for(const e of document.querySelectorAll('[alt],[aria-label],[title]'))for(const a of ['alt','aria-label','title'])if(e.getAttribute(a)&&!e.closest('[lang="es"]:not(html)'))check(e.getAttribute(a),a);
  check(document.title,'title');
  // texto generado por CSS (content: "…"): no es un nodo de texto, pero se ve en pantalla

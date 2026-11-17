@@ -26,7 +26,7 @@ module.exports=function architectureBook(C){
  if(general&&general.pw>205)throw new Error('architecture-book: la planta general no cabe a 1:100');
  pages.push({html:`<div class="grid"><div class="c1-8" style="line-height:0">${general?general.svg:plan({w:200,h:150}).svg}</div>
   <div class="c9-12"><h2 class="h2">Planta general</h2><p class="read">Geometría del proyecto en RUBIK: ${S.geometry.walls.length} muros, ${S.geometry.openings.length} huecos, ${rooms.length} estancias y ${S.objects.length} objetos.</p>
-  ${general?`<div class="legend" style="margin-top:4mm">${C.scaleBar?C.scaleBar(general.mmPerUnit):''}<span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.ink}"/></svg>Portante y fachada</span><span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.partition}"/></svg>Tabique</span><span>Huecos y mobiliario según el modelo</span></div>${keyList(general.keys)}`:''}
+  ${general?`<div class="legend" style="margin-top:4mm;flex-wrap:wrap;gap:2mm 5mm">${C.scaleBar?C.scaleBar(general.mmPerUnit):''}<span data-ui><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.ink}"/></svg>Portante y fachada</span><span data-ui><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.partition}"/></svg>Tabique</span><span data-ui style="flex-basis:100%">Huecos y mobiliario según el modelo</span></div>${keyList(general.keys)}`:''}
   <p class="caption" style="margin-top:3mm">Sin cotas: el modelo no las acredita. Medir sobre el papel no sustituye a una medición en obra.</p>
   ${cajetin('Planta general',general?scaleTxt(100):null)}</div></div>`});
  // ---------- cuadro de superficies ----------

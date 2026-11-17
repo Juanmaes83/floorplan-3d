@@ -1,0 +1,276 @@
+[
+ {
+  "doc": "architecture-book",
+  "nombre": "Architecture Book",
+  "idioma": "es",
+  "pdf": "out/v3/architecture-book.pdf",
+  "paginas": 14,
+  "imagenes": [
+   "architecture-book-es-01.jpg",
+   "architecture-book-es-02.jpg",
+   "architecture-book-es-03.jpg",
+   "architecture-book-es-04.jpg",
+   "architecture-book-es-05.jpg",
+   "architecture-book-es-06.jpg",
+   "architecture-book-es-07.jpg",
+   "architecture-book-es-08.jpg",
+   "architecture-book-es-09.jpg",
+   "architecture-book-es-10.jpg",
+   "architecture-book-es-11.jpg",
+   "architecture-book-es-12.jpg",
+   "architecture-book-es-13.jpg",
+   "architecture-book-es-14.jpg"
+  ]
+ },
+ {
+  "doc": "architecture-book",
+  "nombre": "Architecture Book",
+  "idioma": "en",
+  "pdf": "out/v3/architecture-book.en.pdf",
+  "paginas": 14,
+  "imagenes": [
+   "architecture-book-en-01.jpg",
+   "architecture-book-en-02.jpg",
+   "architecture-book-en-03.jpg",
+   "architecture-book-en-04.jpg",
+   "architecture-book-en-05.jpg",
+   "architecture-book-en-06.jpg",
+   "architecture-book-en-07.jpg",
+   "architecture-book-en-08.jpg",
+   "architecture-book-en-09.jpg",
+   "architecture-book-en-10.jpg",
+   "architecture-book-en-11.jpg",
+   "architecture-book-en-12.jpg",
+   "architecture-book-en-13.jpg",
+   "architecture-book-en-14.jpg"
+  ]
+ },
+ {
+  "doc": "architecture-sheet-strip",
+  "nombre": "Lámina A3 (variante del Architecture Book)",
+  "idioma": "es",
+  "pdf": "out/v3/architecture-sheet-strip.pdf",
+  "paginas": 1,
+  "imagenes": [
+   "architecture-sheet-strip-es-1.jpg"
+  ]
+ },
+ {
+  "doc": "architecture-sheet-strip",
+  "nombre": "Lámina A3 (variante del Architecture Book)",
+  "idioma": "en",
+  "pdf": "out/v3/architecture-sheet-strip.en.pdf",
+  "paginas": 1,
+  "imagenes": [
+   "architecture-sheet-strip-en-1.jpg"
+  ]
+ },
+ {
+  "doc": "interior-book-v3",
+  "nombre": "Interior Design Book",
+  "idioma": "es",
+  "pdf": "out/v3/interior-book-v3.pdf",
+  "paginas": 14,
+  "imagenes": [
+   "interior-book-v3-es-01.jpg",
+   "interior-book-v3-es-02.jpg",
+   "interior-book-v3-es-03.jpg",
+   "interior-book-v3-es-04.jpg",
+   "interior-book-v3-es-05.jpg",
+   "interior-book-v3-es-06.jpg",
+   "interior-book-v3-es-07.jpg",
+   "interior-book-v3-es-08.jpg",
+   "interior-book-v3-es-09.jpg",
+   "interior-book-v3-es-10.jpg",
+   "interior-book-v3-es-11.jpg",
+   "interior-book-v3-es-12.jpg",
+   "interior-book-v3-es-13.jpg",
+   "interior-book-v3-es-14.jpg"
+  ]
+ },
+ {
+  "doc": "interior-book-v3",
+  "nombre": "Interior Design Book",
+  "idioma": "en",
+  "pdf": "out/v3/interior-book-v3.en.pdf",
+  "paginas": 14,
+  "imagenes": [
+   "interior-book-v3-en-01.jpg",
+   "interior-book-v3-en-02.jpg",
+   "interior-book-v3-en-03.jpg",
+   "interior-book-v3-en-04.jpg",
+   "interior-book-v3-en-05.jpg",
+   "interior-book-v3-en-06.jpg",
+   "interior-book-v3-en-07.jpg",
+   "interior-book-v3-en-08.jpg",
+   "interior-book-v3-en-09.jpg",
+   "interior-book-v3-en-10.jpg",
+   "interior-book-v3-en-11.jpg",
+   "interior-book-v3-en-12.jpg",
+   "interior-book-v3-en-13.jpg",
+   "interior-book-v3-en-14.jpg"
+  ]
+ },
+ {
+  "doc": "materials-furniture-book-v3",
+  "nombre": "Materials & Furniture Book",
+  "idioma": "es",
+  "pdf": "out/v3/materials-furniture-book-v3.pdf",
+  "paginas": 12,
+  "imagenes": [
+   "materials-furniture-book-v3-es-01.jpg",
+   "materials-furniture-book-v3-es-02.jpg",
+   "materials-furniture-book-v3-es-03.jpg",
+   "materials-furniture-book-v3-es-04.jpg",
+   "materials-furniture-book-v3-es-05.jpg",
+   "materials-furniture-book-v3-es-06.jpg",
+   "materials-furniture-book-v3-es-07.jpg",
+   "materials-furniture-book-v3-es-08.jpg",
+   "materials-furniture-book-v3-es-09.jpg",
+   "materials-furniture-book-v3-es-10.jpg",
+   "materials-furniture-book-v3-es-11.jpg",
+   "materials-furniture-book-v3-es-12.jpg"
+  ]
+ },
+ {
+  "doc": "materials-furniture-book-v3",
+  "nombre": "Materials & Furniture Book",
+  "idioma": "en",
+  "pdf": "out/v3/materials-furniture-book-v3.en.pdf",
+  "paginas": 12,
+  "imagenes": [
+   "materials-furniture-book-v3-en-01.jpg",
+   "materials-furniture-book-v3-en-02.jpg",
+   "materials-furniture-book-v3-en-03.jpg",
+   "materials-furniture-book-v3-en-04.jpg",
+   "materials-furniture-book-v3-en-05.jpg",
+   "materials-furniture-book-v3-en-06.jpg",
+   "materials-furniture-book-v3-en-07.jpg",
+   "materials-furniture-book-v3-en-08.jpg",
+   "materials-furniture-book-v3-en-09.jpg",
+   "materials-furniture-book-v3-en-10.jpg",
+   "materials-furniture-book-v3-en-11.jpg",
+   "materials-furniture-book-v3-en-12.jpg"
+  ]
+ },
+ {
+  "doc": "commercial-proposal-client-v3",
+  "nombre": "Commercial Proposal (cliente)",
+  "idioma": "es",
+  "pdf": "out/v3/commercial-proposal-client-v3.pdf",
+  "paginas": 2,
+  "imagenes": [
+   "commercial-proposal-client-v3-es-1.jpg",
+   "commercial-proposal-client-v3-es-2.jpg"
+  ]
+ },
+ {
+  "doc": "commercial-proposal-client-v3",
+  "nombre": "Commercial Proposal (cliente)",
+  "idioma": "en",
+  "pdf": "out/v3/commercial-proposal-client-v3.en.pdf",
+  "paginas": 2,
+  "imagenes": [
+   "commercial-proposal-client-v3-en-1.jpg",
+   "commercial-proposal-client-v3-en-2.jpg"
+  ]
+ },
+ {
+  "doc": "commercial-proposal-studio-v3",
+  "nombre": "Commercial Proposal (estudio, interno)",
+  "idioma": "es",
+  "pdf": "out/v3/commercial-proposal-studio-v3.pdf",
+  "paginas": 2,
+  "imagenes": [
+   "commercial-proposal-studio-v3-es-1.jpg",
+   "commercial-proposal-studio-v3-es-2.jpg"
+  ]
+ },
+ {
+  "doc": "commercial-proposal-studio-v3",
+  "idioma": "en",
+  "estado": "no compuesto"
+ },
+ {
+  "doc": "real-estate-sheet-v3",
+  "nombre": "Real Estate Presentation",
+  "idioma": "es",
+  "pdf": "out/v3/real-estate-sheet-v3.pdf",
+  "paginas": 1,
+  "imagenes": [
+   "real-estate-sheet-v3-es-1.jpg"
+  ]
+ },
+ {
+  "doc": "real-estate-sheet-v3",
+  "nombre": "Real Estate Presentation",
+  "idioma": "en",
+  "pdf": "out/v3/real-estate-sheet-v3.en.pdf",
+  "paginas": 1,
+  "imagenes": [
+   "real-estate-sheet-v3-en-1.jpg"
+  ]
+ },
+ {
+  "doc": "real-estate-sheet-v3-sin-presupuesto",
+  "nombre": "Real Estate Presentation sin cifras",
+  "idioma": "es",
+  "pdf": "out/v3/real-estate-sheet-v3-sin-presupuesto.pdf",
+  "paginas": 1,
+  "imagenes": [
+   "real-estate-sheet-v3-sin-presupuesto-es-1.jpg"
+  ]
+ },
+ {
+  "doc": "real-estate-sheet-v3-sin-presupuesto",
+  "nombre": "Real Estate Presentation sin cifras",
+  "idioma": "en",
+  "pdf": "out/v3/real-estate-sheet-v3-sin-presupuesto.en.pdf",
+  "paginas": 1,
+  "imagenes": [
+   "real-estate-sheet-v3-sin-presupuesto-en-1.jpg"
+  ]
+ },
+ {
+  "doc": "entrega-integral",
+  "nombre": "Presentación integral",
+  "idioma": "es",
+  "pdf": "out/v3/entrega-integral.pdf",
+  "paginas": 12,
+  "imagenes": [
+   "entrega-integral-es-01.jpg",
+   "entrega-integral-es-02.jpg",
+   "entrega-integral-es-03.jpg",
+   "entrega-integral-es-04.jpg",
+   "entrega-integral-es-05.jpg",
+   "entrega-integral-es-06.jpg",
+   "entrega-integral-es-07.jpg",
+   "entrega-integral-es-08.jpg",
+   "entrega-integral-es-09.jpg",
+   "entrega-integral-es-10.jpg",
+   "entrega-integral-es-11.jpg",
+   "entrega-integral-es-12.jpg"
+  ]
+ },
+ {
+  "doc": "entrega-integral",
+  "nombre": "Presentación integral",
+  "idioma": "en",
+  "pdf": "out/v3/entrega-integral.en.pdf",
+  "paginas": 12,
+  "imagenes": [
+   "entrega-integral-en-01.jpg",
+   "entrega-integral-en-02.jpg",
+   "entrega-integral-en-03.jpg",
+   "entrega-integral-en-04.jpg",
+   "entrega-integral-en-05.jpg",
+   "entrega-integral-en-06.jpg",
+   "entrega-integral-en-07.jpg",
+   "entrega-integral-en-08.jpg",
+   "entrega-integral-en-09.jpg",
+   "entrega-integral-en-10.jpg",
+   "entrega-integral-en-11.jpg",
+   "entrega-integral-en-12.jpg"
+  ]
+ }
+]

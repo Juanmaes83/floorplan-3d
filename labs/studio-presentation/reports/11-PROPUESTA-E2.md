@@ -1,87 +1,93 @@
-# 11 · Propuesta E2, alineada con la v1.2 §8.1 (no autoriza nada)
+# 11 · Propuesta E2–E7, corregida (v1.3 §7 y v1.4 §9). No autoriza nada.
 
-**Estado:** propuesta. E2 requiere el GO explícito del propietario y una base consolidada acordada con Codex (hoy `master@403e6b7`). No se fusiona la rama del laboratorio ni se copian sus binarios, `node_modules`, referencias VIS ni salidas al árbol de Production.
+**Estado:** propuesta. E2 requiere:
 
-## 1. Correspondencia con el roadmap maestro
+- el GO explícito y separado del propietario;
+- una base consolidada acordada con Codex.
 
-La versión anterior de este informe llamaba E2-1…E2-8 a trabajo que abarca E2–E6. Queda así:
+No se toca el producto, master, Production ni las ramas de Codex.
 
-| Antes | Corte maestro | Qué cambia |
+**Base leída:** `master@8525025a1470d48d52d8e365070e5a0acf116134` (#243, #244 y #245 fusionadas). La lectura se hizo con `git show` y un worktree aparte, sin escribir nada.
+
+**Corrección.** La versión anterior de este informe, del commit `73784ba`, afirmaba que había que «activar ENT-04 cargando `before-after-dossier-core` y `revision-budget-core` en `index.html`». **Es falso.** El código lo refuta (abajo). Se conserva en el historial de Git. Este informe la sustituye.
+
+## 1. Lo que ya existe en master (comprobado en el código)
+
+| Pieza | Evidencia | Consecuencia para E2 |
 |---|---|---|
-| E2-1 modelo de entrega | **E2** (cimientos ENT-04) y evolución en E3 | No se crea un núcleo `FloorPlanDelivery` paralelo. Modelo **por composición** sobre contratos existentes (§3). |
-| E2-2 paginación | E2 solo si el PDF mínimo lo necesita; completa en E3/E5 | CSS Print provisional. `flow.js` con invariante y bloqueo de filas desmesuradas antes de habilitarlo. |
-| E2-3 preparar entrega | **E3** (ENT-03) | Después de la activación ENT-04. La interfaz del laboratorio es una simulación; el exportador es un prototipo. |
-| E2-4 carpeta offline | **E6** (ENT-02/06) tras E3 | B1 conserva las observaciones. El ZIP local no acredita ENT-06. |
-| E2-5 Render IA trazable | **E4** (ENT-05, IMG-12) | Se permite analizar el contrato; sin peticiones pagadas. |
-| E2-6 obra | E3/E4 composición y E6 entrega | Solo material y plan elegibles; DEC-05. |
-| E2-7 Dibujo vivo | E4/E5 o corte Hybrid/Story | La exportación real está pendiente. |
-| E2-8 enlace remoto | **E6** | GOV-08 completo, cuotas, aislamiento y DEC-05. S3 no hace privado un Blob público. |
+| Acceso «Comparar con el original» | `index.html:2516–2520`: abre `comparar/?` + `FloorPlanVariantsCompare.handoff({beforeId,afterId})` + `anchor` | **No hay que cargar ningún motor en la página principal.** |
+| Ruta del comparador | `comparar/index.html` carga, en orden: `revision-compare-core`, `revision-budget-core`, `before-after-dossier-core`, `variants-compare-adapter` y `comparar.js` | ENT-04 está activo en su ruta. Duplicarlo sería un error. |
+| `comparar/comparar.js` | Lee biblioteca y presupuestos del mismo origen. Muestra cortina y lados, cambios y presupuesto. Explica los límites de plantas. Genera un borrador HTML con manifiesto y lo verifica. | Es la base de E2. |
+| Pruebas catalogadas | `tests/ux07-activation.browser.test.cjs` (7 casos: editor → variantes → comparar, estados, ausentes, ajenos, integridad, edificio, negativos) | Cobertura diseñada. **No se ha reejecutado en esta sesión**: que esté catalogada no es un PASS nuevo. |
 
-## 2. Qué hay en `master@403e6b7` (lectura del código)
+## 2. Diagnóstico reproducido (sin tocar el producto)
 
-| Contrato | Estado en `master` | Uso en E2 |
+Fuente: `diagnostico/e2-diagnostico.cjs` sobre master, con fixtures sintéticas del producto. Resultado en `evidence/e2/diagnostico.json`.
+
+| ID | Hallazgo reproducido | Gravedad |
 |---|---|---|
-| `FloorPlanDossier` (`project-dossier-ui.js`) | Cargado. `contents()`, `render(paper,style,bag)`, `open()`. Estilos `technical`, `client`, `realestate` y `studio`. | Anfitrión: el comparador ENT-04 se abre desde la misma área de «Entregar», sin un dossier nuevo. |
-| `FloorPlanBrand` (`brand-core.js`) | Cargado. Perfiles, logo, contacto y snapshot `{profile,title,intro,takenAt}`. Sin colores ni fuentes (H07). | Solo lectura en E2. Los tokens de color y tipografía quedan para E3, con migración compatible. |
-| `FloorPlanBeforeAfterDossier` 1.1.0 (`before-after-dossier-core.js`) | **No cargado** en `index.html`; vive en `labs/ux07-ent04`. API: `view`, `budgetBlock`, `html`, `exportDossier`, `verify`, `sha256`. | **Activar en E2**: cargar y llamar desde «Entregar». Compatibilidad con la fixture 1.0.0 y 1.1.0. |
-| `FloorPlanRevisionBudget` 1.0.0 (`revision-budget-core.js`) | **No cargado**. `revisionMatch`, `compareBudgets`, `dependsOn`, `quantityDiff`. | Activar con ENT-04. Estados `complete`, `partial`, `incoherent`, `one-sided` y `none` según v1.2 §6.2. DEC-07 intacto. |
-| `revision-compare-core.js`, `variants-compare-adapter.js` | Cargados (UX-07) | Fuente de la selección de revisión y variante. |
-| `FloorPlanClientShare` (B1) | Cargado. `{build,download,CSP}` | Sin cambios en E2. Contrato con scripts propios y CSP; no se somete a `verify()` de ENT-04. |
-| `FloorPlanClientDelivery` (`client-delivery-core.js`) | Cargado. `minimizeProject`, `buildSnapshot`, `validate`… | **No se amplía.** Es el contrato minimizado de la visita ENT-01, no un contenedor documental. |
-| `FloorPlanConstructionDelivery` 0.2.0 | Cargado (Evolución) | Lectura en E3/E4, con autoridad del plan. |
-| `FloorPlanPresentationStory` | Cargado | E3: reutilizar su resolvedor de capacidades. |
+| A25-1 | Presupuesto de «después» hecho sobre la revisión anterior. La nota afirma que «se ha comprobado que coinciden» y a continuación dice que no coinciden. El bloque muestra base, IVA y total como si fueran vigentes. | Alta: cifra desfasada presentada como actual |
+| A25-2 | Con la comparación en estado `incoherent` (no se calcula la diferencia), el HTML descargable muestra igualmente el total individual de «después», que es de otra revisión. | Alta |
+| A25-3 | Solo «antes» tiene presupuesto. La pantalla dice «Comparación no disponible», el núcleo rechaza antes-sin-después y `comparar.js` lo descarta en silencio: el borrador dice «Sin presupuesto». | Media: ausencia falsa |
+| A25-4 | Solo «después» tiene presupuesto: el borrador muestra el presupuesto completo. Asimetría con A25-3. | Media |
+| A26 / H03-1 | Tras cambiar variante y presupuesto en otra pestaña, el comparador abierto prepara el borrador con los datos retenidos al abrir, y «Verificar» lo da por bueno (`verify()` recibe `state.prepared`, no una lectura nueva). | Alta: obsolescencia no detectada |
+| A26 / H03-2 | Si el presupuesto guardado cambia durante la preparación, el borrador sale con el estado leído al cargar, sin invalidar ni pedir reconfirmación. | Alta |
+| D02 | El comparador no escribe en el almacenamiento: solo cambia lo que escribe la otra pestaña. | Correcto |
+| H01 / H02 | El inventario del dossier no declara la página económica; la cabecera económica lee `brand.name`. Comprobado con y sin presupuesto y con y sin marca (`evidence/e2/h01-h02.json`). | Media: independientes de ENT-04 |
+| Identidad de la fixture | La revisión `rv1-0f3e96422fd20e08` coincide con `RubikAssistantDomainTools.revision`. La huella FT3D-8 coincide con su función canónica (`evidence/e2/identidad-fixture.json`). | Correcto |
 
-## 3. Modelo documental por composición (adaptadores de solo lectura)
+## 3. E2 corregido: corte mínimo propuesto (ENT-04)
 
-```text
-proyecto + revisión (UX-07) ─┐
-presupuesto guardado ────────┼─ adaptadores puros, solo lectura ─→ snapshot documental congelado
-FloorPlanBrand.snapshot() ───┘   (proyecto, revisión, huella, marca, estado económico, procedencia)
-                                   │  invalidación si cambia cualquier fuente (ST01)
-                                   ├─ ENT-04: FloorPlanBeforeAfterDossier.exportDossier → HTML estático + manifiesto (verify)
-                                   └─ PDF: impresión del navegador (CSS Print), solo si E1 lo acredita para este corte
-```
+**Objetivo:** que «Entregar» lleve al comparador existente y que este no presente datos desfasados como vigentes.
 
-- **Snapshot.** Objeto inmutable con la identidad (`project.id`, revisión, huella) y la de cada pieza. Se rechaza la preparación si una fuente cambia durante un `await`. Esa es la prueba negativa de ST01 y responde a H03.
-- **Sin escrituras.** Biblioteca y presupuestos idénticos byte a byte antes y después de preparar, cambiar la estética y descargar (D02).
-- **Integridad.** El manifiesto ENT-04 se calcula sobre los bytes definitivos. Nunca se reutiliza el hash de otro artefacto.
+| Paso | Cambio | Archivos | Prueba |
+|---|---|---|---|
+| E2.1 | Entrada desde «Entregar» al comparador **existente**: el mismo `handoff`, con estados «sin original», «sin variante» y «selección no elegible» explicados | `js/professional-workspace-ui.js` (entrada), `index.html` (sin motores nuevos) | Navegador: Entregar → comparar con cada estado |
+| E2.2 | A25: rótulos y omisiones inequívocos, sin recalcular el motor. <br>• Bloque individual frente a comparativo, con su revisión. <br>• En `incoherent` o en una sola cara, ninguna cifra de otra revisión en el HTML descargable. <br>• Solo-antes y solo-después simétricos. <br>• La nota de revisión no afirma coincidencia si no la hay (DEC-07). | `comparar/comparar.js` (`build`, `budgetBlock`, `html`) | Los 4 casos A25 como pruebas de regresión, en pantalla y en HTML |
+| E2.3 | A26: obsolescencia. <br>• Antes de preparar, descargar y verificar, se relee el almacenamiento y se compara con el estado retenido. <br>• Si difiere: «El original o la variante han cambiado desde que abriste el comparador» y se pide reconfirmar. <br>• `verify()` distingue «borrador íntegro» de «coincide con lo guardado ahora». <br>• Nunca se guarda al pulsar Comparar. | `comparar/comparar.js` | Otra pestaña, carrera durante un `await` y descarga posterior; almacenamiento byte a byte igual antes y después |
+| E2.4 | Texto de contexto: «Se compara lo guardado en este navegador», más el límite de varias plantas | `comparar/` | Revisión visual en 1440, 820 y 390 |
+| Aparte | H01 y H02, fuera de ENT-04 y como correcciones independientes | `project-dossier-ui.js` | Las 4 combinaciones de `h01-h02` |
 
-## 4. Primer corte E2: activación mínima ENT-04
+**Fuera de E2:**
 
-1. Cargar `before-after-dossier-core.js` y `revision-budget-core.js` en `index.html`, en el orden que exigen sus dependencias.
-2. En «Entregar», una tarjeta «Comparar revisiones» que reutiliza la selección UX-07, abre la vista ENT-04 y descarga HTML estático y manifiesto.
-3. Plantilla sobria profesional: estilo `technical` del dossier y tokens RUBIK existentes. Sin las tres familias todavía (E3).
-4. Marca: solo el snapshot de `FloorPlanBrand`; sin campos nuevos.
-5. **Fuera de E2:**
-   - el PDF (salvo acreditación E1 para este corte);
-   - la publicación, las cuotas y los enlaces;
-   - el exportador selectivo del laboratorio;
-   - los capítulos multimedia.
+- PDF avanzado;
+- multimedia y ZIP;
+- portal y publicación;
+- el exportador del laboratorio y sus binarios;
+- un núcleo `FloorPlanDelivery` paralelo.
 
-## 5. Mapa de impacto y pruebas
+No se sustituyen B1, Story, C4 ni la visita.
 
-| Área | Archivos | Suites que deben seguir verdes |
+**Compatibilidad.** Los manifiestos 1.0 y 1.1 del dossier antes/después siguen verificando.
+
+**Rollback.** Revertir los commits de E2.2 y E2.3 deja el comparador como está hoy. No hay migración de datos.
+
+**Suites que deben pasar:**
+
+- `ux07-activation`;
+- las de dossier y biblioteca;
+- los nuevos casos A25 y A26.
+
+## 4. Cortes posteriores (roadmap maestro; sin IDs ni olas nuevos)
+
+| Corte | Qué | Condiciones |
 |---|---|---|
-| Entregar | `professional-workspace-ui.js`, `index.html` | `professional-workspace.browser`, `project-dossier.browser`, `brand.browser` |
-| ENT-04/UX-07 | `before-after-dossier-core.js`, `revision-budget-core.js`, `revision-compare-core.js`, `variants-compare-adapter.js` | `tests/ux07-*`, fixture `ux07-dossier-1.0.0`, `economic-dossier*`, `budget-presentation` |
-| No regresión | B1, ENT-01, FT3D-8 | `client-share.browser`, `delivery-3d-link.browser`, `client-delivery-core`, `ft3d-8-*` |
+| E3 · ENT-03 | Compositor y marca: modalidades y recetas (v1.4 RP01–RP21) sobre la interfaz existente; tokens de color y tipografía (H07) con migración compatible | GO; modelo común verificado; revisión humana |
+| E4 | Architecture Book y FF&E (ENT-05); Render IA trazable (IMG-12: persistir la imagen exacta enviada, la cámara y la revisión); exportación de Dibujo vivo | Sin IA de pago sin GO |
+| E5 | PDF avanzado: anexos largos y tablas complejas; evaluar Typst con el mismo contrato (ADR aparte) | Un único motor mantenible |
+| E6 · ENT-02/ENT-06 | Paquete del cliente y dossier del propietario; envío remoto | GOV-08 completo (S3 ≠ S4/S5, GOV-06a), GOV-05, DEC-05, IMG-04/IMG-12 |
+| E7 · ENT-07 | Portal, aceptación y firma, posventa | GOV-06b y revisión jurídica |
 
-Pruebas nuevas: D01 (proyecto cruzado), D02 (bytes intactos), D03 (cinco estados económicos), D10 (`verify` y escapes) y ST01 (cambio de fuente durante la preparación).
+**Pilares por delta de producto:**
 
-## 6. Riesgos, rollback y aceptación
+- **FT3D-8:** entrega desde la biblioteca con el aviso de revisión del plan (E3/E6).
+- **Dibujo vivo:** exportación de la apertura (E4/E5).
+- **Render IA:** persistencia de la vista de origen (E4).
+- **Visita:** enlace solo tras GOV-08 y DEC-05 (E6).
 
-- **Riesgos:**
-  - orden de carga de scripts;
-  - divergencia de cifras entre comparador y C4: mitigada usando solo `FloorPlanRevisionBudget` y el motor canónico;
-  - confundir un ENT-04 activo con un ENT-03 completo.
-- **Rollback:** revertir el commit del corte. Son dos scripts y una tarjeta, sin migración de datos.
-- **Aceptación:** CI verde con las suites de §5, revisión visual humana del dossier comparativo (escritorio y móvil) y GO del propietario para fusionar.
+## 5. Decisiones del propietario pendientes
 
-## 7. Después (E3–E6, cada uno con su GO)
-
-| Corte | Contenido |
-|---|---|
-| E3 | Tres familias sobre los cuatro estilos y las cinco plantillas Story existentes; tokens de marca con contraste (H07); A4 vertical y horizontal; Architecture Book. |
-| E4 | Láminas y fichas FF&E; Render IA trazable (vista de origen guardada). |
-| E5 | Calidad PDF y tablas extensas. |
-| E6 | Carpeta de cliente y publicación con GOV-08/ENT-02. El exportador del laboratorio sirve de especificación de comportamiento (selección física, manifiesto, gates y verificador), no de código a copiar. |
+1. GO de E2 y base consolidada (con Codex).
+2. ¿H01 y H02 van dentro del corte E2 o aparte?
+3. DEC-05 (publicación remota de la obra).
+4. H08: exposición de las referencias VIS en el Git público (`reports/13`).

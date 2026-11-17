@@ -68,7 +68,7 @@ tr.total td{font-weight:700;font-size:10pt;border-top:.35mm solid var(--d-ink);b
 .sw i{display:block;height:22mm;border:.2mm solid rgba(0,0,0,.12)}
 .plan text,.axo text{font-family:var(--f-tech)}
 .legend{display:flex;gap:var(--s6);align-items:center;font-size:var(--t-caption);color:var(--d-ink);border-top:.2mm solid var(--d-rule);padding-top:var(--s2)}
-.legend span{display:inline-flex;align-items:center;gap:var(--s2)}
+.legend span{display:inline-flex;align-items:center;gap:var(--s2);white-space:nowrap}
 /* Title block: IFC Sheet standard (180×50 mm, 5 rows, 50 mm side panel; weights 0.5/0.35/0.18 mm) */
 .tb{position:absolute;right:10mm;bottom:10mm;width:180mm;height:50mm;border:.5mm solid var(--d-ink);display:grid;grid-template-columns:65mm 65mm 50mm;grid-template-rows:repeat(5,10mm);font-size:9.9pt;background:var(--d-paper);font-feature-settings:'cv08' 1}
 .tb div{border-right:.18mm solid var(--d-ink);border-bottom:.18mm solid var(--d-ink);padding:.8mm 2mm;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}

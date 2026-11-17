@@ -97,7 +97,7 @@ module.exports={
 'Planta, pavimento, objetos y vista 3D':'Plan, flooring, objects and 3D view','Por confirmar':'To confirm','Por el nombre de las estancias':'By room name','Portante y fachada':'Load-bearing and facade',
 'Precio':'Price','Precio unitario':'Unit price','Precios de prueba, sin revisar':'Test prices, not reviewed','Precios de prueba, solo ilustran el formato':'Test prices, they only illustrate the format',
 'Presentación integral':'Complete presentation','Presentación integral (PDF)':'Complete presentation (PDF)','Presupuesto':'Budget','Presupuesto con IVA':'Budget incl. VAT',
-'Procedencia':'Sources','Producto':'Product','Propuesta económica':'Cost proposal','Proyecto':'Project','Puerta o paso':'Door or opening',
+'Procedencia':'Sources','Producto':'Product','Propuesta económica':'Cost proposal','Proyecto':'Project','Puerta o paso':'Door or opening','Ventana':'Window',
 'Qué':'What','Qué acompaña a esta entrega y de dónde sale cada cosa.':'What comes with this delivery and where everything comes from.','Qué incluye':'What is included','Qué no incluye':'What is not included',
 'Recorrer la vivienda':'Walk through the home','Recorte de la planta de RUBIK alrededor de cada estancia; el resto del plano se ve como contexto.':'Crop of the RUBIK plan around each room; the rest of the plan is shown as context.',
 'Recorte de la planta de RUBIK alrededor de la estancia; el resto del plano se muestra como contexto.':'Crop of the RUBIK plan around the room; the rest of the plan is shown as context.',
