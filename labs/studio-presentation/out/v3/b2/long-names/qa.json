@@ -1,0 +1,435 @@
+{
+ "meta": {
+  "plan": {
+   "callouts": 2,
+   "dropped": 0,
+   "keyed": 11,
+   "split": true
+  },
+  "sheet": {
+   "callouts": 2,
+   "dropped": 0,
+   "keyed": 11
+  },
+  "interior-book-v3": {
+   "rooms": [
+    {
+     "room": "Salón con vestidor, zona de lectura y salida a la terraza orientada al patio interior de manzana",
+     "scale": 75,
+     "markers": 8
+    },
+    {
+     "room": "Dormitorio principal con vestidor, zona de lectura y salida a la terraza orientada al patio interior de manzana",
+     "scale": 50,
+     "markers": 4
+    },
+    {
+     "room": "Dormitorio juvenil con vestidor, zona de lectura y salida a la terraza orientada al patio interior de manzana",
+     "scale": 50,
+     "markers": 4
+    },
+    {
+     "room": "Dormitorio infantil con vestidor, zona de lectura y salida a la terraza orientada al patio interior de manzana",
+     "scale": 50,
+     "markers": 5
+    }
+   ]
+  },
+  "architecture-sheet-strip": {
+   "callouts": 2,
+   "dropped": 0,
+   "keyed": 11
+  },
+  "directions-b1": "omitidas: las direcciones se comparan sobre el proyecto canónico, no sobre variantes de prueba"
+ },
+ "probe": true,
+ "docs": {
+  "directions": {
+   "pages": 3,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 1528,
+     "RUBIK Serif": 370
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  },
+  "interior-book": {
+   "pages": 7,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 6583,
+     "RUBIK Serif": 518
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  },
+  "materials-furniture-book": {
+   "pages": 8,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 10405,
+     "RUBIK Serif": 577
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "commercial-proposal": {
+   "pages": 3,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal",
+    "RUBIK Serif 400 italic"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 3967,
+     "RUBIK Serif": 466
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "real-estate": {
+   "pages": 6,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 5883,
+     "RUBIK Serif": 353
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  },
+  "architecture-sheet": {
+   "pages": 2,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 2286,
+     "RUBIK Serif": 112
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  },
+  "interior-book-v3": {
+   "pages": 16,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 15031,
+     "RUBIK Serif": 1818
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  },
+  "materials-furniture-book-v3": {
+   "pages": 24,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Serif": 749,
+     "RUBIK Inter": 21073
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "commercial-proposal-client-v3": {
+   "pages": 2,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 2017,
+     "RUBIK Serif": 363
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "commercial-proposal-studio-v3": {
+   "pages": 2,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 2653,
+     "RUBIK Serif": 363
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "real-estate-sheet-v3": {
+   "pages": 1,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 917,
+     "RUBIK Serif": 210
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  },
+  "architecture-sheet-strip": {
+   "pages": 2,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [
+     "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
+    ],
+    "fonts": {
+     "RUBIK Inter": 2379,
+     "RUBIK Serif": 112
+    },
+    "display": "RUBIK Inter",
+    "body": "RUBIK Inter"
+   }
+  }
+ }
+}

@@ -7,10 +7,11 @@
 // right), dataviz skill (ranked horizontal bars, one hue, value at the tip, table view on the same page).
 module.exports=function b1(C){
  const {S,T,P,B,BV,prof,TITLE,date,rooms,area,matById,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
-  nf,num,eur,esc,tint,bbox,centroid,plan,axo,scaleBar,doc,fig,img,studioBlock,coverDrawing,materialsPage,objectRows}=C;
+  nf,num,eur,esc,tint,bbox,centroid,plan,axo,scaleBar,doc,fig,img,studioBlock,coverDrawing,materialsPage,objectRows,
+  STUDIO,AREA,INTRO,NOGEO,roomArea,biggest,keyList,LOGO,noBudgetPage,LONG_ROOMS,sheetTable,annexPage}=C;
  const D={},meta={};
- const studio=prof.name||'Estudio sin nombre';
- const BC=S.budget?.test?.view?.client;
+ const studio=STUDIO;
+ const BC=S.budget?.test?.view?.client||null;
  // ---------- object tags: the same grouping as the schedule (room | name | size → M-xx), so a tag is one schedule line ----------
  const rows=objectRows();
  const keyOf=i=>{const o=S.objects[i],g=S.geometry.objects[i];const sz=g?.size?`${num(g.size.widthMm,0)} × ${num(g.size.depthMm,0)}`:null;return (o.room||'Fuera de los recintos')+'|'+o.name+'|'+sz;};
@@ -62,28 +63,30 @@ module.exports=function b1(C){
    <p class="caption" style="margin-top:auto">Los números del plano son las referencias del listado de mobiliario. ${esc(STATUS_AREA)}</p></div></div>`};}
  const roomRight=v=>({cls:'bleed',html:`<figure style="position:absolute;inset:0 0 27mm 0;background:${v.bg}" class="frame">${img(v)}</figure>
   <div style="position:absolute;left:16mm;right:16mm;bottom:16mm;display:flex;gap:8mm;align-items:baseline"><span class="h3" style="margin:0">${esc(v.label)}</span><span class="caption" style="margin:0">${VIEW_NOTE}</span></div>`});
- function smallMultiples(list){const cells=list.map(r=>{const p=roomPlan(r,{scale:100,maxW:76,maxH:34,markers:false,pad:250}),m=floorOf(r),ph=objPhrase(r);
+ function smallMultiples(list,{first=true,part='',total=1}={}){const cells=list.map(r=>{const p=roomPlan(r,{scale:100,maxW:76,maxH:34,markers:false,pad:250}),m=floorOf(r),ph=objPhrase(r);
    return `<div style="border-top:.35mm solid var(--d-ink);padding-top:1.6mm"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="h3" style="margin:0">${esc(r.name)}</span><span class="caption" style="margin:0">1:${p.scale}</span></div>
     <div style="height:35mm;display:flex;align-items:center;justify-content:center;overflow:hidden">${p.svg}</div>
     <div class="caption" style="margin:.6mm 0 0">${r.areaM2==null?'Sin área':num(r.areaM2)+' m²'}${r.counted?'':', no computa'}. ${m?esc(m.name):'Sin pavimento asignado'}.<br>${ph?esc(cap(ph))+'.':'Sin objetos.'}</div></div>`;}).join('');
-  return {html:`<div style="display:grid;grid-template-columns:62mm 1fr;gap:6mm;height:176mm"><div><h2 class="h2">El resto de estancias</h2><p class="read">Las estancias de las que el proyecto no tiene vista 3D, con su recorte de planta, pavimento y objetos.</p>
-   <p class="note" style="margin-top:6mm"><b>Sin vista 3D.</b> RUBIK solo muestra las vistas que el profesional ha generado en el proyecto: ${viewRooms.length} estancias tienen una. No se fabrica ninguna imagen para las demás.</p></div>
+  return {html:`<div style="display:grid;grid-template-columns:62mm 1fr;gap:6mm;height:176mm"><div><h2 class="h2">${viewRooms.length?'El resto de estancias':'Las estancias'}</h2>${total>1?`<p class="caption" style="margin:-2mm 0 4mm">Parte ${part} de ${total}</p>`:''}${first?`<p class="read">${viewRooms.length?'Las estancias de las que el proyecto no tiene vista 3D':'Todas las estancias del proyecto'}, con su recorte de planta, pavimento y objetos.</p>
+   <p class="note" style="margin-top:6mm"><b>Sin vista 3D.</b> RUBIK solo muestra las vistas que el profesional ha generado en el proyecto: ${viewRooms.length===1?'1 estancia tiene una':viewRooms.length+' estancias tienen una'}. No se fabrica ninguna imagen para las demás.</p>`:''}</div>
    <div style="display:grid;grid-template-columns:repeat(3,1fr);align-content:start;gap:3.5mm 5mm">${cells}</div></div>`};}
- const indexPage=entries=>({html:`<div class="grid"><div class="c1-4"><h2 class="h2">Contenido</h2><p class="read">${esc(B.intro)}</p><p class="caption">Texto del profesional en la ficha de entrega.</p></div>
+ const smallPages=list=>{const per=LONG_ROOMS?3:9,n=Math.ceil(list.length/per),out=[];for(let i=0;i<list.length;i+=per)out.push(smallMultiples(list.slice(i,i+per),{first:i===0,part:i/per+1,total:n}));return out;};
+ const indexPage=entries=>({html:`<div class="grid"><div class="c1-4"><h2 class="h2">Contenido</h2><p class="read">${INTRO}</p><p class="caption">Texto del profesional en la ficha de entrega.</p></div>
   <div class="c6-12"><table style="font-size:10.5pt"><tbody>${entries.map(([t,pg,d])=>`<tr><td style="padding:2.4mm 0"><span style="font-family:var(--f-read);font-size:13pt">${esc(t)}</span>${d?`<br><span class="caption">${esc(d)}</span>`:''}</td><td class="num" style="vertical-align:top;padding-top:3mm">${pg}</td></tr>`).join('')}</tbody></table></div></div>`});
  const closingPage=()=>({html:`<div class="grid"><div class="c1-5" style="display:flex;flex-direction:column;justify-content:space-between;height:178mm"><div><h2 class="h2">${esc(studio)}</h2><p class="lead">${esc(prof.tagline||'')}</p></div>
    ${studioBlock()}</div>
   <div class="c7-12" style="display:flex;flex-direction:column;justify-content:flex-end;gap:5mm">
    <p class="note"><b>De dónde sale cada dato.</b> Superficies, estancias, objetos, materiales y vistas proceden del proyecto en RUBIK (revisión ${esc(P.revision||'sin revisión')}). Las vistas son del modelo 3D, no fotografías; los colores de material son los del modelo, no muestras físicas.</p>
-   <p class="note"><b>Lo que este libro no contiene.</b> Referencias de fabricante, acabados de pared, alzados y secciones: el proyecto no los tiene y RUBIK no los inventa.</p></div></div>`});
+   <p class="note"><b>Lo que este libro no contiene.</b> ${[S.objects.length&&!S.objects.some(o=>o.catalogRef)?'referencias de fabricante':null,!S.board.walls.length?'acabados de pared':null,!views.length?'vistas 3D':null,'alzados y secciones'].filter(Boolean).join(', ').replace(/^./,c=>c.toUpperCase())}: el proyecto no los tiene y RUBIK no los inventa.</p></div></div>`});
  {const pages=[coverDrawing('Libro de interiorismo',`Presentado por ${prof.person||studio}, ${date}`)];
-  const proj={html:`<div class="grid"><div class="c1-5"><h2 class="h2">El proyecto</h2><p class="read">${esc(B.intro)}</p><p class="caption">Texto del profesional en la ficha de entrega.</p><p class="note" style="margin-top:8mm"><b>Estado de los datos.</b> ${esc(STATUS_AREA)}</p></div>
-   <div class="c7-12" style="display:flex;flex-direction:column;align-items:center">${plan({w:150,h:150,callouts:false}).svg}<p class="caption">Planta del proyecto; cada estancia lleva el color de su pavimento.</p></div></div>`};
+  const pj=plan({w:150,h:150,callouts:false});const proj={html:`<div class="grid"><div class="c1-5"><h2 class="h2">El proyecto</h2><p class="read">${INTRO}</p><p class="caption">Texto del profesional en la ficha de entrega.</p><p class="note" style="margin-top:6mm"><b>Estado de los datos.</b> ${esc(STATUS_AREA)}</p>${keyList(pj.keys)}</div>
+   <div class="c7-12" style="display:flex;flex-direction:column;align-items:center">${pj.svg}${NOGEO?'':'<p class="caption" style="align-self:flex-start">Planta del proyecto; cada estancia lleva el color de su pavimento.</p>'}</div></div>`};
   // Spreads open on even pages (left), the view on the next odd page (right): index p2, project p3, first spread p4.
   const entries=[['El proyecto',3,'Descripción y planta']];let pg=4;const spreads=[];
   for(const x of viewRooms){entries.push([x.r.name,pg,`Planta a escala, pavimento, objetos y vista 3D`]);spreads.push(roomLeft(x.r),roomRight(x.v));pg+=2;}
-  entries.push(['El resto de estancias',pg,`${otherRooms.length} estancias sin vista 3D`]);pg++;entries.push(['Materiales de pavimento',pg,'Pavimentos por superficie']);pg++;entries.push([studio,pg,'Datos del estudio y procedencia']);
-  pages.push(indexPage(entries),proj,...spreads,smallMultiples(otherRooms),materialsPage('Materiales de pavimento'),closingPage());
+  const small=smallPages(otherRooms);if(small.length){entries.push([viewRooms.length?'El resto de estancias':'Las estancias',pg,`${otherRooms.length} ${otherRooms.length===1?'estancia':'estancias'} sin vista 3D`]);pg+=small.length;}
+  entries.push(['Materiales de pavimento',pg,'Pavimentos por superficie']);pg++;entries.push([studio,pg,'Datos del estudio y procedencia']);
+  pages.push(indexPage(entries),proj,...spreads,...small,materialsPage('Materiales de pavimento'),closingPage());
   meta['interior-book-v3']={rooms:spreads.filter(p=>p.meta).map(p=>p.meta)};
   D['interior-book-v3']=doc('interior-book-v3','Libro de interiorismo','client',pages);}
  // ---------- materials & furniture v3: giant-word cover, board per room, one card per schedule line ----------
@@ -92,14 +95,15 @@ module.exports=function b1(C){
   <div style="position:absolute;left:50%;top:32mm;transform:translateX(-50%);display:flex;align-items:flex-end;gap:2.6mm;height:96mm">${fl.map(f=>`<div style="width:${Math.max(9,22*Math.sqrt(f.areaM2/fl[0].areaM2)).toFixed(1)}mm;height:${(30+66*f.areaM2/fl[0].areaM2).toFixed(1)}mm;background:${f.color};box-shadow:0 0 0 .2mm rgba(0,0,0,.14)"></div>`).join('')}</div>
   <div style="position:absolute;left:50%;top:130mm;transform:translateX(-50%);width:200mm;border-top:.35mm solid var(--d-ink)"></div></figure>
   <div style="position:absolute;left:16mm;right:16mm;bottom:12mm;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6mm;align-items:end">
-   <div><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="font-size:22pt;margin-top:1mm">${esc(TITLE)}</h1></div>
-   <p class="caption" style="margin:0">${esc(sub)}</p><p class="caption" style="margin:0;text-align:right">Cada bloque es un pavimento del modelo, con altura proporcional a su superficie. Colores del modelo, no muestras físicas.</p></div>`};};
- function boardPage(){const cells=rooms.map(r=>{const m=floorOf(r),objs=rowsIn(r);
+   <div><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="font-size:${TITLE.length>55?'14pt':'22pt'};margin-top:1mm">${esc(TITLE)}</h1></div>
+   <p class="caption" style="margin:0">${esc(sub)}</p><p class="caption" style="margin:0;text-align:right">${fl.length?'Cada bloque es un pavimento del modelo, con altura proporcional a su superficie. Colores del modelo, no muestras físicas.':'El proyecto no tiene pavimentos asignados: no hay bloques que mostrar.'}</p></div>`};};
+ function boardPages(){if(!rooms.length)return [{html:`<div class="grid"><div class="c1-6"><h2 class="h2">Materiales por estancia</h2><p class="read">El proyecto no tiene estancias: no hay materiales que asignar.</p></div></div>`}];const cellOf=r=>{const m=floorOf(r),objs=rowsIn(r);
    return `<div style="border-top:.35mm solid var(--d-ink);padding-top:2mm;display:grid;grid-template-columns:15mm 1fr;gap:3mm;break-inside:avoid"><i style="display:block;height:15mm;background:${m?m.color:T.field};border:.2mm solid rgba(0,0,0,.14)"></i>
-    <div><div class="h3" style="margin:0">${esc(r.name)}</div><div class="caption" style="margin:0">${m?esc(m.name):'Sin pavimento asignado'}${r.areaM2!=null?`, ${num(r.areaM2)} m²`:''}</div><div class="caption" style="margin:.4mm 0 0">${objs.length?`${objs.reduce((s,x)=>s+x.qty,0)} objetos: ${objs.map(x=>x.tag).join(', ')}`:'Sin objetos'}</div></div></div>`;}).join('');
-  return {html:`<div style="display:grid;grid-template-columns:60mm 1fr;gap:8mm;height:176mm"><div><h2 class="h2">Materiales por estancia</h2><p class="read">El pavimento de cada estancia y las referencias de los objetos que contiene.</p>
-   <p class="note" style="margin-top:6mm"><b>Paredes.</b> ${S.board.walls.length?esc(S.board.walls.map(w=>w.name).join(', ')):'El proyecto no tiene acabados de pared asignados: no se muestra ninguno.'}</p></div>
-   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4mm 6mm;align-content:start">${cells}</div></div>`};}
+    <div><div class="h3" style="margin:0">${esc(r.name)}</div><div class="caption" style="margin:0">${m?esc(m.name):'Sin pavimento asignado'}${r.areaM2!=null?`, ${num(r.areaM2)} m²`:''}</div><div class="caption" style="margin:.4mm 0 0">${objs.length?`${objs.reduce((s,x)=>s+x.qty,0)} objetos: ${objs.map(x=>x.tag).join(', ')}`:'Sin objetos'}</div></div></div>`;};
+  const per=LONG_ROOMS?6:15,out=[];for(let k=0;k<rooms.length;k+=per){const cells=rooms.slice(k,k+per).map(cellOf).join('');const first=k===0,total=Math.ceil(rooms.length/per);
+  out.push({html:`<div style="display:grid;grid-template-columns:60mm 1fr;gap:8mm;height:176mm"><div><h2 class="h2">Materiales por estancia</h2>${total>1?`<p class="caption" style="margin:-2mm 0 4mm">Parte ${k/per+1} de ${total}</p>`:''}${first?`<p class="read">El pavimento de cada estancia y las referencias de los objetos que contiene.</p>
+   <p class="note" style="margin-top:6mm"><b>Paredes.</b> ${S.board.walls.length?esc(S.board.walls.map(w=>w.name).join(', ')):'El proyecto no tiene acabados de pared asignados: no se muestra ninguno.'}</p>`:''}</div>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4mm 6mm;align-content:start">${cells}</div></div>`});}return out;}
  // One card per schedule line (FF&E spec book / product cut sheet grammar): tag, item, room, quantity, footprint at
  // 1:50, key plan locator and every unknown written as such. Nothing about the product is filled in.
  const keyPlan=(idxs,{w=36,h=30}={})=>{const pts=[...S.geometry.walls.flatMap(x=>[x.start,x.end])],b=bbox(pts),pad=300,vbW=b.x1-b.x0+2*pad,vbH=b.y1-b.y0+2*pad,k=Math.min(w/vbW,h/vbH),u=UNIT_MM/k;
@@ -119,12 +123,13 @@ module.exports=function b1(C){
      <tr><td class="muted">Acabado</td><td>${o.materialId&&matById[o.materialId]?esc(matById[o.materialId].name):'<span class="unk">Sin material asignado</span>'}</td></tr>
      <tr><td class="muted">Producto</td><td>${x.ref?esc(x.ref):'<span class="unk">Sin referencia de producto</span>'}</td></tr><tr><td class="muted">Precio</td><td><span class="unk">Sin precio</span></td></tr></tbody></table></div>
    <div style="display:flex;flex-direction:column;gap:2mm;align-items:center">${g?footprint(g.size.widthMm,g.size.depthMm):''}${keyPlan(idx)}</div></article>`;};
- const cardPages=(list,per=4)=>{const out=[];for(let i=0;i<list.length;i+=per){const chunk=list.slice(i,i+per);
+ const LONG_ITEMS=rows.some(x=>x.name.length>40||x.room.length>40);
+ const cardPages=(list,per=LONG_ITEMS?2:4)=>{const out=[];for(let i=0;i<list.length;i+=per){const chunk=list.slice(i,i+per);
   out.push({html:`<div style="display:grid;grid-template-columns:52mm 1fr;gap:8mm;height:176mm"><div><h2 class="h2">Fichas de mobiliario</h2><p class="caption" style="margin:-2mm 0 4mm">${chunk[0].tag} a ${chunk.at(-1).tag} de ${list.at(-1).tag}</p>${i===0?`<p class="read">Una ficha por línea del listado: lo que el modelo sabe del objeto y, escrito, lo que no sabe.</p>
    <p class="note" style="margin-top:6mm"><b>Sin productos asignados.</b> Ningún objeto del proyecto tiene fabricante, acabado ni precio. RUBIK no los inventa: quedan abiertos hasta que el estudio los elija.</p>`:''}</div>
-   <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5mm 8mm">${chunk.map(card).join('')}</div></div>`});}return out;};
+   <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:${per>2?'1fr 1fr':'1fr'};gap:5mm 8mm">${chunk.map(card).join('')}</div></div>`});}return out;};
  D['materials-furniture-book-v3']=doc('materials-furniture-book-v3','Libro de materiales y mobiliario','client',[
-  giantCover('Materiales',`${S.board.floors.length} pavimentos y ${S.objects.length} objetos del modelo, ${date}`),boardPage(),...cardPages(rows)]);
+  giantCover('Materiales',`${S.board.floors.length} pavimentos y ${S.objects.length} objetos del modelo, ${date}`),...boardPages(),...(rows.length?cardPages(rows):[{html:`<div class="grid"><div class="c1-6"><h2 class="h2">Fichas de mobiliario</h2><p class="read">El proyecto no tiene objetos colocados: no hay fichas.</p></div></div>`}])]);
  // ---------- commercial proposal v3: chapter chart, one-page summary, client and professional versions ----------
  const unit={m2:'m²',m:'m',unit:'ud'};
  const chapterTotals=V=>V.chapters.map(c=>({title:c.title,n:c.lines.length,net:c.lines.reduce((s,l)=>s+l.subtotalNet,0)})).sort((a,b)=>b.net-a.net);
@@ -136,7 +141,7 @@ module.exports=function b1(C){
     <path d="M ${label} ${y} h ${Math.max(L-1,0)} a 1 1 0 0 1 1 1 v ${barH-2} a 1 1 0 0 1 -1 1 h ${-Math.max(L-1,0)} z" fill="${T.ink}"/>
     <text x="${label+L+2}" y="${y+barH/2}" dominant-baseline="middle" font-size="3.4" font-weight="700" fill="${T.ink}">${eur(x.net)}</text>
     <text x="${label+L+2}" y="${y+barH/2+4.6}" dominant-baseline="middle" font-size="3.2" fill="${T.muted}">${num(x.net/V.summary.net.amount*100,0)} % de la base, ${x.n} partidas</text>`;}).join('')}</svg>`;}
- const TEST=S.budget.test.label;
+ const TEST=S.budget?.test?.label||'';
  function summaryPage(V,{variant}){const sm=V.summary;
   return {html:`<div class="grid"><div class="c1-5" style="display:flex;flex-direction:column;justify-content:space-between;height:178mm">
    <div><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="margin-top:2mm">Propuesta económica</h1><p class="lead" style="margin-top:2mm">${esc(TITLE)}</p></div>
@@ -161,47 +166,47 @@ module.exports=function b1(C){
    <tr class="total"><td colspan="${cols-1}">Base imponible</td><td class="num">${eur(sm.net.amount)}</td></tr><tr><td colspan="${cols-1}">IVA ${num(sm.tax.ratePercent,0)} %</td><td class="num">${eur(sm.tax.amount)}</td></tr><tr class="total"><td colspan="${cols-1}">Total con IVA</td><td class="num">${eur(sm.gross.amount)}</td></tr></tbody></table>
    <p class="caption">${prof?'Medición: cantidad calculada por RUBIK sobre el modelo (est. = escala estimada). El importe aplica la merma a la medición.':'Cantidad: medición del modelo más la merma de obra. Precios de prueba de laboratorio, no de mercado.'}</p></div>
    ${prof?'':`<div class="c9-12"><p class="note"><b>Lo que ve el cliente.</b> Partida, cantidad, precio e importe. El origen de cada precio, su revisión y los avisos internos quedan en la versión del estudio.</p></div>`}</div>`};}
- D['commercial-proposal-client-v3']=doc('commercial-proposal-client-v3','Propuesta económica, versión cliente','client',[summaryPage(BC,{variant:'client'}),detailPage(BC,{variant:'client'})]);
- D['commercial-proposal-studio-v3']=doc('commercial-proposal-studio-v3','Propuesta económica, versión estudio','technical',[summaryPage(BV,{variant:'professional'}),detailPage(BV,{variant:'professional'})]);
+ D['commercial-proposal-client-v3']=doc('commercial-proposal-client-v3','Propuesta económica, versión cliente','client',BC?[summaryPage(BC,{variant:'client'}),detailPage(BC,{variant:'client'})]:[noBudgetPage('Propuesta económica')]);
+ D['commercial-proposal-studio-v3']=doc('commercial-proposal-studio-v3','Propuesta económica, versión estudio','technical',BV?[summaryPage(BV,{variant:'professional'}),detailPage(BV,{variant:'professional'})]:[noBudgetPage('Propuesta económica')]);
  // ---------- real-estate A4 portrait, one page: figures with their origin under each ----------
- const hero=viewBy('Salón')||views[0];const byName=re=>rooms.filter(r=>re.test(r.name)).length;
+ const hero=(biggest&&views.find(v=>v.roomId===biggest.id))||views.find(v=>v.kind==='room')||views[0]||null;const byName=re=>rooms.filter(r=>re.test(r.name)).length;
  const reFig=(n,u,l,o)=>`<div style="border-top:.35mm solid var(--d-ink);padding-top:1.6mm"><div style="font-weight:700;font-size:22pt;line-height:1;letter-spacing:-.02em">${n}<span style="font-size:11pt;font-weight:400;margin-left:1mm">${u}</span></div><div style="font-weight:700;font-size:9.5pt;margin-top:1.4mm">${esc(l)}</div><div class="caption" style="margin:.4mm 0 0">${esc(o)}</div></div>`;
- const reSheet=()=>{const p=plan({w:84,h:78,callouts:false,labels:false});const sm=BV.summary;
+ const reSheet=()=>{if(!hero)return reB();const p=plan({w:84,h:78,callouts:false,labels:false});const sm=BV?.summary||null;
   return {cls:'bleed',foot:false,html:`<figure style="position:absolute;left:0;right:0;top:0;height:104mm;background:${hero.bg}" class="frame">${img(hero)}</figure>
   <div style="position:absolute;left:14mm;right:14mm;top:108mm;display:flex;justify-content:space-between;align-items:baseline"><span class="caption" style="margin:0">${esc(hero.label)}. ${VIEW_NOTE}</span></div>
-  <div style="position:absolute;left:14mm;right:14mm;top:118mm"><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="font-size:26pt;margin-top:1mm">${esc(TITLE)}</h1><p class="read" style="margin-top:2mm;max-width:none">${esc(B.intro)}</p></div>
+  <div style="position:absolute;left:14mm;right:14mm;top:118mm"><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="font-size:${TITLE.length>55?'16pt':'26pt'};margin-top:1mm">${esc(TITLE)}</h1><p class="read" style="margin-top:2mm;max-width:none">${INTRO}</p></div>
   <div style="position:absolute;left:14mm;width:92mm;top:158mm;display:grid;grid-template-columns:1fr 1fr;gap:5mm 5mm">
-   ${reFig(num(area),'m²','Superficie útil','Estimada por RUBIK sobre el modelo')}${reFig(byName(/^Dormitorio/),'','Dormitorios','Por el nombre de las estancias')}
-   ${reFig(byName(/^Baño/),'','Baños','Por el nombre de las estancias')}${reFig(num(rooms.find(r=>r.name==='Salón')?.areaM2||0),'m²','Salón','La estancia mayor del plano')}
-   ${reFig(nf(0).format(sm.gross.amount),'€','Reforma, IVA incluido','Precios de prueba, solo ilustran el formato')}${reFig(rooms.length,'','Estancias en el plano',`${rooms.length-C.counted.length} no computan`)}</div>
+   ${reFig(AREA,'m²','Superficie útil','Estimada por RUBIK sobre el modelo')}${reFig(rooms.length?byName(/^Dormitorio/):'—','','Dormitorios','Por el nombre de las estancias')}
+   ${reFig(rooms.length?byName(/^Baño/):'—','','Baños','Por el nombre de las estancias')}${biggest?reFig(num(biggest.areaM2),'m²','Estancia mayor',biggest.name):reFig('—','','Estancia mayor','Sin estancias con superficie')}
+   ${sm?reFig(nf(0).format(sm.gross.amount),'€','Reforma, IVA incluido','Precios de prueba, solo ilustran el formato'):reFig('—','','Reforma','El proyecto no tiene presupuesto')}${reFig(rooms.length||'—','','Estancias en el plano',rooms.length?`${rooms.length-C.counted.length} no computan`:'El proyecto no tiene estancias')}</div>
   <div style="position:absolute;right:14mm;width:82mm;top:158mm;display:flex;flex-direction:column;align-items:center">${p.svg}<p class="caption" style="align-self:flex-start">Planta dibujada desde la geometría del proyecto.</p></div>
   <div style="position:absolute;left:14mm;right:14mm;bottom:12mm;display:grid;grid-template-columns:1fr 1fr;gap:6mm;border-top:.2mm solid var(--d-rule);padding-top:2mm">
    <p class="caption" style="margin:0"><b>No disponibles en el proyecto:</b> ubicación, precio de venta, año, orientación, planta del edificio y certificado energético.</p>
    <p class="caption" style="margin:0;text-align:right"><b>${esc(studio)}</b><br>${esc(prof.email||'')}${prof.web?'<br>'+esc(prof.web.replace(/^https?:\/\//,'')):''}<br>${esc(date)}</p></div>`};};
  D['real-estate-sheet-v3']=doc('real-estate-sheet-v3','Ficha inmobiliaria','realestate',[reSheet()],{size:'A4P'});
  // ---------- A3 sheet with the IFC Sheet title block as a strip at the right (50 × 180 mm) ----------
- {const p=plan({scale:50,objects:true,floorTint:false,pad:160});meta['architecture-sheet-strip']={callouts:p.callouts,dropped:p.dropped};
+ {const p=plan({scale:50,objects:true,floorTint:false,pad:160});meta['architecture-sheet-strip']={callouts:p.callouts,dropped:p.dropped,keyed:p.keys.length};if(p.dropped)throw new Error('strip: room tags dropped '+p.dropped);
   const cell=(c,v,cls='')=>`<div class="${cls}"><small>${c}</small>${v?esc(v):'<span class="unk">No facilitado</span>'}</div>`;
   D['architecture-sheet-strip']=doc('architecture-sheet-strip','Lámina de arquitectura, cajetín en franja','technical',[{foot:false,html:`
   <div class="sheet-frame" style="position:absolute;inset:10mm;border:.7mm solid var(--d-ink)"></div>
   <div style="position:absolute;left:16mm;top:14mm;line-height:0">${p.svg}</div>
-  <div style="position:absolute;left:16mm;bottom:15mm;width:${Math.min(p.pw,250).toFixed(1)}mm" class="legend">${scaleBar(p.mmPerUnit)}<span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.ink}"/></svg>Portante y fachada</span><span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.partition}"/></svg>Tabique</span><span>Huecos y mobiliario según el modelo</span></div>
+  ${NOGEO?'':`<div style="position:absolute;left:16mm;bottom:15mm;width:${Math.min(p.pw,250).toFixed(1)}mm" class="legend">${scaleBar(p.mmPerUnit)}<span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.ink}"/></svg>Portante y fachada</span><span><svg width="7mm" height="3mm"><rect width="7mm" height="3mm" fill="${T.partition}"/></svg>Tabique</span><span>Huecos y mobiliario según el modelo</span></div>`}
   <div style="position:absolute;left:${(16+p.pw+6).toFixed(1)}mm;top:16mm;width:${(360-6-(16+p.pw+6)).toFixed(1)}mm">
-   <h2 class="h2" style="font-size:14pt">Cuadro de superficies</h2><table><thead><tr><th>Estancia</th><th class="num">m²</th></tr></thead><tbody>${rooms.map(r=>`<tr><td>${esc(r.name)}${r.counted?'':' <span class="muted">(no computa)</span>'}</td><td class="num">${r.areaM2==null?'<span class="unk">—</span>':num(r.areaM2)}</td></tr>`).join('')}<tr class="total"><td>Superficie útil computada</td><td class="num">${num(area)}</td></tr></tbody></table>
-   <p class="caption">${esc(STATUS_AREA)}</p></div>
+   <h2 class="h2" style="font-size:14pt">Cuadro de superficies</h2>${sheetTable()||`<table><thead><tr><th>Estancia</th><th class="num">m²</th></tr></thead><tbody>${rooms.map(r=>`<tr><td>${esc(r.name)}${r.counted?'':' <span class="muted">(no computa)</span>'}</td><td class="num">${r.areaM2==null?'<span class="unk">—</span>':num(r.areaM2)}</td></tr>`).join('')}<tr class="total"><td>Superficie útil computada</td><td class="num">${AREA}</td></tr></tbody></table>`}
+   ${LONG_ROOMS?'':`<p class="caption">${esc(STATUS_AREA)}</p>${keyList(p.keys)}`}</div>
   <div style="position:absolute;right:12mm;top:14mm;width:46mm"><p class="note"><b>Alzados y secciones: no incluidos.</b> RUBIK no tiene motor de alzados ni de secciones; esta lámina no los dibuja.</p></div>
   <div class="tbs" style="position:absolute;right:10mm;bottom:10mm;width:50mm;height:180mm;border:.5mm solid var(--d-ink);border-right:none;border-bottom:none;display:grid;grid-template-rows:14mm repeat(9,1fr) 20mm 16mm;font-size:9pt;background:var(--d-paper);font-feature-settings:'cv08' 1">
-   ${[cell('Logotipo',prof.logo?'':null),cell('Proyecto',TITLE),cell('Dirección',null),cell('Cliente',null),cell('Organización',prof.name),cell('Título','Planta de distribución propuesta'),cell('Dibujado por',prof.person),cell('Revisado por',null),cell('Fecha',date),cell('Revisión',P.revision||null)].join('')}
-   <div><small>Lámina</small><span class="num">A-02</span></div><div><small>Escala</small><span style="font-size:12.8pt;font-weight:700">1:50</span></div></div>`}],{size:'A3L'});}
+   ${[prof.logo?`<div><small>Logotipo</small>${LOGO(9,44)}</div>`:cell('Logotipo',null),cell('Proyecto',TITLE),cell('Dirección',null),cell('Cliente',null),cell('Organización',prof.name),cell('Título','Planta de distribución propuesta'),cell('Dibujado por',prof.person),cell('Revisado por',null),cell('Fecha',date),cell('Revisión',P.revision||null)].join('')}
+   <div><small>Lámina</small><span class="num">A-02</span></div><div><small>Escala</small><span style="font-size:12.8pt;font-weight:700">${NOGEO?'—':'1:50'}</span></div></div>`},...(LONG_ROOMS?[annexPage('A-02')]:[])],{size:'A3L'});}
  // ---------- Huashu gate: three directions for each new page type. One is used in v3; approving it is the owner's call ----------
  // The direction name goes in the running foot (never over the design): every gate page keeps a foot.
  // A design drawn without a foot (bleed) is placed in a box 14 mm shorter, so the foot never covers it; nothing inside changes.
  const withMark=(pg,t,chosen)=>({...pg,foot:true,note:`${t}${chosen?', usada en v3 (pendiente de aprobación)':''}`,html:pg.foot===false&&pg.cls==='bleed'?`<div style="position:absolute;inset:0 0 14mm 0;overflow:hidden">${pg.html}</div>`:pg.html});
  const R0=viewRooms[0];
- const spreadA={cls:'bleed',html:`<figure style="position:absolute;inset:0 0 62mm 0;background:${R0.v.bg}" class="frame">${img(R0.v)}</figure>
+ const spreadA=R0&&{cls:'bleed',html:`<figure style="position:absolute;inset:0 0 62mm 0;background:${R0.v.bg}" class="frame">${img(R0.v)}</figure>
   <div style="position:absolute;left:16mm;right:16mm;bottom:20mm;display:grid;grid-template-columns:1fr 2fr;gap:8mm"><div><h2 class="h2" style="margin:0">${esc(R0.r.name)}</h2><p class="caption">${VIEW_NOTE}</p></div>
   <p class="read" style="margin:0">${num(R0.r.areaM2)} m², ${floorOf(R0.r)?esc(floorOf(R0.r).name.toLowerCase()):'sin pavimento asignado'}. ${esc(cap(objPhrase(R0.r)))}.</p></div>`};
- const spreadC=(()=>{const p=roomPlan(R0.r,{scale:100,maxW:84,maxH:80,pad:300});return {html:`<div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto 1fr;gap:5mm 8mm;height:176mm">
+ const spreadC=R0&&(()=>{const p=roomPlan(R0.r,{scale:100,maxW:84,maxH:80,pad:300});return {html:`<div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto 1fr;gap:5mm 8mm;height:176mm">
   <figure class="frame" style="background:${R0.v.bg};height:104mm">${img(R0.v)}</figure><div style="display:flex;flex-direction:column;align-items:center">${p.svg}<p class="caption">Escala 1:${p.scale}</p></div>
   <div>${objTable(R0.r)}</div><div><h2 class="h2">${esc(R0.r.name)}</h2><p class="note">${swatch(floorOf(R0.r),4.5)}${esc(floorOf(R0.r)?.name||'Sin pavimento asignado')}</p></div></div>`};})();
  const sheetA=x=>({html:`<div style="display:grid;grid-template-columns:52mm 1fr;gap:8mm;height:176mm"><div><h2 class="h2">Ficha de mobiliario</h2></div><div style="display:grid;grid-template-columns:1fr;max-width:150mm">${card(x)}</div></div>`});
@@ -212,16 +217,16 @@ module.exports=function b1(C){
   <div style="position:absolute;left:16mm;right:16mm;bottom:12mm;display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:end"><div><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="margin-top:1mm">Materiales y mobiliario</h1></div>
   <p class="caption" style="margin:0">Cada franja es un pavimento del modelo, con anchura proporcional a su superficie (${num(tot)} m² en total). Colores del modelo, no muestras físicas.</p></div>`};};
  const coverC=()=>({html:`<div class="grid"><div class="c1-4" style="display:flex;flex-direction:column;justify-content:flex-end;height:178mm"><p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><h1 class="h1" style="margin-top:2mm">Materiales y mobiliario</h1><p class="lead" style="margin-top:2mm">${esc(TITLE)}</p></div><div class="c5-12" style="display:flex;align-items:center;justify-content:center">${axo({w:176,h:170})}</div></div>`});
- const reB=()=>{const p=plan({w:170,h:150,callouts:false});return {foot:false,html:`<div style="display:flex;justify-content:center">${p.svg}</div><h1 class="h1" style="margin-top:6mm">${esc(TITLE)}</h1><p class="read" style="max-width:none;margin-top:2.5mm">${esc(B.intro)}</p>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:6mm">${reFig(num(area),'m²','Superficie útil','Estimada por RUBIK sobre el modelo')}${reFig(byName(/^Dormitorio/),'','Dormitorios','Por el nombre de las estancias')}${reFig(byName(/^Baño/),'','Baños','Por el nombre de las estancias')}</div>`};};
+ function reB(){const p=plan({w:170,h:150,callouts:false});return {foot:false,html:`<div style="display:flex;flex-direction:column;align-items:center">${p.svg}${keyList(p.keys)}</div><h1 class="h1" style="margin-top:6mm">${esc(TITLE)}</h1><p class="read" style="max-width:none;margin-top:2.5mm">${INTRO}</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:6mm">${reFig(AREA,'m²','Superficie útil','Estimada por RUBIK sobre el modelo')}${reFig(rooms.length?byName(/^Dormitorio/):'—','','Dormitorios','Por el nombre de las estancias')}${reFig(rooms.length?byName(/^Baño/):'—','','Baños','Por el nombre de las estancias')}</div>`};};
  const reC=()=>({foot:false,html:`<p class="meta" style="color:var(--d-ink);font-weight:700">${esc(studio)}</p><div style="font-family:var(--f-read);font-weight:600;font-size:120pt;line-height:1.15;letter-spacing:-.04em;margin-top:14mm">${num(area,0)}<span style="font-size:30pt;margin-left:3mm">m²</span></div>
-  <p class="caption" style="margin-top:4mm">Superficie útil estimada por RUBIK sobre el modelo (${num(area)} m²).</p><h1 class="h1" style="margin-top:10mm">${esc(TITLE)}</h1>
+  <p class="caption" style="margin-top:4mm">Superficie útil estimada por RUBIK sobre el modelo (${AREA} m²).</p><h1 class="h1" style="margin-top:10mm">${esc(TITLE)}</h1>
   <figure class="frame" style="margin-top:8mm;height:86mm;background:${hero.bg}">${img(hero)}</figure><p class="caption">${esc(hero.label)}. ${VIEW_NOTE}</p>`});
- D['directions-b1']=doc('directions-b1','Direcciones B1 por tipo de página','client',[
+ if(!S.variant&&R0&&rows.length&&BV){D['directions-b1']=doc('directions-b1','Direcciones B1 por tipo de página','client',[
   withMark(spreadA,'Pliego de estancia A: la vista manda',false),withMark(roomLeft(R0.r),'Pliego de estancia B: el dibujo manda',true),withMark(spreadC,'Pliego de estancia C: lámina R46',false),
   withMark(sheetA(rows[0]),'Ficha de objeto A: una por página',false),withMark(cardPages(rows.slice(0,4))[0],'Ficha de objeto B: cuatro por página',true),withMark(sheetC(rows.slice(0,8)),'Ficha de objeto C: fila con situación',false),
   withMark(giantCover('Materiales',`${S.board.floors.length} pavimentos y ${S.objects.length} objetos del modelo, ${date}`),'Portada de materiales A: palabra gigante',true),withMark(coverB(),'Portada de materiales B: campo de muestras',false),withMark(coverC(),'Portada de materiales C: axonometría',false)]);
  D['directions-b1-portrait']=doc('directions-b1-portrait','Direcciones B1, ficha inmobiliaria','realestate',[
-  withMark(reSheet(),'Ficha inmobiliaria A: la vista arriba',true),withMark(reB(),'Ficha inmobiliaria B: el dibujo arriba',false),withMark(reC(),'Ficha inmobiliaria C: la cifra',false)],{size:'A4P'});
+  withMark(reSheet(),'Ficha inmobiliaria A: la vista arriba',true),withMark(reB(),'Ficha inmobiliaria B: el dibujo arriba',false),withMark(reC(),'Ficha inmobiliaria C: la cifra',false)],{size:'A4P'});}else meta['directions-b1']=S.variant?'omitidas: las direcciones se comparan sobre el proyecto canónico, no sobre variantes de prueba':'omitidas: el proyecto no tiene vistas de estancia, objetos o presupuesto que comparar';
  return {D,meta};
 };

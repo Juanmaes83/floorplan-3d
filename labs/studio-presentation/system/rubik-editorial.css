@@ -81,3 +81,9 @@ tr.total td{font-weight:700;font-size:10pt;border-top:.35mm solid var(--d-ink);b
 .tbs div:last-child{border-bottom:none}
 .tbs small{display:block;font-size:var(--t-micro);color:var(--d-muted);line-height:1.1;margin-bottom:1mm}
 .tbs .num{display:block;font-size:25.5pt;font-weight:700;line-height:1;color:var(--d-accent)}
+
+/* B2 · long names: the running foot stays on one line (the full name is on the cover); the page number never wraps */
+.foot span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+.foot span:nth-child(-n+2){max-width:34%}
+.foot .pg{flex:none}
+.c1-9{grid-column:1/10}.c10-12{grid-column:10/13}
