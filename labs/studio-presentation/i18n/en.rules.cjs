@@ -91,5 +91,7 @@ module.exports=[
  ['^Imagen IA: (.+)$','AI image: $1'],['^Vista: (.+)$','View: $1'],
  ['^Huellas SHA-256 de cada imagen y de su vista en el registro de la entrega\\.$','SHA-256 fingerprints of each image and its view in the delivery record.'],
  ['^(.+): (\\d[\\d.]*) tokens mostrados por el producto\\.$','$1: $2 tokens shown by the product.'],
+ ['^Solo hay presupuesto de «(.+)»: no hay nada con qué compararlo\\.$','There is only a budget for «$1»: there is nothing to compare it with.'],
+ ['^Partidas no comparables: (\\d+)\\.$','Non-comparable line items: $1.'],
  [' y (?=[A-ZÁÉÍÓÚ\\u0001])',' and '],
 ];

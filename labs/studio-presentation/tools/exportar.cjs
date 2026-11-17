@@ -43,7 +43,9 @@ const errs=[];const E=m=>errs.push(m);
 const isStrArr=a=>Array.isArray(a)&&a.every(x=>typeof x==='string'&&x.length&&x.length<80);
 const dup=a=>a.filter((x,i)=>a.indexOf(x)!==i);
 if(!SEL||typeof SEL!=='object'||Array.isArray(SEL))E('La selección debe ser un objeto.');
-else{const KEYS=['tipo','capitulos','documentos','omitir','modo','idioma','reconocidos','base','nota','seleccionadaEn'];
+else{const KEYS=['tipo','capitulos','documentos','omitir','modo','idioma','reconocidos','base','nota','seleccionadaEn','receta'];
+ // v1.4 §6: «receta» es identidad interna de la selección ({key:'RPnn',version}); se valida y NO entra en el manifiesto del cliente
+ if(SEL.receta!==undefined&&!(SEL.receta&&typeof SEL.receta==='object'&&/^RP(0[1-9]|1\d|2[01])$/.test(SEL.receta.key)&&Number.isInteger(SEL.receta.version)&&Object.keys(SEL.receta).every(k=>['key','version'].includes(k))))E('«receta» debe ser {key:"RP01"…"RP21", version:entero}.');
  for(const k of Object.keys(SEL))if(!KEYS.includes(k))E(`Campo no admitido: ${k}.`);
  if(!CAT.MODOS.includes(SEL.modo))E(`Modo no válido: ${JSON.stringify(SEL.modo)}. Solo «cliente» o «borrador», siempre explícito.`);
  if(!CAT.IDIOMAS.includes(SEL.idioma))E(`Idioma no válido: ${JSON.stringify(SEL.idioma)}. Solo «es» o «en».`);

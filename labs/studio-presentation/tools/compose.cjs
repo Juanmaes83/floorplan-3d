@@ -269,7 +269,7 @@ function build(){
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage});Object.assign(D,b1.D);Object.assign(meta,b1.meta);
   {const ab=require('./architecture-book.cjs')({S,T,doc,plan,roomPlan:b1.helpers.roomPlan,esc,num,date,rev,rooms,counted,AREA,STATUS_AREA,STUDIO,TITLE,NOGEO,matById,snapDir,roomArea,scaleBar,LOGO,prof});Object.assign(D,ab.D);Object.assign(meta,ab.meta);}}
- let E=null;if(process.env.STUDIO_B1!=='0'&&!S.variant&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
+ let E=null;if(process.env.STUDIO_B1!=='0'&&(!S.variant||FIXTURE_FULL)&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage}).helpers;
   E=require('./entrega.cjs')({aportaciones:BR&&BR.file?{file:path.relative(LAB,BR.file),sha256:require('crypto').createHash('sha256').update(fs.readFileSync(BR.file)).digest('hex'),compuestas:BR.compuestas}:null,snapFile:path.resolve(snapDir,'snapshot.json'),S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverImage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
@@ -287,7 +287,8 @@ function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes 
 const I18N_JS=fs.readFileSync(path.join(__dirname,'i18n.js'),'utf8').replace(/^\/\/.*$/mg,'').trim().replace(/^function I18N\(/,'function(');
 const EN_DICT={exact:require('../i18n/en.exact.cjs'),rules:require('../i18n/en.rules.cjs'),spanishWords:require('../i18n/es-words.cjs')};
 const EN_DOCS=new Set(['interior-book-v3','materials-furniture-book-v3','commercial-proposal-client-v3','real-estate-sheet-v3','real-estate-sheet-v3-sin-presupuesto','architecture-book','architecture-sheet-strip','entrega-integral']);
-const EN_ON=process.env.STUDIO_EN!=='0'&&!S.variant;
+const FIXTURE_FULL=(process.env.STUDIO_FIXTURE_ENTREGA==='1'&&/^fixture-economia-/.test(S.variant||'')); // v1.4 §5: escenarios económicos por el recorrido real (entrega + exportador), ES y EN
+const EN_ON=process.env.STUDIO_EN!=='0'&&(!S.variant||FIXTURE_FULL);
 // Datos del proyecto que no se traducen: nombres (y sus trozos, que los rótulos del plano parten en líneas), materiales, objetos,
 // partidas y capítulos del presupuesto, tareas del plan de obra, estudio, título y texto del estudio.
 const I18N_DATA=(()=>{const out=new Set(),mask=new Set();const add=(x,m=true)=>{if(x&&String(x).trim()){out.add(String(x).trim());if(m)mask.add(String(x).trim());}};
@@ -305,9 +306,9 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
    const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
    views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
  const {D,meta,E}=build();const qa={meta,probe:!!PROBE,docs:{}};const fresh=new Set();
- const fixtureDoc=process.env.STUDIO_FIXTURE_DOC;
- if(fixtureDoc&&(!S.variant||E||!Object.hasOwn(D,fixtureDoc)))throw new Error('STUDIO_FIXTURE_DOC solo admite un documento existente de una fixture sin entrega');
- const jobs=Object.entries(D).filter(([id])=>!fixtureDoc||id===fixtureDoc)
+ const fixtureDocs=process.env.STUDIO_FIXTURE_DOC?process.env.STUDIO_FIXTURE_DOC.split(','):null;
+ if(fixtureDocs&&(!S.variant||(E&&!FIXTURE_FULL)||fixtureDocs.some(x=>!Object.hasOwn(D,x))))throw new Error('STUDIO_FIXTURE_DOC solo admite documentos existentes de una fixture (con entrega solo en modo FIXTURE_FULL)');
+ const jobs=Object.entries(D).filter(([id])=>!fixtureDocs||fixtureDocs.includes(id))
   .flatMap(([id,html])=>EN_ON&&EN_DOCS.has(id)?[[id,html,'es'],[id+'.en',html,'en']]:[[id,html,'es']]);const enBlocked=[];
  for(const [id,html,lang] of jobs){const baseId=id.replace(/\.en$/,'');const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[baseId]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});

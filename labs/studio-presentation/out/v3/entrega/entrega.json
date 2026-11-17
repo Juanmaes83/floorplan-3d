@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.2",
- "generated": "2026-11-17T21:43:57.492Z",
+ "generated": "2026-11-17T22:06:41.100Z",
  "idiomas": [
   "es",
   "en"
@@ -9,37 +9,44 @@
   {
    "file": "index.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   },
   {
    "file": "tipo-primera-reunion.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   },
   {
    "file": "tipo-propuesta-comercial.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   },
   {
    "file": "tipo-dossier-tecnico.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   },
   {
    "file": "tipo-interiorismo.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   },
   {
    "file": "tipo-inmobiliaria.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   },
   {
    "file": "tipo-obra.en.html",
    "residual": 0,
-   "sample": []
+   "sample": [],
+   "frases": []
   }
  ],
  "project": {
@@ -463,89 +470,89 @@
   },
   {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "a5a6a497573af550415efb7019c7a34d661f468477665be79412804940d74273",
+   "sha256": "a91616ff8c9cd4deedbd3b18f26f2d7013af0f43dd45c76ea87e7003d6fc3aec",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/interior-book-v3.en.pdf",
-   "sha256": "dfab4995807fb3d3ce10dbf6cfdf98b5d0afb2b394096befb089c556f9e11e58",
+   "sha256": "551e5a87e0ac214f4cdbeacc51659480185cf2510e7941de7622398d8171da84",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "e4f481623dfea8f8193feb03cd2d54b7feabbc0dbbcadc6280de28515fe83ad0",
+   "sha256": "7ffdbbfc72711cf7d24be4786ff55675b0ea78be84a2c74407d87cb85b1a0268",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.en.pdf",
-   "sha256": "e9a22d8d2a5df2fc160ce0defcdca28a4132aa04154ccc6bf41380ae7adfb83b",
+   "sha256": "81fc92037ade0aedb029d433dec36fd74417d6ed74ffcd1f688c8ef9eaddeb7f",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "874087a6780630f78d5b6aad4cdced76b982b1af74dfd29dc77b923ca84d2f33",
+   "sha256": "7e62a62b81472a450b76a32489e8b336b13ecc10f7c42034a51b508eec31d723",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.en.pdf",
-   "sha256": "c225f35fa3dc2baedc5a41c14bbb5bc94cb65684ae7b8516cb21c595268da5d2",
+   "sha256": "eafdb75d283420cea6d6cdfc6bd2d85d33495f8c5f57bed9fb21838c52e2e17f",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "30b8f1b5e60127089de5e9a6143409d94296c377a8aba6ab20ccd151c6cdf632",
+   "sha256": "2667f4c114eb2eb4be48ca3c5465e6ac4984b4717fe6ac4d6e8f7fa41af15504",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.en.pdf",
-   "sha256": "6d3404fc879436ebe8ab4eb7c7fdb33ea7d05d812a6fdd46af564830cd111ee4",
+   "sha256": "aec0f7c36e914f16fdbfa93d142c7115cf862c9f3edadbdd4a221f225e3551b1",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "sha256": "e34fd50f6413aa9367b2b286bf6220e80914fcd065b6d8ddc74561e10e2f8247",
+   "sha256": "fe13e891164c03440354c39a7dcd780d8084041527ee69b79389120ec42f9ecb",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf",
-   "sha256": "da123900e6b8ba661b790a93feb985632235a5a9de7439269386de328a4eca81",
+   "sha256": "31cee860110f9e565745030fd482d87fdd85364929f8c2bd2da664a7280af8e6",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/architecture-book.pdf",
-   "sha256": "fdac381c1782f5e789bdbe04effde72128751e6c090e0ec47970db5a3df20416",
+   "sha256": "92d5eb136d2033f2362b8207f3e28565547055072238da3fb3b3cac21350384b",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-book.en.pdf",
-   "sha256": "c51721cada418820bf0635318fff38853559530dcb67d5bbe42a141693721e28",
+   "sha256": "4121727fdff5c151f0d28552569d80e598242506ca686079155e894022e27c0f",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "067e45298c5205faba9f92d06521d9783871086d27c0e20c591504d09d5c1e61",
+   "sha256": "a9bc4cd01b4b8f126397d9b84df6f82c46f0c7834bf8a018a3131cdb874990ee",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.en.pdf",
-   "sha256": "ad19733471c84956a4be84811711992fda91a645e6fe1444e31ec51ea77efe2b",
+   "sha256": "dba487776d47845ec53ef434ea888041e307f5628a0b6b2b976c0fc7fdcf7362",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "d1351044bdcd7b205b4a0eaee805f90fac2566694d1e9d1990fb729dc508c370",
+   "sha256": "4d062507fafbee5074d89418ee1fe728ec097a830135d0236695a5ce8587a3b8",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.en.pdf",
-   "sha256": "508aaf81d2e4b00c65acec024063fc3591838b90d64de2a0704030f97b2bbfa4",
+   "sha256": "608f5e956f75ea13940aa6260fe49497e234a80be378a89679caf98eee3062e1",
    "producer": "compositor del laboratorio (tools/compose.cjs)",
    "idioma": "en"
   }

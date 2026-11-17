@@ -55,6 +55,15 @@ ${man?`<h2>Archivos del candidato (${man.files.length} + manifiesto)</h2><table>
 ${cand?`<iframe src="${esc(cand)}/index.html" title="Entrega exportada" sandbox="allow-same-origin allow-popups"></iframe>`:''}</main></div>
 ${estado==='pendiente'?`<script>const SEL=${JSON.stringify(SEL).replace(/</g,'\\u003c')};document.getElementById('ack').addEventListener('submit',e=>{e.preventDefault();const r=[...document.querySelectorAll('[name=r]:checked')].map(x=>x.value);
 const s={...SEL,reconocidos:[...new Set([...(SEL.reconocidos||[]),...r])]};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(s,null,1)],{type:'application/json'}));a.download='seleccion-reconocida.json';document.body.append(a);a.click();a.remove();});</script>`:''}</body></html>`;
+// v1.4 §6 · RECIBO DE RECETA (interno, junto al candidato; nunca dentro del ZIP del cliente)
+let recibo=null;if(SEL?.receta){const RC=require('./recetas.cjs');const SRC=process.env.ENTREGA_SRC||path.join(LAB,'out/v3/entrega');const ctx=RC.contexto(LAB,SRC,null);
+ const res=RC.resolver(SEL.receta.key,ctx,SEL.idioma||'es');const base=res.seleccion||null;const diff=base?['tipo','capitulos','documentos','omitir'].filter(k=>JSON.stringify(base[k]||[])!==JSON.stringify(SEL[k]||(k==='omitir'?[]:base[k]))):[];
+ recibo={schema:'rubik-lab-recibo-receta/1',fecha:new Date().toISOString(),receta:SEL.receta.key,version:SEL.receta.version,versionCatalogo:res.version,catalogo:RC.VERSION,versionCoincide:res.version===SEL.receta.version,
+  nombre:res.nombre,nivel:res.nivel,estadoReceta:res.estado,seleccion:diff.length?{aplicada:'modificada por el estudio',cambios:diff}:{aplicada:'la de la receta, sin cambios'},
+  fuentes:Object.fromEntries(Object.entries(res.fuentes||{}).map(([k,v])=>[k,v.estado])),alcanceParcial:res.incompleta||[],avisos:[...(res.motivo||[]),...((main.rej?.gates||main.res?.gates||[]).filter(g=>g.s==='warn').map(g=>g.k+': '+g.t))],
+  estadoPreparacion:estado,candidato:cand?{nombre:cand,zip:cand+'.zip',zipSha256:dig.zipSha256,manifestSha256:dig.manifestSha256}:null,
+  alcance:'Recibo interno del laboratorio. El ZIP del cliente no lo contiene; su manifiesto no cambia de esquema.'};
+ fs.writeFileSync(path.join(ROOT,id+'.recibo-receta.json'),JSON.stringify(recibo,null,1));}
 const rev=path.join(ROOT,id+'.revisar.html');fs.writeFileSync(rev,page);
-const info={schema:'rubik-lab-preparacion/1',id,estado,candidato:cand,revisar:path.relative(LAB,rev),motivo,codigo:main.code};fs.writeFileSync(path.join(ROOT,id+'.revision.json'),JSON.stringify(info,null,1));
+const info={schema:'rubik-lab-preparacion/1',id,estado,recibo:recibo?id+'.recibo-receta.json':null,candidato:cand,revisar:path.relative(LAB,rev),motivo,codigo:main.code};fs.writeFileSync(path.join(ROOT,id+'.revision.json'),JSON.stringify(info,null,1));
 console.log(JSON.stringify(info,null,1));process.exit(main.code);

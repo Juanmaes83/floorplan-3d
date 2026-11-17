@@ -1,0 +1,225 @@
+{
+ "schema": "rubik-lab-economia-zip-qa/1",
+ "fecha": "2026-11-17T22:05:16.366Z",
+ "producto": "8525025a1470d48d52d8e365070e5a0acf116134",
+ "fuentes": [
+  {
+   "archivo": "js/revision-budget-core.js",
+   "sha256": "2c77daadd12fbc3afae74cd2e97cb3ccdbcafccef979774fd1162097955857e2"
+  },
+  {
+   "archivo": "js/revision-compare-core.js",
+   "sha256": "dab5f141b9b92a4e1abf85bbea49dfb036f958df560fd56c6113fc27f3c94da4"
+  },
+  {
+   "archivo": "js/project-core.js",
+   "sha256": "054316463ec8975cc47e20429dc8159b36b9e5242932a7b657203e8c857a07e3"
+  },
+  {
+   "archivo": "js/project-schema.js",
+   "sha256": "3c38a51424a48b9999ad635fed2425502dd499a0c392f63fbce61adde38b74c1"
+  },
+  {
+   "archivo": "js/reference-project.js",
+   "sha256": "63a1d5367241a9ba022510de8a1b60830415274401e94095574ae3dcbd07a5d8"
+  },
+  {
+   "archivo": "js/geo-provider.js",
+   "sha256": "7fdd099a9cdf6f248a10312b51dac91d16bd7cd800fa6ab1d6af5cd5a8d26bfc"
+  },
+  {
+   "archivo": "js/parcel-core.js",
+   "sha256": "0c889a6a4e8f992ed708763a79f61ce839faf2da97396a503b3de314ef0c3c28"
+  },
+  {
+   "archivo": "js/orthophoto-core.js",
+   "sha256": "118f6dfb5115e28dc1bfd3bb44c79aa3532138d28515d7aa4964bdc65bcefecb"
+  },
+  {
+   "archivo": "js/terrain-core.js",
+   "sha256": "d4846f70a82b307e7d37586334ec51d58a35f9ac8d492ca0adac61cc6450f095"
+  },
+  {
+   "archivo": "js/parcel-site-adapter.js",
+   "sha256": "e226426bb2eebc2131cffbb07bbb85a4683d2dd074d68e025d991919a96000bd"
+  },
+  {
+   "archivo": "js/orthophoto-site-adapter.js",
+   "sha256": "aca90c4985826b722d5f4c2c8fbaf8cef6bdfd36e1a499792c567666993ddcdd"
+  },
+  {
+   "archivo": "js/terrain-site-adapter.js",
+   "sha256": "9a05c5bee419f116e118566cc668fa81ff1664d3868e78c0d7c9959abceb6c3f"
+  },
+  {
+   "archivo": "js/territory-integration-core.js",
+   "sha256": "517c1d73b6a44197e680020ed15a88fa331ae20e7bb55b121a448858d4a39448"
+  },
+  {
+   "archivo": "js/project-variants.js",
+   "sha256": "950c8cab69ed7b7ce07d45425ab8050d1a4f5201cbc026a5e833859dee7fbc74"
+  },
+  {
+   "archivo": "js/layout-review.js",
+   "sha256": "e710522940edff6f9d5150e7ffaf4b7c58e639bdd11587a40c17ee2037d86aa1"
+  },
+  {
+   "archivo": "js/tracing-core.js",
+   "sha256": "86b8a900ff6b34512cb71eb5284cfc54311a8c69b8517f19a28ea16af53f2e72"
+  },
+  {
+   "archivo": "js/surface-core.js",
+   "sha256": "09d52a1adbecae3522df89dc8aec7c97b5799b17de314106f063616908b543c2"
+  },
+  {
+   "archivo": "js/budget-presentation.js",
+   "sha256": "2dd858cabb2897a3602897f98871dbbb7dd6a9a701519948c5acbe7b3eba5fb2"
+  },
+  {
+   "archivo": "js/budget-core.js",
+   "sha256": "b2d31ff12a49f54c1135d6547737e6b86964d5512c3a1d2e03b22e39c9c85204"
+  },
+  {
+   "archivo": "js/budget-draft-core.js",
+   "sha256": "fd47b9609b810799d378d50fcc649ce0a24db5c64d31b2e911360bedaff9c8e8"
+  },
+  {
+   "archivo": "js/quantity-core.js",
+   "sha256": "115aaca5b92a42f8d42231d013d73d6a39fd2fa737766f4702e509a84e2f951e"
+  },
+  {
+   "archivo": "labs/ux07-ent04/fixtures.js",
+   "sha256": "283fe6f88dd6ce18d42e58fea40c0f1485509b1262398dc6ff668e8b46328a44"
+  }
+ ],
+ "licencia": "Núcleo ejecutado desde el pin en una carpeta temporal y borrado al terminar; no se copia al laboratorio ni a ningún ZIP. Derechos de redistribución: no acreditados.",
+ "pass": 4,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "complete: estructura HTML (filas, conceptos, importes, orden)",
+   "result": "PASS",
+   "detalle": {
+    "esperado": [
+     [
+      "Revisión base",
+      "Base imponible",
+      "14.561,06 €"
+     ],
+     [
+      "Revisión base",
+      "IVA",
+      "3.057,83 €"
+     ],
+     [
+      "Revisión base",
+      "Total con IVA",
+      "17.618,89 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Base imponible",
+      "15.319,94 €"
+     ],
+     [
+      "Revisión propuesta",
+      "IVA",
+      "3.217,20 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Total con IVA",
+      "18.537,14 €"
+     ],
+     [
+      "Comparación",
+      "Diferencia con IVA",
+      "918,25 €"
+     ]
+    ],
+    "obtenido": [
+     [
+      "Revisión base",
+      "Base imponible",
+      "14.561,06 €"
+     ],
+     [
+      "Revisión base",
+      "IVA",
+      "3.057,83 €"
+     ],
+     [
+      "Revisión base",
+      "Total con IVA",
+      "17.618,89 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Base imponible",
+      "15.319,94 €"
+     ],
+     [
+      "Revisión propuesta",
+      "IVA",
+      "3.217,20 €"
+     ],
+     [
+      "Revisión propuesta",
+      "Total con IVA",
+      "18.537,14 €"
+     ],
+     [
+      "Comparación",
+      "Diferencia con IVA",
+      "918,25 €"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "complete/es: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "complete/en: ZIP exportado y verificado; importes canónicos presentes y en orden; sin importes cuando no procede",
+   "result": "PASS",
+   "detalle": {
+    "verificador": 0,
+    "amountsOk": true,
+    "orderOk": true,
+    "forbidden": false
+   }
+  },
+  {
+   "id": "complete/RP07: sin importes económicos en ningún recurso distribuido",
+   "result": "PASS",
+   "detalle": {
+    "codigo": 0,
+    "hits": [],
+    "salida": null
+   }
+  }
+ ],
+ "paquetes": [
+  {
+   "escenario": "complete",
+   "idioma": "es",
+   "zip": "economia-complete-es.zip",
+   "sha256": "fb0c86884ddc41a72781cd97b4c9436d493c6d9e32dfb2db9708746ba75aee72",
+   "digest": "economia-complete-es.digest.json"
+  },
+  {
+   "escenario": "complete",
+   "idioma": "en",
+   "zip": "economia-complete-en.zip",
+   "sha256": "a016c0a31697b7647edee74b2e0eee0e2c9007a2f42b1eea1c5ef4766f2479b7",
+   "digest": "economia-complete-en.digest.json"
+  }
+ ]
+}

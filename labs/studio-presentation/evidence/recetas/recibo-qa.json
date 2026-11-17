@@ -1,0 +1,83 @@
+{
+ "schema": "rubik-lab-recibo-qa/1",
+ "fecha": "2026-11-17T22:07:17.389Z",
+ "pass": 6,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "R-01 receta aplicada: recibo con receta, versión, fuentes, alcance, avisos y huella EXACTA del ZIP",
+   "result": "PASS",
+   "detalle": {
+    "rec": {
+     "schema": "rubik-lab-recibo-receta/1",
+     "fecha": "2026-11-17T22:06:53.216Z",
+     "receta": "RP01",
+     "version": 1,
+     "versionCatalogo": 1,
+     "catalogo": "rubik-lab-recetas/1",
+     "versionCoincide": true,
+     "nombre": "Alcance, servicios y honorarios",
+     "nivel": "L",
+     "estadoReceta": "emitible",
+     "seleccion": {
+      "aplicada": "la de la receta, sin cambios"
+     },
+     "alcanceParcial": [],
+     "avisos": [
+      "Identidad del estudio: Perfil sintético del laboratorio (estudio@example.invalid).",
+      "Presupuesto revisado: 0 de 11 partidas revisadas; precios de prueba de laboratorio."
+     ],
+     "estadoPreparacion": "exportado",
+     "candidato": {
+      "nombre": "propuesta-comercial-20261117t220641-cliente",
+      "zip": "propuesta-comercial-20261117t220641-cliente.zip",
+      "zipSha256": "5866a833c2ea6aad17f34e9db26bc251463803c41c715ba3abfdc9532bcd8926",
+      "manifestSha256": "b877b74c1f4ef048c7afe42f827f20806e3e678621eb1991199f6a3fb2a5371c"
+     },
+     "alcance": "Recibo interno del laboratorio. El ZIP del cliente no lo contiene; su manifiesto no cambia de esquema."
+    }
+   }
+  },
+  {
+   "id": "R-02 el ZIP del cliente no lleva el recibo ni datos de receta; el manifiesto no cambia de esquema",
+   "result": "PASS",
+   "detalle": {
+    "lista": 6
+   }
+  },
+  {
+   "id": "R-03 selección modificada: el recibo lo dice y nombra los cambios",
+   "result": "PASS",
+   "detalle": {
+    "aplicada": "modificada por el estudio",
+    "cambios": [
+     "capitulos",
+     "documentos"
+    ]
+   }
+  },
+  {
+   "id": "R-04 receta inexistente: selección rechazada",
+   "result": "PASS",
+   "detalle": [
+    "«receta» debe ser {key:\"RP01\"…\"RP21\", version:entero}."
+   ]
+  },
+  {
+   "id": "R-05 versión de receta distinta del catálogo: queda registrada (versionCoincide=false)",
+   "result": "PASS",
+   "detalle": {
+    "version": 8,
+    "catalogo": 1
+   }
+  },
+  {
+   "id": "R-06 interfaz: la selección descargada lleva receta y versión",
+   "result": "PASS",
+   "detalle": {
+    "key": "RP01",
+    "version": 1
+   }
+  }
+ ]
+}

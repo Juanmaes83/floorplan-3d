@@ -9,3 +9,4 @@ out/**/*.html
 out/v3/b2/
 out/v3/architecture-book.pdf
 out/v3/i18n-datos.json
+out/.economia-*/
