@@ -25,7 +25,7 @@ module.exports=function b1(C){
   const b=bbox(r.polygon);let s=scale;const fits=k=>(b.x1-b.x0+2*pad)/k<=maxW&&(b.y1-b.y0+2*pad)/k<=maxH;
   for(const k of [scale,75,100,150])if(fits(k)){s=k;break;}
   const vb={x:b.x0-pad,y:b.y0-pad,w:b.x1-b.x0+2*pad,h:b.y1-b.y0+2*pad},mmPerUnit=1/s,u=UNIT_MM/mmPerUnit;
-  const out=[`<title>${esc(r.name)}, planta a escala 1:${s}</title><desc>Recorte de la planta de RUBIK alrededor de la estancia; el resto del plano se muestra como contexto.</desc>`];
+  const out=[`<title>${esc(r.name)}, planta a 1:${s} de las medidas del modelo${S.project.scale==='estimated'?' (escala estimada)':''}</title><desc>Recorte de la planta de RUBIK alrededor de la estancia; el resto del plano se muestra como contexto.</desc>`];
     for(const q of rooms){const m=matById[q.floorMaterialId];out.push(`<polygon points="${q.polygon.map(p=>p.x+','+p.y).join(' ')}" fill="${q.id===r.id&&m?tint(m.color,.55):T.paper}"/>`);}
   S.geometry.objects.forEach((g,i)=>{const mine=S.objects[i].roomId===r.id;out.push(`<rect x="${-g.size.widthMm/2}" y="${-g.size.depthMm/2}" width="${g.size.widthMm}" height="${g.size.depthMm}" fill="${mine?T.paper:'none'}" fill-opacity="${mine?.55:0}" stroke="${mine?T.ink:T.rule}" stroke-width="${(mine?.3:.2)*u}" transform="translate(${g.position.x} ${g.position.y}) rotate(${g.rotationDeg||0})"/>`);});
   for(const x of S.geometry.walls)out.push(`<line x1="${x.start.x}" y1="${x.start.y}" x2="${x.end.x}" y2="${x.end.y}" stroke="${W_COLOR[x.structure]||T.ink}" stroke-width="${x.thicknessMm}" stroke-linecap="square"/>`);
@@ -83,7 +83,7 @@ module.exports=function b1(C){
    <div class="c7-12" style="display:flex;flex-direction:column;align-items:center">${pj.svg}${NOGEO?'':'<p class="caption" style="align-self:flex-start">Planta del proyecto; cada estancia lleva el color de su pavimento.</p>'}</div></div>`};
   // Spreads open on even pages (left), the view on the next odd page (right): index p2, project p3, first spread p4.
   const entries=[['El proyecto',3,'Descripción y planta']];let pg=4;const spreads=[];
-  for(const x of viewRooms){entries.push([x.r.name,pg,`Planta a escala, pavimento, objetos y vista 3D`]);spreads.push(roomLeft(x.r),roomRight(x.v));pg+=2;}
+  for(const x of viewRooms){entries.push([x.r.name,pg,`Planta, pavimento, objetos y vista 3D`]);spreads.push(roomLeft(x.r),roomRight(x.v));pg+=2;}
   const small=smallPages(otherRooms);if(small.length){entries.push([viewRooms.length?'El resto de estancias':'Las estancias',pg,`${otherRooms.length} ${otherRooms.length===1?'estancia':'estancias'} sin vista 3D`]);pg+=small.length;}
   entries.push(['Materiales de pavimento',pg,'Pavimentos por superficie']);pg++;entries.push([studio,pg,'Datos del estudio y procedencia']);
   pages.push(indexPage(entries),proj,...spreads,...small,materialsPage('Materiales de pavimento'),closingPage());
@@ -111,8 +111,8 @@ module.exports=function b1(C){
    ${S.geometry.walls.map(x=>`<line x1="${x.start.x}" y1="${x.start.y}" x2="${x.end.x}" y2="${x.end.y}" stroke="${T.muted}" stroke-width="${Math.max(x.thicknessMm*.6,.3*u)}"/>`).join('')}
    ${S.geometry.objects.map((g,i)=>mine.has(i)?`<rect x="${-g.size.widthMm/2}" y="${-g.size.depthMm/2}" width="${g.size.widthMm}" height="${g.size.depthMm}" fill="${T.ink}" transform="translate(${g.position.x} ${g.position.y}) rotate(${g.rotationDeg||0})"/>`:'').join('')}</svg>`;};
  const footprint=(wmm,dmm,{scale=50,max=34}={})=>{let s=scale;while(Math.max(wmm,dmm)/s>max-9)s=s===50?75:s===75?100:s+50;const w=wmm/s,d=dmm/s;
-  return `<svg width="${max}mm" height="${max}mm" viewBox="0 0 ${max} ${max}" role="img"><title>Huella en planta a escala 1:${s}</title><rect x="${(max-w)/2}" y="${(max-d)/2}" width="${w}" height="${d}" fill="${T.field}" stroke="${T.ink}" stroke-width=".3"/>
-   <text x="${max/2}" y="${(max-d)/2-1.2}" text-anchor="middle" font-size="2.6" fill="${T.muted}">${num(wmm,0)}</text><text x="${(max+w)/2+1.2}" y="${max/2}" font-size="2.6" fill="${T.muted}" dominant-baseline="middle" transform="rotate(90 ${(max+w)/2+1.2} ${max/2})" text-anchor="middle">${num(dmm,0)}</text></svg><div class="caption" style="margin:0;text-align:center">1:${s}</div>`;};
+  return `<svg width="${max}mm" height="${max}mm" viewBox="0 0 ${max} ${max}" role="img"><title>Huella en planta a 1:${s} de las medidas del modelo</title><rect x="${(max-w)/2}" y="${(max-d)/2}" width="${w}" height="${d}" fill="${T.field}" stroke="${T.ink}" stroke-width=".3"/>
+   <text x="${max/2}" y="${(max-d)/2-1.2}" text-anchor="middle" font-size="2.6" fill="${T.muted}">${num(wmm,0)}</text><text x="${(max+w)/2+1.2}" y="${max/2}" font-size="2.6" fill="${T.muted}" dominant-baseline="middle" transform="rotate(90 ${(max+w)/2+1.2} ${max/2})" text-anchor="middle">${num(dmm,0)}</text></svg><div class="caption" style="margin:0;text-align:center">1:${s} del modelo${S.project.scale==='estimated'?', escala estimada':''}</div>`;};
  const idxOfRow=x=>S.objects.map((o,i)=>i).filter(i=>tagOf(i)===x.tag);
  const card=x=>{const idx=idxOfRow(x),g=S.geometry.objects[idx[0]],o=S.objects[idx[0]];
   return `<article style="border-top:.35mm solid var(--d-ink);padding-top:2.4mm;display:grid;grid-template-columns:1fr 36mm;gap:2mm 5mm;min-height:0">

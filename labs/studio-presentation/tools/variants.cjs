@@ -17,6 +17,10 @@ const write=(name,S)=>{const d=path.join(outRoot,name);fs.mkdirSync(path.join(d,
 {const S=clone(S0);let n=0;for(const k of ['professional','client']){const V=S.budget.test.view[k];if(!V)continue;n=0;for(const c of V.chapters){const base=c.lines;c.lines=[];for(let r=0;r<8;r++)for(const l of base)c.lines.push({...l,description:`${l.description} (PRUEBA ${++n})`});}
   const net=V.chapters.reduce((s,c)=>s+c.lines.reduce((t,l)=>t+l.subtotalNet,0),0),rate=V.summary.tax.ratePercent;V.summary={...V.summary,items:n,unreviewed:n,net:{...V.summary.net,amount:Math.round(net*100)/100},tax:{...V.summary.tax,amount:Math.round(net*rate)/100},gross:{...V.summary.gross,amount:Math.round(net*(100+rate))/100}};}
  S.budget.test.label='DATOS DE PRUEBA DEL MOTOR DE PAGINACIÓN (B3): partidas repetidas ×8, no es un presupuesto.';write('long-budget',S);}
+// v1.2 · A04: one budget line whose description alone is taller than a page (synthetic, labelled). Expected: the document is
+// refused (no truncated PDF), never clipped or silently split.
+{const S=clone(S0);for(const k of ['professional','client']){const V=S.budget.test.view[k];if(!V)continue;const l=V.chapters[0].lines[0];l.description=('PRUEBA DE FILA DESMESURADA (A04). '+l.description+'. ').repeat(140).trim();}
+ S.budget.test.label='DATOS DE PRUEBA DEL MOTOR DE PAGINACIÓN (A04): una partida con una descripción más alta que la página.';write('oversized-row',S);}
 {const S=clone(S0);S.views=[];S.budget=null;S.brand={profile:null,title:S0.brand.title,intro:null,takenAt:S0.brand.takenAt};write('no-budget-views-brand',S);}
 // 3. Long names everywhere a person can type one (project, studio, rooms, objects, materials).
 {const S=clone(S0);const L=' con vestidor, zona de lectura y salida a la terraza orientada al patio interior de manzana';

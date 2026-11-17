@@ -306,9 +306,25 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
     if(r.width&&(r.right>b.right+.8||r.left<b.left-.8||r.bottom>b.bottom+.8||r.top<b.top-.8)){svgClip.push({page:sv.closest('.page').dataset.page,text:t.textContent.slice(0,30)});}}}
    return {pages:pages.length,blockOverlaps,svgClipCount:svgClip.length,svgClip:svgClip.slice(0,8),spillCount:spill.length,spill:spill.slice(0,8),textOverlapCount:textOverlaps.length,textOverlaps:textOverlaps.slice(0,8),overflowCount:over.length,overflow:over.slice(0,12),tagOverlaps,fontsLoaded:[...document.fonts].filter(f=>f.status==='loaded').map(f=>`${f.family} ${f.weight} ${f.style}`)};});
   let lint=null;if(PROBE){const facts=await pg.evaluate(`(${PROBE})()`);lint={...judge(facts),fonts:facts.fonts,display:facts.display,body:facts.body};}
-  await pg.emulateMedia({media:'print'});await pg.pdf({path:path.join(outDir,id+'.pdf'),preferCSSPageSize:true,printBackground:true});
-  qa.docs[id]={...m,flow,external:ext,errors,lint};await ctx.close();}
+  // v1.2 · A04/ST05: a table that breaks the invariant (row lost, duplicated or taller than a page) never becomes a PDF.
+  const {rowText,...flowRec}=flow;const pdfPath=path.join(outDir,id+'.pdf');let pdfRows=null;
+  if(flow.tables&&!flow.ok){if(fs.existsSync(pdfPath))fs.rmSync(pdfPath);qa.blocked=(qa.blocked||[]).concat({doc:id,reason:flow.oversized.length?'fila más alta que una página':'invariante de filas',oversized:flow.oversized,labelErrors:flow.labelErrors});}
+  else{if(process.env.FLOW_FAULT)await pg.addStyleTag({content:'@media print{table.flow tbody tr:nth-child(4){visibility:hidden}}'}); // negative test of ST05 only
+   await pg.emulateMedia({media:'print'});await pg.pdf({path:pdfPath,preferCSSPageSize:true,printBackground:true});
+   // ST05: compare every row with the text actually printed. Count each row's main text in the final DOM and in the PDF.
+   // ST05: per-cell proof on the printed PDF. Each canonical cell of each flow row is located in its page (rect relative to
+   // the page, CSS px → PDF pt ×0.75); the words that pdftotext -tsv places inside that rect must be exactly the cell's text.
+   if(flow.tables){const cells=await pg.evaluate(()=>{const pages=[...document.querySelectorAll('section.page')];const out=[];
+     for(const td of document.querySelectorAll('table.flow tbody td')){if(td.hasAttribute('data-repeat'))continue;const t=td.textContent.replace(/\s+/g,' ').trim();if(!t)continue;
+      const sec=td.closest('section.page'),pr=sec.getBoundingClientRect(),r=td.getBoundingClientRect();out.push({page:pages.indexOf(sec)+1,x:r.left-pr.left,y:r.top-pr.top,w:r.width,h:r.height,t,k:td.parentElement.dataset.k});}return out;});
+    const tsv=require('child_process').execFileSync('pdftotext',['-q','-tsv',pdfPath,'-']).toString().split('\n').slice(1).map(l=>l.split('\t')).filter(c=>c[0]==='5'&&c[11]&&c[11].trim()).map(c=>({p:+c[1],x:+c[6],y:+c[7],w:+c[8],h:+c[9],t:c[11]}));
+    const norm=t=>t.replace(/[\u00a0\u2009\u202f]/g,' ').replace(/\s+/g,'').trim();const bad=[];
+    for(const c of cells){const X=c.x*.75-1,Y=c.y*.75-1,W=c.w*.75+2,H=c.h*.75+2;const got=tsv.filter(w=>w.p===c.page&&w.x+w.w/2>=X&&w.x+w.w/2<=X+W&&w.y+w.h/2>=Y&&w.y+w.h/2<=Y+H).map(w=>w.t).join(' ');
+     if(norm(got)!==norm(c.t))bad.push({row:c.k,page:c.page,want:c.t.slice(0,60),got:got.slice(0,60)});}
+    pdfRows={cells:cells.length,rows:new Set(cells.map(c=>c.k)).size,mismatches:bad.slice(0,10),bad:bad.length,ok:!bad.length};
+    if(!pdfRows.ok)qa.blocked=(qa.blocked||[]).concat({doc:id,reason:'celdas impresas distintas del documento',mismatches:bad.slice(0,10)});}}
+  qa.docs[id]={...m,flow:flowRec,pdfRows,external:ext,errors,lint};await ctx.close();}
  if(E)qa.entregaWeb=E.writeWeb();
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
  for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'flow',JSON.stringify(v.flow),'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
- console.log('meta',JSON.stringify(meta));await browser.close();})().catch(e=>{console.error(e);process.exit(1);});
+ console.log('meta',JSON.stringify(meta));if(qa.blocked){console.log('BLOQUEADO',JSON.stringify(qa.blocked));process.exitCode=2;}await browser.close();})().catch(e=>{console.error(e);process.exit(1);});

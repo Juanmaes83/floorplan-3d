@@ -46,8 +46,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -87,8 +90,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -125,6 +131,15 @@
     "rows": 40,
     "pagesAdded": 1,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 200,
+    "rows": 40,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -163,8 +178,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -202,8 +220,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -239,8 +260,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -280,8 +304,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -318,8 +345,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -356,8 +386,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -394,8 +427,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -433,8 +469,53 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 533,
+     "RUBIK Serif": 76
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
+  "real-estate-sheet-v3-sin-presupuesto": {
+   "pages": 1,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal",
+    "RUBIK Serif 400 italic"
+   ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -470,8 +551,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {

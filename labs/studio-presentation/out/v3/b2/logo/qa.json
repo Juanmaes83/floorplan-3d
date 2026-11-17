@@ -67,8 +67,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -107,8 +110,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -145,6 +151,15 @@
     "rows": 40,
     "pagesAdded": 1,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 200,
+    "rows": 40,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -184,6 +199,15 @@
     "rows": 20,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 81,
+    "rows": 20,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -222,8 +246,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -259,8 +286,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -299,8 +329,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -337,8 +370,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -375,6 +411,15 @@
     "rows": 20,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 59,
+    "rows": 20,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -383,7 +428,7 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 1658,
+     "RUBIK Inter": 1657,
      "RUBIK Serif": 281
     },
     "display": "RUBIK Serif",
@@ -413,6 +458,15 @@
     "rows": 20,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 92,
+    "rows": 20,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -421,7 +475,7 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 2294,
+     "RUBIK Inter": 2293,
      "RUBIK Serif": 281
     },
     "display": "RUBIK Serif",
@@ -451,8 +505,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -460,6 +517,47 @@
     "yellow": [],
     "fonts": {
      "RUBIK Inter": 605,
+     "RUBIK Serif": 128
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Serif"
+   }
+  },
+  "real-estate-sheet-v3-sin-presupuesto": {
+   "pages": 1,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": null,
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 590,
      "RUBIK Serif": 128
     },
     "display": "RUBIK Serif",
@@ -488,8 +586,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {

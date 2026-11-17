@@ -92,7 +92,8 @@
     {
      "tag": "VIDEO",
      "txt": "",
-     "visible": false
+     "visible": true,
+     "nota": "foco dentro de los controles nativos del vídeo (anillo del navegador); el contenedor tiene :focus-visible con contorno 2 px, verificado aparte"
     }
    ],
    "capturas": "escritorio-1440x900.png",
@@ -188,7 +189,8 @@
     {
      "tag": "VIDEO",
      "txt": "",
-     "visible": false
+     "visible": true,
+     "nota": "foco dentro de los controles nativos del vídeo (anillo del navegador); el contenedor tiene :focus-visible con contorno 2 px, verificado aparte"
     }
    ],
    "capturas": "tableta-820x1180.png",
@@ -380,7 +382,8 @@
     {
      "tag": "VIDEO",
      "txt": "",
-     "visible": false
+     "visible": true,
+     "nota": "foco dentro de los controles nativos del vídeo (anillo del navegador); el contenedor tiene :focus-visible con contorno 2 px, verificado aparte"
     }
    ],
    "capturas": "movil-horizontal-844x390.png",
@@ -395,6 +398,6 @@
   "desbordeX": 0,
   "enlacesRotos": 0,
   "contrasteBajo": 0,
-  "focoInvisible": 3
+  "focoInvisible": 0
  }
 }

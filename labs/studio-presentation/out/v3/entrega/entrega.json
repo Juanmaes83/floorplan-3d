@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.1",
- "generated": "2026-11-17T16:01:10.332Z",
+ "generated": "2026-11-17T16:11:15.622Z",
  "project": {
   "id": "prj_reference-home",
   "name": "Proyecto de ejemplo",
@@ -248,37 +248,37 @@
   },
   {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "9acc27fb73d26bdbaaf7587e0a7627aa28ee60ed7fd05a88ed912221e9ecbe07",
+   "sha256": "dcc6456b4fc9532035c810c64f416beb3f64ad0c5d8c31abf0507c23d6a0ebeb",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "fbb80eed47b14ea2e5658dbfafe4f7ec1776c13c000819ea55458a41c5f8639f",
+   "sha256": "968af735f48cb9798ba66fdbc7ab0f8e70369af6240a9dcb04c77c8fc6a681fd",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "64adb4ed88916dd1f7e76408798014fc88044ff56400367d20d627b05f04e6b1",
+   "sha256": "a39a314da179f19d8661c1fff47170a679a5cec2903d3cfa52145cf1a80867ce",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "34f7ed6e73d00c85f3c1e516d6acd1cb21298e5196d08d8cb4ef4ffa9ad66298",
+   "sha256": "8a175c25836d9e7c0f5f4f43c8ca899e9c940edd334e8e6e73365da7a61a32b5",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "sha256": "ecf8f22bf3f4b4121d9a7a9df4d2daba5c9e70ad71f4ed545d50b2df62720996",
+   "sha256": "40b1acc9ed37a520a7b0b71127a694ac0295595d08342b74a34439ca299c32bf",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "8bbc31fbfbf80539e057eb3474650c45b2b1727d32d1000594fb1b6b2329152d",
+   "sha256": "2e96d0642daddb6d108aa0a3ba8746ca3fe4e428b293f29e79aed0aa49435b00",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "5e53a12e4a8c1cca5ded920d9048484417761ef98a5007e2d64e07ae51fd8b83",
+   "sha256": "f5d9868621b4b849dcc7c7e9451094a5d6f05aa4511fc0c002ed69abba401f4a",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   }
  ],

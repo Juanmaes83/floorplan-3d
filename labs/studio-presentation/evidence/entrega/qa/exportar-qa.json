@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-exportar-qa/1",
- "ran": "2026-11-17T15:50:33.845Z",
+ "ran": "2026-11-17T16:13:31.099Z",
  "workdir": "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/exp",
  "pass": 16,
  "fail": 0,
@@ -13,10 +13,10 @@
     "export": {
      "schema": "rubik-lab-entrega-digest/1",
      "folder": "pc",
-     "manifestSha256": "819e6f80a245bcc99f863834b113a265e8e8626f4a6adfbd6ca98b5af446a7b6",
+     "manifestSha256": "ebd0ae3a809e73f16adbd4b670d5c2d8db900f54a70f1b37bba360ef77b298a0",
      "zip": "pc.zip",
-     "zipSha256": "e5353c2dc0208c8df455ea1b41cad632cb21bf753adb38243946808448025e01",
-     "zipBytes": 2722194,
+     "zipSha256": "210f176be64f33f87120386d3d5a67155d9fa258a6bbdaa3a07de2daae5a9c3e",
+     "zipBytes": 2721526,
      "files": 10
     },
     "verificador": {
@@ -124,10 +124,10 @@
    "detail": {
     "schema": "rubik-lab-entrega-digest/1",
     "folder": "pc-borrador",
-    "manifestSha256": "3a59b79a2b10a1ef39ac18c6b48dc0fb3f23aff303bd97a76de1a0e19e16cee7",
+    "manifestSha256": "70e384c67ba7d9bc940ca829f4448d13718c37d61e8e0d65f9b97b97eead7bf4",
     "zip": "pc-borrador.zip",
-    "zipSha256": "f8177982826ee44b9f0d4503725dd87c1fa49b001e386492712377d7774e840f",
-    "zipBytes": 2722256,
+    "zipSha256": "5e42381af4c3d2b26aade1eda3145271fb5c687b320f1b2429587f1a6408c288",
+    "zipBytes": 2721585,
     "files": 10
    }
   },

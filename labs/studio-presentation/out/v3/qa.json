@@ -78,8 +78,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -118,8 +121,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -156,6 +162,15 @@
     "rows": 40,
     "pagesAdded": 1,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 200,
+    "rows": 40,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -195,6 +210,15 @@
     "rows": 20,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 81,
+    "rows": 20,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -233,8 +257,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -270,8 +297,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -310,15 +340,18 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7902,
+     "RUBIK Inter": 7866,
      "RUBIK Serif": 790
     },
     "display": "RUBIK Serif",
@@ -348,8 +381,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -357,7 +393,7 @@
     "yellow": [],
     "fonts": {
      "RUBIK Serif": 421,
-     "RUBIK Inter": 10666
+     "RUBIK Inter": 11786
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -386,6 +422,15 @@
     "rows": 20,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 59,
+    "rows": 20,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -424,6 +469,15 @@
     "rows": 20,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 92,
+    "rows": 20,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -462,8 +516,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -500,8 +557,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -537,8 +597,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -577,8 +640,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -586,7 +652,7 @@
     "yellow": [],
     "fonts": {
      "RUBIK Serif": 375,
-     "RUBIK Inter": 3926
+     "RUBIK Inter": 4066
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -615,8 +681,11 @@
     "rows": 0,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
     "ok": true
    },
+   "pdfRows": null,
    "external": [],
    "errors": [],
    "lint": {
@@ -653,6 +722,15 @@
     "rows": 11,
     "pagesAdded": 0,
     "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "ok": true
+   },
+   "pdfRows": {
+    "cells": 22,
+    "rows": 11,
+    "mismatches": [],
+    "bad": 0,
     "ok": true
    },
    "external": [],
@@ -661,7 +739,7 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 6792,
+     "RUBIK Inter": 7067,
      "RUBIK Serif": 856
     },
     "display": "RUBIK Serif",
