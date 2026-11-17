@@ -19,3 +19,8 @@ Banco CSS Print / Paged.js / Typst (`tools/engines/bench.mjs`), ADR 06 (`reports
 - Entrega: `tools/entrega.cjs` (llamado por compose) → `out/v3/entrega/` (web cliente, 7 tipos), `out/v3/entrega-integral.pdf`, `out/v3/profesional/preparar-entrega.html`.
 - QA: `tools/entrega-qa.cjs`, `tools/preparar-qa.cjs`, `tools/minimap-probe.cjs`. Empaquetado: `tools/package.sh` → `dist/` (no versionado).
 - Informes: 07 (matriz), 09 (riesgos y notas), 10 (entrega integral), 11 (propuesta E2), 00 (resumen y GO/NO-GO).
+
+## Cierre v1.2 (17/11/2026, Claude Code)
+Especificación vigente: v1.2 (sustituye a la v1.1). Informes: `reports/00-RESUMEN-EJECUTIVO.md` (cierre, H01–H08, A01–A06, pilares, paquetes, recomendación), `reports/11-PROPUESTA-E2.md` (alineado con §8.1), `reports/12-MATRIZ-QA-v1.2.md` (D01–D18, ST01–ST09).
+Nuevas herramientas: `tools/exportar.cjs` (exportación selectiva real con gates), `tools/verificar-entrega.cjs`, `tools/exportar-qa.cjs` (16 casos), `tools/inspeccionar-paquete.py`, `tools/paquete-navegador-qa.cjs`; `tools/package.sh` reescrito con allowlist; `tools/flow.js` con invariante final y bloqueo de filas desmesuradas; `compose.cjs` verifica celda a celda en el PDF.
+Pendiente y delimitado: Architecture Book (ausente), muestras en inglés, H03/ST01 (E2), D02/D03 (E2), revisión humana D08, navegadores Firefox/WebKit y dispositivos físicos.
