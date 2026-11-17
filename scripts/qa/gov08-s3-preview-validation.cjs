@@ -13,8 +13,9 @@
      complete (not truncated) and EMPTY (no publication of any state); otherwise nothing is written at all;
    - every file the Preview stores must be on TEST_STORE_HOST, or the run stops and cleans up;
    - a truncated listing or a purge with `more` stops the run;
-   - the dry run must leave the store file set identical; the confirmed purge must remove EXACTLY the expected files
-     (page, 3D visit and tour video of the expired publication) and nothing else;
+   - BLOCKING before the confirmed purge: the expired publication lists exactly its files, the dry run plans EXACTLY the
+     expected files and leaves the store file set identical — any discrepancy stops the run and NO confirmed purge is sent;
+   - the confirmed purge must remove EXACTLY the planned files (page, 3D visit, tour video) and nothing else;
    - the final cleanup is verified: the store must be empty again, or the run fails.
    Synthetic content only. Prints one line per check. */
 const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:path'),{randomBytes}=require('node:crypto');
@@ -79,11 +80,11 @@ const sameSet=(a,b)=>a.length===b.length&&[...a].sort().join('\n')===[...b].sort
   ok('6 S5 limit, as documented: the video is still reachable DIRECTLY until it is deleted',(await direct(jv.url)).status()===200);
   // 7–9 · register, dry run (deletes nothing), confirmed purge (exactly the expected files).
   const s7=await store('7 register');const mine=s7.json.publications.find(p=>p.id===id);
-  ok('7 the publication is listed as expired with exactly its 3 files; nothing inconsistent',mine?.state==='expired'&&sameSet(mine.files.map(f=>f.url),expected)&&s7.json.counts.inconsistent===0,s7.json.counts);
+  must('7 the publication is listed as expired with exactly its 3 files; nothing inconsistent',mine?.state==='expired'&&sameSet(mine.files.map(f=>f.url),expected)&&s7.json.counts.inconsistent===0,s7.json.counts);
   const dryR=await pubs({action:'purge-expired'}),dry=await dryR.json();
   must('8 dry run: complete, this store, no further batch',dryR.status()===200&&dry.dryRun===true&&dry.store===TEST_HOST&&dry.truncated===false&&dry.more===false,{status:dryR.status(),more:dry.more});
-  ok('8 dry run plans EXACTLY the 3 expected files',sameSet(dry.wouldRemove||[],expected),dry.wouldRemove);
-  const s8=await store('8 after the dry run');ok('8 the dry run deleted NOTHING (same file set)',sameSet(s8.files,s7.files),{before:s7.files.length,after:s8.files.length});
+  must('8 dry run plans EXACTLY the 3 expected files (otherwise the confirmed purge is NOT run)',sameSet(dry.wouldRemove||[],expected),dry.wouldRemove);
+  const s8=await store('8 after the dry run');must('8 the dry run deleted NOTHING (same file set; otherwise the confirmed purge is NOT run)',sameSet(s8.files,s7.files),{before:s7.files.length,after:s8.files.length});
   const realR=await pubs({action:'purge-expired',confirm:true}),real=await realR.json();
   must('9 confirmed purge: complete, this store, no further batch',realR.status()===200&&real.store===TEST_HOST&&real.truncated===false&&real.more===false,{status:realR.status(),more:real.more});
   ok('9 confirmed purge removed EXACTLY the planned files, with no failure',sameSet(real.removed||[],dry.wouldRemove||[])&&(real.failed||[]).length===0,{removed:real.removed?.length,failed:real.failed});

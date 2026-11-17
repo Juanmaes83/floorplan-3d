@@ -71,6 +71,9 @@ En el servidor real no se puede adelantar el reloj. La caducidad se prueba con u
 - recorrido completo: **30/30 PASS**;
 - almacén que no es el de prueba: **se detiene en el paso 0, sin escribir**;
 - almacén no vacío: **se detiene en el paso 0, sin escribir ni borrar nada ajeno**.
+- discrepancia en la simulación (el almacén de ensayo añade un archivo caducado ajeno antes de simular): **se detiene en el paso 8, con 0 limpiezas confirmadas enviadas**. Retira solo sus 3 archivos, no borra el ajeno y la verificación final falla (FAIL), como debe.
+
+La coincidencia exacta de lo previsto y la conservación del conjunto de archivos tras la simulación son **bloqueantes** (`must`): ante cualquier discrepancia no se ejecuta la limpieza confirmada.
 
 La variable `REHEARSAL_BLOB_BASE` existe solo para ese ensayo: tiene que apuntar a `127.0.0.1` y una ejecución real no la define.
 

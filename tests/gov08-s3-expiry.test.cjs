@@ -157,6 +157,19 @@ test('purge: a transient failure is retried once; a persistent one is reported (
  t.b.failDelete.clear();r=await pubs(t.b,{action:'purge-expired',confirm:true},{now:T0+8*DAY});assert.deepEqual([r.status,r.json.removed],[200,[t.expiring[1]]]);
  const u=await storeWithEverything();for(const x of u.expiring)u.b.failDelete.set(new URL(x).pathname,9);assert.equal((await pubs(u.b,{action:'purge-expired',confirm:true},{now:T0+8*DAY})).status,502);
 });
+test('purge: a TRUNCATED or INCOMPLETE listing refuses any confirmed purge — zero delete calls; the dry run says so',async()=>{
+ const deletes=b=>b.calls.filter(c=>c.url==='https://blob.vercel-storage.com/delete').length;
+ // (a) more pages than the function reads (MAX_PAGES): 21 expired files, one per page.
+ const b=blob({pageSize:1});for(let i=0;i<Pubs.MAX_PAGES+1;i++)await share(b,{ttl:'7'});
+ const dry=await pubs(b,{action:'purge-expired'},{now:T0+8*DAY});assert.equal(dry.status,200);assert.equal(dry.json.truncated,true);assert.equal(dry.json.more,true);
+ const real=await pubs(b,{action:'purge-expired',confirm:true},{now:T0+8*DAY});
+ assert.deepEqual([real.status,real.json.error,real.json.removed],[409,'incomplete-listing',[]]);assert.equal(deletes(b),0,'not one delete call');assert.equal(b.files.size,Pubs.MAX_PAGES+1);
+ // (b) the store says «more» but gives no cursor: incomplete, never treated as complete.
+ const c=blob();await share(c,{ttl:'7'});const noCursor=async(u,i={})=>{const r=await c.fetchImpl(u,i);if(!u.startsWith('https://blob.vercel-storage.com/?'))return r;const j=await r.json();return {ok:true,status:200,json:async()=>({...j,hasMore:true,cursor:undefined})};};
+ const out=res();await Pubs.handler(req({action:'purge-expired',confirm:true},{'content-type':'application/json','x-rubik-share-token':SHARE}),out,{env,fetchImpl:noCursor,now:()=>T0+8*DAY});
+ assert.deepEqual([out.statusCode,JSON.parse(out.body).error],[409,'incomplete-listing']);assert.equal(deletes(c),0);assert.equal(c.files.size,1);
+ const list=res();await Pubs.handler(req({action:'list'},{'content-type':'application/json','x-rubik-share-token':SHARE}),list,{env,fetchImpl:noCursor,now:()=>T0+8*DAY});assert.equal(JSON.parse(list.body).truncated,true);
+});
 test('register and purge: same permission as publishing; bad requests touch nothing',async()=>{
  const s=await storeWithEverything(),n=s.b.files.size;
  const cases=[[{'x-rubik-share-token':RENDER},401],[{'x-rubik-share-token':''},401],[{'x-rubik-render-token':SHARE,'x-rubik-share-token':undefined},401],[{origin:'https://evil.example'},403],[{'content-type':'text/plain'},415]];

@@ -27,6 +27,7 @@
   ttl:tx('Elige cuánto tiempo estará disponible el enlace: 7, 30 o 90 días.','Choose how long the link stays available: 7, 30 or 90 days.','请选择链接有效期：7、30 或 90 天。'),
   publication:tx('La publicación no es válida o su fecha de caducidad no se admite. Vuelve a publicar.','The publication is not valid or its expiry date is not accepted. Publish again.','发布无效或到期日期不被接受。请重新发布。'),
   expiry:tx('Este servidor no aplica la caducidad de enlaces: no se publica nada sin fecha de caducidad.','This server does not apply link expiry: nothing is published without an expiry date.','此服务器未启用链接到期：不会发布没有到期日期的内容。'),
+  'incomplete-listing':tx('No se ha podido leer el almacén completo: no se borra nada. Vuelve a revisarlo más tarde.','The whole store could not be read: nothing is deleted. Review it again later.','无法完整读取存储：不会删除任何内容。'),
   action:tx('Petición no válida.','Invalid request.','请求无效。'),'content-type':tx('Petición no válida.','Invalid request.','请求无效。')});
  const EXPIRY=window.FloorPlanShareExpiry;
  const fmtDate=d=>{try{return new Date(d).toLocaleString(typeof LANG==='string'&&LANG==='en'?'en-GB':'es-ES',{dateStyle:'short',timeStyle:'short'});}catch{return String(d);}};

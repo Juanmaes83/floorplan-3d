@@ -8,6 +8,8 @@
      every published URL — and lets a validation prove which store it is talking to before writing anything.
    - {"action":"list"} → every publication with its state (active / expired / legacy), expiry date and files
      (URL, size, upload date). Files published before S3 carry no date: they are reported as LEGACY, one by one.
+   - A confirmed purge is REFUSED (409 incomplete-listing, no delete call at all) when the listing is truncated or
+     incomplete: a store that cannot be read whole cannot be purged safely. A dry run still reports, flagged truncated.
    - {"action":"purge-expired"} is a DRY RUN by default: it reports what would be deleted. Only with "confirm":true
      does it delete, and ONLY files whose stored name says they have expired. Legacy files are never deleted here:
      that needs a specific decision of the owner (and then S2's /api/unshare).
@@ -49,7 +51,9 @@ async function listStore(env,fetchImpl,host){
    const at=new Date(b.uploadedAt);
    files.push({url:`https://${host}${u.pathname}`,size:Number.isFinite(b.size)?b.size:null,uploadedAt:Number.isFinite(at.getTime())?at.toISOString():null,info});
   }
-  if(!out.hasMore||!out.cursor)break;cursor=String(out.cursor);
+  if(!out.hasMore)break;
+  // «More» without a way to read it is an INCOMPLETE listing, never a complete one.
+  if(!out.cursor){truncated=true;break;}cursor=String(out.cursor);
  }
  return {files,truncated};
 }
@@ -97,6 +101,8 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,now=D
  const expiredFiles=pubs.filter(p=>p.state==='expired').flatMap(p=>p.files.filter(f=>Expiry.isExpired(f.url,t)).map(f=>f.url));
  const batch=expiredFiles.slice(0,MAX_DELETE),more=expiredFiles.length>MAX_DELETE||listed.truncated;
  if(b.confirm!==true)return send(res,200,{store:host,truncated:listed.truncated,dryRun:true,checkedAt:new Date(t).toISOString(),counts,wouldRemove:batch,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
+ // Never delete from an incomplete view of the store.
+ if(listed.truncated)return send(res,409,{error:'incomplete-listing',store:host,truncated:true,dryRun:false,removed:[],failed:[]});
  const removed=[],failed=[];
  for(const url of batch){const error=await remove(url,env,fetchImpl);if(error)failed.push({url,error});else removed.push(url);}
  const status=!batch.length||!failed.length?200:removed.length?207:502;

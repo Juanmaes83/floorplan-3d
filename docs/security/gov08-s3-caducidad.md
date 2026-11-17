@@ -79,6 +79,7 @@ Son tres cosas distintas y la interfaz no las confunde:
    - la respuesta es `200` (todo borrado), `207` (parcial) o `502` (nada);
    - repetir la limpieza termina lo pendiente, porque borrar un archivo inexistente cuenta como éxito;
    - como máximo se borran 200 archivos por llamada (`more` avisa si quedan más), y el listado se detiene tras 20 páginas de 1000 (`truncated`).
+   - **Listado incompleto:** si el listado está truncado, o el almacén dice «hay más» sin dar cursor, la limpieza confirmada se **rechaza** (`409 incomplete-listing`) sin ninguna llamada de borrado. La simulación sigue informando, marcada `truncated`.
 5. **Interfaz:** en «Almacén de publicaciones», «Revisar el almacén» muestra los recuentos y los archivos sin fecha. «Borrar los archivos de N enlace(s) caducado(s)» primero simula y después pide una confirmación explícita. Las entradas de este navegador cuyos archivos se borraron pasan a «Retirado».
 
 **Limpieza automática (no activada):**
