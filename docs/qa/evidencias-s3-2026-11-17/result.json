@@ -1,0 +1,122 @@
+[
+ {
+  "name": "0 pre-flight (no write yet): store listing answers 200, names the test store and is complete",
+  "ok": true
+ },
+ {
+  "name": "0 the test store is EMPTY before starting (no active, expired, legacy or inconsistent publication)",
+  "ok": true
+ },
+ {
+  "name": "1 publish 7 days: stored on the test store",
+  "ok": true
+ },
+ {
+  "name": "1 the date is now + 7 days, written in the stored name",
+  "ok": true
+ },
+ {
+  "name": "2 opens through /api/view with the isolated CSP",
+  "ok": true
+ },
+ {
+  "name": "3 early withdrawal removes exactly that file",
+  "ok": true
+ },
+ {
+  "name": "3 after withdrawal: store listing answers 200, names the test store and is complete",
+  "ok": true
+ },
+ {
+  "name": "3 the withdrawn link answers 404 and is gone from the store",
+  "ok": true
+ },
+ {
+  "name": "4 tour video: stored on the test store",
+  "ok": true
+ },
+ {
+  "name": "4 3D visit: stored on the test store",
+  "ok": true
+ },
+ {
+  "name": "4 page: stored on the test store",
+  "ok": true
+ },
+ {
+  "name": "4 page, 3D visit and video share ONE publication id and ONE date",
+  "ok": true
+ },
+ {
+  "name": "5 before the date: page 200, 3D visit 200, video 200",
+  "ok": true
+ },
+ {
+  "name": "6 after the date: page 410 and 3D visit 410 expired",
+  "ok": true
+ },
+ {
+  "name": "6 S5 limit, as documented: the video is still reachable DIRECTLY until it is deleted",
+  "ok": true
+ },
+ {
+  "name": "7 register: store listing answers 200, names the test store and is complete",
+  "ok": true
+ },
+ {
+  "name": "7 the publication is listed as expired with exactly its 3 files; nothing inconsistent",
+  "ok": true
+ },
+ {
+  "name": "8 dry run: complete, this store, no further batch",
+  "ok": true
+ },
+ {
+  "name": "8 dry run plans EXACTLY the 3 expected files (otherwise the confirmed purge is NOT run)",
+  "ok": true
+ },
+ {
+  "name": "8 after the dry run: store listing answers 200, names the test store and is complete",
+  "ok": true
+ },
+ {
+  "name": "8 the dry run deleted NOTHING (same file set; otherwise the confirmed purge is NOT run)",
+  "ok": true
+ },
+ {
+  "name": "9 confirmed purge: complete, this store, no further batch",
+  "ok": true
+ },
+ {
+  "name": "9 confirmed purge removed EXACTLY the planned files, with no failure",
+  "ok": true
+ },
+ {
+  "name": "9 after the purge: store listing answers 200, names the test store and is complete",
+  "ok": true
+ },
+ {
+  "name": "9 nothing else was touched: the store is empty again",
+  "ok": true
+ },
+ {
+  "name": "9 after deletion the video is no longer reachable directly (CDN cache up to ~1 min allowed)",
+  "ok": true
+ },
+ {
+  "name": "10 no code / wrong code / other origin are refused",
+  "ok": true
+ },
+ {
+  "name": "12 UI 1440: 7/30/90 with 30 checked",
+  "ok": true
+ },
+ {
+  "name": "12 UI 390: 7/30/90 with 30 checked",
+  "ok": true
+ },
+ {
+  "name": "cleanup verified: the test store is empty again",
+  "ok": true
+ }
+]

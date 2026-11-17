@@ -1,17 +1,19 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
+**Corte verificado 17/11/2026:** master `8525025a1470d48d52d8e365070e5a0acf116134`, #243/#244/#245 fusionadas; 11 checks de master correctos. Árbol `5441db02b71407ab03731216054165eee24940c0`, idéntico a #244 `28a01b0`. La evidencia recuperada del Preview aislado acredita 30/30 comprobaciones reales y 7/7 de conservación, sin usar Blob de Production. [Evidencia original](../qa/evidencias-s3-2026-11-17/result.json). Tras autorización expresa del propietario en esta sesión, se promovió `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`; el alias público ya apunta a ese deployment. El anterior `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` se conserva como recuperación. S4, S5 y GOV-06a siguen pendientes.
+
 **Fecha:** 17/11/2026 · **Corte funcional auditado:** `40b4ae5d724ef83d0e70651545b4f5e4832becd3`. Primera versión redactada el 16/11 sobre `1296aac` y actualizada el 17/11 tras fusionar #242 y mover la URL pública.
 
-**Consolidación técnica posterior:** `master@403e6b74c95a81e23c17badb276abeca9f8c3fd1` incorpora #245 el 17/11. Su HEAD `bcd9692` superó todas las comprobaciones, incluidos los ocho grupos históricos, en la ejecución [44092050036](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44092050036). Se conservan los mismos 35 archivos históricos y la partición bloqueante. Los ajustes afectan al reparto y a los presupuestos de tiempo de render por CPU. Esta evidencia de CI no sustituye las pruebas funcionales históricas ni la validación aislada pendiente de GOV-08 S3 (#244).
+**Consolidación técnica posterior:** `master@403e6b74c95a81e23c17badb276abeca9f8c3fd1` incorpora #245 el 17/11. Su HEAD `bcd9692` superó todas las comprobaciones, incluidos los ocho grupos históricos, en la ejecución [44092050036](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44092050036). Se conservan los mismos 35 archivos históricos y la partición bloqueante. Los ajustes afectan al reparto y a los presupuestos de tiempo de render por CPU. Esta evidencia de CI no sustituye las pruebas funcionales históricas ni amplía el alcance de GOV-08 S3 (#244).
 
-**Corte GOV-08 S3 / ENT-02 (#244):** incorpora caducidad de 7/30/90 días, 30 por defecto, registro del almacén y limpieza manual con simulación previa. Preserva archivos vigentes, históricos e incoherentes, y rechaza listados incompletos o sin confirmación booleana de fin de paginación. Las pruebas locales dirigidas de Codex pasan 56/56 en servidor y 4/4 en navegador. La validación real debe ejecutarse exclusivamente en Preview y Blob de prueba, conforme al [protocolo](../security/gov08-s3-validacion-preview.md), antes de integrar esta PR. Esta nota describe el alcance del corte y su gate, sin atribuir una prueba contra Production. Siguen pendientes S4, S5 y GOV-06a. No hay Cron ni limpieza automática.
+**Corte GOV-08 S3 / ENT-02 (#244):** incorpora caducidad de 7/30/90 días, 30 por defecto, registro del almacén y limpieza manual con simulación previa. Preserva archivos vigentes, históricos e incoherentes, y rechaza listados incompletos o sin confirmación booleana de fin de paginación. Las pruebas locales dirigidas de Codex pasan 56/56 en servidor y 4/4 en navegador. La validación real aislada ya se ejecutó sobre #244: 30/30 más 7/7 de conservación; sus resultados originales están enlazados en la nota de corte. Esta nota describe el alcance del corte y su gate, sin atribuir una prueba contra Production. Siguen pendientes S4, S5 y GOV-06a. No hay Cron ni limpieza automática.
 
 **Qué es este documento.** Es la fotografía **vigente** del producto. Responde a qué está terminado, qué es experimental, qué está simulado o desactivado y qué falta.
 
 **Qué no es.** No es una auditoría nueva, un roadmap nuevo ni una autorización. Ningún estado de este documento autoriza merge, despliegue, gasto ni activación de proveedores.
 
 **Autoridades.**
-- **Nombres, IDs y olas:** el [catálogo maestro](rubik-catalogo-maestro-mejoras-2026-11-09.md). La **v1.11 es candidata** en la PR [#243](https://github.com/Juanmaes83/floorplan-3d/pull/243): tiene 98 códigos (añade HOM-04) y entra en vigor cuando se fusione. Hasta entonces, la vigente en `master` es la v1.10, con 97. Los seis descartes X-01 a X-06 no se renumeran.
+- **Nombres, IDs y olas:** el [catálogo maestro](rubik-catalogo-maestro-mejoras-2026-11-09.md). La **v1.11 es vigente** tras fusionar #243: 98 códigos, incluido HOM-04. Los seis descartes X-01 a X-06 conservan sus IDs.
 - **Estado posterior al 12/11/2026:** este documento.
 - **Documentos históricos:** conservan su fecha y su validez. No estaban equivocados: describen un corte anterior.
 
@@ -29,12 +31,12 @@
 
 | Elemento | Valor |
 |---|---|
-| `master` | `403e6b74c95a81e23c17badb276abeca9f8c3fd1`, tras #245 [M, 17/11]. Las filas funcionales conservan su SHA de acreditación |
+| `master` | `8525025a1470d48d52d8e365070e5a0acf116134`; evidencias funcionales conservan sus SHA originales |
 | Consolidación | [#241](https://github.com/Juanmaes83/floorplan-3d/pull/241), fusionada el 16/11/2026, con HEAD `200b936`. Integra identidad de proyectos, presupuestos independientes, importación de presupuesto, Asistente V3 (#238), HOM-03 (#236), lector y enlace de #166 y las auditorías (#240) |
 | HOM-04 | [#242](https://github.com/Juanmaes83/floorplan-3d/pull/242), fusionada el 17/11/2026, con HEAD `5fcb252`. Sección «Descubre RUBIK en acción» en la Home con dos demos guiadas: Evolución 4D (`/evolucion/?demo=obra`) y Dibujo vivo (`/?demo=dibujo-vivo`). Corrige el error de `/evolucion/?lab=1&dossier=K` en Production |
-| Despliegue Production | `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs`, sobre `40b4ae5`, **READY** [M, consultado en Vercel el 17/11]. El de #241 era `dpl_t1AALQZxQEtEoBeT5HBoTyYF2z2e` |
-| **URL pública `floorplan-3d-alpha.vercel.app`** | **Apunta a `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` (`40b4ae5`) desde el 17/11/2026**, por autorización del propietario [M, consultado en Vercel el 17/11]. Abre sin pedir acceso. Antes estaba en `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (09/11, `master@8df49ed`): para revertir, basta con reasignarle ese despliegue |
-| PR abiertas | **2** al preparar este corte: [#243](https://github.com/Juanmaes83/floorplan-3d/pull/243), gobierno, y [#244](https://github.com/Juanmaes83/floorplan-3d/pull/244), GOV-08 S3. #245 está fusionada. Las 21 históricas se archivaron el 17/11 por decisión del propietario, sin borrar ramas. Detalle en el [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md) y en la §F [M, 17/11] |
+| Despliegue Production | `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`, `8525025`, READY y promovido con autorización expresa el 17/11 |
+| **URL pública `floorplan-3d-alpha.vercel.app`** | Alias verificado tras promoción: `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`, SHA `8525025`. Recuperación conservada: `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` |
+| PR abiertas | 0 al recuperar este corte; #243/#244/#245 fusionadas. La PR documental posterior tiene su propio SHA y CI |
 
 **Capacidades principales comprobadas (navegador real, 17/11):**
 
@@ -186,7 +188,7 @@ Por tanto, la cifra correcta para la V2 es **7 herramientas expuestas y verifica
 
 ## E. Olas 0–5
 
-Mantienen la numeración y los IDs del catálogo: 98 códigos en la v1.11 candidata de #243 (97 en la v1.10 vigente más HOM-04), repartidos 10 / 9 / 28 / 22 / 14 / 15. **Ninguna ola está completa.**
+Mantienen la numeración y los IDs del catálogo: 98 códigos en la v1.11 vigente tras #243 (v1.10 histórica: 97, más HOM-04), repartidos 10 / 9 / 28 / 22 / 14 / 15. **Ninguna ola está completa.**
 
 | Ola | Objetivo | Avances desde el v1.10 (12/11) | Pendientes principales | Dependencias | Siguiente corte razonable |
 |---|---|---|---|---|---|

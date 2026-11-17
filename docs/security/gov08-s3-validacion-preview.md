@@ -1,6 +1,8 @@
 # GOV-08 S3 · Protocolo de validación en Preview con un almacén Blob aislado
 
-**Estado:** preparado. **No ejecutado.** Necesita la autorización expresa del propietario antes de usar cualquier almacenamiento real.
+**Corte verificado 17/11/2026:** master `8525025a1470d48d52d8e365070e5a0acf116134`, #243/#244/#245 fusionadas; 11 checks de master correctos. Árbol `5441db02b71407ab03731216054165eee24940c0`, idéntico a #244 `28a01b0`. La evidencia recuperada del Preview aislado acredita 30/30 comprobaciones reales y 7/7 de conservación, sin usar Blob de Production. [Evidencia original](../qa/evidencias-s3-2026-11-17/result.json). Tras autorización expresa del propietario en esta sesión, se promovió `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`; el alias público ya apunta a ese deployment. El anterior `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` se conserva como recuperación. S4, S5 y GOV-06a siguen pendientes.
+
+**Estado actual:** ejecutado en Preview aislado según evidencia original recuperada. El protocolo siguiente conserva su contexto histórico; cualquier repetición necesita un entorno de prueba autorizado.
 
 **Datos:** solo sintéticos («Proyecto de ejemplo»). Ningún dato de clientes. Presupuesto de IA: 0 €.
 

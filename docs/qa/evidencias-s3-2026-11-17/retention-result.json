@@ -1,0 +1,30 @@
+[
+  {
+    "name": "token belongs exclusively to isolated test store",
+    "ok": true
+  },
+  {
+    "name": "isolated store complete and empty before retention test",
+    "ok": true
+  },
+  {
+    "name": "real Blob lists synthetic active, expired and historical publications separately",
+    "ok": true
+  },
+  {
+    "name": "dry run selects only expired file and preserves exact store contents",
+    "ok": true
+  },
+  {
+    "name": "confirmed purge deletes exactly expired file and retains active and historical files",
+    "ok": true
+  },
+  {
+    "name": "active and historical links still open after purge",
+    "ok": true
+  },
+  {
+    "name": "cleanup removes only files created by this test and verifies empty store",
+    "ok": true
+  }
+]
