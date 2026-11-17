@@ -1,18 +1,12 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · v1.4 auditoría ampliada (en curso)
+## Vigente · v1.4 ampliada (§3–§12)
 
-Mandato: `mandatos/RUBIK-SOTA-CIERRE-INTEGRAL-PROFESIONAL-v1.4-AUDITORIA-AMPLIADA.md`. Base: el candidato v1.4 de la sección siguiente sigue siendo válido y no se repite.
-
-**Hecho en este bloque:** auditoría §3 con oráculo independiente sobre los PDF finales: `node tools/auditoria-recetas.cjs` → `reports/16-AUDITORIA-RECETAS-v1.4.md` y `evidence/recetas/auditoria-completitud.json`.
-Resultado: **2/12 recetas L completas documentalmente** (RP05, RP07). Incompletas: RP01 (alcance de servicios, validez), RP02, RP04 (precio, impuestos de compra), RP06 (concepto, moodboard), RP08 (plan de obra, oferta técnica, exclusiones, vínculo), RP09, RP10, RP11 (catálogo, precios verificados), RP12 (presupuesto revisado); RP03 sin documento propio. La fase P no tiene ninguna receta L en los seis perfiles (6/18 combinaciones).
-Nota de alcance: `revisionAnterior`, `variantesGuardadas`, `dimensionesHuecos` y `fotosAportadas` dependen de E2/E4; marcarlos «corte» y no implementarlos. El resto (RP01, RP04, RP06, RP08, RP10, RP11, RP12) es el trabajo §4 con fixtures sintéticas rotuladas.
-
-**§4 HECHO (ejecución definitiva, 17/11):** `tools/bloques-receta.cjs` compone bloques RP01 (alcance, servicios, honorarios separados del coste, exclusiones, validez), RP04 (compra, impuestos y reforma por autoridad, sin sumar), RP06 (concepto y referencias de vistas propias atribuidas), RP08 (oferta técnica, exclusiones, plan disponible; vínculo plan–presupuesto declarado ausente), RP10 (memoria descriptiva con finalidad), RP11 (fichas de catálogo: genérico/referencia/elegido/instalado, precio solo verificado), RP12 (estado de revisión y condiciones) desde `snapshot/aportaciones.json` (fixture rotulada; solo campos válidos y de la misma revisión). `entrega.json → aportaciones` registra campos compuestos y huella; el resolvedor cuenta solo lo compuesto. ES/EN con gate a cero. Oráculo corregido (valores exactos ES/EN, documentos heredados de RP03, corte E2/E4 declarado): **12/12 L completas documentalmente**. QA: bloques 8/8, recetas 117/117, exportador 72/72.
-
-**§5 (en curso):** compose termina con código 3 si el inglés pedido se bloquea (B-10, prueba real con `node tools/bloques-qa.cjs --compose`); regresión del falso positivo de exclusión textual (B-09).
-
-**Orden restante:** §5 economía (en curso) → §6 recibo de receta → §7 FF&E y QA tipográfico de láminas → §8 localización del selector → §9 donantes (Skills for Architects a9c4355) → §10 RP13–RP21 → §11 negativos N08 → §12 registro F01–F16, paquetes, dossier, aceptación, dictamen. §3 y §4 están TERMINADOS: no repetir.
+Mandato: `mandatos/RUBIK-SOTA-CIERRE-INTEGRAL-PROFESIONAL-v1.4-AUDITORIA-AMPLIADA.md`. Todo el trabajo autorizado está implementado; no repetir §3–§11.
+Registro y dictamen: `reports/19-CIERRE-v1.4-AMPLIADA.md` (F01–F16, dossier, hoja de aceptación). Matriz: informe 16. Donantes: informe 17. Roadmap RP13–RP21: informe 18.
+Pruebas (comando → resultado): `auditoria-recetas` 12/12 L · `bloques-qa [--compose]` 10/10 · `recetas-qa` 117/117 · `exportar-qa` 72/72 · `economia-zip-qa <repo>` 24/24 · `recibo-qa` 6/6 · `selector-ui-qa` 7/7 · `laminas-qa.py` ok · `impacto-qa` 5/5 · `verificar-impacto` vigente.
+Paquetes (no versionados, `dist/`): `bash tools/package.sh` (cliente ES/EN + laboratorio) y `dist/economia/` (12 ZIP + digest + SHA256SUMS; regenerar con `node tools/economia-zip-qa.cjs <worktree master>`, que necesita el pin 8525025). Reconstrucción: `bash tools/reconstruir.sh dist/rubik-studio-presentation-lab.zip <carpeta>`.
+Pendiente humano: hoja de aceptación del informe 19; escala física, Safari real, dispositivos; H08; licencia del núcleo económico. E2–E7 requieren GO aparte.
 
 ## Anterior · traspaso del candidato v1.4
 
