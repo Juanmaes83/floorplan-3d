@@ -783,12 +783,10 @@
    "external": [],
    "errors": [],
    "lint": {
-    "red": [
-     "texto de lectura bajo el mínimo 1: [{\"text\":\"Mirador del dormitorio juvenil\",\"px\":10}]"
-    ],
+    "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 8841,
+     "RUBIK Inter": 8873,
      "RUBIK Serif": 1354
     },
     "display": "RUBIK Serif",

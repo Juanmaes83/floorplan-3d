@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.2",
- "generated": "2026-11-17T17:24:54.695Z",
+ "generated": "2026-11-17T17:43:40.636Z",
  "project": {
   "id": "prj_reference-home",
   "name": "Proyecto de ejemplo",
@@ -18,7 +18,7 @@
  "web": [
   {
    "file": "index.html",
-   "sha256": "1de8e62f52666840df15cf09100c27f7f784f64c422413b72f42e542fb4faf40"
+   "sha256": "87b9edc1bf64312b8cfa2c9650b631b7f76481216f2cbb7e2e8a1395836bb083"
   },
   {
    "file": "tipo-primera-reunion.html",
@@ -30,7 +30,7 @@
   },
   {
    "file": "tipo-dossier-tecnico.html",
-   "sha256": "fb0272074188db28007b9e1d46e67ae4570b4aae087402bd1416acae106e30fb"
+   "sha256": "a710f48e20a800ab2e6d4358c7862835b883d5f1ce92b4e17e80913b8ebbef1a"
   },
   {
    "file": "tipo-interiorismo.html",
@@ -337,42 +337,42 @@
   },
   {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "2feeaf2d20168b132bdf4aac499588fd5fb41886ef1b7c58b3928f9388bde1a1",
+   "sha256": "e9b4718045d1032689e465a38fe47acc4fa661e9f1b6cf8d1b7893b923468680",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "43a0beb8557e306c932bf76997e888e31bf0c2bdfcd0ed3135a077f470a670d3",
+   "sha256": "1d16542301a6873559fa131c1084826a9bf3372fdd46c9eb62797d24ef17d5d3",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "351f1c03db854e58af6c049bd656849548109cdd5d001656f76eceb059aa821a",
+   "sha256": "e7a7547f7f0a31223dee1420ac6a21dc49b6249d3b1b64083f8a81eabf63fc15",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "a654749523a6d2e9eb22a98d7f1347013099bdfcc96904544c68f16f3ed3b227",
+   "sha256": "b741366753a86af5ceea366f625088b65a9edf7c46ec201ad9d099c29155a76b",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "sha256": "0e76d6cdd5854eee69697483152337c77c55da1a0ce9295621fbfbd27e8a6c6b",
+   "sha256": "8b9864ea024e6934bb2c898eefca3d37a42e7a09d9d43e7059af9cf19a50e990",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-book.pdf",
-   "sha256": "aaaad1d6113eb5dcbdabc8b487323525ddbe8fbc2cfc2c898d932990b91f1f10",
+   "sha256": "2bc0fe90d0275f82804187937b78158dbe975440e5d474de0f84720370401465",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "578cd64689e0a38c92aafab28e29d0a8f32da5b3905c19e137debcb6eed88cbc",
+   "sha256": "7b17388c2920b2ff246e702a7bec1b67c81dd0cc1154023e2aab9946ef1164cf",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "5ded680f76aada2f75951cb80668ff50c5a6a840cbae7df299b2fa26a376dcce",
+   "sha256": "a588635d0ccc0b5d672643bdd5351d5034e3751d9dd03ffa366f8f5a05ce720e",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   }
  ],
