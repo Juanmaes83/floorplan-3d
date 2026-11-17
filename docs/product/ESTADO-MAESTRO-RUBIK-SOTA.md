@@ -1,6 +1,8 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
-**Fecha:** 17/11/2026 · **Corte:** `master@40b4ae5d724ef83d0e70651545b4f5e4832becd3`. Primera versión redactada el 16/11 sobre `1296aac` y actualizada el 17/11 tras fusionar #242 y mover la URL pública.
+**Fecha:** 17/11/2026 · **Corte funcional auditado:** `40b4ae5d724ef83d0e70651545b4f5e4832becd3`. Primera versión redactada el 16/11 sobre `1296aac` y actualizada el 17/11 tras fusionar #242 y mover la URL pública.
+
+**Consolidación técnica posterior:** `master@403e6b74c95a81e23c17badb276abeca9f8c3fd1` incorpora #245 el 17/11. Su HEAD `bcd9692` superó todas las comprobaciones, incluidos los ocho grupos históricos, en la ejecución [44092050036](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44092050036). Se conservan los mismos 35 archivos históricos y la partición bloqueante. Los ajustes afectan al reparto y a los presupuestos de tiempo de render por CPU. Esta evidencia de CI no sustituye las pruebas funcionales históricas ni la validación aislada pendiente de GOV-08 S3 (#244).
 
 **Qué es este documento.** Es la fotografía **vigente** del producto. Responde a qué está terminado, qué es experimental, qué está simulado o desactivado y qué falta.
 
@@ -25,12 +27,12 @@
 
 | Elemento | Valor |
 |---|---|
-| `master` | `40b4ae5d724ef83d0e70651545b4f5e4832becd3` [M] |
+| `master` | `403e6b74c95a81e23c17badb276abeca9f8c3fd1`, tras #245 [M, 17/11]. Las filas funcionales conservan su SHA de acreditación |
 | Consolidación | [#241](https://github.com/Juanmaes83/floorplan-3d/pull/241), fusionada el 16/11/2026, con HEAD `200b936`. Integra identidad de proyectos, presupuestos independientes, importación de presupuesto, Asistente V3 (#238), HOM-03 (#236), lector y enlace de #166 y las auditorías (#240) |
 | HOM-04 | [#242](https://github.com/Juanmaes83/floorplan-3d/pull/242), fusionada el 17/11/2026, con HEAD `5fcb252`. Sección «Descubre RUBIK en acción» en la Home con dos demos guiadas: Evolución 4D (`/evolucion/?demo=obra`) y Dibujo vivo (`/?demo=dibujo-vivo`). Corrige el error de `/evolucion/?lab=1&dossier=K` en Production |
 | Despliegue Production | `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs`, sobre `40b4ae5`, **READY** [M, consultado en Vercel el 17/11]. El de #241 era `dpl_t1AALQZxQEtEoBeT5HBoTyYF2z2e` |
 | **URL pública `floorplan-3d-alpha.vercel.app`** | **Apunta a `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` (`40b4ae5`) desde el 17/11/2026**, por autorización del propietario [M, consultado en Vercel el 17/11]. Abre sin pedir acceso. Antes estaba en `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (09/11, `master@8df49ed`): para revertir, basta con reasignarle ese despliegue |
-| PR abiertas | **1**: [#243](https://github.com/Juanmaes83/floorplan-3d/pull/243), la que trae este documento, abierta hasta su integración. Las 21 históricas se archivaron el 17/11 por decisión del propietario: se cerraron sin fusionar y sin borrar ramas. Detalle en el [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md) y en la §F [M, 17/11] |
+| PR abiertas | **2** al preparar este corte: [#243](https://github.com/Juanmaes83/floorplan-3d/pull/243), gobierno, y [#244](https://github.com/Juanmaes83/floorplan-3d/pull/244), GOV-08 S3. #245 está fusionada. Las 21 históricas se archivaron el 17/11 por decisión del propietario, sin borrar ramas. Detalle en el [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md) y en la §F [M, 17/11] |
 
 **Capacidades principales comprobadas (navegador real, 17/11):**
 
@@ -50,7 +52,7 @@
 Es una declaración del propietario, **no** una prueba automatizada ejecutada por Claude. No consta en qué URL se hizo. Si se hizo en la URL pública antes del 17/11, corresponde al despliegue del 09/11 y no a la consolidación [D].
 
 **Excepciones de CI conocidas y no bloqueantes:**
-- Los shards *historical* agotan el tiempo sin `RENDER_TIME_SCALE` y con un corte de 900 s por fichero. Los mismos tests pasan en sus jobs dedicados.
+- Los cortes históricos por tiempo quedaron corregidos en #245, con `RENDER_TIME_SCALE=3`, ocho grupos y un límite de 1100 × escala segundos por archivo. Todos los grupos pasaron sobre `bcd9692`. Las cancelaciones y fallos de los SHA anteriores conservan su clasificación histórica.
 - `assets.browser` falla de forma intermitente con `Loading aborted`.
 
 ---
