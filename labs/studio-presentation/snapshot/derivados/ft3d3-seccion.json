@@ -1,0 +1,235 @@
+{
+ "schema": "rubik-lab-derivado/1",
+ "funcion": "FloorPlanPresentationSection.derive",
+ "opciones": {
+  "overviewDirection": [
+   0,
+   0,
+   1
+  ]
+ },
+ "producto": "8525025a1470d48d52d8e365070e5a0acf116134",
+ "proyecto": "prj_reference-home",
+ "revision": "rv1-0f3e96422fd20e08",
+ "generado": "derivado por el producto en el navegador (sin red)",
+ "nota": "Descriptores de tiempo de ejecución de la Presentación 3D; el producto no los guarda. El laboratorio solo los dibuja.",
+ "rooms": [
+  {
+   "id": "rom_master",
+   "name": "主卧室"
+  },
+  {
+   "id": "rom_mbath",
+   "name": "主卫浴"
+  },
+  {
+   "id": "rom_kid",
+   "name": "小孩房"
+  },
+  {
+   "id": "rom_gbath",
+   "name": "客卫浴"
+  },
+  {
+   "id": "rom_laundry",
+   "name": "洗衣阳台"
+  },
+  {
+   "id": "rom_child",
+   "name": "子女房"
+  },
+  {
+   "id": "rom_kitchen",
+   "name": "厨房"
+  },
+  {
+   "id": "rom_dining",
+   "name": "餐厅"
+  },
+  {
+   "id": "rom_hall",
+   "name": "过道"
+  },
+  {
+   "id": "rom_living",
+   "name": "客厅"
+  },
+  {
+   "id": "rom_balcony",
+   "name": "休闲阳台"
+  },
+  {
+   "id": "rom_bay1",
+   "name": "主卧飘窗"
+  },
+  {
+   "id": "rom_bay2",
+   "name": "子女房飘窗"
+  }
+ ],
+ "defaults": {
+  "wallHeightMm": 2800,
+  "wallThicknessMm": 240
+ },
+ "resultado": {
+  "supported": true,
+  "reason": null,
+  "message": null,
+  "levelId": null,
+  "axis": "x",
+  "normal": [
+   0,
+   1
+  ],
+  "normalAxis": "y",
+  "frontSign": 1,
+  "targetOffset": 5280,
+  "startOffset": 11020.8,
+  "fraction": 0.5,
+  "bounds": {
+   "minX": -360,
+   "maxX": 12210,
+   "minY": -240,
+   "maxY": 10800,
+   "spanX": 12570,
+   "spanY": 11040
+  },
+  "span": 11040,
+  "lineMin": -360,
+  "lineMax": 12210,
+  "line": [
+   [
+    -360,
+    5280
+   ],
+   [
+    12210,
+    5280
+   ]
+  ],
+  "look": [
+   0,
+   -1
+  ],
+  "candidates": [
+   {
+    "fraction": 0.5,
+    "offset": 5280,
+    "rooms": 5,
+    "walls": 5
+   },
+   {
+    "fraction": 0.4,
+    "offset": 6384,
+    "rooms": 3,
+    "walls": 2
+   },
+   {
+    "fraction": 0.6,
+    "offset": 4176,
+    "rooms": 4,
+    "walls": 5
+   }
+  ],
+  "intersections": {
+   "walls": [
+    {
+     "id": "wal_ref-w28",
+     "at": -120,
+     "width": 240,
+     "height": 2800,
+     "gaps": []
+    },
+    {
+     "id": "wal_ref-w32",
+     "at": 2300,
+     "width": 240,
+     "height": 2800,
+     "gaps": []
+    },
+    {
+     "id": "wal_ref-w46",
+     "at": 6203,
+     "width": 240,
+     "height": 2800,
+     "gaps": []
+    },
+    {
+     "id": "wal_ref-bay-1",
+     "at": 10390,
+     "width": 240,
+     "height": 2800,
+     "gaps": [
+      {
+       "id": "opn_bay-1",
+       "kind": "opening",
+       "bottom": 0,
+       "top": 2400
+      }
+     ]
+    },
+    {
+     "id": "wal_ref-window-10",
+     "at": 11080,
+     "width": 100,
+     "height": 2800,
+     "gaps": [
+      {
+       "id": "opn_window-10",
+       "kind": "window",
+       "bottom": 450,
+       "top": 2400
+      }
+     ]
+    }
+   ],
+   "rooms": [
+    {
+     "id": "rom_child",
+     "segments": [
+      [
+       6323,
+       10270
+      ]
+     ]
+    },
+    {
+     "id": "rom_kitchen",
+     "segments": [
+      [
+       0,
+       2180
+      ]
+     ]
+    },
+    {
+     "id": "rom_dining",
+     "segments": [
+      [
+       2420,
+       4820
+      ]
+     ]
+    },
+    {
+     "id": "rom_hall",
+     "segments": [
+      [
+       4820,
+       6083
+      ]
+     ]
+    },
+    {
+     "id": "rom_bay2",
+     "segments": [
+      [
+       10270,
+       11030
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

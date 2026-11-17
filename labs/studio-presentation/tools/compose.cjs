@@ -256,7 +256,8 @@ function build(){
  // B1 (v3): more designs per deliverable, built by tools/b1.cjs from the same snapshot and the same helpers.
  if(process.env.STUDIO_B1!=='0'){const b1=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
-  STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage});Object.assign(D,b1.D);Object.assign(meta,b1.meta);}
+  STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage});Object.assign(D,b1.D);Object.assign(meta,b1.meta);
+  {const ab=require('./architecture-book.cjs')({S,T,doc,plan,roomPlan:b1.helpers.roomPlan,esc,num,date,rev,rooms,counted,AREA,STATUS_AREA,STUDIO,TITLE,NOGEO,coverDrawing,keyList,matById,snapDir,roomArea,scaleBar});Object.assign(D,ab.D);Object.assign(meta,ab.meta);}}
  let E=null;if(process.env.STUDIO_B1!=='0'&&!S.variant&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage}).helpers;

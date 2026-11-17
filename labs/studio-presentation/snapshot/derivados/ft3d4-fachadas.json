@@ -1,0 +1,372 @@
+{
+ "schema": "rubik-lab-derivado/1",
+ "funcion": "FloorPlanPresentationElevation.derive",
+ "producto": "8525025a1470d48d52d8e365070e5a0acf116134",
+ "proyecto": "prj_reference-home",
+ "revision": "rv1-0f3e96422fd20e08",
+ "generado": "derivado por el producto en el navegador (sin red)",
+ "nota": "Descriptores de tiempo de ejecución de la Presentación 3D; el producto no los guarda. El laboratorio solo los dibuja.",
+ "resultado": {
+  "supported": true,
+  "reason": null,
+  "message": null,
+  "partial": false,
+  "candidates": [
+   {
+    "id": "facade-A",
+    "letter": "A",
+    "sector": 0,
+    "normalPlan": [
+     0,
+     -1
+    ],
+    "tangentPlan": [
+     1,
+     0
+    ],
+    "anglePlanDeg": 0,
+    "wallRefs": [
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w2"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w4"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w7"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-0"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-2"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-4"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-6"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-9"
+     }
+    ],
+    "openingRefs": [
+     {
+      "levelId": null,
+      "openingId": "opn_window-0"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-2"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-4"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-6"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-9"
+     }
+    ],
+    "centerMm": {
+     "x": 5925,
+     "y": 1655.0395778364116
+    },
+    "widthMm": 12330,
+    "baseMm": 0,
+    "heightMm": 2800,
+    "totalFacadeLengthMm": 11370,
+    "openingCount": 5,
+    "openingAreaMm2": 8138000,
+    "frame": {
+     "centerMm": {
+      "x": 5925,
+      "y": 5280
+     },
+     "widthMm": 12570,
+     "depthMm": 11040,
+     "baseMm": 0,
+     "heightMm": 2800
+    },
+    "levels": [
+     null
+    ],
+    "trueAzimuthDeg": null,
+    "cardinal": null,
+    "label": "Fachada A"
+   },
+   {
+    "id": "facade-B",
+    "letter": "B",
+    "sector": 2,
+    "normalPlan": [
+     1,
+     0
+    ],
+    "tangentPlan": [
+     0,
+     1
+    ],
+    "anglePlanDeg": 90,
+    "wallRefs": [
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w9"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w10"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w11"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w12"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w13"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w20"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-5"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-7"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-10"
+     }
+    ],
+    "openingRefs": [
+     {
+      "levelId": null,
+      "openingId": "opn_window-5"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-7"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-10"
+     }
+    ],
+    "centerMm": {
+     "x": 11211.68967158496,
+     "y": 5280
+    },
+    "widthMm": 10560,
+    "baseMm": 0,
+    "heightMm": 2800,
+    "totalFacadeLengthMm": 10505,
+    "openingCount": 3,
+    "openingAreaMm2": 11781750,
+    "frame": {
+     "centerMm": {
+      "x": 5925,
+      "y": 5280
+     },
+     "widthMm": 11040,
+     "depthMm": 12570,
+     "baseMm": 0,
+     "heightMm": 2800
+    },
+    "levels": [
+     null
+    ],
+    "trueAzimuthDeg": null,
+    "cardinal": null,
+    "label": "Fachada B"
+   },
+   {
+    "id": "facade-C",
+    "letter": "C",
+    "sector": 4,
+    "normalPlan": [
+     0,
+     1
+    ],
+    "tangentPlan": [
+     -1,
+     0
+    ],
+    "anglePlanDeg": 180,
+    "wallRefs": [
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w18"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w19"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w23"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w24"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w27"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-8"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-11"
+     }
+    ],
+    "openingRefs": [
+     {
+      "levelId": null,
+      "openingId": "opn_window-8"
+     },
+     {
+      "levelId": null,
+      "openingId": "opn_window-11"
+     }
+    ],
+    "centerMm": {
+     "x": 5925,
+     "y": 9106.766513056835
+    },
+    "widthMm": 12330,
+    "baseMm": 0,
+    "heightMm": 2800,
+    "totalFacadeLengthMm": 13020,
+    "openingCount": 2,
+    "openingAreaMm2": 2418000,
+    "frame": {
+     "centerMm": {
+      "x": 5925,
+      "y": 5280
+     },
+     "widthMm": 12570,
+     "depthMm": 11040,
+     "baseMm": 0,
+     "heightMm": 2800
+    },
+    "levels": [
+     null
+    ],
+    "trueAzimuthDeg": null,
+    "cardinal": null,
+    "label": "Fachada C"
+   },
+   {
+    "id": "facade-D",
+    "letter": "D",
+    "sector": 6,
+    "normalPlan": [
+     -1,
+     0
+    ],
+    "tangentPlan": [
+     0,
+     -1
+    ],
+    "anglePlanDeg": 270,
+    "wallRefs": [
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w1"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w21"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w22"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-w28"
+     },
+     {
+      "levelId": null,
+      "wallId": "wal_ref-window-1"
+     }
+    ],
+    "openingRefs": [
+     {
+      "levelId": null,
+      "openingId": "opn_window-1"
+     }
+    ],
+    "centerMm": {
+     "x": 1404.4538706256628,
+     "y": 5280
+    },
+    "widthMm": 10560,
+    "baseMm": 0,
+    "heightMm": 2800,
+    "totalFacadeLengthMm": 9430,
+    "openingCount": 1,
+    "openingAreaMm2": 4605000,
+    "frame": {
+     "centerMm": {
+      "x": 5925,
+      "y": 5280
+     },
+     "widthMm": 11040,
+     "depthMm": 12570,
+     "baseMm": 0,
+     "heightMm": 2800
+    },
+    "levels": [
+     null
+    ],
+    "trueAzimuthDeg": null,
+    "cardinal": null,
+    "label": "Fachada D"
+   }
+  ],
+  "defaultId": "facade-B",
+  "envelope": {
+   "minX": -360,
+   "maxX": 12210,
+   "minY": -240,
+   "maxY": 10800,
+   "bottomMm": 0,
+   "topMm": 2800,
+   "spanX": 12570,
+   "spanY": 11040,
+   "heightMm": 2800,
+   "centerMm": {
+    "x": 5925,
+    "y": 5280
+   }
+  },
+  "unoriented": [],
+  "excluded": [],
+  "northOffsetDeg": null
+ }
+}

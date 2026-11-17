@@ -40,6 +40,11 @@
    "dropped": 0,
    "keyed": 0
   },
+  "architecture-book": {
+   "laminas": 11,
+   "seccion": true,
+   "fachadas": true
+  },
   "entrega": {
    "ai": [
     "Salón",
@@ -649,7 +654,7 @@
      "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
     ],
     "fonts": {
-     "RUBIK Inter": 1202,
+     "RUBIK Inter": 1290,
      "RUBIK Serif": 21
     },
     "display": "RUBIK Inter",
@@ -744,6 +749,52 @@
     "body": "RUBIK Serif"
    }
   },
+  "architecture-book": {
+   "pages": 14,
+   "blockOverlaps": [],
+   "svgClipCount": 0,
+   "svgClip": [],
+   "spillCount": 0,
+   "spill": [],
+   "textOverlapCount": 0,
+   "textOverlaps": [],
+   "overflowCount": 0,
+   "overflow": [],
+   "tagOverlaps": 0,
+   "fontsLoaded": [
+    "RUBIK Inter 400 normal",
+    "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
+    "RUBIK Serif 600 normal"
+   ],
+   "flow": {
+    "tables": 0,
+    "rows": 0,
+    "pagesAdded": 0,
+    "unsplittable": 0,
+    "oversized": [],
+    "labelErrors": 0,
+    "multiTable": [],
+    "postOverflow": [],
+    "orphanHeads": [],
+    "ok": true
+   },
+   "pdfRows": null,
+   "external": [],
+   "errors": [],
+   "lint": {
+    "red": [
+     "texto de lectura bajo el mínimo 1: [{\"text\":\"Mirador del dormitorio juvenil\",\"px\":10}]"
+    ],
+    "yellow": [],
+    "fonts": {
+     "RUBIK Inter": 8841,
+     "RUBIK Serif": 1354
+    },
+    "display": "RUBIK Serif",
+    "body": "RUBIK Inter"
+   }
+  },
   "entrega-integral": {
    "pages": 10,
    "blockOverlaps": [],
@@ -787,7 +838,7 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7067,
+     "RUBIK Inter": 7223,
      "RUBIK Serif": 856
     },
     "display": "RUBIK Serif",
@@ -818,6 +869,7 @@
     "materials-furniture-book-v3",
     "commercial-proposal-client-v3",
     "real-estate-sheet-v3",
+    "architecture-book",
     "architecture-sheet-strip",
     "entrega-integral"
    ]
@@ -865,12 +917,14 @@
    "chapters": [
     "portada",
     "vivienda",
+    "estancias",
     "materiales",
     "presupuesto",
     "documentos",
     "procedencia"
    ],
    "documents": [
+    "architecture-book",
     "architecture-sheet-strip",
     "materials-furniture-book-v3",
     "commercial-proposal-client-v3"

@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.2",
- "generated": "2026-11-17T17:18:28.250Z",
+ "generated": "2026-11-17T17:24:54.695Z",
  "project": {
   "id": "prj_reference-home",
   "name": "Proyecto de ejemplo",
@@ -18,7 +18,7 @@
  "web": [
   {
    "file": "index.html",
-   "sha256": "806ef7c613c0a53f6efbe1b672a1ee6ca406d4eebd4371916897f1aa49cc3c1e"
+   "sha256": "1de8e62f52666840df15cf09100c27f7f784f64c422413b72f42e542fb4faf40"
   },
   {
    "file": "tipo-primera-reunion.html",
@@ -30,7 +30,7 @@
   },
   {
    "file": "tipo-dossier-tecnico.html",
-   "sha256": "efb0d55abb8129ac514d51f4671adf2079edbf2946fc009c52b1a4078ab0792e"
+   "sha256": "fb0272074188db28007b9e1d46e67ae4570b4aae087402bd1416acae106e30fb"
   },
   {
    "file": "tipo-interiorismo.html",
@@ -72,6 +72,7 @@
     "materials-furniture-book-v3",
     "commercial-proposal-client-v3",
     "real-estate-sheet-v3",
+    "architecture-book",
     "architecture-sheet-strip",
     "entrega-integral"
    ]
@@ -119,12 +120,14 @@
    "chapters": [
     "portada",
     "vivienda",
+    "estancias",
     "materiales",
     "presupuesto",
     "documentos",
     "procedencia"
    ],
    "documents": [
+    "architecture-book",
     "architecture-sheet-strip",
     "materials-furniture-book-v3",
     "commercial-proposal-client-v3"
@@ -334,37 +337,42 @@
   },
   {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "e551fa91e8114cf42461cbe2394c1b371456ada4cb46b68621b7a9eb03b5396e",
+   "sha256": "2feeaf2d20168b132bdf4aac499588fd5fb41886ef1b7c58b3928f9388bde1a1",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "5a98dd863ac443677850ad8960b25763397b81e0b0be44673cea1384a10a3e48",
+   "sha256": "43a0beb8557e306c932bf76997e888e31bf0c2bdfcd0ed3135a077f470a670d3",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "ae8ffcc19ccb66a6c87e455fc5b8e80f0158629affeb32f92d80d6b5ebff64fe",
+   "sha256": "351f1c03db854e58af6c049bd656849548109cdd5d001656f76eceb059aa821a",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "3b52ed4bc7f12b08ea28d93cfc6a109b755f4fe36026095019d3d29318e60915",
+   "sha256": "a654749523a6d2e9eb22a98d7f1347013099bdfcc96904544c68f16f3ed3b227",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "sha256": "4cc9955c4ea184c5f6fa3f4b0531c8877e09eff643154516eea0e1e63a0a623e",
+   "sha256": "0e76d6cdd5854eee69697483152337c77c55da1a0ce9295621fbfbd27e8a6c6b",
+   "producer": "compositor del laboratorio (tools/compose.cjs)"
+  },
+  {
+   "file": "documentos/architecture-book.pdf",
+   "sha256": "aaaad1d6113eb5dcbdabc8b487323525ddbe8fbc2cfc2c898d932990b91f1f10",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "c8f4c9365129859170eefaa2236969874e6d42bea60456a4985aaa0a55596f59",
+   "sha256": "578cd64689e0a38c92aafab28e29d0a8f32da5b3905c19e137debcb6eed88cbc",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "111649417339d85b10d06968df2613fa7db9dc017a2bf8d484b20ad79074cc9b",
+   "sha256": "5ded680f76aada2f75951cb80668ff50c5a6a840cbae7df299b2fa26a376dcce",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   }
  ],
