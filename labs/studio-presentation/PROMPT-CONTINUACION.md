@@ -9,7 +9,8 @@
 - **Prohibido:** PR, merge, despliegues, Vercel, cambios en el producto (`js/`, `css/`, `api/`, `index.html`), workflows, secretos, IA de pago y generación de imágenes.
 
 ## Puesta en marcha
-1. `git fetch origin lab/studio-presentation-e0e1 && git worktree add ../studio lab/studio-presentation-e0e1`, o haz checkout de la rama. Lee `HANDOFF.md` y `reports/01`, `03`, `04` y `05`.
+1. `git fetch origin lab/studio-presentation-e0e1 && git worktree add ../studio lab/studio-presentation-e0e1`, o haz checkout de la rama. Lee `HANDOFF.md`, `reports/01-INVENTARIO-DONANTES.md`, `reports/03-CLASIFICACION-REFERENCIAS.json` (**JSON**, no .md), `reports/04-SISTEMA-EDITORIAL.md` y `reports/05-DNA-ENTREGABLES.json` (**JSON**).
+   **Verificación obligatoria antes de seguir:** `git rev-parse HEAD`, que debe ser `37b1a8e` o posterior, y `git ls-tree -r -l HEAD -- labs/studio-presentation/reports labs/studio-presentation/snapshot`. Deben aparecer 5 informes y 8 archivos del snapshot: `snapshot.json` de unos 120 KB y 5 PNG de entre 280 y 550 KB en `snapshot/assets/`. Si no aparecen, tu checkout no es la rama: haz `git fetch origin lab/studio-presentation-e0e1 && git checkout -B lab/studio-presentation-e0e1 origin/lab/studio-presentation-e0e1`.
 2. Donantes, solo lectura:
    - Públicos: `git clone --depth 1 https://github.com/Juanmaes83/<repo> /home/user/juanmaes83/<repo>` para `brand-identity-skill`, `get-shit-pretty`, `huashu-design-3.0-agent-`, `brand-system-skill` y `diagram-design`.
    - En `/home/user/donors`: `Juanmaes83/skills-for-architects`, `Juanmaes83/ifc-sheet`, `Juanmaes83/invoify` y `bilalmlkdev/papora`. Comprueba sus SHA en `reports/01`.
