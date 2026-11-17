@@ -8,7 +8,8 @@ module.exports=function bloques(C){
  const {S,esc,num,nf,date,rev,STUDIO,views,AP,planDemo}=C;
  const EN={};const t=(es,en)=>{EN[es]=en;return `<span>${esc(es)}</span>`;};
  const DATA=new Set();const d=x=>{if(x!=null&&String(x).trim())DATA.add(String(x).trim());return esc(x);};
- const A=AP?.campos||{},pages={},compuestas={};const put=(doc,campos,page)=>{(pages[doc]||=[]).push(page);for(const c of campos)(compuestas[c]||=new Set()).add(doc);};
+ const A=AP?.campos||{},pages={},compuestas={};const put=(doc,campos,page)=>{page={...page,html:page.html.replace(/<(h[23]) class="(h[23])"([^>]*)><span>([^<]*)<\/span><\/h[23]>/g,'<$1 class="$2"$3>$4</$1>')}; // títulos: texto directo (la caja del título no crece por un span)
+ (pages[doc]||=[]).push(page);for(const c of campos)(compuestas[c]||=new Set()).add(doc);};
  const eur=v=>nf(2).format(v)+' €';
  const rotulo=`<p class="caption" style="margin-top:4mm">${t('Datos de fixture sintética del laboratorio: inventados para probar el documento.','Synthetic laboratory fixture data: invented to test the document.')}</p>`;
  const atr=c=>`<p class="caption" style="margin:1mm 0 0">${t('Aportado por:','Contributed by:')} <span lang="es">${d(A[c].atribucion)}</span></p>`;

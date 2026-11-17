@@ -951,15 +951,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "14",
-     "box": "h2",
-     "child": "Concepto y referencias",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1003,15 +996,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "14",
-     "box": "h2",
-     "child": "Concept and references",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1066,15 +1052,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "12",
-     "box": "h2",
-     "child": "Productos con referencia",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1118,15 +1097,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "12",
-     "box": "h2",
-     "child": "Products with a reference",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1181,21 +1153,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 2,
-   "spill": [
-    {
-     "page": "3",
-     "box": "h2",
-     "child": "Alcance, servicios y honorario",
-     "by": 3.1
-    },
-    {
-     "page": "4",
-     "box": "h2",
-     "child": "Estado de revisión del presupu",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1245,21 +1204,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 2,
-   "spill": [
-    {
-     "page": "3",
-     "box": "h2",
-     "child": "Scope, services and fees",
-     "by": 3.1
-    },
-    {
-     "page": "4",
-     "box": "h2",
-     "child": "Budget review status",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1371,15 +1317,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "2",
-     "box": "h2",
-     "child": "Compra y reforma",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1423,15 +1362,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "2",
-     "box": "h2",
-     "child": "Purchase and renovation",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1782,15 +1714,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "14",
-     "box": "h2",
-     "child": "Memoria descriptiva",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1834,15 +1759,8 @@
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 1,
-   "spill": [
-    {
-     "page": "14",
-     "box": "h2",
-     "child": "Descriptive report",
-     "by": 3.1
-    }
-   ],
+   "spillCount": 0,
+   "spill": [],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,

@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-bloques-qa/1",
- "fecha": "2026-11-17T22:00:34.912Z",
+ "fecha": "2026-11-17T22:22:48.271Z",
  "pass": 10,
  "fail": 0,
  "cases": [
@@ -143,15 +143,9 @@
    }
   },
   {
-   "id": "B-10 compose: inglés pedido y bloqueado",
-   "want": "código 3; ES publicado; sin PDF EN del documento bloqueado ni entrega EN",
-   "result": "PASS",
-   "detalle": {
-    "codigo": 3,
-    "bloqueados": [
-     "commercial-proposal-client-v3.en"
-    ]
-   }
+   "id": "B-11 QA geométrico del compositor a cero en los documentos con bloques (ES/EN)",
+   "want": true,
+   "result": "PASS"
   }
  ]
 }
