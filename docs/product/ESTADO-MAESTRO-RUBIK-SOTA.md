@@ -85,7 +85,7 @@ Es una declaración del propietario, **no** una prueba automatizada ejecutada po
 | Importación de presupuesto CON-03 (#241) | INTEGRADO_VALIDADO | Recuperar el presupuesto de un archivo, con re-direccionamiento explícito | Proyecto y presupuesto siguen siendo dos archivos | [M] `tests/con-03-budget-import.test.cjs` | Paquete único [D] |
 | NAV3D Pro V1 (#225 vía #228) | INTEGRADO_VALIDADO | Minimapa en el paseo (UX-22), accesos por estancia (UX-23) y abrir o cerrar todas las puertas (UX-25) | UX-05 (modos, plantas y cortes agrupados) y UX-09 (maqueta blanca) avanzan dentro del panel NAV3D, pero sin pruebas con su ID; falta el móvil físico | [M] `js/nav3d-*`, `tests/nav3d*.cjs` | — |
 | UX-07 «Comparar con el original» (#221) | INTEGRADO_VALIDADO | Comparador de solo lectura desde Variantes | No describe los cambios del interior de un armario R03 | [M] `js/revision-compare-core.js` cargado | — |
-| ENT-04 Dossier antes/después con presupuesto rotulado (#209/#218) | PARCIAL | Nada en el producto | Activación en la interfaz; el núcleo y el laboratorio ya están en `master` | [M] `js/before-after-dossier-core.js` y `js/revision-budget-core.js` **no cargados**; `labs/ux07-ent04/` | Activar ENT-04 [D] |
+| ENT-04 Dossier antes/después con presupuesto rotulado | PARCIAL | Comparación y dossier accesibles en `comparar/`, desde Variantes; usa presupuestos guardados | Evolución editorial y experiencia profesional coordinadas con Studio Presentation; E2 necesita autorización específica | [M] `comparar/index.html`, `comparar/comparar.js`, núcleos de dossier y revisión | Coordinar evolución, no reconstruir [D] |
 | UX-08 Cotas en vivo (#224) | INTEGRADO_VALIDADO | Cotas al mover muebles, compatibles con R02-A y R03 | — | [M] `js/live-dimensions-*`, `tests/ux08-*` | — |
 | UX-12/UX-13 Amueblar por estancia y recetas (#226 vía #228) | INTEGRADO_EXPERIMENTAL | Propuesta reproducible por semilla y densidad, con recetas, que solo se aplica tras confirmarla | Biblioteca con licencias (BIB-01); aceptación visual | [M] `js/smart-furnishing-*`, `tests/smart-furnishing*` | — |
 | MUE-01 «Trae tu mueble» (#227 vía #228) | INTEGRADO_VALIDADO | Foto y medidas convertidas en un volumen genérico; la foto queda solo como referencia | Reconstrucción 3D (MUE-02, ola 5) | [M] `tests/photo-project*.cjs` (MUE-01) | — |
@@ -98,9 +98,9 @@ Es una declaración del propietario, **no** una prueba automatizada ejecutada po
 
 | Código | Estado | Qué puede usar hoy el usuario | Qué falta | Evidencia | Próxima decisión |
 |---|---|---|---|---|---|
-| GOV-08 S1 + S2 + aislamiento (#187, #188, #195) | INTEGRADO_VALIDADO | Permiso de publicación propio (`RUBIK_SHARE_TOKEN`, solo en Production), retirada individual y visor en un origen opaco | S3 caducidad, S4 cuotas, S5 enlaces opacos o Blob privado, registro en servidor y permisos por profesional (GOV-06a) | [M] `api/_share-auth.js`, `api/unshare.js`, `tests/gov08-*` | S3 [D] |
-| ENT-01 Visita 3D (#189, #200, #201 y #241, lector y enlace de #166) | INTEGRADO_VALIDADO, alcance mínimo | Revisar como cliente, publicar, abrir en otra sesión y revocar | Varias plantas, experiencia compartida y caducidad | [M] `js/client-delivery-core.js`, `api/delivery.js`, `tests/delivery-3d-link.browser.test.cjs`; aceptación manual [P] | Ampliación [D] |
-| ENT-02 Ciclo de vida del enlace | PARCIAL | Revocación individual | Caducidad y borrado programado | [M] | Con S3 [D] |
+| GOV-08 S1 + S2 + S3 + aislamiento (#187, #188, #195, #244) | INTEGRADO_VALIDADO en este alcance | Permiso propio, retirada, visor aislado, caducidad 7/30/90 y limpieza manual con simulación y protección de vigentes/históricos | S4 cuotas, S5 almacenamiento privado/enlaces opacos y GOV-06a; Blob público mantiene acceso directo hasta retirada | [M] #244 y evidencia aislada 30/30 + 7/7 | S4/S5 y GOV-06a [D] |
+| ENT-01 Visita 3D (#189, #200, #201 y #241, lector y enlace de #166) | INTEGRADO_VALIDADO, alcance mínimo | Revisar como cliente, publicar, abrir en otra sesión revocar y caducar con respuesta 410 | Varias plantas y experiencia compartida | [M] `js/client-delivery-core.js`, `api/delivery.js`, `tests/delivery-3d-link.browser.test.cjs`; caducidad real aislada en #244 [M]; aceptación manual histórica [P] | Ampliación [D] |
+| ENT-02 Ciclo de vida del enlace | PARCIAL, S3 implementado | Revocación, caducidad y limpieza manual con simulación | S4/S5 y GOV-06a; automatización no autorizada, sin Cron | [M] #244, protocolo 30/30 y conservación 7/7 | Futuros alcances [D] |
 | GOV-05 Legal y privacidad | BLOQUEADO | — | Profesional jurídico externo | [H] #161 | Contratar [D] |
 
 ### B.3 IA, imágenes y catálogos
@@ -192,9 +192,9 @@ Mantienen la numeración y los IDs del catálogo: 98 códigos en la v1.11 vigent
 
 | Ola | Objetivo | Avances desde el v1.10 (12/11) | Pendientes principales | Dependencias | Siguiente corte razonable |
 |---|---|---|---|---|---|
-| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 PR abiertas a **1**, #243, abierta hasta su integración (las 21 históricas se archivaron el 17/11: [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md)). GOV-03 se amplió con HOM-03 y sus sellos se actualizaron el 17/11 a `40b4ae5`. GOV-04: auditorías en `master` (#192 y #241); catálogo v1.11 candidato en #243 | GOV-03: registro global de capacidades | — | — |
-| **1** Vender lo que ya existe | Entregar al cliente con seguridad | GOV-08 S1/S2/aislamiento, ENT-01 de alcance mínimo, OBR-01 cerrado, GOV-07 de software y **HOM-04** (demos guiadas en la Home, en Production desde el 17/11) | ENT-02 caducidad, GOV-08 S3–S5, GOV-05 legal y GOV-07 con dispositivos físicos | GOV-05 (externo) y GOV-06a | **GOV-08 S3** caducidad y registro de publicaciones |
-| **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. ECO-01 como núcleo puro. ENT-04 como núcleo sin activar | ENT-04 en la interfaz, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | **ENT-04**: activar el dossier |
+| **0** Cerrar y ordenar | Terminar lo empezado | GOV-02: se pasó de 62 PR abiertas a **0** al corte de recuperación, con #243/#244/#245 fusionadas (las 21 históricas se archivaron el 17/11: [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md)). GOV-03 se amplió con HOM-03 y sus sellos se actualizaron el 17/11 a `40b4ae5`. GOV-04: auditorías en `master` (#192 y #241); catálogo v1.11 vigente tras #243 | GOV-03: registro global de capacidades | — | — |
+| **1** Vender lo que ya existe | Entregar al cliente con seguridad | GOV-08 S1/S2/S3/aislamiento y caducidad ENT-02 implementada, ENT-01 de alcance mínimo, OBR-01 cerrado, GOV-07 de software y **HOM-04** (demos guiadas en la Home, en Production desde el 17/11) | GOV-08 S4/S5, GOV-05 legal y GOV-07 con dispositivos físicos | GOV-05 (externo) y GOV-06a | CI inteligente; futuros S4/S5 según autorización |
+| **2** Mejoras rápidas y medición | Experiencia y coste por imagen | UX-07, UX-08, NAV3D (UX-22, UX-23 y UX-25, más avance de UX-05 y UX-09), OBR-02/03 y HOM-03 integrados. ECO-01 como núcleo puro. ENT-04 parcial accesible en comparar/ | Evolución editorial de ENT-04, IMG-03 a IMG-12, CAM-01, BIB-01, ENT-03, UX-03/04, cerrar UX-05/09, G-06, GOV-06a e IMG-04 | ECO-01 real antes de los cortes de imagen | ENT-04 coordinado con Studio Presentation |
 | **3** Servicios cobrables | Diferenciación comercial | UX-12/13 experimental, MUE-01 integrado, FOT-01 y CAT-01 en simulación, y AG-0 parcial (V2) | FOT-01 real, CAT-01 real, ENT-05/06, IMG-09/13/15/16/22, PRE-01, UX-11, UX-24, AST-01, ECO-02/03 y PER-01 | GOV-05, ECO-01, IMG-04 y presupuesto de prueba | ECO-01 real con IMG-04 |
 | **4** Interoperabilidad y asistente | Confianza y productividad | AG-1 y AG-2 validados sin LLM. CAT-02 en piloto. IMG-14 en simulación | G-01, G-02, G-08, PER-02/03, PAN-01, UX-10/21/26, OBR-05 y AG-1 con LLM | GOV-06a y prueba C | Prueba C, solo con GO de gasto |
 | **5** Investigación y escala | Solo con decisión expresa | AG-3 local validado (V2). CAT-03 parcial en piloto. AG-4 parcial | AG-5, FOT-02, MUE-02, PAN-02, VID-02, GEN-01, UX-14, LUZ-01, G-04, G-07, ENT-07 y GOV-06b | Decisión y presupuesto | — |
@@ -224,10 +224,10 @@ Mantienen la numeración y los IDs del catálogo: 98 códigos en la v1.11 vigent
 
 Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, coste y facilidad de validación. **Son propuestas, no autorizaciones.**
 
-**Decisión previa ya resuelta:** el 17/11 el propietario autorizó mover `floorplan-3d-alpha.vercel.app`; hoy el público ve `40b4ae5`.
+**Decisión previa ya resuelta:** el 17/11 el propietario autorizó mover `floorplan-3d-alpha.vercel.app`; el público sirve `8525025`, promoción posterior autorizada y comprobada.
 
-1. **GOV-08 S3 / ENT-02:** caducidad y registro de publicaciones. Completa la entrega segura de la ola 1. Riesgo bajo, sin coste de API y fácil de validar.
-2. **ENT-04:** activar el dossier antes/después con presupuesto rotulado. El núcleo y el laboratorio ya están en `master`; cierra el corte 2b.
+1. **CI inteligente:** implantar selector conservador, primero en observación, con gate estable, inventario, medición y rollback. Encargo técnico autorizado; sin omisiones hasta acreditar cobertura.
+2. **ENT-04 / Studio Presentation:** evolución coordinada del dossier existente en comparar/. No integra automáticamente el laboratorio de Claude; E2 requiere autorización específica.
 3. **ECO-01 real con IMG-04:** medición y confirmación de gasto antes de generar. Es condición para FOT-01 y CAT-01 reales.
 4. **GOV-06a mínimo:** identidad y cuotas por profesional. Desbloquea el Asistente con LLM, catálogos multiestudio y GOV-08 por profesional. Valor y riesgo altos.
 5. **Prueba C del Asistente en Preview**, solo con GO de gasto y tope fijado. Es el único camino para decidir si el modo generativo merece llegar a Production.
@@ -244,7 +244,7 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 - los tests citados en cada fila.
 
 **Evidencia histórica [H]:**
-- [catálogo](rubik-catalogo-maestro-mejoras-2026-11-09.md): v1.10 vigente y v1.11 candidata en #243;
+- [catálogo](rubik-catalogo-maestro-mejoras-2026-11-09.md): v1.11 vigente tras #243; v1.10 histórica;
 - [archivo de las 21 PR](../auditorias/archivo-21-pr-2026-11-17.md);
 - [estado de piedras y olas del 12/11](../qa/rubik-estado-unico-piedras-olas-2026-11-12.md);
 - [ROADMAP](../ROADMAP.md);
@@ -277,8 +277,8 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 
 **Pendiente de decisión [D]:**
 - origen de la aceptación manual;
-- activación de ENT-04;
-- GOV-08 S3;
+- evolución coordinada de ENT-04 y autorización específica E2 de Studio Presentation;
+- GOV-08 S4/S5; retirada autorizada de variables temporales de Preview;
 - prueba C y su gasto;
 - GOV-05 y GOV-06a;
 - contrato definitivo de R02-A;
@@ -286,6 +286,6 @@ Máximo cinco, ordenados por valor profesional, dependencias reales, riesgo, cos
 - «CON-03» (importación de presupuesto): código de trabajo, sin ID en el catálogo.
 
 **Contradicciones abiertas:**
-- La numeración de ramas de CAT-IA (#230 dice «CAT-02 Mis catálogos») no coincide exactamente con el catálogo. Este documento usa el significado del catálogo (CAT-01 referencias, CAT-02 fichas y SKU, CAT-03 productos 3D y partidas). **Resuelto en la v1.11 candidata (#243) para «CAT-04»:** es un nombre de trabajo y un avance parcial de CAT-03, sin ID propio. «CON-03» sigue como código de trabajo, pendiente de decisión.
+- La numeración de ramas de CAT-IA (#230 dice «CAT-02 Mis catálogos») no coincide exactamente con el catálogo. Este documento usa el significado del catálogo (CAT-01 referencias, CAT-02 fichas y SKU, CAT-03 productos 3D y partidas). **Resuelto en la v1.11 vigente tras #243 para «CAT-04»:** es un nombre de trabajo y un avance parcial de CAT-03, sin ID propio. «CON-03» sigue como código de trabajo, pendiente de decisión.
 - **Resuelto el 17/11:** los sellos de `js/capability-registry.js` apuntan a `40b4ae5`, el corte que sirve la URL pública.
-- **Resuelto en la v1.11 candidata (#243):** HOM-04 se da de alta en el catálogo (ola 1, hecho y en Production desde el 17/11).
+- **Resuelto en la v1.11 vigente tras #243:** HOM-04 se da de alta en el catálogo (ola 1, hecho y en Production desde el 17/11).

@@ -36,3 +36,11 @@ gh api repos/Juanmaes83/floorplan-3d/rulesets
 ```
 
 Master no tiene protección efectiva: endpoint de protección devuelve 404; rulesets vacíos. No se modificó administración. El rollback documental es revertir el commit; el rollback público exige decisión del propietario sobre el deployment anterior conservado.
+
+## Cierre residual de #246
+
+Matrices y olas reconciliadas: GOV-08 S3 integrado; ENT-02 parcial con caducidad, ENT-01 con 410 acreditado; ENT-04 parcial accesible en comparar/, evolución coordinada con Studio Presentation. Variables temporales de rama Preview aún configuradas al consultarlas sin decrypt; retirada preparada y autorización solicitada exclusivamente para esas dos variables. Production no se modifica. Los metadatos públicos se minimizaron en el árbol actual; las versiones anteriores siguen en el historial, que no se reescribe. Original completo conservado localmente.
+
+Pruebas públicas dirigidas sobre master@8525025: 6/7. Evolución pasó los cuatro casos, Home y Dibujo vivo móvil pasaron; el caso escritorio falló por timeout en «Volver a ver» después de «Cómo hacerlo» (esperaba reinicio de story living-drawing). No es un verde ni un fallo histórico descartado: requiere confirmar la incidencia de replay y corrección de producto en corte separado. [Log sanitizado](../qa/evidencias-cierre-2026-11-17/directed-public.txt). Se adaptaron las dos suites home-demos/evolution-demo a la URL pública, manteniendo aserciones y bloqueando /api/. No hubo llamadas de pago, publicaciones ni borrados. Biblioteca/presentación/presupuesto mantienen evidencia histórica; el smoke 11/11 anterior no acredita aceptación integral nueva de sus recorridos.
+
+CI inteligente se implementa en rama independiente feat/ci-inteligente-observacion-20261117. Observación obligatoria, sin omisiones habilitadas ni ahorro atribuido hasta medir.

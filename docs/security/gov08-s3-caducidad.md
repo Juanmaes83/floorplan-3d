@@ -151,13 +151,9 @@ Supone migrar las publicaciones existentes y no entra en este corte.
 - Las expresiones de nombre de `share-api`, `ent01-delivery-api` y `construction-delivery-core` exigen ahora la publicación y la fecha.
 - La de `share-link` exige además la fecha de caducidad.
 
-**Validación en Preview:** preparada en [gov08-s3-validacion-preview.md](gov08-s3-validacion-preview.md). Necesita un almacén Blob aislado y la autorización del propietario.
+**Validación real vigente:** ejecutada sobre `28a01b0` en Preview `dpl_BLpr8QmGMd6mUxn1Wfaf5cCmLkep`, con Blob exclusivo de prueba: [30/30 comprobaciones](../qa/evidencias-s3-2026-11-17/result.json) y [7/7 conservación](../qa/evidencias-s3-2026-11-17/retention-result.json). Se verificó listado real completo, simulación sin borrado, retirada exacta, conservación de vigentes e históricos y limpieza final vacía. Evidencia original recuperada, no ejecución repetida.
 
-Hoy el Preview comparte el almacén con Production y no tiene código de publicación, así que **no se ha ejecutado**.
-
-**No verificado:**
-- La forma exacta de la respuesta del listado de Blob se tomó de la documentación oficial (`{blobs:[{url,pathname,size,uploadedAt}],cursor,hasMore}`). **No se ha probado contra un almacén real.** Hay que confirmarlo en Preview con un almacén de prueba.
-- Tampoco se ha contado cuántas publicaciones *legacy* hay en Production: exige listar el almacén real.
+**Histórico sustituido:** antes de crear las variables de Preview exclusivas, el protocolo estaba preparado pero bloqueado por compartir Blob con Production. Ese bloqueo fue resuelto para el ensayo aislado. No se ha contado el número de publicaciones históricas en Production ni se ha usado ese almacén para validar borrados.
 
 ## 10. Política fijada por el propietario y decisiones pendientes
 
@@ -176,7 +172,6 @@ con 56/56 pruebas de servidor y 4/4 pruebas de navegador S3 correctas.
 - **Limpieza:** **manual** por ahora; **no se activa Cron**.
 - **Production y secretos:** no se tocan.
 
-**Pendiente:**
-1. **Autorizar la validación en Preview** con un almacén Blob aislado ([protocolo](gov08-s3-validacion-preview.md)). Exige que el propietario cree ese almacén y un código de publicación de prueba, ambos limitados a esa rama de Preview.
-2. **Reconciliación con #243:** cuando se fusione, se incorpora `master` a esta rama y se actualizan las filas GOV-08 y ENT-02 del Estado Maestro. Hoy no se tocan aquí, para no mezclar cortes.
-3. **GO/NO-GO de merge** cuando la CI y la validación en Preview estén completas.
+**Cierres acreditados:** #243 y #244 fusionadas; reconciliación de master y validación aislada terminadas. Los resultados mantienen sus SHA de origen.
+
+**Pendiente real:** S4 cuotas, S5 almacenamiento privado/enlaces opacos y GOV-06a. La limpieza sigue manual. Las dos variables temporales de Preview de la rama S3 siguen configuradas: su retirada requiere autorización expresa y no afecta a Production. Retirar variables no revoca automáticamente credenciales incorporadas en deployments existentes.
