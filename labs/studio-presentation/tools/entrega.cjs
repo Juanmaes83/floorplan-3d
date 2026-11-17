@@ -61,15 +61,19 @@ module.exports=function entrega(C){
  const docRef=d=>({...d,href:`documentos/${d.id}.pdf`});
 
  // ---------- tipos de entrega ----------
- const CH={portada:'Portada',vivienda:'La vivienda',dibujo:'Del dibujo a la imagen',estancias:'Estancia por estancia',materiales:'Materiales',presupuesto:'Presupuesto',obra:'Cómo avanzará la obra',recorrido:'Recorrer la vivienda',decisiones:'Lo que hay que decidir',documentos:'Documentos',procedencia:'De dónde sale cada cosa'};
+ const CH={portada:'Portada',concepto:'Concepto',vivienda:'La vivienda',dibujo:'Del dibujo a la imagen',estancias:'Estancia por estancia',materiales:'Materiales',presupuesto:'Presupuesto',obra:'Cómo avanzará la obra',recorrido:'Recorrer la vivienda',decisiones:'Lo que hay que decidir',documentos:'Documentos',procedencia:'De dónde sale cada cosa'};
  const TIPOS=[
   {id:'integral',name:'Documentación integral',lead:'Todo el proyecto en una entrega: la vivienda, sus estancias, materiales, presupuesto, la obra prevista y los documentos.',ch:Object.keys(CH),docs:DOCLIST.map(d=>d.id).filter(d=>d!=='real-estate-sheet-v3-sin-presupuesto')},
-  {id:'primera-reunion',name:'Primera reunión',lead:'Un primer vistazo para hablar del proyecto: la distribución, cómo se ve y qué queda por decidir.',ch:['portada','vivienda','dibujo','estancias','decisiones','documentos','procedencia'],docs:['real-estate-sheet-v3-sin-presupuesto']},
-  {id:'propuesta-comercial',name:'Propuesta comercial',lead:'La propuesta del estudio con el presupuesto por capítulos y los documentos que la acompañan.',ch:['portada','vivienda','estancias','materiales','presupuesto','decisiones','documentos','procedencia'],docs:['commercial-proposal-client-v3','interior-book-v3']},
+  {id:'primera-reunion',name:'Primera reunión',lead:'Un primer vistazo para hablar del proyecto: la distribución, cómo se ve y qué queda por decidir.',ch:['portada','concepto','vivienda','dibujo','estancias','decisiones','documentos','procedencia'],docs:['real-estate-sheet-v3-sin-presupuesto']},
+  {id:'propuesta-comercial',name:'Propuesta comercial',lead:'La propuesta del estudio con el presupuesto por capítulos y los documentos que la acompañan.',ch:['portada','concepto','vivienda','estancias','materiales','presupuesto','decisiones','documentos','procedencia'],docs:['commercial-proposal-client-v3','interior-book-v3']},
   {id:'dossier-tecnico',name:'Dossier técnico',lead:'Planta, superficies, materiales y mediciones con precio, para revisar el proyecto con detalle.',ch:['portada','vivienda','estancias','materiales','presupuesto','documentos','procedencia'],docs:['architecture-book','architecture-sheet-strip','materials-furniture-book-v3','commercial-proposal-client-v3']},
-  {id:'interiorismo',name:'Presentación de interiorismo',lead:'Cómo se verán las estancias: vistas del modelo, imágenes orientativas, materiales y un recorrido.',ch:['portada','dibujo','estancias','materiales','recorrido','decisiones','documentos','procedencia'],docs:['interior-book-v3','materials-furniture-book-v3']},
+  {id:'interiorismo',name:'Presentación de interiorismo',lead:'Cómo se verán las estancias: vistas del modelo, imágenes orientativas, materiales y un recorrido.',ch:['portada','concepto','dibujo','estancias','materiales','recorrido','decisiones','documentos','procedencia'],docs:['interior-book-v3','materials-furniture-book-v3']},
   {id:'inmobiliaria',name:'Presentación inmobiliaria',lead:'La vivienda para presentarla: imagen, cifras con su origen, planta y recorrido.',ch:['portada','vivienda','estancias','recorrido','documentos','procedencia'],docs:['real-estate-sheet-v3-sin-presupuesto']},
   {id:'obra',name:'Explicación de la obra',lead:'Cómo se construirá la vivienda, fase a fase, con un ejemplo ilustrativo del plan de obra.',ch:['portada','vivienda','obra','decisiones','documentos','procedencia'],docs:['architecture-sheet-strip']}];
+ // Módulo 02 · Concepto: SOLO el texto que el profesional escribió para esta entrega (FloorPlanBrand, delivery.intro). Si no lo
+ // escribió, el capítulo no se compone y sale de todas las modalidades: RUBIK no redacta el planteamiento del estudio.
+ const PRO_TEXT=(S.brand?.intro||'').trim()||null;
+ if(!PRO_TEXT){delete CH.concepto;for(const t of TIPOS)t.ch=t.ch.filter(c=>c!=='concepto');}
 
  // ---------- textos y datos derivados ----------
  const big=[...rooms].filter(r=>r.areaM2!=null).sort((a,b)=>b.areaM2-a.areaM2);
@@ -154,6 +158,7 @@ video{width:100%;background:#111;border-radius:2px}
 .docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:28px}
 .doc{display:block;text-decoration:none;border:1px solid var(--rule);background:var(--paper);padding:18px;border-radius:2px}.doc:hover{border-color:var(--ink)}.doc b{display:block;font-family:var(--read);font-size:19px}.doc p{margin:6px 0 10px;font-size:14px;color:var(--muted)}.doc span{font-size:12.5px;font-weight:700}
 .prov td:first-child{font-weight:700;width:28%}
+.concept blockquote{margin:0}.concept blockquote p{font-family:var(--read);font-size:clamp(24px,3.2vw,38px);line-height:1.28;letter-spacing:-.01em;margin:0;max-width:24em;text-wrap:pretty}.concept figcaption{margin-top:16px}
 footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:var(--ink)}
 .missing{border:1px dashed var(--rule);padding:18px;color:var(--muted);font-size:14px}
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero .studio{margin-bottom:24px}.cols>*{grid-column:span 12!important}.stills{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -163,7 +168,10 @@ footer{padding:40px 0 56px;font-size:13.5px;color:var(--muted)}footer b{color:va
  const videoFig=(o,label,cap)=>o?`<figure><video controls playsinline preload="metadata" poster="${o.poster}" aria-label="${esc(label)}"><source src="${o.video}" type="video/mp4"></video><figcaption>${cap} Duración ${Math.round(o.dur)} s.</figcaption></figure>`:`<div class="missing">${esc(label)}: el vídeo no está disponible en esta entrega.</div>`;
  const chap=(id,n,body)=>`<section class="ch" id="${id}"><div class="wrap">${body.replace('%N%','')}</div></section>`;
  const sections={
-  vivienda:n=>chap('vivienda',n,`<h2>%N%La vivienda</h2><p class="lead">${esc(INTRO)}</p>
+  concepto:n=>!PRO_TEXT?'':chap('concepto',n,`<h2>%N%Concepto</h2><div class="cols"><figure class="s8 concept"><blockquote><p>${esc(PRO_TEXT)}</p></blockquote>
+   <figcaption>${esc(STUDIO)}${prof.person?`, ${esc(prof.person)}`:''}. Texto escrito por el estudio para esta entrega.</figcaption></figure>
+   <div class="s4"><p class="note"><b>Es el planteamiento del estudio, no una medición.</b> Las superficies, estancias y cifras del proyecto están en «La vivienda» y en los documentos.</p></div></div>`),
+  vivienda:n=>chap('vivienda',n,`<h2>%N%La vivienda</h2><p class="lead">${rooms.length} estancias y ${AREA} m² útiles computados, medidos por RUBIK sobre el modelo del proyecto.</p>
    <div class="cols"><figure class="s8"><div class="pan">${planSvg}</div><figcaption>Planta dibujada desde la geometría del proyecto. El color de cada estancia es su pavimento.</figcaption></figure>
    <div class="s4"><table><thead><tr><th>Estancia</th><th class="num">m²</th></tr></thead><tbody>${rooms.map(r=>`<tr><td>${esc(r.name)}${r.counted?'':' <span class="small">(no computa)</span>'}</td><td class="num">${r.areaM2==null?'—':num(r.areaM2)}</td></tr>`).join('')}<tr class="tot"><td>Superficie útil computada</td><td class="num">${AREA}</td></tr></tbody></table><p class="cap">${esc(STATUS_AREA)}</p></div></div>`),
   dibujo:n=>{const g=ai['Vista general'];return chap('dibujo',n,`<h2>%N%Del dibujo a la imagen</h2><p class="lead"><span data-res="ia">El mismo proyecto en tres grados de verdad: el dibujo, el modelo 3D medido y una imagen orientativa del ambiente.</span><span data-res-sin="ia" hidden>El mismo proyecto en dos grados de verdad: el dibujo y el modelo 3D medido.</span></p>
@@ -232,10 +240,12 @@ ${preview?'':''}<script>(()=>{const links=[...document.querySelectorAll('.toc a'
  const im=(rel,alt,style='')=>rel?`<img class="img" src="${dataUri(rel)}" alt="${esc(alt)}" style="${style}">`:`<div class="note">${esc(alt)}: no disponible.</div>`;
  const P=[];
  P.push(coverDrawing('Presentación integral',`Entrega al cliente, ${date}`));
- const idx=[['La vivienda','Planta y superficies medidas sobre el modelo.'],['Del dibujo a la imagen','Dibujo, modelo 3D e imagen orientativa de la misma vivienda.'],...ROOM_IA.map(l=>[l,'Vista del modelo junto a su imagen IA orientativa.']),
+ const idx=[...(PRO_TEXT?[['Concepto','El planteamiento del estudio, con sus palabras.']]:[]),['La vivienda','Planta y superficies medidas sobre el modelo.'],['Del dibujo a la imagen','Dibujo, modelo 3D e imagen orientativa de la misma vivienda.'],...ROOM_IA.map(l=>[l,'Vista del modelo junto a su imagen IA orientativa.']),
   ...(planDemo?[['Cómo avanzará la obra','Ejemplo ilustrativo del plan de obra y su vídeo.']]:[]),...(V?[['Presupuesto','Importe por capítulos con precios de prueba.']]:[]),['Lo que hay que decidir','Lo que el proyecto deja abierto.'],['Documentos y procedencia','Qué acompaña a esta entrega y de dónde sale cada cosa.']];
  P.push({html:`<div class="grid"><div class="c1-4"><h2 class="h2">Esta entrega</h2><p class="read">${esc(TIPOS[0].lead)}</p><p class="caption" style="margin-top:6mm">Junto a este PDF, la carpeta de la entrega contiene una versión para pantalla (index.html) con los vídeos, para ver sin conexión.</p></div>
   <div class="c6-12"><table style="font-size:10.5pt"><tbody>${idx.map(([a,b],i)=>`<tr><td style="padding:2.4mm 0;width:10mm;font-family:var(--f-read);font-size:14pt">${i+1}</td><td style="padding:2.4mm 0"><b>${esc(a)}</b><br><span class="muted">${esc(b)}</span></td></tr>`).join('')}</tbody></table></div></div>`});
+ if(PRO_TEXT)P.push({html:`<div class="grid" style="align-content:center"><div style="grid-column:1 / span 3"><h2 class="h2">Concepto</h2></div><div style="grid-column:4 / span 8"><p style="font-family:var(--f-read);font-size:24pt;line-height:1.3;letter-spacing:-.01em;margin:0">${esc(PRO_TEXT)}</p>
+  <p class="caption" style="margin-top:6mm">${esc(STUDIO)}${prof.person?`, ${esc(prof.person)}`:''}. Texto escrito por el estudio para esta entrega. Es su planteamiento, no una medición: las cifras del proyecto están en las páginas siguientes.</p></div></div>`});
  P.push(planPage('La vivienda'));
  const g=ai['Vista general'];
  P.push({html:`<div class="grid" style="align-content:start"><div class="c1-12"><h2 class="h2">Del dibujo a la imagen</h2></div>

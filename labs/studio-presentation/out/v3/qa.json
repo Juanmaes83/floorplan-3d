@@ -794,7 +794,7 @@
    }
   },
   "entrega-integral": {
-   "pages": 10,
+   "pages": 11,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
@@ -836,8 +836,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7223,
-     "RUBIK Serif": 856
+     "RUBIK Inter": 7553,
+     "RUBIK Serif": 973
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -851,6 +851,7 @@
    "file": "index.html",
    "chapters": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -878,6 +879,7 @@
    "file": "tipo-primera-reunion.html",
    "chapters": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -895,6 +897,7 @@
    "file": "tipo-propuesta-comercial.html",
    "chapters": [
     "portada",
+    "concepto",
     "vivienda",
     "estancias",
     "materiales",
@@ -934,6 +937,7 @@
    "file": "tipo-interiorismo.html",
    "chapters": [
     "portada",
+    "concepto",
     "dibujo",
     "estancias",
     "materiales",

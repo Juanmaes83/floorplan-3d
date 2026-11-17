@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-entrega/0.2",
- "generated": "2026-11-17T17:43:40.636Z",
+ "generated": "2026-11-17T17:48:02.973Z",
  "project": {
   "id": "prj_reference-home",
   "name": "Proyecto de ejemplo",
@@ -18,31 +18,31 @@
  "web": [
   {
    "file": "index.html",
-   "sha256": "87b9edc1bf64312b8cfa2c9650b631b7f76481216f2cbb7e2e8a1395836bb083"
+   "sha256": "c2f76c4725b786e1377df0f971196e0a1292860d9b6712ba265d0909ad97a45d"
   },
   {
    "file": "tipo-primera-reunion.html",
-   "sha256": "74143bfe61976e2e7ba7b9f98c13f71f2071444f2ff920e7db5d1119a67ffa89"
+   "sha256": "df8bf8e23a9beea4a95456ee247fd6bb206c97fe4fc4fcedb0f3babd2d141f38"
   },
   {
    "file": "tipo-propuesta-comercial.html",
-   "sha256": "f30bcca1dd8446cf1b7f579b9cf9d7be5c4416fa690521446bee28b5b6a4956a"
+   "sha256": "8b7def25b5da74fb7d173667ec4495b6177b62f4989091941212187124c1b50c"
   },
   {
    "file": "tipo-dossier-tecnico.html",
-   "sha256": "a710f48e20a800ab2e6d4358c7862835b883d5f1ce92b4e17e80913b8ebbef1a"
+   "sha256": "ac069f0759b455c7b65e57942a78c0205d3c43341a82d524448b25c40e9897b1"
   },
   {
    "file": "tipo-interiorismo.html",
-   "sha256": "36b7d396947705bd430fb07c8efe2eb9a2c5e97b248ce51e74ef5675a8d64b23"
+   "sha256": "ae8035a962f645f2a41aa47efda20c3c2ed3aaeebbb34c38b2c38203e1cbd180"
   },
   {
    "file": "tipo-inmobiliaria.html",
-   "sha256": "76e8ea2fa78ec5bf54ce4a2791bbc56e89554d0cd2376c514adcb2ad49e0e900"
+   "sha256": "f6ad07080ad7a7b7ad85af221a1d1147a7e5418a93425b7b8fd2824e6ef0ee3c"
   },
   {
    "file": "tipo-obra.html",
-   "sha256": "8996dd6cf5bd3deafe37728c58b9f0d9199adc65ef99ce5a78fd59f35ba1151a"
+   "sha256": "e13a2cb86ba8a9ad759688f5d4c05d20b37b2aa147db786c0b305053005c04c7"
   }
  ],
  "studio": {
@@ -56,6 +56,7 @@
    "file": "index.html",
    "chapters": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -83,6 +84,7 @@
    "file": "tipo-primera-reunion.html",
    "chapters": [
     "portada",
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -100,6 +102,7 @@
    "file": "tipo-propuesta-comercial.html",
    "chapters": [
     "portada",
+    "concepto",
     "vivienda",
     "estancias",
     "materiales",
@@ -139,6 +142,7 @@
    "file": "tipo-interiorismo.html",
    "chapters": [
     "portada",
+    "concepto",
     "dibujo",
     "estancias",
     "materiales",
@@ -337,42 +341,42 @@
   },
   {
    "file": "documentos/interior-book-v3.pdf",
-   "sha256": "e9b4718045d1032689e465a38fe47acc4fa661e9f1b6cf8d1b7893b923468680",
+   "sha256": "31be55644070612dfd1f813884e6be17f00eb9c90f30da14b50d376fd8904de3",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/materials-furniture-book-v3.pdf",
-   "sha256": "1d16542301a6873559fa131c1084826a9bf3372fdd46c9eb62797d24ef17d5d3",
+   "sha256": "6a575cca36480cca0da3f85811d1420aaa7103bf285f69d040e254e33827e21f",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/commercial-proposal-client-v3.pdf",
-   "sha256": "e7a7547f7f0a31223dee1420ac6a21dc49b6249d3b1b64083f8a81eabf63fc15",
+   "sha256": "a1788f8e93d0655a1e94dcede4cc436891f91e9db930c2e9bdbe08cb832be27d",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3.pdf",
-   "sha256": "b741366753a86af5ceea366f625088b65a9edf7c46ec201ad9d099c29155a76b",
+   "sha256": "7451356fdc561eb8a399b85adc43882e1527db66fa6e1c090950d47c239e313c",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/real-estate-sheet-v3-sin-presupuesto.pdf",
-   "sha256": "8b9864ea024e6934bb2c898eefca3d37a42e7a09d9d43e7059af9cf19a50e990",
+   "sha256": "c3e27a6498532724834b3e5fac1ae7098a09df1eb9ad166d942bdc83ba10540b",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-book.pdf",
-   "sha256": "2bc0fe90d0275f82804187937b78158dbe975440e5d474de0f84720370401465",
+   "sha256": "dd32bce596edda2b3d3ec0a8450bd09253d16407905e39b06b6452ec07d0ef12",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "7b17388c2920b2ff246e702a7bec1b67c81dd0cc1154023e2aab9946ef1164cf",
+   "sha256": "bfb4013e859880bd8025048c3c1c4596b6890457a3c91331d4ec91a7082cb71d",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   },
   {
    "file": "documentos/entrega-integral.pdf",
-   "sha256": "a588635d0ccc0b5d672643bdd5351d5034e3751d9dd03ffa366f8f5a05ce720e",
+   "sha256": "2989a230e4da53b20afa24e86742b5775b474b497eb26ac8183eb40d8861ec79",
    "producer": "compositor del laboratorio (tools/compose.cjs)"
   }
  ],
