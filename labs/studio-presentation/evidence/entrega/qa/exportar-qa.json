@@ -1,11 +1,11 @@
 {
  "schema": "rubik-lab-exportar-qa/2",
- "ran": "2026-11-17T20:58:34.324Z",
+ "ran": "2026-11-17T21:53:54.230Z",
  "entorno": {
-  "node": "v24.20.0",
+  "node": "v22.23.4",
   "plataforma": "linux"
  },
- "ms": 155560,
+ "ms": 313413,
  "pass": 72,
  "fail": 0,
  "cases": [
@@ -19,10 +19,10 @@
      "schema": "rubik-lab-entrega-digest/2",
      "folder": "pc",
      "manifest": "pc/MANIFIESTO.json",
-     "manifestSha256": "eec40c460c63dc140baadcc79bca50b4eded73a4b8155255c2ec7949a4d3bf90",
+     "manifestSha256": "ae8a4706ca7601abab3c1c9c2366f0a20e5a10df9ce8f5d1d941054ba603396f",
      "zip": "pc.zip",
-     "zipSha256": "d1e141269af26ce927a40e6a832fbb07b97e5be1adfb390e5170603285ce3881",
-     "zipBytes": 2719203,
+     "zipSha256": "c3b3fe0726fe0617921bc069d36500c1eb044d2c31508d71495ced6e7a94d2fb",
+     "zipBytes": 3074191,
      "files": 12,
      "alcance": "Huellas SHA-256 del manifiesto y del ZIP de reparto exacto. Integridad, no firma ni autenticidad."
     },
@@ -138,13 +138,13 @@
     "pages": [
      {
       "f": "documentos/commercial-proposal-client-v3.pdf",
-      "n": 2,
-      "rotuladas": 2
+      "n": 4,
+      "rotuladas": 4
      },
      {
       "f": "documentos/interior-book-v3.pdf",
-      "n": 14,
-      "rotuladas": 14
+      "n": 15,
+      "rotuladas": 15
      }
     ]
    }
@@ -627,7 +627,7 @@
    "result": "PASS",
    "detail": [
     "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/real-estate-sheet-v3.pdf contiene presupuesto.",
-    "BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «20.882» (presupuesto) en documentos/real-estate-sheet-v3.pdf."
+    "BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «20.881,78» (presupuesto) en documentos/real-estate-sheet-v3.pdf; «20.882» (presupuesto) en documentos/real-estate-sheet-v3.pdf."
    ]
   },
   {
@@ -769,8 +769,8 @@
    "want": "huella del manifiesto idéntica en dos exportaciones",
    "result": "PASS",
    "detail": {
-    "a": "eec40c460c63dc140baadcc79bca50b4eded73a4b8155255c2ec7949a4d3bf90",
-    "b": "eec40c460c63dc140baadcc79bca50b4eded73a4b8155255c2ec7949a4d3bf90",
+    "a": "ae8a4706ca7601abab3c1c9c2366f0a20e5a10df9ce8f5d1d941054ba603396f",
+    "b": "ae8a4706ca7601abab3c1c9c2366f0a20e5a10df9ce8f5d1d941054ba603396f",
     "nota": "El ZIP cambia solo por el nombre de la carpeta interior."
    }
   },
@@ -790,127 +790,127 @@
  "timings": [
   {
    "name": "pc",
-   "ms": 6077,
+   "ms": 12162,
    "code": 0
   },
   {
    "name": "tipo-integral",
-   "ms": 8947,
+   "ms": 15921,
    "code": 0
   },
   {
    "name": "tipo-primera-reunion",
-   "ms": 4433,
+   "ms": 8181,
    "code": 0
   },
   {
    "name": "tipo-propuesta-comercial",
-   "ms": 5092,
+   "ms": 12724,
    "code": 0
   },
   {
    "name": "tipo-dossier-tecnico",
-   "ms": 5998,
+   "ms": 12132,
    "code": 0
   },
   {
    "name": "tipo-interiorismo",
-   "ms": 4776,
+   "ms": 8321,
    "code": 0
   },
   {
    "name": "tipo-inmobiliaria",
-   "ms": 4574,
+   "ms": 7899,
    "code": 0
   },
   {
    "name": "tipo-obra",
-   "ms": 6973,
+   "ms": 16282,
    "code": 0
   },
   {
    "name": "pc-sin-presupuesto",
-   "ms": 4539,
+   "ms": 8039,
    "code": 0
   },
   {
    "name": "pc-incoherente",
-   "ms": 2429,
+   "ms": 4833,
    "code": 2
   },
   {
    "name": "integral-parcial",
-   "ms": 2625,
+   "ms": 4429,
    "code": 2
   },
   {
    "name": "pc-sin-ack",
-   "ms": 2867,
+   "ms": 5381,
    "code": 2
   },
   {
    "name": "pc-borrador",
-   "ms": 5379,
+   "ms": 12244,
    "code": 0
   },
   {
    "name": "sin-marca",
-   "ms": 2157,
+   "ms": 4393,
    "code": 2
   },
   {
    "name": "cruzado",
-   "ms": 3309,
+   "ms": 7788,
    "code": 2
   },
   {
    "name": "cruzado-rev",
-   "ms": 45,
+   "ms": 59,
    "code": 2
   },
   {
    "name": "datos",
-   "ms": 3178,
+   "ms": 7847,
    "code": 2
   },
   {
    "name": "sel-16",
-   "ms": 41,
+   "ms": 61,
    "code": 2
   },
   {
    "name": "sel-17",
-   "ms": 43,
+   "ms": 72,
    "code": 2
   },
   {
    "name": "sel-18",
-   "ms": 46,
+   "ms": 75,
    "code": 2
   },
   {
    "name": "sel-19",
-   "ms": 50,
+   "ms": 68,
    "code": 2
   },
   {
    "name": "sel-20",
-   "ms": 45,
+   "ms": 58,
    "code": 2
   },
   {
    "name": "sel-21",
-   "ms": 43,
+   "ms": 57,
    "code": 2
   },
   {
    "name": "sel-22",
-   "ms": 43,
+   "ms": 63,
    "code": 2
   },
   {
    "name": "sel-23",
-   "ms": 47,
+   "ms": 57,
    "code": 2
   },
   {
@@ -920,152 +920,152 @@
   },
   {
    "name": "sel-25",
-   "ms": 51,
+   "ms": 60,
    "code": 2
   },
   {
    "name": "sel-26",
-   "ms": 46,
+   "ms": 60,
    "code": 2
   },
   {
    "name": "sel-27",
-   "ms": 43,
+   "ms": 56,
    "code": 2
   },
   {
    "name": "sel-28",
-   "ms": 49,
+   "ms": 68,
    "code": 2
   },
   {
    "name": "sel-29",
-   "ms": 46,
+   "ms": 69,
    "code": 2
   },
   {
    "name": "idioma-en",
-   "ms": 4343,
+   "ms": 8111,
    "code": 0
   },
   {
    "name": "pc",
-   "ms": 46,
+   "ms": 62,
    "code": 1
   },
   {
    "name": "pc",
-   "ms": 47,
+   "ms": 54,
    "code": 2
   },
   {
    "name": "src-img",
-   "ms": 2071,
+   "ms": 4863,
    "code": 2
   },
   {
    "name": "src-pdf",
-   "ms": 2140,
+   "ms": 5653,
    "code": 2
   },
   {
    "name": "src-mp4",
-   "ms": 2112,
+   "ms": 4788,
    "code": 2
   },
   {
    "name": "src-web",
-   "ms": 72,
+   "ms": 100,
    "code": 2
   },
   {
    "name": "src-noreg",
-   "ms": 2192,
+   "ms": 4717,
    "code": 2
   },
   {
    "name": "src-link",
-   "ms": 2065,
+   "ms": 5027,
    "code": 2
   },
   {
    "name": "src-ext",
-   "ms": 3355,
+   "ms": 7876,
    "code": 2
   },
   {
    "name": "src-js",
-   "ms": 3456,
+   "ms": 7873,
    "code": 2
   },
   {
    "name": "src-origen",
-   "ms": 2104,
+   "ms": 4583,
    "code": 2
   },
   {
    "name": "src-ft",
-   "ms": 3145,
+   "ms": 7466,
    "code": 2
   },
   {
    "name": "src-snap",
-   "ms": 46,
+   "ms": 57,
    "code": 2
   },
   {
    "name": "src-snapfuera",
-   "ms": 40,
+   "ms": 63,
    "code": 2
   },
   {
    "name": "carrera",
-   "ms": 2318,
+   "ms": 4521,
    "code": 2
   },
   {
    "name": "carrera2",
-   "ms": 2125,
+   "ms": 4730,
    "code": 2
   },
   {
    "name": "sin-obra",
-   "ms": 5629,
+   "ms": 12561,
    "code": 0
   },
   {
    "name": "sin-ia",
-   "ms": 4885,
+   "ms": 8349,
    "code": 0
   },
   {
    "name": "sin-video",
-   "ms": 6395,
+   "ms": 12436,
    "code": 0
   },
   {
    "name": "sin-video-integral",
-   "ms": 3743,
+   "ms": 5696,
    "code": 2
   },
   {
    "name": "sin-documentos",
-   "ms": 3842,
+   "ms": 8470,
    "code": 0
   },
   {
    "name": "combinada",
-   "ms": 4985,
+   "ms": 12148,
    "code": 0
   },
   {
    "name": "ficha-con-presupuesto",
-   "ms": 2273,
+   "ms": 4528,
    "code": 2
   },
   {
    "name": "pc-bis",
-   "ms": 5360,
+   "ms": 12274,
    "code": 0
   }
  ]

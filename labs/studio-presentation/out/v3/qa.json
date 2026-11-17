@@ -947,12 +947,19 @@
    }
   },
   "interior-book-v3": {
-   "pages": 14,
+   "pages": 15,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "14",
+     "box": "h2",
+     "child": "Concepto y referencias",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -984,20 +991,27 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7866,
-     "RUBIK Serif": 790
+     "RUBIK Inter": 8232,
+     "RUBIK Serif": 921
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "interior-book-v3.en": {
-   "pages": 14,
+   "pages": 15,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "14",
+     "box": "h2",
+     "child": "Concept and references",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1023,7 +1037,7 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 545,
+    "nodes": 561,
     "residual": [],
     "residualCount": 0,
     "figures": {
@@ -1040,20 +1054,27 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7599,
-     "RUBIK Serif": 735
+     "RUBIK Inter": 7933,
+     "RUBIK Serif": 866
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "materials-furniture-book-v3": {
-   "pages": 12,
+   "pages": 13,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "12",
+     "box": "h2",
+     "child": "Productos con referencia",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1085,20 +1106,27 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Serif": 421,
-     "RUBIK Inter": 11753
+     "RUBIK Serif": 539,
+     "RUBIK Inter": 12461
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "materials-furniture-book-v3.en": {
-   "pages": 12,
+   "pages": 13,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "12",
+     "box": "h2",
+     "child": "Products with a reference",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1124,12 +1152,12 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 1407,
+    "nodes": 1446,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 13,
-     "en": 13,
+     "es": 14,
+     "en": 14,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1141,20 +1169,33 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Serif": 385,
-     "RUBIK Inter": 11008
+     "RUBIK Serif": 497,
+     "RUBIK Inter": 11680
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "commercial-proposal-client-v3": {
-   "pages": 2,
+   "pages": 4,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 2,
+   "spill": [
+    {
+     "page": "3",
+     "box": "h2",
+     "child": "Alcance, servicios y honorario",
+     "by": 3.1
+    },
+    {
+     "page": "4",
+     "box": "h2",
+     "child": "Estado de revisión del presupu",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1192,20 +1233,33 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 1657,
-     "RUBIK Serif": 281
+     "RUBIK Inter": 2695,
+     "RUBIK Serif": 593
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "commercial-proposal-client-v3.en": {
-   "pages": 2,
+   "pages": 4,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 2,
+   "spill": [
+    {
+     "page": "3",
+     "box": "h2",
+     "child": "Scope, services and fees",
+     "by": 3.1
+    },
+    {
+     "page": "4",
+     "box": "h2",
+     "child": "Budget review status",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1237,12 +1291,12 @@
     "ok": true
    },
    "i18n": {
-    "nodes": 129,
+    "nodes": 190,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 32,
-     "en": 32,
+     "es": 36,
+     "en": 36,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1254,8 +1308,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 1592,
-     "RUBIK Serif": 256
+     "RUBIK Inter": 2573,
+     "RUBIK Serif": 528
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -1313,12 +1367,19 @@
    }
   },
   "real-estate-sheet-v3": {
-   "pages": 1,
+   "pages": 2,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "2",
+     "box": "h2",
+     "child": "Compra y reforma",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1350,20 +1411,27 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 605,
-     "RUBIK Serif": 128
+     "RUBIK Inter": 1138,
+     "RUBIK Serif": 213
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Serif"
    }
   },
   "real-estate-sheet-v3.en": {
-   "pages": 1,
+   "pages": 2,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "2",
+     "box": "h2",
+     "child": "Purchase and renovation",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1389,12 +1457,12 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 44,
+    "nodes": 73,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 2,
-     "en": 2,
+     "es": 5,
+     "en": 5,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1406,8 +1474,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 537,
-     "RUBIK Serif": 128
+     "RUBIK Inter": 1027,
+     "RUBIK Serif": 238
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Serif"
@@ -1515,7 +1583,7 @@
    }
   },
   "architecture-sheet-strip": {
-   "pages": 1,
+   "pages": 2,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
@@ -1529,6 +1597,7 @@
    "fontsLoaded": [
     "RUBIK Inter 400 normal",
     "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
    "flow": {
@@ -1553,15 +1622,15 @@
      "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
     ],
     "fonts": {
-     "RUBIK Inter": 1290,
-     "RUBIK Serif": 21
+     "RUBIK Inter": 2120,
+     "RUBIK Serif": 235
     },
     "display": "RUBIK Inter",
     "body": "RUBIK Inter"
    }
   },
   "architecture-sheet-strip.en": {
-   "pages": 1,
+   "pages": 2,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
@@ -1575,6 +1644,7 @@
    "fontsLoaded": [
     "RUBIK Inter 400 normal",
     "RUBIK Inter 700 normal",
+    "RUBIK Serif 400 normal",
     "RUBIK Serif 600 normal"
    ],
    "flow": {
@@ -1591,7 +1661,7 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 112,
+    "nodes": 154,
     "residual": [],
     "residualCount": 0,
     "figures": {
@@ -1610,8 +1680,8 @@
      "la mayor tipografía de la página es RUBIK Inter (fuente de interfaz como display)"
     ],
     "fonts": {
-     "RUBIK Inter": 1274,
-     "RUBIK Serif": 14
+     "RUBIK Inter": 2073,
+     "RUBIK Serif": 227
     },
     "display": "RUBIK Inter",
     "body": "RUBIK Inter"
@@ -1708,12 +1778,19 @@
    }
   },
   "architecture-book": {
-   "pages": 14,
+   "pages": 15,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "14",
+     "box": "h2",
+     "child": "Memoria descriptiva",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1745,20 +1822,27 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 9744,
-     "RUBIK Serif": 1268
+     "RUBIK Inter": 10134,
+     "RUBIK Serif": 1494
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
    }
   },
   "architecture-book.en": {
-   "pages": 14,
+   "pages": 15,
    "blockOverlaps": [],
    "svgClipCount": 0,
    "svgClip": [],
-   "spillCount": 0,
-   "spill": [],
+   "spillCount": 1,
+   "spill": [
+    {
+     "page": "14",
+     "box": "h2",
+     "child": "Descriptive report",
+     "by": 3.1
+    }
+   ],
    "textOverlapCount": 0,
    "textOverlaps": [],
    "overflowCount": 0,
@@ -1784,12 +1868,12 @@
    },
    "pdfRows": null,
    "i18n": {
-    "nodes": 682,
+    "nodes": 715,
     "residual": [],
     "residualCount": 0,
     "figures": {
-     "es": 19,
-     "en": 19,
+     "es": 21,
+     "en": 21,
      "missing": [],
      "extra": [],
      "ok": true
@@ -1801,8 +1885,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 9207,
-     "RUBIK Serif": 1194
+     "RUBIK Inter": 9537,
+     "RUBIK Serif": 1393
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Inter"
@@ -1914,8 +1998,8 @@
     "red": [],
     "yellow": [],
     "fonts": {
-     "RUBIK Inter": 7554,
-     "RUBIK Serif": 999
+     "RUBIK Inter": 7549,
+     "RUBIK Serif": 996
     },
     "display": "RUBIK Serif",
     "body": "RUBIK Serif"

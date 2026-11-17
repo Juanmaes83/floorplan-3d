@@ -1,9 +1,9 @@
 {
  "schema": "rubik-lab-recetas-qa/1",
- "fecha": "2026-11-17T21:37:58.608Z",
+ "fecha": "2026-11-17T21:48:39.880Z",
  "catalogo": "rubik-lab-recetas/1",
  "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
- "registroSha256": "47a42275d5f2d7d4d1e5753da9e2010ab4e6b6b20c42916a4d2111b85e17e9d6",
+ "registroSha256": "1e10a2d0a0c293e71f83c608d11eb029555f73fe4f95dfb35e39aafc8950542e",
  "partes": [
   "esquema",
   "exportar",
@@ -11,8 +11,8 @@
   "ui"
  ],
  "solo": null,
- "total": 111,
- "pass": 104,
+ "total": 117,
+ "pass": 117,
  "casos": [
   {
    "id": "Q01-claves",
@@ -358,20 +358,50 @@
   },
   {
    "id": "Q02-rp01-es-exporta",
-   "ok": false,
+   "ok": true,
    "detalle": {
-    "code": 2,
-    "out": "{\n \"receta\": \"RP01\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.pdf.\"\n ]\n}\n",
-    "err": ""
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp01-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
    }
   },
   {
    "id": "Q02-rp01-en-exporta",
-   "ok": false,
+   "ok": true,
    "detalle": {
-    "code": 2,
-    "out": "{\n \"receta\": \"RP01\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.en.pdf.\"\n ]\n}\n",
-    "err": ""
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp01-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
    }
   },
   {
@@ -562,20 +592,50 @@
   },
   {
    "id": "Q02-rp05-es-exporta",
-   "ok": false,
+   "ok": true,
    "detalle": {
-    "code": 2,
-    "out": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.pdf.\"\n ]\n}\n",
-    "err": ""
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp05-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
    }
   },
   {
    "id": "Q02-rp05-en-exporta",
-   "ok": false,
+   "ok": true,
    "detalle": {
-    "code": 2,
-    "out": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.en.pdf.\"\n ]\n}\n",
-    "err": ""
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp05-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
    }
   },
   {
@@ -910,20 +970,50 @@
   },
   {
    "id": "Q02-rp12-es-exporta",
-   "ok": false,
+   "ok": true,
    "detalle": {
-    "code": 2,
-    "out": "{\n \"receta\": \"RP12\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.pdf.\"\n ]\n}\n",
-    "err": ""
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "es"
+   }
+  },
+  {
+   "id": "Q02-rp12-es-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
    }
   },
   {
    "id": "Q02-rp12-en-exporta",
-   "ok": false,
+   "ok": true,
    "detalle": {
-    "code": 2,
-    "out": "{\n \"receta\": \"RP12\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.en.pdf.\"\n ]\n}\n",
-    "err": ""
+    "verif": 0,
+    "docsOk": true,
+    "expDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "gotDocs": [
+     "documentos/commercial-proposal-client-v3.en.pdf"
+    ],
+    "chOk": true,
+    "htmlLang": "en"
+   }
+  },
+  {
+   "id": "Q02-rp12-en-evidencia",
+   "ok": true,
+   "detalle": {
+    "estado": "emitible",
+    "incompleta": []
    }
   },
   {
@@ -1201,7 +1291,7 @@
   {
    "id": "NEG-sin-reconocer",
    "ok": true,
-   "detalle": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Materiales y mobiliario» (materiales) en documentos/commercial-proposal-client-v3.pdf.\",\n  \"SIN RECONOCER · Identidad de"
+   "detalle": "{\n \"receta\": \"RP05\",\n \"exportado\": false,\n \"estado\": \"emitible\",\n \"codigo\": 2,\n \"zip\": null,\n \"motivo\": [\n  \"SIN RECONOCER · Identidad del estudio: Perfil sintético del laboratorio (estudio@example.invalid).\",\n  \"SIN RECONOCER · Presupuesto revisado: 0 de 11 partidas revisadas; precios de prueba de "
   },
   {
    "id": "NEG-rp13-contrato-cumplido-sin-emision",
@@ -1348,8 +1438,10 @@
   },
   {
    "id": "NEG-rp01-aportacion-no-completa-L",
-   "ok": false,
-   "detalle": []
+   "ok": true,
+   "detalle": [
+    "Aportación de fixture «honorarios» no compuesta: los documentos actuales no la muestran."
+   ]
   },
   {
    "id": "NEG-sin-importes-guarda",
@@ -1388,7 +1480,7 @@
     "code": 0,
     "verificado": true,
     "adaptador": true,
-    "registroSha256": "47a42275d5f2d7d4d1e5753da9e2010ab4e6b6b20c42916a4d2111b85e17e9d6",
+    "registroSha256": "1e10a2d0a0c293e71f83c608d11eb029555f73fe4f95dfb35e39aafc8950542e",
     "estable": true,
     "comparacion": {
      "identidad": true,
