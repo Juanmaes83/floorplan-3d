@@ -1,0 +1,78 @@
+{
+ "schema": "rubik-lab-e2-diagnostico/1",
+ "master": "8525025a1470d48d52d8e365070e5a0acf116134",
+ "fecha": "2026-11-17T17:13:40.037Z",
+ "datos": "sintéticos (fixtures del producto, precios ficticios)",
+ "casos": [
+  {
+   "id": "A25-1",
+   "hallazgo": "Presupuesto de «después» hecho sobre la revisión anterior: la nota afirma que «se ha comprobado que coinciden» y a continuación dice que no coinciden; el bloque muestra base, IVA y total como si fueran de «después».",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "quantities": "differ",
+    "revisionMatch": "before",
+    "diferencias": 6,
+    "totalMostrado": true
+   }
+  },
+  {
+   "id": "A25-2",
+   "hallazgo": "Con la comparación en estado «incoherent» (no se calcula diferencia), el HTML descargable sigue mostrando el total del presupuesto individual de «después», que corresponde a otra revisión.",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "estado": "incoherent",
+    "totalIndividualMostrado": true
+   }
+  },
+  {
+   "id": "A25-3",
+   "hallazgo": "Solo «antes» tiene presupuesto: la pantalla muestra «Comparación no disponible», el núcleo rechaza antes-sin-después y comparar.js lo descarta en silencio: el borrador descargado dice «Sin presupuesto adjunto», sin mencionar que existe el de «antes».",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "nucleo": "after-budget-required",
+    "pantalla": "one-sided",
+    "borrador": "Sin presupuesto adjunto"
+   }
+  },
+  {
+   "id": "A25-4",
+   "hallazgo": "Solo «después» tiene presupuesto: la pantalla dice «Comparación no disponible» y el borrador muestra el presupuesto individual completo (coherente con su revisión). Asimetría con A25-3.",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "pantalla": "one-sided",
+    "borradorMuestraTotal": true,
+    "quantities": "match"
+   }
+  },
+  {
+   "id": "A26/H03-1",
+   "hallazgo": "Tras cambiar la variante y el presupuesto guardados en otra pestaña, el comparador abierto prepara el borrador con los datos retenidos al abrir y «Verificar» lo da por bueno: verify() recibe state.prepared/state.dossier, no una lectura nueva del almacenamiento. Ningún aviso de obsolescencia.",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "borradorConDatosAntiguos": true,
+    "verificado": "true",
+    "avisoObsoleto": false,
+    "estado": "Borrador interno preparado (Presupuesto completo). Huella 3dae3e7b4eda…"
+   }
+  },
+  {
+   "id": "D02-producto",
+   "hallazgo": "El comparador no escribe en el almacenamiento: lo único que cambia es lo que escribió la otra pestaña.",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "igualTrasPreparar": true
+   }
+  },
+  {
+   "id": "A26/H03-2",
+   "hallazgo": "Cambio del presupuesto guardado mientras se prepara: el borrador sale con el estado leído al cargar la página; no hay invalidación ni reconfirmación.",
+   "resultado": "REPRODUCIDO",
+   "evidencia": {
+    "borradorConDatosAntiguos": true
+   }
+  }
+ ],
+ "paginaSinErrores": true,
+ "peticionesExternas": 0,
+ "productoSinCambios": true
+}

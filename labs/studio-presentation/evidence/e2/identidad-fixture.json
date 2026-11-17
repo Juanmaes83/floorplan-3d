@@ -1,0 +1,37 @@
+{
+ "schema": "rubik-lab-identidad-fixture/1",
+ "producto": "8525025a1470d48d52d8e365070e5a0acf116134",
+ "fecha": "2026-11-17T17:18:13.028Z",
+ "revision": {
+  "funcion": "RubikAssistantDomainTools.revision",
+  "snapshot": "rv1-0f3e96422fd20e08",
+  "producto": "rv1-0f3e96422fd20e08",
+  "coincide": true
+ },
+ "huellaFT3D8": {
+  "funcion": "FloorPlanConstructionProject.fingerprint",
+  "manifiesto": "2f755be470b38048b197d07e285d057de9758a9900bbd27ef92f985e12303448",
+  "producto": "2f755be470b38048b197d07e285d057de9758a9900bbd27ef92f985e12303448",
+  "coincide": true
+ },
+ "proyecto": {
+  "id": "prj_reference-home",
+  "coincideId": true,
+  "conteos": {
+   "snapshot": [
+    13,
+    70,
+    22,
+    46
+   ],
+   "producto": [
+    13,
+    70,
+    22,
+    46
+   ]
+  }
+ },
+ "externas": 0,
+ "alcance": "Coincidencia con el proyecto de ejemplo del producto en este SHA. Si no coincide, la fixture se tomó de otra versión del ejemplo o tras cambios: se declara, no se rehace la huella."
+}

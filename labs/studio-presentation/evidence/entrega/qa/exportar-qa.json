@@ -1,34 +1,42 @@
 {
- "schema": "rubik-lab-exportar-qa/1",
- "ran": "2026-11-17T16:13:31.099Z",
- "workdir": "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/exp",
- "pass": 16,
+ "schema": "rubik-lab-exportar-qa/2",
+ "ran": "2026-11-17T17:21:22.310Z",
+ "entorno": {
+  "node": "v22.23.4",
+  "plataforma": "linux"
+ },
+ "ms": 173366,
+ "pass": 72,
  "fail": 0,
  "cases": [
   {
    "id": "ST04-a tipo completo exporta y verifica",
+   "desde": "1.2",
    "want": "exportado y verificador válido",
    "result": "PASS",
    "detail": {
-    "export": {
-     "schema": "rubik-lab-entrega-digest/1",
+    "digest": {
+     "schema": "rubik-lab-entrega-digest/2",
      "folder": "pc",
-     "manifestSha256": "ebd0ae3a809e73f16adbd4b670d5c2d8db900f54a70f1b37bba360ef77b298a0",
+     "manifest": "pc/MANIFIESTO.json",
+     "manifestSha256": "8350fc447e7bc31df51b10f9201fa2e6506ff5cb7924edbf61e1cbecf8f3772b",
      "zip": "pc.zip",
-     "zipSha256": "210f176be64f33f87120386d3d5a67155d9fa258a6bbdaa3a07de2daae5a9c3e",
-     "zipBytes": 2721526,
-     "files": 10
+     "zipSha256": "7c65b184d4f8543899b6986aefa2e50acdff266e2fc6e07cf61f9813bd0407e8",
+     "zipBytes": 2722463,
+     "files": 12,
+     "alcance": "Huellas SHA-256 del manifiesto y del ZIP de reparto exacto. Integridad, no firma ni autenticidad."
     },
     "verificador": {
-     "carpeta": "pc",
+     "entrega": "pc",
      "valido": true,
-     "archivos": 10,
+     "archivos": 11,
      "errores": []
     }
    }
   },
   {
    "id": "ST02-b los 7 tipos exportan y verifican",
+   "desde": "1.2",
    "want": "7/7 exportados y válidos",
    "result": "PASS",
    "detail": [
@@ -36,48 +44,49 @@
      "tipo": "integral",
      "code": 0,
      "verificador": 0,
-     "files": 28
+     "files": 30
     },
     {
      "tipo": "primera-reunion",
      "code": 0,
      "verificador": 0,
-     "files": 11
+     "files": 13
     },
     {
      "tipo": "propuesta-comercial",
      "code": 0,
      "verificador": 0,
-     "files": 10
+     "files": 12
     },
     {
      "tipo": "dossier-tecnico",
      "code": 0,
      "verificador": 0,
-     "files": 5
+     "files": 7
     },
     {
      "tipo": "interiorismo",
      "code": 0,
      "verificador": 0,
-     "files": 18
+     "files": 20
     },
     {
      "tipo": "inmobiliaria",
      "code": 0,
      "verificador": 0,
-     "files": 15
+     "files": 17
     },
     {
      "tipo": "obra",
      "code": 0,
      "verificador": 0,
-     "files": 9
+     "files": 11
     }
    ]
   },
   {
    "id": "ST02-a presupuesto desmarcado: ausencia física",
+   "desde": "1.2",
    "want": "0 coincidencias de importes en toda la carpeta",
    "result": "PASS",
    "detail": {
@@ -91,24 +100,27 @@
   },
   {
    "id": "ST03-a PDF con capítulo excluido",
-   "want": "bloquea (código 2)",
+   "desde": "1.2",
+   "want": "bloquea (código 2) por el grafo de contenido",
    "result": "PASS",
    "detail": [
-    "BLOQUEA · Selección coherente: «commercial-proposal-client-v3» contiene presupuesto, que no están elegidos: regenerar el PDF sin esas secciones o no incluirlo.",
-    "BLOQUEA · Lo excluido no está: Contenido de capítulos excluidos presente: «20.881,78» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «17.257,67» (presupuesto) en documentos/commercial-proposal-client-v3.pdf."
+    "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/commercial-proposal-client-v3.pdf contiene presupuesto.",
+    "BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «20.881,78» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «17.257,67» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «321,97» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «215,58» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «255,65» (presupuesto) en documentos/commercial-proposal-client-v3.pdf; «250,10» (presupuesto) en documentos/commercial-proposal-client-v3.pdf."
    ]
   },
   {
    "id": "ST03-b PDF integral con secciones excluidas",
+   "desde": "1.2",
    "want": "bloquea",
    "result": "PASS",
    "detail": [
-    "BLOQUEA · Selección coherente: «entrega-integral» contiene dibujo, materiales, presupuesto, obra, recorrido, decisiones, documentos, procedencia, que no están elegidos: regenerar el PDF sin esas secciones o no incluirlo.",
-    "BLOQUEA · Lo excluido no está: Contenido de capítulos excluidos presente: «20.881,78» (presupuesto) en documentos/entrega-integral.pdf; «17.257,67» (presupuesto) en documentos/entrega-integral.pdf; «Cómo avanzará la obra» (obra) en documentos/entrega-integral.pdf; «plan de obra» (obra) en documentos/entrega-integral.pdf; «Lo que hay que decidir» (decisiones) en documentos/entrega-integral.pdf."
+    "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/entrega-integral.pdf contiene dibujo, materiales, presupuesto, obra, recorrido, decisiones, procedencia.",
+    "BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «Del dibujo a la imagen» (dibujo) en documentos/entrega-integral.pdf; «Materiales y mobiliario» (materiales) en documentos/entrega-integral.pdf; «20.881,78» (presupuesto) en documentos/entrega-integral.pdf; «17.257,67» (presupuesto) en documentos/entrega-integral.pdf; «Cómo avanzará la obra» (obra) en documentos/entrega-integral.pdf; «plan de obra» (obra) en documentos/entrega-integral.pdf; «Lo que hay que decidir» (decisiones) en documentos/entrega-integral.pdf."
    ]
   },
   {
    "id": "ST03-c avisos sin reconocer (cliente)",
+   "desde": "1.2",
    "want": "bloquea",
    "result": "PASS",
    "detail": [
@@ -119,20 +131,27 @@
   },
   {
    "id": "ST03-d borrador",
-   "want": "exporta rotulado BORRADOR",
+   "desde": "1.2+1.3",
+   "want": "exporta rotulado BORRADOR en la web y en CADA página de cada PDF",
    "result": "PASS",
    "detail": {
-    "schema": "rubik-lab-entrega-digest/1",
-    "folder": "pc-borrador",
-    "manifestSha256": "70e384c67ba7d9bc940ca829f4448d13718c37d61e8e0d65f9b97b97eead7bf4",
-    "zip": "pc-borrador.zip",
-    "zipSha256": "5e42381af4c3d2b26aade1eda3145271fb5c687b320f1b2429587f1a6408c288",
-    "zipBytes": 2721585,
-    "files": 10
+    "pages": [
+     {
+      "f": "documentos/commercial-proposal-client-v3.pdf",
+      "n": 2,
+      "rotuladas": 2
+     },
+     {
+      "f": "documentos/interior-book-v3.pdf",
+      "n": 14,
+      "rotuladas": 14
+     }
+    ]
    }
   },
   {
    "id": "ST03-e sin identidad",
+   "desde": "1.2",
    "want": "bloquea",
    "result": "PASS",
    "detail": [
@@ -142,6 +161,7 @@
   },
   {
    "id": "ST03-f obra de otro proyecto",
+   "desde": "1.2",
    "want": "bloquea",
    "result": "PASS",
    "detail": [
@@ -150,23 +170,26 @@
   },
   {
    "id": "ST03-g revisión cruzada",
-   "want": "bloquea",
+   "desde": "1.2",
+   "want": "rechaza (código 2)",
    "result": "PASS",
    "detail": [
-    "BLOQUEA · Mismo proyecto y revisión: El registro de la entrega (prj_reference-home rv1-otra) no coincide con el snapshot (prj_reference-home rv1-0f3e96422fd20e08)."
+    "La selección es de la revisión rv1-0f3e96422fd20e08; la entrega compuesta es de rv1-otra."
    ]
   },
   {
    "id": "ST06-a dato personal y geometría editable en anexo",
+   "desde": "1.2",
    "want": "bloquea por ambos",
    "result": "PASS",
    "detail": [
     "BLOQUEA · Sin proyecto editable: Geometría editable o código de la aplicación en: documentos/obra-presentacion.html.",
-    "BLOQUEA · Datos personales: Contactos que no son del estudio: cliente.real@correo.es (documentos/obra-presentacion.html)."
+    "BLOQUEA · Datos personales: Contactos que no son del estudio: persona.ajena@correo.example (documentos/obra-presentacion.html)."
    ]
   },
   {
    "id": "ST04-b byte alterado",
+   "desde": "1.2",
    "want": "verificador rechaza",
    "result": "PASS",
    "detail": [
@@ -175,6 +198,7 @@
   },
   {
    "id": "ST04-c archivo añadido",
+   "desde": "1.2",
    "want": "verificador rechaza",
    "result": "PASS",
    "detail": [
@@ -183,10 +207,12 @@
   },
   {
    "id": "ST04-d manifiesto reescrito",
+   "desde": "1.2",
    "want": "verificador rechaza",
    "result": "PASS",
    "detail": [
     "MANIFIESTO.json no coincide con el resumen externo",
+    "El resumen externo declara 12 archivos; el manifiesto 4 más él mismo",
     "Archivo no declarado: media/dibujo-vivo.jpg",
     "Archivo no declarado: media/ia-1.jpg",
     "Archivo no declarado: media/ia-2.jpg",
@@ -205,16 +231,19 @@
   },
   {
    "id": "ST06-b sin scripts ni listener en la web final",
+   "desde": "1.2",
    "want": "0 <script> y 0 addEventListener(message)",
    "result": "PASS",
    "detail": null
   },
   {
    "id": "A02 registro = selección",
+   "desde": "1.2",
    "want": "sin vídeos ni PDF no elegidos; capítulo presupuesto en excluidos",
    "result": "PASS",
    "detail": {
     "files": [
+     "LEEME.txt",
      "documentos/interior-book-v3.pdf",
      "index.html",
      "media/dibujo-vivo.jpg",
@@ -226,6 +255,821 @@
      "media/vista-05-room.jpg"
     ]
    }
+  },
+  {
+   "id": "SEL-01 modo ausente",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Modo no válido: undefined. Solo «cliente» o «borrador», siempre explícito."
+   ]
+  },
+  {
+   "id": "SEL-02 modo desconocido no es un atajo",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Modo no válido: \"publicar\". Solo «cliente» o «borrador», siempre explícito."
+   ]
+  },
+  {
+   "id": "SEL-03 capítulo duplicado",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "«capitulos» repetidos: vivienda."
+   ]
+  },
+  {
+   "id": "SEL-04 documento duplicado",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "«documentos» repetidos: interior-book-v3."
+   ]
+  },
+  {
+   "id": "SEL-05 campo no admitido",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Campo no admitido: publicar."
+   ]
+  },
+  {
+   "id": "SEL-06 documento con ruta",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Documento desconocido: ../../reports/00-RESUMEN-EJECUTIVO."
+   ]
+  },
+  {
+   "id": "SEL-07 documento elegido sin capítulo Documentos",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Hay documentos elegidos pero no el capítulo «Documentos»: el cliente no tendría cómo abrirlos. Elegir el capítulo o quitar los documentos."
+   ]
+  },
+  {
+   "id": "SEL-08 «reconocer» un bloqueo",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Reconocimiento de un aviso que no existe: Datos personales. Los bloqueos no se reconocen."
+   ]
+  },
+  {
+   "id": "SEL-09 selección de otro snapshot (obsoleta)",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "La selección se preparó sobre otro snapshot (huella distinta): está obsoleta."
+   ]
+  },
+  {
+   "id": "SEL-10 selección de otra revisión",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "La selección es de la revisión rv1-otra; la entrega compuesta es de rv1-0f3e96422fd20e08."
+   ]
+  },
+  {
+   "id": "SEL-11 idioma no admitido (zh aplazado, D6)",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Idioma no válido: \"zh\". Solo «es» o «en»."
+   ]
+  },
+  {
+   "id": "SEL-12 JSON ilegible",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "La selección no es un JSON legible."
+   ]
+  },
+  {
+   "id": "SEL-13 tipo desconocido",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Tipo de entrega desconocido: \"portal-publico\"."
+   ]
+  },
+  {
+   "id": "SEL-14 recurso a omitir desconocido",
+   "desde": "1.3",
+   "want": "rechazada (código 2), sin salida",
+   "result": "PASS",
+   "detail": [
+    "Recurso que no se puede omitir: presupuesto. Admitidos: imagenes-ia, videos."
+   ]
+  },
+  {
+   "id": "SEL-15 idioma en",
+   "desde": "1.3",
+   "want": "exporta si la entrega está compuesta en inglés; si no, bloquea sin mezclar idiomas",
+   "result": "PASS",
+   "detail": {
+    "compuestaEn": false,
+    "motivo": [
+     "BLOQUEA · Idioma: La entrega no está compuesta en «en» (disponible: es)."
+    ]
+   }
+  },
+  {
+   "id": "DST-01 destino fuera de las raíces",
+   "desde": "1.3",
+   "want": "error (código 1) y nada escrito",
+   "result": "PASS",
+   "detail": "Destino fuera de las raíces permitidas: <lab>/reports"
+  },
+  {
+   "id": "DST-02 no sobrescribe una entrega anterior",
+   "desde": "1.3",
+   "want": "error (código 1); ZIP anterior intacto",
+   "result": "PASS",
+   "detail": [
+    "Ya existe pc: una entrega anterior no se sobrescribe. Elegir otro nombre."
+   ]
+  },
+  {
+   "id": "DST-03 un intento inválido no borra la salida válida",
+   "desde": "1.3",
+   "want": "rechazo (código 2); carpeta, ZIP y resumen intactos",
+   "result": "PASS",
+   "detail": [
+    "Modo no válido: \"x\". Solo «cliente» o «borrador», siempre explícito."
+   ]
+  },
+  {
+   "id": "DST-04 nombre de salida no permitido",
+   "desde": "1.3",
+   "want": "error (código 1)",
+   "result": "PASS",
+   "detail": "Nombre de salida no permitido: Con Espacio"
+  },
+  {
+   "id": "SRC-01 imagen cambiada tras componer",
+   "desde": "1.3",
+   "want": "bloquea por integridad de origen",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Integridad de origen: media/vista-01-overview.jpg no coincide con la huella registrada al componer."
+   ]
+  },
+  {
+   "id": "SRC-02 PDF corrupto (aunque el registro cuadre)",
+   "desde": "1.3",
+   "want": "bloquea: PDF ilegible",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Formato válido: documentos/interior-book-v3.pdf: PDF ilegible para pdftotext/pdfinfo."
+   ]
+  },
+  {
+   "id": "SRC-03 vídeo cambiado tras componer",
+   "desde": "1.3",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Integridad de origen: media/recorrido.mp4 no coincide con la huella registrada al componer."
+   ]
+  },
+  {
+   "id": "SRC-04 página web alterada",
+   "desde": "1.3",
+   "want": "rechaza (código 2)",
+   "result": "PASS",
+   "detail": [
+    "La página index.html no coincide con su huella registrada."
+   ]
+  },
+  {
+   "id": "SRC-05 archivo sin procedencia registrada",
+   "desde": "1.3",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Procedencia: media/dibujo-vivo.jpg no está en el registro de la entrega: procedencia no acreditada."
+   ]
+  },
+  {
+   "id": "SRC-06 enlace simbólico fuera de la entrega",
+   "desde": "1.3",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Rutas válidas: media/vista-02-room.jpg es un enlace o sale de la entrega compuesta."
+   ]
+  },
+  {
+   "id": "SRC-07 recurso externo oculto en un anexo",
+   "desde": "1.3",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Sin recursos externos: documentos/obra-presentacion.html referencia recursos externos: https://ejemplo.invalid/pixel.png."
+   ]
+  },
+  {
+   "id": "SRC-08 script ejecutable en un anexo",
+   "desde": "1.3",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Sin código ejecutable: documentos/obra-presentacion.html contiene 1 script(s) ejecutable(s) o marcos."
+   ]
+  },
+  {
+   "id": "SRC-09 origen cambiado después de componer",
+   "desde": "1.3",
+   "want": "bloquea: entrega obsoleta",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Origen vigente: El origen de media/vista-01-overview.jpg (snapshot/assets/view-01-overview.png) ha cambiado después de componer: la entrega está obsoleta."
+   ]
+  },
+  {
+   "id": "SRC-10 manifiesto FT3D-8 original alterado",
+   "desde": "1.3",
+   "want": "bloquea",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Integridad de origen: El manifiesto FT3D-8 original no coincide con su huella registrada."
+   ]
+  },
+  {
+   "id": "SRC-11 snapshot cambiado después de componer",
+   "desde": "1.3",
+   "want": "rechaza: obsoleta",
+   "result": "PASS",
+   "detail": [
+    "La selección se preparó sobre otro snapshot (huella distinta): está obsoleta."
+   ]
+  },
+  {
+   "id": "SRC-12 ruta de snapshot fuera del laboratorio",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "Ruta de snapshot no permitida en el registro."
+   ]
+  },
+  {
+   "id": "TOOL-01 extractor de PDF no disponible",
+   "desde": "1.3",
+   "want": "error (código 1) y ninguna salida; nunca «texto vacío válido»",
+   "result": "PASS",
+   "detail": "{\n \"exportado\": false,\n \"tipo\": \"entorno\",\n \"motivo\": [\n  \"Falta la herramienta pdftotext: no se puede verificar la entrega.\"\n ]\n}\n"
+  },
+  {
+   "id": "RACE-01 imagen cambia durante la preparación",
+   "desde": "1.3",
+   "want": "cancela el candidato (código 2): sin carpeta, ZIP ni resumen; sin temporales",
+   "result": "PASS",
+   "detail": [
+    "Las fuentes han cambiado durante la preparación (media/vista-01-overview.jpg): se cancela este candidato. Volver a preparar."
+   ]
+  },
+  {
+   "id": "RACE-02 snapshot cambia durante la preparación (otra pestaña)",
+   "desde": "1.3",
+   "want": "cancela el candidato",
+   "result": "PASS",
+   "detail": [
+    "Las fuentes han cambiado durante la preparación (snapshot): se cancela este candidato. Volver a preparar."
+   ]
+  },
+  {
+   "id": "CUS-01 sin obra",
+   "desde": "1.3",
+   "want": "exporta; 0 archivos y 0 textos de obra",
+   "result": "PASS",
+   "detail": {
+    "hits": [],
+    "files": 20
+   }
+  },
+  {
+   "id": "CUS-02 sin imágenes IA",
+   "desde": "1.3",
+   "want": "exporta; 0 archivos ia-*, 0 textos de IA, sin aviso IA que reconocer",
+   "result": "PASS",
+   "detail": {
+    "hits": []
+   }
+  },
+  {
+   "id": "CUS-03 sin vídeos",
+   "desde": "1.3",
+   "want": "exporta; 0 MP4, 0 <video>, sin el anexo con vídeo incrustado",
+   "result": "PASS",
+   "detail": {}
+  },
+  {
+   "id": "CUS-04 sin vídeos pero con el PDF integral (que los menciona)",
+   "desde": "1.3",
+   "want": "bloquea por el grafo",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/entrega-integral.pdf contiene el recurso omitido «videos»."
+   ]
+  },
+  {
+   "id": "CUS-05 sin documentos",
+   "desde": "1.3",
+   "want": "exporta; 0 PDF y sin capítulo Documentos",
+   "result": "PASS",
+   "detail": {
+    "files": [
+     "LEEME.txt",
+     "MANIFIESTO.json",
+     "index.html",
+     "media/dibujo-vivo.jpg",
+     "media/ia-1.jpg",
+     "media/ia-2.jpg",
+     "media/vista-02-room.jpg",
+     "media/vista-03-room.jpg",
+     "media/vista-04-room.jpg",
+     "media/vista-05-room.jpg"
+    ]
+   }
+  },
+  {
+   "id": "CUS-06 combinación (capítulos + documentos + omitir)",
+   "desde": "1.3",
+   "want": "exporta y verifica el ZIP exacto",
+   "result": "PASS",
+   "detail": {
+    "verificador": []
+   }
+  },
+  {
+   "id": "CUS-07 ficha con presupuesto en una entrega sin presupuesto",
+   "desde": "1.3",
+   "want": "bloquea por el grafo",
+   "result": "PASS",
+   "detail": [
+    "BLOQUEA · Lo excluido no está: Por el grafo de contenido: documentos/real-estate-sheet-v3.pdf contiene presupuesto.",
+    "BLOQUEA · Lo excluido no está: Texto de capítulos excluidos presente: «20.882» (presupuesto) en documentos/real-estate-sheet-v3.pdf."
+   ]
+  },
+  {
+   "id": "ZIP-00 ZIP de reparto exacto válido",
+   "desde": "1.3",
+   "want": "verificador válido; LEEME dentro del inventario",
+   "result": "PASS",
+   "detail": {
+    "entrega": "pc",
+    "valido": true,
+    "archivos": 11,
+    "errores": []
+   }
+  },
+  {
+   "id": "ZIP-html un byte cambiado en index.html",
+   "desde": "1.3",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-txt un byte cambiado en LEEME.txt",
+   "desde": "1.3",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-json un byte cambiado en MANIFIESTO.json",
+   "desde": "1.3",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-pdf un byte cambiado en documentos/commercial-proposal-client-v3.pdf",
+   "desde": "1.3",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-jpg un byte cambiado en media/dibujo-vivo.jpg",
+   "desde": "1.3",
+   "want": "verificador rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-extra archivo de más",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-falta LEEME eliminado",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado"
+   ]
+  },
+  {
+   "id": "ZIP-bytes un byte del ZIP",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)"
+   ]
+  },
+  {
+   "id": "ZIP-symlink enlace simbólico dentro del ZIP",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado",
+    "Enlace simbólico en el ZIP: pc/media/enlace.jpg"
+   ]
+  },
+  {
+   "id": "ZIP-dup entrada duplicada",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado",
+    "Entrada duplicada en el ZIP: pc/LEEME.txt"
+   ]
+  },
+  {
+   "id": "ZIP-ruta entrada que sale de la carpeta",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "El ZIP no coincide con el resumen externo (huella distinta)",
+    "El ZIP no tiene el tamaño declarado",
+    "Entrada fuera de la carpeta declarada o con ruta no válida: ../fuera.txt"
+   ]
+  },
+  {
+   "id": "ZIP-esquema resumen externo de otro esquema",
+   "desde": "1.3",
+   "want": "rechaza",
+   "result": "PASS",
+   "detail": [
+    "Resumen externo de un esquema no admitido: otro/9"
+   ]
+  },
+  {
+   "id": "DET-01 misma selección, mismo manifiesto",
+   "desde": "1.3",
+   "want": "huella del manifiesto idéntica en dos exportaciones",
+   "result": "PASS",
+   "detail": {
+    "a": "8350fc447e7bc31df51b10f9201fa2e6506ff5cb7924edbf61e1cbecf8f3772b",
+    "b": "8350fc447e7bc31df51b10f9201fa2e6506ff5cb7924edbf61e1cbecf8f3772b",
+    "nota": "El ZIP cambia solo por el nombre de la carpeta interior."
+   }
+  },
+  {
+   "id": "DST-05 dos exportaciones simultáneas al mismo destino",
+   "desde": "1.3",
+   "want": "una exporta (0) y la otra se rechaza (1); la ganadora verifica",
+   "result": "PASS",
+   "detail": {
+    "codes": [
+     0,
+     1
+    ]
+   }
+  }
+ ],
+ "timings": [
+  {
+   "name": "pc",
+   "ms": 7226,
+   "code": 0
+  },
+  {
+   "name": "tipo-integral",
+   "ms": 9529,
+   "code": 0
+  },
+  {
+   "name": "tipo-primera-reunion",
+   "ms": 4938,
+   "code": 0
+  },
+  {
+   "name": "tipo-propuesta-comercial",
+   "ms": 6746,
+   "code": 0
+  },
+  {
+   "name": "tipo-dossier-tecnico",
+   "ms": 6289,
+   "code": 0
+  },
+  {
+   "name": "tipo-interiorismo",
+   "ms": 5338,
+   "code": 0
+  },
+  {
+   "name": "tipo-inmobiliaria",
+   "ms": 4909,
+   "code": 0
+  },
+  {
+   "name": "tipo-obra",
+   "ms": 9670,
+   "code": 0
+  },
+  {
+   "name": "pc-sin-presupuesto",
+   "ms": 5216,
+   "code": 0
+  },
+  {
+   "name": "pc-incoherente",
+   "ms": 2202,
+   "code": 2
+  },
+  {
+   "name": "integral-parcial",
+   "ms": 2399,
+   "code": 2
+  },
+  {
+   "name": "pc-sin-ack",
+   "ms": 2439,
+   "code": 2
+  },
+  {
+   "name": "pc-borrador",
+   "ms": 7053,
+   "code": 0
+  },
+  {
+   "name": "sin-marca",
+   "ms": 2459,
+   "code": 2
+  },
+  {
+   "name": "cruzado",
+   "ms": 4216,
+   "code": 2
+  },
+  {
+   "name": "cruzado-rev",
+   "ms": 50,
+   "code": 2
+  },
+  {
+   "name": "datos",
+   "ms": 3823,
+   "code": 2
+  },
+  {
+   "name": "sel-16",
+   "ms": 50,
+   "code": 2
+  },
+  {
+   "name": "sel-17",
+   "ms": 54,
+   "code": 2
+  },
+  {
+   "name": "sel-18",
+   "ms": 49,
+   "code": 2
+  },
+  {
+   "name": "sel-19",
+   "ms": 44,
+   "code": 2
+  },
+  {
+   "name": "sel-20",
+   "ms": 61,
+   "code": 2
+  },
+  {
+   "name": "sel-21",
+   "ms": 63,
+   "code": 2
+  },
+  {
+   "name": "sel-22",
+   "ms": 60,
+   "code": 2
+  },
+  {
+   "name": "sel-23",
+   "ms": 49,
+   "code": 2
+  },
+  {
+   "name": "sel-24",
+   "ms": 48,
+   "code": 2
+  },
+  {
+   "name": "sel-25",
+   "ms": 48,
+   "code": 2
+  },
+  {
+   "name": "sel-26",
+   "ms": 46,
+   "code": 2
+  },
+  {
+   "name": "sel-27",
+   "ms": 42,
+   "code": 2
+  },
+  {
+   "name": "sel-28",
+   "ms": 43,
+   "code": 2
+  },
+  {
+   "name": "sel-29",
+   "ms": 46,
+   "code": 2
+  },
+  {
+   "name": "idioma-en",
+   "ms": 2210,
+   "code": 2
+  },
+  {
+   "name": "pc",
+   "ms": 56,
+   "code": 1
+  },
+  {
+   "name": "pc",
+   "ms": 48,
+   "code": 2
+  },
+  {
+   "name": "src-img",
+   "ms": 2453,
+   "code": 2
+  },
+  {
+   "name": "src-pdf",
+   "ms": 2429,
+   "code": 2
+  },
+  {
+   "name": "src-mp4",
+   "ms": 2690,
+   "code": 2
+  },
+  {
+   "name": "src-web",
+   "ms": 65,
+   "code": 2
+  },
+  {
+   "name": "src-noreg",
+   "ms": 2530,
+   "code": 2
+  },
+  {
+   "name": "src-link",
+   "ms": 2504,
+   "code": 2
+  },
+  {
+   "name": "src-ext",
+   "ms": 4181,
+   "code": 2
+  },
+  {
+   "name": "src-js",
+   "ms": 3891,
+   "code": 2
+  },
+  {
+   "name": "src-origen",
+   "ms": 2575,
+   "code": 2
+  },
+  {
+   "name": "src-ft",
+   "ms": 4109,
+   "code": 2
+  },
+  {
+   "name": "src-snap",
+   "ms": 45,
+   "code": 2
+  },
+  {
+   "name": "src-snapfuera",
+   "ms": 46,
+   "code": 2
+  },
+  {
+   "name": "carrera",
+   "ms": 2358,
+   "code": 2
+  },
+  {
+   "name": "carrera2",
+   "ms": 2303,
+   "code": 2
+  },
+  {
+   "name": "sin-obra",
+   "ms": 7258,
+   "code": 0
+  },
+  {
+   "name": "sin-ia",
+   "ms": 4724,
+   "code": 0
+  },
+  {
+   "name": "sin-video",
+   "ms": 7127,
+   "code": 0
+  },
+  {
+   "name": "sin-video-integral",
+   "ms": 2695,
+   "code": 2
+  },
+  {
+   "name": "sin-documentos",
+   "ms": 5082,
+   "code": 0
+  },
+  {
+   "name": "combinada",
+   "ms": 7117,
+   "code": 0
+  },
+  {
+   "name": "ficha-con-presupuesto",
+   "ms": 2342,
+   "code": 2
+  },
+  {
+   "name": "pc-bis",
+   "ms": 6852,
+   "code": 0
   }
  ]
 }

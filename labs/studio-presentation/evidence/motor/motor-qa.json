@@ -1,0 +1,822 @@
+{
+ "schema": "rubik-lab-motor-qa/1",
+ "ran": "2026-11-17T17:18:00.651Z",
+ "entorno": {
+  "node": "v22.23.4",
+  "poppler": "pdfinfo version 24.02.0"
+ },
+ "pass": 11,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "B3-filas-1",
+   "want": "0 diferencias de celdas; filas del snapshot en orden en el PDF; suma = neto; total impreso; páginas del mismo tamaño, ninguna en blanco, fuentes embebidas",
+   "result": "PASS",
+   "detail": {
+    "code": 0,
+    "docs": [
+     {
+      "id": "materials-furniture-book",
+      "flow": {
+       "rows": 40,
+       "pagesAdded": 1,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 200,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal",
+      "flow": {
+       "rows": 6,
+       "pagesAdded": 0,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 15,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-client-v3",
+      "flow": {
+       "rows": 6,
+       "pagesAdded": 0,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 13,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-studio-v3",
+      "flow": {
+       "rows": 6,
+       "pagesAdded": 0,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 16,
+       "bad": 0
+      }
+     }
+    ],
+    "contraste": {
+     "pdf": true,
+     "filas": 1,
+     "faltan": 0,
+     "fueraDeOrden": 0,
+     "ejemplos": [],
+     "sumaPartidas": 1572.78,
+     "netoSnapshot": 1572.78,
+     "totalImpreso": true,
+     "sumaCuadra": true
+    },
+    "pdfs": [
+     {
+      "f": "commercial-proposal-client-v3.pdf",
+      "paginas": 2,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal-studio-v3.pdf",
+      "paginas": 2,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal.pdf",
+      "paginas": 3,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 5,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     }
+    ],
+    "ms": 5719
+   }
+  },
+  {
+   "id": "B3-filas-50",
+   "want": "0 diferencias de celdas; filas del snapshot en orden en el PDF; suma = neto; total impreso; páginas del mismo tamaño, ninguna en blanco, fuentes embebidas",
+   "result": "PASS",
+   "detail": {
+    "code": 0,
+    "docs": [
+     {
+      "id": "materials-furniture-book",
+      "flow": {
+       "rows": 40,
+       "pagesAdded": 1,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 200,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal",
+      "flow": {
+       "rows": 59,
+       "pagesAdded": 2,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 315,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-client-v3",
+      "flow": {
+       "rows": 59,
+       "pagesAdded": 2,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 215,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-studio-v3",
+      "flow": {
+       "rows": 59,
+       "pagesAdded": 2,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 365,
+       "bad": 0
+      }
+     }
+    ],
+    "contraste": {
+     "pdf": true,
+     "filas": 50,
+     "faltan": 0,
+     "fueraDeOrden": 0,
+     "ejemplos": [],
+     "sumaPartidas": 72870.18,
+     "netoSnapshot": 72870.18,
+     "totalImpreso": true,
+     "sumaCuadra": true
+    },
+    "pdfs": [
+     {
+      "f": "commercial-proposal-client-v3.pdf",
+      "paginas": 4,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal-studio-v3.pdf",
+      "paginas": 4,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 5,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     }
+    ],
+    "ms": 6001
+   }
+  },
+  {
+   "id": "B3-filas-200",
+   "want": "0 diferencias de celdas; filas del snapshot en orden en el PDF; suma = neto; total impreso; páginas del mismo tamaño, ninguna en blanco, fuentes embebidas",
+   "result": "PASS",
+   "detail": {
+    "code": 0,
+    "docs": [
+     {
+      "id": "materials-furniture-book",
+      "flow": {
+       "rows": 40,
+       "pagesAdded": 1,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 200,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal",
+      "flow": {
+       "rows": 209,
+       "pagesAdded": 10,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 1215,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-client-v3",
+      "flow": {
+       "rows": 209,
+       "pagesAdded": 9,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 815,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-studio-v3",
+      "flow": {
+       "rows": 209,
+       "pagesAdded": 10,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 1415,
+       "bad": 0
+      }
+     }
+    ],
+    "contraste": {
+     "pdf": true,
+     "filas": 200,
+     "faltan": 0,
+     "fueraDeOrden": 0,
+     "ejemplos": [],
+     "sumaPartidas": 312532.81,
+     "netoSnapshot": 312532.81,
+     "totalImpreso": true,
+     "sumaCuadra": true
+    },
+    "pdfs": [
+     {
+      "f": "commercial-proposal-client-v3.pdf",
+      "paginas": 11,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal-studio-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal.pdf",
+      "paginas": 13,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 5,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     }
+    ],
+    "ms": 9939
+   }
+  },
+  {
+   "id": "B3-filas-500",
+   "want": "0 diferencias de celdas; filas del snapshot en orden en el PDF; suma = neto; total impreso; páginas del mismo tamaño, ninguna en blanco, fuentes embebidas",
+   "result": "PASS",
+   "detail": {
+    "code": 0,
+    "docs": [
+     {
+      "id": "materials-furniture-book",
+      "flow": {
+       "rows": 40,
+       "pagesAdded": 1,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 200,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal",
+      "flow": {
+       "rows": 509,
+       "pagesAdded": 26,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 3015,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-client-v3",
+      "flow": {
+       "rows": 509,
+       "pagesAdded": 24,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 2015,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-studio-v3",
+      "flow": {
+       "rows": 509,
+       "pagesAdded": 24,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 3515,
+       "bad": 0
+      }
+     }
+    ],
+    "contraste": {
+     "pdf": true,
+     "filas": 500,
+     "faltan": 0,
+     "fueraDeOrden": 0,
+     "ejemplos": [],
+     "sumaPartidas": 780184.55,
+     "netoSnapshot": 780184.55,
+     "totalImpreso": true,
+     "sumaCuadra": true
+    },
+    "pdfs": [
+     {
+      "f": "commercial-proposal-client-v3.pdf",
+      "paginas": 26,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal-studio-v3.pdf",
+      "paginas": 26,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal.pdf",
+      "paginas": 29,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 5,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     }
+    ],
+    "ms": 50732
+   }
+  },
+  {
+   "id": "B3-sin-presupuesto",
+   "want": "0 diferencias de celdas; filas del snapshot en orden en el PDF; suma = neto; total impreso; páginas del mismo tamaño, ninguna en blanco, fuentes embebidas",
+   "result": "PASS",
+   "detail": {
+    "code": 0,
+    "docs": [
+     {
+      "id": "materials-furniture-book",
+      "flow": {
+       "rows": 40,
+       "pagesAdded": 1,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 200,
+       "bad": 0
+      }
+     }
+    ],
+    "contraste": {
+     "pdf": true,
+     "sinPresupuesto": true
+    },
+    "pdfs": [
+     {
+      "f": "commercial-proposal-client-v3.pdf",
+      "paginas": 1,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal-studio-v3.pdf",
+      "paginas": 1,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal.pdf",
+      "paginas": 1,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     }
+    ],
+    "ms": 4791
+   }
+  },
+  {
+   "id": "B3-multilinea-es-en",
+   "want": "0 diferencias de celdas; filas del snapshot en orden en el PDF; suma = neto; total impreso; páginas del mismo tamaño, ninguna en blanco, fuentes embebidas",
+   "result": "PASS",
+   "detail": {
+    "code": 0,
+    "docs": [
+     {
+      "id": "materials-furniture-book",
+      "flow": {
+       "rows": 40,
+       "pagesAdded": 1,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 200,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal",
+      "flow": {
+       "rows": 69,
+       "pagesAdded": 5,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 375,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-client-v3",
+      "flow": {
+       "rows": 69,
+       "pagesAdded": 5,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 255,
+       "bad": 0
+      }
+     },
+     {
+      "id": "commercial-proposal-studio-v3",
+      "flow": {
+       "rows": 69,
+       "pagesAdded": 5,
+       "ok": true,
+       "oversized": 0
+      },
+      "pdfRows": {
+       "cells": 435,
+       "bad": 0
+      }
+     }
+    ],
+    "contraste": {
+     "pdf": true,
+     "filas": 60,
+     "faltan": 0,
+     "fueraDeOrden": 0,
+     "ejemplos": [],
+     "sumaPartidas": 89877.75,
+     "netoSnapshot": 89877.75,
+     "totalImpreso": true,
+     "sumaCuadra": true
+    },
+    "pdfs": [
+     {
+      "f": "commercial-proposal-client-v3.pdf",
+      "paginas": 7,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal-studio-v3.pdf",
+      "paginas": 7,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "commercial-proposal.pdf",
+      "paginas": 8,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 5,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book-v3.pdf",
+      "paginas": 12,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     },
+     {
+      "f": "materials-furniture-book.pdf",
+      "paginas": 5,
+      "tamanos": 1,
+      "enBlanco": [],
+      "fuentes": 4,
+      "noEmbebidas": 0
+     }
+    ],
+    "ms": 5895
+   }
+  },
+  {
+   "id": "B3-fila-desmesurada",
+   "want": "compositor termina con código 2 y NO hay PDF de los documentos bloqueados ni .tmp",
+   "result": "PASS",
+   "detail": {
+    "blocked": [
+     [
+      "commercial-proposal",
+      "fila más alta que una página"
+     ],
+     [
+      "commercial-proposal-client-v3",
+      "fila más alta que una página"
+     ],
+     [
+      "commercial-proposal-studio-v3",
+      "fila más alta que una página"
+     ]
+    ],
+    "times": {
+     "snapDir": "fila-desmesurada",
+     "out": "fila-desmesurada",
+     "ms": 5025,
+     "code": 2
+    }
+   }
+  },
+  {
+   "id": "PUB-01 composición correcta publica la entrega",
+   "want": "código 0; entrega/ con registro y documentos",
+   "result": "PASS",
+   "detail": {
+    "ms": 9845
+   }
+  },
+  {
+   "id": "PUB-02 fallo de impresión (celda oculta solo al imprimir)",
+   "want": "código 2; entrega anterior intacta byte a byte; informe de rechazo aparte; sin PDF de los documentos bloqueados; sin temporales",
+   "result": "PASS",
+   "detail": {
+    "blocked": [
+     [
+      "materials-furniture-book",
+      "celdas impresas distintas del documento"
+     ],
+     [
+      "commercial-proposal",
+      "celdas impresas distintas del documento"
+     ],
+     [
+      "commercial-proposal-client-v3",
+      "celdas impresas distintas del documento"
+     ],
+     [
+      "commercial-proposal-studio-v3",
+      "celdas impresas distintas del documento"
+     ],
+     [
+      "entrega-integral",
+      "celdas impresas distintas del documento"
+     ]
+    ],
+    "temporales": []
+   }
+  },
+  {
+   "id": "PUB-03 dos tablas paginables en una página",
+   "want": "bloqueo explícito «no soportado»; entrega intacta",
+   "result": "PASS",
+   "detail": {
+    "blocked": [
+     [
+      "commercial-proposal-client-v3",
+      "varias tablas paginables en una página (no soportado)"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "PUB-04 recomposición correcta tras un rechazo",
+   "want": "código 0; nueva entrega publicada; la anterior en entrega-anterior/; sin informe de rechazo",
+   "result": "PASS",
+   "detail": {
+    "ms": 9537
+   }
+  }
+ ],
+ "tiempos": {
+  "composiciones": [
+   {
+    "snapDir": "filas-1",
+    "out": "filas-1",
+    "ms": 5719,
+    "code": 0
+   },
+   {
+    "snapDir": "filas-50",
+    "out": "filas-50",
+    "ms": 6001,
+    "code": 0
+   },
+   {
+    "snapDir": "filas-200",
+    "out": "filas-200",
+    "ms": 9939,
+    "code": 0
+   },
+   {
+    "snapDir": "filas-500",
+    "out": "filas-500",
+    "ms": 50732,
+    "code": 0
+   },
+   {
+    "snapDir": "sin-presupuesto",
+    "out": "sin-presupuesto",
+    "ms": 4791,
+    "code": 0
+   },
+   {
+    "snapDir": "multilinea-es-en",
+    "out": "multilinea-es-en",
+    "ms": 5895,
+    "code": 0
+   },
+   {
+    "snapDir": "fila-desmesurada",
+    "out": "fila-desmesurada",
+    "ms": 5025,
+    "code": 2
+   },
+   {
+    "snapDir": "snapshot",
+    "out": "canonico",
+    "ms": 9845,
+    "code": 0
+   },
+   {
+    "snapDir": "snapshot",
+    "out": "canonico",
+    "ms": 9325,
+    "code": 2
+   },
+   {
+    "snapDir": "snapshot",
+    "out": "canonico",
+    "ms": 8784,
+    "code": 2
+   },
+   {
+    "snapDir": "snapshot",
+    "out": "canonico",
+    "ms": 9537,
+    "code": 0
+   }
+  ],
+  "p50": 8784,
+  "max": 50732,
+  "muestras": 11,
+  "nota": "Composiciones distintas (no repeticiones del mismo caso): orientativo, no un p95."
+ }
+}

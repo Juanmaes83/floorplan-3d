@@ -8,9 +8,9 @@ const fs=require('node:fs'),path=require('node:path'),{chromium}=require('playwr
 const [snapDir,outDir]=process.argv.slice(2);fs.mkdirSync(outDir,{recursive:true});
 const S=JSON.parse(fs.readFileSync(path.join(snapDir,'snapshot.json'),'utf8'));
 const LAB=path.resolve(__dirname,'..');
-const IFC_FONTS=process.env.IFC_FONTS||'/home/user/donors/ifc-sheet/packages/ifcsheet/fonts';
+const IFC_FONTS=process.env.IFC_FONTS||path.join(LAB,'vendor/fonts/inter'); // Inter OFL, copia sin modificar (vendor/PROCEDENCIA.md)
 const FS4=path.join(__dirname,'node_modules/@fontsource/source-serif-4/files');
-const HUASHU_LINT=process.env.HUASHU_LINT||'/home/user/juanmaes83/huashu-design-3.0-agent-/scripts/design_lint.py';
+const HUASHU_PROBE=process.env.HUASHU_PROBE||path.join(LAB,'vendor/huashu/design-lint-collect.js'); // MIT (vendor/PROCEDENCIA.md)
 const b64=f=>fs.readFileSync(f).toString('base64');
 const FONT_CSS=[
  ['RUBIK Inter',400,'normal',path.join(IFC_FONTS,'Inter-Regular.ttf'),'truetype'],
@@ -260,11 +260,11 @@ function build(){
  let E=null;if(process.env.STUDIO_B1!=='0'&&!S.variant&&process.env.STUDIO_ENTREGA!=='0'){const h=require('./b1.cjs')({S,T,P,B,BV,prof,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,W_COLOR,wallById,
   nf,num,eur,esc,tint,bbox,centroid,plan,axo,tagLayout,tagSvg,scaleBar,legend,doc,fig,img,studioBlock,coverDrawing,coverImage,materialsPage,objectRows,planPage,
   STUDIO,AREA,INTRO,NOGEO,emptyDrawing,NO_GEO_TEXT,roomArea,biggest,keyList,LOGO,noBudgetPage,schedulePages,LONG_ROOMS,sheetTable,annexPage}).helpers;
-  E=require('./entrega.cjs')({S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
+  E=require('./entrega.cjs')({snapFile:path.resolve(snapDir,'snapshot.json'),S,T,TITLE,date,rev,rooms,counted,area,matById,floors,views,viewBy,VIEW_NOTE,STATUS_AREA,nf,num,eur,esc,plan,axo,doc,fig,STUDIO,AREA,INTRO,prof,LOGO,objectRows,roomArea,planPage,coverDrawing,FONT_CSS,b64,outDir,LAB,...h});
   Object.assign(D,E.D);Object.assign(meta,E.meta);}
  return {D,meta,E};}
 // ---------- Huashu design_lint, ported: same probe (read from the donor file), print floors 12 px body / 9.3 px label ----------
-const PROBE=(()=>{try{const s=fs.readFileSync(HUASHU_LINT,'utf8'),k='COLLECT_JS = r"""',i=s.indexOf(k)+k.length;return s.slice(i,s.indexOf('"""',i));}catch{return null;}})();
+const PROBE=fs.readFileSync(HUASHU_PROBE,'utf8'); // sin la sonda no hay lint: se falla, no se omite en silencio
 function judge(f){const red=[],yellow=[];if(f.broken.length)red.push(`imágenes rotas ${f.broken.length}`);if(f.bodySmall.length)red.push(`texto de lectura bajo el mínimo ${f.bodySmall.length}: ${JSON.stringify(f.bodySmall.slice(0,2))}`);
  if(f.small.length>=3)red.push(`texto bajo el mínimo de etiqueta ${f.small.length}: ${JSON.stringify(f.small.slice(0,3))}`);if(f.lowContrast.length)red.push(`contraste insuficiente ${f.lowContrast.length}: ${JSON.stringify(f.lowContrast.slice(0,3))}`);
  const chrome=[];if(f.eyebrows.length>=3)chrome.push(`etiquetas en mayúsculas espaciadas ${f.eyebrows.length}`);if(f.dots>=2)chrome.push(`cadenas «A · B · C» ${f.dots}`);if(f.emDashLabels)chrome.push(`etiquetas «WORD — texto» ${f.emDashLabels}`);if(f.arrows>=2)chrome.push(`flechas de cola ${f.arrows}`);if(f.monoSmall>=4)chrome.push(`mono pequeña ${f.monoSmall}`);
@@ -276,10 +276,11 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
  {const pg=await browser.newPage();for(const v of S.views){const src='data:image/png;base64,'+b64(path.join(snapDir,v.file));
    const bg=await pg.evaluate(async s=>{const im=new Image();im.src=s;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(2,2,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`;},src);
    views.push({...v,src,bg,fit:v.kind==='overview'?'contain':'cover'});}await pg.close();}
- const {D,meta,E}=build();const qa={meta,probe:!!PROBE,docs:{}};
+ const {D,meta,E}=build();const qa={meta,probe:!!PROBE,docs:{}};const fresh=new Set();
  for(const [id,html] of Object.entries(D)){const f=path.resolve(outDir,id+'.html');fs.writeFileSync(f,html);const vw=VW[id]||1123;
   const ctx=await browser.newContext({locale:'es-ES',viewport:{width:vw,height:1000}});const ext=[],errors=[];ctx.on('request',r=>{if(!/^(file|data|about):/.test(r.url()))ext.push(r.url());});
   const pg=await ctx.newPage();pg.on('pageerror',e=>errors.push(e.message));await pg.addInitScript('window.__MIN_BODY=12;window.__MIN_LABEL=9.3;');await pg.goto('file://'+f);await pg.evaluate(()=>document.fonts.ready);
+  if(process.env.FLOW_FAULT==='multi'&&id==='commercial-proposal-client-v3')await pg.evaluate(()=>{const t=document.querySelector('table.flow');t.after(t.cloneNode(true));}); // negative test: two flow tables in one page
   const flow=await pg.evaluate(`(${FLOW_JS})()`);if(flow.tables){fs.writeFileSync(f,'<!doctype html>\n'+(await pg.evaluate(()=>document.documentElement.outerHTML)));}
   const H=await pg.evaluate(()=>document.documentElement.scrollHeight);await pg.setViewportSize({width:vw,height:Math.min(H,16000)});
   const m=await pg.evaluate(()=>{const pages=[...document.querySelectorAll('.page')];const over=[];
@@ -308,23 +309,29 @@ const FLOW_JS=fs.readFileSync(path.join(__dirname,'flow.js'),'utf8').replace(/^\
   let lint=null;if(PROBE){const facts=await pg.evaluate(`(${PROBE})()`);lint={...judge(facts),fonts:facts.fonts,display:facts.display,body:facts.body};}
   // v1.2 · A04/ST05: a table that breaks the invariant (row lost, duplicated or taller than a page) never becomes a PDF.
   const {rowText,...flowRec}=flow;const pdfPath=path.join(outDir,id+'.pdf');let pdfRows=null;
-  if(flow.tables&&!flow.ok){if(fs.existsSync(pdfPath))fs.rmSync(pdfPath);qa.blocked=(qa.blocked||[]).concat({doc:id,reason:flow.oversized.length?'fila más alta que una página':'invariante de filas',oversized:flow.oversized,labelErrors:flow.labelErrors});}
-  else{if(process.env.FLOW_FAULT)await pg.addStyleTag({content:'@media print{table.flow tbody tr:nth-child(4){visibility:hidden}}'}); // negative test of ST05 only
-   await pg.emulateMedia({media:'print'});await pg.pdf({path:pdfPath,preferCSSPageSize:true,printBackground:true});
+  if(fs.existsSync(pdfPath))fs.rmSync(pdfPath); // v1.3 A11: nunca queda un PDF de una ejecución anterior
+  if(!flow.ok){qa.blocked=(qa.blocked||[]).concat({doc:id,reason:flow.oversized.length?'fila más alta que una página':flow.multiTable.length?'varias tablas paginables en una página (no soportado)':flow.postOverflow.length?'desborde tras escribir las etiquetas de continuación':flow.orphanHeads.length?'cabecera de capítulo huérfana':'invariante de filas',oversized:flow.oversized,labelErrors:flow.labelErrors,multiTable:flow.multiTable,postOverflow:flow.postOverflow,orphanHeads:flow.orphanHeads});}
+  else{if(process.env.FLOW_FAULT==='print')await pg.addStyleTag({content:'@media print{table.flow tbody tr:nth-child(4){visibility:hidden}}'}); // negative test of ST05 only
+   await pg.emulateMedia({media:'print'});const tmpPdf=pdfPath+'.'+process.pid+'.tmp';await pg.pdf({path:tmpPdf,preferCSSPageSize:true,printBackground:true});
    // ST05: compare every row with the text actually printed. Count each row's main text in the final DOM and in the PDF.
    // ST05: per-cell proof on the printed PDF. Each canonical cell of each flow row is located in its page (rect relative to
    // the page, CSS px → PDF pt ×0.75); the words that pdftotext -tsv places inside that rect must be exactly the cell's text.
    if(flow.tables){const cells=await pg.evaluate(()=>{const pages=[...document.querySelectorAll('section.page')];const out=[];
      for(const td of document.querySelectorAll('table.flow tbody td')){if(td.hasAttribute('data-repeat'))continue;const t=td.textContent.replace(/\s+/g,' ').trim();if(!t)continue;
       const sec=td.closest('section.page'),pr=sec.getBoundingClientRect(),r=td.getBoundingClientRect();out.push({page:pages.indexOf(sec)+1,x:r.left-pr.left,y:r.top-pr.top,w:r.width,h:r.height,t,k:td.parentElement.dataset.k});}return out;});
-    const tsv=require('child_process').execFileSync('pdftotext',['-q','-tsv',pdfPath,'-']).toString().split('\n').slice(1).map(l=>l.split('\t')).filter(c=>c[0]==='5'&&c[11]&&c[11].trim()).map(c=>({p:+c[1],x:+c[6],y:+c[7],w:+c[8],h:+c[9],t:c[11]}));
+    const tsv=require('child_process').execFileSync('pdftotext',['-q','-tsv',tmpPdf,'-']).toString().split('\n').slice(1).map(l=>l.split('\t')).filter(c=>c[0]==='5'&&c[11]&&c[11].trim()).map(c=>({p:+c[1],x:+c[6],y:+c[7],w:+c[8],h:+c[9],t:c[11]}));
     const norm=t=>t.replace(/[\u00a0\u2009\u202f]/g,' ').replace(/\s+/g,'').trim();const bad=[];
     for(const c of cells){const X=c.x*.75-1,Y=c.y*.75-1,W=c.w*.75+2,H=c.h*.75+2;const got=tsv.filter(w=>w.p===c.page&&w.x+w.w/2>=X&&w.x+w.w/2<=X+W&&w.y+w.h/2>=Y&&w.y+w.h/2<=Y+H).map(w=>w.t).join(' ');
      if(norm(got)!==norm(c.t))bad.push({row:c.k,page:c.page,want:c.t.slice(0,60),got:got.slice(0,60)});}
     pdfRows={cells:cells.length,rows:new Set(cells.map(c=>c.k)).size,mismatches:bad.slice(0,10),bad:bad.length,ok:!bad.length};
-    if(!pdfRows.ok)qa.blocked=(qa.blocked||[]).concat({doc:id,reason:'celdas impresas distintas del documento',mismatches:bad.slice(0,10)});}}
+    if(!pdfRows.ok)qa.blocked=(qa.blocked||[]).concat({doc:id,reason:'celdas impresas distintas del documento',mismatches:bad.slice(0,10)});}
+   // v1.3 A11: el PDF solo se publica (renombrado atómico) si ha pasado todas sus pruebas; si no, se borra el temporal.
+   if(pdfRows&&!pdfRows.ok)fs.rmSync(tmpPdf);else{fs.renameSync(tmpPdf,pdfPath);fresh.add(id);}}
   qa.docs[id]={...m,flow:flowRec,pdfRows,external:ext,errors,lint};await ctx.close();}
- if(E)qa.entregaWeb=E.writeWeb();
+ // v1.3 A11: con un documento bloqueado NO se publica la entrega: se descarta la preparación y se escribe un informe de
+ // rechazo aparte. La entrega anterior aprobada (si existe) queda intacta. Solo se copian los PDF producidos en ESTA ejecución.
+ if(E){if(qa.blocked){E.discard();fs.writeFileSync(path.join(outDir,'entrega-rechazo.json'),JSON.stringify({schema:'rubik-lab-entrega-rechazo/1',generated:new Date().toISOString(),project:S.project.id,revision:S.project.revision,blocked:qa.blocked,note:'No se ha publicado la entrega. La anterior, si existe, sigue en entrega/ sin cambios.'},null,1));}
+  else{qa.entregaWeb=E.writeWeb(fresh);if(fs.existsSync(path.join(outDir,'entrega-rechazo.json')))fs.rmSync(path.join(outDir,'entrega-rechazo.json'));}}
  fs.writeFileSync(path.join(outDir,'qa.json'),JSON.stringify(qa,null,1));
  for(const [k,v] of Object.entries(qa.docs))console.log(k,'pages',v.pages,'blocks',JSON.stringify(v.blockOverlaps),'overflow',v.overflowCount,'textOverlaps',v.textOverlapCount,'spill',v.spillCount,'svgClip',v.svgClipCount,'flow',JSON.stringify(v.flow),'tagOverlaps',v.tagOverlaps,'ext',v.external.length,'errors',v.errors.length,'RED',JSON.stringify(v.lint?.red),'YELLOW',JSON.stringify(v.lint?.yellow));
  console.log('meta',JSON.stringify(meta));if(qa.blocked){console.log('BLOQUEADO',JSON.stringify(qa.blocked));process.exitCode=2;}await browser.close();})().catch(e=>{console.error(e);process.exit(1);});

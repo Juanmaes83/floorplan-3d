@@ -11,7 +11,9 @@
 function paginateFlow(){
  const rowsOf=()=>[...document.querySelectorAll('table.flow tbody tr')];
  const canon=tr=>[...tr.cells].filter(td=>!td.hasAttribute('data-repeat')).map(td=>td.textContent.replace(/\s+/g,' ').trim()).join(' | ');
- rowsOf().forEach((tr,i)=>{tr.dataset.k=String(i);});const before=rowsOf().map(t=>t.dataset.k+'#'+canon(t));
+ // v1.3: a page with more than one flow table is NOT supported: it is reported (multiTable) and the document is refused.
+ const multiTable=[...document.querySelectorAll('section.page')].filter(s=>s.querySelectorAll('table.flow').length>1).map(s=>[...document.querySelectorAll('section.page')].indexOf(s)+1);
+ [...document.querySelectorAll('table.flow')].forEach((t,ti)=>[...t.tBodies].flatMap(b=>[...b.rows]).forEach((tr,i)=>{tr.dataset.k=ti+'.'+i;}));const before=rowsOf().map(t=>t.dataset.k+'#'+canon(t));
  // rowText: per row, its most distinctive canonical cell (fewest repetitions across rows; longest on ties)
  const cellsOf=t=>[...t.cells].filter(td=>!td.hasAttribute('data-repeat')).map(td=>td.textContent.replace(/\s+/g,' ').trim()).filter(x=>x.length>2);
  const freq=new Map();rowsOf().forEach(t=>cellsOf(t).forEach(c=>freq.set(c,(freq.get(c)||0)+1)));
@@ -19,7 +21,7 @@ function paginateFlow(){
  const bottomOf=sec=>{let m=0;for(const el of sec.querySelectorAll(':scope > :not(.foot) *')){const r=el.getBoundingClientRect();if(r.height&&r.bottom>m)m=r.bottom;}return m;};
  const limitOf=sec=>{const f=sec.querySelector(':scope > .foot');const b=sec.getBoundingClientRect();return (f?f.getBoundingClientRect().top:b.bottom-48)-4;};
  const chains=[];let unsplittable=0;const oversized=[];
- for(const first of [...document.querySelectorAll('section.page')].filter(s=>s.querySelector('table.flow'))){const chain=[first];let sec=first;
+ for(const first of [...document.querySelectorAll('section.page')].filter(s=>s.querySelectorAll('table.flow').length===1)){const chain=[first];let sec=first;
   while(true){const tb=sec.querySelector('table.flow tbody');const moved=[];
    while(bottomOf(sec)>limitOf(sec)&&tb.rows.length>1){moved.unshift(tb.rows[tb.rows.length-1]);tb.rows[tb.rows.length-1].remove();}
    while(moved.length&&tb.rows.length>1&&tb.rows[tb.rows.length-1].classList.contains('chap')){const r=tb.rows[tb.rows.length-1];r.remove();moved.unshift(r);}
@@ -36,4 +38,9 @@ function paginateFlow(){
  const after=rowsOf().map(t=>t.dataset.k+'#'+canon(t));
  let labelErrors=0;for(const td of document.querySelectorAll('table.flow td[data-repeat]')){const t=td.textContent.trim();if(t&&t!==td.dataset.repeat.trim())labelErrors++;}
  const same=before.length===after.length&&before.every((v,i)=>v===after[i]);
- return {tables:chains.length,rows:before.length,pagesAdded:chains.reduce((s,c)=>s+c.length-1,0),unsplittable,oversized,labelErrors,ok:same&&!unsplittable&&!labelErrors,rowText};}
+ // v1.3: geometry measured AGAIN after the continuation labels, «Parte k de n» and page numbers were written.
+ const postOverflow=chains.flat().filter(s=>bottomOf(s)>limitOf(s)).map(s=>pages.indexOf(s)+1);
+ // v1.3: a page whose only body row is a chapter heading (orphan heading) is a fault.
+ const orphanHeads=chains.flat().filter(s=>{const r=[...s.querySelectorAll('table.flow tbody tr')];return r.length&&r.every(x=>x.classList.contains('chap'));}).map(s=>pages.indexOf(s)+1);
+ return {tables:chains.length,rows:before.length,pagesAdded:chains.reduce((s,c)=>s+c.length-1,0),unsplittable,oversized,labelErrors,multiTable,postOverflow,orphanHeads,
+  ok:same&&!unsplittable&&!labelErrors&&!multiTable.length&&!postOverflow.length&&!orphanHeads.length,rowText};}

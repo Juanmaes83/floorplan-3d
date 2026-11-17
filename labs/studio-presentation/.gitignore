@@ -1,5 +1,5 @@
-tools/node_modules/
-out/*/*.html
-out/v3/b2/*/*.pdf
-out/v3/b2/*/*.html
-dist/
+out/*/entrega-anterior/
+out/*/.entrega-preparacion-*/
+out/*/entrega-rechazo.json
+out/*/*.pdf.*.tmp
+.exportando-*/

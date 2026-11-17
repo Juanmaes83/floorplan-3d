@@ -6,7 +6,7 @@ import {createRequire} from 'node:module';import {compiler,compilePdf} from './t
 const here=path.dirname(fileURLToPath(import.meta.url)),LAB=path.resolve(here,'../..'),out=process.argv[2]||path.join(LAB,'out/v3/b3');fs.mkdirSync(out,{recursive:true});
 const S=JSON.parse(fs.readFileSync(path.join(LAB,'snapshot/snapshot.json'),'utf8'));
 const lines=S.budget.test.view.professional.chapters.flatMap(c=>c.lines);
-const INTER=process.env.IFC_FONTS?path.join(process.env.IFC_FONTS,'Inter-Regular.ttf'):'/home/user/donors/ifc-sheet/packages/ifcsheet/fonts/Inter-Regular.ttf';
+const INTER=process.env.IFC_FONTS?path.join(process.env.IFC_FONTS,'Inter-Regular.ttf'):new URL('../../vendor/fonts/inter/Inter-Regular.ttf',import.meta.url).pathname;
 const INTERB=INTER.replace('Regular','Bold');
 const nf=new Intl.NumberFormat('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
 const EXTREME='Partida extrema de prueba: '+'descripción muy larga que no cabe en una línea y debe partirse en varias sin salirse de la celda ni de la página; '.repeat(14)+'SuperPalabraSinEspaciosParaComprobarCorteDeLineaSinGuiones'.repeat(3)+' FIN-EXTREMA';
