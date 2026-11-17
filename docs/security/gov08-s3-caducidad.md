@@ -132,7 +132,7 @@ Supone migrar las publicaciones existentes y no entra en este corte.
 |---|---|
 | `tests/gov08-s3-expiry.test.cjs` (servidor con reloj simulado, nueva) | **23/23** |
 | `tests/gov08-s3-expiry.browser.test.cjs` (app real con reloj del navegador y del servidor, nueva, partición `blocking`) | **4/4** |
-| Ensayo local de `scripts/qa/gov08-s3-preview-validation.cjs` (funciones reales y almacén simulado) | **13/13** |
+| Ensayo local de `scripts/qa/gov08-s3-preview-validation.cjs` endurecido (funciones reales y almacén simulado) | **30/30**; con un almacén equivocado o no vacío, se detiene sin escribir |
 | Suite pura completa (`tests/*.test.cjs` sin navegador) | **1392/0** |
 | `share-withdraw` 2/2 · `share-link` 1/1 · `client-share` 2/2 · `delivery-3d-link` 1/1 · `gov08-s2-focus` 1/1 · `gov08-view-isolation` 8/8 · `ft3d-8-delivery` 6/6 | verde |
 
