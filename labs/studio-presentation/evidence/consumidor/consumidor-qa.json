@@ -1,0 +1,29 @@
+{
+ "generated": "2026-11-17T18:38:35.285Z",
+ "navegadores": {
+  "chromium": "Playwright 1.63 (instalado)",
+  "firefox": "no instalado (prohibido instalar navegadores en este entorno): pendiente en dispositivos reales",
+  "webkit": "ídem"
+ },
+ "paquetes": [],
+ "rendimiento": [],
+ "postMessage": {
+  "antes": 11,
+  "trasEmisorAjeno": 11,
+  "ajenoIgnorado": true,
+  "trasPagina": 10,
+  "paginaObedecida": true
+ },
+ "rendimientoExportacion": {
+  "repeticiones": 0
+ },
+ "resumen": {
+  "paquetes": 0,
+  "correctos": 0,
+  "vistas": 0,
+  "rendimiento": [],
+  "exportacion": {
+   "repeticiones": 0
+  }
+ }
+}

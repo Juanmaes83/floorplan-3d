@@ -3,6 +3,7 @@
   {
    "k": "escritorio integral",
    "v": [
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -47,10 +48,21 @@
   {
    "k": "escritorio registro",
    "v": {
-    "file": "registro-entrega-obra-2026-11-17.json",
+    "file": "seleccion-obra-2026-11-17.json",
     "tipo": "obra",
+    "claves": [
+     "tipo",
+     "capitulos",
+     "documentos",
+     "omitir",
+     "modo",
+     "idioma",
+     "reconocidos",
+     "seleccionadaEn",
+     "base",
+     "nota"
+    ],
     "capitulos": [
-     "portada",
      "vivienda",
      "obra",
      "documentos",
@@ -59,8 +71,8 @@
     "documentos": [
      "architecture-sheet-strip"
     ],
-    "avisos": 6,
-    "piezas": 15,
+    "avisos": 0,
+    "piezas": 0,
     "log": 1
    }
   },
@@ -74,6 +86,7 @@
   {
    "k": "movil integral",
    "v": [
+    "concepto",
     "vivienda",
     "dibujo",
     "estancias",
@@ -118,10 +131,21 @@
   {
    "k": "movil registro",
    "v": {
-    "file": "registro-entrega-obra-2026-11-17.json",
+    "file": "seleccion-obra-2026-11-17.json",
     "tipo": "obra",
+    "claves": [
+     "tipo",
+     "capitulos",
+     "documentos",
+     "omitir",
+     "modo",
+     "idioma",
+     "reconocidos",
+     "seleccionadaEn",
+     "base",
+     "nota"
+    ],
     "capitulos": [
-     "portada",
      "vivienda",
      "obra",
      "documentos",
@@ -130,8 +154,8 @@
     "documentos": [
      "architecture-sheet-strip"
     ],
-    "avisos": 6,
-    "piezas": 15,
+    "avisos": 0,
+    "piezas": 0,
     "log": 1
    }
   },

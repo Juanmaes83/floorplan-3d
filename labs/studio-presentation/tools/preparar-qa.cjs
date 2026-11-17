@@ -5,7 +5,7 @@ const path=require('path'),fs=require('fs');const {chromium}=require('playwright
  for(const vp of [{n:'escritorio',w:1440,h:900},{n:'movil',w:390,h:844,m:true}]){const ctx=await b.newContext({viewport:{width:vp.w,height:vp.h},acceptDownloads:true,isMobile:!!vp.m,hasTouch:!!vp.m});const ext=[],errors=[];
   ctx.on('request',r=>{if(!/^(file|data|blob|about):/.test(r.url()))ext.push(r.url());});const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));
   await p.goto('file://'+path.resolve(outV,'profesional/preparar-entrega.html'));await p.waitForTimeout(1500);
-  const fr=()=>p.frame({url:/entrega\/index\.html/});
+  const fr=()=>p.frame({url:/vista-previa\.html|entrega\/index\.html/});
   const visible=async()=>fr().evaluate(()=>[...document.querySelectorAll('section.ch')].filter(s=>!s.hidden).map(s=>s.id));
   step(vp.n+' integral',await visible());
   await p.locator('input[name=tipo][value=obra]').check();await p.waitForTimeout(500);
@@ -13,7 +13,7 @@ const path=require('path'),fs=require('fs');const {chromium}=require('playwright
   await p.locator('[data-ch=decisiones]').uncheck();await p.waitForTimeout(300);step(vp.n+' sin decisiones',{visible:await visible(),note:await p.locator('#custom').textContent()});
   if(vp.n==='escritorio'){await p.locator('[data-w="390px"]').click();await p.waitForTimeout(400);await p.screenshot({path:path.join(shots,'preparar-escritorio-vista-movil.png')});await p.locator('[data-w="100%"]').click();}
   const [d]=await Promise.all([p.waitForEvent('download'),p.locator('#reg').click()]);const reg=JSON.parse(fs.readFileSync(await d.path(),'utf8'));
-  fs.writeFileSync(path.join(shots,`registro-${vp.n}.json`),JSON.stringify(reg,null,1));step(vp.n+' registro',{file:d.suggestedFilename(),tipo:reg.tipo,capitulos:reg.capitulos,documentos:reg.documentos,avisos:reg.avisos.length,piezas:reg.piezas.length,log:await p.locator('#log li').count()});
+  fs.writeFileSync(path.join(shots,`registro-${vp.n}.json`),JSON.stringify(reg,null,1));step(vp.n+' registro',{file:d.suggestedFilename(),tipo:reg.tipo,claves:Object.keys(reg),capitulos:reg.capitulos||reg.seleccion?.capitulos,documentos:reg.documentos||reg.seleccion?.documentos,avisos:(reg.avisos||reg.comprobaciones||[]).length,piezas:(reg.piezas||reg.archivos||[]).length,log:await p.locator('#log li').count()});
   await p.locator('input[name=tipo][value=integral]').check();await p.waitForTimeout(500);await p.screenshot({path:path.join(shots,`preparar-${vp.n}.png`),fullPage:vp.n==='movil'});
   step(vp.n+' red/errores',{ext:ext.length,errors});await ctx.close();}
  fs.writeFileSync(path.join(shots,'preparar-qa.json'),JSON.stringify(res,null,1));await b.close();})().catch(e=>{console.error(e);process.exit(1);});

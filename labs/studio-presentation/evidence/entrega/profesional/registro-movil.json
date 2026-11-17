@@ -1,16 +1,6 @@
 {
- "schema": "rubik-lab-registro-entrega/0.1",
- "registradoEn": "2026-11-17T14:40:25.364Z",
  "tipo": "obra",
- "tipoNombre": "Explicación de la obra",
- "proyecto": {
-  "id": "prj_reference-home",
-  "name": "Vivienda de ejemplo",
-  "revision": "rv1-0f3e96422fd20e08"
- },
- "estudio": "Estudio Ejemplo",
  "capitulos": [
-  "portada",
   "vivienda",
   "obra",
   "documentos",
@@ -19,99 +9,15 @@
  "documentos": [
   "architecture-sheet-strip"
  ],
- "avisos": [
-  {
-   "que": "Identidad del estudio",
-   "estado": "warn",
-   "detalle": "Estudio Ejemplo: perfil sintético del laboratorio (dominio .invalid). En una entrega real se usa el perfil de «Mi estudio» sin cambiar el logotipo ni la identidad."
-  },
-  {
-   "que": "Presupuesto revisado",
-   "estado": "warn",
-   "detalle": "0 de 11 partidas revisadas. El cliente verá «Pendiente de revisión del estudio». Precios de prueba de laboratorio. No son precios de mercado ni una oferta."
-  },
-  {
-   "que": "Imágenes IA",
-   "estado": "warn",
-   "detalle": "3 imágenes, siempre junto a una vista del modelo y rotuladas «orientativa». Salón: generada desde otra vista de la misma estancia (la imagen enviada no se conservó). RUBIK guarda los renders solo en la memoria de la sesión: guárdalos antes de cerrar."
-  },
-  {
-   "que": "Plan de obra",
-   "estado": "warn",
-   "detalle": "Plan de ejemplo de la demo de RUBIK importado al proyecto: fechas ilustrativas, sin partidas vinculadas. Rotulado así en la entrega; no es un calendario de obra."
-  },
-  {
-   "que": "Enlace para el cliente",
-   "estado": "info",
-   "detalle": "Esta entrega es una carpeta para ver sin conexión. La publicación remota de la entrega de obra está desactivada hasta la decisión DEC-05. Si se publica un enlace: «no indexado» no es privado (lo abre cualquiera que lo tenga) y la caducidad del almacenamiento depende de #244."
-  },
-  {
-   "que": "Visita 3D interactiva",
-   "estado": "info",
-   "detalle": "No va en la carpeta: necesita un enlace publicado. Este proyecto es de una planta; en edificios de varias plantas la visita del cliente tiene restricciones."
-  }
- ],
- "piezas": [
-  {
-   "file": "media/ia-1.jpg",
-   "sha256": "76027ae68113928e44bc878bef664c9bd2a90447b43e5a2b2c9074645d99f3e5"
-  },
-  {
-   "file": "media/ia-2.jpg",
-   "sha256": "b92e64cb06caf927198abee750288b16d6f8a2887721c5f9f56d5f87b6988842"
-  },
-  {
-   "file": "media/ia-3.jpg",
-   "sha256": "6049003934f0f4b2a8c732dd049ff56e0d42a78bb5170992e1eb453ccd9b68ce"
-  },
-  {
-   "file": "media/vista-01-overview.jpg",
-   "sha256": "72a025ed27bb00eb6366db55c5aaba3d4c7b863be49ad7e2aad6d0f6fe6ea195"
-  },
-  {
-   "file": "media/vista-02-room.jpg",
-   "sha256": "52676b877f20e29d616ce7afdbb473739f36b76fa33dc7475e0f74b26b7f54a9"
-  },
-  {
-   "file": "media/vista-03-room.jpg",
-   "sha256": "64c838d7d90546cc57ed255c5160a83035283e56fd71bbe64d33b80c0882b73d"
-  },
-  {
-   "file": "media/vista-04-room.jpg",
-   "sha256": "8def9bfa9c253fb1f3930162f6e74cc7578edbac46e4801c1ec56ddeeb8f7cb1"
-  },
-  {
-   "file": "media/vista-05-room.jpg",
-   "sha256": "2bdee371aa3f129af3791d3673129bb590f8b819c2a1ce171d4c08ecafef793a"
-  },
-  {
-   "file": "media/dibujo-vivo.jpg",
-   "sha256": "9dd582d26dec3a37fe370f73a0e16d3284bb5cec2b2eeab37120adf05e8d759e"
-  },
-  {
-   "file": "media/recorrido.mp4",
-   "sha256": "ae93eb6338f2b36a0c61a55ad0ca9758ec5aff017d4cb83c4ea5b1240d5994c0"
-  },
-  {
-   "file": "media/recorrido-01-master.jpg",
-   "sha256": "24d52b61f06716f5b9788ea28873538116d893caac3fe7c13800a275df75591d"
-  },
-  {
-   "file": "media/recorrido-02-kitchen.jpg",
-   "sha256": "044937777a68242bbbbc7702d180bbbf02dca21c6e1478d10a885840a4a7fe78"
-  },
-  {
-   "file": "media/recorrido-03-dining.jpg",
-   "sha256": "33f052bbc68160a844252d5cd5b3e459c572291ff775291b49f5694d81c48dee"
-  },
-  {
-   "file": "media/recorrido-04-living.jpg",
-   "sha256": "694f23bfecf1120acd8e5861b90e0fb41f31a601a21d919a4385912b5e7bb5e6"
-  },
-  {
-   "file": "documentos/architecture-sheet-strip.pdf",
-   "sha256": "1a970bdfe6a80717467cc3e3a34c81aeafb37d9d16b466b569eb639e87563ac9"
-  }
- ],
- "nota": "Registro local del laboratorio: no se ha enviado ni publicado nada."
+ "omitir": [],
+ "modo": "cliente",
+ "idioma": "es",
+ "reconocidos": [],
+ "seleccionadaEn": "2026-11-17T18:39:52.563Z",
+ "base": {
+  "proyecto": "prj_reference-home",
+  "revision": "rv1-0f3e96422fd20e08",
+  "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390"
+ },
+ "nota": "Selección para tools/preparar.cjs. No es el registro de la entrega: el registro es el MANIFIESTO.json que escribe la exportación, con las comprobaciones recalculadas sobre los archivos finales."
 }
