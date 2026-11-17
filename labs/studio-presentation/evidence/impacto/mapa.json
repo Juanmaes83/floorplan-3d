@@ -4,17 +4,17 @@
     "proyecto": "prj_reference-home",
     "revision": "rv1-0f3e96422fd20e08",
     "snapshotSha256": "fcb6e19f07cd69c7a757fa2a16cb229f62a6d3b8bae29cb358041e7fb071b390",
-    "registroSha256": "5c4dcb1546b724569614b01a0ab4a9a9ae36dd9ec84c786dc75837144d5a596b"
+    "registroSha256": "a4b38645b61e8ccce09b4378ff036333bf7e4ca45e5dbadbc1c93c33e8be1ee1"
   },
   "entorno": {
-    "node": "v24.20.0",
+    "node": "v22.23.4",
     "plataforma": "linux",
     "arquitectura": "x64",
-    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "kernel": "6.18.44-fc-v553",
     "playwright": "1.63.0",
     "poppler": "pdftotext version 24.02.0",
     "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
-    "python": "Python 3.12.3",
+    "python": "Python 3.13.18",
     "tz": "UTC"
   },
   "dependenciasComunes": {
@@ -164,9 +164,9 @@
       "bytes": 53915
     },
     "i18n/en.exact.cjs": {
-      "sha256": "b8619604a80fa55cb5d7bc00c0bbcbb2a5ec43d7ae2550a996f4eae1919fdcf8",
-      "gitBlob": "f55a87e300e9080904731608ad9346a75171aaea",
-      "bytes": 31397
+      "sha256": "7aa1a7efb4c5afadb5e22dc4c1f1beb252812d7fa66896af8aa5b3d329a18762",
+      "gitBlob": "b7663f526d73753b3b620d33a2478bcf7cd459d5",
+      "bytes": 34061
     },
     "i18n/en.manifest.cjs": {
       "sha256": "c611222fa79a29fd11a066ae1d5fb29816229423bc9967f853c83f09be851d65",
@@ -174,14 +174,19 @@
       "bytes": 3170
     },
     "i18n/en.rules.cjs": {
-      "sha256": "7bf495e031dc052ab11e2c703906d0bdce5a5d933110072d9f79b7419772bb63",
-      "gitBlob": "663214779afa1d7101998eeb09eccf17830ae713",
-      "bytes": 12160
+      "sha256": "945946e80d5c23a15ea864ddc6e351a96220bf72ea5af4f61e4a6c09f5c094a0",
+      "gitBlob": "9aedb05e3b26b6e2e2562c793f4c56ad3c66478b",
+      "bytes": 12387
     },
     "i18n/es-words.cjs": {
       "sha256": "af78d14620253a55847ee5d8800b86cf0f3f9205c65795850fb5c7d761aa2a56",
       "gitBlob": "166db93f5828af8e90ad386ccbd8b65e61a93c1c",
       "bytes": 1064
+    },
+    "snapshot/aportaciones.json": {
+      "sha256": "bcb1407ab55fd2e7a418183c3d040ffff2bce8c90a313b16375bf91467de46f6",
+      "gitBlob": "86357ee499207143a6022aa11983b3f616ddfeff",
+      "bytes": 2693
     },
     "snapshot/assets/plan.svg": {
       "sha256": "6cbec91b601f146b40e4fa67cb7f9d12393a385b0523edcb656b3cc26cb62339",
@@ -248,6 +253,11 @@
       "gitBlob": "0e99abf7e56dc77356530153f5ee4414f48bfca8",
       "bytes": 3748
     },
+    "tools/auditoria-recetas.cjs": {
+      "sha256": "253187ea01c790213f9f39d0b3c985eb77597919b284bc22218604633fc81376",
+      "gitBlob": "ecd6df21a5b9e7c88e915399ffb06d3cdbc9e239",
+      "bytes": 8432
+    },
     "tools/b1.cjs": {
       "sha256": "f8541b8c8922ab97d4b4ec537348306195eb9f8afceb6f7e6d728a18f1ea8bd0",
       "gitBlob": "22e551855fad3444b1796dd47053c81782cf9c62",
@@ -257,6 +267,16 @@
       "sha256": "2735f0e35dc7d2b1ba65bfb315bcefaadbb3b1b8f6afc67aaf3452b2bf2d0e18",
       "gitBlob": "e8bb28e15187fd38917c59708809a38057fdae20",
       "bytes": 7841
+    },
+    "tools/bloques-qa.cjs": {
+      "sha256": "e3459d002d43818207538970f1b3433ad48c11fca8d6895d324a368517a0c157",
+      "gitBlob": "4360990c900fcd21cd581454fd2c7895aeda90d4",
+      "bytes": 6564
+    },
+    "tools/bloques-receta.cjs": {
+      "sha256": "05adde853bdca7c88cc6b17d07732d678b80dc1ea363d0a4b1be9c5876db0546",
+      "gitBlob": "7346bfc0f04c9dff0a0d2ac6e05dfefec9363b22",
+      "bytes": 15271
     },
     "tools/catalogo-entrega.cjs": {
       "sha256": "41c1a5b01f6b46b8756576bea5504e989d6908f2764259d2a114988a7ae15452",
@@ -269,9 +289,9 @@
       "bytes": 13968
     },
     "tools/compose.cjs": {
-      "sha256": "f9598d0a29881408ff7135d3ad6527ebfe4c6ebb1db4a04bdfeb4f099ee14636",
-      "gitBlob": "ae7926fcd9d97d008546eb3081bc17e16ffe9518",
-      "bytes": 65132
+      "sha256": "a6e2eb11e60f3d7cbc7396c306a1ce171a0d2464cb9c8d8e41b106064cca0858",
+      "gitBlob": "f640c78ebe5b2c667a46427d6457af4c26208a5c",
+      "bytes": 67506
     },
     "tools/conciliacion.cjs": {
       "sha256": "e127107599fa62d4cf5a4dc8dd1ea84ec9df6a77c931d574a8ae12520a7d4684",
@@ -318,6 +338,11 @@
       "gitBlob": "60d2047a544b78a252d5bbb85f87be0a4229b536",
       "bytes": 5180
     },
+    "tools/economia-zip-qa.cjs": {
+      "sha256": "bf5e9f1f93fc685d5c2623b5dac74cda728488446af63d533bf1327c85d55fbd",
+      "gitBlob": "a0089028c550738d93b1d467e23b0254e36c8e57",
+      "bytes": 10099
+    },
     "tools/engines/bench.mjs": {
       "sha256": "2afced6475aa5a8f4430f5a04172bfe7c70568bb31a1377bc71668df127f6779",
       "gitBlob": "921e2a77c69a5ff9d71d008ccab5f23e2d7fd7a4",
@@ -334,9 +359,9 @@
       "bytes": 5459
     },
     "tools/entrega.cjs": {
-      "sha256": "83c3ad4485a94d6ccaacf8f77b148ba1cdf56329ac7f9e51b830ccb1f5ae76b6",
-      "gitBlob": "b3f22ef04a231636b53cc8d3a424bf92ef734edb",
-      "bytes": 82869
+      "sha256": "b80b6e22891d2db32613a83bd9edc62d41195bf322af76ec58bf6edd4a903d39",
+      "gitBlob": "3a4f61bdd70f7679f3d4268d58eba5bc1920f3b5",
+      "bytes": 86210
     },
     "tools/estado-entrega.cjs": {
       "sha256": "8400b9e3e3df937875456510ff5d5f9f1cbcf42df6d720d52a66035d94eae126",
@@ -359,9 +384,9 @@
       "bytes": 27996
     },
     "tools/exportar.cjs": {
-      "sha256": "ef03625e83eca552d0d8d9e42e4766e67e27430f3e7f1c0a8a8b5c8eec38d98b",
-      "gitBlob": "7c900e20d0a6827d716fb4d6f6fdab1c8cbcc20c",
-      "bytes": 33218
+      "sha256": "2e3519588b9359e51fb18e70d5681e1b48f3763bffb06dfdafedd38661b79991",
+      "gitBlob": "50aaa6af2a8b5ac120d225d133452c5ee3312083",
+      "bytes": 33651
     },
     "tools/ffe-qa.cjs": {
       "sha256": "c7c322bd2952a48ad8159613116d7a447e293eab69b33e3382ead1d9059671ee",
@@ -392,6 +417,11 @@
       "sha256": "3ad6dea0d1ab878ec9de88964590882706e3ddb97c8106c1a78ca853ddbeb73c",
       "gitBlob": "6987f48c0c195fd873b4d95a281e336d2f6e5806",
       "bytes": 7151
+    },
+    "tools/laminas-qa.py": {
+      "sha256": "024938da4fd06377d89cc7b29b7dcb579d9171865dc4f36b3c99c93f848923b1",
+      "gitBlob": "65fc5a91d58f792cf2b69682b4023e393429e393",
+      "bytes": 4165
     },
     "tools/mapa-impacto.cjs": {
       "sha256": "9a4867f6baffa5958bec572810a2ad34562a591a0f77c054ec102e80882cf14d",
@@ -449,9 +479,9 @@
       "bytes": 3084
     },
     "tools/preparar.cjs": {
-      "sha256": "08b8018afeb7a03d312bd14dff8ef65363809bc8f8aeefcf2934f15172b3e5e7",
-      "gitBlob": "55d7c6447b9bc6d686180c6154566c93b16ee663",
-      "bytes": 8813
+      "sha256": "3255224a05f1f17b7b1d1ada5264dd61f63bc2b4e4c6723da409d28457158238",
+      "gitBlob": "56e25a32e9a08f2a9bd3b3b66c29fee48bda4a1e",
+      "bytes": 10354
     },
     "tools/receta-exportar.cjs": {
       "sha256": "a00b5d697f10c29c74277eafed40f8ab11fa8366c9b7f620d83b84207026670d",
@@ -459,14 +489,19 @@
       "bytes": 3544
     },
     "tools/recetas-qa.cjs": {
-      "sha256": "d91f6cd214f1eb29c8a95ec081743c7143d85005cf488fd4798e8bfe6b50f70c",
-      "gitBlob": "2c6019419337d9b007d618121a7c3b8e53bc4735",
-      "bytes": 22736
+      "sha256": "6441af0ed0978edce59bd17a085eebef9a160a40ee2b1de2dcb1d17a56ba473b",
+      "gitBlob": "4cc03d5070b3bb15327c1dcb7e5378228473c08c",
+      "bytes": 22807
     },
     "tools/recetas.cjs": {
-      "sha256": "0f9e70d9620ab1d72f646c4e4a8edb71846811e7deb0c4504701e1489f31abb7",
-      "gitBlob": "820d172a794044c73a6e0255c3ee6e1dd1b78f0b",
-      "bytes": 32018
+      "sha256": "04cd6b66d13ad51e358d98e20364f8118b9b45ad83a280093a055a636fb9f10a",
+      "gitBlob": "f4df1f45f6d56f7861e869fc8a17fd962d4be61d",
+      "bytes": 32941
+    },
+    "tools/recibo-qa.cjs": {
+      "sha256": "6093fd600733d433578bbde9e190883f90ba619a306ac6e768f72cf1954f9c00",
+      "gitBlob": "0924a1025331edd14aca79ebce267154dd7104d7",
+      "bytes": 4632
     },
     "tools/reconstruccion-qa.py": {
       "sha256": "a7d8a65217b354e59626e868d9d50ad9a525ad8e9bef78b448debb6b52b5da54",
@@ -487,6 +522,16 @@
       "sha256": "9c10b68703f35665933793ddbfc20dd90a35dc5e6be9e1369a0fcb006f720485",
       "gitBlob": "87d7c8b7b21168381131d80e3a4a123d1db1d24d",
       "bytes": 2592
+    },
+    "tools/roadmap-recetas.cjs": {
+      "sha256": "eb3a8c4618d8ac75645e5a3f52b3c1d3fa04bb944de570d5f51049c04ef11a43",
+      "gitBlob": "58b57b02c143e760e4adafc9e14899bfdbd5ba7b",
+      "bytes": 2835
+    },
+    "tools/selector-ui-qa.cjs": {
+      "sha256": "9e6ae733d48669ffdb63e1836be5b9c3e8efcf0aba17e943cfa718aee04d484e",
+      "gitBlob": "fde21c0d4ceb6b8b98fe6ca3d5a2710d5ba512cd",
+      "bytes": 3706
     },
     "tools/serve.cjs": {
       "sha256": "a0bb8274a9f43ca2d878cd4c9d8bf155ae3c49f3f7a870ad67ac3a482a887ee2",
@@ -512,6 +557,11 @@
       "sha256": "ecbdbf0bb88f722e6c72f74d562b551ca0248fa0c33239a8507f6fb5ce26c7c6",
       "gitBlob": "dd8d1ce5795d0e9c1d64fdc967612880a7b58ed2",
       "bytes": 8242
+    },
+    "tools/verificar-impacto.cjs": {
+      "sha256": "8227ed51e91aaa07321e1c055aa7437d92688e76119f654f3afc900fbaff3eed",
+      "gitBlob": "53bc51051be9a6c3cdbff359a8a20173c50fced6",
+      "bytes": 2475
     },
     "vendor/PROCEDENCIA.md": {
       "sha256": "bbbbf608f5d6a8feba26154be53f2f7fc60ab14e581495208dd6c23694b1b233",
@@ -605,27 +655,27 @@
           "vinculo": "relación declarada"
         },
         "alcanceServicios": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Estudio Ejemplo (fixture de laboratorio)",
           "vinculo": "relación declarada"
         },
         "honorarios": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "El snapshot no tiene honorarios. Nunca se derivan del coste de obra.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Estudio Ejemplo (fixture de laboratorio)",
           "vinculo": "relación declarada"
         },
         "exclusiones": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Estudio Ejemplo (fixture de laboratorio)",
           "vinculo": "dependencia indirecta de la receta"
         },
         "validezOferta": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Estudio Ejemplo (fixture de laboratorio)",
           "vinculo": "relación declarada"
         },
         "concepto": {
@@ -637,7 +687,7 @@
       },
       "salida": {
         "es": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "propuesta-comercial",
             "capitulos": [
@@ -659,19 +709,11 @@
             },
             "nota": "Receta RP01 (RP01 v1, rubik-lab-recetas/1): Alcance, servicios y honorarios. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "3db3722e24098a99060197a1f387014a2bd055da6f250f1aef03f74f16c86230",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/commercial-proposal-client-v3.pdf": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
-              "index.html": "2cc9e471b9df7ab2560a0fda2fde06ee7582b650686461dae14c44553be00000",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "propuesta-comercial",
             "capitulos": [
@@ -693,16 +735,8 @@
             },
             "nota": "Receta RP01 (RP01 v1, rubik-lab-recetas/1): Alcance, servicios y honorarios. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "8fde9e58852435373760ecc68623c533157b795867b1a134bb5c5485f61390a8",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/commercial-proposal-client-v3.en.pdf": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
-              "index.html": "64292d1143505d191d070355ab92ad5b2ef0cbf9dcf227de8ff5d87a324869b9",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -817,23 +851,8 @@
             },
             "nota": "Receta RP02 (RP02 v1, rubik-lab-recetas/1): Viabilidad y estado actual. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "a3936a6809460446dd40ac0b6fe95d3d75be4e3e725cd44daec69d91c2b00ea2",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/architecture-book.pdf": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
-              "documentos/architecture-sheet-strip.pdf": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
-              "index.html": "d474c4b5588b748c4ce54be594c8e7c49f29d01660690fbc296d7497a0ca7adf",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible-parcial",
@@ -858,23 +877,8 @@
             },
             "nota": "Receta RP02 (RP02 v1, rubik-lab-recetas/1): Viabilidad y estado actual. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "41bb796314ede1f9ea260f61fcaa5aef9b8dfc89d85f436d561fb3d75b69307a",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/architecture-book.en.pdf": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
-              "documentos/architecture-sheet-strip.en.pdf": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
-              "index.html": "72e0cd92b0339762c3cd30448bcdbe35105d020c6da2940e9273c8b26f6995b2",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -1078,42 +1082,8 @@
             },
             "nota": "Receta RP03 (RP03 v1, rubik-lab-recetas/1): Anteproyecto integral y opciones. Selección de laboratorio sobre la modalidad «Documentación integral»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "8b1be78d781b059271c6c2b311a0df62d70a2c12593bf5221771751a345765ee",
-            "archivos": {
-              "LEEME.txt": "d86bbfe0a1126dc4ad29a8d9be94458cd7315bbe815160c8d1b517d39ef63511",
-              "documentos/architecture-book.pdf": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
-              "documentos/architecture-sheet-strip.pdf": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
-              "documentos/commercial-proposal-client-v3.pdf": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
-              "documentos/entrega-integral.pdf": "7d2647fac1740bcc958ebf18f8d87746c27bb0b60fbafa6b71bb6d295f918db0",
-              "documentos/interior-book-v3.pdf": "0146b05abcf6944c92c98efa8ce514ad9b57f79bab9c1cafd28fec1dfb80b8de",
-              "documentos/materials-furniture-book-v3.pdf": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
-              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
-              "documentos/real-estate-sheet-v3.pdf": "aaa4aef6d67dd0671bc783028ba01641c9d9bb1be3eb23eabbda60e0377c2ca6",
-              "index.html": "e1a592b4f99868a0cedea8065a8cdbdfbaacf817c508f57bf1da72bf6de59495",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
-              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
-              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
-              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
-              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
-              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
-              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
-              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
-              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
-              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
-              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible-parcial",
@@ -1150,42 +1120,8 @@
             },
             "nota": "Receta RP03 (RP03 v1, rubik-lab-recetas/1): Anteproyecto integral y opciones. Selección de laboratorio sobre la modalidad «Documentación integral»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "f820ef1bbedda083e2bb53ca04c06097bfb29994350ffbed32c1538696cf7541",
-            "archivos": {
-              "README.txt": "6587ac337cbb032b5e5a454d0dd8f645711a964f2a55ba74f3d01f219bd18663",
-              "documentos/architecture-book.en.pdf": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
-              "documentos/architecture-sheet-strip.en.pdf": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
-              "documentos/commercial-proposal-client-v3.en.pdf": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
-              "documentos/entrega-integral.en.pdf": "4a9caa18a7bc098c156da3f632d25762c49adb6008092250009774ffb15c0ba9",
-              "documentos/interior-book-v3.en.pdf": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
-              "documentos/materials-furniture-book-v3.en.pdf": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
-              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
-              "documentos/real-estate-sheet-v3.en.pdf": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
-              "index.html": "665fa6a521aaafe98bcd2e59c55204f80632af68446b5a93167de236cdc38323",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
-              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
-              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
-              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
-              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46",
-              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
-              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
-              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
-              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
-              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
-              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -1290,15 +1226,15 @@
           "vinculo": "relación declarada"
         },
         "precioInmueble": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "Precio no consta (no es cero).",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Propiedad (fixture de laboratorio)",
           "vinculo": "relación declarada"
         },
         "impuestosCompra": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "No constan: no se infieren del precio.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Asesor fiscal de la propiedad (fixture de laboratorio)",
           "vinculo": "relación declarada"
         },
         "revisionAnterior": {
@@ -1352,30 +1288,8 @@
             },
             "nota": "Receta RP04 (RP04 v1, rubik-lab-recetas/1): Vivienda y potencial de reforma. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "58b2858144351993d558f7da807f54a4d529dbb83b1f90c6b94b59bececd820a",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/real-estate-sheet-v3.pdf": "aaa4aef6d67dd0671bc783028ba01641c9d9bb1be3eb23eabbda60e0377c2ca6",
-              "index.html": "3acfdd23feeb660579863aa8ce3f89152256827e55416feb66995e9bd3aac87b",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
-              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
-              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
-              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
-              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
-              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible-parcial",
@@ -1402,30 +1316,8 @@
             },
             "nota": "Receta RP04 (RP04 v1, rubik-lab-recetas/1): Vivienda y potencial de reforma. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "2928449c438bb8a43692256da0f9b9703d3cd81ce4eabe99508ea425f3811871",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/real-estate-sheet-v3.en.pdf": "19a37e5634a61f288af4893d29bb6c582f51c9aef704a6aaf3e914e1c274560b",
-              "index.html": "d0ea40d182a351539137c775fcaca96dbd089e89c68a2a8e8a939749106a5571",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
-              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
-              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
-              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
-              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
-              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -1502,16 +1394,8 @@
             },
             "nota": "Receta RP05 (RP05 v1, rubik-lab-recetas/1): Estimación económica inicial. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "5ce8fa58dbf41a7ba2dcf61ac49f48d136cea43328ba8bb619a53f4619729184",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/commercial-proposal-client-v3.pdf": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
-              "index.html": "20e5a93344619982e301b39c111095a48df7f25c735cbea5f8782813eae4d84e",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible",
@@ -1534,16 +1418,8 @@
             },
             "nota": "Receta RP05 (RP05 v1, rubik-lab-recetas/1): Estimación económica inicial. Selección de laboratorio sobre la modalidad «Propuesta comercial»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "d9516963b48bbeb0a1a0ddf26d6b2ee641bd224661127fdf288c640521bef68c",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/commercial-proposal-client-v3.en.pdf": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
-              "index.html": "bea88eccb2794c40d4fd49d8c11da151acc25c2c9444357a21bd1d6a9b92f4a1",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -1640,9 +1516,9 @@
           "vinculo": "relación declarada"
         },
         "referenciasMoodboard": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "Sin referencias aportadas: no se buscan ni se generan imágenes.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Vistas del modelo del propio proyecto (RUBIK); sin imágenes de terceros",
           "vinculo": "relación declarada"
         },
         "imagenesIA": {
@@ -1660,7 +1536,7 @@
       },
       "salida": {
         "es": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "interiorismo",
             "capitulos": [
@@ -1685,28 +1561,11 @@
             },
             "nota": "Receta RP06 (RP06 v1, rubik-lab-recetas/1): Concepto, moodboard y opciones. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "bb019bb5acc5f5a50823ca225af32a218344964c7f40a8de8b078fc198a9a245",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/interior-book-v3.pdf": "0146b05abcf6944c92c98efa8ce514ad9b57f79bab9c1cafd28fec1dfb80b8de",
-              "documentos/materials-furniture-book-v3.pdf": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
-              "index.html": "8f55231f0a814ecf9196c3ca86d95f09c5f53a415b4960624dcec9dfce10e711",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "interiorismo",
             "capitulos": [
@@ -1731,25 +1590,8 @@
             },
             "nota": "Receta RP06 (RP06 v1, rubik-lab-recetas/1): Concepto, moodboard y opciones. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "a7bfa48b3afbc89701feb62e74fc9ae7214853d0df40bf1b40173a80a02e75be",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/interior-book-v3.en.pdf": "c6f9fdd4c3acf070f97d6ac0563695d4f74ab8eb50caccdd74516924ae579df8",
-              "documentos/materials-furniture-book-v3.en.pdf": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
-              "index.html": "85a04da44732d77be3a08518ca06b053c2d8174a293a64ce54324f0ff1d0a9a1",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -1888,30 +1730,8 @@
             },
             "nota": "Receta RP07 (RP07 v1, rubik-lab-recetas/1): Ficha comercial de vivienda. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "e1c24ac9fa57787798b66c8881459e218558c835067f9c4b2d7a15f5a6cdd38f",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/real-estate-sheet-v3-sin-presupuesto.pdf": "1bbe142099039418db2a406231a15db26a0abf1837f22be414ec9c2e8dd809da",
-              "index.html": "8baa53aeb7f42fabe3a771eec06db243118b0232c6be271d3798df56fa950fa0",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
-              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
-              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
-              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
-              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
-              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible",
@@ -1937,30 +1757,8 @@
             },
             "nota": "Receta RP07 (RP07 v1, rubik-lab-recetas/1): Ficha comercial de vivienda. Selección de laboratorio sobre la modalidad «Presentación inmobiliaria»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "f97a0892e8853cc22cbfdc2cd74906507694f87be404db0854dab29c3240da34",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/real-estate-sheet-v3-sin-presupuesto.en.pdf": "6bfb71f34851d8f29dbc709d0b14356b1d8a7bef6662ad0216e4a4c328b48588",
-              "index.html": "f97d71e31300314b7a78bbb441f6199c1db2091d23bd4cd51c8dcce947b7c91f",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/ia-3.jpg": "08b9796a400a24ae397d3fac961a65cac4fdf70c5f9ccd3707d48e28d22c92ec",
-              "media/recorrido-01-master.jpg": "949c6799a09bceff369074e0f2425255444f361293aaf74a402d688c111036ef",
-              "media/recorrido-02-kitchen.jpg": "cf050c93deda805f4ce6886c3df42946eb740b2ca1dd4bb862b5ffc1c5050579",
-              "media/recorrido-03-dining.jpg": "71cf9d5ea7f1aebce50443178f48a870754d0806564f449985f019649bfc6be9",
-              "media/recorrido-04-living.jpg": "a768524aea959ce8a9da7fea71b31da78a86e7e6436d33117cd0768eee575ace",
-              "media/recorrido-poster.jpg": "f5619ee4d87552db376331bffc224276611136f8647539ec7c2c4333b85683f3",
-              "media/recorrido.mp4": "48b34de9a5f37943478454e9777fced7e385b59455c45abdb2b26093509e99cf",
-              "media/vista-01-overview.jpg": "e8d447780a962d9b783692af6e875b84242f348ab8ecddfb8c2b9b8e3953b731",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -2021,15 +1819,15 @@
           "vinculo": "relación declarada"
         },
         "ofertaTecnica": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Estudio Ejemplo (fixture de laboratorio)",
           "vinculo": "dependencia indirecta de la receta"
         },
         "exclusiones": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "El contrato del proyecto (snapshot) no tiene este dato. Solo puede llegar como aportación atribuida del estudio.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Estudio Ejemplo (fixture de laboratorio)",
           "vinculo": "dependencia indirecta de la receta"
         },
         "vinculoPlanPresupuesto": {
@@ -2063,22 +1861,8 @@
             },
             "nota": "Receta RP08 (RP08 v1, rubik-lab-recetas/1): Oferta técnica y planificación. Selección de laboratorio sobre la modalidad «Explicación de la obra»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "9176fe3de5b9492e4207cfaef239f3ac19a8c1dd27d7795eea3313079559b5bf",
-            "archivos": {
-              "LEEME.txt": "2c1a39372993e283aabe8d424638a6c571bf4907e9429fc980eecea762ca5283",
-              "documentos/architecture-sheet-strip.pdf": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
-              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
-              "index.html": "43ec40a778518939cdcf0876d44f98a2faf119dcb7e84a84cd1ef077066a990c",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
-              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
-              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
-              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
-              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible-parcial",
@@ -2103,22 +1887,8 @@
             },
             "nota": "Receta RP08 (RP08 v1, rubik-lab-recetas/1): Oferta técnica y planificación. Selección de laboratorio sobre la modalidad «Explicación de la obra»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "fa2809e95e38151b49870e2321b0f6af0ddbc4327832e93e22797f2b8cec0887",
-            "archivos": {
-              "README.txt": "357a4bcea18042061871baf9173bd64f9375227f11310a9cbf07b469f70ac41c",
-              "documentos/architecture-sheet-strip.en.pdf": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
-              "documentos/obra-presentacion.html": "9aa1af713a6822717fb51b4a997b31376f641461966d8ac453d2334920cee893",
-              "index.html": "8d8c0fb3ef7f50fa1d286fab5be5e783465302631260a6b623d1b79abb2482f9",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/obra-1.jpg": "e52f6543740869ef7f96b4a5ced752844fd4dbfac4069a1ed6ceb5f308c35287",
-              "media/obra-2.jpg": "6e1fa8a9a015ebe6e4707799f3a012c2bdbc50c1c602d331d28692743a9d858e",
-              "media/obra-3.jpg": "ca0e9720f7ba24d04dc7cb3723f604601b67bbac6a34896f06c43c56828b6de7",
-              "media/obra-4.jpg": "b2eb9b1e67a50d239013c59af040db24b72d24456cf5db5dcb2fcd4581ec3e5d",
-              "media/obra.mp4": "edd0e81a428687b077aa77d60a2abf2bf1e9853a43c7305eb7452c0ac0b53c46"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -2258,23 +2028,8 @@
             },
             "nota": "Receta RP09 (RP09 v1, rubik-lab-recetas/1): Architecture Book y juego de láminas. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "e42c02ab5fbb1312814aa114d13985ea6285037007977ace37e561c944ff13e6",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/architecture-book.pdf": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
-              "documentos/architecture-sheet-strip.pdf": "e3f4c3cd24bd9477b598f72a63cc801f5781e024180bc7679fae0242910d473b",
-              "index.html": "d474c4b5588b748c4ce54be594c8e7c49f29d01660690fbc296d7497a0ca7adf",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible-parcial",
@@ -2299,23 +2054,8 @@
             },
             "nota": "Receta RP09 (RP09 v1, rubik-lab-recetas/1): Architecture Book y juego de láminas. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "34aafa2e7ea46e8e2829cfe740d3f02119c34d3e85ff83bfa3dc4d219779a7b5",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/architecture-book.en.pdf": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
-              "documentos/architecture-sheet-strip.en.pdf": "07d37ecacac32742f0928559334c22a1424e6306ea4062aaac731f41b3e3c286",
-              "index.html": "72e0cd92b0339762c3cd30448bcdbe35105d020c6da2940e9273c8b26f6995b2",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -2433,22 +2173,8 @@
             },
             "nota": "Receta RP10 (RP10 v1, rubik-lab-recetas/1): Memoria descriptiva y superficies. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "28c47d32581c45654e607a154a214ebeb0c6e778a7780085bb6d650488541e9c",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/architecture-book.pdf": "6a414691c0533c3b0871d2836da8f8126b6f93e41e791ed4324bb715cb34b703",
-              "index.html": "2e39f0a35fb695ce9380aa0eff821210b06781eb8044cd71d40d66754d4e1d7b",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
           "estado": "emitible-parcial",
@@ -2473,22 +2199,8 @@
             },
             "nota": "Receta RP10 (RP10 v1, rubik-lab-recetas/1): Memoria descriptiva y superficies. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "358834375484fbc4a076871abf0794dd4f860e8eb4b2d7e523d8bbbd39e7d70c",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/architecture-book.en.pdf": "2bca323f51d8f2e00426a248588390b3415df06591f0f9c74ef405e6f994892c",
-              "index.html": "ca18fc78978c17e0519c974fd3bfb6360af422bd6b54ff637fd8ea8fcb125133",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -2561,15 +2273,15 @@
           "vinculo": "relación declarada"
         },
         "catalogoProductos": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "Ninguno de los 46 objetos tiene referencia de catálogo: son genéricos del modelo.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Ficha de catálogo de fixture (fabricante ficticio)",
           "vinculo": "relación declarada"
         },
         "preciosVerificados": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "Sin precios de producto: «no valorado», nunca cero.",
+          "estado": "disponible",
+          "autoridad": "aportado (fixture de laboratorio)",
+          "nota": "Tarifa de fixture del fabricante ficticio, no de mercado",
           "vinculo": "relación declarada"
         },
         "imagenesIA": {
@@ -2581,7 +2293,7 @@
       },
       "salida": {
         "es": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "interiorismo",
             "capitulos": [
@@ -2602,25 +2314,11 @@
             },
             "nota": "Receta RP11 (RP11 v1, rubik-lab-recetas/1): Libro FF&E y fichas de activos. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "10cbd606691ec95c4ef0412ed4067bde7cfa676b0985dabef0157a26f1cf54fd",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/materials-furniture-book-v3.pdf": "4297cb959b543987ab293f0d86aad96d1363b0f886d175af38c41ab970514a9b",
-              "index.html": "71aa795d73aa3494b5d8f642ba350996299d3406a875e91bb3610ad04fc90ef7",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "interiorismo",
             "capitulos": [
@@ -2641,22 +2339,8 @@
             },
             "nota": "Receta RP11 (RP11 v1, rubik-lab-recetas/1): Libro FF&E y fichas de activos. Selección de laboratorio sobre la modalidad «Presentación de interiorismo»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "32ffc6e904e72b6561831c9c4be4088d734368b72439fde7b519b5f9a1955e56",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/materials-furniture-book-v3.en.pdf": "1ef39247946ed759164efe040d7a5dec01b7fe78d8d04c9cbfc1e49c99cdcd2c",
-              "index.html": "c5b6fe7fc2d40c782f45ebf8d2c1b05ba363e6501d10ed62110dc2cd48cf236c",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9",
-              "media/ia-1.jpg": "c94d8bbf86ec1272530d8d58a734ed8e890494206188024ec3cbbce34081b446",
-              "media/ia-2.jpg": "85f289b1e1031c2be5e4b0aed08367e56ed2f0b7146640f5b181e8244816d772",
-              "media/vista-02-room.jpg": "6fd4076383b54bb509c0455fbb2d1d4e134a8f36b4a8c6d84bf2ad0a2fab6e71",
-              "media/vista-03-room.jpg": "f22d05b6a089dc0924bedf4bb12c1684029e10baa336b7b3fdf8174a0a11535e",
-              "media/vista-04-room.jpg": "24ad895a9e8a6969f45ef7da8ac1c6a7d37bbc2f30f016485f5ce46a72c63149",
-              "media/vista-05-room.jpg": "31724fad1868a185078e3046851ae882bc57a40fc6a126c3bcb1a52fb0431f92"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [
@@ -2715,15 +2399,15 @@
           "vinculo": "relación declarada"
         },
         "presupuestoRevisado": {
-          "estado": "ausente",
-          "autoridad": null,
-          "nota": "11 de 11 partidas sin revisar por el estudio.",
+          "estado": "disponible",
+          "autoridad": "compuesto desde fuentes del proyecto",
+          "nota": "Bloque compuesto en el documento de la receta.",
           "vinculo": "relación declarada"
         }
       },
       "salida": {
         "es": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "dossier-tecnico",
             "capitulos": [
@@ -2744,19 +2428,11 @@
             },
             "nota": "Receta RP12 (RP12 v1, rubik-lab-recetas/1): Mediciones y presupuesto detallado. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "8c7a7db0ad556df0a4c57089a445c1adf5933becf6784e0840082b3c6391d84a",
-            "archivos": {
-              "LEEME.txt": "ad4c4c30ed8889453455843d4bb2d62487d4903658a2593d668fbb1203090ea7",
-              "documentos/commercial-proposal-client-v3.pdf": "282b2bac25c6ae18ec36359035da37ebbc372a574610970be3cd9607da77f626",
-              "index.html": "85f26a52e35f2bfed837f170c68b6eabc2686f370e333e841384daa6a7bb5926",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         },
         "en": {
-          "estado": "emitible-parcial",
+          "estado": "emitible",
           "seleccion": {
             "tipo": "dossier-tecnico",
             "capitulos": [
@@ -2777,16 +2453,8 @@
             },
             "nota": "Receta RP12 (RP12 v1, rubik-lab-recetas/1): Mediciones y presupuesto detallado. Selección de laboratorio sobre la modalidad «Dossier técnico»; no es un tipo nuevo."
           },
-          "artefacto": {
-            "zipSha256": "108021a299748f569ea75f7a5125370805d8958214a6ff3da7d8dc6f4e77e275",
-            "archivos": {
-              "README.txt": "f0810151a3cf2c4174a071d474e18a47e3a3529529b934e98abe1af2fd87ef55",
-              "documentos/commercial-proposal-client-v3.en.pdf": "f32b3e0ac0a144a5f690a5dc0c8eff562b8ece81afd5dbc562a8cc19d05f831a",
-              "index.html": "e2fb9d1fe069e646d2a5c1c71ee8d8576e3fe9c504aa15ef7aeca5820a43b82d",
-              "media/dibujo-vivo.jpg": "dec2f9f1f4ff355094f5b48c9971f54f7415911b2648870ae8878ccb181294f9"
-            }
-          },
-          "evidencia": "ejecutada y ligada al registro"
+          "artefacto": null,
+          "evidencia": "pendiente de verificar"
         }
       },
       "gates": [

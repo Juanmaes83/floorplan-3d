@@ -1,0 +1,47 @@
+{
+ "schema": "rubik-lab-impacto-qa/1",
+ "pass": 5,
+ "fail": 0,
+ "cases": [
+  {
+   "id": "I-00 mapa vigente",
+   "result": "PASS",
+   "detalle": {
+    "mapa": "ok.json",
+    "vigente": true,
+    "errores": [],
+    "total": 0,
+    "nota": "El mapa no autoriza omitir pruebas de CI."
+   }
+  },
+  {
+   "id": "I-01 dependencia inexistente",
+   "result": "PASS",
+   "detalle": [
+    "Dependencia inexistente: tools/no-existe.cjs"
+   ]
+  },
+  {
+   "id": "I-02 archivo cambiado",
+   "result": "PASS",
+   "detalle": [
+    "Archivo cambiado: assets/dibujo-vivo/00-overview.png"
+   ]
+  },
+  {
+   "id": "I-03 evidencia e identidad obsoletas",
+   "result": "PASS",
+   "detalle": [
+    "Identidad obsoleta: el registro de la entrega ha cambiado desde que se hizo el mapa."
+   ]
+  },
+  {
+   "id": "I-04 prueba citada inexistente",
+   "result": "PASS",
+   "detalle": [
+    "Prueba inexistente en RP-Q01: tools/prueba-fantasma.cjs"
+   ]
+  }
+ ],
+ "nota": "El mapa no autoriza omitir CI."
+}
