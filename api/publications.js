@@ -9,6 +9,9 @@
    - {"action":"purge-expired"} is a DRY RUN by default: it reports what would be deleted. Only with "confirm":true
      does it delete, and ONLY files whose stored name says they have expired. Legacy files are never deleted here:
      that needs a specific decision of the owner (and then S2's /api/unshare).
+   - An INCOHERENT publication — files that share a publication id but carry different dates — is reported with the
+     state 'inconsistent' and is never purged: no grouping can make a file whose own name says «active» be deleted.
+     Every file is also checked against its OWN date right before it is deleted.
    - Deletion is file by file, page first (the link stops opening even if a later file fails), then the 3D visit, then
      the video, each with one retry. 200 all removed · 207 partial · 502 none; running it again finishes what is left
      (deleting a missing file succeeds). At most MAX_DELETE files per call: `more` says to call again.
@@ -48,16 +51,22 @@ async function listStore(env,fetchImpl,host){
  }
  return {files,truncated};
 }
+// Publications by id. Each file keeps its OWN date. A publication whose files do not all carry the same date is
+// 'inconsistent' (it cannot come from /api/share's normal flow) and is never purged; otherwise its state is the state of
+// its one date. `expiresAt` of an inconsistent publication is its earliest date, for information only.
 function group(files,now){
  const pubs=new Map(),legacy=[];
  for(const f of files){
-  const file={url:f.url,size:f.size,uploadedAt:f.uploadedAt};
-  if(f.info.legacy){legacy.push({id:f.url,state:'legacy',expiresAt:null,files:[file]});continue;}
-  const p=pubs.get(f.info.publicationId)||{id:f.info.publicationId,expiresAt:f.info.expiresAt,files:[]};
-  p.expiresAt=Math.min(p.expiresAt,f.info.expiresAt);p.files.push({...file,order:ORDER[f.info.ext]??3});pubs.set(p.id,p);
+  if(f.info.legacy){legacy.push({id:f.url,state:'legacy',expiresAt:null,files:[{url:f.url,size:f.size,uploadedAt:f.uploadedAt,expiresAt:null}]});continue;}
+  const p=pubs.get(f.info.publicationId)||{id:f.info.publicationId,files:[]};
+  p.files.push({url:f.url,size:f.size,uploadedAt:f.uploadedAt,exp:f.info.expiresAt,order:ORDER[f.info.ext]??3});pubs.set(p.id,p);
  }
- const list=[...pubs.values()].map(p=>({id:p.id,state:now>=p.expiresAt?'expired':'active',expiresAt:new Date(p.expiresAt).toISOString(),
-  files:p.files.sort((a,b)=>a.order-b.order||a.url.localeCompare(b.url)).map(({order,...f})=>f)}));
+ const list=[...pubs.values()].map(p=>{
+  const dates=[...new Set(p.files.map(f=>f.exp))],earliest=Math.min(...dates);
+  const state=dates.length>1?'inconsistent':now>=earliest?'expired':'active';
+  return {id:p.id,state,expiresAt:new Date(earliest).toISOString(),
+   files:p.files.sort((a,b)=>a.order-b.order||a.url.localeCompare(b.url)).map(f=>({url:f.url,size:f.size,uploadedAt:f.uploadedAt,expiresAt:new Date(f.exp).toISOString()}))};
+ });
  list.sort((a,b)=>a.expiresAt.localeCompare(b.expiresAt));
  return [...list,...legacy];
 }
@@ -80,15 +89,16 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,now=D
  const t=now();let listed;
  try{listed=await listStore(env,fetchImpl,host);}catch{return send(res,502,{error:'storage-error'});}
  const pubs=group(listed.files,t);
- const counts={active:pubs.filter(p=>p.state==='active').length,expired:pubs.filter(p=>p.state==='expired').length,legacy:pubs.filter(p=>p.state==='legacy').length};
+ const counts={active:pubs.filter(p=>p.state==='active').length,expired:pubs.filter(p=>p.state==='expired').length,legacy:pubs.filter(p=>p.state==='legacy').length,inconsistent:pubs.filter(p=>p.state==='inconsistent').length};
  if(b.action==='list')return send(res,200,{checkedAt:new Date(t).toISOString(),counts,truncated:listed.truncated,publications:pubs});
- const expiredFiles=pubs.filter(p=>p.state==='expired').flatMap(p=>p.files.map(f=>f.url));
+ // Only expired publications, and within them only files whose OWN date has passed (defence in depth).
+ const expiredFiles=pubs.filter(p=>p.state==='expired').flatMap(p=>p.files.filter(f=>Expiry.isExpired(f.url,t)).map(f=>f.url));
  const batch=expiredFiles.slice(0,MAX_DELETE),more=expiredFiles.length>MAX_DELETE||listed.truncated;
- if(b.confirm!==true)return send(res,200,{dryRun:true,checkedAt:new Date(t).toISOString(),counts,wouldRemove:batch,more,legacyUntouched:counts.legacy});
+ if(b.confirm!==true)return send(res,200,{dryRun:true,checkedAt:new Date(t).toISOString(),counts,wouldRemove:batch,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
  const removed=[],failed=[];
  for(const url of batch){const error=await remove(url,env,fetchImpl);if(error)failed.push({url,error});else removed.push(url);}
  const status=!batch.length||!failed.length?200:removed.length?207:502;
- return send(res,status,{dryRun:false,checkedAt:new Date(t).toISOString(),counts,removed,failed,more,legacyUntouched:counts.legacy});
+ return send(res,status,{dryRun:false,checkedAt:new Date(t).toISOString(),counts,removed,failed,more,legacyUntouched:counts.legacy,inconsistentUntouched:counts.inconsistent});
 }
 module.exports=(req,res)=>handler(req,res);
 module.exports.handler=handler;module.exports.group=group;module.exports.MAX_DELETE=MAX_DELETE;module.exports.MAX_PAGES=MAX_PAGES;

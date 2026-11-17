@@ -122,15 +122,15 @@ async function storeWithEverything(){
 }
 test('register: lists the whole store by publication, identifies legacy files, and returns only minimal data',async()=>{
  const s=await storeWithEverything(),r=await pubs(s.b,{action:'list'},{now:T0+8*DAY});
- assert.equal(r.status,200);assert.deepEqual(r.json.counts,{active:1,expired:1,legacy:2});assert.equal(r.headers['cache-control'],'no-store');
+ assert.equal(r.status,200);assert.deepEqual(r.json.counts,{active:1,expired:1,legacy:2,inconsistent:0});assert.equal(r.headers['cache-control'],'no-store');
  const exp=r.json.publications.find(p=>p.state==='expired');assert.deepEqual(exp.files.map(f=>f.url),[s.expiring[0],s.expiring[1]],'page first, then video');
  assert.equal(exp.expiresAt,new Date(T0+7*DAY).toISOString());
  assert.deepEqual(r.json.publications.filter(p=>p.state==='legacy').map(p=>[p.expiresAt,p.files[0].url]).sort(),s.legacy.map(u=>[null,u]).sort());
- for(const p of r.json.publications){assert.deepEqual(Object.keys(p).sort(),['expiresAt','files','id','state']);for(const f of p.files)assert.deepEqual(Object.keys(f).sort(),['size','uploadedAt','url']);}
+ for(const p of r.json.publications){assert.deepEqual(Object.keys(p).sort(),['expiresAt','files','id','state']);for(const f of p.files){assert.deepEqual(Object.keys(f).sort(),['expiresAt','size','uploadedAt','url']);assert.equal(f.expiresAt,p.state==='legacy'?null:p.expiresAt,'one date per coherent publication');}}
  const text=JSON.stringify(r.json);for(const secret of [SHARE,RENDER,env.BLOB_READ_WRITE_TOKEN,'Propuesta'])assert.ok(!text.includes(secret),secret);
 });
 test('register: before the date everything is active; pagination is followed; a failing store answers 502',async()=>{
- const s=await storeWithEverything();assert.deepEqual((await pubs(s.b,{action:'list'},{now:T0+DAY})).json.counts,{active:2,expired:0,legacy:2});
+ const s=await storeWithEverything();assert.deepEqual((await pubs(s.b,{action:'list'},{now:T0+DAY})).json.counts,{active:2,expired:0,legacy:2,inconsistent:0});
  const b=blob({pageSize:2});for(let i=0;i<5;i++)await share(b,{ttl:'7'});const r=await pubs(b,{action:'list'});
  assert.equal(r.json.counts.active,5);assert.equal(b.calls.filter(c=>c.url.startsWith('https://blob.vercel-storage.com/?')).length,3);
  s.b.listFail=true;assert.deepEqual([(await pubs(s.b,{action:'list'})).status,(await pubs(s.b,{action:'list'})).json.error],[502,'storage-error']);
@@ -165,6 +165,34 @@ test('register and purge: same permission as publishing; bad requests touch noth
  for(const body of [{},{action:'delete-all'},{action:'purge-expired',confirm:'yes'},{action:'list',pad:'x'.repeat(2000)}]){const r=await pubs(s.b,body,{now:T0+8*DAY});assert.ok(r.status>=400,JSON.stringify(body).slice(0,40));}
  const out=res();await Pubs.handler(req('',{},'GET'),out,{env,fetchImpl:s.b.fetchImpl});assert.equal(out.statusCode,405);
  assert.equal(s.b.files.size,n,'nothing deleted');
+});
+
+test('consistency: page, tour video and 3D visit of one publication share id and date in their stored names',async()=>{
+ const EX=JSON.parse(JSON.stringify(require('../docs/contracts/examples/floorplan-project-v1.example.json')));EX.schemaVersion='1.12.0';
+ const snap=Delivery.Core.buildSnapshot({project:EX,now:new Date('2026-11-10T10:00:00Z'),rand:()=>0.42,title:'Casa sintética'});
+ const b=blob(),v=await share(b,{kind:'webm',ttl:'7',body:Buffer.from([0x1a,0x45,0xdf,0xa3])});
+ const d=await share(b,{kind:'delivery',pub:v.json.publication.header,body:JSON.stringify(snap),now:T0+MIN});
+ const p=await share(b,{pub:v.json.publication.header,now:T0+2*MIN});
+ const infos=[v,d,p].map(x=>{assert.equal(x.status,200);assert.equal(x.json.publication.header,v.json.publication.header);return E.parse(x.json.url);});
+ assert.equal(new Set(infos.map(i=>i.publicationId)).size,1);assert.equal(new Set(infos.map(i=>i.expiresAt)).size,1);assert.deepEqual(infos.map(i=>i.ext),['webm','delivery.json','html']);
+ const r=await pubs(b,{action:'list'});assert.equal(r.json.publications.length,1);assert.deepEqual(r.json.publications[0].files.map(f=>E.parse(f.url).ext),['html','delivery.json','webm'],'page, then 3D visit, then video');
+ // At the date all three close together: page (410), 3D visit (410) — and the purge takes the three.
+ assert.equal((await view(b,p.json.url,T0+7*DAY)).statusCode,410);assert.equal((await delivery(b,d.json.url,T0+7*DAY)).status,410);
+ assert.deepEqual((await pubs(b,{action:'purge-expired',confirm:true},{now:T0+7*DAY})).json.removed,[p.json.url,d.json.url,v.json.url]);assert.equal(b.files.size,0);
+});
+test('incoherent grouping: files that share an id but carry different dates are «inconsistent» and an active file is NEVER deleted',async()=>{
+ const b=blob(),a=await share(b,{ttl:'7'}),id=E.parse(a.json.url).publicationId;
+ // An authorised but misbehaving client re-uses the id with a later date (valid on its own): same id, two dates.
+ const late=await share(b,{kind:'webm',pub:`${id}.x${E.stamp(T0+90*DAY)}`,body:Buffer.from([0x1a,0x45,0xdf,0xa3])});assert.equal(late.status,200);
+ const r=await pubs(b,{action:'list'},{now:T0+8*DAY});const g=r.json.publications.find(p=>p.id===id);
+ assert.equal(g.state,'inconsistent');assert.deepEqual(r.json.counts,{active:0,expired:0,legacy:0,inconsistent:1});
+ assert.deepEqual(g.files.map(f=>f.expiresAt).sort(),[new Date(T0+7*DAY).toISOString(),new Date(T0+90*DAY).toISOString()]);
+ const dry=await pubs(b,{action:'purge-expired'},{now:T0+8*DAY});assert.deepEqual([dry.json.wouldRemove,dry.json.inconsistentUntouched],[[],1]);
+ const real=await pubs(b,{action:'purge-expired',confirm:true},{now:T0+8*DAY});assert.deepEqual([real.status,real.json.removed],[200,[]]);
+ assert.equal(b.files.size,2,'nothing of an inconsistent publication is deleted');
+ assert.equal((await view(b,a.json.url,T0+8*DAY)).statusCode,410,'its expired page still answers 410 in the viewer');
+ // Even a coherent «expired» group never deletes a file whose own name is still active (checked file by file).
+ assert.equal(E.isExpired(late.json.url,T0+8*DAY),false);
 });
 
 // ---------- «Mis publicaciones» register (this browser) ----------

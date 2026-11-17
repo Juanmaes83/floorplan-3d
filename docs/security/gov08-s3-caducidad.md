@@ -1,6 +1,6 @@
 # GOV-08 S3 / ENT-02 · Caducidad de los enlaces de cliente
 
-**Fecha:** 17/11/2026 · **Base:** `master@40b4ae5` (rama `feat/gov08-s3-caducidad-20261117`, independiente de #243).
+**Fecha:** 17/11/2026 · **Base:** `master@40b4ae5`, reconciliada con `master@f31f303` (referencias editoriales del propietario, sin cambios de código). Rama `feat/gov08-s3-caducidad-20261117`, independiente de #243.
 
 **Estado:** implementación local con pruebas. **Pendiente de la aprobación del propietario.**
 
@@ -38,6 +38,8 @@ rubik-share/<slug>--<publicación: 24 hex aleatorios>--x<AAAAMMDDHHMM UTC>[-<suf
   - el formato del enlace (`/api/view?f=…`) y la validación de S2 no cambian.
 - **Agrupación:** la página, su vídeo y su visita 3D comparten el identificador de publicación y la fecha. La primera subida recibe `{publication:{header,expiresAt}}` y las siguientes envían `x-rubik-share-publication`.
 - **Comprobación al subir:** si el almacén devolviera un nombre sin esa publicación y esa fecha, `api/share.js` responde `502`, porque ese archivo nunca podría caducar.
+- **Consistencia comprobada:** al publicar desde la interfaz con vídeo y visita 3D a 90 días, las tres subidas usan la misma publicación. La primera pide el TTL y las otras dos se unen a ella. Los tres nombres llevan el mismo identificador y la misma fecha, y en esa fecha se cierran y se limpian juntos (prueba de navegador y de servidor).
+- **Agrupación incoherente:** un cliente autorizado podría reutilizar un identificador con otra fecha válida. Esa publicación se marca como `inconsistent`, aparece en «Almacén de publicaciones» y **la limpieza no toca ninguno de sus archivos**. Además, antes de borrar se comprueba la fecha propia de cada archivo, de modo que un archivo cuyo nombre dice que sigue activo nunca se borra. La primera versión (`8c5ee2a`) tomaba la fecha más temprana del grupo; se corrigió con su prueba.
 - **Archivos antiguos:** cualquier archivo de `rubik-share/` que no siga el patrón se publicó antes de S3 y se considera *legacy*.
 
 ## 3. Caducidad del visor, acceso directo a Blob y borrado efectivo
@@ -84,7 +86,26 @@ Son tres cosas distintas y la interfaz no las confunde:
 - Exigiría tocar `vercel.json` y añadir un secreto propio del cron.
 - Queda como **decisión pendiente** y no se ha tocado la configuración de Vercel.
 
-## 6. Compatibilidad
+## 6. Limitaciones que siguen abiertas (GOV-08 S5 y otras)
+
+S3 **no** convierte los enlaces en privados. Sigue pendiente lo siguiente:
+
+1. **Almacén público:** el enlace lleva dentro la URL del archivo en Blob (`?f=https://…public.blob.vercel-storage.com/…`). Quien la copie puede abrir el archivo **directamente**, sin pasar por el visor, hasta que se borre. La caducidad del visor no lo impide.
+2. **Vídeo del recorrido:** la página lo reproduce directamente desde Blob (`media-src` del almacén). Tampoco pasa por la comprobación de caducidad, así que se cierra solo al borrarlo.
+3. **Entre la fecha y la limpieza:** el archivo sigue en el almacén. La limpieza es **manual** por decisión del propietario: no hay Cron.
+4. **Caché de la CDN de Blob:** puede servir un archivo hasta un minuto después de borrado. Las copias descargadas no se pueden retirar.
+5. **No es un control de acceso:** cualquiera con el enlace lo abre mientras no caduque. No hay usuarios del cliente, ni contraseña, ni registro de quién lo abrió.
+6. **Código compartido:** publicar, retirar y limpiar dependen de un código común del estudio. Los permisos y cuotas por profesional son **GOV-06a**.
+7. **Registro de publicaciones:** se deduce de los nombres del almacén. No guarda quién publicó ni para qué cliente; es una decisión deliberada de datos mínimos.
+
+**Qué haría falta para S5:**
+- un almacén **privado de Vercel Blob** (la documentación oficial lo ofrece, leído con el token desde el servidor);
+- enlaces **opacos**: un identificador que el servidor resuelve, sin la URL del archivo;
+- servir el vídeo también a través del servidor.
+
+Supone migrar las publicaciones existentes y no entra en este corte.
+
+## 7. Compatibilidad
 
 | Elemento | Resultado |
 |---|---|
@@ -93,21 +114,25 @@ Son tres cosas distintas y la interfaz no las confunde:
 | **Aislamiento del visor** | La misma CSP: `sandbox allow-scripts allow-downloads`, sin `allow-same-origin`, comprobada sobre una página con fecha |
 | **ENT-01** (visita 3D) | La visita caducada muestra «Esta visita ha caducado… Pide al profesional un enlace nuevo», sin botón de reintentar. Las visitas anteriores a S3 siguen abriéndose |
 | **Archivos asociados** | El vídeo y la visita 3D comparten la publicación y la fecha de la página, y se limpian con ella |
+| **Publicaciones anteriores a S3** | Siguen abriéndose (página y visita 3D, con cualquier reloj). No se modifican ni se borran: la limpieza nunca toca las *legacy* |
+| **Entrega de la Evolución 4D** | Publica con 30 días por defecto. Vídeo y página comparten publicación (`ft3d-8-delivery` 6/6, `construction-delivery-core` 11/11) |
 
-## 7. Defectos encontrados durante la implementación
+## 8. Defectos encontrados durante la implementación
 
 | Defecto | Corrección | Prueba |
 |---|---|---|
 | `share-registry-core.js` convertía una fecha vacía en `1970-01-01` (`new Date(null)`). Una entrada *legacy* habría pasado a «caducada» al guardarse de nuevo, y `withdrawnAt` también quedaba en 1970 | `iso()` mantiene vacío lo que está vacío | Unitaria y de navegador |
 | En «Mis publicaciones», una variable nueva tapaba el elemento de estado del diálogo, de modo que «Retirar» dejaba de funcionar tras una limpieza | Variable renombrada | Prueba de navegador S3 |
+| `api/publications.js` agrupaba por identificador con la fecha más temprana: una agrupación incoherente podía llevar a borrar un archivo cuyo propio nombre seguía activo | Estado `inconsistent`, que nunca se limpia, y comprobación de la fecha propia de cada archivo antes de borrarlo | `gov08-s3-expiry`: «incoherent grouping…» |
 | `gov08-s2-focus.browser` comprobaba el foco al llegar la respuesta, antes de redibujar. Era una carrera previa que falló una vez bajo carga | Espera al mensaje que acompaña al cambio de foco, como ya hacían sus otros pasos. Sin relajar ninguna aserción | 3/3 en aislado y verde en la batería |
 
-## 8. Pruebas (todas locales, datos sintéticos)
+## 9. Pruebas (todas locales, datos sintéticos)
 
 | Suite | Resultado |
 |---|---|
-| `tests/gov08-s3-expiry.test.cjs` (servidor con reloj simulado, nueva) | **21/21** |
-| `tests/gov08-s3-expiry.browser.test.cjs` (app real con reloj del navegador y del servidor, nueva, partición `blocking`) | **3/3** |
+| `tests/gov08-s3-expiry.test.cjs` (servidor con reloj simulado, nueva) | **23/23** |
+| `tests/gov08-s3-expiry.browser.test.cjs` (app real con reloj del navegador y del servidor, nueva, partición `blocking`) | **4/4** |
+| Ensayo local de `scripts/qa/gov08-s3-preview-validation.cjs` (funciones reales y almacén simulado) | **13/13** |
 | Suite pura completa (`tests/*.test.cjs` sin navegador) | **1392/0** |
 | `share-withdraw` 2/2 · `share-link` 1/1 · `client-share` 2/2 · `delivery-3d-link` 1/1 · `gov08-s2-focus` 1/1 · `gov08-view-isolation` 8/8 · `ft3d-8-delivery` 6/6 | verde |
 
@@ -123,19 +148,23 @@ Son tres cosas distintas y la interfaz no las confunde:
 - Las expresiones de nombre de `share-api`, `ent01-delivery-api` y `construction-delivery-core` exigen ahora la publicación y la fecha.
 - La de `share-link` exige además la fecha de caducidad.
 
+**Validación en Preview:** preparada en [gov08-s3-validacion-preview.md](gov08-s3-validacion-preview.md). Necesita un almacén Blob aislado y la autorización del propietario.
+
+Hoy el Preview comparte el almacén con Production y no tiene código de publicación, así que **no se ha ejecutado**.
+
 **No verificado:**
 - La forma exacta de la respuesta del listado de Blob se tomó de la documentación oficial (`{blobs:[{url,pathname,size,uploadedAt}],cursor,hasMore}`). **No se ha probado contra un almacén real.** Hay que confirmarlo en Preview con un almacén de prueba.
 - Tampoco se ha contado cuántas publicaciones *legacy* hay en Production: exige listar el almacén real.
 
-## 9. Decisiones pendientes del propietario
+## 10. Política fijada por el propietario y decisiones pendientes
 
-1. **Política:** aprobar 7, 30 o 90 días con 30 por defecto, o cambiarla.
-2. **Publicaciones *legacy*:** decidir qué hacer con ellas. Opciones:
-   - (a) mantenerlas indefinidamente;
-   - (b) fijarles una fecha anunciada y retirarlas después;
-   - (c) retirarlas ya.
+**Fijado el 17/11/2026:**
+- **Caducidad:** opciones de 7, 30 y 90 días; **30 por defecto**.
+- **Publicaciones históricas:** **no se modifican ni se borran**. Siguen abriéndose y solo se identifican como «sin fecha de caducidad».
+- **Limpieza:** **manual** por ahora; **no se activa Cron**.
+- **Production y secretos:** no se tocan.
 
-   Sin esa decisión, no se toca ninguna.
-3. **Limpieza automática:** decidir si se activa con Vercel Cron, lo que exige cambiar `vercel.json` y añadir un secreto, o si se mantiene manual.
-4. **Validación en Preview** con un almacén Blob de prueba, sin datos de clientes, antes de cualquier merge.
-5. **Reconciliación con #243:** esta rama parte de `40b4ae5`. Cuando se fusione #243, se incorpora `master` y se actualizan las filas GOV-08 y ENT-02 del Estado Maestro, que hoy no se tocan aquí para no mezclar cortes.
+**Pendiente:**
+1. **Autorizar la validación en Preview** con un almacén Blob aislado ([protocolo](gov08-s3-validacion-preview.md)). Exige que el propietario cree ese almacén y un código de publicación de prueba, ambos limitados a esa rama de Preview.
+2. **Reconciliación con #243:** cuando se fusione, se incorpora `master` a esta rama y se actualizan las filas GOV-08 y ENT-02 del Estado Maestro. Hoy no se tocan aquí, para no mezclar cortes.
+3. **GO/NO-GO de merge** cuando la CI y la validación en Preview estén completas.

@@ -122,6 +122,30 @@ test('S3 · ENT-01: an expired 3D visit says so and offers no retry; before its 
  assert.deepEqual(r.external,[]);assert.deepEqual(r.errors,[]);
 });
 
+test('S3 consistency from the UI: page, tour video and 3D visit share one publication id and date, and close and purge together',{timeout:600000},async t=>{
+ const r=await rig({width:1440,height:900});t.after(()=>r.context.close());const {page,store}=r;
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanDeliveryPreview?.eligible());
+ // A synthetic tour video (a few WebM header bytes) stands in for a recorded one: only its upload path is under test.
+ await page.evaluate(()=>{const blob=new Blob([new Uint8Array([0x1a,0x45,0xdf,0xa3,1,2,3,4])],{type:'video/webm'});window.FloorPlanTourVideo={...window.FloorPlanTourVideo,result:{blob,extension:'webm'}};});
+ const dialog=await openDialog(page);
+ await dialog.locator('#shareLinkTtl90').check();await dialog.locator('#shareLinkVideo').check();await dialog.locator('#shareLink3d').check();await dialog.locator('#shareLinkAgree').check();await dialog.locator('#shareLinkToken').fill(SHARE);
+ await dialog.locator('#shareLinkGo').click();await dialog.locator('#shareLinkUrl').waitFor({timeout:120000});
+ const shares=r.calls.filter(c=>c.route==='api/share');assert.deepEqual(shares.map(c=>[c.headers['x-rubik-share-kind'],!!c.headers['x-rubik-share-ttl'],!!c.headers['x-rubik-share-publication']]),
+  [['webm',true,false],['delivery',false,true],['html',false,true]],'the first upload asks for the TTL; the next two join its publication');
+ const names=[...store.keys()].filter(p=>p.startsWith('/rubik-share/')),ids=new Set(),dates=new Set();
+ for(const p of names){const m=/--([0-9a-f]{24})--x(\d{12})/.exec(p);ids.add(m[1]);dates.add(m[2]);}
+ assert.equal(names.length,3);assert.equal(ids.size,1,'one publication id');assert.deepEqual([...dates],[new Date(T0+90*DAY).toISOString().replace(/[-:T]/g,'').slice(0,12)],'one date: 90 days (UTC YYYYMMDDHHMM)');
+ const entry=(await page.evaluate(()=>JSON.parse(localStorage.getItem('rubik-share-publications-v1'))))[0];
+ assert.equal(entry.files.length,3);assert.equal(entry.ttlDays,90);assert.equal(entry.expiresAt,new Date(T0+90*DAY).toISOString());
+ const link=await dialog.locator('#shareLinkUrl').inputValue(),client=await r.context.newPage();assert.equal((await client.goto(link)).status(),200);
+ await r.advance(90*DAY);assert.equal((await client.goto(link)).status(),410,'the page closes at the date');
+ const visit=`https://${HOST}${names.find(p=>p.endsWith('.delivery.json'))}`;const out=fakeRes();await Delivery.handler({method:'GET',url:'/api/delivery?f='+encodeURIComponent(visit)},out,r.opts());assert.equal(out.statusCode,410,'the 3D visit closes at the same date');
+ const d2=await openDialog(page);await d2.locator('#shareStoreReview').click();await d2.locator('#shareStorePurge').click();await d2.locator('#shareStorePurgeConfirm').click();
+ await page.waitForFunction(()=>/Caducados borrados: 3 archivo/.test(document.querySelector('#shareLinkStatus').textContent));assert.equal([...store.keys()].filter(p=>p.startsWith('/rubik-share/')).length,0,'page, visit and video purged together');
+ // The client page plays its video straight from the (fake, aborted) Blob host — that is the direct access S5 is about.
+ assert.deepEqual(r.external.filter(u=>!u.startsWith(`https://${HOST}/rubik-share/`)),[]);assert.deepEqual(r.errors,[]);
+});
+
 test('S3 on a phone 390×844: the expiry choice and the store fit, without horizontal overflow',{timeout:300000},async t=>{
  const r=await rig({width:390,height:844});t.after(()=>r.context.close());const {page}=r;
  await page.goto(url);await page.locator('#welcomeExample').tap();await page.waitForFunction(()=>window.FloorPlanShareLink);
