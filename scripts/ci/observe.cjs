@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('fs'),cp=require('child_process'),path=require('path');
-const {plan,fingerprint}=require('./impact-plan.cjs');
+const {plan,fingerprint,closure}=require('./impact-plan.cjs');
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 function observe(base,head,changes,{forceFull=false}={}){
  const environment={node:process.version,platform:process.platform,arch:process.arch,mode:'observe',config:head.workflows,browser:'workflow-specific; not interchangeable'};
@@ -12,7 +12,7 @@ function observe(base,head,changes,{forceFull=false}={}){
   forceFull:forceFull||!!unknownOwnership});
  result.mode='observe';result.omissionEnabled=false;
  result.unknownOwnership={base:base.unresolvedOwnership,head:head.unresolvedOwnership};
- result.coverage=tests.map(test=>({test,workflows:head.ownership[test]||base.ownership[test]||[],decision:result.tests.includes(test)?'PENDING':'NOT_APPLICABLE',reason:result.tests.includes(test)?'current execution required':'not selected by conservative closure; no PASS claimed',fingerprint:fingerprint(new Set([test,...(head.dependencies[test]||[])]),head.texts,environment)}));
+ result.coverage=tests.map(test=>({test,workflows:head.ownership[test]||base.ownership[test]||[],decision:result.tests.includes(test)?'PENDING':'NOT_APPLICABLE',reason:result.tests.includes(test)?'current execution required':'not selected by conservative closure; no PASS claimed',fingerprint:fingerprint(new Set([...closure(test,head.dependencies),...closure(test,base.dependencies)]),head.texts,environment)}));
  result.workflowCount=Object.keys(head.workflows).length;
  result.environment={node:process.version,platform:process.platform,arch:process.arch};
  return result;
