@@ -10,6 +10,18 @@ Las suites de navegador dependen conservadoramente de **todo el runtime**: las d
 
 La cobertura JSON identifica cada test, sus dependencias y workflows. La matriz Markdown resume los propietarios. Las coincidencias textuales no certifican que una rama condicional de un test haya sido ejecutada. La observación no cambia los filtros de ruta existentes: su propuesta de cobertura se compara con ellos antes de cualquier activación selectiva. Si encuentra cobertura insuficiente, el gate falla o mantiene selección integral; no inventa un PASS.
 
+| Área | Autoridades y dependencias | Respuesta conservadora |
+|---|---|---|
+| Proyecto/geometría | project-core, building-core, esquemas, index.html | Integral |
+| Seguridad/entregas | api/, contratos, docs/security | Integral |
+| Presupuesto/catálogo | budget-core, adapters, persistencia, CAT-04, Asistente | Core integral; UI por cierre transitivo, incluido navegador |
+| Home/estilos | welcome, home-demos, CSS y runtime UMD | Navegadores consumidores; lecturas dinámicas no resueltas fuerzan integral |
+| 3D/Evolución/presentación | runtime compartido, assets, render y fixtures | Overaproximación de navegador; no se deduplican entornos distintos |
+| Documentación | consumidores literales y dinámicos de docs | Solo nivel 1 si consta independencia; si hay consumidor se selecciona o cae a integral |
+| CI/dependencias/desconocidos | scripts/ci, .github, locks, entradas sin grafo | Integral |
+
+Estados de evidencia: `EXECUTED_PASS`, `EXECUTED_FAIL`, `REUSED_VERIFIED`, `NOT_APPLICABLE`, `PENDING`, `CANCELLED`, `UNKNOWN`. El plan usa PENDING y NOT_APPLICABLE; una conclusión verde de workflow no se convierte automáticamente en EXECUTED_PASS de cada test. `compare.cjs` publica workflows previstos ausentes y ejecuciones pendientes/fallidas, y mantiene `coverageCertified:false` hasta acreditar ejecución por suite. Las evidencias reutilizadas solo pasan el verificador explícito y mantienen su SHA original.
+
 ## Tres niveles
 
 1. Universal: sintaxis de selector, pruebas propias, contratos esenciales de proyecto/presupuesto/seguridad, inventario y guarda de cobertura.
