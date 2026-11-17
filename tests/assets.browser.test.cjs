@@ -63,11 +63,12 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const entries=await page.evaluate(ids=>ids.map(id=>FloorPlanAssetUI.entries.find(e=>e.id===id)),ids);assert.ok(entries.every(Boolean));assert.equal(requests.filter(r=>r.url.endsWith('.glb')).length,0);
  const p=Core.clone(project);p.objects=entries.map((e,i)=>({...Core.clone(project.objects[0]),id:'obj_next_'+i,name:e.name,type:e.type,size:{widthMm:e.dimensionsMm.width,depthMm:e.dimensionsMm.depth,heightMm:e.dimensionsMm.height},position:{x:900+(i%3)*1800,y:900+Math.floor(i/3)*1700},assetRef:{catalog:e.catalog,assetId:e.id,catalogRevision:e.revision}}));
  await page.evaluate(p=>FloorPlanApp.importProject(p),p);await open3D(page);await page.waitForFunction(ids=>ids.every(id=>['ready','error'].includes(View3D.assetStatus(id)?.state)),p.objects.map(x=>x.id),{timeout:60000});
- const states=await page.evaluate(ids=>ids.map(id=>View3D.assetStatus(id)),p.objects.map(x=>x.id));assert.ok(states.every(s=>s.state==='ready'),JSON.stringify(states));assert.equal(responses.filter(r=>r.status===200).length,6);assert.deepEqual(failures,[]);
+ const states=await page.evaluate(ids=>ids.map(id=>View3D.assetStatus(id)),p.objects.map(x=>x.id));
+ assert.ok(states.every(s=>s.state==='ready'),JSON.stringify({states,responses,failures}));assert.equal(responses.filter(r=>r.status===200).length,6);assert.deepEqual(failures,[]);
  assert.ok(states.every(s=>s.textureStats?.images>0));
  await fs.mkdir('docs/qa/artifacts/f3-next',{recursive:true});await page.screenshot({path:`docs/qa/artifacts/f3-next/cohort-${viewport.width}x${viewport.height}.png`});
  await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI?.ready);assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.objects.map(x=>x.assetRef.assetId)),ids);assert.deepEqual(errors,[]);
- t.diagnostic(JSON.stringify({viewport,ids,states:states.map(s=>({state:s.state,bytes:s.bytes,triangles:s.triangles,textureStats:s.textureStats}))}));
+ t.diagnostic(JSON.stringify({viewport,ids,states:states.map(s=>({state:s.state,bytes:s.bytes,triangles:s.triangles,textureStats:s.textureStats,durationMs:s.durationMs}))}));
 });
 for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F3 authorized load, dimensions, state and offline fallback ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const {page,context,errors,requests,project,mobile}=await setup(t,viewport),id=project.objects[0].id;
