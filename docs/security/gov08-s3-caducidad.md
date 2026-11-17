@@ -174,4 +174,4 @@ con 56/56 pruebas de servidor y 4/4 pruebas de navegador S3 correctas.
 
 **Cierres acreditados:** #243 y #244 fusionadas; reconciliación de master y validación aislada terminadas. Los resultados mantienen sus SHA de origen.
 
-**Pendiente real:** S4 cuotas, S5 almacenamiento privado/enlaces opacos y GOV-06a. La limpieza sigue manual. Las dos variables temporales de Preview de la rama S3 siguen configuradas: su retirada requiere autorización expresa y no afecta a Production. Retirar variables no revoca automáticamente credenciales incorporadas en deployments existentes.
+**Pendiente real:** S4 cuotas, S5 almacenamiento privado/enlaces opacos y GOV-06a. La limpieza sigue manual. Las dos variables temporales de Preview de la rama S3 siguen configuradas y el propietario decidió expresamente conservarlas por ahora. No se leyeron valores ni se modificó Production. Su retirada futura requiere nueva autorización. Retirar variables no revoca automáticamente credenciales incorporadas en deployments existentes.
