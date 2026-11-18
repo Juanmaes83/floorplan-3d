@@ -146,7 +146,7 @@ La identidad de contenido de §4 se aplica a cada sujeto. Un lector v1 rechaza l
 | Núcleo, perfil simulado en memoria | `tests/expediente.test.cjs` (19) | Contrato, identidad, idempotencia, rechazo de expedientes dañados, reversión, diario, pestaña desactualizada y bloqueo. No acredita IndexedDB real |
 | Navegador real (Chromium, IndexedDB, `localStorage` y Web Locks reales) | `tests/expediente.browser.test.cjs` (4) | Restauración en un perfil limpio con recarga y bytes idénticos; interrupción por recarga a mitad de operación y `recover()`; cuota real agotada; segunda pestaña desactualizada |
 
-En CI: `consolidation-regression.yml`, paso de contratos puros y paso de navegador propio.
+En CI: workflow propio `.github/workflows/f0-expediente.yml`. La guardia `ci-impact` impide cambiar los trabajos de los workflows existentes, y #259 modifica `tests/regression-partitions.json`.
 
 ## 10. Límites de F0.1
 
