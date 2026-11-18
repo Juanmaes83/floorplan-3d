@@ -50,11 +50,13 @@ jobs:
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
           echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
       - name: Pure contracts (identity, library, budget import, unit history, coverage guard)
-        run: node --test tests/project-identity.test.cjs tests/library.test.cjs tests/con-01-unit-history.test.cjs tests/con-03-budget-import.test.cjs tests/browser-test-coverage.test.cjs tests/budget-draft.test.cjs tests/budget-core.test.cjs tests/cat04-xr.test.cjs tests/review-notes-core.test.cjs
+        run: node --test tests/project-identity.test.cjs tests/library.test.cjs tests/con-01-unit-history.test.cjs tests/con-03-budget-import.test.cjs tests/browser-test-coverage.test.cjs tests/budget-draft.test.cjs tests/budget-core.test.cjs tests/cat04-xr.test.cjs tests/review-notes-core.test.cjs tests/expediente.test.cjs
       - name: Browser contracts (blocking partition)
         run: |
           mkdir -p qa-results/consolidation
           IDENTITY_SHOTS=qa-results/consolidation CONSOLIDACION_SHOTS=qa-results/consolidation node --test --test-concurrency=1 $(node scripts/qa/check-browser-test-coverage.cjs --list blocking)
+      - name: Expediente in a real browser (F0.1, IndexedDB + localStorage + Web Locks)
+        run: node --test --test-concurrency=1 tests/expediente.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

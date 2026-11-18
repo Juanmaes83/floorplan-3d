@@ -85,7 +85,9 @@
       add(project,value){Core.validate(project);const title=name(value);return change(n=>{const id=Core.id('prj'),p=Core.clone(project);reidentify(n,p);n.entries.push({id,name:title,project:p});n.activeId=id;});},
       // File imports preserve the visible original and create a separate entry in one atomic write.
       // External import: see the identity contract above (no budget is copied from the project that had the id).
-      importProject(visible,project,value){Core.validate(visible);Core.validate(project);const title=name(value);return change(n=>{store(entry(n,n.activeId),visible);const id=Core.id('prj'),p=Core.clone(project),from=reidentify(n,p);
+      // `originProjectId` (optional): the id the file had when the caller already gave the project a new one (the
+      // expediente restore decides ids before writing, js/expediente-core.js); kept as the same local `origin` metadata.
+      importProject(visible,project,value,{originProjectId}={}){Core.validate(visible);Core.validate(project);const title=name(value);return change(n=>{store(entry(n,n.activeId),visible);const id=Core.id('prj'),p=Core.clone(project),from=reidentify(n,p)||(typeof originProjectId==='string'&&originProjectId!==p.id?originProjectId:null);
         n.entries.push({id,name:title,project:p,...(from?{origin:{projectId:from}}:{})});n.activeId=id;});},
       // Id of the project file the open entry was imported from, when it had to be re-identified here (else null).
       origin:()=>{const o=current().origin;return o&&typeof o.projectId==='string'?o.projectId:null;},

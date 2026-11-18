@@ -9,10 +9,11 @@ const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 // A browser profile: localStorage + IndexedDB images, both in memory.
 function browser(){
  const map=new Map(),images=new Map();
- const storage={getItem:k=>map.has(k)?map.get(k):null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)};
+ const storage={getItem:k=>map.has(k)?map.get(k):null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k),key:i=>[...map.keys()][i]??null,get length(){return map.size;}};
  const io={putImages:async entries=>{for(const [k,b] of entries)images.set(k,b);},removeImages:async keys=>{for(const k of keys)images.delete(k);},getImage:async k=>images.get(k)};
  return {map,images,storage,io,library:()=>Library.load(storage,C.initial())};
 }
+const journalKeys=b=>[...b.map.keys()].filter(k=>k.startsWith(X.JOURNAL+':'));
 const snapshot=b=>JSON.stringify([...b.map].sort())+'|'+[...b.images.keys()].sort().join(',');
 function budgetFor(projectId,tax=21){const b=Budget.createBudget({id:`bud_${projectId}`,subject:{type:'project',id:projectId},title:'Presupuesto reforma',taxRatePercent:tax});Budget.validateBudget(b);return b;}
 function setDocs(b,key,docs){const all=JSON.parse(b.storage.getItem(key)||'{}');Object.assign(all,docs);b.storage.setItem(key,JSON.stringify(all));}
@@ -97,7 +98,7 @@ test('repeated import is idempotent; changed content becomes a visible copy with
  const {b,lib,project}=await singleProfile(),{bytes}=await exportActive(b,lib);
  const clean=browser(),target=clean.library(),ctx=()=>({library:target,storage:clean.storage,...clean.io,visible:target.project()});
  const first=await X.restore(await X.read(bytes),ctx()),entries=target.list().length,images=clean.images.size;
- const second=await X.restore(await X.read(bytes),ctx());assert.deepEqual(second,{status:'already-present',entryId:first.entryId});
+ const second=await X.restore(await X.read(bytes),ctx());assert.equal(second.status,'already-present');assert.equal(second.entryId,first.entryId);assert.equal(second.contentId,first.contentId);
  assert.equal(target.list().length,entries);assert.equal(clean.images.size,images);
  // Re-importing into the original browser is also recognised.
  assert.equal((await X.restore(await X.read(bytes),{library:lib,storage:b.storage,...b.io,visible:lib.project()})).status,'already-present');
@@ -107,14 +108,15 @@ test('repeated import is idempotent; changed content becomes a visible copy with
  assert.equal(copy.status,'restored');assert.equal(copy.reidentified.length,1);const newId=copy.reidentified[0].to;assert.notEqual(newId,project.id);
  const budgets=JSON.parse(b.storage.getItem('rubik-budget-v1'));assert.deepEqual(budgets[project.id],budgetsBefore[project.id]);
  assert.equal(budgets[newId].id,`bud_${newId}`);assert.equal(budgets[newId].subject.id,newId);
+ assert.equal(copy.reidentified[0].reason,'id-in-use');assert.equal(lib.origin(),project.id);
 });
 
 test('documents left by a deleted project are kept: the restored project gets a new id instead',async()=>{
  const {b,lib,project}=await singleProfile(),{bytes}=await exportActive(b,lib);
  const clean=browser(),target=clean.library(),orphan=budgetFor(project.id,4);setDocs(clean,'rubik-budget-v1',{[project.id]:orphan});
  const r=await X.restore(await X.read(bytes),{library:target,storage:clean.storage,...clean.io,visible:target.project()});
- assert.equal(r.preassigned.length,1);const budgets=JSON.parse(clean.storage.getItem('rubik-budget-v1'));
- assert.deepEqual(budgets[project.id],orphan);assert.equal(budgets[r.preassigned[0].to].taxRatePercent,21);
+ assert.equal(r.reidentified.length,1);assert.equal(r.reidentified[0].reason,'documents-in-use');const budgets=JSON.parse(clean.storage.getItem('rubik-budget-v1'));
+ assert.deepEqual(budgets[project.id],orphan);assert.equal(budgets[r.reidentified[0].to].taxRatePercent,21);
 });
 
 test('a failed write undoes the whole restore; a corrupt document store is never overwritten',async()=>{
@@ -132,4 +134,107 @@ test('a failed write undoes the whole restore; a corrupt document store is never
 test('the expediente core works without network or external services',()=>{
  const source=fs.readFileSync(path.join(__dirname,'..','js','expediente-core.js'),'utf8');
  assert.doesNotMatch(source,/\bfetch\(|XMLHttpRequest|WebSocket|sendBeacon|https?:\/\//);
+});
+
+// ── Findings of the F0.1 closing review ─────────────────────────────────────────────────────────────────────────
+const ctxOf=(b,lib,extra={})=>({library:lib,storage:b.storage,...b.io,visible:lib.project(),...extra});
+async function profileWithImage(fx,bytes){const b=browser(),lib=b.library(),p=JSON.parse(JSON.stringify(fx.building.levels[0].project));
+ for(const im of p.sourceImages){const k='img_k'+crypto.randomBytes(4).toString('hex');await b.io.putImages([[k,new Blob([bytes],{type:im.mediaType})]]);im.storage={kind:'local-browser',ref:k};}
+ lib.importProject(lib.project(),p,'Reforma');return {b,lib};}
+
+test('identity includes the real image bytes: same geometry with another image is not «already present»',async()=>{
+ const fx=F.build(),png=fx.bytesFor('img_synthetic'),other=new Uint8Array(png);other[other.length-20]^=1;
+ const a=await profileWithImage(fx,png),z=await profileWithImage(fx,other),fileA=(await exportActive(a.b,a.lib)).bytes,fileZ=(await exportActive(z.b,z.lib)).bytes;
+ const t=browser(),lib=t.library();
+ assert.equal((await X.restore(await X.read(fileA),ctxOf(t,lib))).status,'restored');
+ const second=await X.restore(await X.read(fileZ),ctxOf(t,lib));assert.equal(second.status,'restored');assert.equal(second.reidentified[0].reason,'id-in-use');
+ assert.equal((await X.restore(await X.read(fileZ),ctxOf(t,lib))).status,'already-present');
+});
+
+test('repeated imports after a re-identified copy never pile up copies; an intended copy is still possible',async()=>{
+ const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib);
+ const edited=lib.project();edited.objects.pop();lib.save(edited);
+ const first=await X.restore(await X.read(bytes),ctxOf(b,lib)),count=lib.list().length;assert.equal(first.status,'restored');
+ for(let i=0;i<3;i++){const r=await X.restore(await X.read(bytes),ctxOf(b,lib));assert.equal(r.status,'already-present');assert.equal(r.entryId,first.entryId);}
+ assert.equal(lib.list().length,count);
+ const intended=await X.restore(await X.read(bytes),ctxOf(b,lib,{copy:true}));assert.equal(intended.status,'restored');assert.equal(lib.list().length,count+1);
+ // The work restored in a clean browser, exported again and brought back, is the same work.
+ const clean=browser(),cl=clean.library(),r=await X.restore(await X.read(bytes),ctxOf(clean,cl));cl.open(r.entryId);
+ const back=(await exportActive(clean,cl)).bytes;assert.equal((await X.restore(await X.read(back),ctxOf(b,lib))).status,'already-present');
+});
+
+test('a multi-level building is idempotent after its levels were re-identified',async()=>{
+ const fx=F.build(),b=browser(),lib=b.library(),bld=JSON.parse(JSON.stringify(fx.building));await storeImages(b,bld.levels.map(l=>l.project),fx);lib.importBuilding(lib.project(),bld,bld.name);
+ const ids=bld.levels.map(l=>l.project.id);setDocs(b,'rubik-budget-v1',{[ids[0]]:budgetFor(ids[0]),[ids[1]]:budgetFor(ids[1],10)});
+ const {bytes}=await exportActive(b,lib);const changed=lib.building();changed.levels[1].project.objects.pop();lib.saveBuilding(changed);
+ const copy=await X.restore(await X.read(bytes),ctxOf(b,lib));assert.equal(copy.status,'restored');assert.equal(copy.reidentified.length,2);
+ const budgets=JSON.parse(b.storage.getItem('rubik-budget-v1'));for(const {to} of copy.reidentified){assert.equal(budgets[to].subject.id,to);assert.equal(budgets[to].id,`bud_${to}`);}
+ assert.equal(budgets[copy.reidentified[1].to].taxRatePercent,10);const count=lib.list().length;
+ for(let i=0;i<2;i++)assert.equal((await X.restore(await X.read(bytes),ctxOf(b,lib))).status,'already-present');assert.equal(lib.list().length,count);
+});
+
+test('historical JSON keeps its image references as the JSON import does, and says which are missing',async()=>{
+ const {b,lib}=await singleProfile(),json=lib.project();json.id='prj_json-con-imagen';json.name='Proyecto JSON con imagen';
+ const buffer=new TextEncoder().encode(JSON.stringify(json)).buffer;
+ const here=await X.restore(await X.read(buffer),ctxOf(b,lib));assert.equal(here.status,'restored');assert.deepEqual(here.missingImages,[]);assert.equal(here.imagesIncluded,false);
+ const clean=browser(),cl=clean.library(),there=await X.restore(await X.read(buffer),ctxOf(clean,cl));
+ assert.equal(there.status,'restored');assert.deepEqual(there.missingImages,[json.sourceImages[0].id]);assert.equal(there.images,0);
+});
+
+test('unsaved changes of the visible project are kept when a restore opens another entry',async()=>{
+ const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),cl=clean.library(),active=cl.activeId(),visible=cl.project();visible.objects.pop();
+ await X.restore(await X.read(bytes),{library:cl,storage:clean.storage,...clean.io,visible});
+ const reloaded=Library.load(clean.storage,C.initial());reloaded.open(active);assert.equal(reloaded.project().objects.length,visible.objects.length);
+});
+
+test('nothing is exported when a resource or a document is missing or corrupt',async()=>{
+ const {b,lib}=await singleProfile();b.images.clear();await assert.rejects(exportActive(b,lib),/Imagen local no disponible/);
+ const other=await singleProfile(),all=JSON.parse(other.b.storage.getItem('rubik-budget-v1'));all[other.project.id].currency='USD';other.b.storage.setItem('rubik-budget-v1',JSON.stringify(all));
+ assert.throws(()=>X.collect({library:other.lib,storage:other.b.storage}),e=>e.code==='budget-invalid');
+});
+
+test('a cleanup that fails is reported, never hidden, and recover() finishes it later',async()=>{
+ const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),cl=clean.library(),before=cl.list().length;
+ // The library write (commit point) fails, then the budget cleanup and the image cleanup fail too.
+ const write=clean.storage.setItem;let budgetWrites=0;
+ clean.storage.setItem=(k,v)=>{if(k===Library.KEY&&budgetWrites)throw Object.assign(Error('quota'),{name:'QuotaExceededError'});if(k==='rubik-budget-v1'&&++budgetWrites>1)throw Error('sin espacio');write(k,v);};
+ const error=await X.restore(await X.read(bytes),{...ctxOf(clean,cl),removeImages:async()=>{throw Error('IndexedDB no disponible');}}).catch(e=>e);
+ assert.ok(error instanceof X.ExpedienteError);assert.match(error.message,/no se pudieron limpiar/);assert.equal(error.cleanupPending.length,2);assert.match(error.cause.message,/quota/);
+ clean.storage.setItem=write;assert.equal(Library.load(clean.storage,C.initial()).list().length,before);
+ assert.equal(journalKeys(clean).length,1);assert.ok(clean.images.size>0);assert.ok(Object.keys(JSON.parse(clean.storage.getItem('rubik-budget-v1'))).length>0);
+ // Next start-up (a reload or another tab): recover() undoes the leftovers.
+ const report=await X.recover({library:Library.load(clean.storage,C.initial()),storage:clean.storage,removeImages:clean.io.removeImages});
+ assert.deepEqual(report,{committed:0,rolledBack:1,pending:[]});assert.deepEqual(journalKeys(clean),[]);assert.equal(clean.images.size,0);
+ assert.deepEqual(JSON.parse(clean.storage.getItem('rubik-budget-v1')),{});
+});
+
+test('an interruption after the commit point leaves a complete project; recover() only drops the journal',async()=>{
+ const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),cl=clean.library(),remove=clean.storage.removeItem;
+ clean.storage.removeItem=k=>{if(k.startsWith(X.JOURNAL+':'))throw Error('cierre del navegador');remove(k);};
+ const r=await X.restore(await X.read(bytes),ctxOf(clean,cl));assert.equal(r.status,'restored');assert.equal(r.journalPending,true);
+ clean.storage.removeItem=remove;const reopened=Library.load(clean.storage,C.initial());
+ assert.deepEqual(await X.recover({library:reopened,storage:clean.storage,removeImages:clean.io.removeImages}),{committed:1,rolledBack:0,pending:[]});
+ reopened.open(r.entryId);assert.equal(reopened.project().sourceImages.length,1);assert.ok(clean.images.get(reopened.project().sourceImages[0].storage.ref));
+});
+
+test('a document written by another tab during the restore is not overwritten and nothing is added',async()=>{
+ const {b,lib,project}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),cl=clean.library(),theirs=budgetFor(project.id,7);
+ const put=clean.io.putImages,ctx={...ctxOf(clean,cl),putImages:async e=>{await put(e);setDocs(clean,'rubik-budget-v1',{[project.id]:theirs});}};
+ const error=await X.restore(await X.read(bytes),ctx).catch(e=>e);assert.equal(error.code,'document-conflict');
+ assert.deepEqual(JSON.parse(clean.storage.getItem('rubik-budget-v1'))[project.id],theirs);assert.equal(cl.list().length,1);assert.equal(clean.images.size,0);
+ assert.deepEqual(journalKeys(clean),[]);
+});
+
+test('restore and recover run under the same Web Lock when the browser offers it',async()=>{
+ const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),cl=clean.library(),names=[];
+ const locks={request:async(name,fn)=>{names.push(name);return fn();}};
+ await X.restore(await X.read(bytes),ctxOf(clean,cl,{locks}));await X.recover({library:cl,storage:clean.storage,removeImages:clean.io.removeImages,locks});
+ assert.deepEqual(names,['rubik-sota-expediente','rubik-sota-expediente']);
+});
+
+test('a tab with a stale copy of the library refuses to restore instead of erasing the other tab’s work',async()=>{
+ const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),tabA=clean.library(),tabB=Library.load(clean.storage,C.initial());
+ const a=await X.restore(await X.read(bytes),ctxOf(clean,tabA));assert.equal(a.status,'restored');const stored=clean.storage.getItem(Library.KEY);
+ const error=await X.restore(await X.read(bytes),{...ctxOf(clean,tabB),copy:true}).catch(e=>e);assert.equal(error.code,'library-stale');
+ assert.equal(clean.storage.getItem(Library.KEY),stored);assert.deepEqual(journalKeys(clean),[]);
 });

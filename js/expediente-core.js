@@ -6,8 +6,9 @@
      (project.json + images/…, js/project-package.js) and a building expediente IS a building ZIP (building.json +
      manifest.json + levels/…, js/building-core.js); the expediente only adds `expediente.json` and `documents/…`.
    - Budgets stay FloorPlanBudgetV1 (js/budget-core.js validates them); review notes are carried as stored.
-   - Restoring goes through the library's own import (js/project-library.js), so the identity contract is the same:
-     the file's id is kept when it is free and replaced when it is taken; budgets follow the id they end up with.
+   - Restoring goes through the library's own import (js/project-library.js) with the same identity contract: the
+     file's id is kept when it is free and replaced when it is taken; budgets follow the id they end up with. The work
+     is recognised by content (contentId: geometry + real image bytes + documents), not by its local id.
    - The same reader accepts the historical project/building ZIPs and JSON files (they simply have no documents).
    Integrity: every file of the expediente is listed in `expediente.json` with its size and SHA-256 fingerprint and is
    checked before anything is written. A fingerprint detects altered or damaged content; it is NOT a signature and
@@ -30,7 +31,7 @@
  // Building ZIP limit + the manifest + one budget and one review per level.
  const MAX_ENTRIES=Building.MAX_ENTRIES+1+2*Building.LIMITS.levels;
  const encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
- class ExpedienteError extends Error{constructor(code,message){super(message);this.name='ExpedienteError';this.code=code;}}
+ class ExpedienteError extends Error{constructor(code,message,extra){super(message);this.name='ExpedienteError';this.code=code;if(extra)Object.assign(this,extra);}}
  const fail=(code,message)=>{throw new ExpedienteError(code,message);};
  const clone=v=>v===undefined?undefined:JSON.parse(JSON.stringify(v));
  const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
@@ -145,76 +146,147 @@
   return {...result,documents,source,manifest};
  }
 
- // Equality used to recognise an expediente that is already in the library: the image *storage* differs by design
- // (sidecar in the file, local key in the browser), the content does not.
- function comparable(subject){
+ // ── Content identity ───────────────────────────────────────────────────────────────────────────────────────────
+ // What makes two subjects «the same work», independently of the local ids a restore may assign: the geometry and its
+ // metadata without project/building ids, every image by the SHA-256 of its REAL bytes (the fingerprint project-package
+ // and building-core already write; no other integrity authority) and the documents with their project references
+ // neutralised by level position. `imageToken(image, levelId)` returns the token of one image.
+ async function contentId(subject,documents,imageToken){
   const s=clone(subject.kind==='building'?subject.building:subject.project);
-  for(const p of subject.kind==='building'?s.levels.map(l=>l.project):[s])for(const im of p.sourceImages||[]){delete im.storage;delete im.bytes;delete im.sha256;delete im.originalFileName;}
-  return JSON.stringify(s);
+  const levels=subject.kind==='building'?s.levels.map(l=>[l.id,l.project]):[[null,s]],docs={budgets:[],reviews:[]};
+  for(const [i,[levelId,p]] of levels.entries()){
+   for(const im of p.sourceImages||[]){const token=await imageToken(im,levelId);delete im.storage;delete im.bytes;delete im.originalFileName;im.sha256=token;}
+   const id=p.id;delete p.id;
+   const b=documents.budgets[id];if(b!==undefined){const c=clone(b);if(c.id===`bud_${id}`)c.id='bud_*';if(isObj(c.subject)&&c.subject.id===id)c.subject={...c.subject,id:'*'};docs.budgets.push([i,c]);}
+   if(documents.reviews[id]!==undefined)docs.reviews.push([i,documents.reviews[id]]);
+  }
+  if(subject.kind==='building')delete s.id;
+  return Package.digest(encoder.encode(JSON.stringify([subject.kind,s,docs])));
  }
  const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+ const hasOwn=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+ const subjectOf=e=>e.kind==='building'?{kind:'building',building:e.building}:{kind:'project',project:e.project};
+ function documentsOf(subject,stores){const docs={budgets:{},reviews:{}};for(const p of projectsOf(subject))for(const k of ['budgets','reviews'])if(hasOwn(stores[k],p.id))docs[k][p.id]=stores[k][p.id];return docs;}
+ const STORE_KEY={budgets:BUDGETS,reviews:REVIEWS};
+ const readStores=storage=>({budgets:readStore(storage,BUDGETS).value,reviews:readStore(storage,REVIEWS).value});
+
+ // ── Recovery journal ───────────────────────────────────────────────────────────────────────────────────────────
+ // A restore writes to several independent stores (IndexedDB images, then budgets and reviews, then the library).
+ // Before the first write it records what it is going to create; the record is removed once the library holds the
+ // new entry. A record left behind (closed tab, crash, failed cleanup) is undone by recover(). Nothing is hidden: a
+ // cleanup that fails is reported in the error and its record stays for recover().
+ const JOURNAL='rubik-expediente-journal-v1',LOCK='rubik-sota-expediente';
+ // One key per operation (`<JOURNAL>:<op>`), never a shared map: localStorage reaches other tabs with a delay, so a
+ // read-modify-write of one shared value could bring back a record another tab had already removed.
+ function readJournal(storage){const out={};for(let i=0;i<storage.length;i++){const k=storage.key(i);if(typeof k==='string'&&k.startsWith(JOURNAL+':')){let v;try{v=JSON.parse(storage.getItem(k));}catch{v=null;}out[k.slice(JOURNAL.length+1)]=v;}}return out;}
+ const journalPut=(storage,op,record)=>storage.setItem(`${JOURNAL}:${op}`,JSON.stringify(record));
+ const journalDrop=(storage,op)=>storage.removeItem(`${JOURNAL}:${op}`);
+ // Web Locks serialise restore/recover across the tabs of this origin and are released if a tab dies.
+ // Each tab keeps the collection in memory and a library write stores the WHOLE collection, so a tab that has not seen
+ // another tab's change would erase it. A restore refuses to write from a stale copy.
+ const STALE='Otra pestaña ha cambiado la biblioteca de proyectos. Recarga RUBIK antes de restaurar para no sobrescribir ese trabajo; no se ha cambiado nada.';
+ function stale(library,storage){if(storage.getItem(Library.KEY)===null)return false;try{return JSON.stringify(Library.load(storage,Core.initial()).all())!==JSON.stringify(library.all());}catch{return true;}}
+ const withLock=(locks,fn)=>locks&&typeof locks.request==='function'?locks.request(LOCK,fn):fn();
+ const locksOf=ctx=>ctx.locks===undefined?globalThis.navigator?.locks:ctx.locks;
 
  /* restore(): adds what read() returned to the library as a NEW entry, with its images and documents.
-    ctx: {library, storage, putImages(entries), removeImages(keys), visible (project on screen), name}.
-    Nothing is overwritten: an existing budget or review is never replaced. If the same content is already stored
-    (same id, same geometry, same documents), nothing is written and its entry is reported. On any failure every write
-    of this call is undone and the collection is left as it was. */
- async function restore(parsed,{library,storage,putImages,removeImages,visible,name}){
-  const stores={budgets:readStore(storage,BUDGETS),reviews:readStore(storage,REVIEWS)};
-  const incoming=projectsOf(parsed),key={budgets:BUDGETS,reviews:REVIEWS};
-  const docsMatch=(id,target)=>['budgets','reviews'].every(k=>same(parsed.documents[k][id],stores[k].value[target]));
-  // 1 · Already here? Same subject id, same content and the same documents → nothing to do.
-  const target=comparable(parsed);
-  for(const e of library.all()){
-   if(e.kind!==(parsed.kind==='building'?'building':undefined))continue;
-   const stored=e.kind==='building'?{kind:'building',building:e.building}:{kind:'project',project:e.project};
-   const sameId=parsed.kind==='building'?e.building.id===parsed.building.id:e.project.id===parsed.project.id;
-   if(sameId&&comparable(stored)===target&&incoming.every(p=>docsMatch(p.id,p.id)))return {status:'already-present',entryId:e.id};
-  }
-  // 2 · A project id that is free in the library but still has documents of another project (e.g. left behind by a
-  // deleted entry) gets a new id here, so neither those documents nor the incoming ones are lost.
-  const subject=clone(parsed.kind==='building'?parsed.building:parsed.project),stored=new Set(library.projects().map(p=>p.id)),preassigned=[];
-  for(const p of parsed.kind==='building'?subject.levels.map(l=>l.project):[subject])
-   if(!stored.has(p.id)&&['budgets','reviews'].some(k=>Object.prototype.hasOwnProperty.call(stores[k].value,p.id)&&!same(stores[k].value[p.id],parsed.documents[k][p.id]))){const from=p.id;p.id=Core.id('prj');preassigned.push({from,to:p.id});}
+    ctx: {library, storage, putImages(entries), removeImages(keys), getImage(key), visible (project on screen), name,
+          copy (true = make a copy even if the same work is already here), locks}.
+    Guarantees (see docs/contracts/expediente-v1.md §4):
+    - Identity by content: the same work (geometry, real image bytes, documents) already stored → nothing is written.
+    - Ids are decided BEFORE writing; documents and images are written first and the library last. The library write
+      is a single atomic write and is the commit point: the new entry never appears without its documents.
+    - It is NOT atomic across stores: what was written before a failure or a crash is undone (ordinary rollback), or
+      later by recover() from the journal. A cleanup that fails is reported, never swallowed.
+    - No existing budget or review is replaced; another tab's documents are re-read just before writing. */
+ async function restore(parsed,ctx){return withLock(locksOf(ctx),()=>restoreLocked(parsed,ctx));}
+ async function restoreLocked(parsed,{library,storage,putImages,removeImages,getImage,visible,name,copy=false}){
+  const withBytes=parsed.source!=='project-json'&&parsed.source!=='building-json',images=parsed.images||[];
+  if(stale(library,storage))fail('library-stale',STALE);let current=readStores(storage);
+  // 1 · Same work already here?
+  const tokens=new Map();for(const x of images)tokens.set(`${x.levelId||''}|${x.image.id}`,await Package.digest(x.bytes));
+  const refToken=im=>`ref:${im.storage?.ref||im.id}`;
+  const incomingToken=async(im,levelId)=>withBytes?tokens.get(`${levelId||''}|${im.id}`):refToken(im);
+  const storedToken=async im=>{if(!withBytes)return refToken(im);const blob=getImage?await getImage(im.storage?.ref||im.id):null;return blob?Package.digest(new Uint8Array(await blob.arrayBuffer())):'missing:'+(im.storage?.ref||im.id);};
+  const target=await contentId(parsed,parsed.documents,incomingToken);
+  if(!copy){const shape=await contentId(parsed,parsed.documents,async()=>'');
+   for(const e of library.all()){
+    if((e.kind==='building')!==(parsed.kind==='building'))continue;const s=subjectOf(e),docs=documentsOf(s,current);
+    if(await contentId(s,docs,async()=>'')===shape&&await contentId(s,docs,storedToken)===target)return {status:'already-present',entryId:e.id,contentId:target};
+   }}
+  // 2 · Final ids. A project keeps the file's id only if the library does not use it and no other document hangs from it.
+  const subject=clone(parsed.kind==='building'?parsed.building:parsed.project),projects=parsed.kind==='building'?subject.levels.map(l=>l.project):[subject];
+  const live=new Set(library.projects().map(p=>p.id)),mapping=[];
+  for(const p of projects){const from=p.id,inUse=live.has(from),docsInUse=['budgets','reviews'].some(k=>hasOwn(current[k],from)&&!same(current[k][from],parsed.documents[k][from]));
+   if(inUse||docsInUse)p.id=Core.id('prj');mapping.push({from,to:p.id,reason:inUse?'id-in-use':docsInUse?'documents-in-use':null});}
   if(parsed.kind==='building')Building.validate(subject);else Core.validate(subject);
-  // 3 · Images: new local keys, exactly as the existing ZIP imports do.
-  const pending=[],levelImages=parsed.kind==='building'?subject.levels.flatMap(l=>(l.project.sourceImages||[]).map(im=>[l.id,im])):(subject.sourceImages||[]).map(im=>[null,im]);
+  // 3 · Images: new local keys as the existing ZIP imports do. A JSON file carries references only, as before.
+  const pending=[],missingImages=[],levelImages=parsed.kind==='building'?subject.levels.flatMap(l=>(l.project.sourceImages||[]).map(im=>[l.id,im])):(subject.sourceImages||[]).map(im=>[null,im]);
   for(const [levelId,im] of levelImages){
-   const found=parsed.images.find(x=>x.image.id===im.id&&(levelId===null||x.levelId===levelId));if(!found)fail('image-missing','Falta una imagen del proyecto en el expediente: '+im.id);
+   if(!withBytes){if(!getImage||!await getImage(im.storage?.ref||im.id))missingImages.push(im.id);continue;}
+   const found=images.find(x=>x.image.id===im.id&&(levelId===null||x.levelId===levelId));if(!found)fail('image-missing','Falta una imagen del proyecto en el expediente: '+im.id);
    const ref=Core.id('img');im.storage={kind:'local-browser',ref};pending.push([ref,new Blob([found.bytes],{type:im.mediaType})]);
   }
-  if(pending.length)await putImages(pending);
-  const before={activeId:library.activeId(),entries:new Set(library.list().map(e=>e.id))},written=[];
-  let entryId=null;
-  try{
-   // 4 · The library decides the final ids (identity contract) in one atomic write.
-   const title=name||parsed.manifest?.subject?.name||subject.name;
-   if(parsed.kind==='building')library.importBuilding(visible,subject,title);else library.importProject(visible,subject,title);
-   entryId=library.activeId();if(before.entries.has(entryId))fail('library-unchanged','La biblioteca no ha añadido el proyecto.');
-   const finalIds=parsed.kind==='building'?new Map(library.building().levels.map(l=>[l.id,l.project.id])):null;
-   const originalIds=parsed.kind==='building'?parsed.building.levels.map(l=>[l.project.id,finalIds.get(l.id)]):[[parsed.project.id,library.project().id]];
-   // 5 · Documents follow the id each project ended up with. Never over an existing document.
-   for(const k of ['budgets','reviews']){
-    const next=clone(stores[k].value);let n=0;
-    for(const [from,to] of originalIds){
-     const doc=parsed.documents[k][from];if(doc===undefined)continue;
-     if(Object.prototype.hasOwnProperty.call(next,to)){if(same(next[to],doc))continue;fail('document-conflict','Ya hay un documento guardado para ese proyecto; no se sobrescribe.');}
-     const copy=clone(doc);if(k==='budgets'&&from!==to){if(copy.id===`bud_${from}`)copy.id=`bud_${to}`;copy.subject={...copy.subject,id:to};}
-     next[to]=copy;n++;
-    }
-    if(n){storage.setItem(key[k],JSON.stringify(next));written.push(k);}
-   }
-   const reidentified=originalIds.filter(([a,b])=>a!==b).map(([from,to])=>({from,to}));
-   return {status:'restored',entryId,projectIds:Object.fromEntries(originalIds),reidentified,preassigned,images:pending.length,
-    budgets:Object.keys(parsed.documents.budgets).length,reviews:Object.keys(parsed.documents.reviews).length,source:parsed.source};
-  }catch(e){
-   for(const k of written){try{if(stores[k].raw===null)storage.removeItem?.(key[k]);else storage.setItem(key[k],stores[k].raw);}catch{}}
-   if(entryId&&!before.entries.has(entryId)){try{library.remove(entryId);library.open(before.activeId);}catch{}}
-   if(pending.length){try{await removeImages(pending.map(p=>p[0]));}catch{}}
-   throw e;
+  // Documents to create, under the final ids (an identical one already there is reused, never rewritten).
+  const planned={budgets:new Map(),reviews:new Map()};
+  for(const {from,to} of mapping)for(const k of ['budgets','reviews']){const doc=parsed.documents[k][from];if(doc===undefined||hasOwn(current[k],to))continue;
+   const c=clone(doc);if(k==='budgets'&&from!==to){if(c.id===`bud_${from}`)c.id=`bud_${to}`;c.subject={...c.subject,id:to};}planned[k].set(to,c);}
+  // 4 · Journal first: if it cannot be written, nothing else is.
+  const op=Core.id('exp');
+  journalPut(storage,op,{startedAt:new Date().toISOString(),projectIds:mapping.map(m=>m.to),images:pending.map(p=>p[0]),documents:{budgets:[...planned.budgets.keys()],reviews:[...planned.reviews.keys()]}});
+  const written={budgets:[],reviews:[]};
+  async function abort(cause){
+   const cleanup=[];
+   for(const k of ['budgets','reviews'])if(written[k].length)try{const fresh=readStore(storage,STORE_KEY[k]).value;let changed=false;
+    for(const id of written[k])if(hasOwn(fresh,id)&&same(fresh[id],planned[k].get(id))){delete fresh[id];changed=true;}if(changed)storage.setItem(STORE_KEY[k],JSON.stringify(fresh));}
+    catch(e){cleanup.push({store:STORE_KEY[k],message:e.message});}
+   if(pending.length)try{await removeImages(pending.map(p=>p[0]));}catch(e){cleanup.push({store:'rubik-sota-images-v1',message:e.message});}
+   if(!cleanup.length)try{journalDrop(storage,op);}catch(e){cleanup.push({store:JOURNAL,message:e.message});}
+   const why=cause&&cause.message?cause.message:String(cause);
+   throw new ExpedienteError(cause&&cause.code||'restore-failed',cleanup.length
+    ?`No se ha restaurado el expediente (${why}). No se ha añadido ningún proyecto, pero no se pudieron limpiar todos los restos (${cleanup.map(c=>c.store).join(', ')}); RUBIK los limpiará con recover() al volver a abrirse.`
+    :`No se ha restaurado el expediente (${why}). No se ha añadido ni cambiado nada.`,{cause,cleanupPending:cleanup});
   }
+  // 5 · Images (asynchronous; invisible until the library refers to them).
+  try{if(pending.length)await putImages(pending);}catch(e){return abort(e);}
+  // 6 · Documents, then the library (commit point). Synchronous: nothing else of this tab runs in between.
+  let entryId,journalPending=false;
+  try{
+   if(stale(library,storage))fail('library-stale',STALE);current=readStores(storage);
+   for(const k of ['budgets','reviews']){if(!planned[k].size)continue;const next=current[k];
+    for(const [id,doc] of planned[k]){if(hasOwn(next,id))fail('document-conflict','Otra pestaña ha guardado un documento para ese proyecto mientras se restauraba; no se sobrescribe.');next[id]=doc;}
+    storage.setItem(STORE_KEY[k],JSON.stringify(next));written[k]=[...planned[k].keys()];}
+   const before=new Set(library.list().map(e=>e.id)),title=name||parsed.manifest?.subject?.name||subject.name;
+   if(parsed.kind==='building')library.importBuilding(visible,subject,title);
+   else library.importProject(visible,subject,title,{originProjectId:mapping[0].from!==mapping[0].to?mapping[0].from:undefined});
+   entryId=library.activeId();if(before.has(entryId))fail('library-unchanged','La biblioteca no ha añadido el proyecto.');
+  }catch(e){return abort(e);}
+  try{journalDrop(storage,op);}catch{journalPending=true;}// committed; recover() drops the record later
+  return {status:'restored',entryId,contentId:target,source:parsed.source,imagesIncluded:withBytes,
+   projectIds:Object.fromEntries(mapping.map(m=>[m.from,m.to])),reidentified:mapping.filter(m=>m.from!==m.to),
+   images:pending.length,missingImages,budgets:planned.budgets.size,reviews:planned.reviews.size,journalPending};
  }
 
- const api={FORMAT,VERSION,MANIFEST,MAX_ENTRIES,NOT_INCLUDED,ExpedienteError,check,collect,pack,read,restore,LIBRARY_KEY:Library.KEY};
+ /* recover(): undoes what an interrupted or failed restore left behind, using the journal. A record whose projects are
+    in the library was committed (only the record is removed). Otherwise its documents and images are removed if no
+    project of the library uses them. Call it at start-up, before the person edits. Returns what it did. */
+ async function recover(ctx){return withLock(locksOf(ctx),()=>recoverLocked(ctx));}
+ async function recoverLocked({library,storage,removeImages}){
+  const journal=readJournal(storage),projects=library.projects(),live=new Set(projects.map(p=>p.id));
+  const liveImages=new Set(projects.flatMap(p=>(p.sourceImages||[]).map(i=>i.storage?.ref||i.id))),report={committed:0,rolledBack:0,pending:[]};
+  for(const [op,r] of Object.entries(journal)){
+   try{
+    if(!isObj(r)||!Array.isArray(r.projectIds)||!Array.isArray(r.images)||!isObj(r.documents))fail('journal-invalid','Registro de recuperación incompleto.');
+    if(r.projectIds.some(id=>live.has(id))){journalDrop(storage,op);report.committed++;continue;}
+    for(const k of ['budgets','reviews']){const fresh=readStore(storage,STORE_KEY[k]).value;let changed=false;
+     for(const id of r.documents[k]||[])if(!live.has(id)&&hasOwn(fresh,id)){delete fresh[id];changed=true;}if(changed)storage.setItem(STORE_KEY[k],JSON.stringify(fresh));}
+    const orphans=r.images.filter(k=>!liveImages.has(k));if(orphans.length)await removeImages(orphans);
+    journalDrop(storage,op);report.rolledBack++;
+   }catch(e){report.pending.push({op,message:e.message});}
+  }
+  return report;
+ }
+
+ const api={FORMAT,VERSION,MANIFEST,MAX_ENTRIES,NOT_INCLUDED,JOURNAL,ExpedienteError,check,collect,pack,read,restore,recover,contentId};
  if(node)module.exports=api;else root.FloorPlanExpediente=api;
 })(typeof globalThis==='object'?globalThis:this);
