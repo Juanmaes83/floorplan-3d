@@ -1,0 +1,212 @@
+{
+  "sha": "f34ad8ef79ea5f3232b90ffafb55319e4e140590",
+  "indexGitBlob": "ae81d1864846fac1cba6e8c6c5b9f1169fd18326",
+  "servedIndexVariantSha256": "08cdaefa5bd3202dfe7917f317ae6db43e5c8a03f7e4f9259f2b5874ce1f1913",
+  "node": "v22.13.0",
+  "chromium": "151.0.7922.34",
+  "os": "Windows 11 Pro",
+  "cpu": "AMD Ryzen 9 9900X 12-Core Processor            ",
+  "renderer": "Chromium SwiftShader software",
+  "profiles": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "mobile": false
+    },
+    {
+      "name": "touch",
+      "width": 390,
+      "height": 844,
+      "dpr": 2,
+      "mobile": true
+    }
+  ],
+  "repetitions": 1,
+  "idleMs": 1500,
+  "samples": [
+    {
+      "repeat": 1,
+      "scene": "furnished",
+      "profile": "desktop",
+      "sceneFacts": {
+        "rooms": 13,
+        "walls": 70,
+        "objects": 47,
+        "levelGroups": 0,
+        "canvas": {
+          "width": 884,
+          "height": 627,
+          "style": "display: block; width: 884px; height: 627px; touch-action: none;",
+          "pixelRatio": 1
+        },
+        "assets": [
+          {
+            "bytes": 4204,
+            "triangles": 60,
+            "durationMs": 327.69999998807907
+          }
+        ]
+      },
+      "visual": {
+        "pngSha256": "6d41eef71e185aaafe4027344a7601bfd24bed0095f0302735989dd44a5d2f9b",
+        "camera": {
+          "position": [
+            4.766317183334685,
+            13.02793363444814,
+            7.354116469306931
+          ],
+          "quaternion": [
+            -0.44430738134531256,
+            0.2406171811342638,
+            0.12521070283673114,
+            0.8538246909759659
+          ],
+          "fov": 45,
+          "aspect": 1.4098883572567784
+        }
+      },
+      "entry": {
+        "tookMs": 599,
+        "callbacks": 2,
+        "frames": 2,
+        "framesPerSecond": 3.34,
+        "frameIntervalP95Ms": 32.3,
+        "submissionP95Ms": 15.7,
+        "inputToChangedFrameMs": null,
+        "rendererThreadTaskMs": 250.78,
+        "lastDrawCalls": 1410,
+        "maxTextures": 9,
+        "builds": [
+          {
+            "layer": "architecture",
+            "ms": 22.4
+          },
+          {
+            "layer": "furniture",
+            "ms": 94.8
+          }
+        ]
+      },
+      "idle": {
+        "tookMs": 1505.5,
+        "callbacks": 0,
+        "frames": 0,
+        "framesPerSecond": 0,
+        "frameIntervalP95Ms": null,
+        "submissionP95Ms": null,
+        "inputToChangedFrameMs": null,
+        "rendererThreadTaskMs": 12.7,
+        "lastDrawCalls": null,
+        "maxTextures": 0,
+        "builds": []
+      },
+      "interaction": {
+        "tookMs": 2400.6,
+        "callbacks": 15,
+        "frames": 15,
+        "framesPerSecond": 6.25,
+        "frameIntervalP95Ms": 212.1,
+        "submissionP95Ms": 11.9,
+        "inputToChangedFrameMs": 26,
+        "rendererThreadTaskMs": 205.02,
+        "lastDrawCalls": 1421,
+        "maxTextures": 9,
+        "builds": []
+      }
+    },
+    {
+      "repeat": 1,
+      "scene": "furnished",
+      "profile": "touch",
+      "sceneFacts": {
+        "rooms": 13,
+        "walls": 70,
+        "objects": 47,
+        "levelGroups": 0,
+        "canvas": {
+          "width": 780,
+          "height": 1282,
+          "style": "display: block; width: 390px; height: 641px; touch-action: none;",
+          "pixelRatio": 2
+        },
+        "assets": [
+          {
+            "bytes": 4204,
+            "triangles": 60,
+            "durationMs": 273.4000000357628
+          }
+        ]
+      },
+      "visual": {
+        "pngSha256": "272d29abf36afcafc2f0032966bf5c4a0e4dae3202994c064358c6734177ffa3",
+        "camera": {
+          "position": [
+            9.231868973242076,
+            25.23377519352834,
+            15.07871932296206
+          ],
+          "quaternion": [
+            -0.4443073813453125,
+            0.24061718113426375,
+            0.1252107028367311,
+            0.8538246909759659
+          ],
+          "fov": 45,
+          "aspect": 0.608424336973479
+        }
+      },
+      "entry": {
+        "tookMs": 476.9,
+        "callbacks": 2,
+        "frames": 2,
+        "framesPerSecond": 4.19,
+        "frameIntervalP95Ms": 19.5,
+        "submissionP95Ms": 17.1,
+        "inputToChangedFrameMs": null,
+        "rendererThreadTaskMs": 236.74,
+        "lastDrawCalls": 1410,
+        "maxTextures": 9,
+        "builds": [
+          {
+            "layer": "architecture",
+            "ms": 27.3
+          },
+          {
+            "layer": "furniture",
+            "ms": 95.4
+          }
+        ]
+      },
+      "idle": {
+        "tookMs": 1503.8,
+        "callbacks": 0,
+        "frames": 0,
+        "framesPerSecond": 0,
+        "frameIntervalP95Ms": null,
+        "submissionP95Ms": null,
+        "inputToChangedFrameMs": null,
+        "rendererThreadTaskMs": 13.38,
+        "lastDrawCalls": null,
+        "maxTextures": 0,
+        "builds": []
+      },
+      "interaction": {
+        "tookMs": 4959.5,
+        "callbacks": 27,
+        "frames": 27,
+        "framesPerSecond": 5.44,
+        "frameIntervalP95Ms": 229,
+        "submissionP95Ms": 10.1,
+        "inputToChangedFrameMs": 39.5,
+        "rendererThreadTaskMs": 292.41,
+        "lastDrawCalls": 1421,
+        "maxTextures": 9,
+        "builds": []
+      }
+    }
+  ],
+  "demand": true,
+  "settledEntrance": true
+}
