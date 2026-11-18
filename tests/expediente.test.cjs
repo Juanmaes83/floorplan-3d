@@ -203,7 +203,7 @@ test('a cleanup that fails is reported, never hidden, and recover() finishes it 
  clean.storage.setItem=write;assert.equal(Library.load(clean.storage,C.initial()).list().length,before);
  assert.equal(journalKeys(clean).length,1);assert.ok(clean.images.size>0);assert.ok(Object.keys(JSON.parse(clean.storage.getItem('rubik-budget-v1'))).length>0);
  // Next start-up (a reload or another tab): recover() undoes the leftovers.
- const report=await X.recover({library:Library.load(clean.storage,C.initial()),storage:clean.storage,removeImages:clean.io.removeImages});
+ const report=await X.recover({library:Library.load(clean.storage,C.initial()),storage:clean.storage,removeImages:clean.io.removeImages,minAgeMs:0});
  assert.deepEqual(report,{committed:0,rolledBack:1,pending:[]});assert.deepEqual(journalKeys(clean),[]);assert.equal(clean.images.size,0);
  assert.deepEqual(JSON.parse(clean.storage.getItem('rubik-budget-v1')),{});
 });
@@ -213,7 +213,7 @@ test('an interruption after the commit point leaves a complete project; recover(
  clean.storage.removeItem=k=>{if(k.startsWith(X.JOURNAL+':'))throw Error('cierre del navegador');remove(k);};
  const r=await X.restore(await X.read(bytes),ctxOf(clean,cl));assert.equal(r.status,'restored');assert.equal(r.journalPending,true);
  clean.storage.removeItem=remove;const reopened=Library.load(clean.storage,C.initial());
- assert.deepEqual(await X.recover({library:reopened,storage:clean.storage,removeImages:clean.io.removeImages}),{committed:1,rolledBack:0,pending:[]});
+ assert.deepEqual(await X.recover({library:reopened,storage:clean.storage,removeImages:clean.io.removeImages,minAgeMs:0}),{committed:1,rolledBack:0,pending:[]});
  reopened.open(r.entryId);assert.equal(reopened.project().sourceImages.length,1);assert.ok(clean.images.get(reopened.project().sourceImages[0].storage.ref));
 });
 
@@ -228,7 +228,7 @@ test('a document written by another tab during the restore is not overwritten an
 test('restore and recover run under the same Web Lock when the browser offers it',async()=>{
  const {b,lib}=await singleProfile(),{bytes}=await exportActive(b,lib),clean=browser(),cl=clean.library(),names=[];
  const locks={request:async(name,fn)=>{names.push(name);return fn();}};
- await X.restore(await X.read(bytes),ctxOf(clean,cl,{locks}));await X.recover({library:cl,storage:clean.storage,removeImages:clean.io.removeImages,locks});
+ await X.restore(await X.read(bytes),ctxOf(clean,cl,{locks}));await X.recover({library:cl,storage:clean.storage,removeImages:clean.io.removeImages,locks,minAgeMs:0});
  assert.deepEqual(names,['rubik-sota-expediente','rubik-sota-expediente']);
 });
 

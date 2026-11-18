@@ -1,6 +1,6 @@
-name: F0 expediente - continuity core
-# F0.1 of the continuity ADR: the expediente contract (pure core) and the same flows in a real Chromium (IndexedDB,
-# localStorage, Web Locks). A dedicated workflow, so no existing workflow changes its execution contract.
+name: F0 continuity - expediente and persistence
+# F0 of the continuity ADR: the expediente contract (F0.1) and the IndexedDB persistence authority (F0.2), with their
+# flows in a real Chromium (IndexedDB, localStorage, Web Locks, BroadcastChannel, quota on an on-disk profile). A dedicated workflow, so no existing workflow changes its execution contract.
 # One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -17,9 +17,12 @@ on:
       - js/budget-core.js
       - js/tracing-core.js
       - js/local-images.js
+      - js/persistence-store.js
+      - js/tracing-ui.js
       - index.html
       - tests/expediente.test.cjs
       - tests/expediente.browser.test.cjs
+      - tests/persistence.browser.test.cjs
       - tests/fixtures/building-fixture.cjs
       - .github/workflows/f0-expediente.yml
 permissions:
@@ -27,7 +30,7 @@ permissions:
 jobs:
   expediente:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,3 +48,5 @@ jobs:
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Expediente in a real browser
         run: node --test --test-concurrency=1 tests/expediente.browser.test.cjs
+      - name: Persistence authority in a real browser (F0.2)
+        run: node --test --test-concurrency=1 tests/persistence.browser.test.cjs

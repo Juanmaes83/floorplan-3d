@@ -271,13 +271,20 @@
     in the library was committed (only the record is removed). Otherwise its documents and images are removed if no
     project of the library uses them. Call it at start-up, before the person edits. Returns what it did. */
  async function recover(ctx){return withLock(locksOf(ctx),()=>recoverLocked(ctx));}
- async function recoverLocked({library,storage,removeImages}){
-  const journal=readJournal(storage),projects=library.projects(),live=new Set(projects.map(p=>p.id));
+ // F0.2 · recover() never trusts the tab's own copy of the library alone: that copy may predate a restore another tab
+ // has already committed, and rolling that restore back would delete the budgets and images of a valid project. A project
+ // is live if the stored library OR the tab's copy has it, and records younger than `minAgeMs` are left alone, because
+ // localStorage reaches other tabs with a delay (shown by the real browser test) and the commit may not be visible yet.
+ const RECOVER_MIN_AGE_MS=2*60*1000;
+ async function recoverLocked({library,storage,removeImages,minAgeMs=RECOVER_MIN_AGE_MS,now=Date.now()}){
+  let stored=[];if(storage.getItem(Library.KEY)!==null)try{stored=Library.load(storage,Core.initial()).projects();}catch(e){fail('library-unreadable','No se puede leer la biblioteca guardada; no se ha deshecho nada. '+e.message);}
+  const journal=readJournal(storage),projects=[...stored,...(library?library.projects():[])],live=new Set(projects.map(p=>p.id));
   const liveImages=new Set(projects.flatMap(p=>(p.sourceImages||[]).map(i=>i.storage?.ref||i.id))),report={committed:0,rolledBack:0,pending:[]};
   for(const [op,r] of Object.entries(journal)){
    try{
     if(!isObj(r)||!Array.isArray(r.projectIds)||!Array.isArray(r.images)||!isObj(r.documents))fail('journal-invalid','Registro de recuperación incompleto.');
     if(r.projectIds.some(id=>live.has(id))){journalDrop(storage,op);report.committed++;continue;}
+    const age=now-Date.parse(r.startedAt);if(!(age>=minAgeMs)){report.pending.push({op,message:'Operación reciente: puede estar confirmándose en otra pestaña; se revisará más tarde.'});continue;}
     for(const k of ['budgets','reviews']){const fresh=readStore(storage,STORE_KEY[k]).value;let changed=false;
      for(const id of r.documents[k]||[])if(!live.has(id)&&hasOwn(fresh,id)){delete fresh[id];changed=true;}if(changed)storage.setItem(STORE_KEY[k],JSON.stringify(fresh));}
     const orphans=r.images.filter(k=>!liveImages.has(k));if(orphans.length)await removeImages(orphans);
@@ -287,6 +294,6 @@
   return report;
  }
 
- const api={FORMAT,VERSION,MANIFEST,MAX_ENTRIES,NOT_INCLUDED,JOURNAL,ExpedienteError,check,collect,pack,read,restore,recover,contentId};
+ const api={FORMAT,VERSION,MANIFEST,MAX_ENTRIES,NOT_INCLUDED,JOURNAL,LOCK,RECOVER_MIN_AGE_MS,ExpedienteError,check,collect,pack,read,restore,recover,contentId};
  if(node)module.exports=api;else root.FloorPlanExpediente=api;
 })(typeof globalThis==='object'?globalThis:this);
