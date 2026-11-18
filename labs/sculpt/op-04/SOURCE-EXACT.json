@@ -1,0 +1,722 @@
+{
+  "donor": "https://github.com/Juanmaes83/openPlan3D",
+  "upstream": "https://github.com/laanlabs/openPlan3D",
+  "commit": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+  "snapshotBase": "50a4bab0026d08e8c30f4c18b3dca86448973c31",
+  "moduleClosure": [
+    "src/lib/models/types.ts",
+    "src/lib/stores/project.ts",
+    "src/lib/stores/settings.ts",
+    "src/lib/utils/canvasInteraction.ts",
+    "src/lib/utils/canvasRenderer.ts",
+    "src/lib/utils/catalogAssetUrl.ts",
+    "src/lib/utils/columnPlanGeometry.ts",
+    "src/lib/utils/dimensionPlanGeometry.ts",
+    "src/lib/utils/doorSymbol.ts",
+    "src/lib/utils/entourageCatalog.ts",
+    "src/lib/utils/entourageImages.ts",
+    "src/lib/utils/floors.ts",
+    "src/lib/utils/furnitureCatalog.ts",
+    "src/lib/utils/furnitureCategories.ts",
+    "src/lib/utils/furnitureElevation.ts",
+    "src/lib/utils/furnitureIcons.ts",
+    "src/lib/utils/furniturePlanBounds.ts",
+    "src/lib/utils/hitTesting.ts",
+    "src/lib/utils/interiorArea.ts",
+    "src/lib/utils/openingDrop.ts",
+    "src/lib/utils/roomDetection.ts",
+    "src/lib/utils/roomNesting.ts",
+    "src/lib/utils/roomplanImport.ts",
+    "src/lib/utils/roomplanMerge.ts",
+    "src/lib/utils/roomplanValidation.ts",
+    "src/lib/utils/scanAlignment.ts",
+    "src/lib/utils/stairPlanGeometry.ts",
+    "src/lib/utils/textureFiles.ts",
+    "src/lib/utils/textureGenerator.ts",
+    "src/lib/utils/wallEditing.ts",
+    "src/lib/utils/wallPlanGeometry.ts",
+    "src/lib/utils/wallProfiles.ts",
+    "src/lib/utils/wallProjection.ts"
+  ],
+  "directImports": {
+    "src/lib/utils/scanAlignment.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/utils/hitTesting.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/roomNesting.ts",
+      "src/lib/utils/wallEditing.ts",
+      "src/lib/utils/wallPlanGeometry.ts"
+    ],
+    "src/lib/utils/roomplanMerge.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/utils/columnPlanGeometry.ts",
+      "src/lib/utils/floors.ts",
+      "src/lib/utils/furniturePlanBounds.ts",
+      "src/lib/utils/stairPlanGeometry.ts",
+      "src/lib/utils/wallPlanGeometry.ts"
+    ],
+    "src/lib/utils/roomplanImport.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/utils/floors.ts",
+      "src/lib/utils/furnitureCategories.ts",
+      "src/lib/utils/furnitureElevation.ts",
+      "src/lib/utils/openingDrop.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/roomplanValidation.ts"
+    ],
+    "src/lib/utils/roomplanValidation.ts": [],
+    "tests/scan-alignment.test.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/utils/scanAlignment.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/roomplan-merge.test.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/roomplanImport.ts",
+      "src/lib/utils/roomplanMerge.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/roomplan-collapsed-walls.test.ts": [
+      "src/lib/services/projectPackage.ts",
+      "src/lib/utils/interchange.ts",
+      "src/lib/utils/projectValidation.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/roomplanImport.ts",
+      "src/lib/utils/roomplanMerge.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/roomplan-import-labels.test.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/services/projectPackage.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/roomplanImport.ts"
+    ],
+    "tests/roomplan-import.test.ts": [
+      "src/lib/stores/project.ts",
+      "src/lib/utils/canvasRenderer.ts",
+      "src/lib/utils/roomplanImport.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/browser/scan-door-join.spec.ts": [],
+    "tests/browser/roomplan-add-to-plan.spec.ts": [],
+    "tests/browser/roomplan-confirm-localization.spec.ts": [],
+    "tests/browser/roomplan-import-attributes.spec.ts": [],
+    "src/lib/stores/project.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/stores/onboarding.svelte.ts",
+      "src/lib/utils/duplicateSelection.ts",
+      "src/lib/utils/floors.ts",
+      "src/lib/utils/itemDetails.ts",
+      "src/lib/utils/moveToFloor.ts",
+      "src/lib/utils/outerWalls.ts",
+      "src/lib/utils/projectValidation.ts",
+      "src/lib/utils/roomplanMerge.ts",
+      "src/lib/utils/scanAlignment.ts",
+      "src/lib/utils/selectionRotation.ts",
+      "src/lib/utils/splitWallGeometry.ts",
+      "src/lib/utils/splitWallRooms.ts",
+      "src/lib/utils/wallEditing.ts",
+      "src/lib/utils/wallProfiles.ts"
+    ],
+    "src/lib/components/editor/FloorPlanCanvas.svelte": [
+      "src/lib/components/editor/ContextMenu.svelte",
+      "src/lib/components/editor/MoveToFloorMenu.svelte",
+      "src/lib/i18n/furnitureNames.ts",
+      "src/lib/i18n/index.ts",
+      "src/lib/models/types.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/stores/settings.ts",
+      "src/lib/utils/canvasInteraction.ts",
+      "src/lib/utils/canvasRenderer.ts",
+      "src/lib/utils/drawScheduler.ts",
+      "src/lib/utils/entourageCatalog.ts",
+      "src/lib/utils/floors.ts",
+      "src/lib/utils/furnitureCatalog.ts",
+      "src/lib/utils/furnitureGeometry.ts",
+      "src/lib/utils/furnitureIcons.ts",
+      "src/lib/utils/hitTesting.ts",
+      "src/lib/utils/inlineEditorFocus.ts",
+      "src/lib/utils/marqueeSelection.ts",
+      "src/lib/utils/materials.ts",
+      "src/lib/utils/modalDialog.ts",
+      "src/lib/utils/multiSelectionBounds.ts",
+      "src/lib/utils/openingDrop.ts",
+      "src/lib/utils/openingTranslation.ts",
+      "src/lib/utils/outerWalls.ts",
+      "src/lib/utils/planContentBounds.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/roomNesting.ts",
+      "src/lib/utils/roomPresets.ts",
+      "src/lib/utils/roomTemplates.ts",
+      "src/lib/utils/scanAlignment.ts",
+      "src/lib/utils/selectionContentBounds.ts",
+      "src/lib/utils/shortcuts.ts",
+      "src/lib/utils/snapStep.ts",
+      "src/lib/utils/textureGenerator.ts",
+      "src/lib/utils/tracingImage.ts",
+      "src/lib/utils/wallEditing.ts",
+      "src/lib/utils/wallTranslation.ts"
+    ],
+    "src/lib/components/sidebar/BuildPanel.svelte": [
+      "src/lib/components/ImportError.svelte",
+      "src/lib/components/sidebar/CustomModelPanel.svelte",
+      "src/lib/components/sidebar/FurnitureThumbnail.svelte",
+      "src/lib/i18n/catalogCategories.ts",
+      "src/lib/i18n/entourageLabels.ts",
+      "src/lib/i18n/furnitureNames.ts",
+      "src/lib/i18n/index.ts",
+      "src/lib/i18n/roomLabels.ts",
+      "src/lib/models/types.ts",
+      "src/lib/services/projectOpening.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/utils/entourageCatalog.ts",
+      "src/lib/utils/floors.ts",
+      "src/lib/utils/furnitureCatalog.ts",
+      "src/lib/utils/interchange.ts",
+      "src/lib/utils/modalDialog.ts",
+      "src/lib/utils/placementArming.ts",
+      "src/lib/utils/roomPresets.ts",
+      "src/lib/utils/roomTemplates.ts",
+      "src/lib/utils/roomplanImport.ts",
+      "src/lib/utils/roomplanMerge.ts"
+    ],
+    "src/lib/components/sidebar/PropertiesPanel.svelte": [
+      "src/lib/components/sidebar/ItemDetailsPanel.svelte",
+      "src/lib/i18n/entourageLabels.ts",
+      "src/lib/i18n/furnitureNames.ts",
+      "src/lib/i18n/index.ts",
+      "src/lib/i18n/roomPropertyLabels.ts",
+      "src/lib/i18n/wallMaterialLabels.ts",
+      "src/lib/models/types.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/stores/settings.ts",
+      "src/lib/utils/catalogAssetUrl.ts",
+      "src/lib/utils/doorStyle.ts",
+      "src/lib/utils/entourageCatalog.ts",
+      "src/lib/utils/furnitureCatalog.ts",
+      "src/lib/utils/furnitureElevation.ts",
+      "src/lib/utils/furnitureFinishes.ts",
+      "src/lib/utils/materials.ts",
+      "src/lib/utils/roomDetection.ts",
+      "src/lib/utils/wallEditing.ts",
+      "src/lib/utils/wallProfiles.ts"
+    ],
+    "src/lib/components/toolbar/TopBar.svelte": [
+      "src/lib/components/AssistantShareDialog.svelte",
+      "src/lib/components/ExportNotice.svelte",
+      "src/lib/components/ImportError.svelte",
+      "src/lib/components/LibraryRestoreDialog.svelte",
+      "src/lib/components/ProjectPackageDialog.svelte",
+      "src/lib/components/sidebar/AreaSummaryPanel.svelte",
+      "src/lib/components/toolbar/SettingsDialog.svelte",
+      "src/lib/components/toolbar/VersionHistoryPanel.svelte",
+      "src/lib/i18n/index.ts",
+      "src/lib/i18n/projectServiceMessages.ts",
+      "src/lib/models/types.ts",
+      "src/lib/services/libraryRestore.ts",
+      "src/lib/services/projectOpening.ts",
+      "src/lib/services/projectPackage.ts",
+      "src/lib/stores/exportNotice.ts",
+      "src/lib/stores/onboarding.svelte.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/stores/saveStatus.ts",
+      "src/lib/stores/versionHistory.ts",
+      "src/lib/utils/captureMain3D.ts",
+      "src/lib/utils/export.ts",
+      "src/lib/utils/floors.ts",
+      "src/lib/utils/inlineEditorFocus.ts",
+      "src/lib/utils/interchange.ts",
+      "src/lib/utils/modalDialog.ts",
+      "src/lib/utils/roomplanImport.ts",
+      "src/lib/utils/transferLink.ts"
+    ],
+    "src/lib/components/WelcomeScreen.svelte": [
+      "src/lib/components/ImportError.svelte",
+      "src/lib/i18n/index.ts",
+      "src/lib/i18n/templateLabels.ts",
+      "src/lib/services/libraryRestore.ts",
+      "src/lib/services/projectOpening.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/utils/houseTemplates.ts",
+      "src/lib/utils/interchange.ts",
+      "src/lib/utils/modalDialog.ts",
+      "src/lib/utils/roomplanImport.ts",
+      "src/lib/utils/roomplanValidation.ts"
+    ],
+    "src/lib/i18n/locales/en.ts": [],
+    "src/lib/i18n/locales/pt.ts": [],
+    "src/lib/i18n/undoMessages.ts": [
+      "src/lib/i18n/furnitureNames.ts",
+      "src/lib/i18n/index.ts",
+      "src/lib/models/types.ts",
+      "src/lib/utils/furnitureCatalog.ts"
+    ],
+    "src/routes/editor/+page.svelte": [
+      "src/lib/components/OnboardingTooltip.svelte",
+      "src/lib/components/editor/AlignmentToolbar.svelte",
+      "src/lib/components/editor/CommandPalette.svelte",
+      "src/lib/components/editor/ElevationView.svelte",
+      "src/lib/components/editor/FloorPlanCanvas.svelte",
+      "src/lib/components/editor/PrintLayout.svelte",
+      "src/lib/components/editor/UndoHistoryPanel.svelte",
+      "src/lib/components/sidebar/BuildPanel.svelte",
+      "src/lib/components/sidebar/LayersPanel.svelte",
+      "src/lib/components/sidebar/PropertiesPanel.svelte",
+      "src/lib/components/toolbar/TopBar.svelte",
+      "src/lib/components/viewer3d/ThreeViewer.svelte",
+      "src/lib/i18n/captureImportError.ts",
+      "src/lib/i18n/index.ts",
+      "src/lib/i18n/projectServiceMessages.ts",
+      "src/lib/services/agentBridge.ts",
+      "src/lib/services/datastore.ts",
+      "src/lib/services/deployment.ts",
+      "src/lib/stores/exportNotice.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/stores/saveStatus.ts",
+      "src/lib/utils/interchange.ts",
+      "src/lib/utils/modalDialog.ts",
+      "src/lib/utils/roomplanImport.ts"
+    ],
+    "vitest.config.ts": [
+      "tooling/catalog-assets.mjs"
+    ],
+    "playwright.config.ts": [],
+    "svelte.config.js": [],
+    "vite.config.ts": [
+      "tooling/catalog-assets.mjs",
+      "tooling/render-lab-asset.ts"
+    ]
+  },
+  "baselineSuites": [
+    "tests/scan-alignment.test.ts",
+    "tests/roomplan-merge.test.ts",
+    "tests/roomplan-collapsed-walls.test.ts",
+    "tests/roomplan-import-labels.test.ts",
+    "tests/roomplan-import.test.ts",
+    "tests/browser/scan-door-join.spec.ts",
+    "tests/browser/roomplan-add-to-plan.spec.ts",
+    "tests/browser/roomplan-confirm-localization.spec.ts",
+    "tests/browser/roomplan-import-attributes.spec.ts"
+  ],
+  "files": {
+    ".npmrc": {
+      "gitBlob": "b6f27f135954640c8cc5bfd7b8c9922ca6eb2aad",
+      "sha256": "7151cf397def0c2cb0ab65643701d27d335a72c90f775675b5f826bc7005818a",
+      "location": "added"
+    },
+    ".nvmrc": {
+      "gitBlob": "a45fd52cc5891570d6299fab38643103c3955474",
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+      "location": "added"
+    },
+    "FEATURES.md": {
+      "gitBlob": "2ba2d2fd4dea8322cf102c82c0cc09d28cb55e21",
+      "sha256": "bd631351183017642ddd0056faaeba2c259138357bd6c9595ea342032c73f1fd",
+      "location": "added"
+    },
+    "LICENSE": {
+      "gitBlob": "e19847719492831e7ba07f12a7929ed410b386a4",
+      "sha256": "30228141977aae075d3a50caa11574a12dbc6f69c2bb207d618c8ea2ffa4a83c",
+      "location": "existing"
+    },
+    "package-lock.json": {
+      "gitBlob": "6831c9787bd764ea1aaed81800ac341a43fadc29",
+      "sha256": "ff4c1bb50e457e1f45e9548971d355a1bec34ac52660207d4d38f9c646cfa2ca",
+      "location": "existing"
+    },
+    "package.json": {
+      "gitBlob": "f1921daf2accbcd616c087f357f122a74fa32ea6",
+      "sha256": "7b675136cfcf7250b0fb611c2db782d2dc295112ba0e1e0ffa6a592940527c0b",
+      "location": "existing"
+    },
+    "playwright.config.ts": {
+      "gitBlob": "e25351d7b7b1621899365db633d591a7b0abeea1",
+      "sha256": "2666bdfd075afe9afdf82a29c052e33fdb5427d0ef908a12b3e06a76f264e6c8",
+      "location": "existing"
+    },
+    "src/lib/components/WelcomeScreen.svelte": {
+      "gitBlob": "01adb54ab4a04badf8e67710f91c3fb9de22b8d7",
+      "sha256": "3c51614bee7102655f33d9eee1f8d670386e1c0cfbc346193f4e437e193b6de2",
+      "location": "added"
+    },
+    "src/lib/components/editor/FloorPlanCanvas.svelte": {
+      "gitBlob": "0b5ec72e59da4b714fa0e405e8010e3e1f57ad10",
+      "sha256": "1f853de260c8ec482fac4a22cce35ed9f5c20141d7263b964ac3d7fc204cca3d",
+      "location": "existing"
+    },
+    "src/lib/components/sidebar/BuildPanel.svelte": {
+      "gitBlob": "a587e098887135395ce5b6cfead9637a2d34864d",
+      "sha256": "a8a98ae58f97724682dc7289f400b9f868c196f0444a1c00ddc03e18d1680e4b",
+      "location": "added"
+    },
+    "src/lib/components/sidebar/PropertiesPanel.svelte": {
+      "gitBlob": "02b83773237b2a563f47da14640573efea087336",
+      "sha256": "57ddea636114c0c458b7303b9ef22191db15afba8b5cf70dfcd13f53ff1053d0",
+      "location": "added"
+    },
+    "src/lib/components/toolbar/TopBar.svelte": {
+      "gitBlob": "b7d91559916faa2323503f732383cdadf46e8631",
+      "sha256": "253d49e11334b07fabdd8e4c2b2bfcda3f19a3f610bde73609a4b7035ca77877",
+      "location": "added"
+    },
+    "src/lib/i18n/locales/en.ts": {
+      "gitBlob": "a3513464970b1e3ece667010ac5ccaa6f8c63abe",
+      "sha256": "81fca356321c4a747dbefb6be6ef1d1bec3d78b62cc160f593aa6250478eb5e2",
+      "location": "existing"
+    },
+    "src/lib/i18n/locales/pt.ts": {
+      "gitBlob": "bff9fe986c426d75ed4fab2a0006ec34c0bbe491",
+      "sha256": "50f8c38c6b0459feba868ce6b500ec0856c0eb844ef0cc82770ab29d507ae2ff",
+      "location": "existing"
+    },
+    "src/lib/i18n/undoMessages.ts": {
+      "gitBlob": "033d285e311a61f9980f5105f49a9b41a11eca0f",
+      "sha256": "1710192f1bdd30ea13890089bf2613b60c80ac88f377133e8694e328df1a2963",
+      "location": "added"
+    },
+    "src/lib/models/types.ts": {
+      "gitBlob": "07edba8e16e92484e6050e5f6acb3c94bf1f96ad",
+      "sha256": "22649a10356f7b7fd5ab23da8973196d61788e87ab098c78eb7d126564e0e5f1",
+      "location": "existing"
+    },
+    "src/lib/services/projectPackage.ts": {
+      "gitBlob": "97fe8c37eebc2358d1fcb0b41600cff7b1c9f073",
+      "sha256": "ab738afde456dbbf915208dac9ef00c7ec49e337e08613cbebcafc8b0ee8a67e",
+      "location": "added"
+    },
+    "src/lib/stores/onboarding.svelte.ts": {
+      "gitBlob": "d3f0fd5ad248f13c3a7a2ae86f1cd15f69d919cd",
+      "sha256": "19f03ea3c21ea14a49c54f453512f732f802b3d2f5c364d97455cc0c0db93d71",
+      "location": "added"
+    },
+    "src/lib/stores/project.ts": {
+      "gitBlob": "6d04f656eeea9bb4bede8d922e42f7b0d76887ca",
+      "sha256": "a27f7cdfd27cbe874ed12686f34d61552a0e53edac90c8f5f16107cef59f7476",
+      "location": "existing"
+    },
+    "src/lib/stores/settings.ts": {
+      "gitBlob": "141ac766a52f15598ab983b0d8fcbe8ad40c7284",
+      "sha256": "e062cc645dbf14325c5a58d199ce0c9872918b0c82e9364dbb5f1242e298e07b",
+      "location": "existing"
+    },
+    "src/lib/utils/canvasInteraction.ts": {
+      "gitBlob": "99708ad0f2b222506ffbc1de59076b4da8ef749b",
+      "sha256": "2831223441d2d90b8379b9d92988fc77b3a320af573001ae3e7adc18c97aaf82",
+      "location": "existing"
+    },
+    "src/lib/utils/canvasRenderer.ts": {
+      "gitBlob": "3ebadb3257df8f40b48aa00e0f857093591ef053",
+      "sha256": "dcb715007ca3cf3bb561f2bebfd659ec5708175943cfd9b4c5874a754368482a",
+      "location": "existing"
+    },
+    "src/lib/utils/catalogAssetUrl.ts": {
+      "gitBlob": "2803a7ae270bad1fee30bcdd40c99602eb1c0cc0",
+      "sha256": "2eb0d7114aaf4ea0382cf4ba6ded92f8565ce7324e4edcd0b1c96d13429f4ad4",
+      "location": "existing"
+    },
+    "src/lib/utils/columnPlanGeometry.ts": {
+      "gitBlob": "1dd786a96007c6ebb41e6ac753eab40c82fb7c73",
+      "sha256": "abb63655d2160455a1c648863f8102324208063f647a30dae54d2e51eb44c404",
+      "location": "existing"
+    },
+    "src/lib/utils/dimensionPlanGeometry.ts": {
+      "gitBlob": "8c969820da9f6da9cbf3779a13408255bee82acc",
+      "sha256": "18e222559429a7d9241c630456bfb05288849eb5857eff59c9be426b38d3c38e",
+      "location": "existing"
+    },
+    "src/lib/utils/doorSymbol.ts": {
+      "gitBlob": "0110b16d6242fd68e33b53d070d402ffd4826cc5",
+      "sha256": "8d53be3ec9667a49040b7b7a7f227a17bfa8845adebbed6c8c6f83bdf015f466",
+      "location": "existing"
+    },
+    "src/lib/utils/duplicateSelection.ts": {
+      "gitBlob": "40b739783aab5e9cb2d7a1ecf72aa9de411c76b3",
+      "sha256": "f2e51042f392ee5d0410922088a2b0ff4c56c4fd707e83eb7b5a0b8b4538a8ba",
+      "location": "existing"
+    },
+    "src/lib/utils/entourageCatalog.ts": {
+      "gitBlob": "9eabb35b416cb1f2ac6e4aa5a379c7a8f9b77ee4",
+      "sha256": "43ed1623b5604682288119443ac4594a43ea2f1086c3f736e169ee898bcb1448",
+      "location": "existing"
+    },
+    "src/lib/utils/entourageImages.ts": {
+      "gitBlob": "39b9b443b019d0e7ad43f5b00b65809b0f5e84ae",
+      "sha256": "5322176b7ecc461f86849adc26dc2640c194d652fc8025ced1ab8949395a29f7",
+      "location": "existing"
+    },
+    "src/lib/utils/floors.ts": {
+      "gitBlob": "101d51b4aed3bcd405a14d9c3f6606c60bc041ff",
+      "sha256": "eedac7f5fb2448f9d44b87fa1ed8021dcd8fb89ed84e81e6d95e5575cb77cfbe",
+      "location": "existing"
+    },
+    "src/lib/utils/furnitureCatalog.ts": {
+      "gitBlob": "9002d056b9e9e6a9985dba6bd8d5d5e37396ca4e",
+      "sha256": "b0c848be5ecc67399f2510fb2fdfce9f69aa68981943ecb64c661e767da5c692",
+      "location": "existing"
+    },
+    "src/lib/utils/furnitureCategories.ts": {
+      "gitBlob": "52054f2de2e332c49402b2f2caac83a7f4d4e3ac",
+      "sha256": "281e8a0bf6613b2ae3115e77089f4b94afaacf9219a9e877a977a0b990bf58c4",
+      "location": "existing"
+    },
+    "src/lib/utils/furnitureElevation.ts": {
+      "gitBlob": "38173676064c60621aa7ab6ff7814fea0a2a7d3f",
+      "sha256": "4468f11446c3275f862fd2b7a5ae4dc824579eeead5cb27606e7744395f3da53",
+      "location": "existing"
+    },
+    "src/lib/utils/furnitureIcons.ts": {
+      "gitBlob": "6d8a07d0f5367b04e96dd873c1098d12ea5dd557",
+      "sha256": "6922cae6a567a2c6b69558b423ca922679500d040e75aa536484dcf077bae851",
+      "location": "existing"
+    },
+    "src/lib/utils/furniturePlanBounds.ts": {
+      "gitBlob": "bea7ba0838051f8dda8e0441aae32319362219e2",
+      "sha256": "e7d9e36595925ae5d9be8b1112a13118e8bcb785bdbce7627b85ef9cb41edb95",
+      "location": "existing"
+    },
+    "src/lib/utils/hitTesting.ts": {
+      "gitBlob": "ee78634f0c97c9412887e58d32df0eb767839ce9",
+      "sha256": "6b12823a4515d0ff22d4c6530ce779507af1263aef27307733d456ccc69fc1e9",
+      "location": "existing"
+    },
+    "src/lib/utils/interchange.ts": {
+      "gitBlob": "9315d752fec648dd6e2f996004e5b37c16f7a114",
+      "sha256": "6b88721baa28d173ff6897ae1d54d5ee8ffc4e51bfa1cf299a5bdb712eb609c3",
+      "location": "added"
+    },
+    "src/lib/utils/interiorArea.ts": {
+      "gitBlob": "dc38860e0f75db377472efe15b2909e074502be9",
+      "sha256": "58429f94e0284720c608336bafe1a10b188c668a061a7eff79581aef4ddb4b34",
+      "location": "existing"
+    },
+    "src/lib/utils/itemDetails.ts": {
+      "gitBlob": "0cbae52a98674252a020ced71ab2e1b259e110fe",
+      "sha256": "fe6d320627b7aa120d9e7067f2726a5716238aa9a00304cc5cc881d2abaf38d4",
+      "location": "existing"
+    },
+    "src/lib/utils/moveToFloor.ts": {
+      "gitBlob": "b0682dd4d427ac61d7886a7d16d4b3b51a2a1515",
+      "sha256": "35c9c7f603c6e2010a725593323f1c1b49afd9d02594d15f950ce9da88c0f99a",
+      "location": "existing"
+    },
+    "src/lib/utils/openingDrop.ts": {
+      "gitBlob": "8b62b5e4f95dad7494260b846c81bd1b4e1e8410",
+      "sha256": "7e1e9acd9903376687c8c032301bdfaeffdea87978a5f0b46eff6ad25d28a89f",
+      "location": "added"
+    },
+    "src/lib/utils/outerWalls.ts": {
+      "gitBlob": "7e7b169ca739f87ae2cb3751cd0f34f513233b88",
+      "sha256": "de7cba871594dd1dc44f34959ff7718becdd128399e8562de09c325eb2ef781a",
+      "location": "existing"
+    },
+    "src/lib/utils/projectValidation.ts": {
+      "gitBlob": "feb8447ce3d69b5fc926ac31d2f8004c5b60b979",
+      "sha256": "f51982b73969513d38fc3dba698b714f0084090082c50b5f34933ae9f9030212",
+      "location": "existing"
+    },
+    "src/lib/utils/roomDetection.ts": {
+      "gitBlob": "169ee0d3bd29a9c8027936d45dcfb722db75c90f",
+      "sha256": "dc256a11dbcc339a64c07054232ff528eb3d8ee3f067303c814be010e674ac51",
+      "location": "existing"
+    },
+    "src/lib/utils/roomNesting.ts": {
+      "gitBlob": "8318113c652605b124d98c0576a4cb14c7a40657",
+      "sha256": "4154ded53865b07a4bb0f7419af3177282a8bed12a925875c104a9032b8756ee",
+      "location": "existing"
+    },
+    "src/lib/utils/roomplanImport.ts": {
+      "gitBlob": "48aa0dda14b48b5917808401b5b0c9d51ad01cea",
+      "sha256": "253741b65048d6ca9be89e5b238d905fee516904745f6940dc51a6fff1a4c804",
+      "location": "added"
+    },
+    "src/lib/utils/roomplanMerge.ts": {
+      "gitBlob": "ccc49a154c8386fa6ec8df38c4159fff9129327f",
+      "sha256": "eb11e7c5ece2e288e39d4ad336d65b6d12d536197352049b4c24dce175d6c6b8",
+      "location": "existing"
+    },
+    "src/lib/utils/roomplanValidation.ts": {
+      "gitBlob": "9c255d8618719003c0737e1d6b976e9c6feee29a",
+      "sha256": "fe3f75277694b8f545ed22d6eb0e11a00bd3d02590972901bb435b7b80413b16",
+      "location": "added"
+    },
+    "src/lib/utils/scanAlignment.ts": {
+      "gitBlob": "163b9e7bf3c00adf4abe81c59eade1f6663cd46c",
+      "sha256": "6c6c91d1727e85e6f6ece9c6cc8abe7414279ea17bf314b40b474becc56fa985",
+      "location": "existing"
+    },
+    "src/lib/utils/selectionRotation.ts": {
+      "gitBlob": "15d0bd5c0d4fa2b93f2e11d2e0e9b9b3f9b3f100",
+      "sha256": "08b906706529667bc481e201da7f3162169982ea3f63920b3b22cdce084f7c94",
+      "location": "existing"
+    },
+    "src/lib/utils/splitWallGeometry.ts": {
+      "gitBlob": "79fc5f228e3b92a834530fb0407eb31d7d28fac2",
+      "sha256": "733b4e24a005f0a4d6b49d6f2129fed6959cd034499851dae162693b1927e851",
+      "location": "existing"
+    },
+    "src/lib/utils/splitWallRooms.ts": {
+      "gitBlob": "7f25fef73bb69a23b5ccab7478c026d63acffebf",
+      "sha256": "f77efdf26a5aac5626601f3998e428967688ac945d3c0c83206de6464e6b64d2",
+      "location": "existing"
+    },
+    "src/lib/utils/stairPlanGeometry.ts": {
+      "gitBlob": "90aad2f694bbe270b452bb99b0e2a1e36f421a91",
+      "sha256": "81b8ea47a069f27b42e6cefc67110ac74a95c84505b5c56fbbf5328f35f6f43f",
+      "location": "existing"
+    },
+    "src/lib/utils/textureFiles.ts": {
+      "gitBlob": "c14f58600677ea26f65ea374031424967c8f1a8a",
+      "sha256": "4c6abf9e90020554ca11bd284edb4101046503656a0f34bec62654b052c844e4",
+      "location": "existing"
+    },
+    "src/lib/utils/textureGenerator.ts": {
+      "gitBlob": "2b4c20ad3fa98e12c46c0c4b0e45508ecc298a39",
+      "sha256": "e5fff1f6c8e61310865aa35bc7187a1d67ed3277cd702aceeb0424624d9067ec",
+      "location": "existing"
+    },
+    "src/lib/utils/wallEditing.ts": {
+      "gitBlob": "4065a960d010cede057b8a4baddcee1663b7ce9f",
+      "sha256": "aee1a1503d974e58b0cb0a620dccb09dc9151e4614361fe985086d94a2bb0569",
+      "location": "existing"
+    },
+    "src/lib/utils/wallPlanGeometry.ts": {
+      "gitBlob": "2093175847527b54159716af80532dc212d1e0d0",
+      "sha256": "2adc66301cc9f4d24b16c2bb3d5130ab0f395fe2abef2608cc557c0ca1dcfde7",
+      "location": "existing"
+    },
+    "src/lib/utils/wallProfiles.ts": {
+      "gitBlob": "bc61ab5650500066f0699e4c2548656b9074fbd3",
+      "sha256": "25aa597c37d42d858f46b0d0646bb793641941e85e3da613aefe586400737802",
+      "location": "existing"
+    },
+    "src/lib/utils/wallProjection.ts": {
+      "gitBlob": "939fa1b96e70f1344ce40eebcf8e52f5f479cc46",
+      "sha256": "146bc2163eb9066d10b454a5c9b34fd45743a263b6272b0f8c72506a09b57fdf",
+      "location": "existing"
+    },
+    "src/routes/editor/+page.svelte": {
+      "gitBlob": "050276fc26ad284fc9614938dacee004ae16d812",
+      "sha256": "fec90b722d270375e339e3983218e0c618df0ae4b84330032c6c2f3c6d1942fc",
+      "location": "added"
+    },
+    "static/test-roomplan-multiroom.json": {
+      "gitBlob": "f2924a92c8d75385d14e4f2b09aadc76818d5665",
+      "sha256": "a6af4fa3e67f9e8d26ce652d07d0a461330b6e744bedfc663810a4b0441dad2c",
+      "location": "donor-only"
+    },
+    "svelte.config.js": {
+      "gitBlob": "6bfb3c408174bb74112d80ec573e2defecbdc14f",
+      "sha256": "6e67a199992887a75b09fa9b7e9315a7eedb50a7664e24a7c5290903c1df88f8",
+      "location": "added"
+    },
+    "test-roomplan.json": {
+      "gitBlob": "f2924a92c8d75385d14e4f2b09aadc76818d5665",
+      "sha256": "a6af4fa3e67f9e8d26ce652d07d0a461330b6e744bedfc663810a4b0441dad2c",
+      "location": "donor-only"
+    },
+    "tests/browser/roomplan-add-to-plan.spec.ts": {
+      "gitBlob": "5e446f72ac3b68e7cfc11e9688224d802619a0f6",
+      "sha256": "deee7c5c59546c223ac3d36e4f0c293c9d58c43e3ff9a1fb783e6a5ab42d9b1f",
+      "location": "added"
+    },
+    "tests/browser/roomplan-confirm-localization.spec.ts": {
+      "gitBlob": "d9917484fc067f5c501e19d125bd75e57f4c4f41",
+      "sha256": "28913b88607774502287365d9c40288ea2e41fd83914e7d2ba2c9c75d96a368a",
+      "location": "added"
+    },
+    "tests/browser/roomplan-import-attributes.spec.ts": {
+      "gitBlob": "c87bff84d17381ac746428ae37331201222c88d5",
+      "sha256": "54c86b1a4ca2e8dbd3bde63693d1392fcd19a4cf79b917493353c499c3fdd4d3",
+      "location": "added"
+    },
+    "tests/browser/scan-door-join.spec.ts": {
+      "gitBlob": "640ae1ec768d8d9bfab7a3249e8e8487ee09193e",
+      "sha256": "42beb697505bf051dd334a83e868f8336b3df1fbe410ed86e1d2fd6a4a834dc8",
+      "location": "added"
+    },
+    "tests/fixtures/handoff-collapsed-jog.json": {
+      "gitBlob": "8994b61611fa36b7e35f80c9f431a5891f52aa44",
+      "sha256": "aae4c0206fdfc7d8a03aba759df5c99f2c8d1f2a631e4fbbe2d991c2e0e77b30",
+      "location": "added"
+    },
+    "tests/fixtures/handoff-collapsed-wall.json": {
+      "gitBlob": "6f675f4976bde6f3ae2915c5119265e60d207d10",
+      "sha256": "23e116b347c21cd931446ba95ba7b26a93b1f4e53f633b13fd0f76007ea5d116",
+      "location": "added"
+    },
+    "tests/fixtures/handoff-plan.json": {
+      "gitBlob": "c1fc5eeb6e848d46778bb39ffb13e94597d56b0a",
+      "sha256": "37d8aebf54ba7ed6cad793761b1ea186979f7da806f1a8cacf51d5af9ef81ed1",
+      "location": "added"
+    },
+    "tests/fixtures/handoff-roomplan.json": {
+      "gitBlob": "7ea9e84fd8ae1b1ac288293e36d38d13397dbed2",
+      "sha256": "3e8e720e4701679accb1a66e6ccbfd8da3bc48fd7fb7849b654996800cae4111",
+      "location": "added"
+    },
+    "tests/fixtures/project.ts": {
+      "gitBlob": "708810724fc439e97b75214b42c3f7212364fe12",
+      "sha256": "00b716e322f175909b08c99bdb2a91641902b73acc267c09ada2a1d182748044",
+      "location": "added"
+    },
+    "tests/fixtures/siblings/README.md": {
+      "gitBlob": "afe00085c9decfc585be5f6655fbd277e096c495",
+      "sha256": "cffc27fdae42b3465430d62a1b53998cfebffa29ba719715aa7d342bb43d6b26",
+      "location": "added"
+    },
+    "tests/fixtures/siblings/ios-sample-kitchen.openplan3d.json": {
+      "gitBlob": "1b01a052794f89f8ac9cc2e07b6fe70db3342779",
+      "sha256": "32e145d29fa9ebcd61f92c2efc6ae977f3e548c0e3f148482ca7764465c29511",
+      "location": "added"
+    },
+    "tests/roomplan-collapsed-walls.test.ts": {
+      "gitBlob": "a6536cbb2c0491d9dc3193922e0510a8899c22f6",
+      "sha256": "64c621266f29335505b638d568720ffdc0dac42bb7fb89cbb67499e9057a8876",
+      "location": "added"
+    },
+    "tests/roomplan-import-labels.test.ts": {
+      "gitBlob": "316738600eecb325a408f0543d12ad7f32e533f7",
+      "sha256": "d3b1369150f263708d7ec389057ba1155b451836933d00ac62da2087267cc0be",
+      "location": "added"
+    },
+    "tests/roomplan-import.test.ts": {
+      "gitBlob": "00aa2271a99aa92ab733f3f843b2f9b7b0c734ba",
+      "sha256": "57a9adb5e2dcbe0d409226c97434f4c6ac0c6cccb2e0764cbe3496dba91c754c",
+      "location": "added"
+    },
+    "tests/roomplan-merge.test.ts": {
+      "gitBlob": "0cd979a6431d95be15167894961a3b4cdd08a7e2",
+      "sha256": "ed8374ab6e301c84d2a7ad34d00ed2a1fc6f1a27ec15aab00522cbf9b9c011b7",
+      "location": "added"
+    },
+    "tests/scan-alignment.test.ts": {
+      "gitBlob": "6b3ea6c9b50d21d5d54ce7ad5b2386507db50023",
+      "sha256": "4b40538d711139c5f5fba34b1ab7df60d2b9baf37d1be1fc067ac92007dda52e",
+      "location": "added"
+    },
+    "tooling/catalog-assets.mjs": {
+      "gitBlob": "7ae6e53701c50b855d3c5c9c6eb3e0b7a296f2cc",
+      "sha256": "f671c8fb991308fa79fdef42a5798f65c4b1bbf48a19e4e0e020e0f5666f54cf",
+      "location": "added"
+    },
+    "tsconfig.json": {
+      "gitBlob": "2c2ed3c4d85da301c40654bdf3ac2872b1a87621",
+      "sha256": "7a19bf2d57ef51ed3d7ddb0ed6ac3c4aa89025ab1cc2b0271132477905763134",
+      "location": "added"
+    },
+    "vite.config.ts": {
+      "gitBlob": "87ab4c914ed14925176e88c7cacb8da8c114048b",
+      "sha256": "5bf3307219c839d2e95d9aad2803c49c6963c7da9b4cf901144fd5ca101a6682",
+      "location": "added"
+    },
+    "vitest.config.ts": {
+      "gitBlob": "c5000a2db030068c018b58670fcb32b3ddab37e3",
+      "sha256": "8a1453f7728ea985456a3a15ae75f69efe72ba1b1ea8dc82949c3d14568366d0",
+      "location": "existing"
+    }
+  }
+}
