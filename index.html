@@ -1846,7 +1846,7 @@ function bindFurnPanel(f){
 }
 
 /* ======================= 操作 ======================= */
-function select(sel){ window.FloorPlanOpeningUI?.selected(sel); ui.sel = sel; renderSel(); renderPanel(); }
+function select(sel){ window.FloorPlanOpeningUI?.selected(sel); ui.sel = sel; renderSel(); renderPanel(); window.View3D?.invalidate(); }
 // On desktop the properties column sits beside the plan, so a tap that selects a room or a piece of furniture shows
 // it even if it was collapsed (the guided mode starts collapsed). On phones the drawer would cover the plan: rooms and
 // furniture keep «Propiedades» in the bottom bar. Not on pointerdown: resizing the plan during a drag would move it.
@@ -2661,6 +2661,7 @@ import {mountArchitecturalQuality} from './js/architectural-quality.mjs';
 import {FacadeFidelityAdapter} from './js/facade-fidelity-adapter.mjs';
 import {compatibleWindow,resolveVisual,registry as windowRecipes} from './js/visual-families-core.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
+import {createDrawScheduler} from './js/view3d-frame-scheduler.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
 let OX = geometry.center.x, OY = geometry.center.y, H = project.defaults.wallHeightMm/1000; const FOV = 45;       // 户型中心放在世界原点，层高 2.8 m
@@ -2669,7 +2670,7 @@ const SW = () => stage.clientWidth, SH = () => stage.clientHeight;
 const opt = {cut:2.8, furn:true, labels:true, night:false, hour:10, mode:'orbit',surfaceQuality:'base',roof:false};
 const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm))/1000:opt.cut;
 
-let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
+let inited = false, active = false, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
 let territoryRenderer=null,territorialViewLimits=null,territorialPresentation=false,territorialBaseLevelView=null;
 let solarResult=null;
@@ -2705,8 +2706,10 @@ function init(){
   camera = new THREE.PerspectiveCamera(FOV, SW()/SH(), .05, 300);
   orbit = new OrbitControls(camera, renderer.domElement);
   orbit.enableDamping = true; orbit.maxPolarAngle = Math.PI*.495; orbit.minDistance = 1.5; orbit.maxDistance = 45;
+  orbit.addEventListener('change', requestFrame);
   walkCtl = new PointerLockControls(camera, document.body);
-  walkCtl.addEventListener('lock', () => { $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; });
+  walkCtl.addEventListener('change', requestFrame);
+  walkCtl.addEventListener('lock', () => { $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; if(walkIntent())requestFrame(); });
   walkCtl.addEventListener('unlock', () => { if (opt.mode === 'walk'){ $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
 
   hemi = new THREE.HemisphereLight(0xfff8ee, 0xb9a88f, 1.1);
@@ -2728,7 +2731,8 @@ function init(){
   scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG, exteriorG);
   const ceilingG=window.RubikCeilingEditor?.create3D(THREE)?.group;if(ceilingG)scene.add(ceilingG); // R02-A: elementos de techo a sus cotas
   const furnishG=window.FloorPlanSmartFurnishingUI?.create3D(THREE)?.group;if(furnishG)scene.add(furnishG); // UX-12: propuesta sin aplicar
-  territoryRenderer=FloorPlanTerritoryRenderer.create(THREE);scene.add(territoryRenderer.group);FloorPlanTerritorySession.subscribe(()=>{if(active)syncTerritory();else territoryRenderer.dispose();});
+  territoryRenderer=FloorPlanTerritoryRenderer.create(THREE,requestFrame);scene.add(territoryRenderer.group);FloorPlanTerritorySession.subscribe(()=>{if(active)syncTerritory();else territoryRenderer.dispose();});
+  addEventListener('surface-status', requestFrame);
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -2759,6 +2763,7 @@ function init(){
     [f.cx, f.cy] = snapMove(f, g.x - fdrag.ox, g.y - fdrag.oy);
     furnG.children.find(o => o.userData.fid === f.id)?.position.set(wx(f.cx), 0, wz(f.cy));   // 拖动中只挪模型，松手再整体同步
     window.FloorPlanBuildingUI?.preview(f.id);
+    requestFrame();
   });
   const endF = e => {
     if (!fdrag || e.pointerId !== fdrag.pid) return;
@@ -2771,12 +2776,12 @@ function init(){
     const tap = downAt && Math.hypot(e.clientX-downAt[0], e.clientY-downAt[1]) <= TAP;
     if (look?.id === e.pointerId){
       look = null;
-      if (tap){ const h = pick(e); if (h?.door && h.dist < 3.5) h.door.open = !h.door.open; }   // 漫游时点门开关
+      if (tap){ const h = pick(e); if (h?.door && h.dist < 3.5) toggleDoor(h.door); }   // 漫游时点门开关
       return;
     }
     if (anim || opt.mode !== 'orbit' || !tap) return;
     const h = pick(e);
-    if (h?.door) h.door.open = !h.door.open;
+    if (h?.door) toggleDoor(h.door);
     else if (h?.fid) window.select({kind:'furn', id:h.fid});
     else if (h?.room) window.select({kind:'room', id:h.room});
     else window.select(null);
@@ -2787,6 +2792,7 @@ function init(){
     if (!SW() || !SH()) return;
     renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH());
     camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
+    requestFrame();
   }).observe(stage);
   bindUI();
 }
@@ -3533,6 +3539,7 @@ function clearPresentationReveal(){
   if(revealRun){cancelAnimationFrame(revealRun.raf);revealRun.resolve(false);revealRun=null;}
   if(revealG){const geometries=new Set(),materials=new Set();revealG.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));});revealG.clear();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());}
   revealInfo={status:'off',roomId:null,walls:[],floor:false,floorAreaM2:0,overlayCount:0};
+  requestFrame();
 }
 function presentationReveal(roomId,reduced=false){
   if(!active||contextLost||!revealG)throw Error('Revelado no disponible');
@@ -3566,6 +3573,7 @@ function presentationReveal(roomId,reduced=false){
       if(revealRun!==run)return;
       const progress=Math.min(1,(now-began)/1100),remaining=1-progress*progress*(3-2*progress);
       floorMat.opacity=.88*remaining;wallMat.opacity=.78*remaining;lineMat.opacity=.6*remaining;
+      requestFrame();
       if(progress>=1){const result={...revealInfo,status:'complete'};revealRun=null;clearPresentationReveal();revealInfo=result;resolve(true);return;}
       run.raf=requestAnimationFrame(tick);
     };
@@ -3613,6 +3621,7 @@ function setPresentationContactShadows(enabled){
   if(enabled&&(!active||contextLost))throw Error('Vista 3D no disponible');
   contactEnabled=!!enabled;
   if(contactEnabled)buildPresentationContactShadows();else clearPresentationContactShadows();
+  requestFrame();
   return {enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount};
 }
 function syncRoofVisibility(){
@@ -3860,6 +3869,7 @@ function loadFurnitureAsset(g,f,generation){
     const position=g.position.clone(),rotation=g.rotation.clone();clearGroup(g);g.scale.set(1,1,1);
     result.scene.scale.set(f.w/result.dimensionsMm.width,height*1000/result.dimensionsMm.height,f.d/result.dimensionsMm.depth);
     g.add(result.scene);g.position.copy(position);g.rotation.copy(rotation);g.userData.authorizedAsset=true;
+    requestFrame();
     publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
   }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);}));
   pumpFurnitureAssets();
@@ -3912,7 +3922,7 @@ function buildLabels(){
 
 // 只重建变化的部分
 function territorySite(){return levelContext?window.FloorPlanBuildingUI?.site:project.site;}
-function syncTerritory(){if(!territoryRenderer)return;const site=territorySite(),level=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId);territoryRenderer.update({site,session:FloorPlanTerritorySession,owner:FloorPlanApp.entryId,origin:{x:OX,y:OY},level});const show=territoryRenderer.layers.building;ground.visible=!(site?.buildingPlacement?.vertical&&FloorPlanTerritorySession.get('terrain')&&territoryRenderer.layers.terrain);for(const g of [archFloor,archUp,furnG,levelsG,roofG,exteriorG,labelG,lampG]){if(g.userData.territoryHidden&&show){g.visible=g.userData.territoryBefore;delete g.userData.territoryHidden;}if(!show&&!g.userData.territoryHidden){g.userData.territoryBefore=g.visible;g.userData.territoryHidden=true;g.visible=false;}}window.dispatchEvent(new Event('territory-scene-change'));}
+function syncTerritory(){if(!territoryRenderer)return;const site=territorySite(),level=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId);territoryRenderer.update({site,session:FloorPlanTerritorySession,owner:FloorPlanApp.entryId,origin:{x:OX,y:OY},level});const show=territoryRenderer.layers.building;ground.visible=!(site?.buildingPlacement?.vertical&&FloorPlanTerritorySession.get('terrain')&&territoryRenderer.layers.terrain);for(const g of [archFloor,archUp,furnG,levelsG,roofG,exteriorG,labelG,lampG]){if(g.userData.territoryHidden&&show){g.visible=g.userData.territoryBefore;delete g.userData.territoryHidden;}if(!show&&!g.userData.territoryHidden){g.userData.territoryBefore=g.visible;g.userData.territoryHidden=true;g.visible=false;}}window.dispatchEvent(new Event('territory-scene-change'));requestFrame();}
 function territoryFooter(url,credits){if(!credits.length)return url;const canvas=document.createElement('canvas'),image=renderer.domElement;canvas.width=image.width;const font=Math.max(11,Math.min(20,Math.round(canvas.width/70))),ctx=canvas.getContext('2d');ctx.font=font+'px sans-serif';const lines=[];for(const credit of credits){let line='';for(const word of credit.split(/\s+/)){if(ctx.measureText(line+' '+word).width>canvas.width-24&&line){lines.push(line);line=word;}else line+=(line?' ':'')+word;}if(line)lines.push(line);}const footer=lines.length*(font+5)+16;canvas.height=image.height;ctx.fillStyle='#fffdf9';ctx.fillRect(0,0,canvas.width,canvas.height);const scale=Math.min(canvas.width/image.width,(canvas.height-footer)/image.height),w=image.width*scale,h=image.height*scale;ctx.drawImage(image,(canvas.width-w)/2,0,w,h);ctx.font=font+'px sans-serif';ctx.fillStyle='#2b2824';lines.forEach((line,i)=>ctx.fillText(line,12,canvas.height-footer+font+8+i*(font+5)));return canvas.toDataURL('image/png');}
 function sync(force){
   if (!inited || (!active && !force)) return;
@@ -3926,10 +3936,11 @@ function sync(force){
   window.RubikCeilingEditor?.update3D({x:OX,y:OY});
   navWhiteApply(); // NAV3D V1: la maqueta blanca sigue a las mallas reconstruidas
   window.FloorPlanSmartFurnishingUI?.update3D({x:OX,y:OY});
+  requestFrame();
 }
 
 // CSS2DRenderer 只看标签自身的 visible，不继承父级，所以逐个设置
-function showLabels(v){ labelG.visible = v; labelG.children.forEach(o => o.visible = v); }
+function showLabels(v){ labelG.visible = v; labelG.children.forEach(o => o.visible = v); requestFrame(); }
 function applyGrow(){
   if (!inited) return;
   archUp.scale.y = Math.max(grow, .001);
@@ -3964,6 +3975,7 @@ function applyEnvironment3D(){
   // of the same texture keeps the setting readable without lighting the home.
   ground.material.color.set(0xffffff);ground.material.emissiveMap=opt.night?ground.material.map:null;ground.material.emissive.set(opt.night?0xffffff:0x000000);ground.material.emissiveIntensity=opt.night?.55:0;ground.material.needsUpdate=true;
   const sel=document.getElementById('env3d');if(sel&&sel.value!==env3d)sel.value=env3d;
+  requestFrame();
 }
 function setEnvironment3D(value){
   if(!ENV3D[value])return false;env3d=value;try{localStorage.setItem(ENV3D_KEY,value);}catch{}
@@ -4041,12 +4053,12 @@ function camTween(A, B, e){
   const s = new THREE.Spherical(sa.radius + (sb.radius - sa.radius)*e, sa.phi + (sb.phi - sa.phi)*e, sa.theta + dth*e);
   camera.position.copy(t).add(new THREE.Vector3().setFromSpherical(s)); camera.lookAt(t); orbit.target.copy(t);
 }
-function setPose(P){ camera.position.copy(P.p); orbit.target.copy(P.t); camera.lookAt(P.t); }
-function animate(dur, fn){ return new Promise(res => { anim = {t0:performance.now(), dur, fn, res}; }); }
+function setPose(P){ camera.position.copy(P.p); orbit.target.copy(P.t); camera.lookAt(P.t); requestFrame(); }
+function animate(dur, fn){ return new Promise(res => { anim = {t0:performance.now(), dur, fn, res}; requestFrame(); }); }
 const wait = ms => new Promise(r => setTimeout(r, ms));
 function flyTo(B, dur = 900){
   if(fly?.res)fly.res(false);
-  return new Promise(res=>{fly={t0:performance.now(),dur,A:curPose(),B,res};});
+  return new Promise(res=>{fly={t0:performance.now(),dur,A:curPose(),B,res};requestFrame();});
 }
 
 // The HDR is a presentation-only resource. The original RoomEnvironment and editor light state survive exit.
@@ -4129,7 +4141,7 @@ async function enter(options={}){
   const A = planPose(), B = isoFrom(A);
   grow = 0; furnGrow = 0; applyGrow(); setPose(A);
   stage.classList.add('animating');
-  startLoop(); if(glLost())throw Error('WebGL context lost; reload to retry'); renderer.render(scene, camera);
+  requestFrame(); if(glLost())throw Error('WebGL context lost; reload to retry'); renderer.render(scene, camera);
   stage.classList.add('is3d');                       // 交叉淡入：此刻 3D 画面与 2D 平面完全重合
   await wait(420);
   if(contextLost)throw Error('WebGL context lost');
@@ -4152,7 +4164,7 @@ function abort3D(){
   clearPresentationRoute();
   setPresentationContactShadows(false);
   stopPresentationLighting();
-  if(raf)cancelAnimationFrame(raf);raf=0;
+  renderScheduler.cancel();
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
   cancelFurnitureAssets();
@@ -4162,7 +4174,7 @@ function abort3D(){
   active=false;stage.classList.remove('is3d','animating');
 }
 // A held entry that no narrative took over (the chapter could not start, another stop was chosen…) rises at once.
-function releaseHeldEntry(){if(!heldEntry)return;heldEntry=null;grow=furnGrow=1;applyGrow();orbit.enabled=true;}
+function releaseHeldEntry(){if(!heldEntry)return;heldEntry=null;grow=furnGrow=1;applyGrow();orbit.enabled=true;requestFrame();}
 async function exit(){
   presentationAmbienceEnd();presentationLivingDrawingEnd();
   if(architecturalQualityProject){resetArchitecturalQuality();opt.surfaceQuality='base';}
@@ -4179,7 +4191,7 @@ async function exit(){
   });
   stage.classList.remove('is3d');                    // 此刻 3D 已压平为正俯视，与 2D 重合后淡出
   await wait(450);
-  active = false; cancelAnimationFrame(raf); raf = 0;
+  active = false; renderScheduler.cancel();
   stage.classList.remove('animating');
   grow = furnGrow = 1; applyGrow();
 }
@@ -4243,6 +4255,7 @@ function lookBy(dx, dy){
   eul.setFromQuaternion(camera.quaternion);
   eul.y += dx * .005; eul.x = THREE.MathUtils.clamp(eul.x + dy * .005, -1.35, 1.35);
   camera.quaternion.setFromEuler(eul);
+  requestFrame();
 }
 function startTouchWalk(){
   touchWalk = true;
@@ -4260,6 +4273,7 @@ function bindJoystick(){
     let dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
     const L = Math.hypot(dx, dy); if (L > R){ dx *= R/L; dy *= R/L; }
     joy.x = dx/R; joy.y = dy/R; knob.style.transform = `translate(${dx}px,${dy}px)`;
+    if (walkIntent()) requestFrame();
   };
   el.addEventListener('pointerdown', e => { e.preventDefault(); joy.id = e.pointerId; el.setPointerCapture(e.pointerId); upd(e); });
   el.addEventListener('pointermove', e => { if (e.pointerId === joy.id) upd(e); });
@@ -4335,14 +4349,16 @@ function blocked(x, z, r = .22){
   }
   return false;
 }
-function stepWalk(dt){
-  if (!walkCtl.isLocked && !touchWalk) return;
+function walkIntent(){
+  if (opt.mode !== 'walk' || (!walkCtl.isLocked && !touchWalk)) return null;
+  const x = Number(!!(keys.KeyD || keys.ArrowRight)) - Number(!!(keys.KeyA || keys.ArrowLeft)) + (touchWalk ? joy.x : 0);
+  const y = Number(!!(keys.KeyW || keys.ArrowUp)) - Number(!!(keys.KeyS || keys.ArrowDown)) - (touchWalk ? joy.y : 0);
+  return Math.hypot(x, y) >= .05 ? {x, y} : null;
+}
+function stepWalk(dt, {x, y}){
   const sp = (keys.ShiftLeft || keys.ShiftRight ? 2.6 : 1.4) * dt, fwd = new THREE.Vector3();
   camera.getWorldDirection(fwd); fwd.y = 0; fwd.normalize();
-  const right = new THREE.Vector3(-fwd.z, 0, fwd.x), mv = new THREE.Vector3();
-  if (keys.KeyW || keys.ArrowUp) mv.add(fwd); if (keys.KeyS || keys.ArrowDown) mv.sub(fwd);
-  if (keys.KeyD || keys.ArrowRight) mv.add(right); if (keys.KeyA || keys.ArrowLeft) mv.sub(right);
-  if (touchWalk){ mv.addScaledVector(fwd, -joy.y).addScaledVector(right, joy.x); }
+  const right = new THREE.Vector3(-fwd.z, 0, fwd.x), mv = fwd.clone().multiplyScalar(y).addScaledVector(right, x);
   const mag = Math.min(1, mv.length());        // 摇杆推得越远走得越快
   if (mag < .05) return;
   mv.normalize().multiplyScalar(sp * mag);
@@ -4363,10 +4379,12 @@ function stepWalk(dt){
     }
   }
 }
+function toggleDoor(door){door.open=!door.open;requestFrame();}
 addEventListener('keydown', e => {
   if (!active || e.target.matches('input,select,textarea')) return;
   keys[e.code] = true;
-  if (opt.mode === 'walk' && e.code === 'KeyE'){ const h = pick(); if (h?.door && h.dist < 2.5) h.door.open = !h.door.open; }
+  if (walkIntent()) requestFrame();
+  if (opt.mode === 'walk' && e.code === 'KeyE'){ const h = pick(); if (h?.door && h.dist < 2.5) toggleDoor(h.door); }
   // Esc pauses the walk. Browsers release the pointer on Esc themselves; if the key reaches the page, release it too.
   if (opt.mode === 'walk' && e.code === 'Escape' && walkCtl.isLocked) walkCtl.unlock();
 });
@@ -4410,6 +4428,7 @@ function bindUI(){
     if (k === 'furn'){ furnG.visible = opt.furn; levelsG?.traverse(o=>{if(o.userData.levelFurniture)o.visible=opt.furn;}); if (!opt.furn && ui.sel?.kind === 'furn') window.select(null); }
     if (k === 'labels') showLabels(opt.labels && opt.mode === 'orbit' && !anim && !roofG?.visible);
     if (k === 'night') applyLight();
+    requestFrame();
   });
   $('#sun').oninput = e => { opt.hour = +e.target.value; applyLight(); };
   $('#env3d').value = env3d; $('#env3d').onchange = e => setEnvironment3D(e.target.value);
@@ -4417,7 +4436,17 @@ function bindUI(){
 
 /* ======================= 主循环 ======================= */
 const clock = new THREE.Clock();
-function startLoop(){ if (!raf){ clock.getDelta(); raf = requestAnimationFrame(loop); } }
+const renderScheduler = createDrawScheduler(() => {
+  drawingFrame = true;
+  try { loop(); } finally { drawingFrame = false; }
+});
+let drawingFrame = false, renderedFrames = 0;
+function requestFrame(){
+  if (!active || glLost() || (renderSuspended && !anim && !fly)) return;
+  // Restart the simulation clock after sleep. Idle time never moves the walk or jumps the door angles.
+  if (!renderScheduler.pending && !drawingFrame) clock.getDelta();
+  renderScheduler.invalidate();
+}
 // While a full-screen work area covers the 3D view nothing is visible: frames are skipped (no render cost, battery),
 // but camera animations and flights still advance so programmatic framing (presentation stops) keeps working.
 let renderSuspended=false;
@@ -4430,9 +4459,9 @@ function presentationLivingDrawingBegin(options={}){
   const R=window.FloorPlanLivingDrawingRenderer;if(!R)return {active:false,reason:'module-unavailable'};
   const ld=R.create(THREE,renderer,{furniture:()=>furnG,glass:()=>glassMat,cap:()=>capMat,forceUnsupported:!!options.forceUnsupported});
   const result=ld.begin();if(!result.active){ld.dispose();return result;}
-  livingDrawing=ld;return ld.info;
+  livingDrawing=ld;requestFrame();return ld.info;
 }
-function presentationLivingDrawingEnd(){if(!livingDrawing)return false;livingDrawing.dispose();livingDrawing=null;return true;}
+function presentationLivingDrawingEnd(){if(!livingDrawing)return false;livingDrawing.dispose();livingDrawing=null;requestFrame();return true;}
 /* D3 «Ambientación sugerida» (opt-in, presentation only): while the living drawing plays, some floors show a catalogue
    finish instead of the project's own. Nothing is written to the project: each floor mesh keeps its own material and gets
    it back on end; the suggested finishes live in a private SurfaceRenderer, disposed whole (textures, bitmaps, materials). */
@@ -4451,13 +4480,13 @@ function presentationAmbienceBegin(input){
   }
   for(const w of (input.suggestions||[]).filter(s=>s.surface!=='floor'))skipped.push({roomId:w.roomId,suggested:w.suggested,reason:'walls-not-applied'});
   if(!swaps.length){sr.disposeAll();return {active:false,applied,skipped};}
-  ambience={sr,swaps,applied,skipped,label:String(input.label||'')};
+  ambience={sr,swaps,applied,skipped,label:String(input.label||'')};requestFrame();
   return presentationAmbienceInfo();
 }
 function presentationAmbienceEnd(){
   if(!ambience)return false;const a=ambience;ambience=null;
   for(const {o,own} of a.swaps)o.material=own;
-  a.sr.disposeAll();return true;
+  a.sr.disposeAll();requestFrame();return true;
 }
 function presentationAmbienceInfo(){
   if(!ambience)return {active:false,applied:[],skipped:[]};
@@ -4508,23 +4537,31 @@ function glLost(){ return contextLost || !!renderer?.getContext()?.isContextLost
 let presentationLamps=false;
 function syncCeilingFixtures(cam){if(!presentationLamps||!lampG)return;const show=topHeight()>=H&&cam.position.y<H-.02;lampG.children.forEach(o=>{if(o.isMesh)o.visible=show;});}
 function loop(){
-  raf = requestAnimationFrame(loop);
-  if (glLost()) return;
-  if (renderSuspended && !anim && !fly){ clock.getDelta(); return; }
-  const raw = clock.getDelta(), dt = Math.min(raw, .05), now = performance.now();
+  if (!active || glLost() || (renderSuspended && !anim && !fly)) return;
+  const raw = clock.getDelta(), now = performance.now(), movement = walkIntent();
   if (anim){ const t = clamp01((now - anim.t0)/anim.dur); anim.fn(t); if (t >= 1){ const r = anim.res; anim = null; r(); } }
   else if (fly){ const t = clamp01((now - fly.t0)/fly.dur); camTween(fly.A, fly.B, ease(t)); if (t >= 1){const done=fly.res;fly=null;done?.(true);} }
   else if (opt.mode === 'orbit'){ if (!storyRun) orbit.update(); }
   // The walk uses the real elapsed time (up to 0.25 s) in 50 ms sub-steps: on a slow device (a few frames per second)
   // the person still moves at walking speed, and each sub-step is checked against the walls.
-  else for (let left = Math.min(raw, .25); left > 1e-4; left -= .05) stepWalk(Math.min(left, .05));
+  else if (movement) for (let left = Math.min(raw, .25); left > 1e-4; left -= .05) stepWalk(Math.min(left, .05), movement);
   // Doors swing in real time too (on a slow device a 50 ms cap kept a leaf across the doorway for seconds).
-  doors.forEach(d => { const tg = d.open ? d.a1 : d.a0; d.cur += (tg - d.cur) * Math.min(1, Math.min(raw, .25)*6); d.pivot.rotation.y = d.cur; });
+  let doorMoving = false;
+  for (const d of doors){
+    const target = d.open ? d.a1 : d.a0;
+    if (d.cur === target) continue;
+    const next = d.cur + (target - d.cur) * Math.min(1, Math.min(raw, .25)*6);
+    d.cur = Math.abs(target - next) < .0005 ? target : next;
+    d.pivot.rotation.y = d.cur;
+    doorMoving ||= d.cur !== target;
+  }
   updateSel();
   syncCeilingFixtures(camera);
   syncRoofVisibility();
   if (livingDrawing) livingDrawing.render(scene, camera); else renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
+  renderedFrames++;
+  if (anim || fly || movement || doorMoving) requestFrame();
 }
 
 // 3D capture. 'view' keeps the historical behaviour (current canvas, screen size × pixel ratio ≤ 2).
@@ -4568,7 +4605,7 @@ function shot(opts = {}){
       renderer.render(scene, camera);
     }
   }
-  }finally{territoryCapture?.restore();renderer.render(scene,camera);}
+  }finally{territoryCapture?.restore();renderer.render(scene,camera);if(livingDrawing)requestFrame();}
   if(opts.download!==false){const a = document.createElement('a'); a.download = name; a.href = url; a.click();}
   return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced,attribution:territoryCapture?.attribution||[],...(opts.download===false?{dataUrl:url}:{})};
 }
@@ -4624,7 +4661,7 @@ function renderDelivery(cam, w, h, corners){
   return {width:w, height:h, dataUrl:url, fill,attribution:territoryCapture?.attribution||[]};
 }
 
-function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
+function relang(){ syncWalkTexts(); if (inited) { buildLabels(); requestFrame(); } }
 
 // Product API for a reversible presentation. Diagnostic getters below remain read-only.
 function presentationCapture(){
@@ -4646,7 +4683,7 @@ function presentationCapture(){
 let presentationBaseCut=null,frameInfo=null,overviewInfo=null;const frameCache=new WeakMap();
 // Presentation-only floor outline of the framed room: a 70 mm inner band per polygon edge.
 let roomOutline=null;
-function clearRoomOutline(){if(roomOutline){scene.remove(roomOutline);roomOutline.geometry.dispose();roomOutline.material.dispose();roomOutline=null;}}
+function clearRoomOutline(){if(roomOutline){scene.remove(roomOutline);roomOutline.geometry.dispose();roomOutline.material.dispose();roomOutline=null;requestFrame();}}
 function showRoomOutline(roomId){
   clearRoomOutline();const room=geometry.rooms.find(r=>r.id===roomId);if(!room||room.poly.length<3)return;
   const poly=room.poly,signed=poly.reduce((n,p,i)=>{const q=poly[(i+1)%poly.length];return n+p[0]*q[1]-q[0]*p[1];},0)>0?1:-1,width=70,pos=[];
@@ -4655,6 +4692,7 @@ function showRoomOutline(roomId){
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
   roomOutline=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0x1f7a72,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
   roomOutline.userData.presentationOutline=roomId;roomOutline.renderOrder=2;scene.add(roomOutline);
+  requestFrame();
 }
 // sync() compares the built signature, so a cut restored without a rebuild (route cancel) is rebuilt here.
 function setPresentationCut(cut){if(cut!=null)opt.cut=cut;sync();}
@@ -4723,7 +4761,10 @@ function presentationGo(stop,reduced=false,view={}){
   return flyTo(next,650);
 }
 // Doors are matched by id: a wall-height rebuild during the route recreates their objects.
-const restoreRouteDoors=saved=>saved.forEach(s=>{const door=doors.find(d=>d.id===s.id);if(door){door.open=s.open;door.cur=s.cur;door.pivot.rotation.y=s.cur;}});
+function restoreRouteDoors(saved){
+  saved.forEach(s=>{const door=doors.find(d=>d.id===s.id);if(door){door.open=s.open;door.cur=s.cur;door.pivot.rotation.y=s.cur;}});
+  requestFrame();
+}
 // Walk-mode aids (wall edges and skirting) separate white planes at eye level during the walk only.
 const setWalkAids=on=>archUp?.traverse(o=>{if(o.userData.walkOnly)o.visible=on||opt.mode==='walk';});
 function routeRebuild(run,cut){const info=routeInfo;routeRun=null;setPresentationCut(cut);routeRun=run;routeInfo=info;}
@@ -4801,7 +4842,7 @@ function presentationRoute(roomId,reduced=false,view={}){
   const apply=k=>{const pitch=k.pitch*Math.PI/180;camera.position.set(wx(k.x),k.h,wz(k.y));
     const dir=new THREE.Vector3(Math.cos(k.yaw)*Math.cos(pitch),-Math.sin(pitch),Math.sin(k.yaw)*Math.cos(pitch));
     orbit.target.copy(camera.position).addScaledVector(dir,2.5);camera.lookAt(orbit.target);
-    if(Math.abs(camera.fov-k.fov)>1e-6){camera.fov=k.fov;camera.updateProjectionMatrix();}};
+    if(Math.abs(camera.fov-k.fov)>1e-6){camera.fov=k.fov;camera.updateProjectionMatrix();}requestFrame();};
   const at=ms=>{let start=0;for(let i=0;i<phases.length;i++){const p=phases[i];if(ms<start+p.dur||i===phases.length-1){const t=Math.min(1,Math.max(0,(ms-start)/p.dur));
     if(p.name==='walk')return{phase:p,key:walkAt(Math.min(moves.duration,(ms-start)/1000)),t};
     const e=smooth(t),A=p.from,B=p.to;return{phase:p,t,key:{x:A.x+(B.x-A.x)*e,y:A.y+(B.y-A.y)*e,h:A.h+(B.h-A.h)*e,yaw:angle(A.yaw,B.yaw,e),pitch:A.pitch+(B.pitch-A.pitch)*e,fov:A.fov+(B.fov-A.fov)*e}};}start+=p.dur;}};
@@ -4878,7 +4919,7 @@ function presentationRestorePose(state){
   if(fly?.res)fly.res(false);fly=null;
   camera.position.fromArray(state.position);orbit.target.fromArray(state.target);
   camera.fov=state.fov;camera.aspect=SW()/Math.max(1,SH());camera.updateProjectionMatrix();
-  camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);
+  camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);requestFrame();
 }
 
 /* Presentation Story (FT3D-1a, js/presentation-story-core.js): a narrative state f(p) applied to the one real scene.
@@ -5132,6 +5173,7 @@ function presentationStoryApply(p){
   if(lampG)lampG.visible=grow>.99&&((st.wallScale??1)>.99||st.phase==='room');
   // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
   if(storyRun.kind==='room-descent'){const roomId=storyRun.stopId.replace(/^room:/,'');if(st.phase==='room'){if(!roomOutline)showRoomOutline(roomId);}else clearRoomOutline();}
+  requestFrame();
   return {...st,position:[...st.position],target:[...st.target],...(st.levelDeltas?{levelDeltas:st.levelDeltas.map(x=>({...x})),visibleLevelIds:[...st.visibleLevelIds]}:{})};
 }
 // FT3D-5 resize: the same descriptor, overview stop and p; only the pure narrative is recreated for the new aspect and
@@ -5158,6 +5200,7 @@ function endPresentationStory({keepPose=true}={}){
   orbit.maxDistance=run.saved.maxDistance;orbit.enabled=run.saved.orbitEnabled;
   if(!keepPose){camera.position.copy(run.saved.position);orbit.target.copy(run.saved.target);camera.quaternion.copy(run.saved.quaternion);}
   else camera.lookAt(orbit.target);
+  requestFrame();
   return {kind:run.kind,p:run.state?.p??null};
 }
 
@@ -5378,6 +5421,7 @@ function presentationStoryInfo(){
 }
 
 window.View3D = {
+  invalidate:requestFrame,
   setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
   get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
@@ -5395,8 +5439,12 @@ window.View3D = {
     furniturePlan:furnG?furnG.children.map(g=>({id:g.userData.fid,x:Math.round(g.position.x*1000+OX),y:Math.round(g.position.z*1000+OY),rotationDeg:Math.round(((-g.rotation.y*180/Math.PI)%360+360)%360)})):[],
     activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
   get territoryLayers(){return territoryRenderer?.layers;},setTerritoryLayers(patch){territoryRenderer?.setLayers(patch);syncTerritory();},get territoryInfo(){return territoryRenderer?{children:territoryRenderer.group.children.map(o=>({layers:o.userData.territoryLayers,visible:o.visible,vertices:o.geometry?.attributes.position?.count})),attribution:territoryRenderer.attribution,disposals:territoryRenderer.disposals,layers:territoryRenderer.layers}:null;},
-  setSuspended(value){renderSuspended=!!value;},get suspended(){return renderSuspended;},
-  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
+  setSuspended(value){
+    if(renderSuspended===!!value)return;
+    renderSuspended=!!value;
+    if(renderSuspended&&!anim&&!fly)renderScheduler.cancel();else requestFrame();
+  },get suspended(){return renderSuspended;},
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:renderScheduler.pending,renderedFrames,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
   // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
   // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.
   get walkAim(){if(!active)return null;ptr.set(0,0);ray.setFromCamera(ptr,camera);const h=ray.intersectObjects([...(opt.furn?[furnG]:[]),archUp,archFloor],true).find(h=>h.object.material!==glassMat&&!h.object.isLine&&!h.object.isPoints);if(!h)return null;const o=h.object;return {door:o.userData.door?.id||null,wall:o.userData.wallId||null,name:o.name||o.type,dist:+h.distance.toFixed(2),mesh:o.geometry?.type};},
@@ -5481,9 +5529,9 @@ function navWhiteApply(){
     navWhiteSaved.set(o,o.material);o.material=Array.isArray(o.material)?o.material.map(swap):swap(o.material);});
   return navWhiteSaved.size;
 }
-function navSetWhite(on){if(on&&(!active||contextLost||window.FloorPlanPresentation?.active))return false;navWhite=!!on;navWhiteApply();return true;}
+function navSetWhite(on){if(on&&(!active||contextLost||window.FloorPlanPresentation?.active))return false;navWhite=!!on;navWhiteApply();requestFrame();return true;}
 const navDoors=()=>({total:doors.length,open:doors.filter(d=>d.open).length});
-function navSetAllDoors(open){if(!active||contextLost)return {ok:false,reason:'3d-unavailable'};let changed=0;for(const d of doors)if(d.open!==!!open){d.open=!!open;changed++;}return {ok:true,changed,...navDoors()};}
+function navSetAllDoors(open){if(!active||contextLost)return {ok:false,reason:'3d-unavailable'};let changed=0;for(const d of doors)if(d.open!==!!open){d.open=!!open;changed++;}if(changed)requestFrame();return {ok:true,changed,...navDoors()};}
 function navSetMode(m){if(!active||contextLost||anim||window.FloorPlanPresentation?.active||!['orbit','walk'].includes(m))return false;if(opt.mode!==m)setMode(m);return true;}
 function navFocusRoom(id){
   if(!active||contextLost)return {ok:false,reason:'3d-unavailable'};if(anim)return {ok:false,reason:'busy'};
