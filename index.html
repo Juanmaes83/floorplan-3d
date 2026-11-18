@@ -2534,7 +2534,22 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   // Single-level tools (presentation, sheet…) work on the active level; this names it when a building is open.
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
-  get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
+  get entryId(){return library?.activeId()||project.id;},
+  /* E2.1 · destinos de «Comparar con el original» desde Entregar, con el mismo handoff UX-07 del diálogo Variantes.
+     Solo lee la biblioteca; no guarda nada. Estados: no-library (proyecto sin guardar en la biblioteca), no-variant (el
+     original no tiene variantes), not-eligible (grupo ilegible o variante sin original), ready (pares original→variante). */
+  compareTargets(){
+    if(!library||!window.FloorPlanVariantsCompare)return {state:'no-library',pairs:[]};
+    let group;try{group=library.group(library.activeId());}catch{return {state:'not-eligible',pairs:[]};}
+    if(!Array.isArray(group)||!group.length)return {state:'not-eligible',pairs:[]};
+    const root=group[0],active=group.find(g=>g.id===library.activeId());
+    if(!root||root.variantOf)return {state:'not-eligible',pairs:[]};
+    const variants=group.slice(1).filter(g=>g.variantOf);
+    if(!variants.length)return {state:'no-variant',pairs:[],original:{id:root.id,name:root.name}};
+    const href=g=>'comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:root.id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId());
+    const ordered=active&&active.variantOf?[active,...variants.filter(g=>g!==active)]:variants;
+    return {state:'ready',original:{id:root.id,name:root.name},activeIsVariant:!!active?.variantOf,pairs:ordered.map(g=>({id:g.id,name:g.name,href:href(g)}))};
+  },get viewMode(){return viewMode;},
   // A failed identity migration leaves old shared project ids in storage. Economic writers must fail closed.
   get identityMigration(){return library?.migration?.()||null;},
   // Identity contract (js/project-library.js): id of the file the open entry was imported from when it had to be re-identified here.

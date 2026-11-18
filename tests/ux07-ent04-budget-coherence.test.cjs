@@ -124,7 +124,10 @@ test('dossier 1.1.0: sección de presupuestos comparados (completa, parcial, no 
   // «Después» con el presupuesto hecho sobre «antes»: se dice explícitamente.
   const v=D.view(c,{beforeProject:before,afterProject:after,budget:F.budget('complete',before),now:NOW});
   assert.equal(v.budget.revisionMatch,'before');assert.match(D.html(v,svg),/sus cantidades son las de «Antes»/);
-  throwsCode(()=>D.view(c,{beforeProject:before,afterProject:after,beforeBudget:F.budget('complete',before),now:NOW}),'after-budget-required');
+  // E2.2 (A25-3): solo «antes» ya no se rechaza (era asimétrico con solo «después»): estado one-sided del núcleo canónico,
+  // sin presupuesto individual de «después» y sin inventar el que falta.
+  {const only=D.view(c,{beforeProject:before,afterProject:after,beforeBudget:F.budget('complete',before),now:NOW});
+   assert.equal(only.budgetComparison.status,'one-sided');assert.equal(only.budget,null);assert.match(D.html(only,svg),/Solo hay presupuesto de «Antes»/);}
 });
 
 test('dossier 1.1.0: manifiesto con el presupuesto de «antes», verify lo comprueba y sigue aceptando manifiestos 1.0.0',async()=>{
