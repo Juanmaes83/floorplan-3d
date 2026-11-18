@@ -76,7 +76,8 @@ jobs:
       - name: CAT-04 pure - catalogue lines in the one budget, S2 explicit apply, visual references, assistant (figure oracle)
         run: node --test --test-concurrency=1 tests/cat04-f1f2.test.cjs tests/cat04-xr.test.cjs tests/cat04-cross-review.test.cjs tests/catalog-budget-core.test.cjs tests/visual-reference-core.test.cjs tests/cat04-assistant.test.cjs tests/budget-draft.test.cjs tests/budget-cost-bridge.test.cjs tests/cost-catalog-core.test.cjs tests/assistant-ai-v2.test.cjs
       - name: CatalogProductV1 core, and the guards of R03, R02-A and the photo project with the catalogue loaded
-        run: node --test --test-concurrency=1 tests/catalog-product-core.test.cjs tests/catalog-placement-core.test.cjs tests/assets.test.cjs tests/furniture-search.test.cjs tests/cost-provider.test.cjs tests/brand-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/photo-project-core.test.cjs tests/photo-reform-provider.test.cjs
+        # The isolated provider test already runs in the photo-reform/1 step of this job.
+        run: node --test --test-concurrency=1 tests/catalog-product-core.test.cjs tests/catalog-placement-core.test.cjs tests/assets.test.cjs tests/furniture-search.test.cjs tests/cost-provider.test.cjs tests/brand-core.test.cjs tests/r02a-activation.test.cjs tests/r03-integration-core.test.cjs tests/r03-cabinet-audit.test.cjs tests/photo-project-core.test.cjs
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 45
