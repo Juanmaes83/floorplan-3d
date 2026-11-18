@@ -70,21 +70,20 @@
  const fab=btn('',document.body,'assistant-fab');fab.id='assistantFab';fab.type='button';
  const access=document.createElement('rubik-assistant-access');access.id='assistantAccess';
  const accessRoot=access.attachShadow({mode:'closed'});
- const accessStyle=document.createElement('style');accessStyle.textContent=':host{display:block;width:max-content;max-width:calc(100% - 36px);margin:6px 18px 10px}button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #184e52;background:#184e52;color:#fff;font:700 15px/1 system-ui,sans-serif;cursor:pointer}button:hover{background:#0f3a3d}button:focus-visible{outline:3px solid #f3c969;outline-offset:2px}button[hidden]{display:none}@media print{:host{display:none}}';
+ const accessStyle=document.createElement('style');accessStyle.textContent=':host{display:block;position:sticky;bottom:8px;z-index:2;width:max-content;max-width:calc(100% - 36px);margin:8px 18px 8px auto}button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #184e52;background:#184e52;color:#fff;font:700 15px/1 system-ui,sans-serif;cursor:pointer}button:hover{background:#0f3a3d}button:focus-visible{outline:3px solid #f3c969;outline-offset:2px}button[hidden]{display:none}@media print{:host{display:none}}';
  const accessBtn=document.createElement('button');accessBtn.type='button';accessRoot.append(accessStyle,accessBtn);
  const hostDlg=document.createElement('dialog');hostDlg.id='assistantHost';hostDlg.className='assistant-host';document.body.append(hostDlg);
  const where=el('p',undefined,null,'assistant-where');where.id='assistantWhere';panel.insertBefore(where,panel.children[1]||null);
  const hostDialog=()=>{const m=[...document.querySelectorAll('dialog[open]')].filter(d=>{if(d===hostDlg)return false;try{return d.matches(':modal');}catch{return false;}});return m[m.length-1]||null;};
- let ownCloses=0,lastHost=null;/* «close» de <dialog> llega en una tarea posterior: se cuentan los cierres propios */const watcher=new MutationObserver(()=>{if(lastHost&&!access.isConnected)rehost();});
+ let ownCloses=0,lastHost=null;/* «close» de <dialog> llega en una tarea posterior: se cuentan los cierres propios */const watcher=new MutationObserver(()=>{if(lastHost&&lastHost.lastElementChild!==access)rehost();});
  const closeHost=()=>{if(hostDlg.open){ownCloses++;hostDlg.close();}};
  function rehost(){const d=hostDialog();
   if(d!==lastHost){watcher.disconnect();if(d)watcher.observe(d,{childList:true,subtree:true});if(hostDlg.open&&d)closeHost();lastHost=d;}
   const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
   where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';
-  // Acceso dentro del diálogo: tras la fila de cabecera (título + cerrar…), nunca dentro de ella (la desbordaría en móvil).
-  // Regla estructural (no por estilo calculado: la CSS de algunos diálogos se carga al abrirlos).
-  if(d){let anchor=d.querySelector('h1,h2,h3');while(anchor?.parentElement&&anchor.parentElement!==d&&anchor.parentElement.tagName!=='FORM'&&[...anchor.parentElement.children].filter(n=>n!==access).length<=4)anchor=anchor.parentElement;
-   if(anchor&&access.previousElementSibling!==anchor)anchor.after(access);else if(!anchor&&access.parentNode!==d)d.prepend(access);}
+  // Acceso dentro del diálogo: ÚLTIMO elemento, pegado al borde inferior visible (sticky). No empuja el contenido (en la
+  // bienvenida a 844×390 la primera entrada seguiría fuera de pantalla) ni entra en la fila de cabecera (la desbordaría en móvil).
+  if(d){if(d.lastElementChild!==access)d.append(access);}
   else access.remove();
   // Panel: en su diálogo propio si hay un modal; si no, en el documento.
   const box=state.open&&d?hostDlg:document.body;if(panel.parentNode!==box)box.append(panel);panel.classList.toggle('in-dialog',!!d);

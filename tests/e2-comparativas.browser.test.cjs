@@ -94,8 +94,9 @@ test('E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en 
     await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.RubikAssistantUI&&!!window.FloorPlanTerritoryUI);
     await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();await page.locator('#territoryDialog[open]').waitFor();
     const access=page.locator('#territoryDialog rubik-assistant-access');await access.waitFor();assert.ok(await access.isVisible(),'acceso visible en el diálogo de territorio');
-    assert.equal(await access.evaluate(b=>b.parentElement.id),'territoryDialog','fuera de la fila de cabecera');
+    assert.deepEqual(await access.evaluate(b=>[b.parentElement.id,b.parentElement.lastElementChild===b]),['territoryDialog',true],'último elemento del diálogo, fuera de la cabecera');
     assert.equal(await page.locator('#territoryDialog').evaluate(n=>n.scrollWidth<=n.clientWidth+1),true,'sin desbordamiento horizontal');
+    assert.equal(await access.evaluate(b=>{const r=b.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.right<=innerWidth;}),true,'acceso dentro de la pantalla sin desplazar');
     assert.ok(await page.locator('#territoryClose').isVisible());await page.locator('#territoryClose').click({trial:true});
     await access.click();await page.waitForFunction(()=>document.getElementById('assistantHost').open);
     assert.equal(await page.evaluate(()=>{const r=document.getElementById('assistantPanel').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1;}),true,'el panel cabe en 390');
