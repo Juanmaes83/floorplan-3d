@@ -1,7 +1,7 @@
 {
  "schema": "rubik-lab-e2-diagnostico/1",
- "master": "8525025a1470d48d52d8e365070e5a0acf116134",
- "fecha": "2026-11-17T17:13:40.037Z",
+ "master": "7dccf7a6095e6700b2a6b81161f4172b53c340fb",
+ "fecha": "2026-11-18T08:22:15.890Z",
  "datos": "sintéticos (fixtures del producto, precios ficticios)",
  "casos": [
   {
@@ -52,7 +52,7 @@
     "borradorConDatosAntiguos": true,
     "verificado": "true",
     "avisoObsoleto": false,
-    "estado": "Borrador interno preparado (Presupuesto completo). Huella 3dae3e7b4eda…"
+    "estado": "Borrador interno preparado (Presupuesto completo). Huella fd21a238cc22…"
    }
   },
   {
