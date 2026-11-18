@@ -47,7 +47,10 @@
       net:{amount:t.net.amount,complete:t.net.complete},tax:complete?{amount:t.tax.amount}:null,gross:complete?{amount:t.gross.amount}:null,
       items:report.lines.length,unpriced:t.unpricedItemIds.length,unreviewed:t.unreviewedPriceItemIds.length,incomplete:t.incompleteQuantityItemIds.length,
       priceSources:sources,quantities:differ.length?'differ':'match',quantityDifferences:differ,revisionMatch:matches,
-      revisionNote:'RUBIK no registra sobre qué revisión se hizo un presupuesto: se ha comprobado que sus cantidades coinciden con las de «después».'};
+      // E2.2 (A25): la nota dice lo que se ha comprobado, sin afirmar coincidencia cuando no la hay (DEC-07: coincidir en
+      // cantidades no prueba la revisión). applies=false → el bloque no muestra importes: serían de otra revisión.
+      applies:!differ.length,
+      revisionNote:differ.length?'RUBIK no registra sobre qué revisión se hizo un presupuesto. Se han comparado sus cantidades con las de «después»: no coinciden.':'RUBIK no registra sobre qué revisión se hizo un presupuesto. Se han comparado sus cantidades con las de «después»: coinciden (coincidir en cantidades no prueba la revisión).'};
   }
 
   /* Modelo del dossier. comparison: FloorPlanRevisionCompare.compare(before, after). */
@@ -56,7 +59,7 @@
     if(beforeProject?.id!==comparison.before.projectId||afterProject?.id!==comparison.after.projectId)fail('projects-mismatch','Los proyectos no son los de la comparación.');
     const b=budgetBlock(budget,afterProject,beforeProject);
     if(beforeBudget&&!RevisionBudget)fail('revision-budget-required','Para comparar los dos presupuestos hace falta FloorPlanRevisionBudget.');
-    if(beforeBudget&&!budget)fail('after-budget-required','Para comparar presupuestos hace falta también el de «después».');
+    // E2.2: solo «antes» y solo «después» son simétricos (estado one-sided del núcleo canónico; nunca se inventa el que falta).
     const bc=beforeBudget?RevisionBudget.compareBudgets({comparison,beforeProject,afterProject,beforeBudget,afterBudget:budget}):null;
     const groups={};for(const c of comparison.changes)(groups[c.entity]||=[]).push(c.summary);
     return {schema:SCHEMA,version:VERSION,status:'draft-internal',publication:'none',generatedAt:now,
@@ -74,10 +77,11 @@
     const b=v.budget;
     const budget=b?`<section class="budget"><h2>${esc(b.label)}</h2>
 <p>${esc(b.title)} · ${b.items} partidas${b.unpriced?` · <strong>${b.unpriced} sin precio</strong>`:''}${b.unreviewed?` · ${b.unreviewed} precio(s) sin revisar`:''}.</p>
-${b.complete?`<table><tr><th>Sin IVA</th><td>${eur(b.net.amount)}</td></tr><tr><th>IVA</th><td>${eur(b.tax.amount)}</td></tr><tr><th>Total</th><td>${eur(b.gross.amount)}</td></tr></table>`
+${b.applies===false?`<p class="withheld"><strong>Importes no mostrados.</strong> Las cantidades de este presupuesto no son las de «${esc(v.after.label)}»: sus cifras serían de otra revisión.</p>`
+  :b.complete?`<table><tr><th>Sin IVA</th><td>${eur(b.net.amount)}</td></tr><tr><th>IVA</th><td>${eur(b.tax.amount)}</td></tr><tr><th>Total</th><td>${eur(b.gross.amount)}</td></tr></table>`
   :`<p><strong>Importe conocido sin IVA: ${eur(b.net.amount)}</strong>. No es el coste total: hay partidas sin precio o sin cantidad.</p>`}
 <p class="small">Origen de los precios: ${esc(b.priceSources.join(' · ')||'—')}.</p>
-<p class="small">${esc(b.revisionNote)} Resultado: ${b.quantities==='match'?'<strong>coinciden</strong>.':`<strong>no coinciden en ${b.quantityDifferences.length} partida(s)</strong>; ${b.revisionMatch==='before'?`<strong>sus cantidades son las de «${esc(v.before.label)}»</strong>: está hecho sobre la revisión anterior.`:'el presupuesto puede estar hecho sobre otra revisión.'}`}</p>
+<p class="small">${esc(b.revisionNote)}${b.quantities==='match'?'':` Difieren ${b.quantityDifferences.length} partida(s); ${b.revisionMatch==='before'?`<strong>sus cantidades son las de «${esc(v.before.label)}»</strong>: está hecho sobre la revisión anterior.`:'puede estar hecho sobre otra revisión.'}`}</p>
 ${b.quantities==='differ'?`<ul class="small">${li(b.quantityDifferences.map(d=>`${d.item}: ${d.reason}`))}</ul>`:''}</section>`
       :`<section class="budget"><h2>Presupuesto</h2><p>${esc(v.budgetAbsent)}</p></section>`;
     const bc=v.budgetComparison,CH={same:'igual',quantity:'cantidad',price:'precio','quantity-and-price':'cantidad y precio',added:'nueva',removed:'quitada'};

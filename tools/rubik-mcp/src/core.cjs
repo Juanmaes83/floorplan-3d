@@ -11,6 +11,8 @@ const Diagnostics = require('./diagnostics.cjs');
 const Measure = require('./measure.cjs');
 const Clearance = require('./clearance.cjs');
 const Route = require('./route.cjs');
+const Proposal = require('./proposal.cjs');
+const Isolate = require('./isolate.cjs');
 
 const MAX_PROJECT_BYTES = 15 * 1024 * 1024;
 const MAX_LAYOUT_OBJECTS = 100;
@@ -25,7 +27,7 @@ function areaM2(polygon) {
     const a = polygon[i], b = polygon[(i + 1) % polygon.length];
     twiceArea += a.x * b.y - b.x * a.y;
   }
-  return Math.round(Math.abs(twiceArea / 2) / 1_000_000 * 100) / 100;
+  return Math.abs(twiceArea / 2) / 1_000_000;
 }
 
 function snapshotMeta(project, bytes, stat) {
@@ -132,7 +134,7 @@ function publicElement(kind, item, relation) {
   if (kind === 'rooms') return {
     id: item.id, name: item.name, polygon: item.polygon,
     labelAt: item.labelAt, countsTowardArea: item.countsTowardArea,
-    areaM2: areaM2(item.polygon), relation,
+    areaM2: Math.round(areaM2(item.polygon) * 100) / 100, relation,
   };
   if (kind === 'walls') return {
     id: item.id, start: item.start, end: item.end, thicknessMm: item.thicknessMm,
@@ -214,8 +216,25 @@ async function checkRoute2d(reader, args = {}) {
   return safeJson(Route.findRoute(project, snapshot, { start, end, widthMm }));
 }
 
+// Etapa 2: a candidate position for one piece of furniture, never applied (RubikLayoutProposalV1).
+async function proposeLayout(reader, args = {}) {
+  const { project, snapshot } = await reader.load();
+  return safeJson(Proposal.propose(project, snapshot, args));
+}
+
+// Hardening: the heavy tools, isolated in a worker (see isolate.cjs). The file is read and validated HERE, on the main
+// thread, with the same protections and the same per-tool preconditions; the worker runs the same pure functions.
+async function runIsolated(isolate, reader, task, args = {}, { signal } = {}) {
+  const { project, snapshot } = await reader.load();
+  if (task === 'reviewLayout' && project.objects.length > MAX_LAYOUT_OBJECTS) {
+    fail('La revisión MCP admite hasta 100 muebles por proyecto para mantener acotado el cálculo. La revisión del editor sigue disponible.');
+  }
+  return safeJson(await isolate.run(task, project, snapshot, args, { signal }));
+}
+
 module.exports = {
   MAX_PROJECT_BYTES, MAX_LAYOUT_OBJECTS, MAX_RESPONSE_BYTES,
   createProjectReader, getSummary, listElements, getElement, reviewLayout,
-  diagnoseProject, measureElements, inspectPairClearance, checkRoute2d,
+  diagnoseProject, measureElements, inspectPairClearance, checkRoute2d, proposeLayout,
+  runIsolated, Isolate,
 };

@@ -62,12 +62,52 @@
  const stop=btn('',form,'btn');stop.id='assistantStop';stop.hidden=true;
  const foot=el('div',undefined,panel,'assistant-foot');const clear=btn('',foot,'btn link');clear.id='assistantClear';
  const opener=btn('',null,'btn assistant-open');opener.id='assistantOpen';
+ // E2 · el asistente acompaña en TODA la plataforma, también con un diálogo modal abierto (presupuesto, obra, diseño, marca…).
+ // Regla: NO se inserta nada visible para el código del diálogo. Dentro del diálogo solo hay un acceso encapsulado en un
+ // shadow root CERRADO (las consultas genéricas «button», «form», «select,input,button» del diálogo no lo ven: no lo
+ // desactivan, no le dan el foco, no lo cuentan). El panel se abre en su PROPIO diálogo modal (#assistantHost) por encima,
+ // nunca dentro del diálogo de la aplicación. Fuera de diálogos: botón de la navegación de áreas, o flotante si no se ve.
+ const fab=btn('',document.body,'assistant-fab');fab.id='assistantFab';fab.type='button';
+ const access=document.createElement('rubik-assistant-access');access.id='assistantAccess';
+ const accessRoot=access.attachShadow({mode:'closed'});
+ const accessStyle=document.createElement('style');accessStyle.textContent=':host{display:block;position:sticky;bottom:8px;z-index:2;width:max-content;max-width:calc(100% - 36px);margin:8px 18px 8px auto}:host([data-inline]){position:static;margin:12px 0 4px auto}button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #184e52;background:#184e52;color:#fff;font:700 15px/1 system-ui,sans-serif;cursor:pointer}button:hover{background:#0f3a3d}button:focus-visible{outline:3px solid #f3c969;outline-offset:2px}button[hidden]{display:none}@media print{:host{display:none}}';
+ const accessBtn=document.createElement('button');accessBtn.type='button';accessRoot.append(accessStyle,accessBtn);
+ const hostDlg=document.createElement('dialog');hostDlg.id='assistantHost';hostDlg.className='assistant-host';document.body.append(hostDlg);
+ const where=el('p',undefined,null,'assistant-where');where.id='assistantWhere';panel.insertBefore(where,panel.children[1]||null);
+ const hostDialog=()=>{const m=[...document.querySelectorAll('dialog[open]')].filter(d=>{if(d===hostDlg)return false;try{return d.matches(':modal');}catch{return false;}});return m[m.length-1]||null;};
+ // Superficies NO modales a pantalla completa (la presentación): el flotante, fijo abajo a la derecha, taparía sus controles
+ // (las paradas). La superficie se declara con [data-assistant-host]; mientras se ve, el acceso va EN FLUJO al final de ella
+ // (sin sticky: no se superpone a nada) y el flotante se oculta. Un modal abierto tiene prioridad.
+ const hostSurface=()=>[...document.querySelectorAll('[data-assistant-host]')].find(x=>x.getClientRects().length>0)||null;
+ let ownCloses=0,lastHost=null;/* «close» de <dialog> llega en una tarea posterior: se cuentan los cierres propios */const watcher=new MutationObserver(()=>{if(lastHost&&lastHost.lastElementChild!==access)rehost();});
+ const closeHost=()=>{if(hostDlg.open){ownCloses++;hostDlg.close();}};
+ const own=n=>n===fab||n===access||n===hostDlg||panel.contains(n);
+ function rehost(){const modal=hostDialog(),d=modal||hostSurface();access.toggleAttribute('data-inline',!modal&&!!d);
+  if(d!==lastHost){watcher.disconnect();if(d)watcher.observe(d,{childList:true,subtree:true});if(hostDlg.open&&d)closeHost();lastHost=d;}
+  const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
+  where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';
+  // Acceso dentro del diálogo: ÚLTIMO elemento, pegado al borde inferior visible (sticky). No empuja el contenido (en la
+  // bienvenida a 844×390 la primera entrada seguiría fuera de pantalla) ni entra en la fila de cabecera (la desbordaría en móvil).
+  if(d){if(d.lastElementChild!==access)d.append(access);}
+  else access.remove();
+  // Panel: en su diálogo propio si hay un modal; si no, en el documento.
+  const box=state.open&&d?hostDlg:document.body;if(panel.parentNode!==box)box.append(panel);panel.classList.toggle('in-dialog',!!d);
+  if(state.open&&d&&!hostDlg.open)hostDlg.showModal();else if(!(state.open&&d))closeHost();
+  accessBtn.hidden=state.open;
+  const navVisible=opener.isConnected&&opener.offsetParent!==null&&!opener.closest('[inert]');
+  fab.hidden=state.open||!!d||navVisible;}
+ hostDlg.addEventListener('cancel',e=>{e.preventDefault();closePanel();});
+ hostDlg.addEventListener('close',()=>{if(ownCloses>0){ownCloses--;return;}if(state.open)closePanel();});
+ // Las mutaciones de los propios elementos del asistente no reprograman (evita un bucle: rehost escribe «hidden»).
+ new MutationObserver(rs=>{if(rs.some(r=>!own(r.target)))rehost();}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open','hidden']});
+ document.addEventListener('close',e=>{if(e.target!==hostDlg)setTimeout(rehost,0);},true);addEventListener('resize',()=>rehost());
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
   title.textContent=tx('Asistente RUBIK','RUBIK assistant','RUBIK 助手');close.setAttribute('aria-label',tx('Cerrar el asistente','Close the assistant','关闭助手'));
   mode.textContent=tx('Consulta guiada sin modelo de lenguaje: responde con los datos del proyecto abierto y muestra la fuente. No envía nada fuera de este navegador.','Guided query without a language model: it answers with the open project data and shows the source. Nothing leaves this browser.','无语言模型的引导式查询：根据打开的项目数据回答并显示来源。不会发送到浏览器之外。');
   input.placeholder=tx('Pregunta por estancias, superficies, conflictos o presupuesto…','Ask about rooms, areas, conflicts or budget…','询问房间、面积、冲突或预算……');input.setAttribute('aria-label',tx('Tu consulta','Your question','你的问题'));
   send.textContent=tx('Preguntar','Ask','提问');stop.textContent=tx('Detener','Stop','停止');clear.textContent=tx('Borrar conversación','Clear conversation','清除对话');
+  for(const b of [fab,accessBtn]){b.textContent=tx('Asistente','Assistant','助手');b.setAttribute('aria-label',tx('Abrir el asistente RUBIK aquí','Open the RUBIK assistant here','在此打开 RUBIK 助手'));b.setAttribute('aria-expanded',String(state.open));}fab.setAttribute('aria-controls','assistantPanel');
   opener.textContent=tx('Asistente','Assistant','助手');opener.setAttribute('aria-label',tx('Abrir el asistente RUBIK','Open the RUBIK assistant','打开 RUBIK 助手'));opener.setAttribute('aria-expanded',String(state.open));opener.setAttribute('aria-controls','assistantPanel');
  }
  const SUGG={design:[['¿Cuántas estancias hay?','How many rooms are there?','有几个房间？'],['¿Qué conflictos tiene la distribución?','What conflicts does the layout have?','布局有什么冲突？'],['Mueve el sofá 20 cm a la izquierda','Move the sofa 20 cm left','把沙发向左移动20厘米']],
@@ -151,16 +191,16 @@
  function invalidate(reason='scope-changed'){state.pending?.abort();state.proposal=null;state.applied=null;card.hidden=true;card.replaceChildren();card.dataset.state='invalidated';
   scopeProject=app.project?.id||null;restoreLog();emit('invalidated',{reason});}
  addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
- function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
- function closePanel(){state.open=false;panel.hidden=true;document.body.classList.remove('assistant-open');labels();state.pending?.abort();opener.focus({preventScroll:true});emit('close');}
- opener.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
- panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closePanel();}});
+ function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;rehost();document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
+ function closePanel(){state.open=false;panel.hidden=true;rehost();document.body.classList.remove('assistant-open');labels();state.pending?.abort();(lastHost?accessBtn:fab.hidden?opener:fab).focus({preventScroll:true});emit('close');}
+ opener.onclick=()=>state.open?closePanel():openPanel();fab.onclick=accessBtn.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
+ panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();e.preventDefault();closePanel();}}); // Escape cierra el panel, no el diálogo en el que está
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
  clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
- mountOpener();labels();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
+ mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
  window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
   get trace(){return state.trace.map(e=>structuredClone(e));},setLatency(ms){state.latencyMs=Math.max(0,Math.min(10000,Number(ms)||0));}});

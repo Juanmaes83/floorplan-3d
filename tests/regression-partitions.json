@@ -10,7 +10,10 @@
   "tests/variants.browser.test.cjs",
   "tests/building.browser.test.cjs",
   "tests/evolution-demo.browser.test.cjs",
-  "tests/home-demos.browser.test.cjs"
+  "tests/home-demos.browser.test.cjs",
+  "tests/e2-comparativas.browser.test.cjs",
+  "tests/h01-dossier-inventario.browser.test.cjs",
+  "tests/h02-cabecera-economica.browser.test.cjs"
  ],
  "historical": {
   "presentation-a": [
@@ -66,6 +69,9 @@
   ]
  },
  "classification": {
+  "tests/h02-cabecera-economica.browser.test.cjs": "H02 (#253): nueva y verde en local (2026-11-18). Bloqueante desde su alta.",
+  "tests/h01-dossier-inventario.browser.test.cjs": "H01 (#252): nueva y verde en local (2026-11-18). Bloqueante desde su alta.",
+  "tests/e2-comparativas.browser.test.cjs": "E2 (#251): nueva y verde en local (7/7, 2026-11-18). Bloqueante desde su alta.",
   "tests/build-palette.browser.test.cjs": "Fixed by 6d19ee5 on #241: NAV3D no longer covers the palette on 390x844 or 844x390; local browser verification 2026-11-16, 9/9 together with nav3d.browser.test.cjs. Promoted to blocking.",
   "tests/wall-structure.browser.test.cjs": "pre-existing on master 46174d6 (390x844): «Inicio» loses its 10 px margin with the drawer open. Cosmetic, P2.",
   "tests/journey-orientation.browser.test.cjs": "Six individually verified on #241 (2026-11-16, selective 6/6): T1/T9/T10 1440x900, 390x844 and 844x390 each failed because the historical background-color probe counted off-flow smart-furnishing buttons; assertion now scopes the guide, and each full case passes. T8 had the same obsolete probe and passes. T11 was a real mobile layout defect (176 px vs 170 px); compact padding reduced by 6 px and the full case passes. T13 expected the superseded stage label Distribuir; the current five-stage guide uses Diseñar and still offers Ver conflictos; updated assertion passes. Full journey suite was not rerun and remains historical."

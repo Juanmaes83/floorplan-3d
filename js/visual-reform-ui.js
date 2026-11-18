@@ -12,7 +12,6 @@
  const tx=(es,en,zh)=>({es,en,zh})[lang()]||es;const lab=o=>o?.[lang()]||o?.es||'';
  const el=(tag,attrs={},parent,text)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))if(v!==undefined&&v!==null&&v!==false)n.setAttribute(k,v===true?'':v);if(text!==undefined)n.textContent=text;parent?.append(n);return n;};
  const storage=(()=>{try{const s=window.localStorage;s.getItem('x');return s;}catch{return {getItem:()=>null,setItem(){},removeItem(){}};}})();
- const CFG=P?P.config():{configured:false};
 
  const dlg=el('dialog',{id:'visualStudioDialog',class:'visual-studio-dialog','aria-labelledby':'vsTitle'},document.body);
  const wrap=el('div',{class:'visual-studio'},dlg);const head=el('div',{class:'vs-head'},wrap);const title=el('h2',{id:'vsTitle'},head);const closeBtn=el('button',{type:'button',class:'btn',id:'vsClose'},head);
@@ -34,6 +33,7 @@
  const [s5,h5]=step('vsStep5');const refNote=el('p',{id:'vsRefNote',class:'vs-note'},s5);const refList=el('ul',{id:'vsRefList',class:'vs-ref-list'},s5);const openCat=el('button',{type:'button',class:'btn',id:'vsOpenCatalogs'},s5);
  // 6 · Coste, consentimiento, generar
  const [s6,h6]=step('vsStep6');const cost=el('div',{id:'vsCost',class:'vs-cost',role:'note'},s6);
+ const access=P?.mountBetaAccess(s6,()=>refresh());
  const consentL=el('label',{class:'vs-consent'},s6);const consent=el('input',{type:'checkbox',id:'vsConsent'},consentL);const consentT=el('span',{},consentL);
  const [scnT,scenario]=field(s6,'vsScenario');const actions=el('div',{class:'vs-actions'},s6);
  const realBtn=el('button',{type:'button',class:'btn',id:'vsReal',disabled:true,'aria-describedby':'vsCost'},actions),simBtn=el('button',{type:'button',class:'btn primary',id:'vsSimulate'},actions),cancelBtn=el('button',{type:'button',class:'btn',id:'vsCancel',hidden:true},actions);
@@ -115,11 +115,13 @@
  function request(){const r=recipeNow();return {version:1,mode:'catalog',recipeId:r.id,recipeVersion:r.version,zone:zoneSel.value,intensity:intensity.querySelector('input:checked')?.value,alternatives:+altSel.value,
   preserve:[...keep.querySelectorAll('input[data-preserve]:not([disabled]):checked')].map(i=>i.dataset.preserve),mask:mask.map(m=>[...m]),references:refs.map(x=>({family:x.product.family,kind:x.product.kind,sha256:x.image.sha256}))};}
  function refresh(){const req=request(),c=V.checkRequest(req);
-  cost.replaceChildren();el('strong',{},cost,tx('Generación real: BLOQUEADA (STOP_GASTO)','Real generation: BLOCKED (STOP_GASTO)','真实生成：已锁定（STOP_GASTO）'));
-  el('p',{},cost,CFG.configured?'':tx('photo-reform/1 está cerrado en este despliegue: falta un tope de gasto aprobado por el propietario, el precio vigente y un almacén persistente. No se envía nada ni hay gasto.','photo-reform/1 is closed in this deployment: an owner-approved spending cap, the current price and a persistent store are missing. Nothing is sent and nothing is spent.','此部署中 photo-reform/1 已关闭：缺少业主批准的费用上限、当前价格和持久存储。不发送、不产生费用。'));
+  cost.replaceChildren();el('strong',{},cost,access?.ready?tx('Presupuesto antes de enviar','Quote before upload','上传前报价'):tx('Generación real: BLOQUEADA (STOP_GASTO)','Real generation: BLOCKED (STOP_GASTO)','真实生成：已锁定（STOP_GASTO）'));
+  el('p',{},cost,access?.ready?'':tx('photo-reform/1 está cerrado en este despliegue: falta un tope de gasto aprobado por el propietario, el precio vigente y un almacén persistente. No se envía nada ni hay gasto.','photo-reform/1 is closed in this deployment: an owner-approved spending cap, the current price and a persistent store are missing. Nothing is sent and nothing is spent.','此部署中 photo-reform/1 已关闭：缺少业主批准的费用上限、当前价格和持久存储。不发送、不产生费用。'));
   el('p',{id:'vsCostSim'},cost,tx(`Simulación local: ${req.alternatives} opción(es); coste: no aplica (no se llama a ningún proveedor).`,`Local simulation: ${req.alternatives} option(s); cost: not applicable (no provider is called).`,`本地模拟：${req.alternatives} 个方案；费用：不适用（不调用任何服务）。`));
   const why=!src?tx('Elige una imagen.','Choose an image.','请选择图像。'):!c.ok?({mask:tx('Marca al menos una zona.','Mark at least one zone.','请至少标记一个区域。'),references:tx('Demasiadas referencias.','Too many references.','参考过多。')}[c.code]||tx('Revisa la receta.','Check the recipe.','请检查配方。')):'';
+  realBtn.disabled=!access?.ready||!!why||!!abort||!consent.checked;
   simBtn.disabled=!!why||!!abort;if(why&&!abort)status.dataset.why=why;else delete status.dataset.why;return {req,ok:c.ok&&!!src,why};}
+ consent.onchange=refresh;
  [recipeSel].forEach(s=>s.onchange=()=>{fillRecipe();});zoneSel.onchange=()=>{renderKeep();refresh();};altSel.onchange=refresh;
  openCat.onclick=()=>{dlg.close();window.RubikCatalogUI?.open();};
  file.onchange=async()=>{fileErr.textContent='';src=null;mask=[];stage.hidden=true;hideResults();renderMask();refresh();const f=file.files?.[0];if(!f)return;
@@ -152,11 +154,47 @@
    status.textContent=tx(`Simulación terminada: ${results.length} opción(es), rotuladas como SIMULACIÓN. No se ha llamado a ningún proveedor.`,`Simulation finished: ${results.length} option(s), labelled SIMULATION. No provider was called.`,`模拟完成：${results.length} 个方案，已标注为模拟。未调用任何服务。`);dlg.dataset.run='done';}
   catch(e){if(e?.name==='AbortError'){status.textContent=tx('Cancelado: no queda ningún resultado.','Cancelled: no result is kept.','已取消：不保留任何结果。');hideResults();dlg.dataset.run='cancelled';}else{status.textContent=e.message;dlg.dataset.run='error';if(results.length)renderAlts();}}
   finally{abort=null;cancelBtn.hidden=true;refresh();}};
+ realBtn.onclick=async()=>{
+  const {req,ok,why}=refresh();
+  if(!ok||!consent.checked||!access?.ready){status.textContent=why;return;}
+  hideResults();
+  const controller=new AbortController(),{signal}=controller;
+  abort=controller;simBtn.disabled=true;realBtn.disabled=true;cancelBtn.hidden=false;
+  const source=src,referenceSnapshot=[...refs],pending=[];
+  status.textContent=tx('Calculando presupuesto…','Preparing quote…','正在准备报价…');
+  dlg.dataset.run='running';
+  try{
+   const outcome=await access.adapter().run(req,source.blob,{signal,references:referenceSnapshot.map(x=>x.blob),
+    onItem:(index,item)=>pending.push({index,...item})});
+   if(!outcome.ok)throw Error(outcome.message);
+   const next=[];
+   for(const item of pending){
+    signal.throwIfAborted();
+    const blob=new Blob([item.bytes],{type:item.mediaType});
+    const image=await createImageBitmap(blob);
+    const canvas=document.createElement('canvas');
+    canvas.width=image.width;canvas.height=image.height;
+    canvas.getContext('2d').drawImage(image,0,0);image.close();
+    const sameAspect=Math.abs(canvas.width/canvas.height-source.width/source.height)<.01;
+    next.push({canvas,blob,req,refs:referenceSnapshot,kind:item.kind,cost:item.cost,provider:item.provider,
+     ratios:sameAspect?ratiosOf(canvas,req):{inside:0,outside:1}});
+   }
+   signal.throwIfAborted();
+   results=next;renderAlts();dlg.dataset.run='done';
+   status.textContent=tx('Propuestas visuales listas para revisar.','Visual proposals ready to review.','视觉方案已生成，可以审核。');
+  }catch(error){
+   if(abort!==controller)return;
+   dlg.dataset.run=signal.aborted?'cancelled':'error';
+   status.textContent=signal.aborted?tx('Cancelado. Una solicitud ya iniciada puede haber generado coste.','Cancelled. An already submitted request may incur a cost.','已取消。已提交的请求可能会产生费用。'):error.message;
+  }finally{
+   if(abort===controller){abort=null;cancelBtn.hidden=true;refresh();}
+  }
+ };
  cancelBtn.onclick=()=>abort?.abort();
  function hideResults(){results=[];selected=0;sheet=null;s7.hidden=true;alts.replaceChildren();auto.textContent='';verdict.textContent='';decisionNote.textContent='';for(const q of [qOpen,qGeo])for(const o of Object.values(q.opts))o.checked=false;matchSel.value='not-assessable';acceptBtn.disabled=true;dlImg.disabled=true;dlSheet.disabled=true;delete dlg.dataset.verdict;delete dlg.dataset.decision;}
  function renderAlts(){s7.hidden=false;alts.replaceChildren();results.forEach((r,i)=>{const b=el('button',{type:'button',class:'vs-alt','aria-pressed':String(i===selected),id:'vsAlt'+i},alts,tx('Opción ','Option ','方案 ')+(i+1));b.onclick=()=>{selected=i;renderAlts();};});showSelected();}
  function showSelected(){const r=results[selected];if(!r)return;for(const [cv,from] of [[cmpA,src.canvas],[cmpB,r.canvas]]){cv.width=Math.min(960,from.width);cv.height=Math.round(cv.width*from.height/from.width);cv.getContext('2d').drawImage(from,0,0,cv.width,cv.height);}
-  cmpTag.textContent=tx('SIMULACIÓN','SIMULATION','模拟');slider.oninput();
+  cmpTag.textContent=r.kind==='generated'?tx('PROPUESTA ILUSTRATIVA','ILLUSTRATIVE PROPOSAL','示意方案'):tx('SIMULACIÓN','SIMULATION','模拟');slider.oninput();
   auto.textContent=tx(`Cambios fuera de la zona: ${(r.ratios.outside*100).toFixed(1)} % (tolerancia ${(V.INTENSITY[r.req.intensity].outsideTolerance*100).toFixed(0)} %) · dentro: ${(r.ratios.inside*100).toFixed(0)} %`,`Changes outside the zone: ${(r.ratios.outside*100).toFixed(1)} % (tolerance ${(V.INTENSITY[r.req.intensity].outsideTolerance*100).toFixed(0)} %) · inside: ${(r.ratios.inside*100).toFixed(0)} %`,`区域外变化：${(r.ratios.outside*100).toFixed(1)}%（容差 ${(V.INTENSITY[r.req.intensity].outsideTolerance*100).toFixed(0)}%）· 区域内：${(r.ratios.inside*100).toFixed(0)}%`);
   updateVerdict();}
  slider.oninput=()=>{cmpB.style.clipPath=`inset(0 0 0 ${slider.value}%)`;};
@@ -167,16 +205,21 @@
   acceptBtn.disabled=!rv.deliverable;}
  for(const q of [qOpen,qGeo])for(const o of Object.values(q.opts))o.onchange=updateVerdict;matchSel.onchange=updateVerdict;
  function decide(decision){const r=results[selected];if(!r)return;const rv=currentReview();
-  sheet=V.resultSheet({source:{kind:'photo',sha256:src.sha256,width:src.width,height:src.height},request:r.req,references:refs.map(x=>({catalogId:x.catalog.catalogId,catalogRevision:x.catalog.revision,productId:x.product.productId,variantId:x.product.variantId,sku:x.product.sku,displayName:x.product.displayName,family:x.product.family,imageSha256:x.image.sha256,license:x.image.license})),
-   result:{kind:r.kind,index:selected},review:rv,decision,lang:lang()});
+  sheet=V.resultSheet({source:{kind:'photo',sha256:src.sha256,width:src.width,height:src.height},request:r.req,references:(r.refs||refs).map(x=>({catalogId:x.catalog.catalogId,catalogRevision:x.catalog.revision,productId:x.product.productId,variantId:x.product.variantId,sku:x.product.sku,displayName:x.product.displayName,family:x.product.family,imageSha256:x.image.sha256,license:x.image.license})),
+   result:{kind:r.kind,index:selected,cost:r.cost,provider:r.provider},review:rv,decision,lang:lang()});
   dlg.dataset.decision=decision;dlSheet.disabled=false;dlImg.disabled=!sheet.deliverable; // a simulation is never deliverable
-  decisionNote.textContent=decision==='accepted'?tx('Aceptada como prueba de recorrido. Es una SIMULACIÓN: no se descarga ni se entrega como imagen.','Accepted as a journey test. It is a SIMULATION: it is not downloaded or delivered as an image.','已作为流程测试接受。这是模拟：不下载也不交付图像。')
+  decisionNote.textContent=decision==='accepted'?r.kind==='generated'?tx('Propuesta ilustrativa aceptada.','Illustrative proposal accepted.','已接受示意方案。'):tx('Aceptada como prueba de recorrido. Es una SIMULACIÓN: no se descarga ni se entrega como imagen.','Accepted as a journey test. It is a SIMULATION: it is not downloaded or delivered as an image.','已作为流程测试接受。这是模拟：不下载也不交付图像。')
    :tx(`Rechazada${rv?.reasons?.length?': '+rv.reasons.map(x=>lab(V.REVIEW_TEXT[x])).join(' '):''}. No se entrega.`,`Rejected${rv?.reasons?.length?': '+rv.reasons.map(x=>lab(V.REVIEW_TEXT[x])).join(' '):''}. Not delivered.`,`已拒绝。不交付。`);}
  acceptBtn.onclick=()=>{if(currentReview()?.deliverable)decide('accepted');};rejectBtn.onclick=()=>decide('rejected');
  dlSheet.onclick=()=>{if(!sheet)return;const url=URL.createObjectURL(new Blob([JSON.stringify(sheet,null,1)],{type:'application/json'}));const a=el('a',{href:url,download:`rubik-estudio-imagenes-${sheet.decision}.json`},document.body);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
- dlImg.onclick=()=>{/* only a generated, accepted result: never reached with the simulation */};
+ dlImg.onclick=async()=>{
+  const r=results[selected];
+  if(!sheet?.deliverable||!r?.blob)return;
+  try{await P.downloadIllustration(r.blob,'rubik-estudio-propuesta-'+(selected+1));}
+  catch(error){status.textContent=error.message;}
+ };
  discardBtn.onclick=()=>{hideResults();status.textContent=tx('Resultado descartado.','Result discarded.','结果已丢弃。');};
- closeBtn.onclick=()=>dlg.close();dlg.addEventListener('close',()=>{abort?.abort();});
+ closeBtn.onclick=()=>dlg.close();dlg.addEventListener('close',()=>{abort?.abort();access?.reset();});
  function open(){labels();fillRecipe();renderMask();refresh();dlg.showModal();file.focus();}
  // Entry: «Entregar» → card «Imágenes» (repainted when the area changes: added if missing). A SECONDARY button, like the
  // FOT-01 entry: delivery cards keep an equal CTA hierarchy (no primary action inside any card; Point9 rule).

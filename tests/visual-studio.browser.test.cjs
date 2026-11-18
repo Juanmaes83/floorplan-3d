@@ -90,3 +90,62 @@ test('Estudio de imágenes teléfono 390×844 EN: táctil, atajo de zona, simula
   assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}
 });
+
+test('Private image beta requires a tester code and quote confirmation before upload, then downloads an accepted labelled proposal',{timeout:120000},async()=>{
+ const {context,page}=await K.editor(env,{acceptDownloads:true});
+ const actions=[];
+ const code='qa-private-preview-code-not-a-provider-secret';
+ try{
+  await page.route('**/api/photo-reform',async route=>{
+   const req=route.request(),body=req.postDataJSON();
+   assert.equal(req.headers()['x-rubik-photo-reform-token'],code);
+   assert.equal(req.headers().authorization,undefined);
+   actions.push(body.action);
+   if(body.action==='status')return route.fulfill({json:{enabled:true,contract:'photo-reform/1'}});
+   if(body.action==='quote'){
+    assert.equal(body.image,undefined);
+    return route.fulfill({json:{contract:'photo-reform/1',confirmationId:'qa-quote',provider:{id:'openai-images',name:'Preview QA'},estimate:{amount:.06,currency:'USD'}}});
+   }
+   assert.equal(body.confirmationId,'qa-quote');
+   const [,mime,data]=/^data:(image\/\w+);base64,(.*)$/.exec(body.image);
+   return route.fulfill({json:{version:1,provider:{id:'openai-images',name:'Preview QA'},cost:{amount:.04,currency:'USD'},
+    alternatives:[{index:0,mediaType:mime,data}]}});
+  });
+  const unlock=async selector=>{
+   const dlg=page.locator(selector),access=dlg.locator('[data-photo-beta-access]');
+   await access.locator('summary').click();
+   await access.locator('input[type=password]').fill(code);
+   await access.getByRole('button',{name:'Verificar'}).click();
+   await access.getByText('Acceso verificado.').waitFor();
+  };
+  const confirm=()=>page.once('dialog',d=>{assert.match(d.message(),/0\.0600 USD/);return d.accept();});
+  await page.evaluate(()=>RubikPhotoReform.open());
+  await page.locator('#photoReformFile').setInputFiles(K.file('source.jpg',kitchen,'image/jpeg'));
+  await page.locator('#photoReformIntent').selectOption('light');
+  await page.locator('#photoReformConsent').check();
+  assert.equal(await page.locator('#photoReformReal').isDisabled(),true);
+  await unlock('#photoReformDialog');confirm();
+  await page.locator('#photoReformReal').click();
+  await page.locator('#photoReformAccept').waitFor();
+  assert.equal(await page.locator('#photoReformDownload').isDisabled(),true);
+  await page.locator('#photoReformAccept').click();
+  const [photo]=await Promise.all([page.waitForEvent('download'),page.locator('#photoReformDownload').click()]);
+  assert.match(photo.suggestedFilename(),/propuesta-ilustrativa-1\.png$/);
+  await page.locator('#photoReformClose').click();
+
+  await openStudio(page,false);
+  await page.locator('#vsFile').setInputFiles(K.file('source.jpg',kitchen,'image/jpeg'));
+  await page.locator('#vsStage').waitFor();
+  await dragZone(page,[0.56,0.45],[0.76,0.71]);
+  await page.locator('#vsConsent').check();
+  await unlock('#visualStudioDialog');confirm();
+  await page.locator('#vsReal').click();
+  await page.waitForFunction(()=>document.querySelector('#visualStudioDialog').dataset.run==='done');
+  await yes(page,'vsOpenings','yes');await yes(page,'vsGeometry','yes');
+  await page.locator('#vsAccept').click();
+  assert.match(await page.locator('#vsCmpTag').textContent(),/PROPUESTA ILUSTRATIVA/);
+  const [catalog]=await Promise.all([page.waitForEvent('download'),page.locator('#vsDownloadImage').click()]);
+  assert.match(catalog.suggestedFilename(),/propuesta-1\.png$/);
+  assert.deepEqual(actions,['status','quote','generate','status','quote','generate']);
+ }finally{await context.close();}
+});

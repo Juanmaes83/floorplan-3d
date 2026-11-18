@@ -1,5 +1,6 @@
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const {execFile}=require('node:child_process'),run=require('node:util').promisify(execFile),entries=require('../assets/materials/catalog.json').entries;
+const renderBudget=require('./helpers/render-budget.cjs');
 let browser,server,url;const cache=new Map(),QA='docs/qa/artifacts/surface-library';
 before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const f=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!f.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(f)?'text/javascript':f.endsWith('.css')?'text/css':f.endsWith('.webp')?'image/webp':f.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(QA,{recursive:true});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
@@ -36,3 +37,36 @@ test('HTTP, hash, decode, unknown preset and catalogue failures remain visible w
 test('cancel, invalid scale and failed persistence preserve the project and history',{timeout:60000},async t=>{const {page}=await setup(t),original=await project(page);await open(page);await click(page,'[data-surface] >> nth=0');await page.fill('#surfaceRepeatX','0');await click(page,'#surfaceApply');assert.match(await page.locator('#surfaceError').textContent(),/100 y 10000/);assert.deepEqual(await project(page),original);await page.fill('#surfaceRepeatX','1000');await page.evaluate(()=>{Storage.prototype.setItem=function(){throw Error('QA storage unavailable');};});await click(page,'#surfaceApply');assert.match(await page.locator('#surfaceError').textContent(),/QA storage unavailable/);assert.deepEqual(await project(page),original);await click(page,'#surfaceCancel');assert.equal(await page.locator('#undo').isDisabled(),true);});
 
 test('comparison is real and new surfaces never acquire a zero price in English or Chinese',{timeout:60000},async t=>{const {page,errors}=await setup(t),original=await project(page);await open(page);await click(page,'[data-surface="surface-wood-floor"]');await click(page,'[data-surface="surface-herringbone-parquet"]');assert.equal(await page.locator('.surface-comparison img').count(),2);assert.match(await page.locator('.surface-comparison').textContent(),/Tablón de madera natural/);assert.match(await page.locator('.surface-comparison').textContent(),/Parqué en espiga/);await click(page,'#surfaceCancel');assert.deepEqual(await project(page),original);await page.evaluate(()=>{const p=FloorPlanApp.project;FloorPlanApp.importProject(FloorPlanSurfaces.apply(p,FloorPlanSurfaces.get('surface-herringbone-parquet'),{kind:'floor',id:p.rooms[0].id}));});for(const language of ['en','zh']){await page.evaluate(language=>{LANG=language;select({kind:'room',id:FloorPlanApp.project.rooms[0].id});},language);assert.equal(await page.locator('#panel .total').count(),0);await page.evaluate(()=>select(null));assert.equal(await page.locator('#panel').textContent().then(s=>s.includes('¥')),false);}assert.deepEqual(errors,[]);});
+
+test('Architectural detail uses compatible geometry and returns to the original project',{timeout:120000},async t=>{
+ const {page,errors,maps}=await setup(t);
+ await page.evaluate(()=>{
+  const project=FloorPlanApp.project;
+  const wall=FloorPlanExterior.derive(project).walls.find(w=>w.status==='facade');
+  const plaster=FloorPlanSurfaces.get('surface-white-plaster-02');
+  const oak=FloorPlanSurfaces.get('surface-oak-wood-planks');
+  if(!wall||!oak)throw Error('Reference home requires an exterior wall and oak preset');
+  const painted=FloorPlanSurfaces.apply(project,plaster,{kind:'wall',id:wall.wallId});
+  FloorPlanApp.importProject(FloorPlanSurfaces.apply(painted,oak,{kind:'floor',id:painted.rooms[0].id}));
+ });
+ const original=await project(page);
+ await click(page,'[data-view="3d"]');
+ await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+ assert.equal(maps.filter(url=>url.includes('/f03/')).length,0);
+ const control=page.locator('#architecturalQuality');
+ assert.equal(await control.getAttribute('aria-pressed'),'false');
+ await control.click();
+ await page.waitForFunction(()=>View3D.architecturalQuality().facade.status==='ready'&&View3D.surfaceMetrics.some(m=>m.recipe==='oak-physical-v1'),null,{timeout:renderBudget(30000)});
+ const detail=await page.evaluate(()=>View3D.architecturalQuality());
+ assert.ok(detail.windows>0);
+ assert.ok(detail.facade.active.length>0);
+ assert.equal(detail.facade.resources.textures,3);
+ assert.deepEqual(await project(page),original);
+ await control.click();
+ assert.equal(await control.getAttribute('aria-pressed'),'false');
+ const reset=await page.evaluate(()=>View3D.architecturalQuality());
+ assert.equal(reset.windows,0);
+ assert.equal(reset.facade.resources.textures,0);
+ assert.deepEqual(await project(page),original);
+ assert.deepEqual(errors,[]);
+});

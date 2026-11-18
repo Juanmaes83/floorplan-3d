@@ -80,3 +80,27 @@ test('offline reconciliation CLI: ok / review / blocking exit codes with synthet
  const open=w('open.json',JSON.stringify([{op:'reserve',id:'t2',family:'text',usd:0.01,at:'2026-11-20T11:00:00Z'}]));assert.equal(quiet(()=>CLI.main([open,w('z.csv','fecha,familia,usd\n')])),3,'open reservation → review');
  assert.equal(quiet(()=>CLI.main([log,w('h.csv','a,b\n1,2\n')])),1);assert.equal(quiet(()=>CLI.main([])),1);
 });
+test('image quota and shared budget are reserved atomically and isolated by beta namespace',async()=>{
+ const connection=await fresh();
+ try{
+  const s=L.redisStore({exec:connection,namespace:'beta-rubik-test'});
+  const other=L.redisStore({exec:connection,namespace:'beta-rubik-other'});
+  const image={family:'image',usd:.04,capUsd:.1,units:1,maxUnits:2,maxSubjectUnits:1};
+  const attempts=await Promise.all(['one','two','three'].map(id=>s.reserve({...image,id,subject:'tester-a'})));
+  assert.deepEqual(attempts.map(x=>x.reason).sort(),['ok','tester-outputs','tester-outputs']);
+  assert.equal((await s.reserve({...image,id:'b',subject:'tester-b'})).ok,true);
+  assert.equal((await s.reserve({...image,id:'c',usd:.01,subject:'tester-c'})).reason,'outputs');
+  assert.equal((await s.reserve({id:'text-over',family:'text',usd:.03,capUsd:.1})).reason,'cap');
+  const settled=await s.settle('one',{subject:'tester-a',units:1,usd:.02,basis:'provider-usage'});
+  assert.deepEqual([settled.settled,settled.outputs,settled.reservedOutputs,settled.spentUsd],[true,1,1,.02]);
+  assert.equal((await s.settle('one',{subject:'tester-a',units:1,usd:.02})).settled,false);
+  assert.equal((await other.snapshot()).spentUsd,0);
+  assert.equal((await other.reserve({...image,id:'one',subject:'tester-a'})).ok,true);
+  const Beta=require('../api/_beta-controls.js');
+  await s.set(Beta.SWITCH,true);
+  assert.equal(await Beta.enabled(s),false);
+  assert.equal(await Beta.enabled(other),true);
+  assert.equal(await s.remove(Beta.SWITCH),1);
+  assert.equal(await Beta.enabled(s),true);
+ }finally{connection.close();}
+});
