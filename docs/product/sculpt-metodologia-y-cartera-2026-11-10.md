@@ -290,3 +290,15 @@ La tabla siguiente añade **siete líneas de investigación que se solapan con l
 **Propuesta de orden, no decisión tomada:** concluir el cierre y la sincronización de R02-A en PR #193/#192; resolver al menos el alcance de GOV-05 y mantener F2 como deuda de R01; después, si Juanma autoriza **un único** laboratorio, estudiar el contrato de **operaciones seguras AG-2/AG-3** (Pascal + Model MCP + BIMwright), **sin** acceso de escritura al producto y sin confundir diseño de un contrato con integración. En paralelo solo investigación documental de informes navegables, escaneos y presupuestos.
 
 **Ficha requerida para decidir el siguiente corte:** origen/HEAD fijado, familia de §8.6, ID maestro existente o **PENDIENTE DE DECISIÓN**, baseline realmente ejecutada, delta de código verificado, licencia/activos, alternativas ya presentes en RUBIK, riesgos, plan de pruebas y propuesta de PR draft. Ninguna de estas fuentes supone merge, cambio de ola, gasto de API, acceso a planos de cliente ni Promote.
+
+### 8.8 openPlan3D: bloques de persistencia adoptados en F0.2a (18/11/2026)
+
+Donante: `Juanmaes83/openPlan3D` (fork MIT de `laanlabs/openPlan3D`), `771c9e1`. **Sin nuevas fases ni IDs.** Se aplica a F0.2 del [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). Detalle en `docs/contracts/persistencia-v1.md`, §6 bis (#263, `6be42e5`).
+
+| Bloque | Estado |
+|---|---|
+| Llamada de bloqueo que nunca rechaza (Firefox), apertura bloqueada sin conexión colgada, códigos de cuota 22 y 1014 y `SecurityError`, `persist()` tras el primer guardado | Adoptados en #263, con atribución |
+| Copias recuperadas visibles en la biblioteca | Candidato para F0.3 |
+| Comparación por proyecto en lugar de revisión global | Candidato para F0.2c |
+| Historial de versiones con recursos compartidos | Candidato para F0.3 o posterior; sin autoridad paralela |
+
