@@ -75,8 +75,8 @@
  const hostDlg=document.createElement('dialog');hostDlg.id='assistantHost';hostDlg.className='assistant-host';document.body.append(hostDlg);
  const where=el('p',undefined,null,'assistant-where');where.id='assistantWhere';panel.insertBefore(where,panel.children[1]||null);
  const hostDialog=()=>{const m=[...document.querySelectorAll('dialog[open]')].filter(d=>{if(d===hostDlg)return false;try{return d.matches(':modal');}catch{return false;}});return m[m.length-1]||null;};
- let quiet=false,lastHost=null;const watcher=new MutationObserver(()=>{if(lastHost&&!access.isConnected)rehost();});
- const closeHost=()=>{if(hostDlg.open){quiet=true;hostDlg.close();quiet=false;}};
+ let ownCloses=0,lastHost=null;/* «close» de <dialog> llega en una tarea posterior: se cuentan los cierres propios */const watcher=new MutationObserver(()=>{if(lastHost&&!access.isConnected)rehost();});
+ const closeHost=()=>{if(hostDlg.open){ownCloses++;hostDlg.close();}};
  function rehost(){const d=hostDialog();
   if(d!==lastHost){watcher.disconnect();if(d)watcher.observe(d,{childList:true,subtree:true});if(hostDlg.open&&d)closeHost();lastHost=d;}
   const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
@@ -93,7 +93,7 @@
   const navVisible=opener.isConnected&&opener.offsetParent!==null&&!opener.closest('[inert]');
   fab.hidden=state.open||!!d||navVisible;}
  hostDlg.addEventListener('cancel',e=>{e.preventDefault();closePanel();});
- hostDlg.addEventListener('close',()=>{if(!quiet&&state.open)closePanel();});
+ hostDlg.addEventListener('close',()=>{if(ownCloses>0){ownCloses--;return;}if(state.open)closePanel();});
  new MutationObserver(()=>rehost()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
  document.addEventListener('close',e=>{if(e.target!==hostDlg)setTimeout(rehost,0);},true);addEventListener('resize',()=>rehost());
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
