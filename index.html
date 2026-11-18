@@ -229,7 +229,7 @@ main.animating #hint3d{opacity:0}
 .layers-menu{position:relative;z-index:25}#layersMenu.only2d{animation:none}.layers-menu summary{list-style:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px}.layers-menu summary::-webkit-details-marker{display:none}
 /* Header grouped by task. Row 1: identity and project actions. Row 2: how to edit. Row 3: status, file and settings. */
 @media (min-width:1101px){
-  #presentationBtn{order:-1}#uploadPlanBtn,#uploadCancel{order:0}#newProjectBtn{order:1}#newRoomBtn{order:2}#levelsBtn,#levelBar{order:3}
+  #presentationBtn{order:-1}#uploadPlanBtn,#uploadCancel{order:0}#newProjectBtn{order:1}#newRoomBtn{order:2}#levelsBtn,#levelBar{order:3}#exportJsonQuick{order:4}
   header .hdr-break{order:9;flex-basis:100%;height:0}
   #viewSeg{order:10}#tools,#modes3d{order:11}header>.grp.only2d:not(#tools),header>.grp.only3d:not(#modes3d):not(#toggles3d){order:12}header>.grp:has(#undo){order:13}#layersMenu,#toggles3d{order:14}#traceBtn{order:15}#paneBtns{order:16}
   header .hdr-break2{order:19;flex-basis:100%;height:0}
@@ -322,7 +322,7 @@ dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
 @media(max-width:1100px) and (pointer:coarse){
- header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop,.layers-pop{position:fixed;top:58px;right:4px;left:auto}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
+ header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}#exportJsonQuick{order:-1}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop,.layers-pop{position:fixed;top:58px;right:4px;left:auto}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
 }
 #tracePanel{padding:10px;border-bottom:1px solid var(--line)}#tracePanel .actions{flex-wrap:wrap}#tracePanel label{display:block;margin:8px 0}#tracePanel input,#tracePanel select{max-width:100%;font-size:16px}#tracePanel .btn{border:1px solid var(--line);min-height:44px}#traceWarnings{max-height:160px;overflow:auto}#traceWarnings button{display:block;text-align:left;width:100%;margin:4px 0}#layoutReviewFindings{max-height:220px;overflow:auto}#layoutReviewFindings button{display:block;text-align:left;width:100%;margin:4px 0;white-space:normal;height:auto;line-height:1.35;padding:8px 10px}#layoutReviewLimits li{margin:4px 0;font-size:12px}#traceStatus{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:12px}#traceStatus:empty{display:none}:focus-visible{outline:3px solid var(--teal);outline-offset:2px}#traceDistance label{display:block;margin:10px 0}#traceDistance input{font-size:16px;padding:8px;width:100%}
 .menu-pop{max-width:calc(100vw - 8px);max-height:calc(100dvh - 70px);overflow-y:auto}.menu-pop .btn{white-space:normal;overflow-wrap:anywhere}
@@ -551,6 +551,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
     </div>
     <div class="brand"><b>Rubik Sota</b><span id="subtitle">Floor Plan Designer</span></div><span class="plan-meta" data-en="3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan" data-es="3 dormitorios · 2 salones · 2 baños · Plano de referencia">3 dormitorios · 2 salones · 2 baños · Plano de referencia</span>
+    <button class="btn" type="button" id="exportJsonQuick" data-en="Save project JSON" data-es="Guardar proyecto JSON" title="Descargar una copia del proyecto actual" data-en-title="Download a copy of the current project" data-es-title="Descargar una copia del proyecto actual">保存项目 JSON</button>
     <div class="grp seg" id="viewSeg" title="切换 2D / 3D (T)" data-en-title="Switch 2D / 3D (T)">
       <span class="professional-control-label" data-en="View:" data-es="Vista:">Vista:</span>
       <span class="pill"></span>
@@ -2388,7 +2389,7 @@ $('#exportPng').onclick = exportPNG;
 $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
 // A building exports as a whole; a single level is exported explicitly from «Plantas…» with a warning.
 const exportProjectJson = () => library?.isBuilding()?window.FloorPlanBuildingUI.exportBuildingJson():download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
-$('#exportJson').onclick = exportProjectJson;
+$('#exportJson').onclick = $('#exportJsonQuick').onclick = exportProjectJson;
 $('#importJson').onclick = () => {document.querySelector('details.menu').open=false;$('#fileIn').click();};
 let importSequence=0;
 function beginFileImport(){return {sequence:++importSequence,entryId:library?.activeId(),snapshot:snap(),route:window.FloorPlanGuideUI?.captureImport()};}

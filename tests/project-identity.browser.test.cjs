@@ -124,3 +124,20 @@ test('IDENTIDAD · si falla la migración, presupuestar queda de solo lectura y 
   await closeBudget(page);
  }finally{await context.close();}
 });
+
+test('UX-BETA-001 · descarga JSON desde la cabecera con el mismo exportador del menú',{timeout:90000},async()=>{
+ const {context,page}=await K.editor(env,{acceptDownloads:true});
+ try{
+  for(const viewport of [{width:1440,height:900},{width:390,height:844}]){
+   await page.setViewportSize(viewport);
+   const button=page.getByRole('button',{name:'Guardar proyecto JSON'});
+   assert.equal(await button.isVisible(),true);
+   const bounds=await button.boundingBox();
+   assert.ok(bounds.x>=0&&bounds.x+bounds.width<=viewport.width,'visible sin abrir Archivo ni desplazar la cabecera');
+   const expected=await page.evaluate(()=>structuredClone(FloorPlanApp.project));
+   const [download]=await Promise.all([page.waitForEvent('download'),button.press('Enter')]);
+   assert.deepEqual(JSON.parse(fs.readFileSync(await download.path(),'utf8')),expected);
+   assert.equal(await page.locator('details.menu[open]').count(),0);
+  }
+ }finally{await context.close();}
+});
