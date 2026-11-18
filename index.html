@@ -2709,7 +2709,8 @@ function init(){
   orbit.addEventListener('change', requestFrame);
   walkCtl = new PointerLockControls(camera, document.body);
   walkCtl.addEventListener('change', requestFrame);
-  walkCtl.addEventListener('lock', () => { $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; if(walkIntent())requestFrame(); });
+  // Three.js publishes "lock" before its isLocked flag. Check held input on the queued frame.
+  walkCtl.addEventListener('lock', () => { $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; requestFrame(); });
   walkCtl.addEventListener('unlock', () => { if (opt.mode === 'walk'){ $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
 
   hemi = new THREE.HemisphereLight(0xfff8ee, 0xb9a88f, 1.1);
