@@ -1,0 +1,24 @@
+✔ Home → «Ver demo de evolución 4D» → the example house builds itself; play, pause, back, weeks, tasks; visitor data untouched (10151.0078ms)
+✔ direct link in a clean browser, phone 390x844: loads, plays and fits (3680.7998ms)
+✔ direct link in a clean browser, phone 844x390: loads, plays and fits (3564.5844ms)
+✔ old lab URL without its fixtures (?lab=1&dossier=K): a clear message and a link to the demo, never an exception (536.9399ms)
+✔ Home: «Descubre RUBIK en acción» right after the ways to start, two visual cards with real captures and clear actions (902.752ms)
+✖ Dibujo vivo demo from the Home: intro → play → end card → how to → back to start; the visitor's projects untouched (137254.5778ms)
+✔ Dibujo vivo demo on a phone 390×844: the intro fits, the drawing starts, no horizontal overflow (6519.0095ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 163269.3447
+
+✖ failing tests:
+
+test at ..\public-home-demos.browser.test.cjs:43:1
+✖ Dibujo vivo demo from the Home: intro → play → end card → how to → back to start; the visitor's projects untouched (137254.5778ms)
+  page.waitForFunction: Timeout 120000ms exceeded.
+      at TestContext.<anonymous> (<local>/public-home-demos.browser.test.cjs:64:59) {
+    name: 'TimeoutError'
+  }

@@ -1,0 +1,107 @@
+name: CI impact observation
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: ci-impact-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install PyYAML==6.0.3
+      - name: Universal fast validation
+        run: |
+          node --check scripts/ci/impact-plan.cjs
+          node --check scripts/ci/observe.cjs
+          node --test scripts/ci/*.test.cjs
+          node --test tests/project-identity.test.cjs tests/budget-core.test.cjs tests/gov08-s3-expiry.test.cjs
+          node scripts/qa/check-browser-test-coverage.cjs
+      - name: Inventory base and candidate, including indirect consumers
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          mkdir -p qa-results/impact
+          if ! git cat-file -e "$BASE^{commit}"; then BASE="$HEAD"; fi
+          python scripts/ci/inventory.py "$BASE" > /tmp/ci-base.json
+          python scripts/ci/inventory.py "$HEAD" > /tmp/ci-head.json
+          python scripts/ci/check-inventory.py /tmp/ci-head.json
+          node scripts/ci/observe.cjs /tmp/ci-base.json /tmp/ci-head.json "$BASE" "$HEAD" qa-results/impact/plan.json
+          node scripts/ci/representative.cjs /tmp/ci-base.json /tmp/ci-head.json qa-results/impact/cases.json
+          python scripts/ci/matrix.py /tmp/ci-head.json qa-results/impact
+          python scripts/ci/prove-workflows.py "$BASE" "$HEAD" qa-results/impact/workflow-preservation.json
+      - name: Snapshot real Actions timings (incomplete runs remain pending)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          node scripts/ci/measure.cjs "$REPO" "$HEAD" qa-results/impact/measurement.json
+          node scripts/ci/compare.cjs qa-results/impact/plan.json qa-results/impact/measurement.json qa-results/impact/observed-coverage.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-impact-${{ github.event.pull_request.head.sha || github.sha }}
+          path: qa-results/impact
+  integration-gate:
+    if: always() && !cancelled()
+    needs: observe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stable gate, including empty or documentation-only impact
+        env:
+          RESULT: ${{ needs.observe.result }}
+        run: test "$RESULT" = success
+  full-regression:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dispatch original regression workflows; no application Cron
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ github.ref_name }}
+          FULL_REF: ${{ github.ref }}
+          EXPECTED_SHA: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          require_expected_ref() {
+            local actual
+            actual=$(git ls-remote origin "$FULL_REF" "$FULL_REF^{}" | awk 'END {print $1}')
+            if [ "$actual" != "$EXPECTED_SHA" ]; then
+              echo "::error::Dispatch ref $FULL_REF moved. Expected $EXPECTED_SHA, observed ${actual:-missing}."
+              return 1
+            fi
+          }
+          for file in .github/workflows/*.yml; do
+            workflow=$(basename "$file")
+            [ "$workflow" = ci-impact.yml ] && continue
+            require_expected_ref
+            echo "Requesting $workflow for $EXPECTED_SHA ($FULL_REF)"
+            gh workflow run "$workflow" --repo "$REPO" --ref "$REF"
+            require_expected_ref
+          done

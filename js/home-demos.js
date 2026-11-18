@@ -87,9 +87,25 @@
  function watch(){const tick=()=>{if(!state.seen)return;const P=window.FloorPlanPresentation;
    if(!P.active){state.seen=false;return;}
    if(!P.story){state.seen=false;end();return;}setTimeout(tick,300);};tick();}
- async function replay(){hide();const b=document.getElementById('presentationLivingPlay');
-  if(b&&window.FloorPlanPresentation.active){b.hidden=false;b.click();try{await wait(()=>window.FloorPlanPresentation.story?.kind==='living-drawing',30000);state.seen=true;state.ended=false;watch();}catch(e){fail(e);}}
-  else start();}
+ async function replay(){
+  hide();
+  const presentation=window.FloorPlanPresentation;
+  if(!presentation.active||!document.getElementById('presentationLivingPlay'))return start();
+  let clicked=false;
+  try{
+   const replayed=await wait(()=>{
+    if(!presentation.active)return 'closed';
+    if(!clicked){
+     const control=document.getElementById('presentationLivingPlay');
+     if(!control||control.hidden||control.disabled)return false;
+     clicked=true;control.click();
+    }
+    return presentation.story?.kind==='living-drawing';
+   },30000);
+   if(replayed==='closed')return;
+   state.seen=true;state.ended=false;watch();
+  }catch(e){fail(e);}
+ }
  async function home(){
   try{if(window.FloorPlanPresentation?.active){document.getElementById('presentationClose')?.click();await wait(()=>!window.FloorPlanPresentation.active,30000);}
    const prev=state.previous;

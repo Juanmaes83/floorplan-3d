@@ -1,0 +1,12 @@
+✔ IDENTIDAD · el mismo archivo importado dos veces: proyectos independientes; 11 € → 99 € en la copia no cambia el original; el Asistente no se mezcla; reabrir lo mantiene (5585.2718ms)
+✔ IDENTIDAD · «Duplicar» y «Crear variante»: identidad nueva con importes, IVA propio y revisión; después, independientes entre A/B/C y tras reabrir (4707.0223ms)
+✔ IDENTIDAD · migración: una colección anterior con dos entradas y un solo id se separa una vez, sin perder cifras, y no se repite (2451.9946ms)
+✔ IDENTIDAD · si falla la migración, presupuestar queda de solo lectura y no comparte escrituras (1562.0796ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14674.8203
