@@ -67,25 +67,36 @@ test('E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el
     assert.match(popup.url(),/\/comparar\/\?src=library&before=.+&after=.+&anchor=/);await popup.waitForSelector('#cmpCard:not([hidden])');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[],'(el kit sirve .mjs sin tipo: límite del servidor de pruebas)');assert.deepEqual(w.external,[]);}finally{await ctx.close();}});
 
-test('E2 · asistente presente en toda la plataforma: botón flotante y panel usable dentro de un diálogo modal (presupuesto)',async()=>{
+// El diálogo de la aplicación no recibe NADA que sus consultas genéricas puedan ver (botones, formularios, campos).
+const pollution=(page,id)=>page.evaluate(id=>{const d=document.getElementById(id);return {buttons:[...d.querySelectorAll('button')].filter(b=>/^assistant/.test(b.id||'')||b.closest('#assistantPanel')).length,
+  forms:d.querySelectorAll('#assistantPanel, #assistantForm, #assistantGenCodeForm, #assistantFab').length,access:!!d.querySelector('rubik-assistant-access'),first:d.querySelector('select,input,button')?.id||''};},id);
+
+test('E2 · asistente presente en toda la plataforma: acceso dentro del diálogo de presupuesto y panel encima, sin contaminar el diálogo',async()=>{
   const ctx=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await ctx.newPage();const w=K.watch(page,env.base);try{
     await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.RubikAssistantUI&&!!window.FloorPlanBudgetUI);
     assert.ok(await page.locator('#assistantOpen').isVisible()||await page.locator('#assistantFab').isVisible(),'accesible en el editor (navegación de áreas o flotante)');
-    await page.evaluate(()=>FloorPlanBudgetUI.open());await page.waitForFunction(()=>[...document.querySelectorAll('dialog[open]')].some(d=>d.matches(':modal')&&d.contains(document.getElementById('assistantFab'))));
-    const fab=page.locator('#assistantFab');assert.ok(await fab.isVisible(),'visible dentro del diálogo de presupuesto');assert.ok(await fab.evaluate(b=>b.classList.contains('inline')),'en línea junto al título, sin tapar controles');await fab.click();
-    await page.locator('#assistantPanel').waitFor();assert.ok(await page.evaluate(()=>{const p=document.getElementById('assistantPanel');return !p.hidden&&!!p.closest('dialog[open]');}),'panel dentro del diálogo');
+    const first0=await page.evaluate(()=>{FloorPlanBudgetUI.open();const d=document.getElementById('budgetDialog');return d.querySelector('select,input,button')?.id||'';});
+    await page.waitForFunction(()=>!!document.querySelector('#budgetDialog rubik-assistant-access'));
+    const access=page.locator('#budgetDialog rubik-assistant-access');assert.ok(await access.isVisible(),'acceso visible dentro del diálogo de presupuesto');
+    const p0=await pollution(page,'budgetDialog');assert.deepEqual([p0.buttons,p0.forms],[0,0],'ni botones ni formularios del asistente visibles para el diálogo');assert.equal(p0.first,first0,'el primer control del diálogo sigue siendo el suyo');
+    await access.click();await page.waitForFunction(()=>document.getElementById('assistantHost').open&&!document.getElementById('assistantPanel').hidden);
+    assert.ok(await page.evaluate(()=>document.getElementById('assistantHost').matches(':modal')&&document.getElementById('assistantHost').contains(document.getElementById('assistantPanel'))),'panel en su propio diálogo, encima');
+    const p1=await pollution(page,'budgetDialog');assert.deepEqual([p1.buttons,p1.forms],[0,0],'con el panel abierto tampoco');
     assert.match(await page.locator('#assistantWhere').innerText(),/Estás en:/);
+    await page.fill('#assistantInput','¿Cuál es la superficie útil?');assert.equal(await page.inputValue('#assistantInput'),'¿Cuál es la superficie útil?','el panel es usable');
     if(shots)await page.screenshot({path:shots+'/e2-asistente-en-presupuesto.png'});
-    await page.fill('#assistantPanel textarea, #assistantPanel input[type=text]','¿Cuál es la superficie útil?').catch(()=>{});
-    await page.keyboard.press('Escape');assert.ok(await fab.isVisible(),'al cerrar el panel vuelve el botón del diálogo');
+    await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.getElementById('assistantHost').open);
+    assert.ok(await page.evaluate(()=>document.getElementById('budgetDialog').open),'Escape cierra el panel, no el presupuesto');assert.ok(await access.isVisible(),'vuelve el acceso del diálogo');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
 
 test('E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en fila (territorio) no desborda la cabecera ni tapa «Cerrar»',async()=>{
   const ctx=await env.browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const page=await ctx.newPage();const w=K.watch(page,env.base);try{
     await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.RubikAssistantUI&&!!window.FloorPlanTerritoryUI);
     await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();await page.locator('#territoryDialog[open]').waitFor();
-    const fab=page.locator('#assistantFab');assert.ok(await fab.isVisible(),'acceso visible en el diálogo de territorio');
-    assert.equal(await fab.evaluate(b=>b.parentElement.id),'territoryDialog','fuera de la fila de cabecera');
+    const access=page.locator('#territoryDialog rubik-assistant-access');await access.waitFor();assert.ok(await access.isVisible(),'acceso visible en el diálogo de territorio');
+    assert.equal(await access.evaluate(b=>b.parentElement.id),'territoryDialog','fuera de la fila de cabecera');
     assert.equal(await page.locator('#territoryDialog').evaluate(n=>n.scrollWidth<=n.clientWidth+1),true,'sin desbordamiento horizontal');
     assert.ok(await page.locator('#territoryClose').isVisible());await page.locator('#territoryClose').click({trial:true});
+    await access.click();await page.waitForFunction(()=>document.getElementById('assistantHost').open);
+    assert.equal(await page.evaluate(()=>{const r=document.getElementById('assistantPanel').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1;}),true,'el panel cabe en 390');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});

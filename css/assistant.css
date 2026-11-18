@@ -60,4 +60,4 @@
 .assistant-panel.in-dialog{top:8px}
 .assistant-where{margin:0;font:600 13px/1.4 system-ui,sans-serif;color:#184e52}.assistant-where[hidden]{display:none}
 @media print{.assistant-fab{display:none}}
-.assistant-fab.inline{position:static;display:inline-flex;align-items:center;margin:6px 0 10px;min-height:40px;box-shadow:none}
+.assistant-host{padding:0;margin:0;border:0;background:transparent;width:0;height:0;max-width:none;max-height:none;overflow:visible}.assistant-host::backdrop{background:transparent}
