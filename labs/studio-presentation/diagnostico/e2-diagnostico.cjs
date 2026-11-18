@@ -56,6 +56,13 @@ const bBefore=F.budget('complete',b),bAfter=F.budget('complete',a),bStale=F.budg
  await other.evaluate(({k,id})=>{const l=JSON.parse(localStorage.getItem(k));const en=l.entries.find(e=>e.id===id);en.name=en.name+' (cambiada en otra pestaña)';en.updatedAt='2026-11-17T12:00:00Z';localStorage.setItem(k,JSON.stringify(l));
   const bm=JSON.parse(localStorage.getItem('rubik-budget-v1'));for(const key of Object.keys(bm))bm[key].title='Presupuesto cambiado en otra pestaña';localStorage.setItem('rubik-budget-v1',JSON.stringify(bm));},{k:L.KEY,id:group[1].id});
  const s1=await dump();
+ // E2.3: si el comparador detecta el cambio, bloquea preparar (aviso visible): eso es el arreglo, no un fallo de la prueba
+ await pg.waitForTimeout(500);const blocked=await pg.evaluate(()=>{const b=document.getElementById('buildBtn');const n=document.getElementById('staleNotice');return !!b?.disabled&&!!n&&!n.hidden;});
+ if(blocked){caso('A26/H03-1','Tras cambiar lo guardado en otra pestaña, el comparador bloquea preparar y avisa (E2.3).',false,{bloqueado:true,aviso:true});
+  caso('D02-producto','El comparador no escribe en el almacenamiento.',await dump()===s1,{igual:true});
+  const p1=pg.locator('#buildBtn');caso('A26/H03-2','Cambio durante la preparación: el candidato se rechaza por vigencia (mismo mecanismo).',false,{bloqueado:await p1.isDisabled()});
+  await browser.close();srv.close();out.paginaSinErrores=!errs.length;out.peticionesExternas=ext.length;out.productoSinCambios=execFileSync('git',['-C',M,'status','--porcelain']).toString()===status0;
+  fs.writeFileSync(path.join(LAB,'evidence/e2/diagnostico.json'),JSON.stringify(out,null,1));for(const c of out.casos)console.log(c.resultado,c.id);console.log('producto sin cambios:',out.productoSinCambios,'errores de página:',errs.length,'externas:',ext.length);return;}
  await pg.locator('#buildBtn').click();await pg.waitForSelector('#dosOut:not([hidden])');const status=await pg.locator('#dosStatus').textContent();
  await pg.locator('#verifyBtn').click();await pg.waitForSelector('#verifyOut li.sum');const verified=await pg.locator('#verifyOut li.sum').getAttribute('data-ok');
  const usesStale=await pg.evaluate(()=>!/otra pestaña/.test(window.__ux07Compare.dossier.html));

@@ -11,7 +11,7 @@ const M=path.resolve(process.argv[2]);const head=execFileSync('git',['-C',M,'rev
   if(brand){await page.evaluate(()=>{const p=FloorPlanBrand.saveProfile(localStorage,{name:'Estudio Ejemplo (datos de prueba)',email:'estudio@example.invalid'});FloorPlanBrand.setDelivery(localStorage,FloorPlanApp.entryId,{profileId:p.id,title:'Vivienda de ejemplo'});});await page.reload();await page.waitForFunction(()=>window.FloorPlanDossier&&window.FloorPlanBudgetUI);}
   if(budget){await page.evaluate(()=>FloorPlanBudgetUI.open());await page.waitForTimeout(1500);await page.evaluate(()=>document.querySelector('dialog[open]')?.close());}
   const h01=await page.evaluate(()=>{const c=FloorPlanDossier.contents();const paper=document.createElement('article');FloorPlanDossier.compose(paper,'technical');
-   return {inventoryHasEconomic:'economic' in c.sections,economicReady:!!window.FloorPlanEconomicDossierUI?.current(),renderedEconomicPage:!!paper.querySelector('.dossier-economic')};});
+   return {inventoryHasEconomic:!!c.sections.economic,economicReady:!!window.FloorPlanEconomicDossierUI?.current(),renderedEconomicPage:!!paper.querySelector('.dossier-economic')};});
   let h02=null;try{await page.evaluate(()=>FloorPlanEconomicDossierUI.open());await page.waitForTimeout(800);
    h02=await page.evaluate(()=>{const s=FloorPlanBrandUI.snapshot();const h=document.querySelector('.econ-brand');return {snapshotKeys:s?Object.keys(s):null,profileName:s?.profile?.name||null,econBrandLineShown:!!h};});}catch(e){h02={error:e.message.slice(0,120)};}
   res.push({presupuesto:budget,marca:brand,H01:{...h01,discrepancia:h01.renderedEconomicPage&&!h01.inventoryHasEconomic},H02:{...h02,reproducido:brand?!!h02?.profileName&&!h02?.econBrandLineShown:null}});await ctx.close();}

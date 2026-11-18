@@ -1,0 +1,82 @@
+{
+ "schema": "rubik-lab-h01-h02/1",
+ "master": "7dccf7a6095e6700b2a6b81161f4172b53c340fb",
+ "casos": [
+  {
+   "presupuesto": true,
+   "marca": true,
+   "H01": {
+    "inventoryHasEconomic": false,
+    "economicReady": true,
+    "renderedEconomicPage": true,
+    "discrepancia": true
+   },
+   "H02": {
+    "snapshotKeys": [
+     "profile",
+     "title",
+     "intro",
+     "takenAt"
+    ],
+    "profileName": "Estudio Ejemplo (datos de prueba)",
+    "econBrandLineShown": true,
+    "reproducido": false
+   }
+  },
+  {
+   "presupuesto": true,
+   "marca": false,
+   "H01": {
+    "inventoryHasEconomic": false,
+    "economicReady": true,
+    "renderedEconomicPage": true,
+    "discrepancia": true
+   },
+   "H02": {
+    "snapshotKeys": null,
+    "profileName": null,
+    "econBrandLineShown": false,
+    "reproducido": null
+   }
+  },
+  {
+   "presupuesto": false,
+   "marca": true,
+   "H01": {
+    "inventoryHasEconomic": false,
+    "economicReady": false,
+    "renderedEconomicPage": false,
+    "discrepancia": false
+   },
+   "H02": {
+    "snapshotKeys": [
+     "profile",
+     "title",
+     "intro",
+     "takenAt"
+    ],
+    "profileName": "Estudio Ejemplo (datos de prueba)",
+    "econBrandLineShown": false,
+    "reproducido": true
+   }
+  },
+  {
+   "presupuesto": false,
+   "marca": false,
+   "H01": {
+    "inventoryHasEconomic": false,
+    "economicReady": false,
+    "renderedEconomicPage": false,
+    "discrepancia": false
+   },
+   "H02": {
+    "snapshotKeys": null,
+    "profileName": null,
+    "econBrandLineShown": false,
+    "reproducido": null
+   }
+  }
+ ],
+ "externas": 0,
+ "productoSinCambios": false
+}

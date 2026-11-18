@@ -1,35 +1,35 @@
 {
  "schema": "rubik-lab-e2-diagnostico/1",
- "master": "7dccf7a6095e6700b2a6b81161f4172b53c340fb",
- "fecha": "2026-11-18T08:22:15.890Z",
+ "master": "d36e23a2eb5a5aa86477564b33ea4842f5f16c53",
+ "fecha": "2026-11-18T08:44:05.375Z",
  "datos": "sintéticos (fixtures del producto, precios ficticios)",
  "casos": [
   {
    "id": "A25-1",
    "hallazgo": "Presupuesto de «después» hecho sobre la revisión anterior: la nota afirma que «se ha comprobado que coinciden» y a continuación dice que no coinciden; el bloque muestra base, IVA y total como si fueran de «después».",
-   "resultado": "REPRODUCIDO",
+   "resultado": "NO REPRODUCIDO",
    "evidencia": {
     "quantities": "differ",
     "revisionMatch": "before",
     "diferencias": 6,
-    "totalMostrado": true
+    "totalMostrado": false
    }
   },
   {
    "id": "A25-2",
    "hallazgo": "Con la comparación en estado «incoherent» (no se calcula diferencia), el HTML descargable sigue mostrando el total del presupuesto individual de «después», que corresponde a otra revisión.",
-   "resultado": "REPRODUCIDO",
+   "resultado": "NO REPRODUCIDO",
    "evidencia": {
     "estado": "incoherent",
-    "totalIndividualMostrado": true
+    "totalIndividualMostrado": false
    }
   },
   {
    "id": "A25-3",
    "hallazgo": "Solo «antes» tiene presupuesto: la pantalla muestra «Comparación no disponible», el núcleo rechaza antes-sin-después y comparar.js lo descarta en silencio: el borrador descargado dice «Sin presupuesto adjunto», sin mencionar que existe el de «antes».",
-   "resultado": "REPRODUCIDO",
+   "resultado": "NO REPRODUCIDO",
    "evidencia": {
-    "nucleo": "after-budget-required",
+    "nucleo": null,
     "pantalla": "one-sided",
     "borrador": "Sin presupuesto adjunto"
    }
@@ -46,29 +46,27 @@
   },
   {
    "id": "A26/H03-1",
-   "hallazgo": "Tras cambiar la variante y el presupuesto guardados en otra pestaña, el comparador abierto prepara el borrador con los datos retenidos al abrir y «Verificar» lo da por bueno: verify() recibe state.prepared/state.dossier, no una lectura nueva del almacenamiento. Ningún aviso de obsolescencia.",
-   "resultado": "REPRODUCIDO",
+   "hallazgo": "Tras cambiar lo guardado en otra pestaña, el comparador bloquea preparar y avisa (E2.3).",
+   "resultado": "NO REPRODUCIDO",
    "evidencia": {
-    "borradorConDatosAntiguos": true,
-    "verificado": "true",
-    "avisoObsoleto": false,
-    "estado": "Borrador interno preparado (Presupuesto completo). Huella fd21a238cc22…"
+    "bloqueado": true,
+    "aviso": true
    }
   },
   {
    "id": "D02-producto",
-   "hallazgo": "El comparador no escribe en el almacenamiento: lo único que cambia es lo que escribió la otra pestaña.",
+   "hallazgo": "El comparador no escribe en el almacenamiento.",
    "resultado": "REPRODUCIDO",
    "evidencia": {
-    "igualTrasPreparar": true
+    "igual": true
    }
   },
   {
    "id": "A26/H03-2",
-   "hallazgo": "Cambio del presupuesto guardado mientras se prepara: el borrador sale con el estado leído al cargar la página; no hay invalidación ni reconfirmación.",
-   "resultado": "REPRODUCIDO",
+   "hallazgo": "Cambio durante la preparación: el candidato se rechaza por vigencia (mismo mecanismo).",
+   "resultado": "NO REPRODUCIDO",
    "evidencia": {
-    "borradorConDatosAntiguos": true
+    "bloqueado": true
    }
   }
  ],
