@@ -4,7 +4,7 @@ La rama `codex/candidata-conjunta` parte de `master@7dccf7a6095e6700b2a6b81161f4
 
 | PR | SHA de origen | Alcance |
 | --- | --- | --- |
-| [#251](https://github.com/Juanmaes83/floorplan-3d/pull/251) | `02b297804e6ca4336409abcf10e412f47e4c2f67` | Studio E2, evolución de ENT-04 |
+| [#251](https://github.com/Juanmaes83/floorplan-3d/pull/251) | `30abf6f487cfc878ee1f1fda9b26bbbf5f0a49d3` | Studio E2, evolución de ENT-04 |
 | [#252](https://github.com/Juanmaes83/floorplan-3d/pull/252) | `75c479289876a93f1511cbf5a2fab909aea1f9c8` | H01, inventario del dossier |
 | [#253](https://github.com/Juanmaes83/floorplan-3d/pull/253) | `b74dab7fbb1235dda5084c8de36740c792b29f69` | H02, marca de la cabecera económica |
 | [#254](https://github.com/Juanmaes83/floorplan-3d/pull/254) | `4eb58ae97e9cb6eb2e580c532f2b1fff0f367b1c` | MCP Etapa 2 aprobado en alcance digital y de solo lectura, escala estimada |
