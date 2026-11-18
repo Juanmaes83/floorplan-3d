@@ -23,7 +23,34 @@ jobs:
           node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
-      - name: Run the case that timed out on PR 266
+      - name: Measure orbit settling on the commit from PR 266
         run: |
           git rev-parse HEAD
-          node --test --test-concurrency=1 --test-name-pattern='OP-02 sleeps after orbit' tests/op02-render-demand.browser.test.cjs
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('tests/op02-render-demand.browser.test.cjs')
+          original = path.read_text()
+          marker = '    await sleep(page);\n    assert.notDeepEqual(await page.evaluate(()=>View3D.cameraState.position),start);'
+          assert original.count(marker) == 1
+          traced = original.replace('async function sleep(page){', 'async function sleep(page, timeout=30000){')
+          traced = traced.replace(".classList.contains('animating');\n  });", ".classList.contains('animating');\n  },null,{timeout});", 1)
+          traced = traced.replace('{timeout:90000}', '{timeout:150000}', 1)
+          traced = traced.replace(marker, '''    const settledStart=Date.now();
+              page.on('console', msg=>{if(msg.text().startsWith('orbit sample'))console.log(msg.text());});
+              const sample=await page.evaluate(()=>{
+                const start=performance.now();
+                const frames=View3D.lifecycleMetrics.renderedFrames;
+                return setInterval(()=>console.log('orbit sample',JSON.stringify({
+                  ms:Math.round(performance.now()-start), frames:View3D.lifecycleMetrics.renderedFrames-frames,
+                  metrics:View3D.lifecycleMetrics, camera:View3D.cameraState.position,
+                  stageAnimating:document.querySelector('#stage').classList.contains('animating')
+                })),5000);
+              });
+              try {
+                await sleep(page,75000);
+                console.log('orbit settled and stayed quiet after ms',Date.now()-settledStart);
+              } finally { await page.evaluate(id=>clearInterval(id),sample); }
+              assert.notDeepEqual(await page.evaluate(()=>View3D.cameraState.position),start);''')
+          path.with_name('op02-orbit-diagnosis.test.cjs').write_text(traced)
+          PY
+          node --test --test-concurrency=1 --test-name-pattern='OP-02 sleeps after orbit' tests/op02-orbit-diagnosis.test.cjs
