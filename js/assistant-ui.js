@@ -172,7 +172,7 @@
  function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;rehost();panel.hidden=false;fab.hidden=true;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
  function closePanel(){state.open=false;panel.hidden=true;rehost();document.body.classList.remove('assistant-open');labels();state.pending?.abort();(hostDialog()?fab:opener).focus({preventScroll:true});emit('close');}
  opener.onclick=()=>state.open?closePanel():openPanel();fab.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
- panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closePanel();}});
+ panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();e.preventDefault();closePanel();}}); // Escape cierra el panel, no el diálogo en el que está
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
