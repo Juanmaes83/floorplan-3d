@@ -1,0 +1,30 @@
+name: OP-02 lifecycle compatibility check
+on:
+  push:
+    branches: [codex/verify-op02-ci-delta]
+    paths: [.github/workflows/verify-op02-lifecycle-266.yml]
+permissions:
+  contents: read
+jobs:
+  existing-presentation-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Set up the original browser profile
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+      - name: Run the historical lifecycle case and the affected counter assertion
+        run: |
+          git rev-parse HEAD
+          RENDER_TIME_SCALE=3 node --test --test-concurrency=1 --test-name-pattern='R2 P15 ten presentation cycles' tests/presentation.browser.test.cjs
+          node --test --test-concurrency=1 --test-name-pattern='OP-02 sleeps after orbit' tests/op02-render-demand.browser.test.cjs

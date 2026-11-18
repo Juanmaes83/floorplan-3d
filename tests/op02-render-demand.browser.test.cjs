@@ -7,21 +7,21 @@ let env;
 before(async()=>{env=await K.start();});
 after(async()=>{await env?.stop();});
 
-const counts = page=>page.evaluate(()=>View3D.lifecycleMetrics);
+const counts = page=>page.evaluate(()=>View3D.renderedFrames);
 async function sleep(page){
   await page.waitForFunction(()=>{
     const m=View3D.lifecycleMetrics;
-    return !m.loopActive&&!m.animating&&!m.flying&&m.renderedFrames>0&&!document.querySelector('#stage').classList.contains('animating');
+    return !m.loopActive&&!m.animating&&!m.flying&&View3D.renderedFrames>0&&!document.querySelector('#stage').classList.contains('animating');
   });
-  const before=(await counts(page)).renderedFrames;
+  const before=await counts(page);
   await page.waitForTimeout(450);
-  assert.equal((await counts(page)).renderedFrames,before,'quiet view draws no new frames');
+  assert.equal(await counts(page),before,'quiet view draws no new frames');
   return before;
 }
 async function wake(page, action, before=undefined){
-  before??=(await counts(page)).renderedFrames;
+  before??=await counts(page);
   await action();
-  await page.waitForFunction(n=>View3D.lifecycleMetrics.renderedFrames>n,before);
+  await page.waitForFunction(n=>View3D.renderedFrames>n,before);
 }
 const open3D = page=>page.locator('#viewSeg [data-view="3d"]').click();
 
@@ -48,10 +48,10 @@ test('OP-02 sleeps after orbit, light, doors, 3D white model, and suspension',{t
     await sleep(page);
     assert.ok(await page.evaluate(()=>View3D.walkDoors.every(d=>!d.open)));
     await page.evaluate(()=>View3D.setSuspended(true));
-    const frame=(await counts(page)).renderedFrames;
+    const frame=await counts(page);
     await page.evaluate(()=>{View3D.setEnvironment3D('garden');});
     await page.waitForTimeout(450);
-    assert.equal((await counts(page)).renderedFrames,frame);
+    assert.equal(await counts(page),frame);
     await wake(page,()=>page.evaluate(()=>View3D.setSuspended(false)),frame);
     await sleep(page);
     assert.deepEqual(watch.errors,[]);
