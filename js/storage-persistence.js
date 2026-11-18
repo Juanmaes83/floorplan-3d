@@ -10,7 +10,7 @@
    GENERALISE: sin Svelte (estado con oyentes) y con el entorno inyectable (navegador, almacenamiento) para probarlo.
    REPLACE: claves de RUBIK. Añadido: estimate() (uso y cuota), que pide el ADR de persistencia.
    «persist()» y «durability» son peticiones al navegador, no garantías (contrato persistencia-v1 §11).
-   El editor NO lo usa todavía: F0.2b lo llamará tras un commit() confirmado de persistence-store.
+   La sesión lo llama tras confirmar una escritura solicitada por la persona. El editor aún no usa la sesión.
    UMD: window.FloorPlanStoragePersistence / module.exports.create(env). */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanStoragePersistence=api.create();})(typeof self!=='undefined'?self:this,function(){
  'use strict';
@@ -24,23 +24,32 @@
   const remembered=k=>{try{return store()?.getItem(k)!=null;}catch{return false;}};
   const remember=k=>{try{store()?.setItem(k,'true');}catch{/* el estado en memoria sigue valiendo en esta página */}};
   // Estado: true (el navegador conserva), false (puede borrarlo para liberar espacio), null (no se sabe), undefined (sin comprobar).
-  let state,asked=false,dismissedHere=false;const listeners=new Set();
+  let state,asked=false,dismissedHere=false,grants=0;const listeners=new Set();
   const set=v=>{state=v;for(const f of listeners)try{f(v);}catch{}};
-  async function requestPersistentStorage(){
-   if(asked)return undefined;
+  const grant=()=>{grants++;set(true);};
+  async function requestPersistentStorage({confirmedByUser=false}={}){
+   if(!confirmedByUser||asked||!interacted())return undefined;
    try{const s=manager();
-    if(typeof s?.persist!=='function'){asked=true;return null;}
-    if(!interacted())return undefined;
     asked=true;
+    if(typeof s?.persist!=='function'){set(null);return null;}
     if(remembered(PERSIST_REQUESTED_KEY))return undefined;
-    if(typeof s.persisted==='function'&&(await s.persisted())===true){set(true);return true;}
-    remember(PERSIST_REQUESTED_KEY); // antes de preguntar
-    const granted=(await s.persist())===true;set(granted);return granted;
-   }catch{asked=true;return null;}}
+    if(typeof s.persisted==='function'&&(await s.persisted())===true){grant();return true;}
+    const claim=()=>{
+     if(remembered(PERSIST_REQUESTED_KEY))return false;
+     remember(PERSIST_REQUESTED_KEY); // antes de preguntar
+     return true;
+    };
+    const locks=nav()?.locks;
+    if(!(typeof locks?.request==='function'?await locks.request(PERSIST_REQUESTED_KEY,claim):claim()))return undefined;
+    const granted=(await s.persist())===true;
+    if(granted)grant();else set(false);
+    return granted;
+   }catch{if(state!==true)set(null);return null;}}
   async function checkStoragePersistence(){
+   const before=grants;
    let result=null;try{const s=manager();if(typeof s?.persisted==='function')result=(await s.persisted())===true;}catch{result=null;}
-   set(state===true?true:result); // una concesión hecha mientras esta comprobación estaba pendiente no se deshace
-   return result;}
+   if(before===grants)set(result); // una comprobación anterior no deshace una concesión posterior
+   return state;}
   async function estimate(){try{const s=manager();if(typeof s?.estimate!=='function')return null;const e=await s.estimate();
    return Number.isFinite(e?.usage)&&Number.isFinite(e?.quota)?{usage:e.usage,quota:e.quota}:null;}catch{return null;}}
   const storageNoteDismissed=()=>dismissedHere||remembered(STORAGE_NOTE_DISMISSED_KEY);

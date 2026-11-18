@@ -186,7 +186,9 @@
  // another tab's change would erase it. A restore refuses to write from a stale copy.
  const STALE='Otra pestaña ha cambiado la biblioteca de proyectos. Recarga RUBIK antes de restaurar para no sobrescribir ese trabajo; no se ha cambiado nada.';
  function stale(library,storage){if(storage.getItem(Library.KEY)===null)return false;try{return JSON.stringify(Library.load(storage,Core.initial()).all())!==JSON.stringify(library.all());}catch{return true;}}
- const withLock=(locks,fn)=>locks&&typeof locks.request==='function'?locks.request(LOCK,fn):fn();
+ // SCULPT · openPlan3D (MIT, datastore.ts mutateLibrary): the lock callback never rejects (Firefox reports it as uncaught).
+ const withLock=async(locks,fn)=>{if(!(locks&&typeof locks.request==='function'))return fn();
+  const o=await locks.request(LOCK,async()=>{try{return {ok:true,value:await fn()};}catch(error){return {ok:false,error};}});if(!o.ok)throw o.error;return o.value;};
  const locksOf=ctx=>ctx.locks===undefined?globalThis.navigator?.locks:ctx.locks;
 
  /* restore(): adds what read() returned to the library as a NEW entry, with its images and documents.

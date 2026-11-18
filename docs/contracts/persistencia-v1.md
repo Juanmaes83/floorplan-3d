@@ -149,6 +149,12 @@ La guardia `ci-impact` compara los workflows de la rama base. #263 parte de #262
 
 **Tras integrarse en master**, ambas suites deberían pasar a `tests/regression-partitions.json`, coordinado con Codex (#259 modifica ese archivo).
 
+`f0-almacenamiento-persistente.yml` ejecuta una sola vez la suite unitaria del permiso. La prueba de la conexión con IndexedDB vive en la suite Chromium ya existente de F0.2.
+
+El permiso se solicita desde `storage-persistence.js` cuando `session.flush({userEvent})` recibe un clic o una tecla de confianza y la transacción confirma una escritura. Migración, autoguardado, guardado vacío y conflicto quedan fuera. El guardado termina sin esperar al permiso. `session.storageStatus()` consulta estado y cuota sin abrir avisos. Tanto el permiso como la recomendación de copia se pueden consumir sin conectar aún el editor.
+
+La recolección de imágenes solo borra tras el periodo de gracia si Web Locks registra exclusivamente la pestaña que realiza la limpieza. Si no puede acreditarlo, conserva las imágenes y solo registra candidatas.
+
 ## 10. Validación de navegadores (planificada para F0.3)
 
 Antes de cualquier entorno público hay que acreditar, en Chromium, Firefox y Safari de escritorio, y en Safari de iOS y Chrome de Android:

@@ -31,16 +31,24 @@
  class PersistenceError extends Error{constructor(code,message,extra={}){super(message);this.name='PersistenceError';this.code=code;Object.assign(this,extra);}}
  const managed=k=>KEYS.includes(k);
  async function sha(text){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');}
- const withLock=(locks,fn)=>locks&&typeof locks.request==='function'?locks.request(LOCK,fn):fn();
- const describe=e=>e&&e.name==='QuotaExceededError'?'no queda espacio de almacenamiento en este navegador':(e&&e.message)||String(e);
+ // SCULPT · openPlan3D (MIT, Juanmaes83/openPlan3D@771c9e1, datastore.ts mutateLibrary): the lock callback never
+ // rejects (Firefox reports an immediately rejecting lock callback as uncaught); the outcome is rethrown outside.
+ // Without Web Locks the compare-and-write inside the IndexedDB transaction is still atomic.
+ const withLock=async(locks,fn)=>{if(!(locks&&typeof locks.request==='function'))return fn();
+  const o=await locks.request(LOCK,async()=>{try{return {ok:true,value:await fn()};}catch(error){return {ok:false,error};}});if(!o.ok)throw o.error;return o.value;};
+ // SCULPT · openPlan3D storageErrorMessage: also legacy code 22 and Firefox NS_ERROR_DOM_QUOTA_REACHED (1014).
+ const describe=e=>e&&(e.name==='QuotaExceededError'||e.code===22||e.code===1014)?'no queda espacio de almacenamiento en este navegador'
+  :e&&e.name==='SecurityError'?'el navegador no permite guardar datos de este sitio (revisa la configuración de privacidad)':(e&&e.message)||String(e);
 
  function open({indexedDB:idb=root.indexedDB,name=DB}={}){
   return new Promise((resolve,reject)=>{
-   const r=idb.open(name,1);
-   r.onupgradeneeded=()=>{const db=r.result;for(const s of ['docs','meta','legacy'])db.createObjectStore(s);db.createObjectStore('conflicts',{autoIncrement:true});};
-   r.onsuccess=()=>{const db=r.result;db.onversionchange=()=>db.close();resolve(db);};
+   // SCULPT · openPlan3D localDatabase.ts openDatabase: once blocked has been reported, a late upgrade is aborted and a
+   // late success is closed, so a rejected open never leaves a connection that blocks other tabs.
+   const r=idb.open(name,1);let blocked=false;
+   r.onupgradeneeded=()=>{if(blocked){r.transaction?.abort();return;}const db=r.result;for(const s of ['docs','meta','legacy'])db.createObjectStore(s);db.createObjectStore('conflicts',{autoIncrement:true});};
+   r.onsuccess=()=>{const db=r.result;if(blocked){db.close();return;}db.onversionchange=()=>db.close();resolve(db);};
    r.onerror=()=>reject(new PersistenceError('open-failed','No se pudo abrir el almacenamiento del navegador: '+describe(r.error),{cause:r.error}));
-   r.onblocked=()=>reject(new PersistenceError('open-blocked','Otra pestaña de RUBIK está bloqueando el almacenamiento. Ciérrala o recárgala.'));
+   r.onblocked=()=>{blocked=true;reject(new PersistenceError('open-blocked','Otra pestaña de RUBIK está bloqueando el almacenamiento. Ciérrala o recárgala; tus datos guardados no se han tocado.'));};
   });
  }
  // One transaction; resolves with fn's outcome ONLY when the transaction completed. fn may call `abort(outcome)`.
@@ -160,7 +168,7 @@
 
  // ── Session: the synchronous view an editor tab uses ─────────────────────────────────────────────────────────────
  const TAB_LOCK='rubik-sota-tab:';
- async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get}={}){
+ async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get,storagePermission=root.FloorPlanStoragePersistence}={}){
   const db=await open({indexedDB:idb});
   // While this tab is open it holds a lock; image collection never sweeps while another tab may hold unsaved work.
   let releaseTab=null;const shared=root.FloorPlanImages?.holdTab?.(locks);if(shared)tab=shared;else if(locks?.request)locks.request(TAB_LOCK+tab,()=>new Promise(r=>{releaseTab=r;})).catch(()=>{});
@@ -170,10 +178,19 @@
   const pending=new Map(),listeners=new Set([onState]);let chain=Promise.resolve(),timer=null,closed=false;
   const state={status:'saved',revision,pending:0,error:null,conflictId:null,outdated:false,mirror:legacy.mirror,migration:migration.status,diverged:legacy.diverged,persisted:null};
   const emit=patch=>{Object.assign(state,patch,{pending:pending.size,revision});for(const f of listeners)try{f({...state});}catch{}};
+  const stopPermissionUpdates=storagePermission?.subscribe(persisted=>emit({persisted}));
+  async function storageStatus(){
+   const [,estimate]=await Promise.all([storagePermission?.checkStoragePersistence(),storagePermission?.estimate()]);
+   return {persisted:storagePermission?.state??null,estimate:estimate??null};
+  }
   const full=()=>Object.fromEntries(docs);
   function schedule(){if(closed)return;if(state.status!=='conflict')emit({status:'pending'});clearTimeout(timer);timer=setTimeout(()=>{flush().catch(()=>{});},debounceMs);}
-  function flush(){chain=chain.then(doFlush,doFlush);return chain;}
-  async function doFlush(){
+  function flush({userEvent}={}){
+   const userSave=userEvent?.isTrusted===true&&(userEvent.type==='click'||userEvent.type==='keydown');
+   const save=()=>doFlush(userSave);
+   chain=chain.then(save,save);return chain;
+  }
+  async function doFlush(userSave=false){
    clearTimeout(timer);if(closed)return {...state};
    // In conflict, every later change still reaches IndexedDB: the conflict record is rewritten with the full state.
    if(state.status==='conflict'){
@@ -193,6 +210,7 @@
     }
     revision=r.revision;channel?.postMessage({revision,tab});
     emit({status:pending.size?'pending':'saved',error:null,mirror:r.mirror});
+    if(userSave)void storagePermission?.requestPersistentStorage({confirmedByUser:true});
     if(pending.size)schedule();
    }catch(e){
     for(const [k,v] of batch)if(!pending.has(k))pending.set(k,v);
@@ -229,8 +247,8 @@
     if(out.status!=='saved')throw new PersistenceError('conflict','Otra pestaña guardó mientras se recuperaba el conflicto; vuelve a intentarlo.');
     await removeConflict(db,id);({revision,docs}=await load(db));pending.clear();channel?.postMessage({revision,tab});
     emit({status:'saved',conflictId:null,error:null,outdated:false,mirror:out.mirror});return {revision,superseded:r.superseded};},
-   requestPersist:async()=>{const s=root.navigator?.storage;const out={persisted:s?.persist?await s.persist().catch(()=>false):false,estimate:s?.estimate?await s.estimate().catch(()=>null):null};emit({persisted:out.persisted});return out;},
-   close(){closed=true;clearTimeout(timer);releaseTab?.();root.document?.removeEventListener('visibilitychange',onHide);root.removeEventListener?.('pagehide',flush);channel?.close();db.close();},
+   storageStatus,
+   close(){closed=true;clearTimeout(timer);releaseTab?.();stopPermissionUpdates?.();root.document?.removeEventListener('visibilitychange',onHide);root.removeEventListener?.('pagehide',flush);channel?.close();db.close();},
    db
   };
  }
