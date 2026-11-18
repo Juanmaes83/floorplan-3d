@@ -235,3 +235,15 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 | Coherencia de mediciones | La diferencia de área de pared entre el panel (UX-03) y `quantity-core` se corrige reutilizando `quantity-core`, en un corte separado |
 
 **Fronteras que el expediente respeta:** proyecto privado editable; recursos privados; revisión inmutable (F1); identidad profesional (GOV-06a); entregable publicado para clientes (Blob público, GOV-08); libro de gasto y cuotas (Redis). El expediente solo contiene las dos primeras.
+
+## 17. Recuperación de espacio sin Web Locks
+
+**Situación en #264.** Si el navegador no acredita quién conserva trabajo pendiente, la recogida solo registra candidatas. El tiempo transcurrido no autoriza a eliminar una imagen. La cuota, el estado del permiso y la recomendación de copia se consultan desde la misma autoridad. [Evidencia y cadena de PR](../integration/HANDOFF-F0-G02-SCULPT-2026-11-18.md#f0--cadena-de-integración).
+
+**Diseño para F0.2c.** Mover imágenes y diario al mismo IndexedDB que biblioteca, documentos y conflictos. Una operación guarda un registro provisional y las referencias a cada imagen antes de que pueda depender de ella otra tarea. La confirmación fija documentos y referencias en una transacción. Una cancelación comprobada o la resolución de un diario libera las referencias provisionales. Al recuperar un cierre o un fallo de cuota, mantener esos registros hasta confirmar o descartar la operación por el recorrido de recuperación.
+
+La recogida comprueba referencias confirmadas, conflictos, diarios y operaciones provisionales y elimina solo los huérfanos dentro de una misma transacción IndexedDB de lectura y escritura. Una confirmación concurrente ve la misma revisión o debe revalidar sus referencias antes de aceptar el guardado. Esta garantía es transaccional y no depende del reloj ni de averiguar si hay otra pestaña. Un primer corte puede ofrecer un cálculo de bytes recuperables; la confirmación de limpieza vuelve a comprobar los archivos y las referencias.
+
+**Migración y rollback.** Verificar la copia de biblioteca, imágenes y diarios antes de marcar la nueva autoridad como vigente. Las pestañas antiguas conservan sus datos en el almacén legado. Su limpieza automática queda fuera mientras existan escritores que no registren referencias en la base nueva. Mantener revocable el uso de la nueva recogida y preservar la exportación de emergencia y la copia de compatibilidad.
+
+**Pruebas de admisión.** Dos pestañas con Web Locks desactivado; guardado y limpieza cruzados; importación o restauración interrumpidas; conflicto recuperable; imágenes compartidas; cuota agotada; cálculo de bytes y borrado comprobado del huérfano real; migración desde el almacén legado y rollback. Acreditar Chromium, Firefox y Safari, y al menos los recorridos de almacenamiento en iOS y Android del contrato antes de desplegar.
