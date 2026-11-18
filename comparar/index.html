@@ -13,6 +13,8 @@
   <h1>Comparar con el original</h1>
   <p class="lead" id="scope">Dos distribuciones del mismo grupo de «Variantes».</p>
   <p class="notice" id="savedNotice"><strong>Se compara lo guardado en este navegador.</strong> Este comparador no modifica proyectos, variantes ni presupuestos, y no envía nada: todo se queda en este navegador.</p>
+  <p class="muted" id="limitsNotice">Compara el original y una de sus variantes del mismo grupo de «Variantes». En un edificio se compara una planta con la planta del mismo orden, no el edificio completo.</p>
+  <p class="notice warn" id="staleNotice" role="alert" hidden><strong>Lo guardado ha cambiado desde que abriste el comparador.</strong> Lo que ves ya no es el estado actual del original, de la variante o de sus presupuestos. No se pueden preparar ni descargar documentos hasta que vuelvas a cargar. <button class="btn" type="button" id="reloadBtn">Volver a cargar</button></p>
 </header>
 <main>
   <section class="card fatal" id="fatalCard" hidden aria-labelledby="fatalTitle">
@@ -53,6 +55,23 @@
     <section id="bcOut" class="bc"><p id="bcSummary"></p><div class="tablewrap" id="bcTable"></div><ul id="bcNotes" class="muted"></ul></section>
   </section>
 
+  <section class="card" aria-labelledby="orderTitle" id="orderCard" hidden>
+    <h2 id="orderTitle">Orden de cambio</h2>
+    <p class="notice warn"><strong>BORRADOR INTERNO · sin firma y sin conformidad.</strong> Recoge el motivo que escribe el profesional, las diferencias reales entre las dos revisiones y, solo si los dos presupuestos son coherentes, la diferencia económica. No registra la aceptación del cliente.</p>
+    <div class="form">
+      <label for="orderAuthor">Responsable del cambio <span class="muted">(obligatorio)</span></label>
+      <input id="orderAuthor" type="text" maxlength="120" autocomplete="name">
+      <label for="orderMotivo">Motivo del cambio <span class="muted">(obligatorio; lo escribe el profesional)</span></label>
+      <textarea id="orderMotivo" rows="3" maxlength="1200"></textarea>
+    </div>
+    <div class="row"><button class="btn primary" id="orderBuild" type="button" data-needs="motivo" disabled>Preparar orden de cambio</button></div>
+    <p id="orderStatus" role="status" aria-live="polite"></p>
+    <div id="orderOut" hidden>
+      <div class="row"><button class="btn" id="orderDlHtml" type="button">Descargar HTML</button><button class="btn" id="orderDlManifest" type="button">Descargar manifiesto</button><button class="btn" id="orderVerify" type="button">Verificar ahora</button></div>
+      <ul id="orderVerifyOut" class="checks"></ul>
+      <iframe id="orderPreview" title="Vista previa de la orden de cambio" sandbox></iframe>
+    </div>
+  </section>
   <section class="card" aria-labelledby="dosTitle" id="dosCard" hidden>
     <h2 id="dosTitle">Borrador interno</h2>
     <p class="notice warn"><strong>BORRADOR INTERNO · no se envía al cliente.</strong> Se descarga en este equipo con su manifiesto SHA-256. No se publica, no se sube a ningún servidor y no crea enlaces.</p>

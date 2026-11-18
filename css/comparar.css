@@ -47,3 +47,8 @@ details{margin-top:12px}summary{cursor:pointer;min-height:44px;display:flex;alig
 .notice.warn{border-left-color:#a8621c}.notice strong{font-weight:600}
 .fatal{border-left:4px solid var(--err)}
 .amount-withheld{color:var(--muted);font-style:italic}
+/* E2.5 · orden de cambio: formulario del profesional */
+.form{display:grid;gap:6px;max-width:640px;margin:12px 0}.form label{font-weight:600}.form input,.form textarea{font:inherit;padding:8px 10px;border:1px solid currentColor;border-radius:6px;background:transparent;color:inherit;width:100%}
+.form input:focus-visible,.form textarea:focus-visible,.btn:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+#orderPreview{width:100%;min-height:520px;border:1px solid currentColor;border-radius:6px;background:#fff}
+.withheld{font-style:normal}

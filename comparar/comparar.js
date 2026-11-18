@@ -16,12 +16,12 @@ const BUDGETS='rubik-budget-v1';
 const readOnly={getItem:k=>{try{return localStorage.getItem(k);}catch{return null;}},
   setItem(){throw Error('Comparador de solo lectura');},removeItem(){throw Error('Comparador de solo lectura');}};
 const ID=/^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
-const state={prepared:null,budgets:{before:null,after:null},dossier:null,error:null};
+const state={prepared:null,budgets:{before:null,after:null},dossier:null,error:null,ids:null,fp0:null,stale:false,order:null};
 window.__ux07Compare=state;
 
 function fatal(message){
   state.error=message;state.prepared=null;
-  for(const id of ['cmpCard','bcCard','dosCard'])$(id).hidden=true;
+  for(const id of ['cmpCard','bcCard','dosCard','orderCard'])$(id).hidden=true;
   $('fatal').textContent=message;$('fatalCard').hidden=false;
 }
 
@@ -39,6 +39,21 @@ function readBudgets(){
   catch{return {map:{},error:'Los presupuestos guardados en este navegador no se pueden leer: la comparación se hace sin importes.'};}
 }
 
+// ── E2.3 · Vigencia: huella de lo guardado que usa la comparación (las dos entradas de la biblioteca y sus presupuestos).
+// Se toma al abrir y se vuelve a leer antes de preparar, descargar y verificar. Solo lectura: nunca se escribe.
+function storedSlice(){const ids=state.ids;if(!ids)return null;let lib=null,bud=null;
+  try{const l=JSON.parse(readOnly.getItem(L.KEY)||'null');lib=(l?.entries||[]).filter(e=>e.id===ids.before||e.id===ids.after).map(e=>JSON.stringify(e)).sort();}catch{lib=['ilegible'];}
+  try{const b=JSON.parse(readOnly.getItem(BUDGETS)||'null')||{};const pids=[state.prepared?.before?.id,state.prepared?.after?.id].filter(Boolean);bud=pids.map(k=>k+':'+JSON.stringify(b[k]??null));}catch{bud=['ilegible'];}
+  return JSON.stringify({lib,bud});}
+async function fingerprint(){const x=storedSlice();return x===null?null:D.sha256(x);}
+async function checkFresh(){const now=await fingerprint();state.stale=!!state.fp0&&now!==state.fp0;
+  const box=$('staleNotice');if(box)box.hidden=!state.stale;
+  for(const id of ['buildBtn','dlHtml','dlManifest','orderBuild','orderDlHtml','orderDlManifest'])if($(id))$(id).disabled=state.stale||($(id).dataset.needs==='motivo'&&!$('orderMotivo')?.value.trim());
+  return !state.stale;}
+// relectura de lo guardado AHORA, para verify(): no se usa el estado retenido
+function readNow(){try{const lib=L.load(readOnly),g=lib.group(state.ids.anchor);const b=readBudgets();
+  const pr=V.prepare({group:g,beforeId:state.ids.before,afterId:state.ids.after,budgets:b.map});return {before:pr.before,after:pr.after,budget:pr.budgets.after,beforeBudget:pr.budgets.before};}catch{return null;}}
+
 function start(){
   let p;try{p=params();}catch(e){return fatal(e.message);}
   if(readOnly.getItem(L.KEY)===null)return fatal('No hay proyectos guardados en este navegador. El comparador solo lee la biblioteca del editor de este mismo navegador.');
@@ -53,13 +68,13 @@ function start(){
       try{prepared=run(null);}catch(e2){return fatal(e2.message);}}
     else return fatal(e.code==='not-in-group'?'Esas dos distribuciones no son el original y una de sus variantes (no están en el mismo grupo de «Variantes»).':e.message);
   }
-  state.prepared=prepared;state.budgets=budgetError?{before:null,after:null}:{before:prepared.budgets.before,after:prepared.budgets.after};
-  render(prepared,budgetError);
+  state.prepared=prepared;state.budgets=budgetError?{before:null,after:null}:{before:prepared.budgets.before,after:prepared.budgets.after};state.ids=p;
+  render(prepared,budgetError);fingerprint().then(f=>{state.fp0=f;});
 }
 
 // ── Comparación ────────────────────────────────────────────────────────────────────────────────────────────────────
 function render(pr,budgetError){
-  const c=pr.comparison;$('fatalCard').hidden=true;$('cmpCard').hidden=false;$('bcCard').hidden=false;$('dosCard').hidden=false;
+  const c=pr.comparison;$('fatalCard').hidden=true;$('cmpCard').hidden=false;$('bcCard').hidden=false;$('dosCard').hidden=false;$('orderCard').hidden=false;
   const lv=pr.entries.before.levelName||pr.entries.after.levelName;
   $('scope').textContent=lv?`Dos distribuciones del mismo grupo de «Variantes», planta «${pr.entries.before.levelName||'—'}» frente a planta «${pr.entries.after.levelName||'—'}». No es una comparación del edificio completo.`
     :'Dos distribuciones del mismo grupo de «Variantes»: el original y una variante.';
@@ -120,18 +135,82 @@ const slug=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/
 async function build(){
   $('dosError').textContent='';$('dosStatus').textContent='';$('verifyOut').innerHTML='';
   const pr=state.prepared;if(!pr)return;
-  try{const c=pr.comparison,budget=state.budgets.after,beforeBudget=budget?state.budgets.before:null;
+  if(!await checkFresh()){$('dosError').textContent='No se prepara: lo guardado ha cambiado desde que abriste el comparador. Vuelve a cargar para comparar lo actual.';return;}
+  try{const c=pr.comparison,budget=state.budgets.after,beforeBudget=state.budgets.before; // E2.2: simétrico
     const v=D.view(c,{beforeProject:pr.before,afterProject:pr.after,budget,beforeBudget});
     const out=await D.exportDossier(v,{beforeProject:pr.before,afterProject:pr.after,budget,beforeBudget,comparison:c,beforeSvg:R.planSvg(c,'before',pr.before),afterSvg:R.planSvg(c,'after',pr.after)});
-    state.dossier={view:v,budget,beforeBudget,...out};$('preview').srcdoc=out.html;$('dosOut').hidden=false;
+    state.dossier={view:v,budget,beforeBudget,...out,fp:await fingerprint()};$('preview').srcdoc=out.html;$('dosOut').hidden=false;
     $('dosStatus').textContent=`Borrador interno preparado (${v.budget?v.budget.label:'sin presupuesto'}). Huella ${out.manifest.html.sha256.slice(0,12)}…`;
   }catch(e){state.dossier=null;$('dosOut').hidden=true;$('dosError').textContent=e.message;}
 }
 $('buildBtn').addEventListener('click',build);
-$('dlHtml').addEventListener('click',()=>download(slug(state.dossier.view.title)+'.borrador-interno.html',state.dossier.html,'text/html'));
-$('dlManifest').addEventListener('click',()=>download(slug(state.dossier.view.title)+'.manifest.json',JSON.stringify(state.dossier.manifest,null,1),'application/json'));
-$('verifyBtn').addEventListener('click',async()=>{const r=await D.verify(state.dossier.html,state.dossier.manifest,{beforeProject:state.prepared.before,afterProject:state.prepared.after,budget:state.dossier.budget,beforeBudget:state.dossier.beforeBudget});
-  $('verifyOut').innerHTML=r.checks.map(x=>`<li data-ok="${x.ok}">${x.ok?'✓':'✗'} ${esc(x.name)}</li>`).join('')+`<li class="sum" data-ok="${r.ok}">${r.ok?'Borrador verificado.':'El borrador NO coincide con su manifiesto o con los datos guardados.'}</li>`;});
+$('dlHtml').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug(state.dossier.view.title)+'.borrador-interno.html',state.dossier.html,'text/html');});
+$('dlManifest').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug(state.dossier.view.title)+'.manifest.json',JSON.stringify(state.dossier.manifest,null,1),'application/json');});
+$('verifyBtn').addEventListener('click',async()=>{
+  // E2.3: dos preguntas distintas. (1) ¿Es íntegro respecto a su manifiesto? (2) ¿Coincide con lo guardado AHORA?
+  const integ=await D.verify(state.dossier.html,state.dossier.manifest,{});const now=readNow();
+  const cur=now?await D.verify(state.dossier.html,state.dossier.manifest,{beforeProject:now.before,afterProject:now.after,budget:now.budget,beforeBudget:now.beforeBudget}):null;
+  const curChecks=cur?cur.checks.filter(c=>!integ.checks.some(i=>i.name===c.name)):[];const sameSaved=await fingerprint()===state.dossier.fp;curChecks.push({name:'lo guardado (nombres, revisiones y presupuestos) es lo mismo que al preparar',ok:sameSaved});const curOk=!!cur&&curChecks.every(c=>c.ok);await checkFresh();
+  const li=c=>`<li data-ok="${c.ok}">${c.ok?'✓':'✗'} ${esc(c.name)}</li>`;
+  $('verifyOut').innerHTML=`<li class="sum" data-ok="${integ.ok}" data-check="integridad">${integ.ok?'Borrador íntegro: coincide con su manifiesto.':'El borrador NO coincide con su manifiesto.'}</li>`+integ.checks.map(li).join('')+
+   `<li class="sum" data-ok="${curOk}" data-check="vigencia">${!now?'No se puede leer lo guardado ahora: no se confirma la vigencia.':curOk?'Vigente: coincide con lo guardado ahora en este navegador.':'NO vigente: lo guardado ha cambiado desde que se preparó. El borrador sigue siendo íntegro, pero no representa el estado actual.'}</li>`+curChecks.map(li).join('');});
+
+// ── E2.5 · ORDEN DE CAMBIO (RP14) como borrador interno verificable ─────────────────────────────────────────────────
+// Contrato: revisión base y propuesta identificadas; motivo y responsable escritos por el profesional (obligatorios);
+// diferencias canónicas de FloorPlanRevisionCompare; delta económico SOLO con comparación 'complete' (o 'partial', rotulado
+// como diferencia de partidas comparables); plazo SOLO con plan válido (el comparador no lee planes: se dice); sin conformidad
+// inferida y sin firma. Nada se guarda: se descarga en este equipo con su manifiesto SHA-256.
+const ORDER_SCHEMA='rubik-sota.change-order-draft',ORDER_VERSION='1.0.0';
+const T_ENTITY={wall:'Muros',opening:'Puertas y ventanas',room:'Estancias',object:'Muebles',material:'Definición de materiales'};
+function economicOf(pr){const bc=state.budgets.before||state.budgets.after?pr.budgetComparison:null;if(!bc)return {status:'none',text:'Sin presupuestos guardados para estas revisiones: la orden no incluye diferencia económica.',delta:null};
+ const T=bc.totals;if(bc.status==='complete')return {status:'complete',delta:{net:T.net.delta,gross:T.gross.delta},text:`Diferencia de los dos presupuestos, cada uno correspondiente a su revisión: ${sgn(T.net.delta)} sin IVA (${sgn(T.gross.delta)} con IVA).`};
+ if(bc.status==='partial')return {status:'partial',delta:{comparableNet:T.comparable.netDelta},text:`Algún presupuesto está incompleto. Diferencia de las ${T.comparable.items} partidas comparables: ${sgn(T.comparable.netDelta)} sin IVA. No es la diferencia de coste total.`};
+ return {status:bc.status,delta:null,text:bc.status==='incoherent'?'Algún presupuesto no corresponde a su revisión: la orden no incluye diferencia económica.':esc(T.statement)+' La orden no incluye diferencia económica.'};}
+function orderHtml(o){const c=o.comparison,groups={};for(const x of c.changes)(groups[x.entity]||=[]).push(x.summary);const L=a=>a.map(x=>`<li>${esc(x)}</li>`).join('');
+ const m=c.metrics,row=(k,l,u='')=>`<tr><th scope="row">${l}</th><td>${m.before[k]}${u}</td><td>${m.after[k]}${u}</td><td>${m.delta[k]>0?'+':''}${m.delta[k]}${u}</td></tr>`;
+ return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Orden de cambio · ${esc(c.after.name)}</title><style>
+:root{--ink:#2d332f;--muted:#626457;--rule:#cbc2b3;--paper:#fffdf8;--field:#f4f0e8;--petrol:#205b60;--clay:#875936}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Georgia,'Source Serif 4',serif}
+.page{max-width:820px;margin:0 auto;padding:40px 28px 56px}.badge{display:inline-block;font:700 12px/1 system-ui,sans-serif;letter-spacing:.02em;color:var(--clay);border:1px solid var(--clay);border-radius:999px;padding:5px 10px}
+h1{font:600 30px/1.15 Georgia,serif;margin:14px 0 4px}h2{font:700 14px/1.3 system-ui,sans-serif;margin:30px 0 10px;padding-top:12px;border-top:1px solid var(--rule)}
+.sub{color:var(--muted);margin:0}table{border-collapse:collapse;width:100%;font:14px/1.4 system-ui,sans-serif}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top}td:not(:first-child),th:not(:first-child){font-variant-numeric:tabular-nums}
+.box{background:var(--field);padding:14px 16px;border-left:3px solid var(--petrol)}.muted{color:var(--muted)}ul{padding-left:20px;margin:4px 0}.sig{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.sig div{border:1px dashed var(--rule);padding:12px;min-height:70px;font:13px/1.4 system-ui,sans-serif;color:var(--muted)}footer{margin-top:36px;font:12px/1.5 system-ui,sans-serif;color:var(--muted)}
+@media print{.page{padding:18mm}}@media (max-width:600px){h1{font-size:24px}.sig{grid-template-columns:1fr}}</style></head><body><main class="page">
+<span class="badge">BORRADOR INTERNO · sin firma · sin conformidad registrada</span>
+<h1>Orden de cambio</h1><p class="sub">${esc(c.after.name)} · preparada el ${new Date(o.generatedAt).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'})}</p>
+<h2>Revisiones</h2><table><tr><th></th><th>Revisión</th><th>Guardada</th><th>Huella</th></tr>
+<tr><th scope="row">Base</th><td>${esc(c.before.label)}</td><td>${esc(c.before.updatedAt||'—')}</td><td>${o.manifest.before.sha256.slice(0,12)}…</td></tr>
+<tr><th scope="row">Propuesta</th><td>${esc(c.after.label)}</td><td>${esc(c.after.updatedAt||'—')}</td><td>${o.manifest.after.sha256.slice(0,12)}…</td></tr></table>
+<h2>Motivo del cambio</h2><div class="box"><p style="margin:0">${esc(o.motivo)}</p><p class="muted" style="margin:8px 0 0;font:13px system-ui,sans-serif">Escrito por ${esc(o.author)}. RUBIK no redacta ni valida el motivo.</p></div>
+<h2>Diferencias entre las revisiones (${c.counts.total})</h2>${c.identical?'<p>Las dos revisiones son iguales en los datos guardados.</p>':Object.entries(groups).map(([k,a])=>`<h3 style="font:700 13px system-ui;margin:14px 0 4px">${esc(T_ENTITY[k]||k)}</h3><ul>${L(a)}</ul>`).join('')}
+<table style="margin-top:12px"><tr><th></th><th>${esc(c.before.label)}</th><th>${esc(c.after.label)}</th><th>Dif.</th></tr>${row('netAreaM2','Superficie útil',' m²')}${row('rooms','Estancias')}${row('walls','Muros')}${row('openings','Huecos')}${row('objects','Muebles')}</table>
+<h2>Diferencia económica</h2><p>${o.economic.text}</p>
+<h2>Plazo</h2><p>Sin plazo: estas revisiones no tienen un plan de obra vinculado en el comparador. La orden no estima duración.</p>
+<h2>Límites</h2><ul class="muted">${L(c.limits)}</ul>
+<h2>Conformidad</h2><p>Pendiente. Este documento no registra ni presume la aceptación del cliente y no lleva firma digital.</p>
+<div class="sig"><div>Profesional: ${esc(o.author)}</div><div>Cliente: sin conformidad registrada</div></div>
+<footer>Borrador interno preparado con RUBIK SOTA en este navegador. Se compara lo guardado en este navegador. No se ha publicado ni enviado. Huella y verificación en su manifiesto.</footer></main></body></html>`;}
+async function buildOrder(){const pr=state.prepared;$('orderStatus').textContent='';if(!pr)return;const motivo=$('orderMotivo').value.trim(),author=$('orderAuthor').value.trim();
+ if(!motivo||!author){$('orderStatus').textContent='Escribe el responsable y el motivo: la orden de cambio no se prepara sin ellos.';return;}
+ if(!await checkFresh()){$('orderStatus').textContent='No se prepara: lo guardado ha cambiado. Vuelve a cargar.';return;}
+ const c=pr.comparison,generatedAt=new Date().toISOString(),economic=economicOf(pr);
+ const manifest={schema:ORDER_SCHEMA,version:ORDER_VERSION,status:'draft-internal',publication:'none',signature:'none',acceptance:'not-recorded',generatedAt,
+  before:{projectId:pr.before.id,label:c.before.label,updatedAt:c.before.updatedAt||null,sha256:await D.sha256(JSON.stringify(pr.before))},
+  after:{projectId:pr.after.id,label:c.after.label,updatedAt:c.after.updatedAt||null,sha256:await D.sha256(JSON.stringify(pr.after))},
+  reason:{author,sha256:await D.sha256(motivo)},changes:{total:c.counts.total,sha256:await D.sha256(JSON.stringify(c.changes))},economic:{status:economic.status,delta:economic.delta},schedule:null,html:null};
+ const o={comparison:c,motivo,author,generatedAt,economic,manifest};const page=orderHtml(o);manifest.html={bytes:new TextEncoder().encode(page).length,sha256:await D.sha256(page)};
+ state.order={html:page,manifest,fp:await fingerprint()};$('orderPreview').srcdoc=page;$('orderOut').hidden=false;$('orderVerifyOut').innerHTML='';
+ $('orderStatus').textContent=`Orden de cambio preparada (${economic.status==='complete'?'con diferencia económica':'sin diferencia económica'}). Huella ${manifest.html.sha256.slice(0,12)}…`;}
+$('orderBuild').addEventListener('click',buildOrder);
+for(const id of ['orderMotivo','orderAuthor'])$(id).addEventListener('input',()=>{$('orderBuild').disabled=state.stale||!$('orderMotivo').value.trim()||!$('orderAuthor').value.trim();});
+$('orderDlHtml').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug('orden de cambio '+state.prepared.comparison.after.name)+'.borrador-interno.html',state.order.html,'text/html');});
+$('orderDlManifest').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug('orden de cambio '+state.prepared.comparison.after.name)+'.manifest.json',JSON.stringify(state.order.manifest,null,1),'application/json');});
+$('orderVerify').addEventListener('click',async()=>{const o=state.order,now=readNow();const ok1=new TextEncoder().encode(o.html).length===o.manifest.html.bytes&&await D.sha256(o.html)===o.manifest.html.sha256;
+ const ok2=!!now&&await D.sha256(JSON.stringify(now.before))===o.manifest.before.sha256&&await D.sha256(JSON.stringify(now.after))===o.manifest.after.sha256&&await fingerprint()===o.fp;await checkFresh();
+ $('orderVerifyOut').innerHTML=`<li class="sum" data-ok="${ok1}" data-check="integridad">${ok1?'Orden íntegra: coincide con su manifiesto.':'La orden NO coincide con su manifiesto.'}</li><li class="sum" data-ok="${ok2}" data-check="vigencia">${ok2?'Vigente: las dos revisiones coinciden con lo guardado ahora.':'NO vigente: alguna revisión ha cambiado desde que se preparó.'}</li>`;});
+$('reloadBtn')?.addEventListener('click',()=>location.reload());
+addEventListener('storage',()=>{checkFresh();}); // otra pestaña del mismo origen cambia lo guardado
 
 start();
 })();
