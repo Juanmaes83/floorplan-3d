@@ -87,6 +87,7 @@ Este registro reproduce las denominaciones, donantes y prioridades originales co
 
 - **G-02 · DXF.** [#265](https://github.com/Juanmaes83/floorplan-3d/pull/265) contiene el primer corte en borrador.
 - **F0.3 · Permiso de almacenamiento.** [#264](https://github.com/Juanmaes83/floorplan-3d/pull/264) consolida el permiso en una sola autoridad. El estado de guardado, recuperación e historial siguen la validación del ADR.
+- **OP-07 · Muros curvos e inclinados.** [#267](https://github.com/Juanmaes83/floorplan-3d/pull/267) es solo laboratorio, en `labs/sculpt/op-07/`, sin tocar producción. Baseline del donante: 10 suites, 68/68. Paridad del núcleo en mm con el donante y con `quantity-core`/`project-core` en muros rectos: 19/19 en local. Propone dos campos opcionales (`curve.control`, `heightEndMm`) y un plan de cirugía S1–S6, a la espera de F0.2b y de las decisiones D-OP07-1/2/3.
 
 Cada piedra sigue los gates de SCULPT según corresponda. Fijar fuente exacta, SHA, licencias y manifiesto; aislar el bloque y medir su baseline; clasificar, esculpir y pulir; integrar mediante cirugía sobre los contratos existentes; ejecutar pruebas dirigidas y regresiones; acreditar Preview y revisión humana antes de solicitar integración. Una equivalencia se acredita con la misma entrada y resultados esperados en donante y RUBIK, sus límites y evidencia enlazada. El corte recupera únicamente el valor incremental demostrado.
 
