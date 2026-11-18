@@ -1,0 +1,377 @@
+{
+  "donor": "https://github.com/Juanmaes83/openPlan3D",
+  "commit": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+  "snapshotBase": "6dadcbb75c2fa28930007658e3521e91c8d261a5",
+  "pureModuleClosure": [
+    "src/lib/models/types.ts",
+    "src/lib/stores/settings.ts",
+    "src/lib/utils/drawScheduler.ts",
+    "src/lib/utils/floorStack.ts",
+    "src/lib/utils/floors.ts",
+    "src/lib/utils/orbitDamping.ts",
+    "src/lib/utils/sceneSignature.ts",
+    "src/lib/utils/stairLevels.ts",
+    "src/lib/utils/walkthroughMotion.ts"
+  ],
+  "files": {
+    "LICENSE": {
+      "gitBlob": "e19847719492831e7ba07f12a7929ed410b386a4",
+      "sha256": "30228141977aae075d3a50caa11574a12dbc6f69c2bb207d618c8ea2ffa4a83c",
+      "location": "existing"
+    },
+    "docs/reviews/2026-09-07-idle-rendering-metrics.json": {
+      "gitBlob": "364bc7256f472ba8d4d9ad832bd6e192364bdcff",
+      "sha256": "821365e2efc482038d8a2e13488f86d4fd2c8e3cc9d266404408c3880ff3e34d",
+      "location": "added"
+    },
+    "docs/reviews/2026-09-07-idle-rendering.md": {
+      "gitBlob": "31e31cd4b447e908790ad5f496fc3056e04466c1",
+      "sha256": "ef0971a4f7193e1bf6bc7ab8cc35ee1d55ed19b6f7b6a861349da6183b15a154",
+      "location": "added"
+    },
+    "docs/reviews/2026-09-07-rendering-benchmarks.md": {
+      "gitBlob": "91b3697f985c0277f5701c9210b196bae58dfadf",
+      "sha256": "e22aa686c8881efb084ad0ed641ef5e7e8f4346f544d8d632b543ed69cc52eeb",
+      "location": "added"
+    },
+    "docs/reviews/2026-09-07-rendering-metrics.json": {
+      "gitBlob": "cea75685acd15d0ca060b3e8792912dc055a5fc3",
+      "sha256": "ca3bf672f951168fba041f0666a4265195554af0a39903001aeeed7e8f1a2433",
+      "location": "added"
+    },
+    "package-lock.json": {
+      "gitBlob": "6831c9787bd764ea1aaed81800ac341a43fadc29",
+      "sha256": "ff4c1bb50e457e1f45e9548971d355a1bec34ac52660207d4d38f9c646cfa2ca",
+      "location": "existing"
+    },
+    "package.json": {
+      "gitBlob": "f1921daf2accbcd616c087f357f122a74fa32ea6",
+      "sha256": "7b675136cfcf7250b0fb611c2db782d2dc295112ba0e1e0ffa6a592940527c0b",
+      "location": "existing"
+    },
+    "playwright.benchmark.config.ts": {
+      "gitBlob": "8efc99995c8de57999b5b2407d0c1c3638ccb62c",
+      "sha256": "867030cbab3b3f0349cdf1e3b83e3a9f96ad6ade460595874c0048d55a9ee2ab",
+      "location": "added"
+    },
+    "playwright.config.ts": {
+      "gitBlob": "e25351d7b7b1621899365db633d591a7b0abeea1",
+      "sha256": "2666bdfd075afe9afdf82a29c052e33fdb5427d0ef908a12b3e06a76f264e6c8",
+      "location": "added"
+    },
+    "src/lib/components/editor/FloorPlanCanvas.svelte": {
+      "gitBlob": "0b5ec72e59da4b714fa0e405e8010e3e1f57ad10",
+      "sha256": "1f853de260c8ec482fac4a22cce35ed9f5c20141d7263b964ac3d7fc204cca3d",
+      "location": "added"
+    },
+    "src/lib/components/viewer3d/ThreeViewer.svelte": {
+      "gitBlob": "c3e9e72112b4dab53d33968cfb95ff68988fe1e3",
+      "sha256": "10c7f793b61a23ea9a46653a3090de2bd80ccd1b1123cd780593cac910a4fd32",
+      "location": "added"
+    },
+    "src/lib/models/types.ts": {
+      "gitBlob": "07edba8e16e92484e6050e5f6acb3c94bf1f96ad",
+      "sha256": "22649a10356f7b7fd5ab23da8973196d61788e87ab098c78eb7d126564e0e5f1",
+      "location": "existing"
+    },
+    "src/lib/stores/settings.ts": {
+      "gitBlob": "141ac766a52f15598ab983b0d8fcbe8ad40c7284",
+      "sha256": "e062cc645dbf14325c5a58d199ce0c9872918b0c82e9364dbb5f1242e298e07b",
+      "location": "existing"
+    },
+    "src/lib/utils/drawScheduler.ts": {
+      "gitBlob": "eaed529e57333012f0295c663b8d5e72df0da729",
+      "sha256": "c3d39fe13d85186325cc246edc6f115267308bc0c1dab84598e8f5a61bd1e9d5",
+      "location": "added"
+    },
+    "src/lib/utils/floorStack.ts": {
+      "gitBlob": "3a59c16def538808ae6d6222d268275c102be978",
+      "sha256": "b6b66f9a7755933da6d8427fbbc67fa8ac6f392926842735f9f8b9e6f0690a0c",
+      "location": "added"
+    },
+    "src/lib/utils/floors.ts": {
+      "gitBlob": "101d51b4aed3bcd405a14d9c3f6606c60bc041ff",
+      "sha256": "eedac7f5fb2448f9d44b87fa1ed8021dcd8fb89ed84e81e6d95e5575cb77cfbe",
+      "location": "existing"
+    },
+    "src/lib/utils/furnitureModelLoader.ts": {
+      "gitBlob": "71715d2e17e1435ef1d70853f1e810c81a93b8d1",
+      "sha256": "6a4fdc0b01e8aa01d5bb2da635bde7d545a62f915bad949bc4ba7f20ee2d1033",
+      "location": "added"
+    },
+    "src/lib/utils/orbitDamping.ts": {
+      "gitBlob": "ade735c744c9335e3cc13cd6fb6d2e2010578203",
+      "sha256": "22a7c53d10eea1473e4aae132ffe8819d2cb8b5755caed8efa7b0d83634d4b2f",
+      "location": "added"
+    },
+    "src/lib/utils/sceneFraming.ts": {
+      "gitBlob": "e7ca71a1afa252cdf73d6117d93846879b93c247",
+      "sha256": "f2aef9d350f332a61d42c62666bdf4c84f9c9782c4632bd039f75d9da5b166a6",
+      "location": "added"
+    },
+    "src/lib/utils/sceneSignature.ts": {
+      "gitBlob": "12c47769df1e9be6a4c327c9e5febd98175effac",
+      "sha256": "723bcb4c65ce671754168d593f2706f18f427f7ee53f888898b71cf9d048d3be",
+      "location": "added"
+    },
+    "src/lib/utils/stairLevels.ts": {
+      "gitBlob": "27bcfc4c6019e5f906dd1717304bdcd8e8656c3d",
+      "sha256": "7efc56119d8c4fca7e32a8d9caef0ccb170678472f36d29b930594b7aa34bc66",
+      "location": "added"
+    },
+    "src/lib/utils/textureGenerator.ts": {
+      "gitBlob": "2b4c20ad3fa98e12c46c0c4b0e45508ecc298a39",
+      "sha256": "e5fff1f6c8e61310865aa35bc7187a1d67ed3277cd702aceeb0424624d9067ec",
+      "location": "existing"
+    },
+    "src/lib/utils/viewerShadows.ts": {
+      "gitBlob": "08d81f67c4bd6b5cc1a267b208bc388ef293b0ab",
+      "sha256": "f354926526f1f13ccd0dc629638949cef56f1f4a29305cefbd4b830dd2920a74",
+      "location": "added"
+    },
+    "src/lib/utils/viewerTextures.ts": {
+      "gitBlob": "558896916cb2b3a5d36fce7ae9407e66de6e21dd",
+      "sha256": "a7dde90ab26defdd30bc9fd48e08ad14ae90694e7022dd7ed574ad9e58445614",
+      "location": "added"
+    },
+    "src/lib/utils/walkthroughMotion.ts": {
+      "gitBlob": "f0409a46c6110b55af0890fd8f9d5867e2709fef",
+      "sha256": "8701da439aed78e7ffd2bd8381141ad311ff750b934e35b28eb84a60f0099140",
+      "location": "added"
+    },
+    "tests/browser/canvas-idle.spec.ts": {
+      "gitBlob": "fca0f152b107b908c59e24b587101d23effed431",
+      "sha256": "c71f776238ab21bd72719d818cc35b2494922cb553d77d900a753e9a235d366a",
+      "location": "added"
+    },
+    "tests/browser/gpu.ts": {
+      "gitBlob": "fd65f743ae8639fc2e71c047ae122590e2eb766d",
+      "sha256": "e678ce9646bce1091b5c72b794bd01e83bbcdb862c3cdd37421fcf7096aad33d",
+      "location": "added"
+    },
+    "tests/browser/storage.ts": {
+      "gitBlob": "5aa5766f08aad837a899eff740bd3952fbad6ac9",
+      "sha256": "f668bfaf627a186a336ff908367e2769d4c04dc7dfc33ab582ba4cab28432d41",
+      "location": "added"
+    },
+    "tests/browser/viewer-idle.spec.ts": {
+      "gitBlob": "20fc3232e1f5cb67cbf12abb0b30fa7c489f67bc",
+      "sha256": "c498b29884fed87b2363a66d35cd90cc18ab6b259f9103823409d2c9edee6f9c",
+      "location": "added"
+    },
+    "tests/browser/viewer-invalidation.spec.ts": {
+      "gitBlob": "29b2a587a0364fd91fbadd1627f0c40e03a58b5c",
+      "sha256": "d16eb6d709e95a913f378a88489a5dbe9babe3787fb9d716cacc7dc43fe4b126",
+      "location": "added"
+    },
+    "tests/custom-model-placement.test.ts": {
+      "gitBlob": "4f8d3f8cb5e850bdef0d11cf75f99a324328e467",
+      "sha256": "0ec5cf9375f7bb9a9652a843ba9fff2d388fb6c97a1f160c59c6feb42abea93b",
+      "location": "added"
+    },
+    "tests/draw-scheduler.test.ts": {
+      "gitBlob": "6e49eddc899c3b1f8442e30ab955b5d19387e11a",
+      "sha256": "cd3b29b24f6ea2d76bb9883f647e036d94f6d4950ce9bf22ea205516ae53e259",
+      "location": "added"
+    },
+    "tests/fixtures/render-benchmark.ts": {
+      "gitBlob": "7674d359b10e08fe8e2f685f9e984b17188818e6",
+      "sha256": "f81bee9fd125b7219f316f568fbf2b64ea358c7e3a922699e8d29681f856f376",
+      "location": "added"
+    },
+    "tests/furniture-elevation.test.ts": {
+      "gitBlob": "105b1d6c5988f3f4ff3c0c2d39d21f90b958b163",
+      "sha256": "aa7805931eeeba7b450814f3f0554f75210187db26e4f5801182e73323ad63b2",
+      "location": "added"
+    },
+    "tests/orbit-damping.test.ts": {
+      "gitBlob": "bd1be899c27383fc9929eb72d815e9e44f8f32c3",
+      "sha256": "b5fa7fe46751cd34877f572bc203a8c118bf5ddd4b61ec6aeca8bab79e129126",
+      "location": "added"
+    },
+    "tests/render-benchmark.test.ts": {
+      "gitBlob": "b605a504063473067078c20030623010334e35a5",
+      "sha256": "fe1afcec8726deaff74bb17097fc5821cba50540969ae5c1eb386e6bda6ca13b",
+      "location": "added"
+    },
+    "tests/scene-signature.test.ts": {
+      "gitBlob": "c1b8497ceb7ee1b13e9e158f484165af802b24b8",
+      "sha256": "8b29796a42afa7d13571c7b8ab0e14a766d6c89cc45f59d4dcdc167d927ef138",
+      "location": "added"
+    },
+    "tests/stair-levels.test.ts": {
+      "gitBlob": "dc9617f51336ee940e2b1e55293f32e1321528e2",
+      "sha256": "660ba09a15aa75cd5b3b1cec7c4133e97d60d54a28f175309db4b2383b90aac2",
+      "location": "added"
+    },
+    "tests/stairwell.test.ts": {
+      "gitBlob": "16b35ccddc0643c541fee3e6c3a07e38c40a61fc",
+      "sha256": "bb5c663bdb822088492460873ffee3bbe44d218e8eef4abd20b650186c950269",
+      "location": "added"
+    },
+    "tests/walkthrough-motion.test.ts": {
+      "gitBlob": "44506bc56c499808aeb15b7644bbdcd6ddfd00ea",
+      "sha256": "5b91a07c8872ef6a8dc1f75d99cfc3e47dba198b4cb906cf23f99f323dae4244",
+      "location": "added"
+    },
+    "tooling/render-fixtures.mjs": {
+      "gitBlob": "f010ec3ee7d396956a541e7735a41d50cfd3696e",
+      "sha256": "a9319cb443a8d150619ef58c33ee5fb7009c86347a27d6637a97292ea96df350",
+      "location": "added"
+    },
+    "tooling/safari-timeline.mjs": {
+      "gitBlob": "78714f7117c3289741e0c2b868a9e95b7c5229e4",
+      "sha256": "dad8f3b355c9843929cf95bcf211f161b10602a0ec7e1d72dcff6268539d6274",
+      "location": "added"
+    },
+    "vitest.config.ts": {
+      "gitBlob": "c5000a2db030068c018b58670fcb32b3ddab37e3",
+      "sha256": "8a1453f7728ea985456a3a15ae75f69efe72ba1b1ea8dc82949c3d14568366d0",
+      "location": "added"
+    }
+  },
+  "consumerImportEdges": {
+    "src/lib/components/editor/FloorPlanCanvas.svelte": {
+      "local": [
+        "src/lib/components/editor/ContextMenu.svelte",
+        "src/lib/components/editor/MoveToFloorMenu.svelte",
+        "src/lib/i18n/furnitureNames.ts",
+        "src/lib/i18n/index.ts",
+        "src/lib/models/types.ts",
+        "src/lib/stores/project.ts",
+        "src/lib/stores/settings.ts",
+        "src/lib/utils/canvasInteraction.ts",
+        "src/lib/utils/canvasRenderer.ts",
+        "src/lib/utils/drawScheduler.ts",
+        "src/lib/utils/entourageCatalog.ts",
+        "src/lib/utils/floors.ts",
+        "src/lib/utils/furnitureCatalog.ts",
+        "src/lib/utils/furnitureGeometry.ts",
+        "src/lib/utils/furnitureIcons.ts",
+        "src/lib/utils/hitTesting.ts",
+        "src/lib/utils/inlineEditorFocus.ts",
+        "src/lib/utils/marqueeSelection.ts",
+        "src/lib/utils/materials.ts",
+        "src/lib/utils/modalDialog.ts",
+        "src/lib/utils/multiSelectionBounds.ts",
+        "src/lib/utils/openingDrop.ts",
+        "src/lib/utils/openingTranslation.ts",
+        "src/lib/utils/outerWalls.ts",
+        "src/lib/utils/planContentBounds.ts",
+        "src/lib/utils/roomDetection.ts",
+        "src/lib/utils/roomNesting.ts",
+        "src/lib/utils/roomPresets.ts",
+        "src/lib/utils/roomTemplates.ts",
+        "src/lib/utils/scanAlignment.ts",
+        "src/lib/utils/selectionContentBounds.ts",
+        "src/lib/utils/shortcuts.ts",
+        "src/lib/utils/snapStep.ts",
+        "src/lib/utils/textureGenerator.ts",
+        "src/lib/utils/tracingImage.ts",
+        "src/lib/utils/wallEditing.ts",
+        "src/lib/utils/wallTranslation.ts"
+      ],
+      "external": [
+        "svelte",
+        "svelte/store"
+      ]
+    },
+    "src/lib/components/viewer3d/ThreeViewer.svelte": {
+      "local": [
+        "src/lib/components/ai/OpenAIModelPicker.svelte",
+        "src/lib/i18n/aiRenderLabels.ts",
+        "src/lib/i18n/aiRenderMessages.ts",
+        "src/lib/i18n/catalogCategories.ts",
+        "src/lib/i18n/furnitureNames.ts",
+        "src/lib/i18n/index.ts",
+        "src/lib/models/types.ts",
+        "src/lib/stores/aiKeys.ts",
+        "src/lib/stores/onboarding.svelte.ts",
+        "src/lib/stores/project.ts",
+        "src/lib/stores/settings.ts",
+        "src/lib/utils/columnGeometry.ts",
+        "src/lib/utils/depthOrder.ts",
+        "src/lib/utils/doorStyle.ts",
+        "src/lib/utils/floorCamera.ts",
+        "src/lib/utils/floorStack.ts",
+        "src/lib/utils/frameScene.ts",
+        "src/lib/utils/furnitureCatalog.ts",
+        "src/lib/utils/furnitureElevation.ts",
+        "src/lib/utils/furnitureModelLoader.ts",
+        "src/lib/utils/furnitureModelResources.ts",
+        "src/lib/utils/materials.ts",
+        "src/lib/utils/modalDialog.ts",
+        "src/lib/utils/openaiClient.ts",
+        "src/lib/utils/openingFrames.ts",
+        "src/lib/utils/orbitDamping.ts",
+        "src/lib/utils/portableRenderScene.ts",
+        "src/lib/utils/roomDetection.ts",
+        "src/lib/utils/roomNesting.ts",
+        "src/lib/utils/roomSlabGeometry.ts",
+        "src/lib/utils/sceneFraming.ts",
+        "src/lib/utils/sceneSignature.ts",
+        "src/lib/utils/slopedWallGeometry.ts",
+        "src/lib/utils/stairLevels.ts",
+        "src/lib/utils/stairPlanGeometry.ts",
+        "src/lib/utils/stairwell.ts",
+        "src/lib/utils/textureGenerator.ts",
+        "src/lib/utils/viewerShadows.ts",
+        "src/lib/utils/viewerTextures.ts",
+        "src/lib/utils/walkthroughMotion.ts",
+        "src/lib/utils/wallHighlight.ts",
+        "src/lib/utils/wallProfiles.ts",
+        "src/lib/utils/wallXray.ts"
+      ],
+      "external": [
+        "svelte",
+        "svelte/store",
+        "three",
+        "three/examples/jsm/controls/OrbitControls.js",
+        "three/examples/jsm/controls/PointerLockControls.js"
+      ]
+    },
+    "src/lib/utils/textureGenerator.ts": {
+      "local": [
+        "src/lib/utils/catalogAssetUrl.ts",
+        "src/lib/utils/textureFiles.ts"
+      ],
+      "external": [
+        "$app/paths"
+      ]
+    },
+    "src/lib/utils/viewerTextures.ts": {
+      "local": [
+        "src/lib/utils/furnitureModelResources.ts"
+      ],
+      "external": [
+        "three"
+      ]
+    },
+    "src/lib/utils/viewerShadows.ts": {
+      "local": [],
+      "external": []
+    },
+    "src/lib/utils/furnitureModelLoader.ts": {
+      "local": [
+        "src/lib/models/types.ts",
+        "src/lib/services/customModelResources.ts",
+        "src/lib/utils/depthOrder.ts",
+        "src/lib/utils/furnitureCatalog.ts",
+        "src/lib/utils/furnitureElevation.ts",
+        "src/lib/utils/furnitureFinishes.ts",
+        "src/lib/utils/furnitureModelFiles.ts",
+        "src/lib/utils/furnitureModelResources.ts",
+        "src/lib/utils/furnitureModels3d.ts"
+      ],
+      "external": [
+        "three"
+      ]
+    },
+    "src/lib/utils/sceneFraming.ts": {
+      "local": [
+        "src/lib/models/types.ts"
+      ],
+      "external": []
+    }
+  }
+}
