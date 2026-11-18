@@ -26,6 +26,8 @@
 'use strict';
 const {createHash,createHmac,randomBytes,timingSafeEqual}=require('node:crypto');
 const zlib=require('node:zlib');
+const Beta=require('./_beta-controls.js');
+const Ledger=require('./_spend-ledger.js');
 const VR=require('../js/visual-reform-core.js'); // CAT-01: recipes and closed lists shared with the browser
 const CONTRACT='photo-reform/1',MIN_CODE=32,MAX_CODE=200,MAX_IMAGE=4*1024*1024,MAX_REFERENCE=1024*1024,QUOTE_TTL_MS=10*60e3,HARD_MAX_OUTPUTS=4;
 // Closed lists, the SAME ids as the client (js/photo-reform-core.js INTENTS): the server writes the words, never the browser.
@@ -59,7 +61,7 @@ function settings(env){
  if(env.OPENAI_API_KEY&&sameCode(key,env.OPENAI_API_KEY))return {ok:false,error:'misconfigured'}; // never the /api/render key
  let endpoint;try{endpoint=new URL(env.RUBIK_PHOTO_REFORM_PROVIDER_URL||'');}catch{return {ok:false,error:'provider-not-configured'};}
  const local=env.RUBIK_PHOTO_REFORM_ALLOW_LOCAL_PROVIDER==='1'&&!env.VERCEL&&endpoint.protocol==='http:'&&endpoint.hostname==='127.0.0.1';
- if(!local&&!(endpoint.protocol==='https:'&&provider.hosts.includes(endpoint.hostname)&&!endpoint.username&&!endpoint.password))return {ok:false,error:'provider-not-configured'};
+ if(!local&&!(endpoint.protocol==='https:'&&provider.hosts.includes(endpoint.hostname)&&!endpoint.port&&!endpoint.username&&!endpoint.password&&endpoint.pathname==='/v1/images/edits'&&!endpoint.search&&!endpoint.hash))return {ok:false,error:'provider-not-configured'};
  const cap=money(env.RUBIK_PHOTO_REFORM_BUDGET_CAP_USD),price=money(env.RUBIK_PHOTO_REFORM_PRICE_PER_IMAGE_USD),priceDate=env.RUBIK_PHOTO_REFORM_PRICE_DATE;
  if(!cap)return {ok:false,error:'budget-not-approved'};
  if(!price||typeof priceDate!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(priceDate))return {ok:false,error:'price-unknown'};
@@ -130,36 +132,53 @@ function memoryStore({now=Date.now}={}){
   snapshot:()=>snap()};
  function snap(){return {spentUsd:+ledger.spentUsd.toFixed(6),reservedUsd:+ledger.reservedUsd.toFixed(6),outputs:ledger.outputs,reservedOutputs:ledger.reservedOutputs};}
 }
+function imageTariff(env){
+ const fields=['TEXT_INPUT','IMAGE_INPUT','IMAGE_OUTPUT'];
+ const values=fields.map(field=>money(env['RUBIK_PHOTO_REFORM_'+field+'_PER_MTOK']));
+ return values.every(Boolean)?values:null;
+}
+function billedCost(usage,rates){
+ if(!rates)return null;
+ const a=usage?.input_tokens_details?.text_tokens,b=usage?.input_tokens_details?.image_tokens,c=usage?.output_tokens;
+ if(![a,b,c].every(n=>Number.isSafeInteger(n)&&n>=0)||a+b!==usage.input_tokens||c<=0)return null;
+ // No cached discount is assumed. Ceil to a micro-USD to avoid understating the bill.
+ return Math.ceil(a*rates[0]+b*rates[1]+c*rates[2])/1e6;
+}
 function logLine(log,entry){try{log(JSON.stringify({event:'rubik-photo-reform',...entry}));}catch{}}
 async function readBody(req){
  let body=req.body;if(typeof body==='string'){if(body.length>MAX_IMAGE*1.4+4096)return {error:'too-large'};try{body=JSON.parse(body);}catch{return {error:'json'};}}
  if(!body||typeof body!=='object'||Array.isArray(body))return {error:'json'};return {body};
 }
-async function handler(req,res,{env=process.env,store=null,fetchImpl=globalThis.fetch,now=Date.now,log=console.log,random=randomBytes}={}){
+async function handler(req,res,{env=process.env,store=null,fetchImpl=globalThis.fetch,now=Date.now,log=console.log,random=randomBytes,beta=null}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'},{Allow:'POST'});
  const s=settings(env);if(!s.ok)return send(res,503,{error:s.error});
+ const billedRates=beta&&imageTariff(env);
+ if(beta&&!billedRates)return send(res,503,{error:'price-unknown'});
  if(!store||typeof store.reserve!=='function')return send(res,503,{error:'store-not-configured'});
  if(!sameSite(req))return send(res,403,{error:'origin'});
  if(req.headers['x-rubik-contract']!==CONTRACT||!/^application\/json\b/.test(String(req.headers['content-type']||'')))return send(res,400,{error:'contract'});
  const token=req.headers['x-rubik-photo-reform-token']; // x-rubik-render-token and Authorization are ignored on purpose
  if(typeof token!=='string'||!token||token.length>MAX_CODE||!sameCode(token,s.code))return send(res,401,{error:'token'});
  const {body,error}=await readBody(req);if(error)return send(res,400,{error});
+ if(beta&&await store.get('photo-breaker'))return send(res,503,{error:'breaker-open'});
+ if(body.action==='status'&&beta)return send(res,200,{enabled:true,contract:CONTRACT});
  const request=checkRequest(body.request);if(!request)return send(res,400,{error:'request'});
  const requestId=random(9).toString('base64url');
  if(body.action==='quote'){
   if(Object.keys(body).sort().join(',')!=='action,imageBytes,imageSha256,request'||!isHex64(body.imageSha256)||!Number.isSafeInteger(body.imageBytes)||body.imageBytes<=0||body.imageBytes>MAX_IMAGE)return send(res,400,{error:'quote'});
-  const estimateUsd=+(s.price*request.alternatives).toFixed(6),state=store.snapshot?.()||null;
-  const nonce=random(16).toString('base64url'),exp=now()+QUOTE_TTL_MS,payload=[nonce,exp,canonicalRequest(request),body.imageSha256].join('.');
+  const estimateUsd=+(s.price*request.alternatives).toFixed(6),state=await store.snapshot?.()||null;
+  const nonce=random(16).toString('base64url'),exp=now()+QUOTE_TTL_MS,payload=[nonce,exp,canonicalRequest(request),body.imageSha256,s.model,s.price,s.priceDate].join('.');
   const confirmationId=`${nonce}.${exp}.${signQuote(s,payload)}`;
   logLine(log,{requestId,action:'quote',...(request.mode==='catalog'?{recipe:request.recipeId,zone:request.zone,intensity:request.intensity,references:request.references.length}:{intent:request.intent,finish:request.finish}),outputs:request.alternatives,estimateUsd,status:'ok'});
   return send(res,200,{version:1,contract:CONTRACT,confirmationId,expiresAt:new Date(exp).toISOString(),provider:{id:s.provider.id,name:s.provider.name},model:s.model,
-   estimate:{amount:estimateUsd,currency:'USD',basis:'price-per-image-env',priceDate:s.priceDate,outputs:request.alternatives},
+   estimate:{amount:estimateUsd,currency:'USD',basis:beta?'approved-reservation-ceiling':'price-per-image-env',priceDate:s.priceDate,outputs:request.alternatives},
    budget:{capUsd:s.cap,maxOutputs:s.maxOutputs,spentUsd:state?.spentUsd??null,outputsUsed:state?.outputs??null}},{'x-rubik-request-id':requestId});
  }
  if(body.action!=='generate')return send(res,400,{error:'action'});
  const catalog=request.mode==='catalog';
  if(Object.keys(body).sort().join(',')!==(catalog?'action,confirmationId,idempotencyKey,image,references,request':'action,confirmationId,idempotencyKey,image,request'))return send(res,400,{error:'generate'});
- const idem=body.idempotencyKey;if(typeof idem!=='string'||!/^[A-Za-z0-9_-]{16,64}$/.test(idem))return send(res,400,{error:'idempotency'});
+ const idempotencyKey=body.idempotencyKey;if(typeof idempotencyKey!=='string'||!/^[A-Za-z0-9_-]{16,64}$/.test(idempotencyKey))return send(res,400,{error:'idempotency'});
+ const idem=beta?'image:'+beta.tester+':'+idempotencyKey:idempotencyKey;
  const image=parseImage(body.image);if(!image||(catalog&&image.type==='image/webp'))return send(res,400,{error:'image'});
  // CAT-01: each reference image must be the one quoted (same SHA-256, same order); the mask matches the photo size.
  let references=[],mask=null;
@@ -172,40 +191,68 @@ async function handler(req,res,{env=process.env,store=null,fetchImpl=globalThis.
  }
  const m=/^([A-Za-z0-9_-]{16,32})\.(\d{13})\.([A-Za-z0-9_-]{43})$/.exec(String(body.confirmationId||''));
  if(!m)return send(res,400,{error:'confirmation'});
- const [ ,nonce,expS,sig]=m,exp=Number(expS),expected=signQuote(s,[nonce,exp,canonicalRequest(request),image.sha256].join('.'));
+ const [ ,nonce,expS,sig]=m,exp=Number(expS),expected=signQuote(s,[nonce,exp,canonicalRequest(request),image.sha256,s.model,s.price,s.priceDate].join('.'));
  if(!sameCode(sig,expected))return send(res,409,{error:'confirmation-mismatch'}); // other request, other image or forged
  if(exp<now())return send(res,409,{error:'confirmation-expired'});
  // Idempotency first: a repeated key never calls the provider again (and never bills again).
+ if(beta&&(image.bytes.length+references.reduce((n,item)=>n+item.bytes.length,0)>3*1024*1024))return send(res,413,{error:'too-large'});
  const prior=await store.get('idem:'+idem);if(prior)return send(res,409,{error:'already-processed',status:prior.status,outputsBilled:prior.outputsBilled});
  if(!await store.setIfAbsent('idem:'+idem,{status:'in-progress',outputsBilled:0},24*3600e3))return send(res,409,{error:'already-processed'});
  if(!await store.setIfAbsent('nonce:'+nonce,1,QUOTE_TTL_MS*2)){await store.set('idem:'+idem,{status:'refused-replay',outputsBilled:0},24*3600e3);return send(res,409,{error:'confirmation-used'});}
- const worst=+(s.price*request.alternatives).toFixed(6),reservation=await store.reserve({id:requestId,usd:worst,outputs:request.alternatives,capUsd:s.cap,maxOutputs:s.maxOutputs});
- if(!reservation.ok){await store.set('idem:'+idem,{status:'refused-'+reservation.reason,outputsBilled:0},24*3600e3);logLine(log,{requestId,action:'generate',status:'refused-'+reservation.reason,outputs:request.alternatives});return send(res,402,{error:reservation.reason==='budget'?'budget-exceeded':'outputs-exceeded'});}
+ const worst=+(s.price*request.alternatives).toFixed(6);
+ const meta={model:s.model,tariffDate:s.priceDate};
+ const reservation=await store.reserve(beta
+  ?{id:requestId,family:'image',usd:worst,units:request.alternatives,maxUnits:s.maxOutputs,subject:beta.tester,maxSubjectUnits:beta.perUserImages,capUsd:s.cap,meta}
+  :{id:requestId,usd:worst,outputs:request.alternatives,capUsd:s.cap,maxOutputs:s.maxOutputs});
+ const settle=(billedOutputs,usd,basis)=>store.settle(requestId,beta
+  ?{units:billedOutputs,usd,basis,subject:beta.tester,meta}
+  :{billedOutputs,usd});
+ if(!reservation.ok){await store.set('idem:'+idem,{status:'refused-'+reservation.reason,outputsBilled:0},24*3600e3);logLine(log,{requestId,action:'generate',status:'refused-'+reservation.reason,outputs:request.alternatives});return send(res,402,{error:['cap','budget'].includes(reservation.reason)?'budget-exceeded':'outputs-exceeded'});}
  const started=now(),base={requestId,action:'generate',provider:s.provider.id,model:s.model,outputs:request.alternatives,...(catalog?{recipe:request.recipeId,recipeVersion:request.recipeVersion,zone:request.zone,intensity:request.intensity,references:references.length}:{intent:request.intent,finish:request.finish})};
  const form=new FormData();form.append('model',s.model);form.append('prompt',prompt(request));form.append('n',String(request.alternatives));
+ if(beta){form.append('quality','medium');form.append('output_format','jpeg');form.append('output_compression','85');}
  const ext=t=>t==='image/png'?'png':t==='image/webp'?'webp':'jpg';
  if(catalog){form.append('image[]',new Blob([image.bytes],{type:image.type}),'photo.'+ext(image.type));for(const [i,r] of references.entries())form.append('image[]',new Blob([r.bytes],{type:r.type}),`reference-${i+1}.${ext(r.type)}`);form.append('mask',new Blob([mask],{type:'image/png'}),'mask.png');}
  else form.append('image',new Blob([image.bytes],{type:image.type}),'photo.'+ext(image.type));
+ const controller=new AbortController(),abort=()=>controller.abort();
+ const timer=setTimeout(abort,120e3);
+ res.once?.('close',abort);
  let r,out=null;
- try{r=await fetchImpl(s.endpoint,{method:'POST',headers:{Authorization:`Bearer ${s.key}`},body:form,redirect:'error',signal:AbortSignal.timeout?AbortSignal.timeout(120e3):undefined});out=await r.json().catch(()=>null);}
+ try{r=await fetchImpl(s.endpoint,{method:'POST',headers:{Authorization:`Bearer ${s.key}`},body:form,redirect:'error',signal:controller.signal});out=await r.json().catch(()=>null);}
  catch{
   // Unknown outcome: the provider may have billed. Keep the worst case as spent (never a fictitious 0).
-  await store.settle(requestId,{billedOutputs:request.alternatives,usd:worst});await store.set('idem:'+idem,{status:'provider-unreachable-billing-unknown',outputsBilled:null},24*3600e3);
+  await settle(request.alternatives,worst,'worst-case-unreachable');await store.set('idem:'+idem,{status:'provider-unreachable-billing-unknown',outputsBilled:null},24*3600e3);
   logLine(log,{...base,status:'provider-unreachable',ms:now()-started,billing:'unknown-worst-case-held'});return send(res,502,{error:'provider-unreachable'});
- }
+ }finally{clearTimeout(timer);res.off?.('close',abort);}
  const data=Array.isArray(out?.data)?out.data.filter(d=>typeof d?.b64_json==='string'&&d.b64_json.length):[];
  if(!r.ok||!data.length){
   const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':r.status===402?'provider-payment':'provider-error';
-  await store.settle(requestId,{billedOutputs:0,usd:0});await store.set('idem:'+idem,{status:code,outputsBilled:0},24*3600e3);
+  const unknown=beta&&(r.ok||r.status>=500);
+  await settle(unknown?request.alternatives:0,unknown?worst:0,unknown?'worst-case-provider':'not-billed-4xx');await store.set('idem:'+idem,{status:code,outputsBilled:0},24*3600e3);
   logLine(log,{...base,status:code,providerStatus:r.status,ms:now()-started});return send(res,502,{error:code});
  }
- const alternatives=[];for(const [index,d] of data.slice(0,request.alternatives).entries()){const bytes=Buffer.from(d.b64_json,'base64'),type=sniff(bytes);if(type)alternatives.push({index,mediaType:type,data:d.b64_json});}
- const billed=data.length,usd=+(s.price*billed).toFixed(6);
- const state=await store.settle(requestId,{billedOutputs:billed,usd});await store.set('idem:'+idem,{status:'ok',outputsBilled:billed},24*3600e3);
+ const alternatives=[];for(const [index,d] of data.slice(0,request.alternatives).entries()){const bytes=Buffer.from(d.b64_json,'base64'),type=sniff(bytes);if(type&&(!beta||bytes.length<=1024*1024))alternatives.push({index,mediaType:type,data:d.b64_json});}
+ const billed=data.length,actual=billedCost(out?.usage,billedRates);
+ const usd=beta?(actual??Math.max(worst,+(s.price*billed).toFixed(6))):+(s.price*billed).toFixed(6);
+ if(beta&&usd>worst)await store.set('photo-breaker',{reason:'provider-usage-over-authorization'},30*24*3600e3);
+ const state=await settle(billed,usd,beta?(actual===null?'worst-case-including-input':'provider-usage'):'price-per-image');await store.set('idem:'+idem,{status:'ok',outputsBilled:billed},24*3600e3);
  logLine(log,{...base,status:alternatives.length?'ok':'provider-empty',providerStatus:r.status,ms:now()-started,outputsBilled:billed,cost:{amount:usd,currency:'USD',basis:'price-per-image-env',priceDate:s.priceDate},budget:{spentUsd:state.spentUsd,outputs:state.outputs}});
  if(!alternatives.length)return send(res,502,{error:'provider-empty'});
  return send(res,200,{version:1,provider:{id:s.provider.id,name:s.provider.name},alternatives,cost:{amount:usd,currency:'USD'}},{'x-rubik-request-id':requestId,'x-rubik-outputs-billed':String(billed)});
 }
-// Production export: no persistent store is wired in this repository, so the endpoint stays closed (503).
-module.exports=(req,res)=>handler(req,res,{store:null});
+// Live wiring is available only in the explicitly configured private Preview.
+module.exports=async(req,res)=>{
+ const beta=Beta.settings(process.env);
+ if(!beta||process.env.RUBIK_PHOTO_REFORM_ENABLED!=='1')return send(res,503,{error:'beta-disabled'});
+ const access=req.headers['x-rubik-photo-reform-token'],tester=Beta.identity(beta,access);
+ if(!tester)return send(res,401,{error:'token'});
+ const env={...process.env,RUBIK_PHOTO_REFORM_TOKEN:access,
+  RUBIK_PHOTO_REFORM_BUDGET_CAP_USD:String(Math.min(beta.cap,Number(process.env.RUBIK_PHOTO_REFORM_BUDGET_CAP_USD)))};
+ try{
+  const store=Ledger.storeFromEnv(env);
+  if(!await Beta.enabled(store))return send(res,503,{error:'beta-store-disabled'});
+  return await handler(req,res,{env,beta:{...beta,tester},store});
+ }
+ catch{return send(res,503,{error:'store-unavailable'});}
+};
 Object.assign(module.exports,{handler,settings,checkRequest,parseImage,sniff,prompt,dimsOf,maskPng,memoryStore,sameSite,INTENTS,PROVIDERS,CONTRACT,MAX_IMAGE,HARD_MAX_OUTPUTS});

@@ -117,6 +117,58 @@
    }});
  }
 
- const api={CONTRACT_VERSION,MEDIA,MAX_IMAGE_BYTES,MESSAGES,ENDPOINT,config,validateResponse,serverAdapter};
+
+ // The tester code exists only in the open dialog; the provider key never reaches the browser.
+ function mountBetaAccess(parent,onChange){
+  const doc=parent.ownerDocument,details=doc.createElement('details'),summary=doc.createElement('summary'),label=doc.createElement('label');
+  const input=doc.createElement('input'),check=doc.createElement('button'),output=doc.createElement('output');
+  const t=(es,en,zh)=>({en,zh}[doc.documentElement.lang]||es);
+  details.dataset.photoBetaAccess='';
+  summary.textContent=t('Acceso a beta privada','Private beta access','私测访问');
+  label.textContent=t('Código personal de prueba ','Personal tester code ','个人测试码 ');
+  input.type='password';input.autocomplete='off';input.maxLength=200;input.minLength=32;
+  label.append(input);
+  check.type='button';check.className='btn';check.textContent=t('Verificar','Verify','验证');
+  output.setAttribute('aria-live','polite');details.append(summary,label,check,output);parent.append(details);
+  let code=null,epoch=0,controller;
+  const reset=()=>{epoch++;controller?.abort();code=null;input.value='';output.textContent='';check.disabled=false;onChange();};
+  input.addEventListener('input',()=>{epoch++;controller?.abort();code=null;check.disabled=false;onChange();});
+  check.onclick=async()=>{
+   const candidate=input.value;
+   if(candidate.length<32){output.textContent=t('Introduce el código de prueba.','Enter the tester code.','请输入测试码。');return;}
+   const attempt=++epoch;controller?.abort();controller=new AbortController();check.disabled=true;
+   try{
+    const res=await fetch(ENDPOINT,{method:'POST',credentials:'same-origin',signal:controller.signal,redirect:'error',
+     headers:{'content-type':'application/json','x-rubik-contract':'photo-reform/1','x-rubik-photo-reform-token':candidate},
+     body:JSON.stringify({action:'status'})});
+    const body=await res.json().catch(()=>null);
+    if(attempt!==epoch)return;
+    code=res.ok&&body?.enabled===true?candidate:null;
+    output.textContent=code?t('Acceso verificado.','Access verified.','已验证。'):t('Acceso no disponible.','Access unavailable.','访问不可用。');
+    input.value='';onChange();
+   }catch{if(attempt===epoch){code=null;output.textContent=t('No se pudo verificar el acceso.','Access could not be verified.','无法验证访问。');onChange();}}
+   finally{if(attempt===epoch)check.disabled=false;}
+  };
+  return {get ready(){return !!code;},reset,adapter(){
+   return serverAdapter({accessCode:code,confirm:({estimate,provider})=>root.confirm(
+    t(`Enviar la imagen a ${provider.name} y autorizar un máximo de ${estimate.amount.toFixed(4)} USD?`,
+      `Send the image to ${provider.name} and authorize up to USD ${estimate.amount.toFixed(4)}?`,
+      `将图像发送至 ${provider.name} 并授权最多 ${estimate.amount.toFixed(4)} 美元？`))});
+  }};
+ }
+ async function downloadIllustration(blob,name){
+  const image=await createImageBitmap(blob),canvas=document.createElement('canvas');
+  canvas.width=image.width;canvas.height=image.height;
+  const ctx=canvas.getContext('2d'),font=Math.max(12,Math.round(canvas.width/40));
+  ctx.drawImage(image,0,0);image.close();
+  ctx.fillStyle='#191919';ctx.fillRect(0,canvas.height-font*2,canvas.width,font*2);
+  ctx.fillStyle='#fff';ctx.font=font+'px sans-serif';
+  ctx.fillText('RUBIK · Propuesta visual ilustrativa / Illustrative visual proposal',font/2,canvas.height-font*.65,canvas.width-font);
+  const labelled=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+  if(!labelled)throw Error('No se pudo preparar la descarga.');
+  const url=URL.createObjectURL(labelled),link=document.createElement('a');link.href=url;link.download=name+'.png';
+  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }
+ const api={CONTRACT_VERSION,MEDIA,MAX_IMAGE_BYTES,MESSAGES,ENDPOINT,config,validateResponse,serverAdapter,mountBetaAccess,downloadIllustration};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikPhotoReformProvider=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
