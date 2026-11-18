@@ -43,6 +43,7 @@
  for(const r of C.gate({mode:'real',consent:true,provider:PROVIDER,governance:GOVERNANCE}).reasons)el('li',{},blockList,r);
  el('p',{},provider,'No se envía ninguna foto, no se usan credenciales y no hay gasto.');
  el('p',{class:'photo-reform-ready',id:'photoReformReady'},provider,'Integración preparada y probada SIN ACTIVAR (contrato de proveedor v1): activarla requiere tu autorización expresa del proveedor y del gasto, y cerrar GOV-05 e IMG-04.');
+ const access=P?.mountBetaAccess(s4,()=>refresh());
  const consentLabel=el('label',{class:'photo-reform-consent'},s4);const consent=el('input',{type:'checkbox',id:'photoReformConsent'},consentLabel);
  consentLabel.append(' Entiendo que el resultado es una imagen ilustrativa, no medible, y doy mi consentimiento para procesar esta foto.');
  const scenario=el('select',{id:'photoReformScenario','aria-label':'Escenario de la simulación'},s4);for(const [v,t] of [['ok','Simulación: respuesta correcta'],['error','Simulación: el proveedor devuelve un error'],['slow','Simulación: respuesta lenta (para probar «Cancelar»)']])el('option',{value:v},scenario,t);
@@ -57,12 +58,13 @@
  const compare=el('figure',{class:'photo-reform-compare',id:'photoReformCompare',hidden:true},s5);
  const cmpBase=lazyImg(compare,{alt:'Original',class:'photo-reform-cmp-base'},()=>compare.firstChild),cmpTop=lazyImg(compare,{alt:'Resultado simulado',class:'photo-reform-cmp-top'},()=>cmpBase.node?.nextSibling);
  // Sin resultado que comparar no queda nada a la vista: ni deslizador, ni nota de un resultado anterior, ni descarga.
- const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);slider.hidden=true;resultNote.textContent='';dlBtn.disabled=true;};
+ const hideCompare=()=>{compare.hidden=true;cmpBase.set(null);cmpTop.set(null);slider.hidden=true;resultNote.textContent='';dlBtn.disabled=true;acceptBtn.hidden=true;};
  el('span',{class:'photo-reform-tag photo-reform-tag-before'},compare,'Original');const cmpTag=el('span',{class:'photo-reform-tag photo-reform-tag-after',id:'photoReformCmpTag'},compare,'SIMULACIÓN');
  const slider=el('input',{type:'range',min:'0',max:'100',value:'50',id:'photoReformSlider','aria-label':'Comparar original y resultado'},s5);
  const resultNote=el('p',{id:'photoReformResultNote',class:'photo-reform-result-note'},s5);
  const rrow=el('div',{class:'photo-reform-actions'},s5);
  const dlBtn=el('button',{type:'button',class:'btn',id:'photoReformDownload',disabled:true},rrow,'Descargar');
+ const acceptBtn=el('button',{type:'button',class:'btn',id:'photoReformAccept',hidden:true},rrow,'Aceptar propuesta');
  const discardBtn=el('button',{type:'button',class:'btn',id:'photoReformDiscard'},rrow,'Descartar');
  el('small',{id:'photoReformDownloadWhy'},s5,'La descarga solo se habilitará con un proveedor autorizado: una simulación no es una propuesta para entregar.');
  // 6 · Registro de la sesión (trazabilidad): qué se hizo y cuándo, sin imágenes ni nombres de archivo. Solo en memoria.
@@ -80,13 +82,16 @@
  traceDl.onclick=()=>{const doc={contract:'rubik-photo-reform-trace/1',generatedAt:new Date().toISOString(),note:'Sin imágenes, nombres de archivo, metadatos ni texto libre.',entries:log};
   const url=URL.createObjectURL(new Blob([JSON.stringify(doc,null,2)],{type:'application/json'}));const a=el('a',{href:url,download:'rubik-reforma-foto-registro.json'},document.body);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  const revoke=()=>{if(origUrl)URL.revokeObjectURL(origUrl);origUrl=null;for(const r of results)if(r.url)URL.revokeObjectURL(r.url);results=[];};
- function reset(){abort?.abort();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';log=[];traceList.replaceChildren();s5.hidden=true;altList.replaceChildren();hideCompare();simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
+ function reset(){abort?.abort();access?.reset();abort=null;revoke();image=null;runState=null;file.value='';fileErr.textContent='';original.hidden=true;originalImg.set(null);intentSel.value='';finishSel.hidden=true;finishSel.replaceChildren();altSel.value='1';consent.checked=false;scenario.value='ok';status.textContent='';log=[];traceList.replaceChildren();s5.hidden=true;altList.replaceChildren();hideCompare();simBtn.hidden=false;cancelBtn.hidden=true;refresh();}
  function refresh(){
   const r=C.request({image,intent:intentSel.value,finish:finishSel.hidden?null:finishSel.value,alternatives:altSel.value});
   sends.replaceChildren();never.replaceChildren();
   const sum=r.ok?r.summary:{sends:['Nada todavía: elige una foto válida y una intención.'],never:['El proyecto, sus planos, medidas o datos','El nombre del archivo','Los metadatos de la foto (EXIF, GPS, cámara)','Texto libre']};
   for(const t of sum.sends)el('li',{},sends,t);for(const t of sum.never)el('li',{},never,t);
-  simBtn.disabled=!r.ok||runState?.status==='running';return r;
+  simBtn.disabled=!r.ok||runState?.status==='running';
+  realBtn.disabled=!access?.ready||!r.ok||!consent.checked||runState?.status==='running';
+  provider.hidden=!!access?.ready;
+  return r;
  }
  const noteIntent=()=>{if(intentSel.value)note('intent-set',{intent:intentSel.value,finish:finishSel.hidden?null:finishSel.value,alternatives:+altSel.value});};
  intentSel.onchange=()=>{const i=C.INTENTS.find(x=>x.id===intentSel.value);finishSel.replaceChildren();finishSel.hidden=!i?.finishes.length;if(i?.finishes.length){for(const f of i.finishes)el('option',{value:f.id},finishSel,f.label);}refresh();noteIntent();};
@@ -105,7 +110,7 @@
   image={mediaType:'image/jpeg',width:c.width,height:c.height,bytes:blob.size,canvas:c,blob};origUrl=URL.createObjectURL(blob);note('photo-accepted',{widthPx:c.width,heightPx:c.height});
   originalImg.set(origUrl);originalCap.textContent=`Original · ${c.width}×${c.height} px · sin metadatos`;original.hidden=false;refresh();
  };
- consent.onchange=()=>{if(consent.checked&&/consentimiento/.test(status.textContent))status.textContent='';};
+ consent.onchange=()=>{refresh();if(consent.checked&&/consentimiento/.test(status.textContent))status.textContent='';};
 
  // Adaptador SIMULADO: transforma la propia foto en el navegador. No llama a nada fuera y no tiene coste.
  const FINISH_COLOR={'light-oak':'#c9a77a',walnut:'#6b4a33',microcement:'#b9b4ab','grey-porcelain':'#9a9c9e',white:'#f4f4f2','warm-white':'#f3eadb',sage:'#9fb39a',sand:'#d8c3a0'};
@@ -138,14 +143,17 @@
    el('figcaption',{},card,`Alternativa ${it.index+1} · ${({pending:'en espera',running:'preparando…',done:it.result?.badge,error:'error',cancelled:'cancelada',skipped:'no generada'})[it.status]||it.status}`);}
  }
  function showCompare(){const r=results[selected];if(!r?.url){hideCompare();return;}cmpBase.set(origUrl);cmpTop.set(r.url);compare.hidden=false;slider.hidden=false;cmpTag.textContent=r.label.badge;compare.style.setProperty('--cut',slider.value+'%');
-  resultNote.textContent=`${r.label.badge}. Imagen ilustrativa, no medible. ${r.label.costText}`;dlBtn.disabled=!r.label.downloadable;}
+  resultNote.textContent=`${r.label.badge}. Imagen ilustrativa, no medible. ${r.label.costText}`;acceptBtn.hidden=!r.label.downloadable||!!r.accepted;dlBtn.disabled=!r.label.downloadable||!r.accepted;}
  slider.oninput=()=>compare.style.setProperty('--cut',slider.value+'%');
  // El adaptador real solo se crearía si la puerta lo permite; en este despliegue nunca (botón desactivado y puerta cerrada).
- realBtn.onclick=()=>{const g=C.gate({mode:'real',consent:consent.checked,provider:PROVIDER,governance:GOVERNANCE});note('gate-blocked',{mode:'real'});status.textContent='Bloqueado: '+g.reasons.join(' ');};
+ realBtn.onclick=async()=>{
+  const request=refresh();
+  if(access?.ready&&request.ok&&consent.checked)await runWith(access.adapter(),request);
+ };
  async function runWith(adapter,r,scn){
   for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];selected=0;hideCompare();
   abort=new AbortController();const sig=abort.signal,mode=adapter.kind==='simulated'?'simulated':'real';
-  runState=C.start(C.run(r.request.alternatives));s5.hidden=false;simBtn.hidden=true;cancelBtn.hidden=false;
+  runState=C.start(C.run(r.request.alternatives));s5.hidden=false;simBtn.hidden=true;realBtn.disabled=true;cancelBtn.hidden=false;
   status.textContent=mode==='simulated'?'Simulación en curso (local, sin envíos ni coste)…':'Generando con el proveedor…';renderAlts();
   note('run-started',{mode,adapter:adapter.id,intent:r.request.intent,finish:r.request.finish??null,alternatives:r.request.alternatives});
   const current=()=>runState?.items.findIndex(x=>x.status==='running')??-1;
@@ -154,13 +162,13 @@
     if(!runState||sig.aborted)return;
     const blob=res.blob||new Blob([res.bytes],{type:res.mediaType});
     runState=C.itemDone(runState,i,{kind:res.kind,provider:res.provider,cost:res.cost});if(runState.items[i]?.status!=='done')return;
-    results[i]={url:URL.createObjectURL(blob),label:runState.items[i].result,mediaType:blob.type};note('item-done',{index:i,costKnown:!!res.cost});
+    results[i]={url:URL.createObjectURL(blob),label:runState.items[i].result,mediaType:blob.type,blob};note('item-done',{index:i,costKnown:!!res.cost});
     if(i===0)showCompare();renderAlts();}});
    if(runState&&out?.ok===false){const k=current();runState=C.itemError(runState,Math.max(0,k),out.message);note('item-error',{index:Math.max(0,k),reason:out.reason});status.textContent=out.message;}
    else if(runState?.status==='running'){const k=current();runState=C.itemError(runState,k,'El proveedor ha devuelto menos alternativas de las pedidas.');note('item-error',{index:k,reason:'missing-alternatives'});status.textContent=runState.error;}
   }catch(e){
    if(runState){
-    if(e?.name==='AbortError'){runState=C.cancel(runState);note('run-cancelled',{mode});status.textContent='Cancelado: no se ha generado nada más y no hay coste.';}
+    if(e?.name==='AbortError'){runState=C.cancel(runState);note('run-cancelled',{mode});status.textContent=mode==='real'?'Cancelado. Una solicitud ya iniciada puede haber generado coste.':'Cancelado: no se ha generado nada más y no hay coste.';}
     else{const k=current();runState=C.itemError(runState,Math.max(0,k),e.message);note('item-error',{index:Math.max(0,k),reason:'provider-error'});status.textContent=e.message;}
    }
   }
@@ -179,7 +187,13 @@
  cancelBtn.onclick=()=>abort?.abort();
  discardBtn.onclick=()=>{abort?.abort();abort=null;for(const x of results)if(x.url)URL.revokeObjectURL(x.url);results=[];runState=null;s5.hidden=true;hideCompare();altList.replaceChildren();note('discarded',{});status.textContent='Resultado descartado. La foto original sigue solo en esta ventana.';};
  // Solo para resultados GENERADOS por un proveedor autorizado (label.downloadable); una simulación nunca se descarga.
- dlBtn.onclick=()=>{const r=results[selected];if(!r?.url||!r.label.downloadable)return;const a=el('a',{href:r.url,download:`rubik-reforma-alternativa-${selected+1}.${r.mediaType==='image/png'?'png':r.mediaType==='image/webp'?'webp':'jpg'}`},document.body);a.click();a.remove();};
+ acceptBtn.onclick=()=>{const r=results[selected];if(!r?.label.downloadable)return;r.accepted=true;showCompare();};
+ dlBtn.onclick=async()=>{
+  const r=results[selected];
+  if(!r?.accepted||!r.label.downloadable)return;
+  try{await P.downloadIllustration(r.blob,'rubik-propuesta-ilustrativa-'+(selected+1));}
+  catch(error){status.textContent=error.message;}
+ };
  // Cleanup is SYNCHRONOUS on close: the dialog's «close» event fires in a later task, so between close() and that event the
  // hidden dialog still held the photo <img> (seen in CI). «Cerrar» resets first; Escape fires «cancel» synchronously before
  // closing; the «close» listener stays as a safety net (reset is idempotent).

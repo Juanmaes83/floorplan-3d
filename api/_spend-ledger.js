@@ -11,7 +11,7 @@
      comando como array JSON, cabecera Bearer); las pruebas usan un Redis local real. NADA aquí contrata ni activa un
      servicio: sin URL y token configurados por el propietario, no hay almacén y la pasarela responde 503. */
 'use strict';
-const P='rubik:spend:';
+const DEFAULT_PREFIX='rubik:spend:';
 const MICRO=1e6,toMicro=usd=>Math.round(Number(usd)*MICRO),toUsd=m=>+(Number(m||0)/MICRO).toFixed(6);
 const FAMILIES=Object.freeze(['text','image']);
 const LUA={
@@ -20,14 +20,32 @@ local spent=tonumber(redis.call('HGET',KEYS[1],'spent:text') or '0')+tonumber(re
 local reserved=tonumber(redis.call('HGET',KEYS[1],'reserved') or '0')
 local u=tonumber(ARGV[2]) local cap=tonumber(ARGV[3])
 if u<0 or spent+reserved+u>cap then return {0,'cap'} end
-redis.call('HSET',KEYS[2],'family',ARGV[1],'micro',u,'state','open')
+local units=tonumber(ARGV[5])
+if units>0 then
+ local total=tonumber(redis.call('HGET',KEYS[1],'units:image') or '0')+tonumber(redis.call('HGET',KEYS[1],'reserved:image-units') or '0')
+ local own=tonumber(redis.call('HGET',KEYS[4],'used') or '0')+tonumber(redis.call('HGET',KEYS[4],'reserved') or '0')
+ if total+units>tonumber(ARGV[6]) then return {0,'outputs'} end
+ if own+units>tonumber(ARGV[7]) then return {0,'tester-outputs'} end
+ redis.call('HINCRBY',KEYS[1],'reserved:image-units',units)
+ redis.call('HINCRBY',KEYS[4],'reserved',units)
+end
+redis.call('HSET',KEYS[2],'family',ARGV[1],'micro',u,'state','open','units',units,'subjectKey',KEYS[4])
 redis.call('HINCRBY',KEYS[1],'reserved',u)
 redis.call('RPUSH',KEYS[3],ARGV[4])
 return {1,'ok'}`,
  settle:`local st=redis.call('HGET',KEYS[2],'state')
 if st~='open' then return {0,st or 'missing'} end
 local fam=redis.call('HGET',KEYS[2],'family') local r=tonumber(redis.call('HGET',KEYS[2],'micro')) local u=tonumber(ARGV[1])
-if u<0 then return {0,'negative'} end
+local units=tonumber(redis.call('HGET',KEYS[2],'units') or '0')
+local billed=tonumber(ARGV[3])
+if u<0 or billed<0 then return {0,'negative'} end
+if units>0 then
+ if redis.call('HGET',KEYS[2],'subjectKey')~=KEYS[4] then return {0,'subject'} end
+ redis.call('HINCRBY',KEYS[1],'reserved:image-units',-units)
+ redis.call('HINCRBY',KEYS[1],'units:image',billed)
+ redis.call('HINCRBY',KEYS[4],'reserved',-units)
+ redis.call('HINCRBY',KEYS[4],'used',billed)
+end
 redis.call('HINCRBY',KEYS[1],'reserved',-r)
 redis.call('HINCRBY',KEYS[1],'spent:'..fam,u)
 redis.call('HSET',KEYS[2],'state','settled','settled',u)
@@ -39,24 +57,30 @@ redis.call('ZADD',KEYS[1],ARGV[1],ARGV[3])
 redis.call('PEXPIRE',KEYS[1],120000)
 return 1`,
  fail:`local n=redis.call('INCR',KEYS[1]) if n==1 then redis.call('PEXPIRE',KEYS[1],3600000) end return n`};
-function redisStore({exec,now=Date.now,uid=()=>Math.random().toString(36).slice(2)}){
+const validSubject=id=>/^[a-z0-9][a-z0-9-]{0,31}$/.test(id);
+function redisStore({exec,now=Date.now,namespace,uid=()=>Math.random().toString(36).slice(2)}){
+ if(namespace!==undefined&&!/^[a-z0-9][a-z0-9-]{2,47}$/.test(namespace))throw new Error('invalid spend namespace');
+ const P=namespace?DEFAULT_PREFIX+namespace+':':DEFAULT_PREFIX;
  if(typeof exec!=='function')throw new Error('exec required');
  const entry=(o)=>JSON.stringify({...o,at:new Date(now()).toISOString()});
- const snap=async()=>{const [t,i,r]=await exec(['HMGET',P+'ledger','spent:text','spent:image','reserved']);const text=toUsd(t),image=toUsd(i);
-  return {spentUsd:+(text+image).toFixed(6),text,image,reservedUsd:toUsd(r)};};
+ const snap=async()=>{const [t,i,r,outputs,reservedOutputs]=await exec(['HMGET',P+'ledger','spent:text','spent:image','reserved','units:image','reserved:image-units']);const text=toUsd(t),image=toUsd(i);
+  return {spentUsd:+(text+image).toFixed(6),text,image,reservedUsd:toUsd(r),outputs:Number(outputs||0),reservedOutputs:Number(reservedOutputs||0)};};
  return {
   kind:'redis',
+  async remove(k){return Number(await exec(['DEL',P+'kv:'+k]));},
   async get(k){const v=await exec(['GET',P+'kv:'+k]);return v==null?null:JSON.parse(v);},
-  async set(k,val,ttl){await exec(['SET',P+'kv:'+k,JSON.stringify(val),'PX',String(Math.max(1,Math.round(ttl)))]);},
+  async set(k,val,ttl){await exec(['SET',P+'kv:'+k,JSON.stringify(val),...(ttl===undefined?[]:['PX',String(Math.max(1,Math.round(ttl)))])]);},
   async setIfAbsent(k,val,ttl){return (await exec(['SET',P+'kv:'+k,JSON.stringify(val),'NX','PX',String(Math.max(1,Math.round(ttl)))]))==='OK';},
   async rate(family,t,perMinute){return Number(await exec(['EVAL',LUA.rate,'1',P+'rate:'+family,String(t),String(perMinute),t+':'+uid()]))===1;},
   async fail(kind){return Number(await exec(['EVAL',LUA.fail,'1',P+'fail:'+(kind||'code')]));},
-  async reserve({id,family,usd,capUsd,meta={}}){if(!FAMILIES.includes(family))return {ok:false,reason:'family'};
-   const m=toMicro(usd),cap=toMicro(capUsd);if(!Number.isFinite(m)||!Number.isFinite(cap))return {ok:false,reason:'amount'};
-   const [ok,reason]=await exec(['EVAL',LUA.reserve,'3',P+'ledger',P+'res:'+id,P+'log',family,String(m),String(cap),entry({op:'reserve',id,family,usd:toUsd(m),...meta})]);
+  async reserve({id,family,usd,capUsd,meta={},units=0,maxUnits=0,subject='',maxSubjectUnits=0}){if(!FAMILIES.includes(family))return {ok:false,reason:'family'};
+   const m=toMicro(usd),cap=toMicro(capUsd);if(!Number.isSafeInteger(m)||!Number.isSafeInteger(cap)||cap<1)return {ok:false,reason:'amount'};
+   if(!Number.isSafeInteger(units)||units<0||units>0&&(family!=='image'||!validSubject(subject)||!Number.isSafeInteger(maxUnits)||maxUnits<1||!Number.isSafeInteger(maxSubjectUnits)||maxSubjectUnits<1))return {ok:false,reason:'units'};
+   const [ok,reason]=await exec(['EVAL',LUA.reserve,'4',P+'ledger',P+'res:'+id,P+'log',P+'image-quota:'+subject,family,String(m),String(cap),entry({op:'reserve',id,family,usd:toUsd(m),...meta}),String(units),String(maxUnits),String(maxSubjectUnits)]);
    return {ok:Number(ok)===1,reason};},
-  async settle(id,{usd,basis=null,meta={}}){const m=toMicro(usd);
-   const [ok,reason]=await exec(['EVAL',LUA.settle,'3',P+'ledger',P+'res:'+id,P+'log',String(m),entry({op:'settle',id,usd:toUsd(m),basis,...meta})]);
+  async settle(id,{usd,basis=null,meta={},units=0,subject=''}){const m=toMicro(usd);
+   if(!Number.isSafeInteger(m)||m<0||!Number.isSafeInteger(units)||units<0||units>0&&!validSubject(subject))throw new Error('invalid settlement');
+   const [ok,reason]=await exec(['EVAL',LUA.settle,'4',P+'ledger',P+'res:'+id,P+'log',P+'image-quota:'+subject,String(m),entry({op:'settle',id,usd:toUsd(m),basis,...meta}),String(units)]);
    return {...await snap(),settled:Number(ok)===1,reason};},
   snapshot:snap,
   async log(){return (await exec(['LRANGE',P+'log','0','-1'])||[]).map(s=>JSON.parse(s));}};
@@ -65,13 +89,13 @@ function redisStore({exec,now=Date.now,uid=()=>Math.random().toString(36).slice(
 function restExec({url,token,fetch=globalThis.fetch,timeoutMs=5000}){
  if(!/^https:\/\/[a-z0-9.-]+$/i.test(String(url||''))||typeof token!=='string'||token.length<20)return null;
  return async cmd=>{const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),timeoutMs);
-  try{const r=await fetch(url,{method:'POST',signal:ctl.signal,headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify(cmd)});
+  try{const r=await fetch(url,{method:'POST',signal:ctl.signal,redirect:'error',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify(cmd)});
    const j=await r.json().catch(()=>null);if(!r.ok||!j||'error' in j)throw Object.assign(new Error('store'),{code:'store_error',status:r.status});return j.result;}
   finally{clearTimeout(t);}};
 }
 // Almacén desde el entorno: SOLO si el propietario configura RUBIK_SPEND_STORE_URL y _TOKEN (p. ej. Upstash Redis del
 // Marketplace de Vercel, solo en Preview). Sin ellos devuelve null y la pasarela queda cerrada (503 store-not-configured).
-function storeFromEnv(env,{fetch}={}){const exec=restExec({url:env.RUBIK_SPEND_STORE_URL,token:env.RUBIK_SPEND_STORE_TOKEN,fetch});return exec?redisStore({exec}):null;}
+function storeFromEnv(env,{fetch}={}){const exec=restExec({url:env.RUBIK_SPEND_STORE_URL,token:env.RUBIK_SPEND_STORE_TOKEN,fetch});return exec?redisStore({exec,namespace:env.RUBIK_BETA_LEDGER_NAMESPACE}):null;}
 /* Conciliación verificable: libro (registro de reservas/liquidaciones) frente a costes del proveedor por día y familia.
    providerRows: [{date:'YYYY-MM-DD', family:'text'|'image', usd}] obtenidas del panel o la API de costes del proveedor
    (con proyectos separados por familia). Regla: el libro NUNCA debe quedar por debajo del proveedor (estimamos por

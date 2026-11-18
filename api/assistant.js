@@ -25,6 +25,7 @@
    Privacidad: el navegador envía solo la pregunta y resultados minimizados de herramientas, con consentimiento. El
    registro es UNA línea JSON por petición, sin cuerpo, pregunta, proyecto, código, clave, IP ni agente de usuario. */
 'use strict';
+const Beta=require('./_beta-controls.js');
 const {timingSafeEqual,createHash}=require('node:crypto');
 const Agent=require('../js/assistant-agent-core.js'),Ledger=require('./_spend-ledger.js');
 const MAX_BYTES=96*1024,MIN_CODE=32,MAX_CODE=200,CONTRACT='rubik-assistant/2',TIMEOUT_MS=30000;
@@ -101,7 +102,7 @@ function inputTokenBound(pb){const bytes=Buffer.byteLength(JSON.stringify(pb),'u
  const props=tools.reduce((a,t)=>a+Object.keys(t?.function?.parameters?.properties||{}).length,0);
  return bytes+BOUND.base+BOUND.perMessage*(pb.messages?.length||0)+BOUND.perTool*tools.length+BOUND.perProperty*props;}
 const BREAKER='breaker:text',BREAKER_TTL=365*24*3600e3;
-async function handler(req,res,{env=process.env,log=console.log,store=null,fetch:f=globalThis.fetch,now=Date.now}={}){
+async function handler(req,res,{env=process.env,log=console.log,store=null,fetch:f=globalThis.fetch,now=Date.now,beta=null}={}){
  if(req.method!=='POST'){res.setHeader('Allow','POST');return send(res,405,{error:'method'},log);}
  if(!sameSite(req))return send(res,403,{error:'origin'},log);
  if(!String(req.headers['content-type']||'').toLowerCase().startsWith('application/json'))return send(res,415,{error:'content_type'},log);
@@ -125,14 +126,15 @@ async function handler(req,res,{env=process.env,log=console.log,store=null,fetch
  if(body.consent?.question!==true||body.consent?.projectData!==true)return send(res,400,{error:'consent_required'},log);
  const tools=Array.isArray(body.tools)?body.tools.filter(n=>Agent.NAMES.includes(n)):[];
  const bad=checkMessages(body.messages,tools);if(bad)return send(res,400,{error:'messages',detail:bad},log);
- const idem=String(body.idempotencyKey||'');if(!/^[A-Za-z0-9_.:-]{8,120}$/.test(idem))return send(res,400,{error:'idempotency'},log);
+ const requestKey=String(body.idempotencyKey||'');if(!/^[A-Za-z0-9_.:-]{8,120}$/.test(requestKey))return send(res,400,{error:'idempotency'},log);
+ const idem=beta?'text:'+beta.tester+':'+requestKey:requestKey;
  if(!await store.setIfAbsent('idem:'+idem,{status:'in-progress'},24*3600e3))return send(res,409,{error:'already-processed'},log);
- if(!await store.rate('text',now(),s.perMinute))return send(res,429,{error:'rate_limited'},log);
+ if((beta&&!await store.rate('text:'+beta.tester,now(),beta.perUserTurns))||!await store.rate('text',now(),s.perMinute))return send(res,429,{error:'rate_limited'},log);
  const pb=providerBody(s,tools,body.messages,body.context),estIn=inputTokenBound(pb),worst=costOf(s,estIn,s.maxOut);
  const id='txt_'+createHash('sha256').update(idem).digest('hex').slice(0,16),reservation=await store.reserve({id,family:'text',usd:worst,capUsd:s.cap,meta:{model:s.model,tariffDate:s.date,estIn,maxOut:s.maxOut}});
  if(!reservation.ok){await store.set('idem:'+idem,{status:'refused-'+reservation.reason},24*3600e3);return send(res,402,{error:'budget_exceeded',message:'Se ha alcanzado el tope de gasto aprobado.',capUsd:s.cap},log,{model:s.model});}
  const t0=now(),ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),TIMEOUT_MS);let pres,json;
- try{pres=await f(s.endpoint,{method:'POST',signal:ctl.signal,headers:{'content-type':'application/json',authorization:'Bearer '+s.key},body:JSON.stringify(pb)});json=await pres.json().catch(()=>null);}
+ try{pres=await f(s.endpoint,{method:'POST',signal:ctl.signal,redirect:'error',headers:{'content-type':'application/json',authorization:'Bearer '+s.key},body:JSON.stringify(pb)});json=await pres.json().catch(()=>null);}
  catch{clearTimeout(timer);await store.settle(id,{usd:worst,basis:'worst-case-unreachable',meta:{model:s.model,tariffDate:s.date}});await store.set('idem:'+idem,{status:'provider-unreachable-billing-unknown'},24*3600e3);
   return send(res,502,{error:'provider_unreachable',message:'El proveedor no ha respondido; se retiene el peor caso como gastado.'},log,{model:s.model,usd:worst,ms:now()-t0});}
  clearTimeout(timer);
@@ -158,5 +160,22 @@ function memoryStore({now=Date.now}={}){
 }
 // Despliegue: almacén persistente SOLO si el propietario configura RUBIK_SPEND_STORE_URL/_TOKEN (Upstash Redis REST,
 // api/_spend-ledger.js). Sin ellos → null → 503 'store-not-configured'. Las demás puertas siguen cerradas por defecto.
-module.exports=(req,res)=>handler(req,res,{store:Ledger.storeFromEnv(process.env)});
+module.exports=async(req,res)=>{
+ const beta=Beta.settings(process.env);
+ if(!beta||process.env.RUBIK_ASSISTANT_ENABLED!=='1'){
+  if(req.method==='POST'&&req.body?.action==='status')return send(res,200,{enabled:false,reason:'beta_disabled'});
+  return send(res,503,{error:'beta_disabled'});
+ }
+ const access=req.headers['x-rubik-assistant-code'],tester=Beta.identity(beta,access);
+ if(!tester&&req.body?.action==='status')return send(res,200,{enabled:true,reason:'code-required',requiresCode:true});
+ if(!tester)return send(res,401,{error:'code'});
+ const env={...process.env,RUBIK_ASSISTANT_TOKEN:access,
+  RUBIK_ASSISTANT_BUDGET_CAP_USD:Math.min(beta.cap,Number(process.env.RUBIK_ASSISTANT_BUDGET_CAP_USD))};
+ try{
+  const store=Ledger.storeFromEnv(env);
+  if(!await Beta.enabled(store))return send(res,503,{error:'beta-store-disabled'});
+  return await handler(req,res,{env,beta:{...beta,tester},store});
+ }
+ catch{return send(res,503,{error:'store-unavailable'});}
+};
 Object.assign(module.exports,{handler,settings,checkMessages,providerBody,parseProvider,memoryStore,inputTokenBound,BOUND,PROVIDERS,CONTRACT,MAX_BYTES});
