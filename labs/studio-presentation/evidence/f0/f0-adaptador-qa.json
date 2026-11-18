@@ -1,0 +1,109 @@
+{
+ "herramienta": "tools/f0-adaptador-qa.cjs",
+ "fecha": "2026-11-18T23:15:31.108Z",
+ "pin": {
+  "sha": "dd528119",
+  "jsSha256": "4526a5966de9f62a67457d4a603ed3ecf9a03456f185cb17763c1f52afa69e18"
+ },
+ "node": "v24.14.1",
+ "adaptadorSha256": "c2519b2f38838ad44abe52ea9231c020d00f7d5be4009bfbdcbffa8b28cb62dc",
+ "resumen": "11/11",
+ "casos": [
+  {
+   "id": "F0-01",
+   "titulo": "Ciclo pack → read del proyecto de referencia del producto: formato, versión, sujeto y exclusiones",
+   "resultado": "PASS",
+   "detalle": {
+    "contentId": "494822899bf05964903f02bfa9cf8ad832031100abe82cc594f1b50459a2c9e2",
+    "bytes": 56198
+   }
+  },
+  {
+   "id": "F0-02",
+   "titulo": "Identidad portable: otra fecha y otro id local = mismo trabajo; otra geometría = otro trabajo",
+   "resultado": "PASS",
+   "detalle": {
+    "mismoTrabajo": true,
+    "geometriaDistinta": true
+   }
+  },
+  {
+   "id": "F0-03",
+   "titulo": "Presupuesto como documento F0 (FloorPlanBudgetV1 validado): se cuenta y forma parte de la identidad",
+   "resultado": "PASS",
+   "detalle": {
+    "conPresupuesto": "2d1a416054c7ffa137d3434e520eb20d063eff016ae683facbebb20db28ab199"
+   }
+  },
+  {
+   "id": "F0-04",
+   "titulo": "Integridad: un expediente alterado o truncado se rechaza antes de producir nada",
+   "resultado": "PASS",
+   "detalle": [
+    {
+     "nombre": "byte alterado",
+     "codigo": null
+    },
+    {
+     "nombre": "truncado",
+     "codigo": null
+    }
+   ]
+  },
+  {
+   "id": "F0-05",
+   "titulo": "JSON histórico de proyecto: se acepta sin documentos y es el mismo trabajo que su expediente",
+   "resultado": "PASS",
+   "detalle": {
+    "origen": "project-json"
+   }
+  },
+  {
+   "id": "F0-06",
+   "titulo": "Mapa de dependencias: cubre exactamente las 43 fuentes del catálogo de recetas",
+   "resultado": "PASS",
+   "detalle": {
+    "fuentes": 43,
+    "porEstado": {
+     "expediente": 6,
+     "motor": 4,
+     "sin-fuente": 3,
+     "F0.2b": 2,
+     "excluido": 4,
+     "aportacion": 9,
+     "F0.3": 1,
+     "exp-v2": 1,
+     "fuera": 13
+    }
+   }
+  },
+  {
+   "id": "F0-07",
+   "titulo": "Exclusiones del expediente v1: todas tienen fuente asignada y ninguna se presenta como disponible",
+   "resultado": "PASS"
+  },
+  {
+   "id": "F0-08",
+   "titulo": "Contrato de recetas intacto: las 21 recetas resuelven igual con y sin ctx.f0 (ES y EN)",
+   "resultado": "PASS",
+   "detalle": {
+    "recetas": 21
+   }
+  },
+  {
+   "id": "F0-09",
+   "titulo": "Vigencia por identidad de trabajo, con el vocabulario de N05",
+   "resultado": "PASS"
+  },
+  {
+   "id": "F0-10",
+   "titulo": "Sin simulación: la revisión confirmada se declara ausente con su motivo (dependencia F0.2b)",
+   "resultado": "PASS"
+  },
+  {
+   "id": "F0-11",
+   "titulo": "Solo lectura: el pin del producto no cambia y el laboratorio no toca rutas de producto",
+   "resultado": "PASS"
+  }
+ ]
+}

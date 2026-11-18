@@ -1,6 +1,15 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · v1.4 ampliada (§3–§12)
+## Vigente · continuidad E3 (19/11/2026)
+
+**Base:** `0cf7c2e`, recuperada sin pérdidas. Contraste con master `dd528119`.
+- **Residual N01–N08 y RP-Q01–12:** todo cerrado y acreditado. RP07 incluido. No repetir.
+- **Delta nuevo:** adaptador de laboratorio hacia F0 (`tools/f0-adaptador.cjs`) y su QA, 11/11 contra el pin de master:
+  `git archive dd528119 js | tar -x -C <pin>`; `node tools/f0-adaptador-qa.cjs <pin> dd528119`.
+- **Informe:** `reports/21-E3-CONTINUIDAD-F0.md`. Recoge recuperación, mapa de las 43 fuentes, dependencias y peticiones a F0 (para Codex), riesgos y GO/NO-GO.
+- **E3 de producción:** NO-GO hasta D4, F0.2b integrada y coordinación de contratos con Codex.
+
+## Anterior · v1.4 ampliada (§3–§12)
 
 **CIERRE E0/E1 (17/11/2026):** el propietario ha aceptado visualmente los entregables del candidato `ca9fcc1` (D08). Acta y huellas: informe 19 y `evidence/paquetes/distribucion-v1.4-ampliada.json`. No regenerar ni modificar los entregables aprobados. **El desarrollo autorizado de E0/E1 está terminado.** Siguen pendientes, fuera de la aceptación: escala física, Safari real y dispositivos; H08; derechos del núcleo económico. No empezar ningún corte de integración (E2–E7) sin el mandato y el GO específicos. La base estable de integración la fija la comprobación del cierre de Codex.
 
