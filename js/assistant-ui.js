@@ -74,7 +74,10 @@
   // Dentro de un diálogo: botón EN LÍNEA junto al título (no flota sobre los controles del diálogo).
   // Fuera: el acceso es el botón de la navegación de áreas; el flotante solo aparece si ese botón no está visible.
   const head=d?.querySelector('h1,h2,h3');fab.classList.toggle('inline',!!d);
-  if(d&&head&&fab.previousElementSibling!==head)head.after(fab);else if(!d&&fab.parentNode!==document.body)document.body.append(fab);
+  // Si el título está en una fila de cabecera (título + cerrar…), el botón va DESPUÉS de esa fila: dentro la desbordaría en móvil.
+  // Regla estructural (no por estilo calculado: la CSS de algunos diálogos se carga al abrirlos).
+  let anchor=head;while(d&&anchor?.parentElement&&anchor.parentElement!==d&&anchor.parentElement.tagName!=='FORM'&&[...anchor.parentElement.children].filter(n=>n!==fab).length<=4)anchor=anchor.parentElement;
+  if(d&&anchor&&fab.previousElementSibling!==anchor)anchor.after(fab);else if(!d&&fab.parentNode!==document.body)document.body.append(fab);
   const navVisible=opener.isConnected&&opener.offsetParent!==null&&!opener.closest('[inert]');
   fab.hidden=state.open||(!d&&navVisible);}
  new MutationObserver(()=>rehost()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});

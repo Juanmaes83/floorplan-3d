@@ -78,3 +78,13 @@ test('E2 · asistente presente en toda la plataforma: botón flotante y panel us
     await page.fill('#assistantPanel textarea, #assistantPanel input[type=text]','¿Cuál es la superficie útil?').catch(()=>{});
     await page.keyboard.press('Escape');assert.ok(await fab.isVisible(),'al cerrar el panel vuelve el botón del diálogo');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
+
+test('E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en fila (territorio) no desborda la cabecera ni tapa «Cerrar»',async()=>{
+  const ctx=await env.browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const page=await ctx.newPage();const w=K.watch(page,env.base);try{
+    await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.RubikAssistantUI&&!!window.FloorPlanTerritoryUI);
+    await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();await page.locator('#territoryDialog[open]').waitFor();
+    const fab=page.locator('#assistantFab');assert.ok(await fab.isVisible(),'acceso visible en el diálogo de territorio');
+    assert.equal(await fab.evaluate(b=>b.parentElement.id),'territoryDialog','fuera de la fila de cabecera');
+    assert.equal(await page.locator('#territoryDialog').evaluate(n=>n.scrollWidth<=n.clientWidth+1),true,'sin desbordamiento horizontal');
+    assert.ok(await page.locator('#territoryClose').isVisible());await page.locator('#territoryClose').click({trial:true});
+    assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
