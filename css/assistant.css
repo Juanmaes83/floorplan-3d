@@ -56,8 +56,6 @@
 .assistant-gen-routes{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.assistant-gen-routes .btn{min-height:44px}
 /* E2 · asistente presente en toda la plataforma: botón flotante y panel dentro de los diálogos modales */
 .assistant-fab{position:fixed;z-index:61;right:16px;bottom:16px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #184e52;background:#184e52;color:#fff;font:700 15px/1 system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.18);cursor:pointer}
-.presentation-card-top>.assistant-fab{position:static;min-height:36px;padding:0 10px;font-size:12px;box-shadow:none;order:2}
-.presentation-card-top:has(>.assistant-fab)>h2{flex:1 1 80px;min-width:0}
 .assistant-fab:hover{background:#0f3a3d}.assistant-fab:focus-visible{outline:3px solid #f3c969;outline-offset:2px}.assistant-fab[hidden]{display:none}
 .assistant-panel.in-dialog{top:8px}
 .assistant-where{margin:0;font:600 13px/1.4 system-ui,sans-serif;color:#184e52}.assistant-where[hidden]{display:none}

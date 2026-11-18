@@ -142,11 +142,11 @@ test('The assistant stays reachable without blocking presentation stops in a mul
   const last=page.locator('.presentation-stops button').last();
   await last.click({timeout:7000});
   await page.waitForFunction(()=>!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false');
-  const fab=page.locator('#assistantFab');
-  await fab.click();
+  const access=page.locator('#presentationCardBody rubik-assistant-access');
+  await access.click();
   assert.equal(await page.locator('#assistantPanel').isVisible(),true);
   await page.locator('#assistantClose').click();
-  assert.equal(await fab.evaluate(b=>b===document.activeElement),true);
+  assert.equal(await access.evaluate(b=>b===document.activeElement),true);
   assert.deepEqual(errors,[]);
   await context.close();
  }

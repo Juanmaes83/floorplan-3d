@@ -102,6 +102,27 @@ test('E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en 
     assert.equal(await page.evaluate(()=>{const r=document.getElementById('assistantPanel').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1;}),true,'el panel cabe en 390');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
 
+// Superficie NO modal (como la tarjeta de presentación): el flotante fijo taparía sus controles de abajo a la derecha
+// (FT3D-6 y building-presentation en 30abf6f). El acceso va en flujo al final de la superficie y el flotante se oculta.
+for(const [name,vp,mobile] of [['390×844',{width:390,height:844},true],['844×390',{width:844,height:390},true],['1440×900',{width:1440,height:900},false]])
+test(`E2 · asistente ${name}: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal`,async()=>{
+  const ctx=await env.browser.newContext({viewport:vp,isMobile:mobile,hasTouch:mobile});const page=await ctx.newPage();const w=K.watch(page,env.base);try{
+    await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.RubikAssistantUI);
+    await page.evaluate(()=>{const s=document.createElement('section');s.id='surfaceX';s.dataset.assistantHost='';s.style.cssText='position:fixed;inset:0;z-index:60;overflow:auto;background:#fff;padding:8px';
+      const r=document.createElement('div');r.style.cssText='display:flex;justify-content:flex-end;min-height:calc(100vh - 16px);align-items:flex-end';const b=document.createElement('button');b.id='stopX';b.type='button';b.textContent='Parada';
+      b.onclick=()=>{b.dataset.clicked='1';};r.append(b);s.append(r);s.hidden=true;document.body.append(s);});
+    await page.evaluate(()=>{document.getElementById('surfaceX').hidden=false;}); // como la presentación: existe oculta y se muestra
+    const access=page.locator('#surfaceX rubik-assistant-access');await access.waitFor({state:'attached'});
+    assert.equal(await page.locator('#assistantFab').isVisible(),false,'sin flotante sobre la superficie');
+    assert.equal(await access.evaluate(a=>a.parentElement.lastElementChild===a&&getComputedStyle(a).position),'static','acceso en flujo, último de la superficie');
+    assert.equal(await page.locator('#stopX').evaluate(b=>{const r=b.getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===b;}),true,'nada intercepta el control');
+    await page.locator('#stopX').click();assert.equal(await page.locator('#stopX').getAttribute('data-clicked'),'1');
+    await access.scrollIntoViewIfNeeded();await access.click();await page.waitForFunction(()=>document.getElementById('assistantHost').open);await page.keyboard.press('Escape');
+    await page.evaluate(()=>{document.getElementById('surfaceX').hidden=true;});
+    await page.waitForFunction(()=>!document.querySelector('#surfaceX rubik-assistant-access')||!document.getElementById('surfaceX').getClientRects().length);
+    assert.ok(await page.locator('#assistantOpen').isVisible()||await page.locator('#assistantFab').isVisible(),'acceso normal de vuelta');
+    assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
+
 // A26/H03 · carrera: los datos cambian MIENTRAS se genera (otra pestaña escribe entre dos pasos asíncronos de la exportación).
 // Se simula enganchando crypto.subtle.digest: en la primera huella tras armar, se modifica el presupuesto guardado.
 const armRace=page=>page.evaluate(()=>{const orig=crypto.subtle.digest.bind(crypto.subtle);let armed=true;

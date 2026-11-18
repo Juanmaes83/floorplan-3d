@@ -4,7 +4,7 @@ La rama `codex/candidata-conjunta` parte de `master@7dccf7a6095e6700b2a6b81161f4
 
 | PR | SHA de origen | Alcance |
 | --- | --- | --- |
-| [#251](https://github.com/Juanmaes83/floorplan-3d/pull/251) | `30abf6f487cfc878ee1f1fda9b26bbbf5f0a49d3` | Studio E2, evolución de ENT-04 |
+| [#251](https://github.com/Juanmaes83/floorplan-3d/pull/251) | `a9a92996f48d80b6acd13508f1f308b663e56790` | Studio E2, evolución de ENT-04 |
 | [#252](https://github.com/Juanmaes83/floorplan-3d/pull/252) | `75c479289876a93f1511cbf5a2fab909aea1f9c8` | H01, inventario del dossier |
 | [#253](https://github.com/Juanmaes83/floorplan-3d/pull/253) | `b74dab7fbb1235dda5084c8de36740c792b29f69` | H02, marca de la cabecera económica |
 | [#254](https://github.com/Juanmaes83/floorplan-3d/pull/254) | `4eb58ae97e9cb6eb2e580c532f2b1fff0f367b1c` | MCP Etapa 2 aprobado en alcance digital y de solo lectura, escala estimada |
@@ -24,4 +24,4 @@ Tras la incorporación efectiva en master, actualizar solo los IDs demostrados c
 
 ## Corrección de convivencia en la candidata
 
-El workflow de evidencias de plantillas mostró que el botón flotante del asistente tapaba «Estudio · Planta primera». La [ejecución original](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44286701812/job/134741104223) queda como evidencia. El acceso se aloja en la cabecera de presentación y devuelve allí el foco al cerrar. La regresión acciona ambas funciones en tres formatos. La rama fuente de E2 conserva su historial.
+El workflow de evidencias de plantillas mostró que el botón flotante del asistente tapaba «Estudio · Planta primera». La [ejecución original](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44286701812/job/134741104223) queda como evidencia. La candidata adopta el acceso en flujo dentro de la tarjeta que corrigió Claude en #251. El asistente devuelve el foco a ese acceso al cerrar. Se conservan las regresiones de Claude y la prueba sobre la plantilla real. La regresión acciona ambas funciones en tres formatos. La rama fuente de E2 conserva su historial.

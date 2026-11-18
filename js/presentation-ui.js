@@ -24,7 +24,7 @@
  // the camera (viewRegion) do not move between play, pause, scenes and stops.
  const card=el('div',undefined,overlay,'presentation-card');
  const top=el('div',undefined,card,'presentation-card-top');
- const body=el('div',undefined,card,'presentation-card-body');body.id='presentationCardBody';
+ const body=el('div',undefined,card,'presentation-card-body');body.id='presentationCardBody';body.dataset.assistantHost=''; // el acceso al asistente va al final de esta tarjeta, nunca flotando sobre sus controles
  const title=quiet(el('h2',undefined,top)),closeButton=button('',top,()=>stop());closeButton.id='presentationClose';
  const status=el('p',undefined,body,'presentation-status');status.setAttribute('role','status');
  // In the card header (sticky on short screens), so the level of the view stays visible when the card scrolls.
