@@ -72,3 +72,11 @@ Datos: los del ejemplo («Probar el ejemplo») o un proyecto propio de prueba. N
 2. la revisión visual humana conjunta con esta checklist.
 
 **NO-GO** para activar IA real (#258) y para Production: están fuera de esta integración. Beta 01 queda intacta. E3 no empieza hasta cerrar esta consolidación.
+
+## Integración (18/11/2026, 18:07 UTC)
+
+- #259 se ha integrado en `master` con el commit `163df68e`. Su árbol es idéntico al de la candidata `26c0dbde`.
+- La integración ha cerrado como fusionadas #251 (E2), #252 (H01) y #253 (H02). Sus SHA de origen (`a9a92996`, `75c47928`, `b74dab7f`) son antepasados de `master`.
+- Pendiente: los checks posteriores a la fusión sobre `163df68e`, y la revisión visual de esta checklist si no se hizo antes de integrar.
+- Production sin cambios: sigue en `8525025`. La promoción se gobierna aparte.
+- Rollback: `git revert -m 1 163df68e`.
