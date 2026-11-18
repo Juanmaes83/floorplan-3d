@@ -1,5 +1,7 @@
 # RUBIK SOTA — Catálogo maestro único de mejoras (para revisar y decidir)
 
+> **v1.12 (18/11/2026, propuesta en la rama `docs/reconciliacion-maestra-v1.12`):** los 98 IDs, sus nombres, alias, olas y los descartes X-01 a X-06 **no cambian**. Desde v1.12 la columna «Estado» de la §3 queda **congelada como histórica** a fecha de v1.11. El estado vigente, el programa estratégico P1–P8, el trabajo residual y el hito de cada ID están en una sola fuente: la [matriz de trazabilidad v1.12](MATRIZ-TRAZABILIDAD-v1.12.md). La estrategia está en el [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md). Resumen de reclasificaciones en la §9.
+
 **Fecha:** 09/11/2026 · **Versión:** 1.11 **vigente** tras fusionar [#243](https://github.com/Juanmaes83/floorplan-3d/pull/243) el 17/11/2026 (17/11/2026: alta de HOM-04 y «CAT-04» registrado como avance parcial de CAT-03; v1.10: ficha R03 sincronizada con la PR #194, 11/11/2026; v1.9: ficha R02 sincronizada con la PR #193, 11/11/2026; v1.8: cinco referencias F12 registradas el 11/11/2026: cuatro verificadas y una URL no localizada; F11 y ficha R01 preservadas; ver §7–8) · **Estado:** PROPUESTO para decisión del propietario. **Nada de este documento autoriza** implementación, merge, gasto de API ni cambios en Production.
 **Referencia histórica verificada el 09/11/2026 (versión 1.4):** `master@8df49ed` (= `5fb7a5c` + PR #183, #184 y #185); Production `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` sobre `8df49ed`, con Home de seis perfiles y Render IA D1 (ver `docs/product/hom-01/cierre-hom-01-02-publicacion-2026-11-09.md` y `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`). **No es el último despliegue.**
 
@@ -342,6 +344,7 @@ Marca en la sección 3 cada fila con ✔, ✖ o ⏸. Las decisiones que desbloqu
 | 1.2 | (1) HOM-03 ya no depende del antiguo GOV-01, sino de GOV-01c, GOV-09b y GOV-03, y solo anuncia lo **activo en Production**. (2) GOV-09 dividido: **GOV-09a**, acreditar el modelo y su compatibilidad con una prueba autorizada **antes** del Promote (GOV-01c pasa a depender de ella), y **GOV-09b**, confirmarlo en el registro **después**. (3) GOV-08 reordenado: lo principal es el código compartido, el permiso de publicación propio y la **revocación individual** de enlaces; la comparación en tiempo constante es un detalle menor. | Segunda revisión externa aportada por el propietario, 09/11 |
 | 1.3 | Estados factuales tras el cierre de Render IA D1: Production en `dpl_5oHsDPdSVG5buSVCnYPrLPmbnbNi` (`5fb7a5c`); IMG-01 e IMG-02 pasan a **E**; GOV-09b hecho con el log real; GOV-09a registrada como **desviación cronológica** (no se hizo antes del Promote). Las casillas de decisión del propietario **no se modifican**. Acta: `docs/render-ai/d1-acta-de-cierre-2026-11-09.md`. | Orden maestra del propietario, 09/11 |
 | 1.4 | Estados factuales tras publicar la Home: HOM-01 (#184) y HOM-02 (#185) pasan a **E** y están en Production `dpl_5abs4NFfcFdGeMapKgzzwKqxPxcV` (`master@8df49ed`), con la revisión visual aprobada por el propietario. GOV-03 pasa a **P** (registro mínimo). HOM-03, GOV-08, ENT-01 y ENT-02 **no cambian**: siguen pendientes de decisión. | Integración autorizada por el propietario, 09/11 |
+| 1.12 | **Propuesta del 18/11/2026, pendiente de revisión.** (1) La columna «Estado» de la §3 se congela como histórica; el estado vigente pasa a la [matriz v1.12](MATRIZ-TRAZABILIDAD-v1.12.md), con 13 estados reconciliados y clase de evidencia por fila. (2) Cada ID recibe un programa principal P1–P8 y un hito A–D. (3) Reclasificaciones en la §9. (4) Se proponen al propietario, sin aplicarlas: G-08 superado en su alcance nativo, G-07 candidato a descarte, y PAN-02 antes que PAN-01. Sin altas ni bajas: siguen 98 IDs y seis descartes | Claude Code, por mandato del propietario, 18/11 |
 | 1.11 | **Vigente tras fusionar #243 el 17/11/2026.** (1) **Alta de HOM-04** «Demostraciones guiadas en la Home» en la ola 1, como **E**: PR #242, en Production y en la URL pública desde el 17/11/2026. Es el único ID nuevo: el catálogo pasa de 97 a **98 códigos** (olas 10 / 9 / 28 / 22 / 14 / 15). (2) **«CAT-04» no se crea como ID:** queda registrado como nombre de trabajo y avance parcial de CAT-03, que pasa a **P**; los archivos `cat04-*` no se renombran. (3) «CON-03» (importación de presupuesto de #241) sigue como código de trabajo, pendiente de decisión. Sin cambiar las demás olas, IDs, prioridades ni descartes | Claude Code, por decisión del propietario, 17/11 |
 | 1.10 | Sincroniza la ficha R03 con la evidencia de la [PR #194](https://github.com/Juanmaes83/floorplan-3d/pull/194) (`fc5a422`): R03 es un laboratorio técnicamente completado, pendiente de aceptación humana y sin integración; GOV-05 documentado solo para R03. Sin cambiar olas, IDs, prioridades, estados de otras mejoras, R01/R02, F11/F12, G0–G12 ni el inventario | Claude Code, por orden del propietario, 11/11 |
 | 1.9 | Sincroniza la ficha R02 con la evidencia de la [PR #193](https://github.com/Juanmaes83/floorplan-3d/pull/193) (`7d8a626`): R02-A es un laboratorio funcional, no integrado, pendiente de aceptación humana. Sin cambiar olas, IDs, estados de otras mejoras, R01/R03, F11/F12 ni el inventario | Claude Code, por orden del propietario, 11/11 |
@@ -369,3 +372,34 @@ La investigación describe **13 áreas G0–G12, no 13 piedras clonadas**. Sus c
 **Gates:** origen/licencia → copia fiel → baseline → CLASSIFY → escultura → normalización → TEST → PREVIEW → revisión humana → merge y publicación como autorizaciones separadas. **El laboratorio R01, R02 o R03 no queda aprobado por esta documentación.** Se respetan los cinco casos y veinte planos autorizados de F2 para cualquier afirmación de precisión real. Los asuntos prioritarios de seguridad de enlaces/ENT/GOV-08 conservan su orden.
 
 **Estado:** propuesta documental en rama aislada; sin modificaciones de código ni de Production.
+
+## 9. Reconciliación v1.12 (18/11/2026)
+
+**Corte:** `master@7dccf7a` y PR abiertas #251–#260. **Detalle por ID:** [matriz de trazabilidad v1.12](MATRIZ-TRAZABILIDAD-v1.12.md). **Estrategia:** [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md).
+
+| Estado reconciliado | IDs |
+|---|---|
+| Resuelto y validado | 20 |
+| Integrado con límites de alcance | 7 |
+| Superado por otra solución | 3 |
+| Implementado, pendiente de integración | 1 |
+| Experimental o laboratorio | 5 |
+| Simulado | 5 |
+| Parcialmente desarrollado | 25 |
+| Infraestructura reutilizable sin función específica | 9 |
+| No desarrollado | 19 |
+| Depende de una decisión externa | 3 |
+| Candidato a descarte | 1 |
+| **Total** | **98** |
+
+**Contraste con la auditoría preliminar de ChatGPT** sobre el mismo `7dccf7a`. Era una hipótesis de partida, no un resultado obligado:
+
+| Preliminar | IDs | v1.12 |
+|---|---|---|
+| Resueltos o superados | 26 | 23 resueltos o superados, más 7 integrados con límites |
+| Funcionales en piloto | 3 | Repartidos entre «integrado con límites» y «experimental» |
+| Parcialmente desarrollados | 40 | 25 parciales, más 9 con solo infraestructura reutilizable |
+| Implementados en simulación | 5 | 5 simulados |
+| Sin implementación específica | 24 | 12 nuevos o investigación, 7 resolubles por conexión, 3 decisiones externas, 1 superado, 1 candidato a descarte |
+
+Las diferencias no se han forzado a coincidir. La principal es metodológica: v1.12 separa la infraestructura reutilizable concreta de una implementación parcial de la función.

@@ -1,5 +1,14 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
+> **Corte 18/11/2026 (reconciliación v1.12, propuesta documental).** Master `7dccf7a6095e6700b2a6b81161f4172b53c340fb` incorpora #250: concurrencia acotada de Asset Lab, espera de «Volver a ver» de Dibujo vivo y observador de CI. Sus nueve workflows de master terminaron en `success`.
+>
+> - **URL pública:** sigue sirviendo `8525025`, comprobado por la huella de `js/home-demos.js`. El despliegue de Production de `7dccf7a` existe pero no se ha promovido; promoverlo requiere autorización.
+> - **PR abiertas:** #251, #252 y #253 (Claude) y #254, #255, #257, #258, #259 y #260 (Codex). La candidata conjunta #259 reúne siete de ellas. En su SHA `62155563`, `surfaces.browser.test.cjs` falla 7/8 por un tiempo agotado en la prueba nueva de «Detalle arquitectónico». Ninguna está en master.
+> - **Estado por ID:** desde v1.12 vive en la [matriz de trazabilidad](MATRIZ-TRAZABILIDAD-v1.12.md). Este documento conserva la fotografía de capacidades y despliegue. La estrategia está en el [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md).
+> - **Hallazgo estructural:** la biblioteca de proyectos vive en `localStorage` (`js/project-library.js:7`). Condiciona la comercialización; es la decisión D3 del plan.
+>
+> Lo que sigue describe el corte del 17/11 y se conserva sin cambios.
+
 **Corte verificado 17/11/2026:** master `8525025a1470d48d52d8e365070e5a0acf116134`, #243/#244/#245 fusionadas; 11 checks de master correctos. Árbol `5441db02b71407ab03731216054165eee24940c0`, idéntico a #244 `28a01b0`. La evidencia recuperada del Preview aislado acredita 30/30 comprobaciones reales y 7/7 de conservación, sin usar Blob de Production. [Evidencia original](../qa/evidencias-s3-2026-11-17/result.json). Tras autorización expresa del propietario en esta sesión, se promovió `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`; el alias público ya apunta a ese deployment. El anterior `dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs` se conserva como recuperación. S4, S5 y GOV-06a siguen pendientes.
 
 **Fecha:** 17/11/2026 · **Corte funcional auditado:** `40b4ae5d724ef83d0e70651545b4f5e4832becd3`. Primera versión redactada el 16/11 sobre `1296aac` y actualizada el 17/11 tras fusionar #242 y mover la URL pública.

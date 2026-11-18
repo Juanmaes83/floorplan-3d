@@ -1,5 +1,7 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
+> **Plan operativo vigente desde el 18/11/2026 (propuesta v1.12):** el orden de ejecución, los ocho programas P1–P8, los hitos A–D y los cortes están en el [plan maestro v1.12](product/PLAN-MAESTRO-RUBIK-SOTA-v1.12.md). El estado por ID está en la [matriz de trazabilidad v1.12](product/MATRIZ-TRAZABILIDAD-v1.12.md). Este roadmap conserva su historia sin cambios y ya no es la fuente del orden de trabajo.
+
 > **SCULPT · referencia metodológica subordinada (10/11/2026, propuesta documental):** véanse el [catálogo maestro único de mejoras](product/rubik-catalogo-maestro-mejoras-2026-11-09.md#8-sculpt--registro-subordinado-de-piedras-y-oportunidades-propuesta-documental-de-10112026) y el [anexo de metodología, piedras R01–R03 y mapeo G0–G12](product/sculpt-metodologia-y-cartera-2026-11-10.md). SCULPT no crea fases ni olas, no altera esta historia, ni autoriza implementar, fusionar o publicar.
 
 
