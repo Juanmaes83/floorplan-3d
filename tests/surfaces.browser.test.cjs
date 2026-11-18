@@ -1,5 +1,6 @@
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const {execFile}=require('node:child_process'),run=require('node:util').promisify(execFile),entries=require('../assets/materials/catalog.json').entries;
+const renderBudget=require('./helpers/render-budget.cjs');
 let browser,server,url;const cache=new Map(),QA='docs/qa/artifacts/surface-library';
 before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const f=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!f.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(f)?'text/javascript':f.endsWith('.css')?'text/css':f.endsWith('.webp')?'image/webp':f.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(QA,{recursive:true});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
@@ -55,7 +56,7 @@ test('Architectural detail uses compatible geometry and returns to the original 
  const control=page.locator('#architecturalQuality');
  assert.equal(await control.getAttribute('aria-pressed'),'false');
  await control.click();
- await page.waitForFunction(()=>View3D.architecturalQuality().facade.status==='ready'&&View3D.surfaceMetrics.some(m=>m.recipe==='oak-physical-v1'));
+ await page.waitForFunction(()=>View3D.architecturalQuality().facade.status==='ready'&&View3D.surfaceMetrics.some(m=>m.recipe==='oak-physical-v1'),null,{timeout:renderBudget(30000)});
  const detail=await page.evaluate(()=>View3D.architecturalQuality());
  assert.ok(detail.windows>0);
  assert.ok(detail.facade.active.length>0);
