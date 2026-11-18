@@ -27,17 +27,48 @@
  const isCurved=w=>!!(w.curve&&w.curve.control);
  const at=(length,start,end,x)=>start+(end-start)*Math.max(0,Math.min(1,x/length));
 
+ // ── Resolution and exact references (D-OP07-1 quadratic, D-OP07-3: 16 facets baseline, adaptive by metric tolerance) ──
+ const MAX_FACETS=1024;
+ /** |P0 − 2·P1 + P2| (mm): B'' = 2D is constant on a quadratic, so it fixes curvature and facet error. */
+ function bend(w){if(!isCurved(w))return 0;const c=w.curve.control;return Math.hypot(w.start.x-2*c.x+w.end.x,w.start.y-2*c.y+w.end.y);}
+ /** Facets of a wall: 1 if straight; 16 (donor baseline) by default; with {toleranceMm} at least 16 and as many as
+    needed so that no facet departs from the true curve by more than the tolerance (capped at MAX_FACETS). */
+ function facetCount(w,opts={}){if(!isCurved(w))return 1;const tol=opts&&opts.toleranceMm;if(!(tol>0))return FACETS;
+  return Math.min(MAX_FACETS,Math.max(FACETS,Math.ceil(Math.sqrt(bend(w)/(4*tol)))));}
+ /** Exact maximum distance between the curve and its n uniform-parameter facets: f(mid) − chord = D·h²/4, h = 1/n. */
+ const deviationBound=(w,n=facetCount(w))=>bend(w)/(4*n*n);
+ const GL5=[[0,.5688888888888889],[-.5384693101056831,.4786286704993665],[.5384693101056831,.4786286704993665],[-.906179845938664,.2369268850561891],[.906179845938664,.2369268850561891]];
+ function integrate(f,a,b,n=64){let s=0;const h=(b-a)/n;for(let i=0;i<n;i++){const m=a+h*(i+.5);for(const [x,k] of GL5)s+=k*f(m+x*h/2);}return s*h/2;}
+ function speed(w,t){if(!isCurved(w))return Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);const c=w.curve.control;
+  return Math.hypot(2*(1-t)*(c.x-w.start.x)+2*t*(w.end.x-c.x),2*(1-t)*(c.y-w.start.y)+2*t*(w.end.y-c.y));}
+ /** Height model (donor): linear in the curve parameter. */
+ const heightAtParam=(w,t)=>startHeight(w)+(endHeight(w)-startHeight(w))*t;
+ /** True (non-faceted) references, for precision tests and tolerance reports. */
+ const arcLength=(w,t0=0,t1=1)=>integrate(t=>speed(w,t),t0,t1);
+ const trueGross=w=>integrate(t=>speed(w,t)*heightAtParam(w,t),0,1);
+ /** Smallest radius of curvature (mm). B'(t) = 2a + 2tD and B'×B'' = 4·a×D is constant, so the minimum is at the
+    slowest point. 0 = the curve folds back on itself; Infinity = straight. */
+ function minRadius(w){if(!isCurved(w))return Infinity;const c=w.curve.control,a={x:c.x-w.start.x,y:c.y-w.start.y},D={x:w.start.x-2*c.x+w.end.x,y:w.start.y-2*c.y+w.end.y},dd=D.x*D.x+D.y*D.y;
+  if(dd===0)return Infinity;const t=Math.max(0,Math.min(1,-(a.x*D.x+a.y*D.y)/dd)),sp=Math.hypot(2*a.x+2*t*D.x,2*a.y+2*t*D.y),cross=Math.abs(a.x*D.y-a.y*D.x);
+  if(sp<1e-9)return 0;return cross===0?Infinity:sp**3/(4*cross);}
+ /** Proposed wall rules (CONTRATO-PROPUESTA §3). */
+ function validateWall(w){const issues=[];
+  if(isCurved(w)&&!finite(w.curve.control.x,w.curve.control.y))issues.push('invalid curve control');
+  else{const r=minRadius(w);if(r===0)issues.push('curve folds back');else if(r<w.thicknessMm/2)issues.push('curve too tight for wall thickness');}
+  if('heightEndMm' in w&&!(Number.isFinite(w.heightEndMm)&&w.heightEndMm>0))issues.push('invalid end height');
+  return issues;}
+
  // ── Path ─────────────────────────────────────────────────────────────────────────────────────────────────────────
  function point(w,t){const c=isCurved(w)?w.curve.control:null;
   return c?{x:(1-t)**2*w.start.x+2*(1-t)*t*c.x+t*t*w.end.x,y:(1-t)**2*w.start.y+2*(1-t)*t*c.y+t*t*w.end.y}
    :{x:w.start.x+(w.end.x-w.start.x)*t,y:w.start.y+(w.end.y-w.start.y)*t};}
  /** donor wallPathSpans */
- function pathSpans(w){const count=isCurved(w)?FACETS:1,h0=startHeight(w),h1=endHeight(w);
+ function pathSpans(w,opts){const count=facetCount(w,opts),h0=startHeight(w),h1=endHeight(w);
   return Array.from({length:count},(_,i)=>({start:point(w,i/count),end:point(w,(i+1)/count),startHeight:h0+(h1-h0)*i/count,endHeight:h0+(h1-h0)*(i+1)/count}));}
  /** donor wallPathProfile; adds paramAt (distance → parameter), the inverse RUBIK needs to split at a distance. */
- function pathProfile(w){
+ function pathProfile(w,opts){
   let length=0;
-  const spans=pathSpans(w).map(span=>{const from=length,size=Math.hypot(span.end.x-span.start.x,span.end.y-span.start.y);length+=size;return {...span,from,to:length,length:size};});
+  const spans=pathSpans(w,opts).map(span=>{const from=length,size=Math.hypot(span.end.x-span.start.x,span.end.y-span.start.y);length+=size;return {...span,from,to:length,length:size};});
   const sample=distance=>{const d=Math.max(0,Math.min(length,distance)),span=spans.find(s=>s.length>0&&d<=s.to)??spans[spans.length-1];
    const t=span.length>0?Math.max(0,Math.min(1,(d-span.from)/span.length)):0;
    return {point:{x:span.start.x+(span.end.x-span.start.x)*t,y:span.start.y+(span.end.y-span.start.y)*t},height:span.startHeight+(span.endHeight-span.startHeight)*t};};
@@ -59,16 +90,30 @@
  function split(w,t){const lerp=(a,b)=>({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t}),c=isCurved(w)?w.curve.control:null;
   const c1=c?lerp(w.start,c):undefined,c2=c?lerp(c,w.end):undefined,mid=c1&&c2?lerp(c1,c2):lerp(w.start,w.end);
   return {first:{start:w.start,end:mid,...(c1?{curve:{control:c1}}:{})},second:{start:mid,end:w.end,...(c2?{curve:{control:c2}}:{})}};}
- /** RUBIK extension: split at a physical distance and carry heights and openings across (editing works in mm). */
- function splitAt(w,distanceMm,openings=[]){
-  const path=pathProfile(w),t=path.paramAt(distanceMm),g=split(w,t),h=path.sample(distanceMm).height;
-  const base={thicknessMm:w.thicknessMm};
-  const first={...w,...base,...g.first,heightMm:startHeight(w),...(h!==startHeight(w)||Number.isFinite(w.heightEndMm)?{heightEndMm:h}:{})};
-  const second={...w,...base,...g.second,heightMm:h,...(Number.isFinite(w.heightEndMm)?{heightEndMm:endHeight(w)}:{})};
-  if(!isCurved(w)){delete first.curve;delete second.curve;}
-  const firstLen=pathProfile(first).length,moved=[],blocked=[];
-  for(const o of openings){if(o.offsetMm+o.widthMm<=distanceMm+1e-6)moved.push({...o,part:'first'});else if(o.offsetMm>=distanceMm-1e-6)moved.push({...o,part:'second',offsetMm:o.offsetMm-firstLen});else blocked.push(o.id);}
-  return {first,second,openings:moved,blocked};
+ /** RUBIK extension: split at a physical distance (editing works in mm) and carry heights and openings across.
+    - Geometry: exact de Casteljau at the parameter of that distance; the two pieces ARE the original curve.
+    - Heights: the split height is the original's (param-linear), so the slope continues unchanged.
+    - Openings: anchored by the PARAMETER of their centre, not by "offset − first length", so they keep their place in
+      plan even though each piece is faceted again (a piece is finer than its parent). An opening that straddles the
+      cut is not moved: it is returned in `blocked` and the caller must decide.
+    - opts.roundMm: round points and heights to whole mm as project-core stores them; the shared point is rounded once,
+      so the pieces stay joined exactly. opts.toleranceMm: facet resolution (D-OP07-3). opts.newId: id of the second piece. */
+ function splitAt(w,distanceMm,openings=[],opts={}){
+  const path=pathProfile(w,opts),t=path.paramAt(distanceMm),g=split(w,t),r=opts.roundMm?Math.round:(v=>v),R=p=>({x:r(p.x),y:r(p.y)});
+  const h=r(heightAtParam(w,t)),sloped=endHeight(w)!==startHeight(w),mid=R(g.first.end);
+  const first={...w,start:w.start,end:mid,heightMm:startHeight(w)},second={...w,id:opts.newId||`${w.id}~2`,start:mid,end:w.end,heightMm:h};
+  delete first.curve;delete second.curve;delete first.heightEndMm;delete second.heightEndMm;
+  if(isCurved(w)){first.curve={control:R(g.first.curve.control)};second.curve={control:R(g.second.curve.control)};}
+  if(sloped){first.heightEndMm=h;second.heightEndMm=endHeight(w);}
+  const P1=pathProfile(first,opts),P2=pathProfile(second,opts),moved=[],blocked=[];let maxDriftMm=0;
+  for(const o of openings){
+   const before=o.offsetMm+o.widthMm<=distanceMm+1e-6,after=o.offsetMm>=distanceMm-1e-6;if(!before&&!after){blocked.push(o.id);continue;}
+   const centre=o.offsetMm+o.widthMm/2,tc=path.paramAt(centre),piece=before?first:second,P=before?P1:P2,s=before?tc/t:(tc-t)/(1-t);
+   let offsetMm=P.distanceAt(s)-o.widthMm/2;if(offsetMm<0&&offsetMm>-1e-6)offsetMm=0;
+   if(offsetMm<0||offsetMm+o.widthMm>P.length+1e-6){blocked.push(o.id);continue;}
+   const a=path.sample(centre).point,b=P.sample(offsetMm+o.widthMm/2).point,drift=Math.hypot(a.x-b.x,a.y-b.y);maxDriftMm=Math.max(maxDriftMm,drift);
+   moved.push({...o,wallId:piece.id,offsetMm,part:before?'first':'second',driftMm:drift});}
+  return {first,second,param:t,openings:moved,blocked,maxDriftMm};
  }
 
  // ── Openings and wall faces ──────────────────────────────────────────────────────────────────────────────────────
@@ -78,7 +123,7 @@
   const left=Math.max(0,offsetMm),right=Math.min(path.length,offsetMm+widthMm),top=Math.min(sillMm+heightMm,path.sample(left).height,path.sample(right).height),bottom=Math.max(0,sillMm);
   return right>left&&top>bottom?{left,right,bottom,top}:null;}
  /** RUBIK rule (no silent clipping): the opening must fit along the path and under the LOWER of its two edges. */
- function validateOpening(w,o){const path=pathProfile(w),issues=[];
+ function validateOpening(w,o,opts){const path=pathProfile(w,opts),issues=[];
   if(o.offsetMm<0||o.offsetMm+o.widthMm>path.length+1e-7)issues.push('opening extends beyond wall');
   const lowest=Math.min(path.sample(o.offsetMm).height,path.sample(o.offsetMm+o.widthMm).height);
   if(o.sillHeightMm+o.heightMm>lowest+1e-7)issues.push('opening exceeds wall height');
@@ -91,26 +136,49 @@
    for(const h of holes){if(h.bottom>bottom)append(h.bottom,h.bottom);bottom=Math.max(bottom,h.top);}append(hL,hR);}
   return result;}
  /** donor wallProfileSpans: cut the union of full openings first, then distribute across facets (level heads on slopes). */
- function profileSpans(w,openings){const path=pathProfile(w);
+ function profileSpans(w,openings,opts){const path=pathProfile(w,opts);
   const holes=openings.map(o=>pathOpening(path,o.offsetMm,o.widthMm,o.sillHeightMm||0,o.heightMm)).filter(Boolean);
-  return path.spans.filter(s=>s.length>0).map(span=>{
+  return path.spans.map((s,index)=>({...s,index})).filter(s=>s.length>0).map(span=>{
    const local=holes.flatMap(h=>{const left=h.left<=span.from?0:h.left-span.from,right=h.right>=span.to?span.length:h.right-span.from;
     const top=Math.min(h.top,at(span.length,span.startHeight,span.endHeight,left),at(span.length,span.startHeight,span.endHeight,right));
     return right>left&&top>h.bottom?[{...h,left,right,top}]:[];});
    return {...span,segments:segmentsAroundOpenings(span.length,span.startHeight,span.endHeight,local)};});}
 
  // ── Measurements (proposal for quantity-core; units mm and mm²) ──────────────────────────────────────────────────
- /** Face areas of one wall: gross (trapezoid under the sloped top, along the centreline), openings (clipped union) and
-    net, plus the length of each face. On a curve the two faces differ: the outer one is longer. */
- function faceAreas(w,openings=[]){
-  const spans=profileSpans(w,openings);let gross=0,net=0;
-  for(const s of spans){gross+=s.length*(s.startHeight+s.endHeight)/2;for(const g of s.segments)net+=g.width*((g.topYLeft+g.topYRight)/2-g.bottomY);}
-  const sides=faceLengths(w);return {grossMm2:gross,openingsMm2:gross-net,netMm2:net,lengthMm:pathProfile(w).length,...sides};}
- function offsetPolyline(pts,d){return pts.map((p,i)=>{const a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1;return {x:p.x-dy/l*d,y:p.y+dx/l*d};});}
+ /** Real face areas of one wall, per face (D-OP07-2: each face measured on its own).
+    - Each face is the MITRED offset of the facets by ±thickness/2: per facet, face length = k · centre length, and
+      left + right = 2 · centre exactly (the mitre terms cancel). Left = +normal of start→end (outer face of a curve
+      that bulges to the left).
+    - Heights are the same on both faces (vertical wall); a facet's face is a trapezoid, area = k · centre trapezoid.
+    - Openings: the union of holes cut on the centreline, mapped to each face with the same k (reveals perpendicular to
+      the wall, so the hole is wider on the outer face of a curve). Overlaps count once.
+    - No silent clipping: an opening that does not fit (validateOpening) or an invalid wall (validateWall, or a facet
+      whose inner face vanishes) leaves openings/net/reveals null and complete=false, as quantity-core does.
+    - revealsMm2: jambs, head and (if sillHeightMm > 0) sill of each opening, thickness deep; reported apart. */
+ function faceAreas(w,openings=[],opts={}){
+  const wallIssues=validateWall(w),invalid=openings.filter(o=>validateOpening(w,o,opts).length).map(o=>o.id??null);
+  const path=pathProfile(w,opts),pts=[path.spans[0].start,...path.spans.map(s=>s.end)],half=w.thicknessMm/2;
+  const L=offsetMiter(pts,half),Rt=offsetMiter(pts,-half),seg=(P,i)=>Math.hypot(P[i+1].x-P[i].x,P[i+1].y-P[i].y);
+  const face=()=>({lengthMm:0,grossMm2:0,netMm2:0}),C=face(),Lf=face(),Rf=face();let collapsed=false;
+  for(const s of profileSpans(w,invalid.length?[]:openings,opts)){
+   const kL=seg(L,s.index)/s.length,kR=seg(Rt,s.index)/s.length;if(!(kL>1e-9&&kR>1e-9))collapsed=true;
+   const g=s.length*(s.startHeight+s.endHeight)/2,n=s.segments.reduce((a,x)=>a+x.width*((x.topYLeft+x.topYRight)/2-x.bottomY),0);
+   for(const [F,k] of [[C,1],[Lf,kL],[Rf,kR]]){F.lengthMm+=s.length*k;F.grossMm2+=g*k;F.netMm2+=n*k;}}
+  if(collapsed&&!wallIssues.length)wallIssues.push('curve too tight for wall thickness');
+  const ok=!wallIssues.length&&!invalid.length;
+  const out=F=>({lengthMm:F.lengthMm,grossMm2:F.grossMm2,openingsMm2:ok?F.grossMm2-F.netMm2:null,netMm2:ok?F.netMm2:null});
+  let reveals=0;for(const o of openings)reveals+=w.thicknessMm*(2*o.heightMm+o.widthMm+(o.sillHeightMm>0?o.widthMm:0));
+  return {complete:ok,status:ok?'ok':wallIssues.length?'invalid-wall-geometry':'invalid-opening-geometry',wallIssues,invalid,facets:path.spans.length,
+   centre:out(C),left:out(Lf),right:out(Rf),revealsMm2:ok?reveals:null,
+   lengthMm:C.lengthMm,grossMm2:C.grossMm2,openingsMm2:ok?C.grossMm2-C.netMm2:null,netMm2:ok?C.netMm2:null,leftFaceMm:Lf.lengthMm,rightFaceMm:Rf.lengthMm};}
+ /** Mitred offset of a polyline by d (left = +normal). Ends are cut square. */
+ function offsetMiter(pts,d){const n=[];for(let i=0;i+1<pts.length;i++){const dx=pts[i+1].x-pts[i].x,dy=pts[i+1].y-pts[i].y,l=Math.hypot(dx,dy)||1;n.push({x:-dy/l,y:dx/l});}
+  return pts.map((p,i)=>{const a=n[Math.max(0,i-1)],b=n[Math.min(n.length-1,i)];let mx=a.x+b.x,my=a.y+b.y;const ml=Math.hypot(mx,my);
+   if(ml<1e-12){mx=b.x;my=b.y;}else{mx/=ml;my/=ml;}const cos=mx*b.x+my*b.y;return {x:p.x+mx*d/cos,y:p.y+my*d/cos};});}
  const polyLength=pts=>pts.slice(1).reduce((s,p,i)=>s+Math.hypot(p.x-pts[i].x,p.y-pts[i].y),0);
- function centreline(w){const sp=pathSpans(w);return [sp[0].start,...sp.map(s=>s.end)];}
+ function centreline(w,opts){const sp=pathSpans(w,opts);return [sp[0].start,...sp.map(s=>s.end)];}
  /** Length of the left (+normal) and right faces of the wall; equal on a straight wall. */
- function faceLengths(w){const c=centreline(w),h=w.thicknessMm/2;return {leftFaceMm:polyLength(offsetPolyline(c,h)),rightFaceMm:polyLength(offsetPolyline(c,-h))};}
+ function faceLengths(w,opts){const c=centreline(w,opts),h=w.thicknessMm/2;return {leftFaceMm:polyLength(offsetMiter(c,h)),rightFaceMm:polyLength(offsetMiter(c,-h))};}
 
  // ── Rooms ────────────────────────────────────────────────────────────────────────────────────────────────────────
  /** Room ring from its boundary walls, in order, following each wall's facets (donor getRoomPolygon for a known cycle). */
@@ -165,13 +233,46 @@
  // ── Compatibility ────────────────────────────────────────────────────────────────────────────────────────────────
  /** For a consumer that does not know curves or slopes yet: an equivalent straight, level wall, plus what is lost.
     Never used to SAVE: only to degrade a reading visibly (DXF of an old reader, legacy estimates). */
+ const DEGRADED=Symbol.for('rubik.op07.degraded');
  function legacyView(w){const loss=[];const out={...w};
   if(isCurved(w)){loss.push({field:'curve',chordMm:Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),pathMm:pathProfile(w).length});delete out.curve;}
   if(Number.isFinite(w.heightEndMm)&&w.heightEndMm!==w.heightMm){loss.push({field:'heightEndMm',heightMm:w.heightMm,heightEndMm:w.heightEndMm});out.heightMm=Math.max(w.heightMm,w.heightEndMm);}
-  delete out.heightEndMm;return {wall:out,loss};}
+  delete out.heightEndMm;Object.defineProperty(out,DEGRADED,{value:true});return Object.freeze({wall:Object.freeze(out),loss:Object.freeze(loss)});}
  /** Facets for exporters (DXF LWPOLYLINE): same facets as the viewer, so plan, 3D and CAD agree. */
- const facets=w=>centreline(w);
+ const facets=(w,opts)=>centreline(w,opts);
 
- const api={FACETS,TEXTURE_TILE_MM,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,profileSpans,faceAreas,faceLengths,centreline,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets};
+ // ── Protection against degraded saves and information loss (proposal for the persistence write path) ──────────────
+ /** Features a project uses beyond today's contract; a writer must know all of them to save it. */
+ function featuresOf(project){const f=new Set();for(const w of (project&&project.walls)||[]){if(isCurved(w))f.add('wall.curve');if(Number.isFinite(w.heightEndMm))f.add('wall.heightEnd');}return [...f].sort();}
+ /** In-memory guard: a degraded view (legacyView) can never be the thing that gets saved. */
+ function assertSavable(project){if(project&&(project[DEGRADED]||(project.walls||[]).some(w=>w&&w[DEGRADED])))throw new Error('OP-07: a degraded legacy view cannot be saved');return true;}
+ /** Content guard (survives JSON, where the in-memory mark is lost): what the previous saved state had and the next one
+    lacks, unless the user's intent says so. intent = {straightened:[wallId], leveled:[wallId], removed:[wallId],
+    removedOpenings:[openingId], split:{oldId:[newIds]}}. */
+ function detectLoss(prev,next,intent={}){
+  const issues=[],byId=new Map((next.walls||[]).map(w=>[w.id,w])),has=(k,id)=>(intent[k]||[]).includes(id),splits=intent.split||{};
+  const sloped=w=>Number.isFinite(w.heightEndMm)&&w.heightEndMm!==w.heightMm;
+  for(const w of prev.walls||[]){
+   const pieces=(splits[w.id]||[w.id]).map(id=>byId.get(id));
+   if(pieces.some(p=>!p)){if(!has('removed',w.id))issues.push({code:'wall-lost',wallId:w.id});continue;}
+   if(isCurved(w)&&!has('straightened',w.id)&&pieces.some(p=>!isCurved(p)))issues.push({code:'curve-lost',wallId:w.id});
+   if(sloped(w)&&!has('leveled',w.id)&&!pieces.some(sloped))issues.push({code:'slope-lost',wallId:w.id});}
+  const kept=new Set((next.openings||[]).map(o=>o.id));
+  for(const o of prev.openings||[])if(!kept.has(o.id)&&!has('removedOpenings',o.id)&&!has('removed',o.wallId))issues.push({code:'opening-lost',openingId:o.id,wallId:o.wallId});
+  return issues;}
+ /** Save gate: refuses a degraded view, a writer that does not know a feature the project uses (it would drop it),
+    unintended loss against the previous saved state, and walls or openings that break the proposed rules. */
+ function guardSave({previous=null,next,writerFeatures=[],intent={}}){
+  const issues=[],known=new Set(writerFeatures);
+  try{assertSavable(next);}catch{issues.push({code:'degraded-view'});}
+  for(const f of new Set([...featuresOf(previous),...featuresOf(next)]))if(!known.has(f))issues.push({code:'writer-lacks-feature',feature:f});
+  if(previous)issues.push(...detectLoss(previous,next,intent));
+  const walls=new Map((next.walls||[]).map(w=>[w.id,w]));
+  for(const w of walls.values())for(const message of validateWall(w))issues.push({code:'invalid-wall',wallId:w.id,message});
+  for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o))issues.push({code:'invalid-opening',openingId:o.id,message});}
+  return {ok:!issues.length,issues};}
+
+ const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
+  facetCount,deviationBound,arcLength,trueGross,heightAtParam,minRadius,featuresOf,assertSavable,detectLoss,guardSave};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanWallGeometryLab=api;
 })(globalThis);

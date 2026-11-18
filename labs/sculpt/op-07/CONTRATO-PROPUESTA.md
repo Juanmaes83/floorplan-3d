@@ -32,7 +32,9 @@ No hay un segundo modelo. El muro canónico de `project-core` sigue siendo el mi
 2. `heightEndMm`: finito y > 0. Si es igual a `heightMm`, se puede omitir; el editor la normaliza.
 3. Longitud del muro: la de la **trayectoria facetada** (16 tramos si hay curva), que es la misma en plano, 3D, cotas y presupuesto. En un muro recto equivale a `hypot(end-start)`.
 4. Abertura: se mantiene `offsetMm + widthMm ≤ longitud`. La altura cambia: `sillHeightMm + heightMm ≤ min(altura en el borde izquierdo, altura en el borde derecho)`. En un muro a nivel es la regla actual. No hay recorte silencioso; el recorte del donante queda solo para dibujar.
-5. Estancias: el anillo sigue las facetas de cada muro curvo de su contorno. Solo hay una altura de techo si todos los muros del contorno están a nivel y a la misma altura.
+5. Muro (`validateWall`): radio mínimo de curvatura ≥ grosor/2, curva que no se pliega, `heightEndMm` > 0.
+6. Guardado (`guardSave`): no se guarda una vista degradada, ni lo escribe quien no conozca las capacidades del proyecto, ni se pierden curva, pendiente o aberturas sin intención explícita.
+7. Estancias: el anillo sigue las facetas de cada muro curvo de su contorno. Solo hay una altura de techo si todos los muros del contorno están a nivel y a la misma altura.
 
 ## 4. Consumidores: implicación y compatibilidad
 
@@ -50,8 +52,8 @@ No hay un segundo modelo. El muro canónico de `project-core` sigue siendo el mi
 | Proyectos antiguos | — | Sin cambios: ningún muro tiene los campos | Ninguno |
 | Lectores antiguos de un proyecto nuevo | — | `legacyView` degrada a cuerda y altura máxima e informa la pérdida | Solo lectura; nunca se guarda degradado |
 
-## 5. Decisiones abiertas (para el responsable de producto)
+## 5. Decisiones (aprobadas el 18/11/2026; detalle en [DECISIONES.md](DECISIONES.md))
 
-- **D-OP07-1:** el tipo de curva. Recomendado: Bézier cuadrática, por paridad con el donante. La alternativa es el arco circular, más natural para DXF y obra, pero sin paridad.
-- **D-OP07-2:** la superficie en curva. Recomendado: cara exterior + cara interior. La alternativa, 2 × eje, mantiene el criterio actual pero infla una cara y reduce la otra.
-- **D-OP07-3:** el número de facetas. Recomendado: 16 fijas, como el donante. La alternativa es adaptativo por flecha máxima en mm.
+- **D-OP07-1, aprobada:** Bézier cuadrática, extensible a arco circular. Contexto original: Bézier cuadrática, por paridad con el donante. La alternativa es el arco circular, más natural para DXF y obra, pero sin paridad.
+- **D-OP07-2, aprobada:** superficies independientes de ambas caras. Contexto original: cara exterior + cara interior. La alternativa, 2 × eje, mantiene el criterio actual pero infla una cara y reduce la otra.
+- **D-OP07-3, aprobada:** 16 facetas de base y resolución adaptativa por tolerancia métrica. Contexto original: 16 fijas, como el donante. La alternativa es adaptativo por flecha máxima en mm.

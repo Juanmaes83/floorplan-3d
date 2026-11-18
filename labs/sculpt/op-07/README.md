@@ -1,6 +1,6 @@
 # SCULPT OP-07 · Muros curvos e inclinados, división y perfiles (laboratorio)
 
-**Estado:** laboratorio aislado. No toca producción, el contrato canónico, `index.html`, `project-core`, `quantity-core`, `building-core`, persistencia, APIs ni workflows. Fuera del despliegue (`labs/` está en `.vercelignore`).
+**Estado:** laboratorio aislado, pulido tras aprobarse D-OP07-1/2/3 ([DECISIONES.md](DECISIONES.md)). No toca producción, el contrato canónico, `index.html`, `project-core`, `quantity-core`, `building-core`, persistencia, APIs ni workflows. Fuera del despliegue (`labs/` está en `.vercelignore`).
 
 **Fila de cartera:** OP-07 en [sculpt-openplan3d-roomgpt-2026-11-18.md](../../../docs/product/sculpt-openplan3d-roomgpt-2026-11-18.md) (en #261): «Acreditar el delta sobre la geometría canónica y validar los consumidores antes de ampliar el contrato».
 
@@ -61,7 +61,7 @@ Golden: `tests/golden-generator.donor.test.ts` ejecuta las funciones del donante
 ## 5. VALIDACIÓN
 
 ```bash
-node --test labs/sculpt/op-07/tests/op07.test.cjs   # 19/19, local, sin CI
+node --test labs/sculpt/op-07/tests/op07.test.cjs labs/sculpt/op-07/tests/op07-polish.test.cjs   # 34/34, local, sin CI
 ```
 
 | Grupo | Qué acredita |
@@ -73,4 +73,4 @@ node --test labs/sculpt/op-07/tests/op07.test.cjs   # 19/19, local, sin CI
 | Contrato intacto | `project-core.validate` sigue rechazando `curve` y `heightEndMm`: OP-07 no cambia producción |
 | Delta RUBIK | Validación de aberturas, `offsetMm` medido sobre la curva, división por distancia, caras distintas en curva, trapecio en pendiente, pieza 3D y degradación visible |
 
-Ver [CONTRATO-PROPUESTA.md](CONTRATO-PROPUESTA.md) y [PLAN-CIRUGIA.md](PLAN-CIRUGIA.md).
+Pulido (`op07-polish.test.cjs`, 15 casos): superficies por cara, precisión y conservación, protección de guardado. Ver [DECISIONES.md](DECISIONES.md), [CONTRATO-PROPUESTA.md](CONTRATO-PROPUESTA.md) y [PLAN-CIRUGIA.md](PLAN-CIRUGIA.md).
