@@ -9,18 +9,22 @@
     1. it runs under the restore's Web Lock (`rubik-sota-expediente`), so it never interleaves with a restore in progress;
     2. `live()` is asked AFTER the lock is held and must read the stored state fresh (persistence authority or storage),
        and every image listed in a recovery-journal record counts as live;
-    3. mark and sweep: an unreferenced key is only MARKED; a later pass deletes it if it is still unreferenced `graceMs`
-       after the mark. A commit that lands in between un-marks it by referring to it.
-    4. the grace period is NOT the guarantee for work held elsewhere: images referenced by the persistence authority or
-       by any of its conflict records count as live, and nothing is swept while another RUBIK tab is open (each tab
-       holds a `rubik-sota-tab:` Web Lock; another tab may hold unsaved work this one cannot see). Without Web Locks
-       nothing is ever swept, only marked. */
+    3. images referenced by the persistence authority or by any of its conflict records count as live;
+    4. while another RUBIK tab is open (each holds a `rubik-sota-tab:` Web Lock) it may hold unsaved work this tab cannot
+       see: unreferenced images are only MARKED, and swept by a pass made once this tab is alone.
+    With Web Locks and no other tab, 1-3 are complete, so a real orphan is freed at once (deleting a project frees its
+    space, as before). Without Web Locks no tab can know about the others: a marked image is swept only after
+    `graceMs` (10 min) still unreferenced; a commit in between un-marks it. */
  const GC_KEY='rubik-sota-images-gc-v1',GC_LOCK='rubik-sota-expediente',GRACE_MS=10*60*1000,JOURNAL='rubik-expediente-journal-v1:';
  function plan({keys,live,marks,now,graceMs=GRACE_MS}){
   const remove=[],next={};
   for(const key of keys){if(live.has(key))continue;const seen=Number.isFinite(marks[key])?marks[key]:null;if(seen!==null&&now-seen>=graceMs)remove.push(key);else next[key]=seen??now;}
   return {remove,marks:next};
  }
+ // SCULPT · openPlan3D (MIT, Juanmaes83/openPlan3D@771c9e1, src/lib/services/datastore.ts mutateLibrary): the lock
+ // callback never rejects; Firefox reports a lock callback that rejects at once as an uncaught error even when the
+ // request's promise is handled. The outcome is carried out of the lock and rethrown.
+ async function lockSafely(locks,name,fn){const o=await locks.request(name,async()=>{try{return {ok:true,value:await fn()};}catch(error){return {ok:false,error};}});if(!o.ok)throw o.error;return o.value;}
  const TAB_LOCK='rubik-sota-tab:';let ownTab=null;
  // Held for the life of the page: tells other tabs' collection that this tab may hold unsaved work.
  function holdTab(locks=globalThis.navigator?.locks){if(ownTab||!locks?.request)return ownTab;ownTab=Math.random().toString(36).slice(2);locks.request(TAB_LOCK+ownTab,()=>new Promise(()=>{})).catch(()=>{});return ownTab;}
@@ -33,14 +37,15 @@
  async function collect({live,storage,locks=globalThis.navigator?.locks,now=()=>Date.now(),graceMs=GRACE_MS}){
   const run=async()=>{
    const keys=await api.keys(),refs=new Set([...await live(),...journalImages(storage),...await authorityRefs()]);
-   const others=locks&&typeof locks.query==='function'?(await locks.query()).held.filter(l=>l.name?.startsWith(TAB_LOCK)&&l.name!==TAB_LOCK+ownTab).length:Infinity;
-   const result=plan({keys,live:refs,marks:readMarks(storage),now:now(),graceMs:others?Infinity:graceMs});
+   const hasLocks=!!(locks&&typeof locks.query==='function'),others=hasLocks?(await locks.query()).held.filter(l=>l.name?.startsWith(TAB_LOCK)&&l.name!==TAB_LOCK+ownTab).length:0;
+   const grace=!hasLocks?graceMs:others?Infinity:0;
+   const result=grace===0?{remove:keys.filter(k=>!refs.has(k)),marks:{}}:plan({keys,live:refs,marks:readMarks(storage),now:now(),graceMs:grace});
    if(result.remove.length)await api.remove(result.remove);
    if(Object.keys(result.marks).length)storage.setItem(GC_KEY,JSON.stringify(result.marks));else storage.removeItem(GC_KEY);
-   return {removed:result.remove,marked:Object.keys(result.marks),sweep:!others};
+   return {removed:result.remove,marked:Object.keys(result.marks),sweep:!hasLocks?'grace':!others};
   };
-  return locks&&typeof locks.request==='function'?locks.request(GC_LOCK,run):run();
+  return locks&&typeof locks.request==='function'?lockSafely(locks,GC_LOCK,run):run();
  }
- const api={get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
+ const api={get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanImages=api;
 })(globalThis);

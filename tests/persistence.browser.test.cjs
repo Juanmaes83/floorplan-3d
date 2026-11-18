@@ -8,6 +8,8 @@ const SCRIPTS=[...ordered.slice(0,ordered.indexOf('project-package')+1),'budget-
 const PAGE=`<!doctype html><meta charset="utf-8"><title>persistencia</title>${SCRIPTS.map(s=>`<script src="/js/${s}.js"></script>`).join('')}
 <script>
 const P=FloorPlanPersistence,X=FloorPlanExpediente,I=FloorPlanImages,BUDGET='rubik-budget-v1';
+// Every editor tab holds its tab lock (tracing-ui does it on load).
+I.holdTab();
 window.states=[];
 window.start=async(opts={})=>{window.s=await P.session({debounceMs:60000,onState:st=>states.push(st.status),...opts});return s.state();};
 window.lsSnapshot=()=>Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
@@ -142,8 +144,9 @@ test('image collection never deletes an image of a restore in progress or just c
  // Without Web Locks (older browser): the recovery journal of an unconfirmed restore protects its images too.
  await a.evaluate(()=>localStorage.setItem(X.JOURNAL+':manual',JSON.stringify({startedAt:new Date().toISOString(),projectIds:['prj_nadie'],images:['img_en_curso'],documents:{budgets:[],reviews:[]}})));
  await a.evaluate(()=>I.put([['img_en_curso',new Blob(['x'])]]));
- const r2=await b.evaluate(()=>I.collect({live:async()=>new Set(),storage:localStorage,locks:null,graceMs:0}));
- assert.ok(!r2.removed.includes('img_en_curso'));assert.ok(!r2.removed.includes(keys[0]),'nor the committed one: a first pass only marks');
+ // Without Web Locks a tab reads the stored library fresh; with grace 0 to show that the journal alone protects the image in progress.
+ const r2=await b.evaluate(()=>I.collect({live:async()=>new Set(FloorPlanLibrary.load(localStorage,FloorPlanCore.initial()).projects().flatMap(p=>(p.sourceImages||[]).map(i=>i.storage?.ref||i.id))),storage:localStorage,locks:null,graceMs:0}));
+ assert.ok(!r2.removed.includes('img_en_curso'));assert.ok(!r2.removed.includes(keys[0]),'nor the committed one');assert.equal(r2.sweep,'grace');
  await context.close();
 });
 

@@ -31,16 +31,24 @@
  class PersistenceError extends Error{constructor(code,message,extra={}){super(message);this.name='PersistenceError';this.code=code;Object.assign(this,extra);}}
  const managed=k=>KEYS.includes(k);
  async function sha(text){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');}
- const withLock=(locks,fn)=>locks&&typeof locks.request==='function'?locks.request(LOCK,fn):fn();
- const describe=e=>e&&e.name==='QuotaExceededError'?'no queda espacio de almacenamiento en este navegador':(e&&e.message)||String(e);
+ // SCULPT · openPlan3D (MIT, Juanmaes83/openPlan3D@771c9e1, datastore.ts mutateLibrary): the lock callback never
+ // rejects (Firefox reports an immediately rejecting lock callback as uncaught); the outcome is rethrown outside.
+ // Without Web Locks the compare-and-write inside the IndexedDB transaction is still atomic.
+ const withLock=async(locks,fn)=>{if(!(locks&&typeof locks.request==='function'))return fn();
+  const o=await locks.request(LOCK,async()=>{try{return {ok:true,value:await fn()};}catch(error){return {ok:false,error};}});if(!o.ok)throw o.error;return o.value;};
+ // SCULPT · openPlan3D storageErrorMessage: also legacy code 22 and Firefox NS_ERROR_DOM_QUOTA_REACHED (1014).
+ const describe=e=>e&&(e.name==='QuotaExceededError'||e.code===22||e.code===1014)?'no queda espacio de almacenamiento en este navegador'
+  :e&&e.name==='SecurityError'?'el navegador no permite guardar datos de este sitio (revisa la configuración de privacidad)':(e&&e.message)||String(e);
 
  function open({indexedDB:idb=root.indexedDB,name=DB}={}){
   return new Promise((resolve,reject)=>{
-   const r=idb.open(name,1);
-   r.onupgradeneeded=()=>{const db=r.result;for(const s of ['docs','meta','legacy'])db.createObjectStore(s);db.createObjectStore('conflicts',{autoIncrement:true});};
-   r.onsuccess=()=>{const db=r.result;db.onversionchange=()=>db.close();resolve(db);};
+   // SCULPT · openPlan3D localDatabase.ts openDatabase: once blocked has been reported, a late upgrade is aborted and a
+   // late success is closed, so a rejected open never leaves a connection that blocks other tabs.
+   const r=idb.open(name,1);let blocked=false;
+   r.onupgradeneeded=()=>{if(blocked){r.transaction?.abort();return;}const db=r.result;for(const s of ['docs','meta','legacy'])db.createObjectStore(s);db.createObjectStore('conflicts',{autoIncrement:true});};
+   r.onsuccess=()=>{const db=r.result;if(blocked){db.close();return;}db.onversionchange=()=>db.close();resolve(db);};
    r.onerror=()=>reject(new PersistenceError('open-failed','No se pudo abrir el almacenamiento del navegador: '+describe(r.error),{cause:r.error}));
-   r.onblocked=()=>reject(new PersistenceError('open-blocked','Otra pestaña de RUBIK está bloqueando el almacenamiento. Ciérrala o recárgala.'));
+   r.onblocked=()=>{blocked=true;reject(new PersistenceError('open-blocked','Otra pestaña de RUBIK está bloqueando el almacenamiento. Ciérrala o recárgala; tus datos guardados no se han tocado.'));};
   });
  }
  // One transaction; resolves with fn's outcome ONLY when the transaction completed. fn may call `abort(outcome)`.
@@ -192,6 +200,8 @@
      return pending.size?doFlush():{...state};
     }
     revision=r.revision;channel?.postMessage({revision,tab});
+    // SCULPT · openPlan3D datastore.ts save(): committed work asks the browser to keep the data; the save never waits.
+    if(state.persisted===null){state.persisted='requested';root.navigator?.storage?.persist?.().then(v=>emit({persisted:v}),()=>emit({persisted:false}));}
     emit({status:pending.size?'pending':'saved',error:null,mirror:r.mirror});
     if(pending.size)schedule();
    }catch(e){
