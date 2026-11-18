@@ -1,6 +1,6 @@
 # ADR · Persistencia y continuidad del proyecto profesional
 
-**Estado:** PROPUESTO. Pendiente de aprobación del propietario como decisión **D3** del [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md). **Fecha:** 18/11/2026. **Base:** `master@7dccf7a`. **Autor:** Claude Code.
+**Estado:** ACEPTADO CONCEPTUALMENTE por el propietario el 18/11/2026 (decisión **D3** del [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md)). F0 está autorizado por etapas (§9). No autoriza contratar infraestructura, elegir proveedores, activar servicios ni ejecutar F1. **Fecha:** 18/11/2026. **Base:** `master@7dccf7a`. **Autor:** Claude Code.
 
 Este ADR no crea bases de datos ni almacenes, no contrata servicios, no activa proveedores y no cambia código.
 
@@ -44,10 +44,10 @@ Cada dominio tiene su propio almacenamiento de navegador. Los proyectos guardado
 | Criterio | A · Local reforzado + paquete portable | B · Local primero + sincronización privada | C · Centralizado en servidor |
 |---|---|---|---|
 | Seguridad y privacidad | Alta: nada sale del equipo | Alta si hay identidad y almacén privado | Depende por completo del servidor |
-| Integridad | Buena con paquete firmado por hash | Buena: revisiones inmutables | Buena |
+| Integridad | Buena: huella SHA-256 por archivo (detecta alteraciones; no es una firma ni prueba la autoría) | Buena: revisiones inmutables | Buena |
 | Pérdida del dispositivo | Solo si hay copia exportada | **Sí** | **Sí** |
 | Multidispositivo | Manual | **Sí** | **Sí** |
-| Sin conexión | **Sí** | **Sí**, con cola | No, o muy limitado |
+| Datos locales sin conexión (no es lo mismo que app offline, §16) | **Sí** | **Sí**, con cola | No, o muy limitado |
 | Coste | 0 | Bajo y variable | Medio y fijo |
 | Dependencia del proveedor | Ninguna | Baja: el paquete es el formato | Alta |
 | Complejidad | Baja | Media | Alta: reescribir la persistencia del editor |
@@ -72,9 +72,9 @@ flowchart LR
 
 **Principios:**
 1. **El expediente es la unidad.** Sirve igual para exportar, respaldar, sincronizar y migrar. Es un formato propio y abierto, sin dependencia de ningún proveedor.
-2. **Local primero.** El editor nunca espera a la red. IndexedDB pasa a ser el almacén local, con `navigator.storage.persist()`. `localStorage` queda solo para preferencias.
+2. **Local primero.** El editor nunca espera a la red. IndexedDB pasa a ser el almacén local. Se solicita `navigator.storage.persist()`, que el navegador puede conceder o no y que no garantiza la conservación: la copia exportable sigue siendo el respaldo real. `localStorage` queda solo para preferencias.
 3. **Revisiones inmutables.** Cada guardado remoto crea una revisión nueva. Nunca se sobrescribe una existente.
-4. **Concurrencia optimista.** Cada subida declara su revisión base. Si la revisión vigente ya cambió, el servidor responde `409` y el cliente conserva su trabajo como **variante**, con el mecanismo que ya existe en la biblioteca. Nunca hay sobrescritura silenciosa.
+4. **Concurrencia optimista.** Cada subida declara su revisión base. Si la revisión vigente ya cambió, el servidor responde `409` y el cliente conserva su trabajo como **variante**, con el mecanismo que ya existe en la biblioteca. Si esa distribución ya tiene `MAX_VARIANTS` (2) variantes, el trabajo se conserva como expediente de conflicto visible y exportable; nunca se descarta. Nunca hay sobrescritura silenciosa.
 5. **Archivos grandes fuera de la base de datos.** Fotos, renders, PDF y vídeos van al Blob privado por su hash. La base de datos solo guarda metadatos y punteros.
 6. **Lo publicado se deriva, no se comparte.** Un enlace de cliente es un artefacto derivado de una revisión. Sigue en su Blob público o en S5. Nunca es el proyecto editable.
 7. **Redis no guarda proyectos.** Sigue siendo libro de gasto, cuotas y límites.
@@ -90,12 +90,12 @@ flowchart LR
 | `asset` | sha256, studio_id, tipo, tamaño | Se deduplica por hash dentro del estudio, nunca entre estudios |
 | `revision_asset` | revision_id, sha256, ruta en el expediente | — |
 
-**Manifiesto del expediente** (`rubik-expediente/1`):
+**Manifiesto del expediente** (`rubik-sota.expediente` v1):
 - proyecto o edificio con sus plantas y variantes;
 - presupuesto por revisión;
 - plan de obra;
 - revisiones y comentarios;
-- registro del Asistente;
+- del Asistente, solo lo necesario para continuar el proyecto (§16);
 - marca aplicada;
 - referencias de catálogo con su revisión;
 - presentaciones y dossieres generados;
@@ -117,7 +117,7 @@ Los catálogos del estudio viajan como referencia con revisión y no se copian e
 | Capa | Mecanismo | Verificación |
 |---|---|---|
 | Local | IndexedDB persistente y expediente exportable | Restaurar un expediente en un perfil limpio y comparar hashes |
-| Servidor | Revisiones inmutables; copias diarias de Postgres del proveedor | Restaurar una revisión antigua y abrirla en el editor |
+| Servidor | Revisiones inmutables; copias de Postgres **y**, por separado, del almacén de archivos: una copia de la base de datos no recupera los archivos de Blob | Restaurar una revisión antigua y abrirla en el editor |
 | Independencia del proveedor | Exportación completa del estudio en expedientes ZIP | Importarla en una instalación sin servidor, en modo A |
 
 ## 8. Costes estimados
@@ -151,7 +151,9 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 
 | Fase | Contenido | Imprescindible para | Depende de | Coste |
 |---|---|---|---|---|
-| **F0 · Expediente y local reforzado** | Manifiesto `rubik-expediente/1` sobre `project-package`; exportar e importar el expediente completo; mover la biblioteca a IndexedDB con migración idempotente desde `localStorage`; `storage.persist()`; aviso de copia sin exportar; rótulo de origen | **Hito A** | — | 0 |
+| **F0.1 · Contrato del expediente** | Núcleo `js/expediente-core.js`: exportar e importar un proyecto o edificio con imágenes, presupuestos y observaciones, sobre el almacenamiento actual; lee también los ZIP y JSON históricos | **Hito A** | — | 0 |
+| **F0.2 · Biblioteca en IndexedDB** | Fachada síncrona en memoria con escritura asíncrona; migración en dos fases que no borra `localStorage` hasta verificar; `storage.persist()` solicitado e informado | **Hito A** | F0.1 | 0 |
+| **F0.3 · Experiencia profesional** | Exportar y recuperar el expediente desde la interfaz (reutilizando el control de #257), aviso de copia sin exportar y rótulo de almacenamiento en la Demo | **Hito A** | F0.1, #257 | 0 |
 | **F1 · Sincronización privada de un profesional** | `api/projects.js`; tablas de §5.1; Blob privado por hash; `If-Match` y `409` hacia una variante; cola sin conexión; restauración de revisiones | **Hito B** | GOV-06a, D3-a, D3-b, GOV-05 | Bajo |
 | **F2 · Artefactos enlazados** | Renders, dossieres y presentaciones como recursos de una revisión; publicación S5 derivada de una revisión | Hito C | F1, GOV-08 S5 | Bajo |
 | **F3 · Estudio con varios miembros** | Roles y compartición dentro del estudio | Hito D (GOV-06b) | F1 | Bajo |
@@ -192,7 +194,7 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 
 | Trabajo | Agente |
 |---|---|
-| Contrato `rubik-expediente/1`, manifiesto, migración a IndexedDB y pruebas de ida y vuelta (F0) | Claude Code |
+| Contrato `rubik-sota.expediente` v1, manifiesto, migración a IndexedDB y pruebas de ida y vuelta (F0) | Claude Code |
 | Exportar e importar el expediente desde la interfaz, reutilizando el control de #257 (F0) | Codex |
 | Diseño de seguridad y pruebas adversarias de F1 | Claude Code |
 | `api/projects.js`, almacenamiento, cola sin conexión y CI de F1 | Codex |
@@ -200,7 +202,7 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 
 ## 14. Decisiones del propietario
 
-- **D3** Aprobar B sobre A como arquitectura.
+- **D3** **Aprobada conceptualmente el 18/11:** B sobre A. F0 autorizado por etapas; F1 no autorizado.
 - **D3-a** Elegir proveedor de base de datos.
 - **D3-b** Elegir proveedor de identidad para GOV-06a.
 - **D3-c** Rotular la Demo como almacenamiento de demostración.
@@ -213,3 +215,21 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 - Plan de Vercel del equipo y créditos incluidos: sin verificar.
 - Beta 01: sin identificar.
 - No se ha medido el tamaño real de los expedientes con renders; el ejemplo de costes es un supuesto.
+
+## 16. Precisiones tras la aprobación conceptual (18/11)
+
+| Tema | Precisión |
+|---|---|
+| Síncrono frente a asíncrono | `project-library.js` usa `getItem` y `setItem` síncronos y lo consumen el editor, el historial, los presupuestos y la guía. F0.2 no sustituye una tecnología por otra: mantiene la API síncrona sobre una copia en memoria y persiste en IndexedDB de forma asíncrona, con estado «pendiente de guardar» visible |
+| Límite de variantes | `MAX_VARIANTS=2`. Un conflicto que no quepa como variante se conserva como expediente de conflicto (§5, principio 4) |
+| Compatibilidad del ZIP | El expediente reutiliza las rutas de `project-package` y de `building-core` y añade solo `expediente.json` y `documents/…`. Se siguen leyendo los ZIP y JSON históricos. Se rechazan rutas no autorizadas, duplicados, referencias incompletas y archivos que superan los límites |
+| Migración | Idempotente y en dos fases: copiar y verificar, y solo después marcar `localStorage` como migrado. Nunca se borra el original antes de confirmar la recuperación. Resiste cierre del navegador y falta de espacio porque cada fase puede repetirse |
+| Persistencia del navegador | `storage.persist()` es una solicitud. La app informa de si se concedió y del espacio estimado, y mantiene el respaldo exportable |
+| Integridad | SHA-256 detecta alteraciones accidentales o intencionadas del contenido, pero no autentica a quien lo generó. Los documentos dicen «huella», no «firma» |
+| Sin conexión | Conservar datos locales sin red no equivale a una app offline. No se declara modo offline hasta probar que la app se abre sin red y recupera el trabajo; hoy no hay service worker |
+| Recuperación en servidor | Postgres y el almacén de archivos se respaldan y restauran juntos, con una prueba que restaura ambos y abre el proyecto |
+| Referencias de catálogo | Viajan como referencia con su revisión. Si el catálogo del estudio no está disponible al restaurar, el proyecto se abre con la referencia marcada, sin inventar datos |
+| Asistente | `rubik-assistant-v1` guarda un registro de conversaciones que puede contener datos personales. No es necesario para continuar un proyecto: queda fuera del expediente salvo decisión expresa |
+| Coherencia de mediciones | La diferencia de área de pared entre el panel (UX-03) y `quantity-core` se corrige reutilizando `quantity-core`, en un corte separado |
+
+**Fronteras que el expediente respeta:** proyecto privado editable; recursos privados; revisión inmutable (F1); identidad profesional (GOV-06a); entregable publicado para clientes (Blob público, GOV-08); libro de gasto y cuotas (Redis). El expediente solo contiene las dos primeras.

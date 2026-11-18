@@ -33,7 +33,7 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 | PR abiertas | #251 E2 Studio, #252 H01, #253 H02, #254 MCP Etapa 2, #255 detalle arquitectónico, #257 Guardar JSON, #258 beta IA privada, #259 candidata conjunta, #260 CI inteligente |
 | Laboratorios | Studio Presentation E0–E4 en `lab/studio-presentation-e0e1`; R01 en `lab/sculpt-r01-*`; familias visuales en #165, #167 y #169 archivadas |
 
-**¿Qué mejoras históricas ya están resueltas?** De los 98 IDs, 20 están resueltos y validados y 2 han quedado superados por otra solución. Otros 10 están integrados con límites de alcance declarados. Son 32 IDs sin desarrollo pendiente relevante, frente a los 26 de la auditoría preliminar. El recuento incluye las diez verificaciones del 18/11 (§10).
+**¿Qué mejoras históricas ya están resueltas?** De los 98 IDs, 20 están resueltos y validados y 2 han quedado superados por otra solución. Otros 10 están integrados con límites de alcance declarados. Los **22 resueltos o superados** no tienen trabajo residual relevante. Los **10 integrados con límites** están en uso pero conservan un residual declarado en la matriz, así que no cuentan como cerrados. La auditoría preliminar contaba 26 resueltos o superados. El recuento incluye las diez verificaciones del 18/11 (§10).
 
 **¿Cuántos desarrollos realmente nuevos faltan?** Once IDs exigen desarrollo nuevo, y cinco más son investigación. Ninguno de los once es imprescindible para el hito B. Lo que B necesita es ampliar piezas que ya existen, sobre todo la identidad profesional GOV-06a y la persistencia del [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). El desarrollo nuevo de mayor valor profesional es la exportación DXF (G-02).
 
@@ -64,7 +64,7 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 
 **¿Qué debe supervisar ChatGPT?** La coherencia entre matriz, Estado maestro y PR tras cada integración; que ningún estado suba sin evidencia; el gasto IA frente a su tope; y la honestidad de lo anunciado en la Home. Detalle en §7.3.
 
-**¿Cuál es el próximo paso de mayor valor?** Que Codex cierre el diagnóstico de `surfaces.browser` en #259 y el propietario acepte ese SHA. En paralelo, sin coste ni proveedores, Claude puede empezar F0 del ADR: el contrato del expediente completo y la migración local a IndexedDB.
+**¿Cuál es el próximo paso de mayor valor?** Que Codex cierre el diagnóstico de `surfaces.browser` en #259 y el propietario acepte ese SHA. En paralelo, F0 está autorizado por etapas (D3, §9): primero el contrato del expediente y su recuperación sobre el almacenamiento actual, en una PR propia y fuera de #259.
 
 ---
 
@@ -175,7 +175,7 @@ flowchart LR
 | C3 Registro único de herramientas | `assistant-domain-tools-core.js`, `tools/rubik-mcp/src` | Nombre, esquema, resultado | `AssistantToolCallV1` existente | Adaptador MCP sobre el mismo registro | AG-1, MCP Etapa 3 | Romper la API stdio | Las 137 pruebas de MCP y las del Asistente | Mantener los dos registros |
 | C4 ProposalV1 + vigencia | `assistant-proposals-core`, `tools/rubik-mcp/src/proposal.cjs`, huella de E2 | Cambio, revisión base, impacto | Nuevo, derivado del diff AG-2 | Unificar los tres | PRE-01, AG-2, AG-3, GEN-01, UX-12 | Medio | Oráculos ya existentes de cada uno | Adaptadores con el formato anterior |
 | C5 Resultado de imagen persistido | `ai-render-ui.js`, `delivery-image.js`, biblioteca | Imagen, vista, cámara, revisión, coste | Ficha de resultado, como `rubik-visual-result-sheet/1` | Persistencia y vínculo al proyecto | IMG-12, ENT-05, IMG-16, VID-01 | Tamaño en `localStorage` | Pruebas de cuota de almacenamiento | Retirar el vínculo |
-| C6 Continuidad del proyecto | `project-library.js`, `project-package.js`, `local-images.js` | Expediente completo | `rubik-expediente/1`, propuesto en el [ADR](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md) | F0 local y F1 sincronización privada | Beta, ENT-01, IMG-12, ENT-05, catálogos | Coste y RGPD | Criterios de aceptación del ADR, §10 | Volver al modo local, que se conserva siempre |
+| C6 Continuidad del proyecto | `project-library.js`, `project-package.js`, `local-images.js` | Expediente completo | `rubik-sota.expediente` v1, propuesto en el [ADR](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md) | F0 local y F1 sincronización privada | Beta, ENT-01, IMG-12, ENT-05, catálogos | Coste y RGPD | Criterios de aceptación del ADR, §10 | Volver al modo local, que se conserva siempre |
 
 ---
 
@@ -309,7 +309,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 | Corte | Motivo |
 |---|---|
-| F0 del ADR: contrato `rubik-expediente/1` y migración a IndexedDB | Contrato transversal a P1, P2 y P4 |
+| F0 del ADR: contrato `rubik-sota.expediente` v1 y migración a IndexedDB | Contrato transversal a P1, P2 y P4 |
 | K4, K9, K13 | Conexiones de contratos que tocan varios consumidores |
 | K5 (diseño y revisión adversaria) | Arquitectura de identidad |
 | K10, K11, K12 | Studio Presentation es suyo según el handoff del 17/11 |
@@ -339,6 +339,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 | Riesgo | Tipo | Efecto | Mitigación |
 |---|---|---|---|
 | Proyectos solo en el navegador de un dominio | Técnico y comercial | Pérdida de trabajo, límite de tamaño, sin trabajo multidispositivo | [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md): F0 y F1 |
+| El panel (UX-03) y `quantity-core` dan áreas de pared distintas | Coherencia profesional | Dos cifras para la misma pared en panel y presupuesto | Reutilizar `quantity-core` en el panel, en un corte separado de la persistencia |
 | Studio Presentation es una herramienta Node fuera del producto | Arquitectura | Duplicar el motor de composición | Portar recetas como datos sobre los núcleos del producto; motor de PDF con ADR antes de E5 |
 | Sin identidad real | Seguridad | No se puede cobrar ni aislar estudios | K5 |
 | Blob público en enlaces de cliente | Privacidad | Acceso directo a quien tenga la URL | K6 |
@@ -358,7 +359,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 |---|---|---|
 | D1 | Contratar la revisión jurídica GOV-05 | B, IA real, catálogos de fabricantes |
 | D2 | Presupuesto y tope de gasto para la beta IA y la Prueba C | K16 |
-| D3 | Aprobar el [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md) y sus subdecisiones D3-a a D3-e | F0, F1, B |
+| D3 | **Aprobada conceptualmente el 18/11:** arquitectura B sobre A del [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). F0 autorizado por etapas. Siguen pendientes F1, D3-a a D3-e (proveedor de datos, identidad, rótulo de la Demo, Beta 01, cuotas), la región y los costes | F1, B |
 | D4 | GO de Studio E3 con base en el modelo del producto | K10 |
 | D5 | Precios y paquetes tras el piloto | Salida de B |
 | D6 | Aceptación del SHA de #259 | K2 |
