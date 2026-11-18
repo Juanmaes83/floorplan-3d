@@ -49,7 +49,7 @@ test('real browser: a restore interrupted by a reload leaves no visible trace an
  await page.evaluate(f=>{window.halted=false;restoreFile(f,{putImages:async e=>{await FloorPlanImages.put(e);window.halted=true;await new Promise(()=>{});}});},file);
  await page.waitForFunction(()=>window.halted);await page.reload();await page.waitForFunction(()=>window.exportFile);
  const left=await page.evaluate(()=>state());assert.equal(left.entries,1);assert.equal(left.journal,1);assert.equal(left.images,1);
- assert.deepEqual(await page.evaluate(()=>FloorPlanExpediente.recover({library:lib,storage:localStorage,removeImages:FloorPlanImages.remove})),{committed:0,rolledBack:1,pending:[]});
+ assert.deepEqual(await page.evaluate(()=>FloorPlanExpediente.recover({library:lib,storage:localStorage,removeImages:FloorPlanImages.remove,minAgeMs:0})),{committed:0,rolledBack:1,pending:[]});
  assert.deepEqual(await page.evaluate(()=>state()),{entries:1,journal:0,images:0,budgets:0});await context.close();
 });
 

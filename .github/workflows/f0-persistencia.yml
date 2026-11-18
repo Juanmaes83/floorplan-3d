@@ -1,0 +1,43 @@
+name: F0.2 persistence authority
+# F0.2 of the continuity ADR: IndexedDB as the persistence authority, in a real Chromium (IndexedDB, localStorage,
+# Web Locks, BroadcastChannel, quota on an on-disk profile). Its own workflow: the ci-impact guard forbids changing the
+# jobs of workflows that already exist in the base branch (f0-expediente.yml exists in #262), and the expediente tests
+# keep running there, once.
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - js/persistence-store.js
+      - js/local-images.js
+      - js/tracing-ui.js
+      - js/expediente-core.js
+      - js/project-library.js
+      - index.html
+      - tests/persistence.browser.test.cjs
+      - tests/fixtures/building-fixture.cjs
+      - .github/workflows/f0-persistencia.yml
+permissions:
+  contents: read
+jobs:
+  persistence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Playwright and Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Persistence authority in a real browser
+        run: node --test --test-concurrency=1 tests/persistence.browser.test.cjs

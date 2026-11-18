@@ -114,6 +114,8 @@ La identidad de contenido de §4 se aplica a cada sujeto. Un lector v1 rechaza l
 
 ## 8. F0.2 · Estrategia definitiva (revisión crítica)
 
+**Aprobada por el propietario el 18/11/2026, con condiciones.** La implementación y sus garantías probadas están en [persistencia-v1.md](persistencia-v1.md).
+
 **Se descarta** la fachada síncrona que da por guardado lo que solo está en memoria. Actualizar la memoria no es un guardado duradero.
 
 **Se adopta: IndexedDB como única fuente de verdad, con confirmación explícita.**
@@ -157,4 +159,4 @@ En CI: workflow propio `.github/workflows/f0-expediente.yml`. La guardia `ci-imp
 - El registro del Asistente queda fuera deliberadamente.
 - Dos restauraciones exactamente simultáneas en dos pestañas: §5, límite conocido.
 - `recover()` y la interfaz se conectan en F0.3.
-- La limpieza de imágenes existente (`tracing-ui`, `cleanup()`) podría borrar imágenes de una restauración en curso en otra pestaña antes de confirmar. El resultado sería un error visible, no una corrupción silenciosa. F0.2 la hará respetar el diario.
+- **Resuelto en F0.2a:** la limpieza de imágenes (`tracing-ui`, `cleanup()`) podía borrar imágenes de una restauración en curso, y `recover()` podía deshacer una restauración confirmada por otra pestaña. Ver [persistencia-v1.md](persistencia-v1.md) §5.
