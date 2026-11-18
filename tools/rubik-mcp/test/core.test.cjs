@@ -82,3 +82,14 @@ test('rejects oversized input and detects changes to the selected file', async t
   await fs.writeFile(file, 'x'.repeat(core.MAX_PROJECT_BYTES + 1));
   await assert.rejects(reader.load(), /15 MiB/);
 });
+test('summary rounds once after summing useful rooms', async t=>{
+ const base=C.initial();
+ for(const [i,room] of base.rooms.entries()){
+  room.countsTowardArea=i<2;
+  if(i>=2)continue;
+  const x=i*4000;
+  room.polygon=[{x,y:0},{x:x+1000,y:0},{x:x+1000,y:1004},{x,y:1004}];
+ }
+ const {reader}=await fixture(t,base);
+ assert.equal((await core.getSummary(reader)).usefulAreaM2,2.01);
+});
