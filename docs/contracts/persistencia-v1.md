@@ -99,9 +99,9 @@ La recogida (`FloorPlanImages.collect`) no borra nunca una imagen referenciada p
 
 Además:
 - Se ejecuta bajo el mismo Web Lock que la restauración.
-- **Con Web Locks y sin otra pestaña de RUBIK abierta**, esas referencias son completas: una imagen realmente huérfana se libera en el acto. Borrar un proyecto libera su espacio, como antes de F0.2.
+- **Cuando Web Locks confirma que solo está registrada la pestaña actual**, una imagen huérfana se libera en el acto. Borrar el último proyecto que la usa libera su espacio, como antes de F0.2.
 - **Con otra pestaña abierta** solo se marca, porque esa pestaña puede tener trabajo sin guardar. La primera pasada que se haga a solas la libera. Cada pestaña mantiene un Web Lock `rubik-sota-tab:` (lo toma `tracing-ui` al cargar).
-- **Sin Web Locks** ninguna pestaña puede saber si hay otras. La imagen marcada se libera si sigue sin referencia 10 minutos después. Una confirmación intermedia la salva.
+- **Sin Web Locks o sin registro verificable de la pestaña actual**, solo se marca. El paso del tiempo no autoriza el borrado.
 
 **Hallazgo de CI, confirmado (#263 en `8cf0664`, job `contract`).** `building.browser`, en sus 3 tamaños de pantalla, exige que borrar el último proyecto que usa una imagen la libere. Un periodo de gracia aplicado siempre lo impedía. Con la regla anterior, las dos garantías se cumplen a la vez:
 - ninguna imagen legítima desaparece (pruebas de esta suite);
@@ -112,7 +112,7 @@ Además:
 - restauración ya confirmada;
 - imagen de un conflicto;
 - con otra pestaña abierta no se barre, y sí a solas (conservando la del conflicto);
-- sin Web Locks, el diario protege la imagen en curso.
+- sin Web Locks, una segunda pasada transcurrido un día tampoco borra.
 
 **Hallazgo anterior mantenido:** `recover()` no deshace con una copia desactualizada de la biblioteca ni toca registros recientes.
 
@@ -127,7 +127,7 @@ Donante: `Juanmaes83/openPlan3D` (fork MIT de `laanlabs/openPlan3D`), `771c9e1`.
 | Llamada de bloqueo que nunca rechaza | `datastore.ts`, `mutateLibrary` | `persistence-store`, `expediente-core`, `local-images` | Firefox informa como error no capturado una llamada de bloqueo que rechaza enseguida |
 | Apertura bloqueada sin conexión colgada | `localDatabase.ts`, `openDatabase` | `persistence-store`, `open()` | Una apertura rechazada ya no deja una conexión que bloquee otras pestañas |
 | Códigos de cuota 22 y 1014 (Firefox) y `SecurityError` | `datastore.ts`, `storageErrorMessage` | `persistence-store` | Mensaje correcto fuera de Chromium |
-| `persist()` tras el primer guardado confirmado, sin esperarlo | `datastore.ts`, `save()` | sesión de `persistence-store` | El navegador recibe la petición cuando ya hay trabajo que proteger |
+| `persist()` tras un guardado confirmado iniciado por la persona | `storagePersistence.ts` | `storage-persistence.js` | La petición no retrasa el guardado |
 
 **Candidatos, no adoptados en F0.2a:**
 - **Copias recuperadas visibles** (`localDatabase.ts`, `migrateLegacy`). Lo que escribe una pestaña antigua aparece en la biblioteca como «copia recuperada», y se reutiliza mientras no se edite. Mejora la visibilidad de nuestros conflictos `legacy-diverged` sin esperar a una interfaz. Corresponde a F0.3, porque toca la biblioteca y `MAX_VARIANTS`.
@@ -167,6 +167,11 @@ La guardia `ci-impact` compara los workflows de la rama base. #263 parte de #262
 - ninguna prueba se ejecuta dos veces.
 
 **Tras integrarse en master**, ambas suites deberían pasar a `tests/regression-partitions.json`, coordinado con Codex (#259 modifica ese archivo).
+
+`f0-almacenamiento-persistente.yml` ejecuta una sola vez la suite unitaria del permiso. La prueba de la conexión con IndexedDB vive en la suite Chromium ya existente de F0.2.
+
+El permiso se solicita desde `storage-persistence.js` cuando `session.flush({userEvent})` recibe un clic o una tecla de confianza y la transacción confirma una escritura. Migración, autoguardado, guardado vacío y conflicto quedan fuera. El guardado termina sin esperar al permiso. `session.storageStatus()` consulta estado y cuota sin abrir avisos. Tanto el permiso como la recomendación de copia se pueden consumir sin conectar aún el editor.
+
 
 ## 10. Validación de navegadores (planificada para F0.3)
 

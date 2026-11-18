@@ -1,0 +1,26 @@
+name: F0.3 browser storage permission
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - js/storage-persistence.js
+      - js/persistence-store.js
+      - tests/storage-persistence.test.cjs
+      - .github/workflows/f0-almacenamiento-persistente.yml
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  storage-permission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - run: node --test tests/storage-persistence.test.cjs

@@ -4,12 +4,11 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const F=require('./fixtures/building-fixture.cjs'),BUDGET='rubik-budget-v1';
 const root=path.resolve(__dirname,'..');let server,browser,url,origin;
 const ordered=[...require('node:fs').readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="js\/([a-z0-9-]+)\.js"/g)].map(m=>m[1]);
-const SCRIPTS=[...ordered.slice(0,ordered.indexOf('project-package')+1),'budget-core','expediente-core','persistence-store'];
+const SCRIPTS=[...ordered.slice(0,ordered.indexOf('project-package')+1),'budget-core','expediente-core','storage-persistence','persistence-store'];
 const PAGE=`<!doctype html><meta charset="utf-8"><title>persistencia</title>${SCRIPTS.map(s=>`<script src="/js/${s}.js"></script>`).join('')}
 <script>
 const P=FloorPlanPersistence,X=FloorPlanExpediente,I=FloorPlanImages,BUDGET='rubik-budget-v1';
-// Every editor tab holds its tab lock (tracing-ui does it on load).
-I.holdTab();
+I.holdTab(); // tracing-ui does this in every editor tab, even before a persistence session
 window.states=[];
 window.start=async(opts={})=>{window.s=await P.session({debounceMs:60000,onState:st=>states.push(st.status),...opts});return s.state();};
 window.lsSnapshot=()=>Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
@@ -71,6 +70,42 @@ test('«saved» only after the transaction completes; unconfirmed changes are sh
  await page.evaluate(()=>s.storage.setItem(BUDGET,'{"v":"autoguardado"}'));
  await page.waitForFunction(()=>s.state().status==='saved'&&s.state().revision===3);
  assert.equal((await page.evaluate(()=>authority())).docs[BUDGET],'{"v":"autoguardado"}');assert.deepEqual(page.errors,[]);await context.close();
+});
+
+test('storage permission follows a trusted confirmed save; status, autosave, empty save and a conflict never ask',{timeout:120000},async()=>{
+ const context=await browser.newContext(),a=await seeded(context),b=await open(context);
+ try{
+  for(const page of [a,b])await page.evaluate(async()=>{
+   window.calls=0;window.permissionGranted=false;
+   Object.defineProperty(navigator,'storage',{value:{
+    persisted:async()=>window.permissionGranted,estimate:async()=>({usage:10,quota:100}),
+    persist:()=>{++window.calls;return new Promise(resolve=>{window.finishPermission=granted=>{window.permissionGranted=granted;resolve(granted);};});}
+   }});
+   await start();
+   const button=document.createElement('button');button.id='save';button.textContent='Guardar';
+   button.onclick=userEvent=>{window.saved=s.flush({userEvent});};
+   document.body.append(button);
+  });
+  assert.deepEqual(await a.evaluate(()=>s.storageStatus()),{persisted:false,estimate:{usage:10,quota:100}});
+  await a.click('#save');await a.evaluate(()=>saved);
+  await a.evaluate(async()=>{s.storage.setItem(BUDGET,'{"automatico":true}');await s.flush();});
+  assert.equal(await a.evaluate(()=>window.calls),0);
+  await b.evaluate(()=>s.storage.setItem(BUDGET,'{"en-conflicto":true}'));
+  await b.click('#save');
+  assert.equal((await b.evaluate(()=>saved)).status,'conflict');
+  assert.equal(await b.evaluate(()=>window.calls),0);
+  await a.evaluate(()=>s.storage.setItem(BUDGET,'{"confirmado":true}'));
+  await a.click('#save');
+  assert.equal((await a.evaluate(()=>saved)).status,'saved','save resolves while the browser prompt is still pending');
+  assert.equal((await a.evaluate(()=>authority())).docs[BUDGET],'{"confirmado":true}');
+  await a.waitForFunction(()=>window.calls===1);
+  await a.evaluate(()=>window.finishPermission(true));
+  await a.waitForFunction(()=>s.state().persisted===true);
+  assert.equal((await a.evaluate(()=>s.storageStatus())).persisted,true);
+  await a.evaluate(()=>s.storage.setItem(BUDGET,'{"segundo":true}'));
+  await a.click('#save');assert.equal((await a.evaluate(()=>saved)).status,'saved');
+  assert.equal(await a.evaluate(()=>window.calls),1);
+ }finally{await context.close();}
 });
 
 test('a real exhausted quota fails visibly, keeps the change in memory and in the emergency export, and loses nothing confirmed',{timeout:120000},async()=>{
@@ -144,9 +179,10 @@ test('image collection never deletes an image of a restore in progress or just c
  // Without Web Locks (older browser): the recovery journal of an unconfirmed restore protects its images too.
  await a.evaluate(()=>localStorage.setItem(X.JOURNAL+':manual',JSON.stringify({startedAt:new Date().toISOString(),projectIds:['prj_nadie'],images:['img_en_curso'],documents:{budgets:[],reviews:[]}})));
  await a.evaluate(()=>I.put([['img_en_curso',new Blob(['x'])]]));
- // Without Web Locks a tab reads the stored library fresh; with grace 0 to show that the journal alone protects the image in progress.
- const r2=await b.evaluate(()=>I.collect({live:async()=>new Set(FloorPlanLibrary.load(localStorage,FloorPlanCore.initial()).projects().flatMap(p=>(p.sourceImages||[]).map(i=>i.storage?.ref||i.id))),storage:localStorage,locks:null,graceMs:0}));
- assert.ok(!r2.removed.includes('img_en_curso'));assert.ok(!r2.removed.includes(keys[0]),'nor the committed one');assert.equal(r2.sweep,'grace');
+ const r2=await b.evaluate(()=>I.collect({live:async()=>new Set(),storage:localStorage,locks:null,graceMs:0}));
+ assert.ok(!r2.removed.includes('img_en_curso'));assert.ok(!r2.removed.includes(keys[0]),'nor the committed one: a first pass only marks');
+ const nextDay=await b.evaluate(()=>I.collect({live:async()=>new Set(),storage:localStorage,locks:null,now:()=>Date.now()+86_400_000}));
+ assert.equal(nextDay.sweep,false);assert.deepEqual(nextDay.removed,[]);
  await context.close();
 });
 

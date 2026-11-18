@@ -168,7 +168,7 @@
 
  // ── Session: the synchronous view an editor tab uses ─────────────────────────────────────────────────────────────
  const TAB_LOCK='rubik-sota-tab:';
- async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get}={}){
+ async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get,storagePermission=root.FloorPlanStoragePersistence}={}){
   const db=await open({indexedDB:idb});
   // While this tab is open it holds a lock; image collection never sweeps while another tab may hold unsaved work.
   let releaseTab=null;const shared=root.FloorPlanImages?.holdTab?.(locks);if(shared)tab=shared;else if(locks?.request)locks.request(TAB_LOCK+tab,()=>new Promise(r=>{releaseTab=r;})).catch(()=>{});
@@ -178,10 +178,19 @@
   const pending=new Map(),listeners=new Set([onState]);let chain=Promise.resolve(),timer=null,closed=false;
   const state={status:'saved',revision,pending:0,error:null,conflictId:null,outdated:false,mirror:legacy.mirror,migration:migration.status,diverged:legacy.diverged,persisted:null};
   const emit=patch=>{Object.assign(state,patch,{pending:pending.size,revision});for(const f of listeners)try{f({...state});}catch{}};
+  const stopPermissionUpdates=storagePermission?.subscribe(persisted=>emit({persisted}));
+  async function storageStatus(){
+   const [,estimate]=await Promise.all([storagePermission?.checkStoragePersistence(),storagePermission?.estimate()]);
+   return {persisted:storagePermission?.state??null,estimate:estimate??null};
+  }
   const full=()=>Object.fromEntries(docs);
   function schedule(){if(closed)return;if(state.status!=='conflict')emit({status:'pending'});clearTimeout(timer);timer=setTimeout(()=>{flush().catch(()=>{});},debounceMs);}
-  function flush(){chain=chain.then(doFlush,doFlush);return chain;}
-  async function doFlush(){
+  function flush({userEvent}={}){
+   const userSave=userEvent?.isTrusted===true&&(userEvent.type==='click'||userEvent.type==='keydown');
+   const save=()=>doFlush(userSave);
+   chain=chain.then(save,save);return chain;
+  }
+  async function doFlush(userSave=false){
    clearTimeout(timer);if(closed)return {...state};
    // In conflict, every later change still reaches IndexedDB: the conflict record is rewritten with the full state.
    if(state.status==='conflict'){
@@ -200,9 +209,8 @@
      return pending.size?doFlush():{...state};
     }
     revision=r.revision;channel?.postMessage({revision,tab});
-    // SCULPT · openPlan3D datastore.ts save(): committed work asks the browser to keep the data; the save never waits.
-    if(state.persisted===null){state.persisted='requested';root.navigator?.storage?.persist?.().then(v=>emit({persisted:v}),()=>emit({persisted:false}));}
     emit({status:pending.size?'pending':'saved',error:null,mirror:r.mirror});
+    if(userSave)void storagePermission?.requestPersistentStorage({confirmedByUser:true});
     if(pending.size)schedule();
    }catch(e){
     for(const [k,v] of batch)if(!pending.has(k))pending.set(k,v);
@@ -239,8 +247,8 @@
     if(out.status!=='saved')throw new PersistenceError('conflict','Otra pestaña guardó mientras se recuperaba el conflicto; vuelve a intentarlo.');
     await removeConflict(db,id);({revision,docs}=await load(db));pending.clear();channel?.postMessage({revision,tab});
     emit({status:'saved',conflictId:null,error:null,outdated:false,mirror:out.mirror});return {revision,superseded:r.superseded};},
-   requestPersist:async()=>{const s=root.navigator?.storage;const out={persisted:s?.persist?await s.persist().catch(()=>false):false,estimate:s?.estimate?await s.estimate().catch(()=>null):null};emit({persisted:out.persisted});return out;},
-   close(){closed=true;clearTimeout(timer);releaseTab?.();root.document?.removeEventListener('visibilitychange',onHide);root.removeEventListener?.('pagehide',flush);channel?.close();db.close();},
+   storageStatus,
+   close(){closed=true;clearTimeout(timer);releaseTab?.();stopPermissionUpdates?.();root.document?.removeEventListener('visibilitychange',onHide);root.removeEventListener?.('pagehide',flush);channel?.close();db.close();},
    db
   };
  }
