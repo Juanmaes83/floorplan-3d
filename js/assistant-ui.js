@@ -89,11 +89,17 @@
   const box=state.open&&d?hostDlg:document.body;if(panel.parentNode!==box)box.append(panel);panel.classList.toggle('in-dialog',!!d);
   if(state.open&&d&&!hostDlg.open)hostDlg.showModal();else if(!(state.open&&d))closeHost();
   accessBtn.hidden=state.open;
+  const presentationBar=document.body.classList.contains('presenting')
+   ?document.querySelector('#presentationOverlay .presentation-card-top'):null;
+  // The assistant is a toolbar action during presentation so it cannot cover navigation.
+  const fabHost=presentationBar||document.body;
+  if(fab.parentNode!==fabHost)fabHost.append(fab);
   const navVisible=opener.isConnected&&opener.offsetParent!==null&&!opener.closest('[inert]');
-  fab.hidden=state.open||!!d||navVisible;}
+  fab.hidden=state.open||!!d||(!presentationBar&&navVisible);}
  hostDlg.addEventListener('cancel',e=>{e.preventDefault();closePanel();});
  hostDlg.addEventListener('close',()=>{if(ownCloses>0){ownCloses--;return;}if(state.open)closePanel();});
  new MutationObserver(()=>rehost()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
+ new MutationObserver(()=>rehost()).observe(document.body,{attributes:true,attributeFilter:['class']});
  document.addEventListener('close',e=>{if(e.target!==hostDlg)setTimeout(rehost,0);},true);addEventListener('resize',()=>rehost());
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
@@ -186,7 +192,7 @@
   scopeProject=app.project?.id||null;restoreLog();emit('invalidated',{reason});}
  addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
  function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;rehost();document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
- function closePanel(){state.open=false;panel.hidden=true;rehost();document.body.classList.remove('assistant-open');labels();state.pending?.abort();(hostDialog()?accessBtn:opener).focus({preventScroll:true});emit('close');}
+ function closePanel(){state.open=false;panel.hidden=true;rehost();document.body.classList.remove('assistant-open');labels();state.pending?.abort();(hostDialog()?accessBtn:fab.hidden?opener:fab).focus({preventScroll:true});emit('close');}
  opener.onclick=()=>state.open?closePanel():openPanel();fab.onclick=accessBtn.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();e.preventDefault();closePanel();}}); // Escape cierra el panel, no el diálogo en el que está
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};

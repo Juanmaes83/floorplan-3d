@@ -131,3 +131,23 @@ test('FT6 one-level building reads existing site data from its building authorit
  assert.equal(await page.evaluate(()=>!!FloorPlanBuildingUI.site.buildingPlacement),true);assert.equal(await page.evaluate(()=>!!FloorPlanApp.project.site),false);
  await config(page);await page.locator('#presentationTemplate').selectOption('developer');const data=await templates(page);assert.equal(data.snapshot.resources['site-data'].availability,'supported');assert.deepEqual(data.resolved.decisions.find(c=>c.id==='site-context').compatibleHosts,['elevation']);assert.deepEqual((await state(page)).project,before.project);assert.deepEqual(errors,[]);
 });
+
+test('The assistant stays reachable without blocking presentation stops in a multi-level template', {timeout:120000}, async t=>{
+ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440,height:900}]){
+  const {page,context,errors}=await open(t,{zip:duplex,viewport});
+  await config(page);
+  await page.locator('#presentationTemplate').selectOption('developer');
+  await start(page);
+  await scrub(page,0);
+  const last=page.locator('.presentation-stops button').last();
+  await last.click({timeout:7000});
+  await page.waitForFunction(()=>!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+  const fab=page.locator('#assistantFab');
+  await fab.click();
+  assert.equal(await page.locator('#assistantPanel').isVisible(),true);
+  await page.locator('#assistantClose').click();
+  assert.equal(await fab.evaluate(b=>b===document.activeElement),true);
+  assert.deepEqual(errors,[]);
+  await context.close();
+ }
+});

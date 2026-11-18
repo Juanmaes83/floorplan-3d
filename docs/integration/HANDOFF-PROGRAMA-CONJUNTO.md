@@ -21,3 +21,7 @@ Claude puede validar esta rama desde un worktree separado. Actualizar la candida
 El visto bueno operativo de IA se evalúa aparte. Visual, MCP y guardado JSON pueden pasar su validación e integración sin esperar credenciales ni consumo real. Mantener Beta 01 y Production en sus despliegues aprobados. Para retirar un bloque de la candidata usar el commit de incorporación correspondiente y el primer padre como referencia de rollback.
 
 Tras la incorporación efectiva en master, actualizar solo los IDs demostrados con la auditoría reconciliada de 98 IDs como base. ENT-04 se evalúa en el alcance de E2, sin extender su cierre a Studio E3–E7. H01, H02, UX-BETA-001, MCP y SCULPT tienen seguimiento propio y quedan fuera del recuento histórico. VQ-01, F02 y F03 conservan su procedencia y alcance visual. FOT-01, CAT-01 y el asistente real siguen pendientes de la prueba pagada autorizada. MCP Etapa 2 no cierra AG-5 ni GEN-01.
+
+## Corrección de convivencia en la candidata
+
+El workflow de evidencias de plantillas mostró que el botón flotante del asistente tapaba «Estudio · Planta primera». La [ejecución original](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44286701812/job/134741104223) queda como evidencia. El acceso se aloja en la cabecera de presentación y devuelve allí el foco al cerrar. La regresión acciona ambas funciones en tres formatos. La rama fuente de E2 conserva su historial.
