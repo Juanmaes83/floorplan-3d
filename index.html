@@ -2640,6 +2640,10 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
 import {SurfaceRenderer} from './js/surface-renderer.mjs';
+import {WindowVisualAdapter} from './js/visual-families-adapter.mjs';
+import {mountArchitecturalQuality} from './js/architectural-quality.mjs';
+import {FacadeFidelityAdapter} from './js/facade-fidelity-adapter.mjs';
+import {compatibleWindow,resolveVisual,registry as windowRecipes} from './js/visual-families-core.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
@@ -2795,6 +2799,31 @@ const TEX = {
 };
 const floorMats = {};
 const surfaceRenderer=new SurfaceRenderer(THREE,FloorPlanSurfaces);
+const windowVisual=new WindowVisualAdapter(THREE);
+const facadeVisual=new FacadeFidelityAdapter(THREE);
+let architecturalQualityProject=null,architecturalQualityError=null;
+function resetArchitecturalQuality(){
+  architecturalQualityProject=null;architecturalQualityError=null;
+  facadeVisual.dispose();windowVisual.dispose();
+  dispatchEvent(new Event('architectural-quality-status'));
+}
+function applyArchitecturalQuality(){
+  const projectId=geometry.source.id;
+  if(architecturalQualityProject!==projectId||storyRun)return;
+  architecturalQualityError=null;
+  const mode=matchMedia('(max-width: 1100px)').matches?'mobile':'editor';
+  const sources=windowVisual.snapshot().bindings;
+  const budget=windowRecipes.F02.recipes['window-assembly'].renderBudget.instances;
+  const options={projectId,enabled:true,mode};
+  const eligible=sources.filter(source=>compatibleWindow(source,resolveVisual({...options,sourceIds:[source.id]})));
+  try{
+    if(eligible.length>budget)throw Error('Límite de carpinterías de detalle');
+    windowVisual.set({...options,sourceIds:eligible.map(source=>source.id)});
+  }catch(error){windowVisual.dispose();architecturalQualityError=error.message;}
+  // Match assigned wall finishes and keep the canonical frame, geometry and project unchanged.
+  facadeVisual.set(options);
+  dispatchEvent(new Event('architectural-quality-status'));
+}
 function floorMat(materialId){
   const external=surfaceRenderer.get(project.materials.find(m=>m.id===materialId));if(external)return external;
   const material=MATS[materialId];const kind=({'tile-800':'tile800','tile-600':'tile600','tile-300':'antislip'})[material.preset]||material.preset||'plain';
@@ -3640,6 +3669,7 @@ function buildArch(other){
   clearPresentationRoute();
   renderedSource=project; renderedGeometry=geometry;
   }
+  if(!other){facadeVisual.clearBindings();windowVisual.clearBindings();}
   clearGroup(archFloor); clearGroup(archUp);
   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
   doors.length = 0; colliders = [];
@@ -3686,6 +3716,7 @@ function buildArch(other){
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
     [sill+.02,gTop-.02].forEach(y=>{const tr=new THREE.Mesh(new THREE.BoxGeometry(L,.04,.06),frameMat);tr.position.set(0,y,0);group.add(tr);});
+    if(!other)windowVisual.register({projectId:geometry.source.id,id:r.openingId,wallId:r.id,kind:'window',widthMm:r.spanMm,heightMm:(head-sill)*1000,thicknessMm:r.thickness,sillMm:sill*1000,fullHeight:gTop===head},group,group.children.filter(o=>o.isMesh&&o.material===frameMat),[pane]);
   });
   geometry.doors.forEach(d => {
     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
@@ -3709,7 +3740,8 @@ function buildArch(other){
   if(other)return;
   buildLevels();
   buildRoof();
-  applyLight(); applyGrow(); surfaceRenderer.end();
+  facadeVisual.register(project,exterior,archUp.children.filter(o=>o.isMesh&&o.userData.wallId));
+  applyArchitecturalQuality();applyLight(); applyGrow(); surfaceRenderer.end();
 }
 
 /* ======================= 多层建筑 / building levels ======================= */
@@ -4108,6 +4140,7 @@ function abort3D(){
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
   cancelFurnitureAssets();
+  resetArchitecturalQuality();
   surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
   active=false;stage.classList.remove('is3d','animating');
@@ -4116,6 +4149,7 @@ function abort3D(){
 function releaseHeldEntry(){if(!heldEntry)return;heldEntry=null;grow=furnGrow=1;applyGrow();orbit.enabled=true;}
 async function exit(){
   presentationAmbienceEnd();presentationLivingDrawingEnd();
+  if(architecturalQualityProject){resetArchitecturalQuality();opt.surfaceQuality='base';}
   heldEntry=null;
   if (opt.mode === 'walk'){ walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
     const dir = new THREE.Vector3(); camera.getWorldDirection(dir); orbit.target.copy(camera.position).addScaledVector(dir, 3).setY(0); opt.mode = 'orbit'; syncModeBtns(); }
@@ -5014,7 +5048,9 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   let narrative,sectionCut=null,section=null,elevation=null,axon=null,visit=null,living=null;
   if(kind==='living-drawing'){
     // Hybrid V2: the house starts as a graphite drawing and comes to life room by room (js/presentation-living-drawing*.js)
-    living=beginLiving(view.living,stop,aspect,view.region);narrative=living.narrative;
+    facadeVisual.release();windowVisual.release();
+    try{living=beginLiving(view.living,stop,aspect,view.region);narrative=living.narrative;}
+    catch(error){applyArchitecturalQuality();throw error;}
   }else if(kind==='axon-open'||kind==='exploded-levels-open'){
     // FT3D-5: the descriptor computed by the dialog (FloorPlanPresentationAxon, model mm) — never derived again here.
     // beginAxon is transactional: if anything fails after levelView changed, everything it touched is undone first.
@@ -5099,7 +5135,7 @@ function endPresentationStory({keepPose=true}={}){
   if(run.section)endSection(run.section);
   if(run.elevation)endElevation(run.elevation);
   if(run.axon)endAxon(run.axon);
-  if(run.living)endLiving(run.living);
+  if(run.living){endLiving(run.living);applyArchitecturalQuality();}
   if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;if(run.furn&&run.furn!==furnG)run.furn.scale.y=1;
   applyGrow();
   camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
@@ -5354,6 +5390,26 @@ window.View3D = {
   get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
 
 window.View3D.presentationReveal=presentationReveal;
+Object.assign(window.View3D,{
+  setArchitecturalQuality(enabled){
+    if(!active||contextLost||storyRun)throw Error('Calidad visual no disponible en esta vista');
+    if(!enabled)resetArchitecturalQuality();
+    else architecturalQualityProject=geometry.source.id;
+    const quality=enabled?'enhanced':'base';const unchanged=opt.surfaceQuality===quality;
+    this.setSurfaceQuality(quality);
+    if(enabled&&unchanged)applyArchitecturalQuality();
+  },
+  architecturalQuality(){
+    return {enabled:!!architecturalQualityProject,windows:windowVisual.snapshot().active.length,
+      facade:facadeVisual.snapshot(),error:architecturalQualityError};
+  }
+});
+mountArchitecturalQuality(window.View3D);
+addEventListener('floorplan-project-switched',()=>{
+  if(!architecturalQualityProject)return;
+  resetArchitecturalQuality();
+  if(active&&!contextLost)window.View3D.setSurfaceQuality('base');
+});
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
 Object.assign(window.View3D,{presentationLivingDrawingBegin,presentationLivingDrawingEnd,presentationAmbienceBegin,presentationAmbienceEnd});
 Object.defineProperty(window.View3D,'presentationLivingDrawingInfo',{get:()=>livingDrawing?livingDrawing.info:{active:false}});
