@@ -1,0 +1,164 @@
+{
+  "purpose": "NAV3D V1 · recorridos del corte 2a en el editor real",
+  "head": "f34ad8ef79ea5f3232b90ffafb55319e4e140590",
+  "createdAt": "2026-11-18T21:00:52.750Z",
+  "data": "piso de ejemplo sintético; sin fotos ni datos de clientes",
+  "runs": [
+    {
+      "name": "escritorio",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "file": "nav3d-escritorio-1440x900.webm",
+      "steps": [
+        {
+          "step": "panel de navegación visible",
+          "ok": true,
+          "detail": "Navegación abierta"
+        },
+        {
+          "step": "encuadre de estancia",
+          "ok": true,
+          "detail": "Encuadre de «Salón»."
+        },
+        {
+          "step": "maqueta blanca",
+          "ok": true,
+          "detail": "1247 mallas en blanco"
+        },
+        {
+          "step": "acabados restaurados",
+          "ok": true,
+          "detail": "Acabados"
+        },
+        {
+          "step": "cerrar todas las puertas",
+          "ok": true,
+          "detail": "0 de 6 abiertas en esta planta · solo en esta visita, no cambia el proyecto."
+        },
+        {
+          "step": "abrir todas las puertas",
+          "ok": true,
+          "detail": "6 de 6 abiertas en esta planta · solo en esta visita, no cambia el proyecto."
+        },
+        {
+          "step": "minimapa sigue al paseo",
+          "ok": true,
+          "detail": "Salón · translate(6458 8755) rotate(0)"
+        },
+        {
+          "step": "salida del paseo",
+          "ok": true,
+          "detail": "minimapa retirado"
+        },
+        {
+          "step": "proyecto intacto al volver al editor",
+          "ok": true,
+          "detail": "proyecto, historial y biblioteca iguales"
+        },
+        {
+          "step": "sin errores ni red externa",
+          "ok": true,
+          "detail": "{\"errors\":[],\"external\":[]}"
+        }
+      ],
+      "webm": {
+        "ffprobe": true,
+        "codec": "vp8",
+        "width": 1440,
+        "height": 900,
+        "durationS": 22.52,
+        "bytes": 2680187
+      },
+      "playable": true,
+      "mp4": {
+        "file": "nav3d-escritorio-1440x900.mp4",
+        "ffprobe": true,
+        "codec": "h264",
+        "width": 1440,
+        "height": 900,
+        "durationS": 22.52,
+        "bytes": 3218185
+      }
+    },
+    {
+      "name": "movil",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "nav3d-movil-390x844.webm",
+      "steps": [
+        {
+          "step": "panel de navegación visible",
+          "ok": true,
+          "detail": "Navegación abierta"
+        },
+        {
+          "step": "encuadre de estancia",
+          "ok": true,
+          "detail": "Encuadre de «Salón»."
+        },
+        {
+          "step": "maqueta blanca",
+          "ok": true,
+          "detail": "1247 mallas en blanco"
+        },
+        {
+          "step": "acabados restaurados",
+          "ok": true,
+          "detail": "Acabados"
+        },
+        {
+          "step": "cerrar todas las puertas",
+          "ok": true,
+          "detail": "0 de 6 abiertas en esta planta · solo en esta visita, no cambia el proyecto."
+        },
+        {
+          "step": "abrir todas las puertas",
+          "ok": true,
+          "detail": "6 de 6 abiertas en esta planta · solo en esta visita, no cambia el proyecto."
+        },
+        {
+          "step": "minimapa sigue al paseo",
+          "ok": true,
+          "detail": "Salón · translate(6383.150400012016 8755) rotate(0)"
+        },
+        {
+          "step": "salida del paseo",
+          "ok": true,
+          "detail": "minimapa retirado"
+        },
+        {
+          "step": "proyecto intacto al volver al editor",
+          "ok": true,
+          "detail": "proyecto, historial y biblioteca iguales"
+        },
+        {
+          "step": "sin errores ni red externa",
+          "ok": true,
+          "detail": "{\"errors\":[],\"external\":[]}"
+        }
+      ],
+      "webm": {
+        "ffprobe": true,
+        "codec": "vp8",
+        "width": 390,
+        "height": 844,
+        "durationS": 23.44,
+        "bytes": 1713212
+      },
+      "playable": true,
+      "mp4": {
+        "file": "nav3d-movil-390x844.mp4",
+        "ffprobe": true,
+        "codec": "h264",
+        "width": 390,
+        "height": 844,
+        "durationS": 23.44,
+        "bytes": 855013
+      }
+    }
+  ]
+}

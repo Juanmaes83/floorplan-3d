@@ -1,4 +1,4 @@
-# Autorización conjunta de consolidación · #261, F0, OP-03 y OP-02
+# Secuencia para autorización conjunta · #261, F0, OP-03 y OP-02
 
 Base verificada `master@163df68e83a80ddf11a008d573ee257d51c1821f`. La secuencia se simuló con `git merge-tree --write-tree`, sin conflictos. Los árboles de la tabla corresponden al contenido acumulado tras cada paso con las PR fijadas en esos HEADs.
 
@@ -12,6 +12,8 @@ Base verificada `master@163df68e83a80ddf11a008d573ee257d51c1821f`. La secuencia 
 | 6 | [#266 · OP-02 / Render bajo demanda](https://github.com/Juanmaes83/floorplan-3d/pull/266) | `f34ad8ef79ea5f3232b90ffafb55319e4e140590` | `0e57dd809b5061e74798640ed0f58b8ea75d0514` |
 
 Los árboles acreditados de [F0 por separado](F0-CONSOLIDACION-2026-11-18.md) siguen siendo la referencia de su delta. El árbol conjunto al cerrar #264 difiere del árbol aislado acreditado `c588c503401055698abfb229bcdbeeebf006d2c8` exactamente en los 11 documentos de #261. La cartera de las 14 piedras y R01–R03 conserva los blobs de #261 al completar toda la secuencia. La revisión de whitespace de #261 señala una línea en blanco final en el documento de metodología. Se conserva el HEAD acreditado.
+
+#265 cerró su último check de [regresión general de Presentation](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44376274358/job/135056360557) en verde. #266 conserva las pruebas acreditadas de [OP-02](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44393395796/job/135116770578) y [Studio Presentation → Recorrer](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44393395327/job/135116769356). NAV3D completó la [comparación con `master`](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44393395751/job/135116771060) sin fallos nuevos. El [manifiesto local de vídeo](nav3d-f34ad8e-video-manifest.json) acredita ambos recorridos sobre el mismo HEAD. El [check de vídeo de GitHub](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44393395751/job/135116771123) y la [CI general de #266](https://github.com/Juanmaes83/floorplan-3d/pull/266/checks) siguen sujetos a su resultado oficial. La CI general registró fallos en restauración M09 y reanudación de fachada. Se aislaron esos dos casos en una [ejecución de diagnóstico](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44397035100).
 
 Tras recibir autorización, integrar con commits de merge que conserven cada HEAD como segundo padre. Mantener las referencias de #262 y #263 hasta terminar la cadena. Después de incorporar #262, comprobar que su HEAD es ancestro de `master` antes de retargetear #263 a `master`. Aplicar la misma comprobación después de #263 y antes de retargetear #264. Antes de cada integración, verificar HEAD, base efectiva, diff incremental y checks aplicables. Después, contrastar `master^{tree}` con el árbol esperado y registrar el commit real de integración. Cualquier desviación requiere revisar los árboles antes de continuar.
 
