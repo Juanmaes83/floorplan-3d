@@ -17,6 +17,10 @@ El propietario autorizó esta secuencia de seis PR mediante commits de merge. Se
 
 #266 y #267 conservan sus ramas y siguen fuera de `master`. La simulación de #266 `edfbf66` sobre la nueva base da `0ff75783bd0bbe16a200ead239989938644d6c50`, sin conflictos. Las verificaciones automáticas del HEAD de #266 tienen su propio ciclo. [Checks de #266](https://github.com/Juanmaes83/floorplan-3d/pull/266/checks).
 
+Sobre ese árbol combinado pasaron 3/3 pruebas dirigidas en Docker Linux sin red, Node 22.13 y Chromium 1234. Cubren reposo orbital, restauración M09 y 11 ciclos de P15 con 1.189 geometrías y nueve texturas estables. La [suite propia de #266](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44402050156/job/135147414976) también pasó en GitHub sobre `edfbf66`. El cierre general pendiente se sigue en la PR.
+
+[OP-04 #268](https://github.com/Juanmaes83/floorplan-3d/pull/268) parte de `master@dd528119`, con HEAD `d8a8b9a4a757b6b260255659db74de0d4b23e829`. Pasaron 4 casos propios, 2 regresiones RoomPlan y 2 casos de Chromium. La convivencia simulada de #266 y #268 sobre el `master` consolidado da el árbol `3ad1e8596182b0a30df6c096e2c689254ff22b3a`, sin conflictos. La revisión humana y la CI del candidato de OP-04 quedan en su borrador. [Alcance y pruebas de OP-04](https://github.com/Juanmaes83/floorplan-3d/blob/d8a8b9a4a757b6b260255659db74de0d4b23e829/docs/technical/op04-roomplan-join.md).
+
 ## Secuencia aprobada
 
 | Orden | PR | HEAD a autorizar | Árbol acumulado esperado |
