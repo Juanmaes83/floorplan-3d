@@ -62,12 +62,24 @@
  const stop=btn('',form,'btn');stop.id='assistantStop';stop.hidden=true;
  const foot=el('div',undefined,panel,'assistant-foot');const clear=btn('',foot,'btn link');clear.id='assistantClear';
  const opener=btn('',null,'btn assistant-open');opener.id='assistantOpen';
+ // E2 · el asistente acompaña en TODA la plataforma: botón flotante siempre presente y, si hay un diálogo modal abierto
+ // (presupuesto, obra, diseño, marca, dossier…), el panel y el botón pasan a ese diálogo para seguir siendo usables por encima
+ // de él. El contexto («Estás en …») es el título del diálogo. Nada cambia en el motor ni en lo que el asistente puede hacer.
+ const fab=btn('',document.body,'assistant-fab');fab.id='assistantFab';fab.type='button';
+ const where=el('p',undefined,null,'assistant-where');where.id='assistantWhere';panel.insertBefore(where,panel.children[1]||null);
+ const hostDialog=()=>{const m=[...document.querySelectorAll('dialog[open]')].filter(d=>{try{return d.matches(':modal');}catch{return false;}});return m[m.length-1]||null;};
+ function rehost(){const d=hostDialog(),host=d||document.body;for(const n of [panel,fab])if(n.parentNode!==host)host.append(n);
+  panel.classList.toggle('in-dialog',!!d);const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
+  where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';fab.hidden=state.open;}
+ new MutationObserver(()=>rehost()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
+ document.addEventListener('close',()=>setTimeout(rehost,0),true);
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
   title.textContent=tx('Asistente RUBIK','RUBIK assistant','RUBIK 助手');close.setAttribute('aria-label',tx('Cerrar el asistente','Close the assistant','关闭助手'));
   mode.textContent=tx('Consulta guiada sin modelo de lenguaje: responde con los datos del proyecto abierto y muestra la fuente. No envía nada fuera de este navegador.','Guided query without a language model: it answers with the open project data and shows the source. Nothing leaves this browser.','无语言模型的引导式查询：根据打开的项目数据回答并显示来源。不会发送到浏览器之外。');
   input.placeholder=tx('Pregunta por estancias, superficies, conflictos o presupuesto…','Ask about rooms, areas, conflicts or budget…','询问房间、面积、冲突或预算……');input.setAttribute('aria-label',tx('Tu consulta','Your question','你的问题'));
   send.textContent=tx('Preguntar','Ask','提问');stop.textContent=tx('Detener','Stop','停止');clear.textContent=tx('Borrar conversación','Clear conversation','清除对话');
+  fab.textContent=tx('Asistente','Assistant','助手');fab.setAttribute('aria-label',tx('Abrir el asistente RUBIK aquí','Open the RUBIK assistant here','在此打开 RUBIK 助手'));fab.setAttribute('aria-controls','assistantPanel');fab.setAttribute('aria-expanded',String(state.open));
   opener.textContent=tx('Asistente','Assistant','助手');opener.setAttribute('aria-label',tx('Abrir el asistente RUBIK','Open the RUBIK assistant','打开 RUBIK 助手'));opener.setAttribute('aria-expanded',String(state.open));opener.setAttribute('aria-controls','assistantPanel');
  }
  const SUGG={design:[['¿Cuántas estancias hay?','How many rooms are there?','有几个房间？'],['¿Qué conflictos tiene la distribución?','What conflicts does the layout have?','布局有什么冲突？'],['Mueve el sofá 20 cm a la izquierda','Move the sofa 20 cm left','把沙发向左移动20厘米']],
@@ -151,16 +163,16 @@
  function invalidate(reason='scope-changed'){state.pending?.abort();state.proposal=null;state.applied=null;card.hidden=true;card.replaceChildren();card.dataset.state='invalidated';
   scopeProject=app.project?.id||null;restoreLog();emit('invalidated',{reason});}
  addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
- function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
- function closePanel(){state.open=false;panel.hidden=true;document.body.classList.remove('assistant-open');labels();state.pending?.abort();opener.focus({preventScroll:true});emit('close');}
- opener.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
+ function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;rehost();panel.hidden=false;fab.hidden=true;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
+ function closePanel(){state.open=false;panel.hidden=true;fab.hidden=false;document.body.classList.remove('assistant-open');labels();state.pending?.abort();(hostDialog()?fab:opener).focus({preventScroll:true});emit('close');}
+ opener.onclick=()=>state.open?closePanel():openPanel();fab.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closePanel();}});
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
  clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
- mountOpener();labels();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
+ mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
  window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
   get trace(){return state.trace.map(e=>structuredClone(e));},setLatency(ms){state.latencyMs=Math.max(0,Math.min(10000,Number(ms)||0));}});

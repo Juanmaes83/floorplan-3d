@@ -65,3 +65,16 @@ test('E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el
     const [popup]=await Promise.all([ctx.waitForEvent('page'),card.locator('[data-route^="compare-"]').first().click()]);await popup.waitForLoadState();
     assert.match(popup.url(),/\/comparar\/\?src=library&before=.+&after=.+&anchor=/);await popup.waitForSelector('#cmpCard:not([hidden])');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[],'(el kit sirve .mjs sin tipo: límite del servidor de pruebas)');assert.deepEqual(w.external,[]);}finally{await ctx.close();}});
+
+test('E2 · asistente presente en toda la plataforma: botón flotante y panel usable dentro de un diálogo modal (presupuesto)',async()=>{
+  const ctx=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await ctx.newPage();const w=K.watch(page,env.base);try{
+    await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(env.base);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.RubikAssistantUI&&!!window.FloorPlanBudgetUI);
+    await page.locator('#assistantFab').waitFor();assert.ok(await page.locator('#assistantFab').isVisible(),'visible en el editor');
+    await page.evaluate(()=>FloorPlanBudgetUI.open());await page.waitForFunction(()=>[...document.querySelectorAll('dialog[open]')].some(d=>d.matches(':modal')&&d.contains(document.getElementById('assistantFab'))));
+    const fab=page.locator('#assistantFab');assert.ok(await fab.isVisible(),'visible sobre el diálogo de presupuesto');await fab.click();
+    await page.locator('#assistantPanel').waitFor();assert.ok(await page.evaluate(()=>{const p=document.getElementById('assistantPanel');return !p.hidden&&!!p.closest('dialog[open]');}),'panel dentro del diálogo');
+    assert.match(await page.locator('#assistantWhere').innerText(),/Estás en:/);
+    if(shots)await page.screenshot({path:shots+'/e2-asistente-en-presupuesto.png'});
+    await page.fill('#assistantPanel textarea, #assistantPanel input[type=text]','¿Cuál es la superficie útil?').catch(()=>{});
+    await page.keyboard.press('Escape');assert.ok(await fab.isVisible(),'al cerrar vuelve el botón');
+    assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
