@@ -2662,6 +2662,7 @@ import {FacadeFidelityAdapter} from './js/facade-fidelity-adapter.mjs';
 import {compatibleWindow,resolveVisual,registry as windowRecipes} from './js/visual-families-core.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
 import {createDrawScheduler} from './js/view3d-frame-scheduler.mjs';
+import {createWalkClock,updateOrbitDamping} from './js/view3d-motion.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
 let OX = geometry.center.x, OY = geometry.center.y, H = project.defaults.wallHeightMm/1000; const FOV = 45;       // 户型中心放在世界原点，层高 2.8 m
@@ -2710,8 +2711,12 @@ function init(){
   walkCtl = new PointerLockControls(camera, document.body);
   walkCtl.addEventListener('change', requestFrame);
   // Three.js publishes "lock" before its isLocked flag. Check held input on the queued frame.
-  walkCtl.addEventListener('lock', () => { $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; requestFrame(); });
-  walkCtl.addEventListener('unlock', () => { if (opt.mode === 'walk'){ $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
+  walkCtl.addEventListener('lock', () => {
+    if (!walkLockRequested || !active || opt.mode !== 'walk'){ walkCtl.unlock(); return; }
+    $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block';
+    walkClock.start(performance.now()); requestFrame();
+  });
+  walkCtl.addEventListener('unlock', () => { walkLockRequested = false; resetWalkInput(); if (opt.mode === 'walk'){ $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
 
   hemi = new THREE.HemisphereLight(0xfff8ee, 0xb9a88f, 1.1);
   sun = new THREE.DirectionalLight(0xfff1dd, 2.6);
@@ -4250,7 +4255,7 @@ const HINT_ORBIT = () => COARSE ? tr('单指旋转 · 双指缩放 / 平移 · �
 const HINT_TOUCHWALK = () => tr('左下摇杆移动 · 拖动画面转向 · 点门开关', 'Joystick moves · drag to look · tap a door to open or close it');
 const HINT_WALK = () => tr('WASD 移动 · 鼠标转向 · Shift 快走 · E 开关门 · Esc 暂停', 'WASD moves · mouse looks · Shift runs · E opens or closes a door · Esc pauses');
 function syncHint3d(){ if (viewMode === '3d') $('#tip').textContent = TIPS()['3d']; $('#hint3d').textContent = opt.mode === 'orbit' ? HINT_ORBIT() : touchWalk || COARSE ? HINT_TOUCHWALK() : HINT_WALK(); }
-let touchWalk = false;
+let touchWalk = false, walkLockRequested = false;
 const joy = {x:0, y:0, id:null}, eul = new THREE.Euler(0, 0, 0, 'YXZ');
 function lookBy(dx, dy){
   eul.setFromQuaternion(camera.quaternion);
@@ -4263,8 +4268,13 @@ function startTouchWalk(){
   $('#walkOverlay').style.display = 'none'; $('#joy').style.display = 'block'; $('#walkExit').style.display = 'block';
   syncHint3d();
 }
+function startWalkInput(){
+  if (COARSE){ startTouchWalk(); return; }
+  walkLockRequested = true;
+  walkCtl.lock();
+}
 function stopTouchWalk(){
-  touchWalk = false; joy.x = joy.y = 0; joy.id = null; $('#joy i').style.transform = '';
+  touchWalk = false; walkLockRequested = false; resetWalkInput();
   $('#joy').style.display = 'none'; $('#walkExit').style.display = 'none';
 }
 function bindJoystick(){
@@ -4273,12 +4283,12 @@ function bindJoystick(){
     const r = el.getBoundingClientRect();
     let dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
     const L = Math.hypot(dx, dy); if (L > R){ dx *= R/L; dy *= R/L; }
-    joy.x = dx/R; joy.y = dy/R; knob.style.transform = `translate(${dx}px,${dy}px)`;
-    if (walkIntent()) requestFrame();
+    updateWalkInput(() => { joy.x = dx/R; joy.y = dy/R; });
+    knob.style.transform = `translate(${dx}px,${dy}px)`;
   };
   el.addEventListener('pointerdown', e => { e.preventDefault(); joy.id = e.pointerId; el.setPointerCapture(e.pointerId); upd(e); });
   el.addEventListener('pointermove', e => { if (e.pointerId === joy.id) upd(e); });
-  const end = e => { if (e.pointerId !== joy.id) return; joy.id = null; joy.x = joy.y = 0; knob.style.transform = ''; };
+  const end = e => { if (e.pointerId !== joy.id) return; updateWalkInput(() => { joy.id = null; joy.x = joy.y = 0; }); knob.style.transform = ''; };
   el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
 }
 function setMode(m){
@@ -4351,10 +4361,37 @@ function blocked(x, z, r = .22){
   return false;
 }
 function walkIntent(){
-  if (opt.mode !== 'walk' || (!walkCtl.isLocked && !touchWalk)) return null;
+  if (opt.mode !== 'walk' || (!(walkLockRequested && walkCtl.isLocked) && !touchWalk)) return null;
   const x = Number(!!(keys.KeyD || keys.ArrowRight)) - Number(!!(keys.KeyA || keys.ArrowLeft)) + (touchWalk ? joy.x : 0);
   const y = Number(!!(keys.KeyW || keys.ArrowUp)) - Number(!!(keys.KeyS || keys.ArrowDown)) - (touchWalk ? joy.y : 0);
   return Math.hypot(x, y) >= .05 ? {x, y} : null;
+}
+const walkClock = createWalkClock();
+const walkKeys = new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowLeft','ArrowDown','ArrowRight','ShiftLeft','ShiftRight']);
+function resetWalkInput(){
+  for (const code of walkKeys) delete keys[code];
+  walkClock.stop();
+  joy.x = joy.y = 0; joy.id = null; $('#joy i').style.transform = '';
+}
+function activeWalkIntent(){
+  return active && !renderSuspended && !document.hidden && !anim && !fly && !glLost() ? walkIntent() : null;
+}
+function advanceWalk(now){
+  const movement = activeWalkIntent();
+  if (!movement){ walkClock.stop(); return false; }
+  const elapsed = walkClock.take(now);
+  for (let left = elapsed; left > 1e-4; left -= .05) stepWalk(Math.min(left, .05), movement);
+  return elapsed > 1e-4;
+}
+function updateWalkInput(change){
+  const now = performance.now();
+  // Consume the previous intent before release or a direction change, even if
+  // the entire press fell between two rendered frames.
+  const moved = advanceWalk(now);
+  change();
+  const movement = activeWalkIntent();
+  if (movement) walkClock.start(now); else walkClock.stop();
+  if (moved || movement) requestFrame();
 }
 function stepWalk(dt, {x, y}){
   const sp = (keys.ShiftLeft || keys.ShiftRight ? 2.6 : 1.4) * dt, fwd = new THREE.Vector3();
@@ -4383,13 +4420,23 @@ function stepWalk(dt, {x, y}){
 function toggleDoor(door){door.open=!door.open;requestFrame();}
 addEventListener('keydown', e => {
   if (!active || e.target.matches('input,select,textarea')) return;
-  keys[e.code] = true;
-  if (walkIntent()) requestFrame();
+  if (opt.mode === 'walk' && walkKeys.has(e.code) && !keys[e.code] && !e.repeat
+      && (touchWalk || (walkLockRequested && document.pointerLockElement === walkCtl.domElement))){
+    updateWalkInput(() => { keys[e.code] = true; });
+  }
   if (opt.mode === 'walk' && e.code === 'KeyE'){ const h = pick(); if (h?.door && h.dist < 2.5) toggleDoor(h.door); }
   // Esc pauses the walk. Browsers release the pointer on Esc themselves; if the key reaches the page, release it too.
-  if (opt.mode === 'walk' && e.code === 'Escape' && walkCtl.isLocked) walkCtl.unlock();
+  if (opt.mode === 'walk' && e.code === 'Escape'){
+    // Esc also cancels a lock whose browser event has not reached Three.js yet.
+    walkLockRequested = false; resetWalkInput();
+    if (document.pointerLockElement === walkCtl.domElement) walkCtl.unlock();
+  }
 });
-addEventListener('keyup', e => keys[e.code] = false);
+addEventListener('keyup', e => {
+  if (keys[e.code]) updateWalkInput(() => { delete keys[e.code]; });
+});
+addEventListener('blur', resetWalkInput);
+document.addEventListener('visibilitychange', () => { if (document.hidden) resetWalkInput(); });
 
 /* ======================= 工具栏 ======================= */
 function syncModeBtns(){ document.querySelectorAll('#modes3d .btn').forEach(b => b.classList.toggle('on', b.dataset.mode === opt.mode)); }
@@ -4415,9 +4462,11 @@ function bindUI(){
   $('#roofToggle').onclick=()=>{if(!opt.roof&&roofResult?.status!=='available'){toast('Cubierta no disponible: '+(roofResult?.reason||'geometría insuficiente'));return;}opt.roof=!opt.roof;syncRoofVisibility();
     const chosen=opt.roof;const frame=()=>{if(!active||opt.roof!==chosen||opt.mode!=='orbit')return;if(anim){requestAnimationFrame(frame);return;}flyTo(chosen?roofWhole():isoWhole());};frame();};
   // 触屏设备用摇杆漫游；桌面端锁定鼠标，锁定失败时也退回到摇杆
-  $('#walkOverlay').onclick = () => COARSE ? startTouchWalk() : walkCtl.lock();
-  $('#walkStart').onclick = e => { e.stopPropagation(); COARSE ? startTouchWalk() : walkCtl.lock(); };
-  document.addEventListener('pointerlockerror', () => { if (active && opt.mode === 'walk') startTouchWalk(); });
+  $('#walkOverlay').onclick = startWalkInput;
+  $('#walkStart').onclick = e => { e.stopPropagation(); startWalkInput(); };
+  document.addEventListener('pointerlockerror', () => {
+    if (walkLockRequested && active && opt.mode === 'walk'){ walkLockRequested = false; startTouchWalk(); }
+  });
   $('#walkExit').onclick = () => setMode('orbit');
   bindJoystick();
   syncWalkTexts();
@@ -4539,13 +4588,11 @@ let presentationLamps=false;
 function syncCeilingFixtures(cam){if(!presentationLamps||!lampG)return;const show=topHeight()>=H&&cam.position.y<H-.02;lampG.children.forEach(o=>{if(o.isMesh)o.visible=show;});}
 function loop(){
   if (!active || glLost() || (renderSuspended && !anim && !fly)) return;
-  const raw = clock.getDelta(), now = performance.now(), movement = walkIntent();
+  const raw = clock.getDelta(), now = performance.now();
   if (anim){ const t = clamp01((now - anim.t0)/anim.dur); anim.fn(t); if (t >= 1){ const r = anim.res; anim = null; r(); } }
   else if (fly){ const t = clamp01((now - fly.t0)/fly.dur); camTween(fly.A, fly.B, ease(t)); if (t >= 1){const done=fly.res;fly=null;done?.(true);} }
-  else if (opt.mode === 'orbit'){ if (!storyRun) orbit.update(); }
-  // The walk uses the real elapsed time (up to 0.25 s) in 50 ms sub-steps: on a slow device (a few frames per second)
-  // the person still moves at walking speed, and each sub-step is checked against the walls.
-  else if (movement) for (let left = Math.min(raw, .25); left > 1e-4; left -= .05) stepWalk(Math.min(left, .05), movement);
+  else if (opt.mode === 'orbit'){ if (!storyRun) updateOrbitDamping(orbit, raw); }
+  else advanceWalk(now);
   // Doors swing in real time too (on a slow device a 50 ms cap kept a leaf across the doorway for seconds).
   let doorMoving = false;
   for (const d of doors){
@@ -4562,7 +4609,7 @@ function loop(){
   if (livingDrawing) livingDrawing.render(scene, camera); else renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
   renderedFrames++;
-  if (anim || fly || movement || doorMoving) requestFrame();
+  if (anim || fly || activeWalkIntent() || doorMoving) requestFrame();
 }
 
 // 3D capture. 'view' keeps the historical behaviour (current canvas, screen size × pixel ratio ≤ 2).
@@ -5443,6 +5490,7 @@ window.View3D = {
   setSuspended(value){
     if(renderSuspended===!!value)return;
     renderSuspended=!!value;
+    if(renderSuspended) resetWalkInput();
     if(renderSuspended&&!anim&&!fly)renderScheduler.cancel();else requestFrame();
   },get suspended(){return renderSuspended;},
   shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:renderScheduler.pending,renderedFrames,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
