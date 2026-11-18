@@ -206,6 +206,29 @@
   const corners=[[Math.min(...xs),Math.min(...ys)],[Math.max(...xs),Math.min(...ys)],[Math.max(...xs),Math.max(...ys)],[Math.min(...xs),Math.max(...ys)]],r=(e.rotation||0)*Math.PI/180,sx=e.xScale??1,sy=e.yScale??1;
   return corners.map(([x,y])=>{const X=x*sx,Y=y*sy;return {x:(e.position.x+X*Math.cos(r)-Y*Math.sin(r))*toMm,y:(e.position.y+X*Math.sin(r)+Y*Math.cos(r))*toMm};});
  }
+ // G-02 DXF carries explicit architectural footprints. Other DXF files retain the face pairing heuristic.
+ function rubikDxfGeometry(dxf,labels){
+  if(dxf.header?.$INSUNITS!==4||!Object.hasOwn(dxf.tables?.layer?.layers||{},'RUBIK_WALL_FOOTPRINT'))return null;
+  const walls=[],rooms=[],mid=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+  const polygon=e=>e.type==='LWPOLYLINE'&&e.shape&&e.vertices?.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&!p.bulge)?e.vertices:null;
+  for(const e of dxf.entities){
+   if(e.layer==='RUBIK_WALL_FOOTPRINT'){
+    const v=polygon(e);if(v?.length!==4)return null;
+    const a=mid(v[0],v[3]),b=mid(v[1],v[2]),thickness=len2(v[0],v[3]),l=len2(a,b),tol=0.01;
+    if(l<10||thickness<10||thickness>1500||Math.abs(len2(v[1],v[2])-thickness)>tol||
+       Math.abs(len2(v[0],v[1])-l)>tol||Math.abs(len2(v[2],v[3])-l)>tol||
+       Math.abs((b.x-a.x)*(v[0].x-v[3].x)+(b.y-a.y)*(v[0].y-v[3].y))/l>tol)return null;
+    walls.push({a,b,thickness,paired:true,openings:[]});
+   }else if(e.layer==='ROOMS'){
+    const poly=polygon(e);
+    if(poly?.length>=3&&Math.abs(signedArea(poly))>0){
+     const label=labels.find(label=>label.layer==='ROOMS'&&inside(label.point,poly));
+     rooms.push({polygon:poly,name:label?.text});
+    }
+   }
+  }
+  return {walls,rooms};
+ }
  function dxfToProject(dxf,{name='Plano DXF'}={}){
   if(!dxf||!Array.isArray(dxf.entities))throw Error('El DXF no contiene entidades legibles.');
   const units=dxf.header?.$INSUNITS??0,toMm=units===0?1:UNIT_MM[units];
@@ -214,13 +237,17 @@
   for(const e of dxf.entities){
    if(e.type==='INSERT'){const key=`${e.layer||''} ${e.name||''}`,kind=DOOR.test(key)?'door':WINDOW.test(key)?'window':null;if(!kind)continue;inserts[kind+'s']++;const points=insertFootprint(e,dxf.blocks?.[e.name],toMm);if(points)hints.push({kind,points,strong:true});continue;}
    if(e.type==='ARC'&&e.radius*toMm>=500&&e.radius*toMm<=1300&&Math.abs((e.angleLength??Math.abs(e.endAngle-e.startAngle))-Math.PI/2)<0.35){const c={x:e.center.x*toMm,y:e.center.y*toMm},R=e.radius*toMm;hints.push({kind:'door',points:[c,{x:c.x+R*Math.cos(e.startAngle),y:c.y+R*Math.sin(e.startAngle)},{x:c.x+R*Math.cos(e.endAngle),y:c.y+R*Math.sin(e.endAngle)}],weak:!DOOR.test(e.layer||'')});continue;}
-   if((e.type==='TEXT'||e.type==='MTEXT')&&e.text){const q=e.startPoint||e.position;if(q)labels.push({text:String(e.text).replace(/\\[A-Za-z][^;]*;|[{}]/g,'').replace(/\\P/g,' '),point:{x:q.x*toMm,y:q.y*toMm}});continue;}
+   if((e.type==='TEXT'||e.type==='MTEXT')&&e.text){const q=e.startPoint||e.position;if(q)labels.push({layer:e.layer,text:String(e.text).replace(/\\[A-Za-z][^;]*;|[{}]/g,'').replace(/\\P/g,' '),point:{x:q.x*toMm,y:q.y*toMm}});continue;}
    for(const seg of segmentsOf(e))all.push({layer:e.layer||'0',seg:[{x:seg[0].x*toMm,y:seg[0].y*toMm},{x:seg[1].x*toMm,y:seg[1].y*toMm}]});
   }
   const onWallLayers=all.filter(s=>WALL_LAYER.test(s.layer)),chosen=(onWallLayers.length?onWallLayers:all).filter(s=>len2(s.seg[0],s.seg[1])>=50);
-  if(!chosen.length)throw Error('No se encontraron líneas de muro (LINE/LWPOLYLINE/POLYLINE) en el DXF.');
   if(chosen.length>LIMITS.dxfSegments)throw Error(`El DXF tiene ${chosen.length} líneas candidatas (máximo ${LIMITS.dxfSegments}). Exporta solo la planta o la capa de muros.`);
-  const paired=pairFaces(chosen.map(s=>s.seg)),{walls,rooms,evidence}=assemble(paired,{hints,labels}),b=bounds(walls);
+  const explicit=rubikDxfGeometry(dxf,labels);
+  if(explicit&&!explicit.walls.length&&!explicit.rooms.length)throw Error('No se encontraron muros activos ni estancias en el DXF de RUBIK.');
+  if(!explicit&&!chosen.length)throw Error('No se encontraron líneas de muro (LINE/LWPOLYLINE/POLYLINE) en el DXF.');
+  if(explicit)for(const {layer,seg:points} of all)if(layer==='WINDOWS'||layer==='DOORS_HIDDEN')hints.push({kind:layer==='WINDOWS'?'window':'opening',points});
+  const {walls,rooms,evidence}=explicit?{...explicit,evidence:placeHints(explicit.walls,hints)}:assemble(pairFaces(chosen.map(s=>s.seg)),{hints,labels});
+  const b=walls.length||!explicit?bounds(walls):bounds(rooms.flatMap(r=>r.polygon.map(a=>({a,b:a}))));
   if(b.maxX-b.minX>200000||b.maxY-b.minY>200000)throw Error('El dibujo mide más de 200 m: revisa las unidades del DXF o exporta solo la planta.');
   const built=buildProject({name,walls,rooms,map:q=>({x:q.x-b.minX+LIMITS.margin,y:b.maxY-q.y+LIMITS.margin}),scale:{confidence:'estimated',method:'declared-ratio',note:`Medidas tomadas del DXF (${UNIT_NAME[units]}). Revisa el resultado antes de usarlo como medida real.`}});
   return {project:built.project,report:{units:UNIT_NAME[units],assumedUnits:units===0,layerFilter:onWallLayers.length>0,walls:built.project.walls.length,paired:walls.filter(w=>w.paired).length,openings:built.openings,rooms:built.project.rooms.length,roomNames:built.project.rooms.map(r=>r.name),inserts,unplaced:evidence.skipped+built.skippedOpenings}};

@@ -632,6 +632,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
           <output id="shot3dDims" aria-live="polite"></output>
         </div>
         <button class="btn" id="exportJson" data-en="Export plan JSON">导出方案 JSON</button>
+        <button class="btn" type="button" id="exportDxf" data-en="Export active plan DXF" data-es="Exportar planta activa en DXF">导出当前楼层 DXF</button>
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
         <button class="btn" id="importImage" data-en="Upload a floor plan or project" data-es="Subir plano o proyecto" aria-describedby="uploadPlanHelp">上传平面图或项目</button>
@@ -2390,6 +2391,16 @@ $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDi
 // A building exports as a whole; a single level is exported explicitly from «Plantas…» with a warning.
 const exportProjectJson = () => library?.isBuilding()?window.FloorPlanBuildingUI.exportBuildingJson():download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
 $('#exportJson').onclick = $('#exportJsonQuick').onclick = exportProjectJson;
+$('#exportDxf').onclick = () => {
+  const levelName = window.FloorPlanBuildingUI?.context?.levelName;
+  try {
+    const dxf = window.FloorPlanDxfExport.exportLevel(project, { levelName, language: LANG });
+    const name = [project.name || 'RUBIK', levelName].filter(Boolean).join(' - ').replace(/[<>:"/\\|?*\x00-\x1f]/g, '_');
+    download(name + '.dxf', new Blob([dxf], { type: 'application/dxf' }));
+  } catch {
+    toast(say3('无法导出楼层。请检查是否有墙或房间。','Could not export the plan. Check that it contains walls or rooms.','No se pudo exportar la planta. Comprueba que contiene muros o estancias.'));
+  }
+};
 $('#importJson').onclick = () => {document.querySelector('details.menu').open=false;$('#fileIn').click();};
 let importSequence=0;
 function beginFileImport(){return {sequence:++importSequence,entryId:library?.activeId(),snapshot:snap(),route:window.FloorPlanGuideUI?.captureImport()};}
@@ -5570,6 +5581,8 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/moodboard-core.js"></script>
 <script src="js/moodboard-ui.js"></script>
 <script src="js/quantity-core.js"></script>
+<script src="vendor/g02-dxf/dxf-tools.js"></script>
+<script src="js/dxf-export.js"></script>
 <script src="js/quantity-schedule-core.js"></script>
 <script src="js/quantity-schedule-ui.js"></script>
 <script src="js/budget-core.js"></script>
