@@ -1,6 +1,6 @@
 # Contrato · Expediente RUBIK v1 (`rubik-sota.expediente`)
 
-**Corte:** F0.1 del [ADR de continuidad](../product/ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). **Núcleo:** `js/expediente-core.js`. **Pruebas:** `tests/expediente.test.cjs`. Sin interfaz todavía: `index.html` no carga el módulo hasta F0.3.
+**Corte:** F0.1 del [ADR de continuidad](https://github.com/Juanmaes83/floorplan-3d/blob/docs/reconciliacion-maestra-v1.12/docs/product/ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md) (en la PR #261 hasta que se fusione). **Núcleo:** `js/expediente-core.js`. **Pruebas:** `tests/expediente.test.cjs`. Sin interfaz todavía: `index.html` no carga el módulo hasta F0.3.
 
 ## 1. Qué es
 
