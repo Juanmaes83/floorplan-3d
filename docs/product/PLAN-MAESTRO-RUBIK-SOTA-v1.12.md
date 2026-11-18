@@ -243,6 +243,8 @@ La asignación de cada ID a su hito está en la matriz: 22 en A, 24 en B, 37 en 
 
 ## 6. Trabajo residual, ruta crítica y cortes
 
+La [cartera canónica SCULPT](sculpt-metodologia-y-cartera-2026-11-10.md#3-registro-de-piedras-con-donante-identificado) conserva R01, R02 y R03 y los 14 alias de [openPlan3D y roomGPT](sculpt-openplan3d-roomgpt-2026-11-18.md#cartera-de-openplan3d-y-roomgpt). Cada piedra ejecuta el trabajo residual del programa correspondiente con las prioridades de este plan y la trazabilidad de su fuente.
+
 ### 6.1 Agrupación por infraestructura compartida
 
 | Grupo | IDs | Infraestructura común |

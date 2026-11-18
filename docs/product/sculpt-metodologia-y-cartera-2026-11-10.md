@@ -45,6 +45,8 @@ Cuando las fuentes difieran, aplicar la precedencia del catálogo maestro: decis
 
 ## 3. Registro de piedras con donante identificado
 
+Esta cartera reúne R01, R02 y R03 y añade las 14 piedras OP-01 a OP-12 y RG-01 a RG-02 en el [anexo openPlan3D y roomGPT](sculpt-openplan3d-roomgpt-2026-11-18.md#cartera-de-openplan3d-y-roomgpt). Los alias preservan la trazabilidad del donante. Su ejecución se rige por el [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md), la matriz vigente y la evidencia de cada corte.
+
 | Alias | Fuente verificable y SHA del HEAD donante | Capacidad por comprobar | Encaje actual / ola heredada | Estado real |
 |---|---|---|---|---|
 | **R01** | [wy51ai/floorplan-3d PR #18](https://github.com/wy51ai/floorplan-3d/pull/18), rama del contribuidor `zhuzhuyumeng/floorplan-3d:feat/floorplan-recognition`, `1d235fc0a3c45783e1e1fa129944f8f34d97d297` | Reconocimiento de plano raster, muros/huecos/estancias, OCR y posprocesado, orientación, escala, worker, pruebas | **F2 experimental** y **G-01, ola 4**; también investigación para G-06, ola 2; ninguna validación F2 se concede por clonar | **SCULPT-R01 — LABORATORIO FUNCIONAL, NO VALIDADO SOBRE PLANOS REALES** ([PR #191](https://github.com/Juanmaes83/floorplan-3d/pull/191), SHA `2158fd19207e4a33aeee8fed26d1b29be96103fa`); integración en producto **BLOQUEADA** |
