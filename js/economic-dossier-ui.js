@@ -75,7 +75,8 @@
   const v=E.view(report,{variant}),pro=variant==='professional';
   const head=el('header',undefined,paper,'econ-head');el('small',pro?tx('Dossier económico · Profesional','Economic dossier · Professional','经济资料 · 专业'):tx('Dossier económico · Cliente','Economic dossier · Client','经济资料 · 客户'),head,'econ-kicker');
   el('h1',local(app.project.name),head);el('p',local(v.title)||'',head,'econ-sub');
-  const brand=window.FloorPlanBrandUI?.snapshot?.();if(brand?.name)el('p',brand.name+(brand.person?' · '+brand.person:''),head,'econ-brand');
+  // H02: el snapshot de marca es {profile,title,intro,takenAt}; el nombre y el responsable están en profile (antes se leía brand.name, que no existe).
+  const brand=window.FloorPlanBrandUI?.snapshot?.(),bp=brand?.profile||null;if(bp?.name)el('p',bp.name+(bp.person?' · '+bp.person:''),head,'econ-brand');
   el('p',tx('Documento generado el ','Document generated on ','文件生成于 ')+new Date().toLocaleDateString(loc(),{day:'numeric',month:'long',year:'numeric'}),head,'econ-date');
   totals(v,paper);counts(v,paper);
   if(v.summary.empty){el('p',tx('El presupuesto no tiene partidas.','The budget has no items.','预算没有项目。'),paper,'econ-empty');}
