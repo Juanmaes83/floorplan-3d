@@ -1,0 +1,47 @@
+name: F0 expediente - continuity core
+# F0.1 of the continuity ADR: the expediente contract (pure core) and the same flows in a real Chromium (IndexedDB,
+# localStorage, Web Locks). A dedicated workflow, so no existing workflow changes its execution contract.
+# One run per workflow and PR: a newer push cancels the runs of the obsolete SHA (pushes to master are never cancelled).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - js/expediente-core.js
+      - js/project-package.js
+      - js/project-library.js
+      - js/project-core.js
+      - js/building-core.js
+      - js/budget-core.js
+      - js/tracing-core.js
+      - js/local-images.js
+      - index.html
+      - tests/expediente.test.cjs
+      - tests/expediente.browser.test.cjs
+      - tests/fixtures/building-fixture.cjs
+      - .github/workflows/f0-expediente.yml
+permissions:
+  contents: read
+jobs:
+  expediente:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pure contracts (expediente, library, identity, budget)
+        run: node --test tests/expediente.test.cjs tests/library.test.cjs tests/project-identity.test.cjs tests/budget-core.test.cjs
+      - name: Playwright and Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Expediente in a real browser
+        run: node --test --test-concurrency=1 tests/expediente.browser.test.cjs

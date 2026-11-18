@@ -43,5 +43,6 @@
   }if(used.size!==entries.size)throw Error('El ZIP contiene entradas ajenas al proyecto.');return {project,images};
  }
  async function encode(project,get,{withProject=false}={}){C.validate(project);const p=C.clone(project),entries=new Map();for(const image of p.sourceImages||[]){const blob=await get(image.storage.ref||image.id);if(!blob)throw Error('Imagen local no disponible: '+image.id);const bytes=new Uint8Array(await blob.arrayBuffer()),info=T.imageInfo(bytes,image.mediaType);image.widthPx=info.widthPx;image.heightPx=info.heightPx;image.bytes=bytes.length;image.sha256=await digest(bytes);delete image.originalFileName;image.storage={kind:'sidecar-file',ref:`images/${image.id}.${{'image/png':'png','image/jpeg':'jpg','image/webp':'webp'}[image.mediaType]}`};entries.set(image.storage.ref,bytes);}entries.set('project.json',encoder.encode(JSON.stringify(p,null,2)));const archive=zip(entries);return withProject?{archive,project:p}:archive;}
- const api={crc,zip,unzip,digest,validateEntries,encode};if(typeof module==='object')module.exports=api;else root.FloorPlanPackage=api;
+ // `path` is exported so a wider layout (js/expediente-core.js) accepts exactly these names without copying the rule.
+ const api={crc,zip,unzip,digest,validateEntries,encode,path};if(typeof module==='object')module.exports=api;else root.FloorPlanPackage=api;
 })(globalThis);
