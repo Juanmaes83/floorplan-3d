@@ -12,7 +12,8 @@
   "tests/evolution-demo.browser.test.cjs",
   "tests/home-demos.browser.test.cjs",
   "tests/e2-comparativas.browser.test.cjs",
-  "tests/h01-dossier-inventario.browser.test.cjs"
+  "tests/h01-dossier-inventario.browser.test.cjs",
+  "tests/h02-cabecera-economica.browser.test.cjs"
  ],
  "historical": {
   "presentation-a": [
@@ -68,6 +69,7 @@
   ]
  },
  "classification": {
+  "tests/h02-cabecera-economica.browser.test.cjs": "H02 (#253): nueva y verde en local (2026-11-18). Bloqueante desde su alta.",
   "tests/h01-dossier-inventario.browser.test.cjs": "H01 (#252): nueva y verde en local (2026-11-18). Bloqueante desde su alta.",
   "tests/e2-comparativas.browser.test.cjs": "E2 (#251): nueva y verde en local (7/7, 2026-11-18). Bloqueante desde su alta.",
   "tests/build-palette.browser.test.cjs": "Fixed by 6d19ee5 on #241: NAV3D no longer covers the palette on 390x844 or 844x390; local browser verification 2026-11-16, 9/9 together with nav3d.browser.test.cjs. Promoted to blocking.",
