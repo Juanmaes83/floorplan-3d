@@ -8,6 +8,7 @@ const SCRIPTS=[...ordered.slice(0,ordered.indexOf('project-package')+1),'budget-
 const PAGE=`<!doctype html><meta charset="utf-8"><title>persistencia</title>${SCRIPTS.map(s=>`<script src="/js/${s}.js"></script>`).join('')}
 <script>
 const P=FloorPlanPersistence,X=FloorPlanExpediente,I=FloorPlanImages,BUDGET='rubik-budget-v1';
+I.holdTab(); // tracing-ui does this in every editor tab, even before a persistence session
 window.states=[];
 window.start=async(opts={})=>{window.s=await P.session({debounceMs:60000,onState:st=>states.push(st.status),...opts});return s.state();};
 window.lsSnapshot=()=>Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
@@ -180,6 +181,8 @@ test('image collection never deletes an image of a restore in progress or just c
  await a.evaluate(()=>I.put([['img_en_curso',new Blob(['x'])]]));
  const r2=await b.evaluate(()=>I.collect({live:async()=>new Set(),storage:localStorage,locks:null,graceMs:0}));
  assert.ok(!r2.removed.includes('img_en_curso'));assert.ok(!r2.removed.includes(keys[0]),'nor the committed one: a first pass only marks');
+ const nextDay=await b.evaluate(()=>I.collect({live:async()=>new Set(),storage:localStorage,locks:null,now:()=>Date.now()+86_400_000}));
+ assert.equal(nextDay.sweep,false);assert.deepEqual(nextDay.removed,[]);
  await context.close();
 });
 

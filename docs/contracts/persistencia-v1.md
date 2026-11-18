@@ -99,21 +99,40 @@ La recogida (`FloorPlanImages.collect`) no borra nunca una imagen referenciada p
 
 Además:
 - Se ejecuta bajo el mismo Web Lock que la restauración.
-- **No barre mientras haya otra pestaña de RUBIK abierta.** Cada pestaña mantiene un Web Lock `rubik-sota-tab:`, porque otra pestaña puede tener trabajo sin guardar que esta no ve.
-- Sin Web Locks solo marca; nunca borra.
+- **Cuando Web Locks confirma que solo está registrada la pestaña actual**, una imagen huérfana se libera en el acto. Borrar el último proyecto que la usa libera su espacio, como antes de F0.2.
+- **Con otra pestaña abierta** solo se marca, porque esa pestaña puede tener trabajo sin guardar. La primera pasada que se haga a solas la libera. Cada pestaña mantiene un Web Lock `rubik-sota-tab:` (lo toma `tracing-ui` al cargar).
+- **Sin Web Locks o sin registro verificable de la pestaña actual**, solo se marca. El paso del tiempo no autoriza el borrado.
 
-El periodo de gracia es una protección adicional, no la garantía.
+**Hallazgo de CI, confirmado (#263 en `8cf0664`, job `contract`).** `building.browser`, en sus 3 tamaños de pantalla, exige que borrar el último proyecto que usa una imagen la libere. Un periodo de gracia aplicado siempre lo impedía. Con la regla anterior, las dos garantías se cumplen a la vez:
+- ninguna imagen legítima desaparece (pruebas de esta suite);
+- los huérfanos reales recuperan su espacio (`building.browser`).
 
 **Probado:**
 - restauración en curso en otra pestaña;
 - restauración ya confirmada;
 - imagen de un conflicto;
-- con otra pestaña abierta no se barre, y sí cuando queda sola (y conserva la del conflicto);
-- sin Web Locks.
+- con otra pestaña abierta no se barre, y sí a solas (conservando la del conflicto);
+- sin Web Locks, una segunda pasada transcurrido un día tampoco borra.
 
 **Hallazgo anterior mantenido:** `recover()` no deshace con una copia desactualizada de la biblioteca ni toca registros recientes.
 
 **F0.2c** llevará las imágenes y el diario a la misma base que la biblioteca. Imagen, documento y biblioteca se confirmarán en una transacción, y la recogida será una consulta sobre una sola autoridad.
+
+## 6 bis. SCULPT · bloques adoptados de openPlan3D
+
+Donante: `Juanmaes83/openPlan3D` (fork MIT de `laanlabs/openPlan3D`), `771c9e1`. Solo se adoptan bloques que mejoran lo que ya existe; cada uno lleva la atribución en el código.
+
+| Bloque | Origen | Dónde | Por qué |
+|---|---|---|---|
+| Llamada de bloqueo que nunca rechaza | `datastore.ts`, `mutateLibrary` | `persistence-store`, `expediente-core`, `local-images` | Firefox informa como error no capturado una llamada de bloqueo que rechaza enseguida |
+| Apertura bloqueada sin conexión colgada | `localDatabase.ts`, `openDatabase` | `persistence-store`, `open()` | Una apertura rechazada ya no deja una conexión que bloquee otras pestañas |
+| Códigos de cuota 22 y 1014 (Firefox) y `SecurityError` | `datastore.ts`, `storageErrorMessage` | `persistence-store` | Mensaje correcto fuera de Chromium |
+| `persist()` tras un guardado confirmado iniciado por la persona | `storagePersistence.ts` | `storage-persistence.js` | La petición no retrasa el guardado |
+
+**Candidatos, no adoptados en F0.2a:**
+- **Copias recuperadas visibles** (`localDatabase.ts`, `migrateLegacy`). Lo que escribe una pestaña antigua aparece en la biblioteca como «copia recuperada», y se reutiliza mientras no se edite. Mejora la visibilidad de nuestros conflictos `legacy-diverged` sin esperar a una interfaz. Corresponde a F0.3, porque toca la biblioteca y `MAX_VARIANTS`.
+- **Comparación por proyecto** (`datastore.ts`, `save`/`delete`). Compara el registro concreto en lugar de una revisión global, así que hay menos conflictos falsos entre proyectos distintos. Encaja cuando la biblioteca deje de ser una sola cadena; se evaluará en F0.2c.
+- **Historial de versiones** (`versionHistory.ts`, `snapshotStorage.ts`). Diez instantáneas por proyecto con recursos compartidos entre versiones. RUBIK no tiene historial; candidato para F0.3 o posterior, sin crear una autoridad paralela.
 
 ## 7. Orden recomendado
 
@@ -153,7 +172,6 @@ La guardia `ci-impact` compara los workflows de la rama base. #263 parte de #262
 
 El permiso se solicita desde `storage-persistence.js` cuando `session.flush({userEvent})` recibe un clic o una tecla de confianza y la transacción confirma una escritura. Migración, autoguardado, guardado vacío y conflicto quedan fuera. El guardado termina sin esperar al permiso. `session.storageStatus()` consulta estado y cuota sin abrir avisos. Tanto el permiso como la recomendación de copia se pueden consumir sin conectar aún el editor.
 
-La recolección de imágenes solo borra tras el periodo de gracia si Web Locks registra exclusivamente la pestaña que realiza la limpieza. Si no puede acreditarlo, conserva las imágenes y solo registra candidatas.
 
 ## 10. Validación de navegadores (planificada para F0.3)
 
