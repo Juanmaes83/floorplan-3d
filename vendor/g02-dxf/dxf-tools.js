@@ -1573,3 +1573,4 @@ var RubikDxfTools = (() => {
   return __toCommonJS(entry_exports);
 })();
 if (typeof module === 'object' && module.exports) module.exports = RubikDxfTools;
+else globalThis.RubikDxfTools = RubikDxfTools;

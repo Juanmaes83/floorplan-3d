@@ -2,6 +2,7 @@
 (function(root){
  const C=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
  const T=typeof module==='object'?require('./tracing-core.js'):root.FloorPlanTracing;
+ const DxfIntegrity=typeof module==='object'?require('./dxf-integrity.js'):root.FloorPlanDxfIntegrity;
  const LIMITS={uploadBytes:200*1024*1024,rasterSide:T.LIMITS.pixels,rasterPixels:40e6,dxfSegments:6000,margin:1000};
  const LABELS={pdf:'PDF',png:'PNG',jpeg:'JPEG',webp:'WebP',gif:'GIF',bmp:'BMP',tiff:'TIFF',heic:'HEIC/HEIF',avif:'AVIF',svg:'SVG',dxf:'DXF','dxf-binary':'DXF binario',dwg:'DWG',ifc:'IFC',step:'STEP',zip:'ZIP',usdz:'USDZ',json:'JSON',unknown:'desconocido'};
  const latin=(b,n)=>Array.from(b.subarray(0,Math.min(n,b.length)),c=>String.fromCharCode(c)).join('');
@@ -208,11 +209,11 @@
  }
  // G-02 DXF carries explicit architectural footprints. Other DXF files retain the face pairing heuristic.
  function rubikDxfGeometry(dxf,labels){
-  if(dxf.header?.$INSUNITS!==4||!Object.hasOwn(dxf.tables?.layer?.layers||{},'RUBIK_WALL_FOOTPRINT'))return null;
+  if(dxf.header?.$INSUNITS!==4||!Object.hasOwn(dxf.tables?.layer?.layers||{},DxfIntegrity.auxiliaryLayer))return null;
   const walls=[],rooms=[],mid=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
   const polygon=e=>e.type==='LWPOLYLINE'&&e.shape&&e.vertices?.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&!p.bulge)?e.vertices:null;
   for(const e of dxf.entities){
-   if(e.layer==='RUBIK_WALL_FOOTPRINT'){
+   if(e.layer===DxfIntegrity.auxiliaryLayer){
     const v=polygon(e);if(v?.length!==4)return null;
     const a=mid(v[0],v[3]),b=mid(v[1],v[2]),thickness=len2(v[0],v[3]),l=len2(a,b),tol=0.01;
     if(l<10||thickness<10||thickness>1500||Math.abs(len2(v[1],v[2])-thickness)>tol||
@@ -229,28 +230,42 @@
   }
   return {walls,rooms};
  }
- function dxfToProject(dxf,{name='Plano DXF'}={}){
+ const auxiliaryLayer=layer=>typeof layer==='string'&&layer.toUpperCase()===DxfIntegrity.auxiliaryLayer;
+ function dxfToProject(dxf,options){return convertDxf(dxf,options);}
+ async function dxfFromText(text,{parse,name}){
+  let dxf;
+  try{dxf=parse(text);}catch{throw Error('No se pudo leer el DXF. Guárdalo como DXF ASCII (R2000 o posterior) y súbelo de nuevo.');}
+  return convertDxf(dxf,{name},await DxfIntegrity.inspect(text));
+ }
+ function convertDxf(dxf,{name='Plano DXF'}={},{marked=false,verified=false}={}){
   if(!dxf||!Array.isArray(dxf.entities))throw Error('El DXF no contiene entidades legibles.');
   const units=dxf.header?.$INSUNITS??0,toMm=units===0?1:UNIT_MM[units];
   if(!toMm)throw Error(`Unidades DXF no admitidas ($INSUNITS=${units}). Exporta el plano en mm, cm o m.`);
   const all=[],hints=[],labels=[],inserts={doors:0,windows:0};
+  const layers=dxf.tables?.layer?.layers||{};
+  const hasAuxiliary=Object.keys(layers).some(auxiliaryLayer)||dxf.entities.some(e=>auxiliaryLayer(e.layer));
+  const editedRubik=(marked||hasAuxiliary)&&!verified;
+  const hiddenLayers=new Set(Object.entries(layers).filter(([,layer])=>layer.visible===false||layer.frozen).map(([name])=>name.toUpperCase()));
   for(const e of dxf.entities){
+   if(auxiliaryLayer(e.layer)||editedRubik&&hiddenLayers.has(e.layer?.toUpperCase()))continue;
    if(e.type==='INSERT'){const key=`${e.layer||''} ${e.name||''}`,kind=DOOR.test(key)?'door':WINDOW.test(key)?'window':null;if(!kind)continue;inserts[kind+'s']++;const points=insertFootprint(e,dxf.blocks?.[e.name],toMm);if(points)hints.push({kind,points,strong:true});continue;}
    if(e.type==='ARC'&&e.radius*toMm>=500&&e.radius*toMm<=1300&&Math.abs((e.angleLength??Math.abs(e.endAngle-e.startAngle))-Math.PI/2)<0.35){const c={x:e.center.x*toMm,y:e.center.y*toMm},R=e.radius*toMm;hints.push({kind:'door',points:[c,{x:c.x+R*Math.cos(e.startAngle),y:c.y+R*Math.sin(e.startAngle)},{x:c.x+R*Math.cos(e.endAngle),y:c.y+R*Math.sin(e.endAngle)}],weak:!DOOR.test(e.layer||'')});continue;}
    if((e.type==='TEXT'||e.type==='MTEXT')&&e.text){const q=e.startPoint||e.position;if(q)labels.push({layer:e.layer,text:String(e.text).replace(/\\[A-Za-z][^;]*;|[{}]/g,'').replace(/\\P/g,' '),point:{x:q.x*toMm,y:q.y*toMm}});continue;}
    for(const seg of segmentsOf(e))all.push({layer:e.layer||'0',seg:[{x:seg[0].x*toMm,y:seg[0].y*toMm},{x:seg[1].x*toMm,y:seg[1].y*toMm}]});
   }
-  const onWallLayers=all.filter(s=>WALL_LAYER.test(s.layer)),chosen=(onWallLayers.length?onWallLayers:all).filter(s=>len2(s.seg[0],s.seg[1])>=50);
+  const onWallLayers=all.filter(s=>WALL_LAYER.test(s.layer));
+  const chosen=(onWallLayers.length||editedRubik?onWallLayers:all).filter(s=>len2(s.seg[0],s.seg[1])>=50);
   if(chosen.length>LIMITS.dxfSegments)throw Error(`El DXF tiene ${chosen.length} líneas candidatas (máximo ${LIMITS.dxfSegments}). Exporta solo la planta o la capa de muros.`);
-  const explicit=rubikDxfGeometry(dxf,labels);
+  const explicit=verified?rubikDxfGeometry(dxf,labels):null;
   if(explicit&&!explicit.walls.length&&!explicit.rooms.length)throw Error('No se encontraron muros activos ni estancias en el DXF de RUBIK.');
+  if(editedRubik&&!chosen.length)throw Error('El DXF de RUBIK está modificado o sin verificación y no tiene muros visibles en capas reconocibles. Revisa las capas de muros en CAD y vuelve a importar.');
   if(!explicit&&!chosen.length)throw Error('No se encontraron líneas de muro (LINE/LWPOLYLINE/POLYLINE) en el DXF.');
   if(explicit)for(const {layer,seg:points} of all)if(layer==='WINDOWS'||layer==='DOORS_HIDDEN')hints.push({kind:layer==='WINDOWS'?'window':'opening',points});
   const {walls,rooms,evidence}=explicit?{...explicit,evidence:placeHints(explicit.walls,hints)}:assemble(pairFaces(chosen.map(s=>s.seg)),{hints,labels});
   const b=walls.length||!explicit?bounds(walls):bounds(rooms.flatMap(r=>r.polygon.map(a=>({a,b:a}))));
   if(b.maxX-b.minX>200000||b.maxY-b.minY>200000)throw Error('El dibujo mide más de 200 m: revisa las unidades del DXF o exporta solo la planta.');
   const built=buildProject({name,walls,rooms,map:q=>({x:q.x-b.minX+LIMITS.margin,y:b.maxY-q.y+LIMITS.margin}),scale:{confidence:'estimated',method:'declared-ratio',note:`Medidas tomadas del DXF (${UNIT_NAME[units]}). Revisa el resultado antes de usarlo como medida real.`}});
-  return {project:built.project,report:{units:UNIT_NAME[units],assumedUnits:units===0,layerFilter:onWallLayers.length>0,walls:built.project.walls.length,paired:walls.filter(w=>w.paired).length,openings:built.openings,rooms:built.project.rooms.length,roomNames:built.project.rooms.map(r=>r.name),inserts,unplaced:evidence.skipped+built.skippedOpenings}};
+  return {project:built.project,report:{units:UNIT_NAME[units],assumedUnits:units===0,layerFilter:onWallLayers.length>0,editedRubik,walls:built.project.walls.length,paired:walls.filter(w=>w.paired).length,openings:built.openings,rooms:built.project.rooms.length,roomNames:built.project.rooms.map(r=>r.name),inserts,unplaced:evidence.skipped+built.skippedOpenings}};
  }
 
  // ---- IFC (BIM). web-ifc returns metres with Y up; the plan is (x, -z). ----
@@ -441,6 +456,6 @@
   geojson:'GeoJSON no es un proyecto de plano. Sube un PDF, imagen, DXF o un proyecto JSON de Rubik Sota.',
   unknown:'Formato no reconocido. Sube PDF, imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, DXF, IFC, escaneo RoomPlan (JSON) o un proyecto JSON/ZIP de Rubik Sota.'
  };
- const api={LIMITS,LABELS,GUIDANCE,sniff,classifyJson,fitRaster,pairFaces,assemble,findRooms,buildProject,dxfToProject,ifcExtract,ifcToProject,pdfVectorExtract,pdfScaleFromText,pdfToProject,rasterWallBands,dwgVersion,roomPlanToProject};
+ const api={LIMITS,LABELS,GUIDANCE,sniff,classifyJson,fitRaster,pairFaces,assemble,findRooms,buildProject,dxfToProject,dxfFromText,ifcExtract,ifcToProject,pdfVectorExtract,pdfScaleFromText,pdfToProject,rasterWallBands,dwgVersion,roomPlanToProject};
  if(typeof module==='object')module.exports=api;else root.FloorPlanIntake=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -6,15 +6,16 @@
   const Core = node ? require('./project-core.js') : root.FloorPlanCore;
   const Quantities = node ? require('./quantity-core.js') : root.FloorPlanQuantities;
   const Surface = node ? require('./surface-core.js') : root.FloorPlanSurfaceMetrics;
+  const Integrity = node ? require('./dxf-integrity.js') : root.FloorPlanDxfIntegrity;
   const { Drawing, cadText, canvasSymbolDxf } = node
     ? require('../vendor/g02-dxf/dxf-tools.js')
-    : RubikDxfTools;
+    : root.RubikDxfTools;
 
   const layers = {
     WALLS_EXISTING: [7, 'CONTINUOUS'],
     WALLS_NEW: [3, 'CONTINUOUS'],
     DEMOLITION: [1, 'DASHED'],
-    RUBIK_WALL_FOOTPRINT: [-7, 'CONTINUOUS'],
+    [Integrity.auxiliaryLayer]: [-7, 'CONTINUOUS'],
     DOORS: [30, 'CONTINUOUS'],
     DOORS_HIDDEN: [30, 'DASHED'],
     WINDOWS: [5, 'CONTINUOUS'],
@@ -85,7 +86,7 @@
     text(drawing, [(a.x + b.x) / 2 + nx * 90, (a.y + b.y) / 2 + ny * 90], 100, `${Math.round(length)} mm`, angle);
   }
 
-  function exportLevel(project, { levelName, language = 'es' } = {}) {
+  async function exportLevel(project, { levelName, language = 'es' } = {}) {
     Core.validate(project);
     if (!project.walls.length && !project.rooms.length) throw new Error('El proyecto no tiene una planta que exportar.');
     const drawing = new Drawing();
@@ -101,7 +102,7 @@
     }
     // A CAD layer switched off by default. RUBIK can read the uninterrupted footprints
     // without mistaking visible jambs and gaps for independent walls.
-    drawing.setActiveLayer('RUBIK_WALL_FOOTPRINT');
+    drawing.setActiveLayer(Integrity.auxiliaryLayer);
     for (const wall of project.walls) {
       if (wall.status !== 'demolished') drawing.drawPolyline(Core.wallRect(wall).poly.map(toCad), true);
     }
@@ -143,7 +144,7 @@
       floor.areaM2 === null ? t[6] : `${t[floor.complete ? 4 : 5]} · ${floor.areaM2.toFixed(2)} m²`,
     ];
     legend.forEach((line, index) => text(drawing, [x + w / 2, y + h + 350 + index * 170], 112, line));
-    return drawing.toDxfString();
+    return Integrity.seal(drawing.toDxfString());
   }
 
   const api = { exportLevel };

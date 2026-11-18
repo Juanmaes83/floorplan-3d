@@ -3,6 +3,7 @@ const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const K = require('./photo-project/kit.cjs');
+const { editVisibleWalls } = require('./fixtures/g02-dxf-edits.cjs');
 const DxfParser = require('../vendor/dxf-parser/dxf-parser.js');
 const building = require('../docs/contracts/examples/floorplan-building-v1.example.json');
 let env;
@@ -54,6 +55,26 @@ test('G-02 downloads the current variant and reimports it in RUBIK with estimate
     await page.waitForFunction(id=>FloorPlanApp.entryId!==id,variant.id);
     const imported = await page.evaluate(()=>({scale:FloorPlanApp.project.scale.confidence,walls:FloorPlanApp.project.walls.length,rooms:FloorPlanApp.project.rooms.length}));
     assert.deepEqual(imported,{scale:'estimated',walls:variant.walls,rooms:variant.rooms.length});
+    assert.deepEqual(watch.errors,[]);
+  } finally { await context.close(); }
+});
+
+test('G-02 warns when an edited DXF must be rebuilt from visible walls',{timeout:90000},async()=>{
+  const {context,page,watch}=await K.editor(env,{acceptDownloads:true});
+  try {
+    const original = await page.evaluate(()=>({id:FloorPlanApp.entryId,walls:FloorPlanApp.project.walls}));
+    const {buffer} = await download(page);
+    const edited = editVisibleWalls(buffer.toString());
+    await page.locator('#uploadIn').setInputFiles({name:'plan-editado.dxf',mimeType:'application/dxf',buffer:Buffer.from(edited)});
+    await page.waitForFunction(id=>FloorPlanApp.entryId!==id,original.id);
+    assert.match(await page.locator('#toast').textContent(),/modificado o sin verificación.*sin usar la capa auxiliar/);
+    const imported = await page.evaluate(()=>({scale:FloorPlanApp.project.scale.confidence,walls:FloorPlanApp.project.walls}));
+    const width = walls => {
+      const xs=walls.flatMap(w=>[w.start.x,w.end.x]);
+      return Math.max(...xs)-Math.min(...xs);
+    };
+    assert.equal(imported.scale,'estimated');
+    assert.ok(width(imported.walls)>1.8*width(original.walls));
     assert.deepEqual(watch.errors,[]);
   } finally { await context.close(); }
 });

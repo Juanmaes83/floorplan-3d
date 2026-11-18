@@ -762,6 +762,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/building-core.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
+<script src="js/dxf-integrity.js"></script>
 <script src="js/plan-intake.js"></script>
 <script src="js/layout-review.js"></script>
 <script src="js/furniture-placement.js"></script>
@@ -2391,11 +2392,14 @@ $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDi
 // A building exports as a whole; a single level is exported explicitly from «Plantas…» with a warning.
 const exportProjectJson = () => library?.isBuilding()?window.FloorPlanBuildingUI.exportBuildingJson():download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
 $('#exportJson').onclick = $('#exportJsonQuick').onclick = exportProjectJson;
-$('#exportDxf').onclick = () => {
+$('#exportDxf').onclick = async () => {
   const levelName = window.FloorPlanBuildingUI?.context?.levelName;
   try {
-    const dxf = window.FloorPlanDxfExport.exportLevel(project, { levelName, language: LANG });
     const name = [project.name || 'RUBIK', levelName].filter(Boolean).join(' - ').replace(/[<>:"/\\|?*\x00-\x1f]/g, '_');
+    const activeProject = structuredClone(project), language = LANG;
+    await import('./vendor/g02-dxf/dxf-tools.js');
+    await import('./js/dxf-export.js');
+    const dxf = await window.FloorPlanDxfExport.exportLevel(activeProject, { levelName, language });
     download(name + '.dxf', new Blob([dxf], { type: 'application/dxf' }));
   } catch {
     toast(say3('无法导出楼层。请检查是否有墙或房间。','Could not export the plan. Check that it contains walls or rooms.','No se pudo exportar la planta. Comprueba que contiene muros o estancias.'));
@@ -5581,8 +5585,6 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/moodboard-core.js"></script>
 <script src="js/moodboard-ui.js"></script>
 <script src="js/quantity-core.js"></script>
-<script src="vendor/g02-dxf/dxf-tools.js"></script>
-<script src="js/dxf-export.js"></script>
 <script src="js/quantity-schedule-core.js"></script>
 <script src="js/quantity-schedule-ui.js"></script>
 <script src="js/budget-core.js"></script>

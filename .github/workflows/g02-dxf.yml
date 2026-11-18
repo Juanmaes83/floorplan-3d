@@ -5,6 +5,7 @@ on:
     paths:
       - index.html
       - js/dxf-export.js
+      - js/dxf-integrity.js
       - js/plan-intake.js
       - js/plan-intake-ui.js
       - js/project-core.js
@@ -13,6 +14,7 @@ on:
       - js/building-ui.js
       - vendor/g02-dxf/**
       - tests/g02-dxf*
+      - tests/fixtures/g02-dxf-edits.cjs
       - docs/contracts/examples/floorplan-*.example.json
       - .github/workflows/g02-dxf.yml
 permissions:
@@ -37,7 +39,7 @@ jobs:
       - name: Canonical geometry and independent CAD reader
         run: |
           node --test tests/g02-dxf.test.cjs
-          node -e "require('node:fs').writeFileSync(process.argv[1], require('./js/dxf-export.js').exportLevel(require('./docs/contracts/examples/floorplan-project-v1.example.json')))" "$RUNNER_TEMP/RUBIK-G02-EJEMPLO.dxf"
+          node -e "require('./js/dxf-export.js').exportLevel(require('./docs/contracts/examples/floorplan-project-v1.example.json')).then(dxf => require('node:fs').writeFileSync(process.argv[1], dxf))" "$RUNNER_TEMP/RUBIK-G02-EJEMPLO.dxf"
           python -m pip install ezdxf==1.4.4
           python tests/g02-dxf-cad.py "$RUNNER_TEMP/RUBIK-G02-EJEMPLO.dxf"
       - name: Playwright and Chromium
