@@ -101,3 +101,34 @@ test('E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en 
     await access.click();await page.waitForFunction(()=>document.getElementById('assistantHost').open);
     assert.equal(await page.evaluate(()=>{const r=document.getElementById('assistantPanel').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1;}),true,'el panel cabe en 390');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
+
+// A26/H03 · carrera: los datos cambian MIENTRAS se genera (otra pestaña escribe entre dos pasos asíncronos de la exportación).
+// Se simula enganchando crypto.subtle.digest: en la primera huella tras armar, se modifica el presupuesto guardado.
+const armRace=page=>page.evaluate(()=>{const orig=crypto.subtle.digest.bind(crypto.subtle);let armed=true;
+  crypto.subtle.digest=async(...a)=>{if(armed){armed=false;const k='rubik-budget-v1',b=JSON.parse(localStorage.getItem(k));const id=Object.keys(b)[1];b[id].lines=(b[id].lines||[]).slice(0,1);b[id].__otraPestana=Date.now();localStorage.setItem(k,JSON.stringify(b));}return orig(...a);};});
+test('A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador se descarta, no se puede descargar ni dar por vigente',async()=>{
+  const {storage,group}=seed();const {ctx,page,w}=await open(storage,group);try{
+    await armRace(page);await page.locator('#buildBtn').click();
+    await page.waitForFunction(()=>/durante la preparación/.test(document.getElementById('dosError').textContent));
+    assert.equal(await page.locator('#dosOut').isHidden(),true,'no se muestra un borrador hecho con datos que ya no son los guardados');
+    assert.equal(await page.evaluate(()=>window.__ux07Compare.dossier??null),null,'no queda borrador retenido');
+    await page.waitForSelector('#staleNotice:not([hidden])');assert.ok(await page.locator('#buildBtn').isDisabled(),'hay que recargar para comparar lo actual');
+    assert.deepEqual(w.errors,[]);}finally{await ctx.close();}});
+test('A26/H03 · orden de cambio: cambio de datos DURANTE su generación la descarta',async()=>{
+  const {storage,group}=seed();const {ctx,page,w}=await open(storage,group);try{
+    await page.fill('#orderAuthor','Arquitecta responsable');await page.fill('#orderMotivo','Petición del cliente: ampliar la cocina');
+    await armRace(page);await page.locator('#orderBuild').click();
+    await page.waitForFunction(()=>/durante la preparación/.test(document.getElementById('orderStatus').textContent));
+    assert.equal(await page.locator('#orderPreview').evaluate(n=>!n.srcdoc),true,'sin vista previa de una orden desfasada');
+    assert.ok(await page.locator('#orderDlHtml').isDisabled());assert.ok(await page.locator('#orderDlManifest').isDisabled());
+    assert.deepEqual(w.errors,[]);}finally{await ctx.close();}});
+test('Marca · los borradores del comparador no llevan la marca: cambiarla no los desfasa ni altera su contenido',async()=>{
+  const {storage,group}=seed();storage['rubik-sota-brand-profiles-v1']=JSON.stringify({version:1,activeId:'b1',profiles:[{id:'b1',name:'ESTUDIO-MARCA-ZETA',person:'Persona Zeta'}]});
+  const {ctx,page,w}=await open(storage,group);try{
+    await page.locator('#buildBtn').click();await page.waitForSelector('#dosOut:not([hidden])');
+    const html1=await page.evaluate(()=>window.__ux07Compare.dossier.html);assert.doesNotMatch(html1,/ESTUDIO-MARCA-ZETA|Persona Zeta/,'el borrador interno no incluye la marca');
+    await page.evaluate(()=>localStorage.setItem('rubik-sota-brand-profiles-v1',JSON.stringify({version:1,activeId:'b2',profiles:[{id:'b2',name:'OTRA-MARCA'}]})));
+    await page.locator('#verifyBtn').click();await page.waitForSelector('#verifyOut li[data-check="vigencia"]');
+    assert.equal(await page.locator('#verifyOut li.sum').getAttribute('data-ok'),'true','cambiar la marca no desfasa un borrador que no la usa');
+    assert.equal(await page.locator('#staleNotice').isHidden(),true);
+    assert.deepEqual(w.errors,[]);}finally{await ctx.close();}});

@@ -50,6 +50,12 @@ async function checkFresh(){const now=await fingerprint();state.stale=!!state.fp
   const box=$('staleNotice');if(box)box.hidden=!state.stale;
   for(const id of ['buildBtn','dlHtml','dlManifest','orderBuild','orderDlHtml','orderDlManifest'])if($(id))$(id).disabled=state.stale||($(id).dataset.needs==='motivo'&&!$('orderMotivo')?.value.trim());
   return !state.stale;}
+// A26/H03 · generación asíncrona: la huella se toma al EMPEZAR (y debe ser la de apertura) y se vuelve a leer al TERMINAR.
+// Si lo guardado cambia mientras se genera (otra pestaña), el resultado se descarta: nunca se presenta ni se descarga un
+// borrador hecho con datos que ya no son los guardados. Devuelve la huella de inicio o null si hubo cambio.
+async function stableRun(work){if(!state.fp0)state.fp0=await fingerprint();if(!await checkFresh())return {fp:null,result:null,reason:'stale'};const fp=state.fp0; // referencia: la huella de apertura ya verificada
+  const result=await work();const end=await fingerprint();if(end!==fp){await checkFresh();return {fp:null,result:null,reason:'changed'};}return {fp,result,reason:null};}
+const CHANGED='No se prepara: lo guardado ha cambiado durante la preparación (otra pestaña). Vuelve a cargar para comparar lo actual.';
 // relectura de lo guardado AHORA, para verify(): no se usa el estado retenido
 function readNow(){try{const lib=L.load(readOnly),g=lib.group(state.ids.anchor);const b=readBudgets();
   const pr=V.prepare({group:g,beforeId:state.ids.before,afterId:state.ids.after,budgets:b.map});return {before:pr.before,after:pr.after,budget:pr.budgets.after,beforeBudget:pr.budgets.before};}catch{return null;}}
@@ -135,11 +141,12 @@ const slug=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/
 async function build(){
   $('dosError').textContent='';$('dosStatus').textContent='';$('verifyOut').innerHTML='';
   const pr=state.prepared;if(!pr)return;
-  if(!await checkFresh()){$('dosError').textContent='No se prepara: lo guardado ha cambiado desde que abriste el comparador. Vuelve a cargar para comparar lo actual.';return;}
+  state.dossier=null;$('dosOut').hidden=true;
   try{const c=pr.comparison,budget=state.budgets.after,beforeBudget=state.budgets.before; // E2.2: simétrico
     const v=D.view(c,{beforeProject:pr.before,afterProject:pr.after,budget,beforeBudget});
-    const out=await D.exportDossier(v,{beforeProject:pr.before,afterProject:pr.after,budget,beforeBudget,comparison:c,beforeSvg:R.planSvg(c,'before',pr.before),afterSvg:R.planSvg(c,'after',pr.after)});
-    state.dossier={view:v,budget,beforeBudget,...out,fp:await fingerprint()};$('preview').srcdoc=out.html;$('dosOut').hidden=false;
+    const run=await stableRun(()=>D.exportDossier(v,{beforeProject:pr.before,afterProject:pr.after,budget,beforeBudget,comparison:c,beforeSvg:R.planSvg(c,'before',pr.before),afterSvg:R.planSvg(c,'after',pr.after)}));
+    if(!run.result){$('dosError').textContent=run.reason==='changed'?CHANGED:'No se prepara: lo guardado ha cambiado desde que abriste el comparador. Vuelve a cargar para comparar lo actual.';return;}
+    const out=run.result;state.dossier={view:v,budget,beforeBudget,...out,fp:run.fp};$('preview').srcdoc=out.html;$('dosOut').hidden=false;
     $('dosStatus').textContent=`Borrador interno preparado (${v.budget?v.budget.label:'sin presupuesto'}). Huella ${out.manifest.html.sha256.slice(0,12)}…`;
   }catch(e){state.dossier=null;$('dosOut').hidden=true;$('dosError').textContent=e.message;}
 }
@@ -195,14 +202,17 @@ h1{font:600 30px/1.15 Georgia,serif;margin:14px 0 4px}h2{font:700 14px/1.3 syste
 <footer>Borrador interno preparado con RUBIK SOTA en este navegador. Se compara lo guardado en este navegador. No se ha publicado ni enviado. Huella y verificación en su manifiesto.</footer></main></body></html>`;}
 async function buildOrder(){const pr=state.prepared;$('orderStatus').textContent='';if(!pr)return;const motivo=$('orderMotivo').value.trim(),author=$('orderAuthor').value.trim();
  if(!motivo||!author){$('orderStatus').textContent='Escribe el responsable y el motivo: la orden de cambio no se prepara sin ellos.';return;}
- if(!await checkFresh()){$('orderStatus').textContent='No se prepara: lo guardado ha cambiado. Vuelve a cargar.';return;}
+ state.order=null;$('orderOut').hidden=true;$('orderPreview').removeAttribute('srcdoc');
  const c=pr.comparison,generatedAt=new Date().toISOString(),economic=economicOf(pr);
+ const run=await stableRun(async()=>{
  const manifest={schema:ORDER_SCHEMA,version:ORDER_VERSION,status:'draft-internal',publication:'none',signature:'none',acceptance:'not-recorded',generatedAt,
   before:{projectId:pr.before.id,label:c.before.label,updatedAt:c.before.updatedAt||null,sha256:await D.sha256(JSON.stringify(pr.before))},
   after:{projectId:pr.after.id,label:c.after.label,updatedAt:c.after.updatedAt||null,sha256:await D.sha256(JSON.stringify(pr.after))},
   reason:{author,sha256:await D.sha256(motivo)},changes:{total:c.counts.total,sha256:await D.sha256(JSON.stringify(c.changes))},economic:{status:economic.status,delta:economic.delta},schedule:null,html:null};
  const o={comparison:c,motivo,author,generatedAt,economic,manifest};const page=orderHtml(o);manifest.html={bytes:new TextEncoder().encode(page).length,sha256:await D.sha256(page)};
- state.order={html:page,manifest,fp:await fingerprint()};$('orderPreview').srcdoc=page;$('orderOut').hidden=false;$('orderVerifyOut').innerHTML='';
+ return {page,manifest};});
+ if(!run.result){$('orderStatus').textContent=run.reason==='changed'?CHANGED:'No se prepara: lo guardado ha cambiado. Vuelve a cargar.';return;}
+ const {page,manifest}=run.result;state.order={html:page,manifest,fp:run.fp};$('orderPreview').srcdoc=page;$('orderOut').hidden=false;$('orderVerifyOut').innerHTML='';
  $('orderStatus').textContent=`Orden de cambio preparada (${economic.status==='complete'?'con diferencia económica':'sin diferencia económica'}). Huella ${manifest.html.sha256.slice(0,12)}…`;}
 $('orderBuild').addEventListener('click',buildOrder);
 for(const id of ['orderMotivo','orderAuthor'])$(id).addEventListener('input',()=>{$('orderBuild').disabled=state.stale||!$('orderMotivo').value.trim()||!$('orderAuthor').value.trim();});
