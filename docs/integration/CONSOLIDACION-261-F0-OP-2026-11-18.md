@@ -2,6 +2,23 @@
 
 Base verificada `master@163df68e83a80ddf11a008d573ee257d51c1821f`. La secuencia se simuló con `git merge-tree --write-tree`, sin conflictos. Los árboles de la tabla corresponden al contenido acumulado tras cada paso con las PR fijadas en esos HEADs.
 
+## Acta de ejecución
+
+El propietario autorizó esta secuencia de seis PR mediante commits de merge. Se verificaron el HEAD y el árbol simulado antes de cada paso. Tras cada merge se leyó de nuevo `master`, se cotejó el primer padre con el paso anterior y el segundo padre con el HEAD autorizado. #263 y #264 cambiaron su base a `master` después de comprobar la ascendencia de su dependencia. El árbol final real coincide con el aprobado, `f62e9492de0ee616c8edd1966703238d57702a63`, en [`master@dd528119bdfd80733c4faf5bb56a594190fea5ac`](https://github.com/Juanmaes83/floorplan-3d/commit/dd528119bdfd80733c4faf5bb56a594190fea5ac).
+
+| PR | Commit de merge verificado |
+|---|---|
+| #261 | `67367c6b4abf2d429a5979da3f0cbf1c58721b68` |
+| #262 | `af6577aad2e7af56bd34c1b3901025553a2819f4` |
+| #263 | `455309069ea52ac8c6c4b887209277cc1169900d` |
+| #264 | `7bd414f697796360520f8b6294208d32a9d706b3` |
+| #265 | `4c62c1fcbee4dcb7871508b2d2361778fc6e277a` |
+| #260 | `dd528119bdfd80733c4faf5bb56a594190fea5ac` |
+
+#266 y #267 conservan sus ramas y siguen fuera de `master`. La simulación de #266 `edfbf66` sobre la nueva base da `0ff75783bd0bbe16a200ead239989938644d6c50`, sin conflictos. Las verificaciones automáticas del HEAD de #266 tienen su propio ciclo. [Checks de #266](https://github.com/Juanmaes83/floorplan-3d/pull/266/checks).
+
+## Secuencia aprobada
+
 | Orden | PR | HEAD a autorizar | Árbol acumulado esperado |
 |---|---|---|---|
 | 1 | [#261 · Reconciliación documental](https://github.com/Juanmaes83/floorplan-3d/pull/261) | `f4fe60bf655df854da792581cf7cc82b2ebf39e3` | `56a7c407ce83f30c7b99c20ce9efd9daea5f32e6` |
