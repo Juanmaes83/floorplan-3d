@@ -152,7 +152,7 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 | Fase | Contenido | Imprescindible para | Depende de | Coste |
 |---|---|---|---|---|
 | **F0.1 · Contrato del expediente** | Núcleo `js/expediente-core.js`: exportar e importar un proyecto o edificio con imágenes, presupuestos y observaciones, sobre el almacenamiento actual; lee también los ZIP y JSON históricos | **Hito A** | — | 0 |
-| **F0.2 · Biblioteca en IndexedDB** | Fachada síncrona en memoria con escritura asíncrona; migración en dos fases que no borra `localStorage` hasta verificar; `storage.persist()` solicitado e informado | **Hito A** | F0.1 | 0 |
+| **F0.2 · Biblioteca en IndexedDB** | IndexedDB como única autoridad, con «guardado» confirmado por transacción (sustituye a la fachada que daba por guardado lo que estaba en memoria); una transacción para biblioteca y documentos; revisión bajo Web Lock con conflictos recuperables; migración en dos fases que no toca `localStorage`; copia de compatibilidad para versiones anteriores; `storage.persist()` solicitado e informado. Cortes F0.2a (#263), F0.2b (editor, coordinado con Codex) y F0.2c (imágenes y diario en la misma base) | **Hito A** | F0.1 | 0 |
 | **F0.3 · Experiencia profesional** | Exportar y recuperar el expediente desde la interfaz (reutilizando el control de #257), aviso de copia sin exportar y rótulo de almacenamiento en la Demo | **Hito A** | F0.1, #257 | 0 |
 | **F1 · Sincronización privada de un profesional** | `api/projects.js`; tablas de §5.1; Blob privado por hash; `If-Match` y `409` hacia una variante; cola sin conexión; restauración de revisiones | **Hito B** | GOV-06a, D3-a, D3-b, GOV-05 | Bajo |
 | **F2 · Artefactos enlazados** | Renders, dossieres y presentaciones como recursos de una revisión; publicación S5 derivada de una revisión | Hito C | F1, GOV-08 S5 | Bajo |
@@ -203,6 +203,8 @@ La arquitectura no cambia con la elección, porque el expediente es el formato.
 ## 14. Decisiones del propietario
 
 - **D3** **Aprobada conceptualmente el 18/11:** B sobre A. F0 autorizado por etapas; F1 no autorizado.
+- **F0.1** **GO técnico el 18/11:** #262 (`69ae552`) con la CI del expediente, la guardia `ci-impact` y el contrato en verde. Sin fusionar.
+- **F0.2** **Estrategia aprobada el 18/11 con condiciones** (contrato del expediente, §8): confirmación por transacción, coherencia entre biblioteca y documentos, migración reversible e idempotente sin borrar originales, protección frente a escrituras concurrentes, conflictos recuperables, exportación de emergencia, estado del guardado honesto y una versión anterior que nunca use en silencio una copia desactualizada. F0.2a está en la Draft PR #263 (`docs/contracts/persistencia-v1.md`).
 - **D3-a** Elegir proveedor de base de datos.
 - **D3-b** Elegir proveedor de identidad para GOV-06a.
 - **D3-c** Rotular la Demo como almacenamiento de demostración.
