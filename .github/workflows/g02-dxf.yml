@@ -1,0 +1,57 @@
+name: G-02 architectural DXF
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - index.html
+      - js/dxf-export.js
+      - js/dxf-integrity.js
+      - js/plan-intake.js
+      - js/plan-intake-ui.js
+      - js/project-core.js
+      - js/quantity-core.js
+      - js/surface-core.js
+      - js/building-ui.js
+      - vendor/g02-dxf/**
+      - tests/g02-dxf*
+      - tests/fixtures/g02-dxf-edits.cjs
+      - docs/contracts/examples/floorplan-*.example.json
+      - .github/workflows/g02-dxf.yml
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  dxf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Canonical geometry and independent CAD reader
+        run: |
+          node --test tests/g02-dxf.test.cjs
+          node -e "require('./js/dxf-export.js').exportLevel(require('./docs/contracts/examples/floorplan-project-v1.example.json')).then(dxf => require('node:fs').writeFileSync(process.argv[1], dxf))" "$RUNNER_TEMP/RUBIK-G02-EJEMPLO.dxf"
+          python -m pip install ezdxf==1.4.4
+          python tests/g02-dxf-cad.py "$RUNNER_TEMP/RUBIK-G02-EJEMPLO.dxf"
+      - name: Playwright and Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Active level, variant and import in Chromium
+        run: node --test --test-concurrency=1 tests/g02-dxf.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RUBIK-G02-EJEMPLO
+          path: ${{ runner.temp }}/RUBIK-G02-EJEMPLO.dxf
+          retention-days: 14

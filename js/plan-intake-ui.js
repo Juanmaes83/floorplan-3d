@@ -109,10 +109,12 @@
     await app().importProjectFile(file,{fromUpload:true,transaction:session});return;
    }
    if(kind==='dxf'){
-    await script('vendor/dxf-parser/dxf-parser.js');if(!current())return;let dxf;try{dxf=new window.DxfParser().parseSync(decodeText(bytes));}catch{throw Error('No se pudo leer el DXF. Guárdalo como DXF ASCII (R2000 o posterior) y súbelo de nuevo.');}
-    const {project,report}=I.dxfToProject(dxf,{name:stem(file.name)});if(!adopt(project,stem(file.name)))return;
+    await script('vendor/dxf-parser/dxf-parser.js');if(!current())return;
+    const {project,report}=await I.dxfFromText(decodeText(bytes),{name:stem(file.name),parse:text=>new window.DxfParser().parseSync(text)});
+    if(!current()||!adopt(project,stem(file.name)))return;
     const o=report.openings,plural=(n,one,many)=>`${n} ${n===1?one:many}`;
-    say(`DXF importado en ${report.units}${report.assumedUnits?' (el archivo no declara unidades)':''}: ${plural(report.walls,'muro','muros')} (${report.paired} con grosor medido), ${plural(o.door,'puerta','puertas')}, ${plural(o.window,'ventana','ventanas')}${o.opening?`, ${plural(o.opening,'hueco','huecos')}`:''} y ${plural(report.rooms,'estancia','estancias')}${report.layerFilter?'':'; no hay capa de muros, se usaron todas las líneas'}${report.unplaced?`; ${report.unplaced} elementos sin muro cercano`:''}. Revisa el resultado.`,10000);return;
+    const notice=report.editedRubik?'DXF de RUBIK modificado o sin verificación. Se reconstruyó desde las capas de muros, sin usar la capa auxiliar. ':'';
+    say(notice+`DXF importado en ${report.units}${report.assumedUnits?' (el archivo no declara unidades)':''}: ${plural(report.walls,'muro','muros')} (${report.paired} con grosor medido), ${plural(o.door,'puerta','puertas')}, ${plural(o.window,'ventana','ventanas')}${o.opening?`, ${plural(o.opening,'hueco','huecos')}`:''} y ${plural(report.rooms,'estancia','estancias')}${report.layerFilter?'':'; no hay capa de muros, se usaron todas las líneas'}${report.unplaced?`; ${report.unplaced} elementos sin muro cercano`:''}. Revisa el resultado.`,10000);return;
    }
    if(kind==='ifc'){
     say('Procesando IFC (BIM)…',60000);const {W,api}=await webIfc();let model;
