@@ -99,6 +99,7 @@
  // Every level of every building counts: an image is only removed when no stored project references it.
  // F0.2: an image is only deleted if it stays unreferenced for a grace period (FloorPlanImages.collect), and «referenced»
  // includes what is stored now (another tab may have saved since this one loaded) and the project on screen.
+ I.holdTab?.();
  async function cleanup(){try{const refs=ps=>ps.flatMap(p=>(p?.sourceImages||[]).map(i=>i.storage?.ref||i.id));
   // `live` runs once the lock is held, so it reads the stored library fresh; the tab's own copy and the project on screen also count.
   const live=async()=>{let stored;try{stored=FloorPlanLibrary.load(localStorage,FloorPlanCore.initial()).projects();}catch(e){throw Error('No se pudo leer la biblioteca guardada; no se ha borrado ninguna imagen. '+e.message);}return new Set(refs([...stored,...library.projects(),project]));};

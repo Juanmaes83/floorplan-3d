@@ -81,7 +81,7 @@ test('a real exhausted quota fails visibly, keeps the change in memory and in th
   const u=new Uint8Array(3*1024*1024);for(let i=0;i<u.length;i+=65536)crypto.getRandomValues(u.subarray(i,i+65536));let big='';for(let i=0;i<u.length;i+=32768)big+=String.fromCharCode(...u.subarray(i,i+32768));
   s.storage.setItem(BUDGET,JSON.stringify({big:btoa(big)}));await s.flush();const e=s.state();return {status:e.status,code:e.error?.code,message:e.error?.message,pending:e.pending};});
  assert.equal(st.status,'error');assert.equal(st.code,'write-failed');assert.match(st.message,/No se ha guardado/);assert.equal(st.pending,1);
- const exported=await page.evaluate(async()=>JSON.parse(await s.emergencyExport().text()));
+ const exported=await page.evaluate(async()=>JSON.parse(await (await s.emergencyExport()).text()));
  assert.equal(exported.format,'rubik-sota.emergency');assert.equal(JSON.parse(exported.unsaved[BUDGET]).big.length,4*1024*1024);
  assert.equal((await page.evaluate(()=>authority())).docs['rubik-budget-v1'],'{"x":{"note":"presupuesto original"}}');
  await cdp.send('Storage.overrideQuotaForOrigin',{origin});
@@ -95,10 +95,10 @@ test('two tabs: the second commit does not overwrite the first; its work is kept
  assert.equal((await a.evaluate(async()=>{s.storage.setItem(BUDGET,'{"de":"A"}');await s.flush();return s.state();})).status,'saved');
  await b.waitForFunction(()=>s.state().outdated===true);
  const rb=await b.evaluate(async()=>{s.storage.setItem(BUDGET,'{"de":"B"}');await s.flush();const e=s.state();return {status:e.status,id:e.conflictId,message:e.error.message,pending:e.pending};});
- assert.equal(rb.status,'conflict');assert.match(rb.message,/no se han perdido/);assert.equal(rb.pending,1);
+ assert.equal(rb.status,'conflict');assert.match(rb.message,/nada se ha sobrescrito/);assert.equal(rb.pending,0,'kept in IndexedDB, not only in memory');
  const fresh=await open(context),auth=await fresh.evaluate(()=>authority());
  assert.equal(auth.docs[ 'rubik-budget-v1'],'{"de":"A"}');
- const c=auth.conflicts.find(x=>x.id===rb.id);assert.equal(c.reason,'revision');assert.equal(c.changes['rubik-budget-v1'],'{"de":"B"}');
+ const c=auth.conflicts.find(x=>x.id===rb.id);assert.equal(c.reason,'revision');assert.equal(c.docs['rubik-budget-v1'],'{"de":"B"}');
  await context.close();
 });
 
@@ -118,7 +118,7 @@ test('downgrade: an older RUBIK reads the latest confirmed state; if the mirror 
  await page.evaluate(()=>{s.close();localStorage.setItem(BUDGET,'{"escrito":"por una versión anterior"}');});
  await page.reload();await ready(page);const st=await page.evaluate(()=>start());assert.equal(st.diverged.length,1);
  const auth=await page.evaluate(()=>authority());assert.notEqual(auth.docs[BUDGET_KEY()],'{"escrito":"por una versión anterior"}');
- assert.equal(auth.conflicts.find(c=>c.id===st.diverged[0]).changes['rubik-budget-v1'],'{"escrito":"por una versión anterior"}');
+ assert.equal(auth.conflicts.find(c=>c.id===st.diverged[0]).docs['rubik-budget-v1'],'{"escrito":"por una versión anterior"}');
  assert.equal((await page.evaluate(async()=>{await s.close();return start();})).diverged.length,0,'recorded once, not on every start');
  await context.close();
 });
@@ -158,5 +158,83 @@ test('recover() with a tab’s stale copy of the library does not undo a restore
   const report=await X.recover({library:stale,storage:localStorage,removeImages:I.remove,minAgeMs:0});
   const budgets=JSON.parse(localStorage.getItem('rubik-budget-v1')||'{}');return {pending:r.journalPending,report,images:(await I.keys()).length,budgets:Object.keys(budgets).length};},file);
  assert.equal(out.pending,true);assert.deepEqual(out.report,{committed:1,rolledBack:0,pending:[]});assert.equal(out.images,1);assert.equal(out.budgets,1);
+ await context.close();
+});
+
+// ── F0.2a closing review ─────────────────────────────────────────────────────────────────────────────────────────
+// Simulated write failures, inside a real browser: a Storage wrapper over the real localStorage that throws for one key.
+const failing=()=>{window.failing=pred=>({getItem:k=>localStorage.getItem(k),setItem:(k,v)=>{if(pred(k,v))throw Object.assign(new Error('fallo de escritura'),{name:'QuotaExceededError'});localStorage.setItem(k,v);},removeItem:k=>localStorage.removeItem(k),key:i=>localStorage.key(i),get length(){return localStorage.length;}});};
+
+test('a snapshot and its revision always belong to the same confirmed state, even while another tab commits',{timeout:120000},async()=>{
+ const context=await browser.newContext(),a=await seeded(context);await a.evaluate(()=>start());const b=await open(context);await b.evaluate(()=>start());
+ // Each commit writes the revision it produces into the document; a reader must never see one labelled with another.
+ const writer=a.evaluate(async()=>{for(let i=0;i<40;i++){const n=s.state().revision+1;s.storage.setItem(BUDGET,JSON.stringify({rev:n}));await s.flush();}});
+ const bad=await b.evaluate(async()=>{const db=await P.open();let bad=0,seen=new Set();for(let i=0;i<300;i++){const {revision,docs}=await P.load(db);const v=JSON.parse(docs.get(BUDGET));if(v.rev!==undefined){seen.add(revision);if(v.rev!==revision)bad++;}}db.close();return {bad,seen:seen.size};});
+ await writer;assert.equal(bad.bad,0);assert.ok(bad.seen>1,'the reader did observe several revisions');await context.close();
+});
+
+test('a conflict keeps the COMPLETE work, including changes made during the transaction and after it, and can be rebuilt',{timeout:180000},async()=>{
+ const fx=F.build(),project=JSON.parse(JSON.stringify(fx.building.levels[0].project)),image=fx.bytesFor(project.sourceImages[0].id).toString('base64');
+ const context=await browser.newContext(),a=await open(context);await a.evaluate(([p,i])=>setup(p,i),[project,image]);await a.evaluate(()=>start());
+ const b=await open(context);await b.evaluate(()=>start());
+ await a.evaluate(async()=>{s.storage.setItem('rubik-review-v1','{"de":"A"}');await s.flush();});
+ const r=await b.evaluate(async()=>{const lib=FloorPlanLibrary.load(s.storage,FloorPlanCore.initial()),p=lib.project();p.name='Trabajo de B';lib.save(p);
+  const all=JSON.parse(s.storage.getItem(BUDGET));all[p.id].taxRatePercent=10;s.storage.setItem(BUDGET,JSON.stringify(all));
+  // A change that arrives once the batch has been taken, while the transaction is in flight.
+  const off=s.subscribe(st=>{if(st.status==='saving'){off();s.storage.setItem('rubik-construction-v1','{"durante":"la transacción"}');}});
+  await s.flush();await new Promise(res=>setTimeout(res,400));await s.flush();
+  // And one after the conflict.
+  s.storage.setItem('rubik-review-v1','{"despues":"del conflicto"}');await s.flush();
+  const st=s.state();return {status:st.status,id:st.conflictId,pending:st.pending,image:p.sourceImages[0].storage.ref,pid:p.id};});
+ assert.equal(r.status,'conflict');assert.equal(r.pending,0,'nothing stays only in memory');
+ // B's memory is gone: reopen and rebuild its work from the conflict record alone.
+ await b.close();const c=await open(context);await c.evaluate(()=>start());
+ const rebuilt=await c.evaluate(async([id,pid,ref])=>{const ex=JSON.parse(await (await s.conflictExport(id)).text());
+  const out=await s.adoptConflict(id),lib=FloorPlanLibrary.load(s.storage,FloorPlanCore.initial()),p=lib.projects().find(x=>x.id===pid),auth=await authority();
+  return {name:p.name,tax:JSON.parse(auth.docs[BUDGET])[pid].taxRatePercent,review:auth.docs['rubik-review-v1'],construction:auth.docs['rubik-construction-v1'],
+   imageInExport:!!ex.images[ref],image:!!(await I.get(ref)),superseded:auth.conflicts.find(x=>x.id===out.superseded).docs['rubik-review-v1']};},[r.id,r.pid,r.image]);
+ assert.deepEqual(rebuilt,{name:'Trabajo de B',tax:10,review:'{"despues":"del conflicto"}',construction:'{"durante":"la transacción"}',imageInExport:true,image:true,superseded:'{"de":"A"}'});
+ await context.close();
+});
+
+test('images of conflicts and of other open tabs are never collected; the grace period is not the only guarantee',{timeout:120000},async()=>{
+ const context=await browser.newContext(),a=await seeded(context);await a.evaluate(()=>start());
+ await a.evaluate(async()=>{await I.put([['img_conflicto',new Blob(['c'])],['img_suelta',new Blob(['s'])]]);
+  const db=await P.open();await new Promise((res,rej)=>{const t=db.transaction('conflicts','readwrite');t.objectStore('conflicts').add({reason:'revision',docs:{'rubik-sota-project-library-v1':JSON.stringify({x:{storage:{kind:'local-browser',ref:'img_conflicto'}}})}});t.oncomplete=res;t.onerror=rej;});db.close();});
+ const other=await open(context);await other.evaluate(()=>I.holdTab());
+ const gc=()=>a.evaluate(()=>I.collect({live:async()=>new Set(),storage:localStorage,graceMs:0}));
+ await gc();const withOther=await gc();assert.equal(withOther.sweep,false);assert.deepEqual(withOther.removed,[]);
+ await other.close();
+ // Closing a tab releases its lock asynchronously.
+ await a.waitForFunction(async()=>(await navigator.locks.query()).held.filter(l=>l.name.startsWith(I.TAB_LOCK)).length===1);// The image was already marked by the earlier passes: the first pass alone sweeps it.
+ const alone=await gc();
+ assert.equal(alone.sweep,true);assert.deepEqual(alone.removed,['img_suelta'],'it does sweep once alone, and keeps the conflict image');
+ assert.deepEqual(await a.evaluate(()=>I.keys()),['img_conflicto']);
+ await context.close();
+});
+
+test('compatibility copy: an interruption between keys leaves the library blocked, never a mixture, and the next start repairs it',{timeout:120000},async()=>{
+ const context=await browser.newContext(),page=await seeded(context);await page.evaluate(()=>start());await page.evaluate(()=>s.close());
+ await page.evaluate(()=>{window.halted=false;P.session({hooks:{afterBarrier:async()=>{window.halted=true;await new Promise(()=>{});}}}).then(x=>{x.storage.setItem(BUDGET,'{"rev":"nueva"}');x.flush();});});
+ await page.waitForFunction(()=>window.halted);await page.reload();await ready(page);
+ const mid=await page.evaluate(()=>{let old;try{FloorPlanLibrary.load(localStorage,FloorPlanCore.initial());old='abrió';}catch(e){old='rechazada';}return {library:localStorage.getItem('rubik-sota-project-library-v1')===P.TOMBSTONE,old};});
+ assert.deepEqual(mid,{library:true,old:'rechazada'});
+ const st=await page.evaluate(()=>start());assert.equal(st.mirror.ok,true);
+ assert.equal(await page.evaluate(async()=>{const a=await authority();return P.KEYS.every(k=>(a.docs[k]??null)===localStorage.getItem(k))&&a.docs[BUDGET]==='{"rev":"nueva"}';}),true);
+ await context.close();
+});
+
+test('compatibility copy: a partial failure stays blocked and is repaired; a failed barrier writes nothing; an older tab writing meanwhile is kept as a conflict',{timeout:120000},async()=>{
+ const context=await browser.newContext(),page=await seeded(context);await page.evaluate(failing);await page.evaluate(()=>start());
+ const partial=await page.evaluate(async()=>{s.close();await start({storage:failing(k=>k==='rubik-review-v1')});s.storage.setItem('rubik-review-v1','{"r":2}');await s.flush();return {mirror:s.state().mirror,blocked:localStorage.getItem('rubik-sota-project-library-v1')===P.TOMBSTONE};});
+ assert.equal(partial.mirror.ok,false);assert.equal(partial.mirror.blocked,true);assert.equal(partial.blocked,true);
+ assert.equal((await page.evaluate(async()=>{s.close();return start();})).mirror.ok,true,'repaired at the next start');
+ const before=await page.evaluate(()=>lsSnapshot());
+ const barrier=await page.evaluate(async()=>{s.close();await start({storage:failing((k,v)=>v===P.TOMBSTONE)});s.storage.setItem(BUDGET,'{"b":3}');await s.flush();const st=s.state();return {status:st.status,mirror:st.mirror};});
+ assert.equal(barrier.status,'saved');assert.equal(barrier.mirror.ok,false);assert.equal(barrier.mirror.blocked,false);assert.match(barrier.mirror.message,/no abras una versión anterior/);
+ assert.deepEqual(await page.evaluate(()=>lsSnapshot()),before,'nothing written: localStorage stays one single revision');
+ const old=await page.evaluate(async()=>{s.close();await start();localStorage.setItem(BUDGET,'{"de":"versión anterior"}');s.storage.setItem('rubik-review-v1','{"r":4}');await s.flush();
+  const st=s.state(),a=await authority();return {kept:a.conflicts.find(c=>c.id===st.mirror.conflictId)?.docs[BUDGET],ls:localStorage.getItem(BUDGET),auth:a.docs[BUDGET]};});
+ assert.equal(old.kept,'{"de":"versión anterior"}');assert.equal(old.ls,old.auth);
  await context.close();
 });

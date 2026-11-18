@@ -15,11 +15,9 @@
      CONFLICT record (own object store, survives reloads, exportable) and the tab is told to reload.
    - Migration from localStorage: two phases, verified by SHA-256, repeatable after any interruption, and localStorage is
      never modified or deleted by it. The original values are also kept in the `legacy` store.
-   - Downgrade: after every confirmed commit the changed keys are mirrored to localStorage, so an older RUBIK sees the
-     latest confirmed state, not a stale copy. If the mirror cannot be written, the library key is replaced by a marker
-     the older version rejects visibly («No se pudo abrir la colección local…»), instead of letting it work silently on
-     stale data; the data itself is in IndexedDB (docs + legacy). If an older version wrote to localStorage after the
-     mirror, the next start stores those values as a conflict record ('legacy-diverged'): nothing is lost or overwritten.
+   - Downgrade: after every confirmed commit the authority is copied to localStorage behind a barrier (see writeMirror),
+     so an older RUBIK sees either the latest confirmed state, complete and of one revision, or a library it rejects
+     visibly; never a mixture. What an older version wrote is stored as a conflict record before being overwritten.
    - Emergency export of everything in memory, saved or not, as one JSON file.
    - Flushing does not depend on closing events: a short debounce after every change, plus `visibilitychange` (hidden)
      and `pagehide` as extra opportunities. */
@@ -79,13 +77,21 @@
   });
  }
 
- async function load(db){const [docs,rev]=await Promise.all([readAll(db,'docs'),meta(db,'revision')]);return {revision:rev?.n??0,docs};}
- async function saveConflict(db,record){return run(db,['conflicts'],'readwrite',s=>{const r=s.conflicts.add({...record,at:new Date().toISOString()});return ()=>r.result;});}
+ // The snapshot and its revision come from ONE readonly transaction: IndexedDB gives it a consistent view, so a commit
+ // from another tab can never yield docs of one revision labelled with another (which would let a stale tab commit).
+ async function load(db){return run(db,['docs','meta'],'readonly',s=>{const k=s.docs.getAllKeys(),v=s.docs.getAll(),r=s.meta.get('revision');
+  return ()=>({revision:r.result?.n??0,docs:new Map(k.result.map((key,i)=>[key,v.result[i]]))});});}
+ async function saveConflict(db,record,id){return run(db,['conflicts'],'readwrite',s=>{const value={...record,at:new Date().toISOString()};delete value.id;const r=id===undefined?s.conflicts.add(value):s.conflicts.put(value,id);return ()=>r.result;});}
  async function conflicts(db){const all=await readAll(db,'conflicts');return [...all].map(([id,r])=>({id,...r}));}
  async function removeConflict(db,id){return run(db,['conflicts'],'readwrite',s=>{s.conflicts.delete(id);});}
+ // Every image reference held by the authority or by any conflict record: those images must never be collected.
+ function refsIn(text,out){if(typeof text!=='string')return;let v;try{v=JSON.parse(text);}catch{return;}(function walk(x){if(Array.isArray(x))x.forEach(walk);else if(x&&typeof x==='object'){if(x.storage&&typeof x.storage.ref==='string')out.add(x.storage.ref);for(const y of Object.values(x))walk(y);}})(v);}
+ async function imageRefs(db){const out=new Set(),{docs}=await load(db);for(const v of docs.values())refsIn(v,out);for(const c of await conflicts(db))for(const v of Object.values(c.docs||{}))refsIn(v,out);return out;}
 
  // ── Commit (one transaction, optimistic revision under a Web Lock) ───────────────────────────────────────────────
- async function commit({db,locks,storage,baseRevision,changes,tab='',mirror=true}){
+ // On a revision conflict nothing is written to the authority and the record keeps the tab's COMPLETE state (`snapshot`:
+ // every managed key as the tab sees it), not only the batch: library and documents stay coherent with each other.
+ async function commit({db,locks,storage,baseRevision,changes,snapshot,tab='',mirror=true,hooks}){
   for(const k of Object.keys(changes))if(!managed(k))throw new PersistenceError('key-unmanaged',`«${k}» no está bajo la autoridad de persistencia.`);
   return withLock(locks,async()=>{
    const r=await run(db,['docs','meta'],'readwrite',(s,abort)=>{let out;
@@ -95,60 +101,95 @@
      const n=cur+1;s.meta.put({n,at:new Date().toISOString(),by:tab},'revision');out={status:'saved',revision:n};};
     return ()=>out;});
    if(r.status==='conflict'){
-    const id=await saveConflict(db,{reason:'revision',baseRevision,revision:r.revision,tab,changes});
+    const id=await saveConflict(db,{reason:'revision',baseRevision,revision:r.revision,tab,changed:Object.keys(changes),docs:snapshot||changes});
     return {...r,conflictId:id};
    }
-   r.mirror=mirror&&storage?await writeMirror(db,storage,changes,r.revision):null;
+   r.mirror=mirror&&storage?await writeMirror({db,storage,hooks}):null;
    return r;
   });
  }
- // Downgrade mirror. Best effort, never the authority, never hidden: the result says whether it is current.
- async function writeMirror(db,storage,changes,revision){
-  const m=await meta(db,'mirror')||{hashes:{}},hashes={...m.hashes};
-  try{for(const [k,v] of Object.entries(changes)){if(v===null){storage.removeItem(k);delete hashes[k];}else{storage.setItem(k,v);hashes[k]=await sha(v);}}
-   await run(db,['meta'],'readwrite',s=>{s.meta.put({revision,hashes,ok:true},'mirror');});return {ok:true};}
+
+ // ── Downgrade mirror (called with the persistence lock held) ─────────────────────────────────────────────────────
+ // Protocol, so an older RUBIK never works silently on keys from different revisions:
+ //  0. if localStorage changed since the last mirror (an older version wrote), those values are stored as a conflict
+ //     record BEFORE anything is overwritten;
+ //  1. barrier: the library key becomes the TOMBSTONE, which the older version refuses visibly;
+ //  2. every other managed key is written from the authority (one consistent snapshot);
+ //  3. the library key is written last: only then is localStorage a complete, single-revision copy.
+ // An interruption or failure after 1 leaves the barrier in place; the next start (or commit) repeats the whole copy.
+ async function writeMirror({db,storage,hooks={}}){
+  const m=await meta(db,'mirror')||{hashes:{}},{revision,docs}=await load(db);
+  const diverged=await divergence(storage,m);let conflictId=null;
+  if(diverged)conflictId=await saveConflict(db,{reason:'legacy-diverged',revision:m.revision,docs:diverged});
+  const setMeta=v=>run(db,['meta'],'readwrite',s=>{s.meta.put(v,'mirror');});
+  try{storage.setItem(LIBRARY,TOMBSTONE);}
   catch(e){
-   // An older RUBIK must not work silently on a stale copy: make the library key unusable for it (it shows an error).
-   let blocked=false;try{storage.setItem(LIBRARY,TOMBSTONE);hashes[LIBRARY]=await sha(TOMBSTONE);blocked=true;}catch{}
-   await run(db,['meta'],'readwrite',s=>{s.meta.put({revision,hashes,ok:false,blocked,error:describe(e)},'mirror');}).catch(()=>{});
-   return {ok:false,blocked,message:'La copia de compatibilidad para versiones anteriores no está al día: '+describe(e)+'. Tus datos están guardados en IndexedDB.'};
+   // localStorage refuses even a smaller value (in practice: disabled or broken). Nothing else is written, so it keeps
+   // the previous single-revision copy; the state says so.
+   await setMeta({...m,ok:false,blocked:false,error:describe(e)}).catch(()=>{});
+   return {ok:false,blocked:false,conflictId,message:'No se pudo actualizar ni bloquear la copia para versiones anteriores: '+describe(e)+'. Tus datos están guardados en IndexedDB; no abras una versión anterior.'};
+  }
+  const hashes={...m.hashes,[LIBRARY]:await sha(TOMBSTONE)};
+  await setMeta({revision,hashes,ok:false,blocked:true,state:'writing'});
+  try{
+   if(hooks.afterBarrier)await hooks.afterBarrier();
+   for(const k of KEYS){if(k===LIBRARY)continue;if(docs.has(k)){storage.setItem(k,docs.get(k));hashes[k]=await sha(docs.get(k));}else{storage.removeItem(k);delete hashes[k];}}
+   if(docs.has(LIBRARY)){storage.setItem(LIBRARY,docs.get(LIBRARY));hashes[LIBRARY]=await sha(docs.get(LIBRARY));}
+   else{storage.removeItem(LIBRARY);delete hashes[LIBRARY];}
+   await setMeta({revision,hashes,ok:true,state:'done'});return {ok:true,conflictId};
+  }catch(e){
+   // The barrier stays: an older version refuses the library instead of opening a mixture of revisions.
+   await setMeta({revision,hashes,ok:false,blocked:true,state:'writing',error:describe(e)}).catch(()=>{});
+   return {ok:false,blocked:true,conflictId,message:'La copia para versiones anteriores no está al día ('+describe(e)+'); está bloqueada para que no se use. Tus datos están guardados en IndexedDB.'};
   }
  }
- // Values an older version wrote to localStorage after the last mirror are kept as a conflict record, never overwritten.
- async function checkLegacy({db,storage,locks}){
+ async function divergence(storage,m){const changed={};let any=false;
+  for(const k of KEYS){const v=storage.getItem(k),h=v===null?undefined:await sha(v);if(h!==m.hashes?.[k]){changed[k]=v;any=true;}}
+  if(!any)return null;
+  // A complete picture of what the older version left, not only the keys it changed.
+  for(const k of KEYS)if(!(k in changed)){const v=storage.getItem(k);if(v!==null)changed[k]=v;}
+  return changed;}
+ // At start: record what an older version wrote and repair an interrupted or failed copy.
+ async function checkLegacy({db,storage,locks,hooks}){
   return withLock(locks,async()=>{
-   const m=await meta(db,'mirror');if(!m)return [];const changed={},hashes={...m.hashes};
-   for(const k of KEYS){const v=storage.getItem(k),h=v===null?undefined:await sha(v);if(h!==m.hashes[k]){changed[k]=v;if(h===undefined)delete hashes[k];else hashes[k]=h;}}
-   if(!Object.keys(changed).length)return [];
-   const id=await saveConflict(db,{reason:'legacy-diverged',revision:m.revision,changes:changed});
-   await run(db,['meta'],'readwrite',s=>{s.meta.put({...m,hashes},'mirror');});
-   return [id];
+   const m=await meta(db,'mirror');if(!m)return {diverged:[],mirror:null};
+   if(m.ok&&!(await divergence(storage,m)))return {diverged:[],mirror:{ok:true}};
+   const r=await writeMirror({db,storage,hooks});return {diverged:r.conflictId?[r.conflictId]:[],mirror:r};
   });
  }
 
  // ── Session: the synchronous view an editor tab uses ─────────────────────────────────────────────────────────────
- async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks}={}){
+ const TAB_LOCK='rubik-sota-tab:';
+ async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get}={}){
   const db=await open({indexedDB:idb});
+  // While this tab is open it holds a lock; image collection never sweeps while another tab may hold unsaved work.
+  let releaseTab=null;const shared=root.FloorPlanImages?.holdTab?.(locks);if(shared)tab=shared;else if(locks?.request)locks.request(TAB_LOCK+tab,()=>new Promise(r=>{releaseTab=r;})).catch(()=>{});
   const migration=await migrate({db,storage,locks,hooks});
-  const diverged=await checkLegacy({db,storage,locks});
+  const legacy=await checkLegacy({db,storage,locks,hooks});
   let {revision,docs}=await load(db);
-  const pending=new Map(),listeners=new Set([onState]);let chain=Promise.resolve(),timer=null,stopped=false;
-  const state={status:'saved',revision,pending:0,error:null,conflictId:null,outdated:false,mirror:null,migration:migration.status,diverged,persisted:null};
+  const pending=new Map(),listeners=new Set([onState]);let chain=Promise.resolve(),timer=null,closed=false;
+  const state={status:'saved',revision,pending:0,error:null,conflictId:null,outdated:false,mirror:legacy.mirror,migration:migration.status,diverged:legacy.diverged,persisted:null};
   const emit=patch=>{Object.assign(state,patch,{pending:pending.size,revision});for(const f of listeners)try{f({...state});}catch{}};
-  function schedule(){if(stopped)return;emit({status:state.status==='conflict'?'conflict':'pending'});clearTimeout(timer);timer=setTimeout(()=>{flush().catch(()=>{});},debounceMs);}
-  // One writer per tab, in order: a flush waits for the previous one and takes everything pending at that moment.
+  const full=()=>Object.fromEntries(docs);
+  function schedule(){if(closed)return;if(state.status!=='conflict')emit({status:'pending'});clearTimeout(timer);timer=setTimeout(()=>{flush().catch(()=>{});},debounceMs);}
   function flush(){chain=chain.then(doFlush,doFlush);return chain;}
   async function doFlush(){
-   clearTimeout(timer);if(!pending.size||stopped)return {...state};
-   if(state.status==='conflict')return {...state};
+   clearTimeout(timer);if(closed)return {...state};
+   // In conflict, every later change still reaches IndexedDB: the conflict record is rewritten with the full state.
+   if(state.status==='conflict'){
+    if(!pending.size)return {...state};
+    try{const prev=(await conflicts(db)).find(c=>c.id===state.conflictId)||{};await saveConflict(db,{...prev,docs:full(),updated:true},state.conflictId);pending.clear();emit({});}
+    catch(e){emit({error:new PersistenceError('conflict-unsaved','Hay un conflicto y no se pudieron guardar los últimos cambios: '+describe(e)+'. Usa la exportación de emergencia.',{cause:e})});}
+    return {...state};
+   }
+   if(!pending.size)return {...state};
    const batch=new Map(pending);pending.clear();emit({status:'saving'});
    try{
-    const r=await commit({db,locks,storage,baseRevision:revision,changes:Object.fromEntries(batch),tab});
+    // `full()` is read when the commit runs, so a conflict record includes changes made while a transaction was in flight.
+    const r=await commit({db,locks,storage,baseRevision:revision,changes:Object.fromEntries(batch),snapshot:full(),tab,hooks});
     if(r.status==='conflict'){
-     // Nothing was written. The local changes are stored as a conflict record AND kept in memory.
-     for(const [k,v] of batch)if(!pending.has(k))pending.set(k,v);stopped=true;
-     emit({status:'conflict',conflictId:r.conflictId,outdated:true,error:new PersistenceError('conflict','Otra pestaña guardó antes. Tus cambios no se han perdido: están guardados como conflicto recuperable. Recarga para continuar.')});
-     return {...state};
+     emit({status:'conflict',conflictId:r.conflictId,outdated:true,error:new PersistenceError('conflict','Otra pestaña guardó antes. Tu trabajo completo (biblioteca y documentos) está guardado como conflicto recuperable; nada se ha sobrescrito. Recarga o recupera el conflicto.')});
+     return pending.size?doFlush():{...state};
     }
     revision=r.revision;channel?.postMessage({revision,tab});
     emit({status:pending.size?'pending':'saved',error:null,mirror:r.mirror});
@@ -168,16 +209,31 @@
    removeItem(k){if(!managed(k))return storage.removeItem(k);if(!docs.has(k))return;docs.delete(k);pending.set(k,null);schedule();},
    key:i=>storage.key(i),get length(){return storage.length;}
   };
+  // A JSON file with every managed key as given, plus the bytes of every image it refers to.
+  async function exportDocs(source,extra){const refs=new Set();for(const v of Object.values(source))refsIn(v,refs);const images={},missingImages=[];
+   for(const ref of refs){try{const b=getImage&&await getImage(ref);if(!b){missingImages.push(ref);continue;}const u=new Uint8Array(await b.arrayBuffer());let s='';for(let i=0;i<u.length;i+=32768)s+=String.fromCharCode(...u.subarray(i,i+32768));images[ref]={type:b.type,base64:btoa(s)};}catch{missingImages.push(ref);}}
+   return new Blob([JSON.stringify({format:'rubik-sota.emergency',version:1,exportedAt:new Date().toISOString(),...extra,docs:source,images,missingImages})],{type:'application/json'});}
+  const find=async id=>{const c=(await conflicts(db)).find(x=>x.id===id);if(!c)throw new PersistenceError('conflict-missing','Ese conflicto ya no existe.');return c;};
   return {
    storage:storageFacade,flush,state:()=>({...state,pending:pending.size,revision}),subscribe:f=>{listeners.add(f);return ()=>listeners.delete(f);},
    conflicts:()=>conflicts(db),removeConflict:id=>removeConflict(db,id),
-   // Everything this tab holds, confirmed or not, as one JSON file. Does not depend on IndexedDB working.
-   emergencyExport:()=>new Blob([JSON.stringify({format:'rubik-sota.emergency',version:1,exportedAt:new Date().toISOString(),revision,status:state.status,unsaved:Object.fromEntries(pending),docs:Object.fromEntries(docs)})],{type:'application/json'}),
+   emergencyExport:()=>exportDocs(full(),{revision,status:state.status,unsaved:Object.fromEntries(pending)}),
+   conflictExport:async id=>{const c=await find(id);return exportDocs(c.docs,{conflict:{id,reason:c.reason,baseRevision:c.baseRevision,revision:c.revision,at:c.at}});},
+   // Keep the conflict's version: the current confirmed state is first stored as a conflict record ('superseded'), then
+   // the conflict's complete state is committed in one transaction. Nothing is discarded either way.
+   adoptConflict:async id=>{const c=await find(id);
+    for(const k of Object.keys(c.docs))if(!managed(k))throw new PersistenceError('key-unmanaged',`«${k}» no está bajo la autoridad de persistencia.`);
+    const r=await withLock(locks,async()=>{const cur=await load(db),superseded=await saveConflict(db,{reason:'superseded',revision:cur.revision,docs:Object.fromEntries(cur.docs)});return {cur,superseded};});
+    const changes={};for(const k of KEYS)changes[k]=typeof c.docs[k]==='string'?c.docs[k]:null;
+    const out=await commit({db,locks,storage,baseRevision:r.cur.revision,changes,tab,hooks});
+    if(out.status!=='saved')throw new PersistenceError('conflict','Otra pestaña guardó mientras se recuperaba el conflicto; vuelve a intentarlo.');
+    await removeConflict(db,id);({revision,docs}=await load(db));pending.clear();channel?.postMessage({revision,tab});
+    emit({status:'saved',conflictId:null,error:null,outdated:false,mirror:out.mirror});return {revision,superseded:r.superseded};},
    requestPersist:async()=>{const s=root.navigator?.storage;const out={persisted:s?.persist?await s.persist().catch(()=>false):false,estimate:s?.estimate?await s.estimate().catch(()=>null):null};emit({persisted:out.persisted});return out;},
-   close(){stopped=true;clearTimeout(timer);root.document?.removeEventListener('visibilitychange',onHide);root.removeEventListener?.('pagehide',flush);channel?.close();db.close();},
+   close(){closed=true;clearTimeout(timer);releaseTab?.();root.document?.removeEventListener('visibilitychange',onHide);root.removeEventListener?.('pagehide',flush);channel?.close();db.close();},
    db
   };
  }
- const api={DB,LOCK,CHANNEL,KEYS,TOMBSTONE,PersistenceError,open,migrate,load,commit,checkLegacy,conflicts,removeConflict,session,sha};
+ const api={DB,LOCK,CHANNEL,KEYS,TOMBSTONE,TAB_LOCK,PersistenceError,open,migrate,load,commit,checkLegacy,conflicts,removeConflict,imageRefs,refsIn,session,sha};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanPersistence=api;
 })(globalThis);

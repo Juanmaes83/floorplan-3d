@@ -1,8 +1,9 @@
 # Contrato · Autoridad de persistencia (F0.2)
 
-**Estado:** F0.2a entregado en borrador. La estrategia (contrato del expediente, §8) la aprobó el propietario el 18/11/2026 con condiciones. El editor **todavía no** usa esta autoridad: conectarlo es F0.2b y requiere coordinarlo antes con Codex.
-**Código:** `js/persistence-store.js` (`FloorPlanPersistence`), `js/local-images.js` (recogida segura de imágenes), `js/expediente-core.js` (`recover()`), `js/tracing-ui.js` (`cleanup()`).
-**Pruebas:** `tests/persistence.browser.test.cjs` (8) y `tests/expediente.browser.test.cjs` (4), ambas en Chromium real.
+**Estado:** F0.2a cerrado en borrador (#263). La estrategia (contrato del expediente, §8) la aprobó el propietario el 18/11/2026 con condiciones. El editor **todavía no** usa esta autoridad: F0.2b (§8) se hará solo después de integrar #259 y #262 y de acordar el orden con Codex.
+**Código:** `js/persistence-store.js` (`FloorPlanPersistence`), `js/local-images.js` (recogida segura), `js/expediente-core.js` (`recover()`), `js/tracing-ui.js` (`cleanup()`).
+**Pruebas:** `tests/persistence.browser.test.cjs` (13) y `tests/expediente.browser.test.cjs` (4), en Chromium real. Los fallos de escritura de clave concreta se **simulan** con un envoltorio sobre el `localStorage` real; la cuota es real, en un perfil en disco.
+**CI:** `.github/workflows/f0-persistencia.yml`, workflow propio (§9).
 **Relacionado:** [Contrato del expediente](expediente-v1.md).
 
 ## 1. Decisión
@@ -14,10 +15,10 @@ IndexedDB (`rubik-sota-persistence-v1`) es la **única autoridad** de:
 - las observaciones;
 - el registro de obra.
 
-No es otro motor. Guarda, byte a byte, las mismas cadenas JSON que ya escriben `project-library`, `budget-core` y los demás módulos bajo sus claves de `localStorage`, y las devuelve con la misma interfaz `Storage` (`getItem`, `setItem`, `removeItem`). `index.html` ya entrega un objeto `storage` a `FloorPlanLibrary.load`, así que conectar el editor consiste en sustituir ese objeto. No hay que reconstruir el editor.
+Guarda, byte a byte, las mismas cadenas JSON que ya escriben `project-library`, `budget-core` y los demás módulos, y las devuelve con la misma interfaz `Storage`. No es otro motor. `index.html` ya entrega un objeto `storage` a `FloorPlanLibrary.load`.
 
 **Quedan en `localStorage`:**
-- el registro del Asistente (datos personales, excluido a propósito);
+- el registro del Asistente (excluido a propósito);
 - las preferencias de interfaz;
 - el diario del expediente;
 - las marcas de recogida de imágenes.
@@ -26,70 +27,152 @@ No es otro motor. Guarda, byte a byte, las mismas cadenas JSON que ya escriben `
 
 | Garantía | Mecanismo | Prueba (Chromium real) |
 |---|---|---|
-| «Guardado» solo con la transacción terminada | El estado pasa a «guardado» en `oncomplete`, con `durability: 'strict'`. Antes es «pendiente» o «guardando» | Secuencia observada «pendiente → guardando → guardado»; recargar sin confirmar no da nada por guardado |
-| Coherencia entre biblioteca y documentos | Todo lo pendiente se confirma en **una** transacción | Por construcción: solo hay una transacción por guardado |
-| Sin depender de eventos de cierre | Guardado automático tras una pausa corta. `visibilitychange` (oculta) y `pagehide` solo son oportunidades adicionales | Autoguardado confirmado sin cerrar nada |
-| Recuperación del último estado confirmado | Al abrir se carga lo que hay en IndexedDB | Recarga tras guardar y recarga sin confirmar |
-| Fallo de escritura o cuota agotada | Estado «error al guardar» visible. Los cambios siguen en memoria y se reintentan al recuperar espacio | Cuota real en un perfil en disco (`Storage.overrideQuotaForOrigin`): error visible, nada confirmado perdido, guardado correcto al liberar espacio |
-| Exportación de emergencia | `emergencyExport()`: un JSON con todo lo que la pestaña tiene, guardado o no. No necesita IndexedDB | Contiene el cambio que no se pudo guardar |
-| Escrituras concurrentes | Cada guardado lleva su revisión base y se compara dentro de la transacción, bajo un Web Lock. `BroadcastChannel` avisa a las demás pestañas | La segunda pestaña no sobrescribe a la primera |
-| Trabajo pendiente ante conflictos | El trabajo de la pestaña que pierde se guarda como **registro de conflicto** (almacén propio, persiste entre recargas, se puede listar y exportar) y además sigue en memoria. Nunca va como variante, así que `MAX_VARIANTS` no puede descartar trabajo | Registro de conflicto con los datos de la segunda pestaña |
-| Comunicación honesta | Estados «guardado», «pendiente», «guardando», «error», «conflicto», «desactualizada»; aviso de copia de compatibilidad no actualizada; resultado de `persist()` | — |
+| «Guardado» solo con la transacción terminada | Estado «guardado» en `oncomplete`, con `durability: 'strict'` | Secuencia «pendiente → guardando → guardado»; recargar sin confirmar no da nada por guardado |
+| Instantánea coherente con su revisión | Documentos y revisión se leen en **una** transacción de lectura | 300 lecturas mientras otra pestaña confirma 40 revisiones: ninguna mezcla |
+| Coherencia entre biblioteca y documentos | Todo lo pendiente se confirma en una transacción | Por construcción |
+| Sin depender de eventos de cierre | Autoguardado tras una pausa corta; `visibilitychange` y `pagehide` son solo oportunidades adicionales | Autoguardado confirmado |
+| Recuperación del último estado confirmado | Al abrir se carga IndexedDB | Recargas |
+| Fallo de escritura o cuota agotada | Error visible; los cambios siguen en memoria y se reintentan | Cuota real: error visible, nada confirmado perdido, guardado correcto al liberar espacio |
+| Exportación de emergencia | JSON con todo lo que tiene la pestaña, más los **bytes de cada imagen** referenciada | Contiene el cambio no guardado |
+| Escrituras concurrentes | Revisión base comparada dentro de la transacción, bajo un Web Lock | La segunda pestaña no sobrescribe |
+| Conflictos recuperables | §3 | Reconstrucción completa tras perder la memoria de la pestaña |
 
-## 3. Migración
+## 3. Conflictos
+
+**Hallazgo confirmado.** El registro de conflicto guardaba solo el lote. Los cambios que llegaban durante la transacción o después del conflicto quedaban **solo en memoria**.
+
+**Ahora:**
+- El registro guarda el **estado completo** de la pestaña (todas las claves gestionadas tal como las ve: biblioteca y documentos coherentes entre sí), no solo el lote.
+- Mientras la pestaña sigue en conflicto, cada cambio posterior **reescribe ese mismo registro** en IndexedDB. Nada queda solo en memoria; si esa escritura falla, se avisa y se indica la exportación de emergencia.
+- `conflictExport(id)` genera el mismo formato que la exportación de emergencia, con las imágenes.
+- `adoptConflict(id)` recupera ese trabajo. Primero guarda el estado confirmado vigente como conflicto `superseded`; después confirma el del conflicto en una transacción. No se descarta nada en ninguno de los dos sentidos.
+- Los conflictos nunca entran como variantes, así que `MAX_VARIANTS` no puede descartar trabajo.
+
+**Prueba.** La pestaña B cambia la biblioteca y un presupuesto, recibe otro cambio con la transacción en curso y otro después del conflicto, y se cierra. En una pestaña nueva, solo con el registro, se reconstruyen:
+- el proyecto renombrado;
+- el presupuesto;
+- ambos cambios posteriores;
+- la imagen, en IndexedDB y en la exportación.
+
+La versión de la pestaña A queda como `superseded`.
+
+## 4. Migración
 
 | Requisito | Cómo |
 |---|---|
-| Ningún borrado de originales | La migración **no modifica `localStorage`**. Además, los valores originales se guardan en el almacén `legacy` con su huella SHA-256 |
-| Verificada | Fase A: copia. Después se relee y se comparan huellas. Fase B: marca `done` |
-| Idempotente | Con la marca `done` no se repite. Sin ella, la fase A se repite completa; es segura porque antes de `done` nadie escribe en la autoridad |
-| Resistente a interrupciones | Interrumpida entre fases, la siguiente apertura la completa |
-| Reversible | Ver §4 |
+| Ningún borrado de originales | La migración no modifica `localStorage`; los originales se guardan además en `legacy` con su huella SHA-256 |
+| Verificada | Fase A: copia. Se relee y se comparan huellas. Fase B: marca `done` |
+| Idempotente y resistente a interrupciones | Sin `done`, la fase A se repite completa; antes de `done` nadie escribe en la autoridad |
 
-Probado: copia byte a byte, `localStorage` byte a byte idéntico tras migrar, segunda migración `already` e interrupción real (recarga) entre fases.
+Probado: copia byte a byte; `localStorage` idéntico tras migrar; una segunda migración no hace nada; interrupción real entre fases.
 
-## 4. Volver a una versión anterior de RUBIK
+## 5. Volver a una versión anterior de RUBIK
 
-1. **Copia de compatibilidad.** Tras cada guardado confirmado, las claves cambiadas se copian a `localStorage`. Una versión anterior abre así el último estado confirmado, no una copia antigua. Probado: el `FloorPlanLibrary.load(localStorage)` de la versión anterior ve el cambio.
-2. **Si la copia falla** (por ejemplo, `localStorage` lleno), la clave de la biblioteca se sustituye por una marca que la versión anterior rechaza de forma visible («No se pudo abrir la colección local…»), en lugar de dejarla trabajar en silencio con datos antiguos. Los datos siguen en IndexedDB y el resultado del guardado lo indica. Probado.
-3. **Lo que escriba una versión anterior** después de la última copia se detecta al volver a abrir la versión actual. Se guarda como conflicto `legacy-diverged`, no se aplica ni se pierde y se registra una sola vez. Probado.
-4. **Límite.** Una versión anterior que vea la marca del punto 2 abre su proyecto suelto (`rubik-sota-floorplan-project-v1`) tras el aviso. Es el comportamiento que ya tiene ante una biblioteca ilegible y no se puede cambiar sin modificar versiones ya publicadas. La recuperación pasa por volver a la versión actual o usar la exportación de emergencia.
+**Hallazgo confirmado.** La copia de compatibilidad escribía las claves una a una. Una interrupción entre dos claves dejaba en `localStorage` datos de revisiones distintas, y una versión anterior los habría abierto en silencio.
 
-## 5. Imágenes y recuperación concurrentes
+**Protocolo actual** (con el bloqueo de persistencia tomado):
+0. Si `localStorage` cambió desde la última copia (escribió una versión anterior), su contenido completo se guarda como conflicto `legacy-diverged` **antes** de sobrescribirlo.
+1. **Barrera:** la clave de la biblioteca pasa a ser una marca que la versión anterior rechaza de forma visible («No se pudo abrir la colección local…»).
+2. Se escriben las demás claves desde una sola instantánea de la autoridad.
+3. La biblioteca se escribe **la última**. Solo entonces `localStorage` es una copia completa de una sola revisión.
 
-**Hallazgo de ChatGPT, confirmado.** `cleanup()` borraba toda imagen que la biblioteca de **su** pestaña no referenciaba. Eso incluía:
-- las de una restauración en curso, porque las imágenes se escriben antes de confirmar;
-- las de proyectos que otra pestaña acababa de confirmar.
-
-La recogida (`FloorPlanImages.collect`) tiene ahora tres protecciones independientes:
-1. Se ejecuta bajo el **mismo Web Lock que la restauración** (`rubik-sota-expediente`), así que nunca se intercala con una restauración en curso.
-2. Las referencias vivas se calculan **dentro del bloqueo**, leyendo el estado guardado (no la copia de la pestaña), y suman las imágenes de cada entrada del diario de recuperación.
-3. **Marcar y barrer:** una imagen sin referencia solo se marca. Se borra en una pasada posterior si sigue sin referencia tras un periodo de gracia (10 minutos). Una confirmación intermedia la salva.
-
-**Hallazgo adicional, confirmado:** `recover()` decidía con la copia de la biblioteca de la pestaña. Una copia desactualizada habría deshecho una restauración ya confirmada por otra pestaña, borrando sus presupuestos e imágenes. Ahora:
-- un proyecto cuenta como vivo si lo tiene la biblioteca guardada **o** la copia de la pestaña;
-- una biblioteca guardada ilegible detiene la recuperación sin deshacer nada;
-- los registros con menos de 2 minutos se dejan pendientes, porque `localStorage` llega con retraso a otras pestañas.
-
-| Prueba (Chromium real) | Resultado |
-|---|---|
-| Restauración detenida a mitad en la pestaña A; la pestaña B, con su biblioteca desactualizada, pide borrar sin periodo de gracia | B espera al bloqueo; al confirmar A, no se borra nada |
-| Sin Web Locks, con una restauración a medias en el diario | Su imagen no se borra y la ya confirmada tampoco |
-| `recover()` con una copia desactualizada y una entrada de diario de una restauración confirmada | `committed: 1`; imagen y presupuesto intactos |
-
-## 6. Cortes
-
-| Corte | Contenido | Estado |
+| Caso | Resultado | Prueba |
 |---|---|---|
-| F0.2a | Autoridad, migración, concurrencia, conflictos, compatibilidad hacia atrás, exportación de emergencia, recogida segura de imágenes y `recover()` seguro | Esta PR |
-| F0.2b | Conectar el editor: sustituir el `storage` de `index.html` por la sesión y mostrar el estado del guardado. Los consumidores de presupuestos que leen `localStorage` directamente pasan a la sesión. **Requiere coordinarlo antes con Codex:** `index.html` lo tocan #255, #257 y #259 | Pendiente |
-| F0.2c | Imágenes en la misma base de datos y en la misma transacción que la biblioteca; el diario del expediente pasa a la autoridad (desaparece la ventana entre almacenes de F0.1) | Pendiente |
-| F0.3 | Interfaz: conflictos, exportación de emergencia, `recover()` al arrancar, `persist()` | Pendiente |
+| Interrupción entre claves | La barrera queda; la versión anterior rechaza la biblioteca; el siguiente arranque repite la copia completa | Recarga real tras la barrera |
+| Fallo parcial | Queda bloqueada (`ok: false`, `blocked: true`) y se repara en el siguiente arranque | Fallo simulado de una clave |
+| Fallo al escribir la barrera | No se escribe ninguna otra clave: `localStorage` sigue siendo una única revisión anterior. El estado lo dice: «no abras una versión anterior» | Fallo simulado; `localStorage` idéntico. Es una barrera más pequeña que el valor que sustituye, así que en la práctica solo falla con un `localStorage` inutilizable, que tampoco podría leer una versión anterior |
+| Una versión anterior escribe con la nueva abierta | Se guarda como conflicto antes de la siguiente copia | Probado |
 
-## 7. Límites
+**Estrategia operativa de vuelta atrás:**
+1. Antes de desplegar una versión anterior, abrir la actual y comprobar que el estado de la copia de compatibilidad es `ok`.
+2. Si no lo es, usar la exportación de emergencia o el expediente.
+3. Al volver a la versión actual, lo que hizo la anterior aparece como conflicto `legacy-diverged`, recuperable.
 
-- Hasta F0.2b nada del editor usa esta autoridad: las garantías de §2 son del módulo, probado en Chromium real, no del producto.
-- La cola en memoria que aún no se ha confirmado se pierde si el navegador se cierra de golpe. Siempre se muestra como «pendiente» y la exportación de emergencia la cubre mientras la pestaña está abierta.
+**Límite:** ante la barrera, la versión anterior abre su proyecto suelto tras el aviso. Es el comportamiento ya publicado y no se puede cambiar.
+
+## 6. Imágenes
+
+La recogida (`FloorPlanImages.collect`) no borra nunca una imagen referenciada por:
+- el estado guardado, leído dentro del bloqueo;
+- la autoridad de persistencia y **cualquier registro de conflicto**;
+- una entrada del diario de recuperación, es decir, un expediente pendiente o una operación sin confirmar.
+
+Además:
+- Se ejecuta bajo el mismo Web Lock que la restauración.
+- **No barre mientras haya otra pestaña de RUBIK abierta.** Cada pestaña mantiene un Web Lock `rubik-sota-tab:`, porque otra pestaña puede tener trabajo sin guardar que esta no ve.
+- Sin Web Locks solo marca; nunca borra.
+
+El periodo de gracia es una protección adicional, no la garantía.
+
+**Probado:**
+- restauración en curso en otra pestaña;
+- restauración ya confirmada;
+- imagen de un conflicto;
+- con otra pestaña abierta no se barre, y sí cuando queda sola (y conserva la del conflicto);
+- sin Web Locks.
+
+**Hallazgo anterior mantenido:** `recover()` no deshace con una copia desactualizada de la biblioteca ni toca registros recientes.
+
+**F0.2c** llevará las imágenes y el diario a la misma base que la biblioteca. Imagen, documento y biblioteca se confirmarán en una transacción, y la recogida será una consulta sobre una sola autoridad.
+
+## 7. Orden recomendado
+
+1. **Cerrar F0.2a** (#263) con su CI en verde.
+2. **Integrar #259 (Codex) y luego #262**, después de que el propietario lo autorice. Después, #263 se rebasa sobre master.
+3. **F0.2b** parte del SHA de master resultante: el que incluya #259, #262 y #263. Hoy no existe; se fijará al integrarlos.
+4. **F0.2c antes de habilitar la persistencia para usuarios reales.** Sin F0.2c, una restauración o una imagen nueva sigue escribiendo en dos bases y depende del diario y de la recogida protegida. Es seguro, pero no es una autoridad única.
+5. **F0.3:** interfaz de estado, conflictos, exportación de emergencia, `recover()` al arrancar y `persist()`. Incluye la validación de navegadores (§10) antes de cualquier entorno público.
+
+## 8. Mapa de F0.2b
+
+**No se ha modificado ninguno de estos archivos.**
+
+| Consumidor | Claves | Acceso hoy | Cambio previsto | Lo toca otra PR |
+|---|---|---|---|---|
+| `index.html` | proyecto suelto y, a través del objeto `storage`, biblioteca | `localStorage` directo (6 puntos) y objeto `storage` | Crear la sesión antes de `FloorPlanLibrary.load` y pasar `session.storage` | #255, #257, #259 |
+| `js/budget-ui.js` | presupuestos, biblioteca | `localStorage` directo (4) | Recibir el `storage` de la sesión | — |
+| `js/construction-context.js` | presupuestos, obra, biblioteca | `localStorage` directo (7) | Ídem | — |
+| `js/review-notes-ui.js`, `js/project-dossier-ui.js`, `js/professional-workspace-ui.js` | observaciones | `localStorage` directo (2, 1 y 1) | Ídem | — |
+| `js/cat04-ui.js`, `js/catalog-budget-core.js`, `js/construction-project-adapter.js`, `js/construction-record-core.js`, `js/project-library.js`, `js/expediente-core.js` | presupuestos, obra | Ya reciben `storage` como parámetro | Ninguno: basta con pasarles la sesión | — |
+
+**Pruebas de F0.2b:**
+- las suites de navegador existentes de presupuestos, obra, observaciones, variantes y edificio, ejecutadas contra la sesión;
+- una prueba de editor completo (`index.html`) que guarde, recargue y recupere un conflicto;
+- la migración de un perfil con datos reales de la versión actual.
+
+## 9. CI
+
+La guardia `ci-impact` compara los workflows de la rama base. #263 parte de #262, donde ya existe `f0-expediente.yml`, así que modificarlo violaba la guardia. Por eso la suite de persistencia va en `f0-persistencia.yml`:
+- `f0-expediente.yml` queda exactamente como en #262;
+- la guardia no se toca;
+- ninguna prueba se ejecuta dos veces.
+
+**Tras integrarse en master**, ambas suites deberían pasar a `tests/regression-partitions.json`, coordinado con Codex (#259 modifica ese archivo).
+
+## 10. Validación de navegadores (planificada para F0.3)
+
+Antes de cualquier entorno público hay que acreditar, en Chromium, Firefox y Safari de escritorio, y en Safari de iOS y Chrome de Android:
+- guardar y recargar;
+- cuota;
+- dos pestañas;
+- migración;
+- conflicto;
+- exportación de emergencia;
+- borrado de datos del sitio por el navegador (desalojo).
+
+Puntos a vigilar:
+- `durability: 'strict'`;
+- `navigator.locks` (Safari 15.4 o posterior);
+- `indexedDB.databases()`;
+- `BroadcastChannel`;
+- el desalojo de datos en iOS.
+
+Ahora no se ejecuta porque el módulo no está conectado al editor.
+
+## 11. Límites
+
+- Hasta F0.2b, las garantías son del módulo, no del producto.
+- Lo que no se ha confirmado se pierde si el navegador se cierra de golpe. Siempre se muestra como «pendiente», y la exportación de emergencia lo cubre mientras la pestaña está abierta.
 - `durability: 'strict'` y `persist()` son peticiones al navegador, no garantías.
-- Las pruebas se ejecutan en Chromium. Firefox y Safari no se han probado.
-- La copia de compatibilidad duplica las escrituras en `localStorage` mientras se mantenga el soporte a versiones anteriores.
+- Solo se ha probado en Chromium (§10).
+- La copia de compatibilidad duplica las escrituras en `localStorage` y calcula huellas de las claves gestionadas en cada guardado, mientras se mantenga el soporte a versiones anteriores.
