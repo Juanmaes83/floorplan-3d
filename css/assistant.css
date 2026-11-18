@@ -60,3 +60,4 @@
 .assistant-panel.in-dialog{top:8px}
 .assistant-where{margin:0;font:600 13px/1.4 system-ui,sans-serif;color:#184e52}.assistant-where[hidden]{display:none}
 @media print{.assistant-fab{display:none}}
+.assistant-fab.inline{position:static;display:inline-flex;align-items:center;margin:6px 0 10px;min-height:40px;box-shadow:none}

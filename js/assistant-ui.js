@@ -68,11 +68,17 @@
  const fab=btn('',document.body,'assistant-fab');fab.id='assistantFab';fab.type='button';
  const where=el('p',undefined,null,'assistant-where');where.id='assistantWhere';panel.insertBefore(where,panel.children[1]||null);
  const hostDialog=()=>{const m=[...document.querySelectorAll('dialog[open]')].filter(d=>{try{return d.matches(':modal');}catch{return false;}});return m[m.length-1]||null;};
- function rehost(){const d=hostDialog(),host=d||document.body;for(const n of [panel,fab])if(n.parentNode!==host)host.append(n);
+ function rehost(){const d=hostDialog(),host=d||document.body;if(panel.parentNode!==host)host.append(panel);
   panel.classList.toggle('in-dialog',!!d);const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
-  where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';fab.hidden=state.open;}
+  where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';
+  // Dentro de un diálogo: botón EN LÍNEA junto al título (no flota sobre los controles del diálogo).
+  // Fuera: el acceso es el botón de la navegación de áreas; el flotante solo aparece si ese botón no está visible.
+  const head=d?.querySelector('h1,h2,h3');fab.classList.toggle('inline',!!d);
+  if(d&&head&&fab.previousElementSibling!==head)head.after(fab);else if(!d&&fab.parentNode!==document.body)document.body.append(fab);
+  const navVisible=opener.isConnected&&opener.offsetParent!==null&&!opener.closest('[inert]');
+  fab.hidden=state.open||(!d&&navVisible);}
  new MutationObserver(()=>rehost()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
- document.addEventListener('close',()=>setTimeout(rehost,0),true);
+ document.addEventListener('close',()=>setTimeout(rehost,0),true);addEventListener('resize',()=>rehost());
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
   title.textContent=tx('Asistente RUBIK','RUBIK assistant','RUBIK 助手');close.setAttribute('aria-label',tx('Cerrar el asistente','Close the assistant','关闭助手'));
@@ -164,7 +170,7 @@
   scopeProject=app.project?.id||null;restoreLog();emit('invalidated',{reason});}
  addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
  function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;rehost();panel.hidden=false;fab.hidden=true;document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
- function closePanel(){state.open=false;panel.hidden=true;fab.hidden=false;document.body.classList.remove('assistant-open');labels();state.pending?.abort();(hostDialog()?fab:opener).focus({preventScroll:true});emit('close');}
+ function closePanel(){state.open=false;panel.hidden=true;rehost();document.body.classList.remove('assistant-open');labels();state.pending?.abort();(hostDialog()?fab:opener).focus({preventScroll:true});emit('close');}
  opener.onclick=()=>state.open?closePanel():openPanel();fab.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closePanel();}});
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
