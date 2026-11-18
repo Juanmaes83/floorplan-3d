@@ -1,17 +1,17 @@
-# Secuencia para autorización conjunta · seis PR con CI completa
+# Secuencia para autorización conjunta · seis PR
 
 Base verificada `master@163df68e83a80ddf11a008d573ee257d51c1821f`. La secuencia se simuló con `git merge-tree --write-tree`, sin conflictos. Los árboles de la tabla corresponden al contenido acumulado tras cada paso con las PR fijadas en esos HEADs.
 
 | Orden | PR | HEAD a autorizar | Árbol acumulado esperado |
 |---|---|---|---|
-| 1 | [#261 · Reconciliación documental](https://github.com/Juanmaes83/floorplan-3d/pull/261) | `341624b79ed2cb8bb6c4df38073deeeccbb35f33` | `c6cded96910438e890071acbaa8813aab3a3caf1` |
-| 2 | [#262 · F0.1 Expediente](https://github.com/Juanmaes83/floorplan-3d/pull/262) | `69ae552b1a065737b097599d001c2c5a3546ebbd` | `9486fb81bea4fcb1902098d2e47bc258a2b09894` |
-| 3 | [#263 · F0.2a IndexedDB](https://github.com/Juanmaes83/floorplan-3d/pull/263) | `6be42e52258ca4ca8340607918854348c9302ed6` | `b669ed415c6e1fedb812198595e7069f359d52d4` |
-| 4 | [#264 · F0.3 Permiso y recogida segura](https://github.com/Juanmaes83/floorplan-3d/pull/264) | `748e43d03829398b94b225879b12263aa26f2f1a` | `2b13206314edc317a7707690b260e0de1bbd3e87` |
-| 5 | [#265 · OP-03 / DXF](https://github.com/Juanmaes83/floorplan-3d/pull/265) | `b9f4b3c1489a45f4a1dbdde5f27ecd26ac8f8c43` | `4e30277a4499538bca7236b3e278d6093f8d069a` |
-| 6 | [#260 · CI inteligente](https://github.com/Juanmaes83/floorplan-3d/pull/260) | `5b003bd67b7d08f03d8029ce8ad87f53ed54a466` | `8b2b8330e408cce0cb70770750daafe6dbe193ad` |
+| 1 | [#261 · Reconciliación documental](https://github.com/Juanmaes83/floorplan-3d/pull/261) | `f4fe60bf655df854da792581cf7cc82b2ebf39e3` | `56a7c407ce83f30c7b99c20ce9efd9daea5f32e6` |
+| 2 | [#262 · F0.1 Expediente](https://github.com/Juanmaes83/floorplan-3d/pull/262) | `69ae552b1a065737b097599d001c2c5a3546ebbd` | `eb06de6998a53acafef3912f880174aae5f3c53d` |
+| 3 | [#263 · F0.2a IndexedDB](https://github.com/Juanmaes83/floorplan-3d/pull/263) | `6be42e52258ca4ca8340607918854348c9302ed6` | `20977e3b987de84541d4750f757a12f0994b6875` |
+| 4 | [#264 · F0.3 Permiso y recogida segura](https://github.com/Juanmaes83/floorplan-3d/pull/264) | `748e43d03829398b94b225879b12263aa26f2f1a` | `864820a389bf767d523086e434e75a3d7881e6ea` |
+| 5 | [#265 · OP-03 / DXF](https://github.com/Juanmaes83/floorplan-3d/pull/265) | `b9f4b3c1489a45f4a1dbdde5f27ecd26ac8f8c43` | `0ebd9938f1b92542c8cc97443b6cb23857f46807` |
+| 6 | [#260 · CI inteligente](https://github.com/Juanmaes83/floorplan-3d/pull/260) | `5b003bd67b7d08f03d8029ce8ad87f53ed54a466` | `f62e9492de0ee616c8edd1966703238d57702a63` |
 
-Los árboles acreditados de [F0 por separado](F0-CONSOLIDACION-2026-11-18.md) siguen siendo la referencia de su delta. El árbol conjunto al cerrar #264 difiere del árbol aislado acreditado `c588c503401055698abfb229bcdbeeebf006d2c8` exactamente en los 11 documentos de #261. La cartera de las 14 piedras y R01–R03 conserva los blobs de #261 al completar toda la secuencia. La revisión de whitespace de #261 señala una línea en blanco final en el documento de metodología. Se conserva el HEAD acreditado.
+El [delta de #261](https://github.com/Juanmaes83/floorplan-3d/commit/f4fe60bf655df854da792581cf7cc82b2ebf39e3) tiene como padre directo `341624b79ed2cb8bb6c4df38073deeeccbb35f33`, añade una línea a `docs/product/sculpt-openplan3d-roomgpt-2026-11-18.md` y pasa `git diff --check`. La línea registra OP-07/#267 como laboratorio aislado. Cada árbol recalculado difiere de su árbol anterior solo en esa línea. Los otros cinco HEADs y los árboles de [F0 por separado](F0-CONSOLIDACION-2026-11-18.md) conservan su evidencia. Las 14 piedras y R01–R03 se verificaron en el árbol final. El cierre de los checks aplicables del nuevo HEAD documental se comprueba en [#261](https://github.com/Juanmaes83/floorplan-3d/pull/261/checks).
 
 #265 cerró su último check de [regresión general de Presentation](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44376274358/job/135056360557) en verde. El total es 88 checks de Actions correctos, un check omitido y estado de Vercel correcto. #260 conserva su validación independiente. Va al final y cambia cuatro archivos de la deduplicación ya acreditada. [CI de #260](https://github.com/Juanmaes83/floorplan-3d/pull/260/checks).
 
@@ -19,6 +19,8 @@ Tras recibir autorización, integrar con commits de merge que conserven cada HEA
 
 El rollback de la secuencia completa revierte los commits de integración reales, con primer padre como línea principal, en orden **#260 → #265 → #264 → #263 → #262 → #261**. Si la ejecución se detiene antes, empezar por el último corte integrado. En F0, comprobar lectura de datos existentes y copia de compatibilidad. En OP-03, comprobar exportación e importación DXF. #260 también se puede revertir por separado y devuelve la invocación duplicada de CAT-IA. La activación y promoción se deciden por separado.
 
-[#266 · OP-02](https://github.com/Juanmaes83/floorplan-3d/pull/266/checks) `f34ad8ef79ea5f3232b90ffafb55319e4e140590` queda fuera de la autorización conjunta por sus checks generales pendientes de resolución. [NAV3D](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44393395751) terminó en verde, incluida la comparación con `master` sin fallos nuevos y el vídeo. [Manifiesto local de vídeo](nav3d-f34ad8e-video-manifest.json) · [Delta de benchmark OP-02](OP02-DELTA-BENCHMARK-2026-11-18.md).
+[#266 · OP-02](https://github.com/Juanmaes83/floorplan-3d/pull/266/checks) queda fuera de la autorización conjunta. `edfbf66beb93d2943d3421a2ab35a13299a5c9dc` traslada los cuatro archivos acreditados de `e52df68`, comprobados con igualdad de contenido. Los workflows de diagnóstico permanecen en su rama aislada. [Diagnóstico y validación dirigida](OP02-CI-DIAGNOSTICO-2026-11-18.md) · [Delta de benchmark OP-02](OP02-DELTA-BENCHMARK-2026-11-18.md).
 
-[OP-04](https://github.com/Juanmaes83/floorplan-3d/blob/f027be8f0ddb8fca5acfe510a568ea8850b5742b/labs/sculpt/op-04/README.md) conserva la preparación aprobada y será el siguiente corte funcional SCULPT tras la consolidación.
+[OP-04](https://github.com/Juanmaes83/floorplan-3d/blob/f027be8f0ddb8fca5acfe510a568ea8850b5742b/labs/sculpt/op-04/README.md) conserva la preparación aprobada y será el siguiente corte funcional SCULPT tras la consolidación, seguido de OP-05. #267 continúa como laboratorio aislado, fuera del lote.
+
+Las [12 duplicidades de CI confirmadas](OP02-CI-DIAGNOSTICO-2026-11-18.md#tiempo-de-ejecución-y-duplicidades-observadas) quedan para un corte independiente de #260. Su criterio de entrada es acreditar, por archivo, la equivalencia de SHA, perfil, aserciones, cobertura y evidencia de fallo antes de retirar una invocación. Debe conservar los controles contra `master`, la cobertura única de los shards y los checks de bloqueo.
