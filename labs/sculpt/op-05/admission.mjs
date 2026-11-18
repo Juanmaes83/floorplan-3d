@@ -1,4 +1,5 @@
-import {inspectTextures, LIMITS} from '../../../js/asset-loader.mjs';
+import {inspectGLB, inspectTextures, LIMITS} from '../../../js/asset-loader.mjs';
+import {validateLocalGLBGeometry} from './upstream/src/lib/utils/localGLBGeometry.ts';
 
 const SHA256 = /^[a-f0-9]{64}$/;
 const ownText = (value, max) => typeof value === 'string' && value.trim().length > 0 && value.trim().length <= max;
@@ -21,17 +22,24 @@ export async function planAdmission(buffer, metadata, current = []) {
   };
 
   const original = buffer.slice(0);
+  const document = inspectGLB(original);
+  // F3 has already verified the JSON and BIN chunk boundaries and the embedded buffer length.
+  const binary = new Uint8Array(original, 28 + new DataView(original).getUint32(12, true));
+  const {scene} = validateLocalGLBGeometry({document, binary});
   const resources = inspectTextures(original);
   const hash = await crypto.subtle.digest('SHA-256', original);
   const sha256 = Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
-  const existing = current.find(entry => entry.sha256 === sha256);
+  const id = `model-${sha256}`;
+  const matches = current.filter(entry => entry.sha256 === sha256);
+  const existing = matches[0];
   if (existing) {
-    if (existing.bytes !== original.byteLength || Object.keys(permission).some(key => existing.permission?.[key] !== permission[key])) {
+    if (matches.length !== 1 || existing.id !== id || !ownText(existing.title, 100) || existing.bytes !== original.byteLength ||
+        Object.keys(permission).some(key => existing.permission?.[key] !== permission[key])) {
       throw Error('El modelo ya está registrado con una procedencia distinta. Revisa el conflicto antes de continuar.');
     }
-    return {action: 'reuse', descriptor: existing};
   }
-  return {action: 'stage', descriptor: {
-    id: `model-${sha256}`, sha256, bytes: original.byteLength, title: title.trim(), permission, resources,
+  return {action: existing ? 'reuse' : 'stage', descriptor: {
+    id, sha256, bytes: original.byteLength, title: existing?.title ?? title.trim(), permission,
+    resources, geometry: scene.scenes[scene.activeScene],
   }};
 }
