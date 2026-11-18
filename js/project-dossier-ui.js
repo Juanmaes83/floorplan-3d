@@ -26,7 +26,7 @@
   const m=metrics(),summary=Visual.summary({project:app.project,geometry:app.geometry,metrics:m,levelContext:app.levelContext,brand:window.FloorPlanBrandUI?.snapshot()||null});
   let sheetOk=known.sheet;if(sheetOk===undefined){try{sheetOk=!!window.FloorPlanSheet?.preview?.();}catch{sheetOk=false;}}
   const site=window.FloorPlanSitePreview?.data(),views=window.FloorPlanProjectViews?.current()||[],review=reviewCounts();
-  return {summary,metrics:m,sections:{cover:true,sheet:sheetOk,surfaces:m.areaM2!==null,orientation:!!site&&site.facades.status!=='unavailable',site:!!site&&site.siteView.status!=='unavailable',exterior:true,views:views.length>0,review:review.pending+review.written>0,sources:true},site,views,review};
+  return {summary,metrics:m,sections:{cover:true,sheet:sheetOk,surfaces:m.areaM2!==null,orientation:!!site&&site.facades.status!=='unavailable',site:!!site&&site.siteView.status!=='unavailable',exterior:true,views:views.length>0,review:review.pending+review.written>0,economic:!!window.FloorPlanEconomicDossierUI?.current(),sources:true},site,views,review}; // H01: el inventario declara la página económica cuando el renderizador la compone
  }
  function release(){for(const u of urls)URL.revokeObjectURL(u);urls=[];}
  // Own copy of the real sheet image: the workspace releases its previews on every render.
