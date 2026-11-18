@@ -27,7 +27,7 @@ function areaM2(polygon) {
     const a = polygon[i], b = polygon[(i + 1) % polygon.length];
     twiceArea += a.x * b.y - b.x * a.y;
   }
-  return Math.round(Math.abs(twiceArea / 2) / 1_000_000 * 100) / 100;
+  return Math.abs(twiceArea / 2) / 1_000_000;
 }
 
 function snapshotMeta(project, bytes, stat) {
@@ -134,7 +134,7 @@ function publicElement(kind, item, relation) {
   if (kind === 'rooms') return {
     id: item.id, name: item.name, polygon: item.polygon,
     labelAt: item.labelAt, countsTowardArea: item.countsTowardArea,
-    areaM2: areaM2(item.polygon), relation,
+    areaM2: Math.round(areaM2(item.polygon) * 100) / 100, relation,
   };
   if (kind === 'walls') return {
     id: item.id, start: item.start, end: item.end, thicknessMm: item.thicknessMm,

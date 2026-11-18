@@ -164,9 +164,4 @@ Las pruebas comprueban validación, consultas y paginación, relaciones espacial
 
 El `package-lock.json` fija las dependencias de esta entrega. Se actualizó el SDK MCP a `1.32.1` tras detectar la alerta [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en la versión anterior; el servidor usa stdio y no el cliente OAuth afectado. En aquel momento, `npm audit` no reportaba vulnerabilidades para el lock.
 
-**Revisión del 11-11-2026 (Etapa 2):** `npm audit` reporta avisos posteriores en dependencias transitivas del SDK:
-
-- `body-parser`, de la pila HTTP/express;
-- `fast-uri`, de la validación de esquemas.
-
-El transporte stdio no usa la pila HTTP. La actualización del lock queda pendiente de decisión y no forma parte de la Etapa 2.
+El corte de integración actualiza Zod y las dependencias transitivas afectadas. La evidencia y el alcance de la validación con el proyecto autorizado están en [Validación Beta 01](validation/real-beta01.md).
