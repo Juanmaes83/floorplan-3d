@@ -380,14 +380,14 @@ La investigación describe **13 áreas G0–G12, no 13 piedras clonadas**. Sus c
 | Estado reconciliado | IDs |
 |---|---|
 | Resuelto y validado | 20 |
-| Integrado con límites de alcance | 7 |
-| Superado por otra solución | 3 |
+| Integrado con límites de alcance | 10 |
+| Superado por otra solución | 2 |
 | Implementado, pendiente de integración | 1 |
 | Experimental o laboratorio | 5 |
-| Simulado | 5 |
-| Parcialmente desarrollado | 25 |
-| Infraestructura reutilizable sin función específica | 9 |
-| No desarrollado | 19 |
+| Simulado | 6 |
+| Parcialmente desarrollado | 22 |
+| Infraestructura reutilizable sin función específica | 10 |
+| No desarrollado | 18 |
 | Depende de una decisión externa | 3 |
 | Candidato a descarte | 1 |
 | **Total** | **98** |
@@ -396,10 +396,10 @@ La investigación describe **13 áreas G0–G12, no 13 piedras clonadas**. Sus c
 
 | Preliminar | IDs | v1.12 |
 |---|---|---|
-| Resueltos o superados | 26 | 23 resueltos o superados, más 7 integrados con límites |
+| Resueltos o superados | 26 | 22 resueltos o superados, más 10 integrados con límites |
 | Funcionales en piloto | 3 | Repartidos entre «integrado con límites» y «experimental» |
-| Parcialmente desarrollados | 40 | 25 parciales, más 9 con solo infraestructura reutilizable |
-| Implementados en simulación | 5 | 5 simulados |
+| Parcialmente desarrollados | 40 | 22 parciales, más 10 con solo infraestructura reutilizable |
+| Implementados en simulación | 5 | 6 simulados |
 | Sin implementación específica | 24 | 12 nuevos o investigación, 7 resolubles por conexión, 3 decisiones externas, 1 superado, 1 candidato a descarte |
 
-Las diferencias no se han forzado a coincidir. La principal es metodológica: v1.12 separa la infraestructura reutilizable concreta de una implementación parcial de la función.
+Recuento posterior a las diez verificaciones del 18/11: IMG-11, UX-03, UX-04, UX-10 y AST-01 cambian de estado. Las diferencias no se han forzado a coincidir. La principal es metodológica: v1.12 separa la infraestructura reutilizable concreta de una implementación parcial de la función.

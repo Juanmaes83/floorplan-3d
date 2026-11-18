@@ -49,14 +49,14 @@
 | Estado | IDs |
 |---|---|
 | `RV` Resuelto y validado | 20 |
-| `RL` Integrado con límites de alcance | 7 |
-| `SU` Objetivo superado por otra solución | 3 |
+| `RL` Integrado con límites de alcance | 10 |
+| `SU` Objetivo superado por otra solución | 2 |
 | `PI` Implementado, pendiente de integración | 1 |
 | `EX` Experimental o laboratorio | 5 |
-| `SI` Simulado | 5 |
-| `PA` Parcialmente desarrollado | 25 |
-| `IR` Infraestructura reutilizable, sin función específica | 9 |
-| `ND` No desarrollado | 19 |
+| `SI` Simulado | 6 |
+| `PA` Parcialmente desarrollado | 22 |
+| `IR` Infraestructura reutilizable, sin función específica | 10 |
+| `ND` No desarrollado | 18 |
 | `DX` Depende de una decisión externa | 3 |
 | `RD` Redundante o candidato a descarte | 1 |
 | **Total** | **98** |
@@ -75,9 +75,9 @@
 
 | Hito de cierre | IDs |
 |---|---|
-| A | 23 |
-| B | 22 |
-| C | 38 |
+| A | 22 |
+| B | 24 |
+| C | 37 |
 | D | 15 |
 | **Total** | **98** |
 
@@ -120,7 +120,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | ENT-01 | Visita 3D del cliente | R | `RL` | [I] `js/client-delivery-core.js`, `api/delivery.js`; [E] `tests/client-delivery-core.test.cjs`, `tests/ent01-*`; [P] aceptación manual | Una planta; aceptación manual sin URL registrada | P1 | AMP: varias plantas; recorrido compartido | GOV-08 S4/S5 | Visita multiplanta con enlace caducable y prueba pública dirigida | B |
 | ENT-02 | Seguridad del enlace de cliente | P | `RL` | [H] #244; [E] `tests/gov08-s3-expiry.test.cjs` | Revocación, caducidad y limpieza manual; sin Cron | P3 | AMP: S4/S5 (comparte corte con GOV-08) | GOV-06a | Igual que GOV-08 | B |
 | ENT-03 | Story y plantillas hacia el cliente | N | `EX` | [H] laboratorio `lab/studio-presentation-e0e1@2d49a25`: 21 recetas, 6 perfiles (N01) y estados de entrega (N05); no está en master | Solo laboratorio; herramientas Node fuera del producto | P1 | CON: E3, recetas sobre la interfaz y el modelo existentes | ENT-04 (E2) | E3 integrado con aceptación visual | B |
-| ENT-04 | Dossier antes/después con presupuesto rotulado | P | `PI` | [I] master: `comparar/`, `js/before-after-dossier-core.js`; [H] #251 `a9a9299` (E2), [CI] #251: un shard histórico agotó tiempo; incluido en #259 | Master: comparador desde Variantes. E2: acceso desde Entregar, coherencia económica, vigencia y orden de cambio interna | P1 | VT: CI y aceptación del SHA de #259; VP: revisión visual | — | #259 fusionada con CI verde y aceptación del propietario | B |
+| ENT-04 | Dossier antes/después con presupuesto rotulado | P | `PI` | [I] master: `comparar/`, `js/before-after-dossier-core.js`; [H] #251 `a9a9299` (E2); [CI] en #251 `presentation.browser` agotó el tiempo del archivo y pasó después en #259, donde está incluido | Master: comparador desde Variantes. E2: acceso desde Entregar, coherencia económica, vigencia y orden de cambio interna | P1 | VT: CI y aceptación del SHA de #259; VP: revisión visual | — | #259 fusionada con CI verde y aceptación del propietario | B |
 | ENT-05 | Fichas de imagen trazables | N | `PA` | [I] `js/ai-render-ui.js` guarda vista original, estilo, acabados, modelo, uso y fecha; `js/delivery-image.js` compone la banda con marca | No persiste la imagen ni la cámara; sin libro FF&E | P1 | AMP: E4, persistir imagen enviada, cámara y revisión (comparte corte con IMG-12) | IMG-12 | Ficha exportable con origen, revisión, materiales y leyenda IA | C |
 | ENT-06 | Lotes de entrega con coste y cancelación | N | `ND` | [I] sin lotes en `api/render.js` | — | P1 | NUE sobre IMG-04 y ENT-05 (E6) | IMG-04, GOV-06a | Lote con coste previo, cancelación y ZIP | C |
 | ENT-07 | Portal profesional y white-label | N | `ND` | [I] solo marca del estudio en entregables (`js/brand-core.js`, [E] `tests/brand-core.test.cjs`); sin portal, equipos ni dominio propio | La marca en documentos ya existe y no cuenta como portal | P3 | NUE (E7) | GOV-06b, GOV-05 | Portal con aceptación y firma | D |
@@ -133,13 +133,13 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | IMG-02 | Consumo, coste y registro por imagen | E | `RV` | [I] `api/render.js` líneas de uso y coste; [E] `tests/ai-render-api.test.cjs` 14/14 | Coste estimado `null` sin tarifas | P2 | — | — | Cerrado | A |
 | IMG-03 | Calidad explícita y coste previsto | N | `ND` | [I] `api/render.js` fija `size=1536x1024` y no admite calidad | — | P2 | AMP: lista cerrada de calidad y coste previsto con `js/render-cost-core.js` | ECO-01 | Tres calidades con coste previsto mostrado antes de generar | C |
 | IMG-04 | Confirmación de gasto y lotes | P | `PA` | [I] master: límites por instancia en memoria; [H] #258: presupuesto común y reservas atómicas en Redis, solo Preview | Sin tope global en Production | P2 | CON: integrar #258 y ampliar el libro común a `api/render.js` | GOV-06a, #258 | Tope global y confirmación previa en Production | B |
-| IMG-05 | Catálogo amplio de suelos | P (6) | `PA` | [H] catálogo v1.11; [V] recuento no reverificado | 6 suelos | P5 | AMP sobre BIB-01 | BIB-01 | Biblioteca con licencias y revisión visual | C |
-| IMG-06 | Paredes y techos | P (5) | `PA` | [H] catálogo v1.11; [H] #255 añade estucos F03 solo como detalle 3D | 5 paredes | P5 | AMP sobre BIB-01 | BIB-01 | Igual que IMG-05 | C |
+| IMG-05 | Catálogo amplio de suelos | P (6) | `PA` | [I] `js/ai-render-ui.js:14`: 6 claves cerradas (roble claro, nogal, microcemento, mármol, terrazo, gran formato), conectadas al diálogo de Render IA; [E] `tests/ai-render-api.test.cjs` 14/14 | Sin espiga, porcelánico ni piedra. La lista del render es independiente de la biblioteca de superficies del editor (`js/surface-catalog.js`) | P5 | AMP + CON: derivar la lista del render de la biblioteca de superficies con licencias (BIB-01), en lugar de mantener otra lista | BIB-01 | Una sola biblioteca de suelos con licencia, usada por editor y render | C |
+| IMG-06 | Paredes y techos | P (5) | `PA` | [I] `js/ai-render-ui.js:15`: 5 claves de pared (blanco mate, blanco cálido, salvia, estuco arena, gris azulado), conectadas al diálogo; sin clave de techo; [H] #255 añade estucos F03 solo como detalle 3D | Sin techos, panelado ni pared de acento | P5 | AMP + CON, mismo corte que IMG-05 | BIB-01 | Igual que IMG-05, con techos | C |
 | IMG-07 | Iluminación del render IA | N | `IR` | [I] el 3D ya tiene día/noche y hora (`index.html`, `opt.night`, `opt.hour`); el prompt de `api/render.js` no tiene clave de luz | La iluminación existe en 3D, no en el render IA | P2 | CON: capturar la vista con la hora elegida y añadir una clave cerrada de luz | IMG-03 | Tres ambientes de luz con prueba simulada y una real autorizada | C |
 | IMG-08 | Estilos | P (4) | `PA` | [I] lista cerrada en `js/ai-render-ui.js` | 4 estilos | P2 | AMP | — | Estilos ampliados con revisión visual | C |
 | IMG-09 | Decoración visual | N | `ND` | [I] sin parámetro en `api/render.js` | — | P2 | AMP de la receta visual | IMG-10 | — | C |
 | IMG-10 | Intensidad de cambio | N | `SI` | [H] Estado maestro 17/11: «Estudio de imágenes» en simulación; [I] `js/visual-reform-core.js` | Simulación local rotulada | P2 | AO: proveedor real tras P3 | GOV-05, IMG-04 | Ejecución real autorizada y conciliada | C |
-| IMG-11 | Presets por estancia | N | `ND` | [V] posible solape con las recetas de `js/visual-reform-core.js`, no verificado | — | P2 | AMP | — | — | C |
+| IMG-11 | Presets por estancia | N | `SI` | [I] `js/visual-reform-core.js:42-48`: 6 recetas `PromptRecipeV1` (cocina fiel al catálogo, baño con producto fiel, escaparate de mobiliario, acabado, iluminación, piso piloto de promotora), con zonas e intensidades; solo las usa el «Estudio de imágenes» simulado. [I] Render IA D1 no tiene presets por estancia | Cubre cocina y baño como recetas de producto, en simulación. No cubre salón ni dormitorio, ni el Render IA real | P2 | AMP: reutilizar `PromptRecipeV1` como presets del Render IA y añadir salón y dormitorio | IMG-10, activación de P2 | Presets por estancia en el render real, con prueba simulada y una real autorizada | C |
 | IMG-12 | Variantes, comparador y favoritos | P | `PA` | [I] alternativas en sesión en `js/ai-render-ui.js` (`results` en memoria) | Se pierden al cerrar | P2 | AMP: persistir resultado, vista de origen y revisión (E4) | IMG-04 | Variantes persistidas y comparables | C |
 | IMG-13 | Biblioteca visual del estudio | N | `PA` | [I] `js/catalog-product-core.js` exige licencia y prueba de permiso; `js/visual-reference-core.js` guarda solo metadatos | Local por navegador; sin estudio autenticado | P5 | CON con CAT-02 y GOV-06a | GOV-06a, GOV-05 | Biblioteca compartida por estudio con licencias | C |
 | IMG-14 | Edición por zona | N | `SI` | [H] Estado maestro 17/11 | Simulación | P2 | AO | GOV-05, IMG-04 | Ejecución real autorizada | C |
@@ -193,15 +193,15 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | UX-25 | Abrir o cerrar todas las puertas | P | `RV` | [H] #225 vía #228 | — | P4 | — | — | Cerrado | A |
 | UX-09 | Maqueta blanca | P | `PA` | [H] Estado maestro: avanza dentro de NAV3D sin pruebas con su ID | — | P4 | VT: prueba con el ID | — | Prueba propia en CI | B |
 | UX-05 | Selector agrupado de modos | P | `PA` | [H] igual que UX-09 | — | P4 | VT + UI | — | Prueba propia en CI | B |
-| UX-03 | Panel contextual con KPI | P | `PA` | [H] catálogo v1.11; [V] sin reverificar | — | P4 | UI | — | — | C |
+| UX-03 | Panel contextual con KPI | P | `RL` | [I] `index.html:1758-1780`: panel de muro (longitud, grosor, estado) y de estancia (superficie, perímetro, ancho, fondo, área de pared, huecos); panel de mueble en `index.html:1803`; [T] `tests/panel-pattern.browser.test.cjs` | Conectado al editor. El área de pared supone 2,8 m de altura y no descuenta huecos, aunque `js/quantity-core.js` sí lo calcula | P4 | COR + CON: tomar el área de pared de `quantity-core` y la altura real de la planta | — | El panel y el presupuesto dan la misma superficie de pared | B |
 | UX-08 | Cotas en vivo | N | `RV` | [I] `js/live-dimensions-*`; [H] #224 | — | P4 | — | — | Cerrado | A |
-| UX-04 | Ayudas y atajos | P | `PA` | [H] catálogo v1.11; [V] | — | P4 | UI | — | — | C |
+| UX-04 | Ayudas y atajos | P | `RL` | [I] ayuda por herramienta en `index.html:1939` (`syncModeHint`), atajos de teclado en el panel de ayuda (`index.html:1643`), toasts con medidas al añadir muebles (`index.html:1917`) | Conectado. Los toasts con cifras no son sistemáticos | P4 | UI menor: toasts con el cambio en cada edición geométrica | — | Cada edición geométrica informa del cambio | C |
 | PRE-01 | Preflight de integridad | N | `IR` | [I] piezas existentes: revalidación contra la revisión en `js/assistant-proposals-core.js`; huella de vigencia de E2 (#251); `stale-source` en MCP (#254) | Tres mecanismos de vigencia sin contrato común | P7 | CON: un único contrato de propuesta y vigencia | — | Toda propuesta muestra impacto y se aplica en un paso deshacible | C |
-| UX-11 | Acabado de pared desde el 3D | P | `PA` | [H] catálogo v1.11; [V] | — | P4 | UI | UX-03 | — | C |
+| UX-11 | Acabado de pared desde el 3D | P | `PA` | [I] el acabado de paredes se elige por estancia desde el panel (`index.html:1791`, `FloorPlanSurfaceUI.open`); la selección 3D (`index.html:4138`) devuelve estancia, puerta o mueble, nunca un muro | Sin entrada desde el 3D; sin acabado por pared individual | P4 | CON: selección 3D de muro hacia el diálogo existente; AMP de modelo para la pared de acento | UX-03 | Doble clic en una pared del 3D abre su acabado, con deshacer | C |
 | UX-12 | Amueblar por estancia | N | `EX` | [I] `js/smart-furnishing-core.js`; [T] `tests/smart-furnishing*` | Experimental; biblioteca sin licencias amplias | P7 | VP + AMP con BIB-01 | BIB-01 | Aceptación visual con profesionales | C |
 | UX-13 | Recetas de estilo | P | `EX` | [H] #226 vía #228 | Experimental | P7 | VP | UX-12 | Igual que UX-12 | C |
 | UX-24 | Sugerir el tipo de estancia | N | `IR` | [I] dos heurísticas nombre→tipo duplicadas: `js/nav3d-core.js:13` y `js/presentation-living-drawing-core.js:28`; selector de tipo en el editor (`index.html:1771`) | La heurística existe pero no se ofrece al profesional | P4 | CON: unificar la heurística en `project-core` y ofrecerla como sugerencia aceptable | — | Sugerencia aceptable con deshacer y una sola heurística | B |
-| UX-10 | Píldora de inspección | P | `PA` | [H] catálogo v1.11; [V] | — | P4 | UI | UX-03 | — | C |
+| UX-10 | Píldora de inspección | P | `IR` | [I] el editor no muestra información bajo el cursor: `pointermove` de `index.html:2083` solo gestiona desplazamiento y pellizco; el mapa de entrega pone el nombre de estancia como tooltip (`js/delivery-client.js:149`) | Los datos existen en los paneles de UX-03 | P4 | UI: mostrar al pasar el cursor los datos que ya calcula el panel | UX-03 | Píldora con los datos del panel, sin seleccionar | C |
 | UX-26 | Intercambiar usos de estancias | N | `IR` | [I] nombre y tipo ya son editables por estancia | Se logra hoy editando dos estancias | P4 | UI pequeño, dentro del corte de UX-24 | UX-24 | Acción única con deshacer | C |
 | UX-21 | Panel de sol | P | `PA` | [I] `js/solar-ui.js`, `js/solar-core.js` | — | P5 | UI | — | — | C |
 | LUZ-01 | Iluminación ambiental | N | `IR` | [I] modo noche, hora y grupos de luminarias en `index.html`; puntos de techo en R02-A (`js/r02a-ceiling-*`) | Sin plan de iluminación | P5 | CON: luminarias R02-A + modo noche. Sin lux (K9) | R02-A | Plan visual rotulado «sin cálculo» | D |
@@ -214,14 +214,14 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | OBR-01 | Pendientes de FT3D-8 | P | `RV` | [H] #207; [T] `tests/obr01/` | — | P1 | — | — | Cerrado | A |
 | OBR-02 | Fantasma de la siguiente tarea | P | `RV` | [H] #219; [E] `tests/obr02-obr03-*.test.cjs` | Solo con plan de la misma revisión | P1 | — | — | Cerrado | A |
 | OBR-03 | % del plan y coste planificado | P | `RV` | [H] #219; [E] igual | Rotulado como planificado | P1 | — | — | Cerrado | A |
-| OBR-04 | Muros de carga declarados y pasos libres | P | `PA` | [I] el editor distingue muros de carga (leyenda «Muros de carga», `index.html:900`) y bloquea retirarlos; [V] capa «pasos libres» no verificada | — | P5 | UI | — | Capa rotulada «declarado» | C |
+| OBR-04 | Muros de carga declarados y pasos libres | P | `PA` | [I] capa 2D «Muros de carga» (`index.html:593`) y declaración de estructura (`index.html:1757`, `Core.declareWallStructure`); sin capa de pasos libres; [I] `tools/rubik-mcp/src/route.cjs` y `layout-review` ya calculan recorridos y holguras | Muros de carga sí; pasos libres no | P5 | CON: capa de pasos libres a partir de `route.cjs` y `layout-review`, rotulada como geometría del modelo | — | Capa de pasos libres con la anchura limitante | C |
 | OBR-05 | Exportar a MS Project o GanttProject | N | `IR` | [I] `js/construction-plan-ui.js:119` exporta el plan en JSON propio; `js/construction-schedule-core.js` | Formato propio | P6 | AMP: adaptador MSPDI XML sobre el mismo `serialize` | — | Archivo que abren MS Project y GanttProject, con prueba de ida | C |
 
 ### K · Interoperabilidad y fidelidad del plano
 
 | ID | Mejora | Antes | v1.12 | Evidencia, código, PR y pruebas | Alcance acreditado y límites | Prog. | Residual | Depende de | Criterio de cierre | Hito |
 |---|---|---|---|---|---|---|---|---|---|---|
-| G-06 | Medir sobre el plano importado | P | `PA` | [H] catálogo v1.11 | Medición en el editor | P6 | AMP | — | — | C |
+| G-06 | Medir sobre el plano importado | P | `PA` | [I] herramienta Medir (M) con ajuste a muros y bloqueo de eje (`index.html:850`, `:1939`), utilizable sobre la imagen calibrada; [I] `tools/rubik-mcp/src/measure.cjs` mide entre elementos | Solo distancia. Sin área ni conteo | P6 | AMP: área y conteo sobre `tracing-core` | — | Medir área y contar sobre el plano calibrado | C |
 | G-01 | Auditoría del plano importado | N | `EX` | [H] R01 #191 y #205, archivadas sin integrar | Laboratorio no validado | P6 | VT: F2 con 20 planos reales autorizados | GOV-05 | F2 superado | C |
 | G-08 | Alinear dos planos | N | `SU` | [I] una reforma hecha como variante comparte marco de coordenadas con el original (`js/project-library.js`, `js/revision-compare-core.js`); `building-core.alignment()` ya alinea plantas | Superado para proyectos nativos; queda el caso de dos planos externos | P6 | AMP pequeño: segundo plano externo como calco con registro de dos puntos | — | Calco de un segundo plano registrado sobre una planta | C |
 | G-02 | Exportación DXF profesional | N | `ND` | [I] RUBIK lee DXF (`js/plan-intake.js`) pero no escribe DXF; `js/raw-wall-export.js` exporta sesiones R01, no DXF | — | P6 | NUE: escritor DXF sobre la geometría canónica y las láminas existentes | — | DXF con capas, cotas y leyenda existente/demoler, abierto en dos CAD | C |
@@ -238,7 +238,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | AG-3 | Aplicar con confirmación y deshacer | N | `RL` | [H] acta AG-0…AG-5 | Solo local | P7 | AMP | AG-2, GOV-06a | Aplicación remota con sesión | C |
 | AG-4 | Orquestar renders | N | `PA` | [H] Estado maestro: prepara el render sin gasto | Sin lote con coste | P2 | CON con IMG-04 | IMG-04 | Lote orquestado con coste previo | C |
 | AG-5 | Capacidades avanzadas | N | `ND` | [H] #254 (MCP Etapa 2) propone posiciones de un mueble; no cierra AG-5 | — | P7 | INV | MUE-02, GEN-01 | — | D |
-| AST-01 | Onboarding con tarjetas | N | `SU` | [I] `js/guide-core.js` (objetivos y etapas) y `js/journey-core.js` (siguiente acción desde el estado real); [E] `tests/guide.test.cjs`, `tests/journey-core.test.cjs` | Guía y siguiente acción, sin generar. [V] tarjeta de número de plantas | P4 | VT: comprobar la tarjeta de plantas e importación | — | Cerrado si la verificación confirma las dos tarjetas | A |
+| AST-01 | Onboarding con tarjetas | N | `RL` | [I] `js/guide-core.js:47` (tarjeta «Subir un plano»: PDF, imagen, DXF, IFC, RoomPlan, JSON o ZIP) y `js/journey-core.js` (siguiente acción desde el estado real); [E] `tests/guide.test.cjs` 15/15, `tests/journey-core.test.cjs` 8/8. [I] no hay tarjeta de número de plantas: las plantas se añaden en `js/building-ui.js` | Guía, importación y siguiente acción; sin tarjeta de plantas | P4 | UI: tarjeta que abra «Añadir planta» de `building-ui` | — | Tarjeta de plantas conectada | B |
 
 ### M · Generación automática
 
@@ -267,7 +267,9 @@ Cambian de letra todas las filas cuyo estado de v1.11 era N, P, R o E y ahora ti
 | MUE-01 | N | `RV` | Integrada en #228 |
 | UX-22, UX-23, UX-25 | P | `RV` | NAV3D integrado en #228 |
 | UX-07, OBR-01/02/03 | P | `RV` | Integrados con pruebas |
-| AST-01 | N | `SU` | Guía de objetivos y siguiente acción ya integradas; queda verificar dos tarjetas |
+| AST-01 | N | `RL` | Guía, importación y siguiente acción integradas; falta la tarjeta de plantas (verificado el 18/11) |
+| UX-03, UX-04 | P | `RL` | Paneles con indicadores, ayuda por herramienta y atajos conectados (verificado el 18/11) |
+| IMG-11 | N | `SI` | Recetas de cocina y baño solo en el «Estudio de imágenes» simulado (verificado el 18/11) |
 | G-08 | N | `SU` | Las variantes nativas ya comparten marco con el original; solo queda el caso de dos planos externos |
 | GOV-09a | — | `SU` | Sustituida por GOV-09b, como ya decía v1.3 |
 | ENT-04 | P | `PI` | E2 implementado en #251 e incluido en #259 |
@@ -275,7 +277,7 @@ Cambian de letra todas las filas cuyo estado de v1.11 era N, P, R o E y ahora ti
 | ENT-01, ENT-02, GOV-08 | R / P | `RL` | Integradas con alcance acotado |
 | FOT-01, CAT-01, IMG-10, IMG-14, IMG-15 | N | `SI` | Simulación integrada y rotulada; proveedor real cerrado |
 | CAT-02, UX-12, UX-13, ENT-03, G-01 | N / P | `EX` | Piloto, experimental o laboratorio |
-| IMG-07, IMG-22, CAM-01, UX-24, UX-26, LUZ-01, PRE-01, OBR-05, GEN-01 | N | `IR` | Hay infraestructura concreta reutilizable; la función no existe |
+| IMG-07, IMG-22, CAM-01, UX-24, UX-26, LUZ-01, PRE-01, OBR-05, GEN-01, UX-10 | N | `IR` | Hay infraestructura concreta reutilizable; la función no existe |
 | GOV-06a, IMG-13, BIB-01, ENT-05, AG-0, AG-4 | N | `PA` | Hay una parte específica integrada |
 | GOV-05, PER-02, ECO-02 | R / N | `DX` | Dependen de una decisión jurídica o comercial |
 | G-07 | N | `RD` | Valor bajo para el público objetivo; se propone aplazar o descartar |

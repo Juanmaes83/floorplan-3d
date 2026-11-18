@@ -2,10 +2,10 @@
 
 > **Corte 18/11/2026 (reconciliación v1.12, propuesta documental).** Master `7dccf7a6095e6700b2a6b81161f4172b53c340fb` incorpora #250: concurrencia acotada de Asset Lab, espera de «Volver a ver» de Dibujo vivo y observador de CI. Sus nueve workflows de master terminaron en `success`.
 >
-> - **URL pública:** sigue sirviendo `8525025`, comprobado por la huella de `js/home-demos.js`. El despliegue de Production de `7dccf7a` existe pero no se ha promovido; promoverlo requiere autorización.
-> - **PR abiertas:** #251, #252 y #253 (Claude) y #254, #255, #257, #258, #259 y #260 (Codex). La candidata conjunta #259 reúne siete de ellas. En su SHA `62155563`, `surfaces.browser.test.cjs` falla 7/8 por un tiempo agotado en la prueba nueva de «Detalle arquitectónico». Ninguna está en master.
+> - **Dominios públicos:** Alpha (`floorplan-3d-alpha.vercel.app`) sirve `8525025` con `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`. La Demo compartible (`floorplan-3d-demo.vercel.app`) sirve `7dccf7a` con `dpl_64ndSF5qoDKDtey7XXwEYRAzYDTF`. Ambos tienen destino Production. Los SHA se comprobaron por huella de archivos servidos. Beta 01 está pendiente de identificación.
+> - **PR abiertas:** #251, #252 y #253 (Claude) y #254, #255, #257, #258, #259 y #260 (Codex). La candidata conjunta #259 reúne siete de ellas. En su SHA `62155563`, `surfaces.browser.test.cjs` tiene 7 pruebas correctas y 1 fallida, por un tiempo agotado en la prueba nueva de «Detalle arquitectónico». Codex la está diagnosticando. Ninguna está en master.
 > - **Estado por ID:** desde v1.12 vive en la [matriz de trazabilidad](MATRIZ-TRAZABILIDAD-v1.12.md). Este documento conserva la fotografía de capacidades y despliegue. La estrategia está en el [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md).
-> - **Hallazgo estructural:** la biblioteca de proyectos vive en `localStorage` (`js/project-library.js:7`). Condiciona la comercialización; es la decisión D3 del plan.
+> - **Hallazgo estructural:** la biblioteca de proyectos vive en `localStorage` de cada dominio (`js/project-library.js:7`). La propuesta de continuidad está en el [ADR de persistencia](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md), pendiente de la decisión D3.
 >
 > Lo que sigue describe el corte del 17/11 y se conserva sin cambios.
 

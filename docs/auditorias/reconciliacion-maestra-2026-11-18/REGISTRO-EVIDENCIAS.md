@@ -8,8 +8,10 @@
 |---|---|---|
 | `master` | `7dccf7a6095e6700b2a6b81161f4172b53c340fb` | `git fetch` + `git rev-parse origin/master` |
 | Último merge | #250 `codex/consolidacion-base@8e2f1f7b` | `gh pr list` |
-| URL pública `floorplan-3d-alpha.vercel.app` | Sirve `8525025a` | Huella de `js/home-demos.js` servido = blob de `8525025a` (`6bf496bf…`), distinta de `7dccf7a6` (`2562480c…`) |
-| Despliegue de Production de `7dccf7a6` | Existe (deployment GitHub `7877698056`, 18/11 08:08 UTC) | API de deployments; no promovido al alias según la huella anterior |
+| Alpha `floorplan-3d-alpha.vercel.app` | Sirve `8525025a` | Huella de `js/home-demos.js` servido = blob de `8525025a` (`6bf496bf…`), distinta de `7dccf7a6` (`2562480c…`) |
+| Demo `floorplan-3d-demo.vercel.app` | Sirve `7dccf7a6` | `index.html` servido = blob de `7dccf7a6` (`5e576618…`); `js/home-demos.js` = `2562480c…`. Deployment `dpl_64ndSF5qoDKDtey7XXwEYRAzYDTF`, READY y con destino Production, según ChatGPT |
+| Despliegue de Production de `7dccf7a6` | Deployment GitHub `7877698056`, 18/11 08:08 UTC | Corresponde al SHA que sirve la Demo. **Corrección:** el primer corte decía «no promovido»; lo exacto es que no está asignado a Alpha |
+| Beta 01 | Pendiente de identificación | No consta en el repositorio |
 | Sello del registro de capacidades servido | `VERIFIED_AT='40b4ae5…'` | `curl` del archivo público |
 | Laboratorio Studio | `lab/studio-presentation-e0e1@2d49a254` | `git fetch` |
 
@@ -17,14 +19,14 @@
 
 | PR | Rama | HEAD | Borrador | Archivos | Checks no verdes en su SHA |
 |---|---|---|---|---|---|
-| #251 | `feat/e2-comparativas-profesionales` | `a9a92996` | No | 14 | `historical (presentation-d)`: `presentation.browser.test.cjs` agotó el tiempo del archivo (sin líneas de resultado) |
+| #251 | `feat/e2-comparativas-profesionales` | `a9a92996` | No | 14 | `historical (presentation-d)`: `presentation.browser.test.cjs` agotó el tiempo del archivo (sin líneas de resultado). Pasó después en #259; no se atribuye una regresión actual |
 | #252 | `fix/h01-dossier-inventario-economico` | `75c47928` | No | 4 | Ninguno |
 | #253 | `fix/h02-cabecera-economica-marca` | `b74dab7f` | No | 4 | Ninguno |
 | #254 | `codex/mcp-etapa-2` | `4eb58ae9` | Sí | 19 | Ninguno |
 | #255 | `codex/consolidacion-visual` | `15658307` | Sí | 34 | Ninguno |
 | #257 | `codex/ux-beta-001-export-json` | `7dd0b454` | Sí | 2 | Ninguno |
 | #258 | `codex/beta-ia-operativa` | `56e6777f` | Sí | 11 | Ninguno |
-| #259 | `codex/candidata-conjunta` | `62155563` | Sí | 85 | `historical (details)`: `surfaces.browser.test.cjs` 7/8, falla «Architectural detail uses compatible geometry and returns to the original project» con `page.waitForFunction: Timeout 30000ms exceeded` |
+| #259 | `codex/candidata-conjunta` | `62155563` | Sí | 85 | `historical (details)`: en `surfaces.browser.test.cjs` pasan 7 pruebas y falla 1, «Architectural detail uses compatible geometry and returns to the original project», con `page.waitForFunction: Timeout 30000ms exceeded`. Diagnóstico asignado a Codex; causa no determinada |
 | #260 | `codex/ci-inteligente-activacion` | `5b003bd6` | Sí | 4 | Ninguno |
 
 `full-regression` aparece como `SKIPPED` en todas: es la omisión prevista del observador en `pull_request`. Los shards históricos no son bloqueantes, pero un fallo nuevo en una prueba que añade #255 no debe integrarse sin diagnóstico.

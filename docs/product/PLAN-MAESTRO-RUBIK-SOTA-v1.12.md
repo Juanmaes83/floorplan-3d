@@ -20,7 +20,7 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 
 ## 1. Respuestas directas
 
-**¿Dónde estamos realmente?** RUBIK es un producto 2D/3D profesional amplio y probado, con entrega segura al cliente y una IA mayoritariamente cerrada. Master está en `7dccf7a`. La URL pública `floorplan-3d-alpha.vercel.app` sirve todavía `8525025`, porque el despliegue de Production de `7dccf7a` existe pero no se ha promovido. Hay nueve PR abiertas, siete de ellas reunidas en la candidata conjunta #259, que aún no está lista: su propio SHA tiene un fallo de navegador sin diagnosticar.
+**¿Dónde estamos realmente?** RUBIK es un producto 2D/3D profesional amplio y probado, con entrega segura al cliente y una IA mayoritariamente cerrada. Master está en `7dccf7a`. Hay dos dominios públicos con SHA distintos: **Alpha** (`floorplan-3d-alpha.vercel.app`) sirve `8525025` y la **Demo** compartible (`floorplan-3d-demo.vercel.app`) sirve `7dccf7a`, es decir, master. Beta 01 está pendiente de identificación (§2.1). Hay nueve PR abiertas, siete de ellas reunidas en la candidata conjunta #259. En su SHA, un archivo histórico de navegador tiene una prueba fallida de ocho; Codex la está diagnosticando.
 
 **¿Qué tenemos construido?** Un editor canónico con importación, edificio multiplanta, presentación profesional, variantes, comparador, mediciones, presupuesto C1–C4 con BC3, plan de obra y Evolución 4D, entrega al cliente con caducidad, Render IA de pago activo, Asistente sin LLM y catálogos en piloto. En total, 184 módulos en `js/`, 37 workflows y 387 archivos en `tests/`. Las 136 pruebas puras pasan en local, salvo cinco archivos que fallan por el entorno Windows y no por el producto (§10).
 
@@ -28,16 +28,16 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 
 | Ubicación | Contenido |
 |---|---|
-| Master y URL pública | Todo lo anterior hasta `8525025` |
-| Master sin promover | #250: concurrencia de Asset Lab y espera de Dibujo vivo |
+| Alpha | Todo lo anterior hasta `8525025` |
+| Master y Demo | Además, #250: concurrencia de Asset Lab y espera de Dibujo vivo |
 | PR abiertas | #251 E2 Studio, #252 H01, #253 H02, #254 MCP Etapa 2, #255 detalle arquitectónico, #257 Guardar JSON, #258 beta IA privada, #259 candidata conjunta, #260 CI inteligente |
 | Laboratorios | Studio Presentation E0–E4 en `lab/studio-presentation-e0e1`; R01 en `lab/sculpt-r01-*`; familias visuales en #165, #167 y #169 archivadas |
 
-**¿Qué mejoras históricas ya están resueltas?** De los 98 IDs, 20 están resueltos y validados y 3 han quedado superados por otra solución. Otros 7 están integrados con límites de alcance declarados. Son 30 IDs sin desarrollo pendiente relevante, frente a los 26 de la auditoría preliminar.
+**¿Qué mejoras históricas ya están resueltas?** De los 98 IDs, 20 están resueltos y validados y 2 han quedado superados por otra solución. Otros 10 están integrados con límites de alcance declarados. Son 32 IDs sin desarrollo pendiente relevante, frente a los 26 de la auditoría preliminar. El recuento incluye las diez verificaciones del 18/11 (§10).
 
-**¿Cuántos desarrollos realmente nuevos faltan?** Once IDs exigen desarrollo nuevo, y cinco más son investigación. Ninguno de los once es imprescindible para el hito B. Lo que B necesita es ampliar piezas que ya existen, sobre todo la identidad profesional GOV-06a. El desarrollo nuevo de mayor valor profesional es la exportación DXF (G-02).
+**¿Cuántos desarrollos realmente nuevos faltan?** Once IDs exigen desarrollo nuevo, y cinco más son investigación. Ninguno de los once es imprescindible para el hito B. Lo que B necesita es ampliar piezas que ya existen, sobre todo la identidad profesional GOV-06a y la persistencia del [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). El desarrollo nuevo de mayor valor profesional es la exportación DXF (G-02).
 
-**¿Cuántos necesitan conexiones, ampliaciones o validaciones?** Quince necesitan sobre todo conexión de piezas existentes y veintidós ampliación. Nueve necesitan validación técnica, siete validación profesional y siete activación operativa. Un mismo ID puede necesitar varios tipos.
+**¿Cuántos necesitan conexiones, ampliaciones o validaciones?** Veinte necesitan conexión de piezas existentes y veintitrés ampliación. Ocho necesitan validación técnica, siete validación profesional y siete activación operativa. Hay una corrección: el área de pared del panel de UX-03. Un mismo ID puede necesitar varios tipos.
 
 **¿Qué podemos resolver reutilizando lo existente?** Siete de las 24 «sin implementación» tienen infraestructura concreta: IMG-07, CAM-01, UX-24, UX-26, LUZ-01, OBR-05 y GEN-01. G-08 queda superado para proyectos nativos. El detalle está en §4.
 
@@ -48,13 +48,13 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 4. **Persistencia de resultados de imagen (IMG-12)**, que desbloquea ENT-05, IMG-16, VID-01 y las fichas de Studio E4.
 5. **Dictamen jurídico (GOV-05)**, que desbloquea FOT-01, CAT-01, PER-01/02, catálogos de fabricantes y la beta abierta.
 
-**¿Qué necesitamos para comercializar una primera versión?** El hito B de §5: integrar #259 con su CI en verde, promover con autorización, completar identidad y cuota mínimas, tener dictamen jurídico, decidir el almacenamiento de proyectos y completar un piloto con cinco profesionales. La IA generativa nueva **no** es imprescindible para ese hito.
+**¿Qué necesitamos para comercializar una primera versión?** El hito B de §5: integrar #259 con su CI en verde, promover con autorización, completar identidad y cuota mínimas, tener dictamen jurídico, implantar la continuidad del proyecto según el ADR y completar un piloto con cinco profesionales. La IA generativa nueva **no** es imprescindible para ese hito.
 
 **¿Qué podemos aplazar sin perjudicar el producto?** Personas (PER-01/02/03), panorama conceptual (PAN-01), vídeo generativo (VID-02), foto a espacio métrico (FOT-02), foto a mueble 3D (MUE-02), Move Rooms (UX-14), IMDF (G-07), LUZ-01, G-04, AG-5, GOV-06b y ENT-07.
 
 **¿Cómo deben conectarse los ocho programas?** P3 es la base de P2 y de P4. P1 y P5 aportan el valor visible a P4. P6 y P7 se apoyan en el modelo canónico y en el contrato de propuesta. P8 espera al hito C. El grafo está en §3.
 
-**¿Cuál es la ruta crítica?** Cerrar #259 → promover → identidad y cuota mínimas → dictamen GOV-05 → decisión de almacenamiento → piloto de cinco profesionales → precios. Detalle en §6.
+**¿Cuál es la ruta crítica?** Cerrar #259 → promover → expediente completo y biblioteca en IndexedDB (F0) → identidad y cuota mínimas → dictamen GOV-05 → sincronización privada (F1) → piloto de cinco profesionales → precios. Detalle en §6.
 
 **¿Qué riesgos siguen abiertos?** Los de mayor peso son los proyectos guardados solo en el navegador, Studio Presentation como herramienta Node fuera del producto, la ausencia de identidad real, la falta de dictamen jurídico y la falta de validación en dispositivos físicos. Lista completa en §8.
 
@@ -64,15 +64,15 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 
 **¿Qué debe supervisar ChatGPT?** La coherencia entre matriz, Estado maestro y PR tras cada integración; que ningún estado suba sin evidencia; el gasto IA frente a su tope; y la honestidad de lo anunciado en la Home. Detalle en §7.3.
 
-**¿Cuál es el próximo paso de mayor valor?** Diagnosticar el fallo de `surfaces.browser` en #259, volver a ejecutar su CI y pedir al propietario la aceptación de ese SHA. Es el único paso que convierte siete PR terminadas en producto.
+**¿Cuál es el próximo paso de mayor valor?** Que Codex cierre el diagnóstico de `surfaces.browser` en #259 y el propietario acepte ese SHA. En paralelo, sin coste ni proveedores, Claude puede empezar F0 del ADR: el contrato del expediente completo y la migración local a IndexedDB.
 
 ---
 
 ## 2. Dónde estamos: los siete estados no equivalentes
 
-| Capacidad | Integrada en master | Desplegada (URL pública) | Activada | Validada | Comercial |
+| Capacidad | Integrada en master | Desplegada (Alpha `8525025` / Demo `7dccf7a`) | Activada | Validada | Comercial |
 |---|---|---|---|---|---|
-| Editor, 3D, presentación, variantes, obra 4D | Sí | Sí (`8525025`) | Sí | Chromium sintético; sin dispositivos físicos | No acreditado |
+| Editor, 3D, presentación, variantes, obra 4D | Sí | Sí, en ambos | Sí | Chromium sintético; sin dispositivos físicos | No acreditado |
 | Presupuesto C1–C4, BC3, dossier económico | Sí | Sí | Sí | Pruebas puras ejecutadas | Sin precios reales validados con profesionales |
 | Entrega al cliente ENT-01/GOV-08 S1–S3 | Sí | Sí | Sí | 30/30 aislado + aceptación manual [P] | Falta S4/S5 e identidad |
 | Render IA D1 | Sí | Sí | Sí, de pago | Una acreditación real del 09/11 | Sin tope global ni cuota por profesional |
@@ -81,6 +81,16 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 | FOT-01, CAT-01 | Simulación | Sí | **No** | Simuladores | No |
 | E2 Studio, H01, H02, MCP Etapa 2, VQ/F02/F03, Guardar JSON, beta IA | **No** (PR) | Preview | No | CI de cada origen; #259 con un fallo | No |
 | Studio Presentation E3–E7 | **No** (laboratorio) | No | No | QA de laboratorio | No |
+
+### 2.1 Dominios públicos
+
+| Dominio | SHA servido | Deployment | Cómo se acredita |
+|---|---|---|---|
+| `floorplan-3d-alpha.vercel.app` | `8525025a1470d48d52d8e365070e5a0acf116134` | `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`, promovido con autorización el 17/11 | [I] huella de `js/home-demos.js` igual al blob de `8525025`; deployment según el Estado maestro y ChatGPT |
+| `floorplan-3d-demo.vercel.app` | `7dccf7a6095e6700b2a6b81161f4172b53c340fb` | `dpl_64ndSF5qoDKDtey7XXwEYRAzYDTF` | [I] `index.html` servido idéntico byte a byte al de `7dccf7a`; deployment, estado READY y destino Production comunicados por ChatGPT tras consultar Vercel |
+| Beta 01 | Pendiente de identificación | — | No consta en el repositorio |
+
+Los dos deployments tienen destino Production. La Demo se creó para compartir RUBIK con personas sin cuenta en Vercel ni GitHub. Que un dominio sirva un SHA no indica por sí solo una promoción oficial: puede ser una asignación manual de alias. Esta auditoría no reasigna dominios ni promueve despliegues. Cada dominio tiene su propio almacenamiento de navegador; ver el ADR, §3.
 
 ---
 
@@ -165,7 +175,7 @@ flowchart LR
 | C3 Registro único de herramientas | `assistant-domain-tools-core.js`, `tools/rubik-mcp/src` | Nombre, esquema, resultado | `AssistantToolCallV1` existente | Adaptador MCP sobre el mismo registro | AG-1, MCP Etapa 3 | Romper la API stdio | Las 137 pruebas de MCP y las del Asistente | Mantener los dos registros |
 | C4 ProposalV1 + vigencia | `assistant-proposals-core`, `tools/rubik-mcp/src/proposal.cjs`, huella de E2 | Cambio, revisión base, impacto | Nuevo, derivado del diff AG-2 | Unificar los tres | PRE-01, AG-2, AG-3, GEN-01, UX-12 | Medio | Oráculos ya existentes de cada uno | Adaptadores con el formato anterior |
 | C5 Resultado de imagen persistido | `ai-render-ui.js`, `delivery-image.js`, biblioteca | Imagen, vista, cámara, revisión, coste | Ficha de resultado, como `rubik-visual-result-sheet/1` | Persistencia y vínculo al proyecto | IMG-12, ENT-05, IMG-16, VID-01 | Tamaño en `localStorage` | Pruebas de cuota de almacenamiento | Retirar el vínculo |
-| C6 Almacén de proyectos | `project-library.js`, `project-package.js` | Proyecto + presupuesto + plan | FloorPlanProjectV1 + paquete | Decisión del propietario: local, archivo único o servidor | Beta, ENT-01, catálogos | Coste y RGPD | Migración idempotente, ya probada en #241 | Seguir en local |
+| C6 Continuidad del proyecto | `project-library.js`, `project-package.js`, `local-images.js` | Expediente completo | `rubik-expediente/1`, propuesto en el [ADR](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md) | F0 local y F1 sincronización privada | Beta, ENT-01, IMG-12, ENT-05, catálogos | Coste y RGPD | Criterios de aceptación del ADR, §10 | Volver al modo local, que se conserva siempre |
 
 ---
 
@@ -221,12 +231,12 @@ El recorrido de referencia es: **plano original → reforma propuesta → varian
 
 | Hito | Entrada | Aceptación | Salida |
 |---|---|---|---|
-| **A · Producto actual consolidado** | Master `7dccf7a` | #259 fusionada con CI verde en su SHA; promoción autorizada; Home anuncia solo lo activado; prueba pública del recorrido completo | Una URL pública que hace el recorrido de referencia con datos sintéticos, sin IA nueva |
-| **B · Primera versión comercial** | Hito A | GOV-06a mínimo; GOV-08 S4/S5; dictamen GOV-05 publicado; decisión D3 aplicada; GOV-07 en los dispositivos de la beta; piloto ECO-03 con cinco profesionales; precios ECO-02 decididos | Contrato con profesionales reales, con identidad, cuota y condiciones legales |
+| **A · Producto actual consolidado** | Master `7dccf7a` | #259 fusionada con CI verde en su SHA; promoción autorizada; Home anuncia solo lo activado; prueba pública del recorrido completo; expediente completo exportable y biblioteca en IndexedDB (F0 del ADR) | Una URL pública que hace el recorrido de referencia con datos sintéticos, sin IA nueva |
+| **B · Primera versión comercial** | Hito A | GOV-06a mínimo; GOV-08 S4/S5; dictamen GOV-05 publicado; sincronización privada F1 con sus seis demostraciones; GOV-07 en los dispositivos de la beta; piloto ECO-03 con cinco profesionales; precios ECO-02 decididos | Contrato con profesionales reales, con identidad, cuota y condiciones legales |
 | **C · Plataforma avanzada** | Hito B | Studio E3–E5 integrado; libro de gasto en Production; FOT-01 y CAT-01 reales; Prueba C superada; DXF; MSPDI; CAM-01; IMG-03/07/12 | Servicios IA cobrables y entregables editoriales completos |
 | **D · Ecosistema premium** | Hito C con métricas de uso | Decisión de valor para cada línea | Personas, 360, vídeo generativo, portal, generación de distribuciones |
 
-La asignación de cada ID a su hito está en la matriz: 23 en A, 22 en B, 38 en C y 15 en D.
+La asignación de cada ID a su hito está en la matriz: 22 en A, 24 en B, 37 en C y 15 en D.
 
 ---
 
@@ -253,13 +263,16 @@ flowchart LR
   K1[K1 diagnosticar #259] --> K2[K2 aceptación y fusión] --> K3[K3 promoción autorizada]
   K3 --> K7[K7 piloto 5 profesionales]
   D1[D1 contratar GOV-05] --> K7
-  D3[D3 decidir almacenamiento] --> K5[K5 identidad y cuota mínimas]
+  F0[F0 expediente e IndexedDB] --> F1
+  D3[D3 aprobar ADR] --> K5[K5 identidad y cuota mínimas]
   K5 --> K6[K6 GOV-08 S4/S5]
+  K5 --> F1[F1 sincronización privada]
+  F1 --> K7
   K6 --> K7
   K7 --> D5[D5 precios ECO-02]
 ```
 
-**Imprescindible para B:** K1–K7, D1, D3 y D5. **Deseable:** UX-24, CAM-01, el registro único de capacidades y GOV-07 ampliado.
+**Imprescindible para B:** K1–K7, F0, F1, D1, D3 y D5. **Deseable:** UX-24, CAM-01, el registro único de capacidades y GOV-07 ampliado.
 
 **Paralelo, sin bloquear la ruta:** Studio E3 (P1), registro de licencias (P5), adaptador MSPDI (P6) y contrato ProposalV1 (P7).
 
@@ -271,7 +284,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 | Corte | Objetivo observable | Reutiliza | Depende de | Aceptación | Validación | Tipo |
 |---|---|---|---|---|---|---|
-| **K1** Diagnóstico de #259 | `surfaces.browser` en verde en el SHA de #259, o causa documentada | Prueba de #255; trazas de Asset Lab | — | Tres ejecuciones verdes del shard `details` | CI | COR + VT |
+| **K1** Diagnóstico de #259 | `surfaces.browser` en verde en el SHA de #259, o causa documentada | Prueba de #255; trazas de Asset Lab | — | Tres ejecuciones verdes del shard `details` | CI | COR + VT. **Asignado a Codex** |
 | **K2** Integración de #259 | Árbol de master igual al de la candidata | Handoff de #259 | K1 + aceptación | Checks posteriores verdes | CI + prueba pública dirigida | VT |
 | **K3** Promoción | URL pública sirve el nuevo master | Procedimiento del 17/11 | K2 + autorización | Huella de `index.html` igual al SHA | Smoke público 11/11 | AO |
 | **K4** UX-24 + UX-26 | El editor sugiere el tipo y permite intercambiar usos, con deshacer | Heurísticas de NAV3D y Dibujo vivo | — | Una sola heurística en `project-core`; pruebas de ambos consumidores sin cambios | Prueba pura + navegador | CON |
@@ -296,7 +309,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 | Corte | Motivo |
 |---|---|
-| K1 | Es dueño de #251, cuyo acceso del Asistente convive con la prueba que falla |
+| F0 del ADR: contrato `rubik-expediente/1` y migración a IndexedDB | Contrato transversal a P1, P2 y P4 |
 | K4, K9, K13 | Conexiones de contratos que tocan varios consumidores |
 | K5 (diseño y revisión adversaria) | Arquitectura de identidad |
 | K10, K11, K12 | Studio Presentation es suyo según el handoff del 17/11 |
@@ -305,7 +318,8 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 | Corte | Motivo |
 |---|---|
-| K2, K3 | Preparó la candidata y los procedimientos de integración y promoción |
+| K1, K2, K3 | Diagnostica `surfaces.browser`, preparó la candidata y los procedimientos de integración y promoción |
+| F0 (interfaz) y F1 del ADR | Exportar e importar desde la interfaz; `api/projects.js` y su CI |
 | K5 (implementación), K6, K8, K16 | Autor de #258 y de GOV-08 S3 |
 | K14, K15 | Adaptadores de exportación con prueba de ida y vuelta |
 | CI inteligente (#260) | Continuidad de su piloto |
@@ -324,14 +338,14 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 | Riesgo | Tipo | Efecto | Mitigación |
 |---|---|---|---|
-| Proyectos solo en `localStorage` del navegador | Técnico y comercial | Pérdida de trabajo, límite de tamaño, sin trabajo multidispositivo | D3 y exportación JSON visible (#257) |
+| Proyectos solo en el navegador de un dominio | Técnico y comercial | Pérdida de trabajo, límite de tamaño, sin trabajo multidispositivo | [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md): F0 y F1 |
 | Studio Presentation es una herramienta Node fuera del producto | Arquitectura | Duplicar el motor de composición | Portar recetas como datos sobre los núcleos del producto; motor de PDF con ADR antes de E5 |
 | Sin identidad real | Seguridad | No se puede cobrar ni aislar estudios | K5 |
 | Blob público en enlaces de cliente | Privacidad | Acceso directo a quien tenga la URL | K6 |
 | Sin dictamen jurídico | Legal | Bloquea IA con fotos, catálogos y la beta abierta | D1 |
 | Sin dispositivos físicos | Calidad | Fallos en móvil del cliente | GOV-07 |
-| `surfaces.browser` en #259 y agotamiento de tiempo de `presentation.browser` en #251 | Integración | Fusionar con una regresión | K1 |
-| Master no promovido | Operativo | La URL pública no sirve el último master | K3 tras autorización |
+| Una prueba fallida de ocho en `surfaces.browser` de #259 | Integración | Fusionar con una regresión no diagnosticada | K1, asignado a Codex. `presentation.browser` agotó el tiempo en #251 y pasó después en #259; no se le atribuye una regresión actual |
+| Alpha y Demo sirven SHA distintos | Operativo | Confusión sobre qué versión ve cada persona | Registrar dominio, deployment y SHA en cada promoción o asignación de alias |
 | Sello del registro en `40b4ae5` | Honestidad | Anuncios con un SHA anterior al servido | K9 |
 | Render sin tope global | Económico | Gasto sin límite común | K8 |
 | Expectativa de precisión métrica | Profesional | Confundir visual con medida certificada | Mantener los rótulos «estimado» y «no certifica» |
@@ -344,7 +358,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 |---|---|---|
 | D1 | Contratar la revisión jurídica GOV-05 | B, IA real, catálogos de fabricantes |
 | D2 | Presupuesto y tope de gasto para la beta IA y la Prueba C | K16 |
-| D3 | Almacenamiento de proyectos: local, paquete único o servidor | K5, B |
+| D3 | Aprobar el [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md) y sus subdecisiones D3-a a D3-e | F0, F1, B |
 | D4 | GO de Studio E3 con base en el modelo del producto | K10 |
 | D5 | Precios y paquetes tras el piloto | Salida de B |
 | D6 | Aceptación del SHA de #259 | K2 |
@@ -361,8 +375,8 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 - **No ejecuté pruebas de navegador.** Las pruebas de navegador se citan por CI [CI] o como localizadas [T].
 - **Ejecuté las 136 pruebas puras de master** en Windows con Node 24. Pasaron 131 archivos. Fallaron cinco: tres comparan bytes y fallan por la conversión CRLF del checkout, y pasan sobre una copia LF del mismo SHA; uno necesita `python3` y otro `redis-server`, que no hay en esta máquina. Detalle en el registro de evidencias.
-- **Varias filas heredan el estado del catálogo v1.11 sin reverificación de código.** Están marcadas [H] o [V] en la matriz: IMG-05, IMG-06, IMG-11, UX-03, UX-04, UX-10, UX-11, G-06 y la capa de pasos libres de OBR-04.
-- **No consulté Vercel con credenciales.** El estado de la URL pública se dedujo comparando la huella de un archivo servido con los blobs de Git.
-- **No verifiqué Beta 01** más allá de su mención en #254 y #259. No consta en el repositorio qué despliegue es.
+- **Verificaciones cerradas el 18/11.** IMG-05, IMG-06, IMG-11, UX-03, UX-04, UX-10, UX-11, G-06, OBR-04 y AST-01 se reverificaron en el código; cambian de estado IMG-11, UX-03, UX-04, UX-10 y AST-01. No se ejecutaron pruebas de navegador para ellos.
+- **No consulté Vercel con credenciales.** El SHA de cada dominio se acreditó comparando archivos servidos con los blobs de Git. Los identificadores de deployment de la Demo los comunicó ChatGPT.
+- **Beta 01 sigue pendiente de identificación.** No consta en el repositorio qué dominio o despliegue es.
 - **El laboratorio Studio** se revisó por sus documentos de traspaso, no ejecutando sus herramientas.
 - **Cambios posteriores al corte:** ver la sección final del registro de evidencias.
