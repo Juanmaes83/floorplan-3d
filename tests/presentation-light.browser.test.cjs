@@ -28,7 +28,10 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 });
 test('M09 restores preexisting 3D camera, day/night and editor lights',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&document.querySelector('#stage').classList.contains('is3d')&&!View3D.lifecycleMetrics.animating&&View3D.presentationInspect()&&View3D.surfaceMetrics.length===2&&View3D.surfaceMetrics.every(m=>m.state==='ready'));
- await page.locator('#sun').evaluate(el=>{el.value='16';el.dispatchEvent(new Event('input',{bubbles:true}));});await page.locator('[data-t="night"]').click();const original=await inspect(page);assert.equal(original.scene.options.night,true);assert.equal(original.scene.options.hour,16);
+ await page.locator('#sun').evaluate(el=>{el.value='16';el.dispatchEvent(new Event('input',{bubbles:true}));});await page.locator('[data-t="night"]').click();
+ // A decoded surface can be ready before the invalidated frame uploads its texture to WebGL.
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const original=await inspect(page);assert.equal(original.scene.options.night,true);assert.equal(original.scene.options.hour,16);
  await start(page);await page.locator('#presentationLightPreset').click();await page.waitForFunction(()=>View3D.presentationLight.preset==='warm');await page.locator('#presentationClose').click();await page.waitForFunction(expected=>!FloorPlanPresentation.active&&document.querySelector('#stage').classList.contains('is3d')&&View3D.surfaceMetrics.every(m=>m.state==='ready')&&View3D.rendererMemory.textures===expected,original.memory.textures);
  const restored=await inspect(page);assert.deepEqual(restored.light,original.light);assert.deepEqual(restored.memory,original.memory);assert.equal(restored.mode,'3d');assert.deepEqual(restored.scene.options,original.scene.options);sameCamera(restored.camera,original.camera);assert.equal(restored.project,original.project);assert.equal(restored.entry,original.entry);assert.deepEqual(errors,[]);await page.screenshot({path:path.join(QA,'1440x900-return-3d.png')});
 });

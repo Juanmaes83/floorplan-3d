@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: f34ad8ef79ea5f3232b90ffafb55319e4e140590
+          ref: ${{ github.sha }}
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -36,25 +36,7 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
           echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
-      - name: Run only the failing case and report its state on failure
+      - name: Verify the synchronization fix with the original verdict
         run: |
           git rev-parse HEAD
-          python3 - <<'PY'
-          import os
-          from pathlib import Path
-          suite = os.environ['SUITE']
-          path = Path(f'tests/{suite}.browser.test.cjs')
-          test = path.read_text()
-          if suite == 'presentation-light':
-              start = "await page.locator('#presentationClose').click();await page.waitForFunction(expected=>"
-              end = "original.memory.textures);"
-              assert test.count(start) == test.count(end) == 1
-              test = test.replace(start, start.replace('await page.waitForFunction', 'try{await page.waitForFunction'))
-              test = test.replace(end, end + "}catch(error){console.log('editor before',original.memory,original.camera);console.log('editor restored',await page.evaluate(()=>({active:FloorPlanPresentation.active,mode:FloorPlanApp.viewMode,memory:View3D.rendererMemory,life:View3D.lifecycleMetrics,surfaces:View3D.surfaceMetrics.map(({id,state,detailState})=>({id,state,detailState})),camera:View3D.cameraState,light:View3D.presentationLight.status})));throw error;}")
-          else:
-              marker = "'resumed from where it paused'"
-              assert test.count(marker) == 1
-              test = test.replace(marker, "JSON.stringify({assertion:'resumed from where it paused',paused:paused.story,resumed:resumed.story})")
-          path.write_text(test)
-          PY
           node --test --test-concurrency=1 --test-name-pattern="$PATTERN" "tests/$SUITE.browser.test.cjs"
