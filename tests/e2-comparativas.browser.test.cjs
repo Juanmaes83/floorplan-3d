@@ -28,6 +28,7 @@ test('E2.3 + D02 · cambio en otra pestaña: aviso, sin preparar ni descargar; v
     await page.waitForSelector('#staleNotice:not([hidden])');assert.ok(await page.locator('#buildBtn').isDisabled());assert.ok(await page.locator('#dlHtml').isDisabled());
     await page.locator('#verifyBtn').click();await page.waitForFunction(()=>document.querySelector('#verifyOut li[data-check="vigencia"]')?.dataset.ok==='false');
     assert.equal(await page.locator('#verifyOut li[data-check="integridad"]').getAttribute('data-ok'),'true','sigue íntegro');
+    assert.equal(await page.locator('#verifyOut li.sum').getAttribute('data-ok'),'false','el resumen único no da por verificado un borrador no vigente');assert.match(await page.locator('#verifyOut li.sum').innerText(),/íntegro, pero NO vigente/);
     if(shots)await page.screenshot({path:shots+'/e2-vigencia-aviso.png',fullPage:false});
     assert.deepEqual(w.errors,[]);assert.deepEqual(w.external,[]);}finally{await ctx.close();}});
 
