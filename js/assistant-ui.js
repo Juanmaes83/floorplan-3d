@@ -70,14 +70,19 @@
  const fab=btn('',document.body,'assistant-fab');fab.id='assistantFab';fab.type='button';
  const access=document.createElement('rubik-assistant-access');access.id='assistantAccess';
  const accessRoot=access.attachShadow({mode:'closed'});
- const accessStyle=document.createElement('style');accessStyle.textContent=':host{display:block;position:sticky;bottom:8px;z-index:2;width:max-content;max-width:calc(100% - 36px);margin:8px 18px 8px auto}button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #184e52;background:#184e52;color:#fff;font:700 15px/1 system-ui,sans-serif;cursor:pointer}button:hover{background:#0f3a3d}button:focus-visible{outline:3px solid #f3c969;outline-offset:2px}button[hidden]{display:none}@media print{:host{display:none}}';
+ const accessStyle=document.createElement('style');accessStyle.textContent=':host{display:block;position:sticky;bottom:8px;z-index:2;width:max-content;max-width:calc(100% - 36px);margin:8px 18px 8px auto}:host([data-inline]){position:static;margin:12px 0 4px auto}button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #184e52;background:#184e52;color:#fff;font:700 15px/1 system-ui,sans-serif;cursor:pointer}button:hover{background:#0f3a3d}button:focus-visible{outline:3px solid #f3c969;outline-offset:2px}button[hidden]{display:none}@media print{:host{display:none}}';
  const accessBtn=document.createElement('button');accessBtn.type='button';accessRoot.append(accessStyle,accessBtn);
  const hostDlg=document.createElement('dialog');hostDlg.id='assistantHost';hostDlg.className='assistant-host';document.body.append(hostDlg);
  const where=el('p',undefined,null,'assistant-where');where.id='assistantWhere';panel.insertBefore(where,panel.children[1]||null);
  const hostDialog=()=>{const m=[...document.querySelectorAll('dialog[open]')].filter(d=>{if(d===hostDlg)return false;try{return d.matches(':modal');}catch{return false;}});return m[m.length-1]||null;};
+ // Superficies NO modales a pantalla completa (la presentación): el flotante, fijo abajo a la derecha, taparía sus controles
+ // (las paradas). La superficie se declara con [data-assistant-host]; mientras se ve, el acceso va EN FLUJO al final de ella
+ // (sin sticky: no se superpone a nada) y el flotante se oculta. Un modal abierto tiene prioridad.
+ const hostSurface=()=>[...document.querySelectorAll('[data-assistant-host]')].find(x=>x.getClientRects().length>0)||null;
  let ownCloses=0,lastHost=null;/* «close» de <dialog> llega en una tarea posterior: se cuentan los cierres propios */const watcher=new MutationObserver(()=>{if(lastHost&&lastHost.lastElementChild!==access)rehost();});
  const closeHost=()=>{if(hostDlg.open){ownCloses++;hostDlg.close();}};
- function rehost(){const d=hostDialog();
+ const own=n=>n===fab||n===access||n===hostDlg||panel.contains(n);
+ function rehost(){const modal=hostDialog(),d=modal||hostSurface();access.toggleAttribute('data-inline',!modal&&!!d);
   if(d!==lastHost){watcher.disconnect();if(d)watcher.observe(d,{childList:true,subtree:true});if(hostDlg.open&&d)closeHost();lastHost=d;}
   const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
   where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';
@@ -93,7 +98,8 @@
   fab.hidden=state.open||!!d||navVisible;}
  hostDlg.addEventListener('cancel',e=>{e.preventDefault();closePanel();});
  hostDlg.addEventListener('close',()=>{if(ownCloses>0){ownCloses--;return;}if(state.open)closePanel();});
- new MutationObserver(()=>rehost()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
+ // Las mutaciones de los propios elementos del asistente no reprograman (evita un bucle: rehost escribe «hidden»).
+ new MutationObserver(rs=>{if(rs.some(r=>!own(r.target)))rehost();}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open','hidden']});
  document.addEventListener('close',e=>{if(e.target!==hostDlg)setTimeout(rehost,0);},true);addEventListener('resize',()=>rehost());
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
