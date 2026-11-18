@@ -380,9 +380,8 @@ La investigación describe **13 áreas G0–G12, no 13 piedras clonadas**. Sus c
 | Estado reconciliado | IDs |
 |---|---|
 | Resuelto y validado | 20 |
-| Integrado con límites de alcance | 10 |
+| Integrado con límites de alcance | 11 |
 | Superado por otra solución | 2 |
-| Implementado, pendiente de integración | 1 |
 | Experimental o laboratorio | 5 |
 | Simulado | 6 |
 | Parcialmente desarrollado | 22 |
@@ -396,7 +395,7 @@ La investigación describe **13 áreas G0–G12, no 13 piedras clonadas**. Sus c
 
 | Preliminar | IDs | v1.12 |
 |---|---|---|
-| Resueltos o superados | 26 | 22 resueltos o superados, más 10 integrados con límites |
+| Resueltos o superados | 26 | 22 resueltos o superados, más 11 integrados con límites, incluido ENT-04 tras #259 |
 | Funcionales en piloto | 3 | Repartidos entre «integrado con límites» y «experimental» |
 | Parcialmente desarrollados | 40 | 22 parciales, más 10 con solo infraestructura reutilizable |
 | Implementados en simulación | 5 | 6 simulados |

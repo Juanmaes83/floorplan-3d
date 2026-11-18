@@ -1,9 +1,10 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
-> **Corte 18/11/2026 (reconciliación v1.12, propuesta documental).** Master `7dccf7a6095e6700b2a6b81161f4172b53c340fb` incorpora #250: concurrencia acotada de Asset Lab, espera de «Volver a ver» de Dibujo vivo y observador de CI. Sus nueve workflows de master terminaron en `success`.
+> **Corte 18/11/2026 (reconciliación v1.12, propuesta documental).** Master `163df68e83a80ddf11a008d573ee257d51c1821f` incorpora #259 con el árbol de la candidata autorizada `26c0dbdef94676c188360c4e8869b05c16c3dc23`. Pasaron los siete workflows posteriores a la integración. [Integración #259](https://github.com/Juanmaes83/floorplan-3d/pull/259).
 >
 > - **Dominios públicos:** Alpha (`floorplan-3d-alpha.vercel.app`) sirve `8525025` con `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`. La Demo compartible (`floorplan-3d-demo.vercel.app`) sirve `7dccf7a` con `dpl_64ndSF5qoDKDtey7XXwEYRAzYDTF`. Ambos tienen destino Production. Los SHA se comprobaron por huella de archivos servidos. Beta 01 está pendiente de identificación.
-> - **PR abiertas:** #251, #252 y #253 (Claude) y #254, #255, #257, #258, #259 y #260 (Codex). La candidata conjunta #259 reúne siete de ellas. En su SHA `62155563`, `surfaces.browser.test.cjs` tiene 7 pruebas correctas y 1 fallida, por un tiempo agotado en la prueba nueva de «Detalle arquitectónico». Codex la está diagnosticando. Ninguna está en master.
+> - #259 incorporó E2, H01/H02, MCP Etapa 2, VQ-01/F02/F03, Guardar JSON y los controles de Beta IA privada. El histórico de superficies pasó 8/8 en la candidata autorizada. MCP sigue en solo lectura y con escala estimada para la validación digital. La IA privada sigue pendiente de activación.
+> - F0 se revisa en orden #262 → #263 → #264. La conexión al editor espera la acreditación de las dependencias. #260 sigue como corte independiente y el motor de CI permanece en observación.
 > - **Estado por ID:** desde v1.12 vive en la [matriz de trazabilidad](MATRIZ-TRAZABILIDAD-v1.12.md). Este documento conserva la fotografía de capacidades y despliegue. La estrategia está en el [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md).
 > - **Hallazgo estructural:** la biblioteca de proyectos vive en `localStorage` de cada dominio (`js/project-library.js:7`). La propuesta de continuidad está en el [ADR de persistencia](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md), aprobado conceptualmente por el propietario el 18/11 (D3). F0 está autorizado por etapas; F1, proveedores, identidad, región y cuotas siguen pendientes.
 >

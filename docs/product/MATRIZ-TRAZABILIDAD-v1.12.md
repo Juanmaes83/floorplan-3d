@@ -2,6 +2,8 @@
 
 **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` (18/11/2026), con las PR abiertas #251–#260 consultadas en sus SHA del mismo día. **Autor:** Claude Code, por mandato del propietario. **Estado:** propuesta documental; no autoriza integración, despliegue, activación ni gasto.
 
+**Actualización de integración:** las filas de ENT-04 y el seguimiento de §6 reflejan [#259 en `master@163df68`](https://github.com/Juanmaes83/floorplan-3d/commit/163df68e83a80ddf11a008d573ee257d51c1821f).
+
 **Qué es.** La fuente canónica del **estado vigente** de cada uno de los 98 identificadores del [catálogo maestro](rubik-catalogo-maestro-mejoras-2026-11-09.md), de su programa estratégico y de su trabajo residual. El catálogo sigue siendo la autoridad de nombres, alias y olas. El [plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md) agrupa este residual en cortes. Las evidencias de esta auditoría están en el [registro de evidencias](../auditorias/reconciliacion-maestra-2026-11-18/REGISTRO-EVIDENCIAS.md).
 
 **Columna «Antes».** Es la letra de la columna Estado del catálogo v1.11. Varias filas ya estaban adelantadas por el [Estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) del 17/11; esta matriz las reconcilia en un solo sitio.
@@ -49,9 +51,8 @@
 | Estado | IDs |
 |---|---|
 | `RV` Resuelto y validado | 20 |
-| `RL` Integrado con límites de alcance | 10 |
+| `RL` Integrado con límites de alcance | 11 |
 | `SU` Objetivo superado por otra solución | 2 |
-| `PI` Implementado, pendiente de integración | 1 |
 | `EX` Experimental o laboratorio | 5 |
 | `SI` Simulado | 6 |
 | `PA` Parcialmente desarrollado | 22 |
@@ -120,7 +121,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | ENT-01 | Visita 3D del cliente | R | `RL` | [I] `js/client-delivery-core.js`, `api/delivery.js`; [E] `tests/client-delivery-core.test.cjs`, `tests/ent01-*`; [P] aceptación manual | Una planta; aceptación manual sin URL registrada | P1 | AMP: varias plantas; recorrido compartido | GOV-08 S4/S5 | Visita multiplanta con enlace caducable y prueba pública dirigida | B |
 | ENT-02 | Seguridad del enlace de cliente | P | `RL` | [H] #244; [E] `tests/gov08-s3-expiry.test.cjs` | Revocación, caducidad y limpieza manual; sin Cron | P3 | AMP: S4/S5 (comparte corte con GOV-08) | GOV-06a | Igual que GOV-08 | B |
 | ENT-03 | Story y plantillas hacia el cliente | N | `EX` | [H] laboratorio `lab/studio-presentation-e0e1@2d49a25`: 21 recetas, 6 perfiles (N01) y estados de entrega (N05); no está en master | Solo laboratorio; herramientas Node fuera del producto | P1 | CON: E3, recetas sobre la interfaz y el modelo existentes | ENT-04 (E2) | E3 integrado con aceptación visual | B |
-| ENT-04 | Dossier antes/después con presupuesto rotulado | P | `PI` | [I] master: `comparar/`, `js/before-after-dossier-core.js`; [H] #251 `a9a9299` (E2); [CI] en #251 `presentation.browser` agotó el tiempo del archivo y pasó después en #259, donde está incluido | Master: comparador desde Variantes. E2: acceso desde Entregar, coherencia económica, vigencia y orden de cambio interna | P1 | VT: CI y aceptación del SHA de #259; VP: revisión visual | — | #259 fusionada con CI verde y aceptación del propietario | B |
+| ENT-04 | Dossier antes/después con presupuesto rotulado | P | `RL` | [H] #251 (E2) integrado por #259 en `master@163df68`; [CI] [regresión posterior a la integración](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44366171976) | Comparador desde Variantes y acceso desde Entregar. E2 incluye coherencia económica, vigencia y orden de cambio interna | P1 | VP: validar el recorrido profesional en el entorno autorizado cuando se programe | — | Evidencia de aceptación y revisión profesional del recorrido de entrega | B |
 | ENT-05 | Fichas de imagen trazables | N | `PA` | [I] `js/ai-render-ui.js` guarda vista original, estilo, acabados, modelo, uso y fecha; `js/delivery-image.js` compone la banda con marca | No persiste la imagen ni la cámara; sin libro FF&E | P1 | AMP: E4, persistir imagen enviada, cámara y revisión (comparte corte con IMG-12) | IMG-12 | Ficha exportable con origen, revisión, materiales y leyenda IA | C |
 | ENT-06 | Lotes de entrega con coste y cancelación | N | `ND` | [I] sin lotes en `api/render.js` | — | P1 | NUE sobre IMG-04 y ENT-05 (E6) | IMG-04, GOV-06a | Lote con coste previo, cancelación y ZIP | C |
 | ENT-07 | Portal profesional y white-label | N | `ND` | [I] solo marca del estudio en entregables (`js/brand-core.js`, [E] `tests/brand-core.test.cjs`); sin portal, equipos ni dominio propio | La marca en documentos ya existe y no cuenta como portal | P3 | NUE (E7) | GOV-06b, GOV-05 | Portal con aceptación y firma | D |
@@ -272,7 +273,7 @@ Cambian de letra todas las filas cuyo estado de v1.11 era N, P, R o E y ahora ti
 | IMG-11 | N | `SI` | Recetas de cocina y baño solo en el «Estudio de imágenes» simulado (verificado el 18/11) |
 | G-08 | N | `SU` | Las variantes nativas ya comparten marco con el original; solo queda el caso de dos planos externos |
 | GOV-09a | — | `SU` | Sustituida por GOV-09b, como ya decía v1.3 |
-| ENT-04 | P | `PI` | E2 implementado en #251 e incluido en #259 |
+| ENT-04 | P | `RL` | E2 integrado en master mediante #259 |
 | AG-1, AG-2, AG-3 | R / N | `RL` | Consulta sin LLM, dos operaciones y aplicación local integradas |
 | ENT-01, ENT-02, GOV-08 | R / P | `RL` | Integradas con alcance acotado |
 | FOT-01, CAT-01, IMG-10, IMG-14, IMG-15 | N | `SI` | Simulación integrada y rotulada; proveedor real cerrado |
@@ -299,12 +300,12 @@ No son IDs del catálogo y no alteran el recuento. Se siguen en el plan maestro.
 
 | Código de trabajo | Qué es | Dónde | Relación |
 |---|---|---|---|
-| H01, H02 | Correcciones del dossier económico | #252, #253, incluidas en #259 | ENT-04 |
-| UX-BETA-001 | Guardar proyecto JSON desde la cabecera | #257 (issue #256), incluida en #259 | Beta |
-| MCP Etapa 2 | Propuestas de posición de un mueble, solo lectura, por stdio | #254, incluida en #259 | PRE-01, GEN-01; no cierra AG-5 |
-| VQ-01, F02, F03 | Detalle arquitectónico, carpinterías y fachadas | #255, incluida en #259 | BIB-01, IMG-05/06 |
+| H01, H02 | Correcciones del dossier económico | #252 y #253, integradas por #259 | ENT-04 |
+| UX-BETA-001 | Guardar proyecto JSON desde la cabecera | #257 (issue #256), integrado por #259 y verificado en Chromium | Beta |
+| MCP Etapa 2 | Propuestas de posición de un mueble, solo lectura, por stdio | #254, integrado por #259 con GO funcional digital y escala estimada | PRE-01, GEN-01; AG-5 sigue abierto |
+| VQ-01, F02, F03 | Detalle arquitectónico, carpinterías y fachadas | #255, integrado por #259; histórico de superficies 8/8 | BIB-01, IMG-05/06 |
 | CI inteligente | Deduplicación certificada del CAT-IA | #260 | Gobierno de CI |
-| Beta IA privada | Identidad de tester, cuotas y libro común | #258, incluida en #259 | GOV-06a, IMG-04, FOT-01, CAT-01 |
+| Beta IA privada | Identidad de tester, cuotas y libro común | #258, integrado por #259; la activación y la prueba con proveedor siguen pendientes | GOV-06a, IMG-04, FOT-01, CAT-01 |
 | CON-03 | Importación de presupuesto | master (#241) | Sin ID; decisión pendiente |
 | «CAT-04» | Producto de catálogo a partida C1–C4 | master (#237) | Avance parcial de CAT-03 |
 | R01, R02-A, R03 | Piedras SCULPT | R02-A y R03 en master; R01 en laboratorio | G-01, LUZ-01, CAT-03 |

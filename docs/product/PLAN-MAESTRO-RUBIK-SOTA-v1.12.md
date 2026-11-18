@@ -29,11 +29,12 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 | Ubicación | Contenido |
 |---|---|
 | Alpha | Todo lo anterior hasta `8525025` |
-| Master y Demo | Además, #250: concurrencia de Asset Lab y espera de Dibujo vivo |
-| PR abiertas | #251 E2 Studio, #252 H01, #253 H02, #254 MCP Etapa 2, #255 detalle arquitectónico, #257 Guardar JSON, #258 beta IA privada, #259 candidata conjunta, #260 CI inteligente |
+| Demo | #250, concurrencia de Asset Lab y espera de Dibujo vivo |
+| Master `163df68` | #250 y #259, con E2 Studio, H01/H02, MCP Etapa 2, detalle arquitectónico, Guardar JSON y controles de Beta IA privada |
+| PR abiertas del programa | #262 → #263 → #264 para F0; #260 independiente; #265 G-02 en borrador |
 | Laboratorios | Studio Presentation E0–E4 en `lab/studio-presentation-e0e1`; R01 en `lab/sculpt-r01-*`; familias visuales en #165, #167 y #169 archivadas |
 
-**¿Qué mejoras históricas ya están resueltas?** De los 98 IDs, 20 están resueltos y validados y 2 han quedado superados por otra solución. Otros 10 están integrados con límites de alcance declarados. Los **22 resueltos o superados** no tienen trabajo residual relevante. Los **10 integrados con límites** están en uso pero conservan un residual declarado en la matriz, así que no cuentan como cerrados. La auditoría preliminar contaba 26 resueltos o superados. El recuento incluye las diez verificaciones del 18/11 (§10).
+**¿Qué mejoras históricas ya están resueltas?** De los 98 IDs, 20 están resueltos y validados y 2 han quedado superados por otra solución. Los 11 integrados con límites incluyen ENT-04 tras #259 y conservan el trabajo residual declarado en la matriz.
 
 **¿Cuántos desarrollos realmente nuevos faltan?** Once IDs exigen desarrollo nuevo, y cinco más son investigación. Ninguno de los once es imprescindible para el hito B. Lo que B necesita es ampliar piezas que ya existen, sobre todo la identidad profesional GOV-06a y la persistencia del [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). El desarrollo nuevo de mayor valor profesional es la exportación DXF (G-02).
 
@@ -48,13 +49,13 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 4. **Persistencia de resultados de imagen (IMG-12)**, que desbloquea ENT-05, IMG-16, VID-01 y las fichas de Studio E4.
 5. **Dictamen jurídico (GOV-05)**, que desbloquea FOT-01, CAT-01, PER-01/02, catálogos de fabricantes y la beta abierta.
 
-**¿Qué necesitamos para comercializar una primera versión?** El hito B de §5: integrar #259 con su CI en verde, promover con autorización, completar identidad y cuota mínimas, tener dictamen jurídico, implantar la continuidad del proyecto según el ADR y completar un piloto con cinco profesionales. La IA generativa nueva **no** es imprescindible para ese hito.
+**¿Qué necesitamos para comercializar una primera versión?** Tras integrar #259, el hito B requiere promoción autorizada, identidad y cuota mínimas, dictamen jurídico, continuidad del proyecto según el ADR y un piloto con cinco profesionales.
 
 **¿Qué podemos aplazar sin perjudicar el producto?** Personas (PER-01/02/03), panorama conceptual (PAN-01), vídeo generativo (VID-02), foto a espacio métrico (FOT-02), foto a mueble 3D (MUE-02), Move Rooms (UX-14), IMDF (G-07), LUZ-01, G-04, AG-5, GOV-06b y ENT-07.
 
 **¿Cómo deben conectarse los ocho programas?** P3 es la base de P2 y de P4. P1 y P5 aportan el valor visible a P4. P6 y P7 se apoyan en el modelo canónico y en el contrato de propuesta. P8 espera al hito C. El grafo está en §3.
 
-**¿Cuál es la ruta crítica?** Cerrar #259 → promover → expediente completo y biblioteca en IndexedDB (F0) → identidad y cuota mínimas → dictamen GOV-05 → sincronización privada (F1) → piloto de cinco profesionales → precios. Detalle en §6.
+**¿Cuál es la ruta crítica?** Tras #259, expediente completo y biblioteca en IndexedDB (F0) → identidad y cuota mínimas → dictamen GOV-05 → sincronización privada (F1) → piloto de cinco profesionales → precios. Detalle en §6.
 
 **¿Qué riesgos siguen abiertos?** Los de mayor peso son los proyectos guardados solo en el navegador, Studio Presentation como herramienta Node fuera del producto, la ausencia de identidad real, la falta de dictamen jurídico y la falta de validación en dispositivos físicos. Lista completa en §8.
 
@@ -64,7 +65,7 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 
 **¿Qué debe supervisar ChatGPT?** La coherencia entre matriz, Estado maestro y PR tras cada integración; que ningún estado suba sin evidencia; el gasto IA frente a su tope; y la honestidad de lo anunciado en la Home. Detalle en §7.3.
 
-**¿Cuál es el próximo paso de mayor valor?** Que Codex cierre el diagnóstico de `surfaces.browser` en #259 y el propietario acepte ese SHA. En paralelo, F0 está autorizado por etapas (D3, §9): primero el contrato del expediente y su recuperación sobre el almacenamiento actual, en una PR propia y fuera de #259.
+**¿Cuál es el próximo paso de mayor valor?** Validar la cadena F0 #262 → #263 → #264 antes de conectar el editor. En paralelo, G-02 pasa a revisión del borrador #265.
 
 ---
 
@@ -79,7 +80,7 @@ El [ROADMAP](../ROADMAP.md) conserva la historia y remite aquí.
 | Asistente V2 sin LLM | Sí | Sí | Sí | Pruebas ejecutadas | Piloto |
 | Asistente V3 generativo | Sí | Sí | **No** (`503`) | Solo con simuladores | No |
 | FOT-01, CAT-01 | Simulación | Sí | **No** | Simuladores | No |
-| E2 Studio, H01, H02, MCP Etapa 2, VQ/F02/F03, Guardar JSON, beta IA | **No** (PR) | Preview | No | CI de cada origen; #259 con un fallo | No |
+| E2 Studio, H01, H02, MCP Etapa 2, VQ/F02/F03, Guardar JSON, controles de Beta IA | Sí, #259 | Build de master | Beta IA pendiente | Histórico de superficies 8/8 y siete workflows postintegración | No |
 | Studio Presentation E3–E7 | **No** (laboratorio) | No | No | QA de laboratorio | No |
 
 ### 2.1 Dominios públicos
@@ -231,7 +232,7 @@ El recorrido de referencia es: **plano original → reforma propuesta → varian
 
 | Hito | Entrada | Aceptación | Salida |
 |---|---|---|---|
-| **A · Producto actual consolidado** | Master `7dccf7a` | #259 fusionada con CI verde en su SHA; promoción autorizada; Home anuncia solo lo activado; prueba pública del recorrido completo; expediente completo exportable y biblioteca en IndexedDB (F0 del ADR) | Una URL pública que hace el recorrido de referencia con datos sintéticos, sin IA nueva |
+| **A · Producto actual consolidado** | Master `163df68` con #259 | Promoción autorizada, correspondencia entre Home y las funciones activas, prueba pública del recorrido completo, expediente completo exportable y biblioteca en IndexedDB (F0 del ADR) | Una URL pública que ejecuta el recorrido de referencia con datos sintéticos |
 | **B · Primera versión comercial** | Hito A | GOV-06a mínimo; GOV-08 S4/S5; dictamen GOV-05 publicado; sincronización privada F1 con sus seis demostraciones; GOV-07 en los dispositivos de la beta; piloto ECO-03 con cinco profesionales; precios ECO-02 decididos | Contrato con profesionales reales, con identidad, cuota y condiciones legales |
 | **C · Plataforma avanzada** | Hito B | Studio E3–E5 integrado; libro de gasto en Production; FOT-01 y CAT-01 reales; Prueba C superada; DXF; MSPDI; CAM-01; IMG-03/07/12 | Servicios IA cobrables y entregables editoriales completos |
 | **D · Ecosistema premium** | Hito C con métricas de uso | Decisión de valor para cada línea | Personas, 360, vídeo generativo, portal, generación de distribuciones |
@@ -260,7 +261,7 @@ La asignación de cada ID a su hito está en la matriz: 22 en A, 24 en B, 37 en 
 
 ```mermaid
 flowchart LR
-  K1[K1 diagnosticar #259] --> K2[K2 aceptación y fusión] --> K3[K3 promoción autorizada]
+  K2[K1 y K2 completados] --> K3[K3 promoción autorizada]
   K3 --> K7[K7 piloto 5 profesionales]
   D1[D1 contratar GOV-05] --> K7
   F0[F0 expediente e IndexedDB] --> F1
@@ -284,8 +285,8 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 
 | Corte | Objetivo observable | Reutiliza | Depende de | Aceptación | Validación | Tipo |
 |---|---|---|---|---|---|---|
-| **K1** Diagnóstico de #259 | `surfaces.browser` en verde en el SHA de #259, o causa documentada | Prueba de #255; trazas de Asset Lab | — | Tres ejecuciones verdes del shard `details` | CI | COR + VT. **Asignado a Codex** |
-| **K2** Integración de #259 | Árbol de master igual al de la candidata | Handoff de #259 | K1 + aceptación | Checks posteriores verdes | CI + prueba pública dirigida | VT |
+| **K1** Validación de #259 | Histórico de superficies 8/8 en `26c0dbd` | Resultado de la candidata | — | Histórico acreditado | CI | Completado |
+| **K2** Integración de #259 | Árbol de `master@163df68` igual al de `26c0dbd` | Handoff de #259 | K1 + aceptación del propietario | 7/7 workflows posteriores | CI y pruebas dirigidas | Completado |
 | **K3** Promoción | URL pública sirve el nuevo master | Procedimiento del 17/11 | K2 + autorización | Huella de `index.html` igual al SHA | Smoke público 11/11 | AO |
 | **K4** UX-24 + UX-26 | El editor sugiere el tipo y permite intercambiar usos, con deshacer | Heurísticas de NAV3D y Dibujo vivo | — | Una sola heurística en `project-core`; pruebas de ambos consumidores sin cambios | Prueba pura + navegador | CON |
 | **K5** Identidad y cuota mínimas | Un profesional entra, consume su cuota y no ve datos de otro | `_beta-controls`, `_spend-ledger`, `_share-auth` | D3, D1 iniciado | Pruebas adversarias al nivel de GOV-08 S2 | Preview aislado | AMP |
@@ -345,7 +346,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 | Blob público en enlaces de cliente | Privacidad | Acceso directo a quien tenga la URL | K6 |
 | Sin dictamen jurídico | Legal | Bloquea IA con fotos, catálogos y la beta abierta | D1 |
 | Sin dispositivos físicos | Calidad | Fallos en móvil del cliente | GOV-07 |
-| Una prueba fallida de ocho en `surfaces.browser` de #259 | Integración | Fusionar con una regresión no diagnosticada | K1, asignado a Codex. `presentation.browser` agotó el tiempo en #251 y pasó después en #259; no se le atribuye una regresión actual |
+| Fallo histórico de `surfaces.browser` en `62155563` | Antecedente de #259 | Confundir la evidencia de dos SHA | La candidata autorizada `26c0dbd` obtuvo 8/8 en superficies. Se conserva el resultado del SHA anterior en el registro de evidencias |
 | Alpha y Demo sirven SHA distintos | Operativo | Confusión sobre qué versión ve cada persona | Registrar dominio, deployment y SHA en cada promoción o asignación de alias |
 | Sello del registro en `40b4ae5` | Honestidad | Anuncios con un SHA anterior al servido | K9 |
 | Render sin tope global | Económico | Gasto sin límite común | K8 |
@@ -362,7 +363,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 | D3 | **Aprobada conceptualmente el 18/11:** arquitectura B sobre A del [ADR de continuidad](ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md). F0 autorizado por etapas. Siguen pendientes F1, D3-a a D3-e (proveedor de datos, identidad, rótulo de la Demo, Beta 01, cuotas), la región y los costes | F1, B |
 | D4 | GO de Studio E3 con base en el modelo del producto | K10 |
 | D5 | Precios y paquetes tras el piloto | Salida de B |
-| D6 | Aceptación del SHA de #259 | K2 |
+| D6 | Propietario autorizó #259 en `26c0dbd`; integrado como `163df68` | K2 completado |
 | D7 | Promoción de master | K3 |
 | D8 | Reclasificar G-08 como superado en su alcance nativo | Catálogo |
 | D9 | Descartar o aplazar G-07 | Catálogo |

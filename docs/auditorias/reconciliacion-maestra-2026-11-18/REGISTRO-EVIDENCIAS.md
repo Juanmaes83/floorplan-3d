@@ -2,6 +2,8 @@
 
 **Fecha:** 18/11/2026 · **Autor:** Claude Code · **Rama:** `docs/reconciliacion-maestra-v1.12`, creada desde `origin/master@7dccf7a` en un worktree propio. Solo documentación.
 
+**Continuidad posterior al corte auditado.** El propietario autorizó [#259](https://github.com/Juanmaes83/floorplan-3d/pull/259) en `26c0dbdef94676c188360c4e8869b05c16c3dc23`. GitHub integró el mismo árbol en `master@163df68e83a80ddf11a008d573ee257d51c1821f`. El histórico de superficies de la candidata pasó 8/8 y los siete workflows de master terminaron en éxito. El job histórico `presentation-b` se canceló tras completar 27 pruebas correctas. Las tablas siguientes conservan los resultados de los SHA auditados antes de ese merge. [Evidencia histórica](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44344134253/artifacts/14454540160).
+
 ## 1. SHA de partida
 
 | Referencia | SHA | Fuente |
