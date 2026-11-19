@@ -2,6 +2,8 @@
 
 **LEER PRIMERO AL RECUPERAR CONTEXTO.** Corte 19/11/2026, posterior al cierre técnico de OP-10 y al candidato local final F0.2b. Auditoría ChatGPT por encargo del propietario. Base de producto comprobada: master `dd528119bdfd80733c4faf5bb56a594190fea5ac`, árbol `f62e9492de0ee616c8edd1966703238d57702a63`. Rama documental independiente `docs/continuidad-rubik-2026-11-19`: no altera master, no autoriza merge, promoción, activación ni gasto. Sustituye como entrada operativa al handoff 18/11; conserva los históricos. El catálogo y las olas del plan v1.12 siguen vigentes.
 
+> **Actualización posterior del 19/11 — publicación verificada:** #269 ya está en `956bce96b1d50edb60a8b8aaa3b742f3678261bb`, árbol `1c07fd979b854ad5252e70444bca0c2db381fa9d`. Candidato publicado mediante avance rápido desde `79cd98f6`, con dos commits y seis archivos (+48/−11). El estado actual y el mandato de retomada están en §10.1; las cifras de §3.1–3.2 del candidato local y CI anterior son históricas. **NO-GO para merge o activación.**
+
 ## 0. Protocolo de reanudación
 
 1. Leer este documento y [protocolo multiagente](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE.md). Consultar en vivo master, PR, HEAD, árboles, CI paginada, revisiones, workflows, aceptación y diferencias. Las cifras de este corte no son estado en tiempo real.
@@ -52,14 +54,14 @@ Despliegues **última evidencia histórica, no reconsultados en este corte**: Al
 |---|---|---|
 | F0.1 | INTEGRADO | Expediente hashes, no firma; conservar recuperación |
 | F0.2a | INTEGRADO | Autoridad IndexedDB y revisión/tx |
-| F0.2b | EN ESTABILIZACIÓN, candidato final local | Publicación única coordinada y CI nuevo SHA; NO-GO merge/activación |
+| F0.2b | EN VALIDACIÓN CI, candidato publicado 956bce96 | Acreditar CI nuevo SHA, auditoría y autorización; NO-GO merge/activación |
 | F0.2c | NO DESARROLLADO como corte | Imágenes/adjuntos/recursos y diario misma transacción; OP02/04/DXF compatibilidad, referencias privadas |
 | F0.3 | PARCIAL (#264) | Estado, recuperación/historial/permiso, Safari real/iOS/Android/desalojo |
 | F1 | BLOQUEADO/DISEÑO | D3-a–e proveedor/identidad/región/cuotas, privacidad y gasto; modo local permanente |
 
 F0.2b solo autoridad en origen aislado f0-2b.localhost; editor normal no activa autoridad. Cinco documentos: proyecto, biblioteca, presupuesto, observaciones/revisión, obra. Migración transaccional, confirmación, conflictos, espejo separado, recuperación, E2/Evolución. Lectura confirmada sin migración ni escritura. Revisión local ≠ contentId portable ≠ hash de entrega; imágenes por nivel + ID exacto. Marca, tarifa y catálogo autoridades separadas. Respetar CAM-01/IMG-07. [Contrato F0](../contracts/persistencia-v1.md), [verificación #269](https://github.com/Juanmaes83/floorplan-3d/blob/79cd98f6fffc4b978aee4ba6692f9f5c6554916d/docs/integration/F0-2B-VERIFICACION.md).
 
-### 3.1 Codex: último candidato (local, no publicado)
+### 3.1 Codex: histórico de preparación del candidato (publicado después; ver §10.1)
 
 PR [#269](https://github.com/Juanmaes83/floorplan-3d/pull/269) draft, rama codex/f0-2b-consumers. Remoto **79cd98f6fffc4b978aee4ba6692f9f5c6554916d**, árbol ab3908a8a1f48d86776e21fd3899d057725d67d3. Reparación bootstrap defer antes de plantilla; ocho módulos R03 finales, gate intacto. Ancestro local fe492e1d73a3d289dea608207610b2eba54c4326, árbol ffaa403c44244b2d491a420eb9dd7fdec609f0de. **Último candidato local comunicado por Codex [E]: 956bce96b1d50edb60a8b8aaa3b742f3678261bb**, árbol **1c07fd979b854ad5252e70444bca0c2db381fa9d**; seis archivos +48/−11. GitHub responde 422 al SHA local; no auditable aún. El patch del equipo local no es un enlace accesible para ChatGPT.
 
@@ -96,7 +98,7 @@ Denominaciones del [registro OP/RG](../product/sculpt-openplan3d-roomgpt-2026-11
 | R01 raster | LAB HISTÓRICO/PARCIAL | F2 cinco sesiones/20 planos históricas; entrada y profesional pendientes |
 | R02 techos | A INTEGRADO EXPERIMENTAL; B NO INICIADO | Medidas/privacidad/aceptación reales |
 | R03 armarios | INTEGRADO EXPERIMENTAL | Preservar ocho módulos y hooks; validación real |
-| OP-01 persistencia | PARCIAL/EN ESTABILIZACIÓN | F0.1/2a integrados, 2b local final, 2c/3 residuales |
+| OP-01 persistencia | PARCIAL/EN ESTABILIZACIÓN | F0.1/2a integrados, 2b publicado en CI, 2c/3 residuales |
 | OP-02 rendimiento | PENDIENTE INTEGRACIÓN | #266 verde, aceptación pendiente |
 | OP-03 DXF | INTEGRADO LIMITADO | #265, CAD/profesional pendiente |
 | OP-04 escaneos | PENDIENTE INTEGRACIÓN | #268 verde, escaneos reales pendientes |
@@ -157,7 +159,7 @@ Delta: G-02 pasa de ND a DXF integrado limitado #265 (reconciliar RL en siguient
 
 ## 8. Retomada ordenada y dependencias
 
-1. Autorizar push exacto 956bce96 de Codex (recomendación técnica, no acción ejecutada); revisar nuevo HEAD/CI completa. No más encargos hasta consolidar.
+1. Push exacto 956bce96 ya ejecutado por Codex y verificado. Revisar CI completa y validar gates pendientes; no más pushes ni encargos hasta consolidar.
 2. Aceptaciones visuales/real OP02/04; integración secuencial solo si se cumplen §5. #269 requiere GO separado; revalidar conjunto actualizado.
 3. F0.2c → F0.3 y QA físico/recuperación; activación real separada. No iniciar cirugías hasta gates específicos.
 4. OP07, OP05, E3, OP10 tienen escultura preparada; ordenar cirugías por dependencias, riesgo y mandato. OP12 después F0 y MCP3/4. MCP propio stdio copia única JSON, lectura + propuesta acotada applied:false; etapa3 simulación aislada, etapa4 variante confirmada sin cambiar original. Donante bridge dev local no se trasplanta como escritor. [Roadmap MCP](../technical/local-mcp-roadmap.md).
@@ -171,3 +173,11 @@ GitHub/API primero, scraping de fuentes accesibles autorizadas con crawl4ai, cra
 ## 10. Registro de actualización
 
 19/11: #259–265 verificados, #266/268 pendientes, #267 y E3/OP05 congelados, OP10 cierre técnico inmóvil, #269 79cd98f6 CI 89/8/1; candidato 956bce96 local (no publicado). Revisión de renders por ChatGPT, sin ejecutar Blender. No cambio de master, no merge/deploy, ningún gate modificado. Actualizar tras nuevo SHA de Codex y después de cada aceptación/fusión. Si se pierde contexto, volver a §0.
+
+### 10.1 Publicación F0.2b — nuevo corte 19/11/2026 [I][CI]
+
+- [PR #269](https://github.com/Juanmaes83/floorplan-3d/pull/269) permanece abierta, draft y sin fusionar. HEAD remoto `956bce96b1d50edb60a8b8aaa3b742f3678261bb`, árbol `1c07fd979b854ad5252e70444bca0c2db381fa9d`. Master `dd528119bdfd80733c4faf5bb56a594190fea5ac`, árbol intacto `f62e9492de0ee616c8edd1966703238d57702a63`.
+- [Comparación exacta](https://github.com/Juanmaes83/floorplan-3d/compare/79cd98f6fffc4b978aee4ba6692f9f5c6554916d...956bce96b1d50edb60a8b8aaa3b742f3678261bb): 2 commits por delante, 0 por detrás, ancestro `fe492e1d73a3d289dea608207610b2eba54c4326`, seis archivos +48/−11. Tres JS de consumidores, dos pruebas dirigidas y el informe F0.2b. Sin cambios de workflows ni gates históricos R03. Inspección: espera de navegación y editorReady antes de revisar la recuperación, enlace de FloorPlanApp en obra, observación del dossier al montar workspace, locator de presentación exacto; se conservan timeouts y aserciones relevantes. No se han repetido las pruebas locales por ChatGPT.
+- CI consultada para nuevo HEAD: **98 checks: 14 aprobados, 20 en curso, 63 en cola, 1 omitido full-regression, 0 fallidos**. Workflows: 32 registrados, 9 aprobados, 9 en curso, 14 en cola. Son unidades diferentes. Cifras de corte, no estado en directo.
+- [Persistencia F0.2](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44491214885) y [consolidación](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44491215078). La simulación conjunta `ee70331c65407a458ad782840349696c55887b32` es evidencia local de Codex, no integración ni prueba independiente.
+- **Estado actual: EN VALIDACIÓN CI. GO de publicación consumado; NO-GO para fusionar o activar.** No ordenar otro push salvo fallo acreditado; esperar resultados, auditar gates y aceptaciones y solicitar autorización específica. Mantener E3/OP05/OP07 congelados y OP10 inmóvil. No modificar master, ramas ajenas, servicios ni workflows. Autorización secuencial de #266/#268 permanece restringida a §5.
