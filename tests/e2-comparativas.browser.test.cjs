@@ -6,7 +6,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
 const K=require('./ux07/kit.cjs'),F=require('../labs/ux07-ent04/fixtures.js'),V=require('../js/variants-compare-adapter.js'),L=require('../js/project-library.js');
 const shots=process.env.E2_SHOTS||null;if(shots)fs.mkdirSync(shots,{recursive:true});
-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
+let env;test.before(async()=>{env=await K.start({authority:true});});test.after(async()=>{await env?.stop();});
 function seed({budgets='complete'}={}){const m=new Map(),st={getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k)};
   const lib=L.load(st,F.before());lib.variant(F.before(),'Reforma A');const v=lib.group(lib.activeId()).find(g=>g.id===lib.activeId());const e=F.after();e.id=v.project.id;e.name=v.project.name;lib.save(e);const group=lib.group(lib.activeId());
   const B={complete:{[group[0].project.id]:F.budget('complete',group[0].project),[group[1].project.id]:F.budget('complete',group[1].project)},
@@ -14,7 +14,8 @@ function seed({budgets='complete'}={}){const m=new Map(),st={getItem:k=>m.has(k)
   if(B)m.set('rubik-budget-v1',JSON.stringify(B));return {storage:Object.fromEntries(m),group};}
 async function open(storage,group,opts={}){const ctx=await env.browser.newContext({acceptDownloads:true,...opts});
   await ctx.addInitScript(s=>{if(window.top!==window||sessionStorage.getItem('s'))return;localStorage.clear();for(const [k,v] of Object.entries(s))localStorage.setItem(k,v);sessionStorage.setItem('s','1');},storage);
-  const page=await ctx.newPage();const w=K.watch(page,env.base);await page.goto(env.base+'comparar/?'+V.handoff({beforeId:group[0].id,afterId:group[1].id})+'&anchor='+encodeURIComponent(group[1].id));
+  const page=await ctx.newPage();await page.goto(env.base);await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+  const w=K.watch(page,env.base);await page.goto(env.base+'comparar/?'+V.handoff({beforeId:group[0].id,afterId:group[1].id})+'&anchor='+encodeURIComponent(group[1].id));
   await page.waitForSelector('#cmpCard:not([hidden])');await page.waitForFunction(()=>window.__ux07Compare.prepared);return {ctx,page,w};}
 const dump=p=>p.evaluate(()=>JSON.stringify(Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))));
 
@@ -23,8 +24,13 @@ test('E2.3 + D02 · cambio en otra pestaña: aviso, sin preparar ni descargar; v
     const s0=await dump(page);await page.locator('#buildBtn').click();await page.waitForSelector('#dosOut:not([hidden])');
     await page.locator('#verifyBtn').click();await page.waitForSelector('#verifyOut li[data-check="vigencia"]');
     assert.equal(await page.locator('#verifyOut li[data-check="vigencia"]').getAttribute('data-ok'),'true');assert.equal(await dump(page),s0,'D02: preparar y verificar no escriben');
-    const other=await ctx.newPage();await other.goto(env.base+'comparar/?src=library&before=x&after=y');
-    await other.evaluate(({id})=>{const k='rubik-sota-project-library-v1',l=JSON.parse(localStorage.getItem(k));const en=l.entries.find(e=>e.id===id);en.name+=' (cambiada)';localStorage.setItem(k,JSON.stringify(l));},{id:group[1].id});
+    const other=await ctx.newPage();await other.goto(env.base);
+    await other.waitForFunction(()=>window.FloorPlanApp);
+    await other.evaluate(async id=>{
+      const {storage,persistence}=FloorPlanApp,k='rubik-sota-project-library-v1',l=JSON.parse(storage.getItem(k));
+      l.entries.find(e=>e.id===id).name+=' (cambiada)';
+      storage.setItem(k,JSON.stringify(l));await persistence.requireSaved();
+    },group[1].id);
     await page.waitForSelector('#staleNotice:not([hidden])');assert.ok(await page.locator('#buildBtn').isDisabled());assert.ok(await page.locator('#dlHtml').isDisabled());
     await page.locator('#verifyBtn').click();await page.waitForFunction(()=>document.querySelector('#verifyOut li[data-check="vigencia"]')?.dataset.ok==='false');
     assert.equal(await page.locator('#verifyOut li[data-check="integridad"]').getAttribute('data-ok'),'true','sigue íntegro');
@@ -63,7 +69,7 @@ test('E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el
     await page.waitForFunction(()=>{const l=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')||'null');return !!l?.entries.find(e=>e.id===l.activeId)?.variantOf;});await page.locator('#projectClose').click();
     await page.locator('#workArea-deliver').click();await card.waitFor();await page.waitForFunction(()=>document.querySelector('.professional-card[data-compare-state]')?.dataset.compareState==='ready');
     if(shots)await card.screenshot({path:shots+'/e2-entregar-con-variante.png'});
-    const [popup]=await Promise.all([ctx.waitForEvent('page'),card.locator('[data-route^="compare-"]').first().click()]);await popup.waitForLoadState();
+    const [popup]=await Promise.all([ctx.waitForEvent('page'),card.locator('[data-route^="compare-"]').first().click()]);await popup.waitForURL(/\/comparar\/\?/);
     assert.match(popup.url(),/\/comparar\/\?src=library&before=.+&after=.+&anchor=/);await popup.waitForSelector('#cmpCard:not([hidden])');
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[],'(el kit sirve .mjs sin tipo: límite del servidor de pruebas)');assert.deepEqual(w.external,[]);}finally{await ctx.close();}});
 
@@ -124,12 +130,22 @@ test(`E2 · asistente ${name}: en una superficie no modal no tapa sus controles;
     assert.deepEqual(w.errors.filter(e=>!/module script.*MIME type/.test(e)),[]);}finally{await ctx.close();}});
 
 // A26/H03 · carrera: los datos cambian MIENTRAS se genera (otra pestaña escribe entre dos pasos asíncronos de la exportación).
-// Se simula enganchando crypto.subtle.digest: en la primera huella tras armar, se modifica el presupuesto guardado.
-const armRace=page=>page.evaluate(()=>{const orig=crypto.subtle.digest.bind(crypto.subtle);let armed=true;
-  crypto.subtle.digest=async(...a)=>{if(armed){armed=false;const k='rubik-budget-v1',b=JSON.parse(localStorage.getItem(k));const id=Object.keys(b)[1];b[id].lines=(b[id].lines||[]).slice(0,1);b[id].__otraPestana=Date.now();localStorage.setItem(k,JSON.stringify(b));}return orig(...a);};});
+// La primera huella verifica el estado de apertura. En la segunda, otra pestaña confirma una revisión en IndexedDB.
+async function armRace(ctx,page){
+ const other=await ctx.newPage();
+ await other.goto(env.base);
+ await other.waitForFunction(()=>window.FloorPlanApp);
+ await page.exposeFunction('commitOtherRevision',()=>other.evaluate(async()=>{
+  const {storage,persistence}=FloorPlanApp,k='rubik-budget-v1',map=JSON.parse(storage.getItem(k));
+  map[Object.keys(map)[1]].title+=' (otra pestaña)';
+  storage.setItem(k,JSON.stringify(map));await persistence.requireSaved();
+ }));
+ await page.evaluate(()=>{const orig=crypto.subtle.digest.bind(crypto.subtle);let calls=0;
+  crypto.subtle.digest=async(...a)=>{if(++calls===2)await commitOtherRevision();return orig(...a);};});
+}
 test('A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador se descarta, no se puede descargar ni dar por vigente',async()=>{
   const {storage,group}=seed();const {ctx,page,w}=await open(storage,group);try{
-    await armRace(page);await page.locator('#buildBtn').click();
+    await armRace(ctx,page);await page.locator('#buildBtn').click();
     await page.waitForFunction(()=>/durante la preparación/.test(document.getElementById('dosError').textContent));
     assert.equal(await page.locator('#dosOut').isHidden(),true,'no se muestra un borrador hecho con datos que ya no son los guardados');
     assert.equal(await page.evaluate(()=>window.__ux07Compare.dossier??null),null,'no queda borrador retenido');
@@ -138,7 +154,7 @@ test('A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador 
 test('A26/H03 · orden de cambio: cambio de datos DURANTE su generación la descarta',async()=>{
   const {storage,group}=seed();const {ctx,page,w}=await open(storage,group);try{
     await page.fill('#orderAuthor','Arquitecta responsable');await page.fill('#orderMotivo','Petición del cliente: ampliar la cocina');
-    await armRace(page);await page.locator('#orderBuild').click();
+    await armRace(ctx,page);await page.locator('#orderBuild').click();
     await page.waitForFunction(()=>/durante la preparación/.test(document.getElementById('orderStatus').textContent));
     assert.equal(await page.locator('#orderPreview').evaluate(n=>!n.srcdoc),true,'sin vista previa de una orden desfasada');
     assert.ok(await page.locator('#orderDlHtml').isDisabled());assert.ok(await page.locator('#orderDlManifest').isDisabled());
