@@ -116,7 +116,7 @@ Además:
 
 **Hallazgo anterior mantenido:** `recover()` no deshace con una copia desactualizada de la biblioteca ni toca registros recientes.
 
-**F0.2c** llevará las imágenes y el diario a la misma base que la biblioteca. Imagen, documento y biblioteca se confirmarán en una transacción, y la recogida será una consulta sobre una sola autoridad.
+**F0.2c** llevará las imágenes y el diario a la misma base que la biblioteca. Imagen, documento y biblioteca se confirmarán en una transacción, y la recogida será una consulta sobre una sola autoridad. Diseño: [F0.2c · revisión R1](persistencia-f0-2c-r1.md).
 
 ## 6 bis. SCULPT · bloques adoptados de openPlan3D
 
