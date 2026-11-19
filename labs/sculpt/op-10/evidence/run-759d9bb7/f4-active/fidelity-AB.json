@@ -1,0 +1,41 @@
+{
+ "format": "rubik-sota.op10-fidelity-building",
+ "levels": [
+  {
+   "level": "lvl_fixture-ground",
+   "elevationM": 0,
+   "offsetMm": {
+    "x": 0,
+    "y": 0
+   },
+   "present": true,
+   "contractChecks": 55,
+   "failed": 0,
+   "failures": [],
+   "visualDifferences": 0
+  },
+  {
+   "level": "lvl_fixture-upper",
+   "elevationM": 3.1,
+   "offsetMm": {
+    "x": 2600,
+    "y": 0
+   },
+   "present": false,
+   "contractChecks": null,
+   "failed": null,
+   "failures": null,
+   "visualDifferences": null
+  }
+ ],
+ "stairs": [
+  {
+   "id": "str_fixture-main",
+   "risers": 14,
+   "meshes": 14,
+   "observedTopM": 3.1,
+   "expectedTopM": 3.1,
+   "topDeviationMm": 0
+  }
+ ]
+}

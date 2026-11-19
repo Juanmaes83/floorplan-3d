@@ -1,0 +1,71 @@
+{
+ "phase": 2,
+ "blender": "5.2.1 LTS",
+ "renderer": "Cycles CPU, 16 samples, denoise, 640x400, AgX",
+ "input": {
+  "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171",
+  "projectId": "prj_op10-f5-furniture",
+  "materials": "observed"
+ },
+ "derived": [
+  "world: procedural sky MULTIPLE_SCATTERING, sun 38\u00b0 elevation, 135\u00b0 azimuth (derived)",
+  "sun lamp 4.0 (derived; matches the sky direction)",
+  "room fill: one ceiling area light per room (13), energy 35\u00b7\u221aarea W (derived)"
+ ],
+ "views": [
+  {
+   "view": "axon",
+   "camera": "orthographic axonometry",
+   "ceilings": "hidden in this view (declared)",
+   "seconds": 4.18,
+   "png": {
+    "bytes": 327746,
+    "sha256": "b90030b836ee2b15b3efdf53c29e81e568ebcffa9fe72d51d8de87e4f672b532"
+   }
+  },
+  {
+   "view": "rom_living",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (9452, 9968)",
+   "targetRoomPresence": 0.644,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.644,
+   "twoPoint": false,
+   "seconds": 8.42,
+   "png": {
+    "bytes": 314473,
+    "sha256": "4c73a8487bf0193cd96923fc03beaa6ea6962c0d6c5ea14ec6707d350113b247"
+   }
+  },
+  {
+   "view": "rom_kitchen",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (1853, 6575)",
+   "targetRoomPresence": 1.0,
+   "nearSurfaceFraction": 0.0,
+   "score": 1.0,
+   "twoPoint": false,
+   "seconds": 9.41,
+   "png": {
+    "bytes": 278605,
+    "sha256": "e8d5d620f8d117dbe31ba37c6190e342146fcaf4cc3dd42e9c3e11409166eec6"
+   }
+  },
+  {
+   "view": "rom_master",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (7150, 506)",
+   "targetRoomPresence": 0.722,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.722,
+   "twoPoint": false,
+   "seconds": 8.0,
+   "png": {
+    "bytes": 288048,
+    "sha256": "77e23deb71a1d458637aef91f54e65be1ff86901eb04410da31febe4d16a526f"
+   }
+  }
+ ],
+ "peakRssBytes": 1100513280,
+ "rendererScriptSha256": "724b142785f4b54993bdd296c3aeefc21d1f7e41de8ffdd449cc0761e40c6fb0",
+ "reviewBlend": {
+  "bytes": 2384901
+ }
+}

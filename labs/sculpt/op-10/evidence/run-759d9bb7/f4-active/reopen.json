@@ -1,0 +1,55 @@
+{
+ "status": "PASS",
+ "process": "fresh",
+ "blender": "5.2.1 LTS",
+ "checks": [
+  {
+   "check": "blend hash equals import report",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "scene metadata links the capture",
+   "pass": true,
+   "detail": "prj_fixture-ground"
+  },
+  {
+   "check": "units metric, scale 1",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "transform declared once",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "object count",
+   "pass": true,
+   "detail": 61
+  },
+  {
+   "check": "collections and counts",
+   "pass": true,
+   "detail": {
+    "ceiling": 2,
+    "object": 14,
+    "opening-leaf": 2,
+    "room": 2,
+    "stair": 14,
+    "unlinked": 3,
+    "wall": 24
+   }
+  },
+  {
+   "check": "every object carries rubik_role and rubik_mesh",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "regenerated geometry hash equals the import",
+   "pass": true,
+   "detail": "66d46d89e75ab5f5"
+  }
+ ]
+}

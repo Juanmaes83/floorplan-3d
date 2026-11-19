@@ -3191,7 +3191,7 @@ function buildFurniture(f){
       const cm = mat(c, {roughness:.55}), fz = d/2 - .02;
       if (f.type === 'wardrobe'){
         const h = 2.2, n = Math.max(1, Math.round(w/.5));
-        g.add(box(w - .02, .08, d - .06, '#4a4641', 0, 0, -.03), box(w, h - .08, d - .02, cm, 0, .08, -.01));
+        g.add(box(w - .02, .08, d - .06, '#4a4641', 0, 0, -.03), box(w, h - .1, d - .02, cm, 0, .08, -.01));   // C3: body ends under the lid (no coincident faces)
         fronts(g, -w/2, .08, w, h - .1, fz, n, 1, cm, 'bar', 1.05);
         g.add(box(w, .02, d - .02, darker(c, .9), 0, h - .02, -.01));
       } else if (f.type === 'shoecab'){
@@ -3246,7 +3246,7 @@ function buildFurniture(f){
       const lx = -w/2 + .15, lz = bz + .12;
       g.add(cyl(.07, .075, .02, bm, lx, my, lz, 28), tube([[lx, my + .02, lz], [lx, my + .3, lz + .03], [lx + .12, my + .42, lz + .1]], .008, bm));
       const hd = cyl(.02, .06, .1, bm, lx + .14, my + .34, lz + .12, 24); hd.rotation.x = .5; g.add(hd);
-      g.add(cyl(.04, .038, .09, ceramic({roughness:.3}), w/2 - .15, my, .05, 20), rbox(.2, .015, .28, '#3b5566', -w/2 + .3, my, .1, .004));
+      g.add(cyl(.04, .038, .09, ceramic({roughness:.3}), w/2 - .15, my, .05, 20), rbox(.2, .015, .28, '#3b5566', Math.min(-w/2 + .3, -.33), my, .1, .004));   // C3: notebook clear of the keyboard
       break;
     }
     case 'chair': {
@@ -3261,7 +3261,8 @@ function buildFurniture(f){
     }
     case 'bookshelf': {
       const h = 1.8, t = .022, ns = 5, wm = woodM(c), sh0 = (h - .06 - t)/ns, cols = ['#b88a6a','#6f8f8a','#d9c08c','#9aa58c','#a8675e','#e6dccd','#7d8ea3','#c9bfae'];
-      g.add(box(w, h, .012, woodM(darker(c, .85)), 0, 0, bz + .006), box(t, h, d, wm, -w/2 + t/2), box(t, h, d, wm, w/2 - t/2), box(w - 2*t, .06, d - .03, wm, 0, 0, .0));
+      g.add(box(w - 2*t, h, .012, woodM(darker(c, .85)), 0, 0, bz + .006), box(t, h, d, wm, -w/2 + t/2), box(t, h, d, wm, w/2 - t/2),   // C3: back panel between the sides
+      box(w - 2*t, .06, d - .03, wm, 0, 0, .0));
       for (let s = 0; s <= ns; s++){
         const y = s < ns ? .06 + s*sh0 : h - t; g.add(box(w - 2*t, t, d - .012, wm, 0, y, .006));
         if (s === ns) break;
@@ -3337,13 +3338,13 @@ function buildFurniture(f){
       const tm = mat(c, {roughness:.4}), lw = woodM(darker(c, .55)), ns = Math.max(1, Math.round(w/.62)), top = .75;
       [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a, b]) => g.add(rod([a*(w/2 - .08), 0, b*(d/2 - .08)], [a*(w/2 - .1), .715, b*(d/2 - .1)], .016, lw, .026)));
       g.add(rbox(w, .035, d, tm, 0, .715, 0, .012), box(w - .22, .07, d - .22, lw, 0, .645));
-      g.add(box(w*.7, .003, .32, fabric('#b9a58c'), 0, top, 0));
+      const rd = Math.min(.32, d - .64); if (rd >= .12) g.add(box(w*.7, .003, rd, fabric('#b9a58c'), 0, top, 0));   // C3: runner never overlaps the place mats
       for (let i = 0; i < ns; i++) [-1, 1].forEach(s => {
         const x = -w/2 + w/ns*(i + .5), z = s*(d/2 - .17);
         g.add(box(.38, .003, .28, fabric('#e7dfd1'), x, top, z)); plate(g, .12, x, top + .003, z);
         g.add(cyl(.03, .026, .1, mat('#dfeef3', {transparent:true, opacity:.35, roughness:.05}), x + .15, top + .003, z - s*.1, 16));
       });
-      vase(g, 0, top + .003, 0, .06, .2, '#e9e2d6', R);
+      vase(g, 0, top + (rd >= .12 ? .003 : 0), 0, .06, .2, '#e9e2d6', R);
       break;
     }
     case 'roundtable': {
@@ -3438,7 +3439,7 @@ function buildFurniture(f){
     case 'shower': {
       const cm = chrome(), x = -w/4;
       g.add(rbox(w, .05, d, mat('#f4f4f2', {roughness:.3}), 0, 0, 0, .01), box(w*.6, .003, .05, mat('#9aa1a8', {metalness:.8, roughness:.3}), 0, .05, bz + .08));
-      [[w, .01, 0, d/2 - .005], [.01, d, w/2 - .005, 0]].forEach(([gw, gd, px, pz]) => { const p = box(gw, 1.95, gd, glassMat, px, .05, pz); p.castShadow = false; g.add(p); });
+      [[w - .04, .01, 0, d/2 - .005], [.01, d - .04, w/2 - .005, 0]].forEach(([gw, gd, px, pz]) => { const p = box(gw, 1.935, gd, glassMat, px, .05, pz); p.castShadow = false; g.add(p); });   // C3: glass between posts, under the top rail
       g.add(box(.02, 1.95, .02, frameMat, w/2 - .01, .05, d/2 - .01), box(.02, 1.95, .03, frameMat, -w/2 + .01, .05, d/2 - .005), box(.03, 1.95, .02, frameMat, w/2 - .005, .05, bz + .01));
       g.add(box(w, .015, .02, frameMat, 0, 1.985, d/2 - .005), box(.02, .015, d, frameMat, w/2 - .005, 1.985, 0));
       g.add(rbox(.14, .1, .04, cm, x, 1.0, bz + .02, .01), rod([x, 1.1, bz + .03], [x, 1.95, bz + .03], .012, cm));
@@ -3861,11 +3862,11 @@ function buildArch(other){
     }
     if (r.at){
       const lamp = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, .02, 32), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3}));
-      lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lampG.add(lamp);
+      lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lamp.userData.fixture = 'ceiling-lamp:' + r.id; lampG.add(lamp);
       const pl = new THREE.PointLight(0xffd9a8, 0, 7, 1.6); pl.position.set(wx(r.at[0]), H - .25, wz(r.at[1])); lampG.add(pl);
     }
   });
-  [...geometry.doors, ...geometry.slides].forEach(d => {const r=d.rect;const s=box(M(r.spanMm),.012,M(r.thickness),mat('#d8d0c0',{roughness:.3}),wx(r.center[0]),0,wz(r.center[1]));s.rotation.y=-r.angle;s.castShadow=false;archFloor.add(s);});
+  [...geometry.doors, ...geometry.slides].forEach(d => {const r=d.rect;const s=box(M(r.spanMm),.012,M(r.thickness),mat('#d8d0c0',{roughness:.3}),wx(r.center[0]),0,wz(r.center[1]));s.rotation.y=-r.angle;s.castShadow=false;s.userData.openingId=d.id;archFloor.add(s);});
   geometry.walls.forEach((w, i) => {
     if (w.status === 'demolished') return;
     wallBox(w, 0, Math.min(w.height, top));
@@ -3879,8 +3880,8 @@ function buildArch(other){
     wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height));
     colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
     const gTop = Math.min(head, top); if (gTop <= sill) return;
-    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
-    const pane=new THREE.Mesh(new THREE.BoxGeometry(L,gh,.01),glassMat);pane.position.set(0,sill+gh/2,0);group.add(pane);
+    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=r.openingId;archUp.add(group);
+    const pane=new THREE.Mesh(new THREE.BoxGeometry(L,Math.max(.001,gh-.08),.01),glassMat);pane.position.set(0,sill+gh/2,0);group.add(pane);/* C3: glass between the transoms */
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
     [sill+.02,gTop-.02].forEach(y=>{const tr=new THREE.Mesh(new THREE.BoxGeometry(L,.04,.06),frameMat);tr.position.set(0,y,0);group.add(tr);});
@@ -3888,7 +3889,7 @@ function buildArch(other){
   });
   geometry.doors.forEach(d => {
     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
-    pivot.position.set(wx(d.h[0]), 0, wz(d.h[1]));
+    pivot.position.set(wx(d.h[0]), 0, wz(d.h[1])); pivot.userData.openingId = d.id;
     const leaf = box(L, dh, .04, mat(d.entry ? '#6b4f3a' : '#efe6d8', {roughness:.5}), L/2);
     const knob = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 8), metal()); knob.position.set(L - .07, Math.min(1, dh - .05), 0); knob.scale.z = 2.2;
     pivot.add(leaf, knob);
@@ -3897,11 +3898,11 @@ function buildArch(other){
     door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
     doors.push(door); archUp.add(pivot);
   });
-  geometry.slides.forEach(({rect:r,height})=>{
-    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+  geometry.slides.forEach(({id,rect:r,height})=>{
+    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=id;archUp.add(group);
     [[-1,-.02],[1,.02]].forEach(([s,off])=>{const x=s<0?-L/2+pl/2:L/2-pl/2;
-      const pane=new THREE.Mesh(new THREE.BoxGeometry(pl,ph,.02),glassMat);pane.position.set(x,ph/2,off);group.add(pane);
-      [ph-.03,.03].forEach(y=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(pl,.05,.04),frameMat);fr.position.set(x,y,off);group.add(fr);});
+      const pane=new THREE.Mesh(new THREE.BoxGeometry(pl-.04,ph,.02),glassMat);pane.position.set(x,ph/2,off);group.add(pane);   // C3: glass and rails end at the stiles
+      [ph-.03,.03].forEach(y=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(pl-.04,.05,.04),frameMat);fr.position.set(x,y,off);group.add(fr);});
       [-1,1].forEach(e=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(.04,ph,.04),frameMat);fr.position.set(x+e*pl/2,ph/2,off);group.add(fr);});
     });
   });
@@ -5691,6 +5692,40 @@ window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationDecor',{get:()=>{const lamps=lampG?.children.filter(o=>o.isMesh)||[];return {outline:roomOutline?.userData.presentationOutline||null,ceilingFixtures:!lamps.length?'none':lamps.every(o=>o.visible)?'visible':lamps.some(o=>o.visible)?'mixed':'hidden'};}});
 Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&{...frameInfo,eye:[...frameInfo.eye],look:[...frameInfo.look]}});
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
+/* OP-10 C4+C7 · «Escena para Blender»: captura de SOLO LECTURA de lo que se ve (js/scene-capture-core.js). Espera a una escena
+   estable (sin recursos cargando, sin animación ni vuelo, puertas en reposo, misma firma N fotogramas), es cancelable con
+   AbortSignal y comprueba que el proyecto no cambia. Declara la pose de cámara y la luz del visor (C7); no inventa nada. */
+async function captureScene({signal,stableFrames=30,timeoutMs=120000,includeTerritory=false,onState}={}){
+  const C=window.RubikSceneCapture,err=(code,es)=>Object.assign(Error(es),{code});
+  if(!C)throw err('UNAVAILABLE','El módulo de captura de escena no está cargado.');
+  if(!inited||!active||contextLost)throw err('NOT_3D','Abre la vista 3D para preparar la escena.');
+  const cancelled=()=>{if(signal?.aborted)throw err('CANCELLED','Preparación cancelada. No se ha generado nada.');};
+  const t0=performance.now(),deadline=t0+timeoutMs,doorsAtRest=()=>doors.every(d=>Math.abs(d.cur-(d.open?d.a1:d.a0))<1e-3);
+  const signature=()=>{let s='';scene.traverse(o=>{if(!o.isMesh||!o.visible)return;s+=o.id+':'+(o.geometry?.id??'')+':'+o.matrixWorld.elements.map(v=>v.toFixed(6)).join(',');if(o.isInstancedMesh)s+=':'+o.count+':'+o.instanceMatrix.version;s+='|';});return s;};
+  let same=0,last=null,frames=0;
+  for(;;){
+    cancelled();if(performance.now()>deadline)throw err('UNSTABLE','La escena no terminó de cargar a tiempo. Espera a que se vean todos los muebles y vuelve a intentarlo.');
+    await new Promise(r=>requestAnimationFrame(r));frames++;cancelled();
+    const loading=assetRequests.size||[...assetStates.values()].some(a=>a.state==='loading'),busy=anim||fly||renderSuspended||loading||!doorsAtRest();
+    onState?.(busy?(loading?'loading':'moving'):'settling');
+    const sig=busy?null:signature();same=sig&&sig===last?same+1:0;last=sig;if(same>=stableFrames)break;
+  }
+  const app=window.FloorPlanApp,before=JSON.stringify(app?.project??null),light={night:!!opt.night,hour:opt.hour,exposure:renderer.toneMappingExposure,
+    sun:{direction:sun.position.clone().sub(sun.target.position).normalize().toArray(),color:'#'+sun.color.getHexString(),intensity:sun.intensity},
+    hemi:{sky:'#'+hemi.color.getHexString(),ground:'#'+hemi.groundColor.getHexString(),intensity:hemi.intensity},
+    background:scene.background?.isColor?'#'+scene.background.getHexString():null,
+    lamps:(()=>{const pl=lampG?.children.find(o=>o.isPointLight);return {on:!!opt.night,intensity:pl?.intensity??0,distance:pl?.distance??null,color:pl?'#'+pl.color.getHexString():null};})()};
+  const t1=performance.now(),doc=C.capture(scene,{unitsToMetres:1,includeTerritory,excludeNodes:new Map([[ground,'decorative-ground']]),
+    scope:levelView==='all'?'stacked-levels':'active-level',
+    frame:{source:'RUBIK View3D',originPlanMm:{x:geometry.center.x,y:geometry.center.y},mapping:'x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000',activeLevelId:levelContext?.activeLevelId||null,levelView},
+    view:{camera:{...presentationPose(),source:'viewer'},light}}),t2=performance.now();
+  if(JSON.stringify(app?.project??null)!==before)throw err('MUTATION','La captura habría cambiado el proyecto; se ha detenido sin generar nada.');
+  const assets=[...assetStates.values()].reduce((n,a)=>(n[a.state||'unknown']=(n[a.state||'unknown']||0)+1,n),{});
+  return {doc,info:{projectId:app?.project?.id??null,projectUpdatedAt:app?.project?.updatedAt??null,stability:{frames,stableFrames,waitedMs:Math.round(t1-t0)},captureMs:Math.round((t2-t1)*10)/10,assets,
+    assetErrors:[...assetStates.entries()].filter(([,a])=>a.state==='error').map(([id,a])=>({id,reason:a.reason||null})),
+    objects:(furnG?.children||[]).filter(g=>typeof g.userData?.fid==='string').map(g=>({id:g.userData.fid,catalogModel:!!g.userData.authorizedAsset})).sort((a,b)=>a.id.localeCompare(b.id))}};
+}
+window.View3D.captureScene=captureScene;
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
@@ -5865,6 +5900,10 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- HOM-04 · «Descubre RUBIK en acción»: arranque directo de la demo «Dibujo vivo» (?demo=dibujo-vivo) con el
      ejemplo y la presentación existentes. Sin ?demo no hace nada. -->
 <script src="js/home-demos.js"></script>
+<!-- OP-10 · «Entregar → Escena para Blender»: captura de solo lectura de la vista 3D → GLB + manifiesto en un ZIP local.
+     Sin red, sin texturas ni fotos, sin cambios en el proyecto (candidata de integración; ver docs/integration/OP10-BLENDER-HANDOFF.md). -->
+<link rel="stylesheet" href="css/scene-export.css">
+<script src="js/scene-capture-core.js"></script><script src="js/scene-delivery-core.js"></script><script src="js/scene-export-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->

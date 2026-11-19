@@ -1,0 +1,62 @@
+# OP-10 · «Entregar → Escena para Blender». Unitarias + navegador (Chromium) en cada PR que toque la cadena; la validación
+# completa con Blender (bpy 5.2.1, 402 MB) solo bajo demanda. Firefox/WebKit: SCENE_BROWSERS=chromium,firefox,webkit.
+name: OP-10 Blender scene
+on:
+  workflow_dispatch:
+    inputs:
+      blender:
+        description: 'Also run the full Blender validation (bpy 5.2.1)'
+        type: boolean
+        default: false
+      browsers:
+        description: 'Browsers for the UI test (comma separated)'
+        default: 'chromium'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'js/scene-capture-core.js'
+      - 'js/scene-delivery-core.js'
+      - 'js/scene-export-ui.js'
+      - 'css/scene-export.css'
+      - 'js/project-package.js'
+      - 'scripts/interop/glb.cjs'
+      - 'scripts/interop/scene-*.cjs'
+      - 'scripts/interop/blender-scene-*.py'
+      - 'scripts/offline-pilot/capture-visual.cjs'
+      - 'tests/scene-*.cjs'
+      - 'tests/scene-*.mjs'
+      - 'tests/fixtures/scene-blender/**'
+      - '.github/workflows/op10-blender-scene.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  scene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Core, delivery and comparator
+        run: node --test tests/scene-capture-core.test.mjs tests/scene-delivery.test.cjs tests/scene-roundtrip.test.cjs
+      - name: Playwright browsers
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ github.event.inputs.browsers && 'chromium firefox webkit' || 'chromium' }}
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+      - name: App, UI end to end and robustness
+        env:
+          SCENE_BROWSERS: ${{ github.event.inputs.browsers || 'chromium' }}
+        run: node --test --test-concurrency=1 tests/scene-export.browser.test.cjs
+      - name: Blender validation (on demand)
+        if: ${{ github.event.inputs.blender == 'true' }}
+        run: |
+          python3 -m venv "$RUNNER_TEMP/bpy" && "$RUNNER_TEMP/bpy/bin/pip" install -q bpy==5.2.1
+          node scripts/interop/scene-run.cjs "$RUNNER_TEMP/scene-run" --python "$RUNNER_TEMP/bpy/bin/python" --only f1-rect,f3-openings,f4-all,f5-furniture
+          node -e "const s=require(process.env.RUNNER_TEMP+'/scene-run/summary.json');const bad=s.scenarios.filter(x=>x.c3.visibleDefects||x.importReport!=='PASS'||!x.roundtripCB.pass||x.reopen.result!=='PASS');if(bad.length){console.error(JSON.stringify(bad,null,1));process.exit(1)}"

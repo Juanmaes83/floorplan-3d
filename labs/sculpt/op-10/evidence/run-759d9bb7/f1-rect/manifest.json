@@ -1,0 +1,212 @@
+{
+ "format": "rubik-sota.op10-scene-manifest",
+ "version": "0.1.0-lab",
+ "status": "experimental · observed visual snapshot, not canonical geometry",
+ "source": {
+  "fixture": "f1-rect.json",
+  "fixtureSha256": "0925bc786f382d7dc9541d1bff54050771195167daaed3e06188b790e3b41c30",
+  "kind": "project",
+  "projectId": "prj_op10-f1-rect",
+  "projectUpdatedAt": "2026-11-19T00:00:00.000Z",
+  "projectCanonicalSha256": "69ec51eea1be0f3a0ad9b8dff5f048020e3b97668ed9c0d67cd230e265f7a024"
+ },
+ "code": {
+  "gitHead": "759d9bb7624575cfd4c7a83e5a9e5ba1148c5f74",
+  "indexHtmlSha256": "565f31d8ef8ba4da98dad2fa84722b396c16f189b8510d859543bb7a410dcca4",
+  "coreSha256": "a17181e0cca2dd92f6c3cb4d246d154f93008686960fcceb31d46b02c024f649",
+  "harnessSha256": "4617b5b394a0b6b772b699f7eca4553358551edf9a68082e27a427526e9e5982",
+  "three": "r160 (vendor/three)"
+ },
+ "scope": "active-level",
+ "frame": {
+  "source": "RUBIK View3D",
+  "originPlanMm": {
+   "x": 2500,
+   "y": 2000
+  },
+  "mapping": "x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000",
+  "activeLevelId": null,
+  "levelView": "active"
+ },
+ "units": "metres",
+ "axes": "three-y-up",
+ "unitsToMetresApplied": 1,
+ "blenderTransform": "Blender Z-up: (XB, YB, ZB) = (x, -z, y), applied ONCE by the importer; no other conversion",
+ "stats": {
+  "meshes": 20,
+  "vertices": 703,
+  "faces": 492,
+  "instancesExpanded": 0,
+  "roles": {
+   "room": 1,
+   "unlinked": 7,
+   "ceiling": 1,
+   "wall": 9,
+   "opening-leaf": 2
+  },
+  "entities": 7,
+  "bounds": {
+   "min": [
+    -2.74,
+    0,
+    -2.24
+   ],
+   "max": [
+    2.74,
+    2.8,
+    2.24
+   ]
+  }
+ },
+ "entities": 7,
+ "excluded": {
+  "decorative-ground": 1,
+  "hidden": 18,
+  "unapplied-proposal": 1,
+  "territorial-context": 1
+ },
+ "skipped": {},
+ "policy": {
+  "excludedUserData": [
+   {
+    "key": "renderExclude",
+    "reason": "excluded-by-marker"
+   },
+   {
+    "key": "presentationOutline",
+    "reason": "presentation-outline"
+   },
+   {
+    "key": "presentationSection",
+    "reason": "presentation-section"
+   },
+   {
+    "key": "sectionCap",
+    "reason": "section-cap"
+   },
+   {
+    "key": "contactRoomId",
+    "reason": "contact-shadow-decal"
+   },
+   {
+    "key": "territorialContext",
+    "reason": "territorial-context"
+   }
+  ],
+  "excludedNames": [
+   {
+    "name": "smart-furnishing-preview",
+    "reason": "unapplied-proposal"
+   }
+  ],
+  "surfacesOnly": "Mesh and InstancedMesh triangles; lines, points and sprites skipped",
+  "supportSlab": false,
+  "textures": "never copied; hasMap declared"
+ },
+ "materials": [
+  {
+   "kind": "surface",
+   "color": "#ffffff",
+   "map": "map",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d8d0c0",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#fbfaf7",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d9cbbb",
+   "map": "flat",
+   "meshes": 9
+  },
+  {
+   "kind": "glass",
+   "color": "#cfe6ef",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#5d6166",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#efe6d8",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#cfd2d4",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#ffffff",
+   "map": "flat",
+   "meshes": 1
+  }
+ ],
+ "fallbacks": {
+  "texturesNotCopied": 1,
+  "assetStates": {},
+  "assetErrors": []
+ },
+ "objects": [],
+ "stability": {
+  "frames": 30,
+  "waitedMs": 1981,
+  "inflightAtCapture": 0,
+  "rule": "no asset request in flight, no asset in state «loading», doors settled, scene signature identical for 30 frames"
+ },
+ "limits": {
+  "meshes": 20000,
+  "vertices": 1500000,
+  "faces": 1500000,
+  "instances": 50000,
+  "bytes": 134217728
+ },
+ "metrics": {
+  "loadMs": 6345,
+  "captureMs": 3.7,
+  "serializeMs": 0.5,
+  "sceneBytes": 28284,
+  "navigationBefore": {
+   "medianMs": 64.9,
+   "p95Ms": 123.4
+  },
+  "navigationAfter": {
+   "medianMs": 61,
+   "p95Ms": 135.9
+  },
+  "captureBlocksMainThreadMs": 4.2,
+  "viewport": {
+   "width": 1280,
+   "height": 800
+  }
+ },
+ "invariants": {
+  "projectUnchanged": true,
+  "storageUnchanged": true,
+  "externalRequests": 0,
+  "pageErrors": 0
+ },
+ "outputs": {
+  "scene.json": {
+   "bytes": 28284,
+   "sha256": "93d096e7f4a3df81a18c90ec0d17a54c5933cfa532de4c5f732241c25171f78b"
+  }
+ }
+}

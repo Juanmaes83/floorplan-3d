@@ -1,0 +1,94 @@
+{
+ "note": "p1/p2 intermediate renders (made with a working-tree render.py before 759d9bb7) re-rendered with render.py exactly as committed in 759d9bb7 (sha256 47d4bed0..., equal to HEAD). p3 was rendered with that exact script directly.",
+ "pairs": [
+  {
+   "phase": "p1",
+   "view": "axon",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "d6c28db235a37801d37a50e8f7ce8e2d376895442dda8e3ee3bafaea8a4960c7",
+   "pngSha256At759d9bb7": "e3dc888cb513eee3df1400a0963e3ae6e74d3f515897de04bc665c53355dddbb"
+  },
+  {
+   "phase": "p1",
+   "view": "rom_living",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "a331795afc5e540d59dc7ca132357b4ce144e95f02f651840e9cd519bc12f8f7",
+   "pngSha256At759d9bb7": "2d77d89a63457d6fb780956cd14fbb9cf18e7a8999d8c1f3cad705a58e00e7b5"
+  },
+  {
+   "phase": "p1",
+   "view": "rom_kitchen",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "25374946eeb61a1e7ca6cc8a76cc1bf1b65d52eb1ac243e06b05e25093d7fe97",
+   "pngSha256At759d9bb7": "d985c222817b73e00bffacf74253c447aaa7e9a9fd637f6257952d1ec1f08b24"
+  },
+  {
+   "phase": "p1",
+   "view": "rom_master",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "b21c74e3657e4c8a5365a7315432810da1fb2ac6cd904a5c0e8b631293fc2064",
+   "pngSha256At759d9bb7": "270b32ce6c826c96ab6b49466094d2b04c6a10df589821fac7d95e3b8edc5ffe"
+  },
+  {
+   "phase": "p2",
+   "view": "axon",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "5062a4824c26220ecd5ee0395a7ab45a20499d6707fa37ff1ec5107445b8bdef",
+   "pngSha256At759d9bb7": "0c87c49ab0aa762729b44c6e8fd23509cef44b7e12693455db9c50f9151ed252"
+  },
+  {
+   "phase": "p2",
+   "view": "rom_living",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "f68bd6c2032fba55490cef8772856e6ac754924c6f8521e64d4814277455b26f",
+   "pngSha256At759d9bb7": "5d266896a552a53c3823387774fc84e2584edf422001525a82d01c83bb179b6c"
+  },
+  {
+   "phase": "p2",
+   "view": "rom_kitchen",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "a0e22956c1836720789b668505228d333af242dc1d0e33c30790150612923144",
+   "pngSha256At759d9bb7": "580ca5dbc01198363508b7b3af5930a03e5fcc5f05c51fae1cc1574a71086695"
+  },
+  {
+   "phase": "p2",
+   "view": "rom_master",
+   "size": [
+    640,
+    400
+   ],
+   "maxChannelDiff": 0,
+   "pngSha256Intermediate": "11d9bafcd0d4f6436e0f50815d4ecaa89b413518d15f486aeb48cf05fca8032e",
+   "pngSha256At759d9bb7": "7835b88c6a143236cb6af6c4f86f7602f4d10ba8ecd72aabcdc6303793a05c84"
+  }
+ ],
+ "allPixelIdentical": true
+}

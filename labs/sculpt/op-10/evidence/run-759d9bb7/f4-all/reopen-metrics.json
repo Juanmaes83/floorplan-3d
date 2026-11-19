@@ -1,0 +1,9 @@
+{
+ "command": [
+  "python",
+  "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+ ],
+ "exitCode": 0,
+ "wallSeconds": 0.726,
+ "peakRssBytes": 487256064
+}
