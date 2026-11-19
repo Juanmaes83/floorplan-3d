@@ -1,7 +1,7 @@
 /* Three.js adapter. Context only: no building transforms, picking, collision or network. */
 (function(root){
  'use strict';
- function create(THREE){
+ function create(THREE,onTextureReady=()=>{}){
   const group=new THREE.Group();group.name='territorialContextGroup';group.userData.territorialContext=true;
   let signature='',generation=0,credits=[],state={building:true,parcel:true,orthophoto:true,terrain:true,north:true};
   const disposed={geometry:0,materials:0,textures:0};
@@ -17,7 +17,7 @@
    const terrain=session.get('terrain'),ortho=session.get('orthophoto');let vertices,triangles,terrainActive=!!(terrain&&placement.vertical);
    if(terrainActive){const surface=Terrain.deriveSurface(terrain.grid,frame);vertices=surface.vertices.map(v=>({local:{x:v.xMm,y:v.yMm},sourceX:v.sourceX,sourceY:v.sourceY,height:v.elevationM===null?0:Core.elevationToModel(site,v.elevationM)}));triangles=surface.triangles;tag(new THREE.Mesh(geometry(vertices,triangles,false),new THREE.MeshStandardMaterial({color:0x7e9a6d,side:THREE.DoubleSide,roughness:1})),['terrain']);}
    if(ortho){let vv=vertices,tt=triangles;if(!terrainActive){const e=site.orthophoto.extent;vv=[[e.minX,e.maxY],[e.maxX,e.maxY],[e.minX,e.minY],[e.maxX,e.minY]].map(([x,y])=>({sourceX:x,sourceY:y,local:Core.sourceToLocal(frame,x,y),height:0}));tt=[[0,2,1],[1,2,3]];}
-    const allowed=tt.filter(tri=>tri.every(i=>Core.uvInside(Core.uv(site.orthophoto.extent,vv[i].sourceX,vv[i].sourceY))));const token=generation,texture=new THREE.TextureLoader().load(ortho.url,()=>{if(token!==generation)texture.dispose();});texture.flipY=false;texture.colorSpace=THREE.SRGBColorSpace;
+    const allowed=tt.filter(tri=>tri.every(i=>Core.uvInside(Core.uv(site.orthophoto.extent,vv[i].sourceX,vv[i].sourceY))));const token=generation,texture=new THREE.TextureLoader().load(ortho.url,()=>{if(token!==generation)texture.dispose();else onTextureReady();});texture.flipY=false;texture.colorSpace=THREE.SRGBColorSpace;
     const g=geometry(vv.map(v=>({...v,height:v.height+.002})),allowed,true);tag(new THREE.Mesh(g,new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1})),['orthophoto'],terrainActive?['orthophoto','terrain']:['orthophoto']);
    }
    const n=Core.parcelToModel(site,{x:placement.horizontal.parcelLocalAnchorMm.x,y:placement.horizontal.parcelLocalAnchorMm.y-1500}),a=placement.horizontal.modelAnchorMm;const points=[[a.x,a.y],[n.x,n.y]].map(([x,y])=>new THREE.Vector3((x-offset.x-origin.x)/1000,.03-elevation,(y-offset.y-origin.y)/1000));const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:0xb73228,depthTest:false}));line.userData.territoryLayers=['north'];line.raycast=()=>{};group.add(line);
