@@ -94,8 +94,10 @@ test('R1-T33 · H-1 sobre v2: foto citada por documento, conflicto, diario o his
       // Pestaña viva (lock rubik-sota-tab:viva tomado) y pestaña muerta (sin lock).
       navigator.locks.request('rubik-sota-tab:viva',()=>new Promise(()=>{}));await new Promise(r=>setTimeout(r,50));
       await S.holdSession(db,'viva',[s]);await S.holdSession(db,'muerta',[dead]);
+      const journalRow=(await S.refs(db)).some(x=>x.resourceKey===j&&x.holder==='journal:restore_1');
       const rel=await S.releaseDeadSessions(db);const g=await S.collect(db);const keys=(await S.resourceKeys(db)).sort();db.close();
-      return {released:rel.released,removed:g.removed,keys,expected:[d,c,j,s].sort(),dead};});
+      return {released:rel.released,removed:g.removed,keys,expected:[d,c,j,s].sort(),dead,journalRow};});
+    assert.equal(r.journalRow,true,'el diario protege su foto con una fila explícita (images[]), no solo por la red textual');
     assert.deepEqual(r.released,['muerta']);assert.deepEqual(r.removed,[r.dead]);assert.deepEqual(r.keys,r.expected);
     assert.deepEqual(errors,[]);
   }finally{await ctx.close();}

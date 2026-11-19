@@ -157,7 +157,9 @@
  }
 
  // ── Diario y conflictos (titulares journal:<id> y conflict:<id>) ────────────────────────────────────────────────────
- function journalPut(db,id,record){const text=JSON.stringify(record);const keys=refsOf(text);
+ // El diario del expediente cita sus imágenes en `images: [clave…]` (el formato que ya lee local-images): son referencias explícitas.
+ const journalRefs=record=>{const keys=refsOf(JSON.stringify(record))||new Set();if(Array.isArray(record?.images))for(const k of record.images)if(typeof k==='string')keys.add(k);return keys;};
+ function journalPut(db,id,record){const keys=journalRefs(record);
   return run(db,['journal','refs','resources'],'readwrite',s=>{s.journal.put(record,id);s.resources.getAllKeys().onsuccess=e=>setHolder(s,'journal:'+id,keys);return {status:'saved'};});}
  const journalDelete=(db,id)=>run(db,['journal','refs'],'readwrite',s=>{s.journal.delete(id);setHolder(s,'journal:'+id,new Set());return {status:'deleted'};});
  function conflictAdd(db,record){const keys=new Set();for(const v of Object.values(record.docs||{})){const r=typeof v==='string'?refsOf(v):null;if(r)for(const k of r)keys.add(k);}
@@ -193,6 +195,6 @@
  const refs=db=>run(db,['refs'],'readonly',s=>{const q=s.refs.getAll();return ()=>q.result;});
  const resourceKeys=db=>run(db,['resources'],'readonly',s=>{const q=s.resources.getAllKeys();return ()=>q.result;});
 
- const api={DB,STORES,StoreError,open,refsOf,commit,stage,cancel,holdSession,releaseDeadSessions,journalPut,journalDelete,conflictAdd,collect,load,getResource,refs,resourceKeys,sha256};
+ const api={DB,STORES,StoreError,open,refsOf,journalRefs,commit,stage,cancel,holdSession,releaseDeadSessions,journalPut,journalDelete,conflictAdd,collect,load,getResource,refs,resourceKeys,sha256};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanStoreV2=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
