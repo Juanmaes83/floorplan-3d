@@ -1,5 +1,7 @@
 # RUBIK SOTA — Plan maestro de consolidación y comercialización v1.12
 
+> **Corte posterior 19/11/2026:** para el estado operativo actual, los SHA congelados, el cierre de las PR #259–#265, el candidato F0.2b y la retomada de los agentes, consultar [Continuidad maestra de ejecución](../integration/CONTINUIDAD-RUBIK-SOTA-2026-11-19.md). Las cifras y afirmaciones siguientes conservan su fecha histórica; no son autorización de merge ni activación.
+
 **Fecha:** 18/11/2026 · **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` y PR abiertas #251–#260 en sus SHA del 18/11 · **Autor:** Claude Code, por mandato del propietario · **Estado:** propuesta para decisión del propietario.
 
 Este documento **no autoriza** integración, despliegue, activación de proveedores, gasto ni cambios de alcance. Cada corte propuesto necesita su propia autorización.

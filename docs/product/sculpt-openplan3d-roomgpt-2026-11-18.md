@@ -1,5 +1,7 @@
 # SCULPT · openPlan3D y roomGPT: oportunidades reconciliadas con v1.12
 
+> **Corte posterior 19/11/2026:** para el estado operativo actual, los SHA congelados, el cierre de las PR #259–#265, el candidato F0.2b y la retomada de los agentes, consultar [Continuidad maestra de ejecución](../integration/CONTINUIDAD-RUBIK-SOTA-2026-11-19.md). Las cifras y afirmaciones siguientes conservan su fecha histórica; no son autorización de merge ni activación.
+
 **Fecha:** 18/11/2026. **Método:** [cartera canónica SCULPT](sculpt-metodologia-y-cartera-2026-11-10.md). **Prioridad de producto:** [Plan maestro v1.12](PLAN-MAESTRO-RUBIK-SOTA-v1.12.md) y su [matriz de trazabilidad](MATRIZ-TRAZABILIDAD-v1.12.md).
 **Fuente exacta:** rama `sculpt/openplan3d-fuente`, carpeta `labs/sculpt/openplan3d-771c9e1/`. Es una copia fiel con `MANIFEST.sha256` y `PROCEDENCIA.md`.
 

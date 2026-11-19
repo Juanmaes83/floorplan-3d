@@ -1,5 +1,7 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
+> **Corte posterior 19/11/2026:** para el estado operativo actual, los SHA congelados, el cierre de las PR #259–#265, el candidato F0.2b y la retomada de los agentes, consultar [Continuidad maestra de ejecución](../integration/CONTINUIDAD-RUBIK-SOTA-2026-11-19.md). Las cifras y afirmaciones siguientes conservan su fecha histórica; no son autorización de merge ni activación.
+
 > **Corte 18/11/2026 (reconciliación v1.12, propuesta documental).** Master `163df68e83a80ddf11a008d573ee257d51c1821f` incorpora #259 con el árbol de la candidata autorizada `26c0dbdef94676c188360c4e8869b05c16c3dc23`. Pasaron los siete workflows posteriores a la integración. [Integración #259](https://github.com/Juanmaes83/floorplan-3d/pull/259).
 >
 > - **Dominios públicos:** Alpha (`floorplan-3d-alpha.vercel.app`) sirve `8525025` con `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`. La Demo compartible (`floorplan-3d-demo.vercel.app`) sirve `7dccf7a` con `dpl_64ndSF5qoDKDtey7XXwEYRAzYDTF`. Ambos tienen destino Production. Los SHA se comprobaron por huella de archivos servidos. Beta 01 está pendiente de identificación.

@@ -1,5 +1,7 @@
 # RUBIK SOTA · Continuidad para Claude Code
 
+> **Corte posterior 19/11/2026:** para el estado operativo actual, los SHA congelados, el cierre de las PR #259–#265, el candidato F0.2b y la retomada de los agentes, consultar [Continuidad maestra de ejecución](CONTINUIDAD-RUBIK-SOTA-2026-11-19.md). Las cifras y afirmaciones siguientes conservan su fecha histórica; no son autorización de merge ni activación.
+
 ## Base y decisiones
 
 - [`master@163df68e83a80ddf11a008d573ee257d51c1821f`](https://github.com/Juanmaes83/floorplan-3d/commit/163df68e83a80ddf11a008d573ee257d51c1821f) contiene #259 y las siete PR incorporadas por ella. Su árbol `25f3a4eaef79d58004547f0cb9292175edfd2748` coincide con el SHA aprobado `26c0dbdef94676c188360c4e8869b05c16c3dc23`. Pasaron 7/7 workflows postintegración. En la candidata pasaron 8/8 pruebas de superficies. El job histórico `presentation-b` se canceló tras completar 27 pruebas correctas. [Evidencia histórica](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44344134253/artifacts/14454540160).

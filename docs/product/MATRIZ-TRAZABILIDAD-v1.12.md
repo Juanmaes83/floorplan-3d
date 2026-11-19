@@ -1,5 +1,7 @@
 # RUBIK SOTA — Matriz de trazabilidad reconciliada v1.12
 
+> **Corte posterior 19/11/2026:** para el estado operativo actual, los SHA congelados, el cierre de las PR #259–#265, el candidato F0.2b y la retomada de los agentes, consultar [Continuidad maestra de ejecución](../integration/CONTINUIDAD-RUBIK-SOTA-2026-11-19.md). Las cifras y afirmaciones siguientes conservan su fecha histórica; no son autorización de merge ni activación.
+
 **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` (18/11/2026), con las PR abiertas #251–#260 consultadas en sus SHA del mismo día. **Autor:** Claude Code, por mandato del propietario. **Estado:** propuesta documental; no autoriza integración, despliegue, activación ni gasto.
 
 **Actualización de integración:** las filas de ENT-04 y el seguimiento de §6 reflejan [#259 en `master@163df68`](https://github.com/Juanmaes83/floorplan-3d/commit/163df68e83a80ddf11a008d573ee257d51c1821f).
