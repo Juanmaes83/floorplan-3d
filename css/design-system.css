@@ -90,9 +90,12 @@ body.presenting #roomPlanJoinResult{display:none}
   #roomPlanJoinDialog{inset:12px auto auto max(14px,calc((100vw - 500px)/2));margin:0}
   #actionDialog{position:fixed;inset:12px auto auto max(14px,calc((100vw - 680px)/2));margin:0;width:min(680px,calc(100vw - 28px))}
 }
+#actionSearchBtn .guide-search-compact{display:none}
 @media(max-width:600px){
   header #uploadPlanBtn,header #roomPlanJoinQuick{order:-3}
   header #actionSearchBtn{order:-3;min-width:44px;white-space:nowrap}
+  #actionSearchBtn .guide-search-prompt{display:none}
+  #actionSearchBtn .guide-search-compact{display:inline}
   header .brand{order:-2}
   #roomPlanJoinResult{padding-inline:8px}
 }

@@ -50,6 +50,7 @@
  function facts(){return {saved:saved(),imagesReady:!!project.sourceImages?.length&&project.sourceImages.every(i=>FloorPlanTraceUI.imageReady(i.id))};}
  function progress(){return G.evaluate(project,state(),facts());}
  const header=$('header'),searchBtn=btn('actionSearchBtn','',()=>openSearch(),header);searchBtn.setAttribute('aria-haspopup','dialog');
+ const searchPrompt=el('span',undefined,searchBtn,'guide-search-prompt'),searchCompact=el('span',undefined,searchBtn,'guide-search-compact');
  const homeBtn=btn('welcomeBtn','',()=>openWelcome(),header);homeBtn.title=tx('Volver a la bienvenida','Open welcome','打开欢迎页');
  const resume=btn('guideResume','',()=>{state().closed=false;state().fullTools=false;fullEditor=false;store();render();},header);
  // The guided header keeps what the journey needs: the level switch of a building, the 3D modes (in 3D only) and the
@@ -473,8 +474,8 @@
  }
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
-  searchBtn.textContent=tx('⌕ Buscar','⌕ Search','⌕ 搜索');
-  searchBtn.setAttribute('aria-label',tx('Buscar acciones','Search actions','搜索操作'));
+  searchPrompt.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');
+  searchCompact.textContent=tx('⌕ Buscar','⌕ Search','⌕ 搜索');
   resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
   homeBtn.textContent=tx('← Inicio','← Home','← 首页');homeBtn.title=tx('Volver al inicio sin perder el proyecto','Return home without losing the project','返回首页并保留项目');
   $('#guidePrevious').textContent=tx('← Paso anterior','← Previous step','← 上一步');
