@@ -8,6 +8,7 @@
   "tests/f0-2c-backup.browser.test.cjs",
   "tests/f0-2c-migration.browser.test.cjs",
   "tests/f0-3-status-ui.browser.test.cjs",
+  "tests/f0-3-actions.browser.test.cjs",
   "tests/delivery-3d-link.browser.test.cjs",
   "tests/gov08-s3-expiry.browser.test.cjs",
   "tests/build-palette.browser.test.cjs",
