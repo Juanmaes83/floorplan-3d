@@ -403,6 +403,71 @@
     const top=h=>Math.min(h,yt)*1000;
     return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
   }
+  // OP-07 · S3b: the CANONICAL RING of a room. A room is stored as its polygon of wall faces; where an edge lies on the
+  // face of a curved wall (it was drawn against the wall's chord), the ring follows that face instead: the mitred offset
+  // of the wall's facets from the single core (centreline + offsetMiter), cut where the stored edge starts and ends.
+  // Nothing new is stored: the plan, the 3D floor, the floor area, the perimeter and the room's wall faces all derive
+  // from this ring, so they cannot contradict each other. `faces` names, per curved wall and side, the facets the ring
+  // follows and the fraction of each (the partial facets at both ends); `edgeWalls[i]` names the curved wall that ring
+  // edge i belongs to. A room without curved walls keeps its polygon (the same array: v1 figures are byte-identical).
+  const RING_TOLERANCE_MM = 3, RING_PARALLEL_SIN = 1e-3;
+  // Chains of curved walls joined end to end with the same thickness (e.g. the two pieces of a split curved wall): a room
+  // drawn against the original chord follows the chain's face. Single walls come first, so nothing changes without a split.
+  function curvedUnits(curved) {
+    const units = curved.map(w => [{w, rev:false}]), touch = (p, q) => Math.hypot(p.x - q.x, p.y - q.y) < 1;
+    const ends = m => m.rev ? [m.w.end, m.w.start] : [m.w.start, m.w.end];
+    const grow = chain => { for (let k = 0; k < 16; k++) { const last = ends(chain[chain.length - 1])[1];
+      const nxt = curved.filter(w => !chain.some(m => m.w === w) && w.thicknessMm === chain[0].w.thicknessMm && (touch(w.start, last) || touch(w.end, last)));
+      if (nxt.length !== 1) return; chain.push({w:nxt[0], rev:!touch(nxt[0].start, last)}); units.push(chain.slice()); } };
+    for (const w of curved) grow([{w, rev:false}]);
+    return units;
+  }
+  function roomRing(project, room) {
+    const polygon = room?.polygon, curved = (project?.walls || []).filter(w => w.status !== 'demolished' && Walls.isCurved(w));
+    if (!curved.length || !Array.isArray(polygon) || polygon.length < 3) return {points: polygon, faces: [], edgeWalls: []};
+    const units = curvedUnits(curved).map(chain => {
+      const lines = chain.map(m => { const c = Walls.centreline(m.w, WALL_PATH); return m.rev ? c.slice().reverse() : c; });
+      const centre = lines.reduce((acc, c, i) => acc.concat(i ? c.slice(1) : c), []), owner = [];
+      lines.forEach((c, i) => { for (let j = 0; j + 1 < c.length; j++) owner.push({m:chain[i], local:chain[i].rev ? c.length - 2 - j : j}); });
+      return {chain, start:centre[0], end:centre[centre.length - 1], t:chain[0].w.thicknessMm, centre, owner};
+    });
+    const points = [], faces = [], edgeWalls = [];
+    for (let i = 0; i < polygon.length; i++) {
+      const a = polygon[i], b = polygon[(i + 1) % polygon.length];
+      points.push(a);
+      for (const U of units) {
+        const L = Math.hypot(U.end.x - U.start.x, U.end.y - U.start.y);
+        if (!(L > 0)) continue;
+        const u = {x:(U.end.x - U.start.x) / L, y:(U.end.y - U.start.y) / L}, n = {x:-u.y, y:u.x};
+        const dot = (p, v) => (p.x - U.start.x) * v.x + (p.y - U.start.y) * v.y, da = dot(a, n), db = dot(b, n), el = Math.hypot(b.x - a.x, b.y - a.y);
+        if (!(el > 0) || Math.abs(da - db) > RING_TOLERANCE_MM * 2 || Math.abs(Math.abs((da + db) / 2) - U.t / 2) > RING_TOLERANCE_MM) continue;
+        if (Math.abs(((b.x - a.x) * u.y - (b.y - a.y) * u.x) / el) > RING_PARALLEL_SIN) continue;
+        const side = (da + db) / 2 >= 0 ? 1 : -1, sa = dot(a, u), sb = dot(b, u), lo = Math.max(0, Math.min(sa, sb)), hi = Math.min(L, Math.max(sa, sb));
+        if (hi - lo <= 1) continue;
+        // The face of the curved wall (or chain) on the room's side, and where each of its points falls along the chord.
+        const face = Walls.offsetMiter(U.centre, side * U.t / 2), s = face.map(p => dot(p, u));
+        const at = x => { for (let j = 0; j + 1 < face.length; j++) if ((s[j] - x) * (s[j + 1] - x) <= 0 && s[j] !== s[j + 1]) { const t = (x - s[j]) / (s[j + 1] - s[j]); return {j, t, p:{x:face[j].x + (face[j + 1].x - face[j].x) * t, y:face[j].y + (face[j + 1].y - face[j].y) * t}}; } return null; };
+        // The face of a curved wall ends where the facets end (it leans in or out at the ends): clamp to it.
+        const A = at(Math.max(lo, Math.min(...s))), B = at(Math.min(hi, Math.max(...s)));
+        if (!A || !B) continue;
+        const byWall = new Map(U.chain.map(m => [m.w.id, {wallId:m.w.id, side:m.rev ? -side : side, facets:[]}])), run = [A.p], segWall = [U.owner[A.j].m.w.id];
+        for (let j = A.j; j <= B.j; j++) {
+          const from = j === A.j ? A.t : 0, to = j === B.j ? B.t : 1, o = U.owner[j];
+          if (to - from > 1e-9) byWall.get(o.m.w.id).facets.push({index:o.local, fraction:to - from});
+          if (j > A.j) { run.push(face[j]); segWall.push(o.m.w.id); }
+        }
+        run.push(B.p);
+        // Every edge from `a` to `b` now belongs to the face (the short junction pieces at both ends included).
+        const first = points.length - 1, wallsOfRun = sa <= sb ? segWall : segWall.slice().reverse();
+        edgeWalls[first] = wallsOfRun[0];
+        for (let k = 0; k < run.length; k++) edgeWalls[first + 1 + k] = wallsOfRun[Math.min(k, wallsOfRun.length - 1)];
+        points.push(...(sa <= sb ? run : run.reverse()));
+        for (const f of byWall.values()) if (f.facets.length) { f.facets.sort((x, y) => x.index - y.index); faces.push(f); }
+        break;
+      }
+    }
+    return {points, faces, edgeWalls};
+  }
   // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
   function wallFootprints(w) {
     if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
@@ -436,9 +501,9 @@
       }
       if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
     }
-    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
+    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:roomRing(p,r).points.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
     const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
-    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
+    const points=[...imagePoints,...p.rooms.flatMap(r=>roomRing(p,r).points),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
@@ -510,4 +575,5 @@
   Object.assign(api,{wallFootprints});   // OP-07 S6
   Object.assign(api,{pieceMesh});   // OP-07 S4
   Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
+  Object.assign(api,{roomRing});   // OP-07 S3b
 })(globalThis);
