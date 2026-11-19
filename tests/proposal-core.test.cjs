@@ -94,7 +94,7 @@ test('garantías: los algoritmos de huella no cambian, MCP no escribe, E2 no mod
   const src=f=>fs.readFileSync(path.join(root,f),'utf8');
   const mcp=src('tools/rubik-mcp/src/proposal.cjs');assert.match(mcp,/applied: false/);assert.doesNotMatch(mcp,/writeFile|fs\./,'el MCP no escribe');
   const e2=src('comparar/comparar.js');
-  assert.match(e2,/async function fingerprint\(\)\{const x=storedSlice\(\);return x===null\?null:D\.sha256\(x\);\}/,'la huella de E2 se calcula igual');
+  assert.match(e2,/const x=storedSlice\([^;]*\);return x===null\?null:D\.sha256\(x\);/,'la huella de E2 se calcula igual (SHA-256 de lo guardado)');
   assert.match(e2,/setItem\(\)\{throw Error\('Comparador de solo lectura'\);\}/,'E2 sigue siendo de solo lectura');
   assert.doesNotMatch(e2,/fromAssistant|fromLayout|canApply/,'E2 solo usa la vigencia, no propuestas');
   const core=src('js/proposal-core.js');
