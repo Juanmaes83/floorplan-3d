@@ -92,7 +92,7 @@ body.presenting #roomPlanJoinResult{display:none}
 }
 @media(max-width:600px){
   header #uploadPlanBtn,header #roomPlanJoinQuick{order:-3}
-  header #actionSearchBtn{order:-3;min-width:44px;max-width:110px;white-space:normal}
+  header #actionSearchBtn{order:-3;min-width:44px;white-space:nowrap}
   header .brand{order:-2}
   #roomPlanJoinResult{padding-inline:8px}
 }
@@ -248,3 +248,10 @@ body.guided.next-present:has(#guideBar:not([hidden])) #presentationBtn{display:n
 .presentation-template-options{border-top:1px solid var(--line);padding-top:8px;margin-top:10px}.presentation-template-options summary{cursor:pointer;min-height:44px;align-content:center;font-weight:600}
 .presentation-template-capability{margin:8px 0}.presentation-template-capability label,label.presentation-template-capability{display:flex;gap:10px;align-items:center;min-height:44px}.presentation-template-capability input{width:20px;height:20px;flex:none}
 .presentation-template [hidden]{display:none}.presentation-template button{min-height:44px;white-space:normal}.presentation-template input:disabled+span{color:var(--muted)}
+
+/* Keep the guided search and the full 3D history group within their toolbar rows. */
+@media (min-width:1101px){
+  body.guided header #actionSearchBtn{min-width:180px}
+  body.m3d:not(.guided) header #editHistory{display:grid;grid-template-columns:max-content max-content}
+  body.m3d:not(.guided) header .edit-history-scope{grid-column:1/-1;padding-inline:0;text-align:center}
+}
