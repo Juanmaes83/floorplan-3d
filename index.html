@@ -3739,11 +3739,11 @@ function buildArch(other){
     }
     if (r.at){
       const lamp = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, .02, 32), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3}));
-      lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lampG.add(lamp);
+      lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lamp.userData.fixture = 'ceiling-lamp:' + r.id; lampG.add(lamp);
       const pl = new THREE.PointLight(0xffd9a8, 0, 7, 1.6); pl.position.set(wx(r.at[0]), H - .25, wz(r.at[1])); lampG.add(pl);
     }
   });
-  [...geometry.doors, ...geometry.slides].forEach(d => {const r=d.rect;const s=box(M(r.spanMm),.012,M(r.thickness),mat('#d8d0c0',{roughness:.3}),wx(r.center[0]),0,wz(r.center[1]));s.rotation.y=-r.angle;s.castShadow=false;archFloor.add(s);});
+  [...geometry.doors, ...geometry.slides].forEach(d => {const r=d.rect;const s=box(M(r.spanMm),.012,M(r.thickness),mat('#d8d0c0',{roughness:.3}),wx(r.center[0]),0,wz(r.center[1]));s.rotation.y=-r.angle;s.castShadow=false;s.userData.openingId=d.id;archFloor.add(s);});
   geometry.walls.forEach((w, i) => {
     if (w.status === 'demolished') return;
     wallBox(w, 0, Math.min(w.height, top));
@@ -3757,7 +3757,7 @@ function buildArch(other){
     wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height));
     colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
     const gTop = Math.min(head, top); if (gTop <= sill) return;
-    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=r.openingId;archUp.add(group);
     const pane=new THREE.Mesh(new THREE.BoxGeometry(L,gh,.01),glassMat);pane.position.set(0,sill+gh/2,0);group.add(pane);
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
@@ -3766,7 +3766,7 @@ function buildArch(other){
   });
   geometry.doors.forEach(d => {
     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
-    pivot.position.set(wx(d.h[0]), 0, wz(d.h[1]));
+    pivot.position.set(wx(d.h[0]), 0, wz(d.h[1])); pivot.userData.openingId = d.id;
     const leaf = box(L, dh, .04, mat(d.entry ? '#6b4f3a' : '#efe6d8', {roughness:.5}), L/2);
     const knob = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 8), metal()); knob.position.set(L - .07, Math.min(1, dh - .05), 0); knob.scale.z = 2.2;
     pivot.add(leaf, knob);
@@ -3775,8 +3775,8 @@ function buildArch(other){
     door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
     doors.push(door); archUp.add(pivot);
   });
-  geometry.slides.forEach(({rect:r,height})=>{
-    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+  geometry.slides.forEach(({id,rect:r,height})=>{
+    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=id;archUp.add(group);
     [[-1,-.02],[1,.02]].forEach(([s,off])=>{const x=s<0?-L/2+pl/2:L/2-pl/2;
       const pane=new THREE.Mesh(new THREE.BoxGeometry(pl,ph,.02),glassMat);pane.position.set(x,ph/2,off);group.add(pane);
       [ph-.03,.03].forEach(y=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(pl,.05,.04),frameMat);fr.position.set(x,y,off);group.add(fr);});
