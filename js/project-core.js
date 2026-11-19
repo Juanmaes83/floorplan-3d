@@ -314,33 +314,69 @@
     Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status,declared:!!w.structureSource});
     return rect;
   }
+  // OP-07 · S2: plan pieces of a curved or sloped wall. One straight sub-wall per facet of the single geometric core
+  // (same facets as 3D, measurements and DXF), solid where no opening is, so every consumer of geometry().walls keeps
+  // drawing rectangles. Each piece carries its heights at both ends (heightStart/heightEnd, m) for sloped walls.
+  function shapedPieces(w, openings) {
+    const path=Walls.pathProfile(w,WALL_PATH),holes=[];
+    for (const o of openings) {const a=o.offsetMm,b=o.offsetMm+o.widthMm,last=holes.at(-1);if(last&&a<=last[1])last[1]=Math.max(last[1],b);else holes.push([a,b]);}
+    const pieces=[];
+    for (const span of path.spans) {
+      if (!(span.length>0)) continue;
+      const sub={...w,start:span.start,end:span.end},solid=[];let at=span.from;
+      for (const [a,b] of holes) {if(b<=at||a>=span.to)continue;if(a>at)solid.push([at,a]);at=Math.max(at,b);}
+      if (at<span.to) solid.push([at,span.to]);
+      for (const [a,b] of solid) if (b-a>1e-6) {
+        const rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
+        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true});
+        pieces.push(rect);
+      }
+    }
+    return pieces;
+  }
+  // The straight host of an opening: the wall itself, or on a curved wall the chord between the two edges of the opening
+  // on the faceted path (its symbol is drawn on that chord, at the opening's true place).
+  function openingHost(w, o) {
+    if (!Walls.isCurved(w)) return {host:w,offset:o.offsetMm};
+    const path=Walls.pathProfile(w,WALL_PATH),a=path.sample(o.offsetMm).point,b=path.sample(o.offsetMm+o.widthMm).point;
+    return {host:{...w,start:a,end:b},offset:0};
+  }
+  // Closed outline of a whole wall in plan: the rectangle of a straight wall, or the left face of every facet followed by
+  // the right face backwards (for the DXF auxiliary layer, the envelope and hit areas). Straight wall = wallRect().poly.
+  function wallOutline(w) {
+    if (!shapedWall(w) || !Walls.isCurved(w)) return wallRect(w).poly;
+    const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
+    return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
+  }
   function geometry(p) {
     const walls=[],windows=[],doors=[],slides=[],voids=[];
     for (const w of p.walls) {
-      const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
+      const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),shaped=shapedWall(w);
       const openings=p.openings.filter(o=>o.wallId===w.id).sort((a,b)=>a.offsetMm-b.offsetMm);
+      if (shaped) walls.push(...shapedPieces(w,openings));
       // Merge overlapping intervals for the solid portions; opening visuals retain their IDs.
       let at=0;
       for (const o of openings) {
-        if (o.offsetMm>at) walls.push(wallRect(w,at,o.offsetMm-at));
+        if (!shaped && o.offsetMm>at) walls.push(wallRect(w,at,o.offsetMm-at));
         at=Math.max(at,o.offsetMm+o.widthMm);
-        const rect=wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
+        const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
+        const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
         Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
         if(w.status==='demolished') continue;
         if(o.kind==='window') windows.push(rect);
         else if(o.kind==='door') {
-          const end=o.swing?.hinge==='end',left=o.swing?.side!=='right';
+          const end=o.swing?.hinge==='end',left=o.swing?.side!=='right',span=shaped?rect.spanMm:o.widthMm;
           const normal=left?[u[1],-u[0]]:[-u[1],u[0]],c=end?[-u[0],-u[1]]:u;
-          const base=[w.start.x+u[0]*(o.offsetMm+(end?o.widthMm:0)),w.start.y+u[1]*(o.offsetMm+(end?o.widthMm:0))];
-          doors.push({id:o.id,rect,h:[base[0]+normal[0]*w.thicknessMm/2,base[1]+normal[1]*w.thicknessMm/2],c,o:normal,len:o.widthMm,entry:o.isEntrance,height:o.heightMm/1000});
+          const base=[host.start.x+u[0]*(offset+(end?span:0)),host.start.y+u[1]*(offset+(end?span:0))];
+          doors.push({id:o.id,rect,h:[base[0]+normal[0]*w.thicknessMm/2,base[1]+normal[1]*w.thicknessMm/2],c,o:normal,len:shaped?span:o.widthMm,entry:o.isEntrance,height:o.heightMm/1000});
         } else if(o.kind==='sliding-door') slides.push({id:o.id,rect,v:Math.abs(u[1])>Math.abs(u[0]),height:o.heightMm/1000});
         else voids.push(rect);
       }
-      if(at<length) walls.push(wallRect(w,at,length-at));
+      if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
     }
     const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
     const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
-    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallRect(w).poly.map(([x,y])=>({x,y})))];
+    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
@@ -363,6 +399,7 @@
   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
-  // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
+  // OP-07 · curved and sloped walls (contract 2.0): the same exported object, extended per cut.
   Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
+  Object.assign(api,{wallOutline});   // OP-07 S2
 })(globalThis);
