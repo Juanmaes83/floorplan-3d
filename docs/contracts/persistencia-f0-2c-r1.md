@@ -6,7 +6,7 @@
 - [persistencia-v1.md](persistencia-v1.md): la autoridad F0.2, sus conflictos, la migración de documentos, la vuelta a una versión anterior y la recogida de imágenes. En especial §6, «F0.2c llevará las imágenes y el diario a la misma base».
 - [ADR de persistencia](../product/ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md), §16 y §17. El diseño de §17 se mantiene; R1 lo concreta.
 
-**Estado:** solo diseño. Decisiones del propietario del 19/11/2026 incorporadas (§2). **NO-GO** para implementar A0, F0.2c o cualquier migración de IndexedDB sin autorización específica.
+**Estado:** frente arquitectónico R1 **cerrado** (19/11/2026). R1-D1–D11 decididas (§2); requisitos obligatorios de implementación en §6 bis. Solo diseño: NO-GO para A0, implementación y migraciones sin autorización específica. **NO-GO** para implementar A0, F0.2c o cualquier migración de IndexedDB sin autorización específica.
 
 **Marcas de evidencia:** **[E]** ejecutada · **[I]** inspeccionada en el código · **[H]** histórica, declarada en otra PR o documento · **[P]** pendiente.
 
@@ -134,7 +134,7 @@ Base nueva: `rubik-sota-store-v2`, con otro nombre para no subir de versión las
 | F0.2c | `store-v2`; lectura del legado para migrar y comparar | **Solo** `store-v2`, más la barrera de compatibilidad | — |
 
 **Volver temporalmente a una versión anterior** (persistencia-v1 §5, estrategia operativa):
-- La versión anterior encuentra el legado intacto, con el estado previo a la migración y la barrera, que rechaza la biblioteca de forma visible.
+- La versión anterior encuentra el legado tal como estaba al migrar, con la barrera, que rechaza la biblioteca de forma visible. **No** puede recuperar recursos que ya se hubieran eliminado antes (requisito 4 de §6 bis).
 - Lo que consiga escribir ahí aparece como conflicto `legacy-diverged` al volver a F0.2c (§6 bis).
 - **R1-D10 (aprobada):** F0.2c no escribe una copia de compatibilidad. Para volver, se usa la exportación de emergencia o el rollback de datos (§9).
 
@@ -176,12 +176,35 @@ Bajo el Web Lock `rubik-sota-persistence` cuando está disponible. La garantía,
 
 **Conmutación recuperable entre almacenes.**
 - `meta.authority` vale `'legacy'` o `'v2'` y vive en `store-v2`. La conmutación es una sola transacción: `authority='v2'`, `phase='done'`, `schemaEpoch` sube y se guardan las huellas del legado en ese instante (`legacyHashes`).
-- Inmediatamente después se escribe un **testigo de conmutación fuera de v2**: `meta.switchedTo='store-v2'` en `persistence-v1` y la barrera en `localStorage`. Así, un fallo de v2 no se confunde con «nunca se migró».
+- **Marcador previo (obligatorio).** **Antes** de la transacción de conmutación se escribe, fuera de v2, `meta.switching={token, at}` en `persistence-v1` y su réplica en `localStorage`. Así no existe ningún instante en que v2 esté confirmado sin rastro externo. Tras confirmar v2 se escribe el testigo definitivo `meta.switchedTo='store-v2'` y la barrera, y se retira `switching`.
+- **Recuperación al arrancar.** No se asume atomicidad entre bases distintas: cada combinación de marcador, testigo y estado de v2 tiene una única salida.
+
+  | Marcador previo | Testigo | v2 | Salida |
+  |---|---|---|---|
+  | No | No | — | Nunca se intentó conmutar. Autoridad: legado |
+  | Sí | No | Legible, `authority='v2'` con el mismo token | La conmutación se confirmó: se completa el testigo y se retira el marcador |
+  | Sí | No | Legible, sin conmutar | La conmutación no llegó a confirmarse: se retira el marcador y se repite la verificación (§6, pasos 3–4) |
+  | Sí o no | Sí | Legible | Autoridad: v2 |
+  | Sí | No | **Ilegible** | Estado indeterminado: escrituras bloqueadas y recuperación (siguiente punto). Nunca se asume ni que se migró ni que no |
+  | Sí o no | Sí | **Ilegible** | Escrituras bloqueadas y recuperación (siguiente punto) |
+
 - Una interrupción antes de que termine la transacción de conmutación deja `authority='legacy'` y ningún testigo. El siguiente arranque repite la verificación (§6, pasos 3–4).
 - **v2 ilegible después de conmutar.** Si hay testigo y `store-v2` no se puede abrir, falta o falla su lectura:
   - se **bloquean todas las escrituras**, sin volver nunca al legado de forma automática, porque el legado es anterior a la conmutación y perdería lo hecho después;
   - se ofrece recuperación (§11): reintentar, exportación de emergencia de lo que la pestaña tenga en memoria, copia de emergencia previa (paso 0) y, solo con confirmación humana, el rollback de datos de §9.
 - La vuelta atrás (`authority='legacy'`) sigue el procedimiento de §9. Nunca la decide el código por sí solo.
+
+**Requisitos obligatorios de implementación (cierre de R1, 19/11):**
+1. **Marcador persistente previo a la conmutación**, fuera de v2, escrito antes de confirmarla. Así no queda ventana entre confirmar v2 y escribir el testigo externo (arriba).
+2. **Recuperación segura ante interrupciones entre almacenes.**
+   - No se asume atomicidad entre `store-v2`, `persistence-v1`, `images-v1` y `localStorage`.
+   - Cada escritura entre bases es idempotente y lleva el token de la operación. La recuperación sigue la tabla de arriba.
+   - Ningún estado parcial se interpreta como completo.
+3. **Copia de emergencia verificada y restaurable.**
+   - Al generarla, se relee el archivo producido y se comprueban todas las huellas SHA-256 del manifiesto frente al origen.
+   - Se ejecuta una **restauración de prueba en seco** (`read` y validación del expediente, sin escribir) que confirma que puede abrirse y que contiene todos los documentos y recursos citados.
+   - Si cualquiera de las dos falla, no se registra `meta.preMigrationExport` y la migración no empieza (§6, paso 0). Pruebas R1-T28 y R1-T28b.
+4. **Sin promesas sobre lo ya borrado.** Ni R1 ni una versión anterior pueden recuperar recursos eliminados antes, por H-1, por un escritor antiguo o por el navegador. El legado conserva lo que existía al migrar; nada más. La interfaz y la documentación no deben afirmar lo contrario.
 
 **Escritores antiguos que aún pueden modificar o borrar recursos.** Las versiones sin A0, incluidas las anteriores a P0 con H-1, pueden escribir y recoger en `images-v1` y en `localStorage` en cualquier momento:
 - **Antes de migrar,** un escritor anterior a P0 puede borrar fotos de MUE-01 del legado. La copia de emergencia del paso 0 y la convivencia de §3 reducen ese riesgo, pero lo que se borró antes no se puede recuperar.
@@ -254,6 +277,8 @@ Bajo el Web Lock `rubik-sota-persistence` cuando está disponible. La garantía,
 | R1-T26 | Recursos | El historial de otra pestaña viva protege su recurso; al cerrarla, la recogida lo libera |
 | R1-T27 | Migración | v2 ilegible tras conmutar (con testigo): escrituras bloqueadas, sin volver al legado automáticamente, con recuperación ofrecida |
 | R1-T28 | Migración | Sin la copia de emergencia previa registrada, la migración no empieza. La copia contiene todos los recursos y su manifiesto SHA-256 |
+| R1-T28b | Migración | Una copia con una huella alterada o que no supera la restauración de prueba no se registra, y la migración no empieza |
+| R1-T27b | Migración | Interrupción en cada punto entre marcador previo, transacción de v2 y testigo, con v2 legible e ilegible: cada caso da la salida de la tabla de recuperación |
 | R1-T29 | Migración | Sin Web Locks: dos reservas simultáneas dan un solo dueño. Un dueño con token antiguo no consigue escribir. Un dueño muerto se reclama y se repite desde el paso 1 |
 | R1-T30b | Migración | Un escritor antiguo borra o cambia un recurso citado durante la copia: se repite; si persiste, la migración se detiene con aviso |
 | R1-T30 | Recursos | Confirmación atómica: un fallo a mitad no deja recurso sin titular ni titular sin recurso |
