@@ -28,6 +28,7 @@ test('Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportac
   const b = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'det-b'), { via: 'api' });
   const d = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'delayed'), { via: 'api', delayAssetsMs: 6000 });
   assert.equal(a.outputs['scene.glb'].sha256, b.outputs['scene.glb'].sha256, 'successive exports');
+  assert.equal(a.outputs['manifest.json'].sha256, b.outputs['manifest.json'].sha256, 'manifest is deterministic too');
   assert.equal(a.outputs['scene.glb'].sha256, d.outputs['scene.glb'].sha256, 'late GLB awaited, not captured half-loaded');
   assert.ok(d.metrics.prepareMs >= 1000 || d.metrics.loadMs >= 6000, 'the delay was actually exercised');
 });

@@ -90,13 +90,15 @@ async function capture(input, dest, o = {}) {
         const c = await window.View3D.captureScene(), t0 = performance.now(), glb = window.RubikSceneCapture.toGLB(c.doc), glbMs = performance.now() - t0;
         const manifest = await window.RubikSceneDelivery.manifest({ capture: c, glb, project: window.FloorPlanApp.project, digest });
         const record = await window.RubikSceneDelivery.record({ manifest, digest });
-        return { doc: JSON.stringify(c.doc), glb: btoaBytes(glb), manifest: JSON.stringify(manifest, null, 1) + '\n', record, glbMs };
+        return { doc: JSON.stringify(c.doc), glb: btoaBytes(glb), manifest: JSON.stringify(manifest, null, 1) + '\n', record, glbMs, captureMs: c.info.captureMs, stability: c.info.stability };
         function btoaBytes(u8) { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
       });
       t2 = Date.now();
       files = new Map([['scene.glb', Buffer.from(r.glb, 'base64')], ['manifest.json', Buffer.from(r.manifest)], ['scene.json', Buffer.from(r.doc)]]);
-      record = r.record; t.glbMs = r.glbMs;
+      record = r.record; t.glbMs = r.glbMs; t.captureMs = r.captureMs; t.stability = r.stability;
     }
+    // Imagen limpia del lienzo con la MISMA cámara (sin paneles): referencia RUBIK para la comparativa con Blender.
+    const canvasShot = await page.evaluate(w => { const a = window.View3D.cameraState.aspect, s = window.View3D.deliveryShot({ width: w, height: Math.round(w / a), frame: false }); return s.dataUrl; }, o.shotWidth || 960);
     const after = await snapshot(), nav = await frameStats();
     if (before.project !== after.project) throw Error('Scene preparation changed the project (forbidden).');
     if (before.storage !== after.storage) throw Error('Scene preparation changed browser storage (forbidden).');
@@ -113,12 +115,13 @@ async function capture(input, dest, o = {}) {
     fs.writeFileSync(path.join(dest, 'record.json'), JSON.stringify(record, null, 1) + '\n', { flag: 'wx' });
     if (uiShot) fs.renameSync(uiShot, path.join(dest, 'ui-ready.png'));
     await page.screenshot({ path: path.join(dest, 'viewer.png') });
+    fs.writeFileSync(path.join(dest, 'viewer-canvas.png'), Buffer.from(canvasShot.split(',')[1], 'base64'), { flag: 'wx' });
     const doc = JSON.parse(files.get('scene.json'));
     const report = { format: 'rubik-sota.scene-capture-run', version: '1.0.0', via, browser: browserName, browserVersion: browser.version(), scope, viewport,
       input: { file: path.basename(input), sha256: sha(inputBytes), kind: isBuilding ? 'building' : 'project' },
       code: { gitHead: revision, indexHtmlSha256: sha(fs.readFileSync(path.join(root, 'index.html'))), captureCoreSha256: sha(fs.readFileSync(path.join(root, 'js/scene-capture-core.js'))), deliveryCoreSha256: sha(fs.readFileSync(path.join(root, 'js/scene-delivery-core.js'))), harnessSha256: sha(fs.readFileSync(__filename)) },
       stats: doc.stats, excluded: doc.excluded, view: doc.view, stability: manifest.stability, fallbacks: manifest.fallbacks,
-      metrics: { loadMs: t.loaded - t.load0, prepareMs: t2 - t1, glbMs: t.glbMs != null ? Math.round(t.glbMs) : null, glbBytes: files.get('scene.glb').length, sceneJsonBytes: files.get('scene.json').length, navigationBefore: navBefore, navigationAfter: nav },
+      metrics: { loadMs: t.loaded - t.load0, prepareMs: t2 - t1, captureMainThreadMs: t.captureMs ?? null, stability: t.stability ?? null, glbMs: t.glbMs != null ? Math.round(t.glbMs) : null, glbBytes: files.get('scene.glb').length, sceneJsonBytes: files.get('scene.json').length, navigationBefore: navBefore, navigationAfter: nav },
       invariants: { projectUnchanged: true, storageUnchanged: true, externalRequests: 0, pageErrors: 0, blockedAssetRequests: blocked },
       outputs: Object.fromEntries([...fs.readdirSync(dest)].sort().map(n => [n, { bytes: fs.statSync(path.join(dest, n)).size, sha256: sha(fs.readFileSync(path.join(dest, n))) }])) };
     fs.writeFileSync(path.join(dest, 'capture-report.json'), JSON.stringify(report, null, 1) + '\n', { flag: 'wx' });

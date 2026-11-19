@@ -36,7 +36,8 @@
         properties: 'each object carries rubik_id, rubik_role, rubik_level, rubik_mesh (Object Properties › Custom Properties)', camera: doc.view && doc.view.camera ? 'RUBIK_camera = viewer pose at capture' : 'none' },
       fallbacks: { texturesNotCopied: doc.meshes.filter(m => m.material && m.material.hasMap).length, assets: info.assets || {}, assetErrors: info.assetErrors || [],
         catalogModels: (info.objects || []).filter(o => o.catalogModel).map(o => o.id), proceduralObjects: (info.objects || []).filter(o => !o.catalogModel).length },
-      stability: info.stability || null,
+      // Solo la REGLA de estabilidad: las mediciones (fotogramas, ms) varían entre ejecuciones y romperían el determinismo.
+      stability: info.stability ? { rule: 'no asset loading, no camera/door motion, identical scene signature', stableFrames: info.stability.stableFrames } : null,
       files: { 'scene.glb': { bytes: glb.length, sha256: await digest(glb) } },
       privacy: 'no images, photos, textures, URLs or free text from the project are included; geometry, colours and IDs only',
       limitations: ['Visual observation of the 3D view: procedural furniture is the viewer representation, not manufacturer geometry.',
