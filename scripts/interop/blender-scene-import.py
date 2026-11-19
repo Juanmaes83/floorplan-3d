@@ -1,4 +1,7 @@
 """OP-10 · Importa una «Escena para Blender» de RUBIK (scene.glb + manifest.json) y la verifica. Candidata de integración.
+Se entrega también dentro del ZIP como rubik_blender_prepare.py: es el camino B, «preparación completa» (el camino A es la
+importación nativa del GLB, que no reconstruye la luz del visor; ambos caminos NO dan el mismo render).
+Desde la carpeta descomprimida:  blender --background --factory-startup --python rubik_blender_prepare.py -- . escena-preparada
 
 python blender-scene-import.py -- PACKAGE-DIR OUT-DIR [--materials observed|neutral] [--light viewer|none]
    (python del entorno bpy 5.2.1, o: blender --background --factory-startup --python-exit-code 1 --python ... -- ...)
@@ -84,6 +87,8 @@ def main():
     light_mode = a[a.index("--light") + 1] if "--light" in a else "viewer"
     if out.exists():
         raise SystemExit("Refusing overwrite: " + str(out))
+    if not bpy.app.background:  # parte de una escena vacía: dentro de una sesión abierta descartaría el trabajo de la persona
+        raise SystemExit("Run it headless: blender --background --factory-startup --python rubik_blender_prepare.py -- . escena-preparada")
     glb = (pkg / "scene.glb").read_bytes()
     manifest = json.loads((pkg / "manifest.json").read_text(encoding="utf8"))
     if manifest.get("format") != "rubik-sota.scene-delivery":

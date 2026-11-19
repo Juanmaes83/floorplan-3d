@@ -93,3 +93,54 @@ test('UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la
     assert.deepEqual(errors, []);
   } finally { await browser.close(); server.close(); }
 });
+
+test('Residuales · ZIP con los dos caminos y script idéntico; diálogo en ZH/EN; el asistente no tapa ni roba las acciones', { timeout: 300000 }, async () => {
+  const out = path.join(tmp, 'residual-ui'), r = await Capture.capture(path.join(fx, 'f3-openings.json'), out, { via: 'ui' });
+  assert.deepEqual(r.invariants, { projectUnchanged: true, storageUnchanged: true, externalRequests: 0, pageErrors: 0, blockedAssetRequests: 0 });
+  const shipped = fs.readFileSync(path.join(out, 'rubik_blender_prepare.py')), repo = fs.readFileSync(path.resolve(__dirname, '../scripts/interop/blender-scene-import.py'));
+  assert.equal(Buffer.compare(shipped, repo), 0, 'the ZIP carries the exact preparation script');
+  const m = J(path.join(out, 'manifest.json')), leeme = fs.readFileSync(path.join(out, 'LEEME.txt'), 'utf8');
+  assert.equal(m.files['rubik_blender_prepare.py'].sha256, require('node:crypto').createHash('sha256').update(repo).digest('hex'));
+  assert.match(leeme, /NO producen el mismo render/); assert.match(leeme, /A · Importación directa/); assert.match(leeme, /B · Preparación completa/);
+
+  const { chromium } = require('playwright'), root = path.resolve(__dirname, '..');
+  const types = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webp': 'image/webp', '.png': 'image/png', '.glb': 'model/gltf-binary', '.svg': 'image/svg+xml', '.py': 'text/plain', '.hdr': 'application/octet-stream' };
+  const server = http.createServer((req, res) => { try { const p = path.resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://l').pathname.replace(/^\/$/, '/index.html'))); if (!p.startsWith(root + path.sep)) throw 0; res.setHeader('Content-Type', types[path.extname(p)] || 'application/octet-stream'); res.end(fs.readFileSync(p)); } catch { res.writeHead(404); res.end(); } });
+  await new Promise(r => server.listen(0, '127.0.0.1', r));
+  const browser = await chromium.launch({ ...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}), args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  try {
+    for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
+      const page = await (await browser.newContext({ viewport, isMobile: viewport.width < 1000, hasTouch: viewport.width < 1000 })).newPage(), errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      await page.goto(`http://127.0.0.1:${server.address().port}/`);
+      await page.waitForFunction(() => window.FloorPlanApp && window.RubikSceneExport && window.View3D);
+      await page.evaluate(() => document.querySelector('#welcomeDialog')?.close?.());
+      await page.locator('#fileIn').setInputFiles(path.join(fx, 'f3-openings.json'));
+      await page.waitForFunction(() => window.FloorPlanApp.project?.id === 'prj_op10-f3-openings');
+      await page.evaluate(() => setView('3d')); await page.waitForFunction(() => window.FloorPlanApp.viewMode === '3d');
+      await page.evaluate(() => window.RubikSceneExport.open()); await page.locator('#sePrimary').click();
+      await page.waitForFunction(() => window.RubikSceneExport.state === 'ready');
+      assert.match(await page.locator('#sePaths').innerText(), /no dan el mismo render/);
+      // El asistente (convención de assistant-ui: botón dentro del modal abierto) no tapa ninguna acción del diálogo.
+      for (const id of ['#sePrimary', '#seSecondary']) {
+        const free = await page.locator(id).evaluate(b => { b.scrollIntoView({ block: 'nearest' }); const r = b.getBoundingClientRect(), pts = [[.5, .5], [.1, .5], [.9, .5]];
+          return pts.every(([fx, fy]) => { const e = document.elementFromPoint(r.left + r.width * fx, r.top + r.height * fy); return e === b || b.contains(e); }); });
+        assert.equal(free, true, `${id} not covered at ${viewport.width}x${viewport.height}`);
+      }
+      const access = await page.evaluate(() => { const d = document.querySelector('#sceneExportDialog'), host = d.lastElementChild; return host && host.shadowRoot === null && !host.closest('.scene-export') ? { tag: host.tagName, inside: d.contains(host) } : null; });
+      assert.ok(access && access.inside, 'assistant entry is the dialog-level convention, outside our content');
+      // Escape cierra NUESTRO diálogo (no lo captura el asistente) y el foco no queda atrapado.
+      await page.locator('#sePrimary').focus(); await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#sceneExportDialog').evaluate(d => d.open), false);
+      // ZH y EN: todos los textos visibles del diálogo en el idioma, sin restos en español.
+      for (const [lang, re, notEs] of [['zh', /Blender 场景[\s\S]*在此浏览器中准备/, true], ['en', /Scene for Blender[\s\S]*Prepared in this browser/, true]]) {
+        await page.evaluate(l => { LANG = l; window.RubikSceneExport.open(); }, lang);
+        const txt = await page.locator('#sceneExportDialog .scene-export').innerText();
+        assert.match(txt, re, lang); if (notEs) assert.doesNotMatch(txt, /Escena para Blender|Descarga la vivienda|Dos formas/, lang + ' without Spanish leftovers');
+        await page.evaluate(() => document.querySelector('#sceneExportDialog').close());
+      }
+      assert.deepEqual(errors, []);
+      await page.context().close();
+    }
+  } finally { await browser.close(); server.close(); }
+});

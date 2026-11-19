@@ -53,3 +53,28 @@ test('C5 · paquete: ZIP existente (project-package), solo tres nombres permitid
   assert.equal(Buffer.compare(bytes, Buffer.from(await again.bytes.arrayBuffer())), 0, 'ZIP determinista (sin fechas)');
   assert.equal(D.safeName('Casa García / 2º'), 'Casa-Garcia-2o');
 });
+
+test('Residual 1 · dos caminos declarados: importación nativa ≠ preparación completa; script con huella o ausencia explicada', async () => {
+  const capture = sampleCapture(), glb = C.toGLB(capture.doc), script = Buffer.from('"""OP-10 · prueba"""\nimport bpy\n');
+  const m = await D.manifest({ capture, glb, project, digest, prepareScript: script });
+  assert.match(m.blender.paths.native.expectation, /not the same render/);
+  assert.ok(m.blender.paths.native.notIncluded.some(x => /sun, sky/.test(x)));
+  assert.equal(m.blender.paths.prepared.script, D.SCRIPT); assert.equal(m.blender.paths.prepared.sha256, await digest(script));
+  assert.equal(m.files[D.SCRIPT].sha256, await digest(script)); assert.match(m.blender.paths.prepared.command, /--background/);
+  const p = D.packageFiles({ manifest: m, glb, prepareScript: script, lang: 'es', zip: Package.zip });
+  assert.deepEqual([...p.entries.keys()], ['scene.glb', 'manifest.json', 'LEEME.txt', D.SCRIPT]);
+  const es = new TextDecoder().decode(p.entries.get('LEEME.txt'));
+  assert.match(es, /NO producen el mismo render/); assert.match(es, /A · Importación directa/); assert.match(es, /B · Preparación completa/); assert.match(es, /blender --background --factory-startup --python rubik_blender_prepare\.py -- \. escena-preparada/);
+  const m0 = await D.manifest({ capture, glb, project, digest }), p0 = D.packageFiles({ manifest: m0, glb, prepareScript: script, lang: 'es', zip: Package.zip });
+  assert.equal(m0.blender.paths.prepared.available, false); assert.equal(p0.entries.has(D.SCRIPT), false, 'no script in the ZIP unless the manifest fingerprints it');
+  assert.match(D.readme(m0, 'es'), /no se pudo incluir/);
+});
+
+test('Residual 2 · LEEME completo en ES, EN y ZH (mismas claves, sin huecos)', async () => {
+  const capture = sampleCapture(), glb = C.toGLB(capture.doc), m = await D.manifest({ capture, glb, project, digest, prepareScript: Buffer.from('x') });
+  const keys = Object.keys(D.TEXT.es).sort();
+  for (const lang of ['en', 'zh']) assert.deepEqual(Object.keys(D.TEXT[lang]).sort(), keys, lang);
+  assert.match(D.readme(m, 'en'), /do NOT produce the same render/); assert.match(D.readme(m, 'zh'), /渲染结果并不相同/);
+  assert.match(D.readme(m, 'zh'), /文件 › 导入 › glTF 2\.0/); assert.equal(D.readme(m, 'fr'), D.readme(m, 'es'), 'unknown language falls back to Spanish');
+  for (const lang of ['es', 'en', 'zh']) assert.doesNotMatch(D.readme(m, lang), /undefined|\$\{/);
+});

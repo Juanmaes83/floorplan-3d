@@ -1,6 +1,6 @@
 # HANDOFF · OP-10 · RUBIK → Blender · candidata final para integración
 
-**Estado:** GO técnico para integración (candidata aislada), **pendiente de aceptación visual del propietario** y de la coordinación con Codex para `index.html`. No es un merge ni una activación.
+**Estado:** GO técnico para integración (candidata aislada). **Rama CONGELADA tras el commit residual** (sección 14): Codex organiza la integración y no se añaden más commits, **pendiente de aceptación visual del propietario** y de la coordinación con Codex para `index.html`. No es un merge ni una activación.
 **Rama:** `claude/compassionate-galileo-mlgigy` · **Base:** `master@02712b5147c15defa12a810b2f346e4b3e0ecb60`, árbol `eac7605fb6b3f176c803255041aa510396db1d69` (comprobado al empezar: el master efectivo coincidía con el del mandato).
 **HEAD y árbol:** se comunican en la entrega, porque un archivo no puede contener el SHA de su propio commit (`git log -1 --format='%H %T'`).
 **Responsable:** Claude Code. **Integrador:** Codex.
@@ -9,7 +9,10 @@
 
 ## 1. Qué se entrega en una línea
 
-Una persona abre la vista 3D, va a **Entregar › Documentación › Escena para Blender**, pulsa **Preparar escena** y descarga un ZIP con `scene.glb`, `manifest.json` y `LEEME.txt`. En Blender abre `scene.glb` con *Archivo › Importar › glTF 2.0*: obtiene la vivienda que veía, en metros, con cada pieza identificada (`rubik_id`, `rubik_role`) y la cámara del visor. El proyecto no cambia y no sale nada del navegador.
+Una persona abre la vista 3D, va a **Entregar › Documentación › Escena para Blender**, pulsa **Preparar escena** y descarga un ZIP con `scene.glb`, `manifest.json`, `LEEME.txt` y `rubik_blender_prepare.py`. El proyecto no cambia y no sale nada del navegador. Hay **dos caminos, que no dan el mismo render** (declarado en el diálogo, en el LEEME en ES/EN/ZH y en `manifest.blender.paths`):
+
+* **A · Importación directa**: *Archivo › Importar › glTF 2.0 › scene.glb*. Trae la geometría en metros, los colores base, los `rubik_*` y la cámara del visor, con la luz por defecto de Blender. **No** trae sol, cielo ni luminarias. El vidrio llega como transparencia simple y, desde arriba, los techos pueden tapar el interior.
+* **B · Preparación completa**: `blender --background --factory-startup --python rubik_blender_prepare.py -- . escena-preparada` desde la carpeta descomprimida. Crea `scene.blend` con el sol y el cielo del visor, las luminarias de noche, vidrio con transmisión, caras traseras como en el visor y colecciones por rol. Es lo que producen los renders de la sección 6. El script es copia exacta de `scripts/interop/blender-scene-import.py` (huella en el manifiesto) y se niega a ejecutarse en una sesión interactiva, porque parte de una escena vacía.
 
 ## 2. Cadena única (decisión)
 
@@ -40,6 +43,7 @@ Blender: importador glTF NATIVO ──► blender-scene-import.py (colecciones, 
 | 7 | C5 · manifiesto determinista y lienzo de referencia | `js/scene-delivery-core.js`, `scripts/interop/scene-capture.cjs`, prueba | 5 |
 | 8 | C4/C7 · Blender: importación nativa, reapertura y render | `scripts/interop/blender-scene-{import,reopen,render}.py`, `blender-render-profiles.json`, `measure.py`, `scene-run.cjs` | 1, 4, 5 |
 | 9 | Handoff y evidencias | `docs/integration/OP10-BLENDER-HANDOFF.md`, `docs/integration/op10-evidence/**` | — |
+| 10 | **Residual** · dos caminos, ES/EN/ZH, asistente y C3 sobre el catálogo (sección 14) | `js/scene-delivery-core.js`, `js/scene-export-ui.js`, `css/scene-export.css`, `scripts/interop/blender-scene-import.py`, pruebas, este handoff | 5, 8 |
 
 
 ## 4. Cirugía exacta por archivo y consumidor
@@ -88,7 +92,7 @@ Tolerancias: las del laboratorio sin cambios (1 mm geometría reexpresada, 2 mm 
 
 | Caso | Resultado |
 |---|---|
-| Interfaz C5 de principio a fin (pulsando los botones reales), ZIP con 3 archivos, nombre, manifiesto y huella | PASS |
+| Interfaz C5 de principio a fin (pulsando los botones reales), ZIP con 3 archivos, nombre, manifiesto y huella (4 archivos tras el residual) | PASS |
 | GLB retrasado 6 s: espera y produce los **mismos bytes**; dos exportaciones sucesivas: GLB y manifiesto idénticos | PASS |
 | Modelo ausente (GLB bloqueado): entrega con la representación genérica y `assetErrors` declarado | PASS |
 | Cancelación durante la espera: `CANCELLED`, nada generado, proyecto y almacenamiento intactos | PASS |
@@ -194,7 +198,7 @@ Un paquete descargado desde la app se importa igual: descomprimir el ZIP y pasar
 
 | # | Riesgo | Estado |
 |---|---|---|
-| R1 | Caras coincidentes | **Resuelto** para todos los tipos que aparecen en F1–F6 (0 defectos). Otros tipos de mueble que no salen en los fixtures solo los cubre el detector: conviene pasarlo sobre el catálogo completo al integrar |
+| R1 | Caras coincidentes | **Resuelto** en F1–F6. Sobre el catálogo completo (60 artículos, 45 tipos): **1 defecto real adicional, menor** (`acwall`, 1,2 cm²), **no corregido** por alcance; corrección propuesta en la sección 14 |
 | R2 | Huecos y lámparas sin ID | **Resuelto** (0 sin ID) |
 | R3 | Escenas grandes | Mitigado: GLB binario 12,7 MB; captura de una sola vez; límites con rechazo |
 | R4 | `contentId` sensible a fechas | Evitado: el registro C6 no calcula identidad; solo acepta la confirmada por F0 |
@@ -204,7 +208,7 @@ Un paquete descargado desde la app se importa igual: descomprimir el ZIP y pasar
 | R9 | Piloto roto | **Resuelto** (C1) |
 | N1 | Texturas del visor como color plano | Declarado (`hasMap`, `texturesNotCopied`). Copiarlas exigiría revisar derechos y privacidad (fuera de alcance) |
 | N2 | Conversión de intensidades visor → Cycles | Constantes declaradas en `blender-scene-import.py` (sol ×1,5 W/m², cielo ×0,35, lámpara ×10 W); calibración visual pendiente de aceptación |
-| N3 | Idioma zh | La interfaz C5 cae a inglés |
+| N3 | Idioma zh | **Resuelto**: diálogo, tarjeta y LEEME en ES/EN/ZH |
 
 ## 12. Dictamen
 
@@ -225,3 +229,21 @@ Un paquete descargado desde la app se importa igual: descomprimir el ZIP y pasar
 4. Si el render de entrega merece GPU o servidor (gasto).
 5. CAM-01: si la cámara guardada debe persistir en el proyecto (cambio de esquema; no se hace aquí).
 
+
+## 14. Commit residual y congelación (revisión del propietario, 19/11)
+
+Alcance cerrado: solo estos cuatro puntos. No se toca F0, Studio, CAM-01 ni la GPU, y no hay nueva campaña de render. Pruebas **dirigidas** sobre el delta; no se repitió la batería anterior.
+
+| # | Residual | Qué cambia | Prueba dirigida | Resultado |
+|---|---|---|---|---|
+| 1 | Importación nativa ≠ preparación completa | ZIP con `rubik_blender_prepare.py` (copia exacta, leída del mismo origen; si no se puede leer, el manifiesto y el LEEME lo dicen y el GLB se entrega igual). `manifest.blender.paths.{native,prepared}` con lo que trae y lo que no, y `expectation: not the same render`. Diálogo «Dos formas de abrirla (no dan el mismo render)». El script exige ejecución sin interfaz | Unitaria (huella, 4 archivos, ausencia explicada). Navegador (script del ZIP idéntico byte a byte al del repositorio). Blender sobre el ZIP real: **A** → 0 luces, mundo por defecto, vidrio transmisión 0, `RUBIK_camera`, 112 objetos `rubik_id`; **B** (comando del LEEME, carpeta descomprimida) → PASS 94/94 mallas, `RUBIK_sun`, `RUBIK_world`, vidrio 1,0 | PASS |
+| 2 | Textos ES/EN/ZH | Los 50 textos del diálogo y la tarjeta, y el LEEME, en los tres idiomas; números con el formato de cada idioma; un idioma desconocido cae a español | Unitaria (mismas claves en los tres; sin `undefined`). Navegador con `LANG='zh'` y `'en'` sin restos en español | PASS |
+| 3 | Asistente flotante | Sin cambios de código. `assistant-ui` inserta por convención su botón como **último hijo** del modal abierto (fuera de nuestro contenido), `sticky` | Navegador en 1280×800, 390×844 y 844×390, estado «lista»: `elementFromPoint` en el centro y los extremos de «Descargar ZIP» y «Volver a preparar» devuelve el propio botón (no tapado). Escape cierra nuestro diálogo. 0 errores de página | PASS: no interfiere |
+| 4 | C3 sobre el catálogo | Escena sintética con los **60 artículos (45 tipos)** de `js/generic-catalog.js` capturada en la app real (1.563 mallas, 0 sin ID) y el detector sobre el mobiliario | — | 249 coincidencias del mismo sentido: 147 ocultas por contacto, 100 inocuas (mismo material), 2 marcadas. **Defecto real adicional: 1** |
+
+**Defecto real adicional (no corregido, se comunica):** `acwall` (`index.html`, `buildFurniture`, `case 'acwall'`). La lama `rot(box(w - .12, .008, .06, …))` y la rejilla `box(w - .12, .004, .07, '#3a3d40', …)` tienen el mismo ancho: sus testeros coinciden en el mismo plano con colores distintos. Son **1,2 cm² por unidad**, visibles solo muy de cerca en el lateral del aparato. Corrección propuesta de una línea: lama `w - .14`.
+**Descartado (falso positivo del detector):** `officechair`. Los fondos del pistón y del casquillo a 10 cm están **dentro** del volumen del cubo de la base (no hay cara enfrentada que lo pruebe, de ahí el aviso); ninguna cámara los ve.
+
+Pruebas ejecutadas en este commit: `tests/scene-delivery.test.cjs` 5/5; `tests/scene-export.browser.test.cjs --test-name-pattern Residuales` 1/1; `tests/scene-capture-core.test.mjs` 19/19 (sin cambios de código; confirma el contrato); importación por los caminos A y B en Blender 5.2.1 sobre el ZIP descargado por la interfaz. **No probado:** la negativa del script dentro de un Blender con interfaz (aquí solo existe `bpy` sin interfaz); es una comprobación de `bpy.app.background` de una línea.
+
+**Congelación.** Tras este commit la rama `claude/compassionate-galileo-mlgigy` queda congelada: sin más commits, sin PR y sin workflows disparados desde esta sesión. Su HEAD final se comunica en la entrega.

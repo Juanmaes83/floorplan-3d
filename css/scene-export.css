@@ -23,3 +23,5 @@
 .scene-export .btn:not(.primary){border:1px solid var(--line-strong);background:var(--surface-panel);color:var(--ink)}
 .scene-export .btn:not(.primary):hover{background:var(--surface-hover)}
 .scene-export .btn:disabled{opacity:.55;cursor:default}
+.scene-export .se-paths{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.9rem}
+.scene-export .se-paths-title{margin:0 0 4px;font-weight:600}.scene-export .se-paths ul{margin:0;padding-left:1.1em;color:var(--ink-muted);line-height:1.45}
