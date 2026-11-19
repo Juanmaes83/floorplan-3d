@@ -206,3 +206,33 @@ test('A0 · cambios después de exportar invalidan la autorización de recarga; 
     assert.deepEqual(watch.errors,[]);
   }finally{await page.evaluate(()=>localStorage.removeItem('rubik-sota-schema-epoch-v1')).catch(()=>{});await context.close();}
 });
+
+// Ruta satélite (detectada al revisar la consolidación de F0 de Codex): Evolución registra cada entrega en
+// rubik-construction-v1 escribiendo directamente en localStorage. También es un escritor y pasa por la misma puerta.
+test('A0 · ruta satélite Evolución: una pestaña desactualizada no registra la entrega y lo dice; una al día la registra y queda como escritor',{timeout:120000},async()=>{
+  const ctx=await env.browser.newContext(),page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+  try{
+    const ref=require('../js/reference-project.js'),project={...JSON.parse(JSON.stringify(ref)),id:'prj_a0_evo',name:'Vivienda sintética A0'};
+    await page.goto(env.base+'tests/fixtures/manual-plan.png');
+    await page.evaluate(([LIB,project])=>{localStorage.clear();localStorage.setItem(LIB,JSON.stringify({version:1,activeId:'ent_a0_evo',entries:[{id:'ent_a0_evo',name:'Vivienda sintética A0',project,variants:[]}]}));},[LIB,project]);
+    await page.goto(env.base+'evolucion/index.html?source=library&entry=ent_a0_evo&subject=project:prj_a0_evo');
+    await page.waitForFunction(()=>window.__ft3dSource&&window.FloorPlanSchemaEpoch);
+    const ready=await page.evaluate(async()=>{await window.__ft3dSource.ready;return {error:window.__ft3dSource.error,entry:window.__ft3dSource.entry?.id};});
+    assert.equal(ready.error,null,'la página carga el proyecto sintético');assert.equal(ready.entry,'ent_a0_evo');
+    const record=manifestId=>page.evaluate(id=>window.__ft3dSource.recordDelivery('presentación',{id,project:{name:'Vivienda sintética A0'}}).then(()=>'registrada',e=>e.code||e.message),manifestId);
+    const stored=()=>page.evaluate(()=>localStorage.getItem('rubik-construction-v1'));
+    // Otra pestaña anuncia una época posterior: esta no escribe nada y avisa con el mensaje de A0.
+    await page.evaluate(()=>FloorPlanSchemaEpoch.announce(2));
+    const before=await stored();
+    assert.equal(await record('dlv_a0_outdated'),'schema-outdated');
+    assert.equal(await stored(),before,'no se escribe el registro de entregas');
+    await page.waitForFunction(()=>document.getElementById('a0Banner')?.dataset.state==='outdated');
+    // Al día: la entrega se registra y la pestaña queda como escritor de su época (convivencia R1-D1).
+    await page.evaluate(()=>{localStorage.removeItem(FloorPlanSchemaEpoch.KEY);localStorage.removeItem(FloorPlanSchemaEpoch.SEEN);FloorPlanSchemaEpoch._reset();});
+    assert.equal(await record('dlv_a0_ok'),'registrada');
+    const after=JSON.parse(await stored());assert.ok(Object.values(after.records).some(r=>r.deliveries.some(d=>d.id==='dlv_a0_ok')));
+    const seen=await page.evaluate(()=>JSON.parse(localStorage.getItem(FloorPlanSchemaEpoch.SEEN)));assert.ok(seen&&seen['1'],'queda registrada la época 1 como escritora');
+    assert.deepEqual(errors.filter(e=>!/import|module|three|Failed to fetch|WebGL/i.test(e)),[]);
+  }finally{await ctx.close();}
+});
