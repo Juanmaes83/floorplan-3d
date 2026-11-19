@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "status": "measured on this candidate (see docs/integration/OP10-BLENDER-HANDOFF.md); CPU only unless a GPU run is recorded",
+  "profiles": {
+    "preview":  {"purpose": "fast check of framing and light", "resolution": "640x400",  "samples": 16,  "fill": "rooms"},
+    "review":   {"purpose": "architectural review (lab OP-10 phase 3 quality)", "resolution": "960x600", "samples": 32, "fill": "rooms"},
+    "delivery": {"purpose": "client-facing still", "resolution": "1600x1000", "samples": 128, "fill": "rooms"}
+  }
+}
