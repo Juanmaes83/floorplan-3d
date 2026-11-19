@@ -13,7 +13,9 @@ test('S2 · muros rectos: geometría idéntica byte a byte a master (02712b51) e
 
 test('S2 · en un proyecto con un muro curvo, todos los demás muros y aberturas salen igual que sin él',()=>{
  const plain=F.base(),{project,wall}=F.curved(F.base(),{heightEndMm:2400,withOpening:false});
- const strip=g=>({walls:g.walls.filter(r=>r.id!==wall.id).map(r=>JSON.stringify(r)),doors:JSON.stringify(g.doors),windows:JSON.stringify(g.windows),rooms:JSON.stringify(g.rooms)});
+ // Las estancias dibujadas contra el muro siguen su cara (S3b); las demás no cambian.
+ const follows=new Set(project.rooms.filter(r=>Core.roomRing(project,r).faces.length).map(r=>r.id));
+ const strip=g=>({walls:g.walls.filter(r=>r.id!==wall.id).map(r=>JSON.stringify(r)),doors:JSON.stringify(g.doors),windows:JSON.stringify(g.windows),rooms:JSON.stringify(g.rooms.filter(r=>!follows.has(r.id)))});
  assert.deepEqual(strip(Core.geometry(project)),strip(Core.geometry(plain)));
 });
 

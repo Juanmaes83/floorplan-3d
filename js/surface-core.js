@@ -30,7 +30,9 @@
  // One level: a FloorPlanProjectV1 and, inside a building, its level identity.
  function level(project,{levelId=null,name=null}={}){
   const scale=statusOfScale(project);
-  const rooms=(project.rooms||[]).map(r=>{const areaM2=polygonAreaM2(r.polygon);
+  // OP-07 · S3b: the room's canonical ring (its polygon, following the faces of curved walls; the same polygon otherwise).
+  const Core=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore,ring=r=>Core?.roomRing?Core.roomRing(project,r).points:r.polygon;
+  const rooms=(project.rooms||[]).map(r=>{const areaM2=polygonAreaM2(ring(r));
    return {id:r.id,name:r.name,counted:r.countsTowardArea!==false,areaM2,status:areaM2===null?'unavailable':scale};});
   return {levelId,name,rooms,...aggregate(rooms)};
  }
