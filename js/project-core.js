@@ -348,6 +348,11 @@
     const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
     return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
   }
+  // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
+  function wallFootprints(w) {
+    if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
+    return Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
+  }
   function geometry(p) {
     const walls=[],windows=[],doors=[],slides=[],voids=[];
     for (const w of p.walls) {
@@ -402,4 +407,5 @@
   // OP-07 · curved and sloped walls (contract 2.0): the same exported object, extended per cut.
   Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
   Object.assign(api,{wallOutline});   // OP-07 S2
+  Object.assign(api,{wallFootprints});   // OP-07 S6
 })(globalThis);
