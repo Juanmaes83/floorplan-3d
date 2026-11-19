@@ -27,7 +27,7 @@ test('reglas de oro en TODOS los estados: qué/por qué, estado de los datos, un
   const {ctx,p,errors}=await page();
   try{
     const r=await p.evaluate(()=>{const U=FloorPlanPersistenceUI,out={};
-      for(const kind of Object.keys(U.STATES)){const box=U.render(document.getElementById('slot'),{kind,vars:{reason:'motivo',why:'causa',revision:3,available:'10 MB',needed:'40 MB',step:2,steps:4}});
+      for(const kind of Object.keys(U.STATES)){const box=U.render(document.getElementById('slot'),{kind,vars:{reason:'motivo',why:'causa',revision:3,available:'10 MB',needed:'40 MB',step:2,steps:4,docs:4,resources:7,photos:5,hash:'0123456789ab…',absent:''}});
         const q=s=>box.querySelector(s);out[kind]={tone:box.dataset.tone,role:box.getAttribute('role'),persistent:box.dataset.persistent,title:q('h2')?.textContent.trim(),
           iconHidden:q('.psui-icon')?.getAttribute('aria-hidden'),what:q('.psui-what')?.textContent,data:q('.psui-data')?.textContent,
           primaries:box.querySelectorAll('.btn.primary').length,secondary:!!q('[data-slot=secondary]'),labelled:!!document.getElementById(box.getAttribute('aria-labelledby')),placeholders:/\{\w+\}/.test(box.textContent)};}
@@ -39,7 +39,7 @@ test('reglas de oro en TODOS los estados: qué/por qué, estado de los datos, un
       if(s.tone==='warn'||s.tone==='danger'){assert.equal(s.role,'alert',kind);assert.equal(s.persistent,'true',kind+': un riesgo nunca es efímero');
         assert.equal(s.primaries,1,kind+': ningún bloqueo sin solución');assert.equal(s.secondary,true,kind+': alternativa segura');}
       else assert.equal(s.role,'status',kind);}
-    assert.equal(Object.keys(r).length,13);assert.deepEqual(errors,[]);
+    assert.equal(Object.keys(r).length,19);assert.deepEqual(errors,[]);
   }finally{await ctx.close();}
 });
 
@@ -72,7 +72,7 @@ test('copia de emergencia: la acción dominante exige el consentimiento; teclado
 test('móvil 390×844: sin desplazamiento horizontal y botones de al menos 44 px de alto',{timeout:60000},async()=>{
   const {ctx,p,errors}=await page({viewport:{width:390,height:844}});
   try{
-    const r=await p.evaluate(()=>{const out=[];for(const kind of Object.keys(FloorPlanPersistenceUI.STATES)){const box=FloorPlanPersistenceUI.render(document.getElementById('slot'),{kind,vars:{reason:'un motivo bastante largo para comprobar el ajuste en pantallas estrechas',why:'x',available:'1 MB',needed:'2 MB',step:1,steps:4,revision:1}});
+    const r=await p.evaluate(()=>{const out=[];for(const kind of Object.keys(FloorPlanPersistenceUI.STATES)){const box=FloorPlanPersistenceUI.render(document.getElementById('slot'),{kind,vars:{reason:'un motivo bastante largo para comprobar el ajuste en pantallas estrechas',why:'x',available:'1 MB',needed:'2 MB',step:1,steps:4,revision:1,docs:4,resources:7,photos:5,hash:'0123456789ab…',absent:' Aviso: 1 imágenes citadas ya faltaban en este navegador; la copia no puede recuperarlas.'}});
       out.push({kind,overflow:document.documentElement.scrollWidth>innerWidth+1,minH:Math.min(...[...box.querySelectorAll('.btn')].map(b=>b.getBoundingClientRect().height),99)});}return out;});
     for(const x of r){assert.equal(x.overflow,false,x.kind);assert.ok(x.minH>=44,x.kind+': '+x.minH);}assert.deepEqual(errors,[]);
   }finally{await ctx.close();}
