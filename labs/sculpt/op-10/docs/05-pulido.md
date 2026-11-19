@@ -4,7 +4,7 @@ Escena: F5, el ejemplo con 46 muebles procedimentales y un banco de catálogo au
 
 **Regla:** la geometría y los materiales capturados no se tocan. Lo añadido vive en la colección `OP10_derived` y en la lista `derived` de cada `render-report.json`: cámaras, sol, cielo o exterior, luz de estancia, exposición y color de suelo desde el material del proyecto. No se inventan muebles, materiales, huecos ni medidas.
 
-Hojas antes/después: `evidence/render/fase1-geometria.png`, `fase2-materiales-luz.png` y `fase3-encuadre.png`.
+Hojas antes/después: `evidence/render/fase1-geometria.png`, `fase2-materiales-luz.png` y `fase3-encuadre.png`. Imágenes finales: `evidence/render/final/`. Los «después» proceden del `render.py` de `759d9bb7` (SHA-256 `47d4bed0…`): la fase 3 se renderizó directamente con él y las fases 1 y 2 se volvieron a renderizar con él, con resultado idéntico píxel a píxel a las intermedias (`evidence/render/equivalencia-pixel.json`). Los «antes» (v1) son del script de trabajo anterior y solo se muestran como ciclo rechazado o ajustado.
 
 | Fase · ciclo | Observación (CRITIQUE) | Cambio (CORRECT) | Decisión |
 |---|---|---|---|

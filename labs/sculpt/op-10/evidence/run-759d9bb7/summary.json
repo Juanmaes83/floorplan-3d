@@ -1,0 +1,761 @@
+{
+ "format": "rubik-sota.op10-run",
+ "version": "0.1.0-lab",
+ "startedAt": "2026-11-19T08:12:30.638Z",
+ "scenarios": [
+  {
+   "id": "f1-rect",
+   "capture": {
+    "stats": {
+     "meshes": 20,
+     "vertices": 703,
+     "faces": 492,
+     "instancesExpanded": 0,
+     "roles": {
+      "room": 1,
+      "unlinked": 7,
+      "ceiling": 1,
+      "wall": 9,
+      "opening-leaf": 2
+     },
+     "entities": 7,
+     "bounds": {
+      "min": [
+       -2.74,
+       0,
+       -2.24
+      ],
+      "max": [
+       2.74,
+       2.8,
+       2.24
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 18,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 6345,
+     "captureMs": 3.7,
+     "serializeMs": 0.5,
+     "sceneBytes": 28284,
+     "navigationBefore": {
+      "medianMs": 64.9,
+      "p95Ms": 123.4
+     },
+     "navigationAfter": {
+      "medianMs": 61,
+      "p95Ms": 135.9
+     },
+     "captureBlocksMainThreadMs": 4.2,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {},
+    "sceneSha256": "93d096e7f4a3df81a18c90ec0d17a54c5933cfa532de4c5f732241c25171f78b",
+    "projectCanonicalSha256": "69ec51eea1be0f3a0ad9b8dff5f048020e3b97668ed9c0d67cd230e265f7a024"
+   },
+   "fidelityAB": {
+    "contract": 31,
+    "failed": 0,
+    "visual": 0,
+    "unlinked": 7,
+    "associated": 6
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.727,
+    "peakRssBytes": 480116736
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 703,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 31,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.62,
+    "peakRssBytes": 474685440,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f2-rot30",
+   "capture": {
+    "stats": {
+     "meshes": 1589,
+     "vertices": 446541,
+     "faces": 199388,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "unlinked": 108,
+      "ceiling": 13,
+      "wall": 369,
+      "opening-leaf": 12,
+      "object": 1072
+     },
+     "entities": 148,
+     "bounds": {
+      "min": [
+       -6.808496,
+       -0.000896,
+       -7.40793
+      ],
+      "max": [
+       6.81577,
+       2.8,
+       7.40793
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 188,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 9832,
+     "captureMs": 407,
+     "serializeMs": 156.5,
+     "sceneBytes": 16470479,
+     "navigationBefore": {
+      "medianMs": 522.3,
+      "p95Ms": 553.6
+     },
+     "navigationAfter": {
+      "medianMs": 523.8,
+      "p95Ms": 587
+     },
+     "captureBlocksMainThreadMs": 563.5,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "generic": 46
+    },
+    "sceneSha256": "9e24d7b95599b73823675e1ce986fd46fac81432b8cebf8493bf964817440ea7",
+    "projectCanonicalSha256": "77b242855fd4c20a211756dc653c3c6a30d0d716ebce27b38a50c90c686f7564"
+   },
+   "fidelityAB": {
+    "contract": 599,
+    "failed": 0,
+    "visual": 32,
+    "unlinked": 108,
+    "associated": 97
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.43,
+    "peakRssBytes": 878358528
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 446541,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 599,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 2.545,
+    "peakRssBytes": 732549120,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f3-openings",
+   "capture": {
+    "stats": {
+     "meshes": 94,
+     "vertices": 12265,
+     "faces": 6244,
+     "instancesExpanded": 0,
+     "roles": {
+      "room": 2,
+      "unlinked": 18,
+      "ceiling": 2,
+      "wall": 27,
+      "opening-leaf": 2,
+      "object": 43
+     },
+     "entities": 15,
+     "bounds": {
+      "min": [
+       -5.279953,
+       0,
+       -2.745654
+      ],
+      "max": [
+       5.279953,
+       2.97,
+       2.745654
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 32,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 5708,
+     "captureMs": 22.9,
+     "serializeMs": 5.5,
+     "sceneBytes": 484038,
+     "navigationBefore": {
+      "medianMs": 75.5,
+      "p95Ms": 134.8
+     },
+     "navigationAfter": {
+      "medianMs": 77,
+      "p95Ms": 138.1
+     },
+     "captureBlocksMainThreadMs": 28.4,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "ready": 1,
+     "generic": 1,
+     "error": 1
+    },
+    "sceneSha256": "a8c6bb9ccee4323ffa97c56852b792fe670116318800f8d0c9ed7b2cf60e5ce5",
+    "projectCanonicalSha256": "8675d4cfd813f10bc086581f095f19f03029b4fb9403c6d0579773d20c8dd60d"
+   },
+   "fidelityAB": {
+    "contract": 63,
+    "failed": 0,
+    "visual": 0,
+    "unlinked": 18,
+    "associated": 18
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.79,
+    "peakRssBytes": 484098048
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 12265,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 63,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.739,
+    "peakRssBytes": 479694848,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f4-active",
+   "capture": {
+    "stats": {
+     "meshes": 61,
+     "vertices": 19071,
+     "faces": 6810,
+     "instancesExpanded": 4,
+     "roles": {
+      "room": 2,
+      "unlinked": 3,
+      "ceiling": 2,
+      "wall": 24,
+      "opening-leaf": 2,
+      "object": 14,
+      "stair": 14
+     },
+     "entities": 14,
+     "bounds": {
+      "min": [
+       -3.86,
+       0,
+       -1.44
+      ],
+      "max": [
+       3.86,
+       3.1,
+       1.44
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 19,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 5558,
+     "captureMs": 42.7,
+     "serializeMs": 16,
+     "sceneBytes": 654988,
+     "navigationBefore": {
+      "medianMs": 102.6,
+      "p95Ms": 287.9
+     },
+     "navigationAfter": {
+      "medianMs": 88.8,
+      "p95Ms": 174.4
+     },
+     "captureBlocksMainThreadMs": 58.7,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "generic": 1
+    },
+    "sceneSha256": "e327fe105e64e777b3f80755c179d44b628f4befebe1d175cd9bea1cf22a9ce6",
+    "projectCanonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167"
+   },
+   "fidelityAB": [
+    {
+     "level": "lvl_fixture-ground",
+     "present": true,
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "present": false,
+     "contract": null,
+     "failed": null
+    },
+    {
+     "stairs": [
+      {
+       "id": "str_fixture-main",
+       "risers": 14,
+       "meshes": 14,
+       "observedTopM": 3.1,
+       "expectedTopM": 3.1,
+       "topDeviationMm": 0
+      }
+     ]
+    }
+   ],
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.748,
+    "peakRssBytes": 483487744
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 19071,
+    "issues": 0
+   },
+   "fidelityCA": [
+    {
+     "level": "lvl_fixture-ground",
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "contract": null,
+     "failed": null
+    }
+   ],
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.693,
+    "peakRssBytes": 477954048,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f4-all",
+   "capture": {
+    "stats": {
+     "meshes": 94,
+     "vertices": 47911,
+     "faces": 16544,
+     "instancesExpanded": 4,
+     "roles": {
+      "room": 3,
+      "unlinked": 3,
+      "ceiling": 3,
+      "wall": 31,
+      "opening-leaf": 2,
+      "object": 31,
+      "level": 6,
+      "room-slab": 1,
+      "stair": 14
+     },
+     "entities": 23,
+     "bounds": {
+      "min": [
+       -3.86,
+       0,
+       -1.44
+      ],
+      "max": [
+       3.86,
+       5.9,
+       1.44
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 32,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 5752,
+     "captureMs": 44.6,
+     "serializeMs": 32.7,
+     "sceneBytes": 1628040,
+     "navigationBefore": {
+      "medianMs": 94,
+      "p95Ms": 182.6
+     },
+     "navigationAfter": {
+      "medianMs": 96,
+      "p95Ms": 218.5
+     },
+     "captureBlocksMainThreadMs": 77.3,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "unknown": 1,
+     "generic": 1
+    },
+    "sceneSha256": "2e51ad13f6cdd9933477a3356a8f977ad4169482bc896915a8395bfd3cc786ed",
+    "projectCanonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167"
+   },
+   "fidelityAB": [
+    {
+     "level": "lvl_fixture-ground",
+     "present": true,
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "present": true,
+     "contract": 32,
+     "failed": 0
+    },
+    {
+     "stairs": [
+      {
+       "id": "str_fixture-main",
+       "risers": 14,
+       "meshes": 14,
+       "observedTopM": 3.1,
+       "expectedTopM": 3.1,
+       "topDeviationMm": 0
+      }
+     ]
+    }
+   ],
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.845,
+    "peakRssBytes": 506134528
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 47911,
+    "issues": 0
+   },
+   "fidelityCA": [
+    {
+     "level": "lvl_fixture-ground",
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "contract": 32,
+     "failed": 0
+    }
+   ],
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.726,
+    "peakRssBytes": 487256064,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f5-furniture",
+   "capture": {
+    "stats": {
+     "meshes": 1509,
+     "vertices": 446385,
+     "faces": 199752,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "unlinked": 108,
+      "ceiling": 13,
+      "wall": 292,
+      "opening-leaf": 12,
+      "object": 1069
+     },
+     "entities": 149,
+     "bounds": {
+      "min": [
+       -6.185,
+       -0.000896,
+       -5.52
+      ],
+      "max": [
+       6.185,
+       2.8,
+       5.52
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 144,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 9505,
+     "captureMs": 427.3,
+     "serializeMs": 165.3,
+     "sceneBytes": 15811927,
+     "navigationBefore": {
+      "medianMs": 547,
+      "p95Ms": 628.8
+     },
+     "navigationAfter": {
+      "medianMs": 541.8,
+      "p95Ms": 601.5
+     },
+     "captureBlocksMainThreadMs": 592.6,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "ready": 1,
+     "generic": 46
+    },
+    "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171",
+    "projectCanonicalSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849"
+   },
+   "fidelityAB": {
+    "contract": 601,
+    "failed": 0,
+    "visual": 35,
+    "unlinked": 108,
+    "associated": 97
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.457,
+    "peakRssBytes": 871366656
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 446385,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 601,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 2.578,
+    "peakRssBytes": 728080384,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f6-r02r03",
+   "capture": {
+    "stats": {
+     "meshes": 1513,
+     "vertices": 437989,
+     "faces": 197080,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "unlinked": 108,
+      "ceiling": 13,
+      "wall": 292,
+      "opening-leaf": 12,
+      "object": 1072,
+      "ceiling-element": 1
+     },
+     "entities": 149,
+     "bounds": {
+      "min": [
+       -6.185,
+       -0.000896,
+       -5.52
+      ],
+      "max": [
+       6.185,
+       2.8,
+       5.52
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 144,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 10244,
+     "captureMs": 490.8,
+     "serializeMs": 176.9,
+     "sceneBytes": 15530990,
+     "navigationBefore": {
+      "medianMs": 537.5,
+      "p95Ms": 572.9
+     },
+     "navigationAfter": {
+      "medianMs": 538.8,
+      "p95Ms": 604
+     },
+     "captureBlocksMainThreadMs": 667.7,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "generic": 46
+    },
+    "sceneSha256": "85c3189e53e831010b053f227972cf8f2a201bc00922d90f27ce39295d1a47cf",
+    "projectCanonicalSha256": "0e2b6cbc240d51d592a634d820ff73bd3f2a124dbecca1318279f3eca29df8df"
+   },
+   "fidelityAB": {
+    "contract": 602,
+    "failed": 0,
+    "visual": 34,
+    "unlinked": 108,
+    "associated": 97
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.466,
+    "peakRssBytes": 865816576
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 437989,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 602,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/op10/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 2.64,
+    "peakRssBytes": 723632128,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  }
+ ],
+ "finishedAt": "2026-11-19T08:19:02.400Z"
+}

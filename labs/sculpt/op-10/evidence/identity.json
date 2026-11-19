@@ -1,0 +1,92 @@
+{
+ "format": "rubik-sota.op10-identity",
+ "source": "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/op10-final",
+ "runCommit": "759d9bb7",
+ "toolNote": "computed after the run from its files; capture/compare/Blender outputs untouched",
+ "scenarios": [
+  {
+   "id": "f1-rect",
+   "observedProject": {
+    "projectId": "prj_op10-f1-rect",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "69ec51eea1be0f3a0ad9b8dff5f048020e3b97668ed9c0d67cd230e265f7a024",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "a2c7173dc4055fe7dc80ca0566d777a5a0ffd616ac677556dcd6fb14c6865ef0",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "93d096e7f4a3df81a18c90ec0d17a54c5933cfa532de4c5f732241c25171f78b"
+  },
+  {
+   "id": "f2-rot30",
+   "observedProject": {
+    "projectId": "prj_op10-f2-rot30",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "77b242855fd4c20a211756dc653c3c6a30d0d716ebce27b38a50c90c686f7564",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "92085eb5c10c41eb0532ea6b08f979936b9f6ae81c4545279f7040c0a6f4f2d7",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "9e24d7b95599b73823675e1ce986fd46fac81432b8cebf8493bf964817440ea7"
+  },
+  {
+   "id": "f3-openings",
+   "observedProject": {
+    "projectId": "prj_op10-f3-openings",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "8675d4cfd813f10bc086581f095f19f03029b4fb9403c6d0579773d20c8dd60d",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "ee78637e8329e9f2d0ca338591382368224ee0f9525c8330e6239afdddd81e55",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "a8c6bb9ccee4323ffa97c56852b792fe670116318800f8d0c9ed7b2cf60e5ce5"
+  },
+  {
+   "id": "f4-active",
+   "observedProject": {
+    "projectId": "prj_fixture-ground",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "4218ac607cf5def65c070f05cbc3b29823db5350b70583255b2ecb6f368a1894",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "e327fe105e64e777b3f80755c179d44b628f4befebe1d175cd9bea1cf22a9ce6"
+  },
+  {
+   "id": "f4-all",
+   "observedProject": {
+    "projectId": "prj_fixture-ground",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "4218ac607cf5def65c070f05cbc3b29823db5350b70583255b2ecb6f368a1894",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "2e51ad13f6cdd9933477a3356a8f977ad4169482bc896915a8395bfd3cc786ed"
+  },
+  {
+   "id": "f5-furniture",
+   "observedProject": {
+    "projectId": "prj_op10-f5-furniture",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "6033a221ebb28260c7e8ff3410063a7cef7bfe2101469a107d4602d565d997d4",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171"
+  },
+  {
+   "id": "f6-r02r03",
+   "observedProject": {
+    "projectId": "prj_op10-f6-r02r03",
+    "updatedAt": "2026-11-19T00:00:00.000Z",
+    "canonicalSha256": "0e2b6cbc240d51d592a634d820ff73bd3f2a124dbecca1318279f3eca29df8df",
+    "meaning": "the project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+   },
+   "fixtureContentId": "ee7b29b92603680051267880c5248333f676c4734915f547f072c0301d38c43c",
+   "fixtureContentIdScope": "synthetic fixtures only: empty documents (no budgets, no reviews), no verified image bytes, called outside the expediente pack/read path",
+   "sceneSha256": "85c3189e53e831010b053f227972cf8f2a201bc00922d90f27ce39295d1a47cf"
+  }
+ ]
+}

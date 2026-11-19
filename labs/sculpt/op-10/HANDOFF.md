@@ -11,11 +11,11 @@
 | 1. SOURCE EXACT, hashes, consumidor nativo, forks y propuesta SOURCE DISCOVERY | [docs/01](docs/01-source-exact.md), `upstream/openplan3d-771c9e1/MANIFEST.sha256` |
 | 2. Clasificación KEEP/GENERALISE/OPTIONALISE/REPLACE/REMOVE | [docs/02](docs/02-clasificacion.md) |
 | 3. Adaptador funcional aislado | `src/scene-capture-core.js`, `src/capture-browser.cjs` |
-| 4. Fidelidad geométrica A↔B↔C | [docs/03](docs/03-fidelidad.md), `evidence/run/` |
-| 5. Comparativa RUBIK → Blender | `blender/import_scene.py`, `src/roundtrip.cjs`, `evidence/run/*/roundtrip-CB.json` |
+| 4. Fidelidad geométrica A↔B↔C | [docs/03](docs/03-fidelidad.md), `evidence/run-759d9bb7/` · procedencia en [evidence/PROCEDENCIA.md](evidence/PROCEDENCIA.md) |
+| 5. Comparativa RUBIK → Blender | `blender/import_scene.py`, `src/roundtrip.cjs`, `evidence/run-759d9bb7/*/roundtrip-CB.json` |
 | 6. Capturas antes/después de cada pulido | [docs/05](docs/05-pulido.md), `evidence/render/` |
 | 7. Métricas y límites | [docs/04](docs/04-metricas.md) |
-| 8. Importación y reapertura | `blender/reopen_verify.py`, `evidence/run/*.reopen.json` |
+| 8. Importación y reapertura | `blender/reopen_verify.py`, `evidence/run-759d9bb7/*/reopen.json` |
 | 9. Riesgos residuales · 10. Plan de cirugía | [docs/08](docs/08-riesgos-y-cirugia.md) |
 | Estado de escena y OP-02 · E3 y contratos futuros | [docs/06](docs/06-estado-escena-op02.md), [docs/07](docs/07-e3-contratos-futuros.md) |
 | 11. SHA, árbol y diff | Al final de este documento |
@@ -30,7 +30,9 @@
 - **Fidelidad:** 2.038 comprobaciones contractuales A↔B con **0 fallos**, desviación máxima 0,001 mm; C↔A igual; C↔B **0,000 mm** en 1,4 M vértices. Las diferencias visuales del mobiliario procedimental se miden y se declaran.
 - **Blender 5.2.1 LTS:** importación PASS, `.blend` guardado y reapertura en proceso nuevo PASS 8/8 con el mismo hash de geometría.
 - **Estado de escena:** transiciones detectadas. Con un GLB retrasado 6 s, la captura espera y da los mismos bytes. OP-02: mismos bytes.
-- **Pulido:** 3 fases × 2 ciclos con decisiones registradas; dos REJECT por honestidad (cámara dentro de un mueble y «mar» inventado).
+- **Pulido:** 3 fases × 2 ciclos con decisiones registradas; dos REJECT por honestidad (cámara dentro de un mueble y «mar» inventado). Las imágenes «después» salen del `render.py` exacto de `759d9bb7` (p1/p2 re-renderizadas: idénticas píxel a píxel a las intermedias).
+- **Procedencia:** todas las evidencias de ejecución son de `759d9bb7`. Los commits posteriores solo añaden documentación y metadatos de identidad, verificados sobre los artefactos existentes (`tools/identity.cjs`) sin repetir pruebas.
+- **Identidad:** proyecto observado ≠ revisión transaccional F0 confirmada; el `fixtureContentId` solo acredita los fixtures sintéticos ([docs/07](docs/07-e3-contratos-futuros.md)).
 
 ## Dictamen
 
@@ -50,4 +52,12 @@
 
 ## SHA, árbol y diff
 
-Se completa al cerrar el laboratorio.
+| Elemento | Valor |
+|---|---|
+| Base | `master@dd528119bdfd80733c4faf5bb56a594190fea5ac`, árbol `f62e9492de0ee616c8edd1966703238d57702a63` |
+| `759d9bb7` | Escultura: núcleo, arnés, fidelidad, importador, reapertura y render. **Origen de todas las evidencias de ejecución** |
+| `a9895f8c` | Documentación e identidad en `run.cjs` (+7 líneas, solo metadatos) |
+| `d17ee20f` | Informes de fidelidad, métricas, pulido y HANDOFF |
+| Cierre (commit que contiene este archivo) | Evidencias con procedencia, `tools/identity.cjs`, distinción proyecto observado / F0 / `fixtureContentId`. Su SHA y árbol se comunican en la entrega, porque un archivo no puede contener el SHA de su propio commit |
+| Diff frente a la base | 114 archivos, +20.080 líneas, 0 eliminadas, **todo bajo `labs/sculpt/op-10/`**. Fuera del laboratorio: 0 archivos |
+| Pruebas al cerrar | Núcleo 13/13. No se repitieron captura, Blender ni renders ya acreditados en `759d9bb7` |

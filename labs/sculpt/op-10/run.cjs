@@ -22,12 +22,12 @@ async function run(dest, python) {
   for (const s of SCENARIOS) {
     const cap = path.join(dest, 'capture', s.id), out = { id: s.id };
     const m = await Capture.capture(path.join(fx, s.fixture), cap, { scope: s.scope || 'active' });
-    // Huellas separadas (punto 11): revisión local (proyecto canónico observado, con id y fechas) ≠ identidad portable F0.
+    // Huellas separadas: proyecto OBSERVADO en el visor (no es una revisión transaccional F0 confirmada) ≠ contentId del fixture.
     const fixtureDoc = JSON.parse(fs.readFileSync(path.join(fx, s.fixture), 'utf8'));
     const subject = s.building ? { kind: 'building', building: fixtureDoc } : { kind: 'project', project: JSON.parse(fs.readFileSync(path.join(cap, 'project.json'), 'utf8')) };
-    out.identity = { localRevision: { projectId: m.source.projectId, updatedAt: m.source.projectUpdatedAt, projectCanonicalSha256: m.source.projectCanonicalSha256 },
-      f0ContentId: await Expediente.contentId(subject, { budgets: {}, reviews: {} }, async () => ''), sceneSha256: m.outputs['scene.json'].sha256,
-      note: 'f0ContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json' };
+    out.identity = { observedProject: { projectId: m.source.projectId, updatedAt: m.source.projectUpdatedAt, canonicalSha256: m.source.projectCanonicalSha256, meaning: 'project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision' },
+      fixtureContentId: await Expediente.contentId(subject, { budgets: {}, reviews: {} }, async () => ''), fixtureContentIdScope: 'synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path', sceneSha256: m.outputs['scene.json'].sha256,
+      note: 'fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json' };
     out.capture = { stats: m.stats, excluded: m.excluded, metrics: m.metrics, assets: m.fallbacks.assetStates, sceneSha256: m.outputs['scene.json'].sha256, projectCanonicalSha256: m.source.projectCanonicalSha256 };
     const scene = JSON.parse(fs.readFileSync(path.join(cap, 'scene.json'), 'utf8'));
     const fid = s.building ? compareBuilding(JSON.parse(fs.readFileSync(path.join(fx, s.fixture), 'utf8')), scene, { activeLevelId: scene.frame.activeLevelId })

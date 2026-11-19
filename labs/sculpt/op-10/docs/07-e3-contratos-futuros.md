@@ -7,20 +7,21 @@ Consultado sin modificar: laboratorio E3 congelado en `8c53263423359e4fa71fc2549
 | Resultado de OP-10 | Consumidor E3 posible | Condición |
 |---|---|---|
 | `review.blend` + PNG por encuadre | Láminas e ilustraciones de las recetas (Architecture Book, propuesta) como «render local» | Que la receta declare la fuente «render local OP-10» y su huella |
-| `scene.json` + manifiesto | Trazabilidad del dossier: qué geometría visible se usó | Ligado por `f0ContentId` del trabajo |
+| `scene.json` + manifiesto | Trazabilidad del dossier: qué geometría visible se usó | Ligado a la revisión transaccional F0 confirmada del trabajo (no al `fixtureContentId` del laboratorio) |
 | Comparación A↔B↔C | Evidencia de fidelidad adjunta a la entrega | Solo comprobaciones contractuales; las visuales, como notas |
 
-## Cinco huellas distintas (no se confunden)
+## Huellas distintas (no se confunden)
 
-| Huella | Qué identifica | Dónde |
-|---|---|---|
-| **Revisión local F0** | Este proyecto en esta biblioteca: `projectId` + `updatedAt` + SHA del JSON canónico | `manifest.source` |
-| **ContentId portable** | El trabajo, con independencia del id local (`js/expediente-core.js`, `contentId()`) | `run summary · identity.f0ContentId` |
-| **Huella completa de entrega** | El paquete del expediente (manifiesto F0) | Fuera de OP-10 (F0/E3) |
-| **Huella de escena y cámara** | Escena observada + alcance (`scene.json` SHA) + cámaras derivadas (`render-report.json`) | Manifiesto y `render-report` |
-| **Huella del render** | Cada PNG (SHA-256) con su motor, muestras y resolución | `render-report.json` |
+| Huella | Qué identifica | Qué NO acredita | Dónde |
+|---|---|---|---|
+| **Proyecto observado** | El proyecto tal como estaba cargado en el visor al capturar (`projectId`, `updatedAt`, SHA del JSON canónico) | **No es una revisión transaccional F0 confirmada**: no ha pasado por el diario ni por la confirmación de F0 | `manifest.source`, `identity.observedProject` |
+| **ContentId del fixture** | `js/expediente-core.js` `contentId()` aplicado al fixture con **documentos vacíos** (sin presupuestos ni revisiones) y **sin bytes de imagen verificados** | Solo acredita el alcance de estos fixtures sintéticos; no es la identidad de un expediente real | `evidence/identity.json` (`fixtureContentId`) |
+| **Revisión transaccional F0 confirmada** | La revisión que F0 registra y confirma | OP-10 no la produce ni la consulta | Fuera de OP-10 (F0) |
+| **Huella completa de entrega** | El paquete del expediente (manifiesto F0) | — | Fuera de OP-10 (F0/E3) |
+| **Huella de escena y cámara** | Escena observada + alcance (SHA de `scene.json`) + cámaras derivadas (`render-report.json`) | — | Manifiesto y `render-report` |
+| **Huella del render** | Cada PNG (SHA-256) con motor, muestras y resolución; equivalencia comprobada por píxel | — | `render-report.json`, `evidence/render/equivalencia-pixel.json` |
 
-**Hallazgo [E]:** `contentId()` llamado directamente sobre el proyecto neutraliza el id local pero **no** `createdAt`/`updatedAt`: misma geometría con otra fecha da otro valor. El informe E3 afirma que «otra fecha da el mismo trabajo», probablemente porque el expediente normaliza las fechas en `pack`/`read`. Un consumidor futuro debe calcular la identidad **por el mismo camino que el expediente**, nunca llamando a `contentId()` sobre un proyecto suelto.
+**Hallazgo [E]:** `contentId()` llamado directamente sobre el proyecto neutraliza el id local pero **no** `createdAt`/`updatedAt`. Un consumidor futuro debe calcular la identidad **por el mismo camino que el expediente** (`pack`/`read`), nunca sobre un proyecto suelto.
 
 ## Dependencias para una integración futura
 
