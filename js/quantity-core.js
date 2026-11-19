@@ -100,20 +100,35 @@
   const t1=toEdge(start),t2=toEdge(end);
   return {wallId:w.id,face:avg>=0?1:-1,wallStartMm:start,wallEndMm:end,edgeStartMm:Math.max(0,Math.min(t1,t2)),edgeEndMm:Math.min(el,Math.max(t1,t2)),lengthMm:end-start};
  }
- function nearPolygon(w,polygon){const b=Walls.bounds(w),pad=COVERAGE_TOLERANCE_MM;return polygon.some(p=>p.x>=b.minX-pad&&p.x<=b.maxX+pad&&p.y>=b.minY-pad&&p.y<=b.maxY+pad);}
+ function nearPolygon(w,polygon){const b=Walls.bounds(w),pad=Math.max(COVERAGE_TOLERANCE_MM,w.thicknessMm);return polygon.some(p=>p.x>=b.minX-pad&&p.x<=b.maxX+pad&&p.y>=b.minY-pad&&p.y<=b.maxY+pad);}
+ // OP-07 · S3b: a room's face on a curved wall, from the facets its canonical ring follows (Core.roomRing): per facet,
+ // the core's trapezoid and openings (profileSpans) scaled by that face's mitred length (offsetMiter), times the part of
+ // the facet inside the room. The whole face of a wall gives exactly faceAreas() of that side.
+ function curvedRoomFace(project,w,face,scaleStatus){
+  const opts=wallPath(),own=(project.openings||[]).filter(o=>o.wallId===w.id),base={wallId:w.id,face:face.side,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,curved:true};
+  if(Walls.validateWall(w).length)return {...base,lengthM:null,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,status:'unavailable',complete:false,reason:'invalid-wall-geometry'};
+  const invalid=own.filter(o=>Walls.validateOpening(w,o,opts).length),spans=new Map(Walls.profileSpans(w,invalid.length?[]:own,opts).map(s=>[s.index,s]));
+  const f=Walls.offsetMiter(Walls.centreline(w,opts),face.side*w.thicknessMm/2);let len=0,gross=0,net=0;
+  for(const {index,fraction} of face.facets){const s=spans.get(index);if(!s)continue;const k=Math.hypot(f[index+1].x-f[index].x,f[index+1].y-f[index].y)/s.length;
+   len+=fraction*s.length*k;gross+=fraction*k*s.length*(s.startHeight+s.endHeight)/2;net+=fraction*k*s.segments.reduce((a,x)=>a+x.width*((x.topYLeft+x.topYRight)/2-x.bottomY),0);}
+  const ok=!invalid.length;
+  return {...base,lengthM:len/1000,grossAreaM2:gross/1e6,openingAreaM2:ok?(gross-net)/1e6:null,netAreaM2:ok?net/1e6:null,status:scaleStatus,complete:ok,...(ok?{}:{reason:'invalid-opening-geometry'})};
+ }
+ const coreOf=()=>typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
  function roomWallFaces(project,room){
-  const polygon=room?.polygon;if(!Array.isArray(polygon)||polygon.length<3||!polygon.every(point))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
+  const ring=room?.polygon?coreOf().roomRing(project,room):{points:room?.polygon,faces:[],edgeWalls:[]},polygon=ring.points;if(!Array.isArray(polygon)||polygon.length<3||!polygon.every(point))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
   const scaleStatus=measurementStatus(project),edges=[],matches=[];let perimeterMm=0,ambiguous=false;
   for(let i=0;i<polygon.length;i++){
    const a=polygon[i],b=polygon[(i+1)%polygon.length],len=distanceMm(a,b);if(!(len>0))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
    perimeterMm+=len;const edgeMatches=[];
+   if(ring.edgeWalls[i]){edges.push({lengthMm:len,coverageMm:len});continue;}   // on a curved wall's face (S3b)
    for(const w of project.walls){if(w.status==='demolished'||Walls.isCurved(w))continue;const m=matchEdgeToWall(a,b,w);if(m)edgeMatches.push(m);}
    const sorted=edgeMatches.slice().sort((x,y)=>x.edgeStartMm-y.edgeStartMm);
    for(let j=1;j<sorted.length;j++)if(sorted[j].edgeStartMm<sorted[j-1].edgeEndMm-COVERAGE_TOLERANCE_MM&&sorted[j].wallId!==sorted[j-1].wallId)ambiguous=true;
    const coverage=intervalLength(edgeMatches.map(m=>[m.edgeStartMm,m.edgeEndMm]));edges.push({lengthMm:len,coverageMm:Math.min(len,coverage)});matches.push(...edgeMatches);
   }
   if(ambiguous)return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'ambiguous-wall-face-association'};
-  const matchedBoundaryMm=edges.reduce((s,e)=>s+e.coverageMm,0),missingBoundaryMm=Math.max(0,perimeterMm-matchedBoundaryMm);if(!matches.length)return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:0,missingBoundaryM:perimeterMm/1000,segments:[],reason:'room-wall-association-not-demonstrable'};
+  const matchedBoundaryMm=edges.reduce((s,e)=>s+e.coverageMm,0),missingBoundaryMm=Math.max(0,perimeterMm-matchedBoundaryMm);if(!matches.length&&!ring.faces.length)return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:0,missingBoundaryM:perimeterMm/1000,segments:[],reason:'room-wall-association-not-demonstrable'};
   const groups=new Map();for(const m of matches){const key=`${m.wallId}:${m.face}`,g=groups.get(key)||{wallId:m.wallId,face:m.face,intervals:[]};g.intervals.push([m.wallStartMm,m.wallEndMm]);groups.set(key,g);}
   const segments=[];let grossMm2=0,openingMm2=0,openingsComplete=true,wallGeometryComplete=true;
   for(const g of groups.values()){
@@ -128,15 +143,18 @@
    grossMm2+=gross;if(opening===null)openingsComplete=false;else openingMm2+=opening;
    segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:gross/1e6,openingAreaM2:opening===null?null:opening/1e6,netAreaM2:net===null?null:net/1e6,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:scaleStatus,complete:opening!==null});
   }
+  for(const face of ring.faces){const s=curvedRoomFace(project,project.walls.find(x=>x.id===face.wallId),face,scaleStatus);segments.push(s);
+   if(s.grossAreaM2===null){wallGeometryComplete=false;openingsComplete=false;continue;}grossMm2+=s.grossAreaM2*1e6;if(s.openingAreaM2===null)openingsComplete=false;else openingMm2+=s.openingAreaM2*1e6;}
   const associationComplete=missingBoundaryMm<=COVERAGE_TOLERANCE_MM*polygon.length,complete=associationComplete&&wallGeometryComplete&&openingsComplete;
-  // OP-07: a curved wall is not associated with a room by straight-edge matching yet (S3b); it is named, never guessed.
-  const pendingCurvedWalls=associationComplete?[]:project.walls.filter(w=>Walls.isCurved(w)&&w.status!=='demolished'&&nearPolygon(w,polygon)).map(w=>w.id);
+  // OP-07: a curved wall near the room that its ring does not follow (the room was not drawn against it) is named, never
+  // guessed or measured by its chord.
+  const followed=new Set(ring.faces.map(f=>f.wallId)),pendingCurvedWalls=associationComplete?[]:project.walls.filter(w=>Walls.isCurved(w)&&w.status!=='demolished'&&!followed.has(w.id)&&nearPolygon(w,polygon)).map(w=>w.id);
   return {status:scaleStatus,complete,associationComplete,openingsComplete,...(pendingCurvedWalls.length?{pendingCurvedWalls}:{}),grossAreaM2:grossMm2/1e6,openingAreaM2:openingsComplete?openingMm2/1e6:null,netAreaM2:openingsComplete?(grossMm2-openingMm2)/1e6:null,matchedBoundaryM:matchedBoundaryMm/1000,missingBoundaryM:missingBoundaryMm/1000,segments,
    ...(!associationComplete?{reason:'partial-room-wall-association'}:!wallGeometryComplete?{reason:'invalid-wall-geometry'}:!openingsComplete?{reason:'invalid-opening-geometry'}:{})};
  }
  function room(project,roomOrId){
   assertProject(project);const r=typeof roomOrId==='string'?project.rooms.find(x=>x.id===roomOrId):roomOrId;if(!r)throw new RangeError('FloorPlanQuantities: room not found.');
-  const surface=Surface.level(project).rooms.find(x=>x.id===r.id),perimeterM=polygonPerimeterM(r.polygon),perimeterStatus=perimeterM===null?'unavailable':measurementStatus(project);
+  const surface=Surface.level(project).rooms.find(x=>x.id===r.id),perimeterM=polygonPerimeterM(coreOf().roomRing(project,r).points),perimeterStatus=perimeterM===null?'unavailable':measurementStatus(project);
   return {id:r.id,name:r.name??'',family:r.family??null,counted:r.countsTowardArea!==false,floorMaterialId:r.floorMaterialId??null,status:surface?.status??'unavailable',
    floor:{areaM2:surface?.areaM2??null,status:surface?.status??'unavailable',source:'FloorPlanSurfaceMetrics'},
    perimeter:{lengthM:perimeterM,status:perimeterStatus,complete:perimeterM!==null,source:'room.polygon',openingDeduction:'none'},
