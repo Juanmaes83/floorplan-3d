@@ -1,0 +1,36 @@
+name: OP-02 On-demand 3D
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'js/view3d-frame-scheduler.mjs'
+      - 'js/view3d-motion.mjs'
+      - 'js/surface-renderer.mjs'
+      - 'js/territory-renderer.js'
+      - 'tests/op02-render-demand*.cjs'
+      - '.github/workflows/op02-render-demand.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  render-demand:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Playwright and Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pw/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Scheduler and actual WebGL invalidations
+        run: node --test --test-concurrency=1 tests/op02-render-demand.test.cjs tests/op02-render-demand.browser.test.cjs
