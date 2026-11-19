@@ -13,24 +13,43 @@
  document.documentElement.dataset.source=mode;
  const src=window.__ft3dSource={mode,error:null,entry:null,subject:null,record:null,input:null,requestedRevision:q.get('revision')||null,initialDate:q.get('date')||null,initialTask:q.get('task')||null};
  const fail=m=>{src.error=m;};
- if(mode==='library'){
-  try{
-   const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')||'null'),entry=lib?.entries?.find(e=>e.id===q.get('entry'));
+ const P=window.FloorPlanPersistence,enabled=P.isTestOrigin(),embedded=window.parent!==window;
+ let session,loadedIdentity,bridge;
+ const loadedAt=new Date().toISOString();
+ function readSource(storage){
+   const lib=JSON.parse(storage.getItem('rubik-sota-project-library-v1')||'null'),entry=lib?.entries?.find(e=>e.id===q.get('entry'));
    if(!entry)throw Error('No se encuentra este proyecto en tu biblioteca de este navegador. Vuelve a RUBIK y ábrelo desde la biblioteca.');
    const subject=R.subjectOf(entry);
-   if(subject.type+':'+subject.id!==q.get('subject'))throw Error('El proyecto guardado no es el que se pidió: no se muestra nada para no mezclar datos de dos proyectos.');
+   if(subject.type+':'+subject.id!==q.get('subject'))throw Error('El proyecto guardado no coincide con el solicitado.');
    const doc=R.subjectDoc(entry);A.validateSource(doc);
-   let record=null;try{record=R.open(localStorage).get(entry.id,subject);}catch(e){src.recordError=R.human(e);}
-   let saved={};try{saved=JSON.parse(localStorage.getItem('rubik-budget-v1'))||{};}catch{}
+   let record=null,recordError=null;try{record=R.open(storage).get(entry.id,subject);}catch(e){recordError=R.human(e);}
+   let saved={};try{saved=JSON.parse(storage.getItem('rubik-budget-v1'))||{};}catch{}
    const parse=raw=>{try{return raw?B.parseBudget(JSON.stringify(raw)):null;}catch{return null;}};
-   // One budget per 1.x project: the project's own, or one per level for a building (never summed, never mixed).
-   const budgets=subject.type==='project'?[parse(saved[doc.id])].filter(Boolean):doc.levels.map(l=>parse(saved[l.project.id])).filter(Boolean);
-   const snapshot=Brand?.snapshot(localStorage,entry.id,entry.name)||null;
-   src.entry={id:entry.id,name:entry.name,activeLevelId:entry.activeLevelId??null};src.subject=subject;src.record=record;
-   src.input={project:doc,budgets,selectedBudgetIds:null,schedule:record?.schedule||null,binding:record?.binding||null,
-    brand:snapshot?{snapshot,appliesTo:{type:subject.type,id:subject.id}}:null,registeredParcel:null,parcelDocument:null};
-  }catch(e){fail(e.message);}
+   const budgets=(subject.type==='project'?[saved[doc.id]]:doc.levels.map(l=>saved[l.project.id])).map(parse).filter(Boolean);
+   const snapshot=Brand?.snapshot(storage,entry.id,entry.name,loadedAt)||null;
+   return {entry:{id:entry.id,name:entry.name,activeLevelId:entry.activeLevelId??null},subject,record,recordError,
+    input:{project:doc,budgets,selectedBudgetIds:null,schedule:record?.schedule||null,binding:record?.binding||null,
+      brand:snapshot?{snapshot,appliesTo:{type:subject.type,id:subject.id}}:null,registeredParcel:null,parcelDocument:null}};
  }
+ const identity=source=>JSON.stringify({entry:source.entry,subject:source.subject,input:source.input,recordError:source.recordError});
+ async function loadLibrary(){
+   let source;
+   if(!enabled)source=readSource(localStorage);
+   else{
+    if(embedded){
+     bridge=window.parent.FloorPlanConstructionUI?.evolutionBridge(window);
+     if(!bridge)throw Error('Abre Evolución desde el editor de RUBIK.');
+    }else session=await P.session();
+    const {docs}=await P.readConfirmed();
+    source=readSource({getItem:key=>P.KEYS.includes(key)?docs.get(key)??null:localStorage.getItem(key)});
+   }
+   if(src.requestedRevision&&await A.fingerprint(source.input.project)!==src.requestedRevision)
+    throw Error('El proyecto guardado ha cambiado. Vuelve a abrir Evolución desde RUBIK.');
+   loadedIdentity=identity(source);
+   Object.assign(src,source);
+   return src.input;
+ }
+ if(mode==='library')src.ready=loadLibrary().catch(e=>{fail(e.message);return null;});
  if(mode==='demo'){
   const D=window.FloorPlanConstructionDemo;
   src.demo=q.get('demo');
@@ -39,7 +58,7 @@
  }
  // Messages to RUBIK (same origin only). RUBIK opens its own dialogs over this page; closing them returns here.
  src.toRubik=(action,data={})=>{if(window.parent!==window)window.parent.postMessage({type:'rubik-construction',action,...data},location.origin);return window.parent!==window;};
- src.embedded=window.parent!==window;
+ src.embedded=embedded;
  // Inside RUBIK the page uses RUBIK's bar (status, mode and steps are mirrored there): one bar, more room for the house.
  if(mode==='library'&&src.embedded)document.documentElement.dataset.embedded='1';
  // D-09: Escape works with the focus inside this page too: first it closes the element panel, then it returns to RUBIK.
@@ -50,11 +69,34 @@
  // Every delivery generated here is recorded in the project's construction record, with the fingerprints it froze.
  src.recordDelivery=async(kind,manifest,extra={})=>{
   if(mode!=='library'||!src.entry)return null;
-  // The project's Mi estudio signature at delivery time (RUBIK compares the current one with it).
-  try{const brand=Brand.snapshot(localStorage,src.entry.id,src.entry.name);
-   const f=await R.aspectFingerprints(A.fingerprint,{doc:src.input.project,schedule:src.input.schedule,budget:src.input.budgets.length===1?src.input.budgets[0]:null,brand});
-   R.open(localStorage).addDelivery(src.entry.id,src.subject,{id:manifest.id,kind:'construction-evolution',output:kind,title:manifest.project?.name||src.entry.name,fingerprints:f,...extra});
-   src.toRubik('delivered',{deliveryId:manifest.id});return f;
-  }catch(e){console.error(e);return null;}
+  if(src.recordError)throw Error(src.recordError);
+  const f=await R.aspectFingerprints(A.fingerprint,{doc:src.input.project,schedule:src.input.schedule,
+   budget:src.input.budgets.length===1?src.input.budgets[0]:null,brand:src.input.brand?.snapshot||null});
+  const delivery={id:manifest.id,kind:'construction-evolution',output:kind,title:manifest.project?.name||src.entry.name,
+   fingerprints:f,withVideo:extra.withVideo===true,bytes:extra.bytes??null,sha256:extra.sha256??null};
+  if(bridge){
+   const confirmed=await bridge.register({entryId:src.entry.id,subject:src.subject.type+':'+src.subject.id,
+    requestedRevision:src.requestedRevision,delivery});
+   if(confirmed.id!==delivery.id||!Number.isSafeInteger(confirmed.revision))throw Error('Confirmación local de la entrega inválida.');
+  }else if(session){
+   const state=await session.flush();
+   if(state.status!=='saved'||state.outdated||identity(readSource(session.storage))!==loadedIdentity)
+    throw state.error||Error('Los datos de la entrega han cambiado. Vuelve a abrir Evolución.');
+   const store=R.open(session.storage),prior=store.get(src.entry.id,src.subject)?.deliveries.find(d=>d.id===delivery.id);
+   if(prior&&Object.keys(delivery).some(k=>JSON.stringify(prior[k])!==JSON.stringify(delivery[k])))
+    throw Error('Ese identificador de entrega ya está registrado con otros datos.');
+   if(!prior)store.addDelivery(src.entry.id,src.subject,delivery);
+   const confirmed=await session.flush();
+   if(confirmed.status!=='saved')throw confirmed.error||Error('El registro de entrega sigue pendiente.');
+  }else{
+   // A0 (R1 §3): Evolución también es un escritor de una clave gestionada (rubik-construction-v1). Pasa por la misma puerta
+   // que el editor: si esta pestaña es de una época anterior (o no se puede comprobar), no escribe y lo dice; si escribe,
+   // queda registrada como escritor (evidencia de convivencia R1-D1).
+   const E=window.FloorPlanSchemaEpoch;
+   if(E)E.check(localStorage);
+   R.open(E?E.guardStorage(localStorage):localStorage).addDelivery(src.entry.id,src.subject,delivery);
+  }
+  if(!bridge)src.toRubik('delivered',{deliveryId:delivery.id});
+  return f;
  };
 })();
