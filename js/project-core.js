@@ -8,6 +8,45 @@
   const OrthophotoSite = typeof module !== 'undefined' ? require('./orthophoto-site-adapter.js') : root.FloorPlanOrthophotoSiteAdapter;
   const TerrainSite = typeof module !== 'undefined' ? require('./terrain-site-adapter.js') : root.FloorPlanTerrainSiteAdapter;
   const Territory = typeof module !== 'undefined' ? require('./territory-integration-core.js') : root.FloorPlanTerritoryIntegration;
+  const Walls = typeof module !== 'undefined' ? require('./wall-geometry-core.js') : root.FloorPlanWallGeometry;
+  // OP-07 · Resolution of every curved wall, the same for plan, 3D, measurements, openings and DXF (D-OP07-3). The
+  // laboratory recommends a single metric tolerance of 1 mm (DECISIONES.md §2); it is a proposal, not a product
+  // decision, so it lives in this one place. null = the donor's 16 facets. MAX_FACETS (1024) caps it either way.
+  const WALL_PATH = Object.freeze({toleranceMm: 1});
+  const WALL_FEATURES = Object.freeze(['wall.curve', 'wall.heightEnd']);   // what this writer understands (guardSave)
+  const shapedWall = w => !!(w && (w.curve || w.heightEndMm !== undefined));
+  // ── Versions (D-OP07-4, option B): the SINGLE authority that reads, compares and raises schemaVersion ─────────────
+  // 1.x is FloorPlanProjectV1. 2.0 is the same contract plus the two non-ignorable wall fields (curve, heightEndMm):
+  // only a document that uses them needs 2.x, so no v1 project is ever migrated in bulk. A 1.x reader rejects 2.x without
+  // modifying anything (contract §3, «major desconocido»). 2.0 contains every 1.x feature up to 1.12; a feature added
+  // to 1.x later as 1.(12+k) is 2.k. Every module raises and compares versions through these three functions.
+  const V2_BASE_MINOR = 12;
+  const parseVersion = v => { const m = /^(1|2)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.exec(typeof v === 'string' ? v : ''); return m ? {major:+m[1], minor:+m[2], patch:+m[3]} : null; };
+  const versionLine = v => v.major === 1 ? v.minor : V2_BASE_MINOR + v.minor;
+  // Does a document of `version` already carry what `target` introduced? (2.x never goes below 2; 1.x never reaches 2.)
+  function versionAtLeast(version, target) {
+    const a = parseVersion(version), b = parseVersion(target);
+    if (!a || !b) return false;
+    if (b.major === 2 && a.major < 2) return false;
+    return versionLine(a) >= versionLine(b);
+  }
+  // Raise `project.schemaVersion` (in place) to the lowest version that has both its features and `target`'s. Never
+  // lowers anything and never turns a 1.x document into 2.x unless `target` is 2.x. Returns the project.
+  function raiseVersion(project, target) {
+    const a = parseVersion(project.schemaVersion), b = parseVersion(target);
+    if (!a || !b) throw new Error(`/schemaVersion: cannot raise ${project.schemaVersion} to ${target}`);
+    if (versionAtLeast(project.schemaVersion, target)) return project;
+    const major = Math.max(a.major, b.major), line = Math.max(versionLine(a), versionLine(b));
+    project.schemaVersion = major === 1 ? `1.${line}.0` : `2.${Math.max(0, line - V2_BASE_MINOR)}.0`;
+    return project;
+  }
+  // OP-07 · Save gate for the persistence write path (F0.2b): refuses a degraded legacy view, a writer that does not know
+  // a feature the project uses, the loss of a curve, a slope, a wall or an opening without an explicit intent, and walls
+  // or openings that break the rules. `writerFeatures` defaults to this writer's; an older writer passes its own (none).
+  function guardSave(previous, next, {intent = {}, writerFeatures = WALL_FEATURES} = {}) {
+    return Walls.guardSave({previous, next, writerFeatures, intent, opts: WALL_PATH});   // the same path policy as validate()
+  }
+  const wallLength = w => shapedWall(w) ? Walls.pathProfile(w, WALL_PATH).length : Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
@@ -130,31 +169,31 @@
   function validate(project, {strict = false} = {}) {
     if (project?.schema === 'rubik-sota.floorplan-building') fail('/schema', 'this is a multi-level building, not a FloorPlanProjectV1 project; open it in Rubik or export a single level');
     const version = project?.schemaVersion;
-    if (typeof version !== 'string' || !/^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) fail('/schemaVersion', 'unsupported version');
+    if (!parseVersion(version)) fail('/schemaVersion', 'unsupported version');
     const future = version !== '1.0.0' && !strict;
     check(project, schema, '/', future);
     if(project.site!==undefined){
-      if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
-      if(project.site.buildingPlacement!==undefined&&Number(version.split('.')[1])<12)fail('/site/buildingPlacement','requires project 1.12.0');
+      if(!versionAtLeast(version,'1.7.0'))fail('/site','requires project 1.7.0');
+      if(project.site.buildingPlacement!==undefined&&!versionAtLeast(version,'1.12.0'))fail('/site/buildingPlacement','requires project 1.12.0');
       try{Territory.validate(project.site);}catch(error){fail('/site/buildingPlacement',error.message);}
       try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
       if(project.site.parcel!==undefined){
-        if(Number(version.split('.')[1])<9)fail('/site/parcel','requires project 1.9.0');
+        if(!versionAtLeast(version,'1.9.0'))fail('/site/parcel','requires project 1.9.0');
         check(project.site.parcel,schema.$defs.parcel,'/site/parcel',false);
         try{ParcelSite.fromSiteParcel(project.site.parcel);}catch(error){fail('/site/parcel',error.message);}
       }
       if(project.site.orthophoto!==undefined){
-        if(Number(version.split('.')[1])<10)fail('/site/orthophoto','requires project 1.10.0');
+        if(!versionAtLeast(version,'1.10.0'))fail('/site/orthophoto','requires project 1.10.0');
         check(project.site.orthophoto,schema.$defs.orthophoto,'/site/orthophoto',false);
         try{OrthophotoSite.fromSiteOrthophoto(project.site.orthophoto,project.site.parcel);}catch(error){fail('/site/orthophoto',error.message);}
       }
       if(project.site.terrain!==undefined){
-        if(Number(version.split('.')[1])<11)fail('/site/terrain','requires project 1.11.0');
+        if(!versionAtLeast(version,'1.11.0'))fail('/site/terrain','requires project 1.11.0');
         check(project.site.terrain,schema.$defs.terrain,'/site/terrain',false);
         try{TerrainSite.fromSiteTerrain(project.site.terrain,project.site.parcel);}catch(error){fail('/site/terrain',error.message);}
       }
     }
-    if(project.roofParapet!==undefined&&Number(version.split('.')[1])<8)fail('/roofParapet','requires project 1.8.0');
+    if(project.roofParapet!==undefined&&!versionAtLeast(version,'1.8.0'))fail('/roofParapet','requires project 1.8.0');
     const ids = new Map([[project.id, 'project']]);
     const warnings = [];
     if (future) warnings.push('Newer V1 version: unknown fields are retained; unsupported values are rejected.');
@@ -168,11 +207,21 @@
     for(const w of project.walls)if(w.surfaceMaterialId){ref(w.surfaceMaterialId,'materials',`/walls/${w.id}/surfaceMaterialId`);if(project.materials.find(m=>m.id===w.surfaceMaterialId).category!=='wall')fail(`/walls/${w.id}/surfaceMaterialId`,'wall material required');}
     if(project.roofParapet?.materialId){ref(project.roofParapet.materialId,'materials','/roofParapet/materialId');if(project.materials.find(m=>m.id===project.roofParapet.materialId).category!=='wall')fail('/roofParapet/materialId','wall material required');}
     for (const w of project.walls) if (Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y) < 1) fail(`/walls/${w.id}`, 'zero-length wall');
+    // OP-07 (2.0): curved and sloped walls. The fields are not ignorable, so only a 2.x document can carry them, and
+    // each such wall must pass the wall rules of the single geometric core (minimum radius, no fold, end height).
+    for (const w of project.walls) if (shapedWall(w)) {
+      if (!versionAtLeast(version, '2.0.0')) fail(`/walls/${w.id}`, 'curve and heightEndMm require project 2.0.0');
+      for (const message of Walls.validateWall(w)) fail(`/walls/${w.id}`, message);
+    }
     for (const o of project.openings) {
       ref(o.wallId, 'walls', `/openings/${o.id}/wallId`);
       const w = walls.get(o.wallId), length = Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
-      if (o.offsetMm+o.widthMm > length+1e-7) fail(`/openings/${o.id}`, 'opening extends beyond wall');
-      if (o.sillHeightMm+o.heightMm > w.heightMm) fail(`/openings/${o.id}`, 'opening exceeds wall height');
+      // A curved or sloped wall measures along its faceted path and under the lower edge of the opening (no clipping).
+      if (shapedWall(w)) for (const message of Walls.validateOpening(w, o, WALL_PATH)) fail(`/openings/${o.id}`, message);
+      else {
+        if (o.offsetMm+o.widthMm > length+1e-7) fail(`/openings/${o.id}`, 'opening extends beyond wall');
+        if (o.sillHeightMm+o.heightMm > w.heightMm) fail(`/openings/${o.id}`, 'opening exceeds wall height');
+      }
       if (o.swing && o.kind !== 'door') fail(`/openings/${o.id}/swing`, 'swing only allowed on door');
     }
     for (const r of project.rooms) {
@@ -353,12 +402,14 @@
     if(!STRUCTURE_SOURCES.includes(source))throw Error('Procedencia no admitida.');
     const next=clone(project),wall=next.walls.find(w=>w.id===wallId);if(!wall)throw Error('Muro no encontrado.');
     wall.structure=structure;wall.structureSource=source;
-    if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
+    raiseVersion(next,'1.5.0');
     validate(next);return next;
   }
-  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.buildingPlacement!==undefined&&minor<12)next.schemaVersion='1.12.0';else if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
-  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
+  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
+  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
+  // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
+  Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
 })(globalThis);

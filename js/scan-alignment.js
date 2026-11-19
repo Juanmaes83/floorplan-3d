@@ -114,7 +114,7 @@
   for(const m of incoming.measurements){m.a=point(m.a);m.b=point(m.b);}
   checkOverlap(target,incoming);
   for(const key of Object.keys(listKeys))next[key].push(...incoming[key]);
-  if(Number(next.schemaVersion.split('.')[1])<Number(scan.schemaVersion.split('.')[1]))next.schemaVersion=scan.schemaVersion;
+  C.raiseVersion(next,scan.schemaVersion);
   const canApply=target.scale.confidence==='estimated'&&!target.scale.calibration&&!target.scale.verification;
   if(canApply)next.scale={...target.scale,note:'Incluye escaneo RoomPlan alineado por puertas. Medidas estimadas; verifica las cotas con referencias independientes.'};
   const widthDifferenceMm=Math.abs(moving.door.widthMm-fixed.door.widthMm);
