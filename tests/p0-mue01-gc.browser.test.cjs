@@ -13,6 +13,9 @@ test.after(async()=>{await env?.stop();});
 
 const photoKeys=page=>page.evaluate(async()=>(await FloorPlanImages.keys()).filter(k=>k.startsWith('mue01/')));
 const referenced=page=>page.evaluate(()=>{const r=RubikOwnFurnitureCore.read(FloorPlanApp.project);return [...r.items.values()].filter(Boolean).map(p=>p.imageKey);});
+// Con F0.2b activo el guardado es asíncrono: antes de recargar se confirma lo pendiente (sin efecto en el origen normal).
+const flush=page=>page.evaluate(async()=>{await window.FloorPlanPersistenceEditor?.session?.flush?.();});
+const reopen=async page=>{await flush(page);await K.reopen(page);};
 const blobOk=(page,key)=>page.evaluate(async k=>{const b=await FloorPlanImages.get(k);return b instanceof Blob&&b.size>0;},key);
 
 // Navegación real: Editor → Amueblar → «Traer mi mueble», con foto.
@@ -49,7 +52,7 @@ test('H-1 · navegación real: quitar el trazado no borra la foto de MUE-01; sob
     // El trazado puede abrir otro proyecto: la foto sigue citada por el proyecto del mueble, guardado en la biblioteca.
     await removeTrace(page);
     assert.equal(await blobOk(page,key),true,'la foto sigue en el almacén tras quitar el trazado');
-    await K.reopen(page);
+    await reopen(page);
     assert.deepEqual(await photoKeys(page),[key],'tras recargar, la foto persiste');
     assert.equal(await blobOk(page,key),true);
     // La imagen de plano, ya sin referencia, sí se ha recogido (sin regresión de la recogida).
@@ -72,7 +75,7 @@ test('H-1 · escenario Codex: quitar el trazado con otra pestaña abierta, cerra
     await page.waitForFunction(async()=>(await navigator.locks.query()).held.filter(l=>l.name.startsWith(FloorPlanImages.TAB_LOCK)).length===1);
     await page.evaluate(()=>FloorPlanTraceUI.cleanup());
     assert.equal(await blobOk(page,key),true,'tras cerrar la segunda pestaña y recoger, la foto sigue');
-    await K.reopen(page);assert.equal(await blobOk(page,key),true,'y tras recargar');
+    await reopen(page);assert.equal(await blobOk(page,key),true,'y tras recargar');
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
@@ -82,7 +85,7 @@ test('H-1 · escenario Codex: quitar el trazado con otra pestaña abierta, cerra
 test('H-1 · biblioteca, historial, autoridad, conflictos, versión desconocida y foto en vuelo protegen la foto; lo huérfano se recoge',{timeout:180000},async()=>{
   const {context,page,watch}=await K.editor(env);
   try{
-    await page.evaluate(()=>new Promise((res,rej)=>{const s=document.createElement('script');s.src='js/persistence-store.js';s.onload=res;s.onerror=rej;document.head.append(s);}));
+    await page.evaluate(()=>window.FloorPlanPersistence||new Promise((res,rej)=>{const s=document.createElement('script');s.src='js/persistence-store.js';s.onload=res;s.onerror=rej;document.head.append(s);}));
     const r=await page.evaluate(async()=>{
       const I=FloorPlanImages,P=FloorPlanPersistence,C=RubikOwnFurnitureCore;
       const hex=n=>n.toString(16).padStart(64,'0'),k=n=>'mue01/'+hex(n);
@@ -93,7 +96,9 @@ test('H-1 · biblioteca, historial, autoridad, conflictos, versión desconocida 
       await I.put([1,2,3,4,5,6,7,8,9].map(n=>[k(n),blob()]).concat([['img_p0_orphan',blob()]]));
       const base=FloorPlanApp.project;
       // 1 · otro proyecto de la biblioteca guardada
-      const lib=FloorPlanLibrary.load(localStorage,FloorPlanCore.initial());lib.importProject(lib.project(),withPhoto(FloorPlanCore.initial(),1),'P0 otro');
+      const R=window.FloorPlanPersistenceEditor,st=R?.session?R.storage:localStorage; // la autoridad vigente en este origen
+      const lib=FloorPlanLibrary.load(st,FloorPlanCore.initial());lib.importProject(lib.project(),withPhoto(FloorPlanCore.initial(),1),'P0 otro');
+      await R?.session?.flush?.();
       // 2 · historial (deshacer) del proyecto en pantalla: la foto se quitó pero se puede deshacer
       undoStack.push(JSON.stringify(withPhoto(base,2)));
       // 3 · extensión de una versión futura (no legible por C.read): estado indeterminado → se protege
@@ -122,10 +127,13 @@ test('H-1 · biblioteca, historial, autoridad, conflictos, versión desconocida 
   }finally{await context.close();}
 });
 
-test('H-1 · sin poder leer la biblioteca guardada no se borra nada',{timeout:120000},async()=>{
+test('H-1 · sin poder leer el estado guardado no se borra nada',{timeout:120000},async()=>{
   const {context,page}=await K.editor(env);
   try{
+    // Origen normal: la biblioteca guardada (localStorage) ilegible. Con F0.2b activo: la autoridad (IndexedDB) ilegible.
     const r=await page.evaluate(async()=>{const I=FloorPlanImages,key='mue01/'+'f'.repeat(64);await I.put([[key,new Blob([new Uint8Array([1])])]]);
+      if(window.FloorPlanPersistenceEditor?.session){const P=FloorPlanPersistence,open=P.open;P.open=()=>Promise.reject(Error('autoridad ilegible'));
+        try{await FloorPlanTraceUI.cleanup();}finally{P.open=open;}return (await I.keys()).includes(key);}
       const KEY='rubik-sota-project-library-v1',saved=localStorage.getItem(KEY);localStorage.setItem(KEY,'{corrupto');
       await FloorPlanTraceUI.cleanup();const kept=(await I.keys()).includes(key);localStorage.setItem(KEY,saved);return kept;});
     assert.equal(r,true);
@@ -160,7 +168,7 @@ test('H-1 · cruce: reutilizar una foto huérfana mientras una recogida está en
     await page.locator('#ownFurnDialog').waitFor({state:'hidden',timeout:30000});
     const keys=await referenced(page);assert.deepEqual(keys,[key],'B cita la misma clave');
     assert.equal(await blobOk(page,key),true,'la foto citada sigue en el almacén');
-    await K.reopen(page);assert.deepEqual(await referenced(page),[key]);assert.equal(await blobOk(page,key),true,'y tras recargar');
+    await reopen(page);assert.deepEqual(await referenced(page),[key]);assert.equal(await blobOk(page,key),true,'y tras recargar');
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
