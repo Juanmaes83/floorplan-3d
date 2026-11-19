@@ -4,6 +4,11 @@
  'use strict';
  const Surface=typeof module==='object'?require('./surface-core.js'):root.FloorPlanSurfaceMetrics;
  if(!Surface)throw Error('FloorPlanQuantities requires FloorPlanSurfaceMetrics.');
+ // OP-07 · S3: curved and sloped walls are measured by the single geometric core with the project's single resolution
+ // (project-core WALL_PATH). A wall without curve/heightEndMm never reaches it: its figures are byte-identical.
+ const Walls=typeof module==='object'?require('./wall-geometry-core.js'):root.FloorPlanWallGeometry;
+ const wallPath=()=>(typeof module==='object'?require('./project-core.js'):root.FloorPlanCore).WALL_PATH;
+ const shaped=w=>!!(w&&(w.curve||w.heightEndMm!==undefined));
  const STATUS=Object.freeze(['measured','estimated','unavailable']);
  const FACE_TOLERANCE_MM=3,PARALLEL_SIN_TOLERANCE=1e-4,COVERAGE_TOLERANCE_MM=3,EPS=1e-7;
  const KINDS=Object.freeze(['door','sliding-door','window','opening']);
@@ -62,11 +67,26 @@
   const linked=(project.openings||[]).filter(o=>o.wallId===w.id),counts=openingCounts(linked);
   if(!dimsOk)return {id:w.id,lifecycleStatus:w.status??null,structure:w.structure??null,surfaceMaterialId:w.surfaceMaterialId??null,status:'unavailable',complete:false,
    quantities:{lengthM:null,heightM:null,faceGrossAreaM2:null,faceOpeningAreaM2:null,faceNetAreaM2:null,wallSurfaceGrossAreaM2:null,wallSurfaceOpeningAreaM2:null,wallSurfaceNetAreaM2:null},openings:{...counts,invalid:linked.map(o=>o.id||null)},reason:'invalid-wall-geometry'};
+  if(shaped(w))return shapedWall(project,w,linked,counts,scaleStatus);
   const {rectangles,invalid}=openingRectangles(project,w),grossMm2=lengthMm*heightMm,openingMm2=invalid.length?null:rectangleUnionAreaMm2(rectangles),netMm2=openingMm2===null?null:Math.max(0,grossMm2-openingMm2);
   const m2=v=>v===null?null:v/1e6;
   return {id:w.id,lifecycleStatus:w.status??null,structure:w.structure??null,surfaceMaterialId:w.surfaceMaterialId??null,status:scaleStatus,complete:invalid.length===0,
    quantities:{lengthM:lengthMm/1000,heightM:heightMm/1000,faceGrossAreaM2:m2(grossMm2),faceOpeningAreaM2:m2(openingMm2),faceNetAreaM2:m2(netMm2),wallSurfaceGrossAreaM2:m2(grossMm2*2),wallSurfaceOpeningAreaM2:openingMm2===null?null:m2(openingMm2*2),wallSurfaceNetAreaM2:netMm2===null?null:m2(netMm2*2)},
    openings:{...counts,invalid},...(invalid.length?{reason:'invalid-opening-geometry'}:{})};
+ }
+ // D-OP07-2: each face measured on its own. faceGross/faceNet keep today's meaning (the wall along its axis: partitions,
+ // demolition); wallSurface* is left face + right face, which equals 2 × axis exactly (the mitre terms cancel), so an
+ // aggregated budget does not change; `faces` says how it splits. Reveals (jambs, head, sill) are reported apart.
+ function shapedWall(project,w,linked,counts,scaleStatus){
+  const f=Walls.faceAreas(w,linked,wallPath()),ok=f.complete,m2=v=>v===null||v===undefined?null:v/1e6;
+  const face=F=>({lengthM:F.lengthMm/1000,grossAreaM2:m2(F.grossMm2),openingAreaM2:m2(F.openingsMm2),netAreaM2:m2(F.netMm2)});
+  const geometryOk=!f.wallIssues.length,invalid=ok?[]:f.invalid.length?f.invalid:linked.map(o=>o.id||null);
+  const sum=k=>ok||k==='grossMm2'?f.left[k]+f.right[k]:null;
+  return {id:w.id,lifecycleStatus:w.status??null,structure:w.structure??null,surfaceMaterialId:w.surfaceMaterialId??null,status:geometryOk?scaleStatus:'unavailable',complete:ok,
+   quantities:{lengthM:geometryOk?f.lengthMm/1000:null,heightM:w.heightMm/1000,heightEndM:Walls.endHeight(w)/1000,faceGrossAreaM2:geometryOk?m2(f.grossMm2):null,faceOpeningAreaM2:m2(f.openingsMm2),faceNetAreaM2:m2(f.netMm2),
+    wallSurfaceGrossAreaM2:geometryOk?m2(sum('grossMm2')):null,wallSurfaceOpeningAreaM2:m2(sum('openingsMm2')),wallSurfaceNetAreaM2:m2(sum('netMm2')),revealsAreaM2:m2(f.revealsMm2)},
+   faces:geometryOk?{left:face(f.left),right:face(f.right),facets:f.facets}:null,
+   openings:{...counts,invalid},...(geometryOk?(ok?{}:{reason:'invalid-opening-geometry'}):{reason:'invalid-wall-geometry'})};
  }
  function matchEdgeToWall(a,b,w){
   if(!point(a)||!point(b)||!point(w?.start)||!point(w?.end)||!(finite(w.thicknessMm)&&w.thicknessMm>0))return null;
@@ -80,13 +100,14 @@
   const t1=toEdge(start),t2=toEdge(end);
   return {wallId:w.id,face:avg>=0?1:-1,wallStartMm:start,wallEndMm:end,edgeStartMm:Math.max(0,Math.min(t1,t2)),edgeEndMm:Math.min(el,Math.max(t1,t2)),lengthMm:end-start};
  }
+ function nearPolygon(w,polygon){const b=Walls.bounds(w),pad=COVERAGE_TOLERANCE_MM;return polygon.some(p=>p.x>=b.minX-pad&&p.x<=b.maxX+pad&&p.y>=b.minY-pad&&p.y<=b.maxY+pad);}
  function roomWallFaces(project,room){
   const polygon=room?.polygon;if(!Array.isArray(polygon)||polygon.length<3||!polygon.every(point))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
   const scaleStatus=measurementStatus(project),edges=[],matches=[];let perimeterMm=0,ambiguous=false;
   for(let i=0;i<polygon.length;i++){
    const a=polygon[i],b=polygon[(i+1)%polygon.length],len=distanceMm(a,b);if(!(len>0))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
    perimeterMm+=len;const edgeMatches=[];
-   for(const w of project.walls){if(w.status==='demolished')continue;const m=matchEdgeToWall(a,b,w);if(m)edgeMatches.push(m);}
+   for(const w of project.walls){if(w.status==='demolished'||Walls.isCurved(w))continue;const m=matchEdgeToWall(a,b,w);if(m)edgeMatches.push(m);}
    const sorted=edgeMatches.slice().sort((x,y)=>x.edgeStartMm-y.edgeStartMm);
    for(let j=1;j<sorted.length;j++)if(sorted[j].edgeStartMm<sorted[j-1].edgeEndMm-COVERAGE_TOLERANCE_MM&&sorted[j].wallId!==sorted[j-1].wallId)ambiguous=true;
    const coverage=intervalLength(edgeMatches.map(m=>[m.edgeStartMm,m.edgeEndMm]));edges.push({lengthMm:len,coverageMm:Math.min(len,coverage)});matches.push(...edgeMatches);
@@ -98,12 +119,19 @@
   for(const g of groups.values()){
    const w=project.walls.find(x=>x.id===g.wallId),intervals=mergeIntervals(g.intervals),lengthMm=intervalLength(intervals),heightOk=finite(w?.heightMm)&&w.heightMm>0;
    if(!heightOk){wallGeometryComplete=false;openingsComplete=false;segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:'unavailable',complete:false,reason:'invalid-wall-geometry'});continue;}
-   const gross=lengthMm*w.heightMm,{rectangles,invalid}=openingRectangles(project,w,intervals),opening=invalid.length?null:rectangleUnionAreaMm2(rectangles),net=opening===null?null:Math.max(0,gross-opening);
+   // A sloped straight wall: trapezoid over each interval, and openings checked under their lower edge (no clipping).
+   const sloped=shaped(w),wl=distanceMm(w.start,w.end),hAt=x=>w.heightMm+(Walls.endHeight(w)-w.heightMm)*x/wl;
+   if(sloped&&!(finite(Walls.endHeight(w))&&Walls.endHeight(w)>0)){wallGeometryComplete=false;openingsComplete=false;segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:'unavailable',complete:false,reason:'invalid-wall-geometry'});continue;}
+   const gross=sloped?intervals.reduce((t,[a,b])=>t+(b-a)*(hAt(a)+hAt(b))/2,0):lengthMm*w.heightMm,host=sloped?{...w,heightMm:Math.max(w.heightMm,Walls.endHeight(w))}:w;
+   const r=openingRectangles(project,host,intervals),invalid=sloped?[...r.invalid,...project.openings.filter(o=>o.wallId===w.id&&Walls.validateOpening(w,o).length).map(o=>o.id)]:r.invalid,rectangles=r.rectangles;
+   const opening=invalid.length?null:rectangleUnionAreaMm2(rectangles),net=opening===null?null:Math.max(0,gross-opening);
    grossMm2+=gross;if(opening===null)openingsComplete=false;else openingMm2+=opening;
    segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:gross/1e6,openingAreaM2:opening===null?null:opening/1e6,netAreaM2:net===null?null:net/1e6,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:scaleStatus,complete:opening!==null});
   }
   const associationComplete=missingBoundaryMm<=COVERAGE_TOLERANCE_MM*polygon.length,complete=associationComplete&&wallGeometryComplete&&openingsComplete;
-  return {status:scaleStatus,complete,associationComplete,openingsComplete,grossAreaM2:grossMm2/1e6,openingAreaM2:openingsComplete?openingMm2/1e6:null,netAreaM2:openingsComplete?(grossMm2-openingMm2)/1e6:null,matchedBoundaryM:matchedBoundaryMm/1000,missingBoundaryM:missingBoundaryMm/1000,segments,
+  // OP-07: a curved wall is not associated with a room by straight-edge matching yet (S3b); it is named, never guessed.
+  const pendingCurvedWalls=associationComplete?[]:project.walls.filter(w=>Walls.isCurved(w)&&w.status!=='demolished'&&nearPolygon(w,polygon)).map(w=>w.id);
+  return {status:scaleStatus,complete,associationComplete,openingsComplete,...(pendingCurvedWalls.length?{pendingCurvedWalls}:{}),grossAreaM2:grossMm2/1e6,openingAreaM2:openingsComplete?openingMm2/1e6:null,netAreaM2:openingsComplete?(grossMm2-openingMm2)/1e6:null,matchedBoundaryM:matchedBoundaryMm/1000,missingBoundaryM:missingBoundaryMm/1000,segments,
    ...(!associationComplete?{reason:'partial-room-wall-association'}:!wallGeometryComplete?{reason:'invalid-wall-geometry'}:!openingsComplete?{reason:'invalid-opening-geometry'}:{})};
  }
  function room(project,roomOrId){
