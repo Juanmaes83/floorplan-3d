@@ -22,10 +22,11 @@ test('S4 · muro curvo e inclinado: alturas en los extremos, recorte por secció
  for(const m of pieces.map(r=>Core.pieceMesh(r,0,1.2))){for(let k=1;k<m.positions.length;k+=3)assert.ok(m.positions[k]<=1200+1e-9);}
 });
 
-test('S4 · dintel en muro inclinado: el relleno sobre la abertura sigue la pendiente en sus dos bordes',()=>{
+test('S4 · dintel en muro curvo e inclinado: el relleno sobre la abertura sigue la pendiente en sus dos bordes',()=>{
  const {project,wall}=F.curved(F.base(),{heightEndMm:2400});const g=Core.geometry(project),path=Walls.pathProfile(wall,Core.WALL_PATH);
- const r=g.windows.find(x=>x.openingId==='opn_op07-win'),o=project.openings.find(x=>x.id==='opn_op07-win');
- assert.ok(near(r.heightStart*1000,path.sample(o.offsetMm).height)&&near(r.heightEnd*1000,path.sample(o.offsetMm+o.widthMm).height));
- const m=Core.pieceMesh(r,r.head,10),ys=[];for(let k=1;k<m.positions.length;k+=3)ys.push(m.positions[k]);
- assert.ok(near(Math.min(...ys),r.head*1000)&&near(Math.max(...ys),Math.max(r.heightStart,r.heightEnd)*1000));
+ const o=project.openings.find(x=>x.id==='opn_op07-win'),head=g.wallInfills.filter(r=>r.openingId===o.id&&r.band==='head');
+ const first=head.reduce((a,b)=>a.alongMm<b.alongMm?a:b),last=head.reduce((a,b)=>a.alongMm>b.alongMm?a:b);
+ assert.ok(near(first.heightStart*1000,path.sample(o.offsetMm).height)&&near(last.heightEnd*1000,path.sample(o.offsetMm+o.widthMm).height));
+ for(const r of head){const m=Core.pieceMesh(r,0,10),ys=[];for(let k=1;k<m.positions.length;k+=3)ys.push(m.positions[k]);
+  assert.ok(near(Math.min(...ys),(o.sillHeightMm+o.heightMm))&&near(Math.max(...ys),Math.max(r.heightStart,r.heightEnd)*1000));}
 });
