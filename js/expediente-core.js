@@ -163,6 +163,19 @@
   if(subject.kind==='building')delete s.id;
   return Package.digest(encoder.encode(JSON.stringify([subject.kind,s,docs])));
  }
+ // Consume the images that read() actually verified, keyed by the exact level and image ID.
+ const imageKey=(image,levelId)=>JSON.stringify([levelId??null,image.id]);
+ const refToken=im=>'ref:'+(im.storage?.ref||im.id);
+ async function contentIdOf(parsed){
+  if(parsed.source==='project-json'||parsed.source==='building-json')return contentId(parsed,parsed.documents,refToken);
+  const tokens=new Map();
+  for(const {image,levelId,bytes} of parsed.images||[])tokens.set(imageKey(image,levelId),await Package.digest(bytes));
+  return contentId(parsed,parsed.documents,(image,levelId)=>{
+   const token=tokens.get(imageKey(image,levelId));
+   if(!token)fail('image-missing','Falta la imagen verificada '+image.id+' de su nivel.');
+   return token;
+  });
+ }
  const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
  const hasOwn=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
  const subjectOf=e=>e.kind==='building'?{kind:'building',building:e.building}:{kind:'project',project:e.project};
@@ -201,16 +214,21 @@
     - It is NOT atomic across stores: what was written before a failure or a crash is undone (ordinary rollback), or
       later by recover() from the journal. A cleanup that fails is reported, never swallowed.
     - No existing budget or review is replaced; another tab's documents are re-read just before writing. */
+ async function confirmPersistence(persistence,storage){
+  if(persistence.storage!==storage)fail('authority-mismatch','La sesión y el almacenamiento del expediente no coinciden.');
+  const state=await persistence.flush();
+  if(state.status!=='saved'||state.outdated||await persistence.currentRevision()!==state.revision)
+   fail('authority-unconfirmed',state.error?.message||'La revisión local no se ha confirmado. Recarga o guarda una copia de emergencia.');
+  return state;
+ }
  async function restore(parsed,ctx){return withLock(locksOf(ctx),()=>restoreLocked(parsed,ctx));}
- async function restoreLocked(parsed,{library,storage,putImages,removeImages,getImage,visible,name,copy=false}){
+ async function restoreLocked(parsed,{library,storage,putImages,removeImages,getImage,visible,name,copy=false,persistence}){
+  if(persistence)await confirmPersistence(persistence,storage);
   const withBytes=parsed.source!=='project-json'&&parsed.source!=='building-json',images=parsed.images||[];
   if(stale(library,storage))fail('library-stale',STALE);let current=readStores(storage);
   // 1 · Same work already here?
-  const tokens=new Map();for(const x of images)tokens.set(`${x.levelId||''}|${x.image.id}`,await Package.digest(x.bytes));
-  const refToken=im=>`ref:${im.storage?.ref||im.id}`;
-  const incomingToken=async(im,levelId)=>withBytes?tokens.get(`${levelId||''}|${im.id}`):refToken(im);
   const storedToken=async im=>{if(!withBytes)return refToken(im);const blob=getImage?await getImage(im.storage?.ref||im.id):null;return blob?Package.digest(new Uint8Array(await blob.arrayBuffer())):'missing:'+(im.storage?.ref||im.id);};
-  const target=await contentId(parsed,parsed.documents,incomingToken);
+  const target=await contentIdOf(parsed);
   if(!copy){const shape=await contentId(parsed,parsed.documents,async()=>'');
    for(const e of library.all()){
     if((e.kind==='building')!==(parsed.kind==='building'))continue;const s=subjectOf(e),docs=documentsOf(s,current);
@@ -226,7 +244,7 @@
   const pending=[],missingImages=[],levelImages=parsed.kind==='building'?subject.levels.flatMap(l=>(l.project.sourceImages||[]).map(im=>[l.id,im])):(subject.sourceImages||[]).map(im=>[null,im]);
   for(const [levelId,im] of levelImages){
    if(!withBytes){if(!getImage||!await getImage(im.storage?.ref||im.id))missingImages.push(im.id);continue;}
-   const found=images.find(x=>x.image.id===im.id&&(levelId===null||x.levelId===levelId));if(!found)fail('image-missing','Falta una imagen del proyecto en el expediente: '+im.id);
+   const found=images.find(x=>imageKey(x.image,x.levelId)===imageKey(im,levelId));if(!found)fail('image-missing','Falta una imagen del proyecto en el expediente: '+im.id);
    const ref=Core.id('img');im.storage={kind:'local-browser',ref};pending.push([ref,new Blob([found.bytes],{type:im.mediaType})]);
   }
   // Documents to create, under the final ids (an identical one already there is reused, never rewritten).
@@ -242,6 +260,7 @@
    for(const k of ['budgets','reviews'])if(written[k].length)try{const fresh=readStore(storage,STORE_KEY[k]).value;let changed=false;
     for(const id of written[k])if(hasOwn(fresh,id)&&same(fresh[id],planned[k].get(id))){delete fresh[id];changed=true;}if(changed)storage.setItem(STORE_KEY[k],JSON.stringify(fresh));}
     catch(e){cleanup.push({store:STORE_KEY[k],message:e.message});}
+   if(persistence&&written.budgets.length+written.reviews.length)try{await confirmPersistence(persistence,storage);}catch(e){cleanup.push({store:JOURNAL,message:e.message});}
    if(pending.length)try{await removeImages(pending.map(p=>p[0]));}catch(e){cleanup.push({store:'rubik-sota-images-v1',message:e.message});}
    if(!cleanup.length)try{journalDrop(storage,op);}catch(e){cleanup.push({store:JOURNAL,message:e.message});}
    const why=cause&&cause.message?cause.message:String(cause);
@@ -263,6 +282,10 @@
    else library.importProject(visible,subject,title,{originProjectId:mapping[0].from!==mapping[0].to?mapping[0].from:undefined});
    entryId=library.activeId();if(before.has(entryId))fail('library-unchanged','La biblioteca no ha añadido el proyecto.');
   }catch(e){return abort(e);}
+  if(persistence){
+   try{await confirmPersistence(persistence,storage);}
+   catch(e){throw new ExpedienteError('restore-unconfirmed','La restauración no se ha confirmado. Se conservan el diario y los recursos para recuperar el trabajo.',{cause:e,journalPending:true});}
+  }
   try{journalDrop(storage,op);}catch{journalPending=true;}// committed; recover() drops the record later
   return {status:'restored',entryId,contentId:target,source:parsed.source,imagesIncluded:withBytes,
    projectIds:Object.fromEntries(mapping.map(m=>[m.from,m.to])),reidentified:mapping.filter(m=>m.from!==m.to),
@@ -278,7 +301,8 @@
  // is live if the stored library OR the tab's copy has it, and records younger than `minAgeMs` are left alone, because
  // localStorage reaches other tabs with a delay (shown by the real browser test) and the commit may not be visible yet.
  const RECOVER_MIN_AGE_MS=2*60*1000;
- async function recoverLocked({library,storage,removeImages,minAgeMs=RECOVER_MIN_AGE_MS,now=Date.now()}){
+ async function recoverLocked({library,storage,removeImages,persistence,minAgeMs=RECOVER_MIN_AGE_MS,now=Date.now()}){
+  if(persistence)await confirmPersistence(persistence,storage);
   let stored=[];if(storage.getItem(Library.KEY)!==null)try{stored=Library.load(storage,Core.initial()).projects();}catch(e){fail('library-unreadable','No se puede leer la biblioteca guardada; no se ha deshecho nada. '+e.message);}
   const journal=readJournal(storage),projects=[...stored,...(library?library.projects():[])],live=new Set(projects.map(p=>p.id));
   const liveImages=new Set(projects.flatMap(p=>(p.sourceImages||[]).map(i=>i.storage?.ref||i.id))),report={committed:0,rolledBack:0,pending:[]};
@@ -287,15 +311,18 @@
     if(!isObj(r)||!Array.isArray(r.projectIds)||!Array.isArray(r.images)||!isObj(r.documents))fail('journal-invalid','Registro de recuperación incompleto.');
     if(r.projectIds.some(id=>live.has(id))){journalDrop(storage,op);report.committed++;continue;}
     const age=now-Date.parse(r.startedAt);if(!(age>=minAgeMs)){report.pending.push({op,message:'Operación reciente: puede estar confirmándose en otra pestaña; se revisará más tarde.'});continue;}
+    // In F0.2b images still live in a separate store. Keep potentially referenced bytes and their journal for F0.2c.
+    if(persistence&&r.images.length){report.pending.push({op,message:'La operación conserva imágenes pendientes de recuperación.'});continue;}
     for(const k of ['budgets','reviews']){const fresh=readStore(storage,STORE_KEY[k]).value;let changed=false;
      for(const id of r.documents[k]||[])if(!live.has(id)&&hasOwn(fresh,id)){delete fresh[id];changed=true;}if(changed)storage.setItem(STORE_KEY[k],JSON.stringify(fresh));}
     const orphans=r.images.filter(k=>!liveImages.has(k));if(orphans.length)await removeImages(orphans);
+    if(persistence)await confirmPersistence(persistence,storage);
     journalDrop(storage,op);report.rolledBack++;
    }catch(e){report.pending.push({op,message:e.message});}
   }
   return report;
  }
 
- const api={FORMAT,VERSION,MANIFEST,MAX_ENTRIES,NOT_INCLUDED,JOURNAL,LOCK,RECOVER_MIN_AGE_MS,ExpedienteError,check,collect,pack,read,restore,recover,contentId};
+ const api={FORMAT,VERSION,MANIFEST,MAX_ENTRIES,NOT_INCLUDED,JOURNAL,LOCK,RECOVER_MIN_AGE_MS,ExpedienteError,check,collect,pack,read,restore,recover,contentId,contentIdOf};
  if(node)module.exports=api;else root.FloorPlanExpediente=api;
 })(typeof globalThis==='object'?globalThis:this);

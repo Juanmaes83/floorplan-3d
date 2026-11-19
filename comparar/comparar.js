@@ -1,5 +1,5 @@
 /* UX-07 / ENT-04 · Comparador «Comparar con el original» del producto (propuesta de activación).
-   Se abre desde «Variantes» del editor, en el MISMO origen (comparte el localStorage del editor), con solo dos o tres
+   Se abre desde «Variantes» del editor, en el MISMO origen (comparte la autoridad IndexedDB del editor), con solo dos o tres
    identificadores de la biblioteca en la URL: ?src=library&before=<entrada>&after=<entrada>&anchor=<entrada>.
    - Solo lectura: la biblioteca y los presupuestos se leen con un almacenamiento que lanza error en cualquier escritura;
      nunca se llama a library.save. Se compara lo GUARDADO en este navegador y se dice en pantalla.
@@ -13,8 +13,11 @@ const R=window.FloorPlanRevisionCompare,D=window.FloorPlanBeforeAfterDossier,V=w
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const BUDGETS='rubik-budget-v1';
-const readOnly={getItem:k=>{try{return localStorage.getItem(k);}catch{return null;}},
-  setItem(){throw Error('Comparador de solo lectura');},removeItem(){throw Error('Comparador de solo lectura');}};
+const P=window.FloorPlanPersistence;
+const enabled=P.isTestOrigin();
+const confirmedDocs=async()=>enabled?(await P.readConfirmed()).docs:new Map(P.KEYS.map(k=>[k,localStorage.getItem(k)]));
+const readOnly=docs=>({getItem:k=>docs.get(k)??null,
+  setItem(){throw Error('Comparador de solo lectura');},removeItem(){throw Error('Comparador de solo lectura');}});
 const ID=/^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
 const state={prepared:null,budgets:{before:null,after:null},dossier:null,error:null,ids:null,fp0:null,stale:false,order:null};
 window.__ux07Compare=state;
@@ -33,40 +36,44 @@ function params(){
   if(before===after)throw Error('Elige dos distribuciones distintas.');
   return {before,after,anchor};
 }
-function readBudgets(){
-  const raw=readOnly.getItem(BUDGETS);if(raw===null)return {map:{},error:null};
+function readBudgets(storage){
+  const raw=storage.getItem(BUDGETS);if(raw===null)return {map:{},error:null};
   try{const map=JSON.parse(raw);if(!map||typeof map!=='object'||Array.isArray(map))throw Error('formato');return {map,error:null};}
   catch{return {map:{},error:'Los presupuestos guardados en este navegador no se pueden leer: la comparación se hace sin importes.'};}
 }
 
 // ── E2.3 · Vigencia: huella de lo guardado que usa la comparación (las dos entradas de la biblioteca y sus presupuestos).
 // Se toma al abrir y se vuelve a leer antes de preparar, descargar y verificar. Solo lectura: nunca se escribe.
-function storedSlice(){const ids=state.ids;if(!ids)return null;let lib=null,bud=null;
-  try{const l=JSON.parse(readOnly.getItem(L.KEY)||'null');lib=(l?.entries||[]).filter(e=>e.id===ids.before||e.id===ids.after).map(e=>JSON.stringify(e)).sort();}catch{lib=['ilegible'];}
-  try{const b=JSON.parse(readOnly.getItem(BUDGETS)||'null')||{};const pids=[state.prepared?.before?.id,state.prepared?.after?.id].filter(Boolean);bud=pids.map(k=>k+':'+JSON.stringify(b[k]??null));}catch{bud=['ilegible'];}
+function storedSlice(storage){const ids=state.ids;if(!ids)return null;let lib=null,bud=null;
+  try{const l=JSON.parse(storage.getItem(L.KEY)||'null');lib=(l?.entries||[]).filter(e=>e.id===ids.before||e.id===ids.after).map(e=>JSON.stringify(e)).sort();}catch{lib=['ilegible'];}
+  try{const b=JSON.parse(storage.getItem(BUDGETS)||'null')||{};const pids=[state.prepared?.before?.id,state.prepared?.after?.id].filter(Boolean);bud=pids.map(k=>k+':'+JSON.stringify(b[k]??null));}catch{bud=['ilegible'];}
   return JSON.stringify({lib,bud});}
-async function fingerprint(){const x=storedSlice();return x===null?null:D.sha256(x);}
-async function checkFresh(){const now=await fingerprint();state.stale=!!state.fp0&&now!==state.fp0;
+async function fingerprint(storage){
+  try{const x=storedSlice(storage||readOnly(await confirmedDocs()));return x===null?null:D.sha256(x);}
+  catch{return null;}
+}
+async function checkFresh(){const now=await fingerprint();state.stale ||= !!state.fp0&&now!==state.fp0;
   const box=$('staleNotice');if(box)box.hidden=!state.stale;
   for(const id of ['buildBtn','dlHtml','dlManifest','orderBuild','orderDlHtml','orderDlManifest'])if($(id))$(id).disabled=state.stale||($(id).dataset.needs==='motivo'&&!$('orderMotivo')?.value.trim());
   return !state.stale;}
 // A26/H03 · generación asíncrona: la huella se toma al EMPEZAR (y debe ser la de apertura) y se vuelve a leer al TERMINAR.
 // Si lo guardado cambia mientras se genera (otra pestaña), el resultado se descarta: nunca se presenta ni se descarga un
 // borrador hecho con datos que ya no son los guardados. Devuelve la huella de inicio o null si hubo cambio.
-async function stableRun(work){if(!state.fp0)state.fp0=await fingerprint();if(!await checkFresh())return {fp:null,result:null,reason:'stale'};const fp=state.fp0; // referencia: la huella de apertura ya verificada
+async function stableRun(work){if(!state.fp0||!await checkFresh())return {fp:null,result:null,reason:'stale'};const fp=state.fp0; // referencia: la huella de apertura ya verificada
   const result=await work();const end=await fingerprint();if(end!==fp){await checkFresh();return {fp:null,result:null,reason:'changed'};}return {fp,result,reason:null};}
 const CHANGED='No se prepara: lo guardado ha cambiado durante la preparación (otra pestaña). Vuelve a cargar para comparar lo actual.';
 // relectura de lo guardado AHORA, para verify(): no se usa el estado retenido
-function readNow(){try{const lib=L.load(readOnly),g=lib.group(state.ids.anchor);const b=readBudgets();
+async function readNow(){try{const storage=readOnly(await confirmedDocs()),lib=L.load(storage),g=lib.group(state.ids.anchor);const b=readBudgets(storage);
   const pr=V.prepare({group:g,beforeId:state.ids.before,afterId:state.ids.after,budgets:b.map});return {before:pr.before,after:pr.after,budget:pr.budgets.after,beforeBudget:pr.budgets.before};}catch{return null;}}
 
-function start(){
-  let p;try{p=params();}catch(e){return fatal(e.message);}
-  if(readOnly.getItem(L.KEY)===null)return fatal('No hay proyectos guardados en este navegador. El comparador solo lee la biblioteca del editor de este mismo navegador.');
-  let lib;try{lib=L.load(readOnly);}catch(e){return fatal('La biblioteca de este navegador no se puede leer ('+e.message+'). No se ha modificado nada.');}
+async function start(){
+  const p=params();
+  const storage=readOnly(await confirmedDocs());
+  if(storage.getItem(L.KEY)===null)return fatal('No hay proyectos guardados en este navegador. El comparador solo lee la biblioteca del editor de este mismo navegador.');
+  let lib;try{lib=L.load(storage);}catch(e){return fatal('La biblioteca de este navegador no se puede leer ('+e.message+'). No se ha modificado nada.');}
   let group;try{group=lib.group(p.anchor);}catch{return fatal('Alguna de las distribuciones ya no está en la biblioteca de este navegador.');}
   if(!group.some(g=>g.id===p.anchor))return fatal('Alguna de las distribuciones ya no está en la biblioteca de este navegador.');
-  const b=readBudgets();let prepared,budgetError=b.error;
+  const b=readBudgets(storage);let prepared,budgetError=b.error;
   const run=budgets=>V.prepare({group,beforeId:p.before,afterId:p.after,budgets});
   try{prepared=run(b.map);}
   catch(e){
@@ -75,7 +82,13 @@ function start(){
     else return fatal(e.code==='not-in-group'?'Esas dos distribuciones no son el original y una de sus variantes (no están en el mismo grupo de «Variantes»).':e.message);
   }
   state.prepared=prepared;state.budgets=budgetError?{before:null,after:null}:{before:prepared.budgets.before,after:prepared.budgets.after};state.ids=p;
-  render(prepared,budgetError);fingerprint().then(f=>{state.fp0=f;});
+  state.fp0=await fingerprint(storage);
+  render(prepared,budgetError);
+  const channel=typeof BroadcastChannel==='function'?new BroadcastChannel(P.CHANNEL):null;
+  if(channel)channel.onmessage=()=>void checkFresh();
+  addEventListener('focus',checkFresh);
+  addEventListener('storage',e=>{if(e.key===null||P.KEYS.includes(e.key))void checkFresh();});
+  await checkFresh();
 }
 
 // ── Comparación ────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -155,7 +168,7 @@ $('dlHtml').addEventListener('click',async()=>{if(!await checkFresh())return;dow
 $('dlManifest').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug(state.dossier.view.title)+'.manifest.json',JSON.stringify(state.dossier.manifest,null,1),'application/json');});
 $('verifyBtn').addEventListener('click',async()=>{
   // E2.3: dos preguntas distintas. (1) ¿Es íntegro respecto a su manifiesto? (2) ¿Coincide con lo guardado AHORA?
-  const integ=await D.verify(state.dossier.html,state.dossier.manifest,{});const now=readNow();
+  const integ=await D.verify(state.dossier.html,state.dossier.manifest,{});const now=await readNow();
   const cur=now?await D.verify(state.dossier.html,state.dossier.manifest,{beforeProject:now.before,afterProject:now.after,budget:now.budget,beforeBudget:now.beforeBudget}):null;
   const curChecks=cur?cur.checks.filter(c=>!integ.checks.some(i=>i.name===c.name)):[];const sameSaved=await fingerprint()===state.dossier.fp;curChecks.push({name:'lo guardado (nombres, revisiones y presupuestos) es lo mismo que al preparar',ok:sameSaved});const curOk=!!cur&&curChecks.every(c=>c.ok);await checkFresh();
   const li=c=>`<li data-ok="${c.ok}">${c.ok?'✓':'✗'} ${esc(c.name)}</li>`;
@@ -218,11 +231,9 @@ $('orderBuild').addEventListener('click',buildOrder);
 for(const id of ['orderMotivo','orderAuthor'])$(id).addEventListener('input',()=>{$('orderBuild').disabled=state.stale||!$('orderMotivo').value.trim()||!$('orderAuthor').value.trim();});
 $('orderDlHtml').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug('orden de cambio '+state.prepared.comparison.after.name)+'.borrador-interno.html',state.order.html,'text/html');});
 $('orderDlManifest').addEventListener('click',async()=>{if(!await checkFresh())return;download(slug('orden de cambio '+state.prepared.comparison.after.name)+'.manifest.json',JSON.stringify(state.order.manifest,null,1),'application/json');});
-$('orderVerify').addEventListener('click',async()=>{const o=state.order,now=readNow();const ok1=new TextEncoder().encode(o.html).length===o.manifest.html.bytes&&await D.sha256(o.html)===o.manifest.html.sha256;
+$('orderVerify').addEventListener('click',async()=>{const o=state.order,now=await readNow();const ok1=new TextEncoder().encode(o.html).length===o.manifest.html.bytes&&await D.sha256(o.html)===o.manifest.html.sha256;
  const ok2=!!now&&await D.sha256(JSON.stringify(now.before))===o.manifest.before.sha256&&await D.sha256(JSON.stringify(now.after))===o.manifest.after.sha256&&await fingerprint()===o.fp;await checkFresh();
  $('orderVerifyOut').innerHTML=`<li class="sum" data-ok="${ok1&&ok2}">${ok1&&ok2?'Orden verificada: íntegra y vigente.':!ok1?'Orden NO verificada: no coincide con su manifiesto.':'Orden íntegra, pero NO vigente: no la presentes como el estado actual.'}</li><li class="group" data-ok="${ok1}" data-check="integridad">${ok1?'Orden íntegra: coincide con su manifiesto.':'La orden NO coincide con su manifiesto.'}</li><li class="group" data-ok="${ok2}" data-check="vigencia">${ok2?'Vigente: las dos revisiones coinciden con lo guardado ahora.':'NO vigente: alguna revisión ha cambiado desde que se preparó.'}</li>`;});
 $('reloadBtn')?.addEventListener('click',()=>location.reload());
-addEventListener('storage',()=>{checkFresh();}); // otra pestaña del mismo origen cambia lo guardado
-
-start();
+start().catch(e=>fatal(e.message));
 })();
