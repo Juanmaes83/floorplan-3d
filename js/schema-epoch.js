@@ -88,6 +88,12 @@
   return new Blob([JSON.stringify({format:'rubik-sota.emergency',version:1,exportedAt:new Date().toISOString(),reason:'schema-'+(read().state),docs,unsaved:st?.pending?.()||{},
    note:'Copia de emergencia de los datos de proyecto de esta pestaña. Las imágenes y fotos siguen en este navegador; esta copia no las incluye.'})],{type:'application/json'});
  }
+ // Huella de todo lo que la pestaña tiene sin guardar: proyecto en pantalla y cambios retenidos (puerta o sesión).
+ function changeStamp(){const R=root.FloorPlanPersistenceEditor;let s='';
+  try{s+=JSON.stringify(root.FloorPlanApp?.project??null);}catch{}
+  try{s+=JSON.stringify(R?.storage?.pending?.()??null);}catch{}
+  try{const st=R?.session?.state?.();s+=JSON.stringify([st?.pending,st?.revision]);for(const k of root.FloorPlanPersistence?.KEYS||[])s+=String(R.session.storage.getItem(k));}catch{}
+  return s;}
  let banner=null;
  function style(){if(document.getElementById('a0Style'))return;const s=document.createElement('style');s.id='a0Style';
   s.textContent=`.a0-banner{position:fixed;inset:12px 12px auto 12px;z-index:2147483000;max-width:760px;margin:0 auto;padding:16px 18px;border-radius:10px;
@@ -119,11 +125,13 @@
   const actions=el('div','a0-actions');
   const btn=(label,cls,fn)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.textContent=label;
    b.onclick=async()=>{b.disabled=true;msg.textContent='';try{await fn();}catch(e){msg.textContent=e.message;}finally{b.disabled=false;}};actions.append(b);return b;};
-  let exported=false;
-  btn('Exportar copia de emergencia','btn a0-primary',async()=>{download(await emergencyBlob(),'rubik-copia-emergencia.json');exported=true;msg.textContent='Copia descargada. Ya puedes recargar RUBIK.';});
+  // La copia exportada solo autoriza recargar mientras nada haya cambiado después: se guarda la huella de lo exportado.
+  let exported=null;
+  btn('Exportar copia de emergencia','btn a0-primary',async()=>{const at=changeStamp();download(await emergencyBlob(),'rubik-copia-emergencia.json');exported=at;msg.textContent='Copia descargada. Ya puedes recargar RUBIK.';});
   btn('Recargar RUBIK','btn',()=>{
    const pending=Object.keys(root.FloorPlanPersistenceEditor?.storage?.pending?.()||{}).length||root.FloorPlanPersistenceEditor?.session?.state?.().pending;
-   if(pending&&!exported&&!confirm('Hay cambios que solo están en esta pestaña. Si recargas sin exportar la copia de emergencia, se perderán. ¿Recargar de todos modos?'))return;
+   const covered=exported!==null&&exported===changeStamp();
+   if(pending&&!covered&&!confirm(exported!==null?'Has hecho cambios después de exportar la copia de emergencia y no están en ella. Si recargas, se perderán. ¿Recargar de todos modos?':'Hay cambios que solo están en esta pestaña. Si recargas sin exportar la copia de emergencia, se perderán. ¿Recargar de todos modos?'))return;
    location.reload();});
  }
  subscribe(render);

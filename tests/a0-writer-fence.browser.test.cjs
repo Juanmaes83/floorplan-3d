@@ -119,3 +119,85 @@ test('R1-T03 · F0.2b activo: época de la autoridad leída en la misma transacc
     assert.deepEqual(watch.errors.filter(e=>!/schema/.test(e)),[]);
   }finally{await context.close();}
 });
+
+// ── Revisión ChatGPT de #273 · riesgo 1: la época se comprueba DESPUÉS de las esperas, dentro de la sección protegida ──
+for(const [label,host] of ORIGINS){
+  test(`A0 · ${label}: una escritura de bytes y una pasada de recogida que esperaban no escriben si la época cambió durante la espera`,{timeout:120000},async()=>{
+    const {context,page,watch}=await K.editor(at(host));
+    try{
+      const r=await page.evaluate(async()=>{const I=FloorPlanImages,E=FloorPlanSchemaEpoch;
+        await I.put([['img_a0_huerfana2',new Blob([new Uint8Array([1])])]]);
+        // put: la llamada pasa la puerta síncrona de antes, pero la época cambia mientras espera la conexión.
+        const p=I.put([['img_a0_tarde',new Blob([new Uint8Array([2])])]]).then(()=>'escrito',e=>e.code);E.announce(2);const put=await p;
+        E._reset();localStorage.removeItem(E.KEY);
+        // recogida: la época cambia mientras la pasada espera (locks.query retenido).
+        const L=navigator.locks;let release;const gate=new Promise(r=>{release=r;});let queried=false;
+        const locks={request:(...a)=>L.request(...a),query:async()=>{queried=true;await gate;return L.query();}};
+        const run=I.collect({live:async()=>new Set(),storage:localStorage,locks});
+        while(!queried)await new Promise(r=>setTimeout(r,20));
+        E.announce(2);release();const gc=await run;
+        const keys=await I.keys();E._reset();localStorage.removeItem(E.KEY);
+        return {put,late:keys.includes('img_a0_tarde'),orphan:keys.includes('img_a0_huerfana2'),removed:gc.removed};});
+      assert.equal(r.put,'schema-outdated','la escritura que esperaba se rechaza');assert.equal(r.late,false);
+      assert.equal(r.orphan,true,'la pasada que esperaba no borra');assert.deepEqual(r.removed,[]);
+      assert.deepEqual(watch.errors,[]);
+    }finally{await context.close();}
+  });
+}
+
+test('A0 · F0.2b activo: confirmación tras esperar el lock, espejo tras la barrera y conflictos leen la época dentro de su escritura',{timeout:120000},async()=>{
+  const {context,page,watch}=await K.editor(at('f0-2b.localhost'));
+  try{
+    await rename(page,'A0 base espejo');await flush(page);
+    const r=await page.evaluate(async([LIB,PROJECT])=>{const P=FloorPlanPersistence,E=FloorPlanSchemaEpoch,db=await P.open();
+      const metaPut=(v,k)=>new Promise(res=>{const t=db.transaction('meta','readwrite');v===null?t.objectStore('meta').delete(k):t.objectStore('meta').put(v,k);t.oncomplete=res;});
+      const {revision}=await P.load(db),base=(await P.load(db)).docs.get(LIB);
+      // 1 · Confirmación: el lock tarda; mientras, SOLO la autoridad pasa a la época 2 (sin marcador de localStorage).
+      const L=navigator.locks;let go;const gate=new Promise(r=>{go=r;});
+      const slow={request:(n,f)=>L.request(n,async()=>{await gate;return f();}),query:()=>L.query()};
+      const c=P.commit({db,locks:slow,storage:localStorage,baseRevision:revision,changes:{[LIB]:base.replace('A0 base espejo','A0 tarde')}}).then(()=>'escrito',e=>e.code);
+      await metaPut({epoch:2},'schemaEpoch');go();const commit=await c;
+      const after=(await P.load(db));await metaPut(null,'schemaEpoch');E._reset();
+      // 2 · Conflictos: con la época 2 en la autoridad, ni siquiera se puede retirar un registro de conflicto.
+      const before=(await P.conflicts(db)).length;
+      const add=await new Promise(res=>{const t=db.transaction('conflicts','readwrite');const q=t.objectStore('conflicts').add({reason:'prueba-a0',docs:{},at:new Date().toISOString()});t.oncomplete=()=>res(q.result);});
+      await metaPut({epoch:2},'schemaEpoch');
+      const rm=await P.removeConflict(db,add).then(()=>'borrado',e=>e.code);
+      const kept=(await P.conflicts(db)).some(x=>x.id===add);await metaPut(null,'schemaEpoch');E._reset();
+      // 3 · Espejo: la época cambia justo después de escribir la barrera; ninguna otra clave de localStorage se toca.
+      const {revision:rev2,docs}=await P.load(db);const snapshot=Object.fromEntries(P.KEYS.map(k=>[k,localStorage.getItem(k)]));
+      const m=await P.commit({db,locks:L,storage:localStorage,baseRevision:rev2,changes:{[LIB]:docs.get(LIB).replace('A0 base espejo','A0 espejo')},
+        hooks:{afterBarrier:async()=>{localStorage.setItem(E.KEY,JSON.stringify({epoch:2}));}}});
+      const touched=P.KEYS.filter(k=>k!==LIB&&localStorage.getItem(k)!==snapshot[k]);
+      localStorage.removeItem(E.KEY);E._reset();db.close();
+      return {commit,rev:after.revision,same:after.docs.get(LIB)===base,rm,kept,mirror:m.mirror,touched};},[LIB,PROJECT]);
+    assert.equal(r.commit,'schema-outdated','la confirmación que esperaba el lock se rechaza en su transacción');
+    assert.equal(r.same,true,'el documento no cambia');
+    assert.equal(r.rm,'schema-outdated');assert.equal(r.kept,true,'el conflicto se conserva');
+    assert.equal(r.mirror.ok,false,'el espejo se detiene tras la barrera');assert.deepEqual(r.touched,[],'ninguna otra clave del espejo se escribe');
+    assert.deepEqual(watch.errors,[]);
+  }finally{await context.close();}
+});
+
+// ── Riesgo 2: la copia exportada solo autoriza recargar si nada cambió después ──────────────────────────────────────────
+test('A0 · cambios después de exportar invalidan la autorización de recarga; sin cambios, recarga directa',{timeout:120000},async()=>{
+  const {context,page,watch}=await K.editor(at('127.0.0.1'));
+  try{
+    await page.evaluate(()=>FloorPlanSchemaEpoch.announce(2));
+    await page.waitForFunction(()=>document.getElementById('a0Banner')?.dataset.state==='outdated');
+    await rename(page,'A0 exportado');
+    const exportNow=()=>Promise.all([page.waitForEvent('download'),page.locator('#a0Banner button',{hasText:'Exportar copia de emergencia'}).click()]);
+    await exportNow();
+    await rename(page,'A0 posterior a la copia');
+    const dialogs=[];page.on('dialog',d=>{dialogs.push(d.message());d.dismiss();});
+    await page.locator('#a0Banner button',{hasText:'Recargar RUBIK'}).click();
+    await page.waitForTimeout(500);
+    assert.equal(dialogs.length,1,'pide confirmación');assert.match(dialogs[0],/después de exportar/);
+    assert.equal(await page.evaluate(()=>FloorPlanApp.project.name),'A0 posterior a la copia','no recarga ni pierde el cambio');
+    // Exportar de nuevo cubre el último cambio: recarga sin preguntar.
+    await exportNow();
+    await Promise.all([page.waitForEvent('load'),page.locator('#a0Banner button',{hasText:'Recargar RUBIK'}).click()]);
+    assert.equal(dialogs.length,1,'sin una segunda confirmación');
+    assert.deepEqual(watch.errors,[]);
+  }finally{await page.evaluate(()=>localStorage.removeItem('rubik-sota-schema-epoch-v1')).catch(()=>{});await context.close();}
+});
