@@ -104,6 +104,8 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 .panel-body .form{margin-top:4px}
 .panel-view form{padding:4px 16px 0}
 .panel-group{border-bottom:1px solid var(--line);padding:6px 0}.panel-group:last-child{border-bottom:0}
+.room-suggest{margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-left:4px solid var(--info);border-radius:8px;background:var(--surface-sunken)}.room-suggest p{margin:0 0 8px}#panel .room-suggest .btn,#panel .room-swap .btn{min-height:44px}
+.room-swap .muted{margin:6px 0}
 details.panel-group>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:40px;display:flex;align-items:center;gap:8px;list-style:none}
 details.panel-group>summary::-webkit-details-marker{display:none}
 details.panel-group>summary::before{content:'▸';color:var(--muted);transition:transform .15s}details.panel-group[open]>summary::before{transform:rotate(90deg)}
@@ -1766,6 +1768,28 @@ function wallPanel(w){
     <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
 }
 function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
+// UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
+// está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
+function roomSuggestionOf(source){
+  if(!source||Core.roomFamily(source)!=='unspecified')return null;
+  const s=Core.suggestRoomFamily(source,Core.roomObjects(project,source));
+  if(!s||!Core.roomFamilies.includes(s.family))return null;
+  const why=s.source==='contents'?`porque contiene «${nm(s.object.name||s.object.type)}»`:`por su nombre «${roomDisplay(source)}»`;
+  return {family:s.family,label:familyLabel(s.family),why};
+}
+function roomSuggestion(source){
+  const s=roomSuggestionOf(source);if(!s)return '';
+  return `<div class="room-suggest" role="status" aria-live="polite"><p><b>Sugerencia:</b> ${esc(s.label)}, ${esc(s.why)}.</p><button type="button" class="btn" id="rSuggest" data-family="${esc(s.family)}">Usar «${esc(s.label)}»</button></div>`;
+}
+// UX-26 · Intercambiar solo el uso (nombre y tipo) con otra estancia; un único paso que se deshace con Ctrl+Z o ↶.
+function roomSwapGroup(source){
+  const others=project.rooms.filter(q=>q.id!==source?.id);if(!source||!others.length)return '';
+  const opts=others.map(q=>`<option value="${esc(q.id)}">${esc(roomDisplay(q))}</option>`).join('');
+  return `<details class="panel-group room-swap" data-group="room-swap"><summary>Intercambiar uso</summary>
+    <div class="form"><label class="full" for="rSwapWith">Con la estancia</label><select id="rSwapWith"><option value="">Elige una estancia…</option>${opts}</select></div>
+    <p class="muted">Solo se intercambian el nombre y el tipo. Muebles, acabados, puertas y medidas se quedan donde están.</p>
+    <div class="actions"><button type="button" class="btn" id="rSwap" disabled>Intercambiar uso</button></div></details>`;
+}
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
@@ -1774,13 +1798,14 @@ function roomPanel(r){
   const familyOptions=Core.roomFamilies.map(value=>`<option value="${value}" ${family===value?'selected':''}>${esc(familyTypeLabel(value))}</option>`).join('');
   return `<div class="panel-view room-panel">${panelHead({title:roomDisplay(source), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
   <details class="panel-group" data-group="room-data" open><summary>Datos de la estancia</summary>
-    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>
+    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>${roomSuggestion(source)}
     <div class="stats" style="margin-top:10px">
       <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
       <div><small>${tr('周长','Perimeter')}</small><span class="big">${fmt(perim(r.poly),1)}</span> m</div>
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
     <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></details>
+${roomSwapGroup(source)}
   <details class="panel-group" data-group="room-openings" open><summary>Puertas y ventanas</summary><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></details>
   <details class="panel-group" data-group="room-dimensions" open><summary>Dimensiones</summary><button class="btn" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></details>
   <details class="panel-group" data-group="room-finishes" open><summary>Suelo y paredes</summary><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
@@ -1798,6 +1823,12 @@ function bindRoomPanel(){
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
   $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
   $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});toast(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,4000);};
+  const swapWith=$('#rSwapWith'),swap=$('#rSwap');
+  if(swapWith){swapWith.onchange=()=>{swap.disabled=!swapWith.value;};
+    swap.onclick=()=>{const other=swapWith.value;if(!other)return;const before=undoStack.length;
+      mutate(()=>{project=Core.swapRoomUses(project,id,other);});
+      if(undoStack.length>before)toast(`Uso intercambiado con «${roomDisplay(project.rooms.find(q=>q.id===other))}». Los muebles y acabados no se han movido. Puedes deshacerlo con Ctrl+Z o ↶.`,5000);};}
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
   $('#back').onclick = () => select(null);
