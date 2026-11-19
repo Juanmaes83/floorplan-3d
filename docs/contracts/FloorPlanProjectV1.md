@@ -1,5 +1,14 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
+## FloorPlanProject 2.0 — muros curvos e inclinados (OP-07 · S1, preparada, NO integrada)
+
+- **Decisión D-OP07-4 (opción B, 20/11/2026).** `walls[].curve = {control:{x,y}}` (Bézier cuadrática, mm) y `walls[].heightEndMm` (altura en `end`; `heightMm` es la de `start`) **no se pueden ignorar sin perder información**, así que no caben en una minor (§3). Solo los documentos que los usan pasan a **2.0.0**; ningún proyecto v1 se migra.
+- **2.0 = V1 hasta 1.12 + esos dos campos.** Una mejora futura de 1.x que llegue como 1.(12+k) es 2.k para un documento 2.x.
+- **Autoridad única de versiones:** `Core.parseVersion`, `Core.versionAtLeast` y `Core.raiseVersion` (`js/project-core.js`). Ningún módulo eleva ni compara versiones de proyecto por su cuenta, y lo comprueba `tests/op07-s1-contract.test.cjs`. `raiseVersion` nunca baja la versión y nunca convierte un 1.x en 2.x salvo que el destino sea 2.x. Un 2.x no vuelve a 1.x aunque se enderecen todos sus muros.
+- **Lectores 1.x:** rechazan 2.x sin modificar nada (fila «major desconocido» de §3). Si la colección local no se puede abrir, el editor 1.x no la reescribe. La barrera de época A0 (#273) y `Core.guardSave` en el camino de escritura de F0.2b son protecciones complementarias.
+- **Validación:** la aplica el núcleo único `js/wall-geometry-core.js`: radio mínimo ≥ grosor/2, curva que no se pliega, abertura dentro de la **trayectoria facetada** y bajo el **borde más bajo**, sin recorte silencioso. La resolución es `Core.WALL_PATH`: tolerancia de 1 mm y máximo de 1024 facetas, aprobadas para el candidato. La usan plano, 3D, mediciones, aberturas, DXF y Blender.
+- **Edificios:** `building-core` acepta plantas 2.0.0. Un lector de edificios anterior las rechaza.
+
 ## Ampliación 1.10.0 — ortofoto contextual (Punto 8C-C)
 
 `site.orthophoto` es opcional desde ProjectV1 1.10.0 y requiere `site.parcel`. Guarda únicamente CRS fuente, extensión exacta de la parcela, dimensiones y resolución de la solicitud, política `latest-available`, tipo JPEG y procedencia (`providerId`, fuente, hora de recuperación, atribución y licencia). La validación semántica exige que CRS y extensión coincidan con `site.parcel`. La imagen, su `Blob`, `blob:` URL y píxeles no entran en JSON/ZIP ni se recargan automáticamente al abrirlos. Una nueva carga explícita puede obtener un mosaico distinto porque PNOA Máxima Actualidad es dinámico; `retrievedAt` no equivale a fecha de vuelo. La superposición del contorno se deriva en memoria del mismo marco fuente; no se usa para situar el edificio. Añadir ortofoto eleva el proyecto a 1.10.0; eliminarla no degrada la versión. Proyectos 1.9.0 y anteriores no admiten este campo.

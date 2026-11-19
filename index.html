@@ -750,6 +750,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/parcel-site-adapter.js"></script>
 <script src="js/orthophoto-site-adapter.js"></script>
 <script src="js/terrain-site-adapter.js"></script>
+<script src="js/wall-geometry-core.js"></script>
 <script src="js/project-core.js"></script>
 <script src="js/exterior-core.js"></script>
 <script src="js/roof-core.js"></script>
@@ -1796,8 +1797,8 @@ function bindRoomPanel(){
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
-  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
-  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();Core.raiseVersion(project,'1.6.0');});
+  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;Core.raiseVersion(project,'1.6.0');});
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
   $('#back').onclick = () => select(null);
