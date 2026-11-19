@@ -11,6 +11,10 @@
 (function(){
  'use strict';
  const C=window.RubikOwnFurnitureCore,app=window.FloorPlanApp;if(!C||!app)return;
+ // P0 · H-1: everything in this tab that may still cite a photo counts for the image collection (FloorPlanImages):
+ // the project on screen, every project of the in-memory library and the undo/redo history (a removed photo can come back).
+ window.FloorPlanImages?.holder?.(()=>[app.project,...(typeof library==='object'&&library?.projects?library.projects():[]),
+  ...(typeof undoStack!=='undefined'?undoStack:[]),...(typeof redoStack!=='undefined'?redoStack:[])]);
  const $=s=>document.querySelector(s);
  const el=(tag,attrs={},parent,text)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))if(v!==undefined&&v!==null&&v!==false)n.setAttribute(k,v===true?'':v);if(text!==undefined)n.textContent=text;parent?.append(n);return n;};
  const lazyImg=(parent,attrs,before)=>{let img=null;return {get node(){return img;},set(src){if(!src){img?.remove();img=null;return;}if(!img){img=el('img',attrs);parent.insertBefore(img,before()||null);}img.src=src;}};};
@@ -30,6 +34,7 @@
   const sha=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));
   return {ok:true,blob,meta:{imageKey:'mue01/'+sha,sha256:sha,mediaType:'image/jpeg',widthPx:sz.w,heightPx:sz.h,bytes:blob.size,addedAt:new Date().toISOString()}};
  }
+ const guarded=fn=>window.FloorPlanImages?.guard?window.FloorPlanImages.guard(fn):fn();
  async function storePhoto(p){try{if(!window.FloorPlanImages)throw Error('sin almacén');await FloorPlanImages.put([[p.meta.imageKey,p.blob]]);return true;}catch{return false;}}
  async function loadPhoto(key){try{const b=await window.FloorPlanImages?.get(key);return b instanceof Blob&&b.size?b:null;}catch{return null;}}
 
@@ -62,19 +67,21 @@
  const actions=el('div',{class:'own-furn-actions'},form);
  const cancelBtn=el('button',{type:'button',class:'btn',id:'ownFurnCancel'},actions,'Cancelar');
  const createBtn=el('button',{type:'submit',class:'btn primary',id:'ownFurnCreate'},actions,'Crear mueble');
- let pending=null,previewUrl=null,busy=false;
+ let pending=null,previewUrl=null,busy=false,createOp=0;
+ // Cancelar, Escape, abrir el diálogo o cambiar la foto invalidan la creación en curso (puede estar esperando el lock de la recogida).
+ const abandon=()=>{createOp++;busy=false;createBtn.disabled=false;};
  const setPreview=blob=>{if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=blob?URL.createObjectURL(blob):null;preview.hidden=!blob;previewImg.set(previewUrl);};
  function fillRooms(){room.replaceChildren();el('option',{value:''},room,'Donde estoy mirando ahora');
   for(const r of app.project.rooms){let label=r.name;try{label=roomDisplay(r);}catch{}el('option',{value:r.id},room,label);}
   const sel=(()=>{try{return ui.sel?.kind==='room'?ui.sel.id:'';}catch{return '';}})();room.value=sel||'';}
  function clearErrors(){for(const f of Object.values(fields)){f.err.textContent='';f.input.removeAttribute('aria-invalid');}status.textContent='';}
  function showErrors(errors){let first=null;for(const [k,msg] of Object.entries(errors)){const f=fields[k];if(!f)continue;f.err.textContent=msg;f.input.setAttribute('aria-invalid','true');first=first||f.input;}first?.focus();}
- function open(){form.reset();rot.value='0';clearErrors();pending=null;setPreview(null);fillRooms();busy=false;createBtn.disabled=false;dlg.showModal();name.focus();}
+ function open(){abandon();form.reset();rot.value='0';clearErrors();pending=null;setPreview(null);fillRooms();dlg.showModal();name.focus();}
  openBtn.onclick=open;
- cancelBtn.onclick=()=>{setPreview(null);pending=null;dlg.close();};
+ cancelBtn.onclick=()=>{abandon();setPreview(null);pending=null;dlg.close();};
  // Escape closes the dialog without «Cancelar»: the photo preview must not stay in the hidden dialog either.
- dlg.addEventListener('cancel',()=>{setPreview(null);pending=null;});
- photo.onchange=async()=>{fields.photo.err.textContent='';photo.removeAttribute('aria-invalid');pending=null;setPreview(null);const file=photo.files?.[0];if(!file)return;
+ dlg.addEventListener('cancel',()=>{abandon();setPreview(null);pending=null;});
+ photo.onchange=async()=>{if(busy)abandon();fields.photo.err.textContent='';photo.removeAttribute('aria-invalid');pending=null;setPreview(null);const file=photo.files?.[0];if(!file)return;
   status.textContent='Preparando la foto…';const r=await processPhoto(file);status.textContent='';
   if(!r.ok){fields.photo.err.textContent=r.message;photo.setAttribute('aria-invalid','true');photo.value='';return;}
   pending=r;setPreview(r.blob);};
@@ -84,13 +91,25 @@
   const errors=v.ok?{}:{...v.errors};if(!pending)errors.photo=photo.files?.length?(fields.photo.err.textContent||'La foto no es válida.'):'Elige una foto del mueble.';
   if(Object.keys(errors).length){showErrors(errors);status.textContent='Revisa los campos marcados.';return;}
   busy=true;createBtn.disabled=true;status.textContent='Creando el mueble…';
-  const stored=await storePhoto(pending);
-  const res=app.addOwnFurniture({...v.spec,roomId:room.value||undefined},(project,id)=>{
-   const r=C.read(project);if(r.status==='future'||r.status==='invalid')return; // se conserva intacta: el mueble entra igual, sin anotar
-   C.attach(project,id,stored?pending.meta:null);});
-  busy=false;createBtn.disabled=false;
-  if(!res?.ok){status.textContent=res?.message||'No se ha podido añadir el mueble: no hay sitio libre en esa estancia.';return;}
-  dlg.close();setPreview(null);pending=null;
+  // P0 · H-1: saving the bytes and committing the project that cites them run under the image collection's lock. The photo,
+  // the measures and the room are fixed when «Crear» is pressed; the operation is re-checked before writing anything.
+  const op=++createOp,shot=pending,spec={...v.spec,roomId:room.value||undefined},live=()=>op===createOp;
+  let stored=false,res=null;
+  try{
+   await guarded(async()=>{if(!live())return;const release=window.FloorPlanImages?.pin?.(shot.meta.imageKey);
+    try{stored=await storePhoto(shot);if(!live())return; // cancelada mientras se guardaban los bytes: nada entra en el proyecto
+    res=app.addOwnFurniture(spec,(project,id)=>{
+     const r=C.read(project);if(r.status==='future'||r.status==='invalid')return; // se conserva intacta: el mueble entra igual, sin anotar
+     C.attach(project,id,stored?shot.meta:null);});
+    }finally{release?.();}});
+  }catch{
+   if(live()){busy=false;createBtn.disabled=false;status.textContent='No se ha podido crear el mueble: el almacenamiento de imágenes está ocupado. Vuelve a intentarlo.';}
+   return;
+  }
+  if(!res&&!live())return; // cancelada antes de confirmar: el formulario ya se cerró y el proyecto no cambió
+  if(live()){busy=false;createBtn.disabled=false;}
+  if(!res?.ok){if(live())status.textContent=res?.message||'No se ha podido añadir el mueble: no hay sitio libre en esa estancia.';return;}
+  if(dlg.open)dlg.close();if(live()){setPreview(null);pending=null;}
   // Como al añadir desde la biblioteca: en pantallas estrechas se cierran los cajones para ver el mueble en el plano.
   try{if(matchMedia('(max-width:1100px)').matches)closeDrawers();}catch{}
   const dimsText=`${v.spec.w} × ${v.spec.d} × ${v.spec.h} mm`;
@@ -103,8 +122,11 @@
  let changeFor=null;
  changeInput.onchange=async()=>{const file=changeInput.files?.[0];const id=changeFor;changeInput.value='';if(!file||!id)return;
   const r=await processPhoto(file);if(!r.ok){notify(r.message,6000);return;}
-  if(!await storePhoto(r)){notify('No se ha podido guardar la foto en este navegador.',6000);return;}
-  const out=app.applyOwnFurniture(p=>({ok:true,project:C.attach(p,id,r.meta)}));notify(out?.ok?'Foto de referencia actualizada.':'No se ha podido cambiar la foto.');};
+  let out,stored=true;
+  try{await guarded(async()=>{const release=window.FloorPlanImages?.pin?.(r.meta.imageKey);
+   try{if(!(stored=await storePhoto(r)))return;out=app.applyOwnFurniture(p=>({ok:true,project:C.attach(p,id,r.meta)}));}finally{release?.();}});
+  }catch{notify('No se ha podido cambiar la foto: el almacenamiento de imágenes está ocupado. Vuelve a intentarlo.',6000);return;}
+  if(!stored){notify('No se ha podido guardar la foto en este navegador.',6000);return;}notify(out?.ok?'Foto de referencia actualizada.':'No se ha podido cambiar la foto.');};
  function panel(container,objectId){
   if(panelUrl){URL.revokeObjectURL(panelUrl);panelUrl=null;}
   const project=app.project,first=C.photoStatus(project,objectId,true);
