@@ -636,11 +636,13 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
         <button class="btn" id="importImage" data-en="Upload a floor plan or project" data-es="Subir plano o proyecto" aria-describedby="uploadPlanHelp">上传平面图或项目</button>
+        <button class="btn" id="joinRoomPlan" data-en="Join a RoomPlan scan…" data-es="Unir escaneo RoomPlan…">拼接 RoomPlan 扫描…</button>
         <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear" data-es="Vaciar distribución">清空布置</button>
         <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
       </div></details>
     <input type="file" id="fileIn" aria-label="Proyecto JSON" accept=".json,application/json" hidden>
     <input type="file" id="uploadIn" aria-label="Subir plano" hidden>
+    <input type="file" id="roomPlanJoinIn" accept=".json,application/json" aria-label="Escaneo RoomPlan" hidden>
   </header>
 
   <aside class="lib">
@@ -714,6 +716,17 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, IFC, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, IFC, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、IFC、RoomPlan 或项目)</span></div>
 <dialog id="uploadPdfMode" aria-labelledby="uploadPdfModeTitle"><form method="dialog"><h3 id="uploadPdfModeTitle" data-en="PDF vector drawing" data-es="PDF con dibujo vectorial">PDF 矢量绘图</h3><p id="uploadPdfModeInfo"></p><label>Escala del plano 1: <input type="number" id="uploadPdfScale" min="1" max="1000" step="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate id="uploadPdfCancel" data-en="Cancel" data-es="Cancelar">取消</button> <button class="btn" value="raster" formnovalidate id="uploadPdfRaster" data-en="Use as image" data-es="Usar como imagen">用作图片</button> <button class="btn primary" value="vector" id="uploadPdfVector" data-en="Import measured walls" data-es="Importar muros con medidas">导入带尺寸的墙体</button></p></form></dialog>
 <dialog id="uploadPdfPage" aria-labelledby="uploadPdfTitle"><form method="dialog"><h3 id="uploadPdfTitle">Elegir página del PDF</h3><p id="uploadPdfInfo"></p><label>Página <input type="number" id="uploadPdfNumber" min="1" value="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate>Cancelar</button> <button class="btn primary" value="ok" id="uploadPdfOk">Usar página</button></p></form></dialog>
+<dialog id="roomPlanJoinDialog" aria-labelledby="roomPlanJoinTitle">
+  <form method="dialog">
+    <h3 id="roomPlanJoinTitle">Unir escaneo RoomPlan</h3>
+    <p id="roomPlanJoinFloor"></p>
+    <p><label for="roomPlanFixedDoor">Puerta de la planta</label> <select id="roomPlanFixedDoor"></select></p>
+    <p><label for="roomPlanMovingDoor">La misma puerta en el escaneo</label> <select id="roomPlanMovingDoor"></select></p>
+    <svg id="roomPlanJoinPreview" role="img" aria-label="Vista previa de la planta y del escaneo alineado" width="510" height="260" style="display:block;max-width:100%;background:#f6f3ed" hidden></svg>
+    <p id="roomPlanJoinStatus" role="status"></p>
+    <p class="actions"><button class="btn" value="cancel">Cancelar</button> <button class="btn primary" id="roomPlanJoinApply" value="join" disabled>Unir a esta planta</button></p>
+  </form>
+</dialog>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
 <dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
@@ -2545,6 +2558,16 @@ $('#projectCompare').onclick=()=>{$('#projectsDialog').close();$('#variantsClear
 $('#variantsClose').onclick=()=>$('#variantsDialog').close();
 $('#variantsClearance').onchange=()=>{const v=$('#variantsClearance').value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){$('#variantsError').textContent='La holgura mínima debe ser un número de milímetros mayor que 0.';$('#variantsClearance').value=variantsClearance??'';return;}const next=n===null?null:Math.round(n);if(next===variantsClearance)return;variantsClearance=next;renderVariants();};
 window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelFileImport,fileImportCompleted,
+  applyRoomPlanJoin(next,operation){
+    if(!fileImportCurrent(operation)||next.id!==project.id)return false;
+    const before=snap(),oldUndo=undoStack.slice(),oldRedo=redoStack.slice();
+    project=next;
+    if(!commit(before)){
+      project=JSON.parse(before);undoStack.splice(0,undoStack.length,...oldUndo);redoStack.splice(0,redoStack.length,...oldRedo);
+      refreshProject();renderAll();return false;
+    }
+    refreshProject();validateSel();renderAll();fitView();return true;
+  },
   // Imports become a new library entry, or a new level when «Plantas…» requested it for this transaction.
   adoptImported(visible,next,name,session){return window.FloorPlanBuildingUI?window.FloorPlanBuildingUI.adoptImported(visible,next,name,session):library.importProject(visible,next,name);},
   // Single-level tools (presentation, sheet…) work on the active level; this names it when a building is open.

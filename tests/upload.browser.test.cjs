@@ -27,6 +27,35 @@ const state=page=>page.evaluate(()=>{const p=FloorPlanApp.project;return {id:p.i
 async function upload(page,file,wait){const before=(await state(page)).id;await page.locator('#uploadIn').setInputFiles(file);if(wait!==false)await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),before,{timeout:30000});return state(page);}
 const toastText=page=>page.locator('#toast').textContent();
 
+test('OP-04 previews a RoomPlan door join without writing, commits once and reopens on the same entry',async t=>{
+ const {page,errors}=await pageFor(t),file=path.join(FX,'roomplan-capturedroom.json');
+ await upload(page,file);
+ const snapshot=()=>page.evaluate(()=>({entry:FloorPlanApp.entryId,project:FloorPlanApp.project}));
+ const before=await snapshot();
+ await page.locator('details.menu summary').click();
+ const chooser=page.waitForEvent('filechooser');await page.locator('#joinRoomPlan').click();await (await chooser).setFiles(file);
+ const dialog=page.locator('#roomPlanJoinDialog[open]');await dialog.waitFor();
+ const preview=dialog.locator('#roomPlanJoinPreview');
+ assert.ok(await preview.isVisible(),'aligned scan preview is visible');
+ assert.equal(await preview.locator('circle').count(),2);
+ assert.equal(await preview.locator('circle:visible').count(),2);
+ assert.ok(await preview.locator('line[stroke="#b24c25"]').count()>0,'the aligned scan is drawn in orange');
+ if(process.env.ROOMPLAN_JOIN_SCREENSHOT)await dialog.screenshot({path:process.env.ROOMPLAN_JOIN_SCREENSHOT});
+ assert.deepEqual(await snapshot(),before);
+ await dialog.getByRole('button',{name:'Cancelar'}).click();
+ await page.waitForFunction(()=>!document.body.classList.contains('uploading'));
+ assert.deepEqual(await snapshot(),before);
+ await page.locator('#roomPlanJoinIn').setInputFiles(file);await dialog.waitFor();
+ await dialog.locator('#roomPlanJoinApply').click();
+ await page.waitForFunction(count=>FloorPlanApp.project.walls.length===count,before.project.walls.length*2);
+ const joined=await snapshot();assert.equal(joined.entry,before.entry);
+ assert.equal(joined.project.rooms.length,before.project.rooms.length*2);assert.equal(joined.project.scale.confidence,'estimated');
+ await page.locator('#undo').click();assert.deepEqual(await snapshot(),before);
+ await page.locator('#redo').click();assert.deepEqual(await snapshot(),joined);
+ await page.reload();await page.waitForFunction(count=>FloorPlanApp.project.walls.length===count,joined.project.walls.length);
+ assert.deepEqual(await snapshot(),joined);assert.deepEqual(errors,[]);
+});
+
 test('a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access',async t=>{
  const {page,errors}=await pageFor(t);
  assert.match(await page.locator('#uploadPlanBtn').textContent(),/Subir plano/);assert.ok(await page.locator('#uploadPlanBtn').isVisible());assert.equal(await page.locator('#uploadPlanBtn').count(),1);
