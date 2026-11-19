@@ -410,6 +410,49 @@
     validate(next);return next;
   }
   function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
+  // OP-07 · S5: wall edits as pure operations with the editor's own result shape ({ok, project, explanation, intent}), so
+  // the editor applies them through its single path (FloorPlanApp.applyExtension: validation, undo/redo, save) — no second
+  // editor. A refused edit returns the same project untouched (atomic) and says why; it never drops an opening.
+  const refuse = (code, explanation, extra = {}) => ({ok:false, code, explanation:[explanation], ...extra});
+  function wallEdit(project, wallId, change, intent = {}) {
+    const next = clone(project), w = next.walls.find(x => x.id === wallId);
+    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
+    change(w, next);
+    if (shapedWall(w)) raiseVersion(next, '2.0.0');
+    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
+    const gate = guardSave(project, next, {intent});
+    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code + (i.message ? ': ' + i.message : '')).join('; '), {issues: gate.issues});
+    return {ok:true, project:next, intent};
+  }
+  // Curve: control point in mm (rounded as every plan point), or null to straighten it (explicit intent).
+  const setWallCurve = (project, wallId, control) => control
+    ? wallEdit(project, wallId, w => { w.curve = {control: point(control)}; })
+    : wallEdit(project, wallId, w => { delete w.curve; }, {straightened: [wallId]});
+  // End height in mm, or null to make the wall level again at its start height (explicit intent).
+  const setWallEndHeight = (project, wallId, heightEndMm) => heightEndMm === null || heightEndMm === undefined
+    ? wallEdit(project, wallId, w => { delete w.heightEndMm; }, {leveled: [wallId]})
+    : wallEdit(project, wallId, w => { w.heightEndMm = Math.round(heightEndMm); });
+  // Split at a physical distance along the wall (mm): exact Bézier split of the single core, points rounded to whole mm
+  // once (the pieces stay joined), heights and openings carried over by the parameter of their centre. An opening the
+  // cut would cross refuses the split and is named: openings never disappear.
+  function splitWall(project, wallId, distanceMm, {newId = id('wal')} = {}) {
+    const w = project.walls.find(x => x.id === wallId);
+    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
+    const length = wallLength(w);
+    if (!(distanceMm >= 1 && distanceMm <= length - 1)) return refuse('cut-outside', `El corte debe quedar dentro del muro (1–${Math.floor(length - 1)} mm).`);
+    const own = project.openings.filter(o => o.wallId === wallId), r = Walls.splitAt(w, distanceMm, own, {...WALL_PATH, roundMm:true, newId});
+    if (r.blocked.length) return refuse('opening-straddles-cut', `El corte atraviesa ${r.blocked.length === 1 ? 'una abertura' : r.blocked.length + ' aberturas'}: muévelo o mueve la abertura.`, {openings: r.blocked});
+    const next = clone(project), at = next.walls.findIndex(x => x.id === wallId);
+    next.walls.splice(at, 1, r.first, r.second);
+    const moved = new Map(r.openings.map(o => [o.id, o]));
+    next.openings = next.openings.map(o => moved.has(o.id) ? (({part, driftMm, ...rest}) => ({...rest, offsetMm: Math.round(rest.offsetMm)}))(moved.get(o.id)) : o);
+    if (shapedWall(r.first) || shapedWall(r.second)) raiseVersion(next, '2.0.0');
+    const intent = {split: {[wallId]: [r.first.id, r.second.id]}};
+    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
+    const gate = guardSave(project, next, {intent});
+    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code).join('; '), {issues: gate.issues});
+    return {ok:true, project:next, intent, maxDriftMm: r.maxDriftMm};
+  }
   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
@@ -419,4 +462,5 @@
   Object.assign(api,{wallOutline});   // OP-07 S2
   Object.assign(api,{wallFootprints});   // OP-07 S6
   Object.assign(api,{pieceMesh});   // OP-07 S4
+  Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
 })(globalThis);
