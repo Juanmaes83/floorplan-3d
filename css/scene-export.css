@@ -18,3 +18,8 @@
 .scene-export .se-actions .btn{min-height:44px;min-width:44px}
 .scene-export .btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 @media (max-width:480px){.scene-export-dialog{padding:16px}.scene-export .se-actions{flex-direction:column-reverse}.scene-export .se-actions .btn{width:100%}}
+/* Los .btn solo tienen estilo base dentro de los contenedores del producto: el diálogo vive en <body>. Secundario con borde. */
+.scene-export .btn{font:inherit;font-weight:600;padding:0 16px;border-radius:10px;cursor:pointer}
+.scene-export .btn:not(.primary){border:1px solid var(--line-strong);background:var(--surface-panel);color:var(--ink)}
+.scene-export .btn:not(.primary):hover{background:var(--surface-hover)}
+.scene-export .btn:disabled{opacity:.55;cursor:default}
