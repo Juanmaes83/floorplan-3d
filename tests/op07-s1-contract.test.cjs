@@ -71,13 +71,15 @@ test('S1 · guardado protegido: lector o escritor antiguo, vista degradada y pé
 test('S1 · el núcleo promovido es el del laboratorio (sin un segundo motor geométrico)',()=>{
  // Huella del cuerpo del núcleo del laboratorio (labs/sculpt/op-07/wall-geometry-core.js @ f48614f2, 34 pruebas):
  // el promovido es el mismo código; solo cambian la cabecera y el nombre global.
- const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module'));
+ const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module')).replace(/\n const api=\{[^\n]*\n[^\n]*\n/,'\n');
  // Único delta declarado sobre el laboratorio (S7, 20/11/2026): guardSave recibe la política de trayectoria (WALL_PATH)
  // y valida las aberturas con ella, igual que validate(). Se deshace el delta y se exige la huella original del laboratorio.
  const DELTA=[['intent={},opts}){','intent={}}){'],['validateOpening(w,o,opts))issues','validateOpening(w,o))issues']];
  for(const [now] of DELTA)assert.equal(body.split(now).length,2,`delta presente una sola vez: ${now}`);
  const lab=DELTA.reduce((b,[now,was])=>b.replace(now,was),body);
- assert.equal(require('node:crypto').createHash('sha256').update(lab).digest('hex'),'9ba8364840282ceaf2b479c0706d9386a58eb5ed234aa08ccc1ad358cd0791de');
+ assert.equal(require('node:crypto').createHash('sha256').update(lab).digest('hex'),'14c8a6014bef2bfef48acaa1efc18a92bc46a7e47a7d4ddb190c40de64735926','cuerpo del núcleo idéntico al del laboratorio salvo el delta declarado (sin la línea de exportación)');
+ const Lab=['FACETS','MAX_FACETS','isCurved','pathProfile','splitAt','validateOpening','validateWall','profileSpans','faceAreas','centreline','roomRing','ringArea','interiorArea','slopedPiece','legacyView','facetCount','deviationBound','arcLength','minRadius','featuresOf','guardSave'];
+ for(const k of Lab)assert.ok(k in Walls,'exporta '+k);
  for(const f of ['index.html','comparar/index.html','evolucion/index.html']){const h=fs.readFileSync(path.join(root,f),'utf8');assert.ok(h.indexOf('wall-geometry-core.js')>0&&h.indexOf('wall-geometry-core.js')<h.indexOf('project-core.js'),f);}
  assert.equal(Core.WALL_PATH.toleranceMm,1,'tolerancia única propuesta (pendiente de decisión de producto)');
 });
