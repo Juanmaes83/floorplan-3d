@@ -104,7 +104,9 @@
     // without mistaking visible jambs and gaps for independent walls.
     drawing.setActiveLayer(Integrity.auxiliaryLayer);
     for (const wall of project.walls) {
-      if (wall.status !== 'demolished') drawing.drawPolyline(Core.wallRect(wall).poly.map(toCad), true);
+      // OP-07 · S6: one rectangular footprint per facet (a straight wall: its single rectangle, as before). RUBIK's own DXF
+      // reader (plan-intake) reads 4-vertex footprints, so a curved wall comes back as its facets within the tolerance.
+      if (wall.status !== 'demolished') for (const poly of Core.wallFootprints(wall)) drawing.drawPolyline(poly.map(toCad), true);
     }
     for (const door of geometry.doors) drawDoor(drawing, door);
     for (const window of geometry.windows) drawOpening(drawing, window, 'WINDOWS', 0.25);
