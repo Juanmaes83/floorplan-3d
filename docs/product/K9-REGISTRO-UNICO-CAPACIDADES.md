@@ -19,10 +19,12 @@
 | `planned` | Planificado o bloqueado | En preparación | En preparación | — |
 | `developed` | En una PR, no integrado | No se muestra | No se muestra | PR y SHA |
 | `integrated` | En master | En validación | En preparación | Módulos y pruebas |
-| `validated` | En master y validado | En validación | En preparación | Módulos, pruebas y validación con SHA |
+| `validated` | En master y validado de forma independiente | En validación | En preparación | Módulos, pruebas y validación independiente: agente distinto del autor, SHA, árbol, CI y pruebas (decisión 3 de #282) |
 | `pilot` | Usable en este navegador | En validación | Piloto | Módulos, pruebas y límites |
 | `simulation` | Demostración rotulada | En validación | Simulación | Módulos, pruebas y límites |
 | `production` | Activo en Production | Disponible | Disponible | Despliegue, SHA, fecha y comprobación; sin bloqueos |
+
+**Production (decisión 4 de #282).** El propietario verificó en Vercel que `dpl_EidmS69dvUz8rMhYfEACEPeAgfaa` (READY) sirve `master@02712b51`. Esa verificación acredita solo las capacidades de la Home cuyos módulos y pruebas están en ese árbol. No se extiende a Alpha, Demo ni a los servicios IA: Render IA conserva su comprobación propia del 17/11 (`dpl_GHMo…`, `40b4ae5`).
 
 `assertEntry()` rechaza al cargar cualquier entrada que anuncie más de lo que su evidencia permite. Un registro incoherente no arranca.
 
@@ -69,5 +71,5 @@ Cuando las pruebas de un pendiente aparecen en master, la prueba de coherencia f
 ## Límites
 
 - El nivel `validated` existe, pero hoy ninguna entrada lo usa: no hay validaciones independientes con SHA registradas.
-- La comprobación del árbol de Production se omite, con aviso, en clones superficiales que no contienen `40b4ae5`.
+- La comprobación del árbol de Production se omite, con aviso, en clones superficiales que no contienen el SHA desplegado.
 - K9 no cambia la Home ni promociona nada a Production.

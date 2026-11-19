@@ -30,9 +30,11 @@
  const VERIFIED_AT='40b4ae5d724ef83d0e70651545b4f5e4832becd3';
  const STATES=Object.freeze(['available','validation','preparation']);
  const LEVELS=Object.freeze(['planned','developed','integrated','validated','pilot','simulation','production']);
- // Despliegue de Production acreditado (el mismo para todo lo que está en Production): master@40b4ae5 desde el 17/11.
- const DEPLOYMENT=Object.freeze({deployment:'dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs',sha:'40b4ae5d724ef83d0e70651545b4f5e4832becd3',checkedAt:'2026-11-17'});
- const BASE_CHECK='Módulos y pruebas presentes en master@40b4ae5, el árbol servido por '+DEPLOYMENT.deployment+'; pruebas citadas en verde en ese árbol (CI de #242 sobre el árbol idéntico 5fcb252).';
+ // Production de master verificada en Vercel por el propietario el 19/11 (decisión 4 de #282): dpl_EidmS… READY sirve
+ // master@02712b51. Acredita SOLO las capacidades de la Home cuyos módulos y pruebas están en ese árbol; NO se extiende
+ // a Alpha, Demo ni a los servicios IA (Render IA conserva su propia comprobación del 17/11).
+ const DEPLOYMENT=Object.freeze({deployment:'dpl_EidmS69dvUz8rMhYfEACEPeAgfaa',sha:'02712b5147c15defa12a810b2f346e4b3e0ecb60',checkedAt:'2026-11-19'});
+ const BASE_CHECK='Production de master verificada en Vercel por el propietario el 19/11 (#282): '+DEPLOYMENT.deployment+' READY sirve master@02712b51; módulos y pruebas citados presentes en ese árbol.';
  // Estado que ve cada consumidor, derivado del nivel: nunca se escribe a mano.
  const homeState=level=>level==='production'?'available':level==='planned'||level==='developed'?'preparation':'validation';
  const aiState=level=>level==='production'?'available':level==='pilot'||level==='simulation'?level:'preparation';
@@ -54,7 +56,9 @@
   else if(e.production)throw new RegistryError(e.id,'declara evidencia de Production sin estar en Production');
   if(e.level==='developed'&&!(Number.isInteger(e.pr)&&/^[0-9a-f]{40}$/.test(e.headSha||'')))throw new RegistryError(e.id,'«developed» exige la PR y el SHA donde existe');
   if(['integrated','validated','pilot','simulation','production'].includes(e.level)&&!(e.modules?.length&&e.tests?.length))throw new RegistryError(e.id,'sin módulos o pruebas');
-  if(e.level==='validated'&&!(e.validation&&/^[0-9a-f]{40}$/.test(e.validation.sha)))throw new RegistryError(e.id,'«validated» exige la validación con su SHA');
+  // Validación independiente (decisión 3 de #282): agente distinto del autor, SHA y árbol identificados, CI y pruebas.
+  if(e.level==='validated'){const v=e.validation,h=/^[0-9a-f]{40}$/;
+   if(!(v&&v.by&&v.author&&v.by!==v.author&&h.test(v.sha)&&h.test(v.tree)&&v.ci&&v.tests?.length))throw new RegistryError(e.id,'«validated» exige validación independiente: agente distinto del autor, SHA, árbol, CI y pruebas');}
   if((e.level==='pilot'||e.level==='simulation')&&!e.limits)throw new RegistryError(e.id,'un piloto o una simulación deben declarar sus límites');
   return e;
  }
@@ -63,7 +67,7 @@
  //   work area (FloorPlanProfessionalUI.open), never a new screen.
  const C=(id,name,benefit,level,access,modules,tests,professions,limits=null)=>Object.freeze(assertEntry({id,name,benefit,level,state:homeState(level),access,modules,tests,professions,limits,
   matrix:MATRIX[id]||[],verifiedAt:VERIFIED_AT,production:level==='production'?(id==='render-ai'?RENDER_PRODUCTION:Object.freeze({...DEPLOYMENT,check:BASE_CHECK})):null}));
- const RENDER_PRODUCTION=Object.freeze({...DEPLOYMENT,check:'Comprobación sin gasto del 17/11: POST /api/render sin código en la URL pública → 401 token (proveedor no llamado, no genera imagen); RUBIK_RENDER_ENABLED=1 en Production (metadatos). NO es una acreditación con imagen: la acreditación real es la D1 del 09/11 (docs/render-ai/d1-acta-de-cierre-2026-11-09.md)'});
+ const RENDER_PRODUCTION=Object.freeze({deployment:'dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs',sha:'40b4ae5d724ef83d0e70651545b4f5e4832becd3',checkedAt:'2026-11-17',check:'Comprobación sin gasto del 17/11: POST /api/render sin código en la URL pública → 401 token (proveedor no llamado, no genera imagen); RUBIK_RENDER_ENABLED=1 en Production (metadatos). NO es una acreditación con imagen: la acreditación real es la D1 del 09/11 (docs/render-ai/d1-acta-de-cierre-2026-11-09.md)'});
  const CAPABILITIES=Object.freeze([
   C('import',['Subir y calibrar tu plano','Upload and calibrate your plan','上传并校准平面图'],
    ['PDF, imagen, DXF o IFC convertidos en un plano editable; compruebas la escala con una medida conocida.','PDF, image, DXF or IFC turned into an editable plan; you check the scale with a known length.','将 PDF、图片、DXF 或 IFC 转为可编辑平面图，并用已知尺寸核对比例。'],

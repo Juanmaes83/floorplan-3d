@@ -28,6 +28,7 @@ test('el estado de cada consumidor se DERIVA del nivel: ninguna entrada puede co
 test('nada se anuncia sin evidencia: assertEntry rechaza cada forma de anunciar de más',()=>{
   const ok={id:'x',level:'pilot',modules:['js/a.js'],tests:['tests/a.test.cjs'],limits:['l','l','l'],production:null};
   assert.doesNotThrow(()=>R.assertEntry(ok));
+  assert.doesNotThrow(()=>R.assertEntry({...ok,level:'validated',validation:{by:'codex',author:'claude',sha:'a'.repeat(40),tree:'b'.repeat(40),ci:'run 1',tests:['tests/a.test.cjs']}}),'validación independiente completa');
   const bad=[[{...ok,level:'production'},/sin evidencia de Production/],
     [{...ok,level:'production',production:{deployment:'dpl_x',sha:'0'.repeat(40),checkedAt:'2026-11-19',check:'comprobación real'},id:'photo-reform'},/lo bloquean GOV-05/],
     [{...ok,production:{deployment:'dpl_x'}},/sin estar en Production/],
@@ -35,7 +36,9 @@ test('nada se anuncia sin evidencia: assertEntry rechaza cada forma de anunciar 
     [{...ok,level:'pilot',limits:null},/declarar sus límites/],
     [{...ok,level:'simulation',limits:null},/declarar sus límites/],
     [{...ok,level:'integrated',tests:[]},/sin módulos o pruebas/],
-    [{...ok,level:'validated'},/exige la validación con su SHA/],
+    [{...ok,level:'validated'},/validación independiente/],
+    [{...ok,level:'validated',validation:{by:'claude',author:'claude',sha:'a'.repeat(40),tree:'b'.repeat(40),ci:'run 1',tests:['t']}},/validación independiente/],
+    [{...ok,level:'validated',validation:{by:'codex',author:'claude',sha:'a'.repeat(40),ci:'run 1',tests:['t']}},/validación independiente/],
     [{...ok,level:'available'},/nivel desconocido/]];
   for(const [e,re] of bad)assert.throws(()=>R.assertEntry(e),re,JSON.stringify(e).slice(0,80));
   for(const e of R.all())assert.doesNotThrow(()=>R.assertEntry(e),e.id);
@@ -44,12 +47,16 @@ test('nada se anuncia sin evidencia: assertEntry rechaza cada forma de anunciar 
 test('Production: solo con despliegue, SHA y comprobación; y sus módulos y pruebas estaban en ese árbol',t=>{
   const prod=R.all().filter(e=>e.level==='production');
   assert.deepEqual(R.AI_SERVICES.filter(s=>s.level==='production').map(s=>s.id),['render-ai'],'el único servicio IA activo sigue siendo Render IA');
-  for(const e of prod){assert.equal(e.production.deployment,R.DEPLOYMENT.deployment,e.id);assert.equal(e.production.sha,R.DEPLOYMENT.sha,e.id);}
-  let have=true;try{execFileSync('git',['cat-file','-e',R.DEPLOYMENT.sha+'^{commit}'],{cwd:root,stdio:'ignore'});}catch{have=false;}
-  if(!have)return t.skip('el clon no contiene '+R.DEPLOYMENT.sha.slice(0,8)+' (clon superficial): no se puede comprobar el árbol desplegado');
-  for(const e of prod)for(const f of [...e.modules,...e.tests]){
-    let present=true;try{execFileSync('git',['cat-file','-e',`${R.DEPLOYMENT.sha}:${f}`],{cwd:root,stdio:'ignore'});}catch{present=false;}
-    assert.ok(present,`${e.id}: ${f} no estaba en el árbol de Production ${R.DEPLOYMENT.sha.slice(0,8)}`);}
+  // Decisión 4 de #282: la Production de master (02712b51) acredita las capacidades de la Home; Render IA conserva su
+  // comprobación propia del 17/11 y la nueva verificación NO se le extiende.
+  for(const e of R.CAPABILITIES.filter(c=>c.level==='production'&&c.id!=='render-ai'))assert.equal(e.production.deployment,R.DEPLOYMENT.deployment,e.id);
+  assert.equal(R.byId('render-ai').production.deployment,'dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs','Render IA no hereda la verificación de master');
+  const skipped=[];
+  for(const e of prod){let have=true;try{execFileSync('git',['cat-file','-e',e.production.sha+'^{commit}'],{cwd:root,stdio:'ignore'});}catch{have=false;}
+    if(!have){skipped.push(e.id);continue;}
+    for(const f of [...e.modules,...e.tests]){let present=true;try{execFileSync('git',['cat-file','-e',`${e.production.sha}:${f}`],{cwd:root,stdio:'ignore'});}catch{present=false;}
+      assert.ok(present,`${e.id}: ${f} no estaba en el árbol de Production ${e.production.sha.slice(0,8)}`);}}
+  if(skipped.length)t.diagnostic('árbol desplegado no disponible en este clon (superficial) para: '+skipped.join(', '));
 });
 
 test('sin duplicados: Render IA es UNA capacidad compartida por la Home y por «Nuevos servicios IA»',()=>{
@@ -57,7 +64,7 @@ test('sin duplicados: Render IA es UNA capacidad compartida por la Home y por «
   assert.equal(svc.level,card.level);assert.equal(svc.production,card.production,'la misma evidencia, no una copia');
   for(const f of card.modules)assert.ok(svc.modules.includes(f),f);for(const f of card.tests)assert.ok(svc.tests.includes(f),f);
   const src=fs.readFileSync(path.join(root,'js/capability-registry.js'),'utf8');
-  assert.equal((src.match(/dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs/g)||[]).length,1,'el despliegue se declara una sola vez');
+  for(const d of ['dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs','dpl_EidmS69dvUz8rMhYfEACEPeAgfaa'])assert.equal((src.match(new RegExp(d,'g'))||[]).length,1,d+' se declara una sola vez');
 });
 
 test('el Asistente no decide estados: los lee del registro (y del del producto si no se le pasa ninguno)',()=>{
