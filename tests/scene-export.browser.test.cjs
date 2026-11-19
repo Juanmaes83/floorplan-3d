@@ -23,6 +23,19 @@ for (const browser of browsers) {
   });
 }
 
+test('C3: acwall has no visible coincident faces between louver and grille', { timeout: 240000 }, async () => {
+  const project = Fixtures.f1Rectangular(), id = 'obj_op10-acwall';
+  const [room] = project.rooms;
+  project.objects = [{ id, type: 'acwall', name: 'Wall AC', position: { x: 0, y: 0 }, rotationDeg: 0,
+    size: { widthMm: 900, depthMm: 250, heightMm: 300 }, color: '#f6f7f8', roomId: room.id }];
+  const file = path.join(tmp, 'acwall.json'), out = path.join(tmp, 'acwall-scene');
+  fs.writeFileSync(file, JSON.stringify(project));
+  await Capture.capture(file, out, { via: 'api' });
+  const scene = J(path.join(out, 'scene.json')), meshFilter = mesh => mesh.entity.id === id;
+  assert.ok(scene.meshes.some(meshFilter), 'the real viewer renders and identifies the wall AC');
+  assert.deepEqual(Scene.coincidentFaces(scene, { meshFilter }).defects, []);
+});
+
 test('Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportaciones sucesivas deterministas', { timeout: 240000 }, async () => {
   const a = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'det-a'), { via: 'api' });
   const b = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'det-b'), { via: 'api' });
