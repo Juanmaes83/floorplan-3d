@@ -13,12 +13,12 @@
    conservan byte a byte; una prueba lo comprueba.
    UMD: window.RubikAssistantProposals / module.exports. */
 (function(root,factory){
- const deps=typeof module==='object'&&module.exports?{C:require('./project-core.js'),P:require('./furniture-placement.js'),R:require('./layout-review.js'),K:require('./assistant-contracts.js'),T:require('./assistant-domain-tools-core.js')}
-  :{C:root.FloorPlanCore,P:root.FloorPlanPlacement,R:root.FloorPlanLayoutReview,K:root.RubikAssistantContracts,T:root.RubikAssistantDomainTools};
+ const deps=typeof module==='object'&&module.exports?{C:require('./project-core.js'),P:require('./furniture-placement.js'),R:require('./layout-review.js'),K:require('./assistant-contracts.js'),T:require('./assistant-domain-tools-core.js'),V:require('./proposal-core.js')}
+  :{C:root.FloorPlanCore,P:root.FloorPlanPlacement,R:root.FloorPlanLayoutReview,K:root.RubikAssistantContracts,T:root.RubikAssistantDomainTools,V:root.RubikProposalCore};
  const api=factory(deps);if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikAssistantProposals=api;
 })(typeof self!=='undefined'?self:this,function(deps){
  'use strict';
- const {C,P,R,K,T}=deps;
+ const {C,P,R,K,T,V}=deps;
  const clone=x=>JSON.parse(JSON.stringify(x));
  const now=()=>new Date().toISOString();
  let seq=0;const nextId=()=>'prop_'+Date.now().toString(36)+'_'+(++seq).toString(36);
@@ -84,9 +84,13 @@
   const v=K.proposal(proposal);if(!v.ok)return reject(v.error.code,v.error.message);
   if(proposal.projectId!==project.id)return reject('not_authorized','La propuesta es de otro proyecto.');
   if(proposal.state!=='proposed'&&proposal.state!=='confirmed')return reject('conflict','La propuesta ya no está pendiente.');
-  if(T.revision(project)!==proposal.baseRevision)return reject('revision_mismatch','El proyecto ha cambiado desde la propuesta: genera una nueva.');
+  // K13: la vigencia la decide el contrato común (ProposalV1); el código público sigue siendo revision_mismatch.
+  const fresh=V.checkFresh({kind:'revision',value:proposal.baseRevision},T.revision(project));
+  if(!fresh.ok)return reject(fresh.legacyCode,'El proyecto ha cambiado desde la propuesta: genera una nueva.');
   const r=plan(project,proposal.operation,proposal.params);if(!r.ok)return r;
   return {ok:true,project:r.project,diff:r.proposal.diff};
  }
- return Object.freeze({plan,apply});
+ // K13: la misma propuesta vista con el contrato común (no cambia AssistantProposalV1).
+ const toProposalV1=proposal=>V.fromAssistant(proposal);
+ return Object.freeze({plan,apply,toProposalV1});
 });

@@ -9,7 +9,7 @@
    - Sin red: no consulta ningún servicio; el borrador interno se descarga en este equipo y no se publica. */
 (function(){
 'use strict';
-const R=window.FloorPlanRevisionCompare,D=window.FloorPlanBeforeAfterDossier,V=window.FloorPlanVariantsCompare,L=window.FloorPlanLibrary;
+const R=window.FloorPlanRevisionCompare,D=window.FloorPlanBeforeAfterDossier,PV=window.RubikProposalCore,V=window.FloorPlanVariantsCompare,L=window.FloorPlanLibrary;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const BUDGETS='rubik-budget-v1';
@@ -46,7 +46,9 @@ function storedSlice(){const ids=state.ids;if(!ids)return null;let lib=null,bud=
   try{const b=JSON.parse(readOnly.getItem(BUDGETS)||'null')||{};const pids=[state.prepared?.before?.id,state.prepared?.after?.id].filter(Boolean);bud=pids.map(k=>k+':'+JSON.stringify(b[k]??null));}catch{bud=['ilegible'];}
   return JSON.stringify({lib,bud});}
 async function fingerprint(){const x=storedSlice();return x===null?null:D.sha256(x);}
-async function checkFresh(){const now=await fingerprint();state.stale=!!state.fp0&&now!==state.fp0;
+// K13: la vigencia la decide el contrato común (ProposalV1, base stored-sha256); E2 no es una propuesta ni escribe nada.
+const fresh=(fp,now)=>PV.checkFresh({kind:'stored-sha256',value:fp},now).ok;
+async function checkFresh(){const now=await fingerprint();state.stale=!!state.fp0&&!fresh(state.fp0,now);
   const box=$('staleNotice');if(box)box.hidden=!state.stale;
   for(const id of ['buildBtn','dlHtml','dlManifest','orderBuild','orderDlHtml','orderDlManifest'])if($(id))$(id).disabled=state.stale||($(id).dataset.needs==='motivo'&&!$('orderMotivo')?.value.trim());
   return !state.stale;}
@@ -54,7 +56,7 @@ async function checkFresh(){const now=await fingerprint();state.stale=!!state.fp
 // Si lo guardado cambia mientras se genera (otra pestaña), el resultado se descarta: nunca se presenta ni se descarga un
 // borrador hecho con datos que ya no son los guardados. Devuelve la huella de inicio o null si hubo cambio.
 async function stableRun(work){if(!state.fp0)state.fp0=await fingerprint();if(!await checkFresh())return {fp:null,result:null,reason:'stale'};const fp=state.fp0; // referencia: la huella de apertura ya verificada
-  const result=await work();const end=await fingerprint();if(end!==fp){await checkFresh();return {fp:null,result:null,reason:'changed'};}return {fp,result,reason:null};}
+  const result=await work();const end=await fingerprint();if(!fresh(fp,end)){await checkFresh();return {fp:null,result:null,reason:'changed'};}return {fp,result,reason:null};}
 const CHANGED='No se prepara: lo guardado ha cambiado durante la preparación (otra pestaña). Vuelve a cargar para comparar lo actual.';
 // relectura de lo guardado AHORA, para verify(): no se usa el estado retenido
 function readNow(){try{const lib=L.load(readOnly),g=lib.group(state.ids.anchor);const b=readBudgets();
