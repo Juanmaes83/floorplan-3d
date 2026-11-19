@@ -41,6 +41,8 @@
 
 /* RoomPlan uses the existing header and a feedback row outside the plan. */
 #roomPlanJoinQuick{order:0;min-height:44px;border:1px solid var(--line-strong);color:var(--action)}
+/* Anchor the visually hidden history descriptions inside the scrolling header. */
+#editHistory{position:relative}
 .edit-history-scope{font-size:12px;color:var(--ink-muted);padding-inline:4px}
 #roomPlanJoinResult{grid-column:1/-1;grid-row:3;display:flex;align-items:center;justify-content:space-between;gap:6px 12px;
   padding:6px 14px;background:var(--surface-panel);border-bottom:1px solid var(--line);min-width:0}

@@ -96,6 +96,30 @@ for(const [width,height] of [[1440,900],[820,1180],[390,844],[844,390]]){
  });
 }
 
+test('OP-04 UX keeps the mobile properties dock reachable when opening all tools',async t=>{
+ for(const [width,height] of [[390,844],[820,1180],[844,390]]){
+  const context=await browser.newContext({viewport:{width,height},locale:'es-ES',hasTouch:true,isMobile:true,reducedMotion:'reduce'});
+  try{
+   const page=await context.newPage();
+   await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+   await page.goto(url);
+   await page.locator('#welcomeActionInput').press('Escape');
+   await page.locator('#guideDetails').click();
+   await page.locator('#guideAllTools').click();
+   const panel=page.locator('#tgPanel');
+   const visible=await panel.evaluate(button=>{
+    const {width,height,offsetLeft,offsetTop}=visualViewport;
+    const r=button.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;
+    return innerWidth===width&&x>offsetLeft&&x<offsetLeft+width&&y>offsetTop&&y<offsetTop+height
+      &&button.contains(document.elementFromPoint(x,y));
+   });
+   assert.ok(visible,'Properties must remain tappable without scrolling at '+width+'×'+height);
+   await panel.tap();
+   assert.equal(await page.locator('aside.right.open').count(),0);
+  }finally{await context.close();}
+ }
+});
+
 test('OP-04 UX dismisses the original undo action after an edit or project switch',async t=>{
  const {page,errors}=await pageFor(t),file=path.join(FX,'roomplan-capturedroom.json');
  const model=()=>page.evaluate(()=>({entry:FloorPlanApp.entryId,project:FloorPlanApp.project,depth:[undoStack.length,redoStack.length]}));
