@@ -21,7 +21,8 @@
      5. cada escritura lee la época (A0) dentro de su transacción. */
 (function(root){
  'use strict';
- const DB='rubik-sota-store-v2',STORES=['docs','resources','refs','journal','conflicts','meta'];
+// v2 es el escritor de la época 2 (la que anuncia la conmutación de F0.2c); A0 (época 1) deja de escribir en el legado.
+ const SCHEMA_EPOCH=2,DB='rubik-sota-store-v2',STORES=['docs','resources','refs','journal','conflicts','meta'];
  class StoreError extends Error{constructor(code,message,extra={}){super(message);this.name='StoreError';this.code=code;Object.assign(this,extra);}}
  const KEY_RE=/^[\w.:\/-]{1,200}$/;
 
@@ -49,8 +50,9 @@
    const body=()=>{try{outcome=fn(s,fail);}catch(e){fail(e);}};
    if(!gate)body();
    else s.meta.get('schemaEpoch').onsuccess=e=>{
-    let st=E?E.read():{state:'ok'};if(st.state==='ok'&&E)st=E.fromMeta(e.target.result);
-    else if(!E){const v=e.target.result;st=v===undefined||v?.epoch===1?{state:'ok'}:{state:Number.isInteger(v?.epoch)&&v.epoch>1?'outdated':'indeterminate'};}
+    const own=x=>x.state==='outdated'&&x.epoch<=SCHEMA_EPOCH?{state:'ok',epoch:x.epoch}:x;
+    let st=E?own(E.parse(localStorage.getItem(E.KEY))):{state:'ok'};if(st.state==='ok'&&E)st=own(E.parse(e.target.result===undefined?null:e.target.result));
+    else if(!E){const v=e.target.result;st=v===undefined||v?.epoch<=SCHEMA_EPOCH?{state:'ok'}:{state:Number.isInteger(v?.epoch)?'outdated':'indeterminate'};}
     if(st.state!=='ok'){E?.force(st);fail(new StoreError('schema-'+st.state,E?E.error(st).message:'Esta pestaña no puede escribir.'));return;}
     body();};
    t.oncomplete=()=>resolve(typeof outcome==='function'?outcome():outcome);
@@ -157,7 +159,9 @@
  }
 
  // ── Diario y conflictos (titulares journal:<id> y conflict:<id>) ────────────────────────────────────────────────────
- function journalPut(db,id,record){const text=JSON.stringify(record);const keys=refsOf(text);
+ // El diario del expediente cita sus imágenes en `images: [clave…]` (el formato que ya lee local-images): son referencias explícitas.
+ const journalRefs=record=>{const keys=refsOf(JSON.stringify(record))||new Set();if(Array.isArray(record?.images))for(const k of record.images)if(typeof k==='string')keys.add(k);return keys;};
+ function journalPut(db,id,record){const keys=journalRefs(record);
   return run(db,['journal','refs','resources'],'readwrite',s=>{s.journal.put(record,id);s.resources.getAllKeys().onsuccess=e=>setHolder(s,'journal:'+id,keys);return {status:'saved'};});}
  const journalDelete=(db,id)=>run(db,['journal','refs'],'readwrite',s=>{s.journal.delete(id);setHolder(s,'journal:'+id,new Set());return {status:'deleted'};});
  function conflictAdd(db,record){const keys=new Set();for(const v of Object.values(record.docs||{})){const r=typeof v==='string'?refsOf(v):null;if(r)for(const k of r)keys.add(k);}
@@ -168,7 +172,9 @@
  function collect(db){
   return run(db,['docs','resources','refs','journal','conflicts','meta'],'readwrite',(s,fail)=>{
    let result={removed:[]};
-   if(root.FloorPlanSchemaEpoch?.read().state&&root.FloorPlanSchemaEpoch.read().state!=='ok'){fail(new StoreError('schema-blocked','Recogida detenida por A0.'));return;}
+   {const E=root.FloorPlanSchemaEpoch,x=E?E.parse(localStorage.getItem(E.KEY)):{state:'ok'};if(x.state==='indeterminate'||x.state==='outdated'&&x.epoch>SCHEMA_EPOCH){fail(new StoreError('schema-blocked','Recogida detenida por A0.'));return;}}
+   // R1 §6 bis: durante un rollback de datos no se recoge nada en ningún almacén.
+   s.meta.get('rollback').onsuccess=e=>{const rb=e.target.result;if(rb&&rb.phase!=='done')fail(new StoreError('rollback-in-progress','Recogida detenida: hay una vuelta atrás de datos en curso.'));};
    // Todas las lecturas y los borrados ocurren dentro de esta transacción (callbacks de IndexedDB, sin promesas).
    const got={},names=['resources','refs','docs','journal','conflicts'];let pending=names.length;
    for(const n of names){const q=n==='resources'?s.resources.getAllKeys():s[n].getAll();q.onsuccess=safe(fail,()=>{got[n]=q.result;if(--pending===0)decide();});}
@@ -193,6 +199,6 @@
  const refs=db=>run(db,['refs'],'readonly',s=>{const q=s.refs.getAll();return ()=>q.result;});
  const resourceKeys=db=>run(db,['resources'],'readonly',s=>{const q=s.resources.getAllKeys();return ()=>q.result;});
 
- const api={DB,STORES,StoreError,open,refsOf,commit,stage,cancel,holdSession,releaseDeadSessions,journalPut,journalDelete,conflictAdd,collect,load,getResource,refs,resourceKeys,sha256};
+ const api={SCHEMA_EPOCH,DB,STORES,StoreError,open,refsOf,journalRefs,commit,stage,cancel,holdSession,releaseDeadSessions,journalPut,journalDelete,conflictAdd,collect,load,getResource,refs,resourceKeys,sha256};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanStoreV2=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

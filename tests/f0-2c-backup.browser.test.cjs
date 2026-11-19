@@ -42,7 +42,7 @@ test('consentimiento explícito obligatorio; la copia es completa: documentos, r
       const out=await B.create(db,{consent:{confirmed:true,scope:'private-complete'}});const a=JSON.parse(await out.blob.text());db.close();
       return {codes,counts:out.counts,paths:a.manifest.entries.map(e=>e.path).sort(),private:a.private,algo:a.manifest.algorithm,sha:out.manifestSha256};});
     assert.deepEqual(r.codes,['consent-required','consent-required','consent-required']);
-    assert.deepEqual(r.counts,{docs:3,resources:3,photos:2,refs:7,journal:1,conflicts:1});
+    assert.deepEqual(r.counts,{docs:3,resources:3,photos:2,refs:8,journal:1,conflicts:1}); // 8: el diario cita su foto en images[] (fila journal:<id>)
     assert.ok(r.paths.includes('resources/mue01/'+'1'.padStart(64,'0'))&&r.paths.includes('resources/mue01/'+'2'.padStart(64,'0'))&&r.paths.includes('resources/img_plano'),'incluye las fotos privadas y el plano');
     for(const p2 of ['index/refs.json','index/resources.json','journal.json','conflicts.json','docs/rubik-budget-v1'])assert.ok(r.paths.includes(p2),p2);
     assert.equal(r.private,true);assert.equal(r.algo,'SHA-256');assert.match(r.sha,/^[0-9a-f]{64}$/);

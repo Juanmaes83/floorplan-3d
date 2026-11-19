@@ -115,11 +115,11 @@ test('integridad SHA-256 (R1-D8): huella declarada distinta se rechaza; bytes al
   }finally{await ctx.close();}
 });
 
-test('A0 en v2: con la época 2 ninguna escritura entra (confirmación, en vuelo, recogida)',{timeout:60000},async()=>{
+test('A0 en v2: con una época posterior a la de v2 (3) ninguna escritura entra (confirmación, en vuelo, recogida)',{timeout:60000},async()=>{
   const {ctx,p,errors}=await page();
   try{
     const r=await p.evaluate(async()=>{const db=await fresh();await S.stage(db,'op',[{key:mue(15),bytes:blob('a')}]);await S.cancel(db,'op');
-      await new Promise(res=>{const t=db.transaction('meta','readwrite');t.objectStore('meta').put({epoch:2},'schemaEpoch');t.oncomplete=res;});
+      await new Promise(res=>{const t=db.transaction('meta','readwrite');t.objectStore('meta').put({epoch:3},'schemaEpoch');t.oncomplete=res;});
       const codes=[];for(const f of [()=>S.commit(db,{baseRevision:0,changes:{lib:projectWith()}}),()=>S.stage(db,'op2',[{key:mue(16),bytes:blob('b')}]),()=>S.collect(db)])
         codes.push(await f().then(()=>'escrito',e=>e.code));
       const keys=await S.resourceKeys(db),{revision}=await S.load(db);db.close();FloorPlanSchemaEpoch._reset();return {codes,keys,revision};});

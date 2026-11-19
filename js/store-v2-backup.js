@@ -39,10 +39,16 @@
  }
 
  // ── Crear ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+ const consented=c=>c&&c.confirmed===true&&c.scope==='private-complete';
  async function create(db,{consent}={}){
-  if(!consent||consent.confirmed!==true||consent.scope!=='private-complete')
-   throw new BackupError('consent-required','La copia completa incluye fotos privadas: hace falta tu confirmación explícita.');
-  const s=await snapshot(db),files={},entries=[];
+  if(!consented(consent))throw new BackupError('consent-required','La copia completa incluye fotos privadas: hace falta tu confirmación explícita.');
+  return fromSnapshot(await snapshot(db),{consent});
+ }
+ // La misma copia a partir de cualquier instantánea con la forma de snapshot() (lo usa la migración para copiar el almacén
+ // legado ANTES de migrar: R1 §6 paso 0). Un solo formato, un solo verificador.
+ async function fromSnapshot(s,{consent}={}){
+  if(!consented(consent))throw new BackupError('consent-required','La copia completa incluye fotos privadas: hace falta tu confirmación explícita.');
+  const files={},entries=[];
   const add=async(path,bytes,extra={})=>{const h=await sha(bytes);entries.push({path,sha256:h,size:bytes.length});files[path]={...extra,encoding:'base64',data:b64(bytes)};return h;};
   for(let i=0;i<s.docKeys.length;i++){if(typeof s.docs[i]!=='string')throw new BackupError('unreadable','El documento «'+s.docKeys[i]+'» no es legible: no se genera una copia incompleta.');
    await add('docs/'+s.docKeys[i],enc.encode(s.docs[i]));}
@@ -167,6 +173,6 @@
  }
  function defaultDownload(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
 
- const api={FORMAT,VERSION,BackupError,snapshot,create,verify,dryRun,restoreInto,openDialog};
+ const api={FORMAT,VERSION,BackupError,snapshot,create,fromSnapshot,verify,dryRun,restoreInto,openDialog};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanStoreV2Backup=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
