@@ -88,7 +88,14 @@
    if(!prior)store.addDelivery(src.entry.id,src.subject,delivery);
    const confirmed=await session.flush();
    if(confirmed.status!=='saved')throw confirmed.error||Error('El registro de entrega sigue pendiente.');
-  }else R.open(localStorage).addDelivery(src.entry.id,src.subject,delivery);
+  }else{
+   // A0 (R1 §3): Evolución también es un escritor de una clave gestionada (rubik-construction-v1). Pasa por la misma puerta
+   // que el editor: si esta pestaña es de una época anterior (o no se puede comprobar), no escribe y lo dice; si escribe,
+   // queda registrada como escritor (evidencia de convivencia R1-D1).
+   const E=window.FloorPlanSchemaEpoch;
+   if(E)E.check(localStorage);
+   R.open(E?E.guardStorage(localStorage):localStorage).addDelivery(src.entry.id,src.subject,delivery);
+  }
   if(!bridge)src.toRubik('delivered',{deliveryId:delivery.id});
   return f;
  };
