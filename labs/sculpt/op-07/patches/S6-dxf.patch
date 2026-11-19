@@ -1,0 +1,88 @@
+From 0b538ba7d6bfdb7683827ef761fe5e219e42954f Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 22:52:04 +0000
+Subject: [PATCH 4/6] =?UTF-8?q?OP-07=20S6=20=C2=B7=20DXF:=20piezas=20por?=
+ =?UTF-8?q?=20faceta=20y=20una=20huella=20por=20faceta=20legible=20por=20p?=
+ =?UTF-8?q?lan-intake?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ js/dxf-export.js           |  4 +++-
+ js/project-core.js         |  6 ++++++
+ tests/op07-s6-dxf.test.cjs | 25 +++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 tests/op07-s6-dxf.test.cjs
+
+diff --git a/js/dxf-export.js b/js/dxf-export.js
+index 884bd103..83f56995 100644
+--- a/js/dxf-export.js
++++ b/js/dxf-export.js
+@@ -104,7 +104,9 @@
+     // without mistaking visible jambs and gaps for independent walls.
+     drawing.setActiveLayer(Integrity.auxiliaryLayer);
+     for (const wall of project.walls) {
+-      if (wall.status !== 'demolished') drawing.drawPolyline(Core.wallRect(wall).poly.map(toCad), true);
++      // OP-07 · S6: one rectangular footprint per facet (a straight wall: its single rectangle, as before). RUBIK's own DXF
++      // reader (plan-intake) reads 4-vertex footprints, so a curved wall comes back as its facets within the tolerance.
++      if (wall.status !== 'demolished') for (const poly of Core.wallFootprints(wall)) drawing.drawPolyline(poly.map(toCad), true);
+     }
+     for (const door of geometry.doors) drawDoor(drawing, door);
+     for (const window of geometry.windows) drawOpening(drawing, window, 'WINDOWS', 0.25);
+diff --git a/js/project-core.js b/js/project-core.js
+index 37a5134a..fe89d75d 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -323,6 +323,11 @@
+     const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
+     return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
+   }
++  // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
++  function wallFootprints(w) {
++    if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
++    return Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
++  }
+   function geometry(p) {
+     const walls=[],windows=[],doors=[],slides=[],voids=[];
+     for (const w of p.walls) {
+@@ -377,4 +382,5 @@
+   // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
+   Object.assign(api,{WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
+   Object.assign(api,{wallOutline});   // OP-07 S2
++  Object.assign(api,{wallFootprints});   // OP-07 S6
+ })(globalThis);
+diff --git a/tests/op07-s6-dxf.test.cjs b/tests/op07-s6-dxf.test.cjs
+new file mode 100644
+index 00000000..a4a606b4
+--- /dev/null
++++ b/tests/op07-s6-dxf.test.cjs
+@@ -0,0 +1,25 @@
++'use strict';
++// OP-07 · S6 DXF (G-02): el muro curvo sale con las mismas facetas que el plano; los proyectos existentes, byte a byte
++// iguales; el lector DXF de RUBIK lo vuelve a leer como facetas rectas (sin romper el camino exacto de G-02).
++const test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
++const Core=require('../js/project-core.js'),{exportLevel}=require('../js/dxf-export.js'),{dxfFromText}=require('../js/plan-intake.js');
++const DxfParser=require('../vendor/dxf-parser/dxf-parser.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const parse=t=>new DxfParser().parseSync(t),layer=(d,l)=>d.entities.filter(e=>e.layer===l&&e.type==='LWPOLYLINE');
++
++test('S6 · proyecto existente: DXF byte a byte idéntico a master (02712b51)',async()=>{
++ assert.equal(crypto.createHash('sha256').update(await exportLevel(Core.initial())).digest('hex'),'bac0cac3910084887bbd1d77d46920035bcfec9a12263d1449d3cd87726f6fba');
++});
++
++test('S6 · muro curvo: piezas visibles = plano, una huella por faceta y relectura como facetas',async()=>{
++ const {project,wall}=F.curved(F.base(),{withOpening:false});wall.status='existing';Core.validate(project);
++ const text=await exportLevel(project),dxf=parse(text),n=Walls.facetCount(wall,Core.WALL_PATH);
++ const pieces=Core.geometry(project).walls.filter(r=>r.status==='existing');
++ assert.equal(layer(dxf,'WALLS_EXISTING').length,pieces.length,'las piezas del plano, una a una');
++ const plain=parse(await exportLevel(F.base()));
++ assert.equal(layer(dxf,'RUBIK_WALL_FOOTPRINT').length,layer(plain,'RUBIK_WALL_FOOTPRINT').length-1+n,'el muro curvo aporta una huella por faceta');
++ assert.ok(layer(dxf,'RUBIK_WALL_FOOTPRINT').every(e=>e.vertices.length===4),'huellas de 4 vértices, como lee plan-intake');
++ // Relectura con el lector de RUBIK: el camino exacto de G-02 sigue activo y las facetas reconstruyen la trayectoria.
++ const back=await dxfFromText(text,{parse});const L=w=>Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
++ const total=back.project.walls.reduce((s,w)=>s+L(w),0),expected=F.base().walls.filter(w=>w.status!=='demolished'&&w.id!==wall.id).reduce((s,w)=>s+L(w),0)+Core.wallLength(wall);
++ assert.ok(Math.abs(total-expected)<=back.project.walls.length*1.5,`longitud releída ${total.toFixed(1)} ≈ ${expected.toFixed(1)} mm (redondeo a mm por muro)`);
++});
+-- 
+2.43.0
+

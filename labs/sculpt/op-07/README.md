@@ -1,5 +1,7 @@
 # SCULPT OP-07 · Muros curvos e inclinados, división y perfiles (laboratorio)
 
+**Integración preparada (19/11/2026):** parches S1–S6 probados y no aplicados en [INTEGRACION.md](INTEGRACION.md).
+
 **Estado:** laboratorio aislado, pulido tras aprobarse D-OP07-1/2/3 ([DECISIONES.md](DECISIONES.md)). No toca producción, el contrato canónico, `index.html`, `project-core`, `quantity-core`, `building-core`, persistencia, APIs ni workflows. Fuera del despliegue (`labs/` está en `.vercelignore`).
 
 **Fila de cartera:** OP-07 en [sculpt-openplan3d-roomgpt-2026-11-18.md](../../../docs/product/sculpt-openplan3d-roomgpt-2026-11-18.md) (en #261): «Acreditar el delta sobre la geometría canónica y validar los consumidores antes de ampliar el contrato».

@@ -1,0 +1,198 @@
+From f916898ebe9351011c8e62fb770068010f13b63e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 22:52:03 +0000
+Subject: [PATCH 2/6] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y=20?=
+ =?UTF-8?q?plano:=20piezas=20por=20faceta,=20aberturas=20sobre=20la=20tray?=
+ =?UTF-8?q?ectoria=20y=20contorno=20del=20muro?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ js/project-core.js              | 53 ++++++++++++++++++++++++++++-----
+ tests/op07-s2-geometry.test.cjs | 50 +++++++++++++++++++++++++++++++
+ tests/op07/fixtures.cjs         | 21 ++++++++-----
+ 3 files changed, 108 insertions(+), 16 deletions(-)
+ create mode 100644 tests/op07-s2-geometry.test.cjs
+
+diff --git a/js/project-core.js b/js/project-core.js
+index 8a20a16b..37a5134a 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -289,33 +289,69 @@
+     Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status,declared:!!w.structureSource});
+     return rect;
+   }
++  // OP-07 · S2: plan pieces of a curved or sloped wall. One straight sub-wall per facet of the single geometric core
++  // (same facets as 3D, measurements and DXF), solid where no opening is, so every consumer of geometry().walls keeps
++  // drawing rectangles. Each piece carries its heights at both ends (heightStart/heightEnd, m) for sloped walls.
++  function shapedPieces(w, openings) {
++    const path=Walls.pathProfile(w,WALL_PATH),holes=[];
++    for (const o of openings) {const a=o.offsetMm,b=o.offsetMm+o.widthMm,last=holes.at(-1);if(last&&a<=last[1])last[1]=Math.max(last[1],b);else holes.push([a,b]);}
++    const pieces=[];
++    for (const span of path.spans) {
++      if (!(span.length>0)) continue;
++      const sub={...w,start:span.start,end:span.end},solid=[];let at=span.from;
++      for (const [a,b] of holes) {if(b<=at||a>=span.to)continue;if(a>at)solid.push([at,a]);at=Math.max(at,b);}
++      if (at<span.to) solid.push([at,span.to]);
++      for (const [a,b] of solid) if (b-a>1e-6) {
++        const rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
++        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true});
++        pieces.push(rect);
++      }
++    }
++    return pieces;
++  }
++  // The straight host of an opening: the wall itself, or on a curved wall the chord between the two edges of the opening
++  // on the faceted path (its symbol is drawn on that chord, at the opening's true place).
++  function openingHost(w, o) {
++    if (!Walls.isCurved(w)) return {host:w,offset:o.offsetMm};
++    const path=Walls.pathProfile(w,WALL_PATH),a=path.sample(o.offsetMm).point,b=path.sample(o.offsetMm+o.widthMm).point;
++    return {host:{...w,start:a,end:b},offset:0};
++  }
++  // Closed outline of a whole wall in plan: the rectangle of a straight wall, or the left face of every facet followed by
++  // the right face backwards (for the DXF auxiliary layer, the envelope and hit areas). Straight wall = wallRect().poly.
++  function wallOutline(w) {
++    if (!shapedWall(w) || !Walls.isCurved(w)) return wallRect(w).poly;
++    const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
++    return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
++  }
+   function geometry(p) {
+     const walls=[],windows=[],doors=[],slides=[],voids=[];
+     for (const w of p.walls) {
+-      const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
++      const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),shaped=shapedWall(w);
+       const openings=p.openings.filter(o=>o.wallId===w.id).sort((a,b)=>a.offsetMm-b.offsetMm);
++      if (shaped) walls.push(...shapedPieces(w,openings));
+       // Merge overlapping intervals for the solid portions; opening visuals retain their IDs.
+       let at=0;
+       for (const o of openings) {
+-        if (o.offsetMm>at) walls.push(wallRect(w,at,o.offsetMm-at));
++        if (!shaped && o.offsetMm>at) walls.push(wallRect(w,at,o.offsetMm-at));
+         at=Math.max(at,o.offsetMm+o.widthMm);
+-        const rect=wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
++        const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
++        const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
+         Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
+         if(w.status==='demolished') continue;
+         if(o.kind==='window') windows.push(rect);
+         else if(o.kind==='door') {
+-          const end=o.swing?.hinge==='end',left=o.swing?.side!=='right';
++          const end=o.swing?.hinge==='end',left=o.swing?.side!=='right',span=shaped?rect.spanMm:o.widthMm;
+           const normal=left?[u[1],-u[0]]:[-u[1],u[0]],c=end?[-u[0],-u[1]]:u;
+-          const base=[w.start.x+u[0]*(o.offsetMm+(end?o.widthMm:0)),w.start.y+u[1]*(o.offsetMm+(end?o.widthMm:0))];
+-          doors.push({id:o.id,rect,h:[base[0]+normal[0]*w.thicknessMm/2,base[1]+normal[1]*w.thicknessMm/2],c,o:normal,len:o.widthMm,entry:o.isEntrance,height:o.heightMm/1000});
++          const base=[host.start.x+u[0]*(offset+(end?span:0)),host.start.y+u[1]*(offset+(end?span:0))];
++          doors.push({id:o.id,rect,h:[base[0]+normal[0]*w.thicknessMm/2,base[1]+normal[1]*w.thicknessMm/2],c,o:normal,len:shaped?span:o.widthMm,entry:o.isEntrance,height:o.heightMm/1000});
+         } else if(o.kind==='sliding-door') slides.push({id:o.id,rect,v:Math.abs(u[1])>Math.abs(u[0]),height:o.heightMm/1000});
+         else voids.push(rect);
+       }
+-      if(at<length) walls.push(wallRect(w,at,length-at));
++      if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
+     }
+     const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
+     const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
+-    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallRect(w).poly.map(([x,y])=>({x,y})))];
++    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
+     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
+     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
+@@ -340,4 +376,5 @@
+   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
+   // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
+   Object.assign(api,{WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
++  Object.assign(api,{wallOutline});   // OP-07 S2
+ })(globalThis);
+diff --git a/tests/op07-s2-geometry.test.cjs b/tests/op07-s2-geometry.test.cjs
+new file mode 100644
+index 00000000..675c692c
+--- /dev/null
++++ b/tests/op07-s2-geometry.test.cjs
+@@ -0,0 +1,50 @@
++'use strict';
++// OP-07 · S2 Geometría y plano: un rectángulo por faceta del núcleo único, macizo donde no hay abertura; muros rectos
++// idénticos a master; símbolo de abertura en su sitio real sobre la trayectoria.
++const test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
++const Core=require('../js/project-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const hash=g=>{const {source,...rest}=g;return crypto.createHash('sha256').update(JSON.stringify(rest)).digest('hex');};
++const near=(a,b,e=1e-6)=>Math.abs(a-b)<=e;
++
++test('S2 · muros rectos: geometría idéntica byte a byte a master (02712b51) en el proyecto de ejemplo',()=>{
++ assert.equal(hash(Core.geometry(Core.initial())),'9ed837545457015eb34460ac82ac005b0d3752808651bea4eb16ee15001b94a0');
++ for(const w of Core.initial().walls)assert.deepEqual(Core.wallOutline(w),Core.wallRect(w).poly);
++});
++
++test('S2 · en un proyecto con un muro curvo, todos los demás muros y aberturas salen igual que sin él',()=>{
++ const plain=F.base(),{project,wall}=F.curved(F.base(),{heightEndMm:2400,withOpening:false});
++ const strip=g=>({walls:g.walls.filter(r=>r.id!==wall.id).map(r=>JSON.stringify(r)),doors:JSON.stringify(g.doors),windows:JSON.stringify(g.windows),rooms:JSON.stringify(g.rooms)});
++ assert.deepEqual(strip(Core.geometry(project)),strip(Core.geometry(plain)));
++});
++
++test('S2 · muro curvo: piezas por faceta que cubren la trayectoria menos las aberturas, con alturas continuas',()=>{
++ const {project,wall}=F.curved(F.base(),{heightEndMm:2400});Core.validate(project);
++ const g=Core.geometry(project),pieces=g.walls.filter(r=>r.id===wall.id),path=Walls.pathProfile(wall,Core.WALL_PATH);
++ const holes=project.openings.filter(o=>o.wallId===wall.id).reduce((s,o)=>s+o.widthMm,0);
++ assert.ok(near(pieces.reduce((s,r)=>s+r.spanMm,0),path.length-holes,1e-6),'macizo = trayectoria − aberturas');
++ assert.ok(pieces.every(r=>r.id===wall.id&&r.shaped),'cada pieza conserva el id del muro (selección)');
++ assert.ok(near(pieces[0].heightStart,2.8)&&near(pieces.at(-1).heightEnd,2.4),'pendiente de 2,8 a 2,4 m');
++ for(let i=1;i<pieces.length;i++)if(near(pieces[i].poly[0][0],pieces[i-1].poly[1][0],1e-6))assert.ok(near(pieces[i].heightStart,pieces[i-1].heightEnd),'alturas continuas');
++ // Resolución: la desviación máxima de cada faceta respecto a la curva no supera la tolerancia única.
++ assert.ok(Walls.deviationBound(wall,Walls.facetCount(wall,Core.WALL_PATH))<=Core.WALL_PATH.toleranceMm+1e-12);
++ // La envolvente incluye la panza de la curva (no solo la cuerda).
++ const xs=pieces.flatMap(r=>r.poly.map(p=>p[0])),ys=pieces.flatMap(r=>r.poly.map(p=>p[1])),e=g.envelope;
++ assert.ok(Math.min(...xs)>=e.x-1e-6&&Math.max(...xs)<=e.x+e.w+1e-6&&Math.min(...ys)>=e.y-1e-6&&Math.max(...ys)<=e.y+e.h+1e-6);
++});
++
++test('S2 · aberturas en curva: el símbolo se dibuja sobre la cuerda entre sus dos bordes reales',()=>{
++ const {project,wall}=F.curved(F.base());const g=Core.geometry(project),path=Walls.pathProfile(wall,Core.WALL_PATH);
++ const win=project.openings.find(o=>o.id==='opn_op07-win'),door=project.openings.find(o=>o.id==='opn_op07-door');
++ const r=g.windows.find(x=>x.openingId===win.id),a=path.sample(win.offsetMm).point,b=path.sample(win.offsetMm+win.widthMm).point;
++ assert.ok(near(r.center[0],(a.x+b.x)/2)&&near(r.center[1],(a.y+b.y)/2),'centro de la ventana en su sitio');
++ const d=g.doors.find(x=>x.id===door.id),s=path.sample(door.offsetMm).point;
++ assert.ok(Math.hypot(d.h[0]-s.x,d.h[1]-s.y)<=wall.thicknessMm/2+1e-6,'bisagra en el borde real de la puerta');
++ assert.ok(near(d.len,Math.hypot(path.sample(door.offsetMm+door.widthMm).point.x-s.x,path.sample(door.offsetMm+door.widthMm).point.y-s.y)),'hoja = cuerda del hueco');
++});
++
++test('S2 · contorno de un muro curvo: cerrado, con las dos caras de todas las facetas',()=>{
++ const {wall}=F.curved(F.base(),{withOpening:false}),o=Core.wallOutline(wall),n=Walls.facetCount(wall,Core.WALL_PATH);
++ assert.equal(o.length,2*(n+1));
++ const area=Math.abs(o.reduce((s,p,i)=>s+p[0]*o[(i+1)%o.length][1]-o[(i+1)%o.length][0]*p[1],0))/2;
++ assert.ok(Math.abs(area-Core.wallLength(wall)*wall.thicknessMm)/area<0.01,'área del contorno ≈ trayectoria × grosor');
++});
+diff --git a/tests/op07/fixtures.cjs b/tests/op07/fixtures.cjs
+index 9ace855d..8eb5f236 100644
+--- a/tests/op07/fixtures.cjs
++++ b/tests/op07/fixtures.cjs
+@@ -3,16 +3,21 @@
+    (Core.initial). Ninguno es un proyecto de cliente. */
+ const Core=require('../../js/project-core.js');
+ const clone=x=>JSON.parse(JSON.stringify(x));
+-// El muro más largo del ejemplo con un hueco: se curva hacia fuera de la vivienda y se inclina de 2800 a 2400 mm.
++// El ejemplo pone cada abertura en su propio tramo de muro; las pruebas curvan el muro MACIZO más largo y, si se pide,
++// le añaden una ventana y una puerta reales sobre la trayectoria (offset físico, como el contrato).
+ function base(){const p=Core.clone(Core.initial());p.schemaVersion='1.13.0';return p;}
+-function longest(p,{withOpening=true}={}){const has=new Set(p.openings.map(o=>o.wallId));
+- return p.walls.filter(w=>w.status!=='demolished'&&(!withOpening||has.has(w.id))).sort((a,b)=>Math.hypot(b.end.x-b.start.x,b.end.y-b.start.y)-Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y))[0];}
+-function curved(p=base(),{bulgeMm=600,heightEndMm,withOpening=true}={}){const w=longest(p,{withOpening});
+- const mx=(w.start.x+w.end.x)/2,my=(w.start.y+w.end.y)/2,L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),nx=-(w.end.y-w.start.y)/L,ny=(w.end.x-w.start.x)/L;
+- w.curve={control:{x:Math.round(mx+nx*bulgeMm*2),y:Math.round(my+ny*bulgeMm*2)}};if(heightEndMm!==undefined)w.heightEndMm=heightEndMm;return {project:p,wall:w};}
+-function sloped(p=base(),{heightEndMm=2400}={}){const w=longest(p,{withOpening:false});w.heightEndMm=heightEndMm;return {project:p,wall:w};}
++const len=w=>Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
++function longest(p){const used=new Set(p.openings.map(o=>o.wallId));return p.walls.filter(w=>w.status!=='demolished'&&!used.has(w.id)).sort((a,b)=>len(b)-len(a))[0];}
++function curved(p=base(),{bulgeMm=600,heightEndMm,withOpening=true}={}){const w=longest(p);
++ const mx=(w.start.x+w.end.x)/2,my=(w.start.y+w.end.y)/2,L=len(w),nx=-(w.end.y-w.start.y)/L,ny=(w.end.x-w.start.x)/L;
++ w.curve={control:{x:Math.round(mx+nx*bulgeMm*2),y:Math.round(my+ny*bulgeMm*2)}};if(heightEndMm!==undefined)w.heightEndMm=heightEndMm;
++ if(withOpening){const path=Core.wallLength(w);
++  p.openings.push({id:'opn_op07-win',wallId:w.id,kind:'window',offsetMm:Math.round(path*.18),widthMm:1200,heightMm:1100,sillHeightMm:900},
++   {id:'opn_op07-door',wallId:w.id,kind:'door',offsetMm:Math.round(path*.6),widthMm:900,heightMm:2100,sillHeightMm:0,swing:{hinge:'start',side:'left'}});}
++ return {project:p,wall:w};}
++function sloped(p=base(),{heightEndMm=2400}={}){const w=longest(p);w.heightEndMm=heightEndMm;return {project:p,wall:w};}
+ // Un muro aislado (sin estancias que dependan de él) para pruebas de fórmula.
+ function lone({start={x:0,y:0},end={x:4000,y:0},control,heightMm=2800,heightEndMm,thicknessMm=240}={}){
+  const p=base();p.walls=[{id:'wal_op07',start,end,thicknessMm,heightMm,structure:'partition',status:'new',...(control?{curve:{control}}:{}),...(heightEndMm!==undefined?{heightEndMm}:{})}];
+  p.openings=[];p.rooms=[];p.objects=[];p.measurements=[];return p;}
+-module.exports={clone,base,longest,curved,sloped,lone};
++module.exports={clone,base,longest,curved,sloped,lone,len};
+-- 
+2.43.0
+
