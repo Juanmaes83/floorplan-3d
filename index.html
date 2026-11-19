@@ -5570,6 +5570,40 @@ window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationDecor',{get:()=>{const lamps=lampG?.children.filter(o=>o.isMesh)||[];return {outline:roomOutline?.userData.presentationOutline||null,ceilingFixtures:!lamps.length?'none':lamps.every(o=>o.visible)?'visible':lamps.some(o=>o.visible)?'mixed':'hidden'};}});
 Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&{...frameInfo,eye:[...frameInfo.eye],look:[...frameInfo.look]}});
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
+/* OP-10 C4+C7 · «Escena para Blender»: captura de SOLO LECTURA de lo que se ve (js/scene-capture-core.js). Espera a una escena
+   estable (sin recursos cargando, sin animación ni vuelo, puertas en reposo, misma firma N fotogramas), es cancelable con
+   AbortSignal y comprueba que el proyecto no cambia. Declara la pose de cámara y la luz del visor (C7); no inventa nada. */
+async function captureScene({signal,stableFrames=30,timeoutMs=120000,includeTerritory=false,onState}={}){
+  const C=window.RubikSceneCapture,err=(code,es)=>Object.assign(Error(es),{code});
+  if(!C)throw err('UNAVAILABLE','El módulo de captura de escena no está cargado.');
+  if(!inited||!active||contextLost)throw err('NOT_3D','Abre la vista 3D para preparar la escena.');
+  const cancelled=()=>{if(signal?.aborted)throw err('CANCELLED','Preparación cancelada. No se ha generado nada.');};
+  const t0=performance.now(),deadline=t0+timeoutMs,doorsAtRest=()=>doors.every(d=>Math.abs(d.cur-(d.open?d.a1:d.a0))<1e-3);
+  const signature=()=>{let s='';scene.traverse(o=>{if(!o.isMesh||!o.visible)return;s+=o.id+':'+(o.geometry?.id??'')+':'+o.matrixWorld.elements.map(v=>v.toFixed(6)).join(',');if(o.isInstancedMesh)s+=':'+o.count+':'+o.instanceMatrix.version;s+='|';});return s;};
+  let same=0,last=null,frames=0;
+  for(;;){
+    cancelled();if(performance.now()>deadline)throw err('UNSTABLE','La escena no terminó de cargar a tiempo. Espera a que se vean todos los muebles y vuelve a intentarlo.');
+    await new Promise(r=>requestAnimationFrame(r));frames++;cancelled();
+    const loading=assetRequests.size||[...assetStates.values()].some(a=>a.state==='loading'),busy=anim||fly||renderSuspended||loading||!doorsAtRest();
+    onState?.(busy?(loading?'loading':'moving'):'settling');
+    const sig=busy?null:signature();same=sig&&sig===last?same+1:0;last=sig;if(same>=stableFrames)break;
+  }
+  const app=window.FloorPlanApp,before=JSON.stringify(app?.project??null),light={night:!!opt.night,hour:opt.hour,exposure:renderer.toneMappingExposure,
+    sun:{direction:sun.position.clone().sub(sun.target.position).normalize().toArray(),color:'#'+sun.color.getHexString(),intensity:sun.intensity},
+    hemi:{sky:'#'+hemi.color.getHexString(),ground:'#'+hemi.groundColor.getHexString(),intensity:hemi.intensity},
+    background:scene.background?.isColor?'#'+scene.background.getHexString():null,
+    lamps:(()=>{const pl=lampG?.children.find(o=>o.isPointLight);return {on:!!opt.night,intensity:pl?.intensity??0,distance:pl?.distance??null,color:pl?'#'+pl.color.getHexString():null};})()};
+  const t1=performance.now(),doc=C.capture(scene,{unitsToMetres:1,includeTerritory,excludeNodes:new Map([[ground,'decorative-ground']]),
+    scope:levelView==='all'?'stacked-levels':'active-level',
+    frame:{source:'RUBIK View3D',originPlanMm:{x:geometry.center.x,y:geometry.center.y},mapping:'x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000',activeLevelId:levelContext?.activeLevelId||null,levelView},
+    view:{camera:{...presentationPose(),source:'viewer'},light}}),t2=performance.now();
+  if(JSON.stringify(app?.project??null)!==before)throw err('MUTATION','La captura habría cambiado el proyecto; se ha detenido sin generar nada.');
+  const assets=[...assetStates.values()].reduce((n,a)=>(n[a.state||'unknown']=(n[a.state||'unknown']||0)+1,n),{});
+  return {doc,info:{projectId:app?.project?.id??null,projectUpdatedAt:app?.project?.updatedAt??null,stability:{frames,stableFrames,waitedMs:Math.round(t1-t0)},captureMs:Math.round((t2-t1)*10)/10,assets,
+    assetErrors:[...assetStates.entries()].filter(([,a])=>a.state==='error').map(([id,a])=>({id,reason:a.reason||null})),
+    objects:(furnG?.children||[]).filter(g=>typeof g.userData?.fid==='string').map(g=>({id:g.userData.fid,catalogModel:!!g.userData.authorizedAsset})).sort((a,b)=>a.id.localeCompare(b.id))}};
+}
+window.View3D.captureScene=captureScene;
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
