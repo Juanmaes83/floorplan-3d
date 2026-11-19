@@ -8,6 +8,7 @@
   "tests/build-palette.browser.test.cjs",
   "tests/consolidacion-transversal.browser.test.cjs",
   "tests/client-review.browser.test.cjs",
+  "tests/ux03-wall-faces.browser.test.cjs",
   "tests/variants.browser.test.cjs",
   "tests/building.browser.test.cjs",
   "tests/evolution-demo.browser.test.cjs",
