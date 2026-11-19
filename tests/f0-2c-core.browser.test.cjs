@@ -138,3 +138,60 @@ test('concurrencia: dos confirmaciones sobre la misma revisión desde dos pesta�
     assert.deepEqual(out,['conflict','saved']);
   }finally{await ctx.close();}
 });
+
+// ── Cierre del núcleo (mandato 19/11) ─────────────────────────────────────────────────────────────────────────────────
+test('referencia a un recurso inexistente: se informa y protege los bytes que lleguen después',{timeout:60000},async()=>{
+  const {ctx,p,errors}=await page();
+  try{
+    const r=await p.evaluate(async()=>{const db=await fresh();const k=mue(20);
+      const c=await S.commit(db,{baseRevision:0,changes:{lib:projectWith(k)}});
+      const rows=(await S.refs(db)).map(x=>x.resourceKey+'|'+x.holder);
+      // Los bytes llegan después por una operación que se cancela: la fila doc:lib ya los protege.
+      await S.stage(db,'tarde',[{key:k,bytes:blob('llega tarde')}]);await S.cancel(db,'tarde');
+      const g=await S.collect(db);const kept=(await S.resourceKeys(db)).includes(k);db.close();return {missing:c.missing,rows,removed:g.removed,kept,k};});
+    assert.deepEqual(r.missing,[r.k],'la ausencia se informa');assert.deepEqual(r.rows,[r.k+'|doc:lib'],'la fila existe aunque falten los bytes');
+    assert.deepEqual(r.removed,[]);assert.equal(r.kept,true);assert.deepEqual(errors,[]);
+  }finally{await ctx.close();}
+});
+
+test('misma clave con huella distinta: nunca se sobrescribe en silencio; con la misma huella es idempotente',{timeout:60000},async()=>{
+  const {ctx,p,errors}=await page();
+  try{
+    const r=await p.evaluate(async()=>{const db=await fresh();const k=mue(21);
+      await S.stage(db,'a',[{key:k,bytes:blob('original')}]);const sha=(await S.getResource(db,k)).sha256;
+      const other=await S.stage(db,'b',[{key:k,bytes:blob('distinto')}]).then(()=>'escrito',e=>e.code);
+      const viaCommit=await S.commit(db,{baseRevision:0,changes:{lib:projectWith(k)},resources:[{key:k,bytes:blob('distinto')}]}).then(()=>'escrito',e=>e.code);
+      const same=await S.stage(db,'c',[{key:k,bytes:blob('original')}]).then(()=>'ok',e=>e.code);
+      const after=(await S.getResource(db,k)).sha256,{revision}=await S.load(db),pend=(await S.refs(db)).map(x=>x.holder).sort();db.close();
+      return {other,viaCommit,same,unchanged:after===sha,revision,pend};});
+    assert.equal(r.other,'resource-conflict');assert.equal(r.viaCommit,'resource-conflict');assert.equal(r.same,'ok');
+    assert.equal(r.unchanged,true,'los bytes originales se conservan');assert.equal(r.revision,0,'el guardado rechazado no confirma nada');
+    assert.deepEqual(r.pend,['pending:a','pending:c'],'la operación rechazada no deja filas');assert.deepEqual(errors,[]);
+  }finally{await ctx.close();}
+});
+
+test('sesiones frente a una recogida concurrente: quitar una foto y protegerla por el historial es atómico; una sesión tardía informa',{timeout:120000},async()=>{
+  const ctx=await browser.newContext();
+  try{
+    const a=await ctx.newPage(),b=await ctx.newPage();await a.goto(url);await b.goto(url);
+    await a.evaluate(async()=>{(await fresh()).close();navigator.locks.request('rubik-sota-tab:A',()=>new Promise(()=>{}));});
+    // B recoge sin parar mientras A, 25 veces, quita la foto del documento (con y sin protección del historial).
+    const race=async withSession=>{
+      await b.evaluate(()=>{window.stop=false;window.loops=0;(async()=>{const db=await S.open();while(!window.stop){await S.collect(db).catch(()=>{});window.loops++;}db.close();})();});
+      const lost=await a.evaluate(async withSession=>{const db=await S.open();let lost=0,rev=(await S.load(db)).revision;
+        for(let i=0;i<25;i++){const k=mue(1000+i+(withSession?0:500));
+          rev=(await S.commit(db,{baseRevision:rev,changes:{lib:projectWith(k)},resources:[{key:k,bytes:blob('f'+i+withSession)}]})).revision;
+          rev=(await S.commit(db,{baseRevision:rev,changes:{lib:projectWith()},session:withSession?{tab:'A',keys:[k]}:null})).revision;
+          await new Promise(r=>setTimeout(r,15));if(!(await S.resourceKeys(db)).includes(k))lost++;}
+        db.close();return lost;},withSession);
+      const loops=await b.evaluate(()=>{window.stop=true;return window.loops;});return {lost,loops};};
+    const protectedRun=await race(true),control=await race(false);
+    assert.ok(protectedRun.loops>0&&control.loops>0,'la recogida corrió en paralelo');
+    assert.equal(protectedRun.lost,0,'con la fila de sesión en la misma transacción no se pierde ninguna');
+    assert.ok(control.lost>0,'control: sin historial, la foto quitada sí se recoge (la prueba detecta el riesgo)');
+    // Sesión que se incorpora DESPUÉS de una recogida: no afirma proteger lo que ya no existe.
+    const late=await a.evaluate(async()=>{const db=await S.open();const k=mue(2000);await S.stage(db,'x',[{key:k,bytes:blob('x')}]);await S.cancel(db,'x');
+      await S.collect(db);const h=await S.holdSession(db,'B',[k]);db.close();return {missing:h.missing,k};});
+    assert.deepEqual(late.missing,[late.k]);
+  }finally{await ctx.close();}
+});

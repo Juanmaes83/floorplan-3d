@@ -88,17 +88,29 @@
  }
 
  // Reemplaza en la transacción las filas de un titular por las de `keys` (solo las de recursos existentes o nuevos).
- function setHolder(s,holder,keys,known){
+ // Las filas se escriben TAMBIÉN para recursos que aún no existen: si sus bytes llegan después (otra pestaña, una
+ // restauración), ya están protegidos. La ausencia se informa a quien confirma, nunca se ignora en silencio.
+ function setHolder(s,holder,keys){
   const at=new Date().toISOString();
   s.refs.index('byHolder').openCursor(IDBKeyRange.only(holder)).onsuccess=e=>{const c=e.target.result;
    if(c){if(!keys.has(c.value.resourceKey))c.delete();c.continue();return;}
-   for(const k of keys)if(known.has(k))s.refs.put({resourceKey:k,holder,at});};
+   for(const k of keys)s.refs.put({resourceKey:k,holder,at});};
+ }
+ // Escribe recursos sin sobrescribir nunca en silencio: misma clave y misma huella → no hace nada (idempotente); misma
+ // clave y huella distinta → la transacción entera se aborta (`resource-conflict`). Llama a `then` cuando termina.
+ function putResources(s,prepared,fail,then){
+  let left=prepared.length;if(!left){then();return;}
+  for(const p of prepared){const q=s.resources.get(p.key);q.onsuccess=safe(fail,()=>{const cur=q.result;
+   if(cur&&cur.sha256!==p.value.sha256){fail(new StoreError('resource-conflict','Ya existe otro recurso con la clave «'+p.key+'» y una huella distinta: no se sobrescribe.',{key:p.key}));return;}
+   if(!cur)s.resources.put(p.value,p.key);if(--left===0)then();});}
  }
 
  // ── Confirmación atómica (regla 1) ──────────────────────────────────────────────────────────────────────────────────
  // changes: {clave: cadena|null}; resources: [{key, bytes, sha256?, mediaType?, kind?}]; ops: operaciones en vuelo que esta
  // confirmación cierra (sus filas pending:<op> se retiran en la MISMA transacción, una vez escritas las doc:<k>).
- async function commit(db,{baseRevision,changes={},resources=[],ops=[],by=''}){
+ // session: {tab, keys}: filas session:<tab> del historial de la pestaña, en la MISMA transacción que el cambio (R1-D9):
+ // quitar una foto del documento y protegerla por el deshacer ocurre a la vez; no hay instante en que quede huérfana.
+ async function commit(db,{baseRevision,changes={},resources=[],ops=[],session=null,by=''}){
   const prepared=await prepare(resources),refsByDoc={};
   for(const [k,v] of Object.entries(changes)){if(v===null){refsByDoc[k]=new Set();continue;}
    if(typeof v!=='string')throw new StoreError('doc-type','El documento «'+k+'» debe ser una cadena JSON.');
@@ -107,16 +119,15 @@
    let out;
    s.meta.get('revision').onsuccess=safe(fail,e=>{const cur=e.target.result?.n??0;
     if(cur!==baseRevision){fail(new StoreError('conflict','Otra pestaña guardó antes.',{revision:cur}));return;}
-    for(const p of prepared)s.resources.put(p.value,p.key);
-    // Recursos conocidos = existentes + nuevos: una referencia a un recurso que no existe no crea fila (no hay huérfano
-    // inverso), pero queda registrada como ausente en el resultado.
-    s.resources.getAllKeys().onsuccess=safe(fail,ev=>{
-     const known=new Set([...ev.target.result,...prepared.map(p=>p.key)]),missing=new Set();
+    putResources(s,prepared,fail,()=>s.resources.getAllKeys().onsuccess=safe(fail,ev=>{
+     // Una referencia a un recurso inexistente se registra igualmente (protege bytes que lleguen después) y se informa.
+     const known=new Set(ev.target.result),missing=new Set();
      for(const [k,v] of Object.entries(changes)){if(v===null)s.docs.delete(k);else s.docs.put(v,k);
-      for(const r of refsByDoc[k])if(!known.has(r))missing.add(r);setHolder(s,'doc:'+k,refsByDoc[k],known);}
+      for(const r of refsByDoc[k])if(!known.has(r))missing.add(r);setHolder(s,'doc:'+k,refsByDoc[k]);}
+     if(session)setHolder(s,'session:'+session.tab,new Set(session.keys));
      for(const op of ops)s.refs.index('byHolder').openCursor(IDBKeyRange.only('pending:'+op)).onsuccess=c=>{const cur2=c.target.result;if(cur2){cur2.delete();cur2.continue();}};
      const n=cur+1,at=new Date().toISOString();s.meta.put({n,at,by},'revision');
-     out={status:'saved',revision:n,missing:[...missing]};});
+     out={status:'saved',revision:n,missing:[...missing]};}));
    });
    return ()=>out;
   });
@@ -126,14 +137,16 @@
  async function stage(db,op,resources){
   if(!KEY_RE.test(op))throw new StoreError('op','Identificador de operación no válido.');
   const prepared=await prepare(resources);
-  return run(db,['resources','refs'],'readwrite',s=>{const at=new Date().toISOString();
-   for(const p of prepared){s.resources.put(p.value,p.key);s.refs.put({resourceKey:p.key,holder:'pending:'+op,at});}
+  return run(db,['resources','refs'],'readwrite',(s,fail)=>{const at=new Date().toISOString();
+   putResources(s,prepared,fail,()=>{for(const p of prepared)s.refs.put({resourceKey:p.key,holder:'pending:'+op,at});});
    return {status:'staged',keys:prepared.map(p=>p.key)};});
  }
  const cancel=(db,op)=>run(db,['refs'],'readwrite',s=>{s.refs.index('byHolder').openCursor(IDBKeyRange.only('pending:'+op)).onsuccess=e=>{const c=e.target.result;if(c){c.delete();c.continue();}};return {status:'cancelled'};});
 
  // ── Historial de sesiones (regla 4, R1-D9) ──────────────────────────────────────────────────────────────────────────
- const holdSession=(db,tab,keys)=>run(db,['refs','resources'],'readwrite',s=>{s.resources.getAllKeys().onsuccess=e=>setHolder(s,'session:'+tab,new Set(keys),new Set(e.target.result));return {status:'held'};});
+ // Serializada con la recogida por IndexedDB (ambas readwrite sobre refs): o entra antes y protege, o entra después y
+ // informa qué recursos ya no existen (`missing`); nunca afirma proteger algo que no está.
+ const holdSession=(db,tab,keys)=>run(db,['refs','resources'],'readwrite',s=>{let missing=[];s.resources.getAllKeys().onsuccess=e=>{const have=new Set(e.target.result);missing=keys.filter(k=>!have.has(k));setHolder(s,'session:'+tab,new Set(keys));};return ()=>({status:'held',missing});});
  async function releaseDeadSessions(db,locks=root.navigator?.locks){
   if(typeof locks?.query!=='function')return {released:[]}; // sin Web Locks nadie retira filas de otra pestaña
   const alive=new Set((await locks.query()).held.map(l=>l.name).filter(n=>n?.startsWith('rubik-sota-tab:')).map(n=>n.slice('rubik-sota-tab:'.length)));
@@ -145,11 +158,11 @@
 
  // ── Diario y conflictos (titulares journal:<id> y conflict:<id>) ────────────────────────────────────────────────────
  function journalPut(db,id,record){const text=JSON.stringify(record);const keys=refsOf(text);
-  return run(db,['journal','refs','resources'],'readwrite',s=>{s.journal.put(record,id);s.resources.getAllKeys().onsuccess=e=>setHolder(s,'journal:'+id,keys,new Set(e.target.result));return {status:'saved'};});}
- const journalDelete=(db,id)=>run(db,['journal','refs'],'readwrite',s=>{s.journal.delete(id);setHolder(s,'journal:'+id,new Set(),new Set());return {status:'deleted'};});
+  return run(db,['journal','refs','resources'],'readwrite',s=>{s.journal.put(record,id);s.resources.getAllKeys().onsuccess=e=>setHolder(s,'journal:'+id,keys);return {status:'saved'};});}
+ const journalDelete=(db,id)=>run(db,['journal','refs'],'readwrite',s=>{s.journal.delete(id);setHolder(s,'journal:'+id,new Set());return {status:'deleted'};});
  function conflictAdd(db,record){const keys=new Set();for(const v of Object.values(record.docs||{})){const r=typeof v==='string'?refsOf(v):null;if(r)for(const k of r)keys.add(k);}
   return run(db,['conflicts','refs','resources'],'readwrite',s=>{let id;const q=s.conflicts.add({...record,at:new Date().toISOString()});
-   q.onsuccess=()=>{id=q.result;s.resources.getAllKeys().onsuccess=e=>setHolder(s,'conflict:'+id,keys,new Set(e.target.result));};return ()=>({id});});}
+   q.onsuccess=()=>{id=q.result;s.resources.getAllKeys().onsuccess=e=>setHolder(s,'conflict:'+id,keys);};return ()=>({id});});}
 
  // ── Recogida transaccional (regla 3) ────────────────────────────────────────────────────────────────────────────────
  function collect(db){
