@@ -2,7 +2,7 @@
    viewing, anchored to the whole home or to a room (during the presentation, the room on screen), and downloads
    `observaciones-<versión>.json`. The professional imports that file into the same project and decides
    «Incorporar» or «Descartar» for each one. Nothing here edits the project; drafts and decisions stay in this
-   browser (localStorage `rubik-review-v1`, per project). */
+   browser (managed document `rubik-review-v1`, per project). */
 (function(){
  'use strict';
  const R=window.FloorPlanReviewNotes,app=window.FloorPlanApp,KEY='rubik-review-v1';
@@ -11,8 +11,8 @@
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const button=(text,parent,fn,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';b.onclick=fn;return b;};
  const say=(m,d=4000)=>typeof toast==='function'?toast(m,d):void 0;
- const load=()=>{try{const v=JSON.parse(localStorage.getItem(KEY));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}};
- const save=all=>{try{localStorage.setItem(KEY,JSON.stringify(all));}catch{say(tx('No se pudieron guardar las observaciones en este navegador.','Observations could not be saved in this browser.','无法在此浏览器中保存意见。'),6000);}};
+ const load=()=>{try{const v=JSON.parse(app.storage.getItem(KEY));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}};
+ const save=all=>{try{app.storage.setItem(KEY,JSON.stringify(all));}catch{say(tx('No se pudieron guardar las observaciones en este navegador.','Observations could not be saved in this browser.','无法在此浏览器中保存意见。'),6000);}};
  const revision=()=>FloorPlanGuide.revision(app.project);
  const local=v=>typeof nm==='function'?nm(v):v,roomName=r=>local(r.name);
  // The review thread belongs to the project the file came from (see subject() below): every local copy of it reads the same thread.

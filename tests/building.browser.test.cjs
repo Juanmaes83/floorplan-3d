@@ -8,7 +8,7 @@ const Core=require('../js/project-core.js'),B=require('../js/building-core.js'),
 const root=path.resolve(__dirname,'..'),KEY='rubik-sota-project-library-v1',shots='docs/qa/artifacts/multilevel';
 let server,browser,url;const cache=new Map();
 before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.webp')?'image/webp':file.endsWith('.json')?'application/json':file.endsWith('.png')?'image/png':file.endsWith('.wasm')?'application/wasm':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
- await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://f0-2b.localhost:${server.address().port}/`;
  browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(shots,{recursive:true});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 const curl=target=>new Promise((resolve,reject)=>execFile('curl',['--fail','--silent','--show-error','--max-time','30',target],{maxBuffer:20e6},(e,out)=>e?reject(e):resolve(out)));
@@ -20,7 +20,7 @@ async function setup(context){
 }
 const bw5Count=b=>B.warnings(b).filter(w=>w.code==='BW5').length;
 const digest=v=>require('node:crypto').createHash('sha256').update(typeof v==='string'?v:B.canonical(v)).digest('hex');
-const lib=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)),KEY);
+const lib=page=>page.evaluate(async k=>{const session=FloorPlanApp.persistence.session;await FloorPlanApp.persistence.requireSaved();return JSON.parse((await FloorPlanPersistence.load(session.db)).docs.get(k));},KEY);
 const ctx=page=>page.evaluate(()=>FloorPlanBuildingUI.context);
 const press=async(page,locator,mobile)=>{const l=page.locator(locator);await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();};
 async function download(page,trigger){const pending=page.waitForEvent('download');await trigger();const d=await pending,chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return {name:d.suggestedFilename(),bytes:Buffer.concat(chunks)};}
@@ -63,11 +63,11 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  await addRoom(page,mobile,{name:'Dormitorio',width:4400,depth:2400,x:400,y:400});
  await openLevels(page,mobile);
  await page.fill('#levelOffsetX-1','2600');await press(page,'#levelApply-1',mobile);
- await page.waitForFunction(()=>FloorPlanApp.levelContext&&JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.find(e=>e.kind==='building').building.levels[1].offsetMm.x===2600);
+ await page.waitForFunction(()=>FloorPlanApp.levelContext&&JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.find(e=>e.kind==='building').building.levels[1].offsetMm.x===2600);
  assert.match(await page.locator('.level-alignment').first().textContent(),/2 de 4 muros tienen un muro debajo/);
  await page.fill('#stairX','4900');await page.fill('#stairY','2100');await page.fill('#stairRotation','0');await page.fill('#stairWidth','900');await page.fill('#stairRun','2400');await page.fill('#stairRisers','14');
  assert.match(await page.locator('#stairDerived').textContent(),/Desnivel 3100 mm · contrahuella 221 mm.*no se comprueban contra ninguna normativa/);
- await press(page,'#stairSave',mobile);await page.waitForFunction(()=>JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.find(e=>e.kind==='building').building.stairs.length===1);
+ await press(page,'#stairSave',mobile);await page.waitForFunction(()=>JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.find(e=>e.kind==='building').building.stairs.length===1);
  assert.match(await page.locator('#levelAreas').textContent(),/«Planta baja» 16,80 m² · «Planta primera» 10,56 m² · total 27,36 m²/);
  const warnings=await page.locator('#levelWarnings li').evaluateAll(l=>l.map(x=>x.dataset.code));assert.deepEqual(warnings,['BW3','BW4']);
  await page.locator('#levelWarnings').scrollIntoViewIfNeeded();await shot('02-levels-building');await closeLevels(page,mobile);
@@ -137,19 +137,19 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  // 8. Re-import the building JSON (new entry, open one kept) and a tampered ZIP (rejected, nothing changes).
  const tmp=await fs.mkdtemp(path.join(require('node:os').tmpdir(),'bld-ui-'));await fs.writeFile(path.join(tmp,'edificio.json'),json.bytes);
  const count=(await lib(page)).entries.length;await page.locator('#fileIn').setInputFiles(path.join(tmp,'edificio.json'));
- await page.waitForFunction(n=>JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.length===n+1,count);
+ await page.waitForFunction(n=>JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.length===n+1,count);
  data=await lib(page);const imported=data.entries.find(e=>e.id===data.activeId);assert.equal(imported.kind,'building');// Identity contract (js/project-library.js): a building file imported where its levels are already stored keeps every
  // level, geometry and id EXCEPT the project ids already taken, which are new (two stored projects never share a budget).
  {const strip=ls=>ls.map(l=>({...l,project:{...l.project,id:''}}));assert.equal(digest(strip(imported.building.levels)),digest(strip(beforeReload.levels)));
   imported.building.levels.forEach((l,i)=>assert.notEqual(l.project.id,beforeReload.levels[i].project.id));}
  const tampered=new Map([...entries].map(([k,v])=>[k,new Uint8Array(v)]));const b2=JSON.parse(new TextDecoder().decode(tampered.get('building.json')));b2.stairs[0].toLevelId='lvl_missing';tampered.set('building.json',new TextEncoder().encode(JSON.stringify(b2)));
  await fs.writeFile(path.join(tmp,'manipulado.zip'),Buffer.from(await P.zip(tampered,{check:B.packagePath}).arrayBuffer()));
- const raw=await page.evaluate(k=>localStorage.getItem(k),KEY);await page.locator('#uploadIn').setInputFiles(path.join(tmp,'manipulado.zip'));
+ const raw=await page.evaluate(k=>FloorPlanApp.storage.getItem(k),KEY);await page.locator('#uploadIn').setInputFiles(path.join(tmp,'manipulado.zip'));
  await page.waitForFunction(()=>/missing level reference lvl_missing/.test(document.body.innerText),null,{timeout:30000});
- assert.equal(digest(await page.evaluate(k=>localStorage.getItem(k),KEY)),digest(raw),'tampered ZIP leaves the collection byte-identical');
+ assert.equal(digest(await page.evaluate(k=>FloorPlanApp.storage.getItem(k),KEY)),digest(raw),'tampered ZIP leaves the collection byte-identical');
  // The genuine ZIP imports with verified per-level images.
  await fs.writeFile(path.join(tmp,'edificio.zip'),zip.bytes);await page.locator('#uploadIn').setInputFiles(path.join(tmp,'edificio.zip'));
- await page.waitForFunction(n=>JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.length===n+2,count);
+ await page.waitForFunction(n=>JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.length===n+2,count);
 
  // 9. The presentation covers the whole building (both levels, grouped); single-level consumers (sheet, variant
  // comparison) name the active level.
@@ -160,7 +160,7 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetDialog[open]').waitFor();
  assert.match(await page.locator('#sheetTitle').textContent(),/Lámina de la planta «Planta baja» · edificio/);await page.locator('#sheetClose').click();
  await press(page,'#projectsBtn',mobile);await page.locator('#projectsDialog[open]').waitFor();await press(page,'#projectVariant',mobile);
- await page.waitForFunction(()=>/Variante 1/.test(JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.find(e=>e.id===JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).activeId).name));
+ await page.waitForFunction(()=>/Variante 1/.test(JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.find(e=>e.id===JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).activeId).name));
  data=await lib(page);const variant=data.entries.find(e=>e.id===data.activeId);assert.equal(variant.kind,'building');assert.equal(variant.building.levels.length,2);assert.ok(variant.variantOf);
  await press(page,'#projectCompare',mobile);await page.locator('#variantsDialog[open]').waitFor();
  const titles=await page.locator('#variantsCards .variant-card h3').allTextContents();assert.equal(titles.length,2);assert.ok(titles.every(x=>/· Planta baja/.test(x)),titles.join(' | '));
@@ -192,15 +192,15 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  const hasImage=k=>page.evaluate(async k=>!!(await FloorPlanImages.get(k)),k);assert.equal(await hasImage(ref),true);
  page.on('dialog',d=>d.accept());
  await press(page,'#projectsBtn',mobile);await page.fill('#projectName','Copia del edificio');await press(page,'#projectDuplicate',mobile);
- await page.waitForFunction(()=>FloorPlanBuildingUI.context&&JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.name==='Copia del edificio'));
+ await page.waitForFunction(()=>FloorPlanBuildingUI.context&&JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.name==='Copia del edificio'));
  data=await lib(page);const copy=data.entries.find(e=>e.name==='Copia del edificio'),orig=data.entries.find(e=>e.id===pdfEntry);
  assert.equal(copy.kind,'building');assert.notEqual(copy.building.id,orig.building.id);assert.notDeepEqual(copy.building.levels.map(l=>l.id),orig.building.levels.map(l=>l.id));
  assert.equal(digest(copy.building.levels[1].project.rooms),digest(orig.building.levels[1].project.rooms));
  await page.selectOption('#projectList',copy.id);await press(page,'#projectDelete',mobile);
- await page.waitForFunction(id=>!JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.id===id),copy.id);await page.waitForTimeout(500);
+ await page.waitForFunction(id=>!JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.id===id),copy.id);await page.waitForTimeout(500);
  assert.equal(await hasImage(ref),true,'image still referenced by the original building is kept');
  await page.selectOption('#projectList',pdfEntry);await press(page,'#projectDelete',mobile);
- await page.waitForFunction(id=>!JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.id===id),pdfEntry);
+ await page.waitForFunction(id=>!JSON.parse(FloorPlanApp.storage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.id===id),pdfEntry);
  let removed=false;for(let i=0;i<30&&!removed;i++){removed=!(await hasImage(ref));if(!removed)await page.waitForTimeout(500);}
  assert.equal(removed,true,'image removed once no entry references it');await press(page,'#projectClose',mobile);
  await fs.rm(tmp,{recursive:true});
