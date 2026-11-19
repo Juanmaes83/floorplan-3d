@@ -11,74 +11,118 @@
    that tree (CI of #242 on the identical tree 5fcb252, plus the pure tests locally). They do NOT re-accredit
    Production by themselves: Render IA's `production` evidence was re-checked on 17/11 with the same no-cost check on
    the current public deployment; its real-image accreditation is still D1 of 09/11.
+   K9 · Registro ÚNICO (Plan Maestro v1.12 §6.3): la Home, el Asistente (assistant-runtime-core) y la matriz de
+   trazabilidad leen este archivo; nadie declara estados por su cuenta. Cada entrada tiene un NIVEL de madurez con su
+   evidencia, y el estado que ve cada consumidor se DERIVA de ese nivel (no se escribe a mano, no puede contradecirlo):
+     planned     → solo planificado o bloqueado; sin acceso.
+     developed   → existe en una PR/rama, NO integrado en master (K4, F0…): nunca se anuncia; lleva PR y SHA.
+     integrated  → en master con módulos y pruebas; sin validación independiente ni Production.
+     validated   → en master y validado (prueba + revisión con SHA), aún no activo en Production.
+     pilot       → en master, usable en este navegador sin cuentas ni garantías comerciales.
+     simulation  → en master, demostración rotulada: ningún proveedor, ningún resultado entregable.
+     production  → activo en Production: exige despliegue, SHA y comprobación (`production`).
+   Solo `production` se anuncia como «Disponible» con botón de acceso. assertEntry() rechaza al cargar cualquier entrada
+   que anuncie más de lo que su evidencia permite; tests/capability-registry*.test.cjs lo comprueban y contrastan cada
+   entrada con su fila de docs/product/MATRIZ-TRAZABILIDAD-v1.12.md.
    UMD: window.FloorPlanCapabilities / module.exports. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanCapabilities=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
  const VERIFIED_AT='40b4ae5d724ef83d0e70651545b4f5e4832becd3';
  const STATES=Object.freeze(['available','validation','preparation']);
+ const LEVELS=Object.freeze(['planned','developed','integrated','validated','pilot','simulation','production']);
+ // Despliegue de Production acreditado (el mismo para todo lo que está en Production): master@40b4ae5 desde el 17/11.
+ const DEPLOYMENT=Object.freeze({deployment:'dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs',sha:'40b4ae5d724ef83d0e70651545b4f5e4832becd3',checkedAt:'2026-11-17'});
+ const BASE_CHECK='Módulos y pruebas presentes en master@40b4ae5, el árbol servido por '+DEPLOYMENT.deployment+'; pruebas citadas en verde en ese árbol (CI de #242 sobre el árbol idéntico 5fcb252).';
+ // Estado que ve cada consumidor, derivado del nivel: nunca se escribe a mano.
+ const homeState=level=>level==='production'?'available':level==='planned'||level==='developed'?'preparation':'validation';
+ const aiState=level=>level==='production'?'available':level==='pilot'||level==='simulation'?level:'preparation';
+ // Filas de la matriz v1.12 que cada entrada concreta (la matriz es la autoridad del estado documental; ver el test).
+ const MATRIX=Object.freeze({'render-ai':['GOV-01a','GOV-01b','GOV-01c'],'client-file':['ENT-01','ENT-02'],'construction-plan':['OBR-01'],'evolution-4d':['OBR-01','OBR-02','OBR-03'],
+  assistant:['AG-1','AG-2','AG-3'],catalogs:['CAT-02'],'visual-studio':['CAT-01','IMG-10','IMG-14','IMG-15'],'photo-reform':['FOT-01'],'assistant-llm':['AG-0'],'photo-real':['FOT-01'],
+  'catalog-budget':['CAT-03'],'assistant-catalogs':['CAT-03'],'room-type':['UX-24','UX-26'],'persistence-v2':[]});
+ // Lo que bloquea cada servicio IA no activo (IDs del catálogo; Plan Maestro v1.12 §1): se conserva y no se puede
+ // anunciar ese servicio en Production mientras siga aquí.
+ const BLOCKED_BY=Object.freeze({'visual-studio':['GOV-05','GOV-06a','IMG-04'],'photo-reform':['GOV-05','GOV-06a','IMG-04'],'photo-real':['GOV-05','GOV-06a','IMG-04'],
+  'assistant-llm':['GOV-06a','AG-0','GOV-05'],catalogs:['GOV-06a'],'catalog-budget':['GOV-06a'],'assistant-catalogs':['GOV-06a']});
+ class RegistryError extends Error{constructor(id,message){super(`${id}: ${message}`);this.name='RegistryError';this.id=id;}}
+ // Ninguna entrada anuncia más de lo que su evidencia permite (se comprueba al cargar: un registro incoherente no arranca).
+ function assertEntry(e){
+  if(!LEVELS.includes(e.level))throw new RegistryError(e.id,'nivel desconocido «'+e.level+'»');
+  if(e.level==='production'){const p=e.production;
+   if(!p||!/^dpl_\w+$/.test(p.deployment)||!/^[0-9a-f]{40}$/.test(p.sha)||!/^\d{4}-\d{2}-\d{2}$/.test(p.checkedAt)||!(p.check?.length>10))throw new RegistryError(e.id,'«production» sin evidencia de Production (despliegue, SHA, fecha y comprobación)');
+   if(BLOCKED_BY[e.id]?.length)throw new RegistryError(e.id,'no puede estar en Production mientras lo bloquean '+BLOCKED_BY[e.id].join(', '));}
+  else if(e.production)throw new RegistryError(e.id,'declara evidencia de Production sin estar en Production');
+  if(e.level==='developed'&&!(Number.isInteger(e.pr)&&/^[0-9a-f]{40}$/.test(e.headSha||'')))throw new RegistryError(e.id,'«developed» exige la PR y el SHA donde existe');
+  if(['integrated','validated','pilot','simulation','production'].includes(e.level)&&!(e.modules?.length&&e.tests?.length))throw new RegistryError(e.id,'sin módulos o pruebas');
+  if(e.level==='validated'&&!(e.validation&&/^[0-9a-f]{40}$/.test(e.validation.sha)))throw new RegistryError(e.id,'«validated» exige la validación con su SHA');
+  if((e.level==='pilot'||e.level==='simulation')&&!e.limits)throw new RegistryError(e.id,'un piloto o una simulación deben declarar sus límites');
+  return e;
+ }
  // access: how the Home opens it, always through an existing entry point.
  //   upload → the «Subir un plano» entry · walk → the existing 3D walk of the example · area:<key> → a professional
  //   work area (FloorPlanProfessionalUI.open), never a new screen.
- const C=(id,name,benefit,state,access,modules,tests,professions,limits=null)=>Object.freeze({id,name,benefit,state,access,modules,tests,professions,limits,verifiedAt:VERIFIED_AT});
+ const C=(id,name,benefit,level,access,modules,tests,professions,limits=null)=>Object.freeze(assertEntry({id,name,benefit,level,state:homeState(level),access,modules,tests,professions,limits,
+  matrix:MATRIX[id]||[],verifiedAt:VERIFIED_AT,production:level==='production'?(id==='render-ai'?RENDER_PRODUCTION:Object.freeze({...DEPLOYMENT,check:BASE_CHECK})):null}));
+ const RENDER_PRODUCTION=Object.freeze({...DEPLOYMENT,check:'Comprobación sin gasto del 17/11: POST /api/render sin código en la URL pública → 401 token (proveedor no llamado, no genera imagen); RUBIK_RENDER_ENABLED=1 en Production (metadatos). NO es una acreditación con imagen: la acreditación real es la D1 del 09/11 (docs/render-ai/d1-acta-de-cierre-2026-11-09.md)'});
  const CAPABILITIES=Object.freeze([
   C('import',['Subir y calibrar tu plano','Upload and calibrate your plan','上传并校准平面图'],
    ['PDF, imagen, DXF o IFC convertidos en un plano editable; compruebas la escala con una medida conocida.','PDF, image, DXF or IFC turned into an editable plan; you check the scale with a known length.','将 PDF、图片、DXF 或 IFC 转为可编辑平面图，并用已知尺寸核对比例。'],
-   'available','upload',['js/plan-intake.js','js/plan-intake-ui.js','js/tracing-ui.js'],['tests/plan-intake.test.cjs','tests/upload.browser.test.cjs','tests/multiformat-guide.browser.test.cjs'],
+   'production','upload',['js/plan-intake.js','js/plan-intake-ui.js','js/tracing-ui.js'],['tests/plan-intake.test.cjs','tests/upload.browser.test.cjs','tests/multiformat-guide.browser.test.cjs'],
    ['architecture','renovation','general'],['Las medidas son orientativas: no sustituyen una medición profesional.','Measurements are indicative, not a professional survey.','尺寸仅供参考，不能替代专业测量。']),
   C('walk3d',['Recorrido 3D por dentro','3D walk-through inside','室内 3D 漫游'],
    ['La misma distribución se recorre estancia a estancia, en ordenador o móvil.','The same layout is walked room by room, on a computer or a phone.','同一布局可在电脑或手机上逐个房间漫游。'],
-   'available','walk',['index.html'],['tests/walk.browser.test.cjs','tests/walk-controls.browser.test.cjs'],
+   'production','walk',['index.html'],['tests/walk.browser.test.cjs','tests/walk-controls.browser.test.cjs'],
    ['real-estate','interior','general']),
   C('presentation',['Presentación 3D guiada','Guided 3D presentation','引导式 3D 展示'],
    ['Recorrido narrado por estancias, plantillas profesionales, sección y vista axonométrica.','Narrated tour by room, professional templates, section and axonometric view.','按房间讲解的漫游、专业模板、剖面和轴测视图。'],
-   'available','area:deliver',['js/presentation-ui.js','js/presentation-story-core.js','js/presentation-templates-core.js'],['tests/presentation-story.browser.test.cjs','tests/presentation-templates.browser.test.cjs'],
+   'production','area:deliver',['js/presentation-ui.js','js/presentation-story-core.js','js/presentation-templates-core.js'],['tests/presentation-story.browser.test.cjs','tests/presentation-templates.browser.test.cjs'],
    ['real-estate','developer','interior']),
   C('render-ai',['Render IA fotorrealista','Photorealistic AI render','照片级 AI 渲染'],
    ['Una imagen fotorrealista a partir de una vista real del proyecto, con estilos y acabados alternativos.','A photorealistic image from a real view of the project, with alternative styles and finishes.','基于项目真实视图生成照片级图片，可选风格和饰面。'],
-   'available','area:deliver',['js/ai-render-ui.js','api/render.js','js/delivery-image.js'],['tests/ai-render-api.test.cjs','tests/ai-render.browser.test.cjs','tests/delivery-image-detail.browser.test.cjs'],
+   'production','area:deliver',['js/ai-render-ui.js','api/render.js','js/delivery-image.js'],['tests/ai-render-api.test.cjs','tests/ai-render.browser.test.cjs','tests/delivery-image-detail.browser.test.cjs'],
    ['interior','renovation','real-estate','developer','general'],
    ['Imagen orientativa: no sustituye la geometría del proyecto. Requiere el código de acceso de tu estudio y cada imagen consume créditos de IA.','Indicative image: it does not replace the project geometry. It needs your studio access code and each image uses AI credits.','参考图片：不能替代项目几何。需要工作室访问码，每张图片消耗 AI 额度。']),
   C('sheet',['Lámina a escala con tu marca','Scaled sheet with your brand','带品牌的比例图纸'],
    ['La distribución en una lámina lista para enviar, con tu logo y tus datos.','The layout on a sheet ready to send, with your logo and details.','带有你标志和信息、可直接发送的布局图纸。'],
-   'available','area:deliver',['js/sheet-ui.js','js/brand-ui.js'],['tests/sheet.browser.test.cjs','tests/sheet-scale.browser.test.cjs'],
+   'production','area:deliver',['js/sheet-ui.js','js/brand-ui.js'],['tests/sheet.browser.test.cjs','tests/sheet-scale.browser.test.cjs'],
    ['architecture']),
   C('analyze',['Orientación, sol y emplazamiento','Orientation, sun and site','朝向、日照与场地'],
    ['Orientación del proyecto, soleamiento y su relación con la parcela.','Project orientation, sunlight and its relation to the plot.','项目朝向、日照及与地块的关系。'],
-   'available','area:analyze',['js/solar-ui.js','js/territory-ui.js','js/parcel-site-adapter.js'],['tests/site-analyze.browser.test.cjs'],
+   'production','area:analyze',['js/solar-ui.js','js/territory-ui.js','js/parcel-site-adapter.js'],['tests/site-analyze.browser.test.cjs'],
    ['architecture'],['Datos orientativos; no es un estudio solar ni topográfico certificado.','Indicative data; not a certified solar or survey study.','数据仅供参考，不是认证的日照或测绘研究。']),
   C('budget',['Mediciones y presupuesto','Quantities and budget','工程量与预算'],
    ['Cantidades del proyecto, precios propios o de referencia, revisión e IVA; exportación BC3.','Project quantities, your own or reference prices, review and VAT; BC3 export.','项目工程量、自有或参考价格、审核及增值税；BC3 导出。'],
-   'available','area:budget',['js/budget-ui.js','js/quantity-schedule-ui.js','js/bc3-budget-core.js'],['tests/budget-ui.browser.test.cjs','tests/quantity-schedule.browser.test.cjs'],
+   'production','area:budget',['js/budget-ui.js','js/quantity-schedule-ui.js','js/bc3-budget-core.js'],['tests/budget-ui.browser.test.cjs','tests/quantity-schedule.browser.test.cjs'],
    ['architecture','renovation','construction','general'],['Un presupuesto con partidas sin precio se muestra como parcial.','A budget with unpriced items is shown as partial.','含未定价项目的预算显示为部分预算。']),
   C('variants',['Comparar propuestas','Compare proposals','比较方案'],
    ['Varias versiones del mismo proyecto lado a lado: superficie, estancias y holguras.','Several versions of the same project side by side: area, rooms and clearances.','同一项目的多个版本并排比较：面积、房间和间距。'],
-   'available','area:design',['js/project-variants.js'],['tests/variants.test.cjs','tests/variants.browser.test.cjs'],
+   'production','area:design',['js/project-variants.js'],['tests/variants.test.cjs','tests/variants.browser.test.cjs'],
    ['renovation']),
   C('building',['Viviendas de dos plantas','Two-storey homes','两层住宅'],
    ['Cada tipología con sus plantas y escaleras, en 2D y 3D.','Each unit type with its levels and stairs, in 2D and 3D.','每种户型含楼层和楼梯，支持 2D 和 3D。'],
-   'available','area:design',['js/building-ui.js','js/building-core.js'],['tests/building.browser.test.cjs','tests/building-presentation.browser.test.cjs'],
+   'production','area:design',['js/building-ui.js','js/building-core.js'],['tests/building.browser.test.cjs','tests/building-presentation.browser.test.cjs'],
    ['developer','construction']),
   C('brand',['Tu marca en cada entrega','Your brand on every delivery','每次交付都带你的品牌'],
    ['Logo y datos profesionales en láminas, imágenes y presentaciones.','Logo and professional details on sheets, images and presentations.','标志和专业信息出现在图纸、图片和展示中。'],
-   'available','area:studio',['js/brand-ui.js','js/brand-core.js'],['tests/brand.browser.test.cjs','tests/brand-core.test.cjs'],
+   'production','area:studio',['js/brand-ui.js','js/brand-core.js'],['tests/brand.browser.test.cjs','tests/brand-core.test.cjs'],
    ['developer']),
   C('client-file',['Entrega al cliente','Client delivery','客户交付'],
    ['Archivo de cliente para abrir sin instalar nada, con vídeo del recorrido y comentarios.','A client file that opens without installing anything, with the tour video and comments.','客户无需安装即可打开的文件，附漫游视频和评论。'],
-   'available','area:deliver',['js/client-share-ui.js','js/tour-video-ui.js'],['tests/client-share.browser.test.cjs','tests/tour-video.browser.test.cjs'],
+   'production','area:deliver',['js/client-share-ui.js','js/tour-video-ui.js'],['tests/client-share.browser.test.cjs','tests/tour-video.browser.test.cjs'],
    ['real-estate'],['El enlace público en línea está en revisión de seguridad; el archivo local no depende de él.','The online public link is under security review; the local file does not depend on it.','在线公开链接正在进行安全审查；本地文件不依赖它。']),
   // HOM-02 · Constructora / jefe de obra: FT3D-8 capabilities in master. The 4D evolution is derived from the plan and
   // the budget: it never states real progress on site.
   C('construction-plan',['Plan de obra y Gantt','Works plan and Gantt','施工计划与甘特图'],
    ['Tareas, fechas, dependencias e hitos ligados a los elementos del proyecto y a sus partidas.','Tasks, dates, dependencies and milestones linked to the project elements and budget items.','任务、日期、依赖关系和里程碑，关联项目构件和预算条目。'],
-   'available','area:budget',['js/construction-plan-ui.js','js/construction-schedule-core.js','js/construction-record-core.js'],['tests/m2-s4.browser.test.cjs','tests/construction-schedule-core.test.cjs'],
+   'production','area:budget',['js/construction-plan-ui.js','js/construction-schedule-core.js','js/construction-record-core.js'],['tests/m2-s4.browser.test.cjs','tests/construction-schedule-core.test.cjs'],
    ['construction'],['Es la obra planificada: no registra el avance real ni datos de obra.','It is the planned works: it does not record real progress or site data.','这是计划中的施工：不记录真实进度或现场数据。']),
   C('evolution-4d',['Evolución de obra en 3D (4D)','Works evolution in 3D (4D)','3D 施工进展（4D）'],
    ['La obra prevista día a día en 3D, con vídeo y presentación para el cliente, desde el plan y el presupuesto.','The planned works day by day in 3D, with a video and presentation for the client, from the plan and the budget.','基于计划和预算，逐日展示计划施工的 3D 进展，并生成给客户的视频和展示。'],
-   'available','area:deliver',['evolucion/fidelity-app.js','js/construction-context.js','js/construction-delivery-core.js'],['tests/ft3d-8-ux4d.browser.test.cjs','tests/construction-delivery-core.test.cjs'],
+   'production','area:deliver',['evolucion/fidelity-app.js','js/construction-context.js','js/construction-delivery-core.js'],['tests/ft3d-8-ux4d.browser.test.cjs','tests/construction-delivery-core.test.cjs'],
    ['construction'],['Derivada del plan y de los datos disponibles: no es el estado real de ejecución.','Derived from the plan and the available data: it is not the real state of execution.','源自计划和现有数据：不是真实的施工执行状态。']),
   C('furnish',['Amueblar y elegir acabados','Furnish and choose finishes','布置家具与选择饰面'],
    ['Muebles del catálogo y superficies reales por estancia, con material board.','Catalogue furniture and real surfaces by room, with a material board.','按房间布置目录家具和真实饰面，并生成材料板。'],
-   'available','area:design',['js/furniture-search.js','js/surface-ui.js','js/moodboard-ui.js'],['tests/surfaces.browser.test.cjs','tests/furniture-search.test.cjs','tests/moodboard.browser.test.cjs'],
+   'production','area:design',['js/furniture-search.js','js/surface-ui.js','js/moodboard-ui.js'],['tests/surfaces.browser.test.cjs','tests/furniture-search.test.cjs','tests/moodboard.browser.test.cjs'],
    ['interior'])
  ]);
  // HOM-03 · «Nuevos servicios IA». Each service carries the state it REALLY has, verified on code, contract, tests and
@@ -92,16 +136,19 @@
  // `access` is the existing place that opens the service; the Home only offers it if that module is on the page.
  const AI_GROUPS=Object.freeze(['available','pilot','simulation','preparation']);
  const AI_VERIFIED_AT='40b4ae5d724ef83d0e70651545b4f5e4832becd3';
- const S=(id,state,name,what,isNot,limits,access,modules,tests,professions,extra={})=>Object.freeze({id,state,name,what,isNot,limits,access,modules,tests,professions,production:extra.production||null,gate:extra.gate||null,verifiedAt:AI_VERIFIED_AT});
+ // Render IA es la MISMA capacidad que la tarjeta de la Home: comparte nivel, módulos y evidencia (no se declara dos veces).
+ const S=(id,level,name,what,isNot,limits,access,modules,tests,professions,extra={})=>{const shared=CAPABILITIES.find(c=>c.id===id);
+  const lv=shared?shared.level:level;
+  return Object.freeze(assertEntry({id,level:lv,state:aiState(lv),name,what,isNot,limits,access,modules:shared?[...new Set([...shared.modules,...modules])]:modules,tests:shared?[...new Set([...shared.tests,...tests])]:tests,professions,
+   production:shared?shared.production:(extra.production||null),gate:extra.gate||null,matrix:MATRIX[id]||[],blockedBy:BLOCKED_BY[id]||[],verifiedAt:AI_VERIFIED_AT}));};
  const ALL=['architecture','real-estate','developer','renovation','interior','construction','general'];
  const AI_SERVICES=Object.freeze([
-  S('render-ai','available',['Render IA fotorrealista','Photorealistic AI render','照片级 AI 渲染'],
+  S('render-ai','production',['Render IA fotorrealista','Photorealistic AI render','照片级 AI 渲染'],
    ['Genera una imagen fotorrealista con un proveedor de IA a partir de una vista 3D real de tu proyecto.','Generates a photorealistic image with an AI provider from a real 3D view of your project.','由 AI 服务商根据项目的真实 3D 视图生成照片级图片。'],
    ['Es una imagen orientativa: no cambia ni sustituye la geometría del proyecto.','It is an indicative image: it does not change or replace the project geometry.','这是参考图片：不会改变或替代项目几何。'],
    ['Necesita el código de acceso de tu estudio y cada imagen consume créditos de IA.','It needs your studio access code and each image uses AI credits.','需要工作室访问码，每张图片消耗 AI 额度。'],
    'render-band',['js/ai-render-ui.js','api/render.js'],['tests/ai-render-api.test.cjs','tests/ai-render.browser.test.cjs'],
-   ['interior','renovation','real-estate','developer','general'],
-   {production:Object.freeze({deployment:'dpl_GHMoRKmGrvnST5NmCoALfRuYsvFs',sha:'40b4ae5d724ef83d0e70651545b4f5e4832becd3',checkedAt:'2026-11-17',check:'Comprobación sin gasto del 17/11: POST /api/render sin código en la URL pública → 401 token (proveedor no llamado, no genera imagen); RUBIK_RENDER_ENABLED=1 en Production (metadatos). NO es una acreditación con imagen: la acreditación real es la D1 del 09/11 (docs/render-ai/d1-acta-de-cierre-2026-11-09.md)'})}),
+   ['interior','renovation','real-estate','developer','general']),
   S('assistant','pilot',['Asistente RUBIK · consulta guiada','RUBIK Assistant · guided query','RUBIK 助手 · 引导式查询'],
    ['Responde sobre el proyecto abierto (superficies, presupuesto, materiales, muebles) con los motores de RUBIK y la fuente de cada cifra; propone cambios que revisas, aplicas y deshaces.','Answers about the open project (areas, budget, materials, furniture) with RUBIK engines and the source of every figure; it proposes changes you review, apply and undo.','使用 RUBIK 引擎回答当前项目的问题（面积、预算、材料、家具）并注明每个数字的来源；提出可审核、应用和撤销的修改。'],
    ['No es un chat con IA generativa: no hay ningún modelo de lenguaje conectado y entiende un conjunto cerrado de preguntas.','It is not a generative AI chat: no language model is connected and it understands a closed set of questions.','这不是生成式 AI 聊天：未连接任何语言模型，只能理解固定范围的问题。'],
@@ -126,12 +173,12 @@
    ['La foto no sale del navegador y no se guarda; el proyecto no cambia.','The photo does not leave the browser and is not stored; the project does not change.','照片不会离开浏览器，也不会被保存；项目不会改变。'],
    'photo-reform',['js/photo-reform-ui.js','js/photo-reform-provider.js','api/photo-reform.js'],['tests/photo-project.browser.test.cjs','tests/photo-reform-api.test.cjs'],
    ['renovation','interior','real-estate']),
-  S('assistant-llm','preparation',['Asistente conversacional con IA','Conversational AI assistant','对话式 AI 助手'],
+  S('assistant-llm','planned',['Asistente conversacional con IA','Conversational AI assistant','对话式 AI 助手'],
    ['Preguntas libres sobre el proyecto respondidas por un modelo de lenguaje, con las mismas fuentes y propuestas reversibles.','Free questions about the project answered by a language model, with the same sources and reversible proposals.','由语言模型回答关于项目的自由提问，保留相同的来源和可撤销的提议。'],
    ['Hoy no existe: no hay modelo de texto autorizado ni cuentas de usuario.','It does not exist today: there is no authorised text model and no user accounts.','目前不存在：没有授权的文本模型，也没有用户账户。'],
    ['Pendiente de proveedor, tope de gasto, sesiones autenticadas y privacidad.','Pending provider, spending cap, authenticated sessions and privacy.','待定：服务商、费用上限、身份验证会话和隐私。'],
    null,['api/assistant.js','js/assistant-runtime-core.js'],['tests/assistant-ai-v2.test.cjs'],ALL),
-  S('photo-real','preparation',['Imágenes reales desde tu foto','Real images from your photo','基于照片的真实图像'],
+  S('photo-real','planned',['Imágenes reales desde tu foto','Real images from your photo','基于照片的真实图像'],
    ['Generar con un proveedor de IA las alternativas que hoy solo se simulan en el Estudio de imágenes.','Generating with an AI provider the alternatives that are only simulated today in the Image studio.','用 AI 服务商生成目前仅在图像工作室中模拟的备选方案。'],
    ['Hoy no se genera ninguna imagen real desde una foto.','No real image is generated from a photo today.','目前不会根据照片生成任何真实图片。'],
    ['Pendiente de proveedor autorizado, tope de gasto y revisión de privacidad de las fotos.','Pending an authorised provider, a spending cap and a privacy review of photos.','待定：授权服务商、费用上限和照片隐私审查。'],
@@ -163,5 +210,21 @@
  });
  const byId=id=>CAPABILITIES.find(c=>c.id===id)||null;
  function forAudience(audience){return (ORDER[audience]||ORDER.general).map(byId).filter(Boolean);}
- return {VERIFIED_AT,STATES,CAPABILITIES,ORDER,byId,forAudience,AI_GROUPS,AI_VERIFIED_AT,AI_SERVICES,aiServices};
+ // K9 · Desarrollos pendientes de integración: se registran para que nadie los declare en otro sitio, pero NUNCA se
+ // anuncian (ni forAudience ni aiServices los devuelven) hasta que un corte integrado los suba de nivel con su evidencia.
+ const P=(id,name,pr,headSha,modules,tests,plan)=>Object.freeze(assertEntry({id,level:'developed',state:homeState('developed'),name,pr,headSha,modules,tests,plan,matrix:MATRIX[id]||[],production:null}));
+ const PENDING=Object.freeze([
+  P('room-type',['Sugerir el tipo de estancia e intercambiar usos','Suggest the room type and swap uses','建议房间类型并交换用途'],280,'070dbe8af139ac6bd79e5f239d449e2189cdb9ba',
+   ['js/project-core.js','js/nav3d-core.js','js/presentation-living-drawing-core.js','index.html'],['tests/k4-room-type.test.cjs','tests/k4-room-type.browser.test.cjs'],'K4'),
+  P('persistence-v2',['Persistencia v2 recuperable y avisos de guardado','Recoverable v2 persistence and save notices','可恢复的 v2 持久化与保存提示'],279,'c0092777e2859f5a5d27ed18551762f3b45b0b0d',
+   ['js/schema-epoch.js','js/store-v2.js','js/store-v2-backup.js','js/store-v2-migrate.js','js/persistence-status-ui.js','js/persistence-actions.js'],
+   ['tests/a0-writer-fence.browser.test.cjs','tests/f0-2c-core.browser.test.cjs','tests/f0-2c-backup.browser.test.cjs','tests/f0-2c-migration.browser.test.cjs','tests/f0-3-status-ui.browser.test.cjs','tests/f0-3-actions.browser.test.cjs'],
+   'F0 (cadena #273 → #274 → #276 → #277 → #278 → #279)')]);
+ // Todas las entradas con su nivel, para el Asistente y la matriz: una sola consulta, un solo origen.
+ const all=()=>[...CAPABILITIES,...AI_SERVICES.filter(s=>!CAPABILITIES.some(c=>c.id===s.id)),...PENDING];
+ const levelOf=id=>(all().find(e=>e.id===id)||null)?.level||null;
+ for(const e of all())assertEntry(e);
+ if(new Set(all().map(e=>e.id)).size!==all().length)throw new RegistryError('registry','identificadores repetidos');
+ return {VERIFIED_AT,STATES,CAPABILITIES,ORDER,byId,forAudience,AI_GROUPS,AI_VERIFIED_AT,AI_SERVICES,aiServices,
+  LEVELS,DEPLOYMENT,MATRIX,BLOCKED_BY,PENDING,RegistryError,assertEntry,homeState,aiState,all,levelOf};
 });
