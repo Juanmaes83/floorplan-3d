@@ -283,6 +283,8 @@ flowchart LR
 
 ### 6.3 Cortes propuestos
 
+**Consolidación del 19/11/2026.** P0 H-1 (#270) y OP-02 (#266) integrados. Consultar el [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) y la [matriz de trazabilidad](MATRIZ-TRAZABILIDAD-v1.12.md) para el SHA y la evidencia. Orden restante: #268 → #269 → #271 → #272. A0 (#273) depende del contrato #272 y de F0.2b #269 sobre la base consolidada con P0. La etapa 1 de F0.2c (#274) se acredita después de A0. La migración real y la activación global siguen sujetas a autorización específica.
+
 Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptación independiente.
 
 | Corte | Objetivo observable | Reutiliza | Depende de | Aceptación | Validación | Tipo |

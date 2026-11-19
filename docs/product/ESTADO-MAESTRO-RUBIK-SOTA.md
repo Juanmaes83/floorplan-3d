@@ -1,5 +1,9 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
+> **Corte 19/11/2026 · OP-02.** [#266](https://github.com/Juanmaes83/floorplan-3d/pull/266) está integrada en `02712b5147c15defa12a810b2f346e4b3e0ecb60`, árbol `eac7605fb6b3f176c803255041aa510396db1d69`. [Production de master](https://vercel.com/juanma-espinosas-projects/floorplan-3d/EidmS69dvUz8rMhYfEACEPeAgfaa) está READY para ese SHA. La CI de la PR registró 91 aprobados y una omisión prevista. La [CI posfusión](https://github.com/Juanmaes83/floorplan-3d/actions?query=branch%3Amaster) se sigue en GitHub. #268 es el siguiente corte.
+
+> **Corte 19/11/2026 · P0 H-1.** [#270](https://github.com/Juanmaes83/floorplan-3d/pull/270) está integrada en `cff21adca2938b147a10a6fc69c43ffd3da0f3bf`, árbol `6192531a11d7c569bffe306e8d5c8b6289167db7`. [Production de master](https://vercel.com/juanma-espinosas-projects/floorplan-3d/BCfqd3uVH23BMFGHNi12cfUFM3yU) está READY para ese SHA. La CI de la PR cerró con 25 checks aprobados y una omisión prevista. [CI posfusión de master](https://github.com/Juanmaes83/floorplan-3d/actions?query=branch%3Amaster) verde en los cinco workflows. F0.2b sigue pendiente de integración y de activación global.
+
 > **Corte 18/11/2026 (reconciliación v1.12, propuesta documental).** Master `163df68e83a80ddf11a008d573ee257d51c1821f` incorpora #259 con el árbol de la candidata autorizada `26c0dbdef94676c188360c4e8869b05c16c3dc23`. Pasaron los siete workflows posteriores a la integración. [Integración #259](https://github.com/Juanmaes83/floorplan-3d/pull/259).
 >
 > - **Dominios públicos:** Alpha (`floorplan-3d-alpha.vercel.app`) sirve `8525025` con `dpl_Bx191sBDRSa2nqhm8bwZhZzryvgA`. La Demo compartible (`floorplan-3d-demo.vercel.app`) sirve `7dccf7a` con `dpl_64ndSF5qoDKDtey7XXwEYRAzYDTF`. Ambos tienen destino Production. Los SHA se comprobaron por huella de archivos servidos. Beta 01 está pendiente de identificación.

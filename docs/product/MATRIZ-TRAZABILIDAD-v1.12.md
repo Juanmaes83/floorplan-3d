@@ -163,7 +163,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 |---|---|---|---|---|---|---|---|---|---|---|
 | FOT-01 | Reforma sobre la foto del cliente | N | `SI` | [I] master: `api/photo-reform.js` cerrado por defecto; [E] `tests/photo-reform-api.test.cjs`, `tests/photo-reform-provider.test.cjs`; [H] #258 conecta proveedor real desactivado | Simulación rotulada; proveedor real no activado | P2 | VT+AO: #258, Preview aislado, ejecución real autorizada | GOV-05, IMG-04, GOV-06a | Prueba real con consentimiento, coste conciliado y aceptación | B |
 | FOT-02 | Foto a espacio métrico editable | N | `ND` | — | — | P6 | INV | Validación métrica | — | D |
-| MUE-01 | «Trae tu mueble» simple | N | `RV` | [I] `js/own-furniture-core.js`; [T] `tests/photo-project*.cjs`; [H] #227 vía #228 | Volumen genérico; la foto es solo referencia | P5 | — | — | Cerrado | A |
+| MUE-01 | «Trae tu mueble» simple | N | `RV` | [I] `js/own-furniture-core.js`; [T] `tests/photo-project*.cjs`; [H] #227 vía #228; [E, CI] [#270, P0 H-1](https://github.com/Juanmaes83/floorplan-3d/pull/270) en `cff21adc` | Volumen genérico; la foto es solo referencia | P5 | — | — | Cerrado | A |
 | MUE-02 | Foto a mueble 3D reconstruido | N | `ND` | — | — | P8 | INV | MUE-01, presupuesto IA | — | D |
 
 ### G · Catálogos y bibliotecas
@@ -266,7 +266,7 @@ Cambian de letra todas las filas cuyo estado de v1.11 era N, P, R o E y ahora ti
 | HOM-03 | N | `RV` | Integrada en #241 |
 | UX-08 | N | `RV` | Integrada en #224 |
 | MUE-01 | N | `RV` | Integrada en #228 |
-| UX-22, UX-23, UX-25 | P | `RV` | NAV3D integrado en #228 |
+| UX-22, UX-23, UX-25 | P | `RV` | NAV3D integrado en #228; [CI] [OP-02 #266](https://github.com/Juanmaes83/floorplan-3d/pull/266) acredita las regresiones de navegación y el render bajo demanda en `02712b5` |
 | UX-07, OBR-01/02/03 | P | `RV` | Integrados con pruebas |
 | AST-01 | N | `RL` | Guía, importación y siguiente acción integradas; falta la tarjeta de plantas (verificado el 18/11) |
 | UX-03, UX-04 | P | `RL` | Paneles con indicadores, ayuda por herramienta y atajos conectados (verificado el 18/11) |
