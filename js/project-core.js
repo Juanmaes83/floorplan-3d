@@ -317,20 +317,39 @@
   // OP-07 · S2: plan pieces of a curved or sloped wall. One straight sub-wall per facet of the single geometric core
   // (same facets as 3D, measurements and DXF), solid where no opening is, so every consumer of geometry().walls keeps
   // drawing rectangles. Each piece carries its heights at both ends (heightStart/heightEnd, m) for sloped walls.
-  function shapedPieces(w, openings) {
-    const path=Walls.pathProfile(w,WALL_PATH),holes=[];
+  // S4b · The joint where two plan pieces of a shaped wall meet, at a distance `s` along it. Computed ONCE per joint, from
+  // the facets of the single core, and handed to both pieces, so their shared corners are the very same numbers (a
+  // watertight mesh, no rasterisation cracks). Inside a facet (an opening edge, a wall end) the joint is square to the
+  // facet; at a facet boundary its plane bisects the two facets (the mitre), and its horizontal direction `m` is the
+  // smooth face normal there. `c` = m·n of the facets (the same on both sides of a bisector): a face corner is V + m·z/c.
+  function jointAt(path, s) {
+    const spans=path.spans.filter(x=>x.length>0),dir=sp=>{const dx=sp.end.x-sp.start.x,dy=sp.end.y-sp.start.y,l=Math.hypot(dx,dy);return {x:dx/l,y:dy/l};};
+    let i=spans.findIndex(sp=>s<sp.to-1e-9);if(i<0)i=spans.length-1;
+    const seam=i>0&&Math.abs(s-spans[i].from)<1e-9,d=dir(spans[i]);let t=d,v;
+    if(seam){const a=dir(spans[i-1]),tx=a.x+d.x,ty=a.y+d.y,l=Math.hypot(tx,ty);t={x:tx/l,y:ty/l};v=spans[i].start;}
+    else v=path.sample(s).point;
+    const m={x:-t.y,y:t.x};
+    return Object.freeze({x:v.x,y:v.y,tx:t.x,ty:t.y,mx:m.x,my:m.y,c:m.x*(-d.y)+m.y*d.x,seam});
+  }
+  // Plan pieces of a shaped wall (S2) and, for a curved wall, the infill above and below each opening per facet (S4b).
+  function shapedPieces(w, openings, infills=[]) {
+    const path=Walls.pathProfile(w,WALL_PATH),holes=[],curved=Walls.isCurved(w);
     for (const o of openings) {const a=o.offsetMm,b=o.offsetMm+o.widthMm,last=holes.at(-1);if(last&&a<=last[1])last[1]=Math.max(last[1],b);else holes.push([a,b]);}
-    const pieces=[];
+    const pieces=[],joints=new Map(),joint=x=>{if(!joints.has(x))joints.set(x,jointAt(path,x));return joints.get(x);};
+    const piece=(span,a,b,extra)=>{const sub={...w,start:span.start,end:span.end},rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
+      return Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index,shaped:true,alongMm:(a+b)/2,
+        ends:{start:joint(a),end:joint(b)},seamStart:curved&&joint(a).seam,seamEnd:curved&&joint(b).seam},extra);};
     for (const span of path.spans) {
       if (!(span.length>0)) continue;
-      const sub={...w,start:span.start,end:span.end},solid=[];let at=span.from;
+      const solid=[];let at=span.from;
       for (const [a,b] of holes) {if(b<=at||a>=span.to)continue;if(a>at)solid.push([at,a]);at=Math.max(at,b);}
       if (at<span.to) solid.push([at,span.to]);
-      for (const [a,b] of solid) if (b-a>1e-6) {
-        const rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
-        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true,alongMm:(a+b)/2});
-        pieces.push(rect);
-      }
+      for (const [a,b] of solid) if (b-a>1e-6) pieces.push(piece(span,a,b,{}));
+      // Above the head and below the sill of each opening on a curved wall, per facet (the straight chord would not follow it).
+      if (curved) for (const o of openings) {const a=Math.max(span.from,o.offsetMm),b=Math.min(span.to,o.offsetMm+o.widthMm);if(b-a<=1e-6||w.status==='demolished')continue;
+        const head=(o.sillHeightMm+o.heightMm)/1000,sill=o.sillHeightMm/1000;
+        infills.push(piece(span,a,b,{openingId:o.id,band:'head',yb:head}));
+        if(sill>0)infills.push(piece(span,a,b,{openingId:o.id,band:'sill',yt:sill}));}
     }
     return pieces;
   }
@@ -351,10 +370,31 @@
   // OP-07 · S4: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
   // (heightStart → heightEnd) and the texture running continuously along the whole wall (alongMm). Positions in mm,
   // faces in BoxGeometry order (+x, −x, top, bottom, +z, −z). null for a piece of a straight, level wall (a box).
+  // OP-07 · S4/S4b: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
+  // (heightStart → heightEnd), the texture running continuously along the whole wall (alongMm). Topology, UVs and face
+  // order from the core's slopedPiece (+x, −x, top, bottom, +z, −z); positions in PLAN millimetres [x, height, y] built
+  // from the shared joints (watertight: neighbouring pieces have identical corners), normals in the same axes: the two
+  // faces of a curved wall get the joint's smooth normal, top, bottom, ends and reveals keep hard edges. null for a
+  // piece of a straight, level wall (a box, as before).
   function pieceMesh(rect, yb, yt) {
     if (!rect?.shaped) return null;
-    const top=h=>Math.min(h,yt)*1000;
-    return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
+    const top=h=>Math.min(h,yt)*1000,lo=rect.yb!==undefined?Math.max(yb,rect.yb):yb;
+    const m=Walls.slopedPiece(rect.spanMm,rect.thickness,lo*1000,rect.yt!==undefined?Math.min(rect.yt,yt)*1000:top(rect.heightStart),rect.yt!==undefined?Math.min(rect.yt,yt)*1000:top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
+    const u={x:Math.cos(rect.angle),y:Math.sin(rect.angle)},n={x:-u.y,y:u.x},half=rect.thickness/2,ends=rect.ends;
+    const positions=new Array(m.positions.length),normals=new Array(m.normals.length);
+    for (let i=0;i<m.positions.length;i+=3) {
+      const x=m.positions[i],y=m.positions[i+1],z=m.positions[i+2],J=x>0?ends.end:ends.start,k=Math.sign(z)*half/J.c;
+      positions[i]=J.x+J.mx*k;positions[i+1]=y;positions[i+2]=J.y+J.my*k;
+      const nx=m.normals[i],ny=m.normals[i+1],nz=m.normals[i+2];
+      if (Math.abs(nz)>0.5&&Math.abs(ny)<1e-9) {normals[i]=J.mx*Math.sign(nz);normals[i+1]=0;normals[i+2]=J.my*Math.sign(nz);}          // smooth face
+      else if (Math.abs(nx)>0.5&&Math.abs(ny)<1e-9) {normals[i]=J.tx*Math.sign(nx);normals[i+1]=0;normals[i+2]=J.ty*Math.sign(nx);}      // end / reveal
+      else {normals[i]=nx*u.x+nz*n.x;normals[i+1]=ny;normals[i+2]=nx*u.y+nz*n.y;}                                                      // top, bottom
+    }
+    // A seam end is an internal face shared with the next piece: it is not emitted (it would show as a line where it
+    // meets the outer surface). Real ends and reveals keep theirs. groups: [start, count, material] in face order.
+    const indices=[],groups=[];
+    for (let f=0;f<6;f++) { if ((f===0&&rect.seamEnd)||(f===1&&rect.seamStart)) continue; groups.push([indices.length,6,f]); indices.push(...m.indices.slice(f*6,f*6+6)); }
+    return {positions,normals,uvs:m.uvs,indices,groups,plan:true};
   }
   // OP-07 · S3b: the CANONICAL RING of a room. A room is stored as its polygon of wall faces; where an edge lies on the
   // face of a curved wall (it was drawn against the wall's chord), the ring follows that face instead: the mitred offset
@@ -406,11 +446,11 @@
     return Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
   }
   function geometry(p) {
-    const walls=[],windows=[],doors=[],slides=[],voids=[];
+    const walls=[],windows=[],doors=[],slides=[],voids=[],wallInfills=[];
     for (const w of p.walls) {
       const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),shaped=shapedWall(w);
       const openings=p.openings.filter(o=>o.wallId===w.id).sort((a,b)=>a.offsetMm-b.offsetMm);
-      if (shaped) walls.push(...shapedPieces(w,openings));
+      if (shaped) walls.push(...shapedPieces(w,openings,wallInfills));
       // Merge overlapping intervals for the solid portions; opening visuals retain their IDs.
       let at=0;
       for (const o of openings) {
@@ -420,7 +460,8 @@
         const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
         Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
         // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
-        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2});}
+        // On a curved wall its infill is drawn per facet (wallInfills); on a straight sloped wall the opening's own piece follows the slope.
+        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2,ends:{start:jointAt(path,o.offsetMm),end:jointAt(path,o.offsetMm+o.widthMm)},curvedHost:Walls.isCurved(w)});}
         if(w.status==='demolished') continue;
         if(o.kind==='window') windows.push(rect);
         else if(o.kind==='door') {
@@ -439,7 +480,7 @@
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
-    return {source:p,walls,windows,doors,slides,voids,rooms,envelope,bounds:{x:envelope.x-1600,y:envelope.y-1500,w:Math.max(1000,envelope.w)+3200,h:Math.max(1000,envelope.h)+3000},center:{x:envelope.x+envelope.w/2,y:envelope.y+envelope.h/2}};
+    return {source:p,walls,windows,doors,slides,voids,...(wallInfills.length?{wallInfills}:{}),rooms,envelope,bounds:{x:envelope.x-1600,y:envelope.y-1500,w:Math.max(1000,envelope.w)+3200,h:Math.max(1000,envelope.h)+3000},center:{x:envelope.x+envelope.w/2,y:envelope.y+envelope.h/2}};
   }
   // Declared wall type (contract 1.5.0): what a person states about a wall and where that statement comes from. It is
   // never deduced from thickness, position or drawing, and it is not a structural verification. Declaring raises only
@@ -508,4 +549,5 @@
   Object.assign(api,{pieceMesh});   // OP-07 S4
   Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
   Object.assign(api,{roomRing});   // OP-07 S3b
+  Object.assign(api,{jointAt});   // OP-07 S4b
 })(globalThis);

@@ -3611,14 +3611,30 @@ function wallBox(rect, yb, yt, m){
   // UVs continuous along the whole wall; it sits at the same centre and angle as a box, so everything else is unchanged.
   const sloped=Core.pieceMesh(rect,yb,yt);
   if (sloped) {
-    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(sloped.positions.map(v=>v/1000),3));
+    // Plan millimetres → world (the same wx/wz as every other object): all pieces of a wall share one frame, so their
+    // shared corners are bit-identical and the surface is watertight (no cracks between facets).
+    const P=sloped.positions,pos=new Float32Array(P.length);for(let i=0;i<P.length;i+=3){pos[i]=wx(P[i]);pos[i+1]=P[i+1]/1000;pos[i+2]=wz(P[i+2]);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
     g.setAttribute('normal',new THREE.Float32BufferAttribute(sloped.normals,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(sloped.uvs,2));g.setIndex(sloped.indices);
-    for(let f=0;f<6;f++)g.addGroup(f*6,6,f);
+    for(const [start,count,material] of sloped.groups)g.addGroup(start,count,material);
     const o=new THREE.Mesh(g,m||[wallMat,wallMat,capMat,wallMat,wallMat,wallMat]);
     o.userData.wallId=rect.id;o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';o.userData.slopedPiece=true;
     o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:Math.min(Math.max(rect.heightStart,rect.heightEnd),yt)-yb};
-    o.position.set(wx(rect.center[0]),0,wz(rect.center[1]));o.rotation.y=-rect.angle;o.castShadow=o.receiveShadow=true;archUp.add(o);
-    const ln=new THREE.LineSegments(new THREE.EdgesGeometry(g),edgeMat);ln.position.copy(o.position);ln.rotation.copy(o.rotation);ln.userData.walkOnly=true;ln.visible=opt.mode==='walk';archUp.add(ln);
+    o.castShadow=o.receiveShadow=true;archUp.add(o);
+    // Walk-mode edges: the four long edges, and the end outline only where the piece really ends (not at a facet seam).
+    const vtx=[];for(let i=0;i<pos.length;i+=3)vtx.push([pos[i],pos[i+1],pos[i+2]]);
+    // slopedPiece vertex order: face +x = 0–3 (end), −x = 4–7 (start); 0:(yb,+z) 1:(yb,−z) 2:(top,−z) 3:(top,+z); 4:(yb,−z) 5:(yb,+z) 6:(top,+z) 7:(top,−z)
+    const E={b:{'1':vtx[0],'-1':vtx[1]},t:{'1':vtx[3],'-1':vtx[2]}},S={b:{'1':vtx[5],'-1':vtx[4]},t:{'1':vtx[6],'-1':vtx[7]}};
+    const seg=[],line=(a,b)=>seg.push(...a,...b);
+    for(const k of ['b','t'])for(const z of ['1','-1'])line(S[k][z],E[k][z]);
+    for(const [X,seam] of [[S,rect.seamStart],[E,rect.seamEnd]])if(!seam){line(X.b['1'],X.b['-1']);line(X.b['-1'],X.t['-1']);line(X.t['-1'],X.t['1']);line(X.t['1'],X.b['1']);}
+    const eg=new THREE.BufferGeometry();eg.setAttribute('position',new THREE.Float32BufferAttribute(seg,3));
+    const ln=new THREE.LineSegments(eg,edgeMat);ln.userData.walkOnly=true;ln.visible=opt.mode==='walk';archUp.add(ln);
+    if (yb <= .001 && rect.yb === undefined){   // skirting, mitred like the wall so it is continuous too
+      const sk=Core.pieceMesh({...rect,thickness:rect.thickness+20},0,Math.min(.12,yt)),SP=sk.positions,sp=new Float32Array(SP.length);for(let i=0;i<SP.length;i+=3){sp[i]=wx(SP[i]);sp[i+1]=SP[i+1]/1000;sp[i+2]=wz(SP[i+2]);}
+      const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('normal',new THREE.Float32BufferAttribute(sk.normals,3));sg.setIndex(sk.indices);
+      const s=new THREE.Mesh(sg,skirtMat);s.userData.walkOnly=true;s.visible=opt.mode==='walk';archUp.add(s);
+    }
     return o;
   }
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
@@ -3852,11 +3868,14 @@ function buildArch(other){
     colliders.push({x:wx(w.center[0]),z:wz(w.center[1]),angle:w.angle,length:M(w.spanMm),thickness:M(w.thickness)});
   });
   [...geometry.doors.map(d=>d.rect),...geometry.slides.map(d=>d.rect),...geometry.voids].forEach(r=>{
+    if(r.curvedHost)return;   // OP-07 · S4b: on a curved wall the infill is drawn per facet below
     if(r.sill>0)wallBox(r,0,Math.min(r.sill,top));if(top>r.head)wallBox(r,r.head,Math.min(top,r.height));
   });
+  // OP-07 · S4b: above the head and below the sill of openings on curved walls, one mitred piece per facet.
+  (geometry.wallInfills||[]).forEach(r=>{ if(r.band==='head'){ if(top>r.yb) wallBox(r,r.yb,Math.min(top,r.height)); } else wallBox(r,0,Math.min(r.yt,top)); });
   geometry.windows.forEach((r, i) => {
     const sill=r.sill, head=r.head;
-    wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height));
+    if (!r.curvedHost){ wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height)); }
     colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
     const gTop = Math.min(head, top); if (gTop <= sill) return;
     const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
