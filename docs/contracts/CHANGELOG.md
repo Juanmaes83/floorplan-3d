@@ -1,5 +1,11 @@
 # Cambios compatibles de FloorPlanProjectV1
 
+## 2.0.0 — muros curvos e inclinados (OP-07 · S1, preparada, NO integrada)
+
+- `walls[].curve` y `walls[].heightEndMm`, solo en documentos 2.x (D-OP07-4, opción B). Sin ellos, el documento sigue siendo 1.x sin cambios y no hay migración masiva.
+- Autoridad única de versiones en `project-core` (`parseVersion`, `versionAtLeast`, `raiseVersion`). Los escritores que elevaban `'1.N.0'` a mano la usan.
+- `building-core` acepta plantas 2.0.0.
+
 ## 1.8.0 — intención de peto visual (Punto 8B-B)
 
 - `roofParapet` opcional por proyecto/planta: `enabled`, `heightMm` explícito cuando está activo y `materialId` mural opcional.

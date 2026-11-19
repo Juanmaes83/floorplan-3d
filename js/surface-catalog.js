@@ -51,7 +51,7 @@
   if(existing>=0&&JSON.stringify(next.materials[existing])!==JSON.stringify(material))material.id=C.id('mat');
   if(!next.materials.some(m=>m.id===material.id))next.materials.push(material);
   target[kind==='floor'?'floorMaterialId':'surfaceMaterialId']=material.id;
-  if(Number(next.schemaVersion.split('.')[1])<4)next.schemaVersion='1.4.0';C.validate(next);return next;
+  C.raiseVersion(next,'1.4.0');C.validate(next);return next;
  }
  const api={partial:true,families,validate,repeat,search,apply,entries:[],status:new Map(),get(id){return this.entries.find(e=>e.id===id);},notify(id,message){this.status.set(id,message);if(typeof dispatchEvent==='function')dispatchEvent(new Event('surface-status'));}};
  if(typeof module!=='undefined')module.exports=api;

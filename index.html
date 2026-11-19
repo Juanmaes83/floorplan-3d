@@ -173,6 +173,7 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .stats div{background:var(--surface-sunken,#faf6ef);border-radius:8px;padding:8px}
 .stats small{display:block;color:var(--muted);font-size:11px}
+#panel .wall-shape .btn{min-height:44px}.wall-shape-status:empty{display:none}.wall-shape-status{margin:6px 0;font-size:12px;color:var(--danger,#a3261b)}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
   padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
 #toast.show{opacity:1;transform:translateX(-50%)}
@@ -750,6 +751,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/parcel-site-adapter.js"></script>
 <script src="js/orthophoto-site-adapter.js"></script>
 <script src="js/terrain-site-adapter.js"></script>
+<script src="js/wall-geometry-core.js"></script>
 <script src="js/project-core.js"></script>
 <script src="js/exterior-core.js"></script>
 <script src="js/roof-core.js"></script>
@@ -1531,8 +1533,18 @@ function renderSel(){
         stroke="#fff" stroke-width="${3*k}" paint-order="stroke">${f.w} × ${f.d}</text>`;
     }
   } else if (ui.sel?.kind === 'wall'){
-    const w = geometry.walls.find(w => w.id === ui.sel.id);
-    if (w) s += `<polygon points="${w.poly.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+    const pw = project.walls.find(w => w.id === ui.sel.id);
+    if (pw){
+      // The whole wall (every facet of a curved one), and — in Select — the curvature dot at its centre (OP-07 · S5b).
+      s += `<polygon points="${Core.wallOutline(pw).map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+      if (ui.tool === 'select' && pw.status !== 'demolished'){
+        const {mid} = wallChord(pw), m = pw.curve ? FloorPlanWallGeometry.point(pw, .5) : mid, bad = drag?.kind === 'curve' && drag.refused, hs = COARSE ? 1.7 : 1, hit = (COARSE ? 24 : 12)*k, f = Math.round(wallSagitta(pw));
+        s += `<line x1="${mid.x}" y1="${mid.y}" x2="${m.x}" y2="${m.y}" stroke="#b5653a" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" pointer-events="none"/>
+          <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${hit}" fill="transparent"/>
+          <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${7*hs*k}" fill="${bad ? '#b8412c' : '#fff'}" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke"><title>${op07t('Arrastra para curvar el muro; vuelve a la línea para enderezarlo (Mayús: sin ajuste)','Drag to curve the wall; back to the line to straighten it (Shift: no snapping)','拖动使墙弯曲；拖回直线即拉直（Shift：不吸附）')}</title></circle>`;
+        if (drag?.kind === 'curve') s += `<text x="${m.x}" y="${m.y - 18*k}" font-size="${12*k}" text-anchor="middle" fill="${bad ? '#b8412c' : '#b5653a'}" font-weight="600" stroke="#fff" stroke-width="${3*k}" paint-order="stroke" pointer-events="none">${esc(bad ? drag.refused : (f ? op07t(`flecha ${Math.abs(f)} mm`,`sagitta ${Math.abs(f)} mm`,`矢高 ${Math.abs(f)} mm`) : op07t('recto','straight','直')))}</text>`;
+      }
+    }
   } else if (ui.sel?.kind === 'room'){
     const r = geometry.rooms.find(r => r.id === ui.sel.id);
     s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
@@ -1758,14 +1770,68 @@ function bindWallStructure(root, declare){
   source.onchange = () => declare(type.value, source.value);
 }
 function declareWall(id, structure, source){ mutate(() => { const next = Core.declareWallStructure(project, id, structure, source); project.walls = next.walls; project.schemaVersion = next.schemaVersion; refreshProject(); }); toast('Tipo declarado del muro actualizado (dato orientativo).'); }
+/* OP-07 · S5b · Forma del muro: curvatura (flecha), altura final, enderezar, nivelar y dividir. Cada control es UNA
+   operación del camino único de edición (Core.setWallCurve / setWallEndHeight / splitWall → commit): validación, deshacer,
+   rehacer y guardado de siempre; un rechazo deja el proyecto intacto y se explica aquí. El punto del plano hace lo mismo
+   con el puntero. */
+const op07t = (es, en, zh) => LANG === 'en' ? en : LANG === 'zh' ? zh : es;
+function wallChord(w){ const L = Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y); return {L, mid:{x:(w.start.x+w.end.x)/2, y:(w.start.y+w.end.y)/2}, n:{x:-(w.end.y-w.start.y)/L, y:(w.end.x-w.start.x)/L}}; }
+// Flecha (mm, con signo hacia la normal izquierda): la distancia del punto medio de la curva a la cuerda; control = medio + 2·flecha.
+const wallSagitta = w => { if (!w.curve) return 0; const {mid, n} = wallChord(w); return ((w.curve.control.x-mid.x)*n.x + (w.curve.control.y-mid.y)*n.y)/2; };
+const curveControlFor = (w, sagitta) => { if (!sagitta) return null; const {mid, n} = wallChord(w); return {x:mid.x + n.x*2*sagitta, y:mid.y + n.y*2*sagitta}; };
+let wallShapeStatus = '';
+function wallShapeBlock(w){
+  if (w.status === 'demolished') return '';
+  const f = Math.round(wallSagitta(w)), sloped = w.heightEndMm !== undefined, len = Math.round(Core.wallLength(w));
+  return `<details class="panel-group wall-shape" data-group="wall-shape" open id="wallShape"><summary>${op07t('Forma del muro','Wall shape','墙体形状')}</summary>
+    <div class="form">
+      <label class="full" for="wallSagitta">${op07t('Curvatura · flecha en el centro (mm)','Curvature · sagitta at the centre (mm)','弧度 · 中点矢高 (mm)')}</label>
+      <input id="wallSagitta" type="number" inputmode="numeric" step="10" value="${f}" aria-describedby="wallShapeHelp">
+      <label class="full" for="wallEndHeight">${op07t('Altura al final (mm)','Height at the end (mm)','末端高度 (mm)')}</label>
+      <input id="wallEndHeight" type="number" inputmode="numeric" step="10" min="100" max="10000" value="${sloped ? w.heightEndMm : w.heightMm}">
+      <label class="full" for="wallSplitAt">${op07t('Dividir a (mm desde el inicio)','Split at (mm from the start)','在距起点 (mm) 处分割')}</label>
+      <input id="wallSplitAt" type="number" inputmode="numeric" step="10" min="1" max="${len-1}" value="${Math.round(len/2)}">
+    </div>
+    <div class="actions"><button class="btn" id="wallApplyShape">${op07t('Aplicar forma','Apply shape','应用形状')}</button>
+      <button class="btn" id="wallStraighten" ${w.curve ? '' : 'disabled'}>${op07t('Enderezar','Straighten','拉直')}</button>
+      <button class="btn" id="wallLevel" ${sloped ? '' : 'disabled'}>${op07t('Nivelar','Level','找平')}</button>
+      <button class="btn" id="wallSplit">${op07t('Dividir','Split','分割')}</button></div>
+    ${Core.versionAtLeast(project.schemaVersion, '2.0.0') ? '' : `<p class="muted" id="wallShapeFormat">${op07t('Al curvar o inclinar un muro, el proyecto se guarda en el formato 2.0: las versiones anteriores de RUBIK no podrán abrirlo (no lo modificarán).','Curving or sloping a wall saves the project in format 2.0: earlier RUBIK versions will not open it (and will not change it).','弯曲或倾斜墙体后，项目将以 2.0 格式保存：旧版 RUBIK 无法打开（也不会修改）。')}</p>`}
+    <p class="muted" id="wallShapeHelp">${op07t(`Longitud real ${len} mm. 0 = recto. También puedes arrastrar el punto del centro del muro en el plano (Mayús: sin ajuste).`,`Real length ${len} mm. 0 = straight. You can also drag the dot at the centre of the wall on the plan (Shift: no snapping).`,`实际长度 ${len} mm。0 = 直墙。也可在平面图上拖动墙中点（Shift：不吸附）。`)}</p>
+    <p class="wall-shape-status" id="wallShapeStatus" role="status" aria-live="polite">${esc(wallShapeStatus)}</p></details>`;
+}
+// Applies one wall operation through the single editing path; on refusal nothing changes and the reason is shown.
+function applyWallEdit(run, selectId){
+  const before = snap(), r = run(JSON.parse(before));
+  if (!r.ok){ wallShapeStatus = r.explanation.join(' '); renderPanel(); return r; }
+  project = r.project; window.FloorPlanApp && (FloorPlanApp.lastEditIntent = r.intent || {}); refreshProject();
+  if (commit(before)){ wallShapeStatus = ''; }
+  renderAll(); if (selectId) select({kind:'wall', id:selectId}); return r;
+}
+function bindWallShape(id){
+  const box = $('#wallShape'); if (!box) return;
+  const w = () => project.walls.find(x => x.id === id), num = s => { const v = Number($(s).value); return Number.isFinite(v) ? v : NaN; };
+  $('#wallApplyShape').onclick = () => {
+    const f = num('#wallSagitta'), h = num('#wallEndHeight');
+    if (!Number.isFinite(f) || !Number.isFinite(h)){ wallShapeStatus = op07t('Introduce números en milímetros.','Enter numbers in millimetres.','请输入毫米数值。'); return renderPanel(); }
+    applyWallEdit(p => { const a = Core.setWallCurve(p, id, curveControlFor(p.walls.find(x => x.id === id), Math.round(f)));
+      if (!a.ok) return a; const cur = a.project.walls.find(x => x.id === id), b = Core.setWallEndHeight(a.project, id, Math.round(h) === cur.heightMm ? null : Math.round(h));
+      return b.ok ? {...b, intent:{...a.intent, ...b.intent}} : b; }, id);
+  };
+  $('#wallStraighten').onclick = () => applyWallEdit(p => Core.setWallCurve(p, id, null), id);
+  $('#wallLevel').onclick = () => applyWallEdit(p => Core.setWallEndHeight(p, id, null), id);
+  $('#wallSplit').onclick = () => applyWallEdit(p => Core.splitWall(p, id, num('#wallSplitAt')), id);
+}
 function wallPanel(w){
-  const len = Math.round(Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y));
+  const pw = project.walls.find(x => x.id === w.id) || w;
+  const len = Math.round(Core.wallLength(pw));
   const state = w.status==='demolished' ? ' · marcado para retirar' : '';
   return `<div class="panel-view wall-panel">${panelHead({title:'Muro', context:`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
     ${wallStructureBlock(w)}
+    ${wallShapeBlock(pw)}
     <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
 }
-function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
+function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); bindWallShape(id); }
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
@@ -1796,8 +1862,8 @@ function bindRoomPanel(){
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
-  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
-  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();Core.raiseVersion(project,'1.6.0');});
+  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;Core.raiseVersion(project,'1.6.0');});
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
   $('#back').onclick = () => select(null);
@@ -2028,6 +2094,12 @@ function endDrag(cancel){
     if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else if (d.wall){ select({kind:'wall', id:d.wall}); showProperties(); } else { select(d.room ? {kind:'room', id:d.room} : null); if (d.room) showProperties(); } }
     return;
   }
+  if (d.kind === 'curve'){
+    if (cancel || !d.moved){ if (d.moved){ project = JSON.parse(d.before); refreshProject(); } renderAll(); return; }
+    if (snap() !== d.before){ window.FloorPlanApp && (FloorPlanApp.lastEditIntent = d.intent || {}); commit(d.before); }
+    wallShapeStatus = d.refused ? op07t('Se conserva la última forma válida: ','The last valid shape is kept: ','保留最后的有效形状：') + d.refused : '';
+    renderAll(); return;
+  }
   if (d.moved){ commit(d.before); renderAll(); }
   else if (d.kind === 'move' && !cancel) showProperties();
 }
@@ -2066,7 +2138,11 @@ svg.addEventListener('pointerdown', e => {
     renderMeasure(); return;
   }
   const h = t.closest('[data-handle]');
-  if (h && ui.sel?.kind === 'furn'){
+  if (h && h.dataset.handle === 'curve' && ui.sel?.kind === 'wall'){
+    // OP-07 · S5b: one drag = one operation. The project changes only in memory while dragging (live validation, no
+    // history, no save); on release it is committed once.
+    drag = {kind:'curve', id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false, refused:''};
+  } else if (h && ui.sel?.kind === 'furn'){
     drag = {kind:h.dataset.handle, id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false};
   } else if (ui.tool === 'demolish' && t.closest('[data-wall]')){
     toggleWall(t.closest('[data-wall]').dataset.wall); return;
@@ -2108,6 +2184,18 @@ svg.addEventListener('pointermove', e => {
     if (!drag.moved && !far) return;
     drag.moved = true; svg.classList.add('panning');
     view.x0 = drag.x0 - (e.clientX-drag.sx)/view.s; view.y0 = drag.y0 - (e.clientY-drag.sy)/view.s; applyView(); return;
+  }
+  if (drag.kind === 'curve'){
+    if (!drag.moved && !far) return;
+    drag.moved = true;
+    const base = JSON.parse(drag.before), w = base.walls.find(x => x.id === drag.id), {mid, n} = wallChord(w);
+    // Curve midpoint follows the pointer along the wall's normal: sagitta snapped to 10 mm (Shift: 1 mm); near the line
+    // (12 px) it is straight again.
+    const raw = (p.x-mid.x)*n.x + (p.y-mid.y)*n.y, sag = Math.abs(raw) < 12/view.s ? 0 : e.shiftKey ? Math.round(raw) : Math.round(raw/10)*10;
+    const r = Core.setWallCurve(base, drag.id, curveControlFor(w, sag));
+    if (r.ok){ project = r.project; drag.intent = r.intent; drag.refused = ''; refreshProject(); }
+    else drag.refused = r.explanation.join(' ');
+    renderAll(); return;
   }
   const f = getF(drag.id); if (!f) return;
   if (!drag.moved && !far) return;             // 轻点家具不应让它抖动一下
@@ -3520,6 +3608,36 @@ function wallBox(rect, yb, yt, m){
   else if(exteriorByWall.get(rect.id)==='facade')m=facadeMat;
   const [x0,y0,x1,y1]=rect;
   if (yt - yb <= .001) return;
+  // OP-07 · S4: a piece of a curved or sloped wall is a sloped box from the single geometric core (Core.pieceMesh), with
+  // UVs continuous along the whole wall; it sits at the same centre and angle as a box, so everything else is unchanged.
+  const sloped=Core.pieceMesh(rect,yb,yt);
+  if (sloped) {
+    // Plan millimetres → world (the same wx/wz as every other object): all pieces of a wall share one frame, so their
+    // shared corners are bit-identical and the surface is watertight (no cracks between facets).
+    const P=sloped.positions,pos=new Float32Array(P.length);for(let i=0;i<P.length;i+=3){pos[i]=wx(P[i]);pos[i+1]=P[i+1]/1000;pos[i+2]=wz(P[i+2]);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    g.setAttribute('normal',new THREE.Float32BufferAttribute(sloped.normals,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(sloped.uvs,2));g.setIndex(sloped.indices);
+    for(const [start,count,material] of sloped.groups)g.addGroup(start,count,material);
+    const o=new THREE.Mesh(g,m||[wallMat,wallMat,capMat,wallMat,wallMat,wallMat]);
+    o.userData.wallId=rect.id;o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';o.userData.slopedPiece=true;
+    o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:Math.min(Math.max(rect.heightStart,rect.heightEnd),yt)-yb};
+    o.castShadow=o.receiveShadow=true;archUp.add(o);
+    // Walk-mode edges: the four long edges, and the end outline only where the piece really ends (not at a facet seam).
+    const vtx=[];for(let i=0;i<pos.length;i+=3)vtx.push([pos[i],pos[i+1],pos[i+2]]);
+    // slopedPiece vertex order: face +x = 0–3 (end), −x = 4–7 (start); 0:(yb,+z) 1:(yb,−z) 2:(top,−z) 3:(top,+z); 4:(yb,−z) 5:(yb,+z) 6:(top,+z) 7:(top,−z)
+    const E={b:{'1':vtx[0],'-1':vtx[1]},t:{'1':vtx[3],'-1':vtx[2]}},S={b:{'1':vtx[5],'-1':vtx[4]},t:{'1':vtx[6],'-1':vtx[7]}};
+    const seg=[],line=(a,b)=>seg.push(...a,...b);
+    for(const k of ['b','t'])for(const z of ['1','-1'])line(S[k][z],E[k][z]);
+    for(const [X,seam] of [[S,rect.seamStart],[E,rect.seamEnd]])if(!seam){line(X.b['1'],X.b['-1']);line(X.b['-1'],X.t['-1']);line(X.t['-1'],X.t['1']);line(X.t['1'],X.b['1']);}
+    const eg=new THREE.BufferGeometry();eg.setAttribute('position',new THREE.Float32BufferAttribute(seg,3));
+    const ln=new THREE.LineSegments(eg,edgeMat);ln.userData.walkOnly=true;ln.visible=opt.mode==='walk';archUp.add(ln);
+    if (yb <= .001 && rect.yb === undefined){   // skirting, mitred like the wall so it is continuous too
+      const sk=Core.pieceMesh({...rect,thickness:rect.thickness+20},0,Math.min(.12,yt)),SP=sk.positions,sp=new Float32Array(SP.length);for(let i=0;i<SP.length;i+=3){sp[i]=wx(SP[i]);sp[i+1]=SP[i+1]/1000;sp[i+2]=wz(SP[i+2]);}
+      const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('normal',new THREE.Float32BufferAttribute(sk.normals,3));sg.setIndex(sk.indices);
+      const s=new THREE.Mesh(sg,skirtMat);s.userData.walkOnly=true;s.visible=opt.mode==='walk';archUp.add(s);
+    }
+    return o;
+  }
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
   if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
@@ -3751,11 +3869,14 @@ function buildArch(other){
     colliders.push({x:wx(w.center[0]),z:wz(w.center[1]),angle:w.angle,length:M(w.spanMm),thickness:M(w.thickness)});
   });
   [...geometry.doors.map(d=>d.rect),...geometry.slides.map(d=>d.rect),...geometry.voids].forEach(r=>{
+    if(r.curvedHost)return;   // OP-07 · S4b: on a curved wall the infill is drawn per facet below
     if(r.sill>0)wallBox(r,0,Math.min(r.sill,top));if(top>r.head)wallBox(r,r.head,Math.min(top,r.height));
   });
+  // OP-07 · S4b: above the head and below the sill of openings on curved walls, one mitred piece per facet.
+  (geometry.wallInfills||[]).forEach(r=>{ if(r.band==='head'){ if(top>r.yb) wallBox(r,r.yb,Math.min(top,r.height)); } else wallBox(r,0,Math.min(r.yt,top)); });
   geometry.windows.forEach((r, i) => {
     const sill=r.sill, head=r.head;
-    wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height));
+    if (!r.curvedHost){ wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height)); }
     colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
     const gTop = Math.min(head, top); if (gTop <= sill) return;
     const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=r.openingId;archUp.add(group);
@@ -5486,6 +5607,8 @@ function presentationStoryInfo(){
 
 window.View3D = {
   invalidate:requestFrame,
+  // OP-07 · S4: what the wall meshes are (test and QA inspection; read-only).
+  wallsInspect(){const out=[];for(const o of archUp?.children||[]){if(!o.isMesh||!o.userData.wallId)continue;o.geometry.computeBoundingBox();const b=o.geometry.boundingBox;out.push({wallId:o.userData.wallId,sloped:!!o.userData.slopedPiece,minY:b.min.y+o.position.y,maxY:b.max.y+o.position.y});}return out;},
   setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
   get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
