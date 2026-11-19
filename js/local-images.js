@@ -1,7 +1,15 @@
 /* IndexedDB stores original bytes only. No uploads, remote refs or data URLs in project JSON. */
 (function(root){
  let db;
- function open(){if(!db)db=new Promise((resolve,reject)=>{const r=indexedDB.open('rubik-sota-images-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('images');r.onsuccess=()=>resolve(r.result);r.onerror=()=>{db=null;reject(Error('No se pudo abrir el almacenamiento de imágenes.'));};});return db;}
+ // A0: si otra pestaña sube la versión de esta base, se cierra la conexión (en lugar de bloquearla) y la pestaña queda
+ // desactualizada: no vuelve a abrirla, porque una versión anterior no debe escribir en el formato nuevo.
+ const E=()=>root.FloorPlanSchemaEpoch;let upgraded=false;
+ function open(){if(upgraded)return Promise.reject(Error('Otra pestaña está actualizando el almacenamiento de imágenes. Recarga RUBIK.'));
+  if(!db)db=new Promise((resolve,reject)=>{const r=indexedDB.open('rubik-sota-images-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('images');
+   r.onsuccess=()=>{const d=r.result;d.onversionchange=()=>{d.close();db=null;upgraded=true;E()?.markOutdated('versionchange');};resolve(d);};
+   r.onerror=()=>{db=null;reject(Error('No se pudo abrir el almacenamiento de imágenes.'));};});return db;}
+ // A0: ningún escritor de bytes escribe si esta pestaña no puede (época mayor o indeterminada).
+ const writing=fn=>async(...a)=>{E()?.check();return fn(...a);};
  async function transact(mode,fn){const database=await open();return new Promise((resolve,reject)=>{const tx=database.transaction('images',mode),store=tx.objectStore('images');let result;try{result=fn(store);}catch(e){tx.abort();reject(e);return;}tx.oncomplete=()=>resolve(result?.result);tx.onerror=()=>reject(Error('No se pudo guardar o leer la imagen: revisa el espacio disponible.'));tx.onabort=()=>reject(Error('Operación de imágenes cancelada; no se ha guardado.'));});}
  /* F0.2 · Safe image collection. Deleting «every key this tab cannot see» deleted legitimate images: a tab only knows the
     library it loaded, an image is written BEFORE the project that refers to it is committed (imports, expediente restore,
@@ -63,6 +71,8 @@
  async function collect({live,storage,locks=globalThis.navigator?.locks,now=()=>Date.now()}){
   const canLock=typeof locks?.request==='function';
   const run=async()=>{
+   // A0: con la época mayor o indeterminada no se borra ni se marca nada (protección conservadora, R1-D4).
+   if(E()&&E().read().state!=='ok')return {removed:[],marked:[],sweep:false,blocked:true};
    const keys=await api.keys(),refs=new Set([...await live(),...journalImages(storage),...await authorityRefs(),...pins.keys()]);
    const open=keys.filter(key=>!refs.has(key));
    if(open.length){const held=[];for(const fn of holders)held.push(...await fn());
@@ -81,6 +91,6 @@
   };
   return canLock?lockSafely(locks,GC_LOCK,run):run();
  }
- const api={get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,pin,holder,guard,mentioned,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
+ const api={get:key=>transact('readonly',s=>s.get(key)),put:writing(entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);})),remove:writing(keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);})),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,pin,holder,guard,mentioned,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanImages=api;
 })(globalThis);

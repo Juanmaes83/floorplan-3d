@@ -150,7 +150,8 @@
  async function start(){
   editor.inert=true;
   if(!enabled){
-   try{runtime.storage=localStorage;}
+   // A0: en el origen normal localStorage es la autoridad de las cinco claves; la puerta retiene lo que no pueda escribirse.
+   try{runtime.storage=window.FloorPlanSchemaEpoch?window.FloorPlanSchemaEpoch.guardStorage(localStorage):localStorage;}
    catch{runtime.storage={getItem:()=>null,setItem:()=>{throw Error('Almacenamiento local no disponible.');}};}
    if(isolated&&!window.RUBIK_DELIVERY){
     const values=new Map();
