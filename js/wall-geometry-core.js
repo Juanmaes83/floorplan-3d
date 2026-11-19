@@ -275,7 +275,7 @@
   for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o,opts))issues.push({code:'invalid-opening',openingId:o.id,message});}
   return {ok:!issues.length,issues};}
 
- const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
+ const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,offsetMiter,polyLength,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
   facetCount,deviationBound,arcLength,trueGross,heightAtParam,minRadius,featuresOf,assertSavable,detectLoss,guardSave};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanWallGeometry=api;
 })(globalThis);

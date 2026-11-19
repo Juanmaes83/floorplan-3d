@@ -42,9 +42,11 @@ test('S3 · presupuesto: la partida de pintura suma ambas caras reales de los mu
  assert.ok(near(delta,w.wallSurfaceNetAreaM2-before.wallSurfaceNetAreaM2,1e-9),'solo cambia lo que aporta el muro curvo');
 });
 
-test('S3 · estancias junto a un muro curvo (convivencia con UX-03): incompleto y nombrado, nunca una cifra inventada',()=>{
+test('S3 · estancia cerca de un muro curvo pero NO dibujada contra él (convivencia con UX-03): incompleta y nombrada, nunca por la cuerda',()=>{
  const {project,wall}=F.curved(F.base(),{withOpening:false});
- const affected=project.rooms.map(r=>({r,f:Q.room(project,r.id).wallFaces})).filter(x=>x.f.pendingCurvedWalls?.includes(wall.id));
- assert.ok(affected.length>=1,'las estancias vecinas lo señalan');
- for(const {f} of affected){assert.equal(f.complete,false);assert.equal(f.associationComplete,false);assert.ok(f.missingBoundaryM>0);assert.ok(f.segments.every(s=>s.wallId!==wall.id),'el muro curvo no se mide por su cuerda');}
+ // El salón se separa 40 mm de la cara del muro: ya no se puede demostrar que lo sigue.
+ for(const v of project.rooms.find(r=>r.id==='rom_living').polygon)if(v.y===10560)v.y=10520;
+ const f=Q.room(project,'rom_living').wallFaces;
+ assert.equal(f.complete,false);assert.equal(f.associationComplete,false);assert.ok(f.missingBoundaryM>0);assert.deepEqual(f.pendingCurvedWalls,[wall.id]);
+ assert.ok(f.segments.every(s=>s.wallId!==wall.id),'el muro curvo no se mide por su cuerda');
 });
