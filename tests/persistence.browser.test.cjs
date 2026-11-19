@@ -1,6 +1,6 @@
 // F0.2 · Persistence authority in a REAL browser (Chromium): real IndexedDB, localStorage, Web Locks, BroadcastChannel,
 // real quota (CDP Storage.overrideQuotaForOrigin) and real reloads. Nothing here is simulated in memory.
-const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
+const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),playwright=require('playwright'),{chromium}=playwright;
 const F=require('./fixtures/building-fixture.cjs'),BUDGET='rubik-budget-v1';
 const root=path.resolve(__dirname,'..');let server,browser,url,origin;
 const ordered=[...require('node:fs').readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="js\/([a-z0-9-]+)\.js"/g)].map(m=>m[1]);
@@ -22,9 +22,12 @@ window.unb64=unb64;
 </script>`;
 before(async()=>{
  server=createServer(async(req,res)=>{try{const p=new URL(req.url,'http://l').pathname;if(p==='/p.html'){res.setHeader('content-type','text/html');return res.end(PAGE);}
-  const f=path.resolve(root,'.'+p);if(!f.startsWith(root+path.sep))throw 0;res.setHeader('content-type',f.endsWith('.js')?'text/javascript':'application/octet-stream');res.end(await fs.readFile(f));}catch{res.statusCode=404;res.end();}});
- await new Promise(r=>server.listen(0,'127.0.0.1',r));origin=`http://127.0.0.1:${server.address().port}`;url=origin+'/p.html';
- browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox']});
+  const f=path.resolve(root,'.'+(p.endsWith('/')?p+'index.html':p));if(!f.startsWith(root+path.sep))throw 0;
+  const type={'.js':'text/javascript','.mjs':'text/javascript','.html':'text/html','.css':'text/css','.json':'application/json'};
+  res.setHeader('content-type',type[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.statusCode=404;res.end();}});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));origin=`http://f0-2b.localhost:${server.address().port}`;url=origin+'/p.html';
+ const engine=process.env.F0_BROWSER||'chromium';
+ browser=await playwright[engine].launch(engine==='chromium'?{executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox']}:{});
 });
 after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
 async function open(context){const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.stack||e.message));
@@ -276,4 +279,257 @@ test('compatibility copy: a partial failure stays blocked and is repaired; a fai
   const st=s.state(),a=await authority();return {kept:a.conflicts.find(c=>c.id===st.mirror.conflictId)?.docs[BUDGET],ls:localStorage.getItem(BUDGET),auth:a.docs[BUDGET]};});
  assert.equal(old.kept,'{"de":"versión anterior"}');assert.equal(old.ls,old.auth);
  await context.close();
+});
+
+async function openEditor(context){
+ const page=await context.newPage();
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(origin+'/');
+ await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ page.errors=errors;
+ return page;
+}
+const downloadJson=async(page,selector)=>{
+ const [,download]=await Promise.all([page.locator(selector).click(),page.waitForEvent('download')]);
+ return JSON.parse(await fs.readFile(await download.path(),'utf8'));
+};
+
+test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-tab conflict and recovery',{timeout:120000},async()=>{
+ const ctx=await browser.newContext({acceptDownloads:true,viewport:{width:1440,height:900}});try{
+  const seed=await open(ctx);
+  const originals=await seed.evaluate(()=>{
+   const project=FloorPlanCore.initial(),lib=FloorPlanLibrary.load(localStorage,project);
+   lib.save(project);
+   localStorage.setItem(P.KEYS[0],JSON.stringify(project));
+   localStorage.setItem(P.KEYS[2],JSON.stringify({[project.id]:FloorPlanBudget.createBudget({id:'bud_'+project.id,subject:{type:'project',id:project.id},title:'Presupuesto local'})}));
+   localStorage.setItem(P.KEYS[3],JSON.stringify({[project.id]:{draft:null,received:[],answers:[]}}));
+   localStorage.setItem(P.KEYS[4],JSON.stringify({schema:'rubik-sota.construction-record',schemaVersion:'0.1.0',records:{}}));
+   localStorage.setItem('rubik-sota-assistant-test','solo preferencia');
+   return Object.fromEntries(P.KEYS.map(k=>[k,localStorage.getItem(k)]));
+  });
+  const a=await openEditor(ctx),b=await openEditor(ctx);
+  assert.deepEqual(await seed.evaluate(async()=> (await authority()).docs),originals);
+  assert.equal(await a.evaluate(()=>FloorPlanApp.storage.getItem('rubik-sota-assistant-test')),'solo preferencia');
+  for(const page of [a,b])await require('./editor-fixture.cjs')(page);
+  await a.evaluate(async()=>{
+   await new Promise(resolve=>navigator.locks.request(FloorPlanPersistence.LOCK,()=>new Promise(release=>{window.releaseSave=release;resolve();})));
+   FloorPlanApp.applyExtension(project=>{project.name='Revisión A';return {ok:true,project};});
+  });
+  assert.equal(await a.locator('#persistenceStatus').getAttribute('data-state'),'pending');
+  const json=await downloadJson(a,'#exportJsonQuick');
+  assert.equal(json.name,'Revisión A');
+  assert.equal((await seed.evaluate(()=>authority())).revision,1,'the download does not confirm the blocked transaction');
+  await a.evaluate(()=>releaseSave());
+  await a.waitForFunction(()=>FloorPlanApp.persistence.session.state().status==='saved');
+  assert.equal((await seed.evaluate(()=>authority())).revision,2);
+  await b.waitForFunction(()=>FloorPlanApp.persistence.session.state().outdated);
+  await b.evaluate(async()=>{
+   FloorPlanApp.applyExtension(project=>{project.name='Revisión B';return {ok:true,project};});
+   await FloorPlanApp.persistence.session.flush();
+  });
+  assert.equal(await b.locator('#persistenceStatus').getAttribute('data-state'),'conflict');
+  const kept=await seed.evaluate(()=>authority());assert.equal(kept.revision,2);
+  assert.equal(kept.conflicts.length,1);assert.equal(Object.keys(kept.conflicts[0].docs).length,5);
+  await b.locator('#persistenceOpen').click();
+  const copy=await downloadJson(b,'#persistenceDialog button:text-is("Exportar copia de emergencia")');
+  assert.equal(copy.format,'rubik-sota.emergency');
+  assert.equal(JSON.parse(copy.docs['rubik-sota-project-library-v1']).entries[0].project.name,'Revisión B');
+  b.once('dialog',d=>d.accept());
+  await b.locator('#persistenceDialog button:text-is("Recuperar versión")').click();
+  await b.waitForFunction(()=>window.FloorPlanApp?.project.name==='Revisión B'&&FloorPlanApp.persistence.session.state().revision===3);
+  const recovered=await seed.evaluate(()=>authority());
+  assert.equal(recovered.conflicts.length,1);
+  assert.equal(recovered.conflicts[0].reason,'superseded');
+  assert.equal(JSON.parse(recovered.conflicts[0].docs['rubik-sota-project-library-v1']).entries[0].project.name,'Revisión A');
+  assert.deepEqual([...a.errors,...b.errors],[]);
+ }finally{await ctx.close();}
+});
+
+test('editor F0.2b: a confirmed read/write handoff to Evolución survives stale localStorage',{timeout:120000},async()=>{
+ const ctx=await browser.newContext({viewport:{width:1440,height:900}});try{
+  const page=await openEditor(ctx);
+  if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeExample').click();
+  await page.evaluate(()=>FloorPlanConstructionUI.openEvolution());
+  const frame=page.frameLocator('#evolutionFrame');
+  await frame.locator('body.ready').waitFor();
+  const source=await frame.locator('body').evaluate(()=>({name:__ft3dSource.input.project.name,subject:__ft3dSource.subject,entry:__ft3dSource.entry.id}));
+  assert.equal(source.subject.id,await page.evaluate(()=>FloorPlanApp.project.id));
+  assert.equal(source.entry,await page.evaluate(()=>FloorPlanApp.entryId));
+  assert.equal(await frame.locator('body').evaluate(async()=>{
+   const s=__ft3dSource;
+   const out={id:'dlv_f0_2b_browser',project:{name:s.input.project.name}};
+   await s.recordDelivery('presentación',out);
+   await s.recordDelivery('presentación',out);
+   return true;
+  }),true);
+  const stored=await page.evaluate(async()=>{
+   const p=FloorPlanApp.persistence.session,{docs}=await FloorPlanPersistence.load(p.db),key='rubik-construction-v1';
+   return {saved:p.state().status,actual:JSON.parse(docs.get(key)),same:docs.get(key)===FloorPlanApp.storage.getItem(key)};
+  });
+  assert.equal(stored.saved,'saved');assert.equal(stored.same,true);
+  assert.equal(Object.values(stored.actual.records)[0].deliveries[0].id,'dlv_f0_2b_browser');
+  const standalone=await ctx.newPage();
+  const href=await frame.locator('body').evaluate(()=>location.href);
+  // A partial compatibility copy cannot become the source for an already-open parent session.
+  await page.evaluate(()=>localStorage.setItem(FloorPlanLibrary.KEY,FloorPlanPersistence.TOMBSTONE));
+  await standalone.goto(href);await standalone.locator('body.ready').waitFor();
+  assert.equal(await standalone.evaluate(()=>__ft3dSource.entry?.id),source.entry);
+  await standalone.evaluate(async()=>{
+   const src=__ft3dSource;
+   const message={id:'dlv_f0_2b_independent',project:{name:src.input.project.name}};
+   await src.recordDelivery('presentación',message);
+   const {revision}=await FloorPlanPersistence.readConfirmed();
+   await src.recordDelivery('presentación',message);
+   if((await FloorPlanPersistence.readConfirmed()).revision!==revision)throw Error('un reintento no crea una revisión');
+  });
+  assert.deepEqual(await standalone.evaluate(async()=>{
+   const saved=JSON.parse((await FloorPlanPersistence.readConfirmed()).docs.get('rubik-construction-v1'));
+   return Object.values(saved.records)[0].deliveries.map(d=>d.id);
+  }),['dlv_f0_2b_browser','dlv_f0_2b_independent']);
+  assert.deepEqual(page.errors,[]);
+ }finally{await ctx.close();}
+});
+
+test('F0.2b an explicit save can request persistence after this tab autosaved a confirmed revision',{timeout:120000},async()=>{
+ const ctx=await browser.newContext();try{
+  const page=await seeded(ctx);
+  await page.evaluate(async()=>{
+   window.permissionRequests=0;
+   Object.defineProperty(navigator,'storage',{value:{persisted:async()=>false,persist:async()=>{permissionRequests++;return true;}}});
+   await start();
+   const button=document.createElement('button');button.id='saveConfirmed';button.textContent='Guardar';
+   button.onclick=userEvent=>{window.confirmed=s.flush({userEvent,confirmExisting:true});};
+   document.body.append(button);
+  });
+  await page.locator('#saveConfirmed').click();await page.evaluate(()=>confirmed);
+  assert.equal(await page.evaluate(()=>permissionRequests),0,'migration alone does not grant a request');
+  await page.evaluate(async()=>{s.storage.setItem(BUDGET,'{"autosave":true}');await s.flush();});
+  assert.equal(await page.evaluate(()=>permissionRequests),0,'autosave alone never asks');
+  await page.locator('#saveConfirmed').click();
+  await page.waitForFunction(()=>permissionRequests===1);
+  assert.equal((await page.evaluate(()=>authority())).revision,2,'confirmation does not write a second revision');
+ }finally{await ctx.close();}
+});
+
+test('F0.2b concurrent migration without Web Locks cannot reset a committed revision',{timeout:120000},async()=>{
+ const ctx=await browser.newContext();try{
+  const a=await seeded(ctx),b=await open(ctx);
+  await a.evaluate(()=>{window.migrationA=start({locks:null,hooks:{afterCopy:()=>new Promise(resolve=>{window.finishMigration=resolve;})}});});
+  await a.waitForFunction(()=>window.finishMigration);
+  await b.evaluate(async()=>{
+   await start({locks:null});
+   s.storage.setItem(BUDGET,'{"confirmed":2}');
+   const state=await s.flush();
+   if(state.status!=='saved'||state.revision!==2||!state.mirror.blocked)throw Error(JSON.stringify(state));
+  });
+  await a.evaluate(()=>finishMigration());
+  assert.equal((await a.evaluate(()=>migrationA)).revision,2);
+  assert.equal((await a.evaluate(()=>authority())).docs[BUDGET],'{"confirmed":2}');
+  assert.equal(await a.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),await a.evaluate(()=>P.TOMBSTONE));
+ }finally{await ctx.close();}
+});
+
+test('F0.2b confirmed reader is read-only before migration and the editor fails closed if IndexedDB is unavailable',{timeout:120000},async()=>{
+ const ctx=await browser.newContext();try{
+  const legacy=await seeded(ctx);
+  const before=await legacy.evaluate(()=>lsSnapshot());
+  await legacy.evaluate(async()=>{
+   try{await P.readConfirmed();throw Error('unexpected authority');}
+   catch(e){if(e.code!=='authority-missing')throw e;}
+  });
+  assert.deepEqual(await legacy.evaluate(()=>lsSnapshot()),before);
+  assert.equal(await legacy.evaluate(async()=>typeof indexedDB.databases==='function'&&(await indexedDB.databases()).some(x=>x.name===P.DB)),false);
+  const page=await ctx.newPage();await page.addInitScript(()=>{indexedDB.open=()=>{throw new DOMException('blocked','SecurityError');};});
+  await page.goto(origin+'/');
+  await page.locator('#persistenceDialog[open]').waitFor();
+  assert.match(await page.locator('#persistenceDialog').innerText(),/No se ha abierto el editor/);
+  assert.equal(await page.evaluate(()=>!!window.FloorPlanApp),false);
+  assert.deepEqual(await legacy.evaluate(()=>lsSnapshot()),before);
+ }finally{await ctx.close();}
+});
+
+test('F0.2b default, client preview and synthetic demos leave the professional database closed',{timeout:120000},async()=>{
+ const ctx=await browser.newContext();try{
+  const legacy=await ctx.newPage();
+  await legacy.goto(origin.replace('f0-2b.localhost','127.0.0.1')+'/?f0=1');
+  await legacy.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+  assert.equal(await legacy.evaluate(()=>FloorPlanApp.persistence.session),null);
+  for(const suffix of ['/?entrega=vista-previa','/?demo=dibujo-vivo','/evolucion/?demo=obra']){
+   const p=await ctx.newPage();const attempts=[];
+   await p.exposeFunction('recordProfessionalOpen',name=>attempts.push(name));
+   await p.addInitScript(()=>{const open=indexedDB.open.bind(indexedDB);indexedDB.open=(name,...rest)=>{
+    if(name==='rubik-sota-persistence-v1')void recordProfessionalOpen(name);
+    return open(name,...rest);
+   };});
+   await p.goto(origin+suffix);
+   await p.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'||document.body.classList.contains('ready'));
+   assert.deepEqual(attempts,[]);
+   assert.equal(await p.evaluate(async()=>typeof indexedDB.databases==='function'&&(await indexedDB.databases()).some(x=>x.name==='rubik-sota-persistence-v1')),false);
+   await p.close();
+  }
+ }finally{await ctx.close();}
+});
+
+test('F0.2b portable building includes exact per-level images, budget and review; interruption after staging retains the journal',{timeout:120000},async()=>{
+ // WebKit's temporary contexts on Windows reject Blob writes. Exercise the normal disk-backed store.
+ const profiles=[];
+ async function context(){
+  if(process.env.F0_BROWSER!=='webkit')return browser.newContext();
+  const dir=await fs.mkdtemp(path.join(require('node:os').tmpdir(),'rubik-f0-webkit-'));
+  profiles.push(dir);return playwright.webkit.launchPersistentContext(dir);
+ }
+ const create=await context(),restore=await context();try{
+  const source=await open(create),dest=await open(restore),{building,bytesFor}=F.build();
+  const images=building.levels.map(l=>bytesFor(l.project.sourceImages[0].id).toString('base64'));
+  // IDs with one contained in the other expose substring matching, even though each ID is valid and distinct.
+  building.levels[1].project.sourceImages[0].id=building.levels[0].project.sourceImages[0].id.slice(0,-2);
+  const archive=await source.evaluate(async({building,images})=>{
+   await start();
+   const lib=FloorPlanLibrary.load(s.storage,FloorPlanCore.initial());
+   for(const [i,l] of building.levels.entries()){
+    const im=l.project.sourceImages[0],ref='img_exact_level_'+i;
+    im.storage={kind:'local-browser',ref};
+    await I.put([[ref,new Blob([unb64(images[i])],{type:im.mediaType})]]);
+   }
+   lib.addBuilding(building);
+   const p=building.levels[0].project,id=p.id;
+   s.storage.setItem(BUDGET,JSON.stringify({[id]:FloorPlanBudget.createBudget({id:'bud_'+id,subject:{type:'project',id},title:'Presupuesto portable'})}));
+   s.storage.setItem('rubik-review-v1',JSON.stringify({[id]:{draft:null,received:[],answers:[{note:'Revisión portátil'}]}}));
+   await s.flush();
+   const {archive}=await X.pack(X.collect({library:lib,storage:s.storage}),{getImage:I.get});
+   const parsed=await X.read(await archive.arrayBuffer());
+   return {encoded:b64(await archive.arrayBuffer()),identity:await X.contentIdOf(parsed),digests:parsed.images.map(x=>[x.levelId,x.image.sha256])};
+  },{building,images});
+  assert.equal(archive.digests.length,2);
+  assert.notEqual(archive.digests[0][1],archive.digests[1][1]);
+  const report=await dest.evaluate(async({building,encoded})=>{
+   await start();
+   const lib=FloorPlanLibrary.load(s.storage,FloorPlanCore.initial());lib.addBuilding(building);await s.flush();
+   const parsed=await X.read(unb64(encoded));
+   const result=await X.restore(parsed,{library:lib,storage:s.storage,persistence:s,getImage:I.get,putImages:I.put,removeImages:I.remove,visible:lib.project(),copy:true});
+   const repacked=await X.pack(X.collect({library:lib,storage:s.storage}),{getImage:I.get});
+   const again=await X.read(await repacked.archive.arrayBuffer());
+   const before=await authority();
+   const competitor=await P.session();
+   const putImages=async entries=>{await I.put(entries);competitor.storage.setItem('rubik-construction-v1','{"competitor":true}');await competitor.flush();};
+   let error;
+   try{await X.restore(parsed,{library:lib,storage:s.storage,persistence:s,getImage:I.get,putImages,removeImages:I.remove,visible:lib.project(),copy:true});}
+   catch(e){error=e.code;}
+   const after=await authority();
+   const journal=Object.keys(localStorage).filter(k=>k.startsWith(X.JOURNAL+':'));
+   const retained=(await Promise.all(journal.flatMap(k=>JSON.parse(localStorage.getItem(k)).images).map(I.get))).every(Boolean);
+   competitor.close();
+   return {result,error,identity:await X.contentIdOf(again),digests:again.images.map(x=>[x.levelId,x.image.sha256]),
+    beforeCount:JSON.parse(before.docs[FloorPlanLibrary.KEY]).entries.length,afterCount:JSON.parse(after.docs[FloorPlanLibrary.KEY]).entries.length,
+    journal:journal.length,retained};
+  },{building,encoded:archive.encoded});
+  assert.equal(report.result.status,'restored');assert.equal(report.result.budgets,1);assert.equal(report.result.reviews,1);
+  assert.equal(report.result.reidentified.length,2);
+  assert.equal(report.identity,archive.identity);assert.deepEqual(report.digests,archive.digests);
+  assert.equal(report.error,'restore-unconfirmed');assert.equal(report.beforeCount,report.afterCount);
+  assert.equal(report.journal,1);assert.equal(report.retained,true);
+ }finally{
+  await create.close();await restore.close();
+  for(const dir of profiles)await fs.rm(dir,{recursive:true,force:true});
+ }
 });

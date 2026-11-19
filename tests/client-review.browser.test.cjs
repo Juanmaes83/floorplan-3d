@@ -5,7 +5,7 @@
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:os'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..');let server,browser,url;
-before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://l').pathname));if(!file.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||undefined});});
+before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://l').pathname));if(!file.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://f0-2b.localhost:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||undefined});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function person(t,viewport){const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow,acceptDownloads:true});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
@@ -55,7 +55,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.match(await pro.page.locator(`[data-note="${doc.notes[0].id}"] .review-status`).textContent(),/Se incorporará \(aún no está en la vivienda\)/);
  assert.equal(await pro.project(),proBefore,'deciding does not change the project');
  await pro.page.screenshot({path:path.join(out,`${size}-professional-decides.png`)});
- // 4. Decisions persist in this browser.
+ // 4. Decisions persist in this browser after the authoritative transaction confirms them.
+ await pro.page.waitForFunction(()=>FloorPlanApp.persistence.session.state().status==='saved');
  await pro.page.reload();await pro.page.waitForFunction(()=>window.FloorPlanReviewUI);await require('./editor-fixture.cjs')(pro.page);
  await pro.page.evaluate(()=>FloorPlanReviewUI.open());
  assert.equal(await pro.page.locator(`[data-note="${doc.notes[1].id}"] [data-decision=discard]`).getAttribute('aria-pressed'),'true');

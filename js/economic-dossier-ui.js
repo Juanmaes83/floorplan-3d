@@ -145,6 +145,7 @@
   if(last&&ready.textContent.includes(last))ready.textContent=ready.textContent.replace(last,replacement);
   else{const parts=ready.textContent.split(' · '),i=parts.findIndex(part=>part.startsWith(prefix));if(i<0)return;parts[i]=replacement;ready.textContent=parts.join(' · ');}
   ready.dataset.budgetText=replacement;}
- addEventListener('DOMContentLoaded',()=>{const workspace=document.getElementById('professionalWorkspace');if(!workspace)return;let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;syncDeliverBudgetState();});};new MutationObserver(schedule).observe(workspace,{childList:true,subtree:true});schedule();});
+ const init=()=>{const workspace=document.getElementById('professionalWorkspace');if(!workspace)return;let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;syncDeliverBudgetState();});};new MutationObserver(schedule).observe(workspace,{childList:true,subtree:true});schedule();};
+ if(document.readyState==='loading')addEventListener('DOMContentLoaded',init,{once:true});else init();
  window.FloorPlanEconomicDossierUI={open,close:()=>dialog.close(),section,current,cardState,get variant(){return variant;},get active(){return dialog.open;}};
 })();

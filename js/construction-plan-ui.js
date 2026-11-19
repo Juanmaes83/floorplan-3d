@@ -67,13 +67,14 @@
   (dialog.querySelector('.is-focus button, .is-focus')||dialog.querySelector('#planTitle')).focus({preventScroll:false});
   dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});
  }
- async function save({quiet=false}={}){
+ async function save({quiet=false,userEvent}={}){
   if(brokenLinks().length){error='Hay tareas vinculadas a elementos que ya no existen en el proyecto. Quítalos antes de guardar (pestaña Comprobaciones).';tab='checks';draw();return false;}
   if(unknownItems().length){error='Hay tareas con partidas que ya no están en el presupuesto. Quítalas antes de guardar (pestaña Comprobaciones).';tab='checks';draw();return false;}
   try{
    snap=await C.snapshot();
    // Saving declares the plan for the CURRENT revision of the project: the professional has just reviewed it.
    const doc=asStored(draft,snap.revision);C.store().saveSchedule(snap.entry.id,snap.subject,doc,{action:stored()?'save':'create'});
+   await app.persistence.requireSaved(userEvent);
    snap=await C.snapshot();nowF=await C.nowFingerprints(snap);draft=S.canonical(stored());dirty=false;error='';if(!quiet)message=`Plan guardado para la revisión ${short(snap.revision)} del proyecto.`;money=budgetNow();draw();return true;
   }catch(e){error=R.human(e);draw();return false;}
  }
@@ -84,7 +85,7 @@
   try{const s=stored(),b=money.kind==='project'?money.budget:null;
    const binding=A.createBinding({id:R.newId('bnd'),source:snap.doc,fingerprints:{project:snap.revision,schedule:await A.fingerprint(S.validate(s)),budget:b?await A.fingerprint(b):null},
     scheduleId:s.id,budgetId:b?.id||null,review:{status:'reviewed',by:by.trim(),at:s.review.at},createdAt:new Date().toISOString()});
-   C.store().saveBinding(snap.entry.id,snap.subject,binding);snap=await C.snapshot();nowF=await C.nowFingerprints(snap);review=false;message='Plan marcado como revisado. Es tu declaración: RUBIK no la convierte en una aprobación firmada.';draw();
+   C.store().saveBinding(snap.entry.id,snap.subject,binding);await app.persistence.requireSaved();snap=await C.snapshot();nowF=await C.nowFingerprints(snap);review=false;message='Plan marcado como revisado. Es tu declaración: RUBIK no la convierte en una aprobación firmada.';draw();
   }catch(e){error=R.human(e);draw();}
  }
  function close(force=false){if(dirty&&!force){closing=true;draw();return;}dialog.close();}
@@ -110,10 +111,10 @@
   const foot=el('div',undefined,dialog,'cx-foot');
   const st=el('p',message,foot,'cx-status cx-grow');st.id='planStatus';st.setAttribute('role','status');st.setAttribute('aria-live','polite');
   const er=el('p',error,foot,'cx-err cx-grow');er.id='planError';er.setAttribute('role','alert');
-  if(closing){el('span','Tienes cambios sin guardar.',foot);const sv=btn('Guardar y cerrar',foot,'btn primary');sv.id='planSaveClose';sv.onclick=async()=>{if(await save())close(true);};
+  if(closing){el('span','Tienes cambios sin guardar.',foot);const sv=btn('Guardar y cerrar',foot,'btn primary');sv.id='planSaveClose';sv.onclick=async userEvent=>{if(await save({userEvent}))close(true);};
    const ds=btn('Descartar cambios',foot);ds.id='planDiscard';ds.onclick=()=>{dirty=false;close(true);};const k=btn('Seguir editando',foot);k.onclick=()=>{closing=false;draw();};}
   else if(draft){
-   const sv=btn('Guardar plan',foot,'btn primary');sv.id='planSave';sv.disabled=!dirty&&plan.result==='match';sv.onclick=()=>save();
+   const sv=btn('Guardar plan',foot,'btn primary');sv.id='planSave';sv.disabled=!dirty&&plan.result==='match';sv.onclick=userEvent=>save({userEvent});
    const rv=btn(draft.review.status==='reviewed'&&!dirty?'Revisado':'Marcar como revisado…',foot);rv.id='planReview';rv.disabled=!draft.tasks.length;rv.onclick=()=>{review=!review;draw();};
    const ev=btn('Ver evolución',foot);ev.id='planEvolution';ev.disabled=!stored();ev.onclick=async()=>{if(dirty){error='Guarda el plan antes de ver su evolución.';draw();return;}dialog.close();await window.FloorPlanConstructionUI.openEvolution();};
    const ex=btn('Exportar plan (JSON)',foot);ex.id='planExport';ex.disabled=!stored();ex.onclick=()=>download(new Blob([S.serialize(stored())],{type:'application/json'}),`plan-de-obra-${(snap.entry.name||'proyecto').replace(/[^\w]+/g,'-').toLowerCase()}.json`);
@@ -144,16 +145,17 @@
   if(draft&&!list.some(p=>p.id===draft.id)){const o=el('option',`${draft.source} · sin guardar`,sel);o.value=draft.id;}
   sel.value=draft?.id||'';sel.onchange=()=>{if(dirty){error='Guarda o descarta los cambios antes de cambiar de plan.';sel.value=draft.id;draw();return;}const p=list.find(x=>x.id===sel.value);if(p){draft=S.canonical(p);money=budgetNow();message='';draw();}};
   const bx=el('div',undefined,row);bx.style.display='flex';bx.style.gap='6px';bx.style.flexWrap='wrap';
-  if(draft&&stored()&&draft.id!==snap.record.selectedScheduleId&&list.some(p=>p.id===draft.id)){const use=btn('Usar este plan',bx,'btn primary');use.id='planUse';use.onclick=async()=>{C.store().selectSchedule(snap.entry.id,snap.subject,draft.id);snap=await C.snapshot();message='Este plan es ahora el que usan Evolución y Entregar.';draw();};}
-  const dup=btn('Duplicar plan',bx);dup.id='planDuplicate';dup.disabled=dirty||!list.some(p=>p.id===draft?.id);if(dirty)dup.title='Guarda o descarta los cambios antes de duplicar el plan.';dup.onclick=()=>{try{const copy=R.duplicateSchedule(list.find(p=>p.id===draft.id),{id:R.newId('sch'),title:draft.source+' (copia)'});
-   C.store().saveSchedule(snap.entry.id,snap.subject,copy,{action:'duplicate',select:false});C.snapshot().then(s=>{snap=s;draft=S.canonical(copy);message='Copia guardada como borrador. El plan en uso no cambia hasta que elijas «Usar este plan».';draw();});}catch(e){error=R.human(e);draw();}};
+  if(draft&&stored()&&draft.id!==snap.record.selectedScheduleId&&list.some(p=>p.id===draft.id)){const use=btn('Usar este plan',bx,'btn primary');use.id='planUse';use.onclick=async event=>{try{C.store().selectSchedule(snap.entry.id,snap.subject,draft.id);await app.persistence.requireSaved(event);
+   snap=await C.snapshot();message='Este plan es ahora el que usan Evolución y Entregar.';}catch(e){error=R.human(e);}draw();};}
+  const dup=btn('Duplicar plan',bx);dup.id='planDuplicate';dup.disabled=dirty||!list.some(p=>p.id===draft?.id);if(dirty)dup.title='Guarda o descarta los cambios antes de duplicar el plan.';dup.onclick=async event=>{try{const copy=R.duplicateSchedule(list.find(p=>p.id===draft.id),{id:R.newId('sch'),title:draft.source+' (copia)'});
+   C.store().saveSchedule(snap.entry.id,snap.subject,copy,{action:'duplicate',select:false});await app.persistence.requireSaved(event);snap=await C.snapshot();draft=S.canonical(copy);message='Copia guardada como borrador. El plan en uso no cambia hasta que elijas «Usar este plan».';}catch(e){error=R.human(e);}draw();};
   // D-03: a saved plan can be removed, always with an explicit confirmation that says what changes (the plan in use too).
   if(draft&&list.some(p=>p.id===draft.id)){const inUse=draft.id===snap.record.selectedScheduleId;
    if(removing!==draft.id||dirty){const rm=btn('Eliminar plan',bx);rm.id='planRemove';rm.disabled=dirty;if(dirty)rm.title='Guarda o descarta los cambios antes de eliminar el plan.';rm.onclick=()=>{removing=draft.id;draw();dialog.querySelector('#planRemoveConfirm')?.focus();};}
    else{const box=el('div',undefined,body,'cx-status');box.setAttribute('role','alert');box.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px';
     el('span',inUse?`¿Eliminar «${draft.source}»? Es el plan en uso: Evolución y Entregar se quedarán sin plan hasta que elijas o crees otro. El presupuesto y las entregas ya descargadas no cambian.`:`¿Eliminar «${draft.source}»? Se borra solo este plan; el plan en uso, el presupuesto y las entregas ya descargadas no cambian.`,box);
     const yes=btn('Sí, eliminar',box,'btn primary');yes.id='planRemoveConfirm';const no=btn('Cancelar',box);no.onclick=()=>{removing=null;draw();};
-    yes.onclick=async()=>{const gone=draft.source;try{C.store().removeSchedule(snap.entry.id,snap.subject,removing);}catch(e){removing=null;error=R.human(e);draw();return;}
+    yes.onclick=async event=>{const gone=draft.source;try{C.store().removeSchedule(snap.entry.id,snap.subject,removing);await app.persistence.requireSaved(event);}catch(e){removing=null;error=R.human(e);draw();return;}
      removing=null;snap=await C.snapshot();const sel2=(snap.record.plans||[]).find(p=>p.id===snap.record.selectedScheduleId)||snap.record.plans?.[0]||null;draft=sel2?S.canonical(sel2):null;money=budgetNow();message=`Plan «${gone}» eliminado.`;draw();};}}
  }
  function tabs(body){

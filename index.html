@@ -696,6 +696,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     <span class="only2d"><span data-en="Scale">当前比例</span> <b id="ratio">—</b></span>
     <span id="hover" class="only2d"></span>
     <span class="spacer"></span>
+    <button class="btn" id="persistenceOpen" type="button" hidden><span id="persistenceStatus" aria-live="polite"></span></button>
     <span id="traceStatus" role="status" aria-live="polite"></span><span id="tip"></span>
     <a class="legal-link" id="legalLink" href="#legal-y-uso" data-en="Legal & use" data-es="Legal y uso">法律与使用</a>
   </footer>
@@ -787,6 +788,9 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/presentation-core.js"></script>
 <script src="js/provenance-core.js"></script>
 <script src="js/opening-edit.js"></script>
+<script src="js/storage-persistence.js"></script>
+<script src="js/persistence-store.js"></script>
+<template id="editorScripts">
 <script>
 /* ======================= Multilingual UI: Español / English / 中文 ======================= */
 const LANG_KEY = 'rubik-sota-floorplan-lang';
@@ -1118,11 +1122,9 @@ function applyStaticLang(){
 /* FloorPlanProjectV1 is the only durable application state. Renderer geometry is derived. */
 const Core = window.FloorPlanCore;
 const STORE = 'rubik-sota-floorplan-project-v1';
-let storage;
-try { storage = localStorage; } catch { storage = {getItem:()=>null, setItem:()=>{throw new Error('Browser storage unavailable');}}; }
-const loadedProject = Core.load(storage, STORE);
-let library,libraryError;
-try { library=FloorPlanLibrary.load(storage,loadedProject.project); } catch(e){libraryError=e.message;}
+const persistence = window.FloorPlanPersistenceEditor;
+let storage = persistence.storage;
+const {loadedProject,library,libraryError}=persistence.bootstrap;
 let project = library ? library.project() : loadedProject.project;
 const originalStorage=storage;
 if(library)storage={getItem:key=>key===STORE?JSON.stringify(library.project()):originalStorage.getItem(key),setItem(key,value){if(key===STORE)library.save(JSON.parse(value));else originalStorage.setItem(key,value);}};
@@ -2391,7 +2393,11 @@ $('#exportPng').onclick = exportPNG;
 $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
 // A building exports as a whole; a single level is exported explicitly from «Plantas…» with a warning.
 const exportProjectJson = () => library?.isBuilding()?window.FloorPlanBuildingUI.exportBuildingJson():download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
-$('#exportJson').onclick = $('#exportJsonQuick').onclick = exportProjectJson;
+$('#exportJson').onclick = $('#exportJsonQuick').onclick = event => {
+  // The downloaded copy is available even when the local transaction cannot be confirmed.
+  void persistence.session?.flush({userEvent:event,confirmExisting:true});
+  return exportProjectJson();
+};
 $('#exportDxf').onclick = async () => {
   const levelName = window.FloorPlanBuildingUI?.context?.levelName;
   try {
@@ -2468,7 +2474,6 @@ if(loadedProject.message)toast(loadedProject.message,6000);
 function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
-function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
 function listProjects(){
   const list=$('#projectList');list.replaceChildren();const names=Object.fromEntries(library.list().map(e=>[e.id,e.name]));
   for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=(e.variantOf?`${nm(e.name)} — variante de «${nm(names[e.variantOf])}»`:nm(e.name))+(e.kind==='building'?` — edificio, ${e.levels} plantas`:'');list.append(option);}
@@ -2490,7 +2495,17 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
     }catch(e){$('#projectError').textContent=e.message;}
   };
 }
-$('#projectVariant').onclick=()=>{try{switchProject(library.variant(project));listProjects();$('#projectError').textContent='';toast(`Variante creada y abierta: «${library.list().find(e=>e.id===library.activeId()).name}». El original no cambia.`,5000);}catch(e){$('#projectError').textContent=storageMessage(e,'crear la variante');}};
+$('#projectVariant').onclick=async event=>{
+  const button=event.currentTarget;
+  button.disabled=true;
+  try{
+    switchProject(library.variant(project));listProjects();$('#projectError').textContent='';
+    const name=library.list().find(e=>e.id===library.activeId()).name;
+    await persistence.requireSaved(event);
+    toast('Variante creada y abierta: «'+name+'». El original no cambia.',5000);
+  }catch(e){$('#projectError').textContent=e.message;}
+  finally{button.disabled=false;}
+};
 // Comparison: stored projects for each distribution, except the open one, which uses the state on screen.
 let variantsClearance=null;
 const reviewState={checked:'comprobado',partial:'parcial',insufficient_evidence:'evidencia insuficiente'};
@@ -2533,7 +2548,7 @@ function renderVariants(){
        del MISMO origen (comparte la biblioteca de este navegador). En la dirección solo van identificadores de la biblioteca.
        No guarda nada al pulsar: el editor ya guarda cada cambio, y el comparador dice que compara lo guardado. */
     if(g.variantOf&&window.FloorPlanVariantsCompare){const cmp=document.createElement('button');cmp.className='btn';cmp.dataset.action='compare';cmp.textContent='Comparar con el original';
-      cmp.onclick=()=>window.open('comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:group[0].id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId()),'_blank','noopener');actions.append(cmp);}
+      cmp.onclick=()=>persistence.openComparison('comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:group[0].id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId()));actions.append(cmp);}
     if(g.variantOf){const del=document.createElement('button');del.className='btn danger';del.dataset.action='remove';del.textContent='Eliminar variante';del.onclick=()=>{
       const original=group[0].name;if(!confirm(`¿Eliminar la variante «${g.name}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`))return;
       try{const wasActive=g.id===library.activeId(),next=library.remove(g.id);if(wasActive)switchProject(next);window.FloorPlanTraceUI?.cleanup();renderVariants();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(del);}
@@ -2544,6 +2559,20 @@ function renderVariants(){
 $('#projectCompare').onclick=()=>{$('#projectsDialog').close();$('#variantsClearance').value=variantsClearance??'';renderVariants();$('#variantsDialog').showModal();};
 $('#variantsClose').onclick=()=>$('#variantsDialog').close();
 $('#variantsClearance').onchange=()=>{const v=$('#variantsClearance').value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){$('#variantsError').textContent='La holgura mínima debe ser un número de milímetros mayor que 0.';$('#variantsClearance').value=variantsClearance??'';return;}const next=n===null?null:Math.round(n);if(next===variantsClearance)return;variantsClearance=next;renderVariants();};
+// Sidecars of the starter project must have a durable library identity in the same revision.
+const documentStorage={
+  getItem:key=>originalStorage.getItem(key),
+  setItem(key,value){
+    if(persistence.session&&FloorPlanPersistence.KEYS.includes(key)&&key!==STORE&&key!==FloorPlanLibrary.KEY){
+      if(!library)throw Error('La colección local no está disponible.');
+      if(originalStorage.getItem(FloorPlanLibrary.KEY)===null)library.save(project);
+    }
+    originalStorage.setItem(key,value);
+  },
+  removeItem:key=>originalStorage.removeItem(key),
+  key:index=>originalStorage.key(index),
+  get length(){return originalStorage.length;}
+};
 window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelFileImport,fileImportCompleted,
   // Imports become a new library entry, or a new level when «Plantas…» requested it for this transaction.
   adoptImported(visible,next,name,session){return window.FloorPlanBuildingUI?window.FloorPlanBuildingUI.adoptImported(visible,next,name,session):library.importProject(visible,next,name);},
@@ -2551,6 +2580,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},
+  storage:documentStorage, persistence,
   /* E2.1 · destinos de «Comparar con el original» desde Entregar, con el mismo handoff UX-07 del diálogo Variantes.
      Solo lee la biblioteca; no guarda nada. Estados: no-library (proyecto sin guardar en la biblioteca), no-variant (el
      original no tiene variantes), not-eligible (grupo ilegible o variante sin original), ready (pares original→variante). */
@@ -5653,5 +5683,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/r03-cabinet-core.js"></script><script src="js/r03-cabinet-contract.js"></script><script src="js/r03-cabinet-editor-core.js"></script>
 <script src="js/r03-cabinet-editor-ui.js"></script><script src="js/r03-cabinet-geometry.js"></script><script src="js/r03-cabinet-three.js"></script>
 <script src="js/r03-cabinet-bridge.js"></script><script src="js/r03-cabinet-rubik-ui.js"></script>
+</template>
+<script src="js/persistence-editor.js"></script>
 </body>
 </html>
