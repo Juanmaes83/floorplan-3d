@@ -375,7 +375,7 @@
       if (at<span.to) solid.push([at,span.to]);
       for (const [a,b] of solid) if (b-a>1e-6) {
         const rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
-        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true});
+        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true,alongMm:(a+b)/2});
         pieces.push(rect);
       }
     }
@@ -394,6 +394,14 @@
     if (!shapedWall(w) || !Walls.isCurved(w)) return wallRect(w).poly;
     const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
     return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
+  }
+  // OP-07 · S4: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
+  // (heightStart → heightEnd) and the texture running continuously along the whole wall (alongMm). Positions in mm,
+  // faces in BoxGeometry order (+x, −x, top, bottom, +z, −z). null for a piece of a straight, level wall (a box).
+  function pieceMesh(rect, yb, yt) {
+    if (!rect?.shaped) return null;
+    const top=h=>Math.min(h,yt)*1000;
+    return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
   }
   // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
   function wallFootprints(w) {
@@ -414,6 +422,8 @@
         const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
         const rect=shaped?wallRect(host,offset,Walls.isCurved(w)?Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y):o.widthMm):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
         Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
+        // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
+        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2});}
         if(w.status==='demolished') continue;
         if(o.kind==='window') windows.push(rect);
         else if(o.kind==='door') {
@@ -455,4 +465,5 @@
   Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
   Object.assign(api,{wallOutline});   // OP-07 S2
   Object.assign(api,{wallFootprints});   // OP-07 S6
+  Object.assign(api,{pieceMesh});   // OP-07 S4
 })(globalThis);

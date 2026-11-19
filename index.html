@@ -3700,6 +3700,20 @@ function wallBox(rect, yb, yt, m){
   else if(exteriorByWall.get(rect.id)==='facade')m=facadeMat;
   const [x0,y0,x1,y1]=rect;
   if (yt - yb <= .001) return;
+  // OP-07 · S4: a piece of a curved or sloped wall is a sloped box from the single geometric core (Core.pieceMesh), with
+  // UVs continuous along the whole wall; it sits at the same centre and angle as a box, so everything else is unchanged.
+  const sloped=Core.pieceMesh(rect,yb,yt);
+  if (sloped) {
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(sloped.positions.map(v=>v/1000),3));
+    g.setAttribute('normal',new THREE.Float32BufferAttribute(sloped.normals,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(sloped.uvs,2));g.setIndex(sloped.indices);
+    for(let f=0;f<6;f++)g.addGroup(f*6,6,f);
+    const o=new THREE.Mesh(g,m||[wallMat,wallMat,capMat,wallMat,wallMat,wallMat]);
+    o.userData.wallId=rect.id;o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';o.userData.slopedPiece=true;
+    o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:Math.min(Math.max(rect.heightStart,rect.heightEnd),yt)-yb};
+    o.position.set(wx(rect.center[0]),0,wz(rect.center[1]));o.rotation.y=-rect.angle;o.castShadow=o.receiveShadow=true;archUp.add(o);
+    const ln=new THREE.LineSegments(new THREE.EdgesGeometry(g),edgeMat);ln.position.copy(o.position);ln.rotation.copy(o.rotation);ln.userData.walkOnly=true;ln.visible=opt.mode==='walk';archUp.add(ln);
+    return o;
+  }
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
   if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
@@ -5675,6 +5689,8 @@ function presentationStoryInfo(){
 
 window.View3D = {
   invalidate:requestFrame,
+  // OP-07 · S4: what the wall meshes are (test and QA inspection; read-only).
+  wallsInspect(){const out=[];for(const o of archUp?.children||[]){if(!o.isMesh||!o.userData.wallId)continue;o.geometry.computeBoundingBox();const b=o.geometry.boundingBox;out.push({wallId:o.userData.wallId,sloped:!!o.userData.slopedPiece,minY:b.min.y+o.position.y,maxY:b.max.y+o.position.y});}return out;},
   setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
   get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
