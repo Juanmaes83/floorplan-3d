@@ -54,7 +54,7 @@
  const resume=btn('guideResume','',()=>{state().closed=false;state().fullTools=false;fullEditor=false;store();render();},header);
  // The guided header keeps what the journey needs: the level switch of a building, the 3D modes (in 3D only) and the
  // presentation entry (secondary here: the guide's own button is the dominant action).
- const essentials=new Set(['uploadPlanBtn','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume','levelBar','modes3d','roofGroup','presentationBtn']);
+ const essentials=new Set(['uploadPlanBtn','roomPlanJoinQuick','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume','levelBar','modes3d','roofGroup','presentationBtn']);
  for(const child of header.children)if(!essentials.has(child.id)&&!child.classList.contains('brand')&&!child.querySelector('#undo'))child.classList.add('advanced-control');
  const bar=el('section',undefined,undefined,'guide-bar');bar.id='guideBar';bar.setAttribute('aria-label','Objetivo y progreso');header.after(bar);
  const top=el('div',undefined,bar,'guide-top'),identity=el('div',undefined,top,'guide-identity');
@@ -340,6 +340,7 @@
  async function execute(a,fromWelcome=false){
   if(a.id==='upload')return beginUpload();if(a.id==='blank')return createOwn('create');if(a.id==='example')return example();
   if(fromWelcome)closeWelcome();
+  if(a.id==='joinScan')return window.FloorPlanUpload?.pickJoin();
   if(a.id==='presentation')return window.FloorPlanPresentation?.open();
   if(a.id==='missing'){state().closed=false;render();return openDetails();}
   if((a.goal&&state().goal!==a.goal)||a.targetType){const targetRoom=a.roomHint&&(project.rooms.find(r=>r.family===a.roomHint)||project.rooms.find(r=>G.normalize(nm(r.name||'')).includes(a.roomHint==='bedroom'?LANG==='en'?'bed':'dorm':LANG==='en'?'kitchen':'cocina')));setGoal(a.goal,{targetType:a.targetType,targetRoomId:targetRoom?.id});if(targetRoom)select({kind:'room',id:targetRoom.id});}

@@ -539,6 +539,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <div class="app">
   <header>
     <button class="btn primary upload-plan-cta" id="uploadPlanBtn" aria-describedby="uploadPlanHelp" data-en="Upload a floor plan" data-es="Subir plano" data-en-title="Upload a floor plan or project">上传平面图</button>
+    <button type="button" class="btn" id="roomPlanJoinQuick" aria-haspopup="dialog" data-en="Join scan" data-es="Unir escaneo">拼接扫描</button>
     <button class="btn" id="uploadCancel" hidden data-en="Cancel import" data-es="Cancelar importación">取消导入</button>
     <button class="btn" id="newProjectBtn">Nuevo proyecto</button>
     <span id="uploadPlanHelp" class="sr-only" data-en="PDF (image or vector drawing), image (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, RoomPlan scan (JSON) or Rubik Sota project (JSON/ZIP). You can also drag the file onto the page." data-es="PDF (imagen o dibujo vectorial), imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, escaneo RoomPlan (JSON) o proyecto Rubik Sota (JSON/ZIP). También puedes arrastrar el archivo a la página.">PDF（图片或矢量图）、图片 (PNG、JPG、WebP、HEIC、TIFF、BMP、GIF、AVIF)、SVG、CAD DXF、BIM IFC、RoomPlan 扫描 (JSON) 或 Rubik Sota 项目 (JSON/ZIP)。也可以把文件拖到页面上。</span>
@@ -580,9 +581,12 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <button class="btn" id="vIso" data-en="Iso">斜视</button>
       <button class="btn" id="vTop" data-en="Top">俯视</button>
     </div>
-    <div class="grp">
-      <button class="btn" id="undo" title="撤销 (Ctrl+Z)" data-en-title="Undo (Ctrl+Z)" data-en="Undo">撤销</button>
-      <button class="btn" id="redo" title="重做 (Ctrl+Shift+Z)" data-en-title="Redo (Ctrl+Shift+Z)" data-en="Redo">重做</button>
+    <div class="grp" id="editHistory">
+      <span class="edit-history-scope" data-es="Historial de sesión" data-en="Session history">会话历史</span>
+      <button class="btn" id="undo" aria-describedby="undoReason" title="撤销 (Ctrl+Z)" data-en-title="Undo (Ctrl+Z)" data-en="Undo">撤销</button>
+      <button class="btn" id="redo" aria-describedby="redoReason" title="重做 (Ctrl+Shift+Z)" data-en-title="Redo (Ctrl+Shift+Z)" data-en="Redo">重做</button>
+      <span id="undoReason" class="sr-only" data-es="No hay cambios para deshacer. El historial pertenece a esta sesión de edición." data-en="No changes to undo. History belongs to this editing session.">没有可撤销的更改。历史记录仅在当前编辑会话中可用。</span>
+      <span id="redoReason" class="sr-only" data-es="Rehacer se habilita después de deshacer un cambio en esta sesión." data-en="Redo is available after undoing a change in this session.">在此会话中撤销更改后才能重做。</span>
     </div>
     <span class="hdr-break" aria-hidden="true"></span><span class="hdr-break2" aria-hidden="true"></span>
     <details class="menu-like layers-menu only2d" id="layersMenu"><summary class="btn" data-en="Show ▾" data-es="Mostrar ▾">显示 ▾</summary>
@@ -693,6 +697,13 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 
   <aside class="right"><section id="tracePanel" hidden></section><div id="panel"></div></aside>
 
+  <section id="roomPlanJoinResult" aria-labelledby="roomPlanJoinResultTitle" hidden>
+    <div>
+      <strong id="roomPlanJoinResultTitle" data-es="Escaneo unido" data-en="Scan joined">扫描已拼接</strong>
+      <span data-es="Medidas estimadas. Contorno discontinuo: estancias añadidas." data-en="Estimated dimensions. Dashed outline: added rooms.">估算尺寸。虚线轮廓：新增房间。</span>
+    </div>
+    <button type="button" class="btn" id="roomPlanUndoJoin" data-es="Deshacer unión" data-en="Undo join">撤销拼接</button>
+  </section>
   <footer>
     <span class="only2d">X <b id="cx">—</b></span><span class="only2d">Y <b id="cy">—</b></span>
     <span class="only2d"><span data-en="Scale">当前比例</span> <b id="ratio">—</b></span>
@@ -703,6 +714,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
   </footer>
 </div>
 <div id="toast" role="status"></div>
+<span id="roomPlanJoinAnnouncement" class="sr-only" role="status"></span>
 <dialog id="legalDialog" aria-labelledby="legalTitle">
   <h2 id="legalTitle" data-en="Legal & use" data-es="Legal y uso">法律与使用</h2>
   <p><strong data-en="Platform authorship" data-es="Autoría de la plataforma">平台作者</strong><br>Juan Manuel Espinosa Galant · Rubik Sota</p>
@@ -716,15 +728,16 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, IFC, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, IFC, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、IFC、RoomPlan 或项目)</span></div>
 <dialog id="uploadPdfMode" aria-labelledby="uploadPdfModeTitle"><form method="dialog"><h3 id="uploadPdfModeTitle" data-en="PDF vector drawing" data-es="PDF con dibujo vectorial">PDF 矢量绘图</h3><p id="uploadPdfModeInfo"></p><label>Escala del plano 1: <input type="number" id="uploadPdfScale" min="1" max="1000" step="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate id="uploadPdfCancel" data-en="Cancel" data-es="Cancelar">取消</button> <button class="btn" value="raster" formnovalidate id="uploadPdfRaster" data-en="Use as image" data-es="Usar como imagen">用作图片</button> <button class="btn primary" value="vector" id="uploadPdfVector" data-en="Import measured walls" data-es="Importar muros con medidas">导入带尺寸的墙体</button></p></form></dialog>
 <dialog id="uploadPdfPage" aria-labelledby="uploadPdfTitle"><form method="dialog"><h3 id="uploadPdfTitle">Elegir página del PDF</h3><p id="uploadPdfInfo"></p><label>Página <input type="number" id="uploadPdfNumber" min="1" value="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate>Cancelar</button> <button class="btn primary" value="ok" id="uploadPdfOk">Usar página</button></p></form></dialog>
-<dialog id="roomPlanJoinDialog" aria-labelledby="roomPlanJoinTitle">
+<dialog id="roomPlanJoinDialog" aria-labelledby="roomPlanJoinTitle" aria-describedby="roomPlanJoinFloor">
   <form method="dialog">
     <h3 id="roomPlanJoinTitle">Unir escaneo RoomPlan</h3>
     <p id="roomPlanJoinFloor"></p>
-    <p><label for="roomPlanFixedDoor">Puerta de la planta</label> <select id="roomPlanFixedDoor"></select></p>
-    <p><label for="roomPlanMovingDoor">La misma puerta en el escaneo</label> <select id="roomPlanMovingDoor"></select></p>
+    <p><label for="roomPlanFixedDoor">A · Puerta del plano actual</label> <select id="roomPlanFixedDoor" autofocus></select></p>
+    <p><label for="roomPlanMovingDoor">B · La misma puerta en el escaneo</label> <select id="roomPlanMovingDoor"></select></p>
+    <details><summary>Cómo elegir las puertas</summary><p>Selecciona la misma abertura en ambos planos. Comprueba la estancia y el ancho. Puedes cancelar sin cambiar el proyecto.</p></details>
     <svg id="roomPlanJoinPreview" role="img" aria-label="Vista previa de la planta y del escaneo alineado" width="510" height="260" style="display:block;max-width:100%;background:#f6f3ed" hidden></svg>
     <p id="roomPlanJoinStatus" role="status"></p>
-    <p class="actions"><button class="btn" value="cancel">Cancelar</button> <button class="btn primary" id="roomPlanJoinApply" value="join" disabled>Unir a esta planta</button></p>
+    <p class="actions"><button class="btn" value="cancel">Cancelar</button> <button class="btn primary" id="roomPlanJoinApply" value="join" aria-describedby="roomPlanJoinStatus" disabled>Unir a esta planta</button></p>
   </form>
 </dialog>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
@@ -1175,6 +1188,20 @@ const ui = {tool:'select', sel:null, mA:null, mCur:null,
   layers:{dims:true, labels:true, furn:true, grid:false, bearing:false, wallSnap:true}};
 let view = {x0:0, y0:0, s:.06};
 const undoStack = [], redoStack = [];
+let roomPlanJoinAction = null;
+
+// The receipt identifies the existing top history step. It has no history or persistence of its own.
+function currentRoomPlanJoin(){
+  const action=roomPlanJoinAction;
+  return action && action.project===project && action.entry===library?.activeId() && action.level===library?.activeLevelId()
+    && action.depth===undoStack.length && action.before===undoStack.at(-1) && action.after===snap() ? action : null;
+}
+function clearRoomPlanJoin(){
+  roomPlanJoinAction=null;
+  $('#roomPlanJoinResult').hidden=true;
+  $('#roomPlanJoinAnnouncement').textContent='';
+}
+const roomPlanJoinCount=()=>project.extensions?.['x-op04-roomplan']?.joins?.length||0;
 
 function save(){
   let saved=true;
@@ -1194,8 +1221,20 @@ function commit(before){
   undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; return save();
 }
 function mutate(fn){ const b=snap(); try{fn();commit(b);}catch(e){project=JSON.parse(b);toast(e.message);} renderAll(); }
-function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); redoStack.push(snap()); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); save(); renderAll(); }
-function redo(){ if(!redoStack.length)return;undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();save();renderAll(); }
+function undo(){
+  if(!undoStack.length)return toast(tr('没有可撤销的操作','Nothing to undo'));
+  const joins=roomPlanJoinCount();
+  redoStack.push(snap());project=JSON.parse(undoStack.pop());refreshProject();validateSel();
+  const saved=save();renderAll();
+  if(saved&&joins>roomPlanJoinCount())toast(LANG==='es'?'Unión deshecha. Puedes rehacerla en el historial.':tr('已撤销拼接。可在历史记录中重做。','Join undone. You can redo it in history.'),5000);
+}
+function redo(){
+  if(!redoStack.length)return;
+  const joins=roomPlanJoinCount();
+  undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();
+  const saved=save();renderAll();
+  if(saved&&joins<roomPlanJoinCount())toast(LANG==='es'?'Unión rehecha. Medidas estimadas.':tr('已重做拼接。尺寸为估算值。','Join restored. Dimensions are estimated.'),5000);
+}
 function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id) || ui.sel?.kind==='wall'&&!project.walls.some(w=>w.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
 const getF = id => state.furniture.find(f => f.id === id);
 
@@ -1369,7 +1408,7 @@ const NOLABEL = ['plant','floorlamp','sidetable','barstool','beanbag'];
 function renderRooms(){
   rendered2DSource = project;
   let s = '';
-  geometry.rooms.forEach(r => s += `<polygon class="room" data-room="${esc(r.id)}" points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="url(#m-${esc(state.rooms[r.id].mat)})"/>`);
+  geometry.rooms.forEach(r => s += `<polygon class="room" data-room="${esc(r.id)}"${roomPlanJoinAction?.added.has(r.id)?' data-roomplan-added':''} points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="url(#m-${esc(state.rooms[r.id].mat)})"/>`);
   const sill = r => `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="#e2dacb" stroke="#b9b0a0" stroke-width="1" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
   geometry.doors.forEach(d => s += sill(d.rect)); geometry.slides.forEach(d => s += sill(d.rect));
   SafeDOM.markup($('#gRooms'), s);
@@ -1556,6 +1595,7 @@ function renderSel(){
 }
 
 function renderAll(){window.FloorPlanTerritorySession?.sync(library?.activeId()||project.id,window.FloorPlanBuildingUI?.site||project.site);
+  if(roomPlanJoinAction&&!currentRoomPlanJoin())clearRoomPlanJoin();
   refreshProject(); buildDefs(); renderOpenings(); renderDims();
   renderGrid(); renderRooms(); renderFurn(); renderWalls(); renderLabels(); renderMeasure(); renderSel(); renderPanel(); updateHeader();
   window.View3D?.sync();
@@ -1575,6 +1615,11 @@ function updateHeader(){
   $('#subtitle').textContent=tr(`套内使用面积约 ${fmt(tot)} m² · 尺寸单位 mm${ratio?' · 原图比例 '+ratio:''}`,`Net floor area ≈ ${fmt(tot)} m² · Units: mm${ratio?' · Original scale '+ratio:''}`);
   $('#subtitle').title=$('#subtitle').textContent;
   $('#undo').disabled = !undoStack.length; $('#redo').disabled = !redoStack.length;
+  for(const [id,length]of [['undo',undoStack.length],['redo',redoStack.length]]){
+    const button=$('#'+id),reason=$('#'+id+'Reason');
+    reason.hidden=!!length;
+    if(length)button.removeAttribute('aria-describedby');else button.setAttribute('aria-describedby',reason.id);
+  }
   $('#undo').style.opacity = undoStack.length ? 1 : .4; $('#redo').style.opacity = redoStack.length ? 1 : .4;
 }
 
@@ -2371,6 +2416,18 @@ $('#fit').onclick = fitView;
 $('#s60').onclick = () => { setRatio(60); toast(tr('已按 1:60 显示（与原始户型图同比例）', 'Showing at 1:60 (same scale as the original plan)')); };
 $('#s100').onclick = () => setRatio(100);
 $('#undo').onclick = undo; $('#redo').onclick = redo;
+$('#roomPlanUndoJoin').onclick=()=>{
+  if(!currentRoomPlanJoin()){
+    toast(LANG==='es'?'Deshacer unión ya no está disponible en este contexto.':tr('当前上下文无法撤销拼接。','Undo join is unavailable in this context.'),5000);
+    return;
+  }
+  if(window.FloorPlanOpeningUI?.picking()||window.FloorPlanOpeningUI?.draft()||document.body.classList.contains('uploading')){
+    toast(LANG==='es'?'Termina o cancela la operación en curso antes de deshacer la unión.':tr('撤销拼接前请完成或取消当前操作。','Finish or cancel the current operation before undoing the join.'),5000);
+    return;
+  }
+  undo();
+  $('#roomPlanJoinQuick').focus();
+};
 $('#clearAll').onclick = clearLayout;
 
 /* 全屏：标准 API + Safari（iPad）的 webkit 前缀版本 */
@@ -2561,11 +2618,15 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   applyRoomPlanJoin(next,operation){
     if(!fileImportCurrent(operation)||next.id!==project.id)return false;
     const before=snap(),oldUndo=undoStack.slice(),oldRedo=redoStack.slice();
+    const previousRooms=new Set(project.rooms.map(room=>room.id));
     project=next;
     if(!commit(before)){
       project=JSON.parse(before);undoStack.splice(0,undoStack.length,...oldUndo);redoStack.splice(0,redoStack.length,...oldRedo);
       refreshProject();renderAll();return false;
     }
+    roomPlanJoinAction={entry:library?.activeId(),level:library?.activeLevelId(),project,before,after:snap(),depth:undoStack.length,added:new Set(project.rooms.filter(room=>!previousRooms.has(room.id)).map(room=>room.id))};
+    $('#roomPlanJoinResult').hidden=false;
+    $('#roomPlanJoinAnnouncement').textContent=LANG==='es'?'Escaneo unido. Medidas estimadas. Deshacer unión disponible.':tr('扫描已拼接。尺寸为估算值。可以撤销拼接。','Scan joined. Dimensions are estimated. Undo join is available.');
     refreshProject();validateSel();renderAll();fitView();return true;
   },
   // Imports become a new library entry, or a new level when «Plantas…» requested it for this transaction.

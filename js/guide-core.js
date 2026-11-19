@@ -44,6 +44,7 @@
   return {goal,rev,tasks,required:required.length,done:done.length,percent:Math.round(done.length/required.length*100),optionalDone:optional.filter(t=>t.status==='completed').length,optionalTotal:optional.length,pending,current:selected,stage:selected.stage,finished:pending.length===0};
  }
  const actions={
+  joinScan:{title:['Unir escaneo RoomPlan','Join a RoomPlan scan','拼接 RoomPlan 扫描'],description:['Añade un escaneo a la planta abierta por una puerta común.','Add a scan to the open level using a shared doorway.','通过共用门洞将扫描拼接到当前楼层。'],next:['Elegir el JSON y revisar la pareja de puertas','Choose the JSON and review the matching doors','选择 JSON 并检查匹配的门'],terms:'unir alinear empalmar escaneo roomplan join align merge scan'},
   upload:{title:['Subir un plano','Upload a floor plan','上传平面图'],description:['PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Conversión local y proyecto nuevo; conserva el anterior.','PDF, images, DXF, IFC, RoomPlan or JSON/ZIP. Local conversion into a new project; keeps the previous one.','PDF、图片、DXF、IFC、RoomPlan 或 JSON/ZIP。本地转换为新项目；保留原项目。'],next:['Revisar el plano o calibrar la imagen','Review the plan or calibrate the image','检查平面图或校准图片'],terms:'subir cargar importar imagen foto plano pdf dxf ifc roomplan json zip upload import image photo',goal:'save3d'},
   blank:{title:['Crear desde cero','Create from scratch','从零创建'],description:['Proyecto propio vacío con herramientas de dibujo y dimensiones.','An empty project with drawing and dimension tools.','带有绘图和尺寸工具的空项目。'],next:['Crear la primera estancia','Create the first room','创建第一个房间'],terms:'crear cero nuevo empezar distribucion blank scratch new layout',goal:'create'},
   example:{title:['Probar el ejemplo','Try the example','试用示例'],description:['Explora el Proyecto de ejemplo. Puedes crear una copia propia.','Explore the Example project. You can create your own copy.','浏览示例项目。可创建自己的副本。'],next:['Explorar en 2D o 3D','Explore in 2D or 3D','浏览 2D 或 3D'],terms:'ejemplo demo probar example try'},
@@ -67,14 +68,15 @@
  const furnitureTerms=[['bed','cama','cama camas lecho bed beds'],['crib','cuna','cuna bebe crib'],['sofa','sofa','sofa sofas couch'],['armchair','butaca','butaca sillon armchair'],['table','mesa','mesa mesas table'],['wardrobe','armario','armario ropero wardrobe'],['fridge','nevera','nevera frigorifico fridge'],['counter','encimera','encimera counter'],['chair','silla','silla sillas chair']];
  function resolve(query){
   let q=normalize(query);
-  const chinese={'上传':'upload plan','家具':'furniture','床':'bed','比例':'scale','保存':'save','还有什么':'missing','剩余':'missing','地板':'floor','墙':'walls','撤销':'undo','示例':'example','从零':'scratch','导出':'export','展示':'presentation'};
+  const chinese={'上传':'upload plan','拼接':'join scan','家具':'furniture','床':'bed','比例':'scale','保存':'save','还有什么':'missing','剩余':'missing','地板':'floor','墙':'walls','撤销':'undo','示例':'example','从零':'scratch','导出':'export','展示':'presentation'};
   for(const [term,alias]of Object.entries(chinese))if(q.includes(term))q+=' '+alias;
   if(!q)return ['upload','blank','furniture','presentation','3d','missing','save'].map(id=>({id,...actions[id]}));
   const words=q.split(' '),has=terms=>terms.split(' ').some(w=>words.some((t,i)=>t===w||i===words.length-1&&t.length>=3&&t.length<w.length&&w.startsWith(t)));
   if(has('cambiar modificar change edit')&&has('cocina kitchen')&&!has('pared paredes muro muebles suelo floor wall furniture'))return ['walls','furniture','floor'].map(id=>({id,...actions[id],ambiguous:true}));
   if(has('borrar vaciar eliminar clear delete remove')&&has('muebles furniture'))return [{id:'clear',...actions.clear}];
   if(has('presentar presentacion presentation tour enseñar ensenar'))return [{id:'presentation',...actions.presentation}];
-  if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house pdf png jpg jpeg webp heic tiff svg dxf ifc roomplan json zip bmp gif avif'))return [{id:'upload',...actions.upload}];
+  if(has('unir alinear empalmar join align merge')&&has('escaneo roomplan scan'))return [{id:'joinScan',...actions.joinScan}];
+  if(has('subir cargar importar upload import')&&has('plano imagen foto casa escaneo image photo plan house scan pdf png jpg jpeg webp heic tiff svg dxf ifc roomplan json zip bmp gif avif'))return [{id:'upload',...actions.upload}];
   if(has('exportar export captura capture png descargar download'))return [{id:'export',...actions.export}];
   if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house'))return [{id:'upload',...actions.upload}];
   const catalogTerms=Object.entries(furnitureSearch.specs).map(([type,[,terms]])=>[type,terms.split(' ')[0],terms.split(' ').filter(t=>t!=='cocina').join(' ')]);

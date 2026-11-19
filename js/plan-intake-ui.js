@@ -37,14 +37,16 @@
   const dialog=$('#roomPlanJoinDialog'),fixed=$('#roomPlanFixedDoor'),moving=$('#roomPlanMovingDoor');
   const preview=$('#roomPlanJoinPreview'),status=$('#roomPlanJoinStatus'),apply=$('#roomPlanJoinApply');
   const label=app().levelContext?.levelName||target.name;
-  $('#roomPlanJoinFloor').textContent=`Destino: ${label}. El escaneo aparecerá en naranja. Las medidas son estimadas.${omissions}`;
+  $('#roomPlanJoinFloor').textContent=`Destino: ${label}. A identifica el plano actual; B, el escaneo naranja. Las medidas son estimadas.${omissions}`;
   const options=(select,project)=>{
    const doors=A.doors(project);
    select.replaceChildren(...doors.map((door,i)=>{
     const wall=project.walls.find(w=>w.id===door.wallId);
     const t=(door.offsetMm+door.widthMm/2)/Math.hypot(wall.end.x-wall.start.x,wall.end.y-wall.start.y);
     const x=Math.round(wall.start.x+t*(wall.end.x-wall.start.x)),y=Math.round(wall.start.y+t*(wall.end.y-wall.start.y));
-    return new Option(`Puerta ${i+1} · ${door.widthMm} mm · (${x}, ${y})`,door.id);
+    const {left,right}=FloorPlanOpenings.sides(project,door);
+    const rooms=[...new Set([left.roomId,right.roomId])].map(id=>project.rooms.find(room=>room.id===id)).filter(Boolean).map(room=>roomDisplay(room));
+    return new Option(`Puerta ${i+1} · ${rooms.length?rooms.join(' / ')+' · ':''}${door.widthMm} mm · (${x}, ${y})`,door.id);
    }));
   };
   options(fixed,target);options(moving,scan);
@@ -65,7 +67,13 @@
     preview.setAttribute('viewBox',`${x-margin} ${y-margin} ${w+2*margin} ${h+2*margin}`);
     const moved=new Set(result.addedWalls.map(w=>w.id));
     for(const wall of walls)preview.append(svg('line',{x1:wall.start.x,y1:wall.start.y,x2:wall.end.x,y2:wall.end.y,stroke:moved.has(wall.id)?'#b24c25':'#344351','stroke-width':wall.thicknessMm}));
-    for(const p of [result.reference,result.targetReference])preview.append(svg('circle',{cx:p.x,cy:p.y,r:Math.max(45,margin*.13),fill:'#176b53'}));
+    const markerSize=Math.max(w,h)*.08;
+    for(const [p,letter,color,direction] of [[result.targetReference,'A','#344351',1],[result.reference,'B','#b24c25',-1]]){
+     const r=Math.max(45,margin*.16),x=p.x+direction*(r+markerSize/3);
+     preview.append(svg('circle',{cx:p.x,cy:p.y,r,fill:color,stroke:'#fff','stroke-width':2,'vector-effect':'non-scaling-stroke'}));
+     const mark=svg('text',{x,y:p.y,'text-anchor':direction>0?'start':'end','dominant-baseline':'middle','font-size':markerSize,'font-weight':700,fill:color,stroke:'#fff','stroke-width':r/2,'paint-order':'stroke'});
+     mark.textContent=letter;preview.append(mark);
+    }
     preview.removeAttribute('hidden');
     status.textContent=result.canApply?`Distancia entre ejes de muro: ${result.gapMm} mm. Diferencia de ancho entre puertas: ${result.widthDifferenceMm} mm.`:'Vista previa disponible. La escala de esta planta no admite añadir medidas estimadas sin perder su estado de calibración.';
     proposal=result;apply.disabled=!result.canApply;
@@ -161,7 +169,14 @@
      const omissions=(objects?` El conversor no incorpora los objetos detectados (${objects}).`:'')+(report.skippedOpenings?` Huecos sin muro cercano: ${report.skippedOpenings}.`:'');
      await script('js/scan-alignment.js');if(!current())return;
      const next=await previewRoomPlan(project,session,omissions);
-     if(next&&app().applyRoomPlanJoin(next,session))say('Escaneo unido a la planta. Revisa las medidas estimadas. Puedes deshacer la unión.');
+     if(next&&app().applyRoomPlanJoin(next,session)){
+      const previous=$('#toast');previous.classList.remove('show');previous.textContent='';
+      $('#roomPlanUndoJoin').focus({preventScroll:true});
+     }
+     else if(!next&&current()){
+      say('Unión cancelada. El proyecto no ha cambiado.');
+      $('#roomPlanJoinQuick').focus();
+     }
      return;
     }
     if(type==='roomplan'){const {project,report}=I.roomPlanToProject(value,{name:stem(file.name)});if(adopt(project,stem(file.name)))say(`Escaneo RoomPlan importado: ${report.walls} muros, ${report.openings} puertas, ventanas o huecos y ${report.rooms} ${report.rooms===1?'estancia':'estancias'}${report.skippedOpenings?`; ${report.skippedOpenings} huecos sin muro cercano`:''}. Revisa las medidas.`,9000);return;}
@@ -203,7 +218,9 @@
  cancelButton.onclick=cancel;
  input.onchange=e=>{const file=e.target.files[0];e.target.value='';upload(file);};
  const joinInput=$('#roomPlanJoinIn');
- $('#joinRoomPlan').onclick=()=>{document.querySelector('details.menu').open=false;joinInput.click();};
+ const pickJoin=()=>joinInput.click();
+ $('#roomPlanJoinQuick').onclick=pickJoin;
+ $('#joinRoomPlan').onclick=()=>{document.querySelector('details.menu').open=false;pickJoin();};
  joinInput.onchange=e=>{const file=e.target.files[0];e.target.value='';upload(file,{join:true});};
 
  const overlay=$('#dropOverlay');let depth=0;
@@ -214,5 +231,5 @@
  addEventListener('drop',e=>{if(!hasFiles(e))return;e.preventDefault();depth=0;overlay.classList.remove('show');const files=[...e.dataTransfer.files];if(files.length>1)say('Se sube un plano cada vez: se usará el primer archivo.');upload(files[0]);});
 
  addEventListener('keydown',e=>{if(e.key==='Escape'&&active&&!$('#uploadPdfMode').open&&!$('#uploadPdfPage').open&&!$('#roomPlanJoinDialog').open)cancel();});
- window.FloorPlanUpload={upload,pick,cancel,cancelDialogs};
+ window.FloorPlanUpload={upload,pick,pickJoin,cancel,cancelDialogs};
 })();

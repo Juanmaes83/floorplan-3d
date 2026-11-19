@@ -27,6 +27,104 @@ const state=page=>page.evaluate(()=>{const p=FloorPlanApp.project;return {id:p.i
 async function upload(page,file,wait){const before=(await state(page)).id;await page.locator('#uploadIn').setInputFiles(file);if(wait!==false)await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),before,{timeout:30000});return state(page);}
 const toastText=page=>page.locator('#toast').textContent();
 
+for(const [width,height] of [[1440,900],[820,1180],[390,844],[844,390]]){
+ test(`OP-04 UX keeps join and contextual undo reachable in the guide at ${width}×${height}`,async t=>{
+  const context=await browser.newContext({viewport:{width,height},locale:'es-ES',hasTouch:width<=1100,isMobile:width<=1100,reducedMotion:'reduce'});
+  t.after(()=>context.close());
+  const page=await context.newPage(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+  await page.goto(url);
+  const file=path.join(FX,'roomplan-capturedroom.json');
+  const [first]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);
+  await first.setFiles(file);
+  await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&FloorPlanApp.project.name==='roomplan-capturedroom'&&!document.body.classList.contains('uploading'));
+  const model=()=>page.evaluate(()=>({entry:FloorPlanApp.entryId,project:FloorPlanApp.project,depth:[undoStack.length,redoStack.length]}));
+  const hit=id=>page.locator('#'+id).evaluate(el=>{
+   const r=el.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;
+   const {width,height,offsetLeft,offsetTop}=visualViewport;
+   return r.height>=44&&x>offsetLeft&&x<offsetLeft+width&&y>offsetTop&&y<offsetTop+height&&el.contains(document.elementFromPoint(x,y));
+  });
+  const before=await model(),quick=page.locator('#roomPlanJoinQuick');
+  assert.ok(await page.locator('body.guided').count());
+  assert.ok(await hit('roomPlanJoinQuick'),'join is in the visible toolbar before scrolling');
+  const [scan]=await Promise.all([page.waitForEvent('filechooser'),quick.click()]);
+  await scan.setFiles(file);
+  const dialog=page.locator('#roomPlanJoinDialog[open]');
+  await dialog.waitFor();
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'roomPlanFixedDoor');
+  assert.match(await dialog.locator('#roomPlanFixedDoor option').first().textContent(),/Estancia 1.*900 mm/);
+  assert.deepEqual(await dialog.locator('svg text').allTextContents(),['A','B']);
+  await page.keyboard.press('Escape');
+  await dialog.waitFor({state:'hidden'});
+  await page.waitForFunction(()=>document.activeElement.id==='roomPlanJoinQuick'&&!document.body.classList.contains('uploading'));
+  assert.deepEqual(await model(),before);
+
+  await page.locator('#actionSearchBtn').click();
+  const search=page.locator('#editorActionInput');
+  await search.fill('unir escaneo');
+  await search.press('ArrowDown');
+  assert.ok(await search.getAttribute('aria-activedescendant'));
+  const [found]=await Promise.all([page.waitForEvent('filechooser'),search.press('Enter')]);
+  await found.setFiles(file);
+  await dialog.waitFor();
+  if(process.env.ROOMPLAN_UX_EVIDENCE)await page.screenshot({path:path.join(process.env.ROOMPLAN_UX_EVIDENCE,`dialog-${width}x${height}.png`)});
+  await page.locator('#roomPlanJoinApply').click();
+  const receipt=page.locator('#roomPlanJoinResult');
+  await receipt.waitFor();
+  const joined=await model();
+  assert.deepEqual(joined.depth,[1,0]);assert.equal(joined.entry,before.entry);
+  assert.equal(joined.project.rooms.length,2);assert.equal(joined.project.scale.confidence,'estimated');
+  assert.equal(await page.locator('#gRooms [data-roomplan-added]').count(),1);
+  assert.ok(await hit('roomPlanUndoJoin'),'undo action is visible and unobscured without auto-scroll');
+  assert.ok(await receipt.evaluate(e=>e.getBoundingClientRect().bottom<=document.querySelector('#stage').getBoundingClientRect().top+1),'feedback is outside the stage');
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'roomPlanUndoJoin');
+  assert.match(await page.locator('#roomPlanJoinAnnouncement').textContent(),/Escaneo unido.*Deshacer unión disponible/);
+  if(process.env.ROOMPLAN_UX_EVIDENCE)await page.screenshot({path:path.join(process.env.ROOMPLAN_UX_EVIDENCE,`joined-${width}x${height}.png`)});
+  await page.keyboard.press('Enter');
+  await receipt.waitFor({state:'hidden'});
+  assert.deepEqual(await model(),{...before,depth:[0,1]});
+  assert.match(await toastText(page),/Unión deshecha/);
+  await page.locator('#redo').click();
+  assert.deepEqual(await model(),joined);
+  assert.match(await toastText(page),/Unión rehecha/);
+  await page.reload();
+  await page.waitForFunction(()=>FloorPlanApp.project.walls.length===8);
+  assert.deepEqual(await model(),{...joined,depth:[0,0]});
+  assert.equal(await receipt.isVisible(),false);
+  assert.deepEqual(errors,[]);
+ });
+}
+
+test('OP-04 UX dismisses the original undo action after an edit or project switch',async t=>{
+ const {page,errors}=await pageFor(t),file=path.join(FX,'roomplan-capturedroom.json');
+ const model=()=>page.evaluate(()=>({entry:FloorPlanApp.entryId,project:FloorPlanApp.project,depth:[undoStack.length,redoStack.length]}));
+ const join=async()=>{
+  await page.locator('#roomPlanJoinIn').setInputFiles(file);
+  await page.locator('#roomPlanJoinDialog[open] #roomPlanJoinApply').click();
+  await page.locator('#roomPlanUndoJoin').waitFor();
+ };
+ const stale=()=>page.evaluate(()=>document.getElementById('roomPlanUndoJoin').click());
+ await upload(page,file);await join();
+ await page.evaluate(()=>FloorPlanApp.applyCeiling(project=>{
+  project.rooms[0].name='Estancia revisada';
+  return {ok:true,project};
+ }));
+ const edited=await model();
+ assert.equal(edited.project.rooms[0].name,'Estancia revisada');assert.deepEqual(edited.depth,[2,0]);
+ assert.equal(await page.locator('#roomPlanUndoJoin').isVisible(),false);
+ await stale();assert.deepEqual(await model(),edited);
+ await page.locator('#undo').click();
+ assert.equal(await page.locator('#roomPlanUndoJoin').isVisible(),false,'undoing the later edit does not revive the old action');
+ await upload(page,file);await join();
+ await upload(page,file);
+ const imported=await model();
+ assert.deepEqual(imported.depth,[0,0]);assert.equal(imported.project.rooms.length,1);
+ assert.equal(await page.locator('#roomPlanUndoJoin').isVisible(),false);
+ await stale();assert.deepEqual(await model(),imported);
+ assert.deepEqual(errors,[]);
+});
+
 test('OP-04 previews a RoomPlan door join without writing, commits once and reopens on the same entry',async t=>{
  const {page,errors}=await pageFor(t),file=path.join(FX,'roomplan-capturedroom.json');
  await upload(page,file);
