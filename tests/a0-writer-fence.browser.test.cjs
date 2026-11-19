@@ -90,6 +90,11 @@ for(const [label,host] of ORIGINS){
         if(S){const db=await FloorPlanPersistence.open();try{return await new Promise(r=>{const g=db.transaction('meta').objectStore('meta').get('writersSeen:1');g.onsuccess=()=>r(!!g.result?.at);});}finally{db.close();}}
         return !!JSON.parse(localStorage.getItem('rubik-sota-writers-seen-v1')||'{}')[1];});
       assert.equal(seen,true,'evidencia de convivencia registrada');
+      // La evidencia no muta localStorage en escrituras sin cambios ni más de una vez al día (CI: capture-3d, plantillas).
+      if(!(await authorityOn(page))){const snap=()=>page.evaluate(()=>localStorage.getItem('rubik-sota-writers-seen-v1'));const s1=await snap();
+        assert.match(JSON.parse(s1)[1],/^\d{4}-\d{2}-\d{2}$/,'granularidad de día');
+        await page.evaluate(()=>FloorPlanPersistenceEditor.storage.setItem('rubik-sota-floorplan-project-v1',localStorage.getItem('rubik-sota-floorplan-project-v1')));
+        await rename(page,'A0 igual 2');assert.equal(await snap(),s1,'ni una escritura idéntica ni otra del mismo día reescriben el registro');}
       assert.deepEqual(watch.errors,[]);
     }finally{await context.close();}
   });
