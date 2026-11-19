@@ -28,14 +28,18 @@
  const dockFit=()=>{const top=parseFloat(getComputedStyle(dock).top);
   document.body.classList.toggle('dock-2col',innerWidth<=1100&&innerHeight<=500&&Number.isFinite(top)&&innerHeight-top-36<4*40+3*4+6);};
  const headerEnd=()=>{document.documentElement.style.setProperty('--shell-header-bottom',`${Math.round(header.getBoundingClientRect().bottom)}px`);dockFit();};
- if(typeof ResizeObserver==='function')new ResizeObserver(headerEnd).observe(header);
+ // ResizeObserver callbacks only SCHEDULE the write for the next frame (one per frame): writing CSS variables or
+ // classes inside the delivery can resize observed elements in the same frame, which WebKit reports as «ResizeObserver
+ // loop completed with undelivered notifications» (A0 residual, #273). Window resizes still write at once.
+ const nextFrame=fn=>{let id=0;return ()=>{if(!id)id=requestAnimationFrame(()=>{id=0;fn();});};};
+ if(typeof ResizeObserver==='function')new ResizeObserver(nextFrame(headerEnd)).observe(header);
  // The work-area bar publishes its bottom in --professional-nav-bottom (inline style of <html>): re-check the column then.
  if(typeof MutationObserver==='function')new MutationObserver(dockFit).observe(document.documentElement,{attributes:true,attributeFilter:['style']});
  header.addEventListener('scroll',edge,{passive:true});addEventListener('resize',()=>{edge();headerEnd();});headerEnd();
  // Top of the selection bar, for the temporary message to sit above it on phones (design-system.css).
  const fab=document.getElementById('fab');
  const fabTop=()=>{if(!fab)return;const r=fab.getBoundingClientRect(),on=fab.classList.contains('show'),s=document.documentElement.style;s.setProperty('--fab-top',`${Math.round(on?r.top:innerHeight)}px`);s.setProperty('--fab-h',`${Math.round(on?r.height:0)}px`);};
- if(fab&&typeof ResizeObserver==='function'){new ResizeObserver(fabTop).observe(fab);new MutationObserver(fabTop).observe(fab,{attributes:true,attributeFilter:['class']});}
+ if(fab&&typeof ResizeObserver==='function'){new ResizeObserver(nextFrame(fabTop)).observe(fab);new MutationObserver(fabTop).observe(fab,{attributes:true,attributeFilter:['class']});}
  addEventListener('resize',fabTop);fabTop();
  update();edge();
  window.FloorPlanAppShell={update(){update();edge();}};

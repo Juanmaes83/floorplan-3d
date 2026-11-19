@@ -4491,7 +4491,8 @@ function syncModeBtns(){ document.querySelectorAll('#modes3d .btn').forEach(b =>
 function syncCutBtns(){ document.querySelectorAll('[data-cut]').forEach(b => b.classList.toggle('on', +b.dataset.cut === opt.cut)); }
 // The entry card must fit the scene it covers (a short laptop window leaves little room under the toolbars).
 function fitWalkCard(){ const o = $('#walkOverlay'), card = o.querySelector('.walk-card'); if (!o.offsetHeight) return; o.classList.remove('tight'); if (card.offsetHeight > o.clientHeight - 8) o.classList.add('tight'); }
-new ResizeObserver(fitWalkCard).observe($('#walkOverlay'));
+// Next frame, never inside the ResizeObserver delivery: the class changes the card inside the observed overlay (A0, #273).
+let walkCardFrame = 0; new ResizeObserver(() => { if (!walkCardFrame) walkCardFrame = requestAnimationFrame(() => { walkCardFrame = 0; fitWalkCard(); }); }).observe($('#walkOverlay'));
 function syncWalkTexts(){
   // What the walk is, how to move with this device, how to leave; one primary action. The guided tour with stops
   // is the presentation: named, not duplicated here.
