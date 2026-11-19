@@ -1,0 +1,48 @@
+{
+ "status": "PASS",
+ "blender": "5.2.1 LTS",
+ "blenderBuildHash": "9e2066aef7ef",
+ "python": "3.13.18",
+ "importer": {
+  "kind": "io_import_scene_gltf2 (native)",
+  "script": "9eff7c3e4339b8dda634c9b14800a5533917a01ef4109b2b0651be4955e4e7ee",
+  "materials": "observed",
+  "light": "viewer"
+ },
+ "input": {
+  "glbSha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2",
+  "manifestProject": "prj_op10-f5-furniture",
+  "observedProjectSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849"
+ },
+ "objects": 1509,
+ "expectedMeshes": 1509,
+ "collections": {
+  "ceiling": 26,
+  "fixture": 22,
+  "object": 1116,
+  "opening-leaf": 18,
+  "opening": 117,
+  "room": 28,
+  "camera": 1,
+  "wall": 362
+ },
+ "camera": "RUBIK_camera",
+ "derivedLight": [
+  "glass: transmission 1.0, roughness 0.05 (Cycles equivalent of the viewer transparent glass)",
+  "single-sided materials: back faces transparent in Cycles, as the viewer culls them (e.g. ceilings seen from above)",
+  "sun from viewer: direction [0.300367, 0.951793, -0.0622], intensity 2.785641 x 1.5 W/m2",
+  "world from viewer hemisphere: #fff8ee x 0.385"
+ ],
+ "issues": [],
+ "importSeconds": 3.908,
+ "outputs": {
+  "scene.blend": {
+   "bytes": 2998848,
+   "sha256": "97b6144c3a78b6cf72d6c1f766abd6b6fa9aa7af8933e9d2dfdeb9226d3e1f1b"
+  },
+  "blender-geometry.json": {
+   "bytes": 15430552,
+   "sha256": "bf34bb0a7275bb696bcb5dfb5b55a6fd474bb7a3f4cd3c8384e62c6306106709"
+  }
+ }
+}
