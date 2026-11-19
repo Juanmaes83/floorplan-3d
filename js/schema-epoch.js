@@ -15,7 +15,7 @@
    divergencias del legado y no borrar nunca el legado (R1 §5 y §6 bis). */
 (function(root){
  'use strict';
- const CURRENT=1,KEY='rubik-sota-schema-epoch-v1',SEEN='rubik-sota-writers-seen-v1',CHANNEL='rubik-sota-schema',SEEN_EVERY_MS=60000;
+ const CURRENT=1,KEY='rubik-sota-schema-epoch-v1',SEEN='rubik-sota-writers-seen-v1',CHANNEL='rubik-sota-schema';
  const listeners=new Set();let forced=null,lastSeen=0,last=null;
 
  // ── Estado ─────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -46,10 +46,12 @@
  function force(s){if(s.state==='ok'||forced?.state==='outdated')return;forced={state:s.state,reason:s.reason,epoch:s.epoch};emit(forced);}
 
  // ── Evidencia de convivencia (R1-D1): qué épocas han escrito y cuándo ───────────────────────────────────────────────
+ // Granularidad de DÍA (la convivencia se mide en días): como mucho una escritura de este registro por día y época, y solo
+ // tras un cambio real de datos. Así A0 no muta localStorage en operaciones que no cambian nada (capturas, lecturas).
  function recordWriter(storage=root.localStorage,now=Date.now()){
-  if(now-lastSeen<SEEN_EVERY_MS)return;lastSeen=now;
+  const day=new Date(now).toISOString().slice(0,10);if(lastSeen===day)return;
   try{let all={};try{const v=JSON.parse(storage.getItem(SEEN));if(v&&typeof v==='object'&&!Array.isArray(v))all=v;}catch{}
-   all[CURRENT]=new Date(now).toISOString();storage.setItem(SEEN,JSON.stringify(all));}catch{}
+   lastSeen=day;if(all[CURRENT]===day)return;all[CURRENT]=day;storage.setItem(SEEN,JSON.stringify(all));}catch{}
  }
 
  // ── Puerta sobre un Storage (origen normal: localStorage es la autoridad de las cinco claves) ─────────────────────────
@@ -59,8 +61,8 @@
   const overlay=new Map(),DELETED=Symbol('deleted');
   const facade={
    getItem(k){if(overlay.has(k)){const v=overlay.get(k);return v===DELETED?null:v;}return storage.getItem(k);},
-   setItem(k,v){v=String(v);if(writable(storage)&&!overlay.size){storage.setItem(k,v);recordWriter(storage);return;}overlay.set(k,v);emit(read(storage));},
-   removeItem(k){if(writable(storage)&&!overlay.size){storage.removeItem(k);recordWriter(storage);return;}overlay.set(k,DELETED);emit(read(storage));},
+   setItem(k,v){v=String(v);if(writable(storage)&&!overlay.size){const changed=storage.getItem(k)!==v;storage.setItem(k,v);if(changed)recordWriter(storage);return;}overlay.set(k,v);emit(read(storage));},
+   removeItem(k){if(writable(storage)&&!overlay.size){const changed=storage.getItem(k)!==null;storage.removeItem(k);if(changed)recordWriter(storage);return;}overlay.set(k,DELETED);emit(read(storage));},
    key:i=>storage.key(i),get length(){return storage.length;},
    // Cambios retenidos en esta pestaña (para la exportación de emergencia).
    pending:()=>Object.fromEntries([...overlay].map(([k,v])=>[k,v===DELETED?null:v])),
