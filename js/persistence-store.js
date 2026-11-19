@@ -48,7 +48,7 @@
    // late success is closed, so a rejected open never leaves a connection that blocks other tabs.
    const r=idb.open(name,1);let blocked=false,missing=false;
    r.onupgradeneeded=()=>{if(!create){missing=true;r.transaction.abort();return;}if(blocked){r.transaction?.abort();return;}const db=r.result;for(const s of ['docs','meta','legacy'])db.createObjectStore(s);db.createObjectStore('conflicts',{autoIncrement:true});};
-   r.onsuccess=()=>{const db=r.result;if(blocked){db.close();return;}db.onversionchange=()=>db.close();resolve(db);};
+   r.onsuccess=()=>{const db=r.result;if(blocked){db.close();return;}db.onversionchange=()=>{db.close();root.FloorPlanSchemaEpoch?.markOutdated('versionchange');};resolve(db);};
    r.onerror=()=>reject(missing?new PersistenceError('authority-missing','Abre el editor para preparar su biblioteca local.'):new PersistenceError('open-failed','No se pudo abrir el almacenamiento del navegador: '+describe(r.error),{cause:r.error}));
    r.onblocked=()=>{blocked=true;reject(new PersistenceError('open-blocked','Otra pestaña de RUBIK está bloqueando el almacenamiento. Ciérrala o recárgala; tus datos guardados no se han tocado.'));};
   });
@@ -69,6 +69,8 @@
 
  // ── Migration (idempotent, two phases, verified, localStorage untouched) ─────────────────────────────────────────
  async function migrate({db,storage,locks,hooks={}}){
+  // A0: una pestaña desactualizada o en estado indeterminado no migra (no escribe en la autoridad).
+  {const E=root.FloorPlanSchemaEpoch,s=E?.read(storage);if(s&&s.state!=='ok'){E.force(s);throw new PersistenceError('schema-'+s.state,E.error(s).message,{reason:s.reason});}}
   return withLock(locks,async()=>{
    const done=await meta(db,'migration');if(done?.phase==='done')return {status:'already',migration:done};
    const originals={},hashes={};for(const k of KEYS){const v=storage.getItem(k);if(v!==null)originals[k]=v;}
@@ -137,18 +139,22 @@
  // every managed key as the tab sees it), not only the batch: library and documents stay coherent with each other.
  async function commit({db,locks,storage,baseRevision,changes,snapshot,tab='',mirror=true,hooks,recovery}){
   for(const k of Object.keys(changes))if(!managed(k))throw new PersistenceError('key-unmanaged',`«${k}» no está bajo la autoridad de persistencia.`);
+  // A0: época de esquema. Primero el marcador de localStorage (síncrono); después, la de la autoridad DENTRO de la transacción.
+  const E=root.FloorPlanSchemaEpoch,epochError=s=>{E?.force(s);return new PersistenceError('schema-'+s.state,E?E.error(s).message:'Esta pestaña no puede guardar.',{reason:s.reason});};
+  if(E){const s=E.read(storage||undefined);if(s.state!=='ok')throw epochError(s);}
   return withLock(locks,async()=>{
    const stores=recovery?['docs','meta','conflicts']:['docs','meta'];
    const r=await run(db,stores,'readwrite',(s,abort)=>{let out;
     function write(cur){
      for(const [k,v] of Object.entries(changes)){if(v===null)s.docs.delete(k);else s.docs.put(v,k);}
      const n=cur+1,at=new Date().toISOString();s.meta.put({n,at,by:tab},'revision');out={status:'saved',revision:n};
+     if(E)s.meta.put({at,tab},'writersSeen:'+E.CURRENT); // evidencia de convivencia (R1-D1)
      if(recovery){
       const keep=s.conflicts.add({reason:'superseded',revision:cur,docs:recovery.docs,at});keep.onsuccess=()=>{out.superseded=keep.result;};
       s.conflicts.delete(recovery.id);
      }
     }
-    s.meta.get('revision').onsuccess=e=>{const cur=e.target.result?.n??0;
+    const revision=()=>s.meta.get('revision').onsuccess=e=>{const cur=e.target.result?.n??0;
      if(cur!==baseRevision){abort({status:'conflict',revision:cur});return;}
      if(!recovery){write(cur);return;}
      s.conflicts.get(recovery.id).onsuccess=event=>{
@@ -159,7 +165,10 @@
       write(cur);
      };
     };
+    // A0: la época vigente se lee en la MISMA transacción que la escritura; una conmutación concurrente queda antes o después.
+    if(!E)revision();else s.meta.get('schemaEpoch').onsuccess=e=>{const st=E.fromMeta(e.target.result);if(st.state!=='ok'){abort({status:'schema',epoch:st});return;}revision();};
     return ()=>out;});
+   if(r.status==='schema')throw epochError(r.epoch);
    if(r.status==='conflict'){
     if(recovery)return r;
     const id=await saveConflict(db,{reason:'revision',baseRevision,revision:r.revision,tab,changed:Object.keys(changes),docs:snapshot||changes});
