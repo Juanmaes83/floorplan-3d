@@ -205,11 +205,13 @@ const q=new URLSearchParams(location.search);
 const SRC=window.__ft3dSource||{mode:'lab'};
 // Product: the project saved in the RUBIK library, evaluated with the same S1 dossier engine (no fixture, no file).
 if(SRC.mode==='library'){
-  if(SRC.error){state.error={code:'library-source',message:SRC.error};render();document.body.classList.add('ready');document.body.dataset.state='library-error';}
-  else apply(SRC.input,{caseId:null,text:'Proyecto guardado en tu biblioteca',kind:'library'}).then(()=>{const f=Fid();
+  SRC.ready.then(input=>{
+    if(!input)throw Error(SRC.error);
+    return apply(input,{caseId:null,text:'Proyecto guardado en tu biblioteca',kind:'library'});
+  }).then(()=>{const f=Fid();
     if(SRC.initialDate&&f.ctx?.timeline)f.setDate(SRC.initialDate);if(SRC.initialTask&&f.ctx?.canon?.tasks.some(t=>t.id===SRC.initialTask))f.selectTask(SRC.initialTask);
-    window.dispatchEvent(new CustomEvent('ft3d8-library',{detail:summary()}));})
-   .catch(e=>{state.error={code:e.code,message:e.message};render();document.body.classList.add('ready');});
+    window.dispatchEvent(new CustomEvent('ft3d8-library',{detail:summary()}));
+  }).catch(e=>{state.error={code:e.code||'library-source',message:e.message};render();document.body.classList.add('ready');document.body.dataset.state='library-error';});
 }else if(SRC.mode==='demo'){
   // Public demo (?demo=obra): the example house and an example plan built in memory, evaluated by the same engine.
   const notice=m=>{const n=$('pageNotice');if(n){n.textContent=m;n.hidden=false;}};

@@ -1,8 +1,15 @@
 /* IndexedDB stores original bytes only. No uploads, remote refs or data URLs in project JSON. */
 (function(root){
  let db;
- function open(){if(!db)db=new Promise((resolve,reject)=>{const r=indexedDB.open('rubik-sota-images-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('images');r.onsuccess=()=>resolve(r.result);r.onerror=()=>{db=null;reject(Error('No se pudo abrir el almacenamiento de imágenes.'));};});return db;}
- async function transact(mode,fn){const database=await open();return new Promise((resolve,reject)=>{const tx=database.transaction('images',mode),store=tx.objectStore('images');let result;try{result=fn(store);}catch(e){tx.abort();reject(e);return;}tx.oncomplete=()=>resolve(result?.result);tx.onerror=()=>reject(Error('No se pudo guardar o leer la imagen: revisa el espacio disponible.'));tx.onabort=()=>reject(Error('Operación de imágenes cancelada; no se ha guardado.'));});}
+ // A0: si otra pestaña sube la versión de esta base, se cierra la conexión (en lugar de bloquearla) y la pestaña queda
+ // desactualizada: no vuelve a abrirla, porque una versión anterior no debe escribir en el formato nuevo.
+ const E=()=>root.FloorPlanSchemaEpoch;let upgraded=false;
+ function open(){if(upgraded)return Promise.reject(Error('Otra pestaña está actualizando el almacenamiento de imágenes. Recarga RUBIK.'));
+  if(!db)db=new Promise((resolve,reject)=>{const r=indexedDB.open('rubik-sota-images-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('images');
+   r.onsuccess=()=>{const d=r.result;d.onversionchange=()=>{d.close();db=null;upgraded=true;E()?.markOutdated('versionchange');};resolve(d);};
+   r.onerror=()=>{db=null;reject(Error('No se pudo abrir el almacenamiento de imágenes.'));};});return db;}
+ // A0: la escritura comprueba la época DESPUÉS de esperar la conexión y justo antes de crear la transacción (mismo turno).
+ async function transact(mode,fn){const database=await open();if(mode==='readwrite')E()?.check();return new Promise((resolve,reject)=>{const tx=database.transaction('images',mode),store=tx.objectStore('images');let result;try{result=fn(store);}catch(e){tx.abort();reject(e);return;}tx.oncomplete=()=>resolve(result?.result);tx.onerror=()=>reject(Error('No se pudo guardar o leer la imagen: revisa el espacio disponible.'));tx.onabort=()=>reject(Error('Operación de imágenes cancelada; no se ha guardado.'));});}
  /* F0.2 · Safe image collection. Deleting «every key this tab cannot see» deleted legitimate images: a tab only knows the
     library it loaded, an image is written BEFORE the project that refers to it is committed (imports, expediente restore,
     another tab) and localStorage reaches other tabs late. Three independent protections:
@@ -27,7 +34,7 @@
  // Held for the life of the page: tells other tabs' collection that this tab may hold unsaved work.
  function holdTab(locks=globalThis.navigator?.locks){if(ownTab||!locks?.request)return ownTab;ownTab=Math.random().toString(36).slice(2);locks.request(TAB_LOCK+ownTab,()=>new Promise(()=>{})).catch(()=>{});return ownTab;}
  // References held by the persistence authority (docs and conflict records), when this page has it and it exists.
- async function authorityRefs(){const P=globalThis.FloorPlanPersistence;if(!P)return [];
+ async function authorityRefs(){const P=globalThis.FloorPlanPersistence;if(!P||root.FloorPlanPersistenceEditor&&!root.FloorPlanPersistenceEditor.session)return [];
   if(typeof indexedDB.databases==='function'&&!(await indexedDB.databases()).some(d=>d.name===P.DB))return [];
   const db=await P.open();try{return [...await P.imageRefs(db)];}finally{db.close();}}
  function readMarks(storage){try{const v=JSON.parse(storage.getItem(GC_KEY));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}}
@@ -63,6 +70,8 @@
  async function collect({live,storage,locks=globalThis.navigator?.locks,now=()=>Date.now()}){
   const canLock=typeof locks?.request==='function';
   const run=async()=>{
+   // A0: con la época mayor o indeterminada no se borra ni se marca nada (protección conservadora, R1-D4).
+   if(E()&&E().read().state!=='ok')return {removed:[],marked:[],sweep:false,blocked:true};
    const keys=await api.keys(),refs=new Set([...await live(),...journalImages(storage),...await authorityRefs(),...pins.keys()]);
    const open=keys.filter(key=>!refs.has(key));
    if(open.length){const held=[];for(const fn of holders)held.push(...await fn());
@@ -72,6 +81,8 @@
     const tabs=(await locks.query()).held.filter(l=>l.name?.startsWith(TAB_LOCK));
     sweep=tabs.length===1&&tabs[0].name===TAB_LOCK+ownTab;
    }
+   // A0: la época se vuelve a comprobar tras todas las esperas de la pasada (referencias, autoridad, locks.query).
+   if(E()&&E().read().state!=='ok')return {removed:[],marked:[],sweep:false,blocked:true};
    const result=sweep
     ?{remove:keys.filter(key=>!refs.has(key)),marks:{}}
     :plan({keys,live:refs,marks:readMarks(storage),now:now(),graceMs:Infinity});

@@ -285,7 +285,8 @@ function remember(kind,manifest,extra){
   if(state.history.some(h=>h.kind===kind&&h.deliveryId===manifest.id))return;
   state.history.push(Object.freeze({kind,deliveryId:manifest.id,dossierId:manifest.dossier?.id||null,subjectId:manifest.project.id,projectName:manifest.project.name,at:manifest.generatedAt,...extra}));
   // M2: the delivery is also recorded in the project's construction record (frozen fingerprints, read-only history).
-  window.__ft3dSource?.recordDelivery?.(kind,manifest,{withVideo:!!(extra&&(extra.embedded||kind==='vídeo')),bytes:extra?.bytes||null,sha256:extra?.sha256||null});
+  window.__ft3dSource?.recordDelivery?.(kind,manifest,{withVideo:!!(extra&&(extra.embedded||kind==='vídeo')),bytes:extra?.bytes||null,sha256:extra?.sha256||null})
+   .catch(e=>{const ref=$('deliveryHistory');const warning=document.createElement('p');warning.setAttribute('role','alert');warning.textContent='Entrega generada. Su registro local no se ha confirmado: '+e.message;ref.after(warning);});
 }
 function renderHistory(){
   $('deliveryHistory').innerHTML=state.history.map(h=>`<li>${esc(h.kind)} · entrega <code>${esc(h.deliveryId)}</code> · expediente <code>${esc(h.dossierId||'—')}</code> · ${esc(h.projectName)}${h.sha256?` · SHA-256 <code>${esc(h.sha256.slice(0,12))}</code>`:''}</li>`).join('');

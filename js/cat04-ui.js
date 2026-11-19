@@ -18,7 +18,7 @@
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
  const loc=()=>lang()==='en'?'en-GB':lang()==='zh'?'zh-CN':'es-ES';
  const eur=v=>v===null||v===undefined?'—':v.toLocaleString(loc(),{style:'currency',currency:'EUR'});
- const storage=(()=>{try{const s=window.localStorage;s.getItem('x');return s;}catch{return {getItem:()=>null,setItem(){},removeItem(){}};}})();
+ const storage=app.storage;
  const studioId=()=>window.RubikCatalogUI?.studioId||'local';
  const catalogs=()=>{try{return CP.loadCatalogs(storage,studioId());}catch{return [];}};
  const chapterTitle=()=>tx('Productos de mi estudio','Products from my studio','我的工作室产品');
