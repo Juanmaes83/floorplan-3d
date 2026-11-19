@@ -172,3 +172,52 @@ test('H-1 · cruce: reutilizar una foto huérfana mientras una recogida está en
     assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });
+
+// Auditoría cruzada en #270 (delta de1e419e): la creación espera el lock de la recogida; cancelar en ese intervalo o durante
+// el guardado no debe fallar ni escribir nada en el proyecto, y un lock rechazado deja el formulario reutilizable.
+test('H-1 · cancelar mientras espera el lock, durante el guardado o con el lock rechazado: sin errores ni cambios',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.editor(env);
+  try{
+    const fill=async label=>{const tab=page.locator('#paletteTabFurnish');if(await tab.getAttribute('aria-selected')!=='true')await tab.click();
+      await page.locator('#ownFurnOpen').click();await page.locator('#ownFurn-name').fill(label);await page.locator('#ownFurn-type').selectOption('chair');
+      await page.locator('#ownFurn-photo').setInputFiles({name:'p0-sintetica.jpg',mimeType:'image/jpeg',buffer:jpg});
+      await page.waitForFunction(()=>!/Preparando/.test(document.querySelector('#ownFurnStatus').textContent));
+      for(const [id,val] of [['#ownFurn-widthMm','450'],['#ownFurn-depthMm','450'],['#ownFurn-heightMm','800']])await page.locator(id).fill(val);};
+    const objects=()=>page.evaluate(()=>FloorPlanApp.project.objects.length);
+    const before=await objects();
+    // 1 · Cancelar mientras la creación está en cola tras el lock de la recogida.
+    await fill('Silla P0 cancelar en cola');
+    await page.evaluate(()=>{window.gcHeld=new Promise(r=>{navigator.locks.request(FloorPlanImages.GC_LOCK,()=>new Promise(done=>{window.releaseGc=done;r();}));});return window.gcHeld;});
+    await page.locator('#ownFurnCreate').click();
+    await page.waitForFunction(async()=>(await navigator.locks.query()).pending.some(l=>l.name===FloorPlanImages.GC_LOCK));
+    await page.locator('#ownFurnCancel').click();
+    await page.evaluate(()=>window.releaseGc());
+    await page.waitForFunction(async()=>!(await navigator.locks.query()).held.some(l=>l.name===FloorPlanImages.GC_LOCK));
+    await page.waitForTimeout(300);
+    assert.deepEqual(watch.errors,[],'cancelar en cola no produce errores');
+    assert.equal(await objects(),before,'cancelar en cola no añade el mueble');
+    // 2 · Cancelar mientras se guardan los bytes (dentro del lock).
+    await fill('Silla P0 cancelar guardando');
+    await page.evaluate(()=>{const I=FloorPlanImages,put=I.put;window.putGate=new Promise(r=>{window.releasePut=r;});window.putSeen=false;
+      I.put=async e=>{window.putSeen=true;await window.putGate;I.put=put;return put(e);};});
+    await page.locator('#ownFurnCreate').click();
+    await page.waitForFunction(()=>window.putSeen);
+    await page.locator('#ownFurnCancel').click();
+    await page.evaluate(()=>window.releasePut());
+    await page.waitForFunction(async()=>!(await navigator.locks.query()).held.some(l=>l.name===FloorPlanImages.GC_LOCK));
+    await page.waitForTimeout(300);
+    assert.deepEqual(watch.errors,[],'cancelar durante el guardado no produce errores');
+    assert.equal(await objects(),before,'cancelar durante el guardado no añade el mueble');
+    // 3 · Lock rechazado: mensaje, formulario reutilizable y, al reintentar, el mueble se crea.
+    await fill('Silla P0 lock rechazado');
+    await page.evaluate(()=>{const I=FloorPlanImages,g=I.guard;I.guard=()=>{I.guard=g;return Promise.reject(Error('lock'));};});
+    await page.locator('#ownFurnCreate').click();
+    await page.waitForFunction(()=>/ocupado/.test(document.querySelector('#ownFurnStatus').textContent));
+    assert.equal(await page.locator('#ownFurnCreate').isDisabled(),false,'el botón vuelve a estar disponible');
+    assert.equal(await objects(),before);
+    await page.locator('#ownFurnCreate').click();await page.locator('#ownFurnDialog').waitFor({state:'hidden',timeout:30000});
+    assert.equal(await objects(),before+1,'el reintento crea el mueble');
+    assert.equal((await referenced(page)).length,1);
+    assert.deepEqual(watch.errors,[],'sin errores de página (p. ej. «Cannot read properties of null»)');
+  }finally{await context.close();}
+});
