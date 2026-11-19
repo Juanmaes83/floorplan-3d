@@ -76,12 +76,12 @@ test('F0 valid example round-trips every field, image reference, asset pointer a
 test('newer minor retains unknown data; unknown major is rejected',()=>{
   const p=Core.clone(example);p.schemaVersion='1.1.0';p.futureMetadata={text:'retained'};p.objects[0].futureField=123;
   assert.deepEqual(Core.prepare(p).project,p);assert.ok(Core.prepare(p).warnings.some(x=>x.includes('Newer')));
-  p.schemaVersion='2.0.0';assert.throws(()=>Core.prepare(p),/version/);
+  p.schemaVersion='3.0.0';assert.throws(()=>Core.prepare(p),/version/);
 });
 const invalidCases=[
   ['malformed JSON',()=>'{'],
   ['F0 invalid fixture',()=>invalid],
-  ['unknown version',p=>{p.schemaVersion='2.0.0';return p;}],
+  ['unknown version',p=>{p.schemaVersion='3.0.0';return p;}],
   ['wrong units',p=>{p.units='m';return p;}],
   ['duplicate ID',p=>{p.objects.push(Core.clone(p.objects[0]));return p;}],
   ['broken wall reference',p=>{p.openings[0].wallId='wal_missing';return p;}],

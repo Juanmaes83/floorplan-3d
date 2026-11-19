@@ -8,7 +8,7 @@
   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "coordinateSystem", "scale", "defaults", "walls", "openings", "rooms", "materials", "objects"],
   "properties": {
     "schema": { "const": "rubik-sota.floorplan-project", "description": "Discriminador del tipo de documento. Permite detectar ficheros que no son proyectos." },
-    "schemaVersion": { "type": "string", "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Este esquema acepta solo major 1. Ver política de versiones en el .md §3." },
+    "schemaVersion": { "type": "string", "pattern": "^(1|2)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Major 1 (FloorPlanProjectV1) o 2 (V1 hasta 1.12 + muros curvos e inclinados, OP-07; solo documentos que los usan). Ver política de versiones en el .md §3." },
     "id": { "$ref": "#/$defs/projectId" },
     "name": { "type": "string", "minLength": 1, "maxLength": 200 },
     "createdAt": { "type": "string", "format": "date-time" },
@@ -276,7 +276,9 @@
         "structure": { "enum": ["load-bearing", "exterior", "partition", "low", "unknown", "other"], "description": "Etiqueta declarada por la persona o la plantilla; NO es un dictamen técnico. 'other' desde 1.5.0." },
         "structureSource": { "enum": ["professional", "imported", "pending-review"], "description": "Opcional desde 1.5.0. Procedencia de la declaración de structure: la indicó una persona profesional, llegó en un archivo importado o queda pendiente de revisar. Ausente: no registrada. Nunca se deduce." },
         "status": { "enum": ["existing", "demolished", "new"] },
-        "source": { "$ref": "#/$defs/geometrySource" }
+        "source": { "$ref": "#/$defs/geometrySource" },
+        "curve": { "type": "object", "additionalProperties": false, "required": ["control"], "properties": { "control": { "$ref": "#/$defs/point" } }, "description": "Solo en 2.x (OP-07). Muro curvo: Bézier cuadrática con punto de control en mm. Ausente: muro recto." },
+        "heightEndMm": { "$ref": "#/$defs/heightMm", "description": "Solo en 2.x (OP-07). Altura en el extremo end; heightMm es la altura en start. Ausente: muro a nivel." }
       }
     },
     "opening": {
