@@ -39,7 +39,8 @@ const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!Floo
 async function importZip(page,file){const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(file);
  await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:budget(60000)});await page.waitForTimeout(800);}
 async function example(page){await page.locator('#welcomeExample').click();await page.waitForTimeout(800);}
-async function openConfig(page){await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();}
+async function openConfig(page){const guidePrimary=page.locator('#guidePrimary:visible').and(page.getByRole('button',{name:'Presentar mi vivienda',exact:true}));
+ await page.locator('#presentationBtn:visible,#guidePresent:visible').or(guidePrimary).first().click();await page.locator('#presentationConfig[open]').waitFor();}
 async function configure(page,{mode='off',section=false,elevation=false,chapter=false}={}){await openConfig(page);
  assert.equal(await page.locator('#presentationAxonOff').isChecked(),true,'off by default, never remembered');
  if(mode==='compact')await page.locator('#presentationAxonCompact').check();if(mode==='exploded')await page.locator('#presentationAxonExploded').check();
