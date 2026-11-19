@@ -21,4 +21,8 @@ node --test tests/scan-alignment.test.cjs
 node --test --test-name-pattern="OP-04 previews" tests/upload.browser.test.cjs
 ```
 
-Los checks del candidato usan el workflow de importación multiformato. La validación de esta entrega usa geometría sintética. La revisión humana del corte y la validación con capturas reales siguen pendientes. Después de una integración autorizada, revertir su commit retira la acción. Las uniones ya guardadas conservan geometría canónica legible y la extensión de procedencia.
+Los checks del candidato usan el workflow de importación multiformato. La validación de esta entrega usa geometría sintética. La unión sintética fue aceptada visualmente: 11,31 → 22,62 m², puertas de 900 mm y diferencia de ancho de 0 mm. La validación con capturas reales sigue pendiente. Después de una integración autorizada, revertir su commit retira la acción. Las uniones ya guardadas conservan geometría canónica legible y la extensión de procedencia.
+
+## Residual del asistente guiado
+
+El asistente guiado aún no ofrece ayuda contextual al seleccionar las puertas y revisar la propuesta de unión. Seguimiento independiente de la corrección visual de la previsualización.

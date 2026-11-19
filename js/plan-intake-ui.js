@@ -56,7 +56,7 @@
   };
   let proposal;
   function update(){
-   proposal=null;apply.disabled=true;preview.replaceChildren();preview.style.display='none';
+   proposal=null;apply.disabled=true;preview.replaceChildren();preview.setAttribute('hidden','');
    try{
     const result=A.propose(target,scan,{movingId:moving.value,targetId:fixed.value});
     const walls=target.walls.filter(w=>w.status!=='demolished').concat(result.addedWalls);
@@ -66,7 +66,7 @@
     const moved=new Set(result.addedWalls.map(w=>w.id));
     for(const wall of walls)preview.append(svg('line',{x1:wall.start.x,y1:wall.start.y,x2:wall.end.x,y2:wall.end.y,stroke:moved.has(wall.id)?'#b24c25':'#344351','stroke-width':wall.thicknessMm}));
     for(const p of [result.reference,result.targetReference])preview.append(svg('circle',{cx:p.x,cy:p.y,r:Math.max(45,margin*.13),fill:'#176b53'}));
-    preview.hidden=false;preview.style.display='block';
+    preview.removeAttribute('hidden');
     status.textContent=result.canApply?`Distancia entre ejes de muro: ${result.gapMm} mm. Diferencia de ancho entre puertas: ${result.widthDifferenceMm} mm.`:'Vista previa disponible. La escala de esta planta no admite añadir medidas estimadas sin perder su estado de calibración.';
     proposal=result;apply.disabled=!result.canApply;
    }catch(error){status.textContent=error.message;}

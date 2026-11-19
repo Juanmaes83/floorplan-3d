@@ -35,7 +35,12 @@ test('OP-04 previews a RoomPlan door join without writing, commits once and reop
  await page.locator('details.menu summary').click();
  const chooser=page.waitForEvent('filechooser');await page.locator('#joinRoomPlan').click();await (await chooser).setFiles(file);
  const dialog=page.locator('#roomPlanJoinDialog[open]');await dialog.waitFor();
- assert.equal(await dialog.locator('#roomPlanJoinPreview circle').count(),2);
+ const preview=dialog.locator('#roomPlanJoinPreview');
+ assert.ok(await preview.isVisible(),'aligned scan preview is visible');
+ assert.equal(await preview.locator('circle').count(),2);
+ assert.equal(await preview.locator('circle:visible').count(),2);
+ assert.ok(await preview.locator('line[stroke="#b24c25"]').count()>0,'the aligned scan is drawn in orange');
+ if(process.env.ROOMPLAN_JOIN_SCREENSHOT)await dialog.screenshot({path:process.env.ROOMPLAN_JOIN_SCREENSHOT});
  assert.deepEqual(await snapshot(),before);
  await dialog.getByRole('button',{name:'Cancelar'}).click();
  await page.waitForFunction(()=>!document.body.classList.contains('uploading'));
