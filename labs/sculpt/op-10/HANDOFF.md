@@ -59,5 +59,5 @@
 | `a9895f8c` | Documentación e identidad en `run.cjs` (+7 líneas, solo metadatos) |
 | `d17ee20f` | Informes de fidelidad, métricas, pulido y HANDOFF |
 | Cierre (commit que contiene este archivo) | Evidencias con procedencia, `tools/identity.cjs`, distinción proyecto observado / F0 / `fixtureContentId`. Su SHA y árbol se comunican en la entrega, porque un archivo no puede contener el SHA de su propio commit |
-| Diff frente a la base | 114 archivos, +20.080 líneas, 0 eliminadas, **todo bajo `labs/sculpt/op-10/`**. Fuera del laboratorio: 0 archivos |
+| Diff frente a la base | 114 archivos, +20.088 líneas (al commit de cierre), 0 eliminadas, **todo bajo `labs/sculpt/op-10/`**. Fuera del laboratorio: 0 archivos |
 | Pruebas al cerrar | Núcleo 13/13. No se repitieron captura, Blender ni renders ya acreditados en `759d9bb7` |
