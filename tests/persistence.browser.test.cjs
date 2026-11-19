@@ -295,7 +295,8 @@ const downloadJson=async(page,selector)=>{
 };
 
 test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-tab conflict and recovery',{timeout:120000},async()=>{
- const ctx=await browser.newContext({acceptDownloads:true,viewport:{width:1440,height:900}});try{
+ // This persistence test does not exercise motion. Firefox retains the hidden menu's CSS animation as running.
+ const ctx=await browser.newContext({acceptDownloads:true,reducedMotion:'reduce',viewport:{width:1440,height:900}});try{
   const seed=await open(ctx);
   const originals=await seed.evaluate(()=>{
    const project=FloorPlanCore.initial(),lib=FloorPlanLibrary.load(localStorage,project);

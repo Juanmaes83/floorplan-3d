@@ -23,3 +23,13 @@ Para el corte portable en Firefox o WebKit, establecer `F0_BROWSER` y ejecutar `
 - OP-05 `a722f9d`, OP-07 #267 y E3 permanecen congelados. Las dependencias de GLB privados, adjuntos, historial y E3 productivo pertenecen a cortes posteriores.
 
 **GO técnico para revisión de la rama aislada.** La integración y activación pública requieren gates separados. Consultar el [procedimiento de rollback](../contracts/persistencia-v1.md#rollback) antes de volver a una versión que lea la copia de compatibilidad.
+
+## Corrección del arranque de R03 en #269
+
+En `6edb0d6a`, el manifiesto I1 esperaba ocho scripts desde el inicio del bloque R03 hasta el final de la página. El bootstrap situado tras la plantilla aumentaba ese recuento a nueve. Los ocho jobs fallidos observados en ese SHA reproducen la misma aserción. En Asistente IA V2 y QA Integrada, la ausencia de artefactos siguió a la interrupción del job. [Checks del candidato anterior](https://github.com/Juanmaes83/floorplan-3d/commit/6edb0d6a5d498df24e053379bd948643ea643e2a/checks)
+
+El bootstrap se declara con `defer` antes de la plantilla. Se ejecuta con la plantilla ya analizada y R03 conserva el bloque final, su orden y sus hooks. El gate, el manifiesto, los módulos R02/R03 y los laboratorios quedan intactos.
+
+Verificación dirigida en Chromium, servidor local y Three del repositorio. Pasaron 24 casos de contrato y auditoría R02/R03, 21 de persistencia, 2 de R03 real y coexistencia, 2 de NAV3D y Presentación con WebGL y 6 de vista previa de cliente y demos. Las pruebas de arranque distinguen el origen normal, el origen F0.2b y las rutas aisladas. El corte continúa desactivado para usuarios reales.
+
+Firefox mantenía como activa la animación CSS de un menú cerrado en el fixture de persistencia. Ese caso usa la preferencia de movimiento reducido y conserva las aserciones de guardado, descarga y recuperación. El arranque aislado pasó también en Firefox y WebKit automatizados.
