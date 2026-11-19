@@ -6,7 +6,7 @@
 - [persistencia-v1.md](persistencia-v1.md): la autoridad F0.2, sus conflictos, la migración de documentos, la vuelta a una versión anterior y la recogida de imágenes. En especial §6, «F0.2c llevará las imágenes y el diario a la misma base».
 - [ADR de persistencia](../product/ADR-PERSISTENCIA-CONTINUIDAD-PROYECTO.md), §16 y §17. El diseño de §17 se mantiene; R1 lo concreta.
 
-**Estado:** solo diseño. **NO-GO** para implementar A0, F0.2c o cualquier migración de IndexedDB sin autorización específica.
+**Estado:** solo diseño. Decisiones del propietario del 19/11/2026 incorporadas (§2). **NO-GO** para implementar A0, F0.2c o cualquier migración de IndexedDB sin autorización específica.
 
 **Marcas de evidencia:** **[E]** ejecutada · **[I]** inspeccionada en el código · **[H]** histórica, declarada en otra PR o documento · **[P]** pendiente.
 
@@ -15,11 +15,11 @@
 | Fuente | SHA |
 |---|---|
 | master | `dd528119bdfd80733c4faf5bb56a594190fea5ac` |
-| P0 H-1 · [#270](https://github.com/Juanmaes83/floorplan-3d/pull/270) | `924982dcda0fce313adde6042eb6830f6684bf0b` |
+| P0 H-1 · [#270](https://github.com/Juanmaes83/floorplan-3d/pull/270) | `de1e419e585d6af982921ae422e77b21b6dff577` (árbol `bb11ae38…`). Incluye la exclusión frente al cruce reutilización/recogida (`6d45d4cd`) |
 | F0.2b · [#269](https://github.com/Juanmaes83/floorplan-3d/pull/269) | `956bce96b1d50edb60a8b8aaa3b742f3678261bb` |
 | OP-02 [#266](https://github.com/Juanmaes83/floorplan-3d/pull/266) · OP-04 [#268](https://github.com/Juanmaes83/floorplan-3d/pull/268) | `edfbf66b` · `497c37fb` (no tocan persistencia [I]) |
 
-Simulación P0 → #266 → #268 → #269: árbol `25a4e7c3a3344ceee916f233971018bb5db84877`. Persistencia 21/21 y H-1 4/4 en Chromium [E] (detalle en #270).
+Simulación P0 `de1e419e` → #266 → #268 → #269: árbol `ebdc2fdce0157a82aaa09973c12f3f278f6b59d7`. H-1 5/5 en el origen normal y con **F0.2b activo**; persistencia 21/21; Chromium [E]. Detalle en #270.
 
 ## 1. Estado real del almacenamiento
 
@@ -35,7 +35,7 @@ Simulación P0 → #266 → #268 → #269: árbol `25a4e7c3a3344ceee916f23397101
 |---|---|---|
 | F1 | Imagen y documento se guardan en dos bases distintas. Una imagen se escribe **antes** del proyecto que la cita | [I] `local-images.js` |
 | F2 | Antes de P0, la recogida solo veía `sourceImages` y borraba fotos de MUE-01 citadas (H-1) | Roja/verde [E], #270 |
-| F3 | Con P0, una clave está viva si su texto aparece en cualquier estado legible, o está fijada (`pin`) o registrada (`holder`). Si un estado no se puede leer, no se borra nada | [E] #270 |
+| F3 | Con P0, una clave está viva si su texto aparece en cualquier estado legible, o está fijada (`pin`) o registrada (`holder`). Si un estado no se puede leer, no se borra nada. Guardar los bytes y confirmar el proyecto se ejecutan bajo el lock de la recogida (`guard`), así que una pasada no puede borrar una clave reutilizada entre su lectura y su borrado | [E] #270, roja en `924982dc`/`25a4e7c3`, verde en `de1e419e` |
 | F4 | `refsIn` solo reconoce `storage.ref`. La **exportación de emergencia** y la de conflictos **no incluyen las fotos de MUE-01** | [I] `persistence-store.js`, `exportDocs` (master y #269) |
 | F5 | `local-images.js` abre su base **sin** `onversionchange`. Una pestaña con una versión actual o anterior **bloquearía** una subida de versión de `rubik-sota-images-v1`, y ninguna versión ya publicada se puede corregir con efecto retroactivo | [I] master y #269 |
 | F6 | Ningún escritor comprueba una época de esquema antes de escribir. La única barrera ante versiones anteriores es el TOMBSTONE de la biblioteca en `localStorage` (persistencia-v1 §5) | [I] |
@@ -50,14 +50,17 @@ Simulación P0 → #266 → #268 → #269: árbol `25a4e7c3a3344ceee916f23397101
 
 | ID | Tema | Decisión | Estado |
 |---|---|---|---|
-| R1-D1 | A0 antes de migrar | Ninguna migración de esquema se autoriza hasta que A0 (§3) esté integrado, activado y en uso durante un periodo de convivencia | Propuesta |
+| R1-D1 | A0 antes de migrar | Ninguna migración de esquema se autoriza hasta que A0 (§3) esté integrado, activado y en uso durante una convivencia de **7 días como mínimo**, condicionada a evidencias: sin escritores de época anterior vistos en ese plazo (§3, punto 4) | **Aprobada (19/11)** |
 | R1-D2 | Autoridad única de recursos | Bytes, referencias, diario y documentos en **una** base, con confirmación en **una** transacción (§4). Concreta el ADR §17 | Registrada (ADR §17); concreción propuesta |
-| R1-D3 | Migración sin doble escritura | Copiar, verificar y conmutar. Después, la base nueva es la única escrita. Los almacenes legados se conservan solo para lectura (§6) | Propuesta (fases registradas en persistencia-v1 §4) |
+| R1-D3 | Una única autoridad | Copiar, verificar y conmutar. Después, la base nueva es la única escrita, **sin doble escritura**. Los almacenes legados se conservan solo para lectura (§6) | **Aprobada (19/11)** |
 | R1-D4 | Protección conservadora | La regla de P0 (mención textual, fallo cerrado) se mantiene como **red de seguridad** aunque existan referencias explícitas. Nunca se borra un recurso cuyo estado no pueda determinarse | Acreditada (P0) como invariante; mantenerla, propuesta |
 | R1-D5 | Almacén legado | `rubik-sota-images-v1` y las claves de `localStorage` no se borran en F0.2c. Su limpieza exige una decisión aparte, cuando no queden escritores antiguos (§6) | Registrada (ADR §17) |
-| R1-D6 | Exportación de emergencia privada | Un producto **separado** de la exportación ordinaria, con aviso y confirmación explícita. Incluye **todos** los recursos, también las fotos de MUE-01 (corrige F4). La exportación ordinaria sigue sin fotos privadas | Propuesta |
-| R1-D7 | Rollback | Se distingue el rollback de código del rollback de datos (§9). Ninguna vuelta atrás de código borra datos | Propuesta (base en persistencia-v1 §5) |
-| R1-D8 | Integridad | Cada recurso registra `sha256`, bytes y tipo. La migración verifica la huella y no conmuta si alguna no coincide. «Huella», no «firma» (ADR §16) | Propuesta |
+| R1-D6 | Exportación de emergencia privada | Copia **completa** y separada de la exportación ordinaria, con aviso y confirmación explícita. Incluye **todos** los recursos, también las fotos de MUE-01 (corrige F4). La exportación ordinaria sigue sin fotos privadas | **Aprobada (19/11)** |
+| R1-D7 | Rollback | Se distingue el rollback de código del rollback de datos (§9). Ninguna vuelta atrás de código borra datos | Propuesta; base en persistencia-v1 §5 y precisada por R1-D11 |
+| R1-D8 | Integridad | Cada recurso registra `sha256`, bytes y tipo; **SHA-256 obligatorio**. La migración verifica la huella y no conmuta si alguna no coincide. «Huella», no «firma» (ADR §16) | **Aprobada (19/11)** |
+| R1-D9 | Historial | Se protegen los recursos citados en el historial (deshacer/rehacer) de **todas las sesiones activas**, no solo la propia (§4, regla 4) | **Aprobada (19/11)** |
+| R1-D10 | Compatibilidad | **No** se mantiene una copia de compatibilidad escribible. El legado queda en solo lectura, con barrera, y la escritura de una versión antigua se detecta (§5, §6 bis) | **Aprobada (19/11)** |
+| R1-D11 | Rollback de datos | Solo se permite si **conserva todos los cambios posteriores** a la conmutación (§9) | **Aprobada (19/11)** |
 
 ## 3. A0 · Puerta de escritores (requisito previo)
 
@@ -98,12 +101,16 @@ Base nueva: `rubik-sota-store-v2`, con otro nombre para no subir de versión las
 
 **Reglas:**
 1. **Confirmación atómica.** Documento, recursos nuevos y filas `refs` van en la misma transacción `readwrite`. No existe un recurso sin titular ni un titular sin recurso.
-2. **Operaciones en vuelo.** Al subir una foto o importar un ZIP se crea una fila `pending:<op>` en la misma transacción que los bytes. La confirmación la sustituye por `doc:`. Una cancelación comprobada la elimina. Sustituye a `pin()` en memoria.
+2. **Operaciones en vuelo.** Al subir una foto o importar un ZIP se crea una fila `pending:<op>` en la misma transacción que los bytes. La confirmación la sustituye por `doc:`. Una cancelación comprobada la elimina. Sustituye a `pin()` y a `guard()` de P0: como la recogida es una transacción `readwrite` sobre `resources` y `refs`, IndexedDB serializa la escritura y el borrado sin necesitar Web Locks.
 3. **Recogida.**
    - Es una transacción `readwrite` única: recursos sin ninguna fila `refs`, menos la red de seguridad de R1-D4 (mención textual en `docs`, `conflicts`, `journal` y en el almacén legado mientras exista).
    - No depende de Web Locks ni de contar pestañas.
    - Un registro ilegible aborta la pasada.
-4. **Historial en memoria.** Deshacer y rehacer no se persisten. El titular `pending:` cubre la ventana entre quitar una foto y la recogida. **R1-D9** (propuesta): no recoger recursos de la sesión actual mientras haya historial que los cite. Equivale al `holder()` de P0.
+4. **Historial de todas las sesiones activas (R1-D9).**
+   - Cada pestaña mantiene filas `session:<tabId>` en `refs` para los recursos de su historial: al deshacer o rehacer y al quitar una foto, en la misma transacción que el cambio.
+   - Solo las borra otra pestaña cuando `locks.query()` confirma que el lock `rubik-sota-tab:<tabId>` ya no existe, dentro de la transacción de recogida.
+   - Sin Web Locks, ninguna pestaña borra filas de otra.
+   - Es la versión persistente del `holder()` de P0, que solo veía su propia pestaña.
 5. **Privacidad.**
    - Sin cambios en `kind: 'mue01'`.
    - Las fotos se quedan en el navegador.
@@ -119,9 +126,9 @@ Base nueva: `rubik-sota-store-v2`, con otro nombre para no subir de versión las
 | F0.2c | `store-v2`; lectura del legado para migrar y comparar | **Solo** `store-v2`, más la barrera de compatibilidad | — |
 
 **Volver temporalmente a una versión anterior** (persistencia-v1 §5, estrategia operativa):
-- La versión anterior encuentra el legado intacto, con el estado previo a la migración o a la última copia, y la barrera.
-- Lo que escriba ahí aparece como conflicto `legacy-diverged` al volver a F0.2c.
-- **R1-D10** (propuesta): ¿mantener la copia de compatibilidad (escribir también la biblioteca en `localStorage`) durante F0.2c? Hacerlo contradice «sin doble escritura» (R1-D3). Recomendación: no mantener la copia, conservar la barrera y apoyarse en la exportación de emergencia.
+- La versión anterior encuentra el legado intacto, con el estado previo a la migración y la barrera, que rechaza la biblioteca de forma visible.
+- Lo que consiga escribir ahí aparece como conflicto `legacy-diverged` al volver a F0.2c (§6 bis).
+- **R1-D10 (aprobada):** F0.2c no escribe una copia de compatibilidad. Para volver, se usa la exportación de emergencia o el rollback de datos (§9).
 
 ## 6. Migración transaccional
 
@@ -142,6 +149,29 @@ Bajo el Web Lock `rubik-sota-persistence`, cuando está disponible; sin él, la 
 - Las de ADR §17.
 - R1-T10–T22.
 - Chromium, Firefox y Safari, y los recorridos de almacenamiento de iOS y Android antes de usuarios reales (persistencia-v1 §10).
+
+## 6 bis. Conmutación, exclusión y escritores antiguos
+
+**Exclusión transaccional de migraciones simultáneas.**
+- La migración reserva `meta.migration={phase:'copying', owner:<tabId>, startedAt}` en una transacción `readwrite` de `store-v2` que primero lee ese registro. Si ya existe con otro dueño cuya pestaña sigue viva (`locks.query()`), aborta sin escribir.
+- Además corre bajo el Web Lock `rubik-sota-persistence`. El lock evita trabajo duplicado; la garantía la da el registro transaccional, que también funciona sin Web Locks.
+- La conmutación (paso 4) vuelve a comprobar en la misma transacción que `owner` es la pestaña actual y que `phase==='verified'`. Dos pestañas no pueden producir dos `done` (R1-T18, R1-T19).
+- Un dueño muerto (sin lock y sin progreso) se puede reclamar. La copia parcial de `store-v2` se descarta, nunca el origen.
+
+**Conmutación recuperable entre almacenes.**
+- `meta.authority` vale `'legacy'` o `'v2'` y vive en `store-v2`. Al arrancar se lee antes que cualquier otra cosa. Si `store-v2` no existe o no se puede abrir, la autoridad es el legado.
+- La conmutación es una sola transacción: `authority='v2'`, `phase='done'`, `schemaEpoch` sube, y se guardan las huellas del legado en ese instante (`legacyHashes`).
+- Una interrupción antes de terminar esa transacción deja `authority='legacy'`. El siguiente arranque repite la verificación (§6, pasos 3–4).
+- La vuelta atrás (`authority='legacy'`) sigue el procedimiento de §9. Nunca la decide el código por sí solo.
+
+**Detección de escritores antiguos.**
+- Con A0, cada escritor registra su época en `meta.writersSeen` (§3, punto 4). La convivencia de R1-D1 cuenta desde el último escritor de época anterior visto.
+- Sin A0 (versiones ya publicadas): en cada arranque, F0.2c compara `legacyHashes` con las huellas actuales de las claves de `localStorage`, de `persistence-v1` y de `images-v1`. Cualquier diferencia indica que escribió una versión antigua. Ese contenido entra como conflicto `legacy-diverged`, con sus recursos y su SHA-256, sin sobrescribir nada (§6, paso 5).
+- La interfaz avisa de que hay una pestaña o una app antigua escribiendo (§11).
+
+**Protección de recursos durante el rollback.**
+- Durante la vuelta atrás y hasta que se confirme, no se recoge nada en ningún almacén. La recogida comprueba `meta.rollback` y, si existe, aborta.
+- Los recursos creados en `store-v2` tras la conmutación se copian al legado **antes** de que el legado vuelva a ser autoridad. Se verifican por SHA-256 y se conservan también en `store-v2`.
 
 ## 7. Concurrencia
 
@@ -169,8 +199,8 @@ Bajo el Web Lock `rubik-sota-persistence`, cuando está disponible; sin él, la 
 | Tipo | Qué es | Procedimiento |
 |---|---|---|
 | **De código** | Desplegar una versión anterior | El legado está intacto (R1-D5) y la versión anterior lo abre con la barrera (§5). No hace falta tocar datos |
-| **De datos** | Deshacer la conmutación | **R1-D11** (propuesta): un interruptor `meta.authority='legacy'`, solo con confirmación humana. F0.2c vuelve a leer el legado y conserva `store-v2` para comparar. Lo escrito en v2 después de conmutar se ofrece como exportación y conflicto antes de volver. Nunca se borra `store-v2` automáticamente |
-| **P0 (#270)** | Revertir el merge | Sin datos que revertir: solo impide borrar |
+| **De datos** | Deshacer la conmutación | **R1-D11 (aprobada):** solo si se conservan **todos** los cambios posteriores. Pasos: (1) se toma `meta.rollback` y se detiene la recogida (§6 bis); (2) los documentos y recursos escritos en v2 tras la conmutación se llevan al legado, verificados por SHA-256; si algo no cabe o no verifica, se aborta y se ofrece la exportación de emergencia completa (R1-D6); (3) `authority='legacy'`, con confirmación humana. `store-v2` nunca se borra de forma automática |
+| **P0 (#270)** | Revertir el merge | **No es automáticamente seguro:** reintroduce H-1, la pérdida de fotos MUE-01 citadas en la recogida. Solo se revierte si a la vez se bloquea la recogida o se aplica una corrección equivalente. P0 no tiene datos que revertir |
 
 ## 10. Matriz de pruebas R1
 
@@ -193,10 +223,14 @@ Bajo el Web Lock `rubik-sota-persistence`, cuando está disponible; sin él, la 
 | R1-T20 | Migración | Volver a una versión anterior: lee el legado y la barrera, y no ve nada de v2 |
 | R1-T21 | Migración | Rollback de datos (R1-D11): lo escrito en v2 se exporta y queda como conflicto |
 | R1-T22 | Migración | Sin peticiones de red durante la migración |
+| R1-T23 | Migración | Conmutación interrumpida antes de completar su transacción: la autoridad sigue siendo el legado y se repite |
+| R1-T24 | Migración | Escritor antiguo sin A0 detectado por huellas, con sus recursos en `legacy-diverged` |
+| R1-T25 | Migración | Rollback: lo escrito en v2 llega al legado verificado; sin espacio, se aborta y se ofrece la exportación completa; durante el rollback no se recoge nada |
+| R1-T26 | Recursos | El historial de otra pestaña viva protege su recurso; al cerrarla, la recogida lo libera |
 | R1-T30 | Recursos | Confirmación atómica: un fallo a mitad no deja recurso sin titular ni titular sin recurso |
 | R1-T31 | Recursos | `pending:` cubre la subida de foto o ZIP; una cancelación comprobada lo libera |
 | R1-T32 | Recursos | La recogida transaccional borra el huérfano real y nada más; un registro ilegible aborta |
-| R1-T33 | Recursos | Regresión H-1: los cuatro casos de `tests/p0-mue01-gc.browser.test.cjs` sobre v2 |
+| R1-T33 | Recursos | Regresión H-1: los cinco casos de `tests/p0-mue01-gc.browser.test.cjs` sobre v2, incluido el cruce entre reutilizar una foto y una recogida en curso |
 | R1-T40 | Privacidad | La exportación ordinaria no contiene bytes `mue01/*` |
 | R1-T41 | Privacidad | La exportación de emergencia contiene todos los recursos citados, tras confirmar |
 | R1-T42 | Privacidad | El aviso y la confirmación de la exportación de emergencia son visibles y accesibles |
@@ -221,19 +255,17 @@ Ningún estado de riesgo se comunica solo con color o con un aviso efímero.
 | 0 | P0 #270 | — | CI verde; auditoría; integración autorizada | Revertir el merge |
 | 1 | Consolidación P0 → #266 → #268 → #269 (Codex) | 0 | Batería completa sobre el candidato consolidado | Revertir los merges |
 | 2 | **A0** | 1 | R1-T01–T04 | Revertir. La época no sube sin el corte 4 |
-| 3 | Convivencia de A0 | 2 activado | R1-D1: periodo decidido por el propietario | — |
-| 4 | **F0.2c** (base v2, migración, recursos, recogida, emergencia) | 3; R1-D3, D6, D8, D10, D11 decididas | R1-T10–T42 | §9 |
+| 3 | Convivencia de A0 | 2 activado | R1-D1: ≥7 días sin escritores de época anterior vistos | — |
+| 4 | **F0.2c** (base v2, migración, recursos, recogida, emergencia) | 3 | R1-T10–T42 | §9 |
 | 5 | F0.3 (interfaz completa, navegadores) | 4 | R1-T50, persistencia-v1 §10 | — |
 
 **Antes de autorizar una migración deben estar integrados y activados:** P0, F0.2b y A0 (cortes 0 a 2), y cumplido el periodo de convivencia (corte 3).
 
 ## 13. Pendiente del propietario
 
-- **R1-D1:** duración de la convivencia de A0.
-- **R1-D3:** migración sin doble escritura.
-- **R1-D6:** exportación de emergencia privada que incluye las fotos de MUE-01.
-- **R1-D8:** huellas obligatorias de los recursos.
-- **R1-D9:** historial en memoria como titular.
-- **R1-D10:** copia de compatibilidad durante F0.2c.
-- **R1-D11:** interruptor de rollback de datos.
+- **R1-D2:** concreción de la autoridad única de recursos (§4).
+- **R1-D4:** mantener la regla de P0 como red de seguridad en F0.2c.
+- **R1-D7:** principios generales de rollback.
+- Las decisiones D1, D3, D6, D8, D9, D10 y D11 están aprobadas desde el 19/11.
+- Autorización específica para A0 e implementación (NO-GO vigente).
 - Si se recupera el documento `4e4f1319`: conciliarlo con R1.
