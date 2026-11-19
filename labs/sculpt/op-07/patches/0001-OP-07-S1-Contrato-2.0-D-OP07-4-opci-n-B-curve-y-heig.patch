@@ -1,9 +1,10 @@
-From 2121da22194acddfcc5a2d63dcbf240a183ec4a0 Mon Sep 17 00:00:00 2001
+From 84f56a0dc8aefcb2f09f795d5b3d1379eb2818c4 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 1/6] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=201.13.0:=20?=
- =?UTF-8?q?curve=20y=20heightEndMm,=20n=C3=BAcleo=20geom=C3=A9trico=20?=
- =?UTF-8?q?=C3=BAnico=20y=20guardado=20protegido?=
+Subject: [PATCH 1/9] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D-O?=
+ =?UTF-8?q?P07-4=20opci=C3=B3n=20B):=20curve=20y=20heightEndMm,=20autorida?=
+ =?UTF-8?q?d=20=C3=BAnica=20de=20versiones,=20n=C3=BAcleo=20=C3=BAnico=20y?=
+ =?UTF-8?q?=20guardado=20protegido?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -11,20 +12,22 @@ Content-Transfer-Encoding: 8bit
 ---
  comparar/index.html                           |   1 +
  docs/contracts/CHANGELOG.md                   |   6 +
- docs/contracts/FloorPlanProjectV1.md          |   7 +
- docs/contracts/FloorPlanProjectV1.schema.json |   4 +-
+ docs/contracts/FloorPlanProjectV1.md          |   9 +
+ docs/contracts/FloorPlanProjectV1.schema.json |   6 +-
  evolucion/index.html                          |   1 +
- index.html                                    |   1 +
+ index.html                                    |   5 +-
  js/building-core.js                           |   2 +-
- js/project-core.js                            |  30 +-
- js/project-schema.js                          |   4 +-
+ js/plan-intake.js                             |   2 +-
+ js/project-core.js                            |  75 ++++-
+ js/project-schema.js                          |   6 +-
+ js/surface-catalog.js                         |   2 +-
+ js/tracing-core.js                            |   4 +-
+ js/tracing-ui.js                              |   2 +-
  js/wall-geometry-core.js                      | 281 ++++++++++++++++++
- tests/building-project-1-6.test.cjs           |   4 +-
- tests/building.test.cjs                       |   2 +-
- tests/op07-s1-contract.test.cjs               |  77 +++++
+ tests/op07-s1-contract.test.cjs               | 105 +++++++
  tests/op07/fixtures.cjs                       |  18 ++
- tests/r03-cabinet-contract.test.cjs           |   2 +-
- 15 files changed, 431 insertions(+), 9 deletions(-)
+ tests/project.test.cjs                        |   4 +-
+ 17 files changed, 503 insertions(+), 26 deletions(-)
  create mode 100644 js/wall-geometry-core.js
  create mode 100644 tests/op07-s1-contract.test.cjs
  create mode 100644 tests/op07/fixtures.cjs
@@ -42,50 +45,61 @@ index 3e1972fb..51a0feb5 100644
  <script src="../js/exterior-core.js"></script>
  <script src="../js/roof-core.js"></script>
 diff --git a/docs/contracts/CHANGELOG.md b/docs/contracts/CHANGELOG.md
-index 96cb7414..730600d9 100644
+index 96cb7414..451f95da 100644
 --- a/docs/contracts/CHANGELOG.md
 +++ b/docs/contracts/CHANGELOG.md
 @@ -1,5 +1,11 @@
  # Cambios compatibles de FloorPlanProjectV1
  
-+## 1.13.0 — muros curvos e inclinados (OP-07 · S1, propuesta preparada, NO integrada)
++## 2.0.0 — muros curvos e inclinados (OP-07 · S1, preparada, NO integrada)
 +
-+- `walls[].curve` y `walls[].heightEndMm` opcionales; sin ellos, el muro de 1.12 sin cambios. Validados por el núcleo único `js/wall-geometry-core.js`.
-+- No son ignorables: exigen la barrera de época A0 y `Core.guardSave` en el camino de escritura (ver FloorPlanProjectV1.md, ampliación 1.13.0, y la decisión D-OP07-4).
-+- `building-core` acepta niveles 1.13.0. Las pruebas que usaban 1.13.0 como «versión futura desconocida» pasan a 1.14.0.
++- `walls[].curve` y `walls[].heightEndMm`, solo en documentos 2.x (D-OP07-4, opción B). Sin ellos, el documento sigue siendo 1.x sin cambios y no hay migración masiva.
++- Autoridad única de versiones en `project-core` (`parseVersion`, `versionAtLeast`, `raiseVersion`). Los escritores que elevaban `'1.N.0'` a mano la usan.
++- `building-core` acepta plantas 2.0.0.
 +
  ## 1.8.0 — intención de peto visual (Punto 8B-B)
  
  - `roofParapet` opcional por proyecto/planta: `enabled`, `heightMm` explícito cuando está activo y `materialId` mural opcional.
 diff --git a/docs/contracts/FloorPlanProjectV1.md b/docs/contracts/FloorPlanProjectV1.md
-index 13fc3345..d8993a1a 100644
+index 13fc3345..22fa9719 100644
 --- a/docs/contracts/FloorPlanProjectV1.md
 +++ b/docs/contracts/FloorPlanProjectV1.md
-@@ -1,5 +1,12 @@
+@@ -1,5 +1,14 @@
  # FloorPlanProjectV1 — contrato de proyecto de plano
  
-+## Ampliación 1.13.0 — muros curvos e inclinados (OP-07 · S1, propuesta preparada, NO integrada)
++## FloorPlanProject 2.0 — muros curvos e inclinados (OP-07 · S1, preparada, NO integrada)
 +
-+- `walls[].curve = {control:{x,y}}` (Bézier cuadrática, mm) y `walls[].heightEndMm` (altura en `end`; `heightMm` es la de `start`) son opcionales. Un muro sin ellos es exactamente el de 1.12.
-+- Las reglas de muro y de abertura las aplica el núcleo único `js/wall-geometry-core.js`: radio mínimo ≥ grosor/2, curva que no se pliega, abertura dentro de la **trayectoria facetada** y bajo el **borde más bajo**. Sin recorte silencioso.
-+- Resolución única de las curvas para plano, 3D, mediciones, aberturas y DXF: `Core.WALL_PATH` (propuesta: tolerancia de 1 mm, máximo 1024 facetas; pendiente de decisión de producto).
-+- **Excepción a la regla de minor de §3.** Estos dos campos **no se pueden ignorar sin perder información**: un lector 1.12 vería un muro recto y a nivel. Por eso 1.13.0 solo es seguro con dos protecciones activas antes de que un proyecto guarde un muro curvo o inclinado: la barrera de época A0 (#273), que impide escribir a las pestañas que no conocen el formato, y `Core.guardSave` en el camino de escritura de F0.2b, que impide guardar una vista degradada o perder curva, pendiente, muros o aberturas sin intención explícita. La alternativa conforme a §3 es una major 2.0 solo para los documentos que usan los campos; exige centralizar las 19 elevaciones de versión `'1.N.0'` y las 11 comparaciones de minor del código antes de ser segura (decisión D-OP07-4).
++- **Decisión D-OP07-4 (opción B, 20/11/2026).** `walls[].curve = {control:{x,y}}` (Bézier cuadrática, mm) y `walls[].heightEndMm` (altura en `end`; `heightMm` es la de `start`) **no se pueden ignorar sin perder información**, así que no caben en una minor (§3). Solo los documentos que los usan pasan a **2.0.0**; ningún proyecto v1 se migra.
++- **2.0 = V1 hasta 1.12 + esos dos campos.** Una mejora futura de 1.x que llegue como 1.(12+k) es 2.k para un documento 2.x.
++- **Autoridad única de versiones:** `Core.parseVersion`, `Core.versionAtLeast` y `Core.raiseVersion` (`js/project-core.js`). Ningún módulo eleva ni compara versiones de proyecto por su cuenta, y lo comprueba `tests/op07-s1-contract.test.cjs`. `raiseVersion` nunca baja la versión y nunca convierte un 1.x en 2.x salvo que el destino sea 2.x. Un 2.x no vuelve a 1.x aunque se enderecen todos sus muros.
++- **Lectores 1.x:** rechazan 2.x sin modificar nada (fila «major desconocido» de §3). Si la colección local no se puede abrir, el editor 1.x no la reescribe. La barrera de época A0 (#273) y `Core.guardSave` en el camino de escritura de F0.2b son protecciones complementarias.
++- **Validación:** la aplica el núcleo único `js/wall-geometry-core.js`: radio mínimo ≥ grosor/2, curva que no se pliega, abertura dentro de la **trayectoria facetada** y bajo el **borde más bajo**, sin recorte silencioso. La resolución es `Core.WALL_PATH`: tolerancia de 1 mm y máximo de 1024 facetas, aprobadas para el candidato. La usan plano, 3D, mediciones, aberturas, DXF y Blender.
++- **Edificios:** `building-core` acepta plantas 2.0.0. Un lector de edificios anterior las rechaza.
 +
  ## Ampliación 1.10.0 — ortofoto contextual (Punto 8C-C)
  
  `site.orthophoto` es opcional desde ProjectV1 1.10.0 y requiere `site.parcel`. Guarda únicamente CRS fuente, extensión exacta de la parcela, dimensiones y resolución de la solicitud, política `latest-available`, tipo JPEG y procedencia (`providerId`, fuente, hora de recuperación, atribución y licencia). La validación semántica exige que CRS y extensión coincidan con `site.parcel`. La imagen, su `Blob`, `blob:` URL y píxeles no entran en JSON/ZIP ni se recargan automáticamente al abrirlos. Una nueva carga explícita puede obtener un mosaico distinto porque PNOA Máxima Actualidad es dinámico; `retrievedAt` no equivale a fecha de vuelo. La superposición del contorno se deriva en memoria del mismo marco fuente; no se usa para situar el edificio. Añadir ortofoto eleva el proyecto a 1.10.0; eliminarla no degrada la versión. Proyectos 1.9.0 y anteriores no admiten este campo.
 diff --git a/docs/contracts/FloorPlanProjectV1.schema.json b/docs/contracts/FloorPlanProjectV1.schema.json
-index 434b93aa..9c1f0dce 100644
+index 434b93aa..163dadb3 100644
 --- a/docs/contracts/FloorPlanProjectV1.schema.json
 +++ b/docs/contracts/FloorPlanProjectV1.schema.json
+@@ -8,7 +8,7 @@
+   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "coordinateSystem", "scale", "defaults", "walls", "openings", "rooms", "materials", "objects"],
+   "properties": {
+     "schema": { "const": "rubik-sota.floorplan-project", "description": "Discriminador del tipo de documento. Permite detectar ficheros que no son proyectos." },
+-    "schemaVersion": { "type": "string", "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Este esquema acepta solo major 1. Ver política de versiones en el .md §3." },
++    "schemaVersion": { "type": "string", "pattern": "^(1|2)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Major 1 (FloorPlanProjectV1) o 2 (V1 hasta 1.12 + muros curvos e inclinados, OP-07; solo documentos que los usan). Ver política de versiones en el .md §3." },
+     "id": { "$ref": "#/$defs/projectId" },
+     "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+     "createdAt": { "type": "string", "format": "date-time" },
 @@ -276,7 +276,9 @@
          "structure": { "enum": ["load-bearing", "exterior", "partition", "low", "unknown", "other"], "description": "Etiqueta declarada por la persona o la plantilla; NO es un dictamen técnico. 'other' desde 1.5.0." },
          "structureSource": { "enum": ["professional", "imported", "pending-review"], "description": "Opcional desde 1.5.0. Procedencia de la declaración de structure: la indicó una persona profesional, llegó en un archivo importado o queda pendiente de revisar. Ausente: no registrada. Nunca se deduce." },
          "status": { "enum": ["existing", "demolished", "new"] },
 -        "source": { "$ref": "#/$defs/geometrySource" }
 +        "source": { "$ref": "#/$defs/geometrySource" },
-+        "curve": { "type": "object", "additionalProperties": false, "required": ["control"], "properties": { "control": { "$ref": "#/$defs/point" } }, "description": "Opcional desde 1.13.0 (OP-07). Muro curvo: Bézier cuadrática con punto de control en mm. Ausente: muro recto." },
-+        "heightEndMm": { "$ref": "#/$defs/heightMm", "description": "Opcional desde 1.13.0 (OP-07). Altura en el extremo end; heightMm es la altura en start. Ausente: muro a nivel." }
++        "curve": { "type": "object", "additionalProperties": false, "required": ["control"], "properties": { "control": { "$ref": "#/$defs/point" } }, "description": "Solo en 2.x (OP-07). Muro curvo: Bézier cuadrática con punto de control en mm. Ausente: muro recto." },
++        "heightEndMm": { "$ref": "#/$defs/heightMm", "description": "Solo en 2.x (OP-07). Altura en el extremo end; heightMm es la altura en start. Ausente: muro a nivel." }
        }
      },
      "opening": {
@@ -102,7 +116,7 @@ index 209b90e0..2b32d8e6 100644
  <script src="../js/exterior-core.js"></script>
  <script src="../js/roof-core.js"></script>
 diff --git a/index.html b/index.html
-index 55426096..96590a3a 100644
+index 55426096..0432f8f8 100644
 --- a/index.html
 +++ b/index.html
 @@ -750,6 +750,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
@@ -113,8 +127,19 @@ index 55426096..96590a3a 100644
  <script src="js/project-core.js"></script>
  <script src="js/exterior-core.js"></script>
  <script src="js/roof-core.js"></script>
+@@ -1796,8 +1797,8 @@ function bindRoomPanel(){
+   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
+   document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
+   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
+-  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+-  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
++  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();Core.raiseVersion(project,'1.6.0');});
++  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;Core.raiseVersion(project,'1.6.0');});
+   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
+   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
+   $('#back').onclick = () => select(null);
 diff --git a/js/building-core.js b/js/building-core.js
-index dadcc106..316e383d 100644
+index dadcc106..b0c3e644 100644
 --- a/js/building-core.js
 +++ b/js/building-core.js
 @@ -9,7 +9,7 @@
@@ -122,15 +147,28 @@ index dadcc106..316e383d 100644
   // Embedded projects must use a 1.x version this reader knows, validated strictly (no unknown fields).
   const Territory=typeof module==='object'&&module.exports?require('./territory-integration-core.js'):root.FloorPlanTerritoryIntegration;
 - const PROJECT_VERSIONS=['1.0.0','1.1.0','1.2.0','1.3.0','1.4.0','1.5.0','1.6.0','1.7.0','1.8.0','1.9.0','1.10.0','1.11.0','1.12.0'];
-+ const PROJECT_VERSIONS=['1.0.0','1.1.0','1.2.0','1.3.0','1.4.0','1.5.0','1.6.0','1.7.0','1.8.0','1.9.0','1.10.0','1.11.0','1.12.0','1.13.0'];
++ const PROJECT_VERSIONS=['1.0.0','1.1.0','1.2.0','1.3.0','1.4.0','1.5.0','1.6.0','1.7.0','1.8.0','1.9.0','1.10.0','1.11.0','1.12.0','2.0.0'];
   const LIMITS={levels:2,stairs:4,coordMm:1000000,elevationMm:100000,slabMm:1000,nameMax:200,levelNameMax:80};
   const ID={building:/^bld_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/,level:/^lvl_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/,stair:/^str_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/};
   const MULTI_LEVEL_HINT=/level|floor|storey|story|stair|planta|nivel|piso|escalera|building|edificio/i;
+diff --git a/js/plan-intake.js b/js/plan-intake.js
+index 19523985..4592536f 100644
+--- a/js/plan-intake.js
++++ b/js/plan-intake.js
+@@ -180,7 +180,7 @@
+   walls.forEach((w,i)=>{if(!ids[i])return;for(const o of w.openings||[]){const c=map({x:(o.p1.x+o.p2.x)/2,y:(o.p1.y+o.p2.y)/2}),width=Math.round(len2(o.p1,o.p2));try{const made=T.opening(p,ids[i],c,o.kind,width),wallHeight=p.walls.find(x=>x.id===ids[i]).heightMm,m=o.meta;made.source={method:'imported',review:'unreviewed'};if(m&&m.heightMm>0){const sill=m.sillHeightMm??made.sillHeightMm;if(sill>=0&&m.heightMm+sill<=wallHeight){made.heightMm=m.heightMm;made.sillHeightMm=sill;}}}catch{skippedOpenings++;}}});
+   const floor=p.materials.find(m=>m.category==='floor').id;let n=0;
+   for(const r of rooms){const polygon=r.polygon.map(q=>C.point(map(q)));const labelAt=C.point({x:polygon.reduce((s,v)=>s+v.x,0)/polygon.length,y:polygon.reduce((s,v)=>s+v.y,0)/polygon.length});p.rooms.push({id:C.id('rom'),name:r.name||`Estancia ${++n}`,family:'unspecified',polygon,labelAt,floorMaterialId:floor,countsTowardArea:true,source:{method:'imported',review:'unreviewed'}});}
+-  if(rooms.length&&Number(p.schemaVersion.split('.')[1])<6)p.schemaVersion='1.6.0';
++  if(rooms.length)C.raiseVersion(p,'1.6.0');
+   p.scale=scale;C.validate(p);
+   const kinds={door:0,window:0,opening:0};for(const o of p.openings)kinds[o.kind==='sliding-door'?'door':o.kind]++;
+   return {project:p,openings:kinds,skippedOpenings};
 diff --git a/js/project-core.js b/js/project-core.js
-index 2d2841eb..8a20a16b 100644
+index 2d2841eb..cb7b202b 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -8,6 +8,20 @@
+@@ -8,6 +8,45 @@
    const OrthophotoSite = typeof module !== 'undefined' ? require('./orthophoto-site-adapter.js') : root.FloorPlanOrthophotoSiteAdapter;
    const TerrainSite = typeof module !== 'undefined' ? require('./terrain-site-adapter.js') : root.FloorPlanTerrainSiteAdapter;
    const Territory = typeof module !== 'undefined' ? require('./territory-integration-core.js') : root.FloorPlanTerritoryIntegration;
@@ -141,6 +179,31 @@ index 2d2841eb..8a20a16b 100644
 +  const WALL_PATH = Object.freeze({toleranceMm: 1});
 +  const WALL_FEATURES = Object.freeze(['wall.curve', 'wall.heightEnd']);   // what this writer understands (guardSave)
 +  const shapedWall = w => !!(w && (w.curve || w.heightEndMm !== undefined));
++  // ── Versions (D-OP07-4, option B): the SINGLE authority that reads, compares and raises schemaVersion ─────────────
++  // 1.x is FloorPlanProjectV1. 2.0 is the same contract plus the two non-ignorable wall fields (curve, heightEndMm):
++  // only a document that uses them needs 2.x, so no v1 project is ever migrated in bulk. A 1.x reader rejects 2.x without
++  // modifying anything (contract §3, «major desconocido»). 2.0 contains every 1.x feature up to 1.12; a feature added
++  // to 1.x later as 1.(12+k) is 2.k. Every module raises and compares versions through these three functions.
++  const V2_BASE_MINOR = 12;
++  const parseVersion = v => { const m = /^(1|2)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.exec(typeof v === 'string' ? v : ''); return m ? {major:+m[1], minor:+m[2], patch:+m[3]} : null; };
++  const versionLine = v => v.major === 1 ? v.minor : V2_BASE_MINOR + v.minor;
++  // Does a document of `version` already carry what `target` introduced? (2.x never goes below 2; 1.x never reaches 2.)
++  function versionAtLeast(version, target) {
++    const a = parseVersion(version), b = parseVersion(target);
++    if (!a || !b) return false;
++    if (b.major === 2 && a.major < 2) return false;
++    return versionLine(a) >= versionLine(b);
++  }
++  // Raise `project.schemaVersion` (in place) to the lowest version that has both its features and `target`'s. Never
++  // lowers anything and never turns a 1.x document into 2.x unless `target` is 2.x. Returns the project.
++  function raiseVersion(project, target) {
++    const a = parseVersion(project.schemaVersion), b = parseVersion(target);
++    if (!a || !b) throw new Error(`/schemaVersion: cannot raise ${project.schemaVersion} to ${target}`);
++    if (versionAtLeast(project.schemaVersion, target)) return project;
++    const major = Math.max(a.major, b.major), line = Math.max(versionLine(a), versionLine(b));
++    project.schemaVersion = major === 1 ? `1.${line}.0` : `2.${Math.max(0, line - V2_BASE_MINOR)}.0`;
++    return project;
++  }
 +  // OP-07 · Save gate for the persistence write path (F0.2b): refuses a degraded legacy view, a writer that does not know
 +  // a feature the project uses, the loss of a curve, a slope, a wall or an opening without an explicit intent, and walls
 +  // or openings that break the rules. `writerFeatures` defaults to this writer's; an older writer passes its own (none).
@@ -151,14 +214,53 @@ index 2d2841eb..8a20a16b 100644
    const clone = value => JSON.parse(JSON.stringify(value));
    const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
    const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
-@@ -121,11 +135,21 @@
+@@ -83,31 +122,31 @@
+   function validate(project, {strict = false} = {}) {
+     if (project?.schema === 'rubik-sota.floorplan-building') fail('/schema', 'this is a multi-level building, not a FloorPlanProjectV1 project; open it in Rubik or export a single level');
+     const version = project?.schemaVersion;
+-    if (typeof version !== 'string' || !/^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) fail('/schemaVersion', 'unsupported version');
++    if (!parseVersion(version)) fail('/schemaVersion', 'unsupported version');
+     const future = version !== '1.0.0' && !strict;
+     check(project, schema, '/', future);
+     if(project.site!==undefined){
+-      if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
+-      if(project.site.buildingPlacement!==undefined&&Number(version.split('.')[1])<12)fail('/site/buildingPlacement','requires project 1.12.0');
++      if(!versionAtLeast(version,'1.7.0'))fail('/site','requires project 1.7.0');
++      if(project.site.buildingPlacement!==undefined&&!versionAtLeast(version,'1.12.0'))fail('/site/buildingPlacement','requires project 1.12.0');
+       try{Territory.validate(project.site);}catch(error){fail('/site/buildingPlacement',error.message);}
+       try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
+       if(project.site.parcel!==undefined){
+-        if(Number(version.split('.')[1])<9)fail('/site/parcel','requires project 1.9.0');
++        if(!versionAtLeast(version,'1.9.0'))fail('/site/parcel','requires project 1.9.0');
+         check(project.site.parcel,schema.$defs.parcel,'/site/parcel',false);
+         try{ParcelSite.fromSiteParcel(project.site.parcel);}catch(error){fail('/site/parcel',error.message);}
+       }
+       if(project.site.orthophoto!==undefined){
+-        if(Number(version.split('.')[1])<10)fail('/site/orthophoto','requires project 1.10.0');
++        if(!versionAtLeast(version,'1.10.0'))fail('/site/orthophoto','requires project 1.10.0');
+         check(project.site.orthophoto,schema.$defs.orthophoto,'/site/orthophoto',false);
+         try{OrthophotoSite.fromSiteOrthophoto(project.site.orthophoto,project.site.parcel);}catch(error){fail('/site/orthophoto',error.message);}
+       }
+       if(project.site.terrain!==undefined){
+-        if(Number(version.split('.')[1])<11)fail('/site/terrain','requires project 1.11.0');
++        if(!versionAtLeast(version,'1.11.0'))fail('/site/terrain','requires project 1.11.0');
+         check(project.site.terrain,schema.$defs.terrain,'/site/terrain',false);
+         try{TerrainSite.fromSiteTerrain(project.site.terrain,project.site.parcel);}catch(error){fail('/site/terrain',error.message);}
+       }
+     }
+-    if(project.roofParapet!==undefined&&Number(version.split('.')[1])<8)fail('/roofParapet','requires project 1.8.0');
++    if(project.roofParapet!==undefined&&!versionAtLeast(version,'1.8.0'))fail('/roofParapet','requires project 1.8.0');
+     const ids = new Map([[project.id, 'project']]);
+     const warnings = [];
+     if (future) warnings.push('Newer V1 version: unknown fields are retained; unsupported values are rejected.');
+@@ -121,11 +160,21 @@
      for(const w of project.walls)if(w.surfaceMaterialId){ref(w.surfaceMaterialId,'materials',`/walls/${w.id}/surfaceMaterialId`);if(project.materials.find(m=>m.id===w.surfaceMaterialId).category!=='wall')fail(`/walls/${w.id}/surfaceMaterialId`,'wall material required');}
      if(project.roofParapet?.materialId){ref(project.roofParapet.materialId,'materials','/roofParapet/materialId');if(project.materials.find(m=>m.id===project.roofParapet.materialId).category!=='wall')fail('/roofParapet/materialId','wall material required');}
      for (const w of project.walls) if (Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y) < 1) fail(`/walls/${w.id}`, 'zero-length wall');
-+    // OP-07 (1.13.0): curved and sloped walls. The fields are not ignorable, so an older document cannot carry them, and
++    // OP-07 (2.0): curved and sloped walls. The fields are not ignorable, so only a 2.x document can carry them, and
 +    // each such wall must pass the wall rules of the single geometric core (minimum radius, no fold, end height).
 +    for (const w of project.walls) if (shapedWall(w)) {
-+      if (Number(version.split('.')[1]) < 13) fail(`/walls/${w.id}`, 'curve and heightEndMm require project 1.13.0');
++      if (!versionAtLeast(version, '2.0.0')) fail(`/walls/${w.id}`, 'curve and heightEndMm require project 2.0.0');
 +      for (const message of Walls.validateWall(w)) fail(`/walls/${w.id}`, message);
 +    }
      for (const o of project.openings) {
@@ -175,35 +277,103 @@ index 2d2841eb..8a20a16b 100644
        if (o.swing && o.kind !== 'door') fail(`/openings/${o.id}/swing`, 'swing only allowed on door');
      }
      for (const r of project.rooms) {
-@@ -314,4 +338,6 @@
+@@ -306,12 +355,14 @@
+     if(!STRUCTURE_SOURCES.includes(source))throw Error('Procedencia no admitida.');
+     const next=clone(project),wall=next.walls.find(w=>w.id===wallId);if(!wall)throw Error('Muro no encontrado.');
+     wall.structure=structure;wall.structureSource=source;
+-    if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
++    raiseVersion(next,'1.5.0');
+     validate(next);return next;
+   }
+-  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.buildingPlacement!==undefined&&minor<12)next.schemaVersion='1.12.0';else if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
+-  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
++  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
++  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
    const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
    const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
    if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 +  // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
-+  Object.assign(api,{WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
++  Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
  })(globalThis);
 diff --git a/js/project-schema.js b/js/project-schema.js
-index f8a1b79d..9a045342 100644
+index f8a1b79d..818f7cee 100644
 --- a/js/project-schema.js
 +++ b/js/project-schema.js
+@@ -9,7 +9,7 @@
+   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "coordinateSystem", "scale", "defaults", "walls", "openings", "rooms", "materials", "objects"],
+   "properties": {
+     "schema": { "const": "rubik-sota.floorplan-project", "description": "Discriminador del tipo de documento. Permite detectar ficheros que no son proyectos." },
+-    "schemaVersion": { "type": "string", "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Este esquema acepta solo major 1. Ver política de versiones en el .md §3." },
++    "schemaVersion": { "type": "string", "pattern": "^(1|2)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Major 1 (FloorPlanProjectV1) o 2 (V1 hasta 1.12 + muros curvos e inclinados, OP-07; solo documentos que los usan). Ver política de versiones en el .md §3." },
+     "id": { "$ref": "#/$defs/projectId" },
+     "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+     "createdAt": { "type": "string", "format": "date-time" },
 @@ -277,7 +277,9 @@
          "structure": { "enum": ["load-bearing", "exterior", "partition", "low", "unknown", "other"], "description": "Etiqueta declarada por la persona o la plantilla; NO es un dictamen técnico. 'other' desde 1.5.0." },
          "structureSource": { "enum": ["professional", "imported", "pending-review"], "description": "Opcional desde 1.5.0. Procedencia de la declaración de structure: la indicó una persona profesional, llegó en un archivo importado o queda pendiente de revisar. Ausente: no registrada. Nunca se deduce." },
          "status": { "enum": ["existing", "demolished", "new"] },
 -        "source": { "$ref": "#/$defs/geometrySource" }
 +        "source": { "$ref": "#/$defs/geometrySource" },
-+        "curve": { "type": "object", "additionalProperties": false, "required": ["control"], "properties": { "control": { "$ref": "#/$defs/point" } }, "description": "Opcional desde 1.13.0 (OP-07). Muro curvo: Bézier cuadrática con punto de control en mm. Ausente: muro recto." },
-+        "heightEndMm": { "$ref": "#/$defs/heightMm", "description": "Opcional desde 1.13.0 (OP-07). Altura en el extremo end; heightMm es la altura en start. Ausente: muro a nivel." }
++        "curve": { "type": "object", "additionalProperties": false, "required": ["control"], "properties": { "control": { "$ref": "#/$defs/point" } }, "description": "Solo en 2.x (OP-07). Muro curvo: Bézier cuadrática con punto de control en mm. Ausente: muro recto." },
++        "heightEndMm": { "$ref": "#/$defs/heightMm", "description": "Solo en 2.x (OP-07). Altura en el extremo end; heightMm es la altura en start. Ausente: muro a nivel." }
        }
      },
      "opening": {
+diff --git a/js/surface-catalog.js b/js/surface-catalog.js
+index 609d5a8a..2953f932 100644
+--- a/js/surface-catalog.js
++++ b/js/surface-catalog.js
+@@ -51,7 +51,7 @@
+   if(existing>=0&&JSON.stringify(next.materials[existing])!==JSON.stringify(material))material.id=C.id('mat');
+   if(!next.materials.some(m=>m.id===material.id))next.materials.push(material);
+   target[kind==='floor'?'floorMaterialId':'surfaceMaterialId']=material.id;
+-  if(Number(next.schemaVersion.split('.')[1])<4)next.schemaVersion='1.4.0';C.validate(next);return next;
++  C.raiseVersion(next,'1.4.0');C.validate(next);return next;
+  }
+  const api={partial:true,families,validate,repeat,search,apply,entries:[],status:new Map(),get(id){return this.entries.find(e=>e.id===id);},notify(id,message){this.status.set(id,message);if(typeof dispatchEvent==='function')dispatchEvent(new Event('surface-status'));}};
+  if(typeof module!=='undefined')module.exports=api;
+diff --git a/js/tracing-core.js b/js/tracing-core.js
+index d93861f5..61fa22d0 100644
+--- a/js/tracing-core.js
++++ b/js/tracing-core.js
+@@ -74,7 +74,7 @@
+  function length(value){if(!Number.isInteger(value)||value<1||value>100000)throw Error('Introduce una distancia entre 1 y 100000 mm.');return value;}
+  function calibrate(p,imageId,a,b,known){const image=p.sourceImages.find(i=>i.id===imageId);if(!image)throw Error('Selecciona una imagen local.');a=bounded(image,a);b=bounded(image,b);known=length(known);const d=distance(a,b);if(!d)throw Error('Los dos puntos deben ser distintos.');const ratio=known/d;if(ratio>1000)throw Error('Escala fuera del límite del contrato.');
+   // Recalibration changes the reference only. Existing mm geometry is retained for explicit review.
+-  image.placement??={originMm:{x:0,y:0},rotationDeg:0,mmPerPixel:ratio};image.placement.mmPerPixel=ratio;p.schemaVersion=Number(p.schemaVersion.split('.')[1])>=2?p.schemaVersion:'1.1.0';p.scale={confidence:'estimated',method:'known-dimension',calibration:{sourceImageId:imageId,pointA:a,pointB:b,knownLengthMm:known,mmPerPixel:ratio,calibratedAt:new Date().toISOString(),confirmedByUser:false}};C.validate(p);return p;
++  image.placement??={originMm:{x:0,y:0},rotationDeg:0,mmPerPixel:ratio};image.placement.mmPerPixel=ratio;C.raiseVersion(p,'1.1.0');p.scale={confidence:'estimated',method:'known-dimension',calibration:{sourceImageId:imageId,pointA:a,pointB:b,knownLengthMm:known,mmPerPixel:ratio,calibratedAt:new Date().toISOString(),confirmedByUser:false}};C.validate(p);return p;
+  }
+  function verify(p,a,b,known){const c=p.scale.calibration;if(!c)throw Error('Calibra la imagen antes de verificar.');const image=p.sourceImages.find(i=>i.id===c.sourceImageId);a=bounded(image,a);b=bounded(image,b);known=length(known);if(!distance(a,b))throw Error('Los dos puntos deben ser distintos.');
+   const same=(u,v)=>distance(u,v)<1e-7;if((same(a,c.pointA)&&same(b,c.pointB))||(same(a,c.pointB)&&same(b,c.pointA)))throw Error('Usa una segunda cota independiente, no los puntos de calibración.');
+@@ -94,7 +94,7 @@
+   const height=kind==='window'?Math.min(1200,w.heightMm):Math.min(2100,w.heightMm),sill=kind==='window'?Math.min(900,w.heightMm-height):0;
+   const o={id:C.id('opn'),wallId,kind,offsetMm:offset,widthMm:width,heightMm:height,sillHeightMm:sill,source:{method:'manual',review:'unreviewed'},...(kind==='door'?{swing:{hinge:'start',side:'left'}}:{})};p.openings.push(o);C.validate(p);return o;
+  }
+- function room(p,polygon,name='Estancia'){const labelAt=C.point({x:polygon.reduce((n,v)=>n+v.x,0)/polygon.length,y:polygon.reduce((n,v)=>n+v.y,0)/polygon.length});const r={id:C.id('rom'),name,family:'unspecified',polygon:polygon.map(C.point),labelAt,floorMaterialId:p.materials.find(m=>m.category==='floor').id,countsTowardArea:true,source:{method:'manual',review:'unreviewed'}};p.rooms.push(r);if(Number(p.schemaVersion.split('.')[1])<6)p.schemaVersion='1.6.0';C.validate(p);return r;}
++ function room(p,polygon,name='Estancia'){const labelAt=C.point({x:polygon.reduce((n,v)=>n+v.x,0)/polygon.length,y:polygon.reduce((n,v)=>n+v.y,0)/polygon.length});const r={id:C.id('rom'),name,family:'unspecified',polygon:polygon.map(C.point),labelAt,floorMaterialId:p.materials.find(m=>m.category==='floor').id,countsTowardArea:true,source:{method:'manual',review:'unreviewed'}};p.rooms.push(r);C.raiseVersion(p,'1.6.0');C.validate(p);return r;}
+  function remove(p,kind,id){if(kind==='wall'){p.walls=p.walls.filter(w=>w.id!==id);p.openings=p.openings.filter(o=>o.wallId!==id);}else if(kind==='opening')p.openings=p.openings.filter(o=>o.id!==id);else if(kind==='room'){p.rooms=p.rooms.filter(r=>r.id!==id);for(const o of p.objects)if(o.roomId===id)delete o.roomId;}C.validate(p);}
+  const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+  function crossing(a,b,c,d){return cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0;}
+diff --git a/js/tracing-ui.js b/js/tracing-ui.js
+index a9f51547..e2bdc124 100644
+--- a/js/tracing-ui.js
++++ b/js/tracing-ui.js
+@@ -223,7 +223,7 @@
+  $('#traceDistanceSave').onclick=()=>{try{const captured=points,im=image();apply(p=>distanceMode==='calibrate'?T.calibrate(p,im.id,captured[0],captured[1],Number($('#traceKnown').value)):T.verify(p,captured[0],captured[1],Number($('#traceKnown').value)));points=[];mode='navigate';$('#traceDistance').close();drawPoints();render();const v=project.scale.verification;status(distanceMode==='calibrate'?'Calibración guardada. Ahora mide una segunda cota independiente con «Segunda cota». La geometría en mm se conserva; revisa su correspondencia con la imagen.':v.status==='consistent'?`Segunda cota: ${v.measuredLengthMm} mm frente a ${v.knownLengthMm} mm indicados (${T.verificationText(v)}). Concuerda: ya puedes pulsar «Confirmar escala».`:`Segunda cota: ${v.measuredLengthMm} mm frente a ${v.knownLengthMm} mm indicados (${T.verificationText(v)}). No concuerda: la escala no se confirma; repite la medida con más zoom o recalibra.`);drawer('panel',true);}catch(e){$('#traceDistanceError').textContent=e.message;}};
+  function openImage(createNew=true,name='Plano desde imagen'){newImage=createNew;newProjectName=name;$('#traceImageFile').click();}
+  async function addImage(file,createNew,name=newProjectName,{transaction}={}){const session=transaction||FloorPlanApp.beginFileImport(),valid=()=>FloorPlanApp.fileImportCurrent(session),serial=++operation,current=project.id,initial=snap();let buffer;try{buffer=await file.arrayBuffer();}catch{throw Error('No se pudo leer la imagen. Vuelve a seleccionarla desde el dispositivo.');}if(!valid())return;const bytes=new Uint8Array(buffer),info=T.imageInfo(bytes,file.type,file.name);const rotation=T.orientationAngle(info);if(rotation===undefined)throw Error('El JPEG tiene orientación EXIF reflejada. Exporta una copia PNG con la orientación aplicada antes de importarlo.');await decode(bytes,info);const sha=await P.digest(bytes);if(!valid()||serial!==operation||current!==project.id||snap()!==initial)return;
+-  const next=createNew?T.blank(name):Core.clone(project);if((next.sourceImages||[]).length>=20)throw Error('Máximo 20 imágenes por proyecto.');if(Number(next.schemaVersion.split('.')[1])<2)next.schemaVersion=info.mediaType==='image/webp'?'1.2.0':'1.1.0';const key=Core.id('img'),im={id:Core.id('img'),mediaType:info.mediaType,widthPx:info.widthPx,heightPx:info.heightPx,bytes:bytes.length,sha256:sha,storage:{kind:'local-browser',ref:key},placement:{originMm:{x:0,y:0},rotationDeg:rotation,mmPerPixel:10},visible:true,opacity:.55};(next.sourceImages||=[]).push(im);Core.validate(next);await I.put([[key,new Blob([bytes],{type:info.mediaType})]]);
++  const next=createNew?T.blank(name):Core.clone(project);if((next.sourceImages||[]).length>=20)throw Error('Máximo 20 imágenes por proyecto.');Core.raiseVersion(next,info.mediaType==='image/webp'?'1.2.0':'1.1.0');const key=Core.id('img'),im={id:Core.id('img'),mediaType:info.mediaType,widthPx:info.widthPx,heightPx:info.heightPx,bytes:bytes.length,sha256:sha,storage:{kind:'local-browser',ref:key},placement:{originMm:{x:0,y:0},rotationDeg:rotation,mmPerPixel:10},visible:true,opacity:.55};(next.sourceImages||=[]).push(im);Core.validate(next);await I.put([[key,new Blob([bytes],{type:info.mediaType})]]);
+   try{if(!valid()||serial!==operation||current!==project.id||snap()!==initial){await I.remove([key]);return;}if(createNew){project=FloorPlanApp.adoptImported(project,next,name,session);undoStack.length=redoStack.length=0;ui.sel=null;editing=null;FloorPlanApp.fileImportCompleted(session,'image');}else{apply(p=>{p.schemaVersion=next.schemaVersion;(p.sourceImages||=[]).push(im);});}selectedImage=im.id;refreshProject();renderAll();fitView();shown=true;render();drawer('panel',true);status('Imagen local preparada. Calibra antes de trazar; medidas orientativas.');window.dispatchEvent(new Event('floorplan-image-imported'));return im;}catch(e){await I.remove([key]);throw e;}
+  }
+  $('#traceImageFile').onchange=async e=>{const file=e.target.files[0];e.target.value='';if(!file)return;try{if(file.size>T.LIMITS.bytes)throw Error('La imagen supera 15 MiB.');await addImage(file,newImage);}catch(err){report(err);}};
 diff --git a/js/wall-geometry-core.js b/js/wall-geometry-core.js
 new file mode 100644
-index 00000000..2a79c994
+index 00000000..06465b12
 --- /dev/null
 +++ b/js/wall-geometry-core.js
 @@ -0,0 +1,281 @@
-+/* OP-07 · Curved and sloped walls: the single geometric core for walls with `curve` or `heightEndMm` (contract 1.13.0).
++/* OP-07 · Curved and sloped walls: the single geometric core for walls with `curve` or `heightEndMm` (FloorPlanProject 2.0).
 +   Promoted unchanged from the SCULPT OP-07 laboratory (labs/sculpt/op-07/wall-geometry-core.js @ f48614f2, 34 tests);
 +   only this header and the global name differ. project-core, quantity-core, the renderer and the DXF exporter call it;
 +   a wall without the two fields never reaches it.
@@ -484,40 +654,15 @@ index 00000000..2a79c994
 +  facetCount,deviationBound,arcLength,trueGross,heightAtParam,minRadius,featuresOf,assertSavable,detectLoss,guardSave};
 + if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanWallGeometry=api;
 +})(globalThis);
-diff --git a/tests/building-project-1-6.test.cjs b/tests/building-project-1-6.test.cjs
-index 4e29f44d..41242bc5 100644
---- a/tests/building-project-1-6.test.cjs
-+++ b/tests/building-project-1-6.test.cjs
-@@ -11,6 +11,6 @@ test('building accepts current FloorPlanProjectV1 1.6.0 levels and still rejects
-  assert.doesNotThrow(()=>B.validate(current));
- 
-  const future=clone(current);
-- future.levels[0].project.schemaVersion='1.13.0';
-- assert.throws(()=>B.validate(future),/unsupported level project version 1\.13\.0/);
-+ future.levels[0].project.schemaVersion='1.14.0';
-+ assert.throws(()=>B.validate(future),/unsupported level project version 1\.14\.0/);
- });
-diff --git a/tests/building.test.cjs b/tests/building.test.cjs
-index 777b1656..fd383404 100644
---- a/tests/building.test.cjs
-+++ b/tests/building.test.cjs
-@@ -47,7 +47,7 @@ test('strict level profile rejects hidden multi-level meaning a 1.x reader would
-   'levelId on a wall':[b=>{b.levels[1].project.walls[0].levelId='lvl_fixture-ground';},/walls\/0\/levelId: unknown field/],
-   'x-levels extension':[b=>{b.levels[1].project.extensions={'x-levels':{floors:2}};},/x-levels: multi-level data is not allowed/],
-   'nested stair key in an extension':[b=>{b.levels[0].project.extensions={'x-meta':{stairs:[]}};},/x-meta\/stairs: multi-level data is not allowed/],
--  'unknown future 1.x version':[b=>{b.levels[0].project.schemaVersion='1.13.0';},/unsupported level project version 1.13.0/],
-+  'unknown future 1.x version':[b=>{b.levels[0].project.schemaVersion='1.14.0';},/unsupported level project version 1.14.0/],
-   'nested building':[b=>{b.levels[1].project={...F.build().building};},/a building cannot be nested/],
-  };
-  for(const [name,[mutate,message]] of Object.entries(cases)){const b=F.build().building;mutate(b);assert.throws(()=>B.validate(b),message,name);}
 diff --git a/tests/op07-s1-contract.test.cjs b/tests/op07-s1-contract.test.cjs
 new file mode 100644
-index 00000000..41ea71d0
+index 00000000..391ca656
 --- /dev/null
 +++ b/tests/op07-s1-contract.test.cjs
-@@ -0,0 +1,77 @@
+@@ -0,0 +1,105 @@
 +'use strict';
-+// OP-07 · S1 Contrato: dos campos opcionales en el muro canónico (curve, heightEndMm) desde 1.13.0, validados por el
++// OP-07 · S1 Contrato: dos campos en el muro canónico (curve, heightEndMm) solo en documentos 2.x (D-OP07-4, opción B),
++// con una autoridad única de versiones; validados por el
 +// núcleo geométrico único; proyectos antiguos idénticos; guardado protegido frente a lectores y escritores antiguos.
 +const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 +const Core=require('../js/project-core.js'),Building=require('../js/building-core.js'),Walls=require('../js/wall-geometry-core.js');
@@ -535,10 +680,10 @@ index 00000000..41ea71d0
 + assert.deepEqual(Core.guardSave(p,Core.clone(p),{writerFeatures:[]}),{ok:true,issues:[]});
 +});
 +
-+test('S1 · contrato 1.13.0: curva y pendiente válidas; antes de 1.13.0 se rechazan',()=>{
++test('S1 · contrato 2.0: curva y pendiente válidas en 2.x; en cualquier 1.x se rechazan',()=>{
 + const {project:c}=F.curved(),{project:s}=F.sloped();Core.validate(c);Core.validate(s);
 + assert.deepEqual(Core.featuresOf(c),['wall.curve']);assert.deepEqual(Core.featuresOf(s),['wall.heightEnd']);
-+ for(const p of [c,s]){const old=F.clone(p);old.schemaVersion='1.12.0';rejects(old,/require project 1\.13\.0/);}
++ for(const p of [c,s])for(const v of ['1.0.0','1.12.0','1.13.0']){const old=F.clone(p);old.schemaVersion=v;rejects(old,/require project 2\.0\.0/);}
 + // Esquema: campos cerrados, sin extras dentro de curve, heightEndMm con el mismo rango que heightMm.
 + // Un 1.x posterior a 1.0.0 conserva campos desconocidos (contrato §3); el modo estricto (edificios) los rechaza.
 + const bad=F.clone(c);bad.walls.find(w=>w.curve).curve.extra=1;assert.throws(()=>Core.validate(bad,{strict:true}),/unknown field/);
@@ -562,8 +707,8 @@ index 00000000..41ea71d0
 + rejects(q,/opening exceeds wall height/);q.openings[0].offsetMm=200;Core.validate(q);
 +});
 +
-+test('S1 · edificios: una planta 1.13.0 con muros curvos se valida en el contenedor estricto',()=>{
-+ assert.ok(Building.PROJECT_VERSIONS.includes('1.13.0'));
++test('S1 · edificios: una planta 2.0.0 con muros curvos se valida en el contenedor estricto',()=>{
++ assert.ok(Building.PROJECT_VERSIONS.includes('2.0.0')&&!Building.PROJECT_VERSIONS.includes('1.13.0'));
 + const {project}=F.curved();Core.validate(project,{strict:true});
 +});
 +
@@ -593,9 +738,36 @@ index 00000000..41ea71d0
 + for(const f of ['index.html','comparar/index.html','evolucion/index.html']){const h=fs.readFileSync(path.join(root,f),'utf8');assert.ok(h.indexOf('wall-geometry-core.js')>0&&h.indexOf('wall-geometry-core.js')<h.indexOf('project-core.js'),f);}
 + assert.equal(Core.WALL_PATH.toleranceMm,1,'tolerancia única propuesta (pendiente de decisión de producto)');
 +});
++
++test('S1 · autoridad única de versiones: comparar y elevar sin bajar nunca y sin convertir un v1 en v2',()=>{
++ const at=Core.versionAtLeast,up=(v,t)=>Core.raiseVersion({schemaVersion:v},t).schemaVersion;
++ assert.equal(at('1.6.0','1.6.0'),true);assert.equal(at('1.5.3','1.6.0'),false);assert.equal(at('2.0.0','1.12.0'),true,'2.0 contiene todo 1.x hasta 1.12');
++ assert.equal(at('2.0.0','1.13.0'),false);assert.equal(at('2.1.0','1.13.0'),true);assert.equal(at('1.12.0','2.0.0'),false,'un 1.x nunca alcanza 2');
++ assert.equal(up('1.3.0','1.6.0'),'1.6.0');assert.equal(up('1.9.0','1.6.0'),'1.9.0','no baja');assert.equal(up('2.0.0','1.6.0'),'2.0.0','un 2.x no vuelve a 1');
++ assert.equal(up('1.12.0','2.0.0'),'2.0.0');assert.equal(up('1.4.0','2.0.0'),'2.0.0');assert.equal(up('2.0.0','1.13.0'),'2.1.0','una mejora 1.13 futura es 2.1');
++ assert.throws(()=>Core.raiseVersion({schemaVersion:'3.0.0'},'1.6.0'),/cannot raise/);assert.equal(Core.parseVersion('3.0.0'),null);
++});
++
++test('S1 · ningún v1 se migra: los escritores existentes mantienen la major 1 y conservan los datos',()=>{
++ const p=Core.clone(Core.initial()),w=p.walls[0];
++ const a=Core.declareWallStructure(p,w.id,'partition','professional'),b=Core.setRoofParapet(p,{enabled:false});
++ for(const x of [a,b]){assert.match(x.schemaVersion,/^1\./);assert.deepEqual(Core.featuresOf(x),[]);}
++ assert.deepEqual(Core.clone(Core.initial()),Core.initial(),'el ejemplo v1 no cambia');
++});
++
++test('S1 · una sola autoridad: ningún módulo eleva ni compara versiones de proyecto por su cuenta',()=>{
++ const files=['index.html',...fs.readdirSync(path.join(root,'js')).filter(f=>f.endsWith('.js')).map(f=>'js/'+f)];
++ // Solo se crean documentos nuevos en una versión fija (plantillas en blanco); building-core gestiona su propia versión.
++ const creators=/blank\(|PROJECT_VERSIONS|building/;
++ for(const f of files){const src=fs.readFileSync(path.join(root,f),'utf8');
++  if(f==='js/building-core.js')continue;
++  for(const line of src.split('\n')){
++   assert.ok(!/schemaVersion\.split\(/.test(line),`${f}: compara la versión fuera de la autoridad: ${line.trim().slice(0,90)}`);
++   if(/schemaVersion\s*=\s*'1\./.test(line))assert.ok(creators.test(line),`${f}: eleva la versión fuera de la autoridad: ${line.trim().slice(0,90)}`);}}
++});
 diff --git a/tests/op07/fixtures.cjs b/tests/op07/fixtures.cjs
 new file mode 100644
-index 00000000..9ace855d
+index 00000000..572342c2
 --- /dev/null
 +++ b/tests/op07/fixtures.cjs
 @@ -0,0 +1,18 @@
@@ -605,7 +777,7 @@ index 00000000..9ace855d
 +const Core=require('../../js/project-core.js');
 +const clone=x=>JSON.parse(JSON.stringify(x));
 +// El muro más largo del ejemplo con un hueco: se curva hacia fuera de la vivienda y se inclina de 2800 a 2400 mm.
-+function base(){const p=Core.clone(Core.initial());p.schemaVersion='1.13.0';return p;}
++function base(){const p=Core.clone(Core.initial());p.schemaVersion='2.0.0';return p;}
 +function longest(p,{withOpening=true}={}){const has=new Set(p.openings.map(o=>o.wallId));
 + return p.walls.filter(w=>w.status!=='demolished'&&(!withOpening||has.has(w.id))).sort((a,b)=>Math.hypot(b.end.x-b.start.x,b.end.y-b.start.y)-Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y))[0];}
 +function curved(p=base(),{bulgeMm=600,heightEndMm,withOpening=true}={}){const w=longest(p,{withOpening});
@@ -617,19 +789,25 @@ index 00000000..9ace855d
 + const p=base();p.walls=[{id:'wal_op07',start,end,thicknessMm,heightMm,structure:'partition',status:'new',...(control?{curve:{control}}:{}),...(heightEndMm!==undefined?{heightEndMm}:{})}];
 + p.openings=[];p.rooms=[];p.objects=[];p.measurements=[];return p;}
 +module.exports={clone,base,longest,curved,sloped,lone};
-diff --git a/tests/r03-cabinet-contract.test.cjs b/tests/r03-cabinet-contract.test.cjs
-index 59378a5c..88a7c0f6 100644
---- a/tests/r03-cabinet-contract.test.cjs
-+++ b/tests/r03-cabinet-contract.test.cjs
-@@ -221,7 +221,7 @@ test('A1 option 1 measured, not adopted: a field inside objects[] is not a contr
-   assert.doesNotThrow(() => Core.validate(q));
-   assert.throws(() => Core.validate(q, { strict: true }), /unknown field/, 'a building level (strict) rejects it');
-   assert.throws(() => Building.validate(Building.create(q)), /unknown field/);
--  assert.ok(!Building.PROJECT_VERSIONS.includes('1.13.0'), 'a new minor also needs the building list of level versions');
-+  assert.ok(!Building.PROJECT_VERSIONS.includes('1.14.0'), 'a new minor also needs the building list of level versions');
-   // The in-memory copy of the schema shows what option 1 would have to change.
-   const schema = structuredClone(Schema);
-   assert.equal(schema.$defs.object.additionalProperties, false);
+diff --git a/tests/project.test.cjs b/tests/project.test.cjs
+index 49b5faa6..16dc08bd 100644
+--- a/tests/project.test.cjs
++++ b/tests/project.test.cjs
+@@ -76,12 +76,12 @@ test('F0 valid example round-trips every field, image reference, asset pointer a
+ test('newer minor retains unknown data; unknown major is rejected',()=>{
+   const p=Core.clone(example);p.schemaVersion='1.1.0';p.futureMetadata={text:'retained'};p.objects[0].futureField=123;
+   assert.deepEqual(Core.prepare(p).project,p);assert.ok(Core.prepare(p).warnings.some(x=>x.includes('Newer')));
+-  p.schemaVersion='2.0.0';assert.throws(()=>Core.prepare(p),/version/);
++  p.schemaVersion='3.0.0';assert.throws(()=>Core.prepare(p),/version/);
+ });
+ const invalidCases=[
+   ['malformed JSON',()=>'{'],
+   ['F0 invalid fixture',()=>invalid],
+-  ['unknown version',p=>{p.schemaVersion='2.0.0';return p;}],
++  ['unknown version',p=>{p.schemaVersion='3.0.0';return p;}],
+   ['wrong units',p=>{p.units='m';return p;}],
+   ['duplicate ID',p=>{p.objects.push(Core.clone(p.objects[0]));return p;}],
+   ['broken wall reference',p=>{p.openings[0].wallId='wal_missing';return p;}],
 -- 
 2.43.0
 

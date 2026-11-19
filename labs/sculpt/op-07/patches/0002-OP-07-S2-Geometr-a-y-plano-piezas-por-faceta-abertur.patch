@@ -1,7 +1,7 @@
-From f916898ebe9351011c8e62fb770068010f13b63e Mon Sep 17 00:00:00 2001
+From 3b2de8756aa19013f4b476ca86a9d88cba1d69d0 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 2/6] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y=20?=
+Subject: [PATCH 2/9] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y=20?=
  =?UTF-8?q?plano:=20piezas=20por=20faceta,=20aberturas=20sobre=20la=20tray?=
  =?UTF-8?q?ectoria=20y=20contorno=20del=20muro?=
 MIME-Version: 1.0
@@ -9,17 +9,17 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
- js/project-core.js              | 53 ++++++++++++++++++++++++++++-----
- tests/op07-s2-geometry.test.cjs | 50 +++++++++++++++++++++++++++++++
+ js/project-core.js              | 55 +++++++++++++++++++++++++++------
+ tests/op07-s2-geometry.test.cjs | 50 ++++++++++++++++++++++++++++++
  tests/op07/fixtures.cjs         | 21 ++++++++-----
- 3 files changed, 108 insertions(+), 16 deletions(-)
+ 3 files changed, 109 insertions(+), 17 deletions(-)
  create mode 100644 tests/op07-s2-geometry.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index 8a20a16b..37a5134a 100644
+index cb7b202b..adbd163f 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -289,33 +289,69 @@
+@@ -314,33 +314,69 @@
      Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status,declared:!!w.structureSource});
      return rect;
    }
@@ -97,10 +97,13 @@ index 8a20a16b..37a5134a 100644
      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
      for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
      const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
-@@ -340,4 +376,5 @@
+@@ -363,6 +399,7 @@
+   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
+   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
    if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
-   // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
-   Object.assign(api,{WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
+-  // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
++  // OP-07 · curved and sloped walls (contract 2.0): the same exported object, extended per cut.
+   Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
 +  Object.assign(api,{wallOutline});   // OP-07 S2
  })(globalThis);
 diff --git a/tests/op07-s2-geometry.test.cjs b/tests/op07-s2-geometry.test.cjs
@@ -160,7 +163,7 @@ index 00000000..675c692c
 + assert.ok(Math.abs(area-Core.wallLength(wall)*wall.thicknessMm)/area<0.01,'área del contorno ≈ trayectoria × grosor');
 +});
 diff --git a/tests/op07/fixtures.cjs b/tests/op07/fixtures.cjs
-index 9ace855d..8eb5f236 100644
+index 572342c2..60d58719 100644
 --- a/tests/op07/fixtures.cjs
 +++ b/tests/op07/fixtures.cjs
 @@ -3,16 +3,21 @@
@@ -170,7 +173,7 @@ index 9ace855d..8eb5f236 100644
 -// El muro más largo del ejemplo con un hueco: se curva hacia fuera de la vivienda y se inclina de 2800 a 2400 mm.
 +// El ejemplo pone cada abertura en su propio tramo de muro; las pruebas curvan el muro MACIZO más largo y, si se pide,
 +// le añaden una ventana y una puerta reales sobre la trayectoria (offset físico, como el contrato).
- function base(){const p=Core.clone(Core.initial());p.schemaVersion='1.13.0';return p;}
+ function base(){const p=Core.clone(Core.initial());p.schemaVersion='2.0.0';return p;}
 -function longest(p,{withOpening=true}={}){const has=new Set(p.openings.map(o=>o.wallId));
 - return p.walls.filter(w=>w.status!=='demolished'&&(!withOpening||has.has(w.id))).sort((a,b)=>Math.hypot(b.end.x-b.start.x,b.end.y-b.start.y)-Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y))[0];}
 -function curved(p=base(),{bulgeMm=600,heightEndMm,withOpening=true}={}){const w=longest(p,{withOpening});

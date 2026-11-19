@@ -1,0 +1,327 @@
+From 8cd8c8823b32ac52d6052d25db3f61253d822650 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 23:23:33 +0000
+Subject: [PATCH 7/9] =?UTF-8?q?OP-07=20S3b=20=C2=B7=20Estancias=20por=20el?=
+ =?UTF-8?q?=20anillo=20can=C3=B3nico:=20suelo,=20per=C3=ADmetro=20y=20cara?=
+ =?UTF-8?q?s=20siguen=20la=20cara=20facetada=20del=20muro=20curvo?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ js/project-core.js                | 49 ++++++++++++++++++-
+ js/quantity-core.js               | 30 +++++++++---
+ js/surface-core.js                |  4 +-
+ js/wall-geometry-core.js          |  2 +-
+ tests/op07-s1-contract.test.cjs   |  6 ++-
+ tests/op07-s2-geometry.test.cjs   |  4 +-
+ tests/op07-s3-quantities.test.cjs | 10 ++--
+ tests/op07-s3b-rooms.test.cjs     | 78 +++++++++++++++++++++++++++++++
+ 8 files changed, 166 insertions(+), 17 deletions(-)
+ create mode 100644 tests/op07-s3b-rooms.test.cjs
+
+diff --git a/js/project-core.js b/js/project-core.js
+index 68e30421..f78790a3 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -356,6 +356,50 @@
+     const top=h=>Math.min(h,yt)*1000;
+     return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
+   }
++  // OP-07 · S3b: the CANONICAL RING of a room. A room is stored as its polygon of wall faces; where an edge lies on the
++  // face of a curved wall (it was drawn against the wall's chord), the ring follows that face instead: the mitred offset
++  // of the wall's facets from the single core (centreline + offsetMiter), cut where the stored edge starts and ends.
++  // Nothing new is stored: the plan, the 3D floor, the floor area, the perimeter and the room's wall faces all derive
++  // from this ring, so they cannot contradict each other. `faces` names, per curved wall and side, the facets the ring
++  // follows and the fraction of each (the partial facets at both ends); `edgeWalls[i]` names the curved wall that ring
++  // edge i belongs to. A room without curved walls keeps its polygon (the same array: v1 figures are byte-identical).
++  const RING_TOLERANCE_MM = 3, RING_PARALLEL_SIN = 1e-3;
++  function roomRing(project, room) {
++    const polygon = room?.polygon, curved = (project?.walls || []).filter(w => w.status !== 'demolished' && Walls.isCurved(w));
++    if (!curved.length || !Array.isArray(polygon) || polygon.length < 3) return {points: polygon, faces: [], edgeWalls: []};
++    const points = [], faces = [], edgeWalls = [];
++    for (let i = 0; i < polygon.length; i++) {
++      const a = polygon[i], b = polygon[(i + 1) % polygon.length];
++      points.push(a);
++      for (const w of curved) {
++        const L = Math.hypot(w.end.x - w.start.x, w.end.y - w.start.y), u = {x:(w.end.x - w.start.x) / L, y:(w.end.y - w.start.y) / L}, n = {x:-u.y, y:u.x};
++        const dot = (p, v) => (p.x - w.start.x) * v.x + (p.y - w.start.y) * v.y, da = dot(a, n), db = dot(b, n), el = Math.hypot(b.x - a.x, b.y - a.y);
++        if (!(el > 0) || Math.abs(da - db) > RING_TOLERANCE_MM * 2 || Math.abs(Math.abs((da + db) / 2) - w.thicknessMm / 2) > RING_TOLERANCE_MM) continue;
++        if (Math.abs(((b.x - a.x) * u.y - (b.y - a.y) * u.x) / el) > RING_PARALLEL_SIN) continue;
++        const side = (da + db) / 2 >= 0 ? 1 : -1, sa = dot(a, u), sb = dot(b, u), lo = Math.max(0, Math.min(sa, sb)), hi = Math.min(L, Math.max(sa, sb));
++        if (hi - lo <= 1) continue;
++        // The face of the curved wall on the room's side, and where each of its points falls along the chord.
++        const face = Walls.offsetMiter(Walls.centreline(w, WALL_PATH), side * w.thicknessMm / 2), s = face.map(p => dot(p, u));
++        const at = x => { for (let j = 0; j + 1 < face.length; j++) if ((s[j] - x) * (s[j + 1] - x) <= 0 && s[j] !== s[j + 1]) { const t = (x - s[j]) / (s[j + 1] - s[j]); return {j, t, p:{x:face[j].x + (face[j + 1].x - face[j].x) * t, y:face[j].y + (face[j + 1].y - face[j].y) * t}}; } return null; };
++        // The face of a curved wall ends where the facets end (it leans in or out at the ends): clamp to it.
++        const A = at(Math.max(lo, Math.min(...s))), B = at(Math.min(hi, Math.max(...s)));
++        if (!A || !B) continue;
++        const facets = [], run = [A.p];
++        for (let j = A.j; j <= B.j; j++) {
++          const from = j === A.j ? A.t : 0, to = j === B.j ? B.t : 1;
++          if (to - from > 1e-9) facets.push({index:j, fraction:to - from});
++          if (j > A.j) run.splice(run.length, 0, face[j]);
++        }
++        run.push(B.p);
++        // Every edge from `a` to `b` now belongs to this wall's face (the short junction pieces at both ends included).
++        for (let k = points.length - 1; k < points.length + run.length; k++) edgeWalls[k] = w.id;
++        points.push(...(sa <= sb ? run : run.reverse()));
++        faces.push({wallId:w.id, side, facets});
++        break;
++      }
++    }
++    return {points, faces, edgeWalls};
++  }
+   // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
+   function wallFootprints(w) {
+     if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
+@@ -389,9 +433,9 @@
+       }
+       if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
+     }
+-    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
++    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:roomRing(p,r).points.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
+     const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
+-    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
++    const points=[...imagePoints,...p.rooms.flatMap(r=>roomRing(p,r).points),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
+     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
+     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
+@@ -463,4 +507,5 @@
+   Object.assign(api,{wallFootprints});   // OP-07 S6
+   Object.assign(api,{pieceMesh});   // OP-07 S4
+   Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
++  Object.assign(api,{roomRing});   // OP-07 S3b
+ })(globalThis);
+diff --git a/js/quantity-core.js b/js/quantity-core.js
+index 68badbfe..47b86719 100644
+--- a/js/quantity-core.js
++++ b/js/quantity-core.js
+@@ -100,20 +100,35 @@
+   const t1=toEdge(start),t2=toEdge(end);
+   return {wallId:w.id,face:avg>=0?1:-1,wallStartMm:start,wallEndMm:end,edgeStartMm:Math.max(0,Math.min(t1,t2)),edgeEndMm:Math.min(el,Math.max(t1,t2)),lengthMm:end-start};
+  }
+- function nearPolygon(w,polygon){const b=Walls.bounds(w),pad=COVERAGE_TOLERANCE_MM;return polygon.some(p=>p.x>=b.minX-pad&&p.x<=b.maxX+pad&&p.y>=b.minY-pad&&p.y<=b.maxY+pad);}
++ function nearPolygon(w,polygon){const b=Walls.bounds(w),pad=Math.max(COVERAGE_TOLERANCE_MM,w.thicknessMm);return polygon.some(p=>p.x>=b.minX-pad&&p.x<=b.maxX+pad&&p.y>=b.minY-pad&&p.y<=b.maxY+pad);}
++ // OP-07 · S3b: a room's face on a curved wall, from the facets its canonical ring follows (Core.roomRing): per facet,
++ // the core's trapezoid and openings (profileSpans) scaled by that face's mitred length (offsetMiter), times the part of
++ // the facet inside the room. The whole face of a wall gives exactly faceAreas() of that side.
++ function curvedRoomFace(project,w,face,scaleStatus){
++  const opts=wallPath(),own=(project.openings||[]).filter(o=>o.wallId===w.id),base={wallId:w.id,face:face.side,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,curved:true};
++  if(Walls.validateWall(w).length)return {...base,lengthM:null,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,status:'unavailable',complete:false,reason:'invalid-wall-geometry'};
++  const invalid=own.filter(o=>Walls.validateOpening(w,o,opts).length),spans=new Map(Walls.profileSpans(w,invalid.length?[]:own,opts).map(s=>[s.index,s]));
++  const f=Walls.offsetMiter(Walls.centreline(w,opts),face.side*w.thicknessMm/2);let len=0,gross=0,net=0;
++  for(const {index,fraction} of face.facets){const s=spans.get(index);if(!s)continue;const k=Math.hypot(f[index+1].x-f[index].x,f[index+1].y-f[index].y)/s.length;
++   len+=fraction*s.length*k;gross+=fraction*k*s.length*(s.startHeight+s.endHeight)/2;net+=fraction*k*s.segments.reduce((a,x)=>a+x.width*((x.topYLeft+x.topYRight)/2-x.bottomY),0);}
++  const ok=!invalid.length;
++  return {...base,lengthM:len/1000,grossAreaM2:gross/1e6,openingAreaM2:ok?(gross-net)/1e6:null,netAreaM2:ok?net/1e6:null,status:scaleStatus,complete:ok,...(ok?{}:{reason:'invalid-opening-geometry'})};
++ }
++ const coreOf=()=>typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
+  function roomWallFaces(project,room){
+-  const polygon=room?.polygon;if(!Array.isArray(polygon)||polygon.length<3||!polygon.every(point))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
++  const ring=room?.polygon?coreOf().roomRing(project,room):{points:room?.polygon,faces:[],edgeWalls:[]},polygon=ring.points;if(!Array.isArray(polygon)||polygon.length<3||!polygon.every(point))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
+   const scaleStatus=measurementStatus(project),edges=[],matches=[];let perimeterMm=0,ambiguous=false;
+   for(let i=0;i<polygon.length;i++){
+    const a=polygon[i],b=polygon[(i+1)%polygon.length],len=distanceMm(a,b);if(!(len>0))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
+    perimeterMm+=len;const edgeMatches=[];
++   if(ring.edgeWalls[i]){edges.push({lengthMm:len,coverageMm:len});continue;}   // on a curved wall's face (S3b)
+    for(const w of project.walls){if(w.status==='demolished'||Walls.isCurved(w))continue;const m=matchEdgeToWall(a,b,w);if(m)edgeMatches.push(m);}
+    const sorted=edgeMatches.slice().sort((x,y)=>x.edgeStartMm-y.edgeStartMm);
+    for(let j=1;j<sorted.length;j++)if(sorted[j].edgeStartMm<sorted[j-1].edgeEndMm-COVERAGE_TOLERANCE_MM&&sorted[j].wallId!==sorted[j-1].wallId)ambiguous=true;
+    const coverage=intervalLength(edgeMatches.map(m=>[m.edgeStartMm,m.edgeEndMm]));edges.push({lengthMm:len,coverageMm:Math.min(len,coverage)});matches.push(...edgeMatches);
+   }
+   if(ambiguous)return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'ambiguous-wall-face-association'};
+-  const matchedBoundaryMm=edges.reduce((s,e)=>s+e.coverageMm,0),missingBoundaryMm=Math.max(0,perimeterMm-matchedBoundaryMm);if(!matches.length)return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:0,missingBoundaryM:perimeterMm/1000,segments:[],reason:'room-wall-association-not-demonstrable'};
++  const matchedBoundaryMm=edges.reduce((s,e)=>s+e.coverageMm,0),missingBoundaryMm=Math.max(0,perimeterMm-matchedBoundaryMm);if(!matches.length&&!ring.faces.length)return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:0,missingBoundaryM:perimeterMm/1000,segments:[],reason:'room-wall-association-not-demonstrable'};
+   const groups=new Map();for(const m of matches){const key=`${m.wallId}:${m.face}`,g=groups.get(key)||{wallId:m.wallId,face:m.face,intervals:[]};g.intervals.push([m.wallStartMm,m.wallEndMm]);groups.set(key,g);}
+   const segments=[];let grossMm2=0,openingMm2=0,openingsComplete=true,wallGeometryComplete=true;
+   for(const g of groups.values()){
+@@ -128,15 +143,18 @@
+    grossMm2+=gross;if(opening===null)openingsComplete=false;else openingMm2+=opening;
+    segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:gross/1e6,openingAreaM2:opening===null?null:opening/1e6,netAreaM2:net===null?null:net/1e6,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:scaleStatus,complete:opening!==null});
+   }
++  for(const face of ring.faces){const s=curvedRoomFace(project,project.walls.find(x=>x.id===face.wallId),face,scaleStatus);segments.push(s);
++   if(s.grossAreaM2===null){wallGeometryComplete=false;openingsComplete=false;continue;}grossMm2+=s.grossAreaM2*1e6;if(s.openingAreaM2===null)openingsComplete=false;else openingMm2+=s.openingAreaM2*1e6;}
+   const associationComplete=missingBoundaryMm<=COVERAGE_TOLERANCE_MM*polygon.length,complete=associationComplete&&wallGeometryComplete&&openingsComplete;
+-  // OP-07: a curved wall is not associated with a room by straight-edge matching yet (S3b); it is named, never guessed.
+-  const pendingCurvedWalls=associationComplete?[]:project.walls.filter(w=>Walls.isCurved(w)&&w.status!=='demolished'&&nearPolygon(w,polygon)).map(w=>w.id);
++  // OP-07: a curved wall near the room that its ring does not follow (the room was not drawn against it) is named, never
++  // guessed or measured by its chord.
++  const followed=new Set(ring.faces.map(f=>f.wallId)),pendingCurvedWalls=associationComplete?[]:project.walls.filter(w=>Walls.isCurved(w)&&w.status!=='demolished'&&!followed.has(w.id)&&nearPolygon(w,polygon)).map(w=>w.id);
+   return {status:scaleStatus,complete,associationComplete,openingsComplete,...(pendingCurvedWalls.length?{pendingCurvedWalls}:{}),grossAreaM2:grossMm2/1e6,openingAreaM2:openingsComplete?openingMm2/1e6:null,netAreaM2:openingsComplete?(grossMm2-openingMm2)/1e6:null,matchedBoundaryM:matchedBoundaryMm/1000,missingBoundaryM:missingBoundaryMm/1000,segments,
+    ...(!associationComplete?{reason:'partial-room-wall-association'}:!wallGeometryComplete?{reason:'invalid-wall-geometry'}:!openingsComplete?{reason:'invalid-opening-geometry'}:{})};
+  }
+  function room(project,roomOrId){
+   assertProject(project);const r=typeof roomOrId==='string'?project.rooms.find(x=>x.id===roomOrId):roomOrId;if(!r)throw new RangeError('FloorPlanQuantities: room not found.');
+-  const surface=Surface.level(project).rooms.find(x=>x.id===r.id),perimeterM=polygonPerimeterM(r.polygon),perimeterStatus=perimeterM===null?'unavailable':measurementStatus(project);
++  const surface=Surface.level(project).rooms.find(x=>x.id===r.id),perimeterM=polygonPerimeterM(coreOf().roomRing(project,r).points),perimeterStatus=perimeterM===null?'unavailable':measurementStatus(project);
+   return {id:r.id,name:r.name??'',family:r.family??null,counted:r.countsTowardArea!==false,floorMaterialId:r.floorMaterialId??null,status:surface?.status??'unavailable',
+    floor:{areaM2:surface?.areaM2??null,status:surface?.status??'unavailable',source:'FloorPlanSurfaceMetrics'},
+    perimeter:{lengthM:perimeterM,status:perimeterStatus,complete:perimeterM!==null,source:'room.polygon',openingDeduction:'none'},
+diff --git a/js/surface-core.js b/js/surface-core.js
+index 9b68409b..381a0d49 100644
+--- a/js/surface-core.js
++++ b/js/surface-core.js
+@@ -30,7 +30,9 @@
+  // One level: a FloorPlanProjectV1 and, inside a building, its level identity.
+  function level(project,{levelId=null,name=null}={}){
+   const scale=statusOfScale(project);
+-  const rooms=(project.rooms||[]).map(r=>{const areaM2=polygonAreaM2(r.polygon);
++  // OP-07 · S3b: the room's canonical ring (its polygon, following the faces of curved walls; the same polygon otherwise).
++  const Core=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore,ring=r=>Core?.roomRing?Core.roomRing(project,r).points:r.polygon;
++  const rooms=(project.rooms||[]).map(r=>{const areaM2=polygonAreaM2(ring(r));
+    return {id:r.id,name:r.name,counted:r.countsTowardArea!==false,areaM2,status:areaM2===null?'unavailable':scale};});
+   return {levelId,name,rooms,...aggregate(rooms)};
+  }
+diff --git a/js/wall-geometry-core.js b/js/wall-geometry-core.js
+index 06465b12..4a95890f 100644
+--- a/js/wall-geometry-core.js
++++ b/js/wall-geometry-core.js
+@@ -275,7 +275,7 @@
+   for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o))issues.push({code:'invalid-opening',openingId:o.id,message});}
+   return {ok:!issues.length,issues};}
+ 
+- const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
++ const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,offsetMiter,polyLength,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
+   facetCount,deviationBound,arcLength,trueGross,heightAtParam,minRadius,featuresOf,assertSavable,detectLoss,guardSave};
+  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanWallGeometry=api;
+ })(globalThis);
+diff --git a/tests/op07-s1-contract.test.cjs b/tests/op07-s1-contract.test.cjs
+index 391ca656..10738f1a 100644
+--- a/tests/op07-s1-contract.test.cjs
++++ b/tests/op07-s1-contract.test.cjs
+@@ -71,8 +71,10 @@ test('S1 · guardado protegido: lector o escritor antiguo, vista degradada y pé
+ test('S1 · el núcleo promovido es el del laboratorio (sin un segundo motor geométrico)',()=>{
+  // Huella del cuerpo del núcleo del laboratorio (labs/sculpt/op-07/wall-geometry-core.js @ f48614f2, 34 pruebas):
+  // el promovido es el mismo código; solo cambian la cabecera y el nombre global.
+- const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module'));
+- assert.equal(require('node:crypto').createHash('sha256').update(body).digest('hex'),'9ba8364840282ceaf2b479c0706d9386a58eb5ed234aa08ccc1ad358cd0791de');
++ const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module')).replace(/\n const api=\{[^\n]*\n[^\n]*\n/,'\n');
++ assert.equal(require('node:crypto').createHash('sha256').update(body).digest('hex'),'14c8a6014bef2bfef48acaa1efc18a92bc46a7e47a7d4ddb190c40de64735926','cuerpo del núcleo idéntico al del laboratorio (sin la línea de exportación)');
++ const Lab=['FACETS','MAX_FACETS','isCurved','pathProfile','splitAt','validateOpening','validateWall','profileSpans','faceAreas','centreline','roomRing','ringArea','interiorArea','slopedPiece','legacyView','facetCount','deviationBound','arcLength','minRadius','featuresOf','guardSave'];
++ for(const k of Lab)assert.ok(k in Walls,'exporta '+k);
+  for(const f of ['index.html','comparar/index.html','evolucion/index.html']){const h=fs.readFileSync(path.join(root,f),'utf8');assert.ok(h.indexOf('wall-geometry-core.js')>0&&h.indexOf('wall-geometry-core.js')<h.indexOf('project-core.js'),f);}
+  assert.equal(Core.WALL_PATH.toleranceMm,1,'tolerancia única propuesta (pendiente de decisión de producto)');
+ });
+diff --git a/tests/op07-s2-geometry.test.cjs b/tests/op07-s2-geometry.test.cjs
+index 675c692c..70c39c05 100644
+--- a/tests/op07-s2-geometry.test.cjs
++++ b/tests/op07-s2-geometry.test.cjs
+@@ -13,7 +13,9 @@ test('S2 · muros rectos: geometría idéntica byte a byte a master (02712b51) e
+ 
+ test('S2 · en un proyecto con un muro curvo, todos los demás muros y aberturas salen igual que sin él',()=>{
+  const plain=F.base(),{project,wall}=F.curved(F.base(),{heightEndMm:2400,withOpening:false});
+- const strip=g=>({walls:g.walls.filter(r=>r.id!==wall.id).map(r=>JSON.stringify(r)),doors:JSON.stringify(g.doors),windows:JSON.stringify(g.windows),rooms:JSON.stringify(g.rooms)});
++ // Las estancias dibujadas contra el muro siguen su cara (S3b); las demás no cambian.
++ const follows=new Set(project.rooms.filter(r=>Core.roomRing(project,r).faces.length).map(r=>r.id));
++ const strip=g=>({walls:g.walls.filter(r=>r.id!==wall.id).map(r=>JSON.stringify(r)),doors:JSON.stringify(g.doors),windows:JSON.stringify(g.windows),rooms:JSON.stringify(g.rooms.filter(r=>!follows.has(r.id)))});
+  assert.deepEqual(strip(Core.geometry(project)),strip(Core.geometry(plain)));
+ });
+ 
+diff --git a/tests/op07-s3-quantities.test.cjs b/tests/op07-s3-quantities.test.cjs
+index 1c0f3b16..206467da 100644
+--- a/tests/op07-s3-quantities.test.cjs
++++ b/tests/op07-s3-quantities.test.cjs
+@@ -42,9 +42,11 @@ test('S3 · presupuesto: la partida de pintura suma ambas caras reales de los mu
+  assert.ok(near(delta,w.wallSurfaceNetAreaM2-before.wallSurfaceNetAreaM2,1e-9),'solo cambia lo que aporta el muro curvo');
+ });
+ 
+-test('S3 · estancias junto a un muro curvo (convivencia con UX-03): incompleto y nombrado, nunca una cifra inventada',()=>{
++test('S3 · estancia cerca de un muro curvo pero NO dibujada contra él (convivencia con UX-03): incompleta y nombrada, nunca por la cuerda',()=>{
+  const {project,wall}=F.curved(F.base(),{withOpening:false});
+- const affected=project.rooms.map(r=>({r,f:Q.room(project,r.id).wallFaces})).filter(x=>x.f.pendingCurvedWalls?.includes(wall.id));
+- assert.ok(affected.length>=1,'las estancias vecinas lo señalan');
+- for(const {f} of affected){assert.equal(f.complete,false);assert.equal(f.associationComplete,false);assert.ok(f.missingBoundaryM>0);assert.ok(f.segments.every(s=>s.wallId!==wall.id),'el muro curvo no se mide por su cuerda');}
++ // El salón se separa 40 mm de la cara del muro: ya no se puede demostrar que lo sigue.
++ for(const v of project.rooms.find(r=>r.id==='rom_living').polygon)if(v.y===10560)v.y=10520;
++ const f=Q.room(project,'rom_living').wallFaces;
++ assert.equal(f.complete,false);assert.equal(f.associationComplete,false);assert.ok(f.missingBoundaryM>0);assert.deepEqual(f.pendingCurvedWalls,[wall.id]);
++ assert.ok(f.segments.every(s=>s.wallId!==wall.id),'el muro curvo no se mide por su cuerda');
+ });
+diff --git a/tests/op07-s3b-rooms.test.cjs b/tests/op07-s3b-rooms.test.cjs
+new file mode 100644
+index 00000000..93476e8e
+--- /dev/null
++++ b/tests/op07-s3b-rooms.test.cjs
+@@ -0,0 +1,78 @@
++'use strict';
++// OP-07 · S3b Estancias por el anillo canónico: el polígono guardado, siguiendo la cara facetada de cada muro curvo
++// contra el que se dibujó. Plano, suelo, perímetro, caras, huecos y presupuesto salen del mismo anillo; nada por la cuerda.
++const test=require('node:test'),assert=require('node:assert/strict');
++const Core=require('../js/project-core.js'),Q=require('../js/quantity-core.js'),S=require('../js/surface-core.js'),D=require('../js/budget-draft-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const near=(a,b,e)=>Math.abs(a-b)<=e,labels=new Proxy({},{get:(t,k)=>String(k)});
++const shoelace=pts=>Math.abs(pts.reduce((s,p,i)=>{const q=pts[(i+1)%pts.length];return s+p.x*q.y-q.x*p.y;},0))/2;
++// Caja de dos estancias separadas por un muro central (t = 200), 6 × 4 m interiores cada una, con muros a ejes.
++function box({control,heightEndMm}={}){const p=F.base(),t=200,W=(id,s,e,extra={})=>({id,start:s,end:e,thicknessMm:t,heightMm:2700,structure:'partition',status:'existing',...extra});
++ p.walls=[W('wal_nor',{x:0,y:0},{x:12300,y:0}),W('wal_est',{x:12300,y:0},{x:12300,y:4200}),W('wal_sur',{x:12300,y:4200},{x:0,y:4200}),W('wal_oes',{x:0,y:4200},{x:0,y:0}),
++  W('wal_mid',{x:6150,y:0},{x:6150,y:4200},{...(control?{curve:{control}}:{}),...(heightEndMm?{heightEndMm}:{})})];
++ const mat=p.materials.find(m=>m.category==='floor').id,R=(id,x0,x1)=>({id,name:id,floorMaterialId:mat,countsTowardArea:true,polygon:[{x:x0,y:100},{x:x1,y:100},{x:x1,y:4100},{x:x0,y:4100}]});
++ p.rooms=[R('rom_aaa',100,6050),R('rom_bbb',6250,12200)];p.openings=[];p.objects=[];p.measurements=[];return p;}
++const area=(p,id)=>Q.room(p,id).floor.areaM2;
++
++test('S3b · sin muros curvos el anillo ES el polígono (mismo objeto): v1 sin ningún cambio',()=>{
++ const p=Core.initial();for(const r of p.rooms)assert.equal(Core.roomRing(p,r).points,r.polygon);
++});
++
++test('S3b · convexo y cóncavo: cada estancia gana o pierde exactamente lo que la cara curva encierra',()=>{
++ const flat=box(),A0=area(flat,'rom_aaa'),B0=area(flat,'rom_bbb');
++ for(const [name,cx] of [['hacia B',6150+2400],['hacia A',6150-2400]]){
++  const p=box({control:{x:cx,y:2100}});Core.validate(p);const A=area(p,'rom_aaa'),B=area(p,'rom_bbb');
++  assert.ok(name==='hacia B'?A>A0&&B<B0:A<A0&&B>B0,name);
++  // Conservación: lo que gana una estancia y pierde la otra difiere solo en la huella extra del muro (más largo).
++  const w=p.walls.find(x=>x.id==='wal_mid'),extra=w.thicknessMm*(Core.wallLength(w)-4200)/1e6;
++  assert.ok(near((A0+B0)-(A+B),extra,0.03),`${name}: A+B pierde la huella extra del muro (${extra.toFixed(3)} m²)`);
++ }
++});
++
++test('S3b · el anillo coincide con interiorArea/roomRing del núcleo (área interior por barrido descontando huellas)',()=>{
++ for(const cx of [6150+2400,6150-2400]){const p=box({control:{x:cx,y:2100}}),byId=id=>p.walls.find(w=>w.id===id);
++  const ringA=Walls.roomRing([byId('wal_nor'),byId('wal_mid'),byId('wal_sur'),byId('wal_oes')].map(w=>w.id==='wal_nor'?{...w,end:{x:6150,y:0}}:w.id==='wal_sur'?{...w,start:{x:6150,y:4200}}:w));
++  const core=Walls.interiorArea(ringA,[],p.walls.filter(w=>w.id!=='wal_est'));
++  assert.ok(near(area(p,'rom_aaa'),core,0.05),`S3b ${area(p,'rom_aaa').toFixed(3)} ≈ núcleo ${core.toFixed(3)} m²`);}
++});
++
++test('S3b · unión con muros rectos: anillo simple, cerrado y unido en las esquinas; perímetro = longitud del anillo',()=>{
++ const p=box({control:{x:6150+2000,y:2100}}),r=p.rooms[0],ring=Core.roomRing(p,r).points;
++ const seg=ring.map((a,i)=>[a,ring[(i+1)%ring.length]]),cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
++ for(let i=0;i<seg.length;i++)for(let j=i+2;j<seg.length;j++){if(i===0&&j===seg.length-1)continue;const [a,b]=seg[i],[c,d]=seg[j];
++  assert.ok(!(cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0),'sin autointersecciones');}
++ const per=seg.reduce((s,[a,b])=>s+Math.hypot(b.x-a.x,b.y-a.y),0);assert.ok(near(Q.room(p,'rom_aaa').perimeter.lengthM*1000,per,1e-6));
++ assert.ok(ring.length>4&&Core.geometry(p).rooms[0].poly.length===ring.length,'el plano dibuja el anillo');
++});
++
++test('S3b · caras de estancia: cubierta entera = cara del muro de ese lado (bruta, huecos y neta), con pendiente',()=>{
++ const p=box({control:{x:6150+2400,y:2100},heightEndMm:2300}),w=p.walls.find(x=>x.id==='wal_mid');
++ p.openings=[{id:'opn_mid',wallId:'wal_mid',kind:'door',offsetMm:1500,widthMm:900,heightMm:2050,sillHeightMm:0}];
++ // Estancia que sobrepasa el muro por los dos extremos: sigue toda su cara.
++ p.rooms[1].polygon=[{x:6000,y:-500},{x:13000,y:-500},{x:13000,y:4700},{x:6000,y:4700}];const wf=Q.wall(p,'wal_mid').faces;
++ // La cara del lado de A es la del lado izquierdo o derecho según la dirección del muro; se compara con la que coincide.
++ const ra=Q.room(p,'rom_aaa').wallFaces.segments.find(s=>s.curved);const side=ra.face>0?wf.left:wf.right;
++ assert.ok(ra&&ra.complete);assert.ok(ra.lengthM<side.lengthM,'A cubre su cara salvo las uniones con los muros norte y sur');
++ assert.ok(near(ra.openingAreaM2,side.openingAreaM2,1e-9),'la puerta entera cae en la cara de A');
++ assert.ok(ra.netAreaM2>0&&near(ra.grossAreaM2-ra.openingAreaM2,ra.netAreaM2,1e-9));
++});
++
++test('S3b · cara completa de un muro: exactamente faceAreas() del núcleo en ese lado',()=>{
++ const p=F.lone({start:{x:0,y:0},end:{x:6000,y:0},control:{x:3000,y:-2000},heightEndMm:2200}),w=p.walls[0];
++ p.openings=[{id:'opn_lon',wallId:w.id,kind:'window',offsetMm:2000,widthMm:1200,heightMm:1000,sillHeightMm:900}];
++ const mat=p.materials.find(m=>m.category==='floor').id;p.rooms=[{id:'rom_lon',name:'L',floorMaterialId:mat,polygon:[{x:-1000,y:120},{x:7000,y:120},{x:7000,y:3000},{x:-1000,y:3000}].reverse()}];
++ const seg=Q.room(p,'rom_lon').wallFaces.segments.find(s=>s.curved),f=Q.wall(p,w.id).faces,side=seg.face>0?f.left:f.right;
++ for(const k of ['lengthM','grossAreaM2','openingAreaM2','netAreaM2'])assert.ok(near(seg[k],side[k],1e-9),k);
++});
++
++test('S3b · presupuesto: el suelo del salón crece lo que encierra la curva; la pintura no cambia por el anillo',()=>{
++ const plain=F.base(),{project}=F.curved(F.base(),{withOpening:false}),L=p=>D.lines(p,{labels});
++ const mat=plain.rooms.find(r=>r.id==='rom_living').floorMaterialId,floor=p=>L(p).find(l=>l.key==='floor:'+mat).quantity.value;
++ const d=floor(project)-floor(plain),dA=area(project,'rom_living')-area(plain,'rom_living');assert.ok(dA>1.5&&near(d,dA,1e-9));
++ assert.equal(S.level(project).rooms.find(r=>r.id==='rom_living').areaM2,area(project,'rom_living'),'una sola cifra de suelo');
++});
++
++test('S3b · UX-03: el salón junto al muro curvo tiene su cara curva medida y ningún muro pendiente',()=>{
++ const {project,wall}=F.curved(F.base(),{heightEndMm:2400}),f=Q.room(project,'rom_living').wallFaces;
++ assert.ok(f.segments.some(s=>s.wallId===wall.id&&s.curved&&s.complete));assert.equal(f.pendingCurvedWalls,undefined);
++ assert.ok(near(f.missingBoundaryM,Q.room(F.base(),'rom_living').wallFaces.missingBoundaryM,1e-9),'solo falta el lado abierto que ya faltaba');
++});
+-- 
+2.43.0
+

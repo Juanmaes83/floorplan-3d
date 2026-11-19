@@ -1,7 +1,7 @@
-From 25ccd46ad5ee7b88440525d284b16068088e538f Mon Sep 17 00:00:00 2001
+From 5fb43dfce0401e8911019d4b71854fdab6294c4b Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
-Subject: [PATCH 6/6] =?UTF-8?q?OP-07=20S5=20=C2=B7=20Edici=C3=B3n:=20curva?=
+Subject: [PATCH 6/9] =?UTF-8?q?OP-07=20S5=20=C2=B7=20Edici=C3=B3n:=20curva?=
  =?UTF-8?q?r,=20inclinar=20y=20dividir=20como=20operaciones=20at=C3=B3mica?=
  =?UTF-8?q?s=20por=20el=20camino=20=C3=BAnico=20del=20editor?=
 MIME-Version: 1.0
@@ -18,13 +18,13 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s5-edit.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index ac372f76..77504ae5 100644
+index 4518bb2a..68e30421 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -385,6 +385,49 @@
+@@ -410,6 +410,49 @@
      validate(next);return next;
    }
-   function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.buildingPlacement!==undefined&&minor<12)next.schemaVersion='1.12.0';else if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
+   function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
 +  // OP-07 · S5: wall edits as pure operations with the editor's own result shape ({ok, project, explanation, intent}), so
 +  // the editor applies them through its single path (FloorPlanApp.applyExtension: validation, undo/redo, save) — no second
 +  // editor. A refused edit returns the same project untouched (atomic) and says why; it never drops an opening.
@@ -33,7 +33,7 @@ index ac372f76..77504ae5 100644
 +    const next = clone(project), w = next.walls.find(x => x.id === wallId);
 +    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
 +    change(w, next);
-+    if (shapedWall(w) && Number(next.schemaVersion.split('.')[1]) < 13) next.schemaVersion = '1.13.0';
++    if (shapedWall(w)) raiseVersion(next, '2.0.0');
 +    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
 +    const gate = guardSave(project, next, {intent});
 +    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code + (i.message ? ': ' + i.message : '')).join('; '), {issues: gate.issues});
@@ -61,17 +61,17 @@ index ac372f76..77504ae5 100644
 +    next.walls.splice(at, 1, r.first, r.second);
 +    const moved = new Map(r.openings.map(o => [o.id, o]));
 +    next.openings = next.openings.map(o => moved.has(o.id) ? (({part, driftMm, ...rest}) => ({...rest, offsetMm: Math.round(rest.offsetMm)}))(moved.get(o.id)) : o);
-+    if ((shapedWall(r.first) || shapedWall(r.second)) && Number(next.schemaVersion.split('.')[1]) < 13) next.schemaVersion = '1.13.0';
++    if (shapedWall(r.first) || shapedWall(r.second)) raiseVersion(next, '2.0.0');
 +    const intent = {split: {[wallId]: [r.first.id, r.second.id]}};
 +    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
 +    const gate = guardSave(project, next, {intent});
 +    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code).join('; '), {issues: gate.issues});
 +    return {ok:true, project:next, intent, maxDriftMm: r.maxDriftMm};
 +  }
-   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
+   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
    const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
    const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
-@@ -394,4 +437,5 @@
+@@ -419,4 +462,5 @@
    Object.assign(api,{wallOutline});   // OP-07 S2
    Object.assign(api,{wallFootprints});   // OP-07 S6
    Object.assign(api,{pieceMesh});   // OP-07 S4
@@ -111,7 +111,7 @@ index 00000000..7993e16a
 +});
 diff --git a/tests/op07-s5-edit.test.cjs b/tests/op07-s5-edit.test.cjs
 new file mode 100644
-index 00000000..4ec62f6a
+index 00000000..b0753bcf
 --- /dev/null
 +++ b/tests/op07-s5-edit.test.cjs
 @@ -0,0 +1,51 @@
@@ -122,10 +122,10 @@ index 00000000..4ec62f6a
 +const Core=require('../js/project-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
 +const L=w=>Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
 +
-+test('S5 · curvar, inclinar y deshacer: el proyecto original no cambia y la versión sube a 1.13.0 solo si hace falta',()=>{
++test('S5 · curvar, inclinar y deshacer: el proyecto original no cambia y la versión sube a 2.0.0 solo si hace falta',()=>{
 + const p=F.base();p.schemaVersion='1.12.0';const before=JSON.stringify(p),w=F.longest(p);
 + const c=Core.setWallCurve(p,w.id,{x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2+900.4});assert.equal(c.ok,true);
-+ assert.equal(c.project.schemaVersion,'1.13.0');assert.deepEqual(c.project.walls.find(x=>x.id===w.id).curve.control.y%1,0,'punto redondeado a mm');
++ assert.equal(c.project.schemaVersion,'2.0.0');assert.deepEqual(c.project.walls.find(x=>x.id===w.id).curve.control.y%1,0,'punto redondeado a mm');
 + assert.equal(JSON.stringify(p),before,'operación pura: el original intacto (deshacer = volver a él)');
 + const s=Core.setWallEndHeight(c.project,w.id,2300);assert.equal(s.ok,true);
 + const flat=Core.setWallCurve(s.project,w.id,null);assert.equal(flat.ok,true);assert.deepEqual(flat.intent,{straightened:[w.id]});

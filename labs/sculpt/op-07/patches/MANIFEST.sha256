@@ -1,6 +1,9 @@
-4d310340c4db0cdbb40bfdb99463883d8b7255245046d8811065b1b67321e61a  S1-contrato.patch
-e29f852fed6afd781bebf39285ec402f52016135b828ceed695efabdefbb07d1  S2-geometria-plano.patch
-8983882932304cfa50cf3b0e722720e0831b9ccc4136aecd333372e91a387e35  S3-mediciones.patch
-f8672c533ac6e686612a0327b794a6f4db094e94cc0a5a71e806431cf0c5329c  S4-3d.patch
-f13ad280537d5f16fa6b49a99987e2874522c939010577542d16690645590da6  S5-edicion.patch
-93500baf1e058d3342ecf82e8743603dcb9bcf478fd801dff37f8dd1ac25586d  S6-dxf.patch
+a88fdcc254622b28c94072fe6088e5cb925207d03133326a884f9de8f54be51d  0001-OP-07-S1-Contrato-2.0-D-OP07-4-opci-n-B-curve-y-heig.patch
+63b535df972242cc7fd11048c00c0ad7dbbc05648646b12bdfb007a759ca8a15  0002-OP-07-S2-Geometr-a-y-plano-piezas-por-faceta-abertur.patch
+75b7d65921b6a4e9bdf559746b3975cdb40330cd5b64db42f1457eef3b67e527  0003-OP-07-S3-Mediciones-caras-independientes-trapecios-m.patch
+de133ea5a8fbfcf431b41d28c79aa1be3b246c94acfb7094b404aa254cebbb8b  0004-OP-07-S6-DXF-piezas-por-faceta-y-una-huella-por-face.patch
+8698f89aae533dc3e5c7e7b5223622d5960d70c8cb1f88db9888a19b66a3d4c8  0005-OP-07-S4-3D-piezas-con-pendiente-del-n-cleo-nico-UV-.patch
+767a8bef52e64e939b60f18adc4b5c24e1ec81ec3dcf154b6b95415e83b4b9e4  0006-OP-07-S5-Edici-n-curvar-inclinar-y-dividir-como-oper.patch
+14736c463cf3abd0c7cb4785cb0dccb87964da90945875e3f5f470e6b4f77aad  0007-OP-07-S3b-Estancias-por-el-anillo-can-nico-suelo-per.patch
+3608f08c761f9e9ff1ed00abb9dca35b20ccd27518f2f8716246bce192a07c71  0008-OP-07-S5b-Edici-n-visual-punto-de-curvatura-en-el-pl.patch
+82fe028d399dade247878844fec13b050e09d5e9e14ae7e260c088034e59c971  0009-OP-07-S4b-3D-estanco-y-liso-juntas-compartidas-por-f.patch

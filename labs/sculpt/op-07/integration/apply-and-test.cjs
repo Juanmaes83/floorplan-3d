@@ -7,7 +7,7 @@
 const {execFileSync}=require('node:child_process'),path=require('node:path'),fs=require('node:fs'),os=require('node:os');
 const args=process.argv.slice(2),base=args.find(a=>!a.startsWith('--'))||'origin/master';
 const repo=execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim(),dir=path.join(__dirname,'..','patches');
-const ORDER=['S1-contrato','S2-geometria-plano','S3-mediciones','S6-dxf','S4-3d','S5-edicion'];
+const ORDER=fs.readdirSync(dir).filter(f=>f.endsWith('.patch')).sort().map(f=>f.replace(/\.patch$/,''));
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'op07-apply-')),run=(cmd,a,o={})=>execFileSync(cmd,a,{cwd:tmp,stdio:'inherit',...o});
 try{
  execFileSync('git',['worktree','add','--detach',tmp,base],{cwd:repo,stdio:'inherit'});

@@ -1,7 +1,7 @@
-From 0b538ba7d6bfdb7683827ef761fe5e219e42954f Mon Sep 17 00:00:00 2001
+From 568387404de20e6d0ac12826e61125b7fc7b99ca Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
-Subject: [PATCH 4/6] =?UTF-8?q?OP-07=20S6=20=C2=B7=20DXF:=20piezas=20por?=
+Subject: [PATCH 4/9] =?UTF-8?q?OP-07=20S6=20=C2=B7=20DXF:=20piezas=20por?=
  =?UTF-8?q?=20faceta=20y=20una=20huella=20por=20faceta=20legible=20por=20p?=
  =?UTF-8?q?lan-intake?=
 MIME-Version: 1.0
@@ -31,10 +31,10 @@ index 884bd103..83f56995 100644
      for (const door of geometry.doors) drawDoor(drawing, door);
      for (const window of geometry.windows) drawOpening(drawing, window, 'WINDOWS', 0.25);
 diff --git a/js/project-core.js b/js/project-core.js
-index 37a5134a..fe89d75d 100644
+index adbd163f..2a7f3c99 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -323,6 +323,11 @@
+@@ -348,6 +348,11 @@
      const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
      return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
    }
@@ -46,9 +46,9 @@ index 37a5134a..fe89d75d 100644
    function geometry(p) {
      const walls=[],windows=[],doors=[],slides=[],voids=[];
      for (const w of p.walls) {
-@@ -377,4 +382,5 @@
-   // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
-   Object.assign(api,{WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
+@@ -402,4 +407,5 @@
+   // OP-07 · curved and sloped walls (contract 2.0): the same exported object, extended per cut.
+   Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
    Object.assign(api,{wallOutline});   // OP-07 S2
 +  Object.assign(api,{wallFootprints});   // OP-07 S6
  })(globalThis);
