@@ -19,7 +19,7 @@
  const css=document.createElement('link');css.rel='stylesheet';css.href='css/project-dossier.css';document.head.append(css);
  let style='technical',urls=[],returnFocus=null;
  function metrics(){const s=window.FloorPlanBuildingUI?.presentationSources?.();return FloorPlanSurfaceMetrics.home(s?{levels:s.levels.map(l=>({id:l.levelId,name:l.name,order:l.order,project:l.project}))}:app.project);}
- function reviewCounts(){try{const s=JSON.parse(localStorage.getItem('rubik-review-v1')||'{}')[app.project.id];return {pending:(s?.received||[]).reduce((n,r)=>n+r.doc.notes.filter(x=>r.decisions[x.id]==='pending').length,0),written:s?.draft?.notes?.length||0};}catch{return {pending:0,written:0};}}
+ function reviewCounts(){try{const s=JSON.parse(app.storage.getItem('rubik-review-v1')||'{}')[app.project.id];return {pending:(s?.received||[]).reduce((n,r)=>n+r.doc.notes.filter(x=>r.decisions[x.id]==='pending').length,0),written:s?.draft?.notes?.length||0};}catch{return {pending:0,written:0};}}
  // What the dossier can contain right now, per section: ready (real content) or missing (said in the document).
  // known.sheet lets a host that already built the sheet preview skip a second build.
  function contents(known={}){

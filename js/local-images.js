@@ -27,7 +27,7 @@
  // Held for the life of the page: tells other tabs' collection that this tab may hold unsaved work.
  function holdTab(locks=globalThis.navigator?.locks){if(ownTab||!locks?.request)return ownTab;ownTab=Math.random().toString(36).slice(2);locks.request(TAB_LOCK+ownTab,()=>new Promise(()=>{})).catch(()=>{});return ownTab;}
  // References held by the persistence authority (docs and conflict records), when this page has it and it exists.
- async function authorityRefs(){const P=globalThis.FloorPlanPersistence;if(!P)return [];
+ async function authorityRefs(){const P=globalThis.FloorPlanPersistence;if(!P||root.FloorPlanPersistenceEditor&&!root.FloorPlanPersistenceEditor.session)return [];
   if(typeof indexedDB.databases==='function'&&!(await indexedDB.databases()).some(d=>d.name===P.DB))return [];
   const db=await P.open();try{return [...await P.imageRefs(db)];}finally{db.close();}}
  function readMarks(storage){try{const v=JSON.parse(storage.getItem(GC_KEY));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}}
