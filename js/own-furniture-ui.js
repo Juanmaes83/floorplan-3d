@@ -34,6 +34,7 @@
   const sha=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));
   return {ok:true,blob,meta:{imageKey:'mue01/'+sha,sha256:sha,mediaType:'image/jpeg',widthPx:sz.w,heightPx:sz.h,bytes:blob.size,addedAt:new Date().toISOString()}};
  }
+ const guarded=fn=>window.FloorPlanImages?.guard?window.FloorPlanImages.guard(fn):fn();
  async function storePhoto(p){try{if(!window.FloorPlanImages)throw Error('sin almacén');await FloorPlanImages.put([[p.meta.imageKey,p.blob]]);return true;}catch{return false;}}
  async function loadPhoto(key){try{const b=await window.FloorPlanImages?.get(key);return b instanceof Blob&&b.size?b:null;}catch{return null;}}
 
@@ -89,12 +90,14 @@
   if(Object.keys(errors).length){showErrors(errors);status.textContent='Revisa los campos marcados.';return;}
   busy=true;createBtn.disabled=true;status.textContent='Creando el mueble…';
   // P0 · H-1: between saving the bytes and committing the project that cites them, the photo is pinned against collection.
-  const release=window.FloorPlanImages?.pin?.(pending.meta.imageKey);let stored,res;
-  try{stored=await storePhoto(pending);
-  res=app.addOwnFurniture({...v.spec,roomId:room.value||undefined},(project,id)=>{
-   const r=C.read(project);if(r.status==='future'||r.status==='invalid')return; // se conserva intacta: el mueble entra igual, sin anotar
-   C.attach(project,id,stored?pending.meta:null);});
-  }finally{release?.();}
+  // P0 · H-1: saving the bytes and committing the project that cites them run under the image collection's lock.
+  let stored,res;
+  await guarded(async()=>{const release=window.FloorPlanImages?.pin?.(pending.meta.imageKey);
+   try{stored=await storePhoto(pending);
+   res=app.addOwnFurniture({...v.spec,roomId:room.value||undefined},(project,id)=>{
+    const r=C.read(project);if(r.status==='future'||r.status==='invalid')return; // se conserva intacta: el mueble entra igual, sin anotar
+    C.attach(project,id,stored?pending.meta:null);});
+   }finally{release?.();}});
   busy=false;createBtn.disabled=false;
   if(!res?.ok){status.textContent=res?.message||'No se ha podido añadir el mueble: no hay sitio libre en esa estancia.';return;}
   dlg.close();setPreview(null);pending=null;
@@ -110,9 +113,10 @@
  let changeFor=null;
  changeInput.onchange=async()=>{const file=changeInput.files?.[0];const id=changeFor;changeInput.value='';if(!file||!id)return;
   const r=await processPhoto(file);if(!r.ok){notify(r.message,6000);return;}
-  const release=window.FloorPlanImages?.pin?.(r.meta.imageKey);let out;
-  try{if(!await storePhoto(r)){notify('No se ha podido guardar la foto en este navegador.',6000);return;}
-  out=app.applyOwnFurniture(p=>({ok:true,project:C.attach(p,id,r.meta)}));}finally{release?.();}notify(out?.ok?'Foto de referencia actualizada.':'No se ha podido cambiar la foto.');};
+  let out,stored=true;
+  await guarded(async()=>{const release=window.FloorPlanImages?.pin?.(r.meta.imageKey);
+   try{if(!(stored=await storePhoto(r)))return;out=app.applyOwnFurniture(p=>({ok:true,project:C.attach(p,id,r.meta)}));}finally{release?.();}});
+  if(!stored){notify('No se ha podido guardar la foto en este navegador.',6000);return;}notify(out?.ok?'Foto de referencia actualizada.':'No se ha podido cambiar la foto.');};
  function panel(container,objectId){
   if(panelUrl){URL.revokeObjectURL(panelUrl);panelUrl=null;}
   const project=app.project,first=C.photoStatus(project,objectId,true);

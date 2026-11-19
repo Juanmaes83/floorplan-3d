@@ -7,7 +7,8 @@ const test=require('node:test'),assert=require('node:assert/strict'),path=requir
 const K=require('./photo-project/kit.cjs');
 const PLAN=path.join(__dirname,'fixtures/manual-plan.png');
 let env,jpg;
-test.before(async()=>{env=await K.start();jpg=await K.synthPhoto(env.browser,{label:'P0 MUE01'});});
+// P0_HOST=f0-2b.localhost ejecuta la suite en el origen donde F0.2b activa su autoridad de persistencia (si está integrada).
+test.before(async()=>{env=await K.start();if(process.env.P0_HOST)env.base=env.base.replace('127.0.0.1',process.env.P0_HOST);jpg=await K.synthPhoto(env.browser,{label:'P0 MUE01'});});
 test.after(async()=>{await env?.stop();});
 
 const photoKeys=page=>page.evaluate(async()=>(await FloorPlanImages.keys()).filter(k=>k.startsWith('mue01/')));
@@ -128,5 +129,38 @@ test('H-1 · sin poder leer la biblioteca guardada no se borra nada',{timeout:12
       const KEY='rubik-sota-project-library-v1',saved=localStorage.getItem(KEY);localStorage.setItem(KEY,'{corrupto');
       await FloorPlanTraceUI.cleanup();const kept=(await I.keys()).includes(key);localStorage.setItem(KEY,saved);return kept;});
     assert.equal(r,true);
+  }finally{await context.close();}
+});
+
+// Auditoría cruzada en #270: la recogida lee las referencias y, antes de borrar, espera (aquí, en locks.query()). En ese
+// intervalo la MISMA pestaña reutiliza una clave mue01/… ya guardada y sin referencia, guarda los bytes y confirma el
+// proyecto. Sin exclusión, la pasada borraba después esa clave citada. La pausa se controla de forma determinista.
+test('H-1 · cruce: reutilizar una foto huérfana mientras una recogida está en curso no la pierde',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.editor(env);
+  try{
+    const key=await addOwnFurniture(page,'Silla P0 cruce A');
+    // La foto queda huérfana: se quita de A y se vacía el historial (nada en la pestaña la cita).
+    await page.evaluate(()=>{const C=RubikOwnFurnitureCore,id=[...C.read(FloorPlanApp.project).items.keys()][0];
+      const r=FloorPlanApp.applyOwnFurniture(p=>({ok:true,project:C.detach(p,id)}));if(!r?.ok)throw Error('detach');undoStack.length=0;redoStack.length=0;});
+    assert.deepEqual(await referenced(page),[]);assert.equal(await blobOk(page,key),true);
+    await page.evaluate(()=>{const L=navigator.locks;window.gate=new Promise(r=>{window.releaseGate=r;});window.queried=false;
+      const locks={request:(...a)=>L.request(...a),query:async()=>{window.queried=true;await window.gate;return L.query();}};
+      window.gcRun=FloorPlanImages.collect({live:async()=>new Set(),storage:localStorage,locks});});
+    await page.waitForFunction(()=>window.queried);
+    // Mientras la pasada espera: «Traer mi mueble» con la MISMA foto (misma clave mue01/<sha256>).
+    const tab=page.locator('#paletteTabFurnish');if(await tab.getAttribute('aria-selected')!=='true')await tab.click();
+    await page.locator('#ownFurnOpen').click();await page.locator('#ownFurn-name').fill('Silla P0 cruce B');
+    await page.locator('#ownFurn-type').selectOption('chair');
+    await page.locator('#ownFurn-photo').setInputFiles({name:'p0-sintetica.jpg',mimeType:'image/jpeg',buffer:jpg});
+    await page.waitForFunction(()=>!/Preparando/.test(document.querySelector('#ownFurnStatus').textContent));
+    for(const [id,val] of [['#ownFurn-widthMm','450'],['#ownFurn-depthMm','450'],['#ownFurn-heightMm','800']])await page.locator(id).fill(val);
+    await page.locator('#ownFurnCreate').click();
+    await page.waitForTimeout(1500); // sin exclusión, la confirmación ocurre aquí, antes de que la pasada continúe
+    await page.evaluate(()=>{window.releaseGate();return window.gcRun;});
+    await page.locator('#ownFurnDialog').waitFor({state:'hidden',timeout:30000});
+    const keys=await referenced(page);assert.deepEqual(keys,[key],'B cita la misma clave');
+    assert.equal(await blobOk(page,key),true,'la foto citada sigue en el almacén');
+    await K.reopen(page);assert.deepEqual(await referenced(page),[key]);assert.equal(await blobOk(page,key),true,'y tras recargar');
+    assert.deepEqual(watch.errors,[]);
   }finally{await context.close();}
 });

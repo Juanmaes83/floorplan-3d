@@ -44,7 +44,18 @@
  const pins=new Map(),holders=new Set();
  function holder(fn){holders.add(fn);return ()=>holders.delete(fn);}
  function pin(key){pins.set(key,(pins.get(key)||0)+1);let done=false;return ()=>{if(done)return;done=true;const n=pins.get(key)-1;if(n>0)pins.set(key,n);else pins.delete(key);};}
- function mentioned(keys,texts){const out=new Set();for(const t of texts){if(typeof t!=='string'||!t)continue;for(const k of keys)if(!out.has(k)&&t.includes(k))out.add(k);}return out;}
+ // Every key that occurs as a substring of some text (same result as `text.includes(key)` for each pair), in ONE pass
+ // per text: longest keys first, every start position tried, then the keys contained in a found key are added.
+ function mentioned(keys,texts){const out=new Set();if(!keys.length)return out;
+  const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),re=new RegExp([...keys].sort((a,b)=>b.length-a.length).map(esc).join('|'),'g');
+  for(const t of texts){if(typeof t!=='string'||!t)continue;re.lastIndex=0;let m;while((m=re.exec(t))){out.add(m[0]);re.lastIndex=m.index+1;}}
+  for(const k of keys)if(!out.has(k))for(const f of out)if(f.length>k.length&&f.includes(k)){out.add(k);break;}
+  return out;}
+ // P0 · H-1 (cross audit on #270): a pass reads the references once and deletes later. Storing bytes for a key and committing
+ // the project that cites it must not interleave with that pass, so writers that reuse or add a key run under the SAME
+ // Web Lock as `collect`: either they finish before the pass reads, or the pass finishes (and may delete) before they
+ // write the bytes again. Without Web Locks a pass never deletes (it only marks), so `fn` runs directly.
+ function guard(fn,locks=globalThis.navigator?.locks){return typeof locks?.request==='function'?lockSafely(locks,GC_LOCK,fn):fn();}
  function storageTexts(storage){const out=[];for(let i=0;i<storage.length;i++){const k=storage.key(i);if(k!==GC_KEY)out.push(storage.getItem(k));}return out;}
  async function authorityTexts(){const P=globalThis.FloorPlanPersistence;if(!P)return [];
   if(typeof indexedDB.databases==='function'&&!(await indexedDB.databases()).some(d=>d.name===P.DB))return [];
@@ -70,6 +81,6 @@
   };
   return canLock?lockSafely(locks,GC_LOCK,run):run();
  }
- const api={get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,pin,holder,mentioned,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
+ const api={get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,pin,holder,guard,mentioned,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanImages=api;
 })(globalThis);
