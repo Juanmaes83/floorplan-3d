@@ -53,3 +53,34 @@ test('OP-04 does not extend a verified calibration to imported geometry',()=>{
  const r=prepare(target,imported());assert.equal(r.canApply,false);
  assert.deepEqual(r.project.scale,target.scale);assert.deepEqual(r.project.sourceImages,target.sourceImages);
 });
+
+test('OP-04 review distinguishes the reference home interior doors from the eligible living-room door that overlaps',()=>{
+ const target=C.initial(),scan=imported(),before=JSON.stringify([target,scan]);
+ const review=A.review(target,scan),movingId=door(scan);
+ assert.equal(review.targetDoors.length,8);
+ assert.equal(review.targetDoors.filter(choice=>choice.reason==='interior').length,7);
+ const fixed=review.targetDoors[5];
+ assert.equal(fixed.reason,null);
+ assert.deepEqual(fixed.center,{x:4700,y:8755});
+ assert.equal(fixed.door.widthMm,890);
+ assert.equal(review.scanDoors[0].door.widthMm,900);
+ const blocked=review.inspect({targetId:fixed.door.id,movingId});
+ assert.equal(blocked.state,'overlap');
+ assert.equal(blocked.view.widthDifferenceMm,10);
+ assert.equal(blocked.conflicts.some(group=>group.fixed.length&&group.moving.length),true);
+ assert.equal('project' in blocked,false);
+ const interior={targetId:review.targetDoors[0].door.id,movingId};
+ assert.equal(review.inspect(interior).state,'ineligible');
+ assert.throws(()=>A.propose(target,scan,interior),/una sola estancia/);
+ assert.throws(()=>A.propose(target,scan,{targetId:fixed.door.id,movingId}),/solapa/);
+ assert.equal(JSON.stringify([target,scan]),before);
+});
+
+test('OP-04 a verified compatible review remains read-only until a new project is explicitly proposed',()=>{
+ const target=imported(),scan=imported(),before=JSON.stringify([target,scan]);
+ const pair={targetId:door(target),movingId:door(scan)},review=A.review(target,scan);
+ const result=review.inspect(pair);
+ assert.equal(result.state,'compatible');assert.equal('project' in result,false);
+ assert.equal(A.propose(target,scan,pair).project.rooms.length,2);
+ assert.equal(JSON.stringify([target,scan]),before);
+});

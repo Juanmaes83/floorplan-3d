@@ -39,6 +39,13 @@
 .mat.on{border-color:var(--select);box-shadow:0 0 0 2px var(--select-soft),0 0 0 3px var(--select)}
 .range input{accent-color:var(--select)}
 
+.perla-notice{--notice-tone:var(--info);--notice-surface:var(--surface-sunken);padding:8px 12px;
+  border:1px solid var(--line);border-inline-start:4px solid var(--notice-tone);border-radius:8px;background:var(--notice-surface)}
+.perla-notice strong{color:var(--notice-tone)}
+.perla-notice p{margin:4px 0 0}
+.perla-notice[data-tone="warning"],.perla-notice[data-tone="confirm"]{--notice-tone:var(--warn);--notice-surface:var(--warn-soft)}
+.perla-notice[data-tone="error"],.perla-notice[data-tone="blocked"]{--notice-tone:var(--danger);--notice-surface:var(--danger-soft)}
+
 /* RoomPlan uses the existing header and a feedback row outside the plan. */
 #roomPlanJoinQuick{order:0;min-height:44px;border:1px solid var(--line-strong);color:var(--action)}
 /* Anchor the visually hidden history descriptions inside the scrolling header. */
@@ -64,9 +71,16 @@ body.presenting #roomPlanJoinResult{display:none}
 #gRooms [data-roomplan-added]{stroke:#9c3e1c;stroke-width:3;stroke-dasharray:7 4;vector-effect:non-scaling-stroke}
 #roomPlanJoinDialog{position:fixed;inset:0;margin:auto;width:min(500px,calc(100vw - 28px));max-height:calc(100dvh - 24px)}
 #roomPlanJoinDialog form{min-width:0}
+#roomPlanJoinDialog form>p{margin-block:8px}
+#roomPlanJoinDialog h3{margin-block:0 8px}
+#roomPlanJoinDialog>#assistantAccess{position:static}
 #roomPlanJoinDialog label{display:block;font-weight:600}
 #roomPlanJoinDialog select{width:100%;min-width:0;min-height:44px;font-size:16px}
-#roomPlanJoinPreview{height:clamp(128px,32dvh,260px)}
+#roomPlanJoinPreview{display:block;max-width:100%;height:clamp(118px,25dvh,240px);background:#f6f3ed;margin-top:8px}
+#roomPlanJoinStatus{margin-block:8px}
+#roomPlanJoinFile{overflow-wrap:anywhere}
+#roomPlanJoinApply:disabled{background:var(--surface-sunken);border:1px dashed var(--line-strong);color:var(--ink-muted)}
+#roomPlanJoinDialog .actions .btn{white-space:normal}
 #roomPlanJoinDialog .actions .btn,#roomPlanJoinDialog summary{min-height:44px}
 #roomPlanJoinDialog summary{align-content:center}
 #roomPlanJoinDialog .actions{display:flex;flex-wrap:wrap;gap:6px}

@@ -728,16 +728,26 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, IFC, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, IFC, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、IFC、RoomPlan 或项目)</span></div>
 <dialog id="uploadPdfMode" aria-labelledby="uploadPdfModeTitle"><form method="dialog"><h3 id="uploadPdfModeTitle" data-en="PDF vector drawing" data-es="PDF con dibujo vectorial">PDF 矢量绘图</h3><p id="uploadPdfModeInfo"></p><label>Escala del plano 1: <input type="number" id="uploadPdfScale" min="1" max="1000" step="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate id="uploadPdfCancel" data-en="Cancel" data-es="Cancelar">取消</button> <button class="btn" value="raster" formnovalidate id="uploadPdfRaster" data-en="Use as image" data-es="Usar como imagen">用作图片</button> <button class="btn primary" value="vector" id="uploadPdfVector" data-en="Import measured walls" data-es="Importar muros con medidas">导入带尺寸的墙体</button></p></form></dialog>
 <dialog id="uploadPdfPage" aria-labelledby="uploadPdfTitle"><form method="dialog"><h3 id="uploadPdfTitle">Elegir página del PDF</h3><p id="uploadPdfInfo"></p><label>Página <input type="number" id="uploadPdfNumber" min="1" value="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate>Cancelar</button> <button class="btn primary" value="ok" id="uploadPdfOk">Usar página</button></p></form></dialog>
-<dialog id="roomPlanJoinDialog" aria-labelledby="roomPlanJoinTitle" aria-describedby="roomPlanJoinFloor">
+<dialog id="roomPlanJoinDialog" aria-labelledby="roomPlanJoinTitle" aria-describedby="roomPlanJoinFloor roomPlanJoinStatus">
   <form method="dialog">
     <h3 id="roomPlanJoinTitle">Unir escaneo RoomPlan</h3>
     <p id="roomPlanJoinFloor"></p>
-    <p><label for="roomPlanFixedDoor">A · Puerta del plano actual</label> <select id="roomPlanFixedDoor" autofocus></select></p>
-    <p><label for="roomPlanMovingDoor">B · La misma puerta en el escaneo</label> <select id="roomPlanMovingDoor"></select></p>
-    <details><summary>Cómo elegir las puertas</summary><p>Selecciona la misma abertura en ambos planos. Comprueba la estancia y el ancho. Puedes cancelar sin cambiar el proyecto.</p></details>
-    <svg id="roomPlanJoinPreview" role="img" aria-label="Vista previa de la planta y del escaneo alineado" width="510" height="260" style="display:block;max-width:100%;background:#f6f3ed" hidden></svg>
-    <p id="roomPlanJoinStatus" role="status"></p>
-    <p class="actions"><button class="btn" value="cancel">Cancelar</button> <button class="btn primary" id="roomPlanJoinApply" value="join" aria-describedby="roomPlanJoinStatus" disabled>Unir a esta planta</button></p>
+    <p id="roomPlanJoinFile"></p>
+    <p><label for="roomPlanFixedDoor">A · Puerta del plano actual</label> <select id="roomPlanFixedDoor" aria-describedby="roomPlanDoorEligibility" autofocus></select></p>
+    <p><label for="roomPlanMovingDoor">B · La misma puerta en el escaneo</label> <select id="roomPlanMovingDoor" aria-describedby="roomPlanDoorEligibility"></select></p>
+    <p id="roomPlanDoorEligibility"></p>
+    <details><summary>Cómo elegir las puertas</summary><p>Selecciona la misma abertura en ambos planos. Una puerta al borde de una sola estancia cerrada puede servir de referencia. La pareja se comprueba por separado.</p><ul id="roomPlanRejectedDoors" hidden></ul></details>
+    <div class="perla-notice" id="roomPlanJoinStatus" role="status" aria-atomic="true">
+      <strong id="roomPlanJoinState"></strong><p id="roomPlanJoinMessage"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn" id="roomPlanTryPair" hidden>Ver pareja compatible</button>
+      <button type="button" class="btn" id="roomPlanReplace">Elegir otro escaneo</button>
+      <button type="button" class="btn" id="roomPlanIndependent" hidden>Importar como proyecto independiente</button>
+    </div>
+    <svg id="roomPlanJoinPreview" role="img" aria-label="Vista previa de la planta y del escaneo alineado" width="510" height="260" hidden></svg>
+    <p id="roomPlanConflictLegend" hidden>Trama: elementos del escaneo en conflicto. Contorno discontinuo: muros o estancias del plano afectados.</p>
+    <p class="actions"><button class="btn" value="cancel">Cancelar</button> <button type="button" class="btn" id="roomPlanJoinApply" aria-describedby="roomPlanJoinStatus" disabled>Unión no disponible</button></p>
   </form>
 </dialog>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>

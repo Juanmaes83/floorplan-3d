@@ -42,8 +42,26 @@ La base documental es premium-ux-design-2026-10-20.md, css/design-system.css, cs
 4. Presupuestos, variantes, Presentación y Evolución: estado confirmado y datos de origen comprensibles, comparar y volver. Evitar autoridad paralela y revisar permisos o privacidad antes de amplificar flujos.
 5. Guardado/recuperación, exportación/entrega y asistente: confirmación honesta, alternativa de recuperación y ayuda local. P0, F0.2c y laboratorios quedan fuera del piloto.
 
+## Mensajes contextuales de Perla
+
+El piloto conserva el diálogo nativo y el estado de RoomPlan. Usa los roles de color de Perla y la clase `.perla-notice` para informar junto a la decisión. El estado anuncia el título y la explicación juntos. Mantener el foco en la selección durante las comprobaciones. Al mostrar una pareja comprobada por petición de la persona, llevar el foco a la acción de unir.
+
+| Mensaje | Cuándo y cómo se comunica | Acción |
+|---|---|---|
+| Información | Estado o resultado esperado, con título y texto breve. Usar `role="status"` si cambia en el momento. | Continuar o revisar el resultado. |
+| Advertencia | La acción sigue disponible y tiene una consecuencia que conviene revisar. | Dar la comprobación concreta y mantener la salida. |
+| Error recuperable | La acción intentada falló. La causa se explica junto al control. Reservar `role="alert"` para cambios urgentes que requieren atención inmediata. | Corregir el dato o reintentar. Conservar lo ya introducido cuando sea seguro. |
+| Bloqueo | La acción no se puede completar. Mostrar causa, localización, estado de los datos y alternativa. El control deshabilitado describe su estado y enlaza la explicación. | Elegir otra opción, cambiar la entrada o salir con los datos preservados. |
+| Confirmación con riesgo | Diálogo nativo con un resumen de qué se modifica, qué se conserva y las consecuencias. El foco inicial favorece la salida segura cuando procede. | Confirmar con un verbo específico o cancelar. |
+
+La forma, la etiqueta y el mensaje deben seguir siendo comprensibles sin color. Usar contraste de texto AA, un foco visible y acciones alcanzables sin gestos de precisión. El toast existente queda para respuestas breves tras una acción, como informar de una cancelación. La explicación de un bloqueo se conserva en su contexto.
+
+OP‑04 muestra elegibilidad de cada puerta y revisa la geometría de cada pareja antes de declararla compatible. Si hay solapamiento, dibuja el intento como vista previa: trama sobre elementos entrantes y contorno discontinuo sobre los elementos existentes afectados. Ambas marcas identifican las piezas implicadas. Se usa la misma regla geométrica para la vista previa y la operación. Se vuelve a validar en la confirmación. La búsqueda puede comprobar otras parejas mientras el diálogo sigue abierto. El escaneo permanece seleccionado si falla su reemplazo. Importarlo como proyecto independiente requiere pulsar la acción explícita y usa el importador existente. El protocolo exige registrar la aceptación funcional de #268 y la UX de #271 por separado.
+
+En cada grupo del roadmap se aplicará primero el patrón a sus bloqueos reproducidos y se verificará el estado de los datos en la recuperación. Registrar el flujo y los IDs ya existentes, documentar la evidencia en la PR y pasar después al siguiente corte priorizado.
+
 ## Presupuesto y aceptación
 
-Cero paquetes, nuevas peticiones, instrumentación de producción, listeners por frame o rAF nuevos. Presupuesto provisional de hasta 16 KiB netos de fuente de ejecución sin comprimir; medir los cinco archivos de producción frente a la base. Medir trabajo de render en reposo y llamadas de dibujo tras fijar la misma escena. #268 aún tiene render continuo; confirmar que el piloto no añade un bucle y que sobre el árbol simulado con OP‑02 se mantiene el reposo sin renders. Las cifras de software no equivalen a hardware real ni a una estimación clínica de latencia.
+Cero paquetes, nuevas peticiones, instrumentación de producción, listeners por frame o rAF nuevos. El piloto visual se midió frente a un objetivo provisional de 16 KiB netos. El corte de elegibilidad, diagnóstico y recuperación amplía el alcance y suma aproximadamente 23 KiB netos en los seis archivos de ejecución respecto a #268. La búsqueda de parejas cede el hilo entre comprobaciones y solo se ejecuta con el diálogo abierto. Medir trabajo de render en reposo y llamadas de dibujo tras fijar la misma escena. #268 aún tiene render continuo; confirmar que el piloto no añade un bucle y que sobre el árbol simulado con OP‑02 se mantiene el reposo sin renders. Las cifras de software no equivalen a hardware real ni a una estimación clínica de latencia.
 
 Criterios: cuatro viewports, acceso y Deshacer alcanzables sin desplazamiento automático, teclado y foco visible, roles y nombres accesibles, contraste de texto, objetivo táctil de 44 px para acciones principales, ausencia de cambios con Cancelar/Escape, caducidad probada de la acción e historial correcto tras recarga. Pasar la regresión dirigida del diálogo y comprobar sincronía del visor. Antes de la aceptación final, completar la prueba de autonomía con una persona nueva y la comprobación de anuncios en un lector de pantalla real. La automatización observa el árbol de accesibilidad, pero no reproduce el anuncio del lector ni sustituye la revisión humana.

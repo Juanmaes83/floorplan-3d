@@ -8,10 +8,11 @@ Toda capacidad debe poder descubrirse, entenderse y operarse con seguridad en or
 
 El agente que desarrolla el corte lleva su evidencia. Codex mantiene la auditoría transversal y la trazabilidad de hallazgos. El propietario decide prioridades, acepta el resultado humano y autoriza las acciones que correspondan. Cada intervención conserva las autorizaciones separadas de desarrollo, integración, despliegue, activación y gasto.
 
-## Dos reglas de oro
+## Tres reglas de oro
 
 1. **Dejar que el diseño explique.** El nombre de la acción, su ubicación, su estado y la respuesta del producto deben mostrar qué va a pasar, qué ocurrió y cómo corregirlo. La ayuda aporta contexto cuando hace falta.
 2. **Si una persona puede usar nuestra plataforma sin ti, será un producto con UI/UX perfecto.** Tratarlo como criterio de autonomía. Entregar la tarea a una persona que no conoce la implementación y observar, sin guiarla, si encuentra la entrada, elige el destino, confirma, comprueba el resultado y se recupera de un error o revierte la acción. Registrar las ayudas que tuvo que pedir y el contexto de la prueba.
+3. **NINGÚN BLOQUEO SIN EXPLICACIÓN NI SOLUCIÓN.** Explicar qué ocurrió, por qué y dónde, con una referencia visual si ayuda a localizarlo. Dar un siguiente paso concreto, una alternativa segura y el estado de los datos. La persona debe poder recuperarse sin conocimientos técnicos ni ayuda externa.
 
 
 ## Método
@@ -36,6 +37,7 @@ Observar descubrimiento, número de acciones, jerarquía, nombres, foco y señal
 - El recorrido y los escenarios alternativos tienen evidencia vinculada al SHA, incluido quién cambió qué y en qué punto puede recuperarse.
 - La herramienta es localizable dentro del flujo de trabajo. Los controles principales tienen nombres claros, orden de foco útil y estados deshabilitados comprensibles. No depender solo del color, un icono o un tooltip.
 - El cambio confirma su resultado y separa los estados pendiente, aplicado, cancelado y fallido. Si admite reversión, la persona puede encontrarla y entender cuándo deja de estar disponible.
+- Cada bloqueo tiene una causa en lenguaje cotidiano, una ubicación cuando procede, una acción de recuperación y una salida segura. Comprobar con datos reales o sintéticos representativos que el mensaje describe el estado de los datos y que la persona puede seguirlo.
 - La interacción se valida en ordenador, tableta y móvil. Cubrir teclado, foco visible, contraste, nombres accesibles, mensajes de estado y tamaño de objetivos. Identificar comprobaciones emuladas y validación física pendiente.
 - Adjuntar evidencia visual antes/después, regresiones funcionales y pruebas dirigidas de escenarios alternativos. Registrar todo pendiente explícitamente. La aceptación final requiere revisión humana, incluso cuando los checks técnicos estén verdes.
 
@@ -49,7 +51,7 @@ Por hallazgo, registrar flujo, evidencia, problema, impacto, severidad, propuest
 
 ## Incorporación propuesta
 
-Tras aprobación, referenciar esta página desde AGENTS.md, CLAUDE.md, el protocolo multiagente y el maestro de continuidad. Los cuatro documentos de entrada enlazan al mismo archivo. El inventario y el roadmap de 17 flujos se conservan en el expediente UX‑FIRST del commit local 1556c87.
+Tras aprobación, referenciar esta página desde AGENTS.md, CLAUDE.md, el protocolo multiagente y el maestro de continuidad. Los cuatro documentos de entrada enlazan al mismo archivo. El inventario y el roadmap de 17 flujos se conservan en el expediente UX‑FIRST del commit local 1556c87. En cada intervención prevista revisar los bloqueos de los IDs que cubre ese flujo y acreditar la tercera regla antes de cerrar el corte. El piloto es OP‑04. El [patrón Perla de mensajes contextuales](../technical/smoothui-perla-op04-ux.md#mensajes-contextuales-de-perla) se adopta progresivamente en los 17 flujos y 98 IDs.
 
 ## Adenda · Uso de donantes
 
@@ -57,4 +59,4 @@ El donante aporta patrones de interacción contrastables. Perla conserva los tok
 
 Probar que los controles estén alcanzables en la primera posición visible, antes de que el test desplace o enfoque por el usuario. Para acciones de reversión, verificar que la propuesta antigua caduca cuando cambia el último paso, el nivel o el proyecto. Repetir en ordenador, tableta y móvil en ambas orientaciones. Medir el visor en reposo y probar interrupción o cancelación. Documentar aparte la revisión humana y con tecnología de asistencia real.
 
-Adoptar una interacción compartida cuando la misma necesidad se haya observado en distintos recorridos. El [registro de SmoothUI y plan Perla](../technical/smoothui-perla-op04-ux.md) organiza su uso por cortes. Las dos reglas de oro y el gate humano se aplican a todo el recorrido, no a cada animación por separado.
+Adoptar una interacción compartida cuando la misma necesidad se haya observado en distintos recorridos. El [registro de SmoothUI y plan Perla](../technical/smoothui-perla-op04-ux.md) organiza su uso por cortes. Las tres reglas de oro y el gate humano se aplican a todo el recorrido, no a cada animación por separado.
