@@ -83,8 +83,19 @@ test('el Asistente no decide estados: los lee del registro (y del del producto s
     assert.doesNotMatch(fs.readFileSync(path.join(root,'js',f),'utf8'),/level:'(planned|developed|integrated|validated|pilot|simulation|production)'/,f);
 });
 
-test('desarrollos pendientes (K4, F0): registrados con PR y SHA y NUNCA anunciados',()=>{
-  assert.deepEqual(R.PENDING.map(p=>[p.id,p.pr]),[['room-type',280],['persistence-v2',279]]);
+test('cortes integrados (K4): nivel «integrated» con PR, SHA, árbol y pruebas en el árbol; NUNCA anunciados',()=>{
+  assert.deepEqual(R.INTEGRATED.map(p=>[p.id,p.pr,p.level]),[['room-type',280,'integrated']]);
+  const shown=new Set([...['general','architecture','real-estate','developer','renovation','interior','construction'].flatMap(a=>R.forAudience(a).map(c=>c.id)),...R.aiServices('general').map(s=>s.id)]);
+  for(const p of R.INTEGRATED){assert.ok(!shown.has(p.id),p.id+' integrado pero sin validación ni Production: no se anuncia');
+    assert.match(p.headSha,/^[0-9a-f]{40}$/);assert.match(p.tree,/^[0-9a-f]{40}$/);assert.equal(p.state,'validation');
+    for(const f of [...p.tests,...p.modules])assert.ok(fs.existsSync(path.join(root,f)),`${p.id}: ${f} está en el árbol integrado`);
+    for(const id of p.matrix)assert.equal(MATRIX[id],'PV',`${p.id}: la fila ${id} de la matriz dice «implementado, pendiente de validación»`);}
+  // La función integrada es la de K4, no otra: la heurística única vive en project-core y la usan sus dos consumidores.
+  const Core=require('../js/project-core.js');for(const f of ['suggestRoomFamily','roomFamilyFromName','roomFamilyFromContents','swapRoomUses'])assert.equal(typeof Core[f],'function',f);
+});
+
+test('desarrollos pendientes (F0): registrados con PR y SHA y NUNCA anunciados',()=>{
+  assert.deepEqual(R.PENDING.map(p=>[p.id,p.pr]),[['persistence-v2',279]]);
   const shown=new Set([...['general','architecture','real-estate','developer','renovation','interior','construction'].flatMap(a=>R.forAudience(a).map(c=>c.id)),...R.aiServices('general').map(s=>s.id)]);
   for(const p of R.PENDING){assert.ok(!shown.has(p.id),p.id+' no aparece en la Home ni en los servicios IA');assert.match(p.headSha,/^[0-9a-f]{40}$/);
     assert.equal(R.levelOf(p.id),'developed');

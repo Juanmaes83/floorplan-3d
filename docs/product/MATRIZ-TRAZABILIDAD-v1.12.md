@@ -52,11 +52,12 @@
 |---|---|
 | `RV` Resuelto y validado | 20 |
 | `RL` Integrado con límites de alcance | 11 |
+| `PV` Implementado, pendiente de validación | 2 |
 | `SU` Objetivo superado por otra solución | 2 |
 | `EX` Experimental o laboratorio | 5 |
 | `SI` Simulado | 6 |
 | `PA` Parcialmente desarrollado | 22 |
-| `IR` Infraestructura reutilizable, sin función específica | 10 |
+| `IR` Infraestructura reutilizable, sin función específica | 8 |
 | `ND` No desarrollado | 18 |
 | `DX` Depende de una decisión externa | 3 |
 | `RD` Redundante o candidato a descarte | 1 |
@@ -201,9 +202,9 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | UX-11 | Acabado de pared desde el 3D | P | `PA` | [I] el acabado de paredes se elige por estancia desde el panel (`index.html:1791`, `FloorPlanSurfaceUI.open`); la selección 3D (`index.html:4138`) devuelve estancia, puerta o mueble, nunca un muro | Sin entrada desde el 3D; sin acabado por pared individual | P4 | CON: selección 3D de muro hacia el diálogo existente; AMP de modelo para la pared de acento | UX-03 | Doble clic en una pared del 3D abre su acabado, con deshacer | C |
 | UX-12 | Amueblar por estancia | N | `EX` | [I] `js/smart-furnishing-core.js`; [T] `tests/smart-furnishing*` | Experimental; biblioteca sin licencias amplias | P7 | VP + AMP con BIB-01 | BIB-01 | Aceptación visual con profesionales | C |
 | UX-13 | Recetas de estilo | P | `EX` | [H] #226 vía #228 | Experimental | P7 | VP | UX-12 | Igual que UX-12 | C |
-| UX-24 | Sugerir el tipo de estancia | N | `IR` | [I] dos heurísticas nombre→tipo duplicadas: `js/nav3d-core.js:13` y `js/presentation-living-drawing-core.js:28`; selector de tipo en el editor (`index.html:1771`) | La heurística existe pero no se ofrece al profesional | P4 | CON: unificar la heurística en `project-core` y ofrecerla como sugerencia aceptable | — | Sugerencia aceptable con deshacer y una sola heurística | B |
+| UX-24 | Sugerir el tipo de estancia | N | `PV` | [I] K4 (#280, `070dbe8a`, árbol `6dddcd91`): heurística única en `js/project-core.js` (`suggestRoomFamily`), usada por NAV3D y Dibujo vivo; sugerencia aceptable en el panel de estancia; [T] `tests/k4-room-type.test.cjs`, `tests/k4-room-type.browser.test.cjs` | Integrado; sin validación independiente ni Production | P4 | VAL: validación independiente y despliegue | — | Sugerencia aceptable con deshacer y una sola heurística | B |
 | UX-10 | Píldora de inspección | P | `IR` | [I] el editor no muestra información bajo el cursor: `pointermove` de `index.html:2083` solo gestiona desplazamiento y pellizco; el mapa de entrega pone el nombre de estancia como tooltip (`js/delivery-client.js:149`) | Los datos existen en los paneles de UX-03 | P4 | UI: mostrar al pasar el cursor los datos que ya calcula el panel | UX-03 | Píldora con los datos del panel, sin seleccionar | C |
-| UX-26 | Intercambiar usos de estancias | N | `IR` | [I] nombre y tipo ya son editables por estancia | Se logra hoy editando dos estancias | P4 | UI pequeño, dentro del corte de UX-24 | UX-24 | Acción única con deshacer | C |
+| UX-26 | Intercambiar usos de estancias | N | `PV` | [I] K4 (#280): `swapRoomUses` en `js/project-core.js` y «Intercambiar uso» en el panel de estancia, un solo paso con deshacer; [T] mismas pruebas que UX-24 | Integrado; solo nombre y tipo, sin validación independiente ni Production | P4 | VAL: validación independiente y despliegue | UX-24 | Acción única con deshacer | C |
 | UX-21 | Panel de sol | P | `PA` | [I] `js/solar-ui.js`, `js/solar-core.js` | — | P5 | UI | — | — | C |
 | LUZ-01 | Iluminación ambiental | N | `IR` | [I] modo noche, hora y grupos de luminarias en `index.html`; puntos de techo en R02-A (`js/r02a-ceiling-*`) | Sin plan de iluminación | P5 | CON: luminarias R02-A + modo noche. Sin lux (K9) | R02-A | Plan visual rotulado «sin cálculo» | D |
 | UX-14 | Move Rooms topológico | N | `ND` | — | — | P7 | INV | Solver | — | D |

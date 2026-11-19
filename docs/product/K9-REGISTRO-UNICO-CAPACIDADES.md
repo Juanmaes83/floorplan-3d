@@ -47,7 +47,7 @@ Render IA sigue siendo el único servicio IA activo, con su código de acceso y 
 
 ## Pendientes de integración
 
-`PENDING` registra los cortes con PR para que nadie los declare en otro sitio. Nunca se anuncian.
+`INTEGRATED` registra los cortes ya integrados sin validación independiente ni Production (hoy K4, `room-type`, con PR #280, SHA `070dbe8a` y árbol `6dddcd91`; filas UX-24 y UX-26 de la matriz en `PV`). `PENDING` registra los cortes con PR aún no integrados (hoy F0, `persistence-v2`). Ninguno de los dos se anuncia.
 
 | Entrada | PR | SHA |
 |---|---|---|

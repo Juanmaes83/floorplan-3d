@@ -217,18 +217,23 @@
  // K9 · Desarrollos pendientes de integración: se registran para que nadie los declare en otro sitio, pero NUNCA se
  // anuncian (ni forAudience ni aiServices los devuelven) hasta que un corte integrado los suba de nivel con su evidencia.
  const P=(id,name,pr,headSha,modules,tests,plan)=>Object.freeze(assertEntry({id,level:'developed',state:homeState('developed'),name,pr,headSha,modules,tests,plan,matrix:MATRIX[id]||[],production:null}));
+ // Cortes ya integrados que todavía no tienen validación independiente ni Production: nivel «integrated», con la PR, el
+ // SHA y el árbol del corte que se integró. Tampoco se anuncian: la Home y los servicios IA solo anuncian Production.
+ const I=(id,name,pr,headSha,tree,modules,tests,plan)=>Object.freeze(assertEntry({id,level:'integrated',state:homeState('integrated'),name,pr,headSha,tree,modules,tests,plan,matrix:MATRIX[id]||[],production:null}));
+ const INTEGRATED=Object.freeze([
+  // K4 (#280) se integra antes que K9 (orden de Codex en #281): su cabeza y su árbol son los que entran en master.
+  I('room-type',['Sugerir el tipo de estancia e intercambiar usos','Suggest the room type and swap uses','建议房间类型并交换用途'],280,'070dbe8af139ac6bd79e5f239d449e2189cdb9ba','6dddcd91ebd15223029e003fa431fef8e0fd8d39',
+   ['js/project-core.js','js/nav3d-core.js','js/presentation-living-drawing-core.js','index.html'],['tests/k4-room-type.test.cjs','tests/k4-room-type.browser.test.cjs'],'K4')]);
  const PENDING=Object.freeze([
-  P('room-type',['Sugerir el tipo de estancia e intercambiar usos','Suggest the room type and swap uses','建议房间类型并交换用途'],280,'070dbe8af139ac6bd79e5f239d449e2189cdb9ba',
-   ['js/project-core.js','js/nav3d-core.js','js/presentation-living-drawing-core.js','index.html'],['tests/k4-room-type.test.cjs','tests/k4-room-type.browser.test.cjs'],'K4'),
   P('persistence-v2',['Persistencia v2 recuperable y avisos de guardado','Recoverable v2 persistence and save notices','可恢复的 v2 持久化与保存提示'],279,'c0092777e2859f5a5d27ed18551762f3b45b0b0d',
    ['js/schema-epoch.js','js/store-v2.js','js/store-v2-backup.js','js/store-v2-migrate.js','js/persistence-status-ui.js','js/persistence-actions.js'],
    ['tests/a0-writer-fence.browser.test.cjs','tests/f0-2c-core.browser.test.cjs','tests/f0-2c-backup.browser.test.cjs','tests/f0-2c-migration.browser.test.cjs','tests/f0-3-status-ui.browser.test.cjs','tests/f0-3-actions.browser.test.cjs'],
    'F0 (cadena #273 → #274 → #276 → #277 → #278 → #279)')]);
  // Todas las entradas con su nivel, para el Asistente y la matriz: una sola consulta, un solo origen.
- const all=()=>[...CAPABILITIES,...AI_SERVICES.filter(s=>!CAPABILITIES.some(c=>c.id===s.id)),...PENDING];
+ const all=()=>[...CAPABILITIES,...AI_SERVICES.filter(s=>!CAPABILITIES.some(c=>c.id===s.id)),...INTEGRATED,...PENDING];
  const levelOf=id=>(all().find(e=>e.id===id)||null)?.level||null;
  for(const e of all())assertEntry(e);
  if(new Set(all().map(e=>e.id)).size!==all().length)throw new RegistryError('registry','identificadores repetidos');
  return {VERIFIED_AT,STATES,CAPABILITIES,ORDER,byId,forAudience,AI_GROUPS,AI_VERIFIED_AT,AI_SERVICES,aiServices,
-  LEVELS,DEPLOYMENT,MATRIX,BLOCKED_BY,PENDING,RegistryError,assertEntry,homeState,aiState,all,levelOf};
+  LEVELS,DEPLOYMENT,MATRIX,BLOCKED_BY,INTEGRATED,PENDING,RegistryError,assertEntry,homeState,aiState,all,levelOf};
 });
