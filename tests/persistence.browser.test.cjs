@@ -294,9 +294,11 @@ const downloadJson=async(page,selector)=>{
  return JSON.parse(await fs.readFile(await download.path(),'utf8'));
 };
 
-test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-tab conflict and recovery',{timeout:120000},async()=>{
+test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-tab conflict and recovery',{timeout:120000},async t=>{
+ const start=Date.now(),phase=label=>t.diagnostic((Date.now()-start)+' ms · '+label);
  // This persistence test does not exercise motion. Firefox retains the hidden menu's CSS animation as running.
  const ctx=await browser.newContext({acceptDownloads:true,reducedMotion:'reduce',viewport:{width:1440,height:900}});try{
+  phase('migrate five seeded keys and open both editors');
   const seed=await open(ctx);
   const originals=await seed.evaluate(()=>{
    const project=FloorPlanCore.initial(),lib=FloorPlanLibrary.load(localStorage,project);
@@ -312,17 +314,21 @@ test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-t
   assert.deepEqual(await seed.evaluate(async()=> (await authority()).docs),originals);
   assert.equal(await a.evaluate(()=>FloorPlanApp.storage.getItem('rubik-sota-assistant-test')),'solo preferencia');
   for(const page of [a,b])await require('./editor-fixture.cjs')(page);
+  phase('acquire the Web Lock and stage revision A');
   await a.evaluate(async()=>{
    await new Promise(resolve=>navigator.locks.request(FloorPlanPersistence.LOCK,()=>new Promise(release=>{window.releaseSave=release;resolve();})));
    FloorPlanApp.applyExtension(project=>{project.name='Revisión A';return {ok:true,project};});
   });
   assert.equal(await a.locator('#persistenceStatus').getAttribute('data-state'),'pending');
+  phase('download project JSON with the transaction blocked');
   const json=await downloadJson(a,'#exportJsonQuick');
   assert.equal(json.name,'Revisión A');
   assert.equal((await seed.evaluate(()=>authority())).revision,1,'the download does not confirm the blocked transaction');
+  phase('release the Web Lock and confirm revision 2');
   await a.evaluate(()=>releaseSave());
   await a.waitForFunction(()=>FloorPlanApp.persistence.session.state().status==='saved');
   assert.equal((await seed.evaluate(()=>authority())).revision,2);
+  phase('detect the newer revision and record the conflict');
   await b.waitForFunction(()=>FloorPlanApp.persistence.session.state().outdated);
   await b.evaluate(async()=>{
    FloorPlanApp.applyExtension(project=>{project.name='Revisión B';return {ok:true,project};});
@@ -331,19 +337,31 @@ test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-t
   assert.equal(await b.locator('#persistenceStatus').getAttribute('data-state'),'conflict');
   const kept=await seed.evaluate(()=>authority());assert.equal(kept.revision,2);
   assert.equal(kept.conflicts.length,1);assert.equal(Object.keys(kept.conflicts[0].docs).length,5);
+  phase('download the emergency copy');
   await b.locator('#persistenceOpen').click();
   const copy=await downloadJson(b,'#persistenceDialog button:text-is("Exportar copia de emergencia")');
   assert.equal(copy.format,'rubik-sota.emergency');
   assert.equal(JSON.parse(copy.docs['rubik-sota-project-library-v1']).entries[0].project.name,'Revisión B');
+  phase('accept recovery and wait for the reloaded editor');
   b.once('dialog',d=>d.accept());
-  await b.locator('#persistenceDialog button:text-is("Recuperar versión")').click();
-  await b.waitForFunction(()=>window.FloorPlanApp?.project.name==='Revisión B'&&FloorPlanApp.persistence.session.state().revision===3);
+  await Promise.all([
+   b.waitForEvent('framenavigated',frame=>frame===b.mainFrame()),
+   b.locator('#persistenceDialog button:text-is("Recuperar versión")').click(),
+  ]);
+  // The outgoing editor already has project B and revision 3. Check the newly bootstrapped document.
+  await b.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'
+   &&window.FloorPlanApp?.project.name==='Revisión B'&&FloorPlanApp.persistence.session.state().revision===3);
+  phase('verify the recovered and superseded revisions in IndexedDB');
   const recovered=await seed.evaluate(()=>authority());
   assert.equal(recovered.conflicts.length,1);
   assert.equal(recovered.conflicts[0].reason,'superseded');
   assert.equal(JSON.parse(recovered.conflicts[0].docs['rubik-sota-project-library-v1']).entries[0].project.name,'Revisión A');
   assert.deepEqual([...a.errors,...b.errors],[]);
- }finally{await ctx.close();}
+ }finally{
+  phase('close browser context');
+  await ctx.close();
+  phase('browser context closed');
+ }
 });
 
 test('editor F0.2b: a confirmed read/write handoff to Evolución survives stale localStorage',{timeout:120000},async()=>{

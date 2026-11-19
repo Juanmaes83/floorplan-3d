@@ -136,7 +136,7 @@
   if(cs.state==='empty')return hero?tx('sin partidas','no items','无项目'):tx('Presupuesto sin partidas','Budget without items','预算无项目');
   if(cs.state==='complete')return tx(`${cs.items} partidas · total con IVA ${eur(cs.gross)}`,`${cs.items} items · total incl. VAT ${eur(cs.gross)}`,`${cs.items} 项 · 含税总额 ${eur(cs.gross)}`);
   return tx(`${cs.items} partidas · total no definitivo · ${cs.issues} aviso(s)`,`${cs.items} items · total not final · ${cs.issues} warning(s)`,`${cs.items} 项 · 总额非最终 · ${cs.issues} 个提示`);}
- function syncDeliverBudgetState(){const workspace=document.getElementById('professionalWorkspace');if(!workspace||workspace.hidden||workspace.dataset.area!=='deliver')return;
+ function syncDeliverBudgetState(workspace){if(workspace.hidden||workspace.dataset.area!=='deliver')return;
   const cs=cardState(),card=workspace.querySelector('.professional-card[data-module="budget"] .professional-state'),cardText=deliverStateText(cs,false);if(card&&card.textContent!==cardText)card.textContent=cardText;
   const ready=workspace.querySelector('.project-context-ready');if(!ready)return;const prefix=tx('Presupuesto','Budget','预算')+': ',replacement=prefix+deliverStateText(cs,true);
   // The state text may itself contain « · » (e.g. «11 partidas · total no definitivo · 1 aviso(s)»): splitting on it and
@@ -145,7 +145,14 @@
   if(last&&ready.textContent.includes(last))ready.textContent=ready.textContent.replace(last,replacement);
   else{const parts=ready.textContent.split(' · '),i=parts.findIndex(part=>part.startsWith(prefix));if(i<0)return;parts[i]=replacement;ready.textContent=parts.join(' · ');}
   ready.dataset.budgetText=replacement;}
- const init=()=>{const workspace=document.getElementById('professionalWorkspace');if(!workspace)return;let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;syncDeliverBudgetState();});};new MutationObserver(schedule).observe(workspace,{childList:true,subtree:true});schedule();};
- if(document.readyState==='loading')addEventListener('DOMContentLoaded',init,{once:true});else init();
- window.FloorPlanEconomicDossierUI={open,close:()=>dialog.close(),section,current,cardState,get variant(){return variant;},get active(){return dialog.open;}};
+ function bindDeliverWorkspace(workspace){
+  let queued=false;
+  const schedule=()=>{
+   if(queued)return;
+   queued=true;queueMicrotask(()=>{queued=false;syncDeliverBudgetState(workspace);});
+  };
+  new MutationObserver(schedule).observe(workspace,{childList:true,subtree:true});
+  schedule();
+ }
+ window.FloorPlanEconomicDossierUI={open,close:()=>dialog.close(),section,current,cardState,bindDeliverWorkspace,get variant(){return variant;},get active(){return dialog.open;}};
 })();

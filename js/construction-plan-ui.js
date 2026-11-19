@@ -6,8 +6,8 @@
    element → tasks. A review is a declaration, never an authenticated approval. */
 (function(){
  'use strict';
- const C=window.FloorPlanConstructionContext,R=window.FloorPlanConstructionRecord,A=window.FloorPlanConstructionProject,S=window.FloorPlanConstructionSchedule,B=window.FloorPlanBudget;
- if(!C||!R||!A||!S||!B)return;
+ const app=window.FloorPlanApp,C=window.FloorPlanConstructionContext,R=window.FloorPlanConstructionRecord,A=window.FloorPlanConstructionProject,S=window.FloorPlanConstructionSchedule,B=window.FloorPlanBudget;
+ if(!app||!C||!R||!A||!S||!B)return;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined&&text!==null)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
  const chip=(text,parent,tone='')=>el('span',text,parent,'cx-chip'+(tone?' '+tone:''));
