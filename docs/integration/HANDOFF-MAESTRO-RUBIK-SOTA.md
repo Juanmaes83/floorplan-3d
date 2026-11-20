@@ -62,6 +62,12 @@ Auditar todas las capacidades desde las primeras versiones hasta el master efect
 
 #290 quedó integrada y disponible en Production. El [cierre en #275](https://github.com/Juanmaes83/floorplan-3d/blob/56d94bbc9056f662a600547471d8e5b3ae983ce7/docs/integration/op10-evidence/entregar-56f099d/README.md) contiene SHA, árbol, padres, CI y la prueba de descarga del frontend. El [registro inicial de auditoría retrospectiva](https://github.com/Juanmaes83/floorplan-3d/blob/56d94bbc9056f662a600547471d8e5b3ae983ce7/docs/integration/AUDITORIA-RETROSPECTIVA-CAPACIDADES.md) vive en #275. Simulator E y D conservan autorizaciones independientes.
 
+## Actualización A8 — OP‑07 v3, traza A0 y Simulator E
+
+La [coordinación en #275](https://github.com/Juanmaes83/floorplan-3d/blob/2d0cc64578f188709b06b26e2c09264fd81fc640/docs/integration/op07-a0-2026-11-20/README.md) contiene las trazas para Claude, las reproducciones de aislamiento de S7 y activación 2.0, y el residual independiente del nombre DXF. A0 y su cadena siguen congeladas. OP‑07 queda pendiente de candidata con gate efectivo y desambiguación de intenciones, validación multinavegador, dispositivos y autorización.
+
+Simulator E se publicó en #291. CI Impact Observation requiere que el HEAD incluya master con OP‑10. El registro conserva un candidato local de idéntico árbol, pendiente de autorización por el nuevo SHA. Mantener E → D y las aceptaciones independientes de C/A.
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 
