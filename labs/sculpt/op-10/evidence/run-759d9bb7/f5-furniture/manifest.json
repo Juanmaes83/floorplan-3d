@@ -1,0 +1,1278 @@
+{
+ "format": "rubik-sota.op10-scene-manifest",
+ "version": "0.1.0-lab",
+ "status": "experimental · observed visual snapshot, not canonical geometry",
+ "source": {
+  "fixture": "f5-furniture.json",
+  "fixtureSha256": "b882cc986f24f294d70517989f83c0de5f9c3ea979dc9fce554bfab9f09395a3",
+  "kind": "project",
+  "projectId": "prj_op10-f5-furniture",
+  "projectUpdatedAt": "2026-11-19T00:00:00.000Z",
+  "projectCanonicalSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849"
+ },
+ "code": {
+  "gitHead": "a9895f8cf924abbff44b2718254c8aa3e1844584",
+  "indexHtmlSha256": "565f31d8ef8ba4da98dad2fa84722b396c16f189b8510d859543bb7a410dcca4",
+  "coreSha256": "a17181e0cca2dd92f6c3cb4d246d154f93008686960fcceb31d46b02c024f649",
+  "harnessSha256": "4617b5b394a0b6b772b699f7eca4553358551edf9a68082e27a427526e9e5982",
+  "three": "r160 (vendor/three)"
+ },
+ "scope": "active-level",
+ "frame": {
+  "source": "RUBIK View3D",
+  "originPlanMm": {
+   "x": 5925,
+   "y": 5280
+  },
+  "mapping": "x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000",
+  "activeLevelId": null,
+  "levelView": "active"
+ },
+ "units": "metres",
+ "axes": "three-y-up",
+ "unitsToMetresApplied": 1,
+ "blenderTransform": "Blender Z-up: (XB, YB, ZB) = (x, -z, y), applied ONCE by the importer; no other conversion",
+ "stats": {
+  "meshes": 1509,
+  "vertices": 446385,
+  "faces": 199752,
+  "instancesExpanded": 172,
+  "roles": {
+   "room": 15,
+   "unlinked": 108,
+   "ceiling": 13,
+   "wall": 292,
+   "opening-leaf": 12,
+   "object": 1069
+  },
+  "entities": 149,
+  "bounds": {
+   "min": [
+    -6.185,
+    -0.000896,
+    -5.52
+   ],
+   "max": [
+    6.185,
+    2.8,
+    5.52
+   ]
+  }
+ },
+ "entities": 149,
+ "excluded": {
+  "decorative-ground": 1,
+  "hidden": 144,
+  "unapplied-proposal": 1,
+  "territorial-context": 1
+ },
+ "skipped": {},
+ "policy": {
+  "excludedUserData": [
+   {
+    "key": "renderExclude",
+    "reason": "excluded-by-marker"
+   },
+   {
+    "key": "presentationOutline",
+    "reason": "presentation-outline"
+   },
+   {
+    "key": "presentationSection",
+    "reason": "presentation-section"
+   },
+   {
+    "key": "sectionCap",
+    "reason": "section-cap"
+   },
+   {
+    "key": "contactRoomId",
+    "reason": "contact-shadow-decal"
+   },
+   {
+    "key": "territorialContext",
+    "reason": "territorial-context"
+   }
+  ],
+  "excludedNames": [
+   {
+    "name": "smart-furnishing-preview",
+    "reason": "unapplied-proposal"
+   }
+  ],
+  "surfacesOnly": "Mesh and InstancedMesh triangles; lines, points and sprites skipped",
+  "supportSlab": false,
+  "textures": "never copied; hasMap declared"
+ },
+ "materials": [
+  {
+   "kind": "surface",
+   "color": "#ffffff",
+   "map": "map",
+   "meshes": 13
+  },
+  {
+   "kind": "surface",
+   "color": "#d8d0c0",
+   "map": "flat",
+   "meshes": 8
+  },
+  {
+   "kind": "surface",
+   "color": "#fbfaf7",
+   "map": "flat",
+   "meshes": 16
+  },
+  {
+   "kind": "surface",
+   "color": "#e9e4da",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#f4f1eb",
+   "map": "flat",
+   "meshes": 210
+  },
+  {
+   "kind": "surface",
+   "color": "#34312d",
+   "map": "flat",
+   "meshes": 42
+  },
+  {
+   "kind": "surface",
+   "color": "#d9cbbb",
+   "map": "flat",
+   "meshes": 40
+  },
+  {
+   "kind": "glass",
+   "color": "#cfe6ef",
+   "map": "flat",
+   "meshes": 20
+  },
+  {
+   "kind": "surface",
+   "color": "#5d6166",
+   "map": "flat",
+   "meshes": 83
+  },
+  {
+   "kind": "surface",
+   "color": "#efe6d8",
+   "map": "flat",
+   "meshes": 30
+  },
+  {
+   "kind": "surface",
+   "color": "#cfd2d4",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#6b4f3a",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#4a3e33",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#8d7258",
+   "map": "flat",
+   "meshes": 16
+  },
+  {
+   "kind": "surface",
+   "color": "#b6c2ca",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#f6f3ee",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#c9d6df",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#a2adb4",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#ffffff",
+   "map": "flat",
+   "meshes": 26
+  },
+  {
+   "kind": "surface",
+   "color": "#abb7be",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#efe7da",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#e8dccb",
+   "map": "flat",
+   "meshes": 7
+  },
+  {
+   "kind": "surface",
+   "color": "#2a2724",
+   "map": "flat",
+   "meshes": 18
+  },
+  {
+   "kind": "surface",
+   "color": "#b9b3a8",
+   "map": "flat",
+   "meshes": 150
+  },
+  {
+   "kind": "surface",
+   "color": "#fbfbf9",
+   "map": "flat",
+   "meshes": 28
+  },
+  {
+   "kind": "surface",
+   "color": "#f6ecd9",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#2f5d62",
+   "map": "flat",
+   "meshes": 5
+  },
+  {
+   "kind": "surface",
+   "color": "#e6dccd",
+   "map": "flat",
+   "meshes": 16
+  },
+  {
+   "kind": "surface",
+   "color": "#5a4a3b",
+   "map": "flat",
+   "meshes": 8
+  },
+  {
+   "kind": "surface",
+   "color": "#4a4641",
+   "map": "flat",
+   "meshes": 5
+  },
+  {
+   "kind": "surface",
+   "color": "#e4dcce",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#e7dccd",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#f0e6d6",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#c5bcaf",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#f4f4f2",
+   "map": "flat",
+   "meshes": 8
+  },
+  {
+   "kind": "surface",
+   "color": "#9aa1a8",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#eef0f2",
+   "map": "flat",
+   "meshes": 36
+  },
+  {
+   "kind": "surface",
+   "color": "#eef1f3",
+   "map": "flat",
+   "meshes": 10
+  },
+  {
+   "kind": "surface",
+   "color": "#fafafa",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#fff7e6",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#dfeaee",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#c8b8a6",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#e9e2d6",
+   "map": "flat",
+   "meshes": 9
+  },
+  {
+   "kind": "surface",
+   "color": "#3c3a37",
+   "map": "flat",
+   "meshes": 12
+  },
+  {
+   "kind": "surface",
+   "color": "#d2c1a4",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#e8d5b5",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#bcac92",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#c6b69a",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#e2cfb4",
+   "map": "flat",
+   "meshes": 20
+  },
+  {
+   "kind": "surface",
+   "color": "#2b2b2d",
+   "map": "flat",
+   "meshes": 32
+  },
+  {
+   "kind": "surface",
+   "color": "#1d1d1f",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#0b0e13",
+   "map": "flat",
+   "meshes": 5
+  },
+  {
+   "kind": "surface",
+   "color": "#e8e8ea",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#d2d2d6",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#3b5566",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#6b543f",
+   "map": "flat",
+   "meshes": 68
+  },
+  {
+   "kind": "surface",
+   "color": "#cfc6b8",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#d2c1a7",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#a8675e",
+   "map": "flat",
+   "meshes": 11
+  },
+  {
+   "kind": "surface",
+   "color": "#9aa58c",
+   "map": "flat",
+   "meshes": 14
+  },
+  {
+   "kind": "surface",
+   "color": "#6f8f8a",
+   "map": "flat",
+   "meshes": 8
+  },
+  {
+   "kind": "surface",
+   "color": "#d9c08c",
+   "map": "flat",
+   "meshes": 14
+  },
+  {
+   "kind": "surface",
+   "color": "#b88a6a",
+   "map": "flat",
+   "meshes": 13
+  },
+  {
+   "kind": "surface",
+   "color": "#c9bfae",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#7d8ea3",
+   "map": "flat",
+   "meshes": 9
+  },
+  {
+   "kind": "surface",
+   "color": "#8f969b",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#e6ebee",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#1b1f22",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#c7cfd5",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#26343d",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#b9c3ca",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#e9e5de",
+   "map": "flat",
+   "meshes": 28
+  },
+  {
+   "kind": "surface",
+   "color": "#dcd7cf",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#efece6",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#c9a27a",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#d6cfc3",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#bfb6a8",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#0d0d0e",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#b9bec3",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#15181b",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#101214",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#2b2b2b",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#6b5a45",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#1a1a1a",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#1c1c1c",
+   "map": "flat",
+   "meshes": 10
+  },
+  {
+   "kind": "surface",
+   "color": "#222222",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#c7ccd1",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#2a2c2e",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#dfe4e8",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#ad9e89",
+   "map": "flat",
+   "meshes": 5
+  },
+  {
+   "kind": "surface",
+   "color": "#b9a58c",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "glass",
+   "color": "#dfeef3",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#6f8f4a",
+   "map": "flat",
+   "meshes": 117
+  },
+  {
+   "kind": "surface",
+   "color": "#e8b4a0",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#f6d27a",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#e7dfd1",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#f3e6d8",
+   "map": "flat",
+   "meshes": 12
+  },
+  {
+   "kind": "surface",
+   "color": "#d6cec1",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#3a3027",
+   "map": "flat",
+   "meshes": 25
+  },
+  {
+   "kind": "surface",
+   "color": "#d9cfbf",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#b8a58c",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d98c4a",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#c9ad4f",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#b5463a",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d9cbb8",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#c7baa8",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#ded2c2",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#18181a",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#2a2a2c",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#3a3a3c",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d8cfc2",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#a9433b",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#adb9a6",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#b7c4b0",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#ece5d8",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#9ca796",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d8cdbd",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d9b36c",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#caaf91",
+   "map": "flat",
+   "meshes": 12
+  },
+  {
+   "kind": "surface",
+   "color": "#d6b99a",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#d9d0c4",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#d9d2c5",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#4a3a2c",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#6b5540",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#5f8f4e",
+   "map": "flat",
+   "meshes": 45
+  },
+  {
+   "kind": "surface",
+   "color": "#79a862",
+   "map": "flat",
+   "meshes": 42
+  },
+  {
+   "kind": "surface",
+   "color": "#c4b4c7",
+   "map": "flat",
+   "meshes": 5
+  },
+  {
+   "kind": "surface",
+   "color": "#d8c7dc",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#aea1b2",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#b8aabc",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#cba076",
+   "map": "flat",
+   "meshes": 1
+  }
+ ],
+ "fallbacks": {
+  "texturesNotCopied": 13,
+  "assetStates": {
+   "ready": 1,
+   "generic": 46
+  },
+  "assetErrors": []
+ },
+ "objects": [
+  {
+   "id": "obj_op10-catalog-bench",
+   "assetState": "ready",
+   "reason": null,
+   "authorizedAssetLoaded": true,
+   "visible": true
+  },
+  {
+   "id": "obj_template-001",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-002",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-003",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-004",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-005",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-006",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-007",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-008",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-009",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-010",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-011",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-012",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-013",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-014",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-015",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-016",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-017",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-018",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-019",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-020",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-021",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-022",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-023",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-024",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-025",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-026",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-027",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-028",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-029",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-030",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-031",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-032",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-033",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-034",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-035",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-036",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-037",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-038",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-039",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-040",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-041",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-042",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-043",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-044",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-045",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  },
+  {
+   "id": "obj_template-046",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  }
+ ],
+ "stability": {
+  "frames": 30,
+  "waitedMs": 16312,
+  "inflightAtCapture": 0,
+  "rule": "no asset request in flight, no asset in state «loading», doors settled, scene signature identical for 30 frames"
+ },
+ "limits": {
+  "meshes": 20000,
+  "vertices": 1500000,
+  "faces": 1500000,
+  "instances": 50000,
+  "bytes": 134217728
+ },
+ "metrics": {
+  "loadMs": 9505,
+  "captureMs": 427.3,
+  "serializeMs": 165.3,
+  "sceneBytes": 15811927,
+  "navigationBefore": {
+   "medianMs": 547,
+   "p95Ms": 628.8
+  },
+  "navigationAfter": {
+   "medianMs": 541.8,
+   "p95Ms": 601.5
+  },
+  "captureBlocksMainThreadMs": 592.6,
+  "viewport": {
+   "width": 1280,
+   "height": 800
+  }
+ },
+ "invariants": {
+  "projectUnchanged": true,
+  "storageUnchanged": true,
+  "externalRequests": 0,
+  "pageErrors": 0
+ },
+ "outputs": {
+  "scene.json": {
+   "bytes": 15811927,
+   "sha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171"
+  }
+ }
+}

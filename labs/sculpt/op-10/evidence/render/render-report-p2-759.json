@@ -1,0 +1,74 @@
+{
+ "phase": 2,
+ "blender": "5.2.1 LTS",
+ "renderer": "Cycles CPU, 16 samples, denoise, 640x400, AgX",
+ "input": {
+  "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171",
+  "projectId": "prj_op10-f5-furniture",
+  "materials": "observed"
+ },
+ "derived": [
+  "world: procedural sky MULTIPLE_SCATTERING, sun 38\u00b0 elevation, 135\u00b0 azimuth (derived)",
+  "sun lamp 4.0 (derived; matches the sky direction)",
+  "room fill: one ceiling area light per room (13), energy 20\u00b7\u221aarea W (derived)",
+  "exposure -0.4 EV (derived)",
+  "textured floors coloured from their project material (13 meshes; textures never copied)"
+ ],
+ "views": [
+  {
+   "view": "axon",
+   "world": "studio grey for the axonometry (derived)",
+   "camera": "orthographic axonometry",
+   "ceilings": "hidden in this view (declared)",
+   "seconds": 3.82,
+   "png": {
+    "bytes": 326868,
+    "sha256": "0c87c49ab0aa762729b44c6e8fd23509cef44b7e12693455db9c50f9151ed252"
+   }
+  },
+  {
+   "view": "rom_living",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (9452, 9968)",
+   "targetRoomPresence": 0.644,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.644,
+   "twoPoint": false,
+   "seconds": 8.46,
+   "png": {
+    "bytes": 323529,
+    "sha256": "5d266896a552a53c3823387774fc84e2584edf422001525a82d01c83bb179b6c"
+   }
+  },
+  {
+   "view": "rom_kitchen",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (1853, 6575)",
+   "targetRoomPresence": 1.0,
+   "nearSurfaceFraction": 0.0,
+   "score": 1.0,
+   "twoPoint": false,
+   "seconds": 9.09,
+   "png": {
+    "bytes": 286659,
+    "sha256": "580ca5dbc01198363508b7b3af5930a03e5fcc5f05c51fae1cc1574a71086695"
+   }
+  },
+  {
+   "view": "rom_master",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (7150, 506)",
+   "targetRoomPresence": 0.722,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.722,
+   "twoPoint": false,
+   "seconds": 8.13,
+   "png": {
+    "bytes": 299113,
+    "sha256": "7835b88c6a143236cb6af6c4f86f7602f4d10ba8ecd72aabcdc6303793a05c84"
+   }
+  }
+ ],
+ "peakRssBytes": 1158434816,
+ "rendererScriptSha256": "47d4bed02cc007bfba7c1525ecab88d61e33f1864cae2e1e4ee17bd93c2326f4",
+ "reviewBlend": {
+  "bytes": 2393015
+ }
+}

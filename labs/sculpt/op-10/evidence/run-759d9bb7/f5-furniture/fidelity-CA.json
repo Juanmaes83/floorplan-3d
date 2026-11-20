@@ -1,0 +1,989 @@
+{
+ "format": "rubik-sota.op10-fidelity",
+ "version": "0.1.0-lab",
+ "tolerancesMm": {
+  "exact": 1,
+  "envelope": 2,
+  "area": 0.005
+ },
+ "origin": {
+  "x": 5925,
+  "y": 5280
+ },
+ "checks": 745,
+ "contractChecks": 601,
+ "failed": 0,
+ "failures": [],
+ "visualDifferences": 35,
+ "visualByType": {
+  "bed · within-width-envelope-mm": {
+   "n": 3,
+   "maxMm": 50
+  },
+  "nightstand · within-depth-envelope-mm": {
+   "n": 2,
+   "maxMm": 31
+  },
+  "wardrobe · within-depth-envelope-mm": {
+   "n": 3,
+   "maxMm": 31
+  },
+  "baycushion · base-elevation-mm": {
+   "n": 2,
+   "maxMm": 450
+  },
+  "shower · within-width-envelope-mm": {
+   "n": 2,
+   "maxMm": 10
+  },
+  "shower · within-depth-envelope-mm": {
+   "n": 2,
+   "maxMm": 10
+  },
+  "vanity · base-elevation-mm": {
+   "n": 3,
+   "maxMm": 330
+  },
+  "washer · within-depth-envelope-mm": {
+   "n": 1,
+   "maxMm": 53.575
+  },
+  "counter · within-width-envelope-mm": {
+   "n": 2,
+   "maxMm": 10
+  },
+  "counter · within-depth-envelope-mm": {
+   "n": 2,
+   "maxMm": 11
+  },
+  "stove · within-depth-envelope-mm": {
+   "n": 1,
+   "maxMm": 53.5
+  },
+  "stove · base-elevation-mm": {
+   "n": 1,
+   "maxMm": 862
+  },
+  "ksink · base-elevation-mm": {
+   "n": 1,
+   "maxMm": 862
+  },
+  "fridge · within-depth-envelope-mm": {
+   "n": 1,
+   "maxMm": 26
+  },
+  "cabinet · within-width-envelope-mm": {
+   "n": 1,
+   "maxMm": 20
+  },
+  "cabinet · within-depth-envelope-mm": {
+   "n": 1,
+   "maxMm": 36
+  },
+  "shoecab · within-width-envelope-mm": {
+   "n": 1,
+   "maxMm": 10
+  },
+  "shoecab · base-elevation-mm": {
+   "n": 1,
+   "maxMm": 150
+  },
+  "plant · within-width-envelope-mm": {
+   "n": 3,
+   "maxMm": 26.342
+  },
+  "plant · within-depth-envelope-mm": {
+   "n": 2,
+   "maxMm": 56.493
+  }
+ },
+ "byKind": {
+  "contract · wall/thickness-mm": {
+   "n": 70,
+   "pass": 70,
+   "maxDeviation": 0
+  },
+  "contract · wall/axis-centred-mm": {
+   "n": 70,
+   "pass": 70,
+   "maxDeviation": 0
+  },
+  "contract · wall/height-mm": {
+   "n": 70,
+   "pass": 70,
+   "maxDeviation": 0
+  },
+  "contract · wall/base-mm": {
+   "n": 70,
+   "pass": 70,
+   "maxDeviation": 0
+  },
+  "contract · wall/length-mm": {
+   "n": 70,
+   "pass": 70,
+   "maxDeviation": 0
+  },
+  "contract · wall/start-overhang-mm": {
+   "n": 70,
+   "pass": 70,
+   "maxDeviation": 0
+  },
+  "contract · room/floor-area-relative": {
+   "n": 13,
+   "pass": 13,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minX-mm": {
+   "n": 13,
+   "pass": 13,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxX-mm": {
+   "n": 13,
+   "pass": 13,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minZ-mm": {
+   "n": 13,
+   "pass": 13,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxZ-mm": {
+   "n": 13,
+   "pass": 13,
+   "maxDeviation": 0
+  },
+  "visual · room/raised-floor-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 450
+  },
+  "contract · window/void-through-wall": {
+   "n": 12,
+   "pass": 12,
+   "maxDeviation": 0
+  },
+  "contract · door/void-through-wall": {
+   "n": 6,
+   "pass": 6,
+   "maxDeviation": 0
+  },
+  "contract · sliding-door/void-through-wall": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · opening/void-through-wall": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "visual · object/within-width-envelope-mm": {
+   "n": 47,
+   "pass": 35,
+   "maxDeviation": 50
+  },
+  "visual · object/within-depth-envelope-mm": {
+   "n": 47,
+   "pass": 32,
+   "maxDeviation": 56.493
+  },
+  "contract · object/centre-offset-x-mm": {
+   "n": 47,
+   "pass": 47,
+   "maxDeviation": 12.074
+  },
+  "contract · object/centre-offset-z-mm": {
+   "n": 47,
+   "pass": 47,
+   "maxDeviation": 29.131
+  },
+  "visual · object/base-elevation-mm": {
+   "n": 47,
+   "pass": 39,
+   "maxDeviation": 862
+  },
+  "visual · object/within-height-envelope-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  }
+ },
+ "associations": [
+  {
+   "mesh": "unlinked:none:296",
+   "opening": "opn_window-0",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:297",
+   "opening": "opn_window-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:298",
+   "opening": "opn_window-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:299",
+   "opening": "opn_window-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:300",
+   "opening": "opn_window-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:303",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:304",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:305",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:306",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:307",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:308",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:309",
+   "opening": "opn_window-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:312",
+   "opening": "opn_window-2",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:313",
+   "opening": "opn_window-2",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:314",
+   "opening": "opn_window-2",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:315",
+   "opening": "opn_window-2",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:316",
+   "opening": "opn_window-2",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:317",
+   "opening": "opn_window-2",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:330",
+   "opening": "opn_window-3",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:331",
+   "opening": "opn_window-3",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:332",
+   "opening": "opn_window-3",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:333",
+   "opening": "opn_window-3",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:334",
+   "opening": "opn_window-3",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:337",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:338",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:339",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:340",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:341",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:342",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:346",
+   "opening": "opn_window-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:345",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:347",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:348",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:349",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:350",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:351",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:352",
+   "opening": "opn_window-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:355",
+   "opening": "opn_window-6",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:356",
+   "opening": "opn_window-6",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:357",
+   "opening": "opn_window-6",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:358",
+   "opening": "opn_window-6",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:359",
+   "opening": "opn_window-6",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:363",
+   "opening": "opn_window-6",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:362",
+   "opening": "opn_window-7",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:364",
+   "opening": "opn_window-7",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:365",
+   "opening": "opn_window-7",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:366",
+   "opening": "opn_window-7",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:367",
+   "opening": "opn_window-7",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:372",
+   "opening": "opn_window-7",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:370",
+   "opening": "opn_window-8",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:371",
+   "opening": "opn_window-8",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:373",
+   "opening": "opn_window-8",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:374",
+   "opening": "opn_window-8",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:377",
+   "opening": "opn_window-9",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:378",
+   "opening": "opn_window-9",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:379",
+   "opening": "opn_window-9",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:380",
+   "opening": "opn_window-9",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:381",
+   "opening": "opn_window-9",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:385",
+   "opening": "opn_window-9",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:384",
+   "opening": "opn_window-10",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:386",
+   "opening": "opn_window-10",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:387",
+   "opening": "opn_window-10",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:388",
+   "opening": "opn_window-10",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:389",
+   "opening": "opn_window-10",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:394",
+   "opening": "opn_window-10",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:392",
+   "opening": "opn_window-11",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:393",
+   "opening": "opn_window-11",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:395",
+   "opening": "opn_window-11",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:396",
+   "opening": "opn_window-11",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:11",
+   "opening": "opn_door-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:12",
+   "opening": "opn_door-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:13",
+   "opening": "opn_door-2",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:14",
+   "opening": "opn_door-3",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:15",
+   "opening": "opn_door-4",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:16",
+   "opening": "opn_door-5",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:17",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:409",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:410",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:411",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:412",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:413",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:414",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:415",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:416",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:417",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:418",
+   "opening": "opn_slide-0",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:18",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:419",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:420",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:421",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:422",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:423",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:424",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:425",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:426",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:427",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:428",
+   "opening": "opn_slide-1",
+   "method": "inferred-spatial",
+   "material": "surface"
+  }
+ ],
+ "unlinked": {
+  "total": 108,
+  "associatedToOpenings": 97,
+  "stillUnlinked": [
+   {
+    "name": "unlinked:none:1498",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      2.29,
+      2.778,
+      -3.08
+     ],
+     "max": [
+      2.73,
+      2.798,
+      -2.64
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1499",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -0.165,
+      2.778,
+      -3.72
+     ],
+     "max": [
+      0.275,
+      2.798,
+      -3.28
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1500",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -2.765,
+      2.778,
+      -3.17
+     ],
+     "max": [
+      -2.325,
+      2.798,
+      -2.73
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1501",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -2.385,
+      2.778,
+      -0.88
+     ],
+     "max": [
+      -1.945,
+      2.798,
+      -0.44
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1502",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -4.895,
+      2.778,
+      -1.17
+     ],
+     "max": [
+      -4.455,
+      2.798,
+      -0.73
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1503",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      2.705,
+      2.778,
+      -0.65
+     ],
+     "max": [
+      3.145,
+      2.798,
+      -0.21
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1504",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -4.845,
+      2.778,
+      1
+     ],
+     "max": [
+      -4.405,
+      2.798,
+      1.44
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1505",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -2.245,
+      2.778,
+      0.02
+     ],
+     "max": [
+      -1.805,
+      2.798,
+      0.46
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1506",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -0.695,
+      2.778,
+      -1.05
+     ],
+     "max": [
+      -0.255,
+      2.798,
+      -0.61
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1507",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      1.455,
+      2.778,
+      2.06
+     ],
+     "max": [
+      1.895,
+      2.798,
+      2.5
+     ]
+    }
+   },
+   {
+    "name": "unlinked:none:1508",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      5.035,
+      2.778,
+      3.95
+     ],
+     "max": [
+      5.475,
+      2.798,
+      4.39
+     ]
+    }
+   }
+  ]
+ }
+}

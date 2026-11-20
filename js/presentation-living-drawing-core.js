@@ -8,7 +8,7 @@
    D3 — ambience is a separate, labelled object («source: 'ambientacion'»), never written into the project.
    D4 — 5–8 s per room depending on its protagonists; the camera leaves at 70–80 % of the room.
    UMD: browser global FloorPlanLivingDrawing; CommonJS for tests. */
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanLivingDrawing=api;})(typeof self!=='undefined'?self:this,function(){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./project-core.js'):root.FloorPlanCore);if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanLivingDrawing=api;})(typeof self!=='undefined'?self:this,function(Core){
  'use strict';
  const LIVING=Object.freeze({version:1,firstSeedS:.9,minGapS:.45,gapSpreadS:.45,minGapDeltaS:.06,roomMinS:5,roomMaxS:8,roomBaseS:5,roomPerSeedS:.5,leaveMin:.7,leaveMax:.8,maxProtagonists:6,darkLuminance:.06,
   label:'Ambientación sugerida · no forma parte del proyecto'});
@@ -25,8 +25,7 @@
  // Objects that read as large dark masses in the 3D view (screens): never the first stain of a room (D1).
  const DARK_TYPES=new Set(['tvstand','tv','television','screen']);
  const PER_TYPE=Object.freeze({counter:2,chair:1,plant:1,armchair:2,nightstand:1});
- const NAME_HINTS=[[/sal[oó]n|estar|living|lounge|客厅|起居/i,'living'],[/comedor|dining|餐厅/i,'dining'],[/cocina|kitchen|厨房/i,'kitchen'],
-  [/dormitorio|habitaci[oó]n|bedroom|卧|房$/i,'bedroom'],[/ba[nñ]o|aseo|bath|卫/i,'bathroom'],[/lavader|laundry|洗衣/i,'laundry'],[/terraza|balc[oó]n|terrace|balcony|阳台/i,'terrace']];
+ // Nombre y contenido → uso: la heurística ÚNICA del producto (project-core, UX-24); aquí solo se traduce a las 7 clases del dibujo.
  const FAMILY={living:'living',dining:'dining',kitchen:'kitchen',bedroom:'bedroom',bathroom:'bathroom',toilet:'bathroom',laundry:'laundry',terrace:'terrace',balcony:'terrace'};
 
  // —— small pure helpers ——
@@ -35,24 +34,16 @@
  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
  const round=(v,d=3)=>Math.round(v*10**d)/10**d;
  function luminance(hex){const m=/^#?([0-9a-f]{6})$/i.exec(hex||'');if(!m)return null;const n=parseInt(m[1],16),c=[(n>>16)&255,(n>>8)&255,n&255].map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});return .2126*c[0]+.7152*c[1]+.0722*c[2];}
- function inside(poly,x,y){let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;}
  const polyOf=room=>room.poly||(room.polygon||[]).map(p=>[p.x,p.y]);
  const isDark=o=>DARK_TYPES.has(o.type)||((luminance(o.color)??1)<LIVING.darkLuminance);
 
  /* Objects of a room: by roomId when the object carries it, otherwise by its centre inside the room polygon. */
- function objectsIn(project,room){const poly=polyOf(room);return (project?.objects||[]).filter(o=>o&&o.position&&(o.roomId?o.roomId===room.id:inside(poly,o.position.x,o.position.y)));}
+ function objectsIn(project,room){return Core.roomObjects(project,room);}
  /* Room class: the declared family first, then what the room contains, then its name. */
  function classify(room,objects){
   if(FAMILY[room?.family])return FAMILY[room.family];
-  const t=new Set((objects||[]).map(o=>o.type));
-  if(t.has('counter')||t.has('stove')||t.has('ksink'))return 'kitchen';
-  if(t.has('toilet')||t.has('shower')||t.has('bathtub'))return 'bathroom';
-  if(t.has('bed'))return 'bedroom';
-  if(t.has('sofa'))return 'living';
-  if(t.has('table')&&[...(objects||[])].filter(o=>o.type==='chair').length>=2)return 'dining';
-  if(t.has('washer'))return 'laundry';
-  for(const [re,c] of NAME_HINTS)if(re.test(room?.name||''))return c;
-  return 'other';
+  const s=Core.suggestRoomFamily(room,objects,{among:Object.keys(FAMILY)});
+  return s?FAMILY[s.family]:'other';
  }
  /* Ordered protagonists of a room (D1). Independent of the order of project.objects. */
  function protagonists(roomClass,objects,{max=LIVING.maxProtagonists}={}){

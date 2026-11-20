@@ -1,0 +1,10 @@
+{
+ "format": "rubik-sota.op10-roundtrip",
+ "meshes": 20,
+ "vertices": 703,
+ "faces": 492,
+ "maxVertexDeviationMm": 0,
+ "toleranceMm": 0.001,
+ "issues": [],
+ "pass": true
+}

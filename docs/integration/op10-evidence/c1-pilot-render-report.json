@@ -1,0 +1,404 @@
+{
+ "status": "rendered",
+ "blender": "5.2.1 LTS",
+ "engine": "CYCLES",
+ "device": "CPU",
+ "samples": 4,
+ "denoiser": "OPENIMAGEDENOISE",
+ "resolution": [
+  320,
+  180
+ ],
+ "fps": 30,
+ "framesRendered": 3,
+ "framesInTimeline": 108,
+ "secondsPerFrame": {
+  "mean": 1.529,
+  "max": 1.669,
+  "min": 1.448
+ },
+ "wallSeconds": 16.4,
+ "peakRssMiB": 701.1,
+ "inputs": {
+  "packageSha256": "0f272d70f85bed1af881919d5e7e76fadb8907571855c389949842402b9493d3",
+  "shotsSha256": "b1b9e34a3ded87fb28ac84742405c1855bb54d99e604c2e09b17fd121dd2a0ff",
+  "verifiedBlendSha256": "fa79933c0efc9d2595c3b9aa57687bfc967f275839689d93d1a312542c6aa636",
+  "visualSidecarSha256": "fd1a7cfc19055ad44d3311e2698d75018ac4e53d316e2a7a68ad36f2d1254c20",
+  "rendererSha256": "48677b33c68421e97bcaa7121a221b6c3c8de52043ab42db361741fa620adba7"
+ },
+ "pilotBlend": {
+  "bytes": 2838512,
+  "sha256": "7dde77db094d13dbde97e1af9b24ed954f9ea83cfe893a6f4da7f8076a37d233"
+ },
+ "scene": {
+  "entities": {
+   "room": 13,
+   "wall": 70,
+   "opening": 22,
+   "object": 46
+  },
+  "entityIdsSha256": "e0c96fcf2e67fd6ad2a92a41bdc14074d62e0e429ef4ae18ee5800cd2234365a",
+  "materials": 197,
+  "images": 1,
+  "cameraKeyframes": 108
+ },
+ "presentationAdditions": [
+  "PilotWorld sky 0.9",
+  "PilotSun 2.2 W/m2, 8 deg",
+  "PilotCamera keyed per frame, constant interpolation (hard cuts); level camera with lens shift for the planned downward look (vertical lines stay vertical)"
+ ],
+ "visualSidecar": [
+  {
+   "id": "obj_template-001",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 17
+  },
+  {
+   "id": "obj_template-002",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-003",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-004",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 24
+  },
+  {
+   "id": "obj_template-005",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 6
+  },
+  {
+   "id": "obj_template-006",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-007",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 8
+  },
+  {
+   "id": "obj_template-008",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-009",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 13
+  },
+  {
+   "id": "obj_template-010",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 26
+  },
+  {
+   "id": "obj_template-011",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-012",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-013",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 95
+  },
+  {
+   "id": "obj_template-014",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-015",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 8
+  },
+  {
+   "id": "obj_template-016",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-017",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 10
+  },
+  {
+   "id": "obj_template-018",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-019",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 78
+  },
+  {
+   "id": "obj_template-020",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 54
+  },
+  {
+   "id": "obj_template-021",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 23
+  },
+  {
+   "id": "obj_template-022",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 10
+  },
+  {
+   "id": "obj_template-023",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-024",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 30
+  },
+  {
+   "id": "obj_template-025",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-026",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-027",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-028",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-029",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 49
+  },
+  {
+   "id": "obj_template-030",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 3
+  },
+  {
+   "id": "obj_template-031",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 31
+  },
+  {
+   "id": "obj_template-032",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-033",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 22
+  },
+  {
+   "id": "obj_template-034",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 11
+  },
+  {
+   "id": "obj_template-035",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 20
+  },
+  {
+   "id": "obj_template-036",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 61
+  },
+  {
+   "id": "obj_template-037",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 61
+  },
+  {
+   "id": "obj_template-038",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-039",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 20
+  },
+  {
+   "id": "obj_template-040",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 26
+  },
+  {
+   "id": "obj_template-041",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-042",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 6
+  },
+  {
+   "id": "obj_template-043",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 17
+  },
+  {
+   "id": "obj_template-044",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 11
+  },
+  {
+   "id": "obj_template-045",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 11
+  },
+  {
+   "id": "obj_template-046",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 61
+  }
+ ],
+ "timeline": [
+  {
+   "roomId": "rom_mbath",
+   "first": 1,
+   "last": 108,
+   "anchors": [
+    1,
+    55,
+    108
+   ]
+  }
+ ],
+ "presence": [
+  {
+   "roomId": "rom_mbath",
+   "frame": 1,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-006",
+    "obj_template-007"
+   ],
+   "contents": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "share": {
+    "rom_mbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_mbath",
+   "frame": 55,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "contents": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "share": {
+    "rom_mbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_mbath",
+   "frame": 108,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "contents": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "share": {
+    "rom_mbath": 1.0
+   }
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "command": [
+  "python",
+  "/home/user/op10/labs/sculpt/op-10/blender/import_scene.py"
+ ],
+ "exitCode": 0,
+ "wallSeconds": 0.845,
+ "peakRssBytes": 506134528
+}
