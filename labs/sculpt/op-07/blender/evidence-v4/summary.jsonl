@@ -1,0 +1,2 @@
+{"id":"f1-rect","meshes":20,"unlinked":0,"c3":0,"ab":{"contract":37,"failed":0,"visual":0,"unlinked":0},"cb":{"pass":true,"maxVertexDeviationMm":0,"vertices":703,"issues":0},"ca":{"contract":36,"failed":0},"reopen":"PASS"}
+{"id":"f7-curved","meshes":161,"unlinked":0,"c3":0,"ab":{"contract":49,"failed":0,"visual":0,"unlinked":0},"cb":{"pass":true,"maxVertexDeviationMm":0,"vertices":1273,"issues":0},"ca":{"contract":48,"failed":0},"reopen":"PASS"}

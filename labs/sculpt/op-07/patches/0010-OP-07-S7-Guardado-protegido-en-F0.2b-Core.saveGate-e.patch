@@ -1,7 +1,7 @@
-From 3833838e2525a43f753bbb2907cded0c98cd0f41 Mon Sep 17 00:00:00 2001
+From 544b501aaefb93d48d50572cacd93340e3ae42b3 Mon Sep 17 00:00:00 2001
 From: op07 <op07@local>
 Date: Fri, 20 Nov 2026 10:23:51 +0000
-Subject: [PATCH 10/10] =?UTF-8?q?OP-07=20S7=20=C2=B7=20Guardado=20protegid?=
+Subject: [PATCH 10/12] =?UTF-8?q?OP-07=20S7=20=C2=B7=20Guardado=20protegid?=
  =?UTF-8?q?o=20en=20F0.2b:=20Core.saveGate=20entre=20la=20revisi=C3=B3n=20?=
  =?UTF-8?q?confirmada=20y=20la=20siguiente,=20con=20la=20intenci=C3=B3n=20?=
  =?UTF-8?q?de=20cada=20paso?=
@@ -30,7 +30,7 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s7-save-gate.test.cjs
 
 diff --git a/index.html b/index.html
-index 34472779..c8c08824 100644
+index 7c62b8ee..a67dff66 100644
 --- a/index.html
 +++ b/index.html
 @@ -1194,6 +1194,9 @@ function save(){

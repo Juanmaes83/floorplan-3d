@@ -1,0 +1,142 @@
+{
+ "format": "rubik-sota.scene-fidelity",
+ "version": "1.0.0",
+ "tolerancesMm": {
+  "exact": 1,
+  "envelope": 2,
+  "area": 0.005
+ },
+ "origin": {
+  "x": 2500,
+  "y": 2349.9039394016813
+ },
+ "checks": 49,
+ "contractChecks": 49,
+ "failed": 0,
+ "failures": [],
+ "visualDifferences": 0,
+ "visualByType": {},
+ "byKind": {
+  "contract · wall/thickness-mm": {
+   "n": 5,
+   "pass": 5,
+   "maxDeviation": 0.001
+  },
+  "contract · wall/axis-centred-mm": {
+   "n": 5,
+   "pass": 5,
+   "maxDeviation": 0
+  },
+  "contract · wall/height-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · wall/base-mm": {
+   "n": 5,
+   "pass": 5,
+   "maxDeviation": 0
+  },
+  "contract · wall/length-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · wall/start-overhang-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · wall/path-length-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0.001
+  },
+  "contract · wall/height-max-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "contract · wall/top-follows-slope-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "contract · wall/height-start-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "contract · wall/height-end-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "contract · room/floor-area-relative": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minX-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxX-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minZ-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxZ-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · door/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · door/identified-meshes": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · opening/identified-meshes-inside-opening": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · window/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · window/identified-meshes": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · scene/unlinked-meshes": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · scene/visible-coincident-faces": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  }
+ },
+ "associations": [],
+ "unlinked": {
+  "total": 0,
+  "associatedToOpenings": 0,
+  "stillUnlinked": []
+ }
+}

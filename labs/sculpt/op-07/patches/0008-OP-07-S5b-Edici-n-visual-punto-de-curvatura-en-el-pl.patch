@@ -1,7 +1,7 @@
-From 6709f26067c432232ffd36373d93610cc0c44ebf Mon Sep 17 00:00:00 2001
+From 55359f3b465c5be4b15706a13d3b2a407e35705a Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:27:19 +0000
-Subject: [PATCH 08/10] =?UTF-8?q?OP-07=20S5b=20=C2=B7=20Edici=C3=B3n=20vis?=
+Subject: [PATCH 08/12] =?UTF-8?q?OP-07=20S5b=20=C2=B7=20Edici=C3=B3n=20vis?=
  =?UTF-8?q?ual:=20punto=20de=20curvatura=20en=20el=20plano=20y=20forma=20d?=
  =?UTF-8?q?el=20muro=20en=20el=20panel,=20un=20arrastre=20=3D=20una=20oper?=
  =?UTF-8?q?aci=C3=B3n?=
@@ -17,7 +17,7 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s5b-edit-ui.browser.test.cjs
 
 diff --git a/index.html b/index.html
-index 752d0397..bb16a917 100644
+index 7d826666..2c120aa8 100644
 --- a/index.html
 +++ b/index.html
 @@ -178,6 +178,7 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec

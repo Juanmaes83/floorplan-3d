@@ -1,20 +1,39 @@
-From 972ac0b9106a314d62c0ee24dbb7bdf59d433373 Mon Sep 17 00:00:00 2001
+From 87a60c1862cb69eb69b64d829436543c6c9c8840 Mon Sep 17 00:00:00 2001
 From: op07 <op07@local>
 Date: Fri, 20 Nov 2026 10:39:43 +0000
-Subject: [PATCH] =?UTF-8?q?OP-07=20=C3=97=20OP-10=20=C2=B7=20scene-fidelit?=
- =?UTF-8?q?y=20con=20el=20n=C3=BAcleo=20=C3=BAnico=20(facetas,=20alturas?=
- =?UTF-8?q?=20por=20extremo,=20normal=20del=20hueco,=20suelo=20por=20roomR?=
- =?UTF-8?q?ing)=20y=20escenario=20f7-curved?=
+Subject: [PATCH 11/12] =?UTF-8?q?OP-07=20=C3=97=20OP-10=20=C2=B7=20scene-f?=
+ =?UTF-8?q?idelity=20con=20el=20n=C3=BAcleo=20=C3=BAnico=20(facetas,=20alt?=
+ =?UTF-8?q?uras=20por=20extremo,=20normal=20del=20hueco,=20suelo=20por=20r?=
+ =?UTF-8?q?oomRing)=20y=20escenario=20f7-curved?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
+ scripts/interop/scene-capture.cjs      |  7 +++-
  scripts/interop/scene-fidelity.cjs     | 49 ++++++++++++++++++++++----
- scripts/interop/scene-run.cjs          |  2 +-
- tests/fixtures/scene-blender/build.cjs | 13 +++++--
- 3 files changed, 54 insertions(+), 10 deletions(-)
+ scripts/interop/scene-run.cjs          |  4 +--
+ tests/fixtures/scene-blender/build.cjs | 18 ++++++++--
+ 4 files changed, 66 insertions(+), 12 deletions(-)
 
+diff --git a/scripts/interop/scene-capture.cjs b/scripts/interop/scene-capture.cjs
+index fd870107..b0aa26ee 100644
+--- a/scripts/interop/scene-capture.cjs
++++ b/scripts/interop/scene-capture.cjs
+@@ -36,7 +36,12 @@ async function capture(input, dest, o = {}) {
+   const browser = await engine.launch({ ...(browserName === 'chromium' && process.env.CHROME ? { executablePath: process.env.CHROME } : {}), args });
+   const t = {};
+   try {
+-    const context = await browser.newContext({ viewport, deviceScaleFactor: 1, acceptDownloads: true }), page = await context.newPage(), errors = [];
++    const context = await browser.newContext({ viewport, deviceScaleFactor: 1, acceptDownloads: true });
++    // OP-07 S8: a scenario with curved or sloped walls declares the ACTIVE state explicitly (test origin only); by default the
++    // editor is 'integrated' and refuses to import a 2.0 document.
++    // A0 is not in master yet: the scenario declares a labelled stand-in, as the OP-07 browser tests do (tests/op07/browser-state.cjs).
++    if (o.op07State) await context.addInitScript(st => { globalThis.RUBIK_OP07_STATE = st; if (st === 'active' && !globalThis.FloorPlanSchemaEpoch) globalThis.FloorPlanSchemaEpoch = Object.freeze({ op07StandIn: true }); }, o.op07State);
++    const page = await context.newPage(), errors = [];
+     page.on('pageerror', e => errors.push(e.message));
+     page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_|NS_ERROR|WebGL warning/.test(m.text())) errors.push(m.text()); });
+     let blocked = 0;
 diff --git a/scripts/interop/scene-fidelity.cjs b/scripts/interop/scene-fidelity.cjs
 index 689df02a..fe0116ed 100644
 --- a/scripts/interop/scene-fidelity.cjs
@@ -116,7 +135,7 @@ index 689df02a..fe0116ed 100644
          ctr[1] >= elevationM + o.sillHeightMm / 1000 - 0.05 && ctr[1] <= elevationM + (o.sillHeightMm + o.heightMm) / 1000 + 0.05;
        if (inside && !associated.has(m.name)) associated.set(m.name, { opening: o.id, method: 'inferred-spatial', material: m.material.kind });
 diff --git a/scripts/interop/scene-run.cjs b/scripts/interop/scene-run.cjs
-index a1594463..920c4262 100644
+index a1594463..fadf1a93 100644
 --- a/scripts/interop/scene-run.cjs
 +++ b/scripts/interop/scene-run.cjs
 @@ -11,7 +11,7 @@ const { compare, compareBuilding } = require('./scene-fidelity.cjs'), { roundtri
@@ -124,19 +143,33 @@ index a1594463..920c4262 100644
    { id: 'f1-rect', fixture: 'f1-rect.json' }, { id: 'f2-rot30', fixture: 'f2-rot30.json' }, { id: 'f3-openings', fixture: 'f3-openings.json' },
    { id: 'f4-active', fixture: 'f4-building.json', scope: 'active', building: true }, { id: 'f4-all', fixture: 'f4-building.json', scope: 'all', building: true },
 -  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' },
-+  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' }, { id: 'f7-curved', fixture: 'f7-curved.json' },
++  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' }, { id: 'f7-curved', fixture: 'f7-curved.json', op07State: 'active' },
  ];
  function measured(report, args) { execFileSync('python3', [path.join(here, 'measure.py'), report, '--', ...args], { stdio: ['ignore', 'pipe', 'pipe'] }); return JSON.parse(fs.readFileSync(report, 'utf8')); }
  const J = f => JSON.parse(fs.readFileSync(f, 'utf8'));
+@@ -22,7 +22,7 @@ async function run(dest, { python, only, browser = 'chromium' } = {}) {
+   const summary = { format: 'rubik-sota.scene-run', version: '1.0.0', browser, startedAt: new Date().toISOString(), scenarios: [] };
+   for (const s of SCENARIOS.filter(x => !only || only.includes(x.id))) {
+     const cap = path.join(dest, 'package', s.id), out = { id: s.id };
+-    const m = await Capture.capture(path.join(fx, s.fixture), cap, { scope: s.scope || 'active', browser });
++    const m = await Capture.capture(path.join(fx, s.fixture), cap, { scope: s.scope || 'active', browser, ...(s.op07State ? { op07State: s.op07State } : {}) });
+     out.capture = { stats: m.stats, excluded: m.excluded, metrics: m.metrics, assets: m.fallbacks.assets, glbSha256: m.outputs['scene.glb'].sha256, sceneJsonSha256: m.outputs['scene.json'].sha256 };
+     const scene = J(path.join(cap, 'scene.json')), fixture = J(path.join(fx, s.fixture)), coincident = Core.coincidentFaces(scene);
+     out.c3 = { visibleDefects: coincident.defects.length, hiddenByContact: coincident.hiddenByContact, benignSameMaterial: coincident.benignSameMaterial, first: coincident.defects.slice(0, 3) };
 diff --git a/tests/fixtures/scene-blender/build.cjs b/tests/fixtures/scene-blender/build.cjs
-index c819eaf4..94e856c2 100644
+index c819eaf4..09c6571f 100644
 --- a/tests/fixtures/scene-blender/build.cjs
 +++ b/tests/fixtures/scene-blender/build.cjs
-@@ -61,12 +61,21 @@ function f6R02R03() { // 6 · R02-A (elemento de techo) + R03 (interior de armar
+@@ -61,12 +61,26 @@ function f6R02R03() { // 6 · R02-A (elemento de techo) + R03 (interior de armar
    for (const e of (p.extensions['x-r03-cabinet'] || {}).entries || []) if (e.updatedAt) e.updatedAt = STAMP; // R03 sella con la hora real
    Core.validate(p); return stamp(p);
  }
 +function f7Curved() { // 7 · OP-07: muro curvo (con puerta) dividido en dos piezas + muro inclinado (con ventana), con las operaciones del núcleo
++  // OP-07 S8: el fixture se crea en estado ACTIVO explícito (Node es origen de pruebas); el visor lo abre después como lectura compatible.
++  const was = globalThis.RUBIK_OP07_STATE; globalThis.RUBIK_OP07_STATE = 'active';
++  try { return f7Build(); } finally { globalThis.RUBIK_OP07_STATE = was; }
++}
++function f7Build() {
 +  let p = f1Rectangular(); p.id = 'prj_op10-f7-curved'; p.name = 'OP-10 F7 curvo e inclinado (sintético)';
 +  const s = p.walls.find(w => w.id === 'wal_op10-f1-s'), e = p.walls.find(w => w.id === 'wal_op10-f1-e');
 +  const mx = (s.start.x + s.end.x) / 2, my = (s.start.y + s.end.y) / 2;

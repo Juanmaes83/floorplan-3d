@@ -1,4 +1,4 @@
-# OP-07 · HANDOFF para continuar en otra sesión (20/11/2026, serie v3: 10 parches sobre `bf131c30`)
+# OP-07 · HANDOFF para continuar en otra sesión (20/11/2026, serie v4: 12 parches sobre `adb86034`)
 
 ## Estado
 Serie de **9 parches** en `labs/sculpt/op-07/patches/` (orden numérico), generada desde la rama LOCAL `op07-v2`
@@ -122,13 +122,19 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
 - **Delta acwall de Codex:** no lo he podido cotejar. El conector de GitHub falla en esta sesión (proxy 403) y no hay una rama con ese nombre en el transporte git. Pendiente de que Codex indique la ref.
 - **Nota operativa:** las capturas de f2, f5 y f6 ocupan unos 185 MB y llenaron el disco de este contenedor. Se borran después de extraer la evidencia.
 
-## Pendiente (actualizado 20/11/2026, al cierre de los bloques 1–7)
-Hecho en esta sesión: rebase sobre `bf131c30`, roomRing tras dividir, guardSave con WALL_PATH, S7 en F0.2b, DXF, Blender f7 y previews. **Inventario, GO/NO-GO, plan y rollback: [INTEGRACION.md](INTEGRACION.md).**
-1. A0 · WebKit: Codex reproduce con `a0/ro-trace.init.js` y Claude corrige con la traza. Una sola propagación a #274–#279 después del cierre.
-2. Codex: auditar las decisiones nuevas de INTEGRACION.md §4 (alcance de `saveGate`, intención por paso, cuña de las caras).
-3. Firefox/WebKit/dispositivos, aceptación visual y aceptación CAD en dos programas: no disponibles en este contenedor.
-4. Cotejar el delta *acwall* de Codex cuando indique la ref.
-5. Siguiente misión condicional: diagnóstico de OP-05 (`codex/sculpt-op05-lab@a722f9dd`).
+## Serie v4 (20/11/2026, tarde) — `claude/op07-serie-v4@3afb9e18`, 12 parches sobre master `adb86034`
+- Inventario, seguridad, superficies, GO/NO-GO, plan y rollback en **[INTEGRACION.md](INTEGRACION.md)**: es la fuente única.
+- Corregido tras la auditoría de Codex (`2d0cc645`):
+  - intenciones por `projectId` (mezclar proyectos lanza un error);
+  - revocación al restaurar;
+  - **S8**: integrar ≠ activar; «activo» exige A0 y un escritor protegido; puerta también en `localStorage`.
+  - Las sondas de Codex son ahora negativos.
+- El delta de Blender pasa a ser el parche 0011, sobre OP-10 efectivo: f1–f7 idénticos y f7 sin fallos.
+- **Pendiente:**
+  1. Codex: Firefox/WebKit/dispositivos de la v4 y la traza del residual del manipulador en Windows (no reproducido aquí; mi hipótesis se revirtió por no estar demostrada).
+  2. A0: las 12 trazas no identifican causa (§5). Sigue congelado.
+  3. Aceptación visual y CAD.
+  4. OP-05: solo el diagnóstico, después de este cierre.
 
 ## A0
 `claude/a0-writer-fence@112eaf52` pendiente de Firefox/WebKit por Codex (#273). No propagar a #274–#279.

@@ -1,7 +1,7 @@
-From f601cc9e2faf97ad8abc69852b9dae9a4d7be9e0 Mon Sep 17 00:00:00 2001
+From e5fdea248fdc832bbc61d9b089d3827e8a74cf6a Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 01/10] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D?=
+Subject: [PATCH 01/12] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D?=
  =?UTF-8?q?-OP07-4=20opci=C3=B3n=20B):=20curve=20y=20heightEndMm,=20autori?=
  =?UTF-8?q?dad=20=C3=BAnica=20de=20versiones,=20n=C3=BAcleo=20=C3=BAnico?=
  =?UTF-8?q?=20y=20guardado=20protegido?=
@@ -118,7 +118,7 @@ index 97707619..78d2a368 100644
  <script src="../js/exterior-core.js"></script>
  <script src="../js/roof-core.js"></script>
 diff --git a/index.html b/index.html
-index 53a7cb6f..d34ea1ae 100644
+index 80f4775e..0cc60598 100644
 --- a/index.html
 +++ b/index.html
 @@ -769,6 +769,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese

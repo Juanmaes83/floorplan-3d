@@ -1,7 +1,7 @@
-From 1152257517842284a635192a5bd0eb90be3b04c8 Mon Sep 17 00:00:00 2001
+From 66dd8bb1acbc542fd316aa96eea15aacf5048bd2 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:37:14 +0000
-Subject: [PATCH 09/10] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y?=
+Subject: [PATCH 09/12] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y?=
  =?UTF-8?q?=20liso:=20juntas=20compartidas=20por=20faceta,=20normales=20su?=
  =?UTF-8?q?aves=20solo=20en=20las=20caras=20curvas,=20dinteles=20por=20fac?=
  =?UTF-8?q?eta?=
@@ -21,10 +21,10 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s4b-seams.test.cjs
 
 diff --git a/index.html b/index.html
-index bb16a917..34472779 100644
+index 2c120aa8..7c62b8ee 100644
 --- a/index.html
 +++ b/index.html
-@@ -3733,14 +3733,30 @@ function wallBox(rect, yb, yt, m){
+@@ -3734,14 +3734,30 @@ function wallBox(rect, yb, yt, m){
    // UVs continuous along the whole wall; it sits at the same centre and angle as a box, so everything else is unchanged.
    const sloped=Core.pieceMesh(rect,yb,yt);
    if (sloped) {
@@ -59,7 +59,7 @@ index bb16a917..34472779 100644
      return o;
    }
    const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
-@@ -3974,11 +3990,14 @@ function buildArch(other){
+@@ -3975,11 +3991,14 @@ function buildArch(other){
      colliders.push({x:wx(w.center[0]),z:wz(w.center[1]),angle:w.angle,length:M(w.spanMm),thickness:M(w.thickness)});
    });
    [...geometry.doors.map(d=>d.rect),...geometry.slides.map(d=>d.rect),...geometry.voids].forEach(r=>{
@@ -74,7 +74,7 @@ index bb16a917..34472779 100644
 +    if (!r.curvedHost){ wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height)); }
      colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
      const gTop = Math.min(head, top); if (gTop <= sill) return;
-     const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+     const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=r.openingId;archUp.add(group);
 diff --git a/js/project-core.js b/js/project-core.js
 index 5ae63b30..40ec9646 100644
 --- a/js/project-core.js

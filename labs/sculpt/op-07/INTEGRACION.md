@@ -1,118 +1,152 @@
-# OP-07 · Muros curvos e inclinados — expediente de integración (serie v3, 20/11/2026)
+# OP-07 · Muros curvos e inclinados — expediente de integración (serie v4, 20/11/2026)
 
-> Este documento **sustituye** a la versión de seis parches (S1–S6 sobre `02712b51`), que queda en el historial de git.
-> Inventario único. Sin PR productiva, sin fusión y sin migración real. Codex integra; el propietario autoriza.
+> Este documento sustituye a la versión v3 (que queda en el historial de git).
+> - Estado: **GO para preparar la integración; NO-GO para activar en Production.**
+> - Sin PR productiva, sin fusión y sin migración real.
+> - Codex integra y el propietario autoriza.
 
 ## 0. Fuente verificable
 
 | Qué | Ref |
 |---|---|
-| Master de base | `bf131c30` (SMART: K4, K9, UX-03, AST-01 y K13 integrados) |
-| Serie (commits) | rama `claude/op07-serie-v3` @ `3833838e`. La anterior, `claude/op07-serie-local@04b8e6f2` sobre `02712b51`, se conserva |
-| Parches | `labs/sculpt/op-07/patches/0001…0010` + `MANIFEST.sha256` (orden numérico) |
-| Laboratorio Blender | rama `claude/op07-blender-v3` @ `972ac0b9` (= `6d3e5260` + la serie). Delta en `blender/0001-…patch` |
-| A0 (instrumentación para Codex) | `labs/sculpt/op-07/a0/ro-trace.init.js` + `README.md` |
-| Reproducir | `node labs/sculpt/op-07/integration/apply-and-test.cjs origin/master [--browser] [--full]` |
+| Master de base | `adb86034` (OP-10 #290 fusionada; acwall `eb0a7ee9` y Entregar `56f099dd` incluidos) |
+| Serie (commits) | rama `claude/op07-serie-v4` @ `3afb9e18`. Las v3 (`3833838e`) y v2 (`04b8e6f2`) se conservan |
+| Parches | `patches/0001…0012` + `MANIFEST.sha256` |
+| Reproducir | `node labs/sculpt/op-07/integration/apply-and-test.cjs origin/master [--browser] [--full]` (75/75 sobre `adb86034`) |
+| Sondas de Codex | `docs/integration/op07-a0-2026-11-20` @ `2d0cc645`, convertidas en negativos: `tests/op07-s8-codex-probes.test.cjs` |
 
-## 1. Contrato 2.0 consolidado (D-OP07-4, opción B, ratificada para preparación)
+## 1. Cortes, SHA, estado y GO/NO-GO
 
-1. **Alcance de la versión mayor.**
-   - `curve.control` (Bézier cuadrática) y `heightEndMm` son opcionales y solo existen en documentos **2.x**.
-   - Un documento sin esos campos sigue siendo 1.x **byte a byte**: plano, cantidades, presupuesto y DXF son idénticos a master.
-2. **Autoridad única de versiones.**
-   - `Core.parseVersion`, `versionAtLeast` y `raiseVersion` (`V2_BASE_MINOR = 12`; 2.0 ⊇ 1.12 y una futura 1.(12+k) equivale a 2.k).
-   - Una prueba impide comparar o elevar versiones fuera de esa autoridad.
-   - Hoy ha detectado y migrado `scan-alignment.js` (RoomPlan), que habría **rebajado** un 2.0, y las 3 elevaciones de K4.
-3. **Lectores antiguos.**
-   - Un lector 1.x rechaza 2.x sin modificar nada. Comprobado con master `bf131c30` mediante `integration/s7-legacy-reader.cjs`: `validate` rechaza, la biblioteca no carga, el editor no arranca y la colección queda byte a byte igual.
-   - A0 (la barrera de época) protege a los escritores antiguos. Se complementan; la versión mayor **no** sustituye a A0.
-4. **Geometría.**
-   - Un solo núcleo, `js/wall-geometry-core.js`, igual al del laboratorio. La prueba de huella admite un único delta declarado: `guardSave` recibe la política de trayectoria.
-   - `Core.WALL_PATH = {toleranceMm: 1}`, con techo de 1024 facetas.
-5. **Estancias.**
-   - `Core.roomRing` es el polígono guardado con la cara facetada de cada muro curvo, o de cada **cadena** de piezas de un muro curvo dividido.
-   - De él salen suelo, perímetro, caras, plano, 3D y presupuesto.
-6. **Guardado (S7).**
-   - `Core.saveGate` compara la última revisión **confirmada** de F0.2b con la siguiente, usando la intención de cada paso.
-   - Nunca rechaza un v1 por pérdida.
+Escala del protocolo §4.1: DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO. Ningún corte está en master.
 
-## 2. Cortes, estado y GO/NO-GO
-
-Escala del protocolo §4.1: DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO. Ningún corte pasa de VALIDADO: no hay nada en master.
-
-| # | Corte | SHA serie | Estado | GO/NO-GO para cirugía | Condición pendiente |
+| # | Corte | SHA | Estado | Cirugía | Activación |
 |---|---|---|---|---|---|
-| 1 | S1 Contrato 2.0 | `f601cc9e` | VALIDADO | **GO condicionado** | Ratificación de producto de D-OP07-4 y de 1 mm/1024; Firefox/WebKit |
-| 2 | S2 Geometría y plano | `da302a9c` | VALIDADO | **GO condicionado** | Ídem. Incluye la corrección de huecos en muro recto inclinado (hoy) |
-| 3 | S3 Mediciones | `342655f9` | VALIDADO | **GO condicionado** | Aceptación de D-OP07-2 (caras por muro) por el propietario |
-| 4 | S6 DXF | `03276fe9` | VALIDADO (lector independiente) | **NO-GO para «CAD validado»**, GO técnico | Aceptación en dos CAD comerciales (arquitecto) |
-| 5 | S4 3D | `de677003` | VALIDADO | **GO condicionado** | Aceptación visual; Firefox/WebKit |
-| 6 | S5 Edición | `5bc072d9` | VALIDADO | **GO condicionado** | Se integra con S7 |
-| 7 | S3b Estancias | `77cff3ed` | VALIDADO | **GO condicionado** | Incluye la corrección de división (hoy) |
-| 8 | S5b Edición visual | `6709f260` | VALIDADO (Chromium) | **GO condicionado** | Aceptación visual y de accesibilidad en dispositivos |
-| 9 | S4b 3D estanco | `11522575` | VALIDADO | **GO condicionado** | Aceptación visual |
-| 10 | S7 Guardado protegido | `3833838e` | VALIDADO (Chromium, F0.2b real) | **GO condicionado** | Cirugía de Codex en F0.2b. Validar la decisión de alcance (§4) |
-| — | Blender (OP-10) | `972ac0b9` | VALIDADO (bpy 5.2.1) | **GO como delta de OP-10** | Integrar después de OP-10, nunca sobre `6d3e5260` |
+| 1 | S1 Contrato 2.0 y autoridad de versiones | `e5fdea24` | VALIDADO | GO condicionado | NO-GO |
+| 2 | S2 Geometría y plano (incluye la corrección de huecos en muro recto inclinado) | `6a54f453` | VALIDADO | GO condicionado | NO-GO |
+| 3 | S3 Mediciones | `51c12353` | VALIDADO | GO condicionado | NO-GO |
+| 4 | S6 DXF | `594c7e7c` | VALIDADO (ezdxf) | GO técnico; NO-GO para «CAD validado» | NO-GO |
+| 5 | S4 3D | `3c605885` | VALIDADO | GO condicionado | NO-GO |
+| 6 | S5 Edición | `87a00449` | VALIDADO | GO condicionado | NO-GO |
+| 7 | S3b Estancias (incluye la cadena tras dividir) | `ed263a37` | VALIDADO | GO condicionado | NO-GO |
+| 8 | S5b Edición visual | `55359f3b` | VALIDADO (Chromium Linux) | GO condicionado | NO-GO. Residual de Windows abierto (§5) |
+| 9 | S4b 3D estanco | `66dd8bb1` | VALIDADO | GO condicionado | NO-GO |
+| 10 | S7 Guardado protegido F0.2b | `544b501a` | VALIDADO | GO condicionado | NO-GO |
+| 11 | OP-10 · `scene-fidelity` y f7 (solo los 3 archivos de `972ac0b9` + la opción de estado en la captura) | `87a60c18` | VALIDADO (bpy 5.2.1) | GO condicionado | — |
+| 12 | **S8 Activación efectiva** | `3afb9e18` | VALIDADO | **GO: obligatorio con la serie** | Define la activación |
 
-**La regla de activación no cambia:** ningún documento 2.0 se crea en Production hasta que S1, S2, S3, S3b, S4, S4b, S5, S5b, S6 y S7 estén integrados **juntos** (todos los escritores protegidos) y A0 esté integrado. Integrar no es activar.
+**Condición de los GO:**
+- ratificación de producto (D-OP07-4, 1 mm/1024, D-OP07-2);
+- Firefox, WebKit y dispositivos;
+- aceptación visual.
 
-## 3. Declaración funcional (regla permanente §4.1, diez puntos)
+**Integrar la serie entera es seguro precisamente porque S8 la deja inactiva.**
 
-| Punto | Declaración |
-|---|---|
-| 1 Capacidad | Muros curvos (Bézier), muros inclinados (altura final), dividirlos sin perder nada y medir, presupuestar, ver en 3D, exportar en DXF y enviar a Blender con su geometría real |
-| 2 Área | Editor de planos (2D/3D), Cantidades/Presupuesto, Entregar (DXF y Blender) y persistencia F0.2b |
-| 3 Recorrido | Seleccionar un muro → punto de curvatura en el plano (arrastrar) o panel **«Forma del muro»** (flecha, altura final, Enderezar, Nivelar, Dividir) → panel de la estancia: «Paredes de la estancia» (UX-03) con la cara curva → Presupuestar → Entregar → DXF / Escena para Blender |
-| 4 Tipo | Visible: el manipulador y el panel. Automático: medición, 3D, DXF y la puerta de guardado (solo visible cuando rechaza) |
-| 5 Reutiliza | `project-core` (camino único `applyExtension`, historial y validación), `quantity-core`, `surface-core`, `dxf-export`, el visor 3D (`wallBox`) y el panel de muro existente, F0.2b (sesión, cola, estado, `notify`) y el comparador de OP-10. Sin autoridades nuevas |
-| 6 Perla / UX-FIRST | Una sola entrada («Forma del muro») dentro del panel del muro. Un arrastre = un paso de historial y un guardado. Un rechazo explica la causa, el estado de los datos, el siguiente paso y una alternativa segura. Botones de 44 px |
-| 7 Dependencias y límites | Requiere A0 + F0.2b. Tolerancia de 1 mm y como mucho 1024 facetas. Una estancia junto a un muro curvo que no sigue su cara queda «pendiente» y nombrada, nunca medida por la cuerda. Recuperar un conflicto cuenta como restauración |
-| 8 Pruebas | 61 pruebas de OP-07 en `apply-and-test`. Suite pura completa 1587 (0 fallos). Navegador 42/42 (persistencia, edificios, OP-07 ×5, UX-03, K4, presupuesto). G-02 CAD con ezdxf. Blender f1–f7. Negativos en cada corte |
-| 9 Evidencia | `integration/visual/01…05-*-{2d,3d}.webp` (editor real), `blender/evidence-f7/`, este documento con SHA. No hay Preview de Vercel: la rama no se despliega |
-| 10 Para Production falta | Ratificación de producto, A0 en master (WebKit), cirugía de Codex (serie + S7 en F0.2b), Firefox/WebKit/dispositivos, aceptación visual y CAD, autorización explícita de activación |
+## 2. Seguridad (P0 de la auditoría): qué estaba mal en v3 y qué lo impide ahora
 
-## 4. Decisiones nuevas que Codex y ChatGPT deben auditar
+| Riesgo confirmado por Codex | Corrección en v4 | Negativo que lo acredita |
+|---|---|---|
+| **Intención entre proyectos** («mixed»): el enderezado en A legitimaba la pérdida en B con la misma ID de muro | Cada intención lleva `projectId`. `composeIntent` **lanza** si se mezclan proyectos. `saveGate` aplica `intents[project.id]`, y una intención sin proyecto no autoriza nada. El editor acumula por proyecto | Sonda «mixed», plantas de un edificio, variantes (`op07-s8-*.test.cjs`) |
+| **Intención en el tiempo** («stale»): enderezar, deshacer y perder la curva pasaba | Una restauración (deshacer, rehacer, recuperación) **revoca** los permisos acumulados sobre todo lo que cambia, y luego aporta su propio diff con las mismas barreras | Sonda «stale» (falla sin la corrección y pasa con ella), «dividir, deshacer la división y borrar», «restored» con escritor antiguo y sin activación |
+| **Gate de activación**: «Forma del muro» guardaba un 2.0 en `localStorage` sin F0.2b ni A0 | **S8** (abajo): la puerta S7 también está en el escritor `localStorage`. Integrado no es activo, y activo exige A0 y un escritor protegido | Sonda «defaultCoreCanCreate» y `op07-s8-activation.browser`: F0.2b y `localStorage`, lectura compatible, fallo cerrado sin A0 y en demo aislada |
+| Lotes antes del guardado y concurrencia | Un paso solo se olvida cuando está confirmado en **todos** los documentos gestionados (clave de proyecto y biblioteca). En conflicto, el lote sigue pendiente y la autoridad no cambia | S7 navegador (rechazo atómico, misma revisión), S8 (intercalados en dos proyectos) |
 
-1. **Alcance de `saveGate`.**
-   - `detectLoss` rechazaba cualquier muro desaparecido sin intención, y eso habría bloqueado borrados v1 normales y deshacer un curvado.
-   - Ahora pérdida y reglas solo se aplican a muros con curva o pendiente (y a sus huecos), con el mismo alcance que `validate()`.
-   - La degradación y el escritor sin rasgos se rechazan siempre.
-2. **Intención por paso**, no global:
-   - una operación OP-07 lleva la suya;
-   - una edición genérica, solo los borrados que hace;
-   - deshacer y rehacer, el diff completo.
-   - Se compone desde la revisión confirmada y se descarta al confirmarse.
-3. **Caras tras dividir.** Cada pieza mide su cara con el extremo perpendicular a su última faceta (D-OP07-2). En cada junta una cara gana a lo sumo t/2·θ (< 1 cm) y la otra lo pierde. El suelo y el perímetro no cambian.
+### S8 · tres estados separados (efectivos, no documentales)
 
-## 5. Plan de integración (Codex)
+| Estado | Cómo se llega | Qué permite |
+|---|---|---|
+| **Lectura compatible** | Siempre, una vez integrado | Abrir, dibujar, medir, presupuestar y exportar (DXF y Blender) un 2.0 que ya exista |
+| **Integrado** (por defecto) | `OP07_RELEASE = 'integrated'` en `project-core.js` | Sin punto de curvatura ni «Forma del muro». `setWallCurve`, `setWallEndHeight` y `splitWall` responden `activation-pending`. `raiseVersion` nunca crea un 2.x. Ningún escritor (F0.2b ni `localStorage`) confirma un proyecto 2.x nuevo o modificado, incluidos importar y restaurar. El cambio queda en la pestaña y se explica |
+| **Activo** | Cambiar `OP07_RELEASE` (código autorizado). Además, en la página: A0 cargado (`FloorPlanSchemaEpoch`) **y** un escritor protegido registrado | Todo. Si falta A0 o el escritor, falla cerrado (`activationBlockers()`) |
 
-1. Con A0 integrado: aplicar `0001…0010` con `git am --3way` sobre el master vigente en una rama `codex/…`. Si algo no aplica, se regenera desde `claude/op07-serie-v3` y no se toca a mano.
+- Un host desplegado no puede activarse desde la página: `RUBIK_OP07_STATE` solo se lee en Node, `127.0.0.1`, `localhost` o `f0-2b.localhost`.
+- Las pruebas activas declaran un **sustituto de A0 etiquetado** (`tests/op07/browser-state.cjs`), porque A0 no está en master. La convivencia real se acreditará al integrar A0.
+
+## 3. Superficies (regla HOME / PLATAFORMA / ENTREGABLES)
+
+**HOME.**
+- Candidato de alto valor para arquitectura, reformas e interiorismo: curvas y pendientes reales sin trucos.
+- Hoy: **sin entrada** («preparation» en K9).
+- Solo aparecerá cuando esté DISPONIBLE y autorizado.
+- No se ha añadido ninguna tarjeta.
+
+**PLATAFORMA.**
+- Recorrido: *Diseñar → Seleccionar un muro → panel del muro → «Forma del muro»* (flecha, altura final, Enderezar, Nivelar, Dividir) o *arrastrar el punto de curvatura en el plano*.
+- Acreditado en el estado activo de pruebas:
+  - escritorio 1440×900;
+  - 844×390 y 390×844 (S4);
+  - ratón y teclado reales (S5b);
+  - botones de 44 px;
+  - un arrastre equivale a un paso de historial y un guardado;
+  - los rechazos explican la causa, el estado de los datos y el siguiente paso (Perla).
+- En el estado integrado no hay entrada (S8).
+- Pendiente: Firefox, WebKit, dispositivos físicos, auditoría de accesibilidad (lector de pantalla) y el residual de Windows (§5).
+
+**ENTREGABLES.**
+
+| Consumidor | Estado con un 2.0 | Evidencia |
+|---|---|---|
+| Plano 2D | **Conectado y probado** | S2 (plano v1 idéntico byte a byte), capturas 01–07 |
+| Superficies / suelo (`surface-core`, Q.room) | **Conectado y probado** | S3b, `op07-s3b-split` |
+| Presupuesto (líneas de suelo, pintura y caras) | **Conectado y probado** | S3/S3b (v1 byte a byte; curva por el anillo) |
+| Panel de estancia UX-03 | **Conectado y probado** | S3b y `ux03-wall-faces` |
+| DXF (G-02) | **Conectado y probado** (lector independiente) | `g02-dxf-curved*`; CAD comercial pendiente |
+| Blender (OP-10, Entregar → Escena) | **Conectado y probado** | f1–f7 con bpy 5.2.1; `scene-export` (Entregar real) 6/7, y el fallo también ocurre en master |
+| Visor 3D / Recorrer / Presentación | Conectado (mismo visor) | S4/S4b; **Presentación no tiene prueba propia con un 2.0** |
+| Dossier / expediente (`expediente-core`), Studio, FF&E | **Futuro: no acreditado** | Sin pruebas con un 2.0. No se debe anunciar |
+
+## 4. Validación de la serie v4 (Chromium, Linux, bpy 5.2.1)
+
+- **Suite pura completa:** 1609 pruebas, 0 fallos.
+- **Navegador:** 54/56. Cubre OP-07 ×6, persistencia, edificios, UX-03, K4, `scene-export` (acwall C3 y la exportación real desde Entregar), presupuesto y G-02. Los 2 fallos **también ocurren en master `adb86034` en este entorno**:
+  - «G-02 downloads only the active building level». Codex lo vio pasar en Windows, así que depende del entorno.
+  - «GLB retrasado 6 s… exportaciones sucesivas deterministas».
+- **Blender:** f1–f7 idénticos a la referencia. f7: 49/48 comprobaciones de contrato, 0 fallos, reapertura PASS (`blender/evidence-v4/`). La corrección de suspensión del visor de master no se toca.
+- **Capturas:**
+  - `integration/visual/06-ventana-muro-inclinado-{2d,3d}.webp`: la ventana mide su anchura real;
+  - `07-union-muro-curvo-dividido-{2d,3d}.webp`: unión continua de las dos piezas.
+
+## 5. Residuales y A0 (sin atribuir causas no demostradas)
+
+- **Manipulador al enderezar (Codex, Chromium Windows):** **no reproducido** en Chromium Linux. Probé la hipótesis de que faltaba capturar el puntero con un panel superpuesto, pero la prueba no discriminaba, así que **revertí** el cambio y no queda nada en la serie. Petición a Codex: la secuencia de `pointermove`/`pointerup` y `ui.tool` de la ejecución que falla.
+- **A0:** analicé las 12 trazas de Codex (WebKit escritorio, móvil e histórico `8a2730ee`, y Firefox; R1-T02/T02b/T04 con F0.2b activo):
+  - 0 errores de ResizeObserver;
+  - 0 cambios síncronos de tamaño;
+  - ningún callback dentro de un rAF;
+  - entre 9 y 11 entregas por vista;
+  - ninguna truncada.
+  - **El fallo histórico no se reprodujo y las trazas no identifican ninguna causa.**
+  - Recomendación: mantener A0 congelado y el trazador en un trabajo WebKit que guarde la traza si falla. No hay corrección sin traza. No se propaga a #274–#279.
+
+## 6. Plan de integración (Codex)
+
+1. Rama `codex/…` desde el master vigente: `git am --3way patches/0001…0012`. Si algo no aplica, se regenera desde `claude/op07-serie-v4` y no se toca a mano.
 2. Pruebas:
    - `apply-and-test.cjs <base> --browser --full`;
-   - `regression-partitions.json` ya incluye `op07-s7-persistence`;
-   - G-02 CAD (`tests/g02-dxf-cad.py`);
-   - `integration/g02-dxf-curved*.{cjs,py}`;
+   - Firefox y WebKit de `op07-*` y `persistence`;
+   - `scene-run.cjs` (f1–f7);
+   - G-02 CAD;
    - `integration/s7-legacy-reader.cjs`.
-3. Firefox y WebKit para `op07-s4-3d`, `s4b-render`, `s5-edit`, `s5b-edit-ui`, `s7-persistence` y `persistence.browser`.
-4. OP-10 se integra antes; después se aplica `blender/0001-…patch` y se ejecuta `scene-run.cjs` (f1–f7).
-5. Una sola PR draft de la serie, o las que Codex prefiera, con los SHA de esta tabla. **Sin activar** documentos 2.0 en Production.
+3. **Integrar inactivo** (`OP07_RELEASE='integrated'`).
+4. La activación es un commit separado, solo con:
+   - A0 integrado y con WebKit estable;
+   - 7 días de convivencia de A0;
+   - aceptación visual y CAD;
+   - autorización expresa.
 
-## 6. Rollback (nunca abrir un 2.0 como recto en silencio)
+## 7. Rollback (nunca abrir un 2.0 como recto en silencio)
 
-- **Código:** revertir los commits de la serie restaura master. Un documento 2.0 ya guardado se rechaza entonces al cargar (como en master hoy): el editor no arranca sobre él y la colección no se reescribe. Así lo comprueba `s7-legacy-reader.cjs`.
-- **Datos:** no hay migración. Los v1 nunca se convierten y un 2.0 solo existe si la persona curva o inclina un muro.
-- **Recuperación:** la copia de emergencia de F0.2b exporta el 2.0 completo. Volver a aplicar la serie lo reabre intacto (prueba S7: exportar y reabrir).
-- **Prohibido:** degradar un 2.0 a 1.x por código, o abrirlo con `legacyView` y guardarlo. `assertSavable` y `saveGate` lo impiden.
+- **Activación:** volver a `OP07_RELEASE='integrated'`. Los 2.0 existentes siguen legibles (lectura compatible) y no se confirma ningún cambio sobre ellos.
+- **Código:** revertir la serie. Un 2.0 guardado se rechaza al cargar (el lector v1 no arranca y la colección queda byte a byte igual: `s7-legacy-reader.cjs`). La copia de emergencia conserva el 2.0 completo.
+- **Datos:** no hay migración. Un 2.0 solo existe si se curvó o inclinó un muro con la función activa.
+- **Prohibido:** degradar un 2.0 a 1.x por código, o guardar una vista `legacyView`.
 
-## 7. Puertas pendientes
+## 8. Puertas pendientes
 
 | Puerta | Responsable |
 |---|---|
-| A0 · residual WebKit (ResizeObserver) con `a0/ro-trace.init.js` | Codex (reproducción), Claude (corrección) |
-| Firefox/WebKit y dispositivos de toda la serie | Codex |
-| Aceptación visual 2D/3D y de «Forma del muro» | Propietario |
-| DXF en dos CAD comerciales | Arquitecto |
-| Cotejo con el delta *acwall* de Codex (ref no localizada en esta sesión) | Codex indica la ref |
-| «G-02 downloads only the active building level»: falla también en master `bf131c30` | Corte aparte, si se autoriza |
-| Cuatro fallos previos de `walk-controls` en el HEAD de A0 | Documentados aparte |
-| Simulator A/E: A conserva el sólido canónico; E no debe tratar curvas como cajas favorables | Claude Code 1 / Codex (no se ha tocado) |
+| A0: WebKit estable, integración y 7 días de convivencia | Codex / propietario |
+| Firefox, WebKit y dispositivos de la serie v4; residual del manipulador en Windows | Codex |
+| Accesibilidad (lector de pantalla) de «Forma del muro» | Codex / ChatGPT |
+| Aceptación visual; DXF en dos CAD comerciales | Propietario / arquitecto |
+| Presentación, dossier, Studio y FF&E con un 2.0 | Futuro (sin acreditar) |
+| G-02 y GLB determinista: fallan en master en este entorno | Corte aparte |
