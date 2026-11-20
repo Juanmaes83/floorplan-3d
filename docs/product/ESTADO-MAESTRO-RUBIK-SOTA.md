@@ -1,5 +1,8 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
+> **Corte 20/11/2026 · SMART.** [#288](https://github.com/Juanmaes83/floorplan-3d/pull/288) integró K4, K9, UX-03 y AST-01 en `master@bf131c304391eb393412c12e6fb8c1f94e22a1a3`, árbol `e57089f61dc7a915f316a176280e4c08ebd49057`. GitHub reconoció #280, #281, #285 y #286 como fusionadas por ascendencia. La CI de la PR cerró con 93 aprobaciones y una omisión prevista. El [único relanzamiento](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44704778305/job/136200521011) de `historical (presentation-c)` pasó sobre el mismo HEAD. CI posfusión 7/7, incluidos los [42 contratos CI](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44711628218). [Production](https://vercel.com/juanma-espinosas-projects/floorplan-3d/EFDP9hkCuSwveUmp1Dni5J9RSsWY) READY para ese SHA.
+
+
 > **Corte 20/11/2026 · Contrato R1.** [#272](https://github.com/Juanmaes83/floorplan-3d/pull/272) lleva a master `a02af9454cedc02c5dd26e92260a339cf10c794a` el árbol autorizado `3bd385bbdff2da91756032919611d41abb6f677f` y los dos documentos del contrato F0.2c R1. La CI de la PR cerró con 17 aprobaciones y una omisión prevista. CI posfusión 3/3. [Production](https://vercel.com/juanma-espinosas-projects/floorplan-3d/GxEbYKa9jMpgWDBLj5ndUqm6oZaV) READY para ese SHA. A0, F0.2c y F0.3 permanecen congelados.
 
 
