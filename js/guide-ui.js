@@ -46,7 +46,7 @@
   if(!s||s.projectId!==project.id||!G.goals[s.goal]||!s.evidence||typeof s.evidence!=='object'||Array.isArray(s.evidence)||!Array.isArray(s.completed)||!Array.isArray(s.skipped))s=data.entries[id]=G.initial(project,isReference(project)?'example':'own');
   return s;
  }
- function saved(){try{const raw=originalStorage.getItem(FloorPlanLibrary.KEY);if(library&&raw){const d=JSON.parse(raw);return JSON.stringify(d.entries.find(e=>e.id===library.activeId())?.project)===JSON.stringify(project);}return originalStorage.getItem(STORE)===JSON.stringify(project);}catch{return false;}}
+ function saved(){try{const pending=persistence.session?.state();if(pending&&(pending.status!=='saved'||pending.outdated))return false;const raw=originalStorage.getItem(FloorPlanLibrary.KEY);if(library&&raw){const entry=JSON.parse(raw).entries.find(e=>e.id===library.activeId());const current=entry?.kind==='building'?entry.building.levels.find(l=>l.id===entry.activeLevelId)?.project:entry?.project;return JSON.stringify(current)===JSON.stringify(project);}return originalStorage.getItem(STORE)===JSON.stringify(project);}catch{return false;}}
  function facts(){return {saved:saved(),imagesReady:!!project.sourceImages?.length&&project.sourceImages.every(i=>FloorPlanTraceUI.imageReady(i.id))};}
  function progress(){return G.evaluate(project,state(),facts());}
  const header=$('header'),searchBtn=btn('actionSearchBtn','',()=>openSearch(),header);searchBtn.setAttribute('aria-haspopup','dialog');
@@ -196,6 +196,7 @@
   function goArea(key){if(!window.FloorPlanProfessionalUI)return toast(tx('Esta área no está disponible en esta página.','This area is not available on this page.','此页面无法使用该区域。'),5000);closeWelcome();FloorPlanProfessionalUI.open(key);}
   function access(c){if(c.access==='upload')return [tx('Subir un plano','Upload a plan','上传平面图'),()=>document.getElementById('welcomeUpload').click()];
    if(c.access==='walk')return [tx('Recorrer el ejemplo en 3D','Walk the example in 3D','在 3D 中漫游示例'),()=>safe(walkExample)];
+   if(c.id==='building'&&levelsAvailable())return [label(G.actions.levels.title),()=>openLevels()];
    const key=c.access.slice(5);if(key==='design')return [tx('Ir al editor','Go to the editor','前往编辑器'),()=>closeWelcome()];return [tx('Abrir ','Open ','打开 ')+label(AREA[key]),()=>goArea(key)];}
   const caps=el('section',undefined,shell,'welcome-capabilities');caps.id='welcomeCapabilities';caps.setAttribute('aria-labelledby','welcomeCapabilitiesTitle');
   function renderCapabilities(){caps.replaceChildren();caps.hidden=!CAPS;if(!CAPS)return;
@@ -327,12 +328,22 @@
   let rows=[],index=-1;
   function choose(i){const a=rows[i];if(!a)return;if(!inline)actionDialog.close();safe(()=>execute(a,inline));}
   function selection(i){index=i;for(const [n,b]of [...results.children].entries())b.setAttribute('aria-selected',String(n===i));if(index>=0){input.setAttribute('aria-activedescendant',prefix+'Result'+index);results.children[index]?.scrollIntoView({block:'nearest'});}else input.removeAttribute('aria-activedescendant');}
-  function update(){rows=inline&&!input.value.trim()?[]:G.resolve(input.value);index=-1;results.replaceChildren();input.removeAttribute('aria-activedescendant');input.setAttribute('aria-expanded',String(rows.length>0));feedback.textContent=rows.some(a=>a.ambiguous)?tx('¿Qué quieres cambiar? Elige una opción.','What would you like to change? Choose an option.','想更改什么？请选择。'):!rows.length&&input.value?tx('Sin coincidencias. Prueba: subir plano, cama, escala, 3D, guardar o qué me falta.','No matches. Try: upload plan, bed, scale, 3D, save or what is left.','无匹配。请尝试上传平面图、家具、比例、3D 或保存。'):rows.length?tx(`${rows.length} acciones disponibles. Usa ↑ ↓ y Enter.`,`${rows.length} actions available. Use ↑ ↓ and Enter.`,`${rows.length} 个可用操作。使用方向键和回车。`):'';
+  function update(){rows=inline&&!input.value.trim()?[]:G.resolve(input.value).filter(offered);index=-1;results.replaceChildren();input.removeAttribute('aria-activedescendant');input.setAttribute('aria-expanded',String(rows.length>0));feedback.textContent=rows.some(a=>a.ambiguous)?tx('¿Qué quieres cambiar? Elige una opción.','What would you like to change? Choose an option.','想更改什么？请选择。'):!rows.length&&input.value?tx('Sin coincidencias. Prueba: subir plano, cama, escala, 3D, guardar o qué me falta.','No matches. Try: upload plan, bed, scale, 3D, save or what is left.','无匹配。请尝试上传平面图、家具、比例、3D 或保存。'):rows.length?tx(`${rows.length} acciones disponibles. Usa ↑ ↓ y Enter.`,`${rows.length} actions available. Use ↑ ↓ and Enter.`,`${rows.length} 个可用操作。使用方向键和回车。`):'';
    for(const [i,a]of rows.entries()){const b=el('button',undefined,results,'action-result');b.type='button';b.id=prefix+'Result'+i;b.setAttribute('role','option');b.setAttribute('aria-selected','false');b.tabIndex=-1;el('strong',label(a.title),b);el('span',label(a.description),b);const blocker=requirement(a);if(blocker)el('span',tx('Antes: ','First: ','先完成：')+label(G.definitions[blocker].title),b,'action-requirement');el('span',tx('Después: ','Next: ','下一步：')+label(a.next),b);b.onclick=()=>choose(i);}
   }
   input.oninput=update;input.onkeydown=e=>{if(['ArrowDown','ArrowUp'].includes(e.key)&&rows.length){e.preventDefault();selection((index+(e.key==='ArrowDown'?1:-1)+rows.length)%rows.length);}else if(e.key==='Enter'){e.preventDefault();if(rows.length===1)choose(0);else if(index>=0)choose(index);else if(rows.length)selection(0);}else if(e.key==='Escape'&&input.value){e.preventDefault();e.stopPropagation();input.value='';update();}};
   update();return input;
  }
+ // AST-01 · Una tarjeta que depende de una capacidad solo se ofrece si la capacidad está disponible (registro único,
+ // js/capability-registry.js) y su módulo está en la página: nunca se anuncia lo que no se puede abrir.
+ function levelsAvailable(){const caps=window.FloorPlanCapabilities,c=caps?.byId?.('building');return typeof window.FloorPlanBuildingUI?.open==='function'&&(!caps||c?.state==='available');}
+ function offered(a){return a.capability!=='building'||levelsAvailable();}
+ // Abre «Plantas…» de building-ui (la única implementación) y deja el foco en su primera acción de añadir.
+ function openLevels(){if(!levelsAvailable())return announce(tx('Las plantas no están disponibles en esta página.','Levels are not available on this page.','此页面无法使用楼层。'));
+  closeWelcome();closeDrawers();window.FloorPlanBuildingUI.open();const d=document.getElementById('levelsDialog');if(!d?.open)return;
+  const add=d.querySelector('#levelAddEmpty,#levelCreateEmpty');if(add)return add.focus();
+  // Edificio con el máximo de plantas (building-core LIMITS): se dice, y el panel queda abierto para revisarlas.
+  const max=window.FloorPlanBuilding?.LIMITS?.levels;announce(tx(`Este edificio ya tiene ${max||'el máximo de'} plantas, el máximo actual. Puedes revisarlas aquí.`,`This building already has ${max||'the maximum'} levels, the current maximum. You can review them here.`,`该建筑已有 ${max||'最多'} 层（当前上限）。可在此查看。`));}
  function openSearch(query=''){actionDialog.replaceChildren();heading(actionDialog,tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？'));const input=search(actionDialog,'editor');show(actionDialog);if(query){input.value=query;input.dispatchEvent(new Event('input'));}input.focus();}
  function requirement(a){if(state().kind==='example'&&a.goal&&a.goal!=='review')return 'start';if(a.prerequisite==='geometry'&&!G.geometryReady(project))return 'geometry';if(a.prerequisite==='image'&&!facts().imagesReady)return 'image';return null;}
  function setGoal(goal,{targetType,targetRoomId}={}){const s=state();s.goal=goal;s.manualTask=false;delete s.targetType;delete s.targetRoomId;if(targetType)s.targetType=targetType;if(targetRoomId)s.targetRoomId=targetRoomId;s.closed=false;const p=progress();s.current=(p.pending[0]||p.current).id;store();render();announce(tx('Objetivo actualizado. Las tareas se adaptan a lo que quieres conseguir.','Goal updated. Tasks adapt to what you want to achieve.','目标已更新。任务会根据目标调整。'));}
@@ -341,6 +352,7 @@
   if(a.id==='upload')return beginUpload();if(a.id==='blank')return createOwn('create');if(a.id==='example')return example();
   if(fromWelcome)closeWelcome();
   if(a.id==='presentation')return window.FloorPlanPresentation?.open();
+  if(a.id==='levels')return openLevels();
   if(a.id==='missing'){state().closed=false;render();return openDetails();}
   if((a.goal&&state().goal!==a.goal)||a.targetType){const targetRoom=a.roomHint&&(project.rooms.find(r=>r.family===a.roomHint)||project.rooms.find(r=>G.normalize(nm(r.name||'')).includes(a.roomHint==='bedroom'?LANG==='en'?'bed':'dorm':LANG==='en'?'kitchen':'cocina')));setGoal(a.goal,{targetType:a.targetType,targetRoomId:targetRoom?.id});if(targetRoom)select({kind:'room',id:targetRoom.id});}
   const block=requirement(a);if(block){if(block==='start')afterCopy=a;state().current=block;state().closed=false;store();render();
@@ -351,7 +363,7 @@
    case 'scale':return runTask(progress().tasks.find(t=>t.id==='scale')||{id:'scale',action:'scale',blockers:[]});
    case 'furniture':await setView('2d');if(!ui.sel||ui.sel.kind!=='room'){const room=project.rooms.find(r=>r.id===state().targetRoomId)||project.rooms[0];if(room)select({kind:'room',id:room.id});}libSearch.query=a.filter||'';libSearch.room='';libSearch.family='';$('#furnitureSearch').value=libSearch.query;$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();window.FloorPlanBuildPalette?.select('furnish');drawer('lib',true);$('#furnitureSearch').focus();state().current='furniture';break;
    case '3d':state().current='view3d';await setView('3d');if(is3D())record('view3d');break;
-   case 'save':state().current='save';if(save())announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));break;
+   case 'save':state().current='save';if(save()){await persistence.requireSaved();announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));}break;
    case 'export':state().current='export';exportPNG();break;
    case 'drawWall':await window.FloorPlanBuildPalette.drawWall();break;
    case 'measure':case 'select':await window.FloorPlanBuildPalette.useTool(a.id);break;
@@ -497,6 +509,7 @@
  addEventListener('floorplan-presentation-started',()=>{const id=library?.activeId()||project.id,rev=G.revision(project);try{const all=JSON.parse(originalStorage.getItem(JOURNEY_KEY)||'{}');all[id]={presented:rev};originalStorage.setItem(JOURNEY_KEY,JSON.stringify(all));}catch{}});
  addEventListener('floorplan-export-ready',e=>{if(e.detail.projectId===project.id&&e.detail.revision===G.revision(project)){state().exportName=e.detail.filename;record('export',e.detail.revision);}});
  addEventListener('floorplan-images-ready',sync);
+ persistence.session?.subscribe(()=>queueMicrotask(sync));
  // Entry URL means welcome; #editor reload resumes. Project persistence is independent of the screen.
  sync();if(location.hash!=='#legal-y-uso'){
   const screen=location.hash==='#editor'?'editor':'welcome';setRoute(screen,true);if(screen==='welcome')openWelcome(false);

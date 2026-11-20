@@ -18,6 +18,53 @@
   const roomName = (room, labels = {}, legacyName = name => name) => room?.name
     ? (room.family === undefined ? legacyName(room.name) : room.name)
     : labels[roomFamily(room)] || labels.unspecified || 'Estancia';
+  // UX-24 · La ÚNICA heurística de uso de una estancia (antes duplicada en NAV3D y en el Dibujo vivo). Es una SUGERENCIA:
+  // nunca se escribe en el proyecto sin que una persona la acepte. Primero lo que contiene, después su nombre.
+  // Orden de los nombres: el primero que encaja gana («Cocina-comedor» → comedor; «Baño del dormitorio» → dormitorio).
+  // Toda etiqueta que el propio editor usa (es/en/zh) vuelve a su tipo; las reglas chinas que terminan en 房 van antes de
+  // la genérica «…房 → dormitorio».
+  const ROOM_NAME_HINTS = Object.freeze([
+    [/sal[oó]n|estar|living|lounge|客厅|起居/i,'living'],[/comedor|dining|餐厅/i,'dining'],[/cocina|kitchen|厨房/i,'kitchen'],
+    [/书房/,'office'],[/洗衣房/,'laundry'],
+    [/dormitorio|habitaci[oó]n|bedroom|卧|房$/i,'bedroom'],[/ba[ñn]o|bath|浴室/i,'bathroom'],[/aseo|toilet|\bwc\b|卫/i,'toilet'],
+    [/despacho|estudio|office/i,'office'],[/pasillo|distribuidor|recibidor|hall|走廊/i,'hallway'],[/lavader|lavander|laundry|洗衣/i,'laundry'],
+    [/trastero|almac[eé]n|storage|储藏/i,'storage'],[/terraza|terrace|露台/i,'terrace'],[/balc[oó]n|mirador|balcony|阳台/i,'balcony'],
+    [/garaje|garage|车库/i,'garage'],[/cuarto t[eé]cnico|utility|设备间/i,'utility']]);
+  // among: tipos que entiende quien pregunta; un nombre que encaja con otro tipo se salta (el Dibujo vivo solo distingue 7).
+  const roomFamilyFromName = (name, {among} = {}) => (ROOM_NAME_HINTS.find(([re, f]) => (!among || among.includes(f)) && re.test(String(name || ''))) || [])[1] || null;
+  const roomPoly = room => room?.poly || (room?.polygon || []).map(p => [p.x, p.y]);
+  const insidePoly = (poly, x, y) => { let hit = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) hit = !hit; } return hit; };
+  // Objetos de una estancia: por roomId si el objeto lo lleva; si no, por su centro dentro del polígono.
+  const roomObjects = (project, room) => { const poly = roomPoly(room); return (project?.objects || []).filter(o => o && o.position && (o.roomId ? o.roomId === room.id : insidePoly(poly, o.position.x, o.position.y))); };
+  // Lo que contiene: devuelve el tipo y el objeto que lo deciden (para poder explicarlo), o null.
+  function roomFamilyFromContents(objects) {
+    const list = (objects || []).filter(Boolean), first = (...types) => list.find(o => types.includes(o.type));
+    let o;
+    if ((o = first('counter', 'stove', 'ksink'))) return {family: 'kitchen', object: o};
+    if ((o = first('toilet', 'shower', 'bathtub'))) return {family: 'bathroom', object: o};
+    if ((o = first('bed'))) return {family: 'bedroom', object: o};
+    if ((o = first('sofa'))) return {family: 'living', object: o};
+    if ((o = first('table')) && list.filter(x => x.type === 'chair').length >= 2) return {family: 'dining', object: o};
+    if ((o = first('washer'))) return {family: 'laundry', object: o};
+    return null;
+  }
+  // {family, source:'contents'|'name', object?} o null. No mira el tipo declarado: eso lo decide quien consulta.
+  function suggestRoomFamily(room, objects = [], {among} = {}) {
+    const c = roomFamilyFromContents(objects);
+    if (c) return {family: c.family, source: 'contents', object: c.object};
+    const f = roomFamilyFromName(room?.name, {among});
+    return f ? {family: f, source: 'name'} : null;
+  }
+  // UX-26 · Intercambiar SOLO el uso (nombre y tipo) de dos estancias. Geometría, acabados, muebles, aberturas y techos se
+  // quedan donde están. Los campos viajan tal cual (incluso ausentes), así que cada estancia se sigue mostrando igual que
+  // la otra antes; el esquema no cambia de versión.
+  function swapRoomUses(project, idA, idB) {
+    if (!idA || !idB || idA === idB) throw Error('Elige dos estancias distintas.');
+    const next = clone(project), a = next.rooms.find(r => r.id === idA), b = next.rooms.find(r => r.id === idB);
+    if (!a || !b) throw Error('Estancia no encontrada.');
+    for (const k of ['name', 'family']) { const va = a[k], vb = b[k]; if (vb === undefined) delete a[k]; else a[k] = vb; if (va === undefined) delete b[k]; else b[k] = va; }
+    validate(next); return next;
+  }
   function dateValid(value) {
     if (!/^\d{4}-\d\d-\d\d[Tt]\d\d:\d\d:\d\d(?:\.\d+)?(?:[Zz]|[+-]\d\d:\d\d)$/.test(value)) return false;
     const [y, m, d] = value.slice(0, 10).split('-').map(Number);
@@ -312,6 +359,6 @@
   function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.buildingPlacement!==undefined&&minor<12)next.schemaVersion='1.12.0';else if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
-  const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
+  const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

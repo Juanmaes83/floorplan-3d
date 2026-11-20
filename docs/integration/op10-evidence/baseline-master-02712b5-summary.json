@@ -1,0 +1,845 @@
+{
+ "format": "rubik-sota.op10-run",
+ "version": "0.1.0-lab",
+ "startedAt": "2026-11-19T20:10:53.837Z",
+ "scenarios": [
+  {
+   "id": "f1-rect",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_op10-f1-rect",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "69ec51eea1be0f3a0ad9b8dff5f048020e3b97668ed9c0d67cd230e265f7a024",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "a2c7173dc4055fe7dc80ca0566d777a5a0ffd616ac677556dcd6fb14c6865ef0",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "93d096e7f4a3df81a18c90ec0d17a54c5933cfa532de4c5f732241c25171f78b",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 20,
+     "vertices": 703,
+     "faces": 492,
+     "instancesExpanded": 0,
+     "roles": {
+      "room": 1,
+      "unlinked": 7,
+      "ceiling": 1,
+      "wall": 9,
+      "opening-leaf": 2
+     },
+     "entities": 7,
+     "bounds": {
+      "min": [
+       -2.74,
+       0,
+       -2.24
+      ],
+      "max": [
+       2.74,
+       2.8,
+       2.24
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 18,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 4696,
+     "captureMs": 4.3,
+     "serializeMs": 0.6,
+     "sceneBytes": 28284,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.2
+     },
+     "navigationAfter": {
+      "medianMs": 16.6,
+      "p95Ms": 17.2
+     },
+     "captureBlocksMainThreadMs": 4.9,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {},
+    "sceneSha256": "93d096e7f4a3df81a18c90ec0d17a54c5933cfa532de4c5f732241c25171f78b",
+    "projectCanonicalSha256": "69ec51eea1be0f3a0ad9b8dff5f048020e3b97668ed9c0d67cd230e265f7a024"
+   },
+   "fidelityAB": {
+    "contract": 31,
+    "failed": 0,
+    "visual": 0,
+    "unlinked": 7,
+    "associated": 6
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.794,
+    "peakRssBytes": 481185792
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 703,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 31,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.733,
+    "peakRssBytes": 474042368,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f2-rot30",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_op10-f2-rot30",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "77b242855fd4c20a211756dc653c3c6a30d0d716ebce27b38a50c90c686f7564",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "92085eb5c10c41eb0532ea6b08f979936b9f6ae81c4545279f7040c0a6f4f2d7",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "9e24d7b95599b73823675e1ce986fd46fac81432b8cebf8493bf964817440ea7",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 1589,
+     "vertices": 446541,
+     "faces": 199388,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "unlinked": 108,
+      "ceiling": 13,
+      "wall": 369,
+      "opening-leaf": 12,
+      "object": 1072
+     },
+     "entities": 148,
+     "bounds": {
+      "min": [
+       -6.808496,
+       -0.000896,
+       -7.40793
+      ],
+      "max": [
+       6.81577,
+       2.8,
+       7.40793
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 188,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 7566,
+     "captureMs": 328.1,
+     "serializeMs": 203.9,
+     "sceneBytes": 16470479,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.4
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.2
+     },
+     "captureBlocksMainThreadMs": 532,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "generic": 46
+    },
+    "sceneSha256": "9e24d7b95599b73823675e1ce986fd46fac81432b8cebf8493bf964817440ea7",
+    "projectCanonicalSha256": "77b242855fd4c20a211756dc653c3c6a30d0d716ebce27b38a50c90c686f7564"
+   },
+   "fidelityAB": {
+    "contract": 599,
+    "failed": 0,
+    "visual": 32,
+    "unlinked": 108,
+    "associated": 97
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.226,
+    "peakRssBytes": 878792704
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 446541,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 599,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 2.756,
+    "peakRssBytes": 732672000,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f3-openings",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_op10-f3-openings",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "8675d4cfd813f10bc086581f095f19f03029b4fb9403c6d0579773d20c8dd60d",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "ee78637e8329e9f2d0ca338591382368224ee0f9525c8330e6239afdddd81e55",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "a8c6bb9ccee4323ffa97c56852b792fe670116318800f8d0c9ed7b2cf60e5ce5",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 94,
+     "vertices": 12265,
+     "faces": 6244,
+     "instancesExpanded": 0,
+     "roles": {
+      "room": 2,
+      "unlinked": 18,
+      "ceiling": 2,
+      "wall": 27,
+      "opening-leaf": 2,
+      "object": 43
+     },
+     "entities": 15,
+     "bounds": {
+      "min": [
+       -5.279953,
+       0,
+       -2.745654
+      ],
+      "max": [
+       5.279953,
+       2.97,
+       2.745654
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 32,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 4363,
+     "captureMs": 21.1,
+     "serializeMs": 6.1,
+     "sceneBytes": 484038,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.2
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.2
+     },
+     "captureBlocksMainThreadMs": 27.2,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "ready": 1,
+     "generic": 1,
+     "error": 1
+    },
+    "sceneSha256": "a8c6bb9ccee4323ffa97c56852b792fe670116318800f8d0c9ed7b2cf60e5ce5",
+    "projectCanonicalSha256": "8675d4cfd813f10bc086581f095f19f03029b4fb9403c6d0579773d20c8dd60d"
+   },
+   "fidelityAB": {
+    "contract": 63,
+    "failed": 0,
+    "visual": 0,
+    "unlinked": 18,
+    "associated": 18
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.887,
+    "peakRssBytes": 484605952
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 12265,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 63,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.746,
+    "peakRssBytes": 479322112,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f4-active",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_fixture-ground",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "4218ac607cf5def65c070f05cbc3b29823db5350b70583255b2ecb6f368a1894",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "e327fe105e64e777b3f80755c179d44b628f4befebe1d175cd9bea1cf22a9ce6",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 61,
+     "vertices": 19071,
+     "faces": 6810,
+     "instancesExpanded": 4,
+     "roles": {
+      "room": 2,
+      "unlinked": 3,
+      "ceiling": 2,
+      "wall": 24,
+      "opening-leaf": 2,
+      "object": 14,
+      "stair": 14
+     },
+     "entities": 14,
+     "bounds": {
+      "min": [
+       -3.86,
+       0,
+       -1.44
+      ],
+      "max": [
+       3.86,
+       3.1,
+       1.44
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 19,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 4450,
+     "captureMs": 19.2,
+     "serializeMs": 9.4,
+     "sceneBytes": 654988,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.4
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.7
+     },
+     "captureBlocksMainThreadMs": 28.6,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "generic": 1
+    },
+    "sceneSha256": "e327fe105e64e777b3f80755c179d44b628f4befebe1d175cd9bea1cf22a9ce6",
+    "projectCanonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167"
+   },
+   "fidelityAB": [
+    {
+     "level": "lvl_fixture-ground",
+     "present": true,
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "present": false,
+     "contract": null,
+     "failed": null
+    },
+    {
+     "stairs": [
+      {
+       "id": "str_fixture-main",
+       "risers": 14,
+       "meshes": 14,
+       "observedTopM": 3.1,
+       "expectedTopM": 3.1,
+       "topDeviationMm": 0
+      }
+     ]
+    }
+   ],
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.853,
+    "peakRssBytes": 484876288
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 19071,
+    "issues": 0
+   },
+   "fidelityCA": [
+    {
+     "level": "lvl_fixture-ground",
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "contract": null,
+     "failed": null
+    }
+   ],
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.749,
+    "peakRssBytes": 478433280,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f4-all",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_fixture-ground",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "4218ac607cf5def65c070f05cbc3b29823db5350b70583255b2ecb6f368a1894",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "2e51ad13f6cdd9933477a3356a8f977ad4169482bc896915a8395bfd3cc786ed",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 94,
+     "vertices": 47911,
+     "faces": 16544,
+     "instancesExpanded": 4,
+     "roles": {
+      "room": 3,
+      "unlinked": 3,
+      "ceiling": 3,
+      "wall": 31,
+      "opening-leaf": 2,
+      "object": 31,
+      "level": 6,
+      "room-slab": 1,
+      "stair": 14
+     },
+     "entities": 23,
+     "bounds": {
+      "min": [
+       -3.86,
+       0,
+       -1.44
+      ],
+      "max": [
+       3.86,
+       5.9,
+       1.44
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 32,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 5280,
+     "captureMs": 50.9,
+     "serializeMs": 30.3,
+     "sceneBytes": 1628040,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.7
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.3
+     },
+     "captureBlocksMainThreadMs": 81.2,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "unknown": 1,
+     "generic": 1
+    },
+    "sceneSha256": "2e51ad13f6cdd9933477a3356a8f977ad4169482bc896915a8395bfd3cc786ed",
+    "projectCanonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167"
+   },
+   "fidelityAB": [
+    {
+     "level": "lvl_fixture-ground",
+     "present": true,
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "present": true,
+     "contract": 32,
+     "failed": 0
+    },
+    {
+     "stairs": [
+      {
+       "id": "str_fixture-main",
+       "risers": 14,
+       "meshes": 14,
+       "observedTopM": 3.1,
+       "expectedTopM": 3.1,
+       "topDeviationMm": 0
+      }
+     ]
+    }
+   ],
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 1.073,
+    "peakRssBytes": 506269696
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 47911,
+    "issues": 0
+   },
+   "fidelityCA": [
+    {
+     "level": "lvl_fixture-ground",
+     "contract": 55,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "contract": 32,
+     "failed": 0
+    }
+   ],
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.927,
+    "peakRssBytes": 487346176,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f5-furniture",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_op10-f5-furniture",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "6033a221ebb28260c7e8ff3410063a7cef7bfe2101469a107d4602d565d997d4",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 1509,
+     "vertices": 446385,
+     "faces": 199752,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "unlinked": 108,
+      "ceiling": 13,
+      "wall": 292,
+      "opening-leaf": 12,
+      "object": 1069
+     },
+     "entities": 149,
+     "bounds": {
+      "min": [
+       -6.185,
+       -0.000896,
+       -5.52
+      ],
+      "max": [
+       6.185,
+       2.8,
+       5.52
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 144,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 8197,
+     "captureMs": 322.8,
+     "serializeMs": 194.7,
+     "sceneBytes": 15811927,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.3
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.3
+     },
+     "captureBlocksMainThreadMs": 517.5,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "ready": 1,
+     "generic": 46
+    },
+    "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171",
+    "projectCanonicalSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849"
+   },
+   "fidelityAB": {
+    "contract": 601,
+    "failed": 0,
+    "visual": 35,
+    "unlinked": 108,
+    "associated": 97
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.141,
+    "peakRssBytes": 871485440
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 446385,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 601,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.028,
+    "peakRssBytes": 727080960,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  },
+  {
+   "id": "f6-r02r03",
+   "identity": {
+    "observedProject": {
+     "projectId": "prj_op10-f6-r02r03",
+     "updatedAt": "2026-11-19T00:00:00.000Z",
+     "canonicalSha256": "0e2b6cbc240d51d592a634d820ff73bd3f2a124dbecca1318279f3eca29df8df",
+     "meaning": "project as observed in the viewer at capture time; NOT a confirmed F0 transactional revision"
+    },
+    "fixtureContentId": "ee7b29b92603680051267880c5248333f676c4734915f547f072c0301d38c43c",
+    "fixtureContentIdScope": "synthetic fixtures only: empty documents, no verified image bytes, outside the expediente pack/read path",
+    "sceneSha256": "85c3189e53e831010b053f227972cf8f2a201bc00922d90f27ce39295d1a47cf",
+    "note": "fixtureContentId = js/expediente-core.js contentId() called directly: neutralises the local id but NOT createdAt/updatedAt (verified); compare it only through the same expediente path. scene = observed snapshot + scope; render fingerprint lives in render-report.json"
+   },
+   "capture": {
+    "stats": {
+     "meshes": 1513,
+     "vertices": 437989,
+     "faces": 197080,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "unlinked": 108,
+      "ceiling": 13,
+      "wall": 292,
+      "opening-leaf": 12,
+      "object": 1072,
+      "ceiling-element": 1
+     },
+     "entities": 149,
+     "bounds": {
+      "min": [
+       -6.185,
+       -0.000896,
+       -5.52
+      ],
+      "max": [
+       6.185,
+       2.8,
+       5.52
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 144,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 8375,
+     "captureMs": 320.5,
+     "serializeMs": 205.8,
+     "sceneBytes": 15530990,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.4
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.1
+     },
+     "captureBlocksMainThreadMs": 526.3,
+     "viewport": {
+      "width": 1280,
+      "height": 800
+     }
+    },
+    "assets": {
+     "generic": 46
+    },
+    "sceneSha256": "85c3189e53e831010b053f227972cf8f2a201bc00922d90f27ce39295d1a47cf",
+    "projectCanonicalSha256": "0e2b6cbc240d51d592a634d820ff73bd3f2a124dbecca1318279f3eca29df8df"
+   },
+   "fidelityAB": {
+    "contract": 602,
+    "failed": 0,
+    "visual": 34,
+    "unlinked": 108,
+    "associated": 97
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/import_scene.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.337,
+    "peakRssBytes": 865796096
+   },
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 437989,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 602,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/labs/sculpt/op-10/blender/reopen_verify.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.266,
+    "peakRssBytes": 724226048,
+    "result": "PASS"
+   },
+   "importReport": "PASS"
+  }
+ ],
+ "finishedAt": "2026-11-19T20:12:31.785Z"
+}

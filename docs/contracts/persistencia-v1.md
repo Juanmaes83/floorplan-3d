@@ -1,8 +1,11 @@
 # Contrato · Autoridad de persistencia (F0.2)
 
-**Estado:** F0.2a cerrado en borrador (#263). La estrategia (contrato del expediente, §8) la aprobó el propietario el 18/11/2026 con condiciones. El editor **todavía no** usa esta autoridad: F0.2b (§8) se hará solo después de integrar #259 y #262 y de acordar el orden con Codex.
-**Código:** `js/persistence-store.js` (`FloorPlanPersistence`), `js/local-images.js` (recogida segura), `js/expediente-core.js` (`recover()`), `js/tracing-ui.js` (`cleanup()`).
-**Pruebas:** `tests/persistence.browser.test.cjs` (13) y `tests/expediente.browser.test.cjs` (4), en Chromium real. Los fallos de escritura de clave concreta se **simulan** con un envoltorio sobre el `localStorage` real; la cuota es real, en un perfil en disco.
+**Estado:** F0.2b candidato de desarrollo sobre `dd528119`, con F0.1, F0.2a y #264 como dependencias. La conexión a IndexedDB se ejerce en el origen aislado `http://f0-2b.localhost:<puerto>`. Los orígenes habituales conservan el almacenamiento vigente hasta que se autorice el cambio con F0.2c y F0.3.
+
+**Código:** `persistence-store.js`, `persistence-editor.js`, `expediente-core.js` y `local-images.js`.
+
+**Pruebas:** `persistence.browser.test.cjs` y `expediente.browser.test.cjs` usan IndexedDB y almacenamiento de navegador reales. El escenario de cuota utiliza un perfil Chromium en disco. Los fallos puntuales del espejo se inyectan sobre el almacenamiento real.
+
 **CI:** `.github/workflows/f0-persistencia.yml`, workflow propio (§9).
 **Relacionado:** [Contrato del expediente](expediente-v1.md).
 
@@ -45,7 +48,7 @@ Guarda, byte a byte, las mismas cadenas JSON que ya escriben `project-library`, 
 - El registro guarda el **estado completo** de la pestaña (todas las claves gestionadas tal como las ve: biblioteca y documentos coherentes entre sí), no solo el lote.
 - Mientras la pestaña sigue en conflicto, cada cambio posterior **reescribe ese mismo registro** en IndexedDB. Nada queda solo en memoria; si esa escritura falla, se avisa y se indica la exportación de emergencia.
 - `conflictExport(id)` genera el mismo formato que la exportación de emergencia, con las imágenes.
-- `adoptConflict(id)` recupera ese trabajo. Primero guarda el estado confirmado vigente como conflicto `superseded`; después confirma el del conflicto en una transacción. No se descarta nada en ninguno de los dos sentidos.
+- `adoptConflict(id)` recupera ese trabajo. Guarda la versión vigente como conflicto `superseded`, aplica la recuperada y retira el registro original en la misma transacción comprobada por revisión.
 - Los conflictos nunca entran como variantes, así que `MAX_VARIANTS` no puede descartar trabajo.
 
 **Prueba.** La pestaña B cambia la biblioteca y un presupuesto, recibe otro cambio con la transacción en curso y otro después del conflicto, y se cierra. En una pestaña nueva, solo con el registro, se reconstruyen:
@@ -116,7 +119,7 @@ Además:
 
 **Hallazgo anterior mantenido:** `recover()` no deshace con una copia desactualizada de la biblioteca ni toca registros recientes.
 
-**F0.2c** llevará las imágenes y el diario a la misma base que la biblioteca. Imagen, documento y biblioteca se confirmarán en una transacción, y la recogida será una consulta sobre una sola autoridad.
+**F0.2c** llevará las imágenes y el diario a la misma base que la biblioteca. Imagen, documento y biblioteca se confirmarán en una transacción, y la recogida será una consulta sobre una sola autoridad. Diseño: [F0.2c · revisión R1](persistencia-f0-2c-r1.md).
 
 ## 6 bis. SCULPT · bloques adoptados de openPlan3D
 
@@ -134,30 +137,39 @@ Donante: `Juanmaes83/openPlan3D` (fork MIT de `laanlabs/openPlan3D`), `771c9e1`.
 - **Comparación por proyecto** (`datastore.ts`, `save`/`delete`). Compara el registro concreto en lugar de una revisión global, así que hay menos conflictos falsos entre proyectos distintos. Encaja cuando la biblioteca deje de ser una sola cadena; se evaluará en F0.2c.
 - **Historial de versiones** (`versionHistory.ts`, `snapshotStorage.ts`). Diez instantáneas por proyecto con recursos compartidos entre versiones. RUBIK no tiene historial; candidato para F0.3 o posterior, sin crear una autoridad paralela.
 
-## 7. Orden recomendado
+## 7. Dependencias y adopción
 
-1. **Cerrar F0.2a** (#263) con su CI en verde.
-2. **Integrar #259 (Codex) y luego #262**, después de que el propietario lo autorice. Después, #263 se rebasa sobre master.
-3. **F0.2b** parte del SHA de master resultante: el que incluya #259, #262 y #263. Hoy no existe; se fijará al integrarlos.
-4. **F0.2c antes de habilitar la persistencia para usuarios reales.** Sin F0.2c, una restauración o una imagen nueva sigue escribiendo en dos bases y depende del diario y de la recogida protegida. Es seguro, pero no es una autoridad única.
-5. **F0.3:** interfaz de estado, conflictos, exportación de emergencia, `recover()` al arrancar y `persist()`. Incluye la validación de navegadores (§10) antes de cualquier entorno público.
+- F0.2b se valida sobre el master consolidado. La conexión se activa en conjunto para editor, Comparar y Evolución solo en un origen de pruebas separado. Las entregas y demos se aíslan antes de abrir la autoridad. Un parámetro de URL no cambia la autoridad de una página profesional.
+- F0.2c debe resolver la atomicidad de documentos, bytes y diario en restauraciones. F0.3 debe acreditar el ciclo completo de recuperación acompañado por la interfaz y la matriz de navegadores y dispositivos. El permiso de #264 y la interfaz mínima del laboratorio forman parte de la preparación.
+- Los futuros adjuntos privados de OP-05 se pueden incorporar al único ciclo de referencia, ámbito, transacción y recuperación cuando F0.2c fije ese contrato. F0.2b conserva las cinco claves y los esquemas existentes.
+- Si una restauración pierde la revisión base, conserva la copia recuperable y el diario. La recuperación puede cerrar el diario de un proyecto confirmado. Para huérfanos de una restauración interrumpida con imágenes mantiene el diario y los bytes hasta poder demostrar que no los necesita ninguna revisión o conflicto.
 
-## 8. Mapa de F0.2b
+## 8. Consumidores de F0.2b
 
-**No se ha modificado ninguno de estos archivos.**
+| Consumidor | Claves gestionadas | Acceso en el candidato | Prueba |
+|---|---|---|---|
+| Editor, historial, importadores, trazado, edificios y variantes | Proyecto anterior y biblioteca. Biblioteca también puede copiar presupuestos | Lectura/escritura en la fachada de la sesión. Ediciones síncronas y confirmación posterior | Persistencia, Variantes, Edificios |
+| Presupuestar y CAT-04 | Presupuestos y biblioteca | Fachada de la sesión. Conservan el cálculo y la identidad de presupuesto | Budget UI, E2 y portabilidad |
+| Obra y Plan de obra | Biblioteca, presupuestos y registro de obra | Fachada de la sesión. Guardar, seleccionar y eliminar confirman antes del resultado | Evolución, persistencia y registro de obra |
+| Observaciones, Dossier y Workspace | Observaciones y documentos del área | Fachada de la sesión | Client Review y portabilidad |
+| Comparar/Entregar E2 | Biblioteca y presupuestos | Lee instantáneas confirmadas. Relee antes y después de generar y antes de descargar o verificar | E2, carreras A26/H03 y D02 |
+| Evolución embebida | Biblioteca, presupuestos y obra | Lee una instantánea confirmada. Delega registro a la ventana propietaria con confirmación correlacionada por entrega | Handoff de Evolución y repetición del mismo identificador |
+| Evolución independiente | Biblioteca, presupuestos y obra | Sesión independiente con la misma autoridad y comparación optimista de revisión | Handoff de Evolución, relectura y registro independiente |
+| Expediente v1 | Biblioteca, presupuestos y observaciones | Reutiliza importador, diarios, documentos y sesión. Conserva sus exclusiones | Restauración multiplanta real, repetición y fallo posterior al staging |
+| Recogida y exportación de emergencia | Referencias de los cinco documentos, conflictos y almacén de imágenes | Lectura de autoridad y referencias vivas. Copia de emergencia con diagnóstico de imágenes ausentes | Cuota, conflictos y recogida en varias pestañas |
 
-| Consumidor | Claves | Acceso hoy | Cambio previsto | Lo toca otra PR |
-|---|---|---|---|---|
-| `index.html` | proyecto suelto y, a través del objeto `storage`, biblioteca | `localStorage` directo (6 puntos) y objeto `storage` | Crear la sesión antes de `FloorPlanLibrary.load` y pasar `session.storage` | #255, #257, #259 |
-| `js/budget-ui.js` | presupuestos, biblioteca | `localStorage` directo (4) | Recibir el `storage` de la sesión | — |
-| `js/construction-context.js` | presupuestos, obra, biblioteca | `localStorage` directo (7) | Ídem | — |
-| `js/review-notes-ui.js`, `js/project-dossier-ui.js`, `js/professional-workspace-ui.js` | observaciones | `localStorage` directo (2, 1 y 1) | Ídem | — |
-| `js/cat04-ui.js`, `js/catalog-budget-core.js`, `js/construction-project-adapter.js`, `js/construction-record-core.js`, `js/project-library.js`, `js/expediente-core.js` | presupuestos, obra | Ya reciben `storage` como parámetro | Ninguno: basta con pasarles la sesión | — |
+### Lectura y futura integración E3
 
-**Pruebas de F0.2b:**
-- las suites de navegador existentes de presupuestos, obra, observaciones, variantes y edificio, ejecutadas contra la sesión;
-- una prueba de editor completo (`index.html`) que guarde, recargue y recupere un conflicto;
-- la migración de un perfil con datos reales de la versión actual.
+- **Revisión local:** `FloorPlanPersistence.readConfirmed()` devuelve `{revision, docs}` en una transacción de lectura. El mapa está separado de la sesión. Falta autoridad si la migración nunca se confirmó. La lectura no crea la base ni migra.
+- **Identidad portable:** `FloorPlanExpediente.contentIdOf(parsed)` consume el resultado de `read()` y el `contentId` vigente. Para un expediente usa los bytes verificados y la pareja exacta **nivel + id de imagen**. Un JSON histórico solo aporta referencias. El material sin bytes verificados no puede acreditarse como el mismo adjunto portable.
+- **Huella de entrega:** la vigencia de una entrega requiere comprobar el snapshot y los datos concretos consumidos por su receta. El mismo `contentId` puede coexistir con otra firma, tarifa, planificación, vínculo presupuestario o resultado visual.
+- El [adaptador E3 congelado](https://github.com/Juanmaes83/floorplan-3d/blob/8c53263423359e4fa71fc25494c7a3b6ee1f7fd1/labs/studio-presentation/tools/f0-adaptador.cjs) busca rutas por `includes` y `endsWith`. En producción deberá usar la identidad exacta de la imagen en su nivel, resuelta por el lector canónico. Su veredicto de igualdad de identidad solo cubre el contenido del expediente. Conserva también las huellas de snapshot y registro cuando se evalúe una entrega.
+- **Autoridades actuales:** `rubik-construction-v1` forma parte de F0 aunque el expediente v1 excluya obra y vínculo plan–presupuesto. `FloorPlanBrand` conserva los perfiles y la firma elegida en sus dos claves de estudio. `rubik-tariff-v1` permanece en el navegador. `RubikCatalogProduct` gestiona las fichas y el proyecto conserva sus vínculos en la extensión correspondiente. El norte declarado se guarda en `site.northOffsetDeg` del proyecto o edificio canónico. Ausencia del dato o una orientación sin procedencia se distinguen de una orientación declarada.
+- E3 de producción queda a cargo de D4 y la aceptación correspondiente. Expediente v2, variantes portables, historial y nuevas recetas quedan para sus cortes. Calcular vistas para E3 mantiene abiertas las capacidades CAM01 e IMG07 y la futura persistencia de resultados visuales.
+
+### Rollback
+
+Antes de volver a una versión que solo lea `localStorage`, inmovilizar el origen de prueba, confirmar que no quedan sesiones con ediciones sin confirmar y exportar la revisión y los conflictos recuperables. Confirmar que todos los valores del espejo corresponden a la misma revisión de IndexedDB y que la biblioteca carece de barrera. Si falta una de estas comprobaciones, conservar la autoridad y recuperar desde ella antes de abrir la versión anterior. Conservar también el almacén de imágenes y el diario. Una reversión de código no borra IndexedDB.
 
 ## 9. CI
 
@@ -191,11 +203,11 @@ Puntos a vigilar:
 - `BroadcastChannel`;
 - el desalojo de datos en iOS.
 
-Ahora no se ejecuta porque el módulo no está conectado al editor.
+La matriz completa sigue siendo un gate de F0.3. WebKit automatizado y perfiles móviles emulados aportan evidencia propia, separada de Safari y dispositivos físicos.
 
 ## 11. Límites
 
-- Hasta F0.2b, las garantías son del módulo, no del producto.
+- Las garantías de esta rama se ejercen en el origen de prueba. La publicación de la rama mantiene la activación de usuarios en espera.
 - Lo que no se ha confirmado se pierde si el navegador se cierra de golpe. Siempre se muestra como «pendiente», y la exportación de emergencia lo cubre mientras la pestaña está abierta.
 - `durability: 'strict'` y `persist()` son peticiones al navegador, no garantías.
 - Solo se ha probado en Chromium (§10).

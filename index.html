@@ -104,6 +104,8 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 .panel-body .form{margin-top:4px}
 .panel-view form{padding:4px 16px 0}
 .panel-group{border-bottom:1px solid var(--line);padding:6px 0}.panel-group:last-child{border-bottom:0}
+.room-suggest{margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-left:4px solid var(--info);border-radius:8px;background:var(--surface-sunken)}.room-suggest p{margin:0 0 8px}#panel .room-suggest .btn,#panel .room-swap .btn{min-height:44px}
+.room-swap .muted{margin:6px 0}
 details.panel-group>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:40px;display:flex;align-items:center;gap:8px;list-style:none}
 details.panel-group>summary::-webkit-details-marker{display:none}
 details.panel-group>summary::before{content:'▸';color:var(--muted);transition:transform .15s}details.panel-group[open]>summary::before{transform:rotate(90deg)}
@@ -173,6 +175,9 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .stats div{background:var(--surface-sunken,#faf6ef);border-radius:8px;padding:8px}
 .stats small{display:block;color:var(--muted);font-size:11px}
+.wall-faces{margin-top:10px}.wall-faces-title{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--ink,inherit)}
+.wall-faces-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.wall-faces-stats .big{white-space:nowrap;font-variant-numeric:tabular-nums}.wall-faces-why{margin:6px 0;font-size:12px}
+#panel .wall-faces .btn{min-height:44px}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
   padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
 #toast.show{opacity:1;transform:translateX(-50%)}
@@ -636,11 +641,13 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
         <button class="btn" id="importImage" data-en="Upload a floor plan or project" data-es="Subir plano o proyecto" aria-describedby="uploadPlanHelp">上传平面图或项目</button>
+        <button class="btn" id="joinRoomPlan" data-en="Join a RoomPlan scan…" data-es="Unir escaneo RoomPlan…">拼接 RoomPlan 扫描…</button>
         <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear" data-es="Vaciar distribución">清空布置</button>
         <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
       </div></details>
     <input type="file" id="fileIn" aria-label="Proyecto JSON" accept=".json,application/json" hidden>
     <input type="file" id="uploadIn" aria-label="Subir plano" hidden>
+    <input type="file" id="roomPlanJoinIn" accept=".json,application/json" aria-label="Escaneo RoomPlan" hidden>
   </header>
 
   <aside class="lib">
@@ -696,6 +703,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     <span class="only2d"><span data-en="Scale">当前比例</span> <b id="ratio">—</b></span>
     <span id="hover" class="only2d"></span>
     <span class="spacer"></span>
+    <button class="btn" id="persistenceOpen" type="button" hidden><span id="persistenceStatus" aria-live="polite"></span></button>
     <span id="traceStatus" role="status" aria-live="polite"></span><span id="tip"></span>
     <a class="legal-link" id="legalLink" href="#legal-y-uso" data-en="Legal & use" data-es="Legal y uso">法律与使用</a>
   </footer>
@@ -714,6 +722,17 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, IFC, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, IFC, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、IFC、RoomPlan 或项目)</span></div>
 <dialog id="uploadPdfMode" aria-labelledby="uploadPdfModeTitle"><form method="dialog"><h3 id="uploadPdfModeTitle" data-en="PDF vector drawing" data-es="PDF con dibujo vectorial">PDF 矢量绘图</h3><p id="uploadPdfModeInfo"></p><label>Escala del plano 1: <input type="number" id="uploadPdfScale" min="1" max="1000" step="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate id="uploadPdfCancel" data-en="Cancel" data-es="Cancelar">取消</button> <button class="btn" value="raster" formnovalidate id="uploadPdfRaster" data-en="Use as image" data-es="Usar como imagen">用作图片</button> <button class="btn primary" value="vector" id="uploadPdfVector" data-en="Import measured walls" data-es="Importar muros con medidas">导入带尺寸的墙体</button></p></form></dialog>
 <dialog id="uploadPdfPage" aria-labelledby="uploadPdfTitle"><form method="dialog"><h3 id="uploadPdfTitle">Elegir página del PDF</h3><p id="uploadPdfInfo"></p><label>Página <input type="number" id="uploadPdfNumber" min="1" value="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate>Cancelar</button> <button class="btn primary" value="ok" id="uploadPdfOk">Usar página</button></p></form></dialog>
+<dialog id="roomPlanJoinDialog" aria-labelledby="roomPlanJoinTitle">
+  <form method="dialog">
+    <h3 id="roomPlanJoinTitle">Unir escaneo RoomPlan</h3>
+    <p id="roomPlanJoinFloor"></p>
+    <p><label for="roomPlanFixedDoor">Puerta de la planta</label> <select id="roomPlanFixedDoor"></select></p>
+    <p><label for="roomPlanMovingDoor">La misma puerta en el escaneo</label> <select id="roomPlanMovingDoor"></select></p>
+    <svg id="roomPlanJoinPreview" role="img" aria-label="Vista previa de la planta y del escaneo alineado" width="510" height="260" style="display:block;max-width:100%;background:#f6f3ed" hidden></svg>
+    <p id="roomPlanJoinStatus" role="status"></p>
+    <p class="actions"><button class="btn" value="cancel">Cancelar</button> <button class="btn primary" id="roomPlanJoinApply" value="join" disabled>Unir a esta planta</button></p>
+  </form>
+</dialog>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
 <dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
@@ -787,6 +806,11 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/presentation-core.js"></script>
 <script src="js/provenance-core.js"></script>
 <script src="js/opening-edit.js"></script>
+<script src="js/storage-persistence.js"></script>
+<script src="js/persistence-store.js"></script>
+<!-- Defer until the template has been parsed. R03 remains the final script block. -->
+<script src="js/persistence-editor.js" defer></script>
+<template id="editorScripts">
 <script>
 /* ======================= Multilingual UI: Español / English / 中文 ======================= */
 const LANG_KEY = 'rubik-sota-floorplan-lang';
@@ -947,7 +971,6 @@ function translateEs(zh, en){
   if (ES_TEXT[en]) return ES_TEXT[en];
   let m;
   if ((m=en.match(/^Net floor area ≈ (.+) m² · Units: mm(?: · Original scale (1:\d+))?$/))) return `Superficie útil aprox. ${m[1]} m² · Unidades: mm${m[2]?' · Escala original '+m[2]:''}`;
-  if ((m=en.match(/^Wall area \(2\.8m ceiling, openings not deducted\) ≈ (.+) m²$/))) return `Superficie de muros aprox. ${m[1]} m² (altura: 2,8 m; sin descontar puertas ni ventanas)`;
   if ((m=en.match(/^(\d+) items$/))) return `${m[1]} elementos`;
   if ((m=en.match(/^Remove all (\d+) furniture \/ appliance items\?\nWalls, flooring and measurements are kept\. You can Undo this\.$/))) return `¿Retirar los ${m[1]} muebles o electrodomésticos?\nSe conservan los muros, pavimentos y mediciones. Puedes deshacerlo.`;
   if ((m=en.match(/^Added "(.+)" (\d+)×(\d+)$/))) return `Añadido «${m[1]}» ${m[2]}×${m[3]}`;
@@ -1118,11 +1141,9 @@ function applyStaticLang(){
 /* FloorPlanProjectV1 is the only durable application state. Renderer geometry is derived. */
 const Core = window.FloorPlanCore;
 const STORE = 'rubik-sota-floorplan-project-v1';
-let storage;
-try { storage = localStorage; } catch { storage = {getItem:()=>null, setItem:()=>{throw new Error('Browser storage unavailable');}}; }
-const loadedProject = Core.load(storage, STORE);
-let library,libraryError;
-try { library=FloorPlanLibrary.load(storage,loadedProject.project); } catch(e){libraryError=e.message;}
+const persistence = window.FloorPlanPersistenceEditor;
+let storage = persistence.storage;
+const {loadedProject,library,libraryError}=persistence.bootstrap;
 let project = library ? library.project() : loadedProject.project;
 const originalStorage=storage;
 if(library)storage={getItem:key=>key===STORE?JSON.stringify(library.project()):originalStorage.getItem(key),setItem(key,value){if(key===STORE)library.save(JSON.parse(value));else originalStorage.setItem(key,value);}};
@@ -1766,6 +1787,61 @@ function wallPanel(w){
     <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
 }
 function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
+// UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
+// está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
+function roomSuggestionOf(source){
+  if(!source||Core.roomFamily(source)!=='unspecified')return null;
+  const s=Core.suggestRoomFamily(source,Core.roomObjects(project,source));
+  if(!s||!Core.roomFamilies.includes(s.family))return null;
+  const why=s.source==='contents'?`porque contiene «${nm(s.object.name||s.object.type)}»`:`por su nombre «${roomDisplay(source)}»`;
+  return {family:s.family,label:familyLabel(s.family),why};
+}
+function roomSuggestion(source){
+  const s=roomSuggestionOf(source);if(!s)return '';
+  return `<div class="room-suggest" role="status" aria-live="polite"><p><b>Sugerencia:</b> ${esc(s.label)}, ${esc(s.why)}.</p><button type="button" class="btn" id="rSuggest" data-family="${esc(s.family)}">Usar «${esc(s.label)}»</button></div>`;
+}
+// UX-26 · Intercambiar solo el uso (nombre y tipo) con otra estancia; un único paso que se deshace con Ctrl+Z o ↶.
+function roomSwapGroup(source){
+  const others=project.rooms.filter(q=>q.id!==source?.id);if(!source||!others.length)return '';
+  const opts=others.map(q=>`<option value="${esc(q.id)}">${esc(roomDisplay(q))}</option>`).join('');
+  return `<details class="panel-group room-swap" data-group="room-swap"><summary>Intercambiar uso</summary>
+    <div class="form"><label class="full" for="rSwapWith">Con la estancia</label><select id="rSwapWith"><option value="">Elige una estancia…</option>${opts}</select></div>
+    <p class="muted">Solo se intercambian el nombre y el tipo. Muebles, acabados, puertas y medidas se quedan donde están.</p>
+    <div class="actions"><button type="button" class="btn" id="rSwap" disabled>Intercambiar uso</button></div></details>`;
+}
+/* UX-03 · Paredes de la estancia: la cara interior que da a la estancia seleccionada, con la autoridad única de
+   FloorPlanQuantities (quantity-core): tramo real de cada muro, su altura real y la unión de sus huecos. Es la misma
+   cifra que la fila de la estancia en «Cantidades del proyecto» (Presupuestar). Nada se estima aquí: si no se puede
+   calcular, se dice por qué y cómo resolverlo. */
+const L3=(es,en,zh)=>LANG==='en'?en:LANG==='zh'?zh:es;
+function wallFaceArea(v){const round=window.FloorPlanQuantitySchedule?.round||((n,d=2)=>Math.round(n*10**d)/10**d);return v===null||v===undefined||!Number.isFinite(v)?'—':round(v).toLocaleString(LANG==='en'?'en-GB':'es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function roomWallFaces(id){try{return window.FloorPlanQuantities?.room(project,id)?.wallFaces??null;}catch{return null;}}
+function roomWallFacesBlock(id){
+  const f=roomWallFaces(id),head=`<h4 class="wall-faces-title">${L3('Paredes de la estancia · cara interior','Room walls · inner face','房间墙面 · 室内面')}</h4>`;
+  if(!f)return `<section class="wall-faces" data-wall-faces="unavailable" role="note">${head}<p class="muted">${L3('No se puede calcular: el motor de cantidades no está disponible en esta página.','Cannot be calculated: the quantity engine is not available on this page.','无法计算：此页面未加载工程量引擎。')}</p></section>`;
+  const why={
+   'invalid-room-polygon':[L3('El contorno de la estancia no es válido.','The room outline is not valid.','房间轮廓无效。'),L3('Redibuja la estancia con «Modificar paredes».','Redraw the room with «Edit walls».','用“修改墙体”重新绘制房间。')],
+   'room-wall-association-not-demonstrable':[L3('Ningún muro coincide con el contorno de la estancia.','No wall matches the room outline.','没有墙与房间轮廓重合。'),L3('Dibuja sus muros o ajusta el contorno a la cara de los muros.','Draw its walls or align the outline to the wall faces.','绘制墙体，或将轮廓对齐到墙面。')],
+   'ambiguous-wall-face-association':[L3('Dos muros ocupan el mismo tramo del contorno.','Two walls share the same stretch of the outline.','两面墙占用了轮廓的同一段。'),L3('Revisa los muros superpuestos con «Modificar paredes».','Check the overlapping walls with «Edit walls».','用“修改墙体”检查重叠的墙。')],
+   'invalid-wall-geometry':[L3('Un muro de la estancia no tiene una altura válida.','A wall of this room has no valid height.','该房间有一面墙的高度无效。'),L3('Abre el muro y corrige su altura.','Open the wall and correct its height.','打开该墙并修正高度。')],
+   'invalid-opening-geometry':[L3('Un hueco se sale de su muro o tiene medidas no válidas.','An opening exceeds its wall or has invalid dimensions.','有门窗超出墙体或尺寸无效。'),L3('Abre el muro y corrige la posición o el tamaño del hueco.','Open the wall and correct the opening position or size.','打开该墙并修正门窗的位置或尺寸。')]};
+  // quantity-core da una sola «reason» (la apertura del contorno tiene prioridad); los tramos y openingsComplete dicen
+  // si además falla una altura o un hueco, para no ocultar la causa que hay que corregir.
+  const heightBad=(f.segments||[]).some(s=>s.reason==='invalid-wall-geometry'),code=f.reason==='partial-room-wall-association'?(heightBad?'invalid-wall-geometry':f.openingsComplete===false&&f.segments?.length?'invalid-opening-geometry':null):f.reason;
+  const geometryOk=!heightBad&&f.status!=='unavailable';
+  const gross=geometryOk?f.grossAreaM2:null,opening=f.openingAreaM2,net=f.netAreaM2;
+  const stat=(key,label,v)=>`<div data-wall-face="${key}"><small>${label} · m²</small><span class="big">${wallFaceArea(v)}</span></div>`;
+  const notes=[];
+  if(f.status==='estimated')notes.push(L3('Escala sin calibrar con una medida conocida: cifras estimadas.','Scale not calibrated with a known measurement: estimated figures.','比例尺未用已知尺寸校准：数值为估算。'));
+  const reason=code?why[code]:null;
+  if(f.reason==='partial-room-wall-association'||(f.missingBoundaryM>0&&!f.associationComplete))notes.push(L3(`${wallFaceArea(f.missingBoundaryM)} m del contorno no tienen muro (tramo abierto): no cuentan.`,`${wallFaceArea(f.missingBoundaryM)} m of the outline have no wall (open stretch): not counted.`,`轮廓中有 ${wallFaceArea(f.missingBoundaryM)} m 没有墙（开放段）：不计入。`));
+  const bad=[...new Set((f.segments||[]).filter(s=>s.complete===false).map(s=>s.wallId))].slice(0,4);
+  const fix=reason?`<p class="wall-faces-why" data-wall-faces-reason="${esc(code)}"><b>${L3('No se puede calcular del todo','Cannot be fully calculated','无法完整计算')}:</b> ${reason[0]} ${reason[1]}</p>${bad.length?`<div class="actions">${bad.map((w,i)=>`<button class="btn" data-wall-fix="${esc(w)}">${L3('Abrir muro','Open wall','打开墙')}${bad.length>1?' '+(i+1):''}</button>`).join('')}</div>`:''}`:'';
+  return `<section class="wall-faces" data-wall-faces="${esc(f.complete?'complete':'incomplete')}">${head}
+    <div class="stats wall-faces-stats">${stat('gross',L3('Bruta','Gross','毛面积'),gross)}${stat('openings',L3('Huecos','Openings','门窗'),opening)}${stat('net',L3('Neta','Net','净面积'),net)}</div>
+    <p class="muted">${L3('Altura real de cada muro y huecos descontados. Es la misma cifra de «Cantidades del proyecto» en Presupuestar.','Real height of each wall, openings deducted. Same figure as «Project quantities» in Budget.','按每面墙的实际高度并扣除门窗，与“预算”中“项目工程量”的数值一致。')}</p>
+    ${notes.map(n=>`<p class="muted">${n}</p>`).join('')}${fix}</section>`;
+}
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
@@ -1774,13 +1850,14 @@ function roomPanel(r){
   const familyOptions=Core.roomFamilies.map(value=>`<option value="${value}" ${family===value?'selected':''}>${esc(familyTypeLabel(value))}</option>`).join('');
   return `<div class="panel-view room-panel">${panelHead({title:roomDisplay(source), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
   <details class="panel-group" data-group="room-data" open><summary>Datos de la estancia</summary>
-    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>
+    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>${roomSuggestion(source)}
     <div class="stats" style="margin-top:10px">
       <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
       <div><small>${tr('周长','Perimeter')}</small><span class="big">${fmt(perim(r.poly),1)}</span> m</div>
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
-    <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></details>
+    ${roomWallFacesBlock(r.id)}</details>
+${roomSwapGroup(source)}
   <details class="panel-group" data-group="room-openings" open><summary>Puertas y ventanas</summary><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></details>
   <details class="panel-group" data-group="room-dimensions" open><summary>Dimensiones</summary><button class="btn" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></details>
   <details class="panel-group" data-group="room-finishes" open><summary>Suelo y paredes</summary><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
@@ -1795,9 +1872,16 @@ function bindRoomPanel(){
   FloorPlanSurfaceUI.describe(id,$('#surfaceRoomStatus'));
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
+  document.querySelectorAll('#panel [data-wall-fix]').forEach(b => b.onclick = () => select({kind:'wall', id:b.dataset.wallFix}));
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
   $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
   $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});toast(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,4000);};
+  const swapWith=$('#rSwapWith'),swap=$('#rSwap');
+  if(swapWith){swapWith.onchange=()=>{swap.disabled=!swapWith.value;};
+    swap.onclick=()=>{const other=swapWith.value;if(!other)return;const before=undoStack.length;
+      mutate(()=>{project=Core.swapRoomUses(project,id,other);});
+      if(undoStack.length>before)toast(`Uso intercambiado con «${roomDisplay(project.rooms.find(q=>q.id===other))}». Los muebles y acabados no se han movido. Puedes deshacerlo con Ctrl+Z o ↶.`,5000);};}
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
   $('#back').onclick = () => select(null);
@@ -2391,7 +2475,11 @@ $('#exportPng').onclick = exportPNG;
 $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
 // A building exports as a whole; a single level is exported explicitly from «Plantas…» with a warning.
 const exportProjectJson = () => library?.isBuilding()?window.FloorPlanBuildingUI.exportBuildingJson():download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
-$('#exportJson').onclick = $('#exportJsonQuick').onclick = exportProjectJson;
+$('#exportJson').onclick = $('#exportJsonQuick').onclick = event => {
+  // The downloaded copy is available even when the local transaction cannot be confirmed.
+  void persistence.session?.flush({userEvent:event,confirmExisting:true});
+  return exportProjectJson();
+};
 $('#exportDxf').onclick = async () => {
   const levelName = window.FloorPlanBuildingUI?.context?.levelName;
   try {
@@ -2468,7 +2556,6 @@ if(loadedProject.message)toast(loadedProject.message,6000);
 function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();window.dispatchEvent(new CustomEvent('floorplan-project-switched',{detail:{projectId:project?.id||null}}));}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
-function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
 function listProjects(){
   const list=$('#projectList');list.replaceChildren();const names=Object.fromEntries(library.list().map(e=>[e.id,e.name]));
   for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=(e.variantOf?`${nm(e.name)} — variante de «${nm(names[e.variantOf])}»`:nm(e.name))+(e.kind==='building'?` — edificio, ${e.levels} plantas`:'');list.append(option);}
@@ -2490,7 +2577,17 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
     }catch(e){$('#projectError').textContent=e.message;}
   };
 }
-$('#projectVariant').onclick=()=>{try{switchProject(library.variant(project));listProjects();$('#projectError').textContent='';toast(`Variante creada y abierta: «${library.list().find(e=>e.id===library.activeId()).name}». El original no cambia.`,5000);}catch(e){$('#projectError').textContent=storageMessage(e,'crear la variante');}};
+$('#projectVariant').onclick=async event=>{
+  const button=event.currentTarget;
+  button.disabled=true;
+  try{
+    switchProject(library.variant(project));listProjects();$('#projectError').textContent='';
+    const name=library.list().find(e=>e.id===library.activeId()).name;
+    await persistence.requireSaved(event);
+    toast('Variante creada y abierta: «'+name+'». El original no cambia.',5000);
+  }catch(e){$('#projectError').textContent=e.message;}
+  finally{button.disabled=false;}
+};
 // Comparison: stored projects for each distribution, except the open one, which uses the state on screen.
 let variantsClearance=null;
 const reviewState={checked:'comprobado',partial:'parcial',insufficient_evidence:'evidencia insuficiente'};
@@ -2533,7 +2630,7 @@ function renderVariants(){
        del MISMO origen (comparte la biblioteca de este navegador). En la dirección solo van identificadores de la biblioteca.
        No guarda nada al pulsar: el editor ya guarda cada cambio, y el comparador dice que compara lo guardado. */
     if(g.variantOf&&window.FloorPlanVariantsCompare){const cmp=document.createElement('button');cmp.className='btn';cmp.dataset.action='compare';cmp.textContent='Comparar con el original';
-      cmp.onclick=()=>window.open('comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:group[0].id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId()),'_blank','noopener');actions.append(cmp);}
+      cmp.onclick=()=>persistence.openComparison('comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:group[0].id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId()));actions.append(cmp);}
     if(g.variantOf){const del=document.createElement('button');del.className='btn danger';del.dataset.action='remove';del.textContent='Eliminar variante';del.onclick=()=>{
       const original=group[0].name;if(!confirm(`¿Eliminar la variante «${g.name}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`))return;
       try{const wasActive=g.id===library.activeId(),next=library.remove(g.id);if(wasActive)switchProject(next);window.FloorPlanTraceUI?.cleanup();renderVariants();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(del);}
@@ -2544,13 +2641,38 @@ function renderVariants(){
 $('#projectCompare').onclick=()=>{$('#projectsDialog').close();$('#variantsClearance').value=variantsClearance??'';renderVariants();$('#variantsDialog').showModal();};
 $('#variantsClose').onclick=()=>$('#variantsDialog').close();
 $('#variantsClearance').onchange=()=>{const v=$('#variantsClearance').value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){$('#variantsError').textContent='La holgura mínima debe ser un número de milímetros mayor que 0.';$('#variantsClearance').value=variantsClearance??'';return;}const next=n===null?null:Math.round(n);if(next===variantsClearance)return;variantsClearance=next;renderVariants();};
+// Sidecars of the starter project must have a durable library identity in the same revision.
+const documentStorage={
+  getItem:key=>originalStorage.getItem(key),
+  setItem(key,value){
+    if(persistence.session&&FloorPlanPersistence.KEYS.includes(key)&&key!==STORE&&key!==FloorPlanLibrary.KEY){
+      if(!library)throw Error('La colección local no está disponible.');
+      if(originalStorage.getItem(FloorPlanLibrary.KEY)===null)library.save(project);
+    }
+    originalStorage.setItem(key,value);
+  },
+  removeItem:key=>originalStorage.removeItem(key),
+  key:index=>originalStorage.key(index),
+  get length(){return originalStorage.length;}
+};
 window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelFileImport,fileImportCompleted,
+  applyRoomPlanJoin(next,operation){
+    if(!fileImportCurrent(operation)||next.id!==project.id)return false;
+    const before=snap(),oldUndo=undoStack.slice(),oldRedo=redoStack.slice();
+    project=next;
+    if(!commit(before)){
+      project=JSON.parse(before);undoStack.splice(0,undoStack.length,...oldUndo);redoStack.splice(0,redoStack.length,...oldRedo);
+      refreshProject();renderAll();return false;
+    }
+    refreshProject();validateSel();renderAll();fitView();return true;
+  },
   // Imports become a new library entry, or a new level when «Plantas…» requested it for this transaction.
   adoptImported(visible,next,name,session){return window.FloorPlanBuildingUI?window.FloorPlanBuildingUI.adoptImported(visible,next,name,session):library.importProject(visible,next,name);},
   // Single-level tools (presentation, sheet…) work on the active level; this names it when a building is open.
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},
+  storage:documentStorage, persistence,
   /* E2.1 · destinos de «Comparar con el original» desde Entregar, con el mismo handoff UX-07 del diálogo Variantes.
      Solo lee la biblioteca; no guarda nada. Estados: no-library (proyecto sin guardar en la biblioteca), no-variant (el
      original no tiene variantes), not-eligible (grupo ilegible o variante sin original), ready (pares original→variante). */
@@ -3069,7 +3191,7 @@ function buildFurniture(f){
       const cm = mat(c, {roughness:.55}), fz = d/2 - .02;
       if (f.type === 'wardrobe'){
         const h = 2.2, n = Math.max(1, Math.round(w/.5));
-        g.add(box(w - .02, .08, d - .06, '#4a4641', 0, 0, -.03), box(w, h - .08, d - .02, cm, 0, .08, -.01));
+        g.add(box(w - .02, .08, d - .06, '#4a4641', 0, 0, -.03), box(w, h - .1, d - .02, cm, 0, .08, -.01));   // C3: body ends under the lid (no coincident faces)
         fronts(g, -w/2, .08, w, h - .1, fz, n, 1, cm, 'bar', 1.05);
         g.add(box(w, .02, d - .02, darker(c, .9), 0, h - .02, -.01));
       } else if (f.type === 'shoecab'){
@@ -3124,7 +3246,7 @@ function buildFurniture(f){
       const lx = -w/2 + .15, lz = bz + .12;
       g.add(cyl(.07, .075, .02, bm, lx, my, lz, 28), tube([[lx, my + .02, lz], [lx, my + .3, lz + .03], [lx + .12, my + .42, lz + .1]], .008, bm));
       const hd = cyl(.02, .06, .1, bm, lx + .14, my + .34, lz + .12, 24); hd.rotation.x = .5; g.add(hd);
-      g.add(cyl(.04, .038, .09, ceramic({roughness:.3}), w/2 - .15, my, .05, 20), rbox(.2, .015, .28, '#3b5566', -w/2 + .3, my, .1, .004));
+      g.add(cyl(.04, .038, .09, ceramic({roughness:.3}), w/2 - .15, my, .05, 20), rbox(.2, .015, .28, '#3b5566', Math.min(-w/2 + .3, -.33), my, .1, .004));   // C3: notebook clear of the keyboard
       break;
     }
     case 'chair': {
@@ -3139,7 +3261,8 @@ function buildFurniture(f){
     }
     case 'bookshelf': {
       const h = 1.8, t = .022, ns = 5, wm = woodM(c), sh0 = (h - .06 - t)/ns, cols = ['#b88a6a','#6f8f8a','#d9c08c','#9aa58c','#a8675e','#e6dccd','#7d8ea3','#c9bfae'];
-      g.add(box(w, h, .012, woodM(darker(c, .85)), 0, 0, bz + .006), box(t, h, d, wm, -w/2 + t/2), box(t, h, d, wm, w/2 - t/2), box(w - 2*t, .06, d - .03, wm, 0, 0, .0));
+      g.add(box(w - 2*t, h, .012, woodM(darker(c, .85)), 0, 0, bz + .006), box(t, h, d, wm, -w/2 + t/2), box(t, h, d, wm, w/2 - t/2),   // C3: back panel between the sides
+      box(w - 2*t, .06, d - .03, wm, 0, 0, .0));
       for (let s = 0; s <= ns; s++){
         const y = s < ns ? .06 + s*sh0 : h - t; g.add(box(w - 2*t, t, d - .012, wm, 0, y, .006));
         if (s === ns) break;
@@ -3215,13 +3338,13 @@ function buildFurniture(f){
       const tm = mat(c, {roughness:.4}), lw = woodM(darker(c, .55)), ns = Math.max(1, Math.round(w/.62)), top = .75;
       [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a, b]) => g.add(rod([a*(w/2 - .08), 0, b*(d/2 - .08)], [a*(w/2 - .1), .715, b*(d/2 - .1)], .016, lw, .026)));
       g.add(rbox(w, .035, d, tm, 0, .715, 0, .012), box(w - .22, .07, d - .22, lw, 0, .645));
-      g.add(box(w*.7, .003, .32, fabric('#b9a58c'), 0, top, 0));
+      const rd = Math.min(.32, d - .64); if (rd >= .12) g.add(box(w*.7, .003, rd, fabric('#b9a58c'), 0, top, 0));   // C3: runner never overlaps the place mats
       for (let i = 0; i < ns; i++) [-1, 1].forEach(s => {
         const x = -w/2 + w/ns*(i + .5), z = s*(d/2 - .17);
         g.add(box(.38, .003, .28, fabric('#e7dfd1'), x, top, z)); plate(g, .12, x, top + .003, z);
         g.add(cyl(.03, .026, .1, mat('#dfeef3', {transparent:true, opacity:.35, roughness:.05}), x + .15, top + .003, z - s*.1, 16));
       });
-      vase(g, 0, top + .003, 0, .06, .2, '#e9e2d6', R);
+      vase(g, 0, top + (rd >= .12 ? .003 : 0), 0, .06, .2, '#e9e2d6', R);
       break;
     }
     case 'roundtable': {
@@ -3316,7 +3439,7 @@ function buildFurniture(f){
     case 'shower': {
       const cm = chrome(), x = -w/4;
       g.add(rbox(w, .05, d, mat('#f4f4f2', {roughness:.3}), 0, 0, 0, .01), box(w*.6, .003, .05, mat('#9aa1a8', {metalness:.8, roughness:.3}), 0, .05, bz + .08));
-      [[w, .01, 0, d/2 - .005], [.01, d, w/2 - .005, 0]].forEach(([gw, gd, px, pz]) => { const p = box(gw, 1.95, gd, glassMat, px, .05, pz); p.castShadow = false; g.add(p); });
+      [[w - .04, .01, 0, d/2 - .005], [.01, d - .04, w/2 - .005, 0]].forEach(([gw, gd, px, pz]) => { const p = box(gw, 1.935, gd, glassMat, px, .05, pz); p.castShadow = false; g.add(p); });   // C3: glass between posts, under the top rail
       g.add(box(.02, 1.95, .02, frameMat, w/2 - .01, .05, d/2 - .01), box(.02, 1.95, .03, frameMat, -w/2 + .01, .05, d/2 - .005), box(.03, 1.95, .02, frameMat, w/2 - .005, .05, bz + .01));
       g.add(box(w, .015, .02, frameMat, 0, 1.985, d/2 - .005), box(.02, .015, d, frameMat, w/2 - .005, 1.985, 0));
       g.add(rbox(.14, .1, .04, cm, x, 1.0, bz + .02, .01), rod([x, 1.1, bz + .03], [x, 1.95, bz + .03], .012, cm));
@@ -3429,7 +3552,7 @@ function buildFurniture(f){
       s.moveTo(0, .02); s.lineTo(0, h); s.lineTo(d*.75, h); s.quadraticCurveTo(d, h, d, h*.55); s.quadraticCurveTo(d, 0, d*.55, 0); s.lineTo(.02, 0); s.lineTo(0, .02);
       const geo = new THREE.ExtrudeGeometry(s, {depth:w - .02, bevelEnabled:true, bevelThickness:.01, bevelSize:.006, bevelSegments:3, curveSegments:16});
       geo.rotateY(-Math.PI/2); geo.translate((w - .02)/2, 2.2, bz); g.add(mesh(geo, am));
-      g.add(box(w - .12, .004, .07, '#3a3d40', 0, 2.19, bz + d*.55), rot(box(w - .12, .008, .06, am, 0, 2.18, bz + d*.72), .35));
+      g.add(box(w - .12, .004, .07, '#3a3d40', 0, 2.19, bz + d*.55), rot(box(w - .14, .008, .06, am, 0, 2.18, bz + d*.72), .35));
       g.add(box(.06, .018, .002, mat('#101214', {emissive:'#4fb3a5', emissiveIntensity:.7}), w*.3, 2.2 + h*.5, bz + d + .007));
       for (let i = 0; i < 6; i++) g.add(box(w - .12, .003, .008, '#d5d9dc', 0, 2.2 + h + .006, bz + .03 + i*.022));
       break;
@@ -3739,11 +3862,11 @@ function buildArch(other){
     }
     if (r.at){
       const lamp = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, .02, 32), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3}));
-      lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lampG.add(lamp);
+      lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lamp.userData.fixture = 'ceiling-lamp:' + r.id; lampG.add(lamp);
       const pl = new THREE.PointLight(0xffd9a8, 0, 7, 1.6); pl.position.set(wx(r.at[0]), H - .25, wz(r.at[1])); lampG.add(pl);
     }
   });
-  [...geometry.doors, ...geometry.slides].forEach(d => {const r=d.rect;const s=box(M(r.spanMm),.012,M(r.thickness),mat('#d8d0c0',{roughness:.3}),wx(r.center[0]),0,wz(r.center[1]));s.rotation.y=-r.angle;s.castShadow=false;archFloor.add(s);});
+  [...geometry.doors, ...geometry.slides].forEach(d => {const r=d.rect;const s=box(M(r.spanMm),.012,M(r.thickness),mat('#d8d0c0',{roughness:.3}),wx(r.center[0]),0,wz(r.center[1]));s.rotation.y=-r.angle;s.castShadow=false;s.userData.openingId=d.id;archFloor.add(s);});
   geometry.walls.forEach((w, i) => {
     if (w.status === 'demolished') return;
     wallBox(w, 0, Math.min(w.height, top));
@@ -3757,8 +3880,8 @@ function buildArch(other){
     wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height));
     colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
     const gTop = Math.min(head, top); if (gTop <= sill) return;
-    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
-    const pane=new THREE.Mesh(new THREE.BoxGeometry(L,gh,.01),glassMat);pane.position.set(0,sill+gh/2,0);group.add(pane);
+    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=r.openingId;archUp.add(group);
+    const pane=new THREE.Mesh(new THREE.BoxGeometry(L,Math.max(.001,gh-.08),.01),glassMat);pane.position.set(0,sill+gh/2,0);group.add(pane);/* C3: glass between the transoms */
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
     [sill+.02,gTop-.02].forEach(y=>{const tr=new THREE.Mesh(new THREE.BoxGeometry(L,.04,.06),frameMat);tr.position.set(0,y,0);group.add(tr);});
@@ -3766,7 +3889,7 @@ function buildArch(other){
   });
   geometry.doors.forEach(d => {
     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
-    pivot.position.set(wx(d.h[0]), 0, wz(d.h[1]));
+    pivot.position.set(wx(d.h[0]), 0, wz(d.h[1])); pivot.userData.openingId = d.id;
     const leaf = box(L, dh, .04, mat(d.entry ? '#6b4f3a' : '#efe6d8', {roughness:.5}), L/2);
     const knob = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 8), metal()); knob.position.set(L - .07, Math.min(1, dh - .05), 0); knob.scale.z = 2.2;
     pivot.add(leaf, knob);
@@ -3775,11 +3898,11 @@ function buildArch(other){
     door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
     doors.push(door); archUp.add(pivot);
   });
-  geometry.slides.forEach(({rect:r,height})=>{
-    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+  geometry.slides.forEach(({id,rect:r,height})=>{
+    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=id;archUp.add(group);
     [[-1,-.02],[1,.02]].forEach(([s,off])=>{const x=s<0?-L/2+pl/2:L/2-pl/2;
-      const pane=new THREE.Mesh(new THREE.BoxGeometry(pl,ph,.02),glassMat);pane.position.set(x,ph/2,off);group.add(pane);
-      [ph-.03,.03].forEach(y=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(pl,.05,.04),frameMat);fr.position.set(x,y,off);group.add(fr);});
+      const pane=new THREE.Mesh(new THREE.BoxGeometry(pl-.04,ph,.02),glassMat);pane.position.set(x,ph/2,off);group.add(pane);   // C3: glass and rails end at the stiles
+      [ph-.03,.03].forEach(y=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(pl-.04,.05,.04),frameMat);fr.position.set(x,y,off);group.add(fr);});
       [-1,1].forEach(e=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(.04,ph,.04),frameMat);fr.position.set(x+e*pl/2,ph/2,off);group.add(fr);});
     });
   });
@@ -5569,6 +5692,40 @@ window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationDecor',{get:()=>{const lamps=lampG?.children.filter(o=>o.isMesh)||[];return {outline:roomOutline?.userData.presentationOutline||null,ceilingFixtures:!lamps.length?'none':lamps.every(o=>o.visible)?'visible':lamps.some(o=>o.visible)?'mixed':'hidden'};}});
 Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&{...frameInfo,eye:[...frameInfo.eye],look:[...frameInfo.look]}});
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
+/* OP-10 C4+C7 · «Escena para Blender»: captura de SOLO LECTURA de lo que se ve (js/scene-capture-core.js). Espera a una escena
+   estable (sin recursos cargando, sin animación ni vuelo, puertas en reposo, misma firma N fotogramas), es cancelable con
+   AbortSignal y comprueba que el proyecto no cambia. Declara la pose de cámara y la luz del visor (C7); no inventa nada. */
+async function captureScene({signal,stableFrames=30,timeoutMs=120000,includeTerritory=false,onState}={}){
+  const C=window.RubikSceneCapture,err=(code,es)=>Object.assign(Error(es),{code});
+  if(!C)throw err('UNAVAILABLE','El módulo de captura de escena no está cargado.');
+  if(!inited||!active||contextLost)throw err('NOT_3D','Abre la vista 3D para preparar la escena.');
+  const cancelled=()=>{if(signal?.aborted)throw err('CANCELLED','Preparación cancelada. No se ha generado nada.');};
+  const t0=performance.now(),deadline=t0+timeoutMs,doorsAtRest=()=>doors.every(d=>Math.abs(d.cur-(d.open?d.a1:d.a0))<1e-3);
+  const signature=()=>{let s='';scene.traverse(o=>{if(!o.isMesh||!o.visible)return;s+=o.id+':'+(o.geometry?.id??'')+':'+o.matrixWorld.elements.map(v=>v.toFixed(6)).join(',');if(o.isInstancedMesh)s+=':'+o.count+':'+o.instanceMatrix.version;s+='|';});return s;};
+  let same=0,last=null,frames=0;
+  for(;;){
+    cancelled();if(performance.now()>deadline)throw err('UNSTABLE','La escena no terminó de cargar a tiempo. Espera a que se vean todos los muebles y vuelve a intentarlo.');
+    await new Promise(r=>requestAnimationFrame(r));frames++;cancelled();
+    const loading=assetRequests.size||[...assetStates.values()].some(a=>a.state==='loading'),busy=anim||fly||renderSuspended||loading||!doorsAtRest();
+    onState?.(busy?(loading?'loading':'moving'):'settling');
+    const sig=busy?null:signature();same=sig&&sig===last?same+1:0;last=sig;if(same>=stableFrames)break;
+  }
+  const app=window.FloorPlanApp,before=JSON.stringify(app?.project??null),light={night:!!opt.night,hour:opt.hour,exposure:renderer.toneMappingExposure,
+    sun:{direction:sun.position.clone().sub(sun.target.position).normalize().toArray(),color:'#'+sun.color.getHexString(),intensity:sun.intensity},
+    hemi:{sky:'#'+hemi.color.getHexString(),ground:'#'+hemi.groundColor.getHexString(),intensity:hemi.intensity},
+    background:scene.background?.isColor?'#'+scene.background.getHexString():null,
+    lamps:(()=>{const pl=lampG?.children.find(o=>o.isPointLight);return {on:!!opt.night,intensity:pl?.intensity??0,distance:pl?.distance??null,color:pl?'#'+pl.color.getHexString():null};})()};
+  const t1=performance.now(),doc=C.capture(scene,{unitsToMetres:1,includeTerritory,excludeNodes:new Map([[ground,'decorative-ground']]),
+    scope:levelView==='all'?'stacked-levels':'active-level',
+    frame:{source:'RUBIK View3D',originPlanMm:{x:geometry.center.x,y:geometry.center.y},mapping:'x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000',activeLevelId:levelContext?.activeLevelId||null,levelView},
+    view:{camera:{...presentationPose(),source:'viewer'},light}}),t2=performance.now();
+  if(JSON.stringify(app?.project??null)!==before)throw err('MUTATION','La captura habría cambiado el proyecto; se ha detenido sin generar nada.');
+  const assets=[...assetStates.values()].reduce((n,a)=>(n[a.state||'unknown']=(n[a.state||'unknown']||0)+1,n),{});
+  return {doc,info:{projectId:app?.project?.id??null,projectUpdatedAt:app?.project?.updatedAt??null,stability:{frames,stableFrames,waitedMs:Math.round(t1-t0)},captureMs:Math.round((t2-t1)*10)/10,assets,
+    assetErrors:[...assetStates.entries()].filter(([,a])=>a.state==='error').map(([id,a])=>({id,reason:a.reason||null})),
+    objects:(furnG?.children||[]).filter(g=>typeof g.userData?.fid==='string').map(g=>({id:g.userData.fid,catalogModel:!!g.userData.authorizedAsset})).sort((a,b)=>a.id.localeCompare(b.id))}};
+}
+window.View3D.captureScene=captureScene;
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
@@ -5736,13 +5893,17 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
      propuestas solo se guardan al «Aplicar», en un paso del commit. Nada sale del navegador; proveedor de texto desactivado. -->
 <link rel="stylesheet" href="css/assistant.css">
 <script src="js/assistant-contracts.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
-<script src="js/assistant-proposals-core.js"></script><script src="js/assistant-runtime-core.js"></script><script src="js/assistant-session-core.js"></script><script src="js/assistant-ui.js"></script>
+<script src="js/proposal-core.js"></script><script src="js/assistant-proposals-core.js"></script><script src="js/assistant-runtime-core.js"></script><script src="js/assistant-session-core.js"></script><script src="js/assistant-ui.js"></script>
 <!-- Asistente generativo (rubik-agent/1): conversación con un modelo de texto real vía /api/assistant (cerrado por defecto:
      sin autorización del propietario, solo la consulta guiada). El navegador nunca tiene la clave del proveedor. -->
 <script src="js/assistant-agent-core.js"></script><script src="js/assistant-gen-ui.js"></script>
 <!-- HOM-04 · «Descubre RUBIK en acción»: arranque directo de la demo «Dibujo vivo» (?demo=dibujo-vivo) con el
      ejemplo y la presentación existentes. Sin ?demo no hace nada. -->
 <script src="js/home-demos.js"></script>
+<!-- OP-10 · «Entregar → Escena para Blender»: captura de solo lectura de la vista 3D → GLB + manifiesto en un ZIP local.
+     Sin red, sin texturas ni fotos, sin cambios en el proyecto (candidata de integración; ver docs/integration/OP10-BLENDER-HANDOFF.md). -->
+<link rel="stylesheet" href="css/scene-export.css">
+<script src="js/scene-capture-core.js"></script><script src="js/scene-delivery-core.js"></script><script src="js/scene-export-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->
@@ -5750,5 +5911,6 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/r03-cabinet-core.js"></script><script src="js/r03-cabinet-contract.js"></script><script src="js/r03-cabinet-editor-core.js"></script>
 <script src="js/r03-cabinet-editor-ui.js"></script><script src="js/r03-cabinet-geometry.js"></script><script src="js/r03-cabinet-three.js"></script>
 <script src="js/r03-cabinet-bridge.js"></script><script src="js/r03-cabinet-rubik-ui.js"></script>
+</template>
 </body>
 </html>

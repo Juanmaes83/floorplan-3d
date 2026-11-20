@@ -1,0 +1,147 @@
+{
+ "format": "rubik-sota.op10-fidelity",
+ "version": "0.1.0-lab",
+ "tolerancesMm": {
+  "exact": 1,
+  "envelope": 2,
+  "area": 0.005
+ },
+ "origin": {
+  "x": 2500,
+  "y": 2000
+ },
+ "checks": 31,
+ "contractChecks": 31,
+ "failed": 0,
+ "failures": [],
+ "visualDifferences": 0,
+ "visualByType": {},
+ "byKind": {
+  "contract · wall/thickness-mm": {
+   "n": 4,
+   "pass": 4,
+   "maxDeviation": 0
+  },
+  "contract · wall/axis-centred-mm": {
+   "n": 4,
+   "pass": 4,
+   "maxDeviation": 0
+  },
+  "contract · wall/height-mm": {
+   "n": 4,
+   "pass": 4,
+   "maxDeviation": 0
+  },
+  "contract · wall/base-mm": {
+   "n": 4,
+   "pass": 4,
+   "maxDeviation": 0
+  },
+  "contract · wall/length-mm": {
+   "n": 4,
+   "pass": 4,
+   "maxDeviation": 0
+  },
+  "contract · wall/start-overhang-mm": {
+   "n": 4,
+   "pass": 4,
+   "maxDeviation": 0
+  },
+  "contract · room/floor-area-relative": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minX-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxX-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minZ-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxZ-mm": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · door/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · window/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  }
+ },
+ "associations": [
+  {
+   "mesh": "unlinked:none:1",
+   "opening": "opn_op10-f1-door",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:12",
+   "opening": "opn_op10-f1-window",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:13",
+   "opening": "opn_op10-f1-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:14",
+   "opening": "opn_op10-f1-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:15",
+   "opening": "opn_op10-f1-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:16",
+   "opening": "opn_op10-f1-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  }
+ ],
+ "unlinked": {
+  "total": 7,
+  "associatedToOpenings": 6,
+  "stillUnlinked": [
+   {
+    "name": "unlinked:none:19",
+    "material": "surface",
+    "color": "#ffffff",
+    "bounds": {
+     "min": [
+      -0.22,
+      2.778,
+      -0.22
+     ],
+     "max": [
+      0.22,
+      2.798,
+      0.22
+     ]
+    }
+   }
+  ]
+ }
+}

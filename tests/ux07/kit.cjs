@@ -2,13 +2,13 @@
 /* UX-07 + ENT-04 · kit de navegador: servidor estático local del repositorio y Chromium. Abre el laboratorio aislado
    (labs/ux07-ent04/). Cualquier petición fuera del servidor local se registra (no debe haber ninguna). */
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
-const TYPES={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png'};
+const TYPES={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png'};
 const ROOT=process.env.UX07_ROOT?path.resolve(process.env.UX07_ROOT):path.resolve(__dirname,'..','..');
-async function start(){
+async function start({authority=false}={}){
   const server=createServer(async(req,res)=>{try{let p=new URL(req.url,'http://local').pathname;if(p.endsWith('/'))p+='index.html';
     const file=path.resolve(ROOT,'.'+decodeURIComponent(p));if(!file.startsWith(ROOT+path.sep))throw Error('path');
     res.setHeader('Content-Type',TYPES[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});
-  await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}/`;
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://${authority?'f0-2b.localhost':'127.0.0.1'}:${server.address().port}/`;
   const browser=await chromium.launch({...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),args:['--no-sandbox']});
   return {base,browser,stop:async()=>{await browser.close();await new Promise(r=>server.close(r));}};
 }

@@ -10,10 +10,9 @@
  const FAMILY_ORDER=['living','dining','kitchen','bedroom','bathroom','toilet','office','hallway','laundry','storage','utility','garage','terrace','balcony','other','unspecified'];
  const rank=f=>{const i=FAMILY_ORDER.indexOf(f);return i<0?FAMILY_ORDER.length:i;};
  // Proyectos antiguos sin uso declarado: solo para ORDENAR la lista se deduce el uso del nombre (no se guarda nada).
- const HINTS=[[/sal[oó]n|estar|living|lounge/i,'living'],[/comedor|dining/i,'dining'],[/cocina|kitchen/i,'kitchen'],[/dormitorio|habitaci[oó]n|bedroom/i,'bedroom'],
-  [/ba[ñn]o|bath/i,'bathroom'],[/aseo|toilet|wc/i,'toilet'],[/despacho|estudio|office/i,'office'],[/pasillo|distribuidor|recibidor|hall/i,'hallway'],
-  [/lavadero|laundry/i,'laundry'],[/trastero|almac[eé]n|storage/i,'storage'],[/terraza|terrace/i,'terrace'],[/balc[oó]n|mirador|balcony/i,'balcony']];
- const familyHint=(family,name)=>family&&family!=='unspecified'?family:(HINTS.find(([re])=>re.test(name||''))||[,'unspecified'])[1];
+ // La heurística es la única del producto (project-core, UX-24); aquí no se repite.
+ const Core=typeof module==='object'&&module.exports?require('./project-core.js'):root.FloorPlanCore;
+ const familyHint=(family,name)=>family&&family!=='unspecified'?family:(Core.roomFamilyFromName(name)||'unspecified');
  const area=poly=>Math.abs(poly.reduce((s,p,i)=>{const q=poly[(i+1)%poly.length];return s+p[0]*q[1]-q[0]*p[1];},0))/2;
  const validPoly=poly=>Array.isArray(poly)&&poly.length>=3&&poly.every(p=>Array.isArray(p)&&Number.isFinite(p[0])&&Number.isFinite(p[1]))&&area(poly)>0;
  const SEP='::';

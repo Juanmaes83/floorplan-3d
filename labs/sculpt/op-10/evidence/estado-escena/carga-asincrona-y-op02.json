@@ -1,0 +1,26 @@
+{
+ "note": "captures made at the working tree before 759d9bb7 (same core and harness rules); scene hashes are equal to the 759d9bb7 run where compared",
+ "delayedAsset": {
+  "delayMs": 6000,
+  "waitedMs": 6063,
+  "baselineWaitedMs": 2285,
+  "assetStates": {
+   "ready": 1,
+   "generic": 1,
+   "error": 1
+  },
+  "sameSceneBytes": true
+ },
+ "op02": {
+  "branch": "codex/sculpt-op02-render-demand@edfbf66b",
+  "worktree": "detached, deleted after use",
+  "f3": {
+   "sameSceneBytesAsMaster": true,
+   "waitedMs": 672
+  },
+  "f1": {
+   "sameSceneBytesAsMaster": true,
+   "waitedMs": 683
+  }
+ }
+}

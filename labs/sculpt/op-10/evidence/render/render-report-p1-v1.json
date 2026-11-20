@@ -1,0 +1,64 @@
+{
+ "phase": 1,
+ "blender": "5.2.1 LTS",
+ "renderer": "Cycles CPU, 16 samples, denoise, 640x400, AgX",
+ "input": {
+  "sceneSha256": "2a5c640f3350b50d0be55dbe777a7c70f500eb5f98b6f81009261b65368fc171",
+  "projectId": "prj_op10-f5-furniture",
+  "materials": "neutral"
+ },
+ "derived": [
+  "world: flat grey sky 0.6 (derived)",
+  "sun lamp 3.0 (derived; matches the sky direction)"
+ ],
+ "views": [
+  {
+   "view": "axon",
+   "camera": "orthographic axonometry",
+   "ceilings": "hidden in this view (declared)",
+   "seconds": 2.78,
+   "png": {
+    "bytes": 304742,
+    "sha256": "605f7f79166cb24ccb9d62114e36cdf1088de6bc8e6ee5976f13edae749fc79b"
+   }
+  },
+  {
+   "view": "rom_living",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (9452, 9968)",
+   "targetRoomPresence": 0.644,
+   "twoPoint": false,
+   "seconds": 5.75,
+   "png": {
+    "bytes": 278730,
+    "sha256": "d23def56b663fc55a243d7532cd0dd1eb98a113addb5c9bcceb46972116e6499"
+   }
+  },
+  {
+   "view": "rom_kitchen",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (1853, 5606)",
+   "targetRoomPresence": 0.972,
+   "twoPoint": false,
+   "seconds": 6.2,
+   "png": {
+    "bytes": 275205,
+    "sha256": "e4c8e19d3ed9ac0fc16067036afddfed9f5660d2dee388254168e58cc1341967"
+   }
+  },
+  {
+   "view": "rom_master",
+   "camera": "perspective 24.0 mm, eye 1.35 m at plan (9720, 2864)",
+   "targetRoomPresence": 1.0,
+   "twoPoint": false,
+   "seconds": 5.49,
+   "png": {
+    "bytes": 152344,
+    "sha256": "813e45ca45e97f3d39000737737af199a18e73bdcf1144da70f5e0b9299ab2e0"
+   }
+  }
+ ],
+ "peakRssBytes": 1099100160,
+ "rendererScriptSha256": "991131012b21cf234985c12147e6bef189a84374475cef0c201bf92d05f320b4",
+ "reviewBlend": {
+  "bytes": 2208047
+ }
+}
