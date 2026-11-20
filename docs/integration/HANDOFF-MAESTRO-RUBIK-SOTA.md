@@ -40,21 +40,6 @@ La metodología de §10 y [cartera canónica](https://github.com/Juanmaes83/floo
 
 Ruta estable: `docs/integration/HANDOFF-MAESTRO-RUBIK-SOTA.md`. Al abrir cualquier sesión, leer primero la última actualización fechada y el handoff individual, comprobar master, árbol, CI, PR, Production y autorización. Tras cada avance significativo, Codex actualiza el delta en esta guía (fecha, SHA/base/árbol, evidencia, estado, responsable, dependencia, siguiente acción y permiso); mantiene el historial y enlaza la matriz, plan, estado maestro y #275 o sucesor operativo. No editar en paralelo sus archivos sin acuerdo. La guía es índice/continuidad, no una segunda fuente normativa de estados ni un nuevo roadmap. Las referencias históricas se leen en su fecha. ChatGPT realiza auditorías comparadas, propone prioridades y mandatos; solo writes documentales expresamente solicitados en rama propia. La integración de esta guía en master corresponde a Codex, con el gate documental y autorización aplicables, sin cambios de producto. No iniciar nuevas esculturas por esta nota.
 
-
-## Actualización A4 — regla permanente de integración funcional, UX/UI y QA (20/11/2026)
-
-Decisión del propietario, vigente para todos los frentes y agentes. El texto completo está en un solo sitio, el [protocolo permanente §8](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE.md#8-regla-permanente-de-integración-funcional-uxui-y-qa-propietario-20112026). En resumen:
-
-- Cada corte declara diez puntos: capacidad, área, recorrido del usuario, tipo, reutilización, Perla/UX-FIRST, dependencias y límites, pruebas, evidencia con SHA y qué falta para Production.
-- Una mejora visible sin acceso coherente desde el frontend no está cerrada.
-- Una mejora interna acredita sus consumidores.
-- No se crean autoridades ni controles paralelos.
-- Estado según la escala DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO.
-
-**Aplicación a esta guía:**
-- Las tablas de §3, §6, §7 y §14 se leen con esa escala. Un «hecho» o «cerrado» histórico no equivale a DISPONIBLE salvo evidencia de Production.
-- Los árboles funcionales ya autorizados se preservan sin cambios. Esta regla añade exigencias de declaración y no reabre decisiones ni autorizaciones.
-
 ---
 
 ## Actualización A4 — regla permanente de integración funcional, UX/UI y QA

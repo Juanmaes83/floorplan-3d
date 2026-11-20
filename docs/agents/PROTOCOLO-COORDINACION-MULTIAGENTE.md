@@ -93,33 +93,3 @@ El [catálogo](../product/rubik-catalogo-maestro-mejoras-2026-11-09.md) solo cam
 2. Si otro agente avanzó, reconciliar o declarar los cambios como posteriores al corte.
 3. `git diff --check` limpio.
 4. PR en borrador con rama, SHA y enlaces de evidencia. No fusionar sin autorización.
-
-## 8. Regla permanente de integración funcional, UX/UI y QA (propietario, 20/11/2026)
-
-Toda implementación declara obligatoriamente, en su PR, handoff o expediente de corte:
-
-1. Qué capacidad incorpora o mejora.
-2. En qué área de RUBIK queda integrada.
-3. Cómo encuentra el usuario la funcionalidad, paso a paso.
-4. Si es visible, automática, interna, experimental o de QA.
-5. Qué componentes existentes reutiliza.
-6. Cómo respeta Perla, UX-FIRST y los estándares visuales de RUBIK.
-7. Qué dependencias, permisos y limitaciones tiene.
-8. Qué pruebas funcionales, visuales, de accesibilidad, seguridad y regresión acreditan su funcionamiento.
-9. Qué evidencia permite comprobarla: Preview, capturas, vídeo, ruta de navegación y SHA.
-10. Qué falta para que esté realmente disponible en Production.
-
-- Una mejora **visible** no se considera funcionalmente cerrada sin un acceso coherente y verificable desde el frontend.
-- Una mejora **interna** no requiere interfaz artificial, pero acredita sus consumidores, su funcionamiento y su impacto.
-- No se crean menús, botones, catálogos, inspectores ni autoridades paralelas innecesarias.
-- Responsabilidades:
-  - Claude Code diseña y documenta el destino funcional durante la escultura y el pulido.
-  - Codex garantiza la conexión real durante la cirugía y la integración.
-  - ChatGPT audita la coherencia, la accesibilidad, la seguridad, la descubribilidad y la disponibilidad efectiva.
-- El estado se declara siempre con esta escala, sin saltar peldaños: **DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO**.
-  - Desarrollado: existe en una rama.
-  - Validado: pasa sus pruebas y tiene evidencia.
-  - Integrado: está en master.
-  - Conectado: un consumidor real lo usa en master.
-  - Disponible: se puede usar en Production.
-  - Aceptado: el propietario lo acepta.
