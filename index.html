@@ -2824,7 +2824,7 @@ let levelsG, levelLamps = [], levelContext = null, levelView = 'active', levelBu
 /* ======================= 初始化 ======================= */
 function init(){
   if (inited) return;
-  renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+  renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});installPrivateGuard(renderer);
   renderer.domElement.addEventListener('webglcontextlost',event=>{
     event.preventDefault();if(contextLost)return;
     contextLost=true;abort3D();dispatchEvent(new Event('floorplan-3d-context-lost'));
@@ -4002,7 +4002,54 @@ function pumpFurnitureAssets(){
 }
 
 function publishAsset(id,value){assetStates.set(id,value);dispatchEvent(new Event('floorplan-asset-status'));}
+/* OP-05 P3/P4 (LABORATORIO) · Representación privada de un mueble. INERTE salvo que un módulo de laboratorio registre
+   window.RubikPrivateView (módulo de laboratorio OP-05; el producto nunca lo carga) y lo active. El modelo privado solo cambia la
+   representación visual: el objeto canónico (id, estancia, posición, rotación, cotas, presupuesto, referencias) no cambia.
+   Guarda genérica, que falla cerrado, en tres capas:
+   1. toda API de salida del visor (shot, deliveryShot, presentationCapture, captureScene) corre con el modelo privado
+      RETIRADO de la escena, también si es asíncrona, concurrente, falla o se cancela (genericOutput);
+   2. cada renderer.render sincroniza: el privado solo se dibuja si no hay salida en curso ni una grabación viva;
+   3. los lectores de píxeles del canvas: captureStream bloquea el privado mientras la pista siga viva; toDataURL, toBlob y
+      readPixels con el privado presente LANZAN un error (un consumidor desconocido nunca recibe píxeles privados). */
+let privateOutputs=0,privateShown=false;const privateStreams=new Set();
+function privateAllowed(){return !!window.RubikPrivateView?.enabled&&privateOutputs===0&&![...privateStreams].some(t=>t.readyState==='live');}
+function syncPrivate(){
+  if(!window.RubikPrivateView){privateShown=false;return false;}   // sin laboratorio: coste cero, comportamiento de la base
+  let shown=false;const allow=privateAllowed();
+  for(const g of furnG?.children||[]){const ps=g.userData.privateScene,gen=g.userData.genericGroup;if(!ps)continue;
+    if(allow){if(ps.parent!==g)g.add(ps);if(gen)gen.visible=false;shown=true;}else{if(ps.parent)ps.parent.remove(ps);if(gen)gen.visible=true;}}
+  privateShown=shown;return shown;
+}
+function genericOutput(fn){
+  if(!window.RubikPrivateView)return fn();   // sin laboratorio no hay nada privado: la salida es la de siempre
+  privateOutputs++;syncPrivate();let done=false;const end=()=>{if(done)return;done=true;privateOutputs--;syncPrivate();requestFrame();};
+  try{const r=fn();if(r&&typeof r.then==='function')return r.finally(end);end();return r;}catch(e){end();throw e;}
+}
+function installPrivateGuard(r){
+  const raw=r.render.bind(r),cv=r.domElement,refuse=()=>{throw Error('OP-05: salida de píxeles con un modelo privado visible. Usa la representación genérica.');};
+  r.render=(sc,cam)=>{if(window.RubikPrivateView)syncPrivate();return raw(sc,cam);};
+  for(const k of ['toDataURL','toBlob']){const o=cv[k].bind(cv);cv[k]=(...a)=>{if(privateShown)refuse();return o(...a);};}
+  if(cv.captureStream){const o=cv.captureStream.bind(cv);cv.captureStream=(...a)=>{privateOutputs++;try{syncPrivate();raw(scene,camera);const st=o(...a);for(const t of st.getTracks())privateStreams.add(t);return st;}finally{privateOutputs--;syncPrivate();}};}
+  const gl=r.getContext(),rp=gl.readPixels.bind(gl);gl.readPixels=(...a)=>{if(privateShown)refuse();return rp(...a);};
+}
+function loadPrivateFurniture(g,f,generation,pv){
+  const controller=new AbortController();assetRequests.set(f.id,controller);publishAsset(f.id,{state:'loading',private:true});
+  const bounds=new THREE.Box3().setFromObject(g),height=f.size.heightMm?M(f.size.heightMm):bounds.max.y-bounds.min.y;
+  assetQueue.push(()=>pv.load(project,f.id,{signal:controller.signal}).then(result=>{
+    // Una carga tardía nunca entra en una escena ajena: misma generación, mismo grupo y el mismo proyecto que la pidió.
+    if(generation!==assetGeneration||controller.signal.aborted||g.parent!==furnG||result.projectId!==project.id){AssetLoader.dispose(result.scene);return;}
+    const generic=new THREE.Group();generic.name='op05-generic';while(g.children.length)generic.add(g.children[0]);g.add(generic);
+    result.scene.scale.set(f.w/result.meshDimensionsMm.width,height*1000/result.meshDimensionsMm.height,f.d/result.meshDimensionsMm.depth);
+    g.userData.genericGroup=generic;g.userData.privateScene=result.scene;syncPrivate();requestFrame();
+    publishAsset(f.id,{state:'ready',private:true,triangles:result.triangles,physicalScale:result.physicalScale});
+  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'generic',private:true,reason:error.message||'Modelo privado no disponible'});})
+    .finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);}));
+  pumpFurnitureAssets();
+}
 function loadFurnitureAsset(g,f,generation){
+  const pv=window.RubikPrivateView;   // OP-05 laboratorio: solo existe si un módulo de laboratorio lo registra
+  if(pv){const r=pv.resolve(project,f.id);if(r.kind==='private'){loadPrivateFurniture(g,f,generation,pv);return;}
+    if(r.reason!=='no-private-model'){publishAsset(f.id,{state:'generic',private:true,reason:r.reason});return;}}
   if(!f.assetRef){publishAsset(f.id,{state:'generic'});return;}
   const entry=FloorPlanAssets.resolve(window.FloorPlanAssetUI?.entries||[],f.assetRef);
   if(!entry){publishAsset(f.id,{state:'error',reason:'Referencia no disponible o no autorizada'});return;}
@@ -4040,7 +4087,7 @@ function batchFurniturePrimitives(group){
 }
 function buildFurn(){
   cancelFurnitureAssets();assetStates.clear();
-  furnG.children.forEach(g=>{if(g.userData.authorizedAsset)AssetLoader.dispose(g);});
+  furnG.children.forEach(g=>{if(g.userData.authorizedAsset)AssetLoader.dispose(g);if(g.userData.privateScene){AssetLoader.dispose(g.userData.privateScene);g.userData.privateScene=null;}});
   clearGroup(furnG);
   const canInstance=renderer.capabilities.isWebGL2||!!renderer.extensions.get('ANGLE_instanced_arrays');
   state.furniture.forEach(f => {const g=buildFurniture(f);if(primitiveBatching&&canInstance&&!f.assetRef)batchFurniturePrimitives(g);furnG.add(g);loadFurnitureAsset(g,f,assetGeneration);});
@@ -5726,6 +5773,8 @@ async function captureScene({signal,stableFrames=30,timeoutMs=120000,includeTerr
     objects:(furnG?.children||[]).filter(g=>typeof g.userData?.fid==='string').map(g=>({id:g.userData.fid,catalogModel:!!g.userData.authorizedAsset})).sort((a,b)=>a.id.localeCompare(b.id))}};
 }
 window.View3D.captureScene=captureScene;
+// OP-05 P4: every output API of the viewer runs with the generic representation (private models removed from the scene).
+for(const k of ['shot','deliveryShot','presentationCapture','captureScene']){const fn=window.View3D[k];if(typeof fn==='function')window.View3D[k]=(...a)=>genericOutput(()=>fn(...a));}
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
