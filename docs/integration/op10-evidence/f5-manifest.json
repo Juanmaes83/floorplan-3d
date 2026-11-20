@@ -1,0 +1,189 @@
+{
+ "format": "rubik-sota.scene-delivery",
+ "version": "1.0.0",
+ "status": "integration-candidate · observed visual snapshot, not canonical geometry",
+ "createdAt": null,
+ "source": {
+  "projectId": "prj_op10-f5-furniture",
+  "projectUpdatedAt": "2026-11-19T00:00:00.000Z",
+  "observedProjectSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849",
+  "meaning": "project as observed in the viewer at capture time; not a confirmed F0 revision"
+ },
+ "app": {
+  "revision": null,
+  "captureCore": "1.0.0",
+  "schema": "rubik-sota.observed-scene"
+ },
+ "scene": {
+  "scope": "active-level",
+  "frame": {
+   "source": "RUBIK View3D",
+   "originPlanMm": {
+    "x": 5925,
+    "y": 5280
+   },
+   "mapping": "x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000",
+   "activeLevelId": null,
+   "levelView": "active"
+  },
+  "view": {
+   "camera": {
+    "position": [
+     4.696018,
+     12.835781,
+     6.753835
+    ],
+    "quaternion": [
+     -0.444307,
+     0.240617,
+     0.125211,
+     0.853825
+    ],
+    "target": [
+     0,
+     0,
+     -0.916327
+    ],
+    "fovDeg": 45,
+    "aspect": 1.819095,
+    "source": "viewer"
+   },
+   "light": {
+    "mode": "day",
+    "hour": 10,
+    "exposure": 1.05,
+    "sun": {
+     "direction": [
+      0.300367,
+      0.951793,
+      -0.0622
+     ],
+     "color": "#faf4ed",
+     "intensity": 2.785641
+    },
+    "hemi": {
+     "sky": "#fff8ee",
+     "ground": "#b9a88f",
+     "intensity": 1.1
+    },
+    "background": "#f1f2f2",
+    "lamps": {
+     "on": false,
+     "intensity": 0,
+     "distance": 7,
+     "color": "#ffd9a8"
+    }
+   }
+  },
+  "units": "metres",
+  "axes": "three-y-up",
+  "stats": {
+   "meshes": 1509,
+   "vertices": 446385,
+   "faces": 199752,
+   "instancesExpanded": 172,
+   "roles": {
+    "room": 15,
+    "opening": 97,
+    "ceiling": 13,
+    "wall": 292,
+    "opening-leaf": 12,
+    "object": 1069,
+    "fixture": 11
+   },
+   "entities": 180,
+   "unlinked": 0,
+   "bounds": {
+    "min": [
+     -6.185,
+     -0.000896,
+     -5.52
+    ],
+    "max": [
+     6.185,
+     2.8,
+     5.52
+    ]
+   }
+  },
+  "excluded": {
+   "decorative-ground": 1,
+   "hidden": 144,
+   "unapplied-proposal": 1,
+   "territorial-context": 1
+  },
+  "skipped": {},
+  "policy": {
+   "excludedUserData": [
+    {
+     "key": "renderExclude",
+     "reason": "excluded-by-marker"
+    },
+    {
+     "key": "presentationOutline",
+     "reason": "presentation-outline"
+    },
+    {
+     "key": "presentationSection",
+     "reason": "presentation-section"
+    },
+    {
+     "key": "sectionCap",
+     "reason": "section-cap"
+    },
+    {
+     "key": "contactRoomId",
+     "reason": "contact-shadow-decal"
+    },
+    {
+     "key": "territorialContext",
+     "reason": "territorial-context"
+    }
+   ],
+   "excludedNames": [
+    {
+     "name": "smart-furnishing-preview",
+     "reason": "unapplied-proposal"
+    }
+   ],
+   "surfacesOnly": "Mesh and InstancedMesh triangles; lines, points and sprites skipped",
+   "supportSlab": false,
+   "textures": "never copied; hasMap declared",
+   "normals": "vertex normals transformed by the normal matrix"
+  }
+ },
+ "blender": {
+  "import": "File › Import › glTF 2.0 (.glb/.gltf), default options",
+  "transform": "glTF Y up → Blender Z up: (XB, YB, ZB) = (x, -z, y), applied once by the importer",
+  "properties": "each object carries rubik_id, rubik_role, rubik_level, rubik_mesh (Object Properties › Custom Properties)",
+  "camera": "RUBIK_camera = viewer pose at capture"
+ },
+ "fallbacks": {
+  "texturesNotCopied": 13,
+  "assets": {
+   "generic": 46,
+   "ready": 1
+  },
+  "assetErrors": [],
+  "catalogModels": [
+   "obj_op10-catalog-bench"
+  ],
+  "proceduralObjects": 46
+ },
+ "stability": {
+  "rule": "no asset loading, no camera/door motion, identical scene signature",
+  "stableFrames": 30
+ },
+ "files": {
+  "scene.glb": {
+   "bytes": 13359016,
+   "sha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2"
+  }
+ },
+ "privacy": "no images, photos, textures, URLs or free text from the project are included; geometry, colours and IDs only",
+ "limitations": [
+  "Visual observation of the 3D view: procedural furniture is the viewer representation, not manufacturer geometry.",
+  "Textured surfaces travel as their flat colour (hasMap declared).",
+  "Not a measured survey: accuracy against a real building is not claimed."
+ ]
+}

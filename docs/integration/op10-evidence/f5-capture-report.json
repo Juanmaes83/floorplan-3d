@@ -1,0 +1,182 @@
+{
+ "format": "rubik-sota.scene-capture-run",
+ "version": "1.0.0",
+ "via": "api",
+ "browser": "chromium",
+ "browserVersion": "153.0.8010.12",
+ "scope": "active",
+ "viewport": {
+  "width": 1280,
+  "height": 800
+ },
+ "input": {
+  "file": "f5-furniture.json",
+  "sha256": "b882cc986f24f294d70517989f83c0de5f9c3ea979dc9fce554bfab9f09395a3",
+  "kind": "project"
+ },
+ "code": {
+  "gitHead": "625e6a404b053933f8155303068610b3627f8f25",
+  "indexHtmlSha256": "fad25ffbf57344608e9cfe3412e182dc6ec4b8203eae4102093b7966d455a339",
+  "captureCoreSha256": "4c86505b2698fc090d1e916183e059dff8f5921df2a16ce8cd4c1b3a9d8d25fa",
+  "deliveryCoreSha256": "b8812f9879b13d6fd9423d4865a49dd5194d1a19e9d868e0b5706bbde0c7b818",
+  "harnessSha256": "87130c1705526ded4628a4666cf8704fb69e3106c4c944a36a4b80451561b7b0"
+ },
+ "stats": {
+  "meshes": 1509,
+  "vertices": 446385,
+  "faces": 199752,
+  "instancesExpanded": 172,
+  "roles": {
+   "room": 15,
+   "opening": 97,
+   "ceiling": 13,
+   "wall": 292,
+   "opening-leaf": 12,
+   "object": 1069,
+   "fixture": 11
+  },
+  "entities": 180,
+  "unlinked": 0,
+  "bounds": {
+   "min": [
+    -6.185,
+    -0.000896,
+    -5.52
+   ],
+   "max": [
+    6.185,
+    2.8,
+    5.52
+   ]
+  }
+ },
+ "excluded": {
+  "decorative-ground": 1,
+  "hidden": 144,
+  "unapplied-proposal": 1,
+  "territorial-context": 1
+ },
+ "view": {
+  "camera": {
+   "position": [
+    4.696018,
+    12.835781,
+    6.753835
+   ],
+   "quaternion": [
+    -0.444307,
+    0.240617,
+    0.125211,
+    0.853825
+   ],
+   "target": [
+    0,
+    0,
+    -0.916327
+   ],
+   "fovDeg": 45,
+   "aspect": 1.819095,
+   "source": "viewer"
+  },
+  "light": {
+   "mode": "day",
+   "hour": 10,
+   "exposure": 1.05,
+   "sun": {
+    "direction": [
+     0.300367,
+     0.951793,
+     -0.0622
+    ],
+    "color": "#faf4ed",
+    "intensity": 2.785641
+   },
+   "hemi": {
+    "sky": "#fff8ee",
+    "ground": "#b9a88f",
+    "intensity": 1.1
+   },
+   "background": "#f1f2f2",
+   "lamps": {
+    "on": false,
+    "intensity": 0,
+    "distance": 7,
+    "color": "#ffd9a8"
+   }
+  }
+ },
+ "stability": {
+  "rule": "no asset loading, no camera/door motion, identical scene signature",
+  "stableFrames": 30
+ },
+ "fallbacks": {
+  "texturesNotCopied": 13,
+  "assets": {
+   "generic": 46,
+   "ready": 1
+  },
+  "assetErrors": [],
+  "catalogModels": [
+   "obj_op10-catalog-bench"
+  ],
+  "proceduralObjects": 46
+ },
+ "metrics": {
+  "loadMs": 7218,
+  "prepareMs": 2436,
+  "captureMainThreadMs": 442.7,
+  "stability": {
+   "frames": 31,
+   "stableFrames": 30,
+   "waitedMs": 520
+  },
+  "glbMs": 105,
+  "glbBytes": 13359016,
+  "sceneJsonBytes": 26951934,
+  "navigationBefore": {
+   "medianMs": 16.7,
+   "p95Ms": 17.3
+  },
+  "navigationAfter": {
+   "medianMs": 16.6,
+   "p95Ms": 17.2
+  }
+ },
+ "invariants": {
+  "projectUnchanged": true,
+  "storageUnchanged": true,
+  "externalRequests": 0,
+  "pageErrors": 0,
+  "blockedAssetRequests": 0
+ },
+ "outputs": {
+  "manifest.json": {
+   "bytes": 4361,
+   "sha256": "ad4d5bafc0422afdb8951a83e804d8825404e8c12c014d20e780ac60833178e3"
+  },
+  "project.json": {
+   "bytes": 31801,
+   "sha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849"
+  },
+  "record.json": {
+   "bytes": 748,
+   "sha256": "ae8ed9a2dd0e4c34761c110cb395b7b5d7319b5e6e26a06298bf1f71a111e4fb"
+  },
+  "scene.glb": {
+   "bytes": 13359016,
+   "sha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2"
+  },
+  "scene.json": {
+   "bytes": 26951934,
+   "sha256": "448c1c7f4c04c12ae75d1bf6d0dcc488048403c1eb0a4a3ee14cb4d421d0e4d7"
+  },
+  "viewer-canvas.png": {
+   "bytes": 191742,
+   "sha256": "d8cedaa91605e1fac660fff794ec9e04115099c46140193cf89d5b1f24d8a02d"
+  },
+  "viewer.png": {
+   "bytes": 308730,
+   "sha256": "e13a8b5fa302dc199e81c3b4287176908a751a1db748a6dd3fdc77ccb41b62e6"
+  }
+ }
+}

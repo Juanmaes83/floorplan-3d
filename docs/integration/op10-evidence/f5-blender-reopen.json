@@ -1,0 +1,61 @@
+{
+ "status": "PASS",
+ "process": "fresh",
+ "blender": "5.2.1 LTS",
+ "checks": [
+  {
+   "check": "blend hash equals import report",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "scene metadata links the package",
+   "pass": true,
+   "detail": "prj_op10-f5-furniture"
+  },
+  {
+   "check": "units metric, scale 1",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "transform declared once",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "collections and counts",
+   "pass": true,
+   "detail": {
+    "camera": 1,
+    "ceiling": 26,
+    "fixture": 22,
+    "object": 1116,
+    "opening": 117,
+    "opening-leaf": 18,
+    "room": 28,
+    "wall": 362
+   }
+  },
+  {
+   "check": "active camera kept",
+   "pass": true,
+   "detail": "RUBIK_camera"
+  },
+  {
+   "check": "mesh count",
+   "pass": true,
+   "detail": 1509
+  },
+  {
+   "check": "every mesh carries rubik_role and rubik_mesh",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "regenerated geometry hash equals the import",
+   "pass": true,
+   "detail": "bf34bb0a7275bb69"
+  }
+ ]
+}

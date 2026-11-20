@@ -1,0 +1,27 @@
+/* OP-10 C5 · «Escena para Blender». Solo maquetación sobre los tokens Perla (css/design-system.css); botones .btn existentes. */
+.scene-export-dialog{width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:20px;border:1px solid var(--line);border-radius:14px;box-sizing:border-box;background:var(--surface-panel);color:var(--ink);box-shadow:var(--shadow)}
+.scene-export-dialog::backdrop{background:rgba(20,26,30,.35)}
+.scene-export h2{margin:0 0 6px;font-size:1.2rem}
+.scene-export .se-lead{margin:0 0 10px;color:var(--ink)}
+.scene-export .se-facts{margin:0 0 12px;padding-left:1.1em;color:var(--ink-muted);font-size:.92rem;line-height:1.45}
+.scene-export .se-status{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:var(--surface-sunken);font-weight:600}
+.scene-export-dialog[data-state=error] .se-status{background:var(--danger-soft);color:var(--danger)}
+.scene-export-dialog[data-state=stale] .se-status,.scene-export-dialog[data-state=no3d] .se-status{background:var(--warn-soft);color:var(--warn)}
+.scene-export-dialog[data-state=ready] .se-status{color:var(--success)}
+.scene-export-dialog[data-state=working] .se-status::before{content:"";display:inline-block;width:.8em;height:.8em;margin-right:.5em;border:2px solid var(--line-strong);border-top-color:var(--action);border-radius:50%;vertical-align:-.1em;animation:se-spin .9s linear infinite}
+@media (prefers-reduced-motion:reduce){.scene-export-dialog[data-state=working] .se-status::before{animation:none}}
+@keyframes se-spin{to{transform:rotate(1turn)}}
+.scene-export .se-summary{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 10px;font-size:.92rem}
+.scene-export .se-summary dt{color:var(--ink-muted)}.scene-export .se-summary dd{margin:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.scene-export .se-note{margin:0 0 10px;color:var(--ink-muted);font-size:.9rem}
+.scene-export .se-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:6px}
+.scene-export .se-actions .btn{min-height:44px;min-width:44px}
+.scene-export .btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+@media (max-width:480px){.scene-export-dialog{padding:16px}.scene-export .se-actions{flex-direction:column-reverse}.scene-export .se-actions .btn{width:100%}}
+/* Los .btn solo tienen estilo base dentro de los contenedores del producto: el diálogo vive en <body>. Secundario con borde. */
+.scene-export .btn{font:inherit;font-weight:600;padding:0 16px;border-radius:10px;cursor:pointer}
+.scene-export .btn:not(.primary){border:1px solid var(--line-strong);background:var(--surface-panel);color:var(--ink)}
+.scene-export .btn:not(.primary):hover{background:var(--surface-hover)}
+.scene-export .btn:disabled{opacity:.55;cursor:default}
+.scene-export .se-paths{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.9rem}
+.scene-export .se-paths-title{margin:0 0 4px;font-weight:600}.scene-export .se-paths ul{margin:0;padding-left:1.1em;color:var(--ink-muted);line-height:1.45}

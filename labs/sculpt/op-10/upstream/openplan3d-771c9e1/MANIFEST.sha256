@@ -1,0 +1,10 @@
+30228141977aae075d3a50caa11574a12dbc6f69c2bb207d618c8ea2ffa4a83c  ./LICENSE
+6f7d1213151be971c654ca960d5881d3adbd2a0e23d5c02df7203f5eecc08889  ./docs/portable-render-scene.md
+7b675136cfcf7250b0fb611c2db782d2dc295112ba0e1e0ffa6a592940527c0b  ./package.json
+10c7f793b61a23ea9a46653a3090de2bd80ccd1b1123cd780593cac910a4fd32  ./src/lib/components/viewer3d/ThreeViewer.svelte
+2a16c147fb64af154951d224b243670c0431885495295ad6af542345eff90262  ./src/lib/utils/portableRenderScene.ts
+0c129402e633e59f2723193e5b147ac9ba4e1ff63b4cbf14aa927a03c9d032cf  ./src/lib/utils/slopedWallGeometry.ts
+25aa597c37d42d858f46b0d0646bb793641941e85e3da613aefe586400737802  ./src/lib/utils/wallProfiles.ts
+8dfd3c5fd289235cca43b6613c974cdbf601dbf4615c7bb8a13c4e488650d197  ./tests/browser/portable-render-scene.spec.ts
+ab7b8153da01ab7ad8c5f319acccfd7cbb3684348677b5941921a990f0930bbb  ./tests/fixtures/sloped-walls.openplan.json
+09465913c65030a2ab944fc45474561e61425ed893af00fd7c80fd265f57413a  ./tests/portable-render-scene.test.ts

@@ -1,0 +1,59 @@
+{
+ "profile": "delivery",
+ "profileSpec": {
+  "purpose": "client-facing still",
+  "resolution": "1600x1000",
+  "samples": 128,
+  "fill": "rooms"
+ },
+ "blender": "5.2.1 LTS",
+ "renderer": "Cycles CPU, 128 samples, denoise, 1600x1000, AgX",
+ "threads": 4,
+ "cpuCount": 4,
+ "input": {
+  "glbSha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2",
+  "projectId": "prj_op10-f5-furniture",
+  "materials": "observed",
+  "light": "viewer"
+ },
+ "derived": [
+  "sun and sky: captured from the viewer (see import-report derivedLight)",
+  "room fill: one ceiling area light per room (13), energy 20\u00b7\u221aarea W (derived)",
+  "exposure -0.4 EV (derived)",
+  "textured floors coloured from their project material (13 meshes; textures never copied)"
+ ],
+ "views": [
+  {
+   "view": "viewer",
+   "camera": "captured viewer pose (C7)",
+   "fovDeg": 45,
+   "resolution": [
+    1600,
+    880
+   ],
+   "seconds": 242.84,
+   "png": {
+    "bytes": 1722310,
+    "sha256": "2990c612bf4c01f8800ab24f82bbf2e2dc220c23e8cb20f02c43302d6dcdb312"
+   }
+  },
+  {
+   "view": "rom_living",
+   "camera": "perspective 22.0 mm, eye 1.35 m at plan (5638, 9968)",
+   "targetRoomPresence": 0.72,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.72,
+   "twoPoint": true,
+   "seconds": 633.22,
+   "png": {
+    "bytes": 1797352,
+    "sha256": "174d12b01363431dce87f7d1844a26ceb10f16eade841acb603df646e0605c0c"
+   }
+  }
+ ],
+ "peakRssBytes": 2153025536,
+ "rendererScriptSha256": "1a1695a865255eafc20d07f0c6cb1e6d04f76f57fcb4297f7e85975325a4a9bb",
+ "reviewBlend": {
+  "bytes": 3026718
+ }
+}
