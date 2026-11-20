@@ -139,9 +139,12 @@ export async function load(entry,options={}){
 }
 // OP-05 · P1 (laboratory only, NOT wired to the viewer): bytes that the caller already holds. No URL is accepted. The caller
 // supplies `verify(buffer)` (length, SHA-256, localGLB geometry/resources) and the result carries MESH dimensions only.
-export async function loadVerifiedBytes(buffer,{verify,normalization,...options}={}){
+export async function loadVerifiedBytes(buffer,{verify,normalization,expectedBytes,...options}={}){
  if(!(buffer instanceof ArrayBuffer))throw Error('Only verified bytes are accepted (no URL, Blob or view)');
  if(typeof verify!=='function')throw Error('A verification step is required');
+ // Codex P1 finding: type, F3 limit and declared length are checked BEFORE any copy is made.
+ if(buffer.byteLength===0||buffer.byteLength>MAX_BYTES)throw Error('Bytes exceed the F3 profile or are empty (rejected before copying)');
+ if(expectedBytes!==undefined&&buffer.byteLength!==expectedBytes)throw Error('Length differs from the declared one (rejected before copying)');
  return pipeline(async(sig,check)=>{const copy=buffer.slice(0);await verify(copy);check();return {buffer:copy};},
   scene=>measure(scene,normalization||{unitToMeter:1,rotationDeg:[0,0,0]}),options);
 }

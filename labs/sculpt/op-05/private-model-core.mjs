@@ -9,7 +9,9 @@
 // El objeto canónico (id, posición, rotación, cotas, assetRef) NO cambia: el modelo solo es una representación.
 export const EXT = 'x-op05-private-model', VERSION = 1, PROFILE = 'f3-v1', MEDIA = 'model/gltf-binary', SCOPE = 'project-private';
 const SHA = /^[a-f0-9]{64}$/, MID = /^pmd_[a-f0-9]{32}$/;
-const text = (v, max) => typeof v === 'string' && v.trim().length > 0 && v.trim().length <= max;
+// Codex P2 finding: the RAW string is bounded (not only its trimmed form) and what is kept is the trimmed value.
+const text = (v, max) => typeof v === 'string' && v.length <= max && v.trim().length > 0;
+const norm = v => typeof v === 'string' ? v.trim() : v;
 const clone = v => JSON.parse(JSON.stringify(v));
 const keysExactly = (o, keys) => o && typeof o === 'object' && !Array.isArray(o) && Object.keys(o).sort().join() === [...keys].sort().join();
 export class PrivateModelError extends Error { constructor(code, message) { super(message); this.code = code; } }
@@ -57,6 +59,8 @@ export function attach(project, objectId, admitted, {modelId = newModelId} = {})
   if (!(project.objects || []).some(o => o.id === objectId)) fail('object-not-found', 'El objeto no existe en este proyecto.');
   const ext = read(project), rights = clone(admitted?.rights);
   checkRights(rights);
+  rights.attribution = norm(rights.attribution); rights.license = norm(rights.license);
+  if (typeof admitted?.title !== 'string' || !text(admitted.title, 100)) fail('descriptor-invalid', 'Falta un título acotado del modelo.');
   const same = ext.models.find(d => d.sha256 === admitted.sha256 && d.byteLength === admitted.byteLength);
   let model = same;
   if (same) { if (JSON.stringify(same.rights) !== JSON.stringify(rights)) fail('rights-conflict', 'Estos bytes ya están en el proyecto con otra ficha de derechos. Revisa el conflicto: no se amplían permisos.'); }

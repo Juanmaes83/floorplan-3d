@@ -25,7 +25,13 @@ export async function verifyPrivateBytes(buffer, {sha256, byteLength} = {}) {
 }
 
 export async function loadPrivateModel(buffer, declared, options = {}) {
-  const result = await loadVerifiedBytes(buffer, {...options, normalization: PRIVATE_NORMALIZATION, verify: bytes => verifyPrivateBytes(bytes, declared)});
+  // Codex P1 finding: everything that can be checked without the bytes' content is checked BEFORE the copy; the copy that
+  // reaches decoding is then hashed and inspected again (verifyPrivateBytes).
+  if (!(buffer instanceof ArrayBuffer)) throw Error('Solo se aceptan bytes verificados (ni URL, ni Blob, ni vistas).');
+  if (!SHA256.test(declared?.sha256 || '') || !Number.isSafeInteger(declared?.byteLength)) throw Error('Faltan la huella o la longitud declaradas.');
+  if (buffer.byteLength === 0 || buffer.byteLength > LIMITS.bytes) throw Error('El GLB supera los límites del perfil F3 o está vacío.');
+  if (buffer.byteLength !== declared.byteLength) throw Error('La longitud no coincide con la declarada.');
+  const result = await loadVerifiedBytes(buffer, {...options, expectedBytes: declared.byteLength, normalization: PRIVATE_NORMALIZATION, verify: bytes => verifyPrivateBytes(bytes, declared)});
   const {dimensionsMm, ...rest} = result;
   // Tres medidas distintas que nunca se confunden: la MALLA (aquí), la normalización (declarada) y las cotas canónicas
   // del mueble (en el proyecto, no aquí).
