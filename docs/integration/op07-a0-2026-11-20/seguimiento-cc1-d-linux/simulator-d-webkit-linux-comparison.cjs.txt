@@ -1,0 +1,134 @@
+'use strict';
+const fs=require('node:fs');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+const crypto=require('node:crypto');
+const root='/candidate/scripts/capture/simulator-d';
+const V=require(path.join(root,'src/virtual-capture.cjs'));
+const P=require(path.join(root,'src/pixel-diff.cjs'));
+const out='/evidence';
+const config={viewport:{width:960,height:600},dpr:1,browser:'webkit',realtimeMs:20000};
+const camera='rom_kid';
+const report={
+ base:{sha:'8e917e1a70f499a6b8dc68850c8413b7d06c5682',tree:'dec6d20694e083cb615f42eae60bb74fd3209523'},
+ candidate:{sha:'eae7d5f366ba7e24de9e04d38addd216a70a3d76',tree:'c5735a4b81cdb346d3186c3ceeef251bfcd2ef0d'},
+ harness:'09557c4cac1e6390d3af56281922d8d43093234e',
+ environment:{image:'sha256:a7d3f7dc1eaf01a1c29dc47cf0e84e49114b14d41fb2c6cea98ac80987045758',os:process.platform,node:process.version,playwright:require('playwright/package.json').version,softwareWebGL:process.env.LIBGL_ALWAYS_SOFTWARE},
+ config,interval:{fps:10,seconds:.3,room:camera},result:'FAIL'
+};
+const digest=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+function stats(bytes){
+ const decoded=P.decode(bytes),data=Buffer.from(decoded.data),colors=new Set();
+ for(let i=0;i<data.length;i+=4)colors.add(data.readUInt32BE(i));
+ return {width:decoded.width,height:decoded.height,colors:colors.size,sha256:digest(bytes)};
+}
+async function enter(s){
+ await V.act(s.page,()=>setView('3d'));
+ await V.advanceUntil(s.page,()=>FloorPlanApp.viewMode==='3d'&&View3D.contextAvailable,null,{maxSeconds:8});
+ await V.settle(s.page,{maxSeconds:8});
+}
+async function capture(label){
+ const s=await V.openRubik({...config,root:'/'+label});
+ const phases=s.errors.map(message=>({phase:'bootstrap',message}));
+ let phase='enter-and-settle';
+ s.page.on('pageerror',e=>phases.push({phase,message:e.message,stack:e.stack?.split('\n').slice(0,4).join('\n')||null}));
+ try {
+  await enter(s);
+  phase='visible-capture';
+  const visiblePath=path.join(out,'d-linux-'+label+'-visible-comparison.png');
+  const visible=await s.page.screenshot({path:visiblePath});
+  const dir=fs.mkdtempSync(path.join(out,'d-linux-'+label+'-frames-'));fs.rmdirSync(dir);
+  phase='sequence';
+  const x=await V.captureSequence(s,{action:p=>p.evaluate(id=>{View3D.flyToRoom(id);},camera),fps:10,seconds:.3,out:dir});
+  const recorded={
+   browser:s.browser.version(),visible:{file:path.basename(visiblePath),...stats(visible)},
+   scope:x.scope,sequenceSha256:x.sequenceSha256,frameDirectory:path.basename(dir),distinctFrames:x.distinctFrames,
+   distinctPoses:new Set(x.frames.map(f=>JSON.stringify(f.camera))).size,
+   frames:x.frames.map(f=>({file:f.file,t:f.t,camera:f.camera,...stats(fs.readFileSync(path.join(dir,f.file)))})),
+   errors:s.errors,errorPhases:phases,external:s.external
+  };
+  phase='post-flight-settle';
+  await V.settle(s.page,{maxSeconds:8});recorded.rest=await s.page.evaluate(()=>View3D.lifecycleMetrics);
+  return recorded;
+ }finally{await s.close();}
+}
+async function framebuffer(label){
+ const s=await V.openRubik({...config,root:'/'+label});
+ try{
+  await s.page.evaluate(()=>{
+   const state={readings:[],pending:false};
+   window.__rubikDiagnosticFramebuffer=state;
+   const proto=WebGL2RenderingContext.prototype;
+   for(const method of ['drawElements','drawArrays','drawElementsInstanced','drawArraysInstanced']){
+    const original=proto[method];
+    proto[method]=function(...args){
+     const result=original.apply(this,args);
+     if (!state.pending&&state.readings.length<24&&this.canvas===document.querySelector('#view3d canvas')){
+      state.pending=true;
+      queueMicrotask(()=>{
+       state.pending=false;
+       const ctx=this,attrs=ctx.getContextAttributes(),w=ctx.drawingBufferWidth,h=ctx.drawingBufferHeight;
+       if(ctx.isContextLost()||w===0||h===0||ctx.getParameter(ctx.FRAMEBUFFER_BINDING)!==null)return;
+       const values=[];
+       for(let yi=1;yi<=5;yi++)for(let xi=1;xi<=5;xi++){
+        const pixel=new Uint8Array(4);ctx.readPixels(Math.floor(w*xi/6),Math.floor(h*yi/6),1,1,ctx.RGBA,ctx.UNSIGNED_BYTE,pixel);values.push([...pixel]);
+       }
+       const camera=View3D.cameraState?.position?.map(v=>Number(v.toFixed(6)));
+       state.readings.push({w,h,preserveDrawingBuffer:attrs?.preserveDrawingBuffer,camera,values,colors:new Set(values.map(String)).size});
+      });
+     }
+     return result;
+    };
+   }
+  });
+  await enter(s);
+  const initial=await s.page.evaluate(()=>window.__rubikDiagnosticFramebuffer.readings.slice(-1)[0]||null);
+  await s.page.evaluate(id=>{window.__rubikDiagnosticFramebuffer.readings.length=0;View3D.flyToRoom(id);},camera);
+  await s.page.clock.runFor(330);
+  const flight=await s.page.evaluate(()=>window.__rubikDiagnosticFramebuffer.readings);
+  return {initial,flight,distinctPoses:new Set(flight.map(x=>JSON.stringify(x.camera))).size,errors:s.errors,external:s.external};
+ }finally{await s.close();}
+}
+(async()=>{
+ const failures=[];
+ try{
+  for(const label of ['base','candidate']) {
+   report[label].capture=await capture(label);
+   const r=report[label].capture;
+   assert.equal(r.scope,'canvas3d');
+   assert.equal(r.frames.length,4);
+   if(r.distinctPoses<=1)failures.push(label+' camera did not move');
+   if(r.distinctFrames<=1)failures.push(label+' final captures did not differ during flight');
+   if(r.frames.some(f=>f.colors<=1))failures.push(label+' final capture has no WebGL content');
+   if(r.errors.length)failures.push(label+' page errors: '+r.errors.join(' | '));
+   if(r.external.length)failures.push(label+' made external requests');
+   if(r.rest.loopActive||r.rest.animating||r.rest.flying||r.rest.pendingAssets!==0)failures.push(label+' did not return to rest');
+  }
+  const a=report.base.capture,b=report.candidate.capture;
+  report.equivalence={
+   sha256Equal:a.sequenceSha256===b.sequenceSha256,
+   frames:a.frames.map((f,i)=>{
+    const g=b.frames[i];
+    return {
+      t:f.t,pose:JSON.stringify(f.camera)===JSON.stringify(g.camera),
+      identicalBytes:fs.readFileSync(path.join(out,a.frameDirectory,f.file)).equals(fs.readFileSync(path.join(out,b.frameDirectory,g.file)))
+    };
+   })
+  };
+  if(!report.equivalence.sha256Equal||!report.equivalence.frames.every(f=>f.pose&&f.identicalBytes)) failures.push('Base/candidate equivalence failed');
+  for(const label of ['base','candidate']){
+   try{report[label].framebuffer=await framebuffer(label);}
+   catch(e){report[label].framebuffer={diagnosticError:e.message};}
+   if(!report[label].framebuffer.flight?.some(x=>x.colors>1))failures.push(label+' direct framebuffer content not established');
+   if(report[label].framebuffer.errors?.length)failures.push(label+' framebuffer diagnostics page errors: '+report[label].framebuffer.errors.join(' | '));
+  }
+  report.assertions=failures;
+  assert.deepEqual(failures,[],failures.join('; '));
+  report.result='PASS';
+ }catch(e){report.failure=e.message;process.exitCode=1;}
+ finally{
+  fs.writeFileSync(path.join(out,'simulator-d-webkit-linux-comparison.json'),JSON.stringify(report,null,2)+'\n');
+  const pick=x=>({version:x?.capture?.browser,frames:x?.capture?.frames?.map(f=>f.colors),visibleColors:x?.capture?.visible?.colors,poses:x?.capture?.distinctPoses,framebufferSamples:x?.framebuffer?.flight?.length,framebufferColors:x?.framebuffer?.flight?.map(f=>f.colors),rest:x?.capture?.rest});
+  console.log(JSON.stringify({result:report.result,base:pick(report.base),candidate:pick(report.candidate),equivalence:report.equivalence,failure:report.failure},null,2));
+ }
+})().catch(e=>{console.error(e);process.exitCode=1;});

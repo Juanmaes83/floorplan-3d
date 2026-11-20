@@ -1,0 +1,260 @@
+[
+  {
+    "workflow": ".github/workflows/assistant-ai-v2.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/cat-ia-v1.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ci-impact.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/consolidation-regression.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/eco01-core.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ent01-core.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ent01-i1a-api.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ent01-preview.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/f0-almacenamiento-persistente.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/f0-expediente.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/f0-persistencia.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ft3d-4-facade.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ft3d-6-presentation-templates.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ft3d-8-e2-integration.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ft3d-8-m1-s2-s3.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ft3d-8-m2-s4.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ft3d-8v-schedule-core.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/g02-dxf.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/gov07-webgl-resilience.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/guided-experience.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/home-profession.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/integration-browser.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/integration-v1.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/multiformat-import.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/nav3d-pro-v1.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/obr01-ft3d8-reliability.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/obr02-obr03-plan-4d.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/op02-render-demand.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/op10-blender-scene.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/photo-project-v1.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/point-6-solar.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/point-8c-c-orthophoto.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/point-8c-d-terrain.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/presentation-ux-stability.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/project-first.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/r02a-normalized.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/r03-i0-core.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/r03-sculpt-complete.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/rubik-e2-hybrid-v2-gate.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/rubik-mcp.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/smart-furnishing.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ux07-ent04-before-after.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  },
+  {
+    "workflow": ".github/workflows/ux08-live-dimensions.yml",
+    "existingTriggers": "unchanged",
+    "dispatch": "enabled",
+    "jobsAndAssertions": "unchanged except explicit head SHA fallback for dispatch"
+  }
+]

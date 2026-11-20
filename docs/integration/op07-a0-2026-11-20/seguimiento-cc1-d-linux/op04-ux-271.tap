@@ -1,0 +1,31 @@
+✔ AST-01 · tarjeta de plantas abre «Plantas…» de building-ui 1440x900 (2077.9ms)
+✔ AST-01 · tarjeta de plantas abre «Plantas…» de building-ui 390x844 (1540.0819ms)
+✔ AST-01 · Promotora: la tarjeta del registro «Viviendas de dos plantas» abre «Plantas…» (1105.1455ms)
+✔ AST-01 · sin la capacidad no se anuncia: ni building-ui ni registro «available» → sin tarjeta (1758.7659ms)
+✔ AST-01: tarjeta «Añadir una planta» en la guía, ligada a la capacidad building (0.6088ms)
+✔ AST-01: búsqueda en tres idiomas y sin confundir la planta decorativa (2.199ms)
+✔ AST-01: la guía orienta y no genera; reutiliza building-ui sin duplicarlo (1.012ms)
+✔ F2 local wall assistance privacy/review 1440x900 (8340.8709ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":1440,"height":900},"requests":445,"unexpected":0,"wallIds":["wal_53f5e9e5e7ee4eb2bc394679659eaea8","wal_afd8d27084614dca8ae0f9a17aa7fc65"],"candidateCount":4}
+✔ import verbs with a file format select upload before the PNG export shortcut (0.8559ms)
+✔ intent normalization, synonyms and supported actions (1.429ms)
+✔ partial queries provide suggestions and unsafe ambiguous input never executes an intent (0.2634ms)
+✔ OP-04 UX keeps join and contextual undo reachable in the guide at 1440×900 (1696.0208ms)
+✔ OP-04 UX keeps join and contextual undo reachable in the guide at 820×1180 (1190.6808ms)
+✔ OP-04 UX keeps join and contextual undo reachable in the guide at 390×844 (1224.0293ms)
+✔ OP-04 UX keeps join and contextual undo reachable in the guide at 844×390 (1123.8867ms)
+✔ OP-04 diagnoses the reference home block in 3d at 1440×900 (4388.2224ms)
+✔ OP-04 diagnoses the reference home block in 2d at 820×1180 (840.0421ms)
+✔ OP-04 diagnoses the reference home block in 2d at 390×844 (828.1003ms)
+✔ OP-04 diagnoses the reference home block in 3d at 844×390 (3397.3642ms)
+✔ OP-04 UX keeps the mobile properties dock reachable when opening all tools (1874.9111ms)
+✔ OP-04 previews a RoomPlan door join without writing, commits once and reopens on the same entry (1628.1055ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18579.1177

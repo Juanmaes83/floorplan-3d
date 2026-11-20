@@ -1,0 +1,85 @@
+{
+  "browser": "firefox",
+  "mode": "headless",
+  "source": "09557c4cac1e6390d3af56281922d8d43093234e",
+  "sha": "eae7d5f366ba7e24de9e04d38addd216a70a3d76",
+  "base": "8e917e1a70f499a6b8dc68850c8413b7d06c5682",
+  "tree": "c5735a4b81cdb346d3186c3ceeef251bfcd2ef0d",
+  "playwright": "1.63.0",
+  "platform": "win32",
+  "browserVersion": "155.0",
+  "framesDirectory": "simulator-d-firefox-headless-frames-u94FQx",
+  "canvas": {
+    "client": [
+      960,
+      157
+    ],
+    "buffer": [
+      960,
+      157
+    ],
+    "contextAvailable": true
+  },
+  "scope": "canvas3d",
+  "distinctFrames": 4,
+  "distinctCameras": 4,
+  "frames": [
+    {
+      "t": 0,
+      "sha256": "15b6136062f02159ecd74a6f0db88b9b83fe15452c1cc7040d98393133e2daf3",
+      "colors": 2922,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.932905,
+        13.483273,
+        7.856506
+      ]
+    },
+    {
+      "t": 0.1,
+      "sha256": "3e360bbf9329fff2ae413c83131c122e40816af11e34da37ae9bdb0854ee39b9",
+      "colors": 2902,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.907756,
+        13.450903,
+        7.820559
+      ]
+    },
+    {
+      "t": 0.2,
+      "sha256": "070840eba4ac96a15f16f8ffc35f84a422b059ff6616f4f1c573a32a191e1507",
+      "colors": 3025,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.731619,
+        13.224434,
+        7.568766
+      ]
+    },
+    {
+      "t": 0.3,
+      "sha256": "bb76db5aafaef221dafb0c5d35aed3357b6b6a8f31ff9fb7cfc35544e67e3bde",
+      "colors": 3086,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.252686,
+        12.610831,
+        6.883947
+      ]
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "rest": {
+    "loopActive": false,
+    "animating": false,
+    "flying": false,
+    "pendingAssets": 0
+  },
+  "result": "PASS"
+}
