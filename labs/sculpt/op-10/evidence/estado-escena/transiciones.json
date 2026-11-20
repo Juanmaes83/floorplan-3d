@@ -1,0 +1,33 @@
+{
+ "fixture": "op10-fx",
+ "appRoot": "lab-worktree",
+ "phases": {
+  "enter3d": {
+   "frames": 360,
+   "changedFrames": 3,
+   "lastChangeAtFrame": 6
+  },
+  "levelViewAll": {
+   "frames": 240,
+   "changedFrames": 1,
+   "lastChangeAtFrame": 1
+  },
+  "idle": {
+   "frames": 120,
+   "changedFrames": 0,
+   "lastChangeAtFrame": 0
+  }
+ },
+ "doors": [
+  {
+   "id": "opn_fixture-ground-door",
+   "settled": true
+  }
+ ],
+ "errors": [],
+ "verdict": {
+  "transitionsDetected": true,
+  "idleStable": true,
+  "pageErrors": 0
+ }
+}

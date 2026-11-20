@@ -1,0 +1,40 @@
+{
+ "status": "PASS",
+ "blender": "5.2.1 LTS",
+ "blenderBuildHash": "9e2066aef7ef",
+ "importer": {
+  "sha256": "e0f50df3e4cf1bbf256213b294f92d83aa89791c3742c65819379f1bf22ad9e9",
+  "materials": "neutral",
+  "transform": "(XB,YB,ZB)=(x,-z,y) once"
+ },
+ "input": {
+  "sceneSha256": "2e51ad13f6cdd9933477a3356a8f977ad4169482bc896915a8395bfd3cc786ed",
+  "manifestProject": "prj_fixture-ground",
+  "projectCanonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167"
+ },
+ "objects": 94,
+ "collections": {
+  "room": 3,
+  "unlinked": 3,
+  "ceiling": 3,
+  "wall": 31,
+  "opening-leaf": 2,
+  "object": 31,
+  "level": 6,
+  "room-slab": 1,
+  "stair": 14
+ },
+ "materials": 2,
+ "mismatches": [],
+ "importSeconds": 0.085,
+ "outputs": {
+  "scene.blend": {
+   "bytes": 259488,
+   "sha256": "66ac836fc063f5ade0029e5ad0b0b9a2764a9e9eb5b63547b93e9e92b32351af"
+  },
+  "blender-geometry.json": {
+   "bytes": 1613673,
+   "sha256": "87f2eb0407e3681a4a82dcc617d83e7cc0b53928829447ea70fdbcbd59bc774d"
+  }
+ }
+}

@@ -1,0 +1,260 @@
+{
+ "format": "rubik-sota.op10-scene-manifest",
+ "version": "0.1.0-lab",
+ "status": "experimental · observed visual snapshot, not canonical geometry",
+ "source": {
+  "fixture": "f4-building.json",
+  "fixtureSha256": "1920c4877426ddaeeb4e872d97b3ca14f8860afa274054b5e09b18bd74e2b9ae",
+  "kind": "building",
+  "projectId": "prj_fixture-ground",
+  "projectUpdatedAt": "2026-11-19T00:00:00.000Z",
+  "projectCanonicalSha256": "9e8993628a1647c0cdc9c14b26a157ae3daec702de243d42aad10ac5c1a67167"
+ },
+ "code": {
+  "gitHead": "759d9bb7624575cfd4c7a83e5a9e5ba1148c5f74",
+  "indexHtmlSha256": "565f31d8ef8ba4da98dad2fa84722b396c16f189b8510d859543bb7a410dcca4",
+  "coreSha256": "a17181e0cca2dd92f6c3cb4d246d154f93008686960fcceb31d46b02c024f649",
+  "harnessSha256": "4617b5b394a0b6b772b699f7eca4553358551edf9a68082e27a427526e9e5982",
+  "three": "r160 (vendor/three)"
+ },
+ "scope": "active-level",
+ "frame": {
+  "source": "RUBIK View3D",
+  "originPlanMm": {
+   "x": 4020,
+   "y": 1600
+  },
+  "mapping": "x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000",
+  "activeLevelId": null,
+  "levelView": "active"
+ },
+ "units": "metres",
+ "axes": "three-y-up",
+ "unitsToMetresApplied": 1,
+ "blenderTransform": "Blender Z-up: (XB, YB, ZB) = (x, -z, y), applied ONCE by the importer; no other conversion",
+ "stats": {
+  "meshes": 61,
+  "vertices": 19071,
+  "faces": 6810,
+  "instancesExpanded": 4,
+  "roles": {
+   "room": 2,
+   "unlinked": 3,
+   "ceiling": 2,
+   "wall": 24,
+   "opening-leaf": 2,
+   "object": 14,
+   "stair": 14
+  },
+  "entities": 14,
+  "bounds": {
+   "min": [
+    -3.86,
+    0,
+    -1.44
+   ],
+   "max": [
+    3.86,
+    3.1,
+    1.44
+   ]
+  }
+ },
+ "entities": 14,
+ "excluded": {
+  "decorative-ground": 1,
+  "hidden": 19,
+  "unapplied-proposal": 1,
+  "territorial-context": 1
+ },
+ "skipped": {},
+ "policy": {
+  "excludedUserData": [
+   {
+    "key": "renderExclude",
+    "reason": "excluded-by-marker"
+   },
+   {
+    "key": "presentationOutline",
+    "reason": "presentation-outline"
+   },
+   {
+    "key": "presentationSection",
+    "reason": "presentation-section"
+   },
+   {
+    "key": "sectionCap",
+    "reason": "section-cap"
+   },
+   {
+    "key": "contactRoomId",
+    "reason": "contact-shadow-decal"
+   },
+   {
+    "key": "territorialContext",
+    "reason": "territorial-context"
+   }
+  ],
+  "excludedNames": [
+   {
+    "name": "smart-furnishing-preview",
+    "reason": "unapplied-proposal"
+   }
+  ],
+  "surfacesOnly": "Mesh and InstancedMesh triangles; lines, points and sprites skipped",
+  "supportSlab": false,
+  "textures": "never copied; hasMap declared"
+ },
+ "materials": [
+  {
+   "kind": "surface",
+   "color": "#ffffff",
+   "map": "map",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#d8d0c0",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#fbfaf7",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#d9cbbb",
+   "map": "flat",
+   "meshes": 6
+  },
+  {
+   "kind": "surface",
+   "color": "#f4f1eb",
+   "map": "flat",
+   "meshes": 15
+  },
+  {
+   "kind": "surface",
+   "color": "#34312d",
+   "map": "flat",
+   "meshes": 3
+  },
+  {
+   "kind": "surface",
+   "color": "#efe6d8",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#cfd2d4",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#919ea9",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#9aa7b3",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#ece5d8",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#838e98",
+   "map": "flat",
+   "meshes": 1
+  },
+  {
+   "kind": "surface",
+   "color": "#3a3027",
+   "map": "flat",
+   "meshes": 4
+  },
+  {
+   "kind": "surface",
+   "color": "#ffffff",
+   "map": "flat",
+   "meshes": 2
+  },
+  {
+   "kind": "surface",
+   "color": "#b99a76",
+   "map": "flat",
+   "meshes": 14
+  }
+ ],
+ "fallbacks": {
+  "texturesNotCopied": 2,
+  "assetStates": {
+   "generic": 1
+  },
+  "assetErrors": []
+ },
+ "objects": [
+  {
+   "id": "obj_fixture-sofa",
+   "assetState": "generic",
+   "reason": null,
+   "authorizedAssetLoaded": false,
+   "visible": true
+  }
+ ],
+ "stability": {
+  "frames": 30,
+  "waitedMs": 2895,
+  "inflightAtCapture": 0,
+  "rule": "no asset request in flight, no asset in state «loading», doors settled, scene signature identical for 30 frames"
+ },
+ "limits": {
+  "meshes": 20000,
+  "vertices": 1500000,
+  "faces": 1500000,
+  "instances": 50000,
+  "bytes": 134217728
+ },
+ "metrics": {
+  "loadMs": 5558,
+  "captureMs": 42.7,
+  "serializeMs": 16,
+  "sceneBytes": 654988,
+  "navigationBefore": {
+   "medianMs": 102.6,
+   "p95Ms": 287.9
+  },
+  "navigationAfter": {
+   "medianMs": 88.8,
+   "p95Ms": 174.4
+  },
+  "captureBlocksMainThreadMs": 58.7,
+  "viewport": {
+   "width": 1280,
+   "height": 800
+  }
+ },
+ "invariants": {
+  "projectUnchanged": true,
+  "storageUnchanged": true,
+  "externalRequests": 0,
+  "pageErrors": 0
+ },
+ "outputs": {
+  "scene.json": {
+   "bytes": 654988,
+   "sha256": "e327fe105e64e777b3f80755c179d44b628f4befebe1d175cd9bea1cf22a9ce6"
+  }
+ }
+}

@@ -1,0 +1,824 @@
+{
+ "format": "rubik-sota.scene-run",
+ "version": "1.0.0",
+ "browser": "chromium",
+ "startedAt": "2026-11-19T21:02:20.354Z",
+ "scenarios": [
+  {
+   "id": "f1-rect",
+   "capture": {
+    "stats": {
+     "meshes": 20,
+     "vertices": 703,
+     "faces": 492,
+     "instancesExpanded": 0,
+     "roles": {
+      "room": 1,
+      "opening": 6,
+      "ceiling": 1,
+      "wall": 9,
+      "opening-leaf": 2,
+      "fixture": 1
+     },
+     "entities": 10,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -2.74,
+       0,
+       -2.24
+      ],
+      "max": [
+       2.74,
+       2.8,
+       2.24
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 18,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 4328,
+     "prepareMs": 523,
+     "captureMainThreadMs": 4.8,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 508
+     },
+     "glbMs": 3,
+     "glbBytes": 43600,
+     "sceneJsonBytes": 38337,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.3
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.2
+     }
+    },
+    "assets": {},
+    "glbSha256": "327826138d148cc1db316304a208bd3fd44d346cc4cf90c3aaa2564ede5a0396",
+    "sceneJsonSha256": "b3fea9031a1214b4fd2b3cd7e02f94e73f03108185a8a1117c45058a00acac5b"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 0,
+    "benignSameMaterial": 4,
+    "first": []
+   },
+   "fidelityAB": {
+    "contract": 37,
+    "failed": 0,
+    "visual": 0,
+    "unlinked": 0
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.811,
+    "peakRssBytes": 299651072
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 703,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 36,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.677,
+    "peakRssBytes": 292229120,
+    "result": "PASS"
+   }
+  },
+  {
+   "id": "f2-rot30",
+   "capture": {
+    "stats": {
+     "meshes": 1589,
+     "vertices": 446541,
+     "faces": 199388,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "opening": 97,
+      "ceiling": 13,
+      "wall": 369,
+      "opening-leaf": 12,
+      "object": 1072,
+      "fixture": 11
+     },
+     "entities": 179,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -6.808496,
+       -0.000896,
+       -7.40793
+      ],
+      "max": [
+       6.81577,
+       2.8,
+       7.40793
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 188,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 7425,
+     "prepareMs": 2471,
+     "captureMainThreadMs": 397.5,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 510
+     },
+     "glbMs": 100,
+     "glbBytes": 13446764,
+     "sceneJsonBytes": 28720062,
+     "navigationBefore": {
+      "medianMs": 16.6,
+      "p95Ms": 17.3
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.3
+     }
+    },
+    "assets": {
+     "generic": 46
+    },
+    "glbSha256": "0baef4c49aaf2358bd3b3a2ce3d8885ae9f8c80c5847dbde153c3d64edcce19c",
+    "sceneJsonSha256": "eea52874ca668b983706ce085aa9c73acaf917200fb28bd397dbc57190acb414"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 92,
+    "benignSameMaterial": 120,
+    "first": []
+   },
+   "fidelityAB": {
+    "contract": 641,
+    "failed": 0,
+    "visual": 32,
+    "unlinked": 0
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 7.158,
+    "peakRssBytes": 641380352
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0.001,
+    "vertices": 446541,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 640,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.166,
+    "peakRssBytes": 586162176,
+    "result": "PASS"
+   }
+  },
+  {
+   "id": "f3-openings",
+   "capture": {
+    "stats": {
+     "meshes": 94,
+     "vertices": 12265,
+     "faces": 6244,
+     "instancesExpanded": 0,
+     "roles": {
+      "room": 2,
+      "opening": 18,
+      "ceiling": 2,
+      "wall": 27,
+      "opening-leaf": 2,
+      "object": 43
+     },
+     "entities": 18,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -5.279953,
+       0,
+       -2.745654
+      ],
+      "max": [
+       5.279953,
+       2.97,
+       2.745654
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 32,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 4321,
+     "prepareMs": 580,
+     "captureMainThreadMs": 23.2,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 510
+     },
+     "glbMs": 5,
+     "glbBytes": 428972,
+     "sceneJsonBytes": 805577,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.1
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.2
+     }
+    },
+    "assets": {
+     "ready": 1,
+     "generic": 1,
+     "error": 1
+    },
+    "glbSha256": "183d2c5108712810273770bb108f074bf9811d74c71c93a4f53670618c6ea745",
+    "sceneJsonSha256": "0bd1943e90f51c095d933afc27b59afd8fd34f4c0dc2e1aab3af3300ea8d9563"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 14,
+    "benignSameMaterial": 6,
+    "first": []
+   },
+   "fidelityAB": {
+    "contract": 71,
+    "failed": 0,
+    "visual": 0,
+    "unlinked": 0
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.943,
+    "peakRssBytes": 313507840
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 12265,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 70,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.754,
+    "peakRssBytes": 302321664,
+    "result": "PASS"
+   }
+  },
+  {
+   "id": "f4-active",
+   "capture": {
+    "stats": {
+     "meshes": 61,
+     "vertices": 19071,
+     "faces": 6810,
+     "instancesExpanded": 4,
+     "roles": {
+      "room": 2,
+      "opening": 1,
+      "ceiling": 2,
+      "wall": 24,
+      "opening-leaf": 2,
+      "object": 14,
+      "fixture": 2,
+      "stair": 14
+     },
+     "entities": 17,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -3.86,
+       0,
+       -1.44
+      ],
+      "max": [
+       3.86,
+       3.1,
+       1.44
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 19,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 4211,
+     "prepareMs": 594,
+     "captureMainThreadMs": 22.7,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 509
+     },
+     "glbMs": 7,
+     "glbBytes": 560836,
+     "sceneJsonBytes": 1146615,
+     "navigationBefore": {
+      "medianMs": 16.6,
+      "p95Ms": 17.7
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.8
+     }
+    },
+    "assets": {
+     "generic": 1
+    },
+    "glbSha256": "7f803e1cd447ea0e16c51a0fb09a36f9fa0d86a2fb94351ccde22d451d3021e2",
+    "sceneJsonSha256": "4cd7714ed982e4ed8e830756322578eca235a8f9253ac49a154388e453ba5b14"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 0,
+    "benignSameMaterial": 5,
+    "first": []
+   },
+   "fidelityAB": [
+    {
+     "level": "lvl_fixture-ground",
+     "present": true,
+     "contract": 58,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "present": false,
+     "contract": null,
+     "failed": null
+    },
+    {
+     "stairs": [
+      {
+       "id": "str_fixture-main",
+       "risers": 14,
+       "meshes": 14,
+       "observedTopM": 3.1,
+       "expectedTopM": 3.1,
+       "topDeviationMm": 0
+      }
+     ]
+    }
+   ],
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.901,
+    "peakRssBytes": 308617216
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 19071,
+    "issues": 0
+   },
+   "fidelityCA": [
+    {
+     "level": "lvl_fixture-ground",
+     "contract": 58,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "contract": null,
+     "failed": null
+    }
+   ],
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.727,
+    "peakRssBytes": 298737664,
+    "result": "PASS"
+   }
+  },
+  {
+   "id": "f4-all",
+   "capture": {
+    "stats": {
+     "meshes": 94,
+     "vertices": 47911,
+     "faces": 16544,
+     "instancesExpanded": 4,
+     "roles": {
+      "room": 3,
+      "opening": 6,
+      "ceiling": 3,
+      "wall": 31,
+      "opening-leaf": 2,
+      "object": 31,
+      "fixture": 3,
+      "room-slab": 1,
+      "stair": 14
+     },
+     "entities": 27,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -3.86,
+       0,
+       -1.44
+      ],
+      "max": [
+       3.86,
+       5.9,
+       1.44
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 32,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 5184,
+     "prepareMs": 740,
+     "captureMainThreadMs": 57.7,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 509
+     },
+     "glbMs": 24,
+     "glbBytes": 1347328,
+     "sceneJsonBytes": 2857084,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.5
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.7
+     }
+    },
+    "assets": {
+     "generic": 1
+    },
+    "glbSha256": "7b4102f954ffee07378aeb713f8582a46b352deb9962b51a7234a2d0d2b86867",
+    "sceneJsonSha256": "6a1ee8b35c606708d55bccf35c45d00520be6110b4775363c9b6e2baf9cc14aa"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 0,
+    "benignSameMaterial": 9,
+    "first": []
+   },
+   "fidelityAB": [
+    {
+     "level": "lvl_fixture-ground",
+     "present": true,
+     "contract": 58,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "present": true,
+     "contract": 35,
+     "failed": 0
+    },
+    {
+     "stairs": [
+      {
+       "id": "str_fixture-main",
+       "risers": 14,
+       "meshes": 14,
+       "observedTopM": 3.1,
+       "expectedTopM": 3.1,
+       "topDeviationMm": 0
+      }
+     ]
+    }
+   ],
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 1.186,
+    "peakRssBytes": 326840320
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0,
+    "vertices": 47911,
+    "issues": 0
+   },
+   "fidelityCA": [
+    {
+     "level": "lvl_fixture-ground",
+     "contract": 58,
+     "failed": 0
+    },
+    {
+     "level": "lvl_fixture-upper",
+     "contract": 35,
+     "failed": 0
+    }
+   ],
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.895,
+    "peakRssBytes": 311984128,
+    "result": "PASS"
+   }
+  },
+  {
+   "id": "f5-furniture",
+   "capture": {
+    "stats": {
+     "meshes": 1509,
+     "vertices": 446385,
+     "faces": 199752,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "opening": 97,
+      "ceiling": 13,
+      "wall": 292,
+      "opening-leaf": 12,
+      "object": 1069,
+      "fixture": 11
+     },
+     "entities": 180,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -6.185,
+       -0.000896,
+       -5.52
+      ],
+      "max": [
+       6.185,
+       2.8,
+       5.52
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 144,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 7218,
+     "prepareMs": 2436,
+     "captureMainThreadMs": 442.7,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 520
+     },
+     "glbMs": 105,
+     "glbBytes": 13359016,
+     "sceneJsonBytes": 26951934,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.3
+     },
+     "navigationAfter": {
+      "medianMs": 16.6,
+      "p95Ms": 17.2
+     }
+    },
+    "assets": {
+     "generic": 46,
+     "ready": 1
+    },
+    "glbSha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2",
+    "sceneJsonSha256": "448c1c7f4c04c12ae75d1bf6d0dcc488048403c1eb0a4a3ee14cb4d421d0e4d7"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 96,
+    "benignSameMaterial": 114,
+    "first": []
+   },
+   "fidelityAB": {
+    "contract": 643,
+    "failed": 0,
+    "visual": 35,
+    "unlinked": 0
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 7.072,
+    "peakRssBytes": 640147456
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0.001,
+    "vertices": 446385,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 642,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.17,
+    "peakRssBytes": 581120000,
+    "result": "PASS"
+   }
+  },
+  {
+   "id": "f6-r02r03",
+   "capture": {
+    "stats": {
+     "meshes": 1513,
+     "vertices": 437989,
+     "faces": 197080,
+     "instancesExpanded": 172,
+     "roles": {
+      "room": 15,
+      "opening": 97,
+      "ceiling": 13,
+      "wall": 292,
+      "opening-leaf": 12,
+      "object": 1072,
+      "fixture": 11,
+      "ceiling-element": 1
+     },
+     "entities": 180,
+     "unlinked": 0,
+     "bounds": {
+      "min": [
+       -6.185,
+       -0.000896,
+       -5.52
+      ],
+      "max": [
+       6.185,
+       2.8,
+       5.52
+      ]
+     }
+    },
+    "excluded": {
+     "decorative-ground": 1,
+     "hidden": 144,
+     "unapplied-proposal": 1,
+     "territorial-context": 1
+    },
+    "metrics": {
+     "loadMs": 7268,
+     "prepareMs": 2315,
+     "captureMainThreadMs": 416.9,
+     "stability": {
+      "frames": 31,
+      "stableFrames": 30,
+      "waitedMs": 506
+     },
+     "glbMs": 98,
+     "glbBytes": 13146984,
+     "sceneJsonBytes": 26454782,
+     "navigationBefore": {
+      "medianMs": 16.7,
+      "p95Ms": 17.4
+     },
+     "navigationAfter": {
+      "medianMs": 16.7,
+      "p95Ms": 17.4
+     }
+    },
+    "assets": {
+     "generic": 46
+    },
+    "glbSha256": "3bc39a57a7a0366546701a805aaa96b7c89edc2771c27ffa7a91c1bbcc5822c5",
+    "sceneJsonSha256": "3317fc27292c2ca48946d25fc6b90d5684848bcb85890380cd74b0033af1dfe2"
+   },
+   "c3": {
+    "visibleDefects": 0,
+    "hiddenByContact": 91,
+    "benignSameMaterial": 114,
+    "first": []
+   },
+   "fidelityAB": {
+    "contract": 644,
+    "failed": 0,
+    "visual": 34,
+    "unlinked": 0
+   },
+   "blenderImport": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-import.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 7.108,
+    "peakRssBytes": 636547072
+   },
+   "importReport": "PASS",
+   "roundtripCB": {
+    "pass": true,
+    "maxVertexDeviationMm": 0.001,
+    "vertices": 437989,
+    "issues": 0
+   },
+   "fidelityCA": {
+    "contract": 643,
+    "failed": 0
+   },
+   "reopen": {
+    "command": [
+     "python",
+     "/home/user/floorplan-3d/scripts/interop/blender-scene-reopen.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.07,
+    "peakRssBytes": 579067904,
+    "result": "PASS"
+   }
+  }
+ ],
+ "finishedAt": "2026-11-19T21:04:18.676Z"
+}
