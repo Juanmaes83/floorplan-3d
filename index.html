@@ -1602,7 +1602,7 @@ function renderSel(){
     if (pw){
       // The whole wall (every facet of a curved one), and — in Select — the curvature dot at its centre (OP-07 · S5b).
       s += `<polygon points="${Core.wallOutline(pw).map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
-      if (ui.tool === 'select' && pw.status !== 'demolished'){
+      if (ui.tool === 'select' && pw.status !== 'demolished' && Core.wallFeaturesActive()){   // OP-07 S8: no entry point until activation
         const {mid} = wallChord(pw), m = pw.curve ? FloorPlanWallGeometry.point(pw, .5) : mid, bad = drag?.kind === 'curve' && drag.refused, hs = COARSE ? 1.7 : 1, hit = (COARSE ? 24 : 12)*k, f = Math.round(wallSagitta(pw));
         s += `<line x1="${mid.x}" y1="${mid.y}" x2="${m.x}" y2="${m.y}" stroke="#b5653a" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" pointer-events="none"/>
           <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${hit}" fill="transparent"/>
@@ -1846,7 +1846,7 @@ const wallSagitta = w => { if (!w.curve) return 0; const {mid, n} = wallChord(w)
 const curveControlFor = (w, sagitta) => { if (!sagitta) return null; const {mid, n} = wallChord(w); return {x:mid.x + n.x*2*sagitta, y:mid.y + n.y*2*sagitta}; };
 let wallShapeStatus = '';
 function wallShapeBlock(w){
-  if (w.status === 'demolished') return '';
+  if (w.status === 'demolished' || !Core.wallFeaturesActive()) return '';   // OP-07 S8: integrated ≠ active
   const f = Math.round(wallSagitta(w)), sloped = w.heightEndMm !== undefined, len = Math.round(Core.wallLength(w));
   return `<details class="panel-group wall-shape" data-group="wall-shape" open id="wallShape"><summary>${op07t('Forma del muro','Wall shape','墙体形状')}</summary>
     <div class="form">

@@ -20,6 +20,25 @@
   // only a document that uses them needs 2.x, so no v1 project is ever migrated in bulk. A 1.x reader rejects 2.x without
   // modifying anything (contract §3, «major desconocido»). 2.0 contains every 1.x feature up to 1.12; a feature added
   // to 1.x later as 1.(12+k) is 2.k. Every module raises and compares versions through these three functions.
+  // OP-07 · S8 · Activation, three separate states (none of them migrates anything):
+  //  - compatible reading: always, once integrated — a 2.x document is read, drawn, measured and exported.
+  //  - 'integrated' (OP07_RELEASE default): no entry point, OP-07 operations refuse, raiseVersion never makes a 2.x, and no
+  //    writer confirms a changed 2.x project (saveGate). Integrating the code does NOT activate it.
+  //  - 'active': only by changing OP07_RELEASE in this file (an authorized code change). A test origin (Node, 127.0.0.1,
+  //    localhost, f0-2b.localhost) may set globalThis.RUBIK_OP07_STATE for tests; a deployed host never can.
+  const OP07_RELEASE = 'integrated';
+  function op07State() {
+    const host = root.location?.hostname, testable = !root.location || /^(127\.0\.0\.1|localhost|f0-2b\.localhost)$/.test(host || ''), o = root.RUBIK_OP07_STATE;
+    return testable && (o === 'active' || o === 'integrated') ? o : OP07_RELEASE;
+  }
+  // Even when 'active', a page fails closed unless its writers are protected: A0 (the schema-epoch barrier,
+  // FloorPlanSchemaEpoch) is loaded and the editor installed the S7 save gate on its storage (registerProtectedWriter).
+  // In Node (no document) there is no editor writer: the pure core only obeys the state.
+  let protectedWriter = false;
+  const registerProtectedWriter = () => { protectedWriter = true; };
+  const activationBlockers = () => !root.document ? [] : [...(root.FloorPlanSchemaEpoch ? [] : ['a0']), ...(protectedWriter ? [] : ['protected-writer'])];
+  const wallFeaturesActive = () => op07State() === 'active' && !activationBlockers().length;
+  const ACTIVATION_PENDING = 'Los muros curvos e inclinados todavía no están activados en RUBIK: puedes abrir y consultar un proyecto que los tenga, pero no crearlos ni guardar cambios en él. Exporta una copia si la necesitas.';
   const V2_BASE_MINOR = 12;
   const parseVersion = v => { const m = /^(1|2)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.exec(typeof v === 'string' ? v : ''); return m ? {major:+m[1], minor:+m[2], patch:+m[3]} : null; };
   const versionLine = v => v.major === 1 ? v.minor : V2_BASE_MINOR + v.minor;
@@ -36,6 +55,7 @@
     const a = parseVersion(project.schemaVersion), b = parseVersion(target);
     if (!a || !b) throw new Error(`/schemaVersion: cannot raise ${project.schemaVersion} to ${target}`);
     if (versionAtLeast(project.schemaVersion, target)) return project;
+    if (b.major >= 2 && a.major < 2 && !wallFeaturesActive()) throw new Error(`/schemaVersion: activation-pending: ${ACTIVATION_PENDING}`);
     const major = Math.max(a.major, b.major), line = Math.max(versionLine(a), versionLine(b));
     project.schemaVersion = major === 1 ? `1.${line}.0` : `2.${Math.max(0, line - V2_BASE_MINOR)}.0`;
     return project;
@@ -55,13 +75,26 @@
     const out = {removed:(before?.walls || []).filter(w => !nw.has(w.id)).map(w => w.id), removedOpenings:(before?.openings || []).filter(o => !no.has(o.id)).map(o => o.id), straightened:[], leveled:[], split:{}};
     if (restore) for (const w of before?.walls || []) { const n = nextWalls.get(w.id); if (!n) continue;
       if (Walls.isCurved(w) && !Walls.isCurved(n)) out.straightened.push(w.id); if (sloped(w) && !sloped(n)) out.leveled.push(w.id); }
-    return composeIntent(out, op || {});
+    // S8: every permission belongs to ONE project; a restore revokes earlier permissions on everything it changes.
+    const projectId = after?.id ?? before?.id ?? null;
+    if (restore) { const key = (l, id) => JSON.stringify((l || []).find(x => x.id === id) ?? null);
+      out.revoke = [...new Set([...(before?.walls || []), ...(after?.walls || []), ...(before?.openings || []), ...(after?.openings || [])].map(x => x.id))]
+        .filter(id => key(before?.walls, id) !== key(after?.walls, id) || key(before?.openings, id) !== key(after?.openings, id)); }
+    const r = composeIntent({...out, projectId}, op ? {...op, projectId} : {projectId});
+    if (out.revoke) r.revoke = out.revoke;   // composing this step into earlier ones revokes their permissions on these ids
+    return r;
   }
   // Intents of consecutive steps since the last confirmed revision, composed so that guardSave compares the confirmed
   // document with the next one: a piece of a split that is split again or removed is followed back to the original wall.
   function composeIntent(a = {}, b = {}) {
-    const out = {removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
+    if (a.projectId && b.projectId && a.projectId !== b.projectId) throw new Error(`OP-07: intents of different projects (${a.projectId} ≠ ${b.projectId}) cannot be composed`);
+    const out = {projectId:a.projectId ?? b.projectId ?? null, removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
     const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
+    // A restore (undo, redo, recovery) revokes every earlier permission on the walls and openings it changes.
+    for (const id of b.revoke || []) {
+      for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = out[key].filter(x => x !== id);
+      for (const k of Object.keys(out.split)) if (k === id || out.split[k].includes(id)) delete out.split[k];
+    }
     for (const [old, pieces] of Object.entries(b.split || {})) { const k = origin(old);
       if (k) out.split[k].splice(out.split[k].indexOf(old), 1, ...pieces); else out.split[old] = [...pieces]; }
     for (const id of b.removed || []) { const k = origin(id);
@@ -76,7 +109,7 @@
   // last CONFIRMED revision). A v1 document is never refused here: loss and rule checks apply to walls with a curve or a
   // slope and to their openings (the same scope as validate()); a degraded view and a writer that lacks a feature the
   // document uses are always refused. Removing a whole project is not a wall loss.
-  function saveGate(pairs, {intent = {}, restore = false, writerFeatures = WALL_FEATURES} = {}) {
+  function saveGate(pairs, {intent = {}, intents = null, restore = false, writerFeatures = WALL_FEATURES} = {}) {
     const issues = [], read = t => { if (t === null || t === undefined) return null; try { return JSON.parse(t); } catch { return undefined; } };
     const projectsOf = (kind, doc) => !doc ? [] : kind === 'project' ? [doc] : (doc.entries || []).flatMap(e => e.kind === 'building' ? (e.building?.levels || []).map(l => l.project) : [e.project]).filter(Boolean);
     for (const {kind, before, after} of pairs) {
@@ -86,7 +119,10 @@
       for (const p of projectsOf(kind, next)) {
         const q = prevById.get(p.id) || null, shaped = new Set([...(q?.walls || []), ...(p.walls || [])].filter(shapedWall).map(w => w.id));
         const hosts = new Map([...(q?.openings || []), ...(p.openings || [])].map(o => [o.id, o.wallId]));
-        const why = restore ? composeIntent(editIntent(q, p, {restore:true}), intent) : intent;
+        // Intents are isolated per project (variants and building levels share wall ids): `intents[projectId]`.
+        // A flat intent only applies to the project it was made for (fail closed: without projectId it authorizes nothing).
+        const own = intents ? (intents[p.id]?.projectId === undefined || intents[p.id]?.projectId === p.id ? intents[p.id] || {} : {}) : (intent?.projectId === p.id ? intent : {}), why = restore ? composeIntent(editIntent(q, p, {restore:true}), own) : own;
+        if (!wallFeaturesActive() && (Walls.featuresOf(p).length || (parseVersion(p.schemaVersion)?.major ?? 1) >= 2) && JSON.stringify(p) !== JSON.stringify(q)) issues.push({code:'activation-pending', projectId:p.id});
         for (const i of guardSave(q, p, {intent:why, writerFeatures}).issues) {
           const wall = i.wallId ?? hosts.get(i.openingId);
           if (['degraded-view', 'writer-lacks-feature'].includes(i.code) || shaped.has(wall)) issues.push({...i, projectId:p.id});
@@ -617,6 +653,7 @@
   // editor. A refused edit returns the same project untouched (atomic) and says why; it never drops an opening.
   const refuse = (code, explanation, extra = {}) => ({ok:false, code, explanation:[explanation], ...extra});
   function wallEdit(project, wallId, change, intent = {}) {
+    if (!wallFeaturesActive()) return refuse('activation-pending', ACTIVATION_PENDING);
     const next = clone(project), w = next.walls.find(x => x.id === wallId);
     if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
     change(w, next);
@@ -638,6 +675,7 @@
   // once (the pieces stay joined), heights and openings carried over by the parameter of their centre. An opening the
   // cut would cross refuses the split and is named: openings never disappear.
   function splitWall(project, wallId, distanceMm, {newId = id('wal')} = {}) {
+    if (!wallFeaturesActive()) return refuse('activation-pending', ACTIVATION_PENDING);
     const w = project.walls.find(x => x.id === wallId);
     if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
     const length = wallLength(w);
@@ -668,4 +706,5 @@
   Object.assign(api,{roomRing});   // OP-07 S3b
   Object.assign(api,{jointAt});   // OP-07 S4b
   Object.assign(api,{editIntent,composeIntent,saveGate});   // OP-07 S7
+  Object.assign(api,{wallFeaturesActive,op07State,ACTIVATION_PENDING,activationBlockers,registerProtectedWriter});   // OP-07 S8
 })(globalThis);

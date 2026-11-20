@@ -3,7 +3,7 @@
 // piezas con pendiente del núcleo único; los demás muros siguen siendo cajas; sin errores ni red externa.
 const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
 const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
+let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
 for(const viewport of [{width:1440,height:900},{width:844,height:390},{width:390,height:844}])
 test(`S4 · muro curvo e inclinado en 3D ${viewport.width}x${viewport.height}`,{timeout:180000},async()=>{
  const {context,page,watch}=await K.editor(env,{viewport});
