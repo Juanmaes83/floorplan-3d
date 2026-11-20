@@ -42,3 +42,5 @@ E queda integrado como herramienta interna ejecutable de QA en el repositorio. U
 ## Seguimiento OP‑07 v4 y Simulator D
 
 [Reproducciones, alcance y próximos gates](cierre-v4-d/README.md). Se archivan el residual de intenciones, el conflicto con A0 real y el gate WebKit de D sobre master efectivo. El [contraste de los recursos de G‑02 servidos por Production](production-g02-assets.json) amplía la auditoría retrospectiva.
+
+[Delta agrupado de A0 real + S8, Simulator D en WebKit Linux, cierre CC1 y coordinación OP‑11](seguimiento-cc1-d-linux/README.md).

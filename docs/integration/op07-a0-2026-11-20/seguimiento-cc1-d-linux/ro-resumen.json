@@ -1,0 +1,223 @@
+{
+  "playwright": "1.63.0",
+  "image": "sha256:a7d3f7dc1eaf01a1c29dc47cf0e84e49114b14d41fb2c6cea98ac80987045758",
+  "base": "8e917e1a70f499a6b8dc68850c8413b7d06c5682",
+  "candidate": "eae7d5f366ba7e24de9e04d38addd216a70a3d76",
+  "tracerSource": "5994cb71:labs/sculpt/op-07/a0/ro-trace.init.js",
+  "scope": "bootstrap instrumentation only; independent of capture equivalence",
+  "config": {
+    "viewport": {
+      "width": 960,
+      "height": 600
+    },
+    "dpr": 1,
+    "browser": "webkit",
+    "realtimeMs": 20000
+  },
+  "results": [
+    {
+      "label": "base",
+      "file": "ro-1-base.json",
+      "observations": [
+        [
+          1,
+          "svg#plan"
+        ],
+        [
+          2,
+          "header"
+        ],
+        [
+          3,
+          "div#fab"
+        ],
+        [
+          4,
+          "nav#professionalNav.professional-nav"
+        ],
+        [
+          4,
+          "header"
+        ],
+        [
+          5,
+          "div#walkOverlay"
+        ]
+      ],
+      "flips": [],
+      "errors": [],
+      "pageErrors": [],
+      "events": 168
+    },
+    {
+      "label": "candidate",
+      "file": "ro-2-candidate.json",
+      "observations": [
+        [
+          1,
+          "svg#plan"
+        ],
+        [
+          2,
+          "header"
+        ],
+        [
+          3,
+          "div#fab"
+        ],
+        [
+          4,
+          "nav#professionalNav.professional-nav"
+        ],
+        [
+          4,
+          "header"
+        ],
+        [
+          5,
+          "div#walkOverlay"
+        ]
+      ],
+      "flips": [],
+      "errors": [],
+      "pageErrors": [],
+      "events": 170
+    },
+    {
+      "label": "candidate",
+      "file": "ro-3-candidate.json",
+      "observations": [
+        [
+          1,
+          "svg#plan"
+        ],
+        [
+          2,
+          "header"
+        ],
+        [
+          3,
+          "div#fab"
+        ],
+        [
+          4,
+          "nav#professionalNav.professional-nav"
+        ],
+        [
+          4,
+          "header"
+        ],
+        [
+          5,
+          "div#walkOverlay"
+        ]
+      ],
+      "flips": [],
+      "errors": [],
+      "pageErrors": [],
+      "events": 170
+    },
+    {
+      "label": "base",
+      "file": "ro-4-base.json",
+      "observations": [
+        [
+          1,
+          "svg#plan"
+        ],
+        [
+          2,
+          "header"
+        ],
+        [
+          3,
+          "div#fab"
+        ],
+        [
+          4,
+          "nav#professionalNav.professional-nav"
+        ],
+        [
+          4,
+          "header"
+        ],
+        [
+          5,
+          "div#walkOverlay"
+        ]
+      ],
+      "flips": [],
+      "errors": [],
+      "pageErrors": [],
+      "events": 170
+    },
+    {
+      "label": "base",
+      "file": "ro-5-base.json",
+      "observations": [
+        [
+          1,
+          "svg#plan"
+        ],
+        [
+          2,
+          "header"
+        ],
+        [
+          3,
+          "div#fab"
+        ],
+        [
+          4,
+          "nav#professionalNav.professional-nav"
+        ],
+        [
+          4,
+          "header"
+        ],
+        [
+          5,
+          "div#walkOverlay"
+        ]
+      ],
+      "flips": [],
+      "errors": [],
+      "pageErrors": [],
+      "events": 170
+    },
+    {
+      "label": "candidate",
+      "file": "ro-6-candidate.json",
+      "observations": [
+        [
+          1,
+          "svg#plan"
+        ],
+        [
+          2,
+          "header"
+        ],
+        [
+          3,
+          "div#fab"
+        ],
+        [
+          4,
+          "nav#professionalNav.professional-nav"
+        ],
+        [
+          4,
+          "header"
+        ],
+        [
+          5,
+          "div#walkOverlay"
+        ]
+      ],
+      "flips": [],
+      "errors": [],
+      "pageErrors": [],
+      "events": 170
+    }
+  ]
+}
