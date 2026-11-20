@@ -45,7 +45,7 @@
     }
    }finally{if(state)View3D.presentationRestore(state);if(was!=='3d')await setView(was);}
    if(at!==key())throw Error(tx('El proyecto cambió mientras se preparaban las vistas. Vuelve a prepararlas.','The project changed while the views were prepared. Prepare them again.','准备视图期间项目已更改，请重新准备。'));
-   views={key:at,source:p.source,items,takenAt:new Date()};
+   views={key:at,source:p.source,items,takeId:crypto.randomUUID(),takenAt:new Date()};
   })();
   busy=run;emit();
   try{await run;}catch(e){error=e.message||String(e);}finally{busy=null;emit();}
@@ -58,5 +58,5 @@
   return FloorPlanDeliveryImage.compose({image:v.dataUrl,format:'landscape',layout:'band',data});
  }
  async function download(id){const out=await image(id),v=current().find(x=>x.id===id),a=document.createElement('a');a.href=out.dataUrl;a.download=`rubik-sota-${String(v.label).normalize('NFD').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'vista'}.png`;a.click();return out;}
- window.FloorPlanProjectViews={plan,status,current,prepare,image,download,get error(){return error;},get takenAt(){return views?.takenAt||null;},get source(){return views?.source||plan()?.source||null;},onChange(fn){listeners.add(fn);}};
+ window.FloorPlanProjectViews={plan,status,current,prepare,image,download,get error(){return error;},get takeId(){return views?.takeId||null;},get takenAt(){return views?.takenAt||null;},get source(){return views?.source||plan()?.source||null;},onChange(fn){listeners.add(fn);}};
 })();

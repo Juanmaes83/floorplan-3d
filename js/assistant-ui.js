@@ -82,7 +82,7 @@
  let ownCloses=0,lastHost=null;/* «close» de <dialog> llega en una tarea posterior: se cuentan los cierres propios */const watcher=new MutationObserver(()=>{if(lastHost&&lastHost.lastElementChild!==access)rehost();});
  const closeHost=()=>{if(hostDlg.open){ownCloses++;hostDlg.close();}};
  const own=n=>n===fab||n===access||n===hostDlg||panel.contains(n);
- function rehost(){const modal=hostDialog(),d=modal||hostSurface();access.toggleAttribute('data-inline',!modal&&!!d);
+ function rehost(){const modal=hostDialog(),d=modal||hostSurface();access.toggleAttribute('data-inline',!!d&&(!modal||modal.hasAttribute('data-assistant-inline')));
   if(d!==lastHost){watcher.disconnect();if(d)watcher.observe(d,{childList:true,subtree:true});if(hostDlg.open&&d)closeHost();lastHost=d;}
   const t=d?(d.querySelector('h1,h2,h3,[id$="Title"]')?.textContent||'').trim():'';
   where.hidden=!t;where.textContent=t?tx(`Estás en: ${t}`,`You are in: ${t}`,`当前位置：${t}`):'';

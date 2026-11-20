@@ -2,6 +2,21 @@
 (function(root){
  let db;
  function open(){if(!db)db=new Promise((resolve,reject)=>{const r=indexedDB.open('rubik-sota-images-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('images');r.onsuccess=()=>resolve(r.result);r.onerror=()=>{db=null;reject(Error('No se pudo abrir el almacenamiento de imágenes.'));};});return db;}
+ // Read-only consumers must not create the image database or its stores.
+ function getExisting(key){return new Promise((resolve,reject)=>{
+  const request=indexedDB.open('rubik-sota-images-v1');
+  let missing=false;
+  request.onupgradeneeded=()=>{missing=true;request.transaction.abort();};
+  request.onerror=()=>missing?resolve(null):reject(request.error);
+  request.onsuccess=()=>{
+   const database=request.result;
+   try{
+    const tx=database.transaction('images','readonly'),image=tx.objectStore('images').get(key);
+    tx.oncomplete=()=>{database.close();resolve(image.result??null);};
+    tx.onabort=()=>{database.close();reject(tx.error);};
+   }catch(error){database.close();reject(error);}
+  };
+ });}
  async function transact(mode,fn){const database=await open();return new Promise((resolve,reject)=>{const tx=database.transaction('images',mode),store=tx.objectStore('images');let result;try{result=fn(store);}catch(e){tx.abort();reject(e);return;}tx.oncomplete=()=>resolve(result?.result);tx.onerror=()=>reject(Error('No se pudo guardar o leer la imagen: revisa el espacio disponible.'));tx.onabort=()=>reject(Error('Operación de imágenes cancelada; no se ha guardado.'));});}
  /* F0.2 · Safe image collection. Deleting «every key this tab cannot see» deleted legitimate images: a tab only knows the
     library it loaded, an image is written BEFORE the project that refers to it is committed (imports, expediente restore,
@@ -81,6 +96,6 @@
   };
   return canLock?lockSafely(locks,GC_LOCK,run):run();
  }
- const api={get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,pin,holder,guard,mentioned,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
+ const api={getExisting,get:key=>transact('readonly',s=>s.get(key)),put:entries=>transact('readwrite',s=>{for(const [key,blob]of entries)s.put(blob,key);}),remove:keys=>transact('readwrite',s=>{for(const key of keys)s.delete(key);}),keys:()=>transact('readonly',s=>s.getAllKeys()),collect,plan,holdTab,lockSafely,pin,holder,guard,mentioned,GC_KEY,GC_LOCK,GRACE_MS,TAB_LOCK};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanImages=api;
 })(globalThis);
