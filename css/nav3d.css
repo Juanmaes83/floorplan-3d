@@ -2,7 +2,7 @@
    izquierda del escenario. Teléfono: una pastilla que se despliega como hoja superior con desplazamiento propio. El
    minimapa del paseo va arriba a la derecha: nunca tapa el joystick (abajo izquierda) ni «Salir del paseo» (abajo
    derecha) ni la barra del paseo de la Presentación (arriba al centro). */
-.nav3d{position:absolute;top:52px;left:12px;z-index:13;width:min(300px,calc(100% - 24px));max-height:calc(100% - 64px);display:flex;flex-direction:column;
+.nav3d{position:absolute;top:64px;left:12px;z-index:13;width:min(300px,calc(100% - 24px));max-height:calc(100% - 76px);display:flex;flex-direction:column;
   background:rgba(255,253,249,.97);border:1px solid var(--line,#d8d2c8);border-radius:12px;box-shadow:0 8px 30px #2b282433;font-size:13px;color:var(--ink,#1f1d1a);min-width:0}
 .nav3d[hidden],.nav3d-map[hidden],.nav3d-map-panel[hidden],.nav3d-body[hidden],.nav3d-row[hidden]{display:none}
 .nav3d:not(.open){width:auto;max-width:calc(100% - 24px)}
@@ -19,7 +19,7 @@
 .nav3d-note{margin:0;font-size:12px;line-height:1.35;color:var(--muted,#6b6257)}
 .nav3d-status{margin:0;font-size:12px;line-height:1.35;min-height:1.35em;color:#184e52;font-weight:600}
 .nav3d-status:empty{display:none}
-/* Escritorio: el panel queda bajo la barra de ayuda del 3D (#hint3d, arriba al centro) y por encima de las etiquetas.
+/* Escritorio: el panel queda bajo la barra de ayuda del 3D (#hint3d, arriba, hasta 2 líneas: top 64 px) y por encima de las etiquetas.
    Minimapa del paseo: bajo «Capas de contexto» (arriba a la derecha) y por encima de la capa de la Presentación (z 15)
    para servir también a su paseo. */
 .nav3d-map{position:absolute;top:60px;right:8px;z-index:16;width:min(220px,calc(100% - 24px));padding:6px;background:rgba(255,253,249,.97);border:1px solid var(--line,#d8d2c8);border-radius:12px;box-shadow:0 8px 30px #2b282433;pointer-events:none}

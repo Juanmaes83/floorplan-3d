@@ -215,8 +215,12 @@ main.is3d #view3d{opacity:1;visibility:visible;transition:opacity .45s ease}
 #cross{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;z-index:2;display:none;pointer-events:none}
 #cross:before,#cross:after{content:"";position:absolute;background:#fff;box-shadow:0 0 2px #000}
 #cross:before{left:6px;top:0;width:2px;height:14px}#cross:after{top:6px;left:0;height:2px;width:14px}
-#hint3d{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(43,40,36,.82);color:#fff;border-radius:20px;
-  padding:5px 14px;font-size:12px;z-index:2;pointer-events:none;white-space:nowrap;transition:opacity .4s}
+#hint3d{position:absolute;left:12px;right:172px;top:12px;margin:0 auto;width:fit-content;background:rgba(43,40,36,.82);color:#fff;border-radius:20px;
+  padding:5px 14px;font-size:12px;z-index:2;pointer-events:none;white-space:normal;text-align:center;line-height:1.35;transition:opacity .4s}
+/* Ventanas estrechas: «Navegación» y «Capas de contexto» ocupan la franja superior; la pista va justo debajo, a todo el ancho. */
+@media(max-width:760px){#hint3d{top:64px;right:12px}#view3d:has(#nav3d.open) #hint3d{display:none}#view3d:has(.nav3d-map:not([hidden])) #hint3d{right:160px}}
+/* Paseo en ventana estrecha: el minimapa (140 px, arriba a la derecha) queda libre; la pista ocupa el resto de la franja. */
+/* Con «Navegación» desplegado en una ventana estrecha el panel cubre la franja de la pista: la pista se oculta (el panel ya explica la navegación). */
 main.animating #hint3d{opacity:0}
 .rlabel{font-size:12px;font-weight:600;color:#2b2824;background:rgba(255,253,249,.9);border:1px solid var(--line);
   border-radius:12px;padding:2px 9px;white-space:nowrap;pointer-events:none}
@@ -2049,6 +2053,7 @@ function fitView(){
   if (!(W > 0 && H > 0)) { lastW = lastH = 0; return; }
   view.s = Math.min(W/BOUNDS.w, H/BOUNDS.h);
   view.x0 = BOUNDS.x - (W/view.s - BOUNDS.w)/2; view.y0 = BOUNDS.y - (H/view.s - BOUNDS.h)/2;
+  lastW = W; lastH = H; // This fit already accounts for the current viewport size.
   applyView();
 }
 function zoomAt(ns, mx, my){
@@ -2521,7 +2526,7 @@ let lastW = 0, lastH = 0;
 new ResizeObserver(() => {
   const w = svg.clientWidth, h = svg.clientHeight; if (!w) return;
   if (!lastW) fitView();
-  else { view.x0 -= (w - lastW)/2/view.s; view.y0 -= (h - lastH)/2/view.s; applyView(); }
+  else if (w !== lastW || h !== lastH) { view.x0 -= (w - lastW)/2/view.s; view.y0 -= (h - lastH)/2/view.s; applyView(); }
   lastW = w; lastH = h;
 }).observe(svg);
 
@@ -4159,7 +4164,14 @@ const clamp01 = t => Math.max(0, Math.min(1, t));
 const pose = (t, p) => ({t, p});
 // 与当前 2D 视口完全重合的正俯视位姿：透视相机在该高度下，地面可视高度 = 2D 视口高度
 function planPose(){
-  const cx = view.x0 + SW()/2/view.s, cy = view.y0 + SH()/2/view.s, visH = SH()/view.s/1000;
+  // A viewport change can be laid out before the plan observer commits its new viewBox.
+  // The SVG is centred on the committed viewBox at either size (xMidYMid meet).
+  const box = svg.viewBox.baseVal, width = SW(), height = SH();
+  const ready = box.width > 0 && box.height > 0;
+  const cx = ready ? box.x + box.width/2 : view.x0 + width/2/view.s;
+  const cy = ready ? box.y + box.height/2 : view.y0 + height/2/view.s;
+  const scale = ready && width > 0 && height > 0 ? Math.min(width/box.width, height/box.height) : view.s;
+  const visH = height/scale/1000;
   const dist = visH / 2 / Math.tan(FOV/2*Math.PI/180), t = new THREE.Vector3(wx(cx), 0, wz(cy));
   return pose(t, new THREE.Vector3(t.x, dist, t.z + 1e-4));
 }
@@ -4746,6 +4758,7 @@ function loop(){
   syncRoofVisibility();
   if (livingDrawing) livingDrawing.render(scene, camera); else renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
+  window.RubikLabels?.apply(); // Simulator C: etiquetas de estancia sin solapes (tras el render de CSS2D)
   renderedFrames++;
   if (anim || fly || activeWalkIntent() || doorMoving) requestFrame();
 }
@@ -5870,7 +5883,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- NAV3D V1 · Navegación 3D profesional (Ola 2 · corte 2a): panel de modos, plantas, estancias y visualización y
      minimapa del paseo. Solo estado temporal de la vista 3D; no escribe en el proyecto. -->
 <link rel="stylesheet" href="css/nav3d.css">
-<script src="js/nav3d-core.js"></script><script src="js/nav3d-ui.js"></script>
+<script src="js/label-layout-core.js"></script><script src="js/rubik-labels.js"></script><script src="js/nav3d-core.js"></script><script src="js/nav3d-ui.js"></script>
 <!-- UX-12 + UX-13 · amueblamiento inteligente V1 (propuesta por estancia; solo se guarda al «Aplicar», en un paso del commit) -->
 <script src="js/smart-furnishing-core.js"></script><script src="js/smart-furnishing-ui.js"></script>
 <!-- MUE-01 «Traer mi mueble» y FOT-01 «Reformar desde fotografía» (Ola 3, preparación). Fotos solo en este navegador
