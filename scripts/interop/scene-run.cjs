@@ -11,7 +11,7 @@ const { compare, compareBuilding } = require('./scene-fidelity.cjs'), { roundtri
 const SCENARIOS = [
   { id: 'f1-rect', fixture: 'f1-rect.json' }, { id: 'f2-rot30', fixture: 'f2-rot30.json' }, { id: 'f3-openings', fixture: 'f3-openings.json' },
   { id: 'f4-active', fixture: 'f4-building.json', scope: 'active', building: true }, { id: 'f4-all', fixture: 'f4-building.json', scope: 'all', building: true },
-  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' },
+  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' }, { id: 'f7-curved', fixture: 'f7-curved.json', op07State: 'active' },
 ];
 function measured(report, args) { execFileSync('python3', [path.join(here, 'measure.py'), report, '--', ...args], { stdio: ['ignore', 'pipe', 'pipe'] }); return JSON.parse(fs.readFileSync(report, 'utf8')); }
 const J = f => JSON.parse(fs.readFileSync(f, 'utf8'));
@@ -22,7 +22,7 @@ async function run(dest, { python, only, browser = 'chromium' } = {}) {
   const summary = { format: 'rubik-sota.scene-run', version: '1.0.0', browser, startedAt: new Date().toISOString(), scenarios: [] };
   for (const s of SCENARIOS.filter(x => !only || only.includes(x.id))) {
     const cap = path.join(dest, 'package', s.id), out = { id: s.id };
-    const m = await Capture.capture(path.join(fx, s.fixture), cap, { scope: s.scope || 'active', browser });
+    const m = await Capture.capture(path.join(fx, s.fixture), cap, { scope: s.scope || 'active', browser, ...(s.op07State ? { op07State: s.op07State } : {}) });
     out.capture = { stats: m.stats, excluded: m.excluded, metrics: m.metrics, assets: m.fallbacks.assets, glbSha256: m.outputs['scene.glb'].sha256, sceneJsonSha256: m.outputs['scene.json'].sha256 };
     const scene = J(path.join(cap, 'scene.json')), fixture = J(path.join(fx, s.fixture)), coincident = Core.coincidentFaces(scene);
     out.c3 = { visibleDefects: coincident.defects.length, hiddenByContact: coincident.hiddenByContact, benignSameMaterial: coincident.benignSameMaterial, first: coincident.defects.slice(0, 3) };
