@@ -12,7 +12,16 @@
   'use strict';
   const B = () => root.RubikCabinetBridge, UI = () => root.RubikCabinetEditorUI, E = () => root.RubikCabinetEditor;
   let current = null;
-  const TYPE = { wardrobe: 'Armario ropero', tallcab: 'Columna', cabinet: 'Mueble bajo', shoecab: 'Zapatero' };
+  // Textos del diálogo en los idiomas de RUBIK (es, en, zh). El editor interior heredado (r03-cabinet-editor-ui.js) sigue solo en
+  // español: residual declarado en el handoff y fijado por tests/r03-clearance-in-rubik.browser.test.cjs.
+  const L = () => { const l = typeof LANG !== 'undefined' ? LANG : 'es'; return ({
+    es: { type: { wardrobe: 'Armario ropero', tallcab: 'Columna', cabinet: 'Mueble bajo', shoecab: 'Zapatero' }, interior: 'Interior', close: 'Cerrar', closeLabel: 'Cerrar el editor de interior',
+      note: 'Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.', clear: 'Holguras · solo lectura' },
+    en: { type: { wardrobe: 'Wardrobe', tallcab: 'Tall cabinet', cabinet: 'Base cabinet', shoecab: 'Shoe cabinet' }, interior: 'Interior', close: 'Close', closeLabel: 'Close the interior editor',
+      note: 'Experimental parametric interior: assumed sizes, not a manufacturer\'s. Not a quote and not for manufacturing.', clear: 'Clearances · read only' },
+    zh: { type: { wardrobe: '衣柜', tallcab: '高柜', cabinet: '矮柜', shoecab: '鞋柜' }, interior: '内部', close: '关闭', closeLabel: '关闭内部编辑器',
+      note: '实验性参数化内部：尺寸为假定值，非厂商数据。不是报价，不可用于制造。', clear: '开启空间 · 只读' } })[l] || null; };
+  
 
   /* open({objectId, getProject, commit, opener}) → {ok} | {ok:false, reason}
      commit(nextProjectFn): la app ejecuta nextProjectFn() dentro de su mutate() y devuelve {ok, project?, message?}. */
@@ -24,19 +33,22 @@
     // Nombre VISIBLE por la fuente única de RUBIK (regla: sin chino en español o inglés).
     const shown = root.FloorPlanDisplayName ? root.FloorPlanDisplayName(object.name, object.type) : (object.name || objectId);
     // Sin redundancias («Armario ropero «Armario»»): si el nombre visible es solo el del tipo, no se repite entre comillas.
-    const norm = v => String(v || '').trim().toLocaleLowerCase('es'), typeLabel = TYPE[object.type] || object.type;
-    const generic = norm(shown) === norm(root.FloorPlanDisplayName?.typeName?.(object.type)) || norm(typeLabel).includes(norm(shown));
+    // Solo IGUALDAD EXACTA (sin coincidencias parciales): un nombre propio como «Col» en una «Columna» se muestra siempre.
+    const t = L() || { type: {} }, norm = v => String(v || '').trim().toLocaleLowerCase(), typeLabel = t.type[object.type] || object.type;
+    const generic = !!shown && (norm(shown) === norm(root.FloorPlanDisplayName?.typeName?.(object.type)) || norm(shown) === norm(typeLabel));
     const label = generic ? typeLabel : `${typeLabel} «${shown}»`;
     const dialog = document.createElement('div');
     dialog.className = 'r03-scope r03-rubik-dialog';
     dialog.setAttribute('role', 'dialog');dialog.setAttribute('aria-modal', 'true');dialog.setAttribute('aria-labelledby', 'r03RubikTitle');
     dialog.innerHTML = `<div class="r03-rubik-sheet"><div class="r03-rubik-head"><div class="r03-rubik-row"><h2 id="r03RubikTitle"></h2>
-      <button type="button" class="r03-btn r03-btn-quiet r03-rubik-close" aria-label="Cerrar el editor de interior">Cerrar</button></div>
-      <p class="r03-rubik-note">Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.</p>
-      <details class="r03-clear"><summary><span id="r03ClearTitle" class="r03-clear-title">Holguras · solo lectura</span> <span class="r03-clear-sum" role="status" aria-live="polite"></span></summary>
+      <button type="button" class="r03-btn r03-btn-quiet r03-rubik-close"></button></div>
+      <p class="r03-rubik-note"></p>
+      <details class="r03-clear"><summary><span id="r03ClearTitle" class="r03-clear-title"></span> <span class="r03-clear-sum" role="status" aria-live="polite"></span></summary>
       <div class="r03-clear-groups"></div><p class="r03-clear-limits"></p></details></div>
       <div class="r03-rubik-body"></div></div>`;
-    dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${label} · ${object.size.widthMm} × ${object.size.depthMm} mm`;
+    dialog.querySelector('.r03-rubik-close').textContent = t.close;dialog.querySelector('.r03-rubik-close').setAttribute('aria-label', t.closeLabel);
+    dialog.querySelector('.r03-rubik-note').textContent = t.note;dialog.querySelector('#r03ClearTitle').textContent = t.clear;
+    dialog.querySelector('#r03RubikTitle').textContent = `${t.interior} · ${label} · ${object.size.widthMm} × ${object.size.depthMm} mm`;
     host.append(dialog);
     const body = dialog.querySelector('.r03-rubik-body'), sheet = dialog.querySelector('.r03-rubik-sheet');sheet.tabIndex = -1;
     /* R03 · holguras (solo lectura). Se recalcula con el BORRADOR del editor en cada cambio, con los motores existentes
@@ -48,17 +60,16 @@
       if (!C || !session) { clearBox.hidden = true; return; }
       const t0 = performance.now(), project = getProject(), d = C.describe(project, C.analyzeDraft(project, objectId, session.state.outer, session.state.cabinet));
       clearBox.hidden = false; clearBox.dataset.summary = d.summary || d.status;
-      // Resumen compacto (una línea): cuántos avisos de cada autoridad. El detalle queda en el desplegable, cerrado por defecto,
-      // para dar prioridad al dibujo del armario.
-      const count = lvl => d.groups.filter(g => g.level === lvl).length;
-      const parts = [count('rubik') && `${count('rubik')} de RUBIK`, count('donor') && `${count('donor')} de la regla de origen`, count('experimental') && `${count('experimental')} orientativo${count('experimental') > 1 ? 's' : ''}`].filter(Boolean);
-      clearBox.querySelector('.r03-clear-sum').textContent = d.status !== 'evaluated' ? d.text : parts.length ? `Avisos: ${parts.join(' · ')}. No impiden guardar.` : 'Sin choques al abrir.';
-      clearBox.dataset.ms = (performance.now() - t0).toFixed(2);
+      clearBox.querySelector('.r03-clear-sum').textContent = d.text;
+      clearBox.dataset.ms = (performance.now() - t0).toFixed(2);   // cálculo
+      // Tiempo COMPLETO de la sección: cálculo + DOM + estilo/maquetación + el siguiente fotograma pintado.
+      const seq = clearBox.dataset.seq = String((+clearBox.dataset.seq || 0) + 1);
+      requestAnimationFrame(() => setTimeout(() => { if (clearBox.dataset.seq === seq) clearBox.dataset.paintMs = (performance.now() - t0).toFixed(2); }, 0));
       clearBox.querySelector('.r03-clear-limits').textContent = d.limits || '';
       const host = clearBox.querySelector('.r03-clear-groups'); host.replaceChildren();
       for (const g of d.groups) {
         const el = document.createElement('div'); el.className = `r03-clear-group is-${g.level}`; el.dataset.kind = g.kind;
-        const h = document.createElement('p'); h.className = 'r03-clear-head';
+        const h = document.createElement('p'); h.className = 'r03-clear-head'; el.dataset.count = g.count;
         const t = document.createElement('strong'); t.textContent = g.title; const a = document.createElement('span'); a.className = 'r03-clear-auth'; a.textContent = g.authority;
         h.append(t, ' ', a); const ul = document.createElement('ul');
         for (const it of g.items) { const li = document.createElement('li'); li.textContent = it; ul.append(li); }

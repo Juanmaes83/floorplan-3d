@@ -20,3 +20,19 @@
 4. Revisar cada captura con este criterio antes de entregarla.
 
 **Límite conocido:** un nombre escrito en chino por la persona dentro de una sesión ES/EN se muestra como «Nombre sin traducir». El dato se conserva intacto y se ve en ZH.
+
+## Política de nombres (decisión del propietario, 20/11/2026)
+
+| Clase de nombre | Qué se hace | Qué no se hace nunca |
+|---|---|---|
+| **Datos originales** (lo que la persona escribió o importó) | Se conservan intactos en el modelo. Mostrar es una función de presentación (`nm`, `FloorPlanDisplayName`) | Reescribirlos, traducirlos en el modelo o sustituirlos al guardar |
+| **Ejemplos conocidos** (proyecto de ejemplo, catálogo genérico) | Se **localizan** con los diccionarios (`NAMES_ES`/`NAMES_EN`) | Mostrar el original chino en ES/EN |
+| **Nombres propios legítimos** (profesional, empresa, destinatario, marca, proyecto) | Se muestran **tal como se escribieron** si están en alfabeto latino. No se traducen ni se acortan, y no se ocultan por parecerse al tipo: solo se omite un nombre **exactamente igual** al del tipo, como «Armario» en un armario; «Col» en una columna se muestra | Ocultarlos por coincidencias parciales; transliterarlos automáticamente |
+| **Nombre propio en CJK en una sesión ES/EN** | Se usa un **alias autorizado**: un nombre de presentación en alfabeto latino que la persona elige explícitamente (p. ej. en el destinatario de una entrega). Sin alias, «Nombre sin traducir» y el dato intacto | Inventar el alias ni transliterar sin autorización |
+
+**Alias:** es una **propuesta de contrato** para CC1, sin cambio de modelo en este corte. Requiere que el propietario decida dónde vive (ficha del profesional y del destinatario, o un campo de presentación existente) y su validación. Hasta entonces ninguna superficie lo inventa.
+
+**Pendiente con CC1:**
+1. Añadir HERO, Hybrid, Simulator y STUDIO al recorrido de `no-chinese-display`.
+2. Proponer dónde vive el alias.
+3. Localizar sus textos de interfaz. «Sin chino» no acredita una interfaz traducida: hace falta una prueba de idioma real, como la del diálogo R03 en EN.

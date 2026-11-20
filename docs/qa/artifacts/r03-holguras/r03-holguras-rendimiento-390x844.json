@@ -1,0 +1,27 @@
+{
+ "viewport": "390x844",
+ "calc": {
+  "n": 20,
+  "p50": 15.1,
+  "p95": 21.3,
+  "max": 24.3
+ },
+ "section": {
+  "n": 20,
+  "p50": 24.8,
+  "p95": 29.1,
+  "max": 37.5
+ },
+ "e2e": {
+  "n": 20,
+  "p50": 26.5,
+  "p95": 31.199999999982538,
+  "max": 40.30000000001746
+ },
+ "env": {
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "cores": 4,
+  "dpr": 1,
+  "gl": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+ }
+}

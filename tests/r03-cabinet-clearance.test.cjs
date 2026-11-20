@@ -64,13 +64,34 @@ test('el borrador se analiza sin guardarlo: una distribución con cajones bajo l
   assert.deepEqual(base.project,before,'el proyecto no cambia');assert.deepEqual(draft,s.cabinet,'el borrador no cambia');
 });
 test('describe agrupa por autoridad, con textos legibles y sin mezclar lo experimental con lo de RUBIK', () => {
-  const s=S['nightstand-in-swing'],d=R.describe(s.project,R.analyze(s.project,'obj_wardrobe'));
-  assert.deepEqual(d.groups.map(g=>[g.kind,g.level]),[['door-swing-square','rubik'],['door-swing-sector','experimental']]);
+  const s=S['nightstand-in-swing'],d=R.describe(s.project,R.analyze(s.project,'obj_wardrobe'),{lang:'es'});
+  assert.deepEqual(d.groups.map(g=>[g.kind,g.level,g.count]),[['door-swing-square','rubik',1],['door-swing-sector','experimental',1]]);
   assert.deepEqual(d.groups[0].items,['choca con el mueble «Mesilla»']);
-  assert.match(d.groups[1].authority,/Experimental/);assert.match(d.text,/no impiden guardar/);assert.match(d.limits,/90°/);
-  const c=R.describe(S['narrow-corridor'].project,R.analyze(S['narrow-corridor'].project,'obj_shoecab'));
-  assert.deepEqual(c.groups[0].items,['sale de la estancia','choca con un muro']);
-  assert.equal(R.describe(S['bedroom-default'].project,R.analyze(S['bedroom-default'].project,'obj_wardrobe')).text,'Puertas y cajones se abren sin chocar con nada.');
+  assert.equal(d.text,'Conflictos: puertas 1. Orientativo: 1. No impiden guardar.');assert.match(d.groups[1].authority,/Experimental/);assert.match(d.limits,/90°/);
+  const c=R.describe(S['narrow-corridor'].project,R.analyze(S['narrow-corridor'].project,'obj_shoecab'),{lang:'es'});
+  assert.deepEqual(c.groups[0].items,['sale de la estancia','choca con un muro']);assert.equal(c.counts.doors,2,'dos conflictos reales: la salida y el muro');
+  assert.equal(R.describe(S['bedroom-default'].project,R.analyze(S['bedroom-default'].project,'obj_wardrobe'),{lang:'es'}).text,'Sin choques al abrir.');
+});
+test('varias interferencias simultáneas: el resumen cuenta conflictos (obstáculos), no grupos, y nombra cada uno', () => {
+  const s=structuredClone(S['bedroom-default']),o=obj(s),outer={w:o.size.widthMm,d:o.size.depthMm},cab=K.defaultCabinet(o.type,outer);
+  const g=R.clearanceGeometry(o,outer,cab),centre=P=>({x:Math.round(P.reduce((a,p)=>a+p.x,0)/P.length),y:Math.round(P.reduce((a,p)=>a+p.y,0)/P.length)});
+  assert.ok(g.doors.length>=3,'el armario por defecto tiene al menos tres puertas');
+  const add=(id,name,door)=>s.project.objects.push({id,type:'nightstand',name,position:centre(g.doors[door].plan.sector),size:{widthMm:200,depthMm:200},rotationDeg:0});
+  add('obj_a','Mesilla A',0);add('obj_b','Mesilla B',g.doors.length-1);
+  const d=R.describe(s.project,R.analyze(s.project,'obj_wardrobe'),{lang:'es'}),doors=d.groups.find(x=>x.kind==='door-swing-square');
+  assert.equal(doors.count,2);assert.deepEqual(doors.items.sort(),['choca con el mueble «Mesilla A»','choca con el mueble «Mesilla B»']);
+  assert.equal(d.counts.doors,2);assert.match(d.text,/^Conflictos: puertas 2 · cajones 1\./,'dos conflictos de puertas y uno de cajones, no «grupos»');assert.equal(d.counts.drawers,1);
+  // Con cajones bajo una bisagra a la vez: categorías separadas, cada una con su número.
+  const both=R.describe(s.project,R.analyzeDraft(s.project,'obj_wardrobe',outer,S['drawers-across-hinge'].cabinet),{lang:'es'});
+  assert.ok(both.counts.hingeDrawer>=1&&both.counts.doors>=1,JSON.stringify(both.counts));assert.match(both.text,/Regla de origen: \d+ módulos? con bisagra sobre cajones/);
+});
+test('localización real del resumen y los avisos: es, en y zh; el inglés no contiene español', () => {
+  const s=S['narrow-corridor'],r=R.analyze(s.project,'obj_shoecab'),en=R.describe(s.project,r,{lang:'en'}),zh=R.describe(s.project,r,{lang:'zh'});
+  assert.equal(en.text,'Conflicts: doors 2. Indicative: 1. They do not prevent saving.');
+  assert.deepEqual(en.groups.map(g=>g.title),['Door opening (full sweep)','Exact 90° swing']);assert.deepEqual(en.groups[0].items,['goes outside the room','hits a wall']);
+  const blob=JSON.stringify([en.text,en.limits,en.groups.map(g=>[g.title,g.authority,g.items])]);
+  assert.doesNotMatch(blob,/\b(choca|muro|estancia|puertas|cajones|mueble|Conflictos|guardar|Apertura)\b/,'sin restos en español');
+  assert.match(zh.text,/冲突/);assert.equal(R.describe(s.project,r,{lang:'xx'}).lang,'es','idioma desconocido → español');
 });
 test('negativos: no armario, armario inválido u objeto inexistente → sin grupos y sin inventar holguras', () => {
   const b=S['not-a-cabinet'],inv=S['invalid-shelves'],o=obj(inv),outer={w:o.size.widthMm,d:o.size.depthMm};

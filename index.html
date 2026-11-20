@@ -1928,7 +1928,7 @@ function furnPanel(f){
     <div class="muted" style="margin-top:8px">${tr('占地面积','Footprint')} ${fmt(f.w*f.d/1e6)} m²</div></details>
   <details class="panel-group panel-help" data-group="furn-help"><summary>Cómo moverlo en el plano</summary><section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section></details></div>
   <div class="panel-foot actions"><div class="panel-foot-row"><button class="btn" id="aRot">${tr('旋转 90°','Rotate 90°')}</button><button class="btn" id="aDup">${tr('复制','Duplicate')}</button><button class="btn danger" id="aDel">${tr('删除','Delete')}</button></div>
-    ${window.RubikCabinetBridge?.isCabinet(project.objects.find(o=>o.id===f.id))?`<div class="panel-foot-row"><button class="btn" id="aInterior">Interior del armario…</button></div>`:''}
+    ${window.RubikCabinetBridge?.isCabinet(project.objects.find(o=>o.id===f.id))?`<div class="panel-foot-row"><button class="btn" id="aInterior">${LANG==='en'?'Cabinet interior…':LANG==='zh'?'柜体内部…':'Interior del armario…'}</button></div>`:''}
     <div class="panel-foot-row"><button class="btn" id="aTop">${tr('置于顶层','Bring to front')}</button><button class="btn" id="aBot">${tr('置于底层','Send to back')}</button></div></div></div>`;
 }
 function bindFurnPanel(f){

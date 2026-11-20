@@ -72,31 +72,56 @@
   }
 
   /* Texto para la persona, agrupado por AUTORIDAD (nunca se mezclan): RUBIK (colocación), regla del donante y experimental.
-     Solo informa: ningún grupo bloquea el guardado ni propone un cambio. */
+     Solo informa: ningún grupo bloquea el guardado ni propone un cambio. Idiomas: es, en, zh (los de RUBIK).
+     El resumen CUENTA CONFLICTOS (obstáculos o módulos), no grupos: «puertas 2» son dos obstáculos distintos en el barrido. */
   const GROUPS = Object.freeze({
-    'box-placement': { level: 'rubik', title: 'Colocación del mueble', authority: 'Comprobación de colocación de RUBIK' },
-    'door-swing-square': { level: 'rubik', title: 'Apertura de puertas (barrido completo)', authority: 'Comprobación de colocación de RUBIK, conservadora' },
-    'drawer-reach': { level: 'rubik', title: 'Apertura de cajones', authority: 'Comprobación de colocación de RUBIK' },
-    'hinge-drawer': { level: 'donor', title: 'Bisagra frente a cajones', authority: 'Regla del diseño de origen' },
-    'door-swing-sector': { level: 'experimental', title: 'Giro exacto de 90°', authority: 'Experimental: orientativo, no decide nada' }
+    'box-placement': { level: 'rubik', category: 'placement' }, 'door-swing-square': { level: 'rubik', category: 'doors' },
+    'drawer-reach': { level: 'rubik', category: 'drawers' }, 'hinge-drawer': { level: 'donor', category: 'hingeDrawer' },
+    'door-swing-sector': { level: 'experimental', category: 'sector' }
   });
-  function itemText(project, item) {
-    const [kind, id] = item.split(/:(.+)/);
-    const o = id && (project.objects || []).find(x => x.id === id), show = root.FloorPlanDisplayName;
-    // Nombre VISIBLE: nunca el guardado en bruto (regla: sin chino en español o inglés).
-    const name = o && (show ? show(o.name, o.type) : o.name);
-    if (kind === 'furniture') return `choca con el mueble «${name || id}»`;
-    if (kind === 'wall') return 'choca con un muro';
-    if (kind === 'door') return 'choca con una puerta de la estancia';
-    if (kind === 'room') return 'sale de la estancia';
-    if (kind === 'bay') return `módulo ${Number(id) + 1}`;
-    return item;
+  const T = {
+    es: { title: { 'box-placement': 'Colocación del mueble', 'door-swing-square': 'Apertura de puertas (barrido completo)', 'drawer-reach': 'Apertura de cajones', 'hinge-drawer': 'Bisagra frente a cajones', 'door-swing-sector': 'Giro exacto de 90°' },
+      authority: { rubik: 'Comprobación de colocación de RUBIK', 'door-swing-square': 'Comprobación de colocación de RUBIK, conservadora', donor: 'Regla del diseño de origen', experimental: 'Experimental: orientativo, no decide nada' },
+      furniture: n => `choca con el mueble «${n}»`, walls: k => k === 1 ? 'choca con un muro' : `choca con ${k} muros`, doors: k => k === 1 ? 'choca con una puerta de la estancia' : `choca con ${k} puertas de la estancia`,
+      room: 'sale de la estancia', bay: i => `módulo ${i}`, none: 'Sin comprobación de holguras para este mueble.', clear: 'Sin choques al abrir.',
+      cat: { doors: 'puertas', drawers: 'cajones', placement: 'colocación' }, conflicts: 'Conflictos', donorLine: k => `regla de origen: ${k} ${k === 1 ? 'módulo' : 'módulos'} con bisagra sobre cajones`,
+      sectorLine: k => `orientativo: ${k}`, tail: 'No impiden guardar.', limits: 'Apertura supuesta de 90°. No evalúa herrajes reales, paso de personas ni normativa.' },
+    en: { title: { 'box-placement': 'Furniture placement', 'door-swing-square': 'Door opening (full sweep)', 'drawer-reach': 'Drawer opening', 'hinge-drawer': 'Hinge over drawers', 'door-swing-sector': 'Exact 90° swing' },
+      authority: { rubik: 'RUBIK placement check', 'door-swing-square': 'RUBIK placement check, conservative', donor: 'Original design rule', experimental: 'Experimental: indicative only, decides nothing' },
+      furniture: n => `hits the furniture “${n}”`, walls: k => k === 1 ? 'hits a wall' : `hits ${k} walls`, doors: k => k === 1 ? 'hits a room door' : `hits ${k} room doors`,
+      room: 'goes outside the room', bay: i => `bay ${i}`, none: 'No clearance check for this item.', clear: 'Opens without hitting anything.',
+      cat: { doors: 'doors', drawers: 'drawers', placement: 'placement' }, conflicts: 'Conflicts', donorLine: k => `original rule: ${k} ${k === 1 ? 'bay' : 'bays'} with a hinge over drawers`,
+      sectorLine: k => `indicative: ${k}`, tail: 'They do not prevent saving.', limits: 'Assumed 90° opening. Real hardware, people passage and regulations are not checked.' },
+    zh: { title: { 'box-placement': '家具摆放', 'door-swing-square': '柜门开启（完整扫掠）', 'drawer-reach': '抽屉拉出', 'hinge-drawer': '铰链与抽屉', 'door-swing-sector': '精确 90° 开启' },
+      authority: { rubik: 'RUBIK 摆放检查', 'door-swing-square': 'RUBIK 摆放检查（保守）', donor: '原设计规则', experimental: '实验性：仅供参考，不作判定' },
+      furniture: n => `碰到家具「${n}」`, walls: k => `碰到 ${k} 面墙`, doors: k => `碰到 ${k} 扇房门`, room: '超出房间', bay: i => `第 ${i} 格`, none: '此家具无开启空间检查。', clear: '开启时无碰撞。',
+      cat: { doors: '柜门', drawers: '抽屉', placement: '摆放' }, conflicts: '冲突', donorLine: k => `原设计规则：${k} 格铰链位于抽屉处`, sectorLine: k => `参考：${k}`, tail: '不影响保存。', limits: '假定开启 90°。不评估实际五金、人员通行或规范。' }
+  };
+  const langOf = o => { const l = o && o.lang || (typeof LANG !== 'undefined' ? LANG : 'es'); return T[l] ? l : 'es'; };
+  function groupItems(project, items, t) {
+    const out = [], walls = items.filter(x => x.startsWith('wall:')).length, doors = items.filter(x => x.startsWith('door:')).length, show = root.FloorPlanDisplayName;
+    for (const x of items) {
+      const [kind, id] = x.split(/:(.+)/);
+      if (kind === 'furniture') { const o = (project.objects || []).find(y => y.id === id); out.push(t.furniture(o ? (show ? show(o.name, o.type) : o.name) : id)); }
+      else if (kind === 'room') out.push(t.room);
+      else if (kind === 'bay') out.push(t.bay(Number(id) + 1));
+      else if (kind !== 'wall' && kind !== 'door') out.push(x);
+    }
+    if (walls) out.push(t.walls(walls)); if (doors) out.push(t.doors(doors));
+    return out;
   }
-  function describe(project, result) {
-    if (!result || result.status !== 'evaluated') return { status: result?.status || 'unknown', groups: [], text: 'Sin comprobación de holguras para este mueble.' };
-    const groups = result.issues.map(i => ({ kind: i.kind, ...GROUPS[i.kind], items: [...new Set(i.items.map(x => itemText(project, x)))] }));
-    const text = result.summary === 'clear' ? 'Puertas y cajones se abren sin chocar con nada.' : result.summary === 'experimental-only' ? 'Solo hay avisos orientativos.' : 'Hay avisos de apertura. Revísalos; no impiden guardar.';
-    return { status: 'evaluated', summary: result.summary, groups, text, limits: 'Apertura supuesta de 90°. No evalúa herrajes reales, paso de personas ni normativa.' };
+  function describe(project, result, options) {
+    const lang = langOf(options), t = T[lang];
+    if (!result || result.status !== 'evaluated') return { status: result?.status || 'unknown', lang, groups: [], counts: {}, text: t.none };
+    const groups = result.issues.map(i => ({ kind: i.kind, ...GROUPS[i.kind], title: t.title[i.kind], authority: t.authority[i.kind === 'door-swing-square' ? i.kind : GROUPS[i.kind].level],
+      count: i.items.length, items: groupItems(project, i.items, t) }));
+    const counts = { doors: 0, drawers: 0, placement: 0, hingeDrawer: 0, sector: 0 };
+    for (const g of groups) counts[g.category] += g.count;
+    const real = ['doors', 'drawers', 'placement'].filter(c => counts[c]).map(c => `${t.cat[c]} ${counts[c]}`);
+    const parts = [real.length && `${t.conflicts}: ${real.join(' · ')}`, counts.hingeDrawer && t.donorLine(counts.hingeDrawer), counts.sector && t.sectorLine(counts.sector)].filter(Boolean);
+    const cap = x => x.charAt(0).toLocaleUpperCase() + x.slice(1);
+    const text = parts.length ? `${parts.map(cap).join('. ')}. ${t.tail}` : t.clear;
+    return { status: 'evaluated', lang, summary: result.summary, groups, counts, text, limits: t.limits };
   }
   const api = Object.freeze({ TOL, GROUPS, clearanceGeometry, clearanceBlock, independentIssues, analyze, analyzeDraft, describe });
   if (node) module.exports = api; else root.RubikCabinetClearance = api;

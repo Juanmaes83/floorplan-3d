@@ -153,6 +153,37 @@ Qué cubre la prueba de navegador de holguras:
 
 **Aceptación visual:** las 6 capturas de `docs/qa/artifacts/r03-holguras/` están revisadas a mano: sin chino, sin redundancias, dibujo visible.
 
+## Corte 4 · hallazgos de la revisión del propietario (20/11/2026)
+
+| N.º | Hallazgo | Corrección | Prueba |
+|---|---|---|---|
+| 1 | El resumen contaba **grupos**, no conflictos | `describe` cuenta **conflictos reales** por categoría (obstáculos en puertas, cajones y colocación), aparte de la regla de origen (módulos) y lo orientativo. Ejemplo: «Conflictos: puertas 2 · cajones 1. Orientativo: 2. No impiden guardar.». Muros y puertas de estancia se agregan («choca con 2 muros») sin líneas duplicadas | Pura: dos mesillas en el barrido de puertas distintas dan `puertas 2`, con cada una nombrada, y `cajones 1`. Con cajones bajo bisagra, categorías separadas. Navegador: el número del resumen coincide con el del grupo |
+| 2 | Coincidencias parciales ocultaban nombres | Solo se omite un nombre **exactamente** igual al del tipo | Navegador: «Arm» se ve como «Armario ropero «Arm»», «Armario» no se repite, «Col» se ve |
+| 3 | Solo se medía el cálculo | Tres medidas por cambio (abajo) | 20 cambios por pantalla, con p50/p95/máximo y entorno en `docs/qa/artifacts/r03-holguras/r03-holguras-rendimiento-*.json` |
+| 4 | «Sin chino» no acredita la traducción | El diálogo (título, nota, «Close», tipos), las holguras y el botón de entrada («Cabinet interior…») en ES/EN/ZH | Pura: el texto EN exacto, sin restos en español. Navegador: diálogo y holguras en inglés |
+| 5 | Política de nombres con CC1 | `IDIOMA-COORDINACION-CC1.md` | Documento |
+
+**Rendimiento** (Chromium 153 sin GPU, SwiftShader, 4 núcleos, dpr 1):
+
+| Pantalla | Medida | p50 | p95 | Máximo |
+|---|---|---|---|---|
+| 1440×900 | Cálculo | 20,5 ms | 30,4 ms | |
+| 1440×900 | Sección completa (cálculo + DOM + maquetación + fotograma) | 29,6 ms | 47,3 ms | |
+| 1440×900 | **Clic → fotograma pintado** | 31,9 ms | 50,0 ms | |
+| 390×844 | Cálculo | 15,1 ms | 21,3 ms | 24,3 ms |
+| 390×844 | Sección completa | 24,8 ms | 29,1 ms | 37,5 ms |
+| 390×844 | **Clic → fotograma pintado** | 26,5 ms | 31,2 ms | 40,3 ms |
+
+- **Lectura honesta:** una actualización completa cuesta unos **2–3 fotogramas** en este entorno sin GPU. No es instantáneo y conviene medirlo en un móvil físico.
+- **Umbrales de la prueba:** cálculo p95 < 50 ms y sección p95 < 100 ms. Son guardas contra regresiones, no una afirmación de fluidez.
+- Los valores varían entre ejecuciones. Por ejemplo, el cálculo dio 11–14 ms de mediana en el corte 3: la evidencia de cada ejecución queda en su JSON.
+
+**Residual de localización, declarado:** el editor interior heredado de master (`js/r03-cabinet-editor-ui.js`, núcleo y puente) **sigue en español en la sesión EN**. Inventario exacto: `r03-holguras-en-residual-*.json`, con 14 cadenas: «Dividir módulo», «Añadir balda», «Guardar interior»…
+
+- La prueba lo fija como residual conocido.
+- Localizarlo es un corte propio, pendiente de autorización, porque toca el editor existente.
+- Capturas: `r03-holguras-*-4-ingles.png`.
+
 ## Límites de esta conexión
 
 - Solo Chromium Linux.

@@ -31,8 +31,8 @@ test(`R03 holguras · ${viewport.width}x${viewport.height}`,{timeout:300000},asy
  const openDialog=async()=>{await page.evaluate(id=>{select({kind:'furn',id});drawer('panel',true);},WARDROBE);await page.waitForTimeout(300);
   await press(page.locator('#aInterior').first());await page.locator('.r03-rubik-dialog .r03-clear').waitFor({state:'attached'});};
  const closeDialog=()=>page.evaluate(()=>RubikCabinetRubikUI.close());
- const state=()=>page.evaluate(()=>{const b=document.querySelector('.r03-clear');return {hidden:b.hidden,open:b.open,summary:b.dataset.summary,ms:+b.dataset.ms,text:b.querySelector('.r03-clear-sum').textContent,title:document.querySelector('#r03RubikTitle').textContent,
-  groups:[...b.querySelectorAll('.r03-clear-group')].map(g=>({kind:g.dataset.kind,level:g.className.split('is-')[1],items:[...g.querySelectorAll('li')].map(li=>li.textContent)}))};});
+ const state=()=>page.evaluate(()=>{const b=document.querySelector('.r03-clear');return {hidden:b.hidden,open:b.open,summary:b.dataset.summary,ms:+b.dataset.ms,paintMs:+b.dataset.paintMs,text:b.querySelector('.r03-clear-sum').textContent,title:document.querySelector('#r03RubikTitle').textContent,
+  groups:[...b.querySelectorAll('.r03-clear-group')].map(g=>({kind:g.dataset.kind,count:+g.dataset.count,level:g.className.split('is-')[1],items:[...g.querySelectorAll('li')].map(li=>li.textContent)}))};});
  const fingerprint=()=>page.evaluate(()=>JSON.stringify(project));
 
  // 1 · Positivo de control: el armario del ejemplo, tal cual. La sección existe y es de solo lectura (no hay controles).
@@ -58,15 +58,23 @@ test(`R03 holguras · ${viewport.width}x${viewport.height}`,{timeout:300000},asy
  assert.ok(rubik,'aviso de RUBIK por el barrido: '+JSON.stringify(s1));assert.equal(rubik.level,'rubik');
  assert.ok(rubik.items.some(x=>x.includes(`«${intruder.name}»`)),JSON.stringify(rubik.items));
  for(const g of s1.groups)assert.ok(['rubik','donor','experimental'].includes(g.level),'cada aviso con su autoridad');
- assert.match(s1.text,/^Avisos: 1 de RUBIK · 1 orientativo\. No impiden guardar\.$/);
+ assert.match(s1.text,new RegExp(`^Conflictos: puertas ${rubik.count}( · cajones \\d+)?\\. Orientativo: \\d+\\. No impiden guardar\\.$`),s1.text);assert.equal(rubik.count,1);
  await page.locator('.r03-clear>summary').click();assert.equal((await state()).open,true,'el detalle se despliega');
  assert.doesNotMatch(await page.locator('.r03-rubik-dialog').innerText(),/[\u3400-\u9fff]/,'sin chino visible (regla del propietario)');await shot('2-mueble-en-el-barrido');
 
- // 3 · Rendimiento durante la edición: 20 cambios del borrador; cada recálculo de holguras se mide en la propia sección.
- const times=[];for(let i=0;i<20;i++){await page.locator('.r03-rubik-dialog button',{hasText:i%2?'Deshacer':'Añadir balda'}).first().click({force:true}).catch(()=>{});times.push((await state()).ms);}
- const sorted=[...times].sort((a,b)=>a-b),p95=sorted[Math.floor(sorted.length*0.95)-1]??sorted.at(-1);
- assert.ok(times.every(Number.isFinite),'tiempos medidos');assert.ok(p95<50,`recálculo por cambio p95 ${p95} ms (< 50 ms): ${JSON.stringify(times)}`);
- console.log(`# rendimiento ${name}: mediana ${sorted[10]} ms · p95 ${p95} ms · máx ${sorted.at(-1)} ms`);
+ // 3 · Rendimiento durante la edición: 20 cambios. Tres medidas por cambio: cálculo; sección completa (cálculo + DOM +
+ //     maquetación + fotograma pintado); y de extremo a extremo, del clic al siguiente fotograma pintado.
+ const samples=[];
+ for(let i=0;i<20;i++){const label=i%2?'Deshacer':'Añadir balda';
+  const e2e=await page.evaluate(label=>new Promise(res=>{const b=[...document.querySelectorAll('.r03-rubik-dialog button')].find(x=>x.textContent.trim()===label&&!x.disabled);if(!b)return res(null);
+   const t0=performance.now();b.click();requestAnimationFrame(()=>setTimeout(()=>res(performance.now()-t0),0));}),label);
+  await page.waitForTimeout(30);const st=await state();samples.push({calc:st.ms,section:st.paintMs,e2e});}
+ const stat=k=>{const v=samples.map(x=>x[k]).filter(Number.isFinite).sort((a,b)=>a-b);return {n:v.length,p50:v[Math.floor(v.length/2)],p95:v[Math.min(v.length-1,Math.ceil(v.length*0.95)-1)],max:v.at(-1)};};
+ const perf={viewport:name,calc:stat('calc'),section:stat('section'),e2e:stat('e2e'),env:await page.evaluate(()=>({ua:navigator.userAgent,cores:navigator.hardwareConcurrency,dpr:devicePixelRatio,gl:(()=>{try{const g=document.createElement('canvas').getContext('webgl');const d=g.getExtension('WEBGL_debug_renderer_info');return g.getParameter(d.UNMASKED_RENDERER_WEBGL);}catch{return null;}})()}))};
+ for(const k of ['calc','section','e2e'])assert.ok(perf[k].n>=10,`${k}: muestras ${perf[k].n}`);
+ assert.ok(perf.calc.p95<50,`cálculo p95 ${perf.calc.p95} ms`);assert.ok(perf.section.p95<100,`sección completa p95 ${perf.section.p95} ms`);
+ if(shots)await fs.writeFile(path.join(shots,`r03-holguras-rendimiento-${name}.json`),JSON.stringify(perf,null,1));
+ console.log(`# rendimiento ${name} · cálculo p50 ${perf.calc.p50} / p95 ${perf.calc.p95} ms · sección p50 ${perf.section.p50} / p95 ${perf.section.p95} ms · clic→fotograma p50 ${perf.e2e.p50?.toFixed(1)} / p95 ${perf.e2e.p95?.toFixed(1)} ms`);
  // 3b · Negativo: los avisos NO bloquean el guardado ni aplican nada. Un cambio del borrador recalcula la sección.
  const g0=s1.groups.length;await press(page.locator('.r03-rubik-dialog button',{hasText:'Añadir balda'}).first());
  assert.equal((await state()).groups.length,g0,'una balda no cambia la apertura');
@@ -76,6 +84,23 @@ test(`R03 holguras · ${viewport.width}x${viewport.height}`,{timeout:300000},asy
  assert.deepEqual(after.intruder.position,JSON.parse(moved).objects.find(o=>o.id===intruder.id).position,'el mueble no se mueve: nada se aplica');
  await shot('3-guardado-con-avisos');await closeDialog();
 
+ // 5 · Nombres: solo se omite el nombre si es EXACTAMENTE el del tipo; uno parcial o personalizado se muestra siempre.
+ for(const [nameSet,expect] of [['Arm',/^Interior · Armario ropero «Arm» · /],['Armario',/^Interior · Armario ropero · /],['Col',/^Interior · Armario ropero «Col» · /]]){
+  await page.evaluate(([id,n])=>mutate(()=>{project.objects.find(o=>o.id===id).name=n;}),[WARDROBE,nameSet]);await openDialog();
+  assert.match((await state()).title,expect,nameSet);await closeDialog();}
+ // 6 · Inglés real: el diálogo, su nota, «Close», el tipo y las holguras en inglés (no basta «sin chino»). El editor interior
+ //     heredado (r03-cabinet-editor-ui.js) sigue en español: se INVENTARÍA como residual declarado, no se oculta.
+ await page.evaluate(()=>setLang('en'));await page.waitForTimeout(200);await openDialog();
+ const en=await page.evaluate(()=>{const d=document.querySelector('.r03-rubik-dialog');return {title:d.querySelector('#r03RubikTitle').textContent,close:d.querySelector('.r03-rubik-close').textContent,
+  note:d.querySelector('.r03-rubik-note').textContent,clear:d.querySelector('.r03-clear').innerText,button:document.querySelector('#aInterior')?.textContent,body:d.querySelector('.r03-rubik-body').innerText};});
+ assert.match(en.title,/^Interior · Wardrobe( «[^»]+»)? · \d+ × \d+ mm$/);assert.equal(en.close,'Close');assert.match(en.note,/^Experimental parametric interior/);
+ assert.match(en.clear,/^Clearances · read only/);assert.equal(en.button,'Cabinet interior…');
+ const SPANISH=/\b(choca|muro|estancia|Conflictos|Holguras|guardar|Cerrar|Armario|medidas|puertas|cajones)\b/;
+ for(const k of ['title','close','note','clear','button'])assert.doesNotMatch(en[k],SPANISH,`${k} en inglés: ${en[k]}`);
+ const residual=[...new Set(en.body.split('\n').map(x=>x.trim()).filter(x=>/[áéíóúñ]|\b(Guardar|Deshacer|Rehacer|Cancelar|Baldas|Cajones|Puertas|Módulos|módulo)\b/.test(x)))];
+ assert.ok(residual.length>0,'residual conocido: el editor heredado aún no está localizado');
+ if(shots){await fs.writeFile(path.join(shots,`r03-holguras-en-residual-${name}.json`),JSON.stringify({note:'Cadenas visibles en español del editor interior heredado en la sesión EN (residual declarado)',residual},null,1));await page.screenshot({path:path.join(shots,`r03-holguras-${name}-4-ingles.png`)});}
+ await closeDialog();await page.evaluate(()=>setLang('es'));
  // 4 · Negativo: sin el módulo de holguras, el diálogo funciona igual y la sección no aparece (sin errores).
  await page.evaluate(()=>{window.__clr=window.RubikCabinetClearance;delete window.RubikCabinetClearance;});
  await openDialog();assert.equal((await state()).hidden,true);await closeDialog();
