@@ -46,7 +46,7 @@
   if(!s||s.projectId!==project.id||!G.goals[s.goal]||!s.evidence||typeof s.evidence!=='object'||Array.isArray(s.evidence)||!Array.isArray(s.completed)||!Array.isArray(s.skipped))s=data.entries[id]=G.initial(project,isReference(project)?'example':'own');
   return s;
  }
- function saved(){try{const raw=originalStorage.getItem(FloorPlanLibrary.KEY);if(library&&raw){const d=JSON.parse(raw);return JSON.stringify(d.entries.find(e=>e.id===library.activeId())?.project)===JSON.stringify(project);}return originalStorage.getItem(STORE)===JSON.stringify(project);}catch{return false;}}
+ function saved(){try{const pending=persistence.session?.state();if(pending&&(pending.status!=='saved'||pending.outdated))return false;const raw=originalStorage.getItem(FloorPlanLibrary.KEY);if(library&&raw){const entry=JSON.parse(raw).entries.find(e=>e.id===library.activeId());const current=entry?.kind==='building'?entry.building.levels.find(l=>l.id===entry.activeLevelId)?.project:entry?.project;return JSON.stringify(current)===JSON.stringify(project);}return originalStorage.getItem(STORE)===JSON.stringify(project);}catch{return false;}}
  function facts(){return {saved:saved(),imagesReady:!!project.sourceImages?.length&&project.sourceImages.every(i=>FloorPlanTraceUI.imageReady(i.id))};}
  function progress(){return G.evaluate(project,state(),facts());}
  const header=$('header'),searchBtn=btn('actionSearchBtn','',()=>openSearch(),header);searchBtn.setAttribute('aria-haspopup','dialog');
@@ -351,7 +351,7 @@
    case 'scale':return runTask(progress().tasks.find(t=>t.id==='scale')||{id:'scale',action:'scale',blockers:[]});
    case 'furniture':await setView('2d');if(!ui.sel||ui.sel.kind!=='room'){const room=project.rooms.find(r=>r.id===state().targetRoomId)||project.rooms[0];if(room)select({kind:'room',id:room.id});}libSearch.query=a.filter||'';libSearch.room='';libSearch.family='';$('#furnitureSearch').value=libSearch.query;$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();window.FloorPlanBuildPalette?.select('furnish');drawer('lib',true);$('#furnitureSearch').focus();state().current='furniture';break;
    case '3d':state().current='view3d';await setView('3d');if(is3D())record('view3d');break;
-   case 'save':state().current='save';if(save())announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));break;
+   case 'save':state().current='save';if(save()){await persistence.requireSaved();announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));}break;
    case 'export':state().current='export';exportPNG();break;
    case 'drawWall':await window.FloorPlanBuildPalette.drawWall();break;
    case 'measure':case 'select':await window.FloorPlanBuildPalette.useTool(a.id);break;
@@ -497,6 +497,7 @@
  addEventListener('floorplan-presentation-started',()=>{const id=library?.activeId()||project.id,rev=G.revision(project);try{const all=JSON.parse(originalStorage.getItem(JOURNEY_KEY)||'{}');all[id]={presented:rev};originalStorage.setItem(JOURNEY_KEY,JSON.stringify(all));}catch{}});
  addEventListener('floorplan-export-ready',e=>{if(e.detail.projectId===project.id&&e.detail.revision===G.revision(project)){state().exportName=e.detail.filename;record('export',e.detail.revision);}});
  addEventListener('floorplan-images-ready',sync);
+ persistence.session?.subscribe(()=>queueMicrotask(sync));
  // Entry URL means welcome; #editor reload resumes. Project persistence is independent of the screen.
  sync();if(location.hash!=='#legal-y-uso'){
   const screen=location.hash==='#editor'?'editor':'welcome';setRoute(screen,true);if(screen==='welcome')openWelcome(false);

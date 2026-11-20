@@ -12,8 +12,8 @@
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
  const local=v=>typeof nm==='function'?nm(v):v;
  const BUDGETS='rubik-budget-v1',TARIFF='rubik-tariff-v1';
- const read=k=>{try{const v=JSON.parse(localStorage.getItem(k));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}};
- const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true;}catch{return false;}};
+ const read=k=>{try{const v=JSON.parse(app.storage.getItem(k));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}};
+ const write=(k,v)=>{try{app.storage.setItem(k,JSON.stringify(v));return true;}catch{return false;}};
  const loc=typeof LANG==='string'&&LANG==='en'?'en-GB':'es-ES';
  const eur=v=>v===null||v===undefined?'—':v.toLocaleString(loc,{style:'currency',currency:'EUR'});
  const num=(v,d=2)=>v===null||v===undefined?'—':v.toLocaleString(loc,{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -41,11 +41,11 @@
    catalog={lines:prevCat.map(i=>({key:i.id,chapter:i.chapterId,description:i.description,quantity:i.quantity,waste:i.wastePercent})),chapters:(previous.chapters||[]).filter(c=>prevCat.some(i=>i.chapterId===c.id)).map(c=>({id:c.id,title:c.title})),report:[],orphans:[],preserved:true};}
   const r=D.draft(app.project,{previous,tariff:read(TARIFF),name:local,labels:labels(),...(catalog?{extraLines:catalog.lines,extraChapters:catalog.chapters}:{})});return {...r,savedBefore:!!previous,catalog,catalogError};}
  // CON-02: names of the OTHER local projects (single projects or building levels) stored with the open project's id. Read-only.
- function sharedWith(){try{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')),pid=app.project.id,me=app.entryId;
+ function sharedWith(){try{const lib=JSON.parse(app.storage.getItem('rubik-sota-project-library-v1')),pid=app.project.id,me=app.entryId;
   return (lib?.entries||[]).filter(e=>e.id!==me&&(e.kind==='building'?(e.building?.levels||[]).some(l=>l.project?.id===pid):e.project?.id===pid)).map(e=>local(String(e.name||'')).slice(0,60));}catch{return [];}}
  function identityUnsafe(){
   if(app.identityMigration?.failed)return true;
-  try{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1'));
+  try{const lib=JSON.parse(app.storage.getItem('rubik-sota-project-library-v1'));
    const ids=(lib?.entries||[]).flatMap(e=>e.kind==='building'?(e.building?.levels||[]).map(l=>l.project?.id):[e.project?.id]);
    return ids.filter(id=>id===app.project.id).length>1;
   }catch{return false;}
