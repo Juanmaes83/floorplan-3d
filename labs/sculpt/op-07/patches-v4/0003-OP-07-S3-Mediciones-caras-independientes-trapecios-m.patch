@@ -1,0 +1,154 @@
+From 51c12353ae486815b0b2d0928fdbfca8947fd3ec Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 22:52:04 +0000
+Subject: [PATCH 03/12] =?UTF-8?q?OP-07=20S3=20=C2=B7=20Mediciones:=20caras?=
+ =?UTF-8?q?=20independientes,=20trapecios,=20mochetas=20y=20estancias=20ho?=
+ =?UTF-8?q?nestas=20junto=20a=20muros=20curvos?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ js/quantity-core.js               | 34 +++++++++++++++++++--
+ tests/op07-s3-quantities.test.cjs | 50 +++++++++++++++++++++++++++++++
+ 2 files changed, 81 insertions(+), 3 deletions(-)
+ create mode 100644 tests/op07-s3-quantities.test.cjs
+
+diff --git a/js/quantity-core.js b/js/quantity-core.js
+index 2470f82e..68badbfe 100644
+--- a/js/quantity-core.js
++++ b/js/quantity-core.js
+@@ -4,6 +4,11 @@
+  'use strict';
+  const Surface=typeof module==='object'?require('./surface-core.js'):root.FloorPlanSurfaceMetrics;
+  if(!Surface)throw Error('FloorPlanQuantities requires FloorPlanSurfaceMetrics.');
++ // OP-07 · S3: curved and sloped walls are measured by the single geometric core with the project's single resolution
++ // (project-core WALL_PATH). A wall without curve/heightEndMm never reaches it: its figures are byte-identical.
++ const Walls=typeof module==='object'?require('./wall-geometry-core.js'):root.FloorPlanWallGeometry;
++ const wallPath=()=>(typeof module==='object'?require('./project-core.js'):root.FloorPlanCore).WALL_PATH;
++ const shaped=w=>!!(w&&(w.curve||w.heightEndMm!==undefined));
+  const STATUS=Object.freeze(['measured','estimated','unavailable']);
+  const FACE_TOLERANCE_MM=3,PARALLEL_SIN_TOLERANCE=1e-4,COVERAGE_TOLERANCE_MM=3,EPS=1e-7;
+  const KINDS=Object.freeze(['door','sliding-door','window','opening']);
+@@ -62,12 +67,27 @@
+   const linked=(project.openings||[]).filter(o=>o.wallId===w.id),counts=openingCounts(linked);
+   if(!dimsOk)return {id:w.id,lifecycleStatus:w.status??null,structure:w.structure??null,surfaceMaterialId:w.surfaceMaterialId??null,status:'unavailable',complete:false,
+    quantities:{lengthM:null,heightM:null,faceGrossAreaM2:null,faceOpeningAreaM2:null,faceNetAreaM2:null,wallSurfaceGrossAreaM2:null,wallSurfaceOpeningAreaM2:null,wallSurfaceNetAreaM2:null},openings:{...counts,invalid:linked.map(o=>o.id||null)},reason:'invalid-wall-geometry'};
++  if(shaped(w))return shapedWall(project,w,linked,counts,scaleStatus);
+   const {rectangles,invalid}=openingRectangles(project,w),grossMm2=lengthMm*heightMm,openingMm2=invalid.length?null:rectangleUnionAreaMm2(rectangles),netMm2=openingMm2===null?null:Math.max(0,grossMm2-openingMm2);
+   const m2=v=>v===null?null:v/1e6;
+   return {id:w.id,lifecycleStatus:w.status??null,structure:w.structure??null,surfaceMaterialId:w.surfaceMaterialId??null,status:scaleStatus,complete:invalid.length===0,
+    quantities:{lengthM:lengthMm/1000,heightM:heightMm/1000,faceGrossAreaM2:m2(grossMm2),faceOpeningAreaM2:m2(openingMm2),faceNetAreaM2:m2(netMm2),wallSurfaceGrossAreaM2:m2(grossMm2*2),wallSurfaceOpeningAreaM2:openingMm2===null?null:m2(openingMm2*2),wallSurfaceNetAreaM2:netMm2===null?null:m2(netMm2*2)},
+    openings:{...counts,invalid},...(invalid.length?{reason:'invalid-opening-geometry'}:{})};
+  }
++ // D-OP07-2: each face measured on its own. faceGross/faceNet keep today's meaning (the wall along its axis: partitions,
++ // demolition); wallSurface* is left face + right face, which equals 2 × axis exactly (the mitre terms cancel), so an
++ // aggregated budget does not change; `faces` says how it splits. Reveals (jambs, head, sill) are reported apart.
++ function shapedWall(project,w,linked,counts,scaleStatus){
++  const f=Walls.faceAreas(w,linked,wallPath()),ok=f.complete,m2=v=>v===null||v===undefined?null:v/1e6;
++  const face=F=>({lengthM:F.lengthMm/1000,grossAreaM2:m2(F.grossMm2),openingAreaM2:m2(F.openingsMm2),netAreaM2:m2(F.netMm2)});
++  const geometryOk=!f.wallIssues.length,invalid=ok?[]:f.invalid.length?f.invalid:linked.map(o=>o.id||null);
++  const sum=k=>ok||k==='grossMm2'?f.left[k]+f.right[k]:null;
++  return {id:w.id,lifecycleStatus:w.status??null,structure:w.structure??null,surfaceMaterialId:w.surfaceMaterialId??null,status:geometryOk?scaleStatus:'unavailable',complete:ok,
++   quantities:{lengthM:geometryOk?f.lengthMm/1000:null,heightM:w.heightMm/1000,heightEndM:Walls.endHeight(w)/1000,faceGrossAreaM2:geometryOk?m2(f.grossMm2):null,faceOpeningAreaM2:m2(f.openingsMm2),faceNetAreaM2:m2(f.netMm2),
++    wallSurfaceGrossAreaM2:geometryOk?m2(sum('grossMm2')):null,wallSurfaceOpeningAreaM2:m2(sum('openingsMm2')),wallSurfaceNetAreaM2:m2(sum('netMm2')),revealsAreaM2:m2(f.revealsMm2)},
++   faces:geometryOk?{left:face(f.left),right:face(f.right),facets:f.facets}:null,
++   openings:{...counts,invalid},...(geometryOk?(ok?{}:{reason:'invalid-opening-geometry'}):{reason:'invalid-wall-geometry'})};
++ }
+  function matchEdgeToWall(a,b,w){
+   if(!point(a)||!point(b)||!point(w?.start)||!point(w?.end)||!(finite(w.thicknessMm)&&w.thicknessMm>0))return null;
+   const wx=w.end.x-w.start.x,wy=w.end.y-w.start.y,wl=Math.hypot(wx,wy),ex=b.x-a.x,ey=b.y-a.y,el=Math.hypot(ex,ey);if(!(wl>0&&el>0))return null;
+@@ -80,13 +100,14 @@
+   const t1=toEdge(start),t2=toEdge(end);
+   return {wallId:w.id,face:avg>=0?1:-1,wallStartMm:start,wallEndMm:end,edgeStartMm:Math.max(0,Math.min(t1,t2)),edgeEndMm:Math.min(el,Math.max(t1,t2)),lengthMm:end-start};
+  }
++ function nearPolygon(w,polygon){const b=Walls.bounds(w),pad=COVERAGE_TOLERANCE_MM;return polygon.some(p=>p.x>=b.minX-pad&&p.x<=b.maxX+pad&&p.y>=b.minY-pad&&p.y<=b.maxY+pad);}
+  function roomWallFaces(project,room){
+   const polygon=room?.polygon;if(!Array.isArray(polygon)||polygon.length<3||!polygon.every(point))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
+   const scaleStatus=measurementStatus(project),edges=[],matches=[];let perimeterMm=0,ambiguous=false;
+   for(let i=0;i<polygon.length;i++){
+    const a=polygon[i],b=polygon[(i+1)%polygon.length],len=distanceMm(a,b);if(!(len>0))return {status:'unavailable',complete:false,associationComplete:false,openingsComplete:false,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,matchedBoundaryM:null,missingBoundaryM:null,segments:[],reason:'invalid-room-polygon'};
+    perimeterMm+=len;const edgeMatches=[];
+-   for(const w of project.walls){if(w.status==='demolished')continue;const m=matchEdgeToWall(a,b,w);if(m)edgeMatches.push(m);}
++   for(const w of project.walls){if(w.status==='demolished'||Walls.isCurved(w))continue;const m=matchEdgeToWall(a,b,w);if(m)edgeMatches.push(m);}
+    const sorted=edgeMatches.slice().sort((x,y)=>x.edgeStartMm-y.edgeStartMm);
+    for(let j=1;j<sorted.length;j++)if(sorted[j].edgeStartMm<sorted[j-1].edgeEndMm-COVERAGE_TOLERANCE_MM&&sorted[j].wallId!==sorted[j-1].wallId)ambiguous=true;
+    const coverage=intervalLength(edgeMatches.map(m=>[m.edgeStartMm,m.edgeEndMm]));edges.push({lengthMm:len,coverageMm:Math.min(len,coverage)});matches.push(...edgeMatches);
+@@ -98,12 +119,19 @@
+   for(const g of groups.values()){
+    const w=project.walls.find(x=>x.id===g.wallId),intervals=mergeIntervals(g.intervals),lengthMm=intervalLength(intervals),heightOk=finite(w?.heightMm)&&w.heightMm>0;
+    if(!heightOk){wallGeometryComplete=false;openingsComplete=false;segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:'unavailable',complete:false,reason:'invalid-wall-geometry'});continue;}
+-   const gross=lengthMm*w.heightMm,{rectangles,invalid}=openingRectangles(project,w,intervals),opening=invalid.length?null:rectangleUnionAreaMm2(rectangles),net=opening===null?null:Math.max(0,gross-opening);
++   // A sloped straight wall: trapezoid over each interval, and openings checked under their lower edge (no clipping).
++   const sloped=shaped(w),wl=distanceMm(w.start,w.end),hAt=x=>w.heightMm+(Walls.endHeight(w)-w.heightMm)*x/wl;
++   if(sloped&&!(finite(Walls.endHeight(w))&&Walls.endHeight(w)>0)){wallGeometryComplete=false;openingsComplete=false;segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:null,openingAreaM2:null,netAreaM2:null,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:'unavailable',complete:false,reason:'invalid-wall-geometry'});continue;}
++   const gross=sloped?intervals.reduce((t,[a,b])=>t+(b-a)*(hAt(a)+hAt(b))/2,0):lengthMm*w.heightMm,host=sloped?{...w,heightMm:Math.max(w.heightMm,Walls.endHeight(w))}:w;
++   const r=openingRectangles(project,host,intervals),invalid=sloped?[...r.invalid,...project.openings.filter(o=>o.wallId===w.id&&Walls.validateOpening(w,o).length).map(o=>o.id)]:r.invalid,rectangles=r.rectangles;
++   const opening=invalid.length?null:rectangleUnionAreaMm2(rectangles),net=opening===null?null:Math.max(0,gross-opening);
+    grossMm2+=gross;if(opening===null)openingsComplete=false;else openingMm2+=opening;
+    segments.push({wallId:w.id,face:g.face,lengthM:lengthMm/1000,grossAreaM2:gross/1e6,openingAreaM2:opening===null?null:opening/1e6,netAreaM2:net===null?null:net/1e6,materialId:w.surfaceMaterialId??null,lifecycleStatus:w.status??null,status:scaleStatus,complete:opening!==null});
+   }
+   const associationComplete=missingBoundaryMm<=COVERAGE_TOLERANCE_MM*polygon.length,complete=associationComplete&&wallGeometryComplete&&openingsComplete;
+-  return {status:scaleStatus,complete,associationComplete,openingsComplete,grossAreaM2:grossMm2/1e6,openingAreaM2:openingsComplete?openingMm2/1e6:null,netAreaM2:openingsComplete?(grossMm2-openingMm2)/1e6:null,matchedBoundaryM:matchedBoundaryMm/1000,missingBoundaryM:missingBoundaryMm/1000,segments,
++  // OP-07: a curved wall is not associated with a room by straight-edge matching yet (S3b); it is named, never guessed.
++  const pendingCurvedWalls=associationComplete?[]:project.walls.filter(w=>Walls.isCurved(w)&&w.status!=='demolished'&&nearPolygon(w,polygon)).map(w=>w.id);
++  return {status:scaleStatus,complete,associationComplete,openingsComplete,...(pendingCurvedWalls.length?{pendingCurvedWalls}:{}),grossAreaM2:grossMm2/1e6,openingAreaM2:openingsComplete?openingMm2/1e6:null,netAreaM2:openingsComplete?(grossMm2-openingMm2)/1e6:null,matchedBoundaryM:matchedBoundaryMm/1000,missingBoundaryM:missingBoundaryMm/1000,segments,
+    ...(!associationComplete?{reason:'partial-room-wall-association'}:!wallGeometryComplete?{reason:'invalid-wall-geometry'}:!openingsComplete?{reason:'invalid-opening-geometry'}:{})};
+  }
+  function room(project,roomOrId){
+diff --git a/tests/op07-s3-quantities.test.cjs b/tests/op07-s3-quantities.test.cjs
+new file mode 100644
+index 00000000..1c0f3b16
+--- /dev/null
++++ b/tests/op07-s3-quantities.test.cjs
+@@ -0,0 +1,50 @@
++'use strict';
++// OP-07 · S3 Mediciones y presupuestos: superficies independientes de ambas caras (D-OP07-2), trapecios en pendiente,
++// mochetas aparte; proyectos existentes byte a byte idénticos; nada se estima ni se recorta en silencio.
++const test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
++const Core=require('../js/project-core.js'),Q=require('../js/quantity-core.js'),D=require('../js/budget-draft-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const h=x=>crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex'),labels=new Proxy({},{get:(t,k)=>String(k)});
++const near=(a,b,e=1e-9)=>Math.abs(a-b)<=e*Math.max(1,Math.abs(a),Math.abs(b));
++
++test('S3 · proyectos existentes: cantidades y líneas de presupuesto byte a byte idénticas a master (02712b51)',()=>{
++ const p=Core.initial(),[level,home,lines]='cb40c93bc1e9454ac764120aecc4b519f82718e3297f56ec07d1614d51c0764f 23fa529b8c32581973c75824a222353a54518597ad31c222b6a1a6523849986f cafc0bd1d74fda2a317598c65995de4e63129b620aaf85acd717123da3e8e0fe'.split(' ');
++ assert.equal(h(Q.level(p)),level);assert.equal(h(Q.home(p)),home);assert.equal(h(D.lines(p,{labels})),lines);
++});
++
++test('S3 · muro curvo: longitud de trayectoria, cara izquierda y derecha distintas que suman 2 × eje, mochetas aparte',()=>{
++ const {project,wall}=F.curved(F.base(),{heightEndMm:2400});const q=Q.wall(project,wall.id),k=q.quantities,f=q.faces;
++ assert.equal(q.complete,true);assert.ok(near(k.lengthM*1000,Core.wallLength(wall)));
++ assert.ok(Math.abs(f.left.lengthM-f.right.lengthM)>0.1,'en curva, una cara es más larga que la otra');
++ for(const key of ['grossAreaM2','openingAreaM2','netAreaM2'])assert.ok(near(f.left[key]+f.right[key],2*({grossAreaM2:k.faceGrossAreaM2,openingAreaM2:k.faceOpeningAreaM2,netAreaM2:k.faceNetAreaM2})[key],1e-9),key+': izquierda + derecha = 2 × eje');
++ assert.ok(near(k.wallSurfaceNetAreaM2,f.left.netAreaM2+f.right.netAreaM2));
++ for(const side of [f.left,f.right])assert.ok(near(side.netAreaM2,side.grossAreaM2-side.openingAreaM2));
++ const outer=f.left.lengthM>f.right.lengthM?f.left:f.right,inner=outer===f.left?f.right:f.left;assert.ok(outer.openingAreaM2>inner.openingAreaM2,'el hueco es mayor en la cara exterior');
++ assert.ok(k.revealsAreaM2>0);assert.equal(k.heightEndM,2.4);
++});
++
++test('S3 · muro inclinado recto: trapecio, en el muro y en la cara de cada estancia',()=>{
++ const {project,wall}=F.sloped(F.base(),{heightEndMm:2000}),L=F.len(wall);const k=Q.wall(project,wall.id).quantities;
++ assert.ok(near(k.faceGrossAreaM2*1e6,L*(wall.heightMm+2000)/2,1e-9));
++ const segs=project.rooms.flatMap(r=>Q.room(project,r.id).wallFaces.segments.filter(s=>s.wallId===wall.id));assert.ok(segs.length>=1,'alguna estancia da a ese muro');
++ for(const s of segs)assert.ok(s.grossAreaM2<s.lengthM*wall.heightMm/1000+1e-9,'la cara de la estancia ya no usa la altura de inicio como si fuera a nivel');
++});
++
++test('S3 · sin recorte silencioso: abertura que no cabe → huecos y neta null, complete:false',()=>{
++ const p=F.lone({control:{x:2000,y:1500}}),w=p.walls[0];p.openings=[{id:'opn_x',wallId:w.id,kind:'window',offsetMm:Math.ceil(Core.wallLength(w)),widthMm:600,heightMm:1000,sillHeightMm:900}];
++ const q=Q.wall(p,w.id);assert.equal(q.complete,false);assert.equal(q.reason,'invalid-opening-geometry');
++ assert.equal(q.quantities.faceNetAreaM2,null);assert.equal(q.quantities.wallSurfaceNetAreaM2,null);assert.ok(q.quantities.faceGrossAreaM2>0);
++});
++
++test('S3 · presupuesto: la partida de pintura suma ambas caras reales de los muros curvos, sin cambiar el resto',()=>{
++ const {project,wall}=F.curved(F.base());const plain=F.base();
++ const paint=p=>D.lines(p,{labels}).find(l=>l.key==='paint').quantity.value;
++ const delta=paint(project)-paint(plain),w=Q.wall(project,wall.id).quantities,before=Q.wall(plain,wall.id).quantities;
++ assert.ok(near(delta,w.wallSurfaceNetAreaM2-before.wallSurfaceNetAreaM2,1e-9),'solo cambia lo que aporta el muro curvo');
++});
++
++test('S3 · estancias junto a un muro curvo (convivencia con UX-03): incompleto y nombrado, nunca una cifra inventada',()=>{
++ const {project,wall}=F.curved(F.base(),{withOpening:false});
++ const affected=project.rooms.map(r=>({r,f:Q.room(project,r.id).wallFaces})).filter(x=>x.f.pendingCurvedWalls?.includes(wall.id));
++ assert.ok(affected.length>=1,'las estancias vecinas lo señalan');
++ for(const {f} of affected){assert.equal(f.complete,false);assert.equal(f.associationComplete,false);assert.ok(f.missingBoundaryM>0);assert.ok(f.segments.every(s=>s.wallId!==wall.id),'el muro curvo no se mide por su cuerda');}
++});

@@ -1,7 +1,7 @@
-From 6a54f4531c5bdf0ca53485e80f9df2c3165ef832 Mon Sep 17 00:00:00 2001
+From 3ef74ef3f5c75498bea93c3c20de2854552f10a3 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 02/12] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y?=
+Subject: [PATCH 02/14] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y?=
  =?UTF-8?q?=20plano:=20piezas=20por=20faceta,=20aberturas=20sobre=20la=20t?=
  =?UTF-8?q?rayectoria=20y=20contorno=20del=20muro?=
 MIME-Version: 1.0

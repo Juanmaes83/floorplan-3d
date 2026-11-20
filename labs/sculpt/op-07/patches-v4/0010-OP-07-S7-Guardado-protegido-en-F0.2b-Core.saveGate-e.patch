@@ -1,0 +1,420 @@
+From 544b501aaefb93d48d50572cacd93340e3ae42b3 Mon Sep 17 00:00:00 2001
+From: op07 <op07@local>
+Date: Fri, 20 Nov 2026 10:23:51 +0000
+Subject: [PATCH 10/12] =?UTF-8?q?OP-07=20S7=20=C2=B7=20Guardado=20protegid?=
+ =?UTF-8?q?o=20en=20F0.2b:=20Core.saveGate=20entre=20la=20revisi=C3=B3n=20?=
+ =?UTF-8?q?confirmada=20y=20la=20siguiente,=20con=20la=20intenci=C3=B3n=20?=
+ =?UTF-8?q?de=20cada=20paso?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- persistence-store: puerta opcional {check, committed} evaluada ANTES del commit en la misma cola; un lote rechazado no escribe
+  nada, sigue pendiente en la pestaña y se informa (guard-refused). Copia confirmada propia; recuperación (adoptConflict) también.
+- persistence-editor: la puerta con Core.saveGate; la intención es de cada paso (editIntent) y se compone desde la última
+  revisión confirmada (composeIntent); se descarta al confirmarse. El rechazo se explica con el aviso existente.
+- index.html: stepIntent por paso (sustituye el global lastEditIntent); commit, deshacer y rehacer anotan su paso.
+- Alcance: un documento v1 nunca se rechaza por pérdida; pérdida y reglas solo en muros con curva o pendiente y sus huecos.
+- Pruebas: 7 puras (v1, genérico vs explícito, intención compuesta, deshacer/rehacer, escritor antiguo, vista degradada,
+  biblioteca y edificios, WALL_PATH) y 1 de navegador con F0.2b real (rechazo atómico, deshacer, dividir, rehacer, exportar, reabrir).
+---
+ index.html                                 | 22 ++++---
+ js/persistence-editor.js                   | 31 ++++++++-
+ js/persistence-store.js                    | 13 +++-
+ js/project-core.js                         | 50 +++++++++++++++
+ tests/op07-s7-persistence.browser.test.cjs | 47 ++++++++++++++
+ tests/op07-s7-save-gate.test.cjs           | 75 ++++++++++++++++++++++
+ tests/regression-partitions.json           |  1 +
+ 7 files changed, 226 insertions(+), 13 deletions(-)
+ create mode 100644 tests/op07-s7-persistence.browser.test.cjs
+ create mode 100644 tests/op07-s7-save-gate.test.cjs
+
+diff --git a/index.html b/index.html
+index 7c62b8ee..a67dff66 100644
+--- a/index.html
++++ b/index.html
+@@ -1194,6 +1194,9 @@ function save(){
+   return saved;
+ }
+ const snap = () => JSON.stringify(project);
++// OP-07 S7 · Intent of the operation being committed, for THIS step only (consumed and cleared by commit).
++let stepIntent=null;
++function noteStep(before,restore){const op=stepIntent;stepIntent=null;window.FloorPlanPersistenceEditor?.noteEdit?.(before,snap(),{op,restore});}
+ function commit(before){
+   // R02-A: si este cambio ha quitado estancias, sus elementos y referencias de techo se retiran en el MISMO paso del deshacer.
+   try { const ceiling=window.RubikCeilingEditor?.reconcile(project); if(ceiling) project=ceiling; project.updatedAt = new Date(Math.max(Date.now(), Date.parse(project.createdAt))).toISOString(); Core.validate(project); }
+@@ -1201,11 +1204,11 @@ function commit(before){
+   // No change may create a new furniture–stair conflict (BW5): it is rolled back, the item keeps its last valid pose.
+   const blocked = window.FloorPlanBuildingUI?.guard(before);
+   if (blocked){ project=JSON.parse(before); refreshProject(); window.FloorPlanBuildingUI.refused(blocked); return false; }
+-  undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; return save();
++  undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; noteStep(before,false); return save();
+ }
+ function mutate(fn){ const b=snap(); try{fn();commit(b);}catch(e){project=JSON.parse(b);toast(e.message);} renderAll(); }
+-function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); redoStack.push(snap()); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); save(); renderAll(); }
+-function redo(){ if(!redoStack.length)return;undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();save();renderAll(); }
++function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); const b=snap(); redoStack.push(b); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); noteStep(b,true); save(); renderAll(); }
++function redo(){ if(!redoStack.length)return;const b=snap();undoStack.push(b);project=JSON.parse(redoStack.pop());refreshProject();validateSel();noteStep(b,true);save();renderAll(); }
+ function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id) || ui.sel?.kind==='wall'&&!project.walls.some(w=>w.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
+ const getF = id => state.furniture.find(f => f.id === id);
+ 
+@@ -1825,8 +1828,9 @@ function wallShapeBlock(w){
+ function applyWallEdit(run, selectId){
+   const before = snap(), r = run(JSON.parse(before));
+   if (!r.ok){ wallShapeStatus = r.explanation.join(' '); renderPanel(); return r; }
+-  project = r.project; window.FloorPlanApp && (FloorPlanApp.lastEditIntent = r.intent || {}); refreshProject();
+-  if (commit(before)){ wallShapeStatus = ''; }
++  project = r.project; refreshProject();
++  stepIntent = r.intent || null; const done = commit(before); stepIntent = null;
++  if (done){ wallShapeStatus = ''; }
+   renderAll(); if (selectId) select({kind:'wall', id:selectId}); return r;
+ }
+ function bindWallShape(id){
+@@ -2180,7 +2184,7 @@ function endDrag(cancel){
+   }
+   if (d.kind === 'curve'){
+     if (cancel || !d.moved){ if (d.moved){ project = JSON.parse(d.before); refreshProject(); } renderAll(); return; }
+-    if (snap() !== d.before){ window.FloorPlanApp && (FloorPlanApp.lastEditIntent = d.intent || {}); commit(d.before); }
++    if (snap() !== d.before){ stepIntent = d.intent || null; commit(d.before); stepIntent = null; }
+     wallShapeStatus = d.refused ? op07t('Se conserva la última forma válida: ','The last valid shape is kept: ','保留最后的有效形状：') + d.refused : '';
+     renderAll(); return;
+   }
+@@ -2801,11 +2805,11 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
+   // MUE-01: cambiar o quitar la foto asociada (fn recibe una copia y devuelve {ok,project}); un paso del deshacer.
+   applyOwnFurniture(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;refreshProject();if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+   // R02-A: los cambios de techo pasan por el commit de RUBIK (validación, deshacer, guardado). fn recibe una copia y devuelve {ok,project}.
+-  applyCeiling(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
++  applyCeiling(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;stepIntent=r.intent||null;const done=commit(before);stepIntent=null;if(!done)return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+   // UX-12: la propuesta de amueblamiento se aplica igual, en un solo paso del commit (validación, deshacer y guardado).
+-  applyFurnishing(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
++  applyFurnishing(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;stepIntent=r.intent||null;const done=commit(before);stepIntent=null;if(!done)return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+   // CAT-04: a project extension written by a CAT-IA tool (visual references), in one step of the commit (validation, undo, save).
+-  applyExtension(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
++  applyExtension(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;stepIntent=r.intent||null;const done=commit(before);stepIntent=null;if(!done)return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+   applyAssistant(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;refreshProject();if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
+   async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
+diff --git a/js/persistence-editor.js b/js/persistence-editor.js
+index 591d0749..260fa582 100644
+--- a/js/persistence-editor.js
++++ b/js/persistence-editor.js
+@@ -6,7 +6,31 @@
+  const isolated=window.RUBIK_DELIVERY||new URLSearchParams(location.search).get('demo')==='dibujo-vivo';
+  const enabled=P.isTestOrigin()&&!isolated;
+  let persistenceDialog;
+- const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison};
++ const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison,noteEdit};
++ // OP-07 S7 · Save gate: Core.guardSave between the last CONFIRMED revision and the next one, with the intent of the editing
++ // steps made since that revision (each step carries its own; nothing global persists). A refused save writes nothing.
++ let steps=[],seq=0;
++ function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
++  const C=window.FloorPlanCore;if(!C?.editIntent)return;
++  let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
++  steps.push({seq:++seq,intent:C.editIntent(before,after,{op,restore})});
++ }
++ const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
++ function refusal(issues){
++  const one=issues[0]||{},what={'curve-lost':'perdería la curva de un muro','slope-lost':'perdería la altura final de un muro inclinado',
++   'wall-lost':'perdería un muro curvo o inclinado','opening-lost':'perdería una puerta o ventana de un muro curvo o inclinado',
++   'writer-lacks-feature':'contiene muros que esta versión de RUBIK no sabe guardar','degraded-view':'viene de una vista simplificada del proyecto',
++   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
++  return 'No se ha guardado: el cambio '+what+' sin que lo hayas pedido. Lo guardado no ha cambiado y tu cambio sigue en esta pestaña. Deshazlo (Ctrl+Z) o usa «Forma del muro» para enderezar o nivelar el muro de forma explícita.';
++ }
++ const gate={
++  check({changes,confirmed,restore}){
++   const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
++   const upTo=seq,intent=restore?{}:steps.reduce((a,s)=>C.composeIntent(a,s.intent),{});
++   const v=C.saveGate(pairs,{intent,restore});return {...v,seq:upTo,restore,message:v.ok?'':refusal(v.issues)};
++  },
++  committed(v){if(!v)return;steps=v.restore?[]:steps.filter(s=>s.seq>v.seq);}
++ };
+ 
+  function loadProject(projectKey){
+   const storage=runtime.storage,loadedProject=window.FloorPlanCore.load(storage,projectKey);
+@@ -121,8 +145,11 @@
+   const label=document.getElementById('persistenceStatus');
+   let protecting=false;
+   const protect=e=>{e.preventDefault();e.returnValue=true;};
++  let refused='';
+   const render=s=>{
+    label.textContent=statusText(s);label.dataset.state=s.status;
++   // S7: a refused save says why at once (same notice as the rest of the editor); once per distinct refusal.
++   const why=s.error?.code==='guard-refused'?s.error.message:'';if(why&&why!==refused)notify(why);refused=why;
+    const warn=s.pending>0||s.status==='saving'||s.status==='error'||s.error?.code==='conflict-unsaved';
+    if(warn&&!protecting)addEventListener('beforeunload',protect);
+    if(!warn&&protecting)removeEventListener('beforeunload',protect);
+@@ -157,7 +184,7 @@
+     runtime.storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
+    }
+   }else{
+-   runtime.session=await P.session();
++   runtime.session=await P.session({gate});
+    runtime.storage=runtime.session.storage;
+    attachStatus(runtime.session);
+   }
+diff --git a/js/persistence-store.js b/js/persistence-store.js
+index e363fb0b..7bdf081d 100644
+--- a/js/persistence-store.js
++++ b/js/persistence-store.js
+@@ -225,7 +225,7 @@
+ 
+  // ── Session: the synchronous view an editor tab uses ─────────────────────────────────────────────────────────────
+  const TAB_LOCK='rubik-sota-tab:';
+- async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get,storagePermission=root.FloorPlanStoragePersistence}={}){
++ async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,gate=null,getImage=root.FloorPlanImages?.get,storagePermission=root.FloorPlanStoragePersistence}={}){
+   let db;try{db=await open({indexedDB:idb});}catch(e){channel?.close();throw e;}
+   let releaseTab=null,closed=false;
+   let migration,legacy,revision,docs;
+@@ -238,6 +238,8 @@
+   const shared=root.FloorPlanImages?.holdTab?.(locks);
+   if(shared)tab=shared;
+   else if(canLock(locks))locks.request(TAB_LOCK+tab,()=>closed?undefined:new Promise(r=>{releaseTab=r;})).catch(()=>{});
++  // OP-07 S7: the last CONFIRMED docs, for the optional save gate ({check({changes,confirmed,restore}),committed(verdict)}).
++  let confirmed=new Map(docs);
+   const pending=new Map(),listeners=new Set([onState]);let chain=Promise.resolve(),timer=null,adopting=false,inFlight=null;
+   const pendingCount=()=>new Set([...(inFlight?.keys()||[]),...pending.keys()]).size;
+   const initialRevision=revision;
+@@ -282,6 +284,10 @@
+    }
+    if(!pending.size)return {...state};
+    const batch=new Map(pending);pending.clear();inFlight=batch;emit({status:'saving'});
++   // S7: a refused batch writes nothing; the changes stay in this tab (pending) and the reason is reported.
++   const verdict=gate?gate.check({changes:Object.fromEntries(batch),confirmed:Object.fromEntries(confirmed),restore:false}):null;
++   if(verdict&&!verdict.ok){inFlight=null;for(const [k,v] of batch)if(!pending.has(k))pending.set(k,v);
++    emit({status:'error',error:new PersistenceError('guard-refused',verdict.message||'No se ha guardado: el cambio perdería información del muro.',{issues:verdict.issues})});return {...state};}
+    try{
+     // `full()` is read when the commit runs, so a conflict record includes changes made while a transaction was in flight.
+     const r=await commit({db,locks,storage,baseRevision:revision,changes:Object.fromEntries(batch),snapshot:full(),tab,hooks});
+@@ -291,6 +297,7 @@
+      return pending.size?doFlush():{...state};
+     }
+     revision=r.revision;broadcast();
++    for(const [k,v] of batch)if(v===null)confirmed.delete(k);else confirmed.set(k,v);gate?.committed?.(verdict);
+     emit({status:pending.size?'pending':'saved',error:null,mirror:r.mirror});
+     if(userSave)void storagePermission?.requestPersistentStorage({confirmedByUser:true});
+     if(pending.size)schedule();
+@@ -333,9 +340,11 @@
+      const c=await find(id),cur=await load(db);
+      for(const k of Object.keys(c.docs))if(!managed(k))throw new PersistenceError('key-unmanaged','La versión contiene una clave fuera de la autoridad.');
+      const changes=Object.fromEntries(KEYS.map(k=>[k,typeof c.docs[k]==='string'?c.docs[k]:null]));
++     const verdict=gate?gate.check({changes,confirmed:Object.fromEntries(cur.docs),restore:true}):null;
++     if(verdict&&!verdict.ok)throw new PersistenceError('guard-refused',verdict.message||'Esa versión no se puede recuperar sin perder información.',{issues:verdict.issues});
+      const out=await commit({db,locks,storage,baseRevision:cur.revision,changes,tab,hooks,recovery:{id,at:c.at,source:JSON.stringify(c.docs),docs:Object.fromEntries(cur.docs)}});
+      if(out.status!=='saved')throw new PersistenceError('conflict','Otra pestaña guardó mientras se recuperaba el conflicto; vuelve a intentarlo.');
+-     revision=out.revision;docs=new Map(Object.entries(changes).filter(([,v])=>v!==null));broadcast();
++     revision=out.revision;docs=new Map(Object.entries(changes).filter(([,v])=>v!==null));confirmed=new Map(docs);gate?.committed?.(verdict);broadcast();
+      emit({status:'saved',conflictId:null,error:null,outdated:false,mirror:out.mirror});return {revision,superseded:out.superseded};
+     }finally{adopting=false;}
+    },
+diff --git a/js/project-core.js b/js/project-core.js
+index 40ec9646..ca2aa6e0 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -46,6 +46,55 @@
+   function guardSave(previous, next, {intent = {}, writerFeatures = WALL_FEATURES} = {}) {
+     return Walls.guardSave({previous, next, writerFeatures, intent, opts: WALL_PATH});   // the same path policy as validate()
+   }
++  // OP-07 · S7 · Intent of ONE editing step, bound to that step (never a global that persists): what the operation said
++  // (op, e.g. splitWall's {split}) plus what the step itself removed. A restore (undo, redo, recovery) brings back a state
++  // the person already had, so its whole difference is intended. A generic edit never "intends" dropping a curve or slope.
++  function editIntent(before, after, {op = null, restore = false} = {}) {
++    const ids = l => new Set((l || []).map(x => x.id)), nextWalls = new Map((after?.walls || []).map(w => [w.id, w]));
++    const nw = ids(after?.walls), no = ids(after?.openings), sloped = w => Number.isFinite(w.heightEndMm) && w.heightEndMm !== w.heightMm;
++    const out = {removed:(before?.walls || []).filter(w => !nw.has(w.id)).map(w => w.id), removedOpenings:(before?.openings || []).filter(o => !no.has(o.id)).map(o => o.id), straightened:[], leveled:[], split:{}};
++    if (restore) for (const w of before?.walls || []) { const n = nextWalls.get(w.id); if (!n) continue;
++      if (Walls.isCurved(w) && !Walls.isCurved(n)) out.straightened.push(w.id); if (sloped(w) && !sloped(n)) out.leveled.push(w.id); }
++    return composeIntent(out, op || {});
++  }
++  // Intents of consecutive steps since the last confirmed revision, composed so that guardSave compares the confirmed
++  // document with the next one: a piece of a split that is split again or removed is followed back to the original wall.
++  function composeIntent(a = {}, b = {}) {
++    const out = {removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
++    const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
++    for (const [old, pieces] of Object.entries(b.split || {})) { const k = origin(old);
++      if (k) out.split[k].splice(out.split[k].indexOf(old), 1, ...pieces); else out.split[old] = [...pieces]; }
++    for (const id of b.removed || []) { const k = origin(id);
++      if (k) { out.split[k].splice(out.split[k].indexOf(id), 1); if (!out.split[k].length) { delete out.split[k]; out.removed.push(k); } }
++      else out.removed.push(id); }
++    for (const key of ['straightened', 'leveled']) for (const id of b[key] || []) { out[key].push(id); const k = origin(id); if (k) out[key].push(k); }
++    out.removedOpenings.push(...(b.removedOpenings || []));
++    for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = [...new Set(out[key])];
++    return out;
++  }
++  // S7 · Save gate for the F0.2b write path. pairs = [{kind:'project'|'library', before, after}] (stored JSON text, before =
++  // last CONFIRMED revision). A v1 document is never refused here: loss and rule checks apply to walls with a curve or a
++  // slope and to their openings (the same scope as validate()); a degraded view and a writer that lacks a feature the
++  // document uses are always refused. Removing a whole project is not a wall loss.
++  function saveGate(pairs, {intent = {}, restore = false, writerFeatures = WALL_FEATURES} = {}) {
++    const issues = [], read = t => { if (t === null || t === undefined) return null; try { return JSON.parse(t); } catch { return undefined; } };
++    const projectsOf = (kind, doc) => !doc ? [] : kind === 'project' ? [doc] : (doc.entries || []).flatMap(e => e.kind === 'building' ? (e.building?.levels || []).map(l => l.project) : [e.project]).filter(Boolean);
++    for (const {kind, before, after} of pairs) {
++      const next = read(after), prev = read(before);
++      if (next === undefined) { issues.push({code:'unreadable', kind}); continue; }
++      const prevById = new Map(projectsOf(kind, prev || null).map(p => [p.id, p]));
++      for (const p of projectsOf(kind, next)) {
++        const q = prevById.get(p.id) || null, shaped = new Set([...(q?.walls || []), ...(p.walls || [])].filter(shapedWall).map(w => w.id));
++        const hosts = new Map([...(q?.openings || []), ...(p.openings || [])].map(o => [o.id, o.wallId]));
++        const why = restore ? composeIntent(editIntent(q, p, {restore:true}), intent) : intent;
++        for (const i of guardSave(q, p, {intent:why, writerFeatures}).issues) {
++          const wall = i.wallId ?? hosts.get(i.openingId);
++          if (['degraded-view', 'writer-lacks-feature'].includes(i.code) || shaped.has(wall)) issues.push({...i, projectId:p.id});
++        }
++      }
++    }
++    return {ok:!issues.length, issues};
++  }
+   const wallLength = w => shapedWall(w) ? Walls.pathProfile(w, WALL_PATH).length : Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
+   const clone = value => JSON.parse(JSON.stringify(value));
+   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
+@@ -618,4 +667,5 @@
+   Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
+   Object.assign(api,{roomRing});   // OP-07 S3b
+   Object.assign(api,{jointAt});   // OP-07 S4b
++  Object.assign(api,{editIntent,composeIntent,saveGate});   // OP-07 S7
+ })(globalThis);
+diff --git a/tests/op07-s7-persistence.browser.test.cjs b/tests/op07-s7-persistence.browser.test.cjs
+new file mode 100644
+index 00000000..adc643f3
+--- /dev/null
++++ b/tests/op07-s7-persistence.browser.test.cjs
+@@ -0,0 +1,47 @@
++'use strict';
++// OP-07 · S7 · Guardado protegido en el camino REAL de F0.2b (IndexedDB, revisión confirmada), editor completo:
++// una escritura que perdería la curva no se confirma (nada cambia en la autoridad, el cambio sigue en la pestaña y se
++// explica); curvar, dividir, deshacer y rehacer sí; reabrir devuelve el 2.0 confirmado y la copia de emergencia lo lleva.
++const test=require('node:test'),assert=require('node:assert/strict');
++const K=require('./r02a/editor-kit.cjs');
++let env;test.before(async()=>{env=await K.start();env={...env,base:env.base.replace('127.0.0.1','f0-2b.localhost')};});test.after(async()=>{await env?.stop();});
++const flush=page=>page.evaluate(async()=>{const s=await FloorPlanPersistenceEditor.session.flush();return {status:s.status,code:s.error?.code||null,message:s.error?.message||'',revision:s.revision};});
++// El editor guarda en la biblioteca (clave de F0.2b): el proyecto activo de la última revisión confirmada.
++const stored=page=>page.evaluate(async()=>{const r=await FloorPlanPersistence.readConfirmed(),lib=JSON.parse(r.docs.get(FloorPlanLibrary.KEY)),e=lib.entries.find(x=>x.id===lib.activeId);
++ return {revision:r.revision?.n??r.revision,project:e.kind==='building'?null:e.project};});
++const curvedIds=p=>p.walls.filter(w=>w.curve).map(w=>w.id).sort();
++
++test('S7 · F0.2b: la pérdida no pedida no se confirma; curvar, dividir, deshacer, rehacer, reabrir y exportar sí',{timeout:180000},async()=>{
++ const {context,page,watch}=await K.editor(env);
++ try{
++  assert.ok(await page.evaluate(()=>!!FloorPlanPersistenceEditor.session),'F0.2b activo');
++  // 1. Curvar con la operación del editor (lleva su intención) → confirmado como 2.0.
++  const wid=await page.evaluate(()=>{const p=FloorPlanApp.project,w=[...p.walls].filter(w=>!p.openings.some(o=>o.wallId===w.id)).sort((a,b)=>Math.hypot(b.end.x-b.start.x,b.end.y-b.start.y)-Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y))[0];
++   const r=FloorPlanApp.applyExtension(q=>FloorPlanCore.setWallCurve(q,w.id,{x:(w.start.x+w.end.x)/2+250,y:(w.start.y+w.end.y)/2+700}));if(!r.ok)throw Error(r.explanation);return w.id;});
++  let f=await flush(page);assert.equal(f.status,'saved');let s=await stored(page);
++  assert.equal(s.project.schemaVersion.split('.')[0],'2');assert.deepEqual(curvedIds(s.project),[wid]);const rev1=s.revision;
++  // 2. Un escritor genérico que reconstruye el muro sin `curve` (sin intención): no se confirma.
++  await page.evaluate(id=>FloorPlanApp.applyExtension(q=>{const p=JSON.parse(JSON.stringify(q)),w=p.walls.find(x=>x.id===id);delete w.curve;return {ok:true,project:p};}),wid);
++  f=await flush(page);assert.equal(f.code,'guard-refused');assert.match(f.message,/curva/);assert.match(f.message,/Lo guardado no ha cambiado/);
++  s=await stored(page);assert.equal(s.revision,rev1,'ninguna revisión nueva');assert.deepEqual(curvedIds(s.project),[wid],'la autoridad conserva la curva');
++  assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls.filter(w=>w.curve).length),0,'el cambio sigue en la pestaña (nada se descarta)');
++  assert.equal(await page.locator('#persistenceStatus').getAttribute('data-state'),'error','el estado lo dice');
++  await page.waitForFunction(()=>/No se ha guardado/.test(document.getElementById('toast')?.textContent||''));
++  // 3. Deshacer restaura el estado de la persona → se confirma.
++  await page.evaluate(()=>undo());f=await flush(page);assert.equal(f.status,'saved',f.message);s=await stored(page);
++  assert.ok(s.revision>rev1);assert.deepEqual(curvedIds(s.project),[wid]);
++  // 4. Dividir, deshacer y rehacer: cada paso confirmado, sin rechazos.
++  const len=await page.evaluate(id=>FloorPlanCore.wallLength(FloorPlanApp.project.walls.find(w=>w.id===id)),wid);
++  await page.evaluate(([id,l])=>{const r=FloorPlanApp.applyExtension(q=>FloorPlanCore.splitWall(q,id,Math.round(l/2),{newId:'wal_s7pieza2'}));if(!r.ok)throw Error(r.explanation);},[wid,len]);
++  f=await flush(page);assert.equal(f.status,'saved',f.message);assert.deepEqual(curvedIds((await stored(page)).project),[wid,'wal_s7pieza2'].sort());
++  await page.evaluate(()=>undo());f=await flush(page);assert.equal(f.status,'saved',f.message);assert.deepEqual(curvedIds((await stored(page)).project),[wid]);
++  await page.evaluate(()=>redo());f=await flush(page);assert.equal(f.status,'saved',f.message);const final=(await stored(page)).project;
++  assert.deepEqual(curvedIds(final),[wid,'wal_s7pieza2'].sort());
++  // 5. Copia de emergencia (exportación) con la curva; reabrir devuelve el 2.0 confirmado.
++  const exported=await page.evaluate(async()=>JSON.parse(await (await FloorPlanPersistenceEditor.session.emergencyExport()).text()).docs[FloorPlanLibrary.KEY]);
++  const lib=JSON.parse(exported);assert.deepEqual(curvedIds(lib.entries.find(x=>x.id===lib.activeId).project),curvedIds(final));
++  await page.reload();await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'&&!!window.FloorPlanApp);
++  const reopened=await page.evaluate(()=>FloorPlanApp.project);assert.equal(reopened.schemaVersion,final.schemaVersion);assert.deepEqual(curvedIds(reopened),curvedIds(final));
++  assert.deepEqual(watch.external,[]);
++ }finally{await context.close();}
++});
+diff --git a/tests/op07-s7-save-gate.test.cjs b/tests/op07-s7-save-gate.test.cjs
+new file mode 100644
+index 00000000..289f1fe8
+--- /dev/null
++++ b/tests/op07-s7-save-gate.test.cjs
+@@ -0,0 +1,75 @@
++'use strict';
++// OP-07 · S7 · Puerta de guardado del camino de escritura F0.2b: Core.saveGate entre la última revisión CONFIRMADA y la
++// siguiente, con la intención de cada paso de edición (editIntent) compuesta desde esa revisión (composeIntent).
++const test=require('node:test'),assert=require('node:assert/strict');
++const Core=require('../js/project-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const J=JSON.stringify,proj=(b,a)=>[{kind:'project',before:b===null?null:J(b),after:J(a)}];
++const steps=list=>list.reduce((acc,[b,a,o])=>Core.composeIntent(acc,Core.editIntent(b,a,o)),{});
++const gate=(b,a,intent,o={})=>Core.saveGate(proj(b,a),{intent,...o});
++const curvedProject=()=>F.curved(F.base(),{withOpening:true});
++
++test('S7 · un v1 nunca se rechaza por pérdida: borrar muros y huecos rectos sigue igual que hoy',()=>{
++ const p=Core.initial(),q=Core.clone(p);q.walls.splice(0,1);q.openings=q.openings.filter(o=>q.walls.some(w=>w.id===o.wallId));
++ assert.deepEqual(gate(p,q,{}),{ok:true,issues:[]},'sin intención');
++ assert.equal(Core.saveGate(proj(p,q),{writerFeatures:[]}).ok,true,'un escritor sin rasgos nuevos guarda un v1');
++});
++
++test('S7 · una edición genérica que pierde la curva o la pendiente se rechaza; la operación explícita no',()=>{
++ const {project:p,wall:w}=curvedProject(),q=Core.clone(p),qw=q.walls.find(x=>x.id===w.id);delete qw.curve;
++ assert.deepEqual(gate(p,q,steps([[p,q]])).issues.map(i=>i.code),['curve-lost']);
++ const r=Core.setWallCurve(p,w.id,null);assert.ok(r.ok);assert.equal(gate(p,r.project,steps([[p,r.project,{op:r.intent}]])).ok,true,'Enderezar');
++ const s=F.sloped(F.base(),{heightEndMm:2300}),t=Core.clone(s.project);delete t.walls.find(x=>x.id===s.wall.id).heightEndMm;
++ assert.deepEqual(gate(s.project,t,steps([[s.project,t]])).issues.map(i=>i.code),['slope-lost']);
++ const lv=Core.setWallEndHeight(s.project,s.wall.id,null);assert.ok(lv.ok);assert.equal(gate(s.project,lv.project,steps([[s.project,lv.project,{op:lv.intent}]])).ok,true,'Nivelar');
++});
++
++test('S7 · intención compuesta por pasos: dividir y borrar una pieza, dividir dos veces, borrar el muro curvo',()=>{
++ const {project:p,wall:w}=F.curved(F.base(),{withOpening:false}),L=Core.wallLength(w);
++ const a=Core.splitWall(p,w.id,L/2,{newId:'wal_pieza2'}),b=Core.splitWall(a.project,'wal_pieza2',300,{newId:'wal_pieza3'});
++ assert.equal(gate(p,b.project,steps([[p,a.project,{op:a.intent}],[a.project,b.project,{op:b.intent}]])).ok,true,'dos divisiones');
++ const c=Core.clone(a.project);c.walls=c.walls.filter(x=>x.id!=='wal_pieza2');
++ assert.equal(gate(p,c,steps([[p,a.project,{op:a.intent}],[a.project,c]])).ok,true,'dividir y borrar una pieza');
++ const d=Core.clone(p);d.walls=d.walls.filter(x=>x.id!==w.id);assert.equal(gate(p,d,steps([[p,d]])).ok,true,'borrar el muro curvo es intencionado');
++ // Sin intención, desaparecer la pieza que conserva el id original es perder el muro curvo: se nombra.
++ const e=Core.clone(a.project);e.walls=e.walls.filter(x=>x.id!==w.id);assert.deepEqual(gate(p,e,{}).issues.map(i=>i.code),['wall-lost']);
++});
++
++test('S7 · deshacer y rehacer restauran un estado de la persona: nunca se bloquean',()=>{
++ const p=F.base(),w=F.longest(p),cur=Core.setWallCurve(p,w.id,{x:(w.start.x+w.end.x)/2+300,y:(w.start.y+w.end.y)/2+900});assert.ok(cur.ok,cur.explanation);
++ // Curvado ya confirmado; deshacer lo deja recto.
++ assert.equal(gate(cur.project,p,steps([[cur.project,p,{restore:true}]])).ok,true,'deshacer el curvado');
++ assert.equal(gate(cur.project,p,steps([[cur.project,p]])).ok,false,'la misma pérdida sin ser un deshacer se rechaza');
++ const s=Core.splitWall(cur.project,w.id,1000,{newId:'wal_pieza2'});
++ assert.equal(gate(s.project,cur.project,steps([[s.project,cur.project,{restore:true}]])).ok,true,'deshacer la división');
++ assert.equal(gate(cur.project,s.project,steps([[cur.project,s.project,{restore:true}]])).ok,true,'rehacer la división');
++});
++
++test('S7 · escritor antiguo, vista degradada, ilegible y reglas del muro',()=>{
++ const {project:p}=curvedProject();
++ assert.deepEqual([...new Set(Core.saveGate(proj(p,p),{writerFeatures:[]}).issues.map(i=>i.code))],['writer-lacks-feature'],'un escritor que no conoce la curva no guarda un 2.0');
++ assert.deepEqual(Core.saveGate([{kind:'project',before:J(p),after:'{'}]).issues.map(i=>i.code),['unreadable']);
++ const bad=Core.clone(p),bw=bad.walls.find(Walls.isCurved);bw.curve.control={...bw.start};
++ assert.ok(gate(p,bad,{}).issues.some(i=>i.code==='invalid-wall'),'una curva que se pliega');
++ const deg=Core.clone(p);deg.walls=deg.walls.map(w=>Walls.isCurved(w)?Walls.legacyView(w).wall:w);
++ // En memoria la marca de vista degradada lo impide; por JSON la marca se pierde y queda la pérdida de contenido.
++ assert.throws(()=>Walls.assertSavable(deg),/degraded/);
++ assert.deepEqual([...new Set(gate(p,JSON.parse(J(deg)),{}).issues.map(i=>i.code))],['curve-lost'],'la vista simplificada no se guarda por JSON');
++});
++
++test('S7 · biblioteca y edificios: cada proyecto contra su versión confirmada; quitar un proyecto entero no es perder un muro',()=>{
++ const {project:p,wall:w}=curvedProject(),q=Core.clone(p);delete q.walls.find(x=>x.id===w.id).curve;
++ const lib=(...ps)=>J({version:1,activeId:'x',entries:ps.map((pr,i)=>({id:'ent'+i,name:'E'+i,project:pr}))});
++ const bld=pr=>J({version:1,activeId:'b',entries:[{id:'bld',name:'B',kind:'building',building:{levels:[{id:'lvl',project:pr}]}}]});
++ assert.deepEqual(Core.saveGate([{kind:'library',before:lib(p),after:lib(q)}]).issues.map(i=>i.code),['curve-lost']);
++ assert.deepEqual(Core.saveGate([{kind:'library',before:bld(p),after:bld(q)}]).issues.map(i=>i.code),['curve-lost'],'planta de un edificio');
++ const other=Core.clone(Core.initial());other.id='prj_otro00000000000000000000000000';
++ assert.equal(Core.saveGate([{kind:'library',before:lib(p,other),after:lib(other)}]).ok,true,'quitar el proyecto entero');
++ assert.equal(Core.saveGate([{kind:'library',before:null,after:lib(p)}]).ok,true,'primera escritura (importación o proyecto nuevo)');
++ assert.equal(Core.saveGate([{kind:'library',before:lib(q),after:lib(p)}],{restore:true}).ok,true,'recuperación de una versión');
++});
++
++test('S7 · la abertura al final de la trayectoria se guarda con la MISMA política que validate (WALL_PATH)',()=>{
++ const p=F.lone({start:{x:0,y:0},end:{x:6000,y:0},control:{x:3000,y:-3000}}),w=p.walls[0],q=Core.clone(p);
++ q.openings=[{id:'opn_endwin',wallId:w.id,kind:'window',offsetMm:Math.floor(Core.wallLength(w))-1201,widthMm:1200,heightMm:1000,sillHeightMm:900}];
++ Core.validate(q);assert.equal(gate(p,q,steps([[p,q]])).ok,true);
++});
+diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
+index 67a18743..3ec726b3 100644
+--- a/tests/regression-partitions.json
++++ b/tests/regression-partitions.json
+@@ -18,6 +18,7 @@
+   "tests/op07-s5-edit.browser.test.cjs",
+   "tests/op07-s5b-edit-ui.browser.test.cjs",
+   "tests/op07-s4b-render.browser.test.cjs",
++  "tests/op07-s7-persistence.browser.test.cjs",
+   "tests/home-demos.browser.test.cjs",
+   "tests/e2-comparativas.browser.test.cjs",
+   "tests/h01-dossier-inventario.browser.test.cjs",

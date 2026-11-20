@@ -1,0 +1,174 @@
+From 3c605885d104415b46d0d95c971cfc3bbb645e28 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 22:52:04 +0000
+Subject: [PATCH 05/12] =?UTF-8?q?OP-07=20S4=20=C2=B7=203D:=20piezas=20con?=
+ =?UTF-8?q?=20pendiente=20del=20n=C3=BAcleo=20=C3=BAnico,=20UV=20continuas?=
+ =?UTF-8?q?=20y=20dinteles=20que=20siguen=20la=20pendiente?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ index.html                        | 16 ++++++++++++++++
+ js/project-core.js                | 13 ++++++++++++-
+ tests/op07-s4-3d.browser.test.cjs | 22 ++++++++++++++++++++++
+ tests/op07-s4-3d.test.cjs         | 31 +++++++++++++++++++++++++++++++
+ tests/regression-partitions.json  |  1 +
+ 5 files changed, 82 insertions(+), 1 deletion(-)
+ create mode 100644 tests/op07-s4-3d.browser.test.cjs
+ create mode 100644 tests/op07-s4-3d.test.cjs
+
+diff --git a/index.html b/index.html
+index 0cc60598..7d826666 100644
+--- a/index.html
++++ b/index.html
+@@ -3643,6 +3643,20 @@ function wallBox(rect, yb, yt, m){
+   else if(exteriorByWall.get(rect.id)==='facade')m=facadeMat;
+   const [x0,y0,x1,y1]=rect;
+   if (yt - yb <= .001) return;
++  // OP-07 · S4: a piece of a curved or sloped wall is a sloped box from the single geometric core (Core.pieceMesh), with
++  // UVs continuous along the whole wall; it sits at the same centre and angle as a box, so everything else is unchanged.
++  const sloped=Core.pieceMesh(rect,yb,yt);
++  if (sloped) {
++    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(sloped.positions.map(v=>v/1000),3));
++    g.setAttribute('normal',new THREE.Float32BufferAttribute(sloped.normals,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(sloped.uvs,2));g.setIndex(sloped.indices);
++    for(let f=0;f<6;f++)g.addGroup(f*6,6,f);
++    const o=new THREE.Mesh(g,m||[wallMat,wallMat,capMat,wallMat,wallMat,wallMat]);
++    o.userData.wallId=rect.id;o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';o.userData.slopedPiece=true;
++    o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:Math.min(Math.max(rect.heightStart,rect.heightEnd),yt)-yb};
++    o.position.set(wx(rect.center[0]),0,wz(rect.center[1]));o.rotation.y=-rect.angle;o.castShadow=o.receiveShadow=true;archUp.add(o);
++    const ln=new THREE.LineSegments(new THREE.EdgesGeometry(g),edgeMat);ln.position.copy(o.position);ln.rotation.copy(o.rotation);ln.userData.walkOnly=true;ln.visible=opt.mode==='walk';archUp.add(ln);
++    return o;
++  }
+   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
+   if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
+   o.userData.wallId=rect.id;
+@@ -5609,6 +5623,8 @@ function presentationStoryInfo(){
+ 
+ window.View3D = {
+   invalidate:requestFrame,
++  // OP-07 · S4: what the wall meshes are (test and QA inspection; read-only).
++  wallsInspect(){const out=[];for(const o of archUp?.children||[]){if(!o.isMesh||!o.userData.wallId)continue;o.geometry.computeBoundingBox();const b=o.geometry.boundingBox;out.push({wallId:o.userData.wallId,sloped:!!o.userData.slopedPiece,minY:b.min.y+o.position.y,maxY:b.max.y+o.position.y});}return out;},
+   setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
+   get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
+   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
+diff --git a/js/project-core.js b/js/project-core.js
+index cb9e52e1..d6311781 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -375,7 +375,7 @@
+       if (at<span.to) solid.push([at,span.to]);
+       for (const [a,b] of solid) if (b-a>1e-6) {
+         const rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
+-        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true});
++        Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index??pieces.length,shaped:true,alongMm:(a+b)/2});
+         pieces.push(rect);
+       }
+     }
+@@ -395,6 +395,14 @@
+     const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
+     return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
+   }
++  // OP-07 · S4: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
++  // (heightStart → heightEnd) and the texture running continuously along the whole wall (alongMm). Positions in mm,
++  // faces in BoxGeometry order (+x, −x, top, bottom, +z, −z). null for a piece of a straight, level wall (a box).
++  function pieceMesh(rect, yb, yt) {
++    if (!rect?.shaped) return null;
++    const top=h=>Math.min(h,yt)*1000;
++    return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
++  }
+   // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
+   function wallFootprints(w) {
+     if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
+@@ -414,6 +422,8 @@
+         const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
+         const rect=shaped?wallRect(host,offset,Walls.isCurved(w)?Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y):o.widthMm):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
+         Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
++        // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
++        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2});}
+         if(w.status==='demolished') continue;
+         if(o.kind==='window') windows.push(rect);
+         else if(o.kind==='door') {
+@@ -455,4 +465,5 @@
+   Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
+   Object.assign(api,{wallOutline});   // OP-07 S2
+   Object.assign(api,{wallFootprints});   // OP-07 S6
++  Object.assign(api,{pieceMesh});   // OP-07 S4
+ })(globalThis);
+diff --git a/tests/op07-s4-3d.browser.test.cjs b/tests/op07-s4-3d.browser.test.cjs
+new file mode 100644
+index 00000000..43ce13f1
+--- /dev/null
++++ b/tests/op07-s4-3d.browser.test.cjs
+@@ -0,0 +1,22 @@
++'use strict';
++// OP-07 · S4 3D en el editor real (Chromium, 1440x900, 844x390 y 390x844): un muro curvo e inclinado se construye con
++// piezas con pendiente del núcleo único; los demás muros siguen siendo cajas; sin errores ni red externa.
++const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
++const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
++let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++for(const viewport of [{width:1440,height:900},{width:844,height:390},{width:390,height:844}])
++test(`S4 · muro curvo e inclinado en 3D ${viewport.width}x${viewport.height}`,{timeout:180000},async()=>{
++ const {context,page,watch}=await K.editor(env,{viewport});
++ try{
++  const {project,wall}=F.curved(F.base(),{heightEndMm:2400});
++  const r=await page.evaluate(p=>FloorPlanApp.applyExtension(()=>({ok:true,project:p})),project);assert.equal(r.ok,true,JSON.stringify(r));
++  await K.open3D(page);await page.waitForFunction(()=>window.View3D.wallsInspect().length>0);
++  const meshes=await page.evaluate(()=>View3D.wallsInspect()),mine=meshes.filter(m=>m.wallId===wall.id),others=meshes.filter(m=>m.wallId!==wall.id);
++  const pieces=await page.evaluate(id=>FloorPlanCore.geometry(FloorPlanApp.project).walls.filter(r=>r.id===id).length,wall.id);
++  assert.ok(mine.length>=pieces&&mine.every(m=>m.sloped),'cada pieza del muro curvo es una pieza con pendiente');
++  assert.ok(others.every(m=>!m.sloped),'los demás muros siguen siendo cajas');
++  const top=Math.max(...mine.map(m=>m.maxY));assert.ok(top<=2.8+1e-6&&top>2.4,'cima entre 2,4 y 2,8 m');
++  if(process.env.OP07_SHOTS){await fs.mkdir(process.env.OP07_SHOTS,{recursive:true});await page.screenshot({path:path.join(process.env.OP07_SHOTS,`s4-3d-${viewport.width}x${viewport.height}.png`)});}
++  assert.deepEqual(watch.errors,[]);assert.deepEqual(watch.external,[]);
++ }finally{await context.close();}
++});
+diff --git a/tests/op07-s4-3d.test.cjs b/tests/op07-s4-3d.test.cjs
+new file mode 100644
+index 00000000..9e92ac4b
+--- /dev/null
++++ b/tests/op07-s4-3d.test.cjs
+@@ -0,0 +1,31 @@
++'use strict';
++// OP-07 · S4 3D (pura): cada pieza de un muro curvo o inclinado es una caja con pendiente del núcleo único, con las
++// alturas del muro en sus dos extremos y UV continuas a lo largo de todo el muro; las piezas rectas siguen siendo cajas.
++const test=require('node:test'),assert=require('node:assert/strict');
++const Core=require('../js/project-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const near=(a,b,e=1e-6)=>Math.abs(a-b)<=e;
++// u en los extremos ±x de la cara +z (vértices 16–19 de slopedPiece: −hw,yb | hw,yb | hw,ytr | −hw,ytl).
++const uEnds=m=>[m.uvs[16*2],m.uvs[17*2]];
++
++test('S4 · muros rectos y a nivel: cajas como siempre (pieceMesh null)',()=>{
++ const g=Core.geometry(Core.initial());assert.ok([...g.walls,...g.windows,...g.voids,...g.doors.map(d=>d.rect)].every(r=>Core.pieceMesh(r,0,2.8)===null));
++});
++
++test('S4 · muro curvo e inclinado: alturas en los extremos, recorte por sección y UV continuas en todo el muro',()=>{
++ const {project,wall}=F.curved(F.base(),{heightEndMm:2400,withOpening:false});const pieces=Core.geometry(project).walls.filter(r=>r.id===wall.id);
++ const meshes=pieces.map(r=>Core.pieceMesh(r,0,10));
++ for(const [i,m] of meshes.entries()){const r=pieces[i],ys=[];for(let k=0;k<m.positions.length;k+=3)ys.push(m.positions[k+1]);
++  assert.ok(near(Math.max(...ys),Math.max(r.heightStart,r.heightEnd)*1000,1e-6),'cima de la pieza = altura del muro');}
++ for(let i=1;i<meshes.length;i++)assert.ok(near(uEnds(meshes[i])[0],uEnds(meshes[i-1])[1],1e-9),`UV continua entre las piezas ${i-1} y ${i}`);
++ const total=Core.wallLength(wall)/Walls.TEXTURE_TILE_MM;assert.ok(near(uEnds(meshes.at(-1))[1],total,1e-9)&&near(uEnds(meshes[0])[0],0,1e-12),'de 0 a longitud/tesela');
++ // Sección (corte a 1,2 m): ninguna cima supera el corte.
++ for(const m of pieces.map(r=>Core.pieceMesh(r,0,1.2))){for(let k=1;k<m.positions.length;k+=3)assert.ok(m.positions[k]<=1200+1e-9);}
++});
++
++test('S4 · dintel en muro inclinado: el relleno sobre la abertura sigue la pendiente en sus dos bordes',()=>{
++ const {project,wall}=F.curved(F.base(),{heightEndMm:2400});const g=Core.geometry(project),path=Walls.pathProfile(wall,Core.WALL_PATH);
++ const r=g.windows.find(x=>x.openingId==='opn_op07-win'),o=project.openings.find(x=>x.id==='opn_op07-win');
++ assert.ok(near(r.heightStart*1000,path.sample(o.offsetMm).height)&&near(r.heightEnd*1000,path.sample(o.offsetMm+o.widthMm).height));
++ const m=Core.pieceMesh(r,r.head,10),ys=[];for(let k=1;k<m.positions.length;k+=3)ys.push(m.positions[k]);
++ assert.ok(near(Math.min(...ys),r.head*1000)&&near(Math.max(...ys),Math.max(r.heightStart,r.heightEnd)*1000));
++});
+diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
+index 02e2990c..54307536 100644
+--- a/tests/regression-partitions.json
++++ b/tests/regression-partitions.json
+@@ -14,6 +14,7 @@
+   "tests/variants.browser.test.cjs",
+   "tests/building.browser.test.cjs",
+   "tests/evolution-demo.browser.test.cjs",
++  "tests/op07-s4-3d.browser.test.cjs",
+   "tests/home-demos.browser.test.cjs",
+   "tests/e2-comparativas.browser.test.cjs",
+   "tests/h01-dossier-inventario.browser.test.cjs",

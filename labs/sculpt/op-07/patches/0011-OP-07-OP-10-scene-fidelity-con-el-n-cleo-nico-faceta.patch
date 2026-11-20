@@ -1,7 +1,7 @@
-From 87a60c1862cb69eb69b64d829436543c6c9c8840 Mon Sep 17 00:00:00 2001
+From 6be078fd1f4261e2a9be0ca8a323f3cd3c68535e Mon Sep 17 00:00:00 2001
 From: op07 <op07@local>
 Date: Fri, 20 Nov 2026 10:39:43 +0000
-Subject: [PATCH 11/12] =?UTF-8?q?OP-07=20=C3=97=20OP-10=20=C2=B7=20scene-f?=
+Subject: [PATCH 11/14] =?UTF-8?q?OP-07=20=C3=97=20OP-10=20=C2=B7=20scene-f?=
  =?UTF-8?q?idelity=20con=20el=20n=C3=BAcleo=20=C3=BAnico=20(facetas,=20alt?=
  =?UTF-8?q?uras=20por=20extremo,=20normal=20del=20hueco,=20suelo=20por=20r?=
  =?UTF-8?q?oomRing)=20y=20escenario=20f7-curved?=

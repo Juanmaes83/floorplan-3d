@@ -1,0 +1,552 @@
+From 3afb9e18c84d6d640eeced7203a4169aebb367d6 Mon Sep 17 00:00:00 2001
+From: op07 <op07@local>
+Date: Fri, 20 Nov 2026 10:58:45 +0000
+Subject: [PATCH 12/12] =?UTF-8?q?OP-07=20S8=20=C2=B7=20Activaci=C3=B3n=20e?=
+ =?UTF-8?q?fectiva:=20integrar=20no=20es=20activar;=20lectura=20compatible?=
+ =?UTF-8?q?=20separada;=20intenciones=20por=20proyecto?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- project-core: OP07_RELEASE='integrated' (activar = cambio de código autorizado); solo un origen de pruebas admite
+  RUBIK_OP07_STATE. Integrado: las operaciones OP-07 se rechazan (activation-pending), raiseVersion nunca crea un 2.x y
+  saveGate no confirma un proyecto 2.x nuevo o modificado. Un 2.0 se sigue leyendo, midiendo y exportando.
+- index.html: sin punto de curvatura ni «Forma del muro» mientras no esté activo.
+- persistence-editor: intenciones aisladas por project.id (variantes y plantas comparten IDs de muro); un paso solo se
+  olvida cuando está confirmado en todos los documentos gestionados; la misma puerta en el escritor localStorage.
+- Pruebas: 7 puras y 3 de navegador (F0.2b y localStorage, lectura compatible); las de OP-07 declaran el estado activo.
+---
+ index.html                                 |  4 +-
+ js/persistence-editor.js                   | 27 +++++---
+ js/project-core.js                         | 47 ++++++++++++--
+ tests/op07-s4-3d.browser.test.cjs          |  2 +-
+ tests/op07-s4b-render.browser.test.cjs     |  2 +-
+ tests/op07-s5-edit.browser.test.cjs        |  2 +-
+ tests/op07-s5b-edit-ui.browser.test.cjs    |  2 +-
+ tests/op07-s7-persistence.browser.test.cjs |  2 +-
+ tests/op07-s8-activation.browser.test.cjs  | 67 ++++++++++++++++++++
+ tests/op07-s8-activation.test.cjs          | 72 ++++++++++++++++++++++
+ tests/op07-s8-codex-probes.test.cjs        | 55 +++++++++++++++++
+ tests/op07/browser-state.cjs               | 11 ++++
+ tests/op07/fixtures.cjs                    |  2 +
+ tests/regression-partitions.json           |  1 +
+ 14 files changed, 278 insertions(+), 18 deletions(-)
+ create mode 100644 tests/op07-s8-activation.browser.test.cjs
+ create mode 100644 tests/op07-s8-activation.test.cjs
+ create mode 100644 tests/op07-s8-codex-probes.test.cjs
+ create mode 100644 tests/op07/browser-state.cjs
+
+diff --git a/index.html b/index.html
+index a67dff66..785cdd55 100644
+--- a/index.html
++++ b/index.html
+@@ -1561,7 +1561,7 @@ function renderSel(){
+     if (pw){
+       // The whole wall (every facet of a curved one), and — in Select — the curvature dot at its centre (OP-07 · S5b).
+       s += `<polygon points="${Core.wallOutline(pw).map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+-      if (ui.tool === 'select' && pw.status !== 'demolished'){
++      if (ui.tool === 'select' && pw.status !== 'demolished' && Core.wallFeaturesActive()){   // OP-07 S8: no entry point until activation
+         const {mid} = wallChord(pw), m = pw.curve ? FloorPlanWallGeometry.point(pw, .5) : mid, bad = drag?.kind === 'curve' && drag.refused, hs = COARSE ? 1.7 : 1, hit = (COARSE ? 24 : 12)*k, f = Math.round(wallSagitta(pw));
+         s += `<line x1="${mid.x}" y1="${mid.y}" x2="${m.x}" y2="${m.y}" stroke="#b5653a" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" pointer-events="none"/>
+           <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${hit}" fill="transparent"/>
+@@ -1805,7 +1805,7 @@ const wallSagitta = w => { if (!w.curve) return 0; const {mid, n} = wallChord(w)
+ const curveControlFor = (w, sagitta) => { if (!sagitta) return null; const {mid, n} = wallChord(w); return {x:mid.x + n.x*2*sagitta, y:mid.y + n.y*2*sagitta}; };
+ let wallShapeStatus = '';
+ function wallShapeBlock(w){
+-  if (w.status === 'demolished') return '';
++  if (w.status === 'demolished' || !Core.wallFeaturesActive()) return '';   // OP-07 S8: integrated ≠ active
+   const f = Math.round(wallSagitta(w)), sloped = w.heightEndMm !== undefined, len = Math.round(Core.wallLength(w));
+   return `<details class="panel-group wall-shape" data-group="wall-shape" open id="wallShape"><summary>${op07t('Forma del muro','Wall shape','墙体形状')}</summary>
+     <div class="form">
+diff --git a/js/persistence-editor.js b/js/persistence-editor.js
+index 260fa582..5689051e 100644
+--- a/js/persistence-editor.js
++++ b/js/persistence-editor.js
+@@ -13,23 +13,34 @@
+  function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
+   const C=window.FloorPlanCore;if(!C?.editIntent)return;
+   let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
+-  steps.push({seq:++seq,intent:C.editIntent(before,after,{op,restore})});
++  steps.push({seq:++seq,done:new Set(),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
+  }
+  const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
+  function refusal(issues){
+   const one=issues[0]||{},what={'curve-lost':'perdería la curva de un muro','slope-lost':'perdería la altura final de un muro inclinado',
+    'wall-lost':'perdería un muro curvo o inclinado','opening-lost':'perdería una puerta o ventana de un muro curvo o inclinado',
+    'writer-lacks-feature':'contiene muros que esta versión de RUBIK no sabe guardar','degraded-view':'viene de una vista simplificada del proyecto',
+-   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
++   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','activation-pending':'usa muros curvos o inclinados, que todavía no están activados','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
++  if(one.code==='activation-pending')return 'No se ha guardado: '+window.FloorPlanCore.ACTIVATION_PENDING+' Lo guardado no ha cambiado.';
+   return 'No se ha guardado: el cambio '+what+' sin que lo hayas pedido. Lo guardado no ha cambiado y tu cambio sigue en esta pestaña. Deshazlo (Ctrl+Z) o usa «Forma del muro» para enderezar o nivelar el muro de forma explícita.';
+  }
++ // S8: without F0.2b (today's Production) the editor writes localStorage directly: the same gate runs at this facade,
++ // against what is stored now; a refusal throws, which every writer already reports, and nothing is written.
++ function guarded(store){const kinds=KIND();return {op07Protected:true,getItem:k=>store.getItem(k),removeItem:k=>store.removeItem(k),key:i=>store.key(i),get length(){return store.length;},
++  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false,present:Object.keys(kinds).filter(x=>x===k||store.getItem(x)!==null)});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
+  const gate={
+-  check({changes,confirmed,restore}){
++  check({changes,confirmed,restore,present}){
+    const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
+-   const upTo=seq,intent=restore?{}:steps.reduce((a,s)=>C.composeIntent(a,s.intent),{});
+-   const v=C.saveGate(pairs,{intent,restore});return {...v,seq:upTo,restore,message:v.ok?'':refusal(v.issues)};
++   // Intents per project (variants and building levels share wall ids); never one global intent.
++   const upTo=seq,intents={};if(!restore)for(const s of steps)intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
++   const v=C.saveGate(pairs,{intents,restore});
++   // A step is forgotten only once it is confirmed in EVERY managed document that exists (project key and library).
++   const required=[...new Set((present||[...Object.keys(confirmed).filter(k=>confirmed[k]!=null),...Object.keys(changes)]).map(k=>kinds[k]).filter(Boolean))];
++   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),required,message:v.ok?'':refusal(v.issues)};
+   },
+-  committed(v){if(!v)return;steps=v.restore?[]:steps.filter(s=>s.seq>v.seq);}
++  committed(v){if(!v)return;if(v.restore){steps=[];return;}
++   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.done.add(k);
++   steps=steps.filter(s=>s.seq>v.seq||!v.required.every(k=>s.done.has(k)));}
+  };
+ 
+  function loadProject(projectKey){
+@@ -177,7 +188,7 @@
+  async function start(){
+   editor.inert=true;
+   if(!enabled){
+-   try{runtime.storage=localStorage;}
++   try{runtime.storage=guarded(localStorage);}
+    catch{runtime.storage={getItem:()=>null,setItem:()=>{throw Error('Almacenamiento local no disponible.');}};}
+    if(isolated&&!window.RUBIK_DELIVERY){
+     const values=new Map();
+@@ -188,6 +199,8 @@
+    runtime.storage=runtime.session.storage;
+    attachStatus(runtime.session);
+   }
++  // OP-07 S8: this editor's writer is protected (F0.2b session gate, or the guarded localStorage facade).
++  if(enabled||runtime.storage.op07Protected===true)window.FloorPlanCore.registerProtectedWriter();
+   const projectKey=P.KEYS[0];
+   const bootstrap=loadProject(projectKey);
+   if(enabled&&(bootstrap.libraryError||runtime.storage.getItem(window.FloorPlanLibrary.KEY)===null
+diff --git a/js/project-core.js b/js/project-core.js
+index ca2aa6e0..052e2274 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -20,6 +20,25 @@
+   // only a document that uses them needs 2.x, so no v1 project is ever migrated in bulk. A 1.x reader rejects 2.x without
+   // modifying anything (contract §3, «major desconocido»). 2.0 contains every 1.x feature up to 1.12; a feature added
+   // to 1.x later as 1.(12+k) is 2.k. Every module raises and compares versions through these three functions.
++  // OP-07 · S8 · Activation, three separate states (none of them migrates anything):
++  //  - compatible reading: always, once integrated — a 2.x document is read, drawn, measured and exported.
++  //  - 'integrated' (OP07_RELEASE default): no entry point, OP-07 operations refuse, raiseVersion never makes a 2.x, and no
++  //    writer confirms a changed 2.x project (saveGate). Integrating the code does NOT activate it.
++  //  - 'active': only by changing OP07_RELEASE in this file (an authorized code change). A test origin (Node, 127.0.0.1,
++  //    localhost, f0-2b.localhost) may set globalThis.RUBIK_OP07_STATE for tests; a deployed host never can.
++  const OP07_RELEASE = 'integrated';
++  function op07State() {
++    const host = root.location?.hostname, testable = !root.location || /^(127\.0\.0\.1|localhost|f0-2b\.localhost)$/.test(host || ''), o = root.RUBIK_OP07_STATE;
++    return testable && (o === 'active' || o === 'integrated') ? o : OP07_RELEASE;
++  }
++  // Even when 'active', a page fails closed unless its writers are protected: A0 (the schema-epoch barrier,
++  // FloorPlanSchemaEpoch) is loaded and the editor installed the S7 save gate on its storage (registerProtectedWriter).
++  // In Node (no document) there is no editor writer: the pure core only obeys the state.
++  let protectedWriter = false;
++  const registerProtectedWriter = () => { protectedWriter = true; };
++  const activationBlockers = () => !root.document ? [] : [...(root.FloorPlanSchemaEpoch ? [] : ['a0']), ...(protectedWriter ? [] : ['protected-writer'])];
++  const wallFeaturesActive = () => op07State() === 'active' && !activationBlockers().length;
++  const ACTIVATION_PENDING = 'Los muros curvos e inclinados todavía no están activados en RUBIK: puedes abrir y consultar un proyecto que los tenga, pero no crearlos ni guardar cambios en él. Exporta una copia si la necesitas.';
+   const V2_BASE_MINOR = 12;
+   const parseVersion = v => { const m = /^(1|2)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.exec(typeof v === 'string' ? v : ''); return m ? {major:+m[1], minor:+m[2], patch:+m[3]} : null; };
+   const versionLine = v => v.major === 1 ? v.minor : V2_BASE_MINOR + v.minor;
+@@ -36,6 +55,7 @@
+     const a = parseVersion(project.schemaVersion), b = parseVersion(target);
+     if (!a || !b) throw new Error(`/schemaVersion: cannot raise ${project.schemaVersion} to ${target}`);
+     if (versionAtLeast(project.schemaVersion, target)) return project;
++    if (b.major >= 2 && a.major < 2 && !wallFeaturesActive()) throw new Error(`/schemaVersion: activation-pending: ${ACTIVATION_PENDING}`);
+     const major = Math.max(a.major, b.major), line = Math.max(versionLine(a), versionLine(b));
+     project.schemaVersion = major === 1 ? `1.${line}.0` : `2.${Math.max(0, line - V2_BASE_MINOR)}.0`;
+     return project;
+@@ -55,13 +75,26 @@
+     const out = {removed:(before?.walls || []).filter(w => !nw.has(w.id)).map(w => w.id), removedOpenings:(before?.openings || []).filter(o => !no.has(o.id)).map(o => o.id), straightened:[], leveled:[], split:{}};
+     if (restore) for (const w of before?.walls || []) { const n = nextWalls.get(w.id); if (!n) continue;
+       if (Walls.isCurved(w) && !Walls.isCurved(n)) out.straightened.push(w.id); if (sloped(w) && !sloped(n)) out.leveled.push(w.id); }
+-    return composeIntent(out, op || {});
++    // S8: every permission belongs to ONE project; a restore revokes earlier permissions on everything it changes.
++    const projectId = after?.id ?? before?.id ?? null;
++    if (restore) { const key = (l, id) => JSON.stringify((l || []).find(x => x.id === id) ?? null);
++      out.revoke = [...new Set([...(before?.walls || []), ...(after?.walls || []), ...(before?.openings || []), ...(after?.openings || [])].map(x => x.id))]
++        .filter(id => key(before?.walls, id) !== key(after?.walls, id) || key(before?.openings, id) !== key(after?.openings, id)); }
++    const r = composeIntent({...out, projectId}, op ? {...op, projectId} : {projectId});
++    if (out.revoke) r.revoke = out.revoke;   // composing this step into earlier ones revokes their permissions on these ids
++    return r;
+   }
+   // Intents of consecutive steps since the last confirmed revision, composed so that guardSave compares the confirmed
+   // document with the next one: a piece of a split that is split again or removed is followed back to the original wall.
+   function composeIntent(a = {}, b = {}) {
+-    const out = {removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
++    if (a.projectId && b.projectId && a.projectId !== b.projectId) throw new Error(`OP-07: intents of different projects (${a.projectId} ≠ ${b.projectId}) cannot be composed`);
++    const out = {projectId:a.projectId ?? b.projectId ?? null, removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
+     const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
++    // A restore (undo, redo, recovery) revokes every earlier permission on the walls and openings it changes.
++    for (const id of b.revoke || []) {
++      for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = out[key].filter(x => x !== id);
++      for (const k of Object.keys(out.split)) if (k === id || out.split[k].includes(id)) delete out.split[k];
++    }
+     for (const [old, pieces] of Object.entries(b.split || {})) { const k = origin(old);
+       if (k) out.split[k].splice(out.split[k].indexOf(old), 1, ...pieces); else out.split[old] = [...pieces]; }
+     for (const id of b.removed || []) { const k = origin(id);
+@@ -76,7 +109,7 @@
+   // last CONFIRMED revision). A v1 document is never refused here: loss and rule checks apply to walls with a curve or a
+   // slope and to their openings (the same scope as validate()); a degraded view and a writer that lacks a feature the
+   // document uses are always refused. Removing a whole project is not a wall loss.
+-  function saveGate(pairs, {intent = {}, restore = false, writerFeatures = WALL_FEATURES} = {}) {
++  function saveGate(pairs, {intent = {}, intents = null, restore = false, writerFeatures = WALL_FEATURES} = {}) {
+     const issues = [], read = t => { if (t === null || t === undefined) return null; try { return JSON.parse(t); } catch { return undefined; } };
+     const projectsOf = (kind, doc) => !doc ? [] : kind === 'project' ? [doc] : (doc.entries || []).flatMap(e => e.kind === 'building' ? (e.building?.levels || []).map(l => l.project) : [e.project]).filter(Boolean);
+     for (const {kind, before, after} of pairs) {
+@@ -86,7 +119,10 @@
+       for (const p of projectsOf(kind, next)) {
+         const q = prevById.get(p.id) || null, shaped = new Set([...(q?.walls || []), ...(p.walls || [])].filter(shapedWall).map(w => w.id));
+         const hosts = new Map([...(q?.openings || []), ...(p.openings || [])].map(o => [o.id, o.wallId]));
+-        const why = restore ? composeIntent(editIntent(q, p, {restore:true}), intent) : intent;
++        // Intents are isolated per project (variants and building levels share wall ids): `intents[projectId]`.
++        // A flat intent only applies to the project it was made for (fail closed: without projectId it authorizes nothing).
++        const own = intents ? (intents[p.id]?.projectId === undefined || intents[p.id]?.projectId === p.id ? intents[p.id] || {} : {}) : (intent?.projectId === p.id ? intent : {}), why = restore ? composeIntent(editIntent(q, p, {restore:true}), own) : own;
++        if (!wallFeaturesActive() && (Walls.featuresOf(p).length || (parseVersion(p.schemaVersion)?.major ?? 1) >= 2) && JSON.stringify(p) !== JSON.stringify(q)) issues.push({code:'activation-pending', projectId:p.id});
+         for (const i of guardSave(q, p, {intent:why, writerFeatures}).issues) {
+           const wall = i.wallId ?? hosts.get(i.openingId);
+           if (['degraded-view', 'writer-lacks-feature'].includes(i.code) || shaped.has(wall)) issues.push({...i, projectId:p.id});
+@@ -617,6 +653,7 @@
+   // editor. A refused edit returns the same project untouched (atomic) and says why; it never drops an opening.
+   const refuse = (code, explanation, extra = {}) => ({ok:false, code, explanation:[explanation], ...extra});
+   function wallEdit(project, wallId, change, intent = {}) {
++    if (!wallFeaturesActive()) return refuse('activation-pending', ACTIVATION_PENDING);
+     const next = clone(project), w = next.walls.find(x => x.id === wallId);
+     if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
+     change(w, next);
+@@ -638,6 +675,7 @@
+   // once (the pieces stay joined), heights and openings carried over by the parameter of their centre. An opening the
+   // cut would cross refuses the split and is named: openings never disappear.
+   function splitWall(project, wallId, distanceMm, {newId = id('wal')} = {}) {
++    if (!wallFeaturesActive()) return refuse('activation-pending', ACTIVATION_PENDING);
+     const w = project.walls.find(x => x.id === wallId);
+     if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
+     const length = wallLength(w);
+@@ -668,4 +706,5 @@
+   Object.assign(api,{roomRing});   // OP-07 S3b
+   Object.assign(api,{jointAt});   // OP-07 S4b
+   Object.assign(api,{editIntent,composeIntent,saveGate});   // OP-07 S7
++  Object.assign(api,{wallFeaturesActive,op07State,ACTIVATION_PENDING,activationBlockers,registerProtectedWriter});   // OP-07 S8
+ })(globalThis);
+diff --git a/tests/op07-s4-3d.browser.test.cjs b/tests/op07-s4-3d.browser.test.cjs
+index 43ce13f1..3a6648ea 100644
+--- a/tests/op07-s4-3d.browser.test.cjs
++++ b/tests/op07-s4-3d.browser.test.cjs
+@@ -3,7 +3,7 @@
+ // piezas con pendiente del núcleo único; los demás muros siguen siendo cajas; sin errores ni red externa.
+ const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
+ const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
+-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
+ for(const viewport of [{width:1440,height:900},{width:844,height:390},{width:390,height:844}])
+ test(`S4 · muro curvo e inclinado en 3D ${viewport.width}x${viewport.height}`,{timeout:180000},async()=>{
+  const {context,page,watch}=await K.editor(env,{viewport});
+diff --git a/tests/op07-s4b-render.browser.test.cjs b/tests/op07-s4b-render.browser.test.cjs
+index 541dc68d..40d78fde 100644
+--- a/tests/op07-s4b-render.browser.test.cjs
++++ b/tests/op07-s4b-render.browser.test.cjs
+@@ -3,7 +3,7 @@
+ // el 3D con un muro curvo frente al mismo proyecto recto, y vista del salón con el muro curvo e inclinado (modo Recorrer).
+ const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
+ const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
+-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
+ async function measure(project,shot){
+  const {context,page,watch}=await K.editor(env,{viewport:{width:1440,height:900}});
+  try{
+diff --git a/tests/op07-s5-edit.browser.test.cjs b/tests/op07-s5-edit.browser.test.cjs
+index 7993e16a..c15a5c52 100644
+--- a/tests/op07-s5-edit.browser.test.cjs
++++ b/tests/op07-s5-edit.browser.test.cjs
+@@ -3,7 +3,7 @@
+ // validación, su deshacer/rehacer y su guardado; una división que cruza una abertura se rechaza sin tocar nada.
+ const test=require('node:test'),assert=require('node:assert/strict');
+ const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
+-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
+ test('S5 · curvar, dividir, deshacer y rehacer en el editor; rechazo atómico',{timeout:180000},async()=>{
+  const {context,page,watch}=await K.editor(env);
+  try{
+diff --git a/tests/op07-s5b-edit-ui.browser.test.cjs b/tests/op07-s5b-edit-ui.browser.test.cjs
+index e2c8f212..2292bda5 100644
+--- a/tests/op07-s5b-edit-ui.browser.test.cjs
++++ b/tests/op07-s5b-edit-ui.browser.test.cjs
+@@ -4,7 +4,7 @@
+ // y rehacer. Un arrastre = UNA entrada de historial y UNA escritura; la validación en vivo nunca deja el proyecto inválido.
+ const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
+ const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
+-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
+ // Punto de pantalla de un punto del plano (mm).
+ const screen=(page,pt)=>page.evaluate(({x,y})=>{const s=document.querySelector('#plan'),m=s.getScreenCTM(),q=s.createSVGPoint();q.x=x;q.y=y;const r=q.matrixTransform(m);return {x:r.x,y:r.y};},pt);
+ const wallOf=(page,id)=>page.evaluate(id=>structuredClone(FloorPlanApp.project.walls.find(w=>w.id===id)),id);
+diff --git a/tests/op07-s7-persistence.browser.test.cjs b/tests/op07-s7-persistence.browser.test.cjs
+index adc643f3..052f1fbd 100644
+--- a/tests/op07-s7-persistence.browser.test.cjs
++++ b/tests/op07-s7-persistence.browser.test.cjs
+@@ -4,7 +4,7 @@
+ // explica); curvar, dividir, deshacer y rehacer sí; reabrir devuelve el 2.0 confirmado y la copia de emergencia lo lleva.
+ const test=require('node:test'),assert=require('node:assert/strict');
+ const K=require('./r02a/editor-kit.cjs');
+-let env;test.before(async()=>{env=await K.start();env={...env,base:env.base.replace('127.0.0.1','f0-2b.localhost')};});test.after(async()=>{await env?.stop();});
++let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');env={...env,base:env.base.replace('127.0.0.1','f0-2b.localhost')};});test.after(async()=>{await env?.stop();});
+ const flush=page=>page.evaluate(async()=>{const s=await FloorPlanPersistenceEditor.session.flush();return {status:s.status,code:s.error?.code||null,message:s.error?.message||'',revision:s.revision};});
+ // El editor guarda en la biblioteca (clave de F0.2b): el proyecto activo de la última revisión confirmada.
+ const stored=page=>page.evaluate(async()=>{const r=await FloorPlanPersistence.readConfirmed(),lib=JSON.parse(r.docs.get(FloorPlanLibrary.KEY)),e=lib.entries.find(x=>x.id===lib.activeId);
+diff --git a/tests/op07-s8-activation.browser.test.cjs b/tests/op07-s8-activation.browser.test.cjs
+new file mode 100644
+index 00000000..7fc9727d
+--- /dev/null
++++ b/tests/op07-s8-activation.browser.test.cjs
+@@ -0,0 +1,67 @@
++'use strict';
++// OP-07 · S8 · Activación efectiva en el editor real, en el estado POR DEFECTO ('integrated'), con los dos escritores:
++// F0.2b (IndexedDB) y localStorage (el de Production hoy). Ni entrada en la interfaz, ni operación, ni escritura que cree o
++// confirme un 2.0; un 2.0 ya guardado se abre y se consulta (lectura compatible) sin poder confirmar cambios en él.
++const test=require('node:test'),assert=require('node:assert/strict');
++const K=require('./r02a/editor-kit.cjs'),{withState}=require('./op07/browser-state.cjs');
++let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++const at=(host,state)=>{const e={...env,base:env.base.replace('127.0.0.1',host)};return state?withState(e,state):e;};
++const longest=()=>{const p=FloorPlanApp.project;return [...p.walls].filter(w=>!p.openings.some(o=>o.wallId===w.id)).sort((a,b)=>Math.hypot(b.end.x-b.start.x,b.end.y-b.start.y)-Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y))[0].id;};
++const inject2=id=>FloorPlanApp.applyExtension(q=>{const p=JSON.parse(JSON.stringify(q)),w=p.walls.find(x=>x.id===id);w.curve={control:{x:Math.round((w.start.x+w.end.x)/2+300),y:Math.round((w.start.y+w.end.y)/2+800)}};p.schemaVersion='2.0.0';return {ok:true,project:p};});
++const storedF02b=page=>page.evaluate(async()=>{const r=await FloorPlanPersistence.readConfirmed();return {revision:r.revision?.n??r.revision,lib:r.docs.get(FloorPlanLibrary.KEY)};});
++
++for(const [label,host] of [['F0.2b (IndexedDB)','f0-2b.localhost'],['localStorage','127.0.0.1']]){
++ test(`S8 · integrado, ${label}: sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0`,{timeout:150000},async()=>{
++  const {context,page,watch}=await K.editor(at(host));
++  try{
++   assert.equal(await page.evaluate(()=>FloorPlanCore.op07State()),'integrated');
++   const id=await page.evaluate(longest);
++   await page.evaluate(id=>select({kind:'wall',id}),id);
++   assert.equal(await page.locator('#wallShape').count(),0,'sin panel «Forma del muro»');
++   assert.equal(await page.locator('[data-handle="curve"]').count(),0,'sin punto de curvatura');
++   const r=await page.evaluate(id=>FloorPlanApp.applyExtension(q=>FloorPlanCore.setWallCurve(q,id,{x:0,y:0})),id);
++   assert.equal(r.ok,false);assert.match(r.explanation.join(' '),/todavía no están activados/);
++   const f02b=host==='f0-2b.localhost',before=f02b?await storedF02b(page):await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY));
++   // Un escritor genérico (importación, extensión) que mete un 2.0: no se confirma; el cambio queda en la pestaña.
++   await page.evaluate(inject2,id);
++   if(f02b){const f=await page.evaluate(async()=>{const s=await FloorPlanPersistenceEditor.session.flush();return s.error?.code;});assert.equal(f,'guard-refused');assert.deepEqual(await storedF02b(page),before,'autoridad intacta');}
++   else assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),before,'localStorage intacto');
++   assert.equal(await page.evaluate(id=>!!FloorPlanApp.project.walls.find(w=>w.id===id).curve,id),true,'el trabajo pendiente sigue en la pestaña');
++   await page.waitForFunction(()=>/todavía no están activados/.test(document.getElementById('toast')?.textContent||''));
++   assert.deepEqual(watch.external,[]);
++  }finally{await context.close();}
++ });
++}
++
++test('S8 · lectura compatible: un 2.0 confirmado cuando estaba activo se abre integrado, se ve curvo y no admite cambios confirmados',{timeout:180000},async()=>{
++ const one=await K.editor(at('f0-2b.localhost','active'));let id;
++ try{id=await one.page.evaluate(longest);const r=await one.page.evaluate(id=>FloorPlanApp.applyExtension(q=>FloorPlanCore.setWallCurve(q,id,{x:Math.round((q.walls.find(w=>w.id===id).start.x+q.walls.find(w=>w.id===id).end.x)/2+300),y:Math.round((q.walls.find(w=>w.id===id).start.y+q.walls.find(w=>w.id===id).end.y)/2+800)})),id);
++  assert.ok(r.ok,r.explanation);assert.equal(await one.page.evaluate(async()=>(await FloorPlanPersistenceEditor.session.flush()).status),'saved');
++  // Misma base de datos (mismo origen y contexto): se reabre la página en estado integrado.
++  await one.context.addInitScript(()=>{globalThis.RUBIK_OP07_STATE='integrated';});await one.page.reload();
++  await one.page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'&&!!window.FloorPlanApp);
++  assert.equal(await one.page.evaluate(()=>FloorPlanCore.op07State()),'integrated');
++  assert.equal(await one.page.evaluate(id=>!!FloorPlanApp.project.walls.find(w=>w.id===id).curve,id),true,'se lee el 2.0');
++  const before=await storedF02b(one.page);
++  await one.page.evaluate(()=>FloorPlanApp.applyExtension(q=>({ok:true,project:{...q,name:'Cambio sin activar'}})));
++  assert.equal(await one.page.evaluate(async()=>(await FloorPlanPersistenceEditor.session.flush()).error?.code),'guard-refused');
++  assert.deepEqual(await storedF02b(one.page),before,'no se confirma un cambio en un 2.0 sin activación');
++ }finally{await one.context.close();}
++});
++
++test('S8 · «activo» falla cerrado sin A0 o sin escritor protegido; con ambos se habilita en los dos escritores',{timeout:180000},async()=>{
++ const cases=[['f0-2b.localhost',{a0:'none'},['a0'],false],['127.0.0.1',{a0:'none'},['a0'],false],['f0-2b.localhost',{},[],true],['127.0.0.1',{},[],true]];
++ for(const [host,opts,blockers,active] of cases){
++  const e={...env,base:env.base.replace('127.0.0.1',host)},{context,page}=await K.editor(withState(e,'active',opts));
++  try{
++   const s=await page.evaluate(()=>({state:FloorPlanCore.op07State(),blockers:FloorPlanCore.activationBlockers(),active:FloorPlanCore.wallFeaturesActive()}));
++   assert.deepEqual(s,{state:'active',blockers,active},`${host} ${JSON.stringify(opts)}`);
++   const id=await page.evaluate(longest);await page.evaluate(id=>select({kind:'wall',id}),id);
++   assert.equal(await page.locator('#wallShape').count(),active?1:0,'«Forma del muro» solo si de verdad está activo');
++  }finally{await context.close();}
++ }
++ // Demo aislada (almacén en memoria, sin puerta): nunca hay escritor protegido.
++ const d=await K.editor(withState(env,'active'));
++ try{await d.page.goto(env.base+'?demo=dibujo-vivo');await d.page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'&&!!window.FloorPlanApp);
++  assert.deepEqual(await d.page.evaluate(()=>FloorPlanCore.activationBlockers()),['protected-writer']);}finally{await d.context.close();}
++});
+diff --git a/tests/op07-s8-activation.test.cjs b/tests/op07-s8-activation.test.cjs
+new file mode 100644
+index 00000000..87c84996
+--- /dev/null
++++ b/tests/op07-s8-activation.test.cjs
+@@ -0,0 +1,72 @@
++'use strict';
++// OP-07 · S8 · Activación efectiva (no documental). Integrar ≠ activar: en el estado por defecto ('integrated') se LEE
++// un 2.0 (lectura compatible) pero ninguna operación lo crea y ningún escritor confirma un proyecto 2.x modificado.
++// Además: intenciones aisladas por proyecto (variantes y plantas comparten IDs de muro).
++const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
++const F=require('./op07/fixtures.cjs'),Core=require('../js/project-core.js'),Q=require('../js/quantity-core.js'),DXF=require('../js/dxf-export.js');
++const J=JSON.stringify;
++function as(state,fn){const was=globalThis.RUBIK_OP07_STATE;globalThis.RUBIK_OP07_STATE=state;try{return fn();}finally{globalThis.RUBIK_OP07_STATE=was;}}
++const lib=(...ps)=>J({version:1,activeId:'ent0',entries:ps.map((p,i)=>({id:'ent'+i,name:'E'+i,project:p}))});
++
++test('S8 · el producto sale INTEGRADO, no activo: la constante de publicación es «integrated»',()=>{
++ const src=fs.readFileSync(path.join(__dirname,'../js/project-core.js'),'utf8');
++ assert.match(src,/const OP07_RELEASE = 'integrated';/,'activar exige un cambio de código autorizado');
++ assert.equal(as(undefined,()=>Core.op07State()),'integrated');
++});
++
++test('S8 · un host desplegado no se puede activar desde la página (solo un origen de pruebas)',()=>{
++ const had=Object.getOwnPropertyDescriptor(globalThis,'location');
++ for(const hostname of ['floorplan-3d.vercel.app','rubik.example.com','f0-2b.localhost.evil.com']){
++  Object.defineProperty(globalThis,'location',{value:{hostname},configurable:true});
++  try{assert.equal(as('active',()=>Core.wallFeaturesActive()),false,hostname);}finally{if(had)Object.defineProperty(globalThis,'location',had);else delete globalThis.location;}}
++ Object.defineProperty(globalThis,'location',{value:{hostname:'f0-2b.localhost'},configurable:true});
++ try{assert.equal(as('active',()=>Core.wallFeaturesActive()),true,'origen de pruebas');}finally{if(had)Object.defineProperty(globalThis,'location',had);else delete globalThis.location;}
++});
++
++test('S8 · integrado: curvar, inclinar, dividir y elevar a 2.x se rechazan sin tocar el documento',()=>{
++ as('integrated',()=>{
++  const p=F.base(),snap=J(p),w=F.longest(p);
++  for(const r of [Core.setWallCurve(p,w.id,{x:w.start.x+100,y:w.start.y+900}),Core.setWallEndHeight(p,w.id,2300),Core.splitWall(p,w.id,500)]){
++   assert.equal(r.ok,false);assert.equal(r.code,'activation-pending');assert.match(r.explanation[0],/todavía no están activados/);}
++  assert.equal(J(p),snap);
++  const v1=Core.clone(Core.initial());assert.throws(()=>Core.raiseVersion(v1,'2.0.0'),/activation-pending/);assert.match(v1.schemaVersion,/^1\./);
++  assert.equal(Core.raiseVersion(v1,'1.12.0').schemaVersion,'1.12.0','las elevaciones 1.x siguen igual');
++ });
++});
++
++test('S8 · lectura compatible: un 2.0 se valida, se mide y se exporta aunque no esté activo',async()=>{
++ const {project}=F.curved(F.base());
++ await as('integrated',async()=>{Core.validate(project);assert.ok(Q.level(project));assert.ok(Core.geometry(project).walls.length);
++  const dxf=await DXF.exportLevel(project);assert.match(dxf,/AC1021/);});
++});
++
++test('S8 · integrado: ningún escritor confirma un 2.x nuevo o modificado; un v1 y un 2.0 sin cambios sí pasan',()=>{
++ const {project:p2}=F.curved(F.base()),v1=Core.clone(Core.initial()),v1b=Core.clone(v1);v1b.name='Cambio v1';p2.id='prj_curvo000000000000000000000000';  // una ID por proyecto (contrato de la biblioteca)
++ as('integrated',()=>{
++  assert.deepEqual(Core.saveGate([{kind:'library',before:lib(v1),after:lib(v1,p2)}]).issues.map(i=>i.code),['activation-pending'],'importar o crear un 2.0');
++  const p2b=Core.clone(p2);p2b.name='Editado';
++  assert.ok(Core.saveGate([{kind:'library',before:lib(p2),after:lib(p2b)}]).issues.some(i=>i.code==='activation-pending'),'editar un 2.0 existente');
++  assert.deepEqual(Core.saveGate([{kind:'library',before:lib(v1,p2),after:lib(v1b,p2)}]),{ok:true,issues:[]},'editar el v1 de una colección con un 2.0 intacto');
++  assert.deepEqual(Core.saveGate([{kind:'project',before:J(v1),after:J(v1b)}]),{ok:true,issues:[]});
++ });
++ as('active',()=>assert.equal(Core.saveGate([{kind:'library',before:lib(v1),after:lib(v1,p2)}]).ok,true,'activo: sí'));
++});
++
++test('S8 · intenciones aisladas por proyecto: la misma ID de muro en dos variantes no se legitima de una a otra',()=>{
++ const {project:a,wall:w}=F.curved(F.base(),{withOpening:false}),b=Core.clone(a);b.id='prj_variante00000000000000000000000';
++ const a2=Core.clone(a),b2=Core.clone(b);a2.walls=a2.walls.filter(x=>x.id!==w.id);b2.walls=b2.walls.filter(x=>x.id!==w.id);
++ const intents={[a.id]:Core.editIntent(a,a2)};  // la persona borró el muro curvo SOLO en la variante A
++ const r=Core.saveGate([{kind:'library',before:lib(a,b),after:lib(a2,b2)}],{intents});
++ assert.deepEqual(r.issues.map(i=>[i.code,i.projectId]),[['wall-lost',b.id]],'la variante B pierde el muro sin intención propia');
++ assert.equal(Core.saveGate([{kind:'library',before:lib(a,b),after:lib(a2,b)}],{intents}).ok,true);
++});
++
++test('S8 · pasos consecutivos antes del guardado, en dos proyectos intercalados, y borrado indirecto de huecos',()=>{
++ const {project:a,wall:w}=F.curved(F.base(),{withOpening:true}),b=Core.clone(a);b.id='prj_variante00000000000000000000001';
++ const s1=Core.splitWall(a,w.id,600,{newId:'wal_pieza0002'}),b1=Core.setWallCurve(b,w.id,null);
++ const a3=Core.clone(s1.project);a3.walls=a3.walls.filter(x=>x.id!=='wal_pieza0002');a3.openings=a3.openings.filter(o=>a3.walls.some(x=>x.id===o.wallId));
++ const intents={[a.id]:Core.composeIntent(Core.editIntent(a,s1.project,{op:s1.intent}),Core.editIntent(s1.project,a3)),[b.id]:Core.editIntent(b,b1.project,{op:b1.intent})};
++ assert.deepEqual(Core.saveGate([{kind:'library',before:lib(a,b),after:lib(a3,b1.project)}],{intents}),{ok:true,issues:[]},'dividir y borrar una pieza (con sus huecos) en A; enderezar en B');
++ // Sin la intención de B, enderezar en B es una pérdida de curva.
++ assert.deepEqual(Core.saveGate([{kind:'library',before:lib(a,b),after:lib(a3,b1.project)}],{intents:{[a.id]:intents[a.id]}}).issues.map(i=>i.code),['curve-lost']);
++});
+diff --git a/tests/op07-s8-codex-probes.test.cjs b/tests/op07-s8-codex-probes.test.cjs
+new file mode 100644
+index 00000000..bd4905a2
+--- /dev/null
++++ b/tests/op07-s8-codex-probes.test.cjs
+@@ -0,0 +1,55 @@
++'use strict';
++// OP-07 · S8 · Sondas de Codex (docs/integration/op07-a0-2026-11-20 @ 2d0cc645) convertidas en NEGATIVOS: la misma
++// construcción, con el resultado seguro exigido. En la v3 «mixed», «stale» y «defaultCoreCanCreate» pasaban.
++const test=require('node:test'),assert=require('node:assert/strict');
++const F=require('./op07/fixtures.cjs'),C=require('../js/project-core.js'),J=JSON.stringify;
++function as(state,fn){const was=globalThis.RUBIK_OP07_STATE;globalThis.RUBIK_OP07_STATE=state;try{return fn();}finally{globalThis.RUBIK_OP07_STATE=was;}}
++const library=(a,b)=>J({version:1,activeId:'a',entries:[{id:'a',name:'A',project:a},{id:'b',name:'B',project:b}]});
++function probe(){ // construcción idéntica a s7-intentions.cjs
++ const {project:a,wall}=F.curved(F.base(),{withOpening:true}),b=C.clone(a);b.id='prj_other_house';const victim=b.walls.find(w=>w.id===wall.id);
++ const explicit=C.setWallCurve(a,wall.id,null);assert.equal(explicit.ok,true);
++ const first=C.editIntent(a,explicit.project,{op:explicit.intent});
++ const bAfter=C.clone(b);delete bAfter.walls.find(w=>w.id===victim.id).curve;
++ const second=C.editIntent(b,bAfter);
++ return {a,b,wall,explicit,first,bAfter,second,input:[{kind:'library',before:library(a,b),after:library(explicit.project,bAfter)}]};}
++
++test('Sonda «isolated»: validar B por separado rechaza curve-lost (igual que en v3)',()=>{
++ const {b,bAfter,second}=probe();assert.deepEqual(C.saveGate([{kind:'project',before:J(b),after:J(bAfter)}],{intent:second}).issues.map(i=>i.code),['curve-lost']);});
++
++test('Sonda «mixed»: el enderezado explícito de A ya NO legitima la pérdida en B (misma ID de muro)',()=>{
++ const {first,second,input,b}=probe();
++ assert.throws(()=>C.composeIntent(first,second),/different projects/,'no se pueden componer intenciones de proyectos distintos');
++ const r=C.saveGate(input,{intents:{[first.projectId]:first,[second.projectId]:second}});
++ assert.deepEqual(r.issues.map(i=>[i.code,i.projectId]),[['curve-lost',b.id]]);
++ assert.equal(C.saveGate(input,{intent:first}).ok,false,'una intención plana solo vale para su proyecto');
++ assert.equal(C.saveGate(input,{intent:{straightened:[probe().wall.id]}}).ok,false,'sin projectId no autoriza nada');});
++
++test('Sonda «stale»: enderezar, deshacer y perder la curva genéricamente → rechazado (el deshacer revoca el permiso)',()=>{
++ const {a,explicit,first,wall}=probe(),sameUndo=C.composeIntent(first,C.editIntent(explicit.project,a,{restore:true}));
++ const lost=C.clone(a);delete lost.walls.find(w=>w.id===wall.id).curve;
++ assert.deepEqual(C.saveGate([{kind:'project',before:J(a),after:J(lost)}],{intent:sameUndo}).issues.map(i=>i.code),['curve-lost']);
++ // Rehacer el enderezado vuelve a llevar su propio diff (restauración explícita) y sí se confirma.
++ const redo=C.composeIntent(sameUndo,C.editIntent(a,explicit.project,{restore:true}));
++ assert.equal(C.saveGate([{kind:'project',before:J(a),after:J(explicit.project)}],{intent:redo}).ok,true);});
++
++test('Sonda «restored»: la restauración explícita lleva su diff con las mismas barreras (escritor y activación)',()=>{
++ const {input}=probe();assert.equal(C.saveGate(input,{restore:true}).ok,true);
++ assert.ok(C.saveGate(input,{restore:true,writerFeatures:[]}).issues.some(i=>i.code==='writer-lacks-feature'),'un escritor antiguo falla cerrado');
++ assert.ok(as('integrated',()=>C.saveGate(input,{restore:true})).issues.some(i=>i.code==='activation-pending'),'sin activación no se restaura un 2.0 modificado');});
++
++test('Sonda «defaultCoreCanCreate»: con el núcleo por defecto, inclinar un muro v1 NO crea un 2.0',()=>{
++ as(undefined,()=>{const v1=C.initial(),r=C.setWallEndHeight(v1,F.longest(v1).id,2300);assert.equal(r.ok,false);assert.equal(r.code,'activation-pending');assert.match(v1.schemaVersion,/^1\./);});});
++
++test('Plantas de un edificio con IDs de muro repetidos: la intención de una planta no vale para otra',()=>{
++ const {project:l0,wall}=F.curved(F.base(),{withOpening:false}),l1=C.clone(l0);l0.id='prj_planta0000000000000000000000000';l1.id='prj_planta1111111111111111111111111';
++ const bld=(x,y)=>J({version:1,activeId:'b',entries:[{id:'b',name:'B',kind:'building',building:{levels:[{id:'lvl0',project:x},{id:'lvl1',project:y}]}}]});
++ const s0=C.setWallCurve(l0,wall.id,null),l1b=C.clone(l1);delete l1b.walls.find(w=>w.id===wall.id).curve;
++ const r=C.saveGate([{kind:'library',before:bld(l0,l1),after:bld(s0.project,l1b)}],{intents:{[l0.id]:C.editIntent(l0,s0.project,{op:s0.intent})}});
++ assert.deepEqual(r.issues.map(i=>[i.code,i.projectId]),[['curve-lost',l1.id]]);});
++
++test('Lote de pasos antes de guardar: dividir, deshacer la división y borrar la pieza original → rechazado',()=>{
++ const {project:a,wall}=F.curved(F.base(),{withOpening:false}),s=C.splitWall(a,wall.id,600,{newId:'wal_pieza0002'});
++ let acc=C.editIntent(a,s.project,{op:s.intent});acc=C.composeIntent(acc,C.editIntent(s.project,a,{restore:true}));   // deshacer la división
++ const gone=C.clone(a);gone.walls=gone.walls.filter(w=>w.id!==wall.id);   // un escritor genérico quita el muro curvo
++ assert.deepEqual(C.saveGate([{kind:'project',before:J(a),after:J(gone)}],{intent:acc}).issues.map(i=>i.code),['wall-lost'],'la división deshecha ya no explica nada');
++ const del=C.composeIntent(acc,C.editIntent(a,gone));assert.equal(C.saveGate([{kind:'project',before:J(a),after:J(gone)}],{intent:del}).ok,true,'un borrado explícito posterior sí');});
+diff --git a/tests/op07/browser-state.cjs b/tests/op07/browser-state.cjs
+new file mode 100644
+index 00000000..28094106
+--- /dev/null
++++ b/tests/op07/browser-state.cjs
+@@ -0,0 +1,11 @@
++'use strict';
++// OP-07 S8 · Estado de activación explícito para las pruebas de navegador (solo un origen de pruebas lo admite).
++// withState(env,'active') inyecta RUBIK_OP07_STATE antes de cargar la página. A0 (FloorPlanSchemaEpoch) TODAVÍA NO está en
++// master: para probar el estado activo, la prueba declara un sustituto mínimo y etiquetado (`a0:'stand-in'`). La
++// convivencia real con A0 se acredita al integrar A0; sin este sustituto la activación falla cerrada (prueba S8).
++function withState(env,state,{a0='stand-in'}={}){const b=env.browser;
++ const browser=new Proxy(b,{get:(t,k)=>k==='newContext'?async(...a)=>{const c=await t.newContext(...a);
++  await c.addInitScript(([s,stand])=>{globalThis.RUBIK_OP07_STATE=s;if(stand&&!globalThis.FloorPlanSchemaEpoch)globalThis.FloorPlanSchemaEpoch=Object.freeze({op07StandIn:true});},[state,a0==='stand-in']);return c;}
++  :(typeof t[k]==='function'?t[k].bind(t):t[k])});
++ return {...env,browser};}
++module.exports={withState};
+diff --git a/tests/op07/fixtures.cjs b/tests/op07/fixtures.cjs
+index 60d58719..3ea66dbd 100644
+--- a/tests/op07/fixtures.cjs
++++ b/tests/op07/fixtures.cjs
+@@ -1,6 +1,8 @@
+ 'use strict';
+ /* OP-07 · proyectos de prueba con muros curvos e inclinados, construidos sobre el proyecto de ejemplo real
+    (Core.initial). Ninguno es un proyecto de cliente. */
++// OP-07 S8: the OP-07 tests exercise the ACTIVE state explicitly (Node is a test origin); the product default is 'integrated'.
++globalThis.RUBIK_OP07_STATE='active';
+ const Core=require('../../js/project-core.js');
+ const clone=x=>JSON.parse(JSON.stringify(x));
+ // El ejemplo pone cada abertura en su propio tramo de muro; las pruebas curvan el muro MACIZO más largo y, si se pide,
+diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
+index 3ec726b3..652d74c0 100644
+--- a/tests/regression-partitions.json
++++ b/tests/regression-partitions.json
+@@ -19,6 +19,7 @@
+   "tests/op07-s5b-edit-ui.browser.test.cjs",
+   "tests/op07-s4b-render.browser.test.cjs",
+   "tests/op07-s7-persistence.browser.test.cjs",
++  "tests/op07-s8-activation.browser.test.cjs",
+   "tests/home-demos.browser.test.cjs",
+   "tests/e2-comparativas.browser.test.cjs",
+   "tests/h01-dossier-inventario.browser.test.cjs",

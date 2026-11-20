@@ -1,7 +1,7 @@
-From 3afb9e18c84d6d640eeced7203a4169aebb367d6 Mon Sep 17 00:00:00 2001
+From bafb0fd9dd311a3a60c97a2c6fa03bb6e5a29663 Mon Sep 17 00:00:00 2001
 From: op07 <op07@local>
 Date: Fri, 20 Nov 2026 10:58:45 +0000
-Subject: [PATCH 12/12] =?UTF-8?q?OP-07=20S8=20=C2=B7=20Activaci=C3=B3n=20e?=
+Subject: [PATCH 12/14] =?UTF-8?q?OP-07=20S8=20=C2=B7=20Activaci=C3=B3n=20e?=
  =?UTF-8?q?fectiva:=20integrar=20no=20es=20activar;=20lectura=20compatible?=
  =?UTF-8?q?=20separada;=20intenciones=20por=20proyecto?=
 MIME-Version: 1.0

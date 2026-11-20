@@ -1,7 +1,7 @@
-From 66dd8bb1acbc542fd316aa96eea15aacf5048bd2 Mon Sep 17 00:00:00 2001
+From 7af703f1a31bdb041e5ff038b1cb4647aacf9099 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:37:14 +0000
-Subject: [PATCH 09/12] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y?=
+Subject: [PATCH 09/14] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y?=
  =?UTF-8?q?=20liso:=20juntas=20compartidas=20por=20faceta,=20normales=20su?=
  =?UTF-8?q?aves=20solo=20en=20las=20caras=20curvas,=20dinteles=20por=20fac?=
  =?UTF-8?q?eta?=

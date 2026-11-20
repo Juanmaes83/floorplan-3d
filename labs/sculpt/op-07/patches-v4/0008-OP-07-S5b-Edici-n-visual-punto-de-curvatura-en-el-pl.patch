@@ -1,0 +1,274 @@
+From 55359f3b465c5be4b15706a13d3b2a407e35705a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 23:27:19 +0000
+Subject: [PATCH 08/12] =?UTF-8?q?OP-07=20S5b=20=C2=B7=20Edici=C3=B3n=20vis?=
+ =?UTF-8?q?ual:=20punto=20de=20curvatura=20en=20el=20plano=20y=20forma=20d?=
+ =?UTF-8?q?el=20muro=20en=20el=20panel,=20un=20arrastre=20=3D=20una=20oper?=
+ =?UTF-8?q?aci=C3=B3n?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ index.html                              | 97 +++++++++++++++++++++++--
+ tests/op07-s5b-edit-ui.browser.test.cjs | 89 +++++++++++++++++++++++
+ tests/regression-partitions.json        |  1 +
+ 3 files changed, 182 insertions(+), 5 deletions(-)
+ create mode 100644 tests/op07-s5b-edit-ui.browser.test.cjs
+
+diff --git a/index.html b/index.html
+index 7d826666..2c120aa8 100644
+--- a/index.html
++++ b/index.html
+@@ -178,6 +178,7 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec
+ .wall-faces{margin-top:10px}.wall-faces-title{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--ink,inherit)}
+ .wall-faces-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.wall-faces-stats .big{white-space:nowrap;font-variant-numeric:tabular-nums}.wall-faces-why{margin:6px 0;font-size:12px}
+ #panel .wall-faces .btn{min-height:44px}
++#panel .wall-shape .btn{min-height:44px}.wall-shape-status:empty{display:none}.wall-shape-status{margin:6px 0;font-size:12px;color:var(--danger,#a3261b)}
+ #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+   padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
+ #toast.show{opacity:1;transform:translateX(-50%)}
+@@ -1553,8 +1554,18 @@ function renderSel(){
+         stroke="#fff" stroke-width="${3*k}" paint-order="stroke">${f.w} × ${f.d}</text>`;
+     }
+   } else if (ui.sel?.kind === 'wall'){
+-    const w = geometry.walls.find(w => w.id === ui.sel.id);
+-    if (w) s += `<polygon points="${w.poly.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
++    const pw = project.walls.find(w => w.id === ui.sel.id);
++    if (pw){
++      // The whole wall (every facet of a curved one), and — in Select — the curvature dot at its centre (OP-07 · S5b).
++      s += `<polygon points="${Core.wallOutline(pw).map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
++      if (ui.tool === 'select' && pw.status !== 'demolished'){
++        const {mid} = wallChord(pw), m = pw.curve ? FloorPlanWallGeometry.point(pw, .5) : mid, bad = drag?.kind === 'curve' && drag.refused, hs = COARSE ? 1.7 : 1, hit = (COARSE ? 24 : 12)*k, f = Math.round(wallSagitta(pw));
++        s += `<line x1="${mid.x}" y1="${mid.y}" x2="${m.x}" y2="${m.y}" stroke="#b5653a" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" pointer-events="none"/>
++          <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${hit}" fill="transparent"/>
++          <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${7*hs*k}" fill="${bad ? '#b8412c' : '#fff'}" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke"><title>${op07t('Arrastra para curvar el muro; vuelve a la línea para enderezarlo (Mayús: sin ajuste)','Drag to curve the wall; back to the line to straighten it (Shift: no snapping)','拖动使墙弯曲；拖回直线即拉直（Shift：不吸附）')}</title></circle>`;
++        if (drag?.kind === 'curve') s += `<text x="${m.x}" y="${m.y - 18*k}" font-size="${12*k}" text-anchor="middle" fill="${bad ? '#b8412c' : '#b5653a'}" font-weight="600" stroke="#fff" stroke-width="${3*k}" paint-order="stroke" pointer-events="none">${esc(bad ? drag.refused : (f ? op07t(`flecha ${Math.abs(f)} mm`,`sagitta ${Math.abs(f)} mm`,`矢高 ${Math.abs(f)} mm`) : op07t('recto','straight','直')))}</text>`;
++      }
++    }
+   } else if (ui.sel?.kind === 'room'){
+     const r = geometry.rooms.find(r => r.id === ui.sel.id);
+     s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+@@ -1780,14 +1791,68 @@ function bindWallStructure(root, declare){
+   source.onchange = () => declare(type.value, source.value);
+ }
+ function declareWall(id, structure, source){ mutate(() => { const next = Core.declareWallStructure(project, id, structure, source); project.walls = next.walls; project.schemaVersion = next.schemaVersion; refreshProject(); }); toast('Tipo declarado del muro actualizado (dato orientativo).'); }
++/* OP-07 · S5b · Forma del muro: curvatura (flecha), altura final, enderezar, nivelar y dividir. Cada control es UNA
++   operación del camino único de edición (Core.setWallCurve / setWallEndHeight / splitWall → commit): validación, deshacer,
++   rehacer y guardado de siempre; un rechazo deja el proyecto intacto y se explica aquí. El punto del plano hace lo mismo
++   con el puntero. */
++const op07t = (es, en, zh) => LANG === 'en' ? en : LANG === 'zh' ? zh : es;
++function wallChord(w){ const L = Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y); return {L, mid:{x:(w.start.x+w.end.x)/2, y:(w.start.y+w.end.y)/2}, n:{x:-(w.end.y-w.start.y)/L, y:(w.end.x-w.start.x)/L}}; }
++// Flecha (mm, con signo hacia la normal izquierda): la distancia del punto medio de la curva a la cuerda; control = medio + 2·flecha.
++const wallSagitta = w => { if (!w.curve) return 0; const {mid, n} = wallChord(w); return ((w.curve.control.x-mid.x)*n.x + (w.curve.control.y-mid.y)*n.y)/2; };
++const curveControlFor = (w, sagitta) => { if (!sagitta) return null; const {mid, n} = wallChord(w); return {x:mid.x + n.x*2*sagitta, y:mid.y + n.y*2*sagitta}; };
++let wallShapeStatus = '';
++function wallShapeBlock(w){
++  if (w.status === 'demolished') return '';
++  const f = Math.round(wallSagitta(w)), sloped = w.heightEndMm !== undefined, len = Math.round(Core.wallLength(w));
++  return `<details class="panel-group wall-shape" data-group="wall-shape" open id="wallShape"><summary>${op07t('Forma del muro','Wall shape','墙体形状')}</summary>
++    <div class="form">
++      <label class="full" for="wallSagitta">${op07t('Curvatura · flecha en el centro (mm)','Curvature · sagitta at the centre (mm)','弧度 · 中点矢高 (mm)')}</label>
++      <input id="wallSagitta" type="number" inputmode="numeric" step="10" value="${f}" aria-describedby="wallShapeHelp">
++      <label class="full" for="wallEndHeight">${op07t('Altura al final (mm)','Height at the end (mm)','末端高度 (mm)')}</label>
++      <input id="wallEndHeight" type="number" inputmode="numeric" step="10" min="100" max="10000" value="${sloped ? w.heightEndMm : w.heightMm}">
++      <label class="full" for="wallSplitAt">${op07t('Dividir a (mm desde el inicio)','Split at (mm from the start)','在距起点 (mm) 处分割')}</label>
++      <input id="wallSplitAt" type="number" inputmode="numeric" step="10" min="1" max="${len-1}" value="${Math.round(len/2)}">
++    </div>
++    <div class="actions"><button class="btn" id="wallApplyShape">${op07t('Aplicar forma','Apply shape','应用形状')}</button>
++      <button class="btn" id="wallStraighten" ${w.curve ? '' : 'disabled'}>${op07t('Enderezar','Straighten','拉直')}</button>
++      <button class="btn" id="wallLevel" ${sloped ? '' : 'disabled'}>${op07t('Nivelar','Level','找平')}</button>
++      <button class="btn" id="wallSplit">${op07t('Dividir','Split','分割')}</button></div>
++    ${Core.versionAtLeast(project.schemaVersion, '2.0.0') ? '' : `<p class="muted" id="wallShapeFormat">${op07t('Al curvar o inclinar un muro, el proyecto se guarda en el formato 2.0: las versiones anteriores de RUBIK no podrán abrirlo (no lo modificarán).','Curving or sloping a wall saves the project in format 2.0: earlier RUBIK versions will not open it (and will not change it).','弯曲或倾斜墙体后，项目将以 2.0 格式保存：旧版 RUBIK 无法打开（也不会修改）。')}</p>`}
++    <p class="muted" id="wallShapeHelp">${op07t(`Longitud real ${len} mm. 0 = recto. También puedes arrastrar el punto del centro del muro en el plano (Mayús: sin ajuste).`,`Real length ${len} mm. 0 = straight. You can also drag the dot at the centre of the wall on the plan (Shift: no snapping).`,`实际长度 ${len} mm。0 = 直墙。也可在平面图上拖动墙中点（Shift：不吸附）。`)}</p>
++    <p class="wall-shape-status" id="wallShapeStatus" role="status" aria-live="polite">${esc(wallShapeStatus)}</p></details>`;
++}
++// Applies one wall operation through the single editing path; on refusal nothing changes and the reason is shown.
++function applyWallEdit(run, selectId){
++  const before = snap(), r = run(JSON.parse(before));
++  if (!r.ok){ wallShapeStatus = r.explanation.join(' '); renderPanel(); return r; }
++  project = r.project; window.FloorPlanApp && (FloorPlanApp.lastEditIntent = r.intent || {}); refreshProject();
++  if (commit(before)){ wallShapeStatus = ''; }
++  renderAll(); if (selectId) select({kind:'wall', id:selectId}); return r;
++}
++function bindWallShape(id){
++  const box = $('#wallShape'); if (!box) return;
++  const w = () => project.walls.find(x => x.id === id), num = s => { const v = Number($(s).value); return Number.isFinite(v) ? v : NaN; };
++  $('#wallApplyShape').onclick = () => {
++    const f = num('#wallSagitta'), h = num('#wallEndHeight');
++    if (!Number.isFinite(f) || !Number.isFinite(h)){ wallShapeStatus = op07t('Introduce números en milímetros.','Enter numbers in millimetres.','请输入毫米数值。'); return renderPanel(); }
++    applyWallEdit(p => { const a = Core.setWallCurve(p, id, curveControlFor(p.walls.find(x => x.id === id), Math.round(f)));
++      if (!a.ok) return a; const cur = a.project.walls.find(x => x.id === id), b = Core.setWallEndHeight(a.project, id, Math.round(h) === cur.heightMm ? null : Math.round(h));
++      return b.ok ? {...b, intent:{...a.intent, ...b.intent}} : b; }, id);
++  };
++  $('#wallStraighten').onclick = () => applyWallEdit(p => Core.setWallCurve(p, id, null), id);
++  $('#wallLevel').onclick = () => applyWallEdit(p => Core.setWallEndHeight(p, id, null), id);
++  $('#wallSplit').onclick = () => applyWallEdit(p => Core.splitWall(p, id, num('#wallSplitAt')), id);
++}
+ function wallPanel(w){
+-  const len = Math.round(Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y));
++  const pw = project.walls.find(x => x.id === w.id) || w;
++  const len = Math.round(Core.wallLength(pw));
+   const state = w.status==='demolished' ? ' · marcado para retirar' : '';
+   return `<div class="panel-view wall-panel">${panelHead({title:'Muro', context:`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
+     ${wallStructureBlock(w)}
++    ${wallShapeBlock(pw)}
+     <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
+ }
+-function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
++function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); bindWallShape(id); }
+ // UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
+ // está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
+ function roomSuggestionOf(source){
+@@ -2113,6 +2178,12 @@ function endDrag(cancel){
+     if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else if (d.wall){ select({kind:'wall', id:d.wall}); showProperties(); } else { select(d.room ? {kind:'room', id:d.room} : null); if (d.room) showProperties(); } }
+     return;
+   }
++  if (d.kind === 'curve'){
++    if (cancel || !d.moved){ if (d.moved){ project = JSON.parse(d.before); refreshProject(); } renderAll(); return; }
++    if (snap() !== d.before){ window.FloorPlanApp && (FloorPlanApp.lastEditIntent = d.intent || {}); commit(d.before); }
++    wallShapeStatus = d.refused ? op07t('Se conserva la última forma válida: ','The last valid shape is kept: ','保留最后的有效形状：') + d.refused : '';
++    renderAll(); return;
++  }
+   if (d.moved){ commit(d.before); renderAll(); }
+   else if (d.kind === 'move' && !cancel) showProperties();
+ }
+@@ -2151,7 +2222,11 @@ svg.addEventListener('pointerdown', e => {
+     renderMeasure(); return;
+   }
+   const h = t.closest('[data-handle]');
+-  if (h && ui.sel?.kind === 'furn'){
++  if (h && h.dataset.handle === 'curve' && ui.sel?.kind === 'wall'){
++    // OP-07 · S5b: one drag = one operation. The project changes only in memory while dragging (live validation, no
++    // history, no save); on release it is committed once.
++    drag = {kind:'curve', id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false, refused:''};
++  } else if (h && ui.sel?.kind === 'furn'){
+     drag = {kind:h.dataset.handle, id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false};
+   } else if (ui.tool === 'demolish' && t.closest('[data-wall]')){
+     toggleWall(t.closest('[data-wall]').dataset.wall); return;
+@@ -2194,6 +2269,18 @@ svg.addEventListener('pointermove', e => {
+     drag.moved = true; svg.classList.add('panning');
+     view.x0 = drag.x0 - (e.clientX-drag.sx)/view.s; view.y0 = drag.y0 - (e.clientY-drag.sy)/view.s; applyView(); return;
+   }
++  if (drag.kind === 'curve'){
++    if (!drag.moved && !far) return;
++    drag.moved = true;
++    const base = JSON.parse(drag.before), w = base.walls.find(x => x.id === drag.id), {mid, n} = wallChord(w);
++    // Curve midpoint follows the pointer along the wall's normal: sagitta snapped to 10 mm (Shift: 1 mm); near the line
++    // (12 px) it is straight again.
++    const raw = (p.x-mid.x)*n.x + (p.y-mid.y)*n.y, sag = Math.abs(raw) < 12/view.s ? 0 : e.shiftKey ? Math.round(raw) : Math.round(raw/10)*10;
++    const r = Core.setWallCurve(base, drag.id, curveControlFor(w, sag));
++    if (r.ok){ project = r.project; drag.intent = r.intent; drag.refused = ''; refreshProject(); }
++    else drag.refused = r.explanation.join(' ');
++    renderAll(); return;
++  }
+   const f = getF(drag.id); if (!f) return;
+   if (!drag.moved && !far) return;             // 轻点家具不应让它抖动一下
+   drag.moved = true;
+diff --git a/tests/op07-s5b-edit-ui.browser.test.cjs b/tests/op07-s5b-edit-ui.browser.test.cjs
+new file mode 100644
+index 00000000..e2c8f212
+--- /dev/null
++++ b/tests/op07-s5b-edit-ui.browser.test.cjs
+@@ -0,0 +1,89 @@
++'use strict';
++// OP-07 · S5b Edición visual con interacciones REALES (ratón y teclado sobre el plano y el panel): seleccionar un muro,
++// arrastrar su punto central para curvarlo, volver a la línea para enderezarlo, altura final, nivelar, dividir, deshacer
++// y rehacer. Un arrastre = UNA entrada de historial y UNA escritura; la validación en vivo nunca deja el proyecto inválido.
++const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
++const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
++let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++// Punto de pantalla de un punto del plano (mm).
++const screen=(page,pt)=>page.evaluate(({x,y})=>{const s=document.querySelector('#plan'),m=s.getScreenCTM(),q=s.createSVGPoint();q.x=x;q.y=y;const r=q.matrixTransform(m);return {x:r.x,y:r.y};},pt);
++const wallOf=(page,id)=>page.evaluate(id=>structuredClone(FloorPlanApp.project.walls.find(w=>w.id===id)),id);
++async function setup(viewport){
++ const {context,page,watch}=await K.editor(env,{viewport});
++ await context.addInitScript(()=>{});
++ // Contador de escrituras de la colección (cada guardado real).
++ await page.evaluate(()=>{window.__writes=0;const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(/project/.test(k))window.__writes++;return set.call(this,k,v);};});
++ await page.evaluate(()=>{select(null);fitView();});
++ return {context,page,watch};
++}
++async function selectWall(page,w){const mid={x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2},p=await screen(page,mid);await page.mouse.click(p.x,p.y);
++ await page.waitForFunction(id=>ui.sel?.kind==='wall'&&ui.sel.id===id,w.id);}
++const history=page=>page.evaluate(()=>({undo:undoStack.length,writes:window.__writes,version:FloorPlanApp.project.schemaVersion}));
++
++test('S5b · arrastrar el punto: curva con UN paso de historial y UNA escritura; volver a la línea la endereza; deshacer y rehacer con teclado',{timeout:180000},async()=>{
++ const {context,page,watch}=await setup({width:1440,height:900});
++ try{
++  const w=F.longest(await page.evaluate(()=>structuredClone(FloorPlanApp.project)));await selectWall(page,w);
++  const dot=page.locator('#gSel circle[data-handle="curve"]').last();await dot.waitFor();const box=await dot.boundingBox(),c={x:box.x+box.width/2,y:box.y+box.height/2};
++  const h0=await history(page);
++  // Arrastre de 60 px hacia el exterior en 12 pasos.
++  const n=await page.evaluate(id=>{const w=FloorPlanApp.project.walls.find(x=>x.id===id),L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);return {x:-(w.end.y-w.start.y)/L,y:(w.end.x-w.start.x)/L};},w.id);
++  await page.mouse.move(c.x,c.y);await page.mouse.down();
++  for(let i=1;i<=12;i++)await page.mouse.move(c.x+n.x*5*i,c.y+n.y*5*i);
++  const during=await history(page);assert.equal(during.undo,h0.undo,'durante el arrastre no hay historial');assert.equal(during.writes,h0.writes,'ni escrituras');
++  await page.mouse.up();
++  const h1=await history(page),curved=await wallOf(page,w.id);
++  assert.ok(curved.curve,'el muro queda curvo');assert.equal(h1.undo,h0.undo+1,'un solo paso de historial');assert.equal(h1.writes-h0.writes,1,'una sola escritura');
++  assert.equal(h1.version,'2.0.0','el proyecto pasa a 2.0 al curvar');
++  assert.equal(Math.abs(Math.round((await page.evaluate(id=>wallSagitta(FloorPlanApp.project.walls.find(x=>x.id===id)),w.id)))%10),0,'flecha ajustada a 10 mm');
++  // Plano: piezas por faceta y el salón sigue la cara (S3b).
++  assert.ok(await page.evaluate(id=>document.querySelectorAll(`#gWalls [data-wall="${id}"]`).length>4,w.id));
++  // Volver a la línea endereza (un paso más).
++  const box2=await page.locator('#gSel circle[data-handle="curve"]').last().boundingBox(),c2={x:box2.x+box2.width/2,y:box2.y+box2.height/2};
++  await page.mouse.move(c2.x,c2.y);await page.mouse.down();for(let i=1;i<=10;i++)await page.mouse.move(c2.x+(c.x-c2.x)*i/10,c2.y+(c.y-c2.y)*i/10);await page.mouse.up();
++  assert.equal((await wallOf(page,w.id)).curve,undefined,'enderezado');assert.equal((await history(page)).undo,h0.undo+2);
++  // Deshacer y rehacer con el teclado.
++  await page.locator('#plan').focus().catch(()=>{});await page.keyboard.press('Control+z');assert.ok((await wallOf(page,w.id)).curve,'deshacer: vuelve la curva');
++  await page.keyboard.press('Control+Shift+z');assert.equal((await wallOf(page,w.id)).curve,undefined,'rehacer: recto');
++  await page.keyboard.press('Control+z');await page.keyboard.press('Control+z');assert.deepEqual(await wallOf(page,w.id),w,'dos pasos atrás: el muro original');
++  assert.deepEqual(watch.errors,[]);
++ }finally{await context.close();}
++});
++
++test('S5b · panel: flecha y altura final, rechazo explicado sin tocar nada, nivelar, enderezar y dividir',{timeout:180000},async()=>{
++ const {context,page,watch}=await setup({width:1440,height:900});
++ try{
++  const w=F.longest(await page.evaluate(()=>structuredClone(FloorPlanApp.project)));await selectWall(page,w);
++  await page.locator('#wallShape').waitFor();assert.match(await page.locator('#wallShapeFormat').innerText(),/formato 2\.0/);
++  await page.fill('#wallSagitta','500');await page.fill('#wallEndHeight','2300');await page.click('#wallApplyShape');
++  let x=await wallOf(page,w.id);assert.ok(x.curve);assert.equal(x.heightEndMm,2300);
++  assert.equal(Math.round(await page.evaluate(id=>wallSagitta(FloorPlanApp.project.walls.find(x=>x.id===id)),w.id)),500);
++  // Rechazo: una curva imposible para el grosor no cambia nada y lo explica.
++  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),undo=(await history(page)).undo;
++  await page.fill('#wallSagitta','90000');await page.click('#wallApplyShape');
++  assert.match(await page.locator('#wallShapeStatus').innerText(),/curve/);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.equal((await history(page)).undo,undo);
++  await page.click('#wallLevel');assert.equal((await wallOf(page,w.id)).heightEndMm,undefined,'nivelado');
++  await page.click('#wallStraighten');assert.equal((await wallOf(page,w.id)).curve,undefined,'enderezado');
++  await page.fill('#wallSplitAt','1200');await page.click('#wallSplit');
++  const walls=await page.evaluate(()=>FloorPlanApp.project.walls.length);assert.equal(walls,(await page.evaluate(()=>JSON.parse(undoStack.at(-1)).walls.length))+1,'dividido en dos');
++  // Botones de 44 px y sin desplazamiento horizontal.
++  await selectWall(page,await wallOf(page,w.id));
++  const fit=await page.evaluate(()=>({min:Math.min(...[...document.querySelectorAll('#wallShape .btn')].map(b=>b.getBoundingClientRect().height)),scroll:document.documentElement.scrollWidth>innerWidth+1}));
++  assert.ok(fit.min>=44);assert.equal(fit.scroll,false);
++  if(process.env.OP07_SHOTS){await fs.mkdir(process.env.OP07_SHOTS,{recursive:true});await page.screenshot({path:path.join(process.env.OP07_SHOTS,'s5b-panel-1440.png')});}
++  assert.deepEqual(watch.errors,[]);
++ }finally{await context.close();}
++});
++
++test('S5b · dividir sobre una abertura se rechaza y la nombra; móvil 390x844 sin desplazamiento',{timeout:180000},async()=>{
++ const {context,page,watch}=await setup({width:390,height:844});
++ try{
++  const {project,wall}=F.curved(F.base());const r=await page.evaluate(p=>FloorPlanApp.applyExtension(()=>({ok:true,project:p})),project);assert.equal(r.ok,true);
++  await page.evaluate(id=>{select({kind:'wall',id});drawer('panel',true);},wall.id);await page.locator('#wallShape').waitFor();
++  const door=project.openings.find(o=>o.id==='opn_op07-door');await page.fill('#wallSplitAt',String(door.offsetMm+400));
++  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#wallSplit').scrollIntoViewIfNeeded();await page.locator('#wallSplit').click();
++  assert.match(await page.locator('#wallShapeStatus').innerText(),/atraviesa una abertura/);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
++  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
++  assert.deepEqual(watch.errors,[]);
++ }finally{await context.close();}
++});
+diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
+index 4f924edb..6a625fc6 100644
+--- a/tests/regression-partitions.json
++++ b/tests/regression-partitions.json
+@@ -16,6 +16,7 @@
+   "tests/evolution-demo.browser.test.cjs",
+   "tests/op07-s4-3d.browser.test.cjs",
+   "tests/op07-s5-edit.browser.test.cjs",
++  "tests/op07-s5b-edit-ui.browser.test.cjs",
+   "tests/home-demos.browser.test.cjs",
+   "tests/e2-comparativas.browser.test.cjs",
+   "tests/h01-dossier-inventario.browser.test.cjs",

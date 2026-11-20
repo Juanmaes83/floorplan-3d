@@ -1,7 +1,7 @@
-From e5fdea248fdc832bbc61d9b089d3827e8a74cf6a Mon Sep 17 00:00:00 2001
+From caa6d1e8a5463c47f2bcf91c6d2dd203bf4263d9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 01/12] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D?=
+Subject: [PATCH 01/14] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D?=
  =?UTF-8?q?-OP07-4=20opci=C3=B3n=20B):=20curve=20y=20heightEndMm,=20autori?=
  =?UTF-8?q?dad=20=C3=BAnica=20de=20versiones,=20n=C3=BAcleo=20=C3=BAnico?=
  =?UTF-8?q?=20y=20guardado=20protegido?=

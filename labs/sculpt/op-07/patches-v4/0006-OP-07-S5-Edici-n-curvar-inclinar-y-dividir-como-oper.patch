@@ -1,0 +1,180 @@
+From 87a0044957d2f120adb6c605a702baf736105254 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 19 Nov 2026 22:52:04 +0000
+Subject: [PATCH 06/12] =?UTF-8?q?OP-07=20S5=20=C2=B7=20Edici=C3=B3n:=20cur?=
+ =?UTF-8?q?var,=20inclinar=20y=20dividir=20como=20operaciones=20at=C3=B3mi?=
+ =?UTF-8?q?cas=20por=20el=20camino=20=C3=BAnico=20del=20editor?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ js/project-core.js                  | 44 +++++++++++++++++++++++++
+ tests/op07-s5-edit.browser.test.cjs | 26 +++++++++++++++
+ tests/op07-s5-edit.test.cjs         | 51 +++++++++++++++++++++++++++++
+ tests/regression-partitions.json    |  1 +
+ 4 files changed, 122 insertions(+)
+ create mode 100644 tests/op07-s5-edit.browser.test.cjs
+ create mode 100644 tests/op07-s5-edit.test.cjs
+
+diff --git a/js/project-core.js b/js/project-core.js
+index d6311781..10ec4b4b 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -457,6 +457,49 @@
+     validate(next);return next;
+   }
+   function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
++  // OP-07 · S5: wall edits as pure operations with the editor's own result shape ({ok, project, explanation, intent}), so
++  // the editor applies them through its single path (FloorPlanApp.applyExtension: validation, undo/redo, save) — no second
++  // editor. A refused edit returns the same project untouched (atomic) and says why; it never drops an opening.
++  const refuse = (code, explanation, extra = {}) => ({ok:false, code, explanation:[explanation], ...extra});
++  function wallEdit(project, wallId, change, intent = {}) {
++    const next = clone(project), w = next.walls.find(x => x.id === wallId);
++    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
++    change(w, next);
++    if (shapedWall(w)) raiseVersion(next, '2.0.0');
++    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
++    const gate = guardSave(project, next, {intent});
++    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code + (i.message ? ': ' + i.message : '')).join('; '), {issues: gate.issues});
++    return {ok:true, project:next, intent};
++  }
++  // Curve: control point in mm (rounded as every plan point), or null to straighten it (explicit intent).
++  const setWallCurve = (project, wallId, control) => control
++    ? wallEdit(project, wallId, w => { w.curve = {control: point(control)}; })
++    : wallEdit(project, wallId, w => { delete w.curve; }, {straightened: [wallId]});
++  // End height in mm, or null to make the wall level again at its start height (explicit intent).
++  const setWallEndHeight = (project, wallId, heightEndMm) => heightEndMm === null || heightEndMm === undefined
++    ? wallEdit(project, wallId, w => { delete w.heightEndMm; }, {leveled: [wallId]})
++    : wallEdit(project, wallId, w => { w.heightEndMm = Math.round(heightEndMm); });
++  // Split at a physical distance along the wall (mm): exact Bézier split of the single core, points rounded to whole mm
++  // once (the pieces stay joined), heights and openings carried over by the parameter of their centre. An opening the
++  // cut would cross refuses the split and is named: openings never disappear.
++  function splitWall(project, wallId, distanceMm, {newId = id('wal')} = {}) {
++    const w = project.walls.find(x => x.id === wallId);
++    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
++    const length = wallLength(w);
++    if (!(distanceMm >= 1 && distanceMm <= length - 1)) return refuse('cut-outside', `El corte debe quedar dentro del muro (1–${Math.floor(length - 1)} mm).`);
++    const own = project.openings.filter(o => o.wallId === wallId), r = Walls.splitAt(w, distanceMm, own, {...WALL_PATH, roundMm:true, newId});
++    if (r.blocked.length) return refuse('opening-straddles-cut', `El corte atraviesa ${r.blocked.length === 1 ? 'una abertura' : r.blocked.length + ' aberturas'}: muévelo o mueve la abertura.`, {openings: r.blocked});
++    const next = clone(project), at = next.walls.findIndex(x => x.id === wallId);
++    next.walls.splice(at, 1, r.first, r.second);
++    const moved = new Map(r.openings.map(o => [o.id, o]));
++    next.openings = next.openings.map(o => moved.has(o.id) ? (({part, driftMm, ...rest}) => ({...rest, offsetMm: Math.round(rest.offsetMm)}))(moved.get(o.id)) : o);
++    if (shapedWall(r.first) || shapedWall(r.second)) raiseVersion(next, '2.0.0');
++    const intent = {split: {[wallId]: [r.first.id, r.second.id]}};
++    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
++    const gate = guardSave(project, next, {intent});
++    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code).join('; '), {issues: gate.issues});
++    return {ok:true, project:next, intent, maxDriftMm: r.maxDriftMm};
++  }
+   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
+   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
+   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
+@@ -466,4 +509,5 @@
+   Object.assign(api,{wallOutline});   // OP-07 S2
+   Object.assign(api,{wallFootprints});   // OP-07 S6
+   Object.assign(api,{pieceMesh});   // OP-07 S4
++  Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
+ })(globalThis);
+diff --git a/tests/op07-s5-edit.browser.test.cjs b/tests/op07-s5-edit.browser.test.cjs
+new file mode 100644
+index 00000000..7993e16a
+--- /dev/null
++++ b/tests/op07-s5-edit.browser.test.cjs
+@@ -0,0 +1,26 @@
++'use strict';
++// OP-07 · S5 en el editor real: las operaciones de muro pasan por el camino único de edición (applyExtension), con su
++// validación, su deshacer/rehacer y su guardado; una división que cruza una abertura se rechaza sin tocar nada.
++const test=require('node:test'),assert=require('node:assert/strict');
++const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
++let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
++test('S5 · curvar, dividir, deshacer y rehacer en el editor; rechazo atómico',{timeout:180000},async()=>{
++ const {context,page,watch}=await K.editor(env);
++ try{
++  const p=F.base(),w=F.longest(p);
++  const json=()=>page.evaluate(()=>JSON.stringify(FloorPlanApp.project));const start=await json();
++  const curved=await page.evaluate(([id,c])=>FloorPlanApp.applyExtension(p=>FloorPlanCore.setWallCurve(p,id,c)),[w.id,{x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2+1200}]);
++  assert.equal(curved.ok,true,JSON.stringify(curved));const afterCurve=await json();
++  const split=await page.evaluate(id=>FloorPlanApp.applyExtension(p=>FloorPlanCore.splitWall(p,id,1500,{newId:'wal_op07-ui'})),w.id);assert.equal(split.ok,true,JSON.stringify(split));
++  assert.ok(await page.evaluate(()=>FloorPlanApp.project.walls.some(x=>x.id==='wal_op07-ui')));
++  await page.evaluate(()=>undo());assert.equal(await json(),afterCurve,'deshacer devuelve el muro curvo sin dividir');
++  await page.evaluate(()=>redo());assert.ok(await page.evaluate(()=>FloorPlanApp.project.walls.some(x=>x.id==='wal_op07-ui')),'rehacer');
++  await page.evaluate(()=>{undo();undo();});assert.equal(await json(),start,'dos pasos atrás: el proyecto de partida');
++  // Rechazo atómico: dividir sobre la ventana nueva no cambia nada y explica por qué.
++  await page.evaluate(([id,c])=>FloorPlanApp.applyExtension(p=>FloorPlanCore.setWallCurve(p,id,c)),[w.id,{x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2+1200}]);
++  await page.evaluate(id=>FloorPlanApp.applyExtension(p=>({ok:true,project:{...p,openings:[...p.openings,{id:'opn_op07-ui',wallId:id,kind:'window',offsetMm:1000,widthMm:1000,heightMm:1100,sillHeightMm:900}]}})),w.id);
++  const before=await json(),refused=await page.evaluate(id=>FloorPlanApp.applyExtension(p=>FloorPlanCore.splitWall(p,id,1500)),w.id);
++  assert.equal(refused.ok,false);assert.match(refused.explanation[0],/atraviesa una abertura/);assert.equal(await json(),before);
++  assert.deepEqual(watch.errors,[]);
++ }finally{await context.close();}
++});
+diff --git a/tests/op07-s5-edit.test.cjs b/tests/op07-s5-edit.test.cjs
+new file mode 100644
+index 00000000..b0753bcf
+--- /dev/null
++++ b/tests/op07-s5-edit.test.cjs
+@@ -0,0 +1,51 @@
++'use strict';
++// OP-07 · S5 Edición (pura): curva, pendiente y división como operaciones atómicas con el mismo resultado que usa el
++// editor ({ok, project, explanation}); nunca desaparece una abertura; la puerta de guardado acepta la intención.
++const test=require('node:test'),assert=require('node:assert/strict');
++const Core=require('../js/project-core.js'),Walls=require('../js/wall-geometry-core.js'),F=require('./op07/fixtures.cjs');
++const L=w=>Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
++
++test('S5 · curvar, inclinar y deshacer: el proyecto original no cambia y la versión sube a 2.0.0 solo si hace falta',()=>{
++ const p=F.base();p.schemaVersion='1.12.0';const before=JSON.stringify(p),w=F.longest(p);
++ const c=Core.setWallCurve(p,w.id,{x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2+900.4});assert.equal(c.ok,true);
++ assert.equal(c.project.schemaVersion,'2.0.0');assert.deepEqual(c.project.walls.find(x=>x.id===w.id).curve.control.y%1,0,'punto redondeado a mm');
++ assert.equal(JSON.stringify(p),before,'operación pura: el original intacto (deshacer = volver a él)');
++ const s=Core.setWallEndHeight(c.project,w.id,2300);assert.equal(s.ok,true);
++ const flat=Core.setWallCurve(s.project,w.id,null);assert.equal(flat.ok,true);assert.deepEqual(flat.intent,{straightened:[w.id]});
++ assert.equal(Core.setWallEndHeight(flat.project,w.id,null).ok,true);
++ // Rechazos atómicos y explicados.
++ const tight=Core.setWallCurve(p,w.id,{x:w.start.x,y:w.start.y+200000});assert.equal(tight.ok,false);assert.match(tight.explanation[0],/curve/);
++ assert.equal(Core.setWallEndHeight(p,w.id,20).ok,false);assert.equal(Core.setWallCurve(p,'wal_nope',{x:0,y:0}).code,'wall-not-found');
++});
++
++test('S5 · dividir: piezas unidas exactamente, aberturas reubicadas en su sitio y alturas conservadas',()=>{
++ const {project,wall}=F.curved(F.base(),{heightEndMm:2400}),len=Core.wallLength(wall),cut=Math.round(len*.4);
++ const r=Core.splitWall(project,wall.id,cut,{newId:'wal_op07-b'});assert.equal(r.ok,true,r.explanation?.join());
++ const [a,b]=['first','second'].map((k,i)=>r.project.walls.find(x=>x.id===(i?'wal_op07-b':wall.id)));
++ assert.deepEqual(a.end,b.start,'unidas exactamente');assert.ok(Number.isInteger(a.end.x)&&Number.isInteger(a.curve.control.x),'puntos enteros como guarda project-core');
++ assert.equal(a.heightMm,wall.heightMm);assert.equal(b.heightEndMm,2400);assert.equal(a.heightEndMm,b.heightMm,'altura continua en el corte');
++ assert.ok(Math.abs(Core.wallLength(a)+Core.wallLength(b)-len)<2,'longitud conservada (redondeo a mm)');
++ assert.equal(r.project.openings.length,project.openings.length,'ninguna abertura desaparece');
++ for(const o of project.openings.filter(x=>x.wallId===wall.id)){const n=r.project.openings.find(x=>x.id===o.id),host=r.project.walls.find(x=>x.id===n.wallId);
++  const before=Walls.pathProfile(wall,Core.WALL_PATH).sample(o.offsetMm+o.widthMm/2).point,after=Walls.pathProfile(host,Core.WALL_PATH).sample(n.offsetMm+n.widthMm/2).point;
++  assert.ok(Math.hypot(before.x-after.x,before.y-after.y)<1.5,`${o.id} en su sitio (< 1,5 mm con redondeo)`);}
++ assert.deepEqual(r.intent,{split:{[wall.id]:[wall.id,'wal_op07-b']}});
++ assert.equal(Core.guardSave(project,r.project,{intent:r.intent}).ok,true);
++});
++
++test('S5 · dividir sobre una abertura se rechaza y la nombra; fuera del muro también se rechaza',()=>{
++ const {project,wall}=F.curved(F.base()),o=project.openings.find(x=>x.id==='opn_op07-door');
++ const r=Core.splitWall(project,wall.id,o.offsetMm+o.widthMm/2);assert.equal(r.ok,false);assert.equal(r.code,'opening-straddles-cut');assert.deepEqual(r.openings,[o.id]);
++ assert.equal(Core.splitWall(project,wall.id,0).code,'cut-outside');assert.equal(Core.splitWall(project,wall.id,Core.wallLength(wall)+10).code,'cut-outside');
++});
++
++test('S5 · dividir un muro recto y a nivel no cambia el contrato (sigue en su versión, sin campos nuevos)',()=>{
++ const p=F.base();p.schemaVersion='1.12.0';const w=F.longest(p),r=Core.splitWall(p,w.id,Math.round(L(w)/2),{newId:'wal_op07-c'});
++ assert.equal(r.ok,true);assert.equal(r.project.schemaVersion,'1.12.0');assert.ok(r.project.walls.every(x=>!Core.shapedWall(x)));
++ assert.equal(r.project.walls.length,p.walls.length+1);
++});
++
++test('S5 · una pérdida sin intención se detecta aunque la operación la hiciera otra parte del editor',()=>{
++ const {project,wall}=F.curved(F.base());const bad=F.clone(project);delete bad.walls.find(x=>x.id===wall.id).curve;
++ assert.ok(Core.guardSave(project,bad).issues.some(i=>i.code==='curve-lost'));
++});
+diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
+index 54307536..4f924edb 100644
+--- a/tests/regression-partitions.json
++++ b/tests/regression-partitions.json
+@@ -15,6 +15,7 @@
+   "tests/building.browser.test.cjs",
+   "tests/evolution-demo.browser.test.cjs",
+   "tests/op07-s4-3d.browser.test.cjs",
++  "tests/op07-s5-edit.browser.test.cjs",
+   "tests/home-demos.browser.test.cjs",
+   "tests/e2-comparativas.browser.test.cjs",
+   "tests/h01-dossier-inventario.browser.test.cjs",

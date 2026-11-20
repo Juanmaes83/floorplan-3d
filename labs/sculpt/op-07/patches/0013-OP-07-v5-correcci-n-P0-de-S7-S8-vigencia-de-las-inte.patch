@@ -1,0 +1,162 @@
+From 76d451b36b39a18de288d4abbce004a4d1fb396a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 20 Nov 2026 13:22:22 +0000
+Subject: [PATCH 13/14] =?UTF-8?q?OP-07=20v5=20=C2=B7=20correcci=C3=B3n=20P?=
+ =?UTF-8?q?0=20de=20S7/S8:=20vigencia=20de=20las=20intenciones=20por=20doc?=
+ =?UTF-8?q?umento=20y=20revocaci=C3=B3n=20al=20reintroducir=20una=20forma?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Reproducción de Codex (cierre-v4-d, 3eee6937) sobre v4 3afb9e18:
+1. persistence-editor: cada paso queda pendiente POR DOCUMENTO; cada documento se comprueba solo con los pasos que no ha
+   confirmado y un commit consume los de los documentos que escribe. La clave histórica que nunca se escribe ya no
+   prolonga una autorización consumida por la biblioteca. Tope de 512 pasos (falla seguro: solo puede rechazar).
+2. project-core: editIntent declara las formas que cada paso reintroduce (curva, pendiente, muro u hueco que vuelven) y
+   composeIntent revoca el permiso anterior de perderlas, también dentro del mismo lote.
+Regresiones puras (tests/op07-s8b-revival.test.cjs, 4): curva, inclinación, curva reintroducida por edición genérica y
+muro que reaparece; fallan 4/4 sobre v4 y pasan sobre v5. Sin activación (OP07_RELEASE='integrated').
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_018qrnxCxtywTym2g1MpgUDA
+---
+ js/persistence-editor.js        | 28 +++++++++++++---------
+ js/project-core.js              | 14 +++++++++++
+ tests/op07-s8b-revival.test.cjs | 41 +++++++++++++++++++++++++++++++++
+ 3 files changed, 72 insertions(+), 11 deletions(-)
+ create mode 100644 tests/op07-s8b-revival.test.cjs
+
+diff --git a/js/persistence-editor.js b/js/persistence-editor.js
+index 5689051e..65abc875 100644
+--- a/js/persistence-editor.js
++++ b/js/persistence-editor.js
+@@ -9,11 +9,13 @@
+  const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison,noteEdit};
+  // OP-07 S7 · Save gate: Core.guardSave between the last CONFIRMED revision and the next one, with the intent of the editing
+  // steps made since that revision (each step carries its own; nothing global persists). A refused save writes nothing.
+- let steps=[],seq=0;
++ let steps=[],seq=0;const MAX_STEPS=512;
+  function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
+   const C=window.FloorPlanCore;if(!C?.editIntent)return;
+   let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
+-  steps.push({seq:++seq,done:new Set(),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
++  steps.push({seq:++seq,pending:new Set(['project','library']),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
++  // Fail safe: dropping old steps can only refuse a save, never authorize a loss.
++  if(steps.length>MAX_STEPS)steps.splice(0,steps.length-MAX_STEPS);
+  }
+  const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
+  function refusal(issues){
+@@ -27,20 +29,24 @@
+  // S8: without F0.2b (today's Production) the editor writes localStorage directly: the same gate runs at this facade,
+  // against what is stored now; a refusal throws, which every writer already reports, and nothing is written.
+  function guarded(store){const kinds=KIND();return {op07Protected:true,getItem:k=>store.getItem(k),removeItem:k=>store.removeItem(k),key:i=>store.key(i),get length(){return store.length;},
+-  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false,present:Object.keys(kinds).filter(x=>x===k||store.getItem(x)!==null)});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
++  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
+  const gate={
+-  check({changes,confirmed,restore,present}){
++  check({changes,confirmed,restore}){
+    const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
+    // Intents per project (variants and building levels share wall ids); never one global intent.
+-   const upTo=seq,intents={};if(!restore)for(const s of steps)intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
+-   const v=C.saveGate(pairs,{intents,restore});
+-   // A step is forgotten only once it is confirmed in EVERY managed document that exists (project key and library).
+-   const required=[...new Set((present||[...Object.keys(confirmed).filter(k=>confirmed[k]!=null),...Object.keys(changes)]).map(k=>kinds[k]).filter(Boolean))];
+-   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),required,message:v.ok?'':refusal(v.issues)};
++   // Each document is checked ONLY with the steps it has not confirmed yet (OP-07 v5): a document that is never written
++   // (the historical project key while the editor writes the library) cannot keep alive a step another document consumed.
++   const upTo=seq,issues=[];
++   for(const pair of pairs){const intents={};if(!restore)for(const s of steps)if(s.seq<=upTo&&s.pending.has(pair.kind))intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
++    issues.push(...C.saveGate([pair],{intents,restore}).issues);}
++   const v={ok:!issues.length,issues};
++   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),message:v.ok?'':refusal(v.issues)};
+   },
++  // A confirmed write consumes, for the documents it wrote, every step up to the revision checked (steps made while the
++  // write was in flight stay pending). A restore starts over.
+   committed(v){if(!v)return;if(v.restore){steps=[];return;}
+-   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.done.add(k);
+-   steps=steps.filter(s=>s.seq>v.seq||!v.required.every(k=>s.done.has(k)));}
++   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.pending.delete(k);
++   steps=steps.filter(s=>s.pending.size);}
+  };
+ 
+  function loadProject(projectKey){
+diff --git a/js/project-core.js b/js/project-core.js
+index 052e2274..1dc94cae 100644
+--- a/js/project-core.js
++++ b/js/project-core.js
+@@ -80,7 +80,18 @@
+     if (restore) { const key = (l, id) => JSON.stringify((l || []).find(x => x.id === id) ?? null);
+       out.revoke = [...new Set([...(before?.walls || []), ...(after?.walls || []), ...(before?.openings || []), ...(after?.openings || [])].map(x => x.id))]
+         .filter(id => key(before?.walls, id) !== key(after?.walls, id) || key(before?.openings, id) !== key(after?.openings, id)); }
++    // OP-07 v5 · Every step (not only a restore) declares the shapes it REINTRODUCES: a wall that is curved or sloped again
++    // after the step (newly or with a different shape), and walls and openings that reappear. Composing it revokes
++    // any earlier permission to lose them, even within the same batch.
++    const prevWalls = new Map((before?.walls || []).map(w => [w.id, w])), prevOpenings = new Set((before?.openings || []).map(o => o.id));
++    const reshape = {curved:[], sloped:[], present:[], openings:[]};
++    for (const w of after?.walls || []) { const p = prevWalls.get(w.id);
++      if (!p) reshape.present.push(w.id);
++      if (Walls.isCurved(w) && (!p || JSON.stringify(p.curve ?? null) !== JSON.stringify(w.curve))) reshape.curved.push(w.id);
++      if (sloped(w) && (!p || p.heightEndMm !== w.heightEndMm || p.heightMm !== w.heightMm)) reshape.sloped.push(w.id); }
++    for (const o of after?.openings || []) if (!prevOpenings.has(o.id)) reshape.openings.push(o.id);
+     const r = composeIntent({...out, projectId}, op ? {...op, projectId} : {projectId});
++    r.reshape = reshape;
+     if (out.revoke) r.revoke = out.revoke;   // composing this step into earlier ones revokes their permissions on these ids
+     return r;
+   }
+@@ -90,6 +101,9 @@
+     if (a.projectId && b.projectId && a.projectId !== b.projectId) throw new Error(`OP-07: intents of different projects (${a.projectId} ≠ ${b.projectId}) cannot be composed`);
+     const out = {projectId:a.projectId ?? b.projectId ?? null, removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
+     const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
++    // A step that reintroduces a curve, a slope, a wall or an opening revokes the earlier permission to lose it (v5).
++    const rs = b.reshape || {}, drop = (key, ids) => { for (const id of ids || []) { out[key] = out[key].filter(x => x !== id); const k = origin(id); if (k) out[key] = out[key].filter(x => x !== k); } };
++    drop('straightened', rs.curved); drop('leveled', rs.sloped); drop('removed', rs.present); drop('removedOpenings', rs.openings);
+     // A restore (undo, redo, recovery) revokes every earlier permission on the walls and openings it changes.
+     for (const id of b.revoke || []) {
+       for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = out[key].filter(x => x !== id);
+diff --git a/tests/op07-s8b-revival.test.cjs b/tests/op07-s8b-revival.test.cjs
+new file mode 100644
+index 00000000..091b4c58
+--- /dev/null
++++ b/tests/op07-s8b-revival.test.cjs
+@@ -0,0 +1,41 @@
++'use strict';
++// OP-07 v5 · Regresión (Codex, cierre-v4-d @ 3eee6937): reintroducir una forma revoca el permiso anterior de perderla,
++// también dentro del MISMO lote. Curva y su equivalente de inclinación; positivos conservados.
++const test=require('node:test'),assert=require('node:assert/strict');
++const F=require('./op07/fixtures.cjs'),C=require('../js/project-core.js'),J=JSON.stringify;
++const lot=steps=>steps.reduce((acc,[b,a,o])=>C.composeIntent(acc,C.editIntent(b,a,o)),{});
++const gate=(b,a,intent)=>C.saveGate([{kind:'project',before:J(b),after:J(a)}],{intent});
++
++test('v5 · enderezar → volver a curvar → pérdida genérica en un lote: rechazado (curve-lost)',()=>{
++ const {project:p0,wall:w}=F.curved(F.base(),{withOpening:false}),s=C.setWallCurve(p0,w.id,null);
++ const mid=s.project.walls.find(x=>x.id===w.id),c=C.setWallCurve(s.project,w.id,{x:Math.round((mid.start.x+mid.end.x)/2+150),y:Math.round((mid.start.y+mid.end.y)/2+500)});assert.ok(c.ok,c.explanation);
++ const lost=C.clone(c.project);delete lost.walls.find(x=>x.id===w.id).curve;
++ const intent=lot([[p0,s.project,{op:s.intent}],[s.project,c.project,{op:c.intent}],[c.project,lost]]);
++ assert.deepEqual(gate(p0,lost,intent).issues.map(i=>i.code),['curve-lost']);
++ assert.equal(gate(p0,s.project,lot([[p0,s.project,{op:s.intent}]])).ok,true,'positivo: enderezar explícitamente sigue confirmándose');
++});
++
++test('v5 · equivalente de inclinación: nivelar → volver a inclinar → pérdida genérica en un lote: rechazado (slope-lost)',()=>{
++ const {project:p0,wall:w}=F.sloped(F.base(),{heightEndMm:2300}),l=C.setWallEndHeight(p0,w.id,null),r=C.setWallEndHeight(l.project,w.id,2400);assert.ok(l.ok&&r.ok);
++ const lost=C.clone(r.project);delete lost.walls.find(x=>x.id===w.id).heightEndMm;
++ assert.deepEqual(gate(p0,lost,lot([[p0,l.project,{op:l.intent}],[l.project,r.project,{op:r.intent}],[r.project,lost]])).issues.map(i=>i.code),['slope-lost']);
++ assert.equal(gate(p0,l.project,lot([[p0,l.project,{op:l.intent}]])).ok,true,'positivo: nivelar explícitamente');
++});
++
++test('v5 · volver a curvar con una edición genérica (no solo con la operación) también revoca',()=>{
++ const {project:p0,wall:w}=F.curved(F.base(),{withOpening:false}),s=C.setWallCurve(p0,w.id,null),again=C.clone(s.project);
++ again.walls.find(x=>x.id===w.id).curve=C.clone(p0.walls.find(x=>x.id===w.id).curve);
++ const lost=C.clone(again);delete lost.walls.find(x=>x.id===w.id).curve;
++ assert.deepEqual(gate(p0,lost,lot([[p0,s.project,{op:s.intent}],[s.project,again],[again,lost]])).issues.map(i=>i.code),['curve-lost']);
++});
++
++test('v5 · un muro con forma que reaparece revoca su permiso de borrado; positivos de división y deshacer intactos',()=>{
++ const {project:p0,wall:w}=F.curved(F.base(),{withOpening:false}),gone=C.clone(p0);gone.walls=gone.walls.filter(x=>x.id!==w.id);
++ // Un borrado dentro de un paso del editor es intención (S7). Lo que se prueba: borrar y volver a añadir en el editor, y que un
++ // escritor FUERA de los pasos guarde el documento sin el muro: el permiso del primer borrado ya no vale.
++ const back=C.clone(p0);
++ assert.deepEqual(gate(p0,gone,lot([[p0,gone],[gone,back]])).issues.map(i=>i.code),['wall-lost'],'borrar, volver a añadir y perder fuera de los pasos');
++ assert.equal(gate(p0,gone,lot([[p0,gone]])).ok,true,'positivo: borrado explícito');
++ const sp=C.splitWall(p0,w.id,600,{newId:'wal_pieza0002'});assert.equal(gate(p0,sp.project,lot([[p0,sp.project,{op:sp.intent}]])).ok,true,'positivo: dividir');
++ const st=C.setWallCurve(p0,w.id,null);assert.equal(gate(st.project,p0,lot([[st.project,p0,{restore:true}]])).ok,true,'positivo: deshacer un enderezado confirmado');
++});
