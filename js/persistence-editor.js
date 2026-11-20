@@ -194,7 +194,11 @@
  async function start(){
   editor.inert=true;
   if(!enabled){
-   try{runtime.storage=guarded(localStorage);}
+    try{
+     const s8=guarded(localStorage),a0=window.FloorPlanSchemaEpoch;
+     // A0 retains blocked changes in memory. S8 confirms only writes that reach the durable storage.
+     runtime.storage=a0?Object.assign(a0.guardStorage(s8),{op07Protected:s8.op07Protected}):s8;
+    }
    catch{runtime.storage={getItem:()=>null,setItem:()=>{throw Error('Almacenamiento local no disponible.');}};}
    if(isolated&&!window.RUBIK_DELIVERY){
     const values=new Map();
