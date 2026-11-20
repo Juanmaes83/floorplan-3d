@@ -41,6 +41,8 @@ async function capture(input, dest, o = {}) {
     page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_|NS_ERROR|WebGL warning/.test(m.text())) errors.push(m.text()); });
     let blocked = 0;
     await context.route('**/*', async r => { const u = r.request().url();
+      // WebKit routes the download of the in-browser ZIP. Only blob URLs from this page's own origin are local.
+      if (u.startsWith('blob:' + base)) return r.continue();
       if (u.startsWith(base)) {
         if (/\.glb(\?|$)/.test(u)) { if (o.blockAssets) { blocked++; return r.abort(); } if (o.delayAssetsMs) await new Promise(res => setTimeout(res, o.delayAssetsMs)); }
         return r.continue(); }
@@ -71,17 +73,23 @@ async function capture(input, dest, o = {}) {
     let files, record, uiShot = null, t1, t2;
     t1 = Date.now();
     if (via === 'ui') {
-      await page.evaluate(() => window.RubikSceneExport.open());
+      await page.locator('#workArea-deliver').click();
+      const card = page.locator('#professionalWorkspace [data-group="documentation"] #sceneExportCard');
+      if (!await page.evaluate(() => window.View3D.suspended)) throw Error('Entregar did not suspend the background viewer');
+      await card.locator('#sceneExportOpen').click();
       await page.locator('#sceneExportDialog #sePrimary').click(); // «Preparar escena»
       await page.waitForFunction(() => ['ready', 'error'].includes(window.RubikSceneExport.state), null, { timeout: 180000 });
       t2 = Date.now();
       const st = await page.evaluate(() => ({ state: window.RubikSceneExport.state, status: document.querySelector('#seStatus').textContent }));
       if (st.state !== 'ready') throw Error('UI did not reach «ready»: ' + st.status);
+      if (!await page.evaluate(() => window.View3D.suspended)) throw Error('Preparation did not restore the suspended viewer');
       uiShot = path.join(os.tmpdir(), 'scene-ui-' + process.pid + '.png'); await page.locator('#sceneExportDialog').screenshot({ path: uiShot });
       const [download] = await Promise.all([page.waitForEvent('download'), page.locator('#sceneExportDialog #sePrimary').click()]); // «Descargar ZIP»
       const zipPath = path.join(tmp, await download.suggestedFilename()); await download.saveAs(zipPath);
       const zip = fs.readFileSync(zipPath); files = unzipStored(zip); files.set('package.zip', zip); files.set('package-name.txt', Buffer.from(await download.suggestedFilename()));
       record = await page.evaluate(() => window.RubikSceneExport.result.record);
+      await page.keyboard.press('Escape');
+      await page.locator('#workArea-design').click();
       const doc = await page.evaluate(async () => { const c = await window.View3D.captureScene(); return JSON.stringify(c.doc); }); // misma escena, para A↔B
       files.set('scene.json', Buffer.from(doc));
     } else {

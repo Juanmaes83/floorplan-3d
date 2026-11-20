@@ -70,8 +70,9 @@ test('UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
     await page.waitForFunction(() => window.FloorPlanApp && window.RubikSceneExport && window.View3D);
     await page.evaluate(() => document.querySelector('#welcomeDialog')?.close?.());
-    // 1 · En 2D: el diálogo explica y su acción principal abre la vista 3D (no bloquea sin salida)
-    await page.evaluate(() => window.RubikSceneExport.open());
+    // 1 · Desde Entregar en 2D, la acción principal abre la escena y devuelve el visor al reposo del área.
+    await page.locator('#workArea-deliver').press('Enter');
+    await page.locator('#professionalWorkspace [data-group="documentation"] #sceneExportOpen').press('Enter');
     assert.equal(await page.locator('#sceneExportDialog').getAttribute('data-state'), 'no3d');
     assert.match(await page.locator('#seStatus').textContent(), /vista 3D abierta/);
     assert.equal(await page.locator('#sePrimary').textContent(), 'Abrir la vista 3D');
@@ -80,8 +81,10 @@ test('UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la
     assert.equal(overflow, false, 'no horizontal overflow at 390 px');
     await page.locator('#sePrimary').click();
     await page.waitForFunction(() => window.FloorPlanApp.viewMode === '3d' && document.querySelector('#sceneExportDialog').dataset.state === 'idle');
+    assert.equal(await page.evaluate(() => View3D.suspended), true, 'Entregar keeps the background viewer suspended after entering 3D');
     // 2 · Proyecto vacío (sin geometría): error con causa y salida, sin generar nada
     await page.evaluate(() => document.querySelector('#sceneExportDialog').close());
+    await page.locator('#workArea-design').click();
     const blank = require('../js/room-layout.js').blank('Vacío (prueba OP-10)'), file = path.join(tmp, 'blank.json'); fs.writeFileSync(file, JSON.stringify(blank));
     await page.locator('#fileIn').setInputFiles(file); await page.waitForFunction(id => window.FloorPlanApp.project?.id === id, blank.id);
     await page.evaluate(() => setView('3d')); await page.waitForFunction(() => window.FloorPlanApp.viewMode === '3d');

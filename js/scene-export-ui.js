@@ -18,6 +18,15 @@
  let state='idle',abort=null,result=null,error=null;
  const stage={loading:tx('Esperando a que la vista 3D termine de cargar los muebles…','Waiting for the 3D view to finish loading furniture…','等待 3D 视图加载完家具…'),moving:tx('Esperando a que termine el movimiento de cámara o puertas…','Waiting for the camera or doors to stop moving…','等待相机或门停止移动…'),settling:tx('Comprobando que la escena está estable…','Checking that the scene is stable…','正在确认场景已稳定…')};
 
+ // «Entregar» suspende el visor detrás del área. Cederlo solo durante la operación del diálogo.
+ async function withActiveViewer(run){
+  const view=window.View3D;
+  if(!view?.suspended)return run();
+  const area=window.FloorPlanProfessionalUI?.area;
+  view.setSuspended(false);
+  try{return await run();}
+  finally{if(window.FloorPlanProfessionalUI?.area===area)view.setSuspended(true);}
+ }
  function is3d(){return app.viewMode==='3d'&&window.View3D&&window.View3D.contextAvailable!==false;}
  function set(next){state=next;render();}
  function render(){
@@ -31,7 +40,7 @@
    status.textContent=ok?tx('Encuadra la vista 3D como quieras verla en Blender: la cámara actual se incluye.','Frame the 3D view as you want to see it in Blender: the current camera is included.','请按希望在 Blender 中看到的样子调整 3D 视图：当前相机将被包含。')
     :tx('Necesitas la vista 3D abierta: la escena se toma de lo que se ve allí.','The 3D view must be open: the scene is taken from what it shows.','需要打开 3D 视图：场景取自其中显示的内容。');
    primary.textContent=ok?tx('Preparar escena','Prepare scene','准备场景'):tx('Abrir la vista 3D','Open the 3D view','打开 3D 视图');
-   primary.onclick=ok?prepare:async()=>{primary.disabled=true;status.textContent=tx('Abriendo la vista 3D…','Opening the 3D view…','正在打开 3D 视图…');try{await window.setView?.('3d');}catch{}for(let i=0;i<100&&!is3d();i++)await new Promise(r=>setTimeout(r,50));render();(primary.hidden?secondary:primary).focus();};
+   primary.onclick=ok?prepare:async()=>{primary.disabled=true;status.textContent=tx('Abriendo la vista 3D…','Opening the 3D view…','正在打开 3D 视图…');try{await withActiveViewer(()=>window.setView?.('3d'));}catch{}for(let i=0;i<100&&!is3d();i++)await new Promise(r=>setTimeout(r,50));render();(primary.hidden?secondary:primary).focus();};
   }else if(state==='working'){
    primary.hidden=true;secondary.textContent=tx('Cancelar','Cancel','取消');secondary.onclick=()=>abort?.abort();
   }else if(state==='ready'||state==='stale'){
@@ -71,7 +80,7 @@
   if(state==='working')return;if(!is3d()){set('no3d');return;}
   abort=new AbortController();result=null;error=null;set('working');status.textContent=stage.settling;
   try{
-   const capture=await window.View3D.captureScene({signal:abort.signal,onState:s=>{if(stage[s]&&status.textContent!==stage[s])status.textContent=stage[s];}});
+   const capture=await withActiveViewer(()=>window.View3D.captureScene({signal:abort.signal,onState:s=>{if(stage[s]&&status.textContent!==stage[s])status.textContent=stage[s];}}));
    status.textContent=tx('Empaquetando la escena…','Packaging the scene…','正在打包场景…');await new Promise(r=>setTimeout(r));if(abort.signal.aborted)throw Object.assign(Error('cancelled'),{code:'CANCELLED'});
    const prepareScript=await script(),glb=C.toGLB(capture.doc),manifest=await D.manifest({capture,glb,project:app.project,digest,prepareScript,app:{revision:document.documentElement.dataset.appRevision||null}});
    const pkg=D.packageFiles({manifest,glb,prepareScript,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
