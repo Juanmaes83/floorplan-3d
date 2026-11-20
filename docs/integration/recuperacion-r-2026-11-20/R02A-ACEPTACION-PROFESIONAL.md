@@ -53,7 +53,7 @@ En el panel de **la estancia seleccionada**, «Techo y elementos altos · experi
 | 5 | **Recolocación automática** solo con muros alineados a los ejes | Aceptar como límite declarado |
 | 6 | **Tamaños** genéricos y rotulados del donante | Aceptar en el piloto |
 | 7 | **GOV-05:** coautoría de IA y aviso MIT del donante (`docs/licenses/r02a-donor-MIT.txt`) | Cerrarlo es requisito para salir de «experimental» |
-| 8 | **Nombres de muebles** en los avisos, tal como se guardan | Traducir con el diccionario existente (corte menor) |
+| 8 | **Nombres de muebles** en los avisos, tal como se guardan | **Resuelto** en `claude/r03-holguras@e984705e`: `r02a-ceiling-editor.js` muestra muebles y estancias por `window.FloorPlanDisplayName`. Regla permanente: sin chino en ES/EN, vigilada por `tests/no-chinese-display.browser.test.cjs` |
 
 ## 5. Para salir de «experimental»
 
@@ -63,3 +63,24 @@ Hace falta:
 - Firefox y WebKit por Codex.
 
 Mientras tanto se mantiene tal cual: no hay cambios de código.
+
+## 6. Propuesta de cierre de las decisiones (para firmar; sigue «experimental» hasta entonces)
+
+Cada propuesta reutiliza lo que ya existe y no amplía el alcance. No se abre R02-B.
+
+| N.º | Propuesta concreta | Qué cambia si se aprueba | Prueba que la acredita |
+|---|---|---|---|
+| 1 · Altura de paso | **2100 mm** de paso libre bajo cualquier elemento en las zonas de circulación de la estancia (fuera de muebles). Por debajo, el estado pasa de «revisable» a **«bloqueado · paso libre»**, con la cota y el motivo. Fuera de circulación no se aplica | Una regla nueva en `r02a-ceiling-core` (`validate` y `previewDiff`) con su fuente declarada «decisión del propietario». **No es normativa** | La prueba que hoy **fija** el caso de 40 cm como «revisable» pasa a exigir «bloqueado». Casos en el límite: 2099 y 2100 mm |
+| 2 · Muebles sin altura | **Aceptar la limitación** en el piloto: sobre un mueble, «pendiente de datos» y sin guardar. Indicar la altura del mueble queda fuera | Nada | Las pruebas actuales ya lo fijan |
+| 3 · Contrato | **Ratificar `x-r02a-ceiling`** (extensión versionada). Rechazar `ceilingItems[]` | Nada (ya implementado). Se registra la ratificación en el handoff maestro | `r02a-integration-contract` 7/7 |
+| 4 · Referencia vertical | **Ratificar «planta con excepción por estancia»**, con fuente obligatoria. La derivación desde la planta superior queda **fuera** hasta una decisión propia | Nada | `r02a-ceiling-core` 22/22 y `r02a-editor.browser` |
+| 5 · Recolocación automática | Aceptar «solo con muros alineados a los ejes» como límite **visible** en el panel | Una línea de texto en los límites del panel | Comprobar la frase en `r02a-editor.browser` |
+| 6 · Tamaños del donante | Aceptar en el piloto, **rotulados** «genéricos» | Nada | Ya rotulados |
+| 7 · GOV-05 | Cerrar con el expediente de licencia y coautoría (aviso MIT en `docs/licenses/r02a-donor-MIT.txt` + nota de coautoría de IA en el handoff) | Documento | Revisión del propietario |
+| 8 · Nombres | Resuelto (ver §4) | Integrar con `claude/r03-holguras` | `no-chinese-display.browser` 3/3 |
+
+**Orden propuesto:**
+1. Firmar 2, 3, 4, 5, 6 y 8: no requieren código, o es mínimo.
+2. Decidir 1: es la única con código nuevo y la que más protege.
+3. Cerrar 7.
+4. Con las ocho cerradas y el recorrido del §3 hecho en la Preview exacta, retirar «experimental» con autorización expresa.
