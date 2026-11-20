@@ -4008,39 +4008,60 @@ function publishAsset(id,value){assetStates.set(id,value);dispatchEvent(new Even
    Guarda genérica, que falla cerrado, en tres capas:
    1. toda API de salida del visor (shot, deliveryShot, presentationCapture, captureScene) corre con el modelo privado
       RETIRADO de la escena, también si es asíncrona, concurrente, falla o se cancela (genericOutput);
-   2. cada renderer.render sincroniza: el privado solo se dibuja si no hay salida en curso ni una grabación viva;
-   3. los lectores de píxeles del canvas: captureStream bloquea el privado mientras la pista siga viva; toDataURL, toBlob y
-      readPixels con el privado presente LANZAN un error (un consumidor desconocido nunca recibe píxeles privados). */
-let privateOutputs=0,privateShown=false;const privateStreams=new Set();
-function privateAllowed(){return !!window.RubikPrivateView?.enabled&&privateOutputs===0&&![...privateStreams].some(t=>t.readyState==='live');}
+   2. cada renderer.render sincroniza: el privado solo se dibuja si el modo está activo, la concesión sigue vigente y no hay
+      salida en curso, presentación, grabador ni pista grabada viva;
+   3. lectores CONOCIDOS de píxeles del canvas (toDataURL, toBlob, captureStream, readPixels, drawImage 2D/Offscreen,
+      createImageBitmap, texImage2D/texSubImage2D): si el último fotograma era privado y ya no está autorizado se repinta en
+      genérico antes de leer; si sigue autorizado, la lectura LANZA un error. No es una protección universal de los píxeles:
+      una captura de pantalla del sistema operativo o compartir pantalla quedan fuera del alcance de la página. */
+let privateOutputs=0,privateShown=false,canvasPrivateFrame=false,privateRaw=null;const privateStreams=new Set(),privateTargets=new WeakSet();
+// OP05-A: una presentación (en vivo, con o sin grabación) y el grabador son salidas: nunca muestran el privado.
+function privateAllowed(){return !!window.RubikPrivateView?.enabled&&privateOutputs===0&&!window.FloorPlanPresentation?.active&&!window.FloorPlanTourRecorder?.busy&&![...privateStreams].some(t=>t.readyState==='live');}
 function syncPrivate(){
   if(!window.RubikPrivateView){privateShown=false;return false;}   // sin laboratorio: coste cero, comportamiento de la base
-  let shown=false;const allow=privateAllowed();
+  let shown=false;const pv=window.RubikPrivateView,allow=privateAllowed();
   for(const g of furnG?.children||[]){const ps=g.userData.privateScene,gen=g.userData.genericGroup;if(!ps)continue;
-    if(allow){if(ps.parent!==g)g.add(ps);if(gen)gen.visible=false;shown=true;}else{if(ps.parent)ps.parent.remove(ps);if(gen)gen.visible=true;}}
+    // OP05-C: cada fotograma exige que la concesión siga vigente para ese proyecto y modelo.
+    if(allow&&pv.isGranted?.(g.userData.privateKey)){if(ps.parent!==g)g.add(ps);if(gen)gen.visible=false;shown=true;}else{if(ps.parent)ps.parent.remove(ps);if(gen)gen.visible=true;}}
   privateShown=shown;return shown;
+}
+// OP05-B: el CANVAS puede conservar el último fotograma privado aunque la escena ya sea genérica. Antes de cualquier
+// lectura: si ya no hay nada privado autorizado, se repinta en genérico de forma síncrona; si lo hay, la lectura falla.
+function genericCanvas(){
+  if(!window.RubikPrivateView||!canvasPrivateFrame)return;
+  syncPrivate();
+  if(!privateShown&&privateRaw&&scene&&camera){privateRaw(scene,camera);canvasPrivateFrame=false;return;}
+  throw Error('OP-05: salida de píxeles con un modelo privado visible. Usa la representación genérica.');
 }
 function genericOutput(fn){
   if(!window.RubikPrivateView)return fn();   // sin laboratorio no hay nada privado: la salida es la de siempre
-  privateOutputs++;syncPrivate();let done=false;const end=()=>{if(done)return;done=true;privateOutputs--;syncPrivate();requestFrame();};
-  try{const r=fn();if(r&&typeof r.then==='function')return r.finally(end);end();return r;}catch(e){end();throw e;}
+  privateOutputs++;let done=false;const end=()=>{if(done)return;done=true;privateOutputs--;syncPrivate();requestFrame();};
+  try{syncPrivate();genericCanvas();const r=fn();if(r&&typeof r.then==='function')return r.finally(end);end();return r;}catch(e){end();throw e;}
 }
+function privateState(){let scenes=0;for(const g of furnG?.children||[])if(g.userData.privateScene)scenes++;return {scenes,shown:privateShown,canvasPrivateFrame};}
+// Lectores CONOCIDOS de píxeles del canvas del visor (no es una protección universal: una captura de pantalla del sistema
+// u otra API no enumerada aquí no se puede interceptar desde la página).
 function installPrivateGuard(r){
-  const raw=r.render.bind(r),cv=r.domElement,refuse=()=>{throw Error('OP-05: salida de píxeles con un modelo privado visible. Usa la representación genérica.');};
-  r.render=(sc,cam)=>{if(window.RubikPrivateView)syncPrivate();return raw(sc,cam);};
-  for(const k of ['toDataURL','toBlob']){const o=cv[k].bind(cv);cv[k]=(...a)=>{if(privateShown)refuse();return o(...a);};}
-  if(cv.captureStream){const o=cv.captureStream.bind(cv);cv.captureStream=(...a)=>{privateOutputs++;try{syncPrivate();raw(scene,camera);const st=o(...a);for(const t of st.getTracks())privateStreams.add(t);return st;}finally{privateOutputs--;syncPrivate();}};}
-  const gl=r.getContext(),rp=gl.readPixels.bind(gl);gl.readPixels=(...a)=>{if(privateShown)refuse();return rp(...a);};
+  const raw=r.render.bind(r),cv=r.domElement;privateRaw=raw;
+  r.render=(sc,cam)=>{if(window.RubikPrivateView)syncPrivate();const out=raw(sc,cam);if(window.RubikPrivateView){const rt=r.getRenderTarget();if(rt===null)canvasPrivateFrame=privateShown;else if(privateShown)privateTargets.add(rt);else privateTargets.delete(rt);}return out;};
+  for(const k of ['toDataURL','toBlob']){const o=cv[k].bind(cv);cv[k]=(...a)=>{genericCanvas();return o(...a);};}
+  if(cv.captureStream){const o=cv.captureStream.bind(cv);cv.captureStream=(...a)=>{privateOutputs++;try{syncPrivate();genericCanvas();const st=o(...a);for(const t of st.getTracks())privateStreams.add(t);return st;}finally{privateOutputs--;syncPrivate();}};}
+  const gl=r.getContext(),rp=gl.readPixels.bind(gl);gl.readPixels=(...a)=>{const rt=r.getRenderTarget();if(rt===null)genericCanvas();else if(window.RubikPrivateView&&privateTargets.has(rt))throw Error('OP-05: lectura de un destino de render con un modelo privado. Usa la representación genérica.');return rp(...a);};
+  for(const k of ['readRenderTargetPixels','readRenderTargetPixelsAsync'])if(typeof r[k]==='function'){const f=r[k].bind(r);r[k]=(rt,...a)=>{if(window.RubikPrivateView&&privateTargets.has(rt)){const e=Error('OP-05: lectura de un destino de render con un modelo privado. Usa la representación genérica.');if(k.endsWith('Async'))return Promise.reject(e);throw e;}return f(rt,...a);};}
+  const isViewer=src=>src===cv;
+  for(const C of [window.CanvasRenderingContext2D,window.OffscreenCanvasRenderingContext2D].filter(Boolean)){const o=C.prototype.drawImage;C.prototype.drawImage=function(src,...a){if(isViewer(src))genericCanvas();return o.call(this,src,...a);};}
+  if(window.createImageBitmap){const o=window.createImageBitmap.bind(window);window.createImageBitmap=(src,...a)=>{if(isViewer(src)){try{genericCanvas();}catch(e){return Promise.reject(e);}}return o(src,...a);};}
+  for(const G of [window.WebGLRenderingContext,window.WebGL2RenderingContext].filter(Boolean))for(const k of ['texImage2D','texSubImage2D']){const o=G.prototype[k];G.prototype[k]=function(...a){if(a.some(isViewer))genericCanvas();return o.apply(this,a);};}
 }
 function loadPrivateFurniture(g,f,generation,pv){
   const controller=new AbortController();assetRequests.set(f.id,controller);publishAsset(f.id,{state:'loading',private:true});
   const bounds=new THREE.Box3().setFromObject(g),height=f.size.heightMm?M(f.size.heightMm):bounds.max.y-bounds.min.y;
   assetQueue.push(()=>pv.load(project,f.id,{signal:controller.signal}).then(result=>{
     // Una carga tardía nunca entra en una escena ajena: misma generación, mismo grupo y el mismo proyecto que la pidió.
-    if(generation!==assetGeneration||controller.signal.aborted||g.parent!==furnG||result.projectId!==project.id){AssetLoader.dispose(result.scene);return;}
+    if(generation!==assetGeneration||controller.signal.aborted||g.parent!==furnG||result.projectId!==project.id||!pv.isGranted?.(result.key)){AssetLoader.dispose(result.scene);return;}
     const generic=new THREE.Group();generic.name='op05-generic';while(g.children.length)generic.add(g.children[0]);g.add(generic);
     result.scene.scale.set(f.w/result.meshDimensionsMm.width,height*1000/result.meshDimensionsMm.height,f.d/result.meshDimensionsMm.depth);
-    g.userData.genericGroup=generic;g.userData.privateScene=result.scene;syncPrivate();requestFrame();
+    g.userData.genericGroup=generic;g.userData.privateScene=result.scene;g.userData.privateKey=result.key;syncPrivate();requestFrame();
     publishAsset(f.id,{state:'ready',private:true,triangles:result.triangles,physicalScale:result.physicalScale});
   }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'generic',private:true,reason:error.message||'Modelo privado no disponible'});})
     .finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);}));
@@ -5773,6 +5794,7 @@ async function captureScene({signal,stableFrames=30,timeoutMs=120000,includeTerr
     objects:(furnG?.children||[]).filter(g=>typeof g.userData?.fid==='string').map(g=>({id:g.userData.fid,catalogModel:!!g.userData.authorizedAsset})).sort((a,b)=>a.id.localeCompare(b.id))}};
 }
 window.View3D.captureScene=captureScene;
+window.View3D.privateState=privateState;   // OP-05 laboratorio: inspección (escenas privadas cargadas, visibles, último fotograma)
 // OP-05 P4: every output API of the viewer runs with the generic representation (private models removed from the scene).
 for(const k of ['shot','deliveryShot','presentationCapture','captureScene']){const fn=window.View3D[k];if(typeof fn==='function')window.View3D[k]=(...a)=>genericOutput(()=>fn(...a));}
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.

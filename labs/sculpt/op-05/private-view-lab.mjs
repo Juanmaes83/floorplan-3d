@@ -32,7 +32,9 @@ export const view = {
     if (bytes.byteLength !== d.byteLength) throw Error('Los bytes no tienen la longitud de la ficha.');
     grants.set(key(project.id, d.modelId), {sha256: d.sha256, byteLength: d.byteLength, bytes: bytes.slice(0)});
   },
-  revokeAll() { grants.clear(); overlays.clear(); },
+  // OP05-C: revocar retira también lo ya cargado: reconstruye el mobiliario (cancela cargas, libera escenas privadas).
+  revokeAll() { grants.clear(); overlays.clear(); globalThis.View3D?.refreshAssets?.(); globalThis.View3D?.invalidate?.(); },
+  isGranted(k) { return typeof k === 'string' && grants.has(k); },
   grantsFor(projectId) { return [...grants.keys()].filter(k => k.startsWith(projectId + '|')).length; },
   resolve(project, objectId) {
     const r = Core.resolve(virtual(project), objectId, {available: () => true});
@@ -46,7 +48,7 @@ export const view = {
     if (r.kind !== 'private') throw Error('Representación genérica: ' + r.reason);
     const g = grants.get(key(project.id, r.modelId)), projectId = project.id;
     const result = await loadPrivateModel(g.bytes, {sha256: g.sha256, byteLength: g.byteLength}, {signal});
-    return {...result, projectId};
+    return {...result, projectId, key: key(project.id, r.modelId)};
   },
 };
 globalThis.RubikPrivateView = view;

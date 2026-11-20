@@ -4,6 +4,7 @@
   "tests/project-identity.browser.test.cjs",
   "tests/ast01-levels-card.browser.test.cjs",
   "tests/op05-p3p4.browser.test.cjs",
+  "tests/op05-p4-residuals.browser.test.cjs",
   "tests/p0-mue01-gc.browser.test.cjs",
   "tests/k4-room-type.browser.test.cjs",
   "tests/delivery-3d-link.browser.test.cjs",
