@@ -54,6 +54,10 @@ Las mejoras visibles requieren acceso verificable desde el frontend. Las interna
 
 El candidato exacto de #290 está publicado. El [registro de continuidad y evidencia en #275](https://github.com/Juanmaes83/floorplan-3d/blob/aa87295b2ffd3daab314c99e261e5f6c88bcccde/docs/integration/op10-evidence/entregar-56f099d/README.md) contiene el HEAD, la base, el árbol, la autorización registrada, el recorrido frontend y el procedimiento para cerrar el gate. Ese registro mantiene el estado y las capturas de OP-10. Consultarlo junto a los checks de GitHub antes de continuar.
 
+## Actualización A6 — auditoría retrospectiva
+
+Auditar todas las capacidades desde las primeras versiones hasta el master efectivo en Home, Plataforma y Entregables. El [protocolo permanente](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE.md#42-auditoría-retrospectiva-de-capacidades) define cobertura, criterios y evidencias. Usar las autoridades existentes y registrar el resultado diferencial en continuidad. El inventario puede avanzar en paralelo con la CI. Acreditar disponibilidad sobre Production efectivo y reservar las correcciones para cortes autorizados.
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 

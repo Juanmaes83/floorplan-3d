@@ -68,6 +68,16 @@ Una mejora visible alcanza el cierre funcional cuando se puede encontrar y utili
 
 Claude Code define el destino y el recorrido durante la escultura y el pulido. Codex garantiza la conexión real, la regresión y la comprobación tras integrar. ChatGPT audita coherencia, accesibilidad, seguridad, descubribilidad y disponibilidad efectiva. El propietario conserva la aceptación y las autorizaciones por SHA.
 
+## 4.2. Auditoría retrospectiva de capacidades
+
+Cubrir todas las versiones hasta el master efectivo. Cruzar el catálogo de 98 mejoras, la matriz v1.12, el plan maestro, las 23 piedras SCULPT y K9/GOV‑03 con el historial, los módulos, las rutas, los contratos y la evidencia. Revisar HOM‑01–04, Entregar y Studio Presentation con Perla, UX-FIRST y los estándares QA. Referenciar una capacidad en su autoridad vigente y registrar las relaciones sin duplicar el catálogo.
+
+Por capacidad auditar Home, Plataforma y Entregables. Justificar las superficies que no aplican. Registrar referencia canónica, problema, estado técnico y funcional, profesiones, recorrido o consumidor real, presencia o propuesta en Home, entregables, autoridades reutilizadas, QA, evidencia por SHA y entorno, dependencias, permisos y propuesta de cierre. Separar los estados de §4.1 y distinguir Preview de Production.
+
+Verificar descubribilidad, promesas, acceso por frontend, accesibilidad, calidad visual y resultados útiles. Para Home seleccionar beneficios profesionales demostrados por perfil. Para Entregar y Studio aprovechar los grupos y compositores existentes y comprobar revisión, privacidad, marca, licencias y trazabilidad. Distinguir investigación, simulación, funciones experimentales, proveedores reales y garantías certificadas según evidencia.
+
+Priorizar por seguridad, madurez, proximidad al cierre, dependencias, valor profesional, valor percibido y esfuerzo. El inventario y diagnóstico pueden avanzar en paralelo como trabajo de solo lectura. Antes de acreditar disponibilidad, consultar el master y Production efectivos. Los cambios de producto requieren cortes separados y autorización. Mantener OP‑10 → Simulator E → Simulator D.
+
 ## 5. Tras cada integración en master
 
 El agente que integra actualiza, en la misma PR o en una documental inmediata:
