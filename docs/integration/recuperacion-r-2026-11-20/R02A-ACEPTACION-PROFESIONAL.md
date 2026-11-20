@@ -98,37 +98,60 @@ Cada propuesta reutiliza lo que ya existe y no amplía el alcance. No se abre R0
 
 **Sigue experimental** hasta que se cumplan las tres condiciones: GOV-05, la aceptación del recorrido (§3) y los gates de Codex (Firefox, WebKit, Windows).
 
-## 8. Criterio de paso libre de 2100 mm · especificación preparada (sin aplicar)
+## 8. Criterio de paso libre de 2100 mm · especificación CORREGIDA (sin aplicar)
+
+> **Corrección (revisión del propietario, 20/11/2026).** La versión anterior trataba «la superficie de la estancia que no ocupa ningún mueble» como zona de circulación. **Es incorrecto:** una superficie libre no es por sí sola un lugar por el que se circula, como un rincón, el hueco tras un sofá o el espacio sobre una bañera. Queda retirada.
 
 **Naturaleza.** Es un **criterio inicial de diseño** del propietario, pendiente de validación profesional.
-- **No** es cumplimiento normativo y no se presenta como tal: ni CTE ni otra norma.
-- **No** se extiende a cualquier estancia ni a cualquier punto de una estancia.
+- **No** es cumplimiento normativo y no se presenta como tal.
+- **No** se extiende a cualquier estancia ni punto.
+- **Sin una zona de circulación verificable no hay bloqueo.**
 
-**Dónde se aplica: solo en las zonas de circulación.**
-- **Zona de circulación:** la superficie de la estancia que **no** ocupa ningún mueble, en planta, con la misma huella que ya usa `FloorPlanPlacement`.
-- Encima de un mueble **no se aplica**: ahí sigue la regla actual, «pendiente de datos», porque el mueble no tiene altura.
-- **Estancias excluidas** del criterio, por familia: `storage`, `utility` y `garage`. Se decide así para no extender la regla de forma indiscriminada; la lista es ampliable solo por decisión del propietario.
-- Pasillos (`hallway`) y el resto de estancias habitables: se aplica en sus zonas libres.
+### Zona de circulación verificable (motor existente, sin motor nuevo)
 
-**Regla.** Para un elemento de techo dentro de una zona de circulación, se calcula `puntoMasBajo = referencia − descuelgue − altura del elemento`, con los mismos datos que ya calcula `mount` en `r02a-ceiling-core`:
-- si `puntoMasBajo ≥ 2100 mm`, nada cambia;
-- si `puntoMasBajo < 2100 mm`, el estado pasa de «revisable» a **«bloqueado · paso libre»**, con la cota, el margen que falta y el texto *«Criterio de diseño inicial (2100 mm en zonas de paso), pendiente de validación profesional. No es una comprobación normativa.»*;
-- sin referencia vertical: «pendiente de datos», como hoy; **nunca se supone**.
+Se reutiliza el planificador de recorridos de RUBIK, `FloorPlanPresentationRoute.plan(project, geometry, roomId)` (`js/presentation-route.js`), que ya calcula el camino real de una persona:
+- Dijkstra sobre una rejilla de 200 mm alineada con los muros;
+- desde la **puerta de entrada**, atravesando puertas de altura ≥ 1,85 m;
+- con margen duro `clearanceMm` (220 mm) a muros, ventanas, correderas y muebles.
 
-**Implementación prevista** (un corte pequeño, sin motor nuevo):
-1. `r02a-ceiling-core`:
-   - una constante `PASSAGE_CRITERION = { minClearMm: 2100, source: 'owner-design-criterion-2026-11-20', normative: false, excludedFamilies: ['storage','utility','garage'] }`;
-   - la comprobación dentro de `validate`/`previewDiff`, reutilizando la huella de `FloorPlanPlacement` para saber si el punto está sobre un mueble.
-2. `r02a-ceiling-editor`: el aviso con el texto anterior, siempre visible junto al estado.
-3. El contrato `x-r02a-ceiling` **no cambia**: el criterio no se guarda, se evalúa.
+1. Para cada estancia de la planta activa se pide `plan(...)`. **Solo cuenta un resultado `kind:'interior'`** (`code:'clear'`), con sus `points` y su `clearanceMm`.
+2. **Zona de circulación** = la banda de semiancho `clearanceMm` alrededor de la polilínea `points` de esos recorridos: el espacio que el propio motor garantiza libre.
+3. Si el resultado es `aerial` (sin camino interior) o `unavailable` (sin entrada, sin polígono o entrada baja), **esa estancia no tiene zona verificable**:
+   - el criterio **no se aplica**;
+   - el estado lo dice: «Paso libre no evaluado: no hay un recorrido verificable hasta esta estancia».
+4. La banda puede ser más estrecha que un paso real. Es un **mínimo verificable**, no la superficie de paso de diseño. Ampliarla a un ancho de paso (p. ej. 800 mm) es una decisión pendiente, y no se supone.
 
-**Pruebas que lo acreditarán:**
+### Regla
+
+- Se reutiliza **`lowestPointMm`** del montaje que ya calcula `r02a-ceiling-core` (`mount.lowestPointMm`, la cota más baja del elemento, incluidos descuelgue, cuerpo y cortina). No se recalcula nada.
+- Un elemento queda sujeto al criterio solo si **su huella en planta corta la zona de circulación verificable**.
+- Con elemento sujeto y `lowestPointMm < 2100`: el estado pasa de «revisable» a **«bloqueado · paso libre»**, con la cota, lo que falta hasta 2100 y el recorrido afectado. Texto: *«Criterio de diseño inicial (2100 mm en el recorrido de paso), pendiente de validación profesional. No es una comprobación normativa.»*
+- Con `lowestPointMm ≥ 2100`: nada cambia.
+
+**Casos sin bloqueo:**
+
+| Caso | Estado |
+|---|---|
+| Elemento fuera de la banda | Sin cambios, aunque esté en una zona libre de muebles |
+| Sin referencia vertical (`mount` no calculado) | «Pendiente de datos», como hoy; nunca se supone |
+| Estancia sin recorrido `interior` | «Paso libre no evaluado», sin bloqueo |
+| Familias `storage`, `utility`, `garage` | Excluidas, salvo decisión del propietario |
+
+### Implementación prevista (corte pequeño, sin motor nuevo)
+
+1. `r02a-ceiling-core`: `PASSAGE_CRITERION = { minClearMm: 2100, source: 'owner-design-criterion-2026-11-20', normative: false, zone: 'presentation-route-interior-band', excludedFamilies: ['storage','utility','garage'] }`.
+   - La comprobación recibe la **zona ya calculada** (polilíneas y semiancho) como dato de entrada. El núcleo sigue puro y no llama al planificador.
+2. `r02a-ceiling-editor`: obtiene la zona con `FloorPlanPresentationRoute.plan` y la pasa al núcleo. Muestra el aviso y, opcionalmente, la banda en el plano 2D, solo como lectura.
+3. El contrato `x-r02a-ceiling` **no cambia**: la zona y el criterio no se guardan, se evalúan.
+
+### Pruebas que lo acreditarán
 
 | Tipo | Caso |
 |---|---|
-| Positivas | 2100 mm exactos pasa; 2099 bloquea con la cota y el margen correctos; el caso de #217 (40 cm del suelo) pasa de «revisable», fijado hoy como límite, a «bloqueado · paso libre» |
-| Negativas | Sobre un mueble: «pendiente de datos», sin criterio. En `storage`, `utility` y `garage`: no se aplica. Sin referencia: «pendiente», nunca supuesto. El texto no menciona ninguna norma ni cumplimiento |
+| Positivas | Elemento sobre el recorrido `interior` con `lowestPointMm` 2099: bloqueado, con la cota, el margen y el recorrido. 2100 exactos: sin cambios. El caso de #217 (40 cm del suelo) **sobre el recorrido**: bloqueado |
+| Negativas | El mismo elemento, en una **zona libre de muebles fuera del recorrido**: sin bloqueo (es el error de la especificación anterior). Estancia con recorrido `aerial` o `unavailable`: «no evaluado», sin bloqueo. Sin referencia: «pendiente». Familias excluidas: sin criterio. El texto no menciona ninguna norma |
+| Determinismo | La zona es idéntica entre ejecuciones (mismo `points`) y no depende del orden de los muebles |
 | Contrato | El documento guardado es byte a byte igual con el criterio activo |
-| Navegador | `r02a-editor.browser` muestra el aviso y el texto exacto |
+| Navegador | `r02a-editor.browser` muestra el aviso y, en el plano, la banda del recorrido |
 
-**Siguiente:** aplicar este corte cuando lo autorices, y la validación profesional del valor de 2100 mm.
+**Siguiente:** aplicar este corte solo con tu autorización y tras la validación profesional del valor de 2100 mm. **Sin una zona verificable no se activa ningún bloqueo.**
