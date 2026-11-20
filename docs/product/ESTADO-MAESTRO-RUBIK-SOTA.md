@@ -1,5 +1,8 @@
 # RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
 
+> **Corte 20/11/2026 · K13.** [#287](https://github.com/Juanmaes83/floorplan-3d/pull/287) incorpora ProposalV1 compatible con F0.2b en `master@1daa74604b095e8e3b63d5662a303459e2c93bc1`, árbol `b78190130eb0270827462c0029b1b79846b97ca5`. CI de la PR: 93 aprobados y una omisión prevista. El único relanzamiento autorizado cerró [CAT‑IA browser](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44650572153/job/136167916641). El verificador posfusión acredita [42 contratos CI](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44702496176). [Production](https://vercel.com/juanma-espinosas-projects/floorplan-3d/3cWoKf881oARMSHhweydu7LXwFnR) READY para ese SHA.
+
+
 > **Corte 20/11/2026.** OP-04 quedó integrada en #284, incluyendo #268 por ascendencia. F0.2b #269 quedó integrada en master `0e1a6e0a0eaaa234a40f1940cd9834d0dd7ee1e4`, árbol `be2e5d8b87c3d5b09b973bba63a7d470f7b65045`. Production verificada para ese SHA y CI posfusión 10/10. F0.2b mantiene su origen aislado. [Continuidad y candidatos](https://github.com/Juanmaes83/floorplan-3d/pull/275).
 
 > **Corte 19/11/2026 · OP-02.** [#266](https://github.com/Juanmaes83/floorplan-3d/pull/266) está integrada en `02712b5147c15defa12a810b2f346e4b3e0ecb60`, árbol `eac7605fb6b3f176c803255041aa510396db1d69`. [Production de master](https://vercel.com/juanma-espinosas-projects/floorplan-3d/EidmS69dvUz8rMhYfEACEPeAgfaa) está READY para ese SHA. La CI de la PR registró 91 aprobados y una omisión prevista. La [CI posfusión](https://github.com/Juanmaes83/floorplan-3d/actions?query=branch%3Amaster) se sigue en GitHub. #268 es el siguiente corte.
