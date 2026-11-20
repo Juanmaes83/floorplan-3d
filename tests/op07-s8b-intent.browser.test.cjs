@@ -11,7 +11,7 @@ function seed({historical,variant}){const original=C.initial(),v={...C.clone(ori
  return {historical:historical?JSON.stringify(original):null,library:JSON.stringify({version:1,activeId:variant?'e_variant':'e_original',entries})};}
 const confirmed=page=>page.evaluate(async()=>{const {revision,docs}=await FloorPlanPersistence.readConfirmed();return {revision,docs:[...docs]};});
 async function open(opts){const {historical,library}=seed(opts),base=env.base.replace('127.0.0.1','f0-2b.localhost');
- const cfg=withState({...env,base},'active',{a0:opts.a0||'stand-in'}),context=await cfg.browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+ const cfg=withState({...env,base},opts.state||'active',{a0:opts.a0||'stand-in'}),context=await cfg.browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
  await context.addInitScript(({a,l,historical,library})=>{if(localStorage.getItem('op07-fixture'))return;if(historical!==null)localStorage.setItem(a,historical);localStorage.setItem(l,library);localStorage.setItem('op07-fixture','1');},{a:A,l:L,historical,library});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base);
  await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'&&!!window.FloorPlanApp);
@@ -75,5 +75,11 @@ test('v5 · positivos y control: enderezar, nivelar y la variante se confirman; 
   try{for(const s of steps){const r=await edit(page,wall,s);assert.equal(r.status,'saved',`${JSON.stringify(opts)} ${s}`);}assert.deepEqual(errors,[]);}finally{await context.close();}}
  const {context,page,wall}=await open({historical:true,a0:'none'});
  try{const before=await confirmed(page),r=await edit(page,wall,['curve']);assert.equal(r.ops[0],false,'sin A0: activation-pending');
-  assert.equal(JSON.stringify((await confirmed(page)).docs),JSON.stringify(before.docs));}finally{await context.close();}
+  assert.equal(JSON.stringify((await confirmed(page)).docs),JSON.stringify(before.docs));
+  assert.equal(await page.evaluate(()=>!!window.FloorPlanSchemaEpoch),false,'el control retira A0 de verdad');}finally{await context.close();}
+ // Control con A0 REAL y el estado de producción ('integrated'): integrar A0 no activa OP-07.
+ const integ=await open({historical:true,state:'integrated'});
+ try{assert.equal(await integ.page.evaluate(()=>!!window.FloorPlanSchemaEpoch&&!window.FloorPlanSchemaEpoch.op07StandIn),true,'A0 real cargado');
+  const before=await confirmed(integ.page),r=await edit(integ.page,integ.wall,['curve']);assert.equal(r.ops[0],false,'integrado con A0 real: activation-pending');
+  assert.equal(JSON.stringify((await confirmed(integ.page)).docs),JSON.stringify(before.docs));}finally{await integ.context.close();}
 });
