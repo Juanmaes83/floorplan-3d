@@ -24,6 +24,8 @@
 - [OP-04](../technical/op04-roomplan-join.md) documenta límites de anclaje, transformación rígida, un solo paso de historial y el resultado sintético aceptado (11,31 → 22,62 m², puertas de 900 mm y diferencia de 0 mm). La visibilidad y el control de solapamientos de #271 conservan su propia aceptación.
 - [G-02](../technical/g02-dxf.md) separa el dibujo 2D del proyecto portable. El [contraste del residual](op07-a0-2026-11-20/README.md#dxf-de-planta-activa--residual-independiente) identifica base, entorno y alcance del 1/1 reutilizado.
 
+**Production · G-02.** En el despliegue de master de código `8e917e1a70f499a6b8dc68850c8413b7d06c5682`, Vercel sirvió el control de Archivo, el exportador DXF y la biblioteca de escritura con bytes idénticos a Git. Los tres hashes están en el [registro de recursos servidos](op07-a0-2026-11-20/production-g02-assets.json). La comprobación autenticada cubre la distribución de los tres archivos. El uso funcional conserva la evidencia de Chromium en el checkout y queda pendiente la aceptación en dos CAD. [Despliegue verificado](https://vercel.com/juanma-espinosas-projects/floorplan-3d/6UsqaQ4HWiob45C8iCDB95F1pCby).
+
 ## Home por profesión · HOM-01–HOM-04
 
 | Perfil | Primera acción que ofrece la Home | Consumidor que debe acreditarse en el recorrido completo |

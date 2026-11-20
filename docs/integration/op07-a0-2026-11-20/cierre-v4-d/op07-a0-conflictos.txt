@@ -1,0 +1,15 @@
+e3b3476c79347999b45843d20204e0330e248102
+100644 591d07495dbbeacff48f656ac2cebcd80f8120b8 1	js/persistence-editor.js
+100644 5689051eb9af6db766cbd26c67c14b14880e3d37 2	js/persistence-editor.js
+100644 4726658f565033002bbeb508094ceb64d85386e7 3	js/persistence-editor.js
+100644 62c3f8db5be9b315012960cabbf090066b8f09a4 1	tests/regression-partitions.json
+100644 652d74c01e3c7d6f987d71a2030404a68b510cf4 2	tests/regression-partitions.json
+100644 ed7d6ce1dfa540d1786476b6711222d0df721f10 3	tests/regression-partitions.json
+
+Auto-merging evolucion/index.html
+Auto-merging index.html
+Auto-merging js/persistence-editor.js
+CONFLICT (content): Merge conflict in js/persistence-editor.js
+Auto-merging js/persistence-store.js
+Auto-merging tests/regression-partitions.json
+CONFLICT (content): Merge conflict in tests/regression-partitions.json
