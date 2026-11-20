@@ -1,0 +1,1 @@
+{"sharedWallId":"wal_ref-w18","ids":["prj_reference-home","prj_other_house"],"isolated":{"ok":false,"issues":[{"code":"curve-lost","wallId":"wal_ref-w18","projectId":"prj_other_house"}]},"mixed":{"ok":true,"issues":[]},"stale":{"ok":true,"issues":[]},"restored":{"ok":true,"issues":[]},"defaultCoreCanCreate":"2.0.0"}

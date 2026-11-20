@@ -1,0 +1,113 @@
+{
+  "base": {
+    "sha": "8e917e1a70f499a6b8dc68850c8413b7d06c5682",
+    "tree": "dec6d20694e083cb615f42eae60bb74fd3209523",
+    "capture": {
+      "browser": "26.6",
+      "visible": {
+        "file": "d-linux-base-visible.png",
+        "width": 960,
+        "height": 600,
+        "colors": 5979,
+        "sha256": "b2d8e7d45710b830c15b9e56f976035d3e3434172ec7f8dcfc4a5f6e4707eb9a"
+      },
+      "scope": "canvas3d",
+      "sequenceSha256": "8b5a6634687845adb58cbdbfd98c6f041d5c5a59a5b298ee252714bbc502f882",
+      "frameDirectory": "d-linux-base-frames-KtKXKE",
+      "distinctFrames": 4,
+      "distinctPoses": 4,
+      "frames": [
+        {
+          "file": "frames/00000.png",
+          "t": 0,
+          "camera": [
+            4.932905,
+            13.483273,
+            7.856506
+          ],
+          "width": 960,
+          "height": 157,
+          "colors": 2943,
+          "sha256": "8af778e36749961eaabfb007d18c9719a7368b00fa0af7bb3a05696ed32e6521"
+        },
+        {
+          "file": "frames/00001.png",
+          "t": 0.1,
+          "camera": [
+            4.907756,
+            13.450903,
+            7.820559
+          ],
+          "width": 960,
+          "height": 157,
+          "colors": 2900,
+          "sha256": "0893d3ba633a088c0f8576df3c997fa27e24ff5bfbd86a4d17f58f67708e066a"
+        },
+        {
+          "file": "frames/00002.png",
+          "t": 0.2,
+          "camera": [
+            4.731619,
+            13.224434,
+            7.568766
+          ],
+          "width": 960,
+          "height": 157,
+          "colors": 3002,
+          "sha256": "81c30516bd4cb1e7dce879f31a5d1b6741b3a878c49ebcc151793bd5d74aff04"
+        },
+        {
+          "file": "frames/00003.png",
+          "t": 0.3,
+          "camera": [
+            4.252686,
+            12.610831,
+            6.883947
+          ],
+          "width": 960,
+          "height": 157,
+          "colors": 3129,
+          "sha256": "4ea6bb150271176f28ab15f4fdf202211f04d2a0c75c6a91a52ca909c556493f"
+        }
+      ],
+      "errors": [
+        "ResizeObserver loop completed with undelivered notifications."
+      ],
+      "external": [],
+      "rest": {
+        "loopActive": false,
+        "animating": false,
+        "flying": false,
+        "pendingAssets": 0
+      }
+    }
+  },
+  "candidate": {
+    "sha": "eae7d5f366ba7e24de9e04d38addd216a70a3d76",
+    "tree": "c5735a4b81cdb346d3186c3ceeef251bfcd2ef0d"
+  },
+  "harness": "09557c4cac1e6390d3af56281922d8d43093234e",
+  "environment": {
+    "image": "sha256:a7d3f7dc1eaf01a1c29dc47cf0e84e49114b14d41fb2c6cea98ac80987045758",
+    "os": "linux",
+    "node": "v24.20.0",
+    "playwright": "1.63.0",
+    "softwareWebGL": "1"
+  },
+  "config": {
+    "viewport": {
+      "width": 960,
+      "height": 600
+    },
+    "dpr": 1,
+    "browser": "webkit",
+    "realtimeMs": 20000
+  },
+  "interval": {
+    "fps": 10,
+    "seconds": 0.3,
+    "room": "rom_kid"
+  },
+  "result": "FAIL",
+  "failure": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'ResizeObserver loop completed with undelivered notifications.'\n+ ]\n- []\n"
+}

@@ -1,0 +1,797 @@
+{
+  "browser": "153.0.8010.12",
+  "candidate": "3afb9e18c84d6d640eeced7203a4169aebb367d6",
+  "results": [
+    {
+      "options": {
+        "label": "control-A0-ausente",
+        "historical": true,
+        "variant": false,
+        "batch": false,
+        "a0": "none"
+      },
+      "state": {
+        "active": false,
+        "blockers": [
+          "a0"
+        ],
+        "realAuthority": true,
+        "standIn": false,
+        "wall": "wal_ref-w18"
+      },
+      "before": {
+        "revision": 1,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "0fb3e32c0e6b0f4af5fc17448425aa5710a83d38df282c439b81703a0adc2db8",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          }
+        ]
+      },
+      "attempt": {
+        "startRevision": 1,
+        "operations": [
+          {
+            "action": "curve",
+            "ok": false,
+            "code": "activation-pending",
+            "explanation": [
+              "Los muros curvos e inclinados todavía no están activados en RUBIK: puedes abrir y consultar un proyecto que los tenga, pero no crearlos ni guardar cambios en él. Exporta una copia si la necesitas."
+            ],
+            "curve": null,
+            "revision": 1
+          }
+        ],
+        "pending": 0,
+        "flush": {
+          "status": "saved",
+          "revision": 1,
+          "pending": 0,
+          "code": null,
+          "message": null
+        }
+      },
+      "after": {
+        "revision": 1,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "0fb3e32c0e6b0f4af5fc17448425aa5710a83d38df282c439b81703a0adc2db8",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          }
+        ]
+      },
+      "runtimeErrors": []
+    },
+    {
+      "options": {
+        "label": "control-sin-clave-historica",
+        "historical": false,
+        "variant": false,
+        "batch": false,
+        "a0": "stand-in"
+      },
+      "state": {
+        "active": true,
+        "blockers": [],
+        "realAuthority": true,
+        "standIn": true,
+        "wall": "wal_ref-w18"
+      },
+      "before": {
+        "revision": 1,
+        "historicalHash": null,
+        "libraryHash": "0fb3e32c0e6b0f4af5fc17448425aa5710a83d38df282c439b81703a0adc2db8",
+        "historical": null,
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          }
+        ]
+      },
+      "curved": {
+        "revision": 2,
+        "historicalHash": null,
+        "libraryHash": "876ba0432caa2a9fbb1bb335cb62b675b1dac86dd6bda601d489ffd3524f2c89",
+        "historical": null,
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": {
+              "x": 7270,
+              "y": 10840
+            }
+          }
+        ]
+      },
+      "intermediate": [
+        {
+          "result": {
+            "startRevision": 2,
+            "operations": [
+              {
+                "action": "straighten",
+                "ok": true,
+                "code": null,
+                "explanation": null,
+                "curve": null,
+                "revision": 2
+              }
+            ],
+            "pending": 1,
+            "flush": {
+              "status": "saved",
+              "revision": 3,
+              "pending": 0,
+              "code": null,
+              "message": null
+            }
+          },
+          "confirmed": {
+            "revision": 3,
+            "historicalHash": null,
+            "libraryHash": "6fdd44cabfb78143888170b4aabc5cdd6313a765dafb05cd157ef31f83e86db0",
+            "historical": null,
+            "activeId": "e_original",
+            "entries": [
+              {
+                "id": "e_original",
+                "projectId": "prj_reference-home",
+                "variantOf": null,
+                "curve": null
+              }
+            ]
+          }
+        },
+        {
+          "result": {
+            "startRevision": 3,
+            "operations": [
+              {
+                "action": "recurve",
+                "ok": true,
+                "code": null,
+                "explanation": null,
+                "curve": {
+                  "x": 7270,
+                  "y": 10910
+                },
+                "revision": 3
+              }
+            ],
+            "pending": 1,
+            "flush": {
+              "status": "saved",
+              "revision": 4,
+              "pending": 0,
+              "code": null,
+              "message": null
+            }
+          },
+          "confirmed": {
+            "revision": 4,
+            "historicalHash": null,
+            "libraryHash": "9f20bad28f47fd2b92e89ff78e85f3387a70680cb77028b1299a966d55a4d60a",
+            "historical": null,
+            "activeId": "e_original",
+            "entries": [
+              {
+                "id": "e_original",
+                "projectId": "prj_reference-home",
+                "variantOf": null,
+                "curve": {
+                  "x": 7270,
+                  "y": 10910
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "beforeFinal": {
+        "revision": 4,
+        "historicalHash": null,
+        "libraryHash": "9f20bad28f47fd2b92e89ff78e85f3387a70680cb77028b1299a966d55a4d60a",
+        "historical": null,
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": {
+              "x": 7270,
+              "y": 10910
+            }
+          }
+        ]
+      },
+      "attempt": {
+        "startRevision": 4,
+        "operations": [
+          {
+            "action": "generic-loss",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": null,
+            "revision": 4
+          }
+        ],
+        "pending": 1,
+        "flush": {
+          "status": "error",
+          "revision": 4,
+          "pending": 1,
+          "code": "guard-refused",
+          "message": "No se ha guardado: el cambio perdería la curva de un muro sin que lo hayas pedido. Lo guardado no ha cambiado y tu cambio sigue en esta pestaña. Deshazlo (Ctrl+Z) o usa «Forma del muro» para enderezar o nivelar el muro de forma explícita."
+        }
+      },
+      "afterFinal": {
+        "revision": 4,
+        "historicalHash": null,
+        "libraryHash": "9f20bad28f47fd2b92e89ff78e85f3387a70680cb77028b1299a966d55a4d60a",
+        "historical": null,
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": {
+              "x": 7270,
+              "y": 10910
+            }
+          }
+        ]
+      },
+      "rejected": true,
+      "originalConfirmedBytesUnchanged": true,
+      "runtimeErrors": []
+    },
+    {
+      "options": {
+        "label": "confirmaciones-con-ambas-claves",
+        "historical": true,
+        "variant": false,
+        "batch": false,
+        "a0": "stand-in"
+      },
+      "state": {
+        "active": true,
+        "blockers": [],
+        "realAuthority": true,
+        "standIn": true,
+        "wall": "wal_ref-w18"
+      },
+      "before": {
+        "revision": 1,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "0fb3e32c0e6b0f4af5fc17448425aa5710a83d38df282c439b81703a0adc2db8",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          }
+        ]
+      },
+      "curved": {
+        "revision": 2,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "80f1959fa1adaed1e6f85b5c92e86f42d5295c1595fd74b4f9051ef37feb3673",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": {
+              "x": 7270,
+              "y": 10840
+            }
+          }
+        ]
+      },
+      "intermediate": [
+        {
+          "result": {
+            "startRevision": 2,
+            "operations": [
+              {
+                "action": "straighten",
+                "ok": true,
+                "code": null,
+                "explanation": null,
+                "curve": null,
+                "revision": 2
+              }
+            ],
+            "pending": 1,
+            "flush": {
+              "status": "saved",
+              "revision": 3,
+              "pending": 0,
+              "code": null,
+              "message": null
+            }
+          },
+          "confirmed": {
+            "revision": 3,
+            "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+            "libraryHash": "4800a0c74fd149d83450ca70d35b653639fe9cef25b8937f356d1410151a630e",
+            "historical": {
+              "id": "prj_reference-home",
+              "curve": null
+            },
+            "activeId": "e_original",
+            "entries": [
+              {
+                "id": "e_original",
+                "projectId": "prj_reference-home",
+                "variantOf": null,
+                "curve": null
+              }
+            ]
+          }
+        },
+        {
+          "result": {
+            "startRevision": 3,
+            "operations": [
+              {
+                "action": "recurve",
+                "ok": true,
+                "code": null,
+                "explanation": null,
+                "curve": {
+                  "x": 7270,
+                  "y": 10910
+                },
+                "revision": 3
+              }
+            ],
+            "pending": 1,
+            "flush": {
+              "status": "saved",
+              "revision": 4,
+              "pending": 0,
+              "code": null,
+              "message": null
+            }
+          },
+          "confirmed": {
+            "revision": 4,
+            "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+            "libraryHash": "a4627559a76bae5d00505d2d4ff8bd8e93858e4e714f8b1d22bb51e7daa5db19",
+            "historical": {
+              "id": "prj_reference-home",
+              "curve": null
+            },
+            "activeId": "e_original",
+            "entries": [
+              {
+                "id": "e_original",
+                "projectId": "prj_reference-home",
+                "variantOf": null,
+                "curve": {
+                  "x": 7270,
+                  "y": 10910
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "beforeFinal": {
+        "revision": 4,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "a4627559a76bae5d00505d2d4ff8bd8e93858e4e714f8b1d22bb51e7daa5db19",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": {
+              "x": 7270,
+              "y": 10910
+            }
+          }
+        ]
+      },
+      "attempt": {
+        "startRevision": 4,
+        "operations": [
+          {
+            "action": "generic-loss",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": null,
+            "revision": 4
+          }
+        ],
+        "pending": 1,
+        "flush": {
+          "status": "saved",
+          "revision": 5,
+          "pending": 0,
+          "code": null,
+          "message": null
+        }
+      },
+      "afterFinal": {
+        "revision": 5,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "889269233cf22828497aba620a5268acade4bc0f1a717bfd9199dd3709c24616",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_original",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          }
+        ]
+      },
+      "rejected": false,
+      "originalConfirmedBytesUnchanged": false,
+      "runtimeErrors": []
+    },
+    {
+      "options": {
+        "label": "lote-variante-con-ambas-claves",
+        "historical": true,
+        "variant": true,
+        "batch": true,
+        "a0": "stand-in"
+      },
+      "state": {
+        "active": true,
+        "blockers": [],
+        "realAuthority": true,
+        "standIn": true,
+        "wall": "wal_ref-w18"
+      },
+      "before": {
+        "revision": 1,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "d186991fd1c972aa8992b351e6b2e83baaec1d2d87458da1ae860f8149491f68",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": null
+          }
+        ]
+      },
+      "curved": {
+        "revision": 2,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "6fc293b09436289f4524e4270a5b038d2ee0f75c9f7a66aa18895b03b8bbecf8",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": {
+              "x": 7270,
+              "y": 10840
+            }
+          }
+        ]
+      },
+      "intermediate": [],
+      "beforeFinal": {
+        "revision": 2,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "6fc293b09436289f4524e4270a5b038d2ee0f75c9f7a66aa18895b03b8bbecf8",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": {
+              "x": 7270,
+              "y": 10840
+            }
+          }
+        ]
+      },
+      "attempt": {
+        "startRevision": 2,
+        "operations": [
+          {
+            "action": "straighten",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": null,
+            "revision": 2
+          },
+          {
+            "action": "recurve",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": {
+              "x": 7270,
+              "y": 10910
+            },
+            "revision": 2
+          },
+          {
+            "action": "generic-loss",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": null,
+            "revision": 2
+          }
+        ],
+        "pending": 1,
+        "flush": {
+          "status": "saved",
+          "revision": 3,
+          "pending": 0,
+          "code": null,
+          "message": null
+        }
+      },
+      "afterFinal": {
+        "revision": 3,
+        "historicalHash": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+        "libraryHash": "bfb787b7c872fbe40be5ce6d80892e8594390a3d6e7135d3f8c0fb3ecb922059",
+        "historical": {
+          "id": "prj_reference-home",
+          "curve": null
+        },
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": null
+          }
+        ]
+      },
+      "rejected": false,
+      "originalConfirmedBytesUnchanged": false,
+      "runtimeErrors": []
+    },
+    {
+      "options": {
+        "label": "control-lote-variante-sin-clave-historica",
+        "historical": false,
+        "variant": true,
+        "batch": true,
+        "a0": "stand-in"
+      },
+      "state": {
+        "active": true,
+        "blockers": [],
+        "realAuthority": true,
+        "standIn": true,
+        "wall": "wal_ref-w18"
+      },
+      "before": {
+        "revision": 1,
+        "historicalHash": null,
+        "libraryHash": "d186991fd1c972aa8992b351e6b2e83baaec1d2d87458da1ae860f8149491f68",
+        "historical": null,
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": null
+          }
+        ]
+      },
+      "curved": {
+        "revision": 2,
+        "historicalHash": null,
+        "libraryHash": "02a928d13e616e141f0718bb57134d378817cf9d2224c3b7542349ad7b2a660d",
+        "historical": null,
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": {
+              "x": 7270,
+              "y": 10840
+            }
+          }
+        ]
+      },
+      "intermediate": [],
+      "beforeFinal": {
+        "revision": 2,
+        "historicalHash": null,
+        "libraryHash": "02a928d13e616e141f0718bb57134d378817cf9d2224c3b7542349ad7b2a660d",
+        "historical": null,
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": {
+              "x": 7270,
+              "y": 10840
+            }
+          }
+        ]
+      },
+      "attempt": {
+        "startRevision": 2,
+        "operations": [
+          {
+            "action": "straighten",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": null,
+            "revision": 2
+          },
+          {
+            "action": "recurve",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": {
+              "x": 7270,
+              "y": 10910
+            },
+            "revision": 2
+          },
+          {
+            "action": "generic-loss",
+            "ok": true,
+            "code": null,
+            "explanation": null,
+            "curve": null,
+            "revision": 2
+          }
+        ],
+        "pending": 1,
+        "flush": {
+          "status": "saved",
+          "revision": 3,
+          "pending": 0,
+          "code": null,
+          "message": null
+        }
+      },
+      "afterFinal": {
+        "revision": 3,
+        "historicalHash": null,
+        "libraryHash": "53d1f516f49b83cb4f8faa6acda2cc41cb064072ef15a429733b17fdf7992da2",
+        "historical": null,
+        "activeId": "e_variant",
+        "entries": [
+          {
+            "id": "e_original",
+            "projectId": "prj_reference-home",
+            "variantOf": null,
+            "curve": null
+          },
+          {
+            "id": "e_variant",
+            "projectId": "prj_c0de0000000000000000000000000000",
+            "variantOf": "e_original",
+            "curve": null
+          }
+        ]
+      },
+      "rejected": false,
+      "originalConfirmedBytesUnchanged": false,
+      "runtimeErrors": []
+    }
+  ]
+}
