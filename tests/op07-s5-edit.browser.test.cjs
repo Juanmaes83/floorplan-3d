@@ -3,7 +3,7 @@
 // validación, su deshacer/rehacer y su guardado; una división que cruza una abertura se rechaza sin tocar nada.
 const test=require('node:test'),assert=require('node:assert/strict');
 const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
+let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
 test('S5 · curvar, dividir, deshacer y rehacer en el editor; rechazo atómico',{timeout:180000},async()=>{
  const {context,page,watch}=await K.editor(env);
  try{

@@ -13,23 +13,34 @@
  function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
   const C=window.FloorPlanCore;if(!C?.editIntent)return;
   let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
-  steps.push({seq:++seq,intent:C.editIntent(before,after,{op,restore})});
+  steps.push({seq:++seq,done:new Set(),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
  }
  const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
  function refusal(issues){
   const one=issues[0]||{},what={'curve-lost':'perdería la curva de un muro','slope-lost':'perdería la altura final de un muro inclinado',
    'wall-lost':'perdería un muro curvo o inclinado','opening-lost':'perdería una puerta o ventana de un muro curvo o inclinado',
    'writer-lacks-feature':'contiene muros que esta versión de RUBIK no sabe guardar','degraded-view':'viene de una vista simplificada del proyecto',
-   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
+   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','activation-pending':'usa muros curvos o inclinados, que todavía no están activados','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
+  if(one.code==='activation-pending')return 'No se ha guardado: '+window.FloorPlanCore.ACTIVATION_PENDING+' Lo guardado no ha cambiado.';
   return 'No se ha guardado: el cambio '+what+' sin que lo hayas pedido. Lo guardado no ha cambiado y tu cambio sigue en esta pestaña. Deshazlo (Ctrl+Z) o usa «Forma del muro» para enderezar o nivelar el muro de forma explícita.';
  }
+ // S8: without F0.2b (today's Production) the editor writes localStorage directly: the same gate runs at this facade,
+ // against what is stored now; a refusal throws, which every writer already reports, and nothing is written.
+ function guarded(store){const kinds=KIND();return {op07Protected:true,getItem:k=>store.getItem(k),removeItem:k=>store.removeItem(k),key:i=>store.key(i),get length(){return store.length;},
+  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false,present:Object.keys(kinds).filter(x=>x===k||store.getItem(x)!==null)});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
  const gate={
-  check({changes,confirmed,restore}){
+  check({changes,confirmed,restore,present}){
    const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
-   const upTo=seq,intent=restore?{}:steps.reduce((a,s)=>C.composeIntent(a,s.intent),{});
-   const v=C.saveGate(pairs,{intent,restore});return {...v,seq:upTo,restore,message:v.ok?'':refusal(v.issues)};
+   // Intents per project (variants and building levels share wall ids); never one global intent.
+   const upTo=seq,intents={};if(!restore)for(const s of steps)intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
+   const v=C.saveGate(pairs,{intents,restore});
+   // A step is forgotten only once it is confirmed in EVERY managed document that exists (project key and library).
+   const required=[...new Set((present||[...Object.keys(confirmed).filter(k=>confirmed[k]!=null),...Object.keys(changes)]).map(k=>kinds[k]).filter(Boolean))];
+   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),required,message:v.ok?'':refusal(v.issues)};
   },
-  committed(v){if(!v)return;steps=v.restore?[]:steps.filter(s=>s.seq>v.seq);}
+  committed(v){if(!v)return;if(v.restore){steps=[];return;}
+   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.done.add(k);
+   steps=steps.filter(s=>s.seq>v.seq||!v.required.every(k=>s.done.has(k)));}
  };
 
  function loadProject(projectKey){
@@ -177,7 +188,7 @@
  async function start(){
   editor.inert=true;
   if(!enabled){
-   try{runtime.storage=localStorage;}
+   try{runtime.storage=guarded(localStorage);}
    catch{runtime.storage={getItem:()=>null,setItem:()=>{throw Error('Almacenamiento local no disponible.');}};}
    if(isolated&&!window.RUBIK_DELIVERY){
     const values=new Map();
@@ -188,6 +199,8 @@
    runtime.storage=runtime.session.storage;
    attachStatus(runtime.session);
   }
+  // OP-07 S8: this editor's writer is protected (F0.2b session gate, or the guarded localStorage facade).
+  if(enabled||runtime.storage.op07Protected===true)window.FloorPlanCore.registerProtectedWriter();
   const projectKey=P.KEYS[0];
   const bootstrap=loadProject(projectKey);
   if(enabled&&(bootstrap.libraryError||runtime.storage.getItem(window.FloorPlanLibrary.KEY)===null

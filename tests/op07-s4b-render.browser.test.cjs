@@ -3,7 +3,7 @@
 // el 3D con un muro curvo frente al mismo proyecto recto, y vista del salón con el muro curvo e inclinado (modo Recorrer).
 const test=require('node:test'),assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
 const K=require('./photo-project/kit.cjs'),F=require('./op07/fixtures.cjs');
-let env;test.before(async()=>{env=await K.start();});test.after(async()=>{await env?.stop();});
+let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');});test.after(async()=>{await env?.stop();});
 async function measure(project,shot){
  const {context,page,watch}=await K.editor(env,{viewport:{width:1440,height:900}});
  try{
