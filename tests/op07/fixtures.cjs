@@ -1,6 +1,8 @@
 'use strict';
 /* OP-07 · proyectos de prueba con muros curvos e inclinados, construidos sobre el proyecto de ejemplo real
    (Core.initial). Ninguno es un proyecto de cliente. */
+// OP-07 S8: the OP-07 tests exercise the ACTIVE state explicitly (Node is a test origin); the product default is 'integrated'.
+globalThis.RUBIK_OP07_STATE='active';
 const Core=require('../../js/project-core.js');
 const clone=x=>JSON.parse(JSON.stringify(x));
 // El ejemplo pone cada abertura en su propio tramo de muro; las pruebas curvan el muro MACIZO más largo y, si se pide,

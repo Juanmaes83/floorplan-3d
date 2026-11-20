@@ -4,7 +4,7 @@
 // explica); curvar, dividir, deshacer y rehacer sí; reabrir devuelve el 2.0 confirmado y la copia de emergencia lo lleva.
 const test=require('node:test'),assert=require('node:assert/strict');
 const K=require('./r02a/editor-kit.cjs');
-let env;test.before(async()=>{env=await K.start();env={...env,base:env.base.replace('127.0.0.1','f0-2b.localhost')};});test.after(async()=>{await env?.stop();});
+let env;test.before(async()=>{env=require('./op07/browser-state.cjs').withState(await K.start(),'active');env={...env,base:env.base.replace('127.0.0.1','f0-2b.localhost')};});test.after(async()=>{await env?.stop();});
 const flush=page=>page.evaluate(async()=>{const s=await FloorPlanPersistenceEditor.session.flush();return {status:s.status,code:s.error?.code||null,message:s.error?.message||'',revision:s.revision};});
 // El editor guarda en la biblioteca (clave de F0.2b): el proyecto activo de la última revisión confirmada.
 const stored=page=>page.evaluate(async()=>{const r=await FloorPlanPersistence.readConfirmed(),lib=JSON.parse(r.docs.get(FloorPlanLibrary.KEY)),e=lib.entries.find(x=>x.id===lib.activeId);
