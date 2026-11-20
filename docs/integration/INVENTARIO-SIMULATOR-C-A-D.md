@@ -1,5 +1,11 @@
 # RUBIK SOTA · Inventario de integración Simulator C, A y D
 
+## Corte 20/11/2026 · C integrado, A y D pendientes
+
+- **C/C-bis y dock.** #293 integrada y Production verificada sobre `e32c7cd7efddd791b9ff17e7dc8e8309ee19f3d4`. [Estado maestro](../product/ESTADO-MAESTRO-RUBIK-SOTA.md).
+- **A.** HEAD fuente `1ba63cd038b1c781519ecaeba2f0ca2e30746cf6`. El propietario aceptó el recorrido de Evolución y la construcción por hiladas. La prueba dirigida sobre el acumulado previo a la corrección de QA de F2 volvió a acreditar las hiladas y el sólido final. La autorización de fusión se liga al merge efectivo de OP-11 lote 01 y al árbol acreditado. HERO FINAL sigue en preparación separada.
+- **D.** `eae7d5f366ba7e24de9e04d38addd216a70a3d76` preservado. WebKit 26.6 reproduce el aviso durante el arranque, antes de elegir Ejemplo y antes de entrar en 3D, incluso con reloj real. Las aserciones de movimiento, contenido no vacío y equivalencia mantienen su alcance.
+
 Corte del 20/11/2026. Fuente congelada: [laboratorio Simulator `09557c4cac1e6390d3af56281922d8d43093234e`](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/tree/09557c4cac1e6390d3af56281922d8d43093234e/COMPONENTES), árbol `435810ed92a107005df9dc1cb334ff473cffec6f`. Donante `simulator@57d562c`, MIT. Se conservan los avisos de origen para la publicación de cada corte.
 
 La secuencia autorizada sigue siendo K13 → #272 → SMART. Después se preserva OP-10 → E → D. C y A quedan como cortes independientes, preparados en local sobre el árbol autorizado de SMART `e57089f61dc7a915f316a176280e4c08ebd49057`. Su base se comprobará antes de presentar cada integración.

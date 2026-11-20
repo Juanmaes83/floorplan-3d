@@ -121,7 +121,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 |---|---|---|---|---|---|---|---|---|---|---|
 | ENT-01 | Visita 3D del cliente | R | `RL` | [I] `js/client-delivery-core.js`, `api/delivery.js`; [E] `tests/client-delivery-core.test.cjs`, `tests/ent01-*`; [P] aceptación manual | Una planta; aceptación manual sin URL registrada | P1 | AMP: varias plantas; recorrido compartido | GOV-08 S4/S5 | Visita multiplanta con enlace caducable y prueba pública dirigida | B |
 | ENT-02 | Seguridad del enlace de cliente | P | `RL` | [H] #244; [E] `tests/gov08-s3-expiry.test.cjs` | Revocación, caducidad y limpieza manual; sin Cron | P3 | AMP: S4/S5 (comparte corte con GOV-08) | GOV-06a | Igual que GOV-08 | B |
-| ENT-03 | Story y plantillas hacia el cliente | N | `EX` | [H] laboratorio `8c532634`: 21 recetas, 6 perfiles y 43 fuentes; adaptador F0 acreditado 11/11. El selector productivo espera D4 | Solo laboratorio; herramientas Node fuera del producto | P1 | CON: E3, recetas sobre la interfaz y el modelo existentes | ENT-04 (E2) | E3 integrado con aceptación visual | B |
+| ENT-03 | Story y plantillas hacia el cliente | N | `EX` | [H] cierre `78a43dc3`. [E] Candidata `64f8837f` y convivencia probada sobre acumulado local; C1 de lectura, takeId e identidad canónica. Faltan Safari físico, aceptación y D4 | Selector candidato; herramientas de QA fuera del frontend productivo | P1 | CON: E3, recetas sobre la interfaz y el modelo existentes | ENT-04 (E2) | E3 integrado con aceptación visual | B |
 | ENT-04 | Dossier antes/después con presupuesto rotulado | P | `RL` | [H] #251 (E2) integrado por #259 en `master@163df68`; [CI] [regresión posterior a la integración](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44366171976) | Comparador desde Variantes y acceso desde Entregar. E2 incluye coherencia económica, vigencia y orden de cambio interna | P1 | VP: validar el recorrido profesional en el entorno autorizado cuando se programe | — | Evidencia de aceptación y revisión profesional del recorrido de entrega | B |
 | ENT-05 | Fichas de imagen trazables | N | `PA` | [I] `js/ai-render-ui.js` guarda vista original, estilo, acabados, modelo, uso y fecha; `js/delivery-image.js` compone la banda con marca | No persiste la imagen ni la cámara; sin libro FF&E | P1 | AMP: E4, persistir imagen enviada, cámara y revisión (comparte corte con IMG-12) | IMG-12 | Ficha exportable con origen, revisión, materiales y leyenda IA | C |
 | ENT-06 | Lotes de entrega con coste y cancelación | N | `ND` | [I] sin lotes en `api/render.js` | — | P1 | NUE sobre IMG-04 y ENT-05 (E6) | IMG-04, GOV-06a | Lote con coste previo, cancelación y ZIP | C |
@@ -309,7 +309,7 @@ No son IDs del catálogo y no alteran el recuento. Se siguen en el plan maestro.
 | Beta IA privada | Identidad de tester, cuotas y libro común | #258, integrado por #259; la activación y la prueba con proveedor siguen pendientes | GOV-06a, IMG-04, FOT-01, CAT-01 |
 | CON-03 | Importación de presupuesto | master (#241) | Sin ID; decisión pendiente |
 | «CAT-04» | Producto de catálogo a partida C1–C4 | master (#237) | Avance parcial de CAT-03 |
-| R01, R02-A, R03 | Piedras SCULPT | R02-A y R03 en master; R01 en laboratorio | G-01, LUZ-01, CAT-03 |
+| R01, R02-A, R03 | Piedras SCULPT | R02-A y R03 en master en su alcance actual. Recuperados: recorrido de aceptación R02-A `743343a1`, holguras R03 de solo lectura `e95f106f`, laboratorio R01 `d9fe3f2a` en HOLD | G-01, LUZ-01, CAT-03 |
 
 ## 7. Cómo se actualiza esta matriz
 
