@@ -1,0 +1,1128 @@
+{
+  "totals": {
+    "firefox-trace-desktop": {
+      "cases": 19,
+      "errors": 0,
+      "changed": 0,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0"
+    },
+    "webkit-plain-desktop": {
+      "cases": 19,
+      "errors": 0,
+      "changed": 0,
+      "UA": null
+    },
+    "webkit-plain-historico": {
+      "cases": 3,
+      "errors": 0,
+      "changed": 0,
+      "UA": null
+    },
+    "webkit-trace-desktop": {
+      "cases": 19,
+      "errors": 0,
+      "changed": 0,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15"
+    },
+    "webkit-trace-historico": {
+      "cases": 6,
+      "errors": 0,
+      "changed": 0,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15"
+    },
+    "webkit-trace-mobile": {
+      "cases": 6,
+      "errors": 0,
+      "changed": 0,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15"
+    }
+  },
+  "rows": [
+    {
+      "name": "firefox-trace-desktop-01.json",
+      "test": "fixture: espera la animación que se dibuja e ignora la de un <details> cerrado (caso .menu-pop en Firefox)",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "62f75407523ca2e680d31f99416a118601eede06b02fbb603d574f0224800848"
+    },
+    {
+      "name": "firefox-trace-desktop-02.json",
+      "test": "ResizeObserver · R1-T04 · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "7d82eef68b363f5bde9b3f474092655f6dd1efd591b7d90ce590c18f08b6dfe7"
+    },
+    {
+      "name": "firefox-trace-desktop-03.json",
+      "test": "ResizeObserver · R1-T02b · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "6d1c798aa2ef119564df7da74c2e689ad6e69ae98abe47c6a45b5cdefc2988c2"
+    },
+    {
+      "name": "firefox-trace-desktop-04.json",
+      "test": "ResizeObserver · R1-T02 · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "5bdd9b1edc7f3834be9aa1f4c5568ba3240ab43c175cc929601ae2f94d8043ff"
+    },
+    {
+      "name": "firefox-trace-desktop-05.json",
+      "test": "ResizeObserver · R1-T04 · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "da6e567db46206e15b0f248ce40e11e4b510a21dfd9bd623babc28c87113edd4"
+    },
+    {
+      "name": "firefox-trace-desktop-06.json",
+      "test": "ResizeObserver · R1-T02b · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "73ec87c6a8d3f872138a6810ab507319c76f88c1a9db1fd00810737b52375f8e"
+    },
+    {
+      "name": "firefox-trace-desktop-07.json",
+      "test": "ResizeObserver · R1-T02 · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "a09a9c7aa23d3617bdaf9b2bf0285264cbf88b638c78657eb588d407635c6b4a"
+    },
+    {
+      "name": "firefox-trace-desktop-08.json",
+      "test": "ResizeObserver · R1-T04 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "dad3f4fb057980b0a971b1dac1e01895c6221c39f4228e864daa4433aca317fb"
+    },
+    {
+      "name": "firefox-trace-desktop-09.json",
+      "test": "ResizeObserver · R1-T02b · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "e8782768b9e598ff154ec6a99513016ce82ba83dc9b97ddd86ba74ca7ea73f4d"
+    },
+    {
+      "name": "firefox-trace-desktop-10.json",
+      "test": "ResizeObserver · R1-T02 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "d7bce0d59a58c1d490339534efb18e50137223345fc008b7b7978775431a5825"
+    },
+    {
+      "name": "firefox-trace-desktop-11.json",
+      "test": "ResizeObserver · R1-T04 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "6801df3d9106de710937f34f06ff89cbe2c5fb1ae80ac6204506a337bb08c644"
+    },
+    {
+      "name": "firefox-trace-desktop-12.json",
+      "test": "ResizeObserver · R1-T02b · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "9720451ed5e8fa0237c0016e3a5e937ca09af309571f160de5a6a003457f1f24"
+    },
+    {
+      "name": "firefox-trace-desktop-13.json",
+      "test": "ResizeObserver · R1-T02 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "43d24a527c6f088c26a8ed32b25db927181c4619f2808688005427157d6319da"
+    },
+    {
+      "name": "firefox-trace-desktop-14.json",
+      "test": "R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "249f5a4ff83f846e44d7b123732b70b805fe6cf263f3ba5bdf6f681e3d566a41"
+    },
+    {
+      "name": "firefox-trace-desktop-15.json",
+      "test": "R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "c6c7388dbe73533310357fce9813c263d0bc421d6d0b12fe70478ed43de07207"
+    },
+    {
+      "name": "firefox-trace-desktop-16.json",
+      "test": "R1-T04 · normal: con la misma época nada cambia y se registra el escritor",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "22c074a0b3680bcdb09ae81313b91164e78d54fbd4bc495916f6f49717b13285"
+    },
+    {
+      "name": "firefox-trace-desktop-17.json",
+      "test": "R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "ce8e3189390ed12a59c45b564562d8168ea1bd0883183887edca0ceb1284a1a7"
+    },
+    {
+      "name": "firefox-trace-desktop-18.json",
+      "test": "R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "67521bebf632fe81bdafe53ce71232893467fa9cd3d04c4318d7c6dd7d194ae6"
+    },
+    {
+      "name": "firefox-trace-desktop-19.json",
+      "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+      "engine": "firefox",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "581ccb940e0d205dc042b4690616ad5241433e8e222d21072c93480df06cdafe"
+    },
+    {
+      "name": "webkit-plain-desktop-01.json",
+      "test": "fixture: espera la animación que se dibuja e ignora la de un <details> cerrado (caso .menu-pop en Firefox)",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "c70fb1c26f7231f1a5038aefde3b81e1971647efb66f759ca89b8cd1cc20aa8f"
+    },
+    {
+      "name": "webkit-plain-desktop-02.json",
+      "test": "ResizeObserver · R1-T04 · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "6db4b1d98aafed0e84c6c3daa055e42f6f4b843988c87897e41440b7d09171d2"
+    },
+    {
+      "name": "webkit-plain-desktop-03.json",
+      "test": "ResizeObserver · R1-T02b · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "f2b4bb7133cb7013d0fe39ca6f89b1f28165de048a1b66cb2acbcee02f3782ce"
+    },
+    {
+      "name": "webkit-plain-desktop-04.json",
+      "test": "ResizeObserver · R1-T02 · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "ace7991b1d09c1fe96fa6881e71fb8aa5830611253a1c37d446ad60d076fd3ad"
+    },
+    {
+      "name": "webkit-plain-desktop-05.json",
+      "test": "ResizeObserver · R1-T04 · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "2b2130de1496e530080a72e0a262d4ce738b525ce5eeca0a9535558e98e26b0c"
+    },
+    {
+      "name": "webkit-plain-desktop-06.json",
+      "test": "ResizeObserver · R1-T02b · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "19efba819834d12f692d26ec890f066d6136035b6c0343fb09d41b3d9b171fa1"
+    },
+    {
+      "name": "webkit-plain-desktop-07.json",
+      "test": "ResizeObserver · R1-T02 · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "464179035a41f25c5140e8b9642b1dd891863a3156784c7aa872f21677938632"
+    },
+    {
+      "name": "webkit-plain-desktop-08.json",
+      "test": "ResizeObserver · R1-T04 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "3edc3573b089d9c08a7a758d97b9830a0b09e4cfeb5378aea5465c430892bb0c"
+    },
+    {
+      "name": "webkit-plain-desktop-09.json",
+      "test": "ResizeObserver · R1-T02b · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "7c5e47fa72ba8b43e78d1107792bd63daf9c0f8750da34cefd562e1b3762c570"
+    },
+    {
+      "name": "webkit-plain-desktop-10.json",
+      "test": "ResizeObserver · R1-T02 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "f2dc4dc1f229841642bc51e7281278d51744d18e3ea14a2442a74eba1cd5c840"
+    },
+    {
+      "name": "webkit-plain-desktop-11.json",
+      "test": "ResizeObserver · R1-T04 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "7d918fac03c8dc3aa9ed97f79f1f7033573ae45357d239eeb5d0a3b0dfe4db1c"
+    },
+    {
+      "name": "webkit-plain-desktop-12.json",
+      "test": "ResizeObserver · R1-T02b · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "e6eb7e17557eebe17d6ba8f11a4e8a13e9b031aacad4fcb272a4cee834ec5725"
+    },
+    {
+      "name": "webkit-plain-desktop-13.json",
+      "test": "ResizeObserver · R1-T02 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "206dd914cc32a99ee1db6f2530676d0f255ab86589bf381f7869bba4bb3f28f9"
+    },
+    {
+      "name": "webkit-plain-desktop-14.json",
+      "test": "R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "cbe6d928d3e89880883d61eda4b75594c4b907e9233c80cee33b5e63bf6790c8"
+    },
+    {
+      "name": "webkit-plain-desktop-15.json",
+      "test": "R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "de8f3e792058fe7b43ab01a3e2648b76ba9a54ffacf7158a7577f08585c73cf9"
+    },
+    {
+      "name": "webkit-plain-desktop-16.json",
+      "test": "R1-T04 · normal: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "020025d4757866422c32d90e2526e3be564e4b15a197892aeb5892d39fa48cf3"
+    },
+    {
+      "name": "webkit-plain-desktop-17.json",
+      "test": "R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "44eec0fb61bd55d4c09555bf5a937fd360ea4004e3d745e46a2c365ae6eb6c9e"
+    },
+    {
+      "name": "webkit-plain-desktop-18.json",
+      "test": "R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "049a4cb678047db411d82a00a4395af76a76630e5caa1e287788c0bbf270aa86"
+    },
+    {
+      "name": "webkit-plain-desktop-19.json",
+      "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "490b65af422566d1d51f69e5110dbd501e350f73b890c335dfe0d464ae571927"
+    },
+    {
+      "name": "webkit-plain-historico-01.json",
+      "test": "R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "0ce5f834327ee4d493427e11712a5aa733fbcb5a66c64a64e423d27aec7b0d57"
+    },
+    {
+      "name": "webkit-plain-historico-02.json",
+      "test": "R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "35f82fb1cb58b83583968809565e345c95545a2c300d5f5e99b4a2effa0407aa"
+    },
+    {
+      "name": "webkit-plain-historico-03.json",
+      "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": false,
+      "UA": null,
+      "f02b": null,
+      "viewport": null,
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "bf2a00530fd44e52a116a87f994b8fab78b84ab5c75e4962384fe5255faf1335"
+    },
+    {
+      "name": "webkit-trace-desktop-01.json",
+      "test": "fixture: espera la animación que se dibuja e ignora la de un <details> cerrado (caso .menu-pop en Firefox)",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "6c796bdfacb343870bab9871a79bc536b03b3c9ec89e7e93eb998863253f9d66"
+    },
+    {
+      "name": "webkit-trace-desktop-02.json",
+      "test": "ResizeObserver · R1-T04 · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "7ed282af1147680b4a32350040716ccf4b1ceccf9aafbae37f681308c9daca27"
+    },
+    {
+      "name": "webkit-trace-desktop-03.json",
+      "test": "ResizeObserver · R1-T02b · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "3f662a10a899166a72c943d408a1492dad18e588b2d7f58578ff157c237017eb"
+    },
+    {
+      "name": "webkit-trace-desktop-04.json",
+      "test": "ResizeObserver · R1-T02 · normal · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "1d7183064ecae48ef262d31f204bf7d023e22ae88d375ab9f013337e680de0ca"
+    },
+    {
+      "name": "webkit-trace-desktop-05.json",
+      "test": "ResizeObserver · R1-T04 · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "a2811a1a0f8541eab18aba62eef56cfe6c7d9eef89324e7d06c778635a59f8ae"
+    },
+    {
+      "name": "webkit-trace-desktop-06.json",
+      "test": "ResizeObserver · R1-T02b · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "7354e76ef3b5efe938689be4f77e4ab602329f7b482fb44601b738cd8400b629"
+    },
+    {
+      "name": "webkit-trace-desktop-07.json",
+      "test": "ResizeObserver · R1-T02 · normal · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "415729a43aaa71dffcb1acb3cf3bbccd838eb82a7308bcec65b8d0b6bab5bbd8"
+    },
+    {
+      "name": "webkit-trace-desktop-08.json",
+      "test": "ResizeObserver · R1-T04 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "5687f663e0243a9e5671e3ae456ffa00dfb72a6ef32d2a74609df9f19e471c91"
+    },
+    {
+      "name": "webkit-trace-desktop-09.json",
+      "test": "ResizeObserver · R1-T02b · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "05cf051790e2c728d848767116f32730650e35d48c0daed27f520affc4eeaa28"
+    },
+    {
+      "name": "webkit-trace-desktop-10.json",
+      "test": "ResizeObserver · R1-T02 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1399,
+        873
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "42ed48dd973349680df79f1b8ca7d7d8a9b932bcb7a2463e6dffb4a97def17f9"
+    },
+    {
+      "name": "webkit-trace-desktop-11.json",
+      "test": "ResizeObserver · R1-T04 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "42a59ae6f64b2eedf413268fff9ab5a9f47400185e69384afc90324681c49994"
+    },
+    {
+      "name": "webkit-trace-desktop-12.json",
+      "test": "ResizeObserver · R1-T02b · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "693e02ef55bc478f94802ca24864bd65ec6092f24a4f11baf1b4c4243344d097"
+    },
+    {
+      "name": "webkit-trace-desktop-13.json",
+      "test": "ResizeObserver · R1-T02 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        349,
+        817
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "14a6e5b09840743230f36f880273d7b879dc09aaa832ee8435be7545fa036af3"
+    },
+    {
+      "name": "webkit-trace-desktop-14.json",
+      "test": "R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "445cb9515a2dda91227e46152d819f74d89ceb6982f6eb6d7b633d5643791a2b"
+    },
+    {
+      "name": "webkit-trace-desktop-15.json",
+      "test": "R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "a15e01c0c0a529b5a5cd28810754ce51e220d4c88133119f3d0624e8a16cac78"
+    },
+    {
+      "name": "webkit-trace-desktop-16.json",
+      "test": "R1-T04 · normal: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "ee6a1c824db6d3f447f3bd843a6ffad8102c602abab080726e9367eee3bc6551"
+    },
+    {
+      "name": "webkit-trace-desktop-17.json",
+      "test": "R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "36e3df31f0d7e0975d859ae3caa65b5f1915605bd2d822b1646ce7dd922513a7"
+    },
+    {
+      "name": "webkit-trace-desktop-18.json",
+      "test": "R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "8c0757b47cd319cd172b8000b3f9ddb28634d285f8fb8ddb4d4589e7b5d155b1"
+    },
+    {
+      "name": "webkit-trace-desktop-19.json",
+      "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "8563da5d96d84f070e312e16a0741ca021e9c88e714fdf9a8581a624b24f46a0"
+    },
+    {
+      "name": "webkit-trace-historico-01.json",
+      "test": "R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "6f3c9b05174f68ee689b0706a27cde2a95ba94d8eff2bd969b094b45035f6c2f"
+    },
+    {
+      "name": "webkit-trace-historico-02.json",
+      "test": "R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "453a23313d26b91df2f24de64b07c871221649c05d635ebc6a2469b21f127571"
+    },
+    {
+      "name": "webkit-trace-historico-03.json",
+      "test": "R1-T04 · normal: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "fc358ba742984be251684c911ccf1d70595eee022cb39f1fa5b9c8533c2b2668"
+    },
+    {
+      "name": "webkit-trace-historico-04.json",
+      "test": "R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "382d4679136d9ae7c98a04ad03672a1736bad34cdadc2afc4069c2476364192f"
+    },
+    {
+      "name": "webkit-trace-historico-05.json",
+      "test": "R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "7b704997223764068dbb6e1498cf8726b2144eaf068e39ef62f7507b663a38b8"
+    },
+    {
+      "name": "webkit-trace-historico-06.json",
+      "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "32965cbce4d4bea9e8230a6410493ee4322c50a3ab3e0397a91fd360285fca9f"
+    },
+    {
+      "name": "webkit-trace-mobile-01.json",
+      "test": "R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "a4db2b0da75544acb8b830dc822b2bbc9049f54dd73c17588b3e6aa380f2877b"
+    },
+    {
+      "name": "webkit-trace-mobile-02.json",
+      "test": "R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "ed16f5a165ad1cfa914effc844c61407f62fee4e331990fb2352349adf75dad3"
+    },
+    {
+      "name": "webkit-trace-mobile-03.json",
+      "test": "R1-T04 · normal: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "f21b2ad03a5de3c0b27ff1409bffd64e99da7e34a143d2c488ea275e7170a183"
+    },
+    {
+      "name": "webkit-trace-mobile-04.json",
+      "test": "R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "2f40e5a8b73930cb6da05f9ee806998f0e9e14e7e2e1c800595d49feb9952165"
+    },
+    {
+      "name": "webkit-trace-mobile-05.json",
+      "test": "R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "548dd73d8d7b787019e1371659868fef8dd6cde16361b5a123fcd629c2dd9d30"
+    },
+    {
+      "name": "webkit-trace-mobile-06.json",
+      "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+      "engine": "webkit",
+      "traced": true,
+      "UA": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+      "f02b": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": 0,
+      "diagnostics": [],
+      "removedOrResized": 0,
+      "sha256": "fc5fdce3cb8304244b572250d445b9fbf866b13e9e2bcda600697108f7b81bf3"
+    }
+  ]
+}
