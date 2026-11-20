@@ -20,11 +20,11 @@
  */
 (function(root,factory){
  const node=typeof module==='object'&&module.exports;
- const api=factory(node?require('./recetas-catalogo.js'):root.RubikStudioE3Catalogo);
+ const api=factory(node?require('./studio-e3-recetas.js'):root.RubikStudioE3Catalogo);
  if(node)module.exports=api;else root.RubikStudioE3=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(CAT){
  'use strict';
- if(!CAT||!Array.isArray(CAT.recetas)||CAT.recetas.length!==21)throw new Error('RubikStudioE3: falta el catálogo de recetas generado (e3/recetas-catalogo.js).');
+ if(!CAT||!Array.isArray(CAT.recetas)||CAT.recetas.length!==21)throw new Error('RubikStudioE3: falta el catálogo de recetas generado (js/studio-e3-recetas.js).');
  const VERSION='rubik-lab-e3/1';
  const KEYS=Object.freeze({project:'rubik-sota-floorplan-project-v1',library:'rubik-sota-project-library-v1',budgets:'rubik-budget-v1',reviews:'rubik-review-v1',construction:'rubik-construction-v1'});
  const LANGS=['es','en','zh'];
