@@ -11,6 +11,7 @@
 | v1.3 | `RUBIK-SOTA-PROMPT-CLAUDE-CIERRE-INTEGRAL-E0E1-v1.3.md` | 42.430 | `c2f16097b21eef089bdf414db9c463385ae081828bec282311ad98e594a552a4` | Mandato de cierre E0/E1 (A01–A29, H01–H08, D/ST) | Cierre técnico y residual hechos (A10, A22, A23 y A27–A29 reconciliados contra §4–§7). Pendientes delimitados: estados económicos → N04; Firefox/WebKit; revisión humana. Ver `reports/13`. |
 | v1.4 | `RUBIK-SOTA-PROMPT-CLAUDE-DELTA-DOCUMENTAL-v1.4.md` | 13.410 | `bfff73fcc4a63ea7c1489733a252d0831c68305c5be481ec1c326e569b7878de` | Mandato delta (N01–N08, RP-Q01–RP-Q12) | Resultados del candidato y límites en `reports/15`. |
 | v1.4 | `RUBIK-SOTA-ANEXO-ENTREGABLES-PROFESIONALES-v1.4.md` | 43.659 | `6241ac2f1074f20984b361914f877a2dde00eb9f7b1f8a93153477905021636d` | Anexo funcional (RP01–RP21, M01–M12) | Auditado (`reports/14`). Las 5 correcciones de la auditoría (V1–V5) se aplican al ejecutar, sin editar el anexo. |
+| E3 / K10 / ENT-03 (20/11/2026) | — (recibido en el chat del propietario; no se dispone del archivo original, así que no se copia ni se resume como si lo fuera) | — | — | GO de preparación funcional en laboratorio: contratos C1–C4 con Codex, 43 fuentes contra master `130ba24`, selector E3, vigencia N05, Blender/Simulator solo contrato, UX, pruebas del delta y §4.1 | Ejecutado como laboratorio hasta VALIDADO: `reports/22-E3-K10-ENT03-CONTRATOS-SELECTOR.md` y `reports/22b-MATRIZ-43-FUENTES.md`. Sus requisitos se suman a los anteriores |
 
 ## Hallazgos externos de continuidad
 

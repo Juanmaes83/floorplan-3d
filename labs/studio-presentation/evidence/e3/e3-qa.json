@@ -1,0 +1,468 @@
+{
+ "schema": "rubik-lab-e3-qa/1",
+ "fecha": "2026-11-20T14:25:50.915Z",
+ "pin": "130ba24d420a2f4b26ab261313202e6070904fd8",
+ "entorno": {
+  "node": "v22.23.5",
+  "plataforma": "linux"
+ },
+ "resumen": "23/23 PASS",
+ "casos": [
+  {
+   "id": "E3-01",
+   "titulo": "Catálogo generado idéntico a tools/recetas.cjs: 21 recetas, niveles L/C/F y campo «corte» intactos",
+   "resultado": "PASS",
+   "detalle": {
+    "L": 12,
+    "C": 5,
+    "F": 4,
+    "sha256": "df3e0c1bd67b3b8c559155eccc66deafbd33af836a952f1ff6c1677b619d7e7b"
+   }
+  },
+  {
+   "id": "E3-02",
+   "titulo": "Matriz de las 43 fuentes: cubre exactamente el catálogo y cada evidencia existe en master 130ba24",
+   "resultado": "PASS",
+   "detalle": {
+    "evidencias": 34,
+    "sinEvidencia": [
+     "concepto",
+     "alcanceServicios",
+     "exclusiones",
+     "validezOferta",
+     "precioInmueble",
+     "impuestosCompra",
+     "referenciasMoodboard",
+     "ofertaTecnica",
+     "preciosVerificados",
+     "ofertasIndependientes",
+     "motivoCambio",
+     "observacionesObra",
+     "certificadosObra",
+     "actasVisita",
+     "especificacionValidada",
+     "punchList",
+     "revisionEjecutada",
+     "manualesGarantias",
+     "costeLiquidado",
+     "actasEntrega",
+     "evidenciaEjecutada",
+     "archivoPropietario"
+    ]
+   }
+  },
+  {
+   "id": "E3-03",
+   "titulo": "Reconciliación con el mapa F0 (informe 21): cada cambio de clase está anotado y las exclusiones del expediente siguen cubiertas",
+   "resultado": "PASS",
+   "detalle": {
+    "cambios": [
+     {
+      "fuente": "vistas3d",
+      "antes": "sin-fuente",
+      "ahora": "sesion",
+      "motivo": "antes «sin-fuente»: el producto ya prepara vistas reales por revisión; siguen sin persistirse (C4)"
+     },
+     {
+      "fuente": "norte",
+      "antes": "sin-fuente",
+      "ahora": "confirmada",
+      "motivo": "antes «sin-fuente»: el contrato 1.7 declara el norte"
+     },
+     {
+      "fuente": "honorarios",
+      "antes": "excluido",
+      "ahora": "aportacion",
+      "motivo": "antes «excluido»: no hay módulo de honorarios en master"
+     }
+    ]
+   }
+  },
+  {
+   "id": "E3-04",
+   "titulo": "Paridad de resolución con tools/recetas.cjs (21 recetas × ES/EN) sobre las mismas fuentes",
+   "resultado": "PASS",
+   "detalle": {
+    "comparadas": 42
+   }
+  },
+  {
+   "id": "E3-05",
+   "titulo": "Adaptador F0 del laboratorio intacto sobre master 130ba24 (11 casos)",
+   "resultado": "PASS",
+   "detalle": {
+    "resumen": "11/11",
+    "archivo": "evidence/e3/f0-adaptador-qa-130ba24.json"
+   }
+  },
+  {
+   "id": "E3-06",
+   "titulo": "Proyecto confirmado válido: RP05 se prepara solo con lo confirmado y verifica «verificado»",
+   "resultado": "PASS",
+   "detalle": {
+    "contentId": "92e46994a8dfbe546b7f66fa0035e5098957990d3dd70e62789bf13941714b0a",
+    "revision": 3,
+    "seleccionSha256": "33339c3ae211c14af3b823f78c1a412f3760ecaffcb67e6d988c729286cceb20",
+    "acreditadas": [
+     "presupuesto"
+    ]
+   }
+  },
+  {
+   "id": "E3-07",
+   "titulo": "Sin revisión confirmada (authority-missing): explica causa, siguiente paso, alternativa y datos; no crea revisión",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-08",
+   "titulo": "Cambios no guardados: no se prepara y el proyecto observado nunca pasa por confirmado",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-09",
+   "titulo": "Otra pestaña: almacenamiento bloqueado y revisión que cambia durante la preparación",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-10",
+   "titulo": "Presupuesto de otra revisión o de otro sujeto: caduca el candidato o no se acredita",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-11",
+   "titulo": "Cambio de marca: el expediente no la incluye, pero su huella congelada caduca el candidato",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-12",
+   "titulo": "Cambio de geometría, de imágenes o de documentos: «verificado-desactualizado»",
+   "resultado": "PASS",
+   "detalle": {
+    "geometria": "desactualizado-trabajo",
+    "imagenes": "desactualizado-trabajo",
+    "documentos": "desactualizado-trabajo"
+   }
+  },
+  {
+   "id": "E3-13",
+   "titulo": "Restauración portable: otro id local, otra entrada y otra revisión con el mismo contentId → sigue vigente",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-14",
+   "titulo": "Expediente alterado o truncado y candidato manipulado: «invalido»",
+   "resultado": "PASS",
+   "detalle": {
+    "truncado": "invalido-expediente",
+    "alterado": "invalido-expediente",
+    "expedienteMismoTrabajo": true
+   }
+  },
+  {
+   "id": "E3-15",
+   "titulo": "Preparación cancelada y resultado asíncrono obsoleto: se descartan sin aplicar nada",
+   "resultado": "PASS",
+   "detalle": {
+    "primero": "obsoleta",
+    "cancelado": "cancelada"
+   }
+  },
+  {
+   "id": "E3-16",
+   "titulo": "Fuentes obligatorias ausentes: L bloqueada con lo que falta nombrado",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-17",
+   "titulo": "Receta parcial: se prepara y nombra lo incompleto y lo omitido (RP09, RP07, RP03)",
+   "resultado": "PASS",
+   "detalle": {
+    "RP09": {
+     "estado": "preparable-parcial",
+     "incompleta": [
+      "revisionAnterior"
+     ],
+     "omitidas": []
+    },
+    "RP07": {
+     "estado": "preparable",
+     "incompleta": [],
+     "omitidas": [
+      "norte",
+      "revisionAnterior"
+     ]
+    },
+    "RP03": {
+     "estado": "preparable-parcial",
+     "incompleta": [
+      "variantesGuardadas"
+     ],
+     "omitidas": [
+      "concepto",
+      "planObra",
+      "imagenesIA"
+     ]
+    }
+   }
+  },
+  {
+   "id": "E3-18",
+   "titulo": "Recetas C/F: nunca preparables ni emitibles",
+   "resultado": "PASS",
+   "detalle": {
+    "RP13": "no-elegible",
+    "RP14": "no-elegible",
+    "RP15": "no-elegible",
+    "RP16": "no-disponible",
+    "RP17": "no-elegible",
+    "RP18": "no-disponible",
+    "RP19": "no-disponible",
+    "RP20": "no-disponible",
+    "RP21": "no-elegible"
+   }
+  },
+  {
+   "id": "E3-19",
+   "titulo": "Conservación del almacenamiento: la lectura no cambia los documentos, no usa la sesión y el pin no cambia",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-20",
+   "titulo": "Ninguna revisión confirmada falsa: origen fuera de prueba, lectura sin revisión o sin documentos",
+   "resultado": "PASS"
+  },
+  {
+   "id": "E3-21",
+   "titulo": "Textos ES/EN/ZH completos, sin respaldo silencioso; nombres de receta en ZH rotulados EN",
+   "resultado": "PASS",
+   "detalle": {
+    "codigos": 21,
+    "motivos": 13
+   }
+  },
+  {
+   "id": "E3-22",
+   "titulo": "Contrato C6 de OP-10 sin activar: E3 no llama a record() y la identidad de C6 sigue «observed-only» sin confirmación",
+   "resultado": "PASS",
+   "detalle": {
+    "observado": "observed-only",
+    "conIdentidadE3": "confirmed",
+    "nota": "Solo demuestra la forma del consumo propuesto; producto sigue llamando record({confirmed:null})."
+   }
+  },
+  {
+   "id": "E3-23",
+   "titulo": "Solo lectura del producto: el pin de master no cambia",
+   "resultado": "PASS",
+   "detalle": {
+    "pinJsSha256": "369d117225d9c7c850cb0c4fa79b581b3adcaeebf5d729aa737b8608df08a032"
+   }
+  }
+ ],
+ "evidenciasMatriz": [
+  {
+   "fuente": "geometria",
+   "archivo": "js/persistence-store.js",
+   "linea": 120,
+   "patron": "async function readConfirmed"
+  },
+  {
+   "fuente": "geometria",
+   "archivo": "js/expediente-core.js",
+   "linea": 154,
+   "patron": "async function contentId"
+  },
+  {
+   "fuente": "geometria",
+   "archivo": "js/project-core.js",
+   "linea": 130,
+   "patron": "function validate"
+  },
+  {
+   "fuente": "superficies",
+   "archivo": "js/surface-core.js",
+   "linea": 46,
+   "patron": "root.FloorPlanSurfaceMetrics=api"
+  },
+  {
+   "fuente": "vistas3d",
+   "archivo": "js/project-views-ui.js",
+   "linea": 25,
+   "patron": "function current\\(\\)\\{return status\\(\\)==='ready'"
+  },
+  {
+   "fuente": "vistas3d",
+   "archivo": "js/project-core.js",
+   "linea": 362,
+   "patron": "api="
+  },
+  {
+   "fuente": "imagenesIA",
+   "archivo": "js/expediente-core.js",
+   "linea": 30,
+   "patron": "NOT_INCLUDED="
+  },
+  {
+   "fuente": "dibujoVivo",
+   "archivo": "js/presentation-living-drawing-core.js",
+   "linea": 11,
+   "patron": "function"
+  },
+  {
+   "fuente": "recorrido",
+   "archivo": "js/presentation-route.js",
+   "linea": 156,
+   "patron": "root.FloorPlanPresentationRoute=api"
+  },
+  {
+   "fuente": "materiales",
+   "archivo": "js/persistence-store.js",
+   "linea": 120,
+   "patron": "async function readConfirmed"
+  },
+  {
+   "fuente": "materiales",
+   "archivo": "docs/contracts/FloorPlanProjectV1.md",
+   "linea": 131,
+   "patron": "`materials`"
+  },
+  {
+   "fuente": "objetos",
+   "archivo": "js/persistence-store.js",
+   "linea": 120,
+   "patron": "async function readConfirmed"
+  },
+  {
+   "fuente": "objetos",
+   "archivo": "docs/contracts/FloorPlanProjectV1.md",
+   "linea": 131,
+   "patron": "`objects`"
+  },
+  {
+   "fuente": "presupuesto",
+   "archivo": "js/persistence-store.js",
+   "linea": 120,
+   "patron": "async function readConfirmed"
+  },
+  {
+   "fuente": "presupuesto",
+   "archivo": "js/persistence-store.js",
+   "linea": 29,
+   "patron": "'rubik-budget-v1'"
+  },
+  {
+   "fuente": "presupuesto",
+   "archivo": "js/budget-core.js",
+   "linea": 58,
+   "patron": "subject is required"
+  },
+  {
+   "fuente": "presupuestoRevisado",
+   "archivo": "js/revision-budget-core.js",
+   "linea": 20,
+   "patron": "root.FloorPlanRevisionBudget=api"
+  },
+  {
+   "fuente": "planObra",
+   "archivo": "js/persistence-store.js",
+   "linea": 29,
+   "patron": "'rubik-construction-v1'"
+  },
+  {
+   "fuente": "planObra",
+   "archivo": "js/expediente-core.js",
+   "linea": 30,
+   "patron": "'construction-record'"
+  },
+  {
+   "fuente": "vinculoPlanPresupuesto",
+   "archivo": "js/construction-record-core.js",
+   "linea": 2,
+   "patron": "binding"
+  },
+  {
+   "fuente": "marca",
+   "archivo": "js/brand-core.js",
+   "linea": 10,
+   "patron": "rubik-sota-brand-profiles-v1"
+  },
+  {
+   "fuente": "marca",
+   "archivo": "js/expediente-core.js",
+   "linea": 30,
+   "patron": "'brand-profiles'"
+  },
+  {
+   "fuente": "seccionFachadas",
+   "archivo": "js/presentation-section-core.js",
+   "linea": 19,
+   "patron": "function"
+  },
+  {
+   "fuente": "seccionFachadas",
+   "archivo": "js/presentation-elevation-core.js",
+   "linea": 19,
+   "patron": "function"
+  },
+  {
+   "fuente": "dimensionesHuecos",
+   "archivo": "js/persistence-store.js",
+   "linea": 120,
+   "patron": "async function readConfirmed"
+  },
+  {
+   "fuente": "dimensionesHuecos",
+   "archivo": "docs/contracts/FloorPlanProjectV1.md",
+   "linea": 131,
+   "patron": "`openings`"
+  },
+  {
+   "fuente": "revisionAnterior",
+   "archivo": "js/persistence-store.js",
+   "linea": 50,
+   "patron": "'conflicts'"
+  },
+  {
+   "fuente": "variantesGuardadas",
+   "archivo": "js/project-library.js",
+   "linea": 8,
+   "patron": "variantOf"
+  },
+  {
+   "fuente": "variantesGuardadas",
+   "archivo": "js/expediente-core.js",
+   "linea": 30,
+   "patron": "'variant-links'"
+  },
+  {
+   "fuente": "fotosAportadas",
+   "archivo": "js/persistence-store.js",
+   "linea": 120,
+   "patron": "async function readConfirmed"
+  },
+  {
+   "fuente": "fotosAportadas",
+   "archivo": "docs/contracts/FloorPlanProjectV1.md",
+   "linea": 102,
+   "patron": "sourceImages"
+  },
+  {
+   "fuente": "norte",
+   "archivo": "docs/contracts/FloorPlanProjectV1.md",
+   "linea": 9,
+   "patron": "northOffsetDeg"
+  },
+  {
+   "fuente": "honorarios",
+   "archivo": "js/expediente-core.js",
+   "linea": 30,
+   "patron": "'studio-tariff'"
+  },
+  {
+   "fuente": "catalogoProductos",
+   "archivo": "js/catalog-budget-core.js",
+   "linea": 23,
+   "patron": "root.RubikCatalogBudget=api"
+  }
+ ]
+}

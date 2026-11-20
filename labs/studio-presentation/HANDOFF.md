@@ -1,6 +1,50 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · continuidad E3 (19/11/2026)
+## Vigente · E3 / K10 / ENT-03: preparación funcional en laboratorio (20/11/2026)
+
+**Bases:** laboratorio `8c53263` (sin rebase; worktree independiente) y master `130ba24d420a2f4b26ab261313202e6070904fd8` (incluye #289).
+
+**Informe:** `reports/22-E3-K10-ENT03-CONTRATOS-SELECTOR.md` (C1–C4, dependencias, selector, N05, Blender/Simulator, UX, §4.1 y GO/NO-GO). **Matriz de las 43 fuentes:** `reports/22b-MATRIZ-43-FUENTES.md`.
+
+**Delta (solo `labs/studio-presentation/`):**
+
+| Archivo | Qué es |
+|---|---|
+| `e3/recetas-catalogo.js` | Generado desde `tools/recetas.cjs` |
+| `e3/e3-core.js` | Núcleo puro |
+| `e3/e3-ui.js`, `e3/e3.css` | Tarjeta y diálogo de Entregar |
+| `e3/rubik-130ba24-e3.patch` | Enganche propuesto a Codex. **No aplicado** |
+| `tools/e3-catalogo.cjs`, `tools/e3-copia.cjs`, `tools/e3-matriz.cjs` | Herramientas |
+| `tools/e3-qa.cjs`, `tools/e3-ui-qa.cjs` | QA |
+| `evidence/e3/` | JSON y capturas |
+
+**Comandos (pin de master fuera del repositorio: `git archive 130ba24 | tar -x -C <pin>`):**
+1. `node tools/e3-catalogo.cjs --check` → idéntico.
+2. `node tools/e3-qa.cjs <pin> 130ba24d420a2f4b26ab261313202e6070904fd8` → **23/23 PASS** (Node 22). Incluye el adaptador F0 11/11 sobre `130ba24`.
+3. `node tools/e3-copia.cjs <pin> <copia> 130ba24…` → copia aislada (enlaces duros; el pin no cambia) y parche.
+4. `node tools/e3-ui-qa.cjs <copia>` → Chromium 157 (ver `evidence/e3/e3-ui-qa.json`). Firefox y WebKit: **NOT_RUN** (no instalados en este contenedor; no se descargan).
+5. `node tools/e3-matriz.cjs 130ba24…` → regenera el 22b.
+
+**Hallazgos de master que Codex debe confirmar:**
+- el proyecto abierto vive en la **entrada activa de la biblioteca confirmada**;
+- `js/expediente-core.js` **no se carga** en `index.html`;
+- el ejemplo recién abierto no tiene proyecto confirmado hasta «Crear mi copia»;
+- `norte` ya tiene fuente (`site.northOffsetDeg`).
+
+**Límites:**
+- sin emisión, firma ni aceptación;
+- la vista previa es de **composición**, no un PDF;
+- emulación táctil, no dispositivos físicos;
+- sin Safari real.
+
+**No repetir:** E0/E1, D08 y las suites históricas (recetas 117/117, exportador 72/72, economía 24/24, estados 23/23, F0 11/11). Esas cifras no se atribuyen a este árbol, salvo F0 11/11, reejecutado como E3-05.
+
+**Siguiente actor:**
+1. Auditoría independiente (ChatGPT).
+2. Codex: revisión de C1–C4 y del parche.
+3. Propietario: D4.
+
+## Anterior · continuidad E3 (19/11/2026)
 
 **Base:** `0cf7c2e`, recuperada sin pérdidas. Contraste con master `dd528119`.
 - **Residual N01–N08 y RP-Q01–12:** todo cerrado y acreditado. RP07 incluido. No repetir.

@@ -1,0 +1,21 @@
+--- a/index.html
++++ b/index.html
+@@ -5854,6 +5854,7 @@
+ <script src="js/client-delivery-core.js"></script>
+ <script src="js/delivery-map-core.js"></script>
+ <script src="js/delivery-preview-ui.js"></script>
++<script src="js/expediente-core.js"></script><script src="e3/recetas-catalogo.js"></script><script src="e3/e3-core.js"></script><script src="e3/e3-ui.js"></script>
+ <script src="js/professional-workspace-ui.js"></script>
+ <!-- FT3D-8 M2 (S4): one project, one budget, one plan, one evolution, one delivery. Reuses M1 and Gate D engines. -->
+ <script src="js/cost-provider-bcca-es.js"></script>
+--- a/js/professional-workspace-ui.js
++++ b/js/professional-workspace-ui.js
+@@ -53,6 +53,8 @@
+    grid.querySelector('[data-group="signature"]>h2').textContent=tx('La firma del profesional','Professional signature','专业签名');
+    // ENT-01 I1B: review the REAL 3D engine in an isolated, non-publishing client tab.
+    window.FloorPlanDeliveryPreview?.card(grid.querySelector('[data-group="experience"] .professional-group-items'));
++   // E3 · K10 / ENT-03 (propuesta de laboratorio): «Preparar entrega» con recetas profesionales sobre la revisión confirmada. Solo lectura.
++   window.RubikStudioE3UI?.card(grid.querySelector('[data-group="documentation"] .professional-group-items'));
+   }
+   if(area==='studio'){
+    const profiles=grid.querySelector('[data-module="studio"]'),snap=FloorPlanBrandUI.snapshot(),profile=snap?.profile;

@@ -1,0 +1,359 @@
+{
+ "schema": "rubik-lab-e3-ui-qa/1",
+ "fecha": "2026-11-20T14:25:43.546Z",
+ "copia": "master 130ba24 + e3/rubik-130ba24-e3.patch (aislada)",
+ "origen": "http://f0-2b.localhost (y 127.0.0.1 para UI-17)",
+ "entorno": {
+  "node": "v22.23.5",
+  "playwright": "1.63.0",
+  "so": "linux",
+  "emulacion": "viewport + táctil emulado; no son dispositivos físicos ni Safari real"
+ },
+ "entornos": [
+  {
+   "navegador": "chromium",
+   "version": "157.0.8103.78",
+   "estado": "RUN"
+  },
+  {
+   "navegador": "firefox",
+   "estado": "NOT_RUN",
+   "motivo": "browserType.launch: Executable doesn't exist at /opt/pw-browsers/firefox-1543/firefox/firefox"
+  },
+  {
+   "navegador": "webkit",
+   "estado": "NOT_RUN",
+   "motivo": "browserType.launch: Executable doesn't exist at /opt/pw-browsers/webkit-2359/pw_run.sh"
+  }
+ ],
+ "resumen": {
+  "PASS": 18,
+  "FAIL": 0,
+  "SKIP": 0,
+  "NOT_RUN": 2
+ },
+ "casos": [
+  {
+   "navegador": "chromium",
+   "id": "UI-01",
+   "titulo": "Entregar muestra «Preparar entrega» en Documentación sin retirar E2.1, la visita 3D ni otras tarjetas",
+   "resultado": "PASS",
+   "detalle": {
+    "e3": true,
+    "compare": true,
+    "visita": true,
+    "grupos": [
+     "documentation",
+     "experience",
+     "coordination",
+     "signature"
+    ]
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-02a",
+   "titulo": "Proyecto de ejemplo sin guardar: «sin revisión del proyecto», con causa y siguiente paso; nada preparable",
+   "resultado": "PASS",
+   "detalle": {
+    "lectura": "confirmado",
+    "rev": 1,
+    "motivo": "c1-sin-revision",
+    "code": "c1-sin-revision",
+    "preparables": 0
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-02",
+   "titulo": "El diálogo lee la revisión confirmada, lista las 21 recetas con su nivel y no inventa revisión",
+   "resultado": "PASS",
+   "detalle": {
+    "estado": "confirmado",
+    "rev": 2,
+    "items": 21,
+    "modal": true,
+    "cambios": false
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-03",
+   "titulo": "Receta L bloqueada (RP07 sin vistas preparadas): explica causa, siguiente paso, alternativa y datos",
+   "resultado": "PASS",
+   "detalle": {
+    "aviso": true,
+    "dd": 3,
+    "boton": false,
+    "falta": [
+     "Fuentes acreditadas · 4",
+     "Obligatorias que faltan · 1",
+     "Opcionales omitidas · 2"
+    ]
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-04",
+   "titulo": "Recetas C y F: elegibilidad o indisponibilidad sin botón de preparación ni emisión",
+   "resultado": "PASS",
+   "detalle": {
+    "RP13": {
+     "boton": false,
+     "aviso": "receta-c"
+    },
+    "RP14": {
+     "boton": false,
+     "aviso": "receta-c"
+    },
+    "RP16": {
+     "boton": false,
+     "aviso": "receta-f"
+    },
+    "RP21": {
+     "boton": false,
+     "aviso": "receta-c"
+    }
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-05",
+   "titulo": "Receta parcial (RP10): se prepara con lo confirmado, nombra lo incompleto y verifica «verificado»",
+   "resultado": "PASS",
+   "detalle": {
+    "estado": "verificado",
+    "res": "preparable-parcial",
+    "incompleta": [
+     "revisionAnterior"
+    ],
+    "rev": 2,
+    "paquete": null
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-06",
+   "titulo": "Conservación: abrir, preparar y verificar no cambia localStorage ni la revisión confirmada",
+   "resultado": "PASS",
+   "detalle": {
+    "revision": 2
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-07",
+   "titulo": "Cambios sin guardar (edición real del norte, antes de confirmarse) bloquean la preparación",
+   "resultado": "PASS",
+   "detalle": {
+    "cambiosSinGuardar": true
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-08",
+   "titulo": "Al confirmarse el cambio, el candidato pasa a «verificado-desactualizado» y el norte queda acreditado",
+   "resultado": "PASS",
+   "detalle": {
+    "estado": "verificado-desactualizado",
+    "motivo": "desactualizado-trabajo",
+    "norte": {
+     "estado": "disponible",
+     "motivo": "confirmada",
+     "dato": "30°",
+     "clase": "confirmada"
+    }
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-09",
+   "titulo": "Otra pestaña confirma una revisión nueva: la primera lo detecta al verificar (sin escribir)",
+   "resultado": "PASS",
+   "detalle": {
+    "antes": 3,
+    "rev": 4,
+    "cambios": true,
+    "estado": "verificado-desactualizado"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-10",
+   "titulo": "Teclado: Escape cierra el diálogo y el foco vuelve a «Preparar entrega»; flechas recorren las recetas",
+   "resultado": "PASS",
+   "detalle": {
+    "retorno": "e3Open",
+    "flecha": "RP02",
+    "focoAtrapado": true
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-11",
+   "titulo": "Contraste AA del texto del diálogo (≥4,5:1)",
+   "resultado": "PASS",
+   "detalle": {
+    "n": 167,
+    "min": 4.68,
+    "peores": [
+     {
+      "t": "Preparar candidato",
+      "ratio": 4.68
+     },
+     {
+      "t": "preparable con omisiones",
+      "ratio": 6.33
+     },
+     {
+      "t": "preparable con omisiones",
+      "ratio": 6.33
+     }
+    ]
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-12",
+   "titulo": "Sin errores de página ni peticiones externas en el flujo de escritorio",
+   "resultado": "PASS",
+   "detalle": {
+    "errores": 0,
+    "externas": 0
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-13",
+   "titulo": "820×1180 táctil (emulación): sin desbordamiento horizontal y objetivos táctiles ≥44 px",
+   "resultado": "PASS",
+   "detalle": {
+    "cerrarVisible": true,
+    "ancho": 786,
+    "vw": 820,
+    "overflow": false,
+    "pequenos": [],
+    "estado": "verificado"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-14",
+   "titulo": "390×844 táctil (emulación): sin desbordamiento horizontal y objetivos táctiles ≥44 px",
+   "resultado": "PASS",
+   "detalle": {
+    "cerrarVisible": true,
+    "ancho": 390,
+    "vw": 390,
+    "overflow": false,
+    "pequenos": [],
+    "estado": "verificado"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-15",
+   "titulo": "EN + prefers-reduced-motion: textos en inglés y sin transiciones en el diálogo",
+   "resultado": "PASS",
+   "detalle": {
+    "titulo": "Prepare delivery",
+    "rp": "RP05 · Initial cost estimate",
+    "trans": "0s"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-16",
+   "titulo": "ZH: interfaz nueva en chino; nombres de receta (catálogo ES/EN) rotulados lang=\"en\", sin respaldo silencioso",
+   "resultado": "PASS",
+   "detalle": {
+    "titulo": "准备交付",
+    "nombreLang": "en",
+    "aviso": "此配方缺少必需的来源。"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-17",
+   "titulo": "Fuera del origen de prueba: aviso «c1-origen» y ninguna receta preparable",
+   "resultado": "PASS",
+   "detalle": {
+    "motivo": "c1-origen",
+    "code": "c1-origen",
+    "preparables": 0
+   }
+  },
+  {
+   "navegador": "firefox",
+   "id": "*",
+   "titulo": "Suite completa",
+   "resultado": "NOT_RUN",
+   "detalle": "Navegador no instalado en el contenedor; no se descarga (política del entorno)."
+  },
+  {
+   "navegador": "webkit",
+   "id": "*",
+   "titulo": "Suite completa",
+   "resultado": "NOT_RUN",
+   "detalle": "Navegador no instalado en el contenedor; no se descarga (política del entorno)."
+  }
+ ],
+ "capturas": [
+  {
+   "archivo": "evidence/e3/visual/e3-escritorio-sin-revision.png",
+   "bytes": 373508
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-escritorio-lista.png",
+   "bytes": 364595
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-escritorio-bloqueada.png",
+   "bytes": 559343
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-escritorio-verificado.png",
+   "bytes": 369707
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-escritorio-desactualizado.png",
+   "bytes": 391183
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-820-tarjeta.png",
+   "bytes": 356601
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-820-dialogo.png",
+   "bytes": 383228
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-820-vista-previa.png",
+   "bytes": 315524
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-390-tarjeta.png",
+   "bytes": 155230
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-390-dialogo.png",
+   "bytes": 218359
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-390-vista-previa.png",
+   "bytes": 204223
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-en-reducido.png",
+   "bytes": 336060
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-zh.png",
+   "bytes": 495336
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-origen-no-prueba.png",
+   "bytes": 367105
+  }
+ ]
+}
