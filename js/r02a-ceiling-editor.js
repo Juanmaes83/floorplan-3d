@@ -19,15 +19,18 @@
   const doc = root.document, app = () => root.FloorPlanApp;
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const markup = (el, html) => (root.SafeDOM ? root.SafeDOM.markup(el, html) : (el.innerHTML = html));
-  const LIMITS_ES = Object.freeze([
-    'Herramienta experimental de diseño: posición y altura revisables por una persona.',
-    'No comprueba la altura de paso para personas: un elemento «revisable» puede quedar a una altura incompatible con la circulación.',
-    'No comprueba instalaciones (electricidad, climatización), ni iluminación, ni normativa.',
-    'Las medidas de catálogo son genéricas, no de un producto medido.',
-    'Antes de ejecutar una obra, valida alturas y anclajes con un profesional.'
-  ]);
-  const STATE_ES = { 'candidate-reviewable': 'Revisable', pending: 'Pendiente de datos', blocked: 'Bloqueado', orphan: 'Sin estancia', invalid: 'No válido' };
-  const REF_ES = { 'finished-floor': 'suelo acabado', 'level-floor': 'forjado' };
+  // Textos visibles en los idiomas de RUBIK (convención de los módulos: tx local que lee el LANG global; sin LANG, español).
+  const tx = (es, en, zh) => ({ es, en, zh })[typeof LANG === 'string' ? LANG : 'es'] ?? es;
+  const LIMITS_ES = () => [
+    tx('Herramienta experimental de diseño: posición y altura revisables por una persona.', 'Experimental design tool: position and height to be reviewed by a person.', '实验性设计工具：位置和高度需人工审核。'),
+    tx('No comprueba la altura de paso para personas: un elemento «revisable» puede quedar a una altura incompatible con la circulación.', 'It does not check clear passage height for people: a “reviewable” item may hang at a height incompatible with circulation.', '不检查人员通行净高："可审核"的元素可能处于妨碍通行的高度。'),
+    tx('No comprueba instalaciones (electricidad, climatización), ni iluminación, ni normativa.', 'It does not check installations (electrical, HVAC), lighting or regulations.', '不检查设备（电气、空调）、照明或规范。'),
+    tx('Las medidas de catálogo son genéricas, no de un producto medido.', 'Catalogue sizes are generic, not from a measured product.', '目录尺寸为通用值，并非实测产品。'),
+    tx('Antes de ejecutar una obra, valida alturas y anclajes con un profesional.', 'Before building, validate heights and fixings with a professional.', '施工前请与专业人员核实高度和固定方式。')];
+  const STATE_ES = () => ({ 'candidate-reviewable': tx('Revisable', 'Reviewable', '可审核'), pending: tx('Pendiente de datos', 'Missing data', '待补数据'), blocked: tx('Bloqueado', 'Blocked', '已阻止'), orphan: tx('Sin estancia', 'No room', '无房间'), invalid: tx('No válido', 'Invalid', '无效') });
+  const REF_ES = () => ({ 'finished-floor': tx('suelo acabado', 'the finished floor', '完成地面'), 'level-floor': tx('forjado', 'the structural floor', '楼板') });
+  // Nombres VISIBLES por la fuente única del producto: los datos guardados (p. ej. el ejemplo, en chino) no se muestran en bruto.
+  const shown = (n, t) => (root.FloorPlanDisplayName ? root.FloorPlanDisplayName(n, t) : typeof nm === 'function' ? nm(n) : n);
   // Estilos propios (así index.html no cambia de CSS). Cajas de 44 px mínimo para el toque.
   if (doc && !doc.getElementById('r02aStyle')) {
     const css = doc.createElement('style'); css.id = 'r02aStyle';
@@ -46,10 +49,10 @@
   const st = { draft: null, result: null, alternatives: null, open: false, placing: false, last: null, notice: null, removed: [], loadedFor: null, passage: null };
 
   const project = () => app()?.project;
-  const levelWord = () => (app()?.levelContext ? 'esta planta' : 'toda la planta (este proyecto)');
-  function labelOf(id) { const p = project(), o = p?.objects?.find(x => x.id === id); return o ? `«${o.name}»` : `«${id}»`; }
+  const levelWord = () => (app()?.levelContext ? tx('esta planta', 'this level', '本楼层') : tx('toda la planta (este proyecto)', 'the whole level (this project)', '整层（本项目）'));
+  function labelOf(id) { const p = project(), o = p?.objects?.find(x => x.id === id); return o ? `«${shown(o.name, o.type)}»` : `«${id}»`; }
   const roomOfId = id => project()?.rooms?.find(r => r.id === id);
-  const roomName = id => roomOfId(id)?.name || id;
+  const roomName = id => { const r = roomOfId(id); return r ? shown(r.name) : id; };
   function centroid(room) { const P = room.polygon; return { x: Math.round(P.reduce((a, p) => a + p.x, 0) / P.length), y: Math.round(P.reduce((a, p) => a + p.y, 0) / P.length) }; }
   const newId = () => (root.FloorPlanCore?.id ? root.FloorPlanCore.id('cei') : 'cei_' + Math.random().toString(36).slice(2, 12));
   function defaultDraft(roomId) {
@@ -73,8 +76,8 @@
   const info = text => { if (!st.notice || st.notice.kind === 'info') st.notice = { kind: 'info', text }; };
   function write(fn) {
     st.notice = null;
-    const r = app()?.applyCeiling ? app().applyCeiling(fn) : { ok: false, explanation: ['El editor no expone applyCeiling.'] };
-    if (!r.ok) st.notice = { kind: 'error', text: (r.explanation || ['No se ha guardado.']).join(' ') };
+    const r = app()?.applyCeiling ? app().applyCeiling(fn) : { ok: false, explanation: [tx('El editor no expone applyCeiling.', 'The editor does not expose applyCeiling.', '编辑器未提供 applyCeiling。')] };
+    if (!r.ok) st.notice = { kind: 'error', text: (r.explanation || [tx('No se ha guardado.', 'Not saved.', '未保存。')]).join(' ') };
     return r;
   }
   function reconcile(p) {
@@ -112,66 +115,69 @@
   // ── Panel de la estancia ───────────────────────────────────────────────────────────────────────────────────────
   function refLine(p, roomId) {
     const ext = X.extension(p), own = ext.verticalReferences.find(v => v.scope === 'room' && v.roomId === roomId), lvl = ext.verticalReferences.find(v => v.scope === 'project');
-    const show = (v, where) => `<b>${v.clearHeightMm} mm</b> de altura libre desde ${REF_ES[v.reference]} · ${esc(where)} · fuente: ${esc(v.source)}`;
-    if (own) return { html: show(own, 'solo esta estancia'), own, lvl };
-    if (lvl) return { html: show(lvl, 'de ' + levelWord()), own, lvl };
-    return { html: '<b>Desconocida.</b> Sin referencia no se calculan cotas ni se dibuja el techo; nunca se supone (la altura de los muros no se usa como techo).', own, lvl };
+    const show = (v, where) => tx(`<b>${v.clearHeightMm} mm</b> de altura libre desde ${REF_ES()[v.reference]} · ${esc(where)} · fuente: ${esc(v.source)}`, `<b>${v.clearHeightMm} mm</b> clear height from ${REF_ES()[v.reference]} · ${esc(where)} · source: ${esc(v.source)}`, `自${REF_ES()[v.reference]}起净高 <b>${v.clearHeightMm} mm</b> · ${esc(where)} · 来源：${esc(v.source)}`);
+    if (own) return { html: show(own, tx('solo esta estancia', 'this room only', '仅本房间')), own, lvl };
+    if (lvl) return { html: show(lvl, tx('de ', 'for ', '') + levelWord()), own, lvl };
+    return { html: tx('<b>Desconocida.</b> Sin referencia no se calculan cotas ni se dibuja el techo; nunca se supone (la altura de los muros no se usa como techo).', '<b>Unknown.</b> Without a reference no levels are computed and no ceiling is drawn; it is never assumed (wall height is not used as the ceiling).', '<b>未知。</b>没有基准时不计算标高、不绘制吊顶；绝不假定（不以墙高作为吊顶）。'), own, lvl };
   }
   function roomPanel(container, roomId) {
     const p = project(); if (!container || !p || !roomOfId(roomId)) return;
+    // Cambio de idioma: los textos guardados en el estado del panel (última comprobación, alternativas, aviso) se generaron en
+    // el idioma anterior. La comprobación se recalcula con el núcleo (solo lectura); alternativas y aviso transitorio se retiran.
+    if (st.lang !== lang()) { if (st.lang !== undefined) { if (st.result && st.draft) st.result = evaluate(p, request(st.draft)); st.alternatives = null; st.notice = null; } st.lang = lang(); }
     const ext = X.extension(p);
     if (!st.draft || st.draft.roomId !== roomId) { st.draft = defaultDraft(roomId); st.result = null; st.alternatives = null; }
     const sec = doc.createElement('section');sec.className = 'r02a-ceiling';sec.dataset.roomId = roomId;
     const d = st.draft, cat = S.CATALOG[d.type], ref = refLine(p, roomId);
     let body;
     if (ext.status === 'future' || ext.status === 'invalid') {
-      body = `<p class="r02a-warn" role="alert">Los datos de techo de este proyecto ${ext.status === 'future' ? 'son de una versión más reciente de RUBIK' : 'no son válidos'}: se conservan tal cual y no se pueden editar aquí.</p>`;
+      body = `<p class="r02a-warn" role="alert">${ext.status === 'future' ? tx('Los datos de techo de este proyecto son de una versión más reciente de RUBIK: se conservan tal cual y no se pueden editar aquí.', 'This project’s ceiling data is from a newer RUBIK version: it is kept as is and cannot be edited here.', '本项目的吊顶数据来自更新版本的 RUBIK：按原样保留，此处不可编辑。') : tx('Los datos de techo de este proyecto no son válidos: se conservan tal cual y no se pueden editar aquí.', 'This project’s ceiling data is not valid: it is kept as is and cannot be edited here.', '本项目的吊顶数据无效：按原样保留，此处不可编辑。')}</p>`;
     } else {
       const rc = X.recheck(p, { labelOf }), mine = rc.items.filter(i => i.roomId === roomId);
-      const rows = mine.map(i => `<li data-item="${esc(i.id)}" data-holds="${i.holds}"><b>${esc(S.TYPE_LABEL[i.type] || i.type)}</b> · ${esc(STATE_ES[i.state] || i.state)}
-        <br><small>${esc(i.explanation.join(' '))}</small><br><button type="button" class="btn" data-r02a="edit" data-id="${esc(i.id)}">Editar</button> <button type="button" class="btn danger" data-r02a="remove" data-id="${esc(i.id)}">Quitar</button></li>`).join('');
+      const rows = mine.map(i => `<li data-item="${esc(i.id)}" data-holds="${i.holds}"><b>${esc(S.TYPE_LABEL[i.type] || i.type)}</b> · ${esc(STATE_ES()[i.state] || i.state)}
+        <br><small>${esc(i.explanation.join(' '))}</small><br><button type="button" class="btn" data-r02a="edit" data-id="${esc(i.id)}">${esc(tx('Editar', 'Edit', '编辑'))}</button> <button type="button" class="btn danger" data-r02a="remove" data-id="${esc(i.id)}">${esc(tx('Quitar', 'Remove', '移除'))}</button></li>`).join('');
       const res = st.result, alts = st.alternatives;
       body = `
-      <h4>Referencia vertical</h4>
+      <h4>${esc(tx('Referencia vertical', 'Vertical reference', '竖向基准'))}</h4>
       <p class="r02a-ref" data-ref="${ref.own ? 'room' : ref.lvl ? 'project' : 'unknown'}">${ref.html}</p>
       <div class="r02a-form">
-        <label>Se aplica a <select data-f="scope"><option value="project">${esc(levelWord())}</option><option value="room">solo esta estancia</option></select></label>
-        <label>Altura libre (mm) <input type="number" inputmode="numeric" min="1" step="10" data-f="clear" value="${esc(ref.own?.clearHeightMm ?? ref.lvl?.clearHeightMm ?? '')}"></label>
-        <label>Medida desde <select data-f="reference"><option value="finished-floor">el suelo acabado</option><option value="level-floor">el forjado</option></select></label>
-        <label>Fuente (obligatoria) <input type="text" maxlength="200" data-f="source" placeholder="p. ej. medición in situ del 12/11"></label>
-        <button type="button" class="btn" data-r02a="ref-save">Guardar referencia</button>
-        ${ref.own ? '<button type="button" class="btn" data-r02a="ref-clear-room">Quitar la de esta estancia</button>' : ''}
-        ${ref.lvl ? `<button type="button" class="btn" data-r02a="ref-clear-level">Quitar la de ${esc(levelWord())}</button>` : ''}
+        <label>${esc(tx('Se aplica a', 'Applies to', '适用于'))} <select data-f="scope"><option value="project">${esc(levelWord())}</option><option value="room">${esc(tx('solo esta estancia', 'this room only', '仅本房间'))}</option></select></label>
+        <label>${esc(tx('Altura libre (mm)', 'Clear height (mm)', '净高 (mm)'))} <input type="number" inputmode="numeric" min="1" step="10" data-f="clear" value="${esc(ref.own?.clearHeightMm ?? ref.lvl?.clearHeightMm ?? '')}"></label>
+        <label>${esc(tx('Medida desde', 'Measured from', '测量起点'))} <select data-f="reference"><option value="finished-floor">${esc(tx('el suelo acabado', 'the finished floor', '完成地面'))}</option><option value="level-floor">${esc(tx('el forjado', 'the structural floor', '楼板'))}</option></select></label>
+        <label>${esc(tx('Fuente (obligatoria)', 'Source (required)', '来源（必填）'))} <input type="text" maxlength="200" data-f="source" placeholder="${esc(tx('p. ej. medición in situ del 12/11', 'e.g. on-site measurement of 12/11', '例如 11/12 现场测量'))}"></label>
+        <button type="button" class="btn" data-r02a="ref-save">${esc(tx('Guardar referencia', 'Save reference', '保存基准'))}</button>
+        ${ref.own ? `<button type="button" class="btn" data-r02a="ref-clear-room">${esc(tx('Quitar la de esta estancia', 'Remove this room’s reference', '移除本房间的基准'))}</button>` : ''}
+        ${ref.lvl ? `<button type="button" class="btn" data-r02a="ref-clear-level">${esc(tx('Quitar la de ', 'Remove the reference for ', '移除基准：') + levelWord())}</button>` : ''}
       </div>
-      <h4>Elementos en esta estancia (${mine.length})</h4>
-      ${mine.length ? `<ul class="r02a-items">${rows}</ul>` : '<p class="muted">Ninguno.</p>'}
+      <h4>${esc(tx('Elementos en esta estancia', 'Items in this room', '本房间的元素'))} (${mine.length})</h4>
+      ${mine.length ? `<ul class="r02a-items">${rows}</ul>` : `<p class="muted">${esc(tx('Ninguno.', 'None.', '无。'))}</p>`}
       ${passageBlock(p, roomId, mine)}
-      <h4>${d.editing ? 'Modificar elemento' : 'Añadir elemento'}</h4>
+      <h4>${esc(d.editing ? tx('Modificar elemento', 'Edit item', '修改元素') : tx('Añadir elemento', 'Add item', '添加元素'))}</h4>
       <div class="r02a-form">
-        <label>Tipo <select data-f="type">${Object.entries(S.TYPE_LABEL).map(([k, v]) => `<option value="${k}"${k === d.type ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select></label>
+        <label>${esc(tx('Tipo', 'Type', '类型'))} <select data-f="type">${Object.entries(S.TYPE_LABEL).map(([k, v]) => `<option value="${k}"${k === d.type ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select></label>
         <label>X (mm) <input type="number" inputmode="numeric" data-f="x" value="${esc(d.x)}"></label>
         <label>Y (mm) <input type="number" inputmode="numeric" data-f="y" value="${esc(d.y)}"></label>
-        <label>Giro (°) <input type="number" inputmode="numeric" step="15" data-f="rot" value="${esc(d.rot)}"></label>
-        <label>Ancho (mm) <input type="number" inputmode="numeric" data-f="w" value="${esc(d.w)}"></label>
-        <label>Fondo (mm) <input type="number" inputmode="numeric" data-f="d" value="${esc(d.d)}"></label>
-        <label>Alto (mm) <input type="number" inputmode="numeric" data-f="h" value="${esc(d.h)}"></label>
-        <label>Descuelgue desde el techo (mm) <input type="number" inputmode="numeric" min="0" data-f="drop" value="${esc(d.drop)}"></label>
-        ${cat.kind === 'curtain' ? `<label>Caída de la cortina (mm) <input type="number" inputmode="numeric" data-f="curtain" value="${esc(d.curtain ?? '')}"></label>` : ''}
-        <p class="muted">Medidas de catálogo genéricas (no de un producto medido): ajústalas a las reales.</p>
-        <button type="button" class="btn" data-r02a="place">${st.placing ? 'Toca el plano…' : 'Colocar tocando el plano'}</button>
-        <button type="button" class="btn" data-r02a="center">Centro de la estancia</button>
-        <button type="button" class="btn" data-r02a="check">Comprobar</button>
+        <label>${esc(tx('Giro (°)', 'Rotation (°)', '旋转 (°)'))} <input type="number" inputmode="numeric" step="15" data-f="rot" value="${esc(d.rot)}"></label>
+        <label>${esc(tx('Ancho (mm)', 'Width (mm)', '宽 (mm)'))} <input type="number" inputmode="numeric" data-f="w" value="${esc(d.w)}"></label>
+        <label>${esc(tx('Fondo (mm)', 'Depth (mm)', '深 (mm)'))} <input type="number" inputmode="numeric" data-f="d" value="${esc(d.d)}"></label>
+        <label>${esc(tx('Alto (mm)', 'Height (mm)', '高 (mm)'))} <input type="number" inputmode="numeric" data-f="h" value="${esc(d.h)}"></label>
+        <label>${esc(tx('Descuelgue desde el techo (mm)', 'Drop from the ceiling (mm)', '距吊顶下吊 (mm)'))} <input type="number" inputmode="numeric" min="0" data-f="drop" value="${esc(d.drop)}"></label>
+        ${cat.kind === 'curtain' ? `<label>${esc(tx('Caída de la cortina (mm)', 'Curtain drop (mm)', '窗帘垂度 (mm)'))} <input type="number" inputmode="numeric" data-f="curtain" value="${esc(d.curtain ?? '')}"></label>` : ''}
+        <p class="muted">${esc(tx('Medidas de catálogo genéricas (no de un producto medido): ajústalas a las reales.', 'Generic catalogue sizes (not from a measured product): adjust them to the real ones.', '通用目录尺寸（非实测产品）：请按实际调整。'))}</p>
+        <button type="button" class="btn" data-r02a="place">${esc(st.placing ? tx('Toca el plano…', 'Tap the plan…', '点按平面图…') : tx('Colocar tocando el plano', 'Place by tapping the plan', '点按平面图放置'))}</button>
+        <button type="button" class="btn" data-r02a="center">${esc(tx('Centro de la estancia', 'Room centre', '房间中心'))}</button>
+        <button type="button" class="btn" data-r02a="check">${esc(tx('Comprobar', 'Check', '检查'))}</button>
       </div>
-      ${res ? `<div class="r02a-result" data-state="${esc(res.state || 'invalid')}" role="status"><b>${esc(STATE_ES[res.state] || 'No válido')}</b><br>${esc((res.explanation || []).join(' '))}</div>` : ''}
-      ${res && res.ok && res.state !== 'candidate-reviewable' ? '<button type="button" class="btn" data-r02a="alts">Ver alternativas</button>' : ''}
-      ${alts ? (alts.alternatives?.length ? `<ol class="r02a-alts">${alts.alternatives.map((a, i) => `<li>(${a.position.x}, ${a.position.y}) a ${a.distanceMm} mm <button type="button" class="btn" data-r02a="use-alt" data-i="${i}">Usar alternativa ${i + 1}</button></li>`).join('')}</ol>` : `<p class="muted">${esc(alts.explanation || 'No hay alternativas revisables en esta estancia.')}</p>`) : ''}
-      <p class="r02a-limit">No comprueba la altura de paso para personas, instalaciones ni normativa.</p>
-      <label class="r02a-confirm"><input type="checkbox" data-f="confirmed"${d.confirmed ? ' checked' : ''}> He revisado este elemento y quiero guardarlo en el proyecto</label>
-      <button type="button" class="btn primary" data-r02a="save"${d.confirmed ? '' : ' disabled'}>${d.editing ? 'Guardar cambios' : 'Guardar en el proyecto'}</button>
-      ${d.editing ? '<button type="button" class="btn" data-r02a="new">Nuevo elemento</button>' : ''}`;
+      ${res ? `<div class="r02a-result" data-state="${esc(res.state || 'invalid')}" role="status"><b>${esc(STATE_ES()[res.state] || tx('No válido', 'Invalid', '无效'))}</b><br>${esc((res.explanation || []).join(' '))}</div>` : ''}
+      ${res && res.ok && res.state !== 'candidate-reviewable' ? `<button type="button" class="btn" data-r02a="alts">${esc(tx('Ver alternativas', 'See alternatives', '查看备选'))}</button>` : ''}
+      ${alts ? (alts.alternatives?.length ? `<ol class="r02a-alts">${alts.alternatives.map((a, i) => `<li>(${a.position.x}, ${a.position.y}) ${esc(tx('a', 'at', '距离'))} ${a.distanceMm} mm <button type="button" class="btn" data-r02a="use-alt" data-i="${i}">${esc(tx(`Usar alternativa ${i + 1}`, `Use alternative ${i + 1}`, `使用备选 ${i + 1}`))}</button></li>`).join('')}</ol>` : `<p class="muted">${esc(alts.explanation || tx('No hay alternativas revisables en esta estancia.', 'There are no reviewable alternatives in this room.', '本房间没有可审核的备选。'))}</p>`) : ''}
+      <p class="r02a-limit">${esc(tx('No comprueba la altura de paso para personas, instalaciones ni normativa.', 'It does not check clear passage height for people, installations or regulations.', '不检查人员通行净高、设备或规范。'))}</p>
+      <label class="r02a-confirm"><input type="checkbox" data-f="confirmed"${d.confirmed ? ' checked' : ''}> ${esc(tx('He revisado este elemento y quiero guardarlo en el proyecto', 'I have reviewed this item and want to save it in the project', '我已审核此元素并希望保存到项目中'))}</label>
+      <button type="button" class="btn primary" data-r02a="save"${d.confirmed ? '' : ' disabled'}>${esc(d.editing ? tx('Guardar cambios', 'Save changes', '保存更改') : tx('Guardar en el proyecto', 'Save in the project', '保存到项目'))}</button>
+      ${d.editing ? `<button type="button" class="btn" data-r02a="new">${esc(tx('Nuevo elemento', 'New item', '新建元素'))}</button>` : ''}`;
     }
-    markup(sec, `<details${st.open ? ' open' : ''}><summary><b>Techo y elementos altos</b> <span class="r02a-badge">experimental</span></summary>
-      <ul class="r02a-limits">${LIMITS_ES.map(t => `<li>${esc(t)}</li>`).join('')}</ul>${body}</details>`);
+    markup(sec, `<details${st.open ? ' open' : ''}><summary><b>${esc(tx('Techo y elementos altos', 'Ceiling and high items', '吊顶与高位元素'))}</b> <span class="r02a-badge">${esc(tx('experimental', 'experimental', '实验性'))}</span></summary>
+      <ul class="r02a-limits">${LIMITS_ES().map(t => `<li>${esc(t)}</li>`).join('')}</ul>${body}</details>`);
     container.append(sec);
     bind(sec, roomId);
   }
@@ -193,17 +199,17 @@
       const act = b.dataset.r02a, f = k => sec.querySelector(`[data-f="${k}"]`)?.value;
       if (act === 'ref-save') {
         const scope = f('scope'), ref = { scope, ...(scope === 'room' ? { roomId } : {}), clearHeightMm: Math.round(Number(f('clear'))), reference: f('reference'), source: (f('source') || '').trim() };
-        if (!ref.source) { st.notice = { kind: 'error', text: 'La referencia vertical necesita su fuente (de dónde sale la medida).' }; return rerender(); }
-        if (write(p => B.setReference(p, ref)).ok) info('Referencia vertical guardada. Los elementos guardados se han comprobado de nuevo.');
+        if (!ref.source) { st.notice = { kind: 'error', text: tx('La referencia vertical necesita su fuente (de dónde sale la medida).', 'The vertical reference needs its source (where the measurement comes from).', '竖向基准需要来源（测量数据从何而来）。') }; return rerender(); }
+        if (write(p => B.setReference(p, ref)).ok) info(tx('Referencia vertical guardada. Los elementos guardados se han comprobado de nuevo.', 'Vertical reference saved. Saved items have been checked again.', '竖向基准已保存。已重新检查已保存的元素。'));
       } else if (act === 'ref-clear-room' || act === 'ref-clear-level') {
         const scope = act === 'ref-clear-room' ? { scope: 'room', roomId } : { scope: 'project' };
-        if (write(p => B.clearReference(p, scope)).ok) info('Referencia retirada. Los elementos que dependían de ella quedan pendientes de datos; no se mueven.');
+        if (write(p => B.clearReference(p, scope)).ok) info(tx('Referencia retirada. Los elementos que dependían de ella quedan pendientes de datos; no se mueven.', 'Reference removed. Items that depended on it now have missing data; they are not moved.', '基准已移除。依赖它的元素变为待补数据，不会被移动。'));
       } else if (act === 'edit') {
         const it = X.extension(project()).items.find(i => i.id === b.dataset.id); if (!it) return;
         st.draft = { id: it.id, roomId, type: it.type, x: it.position.x, y: it.position.y, rot: it.rotationDeg, w: it.size.widthMm, d: it.size.depthMm, h: it.size.heightMm, drop: it.dropMm, curtain: it.curtainLengthMm, confirmed: false, editing: true };
         st.result = null; st.alternatives = null;
       } else if (act === 'remove') {
-        if (write(p => B.remove(p, b.dataset.id)).ok) { info('Elemento quitado. Se puede deshacer.'); if (st.draft?.id === b.dataset.id) st.draft = defaultDraft(roomId); }
+        if (write(p => B.remove(p, b.dataset.id)).ok) { info(tx('Elemento quitado. Se puede deshacer.', 'Item removed. It can be undone.', '元素已移除。可以撤销。')); if (st.draft?.id === b.dataset.id) st.draft = defaultDraft(roomId); }
       } else if (act === 'new') { st.draft = defaultDraft(roomId); st.result = null; st.alternatives = null;
       } else if (act === 'center') { const c = centroid(roomOfId(roomId)); Object.assign(d, { x: c.x, y: c.y, confirmed: false }); st.result = null;
       } else if (act === 'passage') { consultPassage(roomId);
@@ -218,7 +224,7 @@
       } else if (act === 'save') {
         if (!d.confirmed) return;
         const req = request(d), r = write(p => B.confirm(p, req));
-        if (r.ok) { info(`Guardado en el proyecto: ${S.TYPE_LABEL[d.type]}. Se puede deshacer.`); st.draft = defaultDraft(roomId); st.result = null; }
+        if (r.ok) { info(tx(`Guardado en el proyecto: ${S.TYPE_LABEL[d.type]}. Se puede deshacer.`, `Saved in the project: ${S.TYPE_LABEL[d.type]}. It can be undone.`, `已保存到项目：${S.TYPE_LABEL[d.type]}。可以撤销。`)); st.draft = defaultDraft(roomId); st.result = null; }
         else st.result = { ok: false, state: 'blocked', explanation: r.explanation };
       }
       rerender();
@@ -250,7 +256,7 @@
   function layer() {
     const svg = doc.getElementById('plan'); if (!svg) return null;
     let g = doc.getElementById('gCeiling');
-    if (!g) { g = doc.createElementNS('http://www.w3.org/2000/svg', 'g'); g.id = 'gCeiling'; g.setAttribute('pointer-events', 'none'); g.setAttribute('aria-label', 'Elementos de techo (experimental)'); svg.insertBefore(g, doc.getElementById('gSel')); }
+    if (!g) { g = doc.createElementNS('http://www.w3.org/2000/svg', 'g'); g.id = 'gCeiling'; g.setAttribute('pointer-events', 'none'); g.setAttribute('aria-label', tx('Elementos de techo (experimental)', 'Ceiling items (experimental)', '吊顶元素（实验性）')); svg.insertBefore(g, doc.getElementById('gSel')); }
     return g;
   }
   function render() {
@@ -261,14 +267,14 @@
     if (st.loadedFor !== key) {
       st.loadedFor = key; st.draft = null; st.result = null; st.alternatives = null;
       const rc = B.afterLoad(p, { labelOf });
-      if (rc.status === 'future' || rc.status === 'invalid') st.notice = { kind: 'error', text: `Elementos de techo: datos ${rc.status === 'future' ? 'de una versión más reciente' : 'no válidos'}. Se conservan sin cambios y no se pueden editar.` };
-      else if (rc.failing) st.notice = { kind: 'warn', text: `Elementos de techo: ${rc.failing} de ${rc.items.length} ya no cumplen al abrir el proyecto. Revísalos en su estancia.` };
+      if (rc.status === 'future' || rc.status === 'invalid') st.notice = { kind: 'error', text: rc.status === 'future' ? tx('Elementos de techo: datos de una versión más reciente. Se conservan sin cambios y no se pueden editar.', 'Ceiling items: data from a newer version. Kept unchanged and not editable.', '吊顶元素：数据来自更新版本。保持不变且不可编辑。') : tx('Elementos de techo: datos no válidos. Se conservan sin cambios y no se pueden editar.', 'Ceiling items: invalid data. Kept unchanged and not editable.', '吊顶元素：数据无效。保持不变且不可编辑。') };
+      else if (rc.failing) st.notice = { kind: 'warn', text: tx(`Elementos de techo: ${rc.failing} de ${rc.items.length} ya no cumplen al abrir el proyecto. Revísalos en su estancia.`, `Ceiling items: ${rc.failing} of ${rc.items.length} no longer fit when opening the project. Review them in their room.`, `吊顶元素：打开项目时 ${rc.items.length} 个中有 ${rc.failing} 个不再符合。请在其房间中检查。`) };
     } else if (st.last && st.last !== json) {
       const r = B.afterEdit(JSON.parse(st.last), p, { labelOf });
-      if (r.newlyFailing?.length) st.notice = { kind: 'warn', text: `Tras este cambio, ${r.newlyFailing.map(i => `${S.TYPE_LABEL[i.type]} (${roomName(i.roomId)}): ${i.explanation.join(' ')}`).join(' · ')} No se ha movido nada.` };
-      else if (r.recovered?.length) st.notice = { kind: 'info', text: `${r.recovered.length} elemento(s) de techo vuelven a cumplir.` };
+      if (r.newlyFailing?.length) st.notice = { kind: 'warn', text: `${tx('Tras este cambio, ', 'After this change, ', '此次更改后，')}${r.newlyFailing.map(i => `${S.TYPE_LABEL[i.type]} (${roomName(i.roomId)}): ${i.explanation.join(' ')}`).join(' · ')} ${tx('No se ha movido nada.', 'Nothing has been moved.', '未移动任何内容。')}` };
+      else if (r.recovered?.length) st.notice = { kind: 'info', text: tx(`${r.recovered.length} elemento(s) de techo vuelven a cumplir.`, `${r.recovered.length} ceiling item(s) fit again.`, `${r.recovered.length} 个吊顶元素重新符合。`) };
     }
-    if (st.removed.length) { st.notice = { kind: 'info', text: `Se ha eliminado una estancia: se retiran con ella ${st.removed.length} dato(s) de techo (se recuperan al deshacer).` }; st.removed = []; }
+    if (st.removed.length) { st.notice = { kind: 'info', text: tx(`Se ha eliminado una estancia: se retiran con ella ${st.removed.length} dato(s) de techo (se recuperan al deshacer).`, `A room was deleted: ${st.removed.length} ceiling item(s) were removed with it (they come back on undo).`, `已删除一个房间：随之移除 ${st.removed.length} 个吊顶数据（撤销可恢复）。`) }; st.removed = []; }
     st.last = json;
     if (g) {
       const rc = X.recheck(p, { labelOf }), byId = new Map(rc.items?.map(i => [i.id, i]) || []);
@@ -291,7 +297,7 @@
     if (!st.notice) { if (el) el.hidden = true; return; }
     if (!el) { el = doc.createElement('div'); el.id = 'r02aNotice'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); doc.body.append(el); }
     el.dataset.kind = st.notice.kind; el.hidden = false;
-    markup(el, `<span>${esc(st.notice.text)}</span> <button type="button" aria-label="Cerrar aviso">×</button>`);
+    markup(el, `<span>${esc(st.notice.text)}</span> <button type="button" aria-label="${esc(tx('Cerrar aviso', 'Close notice', '关闭提示'))}">×</button>`);
     el.querySelector('button').onclick = () => { st.notice = null; el.hidden = true; };
   }
 
