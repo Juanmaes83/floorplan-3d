@@ -30,7 +30,7 @@
 | **Nombres propios legítimos** (profesional, empresa, destinatario, marca, proyecto) | Se muestran **tal como se escribieron** si están en alfabeto latino. No se traducen ni se acortan, y no se ocultan por parecerse al tipo: solo se omite un nombre **exactamente igual** al del tipo, como «Armario» en un armario; «Col» en una columna se muestra | Ocultarlos por coincidencias parciales; transliterarlos automáticamente |
 | **Nombre propio en CJK en una sesión ES/EN** | Se usa un **alias autorizado**: un nombre de presentación en alfabeto latino que la persona elige explícitamente (p. ej. en el destinatario de una entrega). Sin alias, «Nombre sin traducir» y el dato intacto | Inventar el alias ni transliterar sin autorización |
 
-**Alias:** es una **propuesta de contrato** para CC1, sin cambio de modelo en este corte. Requiere que el propietario decida dónde vive (ficha del profesional y del destinatario, o un campo de presentación existente) y su validación. Hasta entonces ninguna superficie lo inventa.
+**Alias (decisión del propietario: sin segundo almacén de identidad):** si llega a existir, vive en la **ficha existente** del profesional o del destinatario, nunca en un almacén nuevo ni en una copia paralela de la identidad. Es una **propuesta de contrato** para CC1, sin cambio de modelo en este corte. Requiere que el propietario decida dónde vive (ficha del profesional y del destinatario, o un campo de presentación existente) y su validación. Hasta entonces ninguna superficie lo inventa.
 
 **Pendiente con CC1:**
 1. Añadir HERO, Hybrid, Simulator y STUDIO al recorrido de `no-chinese-display`.
