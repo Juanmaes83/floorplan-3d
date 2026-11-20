@@ -61,12 +61,26 @@ function f6R02R03() { // 6 · R02-A (elemento de techo) + R03 (interior de armar
   for (const e of (p.extensions['x-r03-cabinet'] || {}).entries || []) if (e.updatedAt) e.updatedAt = STAMP; // R03 sella con la hora real
   Core.validate(p); return stamp(p);
 }
+function f7Curved() { // 7 · OP-07: muro curvo (con puerta) dividido en dos piezas + muro inclinado (con ventana), con las operaciones del núcleo
+  // OP-07 S8: el fixture se crea en estado ACTIVO explícito (Node es origen de pruebas); el visor lo abre después como lectura compatible.
+  const was = globalThis.RUBIK_OP07_STATE; globalThis.RUBIK_OP07_STATE = 'active';
+  try { return f7Build(); } finally { globalThis.RUBIK_OP07_STATE = was; }
+}
+function f7Build() {
+  let p = f1Rectangular(); p.id = 'prj_op10-f7-curved'; p.name = 'OP-10 F7 curvo e inclinado (sintético)';
+  const s = p.walls.find(w => w.id === 'wal_op10-f1-s'), e = p.walls.find(w => w.id === 'wal_op10-f1-e');
+  const mx = (s.start.x + s.end.x) / 2, my = (s.start.y + s.end.y) / 2;
+  const curve = Core.setWallCurve(p, s.id, { x: Math.round(mx), y: Math.round(my + 1400) }); if (!curve.ok) throw Error('f7 curve: ' + curve.explanation); p = curve.project;
+  const split = Core.splitWall(p, s.id, 2600, { newId: 'wal_op10-f7-s2' }); if (!split.ok) throw Error('f7 split: ' + split.explanation); p = split.project;
+  const slope = Core.setWallEndHeight(p, e.id, 2300); if (!slope.ok) throw Error('f7 slope: ' + slope.explanation); p = slope.project;
+  Core.validate(p); return stamp(p);
+}
 function build(dest) {
   if (fs.existsSync(dest)) throw Error('Refusing overwrite: ' + dest);
   fs.mkdirSync(dest, { recursive: true });
-  const out = { 'f1-rect.json': f1Rectangular(), 'f2-rot30.json': f2Rotated(), 'f3-openings.json': f3Openings(), 'f4-building.json': f4Building(), 'f5-furniture.json': f5Furniture(), 'f6-r02r03.json': f6R02R03() };
+  const out = { 'f1-rect.json': f1Rectangular(), 'f2-rot30.json': f2Rotated(), 'f3-openings.json': f3Openings(), 'f4-building.json': f4Building(), 'f5-furniture.json': f5Furniture(), 'f6-r02r03.json': f6R02R03(), 'f7-curved.json': f7Curved() };
   for (const [name, doc] of Object.entries(out)) fs.writeFileSync(path.join(dest, name), JSON.stringify(doc, null, 1) + '\n', { flag: 'wx' });
   return Object.keys(out);
 }
-module.exports = { build, f1Rectangular, f2Rotated, f3Openings, f4Building, f5Furniture, f6R02R03 };
+module.exports = { build, f1Rectangular, f2Rotated, f3Openings, f4Building, f5Furniture, f6R02R03, f7Curved };
 if (require.main === module) { const dest = process.argv[2]; if (!dest) { console.error('Uso: node build.cjs DESTINO-NUEVO'); process.exit(1); } console.log(build(path.resolve(dest)).join('\n')); }

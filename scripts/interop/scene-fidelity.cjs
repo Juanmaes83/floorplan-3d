@@ -8,7 +8,25 @@
  * EXPORTACIÓN (float32, redondeo a 1 µm, triangulación), no de precisión arquitectónica del proyecto.
  * Uso: node scene-fidelity.cjs project.json scene.json [--tol perfil] → informe JSON por stdout
  */
-const fs = require('node:fs');
+const fs = require('node:fs'), path = require('node:path');
+// OP-07 · muros curvos e inclinados (contrato 2.0): se miden con el núcleo único (js/wall-geometry-core.js) y la política
+// de trayectoria del proyecto (Core.WALL_PATH); el suelo esperado es el anillo canónico (Core.roomRing). Los muros
+// rectos sin pendiente y los proyectos v1 siguen exactamente el camino anterior.
+const Core = require(path.join(__dirname, '../../js/project-core.js')), Walls = require(path.join(__dirname, '../../js/wall-geometry-core.js'));
+const shaped = w => Walls.isCurved(w) || (Number.isFinite(w.heightEndMm) && w.heightEndMm !== w.heightMm);
+// Marco de una trayectoria facetada (m, mundo): punto, tangente y normal en la distancia s; proyección de un vértice.
+function pathFrame(w, origin) {
+  const c = Walls.centreline(w, Core.WALL_PATH).map(p => ({ x: (p.x - origin.x) / 1000, z: (p.y - origin.y) / 1000 }));
+  const segs = []; let acc = 0;
+  for (let i = 0; i + 1 < c.length; i++) { const a = c[i], b = c[i + 1], L = Math.hypot(b.x - a.x, b.z - a.z), u = { x: (b.x - a.x) / L, z: (b.z - a.z) / L }; segs.push({ a, b, L, u, n: { x: -u.z, z: u.x }, s0: acc }); acc += L; }
+  const at = s => { const g = segs.find(x => s <= x.s0 + x.L + 1e-12) || segs[segs.length - 1], t = s - g.s0; return { p: { x: g.a.x + g.u.x * t, z: g.a.z + g.u.z * t }, u: g.u, n: g.n }; };
+  // Proyección de un vértice sobre la trayectoria: distancia a lo largo (s, prolongando los extremos) y desviación con signo.
+  const project = v => { let best = null;
+    segs.forEach((g, i) => { let t = (v[0] - g.a.x) * g.u.x + (v[2] - g.a.z) * g.u.z; if (i > 0) t = Math.max(0, t); if (i < segs.length - 1) t = Math.min(g.L, t);
+      const q = { x: g.a.x + g.u.x * t, z: g.a.z + g.u.z * t }, d = Math.hypot(v[0] - q.x, v[2] - q.z); if (!best || d < best.d) best = { d, s: g.s0 + t, off: (v[0] - q.x) * g.n.x + (v[2] - q.z) * g.n.z }; });
+    return best; };
+  return { L: acc, at, project };
+}
 
 // Tolerancias propuestas (mm), justificadas en docs/03-fidelidad.md.
 const TOL = Object.freeze({
@@ -61,6 +79,20 @@ function compare(project, scene, { origin, elevationM = 0, voids = [], coinciden
     const meshes = by.get('wall:' + w.id) || [];
     if (w.status === 'demolished') { add('wall', w.id, 'demolished-has-no-solid', 0, meshes.length, 0); continue; }
     if (!meshes.length) { add('wall', w.id, 'present', 1, 0, 0); continue; }
+    if (shaped(w)) { // OP-07: grosor, trayectoria y altura por extremos contra el núcleo, faceta a faceta
+      const P = pathFrame(w, origin), pts = meshes.flatMap(m => m.vertices).map(v => ({ v, q: P.project(v) }));
+      const h0 = Walls.startHeight(w) / 1000, h1 = Walls.endHeight(w) / 1000, top = s => h0 + (h1 - h0) * Math.min(1, Math.max(0, s / P.L));
+      const [o0, o1] = range(pts.map(x => x.q.off)), [s0, s1] = range(pts.map(x => x.q.s)), [y0, y1] = range(pts.map(x => x.v[1]));
+      add('wall', w.id, 'thickness-mm', w.thicknessMm, mm(o1 - o0), TOL.exact, { note: 'OP-07: signed offset from the faceted centreline' });
+      add('wall', w.id, 'axis-centred-mm', 0, mm((o0 + o1) / 2), TOL.exact);
+      add('wall', w.id, 'path-length-mm', mm(P.L), mm(s1 - s0), w.thicknessMm + TOL.exact, { note: 'OP-07: along the faceted path (Core.WALL_PATH); may exceed it by up to the wall thickness (joints)' });
+      add('wall', w.id, 'height-max-mm', Math.max(Walls.startHeight(w), Walls.endHeight(w)), mm(y1 - elevationM), TOL.exact);
+      add('wall', w.id, 'top-follows-slope-mm', 0, mm(Math.max(0, ...pts.map(x => x.v[1] - elevationM - top(x.q.s)))), TOL.exact, { note: 'no vertex above the sloped top line' });
+      for (const [end, s, h] of [['start', 0, h0], ['end', P.L, h1]]) { const near = pts.filter(x => Math.abs(x.q.s - s) <= 0.002);
+        add('wall', w.id, `height-${end}-mm`, mm(h), near.length ? mm(Math.max(...near.map(x => x.v[1])) - elevationM) : null, TOL.exact); }
+      add('wall', w.id, 'base-mm', 0, mm(y0 - elevationM), TOL.exact);
+      continue;
+    }
     const f = axisFrame(w, origin), verts = meshes.flatMap(m => m.vertices);
     const [s0, s1] = range(verts.map(v => along(f, v))), [n0, n1] = range(verts.map(v => across(f, v))), [y0, y1] = range(verts.map(v => v[1]));
     // El visor prolonga cada muro media anchura en sus extremos para cerrar las esquinas: se mide el exceso declarado.
@@ -76,7 +108,7 @@ function compare(project, scene, { origin, elevationM = 0, voids = [], coinciden
     add('wall', w.id, 'start-overhang-mm', 0, mm(Math.max(0, -s0)), w.thicknessMm / 2 + TOL.exact);
   }
   for (const r of project.rooms) {
-    const meshes = (by.get('room:' + r.id) || []).concat(by.get('room-slab:' + r.id) || []);
+    const meshes = (by.get('room:' + r.id) || []).concat(by.get('room-slab:' + r.id) || []), ring = Core.roomRing(project, r).points; // OP-07: anillo canónico
     // Huella del suelo = caras horizontales a la cota más alta de la estancia (un plano o la tapa de una plataforma, p. ej. poyete).
     const top = meshes.length ? Math.max(...meshes.flatMap(m => m.vertices.map(v => v[1]))) : null;
     const floor = meshes.map(m => ({ ...m, faces: m.faces.filter(f => f.every(i => Math.abs(m.vertices[i][1] - top) < 1e-6)) })).filter(m => m.faces.length);
@@ -85,9 +117,9 @@ function compare(project, scene, { origin, elevationM = 0, voids = [], coinciden
     // Huecos de forjado (escaleras) contenidos en la estancia: el suelo observado debe faltar exactamente ahí.
     const inside = v => v.polygon.every(q => { let c = false; for (let i = 0, j = r.polygon.length - 1; i < r.polygon.length; j = i++) { const a = r.polygon[i], b = r.polygon[j]; if ((a.y > q.y) !== (b.y > q.y) && q.x < (b.x - a.x) * (q.y - a.y) / (b.y - a.y) + a.x) c = !c; } return c; });
     const roomVoids = voids.filter(inside), voidArea = roomVoids.reduce((s, v) => s + polygonArea(v.polygon), 0);
-    const area = floor.reduce((s, m) => s + triAreaXZ(m), 0) * 1e6, expected = polygonArea(r.polygon) - voidArea;
+    const area = floor.reduce((s, m) => s + triAreaXZ(m), 0) * 1e6, expected = polygonArea(ring) - voidArea;
     add('room', r.id, 'floor-area-relative', 0, Math.round(Math.abs(area - expected) / expected * 1e6) / 1e6, TOL.area, { expectedMm2: Math.round(expected), observedMm2: Math.round(area), ...(roomVoids.length ? { slabVoids: roomVoids.map(v => v.id), voidAreaMm2: Math.round(voidArea) } : {}) });
-    const xs = r.polygon.map(p => (p.x - origin.x) / 1000), zs = r.polygon.map(p => (p.y - origin.y) / 1000), verts = floor.flatMap(m => m.faces.flat().map(i => m.vertices[i]));
+    const xs = ring.map(p => (p.x - origin.x) / 1000), zs = ring.map(p => (p.y - origin.y) / 1000), verts = floor.flatMap(m => m.faces.flat().map(i => m.vertices[i]));
     const [ox0, ox1] = range(verts.map(v => v[0])), [oz0, oz1] = range(verts.map(v => v[2]));
     add('room', r.id, 'bounds-minX-mm', mm(Math.min(...xs)), mm(ox0), TOL.exact); add('room', r.id, 'bounds-maxX-mm', mm(Math.max(...xs)), mm(ox1), TOL.exact);
     add('room', r.id, 'bounds-minZ-mm', mm(Math.min(...zs)), mm(oz0), TOL.exact); add('room', r.id, 'bounds-maxZ-mm', mm(Math.max(...zs)), mm(oz1), TOL.exact);
@@ -96,20 +128,23 @@ function compare(project, scene, { origin, elevationM = 0, voids = [], coinciden
   for (const o of project.openings) {
     const w = project.walls.find(x => x.id === o.wallId); if (!w) continue;
     const f = axisFrame(w, origin), s = (o.offsetMm + o.widthMm / 2) / 1000, cy = elevationM + (o.sillHeightMm + o.heightMm / 2) / 1000;
-    const c = [f.a.x + f.u.x * s, cy, f.a.z + f.u.z * s], d = [f.n.x, 0, f.n.z], start = [c[0] - d[0] * 0.5, c[1], c[2] - d[2] * 0.5];
+    // OP-07: en un muro curvo el centro del hueco está sobre la trayectoria y el rayo sigue la normal de SU faceta.
+    const PF = Walls.isCurved(w) ? pathFrame(w, origin) : null, F = PF ? PF.at(s) : null;
+    const al = v => PF ? PF.project(v).s : along(f, v), ac = v => PF ? PF.project(v).off : across(f, v);
+    const c = F ? [F.p.x, cy, F.p.z] : [f.a.x + f.u.x * s, cy, f.a.z + f.u.z * s], d = F ? [F.n.x, 0, F.n.z] : [f.n.x, 0, f.n.z], start = [c[0] - d[0] * 0.5, c[1], c[2] - d[2] * 0.5];
     const hits = rayHits(by.get('wall:' + w.id) || [], start, d, 1.0);
     add('opening', o.id, 'void-through-wall', 0, hits, 0, { kind: o.kind, note: 'ray through the opening centre, perpendicular to the wall, must not hit its wall' });
     if (w.status !== 'demolished' && ['window', 'door', 'sliding-door'].includes(o.kind)) { // C2: identidad canónica, no inferida
       const own = (by.get('opening:' + o.id) || []).concat(by.get('opening-leaf:' + o.id) || []);
       add('opening', o.id, 'identified-meshes', 1, own.length ? 1 : 0, 0, { kind: o.kind, meshes: own.length });
-      const outside = own.filter(m => { const ctr = [0, 1, 2].map(a => (m.bounds.min[a] + m.bounds.max[a]) / 2), t = along(f, ctr), qd = across(f, ctr);
+      const outside = own.filter(m => { const ctr = [0, 1, 2].map(a => (m.bounds.min[a] + m.bounds.max[a]) / 2), t = al(ctr), qd = ac(ctr);
         const reach = o.kind === 'door' ? o.widthMm / 1000 + 0.05 : 0.05; // la hoja abierta gira fuera del muro hasta su anchura
         return !(t >= o.offsetMm / 1000 - 0.05 - (o.kind === 'door' ? o.widthMm / 1000 : 0) && t <= (o.offsetMm + o.widthMm) / 1000 + 0.05 + (o.kind === 'door' ? o.widthMm / 1000 : 0) && Math.abs(qd) <= w.thicknessMm / 2000 + reach && ctr[1] >= elevationM - 0.05 && ctr[1] <= elevationM + (o.sillHeightMm + o.heightMm) / 1000 + 0.05); });
       if (own.length) add('opening', o.id, 'identified-meshes-inside-opening', 0, outside.length, 0, { outside: outside.slice(0, 3).map(m => m.name) });
     }
     // Asociación espacial declarada: mallas sin ID cuyo centro cae dentro del volumen del hueco (± espesor + 5 cm).
     for (const m of unlinked) {
-      const ctr = [0, 1, 2].map(a => (m.bounds.min[a] + m.bounds.max[a]) / 2), t = along(f, ctr), q = across(f, ctr);
+      const ctr = [0, 1, 2].map(a => (m.bounds.min[a] + m.bounds.max[a]) / 2), t = al(ctr), q = ac(ctr);
       const inside = t >= o.offsetMm / 1000 - 0.05 && t <= (o.offsetMm + o.widthMm) / 1000 + 0.05 && Math.abs(q) <= w.thicknessMm / 2000 + 0.05 &&
         ctr[1] >= elevationM + o.sillHeightMm / 1000 - 0.05 && ctr[1] <= elevationM + (o.sillHeightMm + o.heightMm) / 1000 + 0.05;
       if (inside && !associated.has(m.name)) associated.set(m.name, { opening: o.id, method: 'inferred-spatial', material: m.material.kind });
