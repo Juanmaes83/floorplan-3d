@@ -25,14 +25,16 @@
     return s + '</g>';
   }
   // Diferencias entre dos propuestas de la misma estancia (pieza a pieza por papel): lo que el panel enseña al cambiar receta.
+  // Nombres VISIBLES por la fuente única de RUBIK (regla: sin chino en español o inglés).
+  const shown = it => root.FloorPlanDisplayName ? root.FloorPlanDisplayName(it.name, it.type) : it.name;
   function differences(a, b) {
     if (!a?.ok || !b?.ok) return [];
     const out = [], byRole = p => { const m = new Map(); for (const it of p.items) { const k = it.role; m.set(k, [...(m.get(k) || []), it]); } return m; }, A = byRole(a), B = byRole(b);
     for (const role of new Set([...A.keys(), ...B.keys()])) {
       const x = A.get(role)?.[0], y = B.get(role)?.[0];
-      if (!x && y) out.push(`+ ${y.name}`); else if (x && !y) out.push(`− ${x.name}`);
-      else if (x.variant !== y.variant || x.size.widthMm !== y.size.widthMm) out.push(`${x.name} ${x.size.widthMm}×${x.size.depthMm} → ${y.name} ${y.size.widthMm}×${y.size.depthMm}`);
-      else if (x.color !== y.color) out.push(`${y.name}: color ${x.color} → ${y.color}`);
+      if (!x && y) out.push(`+ ${shown(y)}`); else if (x && !y) out.push(`− ${shown(x)}`);
+      else if (x.variant !== y.variant || x.size.widthMm !== y.size.widthMm) out.push(`${shown(x)} ${x.size.widthMm}×${x.size.depthMm} → ${shown(y)} ${y.size.widthMm}×${y.size.depthMm}`);
+      else if (x.color !== y.color) out.push(`${shown(y)}: color ${x.color} → ${y.color}`);
     }
     return out;
   }
