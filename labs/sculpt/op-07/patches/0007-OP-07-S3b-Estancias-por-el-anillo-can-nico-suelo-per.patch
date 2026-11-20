@@ -1,4 +1,4 @@
-From 63294f8430975ae9f1ec51dec002c83692f9e3f7 Mon Sep 17 00:00:00 2001
+From ed9ce37f24fd79de34089fec933c5df062ec6769 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:23:33 +0000
 Subject: [PATCH 7/9] =?UTF-8?q?OP-07=20S3b=20=C2=B7=20Estancias=20por=20el?=
@@ -23,7 +23,7 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s3b-split.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index e5546ef7..3ae3bcf7 100644
+index ae619e64..c3a20c6a 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -403,6 +403,71 @@
@@ -197,11 +197,11 @@ index 9b68409b..381a0d49 100644
    return {levelId,name,rooms,...aggregate(rooms)};
   }
 diff --git a/js/wall-geometry-core.js b/js/wall-geometry-core.js
-index 06465b12..4a95890f 100644
+index 241542e5..c8ee1627 100644
 --- a/js/wall-geometry-core.js
 +++ b/js/wall-geometry-core.js
 @@ -275,7 +275,7 @@
-   for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o))issues.push({code:'invalid-opening',openingId:o.id,message});}
+   for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o,opts))issues.push({code:'invalid-opening',openingId:o.id,message});}
    return {ok:!issues.length,issues};}
  
 - const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
@@ -210,17 +210,22 @@ index 06465b12..4a95890f 100644
   if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanWallGeometry=api;
  })(globalThis);
 diff --git a/tests/op07-s1-contract.test.cjs b/tests/op07-s1-contract.test.cjs
-index 391ca656..10738f1a 100644
+index a4c9b945..bff3ac01 100644
 --- a/tests/op07-s1-contract.test.cjs
 +++ b/tests/op07-s1-contract.test.cjs
-@@ -71,8 +71,10 @@ test('S1 · guardado protegido: lector o escritor antiguo, vista degradada y pé
+@@ -71,13 +71,15 @@ test('S1 · guardado protegido: lector o escritor antiguo, vista degradada y pé
  test('S1 · el núcleo promovido es el del laboratorio (sin un segundo motor geométrico)',()=>{
   // Huella del cuerpo del núcleo del laboratorio (labs/sculpt/op-07/wall-geometry-core.js @ f48614f2, 34 pruebas):
   // el promovido es el mismo código; solo cambian la cabecera y el nombre global.
 - const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module'));
-- assert.equal(require('node:crypto').createHash('sha256').update(body).digest('hex'),'9ba8364840282ceaf2b479c0706d9386a58eb5ed234aa08ccc1ad358cd0791de');
 + const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module')).replace(/\n const api=\{[^\n]*\n[^\n]*\n/,'\n');
-+ assert.equal(require('node:crypto').createHash('sha256').update(body).digest('hex'),'14c8a6014bef2bfef48acaa1efc18a92bc46a7e47a7d4ddb190c40de64735926','cuerpo del núcleo idéntico al del laboratorio (sin la línea de exportación)');
+  // Único delta declarado sobre el laboratorio (S7, 20/11/2026): guardSave recibe la política de trayectoria (WALL_PATH)
+  // y valida las aberturas con ella, igual que validate(). Se deshace el delta y se exige la huella original del laboratorio.
+  const DELTA=[['intent={},opts}){','intent={}}){'],['validateOpening(w,o,opts))issues','validateOpening(w,o))issues']];
+  for(const [now] of DELTA)assert.equal(body.split(now).length,2,`delta presente una sola vez: ${now}`);
+  const lab=DELTA.reduce((b,[now,was])=>b.replace(now,was),body);
+- assert.equal(require('node:crypto').createHash('sha256').update(lab).digest('hex'),'9ba8364840282ceaf2b479c0706d9386a58eb5ed234aa08ccc1ad358cd0791de');
++ assert.equal(require('node:crypto').createHash('sha256').update(lab).digest('hex'),'14c8a6014bef2bfef48acaa1efc18a92bc46a7e47a7d4ddb190c40de64735926','cuerpo del núcleo idéntico al del laboratorio salvo el delta declarado (sin la línea de exportación)');
 + const Lab=['FACETS','MAX_FACETS','isCurved','pathProfile','splitAt','validateOpening','validateWall','profileSpans','faceAreas','centreline','roomRing','ringArea','interiorArea','slopedPiece','legacyView','facetCount','deviationBound','arcLength','minRadius','featuresOf','guardSave'];
 + for(const k of Lab)assert.ok(k in Walls,'exporta '+k);
   for(const f of ['index.html','comparar/index.html','evolucion/index.html']){const h=fs.readFileSync(path.join(root,f),'utf8');assert.ok(h.indexOf('wall-geometry-core.js')>0&&h.indexOf('wall-geometry-core.js')<h.indexOf('project-core.js'),f);}

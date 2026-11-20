@@ -1,4 +1,4 @@
-From 27e33959a7a13c55d020f2cc31486440b3c15b19 Mon Sep 17 00:00:00 2001
+From f601cc9e2faf97ad8abc69852b9dae9a4d7be9e0 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
 Subject: [PATCH 1/9] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D-O?=
@@ -26,10 +26,10 @@ Content-Transfer-Encoding: 8bit
  js/tracing-ui.js                              |   2 +-
  js/wall-geometry-core.js                      | 281 ++++++++++++++++++
  tests/browser.test.cjs                        |   2 +-
- tests/op07-s1-contract.test.cjs               | 105 +++++++
+ tests/op07-s1-contract.test.cjs               | 122 ++++++++
  tests/op07/fixtures.cjs                       |  18 ++
  tests/project.test.cjs                        |   4 +-
- 19 files changed, 506 insertions(+), 29 deletions(-)
+ 19 files changed, 523 insertions(+), 29 deletions(-)
  create mode 100644 js/wall-geometry-core.js
  create mode 100644 tests/op07-s1-contract.test.cjs
  create mode 100644 tests/op07/fixtures.cjs
@@ -169,7 +169,7 @@ index 19523985..4592536f 100644
    const kinds={door:0,window:0,opening:0};for(const o of p.openings)kinds[o.kind==='sliding-door'?'door':o.kind]++;
    return {project:p,openings:kinds,skippedOpenings};
 diff --git a/js/project-core.js b/js/project-core.js
-index 932500e1..69966b03 100644
+index 932500e1..0730efa6 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -8,6 +8,45 @@
@@ -212,7 +212,7 @@ index 932500e1..69966b03 100644
 +  // a feature the project uses, the loss of a curve, a slope, a wall or an opening without an explicit intent, and walls
 +  // or openings that break the rules. `writerFeatures` defaults to this writer's; an older writer passes its own (none).
 +  function guardSave(previous, next, {intent = {}, writerFeatures = WALL_FEATURES} = {}) {
-+    return Walls.guardSave({previous, next, writerFeatures, intent});
++    return Walls.guardSave({previous, next, writerFeatures, intent, opts: WALL_PATH});   // the same path policy as validate()
 +  }
 +  const wallLength = w => shapedWall(w) ? Walls.pathProfile(w, WALL_PATH).length : Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
    const clone = value => JSON.parse(JSON.stringify(value));
@@ -386,7 +386,7 @@ index f33bc2af..f0085b7b 100644
   $('#traceImageFile').onchange=async e=>{const file=e.target.files[0];e.target.value='';if(!file)return;try{if(file.size>T.LIMITS.bytes)throw Error('La imagen supera 15 MiB.');await addImage(file,newImage);}catch(err){report(err);}};
 diff --git a/js/wall-geometry-core.js b/js/wall-geometry-core.js
 new file mode 100644
-index 00000000..06465b12
+index 00000000..241542e5
 --- /dev/null
 +++ b/js/wall-geometry-core.js
 @@ -0,0 +1,281 @@
@@ -657,14 +657,14 @@ index 00000000..06465b12
 +  return issues;}
 + /** Save gate: refuses a degraded view, a writer that does not know a feature the project uses (it would drop it),
 +    unintended loss against the previous saved state, and walls or openings that break the proposed rules. */
-+ function guardSave({previous=null,next,writerFeatures=[],intent={}}){
++ function guardSave({previous=null,next,writerFeatures=[],intent={},opts}){
 +  const issues=[],known=new Set(writerFeatures);
 +  try{assertSavable(next);}catch{issues.push({code:'degraded-view'});}
 +  for(const f of new Set([...featuresOf(previous),...featuresOf(next)]))if(!known.has(f))issues.push({code:'writer-lacks-feature',feature:f});
 +  if(previous)issues.push(...detectLoss(previous,next,intent));
 +  const walls=new Map((next.walls||[]).map(w=>[w.id,w]));
 +  for(const w of walls.values())for(const message of validateWall(w))issues.push({code:'invalid-wall',wallId:w.id,message});
-+  for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o))issues.push({code:'invalid-opening',openingId:o.id,message});}
++  for(const o of next.openings||[]){const w=walls.get(o.wallId);if(w)for(const message of validateOpening(w,o,opts))issues.push({code:'invalid-opening',openingId:o.id,message});}
 +  return {ok:!issues.length,issues};}
 +
 + const api={FACETS,MAX_FACETS,TEXTURE_TILE_MM,DEGRADED,isCurved,startHeight,endHeight,point,pathSpans,pathProfile,bounds,dimension,split,splitAt,pathOpening,validateOpening,validateWall,profileSpans,faceAreas,faceLengths,centreline,roomRing,ringArea,interiorArea,roomCeiling,slopedPiece,legacyView,facets,
@@ -686,10 +686,10 @@ index 49d0b5d9..86620a67 100644
      await page.locator('#fileIn').setInputFiles({name:`invalid-${i}.json`,mimeType:'application/json',buffer});
 diff --git a/tests/op07-s1-contract.test.cjs b/tests/op07-s1-contract.test.cjs
 new file mode 100644
-index 00000000..391ca656
+index 00000000..a4c9b945
 --- /dev/null
 +++ b/tests/op07-s1-contract.test.cjs
-@@ -0,0 +1,105 @@
+@@ -0,0 +1,122 @@
 +'use strict';
 +// OP-07 · S1 Contrato: dos campos en el muro canónico (curve, heightEndMm) solo en documentos 2.x (D-OP07-4, opción B),
 +// con una autoridad única de versiones; validados por el
@@ -764,7 +764,12 @@ index 00000000..391ca656
 + // Huella del cuerpo del núcleo del laboratorio (labs/sculpt/op-07/wall-geometry-core.js @ f48614f2, 34 pruebas):
 + // el promovido es el mismo código; solo cambian la cabecera y el nombre global.
 + const prod=fs.readFileSync(path.join(root,'js/wall-geometry-core.js'),'utf8'),body=prod.slice(prod.indexOf('(function(root){'),prod.lastIndexOf('if(typeof module'));
-+ assert.equal(require('node:crypto').createHash('sha256').update(body).digest('hex'),'9ba8364840282ceaf2b479c0706d9386a58eb5ed234aa08ccc1ad358cd0791de');
++ // Único delta declarado sobre el laboratorio (S7, 20/11/2026): guardSave recibe la política de trayectoria (WALL_PATH)
++ // y valida las aberturas con ella, igual que validate(). Se deshace el delta y se exige la huella original del laboratorio.
++ const DELTA=[['intent={},opts}){','intent={}}){'],['validateOpening(w,o,opts))issues','validateOpening(w,o))issues']];
++ for(const [now] of DELTA)assert.equal(body.split(now).length,2,`delta presente una sola vez: ${now}`);
++ const lab=DELTA.reduce((b,[now,was])=>b.replace(now,was),body);
++ assert.equal(require('node:crypto').createHash('sha256').update(lab).digest('hex'),'9ba8364840282ceaf2b479c0706d9386a58eb5ed234aa08ccc1ad358cd0791de');
 + for(const f of ['index.html','comparar/index.html','evolucion/index.html']){const h=fs.readFileSync(path.join(root,f),'utf8');assert.ok(h.indexOf('wall-geometry-core.js')>0&&h.indexOf('wall-geometry-core.js')<h.indexOf('project-core.js'),f);}
 + assert.equal(Core.WALL_PATH.toleranceMm,1,'tolerancia única propuesta (pendiente de decisión de producto)');
 +});
@@ -794,6 +799,18 @@ index 00000000..391ca656
 +  for(const line of src.split('\n')){
 +   assert.ok(!/schemaVersion\.split\(/.test(line),`${f}: compara la versión fuera de la autoridad: ${line.trim().slice(0,90)}`);
 +   if(/schemaVersion\s*=\s*'1\./.test(line))assert.ok(creators.test(line),`${f}: eleva la versión fuera de la autoridad: ${line.trim().slice(0,90)}`);}}
++});
++
++test('S7 · guardSave valida las aberturas con la MISMA trayectoria que validate (1 mm, no 16 facetas)',()=>{
++ // Ventana que termina entre la longitud con 16 facetas (6884 mm) y la real con 1 mm (6886,3 mm): validate() la acepta,
++ // así que el guardado no puede rechazarla. Antes de S7, guardSave usaba 16 facetas y bloqueaba un proyecto válido.
++ const p=F.lone({start:{x:0,y:0},end:{x:6000,y:0},control:{x:3000,y:-3000}}),w=p.walls[0],W=require('../js/wall-geometry-core.js');
++ const L1=Core.wallLength(w),L16=W.pathProfile(w,{}).length;assert.ok(L1-L16>2,'la trayectoria de 16 facetas es más corta');
++ const q=Core.clone(p);q.openings=[{id:'opn_endwin',wallId:w.id,kind:'window',offsetMm:Math.floor(L1)-1201,widthMm:1200,heightMm:1000,sillHeightMm:900}];
++ Core.validate(q);assert.deepEqual(Core.guardSave(p,q),{ok:true,issues:[]});
++ // Y sigue rechazando la que de verdad se sale del muro con 1 mm.
++ const r=Core.clone(q);r.openings[0].offsetMm=Math.ceil(L1)-1199;assert.throws(()=>Core.validate(r));
++ assert.equal(Core.guardSave(p,r).issues[0]?.code,'invalid-opening');
 +});
 diff --git a/tests/op07/fixtures.cjs b/tests/op07/fixtures.cjs
 new file mode 100644

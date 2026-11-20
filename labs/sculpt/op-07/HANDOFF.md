@@ -58,6 +58,15 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
   - Consumidores reales: suelo de Q.room/Surface.level (plano y suelo 3D), perímetro, caras del panel «Paredes de la estancia» (UX-03) y la línea de suelo del presupuesto.
   - Recorrido: dibujar y curvar un muro → panel «Forma del muro» → Dividir. El panel de la estancia mantiene sus cifras. Estado: DESARROLLADO y VALIDADO.
 
+## Bloque 4a · `guardSave` con la política de trayectoria (`WALL_PATH`) — 20/11/2026
+- **Defecto confirmado:** `guardSave` validaba las aberturas con 16 facetas y `validate()` lo hace con 1 mm. Una ventana que termina entre 6884 mm (16 facetas) y 6886,3 mm (1 mm) se aceptaba en `validate` y **se rechazaba al guardar**: un proyecto válido no se podía guardar.
+- **Corrección (S1):**
+  - `Walls.guardSave({…, opts})` pasa `opts` a `validateOpening`.
+  - `Core.guardSave` le da `WALL_PATH`.
+  - Es el **único delta** sobre el núcleo del laboratorio. La prueba de huella deshace ese delta declarado y sigue exigiendo la huella ORIGINAL (`14c8a601…`, y `9ba83648…` en la etapa S1). La aserción no se relaja.
+- **Prueba negativa nueva (S1):** guardSave acepta lo que acepta validate y sigue rechazando la abertura que de verdad se sale del muro.
+- `quantity-core.js:141` también llama `validateOpening(w,o)` sin `opts`, pero solo en muros **rectos** con pendiente, cuya trayectoria es la cuerda y no depende de las facetas. No hay defecto.
+
 ## Pendiente (en este orden)
 1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
    Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.

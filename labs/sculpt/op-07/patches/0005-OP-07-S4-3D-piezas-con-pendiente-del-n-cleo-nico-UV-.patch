@@ -1,4 +1,4 @@
-From 32e19d1176f5df67922b6db89bc9bc3833ed3f5c Mon Sep 17 00:00:00 2001
+From d63b09a6dd3bb04f0abaaa49d3be1e4593dfa7a2 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
 Subject: [PATCH 5/9] =?UTF-8?q?OP-07=20S4=20=C2=B7=203D:=20piezas=20con=20?=
@@ -53,7 +53,7 @@ index d34ea1ae..752d0397 100644
    get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
    // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
 diff --git a/js/project-core.js b/js/project-core.js
-index cabee845..5c0a344f 100644
+index 05149a48..d4d060f8 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -375,7 +375,7 @@

@@ -1,4 +1,4 @@
-From c53a28971e7d4a38f62d70997f7b0343b42c0b4b Mon Sep 17 00:00:00 2001
+From 0c7bbe153b707965b2db1bbe28d8308ed5581bba Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
 Subject: [PATCH 2/9] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y=20?=
@@ -16,7 +16,7 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s2-geometry.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index 69966b03..2905cb5c 100644
+index 0730efa6..0b0355c2 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -361,33 +361,69 @@

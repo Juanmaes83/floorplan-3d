@@ -1,4 +1,4 @@
-From 319bf8ec404d4faf3167db102ab30a320982dd9b Mon Sep 17 00:00:00 2001
+From 41ff183bd6800c9871de116c339e732d6338ce7f Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:37:14 +0000
 Subject: [PATCH 9/9] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y=20l?=
@@ -75,7 +75,7 @@ index bb16a917..34472779 100644
      const gTop = Math.min(head, top); if (gTop <= sill) return;
      const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
 diff --git a/js/project-core.js b/js/project-core.js
-index 3ae3bcf7..2b63e5f0 100644
+index c3a20c6a..896708bc 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -364,20 +364,39 @@
