@@ -90,15 +90,26 @@ async function download(url,limit,signal){
 }
 const digest=async buffer=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),b=>b.toString(16).padStart(2,'0')).join('');
 export async function load(entry,{timeoutMs=8000,signal}={}){
- const controller=new AbortController(),abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
- const timer=setTimeout(abort,timeoutMs),start=performance.now(),bitmaps=[],createdTextures=[];let parsed;
- const check=()=>{if(controller.signal.aborted)throw Error('Loading aborted');};
+ // One deadline covers the authorized load, excluding queue wait.
+ const controller=new AbortController(),start=performance.now(),phaseMs={};
+ let phase='permission',phaseStart=start,parsed;
+ const timings=()=>({...phaseMs,[phase]:performance.now()-phaseStart});
+ const next=stage=>{const now=performance.now();phaseMs[phase]=now-phaseStart;phase=stage;phaseStart=now;};
+ const cancel=code=>controller.abort(Object.assign(Error('Loading aborted'),{
+  code,phase,phaseMs:timings(),durationMs:performance.now()-start,timeoutMs
+ }));
+ const abort=()=>cancel(signal.reason==='asset-generation'?'F3_GENERATION_CHANGED':'F3_CANCELLED');
+ signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
+ const timer=setTimeout(()=>cancel('F3_DEADLINE_EXCEEDED'),timeoutMs),bitmaps=[],createdTextures=[];
+ const check=()=>{if(controller.signal.aborted)throw controller.signal.reason;};
  const cleanup=()=>{if(parsed)dispose(parsed.scene);createdTextures.splice(0).forEach(t=>t.dispose());bitmaps.splice(0).forEach(i=>i.close());};
- let rejectAbort;const canceled=new Promise((_,reject)=>{rejectAbort=()=>reject(Error('Loading aborted'));controller.signal.addEventListener('abort',rejectAbort,{once:true});if(controller.signal.aborted)rejectAbort();});
+ let rejectAbort;const canceled=new Promise((_,reject)=>{rejectAbort=()=>reject(controller.signal.reason);controller.signal.addEventListener('abort',rejectAbort,{once:true});if(controller.signal.aborted)rejectAbort();});
  const task=(async()=>{try{
-  check();const permission=await download(entry.permissionUrl,32768,controller.signal);check();if(await digest(permission)!==entry.permissionSha256)throw Error('Permission document changed');
-  const buffer=await download(entry.url,Math.min(entry.bytes,MAX_BYTES),controller.signal);check();if(buffer.byteLength!==entry.bytes||await digest(buffer)!==entry.sha256)throw Error('Model integrity changed');
-  const data=readGLB(buffer),info=textures(buffer,data);check();
+  check();const permission=await download(entry.permissionUrl,32768,controller.signal);check();next('permission-integrity');if(await digest(permission)!==entry.permissionSha256)throw Error('Permission document changed');
+  next('model-download');
+  const buffer=await download(entry.url,Math.min(entry.bytes,MAX_BYTES),controller.signal);check();next('integrity');if(buffer.byteLength!==entry.bytes||await digest(buffer)!==entry.sha256)throw Error('Model integrity changed');
+  next('inspection');const data=readGLB(buffer),info=textures(buffer,data);check();
+  next('decode');
   for(const im of info.images){
    const bitmap=await createImageBitmap(new Blob([new Uint8Array(buffer,im.offset,im.bytes)],{type:'image/jpeg'}),{premultiplyAlpha:'none',colorSpaceConversion:'none'});bitmaps.push(bitmap);check();
    if(bitmap.width!==im.width||bitmap.height!==im.height)throw Error('Decoded image size differs');
@@ -109,8 +120,9 @@ export async function load(entry,{timeoutMs=8000,signal}={}){
    texture.flipY=false;texture.name=def.name||'';texture.magFilter=filters[sampler.magFilter]||THREE.LinearFilter;texture.minFilter=filters[sampler.minFilter]||THREE.LinearMipmapLinearFilter;texture.wrapS=wraps[sampler.wrapS]||THREE.RepeatWrapping;texture.wrapT=wraps[sampler.wrapT]||THREE.RepeatWrapping;texture.needsUpdate=true;
    createdTextures.push(texture);parser.associations.set(texture,{textures:index});return Promise.resolve(texture);
   }}));
-  parsed=await loader.parseAsync(buffer,'');check();const result=normalize(parsed.scene,entry);check();
-  return {...result,bytes:buffer.byteLength,permissionBytes:permission.byteLength,durationMs:performance.now()-start,textureStats:info.stats,attribution:entry.attribution};
+  next('parse');parsed=await loader.parseAsync(buffer,'');check();
+  next('normalize');const result=normalize(parsed.scene,entry);check();
+  return {...result,bytes:buffer.byteLength,permissionBytes:permission.byteLength,durationMs:performance.now()-start,phaseMs:timings(),textureStats:info.stats,attribution:entry.attribution};
  }catch(error){cleanup();throw error;}})();
- try{return await Promise.race([task,canceled]);}catch(error){cleanup();throw error;}finally{clearTimeout(timer);controller.signal.removeEventListener('abort',rejectAbort);signal?.removeEventListener('abort',abort);}
+ try{return await Promise.race([task,canceled]);}catch(error){cleanup();throw controller.signal.aborted?controller.signal.reason:error;}finally{clearTimeout(timer);controller.signal.removeEventListener('abort',rejectAbort);signal?.removeEventListener('abort',abort);}
 }

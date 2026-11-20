@@ -3992,9 +3992,9 @@ const assetStates=new Map(),assetRequests=new Map(),assetQueue=[];
 const MAX_ACTIVE_ASSET_LOADS=2;
 let assetGeneration=0,activeAssetLoads=0;
 
-function cancelFurnitureAssets(){
+function cancelFurnitureAssets(reason='asset-generation'){
   assetGeneration++;assetQueue.length=0;
-  assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
+  assetRequests.forEach(controller=>controller.abort(reason));assetRequests.clear();
 }
 function pumpFurnitureAssets(){
   // Download, verification, JPEG decoding and parsing share a per-load deadline.
@@ -4019,8 +4019,8 @@ function loadFurnitureAsset(g,f,generation){
     result.scene.scale.set(f.w/result.dimensionsMm.width,height*1000/result.dimensionsMm.height,f.d/result.dimensionsMm.depth);
     g.add(result.scene);g.position.copy(position);g.rotation.copy(rotation);g.userData.authorizedAsset=true;
     requestFrame();
-    publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
-  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);}));
+    publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,phaseMs:result.phaseMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
+  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos',...(error.code?.startsWith('F3_')?{loadFailure:{code:error.code,phase:error.phase,phaseMs:error.phaseMs,durationMs:error.durationMs,timeoutMs:error.timeoutMs}}:{})});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);}));
   pumpFurnitureAssets();
 }
 function batchFurniturePrimitives(group){
@@ -4323,7 +4323,7 @@ function abort3D(){
   renderScheduler.cancel();
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
-  cancelFurnitureAssets();
+  cancelFurnitureAssets('viewer-exit');
   resetArchitecturalQuality();
   surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
