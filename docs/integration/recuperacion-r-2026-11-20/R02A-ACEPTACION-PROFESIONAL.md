@@ -155,3 +155,40 @@ Se reutiliza el planificador de recorridos de RUBIK, `FloorPlanPresentationRoute
 | Navegador | `r02a-editor.browser` muestra el aviso y, en el plano, la banda del recorrido |
 
 **Siguiente:** aplicar este corte solo con tu autorización y tras la validación profesional del valor de 2100 mm. **Sin una zona verificable no se activa ningún bloqueo.**
+
+## 9. Prototipo ORIENTATIVO de paso libre (autorizado el 20/11/2026) · sin bloqueo
+
+**Auditoría del propietario sobre `js/presentation-route.js`, aceptada:**
+- `FloorPlanPresentationRoute.plan` es un planificador de recorridos de **presentación audiovisual**, no una autoridad de circulación de personas.
+- `clearanceMm` es 220 mm por defecto.
+- El origen puede desplazarse hasta 1200 mm de la puerta.
+- Validar los puntos no demuestra que toda la banda sea una zona exigible.
+
+Por tanto, la §8 queda como **especificación futura condicionada** a una decisión profesional con autoridad geométrica explícita. **No hay bloqueo.**
+
+**Lo que se entrega:** `js/r02a-passage-indicative.js`, un módulo **puro y no conectado** (ningún archivo de producto lo carga).
+- `indicate({proposals, routes, rooms})` → por elemento: `not-evaluated` (con `reason`), `outside-route`, `route-clear` o `possible-interference` (con `shortfallMm`).
+- `applied:false`, `blocking:false`, `normative:false`.
+- Cota: `mount.lowestPointMm` de `r02a-ceiling-core`, sin recalcular.
+- Rutas: resultados `kind:'interior'` de `FloorPlanPresentationRoute.plan`, como indicación geométrica experimental.
+- **Sin recorrido verificable en la estancia del elemento → «no evaluado».** Fuera de estancias (p. ej. en el hueco de una puerta) → «no evaluado».
+- **No existe ningún estado de bloqueo**, y ningún estado de R02-A cambia.
+
+**Pruebas** (`tests/r02a-passage-indicative.test.cjs`, 11/11):
+
+| Grupo | Caso |
+|---|---|
+| Banco | El ejemplo tiene recorridos `interior` (pasillo, dormitorios, baños, comedor, salón) y `aerial` (cocina, lavadero, balcón, miradores); margen de 220 mm |
+| Geometría | Colgante sobre el recorrido del pasillo: `lowestPointMm` 1700 del núcleo → posible interferencia de 400 mm |
+| Casos límite | 2100 exactos: sin interferencia. 2099: 1 mm. Ningún estado de bloqueo |
+| Fuera del recorrido | Una zona libre de muebles en el salón que no es recorrido (> 800 mm) → `outside-route`, nunca interferencia |
+| No evaluado | Cocina (`aerial`), aunque cuelgue bajo; sin referencia vertical; fuera de estancias |
+| Giro de objetos | Pieza de 1400 × 100 junto a una ruta aislada: paralela, fuera (550 mm); a 90°, cruza; a 45°, la esquina entra; a 180°, fuera |
+| Puertas | El recorrido declara sus puertas. En el hueco de la puerta, no evaluado; justo dentro, sobre el tramo que la cruza, se indica |
+| Rutas alternativas | El pasillo es tramo común de varios recorridos: el elemento lista todos los que lo atraviesan |
+| Determinismo y solo lectura | Mismo resultado con el orden de muebles invertido; propuestas intactas; nada aplicado, bloqueante ni normativo |
+| Costes | Planificar las 13 estancias del ejemplo: ~80 ms. Indicar 50 elementos: ~1 ms (Node 22, este contenedor) |
+
+**Vista (preparada, sin conectar).** La conexión natural es una línea informativa en la sección de techo, con el texto del criterio (*«Criterio inicial de diseño, pendiente de validación profesional. No es una comprobación normativa.»*) y nunca en el estado ni en el botón de guardar. Requiere cargar el módulo en `index.html` y ampliar el manifiesto de activación R02-A, así que necesita **tu autorización**.
+
+R02-A sigue **experimental** y GOV-05 abierto.
