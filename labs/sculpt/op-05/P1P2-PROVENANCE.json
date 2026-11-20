@@ -1,0 +1,93 @@
+{
+ "format": "rubik-sculpt-provenance",
+ "version": 1,
+ "cut": "OP-05 P1/P2 (laboratorio)",
+ "base": {
+  "repo": "Juanmaes83/floorplan-3d",
+  "master": "8e917e1a70f499a6b8dc68850c8413b7d06c5682"
+ },
+ "laboratory": {
+  "branch": "codex/sculpt-op05-lab",
+  "commit": "a722f9ddaf735d1ef45ffc17c6fbb87c2e8f43a6",
+  "path": "labs/sculpt/op-05",
+  "note": "importado sin cambios en el primer commit de esta rama"
+ },
+ "donor": {
+  "repo": "https://github.com/laanlabs/openPlan3D",
+  "commit": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+  "license": "MIT",
+  "licenseFile": "labs/sculpt/op-05/upstream/LICENSE",
+  "licenseSha256": "30228141977aae075d3a50caa11574a12dbc6f69c2bb207d618c8ea2ffa4a83c"
+ },
+ "port": {
+  "generator": "labs/sculpt/op-05/js/port.cjs",
+  "transform": "node:module.stripTypeScriptTypes(mode strip) + especificadores relativos .mjs; sin edición manual",
+  "check": "node labs/sculpt/op-05/js/port.cjs --check",
+  "files": [
+   {
+    "port": "labs/sculpt/op-05/js/localGLBGeometry.mjs",
+    "portSha256": "d243f45e4d5eea274ca5c4ece42ca393bad76bb116918fe3d6607d69dd8182ef",
+    "original": "labs/sculpt/op-05/upstream/src/lib/utils/localGLBGeometry.ts",
+    "originalSha256": "7a97ce921af11dccc0d0aa556bfeefa35ba960dc248ca7a78b0442c44a123744",
+    "donorPath": "src/lib/utils/localGLBGeometry.ts"
+   },
+   {
+    "port": "labs/sculpt/op-05/js/localGLBAccessors.mjs",
+    "portSha256": "266417abcffe4f7522ab48485d2878e66cce7e8be3294e6aaeec0386d1c86c9e",
+    "original": "labs/sculpt/op-05/upstream/src/lib/utils/localGLBAccessors.ts",
+    "originalSha256": "546c42a6a5ec24736da563333aa7905f09d9d5dc076c839c91ebc296b3e4de3c",
+    "donorPath": "src/lib/utils/localGLBAccessors.ts"
+   },
+   {
+    "port": "labs/sculpt/op-05/js/localGLBScene.mjs",
+    "portSha256": "a4834662e0fe522706432f14af0b8a1c5dd6e6c72a91b24e920d57251bcd4289",
+    "original": "labs/sculpt/op-05/upstream/src/lib/utils/localGLBScene.ts",
+    "originalSha256": "b6e0d4fb4568613f442909e474b1b60b62c6901995048b05869d11d9c79157f3",
+    "donorPath": "src/lib/utils/localGLBScene.ts"
+   },
+   {
+    "port": "labs/sculpt/op-05/js/localGLBResources.mjs",
+    "portSha256": "6863516ffe19cb7344969fc002387864696a27416d1d5403476d3debd8b7eef4",
+    "original": "labs/sculpt/op-05/upstream/src/lib/utils/localGLBResources.ts",
+    "originalSha256": "1c63eab545c8c47952df246cb431e135ab431c281f815a8722e8f118412a010f",
+    "donorPath": "src/lib/utils/localGLBResources.ts"
+   },
+   {
+    "port": "labs/sculpt/op-05/js/rasterHeader.mjs",
+    "portSha256": "feb65aec026c369048829b610bbee035c57a85bcaec1f513b89e4c6cf29bc311",
+    "original": "labs/sculpt/op-05/upstream/src/lib/utils/rasterHeader.ts",
+    "originalSha256": "3865a1baadc8c448393fbc640c9a4d04574b28addc781c8ca792463c1d52c401",
+    "donorPath": "src/lib/utils/rasterHeader.ts"
+   }
+  ]
+ },
+ "product": {
+  "file": "js/asset-loader.mjs",
+  "baseSha256": "e506802096a03fcd85aa08b244605d98ecc1d4b82dbcd7f9f4c11783139baef9",
+  "candidateSha256": "f31545bf0273afc1c46a15859da903ce9f779525ba90be90fc90c2989c6b444b",
+  "change": "pipeline() común; parseVerified(); measure() separado; normalize() con la misma tolerancia de 20 mm; load() sin cambio de comportamiento; loadVerifiedBytes() nuevo (no conectado al visor)"
+ },
+ "newFiles": [
+  {
+   "path": "labs/sculpt/op-05/private-loader.mjs",
+   "sha256": "c831476582b05979668f4258f5ea0ff6b5b8532f71ad72f8156852cd68c84432"
+  },
+  {
+   "path": "labs/sculpt/op-05/private-model-core.mjs",
+   "sha256": "c6f78457e1e2dcc85789eeaa292285a6da746c32f2d2fdaa1807c97fc5b84253"
+  },
+  {
+   "path": "labs/sculpt/op-05/p1.test.mjs",
+   "sha256": "289d770d95655c7f17c363f5619896e7307cd36fd24caeaf88d257a387d9e28c"
+  },
+  {
+   "path": "labs/sculpt/op-05/p2.test.mjs",
+   "sha256": "46425f9269c8b1de633d22376f08ec18079a442d47109fc93c1bdd6b6c60429d"
+  },
+  {
+   "path": "labs/sculpt/op-05/js/port.cjs",
+   "sha256": "2ea2f47ef79f9a6479d0fa52254940be4d3995b1c9d27ff7544257d12359b3c0"
+  }
+ ],
+ "decisions": "Propietario 20/11/2026: id opaco; extensión versionada; ficha por proyecto; perfil F3; exportaciones ordinarias sin OP-05; expediente privado futuro explícito; entregables genéricos; C1 NO-GO (sin persistencia GLB)."
+}
