@@ -56,7 +56,8 @@ async function capture(input, dest, o = {}) {
     await page.locator('#fileIn').setInputFiles(file);
     const expectId = isBuilding ? parsed.levels[0].project.id : parsed.id;
     await page.waitForFunction(id => window.FloorPlanApp.project && (window.FloorPlanApp.project.id === id || (window.FloorPlanApp.levelContext && JSON.stringify(window.FloorPlanApp.levelContext).includes(id))), expectId, { timeout: 120000 });
-    await page.evaluate(() => setView('3d'));
+    if (o.enter3D) await o.enter3D(page);
+    else await page.evaluate(() => setView('3d'));
     await page.waitForFunction(() => window.FloorPlanApp.viewMode === '3d' && window.View3D.contextAvailable, null, { timeout: 120000 });
     if (isBuilding && scope === 'all') { await page.evaluate(() => document.querySelector('#levelViewAll').click()); await page.waitForFunction(n => window.View3D.levelView === 'all' && window.View3D.levelInspect().levels.length === n, parsed.levels.length, { timeout: 120000 }); }
     t.loaded = Date.now();
