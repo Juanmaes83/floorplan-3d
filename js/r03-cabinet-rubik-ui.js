@@ -24,7 +24,7 @@
     zh: { type: { wardrobe: '衣柜', tallcab: '高柜', cabinet: '矮柜', shoecab: '鞋柜' }, interior: '内部', close: '关闭', closeLabel: '关闭内部编辑器',
       note: '实验性参数化内部：尺寸为假定值，非厂商数据。不是报价，不可用于制造。', clear: '开启空间 · 只读',
       notSaved: '未保存。', saved: '内部已保存到项目中。可用 RUBIK 的「撤销」撤回。', unsaved: how => `有未保存的更改。${how === 'key' ? '再按一次 Escape' : '再点一次「关闭」'}即可不保存关闭。` } }); return T[l] || T.es; };
-  
+
 
   /* open({objectId, getProject, commit, opener}) → {ok} | {ok:false, reason}
      commit(nextProjectFn): la app ejecuta nextProjectFn() dentro de su mutate() y devuelve {ok, project?, message?}. */
