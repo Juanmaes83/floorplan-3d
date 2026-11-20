@@ -1,4 +1,4 @@
-From 84f56a0dc8aefcb2f09f795d5b3d1379eb2818c4 Mon Sep 17 00:00:00 2001
+From 27e33959a7a13c55d020f2cc31486440b3c15b19 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
 Subject: [PATCH 1/9] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D-O?=
@@ -15,25 +15,27 @@ Content-Transfer-Encoding: 8bit
  docs/contracts/FloorPlanProjectV1.md          |   9 +
  docs/contracts/FloorPlanProjectV1.schema.json |   6 +-
  evolucion/index.html                          |   1 +
- index.html                                    |   5 +-
+ index.html                                    |   7 +-
  js/building-core.js                           |   2 +-
  js/plan-intake.js                             |   2 +-
  js/project-core.js                            |  75 ++++-
  js/project-schema.js                          |   6 +-
+ js/scan-alignment.js                          |   2 +-
  js/surface-catalog.js                         |   2 +-
  js/tracing-core.js                            |   4 +-
  js/tracing-ui.js                              |   2 +-
  js/wall-geometry-core.js                      | 281 ++++++++++++++++++
+ tests/browser.test.cjs                        |   2 +-
  tests/op07-s1-contract.test.cjs               | 105 +++++++
  tests/op07/fixtures.cjs                       |  18 ++
  tests/project.test.cjs                        |   4 +-
- 17 files changed, 503 insertions(+), 26 deletions(-)
+ 19 files changed, 506 insertions(+), 29 deletions(-)
  create mode 100644 js/wall-geometry-core.js
  create mode 100644 tests/op07-s1-contract.test.cjs
  create mode 100644 tests/op07/fixtures.cjs
 
 diff --git a/comparar/index.html b/comparar/index.html
-index 3e1972fb..51a0feb5 100644
+index f45ac7bc..f94604e8 100644
 --- a/comparar/index.html
 +++ b/comparar/index.html
 @@ -103,6 +103,7 @@
@@ -104,7 +106,7 @@ index 434b93aa..163dadb3 100644
      },
      "opening": {
 diff --git a/evolucion/index.html b/evolucion/index.html
-index 209b90e0..2b32d8e6 100644
+index 97707619..78d2a368 100644
 --- a/evolucion/index.html
 +++ b/evolucion/index.html
 @@ -60,6 +60,7 @@
@@ -116,10 +118,10 @@ index 209b90e0..2b32d8e6 100644
  <script src="../js/exterior-core.js"></script>
  <script src="../js/roof-core.js"></script>
 diff --git a/index.html b/index.html
-index 55426096..0432f8f8 100644
+index 53a7cb6f..d34ea1ae 100644
 --- a/index.html
 +++ b/index.html
-@@ -750,6 +750,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
+@@ -769,6 +769,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
  <script src="js/parcel-site-adapter.js"></script>
  <script src="js/orthophoto-site-adapter.js"></script>
  <script src="js/terrain-site-adapter.js"></script>
@@ -127,17 +129,19 @@ index 55426096..0432f8f8 100644
  <script src="js/project-core.js"></script>
  <script src="js/exterior-core.js"></script>
  <script src="js/roof-core.js"></script>
-@@ -1796,8 +1797,8 @@ function bindRoomPanel(){
-   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
+@@ -1874,9 +1875,9 @@ function bindRoomPanel(){
    document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
+   document.querySelectorAll('#panel [data-wall-fix]').forEach(b => b.onclick = () => select({kind:'wall', id:b.dataset.wallFix}));
    $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
 -  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
 -  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+-  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});toast(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,4000);};
 +  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();Core.raiseVersion(project,'1.6.0');});
 +  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;Core.raiseVersion(project,'1.6.0');});
-   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
-   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
-   $('#back').onclick = () => select(null);
++  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;Core.raiseVersion(project,'1.6.0');});toast(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,4000);};
+   const swapWith=$('#rSwapWith'),swap=$('#rSwap');
+   if(swapWith){swapWith.onchange=()=>{swap.disabled=!swapWith.value;};
+     swap.onclick=()=>{const other=swapWith.value;if(!other)return;const before=undoStack.length;
 diff --git a/js/building-core.js b/js/building-core.js
 index dadcc106..b0c3e644 100644
 --- a/js/building-core.js
@@ -165,7 +169,7 @@ index 19523985..4592536f 100644
    const kinds={door:0,window:0,opening:0};for(const o of p.openings)kinds[o.kind==='sliding-door'?'door':o.kind]++;
    return {project:p,openings:kinds,skippedOpenings};
 diff --git a/js/project-core.js b/js/project-core.js
-index 2d2841eb..cb7b202b 100644
+index 932500e1..69966b03 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -8,6 +8,45 @@
@@ -214,7 +218,7 @@ index 2d2841eb..cb7b202b 100644
    const clone = value => JSON.parse(JSON.stringify(value));
    const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
    const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
-@@ -83,31 +122,31 @@
+@@ -130,31 +169,31 @@
    function validate(project, {strict = false} = {}) {
      if (project?.schema === 'rubik-sota.floorplan-building') fail('/schema', 'this is a multi-level building, not a FloorPlanProjectV1 project; open it in Rubik or export a single level');
      const version = project?.schemaVersion;
@@ -253,7 +257,7 @@ index 2d2841eb..cb7b202b 100644
      const ids = new Map([[project.id, 'project']]);
      const warnings = [];
      if (future) warnings.push('Newer V1 version: unknown fields are retained; unsupported values are rejected.');
-@@ -121,11 +160,21 @@
+@@ -168,11 +207,21 @@
      for(const w of project.walls)if(w.surfaceMaterialId){ref(w.surfaceMaterialId,'materials',`/walls/${w.id}/surfaceMaterialId`);if(project.materials.find(m=>m.id===w.surfaceMaterialId).category!=='wall')fail(`/walls/${w.id}/surfaceMaterialId`,'wall material required');}
      if(project.roofParapet?.materialId){ref(project.roofParapet.materialId,'materials','/roofParapet/materialId');if(project.materials.find(m=>m.id===project.roofParapet.materialId).category!=='wall')fail('/roofParapet/materialId','wall material required');}
      for (const w of project.walls) if (Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y) < 1) fail(`/walls/${w.id}`, 'zero-length wall');
@@ -277,7 +281,7 @@ index 2d2841eb..cb7b202b 100644
        if (o.swing && o.kind !== 'door') fail(`/openings/${o.id}/swing`, 'swing only allowed on door');
      }
      for (const r of project.rooms) {
-@@ -306,12 +355,14 @@
+@@ -353,12 +402,14 @@
      if(!STRUCTURE_SOURCES.includes(source))throw Error('Procedencia no admitida.');
      const next=clone(project),wall=next.walls.find(w=>w.id===wallId);if(!wall)throw Error('Muro no encontrado.');
      wall.structure=structure;wall.structureSource=source;
@@ -290,7 +294,7 @@ index 2d2841eb..cb7b202b 100644
 +  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
 +  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
    const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
-   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
+   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
    if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 +  // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
 +  Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
@@ -319,6 +323,19 @@ index f8a1b79d..818f7cee 100644
        }
      },
      "opening": {
+diff --git a/js/scan-alignment.js b/js/scan-alignment.js
+index 389fb749..4e97b622 100644
+--- a/js/scan-alignment.js
++++ b/js/scan-alignment.js
+@@ -114,7 +114,7 @@
+   for(const m of incoming.measurements){m.a=point(m.a);m.b=point(m.b);}
+   checkOverlap(target,incoming);
+   for(const key of Object.keys(listKeys))next[key].push(...incoming[key]);
+-  if(Number(next.schemaVersion.split('.')[1])<Number(scan.schemaVersion.split('.')[1]))next.schemaVersion=scan.schemaVersion;
++  C.raiseVersion(next,scan.schemaVersion);
+   const canApply=target.scale.confidence==='estimated'&&!target.scale.calibration&&!target.scale.verification;
+   if(canApply)next.scale={...target.scale,note:'Incluye escaneo RoomPlan alineado por puertas. Medidas estimadas; verifica las cotas con referencias independientes.'};
+   const widthDifferenceMm=Math.abs(moving.door.widthMm-fixed.door.widthMm);
 diff --git a/js/surface-catalog.js b/js/surface-catalog.js
 index 609d5a8a..2953f932 100644
 --- a/js/surface-catalog.js
@@ -355,10 +372,10 @@ index d93861f5..61fa22d0 100644
   const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
   function crossing(a,b,c,d){return cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0;}
 diff --git a/js/tracing-ui.js b/js/tracing-ui.js
-index a9f51547..e2bdc124 100644
+index f33bc2af..f0085b7b 100644
 --- a/js/tracing-ui.js
 +++ b/js/tracing-ui.js
-@@ -223,7 +223,7 @@
+@@ -228,7 +228,7 @@
   $('#traceDistanceSave').onclick=()=>{try{const captured=points,im=image();apply(p=>distanceMode==='calibrate'?T.calibrate(p,im.id,captured[0],captured[1],Number($('#traceKnown').value)):T.verify(p,captured[0],captured[1],Number($('#traceKnown').value)));points=[];mode='navigate';$('#traceDistance').close();drawPoints();render();const v=project.scale.verification;status(distanceMode==='calibrate'?'Calibración guardada. Ahora mide una segunda cota independiente con «Segunda cota». La geometría en mm se conserva; revisa su correspondencia con la imagen.':v.status==='consistent'?`Segunda cota: ${v.measuredLengthMm} mm frente a ${v.knownLengthMm} mm indicados (${T.verificationText(v)}). Concuerda: ya puedes pulsar «Confirmar escala».`:`Segunda cota: ${v.measuredLengthMm} mm frente a ${v.knownLengthMm} mm indicados (${T.verificationText(v)}). No concuerda: la escala no se confirma; repite la medida con más zoom o recalibra.`);drawer('panel',true);}catch(e){$('#traceDistanceError').textContent=e.message;}};
   function openImage(createNew=true,name='Plano desde imagen'){newImage=createNew;newProjectName=name;$('#traceImageFile').click();}
   async function addImage(file,createNew,name=newProjectName,{transaction}={}){const session=transaction||FloorPlanApp.beginFileImport(),valid=()=>FloorPlanApp.fileImportCurrent(session),serial=++operation,current=project.id,initial=snap();let buffer;try{buffer=await file.arrayBuffer();}catch{throw Error('No se pudo leer la imagen. Vuelve a seleccionarla desde el dispositivo.');}if(!valid())return;const bytes=new Uint8Array(buffer),info=T.imageInfo(bytes,file.type,file.name);const rotation=T.orientationAngle(info);if(rotation===undefined)throw Error('El JPEG tiene orientación EXIF reflejada. Exporta una copia PNG con la orientación aplicada antes de importarlo.');await decode(bytes,info);const sha=await P.digest(bytes);if(!valid()||serial!==operation||current!==project.id||snap()!==initial)return;
@@ -654,6 +671,19 @@ index 00000000..06465b12
 +  facetCount,deviationBound,arcLength,trueGross,heightAtParam,minRadius,featuresOf,assertSavable,detectLoss,guardSave};
 + if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanWallGeometry=api;
 +})(globalThis);
+diff --git a/tests/browser.test.cjs b/tests/browser.test.cjs
+index 49d0b5d9..86620a67 100644
+--- a/tests/browser.test.cjs
++++ b/tests/browser.test.cjs
+@@ -89,7 +89,7 @@ test('opening and exporting a project does not add absent optional fields',async
+ test('file handler rejects invalid inputs atomically with visible element-specific errors',async t=>{
+   const {page,errors}=await pageFor(t);await page.click('.item[data-key="0:0"]');
+   const before=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),saved:localStorage.getItem('rubik-sota-floorplan-project-v1'),html:document.querySelector('#plan').outerHTML}));
+-  const mutations=[()=>'{',p=>{p.schemaVersion='2.0.0';return p;},p=>{p.objects.push({...p.objects[0]});return p;},p=>{p.openings[0].wallId='wal_missing';return p;},p=>{p.objects[0].size.widthMm=-1;return p;},p=>{p.objects[0].id='obj_bad" onmouseover="window.auditExecuted=1';return p;}];
++  const mutations=[()=>'{',p=>{p.schemaVersion='3.0.0';return p;},p=>{p.objects.push({...p.objects[0]});return p;},p=>{p.openings[0].wallId='wal_missing';return p;},p=>{p.objects[0].size.widthMm=-1;return p;},p=>{p.objects[0].id='obj_bad" onmouseover="window.auditExecuted=1';return p;}];
+   for(const [i,change]of mutations.entries()){
+     const value=change(Core.clone(example)),buffer=Buffer.from(typeof value==='string'?value:JSON.stringify(value));
+     await page.locator('#fileIn').setInputFiles({name:`invalid-${i}.json`,mimeType:'application/json',buffer});
 diff --git a/tests/op07-s1-contract.test.cjs b/tests/op07-s1-contract.test.cjs
 new file mode 100644
 index 00000000..391ca656
@@ -808,6 +838,3 @@ index 49b5faa6..16dc08bd 100644
    ['wrong units',p=>{p.units='m';return p;}],
    ['duplicate ID',p=>{p.objects.push(Core.clone(p.objects[0]));return p;}],
    ['broken wall reference',p=>{p.openings[0].wallId='wal_missing';return p;}],
--- 
-2.43.0
-

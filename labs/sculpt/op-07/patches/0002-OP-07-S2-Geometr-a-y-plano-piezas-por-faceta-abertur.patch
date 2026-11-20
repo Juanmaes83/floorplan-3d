@@ -1,4 +1,4 @@
-From 3b2de8756aa19013f4b476ca86a9d88cba1d69d0 Mon Sep 17 00:00:00 2001
+From c53a28971e7d4a38f62d70997f7b0343b42c0b4b Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
 Subject: [PATCH 2/9] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y=20?=
@@ -16,10 +16,10 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s2-geometry.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index cb7b202b..adbd163f 100644
+index 69966b03..2905cb5c 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -314,33 +314,69 @@
+@@ -361,33 +361,69 @@
      Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status,declared:!!w.structureSource});
      return rect;
    }
@@ -97,9 +97,9 @@ index cb7b202b..adbd163f 100644
      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
      for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
      const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
-@@ -363,6 +399,7 @@
+@@ -410,6 +446,7 @@
    const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
-   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
+   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
    if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 -  // OP-07 · curved and sloped walls (contract 1.13.0): the same exported object, extended per cut.
 +  // OP-07 · curved and sloped walls (contract 2.0): the same exported object, extended per cut.
@@ -196,6 +196,3 @@ index 572342c2..60d58719 100644
   p.openings=[];p.rooms=[];p.objects=[];p.measurements=[];return p;}
 -module.exports={clone,base,longest,curved,sloped,lone};
 +module.exports={clone,base,longest,curved,sloped,lone,len};
--- 
-2.43.0
-

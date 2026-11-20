@@ -1,4 +1,4 @@
-From 28baf5b9ac18e97539fc136d0c9bcc599f472de7 Mon Sep 17 00:00:00 2001
+From 480b90487d1bdcdefd1f82ce3e7da05ae7028d53 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:27:19 +0000
 Subject: [PATCH 8/9] =?UTF-8?q?OP-07=20S5b=20=C2=B7=20Edici=C3=B3n=20visua?=
@@ -17,18 +17,18 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s5b-edit-ui.browser.test.cjs
 
 diff --git a/index.html b/index.html
-index a01c1d5d..995f29df 100644
+index 752d0397..bb16a917 100644
 --- a/index.html
 +++ b/index.html
-@@ -173,6 +173,7 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec
- .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
- .stats div{background:var(--surface-sunken,#faf6ef);border-radius:8px;padding:8px}
- .stats small{display:block;color:var(--muted);font-size:11px}
+@@ -178,6 +178,7 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec
+ .wall-faces{margin-top:10px}.wall-faces-title{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--ink,inherit)}
+ .wall-faces-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.wall-faces-stats .big{white-space:nowrap;font-variant-numeric:tabular-nums}.wall-faces-why{margin:6px 0;font-size:12px}
+ #panel .wall-faces .btn{min-height:44px}
 +#panel .wall-shape .btn{min-height:44px}.wall-shape-status:empty{display:none}.wall-shape-status{margin:6px 0;font-size:12px;color:var(--danger,#a3261b)}
  #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
    padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
  #toast.show{opacity:1;transform:translateX(-50%)}
-@@ -1532,8 +1533,18 @@ function renderSel(){
+@@ -1553,8 +1554,18 @@ function renderSel(){
          stroke="#fff" stroke-width="${3*k}" paint-order="stroke">${f.w} × ${f.d}</text>`;
      }
    } else if (ui.sel?.kind === 'wall'){
@@ -49,7 +49,7 @@ index a01c1d5d..995f29df 100644
    } else if (ui.sel?.kind === 'room'){
      const r = geometry.rooms.find(r => r.id === ui.sel.id);
      s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
-@@ -1759,14 +1770,68 @@ function bindWallStructure(root, declare){
+@@ -1780,14 +1791,68 @@ function bindWallStructure(root, declare){
    source.onchange = () => declare(type.value, source.value);
  }
  function declareWall(id, structure, source){ mutate(() => { const next = Core.declareWallStructure(project, id, structure, source); project.walls = next.walls; project.schemaVersion = next.schemaVersion; refreshProject(); }); toast('Tipo declarado del muro actualizado (dato orientativo).'); }
@@ -117,10 +117,10 @@ index a01c1d5d..995f29df 100644
  }
 -function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
 +function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); bindWallShape(id); }
- function roomPanel(r){
-   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
-   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
-@@ -2029,6 +2094,12 @@ function endDrag(cancel){
+ // UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
+ // está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
+ function roomSuggestionOf(source){
+@@ -2113,6 +2178,12 @@ function endDrag(cancel){
      if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else if (d.wall){ select({kind:'wall', id:d.wall}); showProperties(); } else { select(d.room ? {kind:'room', id:d.room} : null); if (d.room) showProperties(); } }
      return;
    }
@@ -133,7 +133,7 @@ index a01c1d5d..995f29df 100644
    if (d.moved){ commit(d.before); renderAll(); }
    else if (d.kind === 'move' && !cancel) showProperties();
  }
-@@ -2067,7 +2138,11 @@ svg.addEventListener('pointerdown', e => {
+@@ -2151,7 +2222,11 @@ svg.addEventListener('pointerdown', e => {
      renderMeasure(); return;
    }
    const h = t.closest('[data-handle]');
@@ -146,7 +146,7 @@ index a01c1d5d..995f29df 100644
      drag = {kind:h.dataset.handle, id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false};
    } else if (ui.tool === 'demolish' && t.closest('[data-wall]')){
      toggleWall(t.closest('[data-wall]').dataset.wall); return;
-@@ -2110,6 +2185,18 @@ svg.addEventListener('pointermove', e => {
+@@ -2194,6 +2269,18 @@ svg.addEventListener('pointermove', e => {
      drag.moved = true; svg.classList.add('panning');
      view.x0 = drag.x0 - (e.clientX-drag.sx)/view.s; view.y0 = drag.y0 - (e.clientY-drag.sy)/view.s; applyView(); return;
    }
@@ -261,10 +261,10 @@ index 00000000..e2c8f212
 + }finally{await context.close();}
 +});
 diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
-index b7100cf1..4e2b0b70 100644
+index 4f924edb..6a625fc6 100644
 --- a/tests/regression-partitions.json
 +++ b/tests/regression-partitions.json
-@@ -13,6 +13,7 @@
+@@ -16,6 +16,7 @@
    "tests/evolution-demo.browser.test.cjs",
    "tests/op07-s4-3d.browser.test.cjs",
    "tests/op07-s5-edit.browser.test.cjs",
@@ -272,6 +272,3 @@ index b7100cf1..4e2b0b70 100644
    "tests/home-demos.browser.test.cjs",
    "tests/e2-comparativas.browser.test.cjs",
    "tests/h01-dossier-inventario.browser.test.cjs",
--- 
-2.43.0
-

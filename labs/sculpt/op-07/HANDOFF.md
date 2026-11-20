@@ -19,6 +19,19 @@ Suite pura con la serie aplicada: **1501/1501**. Navegador OP-07 (S4, S4b, S5, S
 
 Antes de S4b había 4,28 mm de costura por junta; ahora 0.
 
+## Bloque 1 · Serie rebasada sobre master `bf131c30` (SMART: K4, K9, UX-03, AST-01, K13) — 20/11/2026
+- Fuente: rama `claude/op07-serie-v3` (la anterior, `claude/op07-serie-local@04b8e6f2` sobre `02712b51`, se conserva intacta como referencia verificada).
+- S1 dejó de aplicarse sobre el master nuevo. Hubo tres conflictos y una regresión latente:
+  - **K4** (`index.html`, panel de estancia) añadió 3 elevaciones manuales `'1.6.0'`. Ahora pasan por `Core.raiseVersion`.
+  - **UX-03** (CSS y `bindWallPanel`): se conserva entero y S5b añade `bindWallShape(id)`.
+  - **RoomPlan** (`js/scan-alignment.js:117`, nuevo en master) comparaba solo la minor. Con un destino 2.0 y un escaneo 1.x **habría rebajado** el documento a 1.x, y la validación lo habría rechazado. Ahora usa `C.raiseVersion(next, scan.schemaVersion)`. La prueba de guarda de S1 lo detectaba.
+  - `tests/browser.test.cjs` usaba `2.0.0` como versión mayor desconocida. Pasa a `3.0.0` con la misma garantía (rechazo atómico) y sin relajar ninguna aserción. Antes no se ejecutaba porque faltaba `CHROME`.
+- Resultados:
+  - Suite «pura» (con `CHROME`): master 1525/1527 (0 fallos, 2 omitidas); con la serie 1572 pruebas, 0 fallos.
+  - `apply-and-test.cjs`: 45/45.
+  - Navegador, OP-07 junto con K4, UX-03 y AST-01: 17/17 en Chromium.
+- A0 · WebKit: este contenedor no tiene WebKit ni Firefox (solo Chromium). La reproducción del residual ResizeObserver es de Codex, con la instrumentación de `labs/sculpt/op-07/a0/` (bloque 2).
+
 ## Pendiente (en este orden)
 1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
    Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.

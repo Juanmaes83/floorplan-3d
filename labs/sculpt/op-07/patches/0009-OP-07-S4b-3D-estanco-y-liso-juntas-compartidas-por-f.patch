@@ -1,4 +1,4 @@
-From 04b8e6f29d48e4dfac02789b03506eaeec0369f5 Mon Sep 17 00:00:00 2001
+From 130a21fbcf7b2ec09363d94cdb65b25664ab7ec6 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:37:14 +0000
 Subject: [PATCH 9/9] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y=20l?=
@@ -20,10 +20,10 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s4b-seams.test.cjs
 
 diff --git a/index.html b/index.html
-index 995f29df..a775dba6 100644
+index bb16a917..34472779 100644
 --- a/index.html
 +++ b/index.html
-@@ -3611,14 +3611,30 @@ function wallBox(rect, yb, yt, m){
+@@ -3733,14 +3733,30 @@ function wallBox(rect, yb, yt, m){
    // UVs continuous along the whole wall; it sits at the same centre and angle as a box, so everything else is unchanged.
    const sloped=Core.pieceMesh(rect,yb,yt);
    if (sloped) {
@@ -58,7 +58,7 @@ index 995f29df..a775dba6 100644
      return o;
    }
    const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
-@@ -3852,11 +3868,14 @@ function buildArch(other){
+@@ -3974,11 +3990,14 @@ function buildArch(other){
      colliders.push({x:wx(w.center[0]),z:wz(w.center[1]),angle:w.angle,length:M(w.spanMm),thickness:M(w.thickness)});
    });
    [...geometry.doors.map(d=>d.rect),...geometry.slides.map(d=>d.rect),...geometry.voids].forEach(r=>{
@@ -75,10 +75,10 @@ index 995f29df..a775dba6 100644
      const gTop = Math.min(head, top); if (gTop <= sill) return;
      const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
 diff --git a/js/project-core.js b/js/project-core.js
-index f78790a3..0944936e 100644
+index 674ab8c6..a9d7f1cc 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -317,20 +317,39 @@
+@@ -364,20 +364,39 @@
    // OP-07 · S2: plan pieces of a curved or sloped wall. One straight sub-wall per facet of the single geometric core
    // (same facets as 3D, measurements and DXF), solid where no opening is, so every consumer of geometry().walls keeps
    // drawing rectangles. Each piece carries its heights at both ends (heightStart/heightEnd, m) for sloped walls.
@@ -127,7 +127,7 @@ index f78790a3..0944936e 100644
      }
      return pieces;
    }
-@@ -351,10 +370,31 @@
+@@ -398,10 +417,31 @@
    // OP-07 · S4: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
    // (heightStart → heightEnd) and the texture running continuously along the whole wall (alongMm). Positions in mm,
    // faces in BoxGeometry order (+x, −x, top, bottom, +z, −z). null for a piece of a straight, level wall (a box).
@@ -161,7 +161,7 @@ index f78790a3..0944936e 100644
    }
    // OP-07 · S3b: the CANONICAL RING of a room. A room is stored as its polygon of wall faces; where an edge lies on the
    // face of a curved wall (it was drawn against the wall's chord), the ring follows that face instead: the mitred offset
-@@ -406,11 +446,11 @@
+@@ -453,11 +493,11 @@
      return Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
    }
    function geometry(p) {
@@ -175,7 +175,7 @@ index f78790a3..0944936e 100644
        // Merge overlapping intervals for the solid portions; opening visuals retain their IDs.
        let at=0;
        for (const o of openings) {
-@@ -420,7 +460,8 @@
+@@ -467,7 +507,8 @@
          const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
          Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
          // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
@@ -185,7 +185,7 @@ index f78790a3..0944936e 100644
          if(w.status==='demolished') continue;
          if(o.kind==='window') windows.push(rect);
          else if(o.kind==='door') {
-@@ -439,7 +480,7 @@
+@@ -486,7 +527,7 @@
      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
      for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
      const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
@@ -194,7 +194,7 @@ index f78790a3..0944936e 100644
    }
    // Declared wall type (contract 1.5.0): what a person states about a wall and where that statement comes from. It is
    // never deduced from thickness, position or drawing, and it is not a structural verification. Declaring raises only
-@@ -508,4 +549,5 @@
+@@ -555,4 +596,5 @@
    Object.assign(api,{pieceMesh});   // OP-07 S4
    Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
    Object.assign(api,{roomRing});   // OP-07 S3b
@@ -325,10 +325,10 @@ index 00000000..92ab77c9
 + assert.ok(P.some(r=>r.seamStart)&&P.some(r=>!r.seamEnd),'hay juntas internas y extremos reales');
 +});
 diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
-index 4e2b0b70..53df312c 100644
+index 6a625fc6..67a18743 100644
 --- a/tests/regression-partitions.json
 +++ b/tests/regression-partitions.json
-@@ -14,6 +14,7 @@
+@@ -17,6 +17,7 @@
    "tests/op07-s4-3d.browser.test.cjs",
    "tests/op07-s5-edit.browser.test.cjs",
    "tests/op07-s5b-edit-ui.browser.test.cjs",
@@ -336,6 +336,3 @@ index 4e2b0b70..53df312c 100644
    "tests/home-demos.browser.test.cjs",
    "tests/e2-comparativas.browser.test.cjs",
    "tests/h01-dossier-inventario.browser.test.cjs",
--- 
-2.43.0
-

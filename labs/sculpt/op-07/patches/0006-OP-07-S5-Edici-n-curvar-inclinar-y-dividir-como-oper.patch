@@ -1,4 +1,4 @@
-From 5fb43dfce0401e8911019d4b71854fdab6294c4b Mon Sep 17 00:00:00 2001
+From 939e040eec62bb592ca4386add9c49d382599c1f Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
 Subject: [PATCH 6/9] =?UTF-8?q?OP-07=20S5=20=C2=B7=20Edici=C3=B3n:=20curva?=
@@ -18,10 +18,10 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s5-edit.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index 4518bb2a..68e30421 100644
+index 5c0a344f..e5546ef7 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -410,6 +410,49 @@
+@@ -457,6 +457,49 @@
      validate(next);return next;
    }
    function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
@@ -70,8 +70,8 @@ index 4518bb2a..68e30421 100644
 +  }
    function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
    const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
-   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
-@@ -419,4 +462,5 @@
+   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
+@@ -466,4 +509,5 @@
    Object.assign(api,{wallOutline});   // OP-07 S2
    Object.assign(api,{wallFootprints});   // OP-07 S6
    Object.assign(api,{pieceMesh});   // OP-07 S4
@@ -167,10 +167,10 @@ index 00000000..b0753bcf
 + assert.ok(Core.guardSave(project,bad).issues.some(i=>i.code==='curve-lost'));
 +});
 diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
-index 71c66cc0..b7100cf1 100644
+index 54307536..4f924edb 100644
 --- a/tests/regression-partitions.json
 +++ b/tests/regression-partitions.json
-@@ -12,6 +12,7 @@
+@@ -15,6 +15,7 @@
    "tests/building.browser.test.cjs",
    "tests/evolution-demo.browser.test.cjs",
    "tests/op07-s4-3d.browser.test.cjs",
@@ -178,6 +178,3 @@ index 71c66cc0..b7100cf1 100644
    "tests/home-demos.browser.test.cjs",
    "tests/e2-comparativas.browser.test.cjs",
    "tests/h01-dossier-inventario.browser.test.cjs",
--- 
-2.43.0
-

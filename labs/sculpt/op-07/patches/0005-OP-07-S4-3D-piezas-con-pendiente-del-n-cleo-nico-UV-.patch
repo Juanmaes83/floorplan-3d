@@ -1,4 +1,4 @@
-From 4bfd699a06c86ff264d644526a8d45f9698423cc Mon Sep 17 00:00:00 2001
+From 32e19d1176f5df67922b6db89bc9bc3833ed3f5c Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
 Subject: [PATCH 5/9] =?UTF-8?q?OP-07=20S4=20=C2=B7=203D:=20piezas=20con=20?=
@@ -19,10 +19,10 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s4-3d.test.cjs
 
 diff --git a/index.html b/index.html
-index 0432f8f8..a01c1d5d 100644
+index d34ea1ae..752d0397 100644
 --- a/index.html
 +++ b/index.html
-@@ -3520,6 +3520,20 @@ function wallBox(rect, yb, yt, m){
+@@ -3642,6 +3642,20 @@ function wallBox(rect, yb, yt, m){
    else if(exteriorByWall.get(rect.id)==='facade')m=facadeMat;
    const [x0,y0,x1,y1]=rect;
    if (yt - yb <= .001) return;
@@ -43,7 +43,7 @@ index 0432f8f8..a01c1d5d 100644
    const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
    if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
    o.userData.wallId=rect.id;
-@@ -5486,6 +5500,8 @@ function presentationStoryInfo(){
+@@ -5608,6 +5622,8 @@ function presentationStoryInfo(){
  
  window.View3D = {
    invalidate:requestFrame,
@@ -53,10 +53,10 @@ index 0432f8f8..a01c1d5d 100644
    get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
    // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
 diff --git a/js/project-core.js b/js/project-core.js
-index 2a7f3c99..4518bb2a 100644
+index cabee845..5c0a344f 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -328,7 +328,7 @@
+@@ -375,7 +375,7 @@
        if (at<span.to) solid.push([at,span.to]);
        for (const [a,b] of solid) if (b-a>1e-6) {
          const rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
@@ -65,7 +65,7 @@ index 2a7f3c99..4518bb2a 100644
          pieces.push(rect);
        }
      }
-@@ -348,6 +348,14 @@
+@@ -395,6 +395,14 @@
      const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
      return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
    }
@@ -80,7 +80,7 @@ index 2a7f3c99..4518bb2a 100644
    // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
    function wallFootprints(w) {
      if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
-@@ -367,6 +375,8 @@
+@@ -414,6 +422,8 @@
          const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
          const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
          Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
@@ -89,7 +89,7 @@ index 2a7f3c99..4518bb2a 100644
          if(w.status==='demolished') continue;
          if(o.kind==='window') windows.push(rect);
          else if(o.kind==='door') {
-@@ -408,4 +418,5 @@
+@@ -455,4 +465,5 @@
    Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
    Object.assign(api,{wallOutline});   // OP-07 S2
    Object.assign(api,{wallFootprints});   // OP-07 S6
@@ -161,10 +161,10 @@ index 00000000..9e92ac4b
 + assert.ok(near(Math.min(...ys),r.head*1000)&&near(Math.max(...ys),Math.max(r.heightStart,r.heightEnd)*1000));
 +});
 diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
-index 62c3f8db..71c66cc0 100644
+index 02e2990c..54307536 100644
 --- a/tests/regression-partitions.json
 +++ b/tests/regression-partitions.json
-@@ -11,6 +11,7 @@
+@@ -14,6 +14,7 @@
    "tests/variants.browser.test.cjs",
    "tests/building.browser.test.cjs",
    "tests/evolution-demo.browser.test.cjs",
@@ -172,6 +172,3 @@ index 62c3f8db..71c66cc0 100644
    "tests/home-demos.browser.test.cjs",
    "tests/e2-comparativas.browser.test.cjs",
    "tests/h01-dossier-inventario.browser.test.cjs",
--- 
-2.43.0
-

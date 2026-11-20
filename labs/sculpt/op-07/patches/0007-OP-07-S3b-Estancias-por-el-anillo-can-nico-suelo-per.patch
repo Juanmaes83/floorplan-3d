@@ -1,4 +1,4 @@
-From 8cd8c8823b32ac52d6052d25db3f61253d822650 Mon Sep 17 00:00:00 2001
+From dba3430e9ffdb65e77a524c1fb8d41d7ff2cf906 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:23:33 +0000
 Subject: [PATCH 7/9] =?UTF-8?q?OP-07=20S3b=20=C2=B7=20Estancias=20por=20el?=
@@ -21,10 +21,10 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s3b-rooms.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index 68e30421..f78790a3 100644
+index e5546ef7..674ab8c6 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -356,6 +356,50 @@
+@@ -403,6 +403,50 @@
      const top=h=>Math.min(h,yt)*1000;
      return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
    }
@@ -75,7 +75,7 @@ index 68e30421..f78790a3 100644
    // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
    function wallFootprints(w) {
      if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
-@@ -389,9 +433,9 @@
+@@ -436,9 +480,9 @@
        }
        if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
      }
@@ -87,7 +87,7 @@ index 68e30421..f78790a3 100644
      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
      for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
      const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
-@@ -463,4 +507,5 @@
+@@ -510,4 +554,5 @@
    Object.assign(api,{wallFootprints});   // OP-07 S6
    Object.assign(api,{pieceMesh});   // OP-07 S4
    Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
@@ -322,6 +322,3 @@ index 00000000..93476e8e
 + assert.ok(f.segments.some(s=>s.wallId===wall.id&&s.curved&&s.complete));assert.equal(f.pendingCurvedWalls,undefined);
 + assert.ok(near(f.missingBoundaryM,Q.room(F.base(),'rom_living').wallFaces.missingBoundaryM,1e-9),'solo falta el lado abierto que ya faltaba');
 +});
--- 
-2.43.0
-
