@@ -1,4 +1,4 @@
-# OP-07 · HANDOFF para continuar en otra sesión (20/11/2026)
+# OP-07 · HANDOFF para continuar en otra sesión (20/11/2026, serie v3: 10 parches sobre `bf131c30`)
 
 ## Estado
 Serie de **9 parches** en `labs/sculpt/op-07/patches/` (orden numérico), generada desde la rama LOCAL `op07-v2`
@@ -122,21 +122,13 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
 - **Delta acwall de Codex:** no lo he podido cotejar. El conector de GitHub falla en esta sesión (proxy 403) y no hay una rama con ese nombre en el transporte git. Pendiente de que Codex indique la ref.
 - **Nota operativa:** las capturas de f2, f5 y f6 ocupan unos 185 MB y llenaron el disco de este contenedor. Se borran después de extraer la evidencia.
 
-## Pendiente (en este orden)
-1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
-   Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.
-   Delta pendiente en `scripts/interop/scene-fidelity.cjs`: para muros con forma usar `js/wall-geometry-core.js`
-   (grosor/longitud por faceta, altura = máx(heightMm, heightEndMm) y por extremos, rayo del hueco por la normal de la
-   faceta), y suelo esperado = `Core.roomRing(...).points`. Añadir escenario `f7-curved` a
-   `tests/fixtures/scene-blender/build.cjs` y `scene-run.cjs`. `bpy==5.2.1` se instalaba en `/tmp/claude-0/bpyenv`
-   (puede no existir en la nueva sesión: `python3 -m venv V && V/bin/pip install bpy==5.2.1`). Entregar el delta como
-   parche en `labs/sculpt/op-07/blender/`.
-2. **Persistencia (S7):** conectar `Core.guardSave(prev confirmado, siguiente, intent)` al camino de escritura F0.2b
-   (`js/persistence-editor.js`) en copia aislada; `FloorPlanApp.lastEditIntent` ya lo rellenan S5b. Probar: lector v1
-   (master) no sobrescribe un 2.0, importación, reapertura, deshacer, recuperación, edificios, exportación.
-3. **DXF:** unidades/huecos/longitud/relectura ya probados (S6); falta validación CAD externa (`tests/g02-dxf-cad.py`)
-   y documentar el fallo preexistente «G-02 downloads only the active building level» (falla en master sin OP-07).
-4. Previews actualizadas (`integration/capture-visual.cjs`), actualizar `INTEGRACION.md` con S3b/S4b/S5b, push.
+## Pendiente (actualizado 20/11/2026, al cierre de los bloques 1–7)
+Hecho en esta sesión: rebase sobre `bf131c30`, roomRing tras dividir, guardSave con WALL_PATH, S7 en F0.2b, DXF, Blender f7 y previews. **Inventario, GO/NO-GO, plan y rollback: [INTEGRACION.md](INTEGRACION.md).**
+1. A0 · WebKit: Codex reproduce con `a0/ro-trace.init.js` y Claude corrige con la traza. Una sola propagación a #274–#279 después del cierre.
+2. Codex: auditar las decisiones nuevas de INTEGRACION.md §4 (alcance de `saveGate`, intención por paso, cuña de las caras).
+3. Firefox/WebKit/dispositivos, aceptación visual y aceptación CAD en dos programas: no disponibles en este contenedor.
+4. Cotejar el delta *acwall* de Codex cuando indique la ref.
+5. Siguiente misión condicional: diagnóstico de OP-05 (`codex/sculpt-op05-lab@a722f9dd`).
 
 ## A0
 `claude/a0-writer-fence@112eaf52` pendiente de Firefox/WebKit por Codex (#273). No propagar a #274–#279.
