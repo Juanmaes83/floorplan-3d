@@ -1,5 +1,7 @@
 # RUBIK SOTA — Matriz de trazabilidad reconciliada v1.12
 
+> **Corte 20/11/2026 · OP-11 / F3.** [OP-11 lote 01 #294](https://github.com/Juanmaes83/floorplan-3d/pull/294) integrado en master `9eb7c5f0bffb826fe8789c98d655172befde5da6`, árbol `3af6b5aab9bdde2d24a9b4935332ac43cc106fcd`. CI de PR 93 aprobados y una omisión prevista. [Production READY para el SHA exacto](https://vercel.com/juanma-espinosas-projects/floorplan-3d/47cKosGTbB4vox1F7HwjXk1JnNXC). La CI posfusión se acredita por separado. F3 fija un plazo global de 12 s. El banco original vuelve a entregarse con bytes idénticos bajo 2,5 s de permiso y 6 s de GLB. [Diagnóstico, parche y regresiones](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/tree/codex/evidencia-integracion-20261120/COMPONENTES/EVIDENCIA-INTEGRACION-20261120/CONTINUIDAD-OPERATIVA/SCENE-F3-PRESUPUESTO-20261120).
+
 **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` (18/11/2026), con las PR abiertas #251–#260 consultadas en sus SHA del mismo día. **Autor:** Claude Code, por mandato del propietario. **Estado:** propuesta documental; no autoriza integración, despliegue, activación ni gasto.
 
 **Actualización de integración:** las filas de ENT-04 y el seguimiento de §6 reflejan [#259 en `master@163df68`](https://github.com/Juanmaes83/floorplan-3d/commit/163df68e83a80ddf11a008d573ee257d51c1821f).

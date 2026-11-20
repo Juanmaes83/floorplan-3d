@@ -1,5 +1,7 @@
 # Inventario técnico del repositorio madre
 
+> **Corte 20/11/2026 · OP-11 / F3.** [OP-11 lote 01 #294](https://github.com/Juanmaes83/floorplan-3d/pull/294) integrado en master `9eb7c5f0bffb826fe8789c98d655172befde5da6`, árbol `3af6b5aab9bdde2d24a9b4935332ac43cc106fcd`. CI de PR 93 aprobados y una omisión prevista. [Production READY para el SHA exacto](https://vercel.com/juanma-espinosas-projects/floorplan-3d/47cKosGTbB4vox1F7HwjXk1JnNXC). La CI posfusión se acredita por separado. F3 fija un plazo global de 12 s. El banco original vuelve a entregarse con bytes idénticos bajo 2,5 s de permiso y 6 s de GLB. [Diagnóstico, parche y regresiones](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/tree/codex/evidencia-integracion-20261120/COMPONENTES/EVIDENCIA-INTEGRACION-20261120/CONTINUIDAD-OPERATIVA/SCENE-F3-PRESUPUESTO-20261120).
+
 **SHA:** `46174d6918e336119a79f5bda9fd2733aa5464c4`. «Verificada» indica código + entrada + prueba del corte indicado, no disponibilidad en el alias público ni validación de todos los submodos. La lista de scripts en `index.html:2520–2616,5454–5533` es una prueba de conexión, no de funcionamiento por sí sola.
 
 | Capacidad y estado | Archivos/entrada UI | Datos/dependencias | Pruebas y límite |
