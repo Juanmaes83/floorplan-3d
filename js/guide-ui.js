@@ -50,11 +50,12 @@
  function facts(){return {saved:saved(),imagesReady:!!project.sourceImages?.length&&project.sourceImages.every(i=>FloorPlanTraceUI.imageReady(i.id))};}
  function progress(){return G.evaluate(project,state(),facts());}
  const header=$('header'),searchBtn=btn('actionSearchBtn','',()=>openSearch(),header);searchBtn.setAttribute('aria-haspopup','dialog');
+ const searchPrompt=el('span',undefined,searchBtn,'guide-search-prompt'),searchCompact=el('span',undefined,searchBtn,'guide-search-compact');
  const homeBtn=btn('welcomeBtn','',()=>openWelcome(),header);homeBtn.title=tx('Volver a la bienvenida','Open welcome','打开欢迎页');
  const resume=btn('guideResume','',()=>{state().closed=false;state().fullTools=false;fullEditor=false;store();render();},header);
  // The guided header keeps what the journey needs: the level switch of a building, the 3D modes (in 3D only) and the
  // presentation entry (secondary here: the guide's own button is the dominant action).
- const essentials=new Set(['uploadPlanBtn','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume','levelBar','modes3d','roofGroup','presentationBtn']);
+ const essentials=new Set(['uploadPlanBtn','roomPlanJoinQuick','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume','levelBar','modes3d','roofGroup','presentationBtn']);
  for(const child of header.children)if(!essentials.has(child.id)&&!child.classList.contains('brand')&&!child.querySelector('#undo'))child.classList.add('advanced-control');
  const bar=el('section',undefined,undefined,'guide-bar');bar.id='guideBar';bar.setAttribute('aria-label','Objetivo y progreso');header.after(bar);
  const top=el('div',undefined,bar,'guide-top'),identity=el('div',undefined,top,'guide-identity');
@@ -351,6 +352,7 @@
  async function execute(a,fromWelcome=false){
   if(a.id==='upload')return beginUpload();if(a.id==='blank')return createOwn('create');if(a.id==='example')return example();
   if(fromWelcome)closeWelcome();
+  if(a.id==='joinScan')return window.FloorPlanUpload?.pickJoin();
   if(a.id==='presentation')return window.FloorPlanPresentation?.open();
   if(a.id==='levels')return openLevels();
   if(a.id==='missing'){state().closed=false;render();return openDetails();}
@@ -484,7 +486,9 @@
  }
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
-  searchBtn.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
+  searchPrompt.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');
+  searchCompact.textContent=tx('⌕ Buscar','⌕ Search','⌕ 搜索');
+  resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
   homeBtn.textContent=tx('← Inicio','← Home','← 首页');homeBtn.title=tx('Volver al inicio sin perder el proyecto','Return home without losing the project','返回首页并保留项目');
   $('#guidePrevious').textContent=tx('← Paso anterior','← Previous step','← 上一步');
   $('#guideGoalChange').textContent=tx('Cambiar objetivo','Change goal','更改目标');$('#guideDetails').textContent=tx('Tareas y ayuda','Tasks & help','任务及帮助');$('#guideClose').textContent='×';$('#guideClose').setAttribute('aria-label',tx('Cerrar guía','Close guide','关闭指南'));
