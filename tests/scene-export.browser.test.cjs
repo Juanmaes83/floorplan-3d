@@ -71,6 +71,32 @@ test('Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportac
   assert.ok(d.metrics.prepareMs >= 1000 || d.metrics.loadMs >= 6000, 'the delay was actually exercised');
 });
 
+test('El encuadre observado conserva el centro del plano al entrar en 3D con un resize pendiente', { timeout: 240000 }, async () => {
+  const input = path.join(fx, 'f3-openings.json'), out = path.join(tmp, 'pending-resize');
+  let expected;
+  await Capture.capture(input, out, { via: 'api', enter3D: async page => {
+    const height = await page.evaluate(() => {
+      const stage = document.querySelector('#stage'), height = stage.clientHeight;
+      stage.style.height = (height - 24) + 'px';
+      return height;
+    });
+    await page.waitForFunction(height => {
+      const svg = document.querySelector('#plan');
+      return svg.clientHeight === height - 24 && Math.abs(svg.viewBox.baseVal.height * view.s - svg.clientHeight) < 0.01;
+    }, height);
+    expected = await page.evaluate(async () => {
+      const svg = document.querySelector('#plan'), box = svg.viewBox.baseVal;
+      const center = FloorPlanApp.geometry.center;
+      const target = [(box.x + box.width / 2 - center.x) / 1000, 0, (box.y + box.height / 2 - center.y) / 1000];
+      document.querySelector('#stage').style.removeProperty('height');
+      await setView('3d');
+      return target.map(value => Number(value.toFixed(6)) || 0);
+    });
+  } });
+  const { view: { camera } } = J(path.join(out, 'scene.json'));
+  assert.deepEqual(camera.target, expected, 'la captura conserva el centro del plano visible antes del resize');
+});
+
 test('Robustez · modelo ausente: la escena se entrega con su representación genérica y lo declara', { timeout: 240000 }, async () => {
   const r = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'blocked'), { via: 'api', blockAssets: true });
   assert.ok(r.invariants.blockedAssetRequests >= 1);

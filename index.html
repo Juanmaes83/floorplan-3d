@@ -2053,6 +2053,7 @@ function fitView(){
   if (!(W > 0 && H > 0)) { lastW = lastH = 0; return; }
   view.s = Math.min(W/BOUNDS.w, H/BOUNDS.h);
   view.x0 = BOUNDS.x - (W/view.s - BOUNDS.w)/2; view.y0 = BOUNDS.y - (H/view.s - BOUNDS.h)/2;
+  lastW = W; lastH = H; // This fit already accounts for the current viewport size.
   applyView();
 }
 function zoomAt(ns, mx, my){
@@ -2525,7 +2526,7 @@ let lastW = 0, lastH = 0;
 new ResizeObserver(() => {
   const w = svg.clientWidth, h = svg.clientHeight; if (!w) return;
   if (!lastW) fitView();
-  else { view.x0 -= (w - lastW)/2/view.s; view.y0 -= (h - lastH)/2/view.s; applyView(); }
+  else if (w !== lastW || h !== lastH) { view.x0 -= (w - lastW)/2/view.s; view.y0 -= (h - lastH)/2/view.s; applyView(); }
   lastW = w; lastH = h;
 }).observe(svg);
 
@@ -4163,7 +4164,14 @@ const clamp01 = t => Math.max(0, Math.min(1, t));
 const pose = (t, p) => ({t, p});
 // 与当前 2D 视口完全重合的正俯视位姿：透视相机在该高度下，地面可视高度 = 2D 视口高度
 function planPose(){
-  const cx = view.x0 + SW()/2/view.s, cy = view.y0 + SH()/2/view.s, visH = SH()/view.s/1000;
+  // A viewport change can be laid out before the plan observer commits its new viewBox.
+  // The SVG is centred on the committed viewBox at either size (xMidYMid meet).
+  const box = svg.viewBox.baseVal, width = SW(), height = SH();
+  const ready = box.width > 0 && box.height > 0;
+  const cx = ready ? box.x + box.width/2 : view.x0 + width/2/view.s;
+  const cy = ready ? box.y + box.height/2 : view.y0 + height/2/view.s;
+  const scale = ready && width > 0 && height > 0 ? Math.min(width/box.width, height/box.height) : view.s;
+  const visH = height/scale/1000;
   const dist = visH / 2 / Math.tan(FOV/2*Math.PI/180), t = new THREE.Vector3(wx(cx), 0, wz(cy));
   return pose(t, new THREE.Vector3(t.x, dist, t.z + 1e-4));
 }
