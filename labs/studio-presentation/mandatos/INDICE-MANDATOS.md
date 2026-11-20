@@ -14,6 +14,7 @@
 | E3 / K10 / ENT-03 (20/11/2026) | — (recibido en el chat del propietario; no se dispone del archivo original, así que no se copia ni se resume como si lo fuera) | — | — | GO de preparación funcional en laboratorio: contratos C1–C4 con Codex, 43 fuentes contra master `130ba24`, selector E3, vigencia N05, Blender/Simulator solo contrato, UX, pruebas del delta y §4.1 | Ejecutado como laboratorio hasta VALIDADO: `reports/22-E3-K10-ENT03-CONTRATOS-SELECTOR.md` y `reports/22b-MATRIZ-43-FUENTES.md`. Sus requisitos se suman a los anteriores |
 | CC1 · Cierre técnico E3 / K10 / ENT-03 (20/11/2026) | — (recibido en el chat; sin archivo original, no se copia) | — | — | Cierre diferencial de los hallazgos de auditoría E3-A a E3-D y §8 | Hecho en laboratorio: `reports/23-E3-CIERRE-TECNICO.md`. Se suma a los anteriores |
 | CC1 · Cierre final E3 y transferencia a Codex (20/11/2026) | — (recibido en el chat; sin archivo original) | — | — | Residual E3-D: identidad real de las tomas; handoff definitivo de integración | Hecho: §7 del informe 23 y `HANDOFF-INTEGRACION-CODEX-E3.md`. E3 detenido en el laboratorio |
+| CC1 · Studio E4 / K11 / K12 / ENT-05 (20/11/2026) | — (recibido en el chat; sin archivo original) | — | — | K11 (resultado visual trazable), después K12, Architecture Book y FF&E | Primer corte K11 en `lab/studio-e4-k11`: `reports/24-E4-K11-RESULTADO-VISUAL.md`. K12/AB/FF&E pendientes de la auditoría de K11 |
 
 ## Hallazgos externos de continuidad
 

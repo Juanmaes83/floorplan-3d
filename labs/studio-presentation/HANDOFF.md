@@ -1,6 +1,35 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · E3 CERRADO EN LABORATORIO y transferido a Codex (20/11/2026)
+## Vigente · Studio E4 / K11 (rama `lab/studio-e4-k11`, 20/11/2026)
+
+**Base:** `78a43dc` (cierre E3, sin modificar). Contrastado con la candidata de Codex `64f8837` (`takeId`, `get` sin creación) y con master `4ea7cb3`.
+
+**Informe:** `reports/24-E4-K11-RESULTADO-VISUAL.md`.
+
+**Delta:**
+
+| Archivo | Qué es |
+|---|---|
+| `k11/k11-core.js` | Contrato `rubik-lab-visual-result/1`, clave con `takeId`, verificación de bytes y vigencia, adaptador AISLADO de conservación, generador cancelable, textos ES/EN/ZH |
+| `k11/k11-lab-ui.js` | Demostración en la copia aislada (proveedor SIMULADO, base propia `rubik-lab-k11-v1`) |
+| `tools/k11-copia.cjs`, `tools/k11-qa.cjs`, `tools/k11-ui-qa.cjs` | Copia aislada y QA |
+| `evidence/k11/` | JSON y capturas |
+
+**Comandos (pin: `git archive <sha> | tar -x -C <pin>`):**
+
+| Comando | Resultado |
+|---|---|
+| `node tools/k11-qa.cjs <pin-64f8837> 64f8837…` | **26/26** (también 26/26 con el pin de master `4ea7cb3`) |
+| `node tools/k11-copia.cjs <pin-64f8837> <copia>` y después `node tools/k11-ui-qa.cjs <copia>` | Chromium **9/9**. Firefox/WebKit: NOT_RUN |
+
+**Siguiente:**
+1. Auditoría de ChatGPT sobre K11.
+2. Codex: contrato K11-C.
+3. Después, K12, Architecture Book y FF&E (no empezados).
+
+**No tocar:** E3 cerrado (`78a43dc`) ni la candidata de Codex.
+
+## Anterior · E3 CERRADO EN LABORATORIO y transferido a Codex (20/11/2026)
 
 **Partida:** `e9bd6bf`. Se cierra el único residual de la auditoría: la identidad real de las tomas de vistas (`takenAt` es un `Date` y `canon()` lo colapsaba en `{}`).
 

@@ -1,0 +1,208 @@
+{
+ "schema": "rubik-lab-k11-ui-qa/1",
+ "fecha": "2026-11-20T16:25:40.639Z",
+ "copia": "candidata Codex 64f8837 + k11 de laboratorio (aislada)",
+ "navegador": {
+  "chromium": "RUN",
+  "firefox": "NOT_RUN (no instalado)",
+  "webkit": "NOT_RUN (no instalado)"
+ },
+ "entorno": {
+  "node": "v22.23.5",
+  "playwright": "1.63.0",
+  "emulacion": "móvil emulado; no es un dispositivo físico"
+ },
+ "resumen": {
+  "PASS": 9,
+  "FAIL": 0
+ },
+ "casos": [
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-01",
+   "titulo": "Vista real con takeId → resultado SIMULADO → ficha: original PNG y bytes enviados JPEG distintos (K11-A real), íntegro y vigente",
+   "resultado": "PASS",
+   "detalle": {
+    "clase": "simulado-laboratorio",
+    "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+    "orig": "image/png",
+    "env": "image/jpeg",
+    "derivada": true,
+    "distintos": true,
+    "noAcreditado": [
+     "camara",
+     "iluminacion",
+     "modelo",
+     "consumo",
+     "coste",
+     "fecha-generacion"
+    ],
+    "integridad": "integro",
+    "vigencia": "vigente",
+    "id": "vr_eb28dabf090d4090a652f86a2f8194a4"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-02",
+   "titulo": "Misma toma y mismo estilo → se reutiliza su resultado (caché por takeId); dos variantes conservadas, favorito y comparación",
+   "resultado": "PASS",
+   "detalle": {
+    "l": [
+     {
+      "id": "vr_eb28dabf090d4090a652f86a2f8194a4",
+      "estilo": "natural",
+      "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+      "integridad": "integro",
+      "vigencia": "vigente",
+      "favorito": true
+     },
+     {
+      "id": "vr_88837bd4ab764f1d9516443ab91cb020",
+      "estilo": "scandinavian",
+      "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+      "integridad": "integro",
+      "vigencia": "vigente",
+      "favorito": false
+     }
+    ],
+    "cmp": "Misma toma: sí · mismo original: sí · cambia: style"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-03",
+   "titulo": "Recuperación tras recargar la página: las dos fichas, íntegras y vigentes, con su favorito",
+   "resultado": "PASS",
+   "detalle": [
+    {
+     "id": "vr_eb28dabf090d4090a652f86a2f8194a4",
+     "estilo": "natural",
+     "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+     "integridad": "integro",
+     "vigencia": "toma-anterior",
+     "favorito": true
+    },
+    {
+     "id": "vr_88837bd4ab764f1d9516443ab91cb020",
+     "estilo": "scandinavian",
+     "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+     "integridad": "integro",
+     "vigencia": "toma-anterior",
+     "favorito": false
+    }
+   ]
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-04",
+   "titulo": "Recaptura: un resultado nuevo NO se recupera de la caché de la toma anterior (otro id, takeId nuevo)",
+   "resultado": "PASS",
+   "detalle": {
+    "id": "vr_4256d838c5d04ab8bf46b8fe36d1c1fc",
+    "toma": "0e16e72b-a98c-4829-a939-16e629aab751",
+    "cache": false
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-05",
+   "titulo": "Cambio real de revisión (norte confirmado): las fichas siguen íntegras y pasan a «desactualizado»; no se reasignan",
+   "resultado": "PASS",
+   "detalle": {
+    "l": [
+     {
+      "id": "vr_eb28dabf090d4090a652f86a2f8194a4",
+      "estilo": "natural",
+      "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+      "integridad": "integro",
+      "vigencia": "desactualizado",
+      "favorito": true
+     },
+     {
+      "id": "vr_88837bd4ab764f1d9516443ab91cb020",
+      "estilo": "scandinavian",
+      "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+      "integridad": "integro",
+      "vigencia": "desactualizado",
+      "favorito": false
+     }
+    ],
+    "revisionesCongeladas": [
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-06",
+   "titulo": "Bytes alterados → «inválido»; bytes ausentes → «incompleto» (base aislada del laboratorio)",
+   "resultado": "PASS",
+   "detalle": [
+    {
+     "id": "vr_eb28dabf090d4090a652f86a2f8194a4",
+     "estilo": "natural",
+     "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+     "integridad": "invalido",
+     "vigencia": "desactualizado",
+     "favorito": true
+    },
+    {
+     "id": "vr_88837bd4ab764f1d9516443ab91cb020",
+     "estilo": "scandinavian",
+     "toma": "a76c8094-8ad4-4848-b344-46dd1219a19a",
+     "integridad": "incompleto",
+     "vigencia": "desactualizado",
+     "favorito": false
+    }
+   ]
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-07",
+   "titulo": "Sin red externa, sin errores y sin escritura en el producto: ni localStorage nuevo, ni claves «k11:» en FloorPlanImages, ni la extensión en la autoridad F0",
+   "resultado": "PASS",
+   "detalle": {
+    "nuevasClavesLocalStorage": [],
+    "extEnF0": false,
+    "clavesK11EnImagenes": 0,
+    "externas": 0
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-08",
+   "titulo": "Teclado: Escape cierra el diálogo; foco dentro del diálogo",
+   "resultado": "PASS"
+  },
+  {
+   "navegador": "chromium",
+   "id": "K11-UI-09",
+   "titulo": "390×844 táctil (emulación) y ZH: ficha legible, sin desbordamiento, «Cerrar» visible, textos en chino",
+   "resultado": "PASS",
+   "detalle": {
+    "titulo": "可追溯视觉结果",
+    "overflow": false,
+    "cerrar": true,
+    "rect": [
+     327,
+     7,
+     371,
+     51,
+     390,
+     844
+    ],
+    "integridad": "integro"
+   }
+  }
+ ],
+ "capturas": [
+  "evidence/k11/visual/k11-ficha.png",
+  "evidence/k11/visual/k11-variantes-comparacion.png",
+  "evidence/k11/visual/k11-recuperacion-tras-recargar.png",
+  "evidence/k11/visual/k11-desactualizado.png",
+  "evidence/k11/visual/k11-alterado-ausente.png",
+  "evidence/k11/visual/k11-movil-zh.png"
+ ]
+}

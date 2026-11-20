@@ -1,0 +1,322 @@
+{
+ "schema": "rubik-lab-k11-qa/1",
+ "fecha": "2026-11-20T16:07:02.671Z",
+ "pin": "64f8837f93a4bfe70238461cf9b9df09d8f78bab",
+ "entorno": {
+  "node": "v22.23.5",
+  "plataforma": "linux"
+ },
+ "resumen": "26/26 PASS",
+ "casos": [
+  {
+   "id": "K-00",
+   "requisito": "K11-B · antes",
+   "titulo": "La clave REAL de ai-render-ui.js da la MISMA clave para dos tomas distintas con la misma vista y revisión",
+   "resultado": "PASS",
+   "detalle": {
+    "antes": "ent|prj|r7|stop-r1|natural||",
+    "ahoraA": "ent|prj|r7|take-A|stop-r1|natural||",
+    "ahoraB": "ent|prj|r7|take-B|stop-r1|natural||"
+   }
+  },
+  {
+   "id": "K-00b",
+   "requisito": "K11-A · antes",
+   "titulo": "ai-render-ui.js conserva como «original» view.dataUrl pero envía jpeg(view.dataUrl) y no guarda los bytes enviados",
+   "resultado": "PASS",
+   "detalle": {
+    "fichaEnMemoria": [
+     "viewId",
+     "label",
+     "style",
+     "floor",
+     "walls",
+     "image",
+     "original",
+     "model",
+     "usage",
+     "cost",
+     "generatedAt"
+    ]
+   }
+  },
+  {
+   "id": "K-01",
+   "requisito": "Contrato",
+   "titulo": "Ficha trazable completa: id opaco, sujeto (proyecto, entrada, contentId, revisión), toma (takeId), recursos, estilo, procedencia, derechos; lo no acreditado se enumera",
+   "resultado": "PASS",
+   "detalle": {
+    "id": "vr_2c0f7bbae2e5ae341",
+    "noAcreditado": [
+     "camara",
+     "iluminacion",
+     "modelo",
+     "consumo",
+     "coste"
+    ],
+    "huella": "c5801ef4f35ed999722fdcee9e5c656c88c4ccdb3ed182250871d86d09bcee33"
+   }
+  },
+  {
+   "id": "K-02",
+   "requisito": "K11-A",
+   "titulo": "Original y bytes enviados son recursos distintos y verificables; el envío declara su transformación y deriva del original",
+   "resultado": "PASS",
+   "detalle": {
+    "original": "825e993650df",
+    "enviada": "6836fc3b81f5"
+   }
+  },
+  {
+   "id": "K-03",
+   "requisito": "K11-B",
+   "titulo": "Recaptura (otro takeId, misma vista y revisión) no reutiliza el resultado anterior; la misma toma sí; sin takeId no hay caché",
+   "resultado": "PASS",
+   "detalle": {
+    "entradasCache": 2
+   }
+  },
+  {
+   "id": "K-04",
+   "requisito": "Dos resultados sobre la misma toma",
+   "titulo": "Ambos se conservan como variantes; la comparación dice misma toma y qué cambia",
+   "resultado": "PASS",
+   "detalle": {
+    "cmp": {
+     "mismaToma": true,
+     "mismaVista": true,
+     "mismoTrabajo": true,
+     "mismoOriginal": true,
+     "mismoResultado": false,
+     "cambia": [
+      "style",
+      "floor"
+     ],
+     "clases": [
+      "simulado-laboratorio",
+      "simulado-laboratorio"
+     ]
+    },
+    "bytesGuardados": 3
+   }
+  },
+  {
+   "id": "K-05",
+   "requisito": "Dos tomas diferentes con la misma geometría",
+   "titulo": "El resultado de la toma A, íntegro, se marca «de una toma anterior» al verificar contra la toma B",
+   "resultado": "PASS",
+   "detalle": {
+    "integridad": "integro",
+    "vigencia": "toma-anterior",
+    "motivos": [],
+    "recursos": {
+     "original": "ok",
+     "enviada": "ok",
+     "resultado": "ok"
+    }
+   }
+  },
+  {
+   "id": "K-06",
+   "requisito": "Cambio de proyecto durante una operación",
+   "titulo": "Proyecto o toma que cambian mientras el proveedor responde: se descarta, no se asigna",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-07",
+   "requisito": "Respuestas asíncronas tardías",
+   "titulo": "Una generación anterior que responde tarde se descarta y no ensucia la caché",
+   "resultado": "PASS",
+   "detalle": {
+    "primera": "cancelada",
+    "segunda": "ok"
+   }
+  },
+  {
+   "id": "K-08",
+   "requisito": "Cambio de revisión",
+   "titulo": "Íntegro y desactualizado a la vez; reabrir no reasigna la ficha a la revisión posterior",
+   "resultado": "PASS",
+   "detalle": {
+    "integridad": "integro",
+    "vigencia": "desactualizado",
+    "motivos": [],
+    "recursos": {
+     "original": "ok",
+     "enviada": "ok",
+     "resultado": "ok"
+    }
+   }
+  },
+  {
+   "id": "K-09",
+   "requisito": "Imagen original o resultado alterado",
+   "titulo": "Bytes del original o del resultado alterados, o la ficha manipulada → «invalido»",
+   "resultado": "PASS",
+   "detalle": {
+    "original": [
+     "original:alterado"
+    ],
+    "resultado": [
+     "resultado:alterado"
+    ]
+   }
+  },
+  {
+   "id": "K-10",
+   "requisito": "Archivo ausente o corrupto",
+   "titulo": "Ausente → «incompleto»; truncado → «invalido»; lectura que falla → «no comprobable»; registro ilegible → «documento-corrupto»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-11",
+   "requisito": "Restauración con identificadores locales diferentes",
+   "titulo": "Otro id de proyecto y otra revisión con el mismo trabajo → «vigente · restaurado»; la ficha no se reasigna",
+   "resultado": "PASS",
+   "detalle": {
+    "integridad": "integro",
+    "vigencia": "vigente-restaurado",
+    "motivos": [],
+    "recursos": {
+     "original": "ok",
+     "enviada": "ok",
+     "resultado": "ok"
+    }
+   }
+  },
+  {
+   "id": "K-12",
+   "requisito": "Cuota agotada",
+   "titulo": "Almacén lleno al conservar → «cuota», nada a medias; proveedor sin cuota → «cuota-proveedor», nada cobrado ni guardado",
+   "resultado": "PASS",
+   "detalle": {
+    "retirados": 1
+   }
+  },
+  {
+   "id": "K-13",
+   "requisito": "Fallo parcial de escritura simulada",
+   "titulo": "Si el commit falla, se retiran SOLO los bytes nuevos de la operación y el proyecto no cambia",
+   "resultado": "PASS",
+   "detalle": {
+    "log": [
+     "put:k11:825e993650df4bc6be13ddd608743f379c15836e229019bca559a03d3f9ee700",
+     "put:k11:6836fc3b81f51bd13d3fb65c0a4db5a89fe6b3f9e5858f0b5d3f1f8f0c9136e5",
+     "put:k11:d6c12c0230ddcc96aa41aef5e0ecc3bd5982e2396dd730f5c1c1c01eb06ee7f6",
+     "rm:k11:825e993650df4bc6be13ddd608743f379c15836e229019bca559a03d3f9ee700",
+     "rm:k11:6836fc3b81f51bd13d3fb65c0a4db5a89fe6b3f9e5858f0b5d3f1f8f0c9136e5",
+     "rm:k11:d6c12c0230ddcc96aa41aef5e0ecc3bd5982e2396dd730f5c1c1c01eb06ee7f6"
+    ]
+   }
+  },
+  {
+   "id": "K-14",
+   "requisito": "Cancelación",
+   "titulo": "Cancelar la generación (proveedor pendiente) o la conservación (antes del commit): «cancelada» y nada guardado",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-15",
+   "requisito": "Duplicados",
+   "titulo": "Conservar dos veces la misma ficha no duplica; bytes iguales entre fichas se guardan una vez (direccionados por contenido)",
+   "resultado": "PASS",
+   "detalle": {
+    "fichas": 2,
+    "bytes": 4
+   }
+  },
+  {
+   "id": "K-16",
+   "requisito": "Datos de otro proyecto",
+   "titulo": "Una ficha de otro proyecto no se conserva en este; una extensión copiada a otro trabajo se marca «de otro proyecto»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-17",
+   "requisito": "Permisos insuficientes",
+   "titulo": "Un simulado no va a presentación; un derecho no concedido se rechaza; el almacén sin permiso → «permiso-almacen»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-18",
+   "requisito": "Destinos de exportación desconocidos",
+   "titulo": "Destino fuera de la lista cerrada → «destino-desconocido», al crear y al usar",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-19",
+   "requisito": "Variantes y favoritos",
+   "titulo": "El favorito vive aparte: no cambia la huella de la ficha y no equivale a aceptación; un histórico íntegro puede estar desactualizado",
+   "resultado": "PASS"
+  },
+  {
+   "id": "K-20",
+   "requisito": "Recorrido",
+   "titulo": "Vista → resultado → ficha → conservación → recuperación tras «recargar» (adaptador nuevo sobre los mismos almacenes) → comparación",
+   "resultado": "PASS",
+   "detalle": {
+    "comparacion": {
+     "mismaToma": true,
+     "mismaVista": true,
+     "mismoTrabajo": true,
+     "mismoOriginal": true,
+     "mismoResultado": false,
+     "cambia": [
+      "style"
+     ],
+     "clases": [
+      "simulado-laboratorio",
+      "simulado-laboratorio"
+     ]
+    }
+   }
+  },
+  {
+   "id": "K-21",
+   "requisito": "Clases separadas",
+   "titulo": "Vista real (sin envío ni resultado distinto), render IA (exige proveedor y envío) y simulado (solo «simulador-laboratorio») no se confunden",
+   "resultado": "PASS",
+   "detalle": {
+    "vistaReal": [
+     "estudio",
+     "comparacion",
+     "presentacion-orientativa",
+     "entrega-orientativa"
+    ],
+    "ia": [
+     "estudio",
+     "comparacion",
+     "presentacion-orientativa"
+    ],
+    "simulado": [
+     "estudio",
+     "comparacion"
+    ]
+   }
+  },
+  {
+   "id": "K-22",
+   "requisito": "K11-C",
+   "titulo": "Las referencias de bytes de la extensión son VIVAS para el recolector real (persistence-store.refsIn) sin cambiar sus reglas",
+   "resultado": "PASS",
+   "detalle": {
+    "vivas": 3
+   }
+  },
+  {
+   "id": "K-23",
+   "requisito": "UX",
+   "titulo": "Textos ES/EN/ZH completos (causa, siguiente, alternativa, datos) y estados; sin respaldo silencioso",
+   "resultado": "PASS",
+   "detalle": {
+    "codigos": 14
+   }
+  },
+  {
+   "id": "K-24",
+   "requisito": "Seguridad",
+   "titulo": "Núcleo sin red, sin almacenamiento propio, sin IA real; ningún rechazo sin capturar",
+   "resultado": "PASS"
+  }
+ ]
+}
