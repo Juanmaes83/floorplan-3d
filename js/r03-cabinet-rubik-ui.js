@@ -21,19 +21,44 @@
     const project = getProject(), o = B().open(project, objectId);
     if (!o.ok) return { ok: false, reason: o.issues?.[0]?.message || o.status };
     const object = project.objects.find(x => x.id === objectId);
+    // Nombre VISIBLE por la fuente única de RUBIK (regla: sin chino en español o inglés).
+    const shown = root.FloorPlanDisplayName ? root.FloorPlanDisplayName(object.name, object.type) : (object.name || objectId);
     const dialog = document.createElement('div');
     dialog.className = 'r03-scope r03-rubik-dialog';
     dialog.setAttribute('role', 'dialog');dialog.setAttribute('aria-modal', 'true');dialog.setAttribute('aria-labelledby', 'r03RubikTitle');
     dialog.innerHTML = `<div class="r03-rubik-sheet"><div class="r03-rubik-head"><div class="r03-rubik-row"><h2 id="r03RubikTitle"></h2>
       <button type="button" class="r03-btn r03-btn-quiet r03-rubik-close" aria-label="Cerrar el editor de interior">Cerrar</button></div>
-      <p class="r03-rubik-note">Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.</p></div>
+      <p class="r03-rubik-note">Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.</p>
+      <section class="r03-clear" aria-labelledby="r03ClearTitle"><h3 id="r03ClearTitle">Holguras de apertura · solo lectura</h3>
+      <p class="r03-clear-sum" role="status" aria-live="polite"></p><div class="r03-clear-groups"></div><p class="r03-clear-limits"></p></section></div>
       <div class="r03-rubik-body"></div></div>`;
-    dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${TYPE[object.type] || object.type} «${object.name || objectId}» · ${object.size.widthMm} × ${object.size.depthMm} mm`;
+    dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${TYPE[object.type] || object.type} «${shown}» · ${object.size.widthMm} × ${object.size.depthMm} mm`;
     host.append(dialog);
     const body = dialog.querySelector('.r03-rubik-body'), sheet = dialog.querySelector('.r03-rubik-sheet');sheet.tabIndex = -1;
+    /* R03 · holguras (solo lectura). Se recalcula con el BORRADOR del editor en cada cambio, con los motores existentes
+       (RubikCabinetClearance → RubikCabinetCore + FloorPlanPlacement + FloorPlanLayoutReview). Agrupa por autoridad, no
+       bloquea el guardado ni propone nada. Sin el módulo, la sección no aparece. */
+    const clearBox = dialog.querySelector('.r03-clear');
+    const showClearance = session => {
+      const C = root.RubikCabinetClearance;
+      if (!C || !session) { clearBox.hidden = true; return; }
+      const project = getProject(), d = C.describe(project, C.analyzeDraft(project, objectId, session.state.outer, session.state.cabinet));
+      clearBox.hidden = false; clearBox.dataset.summary = d.summary || d.status;
+      clearBox.querySelector('.r03-clear-sum').textContent = d.text;
+      clearBox.querySelector('.r03-clear-limits').textContent = d.limits || '';
+      const host = clearBox.querySelector('.r03-clear-groups'); host.replaceChildren();
+      for (const g of d.groups) {
+        const el = document.createElement('div'); el.className = `r03-clear-group is-${g.level}`; el.dataset.kind = g.kind;
+        const h = document.createElement('p'); h.className = 'r03-clear-head';
+        const t = document.createElement('strong'); t.textContent = g.title; const a = document.createElement('span'); a.className = 'r03-clear-auth'; a.textContent = g.authority;
+        h.append(t, ' ', a); const ul = document.createElement('ul');
+        for (const it of g.items) { const li = document.createElement('li'); li.textContent = it; ul.append(li); }
+        el.append(h, ul); host.append(el);
+      }
+    };
     let savedAlready = o.status === 'ok';
     const editor = UI().mount(body, {
-      session: o.session, title: `${TYPE[object.type] || object.type} «${object.name || objectId}»`, savedAlready,
+      session: o.session, title: `${TYPE[object.type] || object.type} «${shown}»`, savedAlready,
       onSave: (res, s) => {
         const r = commit(() => B().save(getProject(), s));
         if (!r?.ok) return { message: { kind: 'error', text: 'No se ha guardado. ' + (r?.message || '') } };
@@ -44,8 +69,9 @@
         return null;
       },
       onCancel: () => close(),// «Cancelar» es descartar a propósito: cierra sin preguntar
-      onChange: () => { delete dialog.dataset.confirmClose; },// un cambio nuevo vuelve a exigir confirmación
+      onChange: s => { delete dialog.dataset.confirmClose; showClearance(s); },// un cambio nuevo vuelve a exigir confirmación
     });
+    showClearance(editor.session);
     if (o.notice) editor.setSession(o.session, o.notice, savedAlready);
     /* Cerrar con cambios sin guardar pide confirmación, igual con Escape que con el botón «Cerrar» (en el móvil no hay
        Escape: antes el botón cerraba y los tiraba sin avisar). La segunda petición seguida cierra. */

@@ -570,7 +570,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     </div>
     <div class="grp only2d">
       <button class="btn" id="zoomOut" title="缩小" data-en-title="Zoom out">−</button>
-      <button class="btn" id="zoomIn" title="放大" data-en-title="Zoom in">＋</button>
+      <button class="btn" id="zoomIn" title="放大" data-en-title="Zoom in">+</button>
       <button class="btn" id="fit" title="适应窗口 (F)" data-en-title="Fit to window (F)" data-en="Fit">适应</button>
       <button class="btn" id="s60" title="按 1:60 显示（与原图同比例）" data-en-title="Show at 1:60 (same scale as the original plan)">1:60</button>
       <button class="btn" id="s100" title="按 1:100 显示" data-en-title="Show at 1:100">1:100</button>
@@ -1115,6 +1115,18 @@ const NAMES_ES = {
   "休闲椅": "Sillón de descanso"
 };
 const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
+/* REGLA PERMANENTE (propietario, 20/11/2026): en español o inglés NUNCA se muestra texto en chino. Los datos guardados
+   (p. ej. el proyecto de ejemplo) pueden conservar nombres en chino; lo que se MUESTRA pasa por aquí. Si falta la traducción,
+   se usa el nombre del tipo de mueble del catálogo y, en último caso, un genérico. Única fuente para los módulos
+   (window.FloorPlanDisplayName). Lo vigila tests/no-chinese-display.browser.test.cjs. */
+const CJK_RE = /[\u2E80-\u2FFF\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF]/;
+function displayName(name, type){
+  const n = nm(String(name ?? ''));
+  if (LANG === 'zh' || !CJK_RE.test(n)) return n;
+  const item = type && FloorPlanGenericCatalog.groups.flatMap(g => g.items).find(i => i[0] === type), byType = item && nm(item[1]);
+  return byType && !CJK_RE.test(byType) ? byType : (LANG === 'en' ? 'Item' : 'Elemento');
+}
+window.FloorPlanDisplayName = displayName;
 const ROOM_FAMILY_LABELS={unspecified:['Estancia','Room','房间'],living:['Salón','Living room','客厅'],dining:['Comedor','Dining room','餐厅'],kitchen:['Cocina','Kitchen','厨房'],bedroom:['Dormitorio','Bedroom','卧室'],bathroom:['Baño','Bathroom','浴室'],toilet:['Aseo','Toilet','卫生间'],office:['Despacho','Office','书房'],hallway:['Pasillo','Hallway','走廊'],storage:['Trastero','Storage','储藏室'],laundry:['Lavadero','Laundry','洗衣房'],terrace:['Terraza','Terrace','露台'],balcony:['Balcón','Balcony','阳台'],garage:['Garaje','Garage','车库'],utility:['Cuarto técnico','Utility room','设备间'],other:['Otra estancia','Other','其他']};
 const familyLabel=family=>(ROOM_FAMILY_LABELS[Core.roomFamilies.includes(family)?family:'unspecified']||ROOM_FAMILY_LABELS.unspecified)[{es:0,en:1,zh:2}[LANG]??0];
 const familyTypeLabel=family=>family==='unspecified'?({es:'Sin especificar',en:'Unspecified',zh:'未指定'}[LANG]||'Sin especificar'):familyLabel(family);
@@ -5910,7 +5922,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <link rel="stylesheet" href="css/r03-cabinet-editor.css">
 <script src="js/r03-cabinet-core.js"></script><script src="js/r03-cabinet-contract.js"></script><script src="js/r03-cabinet-editor-core.js"></script>
 <script src="js/r03-cabinet-editor-ui.js"></script><script src="js/r03-cabinet-geometry.js"></script><script src="js/r03-cabinet-three.js"></script>
-<script src="js/r03-cabinet-bridge.js"></script><script src="js/r03-cabinet-rubik-ui.js"></script>
+<script src="js/r03-cabinet-bridge.js"></script><script src="js/r03-cabinet-clearance.js"></script><script src="js/r03-cabinet-rubik-ui.js"></script>
 </template>
 </body>
 </html>

@@ -1,8 +1,8 @@
 # R03 · Recuperación del análisis de holguras (20/11/2026)
 
-> **Estado:** candidata recuperada, pura y de solo lectura, para auditoría e integración por Codex.
-> - **No está conectada** a ninguna interfaz: ningún archivo de producto la carga.
-> - No escribe el proyecto ni aplica propuestas.
+> **Estado:** candidata recuperada y **conectada en solo lectura** al diálogo de interiores existente (autorización del propietario del 20/11/2026), para auditoría e integración por Codex.
+> - No escribe el proyecto, no bloquea el guardado y no aplica propuestas.
+> - Sin fusionar ni activar fuera de esta rama.
 
 ## Identidad
 
@@ -59,11 +59,65 @@ Lo que cubren:
 - Apertura supuesta de 90° (`K.ASSUMED`). No evalúa herrajes reales, recorrido de personas ni normativa.
 - El cuadrado es conservador: un hallazgo solo en el cuadrado no es una colisión del sector.
 
-## Plan de conexión (no ejecutado, requiere autorización)
+## Conexión en solo lectura (corte 2, autorizado)
 
-1. Mostrar `analyze()` en solo lectura en el editor R03 (`r03-cabinet-editor-ui.js`), junto a la validación existente, sin bloquear el guardado.
-2. Prueba de navegador del editor con la escena de la mesilla.
-3. Firefox y WebKit por Codex.
+| Pieza | Cambio |
+|---|---|
+| `js/r03-cabinet-clearance.js` | `analyzeDraft(project, id, outer, cabinet)`: el mismo análisis sobre el **borrador** del editor. `describe(project, result)`: grupos por autoridad con textos legibles |
+| `js/r03-cabinet-rubik-ui.js` | Sección «Holguras de apertura · solo lectura» en el diálogo existente. Se recalcula en cada cambio del borrador, **sin controles**, sin tocar `onSave` y oculta si el módulo no está |
+| `index.html` | Una línea: carga `js/r03-cabinet-clearance.js` justo antes de `r03-cabinet-rubik-ui.js`. **Ningún punto de conexión nuevo** |
+| `tests/r03-activation-manifest.cjs` | Lista autorizada actualizada a sabiendas (nueve módulos), sin relajar las guardas I1/A4 |
+| `css/r03-cabinet-editor.css` | Estilos de la sección con los tokens del ámbito `.r03-scope` |
+
+**Avisos diferenciados por autoridad** (nunca mezclados):
+- **RUBIK** (comprobación de colocación): colocación del mueble, barrido completo de puertas (conservador) y apertura de cajones;
+- **regla del diseño de origen:** bisagra frente a cajones;
+- **experimental:** giro exacto de 90°, orientativo, que no decide nada.
+
+### Pruebas
+
+| Prueba | Resultado |
+|---|---|
+| `tests/r03-cabinet-clearance.test.cjs` | **11/11** |
+| `tests/r03-clearance-in-rubik.browser.test.cjs` (nueva, bloqueante) | **2/2**, en 1440×900 y 390×844 |
+| `tests/no-chinese-display.browser.test.cjs` (nueva, bloqueante) | **3/3** |
+| Guardas I1/A4 (`r03-integration-core`, `r03-cabinet-audit`) | Verdes con la lista actualizada |
+| `r03-editor-in-rubik`, `r03-editor`, `r02a-editor`, `r02a-lab`, `r02a-r03-coexistence` | 8/8, 16/16, 5/5, 13/13 y 1/1 |
+| Suite pura | 1522/1524, 0 fallos, 2 omitidas |
+| Cobertura de navegador | 0 archivos sin cubrir |
+
+Qué cubren las pruebas puras de `r03-cabinet-clearance`:
+- **positivas:** el borrador ve un conflicto que lo guardado no tiene; grupos por autoridad;
+- **negativas:** un objeto que no es armario, un armario inválido o un id inexistente no producen grupos ni inventan holguras; el proyecto y el borrador quedan intactos.
+
+Qué cubre la prueba de navegador de holguras:
+- **positivas:** el armario del ejemplo; un mueble colocado a propósito dentro del barrido aparece como aviso de RUBIK con su nombre visible;
+- **negativas:** la sección no tiene controles; abrir y mirar no cambia el proyecto ni el deshacer; se **guarda aunque haya avisos** y el mueble no se mueve; sin el módulo el diálogo funciona y la sección no aparece; sin errores de página.
+
+### Evidencia visual
+
+`docs/qa/artifacts/r03-holguras/`, en 1440×900 y 390×844:
+- `1-ejemplo`;
+- `2-mueble-en-el-barrido`;
+- `3-guardado-con-avisos`.
+
+**Revisadas a mano: sin texto en chino.**
+
+### Corrección: texto en chino visible (regla permanente del propietario)
+
+- **Defecto.** Las primeras capturas mostraban «衣柜» y «床头柜». El proyecto de ejemplo guarda 68 nombres en chino. RUBIK los traduce con `nm()`, una constante interna de `index.html`, pero los módulos R03 (título y etiqueta del diálogo), las holguras y R02-A (avisos de muebles y estancias) mostraban `object.name` y `room.name` en bruto.
+- **Fuente única.** `window.FloorPlanDisplayName(name, type)` traduce con los diccionarios existentes. En español o inglés **nunca** devuelve chino: si falta la traducción, usa el nombre del tipo del catálogo y, en último caso, «Elemento» o «Item». En chino se respeta el original.
+- **Corregidos los 5 puntos:** `r03-cabinet-clearance.js`, `r03-cabinet-rubik-ui.js` (dos) y `r02a-ceiling-editor.js` (muebles y estancias).
+- **`#zoomIn`:** «＋» de ancho completo cambiado por «+».
+- **Guarda permanente.** Recorre la interfaz real en ES y EN: plano, panel de **cada** mueble y **cada** estancia, y el diálogo de **cada** armario. Falla con el sitio exacto ante cualquier carácter CJK visible. **Discrimina:** al deshacer la corrección del título falla con «Armario ropero «衣柜»».
+- **Regla anotada** en `AGENTS.md`, que leen todos los agentes.
+- **Única excepción explícita:** el selector de idioma muestra «中文», el nombre del idioma en su propio idioma. **Pendiente de tu confirmación.**
+
+## Límites de esta conexión
+
+- Solo Chromium Linux.
+- En móvil la sección ocupa altura antes del alzado; se acepta para revisión UX.
+- Nombres redundantes del ejemplo, como «Armario ropero «Armario»»: es la traducción literal del nombre guardado.
 
 ## Lo que no se recupera, y por qué
 

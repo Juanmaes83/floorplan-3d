@@ -50,3 +50,9 @@
 .r03-rubik-head{position:sticky;top:0;background:var(--panel);padding:10px 0 6px;z-index:2;border-bottom:1px solid var(--line)}
 .r03-rubik-row{display:flex;align-items:center;gap:12px}.r03-rubik-head h2{font-size:16px;margin:0;flex:1 1 auto;min-width:0}.r03-rubik-close{flex:0 0 auto}
 .r03-rubik-note{margin:4px 0 0;font-size:12.5px;color:var(--warn)}
+.r03-clear{margin:10px 0 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.r03-clear h3{margin:0;font-size:14px}.r03-clear-sum{margin:4px 0;font-size:14px}.r03-clear[data-summary="clear"] .r03-clear-sum{color:var(--ok)}
+.r03-clear-group{margin:6px 0 0;padding:6px 8px;border-radius:8px;border-left:4px solid var(--line)}.r03-clear-group ul{margin:2px 0 0;padding-left:18px;font-size:13.5px}
+.r03-clear-head{margin:0;font-size:13.5px}.r03-clear-auth{color:var(--muted);font-size:12px}
+.r03-clear-group.is-rubik{border-left-color:var(--warn);background:#fdf6e7}.r03-clear-group.is-donor{border-left-color:var(--accent);background:#eef1f5}
+.r03-clear-group.is-experimental{border-left-color:var(--line);background:#f7f6f3}.r03-clear-limits{margin:6px 0 0;font-size:12px;color:var(--muted)}

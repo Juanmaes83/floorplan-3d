@@ -2,7 +2,9 @@
 //
 // Hasta R03-I0 (#198) y la preintegración (#214), dos pruebas exigían que index.html NO cargase R03.
 // La activación R03-I1 autoriza EXACTAMENTE lo que hay aquí y nada más:
-//   · una hoja de estilos y ocho módulos R03, en este orden y solo desde js/ y css/ (mismo origen);
+//   · una hoja de estilos y nueve módulos R03, en este orden y solo desde js/ y css/ (mismo origen). El noveno,
+//     js/r03-cabinet-clearance.js (holguras en SOLO LECTURA dentro del diálogo, autorización del propietario del 20/11/2026),
+//     no añade ningún punto de conexión: lo usa RubikCabinetRubikUI;
 //   · cinco puntos de conexión en el editor, todos a través del puente (RubikCabinetBridge) o de su diálogo
 //     (RubikCabinetRubikUI);
 //   · ningún módulo de laboratorio (labs/) ni de otras piedras SCULPT (R01, R02, …).
@@ -15,7 +17,7 @@ const path = require('node:path');
 const STYLES = Object.freeze(['css/r03-cabinet-editor.css']);
 const SCRIPTS = Object.freeze([
   'js/r03-cabinet-core.js', 'js/r03-cabinet-contract.js', 'js/r03-cabinet-editor-core.js', 'js/r03-cabinet-editor-ui.js',
-  'js/r03-cabinet-geometry.js', 'js/r03-cabinet-three.js', 'js/r03-cabinet-bridge.js', 'js/r03-cabinet-rubik-ui.js',
+  'js/r03-cabinet-geometry.js', 'js/r03-cabinet-three.js', 'js/r03-cabinet-bridge.js', 'js/r03-cabinet-clearance.js', 'js/r03-cabinet-rubik-ui.js',
 ]);
 // Cada punto de conexión, con el número exacto de apariciones permitidas en index.html.
 const HOOKS = Object.freeze([

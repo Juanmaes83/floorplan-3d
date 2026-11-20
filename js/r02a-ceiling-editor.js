@@ -47,9 +47,11 @@
 
   const project = () => app()?.project;
   const levelWord = () => (app()?.levelContext ? 'esta planta' : 'toda la planta (este proyecto)');
-  function labelOf(id) { const p = project(), o = p?.objects?.find(x => x.id === id); return o ? `«${o.name}»` : `«${id}»`; }
+  // Nombres VISIBLES por la fuente única de RUBIK (regla: sin chino en español o inglés).
+  const shown = (n, t) => globalThis.FloorPlanDisplayName ? globalThis.FloorPlanDisplayName(n, t) : n;
+  function labelOf(id) { const p = project(), o = p?.objects?.find(x => x.id === id); return o ? `«${shown(o.name, o.type)}»` : `«${id}»`; }
   const roomOfId = id => project()?.rooms?.find(r => r.id === id);
-  const roomName = id => roomOfId(id)?.name || id;
+  const roomName = id => { const r = roomOfId(id); return r ? shown(r.name) : id; };
   function centroid(room) { const P = room.polygon; return { x: Math.round(P.reduce((a, p) => a + p.x, 0) / P.length), y: Math.round(P.reduce((a, p) => a + p.y, 0) / P.length) }; }
   const newId = () => (root.FloorPlanCore?.id ? root.FloorPlanCore.id('cei') : 'cei_' + Math.random().toString(36).slice(2, 12));
   function defaultDraft(roomId) {

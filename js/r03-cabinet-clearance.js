@@ -57,13 +57,47 @@
   function analyze(project, objectId) {
     const r = X.read(project, objectId);
     if (!r.cabinet || !r.outer) return { status: r.status, objectId, applied: false };
+    return { ...analyzeDraft(project, objectId, r.outer, r.cabinet), cabinetSource: r.status };
+  }
+  /* El mismo análisis sobre un BORRADOR (lo que el editor de interiores tiene sin guardar): no lee ni escribe el contrato. */
+  function analyzeDraft(project, objectId, outer, cabinet) {
     const object = (project.objects || []).find(o => o.id === objectId);
-    if (K.validate(r.outer, r.cabinet).length) return { status: 'invalid-cabinet', objectId, applied: false };
-    const clearance = clearanceBlock(project, object, r.outer, r.cabinet), conflicts = K.drawerDoorConflicts(r.outer, r.cabinet);
+    if (!object) return { status: 'unknown-object', objectId, applied: false };
+    if (!K.isCabinetType(object.type)) return { status: 'not-cabinet', objectId, applied: false };
+    if (K.validate(outer, cabinet).length) return { status: 'invalid-cabinet', objectId, applied: false };
+    const clearance = clearanceBlock(project, object, outer, cabinet), conflicts = K.drawerDoorConflicts(outer, cabinet);
     const issues = independentIssues(PL.problems(project, object).map(tag), { hingeDrawerConflicts: conflicts }, clearance);
-    return { status: 'evaluated', objectId, cabinetSource: r.status, applied: false, clearance, issues,
+    return { status: 'evaluated', objectId, applied: false, clearance, issues,
       summary: issues.some(i => i.authority !== 'experimental R03') ? 'issues' : issues.length ? 'experimental-only' : 'clear' };
   }
-  const api = Object.freeze({ TOL, clearanceGeometry, clearanceBlock, independentIssues, analyze });
+
+  /* Texto para la persona, agrupado por AUTORIDAD (nunca se mezclan): RUBIK (colocación), regla del donante y experimental.
+     Solo informa: ningún grupo bloquea el guardado ni propone un cambio. */
+  const GROUPS = Object.freeze({
+    'box-placement': { level: 'rubik', title: 'Colocación del mueble', authority: 'Comprobación de colocación de RUBIK' },
+    'door-swing-square': { level: 'rubik', title: 'Apertura de puertas (barrido completo)', authority: 'Comprobación de colocación de RUBIK, conservadora' },
+    'drawer-reach': { level: 'rubik', title: 'Apertura de cajones', authority: 'Comprobación de colocación de RUBIK' },
+    'hinge-drawer': { level: 'donor', title: 'Bisagra frente a cajones', authority: 'Regla del diseño de origen' },
+    'door-swing-sector': { level: 'experimental', title: 'Giro exacto de 90°', authority: 'Experimental: orientativo, no decide nada' }
+  });
+  function itemText(project, item) {
+    const [kind, id] = item.split(/:(.+)/);
+    const o = id && (project.objects || []).find(x => x.id === id), show = root.FloorPlanDisplayName;
+    // Nombre VISIBLE: nunca el guardado en bruto (regla: sin chino en español o inglés).
+    const name = o && (show ? show(o.name, o.type) : o.name);
+    if (kind === 'furniture') return `choca con el mueble «${name || id}»`;
+    if (kind === 'wall') return 'choca con un muro';
+    if (kind === 'door') return 'choca con una puerta de la estancia';
+    if (kind === 'room') return 'sale de la estancia';
+    if (kind === 'bay') return `módulo ${Number(id) + 1}`;
+    return item;
+  }
+  function describe(project, result) {
+    if (!result || result.status !== 'evaluated') return { status: result?.status || 'unknown', groups: [], text: 'Sin comprobación de holguras para este mueble.' };
+    const groups = result.issues.map(i => ({ kind: i.kind, ...GROUPS[i.kind], items: [...new Set(i.items.map(x => itemText(project, x)))] }));
+    const text = result.summary === 'clear' ? 'Puertas y cajones se abren sin chocar con nada.' : result.summary === 'experimental-only' ? 'Solo hay avisos orientativos.' : 'Hay avisos de apertura. Revísalos; no impiden guardar.';
+    return { status: 'evaluated', summary: result.summary, groups, text, limits: 'Apertura supuesta de 90°. No evalúa herrajes reales, paso de personas ni normativa.' };
+  }
+  const api = Object.freeze({ TOL, GROUPS, clearanceGeometry, clearanceBlock, independentIssues, analyze, analyzeDraft, describe });
   if (node) module.exports = api; else root.RubikCabinetClearance = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
