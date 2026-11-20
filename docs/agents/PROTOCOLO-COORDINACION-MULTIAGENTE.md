@@ -38,6 +38,36 @@ Cada una se concede por separado y por SHA. Ninguna implica otra.
 - Evidencia con su clase: [I] código inspeccionado, [E] prueba ejecutada, [T] prueba localizada, [CI] CI consultada, [H] histórica, [P] propietario, [V] pendiente.
 - Una prueba localizada no se presenta como ejecutada. Un resultado de Preview no se atribuye a Production.
 
+## 4.1. Integración funcional, UX/UI y QA
+
+Toda implementación registra estos diez puntos en su handoff y en la PR. La PR puede enlazar la evidencia del handoff.
+
+1. **Capacidad.** Qué incorpora o mejora y cuál es el alcance del cambio.
+2. **Destino.** Área de RUBIK y superficie concreta que la consume.
+3. **Acceso.** Ruta paso a paso en la interfaz. Para procesos internos, describir el disparador, sus consumidores y el resultado observable.
+4. **Visibilidad.** Indicar si es una función visible, automática, interna, experimental o de QA.
+5. **Reutilización.** Componentes, contratos y autoridades existentes que usa.
+6. **Experiencia.** Cómo respeta Perla, UX-FIRST y los estándares visuales. Una acción bloqueada explica la causa, el siguiente paso, una alternativa segura y el estado de los datos.
+7. **Condiciones.** Dependencias, permisos, límites, activaciones y entornos aplicables.
+8. **Validación.** Pruebas funcionales, visuales, de accesibilidad, de seguridad y de regresión. Distinguir las ejecutadas de las pendientes e indicar cuándo una dimensión no aplica.
+9. **Evidencia.** Preview, capturas, vídeo cuando corresponda, ruta de navegación, SHA y árbol acreditado. Vincular cada evidencia a su entorno y alcance.
+10. **Production.** Gate pendiente, commit efectivo, despliegue, activación autorizada y verificación de acceso o consumo real.
+
+Una mejora visible alcanza el cierre funcional cuando se puede encontrar y utilizar desde el frontend mediante una ruta coherente y verificada. Las mejoras internas acreditan sus consumidores, funcionamiento e impacto sin añadir una interfaz artificial. Reutilizar menús, acciones, catálogos, inspectores y autoridades antes de introducir otros.
+
+**DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO**
+
+| Estado | Evidencia |
+| --- | --- |
+| DESARROLLADO | Artefacto y alcance identificados por SHA. |
+| VALIDADO | Pruebas y límites acreditados sobre el árbol y entorno indicados. |
+| INTEGRADO | Commit incorporado a la rama destino y árbol verificado. |
+| CONECTADO | Ruta de frontend o consumidor efectivo comprobado de extremo a extremo. |
+| DISPONIBLE | Production sirve el SHA verificado y la capacidad es accesible con sus permisos y activación aplicables. |
+| ACEPTADO | Conformidad del propietario para el alcance, la evidencia y el entorno registrados. Una aceptación de Preview se conserva como tal. |
+
+Claude Code define el destino y el recorrido durante la escultura y el pulido. Codex garantiza la conexión real, la regresión y la comprobación tras integrar. ChatGPT audita coherencia, accesibilidad, seguridad, descubribilidad y disponibilidad efectiva. El propietario conserva la aceptación y las autorizaciones por SHA.
+
 ## 5. Tras cada integración en master
 
 El agente que integra actualiza, en la misma PR o en una documental inmediata:
