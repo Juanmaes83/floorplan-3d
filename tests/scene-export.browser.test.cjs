@@ -9,6 +9,30 @@ before(() => { tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'scene-export-')); fx
 after(() => fs.rmSync(tmp, { recursive: true, force: true }));
 const J = f => JSON.parse(fs.readFileSync(f, 'utf8'));
 
+function reportDeterminismDifference(context, runs) {
+  const [control] = runs;
+  const outputs = ['scene.glb', 'manifest.json'];
+  if (runs.every(run => outputs.every(file => run.report.outputs[file].sha256 === control.report.outputs[file].sha256))) return;
+  const reference = J(path.join(tmp, control.name, 'scene.json'));
+  const entries = runs.map(({ name, report }) => {
+    const directory = path.join(tmp, name);
+    const scene = J(path.join(directory, 'scene.json'));
+    const glb = fs.readFileSync(path.join(directory, 'scene.glb'));
+    const binary = glb.subarray(28 + glb.readUInt32LE(12));
+    const difference = scene.meshes.findIndex((mesh, index) => JSON.stringify(mesh) !== JSON.stringify(reference.meshes[index]));
+    return {
+      name, browserVersion: report.browserVersion, viewport: report.viewport, input: report.input.sha256,
+      glb: report.outputs['scene.glb'], binarySha256: require('node:crypto').createHash('sha256').update(binary).digest('hex'),
+      camera: scene.view.camera, light: scene.view.light, frame: scene.frame, stats: scene.stats,
+      firstMeshDifference: difference < 0 ? null : {
+        index: difference, actual: scene.meshes[difference].name, reference: reference.meshes[difference]?.name
+      },
+      fallbacks: report.fallbacks, stability: report.stability, metrics: report.metrics
+    };
+  });
+  context.diagnostic(JSON.stringify(entries));
+}
+
 for (const browser of browsers) {
   test(`C5 · interfaz real de principio a fin (${browser}): ZIP con GLB + manifiesto + LEEME, sin mutación ni red`, { timeout: 240000 }, async () => {
     const out = path.join(tmp, 'ui-' + browser), r = await Capture.capture(path.join(fx, 'f3-openings.json'), out, { via: 'ui', browser });
@@ -36,10 +60,11 @@ test('C3: acwall has no visible coincident faces between louver and grille', { t
   assert.deepEqual(Scene.coincidentFaces(scene, { meshFilter }).defects, []);
 });
 
-test('Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportaciones sucesivas deterministas', { timeout: 240000 }, async () => {
+test('Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportaciones sucesivas deterministas', { timeout: 240000 }, async t => {
   const a = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'det-a'), { via: 'api' });
   const b = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'det-b'), { via: 'api' });
   const d = await Capture.capture(path.join(fx, 'f3-openings.json'), path.join(tmp, 'delayed'), { via: 'api', delayAssetsMs: 6000 });
+  reportDeterminismDifference(t, [{ name: 'det-a', report: a }, { name: 'det-b', report: b }, { name: 'delayed', report: d }]);
   assert.equal(a.outputs['scene.glb'].sha256, b.outputs['scene.glb'].sha256, 'successive exports');
   assert.equal(a.outputs['manifest.json'].sha256, b.outputs['manifest.json'].sha256, 'manifest is deterministic too');
   assert.equal(a.outputs['scene.glb'].sha256, d.outputs['scene.glb'].sha256, 'late GLB awaited, not captured half-loaded');
