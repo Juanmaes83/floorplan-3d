@@ -1,0 +1,274 @@
+TAP version 13
+# Subtest: fixture: espera la animación que se dibuja e ignora la de un <details> cerrado (caso .menu-pop en Firefox)
+ok 1 - fixture: espera la animación que se dibuja e ignora la de un <details> cerrado (caso .menu-pop en Firefox)
+  ---
+  duration_ms: 8114.347892
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T04 · normal · 1440x900: sin bucles ni errores, valores que convergen
+ok 2 - ResizeObserver · R1-T04 · normal · 1440x900: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 3852.333135
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02b · normal · 1440x900: sin bucles ni errores, valores que convergen
+ok 3 - ResizeObserver · R1-T02b · normal · 1440x900: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 4367.009982
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02 · normal · 1440x900: sin bucles ni errores, valores que convergen
+ok 4 - ResizeObserver · R1-T02 · normal · 1440x900: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 4478.859428
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T04 · normal · 390x844: sin bucles ni errores, valores que convergen
+ok 5 - ResizeObserver · R1-T04 · normal · 390x844: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 3148.017138
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02b · normal · 390x844: sin bucles ni errores, valores que convergen
+ok 6 - ResizeObserver · R1-T02b · normal · 390x844: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 3249.41788
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02 · normal · 390x844: sin bucles ni errores, valores que convergen
+ok 7 - ResizeObserver · R1-T02 · normal · 390x844: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 11145.279377
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T04 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen
+ok 8 - ResizeObserver · R1-T04 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 3602.219961
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02b · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen
+ok 9 - ResizeObserver · R1-T02b · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 3454.125281
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen
+ok 10 - ResizeObserver · R1-T02 · F0.2b activo · 1440x900: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 10985.104932
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T04 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen
+ok 11 - ResizeObserver · R1-T04 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 2902.586601
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02b · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen
+ok 12 - ResizeObserver · R1-T02b · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 3129.618663
+  type: 'test'
+  ...
+# Subtest: ResizeObserver · R1-T02 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen
+ok 13 - ResizeObserver · R1-T02 · F0.2b activo · 390x844: sin bucles ni errores, valores que convergen
+  ---
+  duration_ms: 11091.0395
+  type: 'test'
+  ...
+# Subtest: R1-T01 · normal: otra pestaña sube la versión de la base de imágenes; esta cierra su conexión, no bloquea y avisa
+ok 14 - R1-T01 · normal: otra pestaña sube la versión de la base de imágenes; esta cierra su conexión, no bloquea y avisa
+  ---
+  duration_ms: 5350.369598
+  type: 'test'
+  ...
+# Subtest: R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan
+ok 15 - R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan
+  ---
+  duration_ms: 4062.112852
+  type: 'test'
+  ...
+# Subtest: R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado
+ok 16 - R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado
+  ---
+  duration_ms: 3315.396352
+  type: 'test'
+  ...
+# Subtest: R1-T04 · normal: con la misma época nada cambia y se registra el escritor
+ok 17 - R1-T04 · normal: con la misma época nada cambia y se registra el escritor
+  ---
+  duration_ms: 3428.643682
+  type: 'test'
+  ...
+# Subtest: R1-T01 · F0.2b activo: otra pestaña sube la versión de la base de imágenes; esta cierra su conexión, no bloquea y avisa
+ok 18 - R1-T01 · F0.2b activo: otra pestaña sube la versión de la base de imágenes; esta cierra su conexión, no bloquea y avisa
+  ---
+  duration_ms: 2894.217098
+  type: 'test'
+  ...
+# Subtest: R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan
+ok 19 - R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan
+  ---
+  duration_ms: 3565.562471
+  type: 'test'
+  ...
+# Subtest: R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado
+ok 20 - R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado
+  ---
+  duration_ms: 3552.31798
+  type: 'test'
+  ...
+# Subtest: R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor
+ok 21 - R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor
+  ---
+  duration_ms: 3103.991837
+  type: 'test'
+  ...
+# Subtest: R1-T03 · F0.2b activo: época de la autoridad leída en la misma transacción; sin escrituras mezcladas
+ok 22 - R1-T03 · F0.2b activo: época de la autoridad leída en la misma transacción; sin escrituras mezcladas
+  ---
+  duration_ms: 2756.985009
+  type: 'test'
+  ...
+# Subtest: A0 · normal: una escritura de bytes y una pasada de recogida que esperaban no escriben si la época cambió durante la espera
+ok 23 - A0 · normal: una escritura de bytes y una pasada de recogida que esperaban no escriben si la época cambió durante la espera
+  ---
+  duration_ms: 2159.682069
+  type: 'test'
+  ...
+# Subtest: A0 · F0.2b activo: una escritura de bytes y una pasada de recogida que esperaban no escriben si la época cambió durante la espera
+ok 24 - A0 · F0.2b activo: una escritura de bytes y una pasada de recogida que esperaban no escriben si la época cambió durante la espera
+  ---
+  duration_ms: 2526.908244
+  type: 'test'
+  ...
+# Subtest: A0 · F0.2b activo: confirmación tras esperar el lock, espejo tras la barrera y conflictos leen la época dentro de su escritura
+ok 25 - A0 · F0.2b activo: confirmación tras esperar el lock, espejo tras la barrera y conflictos leen la época dentro de su escritura
+  ---
+  duration_ms: 2836.741315
+  type: 'test'
+  ...
+# Subtest: A0 · cambios después de exportar invalidan la autorización de recarga; sin cambios, recarga directa
+ok 26 - A0 · cambios después de exportar invalidan la autorización de recarga; sin cambios, recarga directa
+  ---
+  duration_ms: 6054.840801
+  type: 'test'
+  ...
+# Subtest: A0 · ruta satélite Evolución: una pestaña desactualizada no registra la entrega y lo dice; una al día la registra y queda como escritor
+ok 27 - A0 · ruta satélite Evolución: una pestaña desactualizada no registra la entrega y lo dice; una al día la registra y queda como escritor
+  ---
+  duration_ms: 2131.274274
+  type: 'test'
+  ...
+# Subtest: S7 · F0.2b: la pérdida no pedida no se confirma; curvar, dividir, deshacer, rehacer, reabrir y exportar sí
+ok 28 - S7 · F0.2b: la pérdida no pedida no se confirma; curvar, dividir, deshacer, rehacer, reabrir y exportar sí
+  ---
+  duration_ms: 6152.853817
+  type: 'test'
+  ...
+# Subtest: S8 · integrado, F0.2b (IndexedDB): sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0
+ok 29 - S8 · integrado, F0.2b (IndexedDB): sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0
+  ---
+  duration_ms: 4758.473628
+  type: 'test'
+  ...
+# Subtest: S8 · integrado, localStorage: sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0
+ok 30 - S8 · integrado, localStorage: sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0
+  ---
+  duration_ms: 3350.487772
+  type: 'test'
+  ...
+# Subtest: S8 · lectura compatible: un 2.0 confirmado cuando estaba activo se abre integrado, se ve curvo y no admite cambios confirmados
+ok 31 - S8 · lectura compatible: un 2.0 confirmado cuando estaba activo se abre integrado, se ve curvo y no admite cambios confirmados
+  ---
+  duration_ms: 4065.203935
+  type: 'test'
+  ...
+# Subtest: S8 · «activo» falla cerrado sin A0 o sin escritor protegido; con ambos se habilita en los dos escritores
+not ok 32 - S8 · «activo» falla cerrado sin A0 o sin escritor protegido; con ambos se habilita en los dos escritores
+  ---
+  duration_ms: 2423.087532
+  type: 'test'
+  location: '/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/v5a0/tests/op07-s8-activation.browser.test.cjs:52:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    f0-2b.localhost {"a0":"none"}
+    + actual - expected
+    
+      {
+    +   active: true,
+    +   blockers: [],
+    -   active: false,
+    -   blockers: [
+    -     'a0'
+    -   ],
+        state: 'active'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    state: 'active'
+    blockers:
+      0: 'a0'
+    active: false
+  actual:
+    state: 'active'
+    blockers:
+    active: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/v5a0/tests/op07-s8-activation.browser.test.cjs:58:11)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: v5 · escenarios exactos de Codex (curva): confirmaciones separadas y lote de variante, con y sin clave histórica
+ok 33 - v5 · escenarios exactos de Codex (curva): confirmaciones separadas y lote de variante, con y sin clave histórica
+  ---
+  duration_ms: 7109.917171
+  type: 'test'
+  ...
+# Subtest: v5 · equivalentes de inclinación: nivelar → volver a inclinar → nivelación genérica
+ok 34 - v5 · equivalentes de inclinación: nivelar → volver a inclinar → nivelación genérica
+  ---
+  duration_ms: 3105.616057
+  type: 'test'
+  ...
+# Subtest: v5 · confirmación concurrente: pasos hechos mientras un guardado está en vuelo siguen pendientes y se revocan bien
+ok 35 - v5 · confirmación concurrente: pasos hechos mientras un guardado está en vuelo siguen pendientes y se revocan bien
+  ---
+  duration_ms: 2063.131132
+  type: 'test'
+  ...
+# Subtest: v5 · positivos y control: enderezar, nivelar y la variante se confirman; sin A0 no se crea nada
+not ok 36 - v5 · positivos y control: enderezar, nivelar y la variante se confirman; sin A0 no se crea nada
+  ---
+  duration_ms: 6288.538701
+  type: 'test'
+  location: '/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/v5a0/tests/op07-s8b-intent.browser.test.cjs:72:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    sin A0: activation-pending
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/v5a0/tests/op07-s8b-intent.browser.test.cjs:77:82)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..36
+# tests 36
+# suites 0
+# pass 34
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 89292.75878
