@@ -118,9 +118,10 @@
     const counts = { doors: 0, drawers: 0, placement: 0, hingeDrawer: 0, sector: 0 };
     for (const g of groups) counts[g.category] += g.count;
     const real = ['doors', 'drawers', 'placement'].filter(c => counts[c]).map(c => `${t.cat[c]} ${counts[c]}`);
-    const parts = [real.length && `${t.conflicts}: ${real.join(' · ')}`, counts.hingeDrawer && t.donorLine(counts.hingeDrawer), counts.sector && t.sectorLine(counts.sector)].filter(Boolean);
+    const colon = lang === 'zh' ? '：' : ': ', parts = [real.length && `${t.conflicts}${colon}${real.join(' · ')}`, counts.hingeDrawer && t.donorLine(counts.hingeDrawer), counts.sector && t.sectorLine(counts.sector)].filter(Boolean);
     const cap = x => x.charAt(0).toLocaleUpperCase() + x.slice(1);
-    const text = parts.length ? `${parts.map(cap).join('. ')}. ${t.tail}` : t.clear;
+    const zh = lang === 'zh', sep = zh ? '。' : '. ';
+    const text = parts.length ? `${parts.map(cap).join(sep)}${sep}${t.tail}` : t.clear;
     return { status: 'evaluated', lang, summary: result.summary, groups, counts, text, limits: t.limits };
   }
   const api = Object.freeze({ TOL, GROUPS, clearanceGeometry, clearanceBlock, independentIssues, analyze, analyzeDraft, describe });

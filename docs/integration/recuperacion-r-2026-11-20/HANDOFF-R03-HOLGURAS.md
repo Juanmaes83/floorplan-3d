@@ -184,6 +184,35 @@ Qué cubre la prueba de navegador de holguras:
 - Localizarlo es un corte propio, pendiente de autorización, porque toca el editor existente.
 - Capturas: `r03-holguras-*-4-ingles.png`.
 
+## Corte 5 · localización completa del editor heredado (autorizado el 20/11/2026)
+
+**Alcance:**
+- `js/r03-cabinet-editor-ui.js`: el editor, alzado, pestañas, campos, botones, avisos, `aria-label` y mensajes de operación.
+- `js/r03-cabinet-editor-core.js`: las explicaciones de rechazo y los errores de entrada.
+- `js/r03-cabinet-bridge.js`: los avisos al abrir.
+- `js/r03-cabinet-rubik-ui.js`: guardado, no guardado y confirmación de cierre.
+- El resumen chino de holguras usa ahora puntuación china (「：」「。」).
+
+**Sin motor nuevo de idioma.** Es la convención del repositorio: un `tx(es, en, zh)` local que lee el `LANG` global, como en `quantity-schedule-ui.js`. Sin `LANG` (Node), el texto es **español idéntico** al anterior. Por eso las pruebas puras existentes pasan sin cambios: `r03-cabinet-editor` 13/13, `bridge` 8/8, `contract` 15/15, `audit` 6/6 e `integration-core` 8/8.
+
+**Sin cambios de comportamiento:**
+- operaciones, códigos de error, validaciones, ids, deshacer y rehacer, guardado y contrato `x-r03-cabinet`, intactos;
+- `FRONT_LABEL` y `NOTICE` conservan su forma exportada (accesores);
+- etiquetas de módulo: `M1` en ES, `B1` en EN y `1格` en ZH, solo como texto visible.
+
+**La prueba exige ahora localización completa, sin excepciones** (`r03-clearance-in-rubik.browser`, en 1440×900 y 390×844). En EN y ZH recorre **todo** el texto visible del diálogo y del editor, y cada `aria-label` y `title`: ningún texto en español. Además, en EN:
+- operación → «Shelf added.»;
+- teclado: → mueve el foco a la pestaña siguiente y la leyenda dice «Bays · editing B2»;
+- rechazo explicado en inglés: demasiados cajones;
+- Escape con cambios sin guardar → «There are unsaved changes. Press Escape again to close without saving them.»;
+- el segundo Escape cierra y el **foco vuelve** a «Cabinet interior…».
+
+**Discrimina:** con una sola cadena sin traducir («Dividir módulo» en EN) falla con `["Dividir módulo"]`.
+
+**Capturas:** `r03-holguras-*-4-ingles.png` y `r03-holguras-*-5-chino.png`, revisadas.
+
+**Límite declarado, fuera de R03:** en modo ZH, partes de la aplicación principal detrás del diálogo siguen en español («Diseñar», «Traer mi mueble»…). Es preexistente y no se amplía aquí.
+
 ## Límites de esta conexión
 
 - Solo Chromium Linux.

@@ -88,19 +88,38 @@ test(`R03 holguras · ${viewport.width}x${viewport.height}`,{timeout:300000},asy
  for(const [nameSet,expect] of [['Arm',/^Interior · Armario ropero «Arm» · /],['Armario',/^Interior · Armario ropero · /],['Col',/^Interior · Armario ropero «Col» · /]]){
   await page.evaluate(([id,n])=>mutate(()=>{project.objects.find(o=>o.id===id).name=n;}),[WARDROBE,nameSet]);await openDialog();
   assert.match((await state()).title,expect,nameSet);await closeDialog();}
- // 6 · Inglés real: el diálogo, su nota, «Close», el tipo y las holguras en inglés (no basta «sin chino»). El editor interior
- //     heredado (r03-cabinet-editor-ui.js) sigue en español: se INVENTARÍA como residual declarado, no se oculta.
- await page.evaluate(()=>setLang('en'));await page.waitForTimeout(200);await openDialog();
- const en=await page.evaluate(()=>{const d=document.querySelector('.r03-rubik-dialog');return {title:d.querySelector('#r03RubikTitle').textContent,close:d.querySelector('.r03-rubik-close').textContent,
-  note:d.querySelector('.r03-rubik-note').textContent,clear:d.querySelector('.r03-clear').innerText,button:document.querySelector('#aInterior')?.textContent,body:d.querySelector('.r03-rubik-body').innerText};});
- assert.match(en.title,/^Interior · Wardrobe( «[^»]+»)? · \d+ × \d+ mm$/);assert.equal(en.close,'Close');assert.match(en.note,/^Experimental parametric interior/);
- assert.match(en.clear,/^Clearances · read only/);assert.equal(en.button,'Cabinet interior…');
- const SPANISH=/\b(choca|muro|estancia|Conflictos|Holguras|guardar|Cerrar|Armario|medidas|puertas|cajones)\b/;
- for(const k of ['title','close','note','clear','button'])assert.doesNotMatch(en[k],SPANISH,`${k} en inglés: ${en[k]}`);
- const residual=[...new Set(en.body.split('\n').map(x=>x.trim()).filter(x=>/[áéíóúñ]|\b(Guardar|Deshacer|Rehacer|Cancelar|Baldas|Cajones|Puertas|Módulos|módulo)\b/.test(x)))];
- assert.ok(residual.length>0,'residual conocido: el editor heredado aún no está localizado');
- if(shots){await fs.writeFile(path.join(shots,`r03-holguras-en-residual-${name}.json`),JSON.stringify({note:'Cadenas visibles en español del editor interior heredado en la sesión EN (residual declarado)',residual},null,1));await page.screenshot({path:path.join(shots,`r03-holguras-${name}-4-ingles.png`)});}
- await closeDialog();await page.evaluate(()=>setLang('es'));
+ // 6 · Localización COMPLETA en EN y ZH (sin excepciones): todo el texto visible, aria-label y title del diálogo y del
+ //     editor. Y el comportamiento del editor en inglés: teclado, rechazo explicado, Escape con cambios y foco devuelto.
+ const SPANISH=/[áéíóúñ¿¡]|\b(choca|muro|estancia|Conflictos|Holguras|guardar|Guardar|Cerrar|Armario|medidas|Medidas|puertas|Puertas|cajones|Cajones|Balda|Baldas|módulo|Módulos|Deshacer|Rehacer|Restablecer|Cancelar|Quitar|Añadir|Dividir|Unir|Barra|Ancho|Fondo|Alto|Altura|Interior por defecto|Sin cambios|Aviso)\b/;
+ const texts=()=>page.evaluate(()=>{const d=document.querySelector('.r03-rubik-dialog'),out=[];const w=document.createTreeWalker(d,NodeFilter.SHOW_TEXT);for(let n;(n=w.nextNode());){const t=n.nodeValue.trim();if(t)out.push(t);}
+  for(const el of d.querySelectorAll('[aria-label],[title]'))for(const v of [el.getAttribute('aria-label'),el.getAttribute('title')])if(v)out.push(v);return out;});
+ for(const lang of ['en','zh']){
+  await page.evaluate(l=>setLang(l),lang);await page.waitForTimeout(200);
+  assert.equal(await page.locator('#aInterior').first().textContent(),lang==='en'?'Cabinet interior…':'柜体内部…');
+  await openDialog();await page.locator('.r03-clear>summary').click();
+  const all=await texts(),bad=all.filter(t=>SPANISH.test(t));
+  assert.deepEqual(bad,[],`${lang}: textos en español en el diálogo: ${JSON.stringify(bad.slice(0,10))}`);
+  if(lang==='zh')assert.ok(all.some(t=>/[一-鿿]/.test(t)),'zh: hay texto chino');
+  if(lang==='en'){
+   const en=await page.evaluate(()=>{const d=document.querySelector('.r03-rubik-dialog');return {title:d.querySelector('#r03RubikTitle').textContent,close:d.querySelector('.r03-rubik-close').textContent,note:d.querySelector('.r03-rubik-note').textContent};});
+   assert.match(en.title,/^Interior · Wardrobe( «[^»]+»)? · \d+ × \d+ mm$/);assert.equal(en.close,'Close');assert.match(en.note,/^Experimental parametric interior/);
+   // Operación → mensaje en inglés; teclado de pestañas (→) cambia de módulo con su etiqueta inglesa.
+   await page.locator('.r03-rubik-dialog button',{hasText:'Add shelf'}).first().click();
+   assert.equal(await page.locator('.r03-rubik-dialog .r03-msg').innerText(),'Shelf added.');
+   await page.locator('#r03-tab-0').focus();await page.keyboard.press('ArrowRight');
+   assert.equal(await page.evaluate(()=>document.activeElement?.id),'r03-tab-1');assert.match(await page.locator('.r03-rubik-dialog legend',{hasText:'Bays'}).innerText(),/^Bays · editing B2$/);
+   // Rechazo explicado en inglés (demasiados cajones), sin cambiar nada.
+   for(let i=0;i<12;i++)await page.locator('.r03-rubik-dialog button[aria-label="One drawer more"]').click({force:true}).catch(()=>{});
+   const msg=await page.locator('.r03-rubik-dialog .r03-msg').innerText();assert.doesNotMatch(msg,SPANISH,msg);assert.match(msg,/drawers|bay|Drawers/i,msg);
+   // Escape con cambios sin guardar: pide confirmación en inglés; el segundo cierra y el foco vuelve a «Cabinet interior…».
+   await page.locator('.r03-rubik-dialog .r03-rubik-sheet').focus();await page.keyboard.press('Escape');
+   assert.match(await page.locator('.r03-rubik-dialog .r03-msg').innerText(),/^There are unsaved changes\. Press Escape again to close without saving them\.$/);
+   await page.keyboard.press('Escape');assert.equal(await page.locator('.r03-rubik-dialog').count(),0,'el segundo Escape cierra');
+   assert.equal(await page.evaluate(()=>document.activeElement?.id),'aInterior','el foco vuelve al botón que lo abrió');
+   if(shots)await (async()=>{await openDialog();await page.screenshot({path:path.join(shots,`r03-holguras-${name}-4-ingles.png`)});await closeDialog();})();
+  } else { if(shots)await page.screenshot({path:path.join(shots,`r03-holguras-${name}-5-chino.png`)});await closeDialog(); }
+ }
+ await page.evaluate(()=>setLang('es'));await page.waitForTimeout(150);
  // 4 · Negativo: sin el módulo de holguras, el diálogo funciona igual y la sección no aparece (sin errores).
  await page.evaluate(()=>{window.__clr=window.RubikCabinetClearance;delete window.RubikCabinetClearance;});
  await openDialog();assert.equal((await state()).hidden,true);await closeDialog();

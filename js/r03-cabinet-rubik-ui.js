@@ -14,13 +14,16 @@
   let current = null;
   // Textos del diálogo en los idiomas de RUBIK (es, en, zh). El editor interior heredado (r03-cabinet-editor-ui.js) sigue solo en
   // español: residual declarado en el handoff y fijado por tests/r03-clearance-in-rubik.browser.test.cjs.
-  const L = () => { const l = typeof LANG !== 'undefined' ? LANG : 'es'; return ({
+  const L = () => { const l = typeof LANG !== 'undefined' ? LANG : 'es', T = ({
     es: { type: { wardrobe: 'Armario ropero', tallcab: 'Columna', cabinet: 'Mueble bajo', shoecab: 'Zapatero' }, interior: 'Interior', close: 'Cerrar', closeLabel: 'Cerrar el editor de interior',
-      note: 'Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.', clear: 'Holguras · solo lectura' },
+      note: 'Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.', clear: 'Holguras · solo lectura',
+      notSaved: 'No se ha guardado. ', saved: 'Interior guardado en el proyecto. Se puede deshacer con «Deshacer» de RUBIK.', unsaved: how => `Hay cambios sin guardar. ${how === 'key' ? 'Pulsa Escape' : 'Pulsa «Cerrar»'} otra vez para cerrar sin guardarlos.` },
     en: { type: { wardrobe: 'Wardrobe', tallcab: 'Tall cabinet', cabinet: 'Base cabinet', shoecab: 'Shoe cabinet' }, interior: 'Interior', close: 'Close', closeLabel: 'Close the interior editor',
-      note: 'Experimental parametric interior: assumed sizes, not a manufacturer\'s. Not a quote and not for manufacturing.', clear: 'Clearances · read only' },
+      note: 'Experimental parametric interior: assumed sizes, not a manufacturer\'s. Not a quote and not for manufacturing.', clear: 'Clearances · read only',
+      notSaved: 'Not saved. ', saved: 'Interior saved in the project. You can undo it with RUBIK’s “Undo”.', unsaved: how => `There are unsaved changes. ${how === 'key' ? 'Press Escape' : 'Press “Close”'} again to close without saving them.` },
     zh: { type: { wardrobe: '衣柜', tallcab: '高柜', cabinet: '矮柜', shoecab: '鞋柜' }, interior: '内部', close: '关闭', closeLabel: '关闭内部编辑器',
-      note: '实验性参数化内部：尺寸为假定值，非厂商数据。不是报价，不可用于制造。', clear: '开启空间 · 只读' } })[l] || null; };
+      note: '实验性参数化内部：尺寸为假定值，非厂商数据。不是报价，不可用于制造。', clear: '开启空间 · 只读',
+      notSaved: '未保存。', saved: '内部已保存到项目中。可用 RUBIK 的「撤销」撤回。', unsaved: how => `有未保存的更改。${how === 'key' ? '再按一次 Escape' : '再点一次「关闭」'}即可不保存关闭。` } }); return T[l] || T.es; };
   
 
   /* open({objectId, getProject, commit, opener}) → {ok} | {ok:false, reason}
@@ -81,10 +84,10 @@
       session: o.session, title: label, savedAlready,
       onSave: (res, s) => {
         const r = commit(() => B().save(getProject(), s));
-        if (!r?.ok) return { message: { kind: 'error', text: 'No se ha guardado. ' + (r?.message || '') } };
+        if (!r?.ok) return { message: { kind: 'error', text: (L() || {}).notSaved + (r?.message || '') } };
         // Se sigue editando lo que quedó guardado (el historial de la edición empieza de nuevo; el de RUBIK tiene el paso).
         const again = B().open(getProject(), objectId);savedAlready = true;
-        editor.setSession(again.session, { kind: 'ok', text: 'Interior guardado en el proyecto. Se puede deshacer con «Deshacer» de RUBIK.' }, true);
+        editor.setSession(again.session, { kind: 'ok', text: (L() || {}).saved }, true);
         if (!dialog.contains(document.activeElement)) sheet.focus({ preventScroll: true });
         return null;
       },
@@ -97,7 +100,7 @@
        Escape: antes el botón cerraba y los tiraba sin avisar). La segunda petición seguida cierra. */
     const requestClose = how => {
       if (E().dirty(editor.session) && dialog.dataset.confirmClose !== '1') { dialog.dataset.confirmClose = '1';
-        editor.setSession(editor.session, { kind: 'error', text: `Hay cambios sin guardar. ${how === 'key' ? 'Pulsa Escape' : 'Pulsa «Cerrar»'} otra vez para cerrar sin guardarlos.` }, savedAlready);
+        editor.setSession(editor.session, { kind: 'error', text: (L() || {}).unsaved(how) }, savedAlready);
         return false; }
       close();return true;
     };

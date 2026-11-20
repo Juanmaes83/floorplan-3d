@@ -22,13 +22,17 @@
   const clone = v => structuredClone(v);
   const EDITABLE = Object.freeze(['none', 'ok', 'adapted', 'stale']);
   // Mensaje para la persona, por estado de lectura (el mismo criterio que el laboratorio de #202).
+  // Textos visibles en los idiomas de RUBIK (convención de los módulos: tx local que lee el LANG global; sin LANG, español).
+  const tx = (es, en, zh) => ({ es, en, zh })[typeof LANG === 'string' ? LANG : 'es'] || es;
+  // Accesores: el texto se resuelve en el idioma visible al abrir; la forma ({kind, text}) no cambia.
   const NOTICE = Object.freeze({
-    none: { kind: 'info', text: 'Interior por defecto (valores supuestos, no medidos). Edítalo y pulsa «Guardar interior».' },
-    adapted: { kind: 'info', text: 'El armario cambió de medidas y su interior se ha adaptado: revísalo y guarda.' },
-    stale: { kind: 'error', text: 'El armario cambió de medidas y el interior guardado ya no cabe. Se muestra sin tocarlo: ajústalo y guarda.' },
-    invalid: { kind: 'error', text: 'Este interior no se puede editar aquí: los datos guardados están dañados. No se ha cambiado nada.' },
-    future: { kind: 'error', text: 'Este interior se guardó con una versión posterior de RUBIK. Solo lectura.' },
+    get none() { return { kind: 'info', text: tx('Interior por defecto (valores supuestos, no medidos). Edítalo y pulsa «Guardar interior».', 'Default interior (assumed values, not measured). Edit it and press “Save interior”.', '默认内部（假定值，非实测）。编辑后点击「保存内部」。') }; },
+    get adapted() { return { kind: 'info', text: tx('El armario cambió de medidas y su interior se ha adaptado: revísalo y guarda.', 'The cabinet changed size and its interior was adapted: review it and save.', '柜体尺寸已变，内部已自动适配：请检查并保存。') }; },
+    get stale() { return { kind: 'error', text: tx('El armario cambió de medidas y el interior guardado ya no cabe. Se muestra sin tocarlo: ajústalo y guarda.', 'The cabinet changed size and the saved interior no longer fits. It is shown untouched: adjust it and save.', '柜体尺寸已变，已保存的内部放不下。按原样显示：请调整并保存。') }; },
+    get invalid() { return { kind: 'error', text: tx('Este interior no se puede editar aquí: los datos guardados están dañados. No se ha cambiado nada.', 'This interior cannot be edited here: the saved data is damaged. Nothing was changed.', '此内部无法在此编辑：保存的数据已损坏。未做任何更改。') }; },
+    get future() { return { kind: 'error', text: tx('Este interior se guardó con una versión posterior de RUBIK. Solo lectura.', 'This interior was saved with a later version of RUBIK. Read only.', '此内部由更新版本的 RUBIK 保存。只读。') }; },
   });
+
 
   const isCabinet = object => !!object && K.isCabinetType(object.type);
 
