@@ -386,3 +386,5 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 - **Beta 01 sigue pendiente de identificación.** No consta en el repositorio qué dominio o despliegue es.
 - **El laboratorio Studio** se revisó por sus documentos de traspaso, no ejecutando sus herramientas.
 - **Cambios posteriores al corte:** ver la sección final del registro de evidencias.
+
+**Consolidación 20/11/2026.** OP-04 y F0.2b están integradas. K13 (#287) → contrato R1 (#272) → lote SMART siguen bajo sus gates. Después, OP-10 → Simulator E → Simulator D requieren autorización específica. E3 espera D4 y #271 conserva su aceptación UX en el master efectivo. A0 y su cadena permanecen congeladas por el residual de WebKit. [Inventario y estados efectivos](https://github.com/Juanmaes83/floorplan-3d/pull/275).
