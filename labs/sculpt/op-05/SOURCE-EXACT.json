@@ -1,0 +1,567 @@
+{
+  "donor": "https://github.com/laanlabs/openPlan3D",
+  "commit": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+  "classifyRoots": [
+    "src/lib/services/customModelImport.ts",
+    "src/lib/services/customModelLoader.ts",
+    "src/lib/services/customModelResources.ts",
+    "src/lib/services/customModelSource.ts",
+    "src/lib/services/customModels.ts",
+    "src/lib/utils/localGLB.ts",
+    "src/lib/utils/localGLBAccessors.ts",
+    "src/lib/utils/localGLBExtensions.ts",
+    "src/lib/utils/localGLBGeometry.ts",
+    "src/lib/utils/localGLBImages.ts",
+    "src/lib/utils/localGLBMaterials.ts",
+    "src/lib/utils/localGLBRepack.ts",
+    "src/lib/utils/localGLBResources.ts",
+    "src/lib/utils/localGLBScene.ts",
+    "src/lib/utils/customModelDefinitions.ts",
+    "src/lib/utils/projectPackageZip.ts",
+    "src/lib/utils/rasterHeader.ts"
+  ],
+  "sourceExactScope": "Selected functional family and its direct local dependencies; baseline runs in the pinned full donor checkout.",
+  "imports": {
+    "src/lib/services/customModelImport.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/services/customModelLoader.ts",
+      "src/lib/services/itemPhotos.ts",
+      "src/lib/utils/customModelDefinitions.ts",
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/projectPackageBridge.ts",
+      "src/lib/utils/projectValidation.ts",
+      "src/lib/utils/snapshotStorage.ts"
+    ],
+    "src/lib/services/customModelLoader.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/services/customModelSource.ts",
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBExtensions.ts",
+      "src/lib/utils/localGLBImages.ts",
+      "src/lib/utils/localGLBMaterials.ts",
+      "src/lib/utils/localGLBRepack.ts"
+    ],
+    "src/lib/services/customModelResources.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/services/customModelLoader.ts",
+      "src/lib/utils/furnitureModelResources.ts"
+    ],
+    "src/lib/services/customModelSource.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/utils/customModelDefinitions.ts",
+      "src/lib/utils/localGLB.ts"
+    ],
+    "src/lib/services/customModels.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/services/itemPhotos.ts",
+      "src/lib/utils/projectValidation.ts"
+    ],
+    "src/lib/utils/localGLB.ts": [
+      "src/lib/utils/projectPackageZip.ts"
+    ],
+    "src/lib/utils/localGLBAccessors.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBResources.ts"
+    ],
+    "src/lib/utils/localGLBExtensions.ts": [],
+    "src/lib/utils/localGLBGeometry.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBAccessors.ts",
+      "src/lib/utils/localGLBScene.ts"
+    ],
+    "src/lib/utils/localGLBImages.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBResources.ts"
+    ],
+    "src/lib/utils/localGLBMaterials.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBResources.ts"
+    ],
+    "src/lib/utils/localGLBRepack.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBAccessors.ts",
+      "src/lib/utils/localGLBGeometry.ts"
+    ],
+    "src/lib/utils/localGLBResources.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/rasterHeader.ts"
+    ],
+    "src/lib/utils/localGLBScene.ts": [],
+    "src/lib/utils/customModelDefinitions.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/projectPackageZip.ts"
+    ],
+    "src/lib/utils/projectPackageZip.ts": [],
+    "src/lib/utils/rasterHeader.ts": [],
+    "tests/custom-model-definitions.test.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/services/customModels.ts",
+      "src/lib/services/itemPhotos.ts",
+      "src/lib/services/projectPackage.ts",
+      "src/lib/utils/projectPackageBridge.ts",
+      "src/lib/utils/projectValidation.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/custom-model-import.test.ts": [
+      "src/lib/services/customModelImport.ts",
+      "src/lib/services/customModelSource.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/custom-model-loader.test.ts": [
+      "src/lib/services/customModelLoader.ts",
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBRepack.ts"
+    ],
+    "tests/custom-model-placement.test.ts": [
+      "src/lib/services/customModelResources.ts",
+      "src/lib/utils/furnitureModelLoader.ts",
+      "src/lib/utils/furnitureModelResources.ts",
+      "src/lib/utils/projectPackageBridge.ts",
+      "src/lib/utils/sceneSignature.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/custom-model-source.test.ts": [
+      "src/lib/services/customModelLoader.ts",
+      "src/lib/services/customModelSource.ts",
+      "src/lib/utils/projectPackageBridge.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/local-glb-accessors.test.ts": [
+      "src/lib/utils/localGLBAccessors.ts"
+    ],
+    "tests/local-glb-extensions.test.ts": [
+      "src/lib/utils/localGLBExtensions.ts"
+    ],
+    "tests/local-glb-fixture.test.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBExtensions.ts",
+      "src/lib/utils/localGLBGeometry.ts",
+      "src/lib/utils/localGLBMaterials.ts",
+      "src/lib/utils/localGLBRepack.ts"
+    ],
+    "tests/local-glb-geometry.test.ts": [
+      "src/lib/utils/localGLBAccessors.ts",
+      "src/lib/utils/localGLBGeometry.ts"
+    ],
+    "tests/local-glb-images.test.ts": [
+      "src/lib/utils/localGLBImages.ts"
+    ],
+    "tests/local-glb-materials.test.ts": [
+      "src/lib/utils/localGLBMaterials.ts"
+    ],
+    "tests/local-glb-repack.test.ts": [
+      "src/lib/utils/localGLB.ts",
+      "src/lib/utils/localGLBRepack.ts"
+    ],
+    "tests/local-glb-resources.test.ts": [
+      "src/lib/utils/localGLBResources.ts"
+    ],
+    "tests/local-glb-scene.test.ts": [
+      "src/lib/utils/localGLBScene.ts"
+    ],
+    "tests/local-glb-transport.test.ts": [
+      "src/lib/services/projectPackage.ts",
+      "src/lib/utils/projectPackageBridge.ts",
+      "src/lib/utils/projectValidation.ts",
+      "src/lib/utils/snapshotStorage.ts",
+      "tests/fixtures/project.ts"
+    ],
+    "tests/local-glb.test.ts": [
+      "src/lib/utils/localGLB.ts"
+    ],
+    "tests/browser/custom-model-import.spec.ts": [
+      "tests/browser/storage.ts"
+    ],
+    "vitest.config.ts": [
+      "tooling/catalog-assets.mjs"
+    ],
+    "playwright.config.ts": [],
+    "tooling/local-model-fixture.mjs": [],
+    "src/lib/components/sidebar/CustomModelPanel.svelte": [
+      "src/lib/components/sidebar/CustomModelPreview.svelte",
+      "src/lib/i18n/customModelMessages.ts",
+      "src/lib/i18n/index.ts",
+      "src/lib/services/customModelImport.ts",
+      "src/lib/services/customModels.ts",
+      "src/lib/stores/project.ts",
+      "src/lib/stores/versionHistory.ts",
+      "src/lib/utils/modalDialog.ts"
+    ],
+    "src/lib/components/sidebar/CustomModelPreview.svelte": [
+      "src/lib/i18n/index.ts",
+      "src/lib/services/customModelImport.ts"
+    ],
+    "src/lib/i18n/customModelMessages.ts": [
+      "src/lib/i18n/index.ts"
+    ],
+    "tests/fixtures/project.ts": [
+      "src/lib/models/types.ts",
+      "src/lib/stores/project.ts"
+    ],
+    "tests/browser/storage.ts": []
+  },
+  "files": {
+    ".nvmrc": {
+      "gitBlob": "a45fd52cc5891570d6299fab38643103c3955474",
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/.nvmrc"
+    },
+    "LICENSE": {
+      "gitBlob": "e19847719492831e7ba07f12a7929ed410b386a4",
+      "sha256": "30228141977aae075d3a50caa11574a12dbc6f69c2bb207d618c8ea2ffa4a83c",
+      "location": "upstream"
+    },
+    "docs/local-custom-models.md": {
+      "gitBlob": "6c05a8c451e33e50196cc4ac276570099a859fc3",
+      "sha256": "05bd54251f06246c243a516fcc0d443cd57cb56cc95130ff24c1bae55e7f8359",
+      "location": "upstream"
+    },
+    "docs/project-package-v1.md": {
+      "gitBlob": "d5466746f3540c659e197143d582f73d810b2ba3",
+      "sha256": "f91a77ca944c6691c0499d87fe3e5caba173cd7bec394dc44992687bd0af4236",
+      "location": "upstream"
+    },
+    "docs/reviews/2026-09-12-local-model-import.md": {
+      "gitBlob": "c523808172d3168b359f9e105f13954190b24e9d",
+      "sha256": "87b5964dcf21a6732cbe484f6345acd04c9201d9ea1d83c38905c6f46f1a8797",
+      "location": "upstream"
+    },
+    "package-lock.json": {
+      "gitBlob": "6831c9787bd764ea1aaed81800ac341a43fadc29",
+      "sha256": "ff4c1bb50e457e1f45e9548971d355a1bec34ac52660207d4d38f9c646cfa2ca",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/package-lock.json"
+    },
+    "package.json": {
+      "gitBlob": "f1921daf2accbcd616c087f357f122a74fa32ea6",
+      "sha256": "7b675136cfcf7250b0fb611c2db782d2dc295112ba0e1e0ffa6a592940527c0b",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/package.json"
+    },
+    "playwright.config.ts": {
+      "gitBlob": "e25351d7b7b1621899365db633d591a7b0abeea1",
+      "sha256": "2666bdfd075afe9afdf82a29c052e33fdb5427d0ef908a12b3e06a76f264e6c8",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/playwright.config.ts"
+    },
+    "src/lib/components/sidebar/CustomModelPanel.svelte": {
+      "gitBlob": "69e7aabf5a74a9ccd57478d0fa3d39935934d19c",
+      "sha256": "86258060ca4581c0415d5d73b7bacce3ebbda750d68070071c66c14c0b350d17",
+      "location": "upstream"
+    },
+    "src/lib/components/sidebar/CustomModelPreview.svelte": {
+      "gitBlob": "5703f51e08b64ad71aceeda39c54a239176543cc",
+      "sha256": "a13d24411e20d85ecd6a43f7284654ad95652185740c549fedb7fd87ef98b106",
+      "location": "upstream"
+    },
+    "src/lib/i18n/customModelMessages.ts": {
+      "gitBlob": "47600983e4e7f7ab0f4975a38e9ab4dcc2af1d0d",
+      "sha256": "2705e4b42663f2936798043dda2d3ec578c446e5297890ea8c06a5a229c9079d",
+      "location": "upstream"
+    },
+    "src/lib/i18n/index.ts": {
+      "gitBlob": "dcfe35c0e0fee2dd96d9ef2e8316e10b2c4d55a2",
+      "sha256": "26982f90e483cc4c3563889a8341202be0c8c3e92f05d1870aac6769abf465e8",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/i18n/index.ts"
+    },
+    "src/lib/models/types.ts": {
+      "gitBlob": "07edba8e16e92484e6050e5f6acb3c94bf1f96ad",
+      "sha256": "22649a10356f7b7fd5ab23da8973196d61788e87ab098c78eb7d126564e0e5f1",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/models/types.ts"
+    },
+    "src/lib/services/customModelImport.ts": {
+      "gitBlob": "d61c663dfc89dfffeb7f4ac7eadc1c04e9bb5329",
+      "sha256": "f19224a3f3bd17993817ac5a8df988559e9f28c00a85154e4d839d05cae748ed",
+      "location": "upstream"
+    },
+    "src/lib/services/customModelLoader.ts": {
+      "gitBlob": "e65c57e83d814068bfeb41e5ec15dd9df400100e",
+      "sha256": "e67fd624b1307309c1116636049f2586c32ee60044878cbc8523c3c24099459f",
+      "location": "upstream"
+    },
+    "src/lib/services/customModelResources.ts": {
+      "gitBlob": "ae824fdec20449ab348c2f5d88e8a6735cc1e7e8",
+      "sha256": "3fa4b9d4bb3435075cf1ba41f129c347823fd3652c4b6f5cf02f2ab499afeb5d",
+      "location": "upstream"
+    },
+    "src/lib/services/customModelSource.ts": {
+      "gitBlob": "95d1f3367b534732800a6d0017a479718928fd59",
+      "sha256": "c4e66e6c2a8f77a0e3f72725602c5695eb46c4703fd5927586937537b984c030",
+      "location": "upstream"
+    },
+    "src/lib/services/customModels.ts": {
+      "gitBlob": "78a4bcb3e616d2d7ee5fcc593675669cf37c3c31",
+      "sha256": "f1d6d3ff6904a598bc043701d0e96f69a360c55ec91428cfbf07f2e57150eb12",
+      "location": "upstream"
+    },
+    "src/lib/services/itemPhotos.ts": {
+      "gitBlob": "7325cef60225682d9cb972bd62587551ab0f3591",
+      "sha256": "cb2b02357bf7f7c5277325facd72763edd1f24ac5fc44d4646bcde0638cb8687",
+      "location": "upstream"
+    },
+    "src/lib/services/projectPackage.ts": {
+      "gitBlob": "97fe8c37eebc2358d1fcb0b41600cff7b1c9f073",
+      "sha256": "ab738afde456dbbf915208dac9ef00c7ec49e337e08613cbebcafc8b0ee8a67e",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/services/projectPackage.ts"
+    },
+    "src/lib/stores/project.ts": {
+      "gitBlob": "6d04f656eeea9bb4bede8d922e42f7b0d76887ca",
+      "sha256": "a27f7cdfd27cbe874ed12686f34d61552a0e53edac90c8f5f16107cef59f7476",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/stores/project.ts"
+    },
+    "src/lib/stores/versionHistory.ts": {
+      "gitBlob": "865e330075cc77e7b8d5c3c81e212f383b2c60fb",
+      "sha256": "01731a6daf649f6de09cc2dbde938a5047b40538f338106b8f5f342207b0431f",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/stores/versionHistory.ts"
+    },
+    "src/lib/utils/customModelDefinitions.ts": {
+      "gitBlob": "60ee0a9d7a8ae1b9bbee63b155fb4af0ebaf3de9",
+      "sha256": "0eda06d5e7ad153252c4545bd0f087c9b9bd920afcd8dfe9e9f3774a31a374bf",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/customModelDefinitions.ts"
+    },
+    "src/lib/utils/furnitureModelLoader.ts": {
+      "gitBlob": "71715d2e17e1435ef1d70853f1e810c81a93b8d1",
+      "sha256": "6a4fdc0b01e8aa01d5bb2da635bde7d545a62f915bad949bc4ba7f20ee2d1033",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/furnitureModelLoader.ts"
+    },
+    "src/lib/utils/furnitureModelResources.ts": {
+      "gitBlob": "7d5993ce82c0c4a1f17a01ec68ec69825403eac4",
+      "sha256": "67f83d4deb4a1d3682eae3c84cac730f50d0e29ffd506317ad0dea027877c621",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLB.ts": {
+      "gitBlob": "f9116e905bfb8568a548cb7414905601862defae",
+      "sha256": "e8d5d64e7d8f0a683724c1b604c9e183870ab91e217a0ca5f566d7a6141e091f",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/localGLB.ts"
+    },
+    "src/lib/utils/localGLBAccessors.ts": {
+      "gitBlob": "e6ff594b52d1e2a33bdddfb0189e92c285a20890",
+      "sha256": "546c42a6a5ec24736da563333aa7905f09d9d5dc076c839c91ebc296b3e4de3c",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBExtensions.ts": {
+      "gitBlob": "c54a0eb15225d27e2bc15b899d5336388e5e40bd",
+      "sha256": "0b29e81be02e45ede17f3d636780bd56e47b40066f1affa8a4ed19909844f203",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBGeometry.ts": {
+      "gitBlob": "3d8da0c6ab02e755431bc9c457f35cef2deef462",
+      "sha256": "7a97ce921af11dccc0d0aa556bfeefa35ba960dc248ca7a78b0442c44a123744",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBImages.ts": {
+      "gitBlob": "dd5385d9ed4e12633d0463e4d742563a300c4f7b",
+      "sha256": "16b1db4621b490f14239eade255f3a28a8becfec0c3d3589941d3ce32665c9e8",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBMaterials.ts": {
+      "gitBlob": "5e26242e96985a945dae98c4dd9c31ca10d1da31",
+      "sha256": "818da5dd24789d04712400ef3ccee4c5d3ecb259f4c1200f925a202cb6d98de7",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBRepack.ts": {
+      "gitBlob": "94b35a03f5bbd3b8c552b24f3a10bf5973ba18c7",
+      "sha256": "89f289b94a600143d6e9be439a46734d52569a5beeff40f921c482e5f1baac1b",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBResources.ts": {
+      "gitBlob": "12c718bb997023e7144586512fc5e335d64ab87a",
+      "sha256": "1c63eab545c8c47952df246cb431e135ab431c281f815a8722e8f118412a010f",
+      "location": "upstream"
+    },
+    "src/lib/utils/localGLBScene.ts": {
+      "gitBlob": "7a1a571d21aac9b4efc504e09d64d6635c2c53f1",
+      "sha256": "b6e0d4fb4568613f442909e474b1b60b62c6901995048b05869d11d9c79157f3",
+      "location": "upstream"
+    },
+    "src/lib/utils/modalDialog.ts": {
+      "gitBlob": "0c7296d6c2b7fdb2e8dccee68d412b390ba62fa3",
+      "sha256": "56ac25292dea11bb60ba5fd4819c43b5c2339eaf3b6e6a3c9167d60b6ca15c20",
+      "location": "upstream"
+    },
+    "src/lib/utils/projectPackageBridge.ts": {
+      "gitBlob": "185a58c4084abff4822e7555a56cce43b8aa3063",
+      "sha256": "ca3debfb931a15af376e176cbff7d65b54ad42dfb459cc9deb9adb61a363516a",
+      "location": "upstream"
+    },
+    "src/lib/utils/projectPackageZip.ts": {
+      "gitBlob": "63ade959ed32988b77b4830d743de99e0807982c",
+      "sha256": "640fd70e330a34d40662a3e5a7ef3385463d46cd61264f3967fef6b5d6e7f120",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/projectPackageZip.ts"
+    },
+    "src/lib/utils/projectValidation.ts": {
+      "gitBlob": "feb8447ce3d69b5fc926ac31d2f8004c5b60b979",
+      "sha256": "f51982b73969513d38fc3dba698b714f0084090082c50b5f34933ae9f9030212",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/projectValidation.ts"
+    },
+    "src/lib/utils/rasterHeader.ts": {
+      "gitBlob": "fbdddf5387306986a76db37c6ff43e8045b1b482",
+      "sha256": "3865a1baadc8c448393fbc640c9a4d04574b28addc781c8ca792463c1d52c401",
+      "location": "upstream"
+    },
+    "src/lib/utils/sceneSignature.ts": {
+      "gitBlob": "12c47769df1e9be6a4c327c9e5febd98175effac",
+      "sha256": "723bcb4c65ce671754168d593f2706f18f427f7ee53f888898b71cf9d048d3be",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/sceneSignature.ts"
+    },
+    "src/lib/utils/snapshotStorage.ts": {
+      "gitBlob": "a816e9a8c485bb8765213b462f049bf00f1d7537",
+      "sha256": "51a4a69077891007bea7de4a008531517098563d50fa024c0284de0cf560e037",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/src/lib/utils/snapshotStorage.ts"
+    },
+    "tests/browser/custom-model-import.spec.ts": {
+      "gitBlob": "15bb19af001cadcf40768cfdab6d12eff8c8d6a4",
+      "sha256": "461bc78020bbee8f1938864c9552edd2fe73cfb6e5dada28fe4963f75424320e",
+      "location": "upstream"
+    },
+    "tests/browser/storage.ts": {
+      "gitBlob": "5aa5766f08aad837a899eff740bd3952fbad6ac9",
+      "sha256": "f668bfaf627a186a336ff908367e2769d4c04dc7dfc33ab582ba4cab28432d41",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/tests/browser/storage.ts"
+    },
+    "tests/custom-model-definitions.test.ts": {
+      "gitBlob": "ec71864b005223aa8f0e4dc9ad1c5a737cf4c94f",
+      "sha256": "19dfa7ea2bc9cacd8f16801a5ec34481a80ad539d9c8f5fa98d4b4112174f28d",
+      "location": "upstream"
+    },
+    "tests/custom-model-import.test.ts": {
+      "gitBlob": "a9d7262ef3f908647f148943b6e4cdaff4aa128f",
+      "sha256": "2ade0834f567389fefecac70b9c89287fa106c3af49fb062f16e73085dc2b1db",
+      "location": "upstream"
+    },
+    "tests/custom-model-loader.test.ts": {
+      "gitBlob": "00cb20ef8609ac9dcf7e20691366f9a733fba7cc",
+      "sha256": "12647587de3c990a48fc0c3b2f9170583557c2f30613910c09a85583e61d574a",
+      "location": "upstream"
+    },
+    "tests/custom-model-placement.test.ts": {
+      "gitBlob": "4f8d3f8cb5e850bdef0d11cf75f99a324328e467",
+      "sha256": "0ec5cf9375f7bb9a9652a843ba9fff2d388fb6c97a1f160c59c6feb42abea93b",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/tests/custom-model-placement.test.ts"
+    },
+    "tests/custom-model-source.test.ts": {
+      "gitBlob": "d024d0960e7e87fc78c6a7899c225ae01086a3ba",
+      "sha256": "106ee1aa5e443a1829419e7d8122c3176e28ffb7acd75ff59a2467311e4bd999",
+      "location": "upstream"
+    },
+    "tests/fixtures/local-model-textured-box.glb": {
+      "gitBlob": "435317a20ecf78739b9811ff247cd808e8ff154b",
+      "sha256": "e8ff09ef3a1032c074ccaeb03f470cc45eedbabb0c5085834f652c319ab2d7c7",
+      "location": "donor-only"
+    },
+    "tests/fixtures/project.ts": {
+      "gitBlob": "708810724fc439e97b75214b42c3f7212364fe12",
+      "sha256": "00b716e322f175909b08c99bdb2a91641902b73acc267c09ada2a1d182748044",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/tests/fixtures/project.ts"
+    },
+    "tests/local-glb-accessors.test.ts": {
+      "gitBlob": "4d8f001c03e081f8c28c55b798da6631b22cee79",
+      "sha256": "f5cd59888f89ff4b0eb597de69463f67c6cb6475fc88bf9dce7f5c51e1b4ef27",
+      "location": "upstream"
+    },
+    "tests/local-glb-extensions.test.ts": {
+      "gitBlob": "60d593ba7537b350cb93d6a6078f0393487ddd29",
+      "sha256": "7af8b1d49a9354c222974f048ddf675497d3a7996ffbac5657c6e0993b8e1b50",
+      "location": "upstream"
+    },
+    "tests/local-glb-fixture.test.ts": {
+      "gitBlob": "e8bf3d70eea3376960faf54225a2c32d99771474",
+      "sha256": "f41c44728548adc6bd93d1c0dd9026128a1e2b7f06c2681a7df1f3e83001e631",
+      "location": "upstream"
+    },
+    "tests/local-glb-geometry.test.ts": {
+      "gitBlob": "cc5b5fe2c431d9364c28db8e9ae88ccbc029f256",
+      "sha256": "d6d066cc827d053451bab6dcc22eb712bf47c91feb4f4c4c6ebcbf5324ef8bec",
+      "location": "upstream"
+    },
+    "tests/local-glb-images.test.ts": {
+      "gitBlob": "4fdd7ad8d2b2f739423a8cb6f9c2ae6c340b8c6a",
+      "sha256": "f5333038bf33b81a237ba46fc472b71d97ff131de3f67749da375ae82ca8b30b",
+      "location": "upstream"
+    },
+    "tests/local-glb-materials.test.ts": {
+      "gitBlob": "4f2f7ca162c4b91932dc8a10ed17e45a2513e848",
+      "sha256": "782b0e7092f950c4886976dad59732330baed21316509f36c2349075535d157b",
+      "location": "upstream"
+    },
+    "tests/local-glb-repack.test.ts": {
+      "gitBlob": "c40182f3f8ddc88dab5c33e4bed70151ef7a6cb0",
+      "sha256": "0bde38cfab87668288d5c122b11b1367d443e197046f736b2eb204e8e5e4b3a2",
+      "location": "upstream"
+    },
+    "tests/local-glb-resources.test.ts": {
+      "gitBlob": "ed68982cd95cdaa347919801bccebd20f8634c53",
+      "sha256": "601676888c95b9b999216f004b8a177dcec6705c21416133d8ba32fcdcdba720",
+      "location": "upstream"
+    },
+    "tests/local-glb-scene.test.ts": {
+      "gitBlob": "4c09574d11c1adfd689b69745c1c14c7135c4229",
+      "sha256": "745961aaf878776391f70abae9b8399de338c44dd7fe3d41d2b0e8dcd76d7cdb",
+      "location": "upstream"
+    },
+    "tests/local-glb-transport.test.ts": {
+      "gitBlob": "6c5a85e533f1b14563632d586dffcc1b5b672c8e",
+      "sha256": "167e79e5ca052e256c022fb08a236a34ddbbbb528c21318f2e05ddc65a9c4720",
+      "location": "upstream"
+    },
+    "tests/local-glb.test.ts": {
+      "gitBlob": "a3acf2465429196adf6da7aa85145aea51525c6f",
+      "sha256": "731df12994466af0786fb611ab7a3da5d74158326749c1e51b64005db5fbb0f3",
+      "location": "upstream"
+    },
+    "tooling/catalog-assets.mjs": {
+      "gitBlob": "7ae6e53701c50b855d3c5c9c6eb3e0b7a296f2cc",
+      "sha256": "f671c8fb991308fa79fdef42a5798f65c4b1bbf48a19e4e0e020e0f5666f54cf",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/tooling/catalog-assets.mjs"
+    },
+    "tooling/local-model-fixture.mjs": {
+      "gitBlob": "98ad06b7a00bb468284b8e713d5d1059d3b573a1",
+      "sha256": "1227793e12faee673cdaf87296416f1fe244e7aed852ca89c0445ccd6b18a0f6",
+      "location": "upstream"
+    },
+    "vitest.config.ts": {
+      "gitBlob": "c5000a2db030068c018b58670fcb32b3ddab37e3",
+      "sha256": "8a1453f7728ea985456a3a15ae75f69efe72ba1b1ea8dc82949c3d14568366d0",
+      "location": "previous-snapshot",
+      "archiveCommit": "f027be8f0ddb8fca5acfe510a568ea8850b5742b",
+      "archivePath": "labs/sculpt/openplan3d-771c9e1/vitest.config.ts"
+    }
+  }
+}
