@@ -80,7 +80,18 @@
     if (restore) { const key = (l, id) => JSON.stringify((l || []).find(x => x.id === id) ?? null);
       out.revoke = [...new Set([...(before?.walls || []), ...(after?.walls || []), ...(before?.openings || []), ...(after?.openings || [])].map(x => x.id))]
         .filter(id => key(before?.walls, id) !== key(after?.walls, id) || key(before?.openings, id) !== key(after?.openings, id)); }
+    // OP-07 v5 · Every step (not only a restore) declares the shapes it REINTRODUCES: a wall that is curved or sloped again
+    // after the step (newly or with a different shape), and walls and openings that reappear. Composing it revokes
+    // any earlier permission to lose them, even within the same batch.
+    const prevWalls = new Map((before?.walls || []).map(w => [w.id, w])), prevOpenings = new Set((before?.openings || []).map(o => o.id));
+    const reshape = {curved:[], sloped:[], present:[], openings:[]};
+    for (const w of after?.walls || []) { const p = prevWalls.get(w.id);
+      if (!p) reshape.present.push(w.id);
+      if (Walls.isCurved(w) && (!p || JSON.stringify(p.curve ?? null) !== JSON.stringify(w.curve))) reshape.curved.push(w.id);
+      if (sloped(w) && (!p || p.heightEndMm !== w.heightEndMm || p.heightMm !== w.heightMm)) reshape.sloped.push(w.id); }
+    for (const o of after?.openings || []) if (!prevOpenings.has(o.id)) reshape.openings.push(o.id);
     const r = composeIntent({...out, projectId}, op ? {...op, projectId} : {projectId});
+    r.reshape = reshape;
     if (out.revoke) r.revoke = out.revoke;   // composing this step into earlier ones revokes their permissions on these ids
     return r;
   }
@@ -90,6 +101,9 @@
     if (a.projectId && b.projectId && a.projectId !== b.projectId) throw new Error(`OP-07: intents of different projects (${a.projectId} ≠ ${b.projectId}) cannot be composed`);
     const out = {projectId:a.projectId ?? b.projectId ?? null, removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
     const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
+    // A step that reintroduces a curve, a slope, a wall or an opening revokes the earlier permission to lose it (v5).
+    const rs = b.reshape || {}, drop = (key, ids) => { for (const id of ids || []) { out[key] = out[key].filter(x => x !== id); const k = origin(id); if (k) out[key] = out[key].filter(x => x !== k); } };
+    drop('straightened', rs.curved); drop('leveled', rs.sloped); drop('removed', rs.present); drop('removedOpenings', rs.openings);
     // A restore (undo, redo, recovery) revokes every earlier permission on the walls and openings it changes.
     for (const id of b.revoke || []) {
       for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = out[key].filter(x => x !== id);

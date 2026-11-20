@@ -9,11 +9,13 @@
  const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison,noteEdit};
  // OP-07 S7 · Save gate: Core.guardSave between the last CONFIRMED revision and the next one, with the intent of the editing
  // steps made since that revision (each step carries its own; nothing global persists). A refused save writes nothing.
- let steps=[],seq=0;
+ let steps=[],seq=0;const MAX_STEPS=512;
  function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
   const C=window.FloorPlanCore;if(!C?.editIntent)return;
   let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
-  steps.push({seq:++seq,done:new Set(),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
+  steps.push({seq:++seq,pending:new Set(['project','library']),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
+  // Fail safe: dropping old steps can only refuse a save, never authorize a loss.
+  if(steps.length>MAX_STEPS)steps.splice(0,steps.length-MAX_STEPS);
  }
  const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
  function refusal(issues){
@@ -27,20 +29,24 @@
  // S8: without F0.2b (today's Production) the editor writes localStorage directly: the same gate runs at this facade,
  // against what is stored now; a refusal throws, which every writer already reports, and nothing is written.
  function guarded(store){const kinds=KIND();return {op07Protected:true,getItem:k=>store.getItem(k),removeItem:k=>store.removeItem(k),key:i=>store.key(i),get length(){return store.length;},
-  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false,present:Object.keys(kinds).filter(x=>x===k||store.getItem(x)!==null)});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
+  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
  const gate={
-  check({changes,confirmed,restore,present}){
+  check({changes,confirmed,restore}){
    const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
    // Intents per project (variants and building levels share wall ids); never one global intent.
-   const upTo=seq,intents={};if(!restore)for(const s of steps)intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
-   const v=C.saveGate(pairs,{intents,restore});
-   // A step is forgotten only once it is confirmed in EVERY managed document that exists (project key and library).
-   const required=[...new Set((present||[...Object.keys(confirmed).filter(k=>confirmed[k]!=null),...Object.keys(changes)]).map(k=>kinds[k]).filter(Boolean))];
-   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),required,message:v.ok?'':refusal(v.issues)};
+   // Each document is checked ONLY with the steps it has not confirmed yet (OP-07 v5): a document that is never written
+   // (the historical project key while the editor writes the library) cannot keep alive a step another document consumed.
+   const upTo=seq,issues=[];
+   for(const pair of pairs){const intents={};if(!restore)for(const s of steps)if(s.seq<=upTo&&s.pending.has(pair.kind))intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
+    issues.push(...C.saveGate([pair],{intents,restore}).issues);}
+   const v={ok:!issues.length,issues};
+   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),message:v.ok?'':refusal(v.issues)};
   },
+  // A confirmed write consumes, for the documents it wrote, every step up to the revision checked (steps made while the
+  // write was in flight stay pending). A restore starts over.
   committed(v){if(!v)return;if(v.restore){steps=[];return;}
-   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.done.add(k);
-   steps=steps.filter(s=>s.seq>v.seq||!v.required.every(k=>s.done.has(k)));}
+   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.pending.delete(k);
+   steps=steps.filter(s=>s.pending.size);}
  };
 
  function loadProject(projectKey){
