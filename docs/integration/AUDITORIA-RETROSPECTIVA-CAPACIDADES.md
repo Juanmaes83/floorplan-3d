@@ -39,6 +39,8 @@
 
 El perfil elige la primera acción y prioriza accesos que ya existen. [El check de Home de #290](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44717087403/job/136223129351) acredita los seis perfiles, enlaces que reutilizan áreas del editor y foco visible. Las pruebas de HOM-03 comprueban sus cuatro estados y usan simulación para las funciones que la necesitan. La evidencia cubre la entrada, el destino y el estado comunicado. La disponibilidad de una generación real requiere consultar su permiso y entorno. En HOM-04 queda por cruzar cada demostración con su aprendizaje y con la disponibilidad efectiva del recorrido que muestra. Los tests `home-demos.browser.test.cjs` y `construction-demo-core.test.cjs` permiten distinguir la demostración de los datos de un proyecto del usuario.
 
+**Recorrido móvil de Constructora, 390 × 844.** Desde la Home, «Constructora / jefe de obra → Evolución 4D» abre Entregar. La tarjeta «Evolución de obra» explica que necesita un plan y ofrece «Crear plan de obra», que abre el formulario correcto. La prueba conserva el proyecto y la biblioteca y registra cero errores, peticiones externas y desbordamiento horizontal. En español, el nombre del ejemplo aparece en chino dentro del aviso «Todavía no hay plan de obra». El módulo de plan muestra el nombre de la entrada directamente. Registrar el ajuste de localización para un corte posterior y conservar los nombres propios introducidos por el usuario. [Evidencia en Chromium sobre el checkout de master](op07-a0-2026-11-20/professional-construction-mobile.json)
+
 ## Entregar · primera comprobación activa
 
 | Superficie existente | Autoridad y alcance contrastados | Siguiente comprobación |
