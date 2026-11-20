@@ -50,6 +50,10 @@ Las mejoras visibles requieren acceso verificable desde el frontend. Las interna
 
 **DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO.** Registrar la evidencia de cada estado, con el alcance y entorno de cualquier aceptación previa. Los resultados operativos y los bloqueos de cada corte se siguen en [#275](https://github.com/Juanmaes83/floorplan-3d/pull/275).
 
+## Actualización A5 — relevo de OP-10
+
+El candidato exacto de #290 está publicado. El [registro de continuidad y evidencia en #275](https://github.com/Juanmaes83/floorplan-3d/blob/aa87295b2ffd3daab314c99e261e5f6c88bcccde/docs/integration/op10-evidence/entregar-56f099d/README.md) contiene el HEAD, la base, el árbol, la autorización registrada, el recorrido frontend y el procedimiento para cerrar el gate. Ese registro mantiene el estado y las capturas de OP-10. Consultarlo junto a los checks de GitHub antes de continuar.
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 
