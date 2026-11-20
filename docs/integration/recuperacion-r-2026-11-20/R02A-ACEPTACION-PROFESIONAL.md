@@ -192,3 +192,60 @@ Por tanto, la §8 queda como **especificación futura condicionada** a una decis
 **Vista (preparada, sin conectar).** La conexión natural es una línea informativa en la sección de techo, con el texto del criterio (*«Criterio inicial de diseño, pendiente de validación profesional. No es una comprobación normativa.»*) y nunca en el estado ni en el botón de guardar. Requiere cargar el módulo en `index.html` y ampliar el manifiesto de activación R02-A, así que necesita **tu autorización**.
 
 R02-A sigue **experimental** y GOV-05 abierto.
+
+## 10. Conexión visual del prototipo orientativo (autorizada el 20/11/2026) · solo información
+
+**Dónde:** un bloque compacto en la sección existente «Techo y elementos altos», bajo «Elementos en esta estancia». No hay panel nuevo ni motor nuevo.
+
+**Qué muestra:** el título «Paso libre orientativo · experimental», la nota del criterio y una línea por elemento.
+- **Nota:** *«Criterio inicial de 2100 mm, pendiente de validación profesional. No es normativo, no bloquea nada y el recorrido es orientativo (el de presentación de RUBIK).»*
+- **Por elemento**, uno de estos textos:
+  - **«Posible interferencia: el punto más bajo queda a X mm, Y mm por debajo del criterio inicial.»**
+  - **«Sin interferencia detectada en el recorrido orientativo.»** El estado interno `route-clear` se renombra a `no-interference-detected`, para no sugerir seguridad.
+  - **«Fuera del recorrido orientativo.»**
+  - **«No evaluado: …»**, con el motivo.
+- Textos en ES/EN/ZH. Ninguno dice «ruta libre», seguridad ni cumplimiento, y una prueba lo comprueba.
+
+**Lo que no hace:**
+- no bloquea el guardado;
+- no cambia ningún estado del núcleo: «Revisable» sigue siendo «Revisable»;
+- no escribe en el proyecto ni crea pasos del deshacer;
+- no toca el contrato `x-r02a-ceiling` ni las propuestas.
+
+**Cálculo bajo demanda y caché invalidable:**
+- Nada se calcula hasta pulsar «Consultar paso libre orientativo».
+- Las rutas se guardan en una caché cuya clave es la **firma** de lo que cambia un recorrido: proyecto, planta y geometría (estancias, muros, huecos, puertas y muebles). Los elementos de techo no cambian las rutas.
+- El resultado mostrado lleva además la firma de los elementos y la referencia de la estancia. Si algo cambia, se muestra *«La estancia cambió: vuelve a consultar.»* y **no se recalcula solo**.
+
+**Activación:** `js/r02a-passage-indicative.js` se carga justo antes de `r02a-ceiling-editor.js`. El manifiesto de activación R02-A pasa a siete módulos, actualizado a sabiendas, **sin puntos de conexión nuevos**. Sin el módulo, el bloque no aparece y la sección funciona igual.
+
+### Pruebas
+
+| Prueba | Resultado |
+|---|---|
+| `tests/r02a-passage-indicative.test.cjs` | **13/13**: las 11 anteriores + caché (bajo demanda; sin recálculo en 5 consultas; invalida por mueble movido, otra planta y otro proyecto; no por los techos) + textos |
+| `tests/r02a-passage-in-editor.browser.test.cjs` (nueva, bloqueante) | **6/6** |
+| `r02a-editor`, `r02a-lab`, `r02a-r03-coexistence`, `r02a-activation`, `r03-cabinet-audit` | 5/5, 13/13, 1/1, 3/3, 6/6 |
+| Suite pura | 1524/1526, 0 fallos, 2 omitidas |
+| Cobertura de navegador | 0 archivos sin cubrir |
+
+Los seis casos de la prueba de navegador:
+
+| Caso | Qué comprueba |
+|---|---|
+| Activación | Bloque en reposo hasta consultar; tras consultar, «Posible interferencia» a 2000 mm, 100 por debajo. Proyecto idéntico byte a byte, estados del núcleo iguales, deshacer intacto, sin errores ni peticiones externas |
+| Rendimiento y caché | La primera consulta calcula 13 rutas, una por estancia. Renders, cambios de selección y una segunda consulta no recalculan ninguna. Mover un mueble caduca el resultado sin recalcular; consultar de nuevo recalcula una vez |
+| Sin recorrido | Un elemento en la cocina (ruta `aerial`) da «No evaluado: no hay un recorrido orientativo verificable hasta esta estancia.» |
+| Cambio de proyecto | Otro proyecto con la misma geometría no reutiliza el resultado |
+| Convivencia | Editar, comprobar y guardar con la confirmación expresa funciona igual; el aviso no bloquea; el resultado caduca; deshacer devuelve un paso |
+| Desactivación | Sin el módulo, la sección guarda y lista igual, sin bloque y sin errores |
+
+**Rendimiento medido de extremo a extremo** (clic → resultado en pantalla, Chromium sin GPU, este contenedor): primera consulta ~530 ms con 13 rutas, consulta en caché ~190 ms. Este segundo valor incluye la latencia del clic de Playwright y el redibujado de la sección.
+
+**Evidencia:** `docs/qa/artifacts/r02a-paso-orientativo/r02a-paso-orientativo-1440x900.png`, revisada. El estado del núcleo «Revisable» se ve junto a «Posible interferencia».
+
+**Límites:**
+- La sección R02-A sigue solo en español en el resto del panel, como antes; el bloque nuevo sí está en ES/EN/ZH.
+- Escritorio probado. Móvil: hereda el panel existente y queda pendiente de Codex junto con Firefox y WebKit.
+
+R02-A sigue **experimental**, **GOV-05 abierto** y **ningún bloqueo de paso libre activado**.

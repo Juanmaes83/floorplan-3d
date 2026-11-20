@@ -43,7 +43,7 @@
 #r02aNotice[data-kind=warn]{border-left-color:#b5653a}#r02aNotice[data-kind=error]{border-left-color:#a3261b}#r02aNotice[hidden]{display:none}#r02aNotice button{min-width:32px;min-height:32px;border:0;background:none;font-size:18px;cursor:pointer}`;
     doc.head.append(css);
   }
-  const st = { draft: null, result: null, alternatives: null, open: false, placing: false, last: null, notice: null, removed: [], loadedFor: null };
+  const st = { draft: null, result: null, alternatives: null, open: false, placing: false, last: null, notice: null, removed: [], loadedFor: null, passage: null };
 
   const project = () => app()?.project;
   const levelWord = () => (app()?.levelContext ? 'esta planta' : 'toda la planta (este proyecto)');
@@ -83,6 +83,32 @@
     return null;
   }
 
+  // ── Paso libre ORIENTATIVO (experimental, solo información) ─────────────────────────────────────────────────────
+  // Un bloque compacto bajo los elementos de la estancia, solo si RubikPassageIndicative está cargado. Se calcula BAJO
+  // DEMANDA (botón) con rutas en caché por firma (proyecto, planta y geometría); el resultado solo se muestra mientras la
+  // firma de la estancia no cambie. No escribe, no cambia estados, no toca el guardado ni el deshacer, no bloquea nada.
+  const PI = () => root.RubikPassageIndicative;
+  const lang = () => (typeof LANG === 'string' ? LANG : 'es');
+  const levelKey = () => { const c = app()?.levelContext; return c ? [c.buildingId, c.levelId].join('|') : null; };
+  const geometryNow = p => app()?.geometry || root.FloorPlanCore?.geometry?.(p);
+  function roomRequests(p, roomId) { const ids = new Set(X.recheck(p, { labelOf }).items.filter(i => i.roomId === roomId).map(i => i.id)); return X.asRequests(p).filter(r => ids.has(r.id)); }
+  function passageKey(p, roomId) { const I = PI(); return I.signature(p, geometryNow(p), levelKey()) + '|' + JSON.stringify([roomRequests(p, roomId), X.verticalFor(p, roomId)]); }
+  function consultPassage(roomId) {
+    const I = PI(), p = project(), g = geometryNow(p), plan = root.FloorPlanPresentationRoute?.plan; if (!I || !p || !g) return;
+    const routes = plan ? I.routesFor(p, g, plan, levelKey()).routes : [];
+    const proposals = roomRequests(p, roomId).map(req => { const e = evaluate(p, req); return e.ok ? e.proposal : { id: req.id }; });
+    const out = I.indicate({ proposals, routes, rooms: (g.rooms || []).filter(r => r.poly?.length >= 3).map(r => ({ id: r.id, poly: r.poly })) });
+    st.passage = { roomId, key: passageKey(p, roomId), result: out };
+  }
+  function passageBlock(p, roomId, mine) {
+    const I = PI(); if (!I || !mine.length) return '';
+    const t = I.text(lang()), r = st.passage && st.passage.roomId === roomId ? st.passage : null, fresh = r && r.key === passageKey(p, roomId);
+    const rows = fresh ? r.result.items.map(x => `<li data-passage-item="${esc(x.id)}" data-status="${esc(x.status)}"><b>${esc(S.TYPE_LABEL[mine.find(i => i.id === x.id)?.type] || x.id)}</b> · ${esc(I.describe(x, lang()))}</li>`).join('') : '';
+    return `<div class="r02a-passage" data-passage="${fresh ? 'done' : r ? 'stale' : 'idle'}"><p><b>${esc(t.title)}</b><br><small>${esc(t.note)}</small></p>
+      ${fresh ? `<ul class="r02a-passage-items">${rows}</ul>` : r ? `<p class="muted">${esc(t.stale)}</p>` : ''}
+      <button type="button" class="btn" data-r02a="passage">${esc(t.consult)}</button></div>`;
+  }
+
   // ── Panel de la estancia ───────────────────────────────────────────────────────────────────────────────────────
   function refLine(p, roomId) {
     const ext = X.extension(p), own = ext.verticalReferences.find(v => v.scope === 'room' && v.roomId === roomId), lvl = ext.verticalReferences.find(v => v.scope === 'project');
@@ -119,6 +145,7 @@
       </div>
       <h4>Elementos en esta estancia (${mine.length})</h4>
       ${mine.length ? `<ul class="r02a-items">${rows}</ul>` : '<p class="muted">Ninguno.</p>'}
+      ${passageBlock(p, roomId, mine)}
       <h4>${d.editing ? 'Modificar elemento' : 'Añadir elemento'}</h4>
       <div class="r02a-form">
         <label>Tipo <select data-f="type">${Object.entries(S.TYPE_LABEL).map(([k, v]) => `<option value="${k}"${k === d.type ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select></label>
@@ -179,6 +206,7 @@
         if (write(p => B.remove(p, b.dataset.id)).ok) { info('Elemento quitado. Se puede deshacer.'); if (st.draft?.id === b.dataset.id) st.draft = defaultDraft(roomId); }
       } else if (act === 'new') { st.draft = defaultDraft(roomId); st.result = null; st.alternatives = null;
       } else if (act === 'center') { const c = centroid(roomOfId(roomId)); Object.assign(d, { x: c.x, y: c.y, confirmed: false }); st.result = null;
+      } else if (act === 'passage') { consultPassage(roomId);
       } else if (act === 'place') { arm();
       } else if (act === 'check') { st.result = evaluate(project(), request(d)); st.alternatives = null;
       } else if (act === 'alts') {

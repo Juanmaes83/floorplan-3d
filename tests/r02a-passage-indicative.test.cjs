@@ -26,7 +26,7 @@ test('geometría: colgante sobre el recorrido del pasillo → posible interferen
 test('casos límite: 2100 exactos no interfiere; 2099 sí (1 mm); el estado nunca es «bloqueado»',()=>{
   const base=propose([req('l1','pendant',on,{dropMm:300})])[0];
   const at=v=>({...base,mount:{...base.mount,lowestPointMm:v}});
-  assert.equal(item(run([at(2100)]),'l1').status,'route-clear');
+  assert.equal(item(run([at(2100)]),'l1').status,'no-interference-detected');
   const m=item(run([at(2099)]),'l1');assert.equal(m.status,'possible-interference');assert.equal(m.shortfallMm,1);
   for(const v of [0,1700,2099,2100,2600])assert.ok(I.STATUS.includes(item(run([at(v)]),'l1').status));
   assert.ok(!I.STATUS.some(s=>/block/.test(s)),'no existe un estado de bloqueo');
@@ -92,4 +92,28 @@ test('costes de cálculo: planificar todas las estancias del ejemplo y evaluar 5
   const res=I.indicate({proposals:many,routes,rooms:S.rooms});
   console.log(`# coste · planificar ${g.rooms.length} estancias: ${tPlan} ms · indicar 50 elementos: ${res.costMs} ms`);
   assert.ok(tPlan<2000,`planificación ${tPlan} ms`);assert.ok(res.costMs<200,`indicación ${res.costMs} ms`);assert.equal(res.items.length,50);
+});
+
+// ---- conexión visual: caché invalidable y textos ----
+test('caché de rutas: bajo demanda, reutilizada mientras no cambie la firma; se invalida por proyecto, planta y geometría, no por los techos',()=>{
+  I.resetCache();let calls=0;const plan=(p,g,id)=>{calls++;return R.plan(p,g,id);};
+  const g=C.geometry(REF),n=g.rooms.filter(r=>r.poly.length>=3).length;
+  assert.equal(I.routesFor(REF,g,plan,null).cached,false);assert.equal(calls,n,'primera consulta: una ruta por estancia');
+  for(let i=0;i<5;i++)assert.equal(I.routesFor(REF,g,plan,null).cached,true);assert.equal(calls,n,'renders sucesivos: ningún recálculo');
+  const withCeiling={...REF,extensions:{...REF.extensions,'x-r02a-ceiling':{version:1,items:[{id:'z'}]}}};
+  assert.equal(I.routesFor(withCeiling,C.geometry(withCeiling),plan,null).cached,true,'los elementos de techo no cambian las rutas');
+  const moved=structuredClone(REF);moved.objects[0].position.x+=300;
+  assert.equal(I.routesFor(moved,C.geometry(moved),plan,null).cached,false,'mover un mueble invalida');
+  assert.equal(I.routesFor(REF,g,plan,'bld|lvl_2').cached,false,'otra planta invalida');
+  const other={...structuredClone(REF),id:'prj_otro'};assert.equal(I.routesFor(other,C.geometry(other),plan,null).cached,false,'otro proyecto invalida');
+  assert.equal(I.stats.plans,calls);
+});
+test('textos: nunca «ruta libre» ni seguridad; los tres estados pedidos y el criterio declarado en ES/EN/ZH',()=>{
+  const x={lowestPointMm:1700,shortfallMm:400};
+  assert.equal(I.describe({...x,status:'possible-interference'},'es'),'Posible interferencia: el punto más bajo queda a 1700 mm, 400 mm por debajo del criterio inicial.');
+  assert.equal(I.describe({status:'no-interference-detected'},'es'),'Sin interferencia detectada en el recorrido orientativo.');
+  assert.equal(I.describe({status:'outside-route'},'es'),'Fuera del recorrido orientativo.');
+  assert.match(I.describe({status:'not-evaluated',reason:'no-verifiable-route'},'es'),/^No evaluado: no hay un recorrido orientativo verificable/);
+  for(const l of ['es','en','zh']){const t=I.text(l);assert.match(t.note,/2100/);assert.ok(Object.values(t).every(v=>typeof v!=='string'||!/ruta libre|segur|safe|guarantee|cumple|complies/i.test(v)),l);}
+  assert.match(I.text('es').note,/pendiente de validación profesional\. No es normativo/);assert.match(I.text('en').note,/pending professional validation\. Not regulatory/);
 });
