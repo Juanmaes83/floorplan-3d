@@ -137,3 +137,26 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'no horizontal page scroll');
  assert.deepEqual(errors,[]);
 });
+
+test('mobile dock stays tappable in 3D with reduced motion', {timeout:120000}, async t=>{
+ const viewport={width:390,height:844};
+ const context=await browser.newContext({viewport,isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+ t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ await page.goto(url);
+ await page.waitForFunction(()=>window.FloorPlanApp&&window.View3D);
+ await page.locator('#welcomeExample').click();
+ await page.locator('#mobileDock [data-view="3d"]').tap();
+ await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');
+ const result=await page.locator('#mobileDock').evaluate(dock=>{
+  const r=dock.getBoundingClientRect(),p=dock.querySelector('#tgPanel').getBoundingClientRect();
+  return {width:innerWidth,right:r.right,bottom:r.bottom,hit:document.elementFromPoint(p.left+p.width/2,p.top+p.height/2)?.closest('#tgPanel')?.id};
+ });
+ assert.equal(result.width,viewport.width,'the layout viewport keeps its mobile width');
+ assert.ok(result.right<=viewport.width&&result.bottom<=viewport.height,'the dock stays in the visible viewport');
+ assert.equal(result.hit,'tgPanel','the Properties control receives the tap');
+ await page.locator('#mobileDock #tgPanel').tap();
+ await page.waitForFunction(()=>document.querySelector('aside.right').classList.contains('open'));
+ assert.deepEqual(errors,[]);
+});
