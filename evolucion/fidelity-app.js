@@ -161,7 +161,9 @@ async function show(input,meta,preModel=null,dossier=null){
   // GOV-07: the previous Gantt is retired only now that the new selection evaluated (a rejected import keeps it working).
   ctx?.gantt?.destroy();
   ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
-  scene.load(model.inventory,model.illustrative||[]);
+  // SCULPT A · índice de muros para la fábrica hilada a hilada (mismas claves que el inventario; sin núcleo, sin fábrica).
+  let masonry=null;try{masonry=window.RubikMasonry?.indexBySource(input.source,{Core:window.FloorPlanCore,Project:A})||null;}catch(e){console.warn('masonry',e);}
+  scene.load(model.inventory,model.illustrative||[],{masonry});
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
   const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;$('roofCut')?.setAttribute('aria-pressed',String(reform));camView='auto';framedFinal=false;scene.setPose(fitPose('iso'));scene.setAuto(!document.body.classList.contains('capture'));
   renderHeader(model,meta);
