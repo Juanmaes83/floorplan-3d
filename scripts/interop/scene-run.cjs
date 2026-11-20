@@ -11,7 +11,7 @@ const { compare, compareBuilding } = require('./scene-fidelity.cjs'), { roundtri
 const SCENARIOS = [
   { id: 'f1-rect', fixture: 'f1-rect.json' }, { id: 'f2-rot30', fixture: 'f2-rot30.json' }, { id: 'f3-openings', fixture: 'f3-openings.json' },
   { id: 'f4-active', fixture: 'f4-building.json', scope: 'active', building: true }, { id: 'f4-all', fixture: 'f4-building.json', scope: 'all', building: true },
-  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' },
+  { id: 'f5-furniture', fixture: 'f5-furniture.json' }, { id: 'f6-r02r03', fixture: 'f6-r02r03.json' }, { id: 'f7-curved', fixture: 'f7-curved.json' },
 ];
 function measured(report, args) { execFileSync('python3', [path.join(here, 'measure.py'), report, '--', ...args], { stdio: ['ignore', 'pipe', 'pipe'] }); return JSON.parse(fs.readFileSync(report, 'utf8')); }
 const J = f => JSON.parse(fs.readFileSync(f, 'utf8'));
