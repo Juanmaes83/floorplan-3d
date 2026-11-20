@@ -1,10 +1,10 @@
 From f601cc9e2faf97ad8abc69852b9dae9a4d7be9e0 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 1/9] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D-O?=
- =?UTF-8?q?P07-4=20opci=C3=B3n=20B):=20curve=20y=20heightEndMm,=20autorida?=
- =?UTF-8?q?d=20=C3=BAnica=20de=20versiones,=20n=C3=BAcleo=20=C3=BAnico=20y?=
- =?UTF-8?q?=20guardado=20protegido?=
+Subject: [PATCH 01/10] =?UTF-8?q?OP-07=20S1=20=C2=B7=20Contrato=202.0=20(D?=
+ =?UTF-8?q?-OP07-4=20opci=C3=B3n=20B):=20curve=20y=20heightEndMm,=20autori?=
+ =?UTF-8?q?dad=20=C3=BAnica=20de=20versiones,=20n=C3=BAcleo=20=C3=BAnico?=
+ =?UTF-8?q?=20y=20guardado=20protegido?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

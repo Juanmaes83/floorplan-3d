@@ -1,9 +1,9 @@
 From 0c7bbe153b707965b2db1bbe28d8308ed5581bba Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
-Subject: [PATCH 2/9] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y=20?=
- =?UTF-8?q?plano:=20piezas=20por=20faceta,=20aberturas=20sobre=20la=20tray?=
- =?UTF-8?q?ectoria=20y=20contorno=20del=20muro?=
+Subject: [PATCH 02/10] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y?=
+ =?UTF-8?q?=20plano:=20piezas=20por=20faceta,=20aberturas=20sobre=20la=20t?=
+ =?UTF-8?q?rayectoria=20y=20contorno=20del=20muro?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

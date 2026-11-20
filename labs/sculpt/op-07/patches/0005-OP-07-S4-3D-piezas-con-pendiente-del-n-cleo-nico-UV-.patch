@@ -1,9 +1,9 @@
 From d63b09a6dd3bb04f0abaaa49d3be1e4593dfa7a2 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
-Subject: [PATCH 5/9] =?UTF-8?q?OP-07=20S4=20=C2=B7=203D:=20piezas=20con=20?=
- =?UTF-8?q?pendiente=20del=20n=C3=BAcleo=20=C3=BAnico,=20UV=20continuas=20?=
- =?UTF-8?q?y=20dinteles=20que=20siguen=20la=20pendiente?=
+Subject: [PATCH 05/10] =?UTF-8?q?OP-07=20S4=20=C2=B7=203D:=20piezas=20con?=
+ =?UTF-8?q?=20pendiente=20del=20n=C3=BAcleo=20=C3=BAnico,=20UV=20continuas?=
+ =?UTF-8?q?=20y=20dinteles=20que=20siguen=20la=20pendiente?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

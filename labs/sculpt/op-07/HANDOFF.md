@@ -67,6 +67,26 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
 - **Prueba negativa nueva (S1):** guardSave acepta lo que acepta validate y sigue rechazando la abertura que de verdad se sale del muro.
 - `quantity-core.js:141` también llama `validateOpening(w,o)` sin `opts`, pero solo en muros **rectos** con pendiente, cuya trayectoria es la cuerda y no depende de las facetas. No hay defecto.
 
+## Bloque 4b · S7 guardado protegido en F0.2b (parche 0010) — 20/11/2026
+- **Capacidad:** ninguna escritura confirma la pérdida no pedida de una curva, una pendiente, un muro con forma o un hueco suyo, ni un documento 2.0 escrito por quien no conoce esos rasgos.
+- **Área:** persistencia del editor (F0.2b).
+- **Tipo:** automática. Solo es visible al rechazar: aviso del editor y estado «Guardado local» en error, con la causa, el estado de los datos («Lo guardado no ha cambiado y tu cambio sigue en esta pestaña») y el siguiente paso («Deshazlo (Ctrl+Z) o usa Forma del muro»). No añade controles.
+- **Reutiliza:** `Core.guardSave` (el núcleo con `WALL_PATH`), la sesión F0.2b, su cola y su estado, el `notify` existente y el historial del editor. No hay una segunda persistencia.
+- **Diseño:**
+  - `persistence-store`: puerta opcional `{check, committed}` evaluada antes del `commit`, en la misma cola. Si rechaza, no se escribe nada y el lote sigue pendiente (sin divergencia). Mantiene una copia confirmada propia y la recuperación (`adoptConflict`) pasa por la misma puerta.
+  - `persistence-editor`: la intención es de cada paso (`Core.editIntent`), se compone desde la última revisión confirmada (`Core.composeIntent`) y se descarta al confirmarse.
+  - `index.html`: `stepIntent` por paso sustituye al global `lastEditIntent`. `commit`, deshacer y rehacer anotan su paso.
+- **Decisión de alcance (para validar por Codex/ChatGPT):** `detectLoss` rechazaba cualquier muro desaparecido sin intención, y eso habría bloqueado borrados v1 normales. `Core.saveGate` aplica pérdida y reglas solo a muros con curva o pendiente y a sus huecos, con el mismo alcance que `validate()`. Un documento v1 nunca se rechaza aquí.
+- **Pruebas:**
+  - 7 puras (`tests/op07-s7-save-gate.test.cjs`).
+  - 1 de navegador con F0.2b real (`tests/op07-s7-persistence.browser.test.cjs`, registrada en `regression-partitions.json`): rechazo atómico (misma revisión, autoridad curva, cambio en la pestaña, estado y aviso), deshacer, dividir, deshacer y rehacer, copia de emergencia y reapertura del 2.0.
+  - Lector antiguo: `integration/s7-legacy-reader.cjs` con master `bf131c30`, que rechaza el 2.0, no arranca y deja la colección byte a byte igual.
+- **Suites:** pura completa 1587 (1584 ok, 0 fallos, el resto omitidas). Navegador (persistencia, edificios, OP-07 ×5, UX-03, K4, presupuesto): 42/42 en Chromium. `apply-and-test.cjs`: todas las pruebas de OP-07.
+- **Límites:**
+  - Una recuperación de conflicto (`adoptConflict`) es una restauración: su diff entero se da por intencionado. Un RUBIK v1 no puede producir un 2.0 degradado porque no lo carga.
+  - Firefox y WebKit no están probados aquí.
+- **Estado:** DESARROLLADO y VALIDADO (Chromium). Para INTEGRADO y CONECTADO falta la cirugía de Codex sobre F0.2b con autorización.
+
 ## Pendiente (en este orden)
 1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
    Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.

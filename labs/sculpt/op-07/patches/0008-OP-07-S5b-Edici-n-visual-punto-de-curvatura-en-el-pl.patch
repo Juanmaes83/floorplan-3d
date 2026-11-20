@@ -1,10 +1,10 @@
 From c1a1619f3d019d5e1205c42eb2aa64ef5659c3e7 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:27:19 +0000
-Subject: [PATCH 8/9] =?UTF-8?q?OP-07=20S5b=20=C2=B7=20Edici=C3=B3n=20visua?=
- =?UTF-8?q?l:=20punto=20de=20curvatura=20en=20el=20plano=20y=20forma=20del?=
- =?UTF-8?q?=20muro=20en=20el=20panel,=20un=20arrastre=20=3D=20una=20operac?=
- =?UTF-8?q?i=C3=B3n?=
+Subject: [PATCH 08/10] =?UTF-8?q?OP-07=20S5b=20=C2=B7=20Edici=C3=B3n=20vis?=
+ =?UTF-8?q?ual:=20punto=20de=20curvatura=20en=20el=20plano=20y=20forma=20d?=
+ =?UTF-8?q?el=20muro=20en=20el=20panel,=20un=20arrastre=20=3D=20una=20oper?=
+ =?UTF-8?q?aci=C3=B3n?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
