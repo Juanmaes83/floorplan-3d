@@ -68,6 +68,12 @@ La [coordinación en #275](https://github.com/Juanmaes83/floorplan-3d/blob/2d0cc
 
 Simulator E se publicó en #291. CI Impact Observation requiere que el HEAD incluya master con OP‑10. El registro conserva un candidato local de idéntico árbol, pendiente de autorización por el nuevo SHA. Mantener E → D y las aceptaciones independientes de C/A.
 
+## Actualización A9 — Simulator E integrado
+
+[#291](https://github.com/Juanmaes83/floorplan-3d/pull/291) se fusionó en `8e917e1a70f499a6b8dc68850c8413b7d06c5682`, árbol `dec6d20694e083cb615f42eae60bb74fd3209523`. Añade siete archivos de QA. El [cierre en #275](https://github.com/Juanmaes83/floorplan-3d/blob/cbcbbd731a8cebeb7947f013d7201eab2b42c53b/docs/integration/op07-a0-2026-11-20/README.md#simulator-e--291) acredita 43 contratos CI, ocho pruebas dirigidas, CI posfusión 3/3 y [Production READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/6UsqaQ4HWiob45C8iCDB95F1pCby). El consumidor de E es el arnés interno para la planta activa. Presentación, Recorrer y Studio conservan sus gates para cualquier conexión futura.
+
+La [auditoría retrospectiva](https://github.com/Juanmaes83/floorplan-3d/blob/cbcbbd731a8cebeb7947f013d7201eab2b42c53b/docs/integration/AUDITORIA-RETROSPECTIVA-CAPACIDADES.md) incorpora importación, RoomPlan, G-02, Home por profesión, Entregar y continuidad F0. La matriz registra G-02 como integrado con límites de alcance y mantiene su validación profesional pendiente. Simulator D conserva su gate WebKit y autorización independiente. A0 y #274–#279 siguen congeladas. OP‑07 v3 conserva NO-GO y sus cuatro residuales pasan a la corrección de Claude Code 2.
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 
