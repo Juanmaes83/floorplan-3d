@@ -14,7 +14,7 @@ after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));})
 
 // Texto VISIBLE con CJK (nodos de texto con caja visible, más title/aria-label/placeholder/value de controles visibles).
 // SIN excepciones (decisión del propietario del 20/11/2026): el selector de idioma usa los códigos ES / EN / ZH.
-const FIND=()=>{const re=/[⺀-⿿　-〿぀-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/,out=[];
+const FIND=()=>{const re=/[\p{Script=Han}⺀-⿿　-〿぀-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/u,out=[];
  const visible=el=>{if(!el||!el.isConnected)return false;const st=getComputedStyle(el);if(st.display==='none'||st.visibility==='hidden')return false;const r=el.getBoundingClientRect();return r.width>0&&r.height>0;};
  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);for(let n;(n=w.nextNode());){const p=n.parentElement;if(!p||p.closest('script,style,template'))continue;if(re.test(n.nodeValue)&&visible(p))out.push({where:p.closest('[id]')?.id||p.tagName,text:n.nodeValue.trim().slice(0,60)});}
  for(const el of document.querySelectorAll('[title],[aria-label],[placeholder],input,select,option')){for(const v of [el.title,el.getAttribute('aria-label'),el.placeholder,el.tagName==='INPUT'?el.value:'',el.tagName==='SELECT'?el.selectedOptions?.[0]?.textContent:''])if(v&&re.test(v)&&visible(el.tagName==='OPTION'?el.parentElement:el))out.push({where:el.id||el.tagName,text:String(v).slice(0,60)});}
@@ -60,9 +60,9 @@ test('selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no 
 test('FloorPlanDisplayName: traducción, red de seguridad por tipo y genérico; en chino se respeta el original', async t=>{
  const context=await browser.newContext();t.after(()=>context.close());const page=await context.newPage();await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
  await page.goto(url);await require('./editor-fixture.cjs')(page);
- const r=await page.evaluate(()=>{const o={};for(const l of ['es','en','zh']){setLang(l);o[l]=[FloorPlanDisplayName('衣柜','wardrobe'),FloorPlanDisplayName('不存在的名字','wardrobe'),FloorPlanDisplayName('不存在的名字','tipo-inexistente'),FloorPlanDisplayName('Mi armario','wardrobe')];}setLang('es');return o;});
- assert.deepEqual(r.es,['Armario','Armario','Elemento','Mi armario']);
- assert.equal(r.en[0],'Wardrobe');assert.equal(r.en[2],'Item');assert.equal(r.en[3],'Mi armario');
- assert.equal(r.zh[1],'不存在的名字','en chino se muestra el original');
- for(const v of [...r.es,...r.en])assert.doesNotMatch(v,/[㐀-鿿]/);
+ const r=await page.evaluate(()=>{const o={};for(const l of ['es','en','zh']){setLang(l);o[l]=[FloorPlanDisplayName('衣柜','wardrobe'),FloorPlanDisplayName('不存在的名字','wardrobe'),FloorPlanDisplayName('不存在的名字','tipo-inexistente'),FloorPlanDisplayName('Mi armario','wardrobe'),FloorPlanDisplayName('𠀀','tipo-inexistente')];}setLang('es');return o;});
+ assert.deepEqual(r.es,['Armario','Armario','Elemento','Mi armario','Elemento']);
+ assert.equal(r.en[0],'Wardrobe');assert.equal(r.en[2],'Item');assert.equal(r.en[3],'Mi armario');assert.equal(r.en[4],'Item');
+ assert.equal(r.zh[1],'不存在的名字','en chino se muestra el original');assert.equal(r.zh[4],'𠀀');
+ for(const v of [...r.es,...r.en])assert.doesNotMatch(v,/\p{Script=Han}/u);
 });

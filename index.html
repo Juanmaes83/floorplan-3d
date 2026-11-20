@@ -1119,7 +1119,7 @@ const NAMES_ES = {
   "茶桌": "Mesa auxiliar",
   "休闲椅": "Sillón de descanso"
 };
-const CJK_RE = /[\u2E80-\u2FFF\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF]/;
+const CJK_RE = /[\p{Script=Han}\u2E80-\u2FFF\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF]/u;
 const nmRaw = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
 // nm(): ÚNICO embudo de los nombres visibles que ya usan index.html y ~35 módulos. Traduce con los diccionarios; en ES/EN
 // nunca devuelve chino (regla del propietario): sin traducción, «Nombre sin traducir». Solo para MOSTRAR: nunca se escribe
