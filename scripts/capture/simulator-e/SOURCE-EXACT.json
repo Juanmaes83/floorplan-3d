@@ -1,0 +1,44 @@
+[
+  {
+    "repo": "Juanmaes83/rubik-sculpt-simulator-lab",
+    "commit": "79a28ebfedba366dbf9a48233bafc8faa5634ae2",
+    "path": "COMPONENTES/E-qa-colisiones-animacion/src/motion-preflight.cjs",
+    "blob": "73c134ac7d049b1b852636f1a5f35a30b797c98f",
+    "destination": "src/motion-preflight.cjs"
+  },
+  {
+    "repo": "Juanmaes83/rubik-sculpt-simulator-lab",
+    "commit": "79a28ebfedba366dbf9a48233bafc8faa5634ae2",
+    "path": "COMPONENTES/E-qa-colisiones-animacion/src/rubik-obstacles.cjs",
+    "blob": "864b3c2167e362c396a144d51a90cdd43148c7de",
+    "destination": "src/rubik-obstacles.cjs"
+  },
+  {
+    "repo": "Juanmaes83/rubik-sculpt-simulator-lab",
+    "commit": "79a28ebfedba366dbf9a48233bafc8faa5634ae2",
+    "path": "COMPONENTES/E-qa-colisiones-animacion/test/motion-preflight.test.cjs",
+    "blob": "c4f8952f250764dc9c1535b98a51c86daa91847c",
+    "destination": "test/motion-preflight.test.cjs"
+  },
+  {
+    "repo": "Juanmaes83/rubik-sculpt-simulator-lab",
+    "commit": "79a28ebfedba366dbf9a48233bafc8faa5634ae2",
+    "path": "COMPONENTES/E-qa-colisiones-animacion/HANDOFF.md",
+    "blob": "b2ef3790791d7db66a3a78430dc8fb6418590949",
+    "destination": "HANDOFF.md"
+  },
+  {
+    "repo": "Juanmaes83/rubik-sculpt-simulator-lab",
+    "commit": "79a28ebfedba366dbf9a48233bafc8faa5634ae2",
+    "path": "LICENSE",
+    "blob": "3c28d3a6095c773f3a26c3bbb260f897ed62e078",
+    "destination": "LICENSE"
+  },
+  {
+    "repo": "Juanmaes83/simulator",
+    "commit": "57d562c44fd6a52ef10f5ffdb15c466d1c304345",
+    "path": "LICENSE",
+    "blob": "3c28d3a6095c773f3a26c3bbb260f897ed62e078",
+    "destination": "LICENSE"
+  }
+]

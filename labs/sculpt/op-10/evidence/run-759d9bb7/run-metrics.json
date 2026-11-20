@@ -1,0 +1,9 @@
+{
+ "command": [
+  "node",
+  "labs/sculpt/op-10/run.cjs"
+ ],
+ "exitCode": 0,
+ "wallSeconds": 392.193,
+ "peakRssBytes": 878358528
+}

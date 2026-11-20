@@ -1,0 +1,96 @@
+{
+ "profile": "review",
+ "profileSpec": {
+  "purpose": "architectural review (lab OP-10 phase 3 quality)",
+  "resolution": "960x600",
+  "samples": 32,
+  "fill": "rooms"
+ },
+ "blender": "5.2.1 LTS",
+ "renderer": "Cycles CPU, 32 samples, denoise, 960x600, AgX",
+ "threads": 4,
+ "cpuCount": 4,
+ "input": {
+  "glbSha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2",
+  "projectId": "prj_op10-f5-furniture",
+  "materials": "observed",
+  "light": "viewer"
+ },
+ "derived": [
+  "sun and sky: captured from the viewer (see import-report derivedLight)",
+  "room fill: one ceiling area light per room (13), energy 20\u00b7\u221aarea W (derived)",
+  "exposure -0.4 EV (derived)",
+  "textured floors coloured from their project material (13 meshes; textures never copied)"
+ ],
+ "views": [
+  {
+   "view": "viewer",
+   "camera": "captured viewer pose (C7)",
+   "fovDeg": 45,
+   "resolution": [
+    960,
+    528
+   ],
+   "seconds": 23.17,
+   "png": {
+    "bytes": 676255,
+    "sha256": "8e5602dfb4c44dcff08d93aa1ccb277201d90c7be4616cd9834249c9c28e6936"
+   }
+  },
+  {
+   "view": "axon",
+   "world": "studio grey for the axonometry (derived)",
+   "camera": "orthographic axonometry",
+   "ceilings": "ceilings and ceiling fixtures hidden in this view (declared)",
+   "seconds": 17.31,
+   "png": {
+    "bytes": 683806,
+    "sha256": "f5aba12390b7dfe7300cce522dbdb6ea9552464b2355ec38b040d0cec82c3e34"
+   }
+  },
+  {
+   "view": "rom_living",
+   "camera": "perspective 22.0 mm, eye 1.35 m at plan (5638, 9968)",
+   "targetRoomPresence": 0.72,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.72,
+   "twoPoint": true,
+   "seconds": 58.44,
+   "png": {
+    "bytes": 694409,
+    "sha256": "5af43b97201335bce3436554198aa7b585361e5cef76eaba588055c47184e567"
+   }
+  },
+  {
+   "view": "rom_kitchen",
+   "camera": "perspective 16.0 mm, eye 1.35 m at plan (1635, 5882)",
+   "targetRoomPresence": 0.983,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.983,
+   "twoPoint": true,
+   "seconds": 62.71,
+   "png": {
+    "bytes": 698690,
+    "sha256": "ffe9903cf2fbf42df00c5cc4f0b27ae2bd29d5deadc4ba6fc149c09488733519"
+   }
+  },
+  {
+   "view": "rom_master",
+   "camera": "perspective 18.0 mm, eye 1.35 m at plan (9720, 506)",
+   "targetRoomPresence": 0.856,
+   "nearSurfaceFraction": 0.0,
+   "score": 0.856,
+   "twoPoint": true,
+   "seconds": 61.61,
+   "png": {
+    "bytes": 621054,
+    "sha256": "208581ffdc639d53dd00daebf19267ed448fb443d853b653d923fe8533efb223"
+   }
+  }
+ ],
+ "peakRssBytes": 1239916544,
+ "rendererScriptSha256": "1a1695a865255eafc20d07f0c6cb1e6d04f76f57fcb4297f7e85975325a4a9bb",
+ "reviewBlend": {
+  "bytes": 3020471
+ }
+}

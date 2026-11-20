@@ -1,0 +1,246 @@
+{
+ "format": "rubik-sota.op10-fidelity",
+ "version": "0.1.0-lab",
+ "tolerancesMm": {
+  "exact": 1,
+  "envelope": 2,
+  "area": 0.005
+ },
+ "origin": {
+  "x": 6089.953069939235,
+  "y": 4595.653947064731
+ },
+ "checks": 75,
+ "contractChecks": 63,
+ "failed": 0,
+ "failures": [],
+ "visualDifferences": 0,
+ "visualByType": {},
+ "byKind": {
+  "contract · wall/thickness-mm": {
+   "n": 7,
+   "pass": 7,
+   "maxDeviation": 0
+  },
+  "contract · wall/axis-centred-mm": {
+   "n": 7,
+   "pass": 7,
+   "maxDeviation": 0
+  },
+  "contract · wall/height-mm": {
+   "n": 7,
+   "pass": 7,
+   "maxDeviation": 0
+  },
+  "contract · wall/base-mm": {
+   "n": 7,
+   "pass": 7,
+   "maxDeviation": 0
+  },
+  "contract · wall/length-mm": {
+   "n": 7,
+   "pass": 7,
+   "maxDeviation": 0.001
+  },
+  "contract · wall/start-overhang-mm": {
+   "n": 7,
+   "pass": 7,
+   "maxDeviation": 0
+  },
+  "contract · wall/demolished-has-no-solid": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · room/floor-area-relative": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minX-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxX-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-minZ-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · room/bounds-maxZ-mm": {
+   "n": 2,
+   "pass": 2,
+   "maxDeviation": 0
+  },
+  "contract · window/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · door/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · sliding-door/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "contract · opening/void-through-wall": {
+   "n": 1,
+   "pass": 1,
+   "maxDeviation": 0
+  },
+  "visual · object/within-width-envelope-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0.001
+  },
+  "visual · object/within-depth-envelope-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0.001
+  },
+  "contract · object/centre-offset-x-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "contract · object/centre-offset-z-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "visual · object/base-elevation-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  },
+  "visual · object/within-height-envelope-mm": {
+   "n": 3,
+   "pass": 3,
+   "maxDeviation": 0
+  }
+ },
+ "associations": [
+  {
+   "mesh": "unlinked:none:33",
+   "opening": "opn_north-window",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:34",
+   "opening": "opn_north-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:35",
+   "opening": "opn_north-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:36",
+   "opening": "opn_north-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:37",
+   "opening": "opn_north-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:38",
+   "opening": "opn_north-window",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:2",
+   "opening": "opn_partition-door",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:3",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:41",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:42",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:43",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:44",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:45",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:46",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "glass"
+  },
+  {
+   "mesh": "unlinked:none:47",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:48",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:49",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  },
+  {
+   "mesh": "unlinked:none:50",
+   "opening": "opn_south-slider",
+   "method": "inferred-spatial",
+   "material": "surface"
+  }
+ ],
+ "unlinked": {
+  "total": 18,
+  "associatedToOpenings": 18,
+  "stillUnlinked": []
+ }
+}

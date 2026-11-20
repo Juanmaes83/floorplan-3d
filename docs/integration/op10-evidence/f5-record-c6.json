@@ -1,0 +1,20 @@
+{
+ "kind": "scene-delivery",
+ "format": "rubik-sota.scene-delivery",
+ "version": "1.0.0",
+ "sceneSha256": "e9b2dc1d7b22a60dac181ab918731d7fe06ee0e53b54622eb674313d02ea33a2",
+ "manifestSha256": "14692485a97bc5a57c1970061ddc728b1cc91adedb53c540e85c106577938864",
+ "projectId": "prj_op10-f5-furniture",
+ "observedProjectSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849",
+ "identity": {
+  "status": "observed-only",
+  "contentId": null,
+  "reason": "no confirmed F0 revision supplied by the expediente authority"
+ },
+ "studio": {
+  "sourceKind": "blender-scene",
+  "declaredSource": "RUBIK View3D observed snapshot (OP-10)",
+  "rights": "project owner; no third-party images or textures",
+  "fidelity": "observed-visual"
+ }
+}

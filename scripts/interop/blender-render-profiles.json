@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "status": "measured 2026-11-19 on 4 vCPU, no GPU (F5 example, Cycles CPU): preview ~5-15 s/view 0.9 GB; review ~17-63 s/view 1.2 GB; delivery 243 s (viewer) / 633 s (interior) 2.05 GB. No GPU figure is claimed.",
+  "profiles": {
+    "preview":  {"purpose": "fast check of framing and light", "resolution": "640x400",  "samples": 16,  "fill": "rooms"},
+    "review":   {"purpose": "architectural review (lab OP-10 phase 3 quality)", "resolution": "960x600", "samples": 32, "fill": "rooms"},
+    "delivery": {"purpose": "client-facing still", "resolution": "1600x1000", "samples": 128, "fill": "rooms"}
+  }
+}

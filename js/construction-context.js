@@ -16,7 +16,7 @@
  function ensureStyles(){if(document.querySelector('link[data-construction-styles]'))return;const l=el('link',undefined,document.head);l.rel='stylesheet';l.href='css/construction.css';l.dataset.constructionStyles='';}
 
  /* ---------- identity ---------- */
- function libraryEntries(){try{const v=JSON.parse(localStorage.getItem(LIB));return Array.isArray(v?.entries)?v.entries:[];}catch{return [];}}
+ function libraryEntries(){try{const v=JSON.parse(app.storage.getItem(LIB));return Array.isArray(v?.entries)?v.entries:[];}catch{return [];}}
  // The library entry of the open project, with the project on screen (by identity, never by name) in its place.
  function entry(){
   const id=app.entryId,p=structuredClone(app.project),e=structuredClone(libraryEntries().find(x=>x.id===id)||null);
@@ -27,27 +27,27 @@
  }
  const subject=()=>R.subjectOf(entry());
  const revisionOf=e=>A.fingerprint(R.subjectDoc(e));
- const store=()=>R.open(localStorage);
+ const store=()=>R.open(app.storage);
  async function snapshot(){
-  const e=entry(),s=R.subjectOf(e),doc=R.subjectDoc(e),revision=await revisionOf(e);
+  const e=entry(),s=R.subjectOf(e),doc=R.subjectDoc(e);
   let record=null,recordError=null;try{record=store().get(e.id,s);}catch(err){recordError=err;}
   const dupes=R.duplicateSubjects(libraryEntries()).find(d=>d.subject===s.type+':'+s.id)||null;
   const level=s.type==='building'?s.levels.find(l=>l.id===s.activeLevelId):null;
-  return {entry:e,subject:s,doc,revision,record,recordError,duplicate:dupes,level};
+  return {entry:e,subject:s,doc,revision:await revisionOf(e),record,recordError,duplicate:dupes,level};
  }
  // The budget a plan of this subject may use: the open project's own budget (C1–C4, as Presupuestar shows it).
  // Buildings keep one budget per level: listed, never summed and never allocated to building tasks (DEC-06).
  function budgetFor(s){
   if(s.type==='project'){const c=window.FloorPlanBudgetUI?.current?.();return {kind:'project',budget:c?.budget||null,saved:!!c?.saved,subjectId:app.project.id};}
-  let saved={};try{saved=JSON.parse(localStorage.getItem('rubik-budget-v1'))||{};}catch{}
+  let saved={};try{saved=JSON.parse(app.storage.getItem('rubik-budget-v1'))||{};}catch{}
   return {kind:'building-levels',budget:null,levels:s.levels.map(l=>{let b=null;try{b=saved[l.projectId]?B.parseBudget(JSON.stringify(saved[l.projectId])):null;}catch{}return {...l,budget:b};})};
  }
  // Fingerprints of what a delivery freezes, computed exactly as the Evolución page records them (stored budgets).
  async function nowFingerprints(snap){
-  let saved={};try{saved=JSON.parse(localStorage.getItem('rubik-budget-v1'))||{};}catch{}
+  let saved={};try{saved=JSON.parse(app.storage.getItem('rubik-budget-v1'))||{};}catch{}
   const ids=snap.subject.type==='project'?[snap.doc.id]:snap.doc.levels.map(l=>l.project.id),list=ids.map(id=>saved[id]).filter(Boolean);
   let budget=null;try{budget=list.length===1?B.parseBudget(JSON.stringify(list[0])):null;}catch{}
-  const brand=window.FloorPlanBrand?.snapshot(localStorage,snap.entry.id,snap.entry.name)||null;
+  const brand=window.FloorPlanBrand?.snapshot(app.storage,snap.entry.id,snap.entry.name)||null;
   return R.aspectFingerprints(A.fingerprint,{doc:snap.doc,schedule:snap.record?.schedule||null,budget,brand});
  }
  const ASPECT={project:'el proyecto',schedule:'el plan de obra',budget:'el presupuesto',brand:'la firma de Mi estudio',site:'el emplazamiento'};
@@ -81,13 +81,18 @@
 
  /* ---------- Evolución: the Gate D experience on this saved project, inside RUBIK ---------- */
  let overlay=null,frame=null,lastFocus=null,current=null;
+ let deliveryQueue=Promise.resolve();
  const STEPS=[['plan','Plan de obra'],['proyecto','Expediente'],['evolucion','Evolución 4D'],['entrega','Entregar']];
  // N-09: the guide marks «Mira la obra día a día» as done once the evolution of this project has been opened.
- const seenKey='rubik-evolution-seen-v1',seen=id=>{try{return !!JSON.parse(localStorage.getItem(seenKey)||'{}')[id];}catch{return false;}};
- const markSeen=id=>{try{const o=JSON.parse(localStorage.getItem(seenKey)||'{}');o[id]=Date.now();localStorage.setItem(seenKey,JSON.stringify(o));}catch{}};
+ const seenKey='rubik-evolution-seen-v1',seen=id=>{try{return !!JSON.parse(app.storage.getItem(seenKey)||'{}')[id];}catch{return false;}};
+ const markSeen=id=>{try{const o=JSON.parse(app.storage.getItem(seenKey)||'{}');o[id]=Date.now();app.storage.setItem(seenKey,JSON.stringify(o));}catch{}};
  async function openEvolution({mode='view',taskId=null,date=null}={}){
   try{markSeen(entry()?.id||app.entryId);}catch{}
-  ensureStyles();persistBudget();const snap=await snapshot();
+  ensureStyles();persistBudget();
+  const snap=await snapshot();
+  try{await app.persistence.requireSaved();}
+  catch(e){toast(e.message,6000);return null;}
+  if(app.entryId!==snap.entry.id)return null;
   if(!overlay){overlay=el('div',undefined,document.body,'cx-evolution');overlay.id='evolutionOverlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','evolutionTitle');overlay.hidden=true;
    const bar=el('div',undefined,overlay,'cx-evolution-bar');const back=el('button','← Volver a RUBIK',bar,'btn');back.type='button';back.id='evolutionBack';back.onclick=closeEvolution;
    const t=el('h2','',bar);t.id='evolutionTitle';
@@ -100,7 +105,7 @@
    for(const [m,label] of [['pro','Profesional'],['client','Presentación']]){const b=el('button',label,modes,'cx-step');b.type='button';b.dataset.viewMode=m;b.onclick=()=>frame?.contentDocument?.querySelector(`.modes [data-mode="${m}"]`)?.click();}
    // Escape returns to RUBIK wherever the focus is in this page (inside the frame, library-source.js forwards it).
    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay&&!overlay.hidden&&!e.defaultPrevented&&!document.querySelector('dialog[open]')){e.preventDefault();closeEvolution();}});}
-  current={mode,taskId,date};
+  current={mode,taskId,date,entryId:snap.entry.id,subject:snap.subject.type+':'+snap.subject.id,revision:snap.revision};
   overlay.querySelector('#evolutionTitle').textContent=snap.entry.name;
   overlay.querySelector('#evolutionCrumbs').textContent=`${snap.subject.type==='building'?'Edificio':'Proyecto'} · revisión ${short(snap.revision)}${snap.level?' · planta activa: '+snap.level.name:''}`;
   frame?.remove();frame=el('iframe',undefined,overlay);frame.id='evolutionFrame';frame.title='Evolución de obra de '+snap.entry.name;
@@ -124,20 +129,57 @@
   (lastFocus?.isConnected?lastFocus:document.body).focus?.();}
  // What the evolution shows comes from these three documents; if a dialog opened over it changed one of them, the
  // evolution is rebuilt from the saved data at the same date and task (when they still exist).
- const savedState=()=>['rubik-sota-project-library-v1','rubik-budget-v1','rubik-construction-v1',window.FloorPlanBrand?.DELIVERY_KEY,window.FloorPlanBrand?.PROFILES_KEY].map(k=>k?localStorage.getItem(k):'').join('\u0000');
+ const savedState=()=>['rubik-sota-project-library-v1','rubik-budget-v1','rubik-construction-v1',window.FloorPlanBrand?.DELIVERY_KEY,window.FloorPlanBrand?.PROFILES_KEY].map(k=>k?app.storage.getItem(k):'').join('\u0000');
  async function over(openFn,selector){
   const before=savedState();await openFn();const d=document.querySelector(selector);if(!d?.open)return;
   d.addEventListener('close',async()=>{if(!frame)return;if(savedState()!==before){const f=frame.contentWindow?.__ft3dFidelity;await openEvolution({mode:frame.contentWindow?.document.body.dataset.tab==='entrega'?'deliver':'view',date:f?.last?.date||null,taskId:f?.selected||null});}else frame.focus();},{once:true});
  }
  function openBudgetAt(itemId){window.FloorPlanBudgetUI.open();const tr=itemId&&document.querySelector(`#budgetDialog tr[data-item="${CSS.escape(itemId)}"]`);
   if(tr){tr.classList.add('is-focus');tr.scrollIntoView({block:'center'});tr.querySelector('[data-field="price"]')?.focus({preventScroll:true});}}
+ // Same-origin, frame-scoped capability. The promise correlates each request with its committed revision.
+ function evolutionBridge(sender){
+  if(!app.persistence.session||!frame||frame.contentWindow!==sender)return null;
+  return Object.freeze({register(request){
+   const run=()=>registerEvolutionDelivery(sender,request);
+   const result=deliveryQueue.then(run,run);deliveryQueue=result.catch(()=>{});
+   return result;
+  }});
+ }
+ async function registerEvolutionDelivery(sender,{entryId,subject,requestedRevision,delivery}={}){
+  const validFrame=()=>frame&&frame.contentWindow===sender&&sender.location.origin===location.origin;
+  const SHA=/^[a-f0-9]{64}$/;
+  if(!validFrame()||entryId!==current.entryId||entryId!==app.entryId||subject!==current.subject||requestedRevision!==current.revision)
+   throw Error('La entrega no pertenece a la vista activa de Evolución.');
+  if(!delivery||!/^dlv_[a-zA-Z0-9_-]{1,100}$/.test(delivery.id)||delivery.kind!=='construction-evolution'
+    ||!['vídeo','presentación'].includes(delivery.output)||typeof delivery.title!=='string'||delivery.title.length>240
+    ||typeof delivery.withVideo!=='boolean'||delivery.bytes!==null&&(!Number.isSafeInteger(delivery.bytes)||delivery.bytes<0)
+    ||delivery.sha256!==null&&!SHA.test(delivery.sha256))
+   throw Error('Datos de registro de la entrega inválidos.');
+  const basis=await app.persistence.requireSaved(),snap=await snapshot(),expected=await nowFingerprints(snap);
+  const session=app.persistence.session,state=session.state();
+  if(!validFrame()||entryId!==app.entryId||state.status!=='saved'||state.outdated||state.revision!==basis.revision
+    ||requestedRevision!==snap.revision||Object.keys(expected).some(k=>expected[k]!==delivery.fingerprints?.[k]))
+   throw Error('Los datos de la entrega han cambiado. Vuelve a abrir Evolución.');
+  const {id,output,title,withVideo,bytes,sha256}=delivery;
+  const record={id,kind:'construction-evolution',output,title,withVideo,bytes,sha256,fingerprints:expected};
+  const prior=snap.record?.deliveries.find(d=>d.id===id);
+  if(prior){
+   if(Object.keys(record).some(k=>JSON.stringify(prior[k])!==JSON.stringify(record[k])))throw Error('Ese identificador de entrega ya está registrado con otros datos.');
+   return {id,revision:basis.revision};
+  }
+  store().addDelivery(entryId,snap.subject,record);
+  const saved=await app.persistence.requireSaved();
+  document.dispatchEvent(new CustomEvent('construction-delivered',{detail:{deliveryId:id}}));
+  return {id,revision:saved.revision};
+ }
  // Messages from the Evolución page (same origin only).
- addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='rubik-construction')return;const d=e.data;
+ addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame?.contentWindow||!e.data||e.data.type!=='rubik-construction')return;const d=e.data;
+  if(['itemId','taskId','elementKey','deliveryId'].some(k=>d[k]!==undefined&&(typeof d[k]!=='string'||d[k].length>180)))return;
   if(d.action==='close')closeEvolution();
   if(d.action==='open-plan')over(()=>window.FloorPlanConstructionPlanUI.open({tab:d.itemId?'items':d.elementKey?'elements':'tasks',taskId:d.taskId||null,itemId:d.itemId||null,elementKey:d.elementKey||null}),'#planDialog');
   if(d.action==='open-budget')over(()=>openBudgetAt(d.itemId||null),'#budgetDialog');
   if(d.action==='open-site')over(()=>window.FloorPlanTerritoryUI?.open(),'#territoryDialog');
-  if(d.action==='delivered')document.dispatchEvent(new CustomEvent('construction-delivered',{detail:{deliveryId:d.deliveryId}}));});
+  if(d.action==='delivered'&&!app.persistence.session)document.dispatchEvent(new CustomEvent('construction-delivered',{detail:{deliveryId:d.deliveryId}}));});
 
  /* ---------- budget dialog: partida → tareas → elementos (read-only) ---------- */
  let linkCache=null;
@@ -237,5 +279,5 @@
   }
  }
  window.FloorPlanConstructionContext={entry,subject,snapshot,store,budgetFor,persistBudget,nowFingerprints,deliveryState,elementLabel,rolesFor,TYPE,ROLE,LIFE,eur,day,short};
- window.FloorPlanConstructionUI={cards,openEvolution,closeEvolution,planState,get evolutionFrame(){return frame;}};
+ window.FloorPlanConstructionUI={cards,openEvolution,closeEvolution,planState,evolutionBridge,get evolutionFrame(){return frame;}};
 })();

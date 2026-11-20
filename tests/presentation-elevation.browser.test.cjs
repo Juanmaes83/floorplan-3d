@@ -178,8 +178,15 @@ test('autoplay pauses and resumes; the browser Back restores (1440x900, motion a
  await configure(page,{elevation:true});await settled(page);const before=(await state(page)).residue;await page.locator('#presentationElevationPlay').click();
  await page.evaluate(()=>new Promise(r=>{const tick=()=>{if(FloorPlanPresentation.story?.playing&&FloorPlanPresentation.story.p>0){document.querySelector('#presentationStoryPlay').click();r();}else requestAnimationFrame(tick);};tick();}));
  const paused=await state(page);assert.equal(paused.story.playing,false,'pause');assert.ok(paused.story.p>0&&paused.story.p<1);
- await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.playing);
- await page.evaluate(()=>new Promise(r=>{const tick=()=>{if(FloorPlanPresentation.story?.playing&&FloorPlanPresentation.story.p>.3){document.querySelector('#presentationStoryPlay').click();r();}else if(!FloorPlanPresentation.story)r();else requestAnimationFrame(tick);};tick();}));
+ await page.locator('#presentationStoryPlay').click();
+ // A slow first frame can already exceed 30% before the initial pause.
+ await page.waitForFunction(pausedAt=>{
+  const story=FloorPlanPresentation.story;
+  if(!story)return true;
+  if(story.p<=Math.max(.3,pausedAt))return false;
+  if(story.playing)document.querySelector('#presentationStoryPlay').click();
+  return true;
+ },paused.story.p);
  const resumed=await state(page);assert.ok(!resumed.story||resumed.story.p>paused.story.p,'resumed from where it paused');
  await exit(page,editor,'back','back');await residueClean(page,'back',before);assert.deepEqual(errors,[]);
 });

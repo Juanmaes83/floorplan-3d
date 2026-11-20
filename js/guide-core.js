@@ -55,6 +55,8 @@
   missing:{title:['Ver qué me falta','See what is left','查看剩余任务'],description:['Consulta las tareas necesarias pendientes de tu objetivo.','See the remaining required tasks for your goal.','查看目标尚未完成的必要任务。'],next:['Resolver la primera tarea pendiente','Resolve the first remaining task','完成第一个剩余任务'],terms:'falta faltan pendiente progreso ayuda siguiente missing progress help next'},
   save:{title:definitions.save.title,description:definitions.save.instruction,next:['Exportar una copia JSON o ZIP','Export a JSON or ZIP copy','导出 JSON 或 ZIP 副本'],terms:'guardar conservar salvar save keep',goal:'save'},
   export:{title:definitions.export.title,description:definitions.export.instruction,next:['Guardar también el proyecto editable','Also save the editable project','同时保存可编辑项目'],terms:'exportar imagen png descargar captura export image png download capture',prerequisite:'geometry',goal:'export'},
+  // AST-01 · La tarjeta de plantas orienta y no genera: abre el panel «Plantas…» que ya existe (js/building-ui.js).
+  levels:{title:['Añadir una planta','Add a level','添加楼层'],description:['Abre «Plantas…»: crea un edificio de dos plantas a partir de este proyecto, que se conserva sin cambios, o revisa las plantas del edificio abierto.','Opens «Levels…»: create a two-level building from this project, which is kept unchanged, or review the levels of the open building.','打开“楼层…”：用当前项目创建两层建筑（当前项目保持不变），或查看已打开建筑的楼层。'],next:['Elegir planta vacía o desde imagen o PDF','Choose an empty level or one from an image or PDF','选择空楼层或从图片或 PDF 创建'],terms:'planta plantas piso pisos nivel niveles edificio duplex escalera storey storeys level levels building stairs',capability:'building'},
   // The editor's own tools, reachable by name: each runs the palette's entry (FloorPlanBuildPalette), not a copy.
   drawWall:{title:['Dibujar un muro nuevo','Draw a new wall','绘制新墙'],description:['Herramienta «Dibujar muro» de Construir: toca los dos extremos de cada muro y pulsa «Terminar».','The Build «Draw wall» tool: tap both ends of each wall, then «Finish».','“构建”中的“绘制墙体”：点击每面墙的两端，然后点“完成”。'],next:['Tocar el primer extremo en el plano','Tap the first end on the plan','在平面图上点击第一个端点'],terms:'dibujar trazar construir levantar draw build'},
   measure:{title:['Medir una distancia','Measure a distance','测量距离'],description:['Herramienta «Medir» (M): marca dos puntos o arrastra una línea; Mayús la deja horizontal o vertical. Medida orientativa.','The «Measure» tool (M): mark two points or drag a line; Shift keeps it horizontal or vertical. Indicative measurement.','“测量”工具 (M)：标记两点或拖出一条线；Shift 保持水平或垂直。仅供参考。'],next:['Marcar el primer punto en el plano','Mark the first point on the plan','在平面图上标记第一个点'],terms:'medir medida medidas mide distancia cota cotas regla metro measure measurement distance ruler dimension'},
@@ -68,9 +70,9 @@
  const furnitureTerms=[['bed','cama','cama camas lecho bed beds'],['crib','cuna','cuna bebe crib'],['sofa','sofa','sofa sofas couch'],['armchair','butaca','butaca sillon armchair'],['table','mesa','mesa mesas table'],['wardrobe','armario','armario ropero wardrobe'],['fridge','nevera','nevera frigorifico fridge'],['counter','encimera','encimera counter'],['chair','silla','silla sillas chair']];
  function resolve(query){
   let q=normalize(query);
-  const chinese={'上传':'upload plan','拼接':'join scan','家具':'furniture','床':'bed','比例':'scale','保存':'save','还有什么':'missing','剩余':'missing','地板':'floor','墙':'walls','撤销':'undo','示例':'example','从零':'scratch','导出':'export','展示':'presentation'};
+  const chinese={'楼层':'levels','层':'levels','楼梯':'levels','上传':'upload plan','拼接':'join scan','家具':'furniture','床':'bed','比例':'scale','保存':'save','还有什么':'missing','剩余':'missing','地板':'floor','墙':'walls','撤销':'undo','示例':'example','从零':'scratch','导出':'export','展示':'presentation'};
   for(const [term,alias]of Object.entries(chinese))if(q.includes(term))q+=' '+alias;
-  if(!q)return ['upload','blank','furniture','presentation','3d','missing','save'].map(id=>({id,...actions[id]}));
+  if(!q)return ['upload','blank','levels','furniture','presentation','3d','missing','save'].map(id=>({id,...actions[id]}));
   const words=q.split(' '),has=terms=>terms.split(' ').some(w=>words.some((t,i)=>t===w||i===words.length-1&&t.length>=3&&t.length<w.length&&w.startsWith(t)));
   if(has('cambiar modificar change edit')&&has('cocina kitchen')&&!has('pared paredes muro muebles suelo floor wall furniture'))return ['walls','furniture','floor'].map(id=>({id,...actions[id],ambiguous:true}));
   if(has('borrar vaciar eliminar clear delete remove')&&has('muebles furniture'))return [{id:'clear',...actions.clear}];
@@ -79,8 +81,14 @@
   if(has('subir cargar importar upload import')&&has('plano imagen foto casa escaneo image photo plan house scan pdf png jpg jpeg webp heic tiff svg dxf ifc roomplan json zip bmp gif avif'))return [{id:'upload',...actions.upload}];
   if(has('exportar export captura capture png descargar download'))return [{id:'export',...actions.export}];
   if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house'))return [{id:'upload',...actions.upload}];
+  // AST-01: «planta» es también una planta decorativa del catálogo. Las palabras de edificio llevan a «Plantas…»;
+  // «planta» sola, sin «poner/colocar/maceta…», es ambigua y se ofrecen las dos opciones; nunca se adivina.
+  if(has('nivel niveles edificio duplex storey storeys level levels building escalera escaleras stairs')&&!has('borrar eliminar vaciar clear delete remove'))return [{id:'levels',...actions.levels}];
+  const plantWord=has('planta plantas'),plantPlace=has('poner colocar maceta macetero decoracion decorativa verde pot plant plants');
+  if(plantWord&&has('baja primera segunda tercera superior sotano atico'))return [{id:'levels',...actions.levels}];
   const catalogTerms=Object.entries(furnitureSearch.specs).map(([type,[,terms]])=>[type,terms.split(' ')[0],terms.split(' ').filter(t=>t!=='cocina').join(' ')]);
   const found=[...furnitureTerms,...catalogTerms].find(([, , terms])=>has(terms));
+  if(found?.[0]==='plant'&&plantWord&&!plantPlace)return [{id:'levels',...actions.levels,ambiguous:true},{id:'furniture',...actions.furniture,title:[`Buscar ${found[1]}`,`Find ${found[0]}`,'搜索家具'],filter:found[1],targetType:found[0],ambiguous:true}];
   if(found&&!has('borrar eliminar vaciar clear delete remove'))return [{id:'furniture',...actions.furniture,title:[`Buscar ${found[1]}`,`Find ${found[0]}`,'搜索家具'],filter:found[1],targetType:found[0],roomHint:has('dormitorio habitacion bedroom')?'bedroom':has('cocina kitchen')?'kitchen':undefined}];
   return Object.entries(actions).filter(([,a])=>has(a.terms)).map(([id,a])=>({id,...a})).slice(0,5);
  }
