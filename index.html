@@ -1896,7 +1896,7 @@ function furnPanel(f){
       <label>${tr('宽','Width')} (mm)<input type="number" id="fW" value="${f.w}" min="50" step="10"></label>
       <label>${tr('深','Depth')} (mm)<input type="number" id="fD" value="${f.d}" min="50" step="10"></label>
       <label>${tr('高度','Height')} (mm)<input type="number" id="fH" value="${f.size.heightMm??''}" placeholder="${FloorPlanGenericCatalog.heights[f.type]??800}" min="1" max="10000" step="10"></label>
-      <label class="full">Modelo 3D autorizado<select id="fAsset" aria-describedby="fAssetStatus"><option value="">Genérico</option>${(window.FloorPlanAssetUI?.entries||[]).map(e=>`<option value="${esc(e.id)}" ${f.assetRef?.assetId===e.id&&f.assetRef?.catalog===e.catalog?'selected':''}>${esc(e.name)}</option>`).join('')}</select></label>
+      <label class="full">Modelo 3D autorizado<select id="fAsset" aria-describedby="fAssetStatus"><option value="">Genérico</option>${(window.FloorPlanAssetUI?.entries||[]).filter(e=>FloorPlanAssets.canUse(e,f)).map(e=>`<option value="${esc(e.id)}" ${f.assetRef?.assetId===e.id&&f.assetRef?.catalog===e.catalog?'selected':''}>${esc(e.name)}</option>`).join('')}</select></label>
       <p class="full muted" id="fAssetStatus" role="status" aria-live="polite"></p>
       <label>${tr('中心','Center')} X (mm)<input type="number" id="fX" value="${Math.round(f.cx)}" step="10"></label>
       <label>${tr('中心','Center')} Y (mm)<input type="number" id="fY" value="${Math.round(f.cy)}" step="10"></label>
@@ -1916,7 +1916,7 @@ function bindFurnPanel(f){
   num('#fW', (g,v) => g.w = Math.max(50, Math.round(v)));
   num('#fD', (g,v) => g.d = Math.max(50, Math.round(v)));
   $('#fH').onchange=e=>{const value=e.target.value;if(value==='')upd(g=>delete g.size.heightMm);else if(Number.isFinite(Number(value))&&Number(value)>=1&&Number(value)<=10000)upd(g=>g.size.heightMm=Math.round(Number(value)));else renderPanel();};
-  $('#fAsset').onchange=e=>{const entry=window.FloorPlanAssetUI?.entries.find(a=>a.id===e.target.value);upd(g=>{if(entry)g.assetRef=FloorPlanAssets.associate(g,entry).assetRef;else delete g.assetRef;});};
+  $('#fAsset').onchange=e=>{const entry=window.FloorPlanAssetUI?.entries.find(a=>a.id===e.target.value);upd(g=>{if(FloorPlanAssets.canUse(entry,g))g.assetRef=FloorPlanAssets.associate(g,entry).assetRef;else if(!entry)delete g.assetRef;});};
   window.FloorPlanAssetUI?.update();
   num('#fX', (g,v) => g.cx = v); num('#fY', (g,v) => g.cy = v); num('#fR', (g,v) => g.rot = norm(v));
   $('#fC').onchange = e => upd(g => g.color = e.target.value);
@@ -4005,7 +4005,7 @@ function publishAsset(id,value){assetStates.set(id,value);dispatchEvent(new Even
 function loadFurnitureAsset(g,f,generation){
   if(!f.assetRef){publishAsset(f.id,{state:'generic'});return;}
   const entry=FloorPlanAssets.resolve(window.FloorPlanAssetUI?.entries||[],f.assetRef);
-  if(!entry){publishAsset(f.id,{state:'error',reason:'Referencia no disponible o no autorizada'});return;}
+  if(!FloorPlanAssets.canUse(entry,f)){publishAsset(f.id,{state:'error',reason:'Referencia no disponible o no autorizada para este tipo de objeto'});return;}
   const controller=new AbortController();assetRequests.set(f.id,controller);publishAsset(f.id,{state:'loading'});
   const bounds=new THREE.Box3().setFromObject(g),height=f.size.heightMm?M(f.size.heightMm):bounds.max.y-bounds.min.y;
   assetQueue.push(()=>AssetLoader.load(entry,{signal:controller.signal}).then(result=>{
