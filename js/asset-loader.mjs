@@ -71,16 +71,23 @@ export function dispose(scene){
  scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material])if(m){materials.add(m);for(const v of Object.values(m))if(v?.isTexture){textures.add(v);if(v.image?.close)images.add(v.image);}}});
  geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());images.forEach(i=>i.close());
 }
-export function normalize(scene,entry){
- const root=new THREE.Group();root.add(scene);root.scale.setScalar(entry.normalization.unitToMeter);root.rotation.set(...entry.normalization.rotationDeg.map(v=>v*Math.PI/180));root.updateMatrixWorld(true);
+// OP-05 · P1: measure a parsed scene with an explicit normalization (unit scale and rotation). It never compares with
+// catalogue dimensions and certifies no physical scale: `dimensionsMm` are the normalized MESH dimensions.
+export function measure(scene,normalization){
+ const root=new THREE.Group();root.add(scene);root.scale.setScalar(normalization.unitToMeter);root.rotation.set(...normalization.rotationDeg.map(v=>v*Math.PI/180));root.updateMatrixWorld(true);
  let bounds=new THREE.Box3().setFromObject(root),size=bounds.getSize(new THREE.Vector3());
  if(![size.x,size.y,size.z].every(v=>Number.isFinite(v)&&v>0))throw Error('Invalid bounding box');
  const measured={width:size.x*1000,height:size.y*1000,depth:size.z*1000};
- if(Object.keys(measured).some(k=>Math.abs(measured[k]-entry.dimensionsMm[k])>20))throw Error('Dimensions differ by more than 20 mm');
  const support=new THREE.Group();support.add(root);root.position.set(-(bounds.min.x+bounds.max.x)/2,-bounds.min.y,-(bounds.min.z+bounds.max.z)/2);support.updateMatrixWorld(true);
  let triangles=0,geometryBytes=0;support.traverse(o=>{if(o.isMesh){const p=o.geometry.attributes.position;triangles+=(o.geometry.index?.count??p.count)/3;geometryBytes+=Object.values(o.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+(o.geometry.index?.array.byteLength||0);o.castShadow=o.receiveShadow=true;}});
  if(!Number.isFinite(triangles)||triangles<=0)throw Error('Empty model');
  return {scene:support,dimensionsMm:measured,triangles,geometryBytes};
+}
+// Catalogue path, unchanged: measure with the verified normalization, then the same 20 mm tolerance.
+export function normalize(scene,entry){
+ const result=measure(scene,entry.normalization),measured=result.dimensionsMm;
+ if(Object.keys(measured).some(k=>Math.abs(measured[k]-entry.dimensionsMm[k])>20))throw Error('Dimensions differ by more than 20 mm');
+ return result;
 }
 async function download(url,limit,signal){
  const absolute=new URL(url,location.href);if(absolute.origin!==location.origin||absolute.search||absolute.hash||!absolute.pathname.startsWith(new URL('assets/f3/',location.href).pathname))throw Error('Asset path is not approved');
@@ -89,15 +96,9 @@ async function download(url,limit,signal){
  const bytes=new Uint8Array(length);let n=0;for(const b of chunks){bytes.set(b,n);n+=b.length;}return bytes.buffer;
 }
 const digest=async buffer=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),b=>b.toString(16).padStart(2,'0')).join('');
-export async function load(entry,{timeoutMs=8000,signal}={}){
- const controller=new AbortController(),abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
- const timer=setTimeout(abort,timeoutMs),start=performance.now(),bitmaps=[],createdTextures=[];let parsed;
- const check=()=>{if(controller.signal.aborted)throw Error('Loading aborted');};
- const cleanup=()=>{if(parsed)dispose(parsed.scene);createdTextures.splice(0).forEach(t=>t.dispose());bitmaps.splice(0).forEach(i=>i.close());};
- let rejectAbort;const canceled=new Promise((_,reject)=>{rejectAbort=()=>reject(Error('Loading aborted'));controller.signal.addEventListener('abort',rejectAbort,{once:true});if(controller.signal.aborted)rejectAbort();});
- const task=(async()=>{try{
-  check();const permission=await download(entry.permissionUrl,32768,controller.signal);check();if(await digest(permission)!==entry.permissionSha256)throw Error('Permission document changed');
-  const buffer=await download(entry.url,Math.min(entry.bytes,MAX_BYTES),controller.signal);check();if(buffer.byteLength!==entry.bytes||await digest(buffer)!==entry.sha256)throw Error('Model integrity changed');
+// OP-05 · P1: processing of bytes that are ALREADY authorized (catalogue: download + permission + SHA-256; private: bytes
+// + length + SHA-256 + localGLB validation). Same F3 container, texture and budget checks; same cancellation and release.
+async function parseVerified(buffer,check,bitmaps,createdTextures,keep){
   const data=readGLB(buffer),info=textures(buffer,data);check();
   for(const im of info.images){
    const bitmap=await createImageBitmap(new Blob([new Uint8Array(buffer,im.offset,im.bytes)],{type:'image/jpeg'}),{premultiplyAlpha:'none',colorSpaceConversion:'none'});bitmaps.push(bitmap);check();
@@ -109,8 +110,38 @@ export async function load(entry,{timeoutMs=8000,signal}={}){
    texture.flipY=false;texture.name=def.name||'';texture.magFilter=filters[sampler.magFilter]||THREE.LinearFilter;texture.minFilter=filters[sampler.minFilter]||THREE.LinearMipmapLinearFilter;texture.wrapS=wraps[sampler.wrapS]||THREE.RepeatWrapping;texture.wrapT=wraps[sampler.wrapT]||THREE.RepeatWrapping;texture.needsUpdate=true;
    createdTextures.push(texture);parser.associations.set(texture,{textures:index});return Promise.resolve(texture);
   }}));
-  parsed=await loader.parseAsync(buffer,'');check();const result=normalize(parsed.scene,entry);check();
-  return {...result,bytes:buffer.byteLength,permissionBytes:permission.byteLength,durationMs:performance.now()-start,textureStats:info.stats,attribution:entry.attribution};
+  const parsed=await loader.parseAsync(buffer,'');keep(parsed);check();
+  return {parsed,info};
+}
+// One pipeline for every origin: `acquire` obtains AUTHORIZED bytes under the same timeout and cancellation; the bytes are
+// processed by parseVerified and `finish` builds the result. Any failure or abort releases bitmaps, textures and GPU data.
+async function pipeline(acquire,finish,{timeoutMs=8000,signal}={}){
+ const controller=new AbortController(),abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
+ const timer=setTimeout(abort,timeoutMs),start=performance.now(),bitmaps=[],createdTextures=[];let parsed;
+ const check=()=>{if(controller.signal.aborted)throw Error('Loading aborted');};
+ const cleanup=()=>{if(parsed)dispose(parsed.scene);createdTextures.splice(0).forEach(t=>t.dispose());bitmaps.splice(0).forEach(i=>i.close());};
+ let rejectAbort;const canceled=new Promise((_,reject)=>{rejectAbort=()=>reject(Error('Loading aborted'));controller.signal.addEventListener('abort',rejectAbort,{once:true});if(controller.signal.aborted)rejectAbort();});
+ const task=(async()=>{try{
+  check();const acquired=await acquire(controller.signal,check);check();
+  const {parsed:p,info}=await parseVerified(acquired.buffer,check,bitmaps,createdTextures,x=>{parsed=x;});
+  const result=finish(p.scene,acquired);check();
+  return {...result,bytes:acquired.buffer.byteLength,durationMs:performance.now()-start,textureStats:info.stats};
  }catch(error){cleanup();throw error;}})();
  try{return await Promise.race([task,canceled]);}catch(error){cleanup();throw error;}finally{clearTimeout(timer);controller.signal.removeEventListener('abort',rejectAbort);signal?.removeEventListener('abort',abort);}
+}
+// Catalogue: same-origin assets/f3 download, permission document and model SHA-256, then the 20 mm tolerance (unchanged).
+export async function load(entry,options={}){
+ return pipeline(async(sig,check)=>{
+  const permission=await download(entry.permissionUrl,32768,sig);check();if(await digest(permission)!==entry.permissionSha256)throw Error('Permission document changed');
+  const buffer=await download(entry.url,Math.min(entry.bytes,MAX_BYTES),sig);check();if(buffer.byteLength!==entry.bytes||await digest(buffer)!==entry.sha256)throw Error('Model integrity changed');
+  return {buffer,permission};
+ },(scene,{permission})=>({...normalize(scene,entry),permissionBytes:permission.byteLength,attribution:entry.attribution}),options);
+}
+// OP-05 · P1 (laboratory only, NOT wired to the viewer): bytes that the caller already holds. No URL is accepted. The caller
+// supplies `verify(buffer)` (length, SHA-256, localGLB geometry/resources) and the result carries MESH dimensions only.
+export async function loadVerifiedBytes(buffer,{verify,normalization,...options}={}){
+ if(!(buffer instanceof ArrayBuffer))throw Error('Only verified bytes are accepted (no URL, Blob or view)');
+ if(typeof verify!=='function')throw Error('A verification step is required');
+ return pipeline(async(sig,check)=>{const copy=buffer.slice(0);await verify(copy);check();return {buffer:copy};},
+  scene=>measure(scene,normalization||{unitToMeter:1,rotationDeg:[0,0,0]}),options);
 }
