@@ -1,4 +1,4 @@
-From ed9ce37f24fd79de34089fec933c5df062ec6769 Mon Sep 17 00:00:00 2001
+From 77cff3ed1d2a606dbad990243419ef6f537ea67a Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:23:33 +0000
 Subject: [PATCH 07/10] =?UTF-8?q?OP-07=20S3b=20=C2=B7=20Estancias=20por=20?=
@@ -23,7 +23,7 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s3b-split.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index ae619e64..c3a20c6a 100644
+index 10ec4b4b..5ae63b30 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -403,6 +403,71 @@
@@ -232,7 +232,7 @@ index a4c9b945..bff3ac01 100644
   assert.equal(Core.WALL_PATH.toleranceMm,1,'tolerancia única propuesta (pendiente de decisión de producto)');
  });
 diff --git a/tests/op07-s2-geometry.test.cjs b/tests/op07-s2-geometry.test.cjs
-index 675c692c..70c39c05 100644
+index ea1cd98e..caddd5d4 100644
 --- a/tests/op07-s2-geometry.test.cjs
 +++ b/tests/op07-s2-geometry.test.cjs
 @@ -13,7 +13,9 @@ test('S2 · muros rectos: geometría idéntica byte a byte a master (02712b51) e

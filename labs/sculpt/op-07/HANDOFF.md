@@ -102,6 +102,26 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
 - **Honestidad:** es un lector independiente, **no** la aceptación en dos CAD comerciales. Esa aceptación (arquitecto: AutoCAD/BricsCAD o equivalente, con unidades, cotas, huecos y longitudes) sigue PENDIENTE y no se atribuye a la relectura con `plan-intake` ni a ezdxf.
 - **Fallo previo, no de OP-07:** «G-02 downloads only the active building level» también falla en master `bf131c30`, con la misma aserción: `file.name.endsWith(level.name+'.dxf')`, el nombre del archivo descargado. Es un corte separado, si se autoriza.
 
+## Bloque 6 · Blender (OP-10 candidata `6d3e5260`, intacta): `scene-fidelity` con el núcleo y escenario `f7-curved` — 20/11/2026
+- **Rama de laboratorio** `claude/op07-blender-v3@972ac0b9`: `6d3e5260` fusionada con la serie v3. El único conflicto era `index.html`: los scripts de OP-10 pasan dentro del `<template>` del editor de F0.2b.
+- **Delta independiente** (`labs/sculpt/op-07/blender/0001-…patch`, un commit):
+  - `scripts/interop/scene-fidelity.cjs`:
+    - los muros con forma se miden con `js/wall-geometry-core.js` y `Core.WALL_PATH`: grosor y centrado respecto al eje facetado, longitud por trayectoria, altura máxima, altura en cada extremo, ningún vértice por encima de la línea inclinada y base;
+    - el rayo del hueco y la identidad de sus mallas siguen la trayectoria y la normal de **su** faceta;
+    - el suelo esperado es `Core.roomRing`.
+    - Los muros rectos sin pendiente siguen el camino anterior.
+  - `tests/fixtures/scene-blender/build.cjs` y `scene-run.cjs`: escenario **f7-curved**. Es la vivienda F1 con el muro sur curvado (con puerta) y dividido en dos piezas, y el muro este inclinado de 2,8 a 2,3 m (con ventana), todo con las operaciones reales del núcleo.
+- **Defecto REAL encontrado por el comparador y corregido en S2:**
+  - En un muro **recto con pendiente**, `openingHost` devolvía el muro entero. La ventana y la puerta se construían (en el plano y en 3D) con la longitud de **todo el muro** desde su offset: mallas de la ventana de unos 4,24 m en vez de 1,2 m.
+  - Corrección: `wallRect(host, offset, isCurved ? cuerda : o.widthMm)`.
+  - Prueba de regresión nueva en `tests/op07-s2-geometry.test.cjs` (anchura y centro de la ventana y la puerta, y la hoja de la puerta).
+- **Resultados con bpy 5.2.1 LTS**, recorrido real A (proyecto) → B (visor) → C (Blender) → reapertura del `.blend`:
+  - **f7-curved:** A↔B 49 comprobaciones de contrato, 0 fallos; C↔A 48, 0 fallos; C↔B desviación máxima 0 mm (1273 vértices); 0 mallas sin identificar; C3 = 0; reapertura PASS.
+  - **f1–f6:** resúmenes **idénticos** a los de la candidata intacta `6d3e5260` en esta misma máquina (`evidence-f7/candidate-6d3e5260-summary.jsonl` frente a `scene-run-summary.jsonl`). No hay regresión en OP-10.
+- **Evidencia:** `labs/sculpt/op-07/blender/evidence-f7/` (fidelity-AB.json, project.json y los resúmenes).
+- **Delta acwall de Codex:** no lo he podido cotejar. El conector de GitHub falla en esta sesión (proxy 403) y no hay una rama con ese nombre en el transporte git. Pendiente de que Codex indique la ref.
+- **Nota operativa:** las capturas de f2, f5 y f6 ocupan unos 185 MB y llenaron el disco de este contenedor. Se borran después de extraer la evidencia.
+
 ## Pendiente (en este orden)
 1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
    Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.

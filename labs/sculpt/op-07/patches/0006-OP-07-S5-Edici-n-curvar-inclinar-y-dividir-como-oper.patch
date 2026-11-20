@@ -1,4 +1,4 @@
-From 9624f7dfb1c982be21bbf1c7450d5fb2286ad7f1 Mon Sep 17 00:00:00 2001
+From 5bc072d9871b28c9ca7ce19e0a22e022ad8b167f Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
 Subject: [PATCH 06/10] =?UTF-8?q?OP-07=20S5=20=C2=B7=20Edici=C3=B3n:=20cur?=
@@ -18,7 +18,7 @@ Content-Transfer-Encoding: 8bit
  create mode 100644 tests/op07-s5-edit.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index d4d060f8..ae619e64 100644
+index d6311781..10ec4b4b 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -457,6 +457,49 @@

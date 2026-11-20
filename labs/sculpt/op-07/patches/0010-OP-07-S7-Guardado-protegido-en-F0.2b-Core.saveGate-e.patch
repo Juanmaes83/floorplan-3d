@@ -1,4 +1,4 @@
-From a05c0af9f5599f0a3653a2e00f150e485c210c73 Mon Sep 17 00:00:00 2001
+From 3833838e2525a43f753bbb2907cded0c98cd0f41 Mon Sep 17 00:00:00 2001
 From: op07 <op07@local>
 Date: Fri, 20 Nov 2026 10:23:51 +0000
 Subject: [PATCH 10/10] =?UTF-8?q?OP-07=20S7=20=C2=B7=20Guardado=20protegid?=
@@ -207,7 +207,7 @@ index e363fb0b..7bdf081d 100644
      }finally{adopting=false;}
     },
 diff --git a/js/project-core.js b/js/project-core.js
-index 896708bc..43c4e48e 100644
+index 40ec9646..ca2aa6e0 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -46,6 +46,55 @@

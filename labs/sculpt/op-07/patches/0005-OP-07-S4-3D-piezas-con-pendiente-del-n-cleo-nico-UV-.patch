@@ -1,4 +1,4 @@
-From d63b09a6dd3bb04f0abaaa49d3be1e4593dfa7a2 Mon Sep 17 00:00:00 2001
+From de677003457bbd31e684e5820a9183be343d2007 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:04 +0000
 Subject: [PATCH 05/10] =?UTF-8?q?OP-07=20S4=20=C2=B7=203D:=20piezas=20con?=
@@ -53,7 +53,7 @@ index d34ea1ae..752d0397 100644
    get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
    // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
 diff --git a/js/project-core.js b/js/project-core.js
-index 05149a48..d4d060f8 100644
+index cb9e52e1..d6311781 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -375,7 +375,7 @@
@@ -82,7 +82,7 @@ index 05149a48..d4d060f8 100644
      if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
 @@ -414,6 +422,8 @@
          const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
-         const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
+         const rect=shaped?wallRect(host,offset,Walls.isCurved(w)?Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y):o.widthMm):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
          Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
 +        // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
 +        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2});}

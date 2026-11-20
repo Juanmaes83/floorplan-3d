@@ -1,4 +1,4 @@
-From 41ff183bd6800c9871de116c339e732d6338ce7f Mon Sep 17 00:00:00 2001
+From 1152257517842284a635192a5bd0eb90be3b04c8 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:37:14 +0000
 Subject: [PATCH 09/10] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y?=
@@ -76,7 +76,7 @@ index bb16a917..34472779 100644
      const gTop = Math.min(head, top); if (gTop <= sill) return;
      const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
 diff --git a/js/project-core.js b/js/project-core.js
-index c3a20c6a..896708bc 100644
+index 5ae63b30..40ec9646 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -364,20 +364,39 @@
@@ -177,7 +177,7 @@ index c3a20c6a..896708bc 100644
        let at=0;
        for (const o of openings) {
 @@ -488,7 +528,8 @@
-         const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
+         const rect=shaped?wallRect(host,offset,Walls.isCurved(w)?Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y):o.widthMm):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
          Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
          // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
 -        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2});}

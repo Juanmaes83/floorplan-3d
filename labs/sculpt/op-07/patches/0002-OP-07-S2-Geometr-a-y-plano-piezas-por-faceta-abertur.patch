@@ -1,4 +1,4 @@
-From 0c7bbe153b707965b2db1bbe28d8308ed5581bba Mon Sep 17 00:00:00 2001
+From da302a9c69279e95d1d972ec0b441c5e10ac6fe8 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 22:52:03 +0000
 Subject: [PATCH 02/10] =?UTF-8?q?OP-07=20S2=20=C2=B7=20Geometr=C3=ADa=20y?=
@@ -9,14 +9,14 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
- js/project-core.js              | 55 +++++++++++++++++++++++++++------
- tests/op07-s2-geometry.test.cjs | 50 ++++++++++++++++++++++++++++++
- tests/op07/fixtures.cjs         | 21 ++++++++-----
- 3 files changed, 109 insertions(+), 17 deletions(-)
+ js/project-core.js              | 55 +++++++++++++++++++++++-----
+ tests/op07-s2-geometry.test.cjs | 63 +++++++++++++++++++++++++++++++++
+ tests/op07/fixtures.cjs         | 21 ++++++-----
+ 3 files changed, 122 insertions(+), 17 deletions(-)
  create mode 100644 tests/op07-s2-geometry.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index 0730efa6..0b0355c2 100644
+index 0730efa6..be509531 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -361,33 +361,69 @@
@@ -72,7 +72,7 @@ index 0730efa6..0b0355c2 100644
          at=Math.max(at,o.offsetMm+o.widthMm);
 -        const rect=wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
 +        const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
-+        const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
++        const rect=shaped?wallRect(host,offset,Walls.isCurved(w)?Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y):o.widthMm):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
          Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
          if(w.status==='demolished') continue;
          if(o.kind==='window') windows.push(rect);
@@ -108,10 +108,10 @@ index 0730efa6..0b0355c2 100644
  })(globalThis);
 diff --git a/tests/op07-s2-geometry.test.cjs b/tests/op07-s2-geometry.test.cjs
 new file mode 100644
-index 00000000..675c692c
+index 00000000..ea1cd98e
 --- /dev/null
 +++ b/tests/op07-s2-geometry.test.cjs
-@@ -0,0 +1,50 @@
+@@ -0,0 +1,63 @@
 +'use strict';
 +// OP-07 · S2 Geometría y plano: un rectángulo por faceta del núcleo único, macizo donde no hay abertura; muros rectos
 +// idénticos a master; símbolo de abertura en su sitio real sobre la trayectoria.
@@ -161,6 +161,19 @@ index 00000000..675c692c
 + assert.equal(o.length,2*(n+1));
 + const area=Math.abs(o.reduce((s,p,i)=>s+p[0]*o[(i+1)%o.length][1]-o[(i+1)%o.length][0]*p[1],0))/2;
 + assert.ok(Math.abs(area-Core.wallLength(wall)*wall.thicknessMm)/area<0.01,'área del contorno ≈ trayectoria × grosor');
++});
++
++test('S2 · muro RECTO con pendiente: ventana y puerta miden su anchura y están centradas en su hueco (no el muro entero)',()=>{
++ // Defecto encontrado por el comparador de Blender (f7-curved, 20/11/2026): el símbolo y el 3D de la abertura se hacían
++ // con la longitud de TODO el muro desde su offset.
++ const {project:p,wall:w}=F.sloped(F.base(),{heightEndMm:2300}),L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),u={x:(w.end.x-w.start.x)/L,y:(w.end.y-w.start.y)/L};
++ p.openings=p.openings.filter(o=>o.wallId!==w.id);
++ p.openings.push({id:'opn_slopewin',wallId:w.id,kind:'window',offsetMm:800,widthMm:1200,heightMm:1000,sillHeightMm:900},{id:'opn_slopedoor',wallId:w.id,kind:'door',offsetMm:2600,widthMm:900,heightMm:2050,sillHeightMm:0,swing:{hinge:'start',side:'left'}});
++ Core.validate(p);const g=Core.geometry(p);
++ const door=g.doors.find(d=>d.id==='opn_slopedoor');assert.ok(door&&Math.abs(door.len-900)<1e-6,'hoja de la puerta = su anchura');
++ for(const [list,id,off,wd] of [[g.windows,'opn_slopewin',800,1200],[g.doors.map(d=>d.rect),'opn_slopedoor',2600,900]]){const r=list.find(x=>x.openingId===id);
++  assert.ok(r,id);assert.ok(Math.abs(r.spanMm-wd)<1e-6,`${id}: ${r.spanMm} mm`);
++  const c={x:w.start.x+u.x*(off+wd/2),y:w.start.y+u.y*(off+wd/2)};assert.ok(Math.hypot(r.center[0]-c.x,r.center[1]-c.y)<1,`${id}: centro`);}
 +});
 diff --git a/tests/op07/fixtures.cjs b/tests/op07/fixtures.cjs
 index 572342c2..60d58719 100644
