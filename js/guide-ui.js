@@ -62,7 +62,7 @@
  const topActions=el('div',undefined,top,'guide-controls');btn('guidePrevious','',()=>previousTask(),topActions);btn('guideGoalChange','',()=>openGoal(),topActions);btn('guideDetails','',()=>openDetails(),topActions);
  // Compact guide (default on phones and short screens): goal, current task and its buttons stay; the step list,
  // the progress line and long descriptions are hidden until «Ver más». The choice is remembered per browser.
- const compactKey='rubik-guide-compact',compactDefault=()=>matchMedia('(max-width:600px),(max-height:500px)').matches;
+ const compactKey='rubik-guide-compact',compactDefault=()=>matchMedia('(max-width:600px),(max-height:720px)').matches;
  let compact=(()=>{try{const v=localStorage.getItem(compactKey);return v===null?compactDefault():v==='1';}catch{return compactDefault();}})();
  const compactBtn=btn('guideCompact','',()=>{compact=!compact;try{localStorage.setItem(compactKey,compact?'1':'0');}catch{}applyCompact();},topActions);
  function applyCompact(){bar.classList.toggle('guide-compact',compact);compactBtn.textContent=compact?tx('Ver más','Show more','显示更多'):tx('Ver menos','Show less','显示更少');compactBtn.setAttribute('aria-expanded',String(!compact));compactBtn.title=compact?tx('Mostrar etapas y progreso de la guía','Show guide stages and progress','显示指南阶段和进度'):tx('Ocultar etapas y progreso para dejar más plano a la vista','Hide stages and progress to show more of the plan','隐藏阶段和进度以显示更多平面图');}btn('guideClose','',()=>{state().closed=true;store();render();resume.focus();},topActions);
