@@ -12,5 +12,6 @@ Si la rama de trabajo es anterior a esos documentos, consultar sus versiones rem
 **Regla permanente del propietario (20/11/2026) · idioma visible:** en español o inglés **nunca** se muestra texto en chino, ni en la interfaz ni en evidencias, capturas o entregables.
 - Los datos guardados pueden conservar nombres en chino (el proyecto de ejemplo los tiene); todo nombre que se MUESTRA pasa por `window.FloorPlanDisplayName(name, type)` (`index.html`), que traduce y, si falta la traducción, usa el tipo del catálogo o un genérico.
 - Ningún módulo muestra `object.name` o `room.name` en bruto.
-- La guarda `tests/no-chinese-display.browser.test.cjs` recorre la interfaz real en ES y EN y falla ante cualquier carácter CJK visible. Única excepción explícita: el selector de idioma («中文»), pendiente de confirmación del propietario.
+- La guarda `tests/no-chinese-display.browser.test.cjs` recorre la interfaz real en ES y EN y falla ante cualquier carácter CJK visible, **sin excepciones**: el selector de idioma usa los códigos `ES · EN · ZH` (decisión del propietario). El chino sigue disponible como idioma.
+- `nm()` (`index.html`) es el embudo único de los nombres visibles: nunca devuelve chino en ES/EN y nunca se escribe en el modelo. Los nombres del usuario en alfabeto latino pasan intactos.
 - Antes de entregar una captura, revisarla con este criterio.

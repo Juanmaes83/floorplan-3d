@@ -23,16 +23,20 @@
     const object = project.objects.find(x => x.id === objectId);
     // Nombre VISIBLE por la fuente única de RUBIK (regla: sin chino en español o inglés).
     const shown = root.FloorPlanDisplayName ? root.FloorPlanDisplayName(object.name, object.type) : (object.name || objectId);
+    // Sin redundancias («Armario ropero «Armario»»): si el nombre visible es solo el del tipo, no se repite entre comillas.
+    const norm = v => String(v || '').trim().toLocaleLowerCase('es'), typeLabel = TYPE[object.type] || object.type;
+    const generic = norm(shown) === norm(root.FloorPlanDisplayName?.typeName?.(object.type)) || norm(typeLabel).includes(norm(shown));
+    const label = generic ? typeLabel : `${typeLabel} «${shown}»`;
     const dialog = document.createElement('div');
     dialog.className = 'r03-scope r03-rubik-dialog';
     dialog.setAttribute('role', 'dialog');dialog.setAttribute('aria-modal', 'true');dialog.setAttribute('aria-labelledby', 'r03RubikTitle');
     dialog.innerHTML = `<div class="r03-rubik-sheet"><div class="r03-rubik-head"><div class="r03-rubik-row"><h2 id="r03RubikTitle"></h2>
       <button type="button" class="r03-btn r03-btn-quiet r03-rubik-close" aria-label="Cerrar el editor de interior">Cerrar</button></div>
       <p class="r03-rubik-note">Interior paramétrico experimental: medidas supuestas, no de fabricante. No es un presupuesto ni sirve para fabricar.</p>
-      <section class="r03-clear" aria-labelledby="r03ClearTitle"><h3 id="r03ClearTitle">Holguras de apertura · solo lectura</h3>
-      <p class="r03-clear-sum" role="status" aria-live="polite"></p><div class="r03-clear-groups"></div><p class="r03-clear-limits"></p></section></div>
+      <details class="r03-clear"><summary><span id="r03ClearTitle" class="r03-clear-title">Holguras · solo lectura</span> <span class="r03-clear-sum" role="status" aria-live="polite"></span></summary>
+      <div class="r03-clear-groups"></div><p class="r03-clear-limits"></p></details></div>
       <div class="r03-rubik-body"></div></div>`;
-    dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${TYPE[object.type] || object.type} «${shown}» · ${object.size.widthMm} × ${object.size.depthMm} mm`;
+    dialog.querySelector('#r03RubikTitle').textContent = `Interior · ${label} · ${object.size.widthMm} × ${object.size.depthMm} mm`;
     host.append(dialog);
     const body = dialog.querySelector('.r03-rubik-body'), sheet = dialog.querySelector('.r03-rubik-sheet');sheet.tabIndex = -1;
     /* R03 · holguras (solo lectura). Se recalcula con el BORRADOR del editor en cada cambio, con los motores existentes
@@ -42,9 +46,14 @@
     const showClearance = session => {
       const C = root.RubikCabinetClearance;
       if (!C || !session) { clearBox.hidden = true; return; }
-      const project = getProject(), d = C.describe(project, C.analyzeDraft(project, objectId, session.state.outer, session.state.cabinet));
+      const t0 = performance.now(), project = getProject(), d = C.describe(project, C.analyzeDraft(project, objectId, session.state.outer, session.state.cabinet));
       clearBox.hidden = false; clearBox.dataset.summary = d.summary || d.status;
-      clearBox.querySelector('.r03-clear-sum').textContent = d.text;
+      // Resumen compacto (una línea): cuántos avisos de cada autoridad. El detalle queda en el desplegable, cerrado por defecto,
+      // para dar prioridad al dibujo del armario.
+      const count = lvl => d.groups.filter(g => g.level === lvl).length;
+      const parts = [count('rubik') && `${count('rubik')} de RUBIK`, count('donor') && `${count('donor')} de la regla de origen`, count('experimental') && `${count('experimental')} orientativo${count('experimental') > 1 ? 's' : ''}`].filter(Boolean);
+      clearBox.querySelector('.r03-clear-sum').textContent = d.status !== 'evaluated' ? d.text : parts.length ? `Avisos: ${parts.join(' · ')}. No impiden guardar.` : 'Sin choques al abrir.';
+      clearBox.dataset.ms = (performance.now() - t0).toFixed(2);
       clearBox.querySelector('.r03-clear-limits').textContent = d.limits || '';
       const host = clearBox.querySelector('.r03-clear-groups'); host.replaceChildren();
       for (const g of d.groups) {
@@ -58,7 +67,7 @@
     };
     let savedAlready = o.status === 'ok';
     const editor = UI().mount(body, {
-      session: o.session, title: `${TYPE[object.type] || object.type} «${shown}»`, savedAlready,
+      session: o.session, title: label, savedAlready,
       onSave: (res, s) => {
         const r = commit(() => B().save(getProject(), s));
         if (!r?.ok) return { message: { kind: 'error', text: 'No se ha guardado. ' + (r?.message || '') } };

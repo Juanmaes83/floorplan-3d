@@ -13,17 +13,16 @@ before(async()=>{server=createServer(async(req,res)=>{try{const p=new URL(req.ur
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 
 // Texto VISIBLE con CJK (nodos de texto con caja visible, más title/aria-label/placeholder/value de controles visibles).
-// ÚNICA excepción, explícita: #langBtn muestra el NOMBRE del idioma al que cambia («中文»), en su propio idioma, para
-// que quien lo hable pueda encontrarlo (pendiente de confirmación del propietario). Nada más se exime.
-const FIND=()=>{const EXEMPT=new Set(['langBtn']);const re=/[⺀-⿿　-〿぀-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/,out=[];
+// SIN excepciones (decisión del propietario del 20/11/2026): el selector de idioma usa los códigos ES / EN / ZH.
+const FIND=()=>{const re=/[⺀-⿿　-〿぀-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/,out=[];
  const visible=el=>{if(!el||!el.isConnected)return false;const st=getComputedStyle(el);if(st.display==='none'||st.visibility==='hidden')return false;const r=el.getBoundingClientRect();return r.width>0&&r.height>0;};
- const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);for(let n;(n=w.nextNode());){const p=n.parentElement;if(!p||p.closest('script,style,template'))continue;if(EXEMPT.has(p.id))continue;if(re.test(n.nodeValue)&&visible(p))out.push({where:p.closest('[id]')?.id||p.tagName,text:n.nodeValue.trim().slice(0,60)});}
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);for(let n;(n=w.nextNode());){const p=n.parentElement;if(!p||p.closest('script,style,template'))continue;if(re.test(n.nodeValue)&&visible(p))out.push({where:p.closest('[id]')?.id||p.tagName,text:n.nodeValue.trim().slice(0,60)});}
  for(const el of document.querySelectorAll('[title],[aria-label],[placeholder],input,select,option')){for(const v of [el.title,el.getAttribute('aria-label'),el.placeholder,el.tagName==='INPUT'?el.value:'',el.tagName==='SELECT'?el.selectedOptions?.[0]?.textContent:''])if(v&&re.test(v)&&visible(el.tagName==='OPTION'?el.parentElement:el))out.push({where:el.id||el.tagName,text:String(v).slice(0,60)});}
  for(const t of document.querySelectorAll('svg text'))if(re.test(t.textContent)&&visible(t))out.push({where:'svg:'+(t.closest('[id]')?.id||''),text:t.textContent.slice(0,60)});
  return out;};
 
 for(const lang of ['es','en'])
-test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03 con holguras y techo R02-A`,{timeout:300000},async t=>{
+test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades`,{timeout:300000},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
  await page.goto(url);await require('./editor-fixture.cjs')(page);
@@ -37,8 +36,25 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
  for(const id of await page.evaluate(()=>project.objects.filter(o=>RubikCabinetBridge.isCabinet(o)).map(o=>o.id))){
   await page.evaluate(id=>{select({kind:'furn',id});drawer('panel',true);},id);await page.waitForTimeout(150);
   await page.locator('#aInterior').first().click();await page.locator('.r03-rubik-dialog').waitFor();await scan('interior R03 '+id);await page.evaluate(()=>RubikCabinetRubikUI.close());}
+ // Áreas de trabajo (Analizar, Presupuestar, Entregar, Mi estudio…) y cuadro de cantidades.
+ for(const id of await page.evaluate(()=>[...document.querySelectorAll('[id^="workArea-"]')].map(b=>b.id))){
+  await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);}
+ await page.locator('#workArea-design').click().catch(()=>{});await page.waitForTimeout(200);
+ await page.evaluate(()=>window.FloorPlanQuantityUI?.open());await page.waitForTimeout(300);await scan('cantidades');
+ await page.evaluate(()=>document.querySelectorAll('dialog[open]').forEach(d=>d.close()));
  assert.deepEqual(found,[],'texto chino visible:\n'+found.slice(0,15).map(f=>`${f.at} · ${f.where} · «${f.text}»`).join('\n'));
  assert.deepEqual(errors,[]);
+});
+
+test('selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control', async t=>{
+ const context=await browser.newContext();t.after(()=>context.close());const page=await context.newPage();await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+ await page.goto(url);await require('./editor-fixture.cjs')(page);
+ const read=()=>page.evaluate(()=>{const b=document.getElementById('langBtn');return {lang:LANG,text:b.textContent.trim(),current:b.querySelector('.is-current')?.textContent,label:b.getAttribute('aria-label')};});
+ const seen=[];for(let i=0;i<4;i++){seen.push(await read());await page.locator('#langBtn').click();await page.waitForTimeout(150);}
+ assert.deepEqual(seen.map(s=>s.lang),['es','en','zh','es'],'ES → EN → ZH → ES');
+ for(const s of seen){assert.equal(s.text,'ES · EN · ZH');assert.equal(s.current,s.lang.toUpperCase());}
+ for(const s of seen.filter(s=>s.lang!=='zh'))assert.doesNotMatch(s.label,/[\u3400-\u9fff]/,'etiqueta accesible sin chino en '+s.lang);
+ assert.match(seen[0].label,/Cambiar a inglés/);assert.match(seen[1].label,/Switch to Chinese/);
 });
 
 test('FloorPlanDisplayName: traducción, red de seguridad por tipo y genérico; en chino se respeta el original', async t=>{

@@ -31,13 +31,18 @@ test(`R03 holguras · ${viewport.width}x${viewport.height}`,{timeout:300000},asy
  const openDialog=async()=>{await page.evaluate(id=>{select({kind:'furn',id});drawer('panel',true);},WARDROBE);await page.waitForTimeout(300);
   await press(page.locator('#aInterior').first());await page.locator('.r03-rubik-dialog .r03-clear').waitFor({state:'attached'});};
  const closeDialog=()=>page.evaluate(()=>RubikCabinetRubikUI.close());
- const state=()=>page.evaluate(()=>{const b=document.querySelector('.r03-clear');return {hidden:b.hidden,summary:b.dataset.summary,text:b.querySelector('.r03-clear-sum').textContent,
+ const state=()=>page.evaluate(()=>{const b=document.querySelector('.r03-clear');return {hidden:b.hidden,open:b.open,summary:b.dataset.summary,ms:+b.dataset.ms,text:b.querySelector('.r03-clear-sum').textContent,title:document.querySelector('#r03RubikTitle').textContent,
   groups:[...b.querySelectorAll('.r03-clear-group')].map(g=>({kind:g.dataset.kind,level:g.className.split('is-')[1],items:[...g.querySelectorAll('li')].map(li=>li.textContent)}))};});
  const fingerprint=()=>page.evaluate(()=>JSON.stringify(project));
 
  // 1 · Positivo de control: el armario del ejemplo, tal cual. La sección existe y es de solo lectura (no hay controles).
  const before=await fingerprint(),undo0=await page.evaluate(()=>undoStack.length);
  await openDialog();const s0=await state();assert.equal(s0.hidden,false);
+ assert.equal(s0.open,false,'detalle plegado por defecto: prioridad al dibujo');
+ assert.doesNotMatch(s0.title,/Armario ropero «Armario»/,'sin nombre redundante');assert.match(s0.title,/^Interior · Armario ropero · \d+ × \d+ mm$/);
+ // El dibujo del armario empieza en la mitad superior de la pantalla, también en móvil.
+ const elevTop=await page.evaluate(()=>document.querySelector('.r03-rubik-dialog .r03-elev')?.getBoundingClientRect().top??9999);
+ assert.ok(elevTop<viewport.height*0.5,`dibujo visible pronto (top ${Math.round(elevTop)} px de ${viewport.height})`);
  assert.equal(await page.locator('.r03-clear button,.r03-clear input,.r03-clear select').count(),0,'sin acciones: no propone ni aplica');
  await shot('1-ejemplo');await closeDialog();
  assert.equal(await fingerprint(),before,'abrir y mirar no cambia el proyecto');assert.equal(await page.evaluate(()=>undoStack.length),undo0);
@@ -53,10 +58,16 @@ test(`R03 holguras · ${viewport.width}x${viewport.height}`,{timeout:300000},asy
  assert.ok(rubik,'aviso de RUBIK por el barrido: '+JSON.stringify(s1));assert.equal(rubik.level,'rubik');
  assert.ok(rubik.items.some(x=>x.includes(`«${intruder.name}»`)),JSON.stringify(rubik.items));
  for(const g of s1.groups)assert.ok(['rubik','donor','experimental'].includes(g.level),'cada aviso con su autoridad');
- assert.match(s1.text,/no impiden guardar/);
+ assert.match(s1.text,/^Avisos: 1 de RUBIK · 1 orientativo\. No impiden guardar\.$/);
+ await page.locator('.r03-clear>summary').click();assert.equal((await state()).open,true,'el detalle se despliega');
  assert.doesNotMatch(await page.locator('.r03-rubik-dialog').innerText(),/[\u3400-\u9fff]/,'sin chino visible (regla del propietario)');await shot('2-mueble-en-el-barrido');
 
- // 3 · Negativo: los avisos NO bloquean el guardado ni aplican nada. Un cambio del borrador recalcula la sección.
+ // 3 · Rendimiento durante la edición: 20 cambios del borrador; cada recálculo de holguras se mide en la propia sección.
+ const times=[];for(let i=0;i<20;i++){await page.locator('.r03-rubik-dialog button',{hasText:i%2?'Deshacer':'Añadir balda'}).first().click({force:true}).catch(()=>{});times.push((await state()).ms);}
+ const sorted=[...times].sort((a,b)=>a-b),p95=sorted[Math.floor(sorted.length*0.95)-1]??sorted.at(-1);
+ assert.ok(times.every(Number.isFinite),'tiempos medidos');assert.ok(p95<50,`recálculo por cambio p95 ${p95} ms (< 50 ms): ${JSON.stringify(times)}`);
+ console.log(`# rendimiento ${name}: mediana ${sorted[10]} ms · p95 ${p95} ms · máx ${sorted.at(-1)} ms`);
+ // 3b · Negativo: los avisos NO bloquean el guardado ni aplican nada. Un cambio del borrador recalcula la sección.
  const g0=s1.groups.length;await press(page.locator('.r03-rubik-dialog button',{hasText:'Añadir balda'}).first());
  assert.equal((await state()).groups.length,g0,'una balda no cambia la apertura');
  await press(page.locator('.r03-rubik-dialog button',{hasText:'Guardar interior'}).first());

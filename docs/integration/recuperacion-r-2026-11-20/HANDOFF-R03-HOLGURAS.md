@@ -113,6 +113,46 @@ Qué cubre la prueba de navegador de holguras:
 - **Regla anotada** en `AGENTS.md`, que leen todos los agentes.
 - **Única excepción explícita:** el selector de idioma muestra «中文», el nombre del idioma en su propio idioma. **Pendiente de tu confirmación.**
 
+## Corte 3 · pulido móvil, rendimiento e idioma (autorizado el 20/11/2026)
+
+**Pulido UX:**
+- **Resumen compacto** de una línea. Ejemplo: «Avisos: 1 de RUBIK · 1 orientativo. No impiden guardar.» o «Sin choques al abrir.».
+- **Detalle desplegable**, cerrado por defecto: el dibujo del armario tiene prioridad. En móvil empieza hacia los 230 px; la prueba exige que lo haga en la mitad superior.
+- **Avisos diferenciados por autoridad** dentro del detalle, como antes.
+- **Sin nombres redundantes:** si el nombre visible es solo el del tipo, no se repite. Ahora se lee «Interior · Armario ropero · 2400 × 600 mm».
+- No bloquea el guardado ni aplica nada; la prueba lo comprueba.
+
+**Rendimiento durante la edición** (20 cambios seguidos del borrador, medido en la propia sección, Chromium sin GPU):
+
+| Pantalla | Mediana | p95 | Máximo |
+|---|---|---|---|
+| 1440×900 | 14,2 ms | 19,4 ms | 23,1 ms |
+| 390×844 | 11,5 ms | 17,4 ms | 20,6 ms |
+
+- **Umbral de la prueba:** p95 < 50 ms.
+- **Límite:** la mediana ronda un fotograma de 16 ms en este entorno sin GPU. Falta medir en móvil físico.
+
+**Idioma** (decisión del propietario):
+- Selector `ES · EN · ZH`, sin caracteres chinos en ES/EN; el chino sigue disponible.
+- Excepción de la guarda **eliminada**.
+- `nm()` es ahora el embudo seguro, usado por unos 35 módulos.
+- Corregidos los nombres en bruto de `smart-furnishing-ui.js`. En `quantity-schedule-ui.js` se envuelven por coherencia: su núcleo ya traducía y allí no había fuga.
+- La guarda recorre además las áreas de trabajo y el cuadro de cantidades.
+- Coordinación con CC1: `IDIOMA-COORDINACION-CC1.md`.
+
+**Pruebas de este corte:**
+
+| Prueba | Resultado |
+|---|---|
+| `r03-clearance-in-rubik.browser` | 2/2 |
+| `no-chinese-display.browser` | 4/4 |
+| `upload`, `professional-workspace`, `guide`, `sheet`, `solar`, `surface-sheet` (todas pulsan `#langBtn`) | 9, 17, 5, 9, 14 y 6: todas pasan |
+| `r03-editor-in-rubik`, `r02a-editor` | 8/8, 5/5 |
+| Suite pura | 1522/1524, 0 fallos, 2 omitidas |
+| Cobertura de navegador | 0 archivos sin cubrir |
+
+**Aceptación visual:** las 6 capturas de `docs/qa/artifacts/r03-holguras/` están revisadas a mano: sin chino, sin redundancias, dibujo visible.
+
 ## Límites de esta conexión
 
 - Solo Chromium Linux.

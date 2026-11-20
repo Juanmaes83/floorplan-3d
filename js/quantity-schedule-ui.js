@@ -33,12 +33,12 @@
   const row=el('div',undefined,dialog,'tour-video-actions');const dl=btn(tx('Descargar cantidades (CSV)','Download quantities (CSV)','下载工程量 (CSV)'),row,'btn primary');dl.id='quantityDownload';
   dl.onclick=()=>{const blob=new Blob([S.csv(schedule(),labels())],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rubik-sota-cantidades-${slug(local(app.project.name))}.csv`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);};
   table(dialog,L.rooms,[tx('Estancia','Room','房间'),tx('Suelo m²','Floor m²','地面 m²'),tx('Perímetro m','Perimeter m','周长 m'),tx('Paredes netas m²','Net walls m²','净墙面 m²'),tx('Pavimento','Floor finish','地面材料'),L.status],
-   s.rooms.map(r=>[r.name+(r.counted?'':' *'),num(r.floorM2),num(r.perimeterM),num(r.wallNetM2)+(r.wallNetM2!==null&&!r.wallComplete?' ⚠':''),r.floorMaterial||'—',st[r.status]]),'quantityRooms');
+   s.rooms.map(r=>[local(r.name)+(r.counted?'':' *'),num(r.floorM2),num(r.perimeterM),num(r.wallNetM2)+(r.wallNetM2!==null&&!r.wallComplete?' ⚠':''),(r.floorMaterial?local(r.floorMaterial):'—'),st[r.status]]),'quantityRooms');
   el('p',tx('* Fuera del cómputo de superficie útil. ⚠ Paredes parciales: parte del contorno no coincide con un muro.','* Excluded from usable area. ⚠ Partial walls: part of the outline does not match a wall.','* 不计入面积。⚠ 部分墙体。'),dialog,'quantity-foot');
-  table(dialog,L.floors,[tx('Pavimento','Floor finish','地面材料'),'m²',L.rooms,L.status],s.floors.map(f=>[f.name||'—',num(f.areaM2),f.rooms.join(', '),st[f.status]]),'quantityFloors');
+  table(dialog,L.floors,[tx('Pavimento','Floor finish','地面材料'),'m²',L.rooms,L.status],s.floors.map(f=>[f.name?local(f.name):'—',num(f.areaM2),f.rooms.map(local).join(', '),st[f.status]]),'quantityFloors');
   table(dialog,L.walls,[tx('Tipo','Type','类型'),tx('Longitud m','Length m','长度 m'),tx('Tramos','Segments','段'),tx('Cara neta m²','Net face m²','净面 m²'),L.status],s.walls.map(w=>[L.wallStatus(w.lifecycle),num(w.lengthM),String(w.count),num(w.faceNetM2),st[w.status]]),'quantityWalls');
   table(dialog,L.openings,[tx('Tipo','Type','类型'),tx('Ancho × alto','Width × height','宽 × 高'),tx('Unidades','Units','数量')],s.openings.map(o=>[L.kind(o.kind),`${o.widthCm} × ${o.heightCm} cm`,String(o.count)]),'quantityOpenings');
-  table(dialog,L.furniture,[tx('Elemento','Item','项目'),tx('Unidades','Units','数量')],s.furniture.map(f=>[f.name,String(f.count)]),'quantityFurniture');
+  table(dialog,L.furniture,[tx('Elemento','Item','项目'),tx('Unidades','Units','数量')],s.furniture.map(f=>[local(f.name),String(f.count)]),'quantityFurniture');
   dialog.showModal();dl.focus();
  }
  window.FloorPlanQuantityUI={open,schedule};

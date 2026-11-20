@@ -238,6 +238,7 @@ main.animating #hint3d{opacity:0}
   header .hdr-break{order:9;flex-basis:100%;height:0}
   #viewSeg{order:10}#tools,#modes3d{order:11}header>.grp.only2d:not(#tools),header>.grp.only3d:not(#modes3d):not(#toggles3d){order:12}header>.grp:has(#undo){order:13}#layersMenu,#toggles3d{order:14}#traceBtn{order:15}#paneBtns{order:16}
   header .hdr-break2{order:19;flex-basis:100%;height:0}
+  #langBtn .lang-code{font-weight:400;color:var(--muted,#6b7280)}#langBtn .lang-code.is-current{font-weight:700;color:inherit}
   header>.spacer{order:20}#scaleConfidence{order:21}#projectsBtn{order:22}header>details.menu{order:23}#langBtn{order:24}#fullscreen{order:25}#guideResume{order:26}header .plan-meta{order:27}
 }
 .layers-pop{position:absolute;left:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:190px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 10px 30px rgba(40,30,20,.14);z-index:20}.layers-pop .btn.chip{text-align:left;border-radius:6px}.layers-pop .btn.chip.on::before{content:'✓ ';color:var(--accent)}.layers-pop .btn.chip:not(.on)::before{content:'  ';white-space:pre}
@@ -612,7 +613,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     <div class="spacer"></div>
     <button class="btn" id="traceBtn">Plano propio</button><span id="scaleConfidence" style="font-size:11px">Medidas orientativas</span>
     <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>
-    <button class="btn" id="langBtn" title="Cambiar idioma" aria-label="Cambiar idioma" style="border:1px solid var(--line);background:#fff">EN</button>
+    <button class="btn" id="langBtn" title="Cambiar idioma" aria-label="Cambiar idioma" style="border:1px solid var(--line);background:#fff"><b class="lang-code is-current">ES</b> · <b class="lang-code">EN</b> · <b class="lang-code">ZH</b></button>
     <button class="btn" id="fullscreen" title="全屏 (Shift+F)" style="border:1px solid var(--line);background:#fff">⛶ 全屏</button>
     <details class="menu"><summary class="btn" data-en="File ▾">文件 ▾</summary>
       <div class="menu-pop">
@@ -1114,18 +1115,24 @@ const NAMES_ES = {
   "茶桌": "Mesa auxiliar",
   "休闲椅": "Sillón de descanso"
 };
-const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
+const CJK_RE = /[\u2E80-\u2FFF\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF]/;
+const nmRaw = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
+// nm(): ÚNICO embudo de los nombres visibles que ya usan index.html y ~35 módulos. Traduce con los diccionarios; en ES/EN
+// nunca devuelve chino (regla del propietario): sin traducción, «Nombre sin traducir». Solo para MOSTRAR: nunca se escribe
+// en el modelo (el dato original se conserva). Los nombres latinos del usuario pasan intactos.
+const nm = s => { const t = nmRaw(s); return LANG !== 'zh' && typeof t === 'string' && CJK_RE.test(t) ? (LANG === 'en' ? 'Untranslated name' : 'Nombre sin traducir') : t; };
 /* REGLA PERMANENTE (propietario, 20/11/2026): en español o inglés NUNCA se muestra texto en chino. Los datos guardados
    (p. ej. el proyecto de ejemplo) pueden conservar nombres en chino; lo que se MUESTRA pasa por aquí. Si falta la traducción,
    se usa el nombre del tipo de mueble del catálogo y, en último caso, un genérico. Única fuente para los módulos
    (window.FloorPlanDisplayName). Lo vigila tests/no-chinese-display.browser.test.cjs. */
-const CJK_RE = /[\u2E80-\u2FFF\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF]/;
 function displayName(name, type){
-  const n = nm(String(name ?? ''));
+  const n = nmRaw(String(name ?? ''));
   if (LANG === 'zh' || !CJK_RE.test(n)) return n;
-  const item = type && FloorPlanGenericCatalog.groups.flatMap(g => g.items).find(i => i[0] === type), byType = item && nm(item[1]);
+  const item = type && FloorPlanGenericCatalog.groups.flatMap(g => g.items).find(i => i[0] === type), byType = item && nmRaw(item[1]);
   return byType && !CJK_RE.test(byType) ? byType : (LANG === 'en' ? 'Item' : 'Elemento');
 }
+// Nombre del TIPO de mueble en el idioma visible (catálogo genérico), para no repetir «Armario ropero «Armario»».
+displayName.typeName = type => { const item = FloorPlanGenericCatalog.groups.flatMap(g => g.items).find(i => i[0] === type), n = item && nmRaw(item[1]); return n && !(LANG !== 'zh' && CJK_RE.test(n)) ? n : ''; };
 window.FloorPlanDisplayName = displayName;
 const ROOM_FAMILY_LABELS={unspecified:['Estancia','Room','房间'],living:['Salón','Living room','客厅'],dining:['Comedor','Dining room','餐厅'],kitchen:['Cocina','Kitchen','厨房'],bedroom:['Dormitorio','Bedroom','卧室'],bathroom:['Baño','Bathroom','浴室'],toilet:['Aseo','Toilet','卫生间'],office:['Despacho','Office','书房'],hallway:['Pasillo','Hallway','走廊'],storage:['Trastero','Storage','储藏室'],laundry:['Lavadero','Laundry','洗衣房'],terrace:['Terraza','Terrace','露台'],balcony:['Balcón','Balcony','阳台'],garage:['Garaje','Garage','车库'],utility:['Cuarto técnico','Utility room','设备间'],other:['Otra estancia','Other','其他']};
 const familyLabel=family=>(ROOM_FAMILY_LABELS[Core.roomFamilies.includes(family)?family:'unspecified']||ROOM_FAMILY_LABELS.unspecified)[{es:0,en:1,zh:2}[LANG]??0];
@@ -1145,8 +1152,11 @@ function applyStaticLang(){
   });
   for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['uploadIn',{es:'Subir plano: PDF, imagen, DXF, IFC, RoomPlan o proyecto',en:'Upload plan: PDF, image, DXF, IFC, RoomPlan or project',zh:'上传平面图：PDF、图片、DXF、IFC、RoomPlan 或项目'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
   const langBtn = document.getElementById('langBtn');
-  langBtn.textContent = ({es:'EN',en:'中文',zh:'ES'})[LANG];
-  langBtn.title = LANG === 'es' ? 'Cambiar idioma' : LANG === 'en' ? 'Change language' : '切换语言';
+  // Selector ES / EN / ZH con códigos latinos: en las sesiones española e inglesa no aparece ningún carácter chino
+  // (regla del propietario). El chino sigue disponible. Un clic pasa al siguiente idioma (es → en → zh → es).
+  langBtn.replaceChildren(...['es','en','zh'].flatMap((l,i)=>{const b=document.createElement('b');b.textContent=l.toUpperCase();b.className='lang-code'+(l===LANG?' is-current':'');b.setAttribute('aria-hidden','true');return i?[' · ',b]:[b];}));
+  const NEXT = ({es:'en',en:'zh',zh:'es'})[LANG], LNAME = {es:{es:'español',en:'inglés',zh:'chino'},en:{es:'Spanish',en:'English',zh:'Chinese'},zh:{es:'西班牙语',en:'英语',zh:'中文'}}[LANG];
+  langBtn.title = LANG === 'es' ? `Idioma: ${LNAME.es}. Cambiar a ${LNAME[NEXT]}` : LANG === 'en' ? `Language: ${LNAME.en}. Switch to ${LNAME[NEXT]}` : `语言：${LNAME.zh}。切换到${LNAME[NEXT]}`;
   langBtn.setAttribute('aria-label', langBtn.title);
 }
 
