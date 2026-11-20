@@ -57,3 +57,19 @@ test('R02-A: unrelated ceiling-only data changes keep the route cache hot', () =
   assert.equal(I.routesFor(p, g, plan, 'level-1').cached, true);
   assert.equal(plans, 1);
 });
+
+test('R02-A: the cache key includes the planner and its options (audit of #296)', () => {
+  I.resetCache();
+  const { p, g } = fixture();
+  const calls = [];
+  const planA = (pp, gg, id, o) => { calls.push(['A', o?.clearanceMm ?? 220]); return { kind: 'interior', points: [], clearanceMm: o?.clearanceMm ?? 220 }; };
+  const planB = (pp, gg, id, o) => { calls.push(['B', o?.clearanceMm ?? 220]); return { kind: 'interior', points: [], clearanceMm: o?.clearanceMm ?? 220 }; };
+  assert.equal(I.routesFor(p, g, planA, null).cached, false);
+  assert.equal(I.routesFor(p, g, planA, null).cached, true, 'same planner, same options: cached');
+  assert.equal(I.routesFor(p, g, planB, null).cached, false, 'another planner function must not reuse A');
+  const wide = I.routesFor(p, g, planA, null, { clearanceMm: 600 });
+  assert.equal(wide.cached, false, 'other options must re-plan');
+  assert.equal(wide.routes[0].result.clearanceMm, 600, 'served routes match the requested options');
+  assert.equal(I.routesFor(p, g, planA, null, { clearanceMm: 600 }).cached, true);
+  assert.deepEqual(calls.map(c => c[0] + c[1]), ['A220', 'B220', 'A600']);
+});

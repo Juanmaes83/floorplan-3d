@@ -79,11 +79,15 @@
       (geometry?.slides || []).map(d => rect(d.rect)),
       (project?.objects || []).map(pick)]);
   }
-  function routesFor(project, geometry, plan, levelKey) {
-    const key = signature(project, geometry, levelKey);
+  // La clave incluye también QUIÉN planifica: la identidad de la función `plan` y sus opciones (margen, celda, presupuesto).
+  // Sin esto, otra función u otro margen recibían rutas calculadas con parámetros distintos (auditoría de #296).
+  const plannerIds = new WeakMap(); let plannerSeq = 0;
+  const plannerKey = plan => { if (!plannerIds.has(plan)) plannerIds.set(plan, ++plannerSeq); return plannerIds.get(plan); };
+  function routesFor(project, geometry, plan, levelKey, options) {
+    const key = JSON.stringify([plannerKey(plan), options ?? null]) + signature(project, geometry, levelKey);
     if (cache.has(key)) { stats.hits++; return { key, routes: cache.get(key), cached: true }; }
     stats.misses++;
-    const routes = (geometry?.rooms || []).filter(r => Array.isArray(r.poly) && r.poly.length >= 3).map(r => { stats.plans++; return { roomId: r.id, result: plan(project, geometry, r.id) }; });
+    const routes = (geometry?.rooms || []).filter(r => Array.isArray(r.poly) && r.poly.length >= 3).map(r => { stats.plans++; return { roomId: r.id, result: options === undefined ? plan(project, geometry, r.id) : plan(project, geometry, r.id, options) }; });
     cache.set(key, routes); if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
     return { key, routes, cached: false };
   }
