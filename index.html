@@ -5878,6 +5878,8 @@ window.View3D.measureMirrorPilot=id=>{
   }finally{face.visible=previousVisible;face.material=previousMaterial;renderer.setRenderTarget(previousTarget);material?.dispose();target.dispose();renderer.render(scene,camera);}
   return {status:'measured',id,renderMs,calls,triangles,textureBytes:256*256*4,texturesBefore,texturesAfter:renderer.info.memory.textures,preview,reflection};
 };
+// OP-05 P4: measureMirrorPilot is an output (reflection and in-scene preview images): same generic authority.
+{const fn=window.View3D.measureMirrorPilot;window.View3D.measureMirrorPilot=(...a)=>genericOutput(()=>fn(...a));}
 window.View3D.pickFurnitureAt=(x,y)=>active?pick({clientX:x,clientY:y})?.fid||null:null;
 Object.defineProperty(window.View3D,'primitiveBatchSummary',{get:()=>{let batches=0,instances=0,unmapped=0;
   furnG?.traverse(o=>{if(!o.isInstancedMesh)return;batches++;instances+=o.count;

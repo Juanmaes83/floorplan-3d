@@ -76,10 +76,13 @@ test('V1 records the presentation stops into one playable video of the 3D scene 
  assert.notEqual(ffprobe.status,'failed',JSON.stringify(ffprobe));
  if(ffprobe.status==='passed'){assert.equal(ffprobe.streams[0].width,1280);assert.equal(ffprobe.streams[0].height,720);}
  else t.diagnostic('ffprobe missing: external check not done');
- // The presentation is back on its view and still running; the interface offers no recording.
+ // The presentation is back on its view and still running. V1 had no recording interface; V2 (js/tour-video-ui.js) added
+ // ONE controlled entry, #presentationVideo «Grabar vídeo» in the presentation tools. The guarantee kept: after an API
+ // recording no other recording text, status or dialog is left on screen, and that entry is idle (enabled, not busy).
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true);assert.equal(await page.evaluate(()=>FloorPlanPresentation.current?.kind),before);
  assert.equal(await page.evaluate(()=>FloorPlanTourRecorder.busy),false);
- assert.equal(await page.getByText(/grabar|grabación|record/i).count(),0);
+ const rec=await page.getByText(/grabar|grabación|record/i).evaluateAll(es=>es.filter(e=>e.offsetWidth||e.offsetHeight).map(e=>({id:e.id,tag:e.tagName,parent:e.parentElement?.id,disabled:!!e.disabled})));
+ assert.deepEqual(rec,[{id:'presentationVideo',tag:'BUTTON',parent:'presentationTools',disabled:false}],'only the V2 entry, idle; nothing else left from the recording');
  await page.screenshot({path:path.join(OUT,'presentation-after.png')});assert.deepEqual(errors,[]);
 });
 

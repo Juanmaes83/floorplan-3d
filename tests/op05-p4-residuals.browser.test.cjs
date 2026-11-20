@@ -12,6 +12,7 @@ const RIGHTS={basis:'original',attribution:'RUBIK · laboratorio sintético OP-0
 // Marcador: píxeles magenta saturados (tolerante a JPEG/vídeo). Y un «grifo» sobre TODO captureStream de un canvas 2D (el
 // compositor real del grabador): lee los fotogramas exactos que recibe el MediaRecorder.
 const INIT=()=>{const count=d=>{let n=0;for(let i=0;i<d.length;i+=4)if(d[i]>150&&d[i+2]>150&&d[i+1]<110)n++;return n;};window.__count=count;
+ window.__b64=u=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.slice(f.result.indexOf(',')+1));f.readAsDataURL(new Blob([u]));});
  window.__magenta=async src=>{const img=new Image();img.src=src;await img.decode();const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const x=c.getContext('2d');x.drawImage(img,0,0);return count(x.getImageData(0,0,c.width,c.height).data);};
  window.__tap={frames:0,worst:0};const orig=HTMLCanvasElement.prototype.captureStream;
  HTMLCanvasElement.prototype.captureStream=function(...a){const st=orig.apply(this,a);if(this.closest?.('#view3d'))return st;const tr=st.getVideoTracks()[0];if(!tr||!window.MediaStreamTrackProcessor)return st;
@@ -31,6 +32,15 @@ const visible=async page=>{await page.evaluate(()=>View3D.invalidate());await pa
 async function present(page){await page.evaluate(()=>FloorPlanPresentation.open());await page.locator('.presentation-room-row').nth(1).locator('input').check();
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:60000});}
 
+function readZip(zip){const entries=new Map(),v=new DataView(zip.buffer,zip.byteOffset,zip.byteLength),end=zip.length-22,count=v.getUint16(end+10,true);let off=v.getUint32(end+16,true);
+ for(let i=0;i<count;i++){const method=v.getUint16(off+10,true),size=v.getUint32(off+20,true),nl=v.getUint16(off+28,true),el=v.getUint16(off+30,true),cl=v.getUint16(off+32,true),lo=v.getUint32(off+42,true),name=zip.subarray(off+46,off+46+nl).toString();
+  const lnl=v.getUint16(lo+26,true),lel=v.getUint16(lo+28,true),data=zip.subarray(lo+30+lnl+lel,lo+30+lnl+lel+size);entries.set(name,method===0?data:require('node:zlib').inflateRawSync(data));off+=46+nl+el+cl;}
+ return entries;}
+// Firma geométrica de un GLB: accesores (tipo, número, mínimos y máximos) de las mallas cuyo nodo lleva rubik_id = id.
+function glbObject(glb,id){const b=Buffer.from(glb),len=b.readUInt32LE(12),j=JSON.parse(b.subarray(20,20+len).toString());
+ const meshes=new Set((j.nodes||[]).filter(n=>n.extras?.rubik_id===id&&n.mesh!=null).map(n=>n.mesh));
+ return JSON.stringify([...meshes].sort().map(m=>j.meshes[m].primitives.map(p=>Object.entries(p.attributes).sort().map(([k,a])=>[k,j.accessors[a].type,j.accessors[a].count,j.accessors[a].min,j.accessors[a].max]))));}
+
 test('OP05-A · grabador real (FloorPlanTourRecorder.record): cada fotograma del compositor es genérico; errores y cancelación restauran',{timeout:300000},async()=>{
  const {context,page,fid}=await open();
  try{await grant(page,fid);await ready(page,fid);assert.ok(await visible(page)>150,'control: privado visible en el visor de laboratorio');
@@ -44,7 +54,9 @@ test('OP05-A · grabador real (FloorPlanTourRecorder.record): cada fotograma del
   assert.match(cancel,/Abort|cancel/i);assert.equal(await visible(page),0,'tras cancelar, la presentación sigue genérica');
   // Restauración al salir de la presentación: vuelve el privado al visor autorizado.
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:30000});
-  assert.ok(await visible(page)>150,'fuera de la presentación vuelve el privado al visor de laboratorio');
+  // Con carga, el primer render tras salir puede tardar: se sondea hasta 10 s con el mismo umbral.
+  let back=0;for(let t=0;t<20&&back<=150;t++)back=await visible(page);
+  assert.ok(back>150,'fuera de la presentación vuelve el privado al visor de laboratorio');
  }finally{await context.close();}
 });
 
@@ -88,18 +100,54 @@ test('OP05-C · revocación: con modelo visible, durante una carga, desactivar/r
 
 test('Complementaria · ZIP de presentación por lotes real y salidas concurrentes comprobadas una a una',{timeout:300000},async()=>{
  const {context,page,fid}=await open();
- try{const mid=await grant(page,fid);await ready(page,fid);assert.ok(await visible(page)>150);
-  const each=await page.evaluate(async()=>{const r=await Promise.all([View3D.deliveryShot({width:700,height:450}),View3D.deliveryShot({width:500,height:500}),View3D.captureScene({stableFrames:3}),View3D.deliveryShot({width:640,height:360})]);
-   return Promise.all(r.map(async x=>x.dataUrl?__magenta(x.dataUrl):-1));});
-  for(const n of each.filter(n=>n>=0))assert.equal(n,0,`salida concurrente genérica (${JSON.stringify(each)})`);
+ try{// Referencias GENÉRICAS (sin concesión): documento de escena y ZIP real de Blender, por el mismo camino que la interfaz.
+  const sceneRef=()=>page.evaluate(async id=>{const {doc}=await View3D.captureScene({stableFrames:3});return doc.meshes.filter(m=>m.entity?.id===id).map(m=>JSON.stringify(m.vertices)).sort().join('|');},fid);
+  const blender=async()=>{await page.evaluate(async()=>{await RubikSceneExport.prepare();});assert.equal(await page.evaluate(()=>RubikSceneExport.state),'ready');
+   return readZip(Buffer.from(await page.evaluate(async()=>__b64(await RubikSceneExport.bytes())),'base64'));};
+  const genericScene=await sceneRef(),genericZip=await blender(),glbName=[...genericZip.keys()].find(n=>n.endsWith('.glb'));
+  assert.ok(genericScene.length>0&&glbName,'referencias genéricas tomadas');const genericGlb=glbObject(genericZip.get(glbName),fid);assert.notEqual(genericGlb,'[]');
+  const mid=await grant(page,fid);await ready(page,fid);assert.ok(await visible(page)>150);
+  // Salidas concurrentes con el privado visible: tres imágenes, el documento de escena y la exportación real de Blender.
+  const conc=await page.evaluate(async id=>{const ex=RubikSceneExport.prepare();
+   const r=await Promise.all([View3D.deliveryShot({width:700,height:450}),View3D.deliveryShot({width:500,height:500}),View3D.captureScene({stableFrames:3}),View3D.deliveryShot({width:640,height:360})]);await ex;
+   const doc=r[2].doc,{toGLB}=RubikSceneCapture,glb=toGLB(doc);
+   return {pix:await Promise.all([0,1,3].map(i=>__magenta(r[i].dataUrl))),scene:doc.meshes.filter(m=>m.entity?.id===id).map(m=>JSON.stringify(m.vertices)).sort().join('|'),
+    docText:JSON.stringify(doc),glb:await __b64(new Uint8Array(glb.buffer||glb)),state:RubikSceneExport.state,zip:await __b64(await RubikSceneExport.bytes())};},fid);
+  assert.deepEqual(conc.pix,[0,0,0],'cada imagen concurrente es genérica');
+  assert.equal(conc.scene,genericScene,'documento de escena: la geometría del objeto es la genérica, sin la pirámide privada');
+  assert.equal(glbObject(Buffer.from(conc.glb,'base64'),fid),genericGlb,'GLB del documento: geometría genérica');
+  assert.equal(conc.state,'ready');const zipC=readZip(Buffer.from(conc.zip,'base64'));assert.equal(glbObject(zipC.get([...zipC.keys()].find(n=>n.endsWith('.glb'))),fid),genericGlb,'ZIP de Blender real: geometría genérica');
+  // Ni identificadores, ni huella, ni título, ni derechos, ni la extensión en el documento, su GLB ni ninguna entrada del ZIP.
+  const secrets=[mid,sha,TITLE,RIGHTS.attribution,RIGHTS.evidenceSha256,'x-op05','pmd_','project-private','privateScene','op05-generic'];
+  const texts={documento:conc.docText,glb:Buffer.from(conc.glb,'base64').toString('latin1'),...Object.fromEntries([...zipC].map(([n,d])=>['zip:'+n,Buffer.from(d).toString('latin1')]))};
+  for(const [where,t] of Object.entries(texts))for(const x of secrets)assert.ok(!t.includes(x),`${where} no contiene «${x}»`);
   await present(page);const pending=page.waitForEvent('download');await page.locator('#presentationBatch').click();const file=await pending,zip=fs.readFileSync(await file.path());
-  const entries=new Map();{const v=new DataView(zip.buffer,zip.byteOffset,zip.byteLength),end=zip.length-22,count=v.getUint16(end+10,true);let off=v.getUint32(end+16,true);
-   for(let i=0;i<count;i++){const method=v.getUint16(off+10,true),size=v.getUint32(off+20,true),nl=v.getUint16(off+28,true),el=v.getUint16(off+30,true),cl=v.getUint16(off+32,true),lo=v.getUint32(off+42,true),name=zip.subarray(off+46,off+46+nl).toString();
-    const lnl=v.getUint16(lo+26,true),lel=v.getUint16(lo+28,true),data=zip.subarray(lo+30+lnl+lel,lo+30+lnl+lel+size);entries.set(name,method===0?data:require('node:zlib').inflateRawSync(data));off+=46+nl+el+cl;}}
+  const entries=readZip(zip);
   const manifest=entries.get('presentation.json').toString(),all=[...entries.values()].map(b=>b.toString('latin1')).join('');
   for(const s of [mid,sha,TITLE,RIGHTS.attribution,'x-op05-private-model'])assert.ok(!all.includes(s),'ZIP (manifiesto, proyecto portable e imágenes) sin OP-05');
   const pngs=[...entries.keys()].filter(n=>/\.png$/.test(n));assert.ok(pngs.length>=2,pngs.join());
   for(const n of pngs)assert.equal(await page.evaluate(b=>__magenta('data:image/png;base64,'+b),entries.get(n).toString('base64')),0,`${n}: genérica`);
   assert.ok(JSON.parse(manifest).views.length>=2);
+ }finally{await context.close();}
+});
+
+test('measureMirrorPilot · el reflejo y la vista previa son genéricos aunque el privado esté delante del espejo',{timeout:300000},async()=>{
+ const {context,page}=await open();
+ try{const {vanity,near}=await page.evaluate(()=>{const os=FloorPlanApp.project.objects,v=os.find(o=>o.type==='vanity');
+   const d=o=>Math.hypot(o.position.x-v.position.x,o.position.y-v.position.y);
+   return {vanity:v.id,near:os.filter(o=>o.id!==v.id&&o.size?.widthMm&&o.size?.depthMm).sort((a,b)=>d(a)-d(b)).slice(0,8).map(o=>o.id)};});
+  let used=null,result=null,inView=0;
+  for(const fid of near){await page.evaluate(()=>RubikPrivateView.revokeAll());await grant(page,fid);await ready(page,fid);
+   if((await page.evaluate(id=>View3D.assetStatus(id).state,fid))!=='ready')continue;
+   await page.evaluate(id=>View3D.mirrorPilotView(id),vanity);await page.waitForTimeout(350);
+   // Control positivo: el privado está en la vista de la cámara que usa la medición.
+   inView=await screen(page);if(inView<=150)continue;
+   const r=await page.evaluate(async id=>{const m=View3D.measureMirrorPilot(id);if(m.status!=='measured')return {status:m.status};
+     return {status:m.status,reflection:await __magenta(m.reflection),preview:await __magenta(m.preview)};},vanity);
+   if(r.status==='measured'){used=fid;result=r;break;}}
+  assert.ok(used,`un objeto privado cercano visible delante del espejo y medible (${JSON.stringify({near,inView})})`);
+  assert.equal(result.reflection,0,'reflejo (destino de render) genérico');assert.equal(result.preview,0,'vista previa genérica');
+  // Tras la salida, el visor de laboratorio vuelve a mostrar el privado.
+  let back=0;for(let t=0;t<20&&back<=150;t++)back=await visible(page);assert.ok(back>150,'el privado vuelve al visor de laboratorio');
  }finally{await context.close();}
 });

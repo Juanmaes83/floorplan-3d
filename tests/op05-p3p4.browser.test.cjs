@@ -102,13 +102,15 @@ test('P4 · imágenes, presentación, GLB de Blender, vídeo grabado y JSON: gen
    // Los fotogramas EXACTOS que recibe la grabación: la misma pista alimenta al MediaRecorder y al lector de fotogramas.
    const rec=new MediaRecorder(st,{mimeType:'video/webm'}),parts=[];rec.ondataavailable=e=>parts.push(e.data);rec.start(100);
    const reader=new MediaStreamTrackProcessor({track:track.clone()}).readable.getReader(),c=new OffscreenCanvas(8,8);let worst=0,frames=0;
-   const t0=performance.now();const pump=(async()=>{while(performance.now()-t0<1500){const {value:f,done}=await reader.read();if(done)break;
+   const t0=performance.now();const pump=(async()=>{while(frames<4&&performance.now()-t0<8000){const {value:f,done}=await reader.read();if(done)break;
      c.width=f.displayWidth;c.height=f.displayHeight;const x=c.getContext('2d');x.drawImage(f,0,0);f.close();
      const d=x.getImageData(0,0,c.width,c.height).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]>150&&d[i+2]>150&&d[i+1]<110)n++;worst=Math.max(worst,n);frames++;}})();
-   for(let i=0;i<15;i++){View3D.invalidate();await new Promise(r=>setTimeout(r,80));}
-   await pump;reader.cancel();rec.stop();await new Promise(r=>rec.onstop=r);st.getTracks().forEach(t=>t.stop());
+   // El render bajo demanda agrupa invalidaciones y la pista solo emite al pintarse el canvas: se fuerzan renders hasta
+   // leer al menos 4 fotogramas REALES de la pista (o agotar 8 s; entonces la prueba falla, nunca se da por buena).
+   while(frames<4&&performance.now()-t0<8000){View3D.invalidate();await new Promise(r=>setTimeout(r,80));}
+   reader.cancel().catch(()=>{});await pump;rec.stop();await new Promise(r=>rec.onstop=r);st.getTracks().forEach(t=>t.stop());
    return {worst,frames,bytes:parts.reduce((s,p)=>s+p.size,0)};});
-  assert.ok(video.frames>=2&&video.bytes>0,JSON.stringify(video));assert.equal(video.worst,0,'vídeo: ningún fotograma grabado con el modelo privado');
+  assert.ok(video.frames>=4&&video.bytes>0,JSON.stringify(video));assert.equal(video.worst,0,'vídeo: ningún fotograma grabado con el modelo privado');
   // Control positivo del mismo marcador: cerrada la grabación (pistas detenidas) el visor vuelve a mostrar el privado.
   await page.evaluate(()=>View3D.invalidate());await page.waitForTimeout(300);assert.ok(await screenMagenta(page)>150,'tras la grabación vuelve el privado al visor');
   // JSON exportado real (descarga) y almacenamiento: nada de OP-05.

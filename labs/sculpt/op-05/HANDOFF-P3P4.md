@@ -1,6 +1,6 @@
 # OP-05 · P3/P4 — HANDOFF de laboratorio (20/11/2026)
 
-> **Estado:** candidata de laboratorio, detenida antes de P5.
+> **Estado:** candidata de laboratorio con el **cierre diferencial P4** (residuales A/B/C de ChatGPT y los de su dictamen posterior), detenida antes de P5.
 > - **C1 NO-GO:** no hay persistencia de GLB, descriptores ni referencias de OP-05.
 > - No está integrada, disponible ni activada.
 > - Pendiente de auditoría de ChatGPT y validación de Codex.
@@ -20,7 +20,9 @@
 |---|---|
 | `4ec0dac4` | Hallazgos de Codex sobre P1/P2 |
 | `8df345fe` | P3/P4 |
-| siguiente | Este HANDOFF y las evidencias |
+| `4a47f3e8` | Este HANDOFF y las evidencias |
+| `1755e6db` | Residuales A/B/C (en curso) |
+| siguiente | Cierre P4: grabador, mirror pilot, documento de escena y exportación Blender, prueba de grabación endurecida, contrato V1 reconciliado |
 
 ## 2. Hallazgos de Codex sobre P1/P2 (resueltos antes de conectar el visor)
 
@@ -67,7 +69,77 @@
 **Límites:**
 - Solo Chromium en Linux; faltan Firefox, WebKit y dispositivos.
 - Este Chromium sin interfaz no decodifica WebM, así que los fotogramas grabados se leen de la pista del grabador y no del archivo.
-- Las capturas de presentación por lotes (`presentation-ui`) se basan en `View3D.shot`, que la guarda cubre, pero no tienen una prueba específica con un modelo privado.
+- Presentación por lotes: cubierta desde el cierre P4 con el ZIP real (§5bis).
+
+## 5bis. Cierre diferencial P4 (sobre `4a47f3e8`)
+
+### Qué se corrige
+
+| Residual | Antes (reproducido en `4a47f3e8`) | Corrección |
+|---|---|---|
+| **OP05-A · grabador real** (`FloorPlanTourRecorder.record`, compositor 2D propio con `drawImage`) | Fotogramas grabados con el privado; la presentación en vivo lo mostraba | `privateAllowed()` exige además `!FloorPlanPresentation.active` y `!FloorPlanTourRecorder.busy`. Presentación y grabación son salidas durante **toda** su vida: preparación, composición, grabación, error, cancelación y restauración |
+| **OP05-B · fotograma antiguo** (`preserveDrawingBuffer:true`) | Tras cambiar la representación sin un render nuevo, el canvas seguía teniendo el fotograma privado | El wrapper de render anota si el último fotograma del canvas era privado, y los render targets pintados con el privado (`WeakSet`). Antes de cualquier lector conocido: si ya no está autorizado, **se repinta en genérico de forma síncrona**; si sigue autorizado, la lectura **lanza un error** |
+| **OP05-C · revocación** | `revokeAll` solo vaciaba los mapas; el modelo cargado seguía en la escena | `revokeAll` reconstruye el mobiliario (cancela cargas y libera las escenas privadas). Cada fotograma y cada carga resuelta exigen la **concesión vigente** de su `(proyecto, modelo)` |
+| **`measureMirrorPilot`** (QA, devuelve `reflection` y `preview`) | Salida no cubierta | Pasa por la misma `genericOutput`. La envoltura va **después** de su definición: en el bucle de las otras cuatro el `typeof` la habría saltado en silencio |
+| **`captureScene` en la prueba concurrente** | Salía con `-1`, sin inspeccionar | Se inspeccionan el documento, su GLB y el **ZIP real de Blender** (`RubikSceneExport.prepare`, el camino de la interfaz). Ver abajo |
+
+**Lectores cubiertos:**
+- `toDataURL`, `toBlob`, `captureStream`, `readPixels`;
+- `drawImage` 2D y Offscreen, `createImageBitmap`, `texImage2D`/`texSubImage2D` con el canvas del visor como origen;
+- `readRenderTargetPixels(Async)`.
+
+**No es una protección universal de los píxeles.** Las capturas de pantalla del sistema operativo, compartir pantalla y cualquier API no enumerada quedan fuera del alcance de una página.
+
+### Pruebas (Chromium 1243 y Node 22.23, Linux, este contenedor)
+
+| Prueba | Resultado |
+|---|---|
+| `tests/op05-p4-residuals.browser.test.cjs` (nueva, 5) | **5/5** |
+| `tests/op05-p3p4.browser.test.cjs` (4) | **4/4** |
+| Las dos juntas | **9/9** tres veces: dos en serie y una con carga paralela |
+| Antes, sobre `4a47f3e8` | A, B y C **FAIL** (reproducidos) |
+| Con `genericOutput` desactivada (sonda) | Prueba concurrente y `measureMirrorPilot` **FAIL**: discriminan |
+| Laboratorio `p1`, `p2`, `p12-findings` y `admission` | 22/22 |
+| Suite pura | 1511/1513, 0 fallos, 2 omitidas |
+
+Qué cubre cada prueba de `op05-p4-residuals`:
+- **OP05-A:** presentación en vivo sin el privado. `FloorPlanTourRecorder.record` real, leyendo **los fotogramas del compositor** (`MediaStreamTrackProcessor` sobre la pista que recibe el `MediaRecorder`): ≥3 fotogramas y ningún píxel privado. Cancelación a mitad: sigue genérico. Al salir de la presentación vuelve el privado (control positivo, sondeado hasta 10 s con el mismo umbral).
+- **OP05-B:** con el privado autorizado, `toDataURL`, `drawImage`, Offscreen y `createImageBitmap` se rechazan. Tras `disable()` **sin render intermedio**, `toDataURL` y `drawImage` salen genéricos. `deliveryShot` justo tras un fotograma privado sale genérico.
+- **OP05-C:**
+  - revocar con el modelo visible: el siguiente lector ya es genérico y `privateState().scenes === 0`;
+  - revocar durante una carga: nunca entra;
+  - desactivar, revocar y reactivar sin concesión: nada;
+  - concesión de otro proyecto: nada.
+- **Complementaria:**
+  - tres `deliveryShot` concurrentes con `captureScene` y la **exportación real de Blender**: cada imagen genérica;
+  - documento, GLB y GLB del ZIP con la **geometría del objeto idéntica** a la referencia genérica tomada antes de la concesión;
+  - en documento, GLB y **cada entrada del ZIP**, ninguno de: `modelId`, SHA-256, título, atribución, huella de evidencia, `x-op05`, `pmd_`, `project-private`, `privateScene` ni `op05-generic`;
+  - ZIP real de presentación por lotes: PNG genéricos, manifiesto con vistas y sin secretos.
+- **`measureMirrorPilot`:** el privado, delante del espejo y visible en la cámara de la medición (control positivo), no aparece ni en el reflejo (render target) ni en la vista previa.
+
+**Prueba de grabación (P4 de `op05-p3p4`) endurecida, no relajada.** Fallaba 2 de 4 veces con `frames:1`.
+- **Causa medida:** con carga, 15 invalidaciones producían 2 o 3 renders reales (OP-02 las agrupa) y `captureStream` solo emite al pintarse el canvas.
+- **Ahora:** fuerza renders hasta leer **al menos 4 fotogramas reales** de la pista, con un plazo de 8 s. Si no los obtiene, **falla**. La ausencia de fotogramas nunca se da por ausencia de fuga.
+
+### Consumidores (en serie, sin la carga del laboratorio)
+
+| Suite | Resultado | Base `4a47f3e8` |
+|---|---|---|
+| mirror-pilot | 1/1 | |
+| tour-recorder | 4/4 tras reconciliar el contrato (antes 3/4) | **3/4, el mismo fallo** |
+| tour-recorder-ci, tour-video | 1/1, 2/2 | |
+| presentation, presentation-batch | 58/58, 9/9 | |
+| op02-render-demand, delivery-image, project-views | 3/3, 4/4, 2/2 | |
+| assets, catalog-placement, client-share | 25/25, 2/2, 2/2 | |
+| scene-export | 6/7 | **6/7, el mismo fallo** (n.º 3: dos exportaciones sucesivas con bytes distintos). Residual de determinismo **preexistente**, fuera de OP-05; se reporta a Codex sin tocarlo |
+
+**Contrato V1 reconciliado en `tour-recorder`.** La prueba histórica exigía cero textos de grabación porque esa interfaz no existía. El elemento concreto es `BUTTON#presentationVideo` «Grabar vídeo» en `#presentationTools`, la entrada V2 de `js/tour-video-ui.js`, idéntica en la base. La garantía se conserva más precisa: tras una grabación por API solo queda visible **esa** entrada, inactiva y habilitada, sin otro texto, estado ni diálogo de grabación.
+
+### Plan de integración (no ejecutado)
+
+1. Codex: Firefox, WebKit y Windows sobre esta rama, con las dos suites OP-05 y los consumidores.
+2. La guarda es inerte sin `window.RubikPrivateView`: el producto se comporta como la base. Los parches de prototipo (`drawImage`, `createImageBitmap`, `texImage2D`) cuestan una comparación de referencia por llamada.
+3. P5 (interfaz Amueblar → importar), P6/P7 (F0.2c/F0.3, persistencia) y P8 (activación con A0) siguen sin autorizar. **C1 NO-GO.**
 
 ## 6. Evidencias visuales
 
@@ -98,4 +170,4 @@ En el alcance probado (Chromium Linux) no se observa ninguna fuga visual, geomé
 
 **NO-GO** para P5, P6/P7 (F0.2c/F0.3), P8 (A0) y producto.
 
-Siguiente actuación: auditoría de ChatGPT y validación de Codex.
+Siguiente actuación: auditoría independiente de ChatGPT y validación de Codex sobre el cierre P4 (§5bis).
