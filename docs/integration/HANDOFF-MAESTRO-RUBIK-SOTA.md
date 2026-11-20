@@ -74,6 +74,10 @@ Simulator E se publicó en #291. CI Impact Observation requiere que el HEAD incl
 
 La [auditoría retrospectiva](https://github.com/Juanmaes83/floorplan-3d/blob/cbcbbd731a8cebeb7947f013d7201eab2b42c53b/docs/integration/AUDITORIA-RETROSPECTIVA-CAPACIDADES.md) incorpora importación, RoomPlan, G-02, Home por profesión, Entregar y continuidad F0. La matriz registra G-02 como integrado con límites de alcance y mantiene su validación profesional pendiente. Simulator D conserva su gate WebKit y autorización independiente. A0 y #274–#279 siguen congeladas. OP‑07 v3 conserva NO-GO y sus cuatro residuales pasan a la corrección de Claude Code 2.
 
+## Actualización A10 — publicación obligatoria y auditoría completa
+
+Mandato permanente del propietario (20/11/2026): todas las entregas de Claude Code, Codex y ChatGPT han de quedar publicadas y localizables en su rama/laboratorio autorizado, con SHA completo, árbol, base, handoff y evidencia. Antes de ratificar una decisión, ChatGPT solicita cualquier material decisivo que no esté accesible. La autoridad de esta regla es el [protocolo §4.3](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE.md#43-publicación-obligatoria-trazabilidad-y-auditoría-completa-de-entregas). Los archivos de arranque remiten al protocolo. Respetar las autorizaciones independientes y coordinar publicaciones para no disparar CI redundante. No constituye GO de ningún corte.
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 

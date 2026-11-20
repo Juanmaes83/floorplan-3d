@@ -78,6 +78,19 @@ Verificar descubribilidad, promesas, acceso por frontend, accesibilidad, calidad
 
 Priorizar por seguridad, madurez, proximidad al cierre, dependencias, valor profesional, valor percibido y esfuerzo. El inventario y diagnóstico pueden avanzar en paralelo como trabajo de solo lectura. Antes de acreditar disponibilidad, consultar el master y Production efectivos. Los cambios de producto requieren cortes separados y autorización. Mantener OP‑10 → Simulator E → Simulator D.
 
+## 4.3. Publicación obligatoria, trazabilidad y auditoría completa de entregas
+
+**Mandato permanente del propietario · 20/11/2026.** Aplica a Codex, Claude Code y ChatGPT, tanto a RUBIK como a sus laboratorios. Complementa las autorizaciones separadas de §2 y la metodología de §§3–4.2.
+
+- Cada diagnóstico, escultura, corrección, prueba, documento y handoff que constituya una entrega de trabajo debe quedar en GitHub, en su repositorio y rama propios autorizados. Guardar commits parciales coherentes al cerrar un corte significativo, antes de cambiar de tarea o perder la sesión. Publicar los entregables y evidencias necesarios para reproducir y continuar el trabajo; no declarar cerrada una entrega que solo existe localmente.
+- Al informar de una entrega, indicar repositorio, rama remota, SHA completo del commit, SHA del árbol, base exacta, enlaces directos a los archivos y handoff, pruebas ejecutadas y sus resultados/entornos, evidencia disponible, límites, dependencias, bloqueos, decisiones pendientes y siguiente actuación con responsable. El SHA y árbol de la publicación se verifican después del commit; no exigir que un archivo contenga el hash del propio commit que lo incorpora.
+- Antes de emitir un dictamen, decidir una arquitectura o preparar un mandato, ChatGPT comprueba master, #275/#289 o sus sucesores, código real, exportaciones de funciones, consumidores, contratos, pruebas y evidencia del corte. Si falta un documento, parche, prueba o cambio local material para la decisión, pedirlo al propietario/agente antes de ratificar. Separar lo comprobado, lo comunicado, las hipótesis y las propuestas. Evitar investigaciones duplicadas y no delegar una búsqueda que pueda resolverse directamente.
+- Publicar en una rama/laboratorio autorizado es distinto de integrar, abrir una PR productiva, fusionar, desplegar, activar, migrar o incurrir en gasto. No tocar ramas ajenas, no forzar actualizaciones, no publicar credenciales, datos privados de usuarios ni recursos sin permiso; usar datos sintéticos o evidencia minimizada cuando corresponda. Respetar la coordinación de CI: agrupar cambios documentales y, si un corte tiene prohibición de disparar CI, emplear el laboratorio autorizado o acordar una vía segura con Codex antes de publicar. No desactivar ni relajar gates para cumplir esta regla.
+- Si GitHub o el entorno impiden publicar, comunicar inmediatamente el bloqueo y entregar al propietario un respaldo exacto (archivos o parche, manifiesto y hashes cuando proceda). Mantener la entrega como pendiente de publicación hasta comprobar el remoto. No confundir un commit local con disponibilidad remota.
+- Antes de cerrar o transferir el corte, verificar que el commit, handoff y evidencias relevantes son accesibles al siguiente agente. Codex agrupa el delta de continuidad en #275 y #289 o sus sucesores, sin duplicar contenido canónico. Los archivos de arranque de agentes remiten a este protocolo; una instrucción de arranque no concede nuevas autorizaciones.
+
+**Sin publicación verificable, no hay entrega cerrada.**
+
 ## 5. Tras cada integración en master
 
 El agente que integra actualiza, en la misma PR o en una documental inmediata:
