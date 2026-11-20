@@ -46,3 +46,51 @@ assert check(workflow, base, head) is None
 `;
   assert.doesNotThrow(() => execFileSync('python', ['-B', '-c', script, path.join(__dirname, 'prove-workflows.py')]));
 });
+
+test('the additive proof certifies only a new unit file at the end of the intake step', () => {
+  const script = String.raw`
+import copy
+import runpy
+import sys
+
+proof = runpy.run_path(sys.argv[1])
+check = proof['certified_test_append']
+workflow = proof['INTAKE_WORKFLOW']
+job = proof['INTAKE_JOB']
+file = 'tests/scan-alignment.test.cjs'
+command = proof['NODE_TEST'] + ' tests/plan-intake.test.cjs'
+base = {'on': {'pull_request': {}, 'workflow_dispatch': {}},
+        'jobs': {job: {'runs-on': 'ubuntu-latest', 'steps': [
+            {'name': 'Syntax', 'run': 'node --check js/plan-intake.js'},
+            {'name': 'Unit regressions', 'run': command},
+            {'name': 'Browser', 'run': 'node --test tests/upload.browser.test.cjs'},
+        ]}}}
+head = copy.deepcopy(base)
+step = head['jobs'][job]['steps'][1]
+step['run'] += ' ' + file
+present = lambda path: path == file
+assert check(workflow, base, head, present)['test'] == file
+assert check(workflow, base, head, lambda path: False) is None
+assert check('.github/workflows/other.yml', base, head, present) is None
+for run in (proof['NODE_TEST'] + ' ' + file, command + ' tests/plan-intake.test.cjs',
+            command + ' ' + file + ' tests/second.test.cjs',
+            command + ' ' + file + ' || true', command + ' ' + file + '\nexit 0',
+            proof['NODE_TEST'] + ' ' + file + ' tests/plan-intake.test.cjs',
+            command + ' tests/../scan-alignment.test.cjs'):
+    variant = copy.deepcopy(head)
+    variant['jobs'][job]['steps'][1]['run'] = run
+    assert check(workflow, base, variant, lambda path: True) is None
+for context in ({'if': 'false'}, {'continue-on-error': 'true'}, {'working-directory': 'test'},
+                {'env': {'NODE_OPTIONS': '--test-only'}}, {'shell': 'python'}):
+    variant = copy.deepcopy(head)
+    variant['jobs'][job]['steps'][1].update(context)
+    assert check(workflow, base, variant, present) is None
+variant = copy.deepcopy(head)
+variant['jobs'][job]['steps'][0]['run'] += '\nnode --check js/scan-alignment.js'
+assert check(workflow, base, variant, present) is None
+variant = copy.deepcopy(head)
+variant['on'].pop('pull_request')
+assert check(workflow, base, variant, present) is None
+`;
+  assert.doesNotThrow(() => execFileSync('python', ['-B', '-c', script, path.join(__dirname, 'prove-workflows.py')]));
+});

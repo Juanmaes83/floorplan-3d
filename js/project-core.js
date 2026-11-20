@@ -8,6 +8,94 @@
   const OrthophotoSite = typeof module !== 'undefined' ? require('./orthophoto-site-adapter.js') : root.FloorPlanOrthophotoSiteAdapter;
   const TerrainSite = typeof module !== 'undefined' ? require('./terrain-site-adapter.js') : root.FloorPlanTerrainSiteAdapter;
   const Territory = typeof module !== 'undefined' ? require('./territory-integration-core.js') : root.FloorPlanTerritoryIntegration;
+  const Walls = typeof module !== 'undefined' ? require('./wall-geometry-core.js') : root.FloorPlanWallGeometry;
+  // OP-07 · Resolution of every curved wall, the same for plan, 3D, measurements, openings and DXF (D-OP07-3). The
+  // laboratory recommends a single metric tolerance of 1 mm (DECISIONES.md §2); it is a proposal, not a product
+  // decision, so it lives in this one place. null = the donor's 16 facets. MAX_FACETS (1024) caps it either way.
+  const WALL_PATH = Object.freeze({toleranceMm: 1});
+  const WALL_FEATURES = Object.freeze(['wall.curve', 'wall.heightEnd']);   // what this writer understands (guardSave)
+  const shapedWall = w => !!(w && (w.curve || w.heightEndMm !== undefined));
+  // ── Versions (D-OP07-4, option B): the SINGLE authority that reads, compares and raises schemaVersion ─────────────
+  // 1.x is FloorPlanProjectV1. 2.0 is the same contract plus the two non-ignorable wall fields (curve, heightEndMm):
+  // only a document that uses them needs 2.x, so no v1 project is ever migrated in bulk. A 1.x reader rejects 2.x without
+  // modifying anything (contract §3, «major desconocido»). 2.0 contains every 1.x feature up to 1.12; a feature added
+  // to 1.x later as 1.(12+k) is 2.k. Every module raises and compares versions through these three functions.
+  const V2_BASE_MINOR = 12;
+  const parseVersion = v => { const m = /^(1|2)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.exec(typeof v === 'string' ? v : ''); return m ? {major:+m[1], minor:+m[2], patch:+m[3]} : null; };
+  const versionLine = v => v.major === 1 ? v.minor : V2_BASE_MINOR + v.minor;
+  // Does a document of `version` already carry what `target` introduced? (2.x never goes below 2; 1.x never reaches 2.)
+  function versionAtLeast(version, target) {
+    const a = parseVersion(version), b = parseVersion(target);
+    if (!a || !b) return false;
+    if (b.major === 2 && a.major < 2) return false;
+    return versionLine(a) >= versionLine(b);
+  }
+  // Raise `project.schemaVersion` (in place) to the lowest version that has both its features and `target`'s. Never
+  // lowers anything and never turns a 1.x document into 2.x unless `target` is 2.x. Returns the project.
+  function raiseVersion(project, target) {
+    const a = parseVersion(project.schemaVersion), b = parseVersion(target);
+    if (!a || !b) throw new Error(`/schemaVersion: cannot raise ${project.schemaVersion} to ${target}`);
+    if (versionAtLeast(project.schemaVersion, target)) return project;
+    const major = Math.max(a.major, b.major), line = Math.max(versionLine(a), versionLine(b));
+    project.schemaVersion = major === 1 ? `1.${line}.0` : `2.${Math.max(0, line - V2_BASE_MINOR)}.0`;
+    return project;
+  }
+  // OP-07 · Save gate for the persistence write path (F0.2b): refuses a degraded legacy view, a writer that does not know
+  // a feature the project uses, the loss of a curve, a slope, a wall or an opening without an explicit intent, and walls
+  // or openings that break the rules. `writerFeatures` defaults to this writer's; an older writer passes its own (none).
+  function guardSave(previous, next, {intent = {}, writerFeatures = WALL_FEATURES} = {}) {
+    return Walls.guardSave({previous, next, writerFeatures, intent, opts: WALL_PATH});   // the same path policy as validate()
+  }
+  // OP-07 · S7 · Intent of ONE editing step, bound to that step (never a global that persists): what the operation said
+  // (op, e.g. splitWall's {split}) plus what the step itself removed. A restore (undo, redo, recovery) brings back a state
+  // the person already had, so its whole difference is intended. A generic edit never "intends" dropping a curve or slope.
+  function editIntent(before, after, {op = null, restore = false} = {}) {
+    const ids = l => new Set((l || []).map(x => x.id)), nextWalls = new Map((after?.walls || []).map(w => [w.id, w]));
+    const nw = ids(after?.walls), no = ids(after?.openings), sloped = w => Number.isFinite(w.heightEndMm) && w.heightEndMm !== w.heightMm;
+    const out = {removed:(before?.walls || []).filter(w => !nw.has(w.id)).map(w => w.id), removedOpenings:(before?.openings || []).filter(o => !no.has(o.id)).map(o => o.id), straightened:[], leveled:[], split:{}};
+    if (restore) for (const w of before?.walls || []) { const n = nextWalls.get(w.id); if (!n) continue;
+      if (Walls.isCurved(w) && !Walls.isCurved(n)) out.straightened.push(w.id); if (sloped(w) && !sloped(n)) out.leveled.push(w.id); }
+    return composeIntent(out, op || {});
+  }
+  // Intents of consecutive steps since the last confirmed revision, composed so that guardSave compares the confirmed
+  // document with the next one: a piece of a split that is split again or removed is followed back to the original wall.
+  function composeIntent(a = {}, b = {}) {
+    const out = {removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
+    const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
+    for (const [old, pieces] of Object.entries(b.split || {})) { const k = origin(old);
+      if (k) out.split[k].splice(out.split[k].indexOf(old), 1, ...pieces); else out.split[old] = [...pieces]; }
+    for (const id of b.removed || []) { const k = origin(id);
+      if (k) { out.split[k].splice(out.split[k].indexOf(id), 1); if (!out.split[k].length) { delete out.split[k]; out.removed.push(k); } }
+      else out.removed.push(id); }
+    for (const key of ['straightened', 'leveled']) for (const id of b[key] || []) { out[key].push(id); const k = origin(id); if (k) out[key].push(k); }
+    out.removedOpenings.push(...(b.removedOpenings || []));
+    for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = [...new Set(out[key])];
+    return out;
+  }
+  // S7 · Save gate for the F0.2b write path. pairs = [{kind:'project'|'library', before, after}] (stored JSON text, before =
+  // last CONFIRMED revision). A v1 document is never refused here: loss and rule checks apply to walls with a curve or a
+  // slope and to their openings (the same scope as validate()); a degraded view and a writer that lacks a feature the
+  // document uses are always refused. Removing a whole project is not a wall loss.
+  function saveGate(pairs, {intent = {}, restore = false, writerFeatures = WALL_FEATURES} = {}) {
+    const issues = [], read = t => { if (t === null || t === undefined) return null; try { return JSON.parse(t); } catch { return undefined; } };
+    const projectsOf = (kind, doc) => !doc ? [] : kind === 'project' ? [doc] : (doc.entries || []).flatMap(e => e.kind === 'building' ? (e.building?.levels || []).map(l => l.project) : [e.project]).filter(Boolean);
+    for (const {kind, before, after} of pairs) {
+      const next = read(after), prev = read(before);
+      if (next === undefined) { issues.push({code:'unreadable', kind}); continue; }
+      const prevById = new Map(projectsOf(kind, prev || null).map(p => [p.id, p]));
+      for (const p of projectsOf(kind, next)) {
+        const q = prevById.get(p.id) || null, shaped = new Set([...(q?.walls || []), ...(p.walls || [])].filter(shapedWall).map(w => w.id));
+        const hosts = new Map([...(q?.openings || []), ...(p.openings || [])].map(o => [o.id, o.wallId]));
+        const why = restore ? composeIntent(editIntent(q, p, {restore:true}), intent) : intent;
+        for (const i of guardSave(q, p, {intent:why, writerFeatures}).issues) {
+          const wall = i.wallId ?? hosts.get(i.openingId);
+          if (['degraded-view', 'writer-lacks-feature'].includes(i.code) || shaped.has(wall)) issues.push({...i, projectId:p.id});
+        }
+      }
+    }
+    return {ok:!issues.length, issues};
+  }
+  const wallLength = w => shapedWall(w) ? Walls.pathProfile(w, WALL_PATH).length : Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
@@ -18,6 +106,53 @@
   const roomName = (room, labels = {}, legacyName = name => name) => room?.name
     ? (room.family === undefined ? legacyName(room.name) : room.name)
     : labels[roomFamily(room)] || labels.unspecified || 'Estancia';
+  // UX-24 · La ÚNICA heurística de uso de una estancia (antes duplicada en NAV3D y en el Dibujo vivo). Es una SUGERENCIA:
+  // nunca se escribe en el proyecto sin que una persona la acepte. Primero lo que contiene, después su nombre.
+  // Orden de los nombres: el primero que encaja gana («Cocina-comedor» → comedor; «Baño del dormitorio» → dormitorio).
+  // Toda etiqueta que el propio editor usa (es/en/zh) vuelve a su tipo; las reglas chinas que terminan en 房 van antes de
+  // la genérica «…房 → dormitorio».
+  const ROOM_NAME_HINTS = Object.freeze([
+    [/sal[oó]n|estar|living|lounge|客厅|起居/i,'living'],[/comedor|dining|餐厅/i,'dining'],[/cocina|kitchen|厨房/i,'kitchen'],
+    [/书房/,'office'],[/洗衣房/,'laundry'],
+    [/dormitorio|habitaci[oó]n|bedroom|卧|房$/i,'bedroom'],[/ba[ñn]o|bath|浴室/i,'bathroom'],[/aseo|toilet|\bwc\b|卫/i,'toilet'],
+    [/despacho|estudio|office/i,'office'],[/pasillo|distribuidor|recibidor|hall|走廊/i,'hallway'],[/lavader|lavander|laundry|洗衣/i,'laundry'],
+    [/trastero|almac[eé]n|storage|储藏/i,'storage'],[/terraza|terrace|露台/i,'terrace'],[/balc[oó]n|mirador|balcony|阳台/i,'balcony'],
+    [/garaje|garage|车库/i,'garage'],[/cuarto t[eé]cnico|utility|设备间/i,'utility']]);
+  // among: tipos que entiende quien pregunta; un nombre que encaja con otro tipo se salta (el Dibujo vivo solo distingue 7).
+  const roomFamilyFromName = (name, {among} = {}) => (ROOM_NAME_HINTS.find(([re, f]) => (!among || among.includes(f)) && re.test(String(name || ''))) || [])[1] || null;
+  const roomPoly = room => room?.poly || (room?.polygon || []).map(p => [p.x, p.y]);
+  const insidePoly = (poly, x, y) => { let hit = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) hit = !hit; } return hit; };
+  // Objetos de una estancia: por roomId si el objeto lo lleva; si no, por su centro dentro del polígono.
+  const roomObjects = (project, room) => { const poly = roomPoly(room); return (project?.objects || []).filter(o => o && o.position && (o.roomId ? o.roomId === room.id : insidePoly(poly, o.position.x, o.position.y))); };
+  // Lo que contiene: devuelve el tipo y el objeto que lo deciden (para poder explicarlo), o null.
+  function roomFamilyFromContents(objects) {
+    const list = (objects || []).filter(Boolean), first = (...types) => list.find(o => types.includes(o.type));
+    let o;
+    if ((o = first('counter', 'stove', 'ksink'))) return {family: 'kitchen', object: o};
+    if ((o = first('toilet', 'shower', 'bathtub'))) return {family: 'bathroom', object: o};
+    if ((o = first('bed'))) return {family: 'bedroom', object: o};
+    if ((o = first('sofa'))) return {family: 'living', object: o};
+    if ((o = first('table')) && list.filter(x => x.type === 'chair').length >= 2) return {family: 'dining', object: o};
+    if ((o = first('washer'))) return {family: 'laundry', object: o};
+    return null;
+  }
+  // {family, source:'contents'|'name', object?} o null. No mira el tipo declarado: eso lo decide quien consulta.
+  function suggestRoomFamily(room, objects = [], {among} = {}) {
+    const c = roomFamilyFromContents(objects);
+    if (c) return {family: c.family, source: 'contents', object: c.object};
+    const f = roomFamilyFromName(room?.name, {among});
+    return f ? {family: f, source: 'name'} : null;
+  }
+  // UX-26 · Intercambiar SOLO el uso (nombre y tipo) de dos estancias. Geometría, acabados, muebles, aberturas y techos se
+  // quedan donde están. Los campos viajan tal cual (incluso ausentes), así que cada estancia se sigue mostrando igual que
+  // la otra antes; el esquema no cambia de versión.
+  function swapRoomUses(project, idA, idB) {
+    if (!idA || !idB || idA === idB) throw Error('Elige dos estancias distintas.');
+    const next = clone(project), a = next.rooms.find(r => r.id === idA), b = next.rooms.find(r => r.id === idB);
+    if (!a || !b) throw Error('Estancia no encontrada.');
+    for (const k of ['name', 'family']) { const va = a[k], vb = b[k]; if (vb === undefined) delete a[k]; else a[k] = vb; if (va === undefined) delete b[k]; else b[k] = va; }
+    validate(next); return next;
+  }
   function dateValid(value) {
     if (!/^\d{4}-\d\d-\d\d[Tt]\d\d:\d\d:\d\d(?:\.\d+)?(?:[Zz]|[+-]\d\d:\d\d)$/.test(value)) return false;
     const [y, m, d] = value.slice(0, 10).split('-').map(Number);
@@ -83,31 +218,31 @@
   function validate(project, {strict = false} = {}) {
     if (project?.schema === 'rubik-sota.floorplan-building') fail('/schema', 'this is a multi-level building, not a FloorPlanProjectV1 project; open it in Rubik or export a single level');
     const version = project?.schemaVersion;
-    if (typeof version !== 'string' || !/^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) fail('/schemaVersion', 'unsupported version');
+    if (!parseVersion(version)) fail('/schemaVersion', 'unsupported version');
     const future = version !== '1.0.0' && !strict;
     check(project, schema, '/', future);
     if(project.site!==undefined){
-      if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
-      if(project.site.buildingPlacement!==undefined&&Number(version.split('.')[1])<12)fail('/site/buildingPlacement','requires project 1.12.0');
+      if(!versionAtLeast(version,'1.7.0'))fail('/site','requires project 1.7.0');
+      if(project.site.buildingPlacement!==undefined&&!versionAtLeast(version,'1.12.0'))fail('/site/buildingPlacement','requires project 1.12.0');
       try{Territory.validate(project.site);}catch(error){fail('/site/buildingPlacement',error.message);}
       try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
       if(project.site.parcel!==undefined){
-        if(Number(version.split('.')[1])<9)fail('/site/parcel','requires project 1.9.0');
+        if(!versionAtLeast(version,'1.9.0'))fail('/site/parcel','requires project 1.9.0');
         check(project.site.parcel,schema.$defs.parcel,'/site/parcel',false);
         try{ParcelSite.fromSiteParcel(project.site.parcel);}catch(error){fail('/site/parcel',error.message);}
       }
       if(project.site.orthophoto!==undefined){
-        if(Number(version.split('.')[1])<10)fail('/site/orthophoto','requires project 1.10.0');
+        if(!versionAtLeast(version,'1.10.0'))fail('/site/orthophoto','requires project 1.10.0');
         check(project.site.orthophoto,schema.$defs.orthophoto,'/site/orthophoto',false);
         try{OrthophotoSite.fromSiteOrthophoto(project.site.orthophoto,project.site.parcel);}catch(error){fail('/site/orthophoto',error.message);}
       }
       if(project.site.terrain!==undefined){
-        if(Number(version.split('.')[1])<11)fail('/site/terrain','requires project 1.11.0');
+        if(!versionAtLeast(version,'1.11.0'))fail('/site/terrain','requires project 1.11.0');
         check(project.site.terrain,schema.$defs.terrain,'/site/terrain',false);
         try{TerrainSite.fromSiteTerrain(project.site.terrain,project.site.parcel);}catch(error){fail('/site/terrain',error.message);}
       }
     }
-    if(project.roofParapet!==undefined&&Number(version.split('.')[1])<8)fail('/roofParapet','requires project 1.8.0');
+    if(project.roofParapet!==undefined&&!versionAtLeast(version,'1.8.0'))fail('/roofParapet','requires project 1.8.0');
     const ids = new Map([[project.id, 'project']]);
     const warnings = [];
     if (future) warnings.push('Newer V1 version: unknown fields are retained; unsupported values are rejected.');
@@ -121,11 +256,21 @@
     for(const w of project.walls)if(w.surfaceMaterialId){ref(w.surfaceMaterialId,'materials',`/walls/${w.id}/surfaceMaterialId`);if(project.materials.find(m=>m.id===w.surfaceMaterialId).category!=='wall')fail(`/walls/${w.id}/surfaceMaterialId`,'wall material required');}
     if(project.roofParapet?.materialId){ref(project.roofParapet.materialId,'materials','/roofParapet/materialId');if(project.materials.find(m=>m.id===project.roofParapet.materialId).category!=='wall')fail('/roofParapet/materialId','wall material required');}
     for (const w of project.walls) if (Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y) < 1) fail(`/walls/${w.id}`, 'zero-length wall');
+    // OP-07 (2.0): curved and sloped walls. The fields are not ignorable, so only a 2.x document can carry them, and
+    // each such wall must pass the wall rules of the single geometric core (minimum radius, no fold, end height).
+    for (const w of project.walls) if (shapedWall(w)) {
+      if (!versionAtLeast(version, '2.0.0')) fail(`/walls/${w.id}`, 'curve and heightEndMm require project 2.0.0');
+      for (const message of Walls.validateWall(w)) fail(`/walls/${w.id}`, message);
+    }
     for (const o of project.openings) {
       ref(o.wallId, 'walls', `/openings/${o.id}/wallId`);
       const w = walls.get(o.wallId), length = Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
-      if (o.offsetMm+o.widthMm > length+1e-7) fail(`/openings/${o.id}`, 'opening extends beyond wall');
-      if (o.sillHeightMm+o.heightMm > w.heightMm) fail(`/openings/${o.id}`, 'opening exceeds wall height');
+      // A curved or sloped wall measures along its faceted path and under the lower edge of the opening (no clipping).
+      if (shapedWall(w)) for (const message of Walls.validateOpening(w, o, WALL_PATH)) fail(`/openings/${o.id}`, message);
+      else {
+        if (o.offsetMm+o.widthMm > length+1e-7) fail(`/openings/${o.id}`, 'opening extends beyond wall');
+        if (o.sillHeightMm+o.heightMm > w.heightMm) fail(`/openings/${o.id}`, 'opening exceeds wall height');
+      }
       if (o.swing && o.kind !== 'door') fail(`/openings/${o.id}/swing`, 'swing only allowed on door');
     }
     for (const r of project.rooms) {
@@ -265,37 +410,194 @@
     Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status,declared:!!w.structureSource});
     return rect;
   }
+  // OP-07 · S2: plan pieces of a curved or sloped wall. One straight sub-wall per facet of the single geometric core
+  // (same facets as 3D, measurements and DXF), solid where no opening is, so every consumer of geometry().walls keeps
+  // drawing rectangles. Each piece carries its heights at both ends (heightStart/heightEnd, m) for sloped walls.
+  // S4b · The joint where two plan pieces of a shaped wall meet, at a distance `s` along it. Computed ONCE per joint, from
+  // the facets of the single core, and handed to both pieces, so their shared corners are the very same numbers (a
+  // watertight mesh, no rasterisation cracks). Inside a facet (an opening edge, a wall end) the joint is square to the
+  // facet; at a facet boundary its plane bisects the two facets (the mitre), and its horizontal direction `m` is the
+  // smooth face normal there. `c` = m·n of the facets (the same on both sides of a bisector): a face corner is V + m·z/c.
+  function jointAt(path, s) {
+    const spans=path.spans.filter(x=>x.length>0),dir=sp=>{const dx=sp.end.x-sp.start.x,dy=sp.end.y-sp.start.y,l=Math.hypot(dx,dy);return {x:dx/l,y:dy/l};};
+    let i=spans.findIndex(sp=>s<sp.to-1e-9);if(i<0)i=spans.length-1;
+    const seam=i>0&&Math.abs(s-spans[i].from)<1e-9,d=dir(spans[i]);let t=d,v;
+    if(seam){const a=dir(spans[i-1]),tx=a.x+d.x,ty=a.y+d.y,l=Math.hypot(tx,ty);t={x:tx/l,y:ty/l};v=spans[i].start;}
+    else v=path.sample(s).point;
+    const m={x:-t.y,y:t.x};
+    return Object.freeze({x:v.x,y:v.y,tx:t.x,ty:t.y,mx:m.x,my:m.y,c:m.x*(-d.y)+m.y*d.x,seam});
+  }
+  // Plan pieces of a shaped wall (S2) and, for a curved wall, the infill above and below each opening per facet (S4b).
+  function shapedPieces(w, openings, infills=[]) {
+    const path=Walls.pathProfile(w,WALL_PATH),holes=[],curved=Walls.isCurved(w);
+    for (const o of openings) {const a=o.offsetMm,b=o.offsetMm+o.widthMm,last=holes.at(-1);if(last&&a<=last[1])last[1]=Math.max(last[1],b);else holes.push([a,b]);}
+    const pieces=[],joints=new Map(),joint=x=>{if(!joints.has(x))joints.set(x,jointAt(path,x));return joints.get(x);};
+    const piece=(span,a,b,extra)=>{const sub={...w,start:span.start,end:span.end},rect=wallRect(sub,a-span.from,b-a),h=x=>(span.startHeight+(span.endHeight-span.startHeight)*(x-span.from)/span.length)/1000;
+      return Object.assign(rect,{id:w.id,heightStart:h(a),heightEnd:h(b),height:Math.max(h(a),h(b)),facet:span.index,shaped:true,alongMm:(a+b)/2,
+        ends:{start:joint(a),end:joint(b)},seamStart:curved&&joint(a).seam,seamEnd:curved&&joint(b).seam},extra);};
+    for (const span of path.spans) {
+      if (!(span.length>0)) continue;
+      const solid=[];let at=span.from;
+      for (const [a,b] of holes) {if(b<=at||a>=span.to)continue;if(a>at)solid.push([at,a]);at=Math.max(at,b);}
+      if (at<span.to) solid.push([at,span.to]);
+      for (const [a,b] of solid) if (b-a>1e-6) pieces.push(piece(span,a,b,{}));
+      // Above the head and below the sill of each opening on a curved wall, per facet (the straight chord would not follow it).
+      if (curved) for (const o of openings) {const a=Math.max(span.from,o.offsetMm),b=Math.min(span.to,o.offsetMm+o.widthMm);if(b-a<=1e-6||w.status==='demolished')continue;
+        const head=(o.sillHeightMm+o.heightMm)/1000,sill=o.sillHeightMm/1000;
+        infills.push(piece(span,a,b,{openingId:o.id,band:'head',yb:head}));
+        if(sill>0)infills.push(piece(span,a,b,{openingId:o.id,band:'sill',yt:sill}));}
+    }
+    return pieces;
+  }
+  // The straight host of an opening: the wall itself, or on a curved wall the chord between the two edges of the opening
+  // on the faceted path (its symbol is drawn on that chord, at the opening's true place).
+  function openingHost(w, o) {
+    if (!Walls.isCurved(w)) return {host:w,offset:o.offsetMm};
+    const path=Walls.pathProfile(w,WALL_PATH),a=path.sample(o.offsetMm).point,b=path.sample(o.offsetMm+o.widthMm).point;
+    return {host:{...w,start:a,end:b},offset:0};
+  }
+  // Closed outline of a whole wall in plan: the rectangle of a straight wall, or the left face of every facet followed by
+  // the right face backwards (for the DXF auxiliary layer, the envelope and hit areas). Straight wall = wallRect().poly.
+  function wallOutline(w) {
+    if (!shapedWall(w) || !Walls.isCurved(w)) return wallRect(w).poly;
+    const spans=Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
+    return [...spans.map(q=>q[0]),spans.at(-1)[1],spans.at(-1)[2],...spans.map(q=>q[3]).reverse()];
+  }
+  // OP-07 · S4: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
+  // (heightStart → heightEnd) and the texture running continuously along the whole wall (alongMm). Positions in mm,
+  // faces in BoxGeometry order (+x, −x, top, bottom, +z, −z). null for a piece of a straight, level wall (a box).
+  // OP-07 · S4/S4b: renderer-independent mesh of one plan piece between heights yb and yt (m), its top following the wall
+  // (heightStart → heightEnd), the texture running continuously along the whole wall (alongMm). Topology, UVs and face
+  // order from the core's slopedPiece (+x, −x, top, bottom, +z, −z); positions in PLAN millimetres [x, height, y] built
+  // from the shared joints (watertight: neighbouring pieces have identical corners), normals in the same axes: the two
+  // faces of a curved wall get the joint's smooth normal, top, bottom, ends and reveals keep hard edges. null for a
+  // piece of a straight, level wall (a box, as before).
+  function pieceMesh(rect, yb, yt) {
+    if (!rect?.shaped) return null;
+    const top=h=>Math.min(h,yt)*1000,lo=rect.yb!==undefined?Math.max(yb,rect.yb):yb;
+    const m=Walls.slopedPiece(rect.spanMm,rect.thickness,lo*1000,rect.yt!==undefined?Math.min(rect.yt,yt)*1000:top(rect.heightStart),rect.yt!==undefined?Math.min(rect.yt,yt)*1000:top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
+    const u={x:Math.cos(rect.angle),y:Math.sin(rect.angle)},n={x:-u.y,y:u.x},half=rect.thickness/2,ends=rect.ends;
+    const positions=new Array(m.positions.length),normals=new Array(m.normals.length);
+    for (let i=0;i<m.positions.length;i+=3) {
+      const x=m.positions[i],y=m.positions[i+1],z=m.positions[i+2],J=x>0?ends.end:ends.start,k=Math.sign(z)*half/J.c;
+      positions[i]=J.x+J.mx*k;positions[i+1]=y;positions[i+2]=J.y+J.my*k;
+      const nx=m.normals[i],ny=m.normals[i+1],nz=m.normals[i+2];
+      if (Math.abs(nz)>0.5&&Math.abs(ny)<1e-9) {normals[i]=J.mx*Math.sign(nz);normals[i+1]=0;normals[i+2]=J.my*Math.sign(nz);}          // smooth face
+      else if (Math.abs(nx)>0.5&&Math.abs(ny)<1e-9) {normals[i]=J.tx*Math.sign(nx);normals[i+1]=0;normals[i+2]=J.ty*Math.sign(nx);}      // end / reveal
+      else {normals[i]=nx*u.x+nz*n.x;normals[i+1]=ny;normals[i+2]=nx*u.y+nz*n.y;}                                                      // top, bottom
+    }
+    // A seam end is an internal face shared with the next piece: it is not emitted (it would show as a line where it
+    // meets the outer surface). Real ends and reveals keep theirs. groups: [start, count, material] in face order.
+    const indices=[],groups=[];
+    for (let f=0;f<6;f++) { if ((f===0&&rect.seamEnd)||(f===1&&rect.seamStart)) continue; groups.push([indices.length,6,f]); indices.push(...m.indices.slice(f*6,f*6+6)); }
+    return {positions,normals,uvs:m.uvs,indices,groups,plan:true};
+  }
+  // OP-07 · S3b: the CANONICAL RING of a room. A room is stored as its polygon of wall faces; where an edge lies on the
+  // face of a curved wall (it was drawn against the wall's chord), the ring follows that face instead: the mitred offset
+  // of the wall's facets from the single core (centreline + offsetMiter), cut where the stored edge starts and ends.
+  // Nothing new is stored: the plan, the 3D floor, the floor area, the perimeter and the room's wall faces all derive
+  // from this ring, so they cannot contradict each other. `faces` names, per curved wall and side, the facets the ring
+  // follows and the fraction of each (the partial facets at both ends); `edgeWalls[i]` names the curved wall that ring
+  // edge i belongs to. A room without curved walls keeps its polygon (the same array: v1 figures are byte-identical).
+  const RING_TOLERANCE_MM = 3, RING_PARALLEL_SIN = 1e-3;
+  // Chains of curved walls joined end to end with the same thickness (e.g. the two pieces of a split curved wall): a room
+  // drawn against the original chord follows the chain's face. Single walls come first, so nothing changes without a split.
+  function curvedUnits(curved) {
+    const units = curved.map(w => [{w, rev:false}]), touch = (p, q) => Math.hypot(p.x - q.x, p.y - q.y) < 1;
+    const ends = m => m.rev ? [m.w.end, m.w.start] : [m.w.start, m.w.end];
+    const grow = chain => { for (let k = 0; k < 16; k++) { const last = ends(chain[chain.length - 1])[1];
+      const nxt = curved.filter(w => !chain.some(m => m.w === w) && w.thicknessMm === chain[0].w.thicknessMm && (touch(w.start, last) || touch(w.end, last)));
+      if (nxt.length !== 1) return; chain.push({w:nxt[0], rev:!touch(nxt[0].start, last)}); units.push(chain.slice()); } };
+    for (const w of curved) grow([{w, rev:false}]);
+    return units;
+  }
+  function roomRing(project, room) {
+    const polygon = room?.polygon, curved = (project?.walls || []).filter(w => w.status !== 'demolished' && Walls.isCurved(w));
+    if (!curved.length || !Array.isArray(polygon) || polygon.length < 3) return {points: polygon, faces: [], edgeWalls: []};
+    const units = curvedUnits(curved).map(chain => {
+      const lines = chain.map(m => { const c = Walls.centreline(m.w, WALL_PATH); return m.rev ? c.slice().reverse() : c; });
+      const centre = lines.reduce((acc, c, i) => acc.concat(i ? c.slice(1) : c), []), owner = [];
+      lines.forEach((c, i) => { for (let j = 0; j + 1 < c.length; j++) owner.push({m:chain[i], local:chain[i].rev ? c.length - 2 - j : j}); });
+      return {chain, start:centre[0], end:centre[centre.length - 1], t:chain[0].w.thicknessMm, centre, owner};
+    });
+    const points = [], faces = [], edgeWalls = [];
+    for (let i = 0; i < polygon.length; i++) {
+      const a = polygon[i], b = polygon[(i + 1) % polygon.length];
+      points.push(a);
+      for (const U of units) {
+        const L = Math.hypot(U.end.x - U.start.x, U.end.y - U.start.y);
+        if (!(L > 0)) continue;
+        const u = {x:(U.end.x - U.start.x) / L, y:(U.end.y - U.start.y) / L}, n = {x:-u.y, y:u.x};
+        const dot = (p, v) => (p.x - U.start.x) * v.x + (p.y - U.start.y) * v.y, da = dot(a, n), db = dot(b, n), el = Math.hypot(b.x - a.x, b.y - a.y);
+        if (!(el > 0) || Math.abs(da - db) > RING_TOLERANCE_MM * 2 || Math.abs(Math.abs((da + db) / 2) - U.t / 2) > RING_TOLERANCE_MM) continue;
+        if (Math.abs(((b.x - a.x) * u.y - (b.y - a.y) * u.x) / el) > RING_PARALLEL_SIN) continue;
+        const side = (da + db) / 2 >= 0 ? 1 : -1, sa = dot(a, u), sb = dot(b, u), lo = Math.max(0, Math.min(sa, sb)), hi = Math.min(L, Math.max(sa, sb));
+        if (hi - lo <= 1) continue;
+        // The face of the curved wall (or chain) on the room's side, and where each of its points falls along the chord.
+        const face = Walls.offsetMiter(U.centre, side * U.t / 2), s = face.map(p => dot(p, u));
+        const at = x => { for (let j = 0; j + 1 < face.length; j++) if ((s[j] - x) * (s[j + 1] - x) <= 0 && s[j] !== s[j + 1]) { const t = (x - s[j]) / (s[j + 1] - s[j]); return {j, t, p:{x:face[j].x + (face[j + 1].x - face[j].x) * t, y:face[j].y + (face[j + 1].y - face[j].y) * t}}; } return null; };
+        // The face of a curved wall ends where the facets end (it leans in or out at the ends): clamp to it.
+        const A = at(Math.max(lo, Math.min(...s))), B = at(Math.min(hi, Math.max(...s)));
+        if (!A || !B) continue;
+        const byWall = new Map(U.chain.map(m => [m.w.id, {wallId:m.w.id, side:m.rev ? -side : side, facets:[]}])), run = [A.p], segWall = [U.owner[A.j].m.w.id];
+        for (let j = A.j; j <= B.j; j++) {
+          const from = j === A.j ? A.t : 0, to = j === B.j ? B.t : 1, o = U.owner[j];
+          if (to - from > 1e-9) byWall.get(o.m.w.id).facets.push({index:o.local, fraction:to - from});
+          if (j > A.j) { run.push(face[j]); segWall.push(o.m.w.id); }
+        }
+        run.push(B.p);
+        // Every edge from `a` to `b` now belongs to the face (the short junction pieces at both ends included).
+        const first = points.length - 1, wallsOfRun = sa <= sb ? segWall : segWall.slice().reverse();
+        edgeWalls[first] = wallsOfRun[0];
+        for (let k = 0; k < run.length; k++) edgeWalls[first + 1 + k] = wallsOfRun[Math.min(k, wallsOfRun.length - 1)];
+        points.push(...(sa <= sb ? run : run.reverse()));
+        for (const f of byWall.values()) if (f.facets.length) { f.facets.sort((x, y) => x.index - y.index); faces.push(f); }
+        break;
+      }
+    }
+    return {points, faces, edgeWalls};
+  }
+  // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
+  function wallFootprints(w) {
+    if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
+    return Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
+  }
   function geometry(p) {
-    const walls=[],windows=[],doors=[],slides=[],voids=[];
+    const walls=[],windows=[],doors=[],slides=[],voids=[],wallInfills=[];
     for (const w of p.walls) {
-      const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
+      const length=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),shaped=shapedWall(w);
       const openings=p.openings.filter(o=>o.wallId===w.id).sort((a,b)=>a.offsetMm-b.offsetMm);
+      if (shaped) walls.push(...shapedPieces(w,openings,wallInfills));
       // Merge overlapping intervals for the solid portions; opening visuals retain their IDs.
       let at=0;
       for (const o of openings) {
-        if (o.offsetMm>at) walls.push(wallRect(w,at,o.offsetMm-at));
+        if (!shaped && o.offsetMm>at) walls.push(wallRect(w,at,o.offsetMm-at));
         at=Math.max(at,o.offsetMm+o.widthMm);
-        const rect=wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
+        const {host,offset}=shaped?openingHost(w,o):{host:w,offset:o.offsetMm};
+        const rect=shaped?wallRect(host,offset,Walls.isCurved(w)?Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y):o.widthMm):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
         Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
+        // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
+        // On a curved wall its infill is drawn per facet (wallInfills); on a straight sloped wall the opening's own piece follows the slope.
+        if(shaped){const path=Walls.pathProfile(w,WALL_PATH),hs=path.sample(o.offsetMm).height/1000,he=path.sample(o.offsetMm+o.widthMm).height/1000;Object.assign(rect,{shaped:true,heightStart:hs,heightEnd:he,height:Math.max(hs,he),alongMm:o.offsetMm+o.widthMm/2,ends:{start:jointAt(path,o.offsetMm),end:jointAt(path,o.offsetMm+o.widthMm)},curvedHost:Walls.isCurved(w)});}
         if(w.status==='demolished') continue;
         if(o.kind==='window') windows.push(rect);
         else if(o.kind==='door') {
-          const end=o.swing?.hinge==='end',left=o.swing?.side!=='right';
+          const end=o.swing?.hinge==='end',left=o.swing?.side!=='right',span=shaped?rect.spanMm:o.widthMm;
           const normal=left?[u[1],-u[0]]:[-u[1],u[0]],c=end?[-u[0],-u[1]]:u;
-          const base=[w.start.x+u[0]*(o.offsetMm+(end?o.widthMm:0)),w.start.y+u[1]*(o.offsetMm+(end?o.widthMm:0))];
-          doors.push({id:o.id,rect,h:[base[0]+normal[0]*w.thicknessMm/2,base[1]+normal[1]*w.thicknessMm/2],c,o:normal,len:o.widthMm,entry:o.isEntrance,height:o.heightMm/1000});
+          const base=[host.start.x+u[0]*(offset+(end?span:0)),host.start.y+u[1]*(offset+(end?span:0))];
+          doors.push({id:o.id,rect,h:[base[0]+normal[0]*w.thicknessMm/2,base[1]+normal[1]*w.thicknessMm/2],c,o:normal,len:shaped?span:o.widthMm,entry:o.isEntrance,height:o.heightMm/1000});
         } else if(o.kind==='sliding-door') slides.push({id:o.id,rect,v:Math.abs(u[1])>Math.abs(u[0]),height:o.heightMm/1000});
         else voids.push(rect);
       }
-      if(at<length) walls.push(wallRect(w,at,length-at));
+      if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
     }
-    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
+    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:roomRing(p,r).points.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
     const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
-    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallRect(w).poly.map(([x,y])=>({x,y})))];
+    const points=[...imagePoints,...p.rooms.flatMap(r=>roomRing(p,r).points),...p.walls.flatMap(w=>wallOutline(w).map(([x,y])=>({x,y})))];
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
-    return {source:p,walls,windows,doors,slides,voids,rooms,envelope,bounds:{x:envelope.x-1600,y:envelope.y-1500,w:Math.max(1000,envelope.w)+3200,h:Math.max(1000,envelope.h)+3000},center:{x:envelope.x+envelope.w/2,y:envelope.y+envelope.h/2}};
+    return {source:p,walls,windows,doors,slides,voids,...(wallInfills.length?{wallInfills}:{}),rooms,envelope,bounds:{x:envelope.x-1600,y:envelope.y-1500,w:Math.max(1000,envelope.w)+3200,h:Math.max(1000,envelope.h)+3000},center:{x:envelope.x+envelope.w/2,y:envelope.y+envelope.h/2}};
   }
   // Declared wall type (contract 1.5.0): what a person states about a wall and where that statement comes from. It is
   // never deduced from thickness, position or drawing, and it is not a structural verification. Declaring raises only
@@ -306,12 +608,64 @@
     if(!STRUCTURE_SOURCES.includes(source))throw Error('Procedencia no admitida.');
     const next=clone(project),wall=next.walls.find(w=>w.id===wallId);if(!wall)throw Error('Muro no encontrado.');
     wall.structure=structure;wall.structureSource=source;
-    if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
+    raiseVersion(next,'1.5.0');
     validate(next);return next;
   }
-  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.buildingPlacement!==undefined&&minor<12)next.schemaVersion='1.12.0';else if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
-  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
+  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);raiseVersion(next,site?.buildingPlacement!==undefined?'1.12.0':site?.terrain!==undefined?'1.11.0':site?.orthophoto!==undefined?'1.10.0':site?.parcel!==undefined?'1.9.0':'1.7.0');validate(next);return next;}
+  // OP-07 · S5: wall edits as pure operations with the editor's own result shape ({ok, project, explanation, intent}), so
+  // the editor applies them through its single path (FloorPlanApp.applyExtension: validation, undo/redo, save) — no second
+  // editor. A refused edit returns the same project untouched (atomic) and says why; it never drops an opening.
+  const refuse = (code, explanation, extra = {}) => ({ok:false, code, explanation:[explanation], ...extra});
+  function wallEdit(project, wallId, change, intent = {}) {
+    const next = clone(project), w = next.walls.find(x => x.id === wallId);
+    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
+    change(w, next);
+    if (shapedWall(w)) raiseVersion(next, '2.0.0');
+    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
+    const gate = guardSave(project, next, {intent});
+    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code + (i.message ? ': ' + i.message : '')).join('; '), {issues: gate.issues});
+    return {ok:true, project:next, intent};
+  }
+  // Curve: control point in mm (rounded as every plan point), or null to straighten it (explicit intent).
+  const setWallCurve = (project, wallId, control) => control
+    ? wallEdit(project, wallId, w => { w.curve = {control: point(control)}; })
+    : wallEdit(project, wallId, w => { delete w.curve; }, {straightened: [wallId]});
+  // End height in mm, or null to make the wall level again at its start height (explicit intent).
+  const setWallEndHeight = (project, wallId, heightEndMm) => heightEndMm === null || heightEndMm === undefined
+    ? wallEdit(project, wallId, w => { delete w.heightEndMm; }, {leveled: [wallId]})
+    : wallEdit(project, wallId, w => { w.heightEndMm = Math.round(heightEndMm); });
+  // Split at a physical distance along the wall (mm): exact Bézier split of the single core, points rounded to whole mm
+  // once (the pieces stay joined), heights and openings carried over by the parameter of their centre. An opening the
+  // cut would cross refuses the split and is named: openings never disappear.
+  function splitWall(project, wallId, distanceMm, {newId = id('wal')} = {}) {
+    const w = project.walls.find(x => x.id === wallId);
+    if (!w) return refuse('wall-not-found', `No existe el muro ${wallId}.`);
+    const length = wallLength(w);
+    if (!(distanceMm >= 1 && distanceMm <= length - 1)) return refuse('cut-outside', `El corte debe quedar dentro del muro (1–${Math.floor(length - 1)} mm).`);
+    const own = project.openings.filter(o => o.wallId === wallId), r = Walls.splitAt(w, distanceMm, own, {...WALL_PATH, roundMm:true, newId});
+    if (r.blocked.length) return refuse('opening-straddles-cut', `El corte atraviesa ${r.blocked.length === 1 ? 'una abertura' : r.blocked.length + ' aberturas'}: muévelo o mueve la abertura.`, {openings: r.blocked});
+    const next = clone(project), at = next.walls.findIndex(x => x.id === wallId);
+    next.walls.splice(at, 1, r.first, r.second);
+    const moved = new Map(r.openings.map(o => [o.id, o]));
+    next.openings = next.openings.map(o => moved.has(o.id) ? (({part, driftMm, ...rest}) => ({...rest, offsetMm: Math.round(rest.offsetMm)}))(moved.get(o.id)) : o);
+    if (shapedWall(r.first) || shapedWall(r.second)) raiseVersion(next, '2.0.0');
+    const intent = {split: {[wallId]: [r.first.id, r.second.id]}};
+    try { validate(next); } catch (e) { return refuse('invalid', e.message); }
+    const gate = guardSave(project, next, {intent});
+    if (!gate.ok) return refuse('guard', gate.issues.map(i => i.code).join('; '), {issues: gate.issues});
+    return {ok:true, project:next, intent, maxDriftMm: r.maxDriftMm};
+  }
+  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined)raiseVersion(next,'1.8.0');validate(next);return next;}
   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
-  const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
+  const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName,ROOM_NAME_HINTS,roomFamilyFromName,roomFamilyFromContents,roomObjects,suggestRoomFamily,swapRoomUses};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
+  // OP-07 · curved and sloped walls (contract 2.0): the same exported object, extended per cut.
+  Object.assign(api,{parseVersion,versionAtLeast,raiseVersion,WALL_PATH,WALL_FEATURES,shapedWall,wallLength,featuresOf:Walls.featuresOf,guardSave});   // OP-07 S1
+  Object.assign(api,{wallOutline});   // OP-07 S2
+  Object.assign(api,{wallFootprints});   // OP-07 S6
+  Object.assign(api,{pieceMesh});   // OP-07 S4
+  Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
+  Object.assign(api,{roomRing});   // OP-07 S3b
+  Object.assign(api,{jointAt});   // OP-07 S4b
+  Object.assign(api,{editIntent,composeIntent,saveGate});   // OP-07 S7
 })(globalThis);
