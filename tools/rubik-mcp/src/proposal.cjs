@@ -17,6 +17,7 @@ const T = require('../../../js/tracing-core.js');
 const Review = require('../../../js/layout-review.js');
 const Placement = require('../../../js/furniture-placement.js');
 const Spatial = require('./spatial.cjs');
+const ProposalV1 = require('../../../js/proposal-core.js');
 
 const PROPOSAL_VERSION = 'RubikLayoutProposalV1';
 const GOALS = Object.freeze(['resolve-placement-conflict', 'clear-door-swing']);
@@ -132,8 +133,10 @@ function propose(project, snapshot, rawArgs) {
   const pending = (code, message, extra) => finish(out, 'pending', { blockingReasons: [{ code, message }], ...extra });
 
   // 1. The proposal must correspond to the bytes the person is looking at.
-  if (snapshot.sha256 !== args.expectedSha256) {
-    return block('stale-source', 'El SHA-256 del archivo no coincide con expectedSha256: el JSON cambió desde que se consultó. Vuelve a leer el resumen y repite la petición.', {
+  //    K13: comprobación común de vigencia (ProposalV1); el código público sigue siendo stale-source.
+  const fresh = ProposalV1.checkFresh({ kind: 'file-sha256', value: args.expectedSha256 }, snapshot.sha256);
+  if (!fresh.ok) {
+    return block(fresh.legacyCode, 'El SHA-256 del archivo no coincide con expectedSha256: el JSON cambió desde que se consultó. Vuelve a leer el resumen y repite la petición.', {
       evidence: { expectedSha256: args.expectedSha256, actualSha256: snapshot.sha256 },
     });
   }
@@ -384,4 +387,7 @@ function propose(project, snapshot, rawArgs) {
   return finish(out, 'candidate-reviewable');
 }
 
-module.exports = { PROPOSAL_VERSION, GOALS, LIMITS, NOT_EVALUATED, normalize, propose };
+// K13: vista ProposalV1 de un resultado (solo lectura; applied:false siempre).
+const toProposalV1 = result => ProposalV1.fromLayout(result);
+
+module.exports = { PROPOSAL_VERSION, GOALS, LIMITS, NOT_EVALUATED, normalize, propose, toProposalV1 };
