@@ -84,3 +84,51 @@ Cada propuesta reutiliza lo que ya existe y no amplía el alcance. No se abre R0
 2. Decidir 1: es la única con código nuevo y la que más protege.
 3. Cerrar 7.
 4. Con las ocho cerradas y el recorrido del §3 hecho en la Preview exacta, retirar «experimental» con autorización expresa.
+
+## 7. Decisiones del propietario (20/11/2026)
+
+| N.º | Decisión | Estado |
+|---|---|---|
+| 3 | Contrato `x-r02a-ceiling` | **Ratificado** |
+| 4 | Referencia vertical de planta con excepción por estancia | **Ratificada.** La derivación desde la planta superior queda fuera |
+| 2, 5, 6 | Limitaciones declaradas del piloto (muebles sin altura, recolocación solo con muros alineados a los ejes, tamaños genéricos rotulados) | **Ratificadas** |
+| 8 | Nombres visibles | Resuelto en `claude/r03-holguras` (`nm()` y `FloorPlanDisplayName`) |
+| 1 | Paso libre | **2100 mm como criterio inicial de diseño**, pendiente de validación profesional (§8) |
+| 7 | GOV-05 | Abierto |
+
+**Sigue experimental** hasta que se cumplan las tres condiciones: GOV-05, la aceptación del recorrido (§3) y los gates de Codex (Firefox, WebKit, Windows).
+
+## 8. Criterio de paso libre de 2100 mm · especificación preparada (sin aplicar)
+
+**Naturaleza.** Es un **criterio inicial de diseño** del propietario, pendiente de validación profesional.
+- **No** es cumplimiento normativo y no se presenta como tal: ni CTE ni otra norma.
+- **No** se extiende a cualquier estancia ni a cualquier punto de una estancia.
+
+**Dónde se aplica: solo en las zonas de circulación.**
+- **Zona de circulación:** la superficie de la estancia que **no** ocupa ningún mueble, en planta, con la misma huella que ya usa `FloorPlanPlacement`.
+- Encima de un mueble **no se aplica**: ahí sigue la regla actual, «pendiente de datos», porque el mueble no tiene altura.
+- **Estancias excluidas** del criterio, por familia: `storage`, `utility` y `garage`. Se decide así para no extender la regla de forma indiscriminada; la lista es ampliable solo por decisión del propietario.
+- Pasillos (`hallway`) y el resto de estancias habitables: se aplica en sus zonas libres.
+
+**Regla.** Para un elemento de techo dentro de una zona de circulación, se calcula `puntoMasBajo = referencia − descuelgue − altura del elemento`, con los mismos datos que ya calcula `mount` en `r02a-ceiling-core`:
+- si `puntoMasBajo ≥ 2100 mm`, nada cambia;
+- si `puntoMasBajo < 2100 mm`, el estado pasa de «revisable» a **«bloqueado · paso libre»**, con la cota, el margen que falta y el texto *«Criterio de diseño inicial (2100 mm en zonas de paso), pendiente de validación profesional. No es una comprobación normativa.»*;
+- sin referencia vertical: «pendiente de datos», como hoy; **nunca se supone**.
+
+**Implementación prevista** (un corte pequeño, sin motor nuevo):
+1. `r02a-ceiling-core`:
+   - una constante `PASSAGE_CRITERION = { minClearMm: 2100, source: 'owner-design-criterion-2026-11-20', normative: false, excludedFamilies: ['storage','utility','garage'] }`;
+   - la comprobación dentro de `validate`/`previewDiff`, reutilizando la huella de `FloorPlanPlacement` para saber si el punto está sobre un mueble.
+2. `r02a-ceiling-editor`: el aviso con el texto anterior, siempre visible junto al estado.
+3. El contrato `x-r02a-ceiling` **no cambia**: el criterio no se guarda, se evalúa.
+
+**Pruebas que lo acreditarán:**
+
+| Tipo | Caso |
+|---|---|
+| Positivas | 2100 mm exactos pasa; 2099 bloquea con la cota y el margen correctos; el caso de #217 (40 cm del suelo) pasa de «revisable», fijado hoy como límite, a «bloqueado · paso libre» |
+| Negativas | Sobre un mueble: «pendiente de datos», sin criterio. En `storage`, `utility` y `garage`: no se aplica. Sin referencia: «pendiente», nunca supuesto. El texto no menciona ninguna norma ni cumplimiento |
+| Contrato | El documento guardado es byte a byte igual con el criterio activo |
+| Navegador | `r02a-editor.browser` muestra el aviso y el texto exacto |
+
+**Siguiente:** aplicar este corte cuando lo autorices, y la validación profesional del valor de 2100 mm.
