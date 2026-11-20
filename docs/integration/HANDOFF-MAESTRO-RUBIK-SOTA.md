@@ -57,6 +57,14 @@ Decisión del propietario, vigente para todos los frentes y agentes. El texto co
 
 ---
 
+## Actualización A4 — regla permanente de integración funcional, UX/UI y QA
+
+Antes de la cirugía, cada handoff y PR declara la capacidad, el área de RUBIK, la ruta paso a paso o el consumidor interno, la visibilidad, los componentes reutilizados, el cumplimiento de Perla y UX-FIRST, las dependencias y los permisos, las pruebas aplicables, la evidencia vinculada al SHA y los gates para Production. La lista completa y el criterio por estado viven en el [protocolo permanente](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE.md#41-integración-funcional-uxui-y-qa).
+
+Las mejoras visibles requieren acceso verificable desde el frontend. Las internas demuestran sus consumidores e impacto en el flujo real. Reutilizar las superficies y autoridades de RUBIK. Claude Code documenta el destino durante la escultura y el pulido. Codex valida la conexión durante la cirugía e integración. ChatGPT audita la experiencia y la disponibilidad. El propietario concede la aceptación y los permisos.
+
+**DESARROLLADO → VALIDADO → INTEGRADO → CONECTADO → DISPONIBLE → ACEPTADO.** Registrar la evidencia de cada estado, con el alcance y entorno de cualquier aceptación previa. Los resultados operativos y los bloqueos de cada corte se siguen en [#275](https://github.com/Juanmaes83/floorplan-3d/pull/275).
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 
