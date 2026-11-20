@@ -24,16 +24,29 @@ setItem(k,v){ if(writable(storage)&&!overlay.size){ … storage.setItem(k,v); re
 
 Hay que medir la ventana: repetir con 0, 1, 5 y 20 ms entre los pasos 2 y 3, y comprobar los documentos persistidos byte a byte.
 
-## Opciones de cierre (para decidir con la reproducción, sin aplicar)
+## Criterio del propietario (20/11/2026)
 
-1. **Releer tras escribir.** Después de `setItem`, releer el marcador; si cambió, restaurar el valor anterior y retener el nuevo en memoria. Es barato, pero una ventana mínima no desaparece del todo.
-2. **Cerrojo `navigator.locks`**, ya usado en `js/persistence-store.js`, compartido entre subir el marcador y cada escritura gestionada. Ordena las operaciones, pero no garantiza que WebKit haya propagado el valor dentro del cerrojo. Combinarlo con la opción 1.
-3. **No migrar en el origen normal** mientras haya pestañas vivas de una época anterior (presencia por `BroadcastChannel` o el cerrojo de pestaña existente, `TAB_LOCK`). Es lo que ya exige el gate R1 de convivencia previa a cualquier migración.
+1. La garantía de los escritores se **acredita antes** de autorizar cualquier migración.
+2. No se confía **solo** en la propagación del marcador.
+3. **No se restauran valores antiguos sin comprobar escrituras concurrentes.**
 
-**Recomendación:**
-- mantener la opción 3 como barrera mientras no haya migración, que es el estado actual;
-- medir la ventana en WebKit (macOS y Linux) con el escenario de arriba;
-- solo si se autoriza una migración en el origen normal, aplicar las opciones 1 y 2 juntas, con la prueba del escenario como regresión.
+> **Corrección de la primera versión de esta nota.** Su opción 1 («releer tras escribir y, si cambió, restaurar el valor anterior») queda **retirada**. Restaurar a ciegas puede pisar una escritura legítima de otra pestaña hecha entre medias.
+
+## Opciones revisadas (para decidir con la reproducción, sin aplicar)
+
+1. **Escritura condicionada, nunca restauración.** Cada escritura gestionada lleva la época y una versión del documento (contador o huella) leídas **dentro del mismo cerrojo** (`navigator.locks`, como en `js/persistence-store.js`).
+   - Solo confirma si la época sigue siendo la suya y la versión no cambió.
+   - Si algo cambió, **no escribe** y retiene en memoria, como hoy (R1-T02).
+   - Nunca escribe un valor antiguo encima de otro.
+2. **Detección posterior, sin reparación automática.** Si tras escribir se observa una época mayor, se **marca el estado como indeterminado** y la pestaña deja de escribir. Se avisa a la persona y se ofrece la exportación de emergencia que ya existe. No se toca lo escrito por otros.
+3. **Barrera de migración (gate R1).** No migrar en el origen normal mientras haya pestañas vivas de una época anterior. La presencia se detecta por `TAB_LOCK`/`BroadcastChannel` con confirmación (ack), no solo por el marcador.
+
+**Acreditación previa a cualquier migración** (lo que Codex reproduce en WebKit macOS y Linux):
+- **(a)** el escenario de dos pestañas con 0, 1, 5 y 20 ms entre subir la época y guardar;
+- **(b)** escrituras **concurrentes** reales de las dos pestañas sobre documentos distintos y sobre el mismo;
+- **(c)** en cada caso, documentos persistidos byte a byte iguales a los esperados: ninguna escritura de época antigua confirmada y **ninguna escritura legítima perdida**.
+
+Sin (a), (b) y (c) en verde, la migración sigue en NO-GO.
 
 ## Reparto
 
