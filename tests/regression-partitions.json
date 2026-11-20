@@ -18,6 +18,7 @@
   "tests/op07-s5-edit.browser.test.cjs",
   "tests/op07-s5b-edit-ui.browser.test.cjs",
   "tests/op07-s4b-render.browser.test.cjs",
+  "tests/op07-s7-persistence.browser.test.cjs",
   "tests/home-demos.browser.test.cjs",
   "tests/e2-comparativas.browser.test.cjs",
   "tests/h01-dossier-inventario.browser.test.cjs",

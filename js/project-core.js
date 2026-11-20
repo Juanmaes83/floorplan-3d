@@ -46,6 +46,55 @@
   function guardSave(previous, next, {intent = {}, writerFeatures = WALL_FEATURES} = {}) {
     return Walls.guardSave({previous, next, writerFeatures, intent, opts: WALL_PATH});   // the same path policy as validate()
   }
+  // OP-07 · S7 · Intent of ONE editing step, bound to that step (never a global that persists): what the operation said
+  // (op, e.g. splitWall's {split}) plus what the step itself removed. A restore (undo, redo, recovery) brings back a state
+  // the person already had, so its whole difference is intended. A generic edit never "intends" dropping a curve or slope.
+  function editIntent(before, after, {op = null, restore = false} = {}) {
+    const ids = l => new Set((l || []).map(x => x.id)), nextWalls = new Map((after?.walls || []).map(w => [w.id, w]));
+    const nw = ids(after?.walls), no = ids(after?.openings), sloped = w => Number.isFinite(w.heightEndMm) && w.heightEndMm !== w.heightMm;
+    const out = {removed:(before?.walls || []).filter(w => !nw.has(w.id)).map(w => w.id), removedOpenings:(before?.openings || []).filter(o => !no.has(o.id)).map(o => o.id), straightened:[], leveled:[], split:{}};
+    if (restore) for (const w of before?.walls || []) { const n = nextWalls.get(w.id); if (!n) continue;
+      if (Walls.isCurved(w) && !Walls.isCurved(n)) out.straightened.push(w.id); if (sloped(w) && !sloped(n)) out.leveled.push(w.id); }
+    return composeIntent(out, op || {});
+  }
+  // Intents of consecutive steps since the last confirmed revision, composed so that guardSave compares the confirmed
+  // document with the next one: a piece of a split that is split again or removed is followed back to the original wall.
+  function composeIntent(a = {}, b = {}) {
+    const out = {removed:[...(a.removed || [])], removedOpenings:[...(a.removedOpenings || [])], straightened:[...(a.straightened || [])], leveled:[...(a.leveled || [])], split:Object.fromEntries(Object.entries(a.split || {}).map(([k, v]) => [k, [...v]]))};
+    const origin = id => Object.keys(out.split).find(k => out.split[k].includes(id));
+    for (const [old, pieces] of Object.entries(b.split || {})) { const k = origin(old);
+      if (k) out.split[k].splice(out.split[k].indexOf(old), 1, ...pieces); else out.split[old] = [...pieces]; }
+    for (const id of b.removed || []) { const k = origin(id);
+      if (k) { out.split[k].splice(out.split[k].indexOf(id), 1); if (!out.split[k].length) { delete out.split[k]; out.removed.push(k); } }
+      else out.removed.push(id); }
+    for (const key of ['straightened', 'leveled']) for (const id of b[key] || []) { out[key].push(id); const k = origin(id); if (k) out[key].push(k); }
+    out.removedOpenings.push(...(b.removedOpenings || []));
+    for (const key of ['removed', 'removedOpenings', 'straightened', 'leveled']) out[key] = [...new Set(out[key])];
+    return out;
+  }
+  // S7 · Save gate for the F0.2b write path. pairs = [{kind:'project'|'library', before, after}] (stored JSON text, before =
+  // last CONFIRMED revision). A v1 document is never refused here: loss and rule checks apply to walls with a curve or a
+  // slope and to their openings (the same scope as validate()); a degraded view and a writer that lacks a feature the
+  // document uses are always refused. Removing a whole project is not a wall loss.
+  function saveGate(pairs, {intent = {}, restore = false, writerFeatures = WALL_FEATURES} = {}) {
+    const issues = [], read = t => { if (t === null || t === undefined) return null; try { return JSON.parse(t); } catch { return undefined; } };
+    const projectsOf = (kind, doc) => !doc ? [] : kind === 'project' ? [doc] : (doc.entries || []).flatMap(e => e.kind === 'building' ? (e.building?.levels || []).map(l => l.project) : [e.project]).filter(Boolean);
+    for (const {kind, before, after} of pairs) {
+      const next = read(after), prev = read(before);
+      if (next === undefined) { issues.push({code:'unreadable', kind}); continue; }
+      const prevById = new Map(projectsOf(kind, prev || null).map(p => [p.id, p]));
+      for (const p of projectsOf(kind, next)) {
+        const q = prevById.get(p.id) || null, shaped = new Set([...(q?.walls || []), ...(p.walls || [])].filter(shapedWall).map(w => w.id));
+        const hosts = new Map([...(q?.openings || []), ...(p.openings || [])].map(o => [o.id, o.wallId]));
+        const why = restore ? composeIntent(editIntent(q, p, {restore:true}), intent) : intent;
+        for (const i of guardSave(q, p, {intent:why, writerFeatures}).issues) {
+          const wall = i.wallId ?? hosts.get(i.openingId);
+          if (['degraded-view', 'writer-lacks-feature'].includes(i.code) || shaped.has(wall)) issues.push({...i, projectId:p.id});
+        }
+      }
+    }
+    return {ok:!issues.length, issues};
+  }
   const wallLength = w => shapedWall(w) ? Walls.pathProfile(w, WALL_PATH).length : Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
@@ -618,4 +667,5 @@
   Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
   Object.assign(api,{roomRing});   // OP-07 S3b
   Object.assign(api,{jointAt});   // OP-07 S4b
+  Object.assign(api,{editIntent,composeIntent,saveGate});   // OP-07 S7
 })(globalThis);

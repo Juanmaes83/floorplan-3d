@@ -225,7 +225,7 @@
 
  // ── Session: the synchronous view an editor tab uses ─────────────────────────────────────────────────────────────
  const TAB_LOCK='rubik-sota-tab:';
- async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,getImage=root.FloorPlanImages?.get,storagePermission=root.FloorPlanStoragePersistence}={}){
+ async function session({indexedDB:idb,storage=root.localStorage,locks=root.navigator?.locks,channel=typeof BroadcastChannel==='function'?new BroadcastChannel(CHANNEL):null,debounceMs=250,tab=Math.random().toString(36).slice(2),onState=()=>{},hooks,gate=null,getImage=root.FloorPlanImages?.get,storagePermission=root.FloorPlanStoragePersistence}={}){
   let db;try{db=await open({indexedDB:idb});}catch(e){channel?.close();throw e;}
   let releaseTab=null,closed=false;
   let migration,legacy,revision,docs;
@@ -238,6 +238,8 @@
   const shared=root.FloorPlanImages?.holdTab?.(locks);
   if(shared)tab=shared;
   else if(canLock(locks))locks.request(TAB_LOCK+tab,()=>closed?undefined:new Promise(r=>{releaseTab=r;})).catch(()=>{});
+  // OP-07 S7: the last CONFIRMED docs, for the optional save gate ({check({changes,confirmed,restore}),committed(verdict)}).
+  let confirmed=new Map(docs);
   const pending=new Map(),listeners=new Set([onState]);let chain=Promise.resolve(),timer=null,adopting=false,inFlight=null;
   const pendingCount=()=>new Set([...(inFlight?.keys()||[]),...pending.keys()]).size;
   const initialRevision=revision;
@@ -282,6 +284,10 @@
    }
    if(!pending.size)return {...state};
    const batch=new Map(pending);pending.clear();inFlight=batch;emit({status:'saving'});
+   // S7: a refused batch writes nothing; the changes stay in this tab (pending) and the reason is reported.
+   const verdict=gate?gate.check({changes:Object.fromEntries(batch),confirmed:Object.fromEntries(confirmed),restore:false}):null;
+   if(verdict&&!verdict.ok){inFlight=null;for(const [k,v] of batch)if(!pending.has(k))pending.set(k,v);
+    emit({status:'error',error:new PersistenceError('guard-refused',verdict.message||'No se ha guardado: el cambio perdería información del muro.',{issues:verdict.issues})});return {...state};}
    try{
     // `full()` is read when the commit runs, so a conflict record includes changes made while a transaction was in flight.
     const r=await commit({db,locks,storage,baseRevision:revision,changes:Object.fromEntries(batch),snapshot:full(),tab,hooks});
@@ -291,6 +297,7 @@
      return pending.size?doFlush():{...state};
     }
     revision=r.revision;broadcast();
+    for(const [k,v] of batch)if(v===null)confirmed.delete(k);else confirmed.set(k,v);gate?.committed?.(verdict);
     emit({status:pending.size?'pending':'saved',error:null,mirror:r.mirror});
     if(userSave)void storagePermission?.requestPersistentStorage({confirmedByUser:true});
     if(pending.size)schedule();
@@ -333,9 +340,11 @@
      const c=await find(id),cur=await load(db);
      for(const k of Object.keys(c.docs))if(!managed(k))throw new PersistenceError('key-unmanaged','La versión contiene una clave fuera de la autoridad.');
      const changes=Object.fromEntries(KEYS.map(k=>[k,typeof c.docs[k]==='string'?c.docs[k]:null]));
+     const verdict=gate?gate.check({changes,confirmed:Object.fromEntries(cur.docs),restore:true}):null;
+     if(verdict&&!verdict.ok)throw new PersistenceError('guard-refused',verdict.message||'Esa versión no se puede recuperar sin perder información.',{issues:verdict.issues});
      const out=await commit({db,locks,storage,baseRevision:cur.revision,changes,tab,hooks,recovery:{id,at:c.at,source:JSON.stringify(c.docs),docs:Object.fromEntries(cur.docs)}});
      if(out.status!=='saved')throw new PersistenceError('conflict','Otra pestaña guardó mientras se recuperaba el conflicto; vuelve a intentarlo.');
-     revision=out.revision;docs=new Map(Object.entries(changes).filter(([,v])=>v!==null));broadcast();
+     revision=out.revision;docs=new Map(Object.entries(changes).filter(([,v])=>v!==null));confirmed=new Map(docs);gate?.committed?.(verdict);broadcast();
      emit({status:'saved',conflictId:null,error:null,outdated:false,mirror:out.mirror});return {revision,superseded:out.superseded};
     }finally{adopting=false;}
    },
