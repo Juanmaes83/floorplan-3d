@@ -1,0 +1,15 @@
+✔ R1-T02 · normal: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan (2416.7198ms)
+✔ R1-T02b · normal: marcador ilegible → estado indeterminado, se falla cerrado (1283.4072ms)
+✔ R1-T02 · F0.2b activo: con una época mayor ningún escritor confirma; los cambios siguen en la pestaña y se exportan (1416.6807ms)
+✔ R1-T02b · F0.2b activo: marcador ilegible → estado indeterminado, se falla cerrado (1290.7144ms)
+✔ R1-T03 · F0.2b activo: época de la autoridad leída en la misma transacción; sin escrituras mezcladas (1369.5399ms)
+✔ S8 · integrado, F0.2b (IndexedDB): sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0 (2147.4525ms)
+✔ S8 · integrado, localStorage: sin entrada, operaciones rechazadas y ninguna escritura confirma un 2.0 (1361.8156ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11954.9235
