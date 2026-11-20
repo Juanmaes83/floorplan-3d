@@ -1,4 +1,4 @@
-From 130a21fbcf7b2ec09363d94cdb65b25664ab7ec6 Mon Sep 17 00:00:00 2001
+From 319bf8ec404d4faf3167db102ab30a320982dd9b Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:37:14 +0000
 Subject: [PATCH 9/9] =?UTF-8?q?OP-07=20S4b=20=C2=B7=203D=20estanco=20y=20l?=
@@ -75,7 +75,7 @@ index bb16a917..34472779 100644
      const gTop = Math.min(head, top); if (gTop <= sill) return;
      const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
 diff --git a/js/project-core.js b/js/project-core.js
-index 674ab8c6..a9d7f1cc 100644
+index 3ae3bcf7..2b63e5f0 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
 @@ -364,20 +364,39 @@
@@ -161,7 +161,7 @@ index 674ab8c6..a9d7f1cc 100644
    }
    // OP-07 · S3b: the CANONICAL RING of a room. A room is stored as its polygon of wall faces; where an edge lies on the
    // face of a curved wall (it was drawn against the wall's chord), the ring follows that face instead: the mitred offset
-@@ -453,11 +493,11 @@
+@@ -474,11 +514,11 @@
      return Walls.pathProfile(w,WALL_PATH).spans.filter(s=>s.length>0).map(s=>wallRect({...w,start:s.start,end:s.end}).poly);
    }
    function geometry(p) {
@@ -175,7 +175,7 @@ index 674ab8c6..a9d7f1cc 100644
        // Merge overlapping intervals for the solid portions; opening visuals retain their IDs.
        let at=0;
        for (const o of openings) {
-@@ -467,7 +507,8 @@
+@@ -488,7 +528,8 @@
          const rect=shaped?wallRect(host,offset,Math.hypot(host.end.x-host.start.x,host.end.y-host.start.y)):wallRect(w,o.offsetMm,o.widthMm),u=[Math.cos(rect.angle),Math.sin(rect.angle)];
          Object.assign(rect,{openingId:o.id,sill:o.sillHeightMm/1000,head:(o.sillHeightMm+o.heightMm)/1000});
          // OP-07 · S4: on a curved or sloped wall the infill above the head follows the wall top at both edges of the opening.
@@ -185,7 +185,7 @@ index 674ab8c6..a9d7f1cc 100644
          if(w.status==='demolished') continue;
          if(o.kind==='window') windows.push(rect);
          else if(o.kind==='door') {
-@@ -486,7 +527,7 @@
+@@ -507,7 +548,7 @@
      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
      for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
      const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
@@ -194,7 +194,7 @@ index 674ab8c6..a9d7f1cc 100644
    }
    // Declared wall type (contract 1.5.0): what a person states about a wall and where that statement comes from. It is
    // never deduced from thickness, position or drawing, and it is not a structural verification. Declaring raises only
-@@ -555,4 +596,5 @@
+@@ -576,4 +617,5 @@
    Object.assign(api,{pieceMesh});   // OP-07 S4
    Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
    Object.assign(api,{roomRing});   // OP-07 S3b

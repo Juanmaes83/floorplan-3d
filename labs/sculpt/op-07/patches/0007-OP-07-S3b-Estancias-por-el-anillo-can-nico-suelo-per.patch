@@ -1,4 +1,4 @@
-From dba3430e9ffdb65e77a524c1fb8d41d7ff2cf906 Mon Sep 17 00:00:00 2001
+From 63294f8430975ae9f1ec51dec002c83692f9e3f7 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 19 Nov 2026 23:23:33 +0000
 Subject: [PATCH 7/9] =?UTF-8?q?OP-07=20S3b=20=C2=B7=20Estancias=20por=20el?=
@@ -9,22 +9,24 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
- js/project-core.js                | 49 ++++++++++++++++++-
- js/quantity-core.js               | 30 +++++++++---
+ js/project-core.js                | 70 +++++++++++++++++++++++-
+ js/quantity-core.js               | 30 ++++++++---
  js/surface-core.js                |  4 +-
  js/wall-geometry-core.js          |  2 +-
  tests/op07-s1-contract.test.cjs   |  6 ++-
  tests/op07-s2-geometry.test.cjs   |  4 +-
  tests/op07-s3-quantities.test.cjs | 10 ++--
- tests/op07-s3b-rooms.test.cjs     | 78 +++++++++++++++++++++++++++++++
- 8 files changed, 166 insertions(+), 17 deletions(-)
+ tests/op07-s3b-rooms.test.cjs     | 78 +++++++++++++++++++++++++++
+ tests/op07-s3b-split.test.cjs     | 88 +++++++++++++++++++++++++++++++
+ 9 files changed, 275 insertions(+), 17 deletions(-)
  create mode 100644 tests/op07-s3b-rooms.test.cjs
+ create mode 100644 tests/op07-s3b-split.test.cjs
 
 diff --git a/js/project-core.js b/js/project-core.js
-index e5546ef7..674ab8c6 100644
+index e5546ef7..3ae3bcf7 100644
 --- a/js/project-core.js
 +++ b/js/project-core.js
-@@ -403,6 +403,50 @@
+@@ -403,6 +403,71 @@
      const top=h=>Math.min(h,yt)*1000;
      return Walls.slopedPiece(rect.spanMm,rect.thickness,yb*1000,top(rect.heightStart),top(rect.heightEnd),rect.alongMm,Walls.TEXTURE_TILE_MM);
    }
@@ -36,37 +38,58 @@ index e5546ef7..674ab8c6 100644
 +  // follows and the fraction of each (the partial facets at both ends); `edgeWalls[i]` names the curved wall that ring
 +  // edge i belongs to. A room without curved walls keeps its polygon (the same array: v1 figures are byte-identical).
 +  const RING_TOLERANCE_MM = 3, RING_PARALLEL_SIN = 1e-3;
++  // Chains of curved walls joined end to end with the same thickness (e.g. the two pieces of a split curved wall): a room
++  // drawn against the original chord follows the chain's face. Single walls come first, so nothing changes without a split.
++  function curvedUnits(curved) {
++    const units = curved.map(w => [{w, rev:false}]), touch = (p, q) => Math.hypot(p.x - q.x, p.y - q.y) < 1;
++    const ends = m => m.rev ? [m.w.end, m.w.start] : [m.w.start, m.w.end];
++    const grow = chain => { for (let k = 0; k < 16; k++) { const last = ends(chain[chain.length - 1])[1];
++      const nxt = curved.filter(w => !chain.some(m => m.w === w) && w.thicknessMm === chain[0].w.thicknessMm && (touch(w.start, last) || touch(w.end, last)));
++      if (nxt.length !== 1) return; chain.push({w:nxt[0], rev:!touch(nxt[0].start, last)}); units.push(chain.slice()); } };
++    for (const w of curved) grow([{w, rev:false}]);
++    return units;
++  }
 +  function roomRing(project, room) {
 +    const polygon = room?.polygon, curved = (project?.walls || []).filter(w => w.status !== 'demolished' && Walls.isCurved(w));
 +    if (!curved.length || !Array.isArray(polygon) || polygon.length < 3) return {points: polygon, faces: [], edgeWalls: []};
++    const units = curvedUnits(curved).map(chain => {
++      const lines = chain.map(m => { const c = Walls.centreline(m.w, WALL_PATH); return m.rev ? c.slice().reverse() : c; });
++      const centre = lines.reduce((acc, c, i) => acc.concat(i ? c.slice(1) : c), []), owner = [];
++      lines.forEach((c, i) => { for (let j = 0; j + 1 < c.length; j++) owner.push({m:chain[i], local:chain[i].rev ? c.length - 2 - j : j}); });
++      return {chain, start:centre[0], end:centre[centre.length - 1], t:chain[0].w.thicknessMm, centre, owner};
++    });
 +    const points = [], faces = [], edgeWalls = [];
 +    for (let i = 0; i < polygon.length; i++) {
 +      const a = polygon[i], b = polygon[(i + 1) % polygon.length];
 +      points.push(a);
-+      for (const w of curved) {
-+        const L = Math.hypot(w.end.x - w.start.x, w.end.y - w.start.y), u = {x:(w.end.x - w.start.x) / L, y:(w.end.y - w.start.y) / L}, n = {x:-u.y, y:u.x};
-+        const dot = (p, v) => (p.x - w.start.x) * v.x + (p.y - w.start.y) * v.y, da = dot(a, n), db = dot(b, n), el = Math.hypot(b.x - a.x, b.y - a.y);
-+        if (!(el > 0) || Math.abs(da - db) > RING_TOLERANCE_MM * 2 || Math.abs(Math.abs((da + db) / 2) - w.thicknessMm / 2) > RING_TOLERANCE_MM) continue;
++      for (const U of units) {
++        const L = Math.hypot(U.end.x - U.start.x, U.end.y - U.start.y);
++        if (!(L > 0)) continue;
++        const u = {x:(U.end.x - U.start.x) / L, y:(U.end.y - U.start.y) / L}, n = {x:-u.y, y:u.x};
++        const dot = (p, v) => (p.x - U.start.x) * v.x + (p.y - U.start.y) * v.y, da = dot(a, n), db = dot(b, n), el = Math.hypot(b.x - a.x, b.y - a.y);
++        if (!(el > 0) || Math.abs(da - db) > RING_TOLERANCE_MM * 2 || Math.abs(Math.abs((da + db) / 2) - U.t / 2) > RING_TOLERANCE_MM) continue;
 +        if (Math.abs(((b.x - a.x) * u.y - (b.y - a.y) * u.x) / el) > RING_PARALLEL_SIN) continue;
 +        const side = (da + db) / 2 >= 0 ? 1 : -1, sa = dot(a, u), sb = dot(b, u), lo = Math.max(0, Math.min(sa, sb)), hi = Math.min(L, Math.max(sa, sb));
 +        if (hi - lo <= 1) continue;
-+        // The face of the curved wall on the room's side, and where each of its points falls along the chord.
-+        const face = Walls.offsetMiter(Walls.centreline(w, WALL_PATH), side * w.thicknessMm / 2), s = face.map(p => dot(p, u));
++        // The face of the curved wall (or chain) on the room's side, and where each of its points falls along the chord.
++        const face = Walls.offsetMiter(U.centre, side * U.t / 2), s = face.map(p => dot(p, u));
 +        const at = x => { for (let j = 0; j + 1 < face.length; j++) if ((s[j] - x) * (s[j + 1] - x) <= 0 && s[j] !== s[j + 1]) { const t = (x - s[j]) / (s[j + 1] - s[j]); return {j, t, p:{x:face[j].x + (face[j + 1].x - face[j].x) * t, y:face[j].y + (face[j + 1].y - face[j].y) * t}}; } return null; };
 +        // The face of a curved wall ends where the facets end (it leans in or out at the ends): clamp to it.
 +        const A = at(Math.max(lo, Math.min(...s))), B = at(Math.min(hi, Math.max(...s)));
 +        if (!A || !B) continue;
-+        const facets = [], run = [A.p];
++        const byWall = new Map(U.chain.map(m => [m.w.id, {wallId:m.w.id, side:m.rev ? -side : side, facets:[]}])), run = [A.p], segWall = [U.owner[A.j].m.w.id];
 +        for (let j = A.j; j <= B.j; j++) {
-+          const from = j === A.j ? A.t : 0, to = j === B.j ? B.t : 1;
-+          if (to - from > 1e-9) facets.push({index:j, fraction:to - from});
-+          if (j > A.j) run.splice(run.length, 0, face[j]);
++          const from = j === A.j ? A.t : 0, to = j === B.j ? B.t : 1, o = U.owner[j];
++          if (to - from > 1e-9) byWall.get(o.m.w.id).facets.push({index:o.local, fraction:to - from});
++          if (j > A.j) { run.push(face[j]); segWall.push(o.m.w.id); }
 +        }
 +        run.push(B.p);
-+        // Every edge from `a` to `b` now belongs to this wall's face (the short junction pieces at both ends included).
-+        for (let k = points.length - 1; k < points.length + run.length; k++) edgeWalls[k] = w.id;
++        // Every edge from `a` to `b` now belongs to the face (the short junction pieces at both ends included).
++        const first = points.length - 1, wallsOfRun = sa <= sb ? segWall : segWall.slice().reverse();
++        edgeWalls[first] = wallsOfRun[0];
++        for (let k = 0; k < run.length; k++) edgeWalls[first + 1 + k] = wallsOfRun[Math.min(k, wallsOfRun.length - 1)];
 +        points.push(...(sa <= sb ? run : run.reverse()));
-+        faces.push({wallId:w.id, side, facets});
++        for (const f of byWall.values()) if (f.facets.length) { f.facets.sort((x, y) => x.index - y.index); faces.push(f); }
 +        break;
 +      }
 +    }
@@ -75,7 +98,7 @@ index e5546ef7..674ab8c6 100644
    // Footprint rectangles of a whole wall: [wallRect(w).poly] for a straight wall; one per facet for a curved one.
    function wallFootprints(w) {
      if (!shapedWall(w) || !Walls.isCurved(w)) return [wallRect(w).poly];
-@@ -436,9 +480,9 @@
+@@ -436,9 +501,9 @@
        }
        if(!shaped && at<length) walls.push(wallRect(w,at,length-at));
      }
@@ -87,7 +110,7 @@ index e5546ef7..674ab8c6 100644
      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
      for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
      const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
-@@ -510,4 +554,5 @@
+@@ -510,4 +575,5 @@
    Object.assign(api,{wallFootprints});   // OP-07 S6
    Object.assign(api,{pieceMesh});   // OP-07 S4
    Object.assign(api,{setWallCurve,setWallEndHeight,splitWall});   // OP-07 S5
@@ -321,4 +344,98 @@ index 00000000..93476e8e
 + const {project,wall}=F.curved(F.base(),{heightEndMm:2400}),f=Q.room(project,'rom_living').wallFaces;
 + assert.ok(f.segments.some(s=>s.wallId===wall.id&&s.curved&&s.complete));assert.equal(f.pendingCurvedWalls,undefined);
 + assert.ok(near(f.missingBoundaryM,Q.room(F.base(),'rom_living').wallFaces.missingBoundaryM,1e-9),'solo falta el lado abierto que ya faltaba');
++});
+diff --git a/tests/op07-s3b-split.test.cjs b/tests/op07-s3b-split.test.cjs
+new file mode 100644
+index 00000000..e06e8fc5
+--- /dev/null
++++ b/tests/op07-s3b-split.test.cjs
+@@ -0,0 +1,88 @@
++'use strict';
++// OP-07 · S3b tras dividir un muro curvo (defecto reproducido el 20/11/2026): la estancia dibujada contra la cuerda
++// ORIGINAL sigue la cara de la cadena de piezas. Antes de la corrección, suelo y presupuesto volvían a la cuerda
++// (27,07 → 23,80 m²) sin que la geometría cambiara. Ni segunda geometría ni anillo distinto: el mismo roomRing.
++const test=require('node:test'),assert=require('node:assert/strict');
++const Core=require('../js/project-core.js'),Q=require('../js/quantity-core.js'),S=require('../js/surface-core.js'),D=require('../js/budget-draft-core.js'),F=require('./op07/fixtures.cjs');
++const near=(a,b,e)=>Math.abs(a-b)<=e,labels=new Proxy({},{get:(t,k)=>String(k)});
++function box({control,heightEndMm,t=200}={}){const p=F.base(),W=(id,s,e,extra={})=>({id,start:s,end:e,thicknessMm:t,heightMm:2700,structure:'partition',status:'existing',...extra});
++ p.walls=[W('wal_nor',{x:0,y:0},{x:12300,y:0}),W('wal_est',{x:12300,y:0},{x:12300,y:4200}),W('wal_sur',{x:12300,y:4200},{x:0,y:4200}),W('wal_oes',{x:0,y:4200},{x:0,y:0}),
++  W('wal_mid',{x:6150,y:0},{x:6150,y:4200},{...(control?{curve:{control}}:{}),...(heightEndMm?{heightEndMm}:{})})];
++ const mat=p.materials.find(m=>m.category==='floor').id,R=(id,x0,x1)=>({id,name:id,floorMaterialId:mat,countsTowardArea:true,polygon:[{x:x0,y:100},{x:x1,y:100},{x:x1,y:4100},{x:x0,y:4100}]});
++ p.rooms=[R('rom_aaa',100,6050),R('rom_bbb',6250,12200)];p.openings=[];p.objects=[];p.measurements=[];return p;}
++const mid=p=>p.walls.find(w=>w.id==='wal_mid');
++const split=(p,id,at,newId)=>{const r=Core.splitWall(p,id,at,{newId});assert.ok(r.ok,r.explanation);return r.project;};
++const ringLen=pts=>pts.reduce((s,a,i)=>{const b=pts[(i+1)%pts.length];return s+Math.hypot(b.x-a.x,b.y-a.y);},0);
++const faces=(p,id)=>{const f=Q.room(p,id).wallFaces,c=f.segments.filter(s=>s.curved);
++ return {complete:c.every(s=>s.complete),pending:f.pendingCurvedWalls,walls:c.map(s=>s.wallId).sort(),
++  len:c.reduce((a,s)=>a+s.lengthM,0),gross:c.reduce((a,s)=>a+s.grossAreaM2,0),open:c.reduce((a,s)=>a+s.openingAreaM2,0),net:c.reduce((a,s)=>a+s.netAreaM2,0)};};
++// Lo que una persona ve y presupuesta de cada estancia: suelo, perímetro y caras del muro curvo.
++const look=p=>Object.fromEntries(p.rooms.map(r=>[r.id,{area:Q.room(p,r.id).floor.areaM2,perim:ringLen(Core.roomRing(p,r).points),...faces(p,r.id)}]));
++// Cuña de cada junta: cada pieza mide su cara con el extremo perpendicular a su última faceta (D-OP07-2, cara izquierda +
++// derecha = 2 × eje), así que una cara gana y la otra pierde a lo sumo t/2·θ por junta (θ = giro entre las facetas que se
++// encuentran). Suelo y perímetro salen del anillo y no tienen esa cuña.
++function wedgeM(p){const W=require('../js/wall-geometry-core.js'),cs=p.walls.filter(w=>W.isCurved(w)),dir=(a,b)=>Math.atan2(b.y-a.y,b.x-a.x);let m=0;
++ for(const a of cs)for(const b of cs){if(a===b||Math.hypot(a.end.x-b.start.x,a.end.y-b.start.y)>=1)continue;const ca=W.centreline(a,Core.WALL_PATH),cb=W.centreline(b,Core.WALL_PATH);
++  let th=Math.abs(dir(ca[ca.length-2],ca[ca.length-1])-dir(cb[0],cb[1]));if(th>Math.PI)th=2*Math.PI-th;m+=a.thicknessMm/2*Math.tan(th/2)*2/1000;}
++ return m;}
++function same(before,after,tag,slackM=0){for(const id of Object.keys(before)){const a=before[id],b=after[id];
++ assert.ok(near(a.area,b.area,0.005),`${tag} ${id}: suelo ${a.area.toFixed(4)} → ${b.area.toFixed(4)} m²`);
++ assert.ok(near(a.perim,b.perim,5),`${tag} ${id}: perímetro ${a.perim.toFixed(1)} → ${b.perim.toFixed(1)} mm`);
++ const e={len:slackM+0.001,gross:slackM*2.8+0.002,open:0.002,net:slackM*2.8+0.002};
++ for(const k of ['len','gross','open','net'])assert.ok(near(a[k],b[k],e[k]),`${tag} ${id}: cara ${k} ${a[k]} → ${b[k]} (cuña ${slackM.toFixed(4)} m)`);
++ assert.ok(b.complete,`${tag} ${id}: cara completa`);assert.equal(b.pending,undefined,`${tag} ${id}: ningún muro pendiente`);}}
++
++test('S3b split · convexo y cóncavo, estancias a ambos lados: dividir no cambia suelo, perímetro ni caras',()=>{
++ for(const cx of [6150+2400,6150-2400]){const p=box({control:{x:cx,y:2100}}),before=look(p);
++  const q=split(p,'wal_mid',Core.wallLength(mid(p))/2,'wal_mi2'),after=look(q);same(before,after,`cx=${cx}`,wedgeM(q));assert.ok(wedgeM(q)<0.01,'cuña < 1 cm');
++  for(const id of ['rom_aaa','rom_bbb'])assert.deepEqual(after[id].walls,['wal_mi2','wal_mid'],'la cara es de las dos piezas');}
++});
++
++test('S3b split · regresión del defecto: sin cadena, el suelo volvía a la cuerda (23,80 m²)',()=>{
++ const q=split(box({control:{x:6150+2400,y:2100}}),'wal_mid',3000,'wal_mi2');
++ const chord=Q.room(box(),'rom_aaa').floor.areaM2;assert.ok(near(chord,23.8,1e-6));
++ assert.ok(Q.room(q,'rom_aaa').floor.areaM2>chord+3,'el salón conserva lo que encierra la curva');
++});
++
++test('S3b split · huecos en cada pieza, pendiente y juntas múltiples (tres piezas): mismas cifras',()=>{
++ const p=box({control:{x:6150+2400,y:2100},heightEndMm:2300});
++ p.openings=[{id:'opn_door1',wallId:'wal_mid',kind:'door',offsetMm:900,widthMm:900,heightMm:2050,sillHeightMm:0},{id:'opn_win01',wallId:'wal_mid',kind:'window',offsetMm:3600,widthMm:1000,heightMm:900,sillHeightMm:900}];
++ Core.validate(p);const before=look(p),L=Core.wallLength(mid(p));
++ const q=split(p,'wal_mid',L/2,'wal_mi2'),r=split(q,'wal_mi2',600,'wal_mi3');
++ assert.ok(q.openings.find(o=>o.id==='opn_door1').wallId==='wal_mid'&&q.openings.find(o=>o.id==='opn_win01').wallId==='wal_mi2','cada hueco en su pieza');
++ same(before,look(q),'2 piezas',wedgeM(q));same(before,look(r),'3 piezas',wedgeM(r));
++ assert.ok(before.rom_aaa.open>1,'los huecos cuentan en la cara');
++});
++
++test('S3b split · una pieza dada la vuelta (dibujada al revés) sigue en la cadena',()=>{
++ const p=box({control:{x:6150+2400,y:2100}}),before=look(p),q=split(p,'wal_mid',2500,'wal_mi2'),w=q.walls.find(x=>x.id==='wal_mi2');
++ const slack=wedgeM(q);[w.start,w.end]=[w.end,w.start];same(before,look(q),'invertida',slack);
++});
++
++test('S3b split · presupuesto y superficie: una sola cifra, igual antes y después',()=>{
++ const p=box({control:{x:6150-2400,y:2100}}),q=split(p,'wal_mid',2000,'wal_mi2'),mat=p.rooms[0].floorMaterialId;
++ const floor=x=>D.lines(x,{labels}).find(l=>l.key==='floor:'+mat).quantity.value;
++ assert.ok(near(floor(p),floor(q),0.01));
++ for(const x of [p,q])for(const r of x.rooms)assert.equal(S.level(x).rooms.find(s=>s.id===r.id).areaM2,Q.room(x,r.id).floor.areaM2);
++});
++
++test('S3b split · atómico y reversible: el original no cambia y volver a él (deshacer) devuelve las mismas cifras',()=>{
++ const p=box({control:{x:6150+2400,y:2100}}),snap=JSON.stringify(p),before=look(p),q=split(p,'wal_mid',3000,'wal_mi2');
++ assert.equal(JSON.stringify(p),snap,'dividir no toca el documento anterior');
++ assert.deepEqual(look(JSON.parse(snap)),before,'deshacer = documento anterior, cifras idénticas');
++ assert.deepEqual(look(split(JSON.parse(snap),'wal_mid',3000,'wal_mi2')),look(q),'rehacer = mismas cifras');
++});
++
++test('S3b split · negativos: una estancia redibujada contra una pieza sigue SOLO esa pieza; sin cadena no se inventa cara',()=>{
++ const q=split(box({control:{x:6150+2400,y:2100}}),'wal_mid',Core.wallLength(mid(box({control:{x:6150+2400,y:2100}})))/2,'wal_mi2'),a=q.walls.find(w=>w.id==='wal_mid');
++ // Estancia triangular con una arista paralela a la cuerda de la primera pieza, a medio grueso, del lado de fuera de la curva.
++ const L=Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y),n={x:-(a.end.y-a.start.y)/L,y:(a.end.x-a.start.x)/L},c=Core.wallLength(a)>0?{x:(a.start.x+a.end.x)/2,y:(a.start.y+a.end.y)/2}:null;
++ const ctrl=a.curve.control,away=((ctrl.x-c.x)*n.x+(ctrl.y-c.y)*n.y)>0?-1:1,o=k=>({x:Math.round(k.x+away*n.x*100),y:Math.round(k.y+away*n.y*100)});
++ const tri={...q.rooms[0],id:'rom_tri',polygon:[o(a.start),o(a.end),{x:Math.round(c.x+away*n.x*1500),y:Math.round(c.y+away*n.y*1500)}]};
++ const ring=Core.roomRing({...q,rooms:[tri]},tri);assert.deepEqual(ring.faces.map(f=>f.wallId),['wal_mid']);
++ // Dos muros curvos de distinto grueso no forman cadena: la cara de la cuerda original queda pendiente y nombrada.
++ const t=split(box({control:{x:6150+2400,y:2100}}),'wal_mid',3000,'wal_mi2');t.walls.find(w=>w.id==='wal_mi2').thicknessMm=300;
++ const f=Q.room(t,'rom_aaa').wallFaces;assert.equal(f.complete,false);assert.deepEqual([...f.pendingCurvedWalls].sort(),['wal_mi2','wal_mid']);
++ // Sin muros curvos el anillo es el polígono (mismo objeto).
++ const v1=Core.initial();for(const r of v1.rooms)assert.equal(Core.roomRing(v1,r).points,r.polygon);
 +});

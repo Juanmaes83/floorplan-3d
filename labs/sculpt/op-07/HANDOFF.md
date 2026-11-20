@@ -32,6 +32,32 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
   - Navegador, OP-07 junto con K4, UX-03 y AST-01: 17/17 en Chromium.
 - A0 · WebKit: este contenedor no tiene WebKit ni Firefox (solo Chromium). La reproducción del residual ResizeObserver es de Codex, con la instrumentación de `labs/sculpt/op-07/a0/` (bloque 2).
 
+## Bloque 3 · `roomRing` tras dividir un muro curvo: defecto CONFIRMADO y corregido en S3b — 20/11/2026
+- **Reproducción:** caja de dos estancias con el muro central curvado y dividido por la mitad.
+  - Antes de dividir el suelo medía 27,07 m² y 20,39 m². Tras dividir medía **23,80 / 23,80 m²**, el rectángulo de la cuerda, sin que nadie cambiara la geometría.
+  - El presupuesto también volvía a la cuerda. Las caras de pared quedaban «pendientes».
+  - Pasaba igual con la curva convexa y con la cóncava.
+- **Causa:** `roomRing` contrastaba la arista guardada con la cuerda de cada muro curvo por separado. Las cuerdas de las piezas son diagonales y la arista dibujada contra la cuerda original no coincide con ninguna.
+- **Corrección** (solo `roomRing` en `js/project-core.js`, sin una segunda geometría):
+  - Las unidades son cadenas de muros curvos unidos por sus extremos y del mismo grueso, en cualquier orientación. Primero se prueban los muros sueltos, así que nada cambia si no hay una división.
+  - La cara es `offsetMiter` del eje concatenado del núcleo. Cada faceta se atribuye a su muro, con su índice propio, y `curvedRoomFace` la consume igual que antes.
+- **Pruebas** (`tests/op07-s3b-split.test.cjs`, 7):
+  - convexo y cóncavo, con estancias a los dos lados;
+  - la regresión de los 23,80 m²;
+  - huecos en cada pieza con pendiente, y tres piezas (dos juntas);
+  - una pieza invertida;
+  - presupuesto y superficie con una sola cifra;
+  - atomicidad, deshacer y rehacer;
+  - negativos: una estancia redibujada contra una pieza sigue solo esa pieza; con gruesos distintos no hay cadena y la cara queda pendiente y nombrada; un v1 sigue con el mismo polígono.
+- **Resultado:** suelo ±0,0002 m² y perímetro ±5 mm.
+  - Las caras difieren, como mucho, en la **cuña de cada junta** (t/2·θ, < 1 cm). Es la convención por muro de D-OP07-2, en la que cada pieza termina perpendicular a su última faceta.
+  - Una cara gana lo que pierde la otra y la suma sigue siendo 2 × eje. No es un defecto del anillo y no se ha cambiado.
+- Pruebas puras de OP-07 + UX-03 + K4: 59/59. Navegador OP-07 + UX-03 + K4: 13/13. `apply-and-test.cjs`: 52/52.
+- **Regla de integración (A4):**
+  - Capacidad interna (cálculo del anillo).
+  - Consumidores reales: suelo de Q.room/Surface.level (plano y suelo 3D), perímetro, caras del panel «Paredes de la estancia» (UX-03) y la línea de suelo del presupuesto.
+  - Recorrido: dibujar y curvar un muro → panel «Forma del muro» → Dividir. El panel de la estancia mantiene sus cifras. Estado: DESARROLLADO y VALIDADO.
+
 ## Pendiente (en este orden)
 1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
    Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.
