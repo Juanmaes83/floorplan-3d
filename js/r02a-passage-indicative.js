@@ -66,16 +66,28 @@
   const stats = { plans: 0, hits: 0, misses: 0 };
   const cache = new Map(), CACHE_MAX = 8;
   function signature(project, geometry, levelKey) {
+    // El planificador usa también la envolvente, el objetivo de la estancia y la geometría
+    // COMPLETA de los huecos. Sin estas dependencias se reutilizaba una ruta obsoleta si,
+    // por ejemplo, se ensanchaba una puerta sin desplazar su centro.
+    const rect = r => r ? [r.center, r.angle, r.spanMm, r.thickness] : null;
     const pick = o => ({ id: o.id, t: o.type, p: o.position, s: o.size, r: o.rotationDeg || 0 });
-    return JSON.stringify([project?.id, levelKey ?? null, (geometry?.rooms || []).map(r => [r.id, r.poly, r.counted]),
-      (geometry?.walls || []).map(w => [w.id, w.status, w.center, w.angle, w.spanMm, w.thickness]), (geometry?.doors || []).map(d => [d.id, d.entry, d.height, d.rect && d.rect.center]),
-      (geometry?.windows || []).map(w => [w.center, w.angle, w.spanMm]), (geometry?.slides || []).map(d => d.rect && d.rect.center), (project?.objects || []).map(pick)]);
+    return JSON.stringify([project?.id, levelKey ?? null, geometry?.envelope ?? null,
+      (geometry?.rooms || []).map(r => [r.id, r.poly, r.counted, r.at]),
+      (geometry?.walls || []).map(w => [w.id, w.status, rect(w)]),
+      (geometry?.doors || []).map(d => [d.id, d.entry, d.height, rect(d.rect)]),
+      (geometry?.windows || []).map(rect),
+      (geometry?.slides || []).map(d => rect(d.rect)),
+      (project?.objects || []).map(pick)]);
   }
-  function routesFor(project, geometry, plan, levelKey) {
-    const key = signature(project, geometry, levelKey);
+  // La clave incluye también QUIÉN planifica: la identidad de la función `plan` y sus opciones (margen, celda, presupuesto).
+  // Sin esto, otra función u otro margen recibían rutas calculadas con parámetros distintos (auditoría de #296).
+  const plannerIds = new WeakMap(); let plannerSeq = 0;
+  const plannerKey = plan => { if (!plannerIds.has(plan)) plannerIds.set(plan, ++plannerSeq); return plannerIds.get(plan); };
+  function routesFor(project, geometry, plan, levelKey, options) {
+    const key = JSON.stringify([plannerKey(plan), options ?? null]) + signature(project, geometry, levelKey);
     if (cache.has(key)) { stats.hits++; return { key, routes: cache.get(key), cached: true }; }
     stats.misses++;
-    const routes = (geometry?.rooms || []).filter(r => Array.isArray(r.poly) && r.poly.length >= 3).map(r => { stats.plans++; return { roomId: r.id, result: plan(project, geometry, r.id) }; });
+    const routes = (geometry?.rooms || []).filter(r => Array.isArray(r.poly) && r.poly.length >= 3).map(r => { stats.plans++; return { roomId: r.id, result: options === undefined ? plan(project, geometry, r.id) : plan(project, geometry, r.id, options) }; });
     cache.set(key, routes); if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
     return { key, routes, cached: false };
   }
