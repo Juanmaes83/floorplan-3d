@@ -315,3 +315,63 @@ test('OP-11 cannot replace an R03 interior with a plant GLB, including a mismatc
  assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.extensions['x-r03-cabinet']),result.interior);
  assert.equal(requests.some(r=>r.url.endsWith('/op11-plant-small-1.glb')),false);
 });
+
+test('F3 distinguishes a real deadline, explicit cancellation, and a retired asset generation',{timeout:90000},async t=>{
+ const {page}=await setup(t);
+ const holds=[];
+ await page.route('**/assets/f3/synthetic-bench.glb',route=>new Promise(resolve=>holds.push(async()=>{
+  try{await route.continue();}catch{}finally{resolve();}
+ })));
+ t.after(async()=>{await Promise.all(holds.map(release=>release()));});
+ for(const [stop,expected] of [['deadline','F3_DEADLINE_EXCEEDED'],['external','F3_CANCELLED'],['asset-generation','F3_GENERATION_CHANGED']]){
+  const pending=await page.evaluate(async mode=>{
+   const L=await import('./js/asset-loader.mjs'),entry=FloorPlanAssetUI.entries.find(e=>e.id==='synthetic-bench');
+   const controller=new AbortController();
+   const result=L.load(entry,{timeoutMs:mode==='deadline'?1500:8000,signal:controller.signal}).then(value=>{
+    L.dispose(value.scene);
+    return {completed:true};
+   },error=>({code:error.code,phase:error.phase,phaseMs:error.phaseMs,durationMs:error.durationMs,timeoutMs:error.timeoutMs}));
+   window.__f3AbortCase={controller,result};
+   return true;
+  },stop);
+  assert.equal(pending,true);
+  const until=Date.now()+3000;
+  while(!holds.length&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,10));
+  assert.equal(holds.length,1,'the real GLB request is pending');
+  const output=await page.evaluate(async kind=>{
+   const {controller,result}=window.__f3AbortCase;
+   if(kind!=='deadline')controller.abort(kind);
+   return result;
+  },stop);
+  await holds.shift()();
+  assert.equal(output.code,expected);
+  assert.equal(output.phase,'model-download');
+  assert.ok(output.phaseMs['permission']>=0&&output.phaseMs['model-download']>=0);
+  if(stop==='deadline')assert.ok(output.durationMs>=output.timeoutMs-20,'deadline actually elapsed');
+ }
+});
+
+test('F3 late geometry never enters a different project and the viewer returns to idle',{timeout:90000},async t=>{
+ const {page,project}=await setup(t);
+ let reached,release;
+ const request=new Promise(resolve=>{reached=resolve;});
+ const gate=new Promise(resolve=>{release=resolve;});
+ t.after(release);
+ await page.route('**/assets/f3/synthetic-bench.glb',async route=>{reached();await gate;try{await route.continue();}catch{}});
+ await page.locator('#fAsset').selectOption('synthetic-bench');
+ await open3D(page);
+ await request;
+ const before=await page.evaluate(()=>View3D.lifecycleMetrics.pendingAssets);
+ assert.ok(before>0,'old project has a pending GLB');
+ const next=Core.clone(project);
+ next.id='prj_f3_generation_changed';
+ next.objects=[];
+ await page.evaluate(p=>FloorPlanApp.importProject(p),next);
+ release();
+ await page.waitForFunction(()=>{const m=View3D.lifecycleMetrics;return !m.loopActive&&!m.animating&&!m.flying&&m.pendingAssets===0;});
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.id),next.id);
+ assert.deepEqual(await page.evaluate(()=>View3D.assetObjects),[]);
+ const frames=await page.evaluate(()=>View3D.renderedFrames);
+ await page.waitForTimeout(300);
+ assert.equal(await page.evaluate(()=>View3D.renderedFrames),frames);
+});

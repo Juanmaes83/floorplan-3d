@@ -89,7 +89,8 @@ async function download(url,limit,signal){
  const bytes=new Uint8Array(length);let n=0;for(const b of chunks){bytes.set(b,n);n+=b.length;}return bytes.buffer;
 }
 const digest=async buffer=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),b=>b.toString(16).padStart(2,'0')).join('');
-export async function load(entry,{timeoutMs=8000,signal}={}){
+// 12 s covers a 6 s late GLB plus measured permission and decoding overhead under contention.
+export async function load(entry,{timeoutMs=12000,signal}={}){
  // One deadline covers the authorized load, excluding queue wait.
  const controller=new AbortController(),start=performance.now(),phaseMs={};
  let phase='permission',phaseStart=start,parsed;
