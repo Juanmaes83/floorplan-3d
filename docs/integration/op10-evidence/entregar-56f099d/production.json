@@ -1,0 +1,12 @@
+{
+  "label": "production",
+  "origin": "https://floorplan-3d-fmzs0apls-juanma-espinosas-projects.vercel.app",
+  "authenticated": true,
+  "download": true,
+  "suspended": true,
+  "extraFrames": 0,
+  "observedOnly": true,
+  "projectAndStorageUnchanged": true,
+  "externalRequests": 0,
+  "pageErrors": 0
+}

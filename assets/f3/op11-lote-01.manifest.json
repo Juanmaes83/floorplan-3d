@@ -1,0 +1,110 @@
+[
+  {
+    "id": "op11-plant-small-1",
+    "brand": "Kenney",
+    "productName": "Planta pequeña",
+    "category": "plant",
+    "modelPath": "assets/f3/op11-plant-small-1.glb",
+    "format": "glb",
+    "dimensions": {
+      "width": 95,
+      "depth": 95,
+      "height": 140,
+      "unit": "mm"
+    },
+    "room": 1,
+    "qaStatus": "approved",
+    "licenseType": "CC0-1.0",
+    "permissionDocumentRef": "assets/f3/LICENSE-op11-furniture-kit.txt",
+    "f3Evidence": {
+      "modelSha256": "3cb86c041cf44ea4d76d071b8ab443ad6408391c886d13d6cc7ad0fcbcf98503",
+      "bytes": 8184,
+      "permissionSha256": "78c8043c884b33abee06000a32e11530f25957c5210be8ae2573244f14ba9bbc",
+      "extensionsRequired": [],
+      "permission": {
+        "authorizationKind": "cc0-public-domain-dedication",
+        "commercial": true,
+        "redistribution": true,
+        "streaming": true,
+        "modification": true,
+        "territory": "worldwide",
+        "expires": null,
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "Kenney — Furniture Kit (CC0-1.0)"
+      },
+      "source": {
+        "repository": "laanlabs/openPlan3D",
+        "revision": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+        "path": "static/models/plantSmall1.glb",
+        "blob": "6c64ddaef49e831446cf673d9d8c6c37e446928b",
+        "sha256": "2b9c022feb47be857b2c4fdc29f36522766ba9b70c578c31d7c05d71b4377d15",
+        "url": "https://kenney.nl/assets/furniture-kit"
+      },
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "Remove only unused, non-required KHR_materials_unlit declaration; BIN unchanged"
+      },
+      "dimensionsKind": "model-geometry",
+      "dimensionsSource": "Measured normalized model geometry bounds in metres"
+    }
+  },
+  {
+    "id": "op11-potted-plant",
+    "brand": "Kenney",
+    "productName": "Planta en maceta",
+    "category": "plant",
+    "modelPath": "assets/f3/op11-potted-plant.glb",
+    "format": "glb",
+    "dimensions": {
+      "width": 212,
+      "depth": 241,
+      "height": 654,
+      "unit": "mm"
+    },
+    "room": 1,
+    "qaStatus": "approved",
+    "licenseType": "CC0-1.0",
+    "permissionDocumentRef": "assets/f3/LICENSE-op11-furniture-kit.txt",
+    "f3Evidence": {
+      "modelSha256": "40e9483b6906ef4d2241e64ca7d9159d8a2807b57486c5b85de7f03a1d66262f",
+      "bytes": 7536,
+      "permissionSha256": "78c8043c884b33abee06000a32e11530f25957c5210be8ae2573244f14ba9bbc",
+      "extensionsRequired": [],
+      "permission": {
+        "authorizationKind": "cc0-public-domain-dedication",
+        "commercial": true,
+        "redistribution": true,
+        "streaming": true,
+        "modification": true,
+        "territory": "worldwide",
+        "expires": null,
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "Kenney — Furniture Kit (CC0-1.0)"
+      },
+      "source": {
+        "repository": "laanlabs/openPlan3D",
+        "revision": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+        "path": "static/models/pottedPlant.glb",
+        "blob": "774d659a2d2be3f9af3fea78e13b2f250fdbb262",
+        "sha256": "5b760eda2766f75fda36b2c5df652a1662f82981ef64cd8fa7fe7bcd386b3a15",
+        "url": "https://kenney.nl/assets/furniture-kit"
+      },
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "Remove only unused, non-required KHR_materials_unlit declaration; BIN unchanged"
+      },
+      "dimensionsKind": "model-geometry",
+      "dimensionsSource": "Measured normalized model geometry bounds in metres"
+    }
+  }
+]

@@ -1,0 +1,58 @@
+{
+  "source": "https://github.com/Juanmaes83/rubik-sculpt-simulator-lab",
+  "commit": "09557c4cac1e6390d3af56281922d8d43093234e",
+  "historical": "05dbe0031388796e6bf8b04d97b73cd051e2aa10",
+  "license": "MIT",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sourcePath": "LICENSE",
+      "blob": "3c28d3a6095c773f3a26c3bbb260f897ed62e078"
+    },
+    {
+      "path": "HANDOFF.md",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/HANDOFF.md",
+      "blob": "7a92851b2aa72fe7c5f819dc4c9578ad45b092b0"
+    },
+    {
+      "path": "EQUIVALENCIA.md",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/EQUIVALENCIA.md",
+      "blob": "b1293f4ecabc525588664169521867c3523fc38a"
+    },
+    {
+      "path": "src/virtual-capture.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/src/virtual-capture.cjs",
+      "blob": "a669ffa88407ba179ecb1d6f26c53f1b72842a13"
+    },
+    {
+      "path": "src/still-times.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/src/still-times.cjs",
+      "blob": "1d6ded88d4e3f0edca8926f5e154bab708570bdd"
+    },
+    {
+      "path": "src/pixel-diff.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/src/pixel-diff.cjs",
+      "blob": "eb406b14bcbba1ed6e28e5a77e17c8952d0d0793"
+    },
+    {
+      "path": "src/rubik-scenarios.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/src/rubik-scenarios.cjs",
+      "blob": "8a727dce4127c3359fe61667e3c28d89fa5c8bb2"
+    },
+    {
+      "path": "test/still-times.test.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/test/still-times.test.cjs",
+      "blob": "c2a0888f8e11150838605ada1fcfb89bd1925e41"
+    },
+    {
+      "path": "test/pixel-diff.test.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/test/pixel-diff.test.cjs",
+      "blob": "d2178121e505dcc072193ba7e638da45efcf05c8"
+    },
+    {
+      "path": "test/virtual-capture.browser.test.cjs",
+      "sourcePath": "COMPONENTES/D-captura-reproducible/test/virtual-capture.browser.test.cjs",
+      "blob": "98ddde4903a2f9fb17634428eb297257490a3c09"
+    }
+  ]
+}

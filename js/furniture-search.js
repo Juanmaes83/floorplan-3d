@@ -8,6 +8,8 @@ const specs={
 };
 // Explicit placement/fallback metadata for accepted catalog IDs, never availability.
 const assets={
+ 'rubik-sota-local/op11-plant-small-1':{type:'plant',room:1,terms:'planta pequeña small plant kenney'},
+ 'rubik-sota-local/op11-potted-plant':{type:'plant',room:1,terms:'planta en maceta potted plant kenney'},
  'rubik-sota-local/synthetic-bench':{type:'chair',room:5,terms:'banco asiento sintetico'},
  'immersphere-asset-lab/ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo':{type:'dresser',room:0,terms:'comoda cajonera songesand ikea'},
  'immersphere-asset-lab/ikea-stockholm-2025-puf-alhamn-beige-80586139-demo':{type:'beanbag',room:1,terms:'puf puff pouf stockholm ikea'}

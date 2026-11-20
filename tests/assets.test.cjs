@@ -45,3 +45,24 @@ test('external references survive JSON, project duplication, reload and ZIP with
  const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)},library=Library.load(storage,p);library.save(p);const duplicated=library.duplicate(library.activeId(),'Synthetic external copy');assert.notEqual(duplicated.id,p.id);assert.deepEqual(duplicated.objects,p.objects);assert.deepEqual(Library.load(storage,p).project(),duplicated);
  assert.deepEqual(Core.prepare(JSON.parse(JSON.stringify(p))).project,p);const encoded=await Package.encode(p,async()=>{throw Error('No images/binaries expected');}),contents=await Package.unzip(await encoded.arrayBuffer());assert.deepEqual([...contents.keys()],['project.json']);assert.deepEqual((await Package.validateEntries(contents)).project,p);
 });
+
+test('OP-11 CC0 admission is limited to the pinned Kenney plants and preserves canonical object types',()=>{
+ const raw=fs.readFileSync('assets/f3/op11-lote-01.manifest.json'),data=JSON.parse(raw);
+ const digest=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+ const opts={...options,revision:digest(raw).slice(0,40)};
+ const {entries,excluded}=A.adapt(data,opts);
+ assert.deepEqual(excluded,[]);
+ assert.deepEqual(entries.map(e=>e.id),['op11-plant-small-1','op11-potted-plant']);
+ for(const entry of entries){
+  assert.equal(entry.sha256,digest(fs.readFileSync(entry.url)));
+  assert.equal(entry.permissionSha256,digest(fs.readFileSync(entry.permissionUrl)));
+  assert.equal(entry.attribution,'Kenney — Furniture Kit (CC0-1.0)');
+  const wardrobe={type:'wardrobe',assetRef:{catalog:'rubik-sota-local',assetId:'synthetic-bench'}};
+  assert.deepEqual(A.associate(wardrobe,entry),wardrobe);
+  assert.equal(A.canUse(entry,wardrobe),false);
+  assert.deepEqual(A.associate({type:'plant'},entry).assetRef,{catalog:entry.catalog,assetId:entry.id,catalogRevision:opts.revision});
+ }
+ for(const mutate of [e=>e.brand='IKEA',e=>e.id='other-plant',e=>e.f3Evidence.permission.brand='own-no-third-party-mark',e=>e.f3Evidence.modelSha256='f'.repeat(64),e=>e.f3Evidence.extensionsRequired=['KHR_materials_unlit'],e=>e.f3Evidence.permissionSha256='f'.repeat(64)]){
+  const first=copy(data[0]);mutate(first);assert.equal(A.adapt([first],opts).entries.length,0);
+ }
+});

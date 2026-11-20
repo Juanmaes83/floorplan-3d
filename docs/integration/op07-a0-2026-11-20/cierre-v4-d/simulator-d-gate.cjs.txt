@@ -1,0 +1,67 @@
+'use strict';
+const assert=require('node:assert/strict');
+const crypto=require('node:crypto');
+const fs=require('node:fs');
+const path=require('node:path');
+const {execFileSync}=require('node:child_process');
+const pw=require('playwright');
+const root=process.env.RUBIK_D_ROOT;
+const out=process.env.RUBIK_EVIDENCE;
+const D=path.join(root,'scripts/capture/simulator-d');
+const V=require(path.join(D,'src/virtual-capture.cjs'));
+const P=require(path.join(D,'src/pixel-diff.cjs'));
+const candidate=(...args)=>execFileSync('git',['-C',root,'rev-parse',...args],{encoding:'utf8'}).trim();
+const source=require(path.join(D,'SOURCE-EXACT.json')).commit;
+const mode=process.argv[2]||'headless';
+const browser=process.argv[3]||'webkit';
+const sequenceDir=fs.mkdtempSync(path.join(out,'simulator-d-'+browser+'-'+mode+'-frames-')); fs.rmdirSync(sequenceDir);
+const report={browser,mode,source,sha:candidate('HEAD'),base:candidate('HEAD^'),tree:candidate('HEAD^{tree}'),playwright:require('playwright/package.json').version,platform:process.platform};
+const target=path.join(out,'simulator-d-'+browser+'-'+mode+'.json');
+const realLaunch=pw[browser].launch.bind(pw[browser]);
+pw[browser].launch=opts=>realLaunch({...opts,headless:mode!=='headed'});
+function countColors(bytes) {
+ const {data,width,height}=P.decode(bytes);
+ const pixels=Buffer.from(data);
+ const colors=new Set();
+ for(let i=0;i<pixels.length;i+=4)colors.add(pixels.readUInt32BE(i));
+ return {colors:colors.size,width,height};
+}
+(async()=>{
+ let s;
+ try{
+  s=await V.openRubik({root,browser,realtimeMs:20000});
+  report.browserVersion=s.browser.version(); report.framesDirectory=path.basename(sequenceDir);
+  await V.act(s.page,()=>setView('3d'));
+  await V.advanceUntil(s.page,()=>FloorPlanApp.viewMode==='3d'&&View3D.contextAvailable,null,{maxSeconds:8});
+  await V.settle(s.page,{maxSeconds:8});
+  report.canvas=await s.page.evaluate(()=>{
+   const c=document.querySelector('#view3d canvas'),box=c.getBoundingClientRect();
+   return {client:[box.width,box.height],buffer:[c.width,c.height],contextAvailable:View3D.contextAvailable};
+  });
+  const shot=await V.captureSequence(s,{action:p=>p.evaluate(()=>{View3D.flyToRoom('rom_kid');}),fps:10,seconds:.3,out:sequenceDir});
+  Object.assign(report,{
+   scope:shot.scope, distinctFrames:shot.distinctFrames,
+   distinctCameras:new Set(shot.frames.map(f=>JSON.stringify(f.camera))).size,
+   frames:shot.frames.map(frame=>({t:frame.t,sha256:frame.sha256,...countColors(fs.readFileSync(path.join(sequenceDir,frame.file))),camera:frame.camera})),
+   errors:s.errors,external:s.external
+  });
+  await V.settle(s.page,{maxSeconds:8});
+  report.rest=await s.page.evaluate(()=>{ const m=View3D.lifecycleMetrics;return {loopActive:m.loopActive,animating:m.animating,flying:m.flying,pendingAssets:m.pendingAssets}; });
+  assert.equal(report.scope,'canvas3d');
+  assert.equal(report.frames.length,4);
+  assert.ok(report.distinctCameras>1,'The real camera must move');
+  const failures=[];
+  if(report.distinctFrames<=1)failures.push('The real motion must produce different captured frames');
+  if(report.frames.some(f=>f.colors<=1))failures.push('Each frame must contain non-empty WebGL content');
+  assert.deepEqual(failures,[],failures.join('; '));
+  assert.deepEqual(report.errors,[]);
+  assert.deepEqual(report.external,[]);
+  report.result='PASS';
+ }catch(error){
+  report.result='FAIL';report.failure={code:error.code||null,message:error.message};process.exitCode=1;
+ } finally {
+  fs.writeFileSync(target,JSON.stringify(report,null,2)+'\n');
+  console.log(JSON.stringify({browser:report.browser,version:report.browserVersion,mode,result:report.result,palette:report.frames?.map(f=>f.colors),distinctFrames:report.distinctFrames,distinctCameras:report.distinctCameras,errors:report.errors,external:report.external,failure:report.failure}));
+  if(s)await s.close();
+ }
+})().catch(error=>{console.error(error);process.exitCode=1;});

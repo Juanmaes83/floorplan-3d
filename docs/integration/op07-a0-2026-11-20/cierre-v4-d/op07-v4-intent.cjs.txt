@@ -1,0 +1,149 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const root = process.env.RUBIK_OP07_ROOT;
+const K = require(path.join(root, 'tests/r02a/editor-kit.cjs'));
+const C = require(path.join(root, 'js/project-core.js'));
+const {withState} = require(path.join(root, 'tests/op07/browser-state.cjs'));
+const A = 'rubik-sota-floorplan-project-v1';
+const L = 'rubik-sota-project-library-v1';
+
+function seed(options) {
+ const original = C.initial();
+ const variant = {...C.clone(original), id: 'prj_c0de0000000000000000000000000000', name:'Variante sintética'};
+ const entries = [{id:'e_original',name:'Original sintético',project:original}];
+ if (options.variant) entries.push({id:'e_variant',name:variant.name,variantOf:'e_original',project:variant});
+ return {
+  historical: options.historical ? JSON.stringify(original) : null,
+  library: JSON.stringify({version:1,activeId:options.variant?'e_variant':'e_original',entries})
+ };
+}
+
+async function confirmed(page) {
+ const docs = await page.evaluate(async () => {
+  const {revision, docs} = await FloorPlanPersistence.readConfirmed();
+  return {revision, docs:[...docs]};
+ });
+ return docs;
+}
+function fingerprint(snapshot, wall) {
+ const values = new Map(snapshot.docs);
+ const lib = JSON.parse(values.get(L));
+ const legacy = JSON.parse(values.get(A) || 'null');
+ const hash = text => text === undefined ? null : crypto.createHash('sha256').update(text).digest('hex');
+ const shape = p => p?.walls?.find(w => w.id===wall)?.curve?.control ?? null;
+ return {
+  revision: snapshot.revision, historicalHash:hash(values.get(A)), libraryHash:hash(values.get(L)),
+  historical:legacy && {id:legacy.id, curve:shape(legacy)}, activeId:lib.activeId,
+  entries:lib.entries.map(e => ({id:e.id, projectId:e.project.id, variantOf:e.variantOf??null, curve:shape(e.project)}))
+ };
+}
+
+async function run(env, options) {
+ const {historical,library}=seed(options);
+ const authority={...env,base:env.base.replace('127.0.0.1','f0-2b.localhost')};
+ const cfg=withState(authority,'active',{a0:options.a0});
+ const context=await cfg.browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+ try {
+  await context.addInitScript(({a,l,historical,library}) => {
+   if (localStorage.getItem('op07-security-fixture')) return;
+   if (historical!==null) localStorage.setItem(a,historical);
+   localStorage.setItem(l,library);
+   localStorage.setItem('op07-security-fixture','1');
+  },{a:A,l:L,historical,library});
+  await context.route('**/*',r=>r.request().url().startsWith(authority.base)?r.continue():r.abort());
+  const page=await context.newPage(), runtimeErrors=[];
+  page.on('pageerror',e=>runtimeErrors.push(e.message));
+  await page.goto(authority.base);
+  await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true'&&!!window.FloorPlanApp);
+  const state=await page.evaluate(()=>({
+    active:FloorPlanCore.wallFeaturesActive(), blockers:FloorPlanCore.activationBlockers(),
+    realAuthority:!!FloorPlanPersistenceEditor.session, standIn:globalThis.FloorPlanSchemaEpoch?.op07StandIn===true,
+    wall:[...FloorPlanApp.project.walls].filter(w=>!FloorPlanApp.project.openings.some(o=>o.wallId===w.id)).sort((a,b)=>Math.hypot(b.end.x-b.start.x,b.end.y-b.start.y)-Math.hypot(a.end.x-a.start.x,a.end.y-a.start.y))[0].id
+  }));
+  assert.equal(state.realAuthority,true);
+  const before=fingerprint(await confirmed(page),state.wall);
+  if(options.a0==='none'){
+    assert.equal(state.active,false);
+    assert.deepEqual(state.blockers,['a0']);
+  }else{
+    assert.equal(state.active,true);
+    assert.equal(state.standIn,true);
+  }
+  async function edit(steps, flush) {
+    return page.evaluate(async ({steps,flush,wall})=>{
+      // Execute each editor operation synchronously, so the debounce cannot run between operations of the same batch.
+      const session=FloorPlanPersistenceEditor.session;
+      const startRevision=session.state().revision;
+      const operations=steps.map(action=>{
+        const r=FloorPlanApp.applyExtension(p=>{
+          const w=p.walls.find(x=>x.id===wall);
+          if(action==='straighten')return FloorPlanCore.setWallCurve(p,wall,null);
+          if(action==='generic-loss'){delete w.curve;return {ok:true,project:p};}
+          const dx=w.end.x-w.start.x, dy=w.end.y-w.start.y, scale=(action==='curve' ? 160 : 230)/Math.hypot(dx,dy);
+          return FloorPlanCore.setWallCurve(p,wall,{x:Math.round((w.start.x+w.end.x)/2-dy*scale),y:Math.round((w.start.y+w.end.y)/2+dx*scale)});
+        });
+        const w=FloorPlanApp.project.walls.find(x=>x.id===wall);
+        return {action,ok:r.ok,code:r.code??null,explanation:r.explanation??null,curve:w.curve?.control??null,revision:session.state().revision};
+      });
+      const pending=session.state().pending;
+      const result=flush?await session.flush():null;
+      return {startRevision,operations,pending,flush:result&&{status:result.status,revision:result.revision,pending:result.pending,code:result.error?.code??null,message:result.error?.message??null}};
+    },{steps,flush,wall:state.wall});
+  }
+  if(options.a0==='none') {
+    const attempt=await edit(['curve'],true);
+    const after=fingerprint(await confirmed(page),state.wall);
+    assert.equal(attempt.operations[0].code,'activation-pending');
+    assert.deepEqual(after,before);
+    return {options,state,before,attempt,after,runtimeErrors};
+  }
+  const baserun=await edit(['curve'],true);
+  assert.equal(baserun.operations[0].ok,true,JSON.stringify(baserun));
+  assert.equal(baserun.flush.status,'saved',JSON.stringify(baserun));
+  const curved=fingerprint(await confirmed(page),state.wall);
+  const own=entries=>entries.find(e=>e.id===curved.activeId);
+  assert.ok(own(curved.entries).curve);
+  const intermediate=[];
+  if(!options.batch){
+    for(const action of ['straighten','recurve']){
+      const result=await edit([action],true);
+      assert.equal(result.operations[0].ok,true,JSON.stringify(result));
+      assert.equal(result.flush.status,'saved',JSON.stringify(result));
+      intermediate.push({result,confirmed:fingerprint(await confirmed(page),state.wall)});
+    }
+  }
+  const beforeFinal=await confirmed(page);
+  const attempt=await edit(options.batch?['straighten','recurve','generic-loss']:['generic-loss'],true);
+  assert.ok(attempt.operations.every(o=>o.ok),JSON.stringify(attempt));
+  assert.ok(attempt.operations.every(o=>o.revision===attempt.startRevision),'A batch must have no intermediate commit');
+  const afterFinal=await confirmed(page);
+  const expectedRejection=attempt.flush?.code==='guard-refused';
+  return {
+   options,state,before,curved,intermediate,beforeFinal:fingerprint(beforeFinal,state.wall),attempt,afterFinal:fingerprint(afterFinal,state.wall),
+   rejected:expectedRejection, originalConfirmedBytesUnchanged:JSON.stringify(beforeFinal)===JSON.stringify(afterFinal),runtimeErrors
+  };
+ } finally { await context.close(); }
+}
+(async()=>{
+ const env=await K.start();
+ try {
+  const definitions=[
+   {label:'control-A0-ausente',historical:true,variant:false,batch:false,a0:'none'},
+   {label:'control-sin-clave-historica',historical:false,variant:false,batch:false,a0:'stand-in'},
+   {label:'confirmaciones-con-ambas-claves',historical:true,variant:false,batch:false,a0:'stand-in'},
+   {label:'lote-variante-con-ambas-claves',historical:true,variant:true,batch:true,a0:'stand-in'},
+   {label:'control-lote-variante-sin-clave-historica',historical:false,variant:true,batch:true,a0:'stand-in'}
+  ];
+  const results=[];
+  for(const def of definitions) {
+   const result=await run(env,def);
+   results.push(result);
+  }
+  fs.writeFileSync(process.env.RUBIK_OP07_OUT,JSON.stringify({browser:env.browser.version(),candidate:'3afb9e18c84d6d640eeced7203a4169aebb367d6',results},null,2)+'\n');
+  for(const x of results) console.log(JSON.stringify({case:x.options.label,revision:[x.beforeFinal?.revision,x.afterFinal?.revision],result:x.attempt.flush,rejected:x.rejected,intact:x.originalConfirmedBytesUnchanged,errors:x.runtimeErrors}));
+  assert.ok(results.slice(1).every(x=>x.rejected&&x.originalConfirmedBytesUnchanged&&!x.runtimeErrors.length),'The loss must be rejected and the last revision must remain byte-for-byte unchanged');
+ }finally{await env.stop();}
+})().catch(err=>{console.error(err);process.exitCode=1;});

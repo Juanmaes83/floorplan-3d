@@ -1,0 +1,39 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const pw=require('playwright');
+const V=require('/candidate/scripts/capture/simulator-d/src/virtual-capture.cjs');
+const original=pw.webkit.launch.bind(pw.webkit);
+const config={viewport:{width:960,height:600},dpr:1,browser:'webkit',realtimeMs:20000};
+const cases=[['base',true],['candidate',true],['candidate',false],['base',false],['base',true],['candidate',true],['candidate',true],['base',true]];
+async function open(label,instrument){
+ pw.webkit.launch=async (...args)=>{
+   const b=await original(...args);
+   if(instrument){
+     const newContext=b.newContext.bind(b);
+     b.newContext=async (...opts)=>{
+       const context=await newContext(...opts);
+       await context.addInitScript({path:'/evidence/ro-light.init.js'});
+       return context;
+     };
+   }
+   return b;
+ };
+ const s=await V.openRubik({...config,root:'/'+label});
+ try {
+   await new Promise(resolve=>setTimeout(resolve,130));
+   const trace=instrument?await s.page.evaluate(()=>window.__roTrace.dump()):null;
+   assert.deepEqual(s.external,[]);
+   return {label,instrument,browser:s.browser.version(),pageErrors:[...s.errors],trace};
+ } finally { await s.close(); }
+}
+(async()=>{
+ const runs=[];
+ for(const [label,traced] of cases){
+   const r=await open(label,traced);
+   runs.push(r);
+   console.log(JSON.stringify({label,traced,errors:r.pageErrors,events:r.trace?.log.length}));
+ }
+ fs.writeFileSync('/evidence/ro-light-result.json',JSON.stringify({base:'8e917e1a70f499a6b8dc68850c8413b7d06c5682',candidate:'eae7d5f366ba7e24de9e04d38addd216a70a3d76',image:'sha256:a7d3f7dc1eaf01a1c29dc47cf0e84e49114b14d41fb2c6cea98ac80987045758',playwright:require('playwright/package.json').version,config,runs},null,2)+'\n');
+ assert.ok(runs.every(x=>!x.pageErrors.length),'A WebKit page error occurred during startup');
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -1,7 +1,7 @@
 /* Static authorized catalog, never project/image data. No asset data in projects. */
 (function(){
  // Own local catalogue (rubik-sota-local): bench + CAT-03 synthetic fixtures (separate file, SAME rules); external lab last.
- const paths=['assets/f3/catalog.manifest.json','assets/f3/external.manifest.json','assets/f3/cat-ia.manifest.json'];
+ const paths=['assets/f3/catalog.manifest.json','assets/f3/external.manifest.json','assets/f3/cat-ia.manifest.json','assets/f3/op11-lote-01.manifest.json'];
  const api=window.FloorPlanAssetUI={entries:[],ready:false,error:null,diagnostics:paths.map(path=>({path,state:'loading',phase:'network'}))};
  async function readManifest(path,diagnostic){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);

@@ -44,6 +44,7 @@ async function capture(input, dest, o = {}) {
       // WebKit routes the download of the in-browser ZIP. Only blob URLs from this page's own origin are local.
       if (u.startsWith('blob:' + base)) return r.continue();
       if (u.startsWith(base)) {
+        if (o.delayPermissionMs && new URL(u).pathname === '/assets/f3/LICENSE.txt') await new Promise(resolve => setTimeout(resolve, o.delayPermissionMs));
         if (/\.glb(\?|$)/.test(u)) { if (o.blockAssets) { blocked++; return r.abort(); } if (o.delayAssetsMs) await new Promise(res => setTimeout(res, o.delayAssetsMs)); }
         return r.continue(); }
       external.push(u); return r.abort(); });
@@ -56,7 +57,8 @@ async function capture(input, dest, o = {}) {
     await page.locator('#fileIn').setInputFiles(file);
     const expectId = isBuilding ? parsed.levels[0].project.id : parsed.id;
     await page.waitForFunction(id => window.FloorPlanApp.project && (window.FloorPlanApp.project.id === id || (window.FloorPlanApp.levelContext && JSON.stringify(window.FloorPlanApp.levelContext).includes(id))), expectId, { timeout: 120000 });
-    await page.evaluate(() => setView('3d'));
+    if (o.enter3D) await o.enter3D(page);
+    else await page.evaluate(() => setView('3d'));
     await page.waitForFunction(() => window.FloorPlanApp.viewMode === '3d' && window.View3D.contextAvailable, null, { timeout: 120000 });
     if (isBuilding && scope === 'all') { await page.evaluate(() => document.querySelector('#levelViewAll').click()); await page.waitForFunction(n => window.View3D.levelView === 'all' && window.View3D.levelInspect().levels.length === n, parsed.levels.length, { timeout: 120000 }); }
     t.loaded = Date.now();
@@ -125,10 +127,11 @@ async function capture(input, dest, o = {}) {
     await page.screenshot({ path: path.join(dest, 'viewer.png') });
     fs.writeFileSync(path.join(dest, 'viewer-canvas.png'), Buffer.from(canvasShot.split(',')[1], 'base64'), { flag: 'wx' });
     const doc = JSON.parse(files.get('scene.json'));
+    const assetLoadDiagnostics = o.delayPermissionMs ? await page.evaluate(() => window.View3D.assetMetrics) : undefined;
     const report = { format: 'rubik-sota.scene-capture-run', version: '1.0.0', via, browser: browserName, browserVersion: browser.version(), scope, viewport,
       input: { file: path.basename(input), sha256: sha(inputBytes), kind: isBuilding ? 'building' : 'project' },
       code: { gitHead: revision, indexHtmlSha256: sha(fs.readFileSync(path.join(root, 'index.html'))), captureCoreSha256: sha(fs.readFileSync(path.join(root, 'js/scene-capture-core.js'))), deliveryCoreSha256: sha(fs.readFileSync(path.join(root, 'js/scene-delivery-core.js'))), harnessSha256: sha(fs.readFileSync(__filename)) },
-      stats: doc.stats, excluded: doc.excluded, view: doc.view, stability: manifest.stability, fallbacks: manifest.fallbacks,
+      assetLoadDiagnostics, stats: doc.stats, excluded: doc.excluded, view: doc.view, stability: manifest.stability, fallbacks: manifest.fallbacks,
       metrics: { loadMs: t.loaded - t.load0, prepareMs: t2 - t1, captureMainThreadMs: t.captureMs ?? null, stability: t.stability ?? null, glbMs: t.glbMs != null ? Math.round(t.glbMs) : null, glbBytes: files.get('scene.glb').length, sceneJsonBytes: files.get('scene.json').length, navigationBefore: navBefore, navigationAfter: nav },
       invariants: { projectUnchanged: true, storageUnchanged: true, externalRequests: 0, pageErrors: 0, blockedAssetRequests: blocked },
       outputs: Object.fromEntries([...fs.readdirSync(dest)].sort().map(n => [n, { bytes: fs.statSync(path.join(dest, n)).size, sha256: sha(fs.readFileSync(path.join(dest, n))) }])) };
