@@ -29,7 +29,12 @@
  const KEYS=Object.freeze({project:'rubik-sota-floorplan-project-v1',library:'rubik-sota-project-library-v1',budgets:'rubik-budget-v1',reviews:'rubik-review-v1',construction:'rubik-construction-v1'});
  const LANGS=['es','en','zh'];
  const enc=new TextEncoder();
- const canon=x=>JSON.stringify(function s(v){if(Array.isArray(v))return v.map(s);if(v&&typeof v==='object')return Object.fromEntries(Object.keys(v).sort().map(k=>[k,s(v[k])]));return v;}(x));
+ // Forma canónica para huellas. Solo admite datos JSON planos: un Date, Map, Set o instancia de clase se convertía en «{}»
+ // y dos valores distintos daban la misma huella (residual E3-D). Ahora se rechazan: quien los aporta debe normalizarlos.
+ const plano=v=>{const pr=Object.getPrototypeOf(v);return pr===Object.prototype||pr===null;};
+ const canon=x=>JSON.stringify(function s(v){if(Array.isArray(v))return v.map(s);
+  if(v&&typeof v==='object'){if(!plano(v))throw Object.assign(new TypeError('canon: valor no plano sin normalizar ('+(v.constructor?.name||'objeto')+')'),{code:'no-normalizado'});return Object.fromEntries(Object.keys(v).sort().map(k=>[k,s(v[k])]));}
+  if(typeof v==='number'&&!Number.isFinite(v))throw Object.assign(new TypeError('canon: número no finito'),{code:'no-normalizado'});return v;}(x));
  const parse=t=>{if(typeof t!=='string')return null;try{return JSON.parse(t);}catch{return undefined;}};
 
  // ---------------------------------------------------------------- textos (ES/EN/ZH, sin respaldo silencioso)
@@ -177,6 +182,7 @@
   'motor-sin-resultado':{es:'El motor no da resultado para este proyecto',en:'The engine gives no result for this project',zh:'引擎对此项目没有结果'},
   'imagen-sin-bytes':{es:'Imagen referenciada sin bytes en este navegador',en:'Referenced image without bytes in this browser',zh:'引用的图片在此浏览器中没有字节'},
   'imagen-alterada':{es:'Los bytes no coinciden con la huella declarada',en:'Bytes do not match the declared fingerprint',zh:'字节与声明的指纹不符'},
+  'sesion-sin-identidad':{es:'Toma de vistas sin identidad comprobable (fecha o ids): vuelve a prepararlas en «Imágenes»',en:'View take without a verifiable identity (date or ids): prepare them again in «Images»',zh:'视图拍摄缺少可核验的身份（日期或 ID）：请在“图片”中重新准备'},
   'imagen-no-comprobable':{es:'No se pudieron comprobar los bytes',en:'The bytes could not be checked',zh:'无法核验字节'}
  };
  function texto(code,lang){
@@ -287,6 +293,26 @@
    proyecto:{id,entryId:analisis.entryId,nombre:analisis.nombre},
    paquete:null};
  }
+ /** E3-D · identidad de la TOMA de vistas desde la autoridad real del editor (FloorPlanProjectViews, js/project-views-ui.js).
+  *  takenAt es un Date (new Date() al capturar): se normaliza explícitamente a ISO-8601 UTC con milisegundos. Sin estado
+  *  «ready», sin vistas, sin fecha válida o sin ids, la toma no tiene identidad y NO se acredita («sin-identidad»).
+  *  No persiste cámaras ni crea otra autoridad: solo lee status(), current(), takenAt y source. */
+ const ISO=/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/;
+ function fechaToma(t){
+  if(t instanceof Date)return Number.isFinite(t.getTime())?t.toISOString():null;
+  if(typeof t==='string'&&ISO.test(t)){const d=new Date(t);return Number.isFinite(d.getTime())?d.toISOString():null;}
+  return null;}
+ function vistasDesde(V){
+  if(!V||typeof V.status!=='function')return {estado:'none',n:0,id:null};
+  let estado,items;try{estado=V.status();items=estado==='ready'?(V.current?.()||[]):[];}catch{return {estado:'error',n:0,id:null};}
+  if(estado!=='ready')return {estado,n:0,id:null};
+  const takenAt=fechaToma(V.takenAt),src=V.source;
+  let fuente=null,fuenteOk=true;// origen: primitivo o dato JSON plano (canon lo verifica); otro tipo → sin identidad
+  if(src!=null){try{fuente=typeof src==='object'?JSON.parse(canon(src)):src;}catch{fuenteOk=false;}}
+  const ok=items.length>0&&takenAt&&fuenteOk&&items.every(v=>v&&typeof v.id==='string'&&v.id);
+  if(!ok)return {estado:'sin-identidad',n:items.length,id:null};
+  return {estado:'ready',n:items.length,id:{takenAt,source:fuente,items:items.map(v=>[v.id,typeof v.label==='string'?v.label:''])}};
+ }
  /** E3-D · huella de las fuentes que el expediente no identifica, por fuente. null = no comprobable ahora. */
  async function huellasFuentes(analisis,entorno,digest){
   const h=async v=>v==null?null:digest(enc.encode(canon(v)));
@@ -390,7 +416,7 @@
      if(!mod){r=AUS('sin-motor');break;}
      try{const d=probe.run(mod,p,mot.Core);r=d?DISP('motor',d):AUS('motor-sin-resultado');}catch{r=AUS('motor-error');}
      break;}
-    case 'sesion':{const v=entorno.vistas||{};r=entorno.cambios?AUS('cambios'):v.estado==='ready'&&v.n>0&&v.id?DISP('sesion-lista',String(v.n)):AUS('sesion-caducada');break;}
+    case 'sesion':{const v=entorno.vistas||{};r=entorno.cambios?AUS('cambios'):v.estado==='sin-identidad'?AUS('sesion-sin-identidad'):v.estado==='ready'&&v.n>0&&v.id?DISP('sesion-lista',String(v.n)):AUS('sesion-caducada');break;}
     case 'local':{
      const has={planObra:Object.values(analisis.obra).some(x=>x&&x.schedule),vinculoPlanPresupuesto:Object.values(analisis.obra).some(x=>x&&x.binding),
       marca:!!entorno.marca,variantesGuardadas:analisis.variantes.length>0}[id];
@@ -583,5 +609,5 @@
 
  return Object.freeze({VERSION,KEYS,LANGS,CATALOGO:CAT,MATRIZ,T,TF,texto,motivoFuente,nombre,leerConfirmado,analizar,cambiosSinGuardar,identidad,
   evaluarFuentes,resolver,resolverTodas,receta,preparador,preparar,verificar,coherencia,actualDesdeConfirmado,canon,
-  adaptadorImagenes,comprobarImagenes,huellasFuentes,SESION,controlador});
+  adaptadorImagenes,comprobarImagenes,huellasFuentes,SESION,controlador,vistasDesde,fechaToma});
 });

@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-e3-ui-qa/1",
- "fecha": "2026-11-20T14:46:37.257Z",
+ "fecha": "2026-11-20T15:20:43.904Z",
  "copia": "master 130ba24 + e3/rubik-130ba24-e3.patch (aislada)",
  "origen": "http://f0-2b.localhost (y 127.0.0.1 para UI-17)",
  "entorno": {
@@ -27,7 +27,7 @@
   }
  ],
  "resumen": {
-  "PASS": 23,
+  "PASS": 24,
   "FAIL": 0,
   "SKIP": 0,
   "NOT_RUN": 2
@@ -329,6 +329,30 @@
   },
   {
    "navegador": "chromium",
+   "id": "UI-21",
+   "titulo": "Adaptador REAL del editor de extremo a extremo: repetir la captura de vistas caduca RP07 (usa vistas) y no RP10; toma con identidad ISO",
+   "resultado": "PASS",
+   "detalle": {
+    "toma1": "2026-11-20T15:19:56.145Z",
+    "toma2": "2026-11-20T15:20:18.430Z",
+    "toma3": "2026-11-20T15:20:39.825Z",
+    "vistas": 5,
+    "RP07": {
+     "estado": "verificado-desactualizado",
+     "motivo": "desactualizado-fuente",
+     "cambiadas": [
+      "vistas3d"
+     ]
+    },
+    "RP10": {
+     "estado": "verificado",
+     "motivo": "verificado",
+     "cambiadas": null
+    }
+   }
+  },
+  {
+   "navegador": "chromium",
    "id": "UI-20",
    "titulo": "Sin la bandera de laboratorio no existe ninguna interfaz de diagnóstico (window.__e3)",
    "resultado": "PASS",
@@ -381,11 +405,11 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-escritorio-verificado.png",
-   "bytes": 384147
+   "bytes": 385493
   },
   {
    "archivo": "evidence/e3/visual/e3-escritorio-desactualizado.png",
-   "bytes": 396627
+   "bytes": 398071
   },
   {
    "archivo": "evidence/e3/visual/e3-820-tarjeta.png",
@@ -393,11 +417,11 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-820-dialogo.png",
-   "bytes": 329298
+   "bytes": 334603
   },
   {
    "archivo": "evidence/e3/visual/e3-820-vista-previa.png",
-   "bytes": 306655
+   "bytes": 312440
   },
   {
    "archivo": "evidence/e3/visual/e3-390-tarjeta.png",
@@ -405,11 +429,11 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-390-dialogo.png",
-   "bytes": 200199
+   "bytes": 201716
   },
   {
    "archivo": "evidence/e3/visual/e3-390-vista-previa.png",
-   "bytes": 185524
+   "bytes": 187033
   },
   {
    "archivo": "evidence/e3/visual/e3-1180-tarjeta.png",
@@ -417,11 +441,11 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-1180-dialogo.png",
-   "bytes": 311477
+   "bytes": 311533
   },
   {
    "archivo": "evidence/e3/visual/e3-1180-vista-previa.png",
-   "bytes": 298683
+   "bytes": 298740
   },
   {
    "archivo": "evidence/e3/visual/e3-844-tarjeta.png",
@@ -442,6 +466,10 @@
   {
    "archivo": "evidence/e3/visual/e3-zh.png",
    "bytes": 504509
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-toma-repetida-rp07.png",
+   "bytes": 409815
   },
   {
    "archivo": "evidence/e3/visual/e3-origen-no-prueba.png",

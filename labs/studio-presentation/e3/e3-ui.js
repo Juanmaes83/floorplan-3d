@@ -51,8 +51,8 @@
  const hex=async b=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',b))].map(x=>x.toString(16).padStart(2,'0')).join('');
  // Dependencias: autoridades existentes del producto, solo lectura. Las vistas se identifican por su toma (takenAt), su
  // origen y su selección actual (ids y etiquetas), sin persistir cámaras.
- const vistasInfo=()=>{const V=window.FloorPlanProjectViews;if(!V)return {estado:'none',n:0,id:null};const estado=V.status?.()||'none',items=V.current?.()||[];
-  return {estado,n:items.length,id:estado==='ready'&&items.length?{takenAt:V.takenAt||null,source:V.source||null,items:items.map(v=>[v.id,v.label])}:null};};
+ // Vistas: identidad de la toma normalizada en el núcleo (E3.vistasDesde) desde la autoridad real FloorPlanProjectViews.
+ const vistasInfo=()=>E3.vistasDesde(window.FloorPlanProjectViews);
  const deps=()=>({P:window.FloorPlanPersistence,X:window.FloorPlanExpediente,Core:window.FloorPlanCore,Budget:window.FloorPlanBudget,digest:hex,observado:()=>app.project,
   imagenes:E3.adaptadorImagenes({indexedDB:window.indexedDB,Images:window.FloorPlanImages}),
   marca:()=>window.FloorPlanBrandUI?.snapshot?.()?.profile||null,

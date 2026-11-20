@@ -1,0 +1,22 @@
+{
+ "schema": "rubik-lab-e3-tomas-antes-navegador/1",
+ "fecha": "2026-11-20T15:18:46.743Z",
+ "navegador": "chromium",
+ "autoridad": "FloorPlanProjectViews (copia aislada de master 130ba24 + parche)",
+ "nucleoAnterior": "e9bd6bfd9e5053c56dd151a289f5ed1e4054a941",
+ "tomas": [
+  {
+   "takenAt": "2026-11-20T15:18:32.488Z",
+   "antes": "d91167fcedf43a083232b42572e4a1ccf302c58ab4fda6c32eefc45398210a83",
+   "ahora": "c792d42287551777322af208ddccbb1842d4d2c1d0dc8d18613439e1f8a866b4"
+  },
+  {
+   "takenAt": "2026-11-20T15:18:46.658Z",
+   "antes": "d91167fcedf43a083232b42572e4a1ccf302c58ab4fda6c32eefc45398210a83",
+   "ahora": "39f2fe2657176691a9947b76380b744b9a7aa1d19f44eb93494fc83108e0d587"
+  }
+ ],
+ "antesMismaHuella": true,
+ "ahoraHuellasDistintas": true,
+ "externas": 0
+}

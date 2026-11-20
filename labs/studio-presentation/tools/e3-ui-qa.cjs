@@ -13,7 +13,8 @@ const srv=http.createServer((q,s)=>{let p=decodeURIComponent(q.url.split('?')[0]
  if(!f.startsWith(ROOT)||!fs.existsSync(f)||fs.statSync(f).isDirectory()){s.writeHead(404);s.end();return;}s.writeHead(200,{'content-type':types[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(s);});
 const casos=[],capturas=[];
 const rec=(navegador,id,titulo,resultado,detalle)=>casos.push({navegador,id,titulo,resultado,...(detalle!==undefined?{detalle}:{})});
-async function caso(nav,id,titulo,fn){process.stderr.write(`[${nav}] ${id} …\n`);try{const d=await fn();rec(nav,id,titulo,'PASS',d);}catch(e){rec(nav,id,titulo,'FAIL',String(e&&e.message||e).slice(0,500));}}
+const SOLO=process.env.E3_CASOS?process.env.E3_CASOS.split(','):null;// depuración: ejecutar solo esos casos (la evidencia se genera sin filtro)
+async function caso(nav,id,titulo,fn){if(SOLO&&!SOLO.includes(id))return;process.stderr.write(`[${nav}] ${id} …\n`);try{const d=await fn();rec(nav,id,titulo,'PASS',d);}catch(e){rec(nav,id,titulo,'FAIL',String(e&&e.message||e).slice(0,500));}}
 const ok=(c,m)=>{if(!c)throw new Error(m);};
 const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
 
@@ -146,6 +147,28 @@ async function suite(browser,nav,port){
   const d=await pg.evaluate(()=>({cand:!!__e3.candidato,ocupado:__e3.ocupado,sel:__e3.sel,aviso:__e3.aviso,preview:document.getElementById('e3Preview').hidden,cancelar:!!document.getElementById('e3Cancel'),foco:document.activeElement?.value||document.activeElement?.id}));
   await pg.evaluate(()=>{window.__soltar();});
   ok(!d.cand&&!d.ocupado&&d.sel==='RP09'&&!d.aviso&&d.preview&&!d.cancelar&&d.foco===foco0,JSON.stringify(d));return d;});
+ await s.ctx.close();
+ // ---------- residual E3-D: tomas reales con la autoridad del editor (FloorPlanProjectViews.prepare, takenAt = Date)
+ s=await abrir(browser,port);pg=s.pg;await crearCopia(pg);
+ await caso(nav,'UI-21','Adaptador REAL del editor de extremo a extremo: repetir la captura de vistas caduca RP07 (usa vistas) y no RP10; toma con identidad ISO',async()=>{
+  const toma=async()=>{const antes=await pg.evaluate(()=>FloorPlanProjectViews.takenAt?.getTime?.()??null);
+   await pg.evaluate(()=>{FloorPlanProjectViews.prepare();});// API real del editor (la misma que «Imágenes → Preparar vistas»)
+   await pg.waitForFunction(a=>FloorPlanProjectViews.status()==='ready'&&FloorPlanProjectViews.takenAt?.getTime()!==a,antes,{timeout:90000});
+   return pg.evaluate(()=>{const v=RubikStudioE3.vistasDesde(FloorPlanProjectViews);return {raw:Object.prototype.toString.call(FloorPlanProjectViews.takenAt),takenAt:v.id?.takenAt,n:v.n,estado:v.estado};});};
+  const reverificar=async()=>{await pg.evaluate(()=>document.getElementById('e3Reverify').click());
+   await pg.waitForFunction(()=>__e3.verificacion&&!__e3.verificando&&!__e3.leyendo,null,{timeout:30000});return pg.evaluate(()=>({estado:__e3.verificacion.estado,motivo:__e3.verificacion.motivo,cambiadas:__e3.verificacion.cambiadas||null}));};
+  const t1=await toma();ok(t1.estado==='ready'&&t1.raw==='[object Date]'&&/Z$/.test(t1.takenAt||'')&&t1.n>0,JSON.stringify(t1));
+  await entregar(pg);await dialogo(pg);
+  await elegir(pg,'RP07');await pg.click('#e3Prepare');await pg.waitForSelector('#e3Estado[data-estado="verificado"]',{timeout:30000});
+  const vig=await pg.evaluate(()=>Object.keys(__e3.candidato.congelado.vigencia).join());ok(vig==='vistas3d',vig);
+  const t2=await toma();ok(t2.takenAt!==t1.takenAt,'misma toma');
+  const v7=await reverificar();ok(v7.estado==='verificado-desactualizado'&&v7.motivo==='desactualizado-fuente'&&v7.cambiadas?.join()==='vistas3d',JSON.stringify(v7));
+  await shot(pg,'e3-toma-repetida-rp07',nav);
+  await elegir(pg,'RP10');await pg.click('#e3Prepare');await pg.waitForSelector('#e3Estado[data-estado="verificado"]',{timeout:30000});
+  const t3=await toma();ok(t3.takenAt!==t2.takenAt,'misma toma 3');
+  const v10=await reverificar();ok(v10.estado==='verificado',JSON.stringify(v10));
+  ok(!s.errores.length&&!s.externas.length,s.errores.concat(s.externas).join(' | '));
+  return {toma1:t1.takenAt,toma2:t2.takenAt,toma3:t3.takenAt,vistas:t1.n,RP07:v7,RP10:v10};});
  await s.ctx.close();
  s=await abrir(browser,port,{qa:false});pg=s.pg;
  await caso(nav,'UI-20','Sin la bandera de laboratorio no existe ninguna interfaz de diagnóstico (window.__e3)',async()=>{

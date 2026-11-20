@@ -1,6 +1,30 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · E3 / K10 / ENT-03: cierre técnico de los hallazgos de auditoría (20/11/2026)
+## Vigente · E3 CERRADO EN LABORATORIO y transferido a Codex (20/11/2026)
+
+**Partida:** `e9bd6bf`. Se cierra el único residual de la auditoría: la identidad real de las tomas de vistas (`takenAt` es un `Date` y `canon()` lo colapsaba en `{}`).
+
+**Corrección (delta mínimo):**
+- `E3.vistasDesde()` normaliza la toma desde `FloorPlanProjectViews` (fecha ISO UTC con ms);
+- una toma sin identidad válida no se acredita;
+- `canon()` rechaza los valores no planos.
+
+Informe: complemento §7 de `reports/23-E3-CIERRE-TECNICO.md`.
+
+**Pruebas:**
+
+| Suite | Resultado |
+|---|---|
+| `node tools/e3-tomas-qa.cjs <pin> 130ba24… --antes <e9bd6bf>` | **8/8**; antes 2/2 reproducidos |
+| `node tools/e3-tomas-antes-navegador.cjs <copia> <e9bd6bf>` | Antes: misma huella con dos tomas reales. Ahora: huellas distintas |
+| `node tools/e3-ui-qa.cjs <copia>` | Chromium **24/24** (UI-21: adaptador real del editor, repetir la captura caduca RP07 y no RP10) |
+| Núcleo y cierre | Núcleo 23/23, cierre 46/46 (antes 8/8), F0 11/11. Firefox/WebKit: NOT_RUN |
+
+**Transferencia:** [`HANDOFF-INTEGRACION-CODEX-E3.md`](HANDOFF-INTEGRACION-CODEX-E3.md), con archivos, destinos, parche, contratos, pruebas, gates y reversión.
+
+**Se detiene el desarrollo de E3 en el laboratorio.** NO-GO de fusión, despliegue o activación sin Codex y D4.
+
+## Anterior · E3 / K10 / ENT-03: cierre técnico de los hallazgos de auditoría (20/11/2026)
 
 **Partida:** `448b3ef` (remoto comprobado). Master de contraste `130ba24` (sin commits posteriores al cerrar).
 

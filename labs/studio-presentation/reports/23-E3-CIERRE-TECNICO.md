@@ -226,3 +226,74 @@ Comandos en la sección vigente del HANDOFF. Resultados en `evidence/e3/` (`e3-q
 - §7.4 (PR en borrador): **no se abre**, porque este mandato no autoriza PR. La entrega se acredita por rama, SHA y enlaces.
 
 **Siguiente actor:** ChatGPT (auditoría independiente) → Codex (preparación de la integración) → propietario (D4 y aceptación).
+
+## 7. Complemento · residual E3-D: identidad real de las tomas de vistas (CC1 · cierre final)
+
+**Partida:** `e9bd6bfd9e5053c56dd151a289f5ed1e4054a941`. El único residual de la auditoría de ChatGPT.
+
+### Problema
+
+- `canon()` convertía un `Date` en `{}`.
+- La autoridad real `FloorPlanProjectViews.takenAt` es un `Date` (`new Date()` al capturar, `js/project-views-ui.js:48`), y `vistasInfo()` lo metía tal cual en la identidad de las vistas.
+- Por eso dos tomas distintas, con los mismos ids, etiquetas y origen, recibían **la misma huella**.
+- D-01 no lo detectaba porque usaba identidades sintéticas con texto.
+
+### Reproducción «antes» sobre `e9bd6bf`
+
+| Prueba | Entorno | Resultado |
+|---|---|---|
+| `tools/e3-tomas-qa.cjs --antes`: T-antes y T-antes-2 | Node | 2/2 reproducidos: misma huella para dos `Date` distintos, y `canon({t:Date})` = `{"t":{}}` |
+| `tools/e3-tomas-antes-navegador.cjs` | Chromium, **autoridad real** | Dos tomas reales con distinto `takenAt` dan la misma huella con el núcleo anterior y huellas distintas con el actual (`evidence/e3/e3-tomas-antes-navegador.json`) |
+
+### Corrección (delta mínimo, `e3/e3-core.js` y `e3/e3-ui.js`)
+
+**1. `vistasDesde(FloorPlanProjectViews)`.** Construye la identidad de la toma desde la API real: `status()`, `current()`, `takenAt` y `source`.
+- `fechaToma()` normaliza el `Date` a **ISO-8601 UTC con milisegundos**. También acepta un texto ISO equivalente.
+- Rechaza un `Date` inválido, la ausencia de fecha, un texto no ISO y los números.
+- El origen solo se admite como primitivo o dato JSON plano.
+
+**2. Sin identidad válida no hay crédito.** Una toma sin fecha válida, sin vistas o sin ids queda con estado `sin-identidad`. La fuente queda «ausente» con motivo `sesion-sin-identidad` (ES/EN/ZH), la receta que la requiere se bloquea y un candidato que dependía de ella no se da por vigente.
+
+**3. `canon()` estricto.** Rechaza los valores no planos (`Date`, `Map`, `Set`, instancias de clase y números no finitos) con el código `no-normalizado`. Ya ningún valor distinto colapsa en silencio en la misma huella.
+
+**4. Interfaz:** `vistasInfo = () => E3.vistasDesde(window.FloorPlanProjectViews)`; no construye identidades propias.
+
+**No se persisten cámaras ni se crea otra autoridad de vistas.** La identidad de toma productiva (`takeId`) sigue correspondiendo a Codex.
+
+### Pruebas
+
+**`tools/e3-tomas-qa.cjs` (nuevas): 8/8 PASS**
+
+| Caso | Comprueba |
+|---|---|
+| T-01 | `canon` estricto |
+| T-02 | **Dos `Date` distintos** con mismos ids, etiquetas y origen → identidades y huellas distintas |
+| T-03 | Normalización estable: mismo instante, también en texto ISO |
+| T-04 | **Repetir la captura** caduca RP07 (usa vistas) y no RP10 |
+| T-05 | Siete tomas sin identidad válida: no se acreditan ni dan vigencia; RP07 bloqueada |
+| T-06 | Estados no «ready» y API que lanza |
+| T-07 | **Restauración portable** con la misma toma → «verificado-restaurado»; con otra toma → desactualizado |
+| T-08 | La interfaz usa el adaptador del núcleo y no persiste cámaras |
+
+**UI-21 (Chromium, adaptador REAL del editor de extremo a extremo):**
+1. `FloorPlanProjectViews.prepare()` produce una toma con `takenAt` `Date` → identidad ISO.
+2. Se prepara RP07 → «verificado».
+3. Se **repite la captura** → «Verificar de nuevo» → «verificado-desactualizado» con `cambiadas: ['vistas3d']`.
+4. Se prepara RP10 y se repite otra captura → RP10 sigue «verificado».
+
+Captura: `evidence/e3/visual/e3-toma-repetida-rp07.png`.
+
+**Regresión pertinente:**
+- núcleo 23/23;
+- cierre 46/46 (antes 8/8);
+- interfaz Chromium 157: **24/24** (los 23 anteriores + UI-21);
+- F0 11/11;
+- Firefox/WebKit: NOT_RUN.
+
+En el cierre se corrigió una espera del **arnés** de C-06 (polling de 200 vueltas del bucle, intermitente 1/3) por una espera por condición con límite: 5/5 estable. No es un cambio de E3.
+
+### Dictamen
+
+**Residual E3-D cerrado en laboratorio.** **E3 queda cerrado en laboratorio** y se transfiere a Codex: [`HANDOFF-INTEGRACION-CODEX-E3.md`](../HANDOFF-INTEGRACION-CODEX-E3.md).
+
+Se detiene el desarrollo de E3 en el laboratorio. NO-GO de integración o activación sin D4 y la preparación de Codex.

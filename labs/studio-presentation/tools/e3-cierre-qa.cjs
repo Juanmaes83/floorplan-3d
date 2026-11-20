@@ -39,7 +39,8 @@ const presupuesto=p=>{const b=Budget.createBudget({id:`bud_${p.id}`,subject:{typ
 const P=leer=>({isTestOrigin:()=>true,async readConfirmed(){const s=typeof leer==='function'?leer():leer;return {revision:s.revision,docs:new Map(s.docs)};}});
 function Pcontrolado(){const cola=[];return {cola,P:{isTestOrigin:()=>true,readConfirmed:()=>new Promise((res,rej)=>cola.push({res:s=>res({revision:s.revision,docs:new Map(s.docs)}),rej}))},
  async resolver(i,s){while(cola.length<=i)await Promise.resolve();cola[i].res(s);for(let k=0;k<20;k++)await Promise.resolve();},
- async esperar(n){for(let k=0;k<200&&cola.length<n;k++)await new Promise(r=>setImmediate(r));assert.ok(cola.length>=n,`se esperaban ${n} lecturas, hay ${cola.length}`);}};}
+ // Espera POR CONDICIÓN (n lecturas en cola), con límite de 10 s: no depende de cuántas vueltas del bucle tarde el cálculo.
+ async esperar(n){const t0=Date.now();while(cola.length<n&&Date.now()-t0<10000)await new Promise(r=>setImmediate(r));assert.ok(cola.length>=n,`se esperaban ${n} lecturas, hay ${cola.length}`);}};}
 const VISTAS=(id='V1',estado='ready')=>({estado,n:estado==='ready'?4:0,id:estado==='ready'?{takenAt:'2026-11-20T10:00:00Z',seleccion:id}:null});
 function deps(Pp,p,o={}){return {P:Pp,X,Core,Budget,digest,imagenes:o.imagenes??(async ref=>ref==='img_e3sintetica'?new Uint8Array(PNG):null),observado:o.observado||(()=>clone(p)),
  entorno:o.entorno||(()=>({motores:MOTORES,vistas:VISTAS()})),marca:o.marca||(()=>({name:'Estudio sintético'}))};}

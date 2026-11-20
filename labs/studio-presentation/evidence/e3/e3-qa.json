@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-e3-qa/1",
- "fecha": "2026-11-20T14:47:28.557Z",
+ "fecha": "2026-11-20T15:11:49.427Z",
  "pin": "130ba24d420a2f4b26ab261313202e6070904fd8",
  "entorno": {
   "node": "v22.23.5",
@@ -242,7 +242,7 @@
    "resultado": "PASS",
    "detalle": {
     "codigos": 30,
-    "motivos": 20
+    "motivos": 21
    }
   },
   {

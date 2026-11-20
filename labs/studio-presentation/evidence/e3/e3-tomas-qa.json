@@ -1,0 +1,91 @@
+{
+ "schema": "rubik-lab-e3-tomas-qa/1",
+ "fecha": "2026-11-20T15:11:48.510Z",
+ "pin": "130ba24d420a2f4b26ab261313202e6070904fd8",
+ "entorno": {
+  "node": "v22.23.5",
+  "plataforma": "linux"
+ },
+ "resumen": "8/8 PASS",
+ "antes": {
+  "nucleo": "e9bd6bfd9e5053c56dd151a289f5ed1e4054a941",
+  "reproducidos": "2/2",
+  "casos": [
+   {
+    "id": "T-antes",
+    "defecto": "Dos tomas con Date distintos (mismos ids, etiquetas y origen) → misma huella de vistas",
+    "reproducido": true,
+    "huella": "a39863d99654320308a3139da599e1b12fec88786265bd5f959a31377cf1175d"
+   },
+   {
+    "id": "T-antes-2",
+    "defecto": "canon() del núcleo anterior convierte un Date en «{}»",
+    "reproducido": true
+   }
+  ]
+ },
+ "casos": [
+  {
+   "id": "T-01",
+   "titulo": "canon() ya no colapsa valores no planos: Date, Map, Set, instancias y números no finitos se rechazan; JSON plano estable",
+   "resultado": "PASS"
+  },
+  {
+   "id": "T-02",
+   "titulo": "Dos objetos Date DISTINTOS con mismos ids, etiquetas y origen → identidades y huellas distintas",
+   "resultado": "PASS",
+   "detalle": {
+    "a": "2026-11-20T10:00:00.123Z",
+    "b": "2026-11-20T10:00:05.456Z"
+   }
+  },
+  {
+   "id": "T-03",
+   "titulo": "Normalización estable: dos Date del MISMO instante (y su ISO en texto) → la misma identidad",
+   "resultado": "PASS",
+   "detalle": "2026-11-20T10:00:00.123Z"
+  },
+  {
+   "id": "T-04",
+   "titulo": "Repetir la captura (misma geometría, mismos ids) caduca SOLO el candidato que usa las vistas (RP07); RP10 sigue vigente",
+   "resultado": "PASS",
+   "detalle": {
+    "RP07": "verificado-desactualizado",
+    "RP10": "verificado"
+   }
+  },
+  {
+   "id": "T-05",
+   "titulo": "Toma sin identidad válida (fecha inválida, ausente o no ISO; vistas sin id; origen no plano): no se acredita y no da vigencia",
+   "resultado": "PASS",
+   "detalle": {
+    "fechaInvalida": "sesion-sin-identidad",
+    "sinFecha": "sesion-sin-identidad",
+    "textoNoISO": "sesion-sin-identidad",
+    "numero": "sesion-sin-identidad",
+    "sinId": "sesion-sin-identidad",
+    "origenNoPlano": "sesion-sin-identidad",
+    "vacia": "sesion-sin-identidad"
+   }
+  },
+  {
+   "id": "T-06",
+   "titulo": "Estados no «ready» (stale, busy, none, error) y API que lanza: sin identidad ni vigencia",
+   "resultado": "PASS"
+  },
+  {
+   "id": "T-07",
+   "titulo": "Restauración portable conservada: otro id local y otra revisión con la misma toma → «verificado-restaurado»; con otra toma → desactualizado",
+   "resultado": "PASS",
+   "detalle": {
+    "mismaToma": "verificado-restaurado",
+    "otraToma": "desactualizado-fuente"
+   }
+  },
+  {
+   "id": "T-08",
+   "titulo": "La interfaz usa el adaptador del núcleo sobre la autoridad real (no construye identidades propias) y no persiste cámaras",
+   "resultado": "PASS"
+  }
+ ]
+}
