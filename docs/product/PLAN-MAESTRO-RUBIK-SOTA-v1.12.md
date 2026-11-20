@@ -204,7 +204,7 @@ flowchart LR
 | UX-14 | `ND` | — | Investigación; aplazar |
 | OBR-05 | `IR` | El plan ya se exporta en JSON | Adaptador MSPDI en C |
 | G-08 | `SU` | Las variantes nativas ya comparten marco con el original | Reducir a «calco de un segundo plano externo» |
-| G-02 | `ND` | RUBIK lee DXF pero no lo escribe | Desarrollo nuevo de mayor valor para arquitectos; C |
+| G-02 | `RL` | Exportación DXF 2D de la planta activa, integrada en #265 | Aceptación en dos CAD comerciales y contraste del nombre exportado en el entorno afectado; C |
 | G-07 | `RD` | Público distinto | Proponer descarte |
 | GEN-01 | `IR` | Semilla, ranking, revisión y propuesta ya existen para muebles | Nuevo motor sobre C4; D |
 | ECO-02 | `DX` | Hipótesis de 19 a 249 € | Decidir con datos del piloto |
@@ -303,7 +303,7 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 | **K12** CAM-01 + IMG-07 | Colocar una cámara en el 2D y renderizar de día o de noche | Minimapa NAV3D, `presentationPose`, modo noche | K11 | Pose guardada y reproducible | Navegador + una prueba real autorizada | CON |
 | **K13** ProposalV1 | Un único contrato de propuesta con vigencia | Diff AG-2, `RubikLayoutProposalV1`, huella E2 | — | Las tres familias de pruebas pasan sin cambiar aserciones | Pruebas puras | CON |
 | **K14** OBR-05 MSPDI | MS Project y GanttProject abren el plan | `construction-schedule-core.serialize` | — | Ida y vuelta de fechas y dependencias | Prueba pura + apertura manual | AMP |
-| **K15** G-02 DXF | DXF con capas y cotas abierto en dos CAD | Geometría canónica y láminas | — | Revisión de un arquitecto | VP | NUE |
+| **K15** G-02 DXF | DXF con capas y cotas abierto en dos CAD | Geometría canónica de la planta activa | — | Revisión de un arquitecto | VP | Integrado con validación profesional pendiente |
 | **K16** Activación IA real | FOT-01, CAT-01 y Asistente con proveedor real en Preview | #258 | K5, K8, D1, D2 | Prueba C y ejecuciones reales conciliadas | Preview aislado | AO |
 
 ---
@@ -387,6 +387,6 @@ Cada corte es una PR propia con SHA de partida, CI en su SHA, Preview y aceptaci
 - **El laboratorio Studio** se revisó por sus documentos de traspaso, no ejecutando sus herramientas.
 - **Cambios posteriores al corte:** ver la sección final del registro de evidencias.
 
-**Consolidación 20/11/2026.** OP-04 y F0.2b están integradas. K13 (#287) y el contrato documental R1 (#272) están integrados. El lote SMART [#288](https://github.com/Juanmaes83/floorplan-3d/pull/288) está integrado con su árbol autorizado. El residual de recursos de Presentación cerró con un único relanzamiento del job sobre el mismo HEAD. Después, OP-10 → Simulator E → Simulator D requieren autorización específica. [Simulator C y A](../integration/INVENTARIO-SIMULATOR-C-A-D.md) tienen pruebas dirigidas en base aislada y quedan pendientes de aceptación visual. E3 espera D4 y #271 conserva su aceptación UX en el master efectivo. A0 y su cadena permanecen congeladas por el residual de WebKit. [Inventario y estados efectivos](https://github.com/Juanmaes83/floorplan-3d/pull/275).
+**Consolidación 20/11/2026.** OP-04 y F0.2b están integradas. K13 (#287) y el contrato documental R1 (#272) están integrados. El lote SMART [#288](https://github.com/Juanmaes83/floorplan-3d/pull/288) está integrado con su árbol autorizado. El residual de recursos de Presentación cerró con un único relanzamiento del job sobre el mismo HEAD. OP-10 (#290) y Simulator E ([#291](https://github.com/Juanmaes83/floorplan-3d/pull/291)) ya están integrados. El próximo corte es Simulator D, con gate WebKit y autorización independiente. [Simulator C y A](../integration/INVENTARIO-SIMULATOR-C-A-D.md) tienen pruebas dirigidas en base aislada y quedan pendientes de aceptación visual. E3 espera D4 y #271 conserva su aceptación UX en el master efectivo. A0 y su cadena permanecen congeladas por el residual de WebKit. [Inventario y estados efectivos](https://github.com/Juanmaes83/floorplan-3d/pull/275).
 
 La guía operativa de arranque y coordinación vive en `docs/integration/HANDOFF-MAESTRO-RUBIK-SOTA.md` ([edición auditada en #289](https://github.com/Juanmaes83/floorplan-3d/blob/0429ee6e86ab36d8cdc2fee28f9655cf37dd3b87/docs/integration/HANDOFF-MAESTRO-RUBIK-SOTA.md)). El estado efectivo y la evidencia se actualizan en el registro de continuidad y los documentos canónicos enlazados.

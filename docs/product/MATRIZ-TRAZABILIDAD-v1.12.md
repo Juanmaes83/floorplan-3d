@@ -51,13 +51,13 @@
 | Estado | IDs |
 |---|---|
 | `RV` Resuelto y validado | 20 |
-| `RL` Integrado con límites de alcance | 11 |
+| `RL` Integrado con límites de alcance | 13 |
 | `SU` Objetivo superado por otra solución | 2 |
 | `EX` Experimental o laboratorio | 5 |
 | `SI` Simulado | 6 |
 | `PA` Parcialmente desarrollado | 22 |
-| `IR` Infraestructura reutilizable, sin función específica | 10 |
-| `ND` No desarrollado | 18 |
+| `IR` Infraestructura reutilizable, sin función específica | 9 |
+| `ND` No desarrollado | 17 |
 | `DX` Depende de una decisión externa | 3 |
 | `RD` Redundante o candidato a descarte | 1 |
 | **Total** | **98** |
@@ -225,7 +225,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | G-06 | Medir sobre el plano importado | P | `PA` | [I] herramienta Medir (M) con ajuste a muros y bloqueo de eje (`index.html:850`, `:1939`), utilizable sobre la imagen calibrada; [I] `tools/rubik-mcp/src/measure.cjs` mide entre elementos | Solo distancia. Sin área ni conteo | P6 | AMP: área y conteo sobre `tracing-core` | — | Medir área y contar sobre el plano calibrado | C |
 | G-01 | Auditoría del plano importado | N | `EX` | [H] R01 #191 y #205, archivadas sin integrar | Laboratorio no validado | P6 | VT: F2 con 20 planos reales autorizados | GOV-05 | F2 superado | C |
 | G-08 | Alinear dos planos | N | `SU` | [I] una reforma hecha como variante comparte marco de coordenadas con el original (`js/project-library.js`, `js/revision-compare-core.js`); `building-core.alignment()` ya alinea plantas | Superado para proyectos nativos; queda el caso de dos planos externos | P6 | AMP pequeño: segundo plano externo como calco con registro de dos puntos | — | Calco de un segundo plano registrado sobre una planta | C |
-| G-02 | Exportación DXF profesional | N | `ND` | [I] RUBIK lee DXF (`js/plan-intake.js`) pero no escribe DXF; `js/raw-wall-export.js` exporta sesiones R01, no DXF | — | P6 | NUE: escritor DXF sobre la geometría canónica y las láminas existentes | — | DXF con capas, cotas y leyenda existente/demoler, abierto en dos CAD | C |
+| G-02 | Exportación DXF profesional | N | `RL` | [H] [#265](https://github.com/Juanmaes83/floorplan-3d/pull/265) en master; [T] `tests/g02-dxf.browser.test.cjs`; [H] [descarga de planta activa 1/1](../integration/op07-a0-2026-11-20/README.md#dxf-de-planta-activa--residual-independiente) en el corte `adb86034` | Archivo → Exportar planta activa en DXF. DXF 2D con capas y cotas. Reimportación con escala estimada y reconocimiento heurístico de huecos | P6 | VP: apertura en dos CAD y revisión del nombre exportado en el entorno afectado | — | DXF con capas, cotas y leyenda existente/demoler, abierto en dos CAD | C |
 | G-07 | Exportación IMDF | N | `RD` | — | Valor ★★ para un público de mapas de interior, no de reforma | P6 | DC: proponer descarte o aplazamiento | G-02 | Decisión del propietario | D |
 | G-04 | Foto, LiDAR o IFC a espacio métrico | N | `ND` | [I] IFC se importa; foto y LiDAR no | — | P6 | INV | — | — | D |
 
