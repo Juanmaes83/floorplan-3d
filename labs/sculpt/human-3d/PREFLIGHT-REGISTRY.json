@@ -1,0 +1,114 @@
+{
+  "schema": "rubik-sota.human3d-preflight-v1",
+  "phase": "PREFLIGHT_DOCUMENTAL",
+  "date": "2026-11-20",
+  "product": {
+    "repository": "Juanmaes83/floorplan-3d",
+    "branchReviewed": "master",
+    "commit": "4ea7cb3bb72e6c3bdd9a176cb08bd9e41b8866f2",
+    "tree": "a134a2c3bcb503528a4778f6d432b408c8bc0856"
+  },
+  "branchPublished": "research/human3d-preflight-20261120",
+  "scope": "Metadata/licensing/F3 static code inspection only",
+  "candidates": [
+    {
+      "id": "vrm-avatar-maker",
+      "provider": "ffunch",
+      "repo": "ffunch/vrm-avatar-maker",
+      "sha": "1435345c66da752e0e7a3b6cbae2c09bb1766c98",
+      "licenseCode": "MIT",
+      "licenseAssetsClaimed": "CC0 per ASSETS.md",
+      "licenseAssetLevelVerification": "NOT_RUN",
+      "externalNotices": [
+        "MIT three.js/three-vrm/meshoptimizer",
+        "Apache-2.0 MediaPipe optional"
+      ],
+      "formatsDeclared": [
+        "VRM-1.0",
+        "GLB"
+      ],
+      "constraints": [
+        "bones",
+        "skins",
+        "face shapes/morphs",
+        "donor allows up to 16 materials and 20MB"
+      ],
+      "F3DirectImport": "NO_GO",
+      "priority": "P2",
+      "downloaded": false
+    },
+    {
+      "id": "humanforge",
+      "provider": "abdulrehman043",
+      "repo": "abdulrehman043/humanforge",
+      "sha": "2226df1f50a04c5a8e1c02ea33780d28337dfbb1",
+      "licenseCode": "MIT",
+      "licenseAssetsClaimed": "CC0 per LICENSE.ASSETS.md",
+      "licenseAssetLevelVerification": "NOT_RUN",
+      "externalNotices": [
+        "MakeHuman MPFB2 community items, multiple authors",
+        "Apache-2.0 MediaPipe optional"
+      ],
+      "formatsDeclared": [
+        "generated rigged GLB",
+        "baked binary/texture pipeline"
+      ],
+      "constraints": [
+        "mixamo rig",
+        "ARKit blendshapes",
+        "KHR_mesh_quantization",
+        "WebP textures"
+      ],
+      "F3DirectImport": "NO_GO",
+      "priority": "P3",
+      "downloaded": false
+    },
+    {
+      "id": "quaternius-background-posed-humans",
+      "provider": "Quaternius",
+      "sourceUrl": "https://quaternius.com/packs/backgroundposedhumans.html",
+      "officialGitHubCommit": null,
+      "sourcePublication": "2018-08",
+      "licensePackPageClaimed": "CC0",
+      "licenseContext": "QAL v1.0 effective 2026-08-28; public redistribution of standalone assets restricted under QAL",
+      "licenseArchiveContents": "NOT_INSPECTED",
+      "formatsDeclared": [
+        "FBX",
+        "OBJ",
+        "Blend"
+      ],
+      "countClaim": "Page 28 models; description 20 posed humans plus 8 hairstyles",
+      "F3DirectImport": "NO_GO",
+      "priority": "P1_LICENSE_FIRST",
+      "downloaded": false
+    }
+  ],
+  "f3": {
+    "file": "js/asset-loader.mjs",
+    "sourceCommit": "4ea7cb3bb72e6c3bdd9a176cb08bd9e41b8866f2",
+    "limits": {
+      "maxGLBMiB": 8,
+      "maxImages": 4,
+      "maxTextures": 4,
+      "maxMaterials": 8,
+      "maxImageSidePx": 2048,
+      "maxIndividualImageMiB": 1,
+      "maxDecodedMiB": 16,
+      "maxTextureMiB": 24
+    },
+    "formats": "GLB 2.0 internal binary, JPEG-only embedded, no skin/animation/morph/glTF extensions",
+    "catalogAdmission": "restricted, signed provenance + manifest review",
+    "realDevicePerformanceBudget": "NOT_VALIDATED"
+  },
+  "gates": {
+    "licenseArchive": "NOT_RUN",
+    "assetDownload": "NOT_AUTHORIZED",
+    "conversion": "NOT_AUTHORIZED",
+    "modelValidation": "NOT_RUN",
+    "baseline": "NOT_RUN",
+    "preview": "NOT_RUN",
+    "merge": "FORBIDDEN",
+    "production": "FORBIDDEN"
+  },
+  "nextDecision": "Owner approval only for a separate P1 asset-level licensing and packaging audit; no asset download authorized by current contract"
+}
