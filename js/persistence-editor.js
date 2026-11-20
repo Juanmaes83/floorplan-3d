@@ -6,7 +6,31 @@
  const isolated=window.RUBIK_DELIVERY||new URLSearchParams(location.search).get('demo')==='dibujo-vivo';
  const enabled=P.isTestOrigin()&&!isolated;
  let persistenceDialog;
- const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison};
+ const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison,noteEdit};
+ // OP-07 S7 · Save gate: Core.guardSave between the last CONFIRMED revision and the next one, with the intent of the editing
+ // steps made since that revision (each step carries its own; nothing global persists). A refused save writes nothing.
+ let steps=[],seq=0;
+ function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
+  const C=window.FloorPlanCore;if(!C?.editIntent)return;
+  let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
+  steps.push({seq:++seq,intent:C.editIntent(before,after,{op,restore})});
+ }
+ const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
+ function refusal(issues){
+  const one=issues[0]||{},what={'curve-lost':'perdería la curva de un muro','slope-lost':'perdería la altura final de un muro inclinado',
+   'wall-lost':'perdería un muro curvo o inclinado','opening-lost':'perdería una puerta o ventana de un muro curvo o inclinado',
+   'writer-lacks-feature':'contiene muros que esta versión de RUBIK no sabe guardar','degraded-view':'viene de una vista simplificada del proyecto',
+   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
+  return 'No se ha guardado: el cambio '+what+' sin que lo hayas pedido. Lo guardado no ha cambiado y tu cambio sigue en esta pestaña. Deshazlo (Ctrl+Z) o usa «Forma del muro» para enderezar o nivelar el muro de forma explícita.';
+ }
+ const gate={
+  check({changes,confirmed,restore}){
+   const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
+   const upTo=seq,intent=restore?{}:steps.reduce((a,s)=>C.composeIntent(a,s.intent),{});
+   const v=C.saveGate(pairs,{intent,restore});return {...v,seq:upTo,restore,message:v.ok?'':refusal(v.issues)};
+  },
+  committed(v){if(!v)return;steps=v.restore?[]:steps.filter(s=>s.seq>v.seq);}
+ };
 
  function loadProject(projectKey){
   const storage=runtime.storage,loadedProject=window.FloorPlanCore.load(storage,projectKey);
@@ -121,8 +145,11 @@
   const label=document.getElementById('persistenceStatus');
   let protecting=false;
   const protect=e=>{e.preventDefault();e.returnValue=true;};
+  let refused='';
   const render=s=>{
    label.textContent=statusText(s);label.dataset.state=s.status;
+   // S7: a refused save says why at once (same notice as the rest of the editor); once per distinct refusal.
+   const why=s.error?.code==='guard-refused'?s.error.message:'';if(why&&why!==refused)notify(why);refused=why;
    const warn=s.pending>0||s.status==='saving'||s.status==='error'||s.error?.code==='conflict-unsaved';
    if(warn&&!protecting)addEventListener('beforeunload',protect);
    if(!warn&&protecting)removeEventListener('beforeunload',protect);
@@ -157,7 +184,7 @@
     runtime.storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
    }
   }else{
-   runtime.session=await P.session();
+   runtime.session=await P.session({gate});
    runtime.storage=runtime.session.storage;
    attachStatus(runtime.session);
   }
