@@ -1,0 +1,62 @@
+{
+ "format": "rubik-sculpt-provenance",
+ "version": 1,
+ "cut": "OP-05 P3/P4 (laboratorio)",
+ "from": {
+  "p1p2": "56c9f203709bcb201db30da54bccb54978bb469d",
+  "diagnosis": "70ff51068436da020bcab1b8c6e8cb16952e4981",
+  "base": "8e917e1a70f499a6b8dc68850c8413b7d06c5682"
+ },
+ "authorization": "Propietario 20/11/2026 tras rubik-sculpt-simulator-lab@7fbbad55 (CIERRE-P0-V5-Y-RELEVO-OP05)",
+ "fixture": "sintético propio (pirámide magenta, JPEG 64×64 generado con PIL); sin modelos de clientes",
+ "files": [
+  {
+   "path": "index.html",
+   "sha256": "01dc150b3d4b5c50c7358b7c4fd5bfdeff4965742d99ed1092f06b9f9e803d34"
+  },
+  {
+   "path": "js/asset-loader.mjs",
+   "sha256": "f8b26c7c5e976617bbdf4cf1947ffbc61fff4271b11c6dc85b89ec909068084e"
+  },
+  {
+   "path": "tests/op05-p3p4.browser.test.cjs",
+   "sha256": "a5be94a1c6797cd59af6a0e8552afdd429f06607934bac6b678c02b406c6b32a"
+  },
+  {
+   "path": "labs/sculpt/op-05/private-view-lab.mjs",
+   "sha256": "b05853a448df53e6010d1da6114f6e3f5b57252a0fdab8f9018c720d07a9a73c"
+  },
+  {
+   "path": "labs/sculpt/op-05/private-loader.mjs",
+   "sha256": "f0583c859a8797cd58e69852f1a69b3f08a34c40171cf9a454325d20857c79e8"
+  },
+  {
+   "path": "labs/sculpt/op-05/private-model-core.mjs",
+   "sha256": "4f6cac5a6996f8f29a75293d7a56c86ffc6e97b4fe54ca59d5dd5668ca3f9365"
+  },
+  {
+   "path": "labs/sculpt/op-05/p12-findings.test.mjs",
+   "sha256": "0b69dedb64d2d2e4b16870837c5919fcf181325dc7994175a245a4b6e06374ed"
+  },
+  {
+   "path": "labs/sculpt/op-05/fixtures/build-private-glb.mjs",
+   "sha256": "fa53bba75ed33ff53c220c0364185fc23ecb44d58d5da7b6fa570a73f235fc33"
+  },
+  {
+   "path": "labs/sculpt/op-05/fixtures/private-marker.jpg",
+   "sha256": "d350b4cfb3fa747b488e5722e04e31d132851b9e4dc2579cdac10fb32b926e75"
+  },
+  {
+   "path": "labs/sculpt/op-05/evidence-p3p4/00-generico-visor.webp",
+   "sha256": "5437703caa86c6c9d3085cbae548091a8b406e69365f26ad0f1879e1c1a0aacc"
+  },
+  {
+   "path": "labs/sculpt/op-05/evidence-p3p4/01-privado-visor-laboratorio.webp",
+   "sha256": "1773231910cdb8f6e9c8bf9ffb4427461b9034a17a50fb6a5601b47e2f7764aa"
+  },
+  {
+   "path": "labs/sculpt/op-05/evidence-p3p4/02-salida-deliveryShot-generica.webp",
+   "sha256": "64ebfef07f68b5f88177a72d076957d2c443ce0b0dab2523139665b7fd73790b"
+  }
+ ]
+}
