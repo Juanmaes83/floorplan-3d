@@ -12,7 +12,7 @@
       gasto lo confirma ese flujo (Render IA B2/B8, con su código de acceso). FOT-01 y CAT-IA quedan como stubs con
       contrato y prueba: sus módulos los desarrolla Claude Code 2 y este archivo no los modifica.
    Puro: sin DOM ni red. UMD: window.RubikAssistantRuntime / module.exports. */
-(function(root,factory){const K=typeof module==='object'&&module.exports?require('./assistant-contracts.js'):root.RubikAssistantContracts;const api=factory(K);if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikAssistantRuntime=api;})(typeof self!=='undefined'?self:this,function(K){
+(function(root,factory){const node=typeof module==='object'&&module.exports,K=node?require('./assistant-contracts.js'):root.RubikAssistantContracts;const api=factory(K,()=>node?require('./capability-registry.js'):root.FloorPlanCapabilities);if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikAssistantRuntime=api;})(typeof self!=='undefined'?self:this,function(K,getRegistry){
  'use strict';
  const ADAPTER_VERSION='1.0.0';
  // Fields a text provider could ever receive. Never: room/object names, free text from the project, images, location,
@@ -59,23 +59,27 @@
  // ----- CapabilitiesForAssistantV1 -----
  // env: {registry: FloorPlanCapabilities (optional), modules: {render, renderStyles, photoReform, photoReformConfigured, catalog, smartFurnishing}}
  function capabilities(env={},at=new Date().toISOString()){
-  const reg=env.registry,state=id=>(reg?.byId?.(id)||null)?.state||null;
+  // K9: el registro único decide el nivel de cada servicio; si quien llama no lo pasa, se usa el del producto (nunca un
+  // estado propio). Un módulo presente no basta: además hace falta el nivel que lo permite.
+  const reg=env.registry||getRegistry?.()||null,state=id=>(reg?.byId?.(id)||null)?.state||null,level=id=>reg?.levelOf?.(id)??null;
   const m=env.modules||{};
+  const catalogUsable=!!m.catalog&&['pilot','production'].includes(level('catalogs'));
+  const photoLevel=level('photo-reform');
   const op=(id,kind,st,extra)=>({id,kind,state:st,writes:false,preview:false,costUnknown:false,confirmation:'none',owner:'claude-code-1',...extra});
   const ops=[
    ...['list_capabilities','get_project_summary','list_rooms','get_room','get_quantities','get_budget_summary','get_layout_review','list_materials','list_objects'].map(id=>op(id,'read','available',{source:'RubikAssistantDomainTools'})),
    // CAT-04: read-only access to «Mis catálogos», the catalogue items of the same budget and the linked visual references,
    // available only where CAT-IA is loaded (module flag). No writes, no provider, no cost.
-   ...['list_catalog_products','get_placed_products','get_visual_references'].map(id=>m.catalog?op(id,'read','available',{owner:'claude-code-2',source:'CAT-04 (CatalogCapabilitiesForAssistantV1 · RubikCatalogBudget · RubikVisualReferences)'})
+   ...['list_catalog_products','get_placed_products','get_visual_references'].map(id=>catalogUsable?op(id,'read','available',{owner:'claude-code-2',source:'CAT-04 (CatalogCapabilitiesForAssistantV1 · RubikCatalogBudget · RubikVisualReferences)'})
     :op(id,'read','blocked',{owner:'claude-code-2',source:'CAT-04',reason:'«Mis catálogos» no está cargado en esta página.'})),
    op('set_room_floor_material','proposal','available',{writes:true,preview:true,confirmation:'per-action',source:'RubikAssistantProposals'}),
    op('move_object','proposal','available',{writes:true,preview:true,confirmation:'per-action',source:'RubikAssistantProposals'}),
    m.render&&state('render-ai')==='available'
     ?op('render_views','visual','available',{writes:false,preview:true,costUnknown:true,confirmation:'per-generation',source:'FloorPlanAIRender (B2/B8)',reason:'El asistente prepara la vista y el estilo; el gasto lo confirma el diálogo de Render IA con el código de acceso del estudio.'})
     :op('render_views','visual','blocked',{costUnknown:true,confirmation:'per-generation',reason:'Render IA no está disponible en esta página.',source:'FloorPlanAIRender (B2/B8)'}),
-   op('photo_reform','visual',m.photoReform?(m.photoReformConfigured?'validation':'blocked'):'preparation',{costUnknown:true,confirmation:'per-generation',owner:'claude-code-2',source:'RubikPhotoReform (FOT-01)',
+   op('photo_reform','visual',m.photoReform?(photoLevel==='production'?'available':m.photoReformConfigured?'validation':'blocked'):'preparation',{costUnknown:true,confirmation:'per-generation',owner:'claude-code-2',source:'RubikPhotoReform (FOT-01)',
     reason:m.photoReform?(m.photoReformConfigured?'Proveedor configurado pendiente de validación.':'FOT-01 está en master sin proveedor autorizado: solo el simulador rotulado.'):'FOT-01 no está cargado en esta página.'}),
-   op('catalog_products','read',m.catalog?'available':'blocked',{owner:'claude-code-2',source:'CAT-IA (CatalogCapabilitiesForAssistantV1)',reason:m.catalog?'Lectura de Mis catálogos, de sus partidas en Presupuestar y de las referencias visuales vinculadas; el precio se aplica solo en Presupuestar con confirmación.':'«Mis catálogos» no está cargado en esta página.'}),
+   op('catalog_products','read',catalogUsable?'available':'blocked',{owner:'claude-code-2',source:'CAT-IA (CatalogCapabilitiesForAssistantV1)',reason:catalogUsable?'Lectura de Mis catálogos, de sus partidas en Presupuestar y de las referencias visuales vinculadas; el precio se aplica solo en Presupuestar con confirmación.':'«Mis catálogos» no está cargado en esta página.'}),
    op('photo_to_furniture_3d','advanced','preparation',{costUnknown:true,source:'MUE-02',reason:'MUE-02 no está aprobado ni implementado.'}),
    op('generate_layout','advanced','preparation',{costUnknown:true,source:'GEN-01',reason:'GEN-01 no está aprobado ni implementado.'}),
    op('optimize_layout','advanced','preparation',{costUnknown:true,source:'GEN-01',reason:'Requiere criterios y pruebas propios (GEN-01).'})

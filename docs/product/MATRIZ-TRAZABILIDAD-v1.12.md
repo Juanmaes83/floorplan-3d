@@ -52,11 +52,12 @@
 |---|---|
 | `RV` Resuelto y validado | 20 |
 | `RL` Integrado con límites de alcance | 11 |
+| `PV` Implementado, pendiente de validación | 2 |
 | `SU` Objetivo superado por otra solución | 2 |
 | `EX` Experimental o laboratorio | 5 |
 | `SI` Simulado | 6 |
 | `PA` Parcialmente desarrollado | 22 |
-| `IR` Infraestructura reutilizable, sin función específica | 10 |
+| `IR` Infraestructura reutilizable, sin función específica | 8 |
 | `ND` No desarrollado | 18 |
 | `DX` Depende de una decisión externa | 3 |
 | `RD` Redundante o candidato a descarte | 1 |
@@ -97,7 +98,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | GOV-09a | Acreditar el modelo antes del Promote | — (superada) | `SU` | [H] catálogo v1.3: desviación cronológica | Sustituida por GOV-09b | P2 | — | — | Cerrado por sustitución | A |
 | GOV-09b | Confirmar modelo en el registro de Production | E | `RV` | [H] log `rubik-render` del 09/11 | Una ejecución real | P2 | — | — | Cerrado | A |
 | GOV-02 | Cerrar o archivar PR obsoletas | N | `RV` | [H] [archivo de 21 PR](../auditorias/archivo-21-pr-2026-11-17.md): 0 PR obsoletas abiertas el 17/11; [I] las 9 abiertas el 18/11 son trabajo activo | Higiene puntual cumplida; pasa a regla del protocolo | P4 | — (regla permanente del protocolo) | — | Cerrado | A |
-| GOV-03 | Registro único de capacidades | P | `PA` | [I] `js/capability-registry.js`; [E] `tests/capability-registry.test.cjs` 8/8; sello `VERIFIED_AT=40b4ae5` servido por la URL pública | Solo lo usa la Home | P4 | CON: que la Home, el Asistente y la matriz lean el mismo registro; sello por despliegue | — | Cada capacidad anunciada tiene estado, SHA y prueba en un solo registro | B |
+| GOV-03 | Registro único de capacidades | P | `PA` | [I] `js/capability-registry.js`; [E] `tests/capability-registry.test.cjs` 8/8; sello `VERIFIED_AT=40b4ae5` servido por la URL pública; [V] corte K9 en la rama `claude/k9-capability-registry` (pendiente de integración: no cambia este estado), ver [K9](K9-REGISTRO-UNICO-CAPACIDADES.md) | En master solo lo usa la Home; K9 conecta Home, Asistente y matriz | P4 | CON: que la Home, el Asistente y la matriz lean el mismo registro; sello por despliegue | — | Cada capacidad anunciada tiene estado, SHA y prueba en un solo registro | B |
 | GOV-04 | Documentación de la rama de preparación a master | R | `RV` | [H] #192, #241, #243 fusionadas | Documentos de gobierno en master | P4 | — | — | Cerrado | A |
 | GOV-05 | Revisión jurídica y privacidad | R (borrador) | `DX` | [H] #161 conservada como material de partida | Ninguna revisión profesional | P3 | DJ: contratar asesor; condiciones, retención, licencias, consentimientos de imagen y personas | Propietario | Dictamen firmado y textos legales publicados | B |
 | GOV-06a | Autenticación y cuotas por profesional | N | `PA` | [I] master: `api/_share-auth.js` (código compartido), `api/_spend-ledger.js` (libro atómico); [H] #258 `56e6777`: `api/_beta-controls.js` con identidad por tester (huella SHA-256), cuotas y tope común solo en Preview | No hay cuentas, sesiones, roles ni CSRF | P3 | AMP: de tester en variable de entorno a cuenta de profesional; sesiones, roles, CSRF, cuota durable | GOV-05 | Cuenta individual con cuota y gasto propios en Production, con pruebas adversarias | B |
@@ -201,9 +202,9 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | UX-11 | Acabado de pared desde el 3D | P | `PA` | [I] el acabado de paredes se elige por estancia desde el panel (`index.html:1791`, `FloorPlanSurfaceUI.open`); la selección 3D (`index.html:4138`) devuelve estancia, puerta o mueble, nunca un muro | Sin entrada desde el 3D; sin acabado por pared individual | P4 | CON: selección 3D de muro hacia el diálogo existente; AMP de modelo para la pared de acento | UX-03 | Doble clic en una pared del 3D abre su acabado, con deshacer | C |
 | UX-12 | Amueblar por estancia | N | `EX` | [I] `js/smart-furnishing-core.js`; [T] `tests/smart-furnishing*` | Experimental; biblioteca sin licencias amplias | P7 | VP + AMP con BIB-01 | BIB-01 | Aceptación visual con profesionales | C |
 | UX-13 | Recetas de estilo | P | `EX` | [H] #226 vía #228 | Experimental | P7 | VP | UX-12 | Igual que UX-12 | C |
-| UX-24 | Sugerir el tipo de estancia | N | `IR` | [I] dos heurísticas nombre→tipo duplicadas: `js/nav3d-core.js:13` y `js/presentation-living-drawing-core.js:28`; selector de tipo en el editor (`index.html:1771`) | La heurística existe pero no se ofrece al profesional | P4 | CON: unificar la heurística en `project-core` y ofrecerla como sugerencia aceptable | — | Sugerencia aceptable con deshacer y una sola heurística | B |
+| UX-24 | Sugerir el tipo de estancia | N | `PV` | [I] K4 (#280, `070dbe8a`, árbol `6dddcd91`): heurística única en `js/project-core.js` (`suggestRoomFamily`), usada por NAV3D y Dibujo vivo; sugerencia aceptable en el panel de estancia; [T] `tests/k4-room-type.test.cjs`, `tests/k4-room-type.browser.test.cjs` | Integrado; sin validación independiente ni Production | P4 | VAL: validación independiente y despliegue | — | Sugerencia aceptable con deshacer y una sola heurística | B |
 | UX-10 | Píldora de inspección | P | `IR` | [I] el editor no muestra información bajo el cursor: `pointermove` de `index.html:2083` solo gestiona desplazamiento y pellizco; el mapa de entrega pone el nombre de estancia como tooltip (`js/delivery-client.js:149`) | Los datos existen en los paneles de UX-03 | P4 | UI: mostrar al pasar el cursor los datos que ya calcula el panel | UX-03 | Píldora con los datos del panel, sin seleccionar | C |
-| UX-26 | Intercambiar usos de estancias | N | `IR` | [I] nombre y tipo ya son editables por estancia | Se logra hoy editando dos estancias | P4 | UI pequeño, dentro del corte de UX-24 | UX-24 | Acción única con deshacer | C |
+| UX-26 | Intercambiar usos de estancias | N | `PV` | [I] K4 (#280): `swapRoomUses` en `js/project-core.js` y «Intercambiar uso» en el panel de estancia, un solo paso con deshacer; [T] mismas pruebas que UX-24 | Integrado; solo nombre y tipo, sin validación independiente ni Production | P4 | VAL: validación independiente y despliegue | UX-24 | Acción única con deshacer | C |
 | UX-21 | Panel de sol | P | `PA` | [I] `js/solar-ui.js`, `js/solar-core.js` | — | P5 | UI | — | — | C |
 | LUZ-01 | Iluminación ambiental | N | `IR` | [I] modo noche, hora y grupos de luminarias en `index.html`; puntos de techo en R02-A (`js/r02a-ceiling-*`) | Sin plan de iluminación | P5 | CON: luminarias R02-A + modo noche. Sin lux (K9) | R02-A | Plan visual rotulado «sin cálculo» | D |
 | UX-14 | Move Rooms topológico | N | `ND` | — | — | P7 | INV | Solver | — | D |

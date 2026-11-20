@@ -104,6 +104,8 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 .panel-body .form{margin-top:4px}
 .panel-view form{padding:4px 16px 0}
 .panel-group{border-bottom:1px solid var(--line);padding:6px 0}.panel-group:last-child{border-bottom:0}
+.room-suggest{margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-left:4px solid var(--info);border-radius:8px;background:var(--surface-sunken)}.room-suggest p{margin:0 0 8px}#panel .room-suggest .btn,#panel .room-swap .btn{min-height:44px}
+.room-swap .muted{margin:6px 0}
 details.panel-group>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:40px;display:flex;align-items:center;gap:8px;list-style:none}
 details.panel-group>summary::-webkit-details-marker{display:none}
 details.panel-group>summary::before{content:'▸';color:var(--muted);transition:transform .15s}details.panel-group[open]>summary::before{transform:rotate(90deg)}
@@ -173,6 +175,9 @@ kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ec
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .stats div{background:var(--surface-sunken,#faf6ef);border-radius:8px;padding:8px}
 .stats small{display:block;color:var(--muted);font-size:11px}
+.wall-faces{margin-top:10px}.wall-faces-title{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--ink,inherit)}
+.wall-faces-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.wall-faces-stats .big{white-space:nowrap;font-variant-numeric:tabular-nums}.wall-faces-why{margin:6px 0;font-size:12px}
+#panel .wall-faces .btn{min-height:44px}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
   padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
 #toast.show{opacity:1;transform:translateX(-50%)}
@@ -966,7 +971,6 @@ function translateEs(zh, en){
   if (ES_TEXT[en]) return ES_TEXT[en];
   let m;
   if ((m=en.match(/^Net floor area ≈ (.+) m² · Units: mm(?: · Original scale (1:\d+))?$/))) return `Superficie útil aprox. ${m[1]} m² · Unidades: mm${m[2]?' · Escala original '+m[2]:''}`;
-  if ((m=en.match(/^Wall area \(2\.8m ceiling, openings not deducted\) ≈ (.+) m²$/))) return `Superficie de muros aprox. ${m[1]} m² (altura: 2,8 m; sin descontar puertas ni ventanas)`;
   if ((m=en.match(/^(\d+) items$/))) return `${m[1]} elementos`;
   if ((m=en.match(/^Remove all (\d+) furniture \/ appliance items\?\nWalls, flooring and measurements are kept\. You can Undo this\.$/))) return `¿Retirar los ${m[1]} muebles o electrodomésticos?\nSe conservan los muros, pavimentos y mediciones. Puedes deshacerlo.`;
   if ((m=en.match(/^Added "(.+)" (\d+)×(\d+)$/))) return `Añadido «${m[1]}» ${m[2]}×${m[3]}`;
@@ -1783,6 +1787,61 @@ function wallPanel(w){
     <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
 }
 function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
+// UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
+// está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
+function roomSuggestionOf(source){
+  if(!source||Core.roomFamily(source)!=='unspecified')return null;
+  const s=Core.suggestRoomFamily(source,Core.roomObjects(project,source));
+  if(!s||!Core.roomFamilies.includes(s.family))return null;
+  const why=s.source==='contents'?`porque contiene «${nm(s.object.name||s.object.type)}»`:`por su nombre «${roomDisplay(source)}»`;
+  return {family:s.family,label:familyLabel(s.family),why};
+}
+function roomSuggestion(source){
+  const s=roomSuggestionOf(source);if(!s)return '';
+  return `<div class="room-suggest" role="status" aria-live="polite"><p><b>Sugerencia:</b> ${esc(s.label)}, ${esc(s.why)}.</p><button type="button" class="btn" id="rSuggest" data-family="${esc(s.family)}">Usar «${esc(s.label)}»</button></div>`;
+}
+// UX-26 · Intercambiar solo el uso (nombre y tipo) con otra estancia; un único paso que se deshace con Ctrl+Z o ↶.
+function roomSwapGroup(source){
+  const others=project.rooms.filter(q=>q.id!==source?.id);if(!source||!others.length)return '';
+  const opts=others.map(q=>`<option value="${esc(q.id)}">${esc(roomDisplay(q))}</option>`).join('');
+  return `<details class="panel-group room-swap" data-group="room-swap"><summary>Intercambiar uso</summary>
+    <div class="form"><label class="full" for="rSwapWith">Con la estancia</label><select id="rSwapWith"><option value="">Elige una estancia…</option>${opts}</select></div>
+    <p class="muted">Solo se intercambian el nombre y el tipo. Muebles, acabados, puertas y medidas se quedan donde están.</p>
+    <div class="actions"><button type="button" class="btn" id="rSwap" disabled>Intercambiar uso</button></div></details>`;
+}
+/* UX-03 · Paredes de la estancia: la cara interior que da a la estancia seleccionada, con la autoridad única de
+   FloorPlanQuantities (quantity-core): tramo real de cada muro, su altura real y la unión de sus huecos. Es la misma
+   cifra que la fila de la estancia en «Cantidades del proyecto» (Presupuestar). Nada se estima aquí: si no se puede
+   calcular, se dice por qué y cómo resolverlo. */
+const L3=(es,en,zh)=>LANG==='en'?en:LANG==='zh'?zh:es;
+function wallFaceArea(v){const round=window.FloorPlanQuantitySchedule?.round||((n,d=2)=>Math.round(n*10**d)/10**d);return v===null||v===undefined||!Number.isFinite(v)?'—':round(v).toLocaleString(LANG==='en'?'en-GB':'es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function roomWallFaces(id){try{return window.FloorPlanQuantities?.room(project,id)?.wallFaces??null;}catch{return null;}}
+function roomWallFacesBlock(id){
+  const f=roomWallFaces(id),head=`<h4 class="wall-faces-title">${L3('Paredes de la estancia · cara interior','Room walls · inner face','房间墙面 · 室内面')}</h4>`;
+  if(!f)return `<section class="wall-faces" data-wall-faces="unavailable" role="note">${head}<p class="muted">${L3('No se puede calcular: el motor de cantidades no está disponible en esta página.','Cannot be calculated: the quantity engine is not available on this page.','无法计算：此页面未加载工程量引擎。')}</p></section>`;
+  const why={
+   'invalid-room-polygon':[L3('El contorno de la estancia no es válido.','The room outline is not valid.','房间轮廓无效。'),L3('Redibuja la estancia con «Modificar paredes».','Redraw the room with «Edit walls».','用“修改墙体”重新绘制房间。')],
+   'room-wall-association-not-demonstrable':[L3('Ningún muro coincide con el contorno de la estancia.','No wall matches the room outline.','没有墙与房间轮廓重合。'),L3('Dibuja sus muros o ajusta el contorno a la cara de los muros.','Draw its walls or align the outline to the wall faces.','绘制墙体，或将轮廓对齐到墙面。')],
+   'ambiguous-wall-face-association':[L3('Dos muros ocupan el mismo tramo del contorno.','Two walls share the same stretch of the outline.','两面墙占用了轮廓的同一段。'),L3('Revisa los muros superpuestos con «Modificar paredes».','Check the overlapping walls with «Edit walls».','用“修改墙体”检查重叠的墙。')],
+   'invalid-wall-geometry':[L3('Un muro de la estancia no tiene una altura válida.','A wall of this room has no valid height.','该房间有一面墙的高度无效。'),L3('Abre el muro y corrige su altura.','Open the wall and correct its height.','打开该墙并修正高度。')],
+   'invalid-opening-geometry':[L3('Un hueco se sale de su muro o tiene medidas no válidas.','An opening exceeds its wall or has invalid dimensions.','有门窗超出墙体或尺寸无效。'),L3('Abre el muro y corrige la posición o el tamaño del hueco.','Open the wall and correct the opening position or size.','打开该墙并修正门窗的位置或尺寸。')]};
+  // quantity-core da una sola «reason» (la apertura del contorno tiene prioridad); los tramos y openingsComplete dicen
+  // si además falla una altura o un hueco, para no ocultar la causa que hay que corregir.
+  const heightBad=(f.segments||[]).some(s=>s.reason==='invalid-wall-geometry'),code=f.reason==='partial-room-wall-association'?(heightBad?'invalid-wall-geometry':f.openingsComplete===false&&f.segments?.length?'invalid-opening-geometry':null):f.reason;
+  const geometryOk=!heightBad&&f.status!=='unavailable';
+  const gross=geometryOk?f.grossAreaM2:null,opening=f.openingAreaM2,net=f.netAreaM2;
+  const stat=(key,label,v)=>`<div data-wall-face="${key}"><small>${label} · m²</small><span class="big">${wallFaceArea(v)}</span></div>`;
+  const notes=[];
+  if(f.status==='estimated')notes.push(L3('Escala sin calibrar con una medida conocida: cifras estimadas.','Scale not calibrated with a known measurement: estimated figures.','比例尺未用已知尺寸校准：数值为估算。'));
+  const reason=code?why[code]:null;
+  if(f.reason==='partial-room-wall-association'||(f.missingBoundaryM>0&&!f.associationComplete))notes.push(L3(`${wallFaceArea(f.missingBoundaryM)} m del contorno no tienen muro (tramo abierto): no cuentan.`,`${wallFaceArea(f.missingBoundaryM)} m of the outline have no wall (open stretch): not counted.`,`轮廓中有 ${wallFaceArea(f.missingBoundaryM)} m 没有墙（开放段）：不计入。`));
+  const bad=[...new Set((f.segments||[]).filter(s=>s.complete===false).map(s=>s.wallId))].slice(0,4);
+  const fix=reason?`<p class="wall-faces-why" data-wall-faces-reason="${esc(code)}"><b>${L3('No se puede calcular del todo','Cannot be fully calculated','无法完整计算')}:</b> ${reason[0]} ${reason[1]}</p>${bad.length?`<div class="actions">${bad.map((w,i)=>`<button class="btn" data-wall-fix="${esc(w)}">${L3('Abrir muro','Open wall','打开墙')}${bad.length>1?' '+(i+1):''}</button>`).join('')}</div>`:''}`:'';
+  return `<section class="wall-faces" data-wall-faces="${esc(f.complete?'complete':'incomplete')}">${head}
+    <div class="stats wall-faces-stats">${stat('gross',L3('Bruta','Gross','毛面积'),gross)}${stat('openings',L3('Huecos','Openings','门窗'),opening)}${stat('net',L3('Neta','Net','净面积'),net)}</div>
+    <p class="muted">${L3('Altura real de cada muro y huecos descontados. Es la misma cifra de «Cantidades del proyecto» en Presupuestar.','Real height of each wall, openings deducted. Same figure as «Project quantities» in Budget.','按每面墙的实际高度并扣除门窗，与“预算”中“项目工程量”的数值一致。')}</p>
+    ${notes.map(n=>`<p class="muted">${n}</p>`).join('')}${fix}</section>`;
+}
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
@@ -1791,13 +1850,14 @@ function roomPanel(r){
   const familyOptions=Core.roomFamilies.map(value=>`<option value="${value}" ${family===value?'selected':''}>${esc(familyTypeLabel(value))}</option>`).join('');
   return `<div class="panel-view room-panel">${panelHead({title:roomDisplay(source), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
   <details class="panel-group" data-group="room-data" open><summary>Datos de la estancia</summary>
-    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>
+    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>${roomSuggestion(source)}
     <div class="stats" style="margin-top:10px">
       <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
       <div><small>${tr('周长','Perimeter')}</small><span class="big">${fmt(perim(r.poly),1)}</span> m</div>
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
-    <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></details>
+    ${roomWallFacesBlock(r.id)}</details>
+${roomSwapGroup(source)}
   <details class="panel-group" data-group="room-openings" open><summary>Puertas y ventanas</summary><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></details>
   <details class="panel-group" data-group="room-dimensions" open><summary>Dimensiones</summary><button class="btn" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></details>
   <details class="panel-group" data-group="room-finishes" open><summary>Suelo y paredes</summary><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
@@ -1812,9 +1872,16 @@ function bindRoomPanel(){
   FloorPlanSurfaceUI.describe(id,$('#surfaceRoomStatus'));
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
+  document.querySelectorAll('#panel [data-wall-fix]').forEach(b => b.onclick = () => select({kind:'wall', id:b.dataset.wallFix}));
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
   $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
   $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});toast(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,4000);};
+  const swapWith=$('#rSwapWith'),swap=$('#rSwap');
+  if(swapWith){swapWith.onchange=()=>{swap.disabled=!swapWith.value;};
+    swap.onclick=()=>{const other=swapWith.value;if(!other)return;const before=undoStack.length;
+      mutate(()=>{project=Core.swapRoomUses(project,id,other);});
+      if(undoStack.length>before)toast(`Uso intercambiado con «${roomDisplay(project.rooms.find(q=>q.id===other))}». Los muebles y acabados no se han movido. Puedes deshacerlo con Ctrl+Z o ↶.`,5000);};}
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
   $('#back').onclick = () => select(null);
