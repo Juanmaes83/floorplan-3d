@@ -99,10 +99,18 @@
    es:['El trabajo cambió desde que se preparó (geometría, imágenes o documentos).','Prepara un candidato nuevo.','El candidato anterior se conserva como referencia y no se modifica.','No se ha borrado nada.'],
    en:['The work changed since it was prepared (geometry, images or documents).','Prepare a new candidate.','The previous candidate is kept for reference and not modified.','Nothing was deleted.'],
    zh:['自准备以来作品已更改（几何、图片或文档）。','请准备新的候选。','之前的候选保留作参考，未被修改。','未删除任何内容。']},
-  'desactualizado-externo':{
-   es:['Cambió algo que la entrega usa y que el expediente no incluye (firma, plan de obra o variantes).','Prepara un candidato nuevo.','El candidato anterior se conserva como referencia y no se modifica.','No se ha borrado nada.'],
-   en:['Something the delivery uses and the project file does not include changed (signature, works plan or variants).','Prepare a new candidate.','The previous candidate is kept for reference and not modified.','Nothing was deleted.'],
-   zh:['交付使用但项目档案未包含的内容已更改（签名、施工计划或变体）。','请准备新的候选。','之前的候选保留作参考，未被修改。','未删除任何内容。']},
+  'desactualizado-fuente':{
+   es:['Cambió una fuente que esta entrega usa y que el expediente no identifica (vistas 3D, firma, plan de obra o variantes).','Prepara un candidato nuevo.','El candidato anterior se conserva como referencia y no se modifica.','No se ha borrado nada.'],
+   en:['A source this delivery uses and the project file does not identify has changed (3D views, signature, works plan or variants).','Prepare a new candidate.','The previous candidate is kept for reference and not modified.','Nothing was deleted.'],
+   zh:['此交付使用、但项目档案未标识的来源已更改（三维视图、签名、施工计划或变体）。','请准备新的候选。','之前的候选保留作参考，未被修改。','未删除任何内容。']},
+  'fuente-no-comprobable':{
+   es:['Una fuente que esta entrega usa no se puede comprobar ahora (por ejemplo, vistas sin preparar o firma no disponible).','Vuelve a preparar esa fuente en RUBIK y verifica de nuevo.','Elige una receta que no dependa de esa fuente.','El candidato sigue «preparado»; no se da por vigente.'],
+   en:['A source this delivery uses cannot be checked now (for example, views not prepared or signature unavailable).','Prepare that source again in RUBIK and verify again.','Choose a recipe that does not depend on that source.','The candidate stays «prepared»; it is not taken as current.'],
+   zh:['此交付使用的某个来源目前无法核验（例如视图未准备或签名不可用）。','在 RUBIK 中重新准备该来源后再次验证。','选择不依赖该来源的配方。','候选保持“已准备”，不视为有效。']},
+  'desactualizado-catalogo':{
+   es:['Las reglas del catálogo de recetas cambiaron desde que se preparó.','Prepara un candidato nuevo con las reglas actuales.','El candidato anterior se conserva como referencia.','No se ha borrado nada.'],
+   en:['The recipe catalogue rules changed since it was prepared.','Prepare a new candidate with the current rules.','The previous candidate is kept for reference.','Nothing was deleted.'],
+   zh:['自准备以来配方目录规则已更改。','请按当前规则准备新的候选。','之前的候选保留作参考。','未删除任何内容。']},
   'invalido-alterado':{
    es:['El candidato no coincide con su propia huella: está alterado.','Descártalo y prepara uno nuevo.','—','No se usa ningún dato alterado.'],
    en:['The candidate does not match its own fingerprint: it was altered.','Discard it and prepare a new one.','—','No altered data is used.'],
@@ -115,6 +123,34 @@
    es:['Falta la autoridad del expediente (contentId) en esta página.','Carga js/expediente-core.js en el editor (parte del enganche E3).','Las demás tarjetas de Entregar siguen funcionando.','No se ha calculado ninguna identidad alternativa ni se ha escrito nada.'],
    en:['The project-file authority (contentId) is missing on this page.','Load js/expediente-core.js in the editor (part of the E3 hook).','The other Deliver cards keep working.','No alternative identity was computed and nothing was written.'],
    zh:['此页面缺少项目档案权威（contentId）。','在编辑器中加载 js/expediente-core.js（E3 挂接的一部分）。','“交付”的其他卡片仍可使用。','未计算任何替代身份，也未写入任何内容。']},
+  'invalido-incoherente':{
+   es:['La composición no coincide con lo que se congeló (receta, selección, fuentes o identidades).','Descártalo y prepara uno nuevo.','—','No se muestra ninguna composición incoherente como verificada.'],
+   en:['The composition does not match what was frozen (recipe, selection, sources or identities).','Discard it and prepare a new one.','—','No inconsistent composition is shown as verified.'],
+   zh:['组成与冻结内容不一致（配方、选择、来源或身份）。','丢弃后重新准备。','—','不会将不一致的组成显示为已验证。']},
+  'documento-corrupto':{
+   es:['Un documento confirmado del proyecto (biblioteca, presupuestos u observaciones) no se puede leer.','Abre el proyecto en el editor; si persiste, exporta el expediente y avisa a soporte.','Las demás tarjetas de Entregar siguen disponibles.','No se ha reparado ni reescrito nada.'],
+   en:['A confirmed project document (library, budgets or observations) cannot be read.','Open the project in the editor; if it persists, export the project file and contact support.','The other Deliver cards remain available.','Nothing was repaired or rewritten.'],
+   zh:['某个已确认的项目文档（项目库、预算或意见）无法读取。','在编辑器中打开项目；如仍有问题，请导出项目档案并联系支持。','“交付”的其他卡片仍可使用。','未修复或改写任何内容。']},
+  'imagen-sin-bytes':{
+   es:['Una imagen del proyecto está referenciada, pero sus bytes no están en este navegador.','Vuelve a importar la imagen o restaura el expediente que la contiene.','Elimina la imagen del proyecto si ya no la necesitas.','No se acredita ninguna foto sin sus bytes.'],
+   en:['A project image is referenced, but its bytes are not in this browser.','Import the image again or restore the project file that contains it.','Remove the image from the project if you no longer need it.','No photo is credited without its bytes.'],
+   zh:['项目引用了某张图片，但其字节不在此浏览器中。','重新导入该图片，或恢复包含它的项目档案。','如不再需要，请从项目中移除该图片。','没有字节的照片不予认可。']},
+  'imagen-alterada':{
+   es:['Los bytes de una imagen no coinciden con la huella del proyecto.','Vuelve a importar la imagen original.','Restaura el expediente que contiene la imagen correcta.','No se acredita ninguna imagen alterada.'],
+   en:['The bytes of an image do not match the project fingerprint.','Import the original image again.','Restore the project file that contains the correct image.','No altered image is credited.'],
+   zh:['某张图片的字节与项目指纹不符。','重新导入原始图片。','恢复包含正确图片的项目档案。','不认可任何被篡改的图片。']},
+  'imagen-no-comprobable':{
+   es:['No se pudieron leer las imágenes del proyecto en este momento.','Vuelve a intentarlo; si persiste, recarga RUBIK.','—','No se ha abierto ni creado ningún almacén de imágenes.'],
+   en:['The project images could not be read right now.','Try again; if it persists, reload RUBIK.','—','No image store was opened or created.'],
+   zh:['目前无法读取项目图片。','请重试；如仍有问题，请重新加载 RUBIK。','—','未打开或创建任何图片存储。']},
+  'recurso-cambiado':{
+   es:['Un recurso cambió o desapareció mientras se preparaba.','Vuelve a preparar la entrega.','—','La preparación se ha descartado sin guardar nada.'],
+   en:['A resource changed or disappeared while preparing.','Prepare the delivery again.','—','The preparation was discarded without saving anything.'],
+   zh:['准备期间某个资源已更改或消失。','请重新准备交付。','—','准备已丢弃，未保存任何内容。']},
+  'error-inesperado':{
+   es:['Ha ocurrido un error inesperado.','Vuelve a leer o cierra y abre «Preparar entrega».','Las demás tarjetas de Entregar siguen disponibles.','No se ha escrito nada.'],
+   en:['An unexpected error occurred.','Read again, or close and reopen «Prepare delivery».','The other Deliver cards remain available.','Nothing was written.'],
+   zh:['发生意外错误。','重新读取，或关闭后重新打开“准备交付”。','“交付”的其他卡片仍可使用。','未写入任何内容。']},
   'sin-verificar':{
    es:['No se puede verificar ahora: falta la revisión confirmada.','Resuelve el aviso de lectura y vuelve a verificar.','—','El candidato sigue «preparado».'],
    en:['It cannot be verified now: the confirmed revision is missing.','Resolve the read notice and verify again.','—','The candidate stays «prepared».'],
@@ -134,7 +170,14 @@
   fuera:{es:'Fuera de E3 (obra, comercial o F1)',en:'Outside E3 (works, commercial or F1)',zh:'超出 E3 范围（施工、商务或 F1）'},
   'sin-dato':{es:'Aún no hay datos en el proyecto confirmado',en:'No data yet in the confirmed project',zh:'已确认项目中尚无数据'},
   'sin-motor':{es:'El motor no está cargado en esta página',en:'The engine is not loaded on this page',zh:'此页面未加载该引擎'},
-  'cambios':{es:'Hay cambios sin guardar: no se acredita',en:'There are unsaved changes: not credited',zh:'存在未保存的更改：不予认可'}
+  'cambios':{es:'Hay cambios sin guardar: no se acredita',en:'There are unsaved changes: not credited',zh:'存在未保存的更改：不予认可'},
+  'presupuesto-sin-vinculo':{es:'Presupuesto válido del mismo proyecto; no consta que sus cantidades se calcularan sobre esta geometría',en:'Valid budget of the same project; there is no record that its quantities were computed on this geometry',zh:'同一项目的有效预算；没有记录表明其数量基于当前几何计算'},
+  'documento-invalido':{es:'El documento no supera la validación de RUBIK',en:'The document does not pass RUBIK validation',zh:'该文档未通过 RUBIK 校验'},
+  'motor-error':{es:'El motor falló al calcular con este proyecto',en:'The engine failed with this project',zh:'引擎基于此项目计算失败'},
+  'motor-sin-resultado':{es:'El motor no da resultado para este proyecto',en:'The engine gives no result for this project',zh:'引擎对此项目没有结果'},
+  'imagen-sin-bytes':{es:'Imagen referenciada sin bytes en este navegador',en:'Referenced image without bytes in this browser',zh:'引用的图片在此浏览器中没有字节'},
+  'imagen-alterada':{es:'Los bytes no coinciden con la huella declarada',en:'Bytes do not match the declared fingerprint',zh:'字节与声明的指纹不符'},
+  'imagen-no-comprobable':{es:'No se pudieron comprobar los bytes',en:'The bytes could not be checked',zh:'无法核验字节'}
  };
  function texto(code,lang){
   const e=T[code];if(!e)throw new Error('Texto E3 desconocido: '+code);
@@ -157,48 +200,106 @@
   // Copia desprendida: lo leído no se comparte con la sesión del editor.
   return {estado:'confirmado',revision:r.revision,docs:new Map([...r.docs].filter(([k])=>Object.values(KEYS).includes(k))),lectura:'FloorPlanPersistence.readConfirmed'};
  }
- // Desglose de la lectura confirmada con las autoridades del producto (Core.prepare valida; no migra ni escribe).
- function analizar(lectura,{Core}={}){
+ // Desglose de la lectura confirmada con las autoridades del producto (Core.prepare valida; Budget.parseBudget valida el
+ // presupuesto). No migra ni escribe. Un documento ilegible NO se trata como vacío: se declara corrupto.
+ function analizar(lectura,{Core,Budget}={}){
   if(!lectura||lectura.estado!=='confirmado')return {ok:false,motivo:lectura?.motivo||'c1-error'};
+  const has=k=>lectura.docs.has(k)&&lectura.docs.get(k)!=null;
   // Con F0.2b el proyecto abierto vive en la biblioteca confirmada (entrada activa: {project} o {kind:'building'}).
   // La clave suelta del proyecto solo se usa si no hay biblioteca (estado heredado).
-  const lib0=parse(lectura.docs.get(KEYS.library));const act=Array.isArray(lib0?.entries)?lib0.entries.find(e=>e.id===lib0.activeId):null;
-  if(act&&act.kind==='building')return {ok:false,motivo:'edificio'};
-  const raw=act&&act.project?JSON.stringify(act.project):lib0?null:lectura.docs.get(KEYS.project);const p0=parse(raw);
+  const lib=parse(lectura.docs.get(KEYS.library));
+  if(has(KEYS.library)&&(lib===undefined||lib===null||!Array.isArray(lib.entries)))return {ok:false,motivo:'documento-corrupto',detalle:KEYS.library};
+  const entries=lib?lib.entries:[];const entry=entries.find(e=>e.id===lib?.activeId)||null;
+  if(entry&&entry.kind==='building')return {ok:false,motivo:'edificio'};
+  const raw=entry&&entry.project?JSON.stringify(entry.project):lib?null:lectura.docs.get(KEYS.project);const p0=parse(raw);
+  if(raw!=null&&p0===undefined)return {ok:false,motivo:'documento-corrupto',detalle:KEYS.project};
   if(!p0)return {ok:false,motivo:'c1-sin-revision'};
   if(p0.schema==='rubik-sota.floorplan-building')return {ok:false,motivo:'edificio'};
   let project=p0;
   if(Core&&typeof Core.prepare==='function'){try{project=Core.prepare(raw).project;}catch(e){return {ok:false,motivo:'proyecto-invalido',detalle:e.message};}}
   else if(Core&&typeof Core.validate==='function'){try{Core.validate(p0);}catch(e){return {ok:false,motivo:'proyecto-invalido',detalle:e.message};}}
   const id=project.id;
-  const budgets=parse(lectura.docs.get(KEYS.budgets))||{},reviews=parse(lectura.docs.get(KEYS.reviews))||{};
-  const lib=parse(lectura.docs.get(KEYS.library)),cons=parse(lectura.docs.get(KEYS.construction));
-  const entries=Array.isArray(lib?.entries)?lib.entries:[];
-  const entry=entries.find(e=>e.id===lib?.activeId)||null;
-  const budget=budgets[id]&&budgets[id].subject?.id===id?budgets[id]:null;// un presupuesto de otro sujeto no se acredita
-  const records=cons&&cons.records&&entry?Object.fromEntries(Object.entries(cons.records).filter(([k])=>k.startsWith(entry.id+'|'))):{};
+  // Presupuestos y observaciones entran en contentId: si su documento es ilegible, no hay identidad honesta del trabajo.
+  const budgets=parse(lectura.docs.get(KEYS.budgets)),reviews=parse(lectura.docs.get(KEYS.reviews));
+  for(const [k,v] of [[KEYS.budgets,budgets],[KEYS.reviews,reviews]])if(has(k)&&(v===undefined||v===null||typeof v!=='object'||Array.isArray(v)))return {ok:false,motivo:'documento-corrupto',detalle:k};
+  const b0=budgets?.[id];let budget=null,budgetInvalido=null;
+  if(b0!==undefined){
+   if(!b0||b0.subject?.type!=='project'||b0.subject?.id!==id)budgetInvalido='sujeto';// otro tipo de sujeto u otro id: no se acredita
+   else if(Budget&&typeof Budget.parseBudget==='function'){try{Budget.parseBudget(JSON.stringify(b0));budget=b0;}catch(e){budgetInvalido='validacion: '+e.message;}}
+   else budgetInvalido='sin-autoridad';// sin la autoridad canónica no se acredita
+  }
+  const cons=parse(lectura.docs.get(KEYS.construction));
+  const obraCorrupta=has(KEYS.construction)&&(cons===undefined||cons===null||typeof cons!=='object');
+  const records=!obraCorrupta&&cons&&cons.records&&entry?Object.fromEntries(Object.entries(cons.records).filter(([k])=>k.startsWith(entry.id+'|'))):{};
   const variantes=entry?entries.filter(e=>e.variantOf===entry.id||e.id===entry.variantOf).map(e=>({id:e.id,variantOf:e.variantOf||null})):[];
-  return {ok:true,revision:lectura.revision,project,entryId:entry?.id||null,budget,budgetAjeno:!!budgets[id]&&!budget,review:reviews[id]??null,obra:records,variantes};
+  return {ok:true,revision:lectura.revision,project,entryId:entry?.id||null,nombre:entry?.name||project.name||'',budget,budgetInvalido,budgetAjeno:budgetInvalido==='sujeto',
+   budgetDoc:b0!==undefined?b0:undefined,review:reviews?.[id]??null,obra:records,obraCorrupta,variantes};
  }
  // Cambios sin guardar: el proyecto observado frente al confirmado (comparación de contenido; no se usa la sesión).
  function cambiosSinGuardar(analisis,observado){
   if(!analisis?.ok||!observado)return true;
   return canon(observado)!==canon(analisis.project);}
 
+ // ---------------------------------------------------------------- E3-A · bytes reales de las imágenes (solo lectura)
+ /** Adaptador de solo lectura sobre FloorPlanImages (js/local-images.js). FloorPlanImages.get() abre la base con
+  *  onupgradeneeded, es decir, la CREARÍA si no existe: por eso se comprueba antes con indexedDB.databases() y, si no
+  *  existe o no se puede saber, no se abre nada. Contrato pedido a Codex: un get() sin creación (open sin upgrade). */
+ function adaptadorImagenes({indexedDB:idb,Images}={}){
+  const DBN='rubik-sota-images-v1';
+  return async function leer(ref){
+   if(!idb||typeof idb.databases!=='function'||!Images||typeof Images.get!=='function')throw Object.assign(new Error('Sin forma de comprobar la existencia del almacén de imágenes sin crearlo.'),{code:'no-comprobable'});
+   const dbs=await idb.databases();if(!dbs.some(d=>d.name===DBN))return null;// no existe: no se crea
+   const blob=await Images.get(ref);return blob?new Uint8Array(await blob.arrayBuffer()):null;};
+ }
+ /** Comprueba cada imagen con sus bytes efectivos: huella = digest(bytes) (Package.digest de project-package).
+  *  estado: sin-imagenes · ok · faltan · alteradas · no-comprobable · cancelada. */
+ async function comprobarImagenes(project,{leer,digest,signal}={}){
+  const ims=project?.sourceImages||[];if(!ims.length)return {estado:'sin-imagenes',imagenes:[],tokens:{}};
+  if(typeof leer!=='function')return {estado:'no-comprobable',imagenes:ims.map(i=>({id:i.id,estado:'no-comprobable'})),tokens:{}};
+  const out=[],tokens={};
+  for(const im of ims){
+   if(signal?.aborted)return {estado:'cancelada',imagenes:out,tokens:{}};
+   const ref=im.storage?.ref||im.id;let bytes;
+   try{bytes=await leer(ref);}catch(e){out.push({id:im.id,estado:'no-comprobable',detalle:e?.message});continue;}
+   if(signal?.aborted)return {estado:'cancelada',imagenes:out,tokens:{}};
+   if(!bytes){out.push({id:im.id,estado:'sin-bytes'});continue;}
+   const t=await digest(bytes);
+   if(t!==im.sha256){out.push({id:im.id,estado:'alterada'});continue;}
+   tokens[im.id]=t;out.push({id:im.id,estado:'ok'});
+  }
+  const any=e=>out.some(x=>x.estado===e);
+  return {estado:any('alterada')?'alteradas':any('sin-bytes')?'faltan':any('no-comprobable')?'no-comprobable':'ok',imagenes:out,tokens};
+ }
+ const MOTIVO_IMAGEN={alteradas:'imagen-alterada',faltan:'imagen-sin-bytes','no-comprobable':'imagen-no-comprobable',cancelada:'cancelada'};
+
  // ---------------------------------------------------------------- C2 · identidades separadas
- async function identidad(analisis,{X,digest,marca=null}){
+ /** contentId con la autoridad canónica (FloorPlanExpediente.contentId) y el token de cada imagen = huella de sus bytes
+  *  EFECTIVOS (comprobarImagenes), igual que contentIdOf() sobre un expediente con bytes. Sin bytes válidos no hay identidad. */
+ async function identidad(analisis,{X,digest,imagenes=null}){
   const p=analisis.project,id=p.id;
-  const docs={budgets:analisis.budget?{[id]:analisis.budget}:{},reviews:analisis.review!=null?{[id]:analisis.review}:{}};
-  // Token de imagen: la huella SHA-256 de sus bytes reales que el modelo ya guarda (sourceImages[].sha256). Sin huella → no hay trabajo identificable.
-  const contentId=await X.contentId({kind:'project',project:p},docs,im=>{if(typeof im.sha256!=='string'||!/^[0-9a-f]{64}$/.test(im.sha256))throw Object.assign(new Error('Imagen sin huella: '+im.id),{code:'image-unfingerprinted'});return im.sha256;});
-  const h=async v=>v==null?null:digest(enc.encode(canon(v)));
+  const docs={budgets:analisis.budgetDoc!==undefined?{[id]:analisis.budgetDoc}:{},reviews:analisis.review!=null?{[id]:analisis.review}:{}};
+  const img=imagenes||{estado:(p.sourceImages||[]).length?'no-comprobable':'sin-imagenes',tokens:{}};
+  if(img.estado!=='ok'&&img.estado!=='sin-imagenes')throw Object.assign(new Error('Imágenes no acreditables: '+img.estado),{code:MOTIVO_IMAGEN[img.estado]||'imagen-no-comprobable'});
+  const contentId=await X.contentId({kind:'project',project:p},docs,im=>{const t=img.tokens[im.id];if(!t)throw Object.assign(new Error('Imagen sin bytes verificados: '+im.id),{code:'imagen-no-comprobable'});return t;});
   return {
-   trabajo:{contentId,autoridad:'FloorPlanExpediente.contentId'},
+   trabajo:{contentId,autoridad:'FloorPlanExpediente.contentId (bytes efectivos)'},
    revisionLocal:{revision:analisis.revision,autoridad:'FloorPlanPersistence.readConfirmed · meta.revision'},
-   proyecto:{id,entryId:analisis.entryId},
-   externos:{marca:await h(marca),obra:await h(Object.keys(analisis.obra).length?analisis.obra:null),variantes:await h(analisis.variantes.length?analisis.variantes:null)},
+   proyecto:{id,entryId:analisis.entryId,nombre:analisis.nombre},
    paquete:null};
  }
+ /** E3-D · huella de las fuentes que el expediente no identifica, por fuente. null = no comprobable ahora. */
+ async function huellasFuentes(analisis,entorno,digest){
+  const h=async v=>v==null?null:digest(enc.encode(canon(v)));
+  const v=entorno?.vistas||{};
+  const obra=Object.keys(analisis.obra||{}).length?analisis.obra:null;
+  return {
+   vistas3d:!entorno?.cambios&&v.estado==='ready'&&v.n>0&&v.id?await h(v.id):null,
+   marca:await h(entorno?.marca||null),
+   planObra:analisis.obraCorrupta?null:await h(obra),
+   vinculoPlanPresupuesto:analisis.obraCorrupta?null:await h(obra),
+   variantesGuardadas:await h(analisis.variantes?.length?analisis.variantes:null)};
+ }
+ const SESION=['vistas3d','marca','planObra','vinculoPlanPresupuesto','variantesGuardadas'];
 
  // ---------------------------------------------------------------- matriz de las 43 fuentes contra master 130ba24
  // clase: confirmada · motor · sesion · local · consumidor-pendiente · historial · sin-fuente · aportacion · fuera
@@ -253,24 +354,43 @@
  const DISP=(motivo,dato)=>({estado:'disponible',motivo,dato:dato??null});
  const PARC=(motivo,dato)=>({estado:'parcial',motivo,dato:dato??null});
  const AUS=motivo=>({estado:'ausente',motivo,dato:null});
- /** Evalúa las 43 fuentes. entorno: {cambios:bool, motores:{superficies,dibujoVivo,recorrido,seccion}, vistas:{estado,n}, marca:obj|null}. */
+ const INV=motivo=>({estado:'invalida',motivo,dato:null});
+ // Sondas funcionales con las autoridades del producto (mismas funciones que usan sus consumidores).
+ const geo=(Core,p)=>Core&&typeof Core.geometry==='function'?Core.geometry(p):null;
+ const PROBE={
+  superficies:{mod:'Surface',run:(S,p)=>{const h=S.home(p);return Number.isFinite(h?.areaM2)&&h.areaM2>0?h.areaM2.toFixed(2)+' m² · '+h.status:null;}},
+  recorrido:{mod:'Route',run:(R,p,Core)=>{const g=geo(Core,p);if(!g)return null;const r=R.plan(p,g,p.rooms[0].id);return r?.points?.length?r.points.length+' puntos':null;}},
+  dibujoVivo:{mod:'Living',run:(L,p,Core)=>{const t=L.timeline(p,geo(Core,p));return t?.rooms?.length?t.rooms.length+' estancias':null;}},
+  seccionFachadas:{mod:'Section',run:(S,p)=>{const d=S.derive(p);return d?.supported?'sección '+(d.axis||''):null;}}};
+ /** Evalúa las 43 fuentes. entorno: {cambios, motores:{Surface,Route,Living,Section,Core}, vistas:{estado,n,id}, marca, imagenes}. */
  function evaluarFuentes(analisis,entorno={}){
   const out={};const mot=entorno.motores||{};const ok=analisis&&analisis.ok;const p=ok?analisis.project:null;
   const walls=p?.walls?.length||0,rooms=p?.rooms?.length||0;
+  const img=entorno.imagenes;
   for(const id of Object.keys(CAT.fuentes)){
    const m=MATRIZ[id];let r;
    if(!m)throw new Error('Fuente sin fila en la matriz: '+id);
    if(!ok)r=AUS('sin-dato');
+   // §8 · presupuesto: válido por FloorPlanBudget.parseBudget y del mismo sujeto. Ninguna autoridad liga sus cantidades a
+   // ESTA geometría (budget-core no guarda revisión de geometría): se acredita como parcial y se dice.
+   else if(id==='presupuesto')r=analisis.budget?PARC('presupuesto-sin-vinculo',(analisis.budget.items?.length??0)+''):analisis.budgetInvalido?INV('documento-invalido'):AUS('sin-dato');
+   // E3-A · fotos: solo con bytes efectivos que coinciden con su huella.
+   else if(id==='fotosAportadas'){const n=(p.sourceImages||[]).length;
+    r=!n?AUS('sin-dato'):!img?AUS('imagen-no-comprobable'):img.estado==='ok'?DISP('confirmada',String(n)):img.estado==='alteradas'?INV('imagen-alterada'):img.estado==='faltan'?AUS('imagen-sin-bytes'):AUS('imagen-no-comprobable');}
    else switch(m.clase){
     case 'confirmada':{
      const d={geometria:walls&&rooms?`${walls}·${p.openings?.length||0}·${rooms}`:null,materiales:p.materials?.length||null,objetos:p.objects?.length||null,
       presupuesto:analisis.budget?(analisis.budget.items?.length??0)+'':null,dimensionesHuecos:(p.openings||[]).filter(o=>o.widthMm>0&&o.heightMm>0).length||null,
       fotosAportadas:(p.sourceImages||[]).filter(i=>/^[0-9a-f]{64}$/.test(i.sha256||'')).length||null,norte:Number.isFinite(p.site?.northOffsetDeg)?p.site.northOffsetDeg+'°':null}[id];
      r=d?DISP('confirmada',d):AUS('sin-dato');break;}
+    // §8 · un motor cuenta por su RESULTADO sobre la geometría confirmada, no por estar cargado.
     case 'motor':{const need={superficies:rooms,dibujoVivo:walls,recorrido:rooms,seccionFachadas:walls}[id];
-     const key={superficies:'superficies',dibujoVivo:'dibujoVivo',recorrido:'recorrido',seccionFachadas:'seccion'}[id];
-     r=!need?AUS('sin-dato'):mot[key]===false?AUS('sin-motor'):DISP('motor');break;}
-    case 'sesion':{const v=entorno.vistas||{};r=entorno.cambios?AUS('cambios'):v.estado==='ready'&&v.n>0?DISP('sesion-lista',String(v.n)):AUS('sesion-caducada');break;}
+     const probe=PROBE[id];const mod=mot[probe.mod];
+     if(!need){r=AUS('sin-dato');break;}
+     if(!mod){r=AUS('sin-motor');break;}
+     try{const d=probe.run(mod,p,mot.Core);r=d?DISP('motor',d):AUS('motor-sin-resultado');}catch{r=AUS('motor-error');}
+     break;}
+    case 'sesion':{const v=entorno.vistas||{};r=entorno.cambios?AUS('cambios'):v.estado==='ready'&&v.n>0&&v.id?DISP('sesion-lista',String(v.n)):AUS('sesion-caducada');break;}
     case 'local':{
      const has={planObra:Object.values(analisis.obra).some(x=>x&&x.schedule),vinculoPlanPresupuesto:Object.values(analisis.obra).some(x=>x&&x.binding),
       marca:!!entorno.marca,variantesGuardadas:analisis.variantes.length>0}[id];
@@ -313,9 +433,12 @@
    get generacion(){return gen;}};
  }
  const sha=async(digest,v)=>digest(enc.encode(canon(v)));
+ const usadasDe=R=>[...R.acreditadas,...R.parciales];
+ const iguales=(a,b)=>canon(a)===canon(b);
  /**
-  * Flujo completo: lectura confirmada → análisis → identidades → fuentes → receta → relectura (otra pestaña) → candidato.
-  * deps: {P, X, Core, digest, observado(): proyecto del editor, entorno(): {...}, marca(): perfil|null}
+  * Flujo completo: lectura confirmada → análisis → bytes de imagen → fuentes → receta → identidades → relectura y
+  * recomprobación (otra pestaña, cambios locales, recursos y fuentes de sesión) → candidato.
+  * deps: {P, X, Core, Budget, digest, imagenes(ref)→bytes|null, observado(), entorno(), marca()}
   * El candidato vive en memoria: no se guarda, no se envía y no se escribe en ningún almacenamiento.
   */
  async function preparar({key,idioma},deps,token,prep){
@@ -323,45 +446,142 @@
   if(!['es','en'].includes(idioma))return fin({ok:false,motivo:'idioma',detalle:'Las recetas existen en ES y EN.'});
   if(!deps.X||typeof deps.X.contentId!=='function')return fin({ok:false,motivo:'c2-sin-expediente'});
   const l1=await leerConfirmado(deps.P);if(l1.estado!=='confirmado')return fin({ok:false,motivo:l1.motivo,lectura:l1.estado});
-  const A=analizar(l1,{Core:deps.Core});if(!A.ok)return fin({ok:false,motivo:A.motivo,detalle:A.detalle});
-  const cambios=cambiosSinGuardar(A,deps.observado?.());
-  if(cambios)return fin({ok:false,motivo:'cambios-sin-guardar'});
-  const marca=deps.marca?.()||null;
-  const ent={...(deps.entorno?.()||{}),cambios,marca};
+  const A=analizar(l1,{Core:deps.Core,Budget:deps.Budget});if(!A.ok)return fin({ok:false,motivo:A.motivo,detalle:A.detalle});
+  if(cambiosSinGuardar(A,deps.observado?.()))return fin({ok:false,motivo:'cambios-sin-guardar'});
+  const signal=token?.signal;
+  const img=await comprobarImagenes(A.project,{leer:deps.imagenes,digest:deps.digest,signal});
+  if(img.estado==='cancelada')return fin({ok:false,motivo:'cancelada'});
+  const ent={...(deps.entorno?.()||{}),cambios:false,marca:deps.marca?.()||null,imagenes:img};
   const F=evaluarFuentes(A,ent);const R=resolver(key,F);
   if(!R.preparable)return fin({ok:false,motivo:R.aviso||'receta-bloqueada',receta:R,fuentes:F});
-  let I;try{I=await identidad(A,{X:deps.X,digest:deps.digest,marca});}catch(e){return fin({ok:false,motivo:'proyecto-invalido',detalle:e.message});}
+  let I;try{I=await identidad(A,{X:deps.X,digest:deps.digest,imagenes:img});}catch(e){return fin({ok:false,motivo:e.code&&T[e.code]?e.code:'proyecto-invalido',detalle:e.message});}
+  const usadas=usadasDe(R),H=await huellasFuentes(A,ent,deps.digest);
+  const vigencia=Object.fromEntries(usadas.filter(k=>SESION.includes(k)).map(k=>[k,H[k]]));
+  // Relectura antes de congelar: otra pestaña, cambios locales nuevos, recursos desaparecidos y fuentes de sesión cambiadas.
   const l2=await leerConfirmado(deps.P);
   if(l2.estado!=='confirmado'||l2.revision!==l1.revision)return fin({ok:false,motivo:'revision-movida'});
+  const A2=analizar(l2,{Core:deps.Core,Budget:deps.Budget});
+  if(!A2.ok||cambiosSinGuardar(A2,deps.observado?.()))return fin({ok:false,motivo:'cambios-sin-guardar'});
+  const img2=await comprobarImagenes(A2.project,{leer:deps.imagenes,digest:deps.digest,signal});
+  if(img2.estado==='cancelada')return fin({ok:false,motivo:'cancelada'});
+  if(img2.estado!==img.estado||!iguales(img2.tokens,img.tokens))return fin({ok:false,motivo:'recurso-cambiado'});
+  const ent2={...(deps.entorno?.()||{}),cambios:false,marca:deps.marca?.()||null,imagenes:img2};
+  const H2=await huellasFuentes(A2,ent2,deps.digest);
+  if(Object.keys(vigencia).some(k=>H2[k]!==vigencia[k]))return fin({ok:false,motivo:'recurso-cambiado'});
   const r=receta(key);
-  const seleccion={receta:key,version:r.version,catalogo:CAT.catalogo,idioma,acreditadas:R.acreditadas,parciales:R.parciales};
-  const congelado={revision:I.revisionLocal.revision,contentId:I.trabajo.contentId,proyectoId:I.proyecto.id,entryId:I.proyecto.entryId,
-   seleccionSha256:await sha(deps.digest,seleccion),externos:I.externos,receta:{key,version:r.version,nivel:r.nivel,corte:r.corte},idioma,
-   fuentes:Object.fromEntries(Object.entries(F).map(([k,v])=>[k,v.estado]))};
-  const candidato={schema:'rubik-lab-e3-candidato/1',version:VERSION,estado:'preparado',interno:'Candidato de laboratorio en memoria. No se guarda ni se envía.',
-   congelado,huella:await sha(deps.digest,congelado),composicion:{seleccion,resolucion:R},identidades:I,paquete:null};
+  const seleccion={receta:key,version:r.version,catalogo:CAT.catalogo,catalogoSha:CAT.sha256,idioma,acreditadas:R.acreditadas,parciales:R.parciales};
+  const congelado={revision:I.revisionLocal.revision,contentId:I.trabajo.contentId,proyectoId:I.proyecto.id,entryId:I.proyecto.entryId,proyectoNombre:I.proyecto.nombre,
+   seleccionSha256:await sha(deps.digest,seleccion),receta:{key,version:r.version,nivel:r.nivel,corte:r.corte},catalogoSha:CAT.sha256,idioma,
+   fuentes:Object.fromEntries(Object.entries(F).map(([k,v])=>[k,v.estado])),vigencia};
+  const cuerpo={schema:'rubik-lab-e3-candidato/2',version:VERSION,congelado,composicion:{seleccion,resolucion:R},identidades:I,paquete:null};
+  // Huella LOCAL de integridad sobre la representación canónica completa. No es una firma ni acredita autoría o aceptación.
+  const candidato={...cuerpo,estado:'preparado',interno:'Candidato de laboratorio en memoria. No se guarda ni se envía.',huella:await sha(deps.digest,cuerpo)};
   return fin({ok:true,candidato,fuentes:F});
  }
- /** N05 · vigencia frente a la revisión confirmada actual (o frente a un expediente leído con el adaptador F0). */
+ const cuerpoDe=c=>({schema:c.schema,version:c.version,congelado:c.congelado,composicion:c.composicion,identidades:c.identidades,paquete:c.paquete});
+ /** E3-B · todas las derivaciones del candidato frente a lo congelado. Devuelve la lista de incoherencias. */
+ async function coherencia(c,{digest}){
+  const k=c.congelado,sel=c.composicion?.seleccion,R=c.composicion?.resolucion,I=c.identidades,x=[];
+  if(!k||!sel||!R||!I)return ['estructura'];
+  if(sel.receta!==k.receta?.key)x.push('seleccion.receta');
+  if(sel.version!==k.receta?.version)x.push('seleccion.version');
+  if(sel.idioma!==k.idioma)x.push('seleccion.idioma');
+  if(sel.catalogo!==CAT.catalogo||sel.catalogoSha!==k.catalogoSha)x.push('seleccion.catalogo');
+  if(await sha(digest,sel)!==k.seleccionSha256)x.push('seleccion.huella');
+  if(!iguales(sel.acreditadas,R.acreditadas)||!iguales(sel.parciales,R.parciales))x.push('seleccion.fuentes');
+  if(R.key!==k.receta?.key||R.emitible!==false||R.preparable!==true)x.push('resolucion.receta');
+  if(k.catalogoSha===CAT.sha256){
+   const r=receta(k.receta?.key);if(!r||r.version!==k.receta.version||r.nivel!==k.receta.nivel||r.corte!==k.receta.corte)x.push('receta.version');
+   const F=Object.fromEntries(Object.entries(k.fuentes||{}).map(([i,e])=>[i,{estado:e}]));
+   if(!iguales(resolver(k.receta.key,F),R))x.push('resolucion.derivada');
+   const esperadas=usadasDe(R).filter(i=>SESION.includes(i)).sort();if(!iguales(Object.keys(k.vigencia||{}).sort(),esperadas))x.push('vigencia.fuentes');
+  }
+  if(I.trabajo?.contentId!==k.contentId)x.push('identidades.trabajo');
+  if(I.revisionLocal?.revision!==k.revision)x.push('identidades.revision');
+  if(I.proyecto?.id!==k.proyectoId||I.proyecto?.entryId!==k.entryId||I.proyecto?.nombre!==k.proyectoNombre)x.push('identidades.proyecto');
+  if(c.paquete!==null||I.paquete!==null)x.push('paquete');
+  return x;
+ }
+ /** N05 · vigencia frente al estado actual: identidad portable + revisión local + vigencia de cada fuente USADA. */
  async function verificar(candidato,actual,{digest}){
-  if(!candidato||await sha(digest,candidato.congelado)!==candidato.huella)return {estado:'invalido',motivo:'invalido-alterado'};
-  if(actual?.expedienteRechazado)return {estado:'invalido',motivo:'invalido-expediente',detalle:actual.expedienteRechazado};
-  if(!actual||!actual.contentId)return {estado:'preparado',motivo:'sin-verificar'};
+  if(!candidato||!candidato.congelado||await sha(digest,cuerpoDe(candidato))!==candidato.huella)return {estado:'invalido',motivo:'invalido-alterado'};
+  const inc=await coherencia(candidato,{digest});if(inc.length)return {estado:'invalido',motivo:'invalido-incoherente',incoherencias:inc};
   const c=candidato.congelado;
+  if(c.catalogoSha!==CAT.sha256)return {estado:'verificado-desactualizado',motivo:'desactualizado-catalogo'};
+  if(actual?.expedienteRechazado)return {estado:'invalido',motivo:'invalido-expediente',detalle:actual.expedienteRechazado};
+  if(!actual||!actual.contentId)return {estado:'preparado',motivo:actual?.motivo&&T[actual.motivo]?actual.motivo:'sin-verificar'};
   if(actual.contentId!==c.contentId)return {estado:'verificado-desactualizado',motivo:'desactualizado-trabajo'};
-  const ext=actual.externos||{};const cambiados=Object.keys(c.externos).filter(k=>actual.externos&&(ext[k]??null)!==(c.externos[k]??null));
-  if(cambiados.length)return {estado:'verificado-desactualizado',motivo:'desactualizado-externo',cambiados};
+  const cambiadas=[],noComprobables=[];
+  for(const [k,h] of Object.entries(c.vigencia||{})){const a=actual.fuentes?.[k];if(a==null)noComprobables.push(k);else if(a!==h)cambiadas.push(k);}
+  if(cambiadas.length)return {estado:'verificado-desactualizado',motivo:'desactualizado-fuente',cambiadas};
+  if(noComprobables.length)return {estado:'preparado',motivo:'fuente-no-comprobable',noComprobables};
   if(actual.revision!==undefined&&actual.revision!==c.revision)return {estado:'verificado',motivo:'verificado-restaurado'};
   return {estado:'verificado',motivo:'verificado'};
  }
- /** Estado actual para verificar() desde la lectura confirmada de este navegador. */
+ /** Estado actual para verificar() desde la lectura confirmada de este navegador. Nunca rechaza: devuelve un motivo. */
  async function actualDesdeConfirmado(deps){
-  const l=await leerConfirmado(deps.P);if(l.estado!=='confirmado')return {motivo:l.motivo};
-  const A=analizar(l,{Core:deps.Core});if(!A.ok)return {motivo:A.motivo};
-  const I=await identidad(A,{X:deps.X,digest:deps.digest,marca:deps.marca?.()||null});
-  return {contentId:I.trabajo.contentId,revision:I.revisionLocal.revision,externos:I.externos};
+  try{
+   const l=await leerConfirmado(deps.P);if(l.estado!=='confirmado')return {motivo:l.motivo};
+   const A=analizar(l,{Core:deps.Core,Budget:deps.Budget});if(!A.ok)return {motivo:A.motivo};
+   const img=await comprobarImagenes(A.project,{leer:deps.imagenes,digest:deps.digest});
+   if(img.estado!=='ok'&&img.estado!=='sin-imagenes')return {motivo:MOTIVO_IMAGEN[img.estado]||'imagen-no-comprobable'};
+   const ent={...(deps.entorno?.()||{}),cambios:cambiosSinGuardar(A,deps.observado?.()),marca:deps.marca?.()||null,imagenes:img};
+   const I=await identidad(A,{X:deps.X,digest:deps.digest,imagenes:img});
+   return {contentId:I.trabajo.contentId,revision:I.revisionLocal.revision,fuentes:await huellasFuentes(A,ent,deps.digest)};
+  }catch(e){return {motivo:'error-inesperado',detalle:e?.message};}
  }
 
+ // ---------------------------------------------------------------- E3-C · controlador de la interfaz (sin DOM)
+ /** Estado único del diálogo y reglas de concurrencia. `deps()` se evalúa en cada operación. onCambio(estado, foco).
+  *  - Cada operación captura su época/secuencia; un resultado tardío de otra época o secuencia se descarta entero
+  *    (estado, candidato, selección, mensajes, foco y controles).
+  *  - Cambiar receta o idioma, o cerrar, abre una época nueva y cancela la preparación en vuelo.
+  *  - Solo la preparación vigente puede apagar «ocupado»; cancelar una antigua no toca a una nueva. */
+ function controlador(deps,{onCambio=()=>{}}={}){
+  const st={epoca:0,lectura:null,analisis:null,fuentes:null,cambios:null,sel:null,idioma:null,candidato:null,verificacion:null,aviso:null,
+   ocupado:false,leyendo:false,verificando:false,cerrado:false};
+  const prep=preparador();let tokOcupado=null,seqLeer=0,seqVer=0;
+  const emit=foco=>{if(!st.cerrado)onCambio(st,foco||null);};
+  const nuevaEpoca=()=>{st.epoca++;prep.cancelar();tokOcupado=null;seqVer++;st.ocupado=false;st.verificando=false;st.candidato=null;st.verificacion=null;st.aviso=null;};
+  async function leer(){
+   const n=++seqLeer;seqVer++;st.leyendo=true;st.verificando=false;emit();
+   let r;
+   try{const d=deps();const l=await leerConfirmado(d.P);let A=null,F=null,cambios=null;
+    if(l.estado==='confirmado'){A=analizar(l,{Core:d.Core,Budget:d.Budget});
+     if(A.ok){cambios=cambiosSinGuardar(A,d.observado?.());const img=await comprobarImagenes(A.project,{leer:d.imagenes,digest:d.digest});
+      F=evaluarFuentes(A,{...(d.entorno?.()||{}),cambios,marca:d.marca?.()||null,imagenes:img});}}
+    r={l,A,F,cambios};}
+   catch(e){r={error:'error-inesperado',detalle:e?.message};}
+   if(st.cerrado||n!==seqLeer)return;
+   st.leyendo=false;
+   if(r.error){st.aviso=r.error;}else{st.lectura=r.l;st.analisis=r.A;st.fuentes=r.F;st.cambios=r.cambios;}
+   emit();
+   if(st.candidato)await verificar();
+  }
+  async function verificar(){
+   const c=st.candidato;if(!c)return;const n=++seqVer;st.verificando=true;emit();
+   let v;try{v=await verificarN05(c,await actualDesdeConfirmado(deps()),{digest:deps().digest});}catch(e){v={estado:'preparado',motivo:'error-inesperado'};}
+   if(st.cerrado||n!==seqVer||st.candidato!==c)return;
+   st.verificando=false;st.verificacion=v;emit();
+  }
+  async function prepararUI(){
+   if(!st.sel||st.ocupado)return;
+   const ep=st.epoca,tok=prep.iniciar();tokOcupado=tok;st.ocupado=true;st.aviso=null;st.candidato=null;st.verificacion=null;emit();
+   let r;try{r=await preparar({key:st.sel,idioma:st.idioma||'es'},deps(),tok,prep);}catch(e){r={ok:false,motivo:'error-inesperado',detalle:e?.message};}
+   if(st.cerrado||ep!==st.epoca||tok!==tokOcupado)return;// tardío: otra época, cancelada o sustituida
+   tokOcupado=null;st.ocupado=false;
+   if(r.ok){st.candidato=r.candidato;emit('vista-previa');await verificar();}
+   else{st.aviso=r.motivo;st.fallo=r;emit('detalle');}
+  }
+  function cancelar(){if(!tokOcupado)return;prep.cancelar();tokOcupado=null;st.ocupado=false;st.aviso='cancelada';emit('preparar');}
+  function elegir(key){if(st.cerrado)return;nuevaEpoca();st.sel=key;emit();}
+  function idioma(l){if(st.cerrado)return;nuevaEpoca();st.idioma=l;emit();}
+  function cerrar(){nuevaEpoca();st.cerrado=true;}
+  return {leer,verificar,preparar:prepararUI,cancelar,elegir,idioma,cerrar,get estado(){return st;}};
+ }
+ const verificarN05=verificar;
+
  return Object.freeze({VERSION,KEYS,LANGS,CATALOGO:CAT,MATRIZ,T,TF,texto,motivoFuente,nombre,leerConfirmado,analizar,cambiosSinGuardar,identidad,
-  evaluarFuentes,resolver,resolverTodas,receta,preparador,preparar,verificar,actualDesdeConfirmado,canon});
+  evaluarFuentes,resolver,resolverTodas,receta,preparador,preparar,verificar,coherencia,actualDesdeConfirmado,canon,
+  adaptadorImagenes,comprobarImagenes,huellasFuentes,SESION,controlador});
 });

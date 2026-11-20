@@ -1,6 +1,39 @@
 # Traspaso del laboratorio Studio Presentation
 
-## Vigente · E3 / K10 / ENT-03: preparación funcional en laboratorio (20/11/2026)
+## Vigente · E3 / K10 / ENT-03: cierre técnico de los hallazgos de auditoría (20/11/2026)
+
+**Partida:** `448b3ef` (remoto comprobado). Master de contraste `130ba24` (sin commits posteriores al cerrar).
+
+**Informe:** `reports/23-E3-CIERRE-TECNICO.md` (complementa el 22).
+
+| Hallazgo | Estado | Corrección |
+|---|---|---|
+| E3-A | Reproducido y corregido | `contentId` con los bytes efectivos de las imágenes y equivalencia con `pack`/`read`/`contentIdOf`; adaptador de imágenes que no crea el almacén |
+| E3-B | Reproducido y corregido | Huella canónica completa + coherencia de todas las derivaciones |
+| E3-C | Reproducido y corregido | `controlador()` puro: épocas y secuencias; la interfaz solo dibuja |
+| E3-D | Reproducido y corregido | Vigencia por fuente usada (vistas, marca, obra, variantes); «no comprobable» nunca es vigente |
+| §8 | Reproducido y corregido | Presupuesto con tipo, validación canónica y estado «parcial»; documentos corruptos; motores por su resultado; sin rechazos sin capturar; diagnóstico solo con `RUBIK_E3_QA` |
+
+**Comandos (pin: `git archive 130ba24 | tar -x -C <pin>`):**
+
+| Comando | Resultado |
+|---|---|
+| `node tools/e3-catalogo.cjs --check` | Idéntico |
+| `node tools/e3-qa.cjs <pin> 130ba24d420a2f4b26ab261313202e6070904fd8` | **23/23** (incluye F0 11/11) |
+| `node tools/e3-cierre-qa.cjs <pin> 130ba24… --antes <dir>` | **46/46**, y **8/8 defectos reproducidos** en `448b3ef` |
+| `node tools/e3-copia.cjs <pin> <copia> 130ba24…` y después `node tools/e3-ui-qa.cjs <copia>` | Chromium 157: **23/23**. Firefox/WebKit: NOT_RUN |
+
+Para `--antes`, extrae el núcleo anterior con `git show 448b3ef:labs/studio-presentation/e3/{e3-core,recetas-catalogo}.js > <dir>/…`. Los pasos para Firefox/WebKit reproducibles por Codex están en la §3 del informe 23.
+
+**Parche para Codex:** sin cambios (`e3/rubik-130ba24-e3.patch`). **Dependencias de Codex:** §4 del informe 23.
+
+**Residual global (Codex):** el botón «Asistente» se superpone al diálogo.
+
+**No repetir:** las suites históricas ni los D08.
+
+**Siguiente actor:** ChatGPT, luego Codex y después el propietario. NO-GO de integración o activación.
+
+## Anterior · E3 / K10 / ENT-03: preparación funcional en laboratorio (20/11/2026)
 
 **Bases:** laboratorio `8c53263` (sin rebase; worktree independiente) y master `130ba24d420a2f4b26ab261313202e6070904fd8` (incluye #289).
 

@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-e3-qa/1",
- "fecha": "2026-11-20T14:25:50.915Z",
+ "fecha": "2026-11-20T14:47:28.557Z",
  "pin": "130ba24d420a2f4b26ab261313202e6070904fd8",
  "entorno": {
   "node": "v22.23.5",
@@ -102,8 +102,9 @@
    "detalle": {
     "contentId": "92e46994a8dfbe546b7f66fa0035e5098957990d3dd70e62789bf13941714b0a",
     "revision": 3,
-    "seleccionSha256": "33339c3ae211c14af3b823f78c1a412f3760ecaffcb67e6d988c729286cceb20",
-    "acreditadas": [
+    "seleccionSha256": "41a0f94fbf59e9ce573034484bfeac1843a7a8945c8428a93b0c2f524dea834f",
+    "acreditadas": [],
+    "parciales": [
      "presupuesto"
     ]
    }
@@ -130,8 +131,12 @@
   },
   {
    "id": "E3-11",
-   "titulo": "Cambio de marca: el expediente no la incluye, pero su huella congelada caduca el candidato",
-   "resultado": "PASS"
+   "titulo": "Cambio de marca: no entra en el expediente; su huella congelada caduca el candidato que la USA (RP01) y no el que no la usa (RP05)",
+   "resultado": "PASS",
+   "detalle": {
+    "RP05": "verificado",
+    "RP01": "verificado-desactualizado"
+   }
   },
   {
    "id": "E3-12",
@@ -236,8 +241,8 @@
    "titulo": "Textos ES/EN/ZH completos, sin respaldo silencioso; nombres de receta en ZH rotulados EN",
    "resultado": "PASS",
    "detalle": {
-    "codigos": 21,
-    "motivos": 13
+    "codigos": 30,
+    "motivos": 20
    }
   },
   {

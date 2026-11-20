@@ -1,0 +1,493 @@
+{
+ "schema": "rubik-lab-e3-cierre-qa/1",
+ "fecha": "2026-11-20T14:47:29.855Z",
+ "pin": "130ba24d420a2f4b26ab261313202e6070904fd8",
+ "entorno": {
+  "node": "v22.23.5",
+  "plataforma": "linux"
+ },
+ "resumen": "46/46 PASS",
+ "porHallazgo": {
+  "E3-A": "7/7",
+  "E3-B": "16/16",
+  "E3-C": "9/9",
+  "E3-D": "8/8",
+  "§8": "6/6"
+ },
+ "antes": {
+  "nucleo": "448b3ef12eb6341e021308754c5fef726a28b8e4",
+  "reproducidos": "8/8",
+  "casos": [
+   {
+    "id": "A-antes",
+    "hallazgo": "E3-A",
+    "defecto": "Foto acreditada y candidato preparado sin leer sus bytes (huella declarada)",
+    "reproducido": true
+   },
+   {
+    "id": "A-antes-2",
+    "hallazgo": "E3-A",
+    "defecto": "Huella declarada falsa aceptada como identidad",
+    "reproducido": true
+   },
+   {
+    "id": "B-antes",
+    "hallazgo": "E3-B",
+    "defecto": "Composición, fuentes e identidades alteradas fuera de «congelado» → «verificado»",
+    "reproducido": true
+   },
+   {
+    "id": "D-antes",
+    "hallazgo": "E3-D",
+    "defecto": "Vistas invalidadas tras preparar RP07 → sigue «verificado»",
+    "reproducido": true
+   },
+   {
+    "id": "D-antes-2",
+    "hallazgo": "E3-D",
+    "defecto": "Cambio de marca caduca RP05, que no usa la marca",
+    "reproducido": true
+   },
+   {
+    "id": "S-antes",
+    "hallazgo": "§8",
+    "defecto": "Presupuesto de otro tipo de sujeto acreditado",
+    "reproducido": true
+   },
+   {
+    "id": "S-antes-2",
+    "hallazgo": "§8",
+    "defecto": "Documento de presupuestos corrupto tratado como vacío (prepara)",
+    "reproducido": true
+   },
+   {
+    "id": "C-antes",
+    "hallazgo": "E3-C",
+    "defecto": "Cambio de receta sin cancelar la preparación en vuelo (inspección del código anterior)",
+    "reproducido": true
+   }
+  ]
+ },
+ "casos": [
+  {
+   "id": "A-00",
+   "hallazgo": "E3-A",
+   "titulo": "Equivalencia: contentId de E3 (bytes efectivos) = contentIdOf del expediente canónico (pack → read) del mismo trabajo",
+   "resultado": "PASS",
+   "detalle": {
+    "contentId": "2e8da22ce32b5e2cf7f09e8f083c0bf3eaa1a90a955514a9557342da1634e7f5",
+    "fotos": {
+     "estado": "disponible",
+     "motivo": "confirmada",
+     "dato": "1",
+     "clase": "confirmada"
+    }
+   }
+  },
+  {
+   "id": "A-01",
+   "hallazgo": "E3-A",
+   "titulo": "Referencia sin bytes: la foto queda ausente y no hay candidato ni «verificado»",
+   "resultado": "PASS",
+   "detalle": {
+    "preparar": "imagen-sin-bytes",
+    "verificarDespues": {
+     "estado": "preparado",
+     "motivo": "imagen-sin-bytes"
+    }
+   }
+  },
+  {
+   "id": "A-02",
+   "hallazgo": "E3-A",
+   "titulo": "Bytes alterados: fuente «invalida», sin candidato y sin «verificado»",
+   "resultado": "PASS",
+   "detalle": {
+    "preparar": "imagen-alterada",
+    "fuente": {
+     "estado": "invalida",
+     "motivo": "imagen-alterada",
+     "dato": null,
+     "clase": "confirmada"
+    }
+   }
+  },
+  {
+   "id": "A-03",
+   "hallazgo": "E3-A",
+   "titulo": "Huella declarada que no corresponde a los bytes efectivos: «imagen-alterada», nunca equivalencia inventada",
+   "resultado": "PASS"
+  },
+  {
+   "id": "A-04",
+   "hallazgo": "E3-A",
+   "titulo": "El recurso desaparece durante la preparación (segunda comprobación): «recurso-cambiado»",
+   "resultado": "PASS",
+   "detalle": {
+    "lecturas": 2
+   }
+  },
+  {
+   "id": "A-05",
+   "hallazgo": "E3-A",
+   "titulo": "La resolución falla o se cancela: «imagen-no-comprobable» / «cancelada», sin rechazo sin capturar",
+   "resultado": "PASS",
+   "detalle": {
+    "fallo": "imagen-no-comprobable",
+    "cancelada": "cancelada"
+   }
+  },
+  {
+   "id": "A-06",
+   "hallazgo": "E3-A",
+   "titulo": "Adaptador de solo lectura: no abre ni crea el almacén de imágenes si no existe; sin databases() no es comprobable",
+   "resultado": "PASS",
+   "detalle": {
+    "sinAlmacen": "null sin get",
+    "conAlmacen": "bytes",
+    "sinDatabases": "no-comprobable"
+   }
+  },
+  {
+   "id": "B-00",
+   "hallazgo": "E3-B",
+   "titulo": "Candidato íntegro: «verificado»; la huella cubre la representación canónica completa (no solo «congelado»)",
+   "resultado": "PASS",
+   "detalle": {
+    "schema": "rubik-lab-e3-candidato/2",
+    "huella": "78228288f2be88965435b746d9896e29d6f4c31f5e7d0a4186b608ea8a82570b"
+   }
+  },
+  {
+   "id": "B-01",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de composicion.seleccion (idioma): «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.idioma",
+    "seleccion.huella"
+   ]
+  },
+  {
+   "id": "B-02",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de composicion.seleccion (receta): «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.receta",
+    "seleccion.huella"
+   ]
+  },
+  {
+   "id": "B-03",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de composicion.resolucion (estado): «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "resolucion.derivada"
+   ]
+  },
+  {
+   "id": "B-04",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de fuentes acreditadas (selección y resolución a la vez): «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.huella",
+    "resolucion.derivada"
+   ]
+  },
+  {
+   "id": "B-05",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de fuentes parciales y omitidas: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.fuentes",
+    "resolucion.derivada",
+    "vigencia.fuentes"
+   ]
+  },
+  {
+   "id": "B-06",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de estado congelado de una fuente (deriva otra resolución): «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "resolucion.derivada"
+   ]
+  },
+  {
+   "id": "B-07",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de identidades.trabajo: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "identidades.trabajo"
+   ]
+  },
+  {
+   "id": "B-08",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de identidades.proyecto y revisión: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "identidades.revision",
+    "identidades.proyecto"
+   ]
+  },
+  {
+   "id": "B-09",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de versión de receta: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.huella",
+    "receta.version"
+   ]
+  },
+  {
+   "id": "B-10",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de catálogo declarado en la selección: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.catalogo",
+    "seleccion.huella"
+   ]
+  },
+  {
+   "id": "B-11",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de vínculo selección ↔ candidato (huella de la selección): «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "seleccion.huella"
+   ]
+  },
+  {
+   "id": "B-12",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de fuentes de vigencia congeladas: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "vigencia.fuentes"
+   ]
+  },
+  {
+   "id": "B-13",
+   "hallazgo": "E3-B",
+   "titulo": "Alteración coherente (huella recalculada) de paquete no nulo / emitible: «invalido», nunca «verificado»",
+   "resultado": "PASS",
+   "detalle": [
+    "resolucion.receta",
+    "resolucion.derivada",
+    "paquete"
+   ]
+  },
+  {
+   "id": "B-14",
+   "hallazgo": "E3-B",
+   "titulo": "Catálogo de reglas distinto del vigente (huellas coherentes): «verificado-desactualizado», no «verificado»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "B-15",
+   "hallazgo": "E3-B",
+   "titulo": "E3-14 conservado: revisión congelada manipulada sin rehuella → «invalido-alterado»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-01",
+   "hallazgo": "E3-C",
+   "titulo": "Cambiar de receta durante la preparación: el resultado tardío no aparece ni mueve el foco",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-02",
+   "hallazgo": "E3-C",
+   "titulo": "Cambiar de idioma durante la preparación: el candidato del idioma anterior se descarta",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-03",
+   "hallazgo": "E3-C",
+   "titulo": "Cancelar y preparar otra al instante: la antigua no apaga «ocupado» de la nueva ni se aplica",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-04",
+   "hallazgo": "E3-C",
+   "titulo": "Cerrar y reabrir durante una operación: el diálogo cerrado no emite nada y el nuevo no se toca",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-05",
+   "hallazgo": "E3-C",
+   "titulo": "Cambio de proyecto o variante durante la preparación: no se congela el proyecto anterior",
+   "resultado": "PASS",
+   "detalle": {
+    "local": "cambios-sin-guardar",
+    "confirmado": "revision-movida"
+   }
+  },
+  {
+   "id": "C-06",
+   "hallazgo": "E3-C",
+   "titulo": "Releer con una verificación anterior pendiente: la verificación vieja no sobrescribe a la nueva",
+   "resultado": "PASS",
+   "detalle": {
+    "estado": "verificado-desactualizado",
+    "motivo": "desactualizado-trabajo"
+   }
+  },
+  {
+   "id": "C-07",
+   "hallazgo": "E3-C",
+   "titulo": "Otra pestaña confirma durante la preparación: «revision-movida», sin candidato",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-08",
+   "hallazgo": "E3-C",
+   "titulo": "Cambios locales sin confirmar durante una preparación inicialmente válida: «cambios-sin-guardar»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "C-09",
+   "hallazgo": "E3-C",
+   "titulo": "Errores sin recuperación imposibles: dependencias que lanzan o lecturas que rechazan dejan un motivo, no una promesa rechazada",
+   "resultado": "PASS",
+   "detalle": {
+    "sinCapturar": 0
+   }
+  },
+  {
+   "id": "D-01",
+   "hallazgo": "E3-D",
+   "titulo": "Vistas «ready» → verificado; sustituidas sin cambiar geometría o cambiada su selección → desactualizado",
+   "resultado": "PASS",
+   "detalle": {
+    "sustituidas": "desactualizado-fuente",
+    "seleccion": "desactualizado-fuente"
+   }
+  },
+  {
+   "id": "D-02",
+   "hallazgo": "E3-D",
+   "titulo": "Vistas «stale», «busy», «none», «error» o invalidadas: ni se acreditan ni dan «verificado»",
+   "resultado": "PASS",
+   "detalle": {
+    "stale": "fuente-no-comprobable",
+    "busy": "fuente-no-comprobable",
+    "none": "fuente-no-comprobable",
+    "error": "fuente-no-comprobable"
+   }
+  },
+  {
+   "id": "D-03",
+   "hallazgo": "E3-D",
+   "titulo": "Cambio de planta o proyecto: «desactualizado-trabajo» (identidad portable distinta)",
+   "resultado": "PASS"
+  },
+  {
+   "id": "D-04",
+   "hallazgo": "E3-D",
+   "titulo": "Cambio de marca DURANTE la preparación: «recurso-cambiado»",
+   "resultado": "PASS"
+  },
+  {
+   "id": "D-05",
+   "hallazgo": "E3-D",
+   "titulo": "Cambios del plan de obra y de las relaciones de variantes: caducan solo las recetas que los usan",
+   "resultado": "PASS",
+   "detalle": {
+    "RP08": [
+     "planObra"
+    ],
+    "RP03": [
+     "variantesGuardadas"
+    ],
+    "RP07": "verificado"
+   }
+  },
+  {
+   "id": "D-06",
+   "hallazgo": "E3-D",
+   "titulo": "Información externa necesaria ausente al verificar (firma no disponible): «preparado», no vigente",
+   "resultado": "PASS"
+  },
+  {
+   "id": "D-07",
+   "hallazgo": "E3-D",
+   "titulo": "Restauración portable: mismo trabajo y mismas fuentes pertinentes → «verificado-restaurado»; sin vistas → no vigente",
+   "resultado": "PASS",
+   "detalle": {
+    "RP01": "verificado-restaurado",
+    "RP07": "fuente-no-comprobable"
+   }
+  },
+  {
+   "id": "D-08",
+   "hallazgo": "E3-D",
+   "titulo": "C4/C6 sin activar: ninguna cámara persistida; C6 sigue «observed-only» sin identidad confirmada",
+   "resultado": "PASS"
+  },
+  {
+   "id": "S-01",
+   "hallazgo": "§8",
+   "titulo": "Presupuesto: válido por FloorPlanBudget.parseBudget y del mismo sujeto → «parcial» (sin vínculo con esta geometría)",
+   "resultado": "PASS"
+  },
+  {
+   "id": "S-02",
+   "hallazgo": "§8",
+   "titulo": "Presupuesto de otro TIPO de sujeto (mismo id) o que no supera la validación canónica → «invalida», no acreditado",
+   "resultado": "PASS",
+   "detalle": {
+    "tipo": "sujeto",
+    "validacion": "validacion: FloorPlanBudget: chapters an",
+    "sinAutoridad": "sin-autoridad"
+   }
+  },
+  {
+   "id": "S-03",
+   "hallazgo": "§8",
+   "titulo": "Documentos corruptos (biblioteca, presupuestos, observaciones) → «documento-corrupto», nunca vacíos válidos",
+   "resultado": "PASS",
+   "detalle": {
+    "rubik-sota-project-library-v1": "rubik-sota-project-library-v1",
+    "rubik-budget-v1": "rubik-budget-v1",
+    "rubik-review-v1": "rubik-review-v1"
+   }
+  },
+  {
+   "id": "S-04",
+   "hallazgo": "§8",
+   "titulo": "Motor cargado ≠ motor funcional: sin módulo, módulo que lanza o sin resultado → ausente con motivo propio",
+   "resultado": "PASS",
+   "detalle": {
+    "superficies": "87.18 m² · estimated",
+    "recorrido": "8 puntos",
+    "seccion": {
+     "estado": "disponible",
+     "motivo": "motor",
+     "dato": "sección x",
+     "clase": "motor"
+    }
+   }
+  },
+  {
+   "id": "S-05",
+   "hallazgo": "§8",
+   "titulo": "Interfaz de diagnóstico solo con la bandera de laboratorio RUBIK_E3_QA (no en la propuesta productiva)",
+   "resultado": "PASS"
+  },
+  {
+   "id": "S-06",
+   "hallazgo": "§8",
+   "titulo": "Ningún rechazo de promesa sin capturar en toda la suite",
+   "resultado": "PASS"
+  }
+ ]
+}

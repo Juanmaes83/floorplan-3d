@@ -1,5 +1,7 @@
 # 22 · Studio Presentation E3 / K10 / ENT-03: contratos C1–C4, 43 fuentes, selector profesional y vigencia (laboratorio)
 
+> **Complemento de cierre técnico (20/11/2026):** [23-E3-CIERRE-TECNICO.md](23-E3-CIERRE-TECNICO.md). Corrige los hallazgos de auditoría E3-A a E3-D y §8. Donde el 23 difiere (presupuesto «parcial», marca y vistas como vigencia por fuente usada, huella canónica completa, controlador de concurrencia), prevalece el 23.
+
 **Fecha:** 20/11/2026. **Mandato:** «RUBIK SOTA — MANDATO STUDIO PRESENTATION E3 / K10 / ENT-03» (GO de preparación funcional en laboratorio).
 
 **Rama:** `lab/studio-presentation-e0e1`.

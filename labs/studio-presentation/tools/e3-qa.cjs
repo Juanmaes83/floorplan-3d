@@ -33,7 +33,12 @@ function docsDe(p,{budget=null,revision=3,entry='ent_e3',brand=null,obra=null,va
 function falsoP(estado){let llamadas=0;const base={isTestOrigin:()=>estado.origen!==false,async readConfirmed(){llamadas++;if(estado.error)throw estado.error;const s=typeof estado.leer==='function'?estado.leer(llamadas):estado.leer;return {revision:s.revision,docs:new Map(s.docs)};}};
  return new Proxy(base,{get(t,k){if(k in t)return t[k];if(k==='then'||typeof k==='symbol')return undefined;throw new Error('E3 intentó usar FloorPlanPersistence.'+String(k)+' (solo se permite readConfirmed)');}});}
 const presupuesto=(p,{titulo='Presupuesto'}={})=>{const b=Budget.createBudget({id:`bud_${p.id}`,subject:{type:'project',id:p.id},title:titulo});Budget.validateBudget(b);return b;};
-const deps=(P,p,extra={})=>({P,X,Core,digest,observado:()=>clone(p),entorno:()=>({motores:{superficies:true,dibujoVivo:true,recorrido:true,seccion:true},vistas:{estado:'ready',n:4}}),...extra,marca:()=>('marca' in extra?extra.marca:{name:'Estudio sintético',person:'Responsable sintético'})});
+const Surface=require(path.join(PIN,'js/surface-core.js')),Route=require(path.join(PIN,'js/presentation-route.js')),Living=require(path.join(PIN,'js/presentation-living-drawing-core.js')),Section=require(path.join(PIN,'js/presentation-section-core.js'));
+const MOTORES={Surface,Route,Living,Section,Core};
+// Lector de bytes de imagen sintético (por ref). IMG del ejemplo del contrato declara la huella de 0 bytes (e3b0c442…).
+const BYTES={[IMG.storage.ref]:new Uint8Array(0)};
+const leerBytes=async ref=>BYTES[ref]??null;
+const deps=(P,p,extra={})=>({P,X,Core,Budget,digest,imagenes:leerBytes,observado:()=>clone(p),entorno:()=>({motores:MOTORES,vistas:{estado:'ready',n:4,id:{takenAt:'2026-11-20T10:00:00Z',items:['v1','v2','v3','v4']}}}),...extra,marca:()=>('marca' in extra?extra.marca:{name:'Estudio sintético',person:'Responsable sintético'})});
 const prep=async(key,d,idioma='es')=>{const pr=E3.preparador();const t=pr.iniciar();return E3.preparar({key,idioma},d,t,pr);};
 
 (async()=>{
@@ -77,7 +82,7 @@ const prep=async(key,d,idioma='es')=>{const pr=E3.preparador();const t=pr.inicia
   const v=await E3.verificar(cand,await E3.actualDesdeConfirmado(deps(P,p0)),{digest});assert.deepEqual(v,{estado:'verificado',motivo:'verificado'});
   // identidades separadas (C2)
   const I=cand.identidades;assert.notEqual(I.trabajo.contentId,I.proyecto.id);assert.equal(typeof I.revisionLocal.revision,'number');assert.notEqual(cand.congelado.seleccionSha256,I.trabajo.contentId);
-  return {contentId:cand.congelado.contentId,revision:3,seleccionSha256:cand.congelado.seleccionSha256,acreditadas:cand.composicion.resolucion.acreditadas};});
+  return {contentId:cand.congelado.contentId,revision:3,seleccionSha256:cand.congelado.seleccionSha256,acreditadas:cand.composicion.resolucion.acreditadas,parciales:cand.composicion.resolucion.parciales};});
 
  await caso('E3-07','Sin revisión confirmada (authority-missing): explica causa, siguiente paso, alternativa y datos; no crea revisión',async()=>{
   const e=Object.assign(new Error('Abre el editor…'),{code:'authority-missing'});const r=await prep('RP05',deps(falsoP({error:e}),p0));
@@ -99,9 +104,13 @@ const prep=async(key,d,idioma='es')=>{const pr=E3.preparador();const t=pr.inicia
   const A1=E3.analizar(await E3.leerConfirmado(falsoP({leer:d})),{Core});assert.equal(A1.budget,null);assert.equal(A1.budgetAjeno,true);
   const r=await prep('RP05',deps(falsoP({leer:d}),p0));assert.equal(r.motivo,'receta-bloqueada');assert.deepEqual(r.receta.falta,['presupuesto']);});
 
- await caso('E3-11','Cambio de marca: el expediente no la incluye, pero su huella congelada caduca el candidato',async()=>{
+ await caso('E3-11','Cambio de marca: no entra en el expediente; su huella congelada caduca el candidato que la USA (RP01) y no el que no la usa (RP05)',async()=>{
   const d=deps(falsoP({leer:leer0}),p0,{marca:{name:'Otro estudio sintético'}});const v=await E3.verificar(cand,await E3.actualDesdeConfirmado(d),{digest});
-  assert.equal(v.estado,'verificado-desactualizado');assert.equal(v.motivo,'desactualizado-externo');assert.deepEqual(v.cambiados,['marca']);});
+  assert.deepEqual(v,{estado:'verificado',motivo:'verificado'});
+  const r1=await prep('RP01',deps(falsoP({leer:leer0}),p0));assert.ok(r1.ok,r1.motivo);assert.deepEqual(Object.keys(r1.candidato.congelado.vigencia),['marca']);
+  const v1=await E3.verificar(r1.candidato,await E3.actualDesdeConfirmado(d),{digest});
+  assert.equal(v1.estado,'verificado-desactualizado');assert.equal(v1.motivo,'desactualizado-fuente');assert.deepEqual(v1.cambiadas,['marca']);
+  return {RP05:v.estado,RP01:v1.estado};});
 
  await caso('E3-12','Cambio de geometría, de imágenes o de documentos: «verificado-desactualizado»',async()=>{
   const out={};
@@ -150,7 +159,7 @@ const prep=async(key,d,idioma='es')=>{const pr=E3.preparador();const t=pr.inicia
  await caso('E3-19','Conservación del almacenamiento: la lectura no cambia los documentos, no usa la sesión y el pin no cambia',async()=>{
   const antes=[...leer0.docs].map(([k,v])=>k+sha(v)).join();await prep('RP05',deps(falsoP({leer:leer0}),p0));
   assert.equal([...leer0.docs].map(([k,v])=>k+sha(v)).join(),antes);
-  const src=fs.readFileSync(path.join(LAB,'e3/e3-core.js'),'utf8');for(const w of ['setItem','removeItem','.session(','commit(','flush(','indexedDB','fetch(','XMLHttpRequest','WebSocket','sendBeacon','localStorage.'])assert.ok(!src.includes(w),'e3-core usa '+w);});
+  const src=fs.readFileSync(path.join(LAB,'e3/e3-core.js'),'utf8');for(const w of ['setItem','removeItem','.session(','commit(','flush(','indexedDB.open(','globalThis.indexedDB','window.indexedDB','fetch(','XMLHttpRequest','WebSocket','sendBeacon','localStorage.'])assert.ok(!src.includes(w),'e3-core usa '+w);});
 
  await caso('E3-20','Ninguna revisión confirmada falsa: origen fuera de prueba, lectura sin revisión o sin documentos',async()=>{
   assert.equal((await E3.leerConfirmado(falsoP({origen:false,leer:leer0}))).motivo,'c1-origen');

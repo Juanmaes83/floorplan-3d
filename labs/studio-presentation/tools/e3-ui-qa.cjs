@@ -17,9 +17,11 @@ async function caso(nav,id,titulo,fn){process.stderr.write(`[${nav}] ${id} …\n
 const ok=(c,m)=>{if(!c)throw new Error(m);};
 const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
 
-async function abrir(browser,port,{host='f0-2b.localhost',viewport={width:1440,height:900},lang='es',reduced=false,touch=false}={}){
+async function abrir(browser,port,{host='f0-2b.localhost',viewport={width:1440,height:900},lang='es',reduced=false,touch=false,qa=true}={}){
  const ctx=await browser.newContext({viewport,deviceScaleFactor:2,hasTouch:touch,isMobile:touch&&browser.browserType().name()==='chromium',reducedMotion:reduced?'reduce':'no-preference'});
  await ctx.addInitScript(l=>{try{localStorage.setItem('rubik-sota-floorplan-lang',l);}catch{}},lang);
+ // Bandera de laboratorio: expone el estado del controlador como window.__e3 (la propuesta productiva no la activa).
+ if(qa)await ctx.addInitScript(()=>{window.RUBIK_E3_QA=true;});
  const pg=await ctx.newPage();const errores=[],externas=[];
  pg.on('pageerror',e=>errores.push(e.message));pg.on('console',m=>{if(m.type()==='error')errores.push('console: '+m.text().slice(0,200));});
  await ctx.route('**/*',r=>{const u=new URL(r.request().url());if(u.hostname!==host||u.port!==String(port)){externas.push(u.href);return r.abort();}return r.continue();});
@@ -106,7 +108,7 @@ async function suite(browser,nav,port){
  await s.ctx.close();
 
  // ---------- tableta y móvil (emulación; no son dispositivos físicos)
- for(const [id,vp,touch] of [['UI-13',{width:820,height:1180},true],['UI-14',{width:390,height:844},true]]){
+ for(const [id,vp,touch] of [['UI-13',{width:820,height:1180},true],['UI-14',{width:390,height:844},true],['UI-13b',{width:1180,height:820},true],['UI-14b',{width:844,height:390},true]]){
   s=await abrir(browser,port,{viewport:vp,touch});pg=s.pg;await crearCopia(pg);
   await caso(nav,id,`${vp.width}×${vp.height}${touch?' táctil (emulación)':''}: sin desbordamiento horizontal y objetivos táctiles ≥44 px`,async()=>{
    await entregar(pg);await pg.evaluate(()=>document.getElementById('e3Card').scrollIntoView());await shot(pg,`e3-${vp.width}-tarjeta`,nav);
@@ -129,6 +131,27 @@ async function suite(browser,nav,port){
   ok(d.titulo==='准备交付'&&d.nombreLang==='en'&&/配方/.test(d.aviso||''),JSON.stringify(d));await shot(pg,'e3-zh',nav);ok(!s.errores.length,s.errores.join('|'));return d;});
  await s.ctx.close();
  // ---------- fuera del origen de prueba: F0.2b no está activa → aviso, sin lectura
+ // ---------- cierre técnico: selección, operación en vuelo (determinista) y diagnóstico retirado
+ s=await abrir(browser,port);pg=s.pg;await crearCopia(pg);
+ await caso(nav,'UI-18','Cambiar de receta retira al instante la vista previa del candidato anterior',async()=>{
+  await entregar(pg);await dialogo(pg);await elegir(pg,'RP10');await pg.click('#e3Prepare');await pg.waitForSelector('#e3Estado[data-estado="verificado"]',{timeout:15000});
+  await elegir(pg,'RP09');const d=await pg.evaluate(()=>({oculta:document.getElementById('e3Preview').hidden,hijos:document.getElementById('e3Preview').childElementCount,cand:!!__e3.candidato,sel:__e3.sel}));
+  ok(d.oculta&&d.hijos===0&&!d.cand&&d.sel==='RP09',JSON.stringify(d));return d;});
+ await caso(nav,'UI-19','Preparación en vuelo (lectura retenida, sin temporizadores): cambiar de receta la descarta; no aparece, no queda «ocupado» ni roba el foco',async()=>{
+  await pg.evaluate(()=>{const P=FloorPlanPersistence,orig=P.readConfirmed.bind(P);window.__retenidas=[];
+   P.readConfirmed=()=>new Promise((res,rej)=>window.__retenidas.push(()=>orig().then(res,rej)));window.__soltar=()=>{const a=window.__retenidas.splice(0);a.forEach(f=>f());return a.length;};});
+  await elegir(pg,'RP10');await pg.click('#e3Prepare');await pg.waitForFunction(()=>__e3.ocupado&&window.__retenidas.length>0);
+  await elegir(pg,'RP09');const foco0=await pg.evaluate(()=>document.activeElement?.value||document.activeElement?.id);
+  for(let i=0;i<6;i++){await pg.evaluate(()=>window.__soltar());await pg.waitForTimeout(50);}
+  const d=await pg.evaluate(()=>({cand:!!__e3.candidato,ocupado:__e3.ocupado,sel:__e3.sel,aviso:__e3.aviso,preview:document.getElementById('e3Preview').hidden,cancelar:!!document.getElementById('e3Cancel'),foco:document.activeElement?.value||document.activeElement?.id}));
+  await pg.evaluate(()=>{window.__soltar();});
+  ok(!d.cand&&!d.ocupado&&d.sel==='RP09'&&!d.aviso&&d.preview&&!d.cancelar&&d.foco===foco0,JSON.stringify(d));return d;});
+ await s.ctx.close();
+ s=await abrir(browser,port,{qa:false});pg=s.pg;
+ await caso(nav,'UI-20','Sin la bandera de laboratorio no existe ninguna interfaz de diagnóstico (window.__e3)',async()=>{
+  await entregar(pg);await pg.click('#e3Open');await pg.waitForSelector('#e3Dialog[open]');const d=await pg.evaluate(()=>({diag:'__e3' in window,api:Object.keys(window.RubikStudioE3UI||{})}));
+  ok(!d.diag&&d.api.join()==='card,open',JSON.stringify(d));return d;});
+ await s.ctx.close();
  s=await abrir(browser,port,{host:'127.0.0.1'});pg=s.pg;
  await caso(nav,'UI-17','Fuera del origen de prueba: aviso «c1-origen» y ninguna receta preparable',async()=>{
   await entregar(pg);await dialogo(pg);const d=await pg.evaluate(()=>({motivo:__e3.lectura.motivo,code:document.querySelector('#e3Dialog .e3-read [data-code]')?.dataset.code,preparables:document.querySelectorAll('#e3Dialog [data-estado^="preparable"]').length}));

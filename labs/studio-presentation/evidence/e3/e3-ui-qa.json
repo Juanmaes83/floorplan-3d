@@ -1,6 +1,6 @@
 {
  "schema": "rubik-lab-e3-ui-qa/1",
- "fecha": "2026-11-20T14:25:43.546Z",
+ "fecha": "2026-11-20T14:46:37.257Z",
  "copia": "master 130ba24 + e3/rubik-130ba24-e3.patch (aislada)",
  "origen": "http://f0-2b.localhost (y 127.0.0.1 para UI-17)",
  "entorno": {
@@ -27,7 +27,7 @@
   }
  ],
  "resumen": {
-  "PASS": 18,
+  "PASS": 23,
   "FAIL": 0,
   "SKIP": 0,
   "NOT_RUN": 2
@@ -194,7 +194,7 @@
    "titulo": "Contraste AA del texto del diálogo (≥4,5:1)",
    "resultado": "PASS",
    "detalle": {
-    "n": 167,
+    "n": 132,
     "min": 4.68,
     "peores": [
      {
@@ -252,6 +252,34 @@
   },
   {
    "navegador": "chromium",
+   "id": "UI-13b",
+   "titulo": "1180×820 táctil (emulación): sin desbordamiento horizontal y objetivos táctiles ≥44 px",
+   "resultado": "PASS",
+   "detalle": {
+    "cerrarVisible": true,
+    "ancho": 1040,
+    "vw": 1180,
+    "overflow": false,
+    "pequenos": [],
+    "estado": "verificado"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-14b",
+   "titulo": "844×390 táctil (emulación): sin desbordamiento horizontal y objetivos táctiles ≥44 px",
+   "resultado": "PASS",
+   "detalle": {
+    "cerrarVisible": true,
+    "ancho": 810,
+    "vw": 844,
+    "overflow": false,
+    "pequenos": [],
+    "estado": "verificado"
+   }
+  },
+  {
+   "navegador": "chromium",
    "id": "UI-15",
    "titulo": "EN + prefers-reduced-motion: textos en inglés y sin transiciones en el diálogo",
    "resultado": "PASS",
@@ -270,6 +298,46 @@
     "titulo": "准备交付",
     "nombreLang": "en",
     "aviso": "此配方缺少必需的来源。"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-18",
+   "titulo": "Cambiar de receta retira al instante la vista previa del candidato anterior",
+   "resultado": "PASS",
+   "detalle": {
+    "oculta": true,
+    "hijos": 0,
+    "cand": false,
+    "sel": "RP09"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-19",
+   "titulo": "Preparación en vuelo (lectura retenida, sin temporizadores): cambiar de receta la descarta; no aparece, no queda «ocupado» ni roba el foco",
+   "resultado": "PASS",
+   "detalle": {
+    "cand": false,
+    "ocupado": false,
+    "sel": "RP09",
+    "aviso": null,
+    "preview": true,
+    "cancelar": false,
+    "foco": "RP09"
+   }
+  },
+  {
+   "navegador": "chromium",
+   "id": "UI-20",
+   "titulo": "Sin la bandera de laboratorio no existe ninguna interfaz de diagnóstico (window.__e3)",
+   "resultado": "PASS",
+   "detalle": {
+    "diag": false,
+    "api": [
+     "card",
+     "open"
+    ]
    }
   },
   {
@@ -305,19 +373,19 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-escritorio-lista.png",
-   "bytes": 364595
+   "bytes": 354714
   },
   {
    "archivo": "evidence/e3/visual/e3-escritorio-bloqueada.png",
-   "bytes": 559343
+   "bytes": 563666
   },
   {
    "archivo": "evidence/e3/visual/e3-escritorio-verificado.png",
-   "bytes": 369707
+   "bytes": 384147
   },
   {
    "archivo": "evidence/e3/visual/e3-escritorio-desactualizado.png",
-   "bytes": 391183
+   "bytes": 396627
   },
   {
    "archivo": "evidence/e3/visual/e3-820-tarjeta.png",
@@ -325,11 +393,11 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-820-dialogo.png",
-   "bytes": 383228
+   "bytes": 329298
   },
   {
    "archivo": "evidence/e3/visual/e3-820-vista-previa.png",
-   "bytes": 315524
+   "bytes": 306655
   },
   {
    "archivo": "evidence/e3/visual/e3-390-tarjeta.png",
@@ -337,19 +405,43 @@
   },
   {
    "archivo": "evidence/e3/visual/e3-390-dialogo.png",
-   "bytes": 218359
+   "bytes": 200199
   },
   {
    "archivo": "evidence/e3/visual/e3-390-vista-previa.png",
-   "bytes": 204223
+   "bytes": 185524
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-1180-tarjeta.png",
+   "bytes": 282065
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-1180-dialogo.png",
+   "bytes": 311477
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-1180-vista-previa.png",
+   "bytes": 298683
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-844-tarjeta.png",
+   "bytes": 130365
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-844-dialogo.png",
+   "bytes": 134025
+  },
+  {
+   "archivo": "evidence/e3/visual/e3-844-vista-previa.png",
+   "bytes": 108120
   },
   {
    "archivo": "evidence/e3/visual/e3-en-reducido.png",
-   "bytes": 336060
+   "bytes": 326181
   },
   {
    "archivo": "evidence/e3/visual/e3-zh.png",
-   "bytes": 495336
+   "bytes": 504509
   },
   {
    "archivo": "evidence/e3/visual/e3-origen-no-prueba.png",
