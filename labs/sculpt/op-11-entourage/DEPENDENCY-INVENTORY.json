@@ -1,0 +1,1384 @@
+{
+  "schema": "rubik-sota.op11-c4-source-inventory-v1",
+  "sourceRepo": "laanlabs/openPlan3D",
+  "sourceCommit": "771c9e1ad30bd1c3cc7584d6eca74deb2e14943d",
+  "sourceTree": "9d085f30d6107e5d6959c7b5659d93eebd441516",
+  "symbolDefinitions": [
+    {
+      "id": "person",
+      "donorName": "Person",
+      "category": "people",
+      "donorDefaultWidthCm": 55,
+      "donorAspect": 0.6,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "people-pair",
+      "donorName": "Two People",
+      "category": "people",
+      "donorDefaultWidthCm": 100,
+      "donorAspect": 0.62,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "car-sedan",
+      "donorName": "Sedan",
+      "category": "vehicles",
+      "donorDefaultWidthCm": 460,
+      "donorAspect": 0.4,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "car-suv",
+      "donorName": "SUV",
+      "category": "vehicles",
+      "donorDefaultWidthCm": 470,
+      "donorAspect": 0.42,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "car-pickup",
+      "donorName": "Pickup",
+      "category": "vehicles",
+      "donorDefaultWidthCm": 520,
+      "donorAspect": 0.38,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "tree-deciduous",
+      "donorName": "Deciduous Tree",
+      "category": "planting",
+      "donorDefaultWidthCm": 400,
+      "donorAspect": 1,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "tree-conifer",
+      "donorName": "Conifer",
+      "category": "planting",
+      "donorDefaultWidthCm": 300,
+      "donorAspect": 1,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "shrub",
+      "donorName": "Shrub",
+      "category": "planting",
+      "donorDefaultWidthCm": 120,
+      "donorAspect": 0.9,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "hedge",
+      "donorName": "Hedge",
+      "category": "planting",
+      "donorDefaultWidthCm": 200,
+      "donorAspect": 0.3,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "potted-plant",
+      "donorName": "Potted Plant",
+      "category": "planting",
+      "donorDefaultWidthCm": 60,
+      "donorAspect": 1,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "grass-tuft",
+      "donorName": "Grass",
+      "category": "planting",
+      "donorDefaultWidthCm": 80,
+      "donorAspect": 0.5,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    },
+    {
+      "id": "patio-umbrella",
+      "donorName": "Patio Umbrella",
+      "category": "outdoor",
+      "donorDefaultWidthCm": 250,
+      "donorAspect": 1,
+      "measurementStatus": "DONOR_PLACEMENT_DEFAULT_NOT_PHYSICAL_PRODUCT_MEASUREMENT"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "LICENSE",
+      "role": "license",
+      "bytes": 1071,
+      "gitBlobSHA": "e19847719492831e7ba07f12a7929ed410b386a4"
+    },
+    {
+      "path": "package.json",
+      "role": "license",
+      "bytes": 1895,
+      "gitBlobSHA": "f1921daf2accbcd616c087f357f122a74fa32ea6"
+    },
+    {
+      "path": "src/svg-pathdata.d.ts",
+      "role": "license",
+      "bytes": 295,
+      "gitBlobSHA": "24918a6b3743fb918a5e410b2037fef50abd0d82"
+    },
+    {
+      "path": "src/lib/utils/entourageCatalog.ts",
+      "role": "catalogue",
+      "bytes": 6850,
+      "gitBlobSHA": "9eabb35b416cb1f2ac6e4aa5a379c7a8f9b77ee4"
+    },
+    {
+      "path": "src/lib/utils/entouragePlanBounds.ts",
+      "role": "catalogue",
+      "bytes": 628,
+      "gitBlobSHA": "c60b72e01a119daff5dfd316993421055d8807f6"
+    },
+    {
+      "path": "src/lib/utils/entourageImages.ts",
+      "role": "catalogue",
+      "bytes": 1435,
+      "gitBlobSHA": "39b9b443b019d0e7ad43f5b00b65809b0f5e84ae"
+    },
+    {
+      "path": "src/lib/utils/entourageDxf.ts",
+      "role": "catalogue",
+      "bytes": 2009,
+      "gitBlobSHA": "8319f36f222c519c7cb432d5a4d369972eba24a4"
+    },
+    {
+      "path": "src/lib/utils/cadExport.ts",
+      "role": "export",
+      "bytes": 11825,
+      "gitBlobSHA": "5533ebbaefcc681344fdf0c633d2fe91cf4e1e7b"
+    },
+    {
+      "path": "src/lib/utils/export.ts",
+      "role": "export",
+      "bytes": 48138,
+      "gitBlobSHA": "477b96c694e61d4855aa3c9149bd4c2c2d80e366"
+    },
+    {
+      "path": "src/lib/utils/canvasRenderer.ts",
+      "role": "export",
+      "bytes": 74620,
+      "gitBlobSHA": "3ebadb3257df8f40b48aa00e0f857093591ef053"
+    },
+    {
+      "path": "src/lib/utils/canvasSymbolDxf.ts",
+      "role": "export",
+      "bytes": 4565,
+      "gitBlobSHA": "f2f85ed7307ff53577529d70266ee4e0b85cd12e"
+    },
+    {
+      "path": "src/lib/utils/canvasSymbolSvg.ts",
+      "role": "export",
+      "bytes": 3691,
+      "gitBlobSHA": "293e651adcc48380d1777ed9da78a9cc4d4e71f3"
+    },
+    {
+      "path": "src/lib/utils/exportText.ts",
+      "role": "export",
+      "bytes": 855,
+      "gitBlobSHA": "24715bc799789a11f72aff38eed9ee8f5c88b92f"
+    },
+    {
+      "path": "src/lib/utils/exportVisibility.ts",
+      "role": "export",
+      "bytes": 3535,
+      "gitBlobSHA": "31a8da36f4ec8e6608d62ee2cd20e59239e47321"
+    },
+    {
+      "path": "src/lib/utils/planContentBounds.ts",
+      "role": "export",
+      "bytes": 10360,
+      "gitBlobSHA": "a146a22fbf59f292de73372b32ba025544979fbe"
+    },
+    {
+      "path": "src/lib/utils/planExportContent.ts",
+      "role": "export",
+      "bytes": 507,
+      "gitBlobSHA": "45e446f5b8062900bf6210c99c1ffed22b1999fd"
+    },
+    {
+      "path": "src/lib/utils/canvasPNG.ts",
+      "role": "export",
+      "bytes": 519,
+      "gitBlobSHA": "1480f3ab7a9be2e20ce3e3f34656acead50248c8"
+    },
+    {
+      "path": "src/lib/models/types.ts",
+      "role": "types",
+      "bytes": 8684,
+      "gitBlobSHA": "07edba8e16e92484e6050e5f6acb3c94bf1f96ad"
+    },
+    {
+      "path": "src/lib/i18n/entourageLabels.ts",
+      "role": "localization",
+      "bytes": 717,
+      "gitBlobSHA": "57aaacb7c08846f53aa70c4c21d82c51f19e40a0"
+    },
+    {
+      "path": "src/lib/i18n/index.ts",
+      "role": "localization",
+      "bytes": 1718,
+      "gitBlobSHA": "dcfe35c0e0fee2dd96d9ef2e8316e10b2c4d55a2"
+    },
+    {
+      "path": "src/lib/i18n/locales/en.ts",
+      "role": "localization",
+      "bytes": 93828,
+      "gitBlobSHA": "a3513464970b1e3ece667010ac5ccaa6f8c63abe"
+    },
+    {
+      "path": "src/lib/i18n/locales/pt.ts",
+      "role": "localization",
+      "bytes": 104173,
+      "gitBlobSHA": "bff9fe986c426d75ed4fab2a0006ec34c0bbe491"
+    },
+    {
+      "path": "tests/entourage-dxf.test.ts",
+      "role": "tests",
+      "bytes": 2592,
+      "gitBlobSHA": "0f0770388e2054f7eab4e2cf190292cb43a765c0"
+    },
+    {
+      "path": "tests/entourage-images.test.ts",
+      "role": "tests",
+      "bytes": 1444,
+      "gitBlobSHA": "59ef019381b0784a2a5d16e4972e07bac687d4f9"
+    },
+    {
+      "path": "tests/exports.test.ts",
+      "role": "tests",
+      "bytes": 29685,
+      "gitBlobSHA": "4a28e0eb398301a70d7ebcd302932087767a74db"
+    },
+    {
+      "path": "tests/plan-content-bounds.test.ts",
+      "role": "tests",
+      "bytes": 6396,
+      "gitBlobSHA": "cc4adb8dc16e8e2a4c3c84fa43942c040693aae8"
+    },
+    {
+      "path": "tests/plan-export-content.test.ts",
+      "role": "tests",
+      "bytes": 1078,
+      "gitBlobSHA": "c35d282e1e1f5e1c419a0d49d6f9a00de446f97c"
+    },
+    {
+      "path": "tests/browser/entourage-dxf-export.spec.ts",
+      "role": "tests",
+      "bytes": 4027,
+      "gitBlobSHA": "92eb8f982a325c790b699cc76e942dc9b7b484de"
+    },
+    {
+      "path": "tests/browser/entourage-pdf-export.spec.ts",
+      "role": "tests",
+      "bytes": 5026,
+      "gitBlobSHA": "d2fe6e493ee5d17212ca3be0aa7bb328ec052d39"
+    },
+    {
+      "path": "tests/browser/entourage-png-export.spec.ts",
+      "role": "tests",
+      "bytes": 4103,
+      "gitBlobSHA": "46048011c7d1ada962c8011c35e9c82a646aa354"
+    },
+    {
+      "path": "tests/browser/entourage-svg-export.spec.ts",
+      "role": "tests",
+      "bytes": 3843,
+      "gitBlobSHA": "a64cb9134f46eb518f49342a25f916e8c8a83c7f"
+    },
+    {
+      "path": "tests/browser/entourage-localization.spec.ts",
+      "role": "tests",
+      "bytes": 3345,
+      "gitBlobSHA": "a9904100fcc0cef389547fb642f12564cab17807"
+    },
+    {
+      "path": "tests/fixtures/render-benchmark.ts",
+      "role": "tests",
+      "bytes": 2977,
+      "gitBlobSHA": "7674d359b10e08fe8e2f685f9e984b17188818e6"
+    },
+    {
+      "path": "tests/fixtures/project.ts",
+      "role": "tests",
+      "bytes": 576,
+      "gitBlobSHA": "708810724fc439e97b75214b42c3f7212364fe12"
+    },
+    {
+      "path": "docs/entourage-dxf-export-validation.md",
+      "role": "validation_docs",
+      "bytes": 2026,
+      "gitBlobSHA": "fe31c5f3b5ee2e13b7a2abf026d4f321bac067bf"
+    },
+    {
+      "path": "docs/entourage-pdf-export-validation.md",
+      "role": "validation_docs",
+      "bytes": 1940,
+      "gitBlobSHA": "e16a60252b5e74954262eb62182e9365b0c0e598"
+    },
+    {
+      "path": "docs/entourage-png-export-validation.md",
+      "role": "validation_docs",
+      "bytes": 1715,
+      "gitBlobSHA": "14c1a3c38d696c701ca79d019c4ae0eed31d17dd"
+    },
+    {
+      "path": "docs/entourage-svg-export-validation.md",
+      "role": "validation_docs",
+      "bytes": 1819,
+      "gitBlobSHA": "dd2c1b1eb20f1538b3ef2b110de51e64f85f2d6a"
+    },
+    {
+      "path": "docs/entourage-cad-opacity-validation.md",
+      "role": "validation_docs",
+      "bytes": 1677,
+      "gitBlobSHA": "e9cde5dc3da5b0902f9766866d1c316bd933a798"
+    },
+    {
+      "path": "docs/entourage-group-validation.md",
+      "role": "validation_docs",
+      "bytes": 1588,
+      "gitBlobSHA": "bc3a0dbb91bd9d3f030c66d2928da76cad9a1bb7"
+    }
+  ],
+  "directDependencies": [
+    {
+      "source": "src/lib/utils/entouragePlanBounds.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/entourageImages.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/entourageDxf.ts",
+      "specifier": "dxf-writer",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/entourageDxf.ts",
+      "specifier": "svg-pathdata",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/entourageDxf.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/entourageDxf.ts",
+      "specifier": "./entourageCatalog",
+      "resolvedSourcePath": "src/lib/utils/entourageCatalog.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/entourageDxf.ts",
+      "specifier": "./canvasSymbolDxf",
+      "resolvedSourcePath": "src/lib/utils/canvasSymbolDxf.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./entourageDxf",
+      "resolvedSourcePath": "src/lib/utils/entourageDxf.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/i18n",
+      "resolvedSourcePath": "src/lib/i18n/index.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/i18n/furnitureNames",
+      "resolvedSourcePath": "src/lib/i18n/furnitureNames",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./entourageCatalog",
+      "resolvedSourcePath": "src/lib/utils/entourageCatalog.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./canvasSymbolDxf",
+      "resolvedSourcePath": "src/lib/utils/canvasSymbolDxf.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./canvasRenderer",
+      "resolvedSourcePath": "src/lib/utils/canvasRenderer.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./columnPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/columnPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./planExportContent",
+      "resolvedSourcePath": "src/lib/utils/planExportContent.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./exportText",
+      "resolvedSourcePath": "src/lib/utils/exportText.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./dimensionPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/dimensionPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./textAnnotationLayout",
+      "resolvedSourcePath": "src/lib/utils/textAnnotationLayout",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./doorSymbol",
+      "resolvedSourcePath": "src/lib/utils/doorSymbol",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./planOpening",
+      "resolvedSourcePath": "src/lib/utils/planOpening",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./planWallOutline",
+      "resolvedSourcePath": "src/lib/utils/planWallOutline",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "dxf-writer",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./furnitureDxf",
+      "resolvedSourcePath": "src/lib/utils/furnitureDxf",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./wallDimensionLabel",
+      "resolvedSourcePath": "src/lib/utils/wallDimensionLabel",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/utils/furnitureCatalog",
+      "resolvedSourcePath": "src/lib/utils/furnitureCatalog",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/utils/roomDetection",
+      "resolvedSourcePath": "src/lib/utils/roomDetection",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./roomNesting",
+      "resolvedSourcePath": "src/lib/utils/roomNesting",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/stores/settings",
+      "resolvedSourcePath": "src/lib/stores/settings",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "$lib/stores/planVisibility",
+      "resolvedSourcePath": "src/lib/stores/planVisibility",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "./exportVisibility",
+      "resolvedSourcePath": "src/lib/utils/exportVisibility.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/cadExport.ts",
+      "specifier": "svelte/store",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./entourageImages",
+      "resolvedSourcePath": "src/lib/utils/entourageImages.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/i18n",
+      "resolvedSourcePath": "src/lib/i18n/index.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/i18n/furnitureNames",
+      "resolvedSourcePath": "src/lib/i18n/furnitureNames",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./roomNesting",
+      "resolvedSourcePath": "src/lib/utils/roomNesting",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./entourageCatalog",
+      "resolvedSourcePath": "src/lib/utils/entourageCatalog.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./entouragePlanBounds",
+      "resolvedSourcePath": "src/lib/utils/entouragePlanBounds.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./planContentBounds",
+      "resolvedSourcePath": "src/lib/utils/planContentBounds.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./columnPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/columnPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./planExportContent",
+      "resolvedSourcePath": "src/lib/utils/planExportContent.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./dimensionPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/dimensionPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./textAnnotationLayout",
+      "resolvedSourcePath": "src/lib/utils/textAnnotationLayout",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./canvasSymbolSvg",
+      "resolvedSourcePath": "src/lib/utils/canvasSymbolSvg.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./furnitureSvg",
+      "resolvedSourcePath": "src/lib/utils/furnitureSvg",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./furniturePlanBounds",
+      "resolvedSourcePath": "src/lib/utils/furniturePlanBounds",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./furnitureCaption",
+      "resolvedSourcePath": "src/lib/utils/furnitureCaption",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./canvasPNG",
+      "resolvedSourcePath": "src/lib/utils/canvasPNG.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./doorSymbol",
+      "resolvedSourcePath": "src/lib/utils/doorSymbol",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./planOpening",
+      "resolvedSourcePath": "src/lib/utils/planOpening",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./wallPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/wallPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./wallDimensionLabel",
+      "resolvedSourcePath": "src/lib/utils/wallDimensionLabel",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/utils/furnitureCatalog",
+      "resolvedSourcePath": "src/lib/utils/furnitureCatalog",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/utils/roomDetection",
+      "resolvedSourcePath": "src/lib/utils/roomDetection",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/utils/canvasRenderer",
+      "resolvedSourcePath": "src/lib/utils/canvasRenderer.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/utils/canvasInteraction",
+      "resolvedSourcePath": "src/lib/utils/canvasInteraction",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/stores/settings",
+      "resolvedSourcePath": "src/lib/stores/settings",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "$lib/stores/planVisibility",
+      "resolvedSourcePath": "src/lib/stores/planVisibility",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./exportVisibility",
+      "resolvedSourcePath": "src/lib/utils/exportVisibility.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "svelte/store",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "jspdf",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./exportText",
+      "resolvedSourcePath": "src/lib/utils/exportText.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "./entourageImages",
+      "resolvedSourcePath": "src/lib/utils/entourageImages.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "./roomNesting",
+      "resolvedSourcePath": "src/lib/utils/roomNesting",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "./stairPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/stairPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "./dimensionPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/dimensionPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "./doorSymbol",
+      "resolvedSourcePath": "src/lib/utils/doorSymbol",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/canvasInteraction",
+      "resolvedSourcePath": "src/lib/utils/canvasInteraction",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/stores/settings",
+      "resolvedSourcePath": "src/lib/stores/settings",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/furnitureCatalog",
+      "resolvedSourcePath": "src/lib/utils/furnitureCatalog",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/furnitureIcons",
+      "resolvedSourcePath": "src/lib/utils/furnitureIcons",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/roomDetection",
+      "resolvedSourcePath": "src/lib/utils/roomDetection",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/textureGenerator",
+      "resolvedSourcePath": "src/lib/utils/textureGenerator",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/entourageCatalog",
+      "resolvedSourcePath": "src/lib/utils/entourageCatalog.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasRenderer.ts",
+      "specifier": "$lib/utils/interiorArea",
+      "resolvedSourcePath": "src/lib/utils/interiorArea",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasSymbolDxf.ts",
+      "specifier": "dxf-writer",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/canvasSymbolSvg.ts",
+      "specifier": "./exportText",
+      "resolvedSourcePath": "src/lib/utils/exportText.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/exportVisibility.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/exportVisibility.ts",
+      "specifier": "$lib/stores/settings",
+      "resolvedSourcePath": "src/lib/stores/settings",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/exportVisibility.ts",
+      "specifier": "./planExportContent",
+      "resolvedSourcePath": "src/lib/utils/planExportContent.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./openingPlanBounds",
+      "resolvedSourcePath": "src/lib/utils/openingPlanBounds",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./roomNesting",
+      "resolvedSourcePath": "src/lib/utils/roomNesting",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./entouragePlanBounds",
+      "resolvedSourcePath": "src/lib/utils/entouragePlanBounds.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./stairPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/stairPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "$lib/stores/settings",
+      "resolvedSourcePath": "src/lib/stores/settings",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./canvasRenderer",
+      "resolvedSourcePath": "src/lib/utils/canvasRenderer.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./roomDetection",
+      "resolvedSourcePath": "src/lib/utils/roomDetection",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./wallPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/wallPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./furniturePlanBounds",
+      "resolvedSourcePath": "src/lib/utils/furniturePlanBounds",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./textAnnotationLayout",
+      "resolvedSourcePath": "src/lib/utils/textAnnotationLayout",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./dimensionPlanGeometry",
+      "resolvedSourcePath": "src/lib/utils/dimensionPlanGeometry",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planContentBounds.ts",
+      "specifier": "./interiorArea",
+      "resolvedSourcePath": "src/lib/utils/interiorArea",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/utils/planExportContent.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/i18n/entourageLabels.ts",
+      "specifier": "./index",
+      "resolvedSourcePath": "src/lib/i18n/index.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/i18n/index.ts",
+      "specifier": "svelte/store",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "src/lib/i18n/index.ts",
+      "specifier": "./locales/en",
+      "resolvedSourcePath": "src/lib/i18n/locales/en.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/i18n/index.ts",
+      "specifier": "./locales/pt",
+      "resolvedSourcePath": "src/lib/i18n/locales/pt.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/entourage-dxf.test.ts",
+      "specifier": "vitest",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/entourage-dxf.test.ts",
+      "specifier": "dxf-writer",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/entourage-dxf.test.ts",
+      "specifier": "$lib/utils/entourageDxf",
+      "resolvedSourcePath": "src/lib/utils/entourageDxf.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/entourage-dxf.test.ts",
+      "specifier": "$lib/utils/entourageCatalog",
+      "resolvedSourcePath": "src/lib/utils/entourageCatalog.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/entourage-dxf.test.ts",
+      "specifier": "$lib/utils/canvasSymbolDxf",
+      "resolvedSourcePath": "src/lib/utils/canvasSymbolDxf.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/entourage-images.test.ts",
+      "specifier": "vitest",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/entourage-images.test.ts",
+      "specifier": "$lib/utils/entourageImages",
+      "resolvedSourcePath": "src/lib/utils/entourageImages.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "vitest",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "svelte/store",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "$lib/utils/export",
+      "resolvedSourcePath": "src/lib/utils/export.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "$lib/utils/cadExport",
+      "resolvedSourcePath": "src/lib/utils/cadExport.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "$lib/stores/exportNotice",
+      "resolvedSourcePath": "src/lib/stores/exportNotice",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "$lib/services/customModels",
+      "resolvedSourcePath": "src/lib/services/customModels",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "$lib/utils/roomDetection",
+      "resolvedSourcePath": "src/lib/utils/roomDetection",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "./fixtures/render-benchmark",
+      "resolvedSourcePath": "tests/fixtures/render-benchmark.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/exports.test.ts",
+      "specifier": "./fixtures/project",
+      "resolvedSourcePath": "tests/fixtures/project.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/plan-content-bounds.test.ts",
+      "specifier": "vitest",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/plan-content-bounds.test.ts",
+      "specifier": "$lib/utils/planContentBounds",
+      "resolvedSourcePath": "src/lib/utils/planContentBounds.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/plan-content-bounds.test.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/plan-export-content.test.ts",
+      "specifier": "vitest",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/plan-export-content.test.ts",
+      "specifier": "$lib/utils/planExportContent",
+      "resolvedSourcePath": "src/lib/utils/planExportContent.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/plan-export-content.test.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-dxf-export.spec.ts",
+      "specifier": "@playwright/test",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-dxf-export.spec.ts",
+      "specifier": "node:fs/promises",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-dxf-export.spec.ts",
+      "specifier": "../fixtures/render-benchmark",
+      "resolvedSourcePath": "tests/fixtures/render-benchmark.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-pdf-export.spec.ts",
+      "specifier": "@playwright/test",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-pdf-export.spec.ts",
+      "specifier": "node:fs/promises",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-pdf-export.spec.ts",
+      "specifier": "../fixtures/render-benchmark",
+      "resolvedSourcePath": "tests/fixtures/render-benchmark.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-png-export.spec.ts",
+      "specifier": "@playwright/test",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-png-export.spec.ts",
+      "specifier": "node:fs/promises",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-png-export.spec.ts",
+      "specifier": "../fixtures/render-benchmark",
+      "resolvedSourcePath": "tests/fixtures/render-benchmark.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-svg-export.spec.ts",
+      "specifier": "@playwright/test",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-svg-export.spec.ts",
+      "specifier": "node:fs/promises",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-svg-export.spec.ts",
+      "specifier": "../fixtures/render-benchmark",
+      "resolvedSourcePath": "tests/fixtures/render-benchmark.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-localization.spec.ts",
+      "specifier": "@playwright/test",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/browser/entourage-localization.spec.ts",
+      "specifier": "node:fs/promises",
+      "resolvedSourcePath": null,
+      "kind": "PACKAGE_OR_RUNTIME",
+      "snapshot": "EXTERNAL_NOT_COPIED"
+    },
+    {
+      "source": "tests/fixtures/render-benchmark.ts",
+      "specifier": "../../src/lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "tests/fixtures/project.ts",
+      "specifier": "$lib/stores/project",
+      "resolvedSourcePath": "src/lib/stores/project",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    },
+    {
+      "source": "tests/fixtures/project.ts",
+      "specifier": "$lib/models/types",
+      "resolvedSourcePath": "src/lib/models/types.ts",
+      "kind": "DONOR_INTERNAL",
+      "snapshot": "COPIED"
+    },
+    {
+      "source": "src/lib/utils/export.ts",
+      "specifier": "./projectBackup",
+      "resolvedSourcePath": "src/lib/utils/projectBackup",
+      "kind": "DONOR_INTERNAL_REEXPORT",
+      "snapshot": "REFERENCED_NOT_COPIED"
+    }
+  ],
+  "omittedDirectInternalModules": [
+    "src/lib/i18n/furnitureNames",
+    "src/lib/services/customModels",
+    "src/lib/stores/exportNotice",
+    "src/lib/stores/planVisibility",
+    "src/lib/stores/project",
+    "src/lib/stores/settings",
+    "src/lib/utils/canvasInteraction",
+    "src/lib/utils/columnPlanGeometry",
+    "src/lib/utils/dimensionPlanGeometry",
+    "src/lib/utils/doorSymbol",
+    "src/lib/utils/furnitureCaption",
+    "src/lib/utils/furnitureCatalog",
+    "src/lib/utils/furnitureDxf",
+    "src/lib/utils/furnitureIcons",
+    "src/lib/utils/furniturePlanBounds",
+    "src/lib/utils/furnitureSvg",
+    "src/lib/utils/interiorArea",
+    "src/lib/utils/openingPlanBounds",
+    "src/lib/utils/planOpening",
+    "src/lib/utils/planWallOutline",
+    "src/lib/utils/projectBackup",
+    "src/lib/utils/roomDetection",
+    "src/lib/utils/roomNesting",
+    "src/lib/utils/stairPlanGeometry",
+    "src/lib/utils/textAnnotationLayout",
+    "src/lib/utils/textureGenerator",
+    "src/lib/utils/wallDimensionLabel",
+    "src/lib/utils/wallPlanGeometry"
+  ],
+  "externalPackageOrRuntimeSpecifiers": [
+    "@playwright/test",
+    "dxf-writer",
+    "jspdf",
+    "node:fs/promises",
+    "svelte/store",
+    "svg-pathdata",
+    "vitest"
+  ],
+  "externalVersionEvidence": {
+    "dxf-writer": "^1.18.4",
+    "svg-pathdata": "6.0.3",
+    "jspdf": "^4.2.1",
+    "vitest": "^5.0.5",
+    "@playwright/test": "1.63.0",
+    "svelte": "^5.57.0"
+  },
+  "limitations": [
+    "Imported source modules are not a stand-alone runnable application; untouched donor dependencies remain outside the scope",
+    "Direct static import/re-export inventory; not a complete executable recursive dependency closure",
+    "No actual user images were copied; custom-raster image support is source code only",
+    "DXF vectors support builtin symbols; personalized raster symbols are not converted to CAD",
+    "EN/PT dictionaries preserved as donor originals; no ES entries invented",
+    "Donor default symbol widths are not independent measurements of real commercial products",
+    "No runtime/build/browser tests executed on this branch; donor validation documents are historical"
+  ]
+}
