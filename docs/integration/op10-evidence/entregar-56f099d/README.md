@@ -25,3 +25,11 @@ La autorización del propietario para publicar, fusionar y desplegar corresponde
 2. Si toda la CI queda en verde, fusionar por merge commit bajo la autorización vigente. Ante cualquier fallo o discrepancia, detener la operación. Conservar la igualdad byte a byte del GLB, sin relanzar matrices.
 3. Verificar SHA, árbol, CI posfusión, Production READY y el recorrido frontend hasta descargar el ZIP con un proyecto sintético. Actualizar el resultado en #275 y enlazarlo desde #289. C6 y Studio E3 quedan sin activar.
 4. Después, Simulator E y D requieren autorizaciones separadas. E conserva el HEAD `a5d4ccdef8b7be45fb1e456126fe3145009d7e19` y el árbol provisional `dec6d20694e083cb615f42eae60bb74fd3209523` sobre la candidata corregida. D conserva el gate de captura WebKit. A0 sigue congelada, D4 independiente y C/A pendientes de aceptación visual.
+
+## Fusión y comprobación en Production
+
+GitHub incorporó OP‑10 mediante el commit de merge `adb86034d76e7ddd2033fcadf571a4358c5d25e0`, con padres `bf131c304391eb393412c12e6fb8c1f94e22a1a3` y `56f099dd8c653aa7a27fd771a16654df214cdee3`. Árbol verificado `1393aef8c7f09491f52130d60ae0838b0d2421b3`. CI de la PR: 93 aprobados y una omisión prevista.
+
+[Production READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/CmeZpDHXWmSrv5vh1dzKCPwidJCa) para el SHA de merge. El navegador autenticado recorrió Entregar y descargó el ZIP con un proyecto sintético. Conservó proyecto y almacenamiento, restituyó la suspensión, registró 0 fotogramas adicionales en 500 ms, 0 peticiones externas, 0 errores y la condición `observed-only`. [Captura](production-descarga.png) · [Resultado](production.json)
+
+CI posfusión 5/5 workflows. [CI Impact Observation](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44721203415) confirmó los 42 contratos originales.
