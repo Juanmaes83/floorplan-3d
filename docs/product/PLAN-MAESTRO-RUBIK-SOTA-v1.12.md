@@ -283,6 +283,8 @@ flowchart LR
 
 ### 6.3 Cortes propuestos
 
+OP-11 lote 01 (#294) y Simulator A (#295) ya están en master. El siguiente corte preparado es R03 + idioma. R02-A seguirá de forma independiente tras revisar #296. Los estados de despliegue y verificación se mantienen en el [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md).
+
 #### Actualización operativa · 20/11/2026
 
 C/C-bis se cerró en #293. La cola conserva OP-11 lote 01 → Simulator A; verificar y acreditar la actualización exacta de #294 antes de avanzar. Preparar después Studio E3 y OP-11 lote 02 en cortes independientes. #271 y D conservan sus gates. OP-05 P1–P4, R03 holguras, R02-A, R01 y A0 se recuperan desde los SHA del [handoff maestro](../integration/HANDOFF-MAESTRO-RUBIK-SOTA.md#corte-operativo-20112026--293-y-recuperaci%C3%B3n-auditada). R01 queda HOLD, A0/F0 congeladas, OP-07 inactivo y C1 de OP-05 NO-GO. Ningún corte abre una piedra o requiere modularizar el editor.

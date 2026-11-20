@@ -1,5 +1,9 @@
 # RUBIK SOTA · Inventario de integración Simulator C, A y D
 
+## Corte posterior a #295
+
+[Simulator A #295](https://github.com/Juanmaes83/floorplan-3d/pull/295) se integró en master `a6a0494b6f15ed60db542ef6c95530ae3c2c0ca2`, árbol `1dc7a264692ae6141de6156012978d4934baa567`. CI de PR con 32 aprobados y la omisión prevista de full-regression. [Production READY para el SHA exacto](https://vercel.com/juanma-espinosas-projects/floorplan-3d/Gyz9GuPknX9oaa8XSkyTsj1vo7jv). Seis recursos de Evolución coinciden byte a byte con master por HTTP autenticado. Se conserva la aceptación del propietario para la construcción por hiladas. La verificación posfusión se sigue por SHA en GitHub.
+
 ## Corte 20/11/2026 · C integrado, A y D pendientes
 
 - **C/C-bis y dock.** #293 integrada y Production verificada sobre `e32c7cd7efddd791b9ff17e7dc8e8309ee19f3d4`. [Estado maestro](../product/ESTADO-MAESTRO-RUBIK-SOTA.md).
