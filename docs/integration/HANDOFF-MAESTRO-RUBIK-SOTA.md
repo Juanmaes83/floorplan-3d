@@ -58,6 +58,10 @@ El candidato exacto de #290 está publicado. El [registro de continuidad y evide
 
 Auditar todas las capacidades desde las primeras versiones hasta el master efectivo en Home, Plataforma y Entregables. El [protocolo permanente](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE.md#42-auditoría-retrospectiva-de-capacidades) define cobertura, criterios y evidencias. Usar las autoridades existentes y registrar el resultado diferencial en continuidad. El inventario puede avanzar en paralelo con la CI. Acreditar disponibilidad sobre Production efectivo y reservar las correcciones para cortes autorizados.
 
+## Actualización A7 — OP-10 en Production
+
+#290 quedó integrada y disponible en Production. El [cierre en #275](https://github.com/Juanmaes83/floorplan-3d/blob/56d94bbc9056f662a600547471d8e5b3ae983ce7/docs/integration/op10-evidence/entregar-56f099d/README.md) contiene SHA, árbol, padres, CI y la prueba de descarga del frontend. El [registro inicial de auditoría retrospectiva](https://github.com/Juanmaes83/floorplan-3d/blob/56d94bbc9056f662a600547471d8e5b3ae983ce7/docs/integration/AUDITORIA-RETROSPECTIVA-CAPACIDADES.md) vive en #275. Simulator E y D conservan autorizaciones independientes.
+
 ## Foto original de auditoría (09:44 CET, conservada íntegra)
 
 
