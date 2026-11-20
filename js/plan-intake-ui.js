@@ -32,6 +32,52 @@
   $('#uploadPdfModeInfo').textContent=`La página contiene ${count} trazos vectoriales. Puedes importar los muros, puertas, ventanas y estancias con medidas (escala ${detected?`1:${detected} detectada en el plano`:'no indicada en el plano: compruébala'}) o usarla como imagen para calibrar a mano.`;
   return new Promise(resolve=>{dialog.addEventListener('close',()=>{const scale=Math.round(Number(input.value));resolve(dialog.returnValue==='vector'?(scale>=1&&scale<=1000?{mode:'vector',scale}:{mode:'raster'}):dialog.returnValue==='raster'?{mode:'raster'}:null);},{once:true});dialog.returnValue='';dialog.showModal();});
  }
+ function previewRoomPlan(scan,session,omissions){
+  const A=window.FloorPlanScanAlignment,target=app().project;
+  const dialog=$('#roomPlanJoinDialog'),fixed=$('#roomPlanFixedDoor'),moving=$('#roomPlanMovingDoor');
+  const preview=$('#roomPlanJoinPreview'),status=$('#roomPlanJoinStatus'),apply=$('#roomPlanJoinApply');
+  const label=app().levelContext?.levelName||target.name;
+  $('#roomPlanJoinFloor').textContent=`Destino: ${label}. El escaneo aparecerá en naranja. Las medidas son estimadas.${omissions}`;
+  const options=(select,project)=>{
+   const doors=A.doors(project);
+   select.replaceChildren(...doors.map((door,i)=>{
+    const wall=project.walls.find(w=>w.id===door.wallId);
+    const t=(door.offsetMm+door.widthMm/2)/Math.hypot(wall.end.x-wall.start.x,wall.end.y-wall.start.y);
+    const x=Math.round(wall.start.x+t*(wall.end.x-wall.start.x)),y=Math.round(wall.start.y+t*(wall.end.y-wall.start.y));
+    return new Option(`Puerta ${i+1} · ${door.widthMm} mm · (${x}, ${y})`,door.id);
+   }));
+  };
+  options(fixed,target);options(moving,scan);
+  if(!fixed.options.length||!moving.options.length)throw Error('Para unir escaneos, la planta y el escaneo deben tener al menos una puerta.');
+  const svg=(name,attrs)=>{
+   const node=document.createElementNS('http://www.w3.org/2000/svg',name);
+   for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);
+   return node;
+  };
+  let proposal;
+  function update(){
+   proposal=null;apply.disabled=true;preview.replaceChildren();preview.setAttribute('hidden','');
+   try{
+    const result=A.propose(target,scan,{movingId:moving.value,targetId:fixed.value});
+    const walls=target.walls.filter(w=>w.status!=='demolished').concat(result.addedWalls);
+    const pts=walls.flatMap(w=>[w.start,w.end]),xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+    const x=Math.min(...xs),y=Math.min(...ys),w=Math.max(...xs)-x,h=Math.max(...ys)-y,margin=Math.max(w,h)*.06+100;
+    preview.setAttribute('viewBox',`${x-margin} ${y-margin} ${w+2*margin} ${h+2*margin}`);
+    const moved=new Set(result.addedWalls.map(w=>w.id));
+    for(const wall of walls)preview.append(svg('line',{x1:wall.start.x,y1:wall.start.y,x2:wall.end.x,y2:wall.end.y,stroke:moved.has(wall.id)?'#b24c25':'#344351','stroke-width':wall.thicknessMm}));
+    for(const p of [result.reference,result.targetReference])preview.append(svg('circle',{cx:p.x,cy:p.y,r:Math.max(45,margin*.13),fill:'#176b53'}));
+    preview.removeAttribute('hidden');
+    status.textContent=result.canApply?`Distancia entre ejes de muro: ${result.gapMm} mm. Diferencia de ancho entre puertas: ${result.widthDifferenceMm} mm.`:'Vista previa disponible. La escala de esta planta no admite añadir medidas estimadas sin perder su estado de calibración.';
+    proposal=result;apply.disabled=!result.canApply;
+   }catch(error){status.textContent=error.message;}
+  }
+  fixed.onchange=moving.onchange=update;
+  update();dialog.returnValue='';dialog.showModal();
+  return new Promise(resolve=>dialog.addEventListener('close',()=>{
+   fixed.onchange=moving.onchange=null;
+   resolve(dialog.returnValue==='join'&&proposal?.canApply&&app().fileImportCurrent(session)?proposal.project:null);
+  },{once:true}));
+ }
  const converters={
   async pdf(bytes,name,kind,session){
    const lib=await pdfjs(),task=lib.getDocument({data:bytes.slice(),isEvalSupported:false});let doc;try{doc=await task.promise;}catch{await task.destroy();throw Error('No se pudo abrir el PDF. Puede estar protegido con contraseña o dañado.');}
@@ -88,9 +134,9 @@
  let active=null;
  const cancelButton=$('#uploadCancel');
  function setBusy(value){document.body.classList.toggle('uploading',value);cancelButton.hidden=!value;}
- function cancelDialogs(){active=null;setBusy(false);for(const id of ['uploadPdfPage','uploadPdfMode']){const dialog=$('#'+id);if(dialog.open){dialog.returnValue='cancel';dialog.close();}}}
+ function cancelDialogs(){active=null;setBusy(false);for(const id of ['uploadPdfPage','uploadPdfMode','roomPlanJoinDialog']){const dialog=$('#'+id);if(dialog.open){dialog.returnValue='cancel';dialog.close();}}}
  function cancel(){app().cancelFileImport();say('Importación cancelada. El proyecto actual se conserva.');}
- async function upload(file){
+ async function upload(file,{join=false}={}){
   if(active&&app().fileImportCurrent(active)){say('Ya se está procesando un plano. Puedes cancelar la importación.');return;}
   if(!file)return;
   if(file.size>Math.max(I.LIMITS.uploadBytes,T.LIMITS.packageBytes)){say('El archivo supera el límite de importación. Exporta una versión más ligera.');return;}
@@ -99,11 +145,25 @@
   try{
    const bytes=new Uint8Array(await file.arrayBuffer()),kind=I.sniff(bytes,file.name);
    if(!current())return;
+   if(join&&kind!=='json')throw Error('Selecciona un escaneo RoomPlan en JSON.');
    if(kind==='zip'){if(await traceUI().importZip(file,{transaction:session}))say('Proyecto ZIP importado.');return;}
    if(file.size>I.LIMITS.uploadBytes)throw Error('El archivo supera 200 MB. Exporta una versión más ligera del plano.');
    if(kind==='json'){
     let value;try{value=JSON.parse(decodeText(bytes));}catch{throw Error('El archivo JSON no es válido o está incompleto.');}
     const type=I.classifyJson(value);
+    if(join){
+     if(type!=='roomplan')throw Error('Selecciona un escaneo RoomPlan en JSON.');
+     const surfaces=['walls','doors','windows','openings'].flatMap(key=>Array.isArray(value[key])?value[key]:[]);
+     const stories=new Set(surfaces.map(s=>s?.story).filter(story=>story!==undefined));
+     if((Array.isArray(value.rooms)&&value.rooms.length>1)||stories.size>1)throw Error('Exporta una planta por archivo RoomPlan y selecciona su planta de destino.');
+     const {project,report}=I.roomPlanToProject(value,{name:stem(file.name)});
+     const objects=Array.isArray(value.objects)?value.objects.length:0;
+     const omissions=(objects?` El conversor no incorpora los objetos detectados (${objects}).`:'')+(report.skippedOpenings?` Huecos sin muro cercano: ${report.skippedOpenings}.`:'');
+     await script('js/scan-alignment.js');if(!current())return;
+     const next=await previewRoomPlan(project,session,omissions);
+     if(next&&app().applyRoomPlanJoin(next,session))say('Escaneo unido a la planta. Revisa las medidas estimadas. Puedes deshacer la unión.');
+     return;
+    }
     if(type==='roomplan'){const {project,report}=I.roomPlanToProject(value,{name:stem(file.name)});if(adopt(project,stem(file.name)))say(`Escaneo RoomPlan importado: ${report.walls} muros, ${report.openings} puertas, ventanas o huecos y ${report.rooms} ${report.rooms===1?'estancia':'estancias'}${report.skippedOpenings?`; ${report.skippedOpenings} huecos sin muro cercano`:''}. Revisa las medidas.`,9000);return;}
     if(type==='geojson')throw Error(I.GUIDANCE.geojson);
     await app().importProjectFile(file,{fromUpload:true,transaction:session});return;
@@ -142,6 +202,9 @@
  $('#importImage').onclick=()=>{document.querySelector('details.menu').open=false;pick();};
  cancelButton.onclick=cancel;
  input.onchange=e=>{const file=e.target.files[0];e.target.value='';upload(file);};
+ const joinInput=$('#roomPlanJoinIn');
+ $('#joinRoomPlan').onclick=()=>{document.querySelector('details.menu').open=false;joinInput.click();};
+ joinInput.onchange=e=>{const file=e.target.files[0];e.target.value='';upload(file,{join:true});};
 
  const overlay=$('#dropOverlay');let depth=0;
  const hasFiles=e=>[...(e.dataTransfer?.types||[])].includes('Files');
@@ -150,6 +213,6 @@
  addEventListener('dragleave',e=>{if(!hasFiles(e))return;depth=Math.max(0,depth-1);if(!depth)overlay.classList.remove('show');});
  addEventListener('drop',e=>{if(!hasFiles(e))return;e.preventDefault();depth=0;overlay.classList.remove('show');const files=[...e.dataTransfer.files];if(files.length>1)say('Se sube un plano cada vez: se usará el primer archivo.');upload(files[0]);});
 
- addEventListener('keydown',e=>{if(e.key==='Escape'&&active&&!$('#uploadPdfMode').open&&!$('#uploadPdfPage').open)cancel();});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&active&&!$('#uploadPdfMode').open&&!$('#uploadPdfPage').open&&!$('#roomPlanJoinDialog').open)cancel();});
  window.FloorPlanUpload={upload,pick,cancel,cancelDialogs};
 })();
