@@ -87,6 +87,21 @@ Antes de S4b había 4,28 mm de costura por junta; ahora 0.
   - Firefox y WebKit no están probados aquí.
 - **Estado:** DESARROLLADO y VALIDADO (Chromium). Para INTEGRADO y CONECTADO falta la cirugía de Codex sobre F0.2b con autorización.
 
+## Bloque 5 · DXF — 20/11/2026
+- **Paso de CI G-02 con la serie aplicada:**
+  - `tests/g02-dxf.test.cjs` 6/6.
+  - `tests/g02-dxf-cad.py` con **ezdxf 1.4.4** (la versión fijada en CI): AC1021, mm, auditoría 0 errores y 0 reparaciones.
+  - El DXF del ejemplo v1 es **idéntico byte a byte** al de master `bf131c30` (`cmp`).
+- **Muro curvo e inclinado (2.0):** `integration/g02-dxf-curved.cjs` genera el DXF del ejemplo con ventana y puerta; `integration/g02-dxf-curved-cad.py` lo lee con ezdxf 1.4.4. Resultado:
+  - auditoría 0/0;
+  - 94 huellas de 4 vértices cerradas;
+  - **área leída 20,1863 m², igual a la del núcleo**;
+  - el muro curvo son 25 facetas que cubren exactamente grueso × trayectoria (5553,2 mm);
+  - puertas y ventanas presentes.
+  - Se mide por área porque una faceta (unos 222 mm) puede ser más corta que el grueso (240 mm) y el eje por lados cortos sería ambiguo.
+- **Honestidad:** es un lector independiente, **no** la aceptación en dos CAD comerciales. Esa aceptación (arquitecto: AutoCAD/BricsCAD o equivalente, con unidades, cotas, huecos y longitudes) sigue PENDIENTE y no se atribuye a la relectura con `plan-intake` ni a ezdxf.
+- **Fallo previo, no de OP-07:** «G-02 downloads only the active building level» también falla en master `bf131c30`, con la misma aserción: `file.name.endsWith(level.name+'.dxf')`, el nombre del archivo descargado. Es un corte separado, si se autoriza.
+
 ## Pendiente (en este orden)
 1. **Blender (OP-10 candidata `claude/compassionate-galileo-mlgigy@6d3e5260`, congelada, NO modificar).**
    Trabajo en rama local `op07-blender-lab` (worktree `/home/user/op07b`) = 6d3e5260 + `op07-v2`, fusión limpia.
