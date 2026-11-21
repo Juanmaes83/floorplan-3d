@@ -55,12 +55,14 @@
    window.FloorPlanDeliveryPreview?.card(grid.querySelector('[data-group="experience"] .professional-group-items'));
   }
   if(area==='studio'){
+   window.RubikE3Entregables?.card(grid,'studio'); // STUDIO E3
    const profiles=grid.querySelector('[data-module="studio"]'),snap=FloorPlanBrandUI.snapshot(),profile=snap?.profile;
    const preview=el('div',undefined,profiles,'professional-signature-preview');profiles.querySelector('h3').after(preview);el('small',tx('Así firmas tus entregas','Your delivery signature','您的交付签名'),preview);
    if(profile){if(profile.logo?.startsWith('data:image/png;')){const img=el('img',undefined,preview);img.src=profile.logo;img.alt=tx('Logo profesional seleccionado','Selected professional logo','所选专业标志');}el('strong',profile.name,preview);for(const value of [profile.person,profile.tagline,profile.email,profile.phone,profile.web])if(value)el('span',value,preview);}
    else{symbol(preview,'identity');el('strong',tx('Tu nombre, tu trabajo','Your name, your work','您的名字，您的作品'),preview);el('span',tx('Sin identidad seleccionada. Elige un perfil para ver su firma.','No identity selected. Choose a profile to preview its signature.','尚未选择身份。选择配置以预览签名。'),preview);}
   }
   projectFirst(grid,m,summary,projectContext);
+  if(area==='deliver')window.RubikE3Entregables?.card(grid.querySelector('[data-group="documentation"] .professional-group-items'),'entregar');
  }
  // Project-First A1: each output shows what Rubik already produced from this project, before any click. Previews
  // come from FloorPlanProjectPreview (real plan, real sheet, model axonometric, selected signature); every fact

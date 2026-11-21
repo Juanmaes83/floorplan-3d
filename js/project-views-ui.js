@@ -10,7 +10,8 @@
  const listeners=new Set();
  let views=null,busy=null,error=null;
  const revision=()=>FloorPlanGuide.revision(app.project);
- const key=()=>[app.entryId,app.project?.id,revision(),app.levelContext?.activeLevelId||''].join('|');
+ // View labels are captured in the active language and exported in signed images.
+ const key=()=>[app.entryId,app.project?.id,revision(),app.levelContext?.activeLevelId||'',typeof LANG==='string'?LANG:'es'].join('|');
  const emit=()=>{for(const fn of listeners)try{fn();}catch{}};
  // The selection the professional saved for the presentation, when it is readable; otherwise null.
  function savedSelection(){try{const raw=localStorage.getItem(FloorPlanPresentationCore.key(app.entryId,app.project.id));const s=raw&&JSON.parse(raw);return s?.projectId===app.project.id&&Array.isArray(s.roomIds)?s.roomIds:null;}catch{return null;}}
