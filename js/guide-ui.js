@@ -76,7 +76,7 @@
  const currentAction=btn('guidePrimary','',()=>runTask(progress().current),current,true);
  const secondaryAction=btn('guideSecondary','',()=>{},current);secondaryAction.classList.add('guide-link');const laterAction=btn('guideLater','',()=>{},current);laterAction.classList.add('guide-link');
  const goalDone=el('p',undefined,copy,'guide-goal-done');
- const presentAction=btn('guidePresent','',()=>window.FloorPlanPresentation?.open(),current);
+ const presentAction=btn('guidePresent','',event=>window.FloorPlanPresentation?.open(event.currentTarget),current);
  const exampleLine=el('div',undefined,bar,'guide-example'),exampleNote=el('span',undefined,exampleLine);btn('guideCopyExample','',()=>copyExample(),exampleLine);
  applyCompact();
  const empty=el('div',undefined,$('#stage'),'plan-empty');empty.id='guideEmpty';const emptyBox=el('div',undefined,empty),emptyTitle=el('h2',undefined,emptyBox),emptyText=el('p',undefined,emptyBox);btn('guideEmptyAction','',()=>runTask(progress().tasks.find(t=>t.id==='geometry')),emptyBox,true);

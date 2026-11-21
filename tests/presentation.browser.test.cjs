@@ -328,7 +328,14 @@ test('3D camera, focus and editor state return after Escape and browser Back',{t
  const {page,errors}=await setup(t,{width:1440,height:900});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
  const beforeState=await state(page),camera=await page.evaluate(()=>View3D.presentationInspect());
+ const editorLayout=()=>page.evaluate(()=>{
+  const {libOpen,panelOpen,hiddenLib,hiddenPanel}=FloorPlanApp.capturePresentationEntry(),stage=document.querySelector('#stage');
+  return {libOpen,panelOpen,hiddenLib,hiddenPanel,width:stage.clientWidth,height:stage.clientHeight};
+ });
+ const layoutBefore=await editorLayout();
  for(const exit of ['Escape','Back']){
+  // A CSS delay leaves the presentation width unchanged before the columns begin to move.
+  if(exit==='Back')await page.addStyleTag({content:'.app{transition-delay:220ms !important}'});
   await (await presentEntry(page)).click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
   await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
   await page.getByRole('button',{name:'Siguiente →'}).click();await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false');
@@ -338,6 +345,7 @@ test('3D camera, focus and editor state return after Escape and browser Back',{t
   const restored=await page.evaluate(()=>View3D.presentationInspect());for(const key of ['position','quaternion','target'])for(let i=0;i<restored[key].length;i++)assert.ok(Math.abs(restored[key][i]-camera[key][i])<1e-5,`${exit}: camera ${key}[${i}]`);
   assert.ok(Math.abs(restored.fov-camera.fov)<1e-5);assert.equal(restored.aspect,camera.aspect);
   assert.deepEqual(restored.options,camera.options);assert.deepEqual(restored.doors,camera.doors);assert.deepEqual(restored.canvas,camera.canvas);
+  assert.deepEqual(await editorLayout(),layoutBefore,exit+': panel layout and stage restored');
   await assertFocusOnEntry(page);
  }
  assert.deepEqual(errors,[]);

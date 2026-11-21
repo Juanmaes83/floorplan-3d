@@ -5327,12 +5327,40 @@ function presentationRestore(state){
 // the presentation); bounded so a hidden 3D view never blocks the caller.
 function viewportSettled(timeoutMs=3000){
   const t0=performance.now();
-  let last='',same=0;
-  return new Promise(resolve=>{const check=()=>{const w=SW(),h=SH(),key=w+'x'+h;
-    same=w&&h&&key===last?same+1:0;last=key;
-    // Settled: the same real size on three consecutive frames (a layout rebuild passes through transient heights too).
-    if(same>=2){if(Math.abs(camera.aspect-w/h)>1e-9){camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);labelRenderer.setSize(w,h);}resolve(true);return;}
-    if(!active||performance.now()-t0>timeoutMs){resolve(false);return;}requestAnimationFrame(check);};check();});
+  // Closing a presentation restores the editor columns with a 300 ms CSS transition.
+  // Three matching animation frames can occur *during* that transition (clientWidth rounds to integers),
+  // restoring the camera against a transient width instead of the editor's final viewport.
+  // Observe the fractional stage bounds and require a sustained period with no geometry change.
+  const quietMs=160,grid=stage.closest('.app');
+  let lastW=NaN,lastH=NaN,quietSince=0;
+  return new Promise(resolve=>{
+    const check=()=>{
+      if(!active){resolve(false);return;}
+      const now=performance.now(),rect=stage.getBoundingClientRect();
+      const w=SW(),h=SH();
+      if(w>0&&h>0&&rect.width>0&&rect.height>0){
+        // A pending CSS transition can leave the geometry unchanged throughout its delay.
+        const columnsMoving=grid?.getAnimations?.().some(a=>a.transitionProperty==='grid-template-columns'&&a.playState!=='finished'&&a.playState!=='idle');
+        if(columnsMoving||!Number.isFinite(lastW)||Math.abs(rect.width-lastW)>.1||Math.abs(rect.height-lastH)>.1){
+          lastW=rect.width;lastH=rect.height;quietSince=now;
+        }
+        if(now-quietSince>=quietMs){
+          const aspect=w/h;
+          const size=renderer.getSize(new THREE.Vector2());
+          if(camera.aspect!==aspect||size.x!==w||size.y!==h){
+            camera.aspect=aspect;camera.updateProjectionMatrix();
+            renderer.setSize(w,h);labelRenderer.setSize(w,h);requestFrame();
+          }
+          resolve(true);return;
+        }
+      }else{
+        lastW=NaN;lastH=NaN;quietSince=0;
+      }
+      if(now-t0>=timeoutMs){resolve(false);return;}
+      requestAnimationFrame(check);
+    };
+    check();
+  });
 }
 function presentationInspect(){return active?{
   position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),
