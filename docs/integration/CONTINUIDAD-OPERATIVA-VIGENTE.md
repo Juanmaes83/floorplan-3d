@@ -1,6 +1,6 @@
 # RUBIK SOTA — Continuidad operativa vigente
 
-**Corte documental:** 21/11/2026, tras la fusión de #304. **Producto observado:** `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`, árbol `7dda0024c1e68674126a0f0723d683b8557484f7`. Esta página concentra el estado operativo de esta actualización; Estado maestro, Plan, Matriz y Handoff enlazan aquí. Los cortes anteriores se conservan como históricos. El corte es una consulta fechada: comprobar el remoto antes de actuar, y actualizar este mismo archivo con el siguiente delta publicado.
+**Corte documental:** 21/11/2026, 22:37 CET, tras la fusión de #304. **Producto observado:** `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`, árbol `7dda0024c1e68674126a0f0723d683b8557484f7`. Esta página concentra el estado operativo de esta actualización; Estado maestro, Plan, Matriz y Handoff enlazan aquí. Los cortes anteriores se conservan como históricos. El corte es una consulta fechada: comprobar el remoto antes de actuar, y actualizar este mismo archivo con el siguiente delta publicado.
 
 ## 1. Reglas de lectura y evidencia
 
@@ -67,8 +67,9 @@ Los valores son check-runs leídos en todas las páginas necesarias, no porcenta
 | PR #271 | `60116e8bed31146dd764fd04937165d91be833e8` | 90 success, 1 skipped, 2 failure; 93/93 observados |
 | PR #300 | `56c48411a2b8e75c65de5366bb7c8de52dc4fc47` | 92 success, 1 skipped; 93/93 observados |
 | PR #301 | `0d80abe638fff4cbaf2a7830ecb6a4be2f0f68f8` | 91 success, 1 skipped, 1 failure; 93/93 observados |
-| PR #306 | `401e882c0e84d44f16d85deba27eabf4da8e6eb5` | 75 success, 17 in_progress, 1 skipped; 93/93 observados |
+| PR #306 | `401e882c0e84d44f16d85deba27eabf4da8e6eb5` | 88 success, 4 in_progress, 1 skipped; 93/93 observados |
 | PR #309 | `78cfa859ba16a32ddbadd35327368f4f6b663c85` | 85 success, 1 skipped, 13 failure; 99/99 observados |
+| PR #310 | `2c7e77392a6137be2d1efb5674fd774385942e85` | 72 success, 27 in_progress, 1 skipped; 100/100 observados |
 | master | `9d8a71eaa11c885199ed3001c5eab1d7b59b7799` | 7 success, 1 skipped; 8/8 observados |
 
 Los cambios de estado posteriores pertenecen a otra consulta. No reintentar fallos sin diagnóstico ni rebajar aserciones. Los 13 fallos de #309 son checks, no 13 causas acreditadas. Los logs inspeccionados muestran discrepancias de respaldo sin WebGL (`stage`), acción circular en Studio y estados/textos de demos; no se ha acreditado causa raíz única.
@@ -86,3 +87,7 @@ Los cambios de estado posteriores pertenecen a otra consulta. No reintentar fall
 ## 7. Históricos y coordinación documental
 
 [Delta tras #303](DELTA-AUDITORIA-RUBIK-2026-11-21-POST303.md), V4/V5 y handoffs anteriores conservan sus hechos fechados. #302 contiene continuidad anterior pendiente y no se ha editado su rama; debe reconciliarse con este corte antes de incorporarse. #307 es la auditoría del M08 original: no representa un defecto abierto en #308 corregida. Este documento no sustituye contratos, catálogo o decisiones del propietario.
+
+## 8. Recuperación y reanudación
+
+El [punto de recuperación y reanudación](RECUPERACION-Y-REANUDACION-RUBIK.md) fija fuentes, árboles, procedencia, orden de retoma y los cierres pendientes de M01. **Código recuperable desde GitHub no equivale a proyectos de usuario respaldados.** En master el núcleo de expediente F0.1 existe, pero su contrato conserva interfaz/arranque pendientes de F0.3 y exclusiones expresas; no anunciar una recuperación global ya disponible. La copia completa independiente, el simulacro de restauración y F1 nube/multidispositivo no están acreditados en este corte. La garantía «recuperar siempre» sigue siendo un objetivo de cierre, no una capacidad demostrada.
