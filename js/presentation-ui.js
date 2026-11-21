@@ -1271,11 +1271,13 @@
   // (the layout rebuild passes through a 0 px stage); then the roof, hidden while presenting, is synced again.
   if(saved?.viewMode==='3d')await window.View3D?.viewportSettled?.();
   if(!fromPop&&location.hash==='#presentacion'){
-   const focus=saved?.focus;
-   // Restore the opener before reporting the exit complete. The native history traversal can move focus again.
-   refocus(focus);
-   addEventListener('popstate',()=>refocus(focus),{once:true});
-   history.back();
+   // The editor is ready only when the browser has restored its same-document route. Reloading
+   // the presentation URL before popstate would send the user to the welcome screen.
+   await new Promise(resolve=>{
+    addEventListener('popstate',resolve,{once:true});
+    history.back();
+   });
+   refocus(saved?.focus);
   }else if(document.activeElement===document.body||!shown(document.activeElement))refocus(saved?.focus);
   stopping=false;window.View3D?.syncRoofVisibility?.();
  }
