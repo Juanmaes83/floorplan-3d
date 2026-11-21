@@ -9,7 +9,10 @@
    Classic script, loaded after the guide (it must not be marked as an advanced control of the guided header). */
 (function(){
  const header=document.querySelector('header');if(!header)return;
- const dock=document.createElement('nav');dock.id='mobileDock';dock.setAttribute('aria-label','Accesos principales');
+ // Same language source as the rest of the app (global LANG, es by default); no text of its own is stored.
+ const tx=(es,en,zh)=>{const l=typeof LANG==='string'?LANG:'es';return l==='en'?en:l==='zh'?zh:es;};
+ const dock=document.createElement('nav');dock.id='mobileDock';
+ const dockLabel=()=>dock.setAttribute('aria-label',tx('Accesos principales','Main shortcuts','主要入口'));dockLabel();
  for(const id of ['paneBtns','viewSeg']){const n=document.getElementById(id);if(n)dock.append(n);}
  header.append(dock);
  function update(){
@@ -17,7 +20,7 @@
   document.body.classList.toggle('has-rooms',!!p?.rooms?.length);
   const pending=!!st&&st.state!=='clear';document.body.classList.toggle('distribution-pending',pending);
   const entry=document.getElementById('presentationBtn');
-  if(entry){if(pending)entry.setAttribute('aria-description',`Presentación bloqueada: ${st.headline}. Pulsa para ver qué resolver.`);else entry.removeAttribute('aria-description');}
+  if(entry){if(pending)entry.setAttribute('aria-description',tx(`Presentación bloqueada: ${st.headline}. Pulsa para ver qué resolver.`,`Presentation blocked: ${st.headline}. Press to see what to resolve.`,`演示已被阻止：${st.headline}。按下查看需要解决的问题。`));else entry.removeAttribute('aria-description');}
  }
  function edge(){header.classList.toggle('can-scroll-end',header.scrollWidth-header.clientWidth-header.scrollLeft>4);}
  // The landscape column starts where the header really ends: the header has one row with touch and wraps to three
@@ -38,5 +41,6 @@
  if(fab&&typeof ResizeObserver==='function'){new ResizeObserver(fabTop).observe(fab);new MutationObserver(fabTop).observe(fab,{attributes:true,attributeFilter:['class']});}
  addEventListener('resize',fabTop);fabTop();
  update();edge();
+ document.addEventListener('rubik:languagechange',()=>{dockLabel();update();});
  window.FloorPlanAppShell={update(){update();edge();}};
 })();
