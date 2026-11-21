@@ -283,6 +283,8 @@ flowchart LR
 
 ### 6.3 Cortes propuestos
 
+R03 + idioma (#297) quedó integrado. El siguiente corte independiente es R02-A, con la corrección de caché de #296 incorporada por ascendencia de la fuente de idioma. Ver [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) y [handoff](../integration/HANDOFF-MAESTRO-RUBIK-SOTA.md).
+
 OP-11 lote 01 (#294) y Simulator A (#295) ya están en master. El siguiente corte preparado es R03 + idioma. R02-A seguirá de forma independiente tras revisar #296. Los estados de despliegue y verificación se mantienen en el [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md).
 
 #### Actualización operativa · 20/11/2026
