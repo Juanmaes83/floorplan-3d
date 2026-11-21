@@ -35,6 +35,25 @@ test('sin elegir la IA no sale ninguna petición; si el servicio no está autori
  }finally{await context.close();}
 });
 
+test('la envoltura de Preview explica el piloto cerrado y la pausa de almacenamiento',async()=>{
+ const {context,page}=await kit.editor(env);
+ let result={status:200,json:{enabled:false,reason:'beta_disabled'}};
+ try{
+  await page.route('**/api/assistant',route=>route.fulfill(result));
+  await open(page);
+  await page.click('#assistantModeGen');
+  await page.waitForFunction(()=>document.querySelector('#assistantGenBar').dataset.reason==='beta_disabled');
+  assert.match(await page.textContent('#assistantGenStatus'),/Puedes seguir con Consulta guiada/);
+  assert.equal(await page.locator('#assistantModeGuided').getAttribute('aria-checked'),'true');
+  result={status:503,json:{error:'beta-store-disabled'}};
+  await page.click('#assistantModeGen');
+  await page.waitForFunction(()=>document.querySelector('#assistantGenBar').dataset.reason==='beta-store-disabled');
+  assert.match(await page.textContent('#assistantGenStatus'),/está pausada/);
+  assert.equal(await page.locator('#assistantModeGen').getAttribute('aria-checked'),'false');
+  assert.match((await ask(page,'¿Cuántas estancias hay?')).text,/estancias/);
+ }finally{await context.close();}
+});
+
 test('conversación con IA: consentimiento, herramientas reales de RUBIK, respuesta fundamentada con coste; propuesta → aplicar → deshacer; ruta real',async()=>{
  const {context,page,watch}=await kit.editor(env);
  try{

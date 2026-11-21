@@ -206,7 +206,7 @@
    let body=null;try{body=await res.json();}catch{body=null;}
    if(!res.ok||!body)return {type:'error',code:body?.error||'not_available',message:body?.message||`HTTP ${res.status}`};
    return body;},
-   async status({signal}={}){const res=await f(endpoint,{method:'POST',signal,credentials:'same-origin',headers:headers(),body:JSON.stringify({version:2,action:'status'})});let b=null;try{b=await res.json();}catch{}return b||{enabled:false,reason:'unreachable'};}};
+   async status({signal}={}){const res=await f(endpoint,{method:'POST',signal,credentials:'same-origin',headers:headers(),body:JSON.stringify({version:2,action:'status'})});let b=null;try{b=await res.json();}catch{}return typeof b?.reason==='string'?b:{enabled:false,reason:b?.error||'unreachable'};}};
  }
  /* Scripted test double. It is NOT a language model and is labelled as such: it replays a fixed list of steps to test the
     orchestration (tool execution, proposals, limits, grounding, injection). Never offered to professionals as «AI». */
