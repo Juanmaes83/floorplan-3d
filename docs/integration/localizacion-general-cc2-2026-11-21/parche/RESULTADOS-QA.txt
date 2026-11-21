@@ -1,0 +1,21 @@
+CC2 · candidata final · QA sobre el HEAD de código (base master 1bc501d6, Chromium 1243, 1440x900 y 390x844 en las pruebas nuevas)
+Fecha 21/11/2026. Todas con exit 0.
+
+NUEVAS (bloqueantes, registradas en tests/regression-partitions.json)
+  language-build-furnish-properties.browser     41/41   (sin exclusión del panel R02-A)
+  language-home-navigation.browser               7/7
+VISIBLE-LANGUAGE / R02-A / R03 (de master, sobre la candidata)
+  no-chinese-display.browser 4 | r02a-i18n.browser 3 | r02a-editor.browser 5 | r02a-r03-coexistence.browser 1
+  r02a-ceiling-bridge 6 | r02a-ceiling-session 12 | r02a-activation 3 | r02a-integration-contract 7 | r03-clearance-in-rubik 2
+REGRESIÓN (UI y núcleos de las superficies tocadas)
+  browser-test-coverage 1 | ui-language.browser 3 | build-palette.browser 3 | room-layout.browser 5 | opening-contextual.browser 9
+  surfaces.browser 8 | smart-furnishing.browser 4 | wall-structure.browser 2 | k4-room-type.browser 3
+  first-paint-language.browser 1 | home-demos.browser 3 | home-legal.browser 4 | guide.browser 5 | professional-workspace.browser 17
+  professional-entry.browser 10 | premium-shell.browser 5 | journey-orientation.browser 14 | build-measure-search.browser 3
+  catalog-placement.browser 2 | p0-mue01-gc.browser 6 | ux03-wall-faces.browser 2 | assets.browser 29 | surface-sheet.browser 6
+  upload.browser 9 | browser.test 39
+Nota: la 1.ª ejecución de la prueba nueva sin exclusión R02-A dio 34/41; los 7 fallos eran el cognado «experimental» (idéntico en ES y EN) y se admitió en la lista de nombres fijos; la ejecución final es 41/41.
+NO EJECUTADO: Firefox/WebKit, lector de pantalla real, Preview/Production, presentation.browser completa (suite >1 h, 48 casos verdes y 0 rojos en una ejecución parcial), CI completa.
+
+PARCHE: CC2-L10N-candidata-final.patch  sha256 dc97a4c4aa62cfd56df690d0439de24c355c38bbb1be8333a574f1393e756f70
+  Verificado: `git apply --check` limpio sobre master 1bc501d6 y los tres archivos clave resultan idénticos a la rama.
