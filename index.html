@@ -4773,7 +4773,10 @@ function beginLiving(view,stop,aspect,region){
       return {x:(f.min[0]+f.max[0])/2,z:(f.min[2]+f.max[2])/2,h:f.max[1],dark:n>0&&(sum/n<.12||min<.05)};});
     let narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,obstacles,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
     // HERO FINAL (corte C): epílogo de la misma narrativa; si el núcleo no está o falla, la escena queda exactamente como hoy.
-    if(window.RubikFinalDibujo&&view.hero!==false){try{narrative=window.RubikFinalDibujo.epilogo(narrative,{env:window.RubikFinalDibujo.contorno(rooms.map(r=>r.poly),wallTop),aspect,fov:LIVING_FOV,reducedMotion:!!view.reduced});}catch(e){console.warn('HERO dibujo vivo:',e.message);}}
+    // Se activa en la demo de la Home y cuando el proyecto tiene la firma de Mi estudio asignada (FloorPlanBrand); sin ella,
+    // el «Dibujo vivo» de Presentar mi vivienda es el de siempre (como la ambientación D3: solo cuando se ha elegido).
+    const heroOn=view.hero!==undefined?view.hero!==false:!!(window.RubikHomeDemos?.state?.started||window.RubikStudioHero?.leer?.()?.perfil);
+    if(window.RubikFinalDibujo&&heroOn){try{narrative=window.RubikFinalDibujo.epilogo(narrative,{env:window.RubikFinalDibujo.contorno(rooms.map(r=>r.poly),wallTop),aspect,fov:LIVING_FOV,reducedMotion:!!view.reduced});}catch(e){console.warn('HERO dibujo vivo:',e.message);}}
     return {narrative,started,cut0,timeline:tl,total:narrative.info.total,ambience:!!amb?.active,landing0};
   }catch(error){presentationAmbienceEnd();livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}
 }
