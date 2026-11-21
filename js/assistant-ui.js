@@ -440,7 +440,7 @@
  const cancel=()=>state.pending?.abort();
  stop.onclick=cancel;
  clear.onclick=()=>{state.pending?.abort();state.pending=null;send.disabled=false;stop.hidden=true;state.log=[];clearSavedLog();clearGuidance();render();card.hidden=true;state.proposal=null;state.applied=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
- document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
+ document.addEventListener('rubik:languagechange',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  addEventListener('rubik-assistant',e=>{if(e.detail?.type==='mode')labels();});
  mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
  window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,cancel,invalidate,

@@ -159,7 +159,7 @@
  printButton.onclick=print;
  closeButton.onclick=()=>dialog.close();
  dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
- document.querySelector('#langBtn')?.addEventListener('click',()=>queueMicrotask(relang));
+ document.addEventListener('rubik:languagechange',()=>queueMicrotask(relang));
  relang();
  window.FloorPlanSurfaceSheet={open,render,get active(){return dialog.open;}};
 })();
