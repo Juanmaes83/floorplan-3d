@@ -1,0 +1,19 @@
+30228141977aae075d3a50caa11574a12dbc6f69c2bb207d618c8ea2ffa4a83c  LICENSE
+0c129402e633e59f2723193e5b147ac9ba4e1ff63b4cbf14aa927a03c9d032cf  src/lib/utils/slopedWallGeometry.ts
+22649a10356f7b7fd5ab23da8973196d61788e87ab098c78eb7d126564e0e5f1  src/lib/models/types.ts  (snapshot sculpt/openplan3d-fuente)
+3048674fb57e37537fd08d1e44b764a03de103e83e239fe8ad92cee48954983e  tests/wall-profiles.test.ts
+94235d386bb7f9888a3e09c7fa7d6fbc3b774aa49304396b46b8d971e5f6b628  tests/curved-wall-openings.test.ts
+f01f1c10053f7b6fc2d720f2c1e19a0e4000085d2e674f1e4c3866589271124b  tests/curved-rooms.test.ts
+094fb8b635754e70f758ca71e8923e44acedaf17132989a301983177ef023ae1  tests/wall-heights.test.ts
+fc10b93e87ccc50e1b216a07b610ca3dae24bad452c2c1fc713767afa43d4e3d  tests/interior-area.test.ts
+63e6c36a6ec44deaad702102dcdd4e7522d44f1f41287953e3d2893586ec5044  tests/wall-room-split.test.ts
+b3971bcf654c6bc343eb1233fc98a38a2206a9484515e2169a8ddd6bfdd1c29b  tests/wall-plan-bounds.test.ts
+e161636531b794d1a1a393f87d5b57fdbfdbb87eb3558c72e60c718c3fcf3329  tests/curved-wall-hit.test.ts
+53b9d37083eb7a3d12f836b183e8f383b8f140457a51413641239304fc9c7285  tests/room-drag-curve.test.ts
+41cee970a50e837fa16f49a4e50679ae4d633be9d5b1461c952f0f8d5c9996ca  tests/wall-texture-uvs.test.ts
+25aa597c37d42d858f46b0d0646bb793641941e85e3da613aefe586400737802  src/lib/utils/wallProfiles.ts  (snapshot sculpt/openplan3d-fuente)
+2adc66301cc9f4d24b16c2bb3d5130ab0f395fe2abef2608cc557c0ca1dcfde7  src/lib/utils/wallPlanGeometry.ts  (snapshot sculpt/openplan3d-fuente)
+733b4e24a005f0a4d6b49d6f2129fed6959cd034499851dae162693b1927e851  src/lib/utils/splitWallGeometry.ts  (snapshot sculpt/openplan3d-fuente)
+dc256a11dbcc339a64c07054232ff528eb3d8ee3f067303c814be010e674ac51  src/lib/utils/roomDetection.ts  (snapshot sculpt/openplan3d-fuente)
+58429f94e0284720c608336bafe1a10b188c668a061a7eff79581aef4ddb4b34  src/lib/utils/interiorArea.ts  (snapshot sculpt/openplan3d-fuente)
+4154ded53865b07a4bb0f7419af3177282a8bed12a925875c104a9032b8756ee  src/lib/utils/roomNesting.ts  (snapshot sculpt/openplan3d-fuente)
