@@ -86,7 +86,7 @@
  }
  function watch(){const tick=()=>{if(!state.seen)return;const P=window.FloorPlanPresentation;
    if(!P.active){state.seen=false;return;}
-   if(!P.story){state.seen=false;end();return;}setTimeout(tick,300);};tick();}
+   if(!P.story||(P.story.p>=1&&!P.story.playing&&window.RubikFinalDibujoUI?.ultimo?.hero?.fin)){state.seen=false;end();return;}setTimeout(tick,300);};tick();}
  async function replay(){
   hide();
   const presentation=window.FloorPlanPresentation;

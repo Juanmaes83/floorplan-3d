@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="./fidelity.css">
 <link rel="stylesheet" href="../css/design-system.css">
 <link rel="stylesheet" href="./ux.css">
+<link rel="stylesheet" href="./final-hero.css">
 <style>
  /* M2: the product shows the saved project only; lab tools (fixtures, file loading, test brand) stay in ?lab=1. */
  html:not([data-source=library]) .library-only{display:none!important}
@@ -85,12 +86,14 @@
 <script src="../js/construction-mp4-muxer.js"></script>
 <script src="../js/construction-dossier-core.js"></script>
 <script src="../js/construction-record-core.js"></script>
+<script src="./final-core.js"></script><script src="./final-titulos.js"></script>
 <script src="../js/construction-demo-core.js"></script>
 <script src="../js/persistence-store.js"></script>
 <script src="./library-source.js"></script>
 <!-- Synthetic fixtures are for QA only (?lab=1). The product opens the saved project (?source=library) and never loads them. -->
 <script>if(new URLSearchParams(location.search).get('lab')==='1')document.write('<script src="../labs/ft3d-8/fidelity-fixtures.js"><\/script><script src="../labs/ft3d-8/dossier-fixtures.js"><\/script>');</script>
 <script type="module" src="./fidelity-app.js"></script>
+<script src="../js/generic-catalog.js"></script><script src="../js/asset-catalog.js"></script><script type="module" src="./final-hero.js"></script>
 <script type="module" src="./delivery-ui.js"></script>
 <script type="module" src="./dossier-ui.js"></script>
 <script type="module" src="./ux-shell.js"></script>
