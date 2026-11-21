@@ -283,9 +283,9 @@ flowchart LR
 
 ### 6.3 Cortes propuestos
 
-R03 + idioma (#297), OP-11 lote 01 (#294) y Simulator A (#295) están integrados. El siguiente corte es [R02-A #298](https://github.com/Juanmaes83/floorplan-3d/pull/298), con Preview disponible y CI remota pendiente. La fuente de idioma ya contiene la corrección de #296. Ver [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) y [handoff](../integration/HANDOFF-MAESTRO-RUBIK-SOTA.md).
+R03 + idioma (#297), OP-11 lote 01 (#294), Simulator A (#295) y R02-A (#298) están integrados. Continúa Studio E3 #299 sobre la base de R02-A. Localización #300 y cámara #301 conservan sus propios cortes. Ver el [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md).
 
-Después de R02-A, continuar el cierre de [Studio E3 · Entregables profesionales #299](https://github.com/Juanmaes83/floorplan-3d/pull/299). Studio Presentation E3 conserva su gate D4, la lectura confirmada F0 y los contratos de imágenes y expediente en su corte independiente. #271 y Simulator D conservan sus comprobaciones pendientes.
+Studio Presentation E3 conserva su gate D4, la lectura confirmada F0 y los contratos de imágenes y expediente en su corte independiente. #271 y Simulator D conservan sus comprobaciones pendientes.
 
 #### Actualización operativa · 20/11/2026
 
