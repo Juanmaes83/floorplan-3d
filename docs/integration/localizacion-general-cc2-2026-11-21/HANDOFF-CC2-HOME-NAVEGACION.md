@@ -88,7 +88,9 @@ El «antes» de ese recorrido no incluye dos fallos que dependen del camino de l
 
 **Regresión ejecutada sobre este árbol (Chromium 1243, 1440×900 salvo indicación), todas verdes:** `guide.test` 15, `capability-registry` 8, `capability-registry-k9` 8, `browser-test-coverage` 1, `first-paint-language` 1, `ui-language` 3, `home-demos` 3, `home-legal` 4, `professional-workspace` 17, `professional-entry` 10, `premium-shell` 5, `journey-orientation` 14, `guide-navigation` 14, `multiformat-guide` 9, `solar` 14, `sheet` 9, `surface-sheet` 6, `upload` 9, `brand` 3, `building` 3, `variants` 4, `build-palette` 3, `room-layout` 5, `assistant-ai-v2` 5 y la nueva `language-home-navigation` 7.
 
-**No concluidas al publicar este commit (límite de tiempo del lote local):** `presentation.browser` (48 casos verdes y 0 rojos cuando el lote agotó su tiempo; la suite completa la ejecuta la CI de integración) y `browser.test`. Se informan en la entrega o en el CI; no se dan por verdes.
+**Completada tras el primer commit:** `browser.test` 39/39 verdes.
+
+**No concluida:** `presentation.browser` (suite de más de una hora): 48 casos verdes y 0 rojos en una ejecución interrumpida por tiempo y otra parcial sin rojos; no se da por verde. La ejecuta la CI de integración (`presentation.browser`, partición `presentation-*`).
 
 No ejecutado: Firefox/WebKit (CI de integración), accesibilidad con lector de pantalla real, Preview/Production.
 
