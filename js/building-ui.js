@@ -156,7 +156,14 @@
   if(!isBuilding())return null;const b=library.building(),id=library.activeLevelId();let prev;
   try{prev=B.setProject(b,id,JSON.parse(before));}catch{return null;}
   const was=new Set(B.stairConflicts(prev,{levelId:id}).map(keyOf)),now=B.stairConflicts(current(),{levelId:id}).find(c=>!was.has(keyOf(c)));
-  return now?`No se ha aplicado el cambio: «${now.objectName}» quedaría sobre ${now.zone==='hueco'?'el hueco de la escalera':'los peldaños'} ${now.stairIndex}. Conserva su última posición válida; colócalo fuera de la escalera.`:null;
+  if(!now)return null;
+  const object=project.objects.find(o=>o.id===now.objectId);
+  const name=window.FloorPlanDisplayName(now.objectName,object?.type);
+  const hole=now.zone==='hueco';
+  return L3(
+   `No se ha aplicado el cambio: «${name}» quedaría sobre ${hole?'el hueco de la escalera':'los peldaños'} ${now.stairIndex}. Conserva su última posición válida; colócalo fuera de la escalera.`,
+   `The change was not applied: “${name}” would overlap ${hole?'the stair opening':'the steps'} ${now.stairIndex}. It stays in its last valid position. Move it away from the stairs.`,
+   `未应用更改：“${name}”将与第 ${now.stairIndex} 处${hole?'楼梯洞口':'台阶'}重叠。家具保留在原位置，请将其移到楼梯区域之外。`);
  }
  function refused(message){say(message,8000);}
  // Add/duplicate without a demonstrated free place: nothing is added; the reason and the way out are explained.
