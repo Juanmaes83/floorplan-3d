@@ -2592,7 +2592,9 @@ function listProjects(){
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
-$('#projectsBtn').onclick=()=>{if(!library)return toast(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'),6000);listProjects();$('#projectError').textContent='';$('#projectsDialog').showModal();};
+$('#projectsBtn').onclick=()=>{if(!library)return toast(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'),6000);listProjects();$('#projectError').textContent='';
+  // Pointer activation does not focus buttons in WebKit. Give the native dialog the correct return target.
+  $('#projectsBtn').focus({preventScroll:true});$('#projectsDialog').showModal();};
 $('#projectClose').onclick=()=>$('#projectsDialog').close();
 $('#projectList').onchange=()=>$('#projectName').value=library.list().find(e=>e.id===$('#projectList').value).name;
 for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rename'],['Duplicate','duplicate'],['Delete','remove']]){
