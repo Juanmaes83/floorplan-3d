@@ -1,6 +1,6 @@
 # RUBIK SOTA — Corte operativo verificado V5 (21/11/2026)
 
-> **Vigencia y precedencia.** Corte de lectura **21/11/2026, 03:35–03:37 (Europa/Madrid)**. Esta es la **fotografía operativa más reciente** de la presente propuesta documental. Prevalece sobre afirmaciones temporales de V4 y sobre párrafos históricos de los documentos anteriores, **solo en los extremos contrastados aquí**. Reconsultar GitHub, CI y Vercel antes de cada decisión; los checks cambian durante la sesión. La V4 del 20/11 se conserva como histórico. **No autoriza** merge, despliegue, migración, activación, gasto ni aceptación profesional.
+> **Vigencia y precedencia.** Corte de lectura **21/11/2026, 03:35–03:39 (Europa/Madrid)**. Esta es la **fotografía operativa más reciente** de la presente propuesta documental. Prevalece sobre afirmaciones temporales de V4 y sobre párrafos históricos de los documentos anteriores, **solo en los extremos contrastados aquí**. Reconsultar GitHub, CI y Vercel antes de cada decisión; los checks cambian durante la sesión. La V4 del 20/11 se conserva como histórico. **No autoriza** merge, despliegue, migración, activación, gasto ni aceptación profesional.
 
 ## 1. Procedencia, autoridad y alcance
 
@@ -30,14 +30,14 @@ Los valores siguientes proceden de `GET /commits/{SHA}/check-runs?per_page=100`.
 
 | PR / HEAD corto | Actions OK | Actions en curso | Actions pendientes | Fallos | Omisiones | Estado Vercel | Gate |
 |---|---:|---:|---:|---:|---:|---|---|
-| [#298 R02-A](https://github.com/Juanmaes83/floorplan-3d/pull/298) `f3a6d231` | **91** | **1** | 0 | 0 | 1 | success | **CI no completa** |
+| [#298 R02-A](https://github.com/Juanmaes83/floorplan-3d/pull/298) `f3a6d231` | **92** | **0** | 0 | 0 | 1 | success | **Checks completos, pendiente autorización** |
 | [#299 Studio E3](https://github.com/Juanmaes83/floorplan-3d/pull/299) `33aee9dc` | **0 de producto** | 0 | 0 | 0 | 0 | success (único check-run visible) | **CI no acreditada** |
-| [#300 idioma transversal](https://github.com/Juanmaes83/floorplan-3d/pull/300) `56c48411` | **85** | **7** | 0 | 0 | 1 | success | **CI no completa** |
+| [#300 idioma transversal](https://github.com/Juanmaes83/floorplan-3d/pull/300) `56c48411` | **86** | **6** | 0 | 0 | 1 | success | **CI no completa** |
 | [#301 cámara/foco](https://github.com/Juanmaes83/floorplan-3d/pull/301) `0d80abe6` | **91** | 0 | 0 | **1** | 1 | success | **NO-GO** |
 | [#296 corrección fuente caché](https://github.com/Juanmaes83/floorplan-3d/pull/296) `0dd5e0af` | 28 | 0 | 0 | 0 | 1 | separado | No fusionar en producto aparte |
 | [#271 UX Perla](https://github.com/Juanmaes83/floorplan-3d/pull/271) `60116e8b` | 90 | 0 | 0 | **2** | 1 | separado | NO-GO / base antigua |
 
-**Evolución respecto al informe Codex 03:31:** #298 pasó de 2 a 1 en curso y #300 pasó de 78 a 85 OK y de 15 a 7 en curso, en las consultas directas posteriores. #299 solo cuenta evidencia Vercel. Las cifras quedan congeladas en este corte, no son un monitor automático.
+**Evolución respecto al informe Codex 03:31:** #298 pasó de 2 en curso a **0** (92 OK y 1 omisión); #300 pasó de 78 a **86 OK** y de 15 a **6 en curso**, en las consultas directas posteriores. #299 solo cuenta evidencia Vercel. Las cifras quedan congeladas en este corte; no son un monitor automático. **#298 tiene CI de check-runs verde, pero no autorización de integración.**
 
 **#301 — fallo demostrado, causa NO demostrada.** El workflow [CAT-IA, job browser](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44852929212/job/136688285130) terminó rojo en `tests/professional-workspace.browser.test.cjs`, caso `Point9 saved studio identity, legacy shortcuts, guide delivery and exterior route`: `locator.click: Timeout 10000ms exceeded`, esperando `#welcomeContinue` tras recarga; **23 PASS / 1 FAIL** en esa suite. La ejecución aislada local en master y #301 que comunica Codex **no prueba** que el fallo remoto sea flake; analizar estado de bienvenida, secuencia, test y posible regresión sin relajar aserciones ni reintentar a ciegas. El workflow de Presentación verde no borra este fallo.
 
@@ -49,7 +49,7 @@ Los valores siguientes proceden de `GET /commits/{SHA}/check-runs?per_page=100`.
 
 | PR | Identidad / árbol declarado | Qué está preparado; qué falta |
 |---|---|---|
-| [#298 R02-A](https://github.com/Juanmaes83/floorplan-3d/pull/298) | HEAD `f3a6d2314c334ab7964310bfe21efbd59803eee2`; base `cf0b5012...`; árbol `4bc68adf1c507ffb6e7107293d3e7bef5a965818` | Techos ES/EN/ZH y aviso de paso libre **experimental / informativo / no normativo / sin bloqueo**. Incluye por ascendencia el único arreglo de caché de #296. Esperar CI completa, permiso por objeto exacto y validación adicional |
+| [#298 R02-A](https://github.com/Juanmaes83/floorplan-3d/pull/298) | HEAD `f3a6d2314c334ab7964310bfe21efbd59803eee2`; base `cf0b5012...`; árbol `4bc68adf1c507ffb6e7107293d3e7bef5a965818` | Techos ES/EN/ZH y aviso de paso libre **experimental / informativo / no normativo / sin bloqueo**. Incluye por ascendencia el único arreglo de caché de #296. CI de HEAD terminada sin fallos; revisar gates funcionales, permiso por objeto exacto y validación adicional |
 | [#299 STUDIO E3](https://github.com/Juanmaes83/floorplan-3d/pull/299) | HEAD `33aee9dca8b0f826dd0189b4bc79fe4b1f08434e`; base `cf0b5012...`; árbol `6235e55dc506cdbf5c2d86ec2521b7c69fc6a68c` | Diez fichas delegadas, Preview lista; pendiente CI remota, aceptación visual y permiso. Firma Blender de ejemplo separada de OP-10 |
 | [#300 idioma](https://github.com/Juanmaes83/floorplan-3d/pull/300) | HEAD `56c48411a2b8e75c65de5366bb7c8de52dc4fc47`; base `cf0b5012...`; árbol `112ebed01b10eefbb15cbad4c32b028921fa669d` | Cortes CC2 integrados **en esta PR**, no republicarlos. CI parcial, Preview/aceptación de HEAD consolidado y permiso pendientes |
 | [#301 Presentación](https://github.com/Juanmaes83/floorplan-3d/pull/301) | HEAD `0d80abe638fff4cbaf2a7830ecb6a4be2f0f68f8`; base `cf0b5012...`; árbol `e6fdd77146bf92b184a3faca71c7a28bc0cf5549` | Espera estabilización del visor 3D y restaura foco; fallo CAT-IA remoto sin causa raíz confirmada |
@@ -72,7 +72,7 @@ Los valores siguientes proceden de `GET /commits/{SHA}/check-runs?per_page=100`.
 
 ## 6. Decisiones y orden técnico sin crear nuevas olas
 
-1. **#298:** confirmar fin de todos los checks exigidos sobre el SHA exacto; revisar árbol, Preview y límites orientativos. Solicitar **autorización independiente de fusión**; después, solo si se autoriza, merge commit, CI posfusión, Production y rollback documentado.
+1. **#298:** los check-runs del HEAD exacto finalizaron **92 success, 1 skipped, 0 failure**; contrastar el conjunto obligatorio y los 43 contratos, árbol, Preview, límites orientativos y aceptación requerida. Solicitar **autorización independiente de fusión**; después, solo si se autoriza, merge commit, CI posfusión, Production y rollback documentado.
 2. **#301:** diagnosticar el único fallo CAT-IA de `#welcomeContinue` contra master y su secuencia de estado. Publicar nueva identidad solo si hay cambio causal o evidencia suficiente; exigir CI completa verde antes de solicitar fusión.
 3. **#299:** acreditar Actions para el HEAD, compatibilidad con #298 si este se integra antes y aceptación visual. Vercel READY no es CI.
 4. **#300:** terminar sus checks, verificar Preview sobre HEAD consolidado, idioma completo en el **alcance de esa PR** y compatibilidad con cámara #301. No fusionar por cifras parciales.
@@ -83,6 +83,6 @@ Los valores siguientes proceden de `GET /commits/{SHA}/check-runs?per_page=100`.
 
 ## 7. Dictamen
 
-**Avance demostrado:** #295 y #297 están fusionadas y desplegadas; Actions volvió a ejecutarse; #298 y #300 avanzan, aunque no están completamente verdes; #301 mantiene un fallo real; #299 no dispone de CI de Actions; HERO A+B+C muestra una candidata conjunta en laboratorio (no integración). **Bloqueo central:** terminar y reconciliar gates actuales sin extender alcance ni ignorar los límites de seguridad y aceptación.
+**Avance demostrado:** #295 y #297 están fusionadas y desplegadas; Actions volvió a ejecutarse; #298 terminó sus checks sin rojo, pero espera autorización; #300 continúa con checks en curso; #301 mantiene un fallo real; #299 no dispone de CI de Actions; HERO A+B+C muestra una candidata conjunta en laboratorio (no integración). **Bloqueo central:** terminar y reconciliar gates actuales sin extender alcance ni ignorar los límites de seguridad y aceptación.
 
 > **Este documento es una actualización documental, no una liberación de producto.** Su fecha y hashes impiden confundirlo con estados posteriores.
