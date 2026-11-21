@@ -12,7 +12,7 @@ test.after(async()=>{await env?.stop();});
 // Labelled double of the server+model: replays queued steps; records what the browser sent.
 async function fakeGateway(page,{status={enabled:true,reason:'ok',model:'test-double',priceDate:'2026-11-15',capUsd:0.05,spentUsd:0},queue=[]}={}){
  const seen=[];await page.route('**/api/assistant',async route=>{const req=route.request(),body=JSON.parse(req.postData()||'{}');seen.push({body,headers:req.headers()});
-  if(body.action==='status')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(status)});
+  if(body.action==='status')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(typeof status==='function'?status(req.headers()):status)});
   const next=queue.shift();const out=typeof next==='function'?await next(body):next||{type:'error',code:'internal',message:'queue empty'};
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({...out,usage:{inputTokens:700,outputTokens:60,costUsd:0.0004,costBasis:'tarifa 2026-11-15',spentUsd:0.0004,capUsd:0.05},model:'test-double'})});});
  return seen;}
@@ -32,6 +32,25 @@ test('sin elegir la IA no sale ninguna petición; si el servicio no está autori
   assert.equal(await page.locator('#assistantModeGen').getAttribute('aria-checked'),'false','cannot switch to AI when not authorised');
   m=await ask(page,'¿Cuánto cuesta?');assert.match(m.text,/partidas|presupuesto/i,'guided answer still works');
   assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
+
+test('la envoltura de Preview explica el piloto cerrado y la pausa de almacenamiento',async()=>{
+ const {context,page}=await kit.editor(env);
+ let result={status:200,json:{enabled:false,reason:'beta_disabled'}};
+ try{
+  await page.route('**/api/assistant',route=>route.fulfill(result));
+  await open(page);
+  await page.click('#assistantModeGen');
+  await page.waitForFunction(()=>document.querySelector('#assistantGenBar').dataset.reason==='beta_disabled');
+  assert.match(await page.textContent('#assistantGenStatus'),/Puedes seguir con Consulta guiada/);
+  assert.equal(await page.locator('#assistantModeGuided').getAttribute('aria-checked'),'true');
+  result={status:503,json:{error:'beta-store-disabled'}};
+  await page.click('#assistantModeGen');
+  await page.waitForFunction(()=>document.querySelector('#assistantGenBar').dataset.reason==='beta-store-disabled');
+  assert.match(await page.textContent('#assistantGenStatus'),/está pausada/);
+  assert.equal(await page.locator('#assistantModeGen').getAttribute('aria-checked'),'false');
+  assert.match((await ask(page,'¿Cuántas estancias hay?')).text,/estancias/);
  }finally{await context.close();}
 });
 
@@ -166,4 +185,62 @@ test('privacidad: la pregunta libre se envía sin correos, teléfonos ni enlaces
    assert.match(await page.textContent('#assistantGenPrivacy'),re);}
   assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
  }finally{await context.close();}
+});
+
+test('code-gated mode, private in-memory chat and a stale tool turn on the same project',async()=>{
+ const {context,page,watch}=await kit.editor(env);
+ let release,requested;
+ const held=new Promise(resolve=>{release=resolve;});
+ const entered=new Promise(resolve=>{requested=resolve;});
+ const code='qa-only-synthetic-password';
+ const fingerprint='M05_PRIVATE_QUESTION';
+ try{
+  const seen=await fakeGateway(page,{status:headers=>headers['x-rubik-assistant-code']===code
+   ?{enabled:true,reason:'ok',model:'test-double',priceDate:'2026-11-15',capUsd:1,spentUsd:0}
+   :{enabled:true,reason:'code-required',requiresCode:true},
+   queue:[{type:'message',text:'M05_PRIVATE_ANSWER'},async()=>{requested();await held;return call('get_project_summary');}]});
+  await open(page);
+  await page.locator('#assistantModeGuided').focus();await page.keyboard.press('ArrowRight');
+  await page.locator('#assistantGenCodeForm').waitFor();
+  assert.equal(await page.locator('#assistantModeGuided').getAttribute('aria-checked'),'true');
+  await page.fill('#assistantGenCode',code);await page.locator('#assistantGenCode').press('Enter');
+  await page.waitForFunction(()=>RubikAssistantGenUI.active());
+  assert.equal(seen.filter(x=>x.body.action==='status').at(-1).headers['x-rubik-assistant-code'],code);
+  assert.equal(await page.locator('#assistantModeGuided').getAttribute('tabindex'),'-1');
+  await page.check('#assistantConsentQuestion');await page.check('#assistantConsentData');
+  assert.match((await ask(page,fingerprint)).text,/M05_PRIVATE_ANSWER/);
+  await page.click('#assistantClose');await open(page);
+  assert.match(await page.textContent('#assistantLog'),/M05_PRIVATE_ANSWER/,'visible within its current session');
+  assert.doesNotMatch(await page.evaluate(()=>JSON.stringify({...localStorage})),/M05_PRIVATE_/);
+  assert.doesNotMatch(JSON.stringify(await page.evaluate(()=>RubikAssistantUI.trace)),/M05_PRIVATE_/);
+  await page.fill('#assistantInput','Revisa la vivienda otra vez');await page.click('#assistantSend');
+  await page.waitForFunction(()=>RubikAssistantUI.state.pending);
+  await entered;
+  await page.evaluate(()=>FloorPlanApp.applyAssistant(p=>{p.name='Cambio de revisión';return {ok:true,project:p};}));
+  release();
+  await page.waitForFunction(()=>!RubikAssistantUI.state.pending);
+  assert.match(await page.textContent('#assistantLog'),/cambió el proyecto o el consentimiento/);
+  assert.equal(seen.filter(x=>x.body.action==='step').length,2,'no tool result sent after the edit');
+  assert.equal(await page.evaluate(()=>RubikAssistantGenUI.state.history.length),0);
+  assert.equal(await page.evaluate(()=>FloorPlanApp.project.name),'Cambio de revisión');
+  assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{release();await context.close();}
+});
+
+test('volver a consulta guiada detiene un turno generativo antes del siguiente paso',async()=>{
+ const {context,page}=await kit.editor(env);
+ let release,requested;
+ const held=new Promise(resolve=>{release=resolve;});
+ const entered=new Promise(resolve=>{requested=resolve;});
+ try{
+  const seen=await fakeGateway(page,{queue:[async()=>{requested();await held;return call('get_project_summary');}]});
+  await open(page);await page.click('#assistantModeGen');await page.waitForFunction(()=>RubikAssistantGenUI.active());
+  await page.check('#assistantConsentQuestion');await page.check('#assistantConsentData');
+  await page.fill('#assistantInput','Revisa la vivienda');await page.click('#assistantSend');await entered;
+  await page.click('#assistantModeGuided');release();
+  await page.waitForFunction(()=>!RubikAssistantUI.state.pending);
+  assert.equal(seen.filter(x=>x.body.action==='step').length,1,'no project tool results were sent');
+  assert.match(await page.textContent('#assistantLog'),/Consulta detenida. El proyecto sigue intacto/);
+  assert.match((await ask(page,'¿Cuántas estancias hay?')).text,/estancias/);
+ }finally{release();await context.close();}
 });

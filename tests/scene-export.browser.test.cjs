@@ -40,7 +40,8 @@ for (const browser of browsers) {
     for (const f of ['scene.glb', 'manifest.json', 'LEEME.txt', 'package.zip', 'ui-ready.png']) assert.ok(fs.existsSync(path.join(out, f)), f);
     assert.match(fs.readFileSync(path.join(out, 'package-name.txt'), 'utf8'), /^rubik-escena-blender-prj_op10-f3-openings\.zip$/);
     const m = J(path.join(out, 'manifest.json')), scene = J(path.join(out, 'scene.json'));
-    assert.equal(m.format, 'rubik-sota.scene-delivery'); assert.equal(m.scene.stats.unlinked, 0, 'C2: every mesh identified');
+    assert.equal(m.format, 'rubik-sota.scene-delivery');
+    assert.match(m.captureId, /^[0-9a-f-]{36}$/, 'each render kit identifies its capture'); assert.equal(m.scene.stats.unlinked, 0, 'C2: every mesh identified');
     assert.ok(m.scene.view.camera && m.scene.view.light, 'C7: camera and light declared');
     assert.equal(Scene.coincidentFaces(scene).defects.length, 0, 'C3: no visible coincident faces');
     assert.equal(J(path.join(out, 'record.json')).identity.status, 'observed-only', 'C6: no confirmed F0 revision claimed');
@@ -206,6 +207,57 @@ test('Residuales · ZIP con los dos caminos y script idéntico; diálogo en ZH/E
         assert.match(txt, re, lang); if (notEs) assert.doesNotMatch(txt, /Escena para Blender|Descarga la vivienda|Dos formas/, lang + ' without Spanish leftovers');
         await page.evaluate(() => document.querySelector('#sceneExportDialog').close());
       }
+      // M03: exercise the real review entry point and verify that changing project invalidates an accepted delivery.
+      await page.evaluate(() => { LANG = 'es'; });
+      await page.locator('#workArea-deliver').click();
+      await page.locator('#blenderReviewOpen').click();
+      const dlg = page.locator('#blenderReviewDialog'), primary = dlg.locator('#brPrimary');
+      assert.match(await primary.innerText(), /manifiesto original/);
+      assert.equal(await page.evaluate(() => document.activeElement?.id), 'brPrimary');
+      const before = await page.evaluate(() => JSON.stringify(FloorPlanApp.project));
+      const scene = await page.evaluate(async () => {
+        const c = document.createElement('canvas'); c.width = 32; c.height = 24;
+        c.getContext('2d').fillRect(0, 0, 32, 24);
+        const b = new TextEncoder().encode(RubikSceneDelivery.canonical(FloorPlanApp.project));
+        const sha = await crypto.subtle.digest('SHA-256', b);
+        return { png: c.toDataURL().split(',')[1], projectId: FloorPlanApp.project.id,
+          observedProjectSha256: Array.from(new Uint8Array(sha), n => n.toString(16).padStart(2, '0')).join('') };
+      });
+      const sha = b => require('node:crypto').createHash('sha256').update(b).digest('hex');
+      const json = (name, value) => ({ name, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(value)) });
+      const png = Buffer.from(scene.png, 'base64'), glbSha256 = 'a'.repeat(64);
+      const source = { projectId: scene.projectId, observedProjectSha256: scene.observedProjectSha256 };
+      const manifest = { format: 'rubik-sota.scene-delivery', captureId: 'original-qa', source, files: { 'scene.glb': { sha256: glbSha256 } } };
+      const original = json('manifest.json', manifest);
+      const input = { ...source, glbSha256, manifestSha256: sha(original.buffer), preparedBlendSha256: 'b'.repeat(64) };
+      const report = json('render-report.json', { format: 'rubik-sota.blender-render', status: 'complete',
+        requestedViews: ['viewer'], input, views: [{ view: 'viewer', png: { bytes: png.length, sha256: sha(png) } }] });
+      const resultFiles = [original, report, json('verificacion-reapertura.json', { status: 'PASS', input }),
+        { name: 'viewer.png', mimeType: 'image/png', buffer: png }];
+      const originalInput = dlg.locator('#brOriginal'), resultsInput = dlg.locator('#brFiles');
+      await originalInput.setInputFiles(json('manifest.json', { ...manifest, captureId: 'different-qa' }));
+      await dlg.getByRole('button', { name: 'Elegir carpeta de resultados…' }).waitFor();
+      await resultsInput.setInputFiles(resultFiles);
+      await dlg.locator('[data-code="OTHER_CAPTURE"]').waitFor();
+      assert.equal(await dlg.locator('#brGallery img').count(), 0, 'unverified images are not shown');
+      await originalInput.setInputFiles(original);
+      await dlg.getByRole('button', { name: 'Elegir carpeta de resultados…' }).waitFor();
+      await resultsInput.setInputFiles(resultFiles);
+      await dlg.getByRole('button', { name: 'Preparar entrega' }).click();
+      await dlg.getByRole('button', { name: 'Descargar entrega (ZIP)' }).waitFor();
+      assert.equal(await page.evaluate(() => JSON.stringify(FloorPlanApp.project)), before);
+      const delivery = await page.evaluate(() => RubikBlenderReview.delivery.manifest);
+      assert.equal(delivery.views[0].original.sha256, sha(png));
+      await page.keyboard.press('Escape');
+      assert.equal(await dlg.evaluate(d => d.open), false);
+      await page.locator('#workArea-design').click();
+      await page.locator('#fileIn').setInputFiles(path.join(fx, 'f1-rect.json'));
+      await page.waitForFunction(id => FloorPlanApp.project.id !== id, scene.projectId);
+      await page.locator('#workArea-deliver').click();
+      await page.locator('#blenderReviewOpen').click();
+      await dlg.getByRole('button', { name: 'Elegir manifiesto original…' }).waitFor();
+      assert.match(await dlg.getByRole('status').innerText(), /proyecto ha cambiado/);
+      assert.equal(await page.evaluate(() => Boolean(RubikBlenderReview.delivery)), false);
       assert.deepEqual(errors, []);
       await page.context().close();
     }

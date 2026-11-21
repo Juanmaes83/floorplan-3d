@@ -4,8 +4,9 @@
 // Hasta la integración (#223), dos pruebas de #203/#217 exigían que index.html NO cargase R02-A, y la A4 de R03 vetaba
 // cualquier script «r02a». La integración de R02-A (EXPERIMENTAL, pendiente del GO del propietario) autoriza EXACTAMENTE
 // lo que hay aquí y nada más:
-//   · seis módulos R02-A, en este orden y solo desde js/ (mismo origen); ninguna hoja de estilos propia (el panel trae
-//     la suya en línea);
+//   · siete módulos R02-A, en este orden y solo desde js/ (mismo origen); ninguna hoja de estilos propia (el panel trae
+//     la suya en línea). El séptimo, js/r02a-passage-indicative.js (paso libre ORIENTATIVO, solo información, sin bloqueo;
+//     autorización del propietario del 20/11/2026), no añade ningún punto de conexión: lo usa RubikCeilingEditor;
 //   · seis puntos de conexión en index.html y uno en js/tracing-ui.js, todos a través de RubikCeilingEditor o de
 //     FloorPlanApp.applyCeiling (que pasa por commit(): validación, deshacer y guardado de RUBIK);
 //   · ningún módulo de laboratorio (labs/) ni de otras piedras SCULPT.
@@ -16,7 +17,7 @@ const path = require('node:path');
 
 const SCRIPTS = Object.freeze([
   'js/r02a-donor-extracts.js', 'js/r02a-ceiling-core.js', 'js/r02a-ceiling-session.js',
-  'js/r02a-ceiling-contract.js', 'js/r02a-ceiling-bridge.js', 'js/r02a-ceiling-editor.js',
+  'js/r02a-ceiling-contract.js', 'js/r02a-ceiling-bridge.js', 'js/r02a-passage-indicative.js', 'js/r02a-ceiling-editor.js',
 ]);
 const HOOKS = Object.freeze([
   { what: 'commit(): retirar el techo de una estancia eliminada en el mismo paso', pattern: /window\.RubikCeilingEditor\?\.reconcile\(/g, count: 1 },

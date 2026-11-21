@@ -38,12 +38,86 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
   await page.locator('#aInterior').first().click();await page.locator('.r03-rubik-dialog').waitFor();await scan('interior R03 '+id);await page.evaluate(()=>RubikCabinetRubikUI.close());}
  // Áreas de trabajo (Analizar, Presupuestar, Entregar, Mi estudio…) y cuadro de cantidades.
  for(const id of await page.evaluate(()=>[...document.querySelectorAll('[id^="workArea-"]')].map(b=>b.id))){
-  await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);}
+  await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);
+  if(id==='workArea-deliver'||id==='workArea-studio'){
+   const trigger=page.locator('#professionalWorkspace [data-route="e3-entregas"]');
+   assert.equal(await trigger.count(),1,'one E3 entry per workspace');
+   assert.equal(await trigger.getAttribute('aria-haspopup'),'dialog');
+   assert.equal(await trigger.evaluate(button=>button.classList.contains('primary')),false,'E3 is a secondary action');
+   assert.equal(await trigger.evaluate((button,area)=>{
+    const card=button.closest('.professional-card');
+    const anchor=area==='workArea-deliver'?document.querySelector('[data-group="documentation"] [data-module="sheet"]'):document.querySelector('[data-module="studio"]');
+    return !!(anchor?.compareDocumentPosition(card)&Node.DOCUMENT_POSITION_FOLLOWING);
+   },id),true,'existing actions come before E3');
+   await trigger.focus();await page.keyboard.press('Enter');
+   const e3=page.locator('#e3Entregas[open]');
+   const next=e3.locator('[data-route="e3-siguiente"]');
+   await e3.waitFor();
+   assert.equal(await e3.locator('input[type="checkbox"]').count(),10);
+   assert.equal(await e3.evaluate(dialog=>document.activeElement?.id===dialog.getAttribute('aria-labelledby')),true);
+   await scan('E3 elegir '+id);
+   await next.click();await next.waitFor();await scan('E3 previsualizar '+id);
+   await next.click();await e3.locator('.e3-prep').first().waitFor();await scan('E3 preparar '+id);
+   await page.keyboard.press('Escape');await e3.waitFor({state:'hidden'});
+   assert.equal(await trigger.evaluate(button=>document.activeElement===button),true,'closing E3 restores focus');
+  }
+ }
  await page.locator('#workArea-design').click().catch(()=>{});await page.waitForTimeout(200);
  await page.evaluate(()=>window.FloorPlanQuantityUI?.open());await page.waitForTimeout(300);await scan('cantidades');
  await page.evaluate(()=>document.querySelectorAll('dialog[open]').forEach(d=>d.close()));
  assert.deepEqual(found,[],'texto chino visible:\n'+found.slice(0,15).map(f=>`${f.at} · ${f.where} · «${f.text}»`).join('\n'));
  assert.deepEqual(errors,[]);
+});
+
+
+test('E3: ten previews decode and navigation stays clear of the Assistant on small screens', async t=>{
+ for(const viewport of [{width:393,height:659},{width:844,height:390}]){
+  await t.test(viewport.width+'×'+viewport.height,async sub=>{
+   const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});sub.after(()=>context.close());
+   const page=await context.newPage();await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+   await page.goto(url);await require('./editor-fixture.cjs')(page);
+   await page.locator('#workArea-deliver').click();
+   await page.locator('#professionalWorkspace [data-route="e3-entregas"]').tap();
+   const dialog=page.locator('#e3Entregas[open]');
+   const next=dialog.locator('[data-route="e3-siguiente"]');
+   const withoutOverlap=async()=>{
+    assert.equal(await dialog.evaluate(d=>{
+     const clip=d.getBoundingClientRect();
+     const a=d.querySelector('#assistantAccess').getBoundingClientRect();
+     const c=d.querySelector('.e3-cuerpo').getBoundingClientRect();
+     const footer=d.querySelector('.e3-pie').getBoundingClientRect();
+     return a.top>=c.bottom-1 && a.bottom<=clip.bottom &&
+      footer.top>=c.bottom-1 && footer.bottom<=clip.bottom &&
+      d.scrollWidth===d.clientWidth;
+    }),true,'assistant and navigation are separate from the scrolling content');
+   };
+   await next.waitFor();
+   await dialog.locator('#assistantAccess').waitFor();
+   await withoutOverlap();
+   const images=await dialog.locator('.e3-mini img').all();
+   assert.equal(images.length,10);
+   for(const image of images){
+    await image.scrollIntoViewIfNeeded();
+    assert.equal(await image.evaluate(async i=>{await i.decode();return i.naturalWidth;}),360);
+   }
+   await withoutOverlap();
+   const checked=dialog.getByRole('checkbox',{checked:true});
+   while(await checked.count())await checked.last().uncheck();
+   assert.equal(await next.isEnabled(),false);
+   assert.match(await dialog.getByRole('status').innerText(),/Selecciona al menos un entregable/);
+   await dialog.getByRole('checkbox',{name:/Vistas reales del proyecto/}).check();
+   await next.tap();
+   await dialog.getByText('Aún no hay vistas preparadas', {exact:false}).waitFor();
+   await next.waitFor();
+   await withoutOverlap();
+   await next.tap();
+   await dialog.getByRole('button',{name:'Preparar las vistas'}).waitFor();
+   await withoutOverlap();
+   await page.keyboard.press('Escape');
+   await dialog.waitFor({state:'hidden'});
+   assert.equal(await page.locator('#professionalWorkspace [data-route="e3-entregas"]').evaluate(n=>n===document.activeElement),true);
+  });
+ }
 });
 
 test('selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control', async t=>{

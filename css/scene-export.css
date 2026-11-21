@@ -1,5 +1,6 @@
 /* OP-10 C5 · «Escena para Blender». Solo maquetación sobre los tokens Perla (css/design-system.css); botones .btn existentes. */
 .scene-export-dialog{width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:20px;border:1px solid var(--line);border-radius:14px;box-sizing:border-box;background:var(--surface-panel);color:var(--ink);box-shadow:var(--shadow)}
+.scene-export-dialog > rubik-assistant-access{position:static;margin:12px 0 0 auto}
 .scene-export-dialog::backdrop{background:rgba(20,26,30,.35)}
 .scene-export h2{margin:0 0 6px;font-size:1.2rem}
 .scene-export .se-lead{margin:0 0 10px;color:var(--ink)}
@@ -25,3 +26,19 @@
 .scene-export .btn:disabled{opacity:.55;cursor:default}
 .scene-export .se-paths{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.9rem}
 .scene-export .se-paths-title{margin:0 0 4px;font-weight:600}.scene-export .se-paths ul{margin:0;padding-left:1.1em;color:var(--ink-muted);line-height:1.45}
+/* M03 · Revisar render de Blender (mismo diálogo y tokens que «Escena para Blender»). */
+.blender-review .se-detail{max-height:min(62vh,calc(100dvh - 260px));overflow:auto}
+.blender-review .br-issues{margin:6px 0 10px;padding-left:18px;display:grid;gap:4px}
+.blender-review .br-issues li[data-severity="error"]{color:#8a2a1a;font-weight:600}
+.blender-review .br-issues li[data-severity="warning"]{color:#6b4e12}
+.blender-review .br-compare{margin:10px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.blender-review .br-compare div{display:flex;flex-direction:column;gap:4px}
+.blender-review .br-compare img,.blender-review .br-gallery img{width:100%;height:auto;border-radius:6px;border:1px solid var(--line,#e3ddd3);background:#eee}
+.blender-review .br-compare span,.blender-review .br-gallery span{font-size:12px;color:var(--ink-muted,#5c544a)}
+.blender-review .br-gallery{list-style:none;margin:8px 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.blender-review .br-gallery li{display:flex;flex-direction:column;gap:3px}
+.blender-review .br-diff ul{margin:4px 0 8px;padding-left:18px;display:grid;gap:3px;font-size:13px}
+.blender-review .br-diff li[data-kind="added"] strong{color:#6b4e12}.blender-review .br-diff li[data-kind="missing"] strong{color:#8a2a1a}
+.blender-review .br-sign{margin:8px 0;display:grid;gap:4px}
+.blender-review .btn.link{background:none;border:0;text-decoration:underline;padding:4px 0;min-height:44px}
+@media (max-width:600px){.blender-review .br-compare{grid-template-columns:1fr}}

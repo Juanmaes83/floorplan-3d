@@ -1,0 +1,137 @@
+/* M05: the Assistant and local MCP share these entry points. Product modules own all mutations and permissions. */
+(function(root,factory){
+ const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikAssistantJourney=api;
+})(typeof self!=='undefined'?self:this,function(){
+ 'use strict';
+ const phases=[
+  ['imagine',['Imaginar','Imagine','构想']],
+  ['design',['Diseñar','Design','设计']],
+  ['build',['Construir','Build','施工']],
+  ['present',['Presentar','Present','展示']],
+  ['visit',['Recorrer','Explore','漫游']]
+ ];
+ const steps=[
+  ['upload','imagine','upload',['Sube tu plano','Upload a floor plan','上传平面图'],
+   ['Elige el archivo en Subir plano. Revisa la importación y, si es una imagen o un PDF, calibra con una distancia conocida antes de medir.',
+    'Choose the file in Upload a floor plan. Check the import and, for an image or PDF, calibrate against a known distance before measuring.',
+    '在“上传平面图”选择文件。先检查导入结果；图片或 PDF 须用已知距离校准后再测量。'],['diagnose_project']],
+  ['blank','imagine','welcome',['Lienzo en blanco','Blank canvas','空白画布'],
+   ['En Inicio, elige Crear desde cero. Dibuja la primera estancia e indica sus medidas. Puedes guardar tu trabajo actual antes de cambiar de proyecto.',
+    'In Home, choose Create from scratch. Draw the first room and enter its dimensions. You can save the current work before switching projects.',
+    '在首页选择“从零创建”，绘制第一个房间并输入尺寸。切换项目前可先保存当前工作。']],
+  ['template','imagine','welcome',['Usar plantilla','Use a template','使用模板'],
+   ['Abre Inicio y prueba la vivienda de ejemplo. Para editarla, crea tu copia desde el recorrido de inicio y conserva el original.',
+    'Open Home and try the example home. To edit it, create a copy from the getting-started flow and keep the original.',
+    '在首页打开示例住宅。需要编辑时，从入门流程创建副本，保留原始示例。']],
+  ['scan','imagine','upload',['Importar escáner','Import a scan','导入扫描'],
+   ['En Subir plano, elige el JSON de RoomPlan. Si quieres unir el escaneo con una planta, selecciona las referencias en el diálogo de unión y revisa el encaje antes de confirmar. Las medidas son orientativas.',
+    'In Upload a floor plan, choose the RoomPlan JSON. To join it to a level, select references in the join dialog and review the fit before confirming. Dimensions are indicative.',
+    '在上传平面图中选择 RoomPlan JSON。要与楼层合并，请在合并对话框中选择参照并预览对齐，再确认。尺寸仅供参考。'],['diagnose_project']],
+  ['cad','imagine','upload',['Importar CAD','Import CAD','导入 CAD'],
+   ['Sube un DXF o IFC compatible. Comprueba unidades, planta y elementos importados. Si tienes un DWG, expórtalo como DXF en tu programa CAD y conserva el original.',
+    'Upload a compatible DXF or IFC. Check the units, level and imported elements. If you have a DWG, export it as DXF in your CAD application and keep the original.',
+    '上传兼容的 DXF 或 IFC。核对单位、楼层和导入元素。DWG 请先在 CAD 应用中另存为 DXF，保留原件。'],['diagnose_project']],
+  ['redistribute','design','design',['Redistribuir planos','Rework the layout','调整布局'],
+   ['En Diseñar, selecciona los elementos del plano 2D. Puedes preguntarme por los conflictos de distribución antes de moverlos. MCP puede simular el traslado de un mueble en la copia JSON.',
+    'In Design, select elements on the 2D plan. Ask me about layout conflicts before moving them. MCP can simulate moving one item in the JSON copy.',
+    '在设计中的二维平面图选择元素。移动前可询问布局冲突。MCP 可在 JSON 副本中模拟移动一件家具。'],['review_layout','propose_layout','simulate_layout']],
+  ['rooms','design','design',['Habitaciones','Rooms','房间'],
+   ['En Diseñar, selecciona una estancia para ver su nombre y superficie en Propiedades. Usa + Estancia para añadir otra. Puedes preguntarme cuántas hay o cuánto mide una concreta.',
+    'In Design, select a room to see its name and area in Properties. Use + Room to add another. Ask me how many rooms there are or about a particular area.',
+    '在设计中选中房间，在属性中查看名称和面积。按“+ 房间”可添加。也可询问房间数量或指定房间面积。'],['get_project_summary','list_project_elements']],
+  ['walls','design','design',['Muros','Walls','墙体'],
+   ['Abre Diseñar y el plano 2D. Usa Construir para dibujar un muro o selecciona uno para editarlo. Revisa puertas y ventanas asociadas antes de confirmar cambios.',
+    'Open Design and the 2D plan. Use Build to draw a wall or select one to edit it. Check its doors and windows before confirming changes.',
+    '打开设计中的二维平面图。用“建造”绘制墙体，或选择现有墙体编辑。确认前检查关联的门窗。'],['list_project_elements','measure_elements']],
+  ['ceilings','design','design',['Techos','Ceilings','天花板'],
+   ['Selecciona la estancia en Diseñar y abre Techos en Propiedades. Los avisos de altura de R02-A son orientativos y no bloquean la edición.',
+    'Select the room in Design and open Ceilings in Properties. R02-A height warnings are advisory and do not block editing.',
+    '在设计中选择房间，在属性中打开天花板。R02-A 高度提示仅供参考，不阻挡编辑。']],
+  ['floors','design','design',['Suelos','Floors','地面'],
+   ['Selecciona la estancia y usa Suelo en Propiedades. También puedes pedirme una propuesta para cambiar su acabado; revisa la vista y confirma tú el cambio.',
+    'Select the room and use Floor in Properties. You can also ask me to propose a finish; review the preview and confirm the change yourself.',
+    '选中房间后在属性中打开地面。也可请助手建议饰面；查看预览后自行确认。']],
+  ['exterior','design','analyze',['Exterior','Exterior','室外'],
+   ['Abre Analizar → Emplazamiento para revisar parcela, terreno y orientación. Si falta contexto exterior, usa la geometría del proyecto y revisa la configuración antes de presentar.',
+    'Open Analyse → Site context to review parcel, terrain and orientation. If the exterior context is missing, use the project geometry and check the setup before presenting.',
+    '打开分析 → 场地环境，核对地块、地形和朝向。如缺少室外环境，请先用项目几何并在展示之前检查设置。']],
+  ['furniture','design','furniture',['Muebles','Furniture','家具'],
+   ['Abre la biblioteca de Amueblar. Elige un mueble, colócalo tú y comprueba dimensiones y paso. Puedes pedirme una propuesta para mover un mueble existente.',
+    'Open the Furnish library. Choose and place an item, then check dimensions and clearance. You can ask me to propose moving an existing item.',
+    '打开布置家具的库。选择并自行放置家具，检查尺寸和通行空间。也可请助手建议移动现有家具。'],['list_project_elements','inspect_pair_clearance','simulate_layout']],
+  ['location','build','territory',['Localización','Location','位置'],
+   ['En Analizar → Emplazamiento, introduce la ubicación o referencia que conozcas. Revisa la propuesta antes de guardar. La guía no consulta servicios externos.',
+    'In Analyse → Site context, enter the location or reference you know. Check the proposed location before saving. This guide does not contact external services.',
+    '在分析 → 场地环境中填写已知的位置或参考信息。保存前核对。指南不会访问外部服务。']],
+  ['cadastre','build','territory',['Catastro','Cadastre','地籍'],
+   ['Abre Emplazamiento y revisa la parcela. Si la consulta externa no está habilitada, usa una fuente verificable o los datos manuales disponibles en el diálogo. Los límites son orientativos.',
+    'Open Site context and check the parcel. If external lookup is disabled, use a verifiable source or the manual inputs in the dialog. Boundaries are indicative.',
+    '打开场地环境并核对地块。外部查询不可用时，请用可验证资料或对话框中的手动输入。边界仅供参考。']],
+  ['budget','build','budget',['Presupuesto','Budget','预算'],
+   ['En Presupuestar, revisa mediciones, precios y partidas pendientes. Pregúntame «¿Cuánto cuesta?» para consultar el cálculo disponible y sus faltantes. Un precio pendiente no equivale a cero.',
+    'In Budget, review measurements, prices and pending items. Ask “How much does it cost?” to check the available calculation and missing inputs. A missing price is not zero.',
+    '在预算中检查工程量、价格和待处理条目。可问“预算多少钱？”来查看计算结果及缺项。缺少的价格不等于零。']],
+  ['planning','build','plan',['Planificación','Planning','施工计划'],
+   ['En Presupuestar → Plan de obra, revisa las tareas, fechas y elementos vinculados. Guarda desde allí cuando hayas revisado la planificación.',
+    'In Budget → Works plan, review tasks, dates and linked elements. Save there after reviewing the plan.',
+    '在预算 → 施工计划中核对任务、日期和关联元素。审核后在该处保存。']],
+  ['gantt','build','gantt',['Gantt','Gantt','甘特图'],
+   ['Abre Presupuestar → Plan de obra → Ver evolución para consultar el Gantt. El calendario describe la obra prevista. Para saber qué empieza después, indica la fecha de referencia.',
+    'Open Budget → Works plan → View progress to see the Gantt chart. The calendar describes planned work. To look up the next start, provide the reference date.',
+    '打开预算 → 施工计划 → 查看进度以查看甘特图。日程描述计划施工。要查找下一项开工任务，请提供参考日期。']],
+  ['blender','present','blender',['Blender','Blender','Blender'],
+   ['Abre Entregar → Documentación → Escena para Blender. Revisa la escena, prepárala y descarga el ZIP. El paquete contiene una captura del visor para Blender. El render posterior se realiza aparte.',
+    'Open Deliver → Documentation → Scene for Blender. Check the scene, prepare it and download the ZIP. It contains a viewer snapshot for Blender. Rendering happens separately.',
+    '打开交付 → 文档 → Blender 场景。核对并准备场景，再下载 ZIP。包中含供 Blender 使用的查看器快照，后续渲染另行完成。']],
+  ['normal','present','presentation',['Normal','Guided presentation','引导式展示'],
+   ['En Preparar presentación, revisa las paradas y abre la presentación de tu proyecto. Puedes avanzar o volver a editar desde sus controles.',
+    'In Prepare presentation, review the stops and open your project presentation. Use its controls to advance or return to editing.',
+    '在准备展示中检查停靠点并打开项目展示。可用控件前进或返回编辑。']],
+  ['render','present','render',['Render IA','AI render','AI 渲染'],
+   ['En Entregar → Imágenes, prepara una vista 3D real. Render IA, cuando esté habilitado y tengas permiso, pide código y confirmación. Alternativa local: descarga la vista 3D.',
+    'In Deliver → Images, prepare a real 3D view. AI render, when enabled and permitted, asks for an access code and confirmation. For a local alternative, download the 3D view.',
+    '在交付 → 图片中准备真实三维视图。AI 渲染启用且获许可时，需要访问码和确认。可改为在本地下载三维视图。']],
+  ['hybrid','present','presentation',['Híbrido','Hybrid','混合展示'],
+   ['En Preparar presentación → Historia y escenas, marca Dibujo vivo. Es experimental. Si no aparece para tu proyecto, puedes usar la presentación guiada de las estancias.',
+    'In Prepare presentation → Story and scenes, select Living drawing. It is experimental. If absent for this project, use the guided room presentation.',
+    '在准备展示 → 故事与场景中选择“活绘”。它是实验功能。当前项目没有此选项时，可使用房间引导式展示。']],
+  ['section','present','presentation',['Corte','Section','剖面'],
+   ['En Preparar presentación, busca el corte visual entre las opciones de la presentación 3D. Si falta geometría para el corte, revisa el modelo o continúa con la vista general. Es un apoyo visual.',
+    'In Prepare presentation, look for the visual section among the 3D presentation options. If its geometry is missing, check the model or use the overview. It is a visual aid.',
+    '在准备展示的三维展示选项中查找可视剖面。几何不足时，检查模型或使用总览。剖面仅供可视化参考。']],
+  ['navigate','visit','view3d',['Navegar en 3D','Navigate in 3D','三维导航'],
+   ['Abre Escena 3D. Gira y acerca el modelo con los controles del visor. Si el navegador no puede abrir el visor, vuelve al plano 2D y conserva tu trabajo.',
+    'Open the 3D Scene. Orbit and zoom with the viewer controls. If the browser cannot open the viewer, return to the 2D plan to preserve your work.',
+    '打开三维场景。用查看器控件旋转和缩放。浏览器无法打开查看器时，可返回二维平面图。']],
+  ['walk','visit','view3d',['Recorrido libre','Free walk','自由漫游'],
+   ['En Escena 3D, activa Recorrer. Usa los controles de movimiento del teclado o los de pantalla táctil. Vuelve a Orbitar para recuperar la vista exterior.',
+    'In the 3D Scene, choose Walk. Use keyboard movement or the touch controls. Switch back to Orbit to recover the exterior view.',
+    '在三维场景中启用漫游，使用键盘或触摸控件移动。切回环绕可恢复室外视角。'],['check_route_2d']],
+  ['guided','visit','presentation',['Visita guiada','Guided visit','引导参观'],
+   ['Abre Preparar presentación y revisa las paradas antes de iniciar la visita. Si quieres probar la experiencia sin preparar un proyecto, usa la vivienda de ejemplo desde Inicio.',
+    'Open Prepare presentation and review the stops before starting the visit. To try it without preparing a project, use the example home from Home.',
+    '打开准备展示，在开始前检查停靠点。若想先体验而不准备项目，可从首页打开示例住宅。']],
+  ['client','visit','deliver',['Ver como cliente','View as a client','以客户身份查看'],
+   ['En Entregar, localiza Visita 3D interactiva → Revisar como cliente. La prueba privada del visor usa la vivienda de ejemplo. En un proyecto propio puedes descargar y abrir el archivo para tu cliente.',
+    'In Deliver, find Interactive 3D visit → Review as a client. The private viewer test uses the example home. For your own project, download and open the client file.',
+    '在交付中找到互动三维参观 → 以客户身份预览。查看器的私人测试使用示例住宅。对自有项目，可下载并打开客户文件。']],
+  ['share','visit','deliver',['Enviar enlace','Send a link','发送链接'],
+   ['En Entregar, busca Publicar enlace para el cliente. Si aparece, revisa qué incluye, el acceso y la confirmación. Si falta el servicio o el permiso, descarga el archivo y envíalo tú por el canal elegido.',
+    'In Deliver, look for Publish link for the client. If shown, review its contents, access and confirmation. If the service or permission is missing, download the client file and send it yourself.',
+    '在交付中查找“发布客户链接”。如可用，请核对内容、访问及确认。如无服务或权限，可下载客户文件并自行发送。']]
+ ];
+ const i=lang=>lang==='en'?1:lang==='zh'?2:0;
+ const normalize=s=>String(s||'').normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().replace(/^[¿¡]|[?!.？。]$/gu,'').trim();
+ const guide=(id,lang)=>{const s=steps.find(x=>x[0]===id);return s?{id:s[0],phase:s[1],route:s[2],label:s[3][i(lang)],instructions:s[4][i(lang)],mcpTools:[...(s[5]||[])]}:null;};
+ const list=lang=>phases.map(([id,names])=>({id,label:names[i(lang)],steps:steps.filter(s=>s[1]===id).map(s=>guide(s[0],lang))}));
+ const aliases=new Map([['render ai','render'],['subir plano','upload'],['subir un plano','upload'],['presentacion normal','normal'],['dibujo vivo','hybrid'],['living drawing','hybrid'],['seccion visual','section'],['visual section','section']]);
+ function match(text){
+  const q=normalize(text);
+  // Reject other instructions in the same prompt. Route requests must either match a label or use an explicit guide prefix.
+  const key=q.replace(/^(?:como (?:abro|uso|accedo a)|donde (?:esta|encuentro)|(?:guiame|llevame) (?:a|al)|how (?:do i (?:open|use|find)|to (?:open|use))|where (?:is|do i find)|show me)\s+/u,'').replace(/^(?:el |la |the )/u,'').replace(/^如何(?:打开|使用)/u,'');
+  if(/^(?:que tarea (?:sigue|empieza) en el gantt(?: despues de \d{4}-\d{2}-\d{2})?|what (?:task|work) (?:starts|comes) next (?:in|on) the gantt(?: after \d{4}-\d{2}-\d{2})?|甘特图(?:上)?下一项(?:任务|工作)(?:是(?:什么|哪一项))?)$/u.test(q))return 'gantt';
+  if(aliases.has(key))return aliases.get(key);
+  return steps.find(s=>s[3].some(label=>normalize(label)===key))?.[0]||null;
+ }
+ return Object.freeze({guide,list,match});
+});

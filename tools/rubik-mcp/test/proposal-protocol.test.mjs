@@ -37,7 +37,7 @@ test('stdio: propose_layout is discovered, read-only, and answers the four state
   const { client, dir, file, bytes, stderrText } = await connect(t, scenario('overlap'));
   const before = await stat(file);
   const tools = (await client.listTools()).tools;
-  assert.deepEqual(tools.map(x => x.name).sort(), [...PREVIOUS, 'propose_layout'].sort());
+  assert.deepEqual(tools.map(x => x.name).sort(), [...PREVIOUS, 'get_workflow_guidance', 'propose_layout', 'simulate_layout'].sort());
   const tool = tools.find(x => x.name === 'propose_layout');
   assert.deepEqual(tool.annotations, { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false });
   assert.deepEqual(tool.inputSchema.required.sort(), ['expectedSha256', 'goal', 'objectId']);

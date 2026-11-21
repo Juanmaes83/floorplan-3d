@@ -54,6 +54,14 @@
     for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,0x01000193)>>>0;b=Math.imul(b^(c+i&0xffff),0x01000193)>>>0;}
     return 'rv1-'+a.toString(16).padStart(8,'0')+b.toString(16).padStart(8,'0');
   }
+  // The canonical project ID is stable even when the unsaved example gets a fresh library entry on reload.
+  // A failed legacy identity migration is the one case where the editor cannot guarantee unique project IDs.
+  function projectScope(app,studio='local'){
+    const id=app?.project?.id;if(!id)return null;
+    const scope=[studio,id];
+    if(app.identityMigration?.failed)scope.push(app.entryId||null,app.levelContext?.levelId||null);
+    return JSON.stringify(scope);
+  }
   const base=ctx=>{
     if(!isObj(ctx)||!isObj(ctx.project))return false;const p=ctx.project;
     return p.schema==='rubik-sota.floorplan-project'&&validId(p.id)&&Array.isArray(p.rooms)&&Array.isArray(p.walls)&&Array.isArray(p.openings)&&Array.isArray(p.objects);
@@ -121,8 +129,25 @@
       if(tool==='get_layout_review'){
         if(args.clearanceMm!==undefined&&!(typeof args.clearanceMm==='number'&&Number.isFinite(args.clearanceMm)&&args.clearanceMm>0&&args.clearanceMm<=3000))
           return failure(callId,'invalid_arguments','clearanceMm debe ser un número entre 0 y 3000 mm');
-        const r=L.review(p,args);
-        return result(callId,{status:r.status,checks:r.checks,findings:r.findings.slice(0,200).map(f=>({code:f.code,objects:f.objects,message:f.message})),skipped:r.skipped,unsupported:r.unsupported},
+        const lang=ctx.lang||'es',labels=ctx.labels?.objects||{};
+        const local=(es,en,zh)=>lang==='en'?en:lang==='zh'?zh:es;
+        const names=new Map(p.objects.map(o=>[o.id,labels[o.id]?.[0]||
+          ((lang==='zh'||!/\p{Script=Han}/u.test(o.name||''))&&o.name)||local('Mueble','Furniture','家具')]));
+        const label=o=>names.get(o.id);
+        const r=L.review(p,{...args,label});
+        const openings=new Map(p.openings.map(o=>[o.id,o]));
+        const describe=f=>{
+          if(lang==='es')return f.message;
+          const [a,b]=f.objects.map(id=>names.get(id)||'');
+          if(f.code==='solape')return local(f.message,`“${a}” and “${b}” overlap by ${f.measurementMm} mm in plan.`,`“${a}”与“${b}”在平面上重叠 ${f.measurementMm} 毫米。`);
+          if(f.code==='holgura')return local(f.message,`“${a}” and “${b}” are ${f.measurementMm} mm apart in plan, below the requested ${f.thresholdMm} mm.`,`“${a}”与“${b}”的平面间距为 ${f.measurementMm} 毫米，低于要求的 ${f.thresholdMm} 毫米。`);
+          if(f.code==='puerta'){
+            const width=openings.get(f.openingId)?.widthMm;
+            return local(f.message,`The ${width} mm door reaches “${b}” at about ${f.measurementDeg}° of its 90° swing.`,`${width} 毫米宽的门扇在 90° 开启范围内约 ${f.measurementDeg}° 处碰到“${b}”。`);
+          }
+          return local(f.message,'Check this finding on the plan.','请在平面图中核查此问题。');
+        };
+        return result(callId,{status:r.status,checks:r.checks,findings:r.findings.slice(0,200).map(f=>({code:f.code,objects:f.objects,message:describe(f)})),skipped:r.skipped,unsupported:r.unsupported},
           prov(ctx,'FloorPlanLayoutReview.review',{engine:'FloorPlanLayoutReview'}),['Solo examina huellas en planta: no es cumplimiento normativo, accesibilidad ni certificación.']);}
       if(tool==='list_materials')return result(callId,{materials:(p.materials||[]).slice(0,MAX_LIST).map(m=>({id:m.id,name:typeof m.name==='string'?m.name.slice(0,100):'',category:m.category??null})),count:(p.materials||[]).length},prov(ctx,'FloorPlanProjectV1.materials'));
       if(tool==='list_objects'){if(args.roomId!==undefined&&!p.rooms.some(r=>r.id===args.roomId))return failure(callId,'not_found','Estancia no encontrada');
@@ -176,5 +201,5 @@
       return failure(callId,'not_available','No se pudo calcular esta consulta con los datos actuales');
     }
   }
-  return Object.freeze({TOOLS,ARGS,execute,revision});
+  return Object.freeze({TOOLS,ARGS,execute,revision,projectScope});
 });

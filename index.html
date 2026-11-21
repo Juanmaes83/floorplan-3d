@@ -801,6 +801,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/r02a-ceiling-session.js"></script>
 <script src="js/r02a-ceiling-contract.js"></script>
 <script src="js/r02a-ceiling-bridge.js"></script>
+<script src="js/r02a-passage-indicative.js"></script>
 <script src="js/r02a-ceiling-editor.js"></script>
 <script src="js/room-layout.js"></script>
 <script src="js/wall-assist.js"></script>
@@ -1302,18 +1303,30 @@ function save(){
   return saved;
 }
 const snap = () => JSON.stringify(project);
-function commit(before){
+function commit(before,{requireSave=false}={}){
   // R02-A: si este cambio ha quitado estancias, sus elementos y referencias de techo se retiran en el MISMO paso del deshacer.
   try { const ceiling=window.RubikCeilingEditor?.reconcile(project); if(ceiling) project=ceiling; project.updatedAt = new Date(Math.max(Date.now(), Date.parse(project.createdAt))).toISOString(); Core.validate(project); }
   catch(e){ project=JSON.parse(before); refreshProject(); toast(tr('数据无效：','Invalid data: ') + e.message); return false; }
   // No change may create a new furniture–stair conflict (BW5): it is rolled back, the item keeps its last valid pose.
   const blocked = window.FloorPlanBuildingUI?.guard(before);
   if (blocked){ project=JSON.parse(before); refreshProject(); window.FloorPlanBuildingUI.refused(blocked); return false; }
-  undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; return save();
+  if(requireSave&&!save()){
+    project=JSON.parse(before);refreshProject();window.FloorPlanPresentation?.onProjectChange();return false;
+  }
+  undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; return requireSave||save();
 }
 function mutate(fn){ const b=snap(); try{fn();commit(b);}catch(e){project=JSON.parse(b);toast(e.message);} renderAll(); }
-function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); redoStack.push(snap()); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); save(); renderAll(); }
-function redo(){ if(!redoStack.length)return;undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();save();renderAll(); }
+function restoreHistory(from,to,{requireSave=false}={}){
+  if(!from.length)return false;
+  const previous=project,before=snap();
+  project=JSON.parse(from.at(-1));refreshProject();
+  if(requireSave&&!save()){
+    project=previous;refreshProject();window.FloorPlanPresentation?.onProjectChange();return false;
+  }
+  from.pop();to.push(before);validateSel();if(!requireSave)save();renderAll();return true;
+}
+function undo(){if(!restoreHistory(undoStack,redoStack))return toast(tr('没有可撤销的操作','Nothing to undo'));}
+function redo(){restoreHistory(redoStack,undoStack);}
 function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id) || ui.sel?.kind==='wall'&&!project.walls.some(w=>w.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
 const getF = id => state.furniture.find(f => f.id === id);
 
@@ -1894,9 +1907,19 @@ function wallPanel(w){
   const state = w.status==='demolished' ? L3(' · marcado para retirar',' · marked for removal',' · 已标记拆除') : '';
   return `<div class="panel-view wall-panel">${panelHead({title:L3('Muro','Wall','墙体'), context:L3(`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`,`Wall · ${len} mm · thickness ${w.thicknessMm} mm${state}`,`墙体 · ${len} mm · 厚度 ${w.thicknessMm} mm${state}`), back:backToOverview(), backTitle:backToOverviewTitle()})}<div class="panel-body">
     ${wallStructureBlock(w)}
+    ${window.RubikWallMoveUI?.markup(w)||''}
     <p class="muted">${L3('Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».','To remove or restore the wall use "Demolish"; to change its geometry, "Edit walls".','要拆除或恢复该墙，请使用「拆改墙体」；要修改其几何形状，请使用「修改墙体」。')}</p></div></div>`;
 }
-function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
+function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); window.RubikWallMoveUI?.bind(id,{apply:applyWallMove}); }
+// M08 · «Desplazar muro»: el resultado de RubikWallMove.plan (ya validado) sustituye muros, huecos, estancias y muebles en UNA mutación.
+function applyWallMove(next){
+  const before = snap();
+  for (const key of ['walls','openings','rooms','objects']) project[key] = next[key];
+  project.schemaVersion = next.schemaVersion;
+  const saved = commit(before,{requireSave:true});
+  renderAll();
+  return saved;
+}
 // UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
 // está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
 function roomSuggestionOf(source){
@@ -2852,7 +2875,23 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   applyFurnishing(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   // CAT-04: a project extension written by a CAT-IA tool (visual references), in one step of the commit (validation, undo, save).
   applyExtension(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
-  applyAssistant(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;refreshProject();if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+  applyAssistant(fn){
+    const before=snap(),entry=library.activeId(),level=library.activeLevelId();let r;
+    try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}
+    if(!r?.ok)return r||{ok:false};
+    project=r.project;refreshProject();
+    if(!commit(before,{requireSave:true}))return {ok:false};
+    validateSel();renderAll();
+    let expectedProject=project,expected=snap(),applied=true;
+    const after=expected;
+    return {ok:true,history(action){
+      const undoing=action==='undo',from=undoing?undoStack:redoStack,to=undoing?redoStack:undoStack;
+      if((!undoing&&action!=='redo')||undoing!==applied||project!==expectedProject||snap()!==expected
+        ||entry!==library.activeId()||level!==library.activeLevelId()||from.at(-1)!==(undoing?before:after))return 'stale';
+      if(!restoreHistory(from,to,{requireSave:true}))return 'save-failed';
+      expectedProject=project;expected=snap();applied=!undoing;return 'ok';
+    }};
+  },
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
   async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),
@@ -5980,7 +6019,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/plan-service-ui.js"></script>
 <script src="js/moodboard-core.js"></script>
 <script src="js/moodboard-ui.js"></script>
-<script src="js/quantity-core.js"></script>
+<script src="js/quantity-core.js"></script><script src="js/wall-move-core.js"></script><script src="js/wall-move-ui.js"></script>
 <script src="js/quantity-schedule-core.js"></script>
 <script src="js/quantity-schedule-ui.js"></script>
 <script src="js/budget-core.js"></script>
@@ -5996,6 +6035,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/client-delivery-core.js"></script>
 <script src="js/delivery-map-core.js"></script>
 <script src="js/delivery-preview-ui.js"></script>
+<script src="js/e3-entregas-core.js"></script><script src="js/e3-entregas-ui.js"></script>
 <script src="js/professional-workspace-ui.js"></script>
 <!-- FT3D-8 M2 (S4): one project, one budget, one plan, one evolution, one delivery. Reuses M1 and Gate D engines. -->
 <script src="js/cost-provider-bcca-es.js"></script>
@@ -6034,7 +6074,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- Asistente IA RUBIK V2 (AG-0…AG-5, Draft): consulta guiada SIN modelo de lenguaje sobre el proyecto abierto; las
      propuestas solo se guardan al «Aplicar», en un paso del commit. Nada sale del navegador; proveedor de texto desactivado. -->
 <link rel="stylesheet" href="css/assistant.css">
-<script src="js/assistant-contracts.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
+<script src="js/assistant-contracts.js"></script><script src="js/assistant-journey-core.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
 <script src="js/proposal-core.js"></script><script src="js/assistant-proposals-core.js"></script><script src="js/assistant-runtime-core.js"></script><script src="js/assistant-session-core.js"></script><script src="js/assistant-ui.js"></script>
 <!-- Asistente generativo (rubik-agent/1): conversación con un modelo de texto real vía /api/assistant (cerrado por defecto:
      sin autorización del propietario, solo la consulta guiada). El navegador nunca tiene la clave del proveedor. -->
@@ -6045,7 +6085,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- OP-10 · «Entregar → Escena para Blender»: captura de solo lectura de la vista 3D → GLB + manifiesto en un ZIP local.
      Sin red, sin texturas ni fotos, sin cambios en el proyecto (candidata de integración; ver docs/integration/OP10-BLENDER-HANDOFF.md). -->
 <link rel="stylesheet" href="css/scene-export.css">
-<script src="js/scene-capture-core.js"></script><script src="js/scene-delivery-core.js"></script><script src="js/scene-export-ui.js"></script>
+<script src="js/scene-capture-core.js"></script><script src="js/scene-delivery-core.js"></script><script src="js/scene-export-ui.js"></script><script src="js/blender-review-core.js"></script><script src="js/blender-review-ui.js"></script>
 <!-- R03 · Armarios paramétricos (activación R03-I1, experimental): «Interior del armario…» en el editor. El interior se
      guarda solo en extensions['x-r03-cabinet']; medidas supuestas, no de fabricante; no es fabricación ni presupuesto.
      Lista de módulos fijada por las pruebas I1 (tests/r03-integration-core.test.cjs) y A4 (tests/r03-cabinet-audit.test.cjs). -->

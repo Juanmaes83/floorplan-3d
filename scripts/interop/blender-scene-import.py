@@ -1,3 +1,8 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Juan Manuel Espinosa Galant · Rubik Sota
+# Script del kit «Escena para Blender» de RUBIK SOTA. Usa la API bpy de Blender (GPL-2.0-or-later) y se distribuye bajo
+# la GNU GPL v3 o posterior: ver LICENCIA-SCRIPTS.txt y COPYING-GPL-3.0.txt. Sin garantía. Esta licencia NO se extiende
+# a la aplicación web de RUBIK, a los lanzadores ni a los proyectos, imágenes, renders o archivos .blend de la persona.
 """OP-10 · Importa una «Escena para Blender» de RUBIK (scene.glb + manifest.json) y la verifica. Candidata de integración.
 Se entrega también dentro del ZIP como rubik_blender_prepare.py: es el camino B, «preparación completa» (el camino A es la
 importación nativa del GLB, que no reconstruye la luz del visor; ambos caminos NO dan el mismo render).
@@ -90,7 +95,8 @@ def main():
     if not bpy.app.background:  # parte de una escena vacía: dentro de una sesión abierta descartaría el trabajo de la persona
         raise SystemExit("Run it headless: blender --background --factory-startup --python rubik_blender_prepare.py -- . escena-preparada")
     glb = (pkg / "scene.glb").read_bytes()
-    manifest = json.loads((pkg / "manifest.json").read_text(encoding="utf8"))
+    manifest_bytes = (pkg / "manifest.json").read_bytes()
+    manifest = json.loads(manifest_bytes)
     if manifest.get("format") != "rubik-sota.scene-delivery":
         raise SystemExit("Not a RUBIK scene delivery manifest")
     if sha(glb) != manifest["files"]["scene.glb"]["sha256"] or len(glb) != manifest["files"]["scene.glb"]["bytes"]:
@@ -207,7 +213,7 @@ def main():
         bg.inputs["Strength"].default_value = 0.6
         declared.append("light: none captured; neutral grey world 0.6")
     sc.view_settings.view_transform = "AgX"
-    sc["rubik"] = json.dumps({"glbSha256": manifest["files"]["scene.glb"]["sha256"], "projectId": manifest["source"]["projectId"],
+    sc["rubik"] = json.dumps({"manifestSha256": sha(manifest_bytes), "glbSha256": manifest["files"]["scene.glb"]["sha256"], "projectId": manifest["source"]["projectId"],
                               "observedProjectSha256": manifest["source"]["observedProjectSha256"], "scope": sx.get("rubik_scope"),
                               "transform": "(XB,YB,ZB)=(x,-z,y)", "materials": mode, "light": light_mode, "importer": "glTF native"})
 
