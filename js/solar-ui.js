@@ -99,7 +99,7 @@
  close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
  date.oninput=time.oninput=()=>{localDate=date.value;localTime=time.value;update();};
  north.oninput=lat.oninput=lon.oninput=zone.oninput=update;
- document.querySelector('#langBtn').addEventListener('click',()=>queueMicrotask(relang));
+ document.addEventListener('rubik:languagechange',()=>queueMicrotask(relang));
  // FT3D-4 reads a runtime snapshot (result, local date and time) once when a presentation starts; read-only, nothing saved.
  window.FloorPlanSolarUI={open,sync,restore,get mode(){return mode;},get result(){return calculation();},get localDate(){return localDate;},get localTime(){return localTime;}};
  relang();

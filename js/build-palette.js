@@ -7,6 +7,10 @@
 (function(){
  const $=s=>document.querySelector(s),aside=$('aside.lib');
  const KEY='rubik-sota-palette-tab';
+ // Same language source as the whole app (global LANG; es by default). Nothing is stored and no table of its own: each
+ // text carries its three versions, and the palette is rebuilt from them when the language changes.
+ const tx=(es,en,zh)=>{const l=typeof LANG==='string'?LANG:'es';return l==='en'?en:l==='zh'?zh:es;};
+ const q=(s,l=typeof LANG==='string'?LANG:'es')=>l==='en'?`"${s}"`:l==='zh'?`「${s}」`:`«${s}»`;
  const ICON={
   select:'<path d="M6 4l12 7-5 1.5 3 6-2 1-3-6-4 3z"/>',
   measure:'<path d="M3 15l12-12 6 6-12 12z"/><path d="M8 10l2 2M11 7l2 2M14 4l2 2M5 13l2 2"/>',
@@ -23,20 +27,26 @@
  const icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICON[k]||''}</svg>`;
  // Example names: suggestions for the name field of «Nueva estancia», with their visible translation elsewhere.
  // The most common first; the rest stay one tap away under «Más nombres».
+ // The Spanish name is the stable key (data-room-name); the person sees, and the new room is named with, the example in
+ // the language of the session: a name the person chose is their own data, stored as chosen, never translated afterwards.
+ const NAME_EXAMPLES={'Salón':['Living room','客厅'],'Cocina':['Kitchen','厨房'],'Dormitorio':['Bedroom','卧室'],'Baño':['Bathroom','浴室'],'Comedor':['Dining room','餐厅'],'Estudio':['Study','书房'],
+  'Dormitorio principal':['Master bedroom','主卧室'],'Aseo':['Toilet','卫生间'],'Recibidor':['Entrance hall','玄关'],'Pasillo':['Hallway','走廊'],'Lavadero':['Laundry','洗衣房'],'Terraza':['Terrace','露台'],'Vestidor':['Walk-in closet','衣帽间'],'Habitación de invitados':['Guest room','客房']};
+ const exampleName=key=>{const t=NAME_EXAMPLES[key];return tx(key,t[0],t[1]);};
  const EXAMPLES=['Salón','Cocina','Dormitorio','Baño','Comedor','Estudio'],MORE=['Dormitorio principal','Aseo','Recibidor','Pasillo','Lavadero','Terraza','Vestidor','Habitación de invitados'];
- const OPENINGS=[['door','Puerta abatible'],['sliding-door','Puerta corredera'],['window','Ventana'],['opening','Hueco de paso']];
- const TOOLS=[['select','Seleccionar','V'],['measure','Medir','M'],['demolish','Modificar muros','X']];
+ const OPENINGS=[['door',['Puerta abatible','Hinged door','平开门']],['sliding-door',['Puerta corredera','Sliding door','推拉门']],['window',['Ventana','Window','窗']],['opening',['Hueco de paso','Passage opening','过道洞口']]];
+ const TOOLS=[['select',['Seleccionar','Select','选择'],'V'],['measure',['Medir','Measure','测量'],'M'],['demolish',['Modificar muros','Demolish','拆改墙体'],'X']];
+ const T3=a=>tx(a[0],a[1],a[2]);
  const el=(tag,attrs={},parent,html)=>{const n=document.createElement(tag);for(const [k,v] of Object.entries(attrs))if(v!==undefined&&v!==null)n.setAttribute(k,v);if(html!==undefined)n.innerHTML=html;parent?.append(n);return n;};
  const shown=n=>typeof nm==='function'?nm(n):n;
 
  // Tabs: «Construir» (new) and «Amueblar» (the existing library: search, catalogue and, in 3D, the room list).
- const tabs=el('div',{class:'palette-tabs',role:'tablist','aria-label':'Crear y amueblar'});
+ const tabs=el('div',{class:'palette-tabs',role:'tablist','aria-label':tx('Crear y amueblar','Create and furnish','创建与布置')});
  const furnish=el('div',{id:'paletteFurnish',class:'palette-panel',role:'tabpanel','aria-labelledby':'paletteTabFurnish'});
  const build=el('div',{id:'paletteBuild',class:'palette-panel palette-build',role:'tabpanel','aria-labelledby':'paletteTabBuild'});
  for(const n of [...aside.children])furnish.append(n);
  aside.append(tabs,build,furnish);
  const tab=(id,text,panel)=>{const b=el('button',{type:'button',role:'tab',id,class:'palette-tab','aria-controls':panel.id},tabs);b.textContent=text;return b;};
- const tBuild=tab('paletteTabBuild','Construir',build),tFurnish=tab('paletteTabFurnish','Amueblar',furnish);
+ const tBuild=tab('paletteTabBuild',tx('Construir','Build','构建'),build),tFurnish=tab('paletteTabFurnish',tx('Amueblar','Furnish','布置家具'),furnish);
  function selectTab(which,focus=false){
   const isBuild=which==='build';
   tBuild.setAttribute('aria-selected',String(isBuild));tFurnish.setAttribute('aria-selected',String(!isBuild));
@@ -80,44 +90,44 @@
  // Text of the opening group: where the next door or window goes, or what to tap first.
  function contextText(label){
   const sel=ui?.sel,roomId=contextRoom(),room=project.rooms.find(r=>r.id===roomId);
-  if(room)return {warn:false,text:`Se añadirá a «${shown(room.name)}»: toca después uno de sus muros.`};
-  if(sel?.kind==='opening'){const names=openingRooms(sel.id).map(id=>`«${shown(project.rooms.find(r=>r.id===id).name)}»`);
-   if(names.length>1)return {warn:true,text:`Este hueco separa ${names.join(' y ')}. Toca en el plano la estancia donde quieres añadir ${label?`«${label}»`:'el hueco'}.`};}
-  return {warn:!!label,text:label?`Para añadir «${label}», toca antes en el plano la estancia donde va y vuelve a pulsar «${label}».`:'Toca antes en el plano la estancia donde va el hueco.'};
+  if(room)return {warn:false,text:tx(`Se añadirá a ${q(shown(room.name))}: toca después uno de sus muros.`,`It will be added to ${q(shown(room.name))}: then tap one of its walls.`,`将添加到${q(shown(room.name))}：然后点按其中一面墙。`)};
+  if(sel?.kind==='opening'){const names=openingRooms(sel.id).map(id=>q(shown(project.rooms.find(r=>r.id===id).name)));
+   if(names.length>1)return {warn:true,text:tx(`Este hueco separa ${names.join(' y ')}. Toca en el plano la estancia donde quieres añadir ${label?q(label):'el hueco'}.`,`This opening separates ${names.join(' and ')}. Tap on the plan the room where you want to add ${label?q(label):'the opening'}.`,`此洞口分隔${names.join('和')}。请在平面图上点按要添加${label?q(label):'洞口'}的房间。`)};}
+  return {warn:!!label,text:label?tx(`Para añadir ${q(label)}, toca antes en el plano la estancia donde va y vuelve a pulsar ${q(label)}.`,`To add ${q(label)}, first tap on the plan the room it goes in, then press ${q(label)} again.`,`要添加${q(label)}，请先在平面图上点按它所在的房间，然后再次按${q(label)}。`):tx('Toca antes en el plano la estancia donde va el hueco.','First tap on the plan the room where the opening goes.','请先在平面图上点按洞口所在的房间。')};
  }
 
  let toolButtons=[],openingButtons=[],openingContext=null,stairNote=null,mode3d=null,wallBanner=null,wallTimer=null,hintToast='';
  function construct(){
   build.replaceChildren();
   mode3d=el('div',{class:'palette-3d-note',id:'palette3dNote',hidden:''},build);
-  el('p',{},mode3d).textContent='Para construir, cambia al plano 2D.';
-  action(mode3d,{id:'palettePlan2d',icon:'room',label:'Ir al plano 2D',onclick:()=>setView('2d')});
+  el('p',{},mode3d).textContent=tx('Para construir, cambia al plano 2D.','To build, switch to the 2D plan.','要进行构建，请切换到 2D 平面图。');
+  action(mode3d,{id:'palettePlan2d',icon:'room',label:tx('Ir al plano 2D','Go to the 2D plan','前往 2D 平面图'),onclick:()=>setView('2d')});
 
-  const tools=groupOf('Herramientas');const tg=el('div',{class:'palette-grid palette-tools',role:'group','aria-label':'Herramienta activa'},tools);
-  toolButtons=TOOLS.map(([t,label,key])=>{const b=action(tg,{id:'paletteTool-'+t,icon:t,label,hint:`${label} (${key})`,onclick:()=>useTool(t)});b.dataset.tool=t;return b;});
+  const tools=groupOf(tx('Herramientas','Tools','工具'));const tg=el('div',{class:'palette-grid palette-tools',role:'group','aria-label':tx('Herramienta activa','Active tool','当前工具')},tools);
+  toolButtons=TOOLS.map(([t,labels,key])=>{const label=T3(labels);const b=action(tg,{id:'paletteTool-'+t,icon:t,label,hint:`${label} (${key})`,onclick:()=>useTool(t)});b.dataset.tool=t;return b;});
 
-  const rooms=groupOf('Estancias','Crea una estancia rectangular con sus muros. Los ejemplos sólo proponen el nombre; puedes cambiarlo.');
-  action(rooms,{id:'paletteNewRoom',icon:'room',label:'Nueva estancia',cls:'palette-action palette-primary',onclick:async()=>{await in2D();FloorPlanRoomUI.createRoom();}});
-  const chip=(parent,name)=>{const b=el('button',{type:'button',class:'btn palette-chip','data-room-name':name},parent);b.textContent=name;b.onclick=async()=>{await in2D();FloorPlanRoomUI.createRoom({name:uniqueName(name)});};};
-  const ex=el('div',{class:'palette-examples',role:'group','aria-label':'Ejemplos de nombre'},rooms);for(const name of EXAMPLES)chip(ex,name);
-  const more=el('details',{class:'palette-more',id:'paletteMoreNames'},rooms);el('summary',{},more).textContent='Más nombres';
-  const mx=el('div',{class:'palette-examples',role:'group','aria-label':'Más ejemplos de nombre'},more);for(const name of MORE)chip(mx,name);
+  const rooms=groupOf(tx('Estancias','Rooms','房间'),tx('Crea una estancia rectangular con sus muros. Los ejemplos sólo proponen el nombre; puedes cambiarlo.','Create a rectangular room with its walls. The examples only suggest the name; you can change it.','创建带墙体的矩形房间。示例仅提供名称建议，你可以修改。'));
+  action(rooms,{id:'paletteNewRoom',icon:'room',label:tx('Nueva estancia','New room','新建房间'),cls:'palette-action palette-primary',onclick:async()=>{await in2D();FloorPlanRoomUI.createRoom();}});
+  const chip=(parent,key)=>{const b=el('button',{type:'button',class:'btn palette-chip','data-room-name':key},parent);b.textContent=exampleName(key);b.onclick=async()=>{await in2D();FloorPlanRoomUI.createRoom({name:uniqueName(exampleName(key))});};};
+  const ex=el('div',{class:'palette-examples',role:'group','aria-label':tx('Ejemplos de nombre','Name examples','名称示例')},rooms);for(const name of EXAMPLES)chip(ex,name);
+  const more=el('details',{class:'palette-more',id:'paletteMoreNames'},rooms);el('summary',{},more).textContent=tx('Más nombres','More names','更多名称');
+  const mx=el('div',{class:'palette-examples',role:'group','aria-label':tx('Más ejemplos de nombre','More name examples','更多名称示例')},more);for(const name of MORE)chip(mx,name);
 
-  const holes=groupOf('Puertas y ventanas');
+  const holes=groupOf(tx('Puertas y ventanas','Doors and windows','门窗'));
   openingContext=el('p',{class:'palette-help',id:'paletteOpeningContext','aria-live':'polite'},holes);
-  const og=el('div',{class:'palette-grid',role:'group','aria-label':'Tipos de hueco'},holes);
-  openingButtons=OPENINGS.map(([kind,label])=>{const b=action(og,{id:'paletteOpening-'+kind,icon:kind,label,onclick:()=>addOpening(kind,label)});b.dataset.kind=kind;return b;});
+  const og=el('div',{class:'palette-grid',role:'group','aria-label':tx('Tipos de hueco','Opening types','洞口类型')},holes);
+  openingButtons=OPENINGS.map(([kind,labels])=>{const label=T3(labels);const b=action(og,{id:'paletteOpening-'+kind,icon:kind,label,onclick:()=>addOpening(kind,T3(labels))});b.dataset.kind=kind;return b;});
 
-  const walls=groupOf('Muros y trazado');const wg=el('div',{class:'palette-grid'},walls);
-  action(wg,{id:'paletteWall',icon:'wall',label:'Dibujar muro',hint:'Toca dos extremos por cada muro',onclick:drawWall});
-  action(wg,{id:'paletteTrace',icon:'trace',label:'Plano propio',hint:'Imagen de referencia, escala, estancias por vértices y edición',onclick:()=>{$('#traceBtn')?.click();}});
+  const walls=groupOf(tx('Muros y trazado','Walls and tracing','墙体与描图'));const wg=el('div',{class:'palette-grid'},walls);
+  action(wg,{id:'paletteWall',icon:'wall',label:tx('Dibujar muro','Draw wall','绘制墙体'),hint:tx('Toca dos extremos por cada muro','Tap two ends for each wall','每面墙点按两个端点'),onclick:drawWall});
+  action(wg,{id:'paletteTrace',icon:'trace',label:tx('Plano propio','Own plan','自有平面图'),hint:tx('Imagen de referencia, escala, estancias por vértices y edición','Reference image, scale, rooms by vertices and editing','参考图像、比例、按顶点绘制房间及编辑'),onclick:()=>{$('#traceBtn')?.click();}});
 
-  const lv=groupOf('Plantas y escalera');const lg=el('div',{class:'palette-grid'},lv);
-  action(lg,{id:'paletteLevels',icon:'levels',label:'Plantas…',onclick:()=>FloorPlanBuildingUI?.open()});
-  action(lg,{id:'paletteStair',icon:'stair',label:'Escalera recta',onclick:openStair});
+  const lv=groupOf(tx('Plantas y escalera','Levels and stair','楼层与楼梯'));const lg=el('div',{class:'palette-grid'},lv);
+  action(lg,{id:'paletteLevels',icon:'levels',label:tx('Plantas…','Levels…','楼层…'),onclick:()=>FloorPlanBuildingUI?.open()});
+  action(lg,{id:'paletteStair',icon:'stair',label:tx('Escalera recta','Straight stair','直梯'),onclick:openStair});
   stairNote=el('p',{class:'palette-help',id:'paletteStairNote'},lv);
 
-  const tip=el('p',{class:'palette-tip'},build);tip.textContent='Consejo: crea primero las estancias (sus muros se crean con ellas), añade después puertas y ventanas y amuebla en «Amueblar».';
+  const tip=el('p',{class:'palette-tip'},build);tip.textContent=tx('Consejo: crea primero las estancias (sus muros se crean con ellas), añade después puertas y ventanas y amuebla en «Amueblar».','Tip: create the rooms first (their walls are created with them), then add doors and windows and furnish in "Furnish".','提示：先创建房间（墙体随房间一同创建），再添加门窗，并在「布置家具」中布置。');
  }
  const uniqueName=name=>{const used=new Set(project.rooms.map(r=>r.name));if(!used.has(name))return name;let i=2;while(used.has(`${name} ${i}`))i++;return `${name} ${i}`;};
 
@@ -137,12 +147,13 @@
  async function drawWall(){await in2D();await FloorPlanTraceUI.start('wall');showWallBanner();}
  // Wall drawing stays visible: a banner with what to do and «Terminar», so no hidden mode keeps taking taps.
  function showWallBanner(){
-  if(!wallBanner){wallBanner=el('div',{id:'paletteWallBanner',class:'opening-pick-banner',role:'region','aria-label':'Dibujar muro'},$('#stage'));
-   const copy=el('div',{class:'opening-pick-copy'},wallBanner);el('strong',{},copy).textContent='Dibujando muros';el('span',{},copy).textContent='Toca dos extremos por cada muro (se ajusta a 45°/90°). Deshacer quita el último.';
-   const done=el('button',{type:'button',class:'btn',id:'paletteWallDone'},wallBanner);done.textContent='Terminar';done.onclick=()=>{FloorPlanTraceUI.cancel();hideWallBanner();};}
-  wallBanner.hidden=false;$('#paletteWallDone')?.focus({preventScroll:true});
+  if(!wallBanner){wallBanner=el('div',{id:'paletteWallBanner',class:'opening-pick-banner',role:'region','aria-label':tx('Dibujar muro','Draw wall','绘制墙体')},$('#stage'));
+   const copy=el('div',{class:'opening-pick-copy'},wallBanner);el('strong',{id:'paletteWallBannerTitle'},copy);el('span',{id:'paletteWallBannerText'},copy);
+   const done=el('button',{type:'button',class:'btn',id:'paletteWallDone'},wallBanner);done.onclick=()=>{FloorPlanTraceUI.cancel();hideWallBanner();};}
+  bannerText();wallBanner.hidden=false;$('#paletteWallDone')?.focus({preventScroll:true});
   clearInterval(wallTimer);wallTimer=setInterval(()=>{if(FloorPlanTraceUI.mode?.()!=='wall')hideWallBanner();},250);
  }
+ function bannerText(){if(!wallBanner)return;wallBanner.setAttribute('aria-label',tx('Dibujar muro','Draw wall','绘制墙体'));$('#paletteWallBannerTitle').textContent=tx('Dibujando muros','Drawing walls','正在绘制墙体');$('#paletteWallBannerText').textContent=tx('Toca dos extremos por cada muro (se ajusta a 45°/90°). Deshacer quita el último.','Tap two ends for each wall (it snaps to 45°/90°). Undo removes the last one.','每面墙点按两个端点（自动吸附到 45°/90°）。撤销将移除最后一面。');$('#paletteWallDone').textContent=tx('Terminar','Finish','完成');}
  function hideWallBanner(){clearInterval(wallTimer);wallTimer=null;if(wallBanner)wallBanner.hidden=true;}
  function openStair(){
   const ctx=window.FloorPlanBuildingUI?.context;FloorPlanBuildingUI?.open();
@@ -159,12 +170,20 @@
   const c=contextText();openingContext.classList.toggle('palette-warn',c.warn);openingContext.textContent=c.text;
   for(const b of openingButtons)b.setAttribute('aria-describedby','paletteOpeningContext');
   const levels=window.FloorPlanBuildingUI?.context?.levels||1;
-  stairNote.textContent=levels>1?'La escalera recta une las dos plantas del edificio.':'La escalera une dos plantas: añade la segunda en «Plantas…».';
+  stairNote.textContent=levels>1?tx('La escalera recta une las dos plantas del edificio.','The straight stair joins the two levels of the building.','直梯连接建筑的两个楼层。'):tx('La escalera une dos plantas: añade la segunda en «Plantas…».','The stair joins two levels: add the second one in "Levels…".','楼梯连接两个楼层：请在「楼层…」中添加第二层。');
  }
  let initial='build';try{initial=localStorage.getItem(KEY)||'build';}catch{}
  construct();selectTab(initial==='furnish'?'furnish':'build');
  // «Añadir puertas y ventanas» of the guide: the palette opens on «Construir» with the focus on the first opening type and
  // the group's own instruction (which room it goes to, or what to tap first) in view.
  async function focusOpenings(){await in2D();selectTab('build');if(typeof drawer==='function')drawer('lib',true);render();const first=openingButtons[0];first?.closest('.palette-group')?.scrollIntoView({block:'start'});first?.focus({preventScroll:true});}
+ // Language change (from the header, the Home or any other entry point): the same palette is rebuilt in the new language
+ // and re-synchronised; the tab, the open «Más nombres», the wall-drawing banner and the focus stay as they were.
+ document.addEventListener('rubik:languagechange',()=>{
+  const focusId=aside.contains(document.activeElement)?document.activeElement.id:'',more=$('#paletteMoreNames')?.open;
+  tabs.setAttribute('aria-label',tx('Crear y amueblar','Create and furnish','创建与布置'));tBuild.textContent=tx('Construir','Build','构建');tFurnish.textContent=tx('Amueblar','Furnish','布置家具');
+  construct();if(more)$('#paletteMoreNames').open=true;render();bannerText();
+  if(focusId)document.getElementById(focusId)?.focus({preventScroll:true});
+ });
  window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,focusOpenings,useTool,drawWall,get tab(){return build.hidden?'furnish':'build';}};
 })();

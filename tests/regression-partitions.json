@@ -21,7 +21,9 @@
   "tests/home-demos.browser.test.cjs",
   "tests/e2-comparativas.browser.test.cjs",
   "tests/h01-dossier-inventario.browser.test.cjs",
-  "tests/h02-cabecera-economica.browser.test.cjs"
+  "tests/h02-cabecera-economica.browser.test.cjs",
+  "tests/language-home-navigation.browser.test.cjs",
+  "tests/language-build-furnish-properties.browser.test.cjs"
  ],
  "historical": {
   "presentation-a": [
