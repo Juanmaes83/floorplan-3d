@@ -1,6 +1,6 @@
 # Rubik Floorplan MCP — consulta local de solo lectura
 
-Servidor MCP local para consultar un archivo JSON exportado desde Rubik Sota. Esta primera entrega es deliberadamente de **solo lectura** y trabaja sobre un archivo explícito, no sobre la sesión abierta del editor.
+Servidor MCP local para consultar un archivo JSON exportado desde Rubik Sota. El servidor trabaja en **solo lectura** sobre un archivo explícito. Una orden local independiente permite guardar una variante revisada en RUBIK.
 
 ## Requisitos y arranque
 
@@ -165,3 +165,20 @@ Las pruebas comprueban validación, consultas y paginación, relaciones espacial
 El `package-lock.json` fija las dependencias de esta entrega. Se actualizó el SDK MCP a `1.32.1` tras detectar la alerta [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en la versión anterior; el servidor usa stdio y no el cliente OAuth afectado. En aquel momento, `npm audit` no reportaba vulnerabilidades para el lock.
 
 El corte de integración actualiza Zod y las dependencias transitivas afectadas. La evidencia y el alcance de la validación con el proyecto autorizado están en [Validación Beta 01](validation/real-beta01.md).
+
+### Simular y revisar una variante (etapas 3 y 4)
+
+1. En RUBIK abre la planta y pulsa **Asistente → Revisar con MCP local → Guardar JSON para MCP**. Para un edificio, usa **Plantas → Exportar esta planta (JSON 1.x)**. Abre el JSON en el servidor local con el arranque anterior.
+2. En el cliente MCP ejecuta `diagnose_project` y `get_project_summary`. Toma de este último `snapshot.sha256`. Usa `propose_layout` con `objectId`, `goal` y `expectedSha256`. `clear-door-swing` requiere también `openingId`.
+3. Llama a `simulate_layout` con los mismos argumentos. El resultado compara superficie, número de muebles y revisión geométrica antes y después. Si indicas `clearanceMm`, aplica el mismo umbral a ambos estados. Revisa las exclusiones y la confianza de escala. Solo `candidate-reviewable` devuelve `simulationSha256`.
+4. En una terminal local interactiva, ejecuta desde esta carpeta y sustituye los valores por los del resultado. Repite los argumentos opcionales si se usaron en la simulación.
+
+```sh
+npm run variant -- --project ORIGINAL.json --output-dir CARPETA --object-id ID --goal resolve-placement-conflict --expected-sha256 SHA_DEL_ORIGINAL --simulation-sha256 SHA_DE_LA_SIMULACION
+```
+
+La terminal muestra las poses, métricas, exclusiones y destino. Escribe la frase `GUARDAR` seguida de los ocho caracteres indicados si apruebas el resultado. Salir o introducir otra frase cancela. El ZIP aparece completo en una carpeta existente, con nombre nuevo y sin sobrescribir archivos. Requiere un sistema de archivos local que admita enlaces duros. Si el original o la carpeta cambian antes de la escritura, repite la revisión.
+
+5. Abre el ZIP de revisión y extrae **project.json**. En RUBIK usa **Archivo → Importar proyecto JSON**. Se añade un proyecto independiente con el sufijo «Variante MCP». Conserva `simulation.json` junto al ZIP para comprobar la procedencia, la huella del original y la del JSON de variante. El vínculo de grupo de **Comparar** vive en la biblioteca local de RUBIK. El ZIP de revisión conserva su relación mediante el manifiesto.
+
+El servidor MCP de consulta nunca escribe. El comando de variante es independiente y solo exporta una planta y la posición de un mueble existente. Preserva los campos canónicos y las referencias que ya incluía el JSON. No incluye los bytes de fotos, GLB u otros recursos externos, presupuestos de la biblioteca ni el edificio completo. Si esos recursos son necesarios, conserva también los artefactos originales de RUBIK. La revisión geométrica 2D no certifica accesibilidad, cumplimiento, recorridos, alturas ni otras plantas. Si el cliente MCP usa un proveedor, comprueba qué resultados transmite antes de seleccionar un proyecto privado.

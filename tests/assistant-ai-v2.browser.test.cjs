@@ -136,3 +136,28 @@ test('móvil 390×844 con toques y 844×390 horizontal: hoja inferior dentro de 
   assert.deepEqual(watch.errors,[]);
  }finally{await context.close();}
 });
+
+test('the Assistant refuses an unrelated undo and preserves history when saving fails',async()=>{
+ const {context,page,watch}=await kit.editor(env);
+ const full=()=>page.evaluate(()=>({project:snap(),undo:[...undoStack],redo:[...redoStack],storage:storage.getItem(STORE)}));
+ try{
+  await open(page);await ask(page,'Mueve el sofá 20 cm a la izquierda');
+  assert.deepEqual(await page.locator('.assistant-diff-values dt').allTextContents(),['Antes','Después']);
+  const before=await full();
+  await page.evaluate(()=>{const set=Storage.prototype.setItem;window.__restoreStorage=()=>{Storage.prototype.setItem=set;};
+   Storage.prototype.setItem=function(key,value){if(key===FloorPlanLibrary.KEY)throw new DOMException('Cuota QA','QuotaExceededError');return set.call(this,key,value);};});
+  await page.click('#assistantApply');
+  assert.deepEqual(await full(),before,'refusal preserves editor, history and stored project');
+  assert.match(await page.textContent('#assistantLog'),/proyecto sigue intacto/);
+  await page.evaluate(()=>window.__restoreStorage());
+  await ask(page,'Mueve el sofá 20 cm a la izquierda');await page.click('#assistantApply');
+  assert.equal(await page.locator('#assistantRedo').isDisabled(),true);
+  await page.evaluate(()=>FloorPlanApp.applyAssistant(p=>{p.name='Edición posterior';return {ok:true,project:p};}));
+  const later=await full();
+  await page.click('#assistantUndo');
+  assert.deepEqual(await full(),later,'a stale contextual undo never reverts a later edit');
+  assert.match(await page.textContent('#assistantProposal [role="status"]'),/historial ha cambiado/);
+  assert.equal(await page.locator('#assistantUndo').isDisabled(),true);
+  assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});

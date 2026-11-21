@@ -1,0 +1,20 @@
+{
+  "chromium": {
+    "version": "157.0.8103.80",
+    "sourceSha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+    "simulationSha256": "9ab15ce4b06198474fc7a8f504ddf2e75bdaa1bcca658c77cebe32e09ff10173",
+    "variantReopened": true
+  },
+  "firefox": {
+    "version": "155.0",
+    "sourceSha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+    "simulationSha256": "9ab15ce4b06198474fc7a8f504ddf2e75bdaa1bcca658c77cebe32e09ff10173",
+    "variantReopened": true
+  },
+  "webkit": {
+    "version": "26.6",
+    "sourceSha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+    "simulationSha256": "9ab15ce4b06198474fc7a8f504ddf2e75bdaa1bcca658c77cebe32e09ff10173",
+    "variantReopened": true
+  }
+}

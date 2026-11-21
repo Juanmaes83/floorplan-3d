@@ -1,5 +1,10 @@
 # Roadmap del MCP local de Rubik
 
+> **Candidata M05.** Las etapas 1 y 2 ya existen en el producto. Las etapas 3 y 4 se acreditan juntas en la candidata M05 mediante simulación sin escritura, confirmación local y reimportación de una variante. La integración depende de la revisión de la candidata y la autorización del propietario. [Handoff M05](../integration/M05-COPILOTO-PROFESIONAL.md) · [Ruta operativa](../../tools/rubik-mcp/README.md#simular-y-revisar-una-variante-etapas-3-y-4)
+
+> Las notas fechadas a continuación conservan el estado histórico de cada corte.
+
+
 
 > **Estado vigente, 18-10-2026:** los tres cortes de la Etapa 1 están integrados: [#40](https://github.com/Juanmaes83/floorplan-3d/pull/40) (relaciones por estancia, merge `19f2f44`), [#41](https://github.com/Juanmaes83/floorplan-3d/pull/41) (diagnóstico y medidas 2D, `9c9e155`) y [#43](https://github.com/Juanmaes83/floorplan-3d/pull/43) (obstáculos del segmento mínimo y cadena de puertas, `6728e16`). Se probaron sucesivamente sobre el `master` posterior a #55 y el árbol de cada merge remoto coincidió con el probado: [evidencia](../qa/local-mcp-stage1-integration-2026-10-18.md). **Etapa 1 aún incompleta:** una cadena de puertas y una recta libre no prueban ruta transitable ni anchura; faltan desvíos, giros, extremos de muro, hojas y empotramientos. CI no ejecutó pruebas. Las Etapas 2–4 siguen propuestas.
 
