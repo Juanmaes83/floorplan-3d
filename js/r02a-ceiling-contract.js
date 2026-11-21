@@ -9,6 +9,9 @@
  * and the items already confirmed; only 'candidate-reviewable' is accepted. Pure and atomic. */
 (function (root) {
   'use strict';
+  // Textos visibles en los idiomas de RUBIK (convención de los módulos: tx local que lee el LANG global; sin LANG, español idéntico).
+  const tx = (es, en, zh) => ({ es, en, zh })[typeof LANG === 'string' ? LANG : 'es'] ?? es;
+
   const node = typeof module === 'object' && typeof require === 'function';
   const S = node ? require('./r02a-ceiling-session.js') : root.RubikCeilingSession;
   const Core = node ? require('./project-core.js') : root.FloorPlanCore;
@@ -87,7 +90,7 @@
   }
   /* Confirms ONE item after a human said so. Re-evaluated here, with the stored references and the confirmed items. */
   function confirmItem(project, request, { confirm = false, confirmedAt = new Date().toISOString() } = {}) {
-    if (confirm !== true) return refuse([issue('confirmation-required', 'Hace falta la confirmación expresa de una persona.')]);
+    if (confirm !== true) return refuse([issue('confirmation-required', tx('Hace falta la confirmación expresa de una persona.', 'A person’s explicit confirmation is required.', '需要人工明确确认。'))]);
     const blocked = writable(project); if (blocked) return blocked;
     const ext = extension(project);
     if (!request || typeof request.id !== 'string' || !ID.test(request.id)) return refuse([issue('id', 'id cei_…')]);
@@ -108,7 +111,7 @@
   function removeVerticalReference(project, { scope, roomId } = {}) {
     const blocked = writable(project); if (blocked) return blocked;
     const ext = extension(project), match = v => v.scope === scope && (v.roomId || '') === (scope === 'room' ? roomId || '' : '');
-    if (!ext.verticalReferences.some(match)) return refuse([issue('unknown-reference', 'No hay ninguna referencia guardada con ese ámbito.')]);
+    if (!ext.verticalReferences.some(match)) return refuse([issue('unknown-reference', tx('No hay ninguna referencia guardada con ese ámbito.', 'There is no saved reference with that scope.', '没有该范围的已保存基准。'))]);
     return withExt(project, ext.verticalReferences.filter(v => !match(v)), ext.items);
   }
   function removeItem(project, id) { const blocked = writable(project); if (blocked) return blocked; const ext = extension(project); return withExt(project, ext.verticalReferences, ext.items.filter(x => x.id !== id)); }
@@ -129,13 +132,13 @@
     if (damage.length) return { status: 'invalid', items: [], holding: 0, failing: 0, orphans: [], issues: damage };
     const reqs = asRequests(project), gone = new Set(orphans(project));
     const items = ext.items.map((it, i) => {
-      if (gone.has(it.id)) return { id: it.id, type: it.type, roomId: it.roomId, position: { ...it.position }, holds: false, state: 'orphan', explanation: ['La estancia de este elemento ya no existe en el proyecto.'] };
+      if (gone.has(it.id)) return { id: it.id, type: it.type, roomId: it.roomId, position: { ...it.position }, holds: false, state: 'orphan', explanation: [tx('La estancia de este elemento ya no existe en el proyecto.', 'This item’s room no longer exists in the project.', '该元素所在的房间已不在项目中。')] };
       const accepted = reqs.filter((_, j) => j !== i), ceiling = verticalFor(project, it.roomId);
       const ev = S.evaluate({ project, ceiling, request: reqs[i], accepted, ...(labelOf ? { labelOf } : {}) });
       const movedRoom = ev.ok && ev.proposal.roomId !== it.roomId;
       const holds = ev.ok && ev.state === 'candidate-reviewable' && !ev.diff.relocated && !movedRoom;
       return { id: it.id, type: it.type, roomId: it.roomId, position: { ...it.position }, holds, state: ev.ok ? ev.state : 'invalid',
-        explanation: movedRoom ? ['El elemento ya no queda dentro de su estancia guardada.'].concat(ev.explanation) : ev.explanation };
+        explanation: movedRoom ? [tx('El elemento ya no queda dentro de su estancia guardada.', 'The item is no longer inside its saved room.', '该元素已不在其保存的房间内。')].concat(ev.explanation) : ev.explanation };
     });
     const holding = items.filter(x => x.holds).length;
     return { status: 'present', items, holding, failing: items.length - holding, orphans: [...gone] };
