@@ -199,7 +199,7 @@
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
  clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
- document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
+ document.addEventListener('rubik:languagechange',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
  window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
