@@ -14,7 +14,7 @@
 | MCP 3 | `simulate_layout` comprueba la huella de origen y evalúa una posición en memoria. Compara los dos estados con las métricas de variación del producto. |
 | MCP 4 / OP-12 | Una persona confirma en terminal un ZIP de revisión independiente. Incluye la variante canónica y un manifiesto con huellas. Se abre desde el importador de RUBIK. El contrato de biblioteca conserva localmente los grupos nativos de variantes y el manifiesto conserva la procedencia del intercambio. |
 
-El historial generativo se limita a la memoria de la conversación vigente. La consulta guiada conserva su historial de navegador por estudio, entrada, planta y proyecto. Cada historial conserva la clave histórica del proyecto y delimita sus mensajes dentro de ella. Las entradas antiguas que carecen de ámbito quedan fuera de la restauración automática. «Borrar conversación» elimina el historial activo y el legado de ese proyecto. El contexto enviado a texto sigue sujeto a las exclusiones y al aviso de privacidad. [Consentimiento existente](../product/assistant-ai-v3/03-consentimiento-y-privacidad.md)
+El historial generativo se limita a la memoria de la conversación vigente. La consulta guiada conserva su historial de navegador por estudio e identidad canónica del proyecto o planta. Si el editor no pudo separar identidades históricas, el ámbito usa además la entrada y planta activas. Cada historial conserva la clave histórica del proyecto y delimita sus mensajes dentro de ella. Las entradas antiguas que carecen de ámbito quedan fuera de la restauración automática. «Borrar conversación» elimina el historial activo y el legado de ese proyecto. El contexto enviado a texto sigue sujeto a las exclusiones y al aviso de privacidad. [Consentimiento existente](../product/assistant-ai-v3/03-consentimiento-y-privacidad.md)
 
 ## Procedencia
 
@@ -41,7 +41,7 @@ El registrador usa Playwright y FFmpeg. Abre un proyecto de ejemplo, revisa y de
 
 La regresión local incluye 178 pruebas de núcleo, 138 del servidor MCP en Linux, 19 de navegador y 6 del libro compartido con Redis local real. La prueba de enlaces simbólicos requiere privilegio de creación que este Windows no concede. El caso se ejecutó en Linux y se mantiene intacto. La compatibilidad en el editor pasó 49 pruebas adicionales en Windows, incluidas Studio E3, F0.2b, edificios, R02-A/R03 y ES/EN sin chino visible.
 
-La prueba histórica de identidad falló al cambiar la forma del historial local. Se reprodujo el mismo fallo en Windows. La corrección conserva el índice por proyecto y delimita cada mensaje por ámbito. La prueba histórica permanece intacta. Identidad, V2, V3 y la regresión nueva de separación y borrado por estudio pasaron 20/20 después del cambio. [Job de la reproducción inicial](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44921262665/job/136897661624)
+La prueba histórica de identidad falló al cambiar la forma del historial local. Se reprodujo el mismo fallo en Windows. La corrección conserva el índice por proyecto y delimita cada mensaje por ámbito. La prueba histórica permanece intacta. Se conserva también la consulta guiada al recargar la vivienda de ejemplo antes de guardar. La prueba comprueba que consultar no escribe en la biblioteca de proyectos. Identidad, V2, V3, CAT-04 y las pruebas de agente pasaron 31/31 en la revalidación dirigida. [Job de la reproducción inicial](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44921262665/job/136897661624)
 
 ## Prueba C y disponibilidad
 

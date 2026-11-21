@@ -130,7 +130,7 @@
   deliver:[['Prepara tres renders','Prepare three renders','准备三张渲染图'],['Reforma desde una foto','Reform from a photo','照片改造']],studio:[['¿Qué puedes hacer?','What can you do?','你能做什么？']]};
  function suggestions(){chips.replaceChildren();const a=area();for(const s of SUGG[a]||SUGG.design){const b=btn(tx(...s),chips,'chip');b.onclick=()=>ask(b.textContent);}
   ctxLine.textContent=tx('Área: ','Area: ','区域：')+({design:tx('Diseñar','Design','设计'),analyze:tx('Analizar','Analyze','分析'),budget:tx('Presupuestar','Budget','预算'),deliver:tx('Entregar','Deliver','交付'),studio:tx('Mi estudio','My studio','我的事务所')})[a]+' · '+tx('Revisión ','Revision ','版本 ')+T.revision(app.project).slice(4,12);}
- const logScope=()=>window.RubikAssistantGenUI?.scope()||JSON.stringify(['local',app.entryId||null,app.levelContext?.levelId||null,app.project.id]);
+ const logScope=()=>window.RubikAssistantGenUI?.scope()||T.projectScope(app);
  // Keep the project ID as the storage key. Only scoped messages can be restored.
  const projectLog=all=>Array.isArray(all[app.project.id])?all[app.project.id]:[];
  function restoreLog(){

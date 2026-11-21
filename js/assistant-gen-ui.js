@@ -26,9 +26,10 @@
  const CODE_KEY='rubik-assistant-code',CONSENT_KEY='rubik-assistant-consent';
  const state={mode:'guided',status:null,history:[],historyRevision:null,last:null,checking:null,scope:null,resets:0};
  // Scope = studio + project. Everything the generative mode keeps belongs to exactly one scope.
- const scopeNow=()=>{const app=window.FloorPlanApp,p=app?.project;if(!p?.id)return null;
+ const scopeNow=()=>{
   let studio='local';try{studio=window.RubikCat04?.studioId?.()||window.RubikCatalogUI?.studioId||studio;}catch{}
-  return JSON.stringify([studio,app.entryId||null,app.levelContext?.levelId||null,p.id]);};
+  return T.projectScope(window.FloorPlanApp,studio);
+ };
  const consent=()=>{try{const c=JSON.parse(ss.getItem(CONSENT_KEY));const sc=scopeNow();return c&&sc&&c.scope===sc&&c.question===true&&c.projectData===true?{question:true,projectData:true}:null;}catch{return null;}};
  let qBox=null,dBox=null;
  // Called before every send, on open, on mode change and on the app's project-switch event.

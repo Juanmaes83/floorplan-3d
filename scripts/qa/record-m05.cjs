@@ -44,9 +44,14 @@ async function record(out, evidenceBrowser = 'chromium') {
       await page.locator('#assistantSend').click();
       await page.waitForFunction(() => !RubikAssistantUI.state.pending);
     };
+    const libraryBefore = await page.evaluate(() => localStorage.getItem(FloorPlanLibrary.KEY));
     await assistant.click();
     await question('¿Qué conflictos tiene la distribución?');
     assert.match(await page.textContent('#assistantLog'), /FloorPlanLayoutReview/);
+    await kit.reopen(page);
+    await assistant.click();
+    assert.match(await page.textContent('#assistantLog'), /FloorPlanLayoutReview/);
+    assert.equal(await page.evaluate(() => localStorage.getItem(FloorPlanLibrary.KEY)), libraryBefore);
     await question('Mueve el sofá 20 cm a la izquierda');
     const before = await page.evaluate(() => snap());
     assert.deepEqual(await page.locator('.assistant-diff-values dt').allTextContents(), ['Antes', 'Después']);

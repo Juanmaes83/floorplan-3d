@@ -1,6 +1,6 @@
 # Evidencia M05 · Editor y servidor local
 
-El [recorrido real en Chromium](recorrido-m05.webm) muestra la consulta, la propuesta, su aplicación y su deshacer, el modo generativo con proveedor simulado y la revisión de la variante en RUBIK. Se verificó el vídeo completo con FFmpeg. Firefox y WebKit ejecutaron el mismo recorrido y obtuvieron el mismo diagnóstico y huella de simulación. [Identidad de los navegadores](multinavegador.json)
+El [recorrido real en Chromium](recorrido-m05.webm) muestra la consulta y su recuperación al recargar la vivienda sin guardarla, la propuesta, su aplicación y su deshacer, el modo generativo con proveedor simulado y la revisión de la variante en RUBIK. Se verificó el vídeo completo con FFmpeg. Firefox y WebKit ejecutaron el mismo recorrido y obtuvieron el mismo diagnóstico y huella de simulación. [Identidad de los navegadores](multinavegador.json)
 
 | Paso | Evidencia |
 | --- | --- |

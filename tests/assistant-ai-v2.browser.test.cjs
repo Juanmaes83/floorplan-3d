@@ -191,3 +191,15 @@ test('un proyecto conserva su clave de historial y separa sus mensajes entre est
   assert.doesNotMatch(await page.textContent('#assistantLog'),/Cuánto cuesta|historial anterior/);
  }finally{await context.close();}
 });
+
+test('la consulta guiada se recupera al recargar el ejemplo sin guardar la vivienda',async()=>{
+ const {context,page}=await kit.editor(env);
+ try{
+  const libraryBefore=await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY));
+  await open(page);await ask(page,'¿Cuántas estancias hay?');
+  assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),libraryBefore);
+  await kit.reopen(page);await open(page);
+  assert.match(await page.textContent('#assistantLog'),/estancias en 1 planta/);
+  assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),libraryBefore);
+ }finally{await context.close();}
+});

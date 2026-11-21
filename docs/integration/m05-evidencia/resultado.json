@@ -12,7 +12,7 @@
       "projectId": "prj_m05-synthetic-layout",
       "projectName": "Vivienda sintética MCP — revisión",
       "sizeBytes": 4352,
-      "modifiedAt": "2026-11-21T16:03:49.896Z"
+      "modifiedAt": "2026-11-21T16:12:09.341Z"
     },
     "status": "findings",
     "valid": true,
@@ -414,9 +414,9 @@
     "simulationSha256": "9ab15ce4b06198474fc7a8f504ddf2e75bdaa1bcca658c77cebe32e09ff10173"
   },
   "variant": {
-    "id": "prj_mcp_ceae5d9f-93f8-42c4-9e2a-fcc96cca6847",
+    "id": "prj_mcp_e532b289-026d-4453-9d68-3cb8795830d0",
     "path": "project.json",
-    "sha256": "de2af3250b891559092b34370e52e4dc2094a24963a6b04a33f1c02139556f28",
+    "sha256": "96bb2580d9703e2e2f7ba6cfbee05f047e6af00fcce03f4989271c49cbb02acc",
     "archive": "variante-revisada.zip"
   },
   "originalBytesIntact": true,
@@ -432,7 +432,7 @@
       }
     ],
     "format": {
-      "duration": "14.520000"
+      "duration": "14.680000"
     }
   }
 }
