@@ -59,7 +59,9 @@
     :tx('Prepara las vistas para ver tu vivienda de fondo. Los títulos son los mismos del vídeo descargado.','Prepare the views to see your home behind. Titles match the downloaded video.','准备视图后可看到住宅背景。标题与下载视频相同。');};
   if(!st0?.perfil){
    const p=el('p',tx('Elige tu firma en «Firmar con» o configura Mi estudio: el nombre, el logotipo, el lema, la web y la CTA salen de ahí.','Choose your signature in “Sign with” or set up My studio: name, logo, tagline, website and CTA come from there.','请在“签名”中选择或配置“我的事务所”。'),form,'studio-hero-sin');
-   const b=el('button',tx('Configurar Mi estudio','Set up My studio','配置我的事务所'),form,'btn');b.type='button';b.onclick=()=>document.getElementById('workArea-studio')?.click();void p;
+   // La tarjeta ya está en Mi estudio: no navega a sí misma (acción circular); abre el editor de perfiles existente
+   // (FloorPlanBrandUI, la misma autoridad que usa «Configurar Mi estudio» fuera del estudio).
+   const b=el('button',tx('Crear mi firma profesional','Create my professional signature','创建我的专业签名'),form,'btn');b.type='button';b.onclick=()=>window.FloorPlanBrandUI?.open?.();void p;
   }else{
    const P=st0.perfil;
    el('h4',tx('Tu estudio · Mi estudio','Your studio · My studio','您的事务所'),form);

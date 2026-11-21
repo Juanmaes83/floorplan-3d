@@ -71,8 +71,10 @@ test('Dibujo vivo demo from the Home: intro → play → end card → how to →
  await page.locator('#homeDemoHowTo').click();assert.match(await page.locator('#homeDemoCard').innerText(),/Dibujo vivo[\s\S]*Iniciar|inicia la presentación/);
  await page.locator('#homeDemoCard .btn',{hasText:/^Volver$/}).click();
  // «Volver a ver» replays the same scene.
- assert.equal(await page.locator('#presentationLivingPlay').isDisabled(),true,'the presentation is still settling');
+ // HERO FINAL (corte C): the ending is held on its last frame; «Volver a ver» releases it with the same camera handoff.
  await page.locator('#homeDemoReplay').click();
+ await page.waitForFunction(()=>{const c=document.getElementById('presentationLivingPlay');return c&&!c.hidden;});
+ assert.equal(await page.locator('#presentationLivingPlay').isDisabled(),true,'the presentation is still settling');
  await page.evaluate(()=>window.releaseHomeDemoCamera());
  await page.waitForFunction(()=>window.FloorPlanPresentation.story?.kind==='living-drawing'&&View3D.presentationLivingDrawingInfo.active);
  // Back to start: the presentation closes, the visitor's own project is open again and nothing of theirs changed.

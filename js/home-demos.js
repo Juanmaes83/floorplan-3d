@@ -91,6 +91,7 @@
   hide();
   const presentation=window.FloorPlanPresentation;
   if(!presentation.active||!document.getElementById('presentationLivingPlay'))return start();
+  {const S=presentation.story;if(S&&S.p>=1&&!S.playing&&window.RubikFinalDibujoUI?.ultimo?.hero?.fin)document.getElementById('presentationStoryPlay')?.click();}
   let clicked=false;
   try{
    const replayed=await wait(()=>{
