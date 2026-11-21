@@ -126,6 +126,6 @@
  if(controls){presEntry=document.createElement('button');presEntry.type='button';presEntry.className='btn';presEntry.id='presentationNote';controls.append(presEntry);
   presEntry.onclick=()=>{const stop=window.FloorPlanPresentation?.current;open(stop?.kind==='room'?stop.roomId:null);};}
  function relang(){menuEntry.textContent=tx('Observaciones del cliente…','Client observations…','客户意见…');if(presEntry)presEntry.textContent=tx('Añadir observación','Add observation','添加意见');}
- relang();document.querySelector('#langBtn')?.addEventListener('click',()=>queueMicrotask(()=>{relang();if(dialog.open)render();}));
+ relang();document.addEventListener('rubik:languagechange',()=>queueMicrotask(()=>{relang();if(dialog.open)render();}));
  window.FloorPlanReviewUI={open,get open_(){return dialog.open;}};
 })();

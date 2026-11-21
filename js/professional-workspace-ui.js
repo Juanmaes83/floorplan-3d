@@ -5,12 +5,13 @@
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const titles=()=>({design:tx('Diseñar','Design','设计'),analyze:tx('Analizar','Analyze','分析'),budget:tx('Presupuestar','Budget','预算'),deliver:tx('Entregar','Deliver','交付'),studio:tx('Mi estudio','My studio','我的事务所')});
+ const studioTitle=()=>tx('Logo, datos e identidad profesional','Logo, contact and professional identity','标志、联系方式和专业身份');
  const nav=el('nav',undefined,undefined,'professional-nav');nav.id='professionalNav';nav.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区'));document.querySelector('header').after(nav);
  const section=el('section',undefined,document.body,'professional-workspace');section.id='professionalWorkspace';section.hidden=true;section.setAttribute('aria-labelledby','professionalTitle');
  window.FloorPlanEconomicDossierUI?.bindDeliverWorkspace(section);
  let area='design',returnTo=null;const buttons={};
  function button(text,parent,fn,primary=false){const b=el('button',text,parent,'btn'+(primary?' primary':''));b.type='button';b.onclick=fn;return b;}
- for(const key of Object.keys(titles())){const b=button(titles()[key],nav,()=>open(key));b.id='workArea-'+key;b.setAttribute('aria-label',titles()[key]);if(key==='studio')b.title=tx('Logo, datos e identidad profesional','Logo, contact and professional identity','标志、联系方式和专业身份');b.setAttribute('aria-controls','professionalWorkspace');buttons[key]=b;}
+ for(const key of Object.keys(titles())){const b=button(titles()[key],nav,()=>open(key));b.id='workArea-'+key;b.setAttribute('aria-label',titles()[key]);if(key==='studio')b.title=studioTitle();b.setAttribute('aria-controls','professionalWorkspace');buttons[key]=b;}
  function position(){const bottom=nav.getBoundingClientRect().bottom;section.style.top=bottom+'px';document.documentElement.style.setProperty('--professional-nav-bottom',bottom+'px');}
  const resize=new ResizeObserver(position);resize.observe(nav);resize.observe(document.querySelector('header'));addEventListener('resize',position);
  // Global header controls keep their original handlers. Only the editor behind the workspace is inert.
@@ -234,7 +235,7 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
  section.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')&&!document.body.classList.contains('evolution-open')){e.preventDefault();close();}});
  let suspendedForPresentation=false;
  new MutationObserver(()=>{const presenting=document.body.classList.contains('presenting');if(presenting&&!section.hidden&&!suspendedForPresentation){suspendedForPresentation=true;setInert(false);section.inert=true;}else if(!presenting&&suspendedForPresentation){suspendedForPresentation=false;section.inert=false;if(!section.hidden){setInert(true);render();}}}).observe(document.body,{attributes:true,attributeFilter:['class']});
- document.querySelector('#langBtn').addEventListener('click',()=>queueMicrotask(()=>{for(const[k,b]of Object.entries(buttons)){b.textContent=titles()[k];b.setAttribute('aria-label',titles()[k]);}nav.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区'));for(const b of document.querySelectorAll('[data-professional-home]'))b.textContent=tx('Ir a ','Go to ','前往 ')+titles()[b.dataset.professionalHome];if(!section.hidden)render(false);}));
+ document.addEventListener('rubik:languagechange',()=>queueMicrotask(()=>{for(const[k,b]of Object.entries(buttons)){b.textContent=titles()[k];b.setAttribute('aria-label',titles()[k]);}buttons.studio.title=studioTitle();nav.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区'));for(const b of document.querySelectorAll('[data-professional-home]'))b.textContent=tx('Ir a ','Go to ','前往 ')+titles()[b.dataset.professionalHome];if(!section.hidden)render(false);}));
  for(const id of ['projectsDialog','welcomeDialog'])document.getElementById(id)?.addEventListener('close',()=>{if(!section.hidden)render(false);});
  FloorPlanBrandUI.onChange(()=>{if(!section.hidden)render(false);});
  window.FloorPlanProjectViews?.onChange(()=>{if(section.hidden)return;if(imagesScreen)renderImages(false);else render(false);});

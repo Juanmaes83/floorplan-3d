@@ -72,7 +72,7 @@
  dialog.addEventListener('close',()=>{returnTo?.focus?.({preventScroll:true});});
 
  // «Archivo → Tu marca profesional…»
- const entry=document.createElement('button');entry.type='button';entry.className='btn';entry.id='brandManage';entry.textContent='Tu marca profesional…';
+ const entry=document.createElement('button');entry.type='button';entry.className='btn';entry.id='brandManage';entry.dataset.es='Tu marca profesional…';entry.dataset.en='Your professional brand…';entry.dataset.zh='你的专业品牌…';entry.textContent=L3(entry.dataset.es,entry.dataset.en,entry.dataset.zh);
  (document.querySelector('#openSheet')||document.querySelector('#exportPng'))?.after(entry);
  entry.onclick=()=>{entry.closest('details')?.removeAttribute('open');open();};
 
