@@ -35,19 +35,19 @@ El catálogo ofrece diez accesos. La prueba de vistas acredita la generación co
 
 ## Pulido visual y procedencia
 
-Las diez miniaturas de `assets/e3/thumbs` se cargan al acercarse a la zona visible. La ficha de vistas toma una imagen del proyecto cuando el generador ya dispone de ella. El resto usa ejemplos, con el origen indicado en la tarjeta. Render IA muestra su vista de partida. La selección usa el rol grafito de Perla. El área que se desplaza contiene las opciones. El avance y el Asistente ocupan zonas propias debajo. La selección vacía indica qué hacer para continuar.
+Las diez miniaturas de `assets/e3/thumbs` se cargan al acercarse a la zona visible. La ficha de vistas toma una imagen del proyecto cuando el generador ya dispone de ella. El resto usa ejemplos, con el origen indicado en la tarjeta. Render IA muestra un dormitorio de ejemplo como vista de partida. El diálogo usa el fondo gris Perla, tarjetas blancas, selección grafito y la acción principal petróleo. El área que se desplaza contiene las opciones. El avance y el Asistente ocupan zonas propias debajo. La selección vacía indica qué hacer para continuar.
 
 | Miniatura | Fuente del producto |
 | --- | --- |
 | Vistas reales | Primera imagen limpia de `FloorPlanProjectViews`, generada desde la vivienda de ejemplo. |
-| Render IA | Imagen de entrada en el diálogo de Render IA con la vivienda de ejemplo. |
-| Blender | Render Cycles publicado en `assets/e3/op10-entrega-viewer.jpg`. |
+| Render IA | Detalle del dormitorio juvenil, una vista de proyecto que puede utilizarse como entrada. Captura en Chromium desde FloorPlanProjectViews, sin generar una imagen con IA. |
+| Blender | Vista interior del salón. Render Cycles publicado en `docs/integration/op10-evidence/entrega-1600x1000-rom_living.jpg`. |
 | Lámina, superficies y dossier | Lámina, tabla y vista previa del dossier de la vivienda de ejemplo, capturadas en sus generadores existentes. |
 | Presentación y vídeo | Presentación activa de ejemplo y fotograma de la vista previa de un recorrido grabado localmente, con los controles de reproducción visibles. |
 | Archivo para tu cliente | HTML de ejemplo descargado y abierto en Chromium. |
 | Enlace para tu cliente | Diálogo de consentimiento con el campo de código vacío. |
 
-Las capturas se obtuvieron con Chromium en la Preview de `eef09ae7f3635f01d7b65916823bb5fb3948f787` con datos de ejemplo. Las diez imágenes WebP de 360 × 225 suman 71.396 bytes. El navegador puede hacer la comparación y recorrer las fichas antes de preparar las imágenes del proyecto.
+Las capturas se obtuvieron con Chromium en la Preview de `eef09ae7f3635f01d7b65916823bb5fb3948f787` y la candidata local de E3, con datos de ejemplo. Las diez imágenes WebP de 360 × 225 suman 70.408 bytes. El navegador puede hacer la comparación y recorrer las fichas antes de preparar las imágenes del proyecto.
 
 ## Cierre del corte
 

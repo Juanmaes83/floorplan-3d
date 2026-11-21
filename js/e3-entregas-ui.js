@@ -85,7 +85,7 @@
    box.replaceChildren();el('span',e.formato,box,'e3-formato');
   },{once:true});
   i.src=proyecto||`assets/e3/thumbs/${e.id}.webp`;
-  el('span',proyecto?tx('Tu proyecto','Your project','你的项目'):e.id==='render-ia'?tx('Vista de partida','Source view','起始视图'):tx('Ejemplo','Example','示例'),box,'e3-sello');
+  el('span',proyecto?tx('Tu proyecto','Your project','你的项目'):e.id==='render-ia'?tx('Dormitorio','Bedroom','卧室'):tx('Ejemplo','Example','示例'),box,'e3-sello');
  }
  const seleccionVacia=()=>tx('Selecciona al menos un entregable para continuar.','Choose at least one deliverable to continue.','请至少选择一项交付物以继续。');
  const chip=e=>e.firma==='nunca'?tx('Siempre limpia','Always clean','始终无标识'):e.firma==='imagen'?tx('Limpia o con tu firma','Clean or signed','无标识或带签名'):tx('Opciones del generador','Generator options','生成器选项');
@@ -147,9 +147,9 @@
  }
  window.RubikE3Entregables={card,abrir,firmarRender,get seleccion(){return valida().slice();},set seleccion(v){sel=[...v];valida();}};
  const css=document.createElement('style');css.textContent=`
- .e3-dlg{width:min(1040px,96vw);max-height:92vh;max-height:92dvh;border:0;border-radius:16px;padding:18px;background:#fbf8f3;color:var(--ink);box-sizing:border-box;overflow:hidden}
+ .e3-dlg{width:min(1040px,96vw);max-height:92vh;max-height:92dvh;border:0;border-radius:16px;padding:18px;background:var(--surface-app);color:var(--ink);box-sizing:border-box;overflow:hidden}
  .e3-dlg[open]{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto auto minmax(0,1fr) auto}
- .e3-dlg::backdrop{background:rgba(20,18,16,.45)}
+ .e3-dlg::backdrop{background:rgb(31 35 38 / .42)}
  .e3-cab,.e3-pasos,.e3-firma,.e3-estado,.e3-cuerpo{grid-column:1/-1}
  .e3-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}.e3-cab h2{font-family:Georgia,serif;margin:0;font-size:clamp(20px,3vw,26px)}
  .e3-cerrar{flex:none;width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface-panel);font-size:22px;cursor:pointer}
@@ -158,7 +158,8 @@
  .e3-firma{font-size:13px;color:var(--ink-muted);margin:0 0 4px}.e3-estado{font-size:13px;color:var(--ink);margin:2px 0 4px}
  .e3-estado:empty{margin:0}
  .e3-cuerpo{min-height:0;display:grid;align-content:start;gap:12px;overflow:auto;overscroll-behavior:contain;padding:4px;scroll-padding:4px;scrollbar-gutter:stable}
- .e3-grupo{min-width:0;border:0;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.e3-grupo legend{font-family:Georgia,serif;font-size:18px;margin:6px 0}
+ .e3-grupo{min-width:0;border:0;padding:0;margin:0;display:grid;align-content:start;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.e3-grupo legend{font-family:Georgia,serif;font-size:18px;margin:6px 0}
+ .e3-dlg .e3-item{margin:0}
  .e3-item{display:grid;grid-template-columns:auto 112px minmax(0,1fr);grid-template-areas:'c m t' 'c m h';gap:3px 8px;align-items:center;padding:8px;border-radius:12px;background:var(--surface-panel);border:1px solid var(--line);cursor:pointer;min-height:68px}
  .e3-item:has(input:checked){border-color:var(--line-strong);background:var(--select-soft)}
  .e3-item:focus-within{outline:2px solid var(--focus);outline-offset:1px}
@@ -175,7 +176,7 @@
  .e3-acc .btn[aria-busy=true]{opacity:.7;cursor:progress}
  .e3-pie{grid-area:6/2;min-width:0;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;align-items:center;padding:6px 0 0 6px;border-top:1px solid var(--line)}
  .e3-dlg #assistantAccess{grid-area:6/1;position:static;align-self:start;margin:0;padding:6px 6px 0 0;max-width:none;border-top:1px solid var(--line)}
- @media(max-width:720px){.e3-grupo,.e3-par{grid-template-columns:minmax(0,1fr)}.e3-item{grid-template-columns:auto 80px minmax(0,1fr)}.e3-dlg{padding:12px}}
+ @media(max-width:720px){.e3-grupo,.e3-par{grid-template-columns:minmax(0,1fr)}.e3-item{grid-template-columns:auto clamp(68px,23vw,100px) minmax(0,1fr)}.e3-dlg{padding:12px}}
  @media(max-height:440px){.e3-dlg{padding:8px 12px}.e3-cab h2{font-size:20px}.e3-pasos{margin:3px 0}.e3-firma{font-size:12px}}
  `;document.head.append(css);
 })();
