@@ -108,7 +108,7 @@
   if(has(t,W.budget))return {intent:'budget'};
   if(has(t,W.review))return {intent:'layout_review'};
   if(has(t,W.missing))return {intent:'missing_data'};
-  if(has(t,W.area)){const r=room();if(r.kind==='one')return {intent:'room_area',roomId:r.id};if(r.kind==='many')return {intent:'ambiguous',need:'room',candidates:r.ids};return {intent:'room_area',roomId:null};}
+  if(W.area.some(word=>/\p{Script=Han}/u.test(word)?t.includes(word):new RegExp('(?:^|[^\\p{L}\\p{N}])'+word+'(?:$|[^\\p{L}\\p{N}])','u').test(t))){const r=room();if(r.kind==='one')return {intent:'room_area',roomId:r.id};if(r.kind==='many')return {intent:'ambiguous',need:'room',candidates:r.ids};return {intent:'room_area',roomId:null};}
   if(has(t,W.count)&&(has(t,W.rooms)||has(t,W.levels)))return {intent:'rooms_count'};
   if(has(t,W.help))return {intent:'help'};
   const r=room();if(r.kind==='one'&&has(t,['cuanto mide','tamano','size','多大']))return {intent:'room_area',roomId:r.id};
