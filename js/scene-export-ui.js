@@ -50,8 +50,11 @@
    const dl=el('dl',{class:'se-summary'},detail);
    for(const[k,v]of [[tx('Elementos identificados','Identified elements','已识别元素'),num(s.entities)],[tx('Mallas · caras','Meshes · faces','网格 · 面'),num(s.meshes)+' · '+num(s.faces)],[tx('Tamaño de la descarga','Download size','下载大小'),size(result.bytes.size)],[tx('Cámara','Camera','相机'),m.scene.view?.camera?tx('vista actual','current view','当前视图'):tx('ninguna','none','无')],[tx('Huella de la escena','Scene fingerprint','场景指纹'),m.files['scene.glb'].sha256.slice(0,12)+'…']]){el('dt',{},dl,k);el('dd',{},dl,v);}
    const paths=el('div',{class:'se-paths',id:'sePaths'},detail),hasScript=!!m.blender.paths?.prepared?.script;
-   el('p',{class:'se-paths-title'},paths,tx('Dos formas de abrirla en Blender (no dan el mismo render):','Two ways to open it in Blender (they do not give the same render):','在 Blender 中有两种打开方式（渲染结果不同）：'));
+   el('p',{class:'se-paths-title'},paths,m.blender.paths?.render?.launchers?tx('Tres formas de usarla en Blender (no dan el mismo render):','Three ways to use it in Blender (they do not give the same render):','在 Blender 中有三种使用方式（渲染结果不同）：'):tx('Dos formas de abrirla en Blender (no dan el mismo render):','Two ways to open it in Blender (they do not give the same render):','在 Blender 中有两种打开方式（渲染结果不同）：'));
    const pl=el('ul',{},paths);
+   const kitOk=!!m.blender.paths?.render?.launchers;
+   if(kitOk){const li=el('li',{class:'se-kit',id:'seKit'},pl);el('strong',{},li,tx('Render y entrega sin código (recomendado): ','Render and delivery without code (recommended): ','无需代码的渲染与交付（推荐）：'));
+    li.append(tx('descomprime el ZIP y ejecuta RENDERIZAR-windows.bat (Windows) o «sh renderizar.sh» (macOS/Linux) con Blender instalado. Después vuelve aquí y pulsa «Revisar render…».','unzip and run RENDERIZAR-windows.bat (Windows) or “sh renderizar.sh” (macOS/Linux) with Blender installed. Then come back here and press “Review render…”.','解压后在安装了 Blender 的电脑上运行 RENDERIZAR-windows.bat（Windows）或“sh renderizar.sh”（macOS/Linux），然后回到此处点击“审阅渲染…”。'));}
    el('li',{},pl,tx('Importación directa del GLB: geometría, colores, identificadores y cámara, con la luz por defecto de Blender.','Direct GLB import: geometry, colours, identifiers and camera, with Blender default lighting.','直接导入 GLB：几何体、颜色、标识和相机，使用 Blender 默认照明。'));
    el('li',{},pl,hasScript?tx('Preparación completa con el script incluido: añade el sol, el cielo y las luces del visor. Instrucciones en LEEME.txt.','Full preparation with the included script: adds the viewer sun, sky and lights. Instructions in LEEME.txt.','使用附带脚本完整准备：添加查看器的太阳、天空和灯光。说明见 LEEME.txt。')
     :tx('La preparación completa no se pudo incluir esta vez; la importación directa funciona igual.','Full preparation could not be included this time; direct import works the same.','本次未能包含完整准备脚本；直接导入仍可正常使用。'));
@@ -75,33 +78,57 @@
   return Object.assign(new String(msg),{hint,code:e.code||'UNKNOWN'});
  }
  // Camino B: el script de preparación completa, leído del mismo origen (sin red externa). Se cachea; si falla, null.
- let scriptBytes;async function script(){if(scriptBytes!==undefined)return scriptBytes;try{const r=await fetch('scripts/interop/blender-scene-import.py',{cache:'no-store'});scriptBytes=r.ok?new Uint8Array(await r.arrayBuffer()):null;}catch{scriptBytes=null;}if(scriptBytes&&!new TextDecoder().decode(scriptBytes.subarray(0,12)).startsWith('"""OP-10'))scriptBytes=null;/* nunca una página de error servida en su lugar */return scriptBytes;}
+ // M03 · Kit de render: copias exactas del repositorio leídas del mismo origen. Cada una se reconoce por su cabecera: nunca
+ // se empaqueta una página de error en su lugar. Si alguna falta, el kit no se entrega a medias (el LEEME lo explica).
+ const SPDX='# SPDX-License-Identifier: GPL-3.0-or-later';const KIT_HEAD={render:SPDX,verify:SPDX,profiles:'{',sh:'#!/bin/sh',bat:'@echo off',licence:'RUBIK SOTA · Licencia',copying:'                    GNU GENERAL PUBLIC LICENSE'};
+ let kitCache;async function kit(){
+  if(kitCache!==undefined)return kitCache;const out={};
+  for(const [k,src] of Object.entries(D.KIT_SOURCES||{})){try{const r=await fetch(src,{cache:'no-store'});if(!r.ok){kitCache=null;return null;}const b=new Uint8Array(await r.arrayBuffer());
+   if(!new TextDecoder().decode(b.subarray(0,64)).startsWith(KIT_HEAD[k])){kitCache=null;return null;}out[k]=b;}catch{kitCache=null;return null;}}
+  try{JSON.parse(new TextDecoder().decode(out.profiles)).profiles.review.resolution;}catch{kitCache=null;return null;}
+  return kitCache=out;}
+ // Nombre VISIBLE de cada estancia: el embudo de RUBIK (nunca el nombre guardado en bruto).
+ const roomLabel=r=>{try{if(typeof roomDisplay==='function')return roomDisplay(r);}catch{}return window.FloorPlanDisplayName?window.FloorPlanDisplayName(r.name,'room'):r.id;};
+ // Imagen de referencia: la vista 3D con la cámara que viaja como RUBIK_camera (para comparar con el render «viewer»).
+ function referenceShot(){try{const a=window.View3D.cameraState?.aspect||16/10,w=1280,s=window.View3D.deliveryShot({width:w,height:Math.round(w/a),frame:false});
+  const bin=atob(String(s.dataUrl||s).split(',')[1]);const b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b;}catch{return null;}}
+ let scriptBytes;async function script(){if(scriptBytes!==undefined)return scriptBytes;try{const r=await fetch('scripts/interop/blender-scene-import.py',{cache:'no-store'});scriptBytes=r.ok?new Uint8Array(await r.arrayBuffer()):null;}catch{scriptBytes=null;}if(scriptBytes&&!new TextDecoder().decode(scriptBytes.subarray(0,64)).startsWith(SPDX))scriptBytes=null;/* nunca una página de error servida en su lugar */return scriptBytes;}
  async function prepare(){
   if(state==='working')return;if(!is3d()){set('no3d');return;}
   abort=new AbortController();result=null;error=null;set('working');status.textContent=stage.settling;
   try{
-   const capture=await withActiveViewer(()=>window.View3D.captureScene({signal:abort.signal,onState:s=>{if(stage[s]&&status.textContent!==stage[s])status.textContent=stage[s];}}));
+   const project=app.project,entry=app.entryId,level=app.levelContext?.activeLevelId??null;
+   const fingerprint=D.canonical(project);
+   const stillCurrent=()=>app.entryId===entry&&(app.levelContext?.activeLevelId??null)===level&&D.canonical(app.project)===fingerprint;
+   const ensureCurrent=()=>{if(!stillCurrent())throw Object.assign(Error('project changed'),{code:'MUTATION'});};
+   let reference=null;
+   const capture=await withActiveViewer(async()=>{const c=await window.View3D.captureScene({signal:abort.signal,onState:s=>{if(stage[s]&&status.textContent!==stage[s])status.textContent=stage[s];}});reference=referenceShot();return c;});
    status.textContent=tx('Empaquetando la escena…','Packaging the scene…','正在打包场景…');await new Promise(r=>setTimeout(r));if(abort.signal.aborted)throw Object.assign(Error('cancelled'),{code:'CANCELLED'});
-   const prepareScript=await script(),glb=C.toGLB(capture.doc),manifest=await D.manifest({capture,glb,project:app.project,digest,prepareScript,app:{revision:document.documentElement.dataset.appRevision||null}});
-   const pkg=D.packageFiles({manifest,glb,prepareScript,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
-   result={manifest,bytes:pkg.bytes,name:pkg.name,record:await D.record({manifest,digest,confirmed:null}),updatedAt:app.project?.updatedAt,projectId:app.project?.id};
+   const prepareScript=await script(),kitBytes=await kit();ensureCurrent();
+   const rooms=D.roomsDoc?D.roomsDoc({project,label:roomLabel}):null,glb=C.toGLB(capture.doc);
+   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
+   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
+   const record=await D.record({manifest,digest,confirmed:null});ensureCurrent();
+   result={manifest,bytes:pkg.bytes,name:pkg.name,record,stillCurrent};
    set('ready');primary.focus();
   }catch(e){if(e.code==='CANCELLED'){set('cancelled');}else{error=explain(e);set('error');}primary.focus();}
   finally{abort=null;}
  }
  function download(){
-  if(!result)return;if(app.project?.updatedAt!==result.updatedAt||app.project?.id!==result.projectId){set('stale');return;}
+  if(!result)return;if(!result.stillCurrent()){set('stale');return;}
   const url=URL.createObjectURL(result.bytes),a=el('a',{href:url,download:result.name},document.body);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   status.textContent=tx('Descarga iniciada: ','Download started: ','已开始下载：')+result.name;
  }
  dlg.addEventListener('close',()=>{abort?.abort();});
  dlg.addEventListener('cancel',e=>{if(state==='working'){e.preventDefault();abort?.abort();}});
- function open(){if(state!=='ready')state='idle';else if(app.project?.updatedAt!==result.updatedAt)state='stale';render();dlg.showModal();(primary.hidden?secondary:primary).focus();}
+ function open(){if(state!=='ready')state='idle';else if(!result.stillCurrent())state='stale';render();dlg.showModal();(primary.hidden?secondary:primary).focus();}
  // Entrada: «Entregar» → grupo «Documentación». Botón SECUNDARIO, como las demás tarjetas (sin acciones primarias en tarjetas).
  const addCard=()=>{const items=document.querySelector('[data-group="documentation"] .professional-group-items');if(!items||items.querySelector('#sceneExportCard'))return;
   const card=el('article',{class:'professional-card scene-export-card',id:'sceneExportCard','data-module':'blender-scene'},items);el('h3',{},card,tx('Escena para Blender','Scene for Blender','Blender 场景'));
   el('p',{class:'professional-state'},card,tx('La vivienda en 3D con medidas e identificadores, para visualización profesional.','The home in 3D with dimensions and identifiers, for professional visualisation.','带尺寸和标识的 3D 住宅，用于专业可视化。'));
-  const b=el('button',{type:'button',class:'btn',id:'sceneExportOpen'},card,tx('Preparar escena…','Prepare scene…','准备场景…'));b.onclick=open;};
+  const b=el('button',{type:'button',class:'btn',id:'sceneExportOpen'},card,tx('Preparar escena…','Prepare scene…','准备场景…'));b.onclick=open;
+  // M03 · segundo paso del mismo recorrido: revisar el render hecho en Blender y preparar la entrega.
+  const r=el('button',{type:'button',class:'btn',id:'blenderReviewOpen'},card,tx('Revisar render…','Review render…','审阅渲染…'));r.onclick=()=>window.RubikBlenderReview?.open();};
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addCard();});}).observe(document.body,{childList:true,subtree:true});addCard();
  window.RubikSceneExport=Object.freeze({open,prepare,get state(){return state;},get result(){return result&&{manifest:result.manifest,record:result.record,name:result.name,size:result.bytes.size};},bytes:async()=>result&&new Uint8Array(await result.bytes.arrayBuffer())});
 })();
