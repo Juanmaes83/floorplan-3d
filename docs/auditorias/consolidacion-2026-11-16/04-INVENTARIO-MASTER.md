@@ -1,5 +1,7 @@
 # Inventario técnico del repositorio madre
 
+> **ESTADO POSTERIOR · 21/11/2026.** El SHA inventariado en esta auditoría y los hallazgos por módulo permanecen como **fotografía histórica**. El master y Production posteriores están en `cf0b5012` con #295 y #297 fusionadas. Para PR actuales, CI, límites y tareas sin mezclar autoridades, consultar el [corte V5 verificado](../../integration/CORTE-OPERATIVO-VERIFICADO-2026-11-21.md).
+
 > **R03 + idioma.** [#297](https://github.com/Juanmaes83/floorplan-3d/pull/297) integró el diagnóstico de holguras y la localización del diálogo de armarios. Ver [inventario de módulos R03](../../integration/recuperacion-r-2026-11-20/HANDOFF-R03-HOLGURAS.md).
 
 > **R02-A.** R02-A está publicado en [#298 en borrador](https://github.com/Juanmaes83/floorplan-3d/pull/298), HEAD `f3a6d2314c334ab7964310bfe21efbd59803eee2`, árbol `4bc68adf1c507ffb6e7107293d3e7bef5a965818`, con [Preview READY](https://floorplan-3d-16510z8dr-juanma-espinosas-projects.vercel.app). La fuente de idioma `8a6a1e37` aporta la corrección de caché de #296 una sola vez. El paso libre de 2100 mm es experimental, orientativo y no bloqueante. GOV-05 permanece abierto. La CI remota y la autorización de integración siguen pendientes.
