@@ -38,7 +38,17 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
   await page.locator('#aInterior').first().click();await page.locator('.r03-rubik-dialog').waitFor();await scan('interior R03 '+id);await page.evaluate(()=>RubikCabinetRubikUI.close());}
  // Áreas de trabajo (Analizar, Presupuestar, Entregar, Mi estudio…) y cuadro de cantidades.
  for(const id of await page.evaluate(()=>[...document.querySelectorAll('[id^="workArea-"]')].map(b=>b.id))){
-  await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);}
+  await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);
+  if(id==='workArea-deliver'||id==='workArea-studio'){
+   await page.locator('#professionalWorkspace [data-route="e3-entregas"]').click();
+   const e3=page.locator('#e3Entregas[open]');
+   const next=e3.locator('[data-route="e3-siguiente"]');
+   await e3.waitFor();await scan('E3 elegir '+id);
+   await next.click();await next.waitFor();await scan('E3 previsualizar '+id);
+   await next.click();await e3.locator('.e3-prep').first().waitFor();await scan('E3 preparar '+id);
+   await page.keyboard.press('Escape');await e3.waitFor({state:'hidden'});
+  }
+ }
  await page.locator('#workArea-design').click().catch(()=>{});await page.waitForTimeout(200);
  await page.evaluate(()=>window.FloorPlanQuantityUI?.open());await page.waitForTimeout(300);await scan('cantidades');
  await page.evaluate(()=>document.querySelectorAll('dialog[open]').forEach(d=>d.close()));
