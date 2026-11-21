@@ -161,3 +161,33 @@ test('the Assistant refuses an unrelated undo and preserves history when saving 
   assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
  }finally{await context.close();}
 });
+
+test('un proyecto conserva su clave de historial y separa sus mensajes entre estudios',async()=>{
+ const {context,page}=await kit.editor(env);
+ const key='rubik-assistant-v1';
+ const projectId=await page.evaluate(key=>{
+  const id=FloorPlanApp.project.id;
+  localStorage.setItem(key,JSON.stringify({[id]:[{role:'assistant',text:'historial anterior sin ámbito'}]}));return id;
+ },key);
+ const studio=async id=>page.evaluate(id=>{
+  const select=document.querySelector('#catalogStudio');
+  if(![...select.options].some(o=>o.value===id))select.add(new Option('Estudio de prueba',id));
+  select.value=id;select.dispatchEvent(new Event('change',{bubbles:true}));
+ },id);
+ try{
+  await open(page);
+  assert.equal(await page.textContent('#assistantLog'),'','legacy records cannot be attributed to this studio');
+  await ask(page,'¿Cuántas estancias hay?');
+  await studio('brd-m05-historial');
+  assert.equal(await page.textContent('#assistantLog'),'','the other studio starts with a clean history');
+  await ask(page,'¿Cuánto cuesta?');
+  const stored=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),key);
+  assert.deepEqual(Object.keys(stored),[projectId]);
+  assert.equal(new Set(stored[projectId].filter(m=>m.scope).map(m=>m.scope)).size,2);
+  assert.doesNotMatch(await page.textContent('#assistantLog'),/Cuántas estancias/);
+  await page.click('#assistantClear');
+  await studio('local');
+  assert.match(await page.textContent('#assistantLog'),/Cuántas estancias/);
+  assert.doesNotMatch(await page.textContent('#assistantLog'),/Cuánto cuesta|historial anterior/);
+ }finally{await context.close();}
+});

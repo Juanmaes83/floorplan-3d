@@ -131,9 +131,25 @@
  function suggestions(){chips.replaceChildren();const a=area();for(const s of SUGG[a]||SUGG.design){const b=btn(tx(...s),chips,'chip');b.onclick=()=>ask(b.textContent);}
   ctxLine.textContent=tx('Área: ','Area: ','区域：')+({design:tx('Diseñar','Design','设计'),analyze:tx('Analizar','Analyze','分析'),budget:tx('Presupuestar','Budget','预算'),deliver:tx('Entregar','Deliver','交付'),studio:tx('Mi estudio','My studio','我的事务所')})[a]+' · '+tx('Revisión ','Revision ','版本 ')+T.revision(app.project).slice(4,12);}
  const logScope=()=>window.RubikAssistantGenUI?.scope()||JSON.stringify(['local',app.entryId||null,app.levelContext?.levelId||null,app.project.id]);
- const logKey=()=>'-scope-'+logScope();
- function restoreLog(){state.log=(read()[logKey()]||[]).slice(-MAX_LOG);render();}
- function persist(){const all=read();all[logKey()]=state.log.filter(m=>!m.privateTurn).slice(-MAX_LOG).map(m=>({role:m.role,text:String(m.text).slice(0,2000),source:m.source||null}));write(all);}
+ // Keep the project ID as the storage key. Only scoped messages can be restored.
+ const projectLog=all=>Array.isArray(all[app.project.id])?all[app.project.id]:[];
+ function restoreLog(){
+  const scope=logScope();
+  state.log=projectLog(read()).filter(m=>m?.scope===scope).slice(-MAX_LOG);
+  render();
+ }
+ function persist(){
+  const all=read(),scope=logScope();
+  const older=projectLog(all).filter(m=>m?.scope!==scope);
+  const current=state.log.filter(m=>!m.privateTurn).map(m=>({scope,role:m.role,text:String(m.text).slice(0,2000),source:m.source||null}));
+  all[app.project.id]=[...older,...current].slice(-MAX_LOG);write(all);
+ }
+ function clearSavedLog(){
+  const all=read(),id=app.project.id,scope=logScope();
+  const otherScopes=projectLog(all).filter(m=>m?.scope&&m.scope!==scope);
+  if(otherScopes.length)all[id]=otherScopes;else delete all[id];
+  write(all);
+ }
  function render(){log.replaceChildren();for(const m of state.log){const li=el('li',undefined,log,'assistant-msg '+m.role);el('p',m.text,li);if(m.source){const s=el('p',m.source,li,'assistant-source');s.dataset.source='1';}}log.scrollTop=log.scrollHeight;}
  const push=(role,text,source,privateTurn=!!window.RubikAssistantGenUI?.active())=>{
   state.log.push({role,text,source,...(privateTurn?{privateTurn:true}:{})});
@@ -256,7 +272,7 @@
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
  stop.onclick=()=>state.pending?.abort();
- clear.onclick=()=>{state.pending?.abort();state.pending=null;send.disabled=false;stop.hidden=true;state.log=[];const all=read();delete all[logKey()];delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;state.applied=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
+ clear.onclick=()=>{state.pending?.abort();state.pending=null;send.disabled=false;stop.hidden=true;state.log=[];clearSavedLog();render();card.hidden=true;state.proposal=null;state.applied=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  addEventListener('rubik-assistant',e=>{if(e.detail?.type==='mode')labels();});
  mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
