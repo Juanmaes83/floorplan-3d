@@ -1,5 +1,7 @@
 # RUBIK SOTA — Plan maestro de consolidación y comercialización v1.12
 
+> **NOTA DE VIGENCIA · 21/11/2026.** Este plan v1.12 mantiene **objetivos, programas y 98 IDs históricos**, pero su instantánea del 18/11 y las respuestas de situación de ese corte **no describen el master actual**. Para estado y prioridad operativos ver [corte V5](../integration/CORTE-OPERATIVO-VERIFICADO-2026-11-21.md): #295 y #297 en Production; #298–#301 PR pendientes de gates; HERO A+B+C en laboratorio. No recalcular avances, comerciales o porcentajes de IDs a partir de PR o check-runs.
+
 **Fecha:** 18/11/2026 · **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` y PR abiertas #251–#260 en sus SHA del 18/11 · **Autor:** Claude Code, por mandato del propietario · **Estado:** propuesta para decisión del propietario.
 
 Este documento **no autoriza** integración, despliegue, activación de proveedores, gasto ni cambios de alcance. Cada corte propuesto necesita su propia autorización.
