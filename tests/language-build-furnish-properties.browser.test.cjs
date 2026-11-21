@@ -21,7 +21,7 @@ after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));})
 const LANG_KEY='rubik-sota-floorplan-lang';
 const VIEWPORTS=[{width:1440,height:900},{width:390,height:844}];
 // Fixed names of the product (brands, licences, units, shortcuts) that are the same in every language.
-const SAME=/^(⌘.*|Rubik Sota|Floor Plan Designer|Color|Exterior|Delete|Esc|IKEA\b.*|Kenney\b.*|Rubik Sota — MIT.*|[A-Z0-9⌘/ +]{1,14}|[\d.,:\s×x%·m²/°–—−-]*|[–—−+×＋↑↓←→\s·•*]+)$/;
+const SAME=/^(⌘.*|experimental|Rubik Sota|Floor Plan Designer|Color|Exterior|Delete|Esc|IKEA\b.*|Kenney\b.*|Rubik Sota — MIT.*|[A-Z0-9⌘/ +]{1,14}|[\d.,:\s×x%·m²/°–—−-]*|[–—−+×＋↑↓←→\s·•*]+)$/;
 const SPANISH=/[áéíóúñ¿¡]|\b(el|la|los|las|del|para|con|una|que|por|esta|este|puedes|elige|pulsa|toca)\b/i;
 
 async function open(viewport,lang,{full=true}={}){

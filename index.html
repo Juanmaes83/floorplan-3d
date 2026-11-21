@@ -2695,7 +2695,8 @@ function listProjects(){
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
-$('#projectsBtn').onclick=()=>{if(!library)return toast(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'),6000);listProjects();$('#projectError').textContent='';$('#projectsDialog').showModal();};
+$('#projectsBtn').onclick=()=>{if(!library)return toast(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'),6000);listProjects();$('#projectError').textContent='';// Pointer activation does not focus buttons in WebKit: the native dialog needs the right return target.
+  $('#projectsBtn').focus({preventScroll:true});$('#projectsDialog').showModal();};
 $('#projectClose').onclick=()=>$('#projectsDialog').close();
 $('#projectList').onchange=()=>$('#projectName').value=library.list().find(e=>e.id===$('#projectList').value).name;
 for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rename'],['Duplicate','duplicate'],['Delete','remove']]){
@@ -2715,7 +2716,7 @@ $('#projectVariant').onclick=async event=>{
   button.disabled=true;
   try{
     switchProject(library.variant(project));listProjects();$('#projectError').textContent='';
-    const name=library.list().find(e=>e.id===library.activeId()).name;
+    const name=nm(library.list().find(e=>e.id===library.activeId()).name);
     await persistence.requireSaved(event);
     toast(L3('Variante creada y abierta: «'+name+'». El original no cambia.','Variant created and opened: "'+name+'". The original does not change.','已创建并打开变体：「'+name+'」。原项目不变。'),5000);
   }catch(e){$('#projectError').textContent=e.message;}
@@ -2765,7 +2766,7 @@ function renderVariants(){
     if(g.variantOf&&window.FloorPlanVariantsCompare){const cmp=document.createElement('button');cmp.className='btn';cmp.dataset.action='compare';cmp.textContent='Comparar con el original';
       cmp.onclick=()=>persistence.openComparison('comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:group[0].id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId()));actions.append(cmp);}
     if(g.variantOf){const del=document.createElement('button');del.className='btn danger';del.dataset.action='remove';del.textContent='Eliminar variante';del.onclick=()=>{
-      const original=group[0].name;if(!confirm(L3(`¿Eliminar la variante «${g.name}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`,`Delete the variant "${g.name}"? Only this local copy is removed; the original "${original}" does not change. This cannot be undone.`,`删除变体「${g.name}」？仅删除此本地副本；原项目「${original}」不变。此操作无法撤销。`)))return;
+      const original=nm(group[0].name),variant=nm(g.name);if(!confirm(L3(`¿Eliminar la variante «${variant}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`,`Delete the variant "${variant}"? Only this local copy is removed; the original "${original}" does not change. This cannot be undone.`,`删除变体「${variant}」？仅删除此本地副本；原项目「${original}」不变。此操作无法撤销。`)))return;
       try{const wasActive=g.id===library.activeId(),next=library.remove(g.id);if(wasActive)switchProject(next);window.FloorPlanTraceUI?.cleanup();renderVariants();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(del);}
     card.append(role,h,variantPlan(comparison.scenes[index],comparison.viewBox,g.name),dl,actions);box.append(card);
   }
