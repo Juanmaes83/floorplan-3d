@@ -29,6 +29,7 @@
   // Keep the same building point under the viewport centre: local coordinates differ by the offsets.
   view.x0+=from.offsetMm.x-to.offsetMm.x;view.y0+=from.offsetMm.y-to.offsetMm.y;
   refreshProject();renderAll();applyView();
+  dispatchEvent(new Event('floorplan-level-switched'));
   if(!presentation)say(`Planta activa: «${to.name}» (${to.order+1} de ${b.levels.length}). Sólo se edita esta planta.`,3500);
  }
  // Read-only sources for the building presentation: every level's project (the active one as shown on screen), its

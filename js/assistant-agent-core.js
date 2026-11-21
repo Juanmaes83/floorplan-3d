@@ -155,7 +155,7 @@
   let users=0;for(let i=turns.length-1;i>=0;i--){if(turns[i].role==='user'&&++users>LIMITS.maxHistoryTurns)return turns.slice(i+1);}return turns;}
  /* One conversational turn. adapter.step({messages, tools}) → {type:'tool_calls', calls:[{id,name,arguments}], usage} |
     {type:'message', text, usage} | {type:'error', code, message}. Returns everything the UI shows and the audit. */
- async function runTurn({question,history=[],ctx,adapter,consent,signal,toolNames}){
+ async function runTurn({question,history=[],ctx,adapter,consent,signal,toolNames,isCurrent=()=>true}){
   const t0=Date.now(),usage={inputTokens:0,outputTokens:0,costUsd:0,costKnown:true};
   const fail=(code,message,extra={})=>({ok:false,error:{code,message},usage,steps:[],proposals:[],actions:[],history,...extra});
   if(typeof question!=='string'||!question.trim())return fail('invalid_arguments','Pregunta vacía.');
@@ -167,10 +167,13 @@
   const rq=redactQuestion(question);const messages=[...trimHistory(history),{role:'user',content:rq.text}];
   const steps=[],proposals=[],actions=[];let providerCalls=0;
   for(let i=0;i<LIMITS.maxSteps;i++){
-   if(signal?.aborted)return fail('cancelled','Cancelado.',{steps,proposals,actions,providerCalls});
+   if(signal?.aborted)return fail('cancelled','Cancelado.',{steps,providerCalls});
+   if(!isCurrent())return fail('revision_mismatch','El contexto cambió durante la consulta.',{steps,providerCalls});
    let r;try{r=await adapter.step({messages,tools,context:{area:ctx.area||'design',lang:ctx.lang||'es',projectId:ctx.project.id}},{signal});}catch(e){return fail(e?.name==='AbortError'?'cancelled':'not_available',e?.name==='AbortError'?'Cancelado.':'El modelo no ha respondido.',{steps,proposals,actions,providerCalls});}
    providerCalls++;
    if(r?.usage){usage.inputTokens+=r.usage.inputTokens|0;usage.outputTokens+=r.usage.outputTokens|0;if(Number.isFinite(r.usage.costUsd))usage.costUsd=+(usage.costUsd+r.usage.costUsd).toFixed(6);else usage.costKnown=false;}
+   if(signal?.aborted)return fail('cancelled','Cancelado.',{steps,providerCalls});
+   if(!isCurrent())return fail('revision_mismatch','El contexto cambió durante la consulta.',{steps,providerCalls});
    if(!r||r.type==='error')return fail(r?.code||'not_available',r?.message||'Error del modelo.',{steps,proposals,actions,providerCalls});
    if(r.type==='message'){
     const text=String(r.text||'').slice(0,LIMITS.maxMessageChars).trim();if(!text)return fail('internal','Respuesta vacía del modelo.',{steps,proposals,actions,providerCalls});
@@ -195,13 +198,15 @@
  /* Adapter to the RUBIK server (same origin; the browser never holds a provider key). */
  function httpAdapter({fetch:f,endpoint='/api/assistant',accessCode=()=>null,consent=()=>null,conversationId}){
   let n=0;const conv=conversationId||('conv_'+Date.now().toString(36));
+  const headers=()=>{const code=accessCode();
+   return {'content-type':'application/json','x-rubik-contract':'rubik-assistant/2',...(code?{'x-rubik-assistant-code':code}:{})};};
   return {kind:'provider',async step({messages,tools,context},{signal}={}){
-   const code=accessCode();const res=await f(endpoint,{method:'POST',signal,credentials:'same-origin',headers:{'content-type':'application/json','x-rubik-contract':'rubik-assistant/2',...(code?{'x-rubik-assistant-code':code}:{})},
+   const res=await f(endpoint,{method:'POST',signal,credentials:'same-origin',headers:headers(),
     body:JSON.stringify({version:2,action:'step',conversationId:conv,idempotencyKey:`${conv}_${++n}_${Date.now().toString(36)}`,consent:consent(),context,tools,messages})});
    let body=null;try{body=await res.json();}catch{body=null;}
    if(!res.ok||!body)return {type:'error',code:body?.error||'not_available',message:body?.message||`HTTP ${res.status}`};
    return body;},
-   async status({signal}={}){const res=await f(endpoint,{method:'POST',signal,credentials:'same-origin',headers:{'content-type':'application/json','x-rubik-contract':'rubik-assistant/2'},body:JSON.stringify({version:2,action:'status'})});let b=null;try{b=await res.json();}catch{}return b||{enabled:false,reason:'unreachable'};}};
+   async status({signal}={}){const res=await f(endpoint,{method:'POST',signal,credentials:'same-origin',headers:headers(),body:JSON.stringify({version:2,action:'status'})});let b=null;try{b=await res.json();}catch{}return typeof b?.reason==='string'?b:{enabled:false,reason:b?.error||'unreachable'};}};
  }
  /* Scripted test double. It is NOT a language model and is labelled as such: it replays a fixed list of steps to test the
     orchestration (tool execution, proposals, limits, grounding, injection). Never offered to professionals as «AI». */

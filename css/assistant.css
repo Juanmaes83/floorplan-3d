@@ -15,15 +15,20 @@
 .assistant-log{flex:1 1 auto;min-height:80px;overflow:auto;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .assistant-msg{max-width:92%;padding:8px 10px;border-radius:10px;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
 .assistant-msg p{margin:0}
-.assistant-msg.user{align-self:flex-end;background:#e8e1d6}
-.assistant-msg.assistant{align-self:flex-start;background:#f4f1ec;border:1px solid var(--line,#d8d2c8)}
+.assistant-msg.user{align-self:flex-end;background:var(--surface-hover)}
+.assistant-msg.assistant{align-self:flex-start;background:var(--surface-sunken);border:1px solid var(--line)}
 .assistant-source{margin-top:4px!important;font-size:11px;color:#4f463b}
-.assistant-proposal{border:1px solid #c9a227;border-radius:10px;padding:8px 10px;background:#fffbea;display:grid;gap:6px}
+.assistant-proposal{border:1px solid var(--line-strong);border-radius:10px;padding:8px 10px;background:var(--surface-sunken);display:grid;gap:6px}
 .assistant-proposal[hidden]{display:none}
-.assistant-proposal[data-state=applied]{border-color:#2f7a3b;background:#eef8ef}
-.assistant-proposal[data-state=stale],.assistant-proposal[data-state=failed]{border-color:#a3261b;background:#fdeeee}
+.assistant-proposal[data-state=applied]{border-color:var(--success);background:var(--surface-panel)}
+.assistant-proposal[data-state=stale],.assistant-proposal[data-state=failed]{border-color:var(--danger);background:var(--danger-soft)}
 .assistant-proposal h3{margin:0;font-size:15px}
 .assistant-diff,.assistant-warn{margin:0;padding-left:18px;font-size:13px}
+.assistant-diff-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:4px 0 0}
+.assistant-diff-values div{padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface-panel);overflow-wrap:anywhere}
+.assistant-diff-values dt{font-size:11px;color:var(--ink-muted,var(--muted))}
+.assistant-diff-values dd{margin:0;font-weight:600}
+.assistant-note:empty{display:none}
 .assistant-warn{color:#6b4e00}
 .assistant-note{margin:0;font-size:12px;color:var(--muted,#6b6257)}
 .assistant-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
@@ -32,8 +37,12 @@
 .assistant-chips .chip{min-height:36px;padding:4px 10px;border:1px solid var(--line,#d8d2c8);border-radius:999px;background:#fff;font:inherit;font-size:12px;cursor:pointer}
 .assistant-form{display:flex;gap:6px;align-items:flex-end;position:sticky;bottom:-12px;margin-bottom:-12px;padding:6px 0 12px;background:var(--surface-panel,#fffdf9);z-index:1}
 .assistant-form textarea{flex:1 1 auto;min-width:0;min-height:44px;font:inherit;padding:6px 8px;box-sizing:border-box;resize:vertical}
-.assistant-foot{display:flex;justify-content:flex-end}
-.assistant-foot .link{background:none;border:none;text-decoration:underline;font-size:12px;cursor:pointer;min-height:32px}
+.assistant-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:start;gap:6px}
+.assistant-mcp{flex:1 1 11em;min-width:0}
+.assistant-mcp summary{cursor:pointer;min-height:44px;padding-block:12px;font-weight:600}
+.assistant-mcp .btn{min-height:44px;border:1px solid var(--line);margin-top:5px}
+.assistant-mcp .btn[hidden]{display:none}
+.assistant-foot .link{background:none;border:none;text-decoration:underline;font-size:12px;cursor:pointer;min-height:44px}
 .assistant-panel :focus-visible{outline:3px solid #184e52;outline-offset:2px}
 @media (max-width:720px){
  .assistant-panel{top:auto;left:0;right:0;bottom:0;width:100%;height:min(78dvh,640px);border-radius:14px 14px 0 0}
@@ -48,6 +57,7 @@
 }
 /* Asistente generativo: selector de modo, estado del servicio, código y consentimiento. */
 .assistant-genbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px}
+.assistant-modes{display:flex;flex-wrap:wrap;gap:6px}
 .assistant-genbar .chip{min-height:44px}
 .assistant-genbar .chip[aria-checked="true"]{background:var(--action-soft,#e6f0f0);border-color:var(--action,#1f5f63);font-weight:600}
 .assistant-gen-status{flex-basis:100%;margin:2px 0;font-size:.82rem;color:var(--ink-muted,#555)}

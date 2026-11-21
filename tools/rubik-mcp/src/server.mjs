@@ -80,17 +80,22 @@ async function main() {
     { clearanceMm: z.number().positive().optional() },
     heavy('reviewLayout'));
 
-  registerReadTool(server, 'propose_layout', 'Proponer posición de un mueble (sin aplicar)',
-    'Etapa 2. Para un mueble (objectId) y un objetivo (goal: resolve-placement-conflict o clear-door-swing con openingId), propone UNA posición candidata buscada con FloorPlanPlacement y comprobada con FloorPlanPlacement y layout-review sobre una copia efímera. Exige expectedSha256 (de get_project_summary). Devuelve RubikLayoutProposalV1 con estado candidate-reviewable, pending, blocked o no-change-needed, evidencia, incertidumbre y lo no evaluado. Nunca aplica nada (applied:false), no escribe ni genera parches, no mueve otros muebles, no gira ni cambia de estancia. No es una certificación ni la posición óptima.',
-    {
+  const proposalInput = {
       objectId: z.string().min(1).max(160),
       goal: z.enum(['resolve-placement-conflict', 'clear-door-swing']),
       expectedSha256: z.string().regex(/^[0-9a-f]{64}$/),
       openingId: z.string().min(1).max(160).optional(),
       stepMm: z.number().int().min(10).max(1000).optional(),
       maxCandidates: z.number().int().min(1).max(4000).optional(),
-    },
-    heavy('proposeLayout'));
+    };
+  registerReadTool(server, 'propose_layout', 'Proponer posición de un mueble (sin aplicar)',
+    'Etapa 2. Para un mueble (objectId) y un objetivo (goal: resolve-placement-conflict o clear-door-swing con openingId), propone UNA posición candidata buscada con FloorPlanPlacement y comprobada con FloorPlanPlacement y layout-review sobre una copia efímera. Exige expectedSha256 (de get_project_summary). Devuelve RubikLayoutProposalV1 con estado candidate-reviewable, pending, blocked o no-change-needed, evidencia, incertidumbre y lo no evaluado. Nunca aplica nada (applied:false), no escribe ni genera parches, no mueve otros muebles, no gira ni cambia de estancia. No es una certificación ni la posición óptima.',
+    proposalInput, heavy('proposeLayout'));
+
+  registerReadTool(server, 'simulate_layout', 'Evaluar una propuesta de distribución',
+    'Recalcula propose_layout sobre el mismo SHA-256, valida la copia y compara su área, recuento y revisión geométrica con el original. clearanceMm es un umbral opcional explícito en ambos estados. Devuelve simulationSha256 para revisar una variante local. No modifica ni exporta el proyecto.',
+    { ...proposalInput, clearanceMm: z.number().positive().max(100000).optional() },
+    heavy('simulateLayout'));
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

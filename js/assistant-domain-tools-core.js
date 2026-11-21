@@ -54,6 +54,14 @@
     for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,0x01000193)>>>0;b=Math.imul(b^(c+i&0xffff),0x01000193)>>>0;}
     return 'rv1-'+a.toString(16).padStart(8,'0')+b.toString(16).padStart(8,'0');
   }
+  // The canonical project ID is stable even when the unsaved example gets a fresh library entry on reload.
+  // A failed legacy identity migration is the one case where the editor cannot guarantee unique project IDs.
+  function projectScope(app,studio='local'){
+    const id=app?.project?.id;if(!id)return null;
+    const scope=[studio,id];
+    if(app.identityMigration?.failed)scope.push(app.entryId||null,app.levelContext?.levelId||null);
+    return JSON.stringify(scope);
+  }
   const base=ctx=>{
     if(!isObj(ctx)||!isObj(ctx.project))return false;const p=ctx.project;
     return p.schema==='rubik-sota.floorplan-project'&&validId(p.id)&&Array.isArray(p.rooms)&&Array.isArray(p.walls)&&Array.isArray(p.openings)&&Array.isArray(p.objects);
@@ -176,5 +184,5 @@
       return failure(callId,'not_available','No se pudo calcular esta consulta con los datos actuales');
     }
   }
-  return Object.freeze({TOOLS,ARGS,execute,revision});
+  return Object.freeze({TOOLS,ARGS,execute,revision,projectScope});
 });

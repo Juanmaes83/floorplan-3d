@@ -4,11 +4,14 @@
 const { workerData, parentPort } = require('node:worker_threads');
 // Load the pure modules first (they read their own code), then lock the worker down before any computation.
 const Proposal = require('./proposal.cjs');
+const Simulation = require('./simulation.cjs');
 const Route = require('./route.cjs');
 const Review = require('../../../js/layout-review.js');
 require('./lockdown.cjs').lockdown();
 
 const TASKS = {
+  simulateLayout: (project, snapshot, args) => Simulation.simulate(project, snapshot, args).report,
+  prepareVariant: Simulation.simulate,
   proposeLayout: (project, snapshot, args) => Proposal.propose(project, snapshot, args),
   checkRoute2d: (project, snapshot, { start, end, widthMm }) => Route.findRoute(project, snapshot, { start, end, widthMm }),
   reviewLayout: (project, snapshot, args) => ({ snapshot, ...Review.review(project, { ...(args.clearanceMm === undefined ? {} : { clearanceMm: args.clearanceMm }) }) })

@@ -74,7 +74,11 @@ test('full chain: browser agent → /api/assistant (all gates) → provider (Ope
  assert.equal(r.ok,true,JSON.stringify(r.error));assert.equal(r.answer.grounded,true);assert.match(r.answer.text,new RegExp(`Faltan precios en ${c.totals.unpricedItemIds.length} partidas`));
  assert.equal(providerSaw[0].messages[0].role,'system');assert.equal(providerSaw[1].messages.at(-1).role,'tool','the provider received the RUBIK tool result');
  assert.equal(r.usage.costUsd,+(((1200*0.4+30*1.6)+(1600*0.4+50*1.6))/1e6).toFixed(6));assert.equal((await store.snapshot()).text,r.usage.costUsd,'same figure in the server ledger');
- const st=await adapter.status();assert.equal(st.requiresCode,true,'status without code reveals nothing but that a code is needed');assert.equal(st.model,undefined);
+ const anonymous=await A.httpAdapter({fetch:browserFetch}).status();
+ assert.equal(anonymous.requiresCode,true,'status without code reveals nothing but that a code is needed');assert.equal(anonymous.model,undefined);
+ const status=await adapter.status();
+ assert.equal(status.reason,'ok');assert.equal(status.model,env.RUBIK_ASSISTANT_MODEL);assert.equal(status.spentUsd,r.usage.costUsd);
+ assert.equal(providerSaw.length,2,'neither status check contacts the model');
 });
 
 test('figure check with budget oracles: amounts must come from monetary fields; counts with a noun are checked; declared PARTIAL with its limits',async()=>{
