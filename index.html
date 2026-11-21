@@ -1823,9 +1823,19 @@ function wallPanel(w){
   const state = w.status==='demolished' ? ' · marcado para retirar' : '';
   return `<div class="panel-view wall-panel">${panelHead({title:'Muro', context:`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
     ${wallStructureBlock(w)}
+    ${window.RubikWallMoveUI?.markup(w)||''}
     <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
 }
-function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
+function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); window.RubikWallMoveUI?.bind(id,{apply:applyWallMove}); }
+// M08 · «Desplazar muro»: el resultado de RubikWallMove.plan (ya validado) sustituye muros, huecos, estancias y muebles en UNA mutación.
+function applyWallMove(next){
+  const before = snap();
+  for (const key of ['walls','openings','rooms','objects']) project[key] = next[key];
+  project.schemaVersion = next.schemaVersion;
+  const saved = commit(before,{requireSave:true});
+  renderAll();
+  return saved;
+}
 // UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
 // está sin especificar; nunca se escribe sin que la persona la acepte, y se deshace como cualquier cambio.
 function roomSuggestionOf(source){
@@ -5902,7 +5912,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/plan-service-ui.js"></script>
 <script src="js/moodboard-core.js"></script>
 <script src="js/moodboard-ui.js"></script>
-<script src="js/quantity-core.js"></script>
+<script src="js/quantity-core.js"></script><script src="js/wall-move-core.js"></script><script src="js/wall-move-ui.js"></script>
 <script src="js/quantity-schedule-core.js"></script>
 <script src="js/quantity-schedule-ui.js"></script>
 <script src="js/budget-core.js"></script>
@@ -5957,7 +5967,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- Asistente IA RUBIK V2 (AG-0…AG-5, Draft): consulta guiada SIN modelo de lenguaje sobre el proyecto abierto; las
      propuestas solo se guardan al «Aplicar», en un paso del commit. Nada sale del navegador; proveedor de texto desactivado. -->
 <link rel="stylesheet" href="css/assistant.css">
-<script src="js/assistant-contracts.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
+<script src="js/assistant-contracts.js"></script><script src="js/assistant-journey-core.js"></script><script src="js/assistant-domain-tools-core.js"></script><script src="js/assistant-intents-core.js"></script>
 <script src="js/proposal-core.js"></script><script src="js/assistant-proposals-core.js"></script><script src="js/assistant-runtime-core.js"></script><script src="js/assistant-session-core.js"></script><script src="js/assistant-ui.js"></script>
 <!-- Asistente generativo (rubik-agent/1): conversación con un modelo de texto real vía /api/assistant (cerrado por defecto:
      sin autorización del propietario, solo la consulta guiada). El navegador nunca tiene la clave del proveedor. -->

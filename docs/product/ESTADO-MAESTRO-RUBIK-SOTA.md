@@ -1,4 +1,7 @@
-# RUBIK SOTA — Estado maestro tras la consolidación #241 y HOM-04 (#242)
+# RUBIK SOTA — Estado maestro y continuidad operativa
+
+> **ACTUALIZACIÓN OPERATIVA · 21/11/2026, tras #304.** El corte vigente de esta propuesta documental está en [Continuidad operativa vigente](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md), contrastado con `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`. M05 #303/#304, M08 #308, E3 #299, R02-A #298 y Simulator A/C/E ya están integrados. M03 #306, HERO #309 y las candidatas de laboratorio conservan sus SHA, bases y gates en esa página. **No usar los contadores o estados de los cortes inferiores como pendientes actuales.** No rehacer capacidades integradas ni extrapolar pruebas entre árboles. El cuerpo que sigue conserva su fecha y su valor histórico; los contratos, IDs, decisiones y autorizaciones siguen vigentes en sus alcances.
+
 
 > **Corte 20/11/2026 · Simulator E.** [#291](https://github.com/Juanmaes83/floorplan-3d/pull/291) integrada en `8e917e1a70f499a6b8dc68850c8413b7d06c5682`, árbol `dec6d20694e083cb615f42eae60bb74fd3209523`. Siete archivos exclusivamente de QA. CI de PR 15 aprobadas y una omisión prevista. CI posfusión 3/3 y [Production READY](https://vercel.com/juanma-espinosas-projects/floorplan-3d/6UsqaQ4HWiob45C8iCDB95F1pCby). Se conservan los 43 contratos CI y el alcance de E en la planta activa. Simulator D conserva su gate WebKit y autorización propia. [Acreditación](../integration/op07-a0-2026-11-20/README.md#simulator-e--291).
 

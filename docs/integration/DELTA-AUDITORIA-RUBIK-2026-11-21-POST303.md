@@ -1,5 +1,8 @@
 # RUBIK SOTA — Delta de auditoría tras #303
 
+> **Corte histórico tras #303.** Para el estado posterior a #308 y #304 y la corrección de los diagnósticos de HERO, consultar [Continuidad operativa vigente](CONTINUIDAD-OPERATIVA-VIGENTE.md). Las cifras inferiores solo describen su base original.
+
+
 **Corte:** 21/11/2026 (Europa/Madrid). **Base consultada:** `master@4cd3884f6f6e3be062e8f4c6acc255e8888ae4d0`, árbol `b9b77c5360ab985090c93c3bb67c799cb0d82e16`. Esta nota actualiza la fotografía del informe de 21/11 adjunto al encargo y del [V5 propuesto en #302](https://github.com/Juanmaes83/floorplan-3d/pull/302). Es un delta fechado para incorporar en la autoridad documental vigente; no sustituye el catálogo, la matriz ni las decisiones por SHA.
 
 ## Evidencia del producto

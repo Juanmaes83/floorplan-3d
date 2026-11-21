@@ -52,3 +52,23 @@ La propuesta para la Prueba C usa OpenAI Chat Completions y el snapshot `gpt-5.4
 `store:false` limita el estado de aplicación. La documentación de Chat Completions describe además medidas de retención y control de abusos propias del proveedor. La autorización se circunscribe al modelo, tarifa, cap, acceso, Preview y datos sintéticos indicados. [Controles de datos](https://developers.openai.com/api/docs/guides/your-data)
 
 La aceptación humana y el merge con despliegue automático de Production son gates independientes. M05 llega a revisión con su proveedor desactivado.
+
+## Guía de las cinco fases · corte dependiente de #303
+
+**Destino.** Editor → Asistente RUBIK → Guía de las cinco fases. Elige fase y acción, pulsa «Ver cómo» y usa el botón del módulo existente. También se puede escribir el nombre de la acción. El panel responde en ES, EN o ZH. Dentro de un diálogo abierto, conserva sus controles y explica cómo salir sin perder el contexto. Este acceso queda fuera de las vistas de cliente.
+
+| Fase | Recorridos comprobados en Chromium | Evidencia y límites |
+| --- | --- | --- |
+| Imaginar | Subir plano, lienzo en blanco, plantilla, escáner, CAD | Selector de archivos e Inicio reales. RoomPlan y DXF/IFC usan el importador nativo. Para DWG, se indica una conversión previa a DXF. |
+| Diseñar | Redistribuir, habitaciones, muros, techos, suelos, exterior, muebles | Editor, Propiedades y biblioteca existentes. Recuento de estancias y revisión geométrica con fuente. Los avisos de altura son orientativos. |
+| Construir | Localización, Catastro, presupuesto, planificación, Gantt | Emplazamiento, presupuesto y Plan de obra. Las fechas proceden del plan guardado y se comprueba su revisión. Ausencia, fecha inválida o revisión obsoleta tienen salida explicada. |
+| Presentar | Blender, Normal, Render IA, Híbrido, Corte | Preparar presentación, OP-10 e Imágenes existentes. El acceso a Imágenes no genera nada. Dibujo vivo sigue experimental. Blender conserva su exportación propia y el render posterior. |
+| Recorrer | Navegación 3D, recorrido libre, visita guiada, revisión como cliente, enviar enlace | Visor y Entregar existentes. El visor privado se habilita con la vivienda de ejemplo. La alternativa al enlace es el archivo descargable para el cliente. |
+
+**MCP.** `get_workflow_guidance` usa las mismas 27 entradas, enlaza exclusivamente herramientas existentes de lectura y declara que desconoce el estado del editor en vivo. Las herramientas de proyecto conservan el SHA-256 del JSON seleccionado. La guía no devuelve datos del plan guardado, credenciales ni estado de conectores.
+
+**Reproducción.** Windows y Playwright con Chromium. La regresión de navegador comprueba los 27 recorridos, el punto de entrada de cada uno, igualdad del proyecto y ausencia de escrituras de consulta o peticiones de servicio. El caso Gantt incluye plan ausente, plan vigente, fecha inválida y plan obsoleto. Incluye idioma EN/ZH, comparación de la revisión de distribución con su fuente y bloqueo de navegación desde un diálogo abierto. Firefox y WebKit comprueban el recorrido Gantt hasta Plan de obra. Las capturas son de la vivienda de ejemplo en Chromium. [Escritorio](evidence/m05-guia/gantt-es.webp) · [Móvil](evidence/m05-guia/gantt-movil-es.webp)
+
+**Pruebas reproducibles.** `node --test --test-name-pattern 'guía' tests/assistant-ai-v2.browser.test.cjs`. Los controles anteriores siguen en la suite del Asistente. `npm test --prefix tools/rubik-mcp` en Linux verifica los contratos stdio, las 27 entradas de la guía y la inmutabilidad del JSON original.
+
+**Dependencias y decisión.** Padre exacto de producto M05 `3ffe6f32e8e5f3d5432abf3567f9f8e05370432d`. Base común de producto `e777a6ed7f856aa7a251aa9392b3670ade877f81`. La CI y la Preview de este corte se evalúan sobre su propio SHA. La revisión de esta guía no acredita la Prueba C con un proveedor real ni cambia los permisos del piloto, el almacén, la publicación de enlaces o Production.

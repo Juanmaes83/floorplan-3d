@@ -71,3 +71,15 @@
 .assistant-where{margin:0;font:600 13px/1.4 system-ui,sans-serif;color:#184e52}.assistant-where[hidden]{display:none}
 @media print{.assistant-fab{display:none}}
 .assistant-host{padding:0;margin:0;border:0;background:transparent;width:0;height:0;max-width:none;max-height:none;overflow:visible}.assistant-host::backdrop{background:transparent}
+
+.assistant-journey{border:1px solid var(--line);border-radius:8px;padding:0 10px;background:var(--surface-panel)}
+.assistant-journey[hidden],.assistant-guidance[hidden]{display:none}
+.assistant-journey summary{min-height:44px;padding-block:12px;box-sizing:border-box;font-weight:600;cursor:pointer}
+.assistant-journey-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-bottom:8px}
+.assistant-journey-options label{display:grid;gap:4px;align-content:start;font-size:.85rem}
+.assistant-journey-options select,.assistant-journey .btn{min-height:44px}
+.assistant-journey-options select{width:100%;font:inherit;color:var(--ink);background:var(--surface-panel);border:1px solid var(--line-strong);border-radius:6px;padding:0 6px}
+.assistant-journey-options>.btn{grid-column:1/-1;justify-self:start}
+.assistant-guidance{display:grid;gap:8px;border-top:1px solid var(--line);padding-block:10px;font-size:.9rem;overflow-wrap:anywhere;scroll-margin-block-end:68px}
+.assistant-guidance h3,.assistant-guidance p{margin:0}
+.assistant-guidance .btn{justify-self:start}

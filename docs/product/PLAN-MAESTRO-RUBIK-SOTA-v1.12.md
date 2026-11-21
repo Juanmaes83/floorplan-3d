@@ -1,5 +1,8 @@
 # RUBIK SOTA — Plan maestro de consolidación y comercialización v1.12
 
+> **ACTUALIZACIÓN OPERATIVA · 21/11/2026, tras #304.** El corte vigente de esta propuesta documental está en [Continuidad operativa vigente](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md), contrastado con `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`. M05 #303/#304, M08 #308, E3 #299, R02-A #298 y Simulator A/C/E ya están integrados. M03 #306, HERO #309 y las candidatas de laboratorio conservan sus SHA, bases y gates en esa página. **No usar los contadores o estados de los cortes inferiores como pendientes actuales.** No rehacer capacidades integradas ni extrapolar pruebas entre árboles. El cuerpo que sigue conserva su fecha y su valor histórico; los contratos, IDs, decisiones y autorizaciones siguen vigentes en sus alcances.
+
+
 **Fecha:** 18/11/2026 · **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` y PR abiertas #251–#260 en sus SHA del 18/11 · **Autor:** Claude Code, por mandato del propietario · **Estado:** propuesta para decisión del propietario.
 
 Este documento **no autoriza** integración, despliegue, activación de proveedores, gasto ni cambios de alcance. Cada corte propuesto necesita su propia autorización.

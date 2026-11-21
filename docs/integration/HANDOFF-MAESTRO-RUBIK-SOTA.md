@@ -1,5 +1,8 @@
 # RUBIK SOTA — HANDOFF MAESTRO DE EJECUCIÓN, RECUPERACIÓN Y CIERRE
 
+> **ACTUALIZACIÓN OPERATIVA · 21/11/2026, tras #304.** El corte vigente de esta propuesta documental está en [Continuidad operativa vigente](CONTINUIDAD-OPERATIVA-VIGENTE.md), contrastado con `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`. M05 #303/#304, M08 #308, E3 #299, R02-A #298 y Simulator A/C/E ya están integrados. M03 #306, HERO #309 y las candidatas de laboratorio conservan sus SHA, bases y gates en esa página. **No usar los contadores o estados de los cortes inferiores como pendientes actuales.** No rehacer capacidades integradas ni extrapolar pruebas entre árboles. El cuerpo que sigue conserva su fecha y su valor histórico; los contratos, IDs, decisiones y autorizaciones siguen vigentes en sus alcances.
+
+
 > **ACTUALIZACIÓN DE AUDITORÍA Y CONTINUIDAD · 20/11/2026 — LEER ANTES DEL CORTE HISTÓRICO**
 >
 > Guía de arranque y coordinación aprobada para su depósito documental por petición del propietario. La auditoría independiente de ChatGPT considera el handoff sustancialmente correcto, con los deltas y límites que siguen. El cuerpo original (§0–15) se conserva íntegro como foto fechada de la auditoría iniciada a las 09:44 CET: sus contadores, estados y referencias de rama no son automáticamente los actuales. En caso de conflicto, esta actualización y una consulta nueva de GitHub prevalecen para el estado operativo; catálogo, matriz, plan y contratos siguen siendo autoridades canónicas. No constituye autorización de desarrollo, merge, promoción, activación, migración ni gasto. Codex conserva la integración de producto; el depósito de esta guía es exclusivamente documental.

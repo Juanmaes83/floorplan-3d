@@ -1,5 +1,8 @@
 # RUBIK SOTA — Matriz de trazabilidad reconciliada v1.12
 
+> **ACTUALIZACIÓN OPERATIVA · 21/11/2026, tras #304.** El corte vigente de esta propuesta documental está en [Continuidad operativa vigente](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md), contrastado con `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`. M05 #303/#304, M08 #308, E3 #299, R02-A #298 y Simulator A/C/E ya están integrados. M03 #306, HERO #309 y las candidatas de laboratorio conservan sus SHA, bases y gates en esa página. **No usar los contadores o estados de los cortes inferiores como pendientes actuales.** No rehacer capacidades integradas ni extrapolar pruebas entre árboles. El cuerpo que sigue conserva su fecha y su valor histórico; los contratos, IDs, decisiones y autorizaciones siguen vigentes en sus alcances.
+
+
 **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` (18/11/2026), con las PR abiertas #251–#260 consultadas en sus SHA del mismo día. **Autor:** Claude Code, por mandato del propietario. **Estado:** propuesta documental; no autoriza integración, despliegue, activación ni gasto.
 
 **Actualización de integración:** las filas de ENT-04 y el seguimiento de §6 reflejan [#259 en `master@163df68`](https://github.com/Juanmaes83/floorplan-3d/commit/163df68e83a80ddf11a008d573ee257d51c1821f).
