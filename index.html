@@ -840,6 +840,7 @@ const ES_TEXT = {
   "Clear measures": "Borrar mediciones",
   "Clear layout": "Vaciar distribución",
   "Keyboard Shortcuts": "Atajos de teclado",
+  "Touch Controls": "Controles táctiles",
   "Rotate": "Girar",
   "Rotate left": "Girar a la izquierda",
   "Duplicate": "Duplicar",
@@ -1118,7 +1119,88 @@ const NAMES_ES = {
   "茶桌": "Mesa auxiliar",
   "休闲椅": "Sillón de descanso"
 };
-const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
+// Known generic-catalogue labels that RUBIK itself writes in Spanish when it proposes furniture (smart furnishing): shown in
+// the language of the session; the stored name is never rewritten. [en, zh]
+const NAMES_FROM_ES = {
+  'Sofá de tres plazas':['Three-seater sofa','三人沙发'],'Sofá de dos plazas':['Two-seater sofa','双人沙发'],'Sofá rinconera':['Corner sofa','转角沙发'],'Sillón':['Armchair','扶手椅'],
+  'Butaca de lectura':['Reading chair','阅读椅'],'Puf':['Pouf','坐墩'],'Mesa de centro':['Coffee table','茶几'],'Mesa auxiliar':['Side table','边几'],'Mueble de TV':['TV stand','电视柜'],
+  'Alfombra':['Rug','地毯'],'Lámpara de pie':['Floor lamp','落地灯'],'Planta':['Plant','绿植'],'Planta grande':['Large plant','大型绿植'],
+  'Cama de matrimonio 180':['Double bed 180','双人床 180'],'Cama de matrimonio 150':['Double bed 150','双人床 150'],'Cama individual 120':['Single bed 120','单人床 120'],
+  'Mesilla':['Nightstand','床头柜'],'Armario 200':['Wardrobe 200','衣柜 200'],'Armario 120':['Wardrobe 120','衣柜 120'],'Cómoda':['Dresser','五斗柜'],
+  'Escritorio 120':['Desk 120','书桌 120'],'Escritorio 160':['Desk 160','书桌 160'],'Silla':['Chair','椅子'],'Silla de trabajo':['Office chair','办公椅'],
+  'Estantería 80':['Bookshelf 80','书架 80'],'Estantería 160':['Bookshelf 160','书架 160'],'Mesa de comedor 140':['Dining table 140','餐桌 140'],'Mesa de comedor 180':['Dining table 180','餐桌 180'],
+  'Mesa redonda':['Round table','圆桌'],'Aparador':['Sideboard','餐边柜'],
+  // Authorised 3D models (product names as the catalogues write them): brand and series are kept, the descriptor follows the language.
+  'Aparador Lumen 160 · sintético QA':['Lumen 160 sideboard · QA synthetic','Lumen 160 餐边柜 · QA 合成模型'],'Banco sintético de prueba':['Synthetic test bench','合成测试长凳'],'Horno H60 · sintético QA':['H60 oven · QA synthetic','H60 烤箱 · QA 合成模型'],
+  'IKEA BRIMNES · cama con almacenaje':['IKEA BRIMNES · storage bed','IKEA BRIMNES · 带储物床'],'IKEA FRÖTORP · mesa de centro':['IKEA FRÖTORP · coffee table','IKEA FRÖTORP · 茶几'],
+  'IKEA GLOSTAD · sofá de dos plazas gris oscuro':['IKEA GLOSTAD · dark grey two-seater sofa','IKEA GLOSTAD · 深灰色双人沙发'],'IKEA HEMNES · mueble de TV':['IKEA HEMNES · TV unit','IKEA HEMNES · 电视柜'],
+  'IKEA KNOXHULT · armario bajo blanco':['IKEA KNOXHULT · white low cabinet','IKEA KNOXHULT · 白色矮柜'],'IKEA LAUTERS · lámpara de pie':['IKEA LAUTERS · floor lamp','IKEA LAUTERS · 落地灯'],
+  'IKEA LISABO · mesa de fresno':['IKEA LISABO · ash table','IKEA LISABO · 白蜡木桌'],'IKEA LISABO · silla negro y gris':['IKEA LISABO · black and grey chair','IKEA LISABO · 黑灰色椅子'],
+  'IKEA MALM · cómoda de seis cajones':['IKEA MALM · six-drawer chest','IKEA MALM · 六抽屉柜'],'IKEA MORUM · alfombra beige':['IKEA MORUM · beige rug','IKEA MORUM · 米色地毯'],
+  'IKEA NORDLI · cómoda blanca de cinco cajones':['IKEA NORDLI · white five-drawer chest','IKEA NORDLI · 白色五抽屉柜'],'IKEA NÄMMARÖ · mesa de jardín':['IKEA NÄMMARÖ · garden table','IKEA NÄMMARÖ · 花园桌'],
+  'IKEA NÄMMARÖ · sofá exterior de dos plazas':['IKEA NÄMMARÖ · two-seater outdoor sofa','IKEA NÄMMARÖ · 双人户外沙发'],'IKEA SKOGSTA · mesa de acacia':['IKEA SKOGSTA · acacia table','IKEA SKOGSTA · 相思木桌'],
+  'IKEA SOLVINDEN · lámpara de pie solar':['IKEA SOLVINDEN · solar floor lamp','IKEA SOLVINDEN · 太阳能落地灯'],'IKEA SONGESAND — cómoda blanca':['IKEA SONGESAND — white chest of drawers','IKEA SONGESAND — 白色抽屉柜'],
+  'IKEA STOCKHOLM 2025 · aparador de roble':['IKEA STOCKHOLM 2025 · oak sideboard','IKEA STOCKHOLM 2025 · 橡木餐边柜'],'IKEA STOCKHOLM 2025 — puf Alhamn beige':['IKEA STOCKHOLM 2025 — beige Alhamn pouf','IKEA STOCKHOLM 2025 — 米色 Alhamn 坐墩'],
+  'IKEA STRANDMON · sillón orejero beige':['IKEA STRANDMON · beige wing chair','IKEA STRANDMON · 米色翼背椅'],'IKEA VÄSMAN · sillón exterior':['IKEA VÄSMAN · outdoor armchair','IKEA VÄSMAN · 户外扶手椅'],
+  'Planta en maceta':['Potted plant','盆栽'],'Planta pequeña':['Small plant','小型绿植'],
+  // Surface library (assets/materials/catalog.json): names and families as the catalogue writes them.
+  'Tablón de madera natural':['Natural wood plank','天然木板'],
+  'Parqué en espiga':['Herringbone parquet','人字拼实木地板'],
+  'Parqué diagonal':['Diagonal parquet','斜拼实木地板'],
+  'Parqué rectangular':['Rectangular parquet','长方形实木地板'],
+  'Tablones de roble':['Oak planks','橡木板'],
+  'Suelo de madera envejecida':['Aged wood floor','做旧木地板'],
+  'Madera con desgaste':['Worn wood','磨损木材'],
+  'Tarima de madera':['Wooden decking','木质平台板'],
+  'Madera de veta abierta':['Open-grain wood','粗纹木材'],
+  'Tablón gris rústico':['Rustic grey plank','灰色乡村木板'],
+  'Mosaico cerámico ajedrezado':['Chequerboard ceramic mosaic','棋盘格陶瓷马赛克'],
+  'Baldosas marrones':['Brown tiles','棕色地砖'],
+  'Cerámica de trama fina':['Fine-weave ceramic','细纹陶瓷'],
+  'Baldosas geométricas':['Geometric tiles','几何图案地砖'],
+  'Cerámica de junta marcada':['Marked-joint ceramic','明缝陶瓷'],
+  'Baldosas de patrón alterno':['Alternating-pattern tiles','交错图案地砖'],
+  'Cerámica de trama modular':['Modular-weave ceramic','模块纹陶瓷'],
+  'Baldosas de interior':['Interior tiles','室内地砖'],
+  'Baldosas de gran formato':['Large-format tiles','大规格地砖'],
+  'Azulejos blancos alargados':['Long white tiles','长条白色瓷砖'],
+  'Mármol de veta natural':['Natural-vein marble','天然纹理大理石'],
+  'Losas de mármol':['Marble slabs','大理石板'],
+  'Mosaico de mármol':['Marble mosaic','大理石马赛克'],
+  'Suelo de pizarra':['Slate floor','板岩地面'],
+  'Pizarra de bloques irregulares':['Irregular-block slate','不规则块板岩'],
+  'Pizarra de textura estratificada':['Layered-texture slate','层纹板岩'],
+  'Losas de piedra':['Stone slabs','石板'],
+  'Piedra de monasterio':['Monastery stone','修道院石材'],
+  'Baldosas de granito':['Granite tiles','花岗岩地砖'],
+  'Mosaico de piedra mixta':['Mixed-stone mosaic','混合石材马赛克'],
+  'Hormigón cepillado':['Brushed concrete','拉毛混凝土'],
+  'Cemento estriado':['Ribbed cement','条纹水泥'],
+  'Hormigón de suelo':['Floor concrete','地面混凝土'],
+  'Hormigón de grano fino':['Fine-grain concrete','细粒混凝土'],
+  'Hormigón mineral':['Mineral concrete','矿物混凝土'],
+  'Hormigón de acabado industrial':['Industrial-finish concrete','工业风混凝土'],
+  'Cemento liso':['Smooth cement','光面水泥'],
+  'Cemento desgastado':['Worn cement','磨损水泥'],
+  'Terrazo de agregados':['Aggregate terrazzo','骨料水磨石'],
+  'Hormigón granular':['Granular concrete','颗粒混凝土'],
+  'Yeso blanco fino':['Fine white plaster','细腻白色石膏'],
+  'Yeso gris mineral':['Mineral grey plaster','矿物灰色石膏'],
+  'Yeso gris de grano visible':['Visible-grain grey plaster','可见颗粒灰色石膏'],
+  'Yeso pintado':['Painted plaster','刷漆石膏'],
+  'Yeso de trama decorativa':['Decorative-pattern plaster','装饰纹石膏'],
+  'Revoco mate artesanal':['Handcrafted matt render','手工哑光抹灰'],
+  'Revoco gris liso':['Smooth grey render','光面灰色抹灰'],
+  'Revoco azul':['Blue render','蓝色抹灰'],
+  'Revoco amarillo':['Yellow render','黄色抹灰'],
+  'Arcilla de trama decorativa':['Decorative-pattern clay','装饰纹黏土'],
+  'Madera':['Wood','木材'],
+  'Cerámica y porcelánico':['Ceramic and porcelain','陶瓷与瓷砖'],
+  'Piedra y mármol':['Stone and marble','石材与大理石'],
+  'Cemento, microcemento y terrazo':['Cement, microcement and terrazzo','水泥、微水泥与水磨石'],
+  'Yeso y acabados murales':['Plaster and wall finishes','石膏与墙面饰面']
+};
+const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? NAMES_FROM_ES[s]?.[0] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : (NAMES_FROM_ES[s]?.[1] ?? s);
 const ROOM_FAMILY_LABELS={unspecified:['Estancia','Room','房间'],living:['Salón','Living room','客厅'],dining:['Comedor','Dining room','餐厅'],kitchen:['Cocina','Kitchen','厨房'],bedroom:['Dormitorio','Bedroom','卧室'],bathroom:['Baño','Bathroom','浴室'],toilet:['Aseo','Toilet','卫生间'],office:['Despacho','Office','书房'],hallway:['Pasillo','Hallway','走廊'],storage:['Trastero','Storage','储藏室'],laundry:['Lavadero','Laundry','洗衣房'],terrace:['Terraza','Terrace','露台'],balcony:['Balcón','Balcony','阳台'],garage:['Garaje','Garage','车库'],utility:['Cuarto técnico','Utility room','设备间'],other:['Otra estancia','Other','其他']};
 const familyLabel=family=>(ROOM_FAMILY_LABELS[Core.roomFamilies.includes(family)?family:'unspecified']||ROOM_FAMILY_LABELS.unspecified)[{es:0,en:1,zh:2}[LANG]??0];
 const familyTypeLabel=family=>family==='unspecified'?({es:'Sin especificar',en:'Unspecified',zh:'未指定'}[LANG]||'Sin especificar'):familyLabel(family);
@@ -1136,6 +1218,8 @@ function applyStaticLang(){
     el.title = LANG === 'zh' ? el.dataset.zhTitle : LANG === 'es' ? (el.dataset.esTitle || ES_TEXT[el.dataset.enTitle] || el.dataset.enTitle) : el.dataset.enTitle;
   });
   for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['uploadIn',{es:'Subir plano: PDF, imagen, DXF, IFC, RoomPlan o proyecto',en:'Upload plan: PDF, image, DXF, IFC, RoomPlan or project',zh:'上传平面图：PDF、图片、DXF、IFC、RoomPlan 或项目'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
+  // Accessible names of two plan overlays (SVG groups cannot use the data-* text mechanism).
+  for(const [id,t] of [['gAssist',L3('Sugerencias experimentales sin confirmar','Unconfirmed experimental suggestions','未确认的实验性建议')],['gReview',L3('Resaltado de la revisión de distribución (solo lectura)','Layout review highlight (read-only)','布局审查高亮（只读）')]])document.getElementById(id)?.setAttribute('aria-label',t);
   const langBtn = document.getElementById('langBtn');
   langBtn.textContent = ({es:'EN',en:'中文',zh:'ES'})[LANG];
   langBtn.title = LANG === 'es' ? 'Cambiar idioma' : LANG === 'en' ? 'Change language' : '切换语言';
@@ -1609,7 +1693,7 @@ function renderPanel(){
 // Shared panel head: «Volver» first and fixed at the top (same place, look and meaning in every panel), the name
 // of what is shown and its context. On narrow screens «Ver en el plano» closes the drawer and keeps the selection.
 function panelHead({title, context = '', back = '', backId = 'back', backTitle = ''}){
-  return `<div class="panel-head">${back ? `<button type="button" class="btn panel-back" id="${backId}" data-panel-back${backTitle ? ` title="${esc(backTitle)}"` : ''}>${esc(back)}</button>` : ''}<button type="button" class="btn narrow-only panel-plan" data-panel-plan>Ver en el plano</button>
+  return `<div class="panel-head">${back ? `<button type="button" class="btn panel-back" id="${backId}" data-panel-back${backTitle ? ` title="${esc(backTitle)}"` : ''}>${esc(back)}</button>` : ''}<button type="button" class="btn narrow-only panel-plan" data-panel-plan>${L3('Ver en el plano','View on the plan','在平面图中查看')}</button>
     <h3 id="panelTitle" tabindex="-1">${esc(title)}</h3>${context ? `<p class="muted panel-context">${esc(context)}</p>` : ''}</div>`;
 }
 const group = (key, title, body, open = true, note = '') => `<details class="panel-group" data-group="${key}"${open ? ' open' : ''}><summary>${title}${note ? ` <small>${note}</small>` : ''}</summary><div class="panel-group-body">${body}</div></details>`;
@@ -1633,8 +1717,8 @@ function overviewPanel(){
   const overlaps = FloorPlanOpenings.conflicts(project);
   const parapet=project.roofParapet||{enabled:false};
   const wallMaterials=project.materials.filter(m=>m.category==='wall').map(m=>`<option value="${esc(m.id)}"${m.id===parapet.materialId?' selected':''}>${esc(m.name)}</option>`).join('');
-  const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>Huecos solapados en los datos</b><p>${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => { const o = project.openings.find(x => x.id === id); return `<button class="btn" data-opening-fix="${esc(id)}" title="${esc(id)}">${o ? esc(FloorPlanOpenings.LABEL[o.kind] + ' · ' + o.offsetMm + '–' + (o.offsetMm + o.widthMm) + ' mm') : esc(id)}</button>`; }).join('')}</div></section>` : '';
-  return `<div class="panel-view overview-panel">${panelHead({title:'Vista general del plano', context:`${nm(project.name)} · ${fmt(tot)} m² útiles`})}<div class="panel-body">${legacy}
+  const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>${L3('Huecos solapados en los datos','Overlapping openings in the data','数据中存在重叠的门窗洞口')}</b><p>${L3(`${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.`,`${overlaps.length === 1 ? 'One pair of openings overlaps' : overlaps.length + ' pairs of openings overlap'} on the same wall. They are kept as they are; tap one to correct its position or width.`,`同一面墙上有 ${overlaps.length} 对门窗洞口重叠。它们保持原样；点按其中一个可修正其位置或宽度。`)}</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => { const o = project.openings.find(x => x.id === id); return `<button class="btn" data-opening-fix="${esc(id)}" title="${esc(id)}">${o ? esc(openingLabel(o.kind) + ' · ' + o.offsetMm + '–' + (o.offsetMm + o.widthMm) + ' mm') : esc(id)}</button>`; }).join('')}</div></section>` : '';
+  return `<div class="panel-view overview-panel">${panelHead({title:L3('Vista general del plano','Plan overview','平面图总览'), context:`${nm(project.name)} · ${fmt(tot)} ${L3('m² útiles','m² usable','m² 使用面积')}`})}<div class="panel-body">${legacy}
   <details class="panel-group" data-group="areas" open><summary>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></summary>
     <table>${rows}</table>
     <div class="total"><span>${tr('套内使用面积','Net floor area')}</span><b>${fmt(tot)} m²</b></div>
@@ -1642,12 +1726,12 @@ function overviewPanel(){
   <details class="panel-group" data-group="estimate" open><summary>${tr('地面材料估算','Flooring Estimate')} <small>${tr('含 5% 损耗','incl. 5% waste')}</small></summary>
     <table>${matRows}</table>
     ${!showPrices?'':`<div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>¥${Math.round(cost).toLocaleString()}</b></div>`}</details>
-  <details class="panel-group" data-group="roof-parapet"><summary>Peto visual declarado</summary><div class="form">
-    <label class="full"><input id="roofParapetEnabled" type="checkbox"${parapet.enabled?' checked':''}> Mostrar peto en el borde exterior de la cubierta soportada</label>
-    <label>Altura declarada (mm)<input id="roofParapetHeight" type="number" min="100" max="3000" step="1" value="${parapet.heightMm??''}" placeholder="Introduce altura"></label>
-    <label>Acabado mural<select id="roofParapetMaterial"><option value="">Visual neutro</option>${wallMaterials}</select></label>
-    <button class="btn" id="roofParapetSave" type="button">Guardar decisión</button></div>
-    <p class="muted">Sólo se muestra con «Exterior». La altura es introducida por la persona; no acredita seguridad ni cumplimiento normativo.</p></details>
+  <details class="panel-group" data-group="roof-parapet"><summary>${L3('Peto visual declarado','Declared visual parapet','声明的视觉女儿墙')}</summary><div class="form">
+    <label class="full"><input id="roofParapetEnabled" type="checkbox"${parapet.enabled?' checked':''}> ${L3('Mostrar peto en el borde exterior de la cubierta soportada','Show a parapet on the outer edge of the supported roof','在受支撑屋顶的外缘显示女儿墙')}</label>
+    <label>${L3('Altura declarada (mm)','Declared height (mm)','声明高度 (mm)')}<input id="roofParapetHeight" type="number" min="100" max="3000" step="1" value="${parapet.heightMm??''}" placeholder="${L3('Introduce altura','Enter height','输入高度')}"></label>
+    <label>${L3('Acabado mural','Wall finish','墙面饰面')}<select id="roofParapetMaterial"><option value="">${L3('Visual neutro','Neutral visual','中性视觉')}</option>${wallMaterials}</select></label>
+    <button class="btn" id="roofParapetSave" type="button">${L3('Guardar decisión','Save decision','保存决定')}</button></div>
+    <p class="muted">${L3('Sólo se muestra con «Exterior». La altura es introducida por la persona; no acredita seguridad ni cumplimiento normativo.','Only shown with "Exterior". The height is entered by the person; it does not certify safety or regulatory compliance.','仅在「外观」下显示。高度由用户输入；不证明安全性或合规性。')}</p></details>
   <details class="panel-group" data-group="stats" open><summary>${tr('方案统计','Plan Stats')}</summary>
     <div class="stats"><div><small>${tr('家具数量','Furniture')}</small><span class="big">${state.furniture.length}</span></div>
       <div><small>${tr('拆除墙体','Walls removed')}</small><span class="big">${fmt(demLen,1)}</span> m</div></div>
@@ -1696,14 +1780,14 @@ function renderFab(){
   const fab = $('#fab'), f = ui.sel?.kind === 'furn' && getF(ui.sel.id), r = ui.sel?.kind === 'room' && geometry.rooms.find(r => r.id === ui.sel.id), o = ui.sel?.kind === 'opening' && project.openings.find(x => x.id === ui.sel.id);
   if (window.FloorPlanOpeningUI?.picking()){ fab.classList.remove('show'); return; }
   const od = ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.ready() && FloorPlanOpeningUI.draft(), on = od && od.project.openings.find(x => x.id === od.id);
-  if (on){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[on.kind])} · vista previa</span><button class="btn primary" data-a="apply">Aplicar</button><button class="btn narrow-only" data-a="prop">Editar</button><button class="btn" data-a="discard">Descartar</button>`); fab.classList.add('show');
+  if (on){ SafeDOM.markup(fab, `<span class="name">${esc(openingLabel(on.kind))} · ${L3('vista previa','preview','预览')}</span><button class="btn primary" data-a="apply">${L3('Aplicar','Apply','应用')}</button><button class="btn narrow-only" data-a="prop">${L3('Editar','Edit','编辑')}</button><button class="btn" data-a="discard">${L3('Descartar','Discard','放弃')}</button>`); fab.classList.add('show');
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { try { ({apply:() => FloorPlanOpeningUI.applyDraft(), prop:() => drawer('panel', true), discard:() => FloorPlanOpeningUI.discard()})[b.dataset.a](); } catch(e){ toast(e.message, 6000); } }); return; }
   const wl = ui.sel?.kind === 'wall' && project.walls.find(x => x.id === ui.sel.id);
   // A selected wall: its declared type at a glance and the way to its properties on a phone.
-  if (wl){ const t = (WALL_TYPES.find(([v]) => v === wl.structure) || [0, WALL_LEGACY[wl.structure] || 'Sin especificar'])[1];
-    SafeDOM.markup(fab, `<span class="name">Muro · ${esc(t)}</span><button class="btn narrow-only" data-a="prop">Propiedades</button><button class="btn" data-a="done">Listo</button>`); fab.classList.add('show');
+  if (wl){ const t = L3a((WALL_TYPES.find(([v]) => v === wl.structure) || [0, WALL_LEGACY[wl.structure] || WALL_TYPES[0][1]])[1]);
+    SafeDOM.markup(fab, `<span class="name">${L3('Muro','Wall','墙体')} · ${esc(t)}</span><button class="btn narrow-only" data-a="prop">${L3('Propiedades','Properties','属性')}</button><button class="btn" data-a="done">${L3('Listo','Done','完成')}</button>`); fab.classList.add('show');
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => b.dataset.a === 'prop' ? drawer('panel', true) : (select(null), closeDrawers())); return; }
-  if (o){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[o.kind])}</span><button class="btn narrow-only" data-a="prop">Propiedades</button><button class="btn" data-a="done">Listo</button>`); fab.classList.add('show');
+  if (o){ SafeDOM.markup(fab, `<span class="name">${esc(openingLabel(o.kind))}</span><button class="btn narrow-only" data-a="prop">${L3('Propiedades','Properties','属性')}</button><button class="btn" data-a="done">${L3('Listo','Done','完成')}</button>`); fab.classList.add('show');
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => b.dataset.a === 'prop' ? drawer('panel', true) : (select(null), closeDrawers())); return; }
   if (!f && !r){ fab.classList.remove('show'); return; }
   SafeDOM.markup(fab, f
@@ -1764,17 +1848,17 @@ function closeDrawers(){ if (narrow()) drawer(null); }
 // Declared wall type (contract 1.5.0): what the professional states about a wall and where that statement comes from.
 // One block, used by the wall panel (tap a wall with «Seleccionar») and by «Editar muro» of «Plano propio». It is
 // never inferred and it is not a structural verification. Legacy labels (exterior, low) are shown until a type is chosen.
-const WALL_TYPES = [['unknown','Sin especificar'],['partition','Tabique'],['load-bearing','Muro portante'],['other','Otro']];
-const WALL_SOURCES = [['professional','Declarado por profesional'],['imported','Importado'],['pending-review','Pendiente de revisar']];
-const WALL_LEGACY = {exterior:'Exterior (dato anterior)', low:'Murete (dato anterior)'};
+const WALL_TYPES = [['unknown',['Sin especificar','Unspecified','未指定']],['partition',['Tabique','Partition','隔墙']],['load-bearing',['Muro portante','Load-bearing wall','承重墙']],['other',['Otro','Other','其他']]];
+const WALL_SOURCES = [['professional',['Declarado por profesional','Declared by a professional','由专业人员声明']],['imported',['Importado','Imported','已导入']],['pending-review',['Pendiente de revisar','Pending review','待审核']]];
+const WALL_LEGACY = {exterior:['Exterior (dato anterior)','Exterior (earlier data)','外墙（旧数据）'], low:['Murete (dato anterior)','Low wall (earlier data)','矮墙（旧数据）']};
 function wallStructureBlock(w){
   const opt = (v, t, on, disabled) => `<option value="${esc(v)}"${on?' selected':''}${disabled?' disabled':''}>${esc(t)}</option>`;
-  const types = WALL_TYPES.map(([v,t]) => opt(v, t, w.structure===v)).join('') + (WALL_LEGACY[w.structure] ? opt(w.structure, WALL_LEGACY[w.structure], true, true) : '');
-  const sources = (w.structureSource ? '' : opt('', 'No registrada', true, true)) + WALL_SOURCES.map(([v,t]) => opt(v, t, w.structureSource===v)).join('');
-  return `<details class="panel-group" data-group="wall-structure" open id="wallStructure"><summary>Tipo declarado del muro</summary><div class="form">
-    <label class="full">Tipo<select id="wallStructureType">${types}</select></label>
-    <label class="full">Procedencia<select id="wallStructureSource"${WALL_LEGACY[w.structure]?' disabled':''}>${sources}</select></label></div>
-    <p class="muted" id="wallStructureNote">Dato declarado y orientativo para el proyecto. No es una verificación ni un cálculo estructural.</p></details>`;
+  const types = WALL_TYPES.map(([v,t]) => opt(v, L3a(t), w.structure===v)).join('') + (WALL_LEGACY[w.structure] ? opt(w.structure, L3a(WALL_LEGACY[w.structure]), true, true) : '');
+  const sources = (w.structureSource ? '' : opt('', L3('No registrada','Not recorded','未记录'), true, true)) + WALL_SOURCES.map(([v,t]) => opt(v, L3a(t), w.structureSource===v)).join('');
+  return `<details class="panel-group" data-group="wall-structure" open id="wallStructure"><summary>${L3('Tipo declarado del muro','Declared wall type','声明的墙体类型')}</summary><div class="form">
+    <label class="full">${L3('Tipo','Type','类型')}<select id="wallStructureType">${types}</select></label>
+    <label class="full">${L3('Procedencia','Source','来源')}<select id="wallStructureSource"${WALL_LEGACY[w.structure]?' disabled':''}>${sources}</select></label></div>
+    <p class="muted" id="wallStructureNote">${L3('Dato declarado y orientativo para el proyecto. No es una verificación ni un cálculo estructural.','Declared, indicative data for the project. It is not a verification or a structural calculation.','项目的声明性参考数据。不是结构验证或结构计算。')}</p></details>`;
 }
 // Choosing a type is a declaration by the professional; changing only the origin keeps the declared type.
 function bindWallStructure(root, declare){
@@ -1782,13 +1866,13 @@ function bindWallStructure(root, declare){
   type.onchange = () => declare(type.value, 'professional');
   source.onchange = () => declare(type.value, source.value);
 }
-function declareWall(id, structure, source){ mutate(() => { const next = Core.declareWallStructure(project, id, structure, source); project.walls = next.walls; project.schemaVersion = next.schemaVersion; refreshProject(); }); toast('Tipo declarado del muro actualizado (dato orientativo).'); }
+function declareWall(id, structure, source){ mutate(() => { const next = Core.declareWallStructure(project, id, structure, source); project.walls = next.walls; project.schemaVersion = next.schemaVersion; refreshProject(); }); toast(L3('Tipo declarado del muro actualizado (dato orientativo).','Declared wall type updated (indicative data).','已更新声明的墙体类型（参考数据）。')); }
 function wallPanel(w){
   const len = Math.round(Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y));
-  const state = w.status==='demolished' ? ' · marcado para retirar' : '';
-  return `<div class="panel-view wall-panel">${panelHead({title:'Muro', context:`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
+  const state = w.status==='demolished' ? L3(' · marcado para retirar',' · marked for removal',' · 已标记拆除') : '';
+  return `<div class="panel-view wall-panel">${panelHead({title:L3('Muro','Wall','墙体'), context:L3(`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`,`Wall · ${len} mm · thickness ${w.thicknessMm} mm${state}`,`墙体 · ${len} mm · 厚度 ${w.thicknessMm} mm${state}`), back:backToOverview(), backTitle:backToOverviewTitle()})}<div class="panel-body">
     ${wallStructureBlock(w)}
-    <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
+    <p class="muted">${L3('Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».','To remove or restore the wall use "Demolish"; to change its geometry, "Edit walls".','要拆除或恢复该墙，请使用「拆改墙体」；要修改其几何形状，请使用「修改墙体」。')}</p></div></div>`;
 }
 function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
 // UX-24 · Sugerencia de tipo: la heurística ÚNICA de project-core (contenido, después nombre). Solo se ofrece si el tipo
@@ -1797,27 +1881,32 @@ function roomSuggestionOf(source){
   if(!source||Core.roomFamily(source)!=='unspecified')return null;
   const s=Core.suggestRoomFamily(source,Core.roomObjects(project,source));
   if(!s||!Core.roomFamilies.includes(s.family))return null;
-  const why=s.source==='contents'?`porque contiene «${nm(s.object.name||s.object.type)}»`:`por su nombre «${roomDisplay(source)}»`;
+  const why=s.source==='contents'?L3(`porque contiene «${nm(s.object.name||s.object.type)}»`,`because it contains "${nm(s.object.name||s.object.type)}"`,`因为它包含「${nm(s.object.name||s.object.type)}」`):L3(`por su nombre «${roomDisplay(source)}»`,`because of its name "${roomDisplay(source)}"`,`因为它的名称「${roomDisplay(source)}」`);
   return {family:s.family,label:familyLabel(s.family),why};
 }
 function roomSuggestion(source){
   const s=roomSuggestionOf(source);if(!s)return '';
-  return `<div class="room-suggest" role="status" aria-live="polite"><p><b>Sugerencia:</b> ${esc(s.label)}, ${esc(s.why)}.</p><button type="button" class="btn" id="rSuggest" data-family="${esc(s.family)}">Usar «${esc(s.label)}»</button></div>`;
+  return `<div class="room-suggest" role="status" aria-live="polite"><p><b>${L3('Sugerencia','Suggestion','建议')}:</b> ${esc(s.label)}, ${esc(s.why)}.</p><button type="button" class="btn" id="rSuggest" data-family="${esc(s.family)}">${L3(`Usar «${s.label}»`,`Use "${s.label}"`,`使用「${s.label}」`).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}</button></div>`;
 }
 // UX-26 · Intercambiar solo el uso (nombre y tipo) con otra estancia; un único paso que se deshace con Ctrl+Z o ↶.
 function roomSwapGroup(source){
   const others=project.rooms.filter(q=>q.id!==source?.id);if(!source||!others.length)return '';
   const opts=others.map(q=>`<option value="${esc(q.id)}">${esc(roomDisplay(q))}</option>`).join('');
-  return `<details class="panel-group room-swap" data-group="room-swap"><summary>Intercambiar uso</summary>
-    <div class="form"><label class="full" for="rSwapWith">Con la estancia</label><select id="rSwapWith"><option value="">Elige una estancia…</option>${opts}</select></div>
-    <p class="muted">Solo se intercambian el nombre y el tipo. Muebles, acabados, puertas y medidas se quedan donde están.</p>
-    <div class="actions"><button type="button" class="btn" id="rSwap" disabled>Intercambiar uso</button></div></details>`;
+  return `<details class="panel-group room-swap" data-group="room-swap"><summary>${L3('Intercambiar uso','Swap use','交换用途')}</summary>
+    <div class="form"><label class="full" for="rSwapWith">${L3('Con la estancia','With room','与房间')}</label><select id="rSwapWith"><option value="">${L3('Elige una estancia…','Choose a room…','选择房间…')}</option>${opts}</select></div>
+    <p class="muted">${L3('Solo se intercambian el nombre y el tipo. Muebles, acabados, puertas y medidas se quedan donde están.','Only the name and the type are swapped. Furniture, finishes, doors and dimensions stay where they are.','仅交换名称和类型。家具、饰面、门和尺寸保持原样。')}</p>
+    <div class="actions"><button type="button" class="btn" id="rSwap" disabled>${L3('Intercambiar uso','Swap use','交换用途')}</button></div></details>`;
 }
 /* UX-03 · Paredes de la estancia: la cara interior que da a la estancia seleccionada, con la autoridad única de
    FloorPlanQuantities (quantity-core): tramo real de cada muro, su altura real y la unión de sus huecos. Es la misma
    cifra que la fila de la estancia en «Cantidades del proyecto» (Presupuestar). Nada se estima aquí: si no se puede
    calcular, se dice por qué y cómo resolverlo. */
 const L3=(es,en,zh)=>LANG==='en'?en:LANG==='zh'?zh:es;
+// Presentation-only labels shared by the panels, the selection bar and the palette; the contract keeps its own labels.
+const L3a=a=>L3(a[0],a[1],a[2]);
+const OPENING_LABELS={door:['Puerta abatible','Hinged door','平开门'],'sliding-door':['Puerta corredera','Sliding door','推拉门'],window:['Ventana','Window','窗'],opening:['Hueco de paso','Passage opening','过道洞口']};
+const openingLabel=kind=>OPENING_LABELS[kind]?L3a(OPENING_LABELS[kind]):FloorPlanOpenings.LABEL[kind];
+const backToOverview=()=>L3('← Vista general','← Overview','← 总览'),backToOverviewTitle=()=>L3('Volver a la vista general del plano','Back to the plan overview','返回平面图总览');
 function wallFaceArea(v){const round=window.FloorPlanQuantitySchedule?.round||((n,d=2)=>Math.round(n*10**d)/10**d);return v===null||v===undefined||!Number.isFinite(v)?'—':round(v).toLocaleString(LANG==='en'?'en-GB':'es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function roomWallFaces(id){try{return window.FloorPlanQuantities?.room(project,id)?.wallFaces??null;}catch{return null;}}
 function roomWallFacesBlock(id){
@@ -1849,11 +1938,11 @@ function roomWallFacesBlock(id){
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
-  const lvl = window.FloorPlanBuildingUI?.context?.levels > 1 ? ' · planta activa' : '';
+  const lvl = window.FloorPlanBuildingUI?.context?.levels > 1 ? L3(' · planta activa',' · active level',' · 当前楼层') : '';
   const source=project.rooms.find(q=>q.id===r.id),family=Core.roomFamily(source);
   const familyOptions=Core.roomFamilies.map(value=>`<option value="${value}" ${family===value?'selected':''}>${esc(familyTypeLabel(value))}</option>`).join('');
-  return `<div class="panel-view room-panel">${panelHead({title:roomDisplay(source), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
-  <details class="panel-group" data-group="room-data" open><summary>Datos de la estancia</summary>
+  return `<div class="panel-view room-panel">${panelHead({title:roomDisplay(source), context:`${L3('Estancia','Room','房间')} · ${fmt(a)} m²${lvl}`, back:backToOverview(), backTitle:backToOverviewTitle()})}<div class="panel-body">
+  <details class="panel-group" data-group="room-data" open><summary>${L3('Datos de la estancia','Room data','房间数据')}</summary>
     <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(source?.name?roomDisplay(source):'')}"></div>${roomSuggestion(source)}
     <div class="stats" style="margin-top:10px">
       <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
@@ -1862,9 +1951,9 @@ function roomPanel(r){
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
     ${roomWallFacesBlock(r.id)}</details>
 ${roomSwapGroup(source)}
-  <details class="panel-group" data-group="room-openings" open><summary>Puertas y ventanas</summary><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></details>
-  <details class="panel-group" data-group="room-dimensions" open><summary>Dimensiones</summary><button class="btn" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></details>
-  <details class="panel-group" data-group="room-finishes" open><summary>Suelo y paredes</summary><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
+  <details class="panel-group" data-group="room-openings" open><summary>${L3('Puertas y ventanas','Doors and windows','门窗')}</summary><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(openingLabel(o.kind))} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">${L3('Añadir puerta','Add door','添加门')}</button><button class="btn" id="roomAddWindow">${L3('Añadir ventana','Add window','添加窗')}</button></div><p class="muted">${L3('Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.','Add: then tap one of its walls. Edit: tap the opening on the plan or in this list.','添加：然后点按其中一面墙。编辑：在平面图或此列表中点按洞口。')}</p></details>
+  <details class="panel-group" data-group="room-dimensions" open><summary>${L3('Dimensiones','Dimensions','尺寸')}</summary><button class="btn" id="roomDimensions">${L3('Editar dimensiones interiores','Edit interior dimensions','编辑室内尺寸')}</button><p class="muted">${L3('Rectángulos con muros inequívocos. Medidas de diseño orientativas.','Rectangles with unambiguous walls. Indicative design dimensions.','墙体明确的矩形房间。设计尺寸仅供参考。')}</p></details>
+  <details class="panel-group" data-group="room-finishes" open><summary>${L3('Suelo y paredes','Floor and walls','地面与墙面')}</summary><div class="actions"><button class="btn" id="surfaceFloor">${L3('Biblioteca de acabados · suelo','Finishes library · floor','饰面库 · 地面')}</button><button class="btn" id="surfaceWall">${L3('Acabado de una pared','Finish for a wall','单面墙饰面')}</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
     ${LANG==='es'||!Number.isFinite(MATS[st.mat].price)?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</details>
   <details class="panel-group" data-group="room-furniture" open><summary>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></summary>
     <table>${inside.map(f => `<tr class="click" data-fid="${esc(f.id)}"><td>${esc(nm(f.name))}</td><td class="r muted">${f.w}×${f.d}</td></tr>`).join('') || `<tr><td class="muted">${tr('暂无','None')}</td></tr>`}</table></details></div></div>`;
@@ -1880,7 +1969,7 @@ function bindRoomPanel(){
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
   $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
   $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
-  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});toast(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,4000);};
+  const suggest=$('#rSuggest');if(suggest)suggest.onclick=()=>{const family=suggest.dataset.family;mutate(()=>{state.rooms[id].family=family;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});toast(L3(`Tipo aplicado: ${familyLabel(family)}. Puedes deshacerlo con Ctrl+Z o ↶.`,`Type applied: ${familyLabel(family)}. You can undo it with Ctrl+Z or ↶.`,`已应用类型：${familyLabel(family)}。可用 Ctrl+Z 或 ↶ 撤销。`),4000);};
   const swapWith=$('#rSwapWith'),swap=$('#rSwap');
   if(swapWith){swapWith.onchange=()=>{swap.disabled=!swapWith.value;};
     swap.onclick=()=>{const other=swapWith.value;if(!other)return;const before=undoStack.length;
@@ -1892,15 +1981,15 @@ function bindRoomPanel(){
 }
 
 function furnPanel(f){
-  const room = roomOf(f.cx, f.cy), back = room ? `← Estancia «${roomDisplay(project.rooms.find(q=>q.id===room.id))}»` : '← Vista general';
-  return `<div class="panel-view furn-panel">${panelHead({title:nm(f.name), context:`${tr('家具','Furniture')} · ${f.w} × ${f.d} mm`, back, backTitle: room ? 'Volver a la estancia' : 'Volver a la vista general del plano'})}<div class="panel-body">
-  <details class="panel-group" data-group="furn-data" open><summary>Medidas, posición y modelo</summary>
+  const room = roomOf(f.cx, f.cy), back = room ? L3(`← Estancia «${roomDisplay(project.rooms.find(q=>q.id===room.id))}»`,`← Room "${roomDisplay(project.rooms.find(q=>q.id===room.id))}"`,`← 房间「${roomDisplay(project.rooms.find(q=>q.id===room.id))}」`) : backToOverview();
+  return `<div class="panel-view furn-panel">${panelHead({title:nm(f.name), context:`${tr('家具','Furniture')} · ${f.w} × ${f.d} mm`, back, backTitle: room ? L3('Volver a la estancia','Back to the room','返回房间') : backToOverviewTitle()})}<div class="panel-body">
+  <details class="panel-group" data-group="furn-data" open><summary>${L3('Medidas, posición y modelo','Dimensions, position and model','尺寸、位置与模型')}</summary>
     <div class="form">
       <label class="full">${tr('名称','Name')}<input id="fName" value="${esc(nm(f.name))}"></label>
       <label>${tr('宽','Width')} (mm)<input type="number" id="fW" value="${f.w}" min="50" step="10"></label>
       <label>${tr('深','Depth')} (mm)<input type="number" id="fD" value="${f.d}" min="50" step="10"></label>
       <label>${tr('高度','Height')} (mm)<input type="number" id="fH" value="${f.size.heightMm??''}" placeholder="${FloorPlanGenericCatalog.heights[f.type]??800}" min="1" max="10000" step="10"></label>
-      <label class="full">Modelo 3D autorizado<select id="fAsset" aria-describedby="fAssetStatus"><option value="">Genérico</option>${(window.FloorPlanAssetUI?.entries||[]).filter(e=>FloorPlanAssets.canUse(e,f)).map(e=>`<option value="${esc(e.id)}" ${f.assetRef?.assetId===e.id&&f.assetRef?.catalog===e.catalog?'selected':''}>${esc(e.name)}</option>`).join('')}</select></label>
+      <label class="full">${L3('Modelo 3D autorizado','Authorised 3D model','授权的 3D 模型')}<select id="fAsset" aria-describedby="fAssetStatus"><option value="">${L3('Genérico','Generic','通用')}</option>${(window.FloorPlanAssetUI?.entries||[]).filter(e=>FloorPlanAssets.canUse(e,f)).map(e=>`<option value="${esc(e.id)}" ${f.assetRef?.assetId===e.id&&f.assetRef?.catalog===e.catalog?'selected':''}>${esc(nm(e.name))}</option>`).join('')}</select></label>
       <p class="full muted" id="fAssetStatus" role="status" aria-live="polite"></p>
       <label>${tr('中心','Center')} X (mm)<input type="number" id="fX" value="${Math.round(f.cx)}" step="10"></label>
       <label>${tr('中心','Center')} Y (mm)<input type="number" id="fY" value="${Math.round(f.cy)}" step="10"></label>
@@ -1908,7 +1997,7 @@ function furnPanel(f){
       <label>${tr('颜色','Color')}<input type="color" id="fC" value="${esc(f.color || typeColor(f.type))}"></label>
     </div>
     <div class="muted" style="margin-top:8px">${tr('占地面积','Footprint')} ${fmt(f.w*f.d/1e6)} m²</div></details>
-  <details class="panel-group panel-help" data-group="furn-help"><summary>Cómo moverlo en el plano</summary><section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section></details></div>
+  <details class="panel-group panel-help" data-group="furn-help"><summary>${L3('Cómo moverlo en el plano','How to move it on the plan','如何在平面图中移动')}</summary><section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section></details></div>
   <div class="panel-foot actions"><div class="panel-foot-row"><button class="btn" id="aRot">${tr('旋转 90°','Rotate 90°')}</button><button class="btn" id="aDup">${tr('复制','Duplicate')}</button><button class="btn danger" id="aDel">${tr('删除','Delete')}</button></div>
     ${window.RubikCabinetBridge?.isCabinet(project.objects.find(o=>o.id===f.id))?`<div class="panel-foot-row"><button class="btn" id="aInterior">Interior del armario…</button></div>`:''}
     <div class="panel-foot-row"><button class="btn" id="aTop">${tr('置于顶层','Bring to front')}</button><button class="btn" id="aBot">${tr('置于底层','Send to back')}</button></div></div></div>`;
@@ -2270,6 +2359,8 @@ const libSearch={query:'',room:'',family:''};
 let libRows=[];
 function buildLib(){
   libRows=FloorPlanFurnitureSearch.build(LIB,window.FloorPlanAssetUI?.entries||[],nm,s=>NAMES_ES[s]||s);
+  // Authorised models show their name in the language of the session; the entry (and the name a placed piece is stored with) is untouched.
+  for(const r of libRows)if(r.kind==='asset'){r.name=nm(r.entry.name);r.terms+=' '+FloorPlanFurnitureSearch.normalize(r.name);}
   if(!$('#furnitureSearch')){
     SafeDOM.markup($('#lib'), `<div class="lib-controls"><label for="furnitureSearch">Buscar muebles</label><div class="search-row"><input id="furnitureSearch" type="search" placeholder="Sofá, cama, mesa…" autocomplete="off"><button class="btn" id="searchClear" type="button">Borrar</button></div><div class="search-filters"><label for="searchRoom">Estancia<select id="searchRoom"><option value="">Todas las estancias</option></select></label><label for="searchFamily">Familia / tipo<select id="searchFamily"><option value="">Todas las familias</option></select></label></div><div class="search-summary"><button class="btn" id="searchAll" type="button">Todos</button><p id="searchCount" role="status" aria-live="polite" aria-atomic="true"></p></div><p id="searchCatalogState"></p></div><div id="searchResults"></div>`);
     $('#furnitureSearch').oninput=e=>{libSearch.query=e.target.value;renderLibResults();};
@@ -2278,19 +2369,30 @@ function buildLib(){
     $('#searchClear').onclick=()=>{libSearch.query='';$('#furnitureSearch').value='';renderLibResults();$('#furnitureSearch').focus();};
     $('#searchAll').onclick=resetLibSearch;
   }
-  SafeDOM.markup($('#searchRoom'), `<option value="">Todas las estancias</option>`+LIB.map((g,i)=>`<option value="${i}">${esc(nm(g.cat))}</option>`).join(''));
-  SafeDOM.markup($('#searchFamily'), `<option value="">Todas las familias</option>`+Object.entries(FloorPlanFurnitureSearch.families).filter(([id])=>libRows.some(r=>r.family===id)).map(([id,label])=>`<option value="${id}">${esc(label)}</option>`).join(''));
+  libTexts();
+  SafeDOM.markup($('#searchRoom'), `<option value="">${L3('Todas las estancias','All rooms','全部房间')}</option>`+LIB.map((g,i)=>`<option value="${i}">${esc(nm(g.cat))}</option>`).join(''));
+  SafeDOM.markup($('#searchFamily'), `<option value="">${L3('Todas las familias','All families','全部类别')}</option>`+Object.entries(FloorPlanFurnitureSearch.families).filter(([id])=>libRows.some(r=>r.family===id)).map(([id,label])=>`<option value="${id}">${esc(familyName(id,label))}</option>`).join(''));
   $('#searchRoom').value=libSearch.room;$('#searchFamily').value=libSearch.family;
   renderLibResults();
 }
+const FAMILY_NAMES={asientos:['Seating','座椅'],camas:['Beds','床'],mesas:['Tables','桌子'],almacenaje:['Storage','收纳'],iluminacion:['Lighting','照明'],decoracion:['Decoration and plants','装饰与绿植'],electrodomesticos:['Appliances','家电'],sanitarios:['Sanitary ware','卫浴'],cocina:['Kitchen surfaces','厨房台面'],ocio:['Leisure','休闲']};
+const familyName=(id,es)=>FAMILY_NAMES[id]?L3(es,FAMILY_NAMES[id][0],FAMILY_NAMES[id][1]):es;
+// The search panel is built once; its texts are set here on every build, so a language change reaches it.
+function libTexts(){
+  const set=(sel,t)=>{const n=$(sel);if(n)n.textContent=t;};
+  set('label[for="furnitureSearch"]',L3('Buscar muebles','Search furniture','搜索家具'));$('#furnitureSearch')?.setAttribute('placeholder',L3('Sofá, cama, mesa…','Sofa, bed, table…','沙发、床、桌子…'));
+  set('#searchClear',L3('Borrar','Clear','清除'));set('#searchAll',L3('Todos','All','全部'));
+  for(const [id,t] of [['searchRoom',L3('Estancia','Room','房间')],['searchFamily',L3('Familia / tipo','Family / type','类别 / 类型')]]){const l=$('label[for="'+id+'"]');if(l&&l.firstChild?.nodeType===3)l.firstChild.textContent=t;}
+}
+const assetAttribution=t=>LANG==='es'?t:String(t??'').replace('; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.',LANG==='en'?'; Asset Lab. Use authorised by Juanma for Rubik Sota; no affiliation.':'；Asset Lab。已获 Juanma 授权用于 Rubik Sota；无隶属关系。').replace(/(IKEA[^;]*?)(?=; Asset Lab)/,m=>{const k=Object.keys(NAMES_FROM_ES).find(x=>m.endsWith(x));return k?m.slice(0,m.length-k.length)+nm(k):m;});
 function resetLibSearch(){libSearch.query=libSearch.room=libSearch.family='';$('#furnitureSearch').value=$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();$('#furnitureSearch').focus();}
 function renderLibResults(){
   const rows=FloorPlanFurnitureSearch.filter(libRows,libSearch),api=window.FloorPlanAssetUI;
-  $('#searchCount').textContent=rows.length+' resultados';
-  $('#searchCatalogState').textContent=!api?.ready?'Cargando catálogo de modelos; los genéricos están disponibles.':api.error||'Modelos 3D autorizados: '+libRows.filter(r=>r.kind==='asset').length+'. Su carga se verifica al abrir 3D.';
+  $('#searchCount').textContent=L3(rows.length+' resultados',rows.length+' results',rows.length+' 个结果');
+  $('#searchCatalogState').textContent=!api?.ready?L3('Cargando catálogo de modelos; los genéricos están disponibles.','Loading the model catalogue; the generic ones are available.','正在加载模型目录；通用模型可用。'):api.error||L3('Modelos 3D autorizados: '+libRows.filter(r=>r.kind==='asset').length+'. Su carga se verifica al abrir 3D.','Authorised 3D models: '+libRows.filter(r=>r.kind==='asset').length+'. Their loading is verified when 3D opens.','授权的 3D 模型：'+libRows.filter(r=>r.kind==='asset').length+'。打开 3D 时会验证其加载。');
   const card=r=>{const [type,,w,d,col]=r.item,pad=Math.max(w,d)*.08;
-    return `<button type="button" class="item" data-key="${esc(r.id)}" aria-label="${esc(r.name)} · ${r.kind==='asset'?'Modelo 3D autorizado':'Genérico'} · ${w} × ${r.dimensions.height} × ${d} mm"><svg aria-hidden="true" viewBox="${-w/2-pad} ${-d/2-pad} ${w+2*pad} ${d+2*pad}">${furnSVG(type,w,d,col)}</svg><b>${esc(r.name)}</b><span class="item-kind">${r.kind==='asset'?'Modelo 3D autorizado':'Genérico'}</span><small>${esc(FloorPlanFurnitureSearch.families[r.family])}</small><small>${w} × ${r.dimensions.height} × ${d} mm</small>${r.entry?`<small class="item-attribution">${esc(r.entry.attribution)}</small>`:''}</button>`;};
-  SafeDOM.markup($('#searchResults'),rows.length?LIB.map((g,i)=>{const group=rows.filter(r=>r.room===String(i));return group.length?`<h4>${esc(nm(g.cat))}</h4><div class="lib-grid">${group.map(card).join('')}</div>`:'';}).join(''):'<p class="hint">No hay muebles que coincidan. Prueba otro nombre o elimina los filtros.</p><button class="btn" id="searchEmptyReset" type="button">Limpiar búsqueda y filtros</button>');
+    return `<button type="button" class="item" data-key="${esc(r.id)}" aria-label="${esc(r.name)} · ${r.kind==='asset'?L3('Modelo 3D autorizado','Authorised 3D model','授权的 3D 模型'):L3('Genérico','Generic','通用')} · ${w} × ${r.dimensions.height} × ${d} mm"><svg aria-hidden="true" viewBox="${-w/2-pad} ${-d/2-pad} ${w+2*pad} ${d+2*pad}">${furnSVG(type,w,d,col)}</svg><b>${esc(r.name)}</b><span class="item-kind">${r.kind==='asset'?L3('Modelo 3D autorizado','Authorised 3D model','授权的 3D 模型'):L3('Genérico','Generic','通用')}</span><small>${esc(familyName(r.family,FloorPlanFurnitureSearch.families[r.family]))}</small><small>${w} × ${r.dimensions.height} × ${d} mm</small>${r.entry?`<small class="item-attribution">${esc(assetAttribution(r.entry.attribution))}</small>`:''}</button>`;};
+  SafeDOM.markup($('#searchResults'),rows.length?LIB.map((g,i)=>{const group=rows.filter(r=>r.room===String(i));return group.length?`<h4>${esc(nm(g.cat))}</h4><div class="lib-grid">${group.map(card).join('')}</div>`:'';}).join(''):`<p class="hint">${L3('No hay muebles que coincidan. Prueba otro nombre o elimina los filtros.','No furniture matches. Try another name or remove the filters.','没有匹配的家具。请尝试其他名称或移除筛选条件。')}</p><button class="btn" id="searchEmptyReset" type="button">${L3('Limpiar búsqueda y filtros','Clear search and filters','清除搜索和筛选')}</button>`);
   if($('#searchEmptyReset'))$('#searchEmptyReset').onclick=resetLibSearch;
   $('#searchResults').querySelectorAll('.item').forEach(el=>{
     el.addEventListener('pointerdown',e=>{if(e.button)return;libDrag={el,id:e.pointerId,sx:e.clientX,sy:e.clientY,it:itemOf(el),ghost:null};});
