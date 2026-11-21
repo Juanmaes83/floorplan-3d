@@ -80,7 +80,9 @@ async function preparar(){
  limpiarDecor();const gen=++generacion;
  const capaD=new THREE.Group();capaD.name='rubik-final-decor';capaD.userData.inv=inv;capaD.userData.estado=cob.estado;
  const env=envMetros(inv),cx=(env.x0+env.x1)/2,cz=(env.z0+env.z1)/2,r=Math.hypot(env.x1-env.x0,env.z1-env.z0);
- const cesped=new THREE.Mesh(new THREE.CircleGeometry(r*1.55,128),new THREE.MeshStandardMaterial({color:0xa7b58c,roughness:1,transparent:true,opacity:0,alphaMap:fundido(),depthWrite:false}));
+ const cesped=new THREE.Mesh(new THREE.CircleGeometry(r*1.55,128),new THREE.MeshStandardMaterial({color:0xa7b58c,roughness:1,transparent:true,opacity:0,alphaMap:fundido(),depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-4}));
+ // El césped está a 0,8 mm del suelo de la escena: sin escribir profundidad y con desplazamiento de profundidad no compite
+ // con él (z-fighting visible en el vídeo exportado; comprobado: con sombra recibida y sin patrón escalonado).
  cesped.userData.decor='cesped';cesped.rotation.x=-Math.PI/2;cesped.position.set(cx,-.0012,cz);cesped.receiveShadow=true;capaD.add(cesped);
  // Gate de cobertura: sin plan completo NO se amuebla ni se ambienta (sería fingir una vivienda terminada). Césped y luz sí:
  // el cierre parcial es digno, pero honesto.
@@ -159,7 +161,7 @@ function renderAt(tMs,{render=true}={}){
  const hero=C.poseHero(env,{angulo:e.orbita,aspecto:aspect,elevacionDeg:30});
  fid.scene.setPose(desde?C.mezclarPose(desde,hero,e.acercar):hero);
  aplicarLuz(st,e.luz,env);
- decor.visible=e.decor>0;for(const o of decor.children){const op=o===lawn?e.decor*.92:e.decor;o.traverse(m=>{if(m.isMesh){m.material.opacity=op;m.material.transparent=op<1;m.material.depthWrite=op>.5;}});
+ decor.visible=e.decor>0;for(const o of decor.children){const op=o===lawn?e.decor*.92:e.decor;o.traverse(m=>{if(m.isMesh){m.material.opacity=op;m.material.transparent=op<1;m.material.depthWrite=o===lawn?false:op>.5;}});
   if(o.userData.decor==='planta'){const s=o.userData.s0??(o.userData.s0=o.scale.x);o.scale.setScalar(s*(.6+.4*e.decor));}}
  if(firmaEl){const n=+firmaEl.dataset.n||1;firmaEl.style.opacity=e.firma>0?'1':'0';capa?.wrap.style.setProperty('--rf-velo',String(Math.min(1,e.firma*2)));
   for(const c of firmaEl.children){const k=C.escalon(e.firma,+c.dataset.i,n);c.style.opacity=String(k);c.style.transform=`translateY(${(1-k)*18}px)`;c.style.filter=k<1?`blur(${(1-k)*6}px)`:'';}}
