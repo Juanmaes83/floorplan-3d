@@ -51,14 +51,14 @@
 | Estado | IDs |
 |---|---|
 | `RV` Resuelto y validado | 20 |
-| `RL` Integrado con límites de alcance | 11 |
-| `PV` Implementado, pendiente de validación | 2 |
+| `RL` Integrado con límites de alcance | 13 |
 | `SU` Objetivo superado por otra solución | 2 |
+| `PV` Implementado, pendiente de validación | 2 |
 | `EX` Experimental o laboratorio | 5 |
 | `SI` Simulado | 6 |
 | `PA` Parcialmente desarrollado | 22 |
-| `IR` Infraestructura reutilizable, sin función específica | 8 |
-| `ND` No desarrollado | 18 |
+| `IR` Infraestructura reutilizable, sin función específica | 7 |
+| `ND` No desarrollado | 17 |
 | `DX` Depende de una decisión externa | 3 |
 | `RD` Redundante o candidato a descarte | 1 |
 | **Total** | **98** |
@@ -121,7 +121,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 |---|---|---|---|---|---|---|---|---|---|---|
 | ENT-01 | Visita 3D del cliente | R | `RL` | [I] `js/client-delivery-core.js`, `api/delivery.js`; [E] `tests/client-delivery-core.test.cjs`, `tests/ent01-*`; [P] aceptación manual | Una planta; aceptación manual sin URL registrada | P1 | AMP: varias plantas; recorrido compartido | GOV-08 S4/S5 | Visita multiplanta con enlace caducable y prueba pública dirigida | B |
 | ENT-02 | Seguridad del enlace de cliente | P | `RL` | [H] #244; [E] `tests/gov08-s3-expiry.test.cjs` | Revocación, caducidad y limpieza manual; sin Cron | P3 | AMP: S4/S5 (comparte corte con GOV-08) | GOV-06a | Igual que GOV-08 | B |
-| ENT-03 | Story y plantillas hacia el cliente | N | `EX` | [H] laboratorio `lab/studio-presentation-e0e1@2d49a25`: 21 recetas, 6 perfiles (N01) y estados de entrega (N05); no está en master | Solo laboratorio; herramientas Node fuera del producto | P1 | CON: E3, recetas sobre la interfaz y el modelo existentes | ENT-04 (E2) | E3 integrado con aceptación visual | B |
+| ENT-03 | Story y plantillas hacia el cliente | N | `EX` | [H] laboratorio `8c532634`: 21 recetas, 6 perfiles y 43 fuentes; adaptador F0 acreditado 11/11. El selector productivo espera D4 | Solo laboratorio; herramientas Node fuera del producto | P1 | CON: E3, recetas sobre la interfaz y el modelo existentes | ENT-04 (E2) | E3 integrado con aceptación visual | B |
 | ENT-04 | Dossier antes/después con presupuesto rotulado | P | `RL` | [H] #251 (E2) integrado por #259 en `master@163df68`; [CI] [regresión posterior a la integración](https://github.com/Juanmaes83/floorplan-3d/actions/runs/44366171976) | Comparador desde Variantes y acceso desde Entregar. E2 incluye coherencia económica, vigencia y orden de cambio interna | P1 | VP: validar el recorrido profesional en el entorno autorizado cuando se programe | — | Evidencia de aceptación y revisión profesional del recorrido de entrega | B |
 | ENT-05 | Fichas de imagen trazables | N | `PA` | [I] `js/ai-render-ui.js` guarda vista original, estilo, acabados, modelo, uso y fecha; `js/delivery-image.js` compone la banda con marca | No persiste la imagen ni la cámara; sin libro FF&E | P1 | AMP: E4, persistir imagen enviada, cámara y revisión (comparte corte con IMG-12) | IMG-12 | Ficha exportable con origen, revisión, materiales y leyenda IA | C |
 | ENT-06 | Lotes de entrega con coste y cancelación | N | `ND` | [I] sin lotes en `api/render.js` | — | P1 | NUE sobre IMG-04 y ENT-05 (E6) | IMG-04, GOV-06a | Lote con coste previo, cancelación y ZIP | C |
@@ -164,7 +164,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 |---|---|---|---|---|---|---|---|---|---|---|
 | FOT-01 | Reforma sobre la foto del cliente | N | `SI` | [I] master: `api/photo-reform.js` cerrado por defecto; [E] `tests/photo-reform-api.test.cjs`, `tests/photo-reform-provider.test.cjs`; [H] #258 conecta proveedor real desactivado | Simulación rotulada; proveedor real no activado | P2 | VT+AO: #258, Preview aislado, ejecución real autorizada | GOV-05, IMG-04, GOV-06a | Prueba real con consentimiento, coste conciliado y aceptación | B |
 | FOT-02 | Foto a espacio métrico editable | N | `ND` | — | — | P6 | INV | Validación métrica | — | D |
-| MUE-01 | «Trae tu mueble» simple | N | `RV` | [I] `js/own-furniture-core.js`; [T] `tests/photo-project*.cjs`; [H] #227 vía #228 | Volumen genérico; la foto es solo referencia | P5 | — | — | Cerrado | A |
+| MUE-01 | «Trae tu mueble» simple | N | `RV` | [I] `js/own-furniture-core.js`; [T] `tests/photo-project*.cjs`; [H] #227 vía #228; [E, CI] [#270, P0 H-1](https://github.com/Juanmaes83/floorplan-3d/pull/270) en `cff21adc` | Volumen genérico; la foto es solo referencia | P5 | — | — | Cerrado | A |
 | MUE-02 | Foto a mueble 3D reconstruido | N | `ND` | — | — | P8 | INV | MUE-01, presupuesto IA | — | D |
 
 ### G · Catálogos y bibliotecas
@@ -198,7 +198,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | UX-03 | Panel contextual con KPI | P | `RL` | [I] `index.html:1758-1780`: panel de muro (longitud, grosor, estado) y de estancia (superficie, perímetro, ancho, fondo, área de pared, huecos); panel de mueble en `index.html:1803`; [T] `tests/panel-pattern.browser.test.cjs` | Conectado al editor. El área de pared supone 2,8 m de altura y no descuenta huecos, aunque `js/quantity-core.js` sí lo calcula | P4 | COR + CON: tomar el área de pared de `quantity-core` y la altura real de la planta | — | El panel y el presupuesto dan la misma superficie de pared | B |
 | UX-08 | Cotas en vivo | N | `RV` | [I] `js/live-dimensions-*`; [H] #224 | — | P4 | — | — | Cerrado | A |
 | UX-04 | Ayudas y atajos | P | `RL` | [I] ayuda por herramienta en `index.html:1939` (`syncModeHint`), atajos de teclado en el panel de ayuda (`index.html:1643`), toasts con medidas al añadir muebles (`index.html:1917`) | Conectado. Los toasts con cifras no son sistemáticos | P4 | UI menor: toasts con el cambio en cada edición geométrica | — | Cada edición geométrica informa del cambio | C |
-| PRE-01 | Preflight de integridad | N | `IR` | [I] piezas existentes: revalidación contra la revisión en `js/assistant-proposals-core.js`; huella de vigencia de E2 (#251); `stale-source` en MCP (#254) | Tres mecanismos de vigencia sin contrato común | P7 | CON: un único contrato de propuesta y vigencia | — | Toda propuesta muestra impacto y se aplica en un paso deshacible | C |
+| PRE-01 | Preflight de integridad | N | `RL` | [CI] ProposalV1 de K13 en [#287](https://github.com/Juanmaes83/floorplan-3d/pull/287), `master@1daa7460`, con adaptadores para Asistente, MCP y Comparar | Pendientes de acreditar los consumidores futuros | P7 | CON: un único contrato de propuesta y vigencia | — | Toda propuesta muestra impacto y se aplica en un paso deshacible | C |
 | UX-11 | Acabado de pared desde el 3D | P | `PA` | [I] el acabado de paredes se elige por estancia desde el panel (`index.html:1791`, `FloorPlanSurfaceUI.open`); la selección 3D (`index.html:4138`) devuelve estancia, puerta o mueble, nunca un muro | Sin entrada desde el 3D; sin acabado por pared individual | P4 | CON: selección 3D de muro hacia el diálogo existente; AMP de modelo para la pared de acento | UX-03 | Doble clic en una pared del 3D abre su acabado, con deshacer | C |
 | UX-12 | Amueblar por estancia | N | `EX` | [I] `js/smart-furnishing-core.js`; [T] `tests/smart-furnishing*` | Experimental; biblioteca sin licencias amplias | P7 | VP + AMP con BIB-01 | BIB-01 | Aceptación visual con profesionales | C |
 | UX-13 | Recetas de estilo | P | `EX` | [H] #226 vía #228 | Experimental | P7 | VP | UX-12 | Igual que UX-12 | C |
@@ -226,7 +226,7 @@ Los seis descartes X-01 a X-06 siguen fuera del recuento, sin cambios (§5).
 | G-06 | Medir sobre el plano importado | P | `PA` | [I] herramienta Medir (M) con ajuste a muros y bloqueo de eje (`index.html:850`, `:1939`), utilizable sobre la imagen calibrada; [I] `tools/rubik-mcp/src/measure.cjs` mide entre elementos | Solo distancia. Sin área ni conteo | P6 | AMP: área y conteo sobre `tracing-core` | — | Medir área y contar sobre el plano calibrado | C |
 | G-01 | Auditoría del plano importado | N | `EX` | [H] R01 #191 y #205, archivadas sin integrar | Laboratorio no validado | P6 | VT: F2 con 20 planos reales autorizados | GOV-05 | F2 superado | C |
 | G-08 | Alinear dos planos | N | `SU` | [I] una reforma hecha como variante comparte marco de coordenadas con el original (`js/project-library.js`, `js/revision-compare-core.js`); `building-core.alignment()` ya alinea plantas | Superado para proyectos nativos; queda el caso de dos planos externos | P6 | AMP pequeño: segundo plano externo como calco con registro de dos puntos | — | Calco de un segundo plano registrado sobre una planta | C |
-| G-02 | Exportación DXF profesional | N | `ND` | [I] RUBIK lee DXF (`js/plan-intake.js`) pero no escribe DXF; `js/raw-wall-export.js` exporta sesiones R01, no DXF | — | P6 | NUE: escritor DXF sobre la geometría canónica y las láminas existentes | — | DXF con capas, cotas y leyenda existente/demoler, abierto en dos CAD | C |
+| G-02 | Exportación DXF profesional | N | `RL` | [H] [#265](https://github.com/Juanmaes83/floorplan-3d/pull/265) en master; [T] `tests/g02-dxf.browser.test.cjs`; [H] [descarga de planta activa 1/1](../integration/op07-a0-2026-11-20/README.md#dxf-de-planta-activa--residual-independiente) en el corte `adb86034` | Archivo → Exportar planta activa en DXF. DXF 2D con capas y cotas. Reimportación con escala estimada y reconocimiento heurístico de huecos | P6 | VP: apertura en dos CAD y revisión del nombre exportado en el entorno afectado | — | DXF con capas, cotas y leyenda existente/demoler, abierto en dos CAD | C |
 | G-07 | Exportación IMDF | N | `RD` | — | Valor ★★ para un público de mapas de interior, no de reforma | P6 | DC: proponer descarte o aplazamiento | G-02 | Decisión del propietario | D |
 | G-04 | Foto, LiDAR o IFC a espacio métrico | N | `ND` | [I] IFC se importa; foto y LiDAR no | — | P6 | INV | — | — | D |
 
@@ -267,7 +267,7 @@ Cambian de letra todas las filas cuyo estado de v1.11 era N, P, R o E y ahora ti
 | HOM-03 | N | `RV` | Integrada en #241 |
 | UX-08 | N | `RV` | Integrada en #224 |
 | MUE-01 | N | `RV` | Integrada en #228 |
-| UX-22, UX-23, UX-25 | P | `RV` | NAV3D integrado en #228 |
+| UX-22, UX-23, UX-25 | P | `RV` | NAV3D integrado en #228; [CI] [OP-02 #266](https://github.com/Juanmaes83/floorplan-3d/pull/266) acredita las regresiones de navegación y el render bajo demanda en `02712b5` |
 | UX-07, OBR-01/02/03 | P | `RV` | Integrados con pruebas |
 | AST-01 | N | `RL` | Guía, importación y siguiente acción integradas; falta la tarjeta de plantas (verificado el 18/11) |
 | UX-03, UX-04 | P | `RL` | Paneles con indicadores, ayuda por herramienta y atajos conectados (verificado el 18/11) |

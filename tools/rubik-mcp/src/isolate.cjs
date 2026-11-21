@@ -11,7 +11,7 @@ const path = require('node:path');
 const { Worker } = require('node:worker_threads');
 
 const LIMITS = Object.freeze({ concurrent: 2, defaultTimeoutMs: 30000, minTimeoutMs: 100, maxTimeoutMs: 120000, workerHeapMb: 512 });
-const TASKS = Object.freeze(['proposeLayout', 'checkRoute2d', 'reviewLayout']);
+const TASKS = Object.freeze(['proposeLayout', 'checkRoute2d', 'reviewLayout', 'simulateLayout', 'prepareVariant']);
 
 function timeoutFromEnv(env = process.env) {
   const raw = env.RUBIK_MCP_HEAVY_TIMEOUT_MS;

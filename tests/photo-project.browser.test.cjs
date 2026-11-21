@@ -230,7 +230,11 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     // Tras descartar no queda ninguna imagen de FOT-01 en la página (tampoco <img> vacías: tests/browser.test.cjs las vigila).
     assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0);
     // También se llega desde «Entregar» → «Imágenes».
-    await page.locator('#workArea-deliver').click();assert.equal(await page.locator('#photoReformCard').isVisible(),true);
+    await page.locator('#workArea-deliver').click();
+    const reformCard=page.locator('#photoReformCard');
+    // The card is mounted in the animation frame requested by the workspace observer.
+    await reformCard.waitFor({state:'visible'});
+    assert.equal(await reformCard.isVisible(),true);
     assert.deepEqual(w.errors,[]);assert.deepEqual(w.external,[]);
   }finally{await context.close();}
 });

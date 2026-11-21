@@ -1,0 +1,438 @@
+{
+  "browser": "chromium",
+  "browserVersion": "157.0.8103.80",
+  "node": "v24.14.1",
+  "synthetic": true,
+  "paymentCalls": 0,
+  "provider": "Test double + real browser tools",
+  "diagnosis": {
+    "snapshot": {
+      "sha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+      "schemaVersion": "1.0.0",
+      "projectId": "prj_m05-synthetic-layout",
+      "projectName": "Vivienda sintética MCP — revisión",
+      "sizeBytes": 4352,
+      "modifiedAt": "2026-11-21T16:12:09.341Z"
+    },
+    "status": "findings",
+    "valid": true,
+    "totalFindings": 1,
+    "findings": [
+      {
+        "severity": "info",
+        "category": "scale",
+        "elementType": "project",
+        "elementId": "prj_m05-synthetic-layout",
+        "rule": "scale.confidence",
+        "evidence": {
+          "confidence": "estimated",
+          "method": "template"
+        },
+        "note": "Las dimensiones del JSON son orientativas; la escala física no está confirmada."
+      }
+    ],
+    "truncated": false,
+    "checks": {
+      "contract": "passed",
+      "references": "passed",
+      "geometry": "passed",
+      "spatialRelations": "passed"
+    },
+    "note": "Los hallazgos informativos y espaciales no son infracciones normativas."
+  },
+  "proposal": {
+    "proposalVersion": "RubikLayoutProposalV1",
+    "status": "candidate-reviewable",
+    "goal": "resolve-placement-conflict",
+    "source": {
+      "sha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+      "schemaVersion": "1.0.0",
+      "scaleConfidence": "estimated"
+    },
+    "objectId": "obj_beta",
+    "object": {
+      "id": "obj_beta",
+      "type": "table",
+      "name": "beta"
+    },
+    "problem": {
+      "code": "placement-conflict",
+      "problems": [
+        {
+          "kind": "furniture",
+          "id": "obj_alpha",
+          "detail": "Solapa «alpha»."
+        }
+      ],
+      "description": "«beta» tiene 1 conflicto(s) de colocación en su estancia (FloorPlanPlacement)."
+    },
+    "currentPose": {
+      "position": {
+        "x": 2300,
+        "y": 1500
+      },
+      "rotationDeg": 0,
+      "size": {
+        "widthMm": 600,
+        "depthMm": 600
+      },
+      "roomId": "rom_living"
+    },
+    "suggestedPose": {
+      "position": {
+        "x": 2600,
+        "y": 1500
+      },
+      "rotationDeg": 0,
+      "size": {
+        "widthMm": 600,
+        "depthMm": 600
+      },
+      "roomId": "rom_living"
+    },
+    "distanceMm": 300,
+    "rationale": "Primera posición, en el orden determinista de FloorPlanPlacement (123 posición(es) examinadas), que supera todas las comprobaciones: a 300 mm de la actual, dentro de «living». Comprobada con FloorPlanPlacement y layout-review sobre una copia efímera en memoria. No es necesariamente la mejor.",
+    "evidence": {
+      "room": {
+        "centreRoomIds": [
+          "rom_living"
+        ],
+        "footprintRelation": {
+          "roomIds": [
+            "rom_living"
+          ],
+          "status": "unique",
+          "method": "rotated_footprint_overlap",
+          "evidence": [
+            {
+              "roomId": "rom_living",
+              "overlapAreaMm2": 360000
+            }
+          ]
+        }
+      },
+      "before": {
+        "placementModel": [
+          {
+            "kind": "furniture",
+            "id": "obj_alpha",
+            "detail": "Solapa «alpha»."
+          }
+        ],
+        "reviewModel": [
+          {
+            "code": "solape",
+            "objects": [
+              "obj_alpha",
+              "obj_beta"
+            ],
+            "measurementMm": 300,
+            "message": "Las huellas de «alpha» y «beta» se solapan 300 mm en planta."
+          }
+        ]
+      },
+      "after": {
+        "placementModel": [],
+        "reviewModel": []
+      }
+    },
+    "blockingReasons": [],
+    "expectedEffects": [
+      {
+        "code": "moves-position-only",
+        "message": "Solo cambia la posición de «beta»: de (2300, 1500) a (2600, 1500) mm. ID, tamaño, giro y estancia se conservan."
+      },
+      {
+        "code": "resolves-furniture",
+        "id": "obj_alpha",
+        "message": "Resuelve en el modelo de colocación: Solapa «alpha»."
+      },
+      {
+        "code": "review-clears-solape",
+        "objects": [
+          "obj_alpha",
+          "obj_beta"
+        ],
+        "message": "Deja de aparecer en layout-review: Las huellas de «alpha» y «beta» se solapan 300 mm en planta."
+      }
+    ],
+    "remainingIssues": [],
+    "uncertainty": [
+      {
+        "code": "scale-estimated",
+        "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+      },
+      {
+        "code": "grid-search",
+        "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+      }
+    ],
+    "notEvaluated": [
+      {
+        "code": "height",
+        "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+      },
+      {
+        "code": "clearance",
+        "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+      },
+      {
+        "code": "route",
+        "message": "Recorridos, accesibilidad, evacuación y normativa."
+      },
+      {
+        "code": "stairs-and-levels",
+        "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+      },
+      {
+        "code": "door-details",
+        "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+      },
+      {
+        "code": "other-moves",
+        "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+      },
+      {
+        "code": "preference",
+        "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+      }
+    ],
+    "search": {
+      "generator": "FloorPlanPlacement.candidates + FloorPlanPlacement.problemsIn (mismo orden, prefiltro, redondeo, tolerancia y presupuesto que FloorPlanPlacement.find)",
+      "order": "anillos de 50 mm alrededor de la posición actual; dentro de cada anillo, por distancia y ángulo",
+      "stepMm": 50,
+      "maxCandidates": 4000,
+      "toleranceMm": 1,
+      "tried": 123,
+      "budgetExhausted": false,
+      "verificationLimit": 250,
+      "verificationLimitReached": false,
+      "placementValidRejected": 0,
+      "acceptedIndex": 123,
+      "checks": [
+        "la estancia completa",
+        "los muros",
+        "el barrido de las puertas",
+        "otros muebles"
+      ],
+      "gates": [
+        "FloorPlanPlacement.problemsIn (tolerancia 1 mm)",
+        "objetivo",
+        "FloorPlanPlacement.problems + layout-review sobre una copia efímera",
+        "sin hallazgos nuevos del mueble"
+      ]
+    },
+    "usedData": [
+      "objects[objectId]: id, type, name, position, size, rotationDeg, roomId",
+      "objects[*]: posición, tamaño y giro para solapes",
+      "rooms[*]: id, name, polygon",
+      "walls[*]: start, end, thicknessMm, status",
+      "openings[*]: wallId, kind, offsetMm, widthMm, swing",
+      "scale.confidence"
+    ],
+    "applied": false
+  },
+  "simulation": {
+    "version": "RubikLayoutSimulationV1",
+    "status": "candidate-reviewable",
+    "source": {
+      "sha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+      "schemaVersion": "1.0.0",
+      "scaleConfidence": "estimated"
+    },
+    "request": {
+      "objectId": "obj_beta",
+      "goal": "resolve-placement-conflict",
+      "expectedSha256": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b",
+      "stepMm": 50,
+      "maxCandidates": 4000
+    },
+    "proposal": {
+      "version": "ProposalV1",
+      "kind": "layout-candidate",
+      "id": "layout:obj_beta:resolve-placement-conflict:cf333195ea80",
+      "projectId": null,
+      "base": {
+        "kind": "file-sha256",
+        "value": "cf333195ea802e251cf7439095fdd155f426129789d2f2a8fa410ba57ce0378b"
+      },
+      "operation": "resolve-placement-conflict",
+      "changes": [
+        {
+          "path": "objects[obj_beta].position",
+          "before": {
+            "x": 2300,
+            "y": 1500
+          },
+          "after": {
+            "x": 2600,
+            "y": 1500
+          },
+          "label": null
+        }
+      ],
+      "warnings": [
+        {
+          "code": "scale-estimated",
+          "message": "Escala estimada (no confirmada): las distancias en mm son aproximadas."
+        },
+        {
+          "code": "grid-search",
+          "message": "La candidata es la primera posición de una cuadrícula de 50 mm que supera todas las comprobaciones, en el orden determinista de FloorPlanPlacement. No es óptima ni se exploran posiciones intermedias."
+        }
+      ],
+      "alternatives": [],
+      "state": "proposed",
+      "applicable": false,
+      "applied": false,
+      "requires": {
+        "confirmation": "none",
+        "undo": false
+      },
+      "origin": {
+        "contract": "RubikLayoutProposalV1",
+        "version": "RubikLayoutProposalV1",
+        "status": "candidate-reviewable"
+      }
+    },
+    "applied": false,
+    "comparison": {
+      "before": {
+        "netAreaM2": 12,
+        "objects": 2,
+        "review": {
+          "status": "partial",
+          "checks": {
+            "solapes": {
+              "status": "checked"
+            },
+            "holgura": {
+              "status": "insufficient_evidence",
+              "reason": "Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado."
+            },
+            "puertas": {
+              "status": "checked"
+            }
+          },
+          "counts": {
+            "solape": 1,
+            "holgura": 0,
+            "puerta": 0
+          },
+          "skipped": 0,
+          "excluded": 0,
+          "scaleConfidence": "estimated"
+        }
+      },
+      "after": {
+        "netAreaM2": 12,
+        "objects": 2,
+        "review": {
+          "status": "partial",
+          "checks": {
+            "solapes": {
+              "status": "checked"
+            },
+            "holgura": {
+              "status": "insufficient_evidence",
+              "reason": "Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado."
+            },
+            "puertas": {
+              "status": "checked"
+            }
+          },
+          "counts": {
+            "solape": 0,
+            "holgura": 0,
+            "puerta": 0
+          },
+          "skipped": 0,
+          "excluded": 0,
+          "scaleConfidence": "estimated"
+        }
+      }
+    },
+    "affected": [
+      {
+        "id": "obj_beta",
+        "before": {
+          "position": {
+            "x": 2300,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          },
+          "roomId": "rom_living"
+        },
+        "after": {
+          "position": {
+            "x": 2600,
+            "y": 1500
+          },
+          "rotationDeg": 0,
+          "size": {
+            "widthMm": 600,
+            "depthMm": 600
+          },
+          "roomId": "rom_living"
+        }
+      }
+    ],
+    "notEvaluated": [
+      {
+        "code": "height",
+        "message": "Altura, elevación y mallas 3D: solo huellas en planta."
+      },
+      {
+        "code": "clearance",
+        "message": "Holguras y paso entre muebles: no hay umbral ni se inventa uno (usa inspect_pair_clearance o check_route_2d)."
+      },
+      {
+        "code": "route",
+        "message": "Recorridos, accesibilidad, evacuación y normativa."
+      },
+      {
+        "code": "stairs-and-levels",
+        "message": "Escaleras, huecos de escalera y otras plantas: el JSON exportado no las incluye en esta búsqueda."
+      },
+      {
+        "code": "door-details",
+        "message": "Grosor de la hoja, tiradores, marcos y el lado opuesto de la puerta."
+      },
+      {
+        "code": "other-moves",
+        "message": "Mover otros muebles, girar, redimensionar o cambiar de estancia: solo se propone una nueva posición del mueble indicado."
+      },
+      {
+        "code": "preference",
+        "message": "Ergonomía, estética, uso o preferencia: la candidata es la primera válida, no la mejor."
+      }
+    ],
+    "simulationSha256": "9ab15ce4b06198474fc7a8f504ddf2e75bdaa1bcca658c77cebe32e09ff10173"
+  },
+  "variant": {
+    "id": "prj_mcp_e532b289-026d-4453-9d68-3cb8795830d0",
+    "path": "project.json",
+    "sha256": "96bb2580d9703e2e2f7ba6cfbee05f047e6af00fcce03f4989271c49cbb02acc",
+    "archive": "variante-revisada.zip"
+  },
+  "originalBytesIntact": true,
+  "variantReopened": true,
+  "video": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "vp8",
+        "width": 1120,
+        "height": 700
+      }
+    ],
+    "format": {
+      "duration": "14.680000"
+    }
+  }
+}

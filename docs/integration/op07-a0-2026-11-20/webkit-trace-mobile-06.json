@@ -1,0 +1,2157 @@
+{
+  "test": "R1-T04 · F0.2b activo: con la misma época nada cambia y se registra el escritor",
+  "engine": "webkit",
+  "browserVersion": "26.6",
+  "traced": true,
+  "diagnostics": [],
+  "views": [
+    {
+      "url": "http://f0-2b.localhost:50728/#editor",
+      "trace": {
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "viewport": [
+          390,
+          844
+        ],
+        "dpr": 1,
+        "frames": 118,
+        "f02b": true,
+        "a0": null,
+        "errors": [],
+        "log": [
+          {
+            "kind": "mark",
+            "label": "navigated",
+            "seq": 1,
+            "t": 261,
+            "frame": 0,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-new",
+            "obs": 1,
+            "src": "() => { const w = svg.clientWidth, h = svg.clientHeight; if (!w) return; if (!lastW) fitView(); else { view.x0 -= (w - lastW)/2/view.s; view",
+            "seq": 2,
+            "t": 876,
+            "frame": 38,
+            "inRaf": false
+          },
+          {
+            "kind": "observe",
+            "obs": 1,
+            "target": "svg#plan",
+            "box": [
+              390,
+              466.5
+            ],
+            "seq": 3,
+            "t": 876,
+            "frame": 38,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "",
+            "now": "",
+            "seq": 4,
+            "t": 938,
+            "frame": 38,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div#sbBar.bar",
+            "old": "",
+            "now": "width: 125.563426px;",
+            "seq": 5,
+            "t": 938,
+            "frame": 38,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#undo.btn",
+            "old": "",
+            "now": "opacity: 0.4;",
+            "seq": 6,
+            "t": 938,
+            "frame": 38,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#redo.btn",
+            "old": "",
+            "now": "opacity: 0.4;",
+            "seq": 7,
+            "t": 938,
+            "frame": 38,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 1,
+            "src": "() => { const w = svg.clientWidth, h = svg.clientHeight; if (!w) return; if (!lastW) fitView(); else { view.x0 -= (w - lastW)/2/view.s; view",
+            "entries": [
+              {
+                "target": "svg#plan",
+                "content": [
+                  390,
+                  356
+                ],
+                "border": [
+                  390,
+                  356
+                ]
+              }
+            ],
+            "seq": 8,
+            "t": 968,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 1,
+            "changedSync": [],
+            "seq": 9,
+            "t": 970,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#newProjectBtn.btn.advanced-control",
+            "old": "btn",
+            "now": "",
+            "seq": 10,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#uploadPlanHelp.sr-only.advanced-control",
+            "old": "sr-only",
+            "now": "",
+            "seq": 11,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#newRoomBtn.btn.advanced-control",
+            "old": "btn",
+            "now": "",
+            "seq": 12,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#levelsBtn.btn.advanced-control",
+            "old": "btn",
+            "now": "",
+            "seq": 13,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#levelStatus.sr-only.advanced-control",
+            "old": "sr-only",
+            "now": "",
+            "seq": 14,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span.plan-meta.advanced-control",
+            "old": "plan-meta",
+            "now": "",
+            "seq": 15,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#exportJsonQuick.btn.advanced-control",
+            "old": "btn",
+            "now": "",
+            "seq": 16,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div#tools.grp.only2d.advanced-control",
+            "old": "grp only2d",
+            "now": "",
+            "seq": 17,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.grp.only2d.advanced-control",
+            "old": "grp only2d",
+            "now": "",
+            "seq": 18,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.grp.only3d.advanced-control",
+            "old": "grp only3d",
+            "now": "",
+            "seq": 19,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span.hdr-break.advanced-control",
+            "old": "hdr-break",
+            "now": "",
+            "seq": 20,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span.hdr-break2.advanced-control",
+            "old": "hdr-break2",
+            "now": "",
+            "seq": 21,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "details#layersMenu.menu-like.layers-menu.only2d",
+            "old": "menu-like layers-menu only2d",
+            "now": "",
+            "seq": 22,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.grp.only3d.advanced-control",
+            "old": "grp only3d",
+            "now": "",
+            "seq": 23,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div#toggles3d.grp.only3d.advanced-control",
+            "old": "grp only3d",
+            "now": "",
+            "seq": 24,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.grp.only3d.advanced-control",
+            "old": "grp only3d",
+            "now": "",
+            "seq": 25,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.spacer.advanced-control",
+            "old": "spacer",
+            "now": "",
+            "seq": 26,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#traceBtn.btn.advanced-control",
+            "old": "btn",
+            "now": "",
+            "seq": 27,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#scaleConfidence.advanced-control",
+            "old": "",
+            "now": "font-size:11px",
+            "seq": 28,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#fullscreen.btn.advanced-control",
+            "old": "btn",
+            "now": "border:1px solid var(--line);background:#fff",
+            "seq": 29,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "details.menu.advanced-control",
+            "old": "menu",
+            "now": "",
+            "seq": 30,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "input#fileIn.advanced-control",
+            "old": "",
+            "now": "",
+            "seq": 31,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "input#uploadIn.advanced-control",
+            "old": "",
+            "now": "",
+            "seq": 32,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#guideSecondary.btn.guide-link",
+            "old": "btn",
+            "now": "",
+            "seq": 33,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#guideLater.btn.guide-link",
+            "old": "btn",
+            "now": "",
+            "seq": 34,
+            "t": 1096,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#guideBar.guide-bar.guide-compact",
+            "old": "guide-bar",
+            "now": "",
+            "seq": 35,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.guided.next-present",
+            "old": "",
+            "now": "",
+            "seq": 36,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span",
+            "old": "",
+            "now": "width: 67%;",
+            "seq": 37,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.guided.next-present",
+            "old": "guided",
+            "now": "",
+            "seq": 38,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeLegal.btn.welcome-legal",
+            "old": "btn",
+            "now": "",
+            "seq": 39,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeHeroSecondary.btn.guide-link",
+            "old": "btn",
+            "now": "",
+            "seq": 40,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeUpload.welcome-entry",
+            "old": "btn",
+            "now": "",
+            "seq": 41,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeBlank.welcome-entry",
+            "old": "btn",
+            "now": "",
+            "seq": 42,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeExample.welcome-entry",
+            "old": "btn",
+            "now": "",
+            "seq": 43,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeService.btn.guide-link",
+            "old": "btn",
+            "now": "",
+            "seq": 44,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeDemo-evolucion-obra.btn.primary.demo-card-go",
+            "old": "btn primary",
+            "now": "",
+            "seq": 45,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeDemo-dibujo-vivo.btn.primary.demo-card-go",
+            "old": "btn primary",
+            "now": "",
+            "seq": 46,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAudience-architecture.btn.welcome-audience-option",
+            "old": "btn",
+            "now": "",
+            "seq": 47,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAudience-real-estate.btn.welcome-audience-option",
+            "old": "btn",
+            "now": "",
+            "seq": 48,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAudience-developer.btn.welcome-audience-option",
+            "old": "btn",
+            "now": "",
+            "seq": 49,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAudience-renovation.btn.welcome-audience-option",
+            "old": "btn",
+            "now": "",
+            "seq": 50,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAudience-interior.btn.welcome-audience-option",
+            "old": "btn",
+            "now": "",
+            "seq": 51,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAudience-construction.btn.welcome-audience-option",
+            "old": "btn",
+            "now": "",
+            "seq": 52,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeCap-import.btn.capability-go",
+            "old": "btn",
+            "now": "",
+            "seq": 53,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeCap-walk3d.btn.capability-go",
+            "old": "btn",
+            "now": "",
+            "seq": 54,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeCap-render-ai.btn.capability-go",
+            "old": "btn",
+            "now": "",
+            "seq": 55,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeCap-budget.btn.capability-go",
+            "old": "btn",
+            "now": "",
+            "seq": 56,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeAI-render-ai.btn.ai-service-go",
+            "old": "btn",
+            "now": "",
+            "seq": 57,
+            "t": 1097,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#presentationBtn.btn.presentation-entry",
+            "old": "btn",
+            "now": "",
+            "seq": 58,
+            "t": 1107,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#paletteTool-select.btn.palette-action.on",
+            "old": "btn palette-action",
+            "now": "",
+            "seq": 59,
+            "t": 1114,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-new",
+            "obs": 2,
+            "src": "()=>{if(!id)id=requestAnimationFrame(()=>{id=0;fn();});}",
+            "seq": 60,
+            "t": 1114,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "observe",
+            "obs": 2,
+            "target": "header",
+            "box": [
+              390,
+              60.5
+            ],
+            "seq": 61,
+            "t": 1134,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-new",
+            "obs": 3,
+            "src": "()=>{if(!id)id=requestAnimationFrame(()=>{id=0;fn();});}",
+            "seq": 62,
+            "t": 1153,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "observe",
+            "obs": 3,
+            "target": "div#fab",
+            "box": [
+              12,
+              12
+            ],
+            "seq": 63,
+            "t": 1153,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "",
+            "now": "--shell-header-bottom: 61px; --fab-top: 844px; --fab-h: 0px;",
+            "seq": 64,
+            "t": 1168,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "--shell-header-bottom: 61px;",
+            "now": "--shell-header-bottom: 61px; --fab-top: 844px; --fab-h: 0px;",
+            "seq": 65,
+            "t": 1168,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "--shell-header-bottom: 61px; --fab-top: 844px;",
+            "now": "--shell-header-bottom: 61px; --fab-top: 844px; --fab-h: 0px;",
+            "seq": 66,
+            "t": 1168,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.guided.next-present.has-rooms",
+            "old": "guided next-present",
+            "now": "",
+            "seq": 67,
+            "t": 1168,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "header.can-scroll-end",
+            "old": "",
+            "now": "",
+            "seq": 68,
+            "t": 1168,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span.solar-north-arrow",
+            "old": "",
+            "now": "transform: rotate(0deg);",
+            "seq": 69,
+            "t": 1173,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "dialog#territoryDialog.territory-dialog",
+            "old": "",
+            "now": "",
+            "seq": 70,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-header",
+            "old": "",
+            "now": "",
+            "seq": 71,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryClose.btn",
+            "old": "",
+            "now": "",
+            "seq": 72,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-body",
+            "old": "",
+            "now": "",
+            "seq": 73,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-provider",
+            "old": "",
+            "now": "",
+            "seq": 74,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryImport.btn",
+            "old": "",
+            "now": "",
+            "seq": 75,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryLookup.btn",
+            "old": "",
+            "now": "",
+            "seq": 76,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div#territoryPreview.territory-preview",
+            "old": "",
+            "now": "",
+            "seq": 77,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "p.territory-caution",
+            "old": "",
+            "now": "",
+            "seq": 78,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#territoryOrthophoto.territory-orthophoto",
+            "old": "",
+            "now": "",
+            "seq": 79,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-orthophoto-provider",
+            "old": "",
+            "now": "",
+            "seq": 80,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-orthophoto-actions",
+            "old": "",
+            "now": "",
+            "seq": 81,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryOrthophotoLoad.btn",
+            "old": "",
+            "now": "",
+            "seq": 82,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryOrthophotoSave.btn",
+            "old": "",
+            "now": "",
+            "seq": 83,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryOrthophotoRemove.btn",
+            "old": "",
+            "now": "",
+            "seq": 84,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#territoryTerrain.territory-orthophoto",
+            "old": "",
+            "now": "",
+            "seq": 85,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-orthophoto-provider",
+            "old": "",
+            "now": "",
+            "seq": 86,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-orthophoto-actions",
+            "old": "",
+            "now": "",
+            "seq": 87,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryTerrainLoad.btn",
+            "old": "",
+            "now": "",
+            "seq": 88,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryTerrainSave.btn",
+            "old": "",
+            "now": "",
+            "seq": 89,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryTerrainRemove.btn",
+            "old": "",
+            "now": "",
+            "seq": 90,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-actions",
+            "old": "",
+            "now": "",
+            "seq": 91,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territorySave.btn.primary",
+            "old": "",
+            "now": "",
+            "seq": 92,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryRemove.btn",
+            "old": "",
+            "now": "",
+            "seq": 93,
+            "t": 1179,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#territoryPlacement.territory-orthophoto",
+            "old": "",
+            "now": "",
+            "seq": 94,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div#territoryPlacementPreview.territory-preview",
+            "old": "",
+            "now": "",
+            "seq": 95,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "div.territory-orthophoto-actions",
+            "old": "",
+            "now": "",
+            "seq": 96,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryPlacementAlign.btn",
+            "old": "",
+            "now": "",
+            "seq": 97,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryPlacementSave.btn",
+            "old": "",
+            "now": "",
+            "seq": 98,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#territoryPlacementRemove.btn",
+            "old": "",
+            "now": "",
+            "seq": 99,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "details#territoryLayers.only3d",
+            "old": "",
+            "now": "position: absolute; right: 8px; top: 8px; z-index: 12; background: rgba(255, 253, 249, 0.933); border: 1px solid rgb(204, 195, 182); border-radius: 8px; padding",
+            "seq": 100,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "details#territoryLayers.only3d",
+            "old": "",
+            "now": "position: absolute; right: 8px; top: 8px; z-index: 12; background: rgba(255, 253, 249, 0.933); border: 1px solid rgb(204, 195, 182); border-radius: 8px; padding",
+            "seq": 101,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "summary",
+            "old": "",
+            "now": "min-height: 28px; cursor: pointer;",
+            "seq": 102,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button.btn",
+            "old": "",
+            "now": "min-height: 44px;",
+            "seq": 103,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button.btn",
+            "old": "",
+            "now": "min-height: 44px;",
+            "seq": 104,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 105,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-building.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 106,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 107,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-parcel.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 108,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 109,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-orthophoto.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 110,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 111,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-terrain.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 112,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 113,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-north.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 114,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "p#territoryLayerStatus",
+            "old": "",
+            "now": "font-size: 12px; max-width: 360px; margin: 6px;",
+            "seq": 115,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "p#territoryAttribution",
+            "old": "",
+            "now": "position: absolute; bottom: 4px; left: 6px; right: 6px; font-size: 11px; pointer-events: none; background: rgba(255, 253, 249, 0.867); margin: 0px; z-index: 4; ",
+            "seq": 116,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: inline-flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 117,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 118,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 119,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-building.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 120,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-building.territory-layer-state",
+            "old": "font-size: 12px;",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 121,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: inline-flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 122,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 123,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 124,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-parcel.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 125,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-parcel.territory-layer-state",
+            "old": "font-size: 12px;",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 126,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: inline-flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 127,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 128,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 129,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-orthophoto.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 130,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-orthophoto.territory-layer-state",
+            "old": "font-size: 12px;",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 131,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: inline-flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 132,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 133,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 134,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-terrain.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 135,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-terrain.territory-layer-state",
+            "old": "font-size: 12px;",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 136,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: inline-flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 137,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 138,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "label",
+            "old": "display: flex; align-items: center; gap: 4px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "now": "display: flex; align-items: center; gap: 8px; padding: 6px; min-height: 44px; justify-content: space-between;",
+            "seq": 139,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-north.territory-layer-state",
+            "old": "",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 140,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "span#territoryLayerState-north.territory-layer-state",
+            "old": "font-size: 12px;",
+            "now": "font-size: 12px; color: var(--ink-muted);",
+            "seq": 141,
+            "t": 1183,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-new",
+            "obs": 4,
+            "src": "()=>{if(!positionFrame)positionFrame=requestAnimationFrame(()=>{positionFrame=0;position();});}",
+            "seq": 142,
+            "t": 1195,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "observe",
+            "obs": 4,
+            "target": "nav#professionalNav.professional-nav",
+            "box": [
+              390,
+              29.5
+            ],
+            "seq": 143,
+            "t": 1197,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "observe",
+            "obs": 4,
+            "target": "header.can-scroll-end",
+            "box": [
+              390,
+              60.5
+            ],
+            "seq": 144,
+            "t": 1197,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#welcomeBtn.btn.professional-global-control",
+            "old": "btn",
+            "now": "",
+            "seq": 145,
+            "t": 1198,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#projectsBtn.btn.professional-global-control",
+            "old": "btn",
+            "now": "",
+            "seq": 146,
+            "t": 1198,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#langBtn.btn.professional-global-control",
+            "old": "btn",
+            "now": "border:1px solid var(--line);background:#fff",
+            "seq": 147,
+            "t": 1198,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#fullscreen.btn.advanced-control.professional-global-control",
+            "old": "btn advanced-control",
+            "now": "border:1px solid var(--line);background:#fff",
+            "seq": 148,
+            "t": 1198,
+            "frame": 39,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 1,
+            "src": "() => { const w = svg.clientWidth, h = svg.clientHeight; if (!w) return; if (!lastW) fitView(); else { view.x0 -= (w - lastW)/2/view.s; view",
+            "entries": [
+              {
+                "target": "svg#plan",
+                "content": [
+                  390,
+                  464
+                ],
+                "border": [
+                  390,
+                  464
+                ]
+              }
+            ],
+            "seq": 149,
+            "t": 1234,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 1,
+            "changedSync": [],
+            "seq": 150,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 2,
+            "src": "()=>{if(!id)id=requestAnimationFrame(()=>{id=0;fn();});}",
+            "entries": [
+              {
+                "target": "header.can-scroll-end",
+                "content": [
+                  370,
+                  47.5
+                ],
+                "border": [
+                  390,
+                  60.5
+                ]
+              }
+            ],
+            "seq": 151,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 2,
+            "changedSync": [],
+            "seq": 152,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 3,
+            "src": "()=>{if(!id)id=requestAnimationFrame(()=>{id=0;fn();});}",
+            "entries": [
+              {
+                "target": "div#fab",
+                "content": [
+                  0,
+                  0
+                ],
+                "border": [
+                  12,
+                  12
+                ]
+              }
+            ],
+            "seq": 153,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 3,
+            "changedSync": [],
+            "seq": 154,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 4,
+            "src": "()=>{if(!positionFrame)positionFrame=requestAnimationFrame(()=>{positionFrame=0;position();});}",
+            "entries": [
+              {
+                "target": "nav#professionalNav.professional-nav",
+                "content": [
+                  390,
+                  29.5
+                ],
+                "border": [
+                  390,
+                  29.5
+                ]
+              },
+              {
+                "target": "header.can-scroll-end",
+                "content": [
+                  370,
+                  47.5
+                ],
+                "border": [
+                  390,
+                  60.5
+                ]
+              }
+            ],
+            "seq": 155,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 4,
+            "changedSync": [],
+            "seq": 156,
+            "t": 1237,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#assistantPanel.assistant-panel.in-dialog",
+            "old": "assistant-panel",
+            "now": "",
+            "seq": 157,
+            "t": 1300,
+            "frame": 40,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#professionalWorkspace.professional-workspace",
+            "old": "",
+            "now": "top: 115.5px;",
+            "seq": 158,
+            "t": 1327,
+            "frame": 41,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "--shell-header-bottom: 61px; --fab-top: 844px; --fab-h: 0px;",
+            "now": "--shell-header-bottom: 61px; --fab-top: 844px; --fab-h: 0px; --professional-nav-bottom: 115.5px;",
+            "seq": 159,
+            "t": 1327,
+            "frame": 41,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 1,
+            "src": "() => { const w = svg.clientWidth, h = svg.clientHeight; if (!w) return; if (!lastW) fitView(); else { view.x0 -= (w - lastW)/2/view.s; view",
+            "entries": [
+              {
+                "target": "svg#plan",
+                "content": [
+                  390,
+                  451
+                ],
+                "border": [
+                  390,
+                  451
+                ]
+              }
+            ],
+            "seq": 160,
+            "t": 1345,
+            "frame": 41,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 1,
+            "changedSync": [],
+            "seq": 161,
+            "t": 1347,
+            "frame": 41,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 4,
+            "src": "()=>{if(!positionFrame)positionFrame=requestAnimationFrame(()=>{positionFrame=0;position();});}",
+            "entries": [
+              {
+                "target": "nav#professionalNav.professional-nav",
+                "content": [
+                  378,
+                  44
+                ],
+                "border": [
+                  390,
+                  55
+                ]
+              }
+            ],
+            "seq": 162,
+            "t": 1348,
+            "frame": 41,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 4,
+            "changedSync": [],
+            "seq": 163,
+            "t": 1348,
+            "frame": 41,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#assistantPanel.assistant-panel",
+            "old": "assistant-panel in-dialog",
+            "now": "",
+            "seq": 164,
+            "t": 1423,
+            "frame": 42,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-new",
+            "obs": 5,
+            "src": "() => { if (!walkCardFrame) walkCardFrame = requestAnimationFrame(() => { walkCardFrame = 0; fitWalkCard(); }); }",
+            "seq": 165,
+            "t": 1432,
+            "frame": 42,
+            "inRaf": false
+          },
+          {
+            "kind": "observe",
+            "obs": 5,
+            "target": "div#walkOverlay",
+            "box": [
+              0,
+              0
+            ],
+            "seq": 166,
+            "t": 1432,
+            "frame": 42,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 5,
+            "src": "() => { if (!walkCardFrame) walkCardFrame = requestAnimationFrame(() => { walkCardFrame = 0; fitWalkCard(); }); }",
+            "entries": [
+              {
+                "target": "div#walkOverlay",
+                "content": [
+                  0,
+                  0
+                ],
+                "border": [
+                  0,
+                  0
+                ]
+              }
+            ],
+            "seq": 167,
+            "t": 1434,
+            "frame": 43,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 5,
+            "changedSync": [],
+            "seq": 168,
+            "t": 1434,
+            "frame": 43,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#assistantPanel.assistant-panel.in-dialog",
+            "old": "assistant-panel",
+            "now": "",
+            "seq": 169,
+            "t": 1555,
+            "frame": 51,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "guided next-present has-rooms",
+            "now": "",
+            "seq": 170,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "next-present has-rooms",
+            "now": "",
+            "seq": 171,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "has-rooms",
+            "now": "",
+            "seq": 172,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "aside.lib",
+            "old": "lib",
+            "now": "",
+            "seq": 173,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#tgLib.btn.chip",
+            "old": "btn chip",
+            "now": "",
+            "seq": 174,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "aside.lib",
+            "old": "lib open",
+            "now": "",
+            "seq": 175,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "aside.right.open",
+            "old": "right",
+            "now": "",
+            "seq": 176,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#tgLib.btn.chip",
+            "old": "btn chip on",
+            "now": "",
+            "seq": 177,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#tgPanel.btn.chip.on",
+            "old": "btn chip",
+            "now": "",
+            "seq": 178,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "main#stage.drawer-panel",
+            "old": "",
+            "now": "",
+            "seq": 179,
+            "t": 1672,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#assistantPanel.assistant-panel",
+            "old": "assistant-panel in-dialog",
+            "now": "",
+            "seq": 180,
+            "t": 1678,
+            "frame": 60,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 1,
+            "src": "() => { const w = svg.clientWidth, h = svg.clientHeight; if (!w) return; if (!lastW) fitView(); else { view.x0 -= (w - lastW)/2/view.s; view",
+            "entries": [
+              {
+                "target": "svg#plan",
+                "content": [
+                  390,
+                  334
+                ],
+                "border": [
+                  390,
+                  334
+                ]
+              }
+            ],
+            "seq": 181,
+            "t": 1680,
+            "frame": 61,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 1,
+            "changedSync": [],
+            "seq": 182,
+            "t": 1683,
+            "frame": 61,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 2,
+            "src": "()=>{if(!id)id=requestAnimationFrame(()=>{id=0;fn();});}",
+            "entries": [
+              {
+                "target": "header.can-scroll-end",
+                "content": [
+                  362,
+                  348
+                ],
+                "border": [
+                  390,
+                  365
+                ]
+              }
+            ],
+            "seq": 183,
+            "t": 1683,
+            "frame": 61,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 2,
+            "changedSync": [],
+            "seq": 184,
+            "t": 1683,
+            "frame": 61,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-enter",
+            "obs": 4,
+            "src": "()=>{if(!positionFrame)positionFrame=requestAnimationFrame(()=>{positionFrame=0;position();});}",
+            "entries": [
+              {
+                "target": "header.can-scroll-end",
+                "content": [
+                  362,
+                  348
+                ],
+                "border": [
+                  390,
+                  365
+                ]
+              }
+            ],
+            "seq": 185,
+            "t": 1683,
+            "frame": 61,
+            "inRaf": false
+          },
+          {
+            "kind": "ro-exit",
+            "obs": 4,
+            "changedSync": [],
+            "seq": 186,
+            "t": 1683,
+            "frame": 61,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "--shell-header-bottom: 61px; --fab-top: 844px; --fab-h: 0px; --professional-nav-bottom: 115.5px;",
+            "now": "--shell-header-bottom: 365px; --fab-top: 844px; --fab-h: 0px; --professional-nav-bottom: 115.5px;",
+            "seq": 187,
+            "t": 1712,
+            "frame": 62,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "section#professionalWorkspace.professional-workspace",
+            "old": "top: 115.5px;",
+            "now": "top: 420px;",
+            "seq": 188,
+            "t": 1713,
+            "frame": 62,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "html.lang-ready",
+            "old": "--shell-header-bottom: 365px; --fab-top: 844px; --fab-h: 0px; --professional-nav-bottom: 115.5px;",
+            "now": "--shell-header-bottom: 365px; --fab-top: 844px; --fab-h: 0px; --professional-nav-bottom: 420px;",
+            "seq": 189,
+            "t": 1713,
+            "frame": 62,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "aside.right",
+            "old": "right open",
+            "now": "",
+            "seq": 190,
+            "t": 1819,
+            "frame": 70,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#tgPanel.btn.chip",
+            "old": "btn chip on",
+            "now": "",
+            "seq": 191,
+            "t": 1819,
+            "frame": 70,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "main#stage",
+            "old": "drawer-panel",
+            "now": "",
+            "seq": 192,
+            "t": 1819,
+            "frame": 70,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "header",
+            "old": "can-scroll-end",
+            "now": "",
+            "seq": 193,
+            "t": 2183,
+            "frame": 90,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "button#undo.btn",
+            "old": "opacity: 0.4;",
+            "now": "opacity: 1;",
+            "seq": 194,
+            "t": 2183,
+            "frame": 90,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "has-rooms next-present",
+            "now": "",
+            "seq": 195,
+            "t": 2183,
+            "frame": 90,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "has-rooms",
+            "now": "",
+            "seq": 196,
+            "t": 2183,
+            "frame": 90,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "has-rooms next-present",
+            "now": "",
+            "seq": 197,
+            "t": 2519,
+            "frame": 111,
+            "inRaf": false
+          },
+          {
+            "kind": "style",
+            "target": "body.has-rooms.next-present",
+            "old": "has-rooms",
+            "now": "",
+            "seq": 198,
+            "t": 2519,
+            "frame": 111,
+            "inRaf": false
+          },
+          {
+            "kind": "mark",
+            "label": "context.close",
+            "seq": 199,
+            "t": 2624,
+            "frame": 118,
+            "inRaf": false
+          }
+        ]
+      }
+    }
+  ]
+}

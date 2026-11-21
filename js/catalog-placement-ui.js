@@ -67,9 +67,11 @@
  // Palette entry under «Traer mi mueble».
  const addEntry=()=>{const host=document.querySelector('#paletteFurnish')||document.querySelector('aside.lib');if(!host||host.querySelector('#catalogPlaceEntry'))return;
   const s=el('section',{id:'catalogPlaceEntry',class:'own-furn-entry'});const b=el('button',{type:'button',id:'catalogPlaceOpen',class:'btn own-furn-open'},s,tx('Producto de mi estudio','Product from my studio','我的工作室产品'));
-  el('p',{class:'own-furn-hint'},s,tx('Desde «Mis catálogos»: con medidas verificadas y su modelo 3D validado o un volumen genérico rotulado.','From «My catalogues»: verified measures with its validated 3D model or a labelled generic volume.','来自“我的目录”：已核实尺寸。'));
+  el('p',{class:'own-furn-hint'},s,tx('Desde «Mis catálogos»: con medidas verificadas y su modelo 3D validado o un volumen genérico rotulado.','From "My catalogues": verified measures with its validated 3D model or a labelled generic volume.','来自“我的目录”：已核实尺寸。'));
   b.onclick=()=>{if(matchMedia('(max-width:1100px)').matches){try{closeDrawers();}catch{}}window.RubikCatalogUI?.open();};
   const own=host.querySelector('#ownFurnEntry');if(own)own.after(s);else host.prepend(s);};
+ // The palette entry is built once: it follows the language of the session.
+ document.addEventListener('rubik:languagechange',()=>{const b=document.querySelector('#catalogPlaceOpen'),p=b?.parentElement?.querySelector('.own-furn-hint');if(b)b.textContent=tx('Producto de mi estudio','Product from my studio','我的工作室产品');if(p)p.textContent=tx('Desde «Mis catálogos»: con medidas verificadas y su modelo 3D validado o un volumen genérico rotulado.','From "My catalogues": verified measures with its validated 3D model or a labelled generic volume.','来自“我的目录”：已核实尺寸。');});
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addEntry();panelNote();});}).observe(document.body,{childList:true,subtree:true});addEntry();
  window.RubikCatalogPlacementUI={decorate,budget,costProvider:P.costProvider(catalogs)};
 })();

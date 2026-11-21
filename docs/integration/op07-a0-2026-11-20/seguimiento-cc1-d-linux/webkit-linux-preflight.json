@@ -1,0 +1,42 @@
+{
+  "browser": "26.6",
+  "platform": "linux",
+  "framebuffer": {
+    "available": true,
+    "version": "WebGL 2.0",
+    "renderer": "WebKit WebGL",
+    "framebuffer": [
+      [
+        255,
+        0,
+        0,
+        255
+      ],
+      [
+        0,
+        255,
+        0,
+        255
+      ]
+    ],
+    "error": 0
+  },
+  "visible": [
+    [
+      255,
+      0,
+      0,
+      255
+    ],
+    [
+      0,
+      255,
+      0,
+      255
+    ]
+  ],
+  "size": [
+    160,
+    120
+  ]
+}

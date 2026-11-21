@@ -1,4 +1,10 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Juan Manuel Espinosa Galant · Rubik Sota
+# Script del kit «Escena para Blender» de RUBIK SOTA. Usa la API bpy de Blender (GPL-2.0-or-later) y se distribuye bajo
+# la GNU GPL v3 o posterior: ver LICENCIA-SCRIPTS.txt y COPYING-GPL-3.0.txt. Sin garantía. Esta licencia NO se extiende
+# a la aplicación web de RUBIK, a los lanzadores ni a los proyectos, imágenes, renders o archivos .blend de la persona.
 """OP-10 · Reabre scene.blend en un proceso NUEVO y lo verifica contra su informe de importación.
+M03 · viaja en el ZIP de Entregar como rubik_blender_verify.py (copia exacta).
 
 python blender-scene-reopen.py -- IMPORT-DIR REPORT.json
 Comprueba: hash del .blend, metadatos que enlazan la escena con su paquete, unidades, colecciones y recuentos, cámara,
@@ -11,7 +17,9 @@ import bpy
 
 sys.dont_write_bytecode = True  # importing the sibling importer must not leave __pycache__ in the repository
 
-spec = importlib.util.spec_from_file_location("blender_scene_import", Path(__file__).with_name("blender-scene-import.py"))
+# En el repositorio el importador es blender-scene-import.py; dentro del ZIP de Entregar viaja como rubik_blender_prepare.py.
+_imp = next(p for p in (Path(__file__).with_name("blender-scene-import.py"), Path(__file__).with_name("rubik_blender_prepare.py")) if p.exists())
+spec = importlib.util.spec_from_file_location("blender_scene_import", _imp)
 common = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(common)
 
@@ -31,7 +39,8 @@ def main():
 
     def check(name, ok, detail=None):
         checks.append({"check": name, "pass": bool(ok), "detail": detail})
-    check("blend hash equals import report", sha(blend.read_bytes()) == imp["outputs"]["scene.blend"]["sha256"])
+    prepared_sha = sha(blend.read_bytes())
+    check("blend hash equals import report", prepared_sha == imp["outputs"]["scene.blend"]["sha256"])
     bpy.ops.wm.open_mainfile(filepath=str(blend))
     sc = bpy.context.scene
     meta = json.loads(sc["rubik"])
@@ -48,7 +57,8 @@ def main():
     back, bad = common.geometry_back(names, json.loads((d / "blender-geometry.json").read_text(encoding="utf8"))["frame"])
     regenerated = sha(json.dumps(back, separators=(",", ":")).encode())
     check("regenerated geometry hash equals the import", not bad and regenerated == imp["outputs"]["blender-geometry.json"]["sha256"], regenerated[:16])
-    out = {"status": "PASS" if all(c["pass"] for c in checks) else "FAIL", "process": "fresh", "blender": bpy.app.version_string, "checks": checks}
+    out = {"status": "PASS" if all(c["pass"] for c in checks) else "FAIL", "process": "fresh", "blender": bpy.app.version_string, "checks": checks,
+           "input": {"preparedBlendSha256": prepared_sha, **{k: meta[k] for k in ("glbSha256", "projectId", "observedProjectSha256")}}}
     report_path.write_text(json.dumps(out, indent=1) + "\n", encoding="utf8")
     print(json.dumps({"status": out["status"], "checks": len(checks), "failed": [c["check"] for c in checks if not c["pass"]]}))
     if out["status"] != "PASS":

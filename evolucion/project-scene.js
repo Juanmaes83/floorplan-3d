@@ -8,6 +8,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {buildIllustrative} from './illustrative-props.js';
+import {buildMasonryWall} from './masonry-three.js'; // SCULPT A · fábrica hilada a hilada (núcleo: window.RubikMasonry)
 
 const RAW='#cfc9bf',GHOST='#7a8a99',DEMOLISH='#b23a2a',PREVIEW='#0f7f95';
 const ease=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
@@ -49,7 +50,7 @@ export function createProjectScene(canvas){
   function clear(){root.traverse(o=>o.geometry?.dispose());root.clear();objects=new Map();
     for(const grp of [foot,marks]){grp.traverse(o=>o.geometry?.dispose());grp.clear();}}
   // World mapping identical to the editor: x=(xmm-OX)/1000, z=(ymm-OY)/1000, levels lifted by elevation.
-  function load(inventory,illustrative=[]){
+  function load(inventory,illustrative=[],{masonry=null}={}){
     // Proyecto nuevo: ni el último estado ni la vista previa del anterior se reaplican (aunque se repitan IDs).
     clear();lastStates=null;previewKeys=new Set();previewShown=0;frame={origin:inventory.origin};
     const levels=new Map(inventory.levels.map(l=>[l.levelId,l]));
@@ -57,7 +58,7 @@ export function createProjectScene(canvas){
     for(const e of inventory.elements){
       if(!e.representable)continue;
       const l=levels.get(e.levelId),g=new THREE.Group();g.position.y=l.elevationMm/1000;g.name=e.key;
-      const parts={appear:[],layer:[],meshes:[]};
+      const parts={appear:[],layer:[],meshes:[]};let masonryView=null;
       const keep=(m,{color=null,layer=false}={})=>{m.castShadow=m.receiveShadow=true;m.userData.base={y:m.position.y,sy:m.scale.y};m.userData.final=color;parts.meshes.push(m);(layer?parts.layer:parts.appear).push(m);return m;};
       if(e.type==='wall'){
         // Footprint of the REAL walls (same pieces, flat): shows where the house will stand before anything is built.
@@ -71,6 +72,11 @@ export function createProjectScene(canvas){
           const material=e.material.source==='viewer-default'&&e.exterior!=='facade'?[face(),face(),capMat,face(),face(),face()]:face();
           const m=new THREE.Mesh(new THREE.BoxGeometry(p.spanMm/1000,h,p.thicknessMm/1000),material);
           m.geometry.translate(0,h/2,0);m.position.set(wx(p.center[0],l),p.ybMm/1000,wz(p.center[1],l));m.rotation.y=-p.angle;g.add(keep(m,{color:e.material.color}));}
+        // SCULPT A · mientras dura la obra del muro se pinta su fábrica hilada a hilada (ilustrativa). Las piezas sólidas de
+        // arriba siguen siendo la geometría: fantasma, selección, inspección y tinte no cambian; al terminar vuelven a verse.
+        const mw=masonry?.get(e.key),MM=window.RubikMasonry;
+        if(mw&&MM){masonryView=buildMasonryWall(THREE,mw,MM.wallBlocks(mw),{center:{x:frame.origin.x-l.offsetMm.x,y:frame.origin.y-l.offsetMm.y},colors:{block:e.material.color}});
+          masonryView.group.visible=false;g.add(masonryView.group);}
       }else if(['window','sliding-door','opening'].includes(e.type)&&e.rect){
         const grp=new THREE.Group();grp.position.set(wx(e.rect.center[0],l),0,wz(e.rect.center[1],l));grp.rotation.y=-e.rect.angle;
         const L=e.rect.spanMm/1000,sill=e.sillHeightMm/1000,top=(e.sillHeightMm+e.heightMm)/1000,gh=top-sill;
@@ -111,7 +117,7 @@ export function createProjectScene(canvas){
       const ghost=new THREE.Group();for(const m of [...parts.meshes]){m.updateMatrix();m.traverse(o=>{if(o.isMesh){const ln=new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry),new THREE.LineBasicMaterial({color:GHOST,transparent:true,opacity:.75}));
         o.updateWorldMatrix(true,false);ln.applyMatrix4(new THREE.Matrix4().copy(g.matrixWorld).invert().multiply(o.matrixWorld));ghost.add(ln);}});}
       ghost.visible=false;g.add(ghost);
-      root.add(g);objects.set(e.key,{e,g,parts,ghost});
+      root.add(g);objects.set(e.key,{e,g,parts,ghost,masonry:masonryView});
     }
     loadIllustrative(inventory,illustrative);
   }
@@ -141,6 +147,7 @@ export function createProjectScene(canvas){
     visiblePieces=0;
     for(const [key,o] of objects){
       const s=states.get(key)||{mode:'unscheduled'};
+      if(o.masonry)o.masonry.group.visible=false;
       if(o.g.userData.roof&&!roofVisible){o.g.visible=false;continue;}
       if(s.mode==='unscheduled'){o.g.visible=true;o.parts.meshes.forEach(m=>m.visible=false);o.ghost.visible=true;continue;}
       o.ghost.visible=false;
@@ -156,6 +163,8 @@ export function createProjectScene(canvas){
         else x.material=x.userData.solid;}));
       o.parts.appear.forEach((m,i)=>{const n=o.parts.appear.length,k=fade?1:ease(Math.min(1,Math.max(0,b*n-i)));m.visible=(fade?b:k)>0.001;if(!m.visible)return;
         m.scale.y=m.userData.base.sy*Math.max(.001,k)*(1-rem*.98);m.position.y=m.userData.base.y;visiblePieces++;});
+      // SCULPT A · obra en curso (0 < avance < 1, sin demolición): fábrica en lugar de la caja que crece.
+      if(o.masonry&&b>.001&&b<.999&&rem<=0){o.masonry.setBuilt(b,window.RubikMasonry.builtAt);o.masonry.group.visible=true;o.parts.appear.forEach(m=>m.visible=false);}
       const layerK=s.layer===null||s.layer===undefined?1:s.layer;
       o.parts.meshes.forEach(m=>{if(m.userData.final)tint(m,m.userData.final,layerK);});
       if(rem>0&&o.e.type!=='illustrative')o.parts.meshes.forEach(m=>m.traverse(x=>{if(x.isMesh)for(const y of [].concat(x.material))if(tintable(y))y.color.lerp(new THREE.Color(DEMOLISH),rem*.6);}));
@@ -300,5 +309,5 @@ export function createProjectScene(canvas){
     load,setState,highlight,pick,hitsAt,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=!!v;controls.autoRotateSpeed=.5;applyMotion();},get reducedMotion(){return reducedMotion;},get autoRotating(){return controls.autoRotate;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
-    get objectCount(){return objects.size;},renderer,dispose,get disposed(){return disposed;},setPreview,get preview(){return {keys:[...previewKeys],shown:previewShown};}};
+    get objectCount(){return objects.size;},get masonry(){let walls=0,shown=0;for(const o of objects.values())if(o.masonry){walls++;if(o.masonry.group.visible)shown++;}return {walls,shown};},renderer,dispose,get disposed(){return disposed;},setPreview,get preview(){return {keys:[...previewKeys],shown:previewShown};}};
 }

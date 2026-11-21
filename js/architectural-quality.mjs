@@ -8,6 +8,8 @@ export function mountArchitecturalQuality(view){
  button.type='button';
  const output=document.createElement('output');
  output.className='sr-only';
+ // Keep the live region within the viewport when the mobile header scrolls.
+ output.style.insetInlineStart='0';
  output.setAttribute('aria-live','polite');
  group.append(button,output);
  document.getElementById('roofGroup').after(group);

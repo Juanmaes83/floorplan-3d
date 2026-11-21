@@ -203,7 +203,7 @@
  function open(){reset();dlg.showModal();file.focus();}
 
  // ── Entradas ────────────────────────────────────────────────────────────────────────────────────────────────────
- const entryButton=id=>{const b=el('button',{type:'button',class:'btn photo-reform-open',id},undefined,'Reformar desde fotografía');b.onclick=open;return b;};
+ const entryButton=id=>{const b=el('button',{type:'button',class:'btn photo-reform-open',id},undefined,'Reformar desde fotografía');b.dataset.es='Reformar desde fotografía';b.dataset.en='Renovate from a photo';b.dataset.zh='从照片改造';b.textContent=L3(b.dataset.es,b.dataset.en,b.dataset.zh);b.onclick=open;return b;};
  // Menú «Archivo» del editor.
  const menu=document.querySelector('details.menu .menu-pop');
  if(menu){const b=entryButton('photoReformMenu');b.addEventListener('click',()=>{b.closest('details').open=false;});menu.append(b);}

@@ -1,5 +1,8 @@
 # Byte-hashed interop sources and permissions must survive Windows checkout.
 scripts/interop/* text eol=lf
+scripts/interop/blender-kit/*.sh text eol=lf
+scripts/interop/blender-kit/*.bat text eol=crlf
+scripts/interop/blender-kit/*.txt text eol=lf
 js/project-core.js text eol=lf
 js/project-schema.js text eol=lf
 js/asset-catalog.js text eol=lf

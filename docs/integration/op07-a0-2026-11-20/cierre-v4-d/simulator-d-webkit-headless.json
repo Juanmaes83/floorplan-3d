@@ -1,0 +1,89 @@
+{
+  "browser": "webkit",
+  "mode": "headless",
+  "source": "09557c4cac1e6390d3af56281922d8d43093234e",
+  "sha": "eae7d5f366ba7e24de9e04d38addd216a70a3d76",
+  "base": "8e917e1a70f499a6b8dc68850c8413b7d06c5682",
+  "tree": "c5735a4b81cdb346d3186c3ceeef251bfcd2ef0d",
+  "playwright": "1.63.0",
+  "platform": "win32",
+  "browserVersion": "26.6",
+  "framesDirectory": "simulator-d-webkit-headless-frames-rQu4aH",
+  "canvas": {
+    "client": [
+      960,
+      157
+    ],
+    "buffer": [
+      960,
+      157
+    ],
+    "contextAvailable": true
+  },
+  "scope": "canvas3d",
+  "distinctFrames": 1,
+  "distinctCameras": 4,
+  "frames": [
+    {
+      "t": 0,
+      "sha256": "47ed5cd06d2bf6080c35700e8cc0a4d78915055f57637f912cbc14a37356252f",
+      "colors": 1,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.932905,
+        13.483273,
+        7.856506
+      ]
+    },
+    {
+      "t": 0.1,
+      "sha256": "47ed5cd06d2bf6080c35700e8cc0a4d78915055f57637f912cbc14a37356252f",
+      "colors": 1,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.907756,
+        13.450903,
+        7.820559
+      ]
+    },
+    {
+      "t": 0.2,
+      "sha256": "47ed5cd06d2bf6080c35700e8cc0a4d78915055f57637f912cbc14a37356252f",
+      "colors": 1,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.731619,
+        13.224434,
+        7.568766
+      ]
+    },
+    {
+      "t": 0.3,
+      "sha256": "47ed5cd06d2bf6080c35700e8cc0a4d78915055f57637f912cbc14a37356252f",
+      "colors": 1,
+      "width": 960,
+      "height": 157,
+      "camera": [
+        4.252686,
+        12.610831,
+        6.883947
+      ]
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "rest": {
+    "loopActive": false,
+    "animating": false,
+    "flying": false,
+    "pendingAssets": 0
+  },
+  "result": "FAIL",
+  "failure": {
+    "code": "ERR_ASSERTION",
+    "message": "The real motion must produce different captured frames; Each frame must contain non-empty WebGL content\n+ actual - expected\n\n+ [\n+   'The real motion must produce different captured frames',\n+   'Each frame must contain non-empty WebGL content'\n+ ]\n- []\n"
+  }
+}

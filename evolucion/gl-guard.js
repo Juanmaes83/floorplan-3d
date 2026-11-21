@@ -89,7 +89,7 @@ export function createUnavailableScene(canvas,error=null){
     get userMoved(){return false;},screenBounds:()=>null,set onResize(fn){},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load:noop,setState:noop,highlight:noop,pick:()=>null,hitsAt:()=>[],presentationPose:()=>({...pose}),setFootprint:noop,get footprintVisible(){return false;},
     setPose:noop,frameEnvelope:()=>({...pose}),resize:noop,inspect:()=>[],setRenderSize:noop,releaseRenderSize:noop,orbitPose:()=>({...pose}),renderNow:noop,
-    setSuspended:noop,setAuto:noop,setRoofVisible:noop,get roofVisible(){return true;},get pose(){return {...pose};},setPreview:()=>0,get preview(){return {keys:[],shown:0};},get visiblePieces(){return 0;},get objectCount(){return 0;}};
+    setSuspended:noop,setAuto:noop,setRoofVisible:noop,get roofVisible(){return true;},get pose(){return {...pose};},setPreview:()=>0,get preview(){return {keys:[],shown:0};},get visiblePieces(){return 0;},get objectCount(){return 0;},get masonry(){return {walls:0,shown:0};}};
 }
 
 export function attachGlGuard(scene,{host=scene.canvas.parentElement,core=globalThis.FloorPlanGlQuality,restoreTimeoutMs,governorOptions={},now=()=>performance.now(),reload=()=>location.reload()}={}){

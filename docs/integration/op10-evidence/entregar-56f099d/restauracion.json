@@ -1,0 +1,60 @@
+{
+  "success": {
+    "zip": true,
+    "suspended": true,
+    "projectUnchanged": true,
+    "storageUnchanged": true,
+    "externalRequests": 0,
+    "pageErrors": 0,
+    "blockedAssetRequests": 0,
+    "sha256": "42c13da4cdcabea1716cc437e0c2644dac5ac70f7d9c44ebf82d95c3ae9f82a8"
+  },
+  "cancel": {
+    "state": "cancelled",
+    "code": "CANCELLED",
+    "during": false,
+    "suspended": true,
+    "area": "deliver",
+    "zip": false,
+    "frames": 83,
+    "loopActive": false,
+    "text": "Preparación cancelada. No se ha generado nada.",
+    "extraFrames": 0,
+    "projectUnchanged": true,
+    "storageUnchanged": true,
+    "externalRequests": 0,
+    "pageErrors": []
+  },
+  "error": {
+    "state": "error",
+    "code": "EMPTY",
+    "during": false,
+    "suspended": true,
+    "area": "deliver",
+    "zip": false,
+    "frames": 96,
+    "loopActive": false,
+    "text": "No hay nada visible que exportar.",
+    "extraFrames": 0,
+    "projectUnchanged": true,
+    "storageUnchanged": true,
+    "externalRequests": 0,
+    "pageErrors": []
+  },
+  "timeout": {
+    "state": "error",
+    "code": "UNSTABLE",
+    "during": false,
+    "suspended": true,
+    "area": "deliver",
+    "zip": false,
+    "frames": 84,
+    "loopActive": false,
+    "text": "La vista 3D no terminó de cargar a tiempo.",
+    "extraFrames": 0,
+    "projectUnchanged": true,
+    "storageUnchanged": true,
+    "externalRequests": 0,
+    "pageErrors": []
+  }
+}

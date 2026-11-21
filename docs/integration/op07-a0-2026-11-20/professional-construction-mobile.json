@@ -1,0 +1,22 @@
+{
+  "sha": "8e917e1a70f499a6b8dc68850c8413b7d06c5682",
+  "browser": "153.0.8010.12",
+  "viewport": [
+    390,
+    844
+  ],
+  "path": [
+    "Perfil Constructora / jefe de obra",
+    "Evolución 4D",
+    "Entregar",
+    "Evolución de obra",
+    "Crear plan de obra"
+  ],
+  "home": "La obra planificada, explicada en 3D",
+  "pending": "Necesita un plan de obra",
+  "empty": "Todavía no hay plan de obra para «三室两厅两卫»\n\nCrea las tareas con sus fechas, dependencias, elementos del proyecto y partidas del presupuesto. RUBIK no inventa fechas: las pones tú.\n\nNombre del plan\nCrear plan\nImportar plan (JSON)",
+  "pageErrors": [],
+  "externalRequests": [],
+  "projectAndLibraryUnchanged": true,
+  "horizontalOverflow": false
+}

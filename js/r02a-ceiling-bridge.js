@@ -11,6 +11,9 @@
  * No es MEP, ni iluminación, ni normativa. Sin regla de paso libre para personas (riesgo abierto en el documento). */
 (function (root) {
   'use strict';
+  // Textos visibles en los idiomas de RUBIK (convención de los módulos: tx local que lee el LANG global; sin LANG, español idéntico).
+  const tx = (es, en, zh) => ({ es, en, zh })[typeof LANG === 'string' ? LANG : 'es'] ?? es;
+
   const node = typeof module === 'object' && typeof require === 'function';
   const X = node ? require('./r02a-ceiling-contract.js') : root.RubikCeilingContract;
   const clone = v => structuredClone(v);
@@ -25,7 +28,7 @@
   const setReference = (project, ref) => pass(X.setVerticalReference(project, ref));
   const clearReference = (project, scope) => pass(X.removeVerticalReference(project, scope));
   const remove = (project, id) => {
-    if (!X.extension(project).items.some(i => i && i.id === id)) return refuse([{ code: 'unknown-item', message: 'Ese elemento de techo no está guardado.' }]);
+    if (!X.extension(project).items.some(i => i && i.id === id)) return refuse([{ code: 'unknown-item', message: tx('Ese elemento de techo no está guardado.', 'That ceiling item is not saved.', '该吊顶元素未保存。') }]);
     return pass(X.removeItem(project, id));
   };
   /* Tras quitar o rehacer estancias en el MISMO mutate: retira los elementos y referencias cuya estancia ya no existe.
@@ -52,7 +55,7 @@
       failing: b.items.filter(i => !i.holds).map(pick) };
   }
   const afterLoad = (project, opts) => X.recheck(project, opts);
-  const NOTICE = Object.freeze({ kind: 'info', text: 'Elementos de techo experimentales: posición y altura revisables por una persona. No comprueba la altura de paso, instalaciones ni normativa.' });
+  const NOTICE = Object.freeze({ kind: 'info', get text() { return tx('Elementos de techo experimentales: posición y altura revisables por una persona. No comprueba la altura de paso, instalaciones ni normativa.', 'Experimental ceiling items: position and height to be reviewed by a person. Clear passage height, installations and regulations are not checked.', '实验性吊顶元素：位置和高度需人工审核。不检查通行净高、设备或规范。'); } });
 
   const api = Object.freeze({ confirm, setReference, clearReference, remove, afterRoomsChanged, afterEdit, afterLoad, NOTICE });
   if (node) module.exports = api; else root.RubikCeilingBridge = api;

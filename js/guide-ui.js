@@ -63,7 +63,7 @@
  const topActions=el('div',undefined,top,'guide-controls');btn('guidePrevious','',()=>previousTask(),topActions);btn('guideGoalChange','',()=>openGoal(),topActions);btn('guideDetails','',()=>openDetails(),topActions);
  // Compact guide (default on phones and short screens): goal, current task and its buttons stay; the step list,
  // the progress line and long descriptions are hidden until «Ver más». The choice is remembered per browser.
- const compactKey='rubik-guide-compact',compactDefault=()=>matchMedia('(max-width:600px),(max-height:500px)').matches;
+ const compactKey='rubik-guide-compact',compactDefault=()=>matchMedia('(max-width:600px),(max-height:720px)').matches;
  let compact=(()=>{try{const v=localStorage.getItem(compactKey);return v===null?compactDefault():v==='1';}catch{return compactDefault();}})();
  const compactBtn=btn('guideCompact','',()=>{compact=!compact;try{localStorage.setItem(compactKey,compact?'1':'0');}catch{}applyCompact();},topActions);
  function applyCompact(){bar.classList.toggle('guide-compact',compact);compactBtn.textContent=compact?tx('Ver más','Show more','显示更多'):tx('Ver menos','Show less','显示更少');compactBtn.setAttribute('aria-expanded',String(!compact));compactBtn.title=compact?tx('Mostrar etapas y progreso de la guía','Show guide stages and progress','显示指南阶段和进度'):tx('Ocultar etapas y progreso para dejar más plano a la vista','Hide stages and progress to show more of the plan','隐藏阶段和进度以显示更多平面图');}btn('guideClose','',()=>{state().closed=true;store();render();resume.focus();},topActions);
@@ -119,7 +119,7 @@
  function buildWelcome(){welcome.replaceChildren();const shell=el('div',undefined,welcome,'welcome-shell'),brand=el('div',undefined,shell,'welcome-brand'),mark=el('div',undefined,brand,'brand-mark'),glyph=el('span',undefined,mark,'brand-glyph');glyph.setAttribute('aria-hidden','true');for(let i=0;i<4;i++)el('i',undefined,glyph);const words=el('div',undefined,mark);el('strong','Rubik Sota',words);el('small','Floor Plan Designer',words);
   const nav=el('div',undefined,brand,'welcome-nav');
   if(data.seen||hadLibrary)btn('welcomeReturn',tx('Volver al proyecto →','Return to project →','返回项目 →'),closeWelcome,nav);
-  btn('welcomeLanguage',({es:'English',en:'中文',zh:'Español'})[LANG],()=>{setLang(({es:'en',en:'zh',zh:'es'})[LANG]);buildWelcome();},nav);
+  btn('welcomeLanguage',({es:'English',en:'Chinese',zh:'Español'})[LANG],()=>{const top=welcome.scrollTop;setLang(({es:'en',en:'zh',zh:'es'})[LANG]);buildWelcome();welcome.scrollTop=top;/* the button is rebuilt with the Home: keyboard focus stays on it */document.getElementById('welcomeLanguage')?.focus({preventScroll:true});},nav);
   // «Legal y autoría»: the platform's existing, approved legal and authorship text (#legalDialog), never a copy.
   // Always in the Home's top bar, whatever the chosen field; it opens over the Home and closing it returns here.
   btn('welcomeLegal',tx('Legal y autoría','Legal & authorship','法律与作者'),()=>window.FloorPlanLegal?.open(),nav).classList.add('welcome-legal');
@@ -485,6 +485,7 @@
   return d.task?d.task.stage:d.r?.primary?.id==='conflicts'?2:p.stage;
  }
  function render(){
+  applyCompact();bar.setAttribute('aria-label',tx('Objetivo y progreso','Goal and progress','目标与进度'));
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
   searchPrompt.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');
   searchCompact.textContent=tx('⌕ Buscar','⌕ Search','⌕ 搜索');

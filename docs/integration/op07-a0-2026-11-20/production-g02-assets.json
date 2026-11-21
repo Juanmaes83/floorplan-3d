@@ -1,0 +1,26 @@
+{
+  "sha": "8e917e1a70f499a6b8dc68850c8413b7d06c5682",
+  "target": "production",
+  "deployment": "dpl_6UsqaQ4HWiob45C8iCDB95F1pCby",
+  "scope": "Authenticated availability and bytes of frontend route and DXF loader. No download action exercised.",
+  "assets": [
+    {
+      "path": "index.html",
+      "bytes": 518972,
+      "sha256": "88759408d03180aac65f7a6ed9c82044cd19b380fb23a76744a66e45e299bc0b",
+      "identical": true
+    },
+    {
+      "path": "js/dxf-export.js",
+      "bytes": 7063,
+      "sha256": "d29f62b64240abe391e128504c6f6188e51efb82a188bc1427b13bb65c52c924",
+      "identical": true
+    },
+    {
+      "path": "vendor/g02-dxf/dxf-tools.js",
+      "bytes": 54741,
+      "sha256": "a4431018a811c97056a432db81df5e36581a5b57a5671bfa1dddee31da9d3766",
+      "identical": true
+    }
+  ]
+}

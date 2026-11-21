@@ -2,9 +2,10 @@
 // Lua del almacén se ejecutan de verdad, con conexiones concurrentes. Requiere redis-server en el PATH (la CI lo instala).
 const test=require('node:test'),assert=require('node:assert/strict'),net=require('node:net'),{spawn,execFileSync}=require('node:child_process');
 const L=require('../api/_spend-ledger.js'),API=require('../api/assistant.js');
-let srv,port;
+const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path');
+let srv,serverClosed,dir,socketPath;
 // Minimal RESP client (one connection = one exec function).
-function resp(port){const sock=net.connect(port,'127.0.0.1');let buf=Buffer.alloc(0);const q=[];
+function resp(){const sock=net.connect({path:socketPath});let buf=Buffer.alloc(0);const q=[];
  const parse=(b,i)=>{const t=String.fromCharCode(b[i]),e=b.indexOf('\r\n',i);if(e<0)return null;const line=b.toString('utf8',i+1,e);
   if(t==='+')return [line,e+2];if(t==='-')return [new Error(line),e+2];if(t===':')return [Number(line),e+2];
   if(t==='$'){const n=Number(line);if(n<0)return [null,e+2];if(b.length<e+2+n+2)return null;return [b.toString('utf8',e+2,e+2+n),e+2+n+2];}
@@ -15,13 +16,28 @@ function resp(port){const sock=net.connect(port,'127.0.0.1');let buf=Buffer.allo
  const exec=cmd=>new Promise((res,rej)=>{q.push({res,rej});sock.write('*'+cmd.length+'\r\n'+cmd.map(a=>{const s=String(a);return '$'+Buffer.byteLength(s)+'\r\n'+s+'\r\n';}).join(''));});
  exec.close=()=>sock.destroy();return exec;}
 test.before(async()=>{try{execFileSync('redis-server',['--version']);}catch{throw new Error('redis-server no está instalado: es obligatorio para esta prueba (no se omite).');}
- port=20000+Math.floor(Math.random()*20000);srv=spawn('redis-server',['--port',String(port),'--save','','--appendonly','no'],{stdio:'ignore'});
- for(let i=0;i<50;i++){const e=resp(port);try{await e(['PING']);e.close();return;}catch{e.close();await new Promise(r=>setTimeout(r,100));}}throw new Error('redis did not start');});
-test.after(()=>srv?.kill());
-const fresh=async()=>{const e=resp(port);await e(['FLUSHALL']);return e;};
+ dir=await fs.mkdtemp(path.join(os.tmpdir(),'rubik-redis-'));
+ socketPath=path.join(dir,'redis.sock');
+ let spawnError;
+ srv=spawn('redis-server',['--port','0','--unixsocket',socketPath,'--unixsocketperm','700','--save','','--appendonly','no'],{stdio:'ignore'});
+ srv.once('error',error=>{spawnError=error;});
+ serverClosed=new Promise(resolve=>srv.once('close',resolve));
+ for(let i=0;i<50;i++){
+  if(spawnError)throw spawnError;
+  if(srv.exitCode!==null||srv.signalCode!==null)throw new Error('test Redis exited before readiness');
+  const e=resp();
+  try{await e(['PING']);return;}catch{await new Promise(r=>setTimeout(r,100));}finally{e.close();}
+ }
+ throw new Error('test Redis socket did not become ready');
+});
+test.after(async()=>{
+ if(srv){srv.kill();await serverClosed;}
+ if(dir)await fs.rm(dir,{recursive:true,force:true});
+});
+const fresh=async()=>{const e=resp();await e(['FLUSHALL']);return e;};
 
 test('atomic common cap: 20 concurrent reservations on 20 connections, text and image, never exceed the cap',async()=>{
- const admin=await fresh(),conns=Array.from({length:20},()=>resp(port));
+ const admin=await fresh(),conns=Array.from({length:20},()=>resp());
  const results=await Promise.all(conns.map((c,i)=>L.redisStore({exec:c}).reserve({id:'r'+i,family:i%2?'image':'text',usd:0.01,capUsd:0.05})));
  assert.equal(results.filter(r=>r.ok).length,5,'exactly cap/usd reservations pass, whatever the family');
  const s=L.redisStore({exec:admin});assert.equal((await s.snapshot()).reservedUsd,0.05);
