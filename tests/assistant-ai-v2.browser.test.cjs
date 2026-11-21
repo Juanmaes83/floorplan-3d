@@ -136,3 +136,70 @@ test('móvil 390×844 con toques y 844×390 horizontal: hoja inferior dentro de 
   assert.deepEqual(watch.errors,[]);
  }finally{await context.close();}
 });
+
+test('the Assistant refuses an unrelated undo and preserves history when saving fails',async()=>{
+ const {context,page,watch}=await kit.editor(env);
+ const full=()=>page.evaluate(()=>({project:snap(),undo:[...undoStack],redo:[...redoStack],storage:storage.getItem(STORE)}));
+ try{
+  await open(page);await ask(page,'Mueve el sofá 20 cm a la izquierda');
+  assert.deepEqual(await page.locator('.assistant-diff-values dt').allTextContents(),['Antes','Después']);
+  const before=await full();
+  await page.evaluate(()=>{const set=Storage.prototype.setItem;window.__restoreStorage=()=>{Storage.prototype.setItem=set;};
+   Storage.prototype.setItem=function(key,value){if(key===FloorPlanLibrary.KEY)throw new DOMException('Cuota QA','QuotaExceededError');return set.call(this,key,value);};});
+  await page.click('#assistantApply');
+  assert.deepEqual(await full(),before,'refusal preserves editor, history and stored project');
+  assert.match(await page.textContent('#assistantLog'),/proyecto sigue intacto/);
+  await page.evaluate(()=>window.__restoreStorage());
+  await ask(page,'Mueve el sofá 20 cm a la izquierda');await page.click('#assistantApply');
+  assert.equal(await page.locator('#assistantRedo').isDisabled(),true);
+  await page.evaluate(()=>FloorPlanApp.applyAssistant(p=>{p.name='Edición posterior';return {ok:true,project:p};}));
+  const later=await full();
+  await page.click('#assistantUndo');
+  assert.deepEqual(await full(),later,'a stale contextual undo never reverts a later edit');
+  assert.match(await page.textContent('#assistantProposal [role="status"]'),/historial ha cambiado/);
+  assert.equal(await page.locator('#assistantUndo').isDisabled(),true);
+  assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
+
+test('un proyecto conserva su clave de historial y separa sus mensajes entre estudios',async()=>{
+ const {context,page}=await kit.editor(env);
+ const key='rubik-assistant-v1';
+ const projectId=await page.evaluate(key=>{
+  const id=FloorPlanApp.project.id;
+  localStorage.setItem(key,JSON.stringify({[id]:[{role:'assistant',text:'historial anterior sin ámbito'}]}));return id;
+ },key);
+ const studio=async id=>page.evaluate(id=>{
+  const select=document.querySelector('#catalogStudio');
+  if(![...select.options].some(o=>o.value===id))select.add(new Option('Estudio de prueba',id));
+  select.value=id;select.dispatchEvent(new Event('change',{bubbles:true}));
+ },id);
+ try{
+  await open(page);
+  assert.equal(await page.textContent('#assistantLog'),'','legacy records cannot be attributed to this studio');
+  await ask(page,'¿Cuántas estancias hay?');
+  await studio('brd-m05-historial');
+  assert.equal(await page.textContent('#assistantLog'),'','the other studio starts with a clean history');
+  await ask(page,'¿Cuánto cuesta?');
+  const stored=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),key);
+  assert.deepEqual(Object.keys(stored),[projectId]);
+  assert.equal(new Set(stored[projectId].filter(m=>m.scope).map(m=>m.scope)).size,2);
+  assert.doesNotMatch(await page.textContent('#assistantLog'),/Cuántas estancias/);
+  await page.click('#assistantClear');
+  await studio('local');
+  assert.match(await page.textContent('#assistantLog'),/Cuántas estancias/);
+  assert.doesNotMatch(await page.textContent('#assistantLog'),/Cuánto cuesta|historial anterior/);
+ }finally{await context.close();}
+});
+
+test('la consulta guiada se recupera al recargar el ejemplo sin guardar la vivienda',async()=>{
+ const {context,page}=await kit.editor(env);
+ try{
+  const libraryBefore=await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY));
+  await open(page);await ask(page,'¿Cuántas estancias hay?');
+  assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),libraryBefore);
+  await kit.reopen(page);await open(page);
+  assert.match(await page.textContent('#assistantLog'),/estancias en 1 planta/);
+  assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),libraryBefore);
+ }finally{await context.close();}
+});

@@ -1219,18 +1219,30 @@ function save(){
   return saved;
 }
 const snap = () => JSON.stringify(project);
-function commit(before){
+function commit(before,{requireSave=false}={}){
   // R02-A: si este cambio ha quitado estancias, sus elementos y referencias de techo se retiran en el MISMO paso del deshacer.
   try { const ceiling=window.RubikCeilingEditor?.reconcile(project); if(ceiling) project=ceiling; project.updatedAt = new Date(Math.max(Date.now(), Date.parse(project.createdAt))).toISOString(); Core.validate(project); }
   catch(e){ project=JSON.parse(before); refreshProject(); toast(tr('数据无效：','Invalid data: ') + e.message); return false; }
   // No change may create a new furniture–stair conflict (BW5): it is rolled back, the item keeps its last valid pose.
   const blocked = window.FloorPlanBuildingUI?.guard(before);
   if (blocked){ project=JSON.parse(before); refreshProject(); window.FloorPlanBuildingUI.refused(blocked); return false; }
-  undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; return save();
+  if(requireSave&&!save()){
+    project=JSON.parse(before);refreshProject();window.FloorPlanPresentation?.onProjectChange();return false;
+  }
+  undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length=0; return requireSave||save();
 }
 function mutate(fn){ const b=snap(); try{fn();commit(b);}catch(e){project=JSON.parse(b);toast(e.message);} renderAll(); }
-function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); redoStack.push(snap()); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); save(); renderAll(); }
-function redo(){ if(!redoStack.length)return;undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();save();renderAll(); }
+function restoreHistory(from,to,{requireSave=false}={}){
+  if(!from.length)return false;
+  const previous=project,before=snap();
+  project=JSON.parse(from.at(-1));refreshProject();
+  if(requireSave&&!save()){
+    project=previous;refreshProject();window.FloorPlanPresentation?.onProjectChange();return false;
+  }
+  from.pop();to.push(before);validateSel();if(!requireSave)save();renderAll();return true;
+}
+function undo(){if(!restoreHistory(undoStack,redoStack))return toast(tr('没有可撤销的操作','Nothing to undo'));}
+function redo(){restoreHistory(redoStack,undoStack);}
 function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id) || ui.sel?.kind==='wall'&&!project.walls.some(w=>w.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
 const getF = id => state.furniture.find(f => f.id === id);
 
@@ -2746,7 +2758,23 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   applyFurnishing(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
   // CAT-04: a project extension written by a CAT-IA tool (visual references), in one step of the commit (validation, undo, save).
   applyExtension(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
-  applyAssistant(fn){const before=snap();let r;try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}if(!r?.ok)return r||{ok:false};project=r.project;refreshProject();if(!commit(before))return {ok:false,explanation:['No se ha podido guardar el cambio.']};validateSel();renderAll();return {ok:true};},
+  applyAssistant(fn){
+    const before=snap(),entry=library.activeId(),level=library.activeLevelId();let r;
+    try{r=fn(JSON.parse(before));}catch(e){r={ok:false,explanation:[e.message]};}
+    if(!r?.ok)return r||{ok:false};
+    project=r.project;refreshProject();
+    if(!commit(before,{requireSave:true}))return {ok:false};
+    validateSel();renderAll();
+    let expectedProject=project,expected=snap(),applied=true;
+    const after=expected;
+    return {ok:true,history(action){
+      const undoing=action==='undo',from=undoing?undoStack:redoStack,to=undoing?redoStack:undoStack;
+      if((!undoing&&action!=='redo')||undoing!==applied||project!==expectedProject||snap()!==expected
+        ||entry!==library.activeId()||level!==library.activeLevelId()||from.at(-1)!==(undoing?before:after))return 'stale';
+      if(!restoreHistory(from,to,{requireSave:true}))return 'save-failed';
+      expectedProject=project;expected=snap();applied=!undoing;return 'ok';
+    }};
+  },
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
   async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),

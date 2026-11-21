@@ -61,6 +61,11 @@
  const send=el('button',undefined,form,'btn primary');send.type='submit';send.id='assistantSend';
  const stop=btn('',form,'btn');stop.id='assistantStop';stop.hidden=true;
  const foot=el('div',undefined,panel,'assistant-foot');const clear=btn('',foot,'btn link');clear.id='assistantClear';
+ const mcp=el('details',undefined,foot,'assistant-mcp');mcp.id='assistantMcp';foot.prepend(mcp);
+ const mcpTitle=el('summary',undefined,mcp);
+ const mcpInfo=el('p',undefined,mcp,'assistant-note');
+ const mcpExport=btn('',mcp,'btn');
+ mcpExport.onclick=()=>document.getElementById('exportJsonQuick')?.click();
  const opener=btn('',null,'btn assistant-open');opener.id='assistantOpen';
  // E2 · el asistente acompaña en TODA la plataforma, también con un diálogo modal abierto (presupuesto, obra, diseño, marca…).
  // Regla: NO se inserta nada visible para el código del diálogo. Dentro del diálogo solo hay un acceso encapsulado en un
@@ -104,8 +109,17 @@
  function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
   title.textContent=tx('Asistente RUBIK','RUBIK assistant','RUBIK 助手');close.setAttribute('aria-label',tx('Cerrar el asistente','Close the assistant','关闭助手'));
-  mode.textContent=tx('Consulta guiada sin modelo de lenguaje: responde con los datos del proyecto abierto y muestra la fuente. No envía nada fuera de este navegador.','Guided query without a language model: it answers with the open project data and shows the source. Nothing leaves this browser.','无语言模型的引导式查询：根据打开的项目数据回答并显示来源。不会发送到浏览器之外。');
+  mode.textContent=window.RubikAssistantGenUI?.active()
+   ?tx('Pregunta en tus propias palabras. La IA consulta las herramientas de RUBIK. Tú confirmas cualquier cambio.','Ask in your own words. AI consults RUBIK tools. You confirm every change.','可用自己的语言提问。AI 查询 RUBIK 工具。任何更改均由你确认。')
+   :tx('Consulta guiada sin modelo de lenguaje: responde con los datos del proyecto abierto y muestra la fuente. No envía nada fuera de este navegador.','Guided query without a language model: it answers with the open project data and shows the source. Nothing leaves this browser.','无语言模型的引导式查询：根据打开的项目数据回答并显示来源。不会发送到浏览器之外。');
   input.placeholder=tx('Pregunta por estancias, superficies, conflictos o presupuesto…','Ask about rooms, areas, conflicts or budget…','询问房间、面积、冲突或预算……');input.setAttribute('aria-label',tx('Tu consulta','Your question','你的问题'));
+  mcp.hidden=!!window.RUBIK_DELIVERY;
+  mcpTitle.textContent=tx('Revisar con MCP local','Review with local MCP','用本地 MCP 检查');
+  mcpExport.textContent=tx('Guardar JSON para MCP','Save JSON for MCP','保存供 MCP 使用的 JSON');
+  mcpExport.hidden=!!app.levelContext;
+  mcpInfo.textContent=app.levelContext
+   ?tx('MCP revisa una planta por archivo. Para revisar un edificio, exporta la planta que quieras analizar desde Plantas.','MCP reviews one floor per file. For a building, export the floor you want to analyse from Floors.','MCP 每个文件仅检查一个楼层。对于多层建筑，请从“楼层”导出要分析的楼层。')
+   :tx('Guarda el JSON y selecciónalo en tu cliente MCP local. Allí puedes diagnosticar, proponer y simular. La variante se guarda aparte tras confirmarla en la terminal.','Save the JSON and select it in your local MCP client. There you can diagnose, propose and simulate. The variant is saved separately after you confirm it in the terminal.','保存 JSON 后，在本地 MCP 客户端选择文件，即可诊断、提出建议并模拟。终端确认后，方案将单独保存。');
   send.textContent=tx('Preguntar','Ask','提问');stop.textContent=tx('Detener','Stop','停止');clear.textContent=tx('Borrar conversación','Clear conversation','清除对话');
   for(const b of [fab,accessBtn]){b.textContent=tx('Asistente','Assistant','助手');b.setAttribute('aria-label',tx('Abrir el asistente RUBIK aquí','Open the RUBIK assistant here','在此打开 RUBIK 助手'));b.setAttribute('aria-expanded',String(state.open));}fab.setAttribute('aria-controls','assistantPanel');
   opener.textContent=tx('Asistente','Assistant','助手');opener.setAttribute('aria-label',tx('Abrir el asistente RUBIK','Open the RUBIK assistant','打开 RUBIK 助手'));opener.setAttribute('aria-expanded',String(state.open));opener.setAttribute('aria-controls','assistantPanel');
@@ -116,10 +130,32 @@
   deliver:[['Prepara tres renders','Prepare three renders','准备三张渲染图'],['Reforma desde una foto','Reform from a photo','照片改造']],studio:[['¿Qué puedes hacer?','What can you do?','你能做什么？']]};
  function suggestions(){chips.replaceChildren();const a=area();for(const s of SUGG[a]||SUGG.design){const b=btn(tx(...s),chips,'chip');b.onclick=()=>ask(b.textContent);}
   ctxLine.textContent=tx('Área: ','Area: ','区域：')+({design:tx('Diseñar','Design','设计'),analyze:tx('Analizar','Analyze','分析'),budget:tx('Presupuestar','Budget','预算'),deliver:tx('Entregar','Deliver','交付'),studio:tx('Mi estudio','My studio','我的事务所')})[a]+' · '+tx('Revisión ','Revision ','版本 ')+T.revision(app.project).slice(4,12);}
- function restoreLog(){state.log=(read()[app.project.id]||[]).slice(-MAX_LOG);render();}
- function persist(){const all=read();all[app.project.id]=state.log.slice(-MAX_LOG).map(m=>({role:m.role,text:String(m.text).slice(0,2000),source:m.source||null}));write(all);}
+ const logScope=()=>window.RubikAssistantGenUI?.scope()||T.projectScope(app);
+ // Keep the project ID as the storage key. Only scoped messages can be restored.
+ const projectLog=all=>Array.isArray(all[app.project.id])?all[app.project.id]:[];
+ function restoreLog(){
+  const scope=logScope();
+  state.log=projectLog(read()).filter(m=>m?.scope===scope).slice(-MAX_LOG);
+  render();
+ }
+ function persist(){
+  const all=read(),scope=logScope();
+  const older=projectLog(all).filter(m=>m?.scope!==scope);
+  const current=state.log.filter(m=>!m.privateTurn).map(m=>({scope,role:m.role,text:String(m.text).slice(0,2000),source:m.source||null}));
+  all[app.project.id]=[...older,...current].slice(-MAX_LOG);write(all);
+ }
+ function clearSavedLog(){
+  const all=read(),id=app.project.id,scope=logScope();
+  const otherScopes=projectLog(all).filter(m=>m?.scope&&m.scope!==scope);
+  if(otherScopes.length)all[id]=otherScopes;else delete all[id];
+  write(all);
+ }
  function render(){log.replaceChildren();for(const m of state.log){const li=el('li',undefined,log,'assistant-msg '+m.role);el('p',m.text,li);if(m.source){const s=el('p',m.source,li,'assistant-source');s.dataset.source='1';}}log.scrollTop=log.scrollHeight;}
- const push=(role,text,source)=>{state.log.push({role,text,source});persist();render();};
+ const push=(role,text,source,privateTurn=!!window.RubikAssistantGenUI?.active())=>{
+  state.log.push({role,text,source,...(privateTurn?{privateTurn:true}:{})});
+  if(state.log.length>MAX_LOG)state.log.shift();
+  if(!privateTurn)persist();render();
+ };
  function sourceLine(reply){
   const pr=reply.answer?.provenance||[];if(!pr.length)return null;
   const ST={measured:tx('medido','measured','实测'),estimated:tx('estimado','estimated','估算'),unavailable:tx('no disponible','unavailable','不可用')};
@@ -127,27 +163,50 @@
  }
  // ----- Ask -----
  async function ask(text){
-  text=String(text||'').trim();if(!text||state.pending)return;
+  text=String(text||'').trim();window.RubikAssistantGenUI?.enforceScope();if(!text||state.pending)return;
   const ctl=new AbortController();state.pending=ctl;send.disabled=true;stop.hidden=false;input.value='';
-  push('user',text);emit('ask',{text:text.slice(0,120)});
+  const active=()=>state.pending===ctl&&!ctl.signal.aborted;
+  const G=window.RubikAssistantGenUI,generative=!!G?.active();
+  push('user',text,undefined,generative);emit('ask',generative?{mode:'provider'}:{text:text.slice(0,120)});
   try{
    if(state.latencyMs)await new Promise((res,rej)=>{const t=setTimeout(res,state.latencyMs);ctl.signal.addEventListener('abort',()=>{clearTimeout(t);rej(new DOMException('aborted','AbortError'));},{once:true});});
    // GEN-AI: in «Conversación con IA» mode (js/assistant-gen-ui.js) a real text model answers through /api/assistant,
    // using the same tools, proposal card and apply/undo; otherwise the guided query below answers, as before.
-   const G=window.RubikAssistantGenUI;if(G?.active()){await G.ask(text,{ctx:context(),signal:ctl.signal,push,emit,showProposal});return;}
+   if(!active())return;
+   if(generative){await G.ask(text,{ctx:context(),signal:ctl.signal,
+    push:(role,text,source)=>{if(state.pending===ctl)push(role,text,source,true);},emit,showProposal:p=>{if(active())showProposal(p);}});return;}
    const r=Sess.handle(text,context());
    push('assistant',r.messages[1].text,sourceLine(r));
    emit('answer',{intent:r.intent.intent,tools:r.audit.tools,providerCalls:r.audit.providerCalls,cost:r.audit.cost,figures:r.answer?.figures||[],provenance:r.answer?.provenance||[],error:r.audit.error||null,audit:r.audit});
    if(r.proposal)showProposal(r.proposal);
    if(r.service)showService(r.service);
-  }catch(e){if(e.name==='AbortError'){push('assistant',tx('Consulta detenida: no se ha hecho nada.','Query stopped: nothing was done.','查询已停止：未执行任何操作。'));emit('cancelled');}else{push('assistant',tx('No se ha podido responder.','Could not answer.','无法回答。'));emit('error',{message:String(e.message).slice(0,120)});}}
-  finally{state.pending=null;send.disabled=false;stop.hidden=true;suggestions();}
+  }catch(e){if(state.pending!==ctl)return;if(e.name==='AbortError'){push('assistant',tx('Consulta detenida: no se ha hecho nada.','Query stopped: nothing was done.','查询已停止：未执行任何操作。'));emit('cancelled');}else{push('assistant',tx('No se ha podido responder.','Could not answer.','无法回答。'));emit('error',{message:String(e.message).slice(0,120)});}}
+  finally{if(state.pending===ctl){state.pending=null;send.disabled=false;stop.hidden=true;suggestions();}}
  }
  // ----- Proposal card (AG-2) and apply (AG-3) -----
+ function changeValue(path,value,project){
+  if(value===null||value===undefined)return '—';
+  if(path.endsWith('.position'))return 'X '+value.x+' · Y '+value.y+' mm';
+  if(path.endsWith('.rotationDeg'))return value+'°';
+  if(path.endsWith('.roomId')){
+   const room=project.rooms.find(item=>item.id===value);
+   return room&&typeof roomDisplay==='function'?roomDisplay(room):room?.name||value;
+  }
+  const material=project.materials.find(item=>item.id===value);
+  return material&&typeof nm==='function'?nm(material.name):material?.name||String(value);
+ }
  function showProposal(p){
   state.proposal=p;state.applied=null;card.hidden=false;card.replaceChildren();card.dataset.state='proposed';
   el('h3',tx('Propuesta (sin aplicar)','Proposal (not applied)','建议（未应用）'),card);
-  const ul=el('ul',undefined,card,'assistant-diff');ul.id='assistantDiff';for(const d of p.diff){const li=el('li',d.label,ul);li.dataset.path=d.path;}
+  const current=app.project;
+  const ul=el('ul',undefined,card,'assistant-diff');ul.id='assistantDiff';
+  for(const d of p.diff){
+   const li=el('li',d.label,ul);li.dataset.path=d.path;
+   const values=el('dl',undefined,li,'assistant-diff-values');
+   for(const [caption,value] of [[tx('Antes','Before','更改前'),d.before],[tx('Después','After','更改后'),d.after]]){
+    const pair=el('div',undefined,values);el('dt',caption,pair);el('dd',changeValue(d.path,value,current),pair);
+   }
+  }
   if(p.warnings?.length){const w=el('ul',undefined,card,'assistant-warn');for(const x of p.warnings)el('li',x,w);}
   el('p',tx('Revisa el cambio. «Aplicar» lo valida otra vez con el proyecto actual y lo guarda en un paso que puedes deshacer.','Review the change. «Apply» validates it again against the current project and saves it in one step you can undo.','请检查更改。“应用”会再次按当前项目验证，并作为可撤销的一步保存。'),card,'assistant-note');
   const row=el('div',undefined,card,'assistant-actions');
@@ -160,14 +219,29 @@
   const p=state.proposal;if(!p||button.disabled)return;button.disabled=true;
   let applied=null;
   const r=app.applyAssistant?.(project=>{const a=Prop.apply(project,{...p,state:'confirmed'});applied=a;return a.ok?{ok:true,project:a.project}:{ok:false,explanation:[a.error.message]};});
-  if(!r?.ok){const why=applied&&!applied.ok?applied.error.message:(r?.explanation||[]).join(' ')||tx('No se ha podido aplicar.','Could not apply.','无法应用。');
+  if(!r?.ok){const why=applied&&!applied.ok?applied.error.message:(r?.explanation||[]).join(' ')||tx('No se ha podido guardar el cambio. Tu proyecto sigue intacto. Revisa el almacenamiento y vuelve a pedir la propuesta.','Could not save the change. Your project is intact. Check storage and request the proposal again.','无法保存。项目保持原样。请检查存储，然后重新请求建议。');
    card.dataset.state=applied?.error?.code==='revision_mismatch'?'stale':'failed';button.disabled=true;push('assistant',tx('No aplicado: ','Not applied: ','未应用：')+why);emit('apply-refused',{proposalId:p.id,code:applied?.error?.code||'invalid'});return;}
   state.applied={proposalId:p.id,revisionAfter:T.revision(app.project),baseRevision:p.baseRevision};state.proposal=null;
-  card.replaceChildren();card.dataset.state='applied';el('h3',tx('Cambio aplicado','Change applied','已应用更改'),card);
+  card.replaceChildren();card.dataset.state='applied';const heading=el('h3',tx('Cambio aplicado','Change applied','已应用更改'),card);
   el('p',tx('Es un solo paso del historial del editor.','It is a single step in the editor history.','这是编辑器历史中的一步。'),card,'assistant-note');
   const row=el('div',undefined,card,'assistant-actions');const u=btn(tx('Deshacer','Undo','撤销'),row,'btn');u.id='assistantUndo';const rd=btn(tx('Rehacer','Redo','重做'),row,'btn');rd.id='assistantRedo';
-  u.onclick=()=>{document.getElementById('undo')?.click();card.dataset.state='undone';emit('undo',{revision:T.revision(app.project)});suggestions();};
-  rd.onclick=()=>{document.getElementById('redo')?.click();card.dataset.state='applied';emit('redo',{revision:T.revision(app.project)});suggestions();};
+  const notice=el('p',undefined,card,'assistant-note');notice.setAttribute('role','status');
+  rd.disabled=true;
+  const history=action=>{
+   const result=r.history(action);
+   if(result!=='ok'){
+    notice.textContent=result==='stale'
+     ?tx('El historial ha cambiado. Usa los controles del editor para revisar los pasos posteriores.','The history has changed. Use the editor controls to review the later steps.','历史记录已更改。请使用编辑器控件查看后续步骤。')
+     :tx('El guardado ha fallado. El proyecto sigue como estaba. Revisa el almacenamiento y vuelve a intentarlo.','Saving failed. The project is unchanged. Check storage and try again.','保存失败。项目保持原样。请检查存储后重试。');
+    if(result==='stale')u.disabled=rd.disabled=true;
+    emit('history-refused',{action,code:result});return;
+   }
+   const undone=action==='undo';
+   heading.textContent=undone?tx('Cambio deshecho','Change undone','已撤销更改'):tx('Cambio aplicado','Change applied','已应用更改');
+   notice.textContent='';card.dataset.state=undone?'undone':'applied';u.disabled=undone;rd.disabled=!undone;
+   (undone?rd:u).focus();emit(action,{revision:T.revision(app.project)});suggestions();
+  };
+  u.onclick=()=>history('undo');rd.onclick=()=>history('redo');
   push('assistant',tx('Aplicado. Puedes deshacerlo aquí o con el botón «Deshacer» del editor.','Applied. You can undo it here or with the editor «Undo» button.','已应用。可在此或用编辑器的“撤销”按钮撤销。'));
   emit('applied',{proposalId:p.id,revision:state.applied.revisionAfter});suggestions();
  }
@@ -187,21 +261,23 @@
  // ----- Open / close -----
  // Scope isolation: changing project cuts the request in flight, pending proposal and undo.
  // The in-memory log must always belong to the current project, even while the panel is closed.
- let scopeProject=app.project?.id||null;
- function invalidate(reason='scope-changed'){state.pending?.abort();state.proposal=null;state.applied=null;card.hidden=true;card.replaceChildren();card.dataset.state='invalidated';
-  scopeProject=app.project?.id||null;restoreLog();emit('invalidated',{reason});}
- addEventListener('floorplan-project-switched',()=>{if((app.project?.id||null)!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
- function openPanel(){if((app.project?.id||null)!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;rehost();document.body.classList.add('assistant-open');labels();suggestions();restoreLog();input.focus({preventScroll:true});emit('open',{area:area()});}
+ let scopeProject=null;
+ function invalidate(reason='scope-changed'){state.pending?.abort();state.pending=null;send.disabled=false;stop.hidden=true;state.proposal=null;state.applied=null;card.hidden=true;card.replaceChildren();card.dataset.state='invalidated';
+  scopeProject=logScope();restoreLog();if(state.open)labels();emit('invalidated',{reason});}
+ addEventListener('floorplan-project-switched',()=>{if(logScope()!==scopeProject||state.pending||state.proposal)invalidate('project-switched');});
+ function openPanel(){if(logScope()!==scopeProject)invalidate('project-switched');state.open=true;panel.hidden=false;rehost();document.body.classList.add('assistant-open');labels();suggestions();render();input.focus({preventScroll:true});emit('open',{area:area()});}
  function closePanel(){state.open=false;panel.hidden=true;rehost();document.body.classList.remove('assistant-open');labels();state.pending?.abort();(lastHost?accessBtn:fab.hidden?opener:fab).focus({preventScroll:true});emit('close');}
  opener.onclick=()=>state.open?closePanel():openPanel();fab.onclick=accessBtn.onclick=()=>state.open?closePanel():openPanel();close.onclick=closePanel;
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();e.preventDefault();closePanel();}}); // Escape cierra el panel, no el diálogo en el que está
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
- stop.onclick=()=>state.pending?.abort();
- clear.onclick=()=>{state.log=[];const all=read();delete all[app.project.id];write(all);render();card.hidden=true;state.proposal=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
+ const cancel=()=>state.pending?.abort();
+ stop.onclick=cancel;
+ clear.onclick=()=>{state.pending?.abort();state.pending=null;send.disabled=false;stop.hidden=true;state.log=[];clearSavedLog();render();card.hidden=true;state.proposal=null;state.applied=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
+ addEventListener('rubik-assistant',e=>{if(e.detail?.type==='mode')labels();});
  mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
- window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
+ window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,cancel,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
   get trace(){return state.trace.map(e=>structuredClone(e));},setLatency(ms){state.latencyMs=Math.max(0,Math.min(10000,Number(ms)||0));}});
 })();
