@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import core from './core.cjs';
+import journey from '../../../js/assistant-journey-core.js';
 
 function parseArgs(argv) {
   if (argv.length !== 2 || argv[0] !== '--project' || !argv[1]) {
@@ -80,17 +81,33 @@ async function main() {
     { clearanceMm: z.number().positive().optional() },
     heavy('reviewLayout'));
 
-  registerReadTool(server, 'propose_layout', 'Proponer posición de un mueble (sin aplicar)',
-    'Etapa 2. Para un mueble (objectId) y un objetivo (goal: resolve-placement-conflict o clear-door-swing con openingId), propone UNA posición candidata buscada con FloorPlanPlacement y comprobada con FloorPlanPlacement y layout-review sobre una copia efímera. Exige expectedSha256 (de get_project_summary). Devuelve RubikLayoutProposalV1 con estado candidate-reviewable, pending, blocked o no-change-needed, evidencia, incertidumbre y lo no evaluado. Nunca aplica nada (applied:false), no escribe ni genera parches, no mueve otros muebles, no gira ni cambia de estancia. No es una certificación ni la posición óptima.',
-    {
+  const proposalInput = {
       objectId: z.string().min(1).max(160),
       goal: z.enum(['resolve-placement-conflict', 'clear-door-swing']),
       expectedSha256: z.string().regex(/^[0-9a-f]{64}$/),
       openingId: z.string().min(1).max(160).optional(),
       stepMm: z.number().int().min(10).max(1000).optional(),
       maxCandidates: z.number().int().min(1).max(4000).optional(),
-    },
-    heavy('proposeLayout'));
+    };
+  registerReadTool(server, 'propose_layout', 'Proponer posición de un mueble (sin aplicar)',
+    'Etapa 2. Para un mueble (objectId) y un objetivo (goal: resolve-placement-conflict o clear-door-swing con openingId), propone UNA posición candidata buscada con FloorPlanPlacement y comprobada con FloorPlanPlacement y layout-review sobre una copia efímera. Exige expectedSha256 (de get_project_summary). Devuelve RubikLayoutProposalV1 con estado candidate-reviewable, pending, blocked o no-change-needed, evidencia, incertidumbre y lo no evaluado. Nunca aplica nada (applied:false), no escribe ni genera parches, no mueve otros muebles, no gira ni cambia de estancia. No es una certificación ni la posición óptima.',
+    proposalInput, heavy('proposeLayout'));
+
+  registerReadTool(server, 'simulate_layout', 'Evaluar una propuesta de distribución',
+    'Recalcula propose_layout sobre el mismo SHA-256, valida la copia y compara su área, recuento y revisión geométrica con el original. clearanceMm es un umbral opcional explícito en ambos estados. Devuelve simulationSha256 para revisar una variante local. No modifica ni exporta el proyecto.',
+    { ...proposalInput, clearanceMm: z.number().positive().max(100000).optional() },
+    heavy('simulateLayout'));
+
+  registerReadTool(server, 'get_workflow_guidance', 'Guía de las cinco fases de RUBIK',
+    'Explica el recorrido dentro de RUBIK y enumera las herramientas MCP de lectura útiles. No abre pantallas, no verifica permisos del editor, no consulta servicios y no modifica el proyecto. Omite stepId para ver las cinco fases.',
+    { stepId: z.string().min(1).max(32).optional(), lang: z.enum(['es', 'en', 'zh']).optional() },
+    ({ stepId, lang = 'es' }) => {
+      const delivery = { scope: 'rubik-editor-guide', liveEditorState: false, applied: false };
+      if (!stepId) return { ...delivery, phases: journey.list(lang) };
+      const step = journey.guide(stepId, lang);
+      if (!step) throw new Error('Unknown stepId. Call get_workflow_guidance without stepId to list the supported steps.');
+      return { ...delivery, step };
+    });
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

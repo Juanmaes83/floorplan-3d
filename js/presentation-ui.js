@@ -13,7 +13,7 @@
  const button=(text,parent,fn)=>{const node=el('button',text,parent,'btn');node.type='button';node.onclick=fn;return node;};
  const headerButton=button('',document.querySelector('header'),event=>open(event.currentTarget));headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');
  const config=el('dialog',undefined,document.body,'presentation-config');config.id='presentationConfig';config.setAttribute('aria-labelledby','presentationConfigTitle');
- const overlay=el('section',undefined,document.querySelector('#stage'),'presentation-overlay');overlay.id='presentationOverlay';overlay.hidden=true;overlay.setAttribute('aria-label','Presentación de la vivienda');
+ const overlay=el('section',undefined,document.querySelector('#stage'),'presentation-overlay');overlay.id='presentationOverlay';overlay.hidden=true;overlay.setAttribute('aria-label',tx('Presentación de la vivienda','Home presentation','住宅展示'));
  const map=el('div',undefined,overlay,'presentation-minimap');map.id='presentationMinimap';map.hidden=true;
  const mapToggle=button('',map,()=>{mapOpen=!mapOpen;renderMinimap();});mapToggle.id='presentationMinimapToggle';
  const mapPanel=el('div',undefined,map,'presentation-minimap-panel');mapPanel.id='presentationMinimapPanel';
@@ -1330,5 +1330,8 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
+ // The header entry is a global control: it follows the language from any entry point (header or Home button). An open
+ // presentation redraws its own texts; a closed one only relabels the entry.
+ document.addEventListener('rubik:languagechange',()=>{headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');overlay.setAttribute('aria-label',tx('Presentación de la vivienda','Home presentation','住宅展示'));if(!overlay.hidden)draw();});
  window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active||stopping;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
 })();

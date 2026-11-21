@@ -118,7 +118,7 @@
  function buildWelcome(){welcome.replaceChildren();const shell=el('div',undefined,welcome,'welcome-shell'),brand=el('div',undefined,shell,'welcome-brand'),mark=el('div',undefined,brand,'brand-mark'),glyph=el('span',undefined,mark,'brand-glyph');glyph.setAttribute('aria-hidden','true');for(let i=0;i<4;i++)el('i',undefined,glyph);const words=el('div',undefined,mark);el('strong','Rubik Sota',words);el('small','Floor Plan Designer',words);
   const nav=el('div',undefined,brand,'welcome-nav');
   if(data.seen||hadLibrary)btn('welcomeReturn',tx('Volver al proyecto →','Return to project →','返回项目 →'),closeWelcome,nav);
-  btn('welcomeLanguage',({es:'English',en:'中文',zh:'Español'})[LANG],()=>{setLang(({es:'en',en:'zh',zh:'es'})[LANG]);buildWelcome();},nav);
+  btn('welcomeLanguage',({es:'English',en:'Chinese',zh:'Español'})[LANG],()=>{const top=welcome.scrollTop;setLang(({es:'en',en:'zh',zh:'es'})[LANG]);buildWelcome();welcome.scrollTop=top;/* the button is rebuilt with the Home: keyboard focus stays on it */document.getElementById('welcomeLanguage')?.focus({preventScroll:true});},nav);
   // «Legal y autoría»: the platform's existing, approved legal and authorship text (#legalDialog), never a copy.
   // Always in the Home's top bar, whatever the chosen field; it opens over the Home and closing it returns here.
   btn('welcomeLegal',tx('Legal y autoría','Legal & authorship','法律与作者'),()=>window.FloorPlanLegal?.open(),nav).classList.add('welcome-legal');
@@ -483,6 +483,7 @@
   return d.task?d.task.stage:d.r?.primary?.id==='conflicts'?2:p.stage;
  }
  function render(){
+  applyCompact();bar.setAttribute('aria-label',tx('Objetivo y progreso','Goal and progress','目标与进度'));
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
   searchBtn.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
   homeBtn.textContent=tx('← Inicio','← Home','← 首页');homeBtn.title=tx('Volver al inicio sin perder el proyecto','Return home without losing the project','返回首页并保留项目');

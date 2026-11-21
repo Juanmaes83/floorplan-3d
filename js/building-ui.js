@@ -29,6 +29,7 @@
   // Keep the same building point under the viewport centre: local coordinates differ by the offsets.
   view.x0+=from.offsetMm.x-to.offsetMm.x;view.y0+=from.offsetMm.y-to.offsetMm.y;
   refreshProject();renderAll();applyView();
+  dispatchEvent(new Event('floorplan-level-switched'));
   if(!presentation)say(`Planta activa: «${to.name}» (${to.order+1} de ${b.levels.length}). Sólo se edita esta planta.`,3500);
  }
  // Read-only sources for the building presentation: every level's project (the active one as shown on screen), its
@@ -49,8 +50,8 @@
  function bar(b){
   const box=$('#levelBar');if(!box)return;box.replaceChildren();box.hidden=!b;
   const status=$('#levelStatus');
-  if(!b){if(status)status.textContent='';$('#levelsBtn').textContent='Plantas';return;}
-  const active=activeLevel(b);$('#levelsBtn').textContent='Plantas…';
+  if(!b){if(status)status.textContent='';$('#levelsBtn').textContent=L3('Plantas','Levels','楼层');return;}
+  const active=activeLevel(b);$('#levelsBtn').textContent=L3('Plantas…','Levels…','楼层…');
   for(const l of b.levels){const btn=document.createElement('button');btn.type='button';btn.className='btn chip'+(l.id===active.id?' on':'');btn.dataset.level=l.id;btn.textContent=l.name;btn.setAttribute('aria-pressed',String(l.id===active.id));btn.onclick=()=>selectLevel(l.id);box.append(btn);}
   const all=document.createElement('button');all.type='button';all.id='levelViewAll';all.className='btn chip only3d'+(window.View3D?.levelView==='all'?' on':'');all.textContent='Ver todas';all.title='Ver en 3D todas las plantas o sólo hasta la activa';
   all.setAttribute('aria-pressed',String(window.View3D?.levelView==='all'));all.onclick=()=>{const next=window.View3D?.levelView==='all'?'active':'all';lastContext='';window.View3D?.setLevelContext(context(current()),next);bar(current());};box.append(all);
@@ -155,7 +156,14 @@
   if(!isBuilding())return null;const b=library.building(),id=library.activeLevelId();let prev;
   try{prev=B.setProject(b,id,JSON.parse(before));}catch{return null;}
   const was=new Set(B.stairConflicts(prev,{levelId:id}).map(keyOf)),now=B.stairConflicts(current(),{levelId:id}).find(c=>!was.has(keyOf(c)));
-  return now?`No se ha aplicado el cambio: «${now.objectName}» quedaría sobre ${now.zone==='hueco'?'el hueco de la escalera':'los peldaños'} ${now.stairIndex}. Conserva su última posición válida; colócalo fuera de la escalera.`:null;
+  if(!now)return null;
+  const object=project.objects.find(o=>o.id===now.objectId);
+  const name=window.FloorPlanDisplayName(now.objectName,object?.type);
+  const hole=now.zone==='hueco';
+  return L3(
+   `No se ha aplicado el cambio: «${name}» quedaría sobre ${hole?'el hueco de la escalera':'los peldaños'} ${now.stairIndex}. Conserva su última posición válida; colócalo fuera de la escalera.`,
+   `The change was not applied: “${name}” would overlap ${hole?'the stair opening':'the steps'} ${now.stairIndex}. It stays in its last valid position. Move it away from the stairs.`,
+   `未应用更改：“${name}”将与第 ${now.stairIndex} 处${hole?'楼梯洞口':'台阶'}重叠。家具保留在原位置，请将其移到楼梯区域之外。`);
  }
  function refused(message){say(message,8000);}
  // Add/duplicate without a demonstrated free place: nothing is added; the reason and the way out are explained.

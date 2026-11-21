@@ -1,0 +1,336 @@
+{
+  "scope": "Vivienda de ejemplo de RUBIK con identificador de QA. Datos y marca sintéticos.",
+  "base": "4cd3884f6f6e3be062e8f4c6acc255e8888ae4d0",
+  "labHead": "d54a967ba69d09dba3153b0b5910bca351922551",
+  "codeSha256": {
+    "index.html": "fd7132560ccc1544319962dee2b8f1ee8c173e9a21d54395236cda541b5f56d5",
+    "css/scene-export.css": "913bb00289b509e6ae4fd3c8e3c5dbe8fad395db4ed1df385d279a4db058446a",
+    "js/scene-capture-core.js": "4c86505b2698fc090d1e916183e059dff8f5921df2a16ce8cd4c1b3a9d8d25fa",
+    "js/scene-export-ui.js": "da81b711dfdfcc83eff40da7e80c2da245709fd202efc81787beb5ddfb1f5804",
+    "js/scene-delivery-core.js": "995c1624f39a458ff70b330f1a5befbc0ee93c8879f7bca9f1835465ddc2c983",
+    "js/blender-review-ui.js": "076655c1bb763691237a2026e69e72aef0b5a38a66bac8e91e8edaf59383bd45",
+    "js/blender-review-core.js": "937eef7c4baa0f2197e4111da7ef59521ceb43e493294edfc4c179d6cc7fb00f",
+    "scripts/interop/blender-scene-import.py": "f8b1e27802597fc505529e93348b7e112732411c60e1e29eca72872d4040bf51",
+    "scripts/interop/blender-scene-reopen.py": "c8859883f32e5644d0fc8282ad670b47833b0747e13698225d94880dcc4d5bdc",
+    "scripts/interop/blender-scene-render.py": "7148e1abb89489bce7bc2c45c8c94f57c22e7cb1a3aebdc20d1795b79da8756a",
+    "scripts/interop/blender-kit/RENDERIZAR-windows.bat": "8fe4957159f9720e012773092015d8c1ce654624f16c07963000aed195478610",
+    "scripts/interop/blender-kit/renderizar.sh": "e2c80ed4d59d679041584f1177ac138193147b32aae37cb49b3102ef447b251a",
+    "tests/scene-export.browser.test.cjs": "3b28a0a525af87176e611b9640fec7ea756a8793c47556c860d3b84b9535f632",
+    ".github/workflows/multiformat-import.yml": "2210ddb288bda299c8ffb862929f298a272b5e5d0234ccb115d929c96099d007"
+  },
+  "windowsNative": {
+    "os": "Windows 11 x64",
+    "engine": "5.2.1 LTS",
+    "renderer": "Cycles CPU, 16 samples, denoise, 640x400, AgX",
+    "profile": "preview",
+    "timingsSeconds": 134.5,
+    "memoryMeasurement": null,
+    "pathTest": "Ruta con espacios y caracteres Unicode",
+    "manifest": {
+      "bytes": 7804,
+      "sha256": "b3c4c8f987d24251d83626755176ec2b1855c85a8beb0508765a798cb0e5dcee"
+    },
+    "originalZip": {
+      "bytes": 13767209,
+      "sha256": "4ec10653e10100eabc1948986d001fdce890ead734fda1cb192f13352f7d3926"
+    },
+    "glb": {
+      "bytes": 13354344,
+      "sha256": "a22ed47bc4ec48887035e5ac39c113991304f28d7c9948f349f9f552024b3ffe"
+    },
+    "lockAndReopen": {
+      "checks": 9,
+      "status": "PASS",
+      "resume": {
+        "editedReviewSha256": "d10547af88d9fe3e86b29160308109832cfee1767745ca58b84d95f13efd8e86",
+        "editedReviewPreserved": true,
+        "retainedImages": 6,
+        "recoveredMissingView": true,
+        "rejectedOtherRun": true,
+        "reportUnchangedAfterRejection": true,
+        "scope": "Copia sintética con un PNG apartado para comprobar reanudación"
+      }
+    },
+    "views": [
+      {
+        "view": "viewer",
+        "png": {
+          "bytes": 354058,
+          "sha256": "2cc768d7f2d230f510cb2f13d1566692296668238801b4405ac01705dd1fefc0"
+        },
+        "camera": "captured viewer pose (C7)",
+        "seconds": 1.26
+      },
+      {
+        "view": "axon",
+        "png": {
+          "bytes": 328826,
+          "sha256": "521028924eba68bf461ce8f4241bc3a1489855538bc2ffcc5e4165ba341a4a39"
+        },
+        "camera": "orthographic axonometry",
+        "seconds": 0.92
+      },
+      {
+        "view": "rom_living",
+        "png": {
+          "bytes": 326318,
+          "sha256": "fc2e9daad18108c36f6038697831892ff5a5a21a02a99cdf580a5c2fe20897b0"
+        },
+        "camera": "perspective 16.0 mm, eye 1.35 m at plan (5638, 7202)",
+        "seconds": 2.15,
+        "targetRoomPresence": 0.648,
+        "heroInFrame": 0.75,
+        "foregroundFurnitureFraction": 0.0
+      },
+      {
+        "view": "rom_master",
+        "png": {
+          "bytes": 323799,
+          "sha256": "48be94e60d1abcba0e936a356351e3d1642034b53660ea90cd928e2db8903d89"
+        },
+        "camera": "perspective 13.0 mm, eye 1.35 m at plan (10123, 1685)",
+        "seconds": 2.01,
+        "targetRoomPresence": 0.837,
+        "heroInFrame": 0.875,
+        "foregroundFurnitureFraction": 0.059
+      },
+      {
+        "view": "rom_child",
+        "png": {
+          "bytes": 293228,
+          "sha256": "352b23ddc47c47871b46dac8faebd5e0adb336b9eb1e78faf76059f6ec2d8613"
+        },
+        "camera": "perspective 13.0 mm, eye 1.35 m at plan (9283, 5680)",
+        "seconds": 2.07,
+        "targetRoomPresence": 0.78,
+        "heroInFrame": 1.0,
+        "foregroundFurnitureFraction": 0.021
+      },
+      {
+        "view": "rom_kid",
+        "png": {
+          "bytes": 350165,
+          "sha256": "28505585f170807000cd7edaba1ddce5d80f4a396308b3362225217f32b568f5"
+        },
+        "camera": "perspective 18.0 mm, eye 1.35 m at plan (3890, 2528)",
+        "seconds": 1.88,
+        "targetRoomPresence": 0.79,
+        "heroInFrame": 0.875,
+        "foregroundFurnitureFraction": 0.021
+      }
+    ]
+  },
+  "browser": [
+    {
+      "browser": "157.0.8103.80",
+      "engine": "chromium",
+      "views": [
+        {
+          "view": "viewer",
+          "width": 640,
+          "height": 391,
+          "sha256": "2cc768d7f2d230f510cb2f13d1566692296668238801b4405ac01705dd1fefc0"
+        },
+        {
+          "view": "axon",
+          "width": 640,
+          "height": 400,
+          "sha256": "521028924eba68bf461ce8f4241bc3a1489855538bc2ffcc5e4165ba341a4a39"
+        },
+        {
+          "view": "rom_living",
+          "width": 640,
+          "height": 400,
+          "sha256": "fc2e9daad18108c36f6038697831892ff5a5a21a02a99cdf580a5c2fe20897b0"
+        },
+        {
+          "view": "rom_master",
+          "width": 640,
+          "height": 400,
+          "sha256": "48be94e60d1abcba0e936a356351e3d1642034b53660ea90cd928e2db8903d89"
+        },
+        {
+          "view": "rom_child",
+          "width": 640,
+          "height": 400,
+          "sha256": "352b23ddc47c47871b46dac8faebd5e0adb336b9eb1e78faf76059f6ec2d8613"
+        },
+        {
+          "view": "rom_kid",
+          "width": 640,
+          "height": 400,
+          "sha256": "28505585f170807000cd7edaba1ddce5d80f4a396308b3362225217f32b568f5"
+        }
+      ],
+      "originalBytesMatch": true,
+      "projectAndStorageUnchanged": true,
+      "rejectedOtherCapture": true,
+      "projectSwitchInvalidatedDelivery": true,
+      "offlineReview": true,
+      "syntheticBrandWithLogoAndNoContact": true,
+      "actualZipSha256": "01817ee3475216fee9d30855b2d4f44e521ed812469b876ebe5af413e3b03b08",
+      "zipBytes": 10637923,
+      "detectedExternal": []
+    },
+    {
+      "browser": "155.0",
+      "engine": "firefox",
+      "views": [
+        {
+          "view": "viewer",
+          "width": 640,
+          "height": 391,
+          "sha256": "2cc768d7f2d230f510cb2f13d1566692296668238801b4405ac01705dd1fefc0"
+        },
+        {
+          "view": "axon",
+          "width": 640,
+          "height": 400,
+          "sha256": "521028924eba68bf461ce8f4241bc3a1489855538bc2ffcc5e4165ba341a4a39"
+        },
+        {
+          "view": "rom_living",
+          "width": 640,
+          "height": 400,
+          "sha256": "fc2e9daad18108c36f6038697831892ff5a5a21a02a99cdf580a5c2fe20897b0"
+        },
+        {
+          "view": "rom_master",
+          "width": 640,
+          "height": 400,
+          "sha256": "48be94e60d1abcba0e936a356351e3d1642034b53660ea90cd928e2db8903d89"
+        },
+        {
+          "view": "rom_child",
+          "width": 640,
+          "height": 400,
+          "sha256": "352b23ddc47c47871b46dac8faebd5e0adb336b9eb1e78faf76059f6ec2d8613"
+        },
+        {
+          "view": "rom_kid",
+          "width": 640,
+          "height": 400,
+          "sha256": "28505585f170807000cd7edaba1ddce5d80f4a396308b3362225217f32b568f5"
+        }
+      ],
+      "originalBytesMatch": true,
+      "projectAndStorageUnchanged": true,
+      "rejectedOtherCapture": true,
+      "projectSwitchInvalidatedDelivery": true,
+      "offlineReview": true,
+      "syntheticBrandWithLogoAndNoContact": true,
+      "actualZipSha256": "77ebee0306decf8f7b8781d0d1a59cbf4d63a174c49627105b6a49e23aa123a7",
+      "zipBytes": 7664219,
+      "detectedExternal": []
+    },
+    {
+      "browser": "26.6",
+      "engine": "webkit",
+      "views": [
+        {
+          "view": "viewer",
+          "width": 640,
+          "height": 391,
+          "sha256": "2cc768d7f2d230f510cb2f13d1566692296668238801b4405ac01705dd1fefc0"
+        },
+        {
+          "view": "axon",
+          "width": 640,
+          "height": 400,
+          "sha256": "521028924eba68bf461ce8f4241bc3a1489855538bc2ffcc5e4165ba341a4a39"
+        },
+        {
+          "view": "rom_living",
+          "width": 640,
+          "height": 400,
+          "sha256": "fc2e9daad18108c36f6038697831892ff5a5a21a02a99cdf580a5c2fe20897b0"
+        },
+        {
+          "view": "rom_master",
+          "width": 640,
+          "height": 400,
+          "sha256": "48be94e60d1abcba0e936a356351e3d1642034b53660ea90cd928e2db8903d89"
+        },
+        {
+          "view": "rom_child",
+          "width": 640,
+          "height": 400,
+          "sha256": "352b23ddc47c47871b46dac8faebd5e0adb336b9eb1e78faf76059f6ec2d8613"
+        },
+        {
+          "view": "rom_kid",
+          "width": 640,
+          "height": 400,
+          "sha256": "28505585f170807000cd7edaba1ddce5d80f4a396308b3362225217f32b568f5"
+        }
+      ],
+      "originalBytesMatch": true,
+      "projectAndStorageUnchanged": true,
+      "rejectedOtherCapture": true,
+      "projectSwitchInvalidatedDelivery": true,
+      "offlineReview": true,
+      "syntheticBrandWithLogoAndNoContact": true,
+      "actualZipSha256": "6a94c780bcfc35a859f61d3a0bec49530fb923cf5044c6225856b84bc96c5e2d",
+      "zipBytes": 7472125,
+      "detectedExternal": []
+    }
+  ],
+  "ciContracts": {
+    "existing": 43,
+    "additions": 1,
+    "deletions": 0
+  },
+  "regressions": {
+    "unitLocal": 70,
+    "sceneBrowserLocal": 10,
+    "includes": [
+      "GLB retrasado 6 s, igualdad exacta",
+      "móvil vertical y horizontal",
+      "cancelación y reposo OP-02",
+      "F0 y R03 núcleo",
+      "revisión con captura incorrecta y cambio de proyecto"
+    ]
+  },
+  "baselineImages": {
+    "rom_living": {
+      "filename": "03-salon.png",
+      "bytes": 1806874,
+      "sha256": "5cccfb59397fd3bc42a1f076366ed6fde6b03d98a617e81a2a75fd18146b5df1"
+    },
+    "rom_master": {
+      "filename": "04-dormitorio-principal.png",
+      "bytes": 1638658,
+      "sha256": "8cdddcdc3b2ee96eccc7b66019ce5857203273084b93173a53eb518ac314ead1"
+    },
+    "rom_child": {
+      "filename": "05-dormitorio-juvenil.png",
+      "bytes": 1638174,
+      "sha256": "c2b4219b218491475c6e75eef335f92bdc442da65059eb213c64ce37f8ab841a"
+    },
+    "rom_kid": {
+      "filename": "06-dormitorio-infantil.png",
+      "bytes": 1699189,
+      "sha256": "5ea82870f9e8886db746b5d0654f0564f6c15e1b34a9c4c2743e4110e48af452"
+    }
+  },
+  "media": {
+    "dormitorios.webp": {
+      "bytes": 57738,
+      "sha256": "545b93d2844eecf8a42dab0164fda3288c99362584e1e569e91e64926a2f581e"
+    },
+    "revision-movil.webp": {
+      "bytes": 41228,
+      "sha256": "57b907d506a3385e0bd5673137f5c623eb79ec55002054466c9b14736bb6222a"
+    },
+    "recorrido.mp4": {
+      "bytes": 1523879,
+      "sha256": "f13bda2103c7087da32f2533802ff1c08e51b96f79660935749340e6dd898833"
+    }
+  },
+  "receivedEvidence": "Linux bpy 5.2.1, laboratorio, con adaptador.",
+  "notExecuted": [
+    "macOS nativo",
+    "Linux con nuevo lanzador oficial",
+    "GPU real o tiempos de perfiles review/delivery en el equipo de esta reproducción"
+  ]
+}
