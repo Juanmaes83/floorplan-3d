@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import core from './core.cjs';
+import journey from '../../../js/assistant-journey-core.js';
 
 function parseArgs(argv) {
   if (argv.length !== 2 || argv[0] !== '--project' || !argv[1]) {
@@ -96,6 +97,17 @@ async function main() {
     'Recalcula propose_layout sobre el mismo SHA-256, valida la copia y compara su área, recuento y revisión geométrica con el original. clearanceMm es un umbral opcional explícito en ambos estados. Devuelve simulationSha256 para revisar una variante local. No modifica ni exporta el proyecto.',
     { ...proposalInput, clearanceMm: z.number().positive().max(100000).optional() },
     heavy('simulateLayout'));
+
+  registerReadTool(server, 'get_workflow_guidance', 'Guía de las cinco fases de RUBIK',
+    'Explica el recorrido dentro de RUBIK y enumera las herramientas MCP de lectura útiles. No abre pantallas, no verifica permisos del editor, no consulta servicios y no modifica el proyecto. Omite stepId para ver las cinco fases.',
+    { stepId: z.string().min(1).max(32).optional(), lang: z.enum(['es', 'en', 'zh']).optional() },
+    ({ stepId, lang = 'es' }) => {
+      const delivery = { scope: 'rubik-editor-guide', liveEditorState: false, applied: false };
+      if (!stepId) return { ...delivery, phases: journey.list(lang) };
+      const step = journey.guide(stepId, lang);
+      if (!step) throw new Error('Unknown stepId. Call get_workflow_guidance without stepId to list the supported steps.');
+      return { ...delivery, step };
+    });
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

@@ -5,7 +5,7 @@ Servidor MCP local para consultar un archivo JSON exportado desde Rubik Sota. El
 ## Requisitos y arranque
 
 - Node.js 22.13 o posterior.
-- Un JSON exportado desde Rubik. Si no cumple `FloorPlanProjectV1`, solo la herramienta de diagnóstico podrá explicar el primer bloqueo.
+- Un JSON exportado desde Rubik. Si no cumple `FloorPlanProjectV1`, usa el diagnóstico para identificar el primer bloqueo de los datos. La guía de recorrido tampoco necesita leer su contenido.
 - El cliente MCP ejecutará el proceso local por `stdio`; el servidor no abre un puerto ni hace conexiones de red.
 
 Desde esta carpeta:
@@ -23,10 +23,11 @@ Para Claude Code, registra el comando con las rutas absolutas de Node, `src/serv
 claude mcp add --transport stdio rubik-floorplan -- node /ruta/al/repo/tools/rubik-mcp/src/server.mjs --project /ruta/al/proyecto.json
 ```
 
-El servidor vuelve a leer ese mismo archivo en cada consulta. Si exportas el proyecto de nuevo sobre el mismo archivo, la siguiente llamada analizará el contenido nuevo. El hash SHA-256 de cada respuesta identifica exactamente el JSON leído. Para cambiar a otro archivo, detén y vuelve a iniciar el servidor.
+El servidor vuelve a leer ese mismo archivo en cada consulta de datos. Si exportas el proyecto de nuevo sobre el mismo archivo, la siguiente llamada analizará el contenido nuevo. El hash SHA-256 de las respuestas sobre el proyecto identifica exactamente el JSON leído. Para cambiar a otro archivo, detén y vuelve a iniciar el servidor.
 
 ## Herramientas
 
+- `get_workflow_guidance`: los 27 recorridos del Asistente en ES, EN o ZH. Indica qué hacer en RUBIK y qué herramientas MCP aplican. Sin `stepId` devuelve las cinco fases. El resultado señala que desconoce el estado del editor en vivo y que no aplica cambios.
 - `get_project_summary`: esquema, hash, escala, recuentos y superficie útil aproximada.
 - `list_project_elements`: páginas de estancias, muros, huecos y muebles; permite filtrar por nombre/ID y estancia a partir de geometría.
 - `get_project_element`: consulta un elemento por ID con la misma relación espacial.

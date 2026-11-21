@@ -203,3 +203,104 @@ test('la consulta guiada se recupera al recargar el ejemplo sin guardar la vivie
   assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanLibrary.KEY)),libraryBefore);
  }finally{await context.close();}
 });
+
+// M05 · Each help link is an actual handoff to an existing surface. Merely asking must leave all authorities untouched.
+test('guía de cinco fases: 27 recorridos, destinos efectivos y ninguna escritura de proyecto ni llamada a servicios',{timeout:120000},async()=>{
+ const {context,page,watch}=await kit.editor(env);
+ const writes=[];
+ page.on('request',req=>{if(req.method()!=='GET'||/\/api\//.test(req.url()))writes.push(req.url());});
+ const phases=[
+  ['imagine',[['upload','file'],['blank','#welcomeBlank'],['template','#welcomeExample'],['scan','file'],['cad','file']]],
+  ['design',[['redistribute','#stage'],['rooms','#stage'],['walls','#stage'],['ceilings','#stage'],['floors','#stage'],['exterior','#workArea-analyze[aria-current="page"]'],['furniture','#furnitureSearch']]],
+  ['build',[['location','#territoryDialog[open]'],['cadastre','#territoryDialog[open]'],['budget','#workArea-budget[aria-current="page"]'],['planning','#planDialog[open]'],['gantt','#planDialog[open]']]],
+  ['present',[['blender','#sceneExportOpen'],['normal','#presentationConfig[open]'],['render','[data-route="prepare-views"]'],['hybrid','#presentationConfig[open]'],['section','#presentationConfig[open]']]],
+  ['visit',[['navigate','[data-view="3d"].active'],['walk','#modes3d [data-mode="walk"]'],['guided','#presentationConfig[open]'],['client','#delivery3dPreview'],['share','[data-route="client-link"],[data-route="client-file"]']]]
+ ];
+ try{
+  const original=await project(page);
+  await open(page);
+  await page.locator('#assistantJourney summary').press('Enter');
+  for(const [phase,steps] of phases){
+   for(const [id,target] of steps){
+    await page.selectOption('#assistantPhase',phase);
+    await page.selectOption('#assistantStep',id);
+    const before=strip(await stored(page));
+    await page.locator('#assistantGuideStep').click();
+    const card=page.locator(`#assistantJourney [data-step="${id}"]`);
+    await card.waitFor({state:'visible'});
+    assert.ok((await card.locator('h3').innerText()).length>0,id);
+    if(id==='gantt')assert.match(await card.innerText(),/No hay plan guardado/);
+    const trace=await lastTrace(page,'workflow-guidance');
+    assert.equal(trace.providerCalls,0,id);assert.equal(trace.opened,false,id);
+    assert.deepEqual(await project(page),original,id);
+    assert.deepEqual(strip(await stored(page)),before,id+' consult alone preserves storage');
+
+    const action=card.getByRole('button');assert.equal(await action.count(),1,id);
+    if(target==='file'){
+     const [chooser]=await Promise.all([page.waitForEvent('filechooser'),action.click()]);
+     assert.equal(await chooser.element().getAttribute('id'),'uploadIn',id);
+    }else{
+     await action.click();
+     if(id==='navigate')await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');
+     else await page.locator(target).first().waitFor({state:'visible'});
+    }
+
+    assert.deepEqual(await project(page),original,id+' navigation preserves project');
+    if(await page.locator('dialog[open]').count())await page.keyboard.press('Escape');
+    if(await page.locator('#assistantPanel').isVisible())await page.locator('#assistantClose').click();
+    if(await page.evaluate(()=>FloorPlanProfessionalUI.area!=='design'))await page.locator('#workArea-design').click();
+    await open(page);
+   }
+  }
+  assert.deepEqual(writes,[]);assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
+
+test('guía Gantt: ausencia, fechas del plan vigente, revisión obsoleta y aislamiento; diagnóstico localizado en móvil',{timeout:60000},async()=>{
+ const {context,page,watch}=await kit.editor(env,{viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ try{
+  await open(page,{touch:true});
+  let result=await ask(page,'¿Qué tarea sigue en el Gantt?',{touch:true});
+  assert.match(result.text,/No hay plan guardado/);
+  assert.doesNotMatch(result.text,/m²/);
+  const original=await project(page);
+  await page.evaluate(async()=>{
+   const C=FloorPlanConstructionContext,s=await C.snapshot();
+   C.store().saveSchedule(s.entry.id,s.subject,FloorPlanConstructionSchedule.create({
+    id:'sch_test',projectRef:{type:s.subject.type,id:s.subject.id,revision:s.revision},tasks:[
+     {id:'t1',wbs:'1',title:'Cimentación',startDate:'2026-03-02',endDate:'2026-03-06',dependsOn:[],elementIds:[],budgetItemIds:[],source:'QA'},
+     {id:'t2',wbs:'2',title:'Estructura',startDate:'2026-03-10',endDate:'2026-03-13',dependsOn:[],elementIds:[],budgetItemIds:[],source:'QA'}
+    ]}));
+  });
+  const q='¿Qué tarea sigue en el Gantt después de 2026-03-07?';
+  result=await ask(page,q,{touch:true});
+  assert.match(result.text,/Siguiente inicio previsto el 2026-03-10 \(1\): Estructura/);
+  assert.match(result.source,/Plan de obra guardado · revisión [0-9a-f]{8}/);
+  assert.doesNotMatch(result.text,/Cimentación/);
+  result=await ask(page,'¿Qué tarea sigue en el Gantt después de 2026-02-30?',{touch:true});
+  assert.match(result.text,/fecha no es válida/);
+  assert.deepEqual(await project(page),original);
+  await page.evaluate(()=>FloorPlanApp.applyAssistant(p=>{p.rooms[0].name='Nombre distinto';return {ok:true,project:p};}));
+  result=await ask(page,q,{touch:true});
+  assert.match(result.text,/no corresponde a esta revisión/);
+  assert.doesNotMatch(result.text,/Estructura/);
+  assert.equal(result.source,undefined);
+  await page.evaluate(()=>setLang('en'));
+  result=await ask(page,'What conflicts does the layout have?',{touch:true});
+  assert.match(result.text,/The review finds/);
+  assert.doesNotMatch(result.text,/\p{Script=Han}|Las huellas|se solapan|La hoja/u);
+  await page.evaluate(()=>setLang('zh'));
+  result=await ask(page,'甘特图',{touch:true});
+  assert.match(result.text,/已保存的计划与当前版本不符/);
+  const journey=page.locator('#assistantJourney');
+  // A modal remains in charge of its own state and close control.
+  await page.locator('#assistantClose').click();
+  await page.evaluate(()=>FloorPlanBudgetUI.open());
+  await page.evaluate(()=>RubikAssistantUI.open());
+  result=await ask(page,'Blender',{touch:true});
+  assert.match(await journey.locator('[role="status"]').textContent(),/关闭后/);
+  assert.equal(await journey.locator('[data-step="blender"] button').count(),0);
+  assert.equal(await page.locator('#budgetDialog').isVisible(),true);
+  assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
