@@ -285,7 +285,7 @@ flowchart LR
 
 R03 + idioma (#297), OP-11 lote 01 (#294) y Simulator A (#295) están integrados. El siguiente corte es [R02-A #298](https://github.com/Juanmaes83/floorplan-3d/pull/298), con Preview disponible y CI remota pendiente. La fuente de idioma ya contiene la corrección de #296. Ver [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) y [handoff](../integration/HANDOFF-MAESTRO-RUBIK-SOTA.md).
 
-Después de R02-A, preparar Studio E3 desde su handoff auditado. Conserva D4, la lectura confirmada F0, los contratos de imágenes y expediente, la validación de Preview y la autorización propia. #271 y Simulator D conservan sus comprobaciones pendientes.
+Después de R02-A, continuar el cierre de [Studio E3 · Entregables profesionales #299](https://github.com/Juanmaes83/floorplan-3d/pull/299). Studio Presentation E3 conserva su gate D4, la lectura confirmada F0 y los contratos de imágenes y expediente en su corte independiente. #271 y Simulator D conservan sus comprobaciones pendientes.
 
 #### Actualización operativa · 20/11/2026
 
