@@ -315,7 +315,7 @@ No son IDs del catálogo y no alteran el recuento. Se siguen en el plan maestro.
 | Beta IA privada | Identidad de tester, cuotas y libro común | #258, integrado por #259; la activación y la prueba con proveedor siguen pendientes | GOV-06a, IMG-04, FOT-01, CAT-01 |
 | CON-03 | Importación de presupuesto | master (#241) | Sin ID; decisión pendiente |
 | «CAT-04» | Producto de catálogo a partida C1–C4 | master (#237) | Avance parcial de CAT-03 |
-| R01, R02-A, R03 | Piedras SCULPT | R02-A y R03 en master en su alcance actual. Recuperados: recorrido de aceptación R02-A `743343a1`, holguras R03 de solo lectura `e95f106f`, laboratorio R01 `d9fe3f2a` en HOLD | G-01, LUZ-01, CAT-03 |
+| R01, R02-A, R03 | Piedras SCULPT | R03: holguras de solo lectura e idioma ES/EN/ZH integrados en #297. R02-A: techos experimentales en master; consulta orientativa y traducción en [#298](https://github.com/Juanmaes83/floorplan-3d/pull/298), Preview READY y CI remota pendiente. R01: laboratorio `d9fe3f2a`, HOLD. | G-01, LUZ-01, CAT-03 |
 
 ## 7. Cómo se actualiza esta matriz
 
