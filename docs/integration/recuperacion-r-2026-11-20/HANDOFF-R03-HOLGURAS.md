@@ -1,5 +1,9 @@
 # R03 · Recuperación del análisis de holguras (20/11/2026)
 
+> **SITUACIÓN ACTUAL · 21/11/2026.** Este documento narra la **recuperación histórica**. Las holguras informativas y la localización R03 ya fueron **integradas mediante #297 y desplegadas en Production** sobre `cf0b5012`; siguen sin certificación profesional y sin alterar datos. Para CI posfusión pendiente, seguimiento de idioma y cola actual consultar el [corte V5](../CORTE-OPERATIVO-VERIFICADO-2026-11-21.md).
+
+> **Integración #297.** El bloque R03 consta de nueve módulos declarados en el manifiesto de activación. El nuevo módulo de holguras se carga antes del adaptador del diálogo y conserva los cinco hooks. Seleccionar un armario → Interior del armario → Holguras. El diagnóstico es de solo lectura y no bloquea el guardado. La localización cubre el editor, teclado y avisos de cierre. Ver [estado maestro](../../product/ESTADO-MAESTRO-RUBIK-SOTA.md).
+
 > **Estado:** candidata recuperada y **conectada en solo lectura** al diálogo de interiores existente (autorización del propietario del 20/11/2026), para auditoría e integración por Codex.
 > - No escribe el proyecto, no bloquea el guardado y no aplica propuestas.
 > - Sin fusionar ni activar fuera de esta rama.

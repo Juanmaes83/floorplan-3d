@@ -1,5 +1,7 @@
 # RUBIK SOTA — Plan maestro de consolidación y comercialización v1.12
 
+> **NOTA DE VIGENCIA · 21/11/2026.** Este plan v1.12 mantiene **objetivos, programas y 98 IDs históricos**, pero su instantánea del 18/11 y las respuestas de situación de ese corte **no describen el master actual**. Para estado y prioridad operativos ver [corte V5](../integration/CORTE-OPERATIVO-VERIFICADO-2026-11-21.md): #295 y #297 en Production; #298–#301 PR pendientes de gates; HERO A+B+C en laboratorio. No recalcular avances, comerciales o porcentajes de IDs a partir de PR o check-runs.
+
 **Fecha:** 18/11/2026 · **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` y PR abiertas #251–#260 en sus SHA del 18/11 · **Autor:** Claude Code, por mandato del propietario · **Estado:** propuesta para decisión del propietario.
 
 Este documento **no autoriza** integración, despliegue, activación de proveedores, gasto ni cambios de alcance. Cada corte propuesto necesita su propia autorización.
@@ -282,6 +284,15 @@ flowchart LR
 **Orden técnico entre programas.** P3 va antes de que P2 active nada en Production: la beta IA real de #258 ya exige identidad por tester, y GOV-06a la convierte en identidad por profesional. P5 aporta a P1 y a P4 a la vez: la integración de #255 mejora el 3D de la presentación y de la beta en un solo corte.
 
 ### 6.3 Cortes propuestos
+
+R03 + idioma (#297), OP-11 lote 01 (#294) y Simulator A (#295) están integrados. El siguiente corte es [R02-A #298](https://github.com/Juanmaes83/floorplan-3d/pull/298), con Preview disponible y CI remota pendiente. La fuente de idioma ya contiene la corrección de #296. Ver [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) y [handoff](../integration/HANDOFF-MAESTRO-RUBIK-SOTA.md).
+
+Después de R02-A, continuar el cierre de [Studio E3 · Entregables profesionales #299](https://github.com/Juanmaes83/floorplan-3d/pull/299). Studio Presentation E3 conserva su gate D4, la lectura confirmada F0 y los contratos de imágenes y expediente en su corte independiente. #271 y Simulator D conservan sus comprobaciones pendientes.
+
+#### Actualización operativa · 20/11/2026
+
+C/C-bis se cerró en #293. La cola conserva OP-11 lote 01 → Simulator A; verificar y acreditar la actualización exacta de #294 antes de avanzar. Preparar después Studio E3 y OP-11 lote 02 en cortes independientes. #271 y D conservan sus gates. OP-05 P1–P4, R03 holguras, R02-A, R01 y A0 se recuperan desde los SHA del [handoff maestro](../integration/HANDOFF-MAESTRO-RUBIK-SOTA.md#corte-operativo-20112026--293-y-recuperaci%C3%B3n-auditada). R01 queda HOLD, A0/F0 congeladas, OP-07 inactivo y C1 de OP-05 NO-GO. Ningún corte abre una piedra o requiere modularizar el editor.
+
 
 **Consolidación del 19/11/2026.** P0 H-1 (#270) y OP-02 (#266) integrados. Consultar el [estado maestro](ESTADO-MAESTRO-RUBIK-SOTA.md) y la [matriz de trazabilidad](MATRIZ-TRAZABILIDAD-v1.12.md) para el SHA y la evidencia. Orden restante: #268 → #269 → #271 → #272. A0 (#273) depende del contrato #272 y de F0.2b #269 sobre la base consolidada con P0. La etapa 1 de F0.2c (#274) se acredita después de A0. La migración real y la activación global siguen sujetas a autorización específica.
 
