@@ -50,8 +50,8 @@
  function bar(b){
   const box=$('#levelBar');if(!box)return;box.replaceChildren();box.hidden=!b;
   const status=$('#levelStatus');
-  if(!b){if(status)status.textContent='';$('#levelsBtn').textContent='Plantas';return;}
-  const active=activeLevel(b);$('#levelsBtn').textContent='Plantas…';
+  if(!b){if(status)status.textContent='';$('#levelsBtn').textContent=L3('Plantas','Levels','楼层');return;}
+  const active=activeLevel(b);$('#levelsBtn').textContent=L3('Plantas…','Levels…','楼层…');
   for(const l of b.levels){const btn=document.createElement('button');btn.type='button';btn.className='btn chip'+(l.id===active.id?' on':'');btn.dataset.level=l.id;btn.textContent=l.name;btn.setAttribute('aria-pressed',String(l.id===active.id));btn.onclick=()=>selectLevel(l.id);box.append(btn);}
   const all=document.createElement('button');all.type='button';all.id='levelViewAll';all.className='btn chip only3d'+(window.View3D?.levelView==='all'?' on':'');all.textContent='Ver todas';all.title='Ver en 3D todas las plantas o sólo hasta la activa';
   all.setAttribute('aria-pressed',String(window.View3D?.levelView==='all'));all.onclick=()=>{const next=window.View3D?.levelView==='all'?'active':'all';lastContext='';window.View3D?.setLevelContext(context(current()),next);bar(current());};box.append(all);

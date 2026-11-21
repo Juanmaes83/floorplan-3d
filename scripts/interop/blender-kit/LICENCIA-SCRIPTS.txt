@@ -1,0 +1,42 @@
+RUBIK SOTA · Licencia de los scripts de Blender de este kit / Licence of the Blender scripts in this kit
+
+ES
+Alcance. Sólo estos tres scripts de Python, que usan la API bpy de Blender, se distribuyen bajo la GNU General Public
+License versión 3 o (a tu elección) cualquier versión posterior (SPDX: GPL-3.0-or-later):
+  rubik_blender_prepare.py   (en el repositorio de RUBIK: scripts/interop/blender-scene-import.py)
+  rubik_blender_render.py    (scripts/interop/blender-scene-render.py)
+  rubik_blender_verify.py    (scripts/interop/blender-scene-reopen.py)
+Copyright (C) 2026 Juan Manuel Espinosa Galant · Rubik Sota. El texto completo de la licencia está en COPYING-GPL-3.0.txt.
+Fuentes. Cada script ES su código fuente completo (Python legible, sin compilar ni ofuscar): puedes estudiarlo, modificarlo y
+redistribuirlo con las condiciones de la GPL. Su huella SHA-256 figura en manifest.json.
+Sin garantía. Se distribuyen SIN NINGUNA GARANTÍA, ni siquiera la implícita de comerciabilidad o idoneidad para un fin
+concreto (secciones 15 y 16 de la licencia).
+Lo que NO cubre esta licencia:
+  - la aplicación web de RUBIK SOTA y su código JavaScript, ni la licencia general de RUBIK SOTA, que no cambia;
+  - los lanzadores renderizar.sh y RENDERIZAR-windows.bat, rubik_render_profiles.json, LEEME.txt y manifest.json;
+  - tu proyecto y sus datos: scene.glb, rubik-estancias.json, referencia-rubik.png, y las imágenes, renders y archivos .blend
+    que produzcas. Son tuyos; usar estos scripts no cambia su titularidad.
+Terceros. Blender (blender.org) es software libre bajo GPL-2.0-or-later, compatible con esta licencia; no se incluye en el
+kit: se usa el Blender que tengas instalado. Los scripts sólo usan la biblioteca estándar de Python y la API de Blender
+(bpy, mathutils, bpy_extras); no contienen código de terceros. Se conservan las atribuciones y licencias de terceros.
+Avisos. Si redistribuyes un script, mantén su cabecera (SPDX y copyright) y acompáñalo de COPYING-GPL-3.0.txt. Si lo
+modificas, indica que lo has modificado y la fecha (sección 5).
+
+EN
+Scope. Only these three Python scripts, which use Blender's bpy API, are distributed under the GNU General Public License
+version 3 or (at your option) any later version (SPDX: GPL-3.0-or-later): rubik_blender_prepare.py, rubik_blender_render.py
+and rubik_blender_verify.py. Copyright (C) 2026 Juan Manuel Espinosa Galant · Rubik Sota. Full text: COPYING-GPL-3.0.txt.
+Source. Each script IS its complete source code (readable Python, not compiled or obfuscated); SHA-256 in manifest.json.
+No warranty. Distributed WITHOUT ANY WARRANTY (sections 15 and 16 of the licence).
+Not covered: the RUBIK SOTA web application and its JavaScript (RUBIK SOTA's general licence does not change); the launchers
+renderizar.sh and RENDERIZAR-windows.bat, rubik_render_profiles.json, LEEME.txt and manifest.json; and your project and its
+data (scene.glb, rubik-estancias.json, referencia-rubik.png) and the images, renders and .blend files you produce, which
+remain yours.
+Third parties. Blender is free software under GPL-2.0-or-later, compatible with this licence; it is not included. The scripts
+only use the Python standard library and Blender's API; they contain no third-party code.
+Notices. When redistributing a script keep its header (SPDX and copyright) and include COPYING-GPL-3.0.txt; if you modify it,
+state that you did and the date (section 5).
+
+ZH
+范围：仅本工具中使用 Blender bpy API 的三个 Python 脚本按 GNU GPL 第 3 版或更高版本（GPL-3.0-or-later）分发，全文见
+COPYING-GPL-3.0.txt。不提供任何担保。RUBIK SOTA 网页应用、启动脚本以及您的项目、图像、渲染和 .blend 文件不受此许可约束，仍归您所有。

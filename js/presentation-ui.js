@@ -11,9 +11,9 @@
   Object.defineProperty(node,'textContent',{configurable:true,get(){return TEXT.get.call(this);},set(v){v=v==null?'':String(v);if(TEXT.get.call(this)!==v)TEXT.set.call(this,v);}});
   node.setAttribute=function(name,value){value=String(value);if(this.getAttribute(name)!==value)SET_ATTR.call(this,name,value);};return node;};
  const button=(text,parent,fn)=>{const node=el('button',text,parent,'btn');node.type='button';node.onclick=fn;return node;};
- const headerButton=button('',document.querySelector('header'),()=>open());headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');
+ const headerButton=button('',document.querySelector('header'),event=>open(event.currentTarget));headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');
  const config=el('dialog',undefined,document.body,'presentation-config');config.id='presentationConfig';config.setAttribute('aria-labelledby','presentationConfigTitle');
- const overlay=el('section',undefined,document.querySelector('#stage'),'presentation-overlay');overlay.id='presentationOverlay';overlay.hidden=true;overlay.setAttribute('aria-label','Presentación de la vivienda');
+ const overlay=el('section',undefined,document.querySelector('#stage'),'presentation-overlay');overlay.id='presentationOverlay';overlay.hidden=true;overlay.setAttribute('aria-label',tx('Presentación de la vivienda','Home presentation','住宅展示'));
  const map=el('div',undefined,overlay,'presentation-minimap');map.id='presentationMinimap';map.hidden=true;
  const mapToggle=button('',map,()=>{mapOpen=!mapOpen;renderMinimap();});mapToggle.id='presentationMinimapToggle';
  const mapPanel=el('div',undefined,map,'presentation-minimap-panel');mapPanel.id='presentationMinimapPanel';
@@ -63,7 +63,7 @@
  // Focus goes back to the control that opened the presentation; if the guide has since moved the entry (one
  // presentation entry at a time), to the presentation entry that is visible now, never to an unrelated control.
  const shown=el=>!!el?.isConnected&&!el.closest('[hidden]')&&el.getClientRects().length>0;
- function refocus(target){(shown(target)?target:['#guidePresent','#presentationBtn'].map(q=>document.querySelector(q)).find(shown))?.focus?.({preventScroll:true});}
+ function refocus(target){(target!==document.body&&target!==document.documentElement&&shown(target)?target:['#guidePresent','#presentationBtn'].map(q=>document.querySelector(q)).find(shown))?.focus?.({preventScroll:true});}
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
  let mapOpen=false;
@@ -1053,11 +1053,11 @@
   for(const {name,s} of summaries){if(levels.length>1)el('h3',name,box);const ul=el('ul',undefined,box);for(const line of P.lines(s,lang))el('li',line,ul);}
   el('p',P.T.experience[{es:0,en:1,zh:2}[lang]??0],box,'presentation-provenance-note');
  }
- function open(){
+ function open(opener=document.activeElement){
   if(active||pendingStart){closeButton.focus();return;}
   // A building with a pending distribution is not presented as a finished proposal (see FloorPlanBuildingUI.gate).
   if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Presentar mi vivienda'))return;
-  returnFocus=document.activeElement;
+  returnFocus=opener;
   resetTemplates();config.replaceChildren();buildingConfig=null;roomList=null;startButton=null;sectionLevels=new Map();elevationDescriptor=null;axonDescriptor=null;
   const heading=el('h2',tx('Presentar mi vivienda','Present my home','展示我的住宅'),config);heading.id='presentationConfigTitle';
   // A building of two levels is presented as a whole: rooms chosen per level, one presentation and one batch.
@@ -1271,9 +1271,13 @@
   // (the layout rebuild passes through a 0 px stage); then the roof, hidden while presenting, is synced again.
   if(saved?.viewMode==='3d')await window.View3D?.viewportSettled?.();
   if(!fromPop&&location.hash==='#presentacion'){
-   const focus=saved?.focus;
-   addEventListener('popstate',()=>refocus(focus),{once:true});
-   history.back();
+   // The editor is ready only when the browser has restored its same-document route. Reloading
+   // the presentation URL before popstate would send the user to the welcome screen.
+   await new Promise(resolve=>{
+    addEventListener('popstate',resolve,{once:true});
+    history.back();
+   });
+   refocus(saved?.focus);
   }else if(document.activeElement===document.body||!shown(document.activeElement))refocus(saved?.focus);
   stopping=false;window.View3D?.syncRoofVisibility?.();
  }
@@ -1328,5 +1332,8 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
+ // The header entry is a global control: it follows the language from any entry point (header or Home button). An open
+ // presentation redraws its own texts; a closed one only relabels the entry.
+ document.addEventListener('rubik:languagechange',()=>{headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');overlay.setAttribute('aria-label',tx('Presentación de la vivienda','Home presentation','住宅展示'));if(!overlay.hidden)draw();});
  window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active||stopping;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
 })();
