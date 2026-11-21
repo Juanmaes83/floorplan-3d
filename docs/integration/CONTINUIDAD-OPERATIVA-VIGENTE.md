@@ -1,5 +1,10 @@
 # RUBIK SOTA — Continuidad operativa vigente
 
+> **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en última consulta: 4 PASS, 3 en ejecución, 1 SKIP. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
+> **Continuidad:** M01 no tiene aún restauración integral de proyectos demostrada, el protocolo R1 requiere A0 activo ≥7 días y backup privado completo; no anunciar recuperación garantizada.
+
+---
+
 **Corte documental:** 21/11/2026, 22:37 CET, tras la fusión de #304. **Producto observado:** `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`, árbol `7dda0024c1e68674126a0f0723d683b8557484f7`. Esta página concentra el estado operativo de esta actualización; Estado maestro, Plan, Matriz y Handoff enlazan aquí. Los cortes anteriores se conservan como históricos. El corte es una consulta fechada: comprobar el remoto antes de actuar, y actualizar este mismo archivo con el siguiente delta publicado.
 
 ## 1. Reglas de lectura y evidencia

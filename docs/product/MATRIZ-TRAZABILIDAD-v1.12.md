@@ -1,5 +1,10 @@
 # RUBIK SOTA — Matriz de trazabilidad reconciliada v1.12
 
+> **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](../integration/CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en última consulta: 4 PASS, 3 en ejecución, 1 SKIP. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
+> **Matriz:** mantener 98 IDs y sus estados históricos; este añadido solo actualiza la fotografía operativa post-#300, sin reclasificar los 98 registros sin auditoría por ID.
+
+---
+
 > **ACTUALIZACIÓN OPERATIVA · 21/11/2026, tras #304.** El corte vigente de esta propuesta documental está en [Continuidad operativa vigente](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md), contrastado con `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`. M05 #303/#304, M08 #308, E3 #299, R02-A #298 y Simulator A/C/E ya están integrados. M03 #306, HERO #309 y las candidatas de laboratorio conservan sus SHA, bases y gates en esa página. **No usar los contadores o estados de los cortes inferiores como pendientes actuales.** No rehacer capacidades integradas ni extrapolar pruebas entre árboles. El cuerpo que sigue conserva su fecha y su valor histórico; los contratos, IDs, decisiones y autorizaciones siguen vigentes en sus alcances.
 
 

@@ -1,5 +1,10 @@
 # RUBIK SOTA — Punto de recuperación y reanudación
 
+> **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en última consulta: 4 PASS, 3 en ejecución, 1 SKIP. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
+> **Recuperación:** GitHub recupera el código, no los proyectos guardados en localStorage/IndexedDB. No existe en este corte un simulacro acreditado de copia independiente/restauración integral.
+
+---
+
 **Corte auditado:** 21/11/2026, 22:37 CET. Documento operativo de solo documentación: no ejecuta copias, restauraciones, migraciones, cambios de código ni despliegues. Leer junto a [Continuidad vigente](CONTINUIDAD-OPERATIVA-VIGENTE.md). Comprobar el remoto antes de actuar: una fotografía de estado no es monitorización continua.
 
 ## 1. Qué podemos recuperar hoy
