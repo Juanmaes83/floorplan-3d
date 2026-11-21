@@ -113,7 +113,11 @@ test('teclado, foco y cambio de proyecto en EN: el resumen se abre con el teclad
     const json = await page.evaluate(() => { const p = structuredClone(window.FloorPlanApp.project);p.id = 'prj_idioma-r02a';return JSON.stringify(p); });
     const file = path.join(os.tmpdir(), 'r02a-idioma.json');await fs.writeFile(file, json);
     await page.locator('#fileIn').setInputFiles(file);await page.waitForFunction(() => window.FloorPlanApp.project?.id === 'prj_idioma-r02a');
-    await K.selectRoom(page, 'rom_master');await K.openSection(page);
+    // Keep the import and the initial keyboard interaction real. Select the same room through
+    // the editor after import so different SVG hit areas do not select overlapping furniture.
+    await page.evaluate(() => { select({kind:'room',id:'rom_master'});drawer('panel',true); });
+    await page.locator('section.r02a-ceiling[data-room-id="rom_master"]').waitFor({state:'attached'});
+    await K.openSection(page);
     const t = await panelTexts(page);
     assert.deepEqual(t.filter(x => SPANISH.test(x) || CJK.test(x)), [], 'otro proyecto en EN: ni español ni chino');
   } finally { await context.close(); }
