@@ -226,3 +226,21 @@ test('code-gated mode, private in-memory chat and a stale tool turn on the same 
   assert.deepEqual(watch.external,[]);assert.deepEqual(watch.errors,[]);
  }finally{release();await context.close();}
 });
+
+test('volver a consulta guiada detiene un turno generativo antes del siguiente paso',async()=>{
+ const {context,page}=await kit.editor(env);
+ let release,requested;
+ const held=new Promise(resolve=>{release=resolve;});
+ const entered=new Promise(resolve=>{requested=resolve;});
+ try{
+  const seen=await fakeGateway(page,{queue:[async()=>{requested();await held;return call('get_project_summary');}]});
+  await open(page);await page.click('#assistantModeGen');await page.waitForFunction(()=>RubikAssistantGenUI.active());
+  await page.check('#assistantConsentQuestion');await page.check('#assistantConsentData');
+  await page.fill('#assistantInput','Revisa la vivienda');await page.click('#assistantSend');await entered;
+  await page.click('#assistantModeGuided');release();
+  await page.waitForFunction(()=>!RubikAssistantUI.state.pending);
+  assert.equal(seen.filter(x=>x.body.action==='step').length,1,'no project tool results were sent');
+  assert.match(await page.textContent('#assistantLog'),/Consulta detenida. El proyecto sigue intacto/);
+  assert.match((await ask(page,'¿Cuántas estancias hay?')).text,/estancias/);
+ }finally{release();await context.close();}
+});

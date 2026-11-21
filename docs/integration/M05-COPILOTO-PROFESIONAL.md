@@ -6,7 +6,7 @@
 
 | Capacidad | Conexión y garantía |
 | --- | --- |
-| AG-0 / V3 | La interfaz comprueba disponibilidad con el código de la pestaña. El proveedor solo interviene tras dos consentimientos. Una revisión o ámbito cambiado durante un turno impide entregar su resultado o enviar otro paso. |
+| AG-0 / V3 | La interfaz comprueba disponibilidad con el código de la pestaña. El proveedor solo interviene tras dos consentimientos. Una revisión o ámbito cambiado durante un turno impide entregar su resultado o enviar otro paso. Volver a Consulta guiada cancela el turno en curso. |
 | AG-1 / V2 | Consultas locales sobre estancias, superficies, distribución, materiales, mobiliario, precios y presupuesto. Las respuestas conservan fuente y revisión. |
 | AG-2, AG-3 / K13 | La tarjeta distingue «Antes» y «Después». Aplicar revalida la propuesta y usa el editor. Su deshacer y rehacer comprueban proyecto, planta y paso de historial. Si el almacenamiento rechaza el cambio inmediato, el editor conserva proyecto e historial. F0.2b usa además su propio estado de guardado y conflictos. |
 | AG-4, AG-5 | Presupuestar, catálogos, estudio visual y Render IA conservan sus rutas, límites y confirmaciones. Abrir una ruta no inicia una generación. |

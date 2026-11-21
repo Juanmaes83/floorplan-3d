@@ -271,12 +271,13 @@
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();e.preventDefault();closePanel();}}); // Escape cierra el panel, no el diálogo en el que está
  form.onsubmit=e=>{e.preventDefault();ask(input.value);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(input.value);}});
- stop.onclick=()=>state.pending?.abort();
+ const cancel=()=>state.pending?.abort();
+ stop.onclick=cancel;
  clear.onclick=()=>{state.pending?.abort();state.pending=null;send.disabled=false;stop.hidden=true;state.log=[];clearSavedLog();render();card.hidden=true;state.proposal=null;state.applied=null;window.RubikAssistantGenUI?.clear?.();emit('clear');};
  document.getElementById('langBtn')?.addEventListener('click',()=>setTimeout(()=>{labels();if(state.open)suggestions();},0));
  addEventListener('rubik-assistant',e=>{if(e.detail?.type==='mode')labels();});
  mountOpener();labels();rehost();new MutationObserver(()=>{mountOpener();if(state.open)suggestions();}).observe(document.body,{childList:true,subtree:false});
- window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,invalidate,
+ window.RubikAssistantUI=Object.freeze({open:openPanel,close:closePanel,ask,cancel,invalidate,
   get state(){return {open:state.open,pending:!!state.pending,proposal:state.proposal?structuredClone(state.proposal):null,applied:state.applied?{...state.applied}:null,log:state.log.map(m=>({...m}))};},
   get trace(){return state.trace.map(e=>structuredClone(e));},setLatency(ms){state.latencyMs=Math.max(0,Math.min(10000,Number(ms)||0));}});
 })();

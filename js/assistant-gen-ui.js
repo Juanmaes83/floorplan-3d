@@ -88,7 +88,10 @@
  const fmt=v=>v===null||v===undefined?'—':Number(v).toFixed(4);
  async function check(){if(state.checking)return state.checking;state.checking=(async()=>{try{state.status=await adapter().status();}catch{state.status={enabled:false,reason:'unreachable'};}
   if(!(state.status?.enabled===true&&state.status.reason==='ok')&&state.mode==='generative')setMode('guided');else labels();state.checking=null;})();return state.checking;}
- function setMode(m){if(m==='generative'&&!(state.status?.enabled===true&&state.status.reason==='ok'))return;state.mode=m;labels();
+ function setMode(m){
+  if(m==='generative'&&!(state.status?.enabled===true&&state.status.reason==='ok'))return;
+  if(state.mode==='generative'&&m==='guided')window.RubikAssistantUI?.cancel();
+  state.mode=m;labels();
   dispatchEvent(new CustomEvent('rubik-assistant',{detail:{type:'mode',mode:m,at:Date.now()}}));}
  // Route buttons: open the REAL flows; nothing is spent from here.
  function openRoute(route){const go={'budget-edit':()=>window.FloorPlanBudgetUI?.open(),'reference-prices':()=>window.FloorPlanReferencePricesUI?.open(),'economic-dossier':()=>window.FloorPlanEconomicDossierUI?.open(),
