@@ -262,9 +262,10 @@ test('R2 P15 ten presentation cycles release their loop and keep renderer memory
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
+const P16_MIXED_NAME='<script>window.__presentationInjected=1</script> &amp; Á住宅 '+('SinEspacios'.repeat(3));
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P16 long HTML-like room name stays text and controls fit ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
- const name='<script>window.__presentationInjected=1</script> &amp; Á住宅 '+('SinEspacios'.repeat(3));
+ const name=P16_MIXED_NAME.replace('住宅','WW');
  await page.evaluate(value=>mutate(()=>{project.rooms.find(r=>r.id===FloorPlanApp.geometry.rooms[0].id).name=value;}),name);
  const beforeState=await state(page),beforeScripts=await page.locator('script').count();
  await (await presentEntry(page)).click();
@@ -287,6 +288,40 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await screenshot(page,`${size}-long-name-room`);
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
+});
+
+test('R2 P16 mixed room name follows the visible language, stays text and leaves the saved name intact',{timeout:budget(120000)},async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900});
+ const roomId=await page.evaluate(name=>{
+  const id=FloorPlanApp.geometry.rooms[0].id;
+  mutate(()=>{project.rooms.find(r=>r.id===id).name=name;});
+  return id;
+ },P16_MIXED_NAME);
+ const stored=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ const names=[
+  {lang:'es',start:'Iniciar presentación',visible:'Nombre sin traducir'},
+  {lang:'en',start:'Start presentation',visible:'Untranslated name'},
+  {lang:'zh',start:'开始展示',visible:P16_MIXED_NAME}
+ ];
+ for(const {lang,start,visible} of names){
+  await page.evaluate(value=>setLang(value),lang);
+  const scripts=await page.locator('script').count();
+  await (await presentEntry(page)).click();
+  assert.equal(await page.locator('.presentation-room-row').first().locator('span').textContent(),visible,lang);
+  assert.equal(await page.locator('#presentationConfig script').count(),0,lang);
+  await page.getByRole('button',{name:start,exact:true}).click();
+  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
+  await page.locator('.presentation-stops button').nth(1).click();
+  await page.waitForFunction(id=>FloorPlanPresentation.current?.roomId===id&&document.querySelector('#presentationOverlay').dataset.moving==='false',roomId,{timeout:budget(30000)});
+  assert.equal(await page.locator('.presentation-card h2').textContent(),visible,lang);
+  assert.equal(await page.locator('.presentation-stops button').nth(1).textContent(),visible,lang);
+  assert.equal(await page.locator('script').count(),scripts,lang);
+  assert.equal(await page.evaluate(()=>window.__presentationInjected),undefined,lang);
+  await page.locator('#presentationClose').click();
+  await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),stored,lang);
+ }
+ assert.deepEqual(errors,[]);
 });
 
 test('3D camera, focus and editor state return after Escape and browser Back',{timeout:budget(120000)},async t=>{

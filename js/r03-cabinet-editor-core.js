@@ -13,30 +13,32 @@
   const mm = v => `${Math.round(v)} mm`;
   const OPS = Object.freeze(['select-bay', 'split', 'merge', 'set-shelves', 'add-shelf', 'remove-shelf', 'set-rod', 'set-drawers', 'set-front', 'set-door-count', 'resize', 'set-bay-width']);
 
+  // Textos visibles en los idiomas de RUBIK (convención de los módulos: tx local que lee el LANG global; sin LANG, español).
+  const tx = (es, en, zh) => ({ es, en, zh })[typeof LANG === 'string' ? LANG : 'es'] || es;
   /* Readable reasons, with the numbers that matter. The limits are read from RubikCabinetCore.LIMITS (never duplicated). */
   function explain(issues, state, proposed) {
     const L = K.LIMITS, out = [];
     const inner = state ? K.cavity(state.outer, state.cabinet) : null;
     for (const x of issues || []) {
-      const m = x.bay == null ? '' : `Módulo ${x.bay + 1}: `;
+      const m = x.bay == null ? '' : tx(`Módulo ${x.bay + 1}: `, `Bay ${x.bay + 1}: `, `第 ${x.bay + 1} 格：`);
       // The numbers of the change that was refused (proposed), not of the state that stays.
       const col = x.bay == null ? null : (proposed?.bay === x.bay ? { ...state?.cabinet.columns[x.bay], ...proposed.patch } : state?.cabinet.columns[x.bay]);
       switch (x.code) {
-        case 'shelf-gap': out.push(`${m}cada balda necesita al menos ${L.boardGapMm} mm libres por encima y por debajo (también sobre los cajones y bajo el techo interior).`); break;
-        case 'rod': out.push(`${m}la barra choca: necesita ${L.rodAboveDrawersMm} mm sobre los cajones, ${L.rodShelfGapMm} mm de separación con cada balda y ${L.rodBelowTopMm} mm bajo el techo interior.`); break;
-        case 'drawers-height': out.push(`${m}${col ? `${col.drawers} cajones de ${mm(col.drawerHeight)} (${mm(col.drawers * col.drawerHeight)})` : 'los cajones'} no caben: la altura libre es ${inner ? mm(inner.height) : '—'} y deben quedar ${L.drawerHeadroomMm} mm encima.`); break;
-        case 'drawers': out.push(`${m}entre ${L.drawers[0]} y ${L.drawers[1]} cajones, de ${L.drawerHeight[0]} a ${L.drawerHeight[1]} mm de alto.`); break;
-        case 'bay-width': out.push(`${m}cada módulo necesita al menos ${L.bayMinWidth} mm de anchura libre.`); break;
-        case 'shelves-count': out.push(`${m}como máximo ${L.shelvesMax} baldas por módulo.`); break;
-        case 'bays-count': out.push(`El armario admite de ${L.bays[0]} a ${L.bays[1]} módulos.`); break;
-        case 'bay-index': out.push(x.message.startsWith('No hay') ? 'No hay un módulo contiguo con el que unir.' : 'Ese módulo no existe.'); break;
-        case 'single-bay': out.push('Con un solo módulo, su anchura es toda la anchura libre del armario.'); break;
-        case 'cavity': out.push(`El interior queda demasiado pequeño: altura libre mínima ${L.cavityMinHeight} mm, fondo libre mínimo ${L.cavityMinDepth} mm y ${L.bayMinWidth} mm por módulo.`); break;
-        case 'dimensions': out.push(`Medidas fuera de rango: altura ${L.height[0]}–${L.height[1]} mm, tablero ${L.thickness[0]}–${L.thickness[1]} mm, zócalo ${L.plinth[0]}–${L.plinth[1]} mm.`); break;
-        case 'door-count': out.push(`De ${L.doors[0]} a ${L.doors[1]} puertas.`); break;
-        case 'outer': out.push('Las medidas exteriores deben ser números positivos.'); break;
-        case 'bay-widths-sum': out.push('Las anchuras de los módulos deben llenar el armario.'); break;
-        case 'state': out.push('Estado de puertas no válido.'); break;
+        case 'shelf-gap': out.push(tx(`${m}cada balda necesita al menos ${L.boardGapMm} mm libres por encima y por debajo (también sobre los cajones y bajo el techo interior).`, `${m}each shelf needs at least ${L.boardGapMm} mm free above and below (also above the drawers and below the inner top).`, `${m}每块层板上下至少需要 ${L.boardGapMm} mm 空间（包括抽屉上方和内顶下方）。`)); break;
+        case 'rod': out.push(tx(`${m}la barra choca: necesita ${L.rodAboveDrawersMm} mm sobre los cajones, ${L.rodShelfGapMm} mm de separación con cada balda y ${L.rodBelowTopMm} mm bajo el techo interior.`, `${m}the rail collides: it needs ${L.rodAboveDrawersMm} mm above the drawers, ${L.rodShelfGapMm} mm from each shelf and ${L.rodBelowTopMm} mm below the inner top.`, `${m}挂衣杆冲突：抽屉上方需 ${L.rodAboveDrawersMm} mm，距每块层板 ${L.rodShelfGapMm} mm，内顶下方 ${L.rodBelowTopMm} mm。`)); break;
+        case 'drawers-height': out.push(tx(`${m}${col ? `${col.drawers} cajones de ${mm(col.drawerHeight)} (${mm(col.drawers * col.drawerHeight)})` : 'los cajones'} no caben: la altura libre es ${inner ? mm(inner.height) : '—'} y deben quedar ${L.drawerHeadroomMm} mm encima.`, `${m}${col ? `${col.drawers} drawers of ${mm(col.drawerHeight)} (${mm(col.drawers * col.drawerHeight)})` : 'the drawers'} do not fit: the clear height is ${inner ? mm(inner.height) : '—'} and ${L.drawerHeadroomMm} mm must stay free above.`, `${m}${col ? `${col.drawers} 个 ${mm(col.drawerHeight)} 抽屉（${mm(col.drawers * col.drawerHeight)}）` : '抽屉'}放不下：净高为 ${inner ? mm(inner.height) : '—'}，上方需留 ${L.drawerHeadroomMm} mm。`)); break;
+        case 'drawers': out.push(tx(`${m}entre ${L.drawers[0]} y ${L.drawers[1]} cajones, de ${L.drawerHeight[0]} a ${L.drawerHeight[1]} mm de alto.`, `${m}between ${L.drawers[0]} and ${L.drawers[1]} drawers, ${L.drawerHeight[0]} to ${L.drawerHeight[1]} mm high.`, `${m}抽屉 ${L.drawers[0]} 至 ${L.drawers[1]} 个，高 ${L.drawerHeight[0]} 至 ${L.drawerHeight[1]} mm。`)); break;
+        case 'bay-width': out.push(tx(`${m}cada módulo necesita al menos ${L.bayMinWidth} mm de anchura libre.`, `${m}each bay needs at least ${L.bayMinWidth} mm of clear width.`, `${m}每格净宽至少 ${L.bayMinWidth} mm。`)); break;
+        case 'shelves-count': out.push(tx(`${m}como máximo ${L.shelvesMax} baldas por módulo.`, `${m}at most ${L.shelvesMax} shelves per bay.`, `${m}每格最多 ${L.shelvesMax} 块层板。`)); break;
+        case 'bays-count': out.push(tx(`El armario admite de ${L.bays[0]} a ${L.bays[1]} módulos.`, `The cabinet takes ${L.bays[0]} to ${L.bays[1]} bays.`, `柜体可分 ${L.bays[0]} 至 ${L.bays[1]} 格。`)); break;
+        case 'bay-index': out.push(x.message.startsWith('No hay') ? tx('No hay un módulo contiguo con el que unir.', 'There is no adjacent bay to join with.', '没有可合并的相邻格。') : tx('Ese módulo no existe.', 'That bay does not exist.', '该格不存在。')); break;
+        case 'single-bay': out.push(tx('Con un solo módulo, su anchura es toda la anchura libre del armario.', 'With a single bay, its width is the whole clear width of the cabinet.', '只有一格时，其宽度即柜体全部净宽。')); break;
+        case 'cavity': out.push(tx(`El interior queda demasiado pequeño: altura libre mínima ${L.cavityMinHeight} mm, fondo libre mínimo ${L.cavityMinDepth} mm y ${L.bayMinWidth} mm por módulo.`, `The interior is too small: minimum clear height ${L.cavityMinHeight} mm, minimum clear depth ${L.cavityMinDepth} mm and ${L.bayMinWidth} mm per bay.`, `内部太小：最小净高 ${L.cavityMinHeight} mm，最小净深 ${L.cavityMinDepth} mm，每格 ${L.bayMinWidth} mm。`)); break;
+        case 'dimensions': out.push(tx(`Medidas fuera de rango: altura ${L.height[0]}–${L.height[1]} mm, tablero ${L.thickness[0]}–${L.thickness[1]} mm, zócalo ${L.plinth[0]}–${L.plinth[1]} mm.`, `Sizes out of range: height ${L.height[0]}–${L.height[1]} mm, board ${L.thickness[0]}–${L.thickness[1]} mm, plinth ${L.plinth[0]}–${L.plinth[1]} mm.`, `尺寸超出范围：高度 ${L.height[0]}–${L.height[1]} mm，板厚 ${L.thickness[0]}–${L.thickness[1]} mm，踢脚 ${L.plinth[0]}–${L.plinth[1]} mm。`)); break;
+        case 'door-count': out.push(tx(`De ${L.doors[0]} a ${L.doors[1]} puertas.`, `${L.doors[0]} to ${L.doors[1]} doors.`, `柜门 ${L.doors[0]} 至 ${L.doors[1]} 扇。`)); break;
+        case 'outer': out.push(tx('Las medidas exteriores deben ser números positivos.', 'Outer sizes must be positive numbers.', '外部尺寸必须为正数。')); break;
+        case 'bay-widths-sum': out.push(tx('Las anchuras de los módulos deben llenar el armario.', 'The bay widths must fill the cabinet.', '各格宽度之和必须等于柜体宽度。')); break;
+        case 'state': out.push(tx('Estado de puertas no válido.', 'Invalid door state.', '柜门状态无效。')); break;
         case 'input': out.push(x.message); break;
         default: out.push(x.message || x.code);
       }
@@ -60,14 +62,14 @@
   function compute(s, op) {
     const { outer, cabinet: c } = s.state, b = op.bay ?? s.bay;
     const col = c.columns[b];
-    const needBay = () => (!isInt(b) || !col ? input('Elige un módulo existente.') : null);
+    const needBay = () => (!isInt(b) || !col ? input(tx('Elige un módulo existente.', 'Choose an existing bay.', '请选择一个已有的格。')) : null);
     const done = (r, extra = {}) => (r.ok ? { ok: true, state: { outer: r.outer, cabinet: r.cabinet }, ...extra } : { ok: false, issues: r.issues });
     switch (op.type) {
       case 'split': { const e = needBay(); if (e) return { ok: false, issues: e }; return done(K.splitBay(outer, c, b), { bay: b, touched: 'layout' }); }
       case 'merge': { const e = needBay(); if (e) return { ok: false, issues: e }; return done(K.mergeBay(outer, c, b), { bay: Math.min(b, c.columns.length - 2), touched: 'layout' }); }
       case 'set-shelves': {
         const e = needBay(); if (e) return { ok: false, issues: e };
-        if (!Array.isArray(op.shelves) || op.shelves.some(y => !num(y))) return { ok: false, issues: input('Las alturas de las baldas deben ser números en mm.') };
+        if (!Array.isArray(op.shelves) || op.shelves.some(y => !num(y))) return { ok: false, issues: input(tx('Las alturas de las baldas deben ser números en mm.', 'Shelf heights must be numbers in mm.', '层板高度必须为毫米数值。')) };
         return done(K.setBay(outer, c, b, { shelves: op.shelves.slice().sort((p, q) => p - q) }), { bay: b, touched: 'layout' });
       }
       case 'add-shelf': {
@@ -84,31 +86,31 @@
       }
       case 'set-rod': {
         const e = needBay(); if (e) return { ok: false, issues: e };
-        if (op.rod !== null && !num(op.rod)) return { ok: false, issues: input('La altura de la barra debe ser un número en mm.') };
+        if (op.rod !== null && !num(op.rod)) return { ok: false, issues: input(tx('La altura de la barra debe ser un número en mm.', 'The rail height must be a number in mm.', '挂衣杆高度必须为毫米数值。')) };
         return done(K.setBay(outer, c, b, { rod: op.rod === null ? null : Math.round(op.rod) }), { bay: b, touched: 'layout' });
       }
       case 'set-drawers': {
         const e = needBay(); if (e) return { ok: false, issues: e };
         const patch = {};
-        if (op.drawers !== undefined) { if (!isInt(op.drawers)) return { ok: false, issues: input('El número de cajones debe ser entero.') }; patch.drawers = op.drawers; }
-        if (op.drawerHeight !== undefined) { if (!num(op.drawerHeight)) return { ok: false, issues: input('La altura del cajón debe ser un número en mm.') }; patch.drawerHeight = Math.round(op.drawerHeight); }
+        if (op.drawers !== undefined) { if (!isInt(op.drawers)) return { ok: false, issues: input(tx('El número de cajones debe ser entero.', 'The number of drawers must be a whole number.', '抽屉数量必须为整数。')) }; patch.drawers = op.drawers; }
+        if (op.drawerHeight !== undefined) { if (!num(op.drawerHeight)) return { ok: false, issues: input(tx('La altura del cajón debe ser un número en mm.', 'The drawer height must be a number in mm.', '抽屉高度必须为毫米数值。')) }; patch.drawerHeight = Math.round(op.drawerHeight); }
         // `kind` is the donor's preset label only (long/short/shelves/drawers): geometry never reads it, so it is kept.
         const r = done(K.setBay(outer, c, b, patch), { bay: b, touched: 'layout' });
         return r.ok ? r : { ...r, proposed: { bay: b, patch } };
       }
       case 'set-front': {
-        if (!K.FRONT_STATES.includes(op.front)) return { ok: false, issues: input('Estado de puertas no válido.') };
+        if (!K.FRONT_STATES.includes(op.front)) return { ok: false, issues: input(tx('Estado de puertas no válido.', 'Invalid door state.', '柜门状态无效。')) };
         const next = clone(c); next.front = op.front; const issues = K.validate(outer, next);
         return issues.length ? { ok: false, issues } : { ok: true, state: { outer: { ...outer }, cabinet: next }, bay: s.bay, touched: null };
       }
       case 'set-door-count': {
-        if (!isInt(op.doorCount)) return { ok: false, issues: input('El número de puertas debe ser entero.') };
+        if (!isInt(op.doorCount)) return { ok: false, issues: input(tx('El número de puertas debe ser entero.', 'The number of doors must be a whole number.', '柜门数量必须为整数。')) };
         return done(K.resize(outer, c, { doorCount: op.doorCount }), { bay: s.bay, touched: 'layout' });
       }
       case 'resize': {
         const ch = {};
         for (const [k, key] of [['w', 'w'], ['d', 'd'], ['height', 'height']]) if (op[k] !== undefined) {
-          if (!isInt(op[k]) || op[k] <= 0) return { ok: false, issues: input('Las medidas deben ser milímetros enteros y positivos.') };
+          if (!isInt(op[k]) || op[k] <= 0) return { ok: false, issues: input(tx('Las medidas deben ser milímetros enteros y positivos.', 'Sizes must be positive whole millimetres.', '尺寸必须为正整数毫米。')) };
           ch[key] = op[k];
         }
         if (!Object.keys(ch).length) return { ok: false, issues: input('No hay medidas que cambiar.') };
@@ -116,7 +118,7 @@
       }
       case 'set-bay-width': {
         const e = needBay(); if (e) return { ok: false, issues: e };
-        if (!num(op.width)) return { ok: false, issues: input('La anchura debe ser un número en mm.') };
+        if (!num(op.width)) return { ok: false, issues: input(tx('La anchura debe ser un número en mm.', 'The width must be a number in mm.', '宽度必须为毫米数值。')) };
         return done(K.setBayWidth(outer, c, b, op.width), { bay: b, touched: 'layout' });
       }
       default: return { ok: false, issues: input(`Operación desconocida: ${op.type}`) };
@@ -127,10 +129,10 @@
   function apply(s, op) {
     if (!op || !OPS.includes(op.type)) return refuse(s, input(`Operación desconocida: ${op && op.type}`), op || { type: '?' });
     if (op.type === 'select-bay') {
-      if (!isInt(op.bay) || op.bay < 0 || op.bay >= bayCount(s)) return refuse(s, input('Ese módulo no existe.'), op);
+      if (!isInt(op.bay) || op.bay < 0 || op.bay >= bayCount(s)) return refuse(s, input(tx('Ese módulo no existe.', 'That bay does not exist.', '该格不存在。')), op);
       return { ok: true, session: Object.freeze({ ...s, bay: op.bay, last: { op: op.type, ok: true } }) };
     }
-    if (s.readOnly) return refuse(s, input('Este interior es de solo lectura (versión o datos no editables).'), op);
+    if (s.readOnly) return refuse(s, input(tx('Este interior es de solo lectura (versión o datos no editables).', 'This interior is read only (version or data not editable).', '此内部为只读（版本或数据不可编辑）。')), op);
     const r = compute(s, op);
     if (!r.ok) return refuse(s, r.issues, op, r.proposed);
     if (same(r.state, s.state)) return { ok: true, unchanged: true, session: Object.freeze({ ...s, bay: clampBay({ state: r.state }, r.bay ?? s.bay), last: { op: op.type, ok: true, unchanged: true } }) };
