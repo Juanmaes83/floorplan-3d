@@ -112,12 +112,23 @@ test(`fidelity vs real editor · case ${CASE}`,{timeout:300000},async t=>{
   await ed.waitForTimeout(1500);
   const edPose=await ed.evaluate(()=>View3D.presentationPose());
   for(let i=0;i<3;i++)assert.ok(Math.abs(edPose.position[i]-pose.position[i])<1e-6&&Math.abs(edPose.target[i]-pose.target[i])<1e-6,'same camera');
-  const refShot=await ed.locator('#view3d canvas').first().screenshot();await save(`${CASE}-reference-editor.png`,refShot);
-  // Same canvas size as the editor's (a building adds the level bar, so it is measured, not assumed).
-  const size=await ed.evaluate(()=>{const r=document.querySelector('#view3d canvas').getBoundingClientRect();return [Math.round(r.width),Math.round(r.height)];});
-  await lab.evaluate(([w,h])=>{const d=document.documentElement.style;d.setProperty('--capture-w',w+'px');d.setProperty('--capture-h',h+'px');window.dispatchEvent(new Event('resize'));},size);
+  // Compare actual WebGL pixels. At fractional viewport origins a composited screenshot can include
+  // a CSS row beside the canvas, turning the surrounding layout into part of the silhouette.
+  const readCanvas=canvas=>({url:canvas.toDataURL('image/png'),size:[canvas.width,canvas.height]});
+  const referenceCanvas=ed.locator('#view3d canvas').first();
+  await referenceCanvas.waitFor({state:'visible'});
+  const referenceImage=await referenceCanvas.evaluate(readCanvas);
+  const refShot=Buffer.from(referenceImage.url.split(',')[1],'base64');
+  await save(`${CASE}-reference-editor.png`,refShot);
+  // Match the drawing buffer of the real editor, including the space used by the level bar.
+  await lab.evaluate(([w,h])=>{const d=document.documentElement.style;d.setProperty('--capture-w',w+'px');d.setProperty('--capture-h',h+'px');window.dispatchEvent(new Event('resize'));},referenceImage.size);
   await lab.waitForTimeout(1200);
-  const labShot=await lab.locator('#stage').screenshot();await save(`${CASE}-ft3d8-final-compare.png`,labShot);
+  const labCanvas=lab.locator('#stage');
+  await labCanvas.waitFor({state:'visible'});
+  const labImage=await labCanvas.evaluate(readCanvas);
+  assert.deepEqual(labImage.size,referenceImage.size,'both WebGL canvases have the same capture dimensions');
+  const labShot=Buffer.from(labImage.url.split(',')[1],'base64');
+  await save(`${CASE}-ft3d8-final-compare.png`,labShot);
   // 1. structural vs the editor's own read-only data
   const info=await ed.evaluate(()=>({doors:View3D.doorLeaves,roof:View3D.roofInfo,levels:View3D.levelInspect().levelGroups}));
   const labDoors=Object.entries(got).filter(([,v])=>v.pivot);
@@ -139,6 +150,7 @@ test(`fidelity vs real editor · case ${CASE}`,{timeout:300000},async t=>{
     doors:info.doors.length,roofSurfaces:info.roof.surfaces.length,elementsChecked:Object.keys(want).length,tolerances:TOL};
   await save(`${CASE}-metrics.json`,Buffer.from(JSON.stringify(metrics,null,1)));
   t.diagnostic(JSON.stringify(metrics));
+  assert.ok(cmp.pixelsRef>0&&cmp.pixelsLab>0,'both renders contain a visible silhouette');
   assert.ok(cmp.iou>=TOL.iou,`silhouette IoU ${cmp.iou}`);
   assert.ok(Math.min(cmp.edgesRefInLab,cmp.edgesLabInRef)>=TOL.edges,`edge agreement ${cmp.edgesRefInLab}/${cmp.edgesLabInRef}`);
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
