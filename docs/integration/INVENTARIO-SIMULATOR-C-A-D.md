@@ -1,5 +1,7 @@
 # RUBIK SOTA · Inventario de integración Simulator C, A y D
 
+> **CORTE OPERATIVO · 21/11/2026.** C/C-bis #293 y Simulator A #295 están en master/Production; **D conserva el gate WebKit y no está integrado**. HERO FINAL A+B+C es una candidata **de laboratorio**, no una ampliación ya incorporada de Simulator A. Para identidades y orden vigentes ver [corte V5](CORTE-OPERATIVO-VERIFICADO-2026-11-21.md). Los cortes anteriores se conservan como historia de recuperación.
+
 ## Corte posterior a #295
 
 [Simulator A #295](https://github.com/Juanmaes83/floorplan-3d/pull/295) se integró en master `a6a0494b6f15ed60db542ef6c95530ae3c2c0ca2`, árbol `1dc7a264692ae6141de6156012978d4934baa567`. CI de PR con 32 aprobados y la omisión prevista de full-regression. [Production READY para el SHA exacto](https://vercel.com/juanma-espinosas-projects/floorplan-3d/Gyz9GuPknX9oaa8XSkyTsj1vo7jv). Seis recursos de Evolución coinciden byte a byte con master por HTTP autenticado. Se conserva la aceptación del propietario para la construcción por hiladas. La verificación posfusión se sigue por SHA en GitHub.
