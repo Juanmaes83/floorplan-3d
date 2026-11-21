@@ -26,7 +26,7 @@
  function handle(text,ctx){
   const t0=Date.now(),lang=ctx.lang||'es',project=ctx.project,labels=ctx.labels||{};
   const base={projectId:project?.id,revision:project?T.revision(project):undefined};
-  const call=(tool,args={})=>T.execute(tool,args,{project,budget:ctx.budget,budgetSaved:ctx.budgetSaved,levels:ctx.levels,expectedProjectId:project?.id,catalog:ctx.catalog,catalogReport:ctx.catalogReport,visualRefs:ctx.visualRefs},uid('call'));
+  const call=(tool,args={})=>T.execute(tool,args,{project,lang,labels,budget:ctx.budget,budgetSaved:ctx.budgetSaved,levels:ctx.levels,expectedProjectId:project?.id,catalog:ctx.catalog,catalogReport:ctx.catalogReport,visualRefs:ctx.visualRefs},uid('call'));
   const intent=I.parse(text,{rooms:ents(labels.rooms),objects:ents(labels.objects),materials:ents(labels.materials),products:ents(labels.products),objectProduct:labels.objectProduct||{},selection:ctx.selection||null});
   const user=msg('user',text,{area:ctx.area,...base,mode:'deterministic'});
   const done=(replyText,extra={},tools=[],error)=>{

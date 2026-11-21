@@ -31,12 +31,25 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
 
   const listed = await client.listTools();
   assert.deepEqual(listed.tools.map(tool => tool.name).sort(), [
-    'check_route_2d', 'diagnose_project', 'get_project_element', 'get_project_summary', 'inspect_pair_clearance', 'list_project_elements', 'measure_elements', 'propose_layout', 'review_layout', 'simulate_layout',
+    'check_route_2d', 'diagnose_project', 'get_project_element', 'get_project_summary', 'get_workflow_guidance', 'inspect_pair_clearance', 'list_project_elements', 'measure_elements', 'propose_layout', 'review_layout', 'simulate_layout',
   ]);
   for (const tool of listed.tools) {
     assert.equal(tool.annotations?.readOnlyHint, true, tool.name);
     assert.equal(tool.annotations?.destructiveHint, false, tool.name);
   }
+
+  const help = async args => client.callTool({ name: 'get_workflow_guidance', arguments: args });
+  const journey = (await help({ lang: 'en' })).structuredContent;
+  assert.equal(journey.liveEditorState, false);
+  assert.equal(journey.applied, false);
+  assert.deepEqual(journey.phases.map(p => p.steps.length), [5, 7, 5, 5, 5]);
+  for (const step of journey.phases.flatMap(p => p.steps)) {
+    assert.ok(step.instructions.length > 40);
+    for (const tool of step.mcpTools) assert.ok(listed.tools.some(x => x.name === tool));
+  }
+  assert.equal((await help({ stepId: 'cad', lang: 'zh' })).structuredContent.step.label, '导入 CAD');
+  assert.equal((await help({ stepId: 'unknown' })).isError, true);
+  assert.equal(await readFile(file, 'utf8'), original);
 
   const summary = await client.callTool({ name: 'get_project_summary', arguments: {} });
   assert.equal(summary.isError, undefined);
