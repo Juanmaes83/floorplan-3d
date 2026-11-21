@@ -40,13 +40,26 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
  for(const id of await page.evaluate(()=>[...document.querySelectorAll('[id^="workArea-"]')].map(b=>b.id))){
   await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);
   if(id==='workArea-deliver'||id==='workArea-studio'){
-   await page.locator('#professionalWorkspace [data-route="e3-entregas"]').click();
+   const trigger=page.locator('#professionalWorkspace [data-route="e3-entregas"]');
+   assert.equal(await trigger.count(),1,'one E3 entry per workspace');
+   assert.equal(await trigger.getAttribute('aria-haspopup'),'dialog');
+   assert.equal(await trigger.evaluate(button=>button.classList.contains('primary')),false,'E3 is a secondary action');
+   assert.equal(await trigger.evaluate((button,area)=>{
+    const card=button.closest('.professional-card');
+    const anchor=area==='workArea-deliver'?document.querySelector('[data-group="documentation"] [data-module="sheet"]'):document.querySelector('[data-module="studio"]');
+    return !!(anchor?.compareDocumentPosition(card)&Node.DOCUMENT_POSITION_FOLLOWING);
+   },id),true,'existing actions come before E3');
+   await trigger.focus();await page.keyboard.press('Enter');
    const e3=page.locator('#e3Entregas[open]');
    const next=e3.locator('[data-route="e3-siguiente"]');
-   await e3.waitFor();await scan('E3 elegir '+id);
+   await e3.waitFor();
+   assert.equal(await e3.locator('input[type="checkbox"]').count(),10);
+   assert.equal(await e3.evaluate(dialog=>document.activeElement?.id===dialog.getAttribute('aria-labelledby')),true);
+   await scan('E3 elegir '+id);
    await next.click();await next.waitFor();await scan('E3 previsualizar '+id);
    await next.click();await e3.locator('.e3-prep').first().waitFor();await scan('E3 preparar '+id);
    await page.keyboard.press('Escape');await e3.waitFor({state:'hidden'});
+   assert.equal(await trigger.evaluate(button=>document.activeElement===button),true,'closing E3 restores focus');
   }
  }
  await page.locator('#workArea-design').click().catch(()=>{});await page.waitForTimeout(200);

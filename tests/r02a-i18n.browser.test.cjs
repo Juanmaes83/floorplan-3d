@@ -97,6 +97,43 @@ test(`idioma del panel R02-A · ${vp.name}: EN sin español, ES/EN sin chino, ZH
   } finally { await context.close(); }
 });
 
+test('R02-A preserves an expanded ceiling panel through a synchronous editor refresh', { timeout: 120000 }, async () => {
+  const { context, page } = await K.editor(env);
+  try {
+    await page.evaluate(ref => FloorPlanApp.applyCeiling(p => RubikCeilingBridge.setReference(p, ref)), REF);
+    await openRoom(page);
+    const pos = await freeSpot(page);
+    assert.ok(pos, 'the example offers a reviewable position');
+    const before = await page.evaluate(() => JSON.stringify(FloorPlanApp.project));
+    await sec(page).locator('[data-f="x"]').fill(String(pos.x));
+    await sec(page).locator('[data-f="y"]').fill(String(pos.y));
+    const details = sec(page).locator('details');
+    await details.evaluate(node => new Promise(resolve => {
+      node.addEventListener('toggle', () => resolve(), { once: true });
+      node.querySelector('summary').click();
+    }));
+    assert.equal(await details.evaluate(node => node.open), false);
+    await page.evaluate(() => {
+      document.querySelector('.r02a-ceiling summary').click();
+      // The room panel can be rebuilt in the same task, before the queued native toggle event.
+      renderPanel();
+    });
+    assert.equal(await details.evaluate(node => node.open), true, 'the open state survives a refresh');
+    await sec(page).locator('[data-r02a="check"]').focus();
+    await page.keyboard.press('Enter');
+    const result = sec(page).locator('.r02a-result');
+    await result.waitFor({ state: 'visible' });
+    assert.equal(await result.getAttribute('data-state'), 'candidate-reviewable');
+    assert.equal(await page.evaluate(() => JSON.stringify(FloorPlanApp.project)), before);
+    await page.evaluate(() => {
+      document.querySelector('.r02a-ceiling summary').click();
+      renderPanel();
+    });
+    assert.equal(await details.evaluate(node => node.open), false, 'a deliberate close survives a refresh');
+    assert.equal(await result.isVisible(), false);
+  } finally { await context.close(); }
+});
+
 test('teclado, foco y cambio de proyecto en EN: el resumen se abre con el teclado; otro proyecto conserva el idioma y traduce sus nombres', { timeout: 240000 }, async () => {
   const { context, page } = await K.editor(env);
   try {

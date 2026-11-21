@@ -53,8 +53,6 @@
    grid.querySelector('[data-group="signature"]>h2').textContent=tx('La firma del profesional','Professional signature','专业签名');
    // ENT-01 I1B: review the REAL 3D engine in an isolated, non-publishing client tab.
    window.FloorPlanDeliveryPreview?.card(grid.querySelector('[data-group="experience"] .professional-group-items'));
-   // STUDIO E3: entregables profesionales (se añade arriba; ninguna tarjeta existente cambia).
-   window.RubikE3Entregables?.card(grid,'entregar');
   }
   if(area==='studio'){
    window.RubikE3Entregables?.card(grid,'studio'); // STUDIO E3
@@ -64,6 +62,7 @@
    else{symbol(preview,'identity');el('strong',tx('Tu nombre, tu trabajo','Your name, your work','您的名字，您的作品'),preview);el('span',tx('Sin identidad seleccionada. Elige un perfil para ver su firma.','No identity selected. Choose a profile to preview its signature.','尚未选择身份。选择配置以预览签名。'),preview);}
   }
   projectFirst(grid,m,summary,projectContext);
+  if(area==='deliver')window.RubikE3Entregables?.card(grid.querySelector('[data-group="documentation"] .professional-group-items'),'entregar');
  }
  // Project-First A1: each output shows what Rubik already produced from this project, before any click. Previews
  // come from FloorPlanProjectPreview (real plan, real sheet, model axonometric, selected signature); every fact

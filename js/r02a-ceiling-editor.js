@@ -182,7 +182,14 @@
     bind(sec, roomId);
   }
   function bind(sec, roomId) {
-    sec.querySelector('details').addEventListener('toggle', e => { st.open = e.target.open; });
+    const details = sec.querySelector('details');
+    // Persist the disclosure intent before an editor refresh can detach this section.
+    details.querySelector('summary').addEventListener('click', e => {
+      if (e.defaultPrevented) return;
+      e.preventDefault();
+      st.open = details.open = !details.open;
+    });
+    details.addEventListener('toggle', () => { if (details.isConnected) st.open = details.open; });
     const d = st.draft;
     for (const el of sec.querySelectorAll('[data-f]')) {
       const k = el.dataset.f;

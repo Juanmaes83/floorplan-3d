@@ -1,6 +1,6 @@
 /* STUDIO · E3 · «Entregables profesionales» (navegador).
  * Tarjeta en Entregar y en Mi estudio que abre un flujo en tres pasos — Elegir · Previsualizar · Preparar — sobre los
- * generadores EXISTENTES de RUBIK. No sustituye ni oculta ninguna tarjeta ni ruta: se añade arriba de su área.
+ * generadores existentes de RUBIK. El acceso sigue la jerarquía de las tarjetas de su área.
  * Sin sistemas paralelos:
  *  - identidad: FloorPlanBrandUI.snapshot() (FloorPlanBrand), sin editor propio;
  *  - imagen firmada: FloorPlanProjectViews.image()/download() y, para el render de Blender, FloorPlanDeliveryImage
@@ -18,7 +18,7 @@
  const disponible=g=>{
   if(!existe(g))return false;
   if(g[0]==='FloorPlanAIRender')return existe(['FloorPlanProjectViews','prepare']);
-  if(g[0]==='FloorPlanTourVideo')return existe(['FloorPlanPresentation','open'])&&!!window.FloorPlanTourRecorder?.pickType();
+  if(g[0]==='FloorPlanTourVideo')return existe(['FloorPlanPresentation','open'])&&!!window.FloorPlanTourRecorder?.pickType?.();
   return true;
  };
  function ejecutar(e){
@@ -49,12 +49,10 @@
  // ---------------------------------------------------------------- tarjeta (Entregar y Mi estudio)
  function card(grid,donde){
   if(!grid||grid.querySelector('[data-module="e3-entregas"]'))return null;
-  const c=document.createElement('article');c.className='professional-card e3-card';c.dataset.module='e3-entregas';c.dataset.donde=donde;grid.prepend(c);
-  el('small','STUDIO',c,'e3-kicker');const h=el('h3',tx('Entregables profesionales','Professional deliverables','专业交付物'),c);h.id='e3Card-'+donde;
+  const c=document.createElement('article');c.className='professional-card e3-card';c.dataset.module='e3-entregas';c.dataset.donde=donde;grid.append(c);
+  const h=el('h3',tx('Entregables profesionales','Professional deliverables','专业交付物'),c);h.id='e3Card-'+donde;
   el('p',tx('Elige, previsualiza y prepara lo que recibirá tu cliente: imágenes, Blender, documentos, presentaciones y animaciones. Limpias o con tu firma.','Choose, preview and prepare what your client receives: images, Blender, documents, presentations and animations. Clean or signed.','选择、预览并准备客户将收到的内容：图像、Blender、文档、演示与动画。无标识或带签名。'),c,'professional-state');
-  const fila=el('div',undefined,c,'e3-card-fila');fila.setAttribute('aria-hidden','true');
-  const v=vistas()[0];const a=el('img',undefined,fila);a.alt='';a.src=v?.dataUrl||EJEMPLO_OP10;const b=el('img',undefined,fila);b.alt='';b.src=EJEMPLO_OP10;
-  const btn=el('button',tx('Preparar entregables','Prepare deliverables','准备交付物'),c,'btn primary');btn.type='button';btn.dataset.route='e3-entregas';btn.setAttribute('aria-describedby',h.id);btn.onclick=()=>abrir(btn);
+  const btn=el('button',tx('Preparar entregables','Prepare deliverables','准备交付物'),c,'btn');btn.type='button';btn.dataset.route='e3-entregas';btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-describedby',h.id);btn.onclick=()=>abrir(btn);
   return c;}
  // ---------------------------------------------------------------- diálogo
  let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0;
@@ -65,7 +63,7 @@
     const trigger=origen?.isConnected?origen:document.querySelector('#professionalWorkspace [data-route="e3-entregas"]');
     trigger?.focus();
    }});}
-  paso=1;valida();pintar();if(!dlg.open)dlg.showModal();dlg.querySelector('#e3T')?.focus();}
+  paso=1;valida();pintar();if(!dlg.open){origen?.focus?.({preventScroll:true});dlg.showModal();}dlg.querySelector('#e3T')?.focus();}
  function cabecera(){const h=el('div',undefined,dlg,'e3-cab');const t=el('h2',tx('Entregables profesionales','Professional deliverables','专业交付物'),h);t.id='e3T';t.tabIndex=-1;
   const x=el('button','×',h,'e3-cerrar');x.type='button';x.setAttribute('aria-label',tx('Cerrar','Close','关闭'));x.onclick=()=>dlg.close();
   const pasos=el('ol',undefined,dlg,'e3-pasos');pasos.setAttribute('aria-label',tx('Pasos','Steps','步骤'));
@@ -140,9 +138,6 @@
  }
  window.RubikE3Entregables={card,abrir,firmarRender,get seleccion(){return valida().slice();},set seleccion(v){sel=[...v];valida();}};
  const css=document.createElement('style');css.textContent=`
- .e3-card{grid-column:1/-1;display:grid;gap:8px}.e3-kicker{letter-spacing:.24em;font-weight:700;font-size:11px;color:#1f5c5c}
- .e3-card-fila{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:520px}.e3-card-fila img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px}
- .e3-card .btn{justify-self:start;min-height:44px}
  .e3-dlg{width:min(1040px,96vw);max-height:92vh;border:0;border-radius:16px;padding:18px;background:#fbf8f3;color:#1f1c18;box-sizing:border-box}.e3-dlg::backdrop{background:rgba(20,18,16,.45)}
  .e3-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}.e3-cab h2{font-family:Georgia,serif;margin:0;font-size:clamp(20px,3vw,26px)}
  .e3-cerrar{flex:none;width:44px;height:44px;border-radius:999px;border:1px solid rgba(43,40,36,.2);background:#fff;font-size:22px;cursor:pointer}
