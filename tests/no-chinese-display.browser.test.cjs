@@ -69,6 +69,57 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
  assert.deepEqual(errors,[]);
 });
 
+
+test('E3: ten previews decode and navigation stays clear of the Assistant on small screens', async t=>{
+ for(const viewport of [{width:393,height:659},{width:844,height:390}]){
+  await t.test(viewport.width+'×'+viewport.height,async sub=>{
+   const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});sub.after(()=>context.close());
+   const page=await context.newPage();await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+   await page.goto(url);await require('./editor-fixture.cjs')(page);
+   await page.locator('#workArea-deliver').click();
+   await page.locator('#professionalWorkspace [data-route="e3-entregas"]').tap();
+   const dialog=page.locator('#e3Entregas[open]');
+   const next=dialog.locator('[data-route="e3-siguiente"]');
+   const withoutOverlap=async()=>{
+    assert.equal(await dialog.evaluate(d=>{
+     const clip=d.getBoundingClientRect();
+     const a=d.querySelector('#assistantAccess').getBoundingClientRect();
+     const c=d.querySelector('.e3-cuerpo').getBoundingClientRect();
+     const footer=d.querySelector('.e3-pie').getBoundingClientRect();
+     return a.top>=c.bottom-1 && a.bottom<=clip.bottom &&
+      footer.top>=c.bottom-1 && footer.bottom<=clip.bottom &&
+      d.scrollWidth===d.clientWidth;
+    }),true,'assistant and navigation are separate from the scrolling content');
+   };
+   await next.waitFor();
+   await dialog.locator('#assistantAccess').waitFor();
+   await withoutOverlap();
+   const images=await dialog.locator('.e3-mini img').all();
+   assert.equal(images.length,10);
+   for(const image of images){
+    await image.scrollIntoViewIfNeeded();
+    assert.equal(await image.evaluate(async i=>{await i.decode();return i.naturalWidth;}),360);
+   }
+   await withoutOverlap();
+   const checked=dialog.getByRole('checkbox',{checked:true});
+   while(await checked.count())await checked.last().uncheck();
+   assert.equal(await next.isEnabled(),false);
+   assert.match(await dialog.getByRole('status').innerText(),/Selecciona al menos un entregable/);
+   await dialog.getByRole('checkbox',{name:/Vistas reales del proyecto/}).check();
+   await next.tap();
+   await dialog.getByText('Aún no hay vistas preparadas', {exact:false}).waitFor();
+   await next.waitFor();
+   await withoutOverlap();
+   await next.tap();
+   await dialog.getByRole('button',{name:'Preparar las vistas'}).waitFor();
+   await withoutOverlap();
+   await page.keyboard.press('Escape');
+   await dialog.waitFor({state:'hidden'});
+   assert.equal(await page.locator('#professionalWorkspace [data-route="e3-entregas"]').evaluate(n=>n===document.activeElement),true);
+  });
+ }
+});
+
 test('selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control', async t=>{
  const context=await browser.newContext();t.after(()=>context.close());const page=await context.newPage();await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
  await page.goto(url);await require('./editor-fixture.cjs')(page);

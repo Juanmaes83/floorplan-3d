@@ -18,7 +18,7 @@
 | Vídeo y presentación | `FloorPlanPresentation`, `FloorPlanTourRecorder` y `FloorPlanTourVideo`. La disponibilidad de vídeo depende del grabador del navegador. |
 | Archivo y enlace del cliente | `FloorPlanClientShare` y `FloorPlanShareLink`. Se mantienen las reglas de descarga, consentimiento y publicación del generador. |
 
-El catálogo ofrece diez accesos. La prueba de vistas acredita la generación completa de cinco vistas con sus dos descargas, y las pruebas de delegación acreditan aperturas concretas. Ninguna prueba envía imágenes a IA, publica enlaces, ni inicia una grabación.
+El catálogo ofrece diez accesos. La prueba de vistas acredita la generación completa de cinco vistas con sus dos descargas, y las pruebas de delegación acreditan aperturas concretas. Las pruebas de delegación acreditan los permisos sin enviar imágenes a IA ni publicar enlaces. La miniatura de vídeo se obtuvo de una grabación local con la vivienda de ejemplo.
 
 ## Identidad, seguridad y conservación
 
@@ -32,6 +32,22 @@ El catálogo ofrece diez accesos. La prueba de vistas acredita la generación co
 - La tarjeta inicial se anteponía a las existentes, mostraba dos imágenes y añadía una acción primaria a Entregar. Ahora forma parte de Documentación y aparece después de la lámina y la ficha de superficies. En Mi estudio sigue a las acciones de identidad y configuración. Las imágenes de muestra están dentro del recorrido.
 - R02-A podía reconstruir su panel antes de recibir el evento asíncrono `toggle`. El resumen actualiza la apertura en la misma interacción y los eventos de nodos reemplazados se ignoran. La prueba fuerza una reconstrucción en el mismo turno, comprueba el resultado visible, el cierre voluntario y la igualdad del proyecto. La evaluación, el guardado y las reglas de altura conservan sus contratos.
 - El nuevo control E3 acredita el orden, la acción secundaria, los diez elementos y la devolución del foco con teclado desde las dos áreas. Se ejecutan las regresiones de R02-A ES/EN/ZH, R03, el espacio profesional, CAT-IA, vistas y los casos visuales de E3. Se conserva el inventario de accesos previo.
+
+## Pulido visual y procedencia
+
+Las diez miniaturas de `assets/e3/thumbs` se cargan al acercarse a la zona visible. La ficha de vistas toma una imagen del proyecto cuando el generador ya dispone de ella. El resto usa ejemplos, con el origen indicado en la tarjeta. Render IA muestra su vista de partida. La selección usa el rol grafito de Perla. El área que se desplaza contiene las opciones. El avance y el Asistente ocupan zonas propias debajo. La selección vacía indica qué hacer para continuar.
+
+| Miniatura | Fuente del producto |
+| --- | --- |
+| Vistas reales | Primera imagen limpia de `FloorPlanProjectViews`, generada desde la vivienda de ejemplo. |
+| Render IA | Imagen de entrada en el diálogo de Render IA con la vivienda de ejemplo. |
+| Blender | Render Cycles publicado en `assets/e3/op10-entrega-viewer.jpg`. |
+| Lámina, superficies y dossier | Lámina, tabla y vista previa del dossier de la vivienda de ejemplo, capturadas en sus generadores existentes. |
+| Presentación y vídeo | Presentación activa de ejemplo y fotograma de la vista previa de un recorrido grabado localmente, con los controles de reproducción visibles. |
+| Archivo para tu cliente | HTML de ejemplo descargado y abierto en Chromium. |
+| Enlace para tu cliente | Diálogo de consentimiento con el campo de código vacío. |
+
+Las capturas se obtuvieron con Chromium en la Preview de `eef09ae7f3635f01d7b65916823bb5fb3948f787` con datos de ejemplo. Las diez imágenes WebP de 360 × 225 suman 71.396 bytes. El navegador puede hacer la comparación y recorrer las fichas antes de preparar las imágenes del proyecto.
 
 ## Cierre del corte
 
