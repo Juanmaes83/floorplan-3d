@@ -1254,9 +1254,12 @@
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;
+  stopping=true;
+  const video=window.FloorPlanTourVideo?.leavePresentation?.();
+  if(video)await video;
   if(walking){walking=null;walkBar.hidden=true;delete overlay.dataset.walking;window.View3D?.presentationWalkEnd?.();}
   cancelBatch();closeStory();disposeStory();
-  stopping=true;++epoch;
+  ++epoch;
   captureButton.disabled=true;
   // A building presentation leaves the editor on the level it started from, before the camera and the entry return.
   if(startLevelId&&activeLevelId()!==startLevelId){try{await showLevel(startLevelId);}catch{}}
@@ -1285,6 +1288,7 @@
  }
  function invalidate(){
   if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
+  window.FloorPlanTourVideo?.leavePresentation?.();
   if(walking){walking=null;walkBar.hidden=true;delete overlay.dataset.walking;window.View3D?.presentationWalkEnd?.();}
   cancelBatch();closeStory();disposeStory();endLivingDrawing();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;

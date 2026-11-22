@@ -96,9 +96,14 @@
    const {plan,A}=await preparar(alLimpiar,{signal});const t0=performance.now();
    for(;;){if(signal?.aborted)throw abortError();const t=Math.min(plan.duration,(performance.now()-t0)/1000);A.aplicar(plan,t);onProgress?.(t/plan.duration,plan.at(t).shot.label);if(t>=plan.duration)break;await new Promise(r=>requestAnimationFrame(r));}
    return {duration:plan.duration,shots:plan.shots.length,cuts:plan.cuts.length};});}
- async function configuracion(width,height,fps){if(typeof VideoEncoder==='undefined'||typeof VideoFrame==='undefined'||!window.FloorPlanConstructionMp4)return null;
-  for(const codec of H264){const cfg={codec,width,height,bitrate:6_000_000,framerate:fps,avc:{format:'avc'}};try{if((await VideoEncoder.isConfigSupported(cfg)).supported)return cfg;}catch{}}return null;}
- const disponible=async()=>!!(await configuracion(1280,720,30));
+ async function configuracion(width,height,fps,{reportErrors=false}={}){if(typeof VideoEncoder==='undefined'||typeof VideoFrame==='undefined'||!window.FloorPlanConstructionMp4)return null;
+  let answered=false,failure;
+  for(const codec of H264){const cfg={codec,width,height,bitrate:6_000_000,framerate:fps,avc:{format:'avc'}};
+   try{const support=await VideoEncoder.isConfigSupported(cfg);answered=true;if(support.supported)return cfg;}
+   catch(error){failure=error;}}
+  if(reportErrors&&!answered&&failure)throw failure;
+  return null;}
+ const disponible=async(options)=>!!(await configuracion(1280,720,30,options));
  function cubrir(ctx,source,w,h){const sw=source.width,sh=source.height;if(!sw||!sh)return;const k=Math.max(w/sw,h/sh),cw=w/k,ch=h/k;ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);ctx.drawImage(source,(sw-cw)/2,(sh-ch)/2,cw,ch,0,0,w,h);}
  /** Exportación determinista: cada fotograma se renderiza en su instante exacto del guion. */
  function exportar({width=1280,height=720,fps=30,signal,onProgress}={}){

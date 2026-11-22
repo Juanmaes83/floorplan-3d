@@ -9,6 +9,7 @@ before(async()=>{server=createServer(async(req,res)=>{try{const p=new URL(req.ur
  browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});});
 after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
 const shot=async(page,name)=>{if(!SHOTS)return;await fs.mkdir(SHOTS,{recursive:true});await page.screenshot({path:path.join(SHOTS,name+'.png')});};
+require('./helpers/tour-video-discoverability.cjs')({getBrowser:()=>browser,getOrigin:()=>url});
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])
 test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${viewport.height}`,{timeout:420000},async t=>{
