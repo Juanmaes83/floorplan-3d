@@ -4949,7 +4949,7 @@ function beginLiving(view,stop,aspect,region){
     const furniture=(furnG?.children||[]).map((g,i)=>{const b=new THREE.Box3().setFromObject(g);if(b.isEmpty())return null;const cx=(b.min.x+b.max.x)/2,cz=(b.min.z+b.max.z)/2;
       return {fid:g.userData.fid,index:i,min:b.min.toArray(),max:b.max.toArray(),roomIndex:rooms.find(r=>inRoom(r.poly,cx,cz))?.index||0};}).filter(Boolean);
     const visits=tl.rooms.map(r=>({roomIndex:rooms.find(x=>x.id===r.roomId)?.index||0,start:intro+r.start,duration:r.duration,seeds:r.seeds.map(sd=>({fid:sd.id,at:sd.at,dark:!!sd.dark}))})).filter(v=>v.roomIndex);
-    livingDrawing.setLanding({rooms,visits,furniture,levelY:[-.3,wallTop+.6]});
+    const landing0={rooms,visits,furniture,levelY:[-.3,wallTop+.6]};livingDrawing.setLanding(landing0);
     const amb=view.ambience?presentationAmbienceBegin(view.ambience):null;
     const start=presentationStopPose(stop,aspect,region),total=intro+tl.total+outro;
     const roomViews=tl.rooms.map(r=>{const g=geometry.rooms.find(x=>x.id===r.roomId),xs=g.poly.map(p=>p[0]),ys=g.poly.map(p=>p[1]);
@@ -4959,11 +4959,18 @@ function beginLiving(view,stop,aspect,region){
     // (a TV built into a light stand is still a black slab on screen: any near-black material makes the piece dark)
     const lum=c=>.2126*c.r+.7152*c.g+.0722*c.b,obstacles=furniture.map(f=>{let sum=0,n=0,min=1;furnG.children[f.index].traverse(o=>{if(!o.isMesh)return;for(const m of [].concat(o.material))if(m?.color){const l=lum(m.color);sum+=l;n++;min=Math.min(min,l);}});
       return {x:(f.min[0]+f.max[0])/2,z:(f.min[2]+f.max[2])/2,h:f.max[1],dark:n>0&&(sum/n<.12||min<.05)};});
-    const narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,obstacles,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
-    return {narrative,started,cut0,timeline:tl,total,ambience:!!amb?.active};
+    let narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,obstacles,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
+    // HERO FINAL (corte C): epílogo de la misma narrativa; si el núcleo no está o falla, la escena queda exactamente como hoy.
+    // Se activa en la demo de la Home y cuando el proyecto tiene la firma de Mi estudio asignada (FloorPlanBrand); sin ella,
+    // el «Dibujo vivo» de Presentar mi vivienda es el de siempre (como la ambientación D3: solo cuando se ha elegido).
+    const heroOn=view.hero!==undefined?view.hero!==false:!!(window.RubikHomeDemos?.state?.started||window.RubikStudioHero?.leer?.()?.perfil);
+    if(window.RubikFinalDibujo&&heroOn){try{narrative=window.RubikFinalDibujo.epilogo(narrative,{env:window.RubikFinalDibujo.contorno(rooms.map(r=>r.poly),wallTop),aspect,fov:LIVING_FOV,reducedMotion:!!view.reduced});}catch(e){console.warn('HERO dibujo vivo:',e.message);}}
+    return {narrative,started,cut0,timeline:tl,total:narrative.info.total,ambience:!!amb?.active,landing0};
   }catch(error){presentationAmbienceEnd();livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}
 }
+let livingReal=false; // HERO FINAL (corte C): al final del epílogo la vivienda se ve real, sin la capa del dibujo
 function endLiving(living){
+  livingReal=false;window.RubikFinalDibujoUI?.fin();
   if(living.ambience)presentationAmbienceEnd();
   livingDrawing?.clearLanding();
   if(opt.cut!==living.cut0)setPresentationCut(living.cut0);
@@ -4995,7 +5002,7 @@ function loop(){
   updateSel();
   syncCeilingFixtures(camera);
   syncRoofVisibility();
-  if (livingDrawing) livingDrawing.render(scene, camera); else renderer.render(scene, camera);
+  if (livingDrawing && !livingReal) livingDrawing.render(scene, camera); else renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
   window.RubikLabels?.apply(); // Simulator C: etiquetas de estancia sin solapes (tras el render de CSS2D)
   renderedFrames++;
@@ -5628,13 +5635,21 @@ function presentationStoryApply(p){
   // The room's real wall section replaces the lowered walls once they reach its height: one rebuild at the threshold,
   // never per frame, and undone the same way when p goes back below it.
   if(storyRun.sectionCut){const cut=st.section?storyRun.sectionCut.section:storyRun.sectionCut.base;if(opt.cut!==cut)setPresentationCut(cut);}
+  // HERO del dibujo vivo: muros a su altura real en la construcción; de vuelta a la lectura a 1,2 m al retroceder (una reconstrucción por umbral).
+  if(storyRun.living){const want=st.fullWalls?storyRun.living.cut0:Math.min(storyRun.living.cut0,LIVING_CUT);if(opt.cut!==want)setPresentationCut(want);}
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
   if(archUp&&st.wallScale!==undefined){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
   if(storyRun.visit)applyRoomVisit(storyRun.visit,st);
   if(storyRun.section)applySection(storyRun.section,st);
   if(storyRun.elevation)applyElevation(storyRun.elevation,st);
   if(storyRun.axon)applyAxon(storyRun.axon,st);
-  if(storyRun.living)livingDrawing?.setTime(st.t);
+  if(storyRun.living){const L=storyRun.living;
+    // HERO: llegada de TODA la vivienda con el mismo motor (aterrizajeHero); al retroceder, vuelve la llegada original.
+    if(st.hero&&L.landing0&&window.RubikFinalDibujo){L.heroLanding=L.heroLanding||window.RubikFinalDibujo.aterrizajeHero(L.landing0);if(L.heroLanding&&L.activo!=='hero'){livingDrawing?.setLanding(L.heroLanding);L.activo='hero';}livingDrawing?.setTime(st.hero.kReal<0?-1:st.hero.kReal*(L.heroLanding?.total||1));}
+    else{if(L.activo==='hero'){livingDrawing?.setLanding(L.landing0);L.activo='base';}livingDrawing?.setTime(st.t);}
+    // Toda la vivienda ya real: se dibuja la escena real sin la capa (también las caras exteriores de los muros).
+    livingReal=!!(st.hero&&st.hero.kReal>=1);
+    window.RubikFinalDibujoUI?.estado(st);}
   if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
   if(lampG)lampG.visible=grow>.99&&((st.wallScale??1)>.99||st.phase==='room');
   // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
@@ -6135,6 +6150,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/delivery-map-core.js"></script>
 <script src="js/delivery-preview-ui.js"></script>
 <script src="js/e3-entregas-core.js"></script><script src="js/e3-entregas-ui.js"></script>
+<script src="js/rubik-final-core.js"></script><script src="js/rubik-final-titulos.js"></script><script src="js/rubik-final-dibujo.js"></script><script src="js/rubik-final-dibujo-ui.js"></script><script src="js/studio-hero-ui.js"></script>
 <script src="js/professional-workspace-ui.js"></script>
 <!-- FT3D-8 M2 (S4): one project, one budget, one plan, one evolution, one delivery. Reuses M1 and Gate D engines. -->
 <script src="js/cost-provider-bcca-es.js"></script>

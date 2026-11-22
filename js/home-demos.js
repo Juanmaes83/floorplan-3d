@@ -86,11 +86,12 @@
  }
  function watch(){const tick=()=>{if(!state.seen)return;const P=window.FloorPlanPresentation;
    if(!P.active){state.seen=false;return;}
-   if(!P.story){state.seen=false;end();return;}setTimeout(tick,300);};tick();}
+   if(!P.story||(P.story.p>=1&&!P.story.playing&&window.RubikFinalDibujoUI?.ultimo?.hero?.fin)){state.seen=false;end();return;}setTimeout(tick,300);};tick();}
  async function replay(){
   hide();
   const presentation=window.FloorPlanPresentation;
   if(!presentation.active||!document.getElementById('presentationLivingPlay'))return start();
+  {const S=presentation.story;if(S&&S.p>=1&&!S.playing&&window.RubikFinalDibujoUI?.ultimo?.hero?.fin)document.getElementById('presentationStoryPlay')?.click();}
   let clicked=false;
   try{
    const replayed=await wait(()=>{

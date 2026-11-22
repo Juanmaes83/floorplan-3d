@@ -21,7 +21,7 @@ export function createProjectScene(canvas){
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color(0xe7e6e2);
   const camera=new THREE.PerspectiveCamera(45,1,.05,600);
-  scene.add(new THREE.HemisphereLight(0xffffff,0xd8d3c8,1.2));
+  const hemi=new THREE.HemisphereLight(0xffffff,0xd8d3c8,1.2);scene.add(hemi);
   const sun=new THREE.DirectionalLight(0xffffff,1.7);sun.position.set(14,24,10);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
   Object.assign(sun.shadow.camera,{left:-25,right:25,top:25,bottom:-25,near:1,far:80});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;scene.add(sun);
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(300,300),mat('#e2e0da',{roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.002;ground.receiveShadow=true;scene.add(ground);
@@ -305,7 +305,8 @@ export function createProjectScene(canvas){
     // OBR-02: el material del fantasma de vista previa y sus claves también pertenecen a la escena.
     previewKeys=new Set();previewShown=0;previewMat.dispose();
   }
-  return {get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
+  // SCULPT A · HERO final: acceso de solo lectura a la escena, sus luces y el suelo (la capa decorativa vive fuera de root).
+  return {get stage(){return {scene,camera,hemi,sun,ground,renderer};},get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load,setState,highlight,pick,hitsAt,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=!!v;controls.autoRotateSpeed=.5;applyMotion();},get reducedMotion(){return reducedMotion;},get autoRotating(){return controls.autoRotate;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},

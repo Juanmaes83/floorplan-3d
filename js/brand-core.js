@@ -8,7 +8,11 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanBrand=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
  const PROFILES_KEY='rubik-sota-brand-profiles-v1',DELIVERY_KEY='rubik-sota-brand-delivery-v1',MAX_PROFILES=12,LOGO_MAX_BYTES=300*1024;
- const LIMITS={name:80,person:80,phone:30,email:120,web:200,tagline:120,title:120,intro:400};
+ const LIMITS={name:80,person:80,phone:30,email:120,web:200,tagline:120,title:120,intro:400,cta:60,cliente:80,cierre:160};
+ const HERO_ESTILOS=['cine','editorial'];
+ // HERO FINAL (corte B): datos audiovisuales POR PROYECTO. El cliente solo se muestra con autorización expresa del profesional.
+ const hero=h=>{if(!h||typeof h!=='object')return null;const cliente=clean(h.cliente,LIMITS.cliente),cierre=clean(h.cierre,LIMITS.cierre),estilo=HERO_ESTILOS.includes(h.estilo)?h.estilo:'cine';
+  return {cliente,clienteAutorizado:!!cliente&&h.clienteAutorizado===true,cierre,estilo,incluirWeb:h.incluirWeb===true};};
  const clean=(v,max)=>String(v??'').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim().slice(0,max);
  const fail=(field,message)=>{const e=Error(message);e.field=field;throw e;};
  function web(value){
@@ -29,7 +33,7 @@
  }
  function normalizeProfile(input,{id}={}){
   const p=input||{},name=clean(p.name,LIMITS.name);if(!name)fail('name','Escribe el nombre comercial.');
-  return {id:String(id||p.id||''),name,person:clean(p.person,LIMITS.person),phone:phone(p.phone),email:email(p.email),web:web(p.web),tagline:clean(p.tagline,LIMITS.tagline),logo:logo(p.logo),updatedAt:p.updatedAt||null};
+  return {id:String(id||p.id||''),name,person:clean(p.person,LIMITS.person),phone:phone(p.phone),email:email(p.email),web:web(p.web),tagline:clean(p.tagline,LIMITS.tagline),cta:clean(p.cta,LIMITS.cta),logo:logo(p.logo),updatedAt:p.updatedAt||null};
  }
  function newId(){return 'brd_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);}
  function readProfiles(storage){
@@ -52,22 +56,22 @@
  function delivery(storage,entryId){
   const e=readDeliveries(storage).entries[entryId]||{},lib=readProfiles(storage);
   const profileId=lib.profiles.some(p=>p.id===e.profileId)?e.profileId:null;
-  return {profileId,title:clean(e.title,LIMITS.title),intro:clean(e.intro,LIMITS.intro)};
+  return {profileId,title:clean(e.title,LIMITS.title),intro:clean(e.intro,LIMITS.intro),hero:hero(e.hero)};
  }
  function setDelivery(storage,entryId,change){
   if(!entryId)fail('entry','No hay un proyecto activo.');
   const d=readDeliveries(storage),cur=d.entries[entryId]||{},lib=readProfiles(storage),next={...cur,...change};
   if(next.profileId&&!lib.profiles.some(p=>p.id===next.profileId))fail('profileId','Esa marca ya no existe.');
-  d.entries[entryId]={profileId:next.profileId||null,title:clean(next.title,LIMITS.title),intro:clean(next.intro,LIMITS.intro)};writeDeliveries(storage,d);return delivery(storage,entryId);
+  d.entries[entryId]={profileId:next.profileId||null,title:clean(next.title,LIMITS.title),intro:clean(next.intro,LIMITS.intro),...(hero(next.hero)?{hero:hero(next.hero)}:{})};writeDeliveries(storage,d);return delivery(storage,entryId);
  }
  // Frozen copy used by a deliverable: profile fields, project title and intro, and when it was taken.
  function snapshot(storage,entryId,projectName,now=new Date().toISOString()){
   const d=delivery(storage,entryId),profile=d.profileId?readProfiles(storage).profiles.find(p=>p.id===d.profileId):null;
   if(!profile)return null;
-  return Object.freeze({profile:Object.freeze({...profile}),title:d.title||clean(projectName,LIMITS.title),intro:d.intro,takenAt:now});
+  return Object.freeze({profile:Object.freeze({...profile}),title:d.title||clean(projectName,LIMITS.title),intro:d.intro,hero:d.hero?Object.freeze({...d.hero}):null,takenAt:now});
  }
  const contactLine=p=>[p.person,p.phone,p.email,p.web&&p.web.replace(/^https?:\/\//,'')].filter(Boolean).join(' · ');
  // Credit line: the professional prepared the delivery with Rubik Sota; platform authorship is never replaced.
  const credit=p=>`Preparado por ${p.name} con Rubik Sota`;
- return {PROFILES_KEY,DELIVERY_KEY,MAX_PROFILES,LOGO_MAX_BYTES,LIMITS,normalizeProfile,readProfiles,saveProfile,removeProfile,delivery,setDelivery,snapshot,contactLine,credit,web,email,phone,logo};
+ return {HERO_ESTILOS,PROFILES_KEY,DELIVERY_KEY,MAX_PROFILES,LOGO_MAX_BYTES,LIMITS,normalizeProfile,readProfiles,saveProfile,removeProfile,delivery,setDelivery,snapshot,contactLine,credit,web,email,phone,logo};
 });

@@ -82,15 +82,15 @@ export function normalize(scene,entry){
  if(!Number.isFinite(triangles)||triangles<=0)throw Error('Empty model');
  return {scene:support,dimensionsMm:measured,triangles,geometryBytes};
 }
-async function download(url,limit,signal){
- const absolute=new URL(url,location.href);if(absolute.origin!==location.origin||absolute.search||absolute.hash||!absolute.pathname.startsWith(new URL('assets/f3/',location.href).pathname))throw Error('Asset path is not approved');
+async function download(url,limit,signal,base=location.href){
+ const absolute=new URL(url,base);if(absolute.origin!==location.origin||absolute.search||absolute.hash||!absolute.pathname.startsWith(new URL('assets/f3/',base).pathname))throw Error('Asset path is not approved');
  const response=await fetch(absolute,{signal,credentials:'same-origin',redirect:'error',cache:'no-cache'});if(!response.ok)throw Error(absolute.pathname+': HTTP '+response.status);
  const reader=response.body.getReader(),chunks=[];let length=0;try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>limit)throw Error('Resource limit exceeded');chunks.push(value);}}finally{await reader.cancel();}
  const bytes=new Uint8Array(length);let n=0;for(const b of chunks){bytes.set(b,n);n+=b.length;}return bytes.buffer;
 }
 const digest=async buffer=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),b=>b.toString(16).padStart(2,'0')).join('');
 // 12 s covers a 6 s late GLB plus measured permission and decoding overhead under contention.
-export async function load(entry,{timeoutMs=12000,signal}={}){
+export async function load(entry,{timeoutMs=12000,signal,base}={}){
  // One deadline covers the authorized load, excluding queue wait.
  const controller=new AbortController(),start=performance.now(),phaseMs={};
  let phase='permission',phaseStart=start,parsed;
@@ -106,9 +106,9 @@ export async function load(entry,{timeoutMs=12000,signal}={}){
  const cleanup=()=>{if(parsed)dispose(parsed.scene);createdTextures.splice(0).forEach(t=>t.dispose());bitmaps.splice(0).forEach(i=>i.close());};
  let rejectAbort;const canceled=new Promise((_,reject)=>{rejectAbort=()=>reject(controller.signal.reason);controller.signal.addEventListener('abort',rejectAbort,{once:true});if(controller.signal.aborted)rejectAbort();});
  const task=(async()=>{try{
-  check();const permission=await download(entry.permissionUrl,32768,controller.signal);check();next('permission-integrity');if(await digest(permission)!==entry.permissionSha256)throw Error('Permission document changed');
+  check();const permission=await download(entry.permissionUrl,32768,controller.signal,base);check();next('permission-integrity');if(await digest(permission)!==entry.permissionSha256)throw Error('Permission document changed');
   next('model-download');
-  const buffer=await download(entry.url,Math.min(entry.bytes,MAX_BYTES),controller.signal);check();next('integrity');if(buffer.byteLength!==entry.bytes||await digest(buffer)!==entry.sha256)throw Error('Model integrity changed');
+  const buffer=await download(entry.url,Math.min(entry.bytes,MAX_BYTES),controller.signal,base);check();next('integrity');if(buffer.byteLength!==entry.bytes||await digest(buffer)!==entry.sha256)throw Error('Model integrity changed');
   next('inspection');const data=readGLB(buffer),info=textures(buffer,data);check();
   next('decode');
   for(const im of info.images){

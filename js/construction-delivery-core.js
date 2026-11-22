@@ -115,7 +115,9 @@
     const p=Brand.normalizeProfile(snapshot.profile,{id:snapshot.profile.id}); // re-validated by the brand core
     const fields=CONTACT_FIELDS.filter(f=>include.includes(f)&&p[f]);
     const shown={...Object.fromEntries(CONTACT_FIELDS.map(f=>[f,''])),...Object.fromEntries(fields.map(f=>[f,p[f]]))};
+    // HERO FINAL: la web solo con consentimiento expreso para esta entrega (lista de contacto incluida o hero.incluirWeb) (OP-05); la CTA es del estudio; hero = datos por proyecto.
     return deepFreeze({present:true,profileId:p.id,name:p.name,tagline:p.tagline,logo:p.logo,title:snapshot.title,intro:snapshot.intro,takenAt:snapshot.takenAt,
+      web:fields.includes('web')||snapshot.hero?.incluirWeb===true?p.web:'',cta:p.cta||'',hero:snapshot.hero||null,
       contact:Brand.contactLine(shown),fields,credit:Brand.credit(p)});
   }
 

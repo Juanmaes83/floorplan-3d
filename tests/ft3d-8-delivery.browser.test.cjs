@@ -5,7 +5,7 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),path=require('node:path'),crypto=require('node:crypto'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const View=require('../api/view.js'),F=require('../labs/ft3d-8/fidelity-fixtures.js');
 const root=path.resolve(__dirname,'..'),shots=process.env.FT3D8_DELIVERY_SHOTS||null;
-const TYPES={'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
+const TYPES={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
 const BLOB_HOST='fixturestore.public.blob.vercel-storage.com';
 let server,browser,base,tmp;
 before(async()=>{

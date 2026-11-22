@@ -6,7 +6,7 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const M=require('../js/construction-mp4-muxer.js');
 const root=path.resolve(__dirname,'..'),shots=process.env.FT3D8_UX4D_SHOTS||null;
-const TYPES={'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
+const TYPES={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
 let server,browser,base,ctx,page,watched;
 const launchArgs=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--autoplay-policy=no-user-gesture-required'];
 before(async()=>{

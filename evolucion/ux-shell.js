@@ -2,6 +2,7 @@
    action chosen from the real state, the readiness pill, and the explicit initial state of the evolution.
    It reads what the lab already computed (window.__ft3dFidelity.ctx, window.__ft3dDossier.evaluation) and the shared
    per-day moment (event «ft3d8-moment»): it never evaluates the plan, the budget or the dossier again. */
+const visible=s=>window.RubikFinalCore?window.RubikFinalCore.textoVisible(s,'es'):s; // nada en chino en una sesión ES
 const Fid=()=>window.__ft3dFidelity,Dos=()=>window.__ft3dDossier,P=window.FloorPlanConstructionLabPresenter;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -63,7 +64,7 @@ function state(){
 function renderSummary(){
   const s=state(),box=$('projSummary');if(!s){box.innerHTML='';return;}
   const {ev,m,steps,errors,plan}=s;
-  $('topProject').textContent=m.subject.name;$('topProject').title=m.subject.name;$('readiness').textContent=s.pill;$('readiness').dataset.state=s.tone;
+  $('topProject').textContent=visible(m.subject.name);$('topProject').title=visible(m.subject.name);$('readiness').textContent=s.pill;$('readiness').dataset.state=s.tone;
   const inv=m.inventory,kind=inv.kind==='building'?`Edificio de ${inv.levels.length} plantas`:'Vivienda de una planta';
   const est=m.coverage.elements.byEvidence,approx=est.estimated+est.pending>0;
   const b=ev?.authorities.budget,t=ev?.authorities.territory;
@@ -86,7 +87,7 @@ function renderSummary(){
   const SRC=window.__ft3dSource,lib=SRC?.mode==='library';
   const libKicker=lib?`Proyecto guardado en tu biblioteca · ${m.subject.type==='building'?'edificio':'proyecto'} · revisión ${esc(String(m.fingerprints.project).slice(0,8))}${SRC.subject?.activeLevelId?' · planta activa: '+esc(SRC.subject.levels.find(l=>l.id===SRC.subject.activeLevelId)?.name||''):''}`:null;
   box.innerHTML=`<p class="kicker">${libKicker?libKicker:ev?(ev.dossier.route==='local-package'?'Expediente abierto desde un paquete':'Expediente de documentos cargados en este navegador'):'Modo fidelidad · sin expediente'}${/FIXTURE/.test(m.subject.name)?' · <span class="fx">datos de prueba</span>':''}</p>
-    <h2>${esc(m.subject.name)}</h2><p class="lead${errors.length?' bad':''}">${esc(lead)}</p>
+    <h2>${esc(visible(m.subject.name))}</h2><p class="lead${errors.length?' bad':''}">${esc(lead)}</p>
     <ul class="srows">${rows.map(([k,st,v])=>`<li data-row="${esc(k)}"><span class="k">${esc(k)}${st?chipHtml(st):''}</span><span class="v">${esc(v)}</span></li>`).join('')}</ul>
     ${errors.length?`<ul class="issues-ux">${errors.slice(0,4).map(i=>`<li data-code="${esc(i.code)}"><b>${esc(i.message)}</b><p>${esc(FIX[i.code]||'Revisa el detalle en el expediente completo.')}</p></li>`).join('')}</ul>`:''}
     <div class="pactions"><button type="button" class="btn primary" id="mainAction" data-act="${main[0]}">${esc(main[1])}</button>
@@ -109,7 +110,7 @@ $('projSummary').addEventListener('click',e=>{const b=e.target.closest('[data-ac
 // Everything comes from the loaded documents: weeks and dates from the plan, money from C1-C4 (net, «sin IVA»).
 function renderHero(){
   const ctx=Fid()?.ctx;if(!ctx)return;const m=ctx.model,sch=ctx.schedule;
-  $('heroProject').textContent=m.subject.name;
+  $('heroProject').textContent=visible(m.subject.name);
   $('heroFixture').hidden=!/FIXTURE/.test(m.subject.name);
   if(!sch){$('heroWeeks').textContent='—';$('heroUnit').textContent=m.planning.status==='rejected'?'plan de otro proyecto':'sin planificación';
     $('heroMeta').textContent='Se muestra la vivienda tal como está en el proyecto, sin fechas inventadas.';return;}
