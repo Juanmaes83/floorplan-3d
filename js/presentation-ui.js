@@ -1307,7 +1307,7 @@
   if(active&&modalOpen())return;
   // Walking from the visit: the keys belong to the walk (arrows move); Escape first returns to the presentation.
   if(active&&walking){if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();leaveWalk('stop');}return;}
-  if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
+  if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();if(!window.FloorPlanTourVideo?.cancelPreview?.())stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
   if(active&&map.contains(e.target)&&(e.key==='Enter'||e.key===' '))return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){

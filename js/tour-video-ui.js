@@ -11,7 +11,7 @@
  const HOLD_MS=2000;
  // SIMULATOR B: recorrido cinematográfico (guion por tiempo, exportación determinista). «Paradas» es la grabación de siempre.
  const Film=window.FloorPlanPresentationFilm;let mode=null,cineOK=false;
- let result=null,url='',controller=null,returnFocus=null;
+ let result=null,url='',controller=null,previewController=null,returnFocus=null;
  const slug=s=>String(s||'').normalize('NFD').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'proyecto';
  const projectName=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
  const filename=r=>`rubik-sota-recorrido-${slug(projectName())}.${r.extension}`;
@@ -29,7 +29,7 @@
  open.title=tx('Graba el recorrido de esta presentación para descargarlo','Record this presentation tour to download it','录制此展示路线以便下载');
  const dialog=el('dialog',undefined,document.body,'ai-render-dialog tour-video-dialog');dialog.id='tourVideoDialog';dialog.setAttribute('aria-labelledby','tourVideoTitle');
  // While the camera moves between stops, or a batch of images is running, recording waits.
- const sync=()=>{open.disabled=Recorder.busy||overlay?.dataset.moving==='true'||document.querySelector('#presentationBatchCancel')?.hidden===false;};
+ const sync=()=>{open.disabled=!!previewController||Recorder.busy||overlay?.dataset.moving==='true'||document.querySelector('#presentationBatchCancel')?.hidden===false;};
  if(overlay)new MutationObserver(sync).observe(overlay,{attributes:true,attributeFilter:['data-moving']});
  open.onclick=()=>{if(open.disabled)return;returnFocus=document.activeElement;draw();dialog.showModal();dialog.querySelector('#tourVideoGo,#tourVideoDownload')?.focus();};
  dialog.addEventListener('cancel',e=>{if(controller){e.preventDefault();controller.abort();}});
@@ -57,8 +57,9 @@
    opc('paradas',tx('Por paradas','By stops','按停留点'),tx('Graba en tiempo real cada parada con una pausa (la grabación de siempre).','Records each stop in real time with a pause (the usual recording).','实时录制每个停留点（原有录制）。'),!!type,
     tx('Este navegador no ofrece grabación en tiempo real. Usa Cinematográfico.','This browser cannot record in real time. Use Cinematic.','此浏览器不支持实时录制。请选择电影式。'));
    if((mode||(cineOK?'cine':'paradas'))==='cine'&&state!=='done'){const ver=btn(tx('Ver el recorrido en la presentación','Watch the tour in the presentation','在展示中观看路线'),modo,'btn');ver.id='tourVideoWatch';
-    ver.onclick=async()=>{dialog.close();const c=new AbortController(),esc=e=>{if(e.key==='Escape')c.abort();};addEventListener('keydown',esc,true);
-     try{await Film.previsualizar({signal:c.signal});}catch(e){if(e?.name!=='AbortError')window.toast?.(e.message,5000);}finally{removeEventListener('keydown',esc,true);}
+    ver.onclick=async()=>{dialog.close();previewController=new AbortController();sync();
+     try{await Film.previsualizar({signal:previewController.signal});}catch(e){if(e?.name!=='AbortError')window.toast?.(e.message,5000);}finally{previewController=null;sync();}
+     if(!window.FloorPlanPresentation.active)return;
      returnFocus=open;draw('intro');dialog.showModal();dialog.querySelector('#tourVideoGo')?.focus();};}}
   const status=el('p',message,dialog,'ai-render-status');status.id='tourVideoStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   // Actions go after the preview: first the video and what it is, then what to do with it.
@@ -90,5 +91,6 @@
  }
  (()=>{const st=document.createElement('style');st.textContent='.tour-video-mode{border:0;padding:0;margin:8px 0;display:grid;gap:6px}.tour-video-mode legend{font-weight:700;margin-bottom:4px}.tour-video-mode-opt{display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid rgba(0,0,0,.12);border-radius:10px;cursor:pointer;min-height:44px}.tour-video-mode-opt input{width:20px;height:20px;margin-top:2px}.tour-video-mode-opt span{display:flex;flex-direction:column}.tour-video-mode-opt small{opacity:.8}.tour-video-mode .btn{justify-self:start;min-height:44px}';document.head.append(st);})();
  function download(){if(!result)return;const a=document.createElement('a');a.href=url;a.download=filename(result);document.body.append(a);a.click();a.remove();}
- window.FloorPlanTourVideo={open:()=>open.click(),get result(){return result;},filename:()=>result?filename(result):null};
+ window.FloorPlanTourVideo={open:()=>open.click(),get result(){return result;},filename:()=>result?filename(result):null,
+  cancelPreview(){if(!previewController)return false;previewController.abort();return true;}};
 })();
