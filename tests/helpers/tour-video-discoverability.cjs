@@ -83,20 +83,35 @@ module.exports = ({ getBrowser, getOrigin }) => {
     await start(page,options);
     await settled(page);
     await assertReachable(page);
-    await page.locator('#presentationStoryFull').click();await scene(page,'playing');
-    const hint=availability(page);
-    assert.equal(await video(page).isVisible(),false,'the unavailable action does not compete with the active story player');
-    assert.equal(await hint.getAttribute('role'),'status');
-    assert.match(await hint.innerText(),/Grabar vídeo · Termina la historia/);
-    assert.equal(await hint.evaluate(element=>{
-      const box=element.getBoundingClientRect();
-      const hit=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
-      return element.contains(hit)&&box.left>=0&&box.right<=innerWidth&&box.top>=0&&box.bottom<=innerHeight;
-    }),true,'the recording instruction is visible and unobscured');
-    await page.locator('#presentationClose').focus();await page.keyboard.press('Tab');
-    assert.equal(await page.evaluate(()=>document.activeElement.id),'presentationVideoAvailability');
-    await shot(page,engine+'-historia-1440');
-    await page.locator('#presentationStoryPlay').click();await scene(page,'paused');
+    // Observe the running player and pause in the same browser turn, before a slow runner advances to the arrival.
+    await page.evaluate(()=>{
+      const overlay=document.getElementById('presentationOverlay');
+      const hint=document.getElementById('presentationVideoAvailability');
+      const observer=new MutationObserver(()=>{
+        if(overlay.dataset.story!=='playing')return;
+        observer.disconnect();
+        const box=hint.getBoundingClientRect();
+        const hit=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
+        const buttonVisible=document.getElementById('presentationVideo').getClientRects().length!==0;
+        hint.focus();
+        window.recordingDuringStory={
+          buttonVisible,role:hint.getAttribute('role'),text:hint.textContent,
+          keyboard:hint.tabIndex===0&&document.activeElement===hint,
+          unobscured:hint.contains(hit)&&box.left>=0&&box.right<=innerWidth&&box.top>=0&&box.bottom<=innerHeight,
+        };
+        document.getElementById('presentationStoryPlay').click();
+      });
+      observer.observe(overlay,{attributes:true,attributeFilter:['data-story']});
+    });
+    await page.locator('#presentationStoryFull').click();
+    await page.waitForFunction(()=>window.recordingDuringStory);
+    const recorded=await page.evaluate(()=>window.recordingDuringStory);
+    assert.equal(recorded.buttonVisible,false,'the unavailable action does not compete with the active story player');
+    assert.equal(recorded.role,'status');
+    assert.match(recorded.text,/Grabar vídeo · Termina la historia/);
+    assert.equal(recorded.unobscured,true,'the recording instruction is visible and unobscured');
+    assert.equal(recorded.keyboard,true,'the recording instruction can receive keyboard focus');
+    await scene(page,'paused');
     await assertReachable(page,/Elige una parada/);
     await page.locator('#presentationClose').focus();await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(()=>document.activeElement.id),'presentationVideo');
@@ -189,9 +204,31 @@ module.exports = ({ getBrowser, getOrigin }) => {
     const cine=page.locator('input[name=tourVideoMode][value=cine]');
     if(await cine.isEnabled()){
       await cine.check();
+      // Inspect the live block and navigate Back before the preview can end between protocol calls.
+      await page.evaluate(()=>{
+        const detail=document.getElementById('presentationVideoAvailability');
+        const button=document.getElementById('presentationVideo');
+        const observer=new MutationObserver(()=>{
+          if(!detail.textContent.includes('Vista previa en curso')||!FloorPlanPresentationFilm.busy)return;
+          observer.disconnect();
+          const rect=button.getBoundingClientRect();
+          const hit=document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);
+          window.recordingDuringPreview={
+            disabled:button.getAttribute('aria-disabled')==='true',
+            described:button.getAttribute('aria-describedby')===detail.id&&detail.getAttribute('role')==='status',
+            visible:getComputedStyle(button).visibility==='visible'&&rect.width>=44&&rect.height>=44,
+            inside:rect.left>=0&&rect.top>=0&&rect.right<=innerWidth+1&&rect.bottom<=innerHeight+1,
+            unobscured:button.contains(hit),noOverflow:document.documentElement.scrollWidth<=innerWidth+1,
+          };
+          history.back();
+        });
+        observer.observe(detail,{childList:true,characterData:true,subtree:true});
+      });
       await page.locator('#tourVideoWatch').click();
-      await activeBlock('Vista previa en curso');
-      await page.evaluate(()=>history.back());
+      await page.waitForFunction(()=>window.recordingDuringPreview);
+      assert.deepEqual(await page.evaluate(()=>window.recordingDuringPreview),{
+        disabled:true,described:true,visible:true,inside:true,unobscured:true,noOverflow:true,
+      });
       await page.locator('#presentationOverlay').waitFor({state:'hidden'});
       assert.equal(await page.evaluate(()=>FloorPlanPresentationFilm.busy),false);
       assert.equal(await page.locator('#tourVideoDialog[open]').count(),0);

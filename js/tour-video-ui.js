@@ -160,7 +160,12 @@
   .tour-video-mode-opt small{opacity:.8}.tour-video-mode .btn{justify-self:start;min-height:44px}
  `;document.head.append(st);})();
  function download(){if(!result)return;const a=document.createElement('a');a.href=url;a.download=filename(result);document.body.append(a);a.click();a.remove();}
+ function leavePresentation(){
+  leaving=true;previewController?.abort();controller?.abort();
+  if(dialog.open)dialog.close();
+  sync();return operation;
+ }
+ window.addEventListener('floorplan-project-switched',()=>{leavePresentation();clear();});
  window.FloorPlanTourVideo={open:()=>open.click(),get result(){return result;},filename:()=>result?filename(result):null,
-  cancelPreview(){if(!previewController)return false;previewController.abort();return true;},
-  leavePresentation(){leaving=true;previewController?.abort();controller?.abort();if(dialog.open)dialog.close();clear();sync();return operation;}};
+  cancelPreview(){if(!previewController)return false;previewController.abort();return true;},leavePresentation};
 })();
