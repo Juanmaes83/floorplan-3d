@@ -10,6 +10,10 @@
  if(!app||!C||!R||!A||!S||!B)return;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined&&text!==null)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
+ // Iconos lineales propios (SVG en línea, sin dependencias ni fuentes de iconos): heredan el color del botón.
+ const ICONS={copy:'M8 8h11v11H8zM5 16H4V5h11v1',trash:'M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5',download:'M12 4v11M7 10l5 5 5-5M5 19h14',check:'M5 12l4 4 10-10'};
+ const icon=(name,parent)=>{const NS='http://www.w3.org/2000/svg',g=document.createElementNS(NS,'svg');g.setAttribute('viewBox','0 0 24 24');g.setAttribute('aria-hidden','true');g.setAttribute('class','cx-svg');
+  const p=document.createElementNS(NS,'path');p.setAttribute('d',ICONS[name]);g.append(p);parent?.prepend(g);return g;};
  const chip=(text,parent,tone='')=>el('span',text,parent,'cx-chip'+(tone?' '+tone:''));
  const pct=v=>v.toLocaleString('es-ES',{maximumFractionDigits:2})+' %';
  const DEP={FS:'Fin → inicio',SS:'Inicio → inicio',FF:'Fin → fin',SF:'Inicio → fin'};
@@ -117,13 +121,17 @@
    const sv=btn('Guardar plan',foot,'btn primary');sv.id='planSave';sv.disabled=!dirty&&plan.result==='match';sv.onclick=userEvent=>save({userEvent});
    const rv=btn(draft.review.status==='reviewed'&&!dirty?'Revisado':'Marcar como revisado…',foot);rv.id='planReview';rv.disabled=!draft.tasks.length;rv.onclick=()=>{review=!review;draw();};
    const ev=btn('Ver evolución',foot);ev.id='planEvolution';ev.disabled=!stored();ev.onclick=async()=>{if(dirty){error='Guarda el plan antes de ver su evolución.';draw();return;}dialog.close();await window.FloorPlanConstructionUI.openEvolution();};
-   const ex=btn('Exportar plan (JSON)',foot);ex.id='planExport';ex.disabled=!stored();ex.onclick=()=>download(new Blob([S.serialize(stored())],{type:'application/json'}),`plan-de-obra-${(snap.entry.name||'proyecto').replace(/[^\w]+/g,'-').toLowerCase()}.json`);
+   const xg=el('div',undefined,foot,'cx-export-group');xg.setAttribute('role','group');xg.setAttribute('aria-label','Exportar el plan guardado');el('span','Exportar',xg,'cx-export-label');
+   const ex=btn('Plan (JSON)',xg,'btn cx-export');icon('download',ex);ex.title='Exportar plan (JSON) · formato de RUBIK';ex.id='planExport';ex.disabled=!stored();ex.onclick=()=>download(new Blob([S.serialize(stored())],{type:'application/json'}),`plan-de-obra-${(snap.entry.name||'proyecto').replace(/[^\w]+/g,'-').toLowerCase()}.json`);
    // M13: el plan GUARDADO, tal cual, en MSPDI (Microsoft Project y GanttProject). No cambia el plan ni sus fechas.
-   const mx=btn('Exportar a Microsoft Project / GanttProject (XML)',foot);mx.id='planExportMspdi';mx.disabled=!stored()||!window.FloorPlanScheduleMSPDI;
+   const mx=btn('Microsoft Project / GanttProject (XML)',xg,'btn cx-export');icon('download',mx);mx.id='planExportMspdi';mx.disabled=!stored()||!window.FloorPlanScheduleMSPDI;
    mx.title='Archivo MSPDI (.xml): se abre en Microsoft Project y en GanttProject (Proyecto › Importar).';mx.onclick=exportMspdi;
   }
-  if(mspdiNote&&!closing){const f=el('div',undefined,foot,'cx-banner'+(mspdiNote.tone?' '+mspdiNote.tone:''));f.id='planMspdiReport';f.style.flexBasis='100%';el('b',mspdiNote.title,f);
-   const ul=el('ul',undefined,f);for(const line of mspdiNote.lines)el('li',line,ul);}
+  if(mspdiNote&&!closing){const f=el('div',undefined,foot,'cx-banner cx-report'+(mspdiNote.tone?' '+mspdiNote.tone:''));f.id='planMspdiReport';
+   const h=el('div',undefined,f,'cx-report-head');if(mspdiNote.tone!=='bad')icon('check',h);el('b',mspdiNote.title,h);
+   const main=mspdiNote.lines.filter(l=>!/^No viaja: /.test(l)),lost=mspdiNote.lines.filter(l=>/^No viaja: /.test(l)).map(l=>l.slice(10));
+   const ul=el('ul',undefined,f,'cx-report-main');for(const line of main)el('li',line,ul);
+   if(lost.length){const d=el('details',undefined,f,'cx-report-lost');el('summary',`Qué no viaja al formato MSPDI (${lost.length})`,d);const ul2=el('ul',undefined,d);for(const line of lost)el('li',line,ul2);}}
   if(review&&draft&&!closing){const f=el('div',undefined,foot,'cx-form');f.style.flexBasis='100%';el('h3','Declarar la revisión del plan',f);
    el('p','Indica quién ha revisado fechas, dependencias, elementos y repartos. Es una declaración, no una firma autenticada: si cambias el plan, la revisión queda desactualizada.',f,'cx-banner');
    const lab=el('label',undefined,f,'cx-field');el('span','Revisado por',lab);const who=el('input',undefined,lab);who.id='planReviewer';who.autocomplete='name';
@@ -194,25 +202,34 @@
   if(editing&&!editing.id)taskForm(body,null);
   if(!tasks().length){el('p','El plan no tiene tareas todavía.',body,'cx-empty');return;}
   const L=R.links(asStored()),wrap=el('div',undefined,body,'cx-scroll'),t=el('table',undefined,wrap,'cx-table');t.id='planTasks';
-  const hr=el('tr',undefined,el('thead',undefined,t));for(const x of ['WBS','Tarea','Inicio','Fin','Días','Elementos','Partidas',''])el('th',x,hr).scope='col';
+  t.classList.add('cx-tasks');
+  const hr=el('tr',undefined,el('thead',undefined,t));for(const x of ['WBS','Tarea','Fechas','Elementos','Partidas',''])el('th',x,hr).scope='col';
+  // Escala común del plan para el minidiagrama de Gantt de cada fila (las fechas son las del profesional, no se calculan).
+  const all=tasks(),t0=Math.min(...all.map(x=>Date.parse(x.startDate))),t1=Math.max(...all.map(x=>Date.parse(x.endDate)))+86400000,span=Math.max(86400000,t1-t0);
   const tb=el('tbody',undefined,t),lines=money.report?new Map(money.report.byTask.map(x=>[x.taskId,x])):null;
   for(const tk of [...tasks()].sort((a,b)=>a.startDate.localeCompare(b.startDate)||a.wbs.localeCompare(b.wbs,'es',{numeric:true}))){
    const tr=el('tr',undefined,tb);tr.dataset.task=tk.id;if(focus.taskId===tk.id)tr.classList.add('is-focus');
-   el('td',tk.wbs,tr,'wbs');const th=el('th',undefined,tr);th.scope='row';el('span',(tk.startDate===tk.endDate&&/^◆/.test(tk.title)?'':'')+tk.title,th);
-   if(tk.dependsOn.length)el('small','Después de: '+tk.dependsOn.map(d=>`${task(d.taskId)?.wbs||d.taskId} (${DEP[d.type]}${d.lagDays?`, ${d.lagDays>0?'+':''}${d.lagDays} d`:''})`).join(' · '),th);
-   el('td',day(tk.startDate),tr,'num');el('td',day(tk.endDate),tr,'num');el('td',String(days(tk.startDate,tk.endDate)),tr,'num');
+   // Hito con el mismo criterio que el resto de RUBIK: un solo día y sin elementos ni partidas.
+   const isMs=tk.startDate===tk.endDate&&!tk.elements.length&&!tk.budgetAllocations.length;if(isMs)tr.classList.add('cx-ms');
+   el('td',undefined,tr,'wbs').append(el('span',tk.wbs,undefined,'cx-wbs'));const th=el('th',undefined,tr);th.scope='row';
+   const name=el('span',undefined,th,'cx-task-name');if(isMs){const g=el('span','◆',name,'cx-ms-glyph');g.setAttribute('aria-hidden','true');}el('span',tk.title,name);if(isMs)el('span','Hito',name,'cx-chip cx-chip-ms');
+   if(tk.dependsOn.length){const d=el('small',undefined,th,'cx-deps');const i=el('span','↳',d,'cx-ico');i.setAttribute('aria-hidden','true');el('span','Después de: '+tk.dependsOn.map(d=>`${task(d.taskId)?.wbs||d.taskId} (${DEP[d.type]}${d.lagDays?`, ${d.lagDays>0?'+':''}${d.lagDays} d`:''})`).join(' · '),d);}
+   const dc=el('td',undefined,tr,'cx-dates'),n=days(tk.startDate,tk.endDate);
+   const line=el('div',undefined,dc,'cx-date-line');el('span',isMs?day(tk.startDate):`${day(tk.startDate)} → ${day(tk.endDate)}`,line,'num');el('span',isMs?'1 día':`${n} ${n===1?'día':'días'}`,line,'cx-dur');
+   const track=el('div',undefined,dc,'cx-gantt');track.setAttribute('aria-hidden','true');const bar=el('span',undefined,track,isMs?'cx-gantt-ms':'cx-gantt-bar');
+   const a=(Date.parse(tk.startDate)-t0)/span,w=(Date.parse(tk.endDate)+86400000-Date.parse(tk.startDate))/span;bar.style.left=(a*100).toFixed(2)+'%';if(!isMs)bar.style.width=Math.max(1.5,w*100).toFixed(2)+'%';
    const ec=el('td',undefined,tr),eb=el('div',undefined,ec,'cx-links');
-   if(!tk.elements.length)el('span','Sin representación 3D',eb,'cx-chip');
+   if(!tk.elements.length)el('span','Sin representación 3D',eb,'cx-chip cx-none');
    for(const e of tk.elements.slice(0,3)){const x=byKey.get(e.elementId),b=btn(x?C.elementLabel(x,inv.levels):e.elementId.startsWith(A.ILLUSTRATIVE_PREFIX)?(A.ILLUSTRATIVE[e.elementId.slice(A.ILLUSTRATIVE_PREFIX.length)]?.label||'Medio de obra')+' (ilustración)':'Elemento que ya no existe',eb,'cx-link');b.dataset.element=e.elementId;b.title=C.ROLE[e.role];b.onclick=()=>{tab='elements';focus={elementKey:e.elementId};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};}
    if(tk.elements.length>3)el('span',`+${tk.elements.length-3}`,eb,'cx-chip');
    const ic=el('td',undefined,tr),ib=el('div',undefined,ic,'cx-links'),tl=lines?.get(tk.id);
-   if(!tk.budgetAllocations.length)el('span','Sin partidas',ib,'cx-chip');
+   if(!tk.budgetAllocations.length)el('span','Sin partidas',ib,'cx-chip cx-none');
    for(const a of tk.budgetAllocations){const it=money.budget?.items.find(i=>i.id===a.itemId),line=tl?.lines.find(l=>l.itemId===a.itemId);
     const b=btn(`${it?it.description:'Partida que ya no existe'} · ${pct(a.sharePercent)}${line?' · '+(line.allocatedNet===null?'importe desconocido':eur(line.allocatedNet)):''}`,ib,'cx-link');b.dataset.item=a.itemId;b.onclick=()=>{tab='items';focus={itemId:a.itemId};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};}
-   const ac=el('td',undefined,tr),ab=el('div',undefined,ac,'cx-links');
-   const ed=btn('Editar',ab,'cx-link');ed.dataset.edit=tk.id;ed.onclick=()=>{editing={id:tk.id};draw();dialog.querySelector('#taskTitle')?.focus();};
-   const du=btn('Duplicar',ab,'cx-link');du.dataset.dup=tk.id;du.onclick=()=>{const id=R.newId('tsk'),prevFocus=focus;focus={taskId:id};const ok=change(d=>{d.tasks.push({...structuredClone(tk),id,title:tk.title+' (copia)',dependsOn:[],elements:[],budgetAllocations:[]});},'Copia creada sin elementos ni partidas: no pueden repetirse con el mismo papel ni superar el 100 %.');if(!ok)focus=prevFocus;else dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};
-   const rm=btn('Eliminar',ab,'cx-link');rm.dataset.remove=tk.id;rm.onclick=()=>{const deps=tasks().filter(o=>o.dependsOn.some(d=>d.taskId===tk.id));if(deps.length){error=`«${deps.map(o=>o.title).join('», «')}» depende de esta tarea: quita antes esa dependencia.`;draw();return;}change(d=>{d.tasks=d.tasks.filter(o=>o.id!==tk.id);},'Tarea eliminada. Sus partidas quedan sin asignar.');};
+   const ac=el('td',undefined,tr,'cx-actions'),ab=el('div',undefined,ac,'cx-links');
+   const ed=btn('✎ Editar',ab,'cx-link cx-edit');ed.setAttribute('aria-label','Editar «'+tk.title+'»');ed.dataset.edit=tk.id;ed.onclick=()=>{editing={id:tk.id};draw();dialog.querySelector('#taskTitle')?.focus();};
+   const du=btn('',ab,'cx-link cx-icon');icon('copy',du);du.title='Duplicar';du.setAttribute('aria-label','Duplicar «'+tk.title+'»');du.dataset.dup=tk.id;du.onclick=()=>{const id=R.newId('tsk'),prevFocus=focus;focus={taskId:id};const ok=change(d=>{d.tasks.push({...structuredClone(tk),id,title:tk.title+' (copia)',dependsOn:[],elements:[],budgetAllocations:[]});},'Copia creada sin elementos ni partidas: no pueden repetirse con el mismo papel ni superar el 100 %.');if(!ok)focus=prevFocus;else dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};
+   const rm=btn('',ab,'cx-link cx-icon cx-danger');icon('trash',rm);rm.title='Eliminar';rm.setAttribute('aria-label','Eliminar «'+tk.title+'»');rm.dataset.remove=tk.id;rm.onclick=()=>{const deps=tasks().filter(o=>o.dependsOn.some(d=>d.taskId===tk.id));if(deps.length){error=`«${deps.map(o=>o.title).join('», «')}» depende de esta tarea: quita antes esa dependencia.`;draw();return;}change(d=>{d.tasks=d.tasks.filter(o=>o.id!==tk.id);},'Tarea eliminada. Sus partidas quedan sin asignar.');};
    if(editing?.id===tk.id){const fr=el('tr',undefined,tb),fd=el('td',undefined,fr);fd.colSpan=8;taskForm(fd,tk);}
   }
  }

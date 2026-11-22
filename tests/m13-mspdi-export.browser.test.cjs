@@ -55,7 +55,7 @@ test(`interfaz real (${label}): exporta MSPDI del plan guardado, informa de lo q
   assert.match(xml,/<PredecessorLink><PredecessorUID>\d+<\/PredecessorUID><Type>3<\/Type><CrossProject>0<\/CrossProject><LinkLag>19200<\/LinkLag>/,'SS +4 d');
   assert.match(xml,/Plan previsto en borrador/);assert.doesNotMatch(xml,/<ActualStart>/);
   const rep=page.locator('#planMspdiReport');await rep.waitFor();
-  const text=await rep.textContent();assert.match(text,/3 tareas, 1 hito y 3 dependencias/);assert.match(text,/No viaja: /);assert.match(text,/Fechas ancladas/);
+  const text=await rep.textContent();assert.match(text,/3 tareas, 1 hito y 3 dependencias/);assert.match(text,/Qué no viaja al formato MSPDI/);assert.match(text,/Fechas ancladas/);
   await rep.scrollIntoViewIfNeeded();await shot(page,'m13-informe-'+(label==='móvil'?'movil':label));
   assert.equal(await stored(page),before,'the stored plan is untouched');
   // Con cambios sin guardar se exporta lo guardado, nunca cambios a medias: se pide guardar.
