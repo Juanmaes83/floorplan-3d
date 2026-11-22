@@ -1,5 +1,19 @@
 # RUBIK SOTA — Plan maestro de consolidación y comercialización v1.12
 
+> **Actualización al §6.3 · M11 · 22/11/2026.** HERO FINAL #311 queda integrado. Simulator B conserva un corte independiente. [Trazabilidad del cierre](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md).
+
+> **Corte histórico · 22/11/2026 POST-#271.** [Estado contrastado, evidencias y gates](../integration/CORTE-OPERATIVO-POST271-2026-11-22.md): `master@4d97879b675200840eee00afeb7250667da03da9` / árbol `489dc3757d642d7199dc005960f0cfa547f1fd97`. #301 Cámara y #271 RoomPlan UX están fusionadas y verificadas en Production (CI de #271: 92 PASS + 1 SKIP; posfusión master: 7 PASS + 1 SKIP). #309 HERO continúa NO-GO en producto, aunque c7 acredita C-04 rojo 0/4 → verde 4/4 y c8 7/7 demos en laboratorio; FT3D 39/41 y C-02 en c7 4/5 siguen pendientes. #310 A0 99 PASS + 1 SKIP, pero gate WebKit/Firefox de concurrencia persistente abierto. No activar R1 ni reclamar recuperación de proyectos; fechas y contadores inferiores son históricos. Esta nota es documental, sin autorización de código, Production o migración.
+
+> **Actualización al §6.3 · M12 · 22/11/2026.** La secuencia #300 → #301 → #271 está integrada. La [continuidad operativa](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md) registra el master efectivo y los gates de cada cierre. Las demás capacidades mantienen sus autorizaciones y gates propios.
+
+> **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](../integration/CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en una consulta posterior: 6 PASS, 1 en ejecución y 1 SKIP. Verificar GitHub antes de declararla cerrada. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
+> **Plan:** el roadmap/los hitos A–D históricos no equivalen al cierre actual; priorizar A0, M12, M11 y los gates de identidad, recuperación, jurídico y gasto antes de prometer beta.
+
+---
+
+> **ACTUALIZACIÓN OPERATIVA · 21/11/2026, tras #304.** El corte vigente de esta propuesta documental está en [Continuidad operativa vigente](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md), contrastado con `master@9d8a71eaa11c885199ed3001c5eab1d7b59b7799`. M05 #303/#304, M08 #308, E3 #299, R02-A #298 y Simulator A/C/E ya están integrados. M03 #306, HERO #309 y las candidatas de laboratorio conservan sus SHA, bases y gates en esa página. **No usar los contadores o estados de los cortes inferiores como pendientes actuales.** No rehacer capacidades integradas ni extrapolar pruebas entre árboles. El cuerpo que sigue conserva su fecha y su valor histórico; los contratos, IDs, decisiones y autorizaciones siguen vigentes en sus alcances.
+
+
 **Fecha:** 18/11/2026 · **Corte auditado:** `master@7dccf7a6095e6700b2a6b81161f4172b53c340fb` y PR abiertas #251–#260 en sus SHA del 18/11 · **Autor:** Claude Code, por mandato del propietario · **Estado:** propuesta para decisión del propietario.
 
 Este documento **no autoriza** integración, despliegue, activación de proveedores, gasto ni cambios de alcance. Cada corte propuesto necesita su propia autorización.
