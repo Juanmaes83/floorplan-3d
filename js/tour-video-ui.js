@@ -53,10 +53,17 @@
   if(access.parentElement!==slot){
    const focused=document.activeElement===open;slot.append(access);if(focused)open.focus({preventScroll:true});
   }
+  const playingStory=overlay.dataset.story==='playing'&&slot===header;
+  const focusTarget=document.activeElement;
   const reason=unavailable();
   open.setAttribute('aria-disabled',String(!!reason));
-  const message=reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
+  open.hidden=playingStory;
+  if(playingStory)detail.tabIndex=0;
+  else detail.removeAttribute('tabindex');
+  const message=playingStory?`${open.textContent} · ${reason}`:reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
   if(detail.textContent!==message)detail.textContent=message;
+  if(playingStory&&focusTarget===open)detail.focus({preventScroll:true});
+  else if(!playingStory&&focusTarget===detail)open.focus({preventScroll:true});
  }
  async function checkFormats(){
   checking=true;recorderError=!Recorder;filmError=!Film;
@@ -141,10 +148,11 @@
   finally{controller=null;sync();}
  }
  (()=>{const st=document.createElement('style');st.textContent=`
-  .presentation-video-access{display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 100%}
+  .presentation-video-access{display:flex;align-items:center;gap:8px;min-width:0;min-height:44px;flex:1 1 100%}
   .presentation-video-access #presentationVideo{min-height:44px;flex:none;white-space:nowrap;border:1px solid var(--line)}
+  .presentation-video-access #presentationVideo[hidden]{display:none}
   #presentationVideo[aria-disabled=true]{cursor:default;color:var(--ink-muted)}
-  #presentationVideo:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  :is(#presentationVideo,.presentation-video-detail):focus-visible{outline:2px solid var(--focus);outline-offset:2px}
   .presentation-video-detail{font-size:12px;line-height:1.25;color:var(--ink-muted);overflow-wrap:anywhere}
   .tour-video-mode{border:0;padding:0;margin:8px 0;display:grid;gap:6px}.tour-video-mode legend{font-weight:700;margin-bottom:4px}
   .tour-video-mode-opt{display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid rgba(0,0,0,.12);border-radius:10px;cursor:pointer;min-height:44px}

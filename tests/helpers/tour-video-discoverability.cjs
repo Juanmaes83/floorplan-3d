@@ -84,7 +84,17 @@ module.exports = ({ getBrowser, getOrigin }) => {
     await settled(page);
     await assertReachable(page);
     await page.locator('#presentationStoryFull').click();await scene(page,'playing');
-    await assertReachable(page,/Termina la historia/);
+    const hint=availability(page);
+    assert.equal(await video(page).isVisible(),false,'the unavailable action does not compete with the active story player');
+    assert.equal(await hint.getAttribute('role'),'status');
+    assert.match(await hint.innerText(),/Grabar vídeo · Termina la historia/);
+    assert.equal(await hint.evaluate(element=>{
+      const box=element.getBoundingClientRect();
+      const hit=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
+      return element.contains(hit)&&box.left>=0&&box.right<=innerWidth&&box.top>=0&&box.bottom<=innerHeight;
+    }),true,'the recording instruction is visible and unobscured');
+    await page.locator('#presentationClose').focus();await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'presentationVideoAvailability');
     await shot(page,engine+'-historia-1440');
     await page.locator('#presentationStoryPlay').click();await scene(page,'paused');
     await assertReachable(page,/Elige una parada/);
