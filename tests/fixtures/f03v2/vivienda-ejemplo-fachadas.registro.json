@@ -1,0 +1,52 @@
+{
+ "ruta": "ejemplo → Crear mi copia → Biblioteca de acabados · pared → Aplicar acabado → Guardar proyecto JSON",
+ "asignaciones": 18,
+ "ejemplo": "prj_reference-home",
+ "proyecto": "prj_3db00d343a6e465783eafffdf6012527",
+ "exportado": "prj_3db00d343a6e465783eafffdf6012527",
+ "nombre": "Mi distribución",
+ "muros": 70,
+ "materialesMuro": [
+  {
+   "id": "mat_surface-painted-plaster-wall-wall",
+   "preset": "surface-painted-plaster-wall",
+   "repeatMm": {
+    "x": 1000,
+    "y": 1000
+   }
+  },
+  {
+   "id": "mat_surface-patterned-clay-plaster-wall",
+   "preset": "surface-patterned-clay-plaster",
+   "repeatMm": {
+    "x": 1000,
+    "y": 1000
+   }
+  },
+  {
+   "id": "mat_surface-wood-planks-grey-wall",
+   "preset": "surface-wood-planks-grey",
+   "repeatMm": {
+    "x": 1000,
+    "y": 1000
+   }
+  },
+  {
+   "id": "mat_surface-brushed-concrete-03-wall",
+   "preset": "surface-brushed-concrete-03",
+   "repeatMm": {
+    "x": 1000,
+    "y": 1000
+   }
+  },
+  {
+   "id": "mat_surface-slate-floor-wall",
+   "preset": "surface-slate-floor",
+   "repeatMm": {
+    "x": 1000,
+    "y": 1000
+   }
+  }
+ ],
+ "errores": []
+}

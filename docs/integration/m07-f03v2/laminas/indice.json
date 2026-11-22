@@ -1,0 +1,23 @@
+{
+ "laminas": [
+  "e1-fachada-este-completa.jpg",
+  "e2-fachada-sur-completa.jpg",
+  "e3-fachada-oeste-completa.jpg",
+  "e4-fachada-norte-completa.jpg",
+  "e5-oblicua-sur-rasante.jpg",
+  "e6-esquina-mirador.jpg",
+  "e7-detalle-arcilla.jpg",
+  "e8-detalle-revoco.jpg",
+  "e9-detalle-hormigon.jpg",
+  "e10-detalle-madera.jpg",
+  "e11-exterior-general.jpg",
+  "detalles-b-c.jpg",
+  "movil-390x844.jpg",
+  "movil-844x390.jpg"
+ ],
+ "estados": {
+  "A": "A · sin detalle (F02 y F03 apagados)",
+  "B": "B · detalle arquitectónico (F02 + F03 V1, master)",
+  "C": "C · detalle + F03 V2 (activación voluntaria)"
+ }
+}
