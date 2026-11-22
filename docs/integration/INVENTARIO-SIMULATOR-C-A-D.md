@@ -1,5 +1,17 @@
 # RUBIK SOTA · Inventario de integración Simulator C, A y D
 
+> **CORTE OPERATIVO · 21/11/2026.** C/C-bis #293 y Simulator A #295 están en master/Production; **D conserva el gate WebKit y no está integrado**. HERO FINAL A+B+C es una candidata **de laboratorio**, no una ampliación ya incorporada de Simulator A. Para identidades y orden vigentes ver [corte V5](CORTE-OPERATIVO-VERIFICADO-2026-11-21.md). Los cortes anteriores se conservan como historia de recuperación.
+
+## Corte posterior a #295
+
+[Simulator A #295](https://github.com/Juanmaes83/floorplan-3d/pull/295) se integró en master `a6a0494b6f15ed60db542ef6c95530ae3c2c0ca2`, árbol `1dc7a264692ae6141de6156012978d4934baa567`. CI de PR con 32 aprobados y la omisión prevista de full-regression. [Production READY para el SHA exacto](https://vercel.com/juanma-espinosas-projects/floorplan-3d/Gyz9GuPknX9oaa8XSkyTsj1vo7jv). Seis recursos de Evolución coinciden byte a byte con master por HTTP autenticado. Se conserva la aceptación del propietario para la construcción por hiladas. La verificación posfusión se sigue por SHA en GitHub.
+
+## Corte 20/11/2026 · C integrado, A y D pendientes
+
+- **C/C-bis y dock.** #293 integrada y Production verificada sobre `e32c7cd7efddd791b9ff17e7dc8e8309ee19f3d4`. [Estado maestro](../product/ESTADO-MAESTRO-RUBIK-SOTA.md).
+- **A.** HEAD fuente `1ba63cd038b1c781519ecaeba2f0ca2e30746cf6`. El propietario aceptó el recorrido de Evolución y la construcción por hiladas. La prueba dirigida sobre el acumulado previo a la corrección de QA de F2 volvió a acreditar las hiladas y el sólido final. La autorización de fusión se liga al merge efectivo de OP-11 lote 01 y al árbol acreditado. HERO FINAL sigue en preparación separada.
+- **D.** `eae7d5f366ba7e24de9e04d38addd216a70a3d76` preservado. WebKit 26.6 reproduce el aviso durante el arranque, antes de elegir Ejemplo y antes de entrar en 3D, incluso con reloj real. Las aserciones de movimiento, contenido no vacío y equivalencia mantienen su alcance.
+
 Corte del 20/11/2026. Fuente congelada: [laboratorio Simulator `09557c4cac1e6390d3af56281922d8d43093234e`](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/tree/09557c4cac1e6390d3af56281922d8d43093234e/COMPONENTES), árbol `435810ed92a107005df9dc1cb334ff473cffec6f`. Donante `simulator@57d562c`, MIT. Se conservan los avisos de origen para la publicación de cada corte.
 
 La secuencia autorizada sigue siendo K13 → #272 → SMART. Después se preserva OP-10 → E → D. C y A quedan como cortes independientes, preparados en local sobre el árbol autorizado de SMART `e57089f61dc7a915f316a176280e4c08ebd49057`. Su base se comprobará antes de presentar cada integración.
