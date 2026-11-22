@@ -8,7 +8,7 @@
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
  const local=v=>typeof nm==='function'?nm(v):v;
- const W=1600,H=1100,INK='#2d332f',MUTED='#6b6a5f',PAPER='#fbf8f2',RULE='#d8d0c2',ACCENT='#875936';
+ const W=1600,H=1100,INK='#1f2326',MUTED='#5b6266',PAPER='#ffffff',RULE='#d5d9db',ACCENT='#2b3034';
  const num=(n,d=1)=>n.toLocaleString(typeof LANG==='string'&&LANG==='en'?'en-GB':'es-ES',{maximumFractionDigits:d});
  const slug=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'proyecto';
  const loadImage=src=>new Promise(res=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>res(null);i.src=src;});
@@ -30,7 +30,7 @@
   ctx.fillStyle=PAPER;ctx.fillRect(0,0,W,H);
   const snap=window.FloorPlanBrandUI?.snapshot?.(),brand=snap?.profile?.name||'',title=snap?.title||local(app.project.name);
   ctx.fillStyle=ACCENT;ctx.font='600 20px system-ui,sans-serif';ctx.fillText(tx('MATERIAL BOARD','MATERIAL BOARD','材料板'),64,74);
-  ctx.fillStyle=INK;ctx.font='400 46px Georgia,serif';ctx.fillText(fit(ctx,title,900),64,128);
+  ctx.fillStyle=INK;ctx.font='600 44px system-ui,sans-serif';ctx.fillText(fit(ctx,title,900),64,128);
   if(brand){ctx.font='600 22px system-ui,sans-serif';ctx.textAlign='right';ctx.fillText(fit(ctx,brand,500),W-64,74);ctx.textAlign='left';}
   ctx.fillStyle=RULE;ctx.fillRect(64,154,W-128,2);
   // Right column: the real 3D overview when prepared (so the board shows the home, not only swatches).

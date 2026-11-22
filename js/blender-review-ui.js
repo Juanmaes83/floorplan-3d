@@ -149,8 +149,8 @@
  async function comparison(ref,cycles){
   const [a,b]=await Promise.all([ref,cycles].map(x=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(new Blob([x],{type:'image/png'}));})));
   const w=1600,h=Math.round(w/2*Math.max(a.height/a.width,b.height/b.width)),band=56,c=document.createElement('canvas');c.width=w;c.height=h+band;const g=c.getContext('2d');
-  g.fillStyle='#fbf9f5';g.fillRect(0,0,c.width,c.height);for(const[i,img]of [a,b].entries()){const s=Math.min(w/2/img.width,h/img.height),dw=img.width*s,dh=img.height*s;g.drawImage(img,i*w/2+(w/2-dw)/2,(h-dh)/2,dw,dh);URL.revokeObjectURL(img.src);}
-  g.fillStyle='#2b2620';g.font='600 22px system-ui,sans-serif';g.fillText(tx('RUBIK · vista 3D','RUBIK · 3D view','RUBIK · 3D 视图'),20,h+36);g.fillText(tx('Blender Cycles · misma cámara','Blender Cycles · same camera','Blender Cycles · 相同相机'),w/2+20,h+36);
+  g.fillStyle='#f3f4f4';g.fillRect(0,0,c.width,c.height);for(const[i,img]of [a,b].entries()){const s=Math.min(w/2/img.width,h/img.height),dw=img.width*s,dh=img.height*s;g.drawImage(img,i*w/2+(w/2-dw)/2,(h-dh)/2,dw,dh);URL.revokeObjectURL(img.src);}
+  g.fillStyle='#1f2326';g.font='600 22px system-ui,sans-serif';g.fillText(tx('RUBIK · vista 3D','RUBIK · 3D view','RUBIK · 3D 视图'),20,h+36);g.fillText(tx('Blender Cycles · misma cámara','Blender Cycles · same camera','Blender Cycles · 相同相机'),w/2+20,h+36);
   return new Uint8Array(await (await new Promise(r=>c.toBlob(r,'image/png'))).arrayBuffer());
  }
  async function compose(){

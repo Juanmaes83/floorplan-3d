@@ -5,7 +5,7 @@
  const tr=(es,en,zh)=>({es,en,zh})[LANG]||es;
  const localized=value=>typeof nm==='function'?nm(value):value;
  const svgNode=(tag,attributes={},parent)=>{const node=document.createElementNS(NS,tag);for(const [key,value]of Object.entries(attributes))node.setAttribute(key,String(value));parent?.append(node);return node;};
- const text=(parent,value,x,y,size=20,weight=400,fill='#302c28')=>{const node=svgNode('text',{x,y,'font-size':size,'font-weight':weight,fill,'font-family':'Arial, sans-serif'},parent);node.textContent=String(value);return node;};
+ const text=(parent,value,x,y,size=20,weight=400,fill='#1f2326')=>{const node=svgNode('text',{x,y,'font-size':size,'font-weight':weight,fill,'font-family':'Arial, sans-serif'},parent);node.textContent=String(value);return node;};
  const area=poly=>Math.abs(poly.reduce((sum,p,i)=>{const q=poly[(i+1)%poly.length];return sum+p[0]*q[1]-q[0]*p[1];},0))/2/1e6;
  const inside=(poly,x,y)=>{let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;};
  function labelPoint(room){
@@ -31,8 +31,8 @@
   const brand=window.FloorPlanBrandUI?.snapshot()||null;
   const revision=FloorPlanGuide.revision(project),sheet=svgNode('svg',{xmlns:NS,viewBox:'0 0 1600 1100',width:scale?PAPER_W+'mm':1600,height:scale?(1100*UNIT)+'mm':1100,'data-project-id':project.id,'data-revision':revisionCode(revision)});
   if(scale)sheet.setAttribute('data-scale','1:'+scale);
-  svgNode('rect',{width:1600,height:1100,fill:'#fcfaf6'},sheet);
-  svgNode('rect',{x:22,y:22,width:1556,height:1056,fill:'none',stroke:'#81796e','stroke-width':2},sheet);
+  svgNode('rect',{width:1600,height:1100,fill:'#ffffff'},sheet);
+  svgNode('rect',{x:22,y:22,width:1556,height:1056,fill:'none',stroke:'#aeb5b9','stroke-width':2},sheet);
   const title=brand?.title||localized(project.name||tr('Proyecto sin nombre','Untitled project','未命名项目')),maxTitle=brand?46:62,titleRoom=brand?950:1250;
   text(sheet,tr('LÁMINA DE DISTRIBUCIÓN','FLOOR PLAN SHEET','平面设计图'),50,66,20,700,'#1f5a66');
   text(sheet,title.length>maxTitle?title.slice(0,maxTitle-3)+'…':title,50,112,Math.max(23,Math.min(38,titleRoom/(title.length*.65||1))),700);
@@ -46,8 +46,8 @@
    lines.forEach((l,i)=>text(g,cut(l,chars),x,86+i*19,13.5,400,'#5b6266'));
    if(p.tagline)text(g,cut(p.tagline,chars),x,86+lines.length*19,12.5,400,'#5b6266');
   }
-  svgNode('line',{x1:50,y1:132,x2:1550,y2:132,stroke:'#b9b1a5'},sheet);
-  svgNode('rect',{x:45,y:154,width:1095,height:792,fill:'#f7f4ee',stroke:'#c8c0b5'},sheet);
+  svgNode('line',{x1:50,y1:132,x2:1550,y2:132,stroke:'#aeb5b9'},sheet);
+  svgNode('rect',{x:45,y:154,width:1095,height:792,fill:'#f3f4f4',stroke:'#d5d9db'},sheet);
   const drawing=source.cloneNode(true),bounds=geometry.bounds;
   for(const selector of ['#gSource','#gTrace','#gAssist','#gReview','#gSel','#gGrid','#gMeasure'])drawing.querySelector(selector)?.remove();
   drawing.querySelectorAll('image').forEach(node=>node.remove());
@@ -71,20 +71,20 @@
    if(room.poly.length<3||area(room.poly)<=0)continue;
    const [x,y]=labelPoint(room),name=roomDisplay(project.rooms.find(r=>r.id===room.id)),xs=room.poly.map(p=>p[0]),width=Math.max(...xs)-Math.min(...xs),maxChars=Math.max(16,Math.min(26,Math.floor(width/125))),visible=name.length>maxChars?name.slice(0,maxChars-1)+'…':name;
    const size=Math.max(90,Math.min(220,width/(Math.max(5,visible.length)*.8)));
-   const label=text(labels,visible,x,y,size,700);label.setAttribute('text-anchor','middle');label.setAttribute('paint-order','stroke');label.setAttribute('stroke','#fcfaf6');label.setAttribute('stroke-width','36');svgNode('title',{},label).textContent=name;
-   const value=text(labels,`${area(room.poly).toFixed(2)} m²`,x,y+size*.95,Math.max(95,size*.72),400,'#625b53');value.setAttribute('text-anchor','middle');value.setAttribute('paint-order','stroke');value.setAttribute('stroke','#fcfaf6');value.setAttribute('stroke-width','28');
+   const label=text(labels,visible,x,y,size,700);label.setAttribute('text-anchor','middle');label.setAttribute('paint-order','stroke');label.setAttribute('stroke','#ffffff');label.setAttribute('stroke-width','36');svgNode('title',{},label).textContent=name;
+   const value=text(labels,`${area(room.poly).toFixed(2)} m²`,x,y+size*.95,Math.max(95,size*.72),400,'#5b6266');value.setAttribute('text-anchor','middle');value.setAttribute('paint-order','stroke');value.setAttribute('stroke','#ffffff');value.setAttribute('stroke-width','28');
   }
-  text(sheet,tr('ACABADOS DEL SUELO','FLOOR FINISHES','地面材料'),1170,188,20,700,'#315e62');
+  text(sheet,tr('ACABADOS DEL SUELO','FLOOR FINISHES','地面材料'),1170,188,20,700,'#1f5a66');
   const materialIds=[...new Set(project.rooms.map(room=>room.floorMaterialId))].filter(id=>project.materials.some(item=>item.id===id));
-  if(!materialIds.length)text(sheet,tr('Sin acabados asignados','No finishes assigned','未指定材料'),1172,227,17,400,'#625b53');
-  materialIds.slice(0,12).forEach((id,i)=>{const material=project.materials.find(item=>item.id===id),y=226+i*38;if(!material)return;svgNode('rect',{x:1172,y:y-18,width:22,height:22,rx:3,fill:material.appearance.color||'#ddd',stroke:'#8b8379'},sheet);const label=localized(material.name);text(sheet,label.length>27?label.slice(0,26)+'…':label,1207,y,18);});
+  if(!materialIds.length)text(sheet,tr('Sin acabados asignados','No finishes assigned','未指定材料'),1172,227,17,400,'#5b6266');
+  materialIds.slice(0,12).forEach((id,i)=>{const material=project.materials.find(item=>item.id===id),y=226+i*38;if(!material)return;svgNode('rect',{x:1172,y:y-18,width:22,height:22,rx:3,fill:material.appearance.color||'#ddd',stroke:'#aeb5b9'},sheet);const label=localized(material.name);text(sheet,label.length>27?label.slice(0,26)+'…':label,1207,y,18);});
   if(materialIds.length>12)text(sheet,tr(`+${materialIds.length-12} acabados más`,`+${materialIds.length-12} more finishes`,`另有 ${materialIds.length-12} 种材料`),1172,226+12*38,16);
-  svgNode('line',{x1:1168,y1:750,x2:1544,y2:750,stroke:'#b9b1a5'},sheet);
+  svgNode('line',{x1:1168,y1:750,x2:1544,y2:750,stroke:'#aeb5b9'},sheet);
   const used=geometry.rooms.filter(room=>room.counted!==false).reduce((sum,room)=>sum+area(room.poly),0);
-  text(sheet,tr('SUPERFICIE ÚTIL APROX.','APPROX. NET AREA','约使用面积'),1170,792,16,700,'#625b53');text(sheet,`${used.toFixed(2)} m²`,1170,834,32,700);
+  text(sheet,tr('SUPERFICIE ÚTIL APROX.','APPROX. NET AREA','约使用面积'),1170,792,16,700,'#5b6266');text(sheet,`${used.toFixed(2)} m²`,1170,834,32,700);
   const scaleNote=project.scale?.confidence==='real'?tr('Escala confirmada por la persona','Scale confirmed by user','比例已由用户确认'):tr('Medidas orientativas','Indicative dimensions','尺寸仅供参考');
-  text(sheet,scaleNote,1170,879,16,500,'#625b53');
-  svgNode('line',{x1:50,y1:971,x2:1550,y2:971,stroke:'#b9b1a5'},sheet);
+  text(sheet,scaleNote,1170,879,16,500,'#5b6266');
+  svgNode('line',{x1:50,y1:971,x2:1550,y2:971,stroke:'#aeb5b9'},sheet);
   text(sheet,tr('Proyecto','Project','项目')+`: ${project.id.length>48?project.id.slice(0,45)+'…':project.id}`,50,1007,16);
   text(sheet,tr('Revisión','Revision','修订')+`: ${revisionCode(revision)}`,50,1035,16);
   if(scale){
@@ -95,7 +95,7 @@
    text(sheet,tr(`Escala 1:${scale} · hoja de 420 × ${(1100*UNIT).toFixed(2).replace('.',',')} mm (cabe en A3 apaisado): imprime al 100 % y comprueba la barra con una regla`,`Scale 1:${scale} · 420 × ${(1100*UNIT).toFixed(2)} mm sheet (fits A3 landscape): print at 100 % and check the bar with a ruler`,`比例 1:${scale} · 图纸 420 × ${(1100*UNIT).toFixed(2)} 毫米（适合 A3 横向）：按 100% 打印 · 模型单位：毫米`),780,1007,15);
    if(confidence!=='real'){const w=text(sheet,tr(`La escala reproduce las medidas del modelo. La calibración del inmueble es estimada: las medidas reales pueden diferir.`,`The scale reproduces the model's dimensions. The property's calibration is estimated: real dimensions may differ.`,`比例反映模型尺寸。房屋校准为估算：实际尺寸可能不同。`),780,1062,13,600,'#7a5200');w.setAttribute('data-scale-warning','estimated');}
   }else text(sheet,tr('Unidades del modelo: mm · Sin escala de impresión declarada','Model units: mm · No print scale declared','模型单位：毫米 · 未声明打印比例'),780,1007,15);
-  text(sheet,tr('Cotas y superficies orientativas; verifica medidas in situ.','Dimensions and areas are indicative; verify on site.','尺寸和面积仅供参考，请实地核验。'),780,1035,15,'400','#625b53');
+  text(sheet,tr('Cotas y superficies orientativas; verifica medidas in situ.','Dimensions and areas are indicative; verify on site.','尺寸和面积仅供参考，请实地核验。'),780,1035,15,'400','#5b6266');
   if(brand)text(sheet,FloorPlanBrand.credit(brand.profile),50,1062,14,400,'#5b6266').setAttribute('data-brand-credit','true');
   return {sheet,projectId:project.id,revision};
  }
