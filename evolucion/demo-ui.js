@@ -13,7 +13,7 @@
   for(const [label,fn,primary,id] of actions){const b=el('button','btn'+(primary?' primary':''),row,label);b.type='button';b.onclick=fn;if(id)b.id=id;}
   card.hidden=false;row.querySelector('.primary')?.focus({preventScroll:true});
  }
- const close=()=>{if(card)card.hidden=true;dismissed=true;};
+ const close=()=>{if(card)card.hidden=true;dismissed=true;window.__rubikFinal?.salir?.();};
  const F=()=>window.__ft3dFidelity;
  function end(){
   show('Así avanza una obra en RUBIK',['La vivienda de ejemplo, de la implantación a la retirada del andamio, con su plan de obra semana a semana.'],[
