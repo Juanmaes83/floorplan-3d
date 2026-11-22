@@ -152,9 +152,9 @@ module.exports = ({ getBrowser, getOrigin }) => {
       await page.waitForFunction(text=>document.getElementById('presentationVideoAvailability').textContent.includes(text),pattern);
       await assertReachable(page,new RegExp(pattern));
     };
-    // Let the real navigation enter its moving state before advancing the renderer. Some stops complete within one
-    // browser task on fast engines, so a locator started after the click can miss the whole transient state.
-    await page.evaluate(()=>{
+    // Let the real action enter its busy state and hold the next rendering call until it has been checked.
+    // This observes the actual lock without depending on the number of frames the engine takes to move.
+    const holdNextMove=()=>page.evaluate(()=>{
       const go=View3D.presentationGo;
       const hold=new Promise(resolve=>{window.releaseVideoTestMove=resolve;});
       View3D.presentationGo=async function(...args){
@@ -163,13 +163,17 @@ module.exports = ({ getBrowser, getOrigin }) => {
         return go.apply(this,args);
       };
     });
+    const resumeMove=()=>page.evaluate(()=>window.releaseVideoTestMove());
+    await holdNextMove();
     await page.locator('.presentation-nav button').last().click();
     await activeBlock('Espera a que la cámara');
-    await page.evaluate(()=>window.releaseVideoTestMove());
+    await resumeMove();
     await settled(page);await assertReachable(page);
+    await holdNextMove();
     await page.locator('#presentationBatch').click();
     await activeBlock('Espera a que termine el lote');
     await page.locator('#presentationBatchCancel').click();
+    await resumeMove();
     await page.waitForFunction(()=>document.getElementById('presentationVideo').getAttribute('aria-disabled')==='false');
     await video(page).click();
     const cine=page.locator('input[name=tourVideoMode][value=cine]');
