@@ -136,7 +136,7 @@ function drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo}){
   const src=Fid().scene.canvas;x.fillStyle='#000';x.fillRect(0,0,W,H);
   if(src.width&&src.height){const k=Math.max(W/src.width,H/src.height),w=W/k,h=H/k;x.drawImage(src,(src.width-w)/2,(src.height-h)/2,w,h,0,0,W,H);}
   x.textBaseline='alphabetic';const font=(w,s)=>`${w} ${s}px Inter, "Helvetica Neue", Arial, sans-serif`;
-  if(f.segment==='closing'&&window.__rubikFinal?.activo){window.__rubikFinal.dibujarVideo(x,W,H,{marca:brand,proyecto:visible(model.subject.name)});return;}
+  if(f.segment==='closing'&&window.__rubikFinal?.activo){window.__rubikFinal.dibujarVideo(x,W,H,{marca:brand,proyecto:manifestInfo.title});return;}
   if(f.segment==='opening'||f.segment==='closing'){
     if(f.segment==='opening'){x.fillStyle='rgba(43,48,52,.88)';x.fillRect(0,0,W,H);}
     else{const g=x.createLinearGradient(0,0,W*.78,0);g.addColorStop(0,'rgba(43,48,52,.94)');g.addColorStop(.62,'rgba(43,48,52,.78)');g.addColorStop(1,'rgba(43,48,52,0)');x.fillStyle=g;x.fillRect(0,0,W,H);}
@@ -194,9 +194,9 @@ async function verifyPlayable(url){
 // Encoder: WebCodecs H.264 (frame by frame, exact timestamps, keyframe every second) muxed into an indexed MP4 by
 // FloorPlanConstructionMp4; otherwise MediaRecorder (real time, container from FloorPlanTourRecorder.pickType).
 const H264=['avc1.42001f','avc1.4d001f','avc1.640028'];
-async function encoderConfig(){
+async function encoderConfig(bitrate=BITRATE){
   if(typeof VideoEncoder==='undefined'||!window.FloorPlanConstructionMp4)return null;
-  for(const codec of H264){const cfg={codec,width:W,height:H,bitrate:BITRATE,framerate:FPS_OFFLINE,avc:{format:'avc'}};
+  for(const codec of H264){const cfg={codec,width:W,height:H,bitrate,framerate:FPS_OFFLINE,avc:{format:'avc'}};
     try{if((await VideoEncoder.isConfigSupported(cfg)).supported)return cfg;}catch{}}
   return null;
 }
@@ -206,9 +206,13 @@ async function record(){
   const fid=Fid(),ctx=fid.ctx;if(!ctx||ctx.model.planning.status!=='available')throw Error('Se necesita un plan válido de este proyecto.');
   if(dossierBlock())throw Error(dossierBlock());
   if(state.recording)throw Error('Ya hay una grabación en curso.');
-  const cfg=await encoderConfig(),type=cfg?'video/mp4':Rec.pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
+  const hero=HERO(),schedule=ctx.schedule,sb=D.storyboard(schedule,hero?{closingMs:hero.duracion}:undefined);
+  // Budget the longer MP4 when encoding it. Keep 10% for rate-control variation and the MP4 index.
+  // The actual file still has to pass the share limit. A download is always the original encoded file.
+  const bitrate=hero?Math.min(BITRATE,Math.floor(D.SHARE_LIMIT_BYTES*.9*8000/sb.totalMs)):BITRATE;
+  const cfg=await encoderConfig(bitrate),type=cfg?'video/mp4':Rec.pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
   invalidate();const controller=new AbortController();state.recording={controller,progress:0};renderVideo('Preparando la grabación…');
-  const brand=currentBrand(),pol=policy(),sb=D.storyboard(ctx.schedule,HERO()?{closingMs:HERO().duracion}:undefined),model=ctx.model,schedule=ctx.schedule,inv=model.inventory;
+  const brand=currentBrand(),pol=policy(),model=ctx.model,inv=model.inventory;
   img(brand.logo);await new Promise(r=>setTimeout(r,50));
   const title=visible(brand.present?brand.title:(state.title||model.subject.name)),info={title};
   const backPose=fid.pose,backPos=fid.pos,roof=fid.scene.roofVisible;
