@@ -38,6 +38,71 @@
 .seg .pill{background:var(--select)}
 .mat.on{border-color:var(--select);box-shadow:0 0 0 2px var(--select-soft),0 0 0 3px var(--select)}
 .range input{accent-color:var(--select)}
+
+.perla-notice{--notice-tone:var(--info);--notice-surface:var(--surface-sunken);padding:8px 12px;
+  border:1px solid var(--line);border-inline-start:4px solid var(--notice-tone);border-radius:8px;background:var(--notice-surface)}
+.perla-notice strong{color:var(--notice-tone)}
+.perla-notice p{margin:4px 0 0}
+.perla-notice[data-tone="warning"],.perla-notice[data-tone="confirm"]{--notice-tone:var(--warn);--notice-surface:var(--warn-soft)}
+.perla-notice[data-tone="error"],.perla-notice[data-tone="blocked"]{--notice-tone:var(--danger);--notice-surface:var(--danger-soft)}
+
+/* RoomPlan uses the existing header and a feedback row outside the plan. */
+#roomPlanJoinQuick{order:0;min-height:44px;border:1px solid var(--line-strong);color:var(--action)}
+/* Anchor the visually hidden history descriptions inside the scrolling header. */
+#editHistory{position:relative}
+.edit-history-scope{font-size:12px;color:var(--ink-muted);padding-inline:4px}
+#roomPlanJoinResult{grid-column:1/-1;grid-row:3;display:flex;align-items:center;justify-content:space-between;gap:6px 12px;
+  padding:6px 14px;background:var(--surface-panel);border-bottom:1px solid var(--line);min-width:0}
+#roomPlanJoinResult strong{display:block;color:var(--action)}
+#roomPlanJoinResult span{color:var(--ink-muted)}
+#roomPlanUndoJoin{min-height:44px;border:1px solid var(--line-strong);white-space:normal;flex-shrink:0}
+body:not(.presenting,.professional-area) .app:has(>#roomPlanJoinResult:not([hidden])){grid-template-rows:auto auto auto minmax(0,1fr) 30px}
+body:not(.presenting,.professional-area) .app:has(>#roomPlanJoinResult:not([hidden]))>main,
+body:not(.presenting,.professional-area) .app:has(>#roomPlanJoinResult:not([hidden]))>aside{grid-row:4}
+body:not(.presenting,.professional-area) .app:has(>#roomPlanJoinResult:not([hidden]))>footer{grid-row:5}
+body:not(.presenting,.professional-area) .app:has(>.professional-nav):has(>#roomPlanJoinResult:not([hidden])){
+  grid-template-rows:auto auto auto auto minmax(0,1fr) 30px!important}
+.app:has(>.professional-nav)>#roomPlanJoinResult{grid-row:4}
+body:not(.presenting,.professional-area) .app:has(>.professional-nav):has(>#roomPlanJoinResult:not([hidden]))>main,
+body:not(.presenting,.professional-area) .app:has(>.professional-nav):has(>#roomPlanJoinResult:not([hidden]))>aside{grid-row:5}
+body:not(.presenting,.professional-area) .app:has(>.professional-nav):has(>#roomPlanJoinResult:not([hidden]))>footer{grid-row:6}
+body.professional-area #roomPlanJoinResult{display:none}
+body.presenting #roomPlanJoinResult{display:none}
+#gRooms [data-roomplan-added]{stroke:#9c3e1c;stroke-width:3;stroke-dasharray:7 4;vector-effect:non-scaling-stroke}
+#roomPlanJoinDialog{position:fixed;inset:0;margin:auto;width:min(500px,calc(100vw - 28px));max-height:calc(100dvh - 24px)}
+#roomPlanJoinDialog form{min-width:0}
+#roomPlanJoinDialog form>p{margin-block:8px}
+#roomPlanJoinDialog h3{margin-block:0 8px}
+#roomPlanJoinDialog>#assistantAccess{position:static}
+#roomPlanJoinDialog label{display:block;font-weight:600}
+#roomPlanJoinDialog select{width:100%;min-width:0;min-height:44px;font-size:16px}
+#roomPlanJoinPreview{display:block;max-width:100%;height:clamp(118px,25dvh,240px);background:#f6f3ed;margin-top:8px}
+#roomPlanJoinStatus{margin-block:8px}
+#roomPlanJoinFile{overflow-wrap:anywhere}
+#roomPlanJoinApply:disabled{background:var(--surface-sunken);border:1px dashed var(--line-strong);color:var(--ink-muted)}
+#roomPlanJoinDialog .actions .btn{white-space:normal}
+#roomPlanJoinDialog .actions .btn,#roomPlanJoinDialog summary{min-height:44px}
+#roomPlanJoinDialog summary{align-content:center}
+#roomPlanJoinDialog .actions{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:1100px){
+  body:not(.presenting,.professional-area) .app:has(>#roomPlanJoinResult:not([hidden])){grid-template-rows:auto auto auto minmax(0,1fr) 24px!important}
+  /* Explicit insets use device viewport units even if a native picker has widened the layout viewport. */
+  #roomPlanJoinDialog{inset:12px auto auto max(14px,calc((100vw - 500px)/2));margin:0}
+  #actionDialog{position:fixed;inset:12px auto auto max(14px,calc((100vw - 680px)/2));margin:0;width:min(680px,calc(100vw - 28px))}
+}
+#actionSearchBtn .guide-search-compact{display:none}
+@media(max-width:600px){
+  header #uploadPlanBtn,header #roomPlanJoinQuick{order:-3}
+  header #actionSearchBtn{order:-3;min-width:44px;white-space:nowrap}
+  #actionSearchBtn .guide-search-prompt{display:none}
+  #actionSearchBtn .guide-search-compact{display:inline}
+  header .brand{order:-2}
+  #roomPlanJoinResult{padding-inline:8px}
+}
+@media(max-width:1100px) and (max-height:500px){
+  #roomPlanJoinResult{padding-inline-end:118px}
+  body.dock-2col #roomPlanJoinResult{padding-inline-end:226px}
+}
 .total b{color:var(--ink)}
 .item.dragging{border-color:var(--select)}
 @media (hover:hover){.item:hover{border-color:var(--line-strong)}}
@@ -198,3 +263,20 @@ body.guided.next-present:has(#guideBar:not([hidden])) #presentationBtn{display:n
 .presentation-template-options{border-top:1px solid var(--line);padding-top:8px;margin-top:10px}.presentation-template-options summary{cursor:pointer;min-height:44px;align-content:center;font-weight:600}
 .presentation-template-capability{margin:8px 0}.presentation-template-capability label,label.presentation-template-capability{display:flex;gap:10px;align-items:center;min-height:44px}.presentation-template-capability input{width:20px;height:20px;flex:none}
 .presentation-template [hidden]{display:none}.presentation-template button{min-height:44px;white-space:normal}.presentation-template input:disabled+span{color:var(--muted)}
+
+/* Keep the guided search and the full 3D history group within their toolbar rows. */
+@media (min-width:1101px){
+  body.guided header #actionSearchBtn{min-width:180px}
+  body.m3d:not(.guided) header #editHistory{display:grid;grid-template-columns:max-content max-content}
+  body.m3d:not(.guided) header .edit-history-scope{grid-column:1/-1;padding-inline:0;text-align:center}
+}
+
+/* Fit the visible RoomPlan action and global controls on constrained desktop toolbars. */
+@media(min-width:1101px) and (max-width:1500px){
+  body.guided header #actionSearchBtn{min-width:44px}
+  body.guided header #actionSearchBtn .guide-search-prompt{display:none}
+  body.guided header #actionSearchBtn .guide-search-compact{display:inline}
+}
+@media(min-width:1101px) and (max-width:1439px){
+  body.guided header{flex-wrap:wrap}
+}
