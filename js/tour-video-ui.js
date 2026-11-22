@@ -9,6 +9,9 @@
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
  const HOLD_MS=2000;
+ // SIMULATOR B: recorrido cinematográfico (guion por tiempo, exportación determinista). «Paradas» es la grabación de siempre.
+ const Film=window.FloorPlanPresentationFilm;let mode=null,cineOK=false;
+ Film?.disponible().then(ok=>{cineOK=ok;if(mode===null)mode=ok?'cine':'paradas';}).catch(()=>{mode=mode||'paradas';});
  let result=null,url='',controller=null,returnFocus=null;
  const slug=s=>String(s||'').normalize('NFD').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'proyecto';
  const projectName=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
@@ -39,6 +42,18 @@
   const format=el('p',undefined,dialog,'tour-video-format');format.id='tourVideoFormat';
   format.textContent=type.startsWith('video/mp4')?tx('Formato: MP4 (H.264), se abre en cualquier móvil u ordenador.','Format: MP4 (H.264), plays on any phone or computer.','格式：MP4 (H.264)，任何手机或电脑均可播放。'):tx('Formato: WebM. Este navegador no puede crear MP4. WebM se abre en Chrome, Edge, Firefox y Android; en iPhone o Safari antiguos, y en algunas apps de mensajería, puede no reproducirse: conviértelo a MP4 antes de enviarlo si es tu caso.','Format: WebM. This browser cannot create MP4. WebM plays in Chrome, Edge, Firefox and Android; on older iPhone or Safari, and in some messaging apps, it may not play: convert it to MP4 before sending if that is your case.','格式：WebM。此浏览器无法生成 MP4。WebM 可在 Chrome、Edge、Firefox 和 Android 播放；旧版 iPhone/Safari 及部分通讯应用可能无法播放。');
   if(!type.startsWith('video/mp4'))format.classList.add('is-warning');
+  // Cinematográfico: la nota y el formato describen ESE vídeo (no la estimación ni el formato de «Por paradas»).
+  if(Film&&cineOK&&(mode||'cine')==='cine'){note.textContent=tx(`Se exporta la vista 3D de las ${stops} paradas con el guion cinematográfico: escena de entrada, pausa en cada estancia y traslados. La duración depende de las estancias elegidas y se indica al terminar. Sin paneles, cursor ni editor. El vídeo se queda en este equipo: nada se envía.`,`The 3D view of the ${stops} stops is exported with the cinematic script: opening scene, a pause in each room and moves. The length depends on the rooms chosen and is shown when it finishes. No panels, cursor or editor. The video stays on this device: nothing is sent.`,`按电影式脚本导出 ${stops} 个停留点的三维视图：开场、每个房间停留与过渡。时长取决于所选房间，完成后显示。不含面板、光标或编辑器。视频保留在本设备，不会发送。`);
+   format.textContent=tx('Formato: MP4 (H.264) · 1280×720 · 30 fps.','Format: MP4 (H.264) · 1280×720 · 30 fps.','格式：MP4 (H.264) · 1280×720 · 30 fps。');format.classList.remove('is-warning');}
+  if(Film&&state!=='recording'){const modo=el('fieldset',undefined,dialog,'tour-video-mode');modo.id='tourVideoMode';el('legend',tx('Tipo de recorrido','Tour type','路线类型'),modo);
+   const opc=(v,t,d,ok)=>{const l=el('label',undefined,modo,'tour-video-mode-opt');const r=el('input',undefined,l);r.type='radio';r.name='tourVideoMode';r.value=v;r.disabled=!ok;r.checked=(mode||(cineOK?'cine':'paradas'))===v&&ok;r.onchange=()=>{mode=v;draw(state==='done'?'done':'intro');dialog.querySelector('input[name=tourVideoMode][value='+v+']')?.focus();};
+    const s=el('span',undefined,l);el('b',t,s);el('small',ok?d:tx('Este navegador no puede exportarlo (sin WebCodecs H.264).','This browser cannot export it (no WebCodecs H.264).','此浏览器无法导出（无 WebCodecs H.264）。'),s);};
+   opc('cine',tx('Cinematográfico','Cinematic','电影式'),tx('Recorrido continuo: del plano a la vivienda, entrada en las estancias con traslados suaves y cortes declarados. Se exporta fotograma a fotograma a 30 fps según el guion: la duración no depende de la velocidad del equipo.','Continuous tour: from plan to home, into the rooms with smooth moves and declared cuts. Exported frame by frame at 30 fps from the script: the length does not depend on the device speed.','连续路线：从平面到住宅，平滑过渡与明确剪切。按脚本以 30 fps 逐帧导出：时长不取决于设备速度。'),cineOK);
+   opc('paradas',tx('Por paradas','By stops','按停留点'),tx('Graba en tiempo real cada parada con una pausa (la grabación de siempre).','Records each stop in real time with a pause (the usual recording).','实时录制每个停留点（原有录制）。'),!!type);
+   if((mode||(cineOK?'cine':'paradas'))==='cine'&&state!=='done'){const ver=btn(tx('Ver el recorrido en la presentación','Watch the tour in the presentation','在展示中观看路线'),modo,'btn');ver.id='tourVideoWatch';
+    ver.onclick=async()=>{dialog.close();const c=new AbortController(),esc=e=>{if(e.key==='Escape')c.abort();};addEventListener('keydown',esc,true);
+     try{await Film.previsualizar({signal:c.signal});}catch(e){if(e?.name!=='AbortError')window.toast?.(e.message,5000);}finally{removeEventListener('keydown',esc,true);}
+     returnFocus=open;draw('intro');dialog.showModal();dialog.querySelector('#tourVideoGo')?.focus();};}}
   const status=el('p',message,dialog,'ai-render-status');status.id='tourVideoStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   // Actions go after the preview: first the video and what it is, then what to do with it.
   const actions=el('div',undefined,undefined,'tour-video-actions');
@@ -59,12 +74,15 @@
  async function record(){
   if(!window.FloorPlanPresentation.active){draw('intro',tx('La presentación ya no está activa.','The presentation is no longer active.','展示已不再进行。'));return;}
   controller=new AbortController();draw('recording');sync();
-  try{const r=await Recorder.record({holdMs:HOLD_MS,signal:controller.signal});
+  const cine=(mode||(cineOK?'cine':'paradas'))==='cine'&&cineOK;
+  const avance=(k,l)=>{const s=dialog.querySelector('#tourVideoStatus');if(s)s.textContent=(p=>tx(`Exportando ${p} %`,`Exporting ${p} %`,`正在导出 ${p} %`))(k<.01?(k*100).toFixed(1):Math.round(k*100))+(l?' · '+l:'');};
+  try{const r=cine?await Film.exportar({signal:controller.signal,onProgress:avance}):await Recorder.record({holdMs:HOLD_MS,signal:controller.signal});
    if(!r.blob.size)throw Error(tx('El navegador no generó ningún fotograma. Vuelve a intentarlo.','The browser produced no frames. Try again.','浏览器未生成任何帧，请重试。'));
    clear();result=r;url=URL.createObjectURL(r.blob);controller=null;draw('done');dialog.querySelector('#tourVideoDownload')?.focus();}
   catch(error){const aborted=error?.name==='AbortError';controller=null;draw(result?'done':'intro',aborted?tx('Grabación cancelada. No se ha guardado nada.','Recording cancelled. Nothing was kept.','录制已取消，未保留任何内容。'):error.message);}
   finally{controller=null;sync();}
  }
+ (()=>{const st=document.createElement('style');st.textContent='.tour-video-mode{border:0;padding:0;margin:8px 0;display:grid;gap:6px}.tour-video-mode legend{font-weight:700;margin-bottom:4px}.tour-video-mode-opt{display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid rgba(0,0,0,.12);border-radius:10px;cursor:pointer;min-height:44px}.tour-video-mode-opt input{width:20px;height:20px;margin-top:2px}.tour-video-mode-opt span{display:flex;flex-direction:column}.tour-video-mode-opt small{opacity:.8}.tour-video-mode .btn{justify-self:start;min-height:44px}';document.head.append(st);})();
  function download(){if(!result)return;const a=document.createElement('a');a.href=url;a.download=filename(result);document.body.append(a);a.click();a.remove();}
  window.FloorPlanTourVideo={open:()=>open.click(),get result(){return result;},filename:()=>result?filename(result):null};
 })();
