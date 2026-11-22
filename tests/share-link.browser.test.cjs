@@ -93,5 +93,11 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  assert.deepEqual(played,[1280,720],'the published page plays the tour video under its CSP');
  await shot(client2,'b4-1440-client-page');await client2.close();
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'publishing never changes the project');
+ const next=await page.evaluate(()=>{
+  const source=FloorPlanApp.project.id;
+  FloorPlanApp.importProject({...structuredClone(FloorPlanApp.project),id:'prj_other_video_scope'});
+  return {changed:FloorPlanApp.project.id!==source,video:FloorPlanTourVideo.result!==null};
+ });
+ assert.deepEqual(next,{changed:true,video:false},'a completed tour is discarded when the project changes');
  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
 });
