@@ -1,5 +1,8 @@
 # RUBIK SOTA — HANDOFF MAESTRO DE EJECUCIÓN, RECUPERACIÓN Y CIERRE
 
+> **PUNTO DE PARTIDA PARA NUEVAS SESIONES · 22/11/2026.** Leer primero [Auditoría independiente de estado real y continuidad (corte 22/11/2026)](AUDITORIA-ESTADO-REAL-CONTINUIDAD-2026-11-22.md), verificado sobre master `3d3992c27e980bec5c22fea677e53f333429e6f0`; reconfirmar GitHub, CI, PR y Production antes de decidir. #305/#311/#306/#303/#304/#299/#300/#301/#271 están fusionadas. A0 #310 y Simulator B #313 siguen con gates propios; no ejecutar migración, activar servicios ni fusionar por esta nota. Los apartados históricos inferiores conservan la fotografía de su fecha, no mandan la cola actual.
+
+
 > **Cierre vigente de HERO FINAL · M11 · 22/11/2026.** La [continuidad operativa](CONTINUIDAD-OPERATIVA-VIGENTE.md) registra el merge de #311, Production y las pruebas efectivas. Simulator B y A0 conservan sus gates propios.
 
 > **Corte histórico · 22/11/2026 POST-#271.** [Estado contrastado, evidencias y gates](CORTE-OPERATIVO-POST271-2026-11-22.md): `master@4d97879b675200840eee00afeb7250667da03da9` / árbol `489dc3757d642d7199dc005960f0cfa547f1fd97`. #301 Cámara y #271 RoomPlan UX están fusionadas y verificadas en Production (CI de #271: 92 PASS + 1 SKIP; posfusión master: 7 PASS + 1 SKIP). #309 HERO continúa NO-GO en producto, aunque c7 acredita C-04 rojo 0/4 → verde 4/4 y c8 7/7 demos en laboratorio; FT3D 39/41 y C-02 en c7 4/5 siguen pendientes. #310 A0 99 PASS + 1 SKIP, pero gate WebKit/Firefox de concurrencia persistente abierto. No activar R1 ni reclamar recuperación de proyectos; fechas y contadores inferiores son históricos. Esta nota es documental, sin autorización de código, Production o migración.
