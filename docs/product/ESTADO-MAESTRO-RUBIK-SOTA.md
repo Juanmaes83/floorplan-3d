@@ -1,5 +1,7 @@
 # RUBIK SOTA — Estado maestro y continuidad operativa
 
+> **Corte vigente de M12 · 22/11/2026.** `master@4d97879b675200840eee00afeb7250667da03da9`. Localización #300, cámara #301 y RoomPlan UX #271 integradas y verificadas en Production. [Estado, alcance y pruebas](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md).
+
 > **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](../integration/CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en una consulta posterior: 6 PASS, 1 en ejecución y 1 SKIP. Verificar GitHub antes de declararla cerrada. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
 > **Estado maestro:** Blender #306 e idiomas #300 fusionados. M12 aún necesita #301/#271; E3, M05 y M08 continúan con residuales declarados. Consulte el delta posterior.
 

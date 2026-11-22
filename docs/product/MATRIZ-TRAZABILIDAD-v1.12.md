@@ -1,5 +1,7 @@
 # RUBIK SOTA — Matriz de trazabilidad reconciliada v1.12
 
+> **Evidencia M12 · 22/11/2026.** OP-04 UX está conectado a la importación RoomPlan y al historial de la sesión en [#271](https://github.com/Juanmaes83/floorplan-3d/pull/271), merge `4d97879b675200840eee00afeb7250667da03da9`. [Evidencia de integración y Production](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md). Los resultados se limitan a los recorridos y entornos registrados.
+
 > **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](../integration/CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en una consulta posterior: 6 PASS, 1 en ejecución y 1 SKIP. Verificar GitHub antes de declararla cerrada. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
 > **Matriz:** mantener 98 IDs y sus estados históricos; este añadido solo actualiza la fotografía operativa post-#300, sin reclasificar los 98 registros sin auditoría por ID.
 

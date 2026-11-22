@@ -1,5 +1,7 @@
 # RUBIK SOTA — Plan maestro de consolidación y comercialización v1.12
 
+> **Actualización al §6.3 · M12 · 22/11/2026.** La secuencia #300 → #301 → #271 está integrada. La [continuidad operativa](../integration/CONTINUIDAD-OPERATIVA-VIGENTE.md) registra el master efectivo y los gates de cada cierre. Las demás capacidades mantienen sus autorizaciones y gates propios.
+
 > **CORTE OPERATIVO POST-#300 · 21/11/2026 (posterior a los apartados históricos).** [Auditoría operativa y cola de cierres](../integration/CORTE-OPERATIVO-POST300-2026-11-21.md) (en esta PR #305): `master@414e53acf302c434afb85cf86434382b81eb7b0e` y Vercel Production READY del mismo SHA; #306 Blender y #300 idiomas ya **fusionadas**. CI posfusión #300 en una consulta posterior: 6 PASS, 1 en ejecución y 1 SKIP. Verificar GitHub antes de declararla cerrada. Próximo M12 #301 cámara → #271 RoomPlan UX; M11 #309 HERO bloqueada, M01 A0 #310 con CI general verde pero gate específico WebKit/Firefox y composición pendientes. Las fechas/contadores del cuerpo original son históricos y **no** deben interpretarse como el estado actual. No se autoriza con esta nota merge, gasto ni migración.
 > **Plan:** el roadmap/los hitos A–D históricos no equivalen al cierre actual; priorizar A0, M12, M11 y los gates de identidad, recuperación, jurídico y gasto antes de prometer beta.
 
