@@ -85,7 +85,7 @@ export function createUnavailableScene(canvas,error=null){
   // Mismo contrato que la escena real (#207/OBR-01): preferencia de movimiento en vivo, sin giro automático, dispose idempotente.
   const rm=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;let disposed=false;
   return {get reducedMotion(){return !!rm?.matches;},get autoRotating(){return false;},get disposed(){return disposed;},dispose(){disposed=true;},
-    unavailable:true,reason:String(error?.message||error||'WebGL no disponible'),canvas,renderer:null,
+    unavailable:true,reason:String(error?.message||error||'WebGL no disponible'),canvas,renderer:null,get stage(){return null;},
     get userMoved(){return false;},screenBounds:()=>null,set onResize(fn){},get size(){return [canvas.clientWidth,canvas.clientHeight];},
     load:noop,setState:noop,highlight:noop,pick:()=>null,hitsAt:()=>[],presentationPose:()=>({...pose}),setFootprint:noop,get footprintVisible(){return false;},
     setPose:noop,frameEnvelope:()=>({...pose}),resize:noop,inspect:()=>[],setRenderSize:noop,releaseRenderSize:noop,orbitPose:()=>({...pose}),renderNow:noop,

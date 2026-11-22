@@ -5,7 +5,7 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),path=require('node:path'),crypto=require('node:crypto'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const View=require('../api/view.js'),F=require('../labs/ft3d-8/fidelity-fixtures.js');
 const root=path.resolve(__dirname,'..'),shots=process.env.FT3D8_DELIVERY_SHOTS||null;
-const TYPES={'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
+const TYPES={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
 const BLOB_HOST='fixturestore.public.blob.vercel-storage.com';
 let server,browser,base,tmp;
 before(async()=>{
@@ -45,6 +45,8 @@ async function recordVideo(page){
   return page.evaluate(()=>{const v=window.__ft3dDelivery.state.video;return v&&{type:v.type,ext:v.ext,bytes:v.bytes,width:v.width,height:v.height,durationMs:v.durationMs,sha256:v.sha256,filename:v.filename,manifestId:window.__ft3dDelivery.state.manifest.id};});
 }
 const M=require('../js/construction-mp4-muxer.js'),D=require('../js/construction-delivery-core.js'),A=require('../js/construction-project-adapter.js');
+const Hero=require('../js/rubik-final-core.js');
+const heroStoryboard=schedule=>D.storyboard(schedule,{closingMs:Hero.secuencia().total});
 // Verify the DOWNLOADED file: container index, real duration, seeking to several points, full playback.
 async function verifyVideoFile(file,type,{caseId,declaredMs,prefix}){
   const bytes=await fs.readFile(file),info=M.inspect(bytes);
@@ -52,9 +54,10 @@ async function verifyVideoFile(file,type,{caseId,declaredMs,prefix}){
   assert.equal(info.width,1280);assert.equal(info.height,720);assert.equal(info.codec,'avc1');
   assert.ok(Math.abs(info.movieDurationSec*1000-declaredMs)<=41,`file duration ${info.movieDurationSec}s vs declared ${declaredMs}ms`);
   assert.ok(info.keyframes.length>=Math.floor(declaredMs/1000),'a keyframe every second makes the file seekable');
-  const c=await F.build(caseId),sb=D.storyboard(c.schedule),m=await A.evaluate(c);
-  // Seek points inside the timeline whose plan state differs (several construction phases).
-  const points=[.08,.3,.48,.64,.8,.97].map(k=>k*declaredMs/1000);
+  const c=await F.build(caseId),sb=heroStoryboard(c.schedule),m=await A.evaluate(c);
+  // Sample the opening, four points in the work itself, and the final signed shot.
+  const work=[.12,.34,.50,.82].map(k=>sb.openingMs+k*sb.timelineMs);
+  const points=[.08*sb.openingMs,...work,sb.totalMs-.03*sb.closingMs].map(ms=>ms/1000);
   const phases=points.map(t=>{const f=sb.at(t*1000);return f.segment==='timeline'?D.overlay(m,c.schedule,f.date,null).headline:f.segment;});
   assert.ok(new Set(phases.filter(p=>!['opening','closing'].includes(p))).size>=3,'sampled points show at least three different phases: '+phases.join(' | '));
   const ctx=await browser.newContext();const page=await ctx.newPage();
@@ -110,7 +113,7 @@ test('desktop · brand, real video, download, playback of the downloaded file, c
   assert.deepEqual(await btn(),{go:true,goText:'Grabar de nuevo',cancel:false,download:true,preview:true});
   assert.equal(v.ext,'mp4');assert.equal(v.type,'video/mp4');assert.equal(v.seekable,true);assert.equal(v.fps,25);
   assert.equal(v.width,1280);assert.equal(v.height,720);assert.ok(v.bytes>20000,'non-trivial file');
-  const sb=D.storyboard((await F.build('A')).schedule);assert.ok(Math.abs(v.durationMs-Math.round(sb.totalMs/40)*40)<=1,'declared duration = storyboard');
+  const sb=heroStoryboard((await F.build('A')).schedule);assert.ok(Math.abs(v.durationMs-Math.round(sb.totalMs/40)*40)<=1,'declared duration = storyboard');
   assert.ok(Math.abs(v.playerDurationMs-v.durationMs)<=41,'player duration = declared');
   assert.match(v.filename,new RegExp(`^rubik-sota-evolucion-fixture-a-vivienda-una-planta-[0-9a-f]{8}\\.${v.ext}$`));
   await elShot(page.locator('#step4'),'02-controles-video.png');

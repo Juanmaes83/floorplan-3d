@@ -692,7 +692,7 @@
    // Reduced motion with a section or a façade: one explicit step at a time (the open section; the frontal façade, then
    // its exterior perspective), so each state is seen before going on.
    else if(reducedMotion()&&hasHeldScene(story)){const run=story,single=run.scenes.length===1,hold=nextHold(run);if(single&&hold===null)finishStory();else playStory(hold!==null?run.seq.at(run.i,hold):nextStart(run));}
-   else{const run=story;playStory(1).then(done=>{if(done&&!endsInVisit(run))finishStory();});}});play.id='presentationStoryPlay';play.classList.add('primary');
+   else{const run=story;playStory(1).then(done=>{if(done&&!endsInVisit(run)&&!heroHold())finishStory();});}});play.id='presentationStoryPlay';play.classList.add('primary');
   const nextButton=button('',row,()=>{const run=story;if(!run)return;playStory(nextStart(run));});nextButton.id='presentationStoryNext';nextButton.hidden=true;
   // Section → Spatial Visit V1: on arrival, hand over to «Recorrer» at the same pose, or go back to the section.
   // Arrival actions get their own row under the transport, so they never reflow it.
@@ -936,6 +936,8 @@
     run.playing=false;run.resolve=null;drawStory();resolve(true);};
    run.raf=requestAnimationFrame(tick);});
  }
+ // HERO FINAL (corte C): el epílogo del dibujo vivo se sostiene al final; se sale con «Continuar presentación».
+ const heroHold=()=>!!window.RubikFinalDibujoUI?.ultimo?.hero?.fin;
  async function openStory(token,scenes,{from=0,to=null}={}){
   if(!active||batchActive||token!==epoch||plan.stops[index]?.kind!=='overview'||!scenes?.length)return;
   if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'||sc.kind==='room-visit'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))||(sc.kind==='elevation-open'&&!elevationAt(plan.stops[sc.stop]))||(isAxonKind(sc.kind)&&(!axonEnabled||sc.kind!==axonKind()||!axonAt(plan.stops[sc.stop])))))return;
@@ -951,7 +953,7 @@
   try{if(!await enterScene(run,start.i)||story!==run)return;run.p=start.p;run.P=Math.min(1,Math.max(0,from));if(!applyStory(run,run.p))return;drawStory();}
   catch(error){if(frozenTemplate){templateSceneFailure(run,run.scenes[start.i],error);return;}story=null;drawStory();toast(error.message||String(error),6000);await go(index,token);return;}
   draw();updateCapture();
-  if(to!==null){const done=await playStory(to);if(done&&to>=1&&story===run&&!endsInVisit(run))await finishStory();}
+  if(to!==null){const done=await playStory(to);if(done&&to>=1&&story===run&&!endsInVisit(run)&&!heroHold())await finishStory();}
  }
  // Resize: the same P on the scene rebuilt for the new screen. A single descent that started from the camera of the
  // moment (1b) settles on the nearer of its two stops, as before.

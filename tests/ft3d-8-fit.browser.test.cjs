@@ -4,7 +4,7 @@
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..'),shots=process.env.FT3D8_FIT_SHOTS||null;
-const TYPES={'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
+const TYPES={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
 let server,browser,base;
 before(async()=>{
   server=createServer(async(req,res)=>{try{let p=new URL(req.url,'http://local').pathname;if(p.endsWith('/'))p+='index.html';

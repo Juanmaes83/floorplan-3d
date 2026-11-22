@@ -6,7 +6,7 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),path=require('node:path'),crypto=require('node:crypto'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const X=require('../labs/ft3d-8/dossier-fixtures.js'),Budget=require('../js/budget-core.js'),Schedule=require('../js/construction-schedule-core.js'),M=require('../js/construction-mp4-muxer.js');
 const root=path.resolve(__dirname,'..'),shots=process.env.FT3D8_DOSSIER_SHOTS||null;
-const TYPES={'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
+const TYPES={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'};
 let server,browser,base,tmp;
 before(async()=>{
   server=createServer(async(req,res)=>{try{let p=new URL(req.url,'http://local').pathname;if(p.endsWith('/'))p+='index.html';

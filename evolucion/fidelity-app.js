@@ -233,7 +233,7 @@ function fitPose(view,opts={}){
   const dist=p=>Math.hypot(...p.position.map((v,i)=>v-p.target[i]));return poses.reduce((a,b)=>dist(b)<dist(a)?b:a);
 }
 let framedFinal=false;
-scene.onResize=()=>{if(!ctx||camView==='free'||scene.userMoved||document.body.classList.contains('capture'))return;const auto=camView==='auto';scene.setPose(fitPose(auto?'iso':camView,{standing:!auto||framedFinal}));if(auto)scene.setAuto(true);};
+scene.onResize=()=>{if(!ctx||camView==='free'||scene.userMoved||document.body.classList.contains('capture')||window.__rubikFinal?.activo)return;const auto=camView==='auto';scene.setPose(fitPose(auto?'iso':camView,{standing:!auto||framedFinal}));if(auto)scene.setAuto(true);};
 // AUTO: at the end of the plan (site resources removed) the camera comes closer to the finished house; going back in
 // time restores the site framing. Never while a video is recorded, in capture mode or after the user moved the camera.
 window.addEventListener('ft3d8-moment',e=>{const fin=e.detail?.stage==='final';if(fin===framedFinal)return;

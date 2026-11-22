@@ -54,9 +54,13 @@
    grid.querySelector('[data-group="signature"]>h2').textContent=tx('La firma del profesional','Professional signature','专业签名');
    // ENT-01 I1B: review the REAL 3D engine in an isolated, non-publishing client tab.
    window.FloorPlanDeliveryPreview?.card(grid.querySelector('[data-group="experience"] .professional-group-items'));
+   // HERO FINAL · STUDIO: acceso directo desde Entregar a la tarjeta de STUDIO (misma tarjeta y autoridad FloorPlanBrand).
+   window.RubikStudioHero?.acceso(grid.querySelector('[data-group="experience"] .professional-group-items'));
   }
   if(area==='studio'){
    window.RubikE3Entregables?.card(grid,'studio'); // STUDIO E3
+   // HERO FINAL · STUDIO: visión de cinco fases y tarjeta principal de personalización (ancla de una línea: convive con STUDIO E3 #299).
+   window.RubikStudioHero?.studio(grid);
    const profiles=grid.querySelector('[data-module="studio"]'),snap=FloorPlanBrandUI.snapshot(),profile=snap?.profile;
    const preview=el('div',undefined,profiles,'professional-signature-preview');profiles.querySelector('h3').after(preview);el('small',tx('Así firmas tus entregas','Your delivery signature','您的交付签名'),preview);
    if(profile){if(profile.logo?.startsWith('data:image/png;')){const img=el('img',undefined,preview);img.src=profile.logo;img.alt=tx('Logo profesional seleccionado','Selected professional logo','所选专业标志');}el('strong',profile.name,preview);for(const value of [profile.person,profile.tagline,profile.email,profile.phone,profile.web])if(value)el('span',value,preview);}

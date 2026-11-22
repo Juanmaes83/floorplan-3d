@@ -3,6 +3,8 @@
    optional link through the EXISTING /api/share + /api/view. Everything uses the project, plan and budget selected in
    the lab (window.__ft3dFidelity). Nothing is published without explicit consent; the editable project never leaves.
    Brand profiles of this browser are only READ; the lab test brand lives in memory and is lost on reload. */
+const visible=s=>window.RubikFinalCore?window.RubikFinalCore.textoVisible(s,'es'):s; // nada en chino en una sesión ES
+const HERO=()=>window.__rubikFinal||null; // SCULPT A · HERO final en el vídeo exportado
 const B=window.FloorPlanBrand,D=window.FloorPlanConstructionDelivery,P=window.FloorPlanConstructionLabPresenter,Rec=window.FloorPlanTourRecorder,Fid=()=>window.__ft3dFidelity;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -34,7 +36,7 @@ function snapshot(){
   if(state.source.startsWith('browser:')){const srcId=state.source.slice(8),p=browserProfiles().find(x=>x.id===srcId);if(!p)return null;profileId=B.saveProfile(state.labStore,{...p,id:state.copies[srcId]}).id;state.copies[srcId]=profileId;}
   if(!profileId)return null;
   B.setDelivery(state.labStore,entryKey(),{profileId,title:state.title,intro:state.intro});
-  return B.snapshot(state.labStore,entryKey(),ctx.model.subject.name);
+  return B.snapshot(state.labStore,entryKey(),visible(ctx.model.subject.name));
 }
 const currentBrand=()=>D.brandFor(snapshot(),{include:[...state.include]});
 function renderBrand(){
@@ -73,7 +75,7 @@ async function saveLabBrand(){
 /* ---------- steps 1-2 ---------- */
 function renderReview(){
   const ctx=Fid().ctx;if(!ctx)return;const m=ctx.model,c=m.coverage;
-  $('stepProject').innerHTML=`<p><strong>${esc(m.subject.name)}</strong> · ${esc(m.subject.type)} <code>${esc(m.subject.id)}</code> · revisión <code>${esc(m.fingerprints.project.slice(0,12))}</code></p>
+  $('stepProject').innerHTML=`<p><strong>${esc(visible(m.subject.name))}</strong> · ${esc(m.subject.type)} <code>${esc(m.subject.id)}</code> · revisión <code>${esc(m.fingerprints.project.slice(0,12))}</code></p>
     <p>${c.geometry.representable}/${c.geometry.total} elementos representables desde el modelo RUBIK · ${esc(m.delivery.scopeNotice)}</p>`;
   const pol=policy();
   $('stepPlan').innerHTML=`<p>Plan: ${m.planning.status==='available'?`<strong>${esc(ctx.schedule.id)}</strong> (${esc(m.planning.evidence)})`:`<strong class="bad">${esc(m.planning.message)}</strong>`}</p>
@@ -96,7 +98,7 @@ function renderPreview(ctx,pol,block){
   if(m.planning.status!=='available'){$('deliverSummary').innerHTML=`<p class="bad">${esc(m.planning.message||'Sin planificación de este proyecto: no hay evolución que entregar.')}</p>`;return;}
   const sb=D.storyboard(sch),n=P.weeks(sch).length,tasks=ctx.canon?.tasks?.length||sch.tasks?.length||0;
   const costs=!pol.allowed?'sin importes (no se pueden incluir: '+pol.reasons.join('; ')+')':state.costMode==='none'?'sin importes':state.costMode==='summary'?'con el resumen del presupuesto asignado, sin IVA'+(pol.summary&&!pol.summary.complete?' (incompleto)':''):'con el importe de cada fase, sin IVA';
-  $('deliverSummary').innerHTML=`<p class="lead">Tu cliente verá <strong>${esc(m.subject.name)}</strong> construirse en <strong>${n} ${n===1?'semana':'semanas'}</strong>, del ${esc(P.dateLabel(sb.startDate))} al ${esc(P.dateLabel(sb.endDate))}.</p>
+  $('deliverSummary').innerHTML=`<p class="lead">Tu cliente verá <strong>${esc(visible(m.subject.name))}</strong> construirse en <strong>${n} ${n===1?'semana':'semanas'}</strong>, del ${esc(P.dateLabel(sb.startDate))} al ${esc(P.dateLabel(sb.endDate))}.</p>
     <ul class="gfacts"><li>${tasks} trabajos del plan, con sus fechas</li><li>${esc(costs)}</li><li>${brand.present?'con la marca «'+esc(brand.name)+'»':'sin marca propia (aparecerá «Generado con RUBIK SOTA»)'}</li><li>${esc(m.delivery.label)} · simulación planificada, no obra ejecutada</li></ul>
     ${block?`<p class="bad">${esc(block)}</p>`:''}`;
 }
@@ -134,6 +136,7 @@ function drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo}){
   const src=Fid().scene.canvas;x.fillStyle='#000';x.fillRect(0,0,W,H);
   if(src.width&&src.height){const k=Math.max(W/src.width,H/src.height),w=W/k,h=H/k;x.drawImage(src,(src.width-w)/2,(src.height-h)/2,w,h,0,0,W,H);}
   x.textBaseline='alphabetic';const font=(w,s)=>`${w} ${s}px Inter, "Helvetica Neue", Arial, sans-serif`;
+  if(f.segment==='closing'&&window.__rubikFinal?.activo){window.__rubikFinal.dibujarVideo(x,W,H,{marca:brand,proyecto:manifestInfo.title});return;}
   if(f.segment==='opening'||f.segment==='closing'){
     if(f.segment==='opening'){x.fillStyle='rgba(43,48,52,.88)';x.fillRect(0,0,W,H);}
     else{const g=x.createLinearGradient(0,0,W*.78,0);g.addColorStop(0,'rgba(43,48,52,.94)');g.addColorStop(.62,'rgba(43,48,52,.78)');g.addColorStop(1,'rgba(43,48,52,0)');x.fillStyle=g;x.fillRect(0,0,W,H);}
@@ -141,12 +144,12 @@ function drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo}){
     x.fillStyle='#fff';x.font=font(800,26);x.fillText(fit(x,brand.present?brand.name:'RUBIK SOTA',W-200),96,y);y+=64;
     if(f.segment==='opening'){
       x.font=font(800,54);x.fillText(fit(x,manifestInfo.title,W-200),96,y);y+=48;x.font=font(500,24);x.fillStyle='#d9e5e8';
-      x.fillText(fit(x,'Proyecto '+model.subject.name,W-200),96,y);y+=40;x.fillText(P.dateLabel(sb.startDate)+'  →  '+P.dateLabel(sb.endDate)+'  ·  '+weeksText,96,y);y+=56;
+      x.fillText(fit(x,'Proyecto '+visible(model.subject.name),W-200),96,y);y+=40;x.fillText(P.dateLabel(sb.startDate)+'  →  '+P.dateLabel(sb.endDate)+'  ·  '+weeksText,96,y);y+=56;
       x.fillStyle=C.light;x.font=font(700,22);x.fillText('Simulación planificada de la evolución de obra · no muestra obra ejecutada',96,y);
     }else{
       // Closing: the message and who presents it. Technical identifiers live in the manifest, not on screen.
       x.font=font(800,44);x.fillText('Plan completado según la planificación',96,y);y+=50;x.font=font(500,22);x.fillStyle='#d9e5e8';
-      x.fillText(fit(x,'Proyecto '+model.subject.name+'  ·  '+weeksText,W-200),96,y);y+=36;
+      x.fillText(fit(x,'Proyecto '+visible(model.subject.name)+'  ·  '+weeksText,W-200),96,y);y+=36;
       if(brand.contact){x.fillText(fit(x,brand.contact,W-200),96,y);y+=36;}
       x.fillText(fit(x,brand.credit,W-200),96,y);y+=50;
       x.fillStyle=C.light;x.font=font(700,20);x.fillText('La simulación no certifica obra ejecutada, pagada ni terminada.',96,y);
@@ -161,7 +164,7 @@ function drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo}){
     const hasLogo=lg&&lg.complete&&lg.naturalWidth,lw=hasLogo?Math.min(96,lg.naturalWidth*44/lg.naturalHeight):0;
     x.fillStyle='rgba(255,255,255,.94)';x.fillRect(M,y,tw+36+(hasLogo?lw+14:0),h);x.fillStyle=C.action;x.fillRect(M,y,5,h);
     if(hasLogo){x.drawImage(lg,left,y+17,lw,44);left+=lw+14;}
-    x.fillStyle=C.muted;x.font=font(600,14);x.fillText(fit(x,(brand.present?brand.name:'RUBIK SOTA')+' · '+model.subject.name,tw),left,y+26);
+    x.fillStyle=C.muted;x.font=font(600,14);x.fillText(fit(x,(brand.present?brand.name:'RUBIK SOTA')+' · '+visible(model.subject.name),tw),left,y+26);
     x.fillStyle=C.ink;x.font=font(800,28);x.fillText(fit(x,title,tw),left,y+60);}
   // Top right: the moment stamp, as on the screen.
   {const col=o.stage==='final'?C.success:o.stage==='en-obra'?C.action:C.dark;x.font=font(800,20);const tw=x.measureText(o.stageText).width+40,y=28;
@@ -191,9 +194,9 @@ async function verifyPlayable(url){
 // Encoder: WebCodecs H.264 (frame by frame, exact timestamps, keyframe every second) muxed into an indexed MP4 by
 // FloorPlanConstructionMp4; otherwise MediaRecorder (real time, container from FloorPlanTourRecorder.pickType).
 const H264=['avc1.42001f','avc1.4d001f','avc1.640028'];
-async function encoderConfig(){
+async function encoderConfig(bitrate=BITRATE){
   if(typeof VideoEncoder==='undefined'||!window.FloorPlanConstructionMp4)return null;
-  for(const codec of H264){const cfg={codec,width:W,height:H,bitrate:BITRATE,framerate:FPS_OFFLINE,avc:{format:'avc'}};
+  for(const codec of H264){const cfg={codec,width:W,height:H,bitrate,framerate:FPS_OFFLINE,avc:{format:'avc'}};
     try{if((await VideoEncoder.isConfigSupported(cfg)).supported)return cfg;}catch{}}
   return null;
 }
@@ -203,17 +206,23 @@ async function record(){
   const fid=Fid(),ctx=fid.ctx;if(!ctx||ctx.model.planning.status!=='available')throw Error('Se necesita un plan válido de este proyecto.');
   if(dossierBlock())throw Error(dossierBlock());
   if(state.recording)throw Error('Ya hay una grabación en curso.');
-  const cfg=await encoderConfig(),type=cfg?'video/mp4':Rec.pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
+  const hero=HERO(),schedule=ctx.schedule,sb=D.storyboard(schedule,hero?{closingMs:hero.duracion}:undefined);
+  // Budget the longer MP4 when encoding it. Keep 10% for rate-control variation and the MP4 index.
+  // The actual file still has to pass the share limit. A download is always the original encoded file.
+  const bitrate=hero?Math.min(BITRATE,Math.floor(D.SHARE_LIMIT_BYTES*.9*8000/sb.totalMs)):BITRATE;
+  const cfg=await encoderConfig(bitrate),type=cfg?'video/mp4':Rec.pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
   invalidate();const controller=new AbortController();state.recording={controller,progress:0};renderVideo('Preparando la grabación…');
-  const brand=currentBrand(),pol=policy(),sb=D.storyboard(ctx.schedule),model=ctx.model,schedule=ctx.schedule,inv=model.inventory;
+  const brand=currentBrand(),pol=policy(),model=ctx.model,inv=model.inventory;
   img(brand.logo);await new Promise(r=>setTimeout(r,50));
-  const title=brand.present?brand.title:(state.title||model.subject.name),info={title};
+  const title=visible(brand.present?brand.title:(state.title||model.subject.name)),info={title};
   const backPose=fid.pose,backPos=fid.pos,roof=fid.scene.roofVisible;
   const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const x=canvas.getContext('2d');
   const frame=t=>{const f=sb.at(t);fid.setPos(f.segment==='opening'?0:f.pos);
+    if(f.segment==='closing'&&HERO()?.activo){HERO().renderAt(t-sb.openingMs-sb.timelineMs,{render:false});fid.scene.renderNow();drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo:info});return;}
     fid.setPose(fid.scene.orbitPose(inv,-.55+1.1*(t/sb.totalMs),{scale:.74,lift:.5}));fid.scene.renderNow();drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo:info});};
   const progress=k=>{state.recording.progress=k;$('videoStatus').textContent=`Grabando… ${Math.round(k*100)} %`;};
   let blob,frames=0,declaredMs,container;
+  if(HERO())await HERO().reproducir({manual:true,capaUI:false});
   try{
     fid.scene.setRenderSize(W,H);fid.scene.setSuspended(!!cfg);
     if(cfg){
@@ -244,7 +253,7 @@ async function record(){
       finally{cancelAnimationFrame(raf);if(recorder.state!=='inactive'){const done=new Promise(r=>recorder.addEventListener('stop',r,{once:true}));try{recorder.stop();}catch{}await Promise.race([done,new Promise(r=>setTimeout(r,4000))]);}stream.getTracks().forEach(t=>t.stop());}
       blob=new Blob(chunks,{type:type.split(';')[0]});declaredMs=null;container='mediarecorder';
     }
-  }finally{fid.scene.setSuspended(false);fid.scene.releaseRenderSize();fid.setRoof(roof);fid.setPos(backPos);if(backPose)fid.setPose(backPose);state.recording=null;}
+  }finally{if(HERO()?.activo)HERO().salir();fid.scene.setSuspended(false);fid.scene.releaseRenderSize();fid.setRoof(roof);fid.setPos(backPos);if(backPose)fid.setPose(backPose);state.recording=null;}
   if(!blob.size)throw Error('El navegador no generó ningún fotograma: no se ha guardado nada.');
   const url=URL.createObjectURL(blob),ext=blob.type==='video/mp4'?'mp4':'webm';
   let check;try{check=await verifyPlayable(url);}catch(e){URL.revokeObjectURL(url);throw e;}
@@ -274,7 +283,7 @@ async function prepareDocument(){
   const brand=currentBrand(),pol=policy();
   // With a video, its frozen manifest is the delivery; without one, a manifest is frozen now.
   const manifest=state.manifest||await D.createManifest({model:ctx.model,schedule:ctx.schedule,budget:ctx.input.budget,brand,costPolicy:pol,
-    title:brand.present?brand.title:(state.title||ctx.model.subject.name),intro:brand.present?brand.intro:state.intro,binding:ctx.input.binding,dossier:ctx.dossier||null});
+    title:visible(brand.present?brand.title:(state.title||ctx.model.subject.name)),intro:brand.present?brand.intro:state.intro,binding:ctx.input.binding,dossier:ctx.dossier||null});
   const embed=state.video&&state.video.bytes<=EMBED_LIMIT?{src:await blobToData(state.video.blob),type:state.video.type}:null;
   const html=D.clientDocument(manifest,{video:embed});
   state.manifest=manifest;state.doc={html,bytes:new Blob([html]).size,embedded:!!embed,manifest};

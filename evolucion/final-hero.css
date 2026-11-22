@@ -1,0 +1,30 @@
+/* SCULPT Simulator · A · HERO final. El visor ocupa la pantalla con un recorte animado desde su rectángulo; la interfaz
+   técnica se retira por opacidad (sigue en el DOM y vuelve intacta al salir). Contraste AA sobre la escena. */
+#panel-evolucion>.stagewrap.rf-full{position:fixed;inset:0;height:auto!important;z-index:1000;margin:0;background:#efe6da}
+#panel-evolucion>.stagewrap.rf-full #stage{width:100%;height:100%}
+/* Todo lo técnico del visor se retira con --rf-ov (0..1); los avisos de WebGL (GOV-07) nunca. */
+#panel-evolucion>.stagewrap.rf-full>:not(#stage):not(.rf-firma):not(.rf-pie):not(.rf-salir):not(.demo-end):not([class^=gl-guard]){opacity:var(--rf-ov,1);pointer-events:none}
+body.rubik-final{overflow:hidden}
+.rf-full::after{content:'';position:absolute;inset:45% 0 0 0;pointer-events:none;opacity:var(--rf-velo,0);
+ background:linear-gradient(180deg,rgba(18,16,14,0),rgba(18,16,14,.62))}
+/* Títulos de cierre integrados en el plano: sin caja, sombra suave y velo inferior para máxima legibilidad. */
+.rf-firma{position:absolute;z-index:2;left:clamp(20px,5vw,80px);bottom:clamp(40px,9vh,96px);max-width:min(760px,86vw);color:#fff;font-family:Inter,"Helvetica Neue",Arial,sans-serif;
+ text-shadow:0 2px 14px rgba(0,0,0,.45);opacity:0;pointer-events:none}
+.rf-firma>*{margin:0;will-change:opacity,transform}
+.rf-logo{display:block;max-height:60px;max-width:240px;margin:0 0 14px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.4))}
+.rf-estudio{font-size:clamp(13px,1.3vw,17px);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.86)}
+.rf-titulo{margin:8px 0 6px!important;font-size:clamp(30px,4.6vw,64px);line-height:1.04;font-weight:800;letter-spacing:-.015em}
+.rf-claim{font-size:clamp(16px,1.8vw,24px);font-weight:400;color:rgba(255,255,255,.92)}
+.rf-cta{margin-top:14px!important;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;font-size:clamp(15px,1.5vw,20px);font-weight:700;color:#f3d9a8}
+.rf-web{font-weight:600;color:#fff;border-bottom:1px solid rgba(255,255,255,.55)}
+.rf-ok{margin-top:16px!important;font-size:13px;font-weight:500;color:rgba(255,255,255,.8)}
+.rf-pie{z-index:2;position:absolute;right:clamp(16px,2.4vw,32px);bottom:clamp(12px,2vh,20px);display:flex;flex-direction:column;align-items:flex-end;gap:2px;opacity:0;pointer-events:none;
+ font:500 11.5px Inter,"Helvetica Neue",Arial,sans-serif;color:rgba(255,255,255,.88);text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.rf-rubik{font-weight:700;letter-spacing:.08em;font-size:11px}
+.rf-salir{position:absolute;top:16px;right:16px;min-height:44px;min-width:44px;padding:8px 16px;border-radius:999px;border:1px solid rgba(43,40,36,.35);
+ background:rgba(251,248,243,.88);color:#24211d;font:600 13px Inter,"Helvetica Neue",Arial,sans-serif;cursor:pointer}
+.rf-salir:focus-visible{outline:3px solid #1f4fb5;outline-offset:2px}
+/* La tarjeta de cierre de la demo de la Home aparece sobre el HERO terminado. */
+body.rubik-final .demo-end{z-index:70}
+@media(max-width:640px){.rf-firma{left:16px;right:16px;bottom:64px;max-width:none}.rf-titulo{font-size:30px}.rf-pie{left:12px;right:12px;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){.rf-firma,.rf-pie{transition:none}}
