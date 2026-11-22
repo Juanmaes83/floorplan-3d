@@ -16,7 +16,7 @@
  const {eur,day,short}=C;
  const DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),days=(a,b)=>Math.round((ms(b)-ms(a))/DAY)+1;
 
- let nowF=null,snap=null,inv=null,byKey=new Map(),money=null,draft=null,dirty=false,tab='tasks',focus={},editing=null,closing=false,review=false,message='',error='',removing=null;
+ let nowF=null,snap=null,inv=null,byKey=new Map(),money=null,draft=null,dirty=false,tab='tasks',focus={},editing=null,closing=false,review=false,message='',error='',removing=null,mspdiNote=null;
  const dialog=el('dialog',undefined,document.body,'cx-dialog');dialog.id='planDialog';dialog.setAttribute('aria-labelledby','planTitle');
  dialog.addEventListener('cancel',e=>{if(dirty){e.preventDefault();closing=true;draw();}});
  // D-05: leaving or reloading the page with unsaved plan changes asks first (the browser shows its own warning).
@@ -62,7 +62,7 @@
  /* ---------- open / save ---------- */
  async function open({tab:t='tasks',taskId=null,itemId=null,elementKey=null}={}){
   snap=await C.snapshot();nowF=await C.nowFingerprints(snap);inv=A.inventory(snap.doc);byKey=new Map(inv.elements.map(e=>[e.key,e]));
-  draft=stored()?S.canonical(stored()):null;dirty=false;editing=null;closing=false;review=false;removing=null;message='';error=snap.recordError?R.human(snap.recordError):'';
+  draft=stored()?S.canonical(stored()):null;dirty=false;editing=null;closing=false;review=false;removing=null;mspdiNote=null;message='';error=snap.recordError?R.human(snap.recordError):'';
   money=budgetNow();tab=t;focus={taskId,itemId,elementKey};draw();if(!dialog.open)dialog.showModal();
   (dialog.querySelector('.is-focus button, .is-focus')||dialog.querySelector('#planTitle')).focus({preventScroll:false});
   dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});
@@ -118,12 +118,32 @@
    const rv=btn(draft.review.status==='reviewed'&&!dirty?'Revisado':'Marcar como revisado…',foot);rv.id='planReview';rv.disabled=!draft.tasks.length;rv.onclick=()=>{review=!review;draw();};
    const ev=btn('Ver evolución',foot);ev.id='planEvolution';ev.disabled=!stored();ev.onclick=async()=>{if(dirty){error='Guarda el plan antes de ver su evolución.';draw();return;}dialog.close();await window.FloorPlanConstructionUI.openEvolution();};
    const ex=btn('Exportar plan (JSON)',foot);ex.id='planExport';ex.disabled=!stored();ex.onclick=()=>download(new Blob([S.serialize(stored())],{type:'application/json'}),`plan-de-obra-${(snap.entry.name||'proyecto').replace(/[^\w]+/g,'-').toLowerCase()}.json`);
+   // M13: el plan GUARDADO, tal cual, en MSPDI (Microsoft Project y GanttProject). No cambia el plan ni sus fechas.
+   const mx=btn('Exportar a Microsoft Project / GanttProject (XML)',foot);mx.id='planExportMspdi';mx.disabled=!stored()||!window.FloorPlanScheduleMSPDI;
+   mx.title='Archivo MSPDI (.xml): se abre en Microsoft Project y en GanttProject (Proyecto › Importar).';mx.onclick=exportMspdi;
   }
+  if(mspdiNote&&!closing){const f=el('div',undefined,foot,'cx-banner'+(mspdiNote.tone?' '+mspdiNote.tone:''));f.id='planMspdiReport';f.style.flexBasis='100%';el('b',mspdiNote.title,f);
+   const ul=el('ul',undefined,f);for(const line of mspdiNote.lines)el('li',line,ul);}
   if(review&&draft&&!closing){const f=el('div',undefined,foot,'cx-form');f.style.flexBasis='100%';el('h3','Declarar la revisión del plan',f);
    el('p','Indica quién ha revisado fechas, dependencias, elementos y repartos. Es una declaración, no una firma autenticada: si cambias el plan, la revisión queda desactualizada.',f,'cx-banner');
    const lab=el('label',undefined,f,'cx-field');el('span','Revisado por',lab);const who=el('input',undefined,lab);who.id='planReviewer';who.autocomplete='name';
    const ok=btn('Marcar como revisado',f,'btn primary');ok.id='planReviewConfirm';ok.onclick=()=>markReviewed(who.value);setTimeout(()=>who.focus(),0);}
   const nb=dialog.querySelector('.cx-body');if(nb)nb.scrollTop=scrollTop;
+ }
+ function exportMspdi(){
+  mspdiNote=null;
+  if(dirty){error='Guarda el plan antes de exportarlo: se exporta el plan guardado, nunca cambios a medias.';draw();return;}
+  const X=window.FloorPlanScheduleMSPDI,sch=stored(),name=snap.entry.name||'proyecto';
+  try{
+   const {xml,report}=X.toMSPDI(sch,{projectName:'Plan de obra · '+name});
+   download(new Blob([xml],{type:'application/xml'}),`plan-de-obra-${name.replace(/[^\w]+/g,'-').toLowerCase()}.mspdi.xml`);
+   const corr=R.correspondence(snap.record,{subject:snap.subject,revision:snap.revision}).find(c=>c.aspect==='plan');
+   const lines=X.summary(report).split('\n');
+   if(corr&&corr.result==='obsolete')lines.unshift(`Atención: el plan se guardó sobre la revisión ${short(corr.expected)} y el proyecto está en la ${short(corr.current)}. Se exporta tal como se guardó.`);
+   lines.push('Formato comprobado con el esquema MSPDI de Microsoft Project y con el lector que usa GanttProject. Revisa el archivo al abrirlo en tu aplicación.');
+   mspdiNote={tone:corr&&corr.result==='obsolete'?'warn':'',title:'Plan exportado para Microsoft Project / GanttProject',lines};message='';error='';
+  }catch(e){mspdiNote={tone:'bad',title:'No se ha podido exportar el plan',lines:[explain(e.message)||e.message]};}
+  draw();
  }
  function banner(parent,tone,title,text){const b=el('div',undefined,parent,'cx-banner'+(tone?' '+tone:''));el('b',title,b);el('span',text,b);return b;}
  function empty(body){

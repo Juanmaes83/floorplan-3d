@@ -1,0 +1,5 @@
+<!-- M13 · Lector independiente para verificar la exportación MSPDI. MPXJ 13.12.0 (LGPL) es la versión que integra
+     GanttProject 3.4.3398 en su importador de Microsoft Project (plugin biz.ganttproject.impex.msproject2).
+     Solo herramienta de verificación: no se distribuye con RUBIK. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><groupId>rubik.qa</groupId><artifactId>mspdi-readback</artifactId><version>1</version>
+<dependencies><dependency><groupId>net.sf.mpxj</groupId><artifactId>mpxj</artifactId><version>13.12.0</version></dependency></dependencies></project>
