@@ -51,6 +51,11 @@ El archivo se abre en Microsoft Project (Archivo › Abrir, XML) y en GanttProje
 
 ## Pendiente de validación externa (no se afirma que funcione)
 
+**Hoja de comprobación lista:** `COMPROBACION-APLICACIONES.md`, generada con `scripts/interop/mspdi/checklist.cjs` desde los XML de `muestras/`. Recoge, fila a fila, inicio, fin, duración, hito y predecesoras (FC/CC/FF/CF con su desfase) tal como deben verse en Microsoft Project y en GanttProject, con casillas para el resultado.
+
+La lectura con MPXJ 13.12.0 queda acreditada como **prueba del lector**, no de la aplicación. Codex incorporará la prueba unitaria al gate cuando se prepare el corte.
+
+
 - **Microsoft Project:** no ejecutable en este entorno.
 - **GanttProject 3.4.3398 como aplicación:** descargado de su servidor oficial (SHA-256 `aaed2498…df95a5`), pero en este entorno no se pudo ejecutar el binario. Solo se ha probado su lector (MPXJ 13.12.0).
 
