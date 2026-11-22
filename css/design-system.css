@@ -270,3 +270,13 @@ body.guided.next-present:has(#guideBar:not([hidden])) #presentationBtn{display:n
   body.m3d:not(.guided) header #editHistory{display:grid;grid-template-columns:max-content max-content}
   body.m3d:not(.guided) header .edit-history-scope{grid-column:1/-1;padding-inline:0;text-align:center}
 }
+
+/* Fit the visible RoomPlan action and global controls on constrained desktop toolbars. */
+@media(min-width:1101px) and (max-width:1500px){
+  body.guided header #actionSearchBtn{min-width:44px}
+  body.guided header #actionSearchBtn .guide-search-prompt{display:none}
+  body.guided header #actionSearchBtn .guide-search-compact{display:inline}
+}
+@media(min-width:1101px) and (max-width:1439px){
+  body.guided header{flex-wrap:wrap}
+}
