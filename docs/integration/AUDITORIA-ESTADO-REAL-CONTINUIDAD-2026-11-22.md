@@ -1,4 +1,35 @@
 # RUBIK SOTA · Auditoría independiente de estado real y punto de continuidad
+
+> **ACTUALIZACIÓN POSTERIOR AL CORTE ORIGINAL · 22/11/2026 · POST-#314 / #313 / UX-312 / A0.** Esta entrada es la **fotografía operativa más reciente de este archivo**; el cuerpo de v1.0 que aparece después sigue íntegro como histórico y sus SHAs, contadores y estados de PR corresponden a su fecha. **Volver a consultar GitHub antes de ordenar un nuevo corte.**
+
+### Adenda v1.1: estado verificado tras la integración documental #314
+
+**Referencia nueva:** `master@c355bdf8e5716a634a6c9835df4aec3c3b86ba3b`. [PR documental #314](https://github.com/Juanmaes83/floorplan-3d/pull/314): **FUSIONADA** a 22/11/2026 15:35:37 UTC, con esta auditoría y los enlaces desde Continuidad y Handoff. El informe v1.0 partía de `3d3992c…`; no tratar ese SHA como master vigente. La fusión de documentación por sí sola no autoriza ninguna otra integración.
+
+**M11 / Simulator B — candidata nueva, NO fusionada al elaborar esta adenda:**
+- [PR #313](https://github.com/Juanmaes83/floorplan-3d/pull/313) `OPEN/DRAFT`, `mergeable=true`, base GitHub actual `master@c355bdf8e5716a634a6c9835df4aec3c3b86ba3b`, HEAD `4d2eee7859ee0bc4922c2b0adb817678cbb99c66`, árbol `2692e9433e918c070f86db691a4db9fc035b9826`. Padres del HEAD: `c355bdf8e5716a634a6c9835df4aec3c3b86ba3b` y `80911c6cdf11ac22c806b14bf324b2d9a6400a5c` (candidata aceptada visualmente). El SHA del objeto de merge prospectivo es `8d5a202c38867e1fef1b90dbe16f627ab5222368`; no confundir con un merge realizado.
+- **Verificación independiente vía GitHub:** 30/30 workflows `success` para el HEAD; **93 check-runs totales = 92 `success` + 1 `skipped` de `full-regression`** y 0 fallos o pendientes. La frase del agente «93 checks aprobados y 1 omisión» no coincide literalmente con el endpoint de checks; este documento adopta el recuento directo 92+1 sin desmerecer los 30 workflows.
+- **Comparación directa del master efectivo contra el HEAD:** 7 archivos de producto netos, 0 archivos de documentación netos: `index.html`, `js/film-plan-core.js`, `js/motion-quality-core.js`, `js/presentation-film.js`, `js/presentation-ui.js`, `js/shot-timeline-core.js`, `js/tour-video-ui.js`. La lista de la PR puede mostrar 17 archivos por la historia previa a la recomposición; para este corte se usa el compare `c355bdf8...4d2eee78`.
+- **Preview verificada en Vercel:** [`floorplan-3d-oy95100ew`](https://floorplan-3d-oy95100ew-juanma-espinosas-projects.vercel.app) deployment `dpl_J14X9qmGKYiwFSmCy8sH3JtFLZW7`, `READY` y Git SHA `4d2eee7859ee0bc4922c2b0adb817678cbb99c66`, **no Production**. La identidad de los siete blobs con lo aprobado visualmente está documentada en la PR [H]; esta adenda comprobó árbol, diff, CI y destino Vercel, no repitió los recorridos audiovisuales.
+- **Cierre de B:** [P/H] la aceptación visual anterior se registra en el cuerpo de PR; pendiente autorización específica para **merge commit** y despliegue automático habitual de Production **sobre ese HEAD y base exactos**. Si cambia alguno, revalidar. A0 no está en el delta de B y sigue bloqueado por separado.
+
+**UX-312 / PERLA — inspección independiente de LAB, NO producto integrado:**
+- Fuente congelada: [auditoría UX-312 H1/F4](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/blob/761bea377ede3993c1740bf10dfe3beebdd7aca4/AUDITORIAS/UX-312-H1-F4-20261122/AUDITORIA.md). [H] H1: inventario de 101 elementos, 606 verificaciones dirigidas en seis viewports; falta T3 paridad funcional en el producto y medición conjunta de las tres reducciones de altura.
+- Dos configuradores de Dibujo vivo/Evolución: 12 recorridos Linux HTTP de laboratorio, tres motores Chromium/Firefox/WebKit, escritorio y móvil emulado: **cero operaciones de almacenamiento detectadas**, sin nuevas claves; no equivale a garantía de no escritura en rutas productivas ni móvil físico.
+- La sonda original de capturas podía **no interceptar escrituras en Firefox y WebKit** al asignar `setItem` sobre objetos Storage. Una sonda independiente instrumentó prototipos, altas/borrados/vaciados y IndexedDB; detectó controles de escritura conocidos en los tres motores. No reutilizar la sonda defectuosa para un GO.
+- F2 puede proseguir aislado según su coordinación y decisiones aprobadas; **F3/F4** deben coordinar entradas con A0 y `js/presentation-ui.js` con B. Permanecen pendientes integración producto, QA de paridad, verificación de no escritura en demos conectadas y aceptación por SHA.
+
+**M01 / A0 #310 — NO-GO reforzado por reproducción real en LAB:**
+- Fuente: [escritura de documentos con testigos visibles](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/blob/323179f74158e56cf567d00266bc0e5be7923875/COMPONENTES/A-construccion-procedural/final-hero/integracion-ci-309/codex-a0-post311/escritura-documentos-testigos.md), prueba de edición sintética con dos pestañas y Firefox/WebKit persistentes.
+- Composición aislada `d45e579a587a527559789b83e8e90ef3435396f8` sobre master `c355bdf8...` y A0 #310 `2c7e773...`. **8 casos disconformes + 4 controles correctos**: testigos `rubik-sota-v2-switching` y `rubik-sota-v2-switched` permiten confirmación de escritura en origen normal y F0.2b; el marcador definitivo de época 2 sí bloquea. El proyecto permanece en memoria y no se han demostrado pérdidas de Production. Las pruebas cuentan dos clases de defecto distintas: reconocimiento de testigos y orden de barreras/visibilidad del marcador.
+- Criterio de cierre: rechazar testigos e ilegibles, proteger documentos+imágenes **antes** del marcador visible, no rechazar escrituras legítimas previas a la barrera; reproducir en Chromium/Firefox/WebKit y dispositivos prescritos. Hasta entonces **NO MERGE de A0; NO F0.2c/F0.3; NO MIGRACIÓN**. CI general verde de #310 no revoca el NO-GO.
+
+**Regla anti-solapamiento después de esta adenda:** Codex mantiene su rama #313 hasta decisión expresa. Claude conserva PERLA aislado y coordina F3/F4 para no sobrescribir `js/presentation-ui.js` ni los puntos críticos de persistencia. El defecto A0 tiene dueño/gate propio. Ningún agente debe reimplementar #311 ni asignar UX-312 como si fuera integrado en Production.
+
+**Autorizaciones de esta publicación:** se modifica solamente esta documentación. No se autoriza merge de #313, A0, F03 ni UX-312; tampoco gastos, migraciones ni Production. Para #313, el propietario debe pronunciarse explícitamente sobre la base `c355bdf8…`, HEAD `4d2eee78…` y árbol `2692e943…`. El próximo corte tras una eventual fusión de #313 debe registrar el merge SHA efectivo, CI y despliegue Production sin modificar retrospectivamente los hechos de este corte.
+
+---
+
 **Corte de referencia: 22/11/2026 · v1.0 · documento operativo, solo documentación.**
 
 > **IMPORTANTE PARA CUALQUIER AGENTE QUE RETOME EL PROYECTO:** este informe congela un corte verificable, **no es un estado en tiempo real**. Antes de actuar, volver a consultar `master`, las PR abiertas, sus HEAD y checks, y Production. No volver a ejecutar ni desarrollar una capacidad fusionada por el mero hecho de que una tabla histórica la describa como pendiente. Tampoco deducir autorización de una nota o una CI verde.
