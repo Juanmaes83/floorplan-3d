@@ -73,7 +73,7 @@ module.exports = ({ getBrowser, getOrigin }) => {
   const engine=process.env.RUBIK_TOUR_BROWSER||'chromium';
   async function get(t){
     if(engine==='chromium')return getBrowser();
-    const b=await playwright[engine].launch();
+    const b=await playwright[engine].launch({headless:process.env.RUBIK_TOUR_HEADED!=='1'});
     t.after(()=>b.close());
     return b;
   }
@@ -152,8 +152,20 @@ module.exports = ({ getBrowser, getOrigin }) => {
       await page.waitForFunction(text=>document.getElementById('presentationVideoAvailability').textContent.includes(text),pattern);
       await assertReachable(page,new RegExp(pattern));
     };
+    // Let the real navigation enter its moving state before advancing the renderer. Some stops complete within one
+    // browser task on fast engines, so a locator started after the click can miss the whole transient state.
+    await page.evaluate(()=>{
+      const go=View3D.presentationGo;
+      const hold=new Promise(resolve=>{window.releaseVideoTestMove=resolve;});
+      View3D.presentationGo=async function(...args){
+        View3D.presentationGo=go;
+        await hold;
+        return go.apply(this,args);
+      };
+    });
     await page.locator('.presentation-nav button').last().click();
     await activeBlock('Espera a que la cámara');
+    await page.evaluate(()=>window.releaseVideoTestMove());
     await settled(page);await assertReachable(page);
     await page.locator('#presentationBatch').click();
     await activeBlock('Espera a que termine el lote');
