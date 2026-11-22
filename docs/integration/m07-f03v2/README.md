@@ -78,6 +78,27 @@ La activación es solo de la sesión: no se guarda, no se exporta, no cambia geo
   - activación en 5,4 s con la máquina cargada (1,8 s en el laboratorio sin carga).
 - **Pendiente:** medir en una GPU física, de escritorio y de móvil. No se afirma ningún rendimiento real.
 
+## Revalidación con #313 y coordinación de `index.html`
+
+- **Con #313** (`codex/simulator-b-post311@7ef72889` + M07): F3-01, 02, 09, **10** (Presentación), 12 y 13 dan **6/6 PASS** (`qa-pr313-7ef72889.json`).
+- **`index.html`:** #313 solo añade un bloque de `<script>` hacia la línea 6126. Los cambios de M07 están en las zonas 3210–3240 y 5950–5980; el de M13 es una línea junto a `construction-schedule-core.js`. No se solapan, y aplican en cualquier orden.
+- **Cuando #313 se integre:** repetir F3-10 sobre el master resultante:
+
+  ```bash
+  QA_SOLO=F3-10 node tools/qa.cjs <copia> <master>
+  ```
+
+## Cambio escritorio ↔ móvil, recursos y captura para Blender
+
+- **Defecto corregido** (reproducido antes por la prueba): al cruzar 1100 px con V2 activo se conservaba HERO (41,9 MB) en móvil. Ahora se vuelve a aplicar con el modo nuevo: en móvil todo es equilibrado (≤17 MB), con los mismos muros; al volver a escritorio no se acumula nada; OFF devuelve las texturas y geometrías a la base. Lo cubre la prueba 3 de `tests/m07-f03v2.browser.test.cjs`.
+- **Captura «Escena para Blender» (OP-10) con V2 activo:**
+  - es una **observación** de lo que se ve: geometría idéntica;
+  - los muros V2 se declaran con `hasMap` y `hasNormalMap`; las texturas nunca viajan, igual que en master con los acabados texturizados;
+  - la **exportación canónica** (`scripts/interop/export.cjs`, a partir del proyecto) es idéntica;
+  - tras OFF, la captura vuelve a ser la de master.
+
+  Lo cubre la prueba 4. No se ha tocado el módulo de captura de Blender.
+
 ## Riesgos y pendientes
 
 - **Aprobación visual humana** de los 4 materiales nuevos: estado `VISUAL_PENDING_HUMAN` en el núcleo. Es la decisión que se solicita.
