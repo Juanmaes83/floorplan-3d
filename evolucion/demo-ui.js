@@ -32,7 +32,7 @@
   // The player pauses right after its last frame: check once it has stopped.
   if(!dismissed&&(!card||card.hidden))setTimeout(()=>{
    // SCULPT A · HERO final: si el desenlace se está reproduciendo, la tarjeta llega cuando termina, no encima de él.
-   if(window.__rubikFinal?.activo||window.__rubikFinal?.pendiente){window.addEventListener('rubik-final-fin',()=>{if(dismissed||(card&&!card.hidden))return;window.__rubikFinal?.salir?.();end();},{once:true});return;}
+   if(window.__rubikFinal?.activo||window.__rubikFinal?.pendiente){window.addEventListener('rubik-final-fin',()=>{if(!dismissed&&(!card||card.hidden))end();},{once:true});return;}
    if(!dismissed&&!F()?.playing&&F()?.last?.stage==='final'&&(!card||card.hidden))end();},400);});
  window.__ft3dDemo={end,howTo,close};
 })();

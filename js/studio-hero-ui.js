@@ -104,8 +104,15 @@
  // ---------------------------------------------------------------- STUDIO (área «Mi estudio»): visión + tarjeta principal
  /** Banda «Imaginar. Diseñar. Construir. Presentar.» conectada a las rutas reales del producto (no es una página aparte). */
  /** Imagen REAL de RUBIK sobre la vivienda de ejemplo (dibujo vivo de Hybrid V2 con three.js; evolución de obra), rotulada.
-  *  Si el recurso no carga, la alternativa del propio proyecto. */
- function ejemplo(box,src,alternativa){const i=el('img',undefined,box);i.alt='';i.src=src;i.onerror=()=>{i.remove();box.querySelector('.studio-vision-badge')?.remove();alternativa();};
+  *  Si el recurso no carga, la alternativa del propio proyecto. Decorativa (su columna ya está rotulada: número, título y
+  *  resumen; el contenedor es aria-hidden). Se crea y se pide SOLO cuando su columna entra en pantalla: abrir la Home o
+  *  entrar al editor no descarga nada que nadie vea (contrato de privacidad F2). Mismo archivo y misma calidad; el hueco
+  *  conserva tamaño y color, sin salto de maquetación. Sin IntersectionObserver, se carga como siempre. */
+ function ejemplo(box,src,alternativa){
+  const poner=()=>{if(box.querySelector('img'))return;const i=document.createElement('img');i.className='studio-vision-shot';i.alt='';i.decoding='async';i.width=960;i.height=600;
+   i.onerror=()=>{i.remove();box.querySelector('.studio-vision-badge')?.remove();alternativa();};i.src=src;box.prepend(i);};
+  if(typeof IntersectionObserver!=='function')poner();
+  else{const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();poner();}});io.observe(box);}
   el('span',tx('Vivienda de ejemplo','Example home','示例住宅'),box,'studio-vision-badge');}
  /* Visión STUDIO (referencia del propietario 20/11): cinco columnas — imagen real de la vivienda de ejemplo, número, título
     y resumen — y, al pulsar «Opciones de …», la columna se amplía con sus servicios, cada uno conectado a la ruta EXISTENTE
@@ -247,8 +254,10 @@
  function home(){const d=document.getElementById('welcomeDialog');if(!d||d.querySelector('[data-module="studio-vision"]'))return false;
   // Home de RUBIK = #welcomeDialog (HOM-01…04: no hay otra página de inicio). Se coloca tras «Descubre RUBIK en acción» y
   // antes de «Lo que puedes hacer hoy»; ninguna sección existente se quita ni se mueve.
-  const ancla=d.querySelector('#welcomeInAction'),w=document.createElement('div');w.className='studio-hero-area studio-home';
-  if(ancla)ancla.after(w);else (d.querySelector('form,.welcome-body,.welcome')||d).append(w);vision(w,{donde:'home'});return true;}
+  // Solo cuando master ha construido la bienvenida (buildWelcome: existe su ancla). En una sesión que entra directa al editor
+  // el diálogo está vacío: no se monta nada, ni imágenes ni peticiones; se montará si la bienvenida llega a construirse.
+  const ancla=d.querySelector('#welcomeInAction');if(!ancla)return false;const w=document.createElement('div');w.className='studio-hero-area studio-home';
+  ancla.after(w);vision(w,{donde:'home'});return true;}
  /** Área STUDIO: la visión y la tarjeta PRINCIPAL de personalización. */
  function studio(grid){if(!grid||grid.querySelector('[data-module="studio-vision"]'))return;const wrap=document.createElement('div');wrap.className='studio-hero-area';grid.prepend(wrap);vision(wrap);card(wrap);}
  /** Entregar: solo un ACCESO DIRECTO a la misma configuración (misma tarjeta, misma autoridad FloorPlanBrand). */

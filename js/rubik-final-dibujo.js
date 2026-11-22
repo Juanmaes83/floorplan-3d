@@ -14,7 +14,9 @@
 (function(root,factory){const api=factory(root.RubikFinalCore||(typeof require==='function'?require('./final-core.cjs'):null));
  if(typeof module==='object'&&module.exports)module.exports=api;else root.RubikFinalDibujo=api;})(typeof globalThis!=='undefined'?globalThis:this,function(C){
  'use strict';
- if(!C)throw new Error('final-dibujo: falta RubikFinalCore');
+ // Sin el núcleo común (recurso no servido o bloqueado) el epílogo no existe y la presentación queda exactamente como en
+ // master: no se lanza ningún error que pueda interrumpir el arranque del editor.
+ if(!C){if(typeof console!=='undefined')console.warn('HERO dibujo vivo: falta RubikFinalCore; epílogo desactivado');return undefined;}
  const VERSION='rubik-final-dibujo/1';
  const FASES=Object.freeze(['grafito','construccion','realidad','firma']);
  const DURACIONES=Object.freeze({grafito:3500,construccion:6000,realidad:8000,firma:6500});

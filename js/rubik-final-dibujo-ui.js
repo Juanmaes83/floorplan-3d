@@ -25,7 +25,9 @@
  function firma(){const S=window.RubikStudioHero,st=S?.leer?.(),nombre=window.FloorPlanApp?.project?.name||'';
   return C.firma({marca:S&&st?S.marca(st):null,proyecto:st?.titulo||C.textoVisible(nombre,L()),lang:L(),contexto:'dibujo'});}
  /** Estado de la narrativa (presentationStoryApply): pinta los títulos en su fase de firma; fuera de ella, nada. */
- function estado(st){ultimo=st;const h=st?.hero;interfaz(!h||controles?1:h.interfaz);if(!h||h.firma<=0){if(cv)cv.getContext('2d').clearRect(0,0,cv.width,cv.height);if(cv)cv.dataset.firma='0';return;}
+ // La interfaz técnica se retira solo MIENTRAS el epílogo se reproduce; en el final sostenido vuelve entera (barra de la demo,
+ // «Volver al inicio», «Continuar presentación»): sobre un final en reposo nada queda tapado ni sin poder pulsarse.
+ function estado(st){ultimo=st;const h=st?.hero,quieto=!!h?.fin;interfaz(!h||controles||quieto?1:h.interfaz);if(!h||h.firma<=0){if(cv)cv.getContext('2d').clearRect(0,0,cv.width,cv.height);if(cv)cv.dataset.firma='0';return;}
   const c=capa();if(!c)return;const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);const f=firma();
   T.pintar(x,c.width,c.height,f,{progreso:h.firma,estilo:f.estilo,logo:logo(f.logo)});c.dataset.firma=String(h.firma);c.dataset.fase=h.fase;}
  function fin(){ultimo=null;controles=false;interfaz(1);cv?.remove();cv=null;}

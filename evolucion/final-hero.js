@@ -219,10 +219,14 @@ window.addEventListener('ft3d8-moment',e=>{if(window.__ft3dDelivery?.state?.reco
  const fin=e.detail?.stage==='final',fid=F();
  if(!fin){llegada=false;if(activo)salir();else limpiarDecor();return;}
  if(llegada)return;llegada=true;if(!autoDisparo)return;
+ // Laboratorio de QA (?lab=1, no publicado): las puertas GOV-07 y Gate D miden la Evolución en reposo; allí el HERO solo
+ // arranca a petición (reproducir), nunca solo. Demo, biblioteca y Entrega no cambian.
+ if(window.__ft3dSource?.mode==='lab')return;
  if(fid?.playing||window.__ft3dSource?.mode==='demo'){pendiente=true;reproducir().finally(()=>{pendiente=false;});}});
 // Cualquier gesto del usuario sale del HERO (la interfaz vuelve intacta). Escape también.
-for(const ev of ['pointerdown','wheel'])document.addEventListener(ev,e=>{if(activo&&!e.target.closest?.('.rf-firma'))salir();},{capture:true,passive:true});
-document.addEventListener('keydown',e=>{if(activo&&(e.key==='Escape'||e.key===' '||e.key.startsWith('Arrow')))salir();},{capture:true});
+// La tarjeta final de la demo llega SOBRE el desenlace sostenido: usarla (Cómo hacerlo, Volver a ver…) no es un gesto de salida.
+for(const ev of ['pointerdown','wheel'])document.addEventListener(ev,e=>{if(activo&&!e.target.closest?.('.rf-firma,#demoEnd'))salir();},{capture:true,passive:true});
+document.addEventListener('keydown',e=>{if(activo&&!e.target.closest?.('#demoEnd')&&(e.key==='Escape'||e.key===' '||e.key.startsWith('Arrow')))salir();},{capture:true});
 // Proyecto nuevo: la capa decorativa se rehace para él.
 window.addEventListener('ft3d8-loaded',()=>{if(activo)salir();limpiarDecor();});
 // Al abandonar la página no queda nada retenido.
