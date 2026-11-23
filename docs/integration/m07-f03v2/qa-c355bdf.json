@@ -1,0 +1,420 @@
+{
+ "schema": "rubik-f03-v2-qa/1",
+ "fecha": "2026-11-22T19:56:10.378Z",
+ "entorno": {
+  "node": "v22.23.4",
+  "navegador": "chromium (SwiftShader)",
+  "nota": "móvil y tableta emulados"
+ },
+ "resumen": "15/15 PASS",
+ "casos": [
+  {
+   "id": "F3-01",
+   "titulo": "Pruebas puras (V1 intacta + V2) y regresiones de los núcleos relacionados; derivados íntegros contra su manifiesto; licencias y procedencia completas",
+   "resultado": "PASS",
+   "detalle": {
+    "tests": {
+     "tests/facade-fidelity.test.cjs": {
+      "pass": 9,
+      "fail": 0
+     },
+     "tests/surface-fidelity.test.cjs": {
+      "pass": 3,
+      "fail": 0
+     },
+     "tests/visual-families.test.cjs": {
+      "pass": 3,
+      "fail": 0
+     }
+    },
+    "materialesV2": [
+     "painted_plaster_wall",
+     "patterned_clay_plaster",
+     "brushed_concrete_03",
+     "wood_planks_grey"
+    ],
+    "mapasVerificados": 24,
+    "manifiestoV1": "idéntico a master"
+   }
+  },
+  {
+   "id": "F3-02",
+   "titulo": "Ruta real completa: importar el proyecto → Escena 3D → «Detalle arquitectónico» → «Fachadas ▾» explica la elegibilidad → activar F03 V2 → mejora aplicada → desactivar → vuelve EXACTAMENTE a B → detalle OFF vuelve a A; proyecto, cámara y presentación intactos",
+   "resultado": "PASS",
+   "detalle": {
+    "lista": [
+     {
+      "texto": "Revoco pintado8 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Revestimiento de madera4 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Revoco de arcilla texturado3 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Hormigón visto2 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Sin acabado asignado11 muros",
+      "elegible": "false"
+     },
+     {
+      "texto": "Suelo de pizarra1 muro · Sin material de fachada fiel: se conserva",
+      "elegible": "false"
+     }
+    ],
+    "estado": "Activo en 17 muros.",
+    "C": {
+     "activos": 17,
+     "materiales": [
+      {
+       "id": "painted_plaster_wall",
+       "perfil": "hero",
+       "muros": 8,
+       "m2": 29.46
+      },
+      {
+       "id": "patterned_clay_plaster",
+       "perfil": "hero",
+       "muros": 3,
+       "m2": 21.17
+      },
+      {
+       "id": "brushed_concrete_03",
+       "perfil": "balanced",
+       "muros": 2,
+       "m2": 18.96
+      },
+      {
+       "id": "wood_planks_grey",
+       "perfil": "balanced",
+       "muros": 4,
+       "m2": 7.81
+      }
+     ],
+     "gpuBytesEstimados": 41943048,
+     "presupuesto": {
+      "cap": 42000000,
+      "used": 41943048
+     }
+    },
+    "retornoExacto": {
+     "B": true,
+     "A": true
+    }
+   }
+  },
+  {
+   "id": "F3-03",
+   "titulo": "Tres ciclos ON/OFF sin fugas (objetos del renderizador y recursos propios) y reconstrucción de escena (2D→3D) con V2 activo: se reaplica sola y sin duplicar",
+   "resultado": "PASS",
+   "detalle": {
+    "base": {
+     "geometries": 1121,
+     "textures": 15
+    },
+    "ciclos": [
+     {
+      "on": {
+       "geometries": 1138,
+       "textures": 27
+      },
+      "off": {
+       "geometries": 1121,
+       "textures": 15
+      }
+     },
+     {
+      "on": {
+       "geometries": 1138,
+       "textures": 27
+      },
+      "off": {
+       "geometries": 1121,
+       "textures": 15
+      }
+     },
+     {
+      "on": {
+       "geometries": 1138,
+       "textures": 27
+      },
+      "off": {
+       "geometries": 1121,
+       "textures": 15
+      }
+     }
+    ],
+    "reconstrucciones": [
+     {
+      "corte": "1.2",
+      "v2": true,
+      "status": "ready",
+      "texturas": 12,
+      "materiales": 4,
+      "muros": 17,
+      "renderer": {
+       "geometries": 1155,
+       "textures": 27
+      }
+     },
+     {
+      "corte": "2.8",
+      "v2": true,
+      "status": "ready",
+      "texturas": 12,
+      "materiales": 4,
+      "muros": 17,
+      "renderer": {
+       "geometries": 1138,
+       "textures": 27
+      }
+     }
+    ],
+    "trasSalirDe3D": {
+     "v2": false,
+     "detalle": false,
+     "texturas": 0
+    }
+   }
+  },
+  {
+   "id": "F3-04",
+   "titulo": "Cambio de proyecto con V2 activo: se desactiva, libera todo y el nuevo proyecto no hereda la mejora",
+   "resultado": "PASS",
+   "detalle": {
+    "trasCambio": {
+     "v2": false,
+     "detalle": false,
+     "texturas": 0
+    }
+   }
+  },
+  {
+   "id": "F3-05",
+   "titulo": "Pérdida de contexto WebGL con V2 activo: se libera sin error; al recuperar la escena se puede volver a activar",
+   "resultado": "PASS",
+   "detalle": {
+    "perdida": {
+     "v2": false,
+     "textures": 0,
+     "status": "off"
+    },
+    "recuperacion": "ready",
+    "errores": []
+   }
+  },
+  {
+   "id": "F3-06",
+   "titulo": "Carga fallida: sin los mapas de un material → parcial (el resto se aplica, ese muro conserva su acabado y se explica); sin manifiesto → respaldo completo; con el servidor sano se recupera",
+   "resultado": "PASS",
+   "detalle": {
+    "parcial": {
+     "status": "partial",
+     "activos": 13,
+     "error": "wood_planks_grey: HTTP 503: assets/materials/f03/v2/wood_planks_grey/balanced/albedo.webp"
+    },
+    "respaldo": {
+     "status": "fallback",
+     "error": "painted_plaster_wall: Manifiesto F03 v2 no disponible (HTTP 503) · patterned_clay_plaster: Manifiesto F03 v2 no disponible (HTTP 503) · brushed_concrete_03: Manifiesto F03 v2 no disponible (HTTP 503) · wood_planks_grey: Manifiesto F03 v2 no disponible (HTTP 503)"
+    },
+    "recuperado": "ready"
+   }
+  },
+  {
+   "id": "F3-07",
+   "titulo": "Regresión F02 V2 y F03 V1 «white_stucco» contra master sin cambios: con V2 apagado, el detalle arquitectónico es PÍXEL A PÍXEL igual que en master; con V2, los presets de V1 conservan su material",
+   "resultado": "PASS",
+   "detalle": {
+    "B": {
+     "activos": [
+      "wal_ref-w18",
+      "wal_ref-w7"
+     ],
+     "carpinterias": 12,
+     "identicoAMaster": true
+    },
+    "C": [
+     {
+      "id": "white_stucco",
+      "muros": 2,
+      "perfil": "hero"
+     },
+     {
+      "id": "rough_plaster_03",
+      "muros": 1,
+      "perfil": "hero"
+     },
+     {
+      "id": "painted_plaster_wall",
+      "muros": 1,
+      "perfil": "balanced"
+     }
+    ]
+   }
+  },
+  {
+   "id": "F3-08",
+   "titulo": "Guardado, historial y deshacer: activar V2 no escribe en el proyecto ni en el almacenamiento ni en el historial; exportar con V2 activo da el mismo proyecto; deshacer/rehacer siguen funcionando",
+   "resultado": "PASS",
+   "detalle": {
+    "almacenamientoIntacto": true,
+    "historialIntacto": true,
+    "exportacionIdentica": true,
+    "deshacer": {
+     "aplicado": "surface-brushed-concrete-03",
+     "deshecho": "surface-painted-plaster-wall"
+    },
+    "trasEdicion": {
+     "v2": false,
+     "status": "off",
+     "activos": 0
+    }
+   }
+  },
+  {
+   "id": "F3-09",
+   "titulo": "Render bajo demanda (OP-02): con V2 activo y la cámara quieta no se dibujan fotogramas; el material aparece sin necesitar interacción",
+   "resultado": "PASS",
+   "detalle": {
+    "fotogramasEnReposo": 0,
+    "bucleActivo": false
+   }
+  },
+  {
+   "id": "F3-10",
+   "titulo": "Convivencia con «Presentar mi vivienda» y la captura 3D: con V2 activo la presentación arranca, la mejora se mantiene y al salir sigue aplicada",
+   "resultado": "PASS",
+   "detalle": {
+    "durante": {
+     "v2": true,
+     "status": "ready",
+     "activos": 17
+    },
+    "despues": {
+     "v2": true,
+     "status": "ready"
+    }
+   }
+  },
+  {
+   "id": "F3-11",
+   "titulo": "ES/EN/ZH: el control y el menú se traducen; ningún carácter chino en ES ni EN",
+   "resultado": "PASS",
+   "detalle": {
+    "es": {
+     "cjk": false,
+     "muestra": "Detalle arquitectónico | Fachadas ▾ | Materiales de fachada fieles · experimental\nUsa la versión PBR completa del acabado asignado a cada muro exterior. Sólo en esta sesión: no cambia el proyecto.\n\nActivo en 17 muros.\n\nRevoco pintado\n8 muros · HERO 1024\nRevest"
+    },
+    "en": {
+     "cjk": false,
+     "muestra": "Architectural detail | Facades ▾ | Faithful facade materials · experimental\nUses the full PBR version of the finish assigned to each exterior wall. This session only: the project is not changed.\n\nActive on 17 walls.\n\nPainted render\n8 walls · HERO 1024\nTimber c"
+    },
+    "zh": {
+     "cjk": true,
+     "muestra": "建筑细节 | 立面 ▾ | 可靠立面材质 · 实验\n为每面外墙使用所指定饰面的完整 PBR 版本。仅限本次会话：不修改项目。\n\n已应用于 17 面墙。\n\n涂装抹灰\n8 面墙 · HERO 1024\n木饰面\n4 面墙 · 均衡 512\n纹理黏土抹灰\n3 面墙 · HERO 1024\n清水混凝土\n2 面墙 · 均衡 512\n未指定饰面\n11 面墙\nSuelo de pizarra\n1 面墙 · 无可靠立面材质：保持原样"
+    }
+   }
+  },
+  {
+   "id": "F3-12",
+   "titulo": "Teclado y foco: «Fachadas ▾» con aria-expanded; el interruptor es role=switch etiquetado; Espacio lo cambia; Escape cierra y devuelve el foco; estado en región viva",
+   "resultado": "PASS",
+   "detalle": {
+    "abierto": "true",
+    "interruptor": {
+     "role": "switch",
+     "label": true,
+     "live": "polite",
+     "controls": "facadeV2Pop"
+    },
+    "trasEspacio": true,
+    "cerrado": {
+     "hidden": true,
+     "foco": "facadeV2Menu",
+     "exp": "false"
+    }
+   }
+  },
+  {
+   "id": "F3-13",
+   "titulo": "Móvil 390×844 y 844×390: menú dentro de la pantalla, controles ≥ 40 px, perfil equilibrado dentro de 17 MB estimados",
+   "resultado": "PASS",
+   "detalle": {
+    "vertical": {
+     "dentro": true,
+     "alto": 77,
+     "ancho": 366,
+     "perfiles": [
+      "balanced"
+     ],
+     "gpuBytes": 16777224,
+     "status": "ready"
+    },
+    "horizontal": {
+     "dentro": true,
+     "alto": 44,
+     "ancho": 380,
+     "perfiles": [
+      "balanced"
+     ],
+     "gpuBytes": 16777224,
+     "status": "ready"
+    }
+   }
+  },
+  {
+   "id": "F3-14",
+   "titulo": "Rendimiento y recursos (SwiftShader): tiempo de activación, fotogramas p50/p95 al orbitar con V2 apagado y encendido, bytes descargados y memoria GPU estimada; sin fugas tras desactivar",
+   "resultado": "PASS",
+   "detalle": {
+    "nota": "RAF en SwiftShader (render por software): no es tiempo de GPU real; la memoria GPU es ESTIMADA (RGBA8 + mipmaps), no medida del driver",
+    "activacionMs": 5441,
+    "fotogramaMs": {
+     "off": {
+      "p50": 2165.9,
+      "p95": 2559.6
+     },
+     "on": {
+      "p50": 2213,
+      "p95": 2514.4
+     }
+    },
+    "descargadoBytes": 5313052,
+    "gpuEstimadoBytes": 41943048,
+    "presupuesto": {
+     "cap": 42000000,
+     "used": 41943048
+    },
+    "renderer": {
+     "antes": {
+      "geometries": 1121,
+      "textures": 15
+     },
+     "activo": {
+      "geometries": 1138,
+      "textures": 27
+     },
+     "despues": {
+      "geometries": 1121,
+      "textures": 15
+     }
+    }
+   }
+  },
+  {
+   "id": "F3-15",
+   "titulo": "Regresión del producto: tests/surfaces.browser.test.cjs (biblioteca de acabados y su render) pasa sobre la copia",
+   "resultado": "PASS",
+   "detalle": {
+    "pass": 8,
+    "fail": 0
+   }
+  }
+ ]
+}
