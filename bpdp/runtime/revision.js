@@ -6,10 +6,15 @@
  *  - en el laboratorio: la revisión del paquete (no hay editor que lo cambie), salvo que una prueba sustituya la sonda.
  * Si difieren, la salida se identifica como OBSOLETA y no se ofrece como vigente. */
 const sortKeys = v => Array.isArray(v) ? v.map(sortKeys) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sortKeys(v[k])])) : v;
-const sha = async s => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)))].map(b => b.toString(16).padStart(2, '0')).join('');
+export const hashProject = async s => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)))].map(b => b.toString(16).padStart(2, '0')).join('');
+export function snapshotLiveProject() {
+  const app = window.FloorPlanApp;
+  const project = app.levelContext ? { ...app.project, site: window.FloorPlanBuildingUI?.site } : app.project;
+  return JSON.stringify(sortKeys(project));
+}
 export function probeFor(pkg) {
   if (typeof pkg.revisionProbe === 'function') return pkg.revisionProbe; // punto de prueba documentado
-  if (pkg.source?.live && window.FloorPlanApp?.project) return () => sha(JSON.stringify(sortKeys(window.FloorPlanApp.project)));
+  if (pkg.source?.live && window.FloorPlanApp?.project) return () => hashProject(snapshotLiveProject());
   return async () => pkg.revision;
 }
 /** Estado de vigencia de una salida preparada con `revision`. */

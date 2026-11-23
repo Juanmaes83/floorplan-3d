@@ -189,7 +189,7 @@
   // built in memory) and «Dibujo vivo» (?demo=dibujo-vivo, the existing presentation of the example; js/home-demos.js).
   const inAction=el('section',undefined,shell,'welcome-in-action');inAction.id='welcomeInAction';inAction.setAttribute('aria-labelledby','welcomeInActionTitle');
   el('h2',tx('Descubre RUBIK en acción','See RUBIK in action','观看 RUBIK 实际效果'),inAction).id='welcomeInActionTitle';
-  el('p',tx('Dos demostraciones con la vivienda de ejemplo, sin cuenta ni proyecto, que no cambian nada, y dos módulos que siguen en el laboratorio.','Two demos with the example home, with no account or project, that change nothing, and two modules still in the lab.','两个使用示例住宅的演示（无需账户或项目，不更改任何内容），以及两个仍在实验室中的模块。'),inAction,'lead');
+  el('p',tx('Explora cuatro demostraciones con la vivienda de ejemplo de RUBIK.','Explore four demonstrations with the RUBIK example home.','使用 RUBIK 示例住宅探索四个演示。'),inAction,'lead');
   const demoCards=el('div',undefined,inAction,'demo-cards');
   for(const [id,img,kicker,title,text,note,action,href] of [
    ['evolucion-obra','assets/welcome/demo-evolucion-4d.webp',['Evolución de obra 4D','4D construction','4D 施工'],['Descubre cómo evoluciona una obra','See how a build evolves','查看施工如何推进'],
@@ -204,16 +204,13 @@
    btn('welcomeDemo-'+id,label(action),()=>{location.href=href;},body,true).classList.add('demo-card-go');
    // «Personalizar esta demo» abre el configurador vigente de Evolución; sigue siendo temporal (no guarda nada).
    if(id==='evolucion-obra')btn('welcomeDemoCustomize-'+id,tx('Personalizar esta demo','Customise this demo','自定义此演示'),()=>{location.href=href+'&personalizar=1';},body).classList.add('guide-link');}
-  // UX-312 #321 (corrección 2): Blueprint 3D y Despiece 3D (laboratorio de Claude Code 2). Capturas auténticas de su
-  // evidencia sobre el proyecto real de RUBIK, rotuladas como muestra de laboratorio. Sin enlace hasta que el propietario
-  // haya revisado su demo y aprobado la integración: la ficha lo dice y no promete un acceso que no existe.
-  for(const [id,img,title,text,state] of [
-   ['blueprint-3d','assets/welcome/demo-blueprint-3d.webp',['Blueprint 3D','Blueprint 3D','Blueprint 3D'],['Explica el diseño en 3D: planta, axonometría, sección y capas, con sus cotas.','Explains the design in 3D: plan, axonometric, section and layers, with dimensions.','以 3D 讲解设计：平面、轴测、剖面与图层，附尺寸。'],['Muestra de laboratorio sobre el proyecto real de RUBIK. Pendiente de tu revisión; todavía no está integrado.','Lab sample on the real RUBIK project. Pending your review; not yet integrated.','基于真实 RUBIK 项目的实验室样例。待你审核，尚未集成。']],
-   ['despiece-3d','assets/welcome/demo-despiece-3d.webp',['Despiece 3D','3D exploded view','3D 分解'],['Explica el montaje: separa suelos, muros, carpinterías, techos y mobiliario por familias.','Explains the assembly: separates floors, walls, joinery, ceilings and furniture by family.','讲解装配：按类别分离地面、墙体、门窗、天花与家具。'],['Muestra de laboratorio sobre el proyecto real de RUBIK. Pendiente de tu revisión; todavía no está integrado.','Lab sample on the real RUBIK project. Pending your review; not yet integrated.','基于真实 RUBIK 项目的实验室样例。待你审核，尚未集成。']]]){
-   const card=el('article',undefined,demoCards,'demo-card demo-card-lab');card.dataset.demo=id;
-   const fig=el('figure',undefined,card);realImg(fig,img,label(title)+' · '+tx('captura del laboratorio sobre el proyecto real de RUBIK','lab capture on the real RUBIK project','基于真实 RUBIK 项目的实验室截图'),'welcome-demo-shot');
-   el('figcaption',tx('Laboratorio · proyecto real de RUBIK','Lab · real RUBIK project','实验室 · 真实 RUBIK 项目'),fig,'demo-lab-tag');
-   const body=el('div',undefined,card,'demo-card-body');el('p',tx('En laboratorio','In the lab','实验室中'),body,'demo-card-kicker');el('h3',label(title),body);el('p',label(text),body);el('p',label(state),body,'demo-card-note');}
+  for(const [id,img,title,text,action,href] of [
+   ['blueprint-3d','assets/welcome/demo-blueprint-3d.webp',['Blueprint 3D','Blueprint 3D','Blueprint 3D'],['Explora la planta acotada, los alzados y las secciones.','Explore the dimensioned plan, elevations and sections.','查看标注平面图、立面和剖面。'],['Ver demo de Blueprint 3D','See Blueprint 3D demo','查看 Blueprint 3D 演示'],'bpdp/?demo=blueprint'],
+   ['despiece-3d','assets/welcome/demo-despiece-3d.webp',['Despiece 3D','3D exploded view','3D 分解'],['Separa los componentes por familias y vuelve a montar la vivienda.','Separate components by system and reassemble the home.','按系统分离构件并重新组装住宅。'],['Ver demo de Despiece 3D','See 3D exploded view demo','查看 3D 分解演示'],'bpdp/?demo=despiece&escena=rubik-real']]){
+   const card=el('article',undefined,demoCards,'demo-card');card.dataset.demo=id;
+   const fig=el('figure',undefined,card);realImg(fig,img,label(title),'welcome-demo-shot');
+   const body=el('div',undefined,card,'demo-card-body');el('h3',label(title),body);el('p',label(text),body);
+   btn('welcomeDemo-'+id,label(action),()=>{location.href=href;},body,true).classList.add('demo-card-go');}
   const PORTRAIT={architecture:'arquitectura','real-estate':'inmobiliaria',developer:'promotora',renovation:'reformas',interior:'decoracion',construction:'constructora'};
   const audienceSection=el('section',undefined,shell,'welcome-audience');audienceSection.id='welcomeAudience';
   const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
