@@ -99,3 +99,10 @@ body.professional-area:not(.presenting) .app>aside,body.professional-area:not(.p
 @media(prefers-reduced-motion:reduce){.professional-workspace *,.professional-nav *{animation:none!important;transition:none!important}}
 /* Short landscape phones: the area bar and the journey label give their height back to the plan (≥ 100 px). */
 @media(max-width:1100px) and (max-height:500px){.professional-nav{padding-top:2px;padding-bottom:2px}.professional-nav .btn{min-height:40px;padding-top:4px;padding-bottom:4px}.guide-journey-label{display:none}}
+/* UX-312 F3 · objetivos táctiles de 44 px (contrato T2) en Home, Mi estudio y Entregar. Solo con puntero grueso;
+   el escritorio no cambia. Únicamente altura mínima: mismos controles, mismas acciones. */
+@media (pointer:coarse){
+ #welcomeDialog .welcome-service .guide-link,#welcomeDialog .search-examples button,
+ .studio-vision-ia .studio-ia-btn,#professionalWorkspace .studio-hero .studio-hero-bar .btn,#professionalWorkspace .studio-hero-bar select,.studio-hero-form .btn,
+ #professionalBrandChoice .brand-select,.photo-reform-card-entry .photo-reform-open,#professionalWorkspace .delivery3d-actions .btn{min-height:44px}
+}
