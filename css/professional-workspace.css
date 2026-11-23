@@ -203,5 +203,6 @@ body.professional-area:not(.presenting) .app>aside,body.professional-area:not(.p
 }
 @media(max-width:760px){#professionalWorkspace .perla-delivery-context{grid-template-columns:1fr}}
 
-.perla-delivery-hero{min-width:0}
+.perla-delivery-hero{width:100%;min-width:0;align-self:start;overflow:hidden}
+.perla-delivery-hero img{position:absolute;inset:0}
 .perla-signature-shortcut.btn{justify-self:start;min-height:44px}
