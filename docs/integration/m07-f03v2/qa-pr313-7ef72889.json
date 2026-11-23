@@ -1,0 +1,187 @@
+{
+ "base": "codex/simulator-b-post311@7ef72889d6155d74e5c60fa0dcffad2deadf0f2e + M07",
+ "subset": [
+  "F3-01",
+  "F3-02",
+  "F3-09",
+  "F3-10",
+  "F3-12",
+  "F3-13"
+ ],
+ "resultado": "6/6 PASS",
+ "casos": [
+  {
+   "id": "F3-01",
+   "titulo": "Pruebas puras (V1 intacta + V2) y regresiones de los núcleos relacionados; derivados íntegros contra su manifiesto; licencias y procedencia completas",
+   "resultado": "PASS",
+   "detalle": {
+    "tests": {
+     "tests/facade-fidelity.test.cjs": {
+      "pass": 9,
+      "fail": 0
+     },
+     "tests/surface-fidelity.test.cjs": {
+      "pass": 3,
+      "fail": 0
+     },
+     "tests/visual-families.test.cjs": {
+      "pass": 3,
+      "fail": 0
+     }
+    },
+    "materialesV2": [
+     "painted_plaster_wall",
+     "patterned_clay_plaster",
+     "brushed_concrete_03",
+     "wood_planks_grey"
+    ],
+    "mapasVerificados": 24,
+    "manifiestoV1": "idéntico a master"
+   }
+  },
+  {
+   "id": "F3-02",
+   "titulo": "Ruta real completa: importar el proyecto → Escena 3D → «Detalle arquitectónico» → «Fachadas ▾» explica la elegibilidad → activar F03 V2 → mejora aplicada → desactivar → vuelve EXACTAMENTE a B → detalle OFF vuelve a A; proyecto, cámara y presentación intactos",
+   "resultado": "PASS",
+   "detalle": {
+    "lista": [
+     {
+      "texto": "Revoco pintado8 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Revestimiento de madera4 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Revoco de arcilla texturado3 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Hormigón visto2 muros · elegible",
+      "elegible": "true"
+     },
+     {
+      "texto": "Sin acabado asignado11 muros",
+      "elegible": "false"
+     },
+     {
+      "texto": "Suelo de pizarra1 muro · Sin material de fachada fiel: se conserva",
+      "elegible": "false"
+     }
+    ],
+    "estado": "Activo en 17 muros.",
+    "C": {
+     "activos": 17,
+     "materiales": [
+      {
+       "id": "painted_plaster_wall",
+       "perfil": "hero",
+       "muros": 8,
+       "m2": 29.46
+      },
+      {
+       "id": "patterned_clay_plaster",
+       "perfil": "hero",
+       "muros": 3,
+       "m2": 21.17
+      },
+      {
+       "id": "brushed_concrete_03",
+       "perfil": "balanced",
+       "muros": 2,
+       "m2": 18.96
+      },
+      {
+       "id": "wood_planks_grey",
+       "perfil": "balanced",
+       "muros": 4,
+       "m2": 7.81
+      }
+     ],
+     "gpuBytesEstimados": 41943048,
+     "presupuesto": {
+      "cap": 42000000,
+      "used": 41943048
+     }
+    },
+    "retornoExacto": {
+     "B": true,
+     "A": true
+    }
+   }
+  },
+  {
+   "id": "F3-09",
+   "titulo": "Render bajo demanda (OP-02): con V2 activo y la cámara quieta no se dibujan fotogramas; el material aparece sin necesitar interacción",
+   "resultado": "PASS",
+   "detalle": {
+    "fotogramasEnReposo": 0,
+    "bucleActivo": false
+   }
+  },
+  {
+   "id": "F3-10",
+   "titulo": "Convivencia con «Presentar mi vivienda» y la captura 3D: con V2 activo la presentación arranca, la mejora se mantiene y al salir sigue aplicada",
+   "resultado": "PASS",
+   "detalle": {
+    "durante": {
+     "v2": true,
+     "status": "ready",
+     "activos": 17
+    },
+    "despues": {
+     "v2": true,
+     "status": "ready"
+    }
+   }
+  },
+  {
+   "id": "F3-12",
+   "titulo": "Teclado y foco: «Fachadas ▾» con aria-expanded; el interruptor es role=switch etiquetado; Espacio lo cambia; Escape cierra y devuelve el foco; estado en región viva",
+   "resultado": "PASS",
+   "detalle": {
+    "abierto": "true",
+    "interruptor": {
+     "role": "switch",
+     "label": true,
+     "live": "polite",
+     "controls": "facadeV2Pop"
+    },
+    "trasEspacio": true,
+    "cerrado": {
+     "hidden": true,
+     "foco": "facadeV2Menu",
+     "exp": "false"
+    }
+   }
+  },
+  {
+   "id": "F3-13",
+   "titulo": "Móvil 390×844 y 844×390: menú dentro de la pantalla, controles ≥ 40 px, perfil equilibrado dentro de 17 MB estimados",
+   "resultado": "PASS",
+   "detalle": {
+    "vertical": {
+     "dentro": true,
+     "alto": 77,
+     "ancho": 366,
+     "perfiles": [
+      "balanced"
+     ],
+     "gpuBytes": 16777224,
+     "status": "ready"
+    },
+    "horizontal": {
+     "dentro": true,
+     "alto": 44,
+     "ancho": 380,
+     "perfiles": [
+      "balanced"
+     ],
+     "gpuBytes": 16777224,
+     "status": "ready"
+    }
+   }
+  }
+ ]
+}

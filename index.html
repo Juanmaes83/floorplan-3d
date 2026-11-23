@@ -3210,10 +3210,12 @@ const floorMats = {};
 const surfaceRenderer=new SurfaceRenderer(THREE,FloorPlanSurfaces);
 const windowVisual=new WindowVisualAdapter(THREE);
 const facadeVisual=new FacadeFidelityAdapter(THREE);
+// F03 V2: activación voluntaria por sesión (nunca se guarda en el proyecto). OFF por defecto.
+let facadeV2=false;
 let architecturalQualityProject=null,architecturalQualityError=null;
 function resetArchitecturalQuality(){
   architecturalQualityProject=null;architecturalQualityError=null;
-  facadeVisual.dispose();windowVisual.dispose();
+  facadeV2=false;facadeVisual.dispose();windowVisual.dispose();
   dispatchEvent(new Event('architectural-quality-status'));
 }
 function applyArchitecturalQuality(){
@@ -3230,9 +3232,21 @@ function applyArchitecturalQuality(){
     windowVisual.set({...options,sourceIds:eligible.map(source=>source.id)});
   }catch(error){windowVisual.dispose();architecturalQualityError=error.message;}
   // Match assigned wall finishes and keep the canonical frame, geometry and project unchanged.
-  facadeVisual.set(options);
+  applyFacadeFidelity(projectId,mode,options);
   dispatchEvent(new Event('architectural-quality-status'));
 }
+// F03: V1 (material único, comportamiento de master) o V2 (material del acabado asignado a cada muro).
+function applyFacadeFidelity(projectId,mode,options){
+  facadeVisual.maxAnisotropy=renderer?.capabilities?.getMaxAnisotropy?.()||4;
+  const done=facadeVisual.set(facadeV2?{projectId,enabled:true,mode,recipeVersion:2}:options);
+  done?.catch?.(error=>{architecturalQualityError=error.message;dispatchEvent(new Event('architectural-quality-status'));});
+  return done;
+}
+// Render bajo demanda (OP-02): las texturas llegan después; pedir el fotograma cuando el adaptador termina.
+addEventListener('facade-fidelity-status',()=>{if(active&&!contextLost)requestFrame();});
+// F03 V2 · el perfil depende del ancho (escritorio HERO / móvil equilibrado): al cruzar el umbral con el detalle activo
+// se vuelve a aplicar con el modo nuevo, para no conservar texturas HERO (≈42 MB) en el presupuesto móvil (≤17 MB).
+matchMedia('(max-width: 1100px)').addEventListener('change',()=>{if(architecturalQualityProject&&active&&!contextLost&&!storyRun){applyArchitecturalQuality();requestFrame();}});
 function floorMat(materialId){
   const external=surfaceRenderer.get(project.materials.find(m=>m.id===materialId));if(external)return external;
   const material=MATS[materialId];const kind=({'tile-800':'tile800','tile-600':'tile600','tile-300':'antislip'})[material.preset]||material.preset||'plain';
@@ -5947,7 +5961,16 @@ Object.assign(window.View3D,{
   },
   architecturalQuality(){
     return {enabled:!!architecturalQualityProject,windows:windowVisual.snapshot().active.length,
-      facade:facadeVisual.snapshot(),error:architecturalQualityError};
+      facade:facadeVisual.snapshot(),error:architecturalQualityError,facadeV2};
+  },
+  facadeFidelityV2Preview(){return facadeVisual.previewV2(geometry.source.id);},
+  // F03 V2: sólo con «Detalle arquitectónico» activo; reversible; no toca el proyecto ni sus materiales.
+  setFacadeFidelityV2(enabled){
+    if(!active||contextLost||storyRun)throw Error('Calidad visual no disponible en esta vista');
+    if(!architecturalQualityProject)throw Error('Activa antes «Detalle arquitectónico»');
+    facadeV2=!!enabled;architecturalQualityError=null;
+    const done=applyFacadeFidelity(geometry.source.id,matchMedia('(max-width: 1100px)').matches?'mobile':'editor',{projectId:geometry.source.id,enabled:true,mode:matchMedia('(max-width: 1100px)').matches?'mobile':'editor'});
+    dispatchEvent(new Event('architectural-quality-status'));requestFrame();return done;
   }
 });
 mountArchitecturalQuality(window.View3D);

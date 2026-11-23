@@ -9,41 +9,83 @@
     "maps": [
       {
         "id": "surface-herringbone-parquet",
-        "key": "[\"mat_surface-herringbone-parquet-floor\",\"surface-herringbone-parquet\",2000,3000]",
+        "key": "[\"mat_surface-herringbone-parquet-floor\",\"surface-herringbone-parquet\",2000,3000,false]",
         "state": "ready",
+        "detailState": "off",
         "bytes": 11452,
         "gpuBytes": 349526,
-        "loadMs": 4309.20000000298,
+        "loadMs": 4463.5,
+        "recipe": null,
+        "generated": null,
+        "ownedTextures": 1,
+        "ownedBitmaps": 1,
+        "physical": {
+          "type": "MeshStandardMaterial",
+          "clearcoat": 0,
+          "clearcoatRoughness": 0
+        },
+        "material": {
+          "color": "ffffff",
+          "roughness": 0.65,
+          "metalness": 0,
+          "normalScale": [
+            1,
+            1
+          ]
+        },
         "map": {
           "repeat": [
             0.5,
             0.3333333333333333
           ],
           "colorSpace": "srgb"
-        }
+        },
+        "normalMap": null,
+        "roughnessMap": null
       },
       {
         "id": "surface-white-plaster-02",
-        "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000]",
+        "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000,false]",
         "state": "ready",
+        "detailState": "off",
         "bytes": 7864,
         "gpuBytes": 349526,
-        "loadMs": 4269.399999991059,
+        "loadMs": 4435,
+        "recipe": null,
+        "generated": null,
+        "ownedTextures": 1,
+        "ownedBitmaps": 1,
+        "physical": {
+          "type": "MeshStandardMaterial",
+          "clearcoat": 0,
+          "clearcoatRoughness": 0
+        },
+        "material": {
+          "color": "ffffff",
+          "roughness": 0.92,
+          "metalness": 0,
+          "normalScale": [
+            1,
+            1
+          ]
+        },
         "map": {
           "repeat": [
             1,
             1
           ],
           "colorSpace": "srgb"
-        }
+        },
+        "normalMap": null,
+        "roughnessMap": null
       }
     ],
     "memory": {
-      "geometries": 1298,
-      "textures": 10
+      "geometries": 1189,
+      "textures": 11
     },
-    "canvas": 308,
-    "stage": 308,
+    "canvas": 257,
+    "stage": 257,
     "walls": [
       {
         "id": "wal_ref-w0",
@@ -1441,6 +1483,6 @@
       }
     ]
   },
-  "mapRequests": 132,
+  "mapRequests": 93,
   "pageErrors": []
 }

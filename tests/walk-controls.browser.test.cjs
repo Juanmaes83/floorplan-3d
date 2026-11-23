@@ -14,10 +14,11 @@ const skip=!process.env.THREE_LOCAL_DIR&&'THREE_LOCAL_DIR not set: the walk need
 const contract=require('../docs/contracts/examples/floorplan-project-v1.example.json');
 const record=(vp,control,expected,observed,pass,shot)=>{matrix.push({viewport:vp,control,expected,observed,result:pass?'PASS':'FAIL',shot});return pass;};
 
-async function open(t,viewport,project,input){
+async function open(t,viewport,project,input,{controlledClock=false}={}){
  const mobile=input?input==='touch':viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
+ if(controlledClock)await page.clock.install();
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);
  if(project){await page.evaluate(p=>FloorPlanApp.importProject(p),project);await page.waitForFunction(n=>FloorPlanApp.project.rooms.length===n,project.rooms.length);}
  const tap=async s=>{const l=page.locator(s);if(mobile)await l.tap();else await l.click();};
@@ -48,8 +49,8 @@ const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 const along=(a,b,v)=>((b[0]-a[0])*v[0]+(b[1]-a[1])*v[1])/Math.hypot(v[0],v[1]);
 
 test('desktop controls: keys, Shift, mouse, Esc, resume, focus, leave and return 1440x900',{timeout:900000,skip},async t=>{
- const vp='1440x900',{page,errors,where,hold,turnTo,shot,tap}=await open(t,{width:1440,height:900});
- await tap('[data-mode="walk"]');const start=await where();await page.locator('#walkOverlay').click();
+ const vp='1440x900',{page,errors,where,hold,turnTo,shot,tap}=await open(t,{width:1440,height:900},undefined,undefined,{controlledClock:true});
+ await tap('[data-mode="walk"]');const start=await where();const startPose=await page.evaluate(()=>View3D.presentationPose());await page.locator('#walkOverlay').click();
  assert.ok(record(vp,'Clic en «Pulsa para empezar»','captura el ratón y muestra la cruz',JSON.stringify({locked:(await where()).locked}),(await where()).locked,await shot('locked')));
  // Face the longest free direction of the living room (towards the hall) so every key has room to act.
  await turnTo([start.p[0],start.p[1]-3000]);
@@ -59,10 +60,36 @@ test('desktop controls: keys, Shift, mouse, Esc, resume, focus, leave and return
  assert.ok(await keyRow('↑',['ArrowUp'],'fwd',1));assert.ok(await keyRow('↓',['ArrowDown'],'fwd',-1));
  assert.ok(await keyRow('D',['KeyD'],'right',1));assert.ok(await keyRow('A',['KeyA'],'right',-1));
  assert.ok(await keyRow('→',['ArrowRight'],'right',1));assert.ok(await keyRow('←',['ArrowLeft'],'right',-1));
- // Shift runs: the same time covers clearly more ground (2.6 vs 1.4 m/s).
- await turnTo([start.p[0],start.p[1]-3000]);let a=await where();await hold(['KeyS'],1200);a=await where();
- const w0=await where();await hold(['KeyW'],700);const w1=await where();await hold(['KeyS'],700);const s0=await where();await hold(['ShiftLeft','KeyW'],700);const s1=await where();
- const walk=dist(w0.p,w1.p),run=dist(s0.p,s1.p);assert.ok(record(vp,'Mayús + W','corre (≥ 1,4 × la distancia de W en el mismo tiempo)',`W ${Math.round(walk)} mm · Mayús+W ${Math.round(run)} mm`,run>=walk*1.4,await shot('shift')));
+ // Compare walking and running from the same clear lane for the same browser-clock duration.
+ await page.evaluate(pose=>View3D.presentationRestorePose(pose),startPose);
+ await turnTo([start.p[0],start.p[1]-3000]);
+ const speedPose=await page.evaluate(()=>View3D.presentationPose());
+ const speedStart=await where();
+ assert.ok(await page.evaluate(({p,fwd})=>{
+   for(let mm=0;mm<=1900;mm+=50){
+     if(View3D.walkBlockedAt(p[0]+mm*fwd[0],p[1]+mm*fwd[1]).by)return false;
+   }
+   return true;
+ },speedStart),'speed comparison requires 1.9 m of clearance');
+ await page.waitForFunction(()=>!View3D.lifecycleMetrics.loopActive);
+ const now=await page.evaluate(()=>Date.now());
+ await page.clock.pauseAt(new Date(now+1000));
+ const durationMs=700;
+ const measuredDistance=async keys=>{
+   await page.evaluate(pose=>View3D.presentationRestorePose(pose),speedPose);
+   const from=await where();
+   assert.equal(from.locked,true,'speed comparison requires pointer lock');
+   for(const key of keys)await page.keyboard.down(key);
+   try{await page.clock.runFor(durationMs);}
+   finally{for(const key of [...keys].reverse())await page.keyboard.up(key);}
+   return along(from.p,(await where()).p,from.fwd);
+ };
+ let walk,run;
+ try{
+   walk=await measuredDistance(['KeyW']);
+   run=await measuredDistance(['ShiftLeft','KeyW']);
+ }finally{await page.clock.resume();}
+ assert.ok(record(vp,'Mayús + W','corre (≥ 1,4 × la distancia de W en el mismo tiempo)',`W ${Math.round(walk)} mm · Mayús+W ${Math.round(run)} mm`,Math.abs(walk-1.4*durationMs)<=1&&run>=walk*1.4,await shot('shift')));
  // Mouse look turns the view.
  const y0=(await where()).fwd;await page.evaluate(()=>document.dispatchEvent(new MouseEvent('mousemove',{movementX:300,movementY:0})));await page.waitForTimeout(200);const y1=(await where()).fwd;
  const turned=Math.abs(Math.atan2(y0[0]*y1[1]-y0[1]*y1[0],y0[0]*y1[0]+y0[1]*y1[1]));assert.ok(record(vp,'Ratón','gira la vista',`${(turned*180/Math.PI).toFixed(0)}°`,turned>.4,await shot('mouse')));
