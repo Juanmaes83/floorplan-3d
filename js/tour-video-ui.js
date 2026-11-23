@@ -57,7 +57,9 @@
   const focusTarget=document.activeElement;
   const reason=unavailable();
   open.setAttribute('aria-disabled',String(!!reason));
-  open.hidden=playingStory;
+  // Siempre a la vista en su sitio (cabecera del panel). Si aún no se puede grabar (historia en curso, cámara en
+  // movimiento…) queda desactivado con el motivo al lado, en lugar de aparecer y desaparecer.
+  open.hidden=false;void playingStory;
   if(playingStory)detail.tabIndex=0;
   else detail.removeAttribute('tabindex');
   const message=playingStory?`${open.textContent} · ${reason}`:reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
