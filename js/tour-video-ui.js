@@ -62,7 +62,7 @@
   open.hidden=false;void playingStory;
   if(playingStory)detail.tabIndex=0;
   else detail.removeAttribute('tabindex');
-  const message=playingStory?`${open.textContent} · ${reason}`:reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
+  const message=reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
   if(detail.textContent!==message)detail.textContent=message;
   if(playingStory&&focusTarget===open)detail.focus({preventScroll:true});
   else if(!playingStory&&focusTarget===detail)open.focus({preventScroll:true});
