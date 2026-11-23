@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 // CI integration smoke for Tour video V1. The full 1280x720 evidence remains in tour-recorder.browser.test.cjs;
 // this reduced-resolution test avoids software-encoding timeouts on hosted runners while still proving the integrated
 // recorder produces a playable video, records all stops in order, restores the camera and releases its busy state.
@@ -15,7 +16,7 @@ test('CI smoke records a playable integrated presentation video',{timeout:300000
  const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D&&window.FloorPlanTourRecorder,null,{timeout:120000});
- await page.locator('#welcomeExample').click();await page.locator('#guideClose').click();await page.locator('#presentationBtn').click();
+ await page.locator('#welcomeExample').click();await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await page.locator('#presentationBtn').click();
  await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:60000});
  const beforeKind=await page.evaluate(()=>FloorPlanPresentation.current?.kind);assert.ok(beforeKind);

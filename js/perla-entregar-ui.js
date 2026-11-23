@@ -181,5 +181,5 @@
  document.addEventListener('close',()=>setTimeout(()=>{if(!deliverOpen()||!catOpen||!catFocus)return;if(document.querySelector('dialog[open]'))return;
   const a=document.activeElement,mine=$(`[data-perla-action="${catFocus}"]`);
   if(mine&&(launched===catFocus||!a||a===document.body||!a.isConnected)){mine.focus({preventScroll:true});mine.scrollIntoView({block:'nearest'});}launched=null;},60),true);
- $('#langBtn')?.addEventListener('click',()=>setTimeout(()=>{$('#perlaCatToggle')?._paint?.(true);for(const t of $$('.perla-more-btn'))t._label?.();},0));
+ new MutationObserver(()=>setTimeout(()=>{$('#perlaCatToggle')?._paint?.(true);for(const t of $$('.perla-more-btn'))t._label?.();},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();

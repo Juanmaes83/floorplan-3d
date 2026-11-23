@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 const budget=require('./helpers/render-budget.cjs'); // time budgets scaled for CPU-rendered CI (see the helper)
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
@@ -39,7 +40,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
  assert.deepEqual(await state(page),initial);
- await page.locator('#guideClose').click();assert.equal(await page.locator('#presentationBtn').isVisible(),true);
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());assert.equal(await page.locator('#presentationBtn').isVisible(),true);
  const closedGuide=await state(page);await page.locator('#presentationBtn').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
  assert.deepEqual(await page.locator('.presentation-room-row input:checked').count(),2,'same saved room selection after guide close');
  await screenshot(page,`${size}-p02-closed-guide-config`);
@@ -354,7 +355,7 @@ test('3D camera, focus and editor state return after Escape and browser Back',{t
 test('R2 P08 walk pointer lock releases for presentation and needs a new gesture on return',{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900}),consoleErrors=[];
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
- await page.locator('#guideClose').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
  await page.locator('[data-mode="walk"]').click();assert.equal(await page.evaluate(()=>View3D.walking()),true);
  await page.locator('#walkOverlay').click();await page.waitForFunction(()=>!!document.pointerLockElement);
@@ -381,7 +382,7 @@ test('R2 P08 walk pointer lock releases for presentation and needs a new gesture
 for(const viewport of [{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P08 touch walk stops and resumes by gesture ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
- await page.locator('#guideClose').click();await page.locator('[data-view="3d"]').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await page.locator('[data-view="3d"]').click();
  await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
  await page.locator('[data-mode="walk"]').click();await page.locator('#walkOverlay').click();
  assert.equal(await page.locator('#joy').isVisible(),true,'touch joystick active before presentation');
@@ -489,7 +490,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await screenshot(page,`${size}-p03-empty-search`);
  await page.locator('#presentationConfig').getByRole('button',{name:'Cancelar'}).click();assert.deepEqual(await state(page),beforeState);
  assert.equal(await page.evaluate(()=>document.activeElement?.tagName),'BUTTON','cancel returns focus to an action');
- await page.locator('#guideClose').click();await page.locator('#presentationBtn').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await page.locator('#presentationBtn').click();
  assert.ok((await page.locator('#presentationConfig').textContent()).includes('Primero crea una estancia'));
  await screenshot(page,`${size}-p03-empty-editor`);
  await page.getByRole('button',{name:'Ir a Distribuir'}).click();
@@ -540,11 +541,11 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   assert.deepEqual(await state(page),before);
  }
  await page.locator('#guideCopyExample').click();await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
- await page.locator('#guideClose').click();await verify('own');
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await verify('own');
  const ownId=await page.evaluate(()=>FloorPlanApp.project.id);
  await page.locator('#uploadPlanBtn').click();await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures/intake/vivienda-dos-estancias.dxf'));
  await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:budget(30000)});
- await page.locator('#guideClose').click();await verify('imported');
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await verify('imported');
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 

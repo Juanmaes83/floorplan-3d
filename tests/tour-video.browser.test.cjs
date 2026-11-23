@@ -19,7 +19,8 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanTourVideo&&window.View3D);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),type=await page.evaluate(()=>FloorPlanTourRecorder.pickType());
  await page.locator('#workArea-deliver').click();const workspace=page.locator('#professionalWorkspace');
- assert.match(await workspace.innerText(),/Vídeo del recorrido: inicia la presentación y pulsa «Grabar vídeo»/);
+ // UX-312 PERLA: la indicación vive en el detalle de la ficha compacta («Ver detalles»); sigue en el DOM.
+ assert.match(await workspace.textContent(),/Vídeo del recorrido: inicia la presentación y pulsa «Grabar vídeo»/);
  await workspace.getByRole('button',{name:'Preparar presentación'}).click();
  // Two rooms keep the recording short on software rendering; the selection is the professional's, as in the product.
  const rows=page.locator('#presentationConfig .presentation-room-row input');const n=await rows.count();for(let i=2;i<n;i++)await rows.nth(i).uncheck();

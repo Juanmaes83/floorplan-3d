@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 /* Scaled sheet (result 4, docs/product/professional-client-experience-2026-10-21.md): the downloaded SVG, opened on
    its own outside Rubik (a blank page, no app code), measures 1:scale on paper: a room, the plan box and the scale
    bar are compared in millimetres with the project geometry. */
@@ -41,7 +42,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 test('an estimated calibration is stated on the scaled sheet; an uncalibrated plan cannot be printed to scale',{timeout:120000},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
- await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);if(await page.locator('#guideClose').isVisible())await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  const confidence=await page.evaluate(()=>FloorPlanApp.project.scale.confidence);assert.notEqual(confidence,'real','the example is not calibrated by a person');
  await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetDialog[open]').waitFor();
  await page.locator('#sheetScale').selectOption('100');assert.match(await page.locator('#toast').textContent(),/calibración del inmueble es estimada/);

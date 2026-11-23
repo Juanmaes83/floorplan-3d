@@ -55,7 +55,7 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
    const e3=page.locator('#e3Entregas[open]');
    const next=e3.locator('[data-route="e3-siguiente"]');
    await e3.waitFor();
-   assert.equal(await e3.locator('input[type="checkbox"]').count(),10);
+   assert.equal(await e3.locator('input[type="checkbox"]').count(),await page.evaluate(()=>RubikE3Core.CATALOGO.length),'una casilla por entregable del catálogo E3 (14 con Blueprint y Despiece)');
    assert.equal(await e3.evaluate(dialog=>document.activeElement?.id===dialog.getAttribute('aria-labelledby')),true);
    await scan('E3 elegir '+id);
    await next.click();await next.waitFor();await scan('E3 previsualizar '+id);

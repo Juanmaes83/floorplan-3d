@@ -56,7 +56,7 @@
  el('span',{class:'perla-assistant-slot'},right);
  const help=el('button',{type:'button',id:'perlaHelp',class:'btn perla-icon','aria-haspopup':'dialog'},right);help.innerHTML=svg('help');
  const lang=move('#langBtn',right);if(lang)lang.classList.add('perla-lang');
- const more=el('details',{class:'menu perla-more',id:'perlaMore'},right),moreSum=el('summary',{class:'btn perla-icon'},more);moreSum.innerHTML=svg('more');const morePop=el('div',{class:'menu-pop perla-pop'},more);
+ const more=el('details',{class:'perla-dd perla-more',id:'perlaMore'},right),moreSum=el('summary',{class:'btn perla-icon'},more);moreSum.innerHTML=svg('more');const morePop=el('div',{class:'menu-pop perla-pop'},more);
  for(const id of ['fullscreen'])move('#'+id,morePop);
  const legal=$('#legalLink');if(legal){const b=el('button',{type:'button',id:'perlaLegal',class:'btn'},morePop);b.onclick=()=>{more.open=false;legal.click();};b._t=()=>b.textContent=tx('Legal y uso','Legal and use','法律与使用');b._t();}
  // Ayuda general = atajos y ayuda existentes (la guía tiene su propio botón «Tareas del proyecto»).
@@ -64,7 +64,7 @@
 
  // ── Fila 2 · Importar · Archivo · vista · paso · tareas · Presentar · acción principal ──
  const impWrap=el('div',{class:'perla-split',role:'group'},r2);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
- const imp=el('details',{class:'menu perla-menu',id:'perlaImport'},impWrap),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
+ const imp=el('details',{class:'perla-dd perla-menu',id:'perlaImport'},impWrap),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
  for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importJson','importJsonHelp','importImage','joinRoomPlan'])move('#'+id,impPop);
  // Estado de las medidas en la barra de estado (V4: «Medidas orientativas»), con su id y su manejador.
  {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
@@ -85,6 +85,8 @@
 
  // ── Guía a demanda: «Tareas del proyecto» abre/cierra la guía real; el resumen lee su progreso real ──
  const guide=$('#guideBar');
+ // Si la guía se cierra (o pasa al editor completo) con su panel abierto, el panel se retira con ella.
+ if(guide)new MutationObserver(()=>{if(guide.hidden&&document.body.classList.contains('perla-guide-open')){document.body.classList.remove('perla-guide-open');$('#perlaTasks')?.setAttribute('aria-expanded','false');}}).observe(guide,{attributes:true,attributeFilter:['hidden']});
  function readGuide(){
   const journey=guide?.querySelector('.guide-journey-label')?.textContent||'',prog=guide?.querySelector('.guide-progress-line strong')?.textContent||'',meter=guide?.querySelector('.guide-progress');
   const m=journey.match(/(\d)\D+(\d)\s*·\s*(.+)$/),pct=+(meter?.getAttribute('aria-valuenow')||0),t=(prog.split('·')[1]||'').match(/(\d+)\D+(\d+)/);
@@ -127,7 +129,7 @@
   const bottom=el('div',{class:'perla-canvas-bottom',role:'toolbar','aria-label':tx('Zoom y escala','Zoom and scale','缩放与比例')},stage);
   for(const id of ['zoomOut','fit','zoomIn'])move('#'+id,bottom);
   const zin=$('#zoomIn'),zout=$('#zoomOut');if(zin)zin.setAttribute('aria-label',tx('Ampliar','Zoom in','放大'));if(zout)zout.setAttribute('aria-label',tx('Reducir','Zoom out','缩小'));
-  const scales=el('details',{class:'menu perla-scales'},bottom),ss=el('summary',{class:'btn'},scales),sp=el('div',{class:'menu-pop perla-pop'},scales);for(const id of ['s60','s100'])move('#'+id,sp);
+  const scales=el('details',{class:'perla-dd perla-scales'},bottom),ss=el('summary',{class:'btn'},scales),sp=el('div',{class:'menu-pop perla-pop'},scales);for(const id of ['s60','s100'])move('#'+id,sp);
   ss.textContent='1:60 · 1:100';ss.setAttribute('aria-label',tx('Vistas de escala 1:60 y 1:100','1:60 and 1:100 scale views','1:60 和 1:100 比例视图'));
   move('#scalebar',bottom);
   // Paneles: plegar/reabrir desde fuera del cajón (los mismos tgLib/tgPanel) y Asistente en el Inspector (escritorio) o en la barra inferior (móvil).
@@ -174,10 +176,15 @@
   if(lab===b){b.lastChild&&(b.lastChild.textContent=tx('Retirar tabique','Remove partition','拆除隔墙'));}else lab.textContent=tx('Retirar tabique','Remove partition','拆除隔墙');
   b.title=tx('Retirar o restaurar tabiques no portantes (X). Pulsa un tabique para retirarlo; pulsa uno retirado para restaurarlo.','Remove or restore non-bearing partitions (X). Press a partition to remove it; press a removed one to restore it.','拆除或恢复非承重隔墙 (X)。');};
  // Idioma: re-etiquetar al cambiar (el resto de la app traduce sus propios textos).
- const langBtn=$('#langBtn');if(langBtn)langBtn.addEventListener('click',()=>setTimeout(()=>{paintTexts();demoName();},0));
+ // Idioma: se repinta cuando la app cambia <html lang> (cualquier vía: selector, atajo, carga), no solo con #langBtn.
+ new MutationObserver(()=>setTimeout(()=>{paintTexts();demoName();},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
  // Paseo 3D: mientras el joystick está a la vista, la barra de escena no tapa la vista y la inferior deja libre el minimapa.
  const joy=$('#joy');if(joy){const walk=()=>document.body.classList.toggle('perla-walking',joy.getClientRects().length>0&&getComputedStyle(joy).visibility!=='hidden');
   new MutationObserver(walk).observe(joy,{attributes:true});new MutationObserver(walk).observe(document.body,{attributes:true,attributeFilter:['class']});}
+ // Menús PERLA: se cierran como los de la app (clic fuera) y tras elegir una opción.
+ document.addEventListener('pointerdown',e=>{for(const m of $$('details.perla-dd[open]'))if(!m.contains(e.target))m.open=false;});
+ document.addEventListener('click',e=>{const b=e.target.closest?.('details.perla-dd .perla-pop button');if(b)b.closest('details.perla-dd').open=false;});
+ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const m=document.activeElement?.closest?.('details.perla-dd[open]');if(m){m.open=false;m.querySelector('summary')?.focus();}});
  addEventListener('resize',paneIcons);
  let wasArea=document.body.classList.contains('professional-area');
  new MutationObserver(()=>{const now=document.body.classList.contains('professional-area');if(now!==wasArea){wasArea=now;paneIcons();}}).observe(document.body,{attributes:true,attributeFilter:['class']});

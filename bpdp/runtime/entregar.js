@@ -188,7 +188,7 @@ function pintarTarjeta(c, modulo) {
     try { await activar3D(); await refrescarTarjetas(); document.getElementById(`bpdpOpen-${modulo}`)?.focus(); }
     catch (error) { fallo(error); button.disabled = false; button.focus(); }
   }, true); return; }
-  btn(`bpdpOpen-${modulo}`, M.abrir, e => abrir(modulo, { origen: e.currentTarget }).catch(fallo), true);
+  btn(`bpdpOpen-${modulo}`, M.abrir, e => abrir(modulo, { origen: e.currentTarget }).catch(fallo));
   btn(`bpdpSheet-${modulo}`, 'Previsualizar lámina', e => abrir(modulo, { origen: e.currentTarget, accion: 'lamina' }).catch(fallo));
   btn(`bpdpVideo-${modulo}`, 'Preparar vídeo', e => abrir(modulo, { origen: e.currentTarget, accion: 'video' }).catch(fallo));
 }

@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 let server,url;
@@ -8,7 +9,7 @@ async function capture(page,name){const folder=process.env.SHEET_ARTIFACTS||'qa-
 const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),entry:FloorPlanApp.entryId,guide:JSON.stringify(FloorPlanGuideUI.state()),undo:undoStack.length,redo:redoStack.length,selection:JSON.stringify(ui.sel),view:FloorPlanApp.viewMode,header:document.querySelector('header').scrollLeft}));
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R3 M07 sheet downloads standalone SVG and restores editor ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,consoleErrors=[];page.on('console',msg=>{if(msg.type()==='error')consoleErrors.push(msg.text());});
- await page.locator('#guideClose').click();const before=await state(page);await page.locator('details.menu summary').click();await page.locator('#openSheet').click();assert.equal(await page.locator('#sheetDialog').evaluate(el=>el.open),true);
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());const before=await state(page);await page.locator('details.menu summary').click();await page.locator('#openSheet').click();assert.equal(await page.locator('#sheetDialog').evaluate(el=>el.open),true);
  await page.locator('#sheetPreview').evaluate(async img=>{if(!img.complete)await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});if(!img.naturalWidth)throw Error('Sheet image did not render');});
  await capture(page,`${size}-sheet`);
  if(viewport.width<1000){await page.locator('#sheetZoom').click();assert.ok(await page.locator('.sheet-scroll').evaluate(el=>el.scrollWidth>el.clientWidth));await capture(page,`${size}-sheet-zoomed`);await page.locator('#sheetZoom').click();}
@@ -23,9 +24,9 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 
 test('R3 M07 imported irregular room and localized sheet text stay tied to current project',{timeout:90000},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900}),consoleErrors=[];page.on('console',msg=>{if(msg.type()==='error')consoleErrors.push(msg.text());});
- await page.locator('#guideClose').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  const id=await page.evaluate(()=>{const p=structuredClone(FloorPlanApp.project);p.id='prj_sheet-irregular';p.name='Plano <script>alert(1)</script>';p.rooms[0].id='rom_sheet-concave';p.rooms[0].name='Sala <script>alert(1)</script>';p.rooms[0].polygon=[{x:6600,y:0},{x:10270,y:0},{x:10270,y:3370},{x:8700,y:3370},{x:8700,y:1900},{x:6600,y:1900}];delete p.rooms[0].labelAt;FloorPlanApp.importProject(p);return FloorPlanApp.project.id;});
- assert.equal(id,'prj_sheet-irregular');if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();const before=await state(page);
+ assert.equal(id,'prj_sheet-irregular');if(await page.locator('#guideClose').isVisible())await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());const before=await state(page);
  await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetPreview').evaluate(async img=>{if(!img.complete)await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});});await capture(page,'1440x900-sheet-irregular');
  const pending=page.waitForEvent('download');await page.locator('#sheetDownload').click();const data=(await fs.readFile(await (await pending).path())).toString('utf8');
  assert.match(data,/data-project-id="prj_sheet-irregular"/);assert.match(data,/data-room="rom_sheet-concave"/);assert.match(data,/Sala &lt;script&gt;alert\(1\)&lt;\/script&gt;/);assert.doesNotMatch(data,/<script>/);assert.match(data,/Plano &lt;script&gt;/);
@@ -37,18 +38,18 @@ test('R3 M07 imported irregular room and localized sheet text stay tied to curre
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`R3 M07 own copy and DXF sheet use the active project ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const {page,errors}=await setup(t,viewport),consoleErrors=[];page.on('console',msg=>{if(msg.type()==='error')consoleErrors.push(msg.text());});
- await page.locator('#guideCopyExample').click();await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');await page.locator('#guideClose').click();
+ await page.locator('#guideCopyExample').click();await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  async function check(kind){const before=await state(page),source=await page.evaluate(()=>({id:FloorPlanApp.project.id,rooms:FloorPlanApp.project.rooms.map(room=>room.id)}));await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetPreview').evaluate(async img=>{if(!img.complete)await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});});await capture(page,`${viewport.width}x${viewport.height}-sheet-${kind}`);const pending=page.waitForEvent('download');await page.locator('#sheetDownload').click();const data=(await fs.readFile(await (await pending).path())).toString('utf8');const details=await page.evaluate(markup=>{const doc=new DOMParser().parseFromString(markup,'image/svg+xml');return {id:doc.documentElement.getAttribute('data-project-id'),rooms:[...doc.querySelectorAll('[data-room]')].map(el=>el.getAttribute('data-room')),error:!!doc.querySelector('parsererror')};},data);assert.equal(details.id,source.id);assert.equal(details.error,false);for(const id of source.rooms)assert.ok(details.rooms.includes(id),`${kind} sheet includes ${id}`);await page.locator('#sheetClose').click();assert.deepEqual(await state(page),before);}
  await check('own');const ownId=await page.evaluate(()=>FloorPlanApp.project.id);
  await page.locator('#uploadPlanBtn').click();await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures/intake/vivienda-dos-estancias.dxf'));
- await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:30000});if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();await check('dxf');
+ await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:30000});if(await page.locator('#guideClose').isVisible())await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await check('dxf');
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
 // Closing the sheet queues its «close» event; a reopen that runs before that event (a fast close and reopen, or a test
 // that does both at once) must keep the new preview and download it, not show an empty sheet that refuses to download.
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`sheet reopened before the previous close event keeps its preview and downloads ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
- const {page,errors}=await setup(t,viewport);await page.locator('#guideClose').click();
+ const {page,errors}=await setup(t,viewport);await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  const openSheet=()=>{const d=document.getElementById('openSheet').closest('details');if(d)d.open=true;document.getElementById('openSheet').click();};
  await page.evaluate(openSheet);await page.locator('#sheetDialog[open]').waitFor();
  // Close and reopen in the same task: the first close event is still queued when the sheet opens again.

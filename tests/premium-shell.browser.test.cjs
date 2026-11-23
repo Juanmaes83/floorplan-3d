@@ -1,3 +1,4 @@
+// UX-312 PERLA: capas del plano y grupos 3D pasan de la cabecera al lienzo (V4); el inventario los busca en toda la app.
 // Premium UX cut A (docs/product/premium-ux-design-2026-10-20.md §6) at 1440×900, 390×844 and 844×390:
 // - capability inventory: every control of the header and of the left column recorded before the cut
 //   (tests/fixtures/capability-inventory.json) still exists and can be reached by a person: visible after opening
@@ -42,13 +43,13 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
 
  // 1. Capability inventory: nothing removed, everything reachable.
  const reach=async(c,in3d)=>page.evaluate(([c,mobile])=>{
-  const e=c.id?document.getElementById(c.id):document.querySelector(c.selector);if(!e)return {exists:false};
+  const e=c.id?document.getElementById(c.id):document.querySelector(c.selector.replace(/^header /,'.app '));if(!e)return {exists:false};
   if(e.closest('[hidden]'))return {exists:true,state:'hidden-by-state'};
   if(c.scope==='aside.lib'){if(mobile)drawer('lib',true);const tab=e.closest('#paletteBuild')?'build':e.closest('#paletteFurnish')?'furnish':null;if(tab&&FloorPlanBuildPalette.tab!==tab)FloorPlanBuildPalette.select(tab);}
   for(let d=e.parentElement;d;d=d.parentElement)if(d.tagName==='DETAILS')d.open=true;
   return {exists:true,state:'pending'};},[c,mobile]).then(async r=>{
    if(r.state!=='pending')return r;await page.waitForTimeout(mobile?380:60);
-   return page.evaluate(c=>{const e=c.id?document.getElementById(c.id):document.querySelector(c.selector);e.scrollIntoView({block:'nearest',inline:'nearest'});const b=e.getBoundingClientRect();
+   return page.evaluate(c=>{const e=c.id?document.getElementById(c.id):document.querySelector(c.selector.replace(/^header /,'.app '));e.scrollIntoView({block:'nearest',inline:'nearest'});const b=e.getBoundingClientRect();
     if(b.width<2||b.height<2)return {exists:true,state:'zero-size'};
     const x=Math.min(innerWidth-1,Math.max(0,b.left+b.width/2)),y=Math.min(innerHeight-1,Math.max(0,b.top+b.height/2)),hit=document.elementFromPoint(x,y);
     const inView=b.right>0&&b.left<innerWidth&&b.bottom>0&&b.top<innerHeight;
@@ -59,7 +60,7 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
  if(process.env.THREE_LOCAL_DIR){await page.evaluate(()=>setView('3d'));await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:60000});
   for(const c of inventory.filter(c=>c.only3d)){const r=await reach(c);if(!r.exists||!['reachable','hidden-by-state'].includes(r.state))problems.push(`3D ${c.id||c.selector}: ${r.exists?r.state+' by '+r.by:'missing'}`);await close();await page.waitForTimeout(mobile?350:20);}
   await page.evaluate(()=>setView('2d'));await page.waitForFunction(()=>FloorPlanApp.viewMode==='2d'&&!document.body.classList.contains('busy'),null,{timeout:60000});}
- else for(const c of inventory.filter(c=>c.only3d))if(!await page.evaluate(c=>!!(c.id?document.getElementById(c.id):document.querySelector(c.selector)),c))problems.push(`3D ${c.id||c.selector}: missing`);
+ else for(const c of inventory.filter(c=>c.only3d))if(!await page.evaluate(c=>!!(c.id?document.getElementById(c.id):document.querySelector(c.selector.replace(/^header /,'.app '))),c))problems.push(`3D ${c.id||c.selector}: missing`);
  assert.deepEqual(problems,[],'every control recorded before the cut exists and is reachable');
 
  // 2. Phones: the essential controls are in the viewport without scrolling the header.

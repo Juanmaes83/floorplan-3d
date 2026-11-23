@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 // Tour video V1 (internal): the active presentation is recorded into one video Blob; the same Blob plays in a
 // <video> (the future preview), its frames show the 3D scene and nothing else, and cancelling leaves no Blob.
 // The interface offers no recording yet: no visible text says «Grabar».
@@ -18,7 +19,7 @@ async function open(t){
  const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D&&window.FloorPlanTourRecorder,null,{timeout:120000});await page.locator('#welcomeExample').click();
- await page.locator('#guideClose').click();await page.locator('#presentationBtn').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await page.locator('#presentationBtn').click();
  await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:60000});
  return {page,errors};
