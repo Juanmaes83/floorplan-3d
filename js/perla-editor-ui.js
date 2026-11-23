@@ -34,10 +34,11 @@
  const home=move('#welcomeBtn',left);if(home){home.classList.add('perla-brand');home.innerHTML=`${svg('home',20)}<b>Rubik Sota</b>`;home.setAttribute('aria-label',tx('Ir a Inicio','Go to Home','前往首页'));}
  const brand=$('header .brand');if(brand)brand.classList.add('perla-brand-meta'),left.append(brand);
  // Selector de proyecto: nombre compacto (completo en el título); abre la biblioteca local por la vía existente.
- const proj=el('button',{type:'button',id:'perlaProject',class:'btn perla-project','aria-haspopup':'dialog'},left);
- const projName=()=>{const n=(typeof project==='object'&&project?.name)||'';const shown=typeof nm==='function'?nm(n):n;return shown||tx('Proyecto','Project','项目');};
- const paintProject=()=>{const n=projName(),ex=$('#guideBar')?.getAttribute('data-project-kind')==='example';proj.innerHTML=`<span class="perla-project-name">${String(ex?tx('Proyecto de ejemplo','Example project','示例项目'):n).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}</span>${svg('chev',14)}`;proj.title=tx(`Proyecto activo: ${n}. Abrir la biblioteca de proyectos`,`Active project: ${n}. Open the project library`,`当前项目：${n}。打开项目库`);proj.setAttribute('aria-label',proj.title);};
- proj.onclick=()=>$('#projectsBtn')?.click();
+ // Selector de proyecto = el propio #projectsBtn (mismo manejador: abre la biblioteca local). Su texto i18n se conserva
+ // en el DOM; la ficha muestra el nombre del proyecto con data-perla-name (CSS), sin pisar las traducciones del botón.
+ const proj=move('#projectsBtn',left)||el('button',{type:'button',class:'btn'},left);proj.classList.add('perla-project');proj.setAttribute('aria-haspopup','dialog');
+ const projName=()=>{let n='';try{n=(typeof project==='object'&&project?.name)||'';}catch{}const shown=typeof nm==='function'?nm(n):n;return shown||tx('Proyecto','Project','项目');};
+ const paintProject=()=>{const n=projName(),ex=$('#guideBar')?.getAttribute('data-project-kind')==='example';proj.dataset.perlaName=ex?tx('Proyecto de ejemplo','Example project','示例项目'):n;proj.title=tx(`Proyecto activo: ${n}. Abrir la biblioteca de proyectos`,`Active project: ${n}. Open the project library`,`当前项目：${n}。打开项目库`);proj.setAttribute('aria-label',proj.title);};
  // «Crear copia» del ejemplo: es el MISMO botón de la guía (copia local con id propio); solo visible en el ejemplo.
  const exampleLine=$('.guide-example'),copyBtn=move('#guideCopyExample',left);
  if(copyBtn){copyBtn.classList.add('perla-copy');const lbl=()=>{copyBtn.innerHTML=`${svg('copy',15)}<span class="perla-copy-label">${tx('Crear copia','Create copy','创建副本')}</span>`;copyBtn.setAttribute('aria-label',tx('Crear una copia local del ejemplo','Create a local copy of the example','创建示例的本地副本'));};lbl();
@@ -56,14 +57,17 @@
  const help=el('button',{type:'button',id:'perlaHelp',class:'btn perla-icon','aria-haspopup':'dialog'},right);help.innerHTML=svg('help');
  const lang=move('#langBtn',right);if(lang)lang.classList.add('perla-lang');
  const more=el('details',{class:'menu perla-more',id:'perlaMore'},right),moreSum=el('summary',{class:'btn perla-icon'},more);moreSum.innerHTML=svg('more');const morePop=el('div',{class:'menu-pop perla-pop'},more);
- for(const id of ['projectsBtn','fullscreen'])move('#'+id,morePop);
+ for(const id of ['fullscreen'])move('#'+id,morePop);
  const legal=$('#legalLink');if(legal){const b=el('button',{type:'button',id:'perlaLegal',class:'btn'},morePop);b.onclick=()=>{more.open=false;legal.click();};b._t=()=>b.textContent=tx('Legal y uso','Legal and use','法律与使用');b._t();}
  // Ayuda general = atajos y ayuda existentes (la guía tiene su propio botón «Tareas del proyecto»).
  help.onclick=()=>{const k=$('#panel [data-group="keys"] summary,#panel [data-group="keys"]');if(k){openTab('informe');const d=k.closest('details');if(d)d.open=true;k.scrollIntoView({block:'nearest'});(d?.querySelector('summary')||k).focus?.({preventScroll:true});}};
 
  // ── Fila 2 · Importar · Archivo · vista · paso · tareas · Presentar · acción principal ──
- const imp=el('details',{class:'menu perla-menu',id:'perlaImport'},r2),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
- for(const id of ['uploadPlanBtn','roomPlanJoinQuick','newProjectBtn','importJson','importJsonHelp','importImage','joinRoomPlan'])move('#'+id,impPop);
+ const impWrap=el('div',{class:'perla-split',role:'group'},r2);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
+ const imp=el('details',{class:'menu perla-menu',id:'perlaImport'},impWrap),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
+ for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importJson','importJsonHelp','importImage','joinRoomPlan'])move('#'+id,impPop);
+ // Estado de las medidas en la barra de estado (V4: «Medidas orientativas»), con su id y su manejador.
+ {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
  move('#uploadCancel',r2);
  const fileMenu=$$('header details.menu').find(d=>d.querySelector('#exportPng'));
  if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');const pop=fileMenu.querySelector('.menu-pop');const q=$('#exportJsonQuick');if(q&&pop)pop.insertBefore(q,$('#exportJson')?.nextSibling||null);}
@@ -94,7 +98,7 @@
   // Acción principal = la acción real de la tarea actual (`guidePrimary`): mismo texto, mismo estado, mismo efecto.
   const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){primary.textContent=gp.textContent;primary.disabled=gp.disabled;primary.title=gp.title||'';}
   if(present){present.textContent=tx('Presentar vivienda','Present the home','展示住宅');present.insertAdjacentHTML('afterbegin',svg('present',16));}
-  if(impSum)impSum.innerHTML=`${svg('upload',16)}<span>${tx('Importar','Import','导入')}</span>${svg('chev',14)}`;
+  if(impSum){impSum.innerHTML=svg('chev',16);impSum.setAttribute('aria-label',tx('Más formas de importar o empezar','More ways to import or start','更多导入或开始方式'));impSum.title=impSum.getAttribute('aria-label');}impWrap.setAttribute('aria-label',tx('Importar','Import','导入'));
   const fs=fileMenu?.querySelector('summary');if(fs)fs.innerHTML=`${svg('file',16)}<span>${tx('Archivo','File','文件')}</span>${svg('chev',14)}`;
   help.setAttribute('aria-label',tx('Ayuda y atajos','Help and shortcuts','帮助与快捷键'));help.title=help.getAttribute('aria-label');moreSum.setAttribute('aria-label',tx('Más opciones','More options','更多选项'));
   copyBtn?._perlaLabel?.();paintProject();

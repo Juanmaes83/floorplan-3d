@@ -1,3 +1,4 @@
+// UX-312 PERLA: «Nuevo proyecto» vive en «Importar ▾» (V4); la prueba abre el menú como lo haría la persona.
 // Creation palette of the left column («Construir» / «Amueblar»), end to end at 1440×900, 390×844 and 844×390. It
 // only reuses existing actions: tools stay in step with the toolbar; a room example opens «Nueva estancia» with that
 // name (unique) and no new data; the four contract opening kinds are added to the room of the selection; wall drawing
@@ -42,7 +43,7 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
  await page.evaluate(()=>select(null));await openPalette('furnish');
  await page.evaluate(()=>select(null));
  await page.evaluate(()=>drawer(null));await page.waitForTimeout(350);
- await press('#newProjectBtn');await page.fill('#newProjectName','Prueba de paleta');await press('#newProjectBlank');await page.locator('#roomDesignCancel').first().click();
+ await page.evaluate(()=>{const d=document.getElementById('perlaImport');if(d)d.open=true;});await press('#newProjectBtn');await page.fill('#newProjectName','Prueba de paleta');await press('#newProjectBlank');await page.locator('#roomDesignCancel').first().click();
  // Tabs follow ARIA and the arrow keys.
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms.length),0);await openPalette();
  assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'build','no rooms: «Construir»');

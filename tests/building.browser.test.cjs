@@ -1,3 +1,4 @@
+// UX-312 PERLA: «Nuevo proyecto» vive en «Importar ▾» (V4); la prueba abre el menú como lo haría la persona.
 // First multi-level cut, end to end from the UI at 1440×900, 390×844 and 844×390: create a two-level building,
 // add rooms on each level, align, add a straight stair, switch levels (pointer and keyboard), per-level
 // undo/redo, 3D stacking, reload, JSON/ZIP export and re-import, a tampered ZIP, level export, a level from an
@@ -42,7 +43,7 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  const {page,errors}=await setup(context),shot=async step=>{if(mobile&&!step.includes('levels')&&!step.includes('note')&&!step.includes('variants')&&!step.includes('export'))await page.evaluate(()=>{if(document.querySelector('aside.right')?.classList.contains('open'))document.querySelector('#tgPanel').click();});await page.waitForTimeout(300);await page.screenshot({path:`${shots}/${name}-${step}.png`});};
 
  // 1. A single-level project from the UI: blank plan with two rooms.
- await press(page,'#newProjectBtn',mobile);await page.fill('#newProjectName','Casa prueba');await press(page,'#newProjectBlank',mobile);
+ await page.evaluate(()=>{const d=document.getElementById('perlaImport');if(d)d.open=true;});await press(page,'#newProjectBtn',mobile);await page.fill('#newProjectName','Casa prueba');await press(page,'#newProjectBlank',mobile);
  await page.locator('#roomDesignForm').waitFor();await page.locator('#roomDesignCancel').first().click();
  await addRoom(page,mobile,{name:'Cocina',width:4000,depth:2400,x:400,y:400});
  await addRoom(page,mobile,{name:'Estar',width:3000,depth:2400,neighbor:'A la derecha de Cocina'});

@@ -1,3 +1,4 @@
+// UX-312 PERLA: «Nuevo proyecto» vive en «Importar ▾» (V4); la prueba abre el menú como lo haría la persona.
 // CC2 · Localización de Construir, Amueblar y Propiedades en ES · EN · ZH. Bloqueante.
 // Con el producto real (ratón, teclado y diálogos), comprueba que:
 //  1. Tras cambiar de idioma con la paleta, el panel o un diálogo abiertos, lo visible es EXACTAMENTE lo que se ve al
@@ -154,7 +155,7 @@ const DIALOGS={
  dimensionsRefusal:{open:async p=>{await p.evaluate(()=>{window.select({kind:'room',id:'rom_child'});drawer('panel',true);});await p.locator('#roomDimensions').click();await p.waitForFunction(()=>document.getElementById('roomDesignDialog').open);await p.waitForTimeout(150);},root:'#roomDesignDialog',trigger:'#roomDimensions'},
  // A room the person has just created is rectangular: its dimensions form and its before → after preview.
  dimensions:{open:async p=>{await p.evaluate(()=>FloorPlanBuildPalette.select('build'));await p.locator('#paletteNewRoom').click();await p.evaluate(()=>document.querySelector('#roomDesignReview').click());await p.evaluate(()=>document.querySelector('#roomDesignConfirm').click());await p.waitForFunction(()=>!document.getElementById('roomDesignDialog').open);await p.evaluate(()=>drawer('panel',true));await p.locator('#roomDimensions').click();await p.locator('#roomDesignForm').waitFor();await p.evaluate(()=>{const v=document.getElementById('roomDesignValue');v.value='3500';const f=document.getElementById('roomDesignFixed');f.selectedIndex=1;document.getElementById('roomDesignForm').requestSubmit();});await p.waitForSelector('#roomDesignSvg');},root:'#roomDesignDialog',trigger:'#roomDimensions',creates:true},
- project:{open:p=>p.locator('#newProjectBtn').click(),root:'#roomDesignDialog',trigger:'#newProjectBtn'},
+ project:{open:async p=>{await p.evaluate(()=>{const d=document.getElementById('perlaImport');if(d)d.open=true;});await p.locator('#newProjectBtn').click();},root:'#roomDesignDialog',trigger:'#newProjectBtn'},
  floor:{open:async p=>{await p.evaluate(()=>{window.select({kind:'room',id:'rom_child'});drawer('panel',true);});await p.locator('#surfaceFloor').click();await p.locator('#surfaceCards').waitFor();},root:'#surfaceDialog',trigger:'#surfaceFloor'},
  wall:{open:async p=>{await p.evaluate(()=>{window.select({kind:'room',id:'rom_child'});drawer('panel',true);});await p.locator('#surfaceWall').click();await p.locator('#surfaceWallTarget').waitFor();},root:'#surfaceDialog',trigger:'#surfaceWall'},
  ownFurniture:{open:async p=>{await p.evaluate(()=>FloorPlanBuildPalette.select('furnish'));await p.locator('#ownFurnOpen').click();await p.evaluate(()=>document.getElementById('ownFurnCreate').click());await p.waitForTimeout(200);},root:'#ownFurnDialog',trigger:'#ownFurnOpen'}

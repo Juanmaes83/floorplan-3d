@@ -97,7 +97,7 @@ body.perla .perla-tabs>button{flex:1;min-height:38px;font-size:13px;font-weight:
 body.perla .perla-tabs>button[aria-selected="true"]{color:var(--perla-petrol)!important;font-weight:700;box-shadow:inset 0 -3px 0 var(--perla-petrol)}
 body.perla .perla-props-hint{margin:12px 14px;padding:10px 12px;font-size:13px;color:var(--perla-muted);border:1px dashed var(--perla-line);border-radius:8px;background:#fff}
 body.perla .perla-props-hint[hidden]{display:none}
-body.perla aside.right[data-perla-tab="estancias"] #panel [data-group]:not([data-group="areas"]){display:none!important}
+body.perla aside.right[data-perla-tab="estancias"] #panel [data-group="keys"]{display:none!important}
 body.perla aside.right[data-perla-tab="informe"] #panel [data-group="areas"]{display:none!important}
 body.perla aside.right[data-perla-tab="propiedades"] #panel [data-group]{display:none!important}
 body.perla .perla-inspector-foot{padding:10px 14px;border-top:1px solid var(--perla-line);background:var(--perla-side)}
@@ -181,7 +181,7 @@ body.perla .perla-utils #editHistory #redo::before{content:"↷"}
 body.perla .perla-break{display:none}
 @media (max-width:760px),(max-width:1100px) and (max-height:500px){
   body.perla .perla-r2>*{order:3!important}
-  body.perla #perlaImport{order:1!important}
+  body.perla .perla-r2>.perla-split{order:1!important}
   body.perla #perlaFile{order:2!important}
   body.perla .perla-r2 #viewSeg{order:3!important;flex:1 1 auto}
   body.perla .perla-r2 #viewSeg .seg-label,body.perla .perla-r2 #viewSeg>span:first-child:not(.pill){display:none}
@@ -276,3 +276,20 @@ body.perla.perla-walking #stage>#mobileDock{right:auto;left:50%;transform:transl
 @media (max-width:760px){body.perla.perla-walking #stage>#mobileDock{left:0;transform:none}}
 /* Presentación: las barras del lienzo del editor se retiran (antes vivían en la cabecera, que la presentación oculta) */
 body.perla.presenting .perla-canvas-top,body.perla.presenting .perla-canvas-bottom,body.perla.presenting #stage>#mobileDock{display:none!important}
+body.perla footer #scaleConfidence{display:inline-flex!important;align-items:center;margin-inline-end:12px;font-size:12px;color:var(--perla-muted)}
+/* Selector de proyecto = #projectsBtn: el texto i18n del botón se oculta y se muestra el nombre del proyecto */
+body.perla .perla-left #projectsBtn.perla-project{font-size:0!important;position:relative}
+body.perla .perla-left #projectsBtn.perla-project::before{content:attr(data-perla-name);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+body.perla .perla-left #projectsBtn.perla-project::after{content:"";flex:none;width:7px;height:7px;margin-left:8px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg) translateY(-2px)}
+/* Importar: botón dividido «Subir plano» | ▾ */
+body.perla .perla-split{display:inline-flex;align-items:stretch}
+body.perla .perla-split>#uploadPlanBtn{display:inline-flex!important;align-items:center;gap:6px;min-height:38px;padding:0 12px!important;font-size:13px!important;font-weight:600;border:1px solid var(--perla-line)!important;border-radius:8px 0 0 8px!important;background:#fff!important;color:var(--perla-ink)!important;box-shadow:none!important;white-space:nowrap}
+body.perla .perla-split>#perlaImport>summary{border-radius:0 8px 8px 0!important;border-left:0!important;padding:0 8px!important;min-width:34px;justify-content:center}
+@media (max-width:760px){body.perla .perla-split>#uploadPlanBtn{padding:0 9px!important;font-size:12.5px!important}}
+@media (pointer:coarse),(max-width:760px){body.perla .perla-split>#perlaImport>summary{min-width:44px}}
+/* Escritorio estrecho y zoom 200 %: «Presentar» solo icono y sin rótulo «Vista:» para que la acción principal quepa */
+@media (max-width:1100px){
+  body.perla .perla-r2 #presentationBtn{font-size:0!important;padding:0 10px!important;min-width:44px}
+  body.perla .perla-r2 #viewSeg .professional-control-label{display:none}
+  body.perla .perla-r2{gap:6px}
+}
