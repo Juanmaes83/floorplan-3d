@@ -239,8 +239,15 @@
   const caps=el('div',undefined,ia,'studio-ia-caps');
   for(const [k,t] of [['guia',tx('Guía cada fase','Guides each phase','引导每个阶段')],['chat',tx('Resuelve dudas','Answers questions','解答疑问')],['estrella',tx('Sugiere siguientes pasos','Suggests next steps','建议下一步')],['rayo',tx('Automatiza tareas','Automates tasks','自动化任务')],['enchufe',tx('Conecta herramientas','Connects tools','连接工具')]]){
    const c=el('span',undefined,caps,'studio-ia-cap');c.append(svg(k));el('span',t,c);}
-  const iaB=el('button',tx('Abrir el Asistente','Open the Assistant','打开助手'),ia,'btn primary studio-ia-btn');iaB.type='button';iaB.dataset.route='studio-asistente';iaB.disabled=!existe('RubikAssistantUI','open');
-  iaB.onclick=()=>{try{salirBienvenida();llamar('RubikAssistantUI','open');}catch(e){window.toast?.(e.message,5000);}};
+  const iaB=el('button',tx('Abrir el Asistente','Open the Assistant','打开助手'),ia,'btn primary studio-ia-btn');iaB.type='button';iaB.dataset.route='studio-asistente';
+  // UX-312 E02: el Asistente se carga DESPUÉS que esta banda (index.html), así que la disponibilidad no se decide una sola vez
+  // al dibujar: se sincroniza con la API real cuando termina de cargar. Si no existe, el botón dice por qué está deshabilitado.
+  const sincronizarIA=()=>{const ok=existe('RubikAssistantUI','open');iaB.disabled=!ok;if(ok)iaB.removeAttribute('title');else iaB.title=tx('El Asistente todavía se está cargando o no está disponible en esta versión.','The Assistant is still loading or is not available in this version.','助手仍在加载或此版本不可用。');return ok;};
+  if(!sincronizarIA()){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sincronizarIA,{once:true});addEventListener('load',sincronizarIA,{once:true});}
+  iaB.onclick=()=>{if(!sincronizarIA())return;try{
+   // Origen de foco: al cerrar el panel vuelve aquí si este botón sigue a la vista; si no, se respeta el destino del Asistente.
+   addEventListener('rubik-assistant',function volver(e){if(e.detail?.type!=='close')return;removeEventListener('rubik-assistant',volver);if(iaB.isConnected&&iaB.checkVisibility?.())iaB.focus({preventScroll:true});});
+   salirBienvenida();llamar('RubikAssistantUI','open');}catch(e){window.toast?.(e.message,5000);}};
   return s;}
  /* «Todas las herramientas»: catálogo con búsqueda y categorías GENERADO desde el registro único (FloorPlanCapabilities,
     GOV-03/K9). No declara estados propios: el estado visible se deriva del nivel con homeState/aiState del registro, como
