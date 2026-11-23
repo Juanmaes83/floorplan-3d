@@ -109,6 +109,14 @@ test('Entregar · edificio de dos plantas con escalera y cierre reversible', { t
   t.after(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   const fixture = buildingFixture.build();
+  if (process.env.BPDP_STRESS === '1') {
+    const level = fixture.building.levels[0].project;
+    for (let i = 0; i < 91; i++) level.objects.push({
+      ...level.objects[0], id: 'obj_bpdp-load-' + i, type: 'chair', name: 'Silla de prueba ' + (i + 1),
+      roomId: level.rooms[0].id, size: { widthMm: 250, depthMm: 250 },
+      position: { x: 550 + (i % 13) * 285, y: 550 + Math.floor(i / 13) * 305 }
+    });
+  }
   const { entries } = await buildingCore.packageEntries(fixture.building, image => fixture.bytesFor(image.id), tracing.imageInfo);
   const zip = Buffer.from(await packages.zip(entries, { check: buildingCore.packagePath }).arrayBuffer());
   await page.goto(url + '#inicio');
@@ -153,6 +161,7 @@ test('Entregar · edificio de dos plantas con escalera y cierre reversible', { t
     await page.evaluate(() => BPDP.close());
     await page.locator('dialog.bpdp-host').waitFor({ state: 'detached' });
     assert.deepEqual(await snapshot(), before);
+    if (process.env.BPDP_STRESS === '1') assert.ok(measured.meshes > 300, 'la carga incluye el mobiliario añadido');
     console.log('Edificio:', module, measured);
   }
 });
