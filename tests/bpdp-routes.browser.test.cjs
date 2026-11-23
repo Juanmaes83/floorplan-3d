@@ -42,7 +42,12 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
   assert.equal(await index.locator('[data-group="experience"]').isVisible(), false);
   await index.getByRole('button', { name: 'Todo', exact: true }).click();
   await index.locator('.professional-card-details').first().click();
-  assert.ok(await index.locator('.professional-delivery-detail p').count());
+  assert.ok(await page.locator('.professional-delivery-detail .panel-b p').count());
+  await page.getByRole('button', { name: 'Volver al índice', exact: true }).click();
+  assert.equal(await index.locator('.professional-card-details').first().evaluate(button => button === document.activeElement), true);
+  assert.equal(await index.locator('[data-entrega-code="D2"] .thumb img').evaluate(image => getComputedStyle(image).objectFit), 'contain');
+  const columns = await index.locator('[data-group="documentation"] .cards').evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length);
+  assert.equal(columns, 4);
   await index.locator('.professional-full-catalog summary').click();
   const direct = index.getByRole('button', { name: 'Abrir · Lámina Blueprint 3D', exact: true });
   await direct.click();
