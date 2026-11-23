@@ -1,0 +1,90 @@
+{
+ "tool": "scripts/interop/mspdi/verify.cjs",
+ "exporter": "1.0.0",
+ "xsd": "mspdi_pj12.xsd",
+ "mpxj": "MPXJ (classpath given)",
+ "plans": [
+  {
+   "plan": "simpleHouse",
+   "tasks": 8,
+   "milestones": 0,
+   "links": 8,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "kitchenReform",
+   "tasks": 6,
+   "milestones": 0,
+   "links": 5,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "incompletePlan",
+   "tasks": 3,
+   "milestones": 0,
+   "links": 2,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "milestones",
+   "tasks": 1,
+   "milestones": 2,
+   "links": 2,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "dependencyTypes",
+   "tasks": 6,
+   "milestones": 0,
+   "links": 5,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "textAndCalendar",
+   "tasks": 2,
+   "milestones": 0,
+   "links": 1,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "single",
+   "tasks": 1,
+   "milestones": 0,
+   "links": 0,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "empty",
+   "tasks": 0,
+   "milestones": 0,
+   "links": 0,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  },
+  {
+   "plan": "complex",
+   "tasks": 114,
+   "milestones": 6,
+   "links": 149,
+   "schema": "valid",
+   "readback": "identical",
+   "mismatches": []
+  }
+ ],
+ "ok": true
+}
