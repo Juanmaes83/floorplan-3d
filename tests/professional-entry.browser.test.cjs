@@ -88,8 +88,9 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
  await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
- const order=await page.evaluate(()=>['.welcome-entries','#welcomeWalk','#welcomeSolutions'].map(s=>document.querySelector(s).getBoundingClientRect().top));
- assert.ok(order[0]<order[1]&&order[1]<order[2],'entries, then the 3D walk band, then the solutions');
+ // UX-312 Home H-C1: las soluciones viven dentro de «¿En qué trabajas?», antes de la banda del recorrido 3D.
+ const order=await page.evaluate(()=>['.welcome-entries','#welcomeSolutions','#welcomeWalk'].map(s=>document.querySelector(s).getBoundingClientRect().top));
+ assert.ok(order[0]<order[1]&&order[1]<order[2],'entries, then the solutions (with the profession), then the 3D walk band');
  assert.match(await page.locator('#welcomeWalk h2').textContent(),/recórrela en 3D/);
  assert.deepEqual(await page.locator('.solutions-phases strong').allTextContents(),['Empezar','Preparar','Distribuir','Amueblar','Revisar y guardar']);
  assert.equal(await page.locator('.solutions-card').count(),6,'HOM-02: one card per profile, Constructora included');assert.equal(await page.locator('.solutions-phases svg.icon').count(),5);

@@ -132,4 +132,7 @@ function setupConfig(F,howTo){
  closeB.addEventListener('click',()=>dlg.close());
  how.addEventListener('click',()=>{dlg.close();howTo();});
  dlg.addEventListener('close',()=>open.focus({preventScroll:true}));
+ // UX-312 Home · «Personalizar esta demo» desde la Home (?demo=obra&personalizar=1): abre el mismo configurador cuando
+ // la demostración está lista. Sigue siendo temporal: no lee ni escribe almacenamiento.
+ if(new URLSearchParams(location.search).get('personalizar')==='1'){let n=0;const wait=()=>{if(dlg.open)return;if(ensure())open.click();else if(++n<120)setTimeout(wait,250);};setTimeout(wait,250);}
 }

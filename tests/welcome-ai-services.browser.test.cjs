@@ -39,10 +39,10 @@ test(`four verified states, honest texts, CAT-04 pilot, no duplicate Render IA, 
  assert.doesNotMatch(text,/Pendiente de CAT-04/,'obsolete gate is removed');
  assert.match(text,/ningún modelo de lenguaje/);assert.match(text,/no llama a ningún proveedor de IA/);assert.match(text,/no las genera una IA/);
  assert.doesNotMatch(text,/garantiza|en tiempo real|exclusiv|certificad/i);
- // Render IA keeps a single paid entry: the existing band. Its card has no «Abrir Entregar» of its own.
- assert.equal(await page.locator('#welcomeAIServices #welcomeRenderAIGo').count(),0);assert.equal(await page.locator('#welcomeRenderAIGo').count(),1);
- assert.equal(await page.locator('#welcomeAI-render-ai').textContent(),'Ver Render IA');
- const order=await page.evaluate(()=>['#welcomeCapabilities','#welcomeRenderAI','#welcomeAIServices','#welcomeWalk','#welcomeSolutions'].map(s=>document.querySelector(s).getBoundingClientRect().top));
+ // H-C2 (UX-312 Home): Render IA conserva una sola entrada de pago, su servicio, que abre Entregar → Vistas del proyecto.
+ assert.equal(await page.locator('#welcomeRenderAI, #welcomeRenderAIGo').count(),0);
+ assert.equal(await page.locator('#welcomeAI-render-ai').textContent(),'Abrir Entregar · Vistas del proyecto');
+ const order=await page.evaluate(()=>['#welcomeSolutions','#welcomeCapabilities','#welcomeAIServices','#welcomeWalk'].map(s=>document.querySelector(s).getBoundingClientRect().top));
  for(let i=1;i<order.length;i++)assert.ok(order[i-1]<order[i],'reading order '+i);
  assert.equal(await noScroll(page),true,'no horizontal scroll');
  for(const b of await page.locator('#welcomeAIServices .ai-service-go').all()){const box=await b.boundingBox();assert.ok(box.height>=44,'44 px target');}
@@ -52,8 +52,8 @@ test(`four verified states, honest texts, CAT-04 pilot, no duplicate Render IA, 
 test('every button opens the real service: Render IA band, Assistant, CAT-04, Image studio and FOT-01 (simulations) 1440x900',{timeout:150000},async t=>{
  const vp={width:1440,height:900};
  {const {page,errors,api,press}=await open(t,vp);await press('#welcomeAI-render-ai');
-  await page.waitForFunction(()=>document.activeElement?.id==='welcomeRenderAITitle');
-  assert.equal(await page.locator('#welcomeDialog[open]').count(),1,'stays in the Home');assert.equal(await page.locator('#aiRenderDialog[open]').count(),0,'never opens the paid dialog');
+  await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&window.FloorPlanProfessionalUI?.area==='deliver');
+  assert.equal(await page.locator('#aiRenderDialog[open]').count(),0,'never opens the paid dialog');
   assert.deepEqual(api,[]);assert.deepEqual(errors,[]);}
  {const {page,errors,api,press}=await open(t,vp);const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await press('#welcomeAI-assistant');
   await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&!document.querySelector('#assistantPanel').hidden);
@@ -98,6 +98,6 @@ test('EN and ZH: section, states and buttons translated; keyboard reaches every 
  const seen=new Set();for(let i=0;i<220&&seen.size<7;i++){await page.keyboard.press('Tab');const id=await page.evaluate(()=>document.activeElement?.id||'');
   if(id.startsWith('welcomeAI-')){seen.add(id);const focus=await page.evaluate(()=>{const s=getComputedStyle(document.activeElement);return s.outlineStyle!=='none'||s.boxShadow!=='none';});assert.equal(focus,true,id+' visible focus');}}
  assert.equal(seen.size,7,'all seven buttons reachable with Tab');
- await page.locator('#welcomeAI-render-ai').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.activeElement?.id==='welcomeRenderAITitle');
+ await page.locator('#welcomeAI-render-ai').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>window.FloorPlanProfessionalUI?.area==='deliver');
  assert.deepEqual(errors,[]);
 });
