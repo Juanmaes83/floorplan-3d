@@ -1,7 +1,7 @@
 // Phase B3: «Grabar vídeo» in the client presentation. The preview plays the same Blob that is downloaded, the format
 // is said honestly (WebM with a warning when MP4 cannot be created), cancelling keeps the previous video and nothing
 // else, focus returns to the presentation and the project never changes. Captures go to QA_SHOTS when set.
-const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
+const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createHash}=require('node:crypto'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..'),SHOTS=process.env.QA_SHOTS||'';let server,browser,url;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary'};
 before(async()=>{server=createServer(async(req,res)=>{try{const p=new URL(req.url,'http://l').pathname,f=path.resolve(root,'.'+(p==='/'?'/index.html':p));if(!f.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
@@ -9,6 +9,7 @@ before(async()=>{server=createServer(async(req,res)=>{try{const p=new URL(req.ur
  browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});});
 after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
 const shot=async(page,name)=>{if(!SHOTS)return;await fs.mkdir(SHOTS,{recursive:true});await page.screenshot({path:path.join(SHOTS,name+'.png')});};
+require('./helpers/tour-video-discoverability.cjs')({getBrowser:()=>browser,getOrigin:()=>url});
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])
 test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${viewport.height}`,{timeout:420000},async t=>{
@@ -42,6 +43,15 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
  assert.equal(d.suggestedFilename(),`rubik-sota-recorrido-${await page.evaluate(()=>FloorPlanTourVideo.filename().replace(/^rubik-sota-recorrido-/,''))}`);
  assert.match(d.suggestedFilename(),type.startsWith('video/mp4')?/\.mp4$/:/\.webm$/,'a WebM file is never named .mp4');
  const bytes=await fs.readFile(await d.path());assert.equal(bytes.length,preview.size,'the download is the previewed Blob');
+ const recorded=await page.evaluate(async()=>{
+  const {blob,frames,durationMs}=FloorPlanTourVideo.result;
+  const previewBytes=await (await fetch(document.getElementById('tourVideoPreview').src)).arrayBuffer();
+  const digest=async data=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',data)));
+  return {frames,durationMs,previewHash:await digest(previewBytes),blobHash:await digest(await blob.arrayBuffer())};
+ });
+ assert.ok(recorded.frames>0&&recorded.durationMs>0,'the recording contains frames and has a positive duration');
+ assert.deepEqual(recorded.previewHash,recorded.blobHash,'the player references the exact recorded bytes');
+ assert.equal(createHash('sha256').update(bytes).digest('hex'),Buffer.from(recorded.previewHash).toString('hex'),'the download is byte-identical to the preview');
  // Cancelling a second recording keeps the first video and says nothing was kept.
  // Cancelled at once (a pointer click waits for a stable frame, which on software rendering can outlast the recording).
  await dialog.locator('#tourVideoGo').click();await page.evaluate(()=>document.querySelector('#tourVideoCancel').click());

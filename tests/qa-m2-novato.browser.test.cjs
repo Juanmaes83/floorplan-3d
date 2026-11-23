@@ -61,9 +61,46 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
  await shot(page,'v5-06-recorrido-avanzado',{escenario:'Recorrido de obra',observado:j?.sum});
  // Evolución 4D
  await rotulo(page,'Paso 4: miro cómo se construye la casa día a día.');await page.locator('[data-journey="evolucion"]').click();
- await page.waitForSelector('#evolutionOverlay:not([hidden])');const f=H.evoFrame(page);await f.waitForFunction(()=>window.__ft3dFidelity?.ctx);await page.waitForTimeout(800);
- await f.locator('#play').click();await page.waitForTimeout(3000);await f.locator('#play').click();await shot(page,'v5-07-evolucion',{escenario:'Evolución 4D'});
- S.check('N.10','La evolución reproduce el plan (la fecha avanza)',!!(await f.evaluate(()=>window.__ft3dFidelity.last?.date)));
+ await page.waitForSelector('#evolutionOverlay:not([hidden])');
+ await page.frameLocator('#evolutionFrame').locator('body.ready').waitFor();
+ const f=H.evoFrame(page),play=f.locator('#play');
+ await f.waitForFunction(()=>window.__ft3dFidelity?.ctx&&window.__ft3dFidelity.last?.date);
+ const initialDate=await f.evaluate(()=>{
+  const fidelity=window.__ft3dFidelity,initial=fidelity.last.date;
+  // Observe and pause on the same day-change event so a slow runner cannot race the HERO arrival.
+  const onAdvance=({detail})=>{
+   if(!fidelity.playing||detail.date<=initial||detail.stage==='final')return;
+   window.removeEventListener('ft3d8-moment',onAdvance);
+   const button=document.getElementById('play'),box=button.getBoundingClientRect();
+   const reachable=button.contains(document.elementFromPoint(box.left+box.width/2,box.top+box.height/2));
+   if(reachable)button.click();
+   window.__qaV5Pause={date:detail.date,paused:!fidelity.playing,reachable};
+  };
+  window.addEventListener('ft3d8-moment',onAdvance);
+  return initial;
+ });
+ await play.click();
+ await f.waitForFunction(()=>window.__qaV5Pause);
+ const paused=await f.evaluate(()=>window.__qaV5Pause);
+ S.check('N.10','La fecha avanza y el reproductor puede pausarse antes del final',
+  paused.date>initialDate&&paused.paused&&paused.reachable,{observed:{initialDate,...paused}});
+ await shot(page,'v5-07-evolucion',{escenario:'Evolución 4D'});
+
+ await play.click();
+ const exitHero=f.locator('#rfSalir');
+ await exitHero.waitFor();
+ await shot(page,'v5-07-hero',{escenario:'Cierre HERO'});
+ await exitHero.click();
+ await f.locator('.stagewrap.rf-full').waitFor({state:'hidden'});
+ // A trial click checks real pointer reachability while keeping the timeline at its completed state.
+ await play.click({trial:true});
+ const returned=await f.evaluate(()=>({
+  heroActive:window.__rubikFinal?.activo,
+  date:window.__ft3dFidelity.last?.date,
+  focus:document.activeElement?.id||null,
+ }));
+ S.check('N.10c','Salir del cierre HERO devuelve la interacción al reproductor y conserva la fecha final',
+  returned.heroActive===false&&returned.date>paused.date,{observed:returned});
  await rotulo(page,'Paso 5: Entregar. Preparo el documento para el cliente.');await page.locator('.cx-step[data-step="entrega"]').click();await page.waitForTimeout(900);
  await shot(page,'v5-08-entregar',{escenario:'Entregar'});
  S.check('N.10b','Entregar no muestra textos técnicos de desarrollo (nombres de módulos)',!/FloorPlanCore|FloorPlanRoof|FT3D-8|C1–C4 \(FloorPlanBudget\)/.test(await f.locator('body').innerText()),{observed:(await f.locator('footer').innerText().catch(()=>'')).slice(0,160)});
