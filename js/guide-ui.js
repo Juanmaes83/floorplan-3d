@@ -116,6 +116,12 @@
  }
  function openWelcome(record=true){closeDialogs(welcome);closeDrawers();if(record)setRoute('welcome');buildWelcome();show(welcome);const heading=welcome.querySelector('#welcomeDialogTitle');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true});}
  function ownRecoverable(){return library?.all().some(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));}
+ // UX-312 Home · imagen real de RUBIK que se pide SOLO cuando su sitio entra en pantalla (contrato de privacidad F2: abrir
+ // la Home no descarga lo que nadie ve). Clase .welcome-real-shot: imagen dibujada por la app, nunca marcado inyectado.
+ function realImg(parent,src,alt,cls){const im=el('img',undefined,parent,'welcome-real-shot'+(cls?' '+cls:''));im.alt=alt;im.decoding='async';
+  const put=()=>{if(!im.getAttribute('src'))im.src=src;};
+  if(typeof IntersectionObserver!=='function')put();else{const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();put();}},{rootMargin:'200px'});io.observe(parent);}
+  return im;}
  function buildWelcome(){welcome.replaceChildren();const shell=el('div',undefined,welcome,'welcome-shell'),brand=el('div',undefined,shell,'welcome-brand'),mark=el('div',undefined,brand,'brand-mark'),glyph=el('span',undefined,mark,'brand-glyph');glyph.setAttribute('aria-hidden','true');for(let i=0;i<4;i++)el('i',undefined,glyph);const words=el('div',undefined,mark);el('strong','Rubik Sota',words);el('small','Floor Plan Designer',words);
   const nav=el('div',undefined,brand,'welcome-nav');
   if(data.seen||hadLibrary)btn('welcomeReturn',tx('Volver al proyecto →','Return to project →','返回项目 →'),closeWelcome,nav);
@@ -174,7 +180,7 @@
    ['works','assets/welcome/demo-evolucion-4d.webp',['Construir','Build','建造'],['La obra prevista','The planned works','计划中的施工'],['La vivienda se construye semana a semana según su plan de obra.','The home is built week by week following its works plan.','住宅按施工计划逐周建造。'],['Datos de ejemplo: fechas ilustrativas y sin importes.','Example data: illustrative dates, no amounts.','示例数据：日期仅供说明，不含金额。'],['Ver la obra prevista','See the planned works','查看计划中的施工'],()=>{location.href='evolucion/?demo=obra';}],
    ['delivery','assets/welcome/caso-entrega.webp',['Presentar y recorrer','Present and walk through','展示与漫游'],['La entrega al cliente','The client delivery','交付给客户'],['Archivo, lámina, dossier, visita y vídeo, limpios o con tu firma.','File, sheet, dossier, visit and video, clean or with your signature.','文件、图纸、档案、参观和视频，可不署名或带你的署名。'],null,['Ver qué puedes entregar','See what you can deliver','查看可以交付什么'],goDeliverables]]){
    const li=el('li',undefined,steps,'welcome-case-step');li.dataset.step=id;
-   const fig=el('figure',undefined,li);const im=el('img',undefined,fig);im.src=img;im.loading='lazy';im.alt=label(title)+' · '+tx('captura real de RUBIK con la vivienda de ejemplo','real RUBIK capture of the example home','示例住宅的 RUBIK 真实截图');
+   const fig=el('figure',undefined,li);realImg(fig,img,label(title)+' · '+tx('captura real de RUBIK con la vivienda de ejemplo','real RUBIK capture of the example home','示例住宅的 RUBIK 真实截图'));
    el('figcaption',tx('Captura real · vivienda de ejemplo','Real capture · example home','真实截图 · 示例住宅'),fig);
    el('p',label(phase),li,'welcome-case-phase');el('h3',label(title),li);el('p',label(text),li);if(note)el('p',label(note),li,'demo-card-note');
    btn('welcomeCase-'+id,label(action),()=>fn(),li).classList.add('guide-link');}
@@ -210,7 +216,7 @@
    showPurpose();renderHero();renderCapabilities();renderServices();renderDeliverables();markSolution();
   },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));
    // Retrato del oficio (decorativo: el nombre ya está en el botón). Procedencia en la nota de la sección.
-   const face=document.createElement('img');face.src='assets/welcome/perfiles/'+PORTRAIT[id]+'.webp';face.alt='';face.width=40;face.height=40;face.loading='lazy';face.className='welcome-audience-face';option.prepend(face);}
+   const face=realImg(option,'assets/welcome/perfiles/'+PORTRAIT[id]+'.webp','','welcome-audience-face');face.width=40;face.height=40;option.prepend(face);}
   el('p',tx('Retratos: imágenes generadas para ilustrar cada oficio, no son personas reales. Constructora: captura real de Evolución de obra.','Portraits: images generated to illustrate each field, not real people. Construction: real capture of the 4D build.','肖像：为说明各职业而生成的图片，并非真人。施工单位：4D 施工的真实截图。'),audienceSection,'welcome-audience-credit');
   // The chosen field answers «what is it for me» and offers the same first action as the entries above.
   const purpose=el('div',undefined,audienceSection,'welcome-audience-purpose');purpose.id='welcomeAudiencePurpose';purpose.setAttribute('aria-live','polite');
@@ -345,7 +351,7 @@
    const find=()=>{const c=document.querySelector(`#professionalWorkspace [data-entrega-code="${code}"]`);if(c){c.scrollIntoView({block:'center',behavior:'auto'});(c.querySelector('button:not([disabled]),a[href]')||c).focus({preventScroll:true});return;}if(++n<40)setTimeout(find,100);};setTimeout(find,60);}
   const deliv=el('section',undefined,audienceSection,'welcome-deliverables');deliv.id='welcomeDeliverables';deliv.setAttribute('aria-labelledby','welcomeDeliverablesTitle');
   const dItem=(d,parent,tag='article')=>{const [code,,img,name,what,format,req,signed]=d;const card=el(tag,undefined,parent,'deliverable');card.dataset.entregaCode=code;
-   const fig=el('div',undefined,card,'deliverable-thumb');if(img){const im=el('img',undefined,fig);im.src=img;im.loading='lazy';im.alt=label(name)+' · '+tx('captura real de RUBIK','real RUBIK capture','RUBIK 真实截图');}else{fig.classList.add('is-empty');el('span',code,fig);}
+   const fig=el('div',undefined,card,'deliverable-thumb');if(img){realImg(fig,img,label(name)+' · '+tx('captura real de RUBIK','real RUBIK capture','RUBIK 真实截图'));}else{fig.classList.add('is-empty');el('span',code,fig);}
    const body=el('div',undefined,card,'deliverable-body');const top=el('p',undefined,body,'deliverable-meta');el('span',code,top,'deliverable-code');el('span',format,top);if(signed)el('span',tx('Limpio o con tu firma','Clean or signed','可不署名或署名'),top);
    el('h4',label(name),body);el('p',label(what),body);el('p',label(req),body,'deliverable-req');
    btn('welcomeDeliver-'+code+(tag==='li'?'-all':''),tx('Abrir en Entregar','Open in Deliver','在交付中打开'),()=>openDeliver(code),body).classList.add('guide-link');return card;};
