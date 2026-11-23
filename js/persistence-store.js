@@ -48,17 +48,26 @@
    // late success is closed, so a rejected open never leaves a connection that blocks other tabs.
    const r=idb.open(name,1);let blocked=false,missing=false;
    r.onupgradeneeded=()=>{if(!create){missing=true;r.transaction.abort();return;}if(blocked){r.transaction?.abort();return;}const db=r.result;for(const s of ['docs','meta','legacy'])db.createObjectStore(s);db.createObjectStore('conflicts',{autoIncrement:true});};
-   r.onsuccess=()=>{const db=r.result;if(blocked){db.close();return;}db.onversionchange=()=>db.close();resolve(db);};
+   r.onsuccess=()=>{const db=r.result;if(blocked){db.close();return;}db.onversionchange=()=>{db.close();root.FloorPlanSchemaEpoch?.markOutdated('versionchange');};resolve(db);};
    r.onerror=()=>reject(missing?new PersistenceError('authority-missing','Abre el editor para preparar su biblioteca local.'):new PersistenceError('open-failed','No se pudo abrir el almacenamiento del navegador: '+describe(r.error),{cause:r.error}));
    r.onblocked=()=>{blocked=true;reject(new PersistenceError('open-blocked','Otra pestaña de RUBIK está bloqueando el almacenamiento. Ciérrala o recárgala; tus datos guardados no se han tocado.'));};
   });
  }
  // One transaction; resolves with fn's outcome ONLY when the transaction completed. fn may call `abort(outcome)`.
+ // A0: TODA escritura en la autoridad (confirmación, migración, conflictos, metadatos del espejo, adopción) lee la época
+ // vigente DENTRO de su propia transacción, después de cualquier espera previa: el marcador de localStorage y
+ // `meta.schemaEpoch`. Si esta pestaña no puede escribir, la transacción se aborta sin escribir nada.
  function run(db,stores,mode,fn){
+  const E=root.FloorPlanSchemaEpoch,gate=!!E&&mode==='readwrite';
+  if(gate&&!stores.includes('meta'))stores=[...stores,'meta'];
   return new Promise((resolve,reject)=>{
    let t;try{t=db.transaction(stores,mode,mode==='readwrite'?{durability:'strict'}:undefined);}catch(e){reject(new PersistenceError('write-failed','No se pudo iniciar el guardado: '+describe(e),{cause:e}));return;}
    let outcome,aborted=null;const s=Object.fromEntries(stores.map(n=>[n,t.objectStore(n)]));
-   try{outcome=fn(s,o=>{aborted={value:o};t.abort();});}catch(e){aborted={error:e};try{t.abort();}catch{}}
+   const body=()=>{try{outcome=fn(s,o=>{aborted={value:o};t.abort();});}catch(e){aborted={error:e};try{t.abort();}catch{}}};
+   if(!gate)body();
+   else s.meta.get('schemaEpoch').onsuccess=e=>{let st=E.read();if(st.state==='ok')st=E.fromMeta(e.target.result);
+    if(st.state==='ok'){body();return;}
+    E.force(st);aborted={error:new PersistenceError('schema-'+st.state,E.error(st).message,{reason:st.reason})};try{t.abort();}catch{}};
    t.oncomplete=()=>resolve(typeof outcome==='function'?outcome():outcome);
    t.onabort=()=>{if(aborted&&'value'in aborted)resolve(aborted.value);else{const e=aborted?.error||t.error;reject(e instanceof PersistenceError?e:new PersistenceError('write-failed','No se ha guardado: '+describe(e),{cause:e}));}};
   });
@@ -69,6 +78,8 @@
 
  // ── Migration (idempotent, two phases, verified, localStorage untouched) ─────────────────────────────────────────
  async function migrate({db,storage,locks,hooks={}}){
+  // A0: una pestaña desactualizada o en estado indeterminado no migra (no escribe en la autoridad).
+  {const E=root.FloorPlanSchemaEpoch,s=E?.read(storage);if(s&&s.state!=='ok'){E.force(s);throw new PersistenceError('schema-'+s.state,E.error(s).message,{reason:s.reason});}}
   return withLock(locks,async()=>{
    const done=await meta(db,'migration');if(done?.phase==='done')return {status:'already',migration:done};
    const originals={},hashes={};for(const k of KEYS){const v=storage.getItem(k);if(v!==null)originals[k]=v;}
@@ -137,18 +148,22 @@
  // every managed key as the tab sees it), not only the batch: library and documents stay coherent with each other.
  async function commit({db,locks,storage,baseRevision,changes,snapshot,tab='',mirror=true,hooks,recovery}){
   for(const k of Object.keys(changes))if(!managed(k))throw new PersistenceError('key-unmanaged',`«${k}» no está bajo la autoridad de persistencia.`);
+  // A0: época de esquema. Primero el marcador de localStorage (síncrono); después, la de la autoridad DENTRO de la transacción.
+  const E=root.FloorPlanSchemaEpoch,epochError=s=>{E?.force(s);return new PersistenceError('schema-'+s.state,E?E.error(s).message:'Esta pestaña no puede guardar.',{reason:s.reason});};
+  if(E){const s=E.read(storage||undefined);if(s.state!=='ok')throw epochError(s);}
   return withLock(locks,async()=>{
    const stores=recovery?['docs','meta','conflicts']:['docs','meta'];
    const r=await run(db,stores,'readwrite',(s,abort)=>{let out;
     function write(cur){
      for(const [k,v] of Object.entries(changes)){if(v===null)s.docs.delete(k);else s.docs.put(v,k);}
      const n=cur+1,at=new Date().toISOString();s.meta.put({n,at,by:tab},'revision');out={status:'saved',revision:n};
+     if(E)s.meta.put({at,tab},'writersSeen:'+E.CURRENT); // evidencia de convivencia (R1-D1)
      if(recovery){
       const keep=s.conflicts.add({reason:'superseded',revision:cur,docs:recovery.docs,at});keep.onsuccess=()=>{out.superseded=keep.result;};
       s.conflicts.delete(recovery.id);
      }
     }
-    s.meta.get('revision').onsuccess=e=>{const cur=e.target.result?.n??0;
+    const revision=()=>s.meta.get('revision').onsuccess=e=>{const cur=e.target.result?.n??0;
      if(cur!==baseRevision){abort({status:'conflict',revision:cur});return;}
      if(!recovery){write(cur);return;}
      s.conflicts.get(recovery.id).onsuccess=event=>{
@@ -159,6 +174,8 @@
       write(cur);
      };
     };
+    // A0: run() ya ha leído la época en esta MISMA transacción antes de llegar aquí.
+    revision();
     return ()=>out;});
    if(r.status==='conflict'){
     if(recovery)return r;
@@ -186,8 +203,10 @@
   const diverged=await divergence(storage,m);let conflictId=null;
   if(diverged)conflictId=await saveConflict(db,{reason:'legacy-diverged',revision:m.revision,docs:diverged});
   const setMeta=v=>run(db,['meta'],'readwrite',s=>{s.meta.put(v,'mirror');});
-  try{storage.setItem(LIBRARY,TOMBSTONE);}
+  const E=root.FloorPlanSchemaEpoch,epochOk=()=>{E?.check();}; // A0: después de cada espera, justo antes de escribir
+  try{epochOk();storage.setItem(LIBRARY,TOMBSTONE);}
   catch(e){
+   if(e?.name==='SchemaEpochError')return {ok:false,blocked:false,conflictId,schema:true,message:e.message};
    // localStorage refuses even a smaller value (in practice: disabled or broken). Nothing else is written, so it keeps
    // the previous single-revision copy; the state says so.
    await setMeta({...m,ok:false,blocked:false,error:describe(e)}).catch(()=>{});
@@ -198,8 +217,8 @@
   if(!allowCopy)return {ok:false,blocked:true,conflictId,message:'Guardado en IndexedDB. La copia para versiones anteriores está bloqueada porque el navegador no permite coordinarla.'};
   try{
    if(hooks.afterBarrier)await hooks.afterBarrier();
-   for(const k of KEYS){if(k===LIBRARY)continue;if(docs.has(k)){storage.setItem(k,docs.get(k));hashes[k]=await sha(docs.get(k));}else{storage.removeItem(k);delete hashes[k];}}
-   if(docs.has(LIBRARY)){storage.setItem(LIBRARY,docs.get(LIBRARY));hashes[LIBRARY]=await sha(docs.get(LIBRARY));}
+   for(const k of KEYS){if(k===LIBRARY)continue;epochOk();if(docs.has(k)){storage.setItem(k,docs.get(k));hashes[k]=await sha(docs.get(k));}else{storage.removeItem(k);delete hashes[k];}}
+   epochOk();if(docs.has(LIBRARY)){storage.setItem(LIBRARY,docs.get(LIBRARY));hashes[LIBRARY]=await sha(docs.get(LIBRARY));}
    else{storage.removeItem(LIBRARY);delete hashes[LIBRARY];}
    await setMeta({revision,hashes,ok:true,state:'done'});return {ok:true,conflictId};
   }catch(e){
