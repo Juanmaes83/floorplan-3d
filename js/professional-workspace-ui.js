@@ -48,6 +48,7 @@
    section.querySelector('.professional-head small').textContent=tx('Mesa de trabajo','Project desk','项目工作台');const frame=document.createDocumentFragment();projectContext=Preview.context(frame,summary,{variant:'hero',caption:area==='deliver'?tx('Lo que recibirá tu cliente','What your client will receive','客户将收到的内容'):tx('La vivienda que analizas','The home you are analysing','您正在分析的住宅')});projectContext.classList.add('professional-project-context');grid.before(frame);
   }
   if(area==='deliver'){
+   if(projectContext)deliveryHero(projectContext);
    const groups=[['documentation',tx('Documentación','Documentation','文档'),['surface-sheet','sheet']],['experience',tx('La vivienda, para tu cliente','Your home, for the client','向客户展示住宅'),['presentation','images']],['coordination',tx('Seguimiento del proyecto','Project follow-up','项目跟进'),['budget','review']],['signature',tx('Identidad de la entrega','Delivery identity','交付身份'),['studio']]];
    for(const[key,title,routes]of groups){const group=el('section',undefined,grid,key==='signature'?'professional-delivery-signature':'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
    // The group provides the identity heading; retain the card's original title for existing accessible routes.
@@ -92,6 +93,36 @@
  function groupSection(parent,key,title,cls='professional-delivery-group'){let g=section.querySelector('[data-group="'+key+'"]');
   if(!g){g=el('section',undefined,parent,cls);g.dataset.group=key;const h=el('h2',title,g);h.id='delivery-group-'+key;g.setAttribute('aria-labelledby',h.id);el('div',undefined,g,'professional-group-items');}
   return g;}
+ const deliveryCovers={"D1":["d1-ficha"],"D2":["d2-lamina"],"D3":["d3-dossier"],"D4":[],"D5":["d5-entregables"],"P1":["vista-general"],"P2":["vista-salon","vista-dormitorio-principal","vista-dormitorio-infantil"],"P3":["fase-recorrer"],"P4":["demo-evolucion"],"P5":["p5-material-board"],"P6":["fase-hero"],"P7":["p7-archivo-cliente"],"S1":["s1-presupuesto"],"S2":["s2-observaciones"],"T1":["t1-render-cycles"],"T2":["vista-general"]};
+ function deliveryCover(card,code){
+  const files=deliveryCovers[code];
+  if(!files||card.querySelector('.perla-delivery-cover'))return;
+  const cover=el('figure',undefined,null,'perla-delivery-cover');
+  for(const file of files){
+   const image=el('img',undefined,cover);
+   image.src='assets/delivery/perla/'+file+'.jpg';image.alt='';image.loading='lazy';
+  }
+  if(!files.length){
+   const samples=el('div',undefined,cover,'perla-document-sample');
+   samples.setAttribute('aria-hidden','true');
+   for(let i=0;i<4;i++)el('span',undefined,samples);
+  }
+  if(code==='T2')el('span',tx('B · crea una variante','B · create a variant','B · 创建变体'),cover,'perla-comparison-placeholder');
+  el('figcaption',tx('Ejemplo','Example','示例'),cover);
+  card.prepend(cover);card.classList.add('perla-visual-card');
+ }
+ function deliveryHero(context){
+  const drawing=context.querySelector('.project-context-drawing');
+  const cover=el('figure',undefined,null,'perla-delivery-hero');
+  const image=el('img',undefined,cover);
+  image.src='assets/delivery/perla/vista-general.jpg';
+  image.alt=tx('Vista 3D de la vivienda de ejemplo','3D view of the example home','示例住宅三维视图');
+  el('figcaption',tx('Vivienda de ejemplo','Example home','示例住宅'),cover);
+  drawing.before(cover);drawing.classList.add('perla-active-plan');
+  context.classList.add('perla-delivery-context');
+  const title=el('h2',tx('Lo que recibirá tu cliente','What your client will receive','客户将收到的内容'),null,'perla-delivery-title');context.before(title);
+  context.querySelector('.project-context-copy').append(drawing);
+ }
  function deliveryCatalog(index){
   const catalog=el('details',undefined,index,'professional-full-catalog');
   el('summary',tx('Ver todos los documentos y entregables','View all documents and deliverables','查看所有文档与交付物'),catalog);
@@ -146,7 +177,7 @@
   if(!index){index=el('section',undefined,null,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';const count=el('p',undefined,index,'professional-count');deliveryFilters(index,count);deliveryCatalog(index);const panel=el('aside',undefined,index,'professional-delivery-detail');panel.setAttribute('aria-live','polite');el('h3',tx('Elige un entregable','Choose a deliverable','选择交付物'),panel);grid.prepend(index);}
   let prev=index.querySelector(':scope>.professional-delivery-filters');
   for(const[key,title,items]of INDICE()){const g=groupSection(index,key,title);putAfter(prev,g);prev=g;const box=g.querySelector('.professional-group-items');let last=null;
-   for(const[mod,code]of items){const c=[...section.querySelectorAll('.professional-card')].find(x=>moduleOf(x)===mod);if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;c.dataset.entregaCode=code;
+   for(const[mod,code]of items){const c=[...section.querySelectorAll('.professional-card')].find(x=>moduleOf(x)===mod);if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;c.dataset.entregaCode=code;deliveryCover(c,code);
     if(!c.querySelector(':scope>.professional-code')){const b=el('span',code,null,'professional-code');(c.querySelector(':scope>h3')||c.firstChild)?.before(b);}
     if(!c.querySelector('.professional-card-details')){
      const detailButton=button(tx('Ver detalles','View details','查看详情'),c,()=>{
@@ -172,11 +203,15 @@
   for(let n=index.previousElementSibling;n;n=index.previousElementSibling){if(n.matches('.professional-card,.professional-delivery-group'))break;index.after(n);}
   const journey=grid.querySelector('#obraJourney');putAfter(index,journey);
   const band=[...grid.querySelectorAll(':scope>.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putAfter(journey||index,band);
-  const sign=section.querySelector('[data-group="signature"]'),ctx=section.querySelector('.professional-project-context');putBefore(ctx||grid,sign);
+  const sign=section.querySelector('[data-group="signature"]'),ctx=section.querySelector('.professional-project-context');
+  putBefore(section.querySelector(':scope>.professional-more'),sign);
   for(const a of section.querySelectorAll('.studio-ficha-link'))a.closest('li').hidden=!section.querySelector('[data-entrega-code="'+a.dataset.entrega+'"]');
   const contextActions=ctx?.querySelector('.professional-context-actions');
   if(ctx&&!contextActions){
-   const actions=el('div',undefined,ctx.lastElementChild,'professional-context-actions');
+   const copy=ctx.querySelector('.project-context-copy');
+   const signature=sign?.querySelector('[data-route="studio-profile"]');
+   if(signature)button(tx('Elegir firma','Choose signature','选择签名'),copy,()=>signature.focus()).classList.add('perla-signature-shortcut');
+   const actions=el('div',undefined,copy,'professional-context-actions');
    for(const [id,label,primary] of [
     ['client-file',tx('Descargar archivo para el cliente','Download client file','下载客户文件'),true],
     ['client-3d',tx('Ver como cliente','View as client','以客户身份查看'),false]

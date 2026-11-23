@@ -177,3 +177,31 @@ body.professional-area:not(.presenting) .app>aside,body.professional-area:not(.p
 .professional-index .professional-delivery-group .professional-card{min-width:0;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface-panel)}
 .professional-index .professional-card-details.btn{border-color:transparent;background:transparent;color:var(--rubik-petrol,#1f5a66)}
 .professional-index .professional-card-details[aria-expanded=true]{border-color:var(--line);background:var(--surface-sunken)}
+
+/* UX-312 V3 corte 2: portada y mesa visual de Entregar. */
+#professionalWorkspace[data-area=deliver]{padding-inline:max(16px,calc((100vw - 1328px)/2))}
+.perla-delivery-title{font-size:clamp(23px,3vw,34px);line-height:1.15;margin:12px 0 18px}
+#professionalWorkspace .perla-delivery-context{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:0;padding:0;align-items:stretch;background:var(--surface-panel,#fff);border:0;border-radius:14px;overflow:hidden;box-shadow:0 12px 32px #1f232612}
+.perla-delivery-hero{position:relative;margin:0;background:#e1e0de;aspect-ratio:1.49}
+.perla-delivery-hero img{display:block;width:100%;height:100%;object-fit:cover}
+.perla-delivery-hero figcaption,.perla-delivery-cover figcaption{position:absolute;bottom:8px;left:8px;background:#fff;color:#1f2326;border-radius:5px;padding:2px 6px;font-size:11px}
+.perla-delivery-context .project-context-copy{padding:clamp(16px,2vw,26px);align-content:start;gap:12px}
+.perla-delivery-context .project-context-area{font-size:clamp(23px,3vw,34px);font-weight:750;color:var(--ink)}
+.perla-delivery-context .perla-active-plan{margin-top:8px;justify-self:start}
+.professional-index .perla-visual-card{position:relative;overflow:hidden}
+.perla-delivery-cover{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);aspect-ratio:1.58;margin:-16px -16px 12px;background:#ededed;overflow:hidden}
+.perla-delivery-cover img{display:block;width:100%;height:100%;min-height:0;object-fit:cover}
+.perla-visual-card>.professional-code{position:absolute;z-index:1;top:8px;left:8px;background:#fff}
+.perla-visual-card>.delivery-preview,.perla-visual-card.delivery3d-card>figure:not(.perla-delivery-cover){display:none}
+.perla-document-sample{display:grid;align-content:center;gap:8px;padding:20px}
+.perla-document-sample span{height:8px;border-radius:4px;background:#c5cace}
+.perla-document-sample span:nth-child(odd){width:75%}
+.perla-comparison-placeholder{align-self:center;margin:8px;padding:8px;border:1px dashed #7e888e;font-size:11px;text-align:center}
+@media(min-width:1200px){
+ .professional-index{grid-template-columns:minmax(0,2.25fr) minmax(240px,1fr);gap:0 24px}
+ .professional-index .professional-group-items{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:760px){#professionalWorkspace .perla-delivery-context{grid-template-columns:1fr}}
+
+.perla-delivery-hero{min-width:0}
+.perla-signature-shortcut.btn{justify-self:start;min-height:44px}
