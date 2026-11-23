@@ -1,11 +1,30 @@
 [
   {
     "id": "surface-wood-floor",
-    "key": "[\"mat_surface-wood-floor-floor\",\"surface-wood-floor\",1000,1000]",
+    "key": "[\"mat_surface-wood-floor-floor\",\"surface-wood-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 6208,
     "gpuBytes": 349526,
-    "loadMs": 652.0999999940395,
+    "loadMs": 198.89999999990687,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -13,6 +32,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "wood_floor",
       "title": "Wood Floor",
@@ -44,11 +65,30 @@
   },
   {
     "id": "surface-herringbone-parquet",
-    "key": "[\"mat_surface-herringbone-parquet-floor\",\"surface-herringbone-parquet\",1000,1000]",
+    "key": "[\"mat_surface-herringbone-parquet-floor\",\"surface-herringbone-parquet\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 11452,
     "gpuBytes": 349526,
-    "loadMs": 563,
+    "loadMs": 118,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -56,6 +96,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "herringbone_parquet",
       "title": "Herringbone Parquet",
@@ -87,11 +129,30 @@
   },
   {
     "id": "surface-diagonal-parquet",
-    "key": "[\"mat_surface-diagonal-parquet-floor\",\"surface-diagonal-parquet\",1000,1000]",
+    "key": "[\"mat_surface-diagonal-parquet-floor\",\"surface-diagonal-parquet\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 11544,
     "gpuBytes": 349526,
-    "loadMs": 591.2000000029802,
+    "loadMs": 132.5,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -99,6 +160,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "diagonal_parquet",
       "title": "Diagonal Parquet",
@@ -130,11 +193,30 @@
   },
   {
     "id": "surface-rectangular-parquet",
-    "key": "[\"mat_surface-rectangular-parquet-floor\",\"surface-rectangular-parquet\",1000,1000]",
+    "key": "[\"mat_surface-rectangular-parquet-floor\",\"surface-rectangular-parquet\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7050,
     "gpuBytes": 349526,
-    "loadMs": 575.7999999970198,
+    "loadMs": 140.80000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -142,6 +224,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "rectangular_parquet",
       "title": "Rectangular Parquet",
@@ -173,11 +257,30 @@
   },
   {
     "id": "surface-oak-wood-planks",
-    "key": "[\"mat_surface-oak-wood-planks-floor\",\"surface-oak-wood-planks\",1000,1000]",
+    "key": "[\"mat_surface-oak-wood-planks-floor\",\"surface-oak-wood-planks\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7908,
     "gpuBytes": 349526,
-    "loadMs": 607,
+    "loadMs": 118.10000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -185,6 +288,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "oak_wood_planks",
       "title": "Oak Wood Planks",
@@ -216,11 +321,30 @@
   },
   {
     "id": "surface-old-wood-floor",
-    "key": "[\"mat_surface-old-wood-floor-floor\",\"surface-old-wood-floor\",1000,1000]",
+    "key": "[\"mat_surface-old-wood-floor-floor\",\"surface-old-wood-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 10130,
     "gpuBytes": 349526,
-    "loadMs": 639.0999999940395,
+    "loadMs": 128.30000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -228,6 +352,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "old_wood_floor",
       "title": "Old Wood Floor",
@@ -259,11 +385,30 @@
   },
   {
     "id": "surface-wood-floor-worn",
-    "key": "[\"mat_surface-wood-floor-worn-floor\",\"surface-wood-floor-worn\",1000,1000]",
+    "key": "[\"mat_surface-wood-floor-worn-floor\",\"surface-wood-floor-worn\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7826,
     "gpuBytes": 349526,
-    "loadMs": 602,
+    "loadMs": 174.70000000018626,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -271,6 +416,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "wood_floor_worn",
       "title": "Wood Floor Worn",
@@ -302,11 +449,30 @@
   },
   {
     "id": "surface-wood-floor-deck",
-    "key": "[\"mat_surface-wood-floor-deck-floor\",\"surface-wood-floor-deck\",1000,1000]",
+    "key": "[\"mat_surface-wood-floor-deck-floor\",\"surface-wood-floor-deck\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 15902,
     "gpuBytes": 349526,
-    "loadMs": 549.5999999940395,
+    "loadMs": 197.5,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -314,6 +480,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "wood_floor_deck",
       "title": "Wood Floor Deck",
@@ -345,11 +513,30 @@
   },
   {
     "id": "surface-wood-planks",
-    "key": "[\"mat_surface-wood-planks-floor\",\"surface-wood-planks\",1000,1000]",
+    "key": "[\"mat_surface-wood-planks-floor\",\"surface-wood-planks\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 6708,
     "gpuBytes": 349526,
-    "loadMs": 570.2000000029802,
+    "loadMs": 144.19999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -357,6 +544,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "wood_planks",
       "title": "Wood Planks",
@@ -388,11 +577,30 @@
   },
   {
     "id": "surface-wood-planks-grey",
-    "key": "[\"mat_surface-wood-planks-grey-floor\",\"surface-wood-planks-grey\",1000,1000]",
+    "key": "[\"mat_surface-wood-planks-grey-floor\",\"surface-wood-planks-grey\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 10192,
     "gpuBytes": 349526,
-    "loadMs": 592.7999999970198,
+    "loadMs": 217.89999999990687,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -400,6 +608,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "wood_planks_grey",
       "title": "Wood Planks Grey",
@@ -431,11 +641,30 @@
   },
   {
     "id": "surface-square-tiles",
-    "key": "[\"mat_surface-square-tiles-floor\",\"surface-square-tiles\",1000,1000]",
+    "key": "[\"mat_surface-square-tiles-floor\",\"surface-square-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 10700,
     "gpuBytes": 349526,
-    "loadMs": 576.3999999910593,
+    "loadMs": 144.69999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -443,6 +672,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "square_tiles",
       "title": "Square Tiles",
@@ -474,11 +705,30 @@
   },
   {
     "id": "surface-brown-floor-tiles",
-    "key": "[\"mat_surface-brown-floor-tiles-floor\",\"surface-brown-floor-tiles\",1000,1000]",
+    "key": "[\"mat_surface-brown-floor-tiles-floor\",\"surface-brown-floor-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 8516,
     "gpuBytes": 349526,
-    "loadMs": 475.59999999403954,
+    "loadMs": 122.19999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -486,6 +736,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "brown_floor_tiles",
       "title": "Brown Floor Tiles",
@@ -517,11 +769,30 @@
   },
   {
     "id": "surface-floor-tiles-02",
-    "key": "[\"mat_surface-floor-tiles-02-floor\",\"surface-floor-tiles-02\",1000,1000]",
+    "key": "[\"mat_surface-floor-tiles-02-floor\",\"surface-floor-tiles-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 6828,
     "gpuBytes": 349526,
-    "loadMs": 523,
+    "loadMs": 121.60000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -529,6 +800,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "floor_tiles_02",
       "title": "Floor Tiles 02",
@@ -560,11 +833,30 @@
   },
   {
     "id": "surface-floor-tiles-04",
-    "key": "[\"mat_surface-floor-tiles-04-floor\",\"surface-floor-tiles-04\",1000,1000]",
+    "key": "[\"mat_surface-floor-tiles-04-floor\",\"surface-floor-tiles-04\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 3996,
     "gpuBytes": 349526,
-    "loadMs": 621.7000000029802,
+    "loadMs": 155.20000000018626,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -572,6 +864,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "floor_tiles_04",
       "title": "Floor Tiles 04",
@@ -603,11 +897,30 @@
   },
   {
     "id": "surface-floor-tiles-06",
-    "key": "[\"mat_surface-floor-tiles-06-floor\",\"surface-floor-tiles-06\",1000,1000]",
+    "key": "[\"mat_surface-floor-tiles-06-floor\",\"surface-floor-tiles-06\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 9552,
     "gpuBytes": 349526,
-    "loadMs": 561.2999999970198,
+    "loadMs": 171.5999999998603,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -615,6 +928,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "floor_tiles_06",
       "title": "Floor Tiles 06",
@@ -646,11 +961,30 @@
   },
   {
     "id": "surface-floor-tiles-08",
-    "key": "[\"mat_surface-floor-tiles-08-floor\",\"surface-floor-tiles-08\",1000,1000]",
+    "key": "[\"mat_surface-floor-tiles-08-floor\",\"surface-floor-tiles-08\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 6886,
     "gpuBytes": 349526,
-    "loadMs": 573.6000000089407,
+    "loadMs": 166.5999999998603,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -658,6 +992,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "floor_tiles_08",
       "title": "Floor Tiles 08",
@@ -689,11 +1025,30 @@
   },
   {
     "id": "surface-floor-tiles-09",
-    "key": "[\"mat_surface-floor-tiles-09-floor\",\"surface-floor-tiles-09\",1000,1000]",
+    "key": "[\"mat_surface-floor-tiles-09-floor\",\"surface-floor-tiles-09\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 15690,
     "gpuBytes": 349526,
-    "loadMs": 612.3999999910593,
+    "loadMs": 161,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -701,6 +1056,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "floor_tiles_09",
       "title": "Floor Tiles 09",
@@ -732,11 +1089,30 @@
   },
   {
     "id": "surface-interior-tiles",
-    "key": "[\"mat_surface-interior-tiles-floor\",\"surface-interior-tiles\",1000,1000]",
+    "key": "[\"mat_surface-interior-tiles-floor\",\"surface-interior-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 8218,
     "gpuBytes": 349526,
-    "loadMs": 589.4000000059605,
+    "loadMs": 134.19999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -744,6 +1120,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "interior_tiles",
       "title": "Interior Tiles",
@@ -775,11 +1153,30 @@
   },
   {
     "id": "surface-large-floor-tiles-02",
-    "key": "[\"mat_surface-large-floor-tiles-02-floor\",\"surface-large-floor-tiles-02\",1000,1000]",
+    "key": "[\"mat_surface-large-floor-tiles-02-floor\",\"surface-large-floor-tiles-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 15008,
     "gpuBytes": 349526,
-    "loadMs": 577.2000000029802,
+    "loadMs": 139.4000000001397,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -787,6 +1184,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "large_floor_tiles_02",
       "title": "Large Floor Tiles 02",
@@ -818,11 +1217,30 @@
   },
   {
     "id": "surface-long-white-tiles",
-    "key": "[\"mat_surface-long-white-tiles-floor\",\"surface-long-white-tiles\",1000,1000]",
+    "key": "[\"mat_surface-long-white-tiles-floor\",\"surface-long-white-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 10670,
     "gpuBytes": 349526,
-    "loadMs": 560.9000000059605,
+    "loadMs": 177.80000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -830,6 +1248,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "long_white_tiles",
       "title": "Long White Tiles",
@@ -861,11 +1281,30 @@
   },
   {
     "id": "surface-marble-01",
-    "key": "[\"mat_surface-marble-01-floor\",\"surface-marble-01\",1000,1000]",
+    "key": "[\"mat_surface-marble-01-floor\",\"surface-marble-01\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 3940,
     "gpuBytes": 349526,
-    "loadMs": 617.5,
+    "loadMs": 181.29999999981374,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -873,6 +1312,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "marble_01",
       "title": "Marble 01",
@@ -904,11 +1345,30 @@
   },
   {
     "id": "surface-marble-tiles",
-    "key": "[\"mat_surface-marble-tiles-floor\",\"surface-marble-tiles\",1000,1000]",
+    "key": "[\"mat_surface-marble-tiles-floor\",\"surface-marble-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 29516,
     "gpuBytes": 349526,
-    "loadMs": 595.1999999880791,
+    "loadMs": 221.10000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -916,6 +1376,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "marble_tiles",
       "title": "Marble Tiles",
@@ -947,11 +1409,30 @@
   },
   {
     "id": "surface-marble-mosaic-tiles",
-    "key": "[\"mat_surface-marble-mosaic-tiles-floor\",\"surface-marble-mosaic-tiles\",1000,1000]",
+    "key": "[\"mat_surface-marble-mosaic-tiles-floor\",\"surface-marble-mosaic-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 23380,
     "gpuBytes": 349526,
-    "loadMs": 678.8999999910593,
+    "loadMs": 192.19999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -959,6 +1440,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "marble_mosaic_tiles",
       "title": "Marble Mosaic Tiles",
@@ -990,11 +1473,30 @@
   },
   {
     "id": "surface-slate-floor",
-    "key": "[\"mat_surface-slate-floor-floor\",\"surface-slate-floor\",1000,1000]",
+    "key": "[\"mat_surface-slate-floor-floor\",\"surface-slate-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 5604,
     "gpuBytes": 349526,
-    "loadMs": 686.5999999940395,
+    "loadMs": 164.80000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1002,6 +1504,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "slate_floor",
       "title": "Slate Floor",
@@ -1033,11 +1537,30 @@
   },
   {
     "id": "surface-slate-floor-02",
-    "key": "[\"mat_surface-slate-floor-02-floor\",\"surface-slate-floor-02\",1000,1000]",
+    "key": "[\"mat_surface-slate-floor-02-floor\",\"surface-slate-floor-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7208,
     "gpuBytes": 349526,
-    "loadMs": 675.8999999910593,
+    "loadMs": 125.69999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1045,6 +1568,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "slate_floor_02",
       "title": "Slate Floor 02",
@@ -1076,11 +1601,30 @@
   },
   {
     "id": "surface-slate-floor-03",
-    "key": "[\"mat_surface-slate-floor-03-floor\",\"surface-slate-floor-03\",1000,1000]",
+    "key": "[\"mat_surface-slate-floor-03-floor\",\"surface-slate-floor-03\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 9580,
     "gpuBytes": 349526,
-    "loadMs": 788.2000000029802,
+    "loadMs": 167.20000000018626,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1088,6 +1632,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "slate_floor_03",
       "title": "Slate Floor 03",
@@ -1119,11 +1665,30 @@
   },
   {
     "id": "surface-stone-floor",
-    "key": "[\"mat_surface-stone-floor-floor\",\"surface-stone-floor\",1000,1000]",
+    "key": "[\"mat_surface-stone-floor-floor\",\"surface-stone-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 15294,
     "gpuBytes": 349526,
-    "loadMs": 662.2999999970198,
+    "loadMs": 144.10000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1131,6 +1696,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "stone_floor",
       "title": "Stone Floor",
@@ -1162,11 +1729,30 @@
   },
   {
     "id": "surface-monastery-stone-floor",
-    "key": "[\"mat_surface-monastery-stone-floor-floor\",\"surface-monastery-stone-floor\",1000,1000]",
+    "key": "[\"mat_surface-monastery-stone-floor-floor\",\"surface-monastery-stone-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 12756,
     "gpuBytes": 349526,
-    "loadMs": 631.9000000059605,
+    "loadMs": 146.19999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1174,6 +1760,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "monastery_stone_floor",
       "title": "Monastery Stone Floor",
@@ -1205,11 +1793,30 @@
   },
   {
     "id": "surface-granite-tile-02",
-    "key": "[\"mat_surface-granite-tile-02-floor\",\"surface-granite-tile-02\",1000,1000]",
+    "key": "[\"mat_surface-granite-tile-02-floor\",\"surface-granite-tile-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 4734,
     "gpuBytes": 349526,
-    "loadMs": 662.6000000089407,
+    "loadMs": 161.30000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1217,6 +1824,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "granite_tile_02",
       "title": "Granite Tile 02",
@@ -1248,11 +1857,30 @@
   },
   {
     "id": "surface-mixed-stone-tiles",
-    "key": "[\"mat_surface-mixed-stone-tiles-floor\",\"surface-mixed-stone-tiles\",1000,1000]",
+    "key": "[\"mat_surface-mixed-stone-tiles-floor\",\"surface-mixed-stone-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 24256,
     "gpuBytes": 349526,
-    "loadMs": 668.0999999940395,
+    "loadMs": 136.5,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.65,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1260,6 +1888,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "mixed_stone_tiles",
       "title": "Mixed Stone Tiles",
@@ -1291,11 +1921,30 @@
   },
   {
     "id": "surface-brushed-concrete",
-    "key": "[\"mat_surface-brushed-concrete-floor\",\"surface-brushed-concrete\",1000,1000]",
+    "key": "[\"mat_surface-brushed-concrete-floor\",\"surface-brushed-concrete\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 10796,
     "gpuBytes": 349526,
-    "loadMs": 584.4000000059605,
+    "loadMs": 143.19999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1303,6 +1952,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "brushed_concrete",
       "title": "Brushed Concrete",
@@ -1334,11 +1985,30 @@
   },
   {
     "id": "surface-brushed-concrete-03",
-    "key": "[\"mat_surface-brushed-concrete-03-floor\",\"surface-brushed-concrete-03\",1000,1000]",
+    "key": "[\"mat_surface-brushed-concrete-03-floor\",\"surface-brushed-concrete-03\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 12408,
     "gpuBytes": 349526,
-    "loadMs": 591.2999999970198,
+    "loadMs": 138.4000000001397,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1346,6 +2016,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "brushed_concrete_03",
       "title": "Brushed Concrete 03",
@@ -1377,11 +2049,30 @@
   },
   {
     "id": "surface-concrete-floor-01",
-    "key": "[\"mat_surface-concrete-floor-01-floor\",\"surface-concrete-floor-01\",1000,1000]",
+    "key": "[\"mat_surface-concrete-floor-01-floor\",\"surface-concrete-floor-01\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 24130,
     "gpuBytes": 349526,
-    "loadMs": 583.8999999910593,
+    "loadMs": 114.30000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1389,6 +2080,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "concrete_floor_01",
       "title": "Concrete Floor 01",
@@ -1420,11 +2113,30 @@
   },
   {
     "id": "surface-concrete-floor-02",
-    "key": "[\"mat_surface-concrete-floor-02-floor\",\"surface-concrete-floor-02\",1000,1000]",
+    "key": "[\"mat_surface-concrete-floor-02-floor\",\"surface-concrete-floor-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 21970,
     "gpuBytes": 349526,
-    "loadMs": 641.7000000029802,
+    "loadMs": 117.9000000001397,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1432,6 +2144,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "concrete_floor_02",
       "title": "Concrete Floor 02",
@@ -1463,11 +2177,30 @@
   },
   {
     "id": "surface-concrete-floor-03",
-    "key": "[\"mat_surface-concrete-floor-03-floor\",\"surface-concrete-floor-03\",1000,1000]",
+    "key": "[\"mat_surface-concrete-floor-03-floor\",\"surface-concrete-floor-03\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 19738,
     "gpuBytes": 349526,
-    "loadMs": 565.7999999970198,
+    "loadMs": 132.29999999981374,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1475,6 +2208,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "concrete_floor_03",
       "title": "Concrete Floor 03",
@@ -1506,11 +2241,30 @@
   },
   {
     "id": "surface-hangar-concrete-floor",
-    "key": "[\"mat_surface-hangar-concrete-floor-floor\",\"surface-hangar-concrete-floor\",1000,1000]",
+    "key": "[\"mat_surface-hangar-concrete-floor-floor\",\"surface-hangar-concrete-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 5170,
     "gpuBytes": 349526,
-    "loadMs": 583.5999999940395,
+    "loadMs": 141.30000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1518,6 +2272,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "hangar_concrete_floor",
       "title": "Hangar Concrete Floor",
@@ -1549,11 +2305,30 @@
   },
   {
     "id": "surface-smooth-concrete-floor",
-    "key": "[\"mat_surface-smooth-concrete-floor-floor\",\"surface-smooth-concrete-floor\",1000,1000]",
+    "key": "[\"mat_surface-smooth-concrete-floor-floor\",\"surface-smooth-concrete-floor\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 10524,
     "gpuBytes": 349526,
-    "loadMs": 589.2000000029802,
+    "loadMs": 142.10000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1561,6 +2336,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "smooth_concrete_floor",
       "title": "Smooth Concrete Floor",
@@ -1592,11 +2369,30 @@
   },
   {
     "id": "surface-scuffed-cement",
-    "key": "[\"mat_surface-scuffed-cement-floor\",\"surface-scuffed-cement\",1000,1000]",
+    "key": "[\"mat_surface-scuffed-cement-floor\",\"surface-scuffed-cement\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 5116,
     "gpuBytes": 349526,
-    "loadMs": 612.7999999970198,
+    "loadMs": 115.29999999981374,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1604,6 +2400,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "scuffed_cement",
       "title": "Scuffed Cement",
@@ -1635,11 +2433,30 @@
   },
   {
     "id": "surface-terrazzo-tiles",
-    "key": "[\"mat_surface-terrazzo-tiles-floor\",\"surface-terrazzo-tiles\",1000,1000]",
+    "key": "[\"mat_surface-terrazzo-tiles-floor\",\"surface-terrazzo-tiles\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 18646,
     "gpuBytes": 349526,
-    "loadMs": 556.8999999910593,
+    "loadMs": 124.30000000004657,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1647,6 +2464,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "terrazzo_tiles",
       "title": "Terrazzo Tiles",
@@ -1678,11 +2497,30 @@
   },
   {
     "id": "surface-granular-concrete",
-    "key": "[\"mat_surface-granular-concrete-floor\",\"surface-granular-concrete\",1000,1000]",
+    "key": "[\"mat_surface-granular-concrete-floor\",\"surface-granular-concrete\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 11712,
     "gpuBytes": 349526,
-    "loadMs": 542.4000000059605,
+    "loadMs": 101.10000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1690,6 +2528,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "granular_concrete",
       "title": "Granular Concrete",
@@ -1721,11 +2561,30 @@
   },
   {
     "id": "surface-white-plaster-02",
-    "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000]",
+    "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7864,
     "gpuBytes": 349526,
-    "loadMs": 598.2999999970198,
+    "loadMs": 106,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1733,6 +2592,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "white_plaster_02",
       "title": "White Plaster 02",
@@ -1764,11 +2625,30 @@
   },
   {
     "id": "surface-grey-plaster-03",
-    "key": "[\"mat_surface-grey-plaster-03-wall\",\"surface-grey-plaster-03\",1000,1000]",
+    "key": "[\"mat_surface-grey-plaster-03-wall\",\"surface-grey-plaster-03\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7742,
     "gpuBytes": 349526,
-    "loadMs": 626.2000000029802,
+    "loadMs": 134.0999999998603,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1776,6 +2656,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "grey_plaster_03",
       "title": "Grey Plaster 03",
@@ -1807,11 +2689,30 @@
   },
   {
     "id": "surface-grey-plaster-02",
-    "key": "[\"mat_surface-grey-plaster-02-wall\",\"surface-grey-plaster-02\",1000,1000]",
+    "key": "[\"mat_surface-grey-plaster-02-wall\",\"surface-grey-plaster-02\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 16708,
     "gpuBytes": 349526,
-    "loadMs": 551,
+    "loadMs": 107.5,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1819,6 +2720,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "grey_plaster_02",
       "title": "Grey Plaster 02",
@@ -1850,11 +2753,30 @@
   },
   {
     "id": "surface-painted-plaster-wall",
-    "key": "[\"mat_surface-painted-plaster-wall-wall\",\"surface-painted-plaster-wall\",1000,1000]",
+    "key": "[\"mat_surface-painted-plaster-wall-wall\",\"surface-painted-plaster-wall\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 3104,
     "gpuBytes": 349526,
-    "loadMs": 678.0999999940395,
+    "loadMs": 117.4000000001397,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1862,6 +2784,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "painted_plaster_wall",
       "title": "Painted Plaster Wall",
@@ -1893,11 +2817,30 @@
   },
   {
     "id": "surface-patterned-plaster-wall",
-    "key": "[\"mat_surface-patterned-plaster-wall-wall\",\"surface-patterned-plaster-wall\",1000,1000]",
+    "key": "[\"mat_surface-patterned-plaster-wall-wall\",\"surface-patterned-plaster-wall\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 18282,
     "gpuBytes": 349526,
-    "loadMs": 640.0999999940395,
+    "loadMs": 115.9000000001397,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1905,6 +2848,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "patterned_plaster_wall",
       "title": "Patterned Plaster Wall",
@@ -1936,11 +2881,30 @@
   },
   {
     "id": "surface-plastered-wall-03",
-    "key": "[\"mat_surface-plastered-wall-03-wall\",\"surface-plastered-wall-03\",1000,1000]",
+    "key": "[\"mat_surface-plastered-wall-03-wall\",\"surface-plastered-wall-03\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 4870,
     "gpuBytes": 349526,
-    "loadMs": 639.7000000029802,
+    "loadMs": 124.60000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1948,6 +2912,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "plastered_wall_03",
       "title": "Plastered Wall 03",
@@ -1979,11 +2945,30 @@
   },
   {
     "id": "surface-plastered-wall-04",
-    "key": "[\"mat_surface-plastered-wall-04-wall\",\"surface-plastered-wall-04\",1000,1000]",
+    "key": "[\"mat_surface-plastered-wall-04-wall\",\"surface-plastered-wall-04\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 1008,
     "gpuBytes": 349526,
-    "loadMs": 577.2999999970198,
+    "loadMs": 116.69999999995343,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -1991,6 +2976,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "plastered_wall_04",
       "title": "Plastered Wall 04",
@@ -2022,11 +3009,30 @@
   },
   {
     "id": "surface-blue-plaster-wall",
-    "key": "[\"mat_surface-blue-plaster-wall-wall\",\"surface-blue-plaster-wall\",1000,1000]",
+    "key": "[\"mat_surface-blue-plaster-wall-wall\",\"surface-blue-plaster-wall\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 3240,
     "gpuBytes": 349526,
-    "loadMs": 550.7000000029802,
+    "loadMs": 119.10000000009313,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -2034,6 +3040,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "blue_plaster_wall",
       "title": "Blue Plaster Wall",
@@ -2065,11 +3073,30 @@
   },
   {
     "id": "surface-yellow-plaster",
-    "key": "[\"mat_surface-yellow-plaster-wall\",\"surface-yellow-plaster\",1000,1000]",
+    "key": "[\"mat_surface-yellow-plaster-wall\",\"surface-yellow-plaster\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 7024,
     "gpuBytes": 349526,
-    "loadMs": 610.2999999970198,
+    "loadMs": 114.39999999990687,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -2077,6 +3104,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "yellow_plaster",
       "title": "Yellow Plaster",
@@ -2108,11 +3137,30 @@
   },
   {
     "id": "surface-patterned-clay-plaster",
-    "key": "[\"mat_surface-patterned-clay-plaster-wall\",\"surface-patterned-clay-plaster\",1000,1000]",
+    "key": "[\"mat_surface-patterned-clay-plaster-wall\",\"surface-patterned-clay-plaster\",1000,1000,false]",
     "state": "ready",
+    "detailState": "off",
     "bytes": 8058,
     "gpuBytes": 349526,
-    "loadMs": 663.4000000059605,
+    "loadMs": 123.5,
+    "recipe": null,
+    "generated": null,
+    "ownedTextures": 1,
+    "ownedBitmaps": 1,
+    "physical": {
+      "type": "MeshStandardMaterial",
+      "clearcoat": 0,
+      "clearcoatRoughness": 0
+    },
+    "material": {
+      "color": "ffffff",
+      "roughness": 0.92,
+      "metalness": 0,
+      "normalScale": [
+        1,
+        1
+      ]
+    },
     "map": {
       "repeat": [
         1,
@@ -2120,6 +3168,8 @@
       ],
       "colorSpace": "srgb"
     },
+    "normalMap": null,
+    "roughnessMap": null,
     "source": {
       "assetId": "patterned_clay_plaster",
       "title": "Patterned Clay Plaster",

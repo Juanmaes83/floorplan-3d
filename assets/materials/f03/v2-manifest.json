@@ -1,0 +1,616 @@
+{
+ "schema": "F03/pbr-derivatives@2",
+ "visualOnly": true,
+ "enabledByDefault": false,
+ "method": "F03 V1 (convert-pbr.py) sin cambios de criterio + escala métrica de la fuente + calibración contra el mismo activo del catálogo",
+ "tool": {
+  "script": "COMPONENTES/F03-V2-fachadas/tools/convertir-pbr-v2.py",
+  "OpenEXR": "3.5.3",
+  "NumPy": "2.5.5",
+  "Pillow": "12.3.0",
+  "albedoWebP": {
+   "quality": 88,
+   "method": 6
+  },
+  "dataWebP": {
+   "lossless": true,
+   "method": 6,
+   "exact": true
+  }
+ },
+ "profiles": {
+  "hero": 1024,
+  "balanced": 512
+ },
+ "sources": "COMPONENTES/F03-V2-fachadas/assets/fuentes-poly-haven.json",
+ "materials": {
+  "painted_plaster_wall": {
+   "preset": "surface-painted-plaster-wall",
+   "identity": "wall",
+   "name": "Yeso pintado",
+   "provenance": {
+    "provider": "Poly Haven",
+    "license": "CC0-1.0",
+    "page": "https://polyhaven.com/a/painted_plaster_wall",
+    "authors": [
+     "Amal Kumar"
+    ],
+    "filesHash": "77e9d68a3359a2815a60a62fd3f0eba0f2f41994",
+    "sourceResolution": "2k",
+    "albedoIcc": "sRGB IEC61966-2.1",
+    "normalDegeneratePixels": 0
+   },
+   "integration": {
+    "compatiblePreset": "surface-painted-plaster-wall",
+    "catalogAssetId": "painted_plaster_wall",
+    "catalogAlbedo": "assets/materials/painted-plaster-wall.webp",
+    "catalogMapTint": "#ffffff",
+    "tintLinear": [
+     0.992525,
+     0.99878,
+     0.992879
+    ],
+    "tintSrgb": [
+     0.996707,
+     0.999464,
+     0.996863
+    ],
+    "tintLogSpread": 0.0075,
+    "method": "Media lineal de la muestra del catálogo (mismo activo) × mapTint ÷ media lineal del albedo HERO."
+   },
+   "character": {
+    "relieveAnguloMedioGrados": 8.525,
+    "relieveAnguloP95Grados": 16.93,
+    "rugosidadMedia": 0.9188,
+    "rugosidadDesviacion": 0.0056,
+    "albedoLuminanciaMediaLineal": 0.3739,
+    "albedoContrasteCV": 0.0879
+   },
+   "variants": {
+    "hero": {
+     "repeatMm": {
+      "x": 2000,
+      "y": 2000
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/painted_plaster_wall/hero/albedo.webp",
+       "bytes": 198330,
+       "sha256": "b04ef638adf5ef9b2f7eb76da54ff445db58ef988180101721886e58ce738476",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "6fd812ed8dd5be1873c29aeef38ce9bf1fb30a22c6d4b3a12db725e98c26a1be",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/painted_plaster_wall/hero/normal-gl.webp",
+       "bytes": 1629412,
+       "sha256": "54cbc68c123d573fd9d7584464b2ccad418246b34a583630626b69e4aa28ff74",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "d87603e82bd6ef9f2e92f239fc990323844f482b6f2afcc7a9b86cb5f17571b6",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/painted_plaster_wall/hero/roughness.webp",
+       "bytes": 320808,
+       "sha256": "ca594599cad45ab1df59267ba717e6137785c1b32e83f0d6bcdea1e55b4c1b64",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "f66eaeec6ed05f5df54db93095fbf33c6098de16e972027c65a47cd84fc1ed76",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 2.1163,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0017863709945231676,
+       "max": 0.005721867084503174
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    },
+    "balanced": {
+     "repeatMm": {
+      "x": 2000,
+      "y": 2000
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/painted_plaster_wall/balanced/albedo.webp",
+       "bytes": 24668,
+       "sha256": "36bb5d94983b39ca3c8e4c07f0d6e6f9e9c115f5057da9b8e7632c0fb96ed794",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "6fd812ed8dd5be1873c29aeef38ce9bf1fb30a22c6d4b3a12db725e98c26a1be",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/painted_plaster_wall/balanced/normal-gl.webp",
+       "bytes": 324738,
+       "sha256": "8c9b95b3e524f732ed1bad4f4290635057b69446e7e5d9bb7ffa58363dd2bfab",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "d87603e82bd6ef9f2e92f239fc990323844f482b6f2afcc7a9b86cb5f17571b6",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/painted_plaster_wall/balanced/roughness.webp",
+       "bytes": 65252,
+       "sha256": "6c28c3798306d54afa66a8460972c320aacc4a0a569ad34bade696140a4bd859",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "f66eaeec6ed05f5df54db93095fbf33c6098de16e972027c65a47cd84fc1ed76",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 1.9539,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0013409486273303628,
+       "max": 0.0051081180572509766
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    }
+   }
+  },
+  "patterned_clay_plaster": {
+   "preset": "surface-patterned-clay-plaster",
+   "identity": "wall",
+   "name": "Arcilla de trama decorativa",
+   "provenance": {
+    "provider": "Poly Haven",
+    "license": "CC0-1.0",
+    "page": "https://polyhaven.com/a/patterned_clay_plaster",
+    "authors": [
+     "Amal Kumar"
+    ],
+    "filesHash": "19c4625322fe7472c0cd00db6d03095d6cf36b48",
+    "sourceResolution": "2k",
+    "albedoIcc": "sRGB IEC61966-2.1",
+    "normalDegeneratePixels": 0
+   },
+   "integration": {
+    "compatiblePreset": "surface-patterned-clay-plaster",
+    "catalogAssetId": "patterned_clay_plaster",
+    "catalogAlbedo": "assets/materials/patterned-clay-plaster.webp",
+    "catalogMapTint": "#ffffff",
+    "tintLinear": [
+     1.0,
+     0.996737,
+     0.990077
+    ],
+    "tintSrgb": [
+     1.0,
+     0.998564,
+     0.995625
+    ],
+    "tintLogSpread": 0.01,
+    "method": "Media lineal de la muestra del catálogo (mismo activo) × mapTint ÷ media lineal del albedo HERO."
+   },
+   "character": {
+    "relieveAnguloMedioGrados": 5.708,
+    "relieveAnguloP95Grados": 10.981,
+    "rugosidadMedia": 0.7707,
+    "rugosidadDesviacion": 0.0161,
+    "albedoLuminanciaMediaLineal": 0.299,
+    "albedoContrasteCV": 0.1216
+   },
+   "variants": {
+    "hero": {
+     "repeatMm": {
+      "x": 2000,
+      "y": 2000
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/patterned_clay_plaster/hero/albedo.webp",
+       "bytes": 144014,
+       "sha256": "c0b33663e8e1cfe429cd4300180fa2a26473cee2a0000cfafd55384d80dd16ef",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "58f841b0340359202d0bc9cd0f6e258ac5a2a0893b6fff6601e2948108cfd400",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/patterned_clay_plaster/hero/normal-gl.webp",
+       "bytes": 1442884,
+       "sha256": "692d20543035db2f5eb52a2790b7d4967effb7ec8a8bee45659f1dc7f5fbef11",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "fdf538cf921dd53775efb9decf204b43e555fae28475fb122fb89c0dc7e9136b",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/patterned_clay_plaster/hero/roughness.webp",
+       "bytes": 400090,
+       "sha256": "7ce8ff610b1cf9f7ce11797ec7e58af725df8588f18506367535198ff3202d86",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "8a224a5dff38c1f5d2921ab35df0da48b87668a30df959092ea70c94180807fc",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 1.8976,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0016919582849368453,
+       "max": 0.005536258220672607
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    },
+    "balanced": {
+     "repeatMm": {
+      "x": 2000,
+      "y": 2000
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/patterned_clay_plaster/balanced/albedo.webp",
+       "bytes": 43000,
+       "sha256": "feaa372d49780abbf9a8b2df5d15c537139c6bb82a119eb4dbfcdc308b2e4d73",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "58f841b0340359202d0bc9cd0f6e258ac5a2a0893b6fff6601e2948108cfd400",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/patterned_clay_plaster/balanced/normal-gl.webp",
+       "bytes": 319300,
+       "sha256": "b6c062ed2477629f25067761c0829f4e01c96073990a5378c0b9f3453c01dc1a",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "fdf538cf921dd53775efb9decf204b43e555fae28475fb122fb89c0dc7e9136b",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/patterned_clay_plaster/balanced/roughness.webp",
+       "bytes": 102636,
+       "sha256": "a9a657af15f5e5067b49237216e0191a7cb24f5fce4f17befe4de50d202dd945",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "8a224a5dff38c1f5d2921ab35df0da48b87668a30df959092ea70c94180807fc",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 1.955,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0014680649619549513,
+       "max": 0.00480198860168457
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    }
+   }
+  },
+  "brushed_concrete_03": {
+   "preset": "surface-brushed-concrete-03",
+   "identity": "mineral",
+   "name": "Cemento estriado",
+   "provenance": {
+    "provider": "Poly Haven",
+    "license": "CC0-1.0",
+    "page": "https://polyhaven.com/a/brushed_concrete_03",
+    "authors": [
+     "Amal Kumar"
+    ],
+    "filesHash": "1c89b458ae4b06e5a879b1e3f29d8ae0c7266203",
+    "sourceResolution": "2k",
+    "albedoIcc": "sRGB IEC61966-2.1",
+    "normalDegeneratePixels": 0
+   },
+   "integration": {
+    "compatiblePreset": "surface-brushed-concrete-03",
+    "catalogAssetId": "brushed_concrete_03",
+    "catalogAlbedo": "assets/materials/brushed-concrete-03.webp",
+    "catalogMapTint": "#ffffff",
+    "tintLinear": [
+     0.985196,
+     0.981766,
+     0.97974
+    ],
+    "tintSrgb": [
+     0.993464,
+     0.991941,
+     0.991041
+    ],
+    "tintLogSpread": 0.0205,
+    "method": "Media lineal de la muestra del catálogo (mismo activo) × mapTint ÷ media lineal del albedo HERO."
+   },
+   "character": {
+    "relieveAnguloMedioGrados": 17.389,
+    "relieveAnguloP95Grados": 38.455,
+    "rugosidadMedia": 0.8542,
+    "rugosidadDesviacion": 0.0194,
+    "albedoLuminanciaMediaLineal": 0.1177,
+    "albedoContrasteCV": 0.2822
+   },
+   "variants": {
+    "hero": {
+     "repeatMm": {
+      "x": 2000,
+      "y": 2000
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/brushed_concrete_03/hero/albedo.webp",
+       "bytes": 322914,
+       "sha256": "0133ad61eba5023da7c667076f9f90fb53a117f83d50816d1df807a9bbeeae19",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "da9b80809dd1e85b17ee58b0f19b130a441308128d0c3e66038317f18926d219",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/brushed_concrete_03/hero/normal-gl.webp",
+       "bytes": 2140564,
+       "sha256": "f8b564b014f76289ba57a197fdd3e9ca3dccbf62b29d436574badcc1f2065007",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "85628cc197ed113d94910832e70c9af87b8a05ba36d3e54bf65b79ef39b58595",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/brushed_concrete_03/hero/roughness.webp",
+       "bytes": 494088,
+       "sha256": "27c1dc0a551c131ad946daa95b8cff9ee833f1aa73c7b10a31b9e968bf06e6fb",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "dd9021d553777feb533bb5cafcc2fae608eff7a4e7c1d512ff095496d2354034",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 2.1993,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0019198099616914988,
+       "max": 0.006209135055541992
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    },
+    "balanced": {
+     "repeatMm": {
+      "x": 2000,
+      "y": 2000
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/brushed_concrete_03/balanced/albedo.webp",
+       "bytes": 72962,
+       "sha256": "123ad84bd07ddda673cd124dc1d6682d55db84c2cbaad6b955dd68ebda880f6d",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "da9b80809dd1e85b17ee58b0f19b130a441308128d0c3e66038317f18926d219",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/brushed_concrete_03/balanced/normal-gl.webp",
+       "bytes": 476888,
+       "sha256": "ad00ed077772d3c8be73220754c3759d0e2a0025160e6815bcfaa3c67a53db02",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "85628cc197ed113d94910832e70c9af87b8a05ba36d3e54bf65b79ef39b58595",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/brushed_concrete_03/balanced/roughness.webp",
+       "bytes": 118166,
+       "sha256": "2080a56c171be5ffea299f5d457143206976e350367819f32120e04c57741b7d",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "dd9021d553777feb533bb5cafcc2fae608eff7a4e7c1d512ff095496d2354034",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 2.1085,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0018840786069631577,
+       "max": 0.00590747594833374
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    }
+   }
+  },
+  "wood_planks_grey": {
+   "preset": "surface-wood-planks-grey",
+   "identity": "wood",
+   "name": "Tablón gris rústico",
+   "provenance": {
+    "provider": "Poly Haven",
+    "license": "CC0-1.0",
+    "page": "https://polyhaven.com/a/wood_planks_grey",
+    "authors": [
+     "Rob Tuytel"
+    ],
+    "filesHash": "957dc541af3903b0c3f586ddf67fc3899bed42f5",
+    "sourceResolution": "2k",
+    "albedoIcc": "sRGB IEC61966-2.1",
+    "normalDegeneratePixels": 0
+   },
+   "integration": {
+    "compatiblePreset": "surface-wood-planks-grey",
+    "catalogAssetId": "wood_planks_grey",
+    "catalogAlbedo": "assets/materials/wood-planks-grey.webp",
+    "catalogMapTint": "#ffffff",
+    "tintLinear": [
+     0.976195,
+     0.983446,
+     0.984355
+    ],
+    "tintSrgb": [
+     0.989462,
+     0.992688,
+     0.993091
+    ],
+    "tintLogSpread": 0.0241,
+    "method": "Media lineal de la muestra del catálogo (mismo activo) × mapTint ÷ media lineal del albedo HERO."
+   },
+   "character": {
+    "relieveAnguloMedioGrados": 6.641,
+    "relieveAnguloP95Grados": 21.166,
+    "rugosidadMedia": 0.8432,
+    "rugosidadDesviacion": 0.0397,
+    "albedoLuminanciaMediaLineal": 0.0608,
+    "albedoContrasteCV": 0.3747
+   },
+   "variants": {
+    "hero": {
+     "repeatMm": {
+      "x": 1500,
+      "y": 1500
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/wood_planks_grey/hero/albedo.webp",
+       "bytes": 221196,
+       "sha256": "fc22325e6cc1337970d9da30b30377a89f380b809ee397520c9dedbf540ddf95",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "31bdd475c6f1520fccc34a6823bfab8ba61ce5fd6dd97a3d1d868c21295e1000",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/wood_planks_grey/hero/normal-gl.webp",
+       "bytes": 1389238,
+       "sha256": "af8546abbe745a607dfa1a45f98b7389881fa729bb251b4dc9e1553d7e2bb757",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "b48a986ab6bb08050b9b0341a9b4cdc31a013063bb70b3127ac8bd7f58f2eacf",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/wood_planks_grey/hero/roughness.webp",
+       "bytes": 555128,
+       "sha256": "d8b976fe5587493317690e35a993ff2cbd8e9711003ed51a827b12e2bc1f4557",
+       "width": 1024,
+       "height": 1024,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "7d130443fdaa36f7fb25faca3797b29305fe4730d5a197f81f17e5cacc2a9dc8",
+       "estimatedGpuBytesWithMipmaps": 5592406
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 2.0273,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0017622739542275667,
+       "max": 0.005969345569610596
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    },
+    "balanced": {
+     "repeatMm": {
+      "x": 1500,
+      "y": 1500
+     },
+     "scaleAuthority": "SOURCE_PHYSICAL_DIMENSIONS",
+     "maps": {
+      "albedo": {
+       "path": "assets/materials/f03/v2/wood_planks_grey/balanced/albedo.webp",
+       "bytes": 49842,
+       "sha256": "9795806c5bb8fd23dae526e5cf413227830fae875a62f62db5690c8ca8482391",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "SRGBColorSpace",
+       "sourceSha256": "31bdd475c6f1520fccc34a6823bfab8ba61ce5fd6dd97a3d1d868c21295e1000",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "normal": {
+       "path": "assets/materials/f03/v2/wood_planks_grey/balanced/normal-gl.webp",
+       "bytes": 326954,
+       "sha256": "f2404438288afee9d1d642b5d7ad3400162ec6f81e0bd260e92cbddc1eb5b65d",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "b48a986ab6bb08050b9b0341a9b4cdc31a013063bb70b3127ac8bd7f58f2eacf",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      },
+      "roughness": {
+       "path": "assets/materials/f03/v2/wood_planks_grey/balanced/roughness.webp",
+       "bytes": 132702,
+       "sha256": "a25b9b8f6f4ea1d74429b52fc55ca4c5a1747d380ccfc4e51851ba2eb21ff2c0",
+       "width": 512,
+       "height": 512,
+       "format": "WebP",
+       "colorSpace": "NoColorSpace",
+       "sourceSha256": "7d130443fdaa36f7fb25faca3797b29305fe4730d5a197f81f17e5cacc2a9dc8",
+       "estimatedGpuBytesWithMipmaps": 1398102
+      }
+     },
+     "verification": {
+      "albedoMeanAbsoluteError8bit": 2.0745,
+      "normalUnitLengthErrorAfter8bit": {
+       "mean": 0.0016149301081895828,
+       "max": 0.005475163459777832
+      },
+      "roughnessGreenEqualsRedAndBlue": true,
+      "displacementEnabled": false
+     }
+    }
+   }
+  }
+ }
+}
