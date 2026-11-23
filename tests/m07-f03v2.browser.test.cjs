@@ -23,7 +23,10 @@ async function open(){
  await pg.evaluate(()=>document.querySelector('#welcomeDialog[open]')&&document.getElementById('welcomeExample').click());
  await pg.waitForFunction(()=>!document.querySelector('#welcomeDialog[open]'));
  await pg.setInputFiles('#fileIn',PROJECT);await pg.waitForFunction(id=>FloorPlanApp.project?.id===id,JSON.parse(fs.readFileSync(PROJECT,'utf8')).id);
+ // The view-ready event also records the guide's initial 3D progress.
+ await pg.evaluate(()=>{window.__m07ViewReady=false;window.addEventListener('floorplan-view-ready',()=>{window.__m07ViewReady=true;},{once:true});});
  await pg.click('button[data-view="3d"]');
+ await pg.waitForFunction(()=>window.__m07ViewReady&&!document.body.classList.contains('busy'));
  await pg.waitForFunction(()=>{const m=View3D.lifecycleMetrics;return document.getElementById('stage')?.classList.contains('is3d')&&m&&!m.animating&&!m.flying&&!m.pendingAssets;});
  await pg.evaluate(()=>View3D.presentationRestorePose({position:[2.545,1.6,12.4],target:[2.545,1.4,5.4],quaternion:[0,0,0,1],fov:45}));
  await pg.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
@@ -34,7 +37,10 @@ test('ON/OFF reversible por la interfaz real, con el material asignado a cada mu
  const {ctx,pg,errors}=await open();
  try{
   const project0=await pg.evaluate(()=>JSON.stringify(FloorPlanApp.project)),storage0=await pg.evaluate(()=>JSON.stringify({...localStorage}));
-  await pg.click('#architecturalQuality');await quiet(pg);const B=await canvas(pg);
+  const frame0=await pg.evaluate(()=>View3D.renderedFrames);
+  await pg.click('#architecturalQuality');await quiet(pg);
+  await pg.waitForFunction(frame=>View3D.renderedFrames>frame&&!View3D.lifecycleMetrics.loopActive,frame0);
+  const B=await canvas(pg);
   assert.equal((await state(pg)).enabled,true);assert.equal(await pg.locator('#facadeV2Menu').isVisible(),true,'«Fachadas ▾» appears with the architectural detail');
   await pg.click('#facadeV2Menu');assert.equal(await pg.getAttribute('#facadeV2Menu','aria-expanded'),'true');
   const items=await pg.locator('#facadeV2List li').allTextContents();assert.ok(items.some(t=>/Revoco pintado/.test(t)&&/elegible/.test(t)),items.join(' | '));
