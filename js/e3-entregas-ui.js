@@ -21,19 +21,36 @@
   if(g[0]==='FloorPlanTourVideo')return existe(['FloorPlanPresentation','open'])&&!!window.FloorPlanTourRecorder?.pickType?.();
   return true;
  };
+ // UX-312 E04/E08 (navegación continua): delegar en un generador no expulsa del flujo. Antes de cerrar E3 se registra el
+ // retorno (paso, selección, entregable y desplazamiento); cuando se cierra el diálogo que abre el generador (Cerrar o
+ // Escape), E3 se reabre en ese paso con su selección, su desplazamiento y el foco en la acción de ese entregable.
+ // Si el generador no abre un diálogo (p. ej. la Presentación), no hay retorno que restaurar.
  function ejecutar(e){
   if(!disponible(e.generador))throw Error(tx('El generador no está disponible. Elige otro.','The generator is unavailable. Choose another.','生成器不可用，请选择其他交付物。'));
   const [obj,metodo]=e.generador;
+  const retorno={paso,sel:valida().slice(),id:e.id,scroll:dlg.querySelector('.e3-cuerpo')?.scrollTop||0},antes=new Set(document.querySelectorAll('dialog[open]'));
   if(e.id==='render-ia'){
    const v=vistas()[0];
    if(!v)throw Error(tx('Prepara primero una vista actual del proyecto.','Prepare a current view of the project first.','请先准备当前项目视图。'));
-   dlg.close();
+   dlg.close();volverTras(retorno,antes);
    return window[obj][metodo](v);
   }
   dlg.close();
   if(e.id==='video'&&!window.FloorPlanPresentation.active)return window.FloorPlanPresentation.open();
+  volverTras(retorno,antes);
   return window[obj][metodo]();
  }
+ function volverTras(ret,antes){let intentos=0;
+  const buscar=()=>{const d=[...document.querySelectorAll('dialog[open]')].find(x=>x!==dlg&&!antes.has(x));
+   if(d){d.addEventListener('close',()=>setTimeout(()=>reabrir(ret),0),{once:true});return;}
+   if(++intentos<30)setTimeout(buscar,100);};
+  setTimeout(buscar,0);}
+ async function reabrir(ret){
+  if(!dlg||dlg.open||document.querySelector('dialog[open]'))return; // otra tarea ya ocupa la pantalla: no se le roba
+  paso=ret.paso;sel=ret.sel.slice();valida();await pintar();if(!dlg.open)dlg.showModal();
+  const cuerpo=dlg.querySelector('.e3-cuerpo');if(cuerpo)cuerpo.scrollTop=ret.scroll;
+  const accion=dlg.querySelector(`.e3-prep[data-entregable="${CSS.escape(ret.id)}"] button`)||dlg.querySelector('#e3T');accion?.focus({preventScroll:true});
+  estado(tx('Has vuelto a «Preparar». Tu selección se conserva.','Back to «Prepare». Your selection is kept.','已返回“准备”，你的选择已保留。'));}
  const EJEMPLO_OP10='assets/e3/op10-entrega-viewer.jpg'; // render Cycles real del OP-10 (perfil delivery) de la vivienda de ejemplo
  const vistas=()=>{try{return window.FloorPlanProjectViews?.current?.()||[];}catch{return [];}};
  const titulo=()=>{const s=marca();const n=window.FloorPlanApp?.project?.name||'';return s?.title||(typeof nm==='function'?nm(n):n);};
