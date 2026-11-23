@@ -24,13 +24,17 @@ const PROFILES=['architecture','real-estate','developer','renovation','interior'
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
 test(`neutral Home: hero, capabilities and Render IA band, honest and without horizontal scroll ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const {page,errors,provider}=await open(t,viewport);
- assert.equal(await page.locator('#welcomeDialogTitle').textContent(),'¿Qué quieres hacer?','neutral hero unchanged');
+ // UX-312 Home (encargo del propietario, 23/11/2026): título y subtítulo aprobados, fijos; la profesión añade su propia línea.
+ assert.equal(await page.locator('#welcomeDialogTitle').textContent(),'Imaginar. Diseñar. Construir. Presentar. Recorrer.','approved hero title');assert.equal(await page.locator('#welcomeHeroAudience').isHidden(),true,'no profession line without a profession');
  assert.deepEqual(await cards(page),R.ORDER.general);
  assert.deepEqual(await page.locator('#welcomeCapabilities .capability-state').allTextContents(),Array(4).fill('Disponible'));
- const band=await page.locator('#welcomeRenderAI').textContent();
- for(const must of [/orientativa/,/código de acceso/,/créditos de IA/,/Entregar → Vistas del proyecto/])assert.match(band,must);
- assert.match(await page.locator('#welcomeRenderAI figcaption').textContent(),/Vista 3D real de Rubik/,'the visual is a real Rubik capture, labelled as such');
- const order=await page.evaluate(()=>['.welcome-entries','.welcome-audience','#welcomeCapabilities','#welcomeRenderAI','#welcomeWalk','#welcomeSolutions'].map(s=>document.querySelector(s).getBoundingClientRect().top));
+ // H-C2: la banda de Render IA se consolida en su ficha y su servicio, con las mismas condiciones y el acceso a Entregar.
+ assert.equal(await page.locator('#welcomeRenderAI').count(),0,'no duplicate Render IA band');
+ const card=await page.locator('#welcomeCapabilities [data-capability="render-ai"]').textContent();
+ for(const must of [/orientativa/,/código de acceso/,/créditos de IA/])assert.match(card,must);
+ assert.match(await page.locator('#welcomeAI-render-ai').textContent(),/Entregar · Vistas del proyecto/);
+ // Nuevo orden aprobado: entradas → prueba del caso → profesión (soluciones y «Qué recibe tu cliente») → capacidades → recorrido 3D.
+ const order=await page.evaluate(()=>['.welcome-entries','#welcomeCase','.welcome-audience','#welcomeSolutions','#welcomeDeliverables','#welcomeCapabilities','#welcomeWalk'].map(s=>document.querySelector(s).getBoundingClientRect().top));
  for(let i=1;i<order.length;i++)assert.ok(order[i-1]<order[i],'reading order '+i);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
  assert.deepEqual(provider,[]);assert.deepEqual(errors,[]);
@@ -41,7 +45,8 @@ test(`each profession adapts hero and capabilities without touching the project 
  const {page,errors,provider,press}=await open(t,viewport);
  const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));const titles=new Set();
  for(const p of PROFILES){await press('#welcomeAudience-'+p);
-  const h=await page.locator('#welcomeDialogTitle').textContent();assert.notEqual(h,'¿Qué quieres hacer?',p+' hero adapts');titles.add(h);
+  // El título aprobado no cambia: la profesión se expresa en su propia línea (#welcomeHeroAudience).
+  assert.equal(await page.locator('#welcomeDialogTitle').textContent(),'Imaginar. Diseñar. Construir. Presentar. Recorrer.');const h=await page.locator('#welcomeHeroAudience strong').textContent();titles.add(h);
   assert.notEqual(await page.locator('.welcome-eyebrow').first().textContent(),'Para inmobiliarias, promotoras y estudios',p+' eyebrow adapts');
   assert.deepEqual(await cards(page),R.ORDER[p],p+' capabilities from the registry');
   const n=await page.locator('#welcomeCapabilities .capability-card').count();assert.ok(n>=3&&n<=4);
@@ -49,9 +54,9 @@ test(`each profession adapts hero and capabilities without touching the project 
   assert.match(await page.locator('#welcomeCapabilitiesTitle').textContent(),/Lo que puedes hacer hoy · /);
   assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),project,p+' does not change the project');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,p+' no horizontal scroll');
-  await press('#welcomeAudience-'+p);assert.equal(await page.locator('#welcomeDialogTitle').textContent(),'¿Qué quieres hacer?',p+' deselect returns to neutral');}
+  await press('#welcomeAudience-'+p);assert.equal(await page.locator('#welcomeHeroAudience').isHidden(),true,p+' deselect returns to neutral');}
  assert.equal(titles.size,PROFILES.length,'one hero per profession');
- const text=(await page.locator('#welcomeCapabilities, #welcomeRenderAI, .welcome-intro').allTextContents()).join(' ');
+ const text=(await page.locator('#welcomeCapabilities, #welcomeDeliverables, .welcome-intro').allTextContents()).join(' ');
  assert.doesNotMatch(text,/certificad[ao]s? (oficial|automátic)|garantiza|en tiempo real|exclusiv/i,'no false promises');
  assert.deepEqual(provider,[]);assert.deepEqual(errors,[]);
 });
@@ -62,18 +67,20 @@ test('every access opens an existing place: upload, walk, work areas and Render 
  {const {page,errors,provider,press}=await open(t,vp,'interior');await press('#welcomeCap-render-ai');
   await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open&&window.FloorPlanProfessionalUI?.area==='deliver');
   assert.equal(await page.locator('#aiRenderDialog[open]').count(),0,'the AI dialog is not opened behind the user');assert.deepEqual(provider,[]);assert.deepEqual(errors,[]);}
- // Render IA band → Deliver.
- {const {page,errors,press}=await open(t,vp);await press('#welcomeRenderAIGo');await page.waitForFunction(()=>window.FloorPlanProfessionalUI?.area==='deliver');assert.deepEqual(errors,[]);}
+ // Render IA service (antes banda, H-C2) → Deliver.
+ {const {page,errors,press}=await open(t,vp);await press('#welcomeAI-render-ai');await page.waitForFunction(()=>window.FloorPlanProfessionalUI?.area==='deliver');assert.deepEqual(errors,[]);}
  // Budget and Analyze cards → their areas.
  for(const [aud,cap,area] of [['architecture','budget','budget'],['architecture','analyze','analyze'],['developer','brand','studio']]){
   const {page,errors,press}=await open(t,vp,aud);await press('#welcomeCap-'+cap);await page.waitForFunction(a=>window.FloorPlanProfessionalUI?.area===a,area);assert.deepEqual(errors,[]);}
  // Import → the file picker of «Subir un plano»; the hero's first action too.
  {const {page,press}=await open(t,vp,'architecture');const chooser=page.waitForEvent('filechooser',{timeout:8000});await press('#welcomeCap-import');await chooser;}
- {const {page,press}=await open(t,vp,'renovation');assert.equal(await page.locator('#welcomeHeroPrimary').getAttribute('data-first'),'upload');const chooser=page.waitForEvent('filechooser',{timeout:8000});await press('#welcomeHeroPrimary');await chooser;}
+ // La acción principal es neutra («Probar la vivienda de ejemplo»); la primera acción de la profesión sigue a un clic.
+ {const {page,press}=await open(t,vp,'renovation');assert.equal(await page.locator('#welcomeHeroPrimary').getAttribute('data-first'),'upload');const chooser=page.waitForEvent('filechooser',{timeout:8000});await press('#welcomeHeroFirst');await chooser;}
+ {const {page,errors,press}=await open(t,vp,'renovation');assert.equal(await page.locator('#welcomeHeroPrimary').textContent(),'Probar la vivienda de ejemplo');await press('#welcomeHeroPrimary');await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open);assert.deepEqual(errors,[]);}
  // Walk → the welcome closes into the existing example walk.
  {const {page,errors,press}=await open(t,vp,'real-estate');assert.equal(await page.locator('#welcomeHeroPrimary').getAttribute('data-first'),'walk');await press('#welcomeCap-walk3d');await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open);assert.deepEqual(errors,[]);}
- // Secondary hero action scrolls to the capabilities and focuses their title.
- {const {page,press}=await open(t,vp);await press('#welcomeHeroSecondary');await page.waitForFunction(()=>document.activeElement?.id==='welcomeCapabilitiesTitle');}
+ // «Ver qué puedes entregar» lleva a «Qué recibe tu cliente» y deja el foco en su título.
+ {const {page,press}=await open(t,vp);await press('#welcomeHeroSecondary');await page.waitForFunction(()=>document.activeElement?.id==='welcomeDeliverablesTitle');}
 });
 
 test('keyboard: the profession selector and the capability accesses are reachable and focus is visible 1440x900',{timeout:60000},async t=>{
@@ -91,8 +98,9 @@ test('Constructora / jefe de obra: planned works only, plan in Budget and 4D evo
  const vp={width:1440,height:900};
  {const {page,errors,provider,press}=await open(t,vp);await press('#welcomeAudience-construction');
   assert.equal(await page.locator('#welcomeAudience-construction').getAttribute('aria-pressed'),'true');
-  assert.match(await page.locator('#welcomeDialogTitle').textContent(),/obra planificada/);
-  assert.match(await page.locator('.welcome-intro .lead').textContent(),/No sustituye el seguimiento real de la obra/);
+  // UX-312 Home: la línea de la profesión (#welcomeHeroAudience) lleva el titular y el aviso; el título aprobado no cambia.
+  assert.match(await page.locator('#welcomeHeroAudience strong').textContent(),/obra planificada/);
+  assert.match(await page.locator('#welcomeHeroAudience p').textContent(),/No sustituye el seguimiento real de la obra/);
   assert.deepEqual(await cards(page),['construction-plan','evolution-4d','budget','building']);
   const caps=await page.locator('#welcomeCapabilities').textContent();
   assert.match(caps,/no registra el avance real/);assert.match(caps,/no es el estado real de ejecución/);

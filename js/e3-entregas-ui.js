@@ -21,19 +21,36 @@
   if(g[0]==='FloorPlanTourVideo')return existe(['FloorPlanPresentation','open'])&&!!window.FloorPlanTourRecorder?.pickType?.();
   return true;
  };
+ // UX-312 E04/E08 (navegación continua): delegar en un generador no expulsa del flujo. Antes de cerrar E3 se registra el
+ // retorno (paso, selección, entregable y desplazamiento); cuando se cierra el diálogo que abre el generador (Cerrar o
+ // Escape), E3 se reabre en ese paso con su selección, su desplazamiento y el foco en la acción de ese entregable.
+ // Si el generador no abre un diálogo (p. ej. la Presentación), no hay retorno que restaurar.
  function ejecutar(e){
   if(!disponible(e.generador))throw Error(tx('El generador no está disponible. Elige otro.','The generator is unavailable. Choose another.','生成器不可用，请选择其他交付物。'));
   const [obj,metodo]=e.generador;
+  const retorno={paso,sel:valida().slice(),id:e.id,scroll:dlg.querySelector('.e3-cuerpo')?.scrollTop||0},antes=new Set(document.querySelectorAll('dialog[open]'));
   if(e.id==='render-ia'){
    const v=vistas()[0];
    if(!v)throw Error(tx('Prepara primero una vista actual del proyecto.','Prepare a current view of the project first.','请先准备当前项目视图。'));
-   dlg.close();
+   dlg.close();volverTras(retorno,antes);
    return window[obj][metodo](v);
   }
   dlg.close();
   if(e.id==='video'&&!window.FloorPlanPresentation.active)return window.FloorPlanPresentation.open();
+  volverTras(retorno,antes);
   return window[obj][metodo]();
  }
+ function volverTras(ret,antes){let intentos=0;
+  const buscar=()=>{const d=[...document.querySelectorAll('dialog[open]')].find(x=>x!==dlg&&!antes.has(x));
+   if(d){d.addEventListener('close',()=>setTimeout(()=>reabrir(ret),0),{once:true});return;}
+   if(++intentos<30)setTimeout(buscar,100);};
+  setTimeout(buscar,0);}
+ async function reabrir(ret){
+  if(!dlg||dlg.open||document.querySelector('dialog[open]'))return; // otra tarea ya ocupa la pantalla: no se le roba
+  paso=ret.paso;sel=ret.sel.slice();valida();await pintar();if(!dlg.open)dlg.showModal();
+  const cuerpo=dlg.querySelector('.e3-cuerpo');if(cuerpo)cuerpo.scrollTop=ret.scroll;
+  const accion=dlg.querySelector(`.e3-prep[data-entregable="${CSS.escape(ret.id)}"] button`)||dlg.querySelector('#e3T');accion?.focus({preventScroll:true});
+  estado(tx('Has vuelto a «Preparar». Tu selección se conserva.','Back to «Prepare». Your selection is kept.','已返回“准备”，你的选择已保留。'));}
  const EJEMPLO_OP10='assets/e3/op10-entrega-viewer.jpg'; // render Cycles real del OP-10 (perfil delivery) de la vivienda de ejemplo
  const vistas=()=>{try{return window.FloorPlanProjectViews?.current?.()||[];}catch{return [];}};
  const titulo=()=>{const s=marca();const n=window.FloorPlanApp?.project?.name||'';return s?.title||(typeof nm==='function'?nm(n):n);};
@@ -151,14 +168,14 @@
  .e3-dlg[open]{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto auto minmax(0,1fr) auto}
  .e3-dlg::backdrop{background:rgb(31 35 38 / .42)}
  .e3-cab,.e3-pasos,.e3-firma,.e3-estado,.e3-cuerpo{grid-column:1/-1}
- .e3-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}.e3-cab h2{font-family:Georgia,serif;margin:0;font-size:clamp(20px,3vw,26px)}
+ .e3-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}.e3-cab h2{font-family:var(--font-sans);margin:0;font-size:clamp(20px,3vw,26px)}
  .e3-cerrar{flex:none;width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface-panel);font-size:22px;cursor:pointer}
  .e3-pasos{display:flex;gap:6px;list-style:none;padding:0;margin:6px 0;flex-wrap:wrap}
  .e3-pasos li{padding:4px 10px;border-radius:999px;background:var(--select-soft);font-size:13px}.e3-pasos li[aria-current]{background:var(--select);color:var(--select-ink);font-weight:600}
  .e3-firma{font-size:13px;color:var(--ink-muted);margin:0 0 4px}.e3-estado{font-size:13px;color:var(--ink);margin:2px 0 4px}
  .e3-estado:empty{margin:0}
  .e3-cuerpo{min-height:0;display:grid;align-content:start;gap:12px;overflow:auto;overscroll-behavior:contain;padding:4px;scroll-padding:4px;scrollbar-gutter:stable}
- .e3-grupo{min-width:0;border:0;padding:0;margin:0;display:grid;align-content:start;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.e3-grupo legend{font-family:Georgia,serif;font-size:18px;margin:6px 0}
+ .e3-grupo{min-width:0;border:0;padding:0;margin:0;display:grid;align-content:start;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.e3-grupo legend{font-family:var(--font-sans);font-size:18px;margin:6px 0}
  .e3-dlg .e3-item{margin:0}
  .e3-item{display:grid;grid-template-columns:auto 112px minmax(0,1fr);grid-template-areas:'c m t' 'c m h';gap:3px 8px;align-items:center;padding:8px;border-radius:12px;background:var(--surface-panel);border:1px solid var(--line);cursor:pointer;min-height:68px}
  .e3-item:has(input:checked){border-color:var(--line-strong);background:var(--select-soft)}
@@ -170,7 +187,7 @@
  .e3-chip-nunca{background:var(--action-soft);color:var(--action-pressed)}
  .e3-off{cursor:default}.e3-off .e3-mini{filter:grayscale(.65)}
  .e3-sello{position:absolute;left:3px;bottom:3px;font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:var(--surface-panel);color:var(--ink)}.e3-formato{font-size:10px;font-weight:700}
- .e3-prev h3{font-family:Georgia,serif;margin:4px 0}.e3-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.e3-fig{margin:0;display:flex;flex-direction:column;gap:4px}.e3-fig img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}.e3-fig figcaption{font-size:12px;font-weight:600}
+ .e3-prev h3{font-family:var(--font-sans);margin:4px 0}.e3-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.e3-fig{margin:0;display:flex;flex-direction:column;gap:4px}.e3-fig img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}.e3-fig figcaption{font-size:12px;font-weight:600}
  .e3-firmada figcaption{color:var(--action)}.e3-nota{font-size:13px;color:var(--ink-muted);margin:0}
  .e3-prep{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)}.e3-acc{display:flex;gap:6px;flex-wrap:wrap}.e3-acc .btn,.e3-pie .btn{min-height:44px}
  .e3-acc .btn[aria-busy=true]{opacity:.7;cursor:progress}

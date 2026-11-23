@@ -84,3 +84,29 @@ Los mensajes dicen qué ocurre y cómo corregirlo:
 - Unificar «Plano propio» con el panel de estancia: dibujo de estancias, nombres sugeridos y acabados con jerarquía visual. Es el siguiente candidato de §3.5 de Roadmap 2.
 - Medición con personas del público D-01: ninguna afirmación de esta entrega procede de una sesión con usuarios.
 - Pantalla de progreso propia para la importación de planos grandes: hoy, estado en la barra inferior.
+
+## 8. Navegación continua y retorno al origen (UX-312 V3)
+
+Contrato transversal de E04 y E08. Lo mantiene UX-312 y lo audita Codex. Aplica el [foco por intención](../agents/PROTOCOLO-UX-FIRST-RUBIK-SOTA.md#foco-por-intención--decisión-permanente-del-propietario-23112026) y amplía el patrón de paneles de §3 a las áreas de trabajo y sus diálogos.
+
+| Gesto | Comportamiento |
+|---|---|
+| **Atrás** | Vuelve al **paso anterior** del mismo flujo sin perder lo hecho (p. ej. E3: Preparar → Previsualizar) |
+| **Continuar** | Avanza al siguiente paso; si falta algo, lo dice y lleva al campo |
+| **Cerrar / Escape** | Cierra el nivel más interno y **vuelve a su origen**: área, tarjeta, paso, selección, desplazamiento y foco. Nunca expulsa a la Home |
+| **Cancelar** | Descarta lo pendiente de ese nivel y vuelve al origen; lo confirmado no se toca |
+| **Regresar al origen** | Desde una herramienta delegada (p. ej. E3 → Blender), vuelve al paso desde el que se abrió |
+| **Cambiar de módulo** | Acción explícita (navegación de áreas). Si hay cambios sin guardar, se avisa antes |
+| **Restaurar** | Selección, desplazamiento y foco se recuperan al volver; el foco nunca queda en `body` |
+| **Salir de Entregar** | Acción explícita y separada de cerrar un módulo |
+
+**Origen que se registra al abrir una herramienta:**
+- el área y la tarjeta (`data-route`);
+- el paso y la configuración del flujo;
+- la selección del proyecto;
+- el desplazamiento del área;
+- el control con foco.
+
+Se reutilizan los mecanismos que ya existen, como `launch()` en `js/professional-workspace-ui.js`, que reenfoca la tarjeta al cerrarse el diálogo. No se crea un historial ni un router paralelo.
+
+**Verificación:** una matriz por ruta con las operaciones aplicables de cada uno de los 16 entregables. Abrir, Personalizar, Previsualizar, Preparar, Descargar, Compartir, Cerrar, Atrás, Cancelar, Escape, Reabrir y Recuperar se registran como PASS, FAIL o NOT_APPLICABLE. El piloto es E3 → Preparar → Blender → Cerrar o Escape → Preparar. E04 y E08 no se cierran con rutas sueltas.

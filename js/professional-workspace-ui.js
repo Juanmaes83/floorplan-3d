@@ -49,7 +49,7 @@
   }
   if(area==='deliver'){
    const groups=[['documentation',tx('Documentación','Documentation','文档'),['surface-sheet','sheet']],['experience',tx('La vivienda, para tu cliente','Your home, for the client','向客户展示住宅'),['presentation','images']],['coordination',tx('Seguimiento del proyecto','Project follow-up','项目跟进'),['budget','review']],['signature',tx('Identidad de la entrega','Delivery identity','交付身份'),['studio']]];
-   for(const[key,title,routes]of groups){const group=el('section',undefined,grid,'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
+   for(const[key,title,routes]of groups){const group=el('section',undefined,grid,key==='signature'?'professional-delivery-signature':'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
    // The group provides the identity heading; retain the card's original title for existing accessible routes.
    grid.querySelector('[data-group="signature"]>h2').textContent=tx('La firma del profesional','Professional signature','专业签名');
    // ENT-01 I1B: review the REAL 3D engine in an isolated, non-publishing client tab.
@@ -58,7 +58,7 @@
    window.RubikStudioHero?.acceso(grid.querySelector('[data-group="experience"] .professional-group-items'));
   }
   if(area==='studio'){
-   window.RubikE3Entregables?.card(grid,'studio'); // STUDIO E3
+   // UX-312 C4 (aprobado 22/11/2026): «Preparar entregables» (E3) vive solo en Entregar · D5; Mi estudio ya no la repite.
    // HERO FINAL · STUDIO: visión de cinco fases y tarjeta principal de personalización (ancla de una línea: convive con STUDIO E3 #299).
    window.RubikStudioHero?.studio(grid);
    const profiles=grid.querySelector('[data-module="studio"]'),snap=FloorPlanBrandUI.snapshot(),profile=snap?.profile;
@@ -69,6 +69,75 @@
   projectFirst(grid,m,summary,projectContext);
   if(area==='deliver')window.RubikE3Entregables?.card(grid.querySelector('[data-group="documentation"] .professional-group-items'),'entregar');
  }
+ /* UX-312 F3 · estructura V2.6 aprobada (Gate 1). Solo ordena y agrupa las tarjetas EXISTENTES: ninguna se crea de nuevo,
+    ninguna pierde su ruta, su id ni su manejador. Es idempotente: se aplica al terminar el render y otra vez cuando otro
+    módulo monta su tarjeta más tarde (Recorrido de obra, Evolución de obra, Escena para Blender, Visita 3D, E3).
+    Entregar: firma → lo que recibirá tu cliente → índice (con códigos y recuentos) → Recorrido de obra → cinco fases.
+    Mi estudio: identidad → más ajustes → personalización HERO → cinco fases («Tu marca en RUBIK»). */
+ const INDICE=()=>[['documentation',null,[['surface-sheet','D1'],['sheet','D2'],['dossier','D3'],['economic-dossier','D4'],['e3-entregas','D5']]],
+  ['experience',null,[['presentation','P1'],['images','P2'],['client-3d','P3'],['construction-delivery','P4'],['moodboard','P5'],['studio-hero-acceso','P6'],['client-file','P7']]],
+  ['coordination',null,[['budget','S1'],['review','S2']]],
+  ['tools',tx('Herramientas de trabajo (no son para el cliente)','Working tools (not for the client)','工作工具（不交给客户）'),[['blender-scene','T1'],['compare','T2']]]];
+ const moduleOf=c=>c.dataset.compareState!==undefined?'compare':c.dataset.module;
+ // Mover un nodo solo si no está ya en su sitio: mover un nodo le quita el foco y reinicia su estado.
+ const putAfter=(ref,n)=>{if(n&&ref&&ref.nextElementSibling!==n)ref.after(n);};
+ const putBefore=(ref,n)=>{if(n&&ref&&ref.previousElementSibling!==n)ref.before(n);};
+ const putEnd=(parent,n)=>{if(n&&parent&&parent.lastElementChild!==n)parent.append(n);};
+ const putStart=(parent,n)=>{if(n&&parent&&parent.firstElementChild!==n)parent.prepend(n);};
+ let arranging=false;
+ function arrange(){
+  if(arranging||section.hidden||imagesScreen||(area!=='deliver'&&area!=='studio'))return;const grid=section.querySelector('.professional-grid');if(!grid)return;
+  arranging=true;watch.disconnect();
+  try{if(area==='deliver')arrangeDeliver(grid);else arrangeStudio(grid);}finally{arranging=false;watch.observe(section,{childList:true,subtree:true});}}
+ function groupSection(parent,key,title,cls='professional-delivery-group'){let g=section.querySelector('[data-group="'+key+'"]');
+  if(!g){g=el('section',undefined,parent,cls);g.dataset.group=key;const h=el('h2',title,g);h.id='delivery-group-'+key;g.setAttribute('aria-labelledby',h.id);el('div',undefined,g,'professional-group-items');}
+  return g;}
+ function arrangeDeliver(grid){
+  let index=grid.querySelector(':scope>.professional-index');
+  if(!index){index=el('section',undefined,null,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';el('p',undefined,index,'professional-count');grid.prepend(index);}
+  let prev=index.querySelector(':scope>.professional-count');
+  for(const[key,title,items]of INDICE()){const g=groupSection(index,key,title);putAfter(prev,g);prev=g;const box=g.querySelector('.professional-group-items');let last=null;
+   for(const[mod,code]of items){const c=[...section.querySelectorAll('.professional-card')].find(x=>moduleOf(x)===mod);if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;c.dataset.entregaCode=code;
+    if(!c.querySelector(':scope>.professional-code')){const b=el('span',code,null,'professional-code');(c.querySelector(':scope>h3')||c.firstChild)?.before(b);}}
+   let n=g.querySelector(':scope>.professional-count');if(!n){n=el('span',undefined,null,'professional-count');g.querySelector('h2').after(n);}n.textContent=String(box.children.length);g.hidden=!box.children.length;}
+  // «Más opciones · Guardar y exportar» sigue fuera del índice: la copia editable no es una salida para el cliente (Point9).
+  index.querySelector(':scope>.professional-count').textContent=tx(`${index.querySelectorAll('.professional-card').length} entregables y herramientas`,`${index.querySelectorAll('.professional-card').length} deliverables and tools`,`${index.querySelectorAll('.professional-card').length} 项交付物与工具`);
+  // Lo que otro módulo inserte delante del índice (p. ej. el Recorrido de obra) se coloca DETRÁS: nunca se mueve el índice,
+  // que contiene la tarjeta con el foco.
+  for(let n=index.previousElementSibling;n;n=index.previousElementSibling){if(n.matches('.professional-card,.professional-delivery-group'))break;index.after(n);}
+  const journey=grid.querySelector('#obraJourney');putAfter(index,journey);
+  const band=[...grid.querySelectorAll(':scope>.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putAfter(journey||index,band);
+  const sign=section.querySelector('[data-group="signature"]'),ctx=section.querySelector('.professional-project-context');putBefore(ctx||grid,sign);
+  for(const a of section.querySelectorAll('.studio-ficha-link'))a.closest('li').hidden=!section.querySelector('[data-entrega-code="'+a.dataset.entrega+'"]');
+  dock();}
+ function arrangeStudio(grid){
+  const projectCards=[...grid.querySelectorAll('.professional-card[data-module="project"]')];
+  if(projectCards[0]&&!projectCards[0].dataset.studioRole)projectCards[0].dataset.studioRole='identity';if(projectCards[1]&&!projectCards[1].dataset.studioRole)projectCards[1].dataset.studioRole='preferences';
+  const nuevo=!section.querySelector('[data-group="studio-identity"]');
+  const ident=groupSection(grid,'studio-identity',tx('Tu identidad profesional','Your professional identity','你的专业身份'),'professional-studio-group'),more=groupSection(grid,'studio-settings',tx('Más ajustes','More settings','更多设置'),'professional-studio-group');
+  const pick=sel=>grid.querySelector(sel);
+  const fill=(g,list)=>{const box=g.querySelector('.professional-group-items');let last=null;for(const c of list){if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;}};
+  fill(ident,[pick('[data-studio-role="identity"]'),pick('.professional-card[data-module="studio"]')]);fill(more,[pick('[data-studio-role="preferences"]'),pick('#catalogStudioCard')]);
+  if(nuevo)grid.prepend(ident);putAfter(ident,more);
+  const hero=pick('[data-module="studio-hero"]');putAfter(more,hero);
+  const band=[...grid.querySelectorAll('.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putEnd(grid,band);}
+ // Acción principal fija en el móvil (V2.4 · decisión aprobada): «Descargar archivo para el cliente» siempre a mano.
+ // Es un atajo al MISMO botón de la tarjeta P7 (mismo manejador, mismo estado). Solo se oculta cuando ese botón está ENTERO
+ // dentro de la zona útil del área, descontando la altura de la propia barra (auditoría Codex 23/11: antes bastaban 2 px).
+ // La decisión no depende de si la barra se ve, así que no parpadea; si el foco estaba en el atajo, pasa al botón real.
+ let dockSeen=null,dockH=80;
+ function dock(){const real=section.querySelector('.professional-card [data-route="client-file"]');let bar=section.querySelector(':scope>.professional-dock');
+  if(!real){bar?.remove();dockSeen?.disconnect();return;}
+  if(!bar){bar=el('div',undefined,section,'professional-dock');const b=button(real.textContent,bar,()=>real.click(),true);b.dataset.dock='client-file';}
+  const b=bar.querySelector('button');b.textContent=real.textContent;b.disabled=real.disabled;
+  const h=bar.getBoundingClientRect().height;if(h>0)dockH=Math.ceil(h);
+  dockSeen?.disconnect();
+  dockSeen=new IntersectionObserver(es=>{for(const e of es){const covered=e.intersectionRatio>=0.999;
+   if(covered&&!bar.classList.contains('is-covered')&&bar.contains(document.activeElement))real.focus({preventScroll:true});
+   bar.classList.toggle('is-covered',covered);}},{root:section,rootMargin:`0px 0px -${dockH}px 0px`,threshold:[0,0.5,0.999,1]});
+  dockSeen.observe(real);}
+ // Solo la llegada de tarjetas o secciones reordena; imágenes, textos y estados internos no.
+ const watch=new MutationObserver(list=>{if(arranging)return;if(list.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches('.professional-card,section,.studio-hero-area')))))requestAnimationFrame(arrange);});
  // Project-First A1: each output shows what Rubik already produced from this project, before any click. Previews
  // come from FloorPlanProjectPreview (real plan, real sheet, model axonometric, selected signature); every fact
  // stays as text; nothing is generated, saved or invented here.
@@ -142,7 +211,7 @@
     const ec=card(docs,tx('Dossier económico','Economic dossier','经济资料'),st);ec.classList.add('economic-card');ec.dataset.module='economic-dossier';ec.dataset.state=cs.state;
     const f=figure(ec,'delivery-economic');el('p',cs.state==='none'?tx('Prepara el presupuesto en Presupuestar para presentarlo aquí en versión profesional o para el cliente.','Prepare the budget in Budget to present it here for the professional or the client.','请先在“预算”中准备预算。'):tx('Mismas cifras del presupuesto en dos versiones: profesional (detalle y trazabilidad) y cliente (resumen claro). Imprime o guarda en PDF; exporta CSV, JSON o BC3.','The same budget figures in two versions: professional (detail and traceability) and client (clear summary). Print or save as PDF; export CSV, JSON or BC3.','同一预算的两个版本：专业与客户。'),f,'professional-detail');
     route(ec,tx('Preparar dossier económico','Prepare economic dossier','准备经济资料'),'economic-dossier',()=>U.open(),cs.state!=='none');
-    route(ec,tx('Revisar presupuesto','Review budget','审核预算'),'economic-review',()=>window.FloorPlanProfessionalUI?.open('budget'));}
+    {const r=route(ec,tx('Los precios se revisan en S1 · Presupuesto','Prices are reviewed in S1 · Budget','价格在 S1 · 预算 中审核'),'economic-review',()=>window.FloorPlanProfessionalUI?.open('budget'));r.classList.add('professional-link');}}
    // B1 client file: one self-contained HTML the professional sends; the client's observations come back as a file.
    const exp=grid.querySelector('[data-group="experience"] .professional-group-items');if(exp&&window.FloorPlanClientShare&&window.FloorPlanDossier){const c=FloorPlanDossier.contents({sheet:sheetOk}),n=(FloorPlanProjectViews?.current()||[]).length;
     const sc=card(exp,tx('Archivo para tu cliente','File for your client','客户文件'),tx('Listo para enviar · sin servidor','Ready to send · no server','可发送 · 无需服务器'));sc.classList.add('share-card');sc.dataset.module='client-file';
@@ -225,9 +294,9 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
   const review=card(grid,tx('Observaciones del cliente','Client observations','客户意见'),reviewState());route(review,tx('Gestionar observaciones','Manage observations','管理意见'),'review',()=>FloorPlanReviewUI.open());identity(grid);
   const more=el('section',undefined,section,'professional-more');el('h2',tx('Más opciones · Guardar y exportar','More options · Save and export','更多选项 · 保存与导出'),more);const exports=card(more,tx('Proyecto editable','Editable project','可编辑项目'),tx('Conserva una copia para seguir trabajando','Keep a copy to continue working','保留副本以继续工作'));route(exports,tx('Exportar proyecto JSON / ZIP','Export JSON / ZIP project','导出 JSON / ZIP 项目'),'export-project',()=>{finish();document.querySelector('#exportJson').click();});
  }else if(area==='studio'){identity(grid,true);const c=card(grid,tx('Perfiles profesionales','Professional profiles','专业配置'),tx('Perfiles reutilizables en este navegador','Reusable profiles in this browser','本浏览器中的可复用配置'));detail(c,tx('Nombre comercial, responsable, logo, email, teléfono, web y lema: se editan en el gestor de marca existente. No es una cuenta en la nube.','Business name, professional, logo, email, phone, website and tagline use the existing brand manager. This is not a cloud account.','商业名称、负责人、标志、邮箱、电话、网站和标语使用现有品牌管理器。这不是云账户。'));route(c,tx('Gestionar identidades','Manage identities','管理身份'),'studio',()=>FloorPlanBrandUI.open(),true);detail(c,tx('La selección «Firmar con» es por proyecto. Los perfiles permanecen disponibles para otros proyectos. Las entregas ya descargadas no cambian.','The signature choice is per project; profiles can be reused elsewhere. Downloaded deliveries do not change.','签名选择按项目保存，配置可跨项目复用，已下载交付不会改变。'));const pref=card(grid,tx('Preferencias profesionales','Professional preferences','专业偏好'),tx('Sólo configuración ya disponible','Existing settings only','仅现有设置'));detail(pref,tx('La escala de lámina y las opciones de presentación se ajustan en sus herramientas. Tarifa propia: aún sin editor en esta interfaz; no se guardan precios de proyecto aquí.','Set sheet scale and presentation options in their tools. Own rates have no editor in this interface; no project prices are stored here.','图纸比例与展示选项在各自工具中设置。此界面无自有费率编辑器，不在此保存项目价格。'));}
- visualLayout(grid,m);
+ visualLayout(grid,m);arrange();
  // FT3D-8 M2 (S4): Plan de obra, precios de referencia, evolución de obra y origen de la parcela, in the real areas.
- window.FloorPlanConstructionUI?.cards?.(area,grid,{card,detail,route})?.catch?.(e=>console.error(e));if(focus)title.focus();else if(activeRoute)section.querySelector('[data-route="'+activeRoute+'"]')?.focus();position();}
+ const late=window.FloorPlanConstructionUI?.cards?.(area,grid,{card,detail,route});late?.catch?.(e=>console.error(e));late?.then?.(()=>requestAnimationFrame(arrange));if(focus)title.focus();else if(activeRoute)section.querySelector('[data-route="'+activeRoute+'"]')?.focus();position();}
  function renderImages(focus=true){imagesScreen=true;section.replaceChildren();const h=el('div',undefined,section,'professional-head');button(tx('← Volver a Entregar','← Return to Deliver','← 返回交付'),h,()=>render());const title=el('h1',tx('Generar imágenes','Generate images','生成图片'),h);title.tabIndex=-1;const grid=el('div',undefined,section,'professional-grid');
   // A2: the prepared project views, each downloadable as a delivery image with the project data and the signature.
   const V=window.FloorPlanProjectViews;if(V){const items=V.current(),views=card(grid,tx('Vistas del proyecto','Project views','项目视图'),items.length?tx(`${items.length} vistas reales preparadas`,`${items.length} real views prepared`,`已准备 ${items.length} 个真实视图`):tx('Sin vistas preparadas','No views prepared','尚未准备视图'));views.classList.add('project-views-card');

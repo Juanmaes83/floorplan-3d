@@ -61,7 +61,7 @@ test(`C4: economic dossier ${viewport.width}x${viewport.height}`,{timeout:300000
  const bc3=await dl('#econBc3');assert.match(bc3.name,/\.bc3$/);assert.ok(bc3.body.length>100);
  // 5. Print / Save PDF: own window with the same document.
  const popup=page.waitForEvent('popup');await page.evaluate(()=>{window.__printed=0;});await d.locator('#econPrint').click();const win=await popup;await win.waitForLoadState();
- await win.waitForSelector('.econ-paper');assert.equal(await win.evaluate(()=>getComputedStyle(document.querySelector('.econ-paper')).backgroundColor),'rgb(255, 253, 248)','print window styled offline');assert.match(await win.locator('.econ-paper').innerText(),/IVA 21 %/);await win.close();
+ await win.waitForSelector('.econ-paper');assert.equal(await win.evaluate(()=>getComputedStyle(document.querySelector('.econ-paper')).backgroundColor),'rgb(255, 255, 255)','print window styled offline (PERLA --surface-panel; UX-312 F2)');assert.match(await win.locator('.econ-paper').innerText(),/IVA 21 %/);await win.close();
  // §14.28 blocked print window: said, not thrown.
  await page.evaluate(()=>{window.__open=window.open;window.open=()=>null;});await d.locator('#econPrint').click();assert.match(await d.locator('.econ-status').innerText(),/bloqueó la ventana/);await page.evaluate(()=>{window.open=window.__open;});
  assert.match(pro,/Documento generado el/);assert.doesNotMatch(cli,/Pendiente de revisar/,'review state is professional detail');

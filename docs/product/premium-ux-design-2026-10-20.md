@@ -260,3 +260,41 @@ Cada corte se publica como PR en borrador con:
 - valoración de 1 a 5 de «parece un trabajo profesional», sólo como opinión.
 
 **Sin participantes no hay resultados.** Las hipótesis de §1.4 siguen abiertas.
+
+## 8. Sistema visual PERLA y contenido a color (UX-312 V3)
+
+**PERLA está aprobada y no se sustituye por una interfaz multicolor.** La autoridad de los roles es `css/design-system.css`.
+
+| Rol | Tokens |
+|---|---|
+| Superficies | `--surface-app` · `--surface-panel` · `--surface-sunken` · `--surface-hover` |
+| Filetes | `--line` · `--line-strong` |
+| Tinta | `--ink` · `--ink-muted` |
+| Acción | `--action` (petróleo) · `--action-soft` · `--action-hover` · `--action-pressed` · `--action-ink` |
+| Selección | `--select` (grafito) · `--select-soft` · `--select-ink` |
+| Foco | `--focus` |
+| Semánticos | `--info` · `--warn`(`-soft`) · `--danger`(`-soft`) · `--success` |
+| Marca | `--brand-trace` |
+| Tipografía | `--font-sans` |
+
+Las hojas que se usan solas (impresión y archivo para el cliente) llevan su respaldo PERLA con `var(--token,#hex)`. El SVG y el canvas usan los valores literales de PERLA. Antes de añadir un color se audita la cascada; no se crean tokens paralelos.
+
+**El color lo aporta el contenido, no el cromo.** Una interfaz sobria no tiene por qué ser una experiencia sin riqueza:
+- imágenes arquitectónicas a color del proyecto;
+- vistas con sus materiales y acabados;
+- material board;
+- miniaturas descriptivas;
+- ilustraciones didácticas identificadas como ejemplo;
+- composiciones con escalas y jerarquías distintas.
+
+No se aceptan páginas de tarjetas que sean solo texto sobre gris sin justificación.
+
+**Regla de tarjeta:** la imagen o representación del resultado es protagonista, el texto la explica y las acciones permiten usarla.
+- Tamaños suficientes para comprender el resultado, sin imágenes gigantes que alarguen la página.
+- Revelado progresivo y carga diferida de las vistas.
+- Estados que no dependen solo del color.
+
+**Veracidad:** ver el [contrato de Entregar](professional-client-experience-2026-10-21.md#12-contrato-de-entregar-ux-312-v3).
+- Nada de fotografías ni renders externos sin procedencia y derechos.
+- Ningún dato del proyecto sale a servicios externos sin autorización.
+- No se recolorean los materiales del proyecto.

@@ -60,3 +60,44 @@ El donante aporta patrones de interacción contrastables. Perla conserva los tok
 Probar que los controles estén alcanzables en la primera posición visible, antes de que el test desplace o enfoque por el usuario. Para acciones de reversión, verificar que la propuesta antigua caduca cuando cambia el último paso, el nivel o el proyecto. Repetir en ordenador, tableta y móvil en ambas orientaciones. Medir el visor en reposo y probar interrupción o cancelación. Documentar aparte la revisión humana y con tecnología de asistencia real.
 
 Adoptar una interacción compartida cuando la misma necesidad se haya observado en distintos recorridos. El [registro de SmoothUI y plan Perla](../technical/smoothui-perla-op04-ux.md) organiza su uso por cortes. Las tres reglas de oro y el gate humano se aplican a todo el recorrido, no a cada animación por separado.
+
+## Foco por intención · decisión permanente del propietario (23/11/2026)
+
+Cuando la persona elige una tarea, la interfaz se concentra en esa tarea y baja el ruido del resto. Es la cuarta regla de este protocolo y se aplica junto a las tres reglas de oro. La mantiene UX-312 (Claude Code 1); Codex la audita.
+
+**Qué se prioriza, por este orden:**
+1. El resultado o la escena relevante.
+2. La acción principal.
+3. Las herramientas necesarias.
+4. El contexto imprescindible.
+5. Los controles secundarios, solo cuando se piden.
+
+Lo demás se pliega o pasa a segundo plano. Siempre de forma reversible y **sin eliminar capacidades**: cada herramienta plegada conserva una entrada visible para recuperarla.
+
+| Aspecto del contrato | Regla |
+|---|---|
+| Estado de tarea | La tarea activa se deriva del estado que ya existe (área de trabajo, modo, diálogo o paso abierto). **No se crea un segundo router ni un estado global nuevo** sin justificar una necesidad real |
+| Jerarquía de controles | Una acción dominante por estado (relleno petróleo); el resto, secundarias (contorno) o terciarias (texto). Ver [principios visuales](../product/premium-ux-design-2026-10-20.md#2-principios-visuales-y-de-interacción) |
+| Paneles | Se abre lo que la tarea necesita y se pliega lo accesorio. La persona no debe cerrar varios paneles para hacer lo que ha elegido. Patrón de paneles: [editor-ux-pattern §3](../product/editor-ux-pattern-2026-10-19.md#3-patrón-compartido-de-paneles) |
+| Visibilidad contextual | Lo plegado indica qué contiene y cuántos elementos tiene (por ejemplo, «Opciones de Diseñar · 7 herramientas») |
+| Recuperación reversible | Todo lo plegado se recupera en un paso. La cajonera de las cinco fases tiene un cajón abierto a la vez, «Cerrar», Escape y foco devuelto |
+| Foco | Al abrir una tarea, el foco va a su primer control útil; al cerrarla, vuelve al control que la abrió. Mover un nodo del DOM le quita el foco: no se recolocan contenedores con foco (lección de F3b.1) |
+| Teclado | Tab en orden visual; Escape cierra el nivel abierto más interno y no la tarea entera; Intro y Espacio activan |
+| Táctil | Objetivos de 44 px como mínimo, medidos con la animación terminada y sin redondeo; la acción principal queda al alcance del pulgar |
+| Selección | Cambiar de herramienta o de panel no pierde la selección del proyecto |
+| Continuidad | Cerrar un módulo devuelve a su origen: ver [navegación continua](../product/editor-ux-pattern-2026-10-19.md#8-navegación-continua-y-retorno-al-origen-ux-312-v3) |
+| Preferencias | Se guardan solo cuando están autorizadas (p. ej. `huxing-panes`); nunca dentro del proyecto |
+| Cambios sin guardar | Antes de salir se avisa y se ofrece guardar, descartar o seguir |
+| Estados | Vacío, pendiente y bloqueado dicen qué falta, por qué y el siguiente paso (tercera regla de oro) |
+
+**Ejemplos por tarea:**
+
+| Tarea | Se prioriza |
+|---|---|
+| Diseñar | Construcción y edición |
+| Amueblar | Catálogo y propiedades del objeto |
+| Medir | Cotas |
+| Presentar | La escena y los controles mínimos |
+| Entregar | Las opciones del entregable elegido ([contrato de Entregar](../product/professional-client-experience-2026-10-21.md#12-contrato-de-entregar-ux-312-v3)) |
+| Mi estudio | Marca, identidad, preferencias y personalización |
+| Asistente | La consulta, con su modo real (consulta guiada o IA generativa) y sus límites visibles |
