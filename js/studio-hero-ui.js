@@ -168,29 +168,70 @@
       {k:'ruta',id:'studio-recorrer-ejemplo',t:tx('Visita guiada','Guided visit','导览参观'),h:tx('Recorre la vivienda de ejemplo','Walk the example home','漫游示例住宅'),ok:!!document.getElementById('welcomeWalkExample'),go:()=>{salirBienvenida();document.getElementById('welcomeWalkExample').click();}},
       {k:'gente',id:'studio-recorrer-cliente',t:tx('Ver como cliente','See it as your client','以客户视角查看'),h:tx('Vista previa: no se publica nada','Preview: nothing is published','预览：不发布'),ok:existe('FloorPlanDeliveryPreview','preview'),go:()=>{salirBienvenida();window.FloorPlanDeliveryPreview.preview();}},
       {k:'enlace',id:'studio-recorrer-enlace',t:tx('Enviar enlace','Send link','发送链接'),h:tx('Con tu consentimiento y tu código','With your consent and code','经同意并凭代码'),ok:existe('FloorPlanShareLink','open'),go:()=>{salirBienvenida();window.FloorPlanShareLink.open();}}]}];
+ const RESULTADOS=()=>({imaginar:[[null,tx('Plano de partida','Starting plan','起始平面图')]],
+  disenar:[['D1',tx('Ficha','Area schedule','面积表')],['D2',tx('Lámina','Drawing sheet','图纸')],['P5','Material board']],
+  construir:[['S1',tx('Presupuesto','Budget','预算')],['P4',tx('Evolución de obra','Construction evolution','施工演进')]],
+  presentar:[['P1',tx('Presentación 3D','3D presentation','三维演示')],['P2',tx('Imágenes','Images','图像')],['P6',tx('Cierre','Closing','终幕')],['T1','Blender']],
+  recorrer:[['P3',tx('Visita 3D','3D visit','三维参观')],['P7',tx('Archivo para tu cliente','File for your client','客户文件')]]});
+ const FIRMA=()=>({imaginar:[],
+  disenar:[tx('Cajetín y crédito de la lámina','Sheet title block and credit','图纸标题栏与署名'),tx('Pie de la ficha de superficies','Area schedule footer','面积表页脚'),tx('Dossier del proyecto','Project dossier','项目资料'),'Material board'],
+  construir:[tx('Cabecera del dossier económico','Economic dossier header','经济资料页眉'),tx('Análisis del emplazamiento','Site analysis','场地分析'),tx('Entrega de obra (contacto que elijas)','Construction handover (contact you choose)','施工交付（你选择的联系人）')],
+  presentar:[tx('Presentación 3D','3D presentation','三维演示'),tx('Vistas e imágenes con render IA','Views and AI-rendered images','视图与 AI 渲染图像'),tx('Cierre HERO FINAL','HERO FINAL closing','HERO 终幕'),tx('Entregables profesionales','Professional deliverables','专业交付物'),tx('Revisión del render Blender','Blender render review','Blender 渲染审阅')],
+  recorrer:[tx('Archivo y enlace para el cliente','File and link for the client','客户文件与链接')]});
+ function fichas(col,fase,donde){const items=(donde==='entregar'?RESULTADOS():FIRMA())[fase]||[];if(!items.length)return;
+  const box=el('div',undefined,col,'studio-fase-fichas');el('span',donde==='entregar'?tx('Resultados','Results','成果'):tx('Tu firma aparece en','Your signature appears in','你的签名出现在'),box,'studio-fichas-t');const ul=el('ul',undefined,box);
+  for(const it of items){const li=el('li',undefined,ul);
+   if(donde!=='entregar'){li.textContent=it;continue;}
+   const [code,label]=it;if(!code){li.textContent=label;continue;}
+   // Enlace a su fila del índice de Entregar (mismo documento): lleva el foco a la tarjeta, sin abrir nada.
+   const b=el('button',undefined,li,'studio-ficha-link');b.type='button';b.dataset.entrega=code;el('span',code,b,'studio-ficha-code');b.append(' '+label);
+   b.onclick=()=>{const t=document.querySelector('#professionalWorkspace [data-entrega-code="'+code+'"]');if(!t)return;t.scrollIntoView({block:'center'});const h=t.querySelector('h3');if(h){h.tabIndex=-1;h.focus({preventScroll:true});}};}}
  let visionN=0;
  function vision(parent,{donde='studio'}={}){
   const uid='sv'+(++visionN);
   const s=el('section',undefined,parent,'studio-vision');s.dataset.module='studio-vision';s.dataset.donde=donde;s.setAttribute('aria-labelledby',uid+'T');
   el('small','STUDIO · RUBIK SOTA',s,'studio-hero-kicker');const h=el('h2',tx('Imaginar. Diseñar. Construir. Presentar. Recorrer.','Imagine. Design. Build. Present. Walk through.','构想。设计。建造。呈现。漫游。'),s);h.id=uid+'T';
-  el('p',tx('Cinco fases para llevar un proyecto desde la idea hasta la experiencia final. Una única firma profesional.','Five phases to take a project from the idea to the final experience. One professional signature.','五个阶段，把项目从构想带到最终体验。唯一的专业签名。'),s,'studio-vision-sub');
-  const row=el('div',undefined,s,'studio-vision-row');row.setAttribute('role','list');
+  const cajonera=donde!=='home';
+  if(!cajonera)el('p',tx('Cinco fases para llevar un proyecto desde la idea hasta la experiencia final. Una única firma profesional.','Five phases to take a project from the idea to the final experience. One professional signature.','五个阶段，把项目从构想带到最终体验。唯一的专业签名。'),s,'studio-vision-sub');
+  else{const sub=el('p',undefined,s,'studio-vision-sub');
+   // UX-312 V2.6 · A.2: la misma banda tiene un propósito distinto en cada área (la Home conserva la suya).
+   if(donde==='entregar'){el('b',tx('Cómo se hace lo que entregas.','How what you deliver is made.','你交付的内容是如何完成的。'),sub);sub.append(' '+tx('De qué fase sale cada resultado. Las herramientas de cada fase, bajo demanda.','Which phase each result comes from. Each phase\'s tools, on demand.','每个成果来自哪个阶段。各阶段的工具，按需打开。'));}
+   else{el('b',tx('Tu marca en RUBIK.','Your brand in RUBIK.','你在 RUBIK 中的品牌。'),sub);sub.append(' '+tx('Dónde aparece la identidad que configuras aquí. Las herramientas de cada fase, bajo demanda.','Where the identity you set up here appears. Each phase\'s tools, on demand.','你在此配置的身份出现在哪里。各阶段的工具，按需打开。'));}}
+  s.dataset.cajonera=String(cajonera);
+  const row=el('div',undefined,s,'studio-vision-row');if(!cajonera)row.setAttribute('role','list');
+  const cajones=[];
+  const cerrarCajon=(c,devolver)=>{if(c.lista.hidden)return;c.lista.hidden=true;c.tog.setAttribute('aria-expanded','false');c.col.classList.remove('abierta');if(devolver)c.tog.focus({preventScroll:true});};
   for(const f of FASES()){
-   const col=el('article',undefined,row,'studio-fase');col.setAttribute('role','listitem');col.dataset.fase=f.id;
+   const col=el('article',undefined,row,'studio-fase');if(!cajonera)col.setAttribute('role','listitem');col.dataset.fase=f.id;
    const img=el('div',undefined,col,'studio-vision-img');img.setAttribute('aria-hidden','true');ejemplo(img,'assets/studio/'+f.img,()=>{});
-   const cab=el('div',undefined,col,'studio-fase-cab');el('span','0'+f.n,cab,'studio-fase-n');el('h3',f.t,cab);el('p',f.d,col,'studio-fase-d');
+   const cab=el('div',undefined,col,'studio-fase-cab');el('span','0'+f.n,cab,'studio-fase-n');const fh=el('h3',f.t,cab);fh.id=uid+'-'+f.id+'-t';el('p',f.d,col,'studio-fase-d');
+   if(cajonera)fichas(col,f.id,donde);
    const tog=el('button',undefined,col,'studio-fase-toggle');tog.type='button';tog.dataset.route='studio-'+f.id;const lid=uid+'-'+f.id;tog.setAttribute('aria-controls',lid);tog.setAttribute('aria-expanded','false');
-   tog.append(svg(f.ico));el('span',tx('Opciones de ','Options for ','选项：')+f.t,tog);tog.append(svg('techo','studio-ico studio-flecha'));
-   const lista=el('ul',undefined,col,'studio-fase-opciones');lista.id=lid;lista.hidden=true;
-   for(const sv of f.s){const li=el('li',undefined,lista);const b=el('button',undefined,li,'studio-opcion');b.type='button';if(sv.id)b.dataset.route=sv.id;b.dataset.servicio=sv.t;b.disabled=!sv.ok;
+   tog.append(svg(f.ico));const tl=el('span',tx('Opciones de ','Options for ','选项：')+f.t,tog);tog.append(svg('techo','studio-ico studio-flecha'));
+   let lista;
+   if(cajonera){el('small',' · '+f.s.length+' '+tx('herramientas','tools','个工具'),tl,'studio-fase-cuenta');tog.setAttribute('aria-describedby',fh.id);
+    // Cajonera de planos (V2.4 · A.4): un cajón por fase, uno abierto a la vez; en escritorio ocupa el ancho bajo las
+    // fases, en móvil se abre bajo su fase. Mismas herramientas y mismas rutas que antes.
+    lista=el('div',undefined,row,'studio-cajon');lista.id=lid;lista.hidden=true;lista.setAttribute('role','region');lista.setAttribute('aria-label',tx('Herramientas de ','Tools for ','工具：')+f.t);
+    const cc=el('div',undefined,lista,'studio-cajon-cab');const ch=el('h4',tx('Herramientas de ','Tools for ','工具：')+f.t,cc);el('span',String(f.s.length),ch,'studio-cajon-n');
+    const cerrar=el('button',tx('Cerrar','Close','关闭'),cc,'studio-cajon-cerrar');cerrar.type='button';cerrar.setAttribute('aria-label',tx('Cerrar herramientas de ','Close tools for ','关闭工具：')+f.t);
+    const ul=el('ul',undefined,lista,'studio-fase-opciones');const ref={col,tog,lista};cajones.push(ref);
+    cerrar.onclick=()=>cerrarCajon(ref,true);lista.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();cerrarCajon(ref,true);}});
+    tog.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lista.hidden){e.stopPropagation();cerrarCajon(ref,true);}});
+    lista.listaHerr=ul;}
+   else{lista=el('ul',undefined,col,'studio-fase-opciones');lista.id=lid;lista.hidden=true;lista.listaHerr=lista;}
+   for(const sv of f.s){const li=el('li',undefined,lista.listaHerr);const b=el('button',undefined,li,'studio-opcion');b.type='button';if(sv.id)b.dataset.route=sv.id;b.dataset.servicio=sv.t;b.disabled=!sv.ok;
     b.title=sv.ok?sv.h:tx('No disponible en esta versión','Not available in this version','此版本不可用');b.append(svg(sv.k));const tt=el('span',undefined,b);el('b',sv.t,tt);el('small',sv.ok?sv.h:b.title,tt);
     b.onclick=()=>{try{const r=sv.go();r?.catch?.(e=>window.toast?.(e.message,5000));}catch(e){window.toast?.(e.message,5000);}};}
-   tog.onclick=()=>{const abierta=lista.hidden;lista.hidden=!abierta;tog.setAttribute('aria-expanded',String(abierta));col.classList.toggle('abierta',abierta);if(abierta)lista.querySelector('button:not(:disabled)')?.focus({preventScroll:true});};}
+   tog.onclick=()=>{const abierta=lista.hidden;if(abierta&&cajonera)for(const c of cajones)if(c.lista!==lista)cerrarCajon(c,false);
+    lista.hidden=!abierta;tog.setAttribute('aria-expanded',String(abierta));col.classList.toggle('abierta',abierta);if(abierta)lista.listaHerr.querySelector('button:not(:disabled)')?.focus({preventScroll:true});};}
   // Capa secundaria: «Todas las herramientas» (las cinco fases organizan RUBIK, no lo limitan).
   const todas=el('button',undefined,s,'studio-todas');todas.type='button';todas.dataset.route='studio-todas';todas.append(svg('rejilla'));
   el('span',tx('Todas las herramientas de RUBIK','All RUBIK tools','RUBIK 全部工具'),todas);el('small',tx('Buscar por nombre o por fase · estado real de cada una','Search by name or phase · real status of each','按名称或阶段搜索 · 每项的真实状态'),todas);
   todas.onclick=()=>catalogo(todas);
   // Asistente IA + MCP: ayuda transversal (el Asistente del producto y las propuestas del servidor MCP de RUBIK).
+  // UX-312 C3 (aprobado 22/11/2026): en Mi estudio y Entregar se abre desde el botón «Asistente» de la barra superior.
+  if(cajonera)return s;
   const ia=el('div',undefined,s,'studio-vision-ia');ia.dataset.module='studio-ia';
   const insignia=el('div',undefined,ia,'studio-ia-insignia');insignia.append(svg('chispa','studio-ico studio-ia-ico'));
   const txt=el('div',undefined,ia,'studio-ia-txt');el('h3',tx('Asistente IA + MCP','AI Assistant + MCP','AI 助手 + MCP'),txt);
@@ -268,7 +309,7 @@
   const c=el('article',undefined,parent,'professional-card studio-hero-acceso');c.dataset.module='studio-hero-acceso';el('small','STUDIO',c,'studio-hero-kicker');
   el('h3',tx('Personalización HERO FINAL','HERO FINAL personalisation','HERO 终幕个性化'),c);
   el('p',st?.perfil?tx(`Firma: ${st.perfil.name} · estilo ${st.hero.estilo==='editorial'?'editorial':'cinematográfico'}`,`Signature: ${st.perfil.name} · ${st.hero.estilo==='editorial'?'editorial':'cinematic'} style`,`签名：${st.perfil.name}`):tx('Sin firma elegida','No signature chosen','尚未选择签名'),c,'professional-state');
-  const b=el('button',tx('Configurar en STUDIO','Set up in STUDIO','在 STUDIO 中配置'),c,'btn');b.type='button';b.dataset.route='studio-hero';
+  const b=el('button',tx('Personalizar el cierre en Mi estudio','Customise the closing in My studio','在“我的事务所”中个性化终幕'),c,'btn');b.type='button';b.dataset.route='studio-hero';
   b.onclick=()=>{document.getElementById('workArea-studio')?.click();setTimeout(()=>{const k=document.querySelector('[data-module="studio-hero"]');k?.scrollIntoView({block:'start'});k?.querySelector('h3')?.setAttribute('tabindex','-1');k?.querySelector('h3')?.focus();},60);};
   return c;}
  window.RubikStudioHero={card,studio,acceso,vision,home,catalogo,capacidades,leer,marca,pintarFotograma};

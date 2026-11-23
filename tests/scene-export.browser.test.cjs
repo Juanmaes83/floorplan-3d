@@ -124,7 +124,8 @@ test('UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la
     await page.evaluate(() => document.querySelector('#welcomeDialog')?.close?.());
     // 1 · Desde Entregar en 2D, la acción principal abre la escena y devuelve el visor al reposo del área.
     await page.locator('#workArea-deliver').press('Enter');
-    await page.locator('#professionalWorkspace [data-group="documentation"] #sceneExportOpen').press('Enter');
+    // UX-312 F3 (V2.6 aprobada): la escena vive en «Herramientas de trabajo (no son para el cliente)» del índice de Entregar.
+    await page.locator('#professionalWorkspace [data-group="tools"] #sceneExportOpen').press('Enter');
     assert.equal(await page.locator('#sceneExportDialog').getAttribute('data-state'), 'no3d');
     assert.match(await page.locator('#seStatus').textContent(), /vista 3D abierta/);
     assert.equal(await page.locator('#sePrimary').textContent(), 'Abrir la vista 3D');
