@@ -116,14 +116,14 @@
   el('span',tx('Vivienda de ejemplo','Example home','示例住宅'),box,'studio-vision-badge');}
  /* Visión STUDIO (referencia del propietario 20/11): cinco columnas — imagen real de la vivienda de ejemplo, número, título
     y resumen — y, al pulsar «Opciones de …», la columna se amplía con sus servicios, cada uno conectado a la ruta EXISTENTE
-    del producto. Debajo, la banda «Asistente IA + MCP». Se monta en STUDIO, en la Home (bienvenida) y en Entregar. */
+    del producto. Debajo, la banda del Asistente (consulta guiada + MCP local). Se monta en STUDIO, en la Home (bienvenida) y en Entregar. */
  const ICON={subir:'M12 16V4m0 0l-4 4m4-4l4 4M4 16v3h16v-3',hoja:'M7 3h7l5 5v13H7zM14 3v5h5',rejilla:'M4 4h16v16H4zM4 12h16M12 4v16',escaner:'M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4',cubo:'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5',
   plano:'M4 4h16v16H4zM4 10h6v10M10 4v6',cama:'M3 18V8M3 14h18v4M7 11h4v3M21 14v4',muro:'M4 4h16v16H4zM9 4v16M15 4v16',techo:'M3 13l9-7 9 7',capas:'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5',arbol:'M12 21v-6M7 15h10l-5-11z',sofa:'M4 12h16v5H4zM6 12V9h12v3M5 17v2M19 17v2',
   pin:'M12 21s-6-6-6-11a6 6 0 0112 0c0 5-6 11-6 11zM12 10h0',euro:'M15 6a6 6 0 100 12M6 10h7M6 14h7',calendario:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',barras:'M5 20v-6M10 20V9M15 20v-9M20 20V5',
   blender:'M4 14a8 6 0 0016 0M12 8a4 4 0 100 8 4 4 0 000-8',monitor:'M3 5h18v11H3zM8 20h8M12 16v4',chispa:'M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z',corte:'M6 3v15h15M3 6h15v15',
   ojo:'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a3 3 0 100 6 3 3 0 000-6',play:'M7 5l12 7-12 7z',ruta:'M6 19a2 2 0 100-4 2 2 0 000 4zM18 9a2 2 0 100-4 2 2 0 000 4zM6 15c0-6 12-2 12-8',
   gente:'M9 11a3 3 0 100-6 3 3 0 000 6zM3 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 000-6M21 20c0-2-1-4-4-5',enlace:'M10 14l4-4M8 12l-2 2a3 3 0 004 4l2-2M16 12l2-2a3 3 0 00-4-4l-2 2',
-  guia:'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5',chat:'M4 5h16v11H9l-5 4z',estrella:'M12 3l2.5 6.5L21 10l-5 4.5L17.5 21 12 17.5 6.5 21 8 14.5 3 10l6.5-.5z',rayo:'M13 2L4 14h7l-1 8 9-12h-7z',enchufe:'M9 3v5M15 3v5M6 8h12v4a6 6 0 01-12 0zM12 18v3'};
+  guia:'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5',chat:'M4 5h16v11H9l-5 4z',estrella:'M12 3l2.5 6.5L21 10l-5 4.5L17.5 21 12 17.5 6.5 21 8 14.5 3 10l6.5-.5z',rayo:'M13 2L4 14h7l-1 8 9-12h-7z',enchufe:'M9 3v5M15 3v5M6 8h12v4a6 6 0 01-12 0zM12 18v3',armario:'M5 3h14v18H5zM12 3v18M10 11v2M14 11v2'};
  const svg=(k,cls='studio-ico')=>{const n=document.createElementNS('http://www.w3.org/2000/svg','svg');n.setAttribute('viewBox','0 0 24 24');n.setAttribute('aria-hidden','true');n.setAttribute('class',cls);
   const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',ICON[k]||ICON.hoja);n.append(p);return n;};
  const ir=area=>document.getElementById('workArea-'+area)?.click();
@@ -149,7 +149,13 @@
       {k:'techo',t:tx('Techos','Ceilings','天花'),h:tx('Acabados de techo','Ceiling finishes','天花饰面'),ok:existe('FloorPlanSurfaceUI','open'),go:()=>{editor();llamar('FloorPlanSurfaceUI','open');}},
       {k:'capas',t:tx('Suelos','Floors','地面'),h:tx('Materiales de suelo','Floor materials','地面材料'),ok:existe('FloorPlanSurfaceUI','open'),go:()=>{editor();llamar('FloorPlanSurfaceUI','open');}},
       {k:'arbol',t:tx('Exterior','Exterior','室外'),h:tx('Parcela y entorno','Plot and surroundings','地块与环境'),ok:existe('FloorPlanTerritoryUI','open'),go:()=>{vista3d();llamar('FloorPlanTerritoryUI','open');}},
-      {k:'sofa',t:tx('Muebles','Furniture','家具'),h:tx('Catálogo, a medida real','Catalogue, real sizes','目录家具，真实尺寸'),ok:existe('FloorPlanBuildPalette','select'),go:()=>{editor();llamar('FloorPlanBuildPalette','select','furnish');}}]},
+      {k:'sofa',t:tx('Muebles','Furniture','家具'),h:tx('Catálogo, a medida real','Catalogue, real sizes','目录家具，真实尺寸'),ok:existe('FloorPlanBuildPalette','select'),go:()=>{editor();llamar('FloorPlanBuildPalette','select','furnish');}},
+      // UX-312 Home · acceso 28: «Armarios» abre el interior a medida (R03) del armario seleccionado, con el mismo botón
+      // de Propiedades; sin armario seleccionado explica qué falta y abre Muebles para elegirlo o añadirlo.
+      {k:'armario',id:'studio-disenar-armarios',t:tx('Armarios','Wardrobes','衣柜'),h:tx('Interior a medida de un armario seleccionado','Custom interior of a selected wardrobe','所选衣柜的定制内部'),ok:true,
+       // R03 carga después de esta banda: la disponibilidad se comprueba al pulsar, no al dibujar (mismo criterio que E02).
+       go:()=>{if(!existe('RubikCabinetRubikUI','open'))throw Error(tx('El editor de armarios todavía se está cargando o no está disponible en esta versión.','The wardrobe editor is still loading or is not available in this version.','衣柜编辑器仍在加载或此版本不可用。'));editor();const b=document.getElementById('aInterior');if(b){b.click();return;}if(existe('FloorPlanBuildPalette','select'))llamar('FloorPlanBuildPalette','select','furnish');
+        throw Error(tx('Para diseñar el interior, selecciona un armario en el plano y pulsa «Interior del armario…» en Propiedades. Si no hay ninguno, añádelo desde Muebles.','To design the interior, select a wardrobe on the plan and choose «Cabinet interior…» in Properties. If there is none, add one from Furniture.','要设计内部，请在平面图中选择衣柜，并在属性中点击“柜体内部…”。如果没有衣柜，请从家具中添加。'));}}]},
   {id:'construir',n:3,t:tx('Construir','Build','建造'),d:tx('La evolución de la obra.','The construction evolution.','施工演进。'),img:'studio-03-evolucion-ejemplo.jpg',ico:'calendario',
    s:[{k:'pin',t:tx('Localización','Location','位置'),h:tx('Emplazamiento, orientación y sol','Site, orientation and sun','选址、朝向与日照'),ok:existe('FloorPlanSitePreview','openReport')||existe('FloorPlanSolarUI','open'),go:()=>{salirBienvenida();if(existe('FloorPlanSitePreview','openReport'))llamar('FloorPlanSitePreview','openReport');else llamar('FloorPlanSolarUI','open');}},
       {k:'capas',t:tx('Catastro','Cadastre','地籍'),h:tx('Parcela y referencia catastral','Plot and cadastral reference','地块与地籍编号'),ok:existe('FloorPlanTerritoryUI','open'),go:()=>{vista3d();llamar('FloorPlanTerritoryUI','open');}},
@@ -190,9 +196,11 @@
  function vision(parent,{donde='studio'}={}){
   const uid='sv'+(++visionN);
   const s=el('section',undefined,parent,'studio-vision');s.dataset.module='studio-vision';s.dataset.donde=donde;s.setAttribute('aria-labelledby',uid+'T');
-  el('small','STUDIO · RUBIK SOTA',s,'studio-hero-kicker');const h=el('h2',tx('Imaginar. Diseñar. Construir. Presentar. Recorrer.','Imagine. Design. Build. Present. Walk through.','构想。设计。建造。呈现。漫游。'),s);h.id=uid+'T';
+  el('small','STUDIO · RUBIK SOTA',s,'studio-hero-kicker');
+  // UX-312 Home: en la Home el título aprobado ya encabeza la página; la banda no lo repite y dice qué contiene.
+  const h=el('h2',donde==='home'?tx('Las herramientas de cada fase','The tools of each phase','各阶段的工具'):tx('Imaginar. Diseñar. Construir. Presentar. Recorrer.','Imagine. Design. Build. Present. Walk through.','构想。设计。建造。呈现。漫游。'),s);h.id=uid+'T';
   const cajonera=donde!=='home';
-  if(!cajonera)el('p',tx('Cinco fases para llevar un proyecto desde la idea hasta la experiencia final. Una única firma profesional.','Five phases to take a project from the idea to the final experience. One professional signature.','五个阶段，把项目从构想带到最终体验。唯一的专业签名。'),s,'studio-vision-sub');
+  if(!cajonera)el('p',donde==='home'?tx('Cada fase abre las herramientas reales de RUBIK. Si una necesita un proyecto, una selección o permisos, te lo explica al abrirla.','Each phase opens RUBIK’s real tools. If one needs a project, a selection or permissions, it tells you when you open it.','每个阶段都打开 RUBIK 的真实工具。如需项目、选择或权限，打开时会说明。'):tx('Cinco fases para llevar un proyecto desde la idea hasta la experiencia final. Una única firma profesional.','Five phases to take a project from the idea to the final experience. One professional signature.','五个阶段，把项目从构想带到最终体验。唯一的专业签名。'),s,'studio-vision-sub');
   else{const sub=el('p',undefined,s,'studio-vision-sub');
    // UX-312 V2.6 · A.2: la misma banda tiene un propósito distinto en cada área (la Home conserva la suya).
    if(donde==='entregar'){el('b',tx('Cómo se hace lo que entregas.','How what you deliver is made.','你交付的内容是如何完成的。'),sub);sub.append(' '+tx('De qué fase sale cada resultado. Las herramientas de cada fase, bajo demanda.','Which phase each result comes from. Each phase\'s tools, on demand.','每个成果来自哪个阶段。各阶段的工具，按需打开。'));}
@@ -225,19 +233,27 @@
     b.onclick=()=>{try{const r=sv.go();r?.catch?.(e=>window.toast?.(e.message,5000));}catch(e){window.toast?.(e.message,5000);}};}
    tog.onclick=()=>{const abierta=lista.hidden;if(abierta&&cajonera)for(const c of cajones)if(c.lista!==lista)cerrarCajon(c,false);
     lista.hidden=!abierta;tog.setAttribute('aria-expanded',String(abierta));col.classList.toggle('abierta',abierta);if(abierta)lista.listaHerr.querySelector('button:not(:disabled)')?.focus({preventScroll:true});};}
+  // UX-312 Home: varios módulos (plan de obra, Gantt, Blender…) cargan después de esta banda. Al terminar la carga se
+  // vuelve a comprobar cada acceso deshabilitado con la API real; los que ya existen se habilitan con su descripción.
+  const resincronizar=()=>{const todos=FASES().flatMap(f=>f.s);for(const b of s.querySelectorAll('.studio-opcion:disabled')){const sv=todos.find(x=>x.t===b.dataset.servicio&&(x.id||'')===(b.dataset.route||''));
+   if(sv?.ok){b.disabled=false;b.title=sv.h;const sm=b.querySelector('small');if(sm)sm.textContent=sv.h;}}};
+  if(document.readyState!=='complete')addEventListener('load',resincronizar,{once:true});
   // Capa secundaria: «Todas las herramientas» (las cinco fases organizan RUBIK, no lo limitan).
   const todas=el('button',undefined,s,'studio-todas');todas.type='button';todas.dataset.route='studio-todas';todas.append(svg('rejilla'));
   el('span',tx('Todas las herramientas de RUBIK','All RUBIK tools','RUBIK 全部工具'),todas);el('small',tx('Buscar por nombre o por fase · estado real de cada una','Search by name or phase · real status of each','按名称或阶段搜索 · 每项的真实状态'),todas);
   todas.onclick=()=>catalogo(todas);
-  // Asistente IA + MCP: ayuda transversal (el Asistente del producto y las propuestas del servidor MCP de RUBIK).
+  // Asistente (consulta guiada) + MCP local: ayuda transversal (el Asistente del producto y las propuestas del servidor MCP de RUBIK).
   // UX-312 C3 (aprobado 22/11/2026): en Mi estudio y Entregar se abre desde el botón «Asistente» de la barra superior.
   if(cajonera)return s;
   const ia=el('div',undefined,s,'studio-vision-ia');ia.dataset.module='studio-ia';
   const insignia=el('div',undefined,ia,'studio-ia-insignia');insignia.append(svg('chispa','studio-ico studio-ia-ico'));
-  const txt=el('div',undefined,ia,'studio-ia-txt');el('h3',tx('Asistente IA + MCP','AI Assistant + MCP','AI 助手 + MCP'),txt);
-  el('p',tx('Te acompaña en todo el proceso, conecta servicios y herramientas (MCP) y te ayuda a trabajar más rápido. Sus propuestas nunca se aplican sin ti.','It guides you through the whole process, connects services and tools (MCP) and helps you work faster. Its proposals are never applied without you.','全程陪伴，连接服务与工具（MCP），助你更快工作。建议未经你确认不会应用。'),txt);
+  // UX-312 E03: el acceso declara el modo REAL (el mismo que muestra el panel, #assistantMode): consulta guiada con los datos
+  // del proyecto y su fuente, propuestas que confirmas tú y MCP local sobre una copia JSON. Sin promesas de automatización.
+  const txt=el('div',undefined,ia,'studio-ia-txt');el('h3',tx('Asistente RUBIK · consulta guiada','RUBIK Assistant · guided query','RUBIK 助手 · 引导式查询'),txt);
+  el('p',tx('Responde sobre el proyecto abierto con los datos y motores de RUBIK y muestra la fuente de cada cifra. Sus propuestas las revisas, aplicas y deshaces tú. Funciona en este navegador sin modelo de lenguaje.','It answers about the open project with RUBIK’s data and engines and shows the source of every figure. You review, apply and undo its proposals. It works in this browser without a language model.','使用 RUBIK 的数据和引擎回答当前项目的问题，并显示每个数字的来源。建议由你审阅、应用和撤销。在此浏览器中运行，不使用语言模型。'),txt);
+  el('p',tx('MCP local: guarda una copia JSON y revísala en tu cliente MCP; nunca cambia tu proyecto. La conversación con IA y cualquier conexión que consuma créditos requieren la autorización expresa del titular.','Local MCP: save a JSON copy and review it in your MCP client; it never changes your project. AI conversation and any connection that uses credits need the owner’s express authorisation.','本地 MCP：保存 JSON 副本并在你的 MCP 客户端中检查；不会更改你的项目。AI 对话及任何消耗额度的连接都需要所有者明确授权。'),txt,'studio-ia-modo');
   const caps=el('div',undefined,ia,'studio-ia-caps');
-  for(const [k,t] of [['guia',tx('Guía cada fase','Guides each phase','引导每个阶段')],['chat',tx('Resuelve dudas','Answers questions','解答疑问')],['estrella',tx('Sugiere siguientes pasos','Suggests next steps','建议下一步')],['rayo',tx('Automatiza tareas','Automates tasks','自动化任务')],['enchufe',tx('Conecta herramientas','Connects tools','连接工具')]]){
+  for(const [k,t] of [['guia',tx('Guía cada fase','Guides each phase','引导每个阶段')],['chat',tx('Responde con tus datos','Answers with your data','用你的数据回答')],['estrella',tx('Muestra fuente y alcance','Shows source and scope','显示来源与范围')],['rayo',tx('Propone; tú confirmas','Proposes; you confirm','提出建议，由你确认')],['enchufe',tx('MCP sobre una copia','MCP on a copy','在副本上使用 MCP')]]){
    const c=el('span',undefined,caps,'studio-ia-cap');c.append(svg(k));el('span',t,c);}
   const iaB=el('button',tx('Abrir el Asistente','Open the Assistant','打开助手'),ia,'btn primary studio-ia-btn');iaB.type='button';iaB.dataset.route='studio-asistente';
   // UX-312 E02: el Asistente se carga DESPUÉS que esta banda (index.html), así que la disponibilidad no se decide una sola vez
