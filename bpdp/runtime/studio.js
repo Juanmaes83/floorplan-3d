@@ -38,7 +38,13 @@ export function createStudio(host, data, { style = 'blueprint', pixelRatio } = {
   const center = bbox.getCenter(new THREE.Vector3()), size = bbox.getSize(new THREE.Vector3());
   const assembly = window.BpdpAssembly.build(model, { center: [center.x, center.z] });
   const canvas = document.createElement('canvas'); canvas.className = 'studio-canvas'; host.appendChild(canvas);
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+  } catch (cause) {
+    canvas.remove();
+    throw Object.assign(new Error('No se pudo iniciar WebGL. Comprueba que el navegador admite la vista 3D y vuelve a intentarlo.', { cause }), { code: 'WEBGL_UNAVAILABLE' });
+  }
   renderer.setPixelRatio(pixelRatio || Math.min(2, window.devicePixelRatio || 1)); renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.localClippingEnabled = true; renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const scene = new THREE.Scene(), root = new THREE.Group(); scene.add(root);

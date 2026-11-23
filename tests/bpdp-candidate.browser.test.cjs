@@ -100,10 +100,10 @@ const mismoOrigen = (a, b, msg) => { const { top: ta, ...ra } = a, { top: tb, ..
 const origin = page => page.evaluate(() => { const ws = document.getElementById('professionalWorkspace'); const sc = [...ws.querySelectorAll('*')].filter(n => n.scrollHeight > n.clientHeight + 1).map(n => n.scrollTop);
   return { area: FloorPlanProfessionalUI.area, focus: document.activeElement?.id, top: Math.round(document.activeElement?.getBoundingClientRect().top ?? -1), scroll: [document.scrollingElement.scrollTop, ws.scrollTop, ...sc], open: !!document.querySelector('dialog.bpdp-host') }; });
 
-test('Entregar · activación independiente por módulo (sin bandera RUBIK no cambia)', { timeout: 300000 }, async t => {
+test('Entregar · ambos visores en la ruta normal y diagnóstico por módulo', { timeout: 300000 }, async t => {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); t.after(() => ctx.close()); const page = await ctx.newPage(); page.setDefaultTimeout(240000);
   await page.goto(url); await page.waitForFunction(() => window.BpdpEntregar && window.FloorPlanApp); await page.evaluate(() => FloorPlanProfessionalUI.open('deliver')); await page.waitForSelector('#professionalWorkspace [data-group="experience"]');
-  assert.equal(await page.locator('.bpdp-card').count(), 0, 'sin bandera no hay tarjetas');
+  await page.waitForFunction(() => document.querySelectorAll('.bpdp-card').length === 2);
   await entregar(page, 'despiece'); assert.equal(await page.locator('#bpdpCard-despiece').count(), 1); assert.equal(await page.locator('#bpdpCard-blueprint').count(), 0, 'cada módulo se activa por separado');
 });
 

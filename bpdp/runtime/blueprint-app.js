@@ -17,6 +17,9 @@ export function mountBlueprint(shell, S, { onBack }) {
   const { pkg } = S, P = pkg.project, synthetic = pkg.scenario === 'synthetic', M = S.model;
   // Nombre VISIBLE por el embudo de RUBIK (nunca en chino en ES/EN): RubikFinalCore.textoVisible vía HERO.nombreProyecto.
   const NOMBRE = HERO.nombreProyecto(pkg);
+  const siteNorth = P.site?.northOffsetDeg;
+  const northDeg = Number.isFinite(siteNorth) && siteNorth >= 0 && siteNorth < 360 ? siteNorth : null;
+  const escenario = synthetic ? 'Escena SINTÉTICA de demostración' : pkg.source?.live ? 'Proyecto activo de RUBIK' : 'Vivienda de ejemplo de RUBIK';
   const levels = synthetic ? P.levels : [{ id: null, name: 'Planta', elevationMm: 0 }];
   const elevOf = id => (levels.find(l => l.id === id) || levels[0]).elevationMm / 1000;
   const origin = pkg.frame.originPlanMm, W = (x, y, e) => [(x - origin.x) / 1000, e, (y - origin.y) / 1000];
@@ -285,17 +288,26 @@ export function mountBlueprint(shell, S, { onBack }) {
     const nX = px + pw - 70, nY = py + ph - 66, nota = `E 1:${E} · 5 m = ${(5000 / E).toFixed(0)} mm en A3 impreso al 100 %`; g.textAlign = 'left';
     let fsN = 22, notaX = bx + L + 60, notaY = by + 8, libre = nX - 50 - notaX; const fit = w => { g.font = `500 ${fsN}px ui-monospace,Consolas,monospace`; return g.measureText(nota).width <= w; };
     if (!fit(libre)) { notaX = bx; notaY = by - 26; libre = nX - 50 - bx; while (fsN > 14 && !fit(libre)) fsN--; }
-    g.font = `500 ${fsN}px ui-monospace,Consolas,monospace`; g.fillText(nota, notaX, notaY); const notaW = g.measureText(nota).width; g.beginPath(); g.moveTo(nX, nY - 40); g.lineTo(nX + 18, nY + 20); g.lineTo(nX, nY + 8); g.lineTo(nX - 18, nY + 20); g.closePath(); g.fill(); g.textAlign = 'center'; g.font = '600 24px ui-monospace,Consolas,monospace'; g.fillText('N', nX, nY - 50);
+    g.font = `500 ${fsN}px ui-monospace,Consolas,monospace`; g.fillText(nota, notaX, notaY); const notaW = g.measureText(nota).width;
+    if (northDeg !== null) {
+      // La planta usa -Z como arriba. RUBIK mide el norte girando en sentido horario desde ese eje.
+      g.save();
+      g.translate(nX, nY - 10);
+      g.rotate(northDeg * Math.PI / 180);
+      g.beginPath(); g.moveTo(0, -30); g.lineTo(18, 30); g.lineTo(0, 18); g.lineTo(-18, 30); g.closePath(); g.fill();
+      g.restore();
+      g.textAlign = 'center'; g.font = '600 24px ui-monospace,Consolas,monospace'; g.fillText('N', nX, nY - 54);
+    }
     const barra = { x0: bx, y: by, px: L, mmEnA3: L / DPI * 25.4, mmEsperados: 5000 / E, cabe: notaX + notaW <= nX - 40 && bx + L + 30 < px + pw && by + 40 <= py + ph, rotulos: [bx - 10, bx + L + 30], nota: { x: notaX, y: notaY, w: notaW, cuerpo: fsN } };
     g.restore();
     vista({ id: 'axonometria', nombre: 'AXONOMETRÍA', x: 1720, y: 90, w: 1497, h: 1250, escalada: false, setup: () => { S.setIsolate(null); S.setClip({}); S.applyPose(S.poseFor('axon', { margin: 1.05, ui: false })); } });
-    vista({ id: 'alzado-s', nombre: 'ALZADO SUR', x: 90, y: 1370, w: 1050, h: 780, ext: [all.x + 1, all.y + 1], setup: () => { S.setClip({}); S.applyPose(S.poseFor('elev-s', { ui: false })); } });
+    vista({ id: 'alzado-s', nombre: 'ALZADO · LADO INFERIOR DEL PLANO', x: 90, y: 1370, w: 1050, h: 780, ext: [all.x + 1, all.y + 1], setup: () => { S.setClip({}); S.applyPose(S.poseFor('elev-s', { ui: false })); } });
     vista({ id: 'seccion-aa', nombre: 'SECCIÓN A-A', x: 1160, y: 1370, w: 1050, h: 780, ext: [all.x + 1, all.y + 1], setup: () => { S.setClip({ section: { axis: 'z', pos: secDefault('z') } }); S.applyPose(S.poseFor('elev-s', { ui: false })); } });
     S.renderAt(1, 1).restore();
     const grupos = {}; for (const v of vistas.filter(v => v.escala)) (grupos['1:' + v.escala] = grupos['1:' + v.escala] || []).push({ planta: 'planta', 'alzado-s': 'alzado', 'seccion-aa': 'sección' }[v.id]);
     const escalas = Object.entries(grupos).map(([e, vs]) => `${vs.join(' y ').replace(/^./, c => c.toUpperCase())} ${e}`).join(' · ') + ' · Axonometría sin escala';
-    titleBlock(g, 2230, 1370, 987, 870, [['Proyecto', NOMBRE, true], ['Escenario', synthetic ? 'Escena SINTÉTICA de demostración' : 'Proyecto real de RUBIK (ejemplo)'], ['Revisión', pkg.revision.slice(0, 20)],
-      ['Formato', 'A3 apaisado · 420 × 297 mm · 200 ppp'], ['Escalas', escalas], ['Imprimir', 'Al 100 %, sin «Ajustar a página»'], ['Certeza', 'Cotas calculadas de la geometría · Estimado'],
+    titleBlock(g, 2230, 1370, 987, 870, [['Proyecto', NOMBRE, true], ['Escenario', escenario], ['Revisión', pkg.revision.slice(0, 20)],
+      ['Formato', 'A3 apaisado · 420 × 297 mm · 200 ppp'], ['Escalas', escalas], ['Norte', northDeg === null ? 'Sin configurar' : `${northDeg}° desde arriba del plano`], ['Imprimir', 'Al 100 %, sin «Ajustar a página»'], ['Certeza', 'Cotas calculadas de la geometría · Estimado'],
       ['Fecha', new Date().toISOString().slice(0, 10)], HERO.firma(pkg, 'blueprint', { synthetic })?.estudio ? ['Profesional', HERO.firma(pkg, 'blueprint', { synthetic }).estudio, true] : ['Generado con', 'RUBIK · Blueprint 3D']]);
     st.level = save.level; S.setClip({}); applyView(false); S.applyPose(save.pose);
     const blob = await pngConDensidad(await new Promise(r => cv.toBlob(r, 'image/png')), DPI);

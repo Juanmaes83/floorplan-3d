@@ -72,11 +72,11 @@
   const btn=el('button',tx('Preparar entregables','Prepare deliverables','准备交付物'),c,'btn');btn.type='button';btn.dataset.route='e3-entregas';btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-describedby',h.id);btn.onclick=()=>abrir(btn);
   return c;}
  // ---------------------------------------------------------------- diálogo
- let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0;
+ let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0,bpdpJob=null;
  const valida=()=>{sel=C.seleccionValida(sel,disponible);return sel;};
  function abrir(desde){origen=desde||document.activeElement;
   if(!dlg){dlg=document.createElement('dialog');dlg.id='e3Entregas';dlg.className='e3-dlg';dlg.setAttribute('aria-labelledby','e3T');document.body.append(dlg);
-   dlg.addEventListener('close',()=>{if(!document.activeElement||document.activeElement===document.body||dlg.contains(document.activeElement)){
+   dlg.addEventListener('close',()=>{bpdpJob?.abort();if(!document.activeElement||document.activeElement===document.body||dlg.contains(document.activeElement)){
     const trigger=origen?.isConnected?origen:document.querySelector('#professionalWorkspace [data-route="e3-entregas"]');
     trigger?.focus();
    }});}
@@ -139,12 +139,45 @@
   await pintar();
   estado(tx(`${vistas().length} vistas preparadas.`,`${vistas().length} views prepared.`,`已准备 ${vistas().length} 个视图。`));
  }
+ function bpdpAcciones(e,b,tt,acc){
+  const [modulo,tipo]=e.bpdp,E=window.BpdpEntregar;
+  let salida=null;
+  el('p',e.que,tt,'e3-nota');
+  const preparar=b(tx('Preparar','Prepare','准备'),'e3-preparar-'+e.id,async()=>{
+   const job=new AbortController();bpdpJob=job;
+   salida=null;descargar.hidden=true;preparar.disabled=true;cancelar.hidden=false;cancelar.focus({preventScroll:true});
+   estado(tx('Preparando…','Preparing…','正在准备…'));
+   try {
+    await E.activar3D();
+    const resultado=await E.preparar(modulo,tipo,{signal:job.signal});
+    if(!preparar.isConnected||!dlg.open||job.signal.aborted)return;
+    if(!resultado.vigente)throw Error(tx('El proyecto cambió. Vuelve a preparar la salida.','The project changed. Prepare the output again.','项目已更改，请重新准备。'));
+    salida=resultado;descargar.hidden=false;descargar.focus({preventScroll:true});
+    estado(tx('Salida lista para descargar.','Output ready to download.','交付物可下载。'));
+   }catch(error){
+    if(!dlg.open||!preparar.isConnected)return;
+    if(error.code!=='CANCELLED'&&!job.signal.aborted)throw error;
+    estado(tx('Preparación cancelada.','Preparation cancelled.','已取消准备。'));
+   }finally{
+    bpdpJob=null;preparar.disabled=false;cancelar.hidden=true;
+    if(dlg.open&&preparar.isConnected&&!salida)preparar.focus({preventScroll:true});
+   }
+  },true);
+  const descargar=b(tx('Descargar','Download','下载'),'e3-descargar-'+e.id,async()=>{
+   try {await E.descargar(salida);}
+   catch(error){salida=null;descargar.hidden=true;preparar.focus({preventScroll:true});throw error;}
+  });
+  descargar.hidden=true;
+  const cancelar=el('button',tx('Cancelar preparación','Cancel preparation','取消准备'),acc,'btn');
+  cancelar.type='button';cancelar.hidden=true;cancelar.onclick=()=>bpdpJob?.abort();
+ }
  function paso3(){const cuerpo=el('div',undefined,dlg,'e3-cuerpo');
   for(const e of C.catalogo(L()).filter(e=>valida().includes(e.id))){const row=el('div',undefined,cuerpo,'e3-prep');row.dataset.entregable=e.id;const tt=el('div',undefined,row,'e3-txt');el('b',e.nombre,tt);el('small',e.formato,tt);
    const acc=el('div',undefined,row,'e3-acc');
    const b=(t,ruta,fn,primary)=>{const x=el('button',t,acc,'btn'+(primary?' primary':''));x.type='button';x.dataset.route=ruta;x.onclick=async()=>{if(ocupado)return;ocupado=true;x.setAttribute('aria-busy','true');
      try{await fn();}catch(err){estado(err.message);window.toast?.(err.message,5000);}finally{ocupado=false;x.removeAttribute('aria-busy');}};return x;};
-   if(e.id==='vistas'){const v=vistas();
+   if(e.bpdp)bpdpAcciones(e,b,tt,acc);
+   else if(e.id==='vistas'){const v=vistas();
     if(!v.length)b(tx('Preparar las vistas','Prepare the views','准备视图'),'e3-preparar-vistas',prepararVistas,true);
     else{b(tx('Descargar limpias','Download clean','下载无标识'),'e3-vistas-limpias',()=>{v.forEach(x=>bajar(x.dataUrl,`rubik-sota-${slug(x.label)}-limpia.png`));estado(tx(`${v.length} imágenes limpias descargadas.`,`${v.length} clean images downloaded.`,`已下载 ${v.length} 张无标识图像。`));});
      b(tx('Descargar con tu firma','Download signed','下载签名版'),'e3-vistas-firmadas',async()=>{for(const x of v)await window.FloorPlanProjectViews.download(x.id);estado(tx(`${v.length} imágenes firmadas descargadas.`,`${v.length} signed images downloaded.`,`已下载 ${v.length} 张签名图像。`));},true);}}

@@ -12,6 +12,29 @@ export async function h264Config(width, height, fps, duration = 15) {
     try { if ((await VideoEncoder.isConfigSupported(cfg)).supported) return cfg; } catch { } }
   return null;
 }
+// Some WebCodecs encoders repeat the NAL header in their AVC configuration
+// record. Only correct the matching single SPS/PPS shape we can identify.
+function normalizarAvcC(data) {
+  if (data.length < 17 || data[0] !== 1 || (data[5] & 31) !== 1) return data;
+  const spsSize = (data[6] << 8) | data[7], ppsCount = 8 + spsSize;
+  if (ppsCount + 5 > data.length || data[ppsCount] !== 1 ||
+    (data[8] & 31) !== 7 || data[8] !== data[9] || data[10] !== data[1] ||
+    data[11] !== data[2] || data[12] !== data[3]) return data;
+  const ppsSize = (data[ppsCount + 1] << 8) | data[ppsCount + 2], ppsStart = ppsCount + 3;
+  if (ppsSize < 2 || ppsStart + ppsSize > data.length ||
+    (data[ppsStart] & 31) !== 8 || data[ppsStart] !== data[ppsStart + 1]) return data;
+  const corrected = new Uint8Array(data.length - 2);
+  corrected.set(data.subarray(0, 8));
+  corrected[4] |= 0xfc;
+  corrected[5] |= 0xe0;
+  corrected[6] = (spsSize - 1) >> 8;
+  corrected[7] = (spsSize - 1) & 255;
+  corrected.set(data.subarray(9, ppsStart), 8);
+  corrected[ppsStart - 3] = (ppsSize - 1) >> 8;
+  corrected[ppsStart - 2] = (ppsSize - 1) & 255;
+  corrected.set(data.subarray(ppsStart + 1), ppsStart - 1);
+  return corrected;
+}
 /**
  * @param o.duration s · o.fps · o.width/height · o.apply(t) aplica el estado del guion · o.draw(ctx,t,w,h) compone el fotograma
  */
@@ -35,7 +58,7 @@ export async function exportMp4({ duration, fps = 30, width = 1920, height = 108
   } finally { if (enc.state !== 'closed') enc.close(); }
   if (!avcC || samples.length !== n) throw Error('El codificador no devolvió todos los fotogramas: no se ha guardado nada.');
   samples.sort((a, b) => a.ts - b.ts);
-  const bytes = window.FloorPlanConstructionMp4.mux({ width, height, fps, samples, avcC });
+  const bytes = window.FloorPlanConstructionMp4.mux({ width, height, fps, samples, avcC: normalizarAvcC(avcC) });
   const info = window.FloorPlanConstructionMp4.inspect ? window.FloorPlanConstructionMp4.inspect(bytes) : null;
   const sha = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(b => b.toString(16).padStart(2, '0')).join('');
   return { blob: new Blob([bytes], { type: 'video/mp4' }), bytes: bytes.length, sha256: sha, frames: n, fps, width, height, codec: cfg.codec, duration: (n - 1) / fps + 1 / fps, encodeMs: Math.round(performance.now() - t0), inspect: info };

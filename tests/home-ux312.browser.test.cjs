@@ -31,7 +31,7 @@ test(`Home UX-312: contenido aprobado, inventarios y sin desbordes ${viewport.wi
  // «Qué recibe tu cliente»: 16 rutas indexadas + 10 destinos E3, con «Abrir en Entregar».
  const codes=await page.locator('#welcomeDeliverablesAll [data-entrega-code]').evaluateAll(n=>n.map(x=>x.dataset.entregaCode).sort());
  assert.deepEqual(codes,['D1','D2','D3','D4','D5','P1','P2','P3','P4','P5','P6','P7','S1','S2','T1','T2']);
- assert.equal(await page.locator('#welcomeDeliverablesE3 [data-e3]').count(),10,'los 10 destinos E3');
+ assert.equal(await page.locator('#welcomeDeliverablesE3 [data-e3]').count(),14,'los 10 destinos originales y las cuatro salidas 3D');
  // El catálogo completo se revela a demanda con su botón (aria-expanded) y se vuelve a plegar.
  assert.equal(await page.locator('#welcomeDeliverablesAll').isHidden(),true);await page.locator('#welcomeDeliverablesAllToggle').click();assert.equal(await page.locator('#welcomeDeliverablesAll').isVisible(),true);assert.equal(await page.locator('#welcomeDeliverablesAllToggle').getAttribute('aria-expanded'),'true');await page.locator('#welcomeDeliverablesAllToggle').click();assert.equal(await page.locator('#welcomeDeliverablesAll').isHidden(),true);
  assert.equal(await page.locator('#welcomeDeliverables .deliverable-cards [data-entrega-code]').count(),5);

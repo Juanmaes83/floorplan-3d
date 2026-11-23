@@ -6,20 +6,19 @@
  * no ha cambiado. No llama a ninguna API de escritura de RUBIK.
  */
 
-const sortKeys = v => Array.isArray(v) ? v.map(sortKeys) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sortKeys(v[k])])) : v;
-const sha = async s => [...new Uint8Array(await crypto.subtle.digest('SHA-256', typeof s === 'string' ? new TextEncoder().encode(s) : s))].map(b => b.toString(16).padStart(2, '0')).join('');
+import { hashProject, snapshotLiveProject } from './revision.js';
 
 /** Paquete de escena en vivo (mismo contrato que tools/export-rubik-package.cjs). */
-export async function livePackage() {
+export async function livePackage({ signal } = {}) {
   const app = window.FloorPlanApp, V = window.View3D; if (!app?.project || !V?.captureScene) throw Error('RUBIK no está listo (abre la vista 3D).');
-  const before = JSON.stringify(sortKeys(app.project)), { doc } = await V.captureScene({ stableFrames: 3 }), after = JSON.stringify(sortKeys(app.project));
+  const before = snapshotLiveProject(), { doc } = await V.captureScene({ stableFrames: 3, signal }), after = snapshotLiveProject();
   if (before !== after) throw Error('La captura cambió el proyecto: no se abre nada.');
   let nv = 0, nf = 0; for (const m of doc.meshes) { nv += m.vertices.length * 3; nf += m.faces.length * 3; }
   const pos = new Float32Array(nv), idx = new Uint32Array(nf); let ov = 0, of = 0;
   const meshes = doc.meshes.map(m => { const v = m.vertices.flat(), f = m.faces.flat(); pos.set(v, ov); idx.set(f, of); const r = { name: m.name, entity: m.entity, level: m.level, material: m.material, bounds: m.bounds, v: [ov / 3, v.length / 3], f: [of, f.length] }; ov += v.length; of += f.length; return r; });
   const P = JSON.parse(before), names = Object.fromEntries([...(P.rooms || []).map(r => [r.id, window.FloorPlanDisplayName?.(r.name, 'room') || r.id]), ...(P.objects || []).map(o => [o.id, window.FloorPlanDisplayName?.(o.name, o.type) || o.id])]);
   const pkg = { schema: 'rubik-sota.bpdp.scene-package@1', scenario: 'rubik-real', label: 'Proyecto abierto en RUBIK (en vivo)', source: { api: ['FloorPlanApp.project', 'View3D.captureScene'], live: true },
-    revision: await sha(before), projectId: P.id, project: P, displayNames: names, frame: doc.frame, meshes, geometry: { sha256: null } };
+    revision: await hashProject(before), projectId: P.id, project: P, displayNames: names, frame: doc.frame, meshes, geometry: { sha256: null } };
   return { pkg, pos, idx, projectHash: pkg.revision };
 }
 
