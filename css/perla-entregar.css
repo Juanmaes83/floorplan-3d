@@ -1,3 +1,101 @@
+/* ── Codex · PERLA V3 Entregar (codex/perla-entregar-exacta @ d7b3bb0e) ── */
+/* Composición Entregar · laboratorio c96888ac, con selectores acotados al área. */
+
+#professionalWorkspace[data-area=deliver] .ent-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:end;margin-bottom:16px}
+#professionalWorkspace[data-area=deliver] .firma-chip{display:flex;gap:8px;align-items:center;font-size:13px;flex-wrap:wrap}
+#professionalWorkspace[data-area=deliver] .hero-ent{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);background:var(--surface-panel);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:28px}
+#professionalWorkspace[data-area=deliver] .hero-ent figure{margin:0;position:relative;background:var(--surface-sunken);min-height:260px}
+#professionalWorkspace[data-area=deliver] .hero-ent figure img{width:100%;height:100%;object-fit:cover}
+#professionalWorkspace[data-area=deliver] .hero-ent .txt{padding:22px 24px;display:grid;gap:14px;align-content:start}
+#professionalWorkspace[data-area=deliver] .listo{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14px}
+#professionalWorkspace[data-area=deliver] .listo li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start}
+#professionalWorkspace[data-area=deliver] .listo b{font-weight:600}
+#professionalWorkspace[data-area=deliver] .big{font-size:34px;font-weight:650;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+#professionalWorkspace[data-area=deliver] .acciones{display:flex;flex-wrap:wrap;gap:8px}
+#professionalWorkspace[data-area=deliver] .mesa{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+#professionalWorkspace[data-area=deliver] .filtros{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 16px}
+#professionalWorkspace[data-area=deliver] .filtros button{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface-panel);cursor:pointer;font-weight:550}
+#professionalWorkspace[data-area=deliver] .filtros button[aria-pressed=true]{background:var(--select);color:var(--select-ink);border-color:var(--select)}
+#professionalWorkspace[data-area=deliver] .grupo{margin:0 0 26px}
+#professionalWorkspace[data-area=deliver] .grupo-h{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .grupo-h p{margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
+#professionalWorkspace[data-area=deliver] .perla-tile{all:unset;box-sizing:border-box;display:grid;grid-template-rows:auto 1fr;background:var(--surface-panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+#professionalWorkspace[data-area=deliver] .perla-tile:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+#professionalWorkspace[data-area=deliver] .perla-tile[aria-pressed=true]{border-color:var(--action);box-shadow:0 0 0 2px var(--action)}
+#professionalWorkspace[data-area=deliver] .perla-tile:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#professionalWorkspace[data-area=deliver] .thumb{position:relative;aspect-ratio:16/10;background:var(--surface-sunken);overflow:hidden}
+#professionalWorkspace[data-area=deliver] .thumb img{width:100%;height:100%;object-fit:cover}
+#professionalWorkspace[data-area=deliver] .thumb.doc{background:#ffffff}#professionalWorkspace[data-area=deliver] .thumb.doc img{object-fit:contain;padding:6px}
+#professionalWorkspace[data-area=deliver] .code{position:absolute;left:8px;top:8px;background:var(--surface-panel);border:1px solid var(--line-strong);border-radius:4px;font-size:11.5px;font-weight:700;padding:1px 6px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+#professionalWorkspace[data-area=deliver] .perla-tile .body{padding:12px 14px 14px;display:grid;gap:6px;align-content:start}
+#professionalWorkspace[data-area=deliver] .perla-tile h3{font-size:15.5px;font-weight:650}
+#professionalWorkspace[data-area=deliver] .perla-tile p{margin:0;font-size:13.5px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .perla-tile .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+#professionalWorkspace[data-area=deliver] .perla-tile .cta{font-size:13px;font-weight:650;color:var(--action)}
+#professionalWorkspace[data-area=deliver] .grupo.interno .perla-tile{background:var(--surface-sunken)}
+/* Representaciones explicativas (sin resultado real todavía) */
+#professionalWorkspace[data-area=deliver] .ilus{position:absolute;inset:0;display:grid;place-items:center;padding:14px;background:var(--surface-sunken)}
+#professionalWorkspace[data-area=deliver] .ilus-eco{width:86%;display:grid;gap:6px}
+#professionalWorkspace[data-area=deliver] .ilus-eco i{display:block;height:10px;border-radius:3px;background:var(--line)}
+#professionalWorkspace[data-area=deliver] .ilus-eco i:nth-child(1){width:55%;background:var(--line-strong)}#professionalWorkspace[data-area=deliver] .ilus-eco i:nth-child(3){width:80%}#professionalWorkspace[data-area=deliver] .ilus-eco i:nth-child(5){width:65%}
+#professionalWorkspace[data-area=deliver] .ilus-ab{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:92%}
+#professionalWorkspace[data-area=deliver] .ilus-ab figure{margin:0;position:relative;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--surface-panel);border:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .ilus-ab figure img{width:100%;height:100%;object-fit:cover}
+#professionalWorkspace[data-area=deliver] .ilus-ab .vacio{border:2px dashed var(--line-strong);display:grid;place-items:center;font-size:12px;color:var(--ink-muted);text-align:center;padding:6px}
+#professionalWorkspace[data-area=deliver] .ilus-ab figcaption{position:absolute;left:4px;top:4px;background:rgba(255,255,255,.92);font-size:10.5px;font-weight:700;padding:0 5px;border-radius:3px}
+#professionalWorkspace[data-area=deliver] .mosaico{position:absolute;inset:0;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:2px}
+#professionalWorkspace[data-area=deliver] .mosaico img{width:100%;height:100%;object-fit:cover}#professionalWorkspace[data-area=deliver] .mosaico img:first-child{grid-row:1/3}
+/* Panel de vista previa (foco por intención) */
+#professionalWorkspace[data-area=deliver] .panel{position:sticky;top:76px;background:var(--surface-panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;max-height:calc(100dvh - 96px);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+#professionalWorkspace[data-area=deliver] .panel-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .panel-h h2{font-size:17px;flex:1;min-width:0}
+#professionalWorkspace[data-area=deliver] .panel-x{min-width:44px;min-height:44px;border-radius:8px;border:1px solid var(--line);background:var(--surface-panel);cursor:pointer}
+#professionalWorkspace[data-area=deliver] .panel-b{overflow:auto;padding:14px;display:grid;gap:14px;align-content:start}
+#professionalWorkspace[data-area=deliver] .panel-b .prev{position:relative;border-radius:8px;overflow:hidden;background:var(--surface-sunken);border:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .panel-b .prev img{width:100%}
+#professionalWorkspace[data-area=deliver] .panel-b dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0;font-size:13.5px}
+#professionalWorkspace[data-area=deliver] .panel-b dt{color:var(--ink-muted)}#professionalWorkspace[data-area=deliver] .panel-b dd{margin:0}
+#professionalWorkspace[data-area=deliver] .panel-f{padding:12px 14px;border-top:1px solid var(--line);display:grid;gap:8px}
+#professionalWorkspace[data-area=deliver] .panel-f .btn{width:100%}
+#professionalWorkspace[data-area=deliver] .vacio-panel{padding:28px 20px;text-align:center;color:var(--ink-muted)}
+
+#professionalWorkspace[data-area=deliver]{--select:#2b3034;--select-ink:#fff;--focus:#1f6f8b;--shadow:0 1px 2px #1f23260f,0 8px 24px #1f232614;--radius:10px;background:#eceeee;padding-inline:max(16px,calc((100vw - 1328px)/2))}
+#professionalWorkspace[data-area=deliver] .ent-head h2{margin:4px 0 0;font:700 clamp(24px,3vw,34px)/1.15 system-ui,sans-serif}
+#professionalWorkspace[data-area=deliver] .hero-ent figure{aspect-ratio:1.49;width:100%;min-width:0;align-self:start;overflow:hidden}
+#professionalWorkspace[data-area=deliver] .hero-ent figure>img{display:block;position:absolute;inset:0}
+#professionalWorkspace[data-area=deliver] .hero-ent .txt{min-width:0}
+#professionalWorkspace[data-area=deliver] .hero-ent .project-context-area{font:650 34px/1 system-ui,sans-serif}
+#professionalWorkspace[data-area=deliver] .hero-ent .professional-wine-action{background:#713747;color:#fff;border-color:#713747}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index{display:block;min-width:0;margin:0}
+#professionalWorkspace[data-area=deliver] .mesa .panel{grid-column:auto;grid-row:auto;top:12px}
+#professionalWorkspace[data-area=deliver] .perla-tile.professional-card{padding:0;min-width:0;cursor:default;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-tile .body{min-width:0;overflow-wrap:anywhere}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>.btn{justify-self:start;max-width:100%;white-space:normal}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>.professional-symbol{display:none}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>.delivery-preview,#professionalWorkspace[data-area=deliver] .perla-tile .body>figure{display:none}
+#professionalWorkspace[data-area=deliver] .thumb img{display:block;box-sizing:border-box;min-width:0;min-height:0}
+#professionalWorkspace[data-area=deliver] .thumb .mosaico{grid-template-rows:repeat(2,minmax(0,1fr));grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+#professionalWorkspace[data-area=deliver] .panel[hidden]{display:none}
+@media(max-width:1100px){
+ #professionalWorkspace[data-area=deliver] .mesa{grid-template-columns:minmax(0,1fr)}
+ #professionalWorkspace[data-area=deliver] .mesa .panel{position:static;order:-1;max-height:none}
+}
+@media(max-width:760px){
+ #professionalWorkspace[data-area=deliver] .hero-ent,#professionalWorkspace[data-area=deliver] .ent-head{grid-template-columns:minmax(0,1fr)}
+ #professionalWorkspace[data-area=deliver] .cards{grid-template-columns:repeat(auto-fill,minmax(min(160px,100%),1fr));gap:10px}
+}
+
+#professionalWorkspace[data-area=deliver] .professional-grid:has(>.mesa){display:block}
+#professionalWorkspace[data-area=deliver] .mesa .professional-delivery-detail{padding:0}
+#professionalWorkspace[data-area=deliver] .perla-tile .thumb{width:100%;min-width:0}
+#professionalWorkspace[data-area=deliver] .perla-tile .body .professional-state{justify-self:start;background:#e7eef6;color:#24527a;border-radius:99px;padding:2px 8px;font-size:12px}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>button[data-route]{min-height:44px}
+@media(min-width:1200px){
+ #professionalWorkspace[data-area=deliver] .mesa .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* ── Claude · fichas compactas, catálogo y Home (UX-312 PERLA) ── */
 /* UX-312 · PERLA · Entregar: fichas compactas y catálogo (js/perla-entregar-ui.js). */
 :root{--perla-wine:#783B4B;--perla-petrol:#1F5A66;--perla-petrol-soft:#E3ECEE;--perla-side:#FAF7F8;--perla-line:#E4DDE0}
 /* Ficha compacta: la descripción vive en una capa superpuesta; la cuadrícula no cambia de alto */

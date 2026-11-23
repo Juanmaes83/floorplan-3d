@@ -48,6 +48,7 @@
    section.querySelector('.professional-head small').textContent=tx('Mesa de trabajo','Project desk','项目工作台');const frame=document.createDocumentFragment();projectContext=Preview.context(frame,summary,{variant:'hero',caption:area==='deliver'?tx('Lo que recibirá tu cliente','What your client will receive','客户将收到的内容'):tx('La vivienda que analizas','The home you are analysing','您正在分析的住宅')});projectContext.classList.add('professional-project-context');grid.before(frame);
   }
   if(area==='deliver'){
+   if(projectContext)perlaHero(projectContext);
    const groups=[['documentation',tx('Documentación','Documentation','文档'),['surface-sheet','sheet']],['experience',tx('La vivienda, para tu cliente','Your home, for the client','向客户展示住宅'),['presentation','images']],['coordination',tx('Seguimiento del proyecto','Project follow-up','项目跟进'),['budget','review']],['signature',tx('Identidad de la entrega','Delivery identity','交付身份'),['studio']]];
    for(const[key,title,routes]of groups){const group=el('section',undefined,grid,key==='signature'?'professional-delivery-signature':'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
    // The group provides the identity heading; retain the card's original title for existing accessible routes.
@@ -92,23 +93,178 @@
  function groupSection(parent,key,title,cls='professional-delivery-group'){let g=section.querySelector('[data-group="'+key+'"]');
   if(!g){g=el('section',undefined,parent,cls);g.dataset.group=key;const h=el('h2',title,g);h.id='delivery-group-'+key;g.setAttribute('aria-labelledby',h.id);el('div',undefined,g,'professional-group-items');}
   return g;}
+ // Encadres y orden de la maqueta PERLA V3, c96888ac. Los estados y acciones viven en las fichas del producto.
+ const perlaCovers={"D1":{"images":["d1-ficha.jpg"],"document":true,"sample":false},"D2":{"images":["d2-lamina.jpg"],"document":true,"sample":false},"D3":{"images":["d3-dossier.jpg"],"document":true,"sample":false},"D4":{"images":[],"document":false,"sample":false},"D5":{"images":["d5-entregables.jpg"],"document":true,"sample":false},"P1":{"images":["vista-general.jpg"],"document":false,"sample":false},"P2":{"images":["vista-salon.jpg","vista-dormitorio-principal.jpg","vista-dormitorio-infantil.jpg"],"document":false,"sample":false},"P3":{"images":["fase-recorrer.jpg"],"document":false,"sample":false},"P4":{"images":["demo-evolucion.jpg"],"document":false,"sample":true},"P5":{"images":["p5-material-board.jpg"],"document":true,"sample":false},"P6":{"images":["fase-hero.jpg"],"document":false,"sample":true},"P7":{"images":["p7-archivo-cliente.jpg"],"document":true,"sample":false},"S1":{"images":["s1-presupuesto.jpg"],"document":true,"sample":false},"S2":{"images":["s2-observaciones.jpg"],"document":true,"sample":false},"T1":{"images":["t1-render-cycles.jpg"],"document":false,"sample":false},"T2":{"images":["vista-general.jpg"],"document":false,"sample":false}};
+ function perlaImage(parent,file){
+  const img=el('img',undefined,parent);
+  img.src='assets/delivery/perla/'+file;img.alt='';img.loading='lazy';
+  return img;
+ }
+ function perlaCover(code){
+  const spec=perlaCovers[code];
+  if(!spec)return null;
+  const thumb=el('div',undefined,null,'thumb'+(spec.document?' doc':''));
+  if(code==='D4'){
+   const illustration=el('div',undefined,thumb,'ilus');
+   const lines=el('div',undefined,illustration,'ilus-eco');lines.setAttribute('aria-hidden','true');
+   for(let i=0;i<6;i++)el('i',undefined,lines);
+  }else if(code==='T2'){
+   const illustration=el('div',undefined,thumb,'ilus');
+   const comparison=el('div',undefined,illustration,'ilus-ab');
+   const original=el('figure',undefined,comparison);
+   perlaImage(original,spec.images[0]);
+   el('figcaption',tx('A · original','A · original','A · 原版'),original);
+   el('div',tx('B · crea una variante','B · create a variant','B · 创建变体'),comparison,'vacio');
+  }else{
+   const target=spec.images.length>1?el('div',undefined,thumb,'mosaico'):thumb;
+   for(const file of spec.images)perlaImage(target,file);
+  }
+  el('span',code,thumb,'code');
+  if(spec.sample||code==='D4')el('span',tx('Ejemplo','Example','示例'),thumb,'tag-ej');
+  return thumb;
+ }
+ function perlaTile(card,code){
+  if(card.classList.contains('perla-tile'))return;
+  const cover=perlaCover(code);
+  if(!cover)return;
+  card.classList.add('perla-tile');
+  const body=el('div',undefined,null,'body');
+  body.append(...card.childNodes);
+  card.append(cover,body);
+ }
+ function perlaHero(context){
+  const header=el('div',undefined,null,'ent-head');
+  const heading=el('div',undefined,header);
+  el('small',tx('Entregar al cliente','Deliver to the client','交付给客户'),heading);
+  el('h2',tx('Lo que recibirá tu cliente','What your client will receive','客户将收到的内容'),heading);
+  el('div',undefined,header,'firma-chip');
+  const hero=el('div',undefined,null,'hero-ent');
+  const figure=el('figure',undefined,hero);
+  const isExample=window.FloorPlanGuideUI?.state()?.kind==='example';
+  if(isExample){
+   const image=perlaImage(figure,'vista-general.jpg');
+   image.alt=tx('Vista 3D de la vivienda de ejemplo','3D view of the example home','示例住宅三维视图');image.loading='eager';
+  }else if(!Preview.axonometric(figure)){
+   figure.append(context.querySelector('.project-context-drawing'));
+  }
+  const copy=context.querySelector('.project-context-copy');copy.classList.add('txt');
+  copy.querySelector('small')?.remove();
+  hero.append(copy);context.before(header,hero);context.remove();
+ }
+ function deliveryCatalog(index){
+  const catalog=el('details',undefined,index,'professional-full-catalog');
+  el('summary',tx('Ver todos los documentos y entregables','View all documents and deliverables','查看所有文档与交付物'),catalog);
+  const items=el('div',undefined,catalog,'professional-catalog-items');
+  catalog.addEventListener('toggle',()=>{
+   if(!catalog.open)return;
+   items.replaceChildren();
+   const E3=window.RubikE3Entregables;
+   for(const item of E3?.catalogo()||[]){
+    const row=el('article',undefined,items);
+    el('h3',item.nombre,row);
+    el('p',item.formato+' · '+(item.disponible?tx('Abrir preparación','Open preparation','可打开准备'):tx('No disponible','Unavailable','不可用')),row);
+    el('p',item.que,row);
+    const action=button(tx('Abrir','Open','打开'),row,()=>E3.abrir(action,item.id));
+    action.setAttribute('aria-label',action.textContent+' · '+item.nombre);
+    action.disabled=!item.disponible;
+   }
+   for(const [route,title,format] of [
+    ['economic-dossier',tx('Dossier económico','Economic dossier','经济资料'),'PDF · CSV · JSON · BC3'],
+    ['export-project',tx('Proyecto editable','Editable project','可编辑项目'),'JSON / ZIP'],
+    ['export-dxf',tx('Planta activa','Active floor','当前楼层'),'DXF']
+   ]){
+    const source=section.querySelector('[data-route="'+route+'"]');
+    if(!source)continue;
+    const row=el('article',undefined,items);
+    el('h3',title,row);el('p',format,row);
+    const status=source.closest('.professional-card')?.querySelector('.professional-state');
+    if(status)el('p',status.textContent,row);
+    const action=button(source.textContent,row,()=>source.click());
+    action.disabled=source.disabled;
+   }
+  });
+ }
+ function deliveryFilters(index,count){
+  const filters=el('div',undefined,null,'professional-delivery-filters filtros');
+  count.after(filters);
+  const labels=[['all',tx('Todo','All','全部')],['documentation',tx('Documentación','Documentation','文档')],['experience',tx('Para tu cliente','For your client','给客户')],['coordination',tx('Seguimiento','Follow-up','跟进')],['tools',tx('Herramientas','Tools','工具')]];
+  for(const [key,label] of labels){
+   const b=button(label,filters,()=>{
+    index.dataset.filter=key;
+    for(const filter of filters.querySelectorAll('button'))filter.setAttribute('aria-pressed',String(filter===b));
+    for(const group of index.querySelectorAll(':scope>.professional-delivery-group')){
+     group.hidden=(!group.querySelector('.professional-card')||key!=='all'&&group.dataset.group!==key);
+    }
+   });
+   b.setAttribute('aria-pressed',String(key==='all'));
+  }
+  return filters;
+ }
  function arrangeDeliver(grid){
-  let index=grid.querySelector(':scope>.professional-index');
-  if(!index){index=el('section',undefined,null,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';el('p',undefined,index,'professional-count');grid.prepend(index);}
-  let prev=index.querySelector(':scope>.professional-count');
-  for(const[key,title,items]of INDICE()){const g=groupSection(index,key,title);putAfter(prev,g);prev=g;const box=g.querySelector('.professional-group-items');let last=null;
+  let index=grid.querySelector('.mesa > .professional-index');
+  if(!index){const desk=el('div',undefined,null,'mesa');grid.prepend(desk);index=el('section',undefined,desk,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';const count=el('p',undefined,index,'professional-count');deliveryFilters(index,count);deliveryCatalog(index);const panel=el('aside',undefined,desk,'professional-delivery-detail panel');panel.tabIndex=-1;panel.setAttribute('aria-live','polite');const placeholder=el('div',undefined,panel,'vacio-panel');el('h3',tx('Elige un entregable','Choose a deliverable','选择交付物'),placeholder);el('p',tx('Verás aquí el estado y las opciones de la ficha.','See the status and options for the selected item.','查看所选交付物的状态和选项。'),placeholder);}
+  const desk=index.parentElement,panel=desk.querySelector('.panel');
+  let prev=index.querySelector(':scope>.professional-delivery-filters');
+  for(const[key,title,items]of INDICE()){const g=groupSection(index,key,title);putAfter(prev,g);prev=g;const box=g.querySelector('.professional-group-items');box.classList.add('cards');let last=null;
    for(const[mod,code]of items){const c=[...section.querySelectorAll('.professional-card')].find(x=>moduleOf(x)===mod);if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;c.dataset.entregaCode=code;
-    if(!c.querySelector(':scope>.professional-code')){const b=el('span',code,null,'professional-code');(c.querySelector(':scope>h3')||c.firstChild)?.before(b);}}
-   let n=g.querySelector(':scope>.professional-count');if(!n){n=el('span',undefined,null,'professional-count');g.querySelector('h2').after(n);}n.textContent=String(box.children.length);g.hidden=!box.children.length;}
+    perlaTile(c,code);
+    if(c.querySelector('.perla-card-selector'))continue;
+    const body=c.querySelector('.body');
+    if(!body)continue;
+    const open=button(tx('Ver detalles','View details','查看详情'),body,()=>{
+     const heading=el('div',undefined,null,'panel-h');
+     el('h2',c.querySelector('h3')?.textContent,heading);
+     const close=button('×',heading,()=>{panel.replaceChildren();el('h3',tx('Elige un entregable','Choose a deliverable','选择交付物'),panel,'vacio-panel');open.focus();});
+     close.setAttribute('aria-label',tx('Volver al índice','Return to index','返回索引'));
+     const content=el('div',undefined,null,'panel-b');
+     content.append(perlaCover(code));
+     for(const item of c.querySelectorAll('.professional-state,.professional-detail,.delivery3d-lead,.delivery3d-meta')){
+      if(item.textContent.trim())el('p',item.textContent,content);
+     }
+     const actions=el('div',undefined,null,'panel-f');
+     for(const control of c.querySelectorAll('button[data-route],#delivery3dPreview')){
+      const action=button(control.textContent,actions,()=>control.click(),!actions.children.length);action.disabled=control.disabled;
+     }
+     panel.replaceChildren(heading,content,actions);panel.focus();
+    });
+    open.classList.add('perla-card-selector','professional-card-details');
+   }
+   let n=g.querySelector(':scope>.professional-count');if(!n){n=el('span',undefined,null,'professional-count');g.querySelector('h2').after(n);}n.textContent=String(box.children.length);g.hidden=!box.children.length||!!index.dataset.filter&&index.dataset.filter!=='all'&&index.dataset.filter!==key;}
   // «Más opciones · Guardar y exportar» sigue fuera del índice: la copia editable no es una salida para el cliente (Point9).
   index.querySelector(':scope>.professional-count').textContent=tx(`${index.querySelectorAll('.professional-card').length} entregables y herramientas`,`${index.querySelectorAll('.professional-card').length} deliverables and tools`,`${index.querySelectorAll('.professional-card').length} 项交付物与工具`);
   // Lo que otro módulo inserte delante del índice (p. ej. el Recorrido de obra) se coloca DETRÁS: nunca se mueve el índice,
   // que contiene la tarjeta con el foco.
-  for(let n=index.previousElementSibling;n;n=index.previousElementSibling){if(n.matches('.professional-card,.professional-delivery-group'))break;index.after(n);}
-  const journey=grid.querySelector('#obraJourney');putAfter(index,journey);
-  const band=[...grid.querySelectorAll(':scope>.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putAfter(journey||index,band);
-  const sign=section.querySelector('[data-group="signature"]'),ctx=section.querySelector('.professional-project-context');putBefore(ctx||grid,sign);
-  for(const a of section.querySelectorAll('.studio-ficha-link'))a.closest('li').hidden=!section.querySelector('[data-entrega-code="'+a.dataset.entrega+'"]');
+  for(let n=desk.previousElementSibling;n;n=desk.previousElementSibling){if(n.matches('.professional-card,.professional-delivery-group'))break;desk.after(n);}
+  const journey=grid.querySelector('#obraJourney');putAfter(desk,journey);
+  const band=[...grid.querySelectorAll(':scope>.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putAfter(journey||desk,band);
+  const sign=section.querySelector('[data-group="signature"]');
+  putBefore(section.querySelector(':scope>.professional-more'),sign);
+  const copy=section.querySelector('.hero-ent .txt');
+  if(copy&&!copy.querySelector('.listo')){
+   const list=el('ul',undefined,copy,'listo');
+   for(const [code,label] of [['D1',tx('Ficha','Area schedule','面积表')],['D3',tx('Dossier','Dossier','项目档案')],['S1',tx('Presupuesto','Budget','预算')]]){
+    const status=index.querySelector('[data-entrega-code="'+code+'"] .professional-state');
+    if(!status)continue;
+    const row=el('li',undefined,list);el('b',label,row);el('span',status.textContent,row);
+   }
+  }
+  if(copy&&!copy.querySelector('.acciones')){
+   const signature=sign?.querySelector('[data-route="studio-profile"]'),chip=section.querySelector('.firma-chip');
+   if(signature&&chip){
+    el('span',sign.querySelector('.professional-state')?.textContent,chip);
+    button(tx('Elegir firma','Choose signature','选择签名'),chip,()=>signature.focus());
+   }
+   const actions=el('div',undefined,copy,'acciones');
+   for(const [selector,label,primary] of [
+    ['[data-route="client-file"]',tx('Descargar archivo para el cliente','Download client file','下载客户文件'),true],
+    ['#delivery3dPreview',tx('Ver como cliente','View as client','以客户身份查看'),false]
+   ]){
+    const target=section.querySelector(selector);
+    if(!target)continue;
+    const shortcut=button(label,actions,()=>section.querySelector(selector)?.click(),primary);
+    shortcut.classList.toggle('professional-wine-action',primary);shortcut.disabled=target.disabled;
+   }
+  }
   dock();}
  function arrangeStudio(grid){
   const projectCards=[...grid.querySelectorAll('.professional-card[data-module="project"]')];
@@ -292,7 +448,7 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
    if(t.state==='ready')for(const [i,pr] of t.pairs.entries()){const b=route(cmp,(t.pairs.length===1?tx('Comparar','Compare','比较'):tx(`Comparar «${localName(pr.name)}»`,`Compare «${localName(pr.name)}»`,`比较「${localName(pr.name)}」`)),'compare-'+i,()=>app.persistence.openComparison(pr.href));b?.setAttribute?.('data-compare-variant',pr.id);}
    else if(t.state==='no-variant'||t.state==='no-library')route(cmp,tx('Abrir proyectos','Open projects','打开项目'),'compare-projects',()=>document.getElementById('projectsBtn')?.click());}
   const review=card(grid,tx('Observaciones del cliente','Client observations','客户意见'),reviewState());route(review,tx('Gestionar observaciones','Manage observations','管理意见'),'review',()=>FloorPlanReviewUI.open());identity(grid);
-  const more=el('section',undefined,section,'professional-more');el('h2',tx('Más opciones · Guardar y exportar','More options · Save and export','更多选项 · 保存与导出'),more);const exports=card(more,tx('Proyecto editable','Editable project','可编辑项目'),tx('Conserva una copia para seguir trabajando','Keep a copy to continue working','保留副本以继续工作'));route(exports,tx('Exportar proyecto JSON / ZIP','Export JSON / ZIP project','导出 JSON / ZIP 项目'),'export-project',()=>{finish();document.querySelector('#exportJson').click();});
+  const more=el('section',undefined,section,'professional-more');el('h2',tx('Más opciones · Guardar y exportar','More options · Save and export','更多选项 · 保存与导出'),more);const exports=card(more,tx('Proyecto editable','Editable project','可编辑项目'),tx('Conserva una copia para seguir trabajando','Keep a copy to continue working','保留副本以继续工作'));route(exports,tx('Exportar proyecto JSON / ZIP','Export JSON / ZIP project','导出 JSON / ZIP 项目'),'export-project',()=>{finish();document.querySelector('#exportJson').click();});route(exports,tx('Exportar planta activa en DXF','Export active floor as DXF','导出当前楼层 DXF'),'export-dxf',()=>{finish();document.querySelector('#exportDxf').click();});
  }else if(area==='studio'){identity(grid,true);const c=card(grid,tx('Perfiles profesionales','Professional profiles','专业配置'),tx('Perfiles reutilizables en este navegador','Reusable profiles in this browser','本浏览器中的可复用配置'));detail(c,tx('Nombre comercial, responsable, logo, email, teléfono, web y lema: se editan en el gestor de marca existente. No es una cuenta en la nube.','Business name, professional, logo, email, phone, website and tagline use the existing brand manager. This is not a cloud account.','商业名称、负责人、标志、邮箱、电话、网站和标语使用现有品牌管理器。这不是云账户。'));route(c,tx('Gestionar identidades','Manage identities','管理身份'),'studio',()=>FloorPlanBrandUI.open(),true);detail(c,tx('La selección «Firmar con» es por proyecto. Los perfiles permanecen disponibles para otros proyectos. Las entregas ya descargadas no cambian.','The signature choice is per project; profiles can be reused elsewhere. Downloaded deliveries do not change.','签名选择按项目保存，配置可跨项目复用，已下载交付不会改变。'));const pref=card(grid,tx('Preferencias profesionales','Professional preferences','专业偏好'),tx('Sólo configuración ya disponible','Existing settings only','仅现有设置'));detail(pref,tx('La escala de lámina y las opciones de presentación se ajustan en sus herramientas. Tarifa propia: aún sin editor en esta interfaz; no se guardan precios de proyecto aquí.','Set sheet scale and presentation options in their tools. Own rates have no editor in this interface; no project prices are stored here.','图纸比例与展示选项在各自工具中设置。此界面无自有费率编辑器，不在此保存项目价格。'));}
  visualLayout(grid,m);arrange();
  // FT3D-8 M2 (S4): Plan de obra, precios de referencia, evolución de obra y origen de la parcela, in the real areas.
