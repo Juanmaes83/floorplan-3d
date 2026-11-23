@@ -142,6 +142,6 @@ body.professional-area:not(.presenting) .app>aside,body.professional-area:not(.p
 @media(pointer:coarse){.studio-ficha-link{min-height:44px}}
 /* Acción principal fija en el móvil: atajo al botón de P7; se oculta mientras el botón real está a la vista. */
 .professional-dock{display:none}
-@media(max-width:700px){#professionalWorkspace[data-area=deliver] .professional-dock{display:flex;position:sticky;bottom:0;z-index:5;margin:0 -16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface-panel);border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(20,26,30,.08)}
+@media(max-width:700px){#professionalWorkspace[data-area=deliver] .professional-dock{display:flex;position:sticky;bottom:0;z-index:5;margin:0;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface-panel);border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(20,26,30,.08)}
  #professionalWorkspace[data-area=deliver] .professional-dock.is-covered{display:none}
  .professional-dock .btn{flex:1;min-height:48px}}

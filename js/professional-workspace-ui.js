@@ -94,14 +94,17 @@
   return g;}
  function arrangeDeliver(grid){
   let index=grid.querySelector(':scope>.professional-index');
-  if(!index){index=el('section',undefined,null,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';el('p',undefined,index,'professional-count');}putStart(grid,index);
+  if(!index){index=el('section',undefined,null,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';el('p',undefined,index,'professional-count');grid.prepend(index);}
   let prev=index.querySelector(':scope>.professional-count');
   for(const[key,title,items]of INDICE()){const g=groupSection(index,key,title);putAfter(prev,g);prev=g;const box=g.querySelector('.professional-group-items');let last=null;
    for(const[mod,code]of items){const c=[...section.querySelectorAll('.professional-card')].find(x=>moduleOf(x)===mod);if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;c.dataset.entregaCode=code;
     if(!c.querySelector(':scope>.professional-code')){const b=el('span',code,null,'professional-code');(c.querySelector(':scope>h3')||c.firstChild)?.before(b);}}
    let n=g.querySelector(':scope>.professional-count');if(!n){n=el('span',undefined,null,'professional-count');g.querySelector('h2').after(n);}n.textContent=String(box.children.length);g.hidden=!box.children.length;}
-  const more=section.querySelector('.professional-more');putEnd(index,more);
+  // «Más opciones · Guardar y exportar» sigue fuera del índice: la copia editable no es una salida para el cliente (Point9).
   index.querySelector(':scope>.professional-count').textContent=tx(`${index.querySelectorAll('.professional-card').length} entregables y herramientas`,`${index.querySelectorAll('.professional-card').length} deliverables and tools`,`${index.querySelectorAll('.professional-card').length} 项交付物与工具`);
+  // Lo que otro módulo inserte delante del índice (p. ej. el Recorrido de obra) se coloca DETRÁS: nunca se mueve el índice,
+  // que contiene la tarjeta con el foco.
+  for(let n=index.previousElementSibling;n;n=index.previousElementSibling){if(n.matches('.professional-card,.professional-delivery-group'))break;index.after(n);}
   const journey=grid.querySelector('#obraJourney');putAfter(index,journey);
   const band=[...grid.querySelectorAll(':scope>.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putAfter(journey||index,band);
   const sign=section.querySelector('[data-group="signature"]'),ctx=section.querySelector('.professional-project-context');putBefore(ctx||grid,sign);
@@ -110,11 +113,12 @@
  function arrangeStudio(grid){
   const projectCards=[...grid.querySelectorAll('.professional-card[data-module="project"]')];
   if(projectCards[0]&&!projectCards[0].dataset.studioRole)projectCards[0].dataset.studioRole='identity';if(projectCards[1]&&!projectCards[1].dataset.studioRole)projectCards[1].dataset.studioRole='preferences';
+  const nuevo=!section.querySelector('[data-group="studio-identity"]');
   const ident=groupSection(grid,'studio-identity',tx('Tu identidad profesional','Your professional identity','你的专业身份'),'professional-studio-group'),more=groupSection(grid,'studio-settings',tx('Más ajustes','More settings','更多设置'),'professional-studio-group');
   const pick=sel=>grid.querySelector(sel);
   const fill=(g,list)=>{const box=g.querySelector('.professional-group-items');let last=null;for(const c of list){if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;}};
   fill(ident,[pick('[data-studio-role="identity"]'),pick('.professional-card[data-module="studio"]')]);fill(more,[pick('[data-studio-role="preferences"]'),pick('#catalogStudioCard')]);
-  putStart(grid,ident);putAfter(ident,more);
+  if(nuevo)grid.prepend(ident);putAfter(ident,more);
   const hero=pick('[data-module="studio-hero"]');putAfter(more,hero);
   const band=[...grid.querySelectorAll('.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putEnd(grid,band);}
  // Acción principal fija en el móvil (V2.4 · decisión aprobada): «Descargar archivo para el cliente» siempre a mano.
