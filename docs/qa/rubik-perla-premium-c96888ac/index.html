@@ -1,0 +1,349 @@
+<title>RUBIK PERLA Premium</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: aplicación de producto (no una web): cabecera de RUBIK, navegación de áreas y una vista por área.
+   Entregar = mesa de luz: índice visual a la izquierda y vista previa del entregable elegido a la derecha (hoja en el móvil).
+   Tokens PERLA tomados de css/design-system.css del producto: el cromo es sobrio y el color lo aporta el contenido real. */
+:root{
+ --surface-app:#eceeee;--surface-panel:#ffffff;--surface-sunken:#f3f4f4;--surface-hover:#e6e9ea;
+ --line:#d5d9db;--line-strong:#aeb5b9;--ink:#1f2326;--ink-muted:#5b6266;
+ --action:#1f5a66;--action-hover:#174852;--action-soft:#e3ecee;--action-ink:#ffffff;
+ --select:#2b3034;--select-ink:#ffffff;--focus:#1f6f8b;
+ --ok:#1d6b3c;--ok-soft:#e8f3ec;--warn:#7a5200;--warn-soft:#fff4dc;--info-soft:#e7eef6;--info:#24527a;
+ --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+ --radius:10px;--shadow:0 1px 2px rgba(31,35,38,.06),0 8px 24px rgba(31,35,38,.08);
+}
+*{box-sizing:border-box}
+body{background:var(--surface-app);color:var(--ink);font:15px/1.5 var(--font-sans)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+img{max-width:100%;display:block}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+/* Aviso de laboratorio */
+.lab{background:var(--select);color:var(--select-ink);font-size:12.5px}
+.lab .wrap{padding-block:7px;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center}
+.lab b{font-weight:650}
+/* Cabecera del producto */
+.top{background:var(--surface-panel);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--surface-panel)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:wrap;padding-block:6px}
+.brand{font-weight:700;letter-spacing:.01em}.brand small{display:block;font-weight:400;font-size:12px;color:var(--ink-muted)}
+.areas{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.areas a{display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border-radius:8px;color:var(--ink);text-decoration:none;font-weight:550}
+.areas a[aria-current=page]{background:var(--select);color:var(--select-ink)}
+.areas a:hover:not([aria-current=page]){background:var(--surface-hover)}
+.asist{min-height:40px;padding:0 12px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-panel);cursor:pointer;font-weight:600}
+main{padding-block:20px 64px}
+section[data-view][hidden]{display:none}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font-size:clamp(24px,3vw,32px);font-weight:650;letter-spacing:-.01em}
+h2{font-size:19px;font-weight:650}
+.eyebrow{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);font-weight:650}
+.muted{color:var(--ink-muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-panel);font-weight:600;cursor:pointer;text-decoration:none;color:var(--ink)}
+.btn:hover{background:var(--surface-hover)}
+.btn.primary{background:var(--action);border-color:var(--action);color:var(--action-ink)}.btn.primary:hover{background:var(--action-hover)}
+.btn.link{border:0;background:none;color:var(--action);text-decoration:underline;padding:0 4px;min-height:44px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;padding:2px 9px;border-radius:12px;max-width:100%;line-height:1.35}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{color:var(--ok);background:var(--ok-soft)}.pill.pend{color:var(--info);background:var(--info-soft)}.pill.req{color:var(--warn);background:var(--warn-soft)}
+.pill.ok::before{content:"✓";width:auto;height:auto;background:none;font-size:11px}.pill.req::before{content:"!";width:auto;height:auto;background:none}
+.origen{font-size:11.5px;color:var(--ink-muted)}
+.tag-ej{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.92);color:var(--ink);font-size:11px;font-weight:650;padding:2px 7px;border-radius:4px}
+/* ENTREGAR */
+.ent-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:end;margin-bottom:16px}
+.firma-chip{display:flex;gap:8px;align-items:center;font-size:13px;flex-wrap:wrap}
+.hero-ent{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);background:var(--surface-panel);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:28px}
+.hero-ent figure{margin:0;position:relative;background:var(--surface-sunken);min-height:260px}
+.hero-ent figure img{width:100%;height:100%;object-fit:cover}
+.hero-ent .txt{padding:22px 24px;display:grid;gap:14px;align-content:start}
+.listo{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14px}
+.listo li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start}
+.listo b{font-weight:600}
+.big{font-size:34px;font-weight:650;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.acciones{display:flex;flex-wrap:wrap;gap:8px}
+.mesa{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+.filtros{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 16px}
+.filtros button{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface-panel);cursor:pointer;font-weight:550}
+.filtros button[aria-pressed=true]{background:var(--select);color:var(--select-ink);border-color:var(--select)}
+.grupo{margin:0 0 26px}
+.grupo-h{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.grupo-h p{margin:0;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
+.card{all:unset;box-sizing:border-box;display:grid;grid-template-rows:auto 1fr;background:var(--surface-panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.card:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+.card[aria-pressed=true]{border-color:var(--action);box-shadow:0 0 0 2px var(--action)}
+.card:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.thumb{position:relative;aspect-ratio:16/10;background:var(--surface-sunken);overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb.doc{background:#ffffff}.thumb.doc img{object-fit:contain;padding:6px}
+.code{position:absolute;left:8px;top:8px;background:var(--surface-panel);border:1px solid var(--line-strong);border-radius:4px;font-size:11.5px;font-weight:700;padding:1px 6px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.card .body{padding:12px 14px 14px;display:grid;gap:6px;align-content:start}
+.card h3{font-size:15.5px;font-weight:650}
+.card p{margin:0;font-size:13.5px;color:var(--ink-muted)}
+.card .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+.card .cta{font-size:13px;font-weight:650;color:var(--action)}
+.grupo.interno .card{background:var(--surface-sunken)}
+/* Representaciones explicativas (sin resultado real todavía) */
+.ilus{position:absolute;inset:0;display:grid;place-items:center;padding:14px;background:var(--surface-sunken)}
+.ilus-eco{width:86%;display:grid;gap:6px}
+.ilus-eco i{display:block;height:10px;border-radius:3px;background:var(--line)}
+.ilus-eco i:nth-child(1){width:55%;background:var(--line-strong)}.ilus-eco i:nth-child(3){width:80%}.ilus-eco i:nth-child(5){width:65%}
+.ilus-ab{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:92%}
+.ilus-ab figure{margin:0;position:relative;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--surface-panel);border:1px solid var(--line)}
+.ilus-ab figure img{width:100%;height:100%;object-fit:cover}
+.ilus-ab .vacio{border:2px dashed var(--line-strong);display:grid;place-items:center;font-size:12px;color:var(--ink-muted);text-align:center;padding:6px}
+.ilus-ab figcaption{position:absolute;left:4px;top:4px;background:rgba(255,255,255,.92);font-size:10.5px;font-weight:700;padding:0 5px;border-radius:3px}
+.mosaico{position:absolute;inset:0;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:2px}
+.mosaico img{width:100%;height:100%;object-fit:cover}.mosaico img:first-child{grid-row:1/3}
+/* Panel de vista previa (foco por intención) */
+.panel{position:sticky;top:76px;background:var(--surface-panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;max-height:calc(100dvh - 96px);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.panel-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.panel-h h2{font-size:17px;flex:1;min-width:0}
+.panel-x{min-width:44px;min-height:44px;border-radius:8px;border:1px solid var(--line);background:var(--surface-panel);cursor:pointer}
+.panel-b{overflow:auto;padding:14px;display:grid;gap:14px;align-content:start}
+.panel-b .prev{position:relative;border-radius:8px;overflow:hidden;background:var(--surface-sunken);border:1px solid var(--line)}
+.panel-b .prev img{width:100%}
+.panel-b dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0;font-size:13.5px}
+.panel-b dt{color:var(--ink-muted)}.panel-b dd{margin:0}
+.panel-f{padding:12px 14px;border-top:1px solid var(--line);display:grid;gap:8px}
+.panel-f .btn{width:100%}
+.vacio-panel{padding:28px 20px;text-align:center;color:var(--ink-muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--select);color:var(--select-ink);padding:10px 16px;border-radius:8px;font-size:14px;max-width:calc(100% - 32px);z-index:60;box-shadow:var(--shadow)}
+.dock{display:none}
+/* HOME */
+.h-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:0;background:var(--surface-panel);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.h-hero .txt{padding:clamp(20px,4vw,44px);display:grid;gap:16px;align-content:center}
+.h-hero h1{font-size:clamp(28px,3.6vw,44px);line-height:1.1}
+.h-hero figure{margin:0;position:relative;min-height:300px;background:var(--surface-sunken)}
+.h-hero figure img{width:100%;height:100%;object-fit:cover}
+.sec{margin-top:34px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.demos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.demo{background:var(--surface-panel);border-radius:12px;overflow:hidden;border:1px solid var(--line);display:grid;grid-template-rows:auto 1fr}
+.demo figure{margin:0;position:relative;aspect-ratio:16/9}.demo figure img{width:100%;height:100%;object-fit:cover}
+.demo .body{padding:14px 16px 16px;display:grid;gap:8px}
+.fases{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.fase{background:var(--surface-panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fase figure{margin:0;position:relative;aspect-ratio:4/3}.fase figure img{width:100%;height:100%;object-fit:cover}
+.fase .body{padding:10px 12px 12px}.fase h3{font-size:15px}.fase p{margin:2px 0 0;font-size:13px;color:var(--ink-muted)}
+.fase .n{font-weight:700;color:var(--action);font-variant-numeric:tabular-nums;margin-right:4px}
+.ia{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ia-item{background:var(--surface-panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px;align-content:start}
+.ia-item h3{font-size:15px}.ia-item p{margin:0;font-size:13.5px;color:var(--ink-muted)}
+details.cond{font-size:13px}details.cond summary{cursor:pointer;color:var(--action);font-weight:600;min-height:32px;display:flex;align-items:center}
+.asis-box{margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
+.asis-box summary{cursor:pointer;font-weight:650;min-height:44px;display:flex;align-items:center}
+.asis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:10px}
+.asis-grid figure{margin:0;background:var(--surface-panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.asis-grid figcaption{padding:6px 10px;font-size:12.5px;color:var(--ink-muted)}
+/* MI ESTUDIO */
+.est{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+.panelb{background:var(--surface-panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:12px}
+.firma-prev{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface-sunken)}
+.cajetin{position:absolute;right:10px;bottom:10px;background:var(--surface-panel);border:1px solid var(--ink);padding:8px 12px;display:grid;gap:1px;font-size:12px;min-width:180px}
+.cajetin b{font-size:13.5px}
+.marca-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:0;padding:0;list-style:none;font-size:13.5px}
+.marca-lista li{background:var(--surface-sunken);border-radius:8px;padding:8px 10px}
+.marca-lista small{display:block;color:var(--ink-muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:650}
+.fila{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+/* COMPARATIVA */
+.cmp{display:grid;gap:22px}
+.cmp-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;background:var(--surface-panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.cmp-row h3{grid-column:1/-1;font-size:16px}
+.cmp-row figure{margin:0;display:grid;gap:6px}.cmp-row figure img{border:1px solid var(--line);border-radius:8px}
+.cmp-row figcaption{font-size:12.5px;color:var(--ink-muted)}
+.cmp-row .card{cursor:default}
+ul.porque{margin:0;padding-left:18px;font-size:13.5px;grid-column:1/-1}
+/* Responsive */
+@media (max-width:1100px){.mesa{grid-template-columns:minmax(0,1fr)}.panel{position:fixed;inset:auto 0 0 0;top:auto;max-height:88dvh;border-radius:16px 16px 0 0;z-index:40;padding-bottom:env(safe-area-inset-bottom,0px)}.panel[hidden]{display:none}.velo{position:fixed;inset:0;background:rgba(31,35,38,.42);z-index:39}.velo[hidden]{display:none}
+ .fases{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1101px){.velo{display:none}}
+@media (max-width:760px){.hero-ent,.h-hero,.est{grid-template-columns:minmax(0,1fr)}.hero-ent figure,.h-hero figure{min-height:200px;aspect-ratio:16/10}
+ .demos,.ia{grid-template-columns:minmax(0,1fr)}.fases{grid-template-columns:repeat(2,minmax(0,1fr))}.cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+ .card h3{font-size:14.5px}.card p{display:none}.cmp-row{grid-template-columns:minmax(0,1fr)}.ent-head{grid-template-columns:minmax(0,1fr)}
+ .top .wrap{gap:6px}.areas{margin-left:0;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;order:3}.areas a{justify-content:center;padding:0 4px;font-size:13.5px;min-height:44px}.asist{margin-left:auto;min-height:44px}
+ .dock{display:flex;position:sticky;bottom:0;z-index:30;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface-app);border-top:1px solid var(--line)}.dock .btn{flex:1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="lab"><div class="wrap"><b>Prototipo de laboratorio UX-312 V3 · corte 2</b><span>Dirección visual para aprobar. No es el producto: los botones no ejecutan nada. Imágenes reales de la vivienda de ejemplo, o marcadas «Ejemplo».</span></div></div>
+<header class="top"><div class="wrap">
+ <div class="brand">RUBIK SOTA<small>Proyecto de ejemplo · 87,18 m²</small></div>
+ <nav class="areas" aria-label="Áreas">
+  <a href="#home" data-go="home">Inicio</a><a href="#estudio" data-go="estudio">Mi estudio</a><a href="#entregar" data-go="entregar">Entregar</a><a href="#comparativa" data-go="comparativa">Comparativa</a>
+ </nav>
+ <button class="asist" type="button" data-inerte="Abre el Asistente: consulta guiada con datos y fuentes del proyecto.">Asistente</button>
+</div></header>
+
+<main class="wrap">
+
+<!-- ===================== HOME ===================== -->
+<section data-view="home" aria-labelledby="hT" hidden>
+ <div class="h-hero">
+  <div class="txt">
+   <span class="eyebrow">Para arquitectos e interioristas</span>
+   <h1 id="hT">Del plano a la entrega, con tu firma</h1>
+   <p class="muted" style="margin:0;max-width:46ch">Dibuja o sube el plano, diseña en 3D, presupuesta y entrega a tu cliente una presentación, un dossier y un archivo que abre en cualquier navegador.</p>
+   <div class="acciones"><button class="btn primary" type="button" data-inerte="Abre la vivienda de ejemplo en el editor.">Probar con la vivienda de ejemplo</button><button class="btn" type="button" data-inerte="Abre el selector de plano (PDF o imagen).">Subir mi plano</button></div>
+   <span class="origen">Imagen: vista general real de la vivienda de ejemplo, generada por RUBIK.</span>
+  </div>
+  <figure><img src="img/vista-general.jpg" alt="Vista 3D a color de la vivienda de ejemplo, en planta abierta, con mobiliario y materiales"></figure>
+ </div>
+
+ <div class="sec">
+  <div class="sec-h"><h2>Míralo en movimiento</h2><span class="muted" style="font-size:13.5px">Demos con la vivienda de ejemplo. No guardan nada.</span></div>
+  <div class="demos">
+   <article class="demo"><figure><img src="img/demo-dibujo-vivo.jpg" alt="Dibujo vivo: un dormitorio dibujado a grafito que pasa a la vista real"><span class="tag-ej">Demo</span></figure>
+    <div class="body"><h3>Dibujo vivo</h3><p class="muted" style="margin:0">Del grafito a la vivienda real, estancia a estancia.</p><div class="acciones"><button class="btn primary" type="button" data-inerte="Reproduce la demo de Dibujo vivo.">Ver la demo</button><button class="btn" type="button" data-inerte="Elige y ordena las estancias del recorrido (configurador aprobado).">Personalizar esta demo</button></div></div></article>
+   <article class="demo"><figure><img src="img/demo-evolucion.jpg" alt="Evolución de obra en 4D con andamios y Gantt"><span class="tag-ej">Demo</span></figure>
+    <div class="body"><h3>Evolución de la obra</h3><p class="muted" style="margin:0">19 semanas de obra, día a día, con su plan.</p><div class="acciones"><button class="btn primary" type="button" data-inerte="Reproduce la demo de Evolución.">Ver la demo</button><button class="btn" type="button" data-inerte="Cambia fechas o duraciones de hasta 3 tareas (F4a).">Personalizar esta demo</button></div></div></article>
+  </div>
+ </div>
+
+ <div class="sec">
+  <div class="sec-h"><h2>Cinco fases, un proyecto</h2><button class="btn link" type="button" data-inerte="Catálogo «Todas las herramientas de RUBIK» con búsqueda.">Todas las herramientas</button></div>
+  <div class="fases">
+   <article class="fase"><figure><img src="img/fase-plano.jpg" alt="Plano de la vivienda de ejemplo en el editor"></figure><div class="body"><h3><span class="n">1</span>Imaginar</h3><p>El plano, en el editor.</p></div></article>
+   <article class="fase"><figure><img src="img/vista-salon.jpg" alt="Salón de la vivienda de ejemplo en 3D"></figure><div class="body"><h3><span class="n">2</span>Diseñar</h3><p>La vivienda en 3D.</p></div></article>
+   <article class="fase"><figure><img src="img/fase-evolucion.jpg" alt="Evolución de la obra con Gantt"></figure><div class="body"><h3><span class="n">3</span>Construir</h3><p>Presupuesto y obra.</p></div></article>
+   <article class="fase"><figure><img src="img/fase-hero.jpg" alt="Cierre de presentación con firma"><span class="tag-ej">Ejemplo</span></figure><div class="body"><h3><span class="n">4</span>Presentar</h3><p>Con tu firma.</p></div></article>
+   <article class="fase"><figure><img src="img/fase-recorrer.jpg" alt="Recorrido a la altura de los ojos por la vivienda"></figure><div class="body"><h3><span class="n">5</span>Recorrer</h3><p>Y entregarla.</p></div></article>
+  </div>
+ </div>
+
+ <div class="sec">
+  <div class="sec-h"><h2>Nuevos servicios IA</h2><span class="muted" style="font-size:13.5px">Estado real de cada uno. Nada se activa sin ti.</span></div>
+  <div class="ia">
+   <article class="ia-item"><span class="pill ok">Disponible</span><h3>Asistente del proyecto</h3><p>Consulta guiada con los datos y las fuentes de tu proyecto. Sus propuestas no se aplican sin confirmar.</p><div class="acciones"><button class="btn primary" type="button" data-inerte="E02 corregido: abre el panel del Asistente con el foco en la consulta.">Abrir el Asistente</button></div></article>
+   <article class="ia-item"><span class="pill pend">Piloto</span><h3>Render IA</h3><p>Imágenes fotorrealistas a partir de tus vistas.</p><details class="cond"><summary>Condiciones</summary><p>Requiere preparar las vistas. Usa un proveedor externo solo con tu autorización y muestra el consumo antes de generar.</p></details></article>
+   <article class="ia-item"><span class="pill pend">Simulación</span><h3>Reforma desde fotografía</h3><p>Propuesta ilustrativa sobre una foto, sin envío.</p><details class="cond"><summary>Condiciones</summary><p>Es una simulación local: no promete medidas ni un resultado de obra.</p></details></article>
+  </div>
+ </div>
+ <details class="asis-box"><summary>Así es hoy la Home (AS-IS, producto 7b76f749)</summary><p class="muted">El bloque «Nuevos servicios IA» mide 1457 px en escritorio y 2565 px en el móvil (auditoría de Codex). El botón «Abrir el Asistente» de la banda estaba deshabilitado (E02, ya corregido en 09cdb580).</p></details>
+</section>
+
+<!-- ===================== MI ESTUDIO ===================== -->
+<section data-view="estudio" aria-labelledby="eT" hidden>
+ <div class="ent-head"><div><span class="eyebrow">Mi estudio · configuración de este navegador</span><h1 id="eT">Tu identidad en cada entrega</h1></div><span class="pill req">Sin firma elegida para este proyecto</span></div>
+ <div class="est">
+  <div class="panelb">
+   <div class="fila"><h2>Así firmarás la lámina</h2><span class="origen">Lámina real · cajetín de ejemplo</span></div>
+   <div class="firma-prev"><img src="img/d2-lamina.jpg" alt="Lámina de distribución real de la vivienda de ejemplo"><div class="cajetin" aria-label="Cajetín de ejemplo"><span class="eyebrow">Ejemplo</span><b>Estudio Norte</b><span>Ana Ruiz · arquitecta</span><span class="muted">estudionorte.example</span></div></div>
+   <p class="muted" style="margin:0;font-size:13.5px">Tu firma aparece en la lámina, la ficha, los dossieres, la presentación 3D, las imágenes, el cierre HERO y el archivo para tu cliente. Nunca se envía a ningún servicio.</p>
+   <div class="acciones"><button class="btn primary" type="button" data-inerte="Abre el gestor de marca existente (FloorPlanBrand).">Crear mi firma profesional</button><button class="btn" type="button" data-inerte="Elige qué perfil firma este proyecto.">Elegir firma para este proyecto</button></div>
+  </div>
+  <div style="display:grid;gap:14px">
+   <div class="panelb"><h2>Personalización del cierre</h2><div class="firma-prev"><img src="img/fase-hero.jpg" alt="Cierre de presentación HERO con un estudio de ejemplo"><span class="tag-ej">Ejemplo</span></div><div class="fila"><span class="muted" style="font-size:13.5px">Estilo cinematográfico · 16:9</span><button class="btn" type="button" data-inerte="Reproduce el cierre con tu firma.">Ver en movimiento</button></div></div>
+   <div class="panelb"><h2>Más ajustes</h2>
+    <div class="fila"><div><b>Preferencias profesionales</b><div class="muted" style="font-size:13px">Escala de lámina y opciones de presentación</div></div><button class="btn" type="button" data-inerte="Abre las preferencias.">Ajustar</button></div>
+    <div class="fila"><div><b>Mis catálogos</b><div class="muted" style="font-size:13px">Productos con SKU, medidas y precio con fuente</div></div><button class="btn" type="button" data-inerte="Abre Mis catálogos.">Abrir</button></div>
+   </div>
+  </div>
+ </div>
+ <div class="sec">
+  <div class="sec-h"><h2>Tu marca en RUBIK</h2><span class="muted" style="font-size:13.5px">Dónde aparece la identidad que configuras aquí (verificado en el código).</span></div>
+  <ul class="marca-lista">
+   <li><small>Diseñar</small>Cajetín de la lámina · pie de la ficha · dossier · material board</li>
+   <li><small>Construir</small>Dossier económico · análisis del emplazamiento · entrega de obra</li>
+   <li><small>Presentar</small>Presentación 3D · imágenes · cierre HERO · entregables · revisión Blender</li>
+   <li><small>Recorrer</small>Archivo y enlace para tu cliente</li>
+  </ul>
+ </div>
+</section>
+
+<!-- ===================== ENTREGAR ===================== -->
+<section data-view="entregar" aria-labelledby="dT" hidden>
+ <div class="ent-head">
+  <div><span class="eyebrow">Entregar al cliente</span><h1 id="dT">Lo que recibirá tu cliente</h1></div>
+  <div class="firma-chip"><span class="pill req">Sin firma</span><button class="btn link" type="button" data-inerte="Va a Mi estudio y vuelve aquí al terminar.">Elegir firma</button></div>
+ </div>
+ <div class="hero-ent">
+  <figure><img src="img/vista-general.jpg" alt="Vista 3D a color de la vivienda de ejemplo"></figure>
+  <div class="txt">
+   <div><span class="eyebrow">Proyecto de ejemplo</span><div class="big">87,18 m²</div><span class="muted" style="font-size:13.5px">11 estancias · planta única · medidas orientativas</span></div>
+   <ul class="listo">
+    <li><span class="pill ok">Listo</span><span><b>Ficha, lámina, presentación 3D, material board</b> y archivo para tu cliente</span></li>
+    <li><span class="pill pend">Al pulsar</span><span><b>Imágenes</b> (5 vistas) y dossier del proyecto</span></li>
+    <li><span class="pill req">Falta</span><span><b>Precios</b> del presupuesto y <b>plan de obra</b></span></li>
+   </ul>
+   <div class="acciones"><button class="btn primary" type="button" data-inerte="Descarga el archivo HTML para el cliente (P7).">Descargar archivo para el cliente</button><button class="btn" type="button" data-inerte="Abre la visita 3D privada como la verá tu cliente.">Ver como cliente</button></div>
+  </div>
+ </div>
+
+ <div class="mesa">
+  <div>
+   <div class="sec-h" style="margin-bottom:0"><h2>Índice de la entrega <span class="muted" style="font-weight:400;font-size:14px">· 16 entregables y herramientas</span></h2></div>
+   <div class="filtros" role="group" aria-label="Filtrar el índice">
+    <button type="button" data-f="*" aria-pressed="true">Todo</button><button type="button" data-f="doc" aria-pressed="false">Documentación</button><button type="button" data-f="cli" aria-pressed="false">Para tu cliente</button><button type="button" data-f="seg" aria-pressed="false">Seguimiento</button><button type="button" data-f="int" aria-pressed="false">Herramientas</button>
+   </div>
+   <div id="indice"></div>
+  </div>
+  <div class="velo" hidden></div>
+  <aside class="panel" id="panel" aria-labelledby="panelT" tabindex="-1"></aside>
+ </div>
+ <div class="dock"><button class="btn primary" type="button" data-inerte="Descarga el archivo HTML para el cliente (atajo de P7).">Descargar archivo para el cliente</button></div>
+</section>
+
+<!-- ===================== AS-IS / TO-BE ===================== -->
+<section data-view="comparativa" aria-labelledby="cT" hidden>
+ <div class="ent-head"><div><span class="eyebrow">Revisión de la dirección visual</span><h1 id="cT">Hoy y propuesta, tarjeta a tarjeta</h1></div></div>
+ <p class="muted" style="max-width:70ch;margin:0 0 18px">Tres tarjetas del índice de Entregar: un documento (D2), una salida audiovisual (P1) y el Archivo para el cliente (P7). A la izquierda, la tarjeta real del producto hoy (rama UX-312, 7b76f749). A la derecha, la propuesta con el mismo contenido real.</p>
+ <div class="cmp" id="cmp"></div>
+</section>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+// Datos del índice: códigos, estados y acciones reales del producto para la vivienda de ejemplo (rama UX-312, 7b76f749).
+const E=[
+ {c:'D1',g:'doc',n:'Ficha de superficies',r:'Superficie útil de las 11 estancias, lista para imprimir.',s:['ok','Lista · 87,18 m²'],img:'d1-ficha.jpg',doc:1,a:'Ver ficha',o:'Ficha real del proyecto de ejemplo',dep:'Ninguna'},
+ {c:'D2',g:'doc',n:'Lámina profesional',r:'Plano de distribución con acabados, cotas y tu cajetín.',s:['ok','Lista para revisar'],img:'d2-lamina.jpg',doc:1,a:'Abrir lámina',o:'Lámina real del proyecto de ejemplo',dep:'Firma (opcional) en Mi estudio'},
+ {c:'D3',g:'doc',n:'Dossier del proyecto',r:'Portada, plano, superficies, orientación y exterior en un documento.',s:['pend','5 de 8 secciones con contenido'],img:'d3-dossier.jpg',doc:1,a:'Preparar dossier',o:'Portada real del dossier',dep:'Imágenes 3D y observaciones completan las 3 secciones restantes'},
+ {c:'D4',g:'doc',n:'Dossier económico',r:'El presupuesto en versión para el cliente.',s:['req','Requiere presupuesto con precios'],ilus:'eco',a:'Preparar dossier económico',extra:'Los precios se revisan en S1 · Presupuesto',o:'Ejemplo de estructura · sin importes inventados',dep:'S1 Presupuesto con precios'},
+ {c:'D5',g:'doc',n:'Entregables profesionales',r:'Paquete por pasos: elegir, previsualizar y preparar.',s:['ok','10 entregables disponibles'],img:'d5-entregables.jpg',doc:1,a:'Preparar entregables',o:'Configurador E3 real',dep:'Según el entregable'},
+ {c:'P1',g:'cli',n:'Presentación 3D',r:'Recorrido guiado por la vivienda, con «Grabar vídeo».',s:['ok','Lista · 13 estancias'],img:'vista-general.jpg',a:'Preparar presentación',o:'Vista 3D real de la vivienda de ejemplo',dep:'Ninguna'},
+ {c:'P2',g:'cli',n:'Imágenes',r:'Vista general y estancias a color, limpias o con tu firma.',s:['pend','5 vistas · se preparan al pulsar'],mos:['vista-salon.jpg','vista-dormitorio-principal.jpg','vista-dormitorio-infantil.jpg'],a:'Preparar 5 vistas del proyecto',o:'Vistas reales generadas con «Preparar 5 vistas»',dep:'Vista 3D disponible'},
+ {c:'P3',g:'cli',n:'Visita 3D',r:'Tu cliente recorre la vivienda a la altura de los ojos.',s:['pend','Prueba privada · no se publica'],img:'fase-recorrer.jpg',a:'Revisar como cliente',o:'Recorrido real de la vivienda de ejemplo',dep:'Publicar el enlace requiere tu consentimiento'},
+ {c:'P4',g:'cli',n:'Evolución de obra',r:'La obra día a día, sincronizada con su plan.',s:['req','Requiere plan de obra'],img:'demo-evolucion.jpg',ej:1,a:'Crear plan de obra',o:'Ejemplo: demo con el plan de la vivienda de ejemplo',dep:'Plan de obra (Presupuestar → Plan de obra)'},
+ {c:'P5',g:'cli',n:'Material board',r:'Suelos y mobiliario reales del proyecto en una lámina.',s:['ok','Listo · 6 suelos · 8 colores'],img:'p5-material-board.jpg',doc:1,a:'Ver material board',o:'Material board real',dep:'Ninguna'},
+ {c:'P6',g:'cli',n:'Personalización del cierre',r:'Cómo termina tu presentación, con tu firma.',s:['req','Sin firma elegida'],img:'fase-hero.jpg',ej:1,a:'Personalizar el cierre en Mi estudio',o:'Ejemplo: cierre con un estudio ficticio',dep:'Firma en Mi estudio'},
+ {c:'P7',g:'cli',n:'Archivo para tu cliente',r:'Un HTML que abre sin conexión y le permite dejarte observaciones.',s:['ok','Listo para enviar · sin servidor'],img:'p7-archivo-cliente.jpg',doc:1,a:'Descargar archivo para el cliente',extra:'Publicar enlace para el cliente',o:'Portada real del archivo descargado',dep:'Publicar el enlace requiere consentimiento y código'},
+ {c:'S1',g:'seg',n:'Presupuesto',r:'Partidas desde las cantidades del proyecto, con tus precios.',s:['req','0 de 11 partidas con precio'],img:'s1-presupuesto.jpg',doc:1,a:'Revisar presupuesto',o:'Presupuestar real',dep:'Tus precios'},
+ {c:'S2',g:'seg',n:'Observaciones del cliente',r:'Lo que te devuelve el cliente, anclado al plano.',s:['pend','Sin observaciones todavía'],img:'s2-observaciones.jpg',doc:1,a:'Gestionar observaciones',o:'Gestor real (sin comentarios inventados)',dep:'El cliente responde desde P7'},
+ {c:'T1',g:'int',n:'Escena para Blender',r:'Paquete técnico ZIP con la escena 3D, medidas e identificadores. No es un vídeo.',s:['pend','Requiere la vista 3D abierta'],img:'t1-render-cycles.jpg',a:'Preparar escena',extra:'Revisar render',o:'Render Cycles real de la vivienda de ejemplo con el kit OP-10. El paquete no incluye este render',dep:'Vista 3D abierta · Blender en tu equipo'},
+ {c:'T2',g:'int',n:'Comparar con el original',r:'Antes y después, cambios reales y presupuesto de cada revisión.',s:['req','Requiere una variante'],ilus:'ab',a:'Abrir proyectos',o:'Original real · la variante aún no existe',dep:'Crear una variante en Proyectos'}];
+const G=[['doc','Documentación','Lo que se imprime o se archiva'],['cli','La vivienda, para tu cliente','Lo que verá y recibirá'],['seg','Seguimiento del proyecto','Precios y respuesta del cliente'],['int','Herramientas de trabajo','No son para el cliente']];
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function thumb(e){if(e.ilus==='eco')return `<div class="thumb"><div class="ilus"><div class="ilus-eco" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><span class="tag-ej">Ejemplo · estructura</span><span class="code">${e.c}</span></div>`;
+ if(e.ilus==='ab')return `<div class="thumb"><div class="ilus"><div class="ilus-ab"><figure><img src="img/vista-general.jpg" alt="Original: vista general real"><figcaption>A · original</figcaption></figure><div class="vacio">B · crea una variante para comparar</div></div></div><span class="code">${e.c}</span></div>`;
+ if(e.mos)return `<div class="thumb"><div class="mosaico">${e.mos.map(m=>`<img src="img/${m}" alt="">`).join('')}</div><span class="code">${e.c}</span></div>`;
+ return `<div class="thumb${e.doc?' doc':''}"><img src="img/${e.img}" alt="${esc(e.o)}" loading="lazy">${e.ej?'<span class="tag-ej">Ejemplo</span>':''}<span class="code">${e.c}</span></div>`;}
+function cardHTML(e,static){return `<${static?'div':'button type="button"'} class="card" data-code="${e.c}" ${static?'':'aria-pressed="false"'} aria-label="${e.c} ${esc(e.n)}: ${esc(e.s[1])}">${thumb(e)}<div class="body"><h3>${esc(e.n)}</h3><p>${esc(e.r)}</p><div class="meta"><span class="pill ${e.s[0]}">${esc(e.s[1])}</span><span class="cta">${esc(e.a)} →</span></div></div></${static?'div':'button'}>`;}
+function indice(f){$('#indice').innerHTML=G.filter(([k])=>f==='*'||f===k).map(([k,t,d])=>{const it=E.filter(e=>e.g===k);return `<section class="grupo${k==='int'?' interno':''}" aria-labelledby="g-${k}"><div class="grupo-h"><h3 id="g-${k}" style="font-size:16px">${t} <span class="muted" style="font-weight:400">· ${it.length}</span></h3><p class="muted">${d}</p></div><div class="cards">${it.map(e=>cardHTML(e)).join('')}</div></section>`;}).join('');
+ for(const b of document.querySelectorAll('#indice .card'))b.onclick=()=>abrir(b.dataset.code,b);marcar();}
+let sel=null,origen=null;const narrow=()=>matchMedia('(max-width:1100px)').matches;
+function marcar(){for(const b of document.querySelectorAll('#indice .card'))b.setAttribute('aria-pressed',String(b.dataset.code===sel));}
+function panel(){const p=$('#panel'),e=E.find(x=>x.c===sel);
+ if(!e){p.innerHTML=`<div class="vacio-panel"><h2 id="panelT" style="font-size:16px;color:var(--ink)">Elige un entregable</h2><p>Verás aquí qué recibirá tu cliente, su estado y sus opciones, sin salir de Entregar.</p></div>`;p.hidden=narrow();$('.velo').hidden=true;return;}
+ p.innerHTML=`<div class="panel-h"><span class="code" style="position:static">${e.c}</span><h2 id="panelT">${esc(e.n)}</h2><button class="panel-x" type="button" aria-label="Volver al índice">✕</button></div>
+ <div class="panel-b"><div class="prev">${thumb(e).replace('class="thumb','class="thumb" style="aspect-ratio:auto;min-height:220px').replace('<span class="code">'+e.c+'</span>','')}</div>
+ <p style="margin:0">${esc(e.r)}</p><dl><dt>Estado</dt><dd><span class="pill ${e.s[0]}">${esc(e.s[1])}</span></dd><dt>Necesita</dt><dd>${esc(e.dep)}</dd><dt>Imagen</dt><dd class="muted">${esc(e.o)}</dd><dt>Al cerrar</dt><dd class="muted">Vuelves a esta tarjeta del índice</dd></dl></div>
+ <div class="panel-f"><button class="btn primary" type="button" data-inerte="${esc(e.a)}: abre el generador real y, al cerrarlo, vuelve aquí.">${esc(e.a)}</button>${e.extra?`<button class="btn" type="button" data-inerte="${esc(e.extra)}.">${esc(e.extra)}</button>`:''}</div>`;
+ p.hidden=false;$('.velo').hidden=!narrow();p.querySelector('.panel-x').onclick=cerrar;p.focus({preventScroll:true});}
+function abrir(c,from){sel=c;origen=from;marcar();panel();}
+function cerrar(){const o=origen;sel=null;marcar();panel();o?.focus({preventScroll:true});}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sel)cerrar();});
+$('.velo').onclick=cerrar;addEventListener('resize',()=>panel());
+for(const b of document.querySelectorAll('.filtros button'))b.onclick=()=>{for(const x of document.querySelectorAll('.filtros button'))x.setAttribute('aria-pressed',String(x===b));indice(b.dataset.f);};
+// Comparativa AS-IS / TO-BE
+$('#cmp').innerHTML=[['D2','Documento',['Miniatura real, pero el título y los avisos técnicos van antes que el resultado.','Estado y acción alineados en la misma posición en las 16 tarjetas.']],['P1','Salida audiovisual',['Hoy: esquema gris de líneas aunque existe la vista 3D real a color.','Propuesta: la vista real es la protagonista; «Grabar vídeo» se anuncia en el resultado.']],['P7','Archivo para el cliente',['Hoy: lista de comprobación en texto; no se ve qué recibirá el cliente.','Propuesta: portada real del archivo descargado y la acción principal visible.']]].map(([c,t,w])=>{const e=E.find(x=>x.c===c);
+ return `<article class="cmp-row"><h3>${c} · ${t}</h3><figure><img src="img/asis-${c}.jpg" alt="Tarjeta ${c} del producto hoy"><figcaption>Hoy · producto 7b76f749</figcaption></figure><figure>${cardHTML(e,true)}<figcaption>Propuesta · mismo contenido real</figcaption></figure><ul class="porque">${w.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></article>`;}).join('');
+// Botones inertes del prototipo
+let tt;document.addEventListener('click',e=>{const b=e.target.closest('[data-inerte]');if(!b)return;const t=$('#toast');t.textContent='Prototipo · '+b.dataset.inerte;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3200);});
+// Navegación por hash (#home, #estudio, #entregar, #comparativa)
+function ruta(){const v=(location.hash||'#entregar').slice(1);const ok=['home','estudio','entregar','comparativa'].includes(v)?v:'entregar';
+ for(const s of document.querySelectorAll('[data-view]'))s.hidden=s.dataset.view!==ok;for(const a of document.querySelectorAll('.areas a'))a.toggleAttribute('aria-current',a.dataset.go===ok)||a.removeAttribute('aria-current');
+ for(const a of document.querySelectorAll('.areas a'))a.dataset.go===ok?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current');if(ok==='entregar'){indice('*');panel();}scrollTo(0,0);}
+addEventListener('hashchange',ruta);ruta();
+</script>
