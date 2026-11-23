@@ -321,3 +321,17 @@ body.perla .perla-keep>*{order:0!important}
 body.perla .perla-keep .btn{min-height:34px;font-size:13px}
 /* Modo «Plano propio» (#tracePanel visible): el Inspector no aplica; sus pestañas y su pie se retiran */
 body.perla aside.right:has(#tracePanel:not([hidden])) .perla-inspector-head,body.perla aside.right:has(#tracePanel:not([hidden])) .perla-props-hint{display:none!important}
+
+/* Orden de capas en el lienzo: las barras PERLA (4) quedan por debajo de los avisos del lienzo (conflictos de plantas,
+   z 5) y de los cajones Construir / Inspector (z 6). En el teléfono (vertical y horizontal) la barra inferior queda por
+   encima de los cajones para poder cerrarlos siempre. */
+body.perla .perla-canvas-top,body.perla .perla-canvas-bottom,body.perla #stage>#mobileDock{z-index:4}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #stage>#mobileDock{z-index:70}}
+/* Fila 1: las columnas laterales nunca encogen por debajo de su contenido; así las utilidades no tapan las áreas */
+body.perla .perla-r1{grid-template-columns:minmax(max-content,1fr) auto minmax(max-content,1fr)}
+@media (max-width:1280px){body.perla .perla-r1{gap:6px}body.perla .perla-utils .perla-studio>*:not(svg){display:none}}
+/* Editor completo en el teléfono: la fila de herramientas avanzadas es una sola línea desplazable */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla:not(.guided):not(.professional-area):not(.presenting) .app>header>.perla-keep{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:3px 8px}
+  body.perla .perla-keep>*{flex:none}
+}

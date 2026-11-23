@@ -65,7 +65,8 @@
  // ── Fila 2 · Importar · Archivo · vista · paso · tareas · Presentar · acción principal ──
  const impWrap=el('div',{class:'perla-split',role:'group'},r2);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
  const imp=el('details',{class:'perla-dd perla-menu',id:'perlaImport'},impWrap),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
- for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importJson','importJsonHelp','importImage','joinRoomPlan'])move('#'+id,impPop);
+ // «Importar proyecto JSON» sigue en «Archivo» (junto a «Guardar»), como en la app; aquí, plano, RoomPlan, nuevo, imagen y unir.
+ for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importImage','joinRoomPlan'])move('#'+id,impPop);
  // Estado de las medidas en la barra de estado (V4: «Medidas orientativas»), con su id y su manejador.
  {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
  move('#uploadCancel',r2);

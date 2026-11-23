@@ -62,6 +62,9 @@
   open.hidden=false;void playingStory;
   if(playingStory)detail.tabIndex=0;
   else detail.removeAttribute('tabindex');
+  // Estado visible del botón: bloqueado (con motivo), listo, grabando o vídeo listo. Nunca parece activo si no lo está.
+  const busy=!!(controller||Recorder?.busy||Film?.busy),state=busy?'grabando':reason?'bloqueado':result?'hecho':'listo';
+  open.dataset.state=state;const label=busy?tx('Grabando vídeo…','Recording video…','正在录制视频…'):tx('Grabar vídeo','Record video','录制视频');if(open.textContent!==label)open.textContent=label;
   const message=reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
   if(detail.textContent!==message)detail.textContent=message;
   if(playingStory&&focusTarget===open)detail.focus({preventScroll:true});
@@ -76,7 +79,9 @@
   finally{checking=false;sync();}
  }
  new MutationObserver(sync).observe(overlay,{attributes:true,attributeFilter:['hidden','data-moving','data-story','data-walking','data-route','data-batch']});
- open.onclick=()=>{if(unavailable()||dialog.open){sync();return;}returnFocus=open;draw();dialog.showModal();dialog.querySelector('#tourVideoDownload,#tourVideoGo')?.focus();};
+ open.onclick=()=>{if(dialog.open){sync();return;}
+  // Bloqueado: no abre nada, pero lo dice (el motivo destaca un momento junto al botón).
+  if(unavailable()){sync();detail.classList.remove('is-flash');void detail.offsetWidth;detail.classList.add('is-flash');return;}returnFocus=open;draw();dialog.showModal();dialog.querySelector('#tourVideoDownload,#tourVideoGo')?.focus();};
  dialog.addEventListener('cancel',e=>{if(controller){e.preventDefault();controller.abort();}});
  dialog.addEventListener('close',()=>{if(!leaving)returnFocus?.focus?.({preventScroll:true});sync();});
  window.addEventListener('floorplan-presentation-started',()=>{
@@ -153,7 +158,19 @@
   .presentation-video-access{display:flex;align-items:center;gap:8px;min-width:0;min-height:44px;flex:1 1 100%}
   .presentation-video-access #presentationVideo{min-height:44px;flex:none;white-space:nowrap;border:1px solid var(--line)}
   .presentation-video-access #presentationVideo[hidden]{display:none}
-  #presentationVideo[aria-disabled=true]{cursor:default;color:var(--ink-muted)}
+  #presentationVideo[aria-disabled=true]{cursor:not-allowed;color:var(--ink-muted)}
+  #presentationVideo{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+  #presentationVideo::before{content:'';width:10px;height:10px;border-radius:50%;flex:none;background:#c7c2c4}
+  #presentationVideo[data-state=listo]{border-color:#1F5A66!important;color:#1F5A66;background:#fff}
+  #presentationVideo[data-state=listo]::before{background:#c0392b}
+  #presentationVideo[data-state=bloqueado]{border-style:dashed!important;background:#f4f2f3;opacity:.8}
+  #presentationVideo[data-state=grabando]{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
+  #presentationVideo[data-state=grabando]::before{background:#fff;animation:recPulse 1s ease-in-out infinite}
+  #presentationVideo[data-state=hecho]::before{content:'✓';width:auto;height:auto;background:none;color:#2f6e4a;font-size:14px}
+  @keyframes recPulse{50%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){#presentationVideo[data-state=grabando]::before{animation:none}}
+  .presentation-video-detail.is-flash{color:#783B4B;font-weight:600;animation:recFlash 1.2s ease-out}
+  @keyframes recFlash{0%{background:#F4E8EC}100%{background:transparent}}
   :is(#presentationVideo,.presentation-video-detail):focus-visible{outline:2px solid var(--focus);outline-offset:2px}
   .presentation-video-detail{font-size:12px;line-height:1.25;color:var(--ink-muted);overflow-wrap:anywhere}
   .tour-video-mode{border:0;padding:0;margin:8px 0;display:grid;gap:6px}.tour-video-mode legend{font-weight:700;margin-bottom:4px}
