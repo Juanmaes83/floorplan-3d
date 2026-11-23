@@ -46,7 +46,7 @@
 function setupConfig(F,howTo){
  const S=window.FloorPlanConstructionSchedule,bar=document.querySelector('.demo-bar');
  if(!S||!bar)return;
- const MAX=3,DAY=864e5,clone=o=>JSON.parse(JSON.stringify(o));
+ const MAX=3,MAXD=365,DAY=864e5,clone=o=>JSON.parse(JSON.stringify(o));
  const d=x=>Date.parse(x+'T00:00:00Z'),iso=ms=>new Date(ms).toISOString().slice(0,10);
  const fmt=x=>new Date(d(x)).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
  const dur=t=>Math.round((d(t.endDate)-d(t.startDate))/DAY)+1,short=t=>String(t.title||t.id).replace(/\s*\(.*\)$/,'');
@@ -61,7 +61,7 @@ function setupConfig(F,howTo){
   '.dc-tasks button{min-width:96px}.dc-tasks button[aria-pressed=true]{background:var(--action-soft);border-color:var(--action);color:var(--action)}'+
   '.dc-edit{display:grid;gap:8px;margin:0 0 10px}.dc-edit:empty{display:none}.dc-ed{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 10px;align-items:end;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-sunken)}'+
   '.dc-ed label{display:grid;gap:2px;font-size:12.5px;color:var(--ink-muted)}.dc-ed input{min-height:44px;padding:4px 8px;border:1px solid var(--line-strong);border-radius:6px;font:inherit;color:var(--ink);background:var(--surface-panel)}.dc-ed input[type=number]{width:7ch}'+
-  '.dc-msg{margin:0 0 10px;padding:8px 10px;border-radius:8px;font-size:14px;line-height:1.45}.dc-msg:empty{display:none}.dc-msg.ok{background:var(--action-soft);color:var(--ink)}.dc-msg.err{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}'+
+  '.dc-help{margin:0;font-size:12.5px;color:var(--ink-muted)}.dc-ed input[aria-invalid=true]{border-color:var(--danger);outline:2px solid var(--danger);outline-offset:0}.dc-msg{margin:0 0 10px;padding:8px 10px;border-radius:8px;font-size:14px;line-height:1.45}.dc-msg:empty{display:none}.dc-msg.ok{background:var(--action-soft);color:var(--ink)}.dc-msg.err{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}'+
   '.dc-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;position:sticky;bottom:-18px;margin:0 -20px -18px;padding:10px 20px 14px;background:var(--surface-panel);border-top:1px solid var(--line)}.demo-config .btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-panel);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}'+
   '.demo-config .btn.primary{background:var(--action);border-color:var(--action);color:#fff}.demo-config .btn:disabled{opacity:.5;cursor:default}.demo-config :focus-visible{outline:3px solid var(--focus);outline-offset:2px}'+
   '@media (pointer:coarse){#demoConfigOpen{min-height:44px}}@media (max-width:520px){.dc-ed{grid-template-columns:1fr 1fr}.dc-ed>div{grid-column:1/-1}.dc-actions{flex-direction:column-reverse;flex-wrap:nowrap}.dc-actions .btn{width:100%}}';
@@ -85,10 +85,11 @@ function setupConfig(F,howTo){
   for(const t of current.tasks){const o=original.tasks.find(x=>x.id===t.id),li=el('li',null,list);li.dataset.mod=String(!!o&&(o.startDate!==t.startDate||o.endDate!==t.endDate));
    const txt=el('span',null,li);el('b',null,txt,(t.wbs?t.wbs+' · ':'')+short(t));el('small',null,txt,`${fmt(t.startDate)} – ${fmt(t.endDate)} · ${dur(t)} días`);
    const on=chosen.includes(t.id),b=el('button','btn',li,on?'Elegida':'Cambiar');b.type='button';b.dataset.task=t.id;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-label',(on?'Quitar ':'Cambiar ')+short(t));}
-  edit.replaceChildren();
+  edit.replaceChildren();if(chosen.length)el('p','dc-help',edit,`Duración: un número entero de días, de 1 a ${MAXD}.`).id='dcDaysHelp';
   for(const id of chosen){const t=current.tasks.find(x=>x.id===id),box=el('div','dc-ed',edit),h=el('div',null,box);el('b',null,h,short(t));el('small',null,h,` · ahora ${fmt(t.startDate)}, ${dur(t)} días`);
    const l1=el('label',null,box,'Inicio'),i1=el('input',null,l1);i1.type='date';i1.value=t.startDate;i1.dataset.start=id;
-   const l2=el('label',null,box,'Duración (días)'),i2=el('input',null,l2);i2.type='number';i2.min='1';i2.max='365';i2.value=String(dur(t));i2.dataset.days=id;}
+   const l2=el('label',null,box,'Duración (días)'),i2=el('input',null,l2);// Texto con teclado numérico: un campo numérico del navegador descarta la coma de «2,5» y entregaría «25».
+   i2.type='text';i2.inputMode='numeric';i2.autocomplete='off';i2.spellcheck=false;i2.placeholder='1–'+MAXD;i2.setAttribute('aria-describedby','dcDaysHelp');i2.value=String(dur(t));i2.dataset.days=id;}
   tryB.disabled=!chosen.length;}
  function ensure(){const c=F()?.ctx;if(!c?.schedule)return false;if(!original){original=clone(c.input.schedule);current=clone(c.input.schedule);}return true;}
  async function showPlan(schedule,label){const c=F().ctx,input={...c.input,schedule:clone(schedule)},meta={...c.meta,origin:label};const r=await F().show(input,meta);return !r?.superseded;}
@@ -104,9 +105,15 @@ function setupConfig(F,howTo){
  let op=0,busy=false;
  function setBusy(on){busy=on;dlg.setAttribute('aria-busy',String(on));tryB.disabled=on||!chosen.length;playB.disabled=on;for(const b of list.querySelectorAll('button[data-task]'))b.disabled=on;}
  tryB.addEventListener('click',async()=>{if(busy)return;const c=clone(current);
-  for(const id of chosen){const t=c.tasks.find(x=>x.id===id),start=edit.querySelector(`[data-start="${CSS.escape(id)}"]`).value,n=Math.round(+edit.querySelector(`[data-days="${CSS.escape(id)}"]`).value);
-   if(!/^\d{4}-\d{2}-\d{2}$/.test(start)){say('No se puede aplicar: escribe una fecha de inicio válida.','err');return;}
-   if(!(n>=1)){say('No se puede aplicar: la duración tiene que ser de 1 día o más.','err');return;}
+  // Validación ANTES de tocar el plan (auditoría Codex 23/11): la duración es un entero finito entre 1 y MAXD días y el
+  // inicio, una fecha real. Ante un valor no válido no cambia nada: ni plan, ni Gantt, ni reproductor; se explica y se
+  // lleva el foco al campo.
+  for(const x of edit.querySelectorAll('[aria-invalid]'))x.removeAttribute('aria-invalid');
+  const bad=(input,text)=>{input.setAttribute('aria-invalid','true');say(text,'err');input.focus();};
+  for(const id of chosen){const t=c.tasks.find(x=>x.id===id),si=edit.querySelector(`[data-start="${CSS.escape(id)}"]`),di=edit.querySelector(`[data-days="${CSS.escape(id)}"]`),start=si.value,raw=String(di.value).trim();
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(start)||!Number.isFinite(d(start))||iso(d(start))!==start){bad(si,`No se puede aplicar: «${short(t)}» necesita una fecha de inicio válida (día, mes y año).`);return;}
+   const n=/^\d{1,3}$/.test(raw)?Number(raw):NaN;
+   if(!Number.isInteger(n)||n<1||n>MAXD){bad(di,`No se puede aplicar: la duración de «${short(t)}» tiene que ser un número entero de días entre 1 y ${MAXD}${raw?` (has escrito «${raw}»)`:''}. El plan no ha cambiado.`);return;}
    t.startDate=start;t.endDate=iso(d(start)+(n-1)*DAY);}
   try{S.create(clone(c));}catch(e){say(explain(e),'err');return;}
   const mine=++op;setBusy(true);say('Aplicando el cambio…','');

@@ -122,13 +122,20 @@
   const hero=pick('[data-module="studio-hero"]');putAfter(more,hero);
   const band=[...grid.querySelectorAll('.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putEnd(grid,band);}
  // Acción principal fija en el móvil (V2.4 · decisión aprobada): «Descargar archivo para el cliente» siempre a mano.
- // Es un atajo al MISMO botón de la tarjeta P7 (mismo manejador, mismo estado) y se oculta mientras ese botón está a la vista.
- let dockSeen=null;
+ // Es un atajo al MISMO botón de la tarjeta P7 (mismo manejador, mismo estado). Solo se oculta cuando ese botón está ENTERO
+ // dentro de la zona útil del área, descontando la altura de la propia barra (auditoría Codex 23/11: antes bastaban 2 px).
+ // La decisión no depende de si la barra se ve, así que no parpadea; si el foco estaba en el atajo, pasa al botón real.
+ let dockSeen=null,dockH=80;
  function dock(){const real=section.querySelector('.professional-card [data-route="client-file"]');let bar=section.querySelector(':scope>.professional-dock');
-  if(!real){bar?.remove();return;}
+  if(!real){bar?.remove();dockSeen?.disconnect();return;}
   if(!bar){bar=el('div',undefined,section,'professional-dock');const b=button(real.textContent,bar,()=>real.click(),true);b.dataset.dock='client-file';}
   const b=bar.querySelector('button');b.textContent=real.textContent;b.disabled=real.disabled;
-  dockSeen?.disconnect();dockSeen=new IntersectionObserver(es=>{for(const e of es)bar.classList.toggle('is-covered',e.isIntersecting);});dockSeen.observe(real);}
+  const h=bar.getBoundingClientRect().height;if(h>0)dockH=Math.ceil(h);
+  dockSeen?.disconnect();
+  dockSeen=new IntersectionObserver(es=>{for(const e of es){const covered=e.intersectionRatio>=0.999;
+   if(covered&&!bar.classList.contains('is-covered')&&bar.contains(document.activeElement))real.focus({preventScroll:true});
+   bar.classList.toggle('is-covered',covered);}},{root:section,rootMargin:`0px 0px -${dockH}px 0px`,threshold:[0,0.5,0.999,1]});
+  dockSeen.observe(real);}
  // Solo la llegada de tarjetas o secciones reordena; imágenes, textos y estados internos no.
  const watch=new MutationObserver(list=>{if(arranging)return;if(list.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches('.professional-card,section,.studio-hero-area')))))requestAnimationFrame(arrange);});
  // Project-First A1: each output shows what Rubik already produced from this project, before any click. Previews
