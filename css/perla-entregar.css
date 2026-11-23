@@ -67,3 +67,10 @@
 .welcome-modules-grid>li.perla-compact>.perla-detail{font-size:12.5px}
 /* Móvil: el detalle también se superpone (la lista de tarjetas no se desplaza al abrirlo) */
 @media (max-width:760px){.perla-compact>.perla-detail{position:absolute;margin-top:0;border-radius:0 0 10px 10px;box-shadow:0 14px 28px rgba(40,20,28,.18)}}
+
+/* Home · retrato grande (ilustración 2K, 4:5) y muestra de estilos */
+.welcome-audience-purpose:not([hidden]){grid-template-columns:200px minmax(0,1fr)}
+.welcome-audience-portrait-img{width:200px;height:250px;object-fit:cover;object-position:top}
+@media (max-width:560px){.welcome-audience-purpose:not([hidden]){grid-template-columns:110px minmax(0,1fr)}.welcome-audience-portrait-img{width:110px;height:138px}}
+.home-muestra-estilos{grid-template-columns:1fr 1fr}
+.home-muestra-estilos figure:last-child{grid-column:auto}

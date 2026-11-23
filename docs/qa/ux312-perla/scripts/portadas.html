@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Portadas UX-312</title>
+<style>
+/* Portadas de «Descubre RUBIK en acción»: solo capturas reales de RUBIK (y la ilustración editorial entregada para el
+   Asistente). Sin textos incrustados: el título y la nota de cada tarjeta van en la interfaz, en el idioma activo. */
+body{margin:0;background:#ddd;font-family:system-ui,sans-serif}
+.cover{position:relative;width:960px;height:540px;overflow:hidden;margin:0 0 20px;background:#F3EFF0}
+.crop{position:absolute;background-repeat:no-repeat;border-radius:10px;box-shadow:0 18px 40px rgba(40,20,28,.22),0 2px 6px rgba(40,20,28,.12)}
+/* 1 · Recorrido: teléfono en horizontal con el paseo táctil (joystick y minimapa) */
+#recorrido{background:linear-gradient(160deg,#F7F1F3,#E7DEE2)}
+#recorrido .phone{position:absolute;left:40px;top:120px;width:880px;height:300px;border-radius:44px;background:#1d1b1c;box-shadow:0 30px 60px rgba(40,20,28,.35)}
+#recorrido .screen{position:absolute;left:44px;top:14px;width:792px;height:272px;border-radius:18px;background:url(recorrido-joystick.png) no-repeat;background-size:792px auto;background-position:0 -94px}
+/* 2 · Vídeo: fotogramas consecutivos de un MP4 real de RUBIK, en tira de película */
+#video{background:#1f1c1d}
+#video .strip{position:absolute;left:0;right:0;top:120px;height:300px;background:#111;display:flex;gap:14px;padding:34px 24px;box-sizing:border-box}
+#video .strip::before,#video .strip::after{content:"";position:absolute;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,transparent 0 14px,#F3EFF0 14px 30px,transparent 30px 44px);opacity:.75}
+#video .strip::before{top:10px}#video .strip::after{bottom:10px}
+#video .f{flex:1;background-size:cover;background-position:center;border-radius:4px}
+#video .play{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:rgba(120,59,75,.92);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+#video .play::after{content:"";position:absolute;left:33px;top:24px;border-left:28px solid #fff;border-top:18px solid transparent;border-bottom:18px solid transparent}
+/* 3 · Comparativa: misma cámara, recorte del salón y el balcón, RUBIK | Blender Cycles */
+#comparativa{background:#2a2627}
+#comparativa .half{position:absolute;top:0;width:480px;height:540px;background:url(rubik-vs-cycles.png) no-repeat;background-size:3200px auto}
+#comparativa .a{left:0;background-position:-440px -430px}
+#comparativa .b{left:480px;background-position:-2040px -430px}
+#comparativa .div{position:absolute;left:478px;top:0;width:4px;height:540px;background:#fff}
+#comparativa .knob{position:absolute;left:456px;top:246px;width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+#comparativa .knob::before,#comparativa .knob::after{content:"";position:absolute;top:17px;border-top:7px solid transparent;border-bottom:7px solid transparent}
+#comparativa .knob::before{left:10px;border-right:9px solid #783B4B}#comparativa .knob::after{right:10px;border-left:9px solid #783B4B}
+/* 4 · Asistente: ilustración editorial de la consultora + consulta auténtica (pregunta, respuesta y fuente) */
+#asistente{background:url(consultora-rubik-v1.png) no-repeat;background-size:960px auto;background-position:0 0}
+#asistente .chat{position:absolute;left:36px;top:70px;width:420px;height:270px;background:url(asistente-panel.png) no-repeat #fff;background-size:520px auto;background-position:-12px -385px;border-radius:14px;box-shadow:0 18px 40px rgba(40,20,28,.25)}
+/* 5 · Render IA · estilos: vista de origen real; variantes pendientes de ejemplos acreditados (sin generar) */
+#estilos{background:#F3EFF0}
+#estilos .orig{left:36px;top:40px;width:540px;height:460px;background-image:url(entrega-presentacion.png);background-size:2400px auto;background-position:-1030px -330px}
+#estilos .var{position:absolute;left:606px;width:318px;height:140px;border:2px dashed #C9B8BF;border-radius:10px;background:repeating-linear-gradient(135deg,#FAF7F8 0 12px,#F1EAED 12px 24px)}
+#estilos .v1{top:40px}#estilos .v2{top:200px}#estilos .v3{top:360px}
+/* 6 · Entrega con tu firma: lámina, dossier y presentación de la misma vivienda (firma de demostración) */
+#entrega{background:linear-gradient(160deg,#F4EEF0,#E6DCE0)}
+#entrega .p{position:absolute;background-repeat:no-repeat;background-color:#fff;border-radius:8px;box-shadow:0 18px 40px rgba(40,20,28,.25)}
+#entrega .pres{left:470px;top:150px;width:460px;height:300px;background-image:url(entrega-presentacion.png);background-size:960px auto;background-position:-140px -60px;transform:rotate(3deg)}
+#entrega .dos{left:330px;top:36px;width:300px;height:400px;background-image:url(entrega-dossier.png);background-size:340px auto;background-position:-8px -40px;transform:rotate(-2deg)}
+#entrega .lam{left:30px;top:110px;width:520px;height:380px;background-image:url(entrega-lamina.png);background-size:600px auto;background-position:-12px -72px}
+</style></head><body>
+<div class="cover" id="recorrido"><div class="phone"><div class="screen"></div></div></div>
+<div class="cover" id="video"><div class="strip"><div class="f" style="background-image:url(t000.png)"></div><div class="f" style="background-image:url(t010.png)"></div><div class="f" style="background-image:url(t018.png)"></div></div><div class="play"></div></div>
+<div class="cover" id="comparativa"><div class="half a"></div><div class="half b"></div><div class="div"></div><div class="knob"></div></div>
+<div class="cover" id="asistente"><div class="chat"></div></div>
+<div class="cover" id="estilos"><div class="crop orig"></div><div class="var v1"></div><div class="var v2"></div><div class="var v3"></div></div>
+<div class="cover" id="entrega"><div class="p lam"></div><div class="p dos"></div><div class="p pres"></div></div>
+</body></html>

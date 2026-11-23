@@ -1,0 +1,312 @@
+[
+ {
+  "id": "superficies",
+  "kind": "salida",
+  "name": "Ficha de superficies",
+  "state": "87,18 m² · Estimado",
+  "format": "PDF",
+  "action": "Ver ficha",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "lamina",
+  "kind": "salida",
+  "name": "Lámina profesional",
+  "state": "Lista para revisar · ajustada a la hoja",
+  "format": "SVG",
+  "action": "Abrir lámina",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "dossier",
+  "kind": "salida",
+  "name": "Dossier del proyecto",
+  "state": "5 de 8 secciones con contenido real",
+  "format": "PDF (impresión)",
+  "action": "Preparar dossier",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "economico",
+  "kind": "salida",
+  "name": "Dossier económico",
+  "state": "Sin presupuesto preparado",
+  "format": "PDF · CSV · JSON · BC3",
+  "action": "Preparar dossier económico",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "orientacion",
+  "kind": "salida",
+  "name": "Informe de orientación y emplazamiento",
+  "state": "Disponible",
+  "format": "PDF (impresión)",
+  "action": "Ver informe",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "bp-lamina",
+  "kind": "salida",
+  "name": "Lámina Blueprint 3D",
+  "state": "Candidata · revisión pendiente",
+  "format": "PNG A3 · 200 ppp",
+  "action": "Previsualizar lámina",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "dp-lamina",
+  "kind": "salida",
+  "name": "Lámina Despiece 3D",
+  "state": "Candidata · revisión pendiente",
+  "format": "PNG A3 · 200 ppp",
+  "action": "Previsualizar lámina",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "plano-png",
+  "kind": "salida",
+  "name": "Plano 2D",
+  "state": "Se prepara al pulsar",
+  "format": "PNG",
+  "action": "Descargar PNG",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "vistas",
+  "kind": "salida",
+  "name": "Vistas reales del proyecto",
+  "state": "Plano 2D · Vista 3D · Exterior",
+  "format": "PNG",
+  "action": "Preparar vistas",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "render-ia",
+  "kind": "salida",
+  "name": "Render IA",
+  "state": "Con condiciones",
+  "format": "PNG",
+  "action": "Abrir Render IA",
+  "disabled": true,
+  "req": "Requisito: Una vista preparada del proyecto; servicio y créditos, que se confirman antes de generar."
+ },
+ {
+  "id": "moodboard",
+  "kind": "salida",
+  "name": "Material board",
+  "state": "6 suelos · 0 paredes · 8 colores",
+  "format": "PNG",
+  "action": "Ver material board",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "presentacion",
+  "kind": "salida",
+  "name": "Presentación 3D guiada",
+  "state": "Planta única · 13 estancias en la planta activa",
+  "format": "3D interactiva",
+  "action": "Preparar presentación",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "video",
+  "kind": "salida",
+  "name": "Vídeo del recorrido",
+  "state": "Desde la presentación",
+  "format": "WebM · MP4",
+  "action": "Grabar vídeo",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "bp-visor",
+  "kind": "salida",
+  "name": "Blueprint 3D",
+  "state": "Candidata · revisión pendiente",
+  "format": "3D interactiva",
+  "action": "Abrir Blueprint",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "dp-visor",
+  "kind": "salida",
+  "name": "Despiece 3D",
+  "state": "Candidata · revisión pendiente",
+  "format": "3D interactiva",
+  "action": "Abrir Despiece",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "bp-video",
+  "kind": "salida",
+  "name": "Vídeo Blueprint 3D",
+  "state": "Candidata · revisión pendiente",
+  "format": "MP4 1920 × 1080",
+  "action": "Preparar vídeo",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "dp-video",
+  "kind": "salida",
+  "name": "Vídeo Despiece 3D",
+  "state": "Candidata · revisión pendiente",
+  "format": "MP4 1920 × 1080",
+  "action": "Preparar vídeo",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "evolucion",
+  "kind": "salida",
+  "name": "Evolución de obra",
+  "state": "Necesita un plan de obra",
+  "format": "3D animado",
+  "action": "Crear plan de obra",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "archivo-cliente",
+  "kind": "salida",
+  "name": "Archivo para tu cliente",
+  "state": "Listo para enviar · sin servidor",
+  "format": "HTML",
+  "action": "Descargar archivo",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "enlace",
+  "kind": "salida",
+  "name": "Enlace para tu cliente",
+  "state": "Requiere confirmación",
+  "format": "URL",
+  "action": "Publicar enlace…",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "visita",
+  "kind": "salida",
+  "name": "Visita 3D interactiva",
+  "state": "Prueba privada",
+  "format": "3D interactiva (prueba privada)",
+  "action": "Revisar como cliente",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "proyecto",
+  "kind": "salida",
+  "name": "Proyecto editable",
+  "state": "Listo",
+  "format": "JSON",
+  "action": "Exportar proyecto",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "dxf",
+  "kind": "salida",
+  "name": "DXF de la planta activa",
+  "state": "Se prepara al pulsar",
+  "format": "DXF",
+  "action": "Exportar DXF",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "blender",
+  "kind": "salida",
+  "name": "Escena para Blender",
+  "state": "Herramienta de trabajo",
+  "format": "ZIP · GLB",
+  "action": "Preparar escena…",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "e3",
+  "kind": "acceso",
+  "name": "Preparar entregables",
+  "state": "Acceso",
+  "format": "Según lo elegido",
+  "action": "Preparar entregables",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "presupuesto",
+  "kind": "acceso",
+  "name": "Presupuesto",
+  "state": "Sin presupuesto preparado",
+  "format": "—",
+  "action": "Revisar presupuesto",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "observaciones",
+  "kind": "acceso",
+  "name": "Observaciones del cliente",
+  "state": "Sin observaciones pendientes",
+  "format": "JSON",
+  "action": "Gestionar observaciones",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "revision-render",
+  "kind": "acceso",
+  "name": "Revisión del render",
+  "state": "Herramienta de trabajo",
+  "format": "—",
+  "action": "Revisar render…",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "comparar",
+  "kind": "acceso",
+  "name": "Comparar con el original",
+  "state": "Sin variantes para comparar",
+  "format": "—",
+  "action": "Abrir proyectos",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "hero",
+  "kind": "acceso",
+  "name": "Personalización HERO FINAL",
+  "state": "Sin firma elegida",
+  "format": "—",
+  "action": "Personalizar en Mi estudio",
+  "disabled": false,
+  "req": ""
+ },
+ {
+  "id": "identidad",
+  "kind": "acceso",
+  "name": "Identidad de la entrega",
+  "state": "Sin marca seleccionada",
+  "format": "—",
+  "action": "Configurar Mi estudio",
+  "disabled": false,
+  "req": ""
+ }
+]

@@ -1,0 +1,200 @@
+[
+ {
+  "req": "Índice",
+  "ctl": "Fichas compactas (título, estado, acción; detalle oculto)",
+  "pass": true,
+  "detail": "18 fichas · con «Ver detalles» 15 · fuera de regla: "
+ },
+ {
+  "req": "Índice",
+  "ctl": "«Ver detalles» con teclado: abre, Escape cierra y devuelve el foco",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "req": "Índice",
+  "ctl": "La cuadrícula no se mueve al abrir el detalle",
+  "pass": true,
+  "detail": "558,178 → 558,178"
+ },
+ {
+  "req": "Índice",
+  "ctl": "D2 Lámina: formato real SVG en el detalle",
+  "pass": true,
+  "detail": "Elige ajustar a hoja o una escala de impresión compatible.FormatoSVG («Descargar SVG»)RequisitosEstancias; a escala, con el plano calibrado."
+ },
+ {
+  "req": "Índice",
+  "ctl": "Descripción al pasar el cursor",
+  "pass": true,
+  "detail": "hover=true · bajo el puntero: dossier-checklist"
+ },
+ {
+  "req": "Índice",
+  "ctl": "Visores Blueprint 3D y Despiece 3D junto a Presentación 3D",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "req": "Catálogo",
+  "ctl": "«Ver todos los documentos y entregables» abre el catálogo",
+  "pass": true,
+  "detail": "24 salidas · 7 herramientas y accesos · Documentación profesional | Imágenes y render | Presentaciones y animaciones | Para tu cliente | Exportaciones de trabajo | Herramientas y a"
+ },
+ {
+  "req": "Salida",
+  "ctl": "superficies",
+  "pass": true,
+  "detail": "abre surfaceSheetDialog · Ficha de superficies · vuelta: foco superficies · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "lamina",
+  "pass": true,
+  "detail": "descarga rubik-sota-sheet-prj_reference-home.svg · vuelta: foco lamina · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "dossier",
+  "pass": true,
+  "detail": "abre dossierDialog · Dossier del proyecto · vuelta: foco dossier · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "orientacion",
+  "pass": true,
+  "detail": "abre siteReportDialog · Informe de orientación y emplazamiento · vuelta: foco orientacion · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "plano-png",
+  "pass": true,
+  "detail": "descarga rubik-sota-floor-plan.png · vuelta: foco plano-png · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "moodboard",
+  "pass": true,
+  "detail": "abre moodboardDialog · Material board · vuelta: foco moodboard · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "presentacion",
+  "pass": true,
+  "detail": "abre presentationConfig · Presentar mi vivienda · vuelta: foco presentacion · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "proyecto",
+  "pass": true,
+  "detail": "descarga rubik-sota-floor-plan.json · vuelta: foco proyecto · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "dxf",
+  "pass": true,
+  "detail": "descarga Proyecto de ejemplo.dxf · vuelta: foco dxf · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "archivo-cliente",
+  "pass": true,
+  "detail": "descarga rubik-sota-proyecto-de-ejemplo-para-el-cliente.html · vuelta: foco archivo-cliente · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "enlace",
+  "pass": true,
+  "detail": "abre shareLinkDialog · Enlace para el cliente · vuelta: foco enlace · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "render-ia (requisito)",
+  "pass": true,
+  "detail": "desactivada · Requisito: Una vista preparada del proyecto; servicio y créditos, que se confirman antes de generar."
+ },
+ {
+  "req": "Salida",
+  "ctl": "video",
+  "pass": true,
+  "detail": "abre presentationConfig · Presentar mi vivienda · vuelta: foco video · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "blender",
+  "pass": true,
+  "detail": "abre sceneExportDialog · Escena para Blender · vuelta: foco blender · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "e3",
+  "pass": true,
+  "detail": "abre e3Entregas · Entregables profesionales · vuelta: foco e3 · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "observaciones",
+  "pass": true,
+  "detail": "abre reviewDialog · Observaciones del cliente · vuelta: foco observaciones · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "revision-render",
+  "pass": true,
+  "detail": "abre blenderReviewDialog · Revisar render de Blender · vuelta: foco revision-render · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "comparar",
+  "pass": true,
+  "detail": "abre projectsDialog · Proyectos locales · vuelta: foco comparar · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "bp-lamina",
+  "pass": true,
+  "detail": "abre bpdp-host · Lámina técnica Blueprint (A3) · vuelta: foco bp-lamina · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "dp-lamina",
+  "pass": true,
+  "detail": "abre bpdp-host · Despiece 3D · vuelta: foco dp-lamina · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "bp-visor",
+  "pass": true,
+  "detail": "abre bpdp-host · Blueprint 3D · vuelta: foco bp-visor · catálogo true · área deliver"
+ },
+ {
+  "req": "Salida",
+  "ctl": "dp-visor",
+  "pass": true,
+  "detail": "abre bpdp-host · Despiece 3D · vuelta: foco dp-visor · catálogo true · área deliver"
+ },
+ {
+  "req": "Catálogo",
+  "ctl": "Dossier económico: formatos en el detalle",
+  "pass": true,
+  "detail": "FormatoPDF · CSV · JSON · BC3RequisitosPresupuesto preparado en Presupuestar.OpcionesPDF mediante impresión · CSV · JSON del informe · BC3"
+ },
+ {
+  "req": "Idioma",
+  "ctl": "Catálogo EN sin chino",
+  "pass": true,
+  "detail": "All documents and deliverables\n\n24 outputs · 7 tools and access points\n\nProfessional documentation\nA"
+ },
+ {
+  "req": "Idioma",
+  "ctl": "Catálogo ES sin chino",
+  "pass": true,
+  "detail": "Todos los documentos y entregables\n\n24 salidas · 7 herramientas y accesos\n\nDocumentación profesional"
+ },
+ {
+  "req": "Consola",
+  "ctl": "Sin errores de página",
+  "pass": true,
+  "detail": ""
+ }
+]
