@@ -35,14 +35,18 @@ test(`Home UX-312: contenido aprobado, inventarios y sin desbordes ${viewport.wi
  // El catálogo completo se revela a demanda con su botón (aria-expanded) y se vuelve a plegar.
  assert.equal(await page.locator('#welcomeDeliverablesAll').isHidden(),true);await page.locator('#welcomeDeliverablesAllToggle').click();assert.equal(await page.locator('#welcomeDeliverablesAll').isVisible(),true);assert.equal(await page.locator('#welcomeDeliverablesAllToggle').getAttribute('aria-expanded'),'true');await page.locator('#welcomeDeliverablesAllToggle').click();assert.equal(await page.locator('#welcomeDeliverablesAll').isHidden(),true);
  assert.equal(await page.locator('#welcomeDeliverables .deliverable-cards [data-entrega-code]').count(),5);
- // 28 accesos de fase (27 + Armarios) y el título aprobado no se repite en la banda.
- assert.equal(await page.locator('#welcomeDialog [data-module="studio-vision"] .studio-opcion').count(),28);
+ // 37 accesos de fase: 27 originales + Armarios + 9 capacidades integradas o de laboratorio (#321, corrección 1).
+ assert.equal(await page.locator('#welcomeDialog [data-module="studio-vision"] .studio-opcion').count(),37);
+ for(const r of ['studio-disenar-plantas','studio-disenar-variantes','studio-disenar-catalogos','studio-presentar-estudio','studio-presentar-foto','studio-presentar-blueprint','studio-presentar-despiece','studio-recorrer-archivo','studio-recorrer-marca'])assert.equal(await page.locator('#welcomeDialog [data-route="'+r+'"]').count(),1,r);
+ // Bloque independiente de servicios retirado; FAQ por temas.
+ assert.equal(await page.locator('#welcomeAIServices').count(),0);assert.equal(await page.locator('.welcome-faq-topic').count(),4);assert.equal(await page.locator('.welcome-faq-panel:visible').count(),0,'FAQ compacta al abrir');
+ assert.equal(await page.locator('#welcomeDeliverablesAll [data-entrega-code="D4"] img, #welcomeDeliverablesAll [data-entrega-code="T2"] img').count(),2,'D4 y T2 con muestra auténtica');
  assert.equal(await page.locator('#welcomeDialog [data-route="studio-disenar-armarios"]').count(),1);
  assert.equal(await page.locator('#welcomeDialog h2',{hasText:'Imaginar. Diseñar. Construir. Presentar. Recorrer.'}).count(),0,'solo el h1 lleva el título');
  // 14 capacidades del registro y 9 servicios, con condiciones a demanda (E01) y el modo real del Asistente (E03).
  assert.equal(await page.evaluate(()=>FloorPlanCapabilities.CAPABILITIES.length),14);
- assert.equal(await page.locator('#welcomeAIServices .ai-service').count(),9);
- assert.equal(await page.locator('#welcomeAIServices .ai-service details.ai-service-more').count(),9);
+ assert.equal(await page.locator('#welcomeModules .ai-service').count(),9);
+ assert.equal(await page.locator('#welcomeModules .ai-service details.ai-service-more').count(),9);
  const ia=await page.locator('#welcomeDialog [data-module="studio-ia"]').textContent();assert.match(ia,/consulta guiada/);assert.match(ia,/sin modelo de lenguaje/);assert.doesNotMatch(ia,/Automatiza tareas/);
  // FAQ y footer.
  assert.equal(await page.locator('#welcomeFaq details').count(),10);
@@ -90,4 +94,43 @@ test(`Home UX-312: accesos reales (entregar, presupuesto, Armarios, FAQ, footer,
   assert.doesNotMatch(await page.locator('#welcomeDialog').innerText(),/[㐀-鿿]/,'EN sin chino visible');
   assert.equal(await page.locator('#welcomeDialogTitle').textContent(),'Imagine. Design. Build. Present. Walk through.');
   await press('#welcomeFooterLang-es');assert.equal(await page.evaluate(()=>LANG),'es');assert.deepEqual(errors,[]);}
+});
+
+// UX-312 #321 · correcciones 3–6: guía por profesión, módulos integrados, FAQ por temas, footer, movimiento reducido e idiomas.
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])
+test(`#321: guía y módulos por profesión, FAQ por temas y footer ${viewport.width}x${viewport.height}`,{timeout:180000},async t=>{
+ const {page,errors,press,narrow}=await open(t,viewport);const before=await project(page);
+ const FIRST={architecture:'assistant','real-estate':'render-ai',developer:'render-ai',renovation:'photo-reform',interior:'catalogs',construction:'catalog-budget'};
+ assert.equal(await page.locator('.solutions-phases').isVisible(),true,'sin profesión: las cinco fases');
+ for(const [aud,first] of Object.entries(FIRST)){await press('#welcomeAudience-'+aud);
+  assert.equal(await page.locator('.welcome-work-path').isVisible(),true,aud+' guía propia');assert.equal(await page.locator('.solutions-phases').isHidden(),true);
+  assert.ok(await page.locator('.welcome-work-step').count()>=4);assert.equal(await page.locator('#welcomeModules .ai-service').first().getAttribute('data-service'),first,aud+' módulo destacado');
+  assert.equal(await page.locator('#welcomeModules .ai-service').count(),9);await press('#welcomeAudience-'+aud);}
+ await press('#welcomeAudience-construction');assert.deepEqual(await page.locator('.welcome-work-step strong').allTextContents(),['Mediciones y presupuesto','Plan de obra','Gantt','Obra prevista en 3D','Entrega de obra']);
+ // Reformas y Decoración: sus módulos clave, localizables arriba.
+ await press('#welcomeAudience-renovation');const ren=await page.locator('#welcomeModules .ai-service.is-featured').evaluateAll(n=>n.map(x=>x.dataset.service));assert.ok(ren.includes('photo-reform')&&ren.includes('catalog-budget'));
+ await press('#welcomeAudience-interior');const int=await page.locator('#welcomeModules .ai-service.is-featured').evaluateAll(n=>n.map(x=>x.dataset.service));assert.ok(['catalogs','visual-studio','render-ai'].every(x=>int.includes(x)));
+ await press('#welcomeAudience-interior');
+ // FAQ: un tema abre su acordeón y el mismo control lo cierra; teclado y toque.
+ const topic=page.locator('#welcomeFaqTopic-empezar');await press('#welcomeFaqTopic-empezar');assert.equal(await topic.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('#welcomeFaqPanel-empezar details').count(),4);
+ await press('#welcomeFaqTopic-entregar');assert.equal(await page.locator('#welcomeFaqPanel-empezar').isHidden(),true,'un tema a la vez');
+ await page.locator('#welcomeFaqTopic-entregar').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#welcomeFaqPanel-entregar').isHidden(),true,'el mismo control cierra');
+ await page.locator('#welcomeFaqTopic-ia').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#welcomeFaqPanel-ia').isVisible(),true);
+ assert.equal(await page.locator('#welcomeFaq details').count(),10,'diez respuestas');
+ // Footer → módulos consolidados.
+ await press('#welcomeFooterServices');await page.waitForFunction(()=>document.activeElement?.id==='welcomeModulesTitle');
+ assert.equal(await project(page),before);assert.deepEqual(errors,[]);
+});
+
+test('#321: movimiento reducido y EN/ZH sin chino visible en EN',{timeout:120000},async t=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox']});t.after(()=>browser.close());
+ const ctx=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
+ await page.locator('#welcomeAudience-construction').click();
+ assert.equal(await page.locator('.welcome-work-path').evaluate(n=>getComputedStyle(n).animationName),'none','sin animación con movimiento reducido');
+ assert.equal(await page.locator('.welcome-work-step').count(),5,'el cambio de contenido se entiende igual');
+ await page.locator('#welcomeFooterLang-en').click();assert.doesNotMatch(await page.locator('#welcomeDialog').innerText(),/[㐀-鿿]/);
+ assert.equal(await page.locator('#welcomeModulesTitle').textContent(),'Modules for your work');
+ await page.locator('#welcomeFooterLang-zh').click();assert.equal(await page.locator('#welcomeModulesTitle').textContent(),'适合你工作的模块');
+ assert.deepEqual(errors,[]);
 });

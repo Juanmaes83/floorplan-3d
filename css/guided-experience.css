@@ -227,3 +227,40 @@ body.guided #newRoomBtn{display:none}
 @media(max-width:560px){.welcome-footer{grid-template-columns:minmax(0,1fr);padding:18px}}
 .welcome-footer .btn,.welcome-case-step .btn,.deliverable .btn{white-space:normal;max-width:100%}
 #welcomeDemoCustomize-evolucion-obra,#welcomeFooterExample,#welcomeSolutionsAll,.welcome-case-step .btn,.deliverable .btn{min-height:44px}
+/* UX-312 #321 · correcciones 2–6 */
+/* 2 · Caso legible: margen interior real (el h3/p con margin:0 anulaba el sangrado) y muestras sin recortar. */
+.welcome-case-step{padding:0 0 14px}.welcome-case-step>*:not(figure){margin-left:14px!important;margin-right:14px!important}
+.welcome-case-step figure{background:#fff;border-bottom:1px solid var(--line)}
+.welcome-case-step figure img,.deliverable-thumb img{object-fit:contain;background:#fff}
+.welcome-case-step[data-step="3d"] figure img,.welcome-case-step[data-step="works"] figure img{object-fit:cover}
+.welcome-case-step figcaption{left:8px;bottom:8px}
+.welcome-case-step h3{font-size:15.5px;line-height:1.3}.welcome-case-step p{font-size:13px}
+.demo-card-lab figure{position:relative}.demo-lab-tag{position:absolute;left:10px;top:10px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.94);color:#2a3238;font-size:11.5px;font-weight:600;border:1px solid var(--line)}
+@media(min-width:1001px){.welcome-in-action .demo-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* 3 · Guía y soluciones en un bloque. */
+.welcome-work-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;align-items:start}
+.welcome-work-guide,.welcome-work-solutions{border:1px solid var(--line);border-radius:16px;background:var(--surface-panel);padding:16px}
+.welcome-work-guide .solutions-phases{display:grid;grid-template-columns:1fr;gap:8px}.welcome-work-lead{font-size:13px!important;color:var(--ink-muted);margin:0 0 10px!important}
+.welcome-work-path{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.welcome-work-step{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface-base,#fff)}
+.welcome-work-num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--action);color:#fff;font-weight:600;font-size:13px}
+.welcome-work-step strong{display:block;font-size:14px}.welcome-work-step p{margin:2px 0 0!important;font-size:12.5px!important;color:var(--ink-muted)}.welcome-work-step .btn{min-height:44px}
+.welcome-solutions.is-changing .welcome-work-path,.welcome-solutions.is-changing .solutions-cards{animation:workIn .32s ease both}
+@keyframes workIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.welcome-solutions.is-changing .welcome-work-path,.welcome-solutions.is-changing .solutions-cards{animation:none}}
+.welcome-work-solutions .solutions-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+.welcome-solutions[data-focus=true]:not([data-all=true]) .welcome-work-solutions .solutions-cards{grid-template-columns:1fr}
+@media(max-width:900px){.welcome-work-row{grid-template-columns:minmax(0,1fr)}.welcome-work-solutions .solutions-cards{grid-template-columns:1fr}}
+/* 4/6 · Módulos dentro de «¿En qué trabajas?». */
+.welcome-modules{margin-top:22px;border:1px solid var(--line);border-radius:16px;background:var(--surface-panel);padding:16px}
+.welcome-modules-title{font-size:16px;margin:0 0 4px}
+.welcome-modules-grid{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.welcome-modules-grid .ai-service{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface-base,#fff)}
+.welcome-modules-grid .ai-service.is-featured{border-color:var(--action);box-shadow:inset 0 0 0 1px var(--action)}
+.ai-service-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px!important}.ai-service-for{font-size:11.5px;color:var(--action);font-weight:600;padding:2px 8px;border-radius:999px;background:var(--action-soft)}
+.ai-service-unavailable{font-size:12.5px!important;color:var(--ink-muted)}
+/* 5 · FAQ compacta por temas. */
+.welcome-faq-topics{display:flex;flex-wrap:wrap;gap:8px}.welcome-faq-topic.btn{min-height:44px;border:1px solid var(--line);border-radius:999px;padding:0 16px;background:var(--surface-panel)}
+.welcome-faq-topic[aria-expanded=true]{background:var(--action);border-color:var(--action);color:#fff}
+.welcome-faq-panel{margin-top:10px}
+@media(max-width:560px){.welcome-faq-topics{display:grid;grid-template-columns:1fr 1fr}.welcome-faq-topic.btn{white-space:normal;border-radius:12px}}

@@ -17,12 +17,16 @@ async function open(t,viewport,{audience=null,lang=null}={}){const narrow=viewpo
  if(audience)await page.addInitScript(a=>localStorage.setItem('rubik-professional-audience-v1',a),audience);
  await page.goto(url,{waitUntil:'load'});await page.locator('#welcomeDialog[open]').waitFor();
  if(lang){for(let i=0;i<3&&await page.evaluate(()=>LANG)!==lang;i++)await page.locator('#welcomeLanguage').click();}
- await page.locator('#welcomeAIServices .ai-service-go').first().waitFor();
+ await page.locator('#welcomeModules .ai-service-go').first().waitFor();
  const press=async s=>{const l=page.locator(s);await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
  return {page,errors,api,press,narrow};}
-const groups=page=>page.locator('#welcomeAIServices .ai-service-group').evaluateAll(n=>n.map(g=>({state:g.dataset.state,label:g.querySelector('.capability-state').textContent,ids:[...g.querySelectorAll('.ai-service')].map(s=>s.dataset.service),buttons:[...g.querySelectorAll('.ai-service-go')].map(b=>b.id)})));
+// UX-312 #321 (correcciones 4 y 6): los nueve servicios viven en «Módulos para tu trabajo» (#welcomeModules), dentro de
+// «¿En qué trabajas?»; el bloque «Nuevos servicios IA» desaparece. Se agrupan por estado a partir de las fichas.
+const groups=page=>page.locator('#welcomeModules .ai-service').evaluateAll(n=>{const out=[];for(const s of n){let g=out.find(x=>x.state===s.dataset.state);if(!g){g={state:s.dataset.state,label:s.querySelector('.capability-state').textContent,ids:[],buttons:[]};out.push(g);}g.ids.push(s.dataset.service);const b=s.querySelector('.ai-service-go');if(b)g.buttons.push(b.id);}return out;});
+const featured=page=>page.locator('#welcomeModules .ai-service.is-featured').evaluateAll(n=>n.map(s=>s.dataset.service));
+const MPRIO={architecture:['assistant','catalog-budget','catalogs','render-ai'],'real-estate':['render-ai','photo-reform','visual-studio'],developer:['render-ai','catalogs','assistant'],renovation:['photo-reform','catalog-budget','render-ai','assistant'],interior:['catalogs','visual-studio','render-ai','assistant-catalogs'],construction:['catalog-budget','assistant']};
 const PROFILES=['architecture','real-estate','developer','renovation','interior','construction'];
-const noScroll=page=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&[...document.querySelectorAll('#welcomeAIServices *')].every(n=>n.getBoundingClientRect().right<=innerWidth+1));
+const noScroll=page=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&[...document.querySelectorAll('#welcomeModules *')].every(n=>n.getBoundingClientRect().right<=innerWidth+1));
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
 test(`four verified states, honest texts, CAT-04 pilot, no duplicate Render IA, no /api ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
@@ -34,7 +38,7 @@ test(`four verified states, honest texts, CAT-04 pilot, no duplicate Render IA, 
  assert.deepEqual(g[0].ids,['render-ai'],'only Render IA is presented as available');
  assert.deepEqual(g[3].buttons,[],'nothing in preparation has a button');
  assert.deepEqual(g.slice(0,3).flatMap(x=>x.buttons),['welcomeAI-render-ai','welcomeAI-assistant','welcomeAI-catalogs','welcomeAI-catalog-budget','welcomeAI-assistant-catalogs','welcomeAI-visual-studio','welcomeAI-photo-reform']);
- const text=await page.locator('#welcomeAIServices').textContent();
+ const text=await page.locator('#welcomeModules').textContent();
  assert.match(text,/Presupuestar/,'CAT-04 in master is announced as a pilot');
  assert.doesNotMatch(text,/Pendiente de CAT-04/,'obsolete gate is removed');
  assert.match(text,/ningún modelo de lenguaje/);assert.match(text,/no llama a ningún proveedor de IA/);assert.match(text,/no las genera una IA/);
@@ -42,10 +46,11 @@ test(`four verified states, honest texts, CAT-04 pilot, no duplicate Render IA, 
  // H-C2 (UX-312 Home): Render IA conserva una sola entrada de pago, su servicio, que abre Entregar → Vistas del proyecto.
  assert.equal(await page.locator('#welcomeRenderAI, #welcomeRenderAIGo').count(),0);
  assert.equal(await page.locator('#welcomeAI-render-ai').textContent(),'Abrir Entregar · Vistas del proyecto');
- const order=await page.evaluate(()=>['#welcomeSolutions','#welcomeCapabilities','#welcomeAIServices','#welcomeWalk'].map(s=>document.querySelector(s).getBoundingClientRect().top));
+ assert.equal(await page.locator('#welcomeAIServices').count(),0,'no separate AI services block');assert.equal(await page.getByText('Nuevos servicios IA').count(),0);
+ const order=await page.evaluate(()=>['#welcomeSolutions','#welcomeModules','#welcomeCapabilities','#welcomeWalk'].map(s=>document.querySelector(s).getBoundingClientRect().top));
  for(let i=1;i<order.length;i++)assert.ok(order[i-1]<order[i],'reading order '+i);
  assert.equal(await noScroll(page),true,'no horizontal scroll');
- for(const b of await page.locator('#welcomeAIServices .ai-service-go').all()){const box=await b.boundingBox();assert.ok(box.height>=44,'44 px target');}
+ for(const b of await page.locator('#welcomeModules .ai-service-go').all()){const box=await b.boundingBox();assert.ok(box.height>=44,'44 px target');}
  assert.deepEqual(api,[]);assert.deepEqual(errors,[]);
 });
 
@@ -75,23 +80,25 @@ test('every button opens the real service: Render IA band, Assistant, CAT-04, Im
 });
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])
-test(`six professions: same four states, relevant services first, project untouched ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+test(`six professions: their modules first, all nine with their state, project untouched ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const {page,errors,api,press}=await open(t,viewport);const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  for(const p of PROFILES){await press('#welcomeAudience-'+p);
-  const g=await groups(page);assert.deepEqual(g.map(x=>x.state),['available','pilot','simulation','preparation'],p);
-  assert.deepEqual(g.flatMap(x=>x.ids),R.aiServices(p).map(s=>s.id),p+' order from the registry');
-  assert.equal(await page.locator('#welcomeAIServices .ai-service-go').count(),7,p+' same real accesses');
+  // La profesión pone primero sus módulos (marcados «Para …») y conserva los nueve con su estado.
+  assert.deepEqual(await featured(page),MPRIO[p],p+' featured modules first');
+  const ids=await page.locator('#welcomeModules .ai-service').evaluateAll(n=>n.map(s=>s.dataset.service));assert.deepEqual(ids.slice(0,MPRIO[p].length),MPRIO[p]);assert.deepEqual([...ids].sort(),R.aiServices(p).map(s=>s.id).sort(),p+' all nine kept');
+  assert.equal(await page.locator('#welcomeModules .ai-service-for').count(),MPRIO[p].length);
+  assert.equal(await page.locator('#welcomeModules .ai-service-go').count(),7,p+' same real accesses');
   assert.equal(await noScroll(page),true,p+' no horizontal scroll');
   await press('#welcomeAudience-'+p);}
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),project);assert.deepEqual(api,[]);assert.deepEqual(errors,[]);
 });
 
 test('EN and ZH: section, states and buttons translated; keyboard reaches every button with a visible focus 1440x900',{timeout:90000},async t=>{
- for(const [lang,title,states,go] of [['en','New AI services',['Available','Pilot in this browser','Simulation','In preparation'],'Open the Assistant'],['zh','新 AI 服务',['可用','此浏览器中的试点','模拟','准备中'],'打开助手']]){
+ for(const [lang,title,states,go] of [['en','Modules for your work',['Available','Pilot in this browser','Simulation','In preparation'],'Open the Assistant'],['zh','适合你工作的模块',['可用','此浏览器中的试点','模拟','准备中'],'打开助手']]){
   const {page,errors,api}=await open(t,{width:1440,height:900},{lang});
-  assert.equal(await page.locator('#welcomeAIServicesTitle').textContent(),title);
+  assert.equal(await page.locator('#welcomeModulesTitle').textContent(),title);
   assert.deepEqual((await groups(page)).map(x=>x.label),states);assert.equal(await page.locator('#welcomeAI-assistant').textContent(),go);
-  assert.doesNotMatch(await page.locator('#welcomeAIServices').textContent(),/Simulación|Disponible|Piloto|preparación/,lang+' no Spanish left');
+  assert.doesNotMatch(await page.locator('#welcomeModules').textContent(),/Simulación|Disponible|Piloto|preparación/,lang+' no Spanish left');
   assert.deepEqual(api,[]);assert.deepEqual(errors,[]);}
  const {page,errors}=await open(t,{width:1440,height:900});
  await page.locator('#welcomeAudience-construction').focus();

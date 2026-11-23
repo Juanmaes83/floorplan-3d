@@ -8,3 +8,11 @@
 | `perfiles/constructora.webp` | Recorte de `demo-evolucion-4d.webp` (captura real de Evolución de obra) | Constructora: la generación se detuvo por cuota agotada; no se compraron créditos |
 
 **Pendiente del propietario:** el encargo pide fotos editoriales autorizadas de personas reales, con originales en 2K y licencia registrada. Las imágenes generadas NO cumplen ese criterio (ni resolución 2K ni personas reales). Hay que sustituirlas por fotos con licencia cuando se aporten. Basta con reemplazar los seis archivos de `perfiles/`, con el mismo nombre y formato cuadrado.
+
+## Altas de #321 (23/11/2026)
+
+| Archivo | Origen |
+|---|---|
+| `entregas/D4.webp` | Captura real del Dossier económico profesional de la vivienda de ejemplo, generada por `tests/economic-dossier.browser.test.cjs`. Los precios son los de prueba de esa suite (10 €/unidad), no son tarifas reales |
+| `entregas/T2.webp` | Captura real de «Comparar distribuciones» (original frente a variante), generada por `tests/variants-visual.browser.test.cjs` |
+| `demo-blueprint-3d.webp`, `demo-despiece-3d.webp` | Capturas de la evidencia e2e de Claude Code 2 (laboratorio `rubik-sculpt-simulator-lab`, rama `claude/bpdp-premium-v2`, commit `9b33d7c`), escena «Proyecto RUBIK · datos reales». Son muestras de laboratorio: el módulo no está integrado y su demo está pendiente de revisión del propietario |
