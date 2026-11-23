@@ -1,0 +1,257 @@
+/* UX-312 · PERLA · Editor en dos filas (V4). Solo bajo body.perla; capa de disposición (js/perla-editor-ui.js).
+   Jerarquía: navegación centrada y con peso · auxiliares compactos · acción principal en vino apagado ·
+   segundo nivel en verde petróleo · laterales vino casi blanco · lienzo neutro. */
+body.perla{
+  --perla-wine:#783B4B;--perla-wine-hover:#6A3342;--perla-wine-pressed:#5A2B38;--perla-wine-ring:#F4E8EC;
+  --perla-petrol:#1F5A66;--perla-petrol-soft:#E3ECEE;--perla-side:#FAF7F8;--perla-canvas:#EEF0F0;
+  --perla-line:#E4DDE0;--perla-ink:#1f2326;--perla-muted:#5b6266;
+}
+/* ── Cabecera: dos filas ── */
+body.perla .app>header{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;padding:0!important;height:auto!important;min-height:0!important;flex-wrap:nowrap!important;background:#fff;border-bottom:1px solid var(--perla-line)}
+body.perla .perla-keep{display:none!important}
+body.perla .perla-r1,body.perla .perla-r2{display:flex;align-items:center;gap:8px;padding:6px 14px;min-width:0}
+body.perla .perla-r1{min-height:56px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+body.perla .perla-r2{min-height:50px;border-top:1px solid var(--perla-line);background:#fff;flex-wrap:nowrap}
+body.perla .perla-left,body.perla .perla-utils{display:flex;align-items:center;gap:6px;min-width:0}
+body.perla .perla-utils{justify-content:flex-end}
+body.perla .perla-ico{flex:none;display:block}
+body.perla .perla-brand{display:inline-flex!important;align-items:center;gap:8px;border:0!important;background:none!important;font-size:16px;color:var(--perla-ink);padding:6px 8px!important;min-height:40px}
+body.perla .perla-brand b{font-weight:700;letter-spacing:.01em;white-space:nowrap}
+body.perla .perla-brand-meta{display:none!important}
+body.perla .perla-project{display:inline-flex;align-items:center;gap:6px;min-height:36px;max-width:220px;padding:4px 10px;border:1px solid var(--perla-line);border-radius:8px;background:#fff;font-size:13px;color:var(--perla-ink)}
+body.perla .perla-project-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.perla .perla-copy{display:inline-flex!important;align-items:center;gap:6px;min-height:36px;font-size:13px;color:var(--perla-petrol)!important;border:1px solid var(--perla-petrol)!important;background:#fff!important;border-radius:8px;padding:4px 10px}
+body.perla .perla-copy[hidden]{display:none!important}
+/* Áreas: centradas, con más peso; la activa subrayada en vino */
+body.perla .perla-areas{display:flex;align-items:stretch;gap:4px;justify-self:center}
+body.perla .perla-areas>button{min-height:44px;padding:0 18px!important;font-size:15px!important;font-weight:600!important;color:var(--perla-ink)!important;background:transparent!important;border:0!important;border-radius:8px 8px 0 0!important;box-shadow:inset 0 -3px 0 transparent!important;white-space:nowrap}
+body.perla .perla-areas>button:hover{background:#F6F1F3!important}
+body.perla .perla-areas>button[aria-current="page"],body.perla .perla-areas>button[aria-pressed="true"],body.perla .perla-areas>button.on,body.perla .perla-areas>button[aria-expanded="true"]{color:var(--perla-wine)!important;box-shadow:inset 0 -3px 0 var(--perla-wine)!important}
+/* Utilidades compactas */
+body.perla .perla-icon{display:inline-flex!important;align-items:center;justify-content:center;gap:4px;min-width:36px;min-height:36px;padding:0 8px!important;font-size:12px;color:var(--perla-muted)!important;background:transparent!important;border:1px solid transparent!important;border-radius:8px}
+body.perla .perla-icon:hover{background:#F3F4F4!important;border-color:var(--perla-line)!important}
+body.perla #actionSearchBtn{font-size:12px}
+body.perla #actionSearchBtn kbd{font-size:11px}
+body.perla .perla-utils #editHistory{display:inline-flex;gap:2px}
+body.perla .perla-utils #editHistory button{min-width:34px;min-height:36px;padding:0 6px}
+body.perla .perla-studio{display:inline-flex!important;align-items:center;gap:6px;min-height:36px;font-size:13px!important;font-weight:500!important;padding:0 10px!important;border:1px solid var(--perla-line)!important;border-radius:8px!important;background:#fff!important;color:var(--perla-ink)!important}
+body.perla .perla-lang{min-height:36px;font-size:12px}
+body.perla details.menu>summary{list-style:none}
+body.perla details.menu>summary::-webkit-details-marker{display:none}
+body.perla .perla-more{position:relative}
+body.perla .perla-pop{position:absolute;z-index:60;min-width:240px;display:flex;flex-direction:column;gap:2px;padding:6px;background:#fff;border:1px solid var(--perla-line);border-radius:10px;box-shadow:0 12px 32px rgba(40,20,28,.14)}
+body.perla .perla-more .perla-pop{right:0;left:auto}
+body.perla .perla-pop>button,body.perla .perla-pop>label,body.perla .perla-pop>a{justify-content:flex-start;text-align:start;width:100%;min-height:40px}
+/* Fila 2 */
+body.perla .perla-menu{position:relative}
+body.perla .perla-menu>summary,body.perla .perla-tasks{display:inline-flex!important;align-items:center;gap:6px;min-height:38px;padding:0 12px!important;font-size:13px;font-weight:500;border:1px solid var(--perla-line)!important;border-radius:8px;background:#fff!important;color:var(--perla-ink)!important;cursor:pointer;white-space:nowrap}
+body.perla .perla-menu .perla-pop{left:0;top:calc(100% + 6px)}
+body.perla .perla-r2 #viewSeg{flex:none}
+body.perla .perla-progress{display:flex;align-items:center;gap:10px;min-width:0;padding:0 6px;font-size:13px;color:var(--perla-muted)}
+body.perla .perla-step{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+body.perla .perla-step b{color:var(--perla-ink);font-weight:600}
+body.perla .perla-step small{margin-inline-start:8px;font-size:12px}
+body.perla .perla-meter{flex:none;width:96px;height:6px;border-radius:3px;background:#EDE6E9;overflow:hidden}
+body.perla .perla-meter>i{display:block;height:100%;background:var(--perla-petrol);border-radius:3px;transition:width .2s}
+body.perla .perla-tasks{color:var(--perla-petrol)!important;border-color:var(--perla-petrol)!important}
+body.perla .perla-tasks[aria-expanded="true"]{background:var(--perla-petrol-soft)!important}
+body.perla .perla-spacer{flex:1 1 auto}
+/* Segundo nivel: verde petróleo, contorno */
+body.perla .perla-secondary{display:inline-flex!important;align-items:center;gap:6px;min-height:40px;padding:0 14px!important;font-weight:600;font-size:14px;color:var(--perla-petrol)!important;background:#fff!important;border:1.5px solid var(--perla-petrol)!important;border-radius:9px!important;white-space:nowrap}
+body.perla .perla-secondary:hover{background:var(--perla-petrol-soft)!important}
+/* Primaria: vino apagado, sombra suave, anillo de foco claro */
+body.perla .perla-primary{min-height:42px;padding:0 20px!important;font-size:14px;font-weight:700;color:#fff!important;background:var(--perla-wine)!important;border:1px solid var(--perla-wine)!important;border-radius:10px!important;box-shadow:0 4px 12px rgba(120,59,75,.24),0 1px 2px rgba(120,59,75,.2)!important;white-space:nowrap}
+body.perla .perla-primary:hover{background:var(--perla-wine-hover)!important}
+body.perla .perla-primary:active{background:var(--perla-wine-pressed)!important;box-shadow:0 1px 3px rgba(120,59,75,.25)!important}
+body.perla .perla-primary:focus-visible{outline:3px solid var(--perla-wine)!important;outline-offset:2px;box-shadow:0 0 0 6px var(--perla-wine-ring)!important}
+body.perla .perla-primary:disabled{opacity:.55;box-shadow:none!important;cursor:not-allowed}
+body.perla .perla-primary[hidden]{display:none!important}
+/* Guía como panel a demanda */
+body.perla #guideBar{display:none!important}
+body.perla.perla-guide-open #guideBar{display:grid!important;position:absolute;z-index:55;right:14px;top:112px;width:min(560px,calc(100vw - 28px));max-height:calc(100vh - 140px);overflow:auto;border:1px solid var(--perla-line);border-radius:12px;box-shadow:0 18px 40px rgba(40,20,28,.18);background:#fff}
+body.perla .guide-example{display:none!important}
+body.perla #professionalNav{display:none!important}
+/* ── Paneles laterales y lienzo ── */
+body.perla aside.lib,body.perla aside.right{background:var(--perla-side)!important}
+body.perla aside.lib .palette-tabs,body.perla aside.right #panel>*{background-color:transparent}
+body.perla #stage{background:var(--perla-canvas)!important;position:relative}
+body.perla .perla-canvas-top{position:absolute;z-index:20;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;max-width:calc(100% - 220px)}
+body.perla .perla-canvas-top>.btn,body.perla .perla-canvas-top>details>summary{min-height:34px;font-size:13px;background:#fff;border:1px solid var(--perla-line);border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+body.perla .perla-canvas-top .layers-pop,body.perla .perla-canvas-top .menu-pop{top:calc(100% + 6px);left:0}
+body.perla .perla-canvas-top>details{position:relative}
+body.perla .perla-canvas-bottom{position:absolute;z-index:20;left:12px;bottom:12px;display:flex;align-items:center;gap:4px;padding:4px;background:#fff;border:1px solid var(--perla-line);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+body.perla .perla-canvas-bottom>.btn,body.perla .perla-canvas-bottom>details>summary{min-width:34px;min-height:34px;font-size:13px}
+body.perla .perla-scales{position:relative}
+body.perla .perla-scales .perla-pop{bottom:calc(100% + 6px);left:0;top:auto;min-width:140px}
+body.perla .perla-canvas-bottom #scalebar{position:static!important;margin-inline-start:6px}
+body.perla #stage>#solarNorth{position:absolute;top:12px;right:12px;left:auto;bottom:auto}
+/* Plegar paneles (los mismos tgLib / tgPanel), abajo a la derecha del lienzo */
+body.perla #stage>#mobileDock{position:absolute;z-index:20;right:12px;bottom:12px;display:flex!important;gap:4px;padding:4px;background:#fff;border:1px solid var(--perla-line);border-radius:10px}
+body.perla #stage>#mobileDock #viewSeg{display:none}
+body.perla #mobileDock #paneBtns{display:flex;gap:4px}
+/* Inspector */
+body.perla .perla-inspector-head{padding:12px 14px 0;border-bottom:1px solid var(--perla-line);background:var(--perla-side)}
+body.perla .perla-inspector-title{margin:0 0 8px;font-size:15px;font-weight:700;color:var(--perla-ink)}
+body.perla .perla-tabs{display:flex;gap:2px}
+body.perla .perla-tabs>button{flex:1;min-height:38px;font-size:13px;font-weight:500;border:0!important;border-radius:0!important;background:transparent!important;color:var(--perla-muted)!important;box-shadow:inset 0 -2px 0 transparent}
+body.perla .perla-tabs>button[aria-selected="true"]{color:var(--perla-petrol)!important;font-weight:700;box-shadow:inset 0 -3px 0 var(--perla-petrol)}
+body.perla .perla-props-hint{margin:12px 14px;padding:10px 12px;font-size:13px;color:var(--perla-muted);border:1px dashed var(--perla-line);border-radius:8px;background:#fff}
+body.perla .perla-props-hint[hidden]{display:none}
+body.perla aside.right[data-perla-tab="estancias"] #panel [data-group]:not([data-group="areas"]){display:none!important}
+body.perla aside.right[data-perla-tab="informe"] #panel [data-group="areas"]{display:none!important}
+body.perla aside.right[data-perla-tab="propiedades"] #panel [data-group]{display:none!important}
+body.perla .perla-inspector-foot{padding:10px 14px;border-top:1px solid var(--perla-line);background:var(--perla-side)}
+body.perla .perla-inspector-foot #assistantOpen{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;color:var(--perla-petrol)!important;border:1.5px solid var(--perla-petrol)!important;background:#fff!important;border-radius:9px;font-weight:600}
+/* Foco: anillo vino en la cabecera PERLA */
+body.perla .perla-r1 :focus-visible,body.perla .perla-r2 :focus-visible,body.perla .perla-canvas-top :focus-visible,body.perla .perla-canvas-bottom :focus-visible{outline:3px solid var(--perla-wine);outline-offset:2px}
+/* ── Escritorio estrecho ── */
+@media (max-width:1280px){
+  body.perla .perla-areas>button{padding:0 12px!important;font-size:14px!important}
+  body.perla .perla-studio>span,body.perla #actionSearchBtn kbd{display:none}
+  body.perla .perla-step small{display:none}
+}
+@media (max-width:1100px){
+  body.perla .perla-r1{grid-template-columns:auto 1fr auto}
+  body.perla .perla-project{max-width:140px}
+  body.perla .perla-meter{width:60px}
+  body.perla .perla-tasks>span,body.perla .perla-menu>summary>span{display:none}
+}
+/* ── Móvil vertical ── */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r1{display:flex;padding:4px 8px;min-height:48px;gap:4px}
+  body.perla .perla-areas{order:3;flex:1 1 100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+  body.perla .perla-r1{flex-wrap:wrap}
+  body.perla .perla-areas>button{min-height:40px;padding:0 10px!important;font-size:14px!important}
+  body.perla .perla-left{flex:1;min-width:0}
+  body.perla .perla-brand b,body.perla .perla-copy-label,body.perla #editHistory{display:none!important}
+  body.perla .perla-project{max-width:130px}
+  body.perla .perla-r2{padding:4px 8px;gap:6px;overflow-x:auto;scrollbar-width:none}
+  body.perla .perla-progress{display:none}
+  body.perla .perla-secondary{min-height:40px;padding:0 10px!important}
+  body.perla .perla-secondary>:not(svg){display:none}
+  body.perla .perla-primary{padding:0 14px!important;flex:none}
+  body.perla .perla-canvas-top{max-width:calc(100% - 24px)}
+  body.perla #stage>#solarNorth{top:auto;bottom:76px}
+  body.perla .perla-canvas-bottom{bottom:72px}
+  body.perla #stage>#mobileDock{position:fixed;left:0;right:0;bottom:0;border-radius:0;justify-content:space-around;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border:0;border-top:1px solid var(--perla-line);z-index:70}
+  body.perla #mobileDock #paneBtns{display:contents}
+  body.perla #mobileDock button{flex:1;display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;font-size:12px;border:0!important;background:transparent!important}
+  body.perla.perla-guide-open #guideBar{position:fixed;top:auto;bottom:70px;right:8px;left:8px;width:auto;max-height:60vh}
+  body.perla .perla-menu .perla-pop,body.perla .perla-more .perla-pop{position:fixed;left:8px;right:8px;top:auto;bottom:76px;min-width:0}
+}
+/* ── Móvil horizontal ── */
+@media (max-height:500px) and (orientation:landscape){
+  body.perla .perla-r1{min-height:44px;padding:2px 10px}
+  body.perla .perla-r2{min-height:42px;padding:2px 10px}
+  body.perla .perla-areas>button{min-height:38px}
+  body.perla .perla-progress{display:none}
+}
+/* Ajustes tras la primera captura */
+body.perla .perla-r2>*{order:0!important}
+body.perla #actionSearchBtn .guide-search-prompt,body.perla #actionSearchBtn .guide-search-compact{display:none!important}
+body.perla #editHistory .edit-history-scope{display:none!important}
+body.perla .perla-utils #editHistory #undo,body.perla .perla-utils #editHistory #redo{font-size:0!important;min-width:34px;width:34px;padding:0!important;background:transparent!important;border:1px solid transparent!important;color:var(--perla-muted)}
+body.perla .perla-utils #editHistory #undo::before,body.perla .perla-utils #editHistory #redo::before{font-size:18px;line-height:1}
+body.perla .perla-utils #editHistory #undo::before{content:"↶"}
+body.perla .perla-utils #editHistory #redo::before{content:"↷"}
+/* Móvil · ajuste a la V4 móvil */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .app>header{padding-bottom:0!important;margin-bottom:0!important}
+  body.perla .perla-left{overflow:hidden}
+  body.perla .perla-copy{padding:0 8px;min-width:36px}
+  body.perla #perlaHelp{display:none!important}
+  body.perla .perla-r2{flex-wrap:wrap;overflow:visible;row-gap:6px;padding:6px 8px}
+  body.perla .perla-r2 #viewSeg{flex:1 1 0;min-width:0;display:flex}
+  body.perla .perla-r2 #viewSeg>*{flex:1}
+  body.perla .perla-progress{display:flex;order:5!important;flex:1 1 0;padding:0 2px}
+  body.perla .perla-step{white-space:normal;line-height:1.25}
+  body.perla .perla-step small{display:block;margin:0}
+  body.perla .perla-meter{display:none}
+  body.perla .perla-tasks{order:6!important}
+  body.perla .perla-tasks>span{display:none}
+  body.perla #presentationBtn{order:6!important}
+  body.perla .perla-primary{order:7!important}
+  body.perla .perla-spacer{display:none}
+  body.perla .perla-menu>summary>span{display:inline}
+  body.perla #perlaFile>summary>span{display:none}
+  body.perla .perla-canvas-bottom{right:12px;max-width:calc(100% - 24px);overflow:hidden}
+  body.perla .perla-canvas-bottom #scalebar{min-width:0;max-width:90px;overflow:hidden}
+  body.perla #mobileDock #assistantOpen{flex:1;display:inline-flex;align-items:center;justify-content:center;min-height:52px;font-size:12px;border:0!important;background:transparent!important;color:var(--perla-ink)!important}
+}
+body.perla .perla-break{display:none}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r2>*{order:3!important}
+  body.perla #perlaImport{order:1!important}
+  body.perla #perlaFile{order:2!important}
+  body.perla .perla-r2 #viewSeg{order:3!important;flex:1 1 auto}
+  body.perla .perla-r2 #viewSeg .seg-label,body.perla .perla-r2 #viewSeg>span:first-child:not(.pill){display:none}
+  body.perla .perla-break{display:block;order:4!important;flex-basis:100%;height:0}
+  body.perla .perla-progress{order:5!important;display:flex}
+  body.perla .perla-tasks{order:6!important}
+  body.perla #presentationBtn{order:6!important}
+  body.perla .perla-primary{order:7!important}
+  body.perla .perla-project{max-width:118px}
+  body.perla .perla-left{flex:1 1 auto}
+}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-left{flex:1 1 0!important;min-width:0}
+  body.perla .perla-utils{flex:none}
+  body.perla #presentationBtn{font-size:0!important;padding:0 10px!important;min-width:44px}
+  body.perla .perla-lang{padding:0 6px!important;font-size:11px}
+}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-project{max-width:104px}
+  body.perla .perla-left{overflow:visible}
+  body.perla #mobileDock #assistantOpen{order:9}
+  body.perla #mobileDock #assistantOpen::before{content:"✦";font-size:16px;margin-inline-end:4px}
+}
+/* Filas de la rejilla explícitas: sin ellas, el espacio libre estiraba la cabecera (fila auto) en móvil */
+body.perla:not(.presenting,.professional-area) .app:not(:has(>#roomPlanJoinResult:not([hidden]))){grid-template-rows:auto auto auto minmax(0,1fr) 30px!important}
+body.perla .app>header::after{content:none!important;display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla:not(.presenting,.professional-area) .app:not(:has(>#roomPlanJoinResult:not([hidden]))){grid-template-rows:auto auto auto minmax(0,1fr) 24px!important}}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla .perla-project{max-width:92px}body.perla .perla-left{overflow:hidden}body.perla .perla-brand{padding:6px 4px!important}}
+/* Área profesional abierta: la fila 1 sigue (Inicio, proyecto, áreas, Mi estudio, idioma, Más); la fila 2 y lo que actúa
+   sobre el editor (inerte detrás del área) se ocultan, como hacía la cabecera anterior. */
+body.perla.professional-area .app.app>header>.perla-r1{display:grid!important}
+body.perla.professional-area .app>header>.perla-r2{display:none!important}
+body.perla.professional-area .perla-r1 #actionSearchBtn,body.perla.professional-area .perla-r1 #editHistory,body.perla.professional-area #perlaHelp,body.perla.professional-area .perla-copy{display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.professional-area .app.app>header>.perla-r1{display:flex!important}}
+/* Móvil horizontal: una sola línea por fila (la altura útil es escasa) */
+@media (max-width:1100px) and (max-height:500px){
+  body.perla .perla-r1{flex-wrap:nowrap;min-height:44px}
+  body.perla .perla-areas{order:0;flex:0 1 auto;overflow-x:auto;justify-content:center}
+  body.perla .perla-areas>button{min-height:38px;padding:0 8px!important;font-size:13px!important}
+  body.perla .perla-left{flex:0 1 auto!important}
+  body.perla .perla-project{max-width:120px}
+  body.perla .perla-r2{flex-wrap:nowrap;min-height:44px;padding:3px 8px}
+  body.perla .perla-break{display:none}
+  body.perla .perla-progress{display:flex;order:3!important;flex:1 1 0}
+  body.perla .perla-step small{display:none}
+  body.perla .perla-r2 #viewSeg{flex:0 0 auto}
+  body.perla #stage>#mobileDock{position:absolute;left:auto;right:8px;bottom:8px;width:auto;border-radius:10px;border:1px solid var(--perla-line);padding:3px;gap:2px;display:flex!important;grid-template-columns:none}
+  body.perla #mobileDock button{flex:none;flex-direction:row;min-height:40px;padding:0 10px!important;gap:6px}
+  body.perla .perla-canvas-bottom{bottom:8px;right:auto;max-width:calc(100% - 360px)}
+  body.perla #stage>#solarNorth{top:8px;bottom:auto}
+}
+@media (max-width:1100px) and (max-height:500px){
+  body.perla .app>main{margin-right:0!important}
+  body.perla aside.right.open{margin-right:0!important}
+  body.perla #stage>#mobileDock{top:auto!important;width:auto!important;height:auto!important;overflow:visible}
+  body.perla #mobileDock button{min-height:40px!important}
+}
+@media (max-width:1100px) and (max-height:500px){
+  body.perla .perla-left{flex:none!important;overflow:visible}
+  body.perla .perla-project{max-width:96px}
+  body.perla .perla-areas{flex:1 1 auto;min-width:0;gap:0}
+  body.perla .perla-areas>button{padding:0 7px!important;font-size:12.5px!important}
+  body.perla .perla-utils{gap:2px}
+}
+/* Asistente en la fila 1 mientras hay un área abierta */
+body.perla .perla-assistant-slot{display:contents}
+body.perla .perla-assistant-slot #assistantOpen{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;font-size:13px;font-weight:600;color:var(--perla-petrol)!important;border:1.5px solid var(--perla-petrol)!important;background:#fff!important;border-radius:8px}
+/* Mi estudio en el teléfono: solo icono (la acción se conserva) */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-utils .perla-studio{display:inline-flex!important;font-size:0!important;min-width:36px;padding:0 9px!important;border-color:transparent!important;background:transparent!important}
+  body.perla .perla-utils .perla-studio::before{margin:0!important}
+  body.perla .perla-assistant-slot #assistantOpen{padding:0 8px;font-size:12px}
+}

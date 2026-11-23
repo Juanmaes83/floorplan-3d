@@ -47,7 +47,7 @@
   const caps=RT.capabilities({registry:window.FloorPlanCapabilities,modules:{render:!!window.FloorPlanAIRender,photoReform:!!window.RubikPhotoReformProvider||!!window.RubikPhotoReformCore,photoReformConfigured:false,catalog:!!window.RubikCat04}});
   return {project:p,budget,budgetSaved:saved,levels,selection,area:area(),lang:L(),labels:{rooms,objects,materials,products,objectProduct},caps,catalog,catalogReport,visualRefs,renderStyles:window.FloorPlanAIRender?.STYLES?.()||[]};
  }
- function area(){const cur=document.querySelector('#professionalNav [aria-current="page"]');const k=cur?.id?.replace('workArea-','');return K.AREAS.includes(k)?k:'design';}
+ function area(){const cur=document.querySelector('[id^="workArea-"][aria-current="page"]');const k=cur?.id?.replace('workArea-','');return K.AREAS.includes(k)?k:'design';}
  // ----- Panel -----
  const panel=el('section',undefined,document.body,'assistant-panel');panel.id='assistantPanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','false');panel.setAttribute('aria-labelledby','assistantTitle');
  const head=el('div',undefined,panel,'assistant-head');const title=el('h2',undefined,head);title.id='assistantTitle';
@@ -119,7 +119,7 @@
  // Las mutaciones de los propios elementos del asistente no reprograman (evita un bucle: rehost escribe «hidden»).
  new MutationObserver(rs=>{if(rs.some(r=>!own(r.target)))rehost();}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open','hidden']});
  document.addEventListener('close',e=>{if(e.target!==hostDlg)setTimeout(rehost,0);},true);addEventListener('resize',()=>rehost());
- function mountOpener(){const nav=document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
+ function mountOpener(){const nav=document.querySelector('[data-assistant-opener-host]')||document.getElementById('professionalNav');if(nav&&!nav.contains(opener))nav.append(opener);else if(!nav&&!opener.isConnected)document.querySelector('header')?.append(opener);}
  function labels(){
   title.textContent=tx('Asistente RUBIK','RUBIK assistant','RUBIK 助手');close.setAttribute('aria-label',tx('Cerrar el asistente','Close the assistant','关闭助手'));
   mode.textContent=window.RubikAssistantGenUI?.active()
