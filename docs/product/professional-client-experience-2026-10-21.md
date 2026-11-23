@@ -268,3 +268,47 @@ Regla: solo se muestra lo que ya funciona. Lo demás aparece como «en preparaci
 | Agente conectado real | Un proveedor de IA interpreta texto y genera propuestas | **Sí:** si la geometría sale del navegador (D-08), proveedor, presupuesto con coste por uso, consentimiento por proyecto y registro |
 
 **Recomendación:** primero la ayuda local, después el prototipo. El agente real solo tras la decisión, con un piloto acotado.
+
+## 12. Contrato de Entregar (UX-312 V3)
+
+Entregar es un **espacio de trabajo continuo**, no una sucesión de diálogos. Lo mantiene UX-312 y lo audita Codex. Aplica el [foco por intención](../agents/PROTOCOLO-UX-FIRST-RUBIK-SOTA.md#foco-por-intención--decisión-permanente-del-propietario-23112026), la [navegación continua](editor-ux-pattern-2026-10-19.md#8-navegación-continua-y-retorno-al-origen-ux-312-v3) y el [sistema visual PERLA](premium-ux-design-2026-10-20.md#8-sistema-visual-perla-y-contenido-a-color-ux-312-v3).
+
+**Recorrido:** Elegir → Personalizar → Previsualizar → Preparar → Descargar o Compartir.
+- Cada formato usa solo las etapas que le corresponden.
+- Previsualizar no obliga a descargar.
+- Compartir exige consentimiento y permisos (enlace B4, código y caducidad).
+
+**Estructura (F3b, aprobada en la V2.6):** la firma → «Lo que recibirá tu cliente» → índice de la entrega → Recorrido de obra → cinco fases (resultados). «Más opciones · Guardar y exportar» queda fuera del índice, porque la copia editable no es una salida para el cliente.
+
+**Índice con códigos estables** (son los que enlazan las cinco fases):
+
+| Grupo | Códigos |
+|---|---|
+| Documentación | D1 Ficha de superficies · D2 Lámina · D3 Dossier del proyecto · D4 Dossier económico (C1: los precios se revisan en S1) · D5 Entregables profesionales (E3; C4: solo aquí) |
+| La vivienda, para tu cliente | P1 Presentación 3D (incluye «Grabar vídeo») · P2 Imágenes · P3 Visita 3D · P4 Evolución de obra · P5 Material board · P6 Personalización HERO (N1) · P7 Archivo para tu cliente |
+| Seguimiento | S1 Presupuesto · S2 Observaciones |
+| Herramientas de trabajo (no son para el cliente) | T1 Escena para Blender (paquete técnico de escena 3D, no un vídeo) · T2 Comparar con el original |
+
+**Cada elemento comunica:**
+- qué es y qué resultado ofrece;
+- una **representación visual útil**;
+- su estado real (listo, se prepara al pulsar, requiere algo previo o bloqueado, con el motivo);
+- la acción principal;
+- la previsualización cuando existe;
+- las opciones de preparación;
+- descargar o compartir cuando proceda;
+- sus dependencias;
+- cómo volver.
+
+**Veracidad de la representación visual:**
+- Se prioriza la vista real del proyecto, producida por el generador existente; no se duplican motores.
+- Si el resultado aún no existe, se muestra una ilustración identificada como «Ejemplo», hecha con recursos propios del producto.
+- No se presentan imágenes genéricas como resultados del cliente.
+- No se inventan importes, materiales ni comentarios.
+- No se recolorean materiales.
+
+**Contexto:** al entrar en una herramienta se registra su origen (área, tarjeta, paso, configuración, selección, desplazamiento y foco). Al cerrar, se vuelve a ese origen dentro de Entregar. Salir de Entregar es una acción explícita.
+
+**Acción principal en el móvil:** «Descargar archivo para el cliente» queda fija como atajo al mismo botón de P7. Solo se oculta cuando ese botón se ve **entero** por encima de la barra, en vertical y en horizontal. Comprobado en `t3-dock.cjs` (laboratorio UX-312).
+
+**Verificación:** matriz por elemento D1–T2 con las operaciones aplicables (ver la navegación continua), T1 de presencia con las consolidaciones aprobadas, T2 de descubrimiento e interacción, y T3 de la misma acción frente a master.
