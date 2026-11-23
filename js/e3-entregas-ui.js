@@ -72,15 +72,16 @@
   const btn=el('button',tx('Preparar entregables','Prepare deliverables','准备交付物'),c,'btn');btn.type='button';btn.dataset.route='e3-entregas';btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-describedby',h.id);btn.onclick=()=>abrir(btn);
   return c;}
  // ---------------------------------------------------------------- diálogo
- let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0,bpdpJob=null;
+ let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0,bpdpJob=null,seleccionAnterior=null;
  const valida=()=>{sel=C.seleccionValida(sel,disponible);return sel;};
- function abrir(desde){origen=desde||document.activeElement;
+ function abrir(desde,id){origen=desde||document.activeElement;
+  if(id){seleccionAnterior=sel.slice();sel=[id];}
   if(!dlg){dlg=document.createElement('dialog');dlg.id='e3Entregas';dlg.className='e3-dlg';dlg.setAttribute('aria-labelledby','e3T');document.body.append(dlg);
-   dlg.addEventListener('close',()=>{bpdpJob?.abort();if(!document.activeElement||document.activeElement===document.body||dlg.contains(document.activeElement)){
+   dlg.addEventListener('close',()=>{bpdpJob?.abort();if(seleccionAnterior){sel=seleccionAnterior;seleccionAnterior=null;}if(!document.activeElement||document.activeElement===document.body||dlg.contains(document.activeElement)){
     const trigger=origen?.isConnected?origen:document.querySelector('#professionalWorkspace [data-route="e3-entregas"]');
     trigger?.focus();
    }});}
-  paso=1;valida();pintar();if(!dlg.open){origen?.focus?.({preventScroll:true});dlg.showModal();}dlg.querySelector('#e3T')?.focus();}
+  paso=id&&valida().length?3:1;valida();pintar();if(!dlg.open){origen?.focus?.({preventScroll:true});dlg.showModal();}dlg.querySelector('#e3T')?.focus();}
  function cabecera(){const h=el('div',undefined,dlg,'e3-cab');const t=el('h2',tx('Entregables profesionales','Professional deliverables','专业交付物'),h);t.id='e3T';t.tabIndex=-1;
   const x=el('button','×',h,'e3-cerrar');x.type='button';x.setAttribute('aria-label',tx('Cerrar','Close','关闭'));x.onclick=()=>dlg.close();
   const pasos=el('ol',undefined,dlg,'e3-pasos');pasos.setAttribute('aria-label',tx('Pasos','Steps','步骤'));
@@ -195,7 +196,7 @@
   if(render!==currentRender)return;
   pie();dlg.querySelector('#e3T')?.focus();
  }
- window.RubikE3Entregables={card,abrir,firmarRender,get seleccion(){return valida().slice();},set seleccion(v){sel=[...v];valida();}};
+ window.RubikE3Entregables={card,abrir,firmarRender,catalogo:()=>C.catalogo(L()).map(e=>({...e,disponible:disponible(e.generador)})),get seleccion(){return valida().slice();},set seleccion(v){sel=[...v];valida();}};
  const css=document.createElement('style');css.textContent=`
  .e3-dlg{width:min(1040px,96vw);max-height:92vh;max-height:92dvh;border:0;border-radius:16px;padding:18px;background:var(--surface-app);color:var(--ink);box-sizing:border-box;overflow:hidden}
  .e3-dlg[open]{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto auto minmax(0,1fr) auto}
