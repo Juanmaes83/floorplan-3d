@@ -98,20 +98,30 @@ function setupConfig(F,howTo){
   else if(chosen.length>=MAX){say(`Para que sea ágil, la demo cambia hasta ${MAX} tareas a la vez. Quita una de las elegidas para elegir otra.`,'err');return;}
   else chosen=[...chosen,id];
   say('','');render();list.querySelector(`button[data-task="${CSS.escape(id)}"]`)?.focus();});
- tryB.addEventListener('click',async()=>{const c=clone(current);
+ // Acciones serializadas: cada «Probar» o «Restaurar» recibe un turno (op); solo el resultado del último turno cambia el
+ // estado y el mensaje, así el diálogo y el Gantt muestran siempre el mismo plan. «Restaurar» siempre se puede pulsar y
+ // deja sin efecto un cambio que se esté aplicando; «Probar» y «Reproducir» esperan a que termine la acción en curso.
+ let op=0,busy=false;
+ function setBusy(on){busy=on;dlg.setAttribute('aria-busy',String(on));tryB.disabled=on||!chosen.length;playB.disabled=on;for(const b of list.querySelectorAll('button[data-task]'))b.disabled=on;}
+ tryB.addEventListener('click',async()=>{if(busy)return;const c=clone(current);
   for(const id of chosen){const t=c.tasks.find(x=>x.id===id),start=edit.querySelector(`[data-start="${CSS.escape(id)}"]`).value,n=Math.round(+edit.querySelector(`[data-days="${CSS.escape(id)}"]`).value);
    if(!/^\d{4}-\d{2}-\d{2}$/.test(start)){say('No se puede aplicar: escribe una fecha de inicio válida.','err');return;}
    if(!(n>=1)){say('No se puede aplicar: la duración tiene que ser de 1 día o más.','err');return;}
    t.startDate=start;t.endDate=iso(d(start)+(n-1)*DAY);}
   try{S.create(clone(c));}catch(e){say(explain(e),'err');return;}
-  tryB.disabled=true;
-  try{if(await showPlan(c,'Demostración · versión personalizada en esta pestaña (no se guarda)')){current=c;render();say('Cambio aplicado en esta pestaña. Todas las dependencias se cumplen: pulsa «Reproducir la evolución» o cierra para explorar.','ok');}}
-  catch(e){say('No se ha podido mostrar el cambio: '+(e&&e.message||e)+'. El plan anterior sigue en pantalla.','err');}
-  finally{tryB.disabled=!chosen.length;}});
- reset.addEventListener('click',async()=>{if(!ensure())return;chosen=[];
-  try{await showPlan(original,'Demostración · vivienda de ejemplo de RUBIK (datos de ejemplo)');current=clone(original);render();say('Restaurado el plan de ejemplo original.','ok');}
-  catch(e){say('No se ha podido restaurar: '+(e&&e.message||e),'err');}});
- playB.addEventListener('click',()=>{dlg.close();F()?.setPos(0);F()?.play();});
+  const mine=++op;setBusy(true);say('Aplicando el cambio…','');
+  try{const shown=await showPlan(c,'Demostración · versión personalizada en esta pestaña (no se guarda)');
+   if(mine!==op)return;
+   if(shown){current=c;render();say('Cambio aplicado en esta pestaña. Todas las dependencias se cumplen: pulsa «Reproducir la evolución» o cierra para explorar.','ok');}}
+  catch(e){if(mine===op)say('No se ha podido mostrar el cambio: '+(e&&e.message||e)+'. El plan anterior sigue en pantalla.','err');}
+  finally{if(mine===op)setBusy(false);}});
+ reset.addEventListener('click',async()=>{if(!ensure())return;const mine=++op;chosen=[];setBusy(true);say('Restaurando el plan de ejemplo…','');
+  try{const shown=await showPlan(original,'Demostración · vivienda de ejemplo de RUBIK (datos de ejemplo)');
+   if(mine!==op)return;
+   if(shown){current=clone(original);render();say('Restaurado el plan de ejemplo original.','ok');}}
+  catch(e){if(mine===op)say('No se ha podido restaurar: '+(e&&e.message||e)+'. El plan anterior sigue en pantalla.','err');}
+  finally{if(mine===op)setBusy(false);}});
+ playB.addEventListener('click',()=>{if(busy)return;dlg.close();F()?.setPos(0);F()?.play();});
  closeB.addEventListener('click',()=>dlg.close());
  how.addEventListener('click',()=>{dlg.close();howTo();});
  dlg.addEventListener('close',()=>open.focus({preventScroll:true}));
