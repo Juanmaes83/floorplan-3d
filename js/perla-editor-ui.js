@@ -171,6 +171,9 @@
   b.title=tx('Retirar o restaurar tabiques no portantes (X). Pulsa un tabique para retirarlo; pulsa uno retirado para restaurarlo.','Remove or restore non-bearing partitions (X). Press a partition to remove it; press a removed one to restore it.','拆除或恢复非承重隔墙 (X)。');};
  // Idioma: re-etiquetar al cambiar (el resto de la app traduce sus propios textos).
  const langBtn=$('#langBtn');if(langBtn)langBtn.addEventListener('click',()=>setTimeout(()=>{paintTexts();demoName();},0));
+ // Paseo 3D: mientras el joystick está a la vista, la barra de escena no tapa la vista y la inferior deja libre el minimapa.
+ const joy=$('#joy');if(joy){const walk=()=>document.body.classList.toggle('perla-walking',joy.getClientRects().length>0&&getComputedStyle(joy).visibility!=='hidden');
+  new MutationObserver(walk).observe(joy,{attributes:true});new MutationObserver(walk).observe(document.body,{attributes:true,attributeFilter:['class']});}
  addEventListener('resize',paneIcons);
  let wasArea=document.body.classList.contains('professional-area');
  new MutationObserver(()=>{const now=document.body.classList.contains('professional-area');if(now!==wasArea){wasArea=now;paneIcons();}}).observe(document.body,{attributes:true,attributeFilter:['class']});

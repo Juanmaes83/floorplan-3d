@@ -189,7 +189,7 @@
   // built in memory) and «Dibujo vivo» (?demo=dibujo-vivo, the existing presentation of the example; js/home-demos.js).
   const inAction=el('section',undefined,shell,'welcome-in-action');inAction.id='welcomeInAction';inAction.setAttribute('aria-labelledby','welcomeInActionTitle');
   el('h2',tx('Descubre RUBIK en acción','See RUBIK in action','观看 RUBIK 实际效果'),inAction).id='welcomeInActionTitle';
-  el('p',tx('Explora cuatro demostraciones con la vivienda de ejemplo de RUBIK.','Explore four demonstrations with the RUBIK example home.','使用 RUBIK 示例住宅探索四个演示。'),inAction,'lead');
+  el('p',tx('Explora diez demostraciones con la vivienda de ejemplo de RUBIK.','Explore ten demonstrations with the RUBIK example home.','使用 RUBIK 示例住宅探索十个演示。'),inAction,'lead');
   const demoCards=el('div',undefined,inAction,'demo-cards');
   for(const [id,img,kicker,title,text,note,action,href] of [
    ['evolucion-obra','assets/welcome/demo-evolucion-4d.webp',['Evolución de obra 4D','4D construction','4D 施工'],['Descubre cómo evoluciona una obra','See how a build evolves','查看施工如何推进'],
@@ -211,6 +211,21 @@
    const fig=el('figure',undefined,card);realImg(fig,img,label(title),'welcome-demo-shot');
    const body=el('div',undefined,card,'demo-card-body');el('h3',label(title),body);el('p',label(text),body);
    btn('welcomeDemo-'+id,label(action),()=>{location.href=href;},body,true).classList.add('demo-card-go');}
+  // UX-312 · seis capacidades más (portadas: capturas reales de RUBIK; procedencia en assets/welcome/PROCEDENCIA.md).
+  // Cada visual explica su función: recorrer (teléfono con joystick y minimapa), reproducir (fotogramas de un MP4 real),
+  // comparar (misma cámara RUBIK | Cycles), consultar (consulta guiada con fuente), estilos (vista de origen; variantes
+  // pendientes de ejemplos acreditados) y entregable (lámina, dossier y presentación con firma de demostración).
+  for(const [id,kicker,title,text,note,action] of [
+   ['recorrido',['Recorrido 3D','3D walkthrough','三维漫游'],['Recorre tu plano en 3D','Walk through your plan in 3D','在三维中漫游你的平面'],['A la altura de los ojos, con el joystick táctil y el minimapa que marca dónde estás y hacia dónde miras.','At eye level, with the touch joystick and the minimap showing where you are and where you look.','以视线高度漫游，触控摇杆与小地图显示你的位置和朝向。'],['Vivienda de ejemplo. No cambia nada.','Example home. Nothing changes.','示例住宅。不会更改任何内容。'],['Recorrer la vivienda de ejemplo','Walk through the example home','漫游示例住宅']],
+   ['video',['Vídeo','Video','视频'],['Vídeo cinematográfico','Cinematic video','电影感视频'],['Del plano a la escena y la entrada en una estancia, grabado como MP4 desde la presentación.','From the plan to the scene and into a room, recorded as MP4 from the presentation.','从平面到场景再进入房间，从演示中录制为 MP4。'],['Fotogramas de un MP4 real de RUBIK.','Frames from a real RUBIK MP4.','来自 RUBIK 真实 MP4 的帧。'],['Ver vídeo de ejemplo','See the example video','查看示例视频']],
+   ['comparativa',['Render','Render','渲染'],['Visualización profesional','Professional visualisation','专业可视化'],['La misma cámara en RUBIK y en Blender Cycles: luz y materiales del salón con calidad de render.','The same camera in RUBIK and in Blender Cycles: living-room light and materials at render quality.','RUBIK 与 Blender Cycles 中的同一相机：客厅的光线与材料达到渲染品质。'],['Render real de Cycles · flujo actual de imágenes fijas.','Real Cycles render · current still-image workflow.','真实 Cycles 渲染 · 当前静态图像流程。'],['Ver comparativa de render','See the render comparison','查看渲染对比']],
+   ['asistente',['Asistente','Assistant','助手'],['Asistente RUBIK','RUBIK assistant','RUBIK 助手'],['Pregunta por tu proyecto y recibe la respuesta con la fuente del dato.','Ask about your project and get the answer with the source of the data.','询问你的项目，获得带数据来源的回答。'],['Consulta guiada: sin modelo de lenguaje y sin enviar nada. Ilustración editorial.','Guided query: no language model and nothing sent. Editorial illustration.','引导查询：不使用语言模型，不发送任何内容。编辑插画。'],['Probar la consulta guiada','Try the guided query','试用引导查询']],
+   ['estilos',['Render IA','AI render','AI 渲染'],['Render IA · Explora estilos','AI render · Explore styles','AI 渲染 · 探索风格'],['Parte de una vista real de tu proyecto y compara estilos sobre el mismo encuadre.','Start from a real view of your project and compare styles on the same framing.','从项目的真实视图出发，在同一构图上比较风格。'],['Vista de origen real. Variantes pendientes de ejemplos acreditados. Sin generar ni consumir créditos.','Real source view. Variants pending credited examples. No generation, no credits used.','真实源视图。变体待认证示例。不生成，不消耗额度。'],['Ver ejemplos de estilo','See style examples','查看风格示例']],
+   ['entrega',['Entregar','Deliver','交付'],['Entrega con tu firma','Delivery with your signature','带你签名的交付'],['Lámina, dossier y presentación de la misma vivienda, firmados con tu estudio.','Sheet, dossier and presentation of the same home, signed with your studio.','同一住宅的图纸、档案与演示，带你的事务所签名。'],['Firma de demostración. No publica ningún enlace.','Demo signature. No link is published.','演示签名。不会发布任何链接。'],['Ver una entrega de ejemplo','See an example delivery','查看交付示例']]]){
+   const card=el('article',undefined,demoCards,'demo-card');card.dataset.demo=id;
+   const fig=el('figure',undefined,card);realImg(fig,'assets/welcome/en-accion/'+id+'.webp',label(title),'welcome-demo-shot');
+   const body=el('div',undefined,card,'demo-card-body');el('p',label(kicker),body,'demo-card-kicker');el('h3',label(title),body);el('p',label(text),body);el('p',label(note),body,'demo-card-note');
+   const go=btn('welcomeDemo-'+id,label(action),()=>window.RubikHomeEnAccion?.open(id,go),body,true);go.classList.add('demo-card-go');}
   const PORTRAIT={architecture:'arquitectura','real-estate':'inmobiliaria',developer:'promotora',renovation:'reformas',interior:'decoracion',construction:'constructora'};
   const audienceSection=el('section',undefined,shell,'welcome-audience');audienceSection.id='welcomeAudience';
   const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
@@ -224,11 +239,17 @@
   },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));
    // Retrato del oficio (decorativo: el nombre ya está en el botón). Procedencia en la nota de la sección.
    const face=realImg(option,'assets/welcome/perfiles/'+PORTRAIT[id]+'.webp','','welcome-audience-face');face.width=40;face.height=40;option.prepend(face);}
-  el('p',tx('Retratos: imágenes generadas para ilustrar cada oficio, no son personas reales. Constructora: captura real de Evolución de obra.','Portraits: images generated to illustrate each field, not real people. Construction: real capture of the 4D build.','肖像：为说明各职业而生成的图片，并非真人。施工单位：4D 施工的真实截图。'),audienceSection,'welcome-audience-credit');
+  el('p',tx('Retratos: ilustraciones generadas para cada oficio; no son personas reales.','Portraits: illustrations generated for each field; they are not real people.','肖像：为各职业生成的插画，并非真人。'),audienceSection,'welcome-audience-credit');
   // The chosen field answers «what is it for me» and offers the same first action as the entries above.
   const purpose=el('div',undefined,audienceSection,'welcome-audience-purpose');purpose.id='welcomeAudiencePurpose';purpose.setAttribute('aria-live','polite');
   function showPurpose(){purpose.replaceChildren();purpose.hidden=!audience;if(!audience)return;
-   el('p',label(audiencePurpose[audience]),purpose);const row=el('div',undefined,purpose,'welcome-audience-actions');
+   // UX-312: retrato editorial del oficio elegido junto al resumen (se pinta con el mismo cambio que resumen, guía y
+   // soluciones). Es una ilustración, no una persona real; el pie lo dice. En el móvil va con el resumen, encima.
+   purpose.dataset.audience=audience;const fig=el('figure',undefined,purpose,'welcome-audience-portrait');
+   const face=realImg(fig,'assets/welcome/perfiles/'+PORTRAIT[audience]+'.webp',tx('Ilustración del oficio: ','Illustration of the field: ','职业插画：')+label(audiences.find(a=>a[0]===audience)?.[1]||''),'welcome-audience-portrait-img');face.width=180;face.height=180;
+   el('figcaption',tx('Ilustración','Illustration','插画'),fig);
+   const text=el('div',undefined,purpose,'welcome-audience-purpose-text');
+   el('p',label(audiencePurpose[audience]),text);const row=el('div',undefined,text,'welcome-audience-actions');
    btn('welcomeAudienceStart',tx('Empezar: subir un plano','Start: upload a plan','开始：上传平面图'),()=>document.getElementById('welcomeUpload').click(),row,true);
    btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
   showPurpose();

@@ -28,7 +28,7 @@
   toggle._label=label;label();
   toggle.onclick=()=>setOpen(card,toggle.getAttribute('aria-expanded')!=='true');
   // El botón va junto al estado: se ve sin abrir nada y no desplaza las acciones.
-  const state=card.querySelector(':scope>.professional-state, :scope .professional-state');(state||card.querySelector('h3'))?.after(toggle);
+  const state=card.querySelector(':scope>.professional-state, :scope .professional-state');(state||card.querySelector('h3,h4,h5'))?.after(toggle);
   card.append(layer);
   if(!layer.querySelector('p,dd'))toggle.hidden=true;
  }
@@ -167,8 +167,15 @@
  let pending=false;
  function apply(){pending=false;if(!deliverOpen())return;const index=$('#professionalWorkspace .professional-index');if(!index)return;
   mo.disconnect();try{compactIndex();buildCatalog(index);}finally{mo.observe(document.body,{childList:true,subtree:true});}}
- const mo=new MutationObserver(()=>{if(!pending&&deliverOpen()){pending=true;requestAnimationFrame(apply);}});
- mo.observe(document.body,{childList:true,subtree:true});
+ // Home · «Módulos para tu trabajo»: la misma ficha compacta. El detalle conserva qué es, qué no es y sus condiciones
+ // (privacidad y créditos incluidos); estado, título, acción y el aviso que condiciona la acción siguen a la vista.
+ let homePending=false;
+ function compactHome(){homePending=false;const lis=$$('.welcome-modules-grid > li.ai-service:not([data-perla-compact])');if(!lis.length)return;
+  mo.disconnect();try{for(const li of lis){const more=li.querySelector(':scope>.ai-service-more');const details=[li.querySelector(':scope>.ai-service-what'),...(more?$$(':scope>p',more):[])].filter(Boolean);
+   compact(li,{details});if(more)more.hidden=true;}}finally{mo.observe(document.body,{childList:true,subtree:true});}}
+ const mo=new MutationObserver(()=>{if(!pending&&deliverOpen()){pending=true;requestAnimationFrame(apply);}
+  if(!homePending&&document.querySelector('.welcome-modules-grid > li.ai-service:not([data-perla-compact])')){homePending=true;requestAnimationFrame(compactHome);}});
+ mo.observe(document.body,{childList:true,subtree:true});compactHome();
  // Al volver de un diálogo el foco regresa a la ficha del catálogo; si Entregar se repintó, se recupera por id.
  let launched=null;
  document.addEventListener('close',()=>setTimeout(()=>{if(!deliverOpen()||!catOpen||!catFocus)return;if(document.querySelector('dialog[open]'))return;

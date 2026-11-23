@@ -255,3 +255,24 @@ body.perla .perla-assistant-slot #assistantOpen{display:inline-flex;align-items:
   body.perla .perla-utils .perla-studio::before{margin:0!important}
   body.perla .perla-assistant-slot #assistantOpen{padding:0 8px;font-size:12px}
 }
+/* 3D: las capas del plano son solo 2D (como su menú original, .only2d) y la barra del lienzo deja libre la
+   pastilla de navegación 3D (#nav3d, arriba a la izquierda) */
+body.perla.m3d .perla-canvas-top>[data-layer]{display:none!important}
+body.perla.m3d .perla-canvas-top{left:auto;right:12px;justify-content:flex-end;max-width:calc(100% - 160px)}
+body.perla.m3d #stage>#solarNorth{top:auto;bottom:64px}
+/* Teléfono en 3D: la barra de escena es UNA fila desplazable (no tapa la escena); «Presentar» sigue en la fila 2 */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla.m3d .perla-canvas-top{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 150px);top:8px}
+  body.perla.m3d .perla-canvas-top>*{flex:none}
+  body.perla .perla-r2 #presentationBtn{position:static!important;left:auto!important;bottom:auto!important;transform:none!important}
+}
+@media (max-width:1100px) and (max-height:500px){body.perla .perla-project{max-width:84px}}
+/* Zoom, Ajustar, 1:60 / 1:100 y barra de escala son del plano (su grupo original era .only2d) */
+body.perla.m3d .perla-canvas-bottom{display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.m3d .perla-canvas-top{justify-content:flex-start}}
+/* Paseo 3D (joystick visible): la vista queda despejada; la barra inferior se pliega a la izquierda del minimapa */
+body.perla.perla-walking .perla-canvas-top{display:none!important}
+body.perla.perla-walking #stage>#mobileDock{right:auto;left:50%;transform:translateX(-50%)}
+@media (max-width:760px){body.perla.perla-walking #stage>#mobileDock{left:0;transform:none}}
+/* Presentación: las barras del lienzo del editor se retiran (antes vivían en la cabecera, que la presentación oculta) */
+body.perla.presenting .perla-canvas-top,body.perla.presenting .perla-canvas-bottom,body.perla.presenting #stage>#mobileDock{display:none!important}
