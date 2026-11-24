@@ -182,9 +182,11 @@
  }
  // Retirar/restaurar tabiques: mismo modo `demolish` (V/M/X), con nombre que explica ambas direcciones.
  const demo=$('#paletteBuild [data-tool="demolish"], #paletteBuild [data-palette-tool="demolish"]');
- const demoName=()=>{const b=demo||$$('#paletteBuild button').find(x=>/Modificar muros|Demolish|拆改墙体|Retirar tabique/.test(x.textContent));if(!b)return;const lab=[...b.querySelectorAll('span,b')].find(s=>/Modificar muros|Demolish|拆改墙体|Retirar tabique/.test(s.textContent))||b;
-  if(lab===b){b.lastChild&&(b.lastChild.textContent=tx('Retirar tabique','Remove partition','拆除隔墙'));}else lab.textContent=tx('Retirar tabique','Remove partition','拆除隔墙');
-  b.title=tx('Retirar o restaurar tabiques no portantes (X). Pulsa un tabique para retirarlo; pulsa uno retirado para restaurarlo.','Remove or restore non-bearing partitions (X). Press a partition to remove it; press a removed one to restore it.','拆除或恢复非承重隔墙 (X)。');};
+ const demoName=()=>{const re=/Modificar muros|Demolish|拆改墙体|Retirar tabique|Remove partition|拆除隔墙/;
+  const b=(demo?.isConnected&&demo)||$('#paletteBuild [data-tool="demolish"], #paletteBuild [data-palette-tool="demolish"]')||$$('#paletteBuild button').find(x=>re.test(x.textContent));if(!b)return;
+  const lab=[...b.querySelectorAll('span,b')].find(s=>re.test(s.textContent))||b,name=tx('Retirar tabique','Remove partition','拆除隔墙');
+  if(lab===b){if(b.lastChild&&b.lastChild.textContent!==name)b.lastChild.textContent=name;}else if(lab.textContent!==name)lab.textContent=name;
+  const t=tx('Retirar o restaurar tabiques no portantes (X). Pulsa un tabique para retirarlo; pulsa uno retirado para restaurarlo.','Remove or restore non-bearing partitions (X). Press a partition to remove it; press a removed one to restore it.','拆除或恢复非承重隔墙 (X)。');if(b.title!==t)b.title=t;};
  // Idioma: re-etiquetar al cambiar (el resto de la app traduce sus propios textos).
  // Cabecera: etiquetas propias de PERLA y textos de controles trasladados que su módulo solo pinta al crearlos. Igual que
  // una carga nueva en ese idioma (tests/language-home-navigation compara ambos estados).
@@ -204,7 +206,7 @@
   set('openSheet','Abrir lámina','Open sheet','打开图纸');
  }
  // Idioma: se repinta cuando la app cambia <html lang> (cualquier vía: selector, atajo, carga), no solo con #langBtn.
- new MutationObserver(()=>setTimeout(()=>{paintTexts();demoName();paintHeader();setTimeout(paintHeader,120);},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ new MutationObserver(()=>setTimeout(()=>{paintTexts();demoName();paintHeader();setTimeout(()=>{paintHeader();demoName();},120);},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
  // Paseo 3D: mientras el joystick está a la vista, la barra de escena no tapa la vista y la inferior deja libre el minimapa.
  const joy=$('#joy');if(joy){const walk=()=>document.body.classList.toggle('perla-walking',joy.getClientRects().length>0&&getComputedStyle(joy).visibility!=='hidden');
   new MutationObserver(walk).observe(joy,{attributes:true});new MutationObserver(walk).observe(document.body,{attributes:true,attributeFilter:['class']});}
@@ -225,6 +227,8 @@
  const placeFullTools=()=>{if(compactTools.matches)morePop.append(keep);else header.append(keep);};
  placeFullTools();compactTools.addEventListener('change',placeFullTools);
  setGuide(false,{focus:false});paintTexts();demoName();paintHeader();
+ // La paleta se reconstruye al cambiar de idioma o de pestaña: «Retirar tabique» vuelve a nombrarse cuando su botón cambia.
+ const pb=$('#paletteBuild');if(pb){let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;demoName();});}).observe(pb,{childList:true,subtree:true,attributes:true,attributeFilter:['title']});}
  // El dibujo vuelve a encajar en el lienzo reorganizado (mismo «Ajustar» del visor, sin cambiar el proyecto).
  requestAnimationFrame(()=>$('#fit')?.click());
  addEventListener('load',()=>{paneIcons();dispatchEvent(new Event('resize'));});
