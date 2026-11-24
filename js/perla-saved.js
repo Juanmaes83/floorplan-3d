@@ -13,10 +13,11 @@
   try{const r=set.call(this,k,v);state='saved';at=new Date();paint();return r;}catch(e){state='error';paint();throw e;}};
  function text(){if(state==='error')return tx('Cambios sin guardar','Unsaved changes','未保存的更改');
   if(state==='saved'&&!at)return tx('✓ Guardado','✓ Saved','✓ 已保存');
-  if(state==='saved'){const hh=String(at.getHours()).padStart(2,'0'),mm=String(at.getMinutes()).padStart(2,'0');return tx(`✓ Guardado · ${hh}:${mm}`,`✓ Saved · ${hh}:${mm}`,`✓ 已保存 · ${hh}:${mm}`);}
+  if(state==='saved')return tx('✓ Guardado','✓ Saved','✓ 已保存');
   return '';}
  function chip(){const c=document.createElement('span');c.className='perla-saved';c.setAttribute('role','status');c.setAttribute('aria-live','polite');chips.add(c);return c;}
  function paint(){const t=text(),title=tx('Se guarda solo en este navegador al hacer cada cambio.','Saved automatically in this browser with every change.','每次更改都会自动保存在此浏览器中。');
+  // Sin hora: el aviso es un estado estable («✓ Guardado» / «Cambios sin guardar»), igual tras recargar o cambiar de idioma.
   for(const c of chips){if(!c.isConnected){chips.delete(c);continue;}c.textContent=t;c.dataset.state=state||'';c.hidden=!t;c.title=title;}}
  let editorChip=null;
  function place(){

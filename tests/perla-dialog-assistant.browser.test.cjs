@@ -21,12 +21,12 @@ test(`U9 el Asistente no tapa controles de los diálogos ${viewport.width}x${vie
  for(const [a,r] of [['analyze','territory'],['budget','budget-edit'],['deliver','dossier'],['analyze','site-report']]){
   await page.evaluate(()=>{for(const d of document.querySelectorAll('dialog[open]'))d.close();});await page.evaluate(a=>FloorPlanProfessionalUI.open(a),a);await page.waitForTimeout(400);
   const b=page.locator(`#professionalWorkspace [data-route="${r}"]:visible`).first();await b.scrollIntoViewIfNeeded();await b.tap();await page.waitForTimeout(900);
-  const covered=await page.evaluate(async()=>{const d=[...document.querySelectorAll('dialog[open]')].filter(x=>x.id!=='assistantHost').pop();if(!d)return ['sin diálogo'];const acc=document.querySelector('#assistantAccess'),hits=new Set();
-   const box=[d,...d.querySelectorAll('*')].find(e=>e.scrollHeight>e.clientHeight+4&&/auto|scroll/.test(getComputedStyle(e).overflowY))||d;
-   for(let y=0;y<=box.scrollHeight;y+=60){box.scrollTop=y;await new Promise(r=>requestAnimationFrame(r));
-    for(const c of d.querySelectorAll('button,a[href],input,select,summary')){if(acc?.contains(c)||!c.checkVisibility())continue;const q=c.getBoundingClientRect();if(q.width<2||q.bottom<0||q.top>innerHeight)continue;
-     if(document.elementFromPoint(q.left+q.width/2,Math.min(innerHeight-1,q.top+q.height/2))===acc)hits.add((c.textContent||c.id).trim().slice(0,30)||c.tagName);}}
-   return [...hits];});
+  // Cada control del diálogo debe poder verse ENTERO y sin tapar al llevarlo a la vista (el acceso es un pie, no un flotante).
+  const covered=await page.evaluate(async()=>{const d=[...document.querySelectorAll('dialog[open]')].filter(x=>x.id!=='assistantHost').pop();if(!d)return ['sin diálogo'];const acc=document.querySelector('#assistantAccess'),bad=[];
+   for(const c of d.querySelectorAll('button,a[href],input,select,summary')){if(acc?.contains(c)||!c.checkVisibility())continue;c.scrollIntoView({block:'center'});await new Promise(r=>requestAnimationFrame(r));
+    const q=c.getBoundingClientRect();if(q.width<2||q.height<2)continue;const pts=[[q.left+q.width/2,q.top+q.height/2],[q.left+3,q.top+3],[q.right-3,q.bottom-3]];
+    if(pts.some(([x,y])=>document.elementFromPoint(Math.min(innerWidth-1,x),Math.min(innerHeight-1,y))===acc))bad.push((c.textContent||c.id).trim().slice(0,30)||c.tagName);}
+   return bad;});
   assert.deepEqual(covered,[],`${a}/${r}: ningún control tapado por «Asistente»`);
  }
 });

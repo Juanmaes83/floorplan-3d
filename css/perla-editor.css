@@ -519,10 +519,11 @@ body.perla #mobileDock>#editHistory :is(#undo,#redo){min-height:52px!important;b
 body.perla .perla-r2>#perlaReturn{order:-10!important;flex:0 0 auto;min-height:40px;padding:0 14px;border:1px solid var(--perla-wine,#7a2e45);color:var(--perla-wine,#7a2e45);background:#fff;font-weight:600;border-radius:10px;white-space:nowrap}
 body.perla .perla-r2>#perlaReturn:hover{background:#faf3f5}
 body.perla .perla-r2>#perlaReturn[hidden]{display:none!important}
-/* UX-312 PERLA · U9: en el móvil el acceso «Asistente» de un diálogo va EN FLUJO al final (sin sticky): nunca tapa contenido
-   ni botones del diálogo al desplazarse. En escritorio sigue fijo abajo, donde hay espacio. */
+/* UX-312 PERLA · U9: en el móvil el acceso «Asistente» de un diálogo es una BARRA INFERIOR a todo el ancho (fondo propio):
+   sigue a la vista sin desplazar (contrato E2) y el contenido pasa por debajo como en cualquier pie de diálogo, en vez de
+   que una píldora flotante tape a medias los botones de al lado. */
 @media (max-width:760px),(max-width:1100px) and (max-height:500px){
-  dialog #assistantAccess{position:static!important;margin:12px 0 4px auto!important}
+  dialog #assistantAccess{width:auto!important;max-width:none!important;margin:8px 0 0!important;padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex!important;justify-content:center;background:#fff;border-top:1px solid #e6dde0;bottom:0!important}
 }
 /* UX-312 PERLA · U9 aviso «Guardado»: estado discreto con color + texto (no solo color). */
 .perla-saved{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:#e9f5ee;color:#1d6b3f;border:1px solid #b9dcc6}

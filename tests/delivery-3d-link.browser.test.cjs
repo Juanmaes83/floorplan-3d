@@ -42,7 +42,7 @@ test('a separate browser opens the published 3D visit and revocation removes bot
  const professional=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>professional.close());await route(professional);
  const page=await professional.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(url);await page.locator('#welcomeExample').click();await page.locator('#workArea-deliver').click();
- await abrirFicha(page,'P7');await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();
+ await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;
  const dialog=page.locator('#shareLinkDialog');await dialog.locator('#shareLink3d').check();await dialog.locator('#shareLinkAgree').check();
  await dialog.locator('#shareLinkToken').fill(CODE);await dialog.locator('#shareLinkGo').click();await dialog.locator('#shareLinkUrl').waitFor();
  const link=await dialog.locator('#shareLinkUrl').inputValue();assert.equal(store.size,2);

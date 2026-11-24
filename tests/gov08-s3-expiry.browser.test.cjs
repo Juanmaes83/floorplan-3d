@@ -44,8 +44,8 @@ async function rig(viewport){
 }
 async function openDialog(page){
  if(await page.locator('#shareLinkDialog[open]').count())await page.locator('#shareLinkClose').click();
- await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');// UX-312 PERLA: con el panel de la ficha abierto, la acción está en la ficha y en su panel (mismo control real); se pulsa la primera.
- await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).first().click();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');// UX-312 PERLA: con el panel de la ficha abierto se pulsa la acción del panel (mismo control real que la ficha).
+ await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;
  const d=page.locator('#shareLinkDialog');await d.waitFor();return d;
 }
 
