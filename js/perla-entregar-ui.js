@@ -227,6 +227,9 @@
  function bpdpTile(card){const m=card.id.replace('bpdpCard-','');const b=BPDP[m];if(!b)return;card.dataset.entregaCode=b[0];card.classList.add('perla-tile');
   if(!card.querySelector(':scope>.thumb')){const th=el('div','thumb',null);const i=el('img',undefined,th);i.src=b[1];i.alt='';i.loading='lazy';el('span','code',th,b[0]);card.prepend(th);}
   tile(card);}
+ document.addEventListener('rubik:bpdp-card-rendered',e=>{
+  if(deliverOpen()&&e.target.matches('#professionalWorkspace .professional-index .bpdp-card'))bpdpTile(e.target);
+ });
  function groupHeads(index){for(const g of $$(':scope>.professional-delivery-group',index)){const s=GROUP_SUB[g.dataset.group];if(!s)continue;
   let p=g.querySelector(':scope>.perla-group-sub');if(!p){p=el('p','perla-group-sub',null);(g.querySelector(':scope>.professional-count')||g.querySelector('h2'))?.after(p);}const t=T(s);if(p.textContent!==t)p.textContent=t;}}
  const HERO_NAMES={D1:['ficha','area schedule','面积表'],D2:['lámina','sheet','图纸'],P1:['presentación 3D','3D presentation','三维演示'],P5:['material board','material board','材料板'],P7:['archivo para tu cliente','client file','客户文件'],P2:['imágenes','images','图像'],D3:['dossier del proyecto','project dossier','项目档案'],S1:['precios del presupuesto','budget prices','预算价格'],P4:['plan de obra','construction plan','施工计划']};

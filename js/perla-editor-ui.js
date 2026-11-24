@@ -71,7 +71,8 @@
  {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
  move('#uploadCancel',r2);
  const fileMenu=$$('header details.menu').find(d=>d.querySelector('#exportPng'));
- if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');const pop=fileMenu.querySelector('.menu-pop');const q=$('#exportJsonQuick');if(q&&pop)pop.insertBefore(q,$('#exportJson')?.nextSibling||null);}
+ if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');}
+ move('#exportJsonQuick',r2);
  const view=move('#viewSeg',r2);
  move('#levelBar',r2);move('#levelStatus',r2);
  el('span',{class:'perla-break','aria-hidden':'true'},r2);

@@ -115,7 +115,7 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
     await opener.click();
     await page.locator('dialog.bpdp-host[open]').waitFor();
     await page.keyboard.press('Escape');
-    await page.waitForFunction(() => !BpdpEntregar.abierta);
+    await page.waitForFunction(id => !BpdpEntregar.abierta && window.BPDP === null && document.activeElement?.id === id, 'bpdpOpen-' + module, { timeout: 5000 });
     assert.equal(await opener.evaluate(el => el === document.activeElement), true);
   }
   assert.equal(await page.evaluate(() => JSON.stringify(FloorPlanApp.project)), before);

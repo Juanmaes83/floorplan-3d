@@ -194,7 +194,12 @@ function pintarTarjeta(c, modulo) {
 }
 // Repintar una tarjeta (estado de sus salidas) conserva el foco del profesional en el mismo botón.
 function refrescarTarjetas() { const foco = document.activeElement?.id || null, esperas = [];
-  for (const [c, m] of [...tarjetas]) if (c.isConnected) { pintarTarjeta(c, m); esperas.push(c.listo); } else tarjetas.delete(c);
+  for (const [c, m] of [...tarjetas]) {
+    if (!c.isConnected) { tarjetas.delete(c); continue; }
+    pintarTarjeta(c, m);
+    c.dispatchEvent(new Event('rubik:bpdp-card-rendered', { bubbles: true }));
+    esperas.push(c.listo);
+  }
   if (foco && document.activeElement?.id !== foco) document.getElementById(foco)?.focus({ preventScroll: true });
   return Promise.all(esperas); }
 export function card(container, modulo) {
