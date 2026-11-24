@@ -188,9 +188,9 @@ function pintarTarjeta(c, modulo) {
     try { await activar3D(); await refrescarTarjetas(); document.getElementById(`bpdpOpen-${modulo}`)?.focus(); }
     catch (error) { fallo(error); button.disabled = false; button.focus(); }
   }); return; }
-  btn(`bpdpOpen-${modulo}`, M.abrir, e => abrir(modulo, { origen: e.currentTarget }).catch(fallo));
-  btn(`bpdpSheet-${modulo}`, 'Previsualizar lámina', e => abrir(modulo, { origen: e.currentTarget, accion: 'lamina' }).catch(fallo));
-  btn(`bpdpVideo-${modulo}`, 'Preparar vídeo', e => abrir(modulo, { origen: e.currentTarget, accion: 'video' }).catch(fallo));
+  btn(`bpdpOpen-${modulo}`, M.abrir, e => abrir(modulo, { origen: e.currentTarget.perlaActionOrigin || e.currentTarget }).catch(fallo));
+  btn(`bpdpSheet-${modulo}`, 'Previsualizar lámina', e => abrir(modulo, { origen: e.currentTarget.perlaActionOrigin || e.currentTarget, accion: 'lamina' }).catch(fallo));
+  btn(`bpdpVideo-${modulo}`, 'Preparar vídeo', e => abrir(modulo, { origen: e.currentTarget.perlaActionOrigin || e.currentTarget, accion: 'video' }).catch(fallo));
 }
 // Repintar una tarjeta (estado de sus salidas) conserva el foco del profesional en el mismo botón.
 function refrescarTarjetas() { const foco = document.activeElement?.id || null, esperas = [];

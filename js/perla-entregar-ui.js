@@ -260,7 +260,10 @@
   const f=el('div','panel-f');const acts=actionsOf(card);acts.sort((a,c)=>(c.classList.contains('perla-go')?1:0)-(a.classList.contains('perla-go')?1:0));
   for(const a of acts){const mb=el('button','btn'+(a.classList.contains('perla-go')?' primary':''),f,a.textContent.trim());mb.type='button';mb.disabled=!!a.disabled;mb.dataset.perlaMirror=a.dataset.route||a.id||'';
    // En teléfono y tableta la hoja se cierra antes de lanzar la acción (no queda un velo encima); al volver, foco en la ficha.
-   mb.onclick=()=>{lastMirror={text:mb.textContent,route:mb.dataset.perlaMirror};if(narrow()){returnCard=card;closePanel(false);}a.click();};}
+   mb.onclick=()=>{lastMirror={text:mb.textContent,route:mb.dataset.perlaMirror};if(narrow()){returnCard=card;closePanel(false);}
+   a.perlaActionOrigin=narrow()?card.querySelector('.perla-card-selector'):mb;
+   try{a.click();}finally{delete a.perlaActionOrigin;}
+  };}
   p.replaceChildren(head,b,f);p.setAttribute('aria-labelledby','perlaPanelT');p.tabIndex=-1;p.hidden=false;p.classList.add('perla-panel-open');
   const v=velo();if(v)v.hidden=!narrow();p.focus({preventScroll:true});if(!narrow())p.scrollIntoView({block:'nearest'});}
  function closePanel(focus){const p=deskPanel(),c=selCard;selCard=null;lastMirror=null;pressed();if(p){emptyPanel(p);p.classList.remove('perla-panel-open');}const v=velo();if(v)v.hidden=true;

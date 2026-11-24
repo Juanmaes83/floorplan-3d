@@ -98,7 +98,7 @@ const projectHash = page => page.evaluate(async () => { const s = v => Array.isA
 // Mismo origen: área, foco, desplazamiento y diálogo idénticos; posición en pantalla del control con ±1 px (redondeo subpíxel).
 const mismoOrigen = (a, b, msg) => { const { top: ta, ...ra } = a, { top: tb, ...rb } = b; assert.deepEqual(ra, rb, msg); assert.ok(Math.abs(ta - tb) <= 1, `${msg}: posición ${tb} → ${ta}`); };
 const origin = page => page.evaluate(() => { const ws = document.getElementById('professionalWorkspace'); const sc = [...ws.querySelectorAll('*')].filter(n => n.scrollHeight > n.clientHeight + 1).map(n => n.scrollTop);
-  return { area: FloorPlanProfessionalUI.area, focus: document.activeElement?.id, top: Math.round(document.activeElement?.getBoundingClientRect().top ?? -1), scroll: [document.scrollingElement.scrollTop, ws.scrollTop, ...sc], open: !!document.querySelector('dialog.bpdp-host') }; });
+  return { area: FloorPlanProfessionalUI.area, focus: (document.activeElement?.dataset.perlaMirror || document.activeElement?.id), top: Math.round(document.activeElement?.getBoundingClientRect().top ?? -1), scroll: [document.scrollingElement.scrollTop, ws.scrollTop, ...sc], open: !!document.querySelector('dialog.bpdp-host') }; });
 
 test('Entregar · ambos visores en la ruta normal y diagnóstico por módulo', { timeout: 300000 }, async t => {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); t.after(() => ctx.close()); const page = await ctx.newPage(); page.setDefaultTimeout(240000);
@@ -107,6 +107,15 @@ test('Entregar · ambos visores en la ruta normal y diagnóstico por módulo', {
   await entregar(page, 'despiece'); assert.equal(await page.locator('#bpdpCard-despiece').count(), 1); assert.equal(await page.locator('#bpdpCard-blueprint').count(), 0, 'cada módulo se activa por separado');
 });
 
+async function deliveryAction(page, id) {
+  const original = page.locator('#' + id);
+  if (await original.isVisible()) return original;
+  const panel = page.locator('.perla-panel-open');
+  const action = panel.locator('[data-perla-mirror="' + id + '"]');
+  if (!(await action.isVisible())) await original.locator('xpath=ancestor::article[1]').locator('.perla-card-selector').click();
+  return action;
+}
+
 for (const mod of ['blueprint', 'despiece']) {
   test(`Entregar · ${mod}: tarjeta → lámina real → retorno exacto a la tarjeta; Escape por pasos; proyecto intacto`, { timeout: 900000 }, async t => {
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, acceptDownloads: true, reducedMotion: 'reduce' }); t.after(() => ctx.close());
@@ -114,20 +123,23 @@ for (const mod of ['blueprint', 'despiece']) {
     await entregar(page); const card = page.locator(`#bpdpCard-${mod}`); await card.scrollIntoViewIfNeeded();
     const state = await card.locator('.professional-state').innerText(); assert.match(state, /Lámina PNG A3/); assert.match(state, /Vídeo MP4/); assert.match(state, /Firma:/);
     await page.screenshot({ path: path.join(OUT, `entregar-tarjeta-${mod}.png`) });
-    const h0 = await projectHash(page); await page.focus(`#bpdpSheet-${mod}`); const o0 = await origin(page);
+    const h0 = await projectHash(page); const sheetAction = await deliveryAction(page, `bpdpSheet-${mod}`); await sheetAction.focus(); const o0 = await origin(page);
     // Previsualizar lámina → descarga real → cerrar → vuelve a la tarjeta y al paso de origen.
-    await page.click(`#bpdpSheet-${mod}`); await page.waitForSelector('dialog.bpdp-host .modal img'); await page.waitForFunction(() => document.querySelector('dialog.bpdp-host .modal')?.dataset.vigente === 'true');
+    await sheetAction.click(); await page.waitForSelector('dialog.bpdp-host .modal img'); await page.waitForFunction(() => document.querySelector('dialog.bpdp-host .modal')?.dataset.vigente === 'true');
     const meta = await page.evaluate(() => ({ sub: document.querySelector('dialog.bpdp-host .modal .sub').innerText, vig: document.querySelector('dialog.bpdp-host .modal .vigencia').innerText }));
     assert.match(meta.sub, /A3/); assert.match(meta.vig, /Vigente · revisión/);
     await page.screenshot({ path: path.join(OUT, `entregar-lamina-${mod}.png`) }); assert.deepEqual(await overlaps(page), []);
     const [dl] = await Promise.all([page.waitForEvent('download'), page.click('dialog.bpdp-host .modal [data-a="dl"]')]); const f = path.join(OUT, `entregar-lamina-${mod}.png`.replace('.png', '-descargada.png')); await dl.saveAs(f);
     const buf = fs.readFileSync(f); assert.equal(buf.slice(1, 4).toString(), 'PNG'); assert.equal(buf.readUInt32BE(16), 3307); assert.equal(buf.readUInt32BE(20), 2339);
-    await page.click('dialog.bpdp-host .modal [data-a="close"]'); await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host'));
+    await page.click('dialog.bpdp-host .modal [data-a="close"]'); await page.waitForFunction(() => window.BPDP === null);
     const o1 = await origin(page); mismoOrigen(o1, o0, 'retorno exacto: área, foco, desplazamiento');
     // Abrir la experiencia y salir con Escape: un paso atrás cada vez hasta volver a la tarjeta.
+    const panelClose = page.locator('.perla-panel-open .panel-x');
+    if (await panelClose.isVisible()) await panelClose.click();
     await page.focus(`#bpdpOpen-${mod}`); const o2 = await origin(page); await page.click(`#bpdpOpen-${mod}`); await page.waitForFunction(() => !!window.BPDP?.studio);
     if (mod === 'blueprint') { await page.evaluate(() => BPDP.app.setIntent('measure')); await page.keyboard.press('Escape'); assert.equal(await page.evaluate(() => BPDP.app.state.intent), 'clean', 'Escape sale primero de la intención'); }
-    await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host'));
+    await page.keyboard.press('Escape'); await page.waitForFunction(() => window.BPDP === null);
+    await page.waitForFunction(id => document.activeElement?.id === id, `bpdpOpen-${mod}`, { timeout: 5000 });
     mismoOrigen(await origin(page), o2, 'Escape devuelve a la tarjeta de origen');
     assert.equal(await projectHash(page), h0, 'el proyecto no cambia'); assert.deepEqual(errors, []);
   });
@@ -141,14 +153,14 @@ test('Entregar · vídeo real con firma de «Mi estudio», reproducido y descarg
   await page.evaluate(() => { const s = FloorPlanBrandUI.store, p = FloorPlanBrand.saveProfile(s, { name: 'Estudio Prueba BP-DP', tagline: 'Arquitectura clara', cta: 'Pide cita', web: 'https://estudio-prueba.es' });
     FloorPlanBrand.setDelivery(s, FloorPlanApp.entryId, { profileId: p.id, title: 'Vivienda de ejemplo', hero: { cliente: 'Cliente sin autorizar', clienteAutorizado: false, cierre: '', estilo: 'cine', incluirWeb: true } }); });
   // Cancelar durante la preparación del vídeo de Blueprint: vuelve a la tarjeta, sin salida.
-  await page.focus('#bpdpVideo-blueprint'); const o0 = await origin(page);
-  await page.click('#bpdpVideo-blueprint'); await page.waitForSelector('dialog.bpdp-host .modal [data-a="cancel"]'); await page.waitForTimeout(1500); await page.click('dialog.bpdp-host .modal [data-a="cancel"]');
-  await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host')); { const o1 = await origin(page);
+  const cancelAction = await deliveryAction(page, 'bpdpVideo-blueprint'); await cancelAction.focus(); const o0 = await origin(page);
+  await cancelAction.click(); await page.waitForSelector('dialog.bpdp-host .modal [data-a="cancel"]'); await page.waitForTimeout(1500); await page.click('dialog.bpdp-host .modal [data-a="cancel"]');
+  await page.waitForFunction(() => window.BPDP === null); { const o1 = await origin(page);
     // La firma cambió mientras Entregar estaba abierto: lo que se exige es volver a la MISMA tarjeta, en la misma posición de pantalla.
     assert.deepEqual({ area: o1.area, focus: o1.focus, open: o1.open }, { area: o0.area, focus: o0.focus, open: o0.open }, 'cancelar vuelve a la tarjeta');
     assert.ok(Math.abs(o1.top - o0.top) <= 1, `misma posición en pantalla (±1 px de redondeo subpíxel): ${o0.top} → ${o1.top}`); }
   // Vídeo completo de Despiece.
-  await page.click('#bpdpVideo-despiece'); await page.waitForSelector('dialog.bpdp-host .modal video', { timeout: 1500000 });
+  await (await deliveryAction(page, 'bpdpVideo-despiece')).click(); await page.waitForSelector('dialog.bpdp-host .modal video', { timeout: 1500000 });
   const r = await page.evaluate(async () => { const m = document.querySelector('dialog.bpdp-host .modal'), v = m.querySelector('video'); await new Promise(res => v.readyState >= 1 ? res() : (v.onloadedmetadata = res)); v.muted = true; await v.play(); await new Promise(res => setTimeout(res, 800)); v.pause();
     const played = [...new Uint8Array(await crypto.subtle.digest('SHA-256', await (await fetch(v.src)).arrayBuffer()))].map(x => x.toString(16).padStart(2, '0')).join('');
     return { played, playedTo: v.currentTime, duration: v.duration, meta: m.querySelector('.meta').innerText, vig: m.querySelector('.vigencia').innerText, firma: window.__bpdpLastVideo.firma, revision: window.__bpdpLastVideo.revision }; });
@@ -162,8 +174,8 @@ test('Entregar · vídeo real con firma de «Mi estudio», reproducido y descarg
   assert.ok(Math.abs(p.duration - r.duration) < .05);
   // Extraer el último fotograma (firma) para revisión.
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-sseof', '-0.3', '-i', file, '-frames:v', '1', '-q:v', '2', path.join(OUT, 'entregar-video-despiece-firma.jpg')]);
-  await page.click('dialog.bpdp-host .modal [data-a="close"]'); await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host'));
-  assert.equal(await page.evaluate(() => document.activeElement?.id), 'bpdpVideo-despiece'); assert.deepEqual(errors, []);
+  await page.click('dialog.bpdp-host .modal [data-a="close"]'); await page.waitForFunction(() => window.BPDP === null);
+  assert.equal(await page.evaluate(() => document.activeElement?.dataset.perlaMirror || document.activeElement?.id), 'bpdpVideo-despiece'); assert.deepEqual(errors, []);
 });
 
 test('Vigencia con el proyecto abierto: cambio de revisión, salida obsoleta bloqueada, vuelta a vigente', { timeout: 900000 }, async t => {
@@ -185,7 +197,7 @@ test('Vigencia con el proyecto abierto: cambio de revisión, salida obsoleta blo
   // El proyecto vuelve a su revisión: la lámina vuelve a ser vigente.
   await page.evaluate(n => { FloorPlanApp.project.name = n; }, name0);
   await page.evaluate(() => BPDP.app.makeSheet()); await page.waitForFunction(() => document.querySelector('dialog.bpdp-host .modal')?.dataset.vigente === 'true');
-  await page.keyboard.press('Escape'); await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host'));
+  await page.keyboard.press('Escape'); await page.keyboard.press('Escape'); await page.waitForFunction(() => window.BPDP === null);
   assert.deepEqual(errors, []);
 });
 
@@ -210,7 +222,7 @@ test('Firma con el almacén de marca de RUBIK: borrador, Escape, Aplicar y foco'
   assert.equal(d1.profileId, pid); assert.equal(d1.title, 'Vivienda firmada'); assert.equal(d1.hero.clienteAutorizado, false); assert.equal(d1.hero.incluirWeb, false);
   const f = await page.evaluate(() => ({ estudio: BPDP.app.firma.estudio, para: BPDP.app.firma.para, web: BPDP.app.firma.web, titulo: BPDP.app.firma.titulo, focus: document.activeElement?.dataset?.a }));
   assert.deepEqual(f, { estudio: 'Estudio Marca RUBIK', para: null, web: null, titulo: 'Vivienda firmada', focus: 'firma' });
-  await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host')); assert.deepEqual(errors, []);
+  await page.keyboard.press('Escape'); await page.waitForFunction(() => window.BPDP === null); assert.deepEqual(errors, []);
 });
 
 test('Recursos: coste del contexto WebGL adicional, fluidez y liberación (3 ciclos)', { timeout: 900000 }, async t => {
@@ -230,7 +242,7 @@ test('Recursos: coste del contexto WebGL adicional, fluidez y liberación (3 cic
       else { BPDP.app.setIntent('present'); await new Promise(r => setTimeout(r, 3000)); BPDP.app.setIntent('clean'); }
       const ms = performance.now() - t0, n = S.stats().frames - n0, ft = S.stats().frameTimes.slice(-Math.max(1, n)).sort((a, b) => a - b);
       return { renders: n, fps: +(n / (ms / 1000)).toFixed(1), p50: ft[Math.floor(ft.length * .5)], p95: ft[Math.floor(ft.length * .95)], gl: S.stats().drawCalls }; }, mod);
-    await page.evaluate(() => BPDP.close()); await page.waitForFunction(() => !document.querySelector('dialog.bpdp-host'));
+    await page.evaluate(() => BPDP.close()); await page.waitForFunction(() => window.BPDP === null);
     const afterC = await probe(); cycles.push({ cycle: i + 1, mod, firstFrameMs: firstFrame, openedMs: null, during, fps, after: afterC });
   }
   const last = cycles[cycles.length - 1].after;
