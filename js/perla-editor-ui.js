@@ -224,7 +224,13 @@
  let wasArea=document.body.classList.contains('professional-area');
  new MutationObserver(()=>{const now=document.body.classList.contains('professional-area');if(now!==wasArea){wasArea=now;paneIcons();}}).observe(document.body,{attributes:true,attributeFilter:['class']});
  const compactTools=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
- const placeFullTools=()=>{if(compactTools.matches)morePop.append(keep);else header.append(keep);};
+ // Deshacer / Rehacer: en teléfono y horizontal, a la vista en la barra del lienzo (antes solo dentro de «⋯»); en
+ // escritorio, en la fila 1. Mismo control (#editHistory, #undo, #redo) y mismo efecto.
+ const histNode=$('#editHistory'),histHome=histNode?.parentElement,histNext=histNode?.nextSibling;
+ const placeHistory=()=>{const top=$('.perla-canvas-top');if(!histNode||!top)return;
+  if(compactTools.matches){if(histNode.parentElement!==top)top.append(histNode);}
+  else if(histHome&&histNode.parentElement!==histHome)histHome.insertBefore(histNode,histNext&&histNext.parentElement===histHome?histNext:null);};
+ const placeFullTools=()=>{if(compactTools.matches)morePop.append(keep);else header.append(keep);placeHistory();};
  placeFullTools();compactTools.addEventListener('change',placeFullTools);
  setGuide(false,{focus:false});paintTexts();demoName();paintHeader();
  // La paleta se reconstruye al cambiar de idioma o de pestaña: «Retirar tabique» vuelve a nombrarse cuando su botón cambia.

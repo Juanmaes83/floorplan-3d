@@ -451,7 +451,7 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
  body.perla .perla-utils #actionSearchBtn svg,body.perla .perla-utils .perla-studio svg{flex:none}
 }
 /* Teléfono estrecho (≤380 px): el chip del proyecto conserva un nombre legible y las cuatro áreas caben sin cortar. */
-@media (max-width:380px){
+@media (max-width:420px){
  body.perla .perla-left>.perla-project{min-width:60px}
  body.perla .perla-utils{gap:2px}body.perla .perla-utils>.btn,body.perla .perla-utils>details>summary{padding-inline:6px}
  body.perla .perla-areas>button{padding-inline:7px!important;font-size:14px!important}
@@ -469,3 +469,14 @@ body.perla .perla-canvas-top:has(#layersMenu[open]){z-index:60!important}
    zoom y escala. «Ajustar» muestra la vivienda entera sin nada encima y cada estancia se puede tocar. */
 @media (max-width:760px){body.perla:not(.m3d):not(.presenting) #stage>#plan{margin-top:50px;height:calc(100% - 50px - 123px)}}
 @media (max-width:1100px) and (max-height:500px){body.perla:not(.m3d):not(.presenting) #stage>#plan{margin-top:48px;height:calc(100% - 48px - 58px)}}
+/* Deshacer / Rehacer en la barra del lienzo (teléfono y horizontal): dos iconos con su nombre accesible. */
+body.perla .perla-canvas-top>#editHistory{display:inline-flex!important;gap:4px}
+body.perla .perla-canvas-top>#editHistory .edit-history-scope{display:none!important}
+body.perla .perla-canvas-top>#editHistory :is(#undo,#redo){font-size:0!important;min-width:36px;width:36px;min-height:36px;padding:0!important;background:#fff;border:1px solid var(--perla-line);border-radius:8px}
+body.perla .perla-canvas-top>#editHistory :is(#undo,#redo)::before{font-size:18px;line-height:1;color:var(--perla-ink,#1f2326)}
+body.perla .perla-canvas-top>#editHistory #undo::before{content:"↶" / ""}
+body.perla .perla-canvas-top>#editHistory #redo::before{content:"↷" / ""}
+body.perla .perla-canvas-top>#editHistory :is(#undo,#redo):disabled{opacity:.45}
+/* Escala «1:60 · 1:100»: su menú se abre hacia arriba y por encima de todo; la barra no lo recorta. */
+body.perla .perla-canvas-bottom:has(details[open]){overflow:visible!important;z-index:60!important}
+body.perla .perla-canvas-bottom details.perla-scales>.perla-pop{top:auto!important;bottom:calc(100% + 6px)!important}
