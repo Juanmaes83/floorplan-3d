@@ -85,16 +85,29 @@
   try{return await fn(paso=>{pasos.push(paso);});}
   finally{for(const paso of pasos.reverse()){try{paso();}catch(e){console.warn('[presentation-film] limpieza',e);}}busy=false;}}
  /** Prepara una operación: cámara quieta → plan → aplicador → (capas). Registra cada limpieza al tomar el recurso. */
- async function preparar(alLimpiar,{signal,reducedMotion=reduce(),ocultarCapas=true}={}){
+ async function preparar(alLimpiar,{signal,reducedMotion=reduce(),ocultarCapas=true,drone=false,outputAspect=null}={}){
+  if(drone){
+   await quieta(signal);
+   const V=window.View3D;
+   if(ocultarCapas)alLimpiar(capas());
+   const flight=V.presentationDrone();alLimpiar(flight.close);
+   const aspect=Math.min(flight.aspect,outputAspect??flight.aspect);
+   const vertical=outputAspect?Math.min(1,flight.aspect/outputAspect):1;
+   const tour=FloorPlanSunDrone.flightForPoints(flight.points,aspect,vertical);
+   const shot={kind:'flight',label:tx('Vuelo de dron','Drone flight','无人机航拍'),t0:0,t1:tour.duration};
+   const plan={duration:tour.duration,shots:[shot],cuts:[],reducedMotion:false,at:()=>({shot}),
+    frameTimes:fps=>Array.from({length:tour.duration*fps+1},(_,i)=>i/fps)};
+   return {plan,views:{},shots:[shot],A:{aplicar(timePlan,time){flight.apply(tour.pose(time));}}};
+  }
   await quieta(signal);const P=planificar({reducedMotion}),A=aplicador(P.views);alLimpiar(()=>A.cerrar(P.initial));
   if(ocultarCapas)alLimpiar(capas());return {...P,A};}
  function marcas(plan){return plan.shots.filter(s=>s.kind==='hold'&&s.stop).map(s=>({stop:s.stop,label:s.label,atMs:Math.round(s.t0*1000)}));}
  function capas(){const Vw=window.View3D,l=Vw.territoryLayers;const volver=()=>{if(l)Vw.setTerritoryLayers(l);};if(l){try{Vw.setTerritoryLayers({parcel:false,orthophoto:false,terrain:false,north:false});}catch(e){try{volver();}catch{}throw e;}}return volver;}
  /** Vista previa en la propia presentación, en tiempo real, con el mismo guion. */
- function previsualizar({signal,onProgress}={}){
+ function previsualizar({signal,onProgress,drone=false}={}){
   return sesion(tx('Ya hay un recorrido en curso.','A tour is already running.','已有路线在进行。'),async alLimpiar=>{
-   const {plan,A}=await preparar(alLimpiar,{signal});const t0=performance.now();
-   for(;;){if(signal?.aborted)throw abortError();const t=Math.min(plan.duration,(performance.now()-t0)/1000);A.aplicar(plan,t);onProgress?.(t/plan.duration,plan.at(t).shot.label);if(t>=plan.duration)break;await new Promise(r=>requestAnimationFrame(r));}
+   const {plan,A}=await preparar(alLimpiar,{signal,drone});const t0=performance.now();
+   for(;;){if(signal?.aborted)throw abortError();const t=drone&&reduce()?plan.duration:Math.min(plan.duration,(performance.now()-t0)/1000);A.aplicar(plan,t);onProgress?.(t/plan.duration,plan.at(t).shot.label);if(t>=plan.duration)break;await new Promise(r=>requestAnimationFrame(r));}
    return {duration:plan.duration,shots:plan.shots.length,cuts:plan.cuts.length};});}
  async function configuracion(width,height,fps,{reportErrors=false}={}){if(typeof VideoEncoder==='undefined'||typeof VideoFrame==='undefined'||!window.FloorPlanConstructionMp4)return null;
   let answered=false,failure;
@@ -106,11 +119,11 @@
  const disponible=async(options)=>!!(await configuracion(1280,720,30,options));
  function cubrir(ctx,source,w,h){const sw=source.width,sh=source.height;if(!sw||!sh)return;const k=Math.max(w/sw,h/sh),cw=w/k,ch=h/k;ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);ctx.drawImage(source,(sw-cw)/2,(sh-ch)/2,cw,ch,0,0,w,h);}
  /** Exportación determinista: cada fotograma se renderiza en su instante exacto del guion. */
- function exportar({width=1280,height=720,fps=30,signal,onProgress}={}){
+ function exportar({width=1280,height=720,fps=30,signal,onProgress,drone=false}={}){
   return sesion(tx('Ya hay una grabación en curso.','A recording is already running.','已有录制在进行。'),async alLimpiar=>{
    const cfg=await configuracion(width,height,fps);if(!cfg)throw Object.assign(Error(tx('Este navegador no puede exportar el recorrido cinematográfico (sin WebCodecs H.264).','This browser cannot export the cinematic tour (no WebCodecs H.264).','此浏览器无法导出电影式路线（无 WebCodecs H.264）。')),{code:'NO_WEBCODECS'});
    const source=document.querySelector('#view3d canvas');if(!source)throw Error(tx('Vista 3D no disponible.','3D view not available.','三维视图不可用。'));
-   const {plan,views,shots,A}=await preparar(alLimpiar,{signal});
+   const {plan,views,shots,A}=await preparar(alLimpiar,{signal,drone,outputAspect:width/height});
    const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');
    const times=plan.frameTimes(fps),samples=[];let avcC=null,failure=null;const t0=performance.now();
    const enc=new VideoEncoder({output:(chunk,meta)=>{if(meta?.decoderConfig?.description&&!avcC)avcC=new Uint8Array(meta.decoderConfig.description);const d=new Uint8Array(chunk.byteLength);chunk.copyTo(d);samples.push({data:d,key:chunk.type==='key',ts:chunk.timestamp});},error:e=>{failure=e;}});
@@ -131,7 +144,7 @@
    // Duración del ARCHIVO: fotogramas × 1/fps. Los fotogramas son los instantes 0, 1/fps, … del guion más el instante
    // final exacto, así que el archivo dura entre el guion y el guion + 2/fps (p. ej. 29,13 s → 875 fotogramas = 29,167 s).
    return {blob,type:'video/mp4',extension:'mp4',container:'mp4-indexed',width,height,fps,frames:times.length,durationMs:Math.round(times.length*1000/fps),scriptMs:Math.round(plan.duration*1000),stops:Object.keys(views).length,
-    marks:marcas(plan),plan:{duration:plan.duration,shots:plan.shots.map(s=>({kind:s.kind,label:s.label,t0:s.t0,t1:s.t1})),cuts:plan.cuts,reducedMotion:plan.reducedMotion},elapsedMs:Math.round(performance.now()-t0),guion:shots.map(s=>s.kind)};});}
+    drone,marks:marcas(plan),plan:{duration:plan.duration,shots:plan.shots.map(s=>({kind:s.kind,label:s.label,t0:s.t0,t1:s.t1})),cuts:plan.cuts,reducedMotion:plan.reducedMotion},elapsedMs:Math.round(performance.now()-t0),guion:shots.map(s=>s.kind)};});}
  /** Diagnóstico de solo lectura (QA y revisión): la imagen del lienzo 3D en el instante t del guion, con el MISMO
   *  aplicador que la exportación. Restaura la vista. */
  function fotograma(t,{reducedMotion=reduce()}={}){
