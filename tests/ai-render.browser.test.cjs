@@ -23,7 +23,7 @@ test('Phase B2: AI render of a real view with consent, access code and honest la
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#aiRenderDialog');
  await page.locator('#workArea-deliver').click();await workspace.locator('[data-route="prepare-views"]').first().click();
  await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy',null,{timeout:240000});const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
- await abrirFicha(page,'P2');await workspace.getByRole('button',{name:'Generar imágenes',exact:true}).click();await workspace.getByRole('button',{name:'Render IA de: Vista general',exact:true}).click();await dialog.waitFor();
+ await abrirFicha(page,'P2');await workspace.locator('.panel-f').getByRole('button',{name:'Generar imágenes',exact:true}).click();await workspace.getByRole('button',{name:'Render IA de: Vista general',exact:true}).click();await dialog.waitFor();
  assert.match(await dialog.locator('#aiRenderConsent').innerText(),/Se envía sólo la imagen de esta vista a OpenAI[\s\S]*No se envían el proyecto, la ubicación ni tus datos/);
  // Consent and access code are required before anything leaves the browser.
  await dialog.locator('#aiRenderGo').click();assert.match(await dialog.locator('#aiRenderStatus').innerText(),/Confirma que entiendes qué se envía/);

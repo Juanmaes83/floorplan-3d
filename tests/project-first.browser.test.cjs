@@ -1,6 +1,8 @@
 // Project-First A1: Deliver, Analyze and My studio show the project and the outputs Rubik already produced, before any
 // click. Previews come from the real project (plan, sheet, metric, signature), say what is not ready and never change
 // the model. Desktop, laptop, phone and landscape phone.
+// UX-312 PERLA · Entregar (maqueta c96888ac, composición con Codex): el resumen es «.hero-ent» con Listo / Al pulsar / Falta;
+// las fichas guardan su texto largo y su vista previa para el panel (ocultos en la ficha): se leen con textContent.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..');let server,browser,url;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp'};
@@ -19,23 +21,23 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
 
  // Case A — Deliver: which project, what documentation and visuals exist, what is ready, what is missing, which identity.
  await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Entregar al cliente',exact:true}).waitFor();
- await page.waitForFunction(()=>document.querySelector('#professionalWorkspace .project-context-ready')?.textContent.includes('Presupuesto: sin preparar'));
- const hero=workspace.locator('.project-context');
- assert.equal(await hero.locator('svg[role=img]').getAttribute('aria-label'),'Vista esquemática de la planta activa');
- assert.equal(await hero.locator('.preview-room').count(),facts.rooms,'the house drawn from its own rooms');assert.equal(await hero.locator('.preview-wall').count(),facts.walls);
+ await page.waitForFunction(()=>document.querySelectorAll('#professionalWorkspace .hero-ent .listo li').length>=2);
+ const hero=workspace.locator('.hero-ent');
+ // Vivienda de ejemplo: la portada es su vista 3D real (en otro proyecto, el esquema axonométrico de su planta).
+ assert.match(await hero.locator('figure img').getAttribute('alt'),/Vista 3D de la vivienda de ejemplo/);
  const heroText=await hero.innerText();assert.match(heroText,/Proyecto de ejemplo/);assert.match(heroText,/87,18 m²/);assert.match(heroText,/Estimado/);assert.match(heroText,new RegExp(`${facts.counted} estancias en el cómputo`));
- assert.match(heroText,/Listo para revisar: ficha, lámina, presentación 3D, observaciones/);assert.match(heroText,/Se genera al pulsar: imágenes/);assert.match(heroText,/Falta: firma profesional/);assert.match(heroText,/Presupuesto: sin preparar/);
+ assert.match(heroText,/Listo\s+Ficha, lámina, presentación 3D/);assert.match(heroText,/Al pulsar\s+Imágenes/);assert.match(heroText,/Falta\s+Precios del presupuesto y plan de obra/);
  // Surface schedule preview: its largest rooms, as the schedule lists them.
- const rows=await workspace.locator('.delivery-document li span:first-child').allInnerTexts();assert.deepEqual(rows,facts.top);
+ const rows=(await workspace.locator('.delivery-document li span:first-child').allTextContents()).map(t=>t.trim());assert.deepEqual(rows,facts.top);
  // Sheet: the real sheet document, loaded locally as an image, and its state says it is ready to review.
  const sheet=workspace.locator('[data-module="sheet"]');await sheet.locator('img.project-sheet-image').evaluate(img=>img.decode());
  const image=await sheet.locator('img.project-sheet-image').evaluate(img=>({src:img.src.slice(0,5),w:img.naturalWidth,alt:img.alt}));assert.equal(image.src,'blob:');assert.ok(image.w>0);assert.match(image.alt,/lámina/);
- assert.match(await sheet.innerText(),/Lista para revisar · ajustada a la hoja/);assert.match(await sheet.innerText(),/Sin firma profesional/);
+ assert.match(await sheet.textContent(),/Lista para revisar · ajustada a la hoja/);assert.match(await sheet.textContent(),/Sin firma profesional/);
  // 3D: a labelled model scheme, explicitly not a render; images: none shown as ready.
- const presentation=workspace.locator('[data-module="presentation"]');assert.equal(await presentation.locator('svg[role=img]').getAttribute('aria-label'),'Esquema axonométrico del modelo de la planta activa');assert.match(await presentation.innerText(),/No es un render/);
- const images=await workspace.locator('[data-module="images"]').innerText();assert.match(images,/Todavía no hay vistas preparadas/);assert.match(images,/Se genera al pulsar/);assert.equal(await workspace.locator('[data-module="images"] img').count(),0,'no fake thumbnails');
- assert.match(await workspace.locator('[data-module="budget"]').innerText(),/Sin presupuesto preparado/);assert.match(await workspace.locator('[data-module="review"]').innerText(),/Sin observaciones pendientes/);
- assert.match(await workspace.locator('[data-module="studio"] .project-signature').innerText(),/Sin firma profesional/);
+ const presentation=workspace.locator('[data-module="presentation"]');assert.equal(await presentation.locator('svg[role=img]').getAttribute('aria-label'),'Esquema axonométrico del modelo de la planta activa');assert.match(await presentation.textContent(),/No es un render/);
+ const images=await workspace.locator('[data-module="images"]').textContent();assert.match(images,/Todavía no hay vistas preparadas/);assert.match(images,/Se genera al pulsar/);assert.equal(await workspace.locator('[data-module="images"] img:not(.thumb img)').count(),0,'no fake thumbnails');assert.match(await workspace.locator('[data-module="images"] .thumb .tag-ej').innerText(),/Ejemplo/,'the illustrative cover says it is an example');
+ assert.match(await workspace.locator('[data-module="budget"]').textContent(),/Sin presupuesto preparado/);assert.match(await workspace.locator('[data-module="review"]').textContent(),/Sin observaciones pendientes/);
+ assert.match(await workspace.locator('[data-module="studio"] .project-signature').textContent(),/Sin firma profesional/);
  // Existing routes are intact.
  await workspace.getByRole('button',{name:'Abrir lámina',exact:true}).click();await page.locator('#sheetDialog[open]').waitFor();await page.locator('#sheetClose').click();
  await page.waitForFunction(()=>document.activeElement?.dataset.route==='sheet');
@@ -51,7 +53,7 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
  await page.locator('#workArea-studio').click();await workspace.locator('.studio-sheet img').evaluate(img=>img.decode());
  assert.match(await workspace.locator('.studio-sheet').innerText(),/Así aparece Estudio Ejemplo en la lámina de este proyecto/);assert.match(await workspace.locator('.project-context').innerText(),/Proyecto de ejemplo/);
  const signed=await workspace.locator('.studio-sheet img').evaluate(async img=>(await (await fetch(img.src)).text()).includes('Estudio Ejemplo'));assert.equal(signed,true,'the preview is the real signed sheet');
- await page.locator('#workArea-deliver').click();assert.match(await workspace.locator('[data-module="studio"] .project-signature').innerText(),/Estudio Ejemplo/);assert.match(await workspace.locator('[data-module="sheet"]').innerText(),/Firmada por Estudio Ejemplo/);
+ await page.locator('#workArea-deliver').click();assert.match(await workspace.locator('[data-module="studio"] .project-signature').textContent(),/Estudio Ejemplo/);assert.match(await workspace.locator('[data-module="sheet"]').textContent(),/Firmada por Estudio Ejemplo/);
 
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),original,'previews never change the project');
  assert.deepEqual(external,[],'no remote preview, image or font');assert.deepEqual(errors,[]);
@@ -65,6 +67,6 @@ test('Project-First A1: Deliver follows a change in the project',{timeout:90000}
  await page.locator('#workArea-design').click();await page.evaluate(()=>mutate(()=>{const g=FloorPlanApp.geometry.rooms.filter(r=>r.counted!==false);FloorPlanApp.project.rooms.find(r=>r.id===g[0].id).countsTowardArea=false;}));
  await page.locator('#workArea-deliver').click();const after=await workspace.locator('.project-context-meta').innerText(),expected=await page.evaluate(()=>FloorPlanSurfaceMetrics.home(FloorPlanApp.project));
  assert.notEqual(after,before);assert.match(after,new RegExp(`${expected.levels[0].rooms.filter(r=>r.counted).length} estancias en el cómputo`));
- assert.match(await workspace.locator('.project-context').innerText(),new RegExp(expected.areaM2.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}).replace('.','\\.')+' m²'));
+ assert.match(await workspace.locator('.hero-ent').innerText(),new RegExp(expected.areaM2.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}).replace('.','\\.')+' m²'));
  assert.deepEqual(errors,[]);
 });

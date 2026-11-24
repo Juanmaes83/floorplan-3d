@@ -175,7 +175,10 @@
 
 /* Composición Codex + Claude: un solo «Ver todos los documentos y entregables» (el catálogo completo, 24 salidas y 7
    accesos, con sus generadores); formato y requisitos dentro del panel lateral de detalle. */
-#professionalWorkspace .professional-full-catalog{display:none}
+/* El catálogo E3 de Codex (preparación directa de cada entregable profesional) sigue a la vista con su propio nombre */
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-full-catalog{order:2;flex:1 1 100%;margin:8px 0 0}
+#professionalWorkspace[data-area=deliver] .professional-full-catalog>summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;color:var(--action);font-weight:650;font-size:14px}
+#professionalWorkspace[data-area=deliver] .professional-full-catalog[open]{background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px 14px 14px}
 #professionalWorkspace[data-area=deliver] .panel .perla-panel-meta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
 #professionalWorkspace[data-area=deliver] .panel .perla-panel-meta dt{color:var(--color-ash,#6b6b6b);font-weight:600}
 #professionalWorkspace[data-area=deliver] .panel .perla-panel-meta dd{margin:0}
@@ -189,7 +192,7 @@
 /* Índice: «Índice de la entrega · N entregables y herramientas» en una línea; debajo, «Ver todos…» y los filtros */
 #professionalWorkspace[data-area=deliver] .mesa .professional-index{display:flex!important;flex-wrap:wrap;align-items:baseline;column-gap:8px}
 #professionalWorkspace[data-area=deliver] .mesa .professional-index>*{flex:1 1 100%;order:3;min-width:0}
-#professionalWorkspace[data-area=deliver] .mesa .professional-index>h2{flex:0 0 auto;order:0;margin:0;font-size:20px}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>h2{flex:0 1 auto;min-width:0;overflow-wrap:anywhere;order:0;margin:0;font-size:20px}
 #professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-count{flex:1 1 0;order:1;color:var(--ink-muted);font-size:14px;margin:0}
 #professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-count::before{content:'· '}
 #professionalWorkspace[data-area=deliver] .mesa .professional-index>#perlaCatToggle{flex:0 0 auto;order:2;margin:10px 0 0}
@@ -197,7 +200,7 @@
 /* Grupos: título, recuento y subtítulo en una línea con filete */
 #professionalWorkspace[data-area=deliver] .professional-delivery-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 26px}
 #professionalWorkspace[data-area=deliver] .professional-delivery-group>*{flex:1 1 100%}
-#professionalWorkspace[data-area=deliver] .professional-delivery-group>h2{flex:0 0 auto;font-size:16px;font-weight:650;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>h2{flex:0 1 auto;min-width:0;font-size:16px;font-weight:650;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
 #professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-count{flex:0 0 auto;background:none;padding:0;color:var(--ink-muted);font-weight:400;font-size:16px}
 #professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-count::before{content:'· '}
 #professionalWorkspace[data-area=deliver] .professional-delivery-group>.perla-group-sub{flex:1 1 0;margin:0;font-size:13px;color:var(--ink-muted)}

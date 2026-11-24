@@ -2,6 +2,8 @@
 // Before preparing, nothing pretends to be an image; afterwards Deliver and «Generar imágenes» show the real frames,
 // each downloadable as a delivery image. The editor view, the camera and the project are restored; a later change
 // marks the views as out of date instead of showing an old house.
+// UX-312 PERLA · Entregar (maqueta c96888ac): la ficha muestra una portada ilustrativa marcada «Ejemplo» y guarda el texto
+// largo para su panel (oculto en la ficha): se comprueba con textContent y sin contar la portada.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..');let server,browser,url;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary'};
@@ -19,7 +21,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test('Pro
  await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Entregar al cliente',exact:true}).waitFor();
  // Before: no image pretends to exist; the action says how many views Rubik can prepare.
  const stops=await page.evaluate(()=>FloorPlanProjectViews.plan().stops.map(s=>s.id));assert.equal(stops[0],'overview');assert.ok(stops.length>=2&&stops.length<=5);
- assert.equal(await workspace.locator('[data-module="images"] img').count(),0);assert.match(await workspace.locator('[data-module="images"]').innerText(),/Todavía no hay vistas preparadas/);
+ assert.equal(await workspace.locator('[data-module="images"] img:not(.thumb img)').count(),0);assert.match(await workspace.locator('[data-module="images"] .thumb .tag-ej').innerText(),/Ejemplo/);assert.match(await workspace.locator('[data-module="images"]').textContent(),/Todavía no hay vistas preparadas/);
  const prepare=workspace.getByRole('button',{name:`Preparar ${stops.length} vistas del proyecto`,exact:true});await prepare.click();
  await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy',null,{timeout:240000});
  assert.equal(await page.evaluate(()=>FloorPlanProjectViews.status()),'ready',await page.evaluate(()=>FloorPlanProjectViews.error));
@@ -28,7 +30,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test('Pro
  assert.equal(frames.length,stops.length);assert.ok(frames.every(f=>f.png&&f.w===1600&&f.h===820&&/^Vista 3D real: /.test(f.alt)));
  assert.equal(await workspace.locator('[data-module="presentation"] img.project-view-image').getAttribute('alt'),'Vista general real de la vivienda en 3D');
  assert.match(await workspace.locator('[data-module="images"] .professional-state').innerText(),new RegExp(`${stops.length} vistas reales preparadas`));
- assert.match(await workspace.locator('.project-context-ready').innerText(),/Listo para revisar: [^·]*imágenes/);
+ await page.waitForFunction(()=>/Listo\s+[^\n]*imágenes/i.test(document.querySelector('#professionalWorkspace .hero-ent .listo')?.innerText||''));
  // The editor returns as it was: same view mode, same project; keyboard focus stays on the action.
  assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),view:FloorPlanApp.viewMode})),before);
  assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'prepare-views');

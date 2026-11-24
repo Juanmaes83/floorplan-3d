@@ -202,11 +202,16 @@
   if(code==='D5'){let n=0;try{n=(window.RubikE3Entregables?.catalogo?.()||[]).filter(i=>i.disponible).length;}catch{}return ['ok',tx(`${n} entregables disponibles`,`${n} deliverables available`,`${n} 项交付物可用`)];}
   if(code==='P3')return ['pend',tx('Prueba privada · no se publica','Private test · not published','私密测试 · 不发布')];
   if(code==='T1'||code==='P8'||code==='P9'){const ok3d=document.body.classList.contains('m3d')&&!/Requiere la vista 3D|Requires the 3D/.test(st);return ['pend',ok3d?tx('Se prepara al pulsar','Prepared on demand','点击时准备'):tx('Requiere la vista 3D abierta','Requires the 3D view open','需要打开三维视图')];}
-  if(code==='P2')return ['pend',st];
-  if(/Requiere|Necesita|Requires|Needs|Sin presupuesto|No budget|Sin firma|No signature|Sin variantes|No variants|^0 de|^0 of|no disponible|not available|需要|没有|未选|尚未准备|尚未选择/i.test(st))return ['req',st];
+  if(code==='P2'){let n=0;try{n=(window.FloorPlanProjectViews?.current?.()||[]).length;}catch{}return [n?'ok':'pend',st];}
+  if(/Requiere|Necesita|Requires|Needs|Sin presupuesto|No budget|Sin firma|No signature|Sin variantes|No variants|^0 de|^0 of|no disponible|not available|sin precio|without price|unpriced|需要|没有|未选|尚未准备|尚未选择|无价格/i.test(st))return ['req',st];
   if(/Lista|Listo|Ready|disponible|available|m²|estancias|rooms|suelos|floors|就绪|房间|可供|可发送|单层|地面/i.test(st))return ['ok',st];
   return ['pend',st];}
  function tile(card){const code=card.dataset.entregaCode;if(!REF[code])return;card.classList.add('perla-ref');const body=bodyOf(card);if(!body)return;
+  // Portada honesta: es una imagen de la vivienda de ejemplo; en otro proyecto (o en P2 sin vistas preparadas) lo dice.
+  const th=card.querySelector(':scope>.thumb');if(th){let ex=false;try{ex=window.FloorPlanGuideUI?.state?.()?.kind==='example';}catch{}
+   const noViews=code==='P2'&&!(window.FloorPlanProjectViews?.current?.()||[]).length;const need=!ex||noViews;
+   let tag=th.querySelector(':scope>.tag-ej');if(need&&!tag){tag=el('span','tag-ej perla-tag-ej',th);}
+   if(tag?.classList.contains('perla-tag-ej')){if(!need)tag.remove();else{const t=tx('Ejemplo','Example','示例');if(tag.textContent!==t)tag.textContent=t;}}}
   const [k,txt]=pillOf(code,card);card.dataset.perlaPill=k;
   let desc=body.querySelector(':scope>.perla-desc');if(!desc)desc=el('p','perla-desc',body);const d=T(REF[code][0]);if(desc.textContent!==d)desc.textContent=d;
   let meta=body.querySelector(':scope>.perla-meta');if(!meta){meta=el('div','perla-meta',body);el('span','perla-pill',meta);}
@@ -230,7 +235,7 @@
   const sig=JSON.stringify([rows,g]);if(ul.dataset.sig===sig)return;ul.dataset.sig=sig;ul.replaceChildren();
   for(const[k,l]of rows){const li=el('li',undefined,ul);el('span','perla-pill '+k,li,l);const t=joinList(g[k]);el('span',undefined,li,t.charAt(0).toUpperCase()+t.slice(1));}}
  // Panel (escritorio: lateral fijo; teléfono y tableta: hoja inferior sobre un velo)
- let selCard=null,lastMirror=null;
+ let selCard=null,lastMirror=null,returnCard=null;
  const deskPanel=()=>$('#professionalWorkspace .mesa .panel');
  function velo(){const mesa=$('#professionalWorkspace .mesa');if(!mesa)return null;let v=mesa.querySelector(':scope>.perla-velo');if(!v){v=el('div','perla-velo',mesa);v.hidden=true;v.onclick=()=>closePanel(true);}return v;}
  function emptyPanel(p){p.replaceChildren();const h=el('h3','vacio-panel',p,tx('Elige un entregable','Choose a deliverable','选择交付物'));el('p','perla-vacio-txt',h,tx('Verás aquí qué recibirá tu cliente, su estado y sus opciones, sin salir de Entregar.','Here you will see what your client will receive, its status and its options, without leaving Deliver.','在此查看客户将收到的内容、其状态和选项，无需离开交付。'));p.removeAttribute('aria-labelledby');}
@@ -249,7 +254,8 @@
   row(tx('Al cerrar','On close','关闭后'),tx('Vuelves a esta tarjeta del índice','You return to this index card','返回此索引卡片'));
   const f=el('div','panel-f');const acts=actionsOf(card);acts.sort((a,c)=>(c.classList.contains('perla-go')?1:0)-(a.classList.contains('perla-go')?1:0));
   for(const a of acts){const mb=el('button','btn'+(a.classList.contains('perla-go')?' primary':''),f,a.textContent.trim());mb.type='button';mb.disabled=!!a.disabled;mb.dataset.perlaMirror=a.dataset.route||a.id||'';
-   mb.onclick=()=>{lastMirror=mb.textContent;a.click();};}
+   // En teléfono y tableta la hoja se cierra antes de lanzar la acción (no queda un velo encima); al volver, foco en la ficha.
+   mb.onclick=()=>{lastMirror={text:mb.textContent,route:mb.dataset.perlaMirror};if(narrow()){returnCard=card;closePanel(false);}a.click();};}
   p.replaceChildren(head,b,f);p.setAttribute('aria-labelledby','perlaPanelT');p.tabIndex=-1;p.hidden=false;p.classList.add('perla-panel-open');
   const v=velo();if(v)v.hidden=!narrow();p.focus({preventScroll:true});if(!narrow())p.scrollIntoView({block:'nearest'});}
  function closePanel(focus){const p=deskPanel(),c=selCard;selCard=null;lastMirror=null;pressed();if(p){emptyPanel(p);p.classList.remove('perla-panel-open');}const v=velo();if(v)v.hidden=true;
@@ -260,14 +266,17 @@
  document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!selCard||document.querySelector('dialog[open]'))return;const p=deskPanel();
   if(narrow()||p?.contains(document.activeElement)||selCard.contains(document.activeElement)){e.preventDefault();e.stopPropagation();closePanel(true);}},true);
  // Al cerrar el generador, el panel se actualiza (el estado pudo cambiar) y el foco vuelve a su botón.
- document.addEventListener('close',()=>setTimeout(()=>{if(!selCard||!deliverOpen()||document.querySelector('dialog[open]'))return;
+ document.addEventListener('close',()=>setTimeout(()=>{if(!selCard&&returnCard&&!document.querySelector('dialog[open]')){const c=returnCard,a=document.activeElement;returnCard=null;
+   if(c.isConnected&&(!a||a===document.body||a.offsetParent===null||!a.isConnected))c.querySelector('.perla-card-selector')?.focus({preventScroll:true});return;}
+  if(!selCard||!deliverOpen()||document.querySelector('dialog[open]'))return;
   const a=document.activeElement;if(a&&a!==document.body&&a.offsetParent!==null&&a.isConnected)return;const t=lastMirror;
-  if(selCard.isConnected)openPanel(selCard);const mb=t&&[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])].find(b=>b.textContent===t);(mb||deskPanel())?.focus({preventScroll:true});},90),true);
+  if(selCard.isConnected)openPanel(selCard);const bs=[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])],mb=t&&(bs.find(b=>t.route&&b.dataset.perlaMirror===t.route)||bs.find(b=>b.textContent===t.text));(mb||deskPanel())?.focus({preventScroll:true});},30),true);
  // Barra inferior del teléfono: el producto ya tiene la suya (.professional-dock, mismo atajo de P7); solo cambia su color.
  function maqueta(index){
   for(const c of $$('#professionalWorkspace .professional-index .professional-card[data-entrega-code]'))if(c.querySelector(':scope>.thumb'))tile(c);
   for(const c of $$('#professionalWorkspace .professional-index .bpdp-card'))bpdpTile(c);
   groupHeads(index);heroList();
+  const e3=index.querySelector(':scope>.professional-full-catalog>summary');if(e3){const t=tx('Preparación directa · entregables profesionales (E3)','Direct preparation · professional deliverables (E3)','直接准备 · 专业交付物 (E3)');if(e3.textContent!==t)e3.textContent=t;}
   const p=deskPanel();if(p&&!selCard&&!p.querySelector('.perla-vacio-txt'))emptyPanel(p);
   if(selCard&&!selCard.isConnected){const code=selCard.dataset.entregaCode;const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${code}"]`);selCard=n||null;if(!n)closePanel(false);else pressed();}}
 

@@ -70,7 +70,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  await client.locator('#shareReview').waitFor();assert.equal(await client.locator('#shareTour').count(),0);
  assert.doesNotMatch(await client.locator('body').innerText(),/Prepáralas en Entregar/,'no professional instructions in the client page');assert.match(await client.locator('.share-top').innerText(),/No necesita conexión ni instalar nada/);await client.close();assert.deepEqual(clientErrors,[]);
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#shareLinkDialog').open);
- assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'client-link','focus returns to the action');
+ await page.waitForFunction(()=>(document.activeElement?.dataset.route||document.activeElement?.dataset.perlaMirror)==='client-link',null,{timeout:5000}); // focus returns to the action (or to its button in the card panel)
 
  // With a recorded tour video: the video goes first, the page links to it and plays it from the store.
  await workspace.getByRole('button',{name:'Preparar presentación'}).click();
