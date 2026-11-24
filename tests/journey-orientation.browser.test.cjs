@@ -20,12 +20,12 @@ async function open(t,viewport,{three=false}={}){
  const name=`${viewport.width}x${viewport.height}`;
  const press=async(sel,{timeout}={})=>{await page.evaluate(s=>{const n=document.querySelector(s);if(n&&n.closest('#guideBar')&&!document.body.classList.contains('perla-guide-open'))window.FloorPlanPerla?.setGuide?.(true,{focus:false});},sel);timeout??=await page.evaluate(()=>FloorPlanApp.viewMode==='3d'||!!window.FloorPlanPresentation?.active)?120000:8000;const l=page.locator(sel).first();await l.waitFor({state:'visible',timeout});await l.scrollIntoViewIfNeeded({timeout});if(narrow)await l.tap({timeout});else await l.click({timeout});await page.waitForTimeout(300);};
  // UX-312 PERLA (V4): la guía es el panel «Tareas del proyecto» a demanda; se abre antes de leerla, como lo haría una persona.
- const guide=()=>page.evaluate(()=>{window.FloorPlanPerla?.setGuide?.(true,{focus:false});const b=document.querySelector('#guideBar'),t=s=>b.querySelector(s)?.textContent.trim()||'',v=e=>!!e&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden';return {title:t('.guide-current h2'),text:t('.guide-current p'),primary:v(document.querySelector('#guidePrimary'))?document.querySelector('#guidePrimary').textContent.trim():null,secondary:v(document.querySelector('#guideSecondary'))?document.querySelector('#guideSecondary').textContent.trim():null};});
+ const guide=()=>page.evaluate(()=>{const was=document.body.classList.contains('perla-guide-open');window.FloorPlanPerla?.setGuide?.(true,{focus:false});try{return (()=>{const b=document.querySelector('#guideBar'),t=s=>b.querySelector(s)?.textContent.trim()||'',v=e=>!!e&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden';return {title:t('.guide-current h2'),text:t('.guide-current p'),primary:v(document.querySelector('#guidePrimary'))?document.querySelector('#guidePrimary').textContent.trim():null,secondary:v(document.querySelector('#guideSecondary'))?document.querySelector('#guideSecondary').textContent.trim():null};})();}finally{if(!was)window.FloorPlanPerla?.setGuide?.(false,{focus:false});}});
  const project=()=>page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const closeDrawers=async()=>{for(const [a,toggle] of [['aside.lib','#tgLib'],['aside.right','#tgPanel']])if(await page.evaluate(s=>matchMedia('(max-width:1100px)').matches&&document.querySelector(s).classList.contains('open'),a))await press(toggle);await page.waitForTimeout(400);};
  const firstRoom=async(n='Salón')=>{await press('#welcomeBlank');await page.locator('#roomDesignName').fill(n);await press('#roomDesignReview');await press('#roomDesignConfirm');await page.waitForTimeout(400);await closeDrawers();};
  const upload=async(button,file)=>{const fc=page.waitForEvent('filechooser');await press(button);await (await fc).setFiles(file);};
- const filled=()=>page.evaluate(()=>{window.FloorPlanPerla?.setGuide?.(true,{focus:false});return [...document.querySelectorAll('#guideBar button.primary')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden').map(b=>b.id||b.textContent.trim())});
+ const filled=()=>page.evaluate(()=>{const was=document.body.classList.contains('perla-guide-open');window.FloorPlanPerla?.setGuide?.(true,{focus:false});const out=[...document.querySelectorAll('#guideBar button.primary')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden').map(b=>b.id||b.textContent.trim());if(!was)window.FloorPlanPerla?.setGuide?.(false,{focus:false});return out;});
  const shot=n=>page.screenshot({path:path.join(shots,`${name}-${n}.png`)});
  return {page,errors,narrow,name,press,guide,project,closeDrawers,firstRoom,upload,filled,shot};
 }
@@ -129,15 +129,20 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  await c.shot('t6-after-presenting');assert.deepEqual(c.errors,[]);
 });
 
-test('T11 phone guide (M4): one row of controls, every control on screen, more plan visible; desktop header keeps one line and one presentation entry',{timeout:180000},async t=>{
+// UX-312 PERLA (V4 aprobada): la guía es el panel «Tareas del proyecto» a demanda y la cabecera tiene dos filas; la intención de
+// T11 se mantiene: en el teléfono, con el panel abierto, todos sus controles están dentro de la pantalla y el plano conserva
+// su sitio; en escritorio la cabecera no se sale de la pantalla y hay una sola entrada de presentación a la vista.
+test('T11 phone guide (M4): every guide control on screen; desktop header stays inside the screen with one presentation entry',{timeout:180000},async t=>{
  const c=await open(t,{width:390,height:844}),{page}=c;await c.firstRoom();
- const g=await page.evaluate(()=>{const b=document.querySelector('#guideBar').getBoundingClientRect(),ids=['guidePrevious','guideGoalChange','guideDetails','guideCompact','guideClose'];return {h:b.height,ctl:ids.map(id=>{const r=document.getElementById(id).getBoundingClientRect();return {id,top:Math.round(r.top),inside:r.left>=0&&r.right<=innerWidth&&r.width>0,name:document.getElementById(id).textContent.trim()};})};});
- assert.ok(g.h<=170,`guide height ${Math.round(g.h)} px ≤ 170 (master: 217)`);
- assert.deepEqual(g.ctl.filter(x=>!x.inside).map(x=>x.id),[]);assert.equal(new Set(g.ctl.map(x=>x.top)).size,1,'one row of controls');
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false}));await page.waitForTimeout(300);
+ const g=await page.evaluate(()=>{const ids=['guidePrevious','guideGoalChange','guideDetails','guideClose'];return {ctl:ids.map(id=>{const e=document.getElementById(id),r=e.getBoundingClientRect();return {id,inside:r.left>=0&&r.right<=innerWidth&&r.width>0&&r.top>=0&&r.bottom<=innerHeight,name:e.textContent.trim()};}),hscroll:document.documentElement.scrollWidth>innerWidth+1};});
+ assert.deepEqual(g.ctl.filter(x=>!x.inside).map(x=>x.id),[],'every guide control on screen');assert.equal(g.hscroll,false,'no horizontal scroll');
  assert.equal(g.ctl[0].name,'← Paso anterior','the previous-step button keeps its name');await c.shot('t11-phone-guide');
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(false,{focus:false}));await page.waitForTimeout(300);
+ assert.ok(await page.evaluate(()=>document.querySelector('#stage').getBoundingClientRect().height/innerHeight)>=.55,'the plan keeps its room with the guide closed');
  const d=await open(t,{width:1440,height:900});await d.press('#welcomeExample');await d.page.waitForTimeout(500);
- assert.ok(await d.page.evaluate(()=>document.querySelector('header').getBoundingClientRect().height)<=80,'guided header stays on one line');
- assert.equal(await d.page.locator('button:visible',{hasText:'Presentar mi vivienda'}).count(),1,'one presentation entry at a time');
+ assert.ok(await d.page.evaluate(()=>{const h=document.querySelector('header').getBoundingClientRect();return h.right<=innerWidth+1&&document.documentElement.scrollWidth<=innerWidth+1;}),'header inside the screen');
+ assert.equal(await d.page.locator('button:visible',{hasText:/Presentar (mi )?vivienda/}).count(),1,'one presentation entry at a time');
  assert.deepEqual([...c.errors,...d.errors],[]);
 });
 

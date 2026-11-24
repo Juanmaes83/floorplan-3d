@@ -401,3 +401,17 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
  body.perla #stage:has(>.level-conflicts:not([hidden]))>#plan{margin-top:104px;height:calc(100% - 104px)}
 }
 @media (min-width:761px){body.perla #stage>.level-conflicts{bottom:72px}body.perla #stage:has(#fab.show)>.level-conflicts{bottom:128px}}
+/* Teléfono: con un panel lateral abierto (Inspector, revisión, Construir) solo queda libre la franja izquierda del plano:
+   los botones de zoom pasan a esa franja, en vertical; escala y «Ajustar» vuelven al cerrar el panel. */
+@media (max-width:760px){
+ body.perla:has(aside.right.open) .perla-canvas-bottom,body.perla:has(aside.lib.open) .perla-canvas-bottom{top:54px;bottom:auto;left:8px;right:auto;width:auto;max-width:56px;flex-direction:column;padding:4px;gap:4px}
+ body.perla:has(aside.right.open) .perla-canvas-bottom>*:not(:has(#zoomIn)):not(:has(#zoomOut)):not(#zoomIn):not(#zoomOut),
+ body.perla:has(aside.lib.open) .perla-canvas-bottom>*:not(:has(#zoomIn)):not(:has(#zoomOut)):not(#zoomIn):not(#zoomOut){display:none!important}
+ body.perla:has(aside.right.open) .perla-canvas-bottom :is(#fit,#scalebar,.perla-scale-switch),body.perla:has(aside.lib.open) .perla-canvas-bottom :is(#fit,#scalebar,.perla-scale-switch){display:none!important}
+ body.perla:has(aside.right.open) .perla-canvas-bottom>*,body.perla:has(aside.lib.open) .perla-canvas-bottom>*{flex-direction:column}
+}
+/* Teléfono · modo guiado: el resumen del paso ocupa su propia línea, compacta y sin cortes de palabra en columna. */
+@media (max-width:760px){
+ body.perla.guided .perla-r2>#perlaProgress{flex:1 1 100%!important;min-width:0;display:flex;align-items:center;gap:8px;min-height:0}
+ body.perla.guided .perla-r2>#perlaProgress *{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+}

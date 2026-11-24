@@ -38,7 +38,7 @@
  // en el DOM; la ficha muestra el nombre del proyecto con data-perla-name (CSS), sin pisar las traducciones del botón.
  const proj=move('#projectsBtn',left)||el('button',{type:'button',class:'btn'},left);proj.classList.add('perla-project');proj.setAttribute('aria-haspopup','dialog');
  const projName=()=>{let n='';try{n=(typeof project==='object'&&project?.name)||'';}catch{}const shown=typeof nm==='function'?nm(n):n;return shown||tx('Proyecto','Project','项目');};
- const paintProject=()=>{const n=projName(),ex=$('#guideBar')?.getAttribute('data-project-kind')==='example';proj.dataset.perlaName=ex?tx('Proyecto de ejemplo','Example project','示例项目'):n;proj.title=tx(`Proyecto activo: ${n}. Abrir la biblioteca de proyectos`,`Active project: ${n}. Open the project library`,`当前项目：${n}。打开项目库`);proj.setAttribute('aria-label',proj.title);};
+ const paintProject=()=>{const raw=projName(),ex=$('#guideBar')?.getAttribute('data-project-kind')==='example',n=ex?tx('Proyecto de ejemplo','Example project','示例项目'):raw;proj.dataset.perlaName=n;proj.title=tx(`Proyecto activo: ${n}. Abrir la biblioteca de proyectos`,`Active project: ${n}. Open the project library`,`当前项目：${n}。打开项目库`);proj.setAttribute('aria-label',proj.title);};
  // «Crear copia» del ejemplo: es el MISMO botón de la guía (copia local con id propio); solo visible en el ejemplo.
  const exampleLine=$('.guide-example'),copyBtn=move('#guideCopyExample',left);
  if(copyBtn){copyBtn.classList.add('perla-copy');const lbl=()=>{copyBtn.innerHTML=`${svg('copy',15)}<span class="perla-copy-label">${tx('Crear copia','Create copy','创建副本')}</span>`;copyBtn.setAttribute('aria-label',tx('Crear una copia local del ejemplo','Create a local copy of the example','创建示例的本地副本'));};lbl();
@@ -192,6 +192,7 @@
   const a=tx('Ir a Inicio','Go to Home','前往首页');if(home.getAttribute('aria-label')!==a)home.setAttribute('aria-label',a);};
  if(home)new MutationObserver(()=>{if(!home.querySelector(".perla-ico"))perlaBrand();}).observe(home,{childList:true});
  function paintHeader(){
+  try{paintProject();}catch{}
   r1.setAttribute('aria-label',tx('Proyecto y áreas','Project and areas','项目与区域'));r2.setAttribute('aria-label',tx('Archivo, vista y paso','File, view and step','文件、视图与步骤'));
   center.setAttribute("aria-label",tx("Áreas de trabajo","Work areas","工作区域"));perlaBrand();
   $('#actionSearchBtn')?.setAttribute('aria-label',tx('Buscar una acción','Search an action','搜索操作'));$('#editHistory')?.setAttribute('aria-label',tx('Historial de sesión','Session history','会话历史'));
