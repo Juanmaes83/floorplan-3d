@@ -253,5 +253,5 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
   const home=button(tx('Ir a ','Go to ','前往 ')+titles()[key],null,()=>{dialog.close();open(key);});home.classList.add('professional-origin');home.dataset.professionalHome=key;
   const mount=()=>{if(!dialog.contains(home))dialog.querySelector('h2')?.after(home);};mount();new MutationObserver(mount).observe(dialog,{childList:true,subtree:true});
  }
- buttons.design.setAttribute('aria-current','page');window.FloorPlanProfessionalUI={open,close,get area(){return area;}};
+ buttons.design.setAttribute('aria-current','page');window.FloorPlanProfessionalUI={open,close,refreshAnalyze(){if(area==='analyze')render(false);},get area(){return area;}};
 })();

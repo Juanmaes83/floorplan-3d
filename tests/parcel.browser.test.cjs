@@ -97,8 +97,8 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  const second=xml.replaceAll('1907401VK4810H','1907401VK4810J').match(/<g:featureMember>[\s\S]*?<\/g:featureMember>/)[0]
   .replace(/\b5000\d\d\b/g,value=>String(Number(value)+100));
  const many=xml.replace('</g:FeatureCollection>',second+'</g:FeatureCollection>');
- await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);
- await page.locator('#territoryOpen').click();
+ await page.locator('#workArea-analyze').click();
+ await page.getByRole('button',{name:'Configurar emplazamiento'}).click();
  await page.locator('#territoryFile').setInputFiles({name:'varias.gml',mimeType:'application/xml',buffer:Buffer.from(many)});
  await page.locator('#territoryMapToggle').click();
  await page.locator('#territoryMapContent canvas').waitFor();
@@ -116,6 +116,9 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.site?.parcel),undefined);
  await page.locator('#territorySave').click();
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.site.parcel.reference),'1907401VK4810J');
+ assert.equal(await page.locator('#territorySave').innerText(),'Parcela guardada');
+ assert.equal(await page.locator('#territorySave').isDisabled(),true);
+ assert.match(await page.locator('#professionalWorkspace').innerText(),/Parcela disponible/);
  assert.equal(await editable(page),beforeGeometry);
  await page.locator('#territoryMapToggle').click();
  await page.locator('#territoryMapContent canvas').waitFor();
@@ -125,5 +128,6 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  await page.locator('#territoryMapContent canvas').waitFor({state:'detached'});
  await page.waitForFunction(gl=>gl.isContextLost(),context);
  await context.dispose();
+ assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'territory');
  assert.deepEqual(errors,[]);
 });
