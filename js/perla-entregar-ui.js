@@ -198,18 +198,20 @@
  const bodyOf=c=>c.querySelector(':scope>.body, :scope>.bpdp-card-body');
  // Todas las acciones de la ficha, también las que otros módulos añaden fuera de su cuerpo (Reformar desde fotografía, Estudio de imágenes…)
  const actionsOf=c=>$$('button, a[href]',c).filter(b=>!b.matches('.perla-card-selector,.perla-more-btn')&&!b.closest('.thumb'));
+ // Vistas del proyecto preparadas y vigentes (si el proyecto cambió después, no cuentan como listas)
+ const viewsReady=()=>{try{const V=window.FloorPlanProjectViews;return !!(V?.current?.()||[]).length&&V?.status?.()!=='stale';}catch{return false;}};
  function pillOf(code,card){const st=(card.querySelector('.professional-state')?.textContent||'').trim();
   if(code==='D5'){let n=0;try{n=(window.RubikE3Entregables?.catalogo?.()||[]).filter(i=>i.disponible).length;}catch{}return ['ok',tx(`${n} entregables disponibles`,`${n} deliverables available`,`${n} 项交付物可用`)];}
   if(code==='P3')return ['pend',tx('Prueba privada · no se publica','Private test · not published','私密测试 · 不发布')];
   if(code==='T1'||code==='P8'||code==='P9'){const ok3d=document.body.classList.contains('m3d')&&!/Requiere la vista 3D|Requires the 3D/.test(st);return ['pend',ok3d?tx('Se prepara al pulsar','Prepared on demand','点击时准备'):tx('Requiere la vista 3D abierta','Requires the 3D view open','需要打开三维视图')];}
-  if(code==='P2'){let n=0;try{n=(window.FloorPlanProjectViews?.current?.()||[]).length;}catch{}return [n?'ok':'pend',st];}
+  if(code==='P2')return [viewsReady()?'ok':'pend',st];
   if(/Requiere|Necesita|Requires|Needs|Sin presupuesto|No budget|Sin firma|No signature|Sin variantes|No variants|^0 de|^0 of|no disponible|not available|sin precio|without price|unpriced|需要|没有|未选|尚未准备|尚未选择|无价格/i.test(st))return ['req',st];
   if(/Lista|Listo|Ready|disponible|available|m²|estancias|rooms|suelos|floors|就绪|房间|可供|可发送|单层|地面/i.test(st))return ['ok',st];
   return ['pend',st];}
  function tile(card){const code=card.dataset.entregaCode;if(!REF[code])return;card.classList.add('perla-ref');const body=bodyOf(card);if(!body)return;
   // Portada honesta: es una imagen de la vivienda de ejemplo; en otro proyecto (o en P2 sin vistas preparadas) lo dice.
   const th=card.querySelector(':scope>.thumb');if(th){let ex=false;try{ex=window.FloorPlanGuideUI?.state?.()?.kind==='example';}catch{}
-   const noViews=code==='P2'&&!(window.FloorPlanProjectViews?.current?.()||[]).length;const need=!ex||noViews;
+   const noViews=code==='P2'&&!viewsReady();const need=!ex||noViews;
    let tag=th.querySelector(':scope>.tag-ej');if(need&&!tag){tag=el('span','tag-ej perla-tag-ej',th);}
    if(tag?.classList.contains('perla-tag-ej')){if(!need)tag.remove();else{const t=tx('Ejemplo','Example','示例');if(tag.textContent!==t)tag.textContent=t;}}}
   const [k,txt]=pillOf(code,card);card.dataset.perlaPill=k;
