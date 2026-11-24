@@ -272,7 +272,10 @@ body.perla.m3d #stage>#solarNorth{top:auto;bottom:64px}
 body.perla.m3d .perla-canvas-bottom{display:none!important}
 @media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.m3d .perla-canvas-top{justify-content:flex-start}}
 /* Paseo 3D (joystick visible): la vista queda despejada; la barra inferior se pliega a la izquierda del minimapa */
-body.perla.perla-walking .perla-canvas-top{display:none!important}
+/* Paseo: la barra del lienzo deja a la vista solo los modos 3D («Vista aérea» / «Recorrer»): se puede salir del paseo
+   con el mismo botón de siempre. En el teléfono la barra se oculta entera (joystick y «Salir del recorrido»). */
+body.perla.perla-walking .perla-canvas-top>:not(#modes3d){display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.perla-walking .perla-canvas-top{display:none!important}}
 body.perla.perla-walking #stage>#mobileDock{right:auto;left:50%;transform:translateX(-50%)}
 @media (max-width:760px){body.perla.perla-walking #stage>#mobileDock{left:0;transform:none}}
 /* Presentación: las barras del lienzo del editor se retiran (antes vivían en la cabecera, que la presentación oculta) */
@@ -415,3 +418,38 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
  body.perla.guided .perla-r2>#perlaProgress{flex:1 1 100%!important;min-width:0;display:flex;align-items:center;gap:8px;min-height:0}
  body.perla.guided .perla-r2>#perlaProgress *{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 }
+/* Fila 1 en teléfono: inicio, proyecto y «Crear copia» caben siempre enteros junto a las utilidades. El chip del proyecto es
+   el que encoge (puntos suspensivos; el nombre completo sigue en su título y nombre accesible); nada queda cortado. */
+@media (max-width:760px){
+ body.perla .perla-r1>.perla-left{display:flex;align-items:center;gap:6px;overflow:visible;min-width:0}
+ body.perla .perla-left>#welcomeBtn,body.perla .perla-left>.perla-copy,body.perla .perla-left>#guideCopyExample{flex:0 0 auto}
+ body.perla .perla-left>.perla-project{flex:0 1 auto;min-width:44px;max-width:100%;overflow:hidden}
+ body.perla .perla-left>.perla-project::before{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+}
+/* Tableta (761–1100 px): la barra de paneles del lienzo es compacta, a la derecha (no una franja blanca de lado a lado
+   que tape el zoom), y la fila 1 cabe entera: marca, «Crear copia» y «Mi estudio» se quedan en su icono (su nombre
+   sigue siendo el nombre accesible del botón). */
+@media (min-width:761px) and (max-width:1100px) and (min-height:501px){
+ body.perla #stage>#mobileDock{position:absolute!important;left:auto!important;right:12px!important;bottom:12px!important;top:auto!important;width:auto!important;height:auto!important;border-radius:10px!important;border:1px solid var(--perla-line)!important;padding:4px!important;gap:4px!important;display:flex!important;grid-template-columns:none!important;justify-content:flex-end}
+ body.perla #stage>#mobileDock button{flex:none!important;min-height:40px!important}
+}
+@media (min-width:761px) and (max-width:1180px) and (min-height:501px){
+ body.perla .perla-brand>b,body.perla .perla-copy-label,body.perla .perla-studio>*:not(svg){display:none}
+ body.perla .perla-r1{gap:6px}body.perla .perla-areas .btn{padding-inline:10px}
+ body.perla .perla-project{max-width:150px}
+ body.perla .perla-utils #actionSearchBtn,body.perla .perla-utils .perla-studio{font-size:0!important;min-width:36px;padding:0 9px!important;gap:0!important}
+ body.perla .perla-utils #actionSearchBtn kbd{display:none}
+ body.perla .perla-utils #actionSearchBtn svg,body.perla .perla-utils .perla-studio svg{flex:none}
+}
+/* Teléfono estrecho (≤380 px): el chip del proyecto conserva un nombre legible y las cuatro áreas caben sin cortar. */
+@media (max-width:380px){
+ body.perla .perla-left>.perla-project{min-width:60px}
+ body.perla .perla-utils{gap:2px}body.perla .perla-utils>.btn,body.perla .perla-utils>details>summary{padding-inline:6px}
+ body.perla .perla-areas>button{padding-inline:7px!important;font-size:14px!important}
+ body.perla .perla-utils{gap:2px!important}
+ body.perla .perla-utils #langBtn{padding:0 5px!important;font-size:11px!important;min-width:0!important}
+ body.perla .perla-left>.perla-project{min-width:72px;padding-inline:7px!important;gap:0!important}
+ body.perla .perla-left>.perla-project>svg,body.perla .perla-left>.perla-project>.perla-ico{display:none}
+}
+/* Teléfono: el aviso del norte («Norte sin configurar») va por encima de la barra de zoom y escala, sin taparla. */
+@media (max-width:760px){body.perla #solarNorth{bottom:140px!important}}
