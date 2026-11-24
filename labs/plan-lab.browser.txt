@@ -1,0 +1,55 @@
+async page => {
+  page.setDefaultTimeout(8000);
+  const failures = [];
+  page.on('pageerror', error => failures.push(error.message));
+  page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
+  const ensure = (condition, message) => { if (!condition) throw Error(message); };
+  const report = page.getByRole('button', { name: 'Evaluar' });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.reload();
+  await page.locator('#flight[data-frame="0"]').waitFor();
+  ensure(/87,18/.test(await page.locator('#areas').innerText()), 'Superficie del ejemplo');
+  ensure(await page.locator('#sun-results li').count() === 13, 'Resultados solares por estancia');
+  await page.locator('#setback').fill('15');
+  await report.click();
+  ensure(/requiere revisión/.test(await page.locator('#parcel').innerText()), 'Cambio de retranqueo');
+  await page.locator('#date').fill('2026-03-29');
+  await report.click();
+  ensure(/cambio de hora/.test(await page.locator('#sun-results').innerText()), 'Día con cambio de hora');
+  await page.locator('#date').fill('2026-12-21');
+  await report.click();
+  ensure(await page.locator('#sun-results li').count() === 13, 'Solsticio');
+  await page.locator('#play').click();
+  await page.waitForFunction(() => Number(document.querySelector('#flight').dataset.frame) > 0.2);
+  await page.locator('#play').click();
+  const paused = await page.locator('#flight').getAttribute('data-frame');
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  ensure(paused === await page.locator('#flight').getAttribute('data-frame'), 'La pausa cancela la animación');
+  for (const size of [{ width: 390, height: 844 }, { width: 844, height: 390 }]) {
+    await page.setViewportSize(size);
+    await page.locator('#progress').focus();
+    await page.keyboard.press('End');
+    await page.waitForFunction(() => document.querySelector('#flight').dataset.frame === '54');
+    ensure(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Lienzo sin desbordamiento');
+  }
+  const local = await page.evaluate(() => JSON.stringify(FloorPlanCore.initial()));
+  await page.locator('#file').setInputFiles({ name: 'proyecto-local.json', mimeType: 'application/json', buffer: Buffer.from(local) });
+  await page.getByText('Proyecto local · proyecto-local.json').waitFor();
+  ensure(/pendiente/.test(await page.locator('#parcel').innerText()), 'Muestra la ausencia de parcela');
+  ensure(/no disponible/.test(await page.locator('#sun-results').innerText()), 'Muestra que faltan datos solares');
+  await page.locator('#file').setInputFiles({ name: 'incorrecto.json', mimeType: 'application/json', buffer: Buffer.from('{}') });
+  await page.getByText('No se pudo evaluar el archivo:', { exact: false }).waitFor();
+  ensure(/87,18/.test(await page.locator('#areas').innerText()), 'Conserva el resultado anterior al rechazar JSON');
+  const twoLevels = await page.evaluate(() => {
+    const project = FloorPlanCore.initial();
+    return JSON.stringify(FloorPlanBuilding.addLevel(FloorPlanBuilding.create(project), project));
+  });
+  await page.locator('#file').setInputFiles({ name: 'dos-plantas.json', mimeType: 'application/json', buffer: Buffer.from(twoLevels) });
+  await page.waitForFunction(() => document.getElementById('source').textContent.endsWith('dos-plantas.json'), null, { timeout: 5000 });
+  ensure(/174,37/.test(await page.locator('#areas').innerText()), 'Suma de las dos plantas');
+  await page.locator('#progress').focus();
+  await page.keyboard.press('End');
+  await page.waitForFunction(() => document.querySelector('#flight').dataset.frame === '54');
+  ensure(failures.length === 0, JSON.stringify(failures));
+  return 'Escritorio y móvil en ambas orientaciones: retranqueo, sol, vuelo, JSON y consola correctos.';
+}
