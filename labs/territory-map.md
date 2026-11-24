@@ -8,4 +8,4 @@ La selección espacial está en **Analizar → Contexto territorial**. Permite c
 - El mapa base se activa a petición mediante el [WMTS oficial del IGN](https://nco.ign.es/portal/sharing/portals/self). El selector abre por defecto con geometría local. Las teselas se solicitan directamente al IGN solo al activar esa capa y la atribución se muestra en la interfaz.
 - El caso E2E verifica que revisar una candidata no escribe en el proyecto, que guardar conserva la geometría editable y que cerrar el diálogo elimina el lienzo y pierde el contexto WebGL.
 
-El dossier conserva su diagrama vectorial de «Emplazamiento». La captura de la cartografía base para una lámina o un PDF requiere validar el circuito de exportación y atribución antes de incorporarla.
+En **Entregar → Preparar dossier**, «Incluir mapa base IGN» añade un plano de situación a los estilos con Emplazamiento y una parcela guardada. El PDF conserva el diagrama vectorial de «Emplazamiento» y muestra la atribución IGNBaseTodo, Sistema Cartográfico Nacional / Instituto Geográfico Nacional y CC BY 4.0 junto al mapa. La opción parte desactivada. Si el servicio falla, el diagrama vectorial sigue disponible.

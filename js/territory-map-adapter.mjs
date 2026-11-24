@@ -1,5 +1,5 @@
 // Optional official IGN Spain basemap. No remote tiles are loaded until requested.
-const tiles = 'https://www.ign.es/wmts/ign-base?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=IGNBaseTodo&STYLE=default&FORMAT=image/jpeg&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}';
+export const IGN_TILES = 'https://www.ign.es/wmts/ign-base?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=IGNBaseTodo&STYLE=default&FORMAT=image/jpeg&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}';
 const projections = {
   'EPSG:25829': '+proj=utm +zone=29 +ellps=GRS80 +units=m +no_defs',
   'EPSG:25830': '+proj=utm +zone=30 +ellps=GRS80 +units=m +no_defs',
@@ -103,7 +103,7 @@ export async function openParcelMap(container, parcels, { signal, onPick, initia
     basemap(active) {
       if (!map.getLayer('parcels')) return false;
       if (active && !map.getSource('ign-basemap')) {
-        map.addSource('ign-basemap', { type: 'raster', tiles: [tiles], tileSize: 256, maxzoom: 19 });
+        map.addSource('ign-basemap', { type: 'raster', tiles: [IGN_TILES], tileSize: 256, maxzoom: 19 });
         map.addLayer({ id: 'ign-basemap', type: 'raster', source: 'ign-basemap' }, 'parcels');
       } else if (!active && map.getSource('ign-basemap')) {
         map.removeLayer('ign-basemap');

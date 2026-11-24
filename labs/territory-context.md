@@ -16,7 +16,7 @@ La ruta `POST /api/places-context` requiere Vercel Preview, `RUBIK_CONTEXT_ENABL
 
 ## Dossier
 
-El dossier puede seguir usando la ubicación y el plano del propio proyecto. Una ampliación viable sería ofrecer un enlace externo generado a partir de ese dato, con una elección explícita de incluir la ubicación. Los lugares, direcciones, tiempos, distancias y metadatos de Street View consultados se mantienen en pantalla. Para incorporar contenido de Google a un documento compartible es preciso acordar el uso, los términos de la cuenta y la atribución antes de activar esa salida.
+En **Entregar → Preparar dossier**, «Compartir enlace a la ubicación» añade un enlace a Google Maps generado con las coordenadas de referencia de la parcela guardada. La opción parte desactivada y genera el enlace localmente. Los lugares, direcciones, tiempos, distancias y metadatos de Street View consultados se mantienen en pantalla. Para incorporar contenido de Google a un documento compartible es preciso acordar el uso, los términos de la cuenta y la atribución antes de activar esa salida.
 
 - [Places y atribución](https://developers.google.com/maps/documentation/places/web-service/policies)
 - [Routes y atribución](https://developers.google.com/maps/documentation/routes/policies)
