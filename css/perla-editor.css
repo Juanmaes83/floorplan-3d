@@ -352,3 +352,11 @@ body.perla .perla-r1 :is(.perla-areas > .btn,#workArea-studio){min-height:40px}
 @media (min-width:1101px) and (min-height:501px){
  body.perla.m3d #stage:has(#nav3d.open:not([hidden])) .perla-canvas-top{left:324px;max-width:calc(100% - 336px)}
 }
+body.perla .app>header:has(.perla-dd[open]){z-index:75;overflow:visible}
+
+body.perla.presenting .app>header{display:none!important}
+
+body.perla:not(.professional-area) #perlaMore[open] #editHistory{display:flex!important}
+body.perla #perlaMore #editHistory button{font-size:13px!important;width:auto!important;min-height:44px!important}
+body.perla #perlaMore #editHistory button::before{content:none!important}
+

@@ -58,6 +58,11 @@
  const lang=move('#langBtn',right);if(lang)lang.classList.add('perla-lang');
  const more=el('details',{class:'perla-dd perla-more',id:'perlaMore'},right),moreSum=el('summary',{class:'btn perla-icon'},more);moreSum.innerHTML=svg('more');const morePop=el('div',{class:'menu-pop perla-pop'},more);
  for(const id of ['fullscreen'])move('#'+id,morePop);
+ if(hist){
+  const compactHistory=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
+  const placeHistory=()=>{if(compactHistory.matches)morePop.prepend(hist);else right.insertBefore(hist,studio);};
+  placeHistory();compactHistory.addEventListener('change',placeHistory);
+ }
  const legal=$('#legalLink');if(legal){const b=el('button',{type:'button',id:'perlaLegal',class:'btn'},morePop);b.onclick=()=>{more.open=false;legal.click();};b._t=()=>b.textContent=tx('Legal y uso','Legal and use','法律与使用');b._t();}
  // Ayuda general = atajos y ayuda existentes (la guía tiene su propio botón «Tareas del proyecto»).
  help.onclick=()=>{const k=$('#panel [data-group="keys"] summary,#panel [data-group="keys"]');if(k){openTab('informe');const d=k.closest('details');if(d)d.open=true;k.scrollIntoView({block:'nearest'});(d?.querySelector('summary')||k).focus?.({preventScroll:true});}};
@@ -114,6 +119,7 @@
   else if(focus)tasks.focus({preventScroll:true});
  }
  guide?.addEventListener('rubik:guide-reveal',()=>setGuide(true,{focus:false}));
+ $('#guideResume')?.addEventListener('click',()=>{if(guide&&!guide.hidden)setGuide(true);});
  tasks.onclick=()=>setGuide(!document.body.classList.contains('perla-guide-open'));
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('perla-guide-open')&&guide?.contains(document.activeElement)){e.preventDefault();setGuide(false);}},true);
  if(guide)new MutationObserver(()=>paintProgress()).observe(guide,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['aria-valuenow','hidden','disabled']});
