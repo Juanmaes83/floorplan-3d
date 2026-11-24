@@ -1,0 +1,35 @@
+/* UX-312 PERLA · U10 semáforo: verde hecho · naranja empezado · rojo sin hacer. Siempre con icono y texto. */
+:root{--sem-ok:#1d7a46;--sem-ok-bg:#e6f4ec;--sem-pend:#b3600c;--sem-pend-bg:#fdf0e1;--sem-req:#b42318;--sem-req-bg:#fdeceb}
+.perla-sem{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}
+.perla-sem-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-size:13px}
+.perla-sem-head strong{font-size:15px}
+.perla-sem-legend{display:flex;flex-wrap:wrap;gap:4px 10px}
+.perla-sem-k{display:inline-flex;align-items:center;gap:4px;font-weight:600}
+.perla-sem-k i{font-style:normal}
+.perla-sem-k.ok{color:var(--sem-ok)}.perla-sem-k.pend{color:var(--sem-pend)}.perla-sem-k.req{color:var(--sem-req)}
+.perla-sem-bar{display:flex;gap:2px;height:8px;border-radius:999px;overflow:hidden;background:#eee}
+.perla-sem-bar .seg{display:block;min-width:6px}
+.perla-sem-bar .seg.ok{background:var(--sem-ok)}.perla-sem-bar .seg.pend{background:var(--sem-pend)}.perla-sem-bar .seg.req{background:var(--sem-req)}
+/* Editor: un punto por tarea, junto a «Paso n de m». */
+.perla-sem-dots{display:inline-flex;gap:3px;align-items:center;margin-inline-start:6px}
+.perla-dot{width:22px;height:22px;min-width:22px;min-height:22px;padding:0;border-radius:50%;border:1.5px solid currentColor;background:#fff;font:700 11px/1 system-ui,sans-serif;display:inline-grid;place-items:center;cursor:pointer}
+.perla-dot.ok{color:var(--sem-ok);background:var(--sem-ok-bg)}.perla-dot.pend{color:var(--sem-pend);background:var(--sem-pend-bg)}.perla-dot.req{color:var(--sem-req);background:var(--sem-req-bg)}
+.perla-dot:focus-visible{outline:3px solid #e4b8c5;outline-offset:2px}
+@media (max-width:760px){.perla-sem-dots{display:none}}
+/* Lista de tareas de la guía: el mismo semáforo. */
+.guide-task[data-state]{border-inline-start:4px solid var(--sem-req)}
+.guide-task[data-state="completed"]{border-inline-start-color:var(--sem-ok)}
+.guide-task[data-state="active"],.guide-task[data-state="review"]{border-inline-start-color:var(--sem-pend)}
+/* Fichas de Entregar, filas del resumen de Presupuestar y pasos del Recorrido de obra. */
+#professionalWorkspace [data-entrega-code][data-sem]{border-inline-start:4px solid var(--sem-req)}
+#professionalWorkspace [data-entrega-code][data-sem="ok"]{border-inline-start-color:var(--sem-ok)}
+#professionalWorkspace [data-entrega-code][data-sem="pend"]{border-inline-start-color:var(--sem-pend)}
+#professionalWorkspace .cx-jstep[data-sem]{border-inline-start:4px solid var(--sem-req);padding-inline-start:8px}
+#professionalWorkspace .cx-jstep[data-sem="ok"]{border-inline-start-color:var(--sem-ok)}
+#professionalWorkspace .cx-jstep[data-sem="pend"]{border-inline-start-color:var(--sem-pend)}
+/* Las etiquetas existentes (Listo / Al pulsar / Falta) adoptan los colores del semáforo: un solo lenguaje visual. */
+#professionalWorkspace[data-area] .perla-pill.ok,#professionalWorkspace.perla-pres :is(.perla-pill.ok,.perla-pill-state[data-kind=ok]){color:var(--sem-ok);background:var(--sem-ok-bg)}
+#professionalWorkspace[data-area] .perla-pill.pend,#professionalWorkspace.perla-pres :is(.perla-pill.pend,.perla-pill-state[data-kind=pend]){color:var(--sem-pend);background:var(--sem-pend-bg)}
+#professionalWorkspace[data-area] .perla-pill.req,#professionalWorkspace.perla-pres :is(.perla-pill.req,.perla-pill-state[data-kind=req]){color:var(--sem-req);background:var(--sem-req-bg)}
+#professionalWorkspace[data-area] .perla-pill.pend::before,#professionalWorkspace.perla-pres :is(.perla-pill.pend,.perla-pill-state[data-kind=pend])::before{background:var(--sem-pend)}
+.perla-sem-host .perla-sem{margin:0 0 10px}
