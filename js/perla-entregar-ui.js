@@ -34,7 +34,7 @@
   card.append(layer);
   if(!layer.querySelector('p,dd'))toggle.hidden=true;
  }
- function uncompact(card){if(card.dataset.perlaCompact!=='1')return;const layer=card.querySelector(':scope>.perla-detail'),body=card.querySelector(':scope>.body')||card;
+ function uncompact(card){if(card.dataset.perlaCompact!=='1')return;const layer=card.querySelector('.perla-detail'),body=card.querySelector(':scope>.body')||card;
   const anchor=body.querySelector(':scope>button[data-route], :scope>.perla-card-selector');for(const p of [...(layer?.children||[])])if(!p.matches('.perla-detail-meta'))anchor?anchor.before(p):body.append(p);
   layer?.remove();card.querySelector('.perla-more-btn')?.remove();card.classList.remove('perla-compact','perla-open');delete card.dataset.perlaCompact;}
  function fillMeta(layer,meta){const dl=layer.querySelector('.perla-detail-meta');if(!dl)return;dl.replaceChildren();
@@ -67,6 +67,9 @@
  const metaFor=mod=>{const m=CARD_META[mod];return m?[[tx('Formato','Format','格式'),T(m[0])],[tx('Requisitos','Requirements','要求'),T(m[1])]]:[];};
  function compactIndex(){
   for(const card of $$('#professionalWorkspace .professional-index .professional-card, #professionalWorkspace [data-group="experience"] .bpdp-card')){
+   // Las fichas de la maqueta (con código conocido) no usan la capa antigua: su detalle vive en el panel. Si la ficha llegó
+   // tarde y ya se había compactado, se deshace (así el estado «Última entrega…» vuelve a su sitio).
+   if(card.dataset.entregaCode&&REF[card.dataset.entregaCode]){uncompact(card);continue;}
    const mod=card.dataset.module||'';
    const details=$$(':scope>p.professional-detail, :scope>.bpdp-card-body>p:not(.professional-state)',card);
    compact(card,{details,meta:metaFor(mod)});

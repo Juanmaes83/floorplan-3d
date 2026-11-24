@@ -237,5 +237,13 @@
  const pb=$('#paletteBuild');if(pb){let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;demoName();});}).observe(pb,{childList:true,subtree:true,attributes:true,attributeFilter:['title']});}
  // El dibujo vuelve a encajar en el lienzo reorganizado (mismo «Ajustar» del visor, sin cambiar el proyecto).
  requestAnimationFrame(()=>$('#fit')?.click());
+ // Si el diseño de PERLA encoge el lienzo (cabecera, guía, avisos, paneles) y la persona no ha movido ni ampliado el plano
+ // desde el último ajuste, se vuelve a «Ajustar»: la vivienda sigue entera a la vista. Si la ha movido, se respeta.
+ {const plan=$('#plan');let touched=false,lw=0,lh=0,t=0;
+  if(plan){for(const ev of ['wheel','pointerdown'])plan.addEventListener(ev,()=>{touched=true;},{passive:true});
+   for(const id of ['zoomIn','zoomOut'])$('#'+id)?.addEventListener('click',()=>{touched=true;});
+   $('#fit')?.addEventListener('click',()=>{touched=false;});
+   new ResizeObserver(()=>{const w=plan.clientWidth,h=plan.clientHeight;if(!w||!h)return;const shrank=lw&&(w<lw-8||h<lh-8);lw=w;lh=h;
+    if(shrank&&!touched){clearTimeout(t);t=setTimeout(()=>{if(!touched)$('#fit')?.click();},60);}}).observe(plan);}}
  addEventListener('load',()=>{paneIcons();dispatchEvent(new Event('resize'));});
 })();
