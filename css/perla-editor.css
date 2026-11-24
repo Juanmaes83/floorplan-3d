@@ -393,7 +393,13 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 }
 /* La barra de selección (#fab) sube por encima de la barra inferior del lienzo (zoom y escala): nunca se pisan.
    En el teléfono vertical la barra del lienzo ya va encima del dock y la de selección queda debajo, sin tocarse. */
-@media (min-width:761px){body.perla #stage>#fab{bottom:72px}}
+@media (min-width:761px) and (min-height:501px){body.perla #stage>#fab{bottom:72px}}
+/* Teléfono en horizontal: la barra de selección va en la franja superior libre, a la derecha (a la izquierda siguen Cotas,
+   Estancias y Muebles); abajo quedan zoom, escala y la barra de paneles. El aviso del norte cede su sitio mientras tanto. */
+@media (max-width:1100px) and (max-height:500px){
+ body.perla #stage>#fab{top:3px!important;bottom:auto!important;left:auto!important;right:12px!important;transform:none!important;max-width:calc(100% - 330px)}
+ body.perla #stage:has(>#fab.show) #solarNorth{visibility:hidden}
+}
 /* Teléfono en horizontal: mientras se dibuja (aviso «Dibujando muros» a la vista), las barras inferiores del lienzo no
    tapan el plano; el aviso trae «Terminar» y al terminar vuelven. */
 @media (max-width:1100px) and (max-height:500px){
@@ -404,7 +410,7 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 @media (max-width:760px){
  body.perla #stage>.level-conflicts,body.perla #stage:has(#fab.show)>.level-conflicts{top:54px;bottom:auto;left:12px;right:12px;max-width:none}
  /* mientras el aviso está a la vista, el plano se encaja debajo de él: no tapa cotas ni estancias */
- body.perla #stage:has(>.level-conflicts:not([hidden]))>#plan{margin-top:104px;height:calc(100% - 104px)}
+ body.perla #stage:has(>.level-conflicts:not([hidden]))>#plan{margin-top:104px!important;height:calc(100% - 104px - 123px)!important}
 }
 @media (min-width:761px){body.perla #stage>.level-conflicts{bottom:72px}body.perla #stage:has(#fab.show)>.level-conflicts{bottom:128px}}
 /* Teléfono: con un panel lateral abierto (Inspector, revisión, Construir) solo queda libre la franja izquierda del plano:
@@ -459,3 +465,7 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 /* Con «Mostrar ▾» abierto, la barra del lienzo pasa por encima de la brújula, los avisos y la barra inferior:
    sus opciones nunca quedan debajo. */
 body.perla .perla-canvas-top:has(#layersMenu[open]){z-index:60!important}
+/* Teléfono: el plano se encaja en la zona libre entre la barra superior del lienzo (Cotas, Estancias, Muebles) y la de
+   zoom y escala. «Ajustar» muestra la vivienda entera sin nada encima y cada estancia se puede tocar. */
+@media (max-width:760px){body.perla:not(.m3d):not(.presenting) #stage>#plan{margin-top:50px;height:calc(100% - 50px - 123px)}}
+@media (max-width:1100px) and (max-height:500px){body.perla:not(.m3d):not(.presenting) #stage>#plan{margin-top:48px;height:calc(100% - 48px - 58px)}}
