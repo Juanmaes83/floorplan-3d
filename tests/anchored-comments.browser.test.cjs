@@ -19,7 +19,7 @@ test('Phase B6: comments anchored to an element, a point of the plan and an imag
  await workspace.locator('[data-route="prepare-views"]').first().click();await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy',null,{timeout:240000});
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const bed=await page.evaluate(()=>{const o=FloorPlanApp.project.objects.find(x=>x.type==='bed');return {id:o.id};});
- const download=page.waitForEvent('download');await workspace.getByRole('button',{name:'Descargar archivo para el cliente',exact:true}).click();const file=path.join(dir,'cliente.html');await (await download).saveAs(file);
+ const download=page.waitForEvent('download');await workspace.locator('[data-route="client-file"]').click();const file=path.join(dir,'cliente.html');await (await download).saveAs(file);
 
  // The client, offline, on a phone.
  const client=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,acceptDownloads:true});t.after(()=>client.close());

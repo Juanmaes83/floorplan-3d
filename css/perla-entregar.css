@@ -61,7 +61,7 @@
 #professionalWorkspace[data-area=deliver] .vacio-panel{padding:28px 20px;text-align:center;color:var(--ink-muted)}
 
 #professionalWorkspace[data-area=deliver]{--select:#2b3034;--select-ink:#fff;--focus:#1f6f8b;--shadow:0 1px 2px #1f23260f,0 8px 24px #1f232614;--radius:10px;background:#eceeee;padding-inline:max(16px,calc((100vw - 1328px)/2))}
-#professionalWorkspace[data-area=deliver] .ent-head h2{margin:4px 0 0;font:700 clamp(24px,3vw,34px)/1.15 system-ui,sans-serif}
+#professionalWorkspace[data-area=deliver] .ent-head h1{margin:4px 0 0;font:700 clamp(24px,3vw,34px)/1.15 system-ui,sans-serif}
 #professionalWorkspace[data-area=deliver] .hero-ent figure{aspect-ratio:1.49;width:100%;min-width:0;align-self:start;overflow:hidden}
 #professionalWorkspace[data-area=deliver] .hero-ent figure>img{display:block;position:absolute;inset:0}
 #professionalWorkspace[data-area=deliver] .hero-ent .txt{min-width:0}
@@ -187,7 +187,6 @@
    Jerarquía aprobada: acción principal vino #783B4B (halo #F4E8EC); enlaces y selección verde petróleo #1F5A66. */
 #professionalWorkspace[data-area=deliver]{--action:#1F5A66;--ok:#2f6e4a;--ok-soft:#e6f2ea;--info:#1F5A66;--info-soft:#e3eef0;--warn:#8a5a00;--warn-soft:#fbf0d9}
 /* Cabecera: un solo título visible («Lo que recibirá tu cliente»); el h1 sigue para lectores de pantalla y foco */
-#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-head h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 #professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-head small,#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-intro{display:none}
 /* Índice: «Índice de la entrega · N entregables y herramientas» en una línea; debajo, «Ver todos…» y los filtros */
 #professionalWorkspace[data-area=deliver] .mesa .professional-index{display:flex!important;flex-wrap:wrap;align-items:baseline;column-gap:8px}

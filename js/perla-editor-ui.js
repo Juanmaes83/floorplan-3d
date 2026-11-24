@@ -48,7 +48,7 @@
   const gb=$('#guideBar');if(gb)new MutationObserver(sync).observe(gb,{attributes:true,attributeFilter:['data-project-kind']});sync();copyBtn._perlaLabel=lbl;copyBtn._perlaExample=isExample;}
  // Áreas: los mismos botones de la barra de áreas, centrados y con más peso.
  for(const id of ['workArea-design','workArea-analyze','workArea-budget','workArea-deliver'])move('#'+id,center);
- center.setAttribute('role','group');center.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区域'));
+ center.setAttribute('role','navigation');center.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区域'));
  // Utilidades compactas: búsqueda de acciones, historial de sesión, Mi estudio, ayuda, idioma y «Más».
  const search=move('#actionSearchBtn',right);if(search){search.classList.add('perla-icon');search.insertAdjacentHTML('afterbegin',svg('search'));search.setAttribute('aria-label',tx('Buscar una acción','Search an action','搜索操作'));}
  const hist=move('#editHistory',right);if(hist){hist.setAttribute('role','group');hist.setAttribute('aria-label',tx('Historial de sesión','Session history','会话历史'));}

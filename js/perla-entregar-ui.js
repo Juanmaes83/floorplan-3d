@@ -268,6 +268,7 @@
   const v=velo();if(v)v.hidden=!narrow();p.focus({preventScroll:true});if(!narrow())p.scrollIntoView({block:'nearest'});}
  function closePanel(focus){const p=deskPanel(),c=selCard;selCard=null;lastMirror=null;pressed();if(p){emptyPanel(p);p.classList.remove('perla-panel-open');}const v=velo();if(v)v.hidden=true;
   if(focus&&c?.isConnected)c.querySelector('.perla-card-selector')?.focus({preventScroll:true});}
+ document.addEventListener('rubik:leave-deliver',()=>{closePanel(false);returnCard=null;catFocus=null;});
  // Toda la ficha (su selector cubre la tarjeta) abre el panel; el de Codex no llega a ejecutarse: este lo sustituye.
  document.addEventListener('click',e=>{const s=e.target.closest?.('#professionalWorkspace .perla-ref .perla-card-selector');if(!s)return;e.stopPropagation();e.preventDefault();
   const c=s.closest('.perla-ref');if(selCard===c&&deskPanel()?.classList.contains('perla-panel-open'))closePanel(true);else openPanel(c);},true);
