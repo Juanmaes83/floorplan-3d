@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asesor RUBIK · laboratorio simulado</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<header class="lab-top">
+ <div class="lab-brand"><b>RUBIK</b> · Asesor en vivo</div>
+ <div class="lab-badges">
+  <span class="badge ia" id="badgeIa">IA</span>
+  <span class="badge sim" id="badgeSim">Sesión simulada</span>
+  <span class="badge off" id="badgeOff">Voz real apagada · sin conexión a Nuance</span>
+ </div>
+</header>
+<main class="lab">
+ <section class="advisor" aria-labelledby="advTitle">
+  <h1 id="advTitle">Asesor RUBIK <small>(asistente de IA)</small></h1>
+  <div class="setup">
+   <label>Oficio <select id="profile">
+    <option value="architecture">Estudio de arquitectura</option>
+    <option value="real-estate">Inmobiliaria</option>
+    <option value="developer">Promotora</option>
+    <option value="renovation">Reformas</option>
+    <option value="interior">Decoración e interiorismo</option>
+    <option value="construction">Constructora / jefe de obra</option>
+   </select></label>
+   <fieldset class="mode"><legend>Modo</legend>
+    <label><input type="radio" name="mode" value="cliente" checked> Cliente (solo consulta)</label>
+    <label><input type="radio" name="mode" value="tecnico"> Técnico</label>
+   </fieldset>
+  </div>
+  <div class="avatar-row">
+   <div class="avatar" id="avatar" role="img" aria-label="Avatar del asesor, una IA"><span>IA</span></div>
+   <div class="status"><strong id="state" aria-live="polite">Listo para empezar</strong><p class="note">El asesor solo empieza cuando tú lo pulsas. No usa cámara ni micrófono en este laboratorio.</p></div>
+  </div>
+  <p class="subtitle" id="subtitle" aria-live="polite"></p>
+  <div class="actions">
+   <button type="button" class="btn primary" id="start">Iniciar conversación</button>
+   <button type="button" class="btn" id="close" disabled>Terminar</button>
+   <button type="button" class="btn" id="toText">Continuar por texto</button>
+  </div>
+  <div class="error" id="error" role="alert" hidden><p id="errorMsg"></p><div class="row"><button type="button" class="btn" id="retry">Reintentar</button><button type="button" class="btn primary" id="errToText">Continuar por texto</button></div></div>
+  <form class="talk" id="talk" aria-label="Lo que dirías al asesor">
+   <label for="say">Di algo al asesor <small>(simulado: escribe lo que dirías)</small></label>
+   <div class="row"><input id="say" autocomplete="off" disabled placeholder="Por ejemplo: ¿cuántos metros tiene la vivienda?"><button class="btn" id="sayBtn" disabled>Decir</button></div>
+   <div class="chips" id="chips">
+    <button type="button" class="chip" data-say="¿Cuántos metros tiene la vivienda?" disabled>Superficies</button>
+    <button type="button" class="chip" data-say="Enséñame el salón" disabled>Enfocar el salón</button>
+    <button type="button" class="chip" data-say="Prefiero seguir por texto" disabled>Pasar a texto</button>
+    <button type="button" class="chip" data-say="¿Cuánto cuesta la reforma?" disabled>Presupuesto</button>
+    <button type="button" class="chip" data-say="Cambia el suelo del salón" disabled>Cambiar suelo</button>
+   </div>
+  </form>
+  <section class="results" aria-labelledby="resT"><h2 id="resT">Resultados</h2><div id="results"><p class="muted">Aún no hay resultados.</p></div></section>
+  <details class="qa"><summary>Laboratorio: simular errores del servicio</summary>
+   <div class="row"><select id="failSel">
+    <option value="">Sin error</option><option value="mic_denied">Permiso de micrófono denegado</option><option value="invalid_credential">Credencial inválida (401)</option>
+    <option value="forbidden">Sin acceso (403)</option><option value="concurrency_limit">Concurrencia (409)</option><option value="credits_spent">Saldo agotado (429)</option>
+    <option value="start_limit">Límite de inicios (429)</option><option value="capacity_unavailable">Sin capacidad (429)</option><option value="unavailable">No disponible (503)</option>
+   </select><button type="button" class="btn" id="dropConn">Simular pérdida de conexión</button></div>
+   <p class="muted">El error elegido se aplica al iniciar. La pérdida de conexión se aplica a una sesión en curso.</p>
+  </details>
+  <ol class="log" id="log" aria-label="Registro de la sesión"></ol>
+ </section>
+ <section class="viewer" aria-label="Visor de RUBIK con la vivienda de ejemplo">
+  <iframe id="rubik" title="RUBIK · vivienda de ejemplo" src="../../index.html#inicio"></iframe>
+ </section>
+</main>
+<script src="tools.js"></script>
+<script src="adapter.js"></script>
+<script src="lab.js"></script>
+</body>
+</html>
