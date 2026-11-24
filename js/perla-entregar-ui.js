@@ -18,6 +18,8 @@
 
  // ── Ficha compacta: «Ver detalles» con capa superpuesta ──
  function compact(card,{details=[],meta=[]}={}){
+  // Ficha PERLA V3 de Codex (portada + «Ver detalles» que abre el panel lateral): el detalle vive en ese panel, no en una capa.
+  if(card.querySelector('.perla-card-selector')){uncompact(card);card.dataset.perlaPanel='1';return;}
   if(card.dataset.perlaCompact==='1'){const d=card.querySelector(':scope>.perla-detail');if(d)fillMeta(d,meta);return;}
   card.dataset.perlaCompact='1';card.classList.add('perla-compact');
   const layer=el('div','perla-detail',null);layer.id='perla-det-'+(++uid);layer.hidden=true;layer.setAttribute('role','region');
@@ -32,6 +34,9 @@
   card.append(layer);
   if(!layer.querySelector('p,dd'))toggle.hidden=true;
  }
+ function uncompact(card){if(card.dataset.perlaCompact!=='1')return;const layer=card.querySelector(':scope>.perla-detail'),body=card.querySelector(':scope>.body')||card;
+  const anchor=body.querySelector(':scope>button[data-route], :scope>.perla-card-selector');for(const p of [...(layer?.children||[])])if(!p.matches('.perla-detail-meta'))anchor?anchor.before(p):body.append(p);
+  layer?.remove();card.querySelector('.perla-more-btn')?.remove();card.classList.remove('perla-compact','perla-open');delete card.dataset.perlaCompact;}
  function fillMeta(layer,meta){const dl=layer.querySelector('.perla-detail-meta');if(!dl)return;dl.replaceChildren();
   for(const[k,v]of meta)if(v){el('dt',undefined,dl,k);el('dd',undefined,dl,v);}
   const t=layer.closest('.professional-card,.perla-cat-item')?.querySelector('.perla-more-btn');if(t)t.hidden=!layer.querySelector('p,dd');}
@@ -163,10 +168,113 @@
   toggle._paint=paint;paint(false);
  }
 
+ // ── Maqueta PERLA c96888ac (docs/qa/rubik-perla-premium-c96888ac en codex/rubik-perla-premium-c96888ac @ 87f8d7e9) ──
+ // Ficha: portada, título, una línea, estado con color (listo / al pulsar / falta) y UNA acción a la vista; toda la ficha
+ // abre el panel. El panel reúne descripción completa, estado, lo que necesita, formato, la imagen y TODAS las acciones de
+ // la ficha (cada botón del panel pulsa el control real, que sigue en el DOM). No se elimina ningún entregable ni acción.
+ const REF={
+  D1:[['Superficie útil por estancia, lista para imprimir.','Usable area per room, ready to print.','各房间使用面积，可直接打印。'],['Ninguna','None','无'],['Ficha real de la vivienda de ejemplo','Real schedule of the example home','示例住宅的真实明细表']],
+  D2:[['Plano de distribución con acabados, cotas y tu cajetín.','Layout plan with finishes, dimensions and your title block.','带饰面、尺寸和图签的布局图。'],['Firma (opcional) en Mi estudio','Signature (optional) in My studio','我的工作室中的签名（可选）'],['Lámina real de la vivienda de ejemplo','Real sheet of the example home','示例住宅的真实图纸']],
+  D3:[['Portada, plano, superficies, orientación y exterior en un documento.','Cover, plan, areas, orientation and exterior in one document.','封面、平面、面积、朝向与外部合为一份文件。'],['Imágenes 3D y observaciones completan las secciones restantes','3D images and comments complete the remaining sections','三维图像与意见补全其余章节'],['Portada real del dossier','Real dossier cover','档案的真实封面']],
+  D4:[['El presupuesto en versión para el cliente.','The budget in a client version.','客户版预算。'],['S1 Presupuesto con precios','S1 Budget with prices','S1 带价格的预算'],['Ejemplo de estructura · sin importes inventados','Structure example · no invented amounts','结构示例 · 无虚构金额']],
+  D5:[['Paquete por pasos: elegir, previsualizar y preparar.','Step-by-step package: choose, preview and prepare.','分步打包：选择、预览、准备。'],['Según el entregable','Depends on the deliverable','取决于交付物'],['Configurador E3 real','Real E3 configurator','真实的 E3 配置器']],
+  P1:[['Recorrido guiado por la vivienda, con «Grabar vídeo».','Guided tour of the home, with «Record video».','住宅导览，可“录制视频”。'],['Ninguna','None','无'],['Vista 3D real de la vivienda de ejemplo','Real 3D view of the example home','示例住宅的真实三维视图']],
+  P2:[['Vista general y estancias a color, limpias o con tu firma.','Overview and rooms in colour, clean or with your signature.','彩色总览与房间，无标记或带签名。'],['La vista 3D para preparar las 5 vistas','The 3D view to prepare the 5 views','需三维视图来准备 5 个视图'],['Vistas reales generadas con «Preparar 5 vistas»','Real views made with «Prepare 5 views»','用“准备 5 个视图”生成的真实视图']],
+  P3:[['Tu cliente recorre la vivienda a la altura de los ojos.','Your client walks the home at eye level.','客户以视线高度漫游住宅。'],['Publicar el enlace requiere tu consentimiento','Publishing the link requires your consent','发布链接需你同意'],['Recorrido real de la vivienda de ejemplo','Real walkthrough of the example home','示例住宅的真实漫游']],
+  P4:[['La obra día a día, sincronizada con su plan.','The works day by day, synced with its plan.','逐日施工，与计划同步。'],['Plan de obra (Presupuestar → Plan de obra)','Construction plan (Budget → Construction plan)','施工计划（预算 → 施工计划）'],['Ejemplo: demo con el plan de la vivienda de ejemplo','Example: demo with the example home plan','示例：示例住宅计划的演示']],
+  P5:[['Suelos y mobiliario reales del proyecto en una lámina.','Real project floors and furniture on one board.','项目真实地面与家具汇于一板。'],['Ninguna','None','无'],['Material board real','Real material board','真实材料板']],
+  P6:[['Cómo termina tu presentación, con tu firma.','How your presentation ends, with your signature.','演示的结尾，带你的签名。'],['Firma en Mi estudio','Signature in My studio','我的工作室中的签名'],['Ejemplo: cierre con un estudio ficticio','Example: ending with a fictitious studio','示例：虚构工作室的结尾']],
+  P7:[['Un HTML que abre sin conexión y le permite dejarte observaciones.','An HTML file that opens offline and lets them leave you comments.','可离线打开并可留下意见的 HTML。'],['Publicar el enlace requiere tu confirmación','Publishing the link requires your confirmation','发布链接需你确认'],['Portada real del archivo descargado','Real cover of the downloaded file','下载文件的真实封面']],
+  P8:[['Planta, cotas, alzados y secciones sobre el 3D del proyecto.','Plan, dimensions, elevations and sections on the project 3D.','基于项目三维的平面、尺寸、立面与剖面。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Portada de la Home · captura real de Blueprint 3D','Home cover · real Blueprint 3D capture','首页封面 · Blueprint 3D 真实截图']],
+  P9:[['Cómo se separa y se monta la vivienda, pieza a pieza.','How the home comes apart and goes together, piece by piece.','住宅如何逐件拆分与组装。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Portada de la Home · captura real de Despiece 3D','Home cover · real Exploded 3D capture','首页封面 · 拆解三维真实截图']],
+  S1:[['Partidas desde las cantidades del proyecto, con tus precios.','Items from the project quantities, with your prices.','根据项目数量与你的价格生成条目。'],['Tus precios','Your prices','你的价格'],['Presupuestar real','Real Budget area','真实的预算区']],
+  S2:[['Lo que te devuelve el cliente, anclado al plano.','What your client sends back, pinned to the plan.','客户反馈，锚定在平面上。'],['El cliente responde desde P7','The client replies from P7','客户通过 P7 回复'],['Gestor real (sin comentarios inventados)','Real manager (no invented comments)','真实管理器（无虚构意见）']],
+  T1:[['Paquete técnico ZIP con la escena 3D, medidas e identificadores. No es un vídeo.','Technical ZIP package with the 3D scene, dimensions and identifiers. It is not a video.','含三维场景、尺寸与标识的技术 ZIP 包。不是视频。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Render Cycles real de la vivienda de ejemplo','Real Cycles render of the example home','示例住宅的真实 Cycles 渲染']],
+  T2:[['Antes y después, cambios reales y presupuesto de cada revisión.','Before and after, real changes and the budget of each revision.','前后对比、真实变更与每次修订的预算。'],['Crear una variante en Proyectos','Create a variant in Projects','在项目中创建变体'],['Original real · la variante aún no existe','Real original · the variant does not exist yet','真实原版 · 变体尚不存在']]};
+ const GROUP_SUB={documentation:['Lo que se imprime o se archiva','What gets printed or archived','用于打印或归档'],experience:['Lo que verá y recibirá','What they will see and receive','客户将看到和收到的'],coordination:['Precios y respuesta del cliente','Prices and client response','价格与客户反馈'],tools:['No son para el cliente','Not for the client','不提供给客户']};
+ const BPDP={blueprint:['P8','assets/welcome/demo-blueprint-3d.webp'],despiece:['P9','assets/welcome/demo-despiece-3d.webp']};
+ const PRIMARY={P2:/5 vistas|5 views|5 个视图/};
+ const narrow=()=>matchMedia('(max-width:1100px)').matches;
+ const bodyOf=c=>c.querySelector(':scope>.body, :scope>.bpdp-card-body');
+ // Todas las acciones de la ficha, también las que otros módulos añaden fuera de su cuerpo (Reformar desde fotografía, Estudio de imágenes…)
+ const actionsOf=c=>$$('button, a[href]',c).filter(b=>!b.matches('.perla-card-selector,.perla-more-btn')&&!b.closest('.thumb'));
+ function pillOf(code,card){const st=(card.querySelector('.professional-state')?.textContent||'').trim();
+  if(code==='D5'){let n=0;try{n=(window.RubikE3Entregables?.catalogo?.()||[]).filter(i=>i.disponible).length;}catch{}return ['ok',tx(`${n} entregables disponibles`,`${n} deliverables available`,`${n} 项交付物可用`)];}
+  if(code==='P3')return ['pend',tx('Prueba privada · no se publica','Private test · not published','私密测试 · 不发布')];
+  if(code==='T1'||code==='P8'||code==='P9'){const ok3d=document.body.classList.contains('m3d')&&!/Requiere la vista 3D|Requires the 3D/.test(st);return ['pend',ok3d?tx('Se prepara al pulsar','Prepared on demand','点击时准备'):tx('Requiere la vista 3D abierta','Requires the 3D view open','需要打开三维视图')];}
+  if(code==='P2')return ['pend',st];
+  if(/Requiere|Necesita|Requires|Needs|Sin presupuesto|No budget|Sin firma|No signature|Sin variantes|No variants|^0 de|^0 of|no disponible|not available|需要|没有|未选|尚未准备|尚未选择/i.test(st))return ['req',st];
+  if(/Lista|Listo|Ready|disponible|available|m²|estancias|rooms|suelos|floors|就绪|房间|可供|可发送|单层|地面/i.test(st))return ['ok',st];
+  return ['pend',st];}
+ function tile(card){const code=card.dataset.entregaCode;if(!REF[code])return;card.classList.add('perla-ref');const body=bodyOf(card);if(!body)return;
+  const [k,txt]=pillOf(code,card);card.dataset.perlaPill=k;
+  let desc=body.querySelector(':scope>.perla-desc');if(!desc)desc=el('p','perla-desc',body);const d=T(REF[code][0]);if(desc.textContent!==d)desc.textContent=d;
+  let meta=body.querySelector(':scope>.perla-meta');if(!meta){meta=el('div','perla-meta',body);el('span','perla-pill',meta);}
+  const pill=meta.firstChild;if(pill.className!=='perla-pill '+k)pill.className='perla-pill '+k;if(pill.textContent!==txt)pill.textContent=txt;
+  const acts=actionsOf(card),pri=acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
+  for(const b of acts)b.classList.toggle('perla-go',b===pri);
+  let sel=body.querySelector(':scope>.perla-card-selector');
+  if(!sel){sel=el('button','btn perla-card-selector professional-card-details',body,tx('Ver detalles','View details','查看详情'));sel.type='button';}
+  const label=tx('Ver detalles','View details','查看详情')+' · '+code+' '+(card.querySelector('h3')?.textContent||'')+': '+txt;if(sel.getAttribute('aria-label')!==label)sel.setAttribute('aria-label',label);
+  if(!sel.hasAttribute('aria-pressed'))sel.setAttribute('aria-pressed',String(selCard===card));}
+ function bpdpTile(card){const m=card.id.replace('bpdpCard-','');const b=BPDP[m];if(!b)return;card.dataset.entregaCode=b[0];card.classList.add('perla-tile');
+  if(!card.querySelector(':scope>.thumb')){const th=el('div','thumb',null);const i=el('img',undefined,th);i.src=b[1];i.alt='';i.loading='lazy';el('span','code',th,b[0]);card.prepend(th);}
+  tile(card);}
+ function groupHeads(index){for(const g of $$(':scope>.professional-delivery-group',index)){const s=GROUP_SUB[g.dataset.group];if(!s)continue;
+  let p=g.querySelector(':scope>.perla-group-sub');if(!p){p=el('p','perla-group-sub',null);(g.querySelector(':scope>.professional-count')||g.querySelector('h2'))?.after(p);}const t=T(s);if(p.textContent!==t)p.textContent=t;}}
+ const HERO_NAMES={D1:['ficha','area schedule','面积表'],D2:['lámina','sheet','图纸'],P1:['presentación 3D','3D presentation','三维演示'],P5:['material board','material board','材料板'],P7:['archivo para tu cliente','client file','客户文件'],P2:['imágenes','images','图像'],D3:['dossier del proyecto','project dossier','项目档案'],S1:['precios del presupuesto','budget prices','预算价格'],P4:['plan de obra','construction plan','施工计划']};
+ const joinList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+tx(' y ',' and ','和')+a[a.length-1];
+ function heroList(){const ul=$('#professionalWorkspace .hero-ent .listo');if(!ul)return;const g={ok:[],pend:[],req:[]};
+  for(const[code,n]of Object.entries(HERO_NAMES)){const c=$(`#professionalWorkspace .professional-index [data-entrega-code="${code}"]`);if(c)g[c.dataset.perlaPill||'pend'].push(T(n));}
+  const rows=[['ok',tx('Listo','Ready','就绪')],['pend',tx('Al pulsar','On demand','点击时')],['req',tx('Falta','Missing','缺少')]].filter(([k])=>g[k].length);
+  const sig=JSON.stringify([rows,g]);if(ul.dataset.sig===sig)return;ul.dataset.sig=sig;ul.replaceChildren();
+  for(const[k,l]of rows){const li=el('li',undefined,ul);el('span','perla-pill '+k,li,l);const t=joinList(g[k]);el('span',undefined,li,t.charAt(0).toUpperCase()+t.slice(1));}}
+ // Panel (escritorio: lateral fijo; teléfono y tableta: hoja inferior sobre un velo)
+ let selCard=null,lastMirror=null;
+ const deskPanel=()=>$('#professionalWorkspace .mesa .panel');
+ function velo(){const mesa=$('#professionalWorkspace .mesa');if(!mesa)return null;let v=mesa.querySelector(':scope>.perla-velo');if(!v){v=el('div','perla-velo',mesa);v.hidden=true;v.onclick=()=>closePanel(true);}return v;}
+ function emptyPanel(p){p.replaceChildren();const h=el('h3','vacio-panel',p,tx('Elige un entregable','Choose a deliverable','选择交付物'));el('p','perla-vacio-txt',h,tx('Verás aquí qué recibirá tu cliente, su estado y sus opciones, sin salir de Entregar.','Here you will see what your client will receive, its status and its options, without leaving Deliver.','在此查看客户将收到的内容、其状态和选项，无需离开交付。'));p.removeAttribute('aria-labelledby');}
+ function pressed(){for(const s of $$('#professionalWorkspace .perla-ref .perla-card-selector'))s.setAttribute('aria-pressed',String(s.closest('.perla-ref')===selCard));}
+ function openPanel(card){const p=deskPanel();if(!p||!card)return;selCard=card;pressed();const code=card.dataset.entregaCode,r=REF[code]||[];
+  const head=el('div','panel-h');el('span','code perla-panel-code',head,code);const h=el('h2',undefined,head,card.querySelector('h3')?.textContent||'');h.id='perlaPanelT';
+  const x=el('button','panel-x',head,'✕');x.type='button';x.setAttribute('aria-label',tx('Volver al índice','Return to index','返回索引'));x.onclick=()=>closePanel(true);
+  const b=el('div','panel-b');const th=card.querySelector(':scope>.thumb');if(th){const prev=el('div','prev',b),c=th.cloneNode(true);c.querySelector('.code')?.remove();c.querySelectorAll('img').forEach(i=>i.loading='eager');prev.append(c);}
+  if(r[0])el('p','perla-panel-desc',b,T(r[0]));
+  const seen=new Set();const pillTxt=card.querySelector('.perla-pill')?.textContent.trim();for(const n of $$('p:not(.perla-desc):not(.perla-pill), figcaption, small',card)){const t=n.textContent.trim();if(!t||t===pillTxt||seen.has(t)||n.closest('.perla-meta,.thumb'))continue;seen.add(t);el('p','perla-panel-more',b,t);}
+  const dl=el('dl',undefined,b);const row=(k,v,node)=>{el('dt',undefined,dl,k);const dd=el('dd',undefined,dl);node?dd.append(node):dd.textContent=v;};
+  row(tx('Estado','Status','状态'),null,card.querySelector('.perla-pill')?.cloneNode(true));
+  if(r[1])row(tx('Necesita','Needs','需要'),T(r[1]));
+  const m=CARD_META[card.dataset.module||''];if(m)row(tx('Formato','Format','格式'),T(m[0]));
+  if(r[2])row(tx('Imagen','Image','图像'),T(r[2]));
+  row(tx('Al cerrar','On close','关闭后'),tx('Vuelves a esta tarjeta del índice','You return to this index card','返回此索引卡片'));
+  const f=el('div','panel-f');const acts=actionsOf(card);acts.sort((a,c)=>(c.classList.contains('perla-go')?1:0)-(a.classList.contains('perla-go')?1:0));
+  for(const a of acts){const mb=el('button','btn'+(a.classList.contains('perla-go')?' primary':''),f,a.textContent.trim());mb.type='button';mb.disabled=!!a.disabled;mb.dataset.perlaMirror=a.dataset.route||a.id||'';
+   mb.onclick=()=>{lastMirror=mb.textContent;a.click();};}
+  p.replaceChildren(head,b,f);p.setAttribute('aria-labelledby','perlaPanelT');p.tabIndex=-1;p.hidden=false;p.classList.add('perla-panel-open');
+  const v=velo();if(v)v.hidden=!narrow();p.focus({preventScroll:true});if(!narrow())p.scrollIntoView({block:'nearest'});}
+ function closePanel(focus){const p=deskPanel(),c=selCard;selCard=null;lastMirror=null;pressed();if(p){emptyPanel(p);p.classList.remove('perla-panel-open');}const v=velo();if(v)v.hidden=true;
+  if(focus&&c?.isConnected)c.querySelector('.perla-card-selector')?.focus({preventScroll:true});}
+ // Toda la ficha (su selector cubre la tarjeta) abre el panel; el de Codex no llega a ejecutarse: este lo sustituye.
+ document.addEventListener('click',e=>{const s=e.target.closest?.('#professionalWorkspace .perla-ref .perla-card-selector');if(!s)return;e.stopPropagation();e.preventDefault();
+  const c=s.closest('.perla-ref');if(selCard===c&&deskPanel()?.classList.contains('perla-panel-open'))closePanel(true);else openPanel(c);},true);
+ document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!selCard||document.querySelector('dialog[open]'))return;const p=deskPanel();
+  if(narrow()||p?.contains(document.activeElement)||selCard.contains(document.activeElement)){e.preventDefault();e.stopPropagation();closePanel(true);}},true);
+ // Al cerrar el generador, el panel se actualiza (el estado pudo cambiar) y el foco vuelve a su botón.
+ document.addEventListener('close',()=>setTimeout(()=>{if(!selCard||!deliverOpen()||document.querySelector('dialog[open]'))return;
+  const a=document.activeElement;if(a&&a!==document.body&&a.offsetParent!==null&&a.isConnected)return;const t=lastMirror;
+  if(selCard.isConnected)openPanel(selCard);const mb=t&&[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])].find(b=>b.textContent===t);(mb||deskPanel())?.focus({preventScroll:true});},90),true);
+ // Barra inferior del teléfono: el producto ya tiene la suya (.professional-dock, mismo atajo de P7); solo cambia su color.
+ function maqueta(index){
+  for(const c of $$('#professionalWorkspace .professional-index .professional-card[data-entrega-code]'))if(c.querySelector(':scope>.thumb'))tile(c);
+  for(const c of $$('#professionalWorkspace .professional-index .bpdp-card'))bpdpTile(c);
+  groupHeads(index);heroList();
+  const p=deskPanel();if(p&&!selCard&&!p.querySelector('.perla-vacio-txt'))emptyPanel(p);
+  if(selCard&&!selCard.isConnected){const code=selCard.dataset.entregaCode;const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${code}"]`);selCard=n||null;if(!n)closePanel(false);else pressed();}}
+
  // ── Aplicar al pintar Entregar (idempotente; no reordena lo que ya está en su sitio) ──
  let pending=false;
  function apply(){pending=false;if(!deliverOpen())return;const index=$('#professionalWorkspace .professional-index');if(!index)return;
-  mo.disconnect();try{compactIndex();buildCatalog(index);}finally{mo.observe(document.body,{childList:true,subtree:true});}}
+  mo.disconnect();try{maqueta(index);compactIndex();buildCatalog(index);}finally{mo.observe(document.body,{childList:true,subtree:true});}}
  // Home · «Módulos para tu trabajo»: la misma ficha compacta. El detalle conserva qué es, qué no es y sus condiciones
  // (privacidad y créditos incluidos); estado, título, acción y el aviso que condiciona la acción siguen a la vista.
  let homePending=false;
@@ -181,5 +289,5 @@
  document.addEventListener('close',()=>setTimeout(()=>{if(!deliverOpen()||!catOpen||!catFocus)return;if(document.querySelector('dialog[open]'))return;
   const a=document.activeElement,mine=$(`[data-perla-action="${catFocus}"]`);
   if(mine&&(launched===catFocus||!a||a===document.body||!a.isConnected)){mine.focus({preventScroll:true});mine.scrollIntoView({block:'nearest'});}launched=null;},60),true);
- new MutationObserver(()=>setTimeout(()=>{$('#perlaCatToggle')?._paint?.(true);for(const t of $$('.perla-more-btn'))t._label?.();},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ new MutationObserver(()=>setTimeout(()=>{$('#perlaCatToggle')?._paint?.(true);for(const t of $$('.perla-more-btn'))t._label?.();if(deliverOpen()){const i=$('#professionalWorkspace .professional-index');if(i){mo.disconnect();try{maqueta(i);if(selCard)openPanel(selCard);}finally{mo.observe(document.body,{childList:true,subtree:true});}}}},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();

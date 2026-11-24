@@ -172,3 +172,97 @@
 @media (max-width:560px){.welcome-audience-purpose:not([hidden]){grid-template-columns:110px minmax(0,1fr)}.welcome-audience-portrait-img{width:110px;height:138px}}
 .home-muestra-estilos{grid-template-columns:1fr 1fr}
 .home-muestra-estilos figure:last-child{grid-column:auto}
+
+/* Composición Codex + Claude: un solo «Ver todos los documentos y entregables» (el catálogo completo, 24 salidas y 7
+   accesos, con sus generadores); formato y requisitos dentro del panel lateral de detalle. */
+#professionalWorkspace .professional-full-catalog{display:none}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-meta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-meta dt{color:var(--color-ash,#6b6b6b);font-weight:600}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-meta dd{margin:0}
+
+/* ── Maqueta PERLA c96888ac: ficha, grupos, resumen, panel y móvil ──
+   Jerarquía aprobada: acción principal vino #783B4B (halo #F4E8EC); enlaces y selección verde petróleo #1F5A66. */
+#professionalWorkspace[data-area=deliver]{--action:#1F5A66;--ok:#2f6e4a;--ok-soft:#e6f2ea;--info:#1F5A66;--info-soft:#e3eef0;--warn:#8a5a00;--warn-soft:#fbf0d9}
+/* Cabecera: un solo título visible («Lo que recibirá tu cliente»); el h1 sigue para lectores de pantalla y foco */
+#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-head h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-head small,#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-intro{display:none}
+/* Índice: «Índice de la entrega · N entregables y herramientas» en una línea; debajo, «Ver todos…» y los filtros */
+#professionalWorkspace[data-area=deliver] .mesa .professional-index{display:flex!important;flex-wrap:wrap;align-items:baseline;column-gap:8px}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>*{flex:1 1 100%;order:3;min-width:0}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>h2{flex:0 0 auto;order:0;margin:0;font-size:20px}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-count{flex:1 1 0;order:1;color:var(--ink-muted);font-size:14px;margin:0}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-count::before{content:'· '}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>#perlaCatToggle{flex:0 0 auto;order:2;margin:10px 0 0}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>#perlaCatalog{order:2}
+/* Grupos: título, recuento y subtítulo en una línea con filete */
+#professionalWorkspace[data-area=deliver] .professional-delivery-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 26px}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>*{flex:1 1 100%}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>h2{flex:0 0 auto;font-size:16px;font-weight:650;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-count{flex:0 0 auto;background:none;padding:0;color:var(--ink-muted);font-weight:400;font-size:16px}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-count::before{content:'· '}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.perla-group-sub{flex:1 1 0;margin:0;font-size:13px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-group-items{margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group[data-group=tools] .perla-ref{background:var(--surface-sunken,#f1f2f2)}
+/* Estados con color: listo (✓), al pulsar (•), falta (!) */
+#professionalWorkspace[data-area=deliver] .perla-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;padding:2px 9px;border-radius:12px;max-width:100%;line-height:1.35;justify-self:start}
+#professionalWorkspace[data-area=deliver] .perla-pill::before{content:'';flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+#professionalWorkspace[data-area=deliver] .perla-pill.ok{color:var(--ok);background:var(--ok-soft)}
+#professionalWorkspace[data-area=deliver] .perla-pill.pend{color:var(--info);background:var(--info-soft)}
+#professionalWorkspace[data-area=deliver] .perla-pill.req{color:var(--warn);background:var(--warn-soft)}
+#professionalWorkspace[data-area=deliver] .perla-pill.ok::before{content:'✓';width:auto;height:auto;background:none;font-size:11px}
+#professionalWorkspace[data-area=deliver] .perla-pill.req::before{content:'!';width:auto;height:auto;background:none}
+/* Ficha: portada, título, una línea, estado y una acción; el resto de la ficha sigue en el DOM y se ve en el panel */
+#professionalWorkspace[data-area=deliver] .perla-ref{position:relative;display:grid;grid-template-rows:auto 1fr;cursor:pointer}
+#professionalWorkspace[data-area=deliver] .perla-ref>.bpdp-card-figure{display:none}
+#professionalWorkspace[data-area=deliver] .perla-ref>.body,#professionalWorkspace[data-area=deliver] .perla-ref>.bpdp-card-body{padding:12px 14px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+#professionalWorkspace[data-area=deliver] .perla-ref>:is(.body,.bpdp-card-body)>:not(h3):not(.perla-desc):not(.perla-meta):not(.perla-go):not(.perla-card-selector):not(.bpdp-card-actions):not(.delivery3d-body){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .bpdp-card-actions>:not(.perla-go){display:none!important}
+/* P3 (visita 3D) anida su contenido: participa en la misma rejilla; su mensaje de estado se ve si dice algo */
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-body{display:contents!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-body>:not(h3):not(.delivery3d-actions){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-body>#delivery3dMessage:not(:empty){display:block!important;order:5;margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-actions{order:4;display:block;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-actions>:not(.perla-go){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .bpdp-card-actions{display:block;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-ref h3{order:1;font-size:15.5px;font-weight:650;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-desc{order:2;margin:0;font-size:13.5px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-meta{order:3;margin-top:4px}
+#professionalWorkspace[data-area=deliver] .perla-ref :is(.perla-go,.bpdp-card-actions){order:4}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go{position:relative;z-index:2;justify-self:start;min-height:32px;padding:0;margin:0;border:0!important;background:none!important;box-shadow:none!important;color:var(--action)!important;font-size:13px;font-weight:650;text-align:left;white-space:normal;cursor:pointer}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go::after{content:' →'}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go:hover{text-decoration:underline}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go:disabled{color:var(--ink-muted)!important;cursor:not-allowed}
+/* El selector cubre toda la ficha: un toque o clic en cualquier parte abre el panel (la acción queda por encima) */
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-card-selector{position:absolute!important;inset:0!important;width:auto!important;max-width:none!important;height:auto!important;justify-self:stretch!important;z-index:1;margin:0;padding:0;min-height:0;border:0;border-radius:var(--radius);background:transparent!important;box-shadow:none!important;color:transparent!important;font-size:0;cursor:pointer}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-card-selector:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#professionalWorkspace[data-area=deliver] .perla-ref:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+#professionalWorkspace[data-area=deliver] .perla-ref:has(.perla-card-selector[aria-pressed=true]){border-color:var(--action);box-shadow:0 0 0 2px var(--action)}
+#professionalWorkspace[data-area=deliver] .perla-ref .thumb{position:relative}
+/* Resumen junto a la vista 3D */
+#professionalWorkspace[data-area=deliver] .hero-ent .listo li{grid-template-columns:auto minmax(0,1fr)}
+/* Panel */
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-code{position:static}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-desc{margin:0}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-more{margin:0;font-size:13px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .panel .prev .thumb{aspect-ratio:auto;min-height:220px}
+#professionalWorkspace[data-area=deliver] .panel .prev .thumb>img{position:static}
+#professionalWorkspace[data-area=deliver] .panel-f .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26}
+#professionalWorkspace[data-area=deliver] .panel-f .btn.primary:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
+#professionalWorkspace[data-area=deliver] .panel .vacio-panel{margin:0;font-size:16px;color:var(--ink)}
+#professionalWorkspace[data-area=deliver] .panel .perla-vacio-txt{margin:8px 0 0;font-size:13.5px;font-weight:400;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .perla-velo{display:none}
+@media (max-width:1100px){
+ #professionalWorkspace[data-area=deliver] .mesa .panel:not(.perla-panel-open){display:none}
+ #professionalWorkspace[data-area=deliver] .mesa .panel.perla-panel-open{position:fixed;inset:auto 0 0 0;top:auto;max-height:88dvh;border-radius:16px 16px 0 0;z-index:91;padding-bottom:env(safe-area-inset-bottom,0px)}
+ #professionalWorkspace[data-area=deliver] .perla-velo:not([hidden]){display:block;position:fixed;inset:0;background:rgba(31,35,38,.42);z-index:90}
+}
+@media (max-width:760px){
+ #professionalWorkspace[data-area=deliver] .perla-ref .perla-desc{display:none}
+ #professionalWorkspace[data-area=deliver] .perla-ref h3{font-size:14.5px}
+}
+@media (prefers-reduced-motion:reduce){#professionalWorkspace[data-area=deliver] .perla-ref{transition:none}}
+#professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26}
+#professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
+#professionalWorkspace[data-area=deliver] .perla-ref>:not(.thumb):not(.body):not(.bpdp-card-body):not(.perla-card-selector){display:none!important}
+#professionalWorkspace[data-area=deliver] .professional-dock .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
