@@ -37,7 +37,7 @@ test('S2: «Mis publicaciones» withdraws a published link after confirmation, a
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanShareRegistry);
  const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#shareLinkDialog'),pubs=dialog.locator('#sharePublications');
- await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;await dialog.waitFor();
  assert.match(await pubs.innerText(),/Mis publicaciones \(este navegador\)[\s\S]*no es un registro completo[\s\S]*panel de Vercel Blob[\s\S]*copias en caché[\s\S]*Todavía no hay publicaciones/);
  // S2: the dialog explains where links are withdrawn, without promising an exact disappearance time.
  const note=await dialog.locator('#shareLinkNote').innerText();
@@ -108,7 +108,7 @@ test('S2: clear history (no deletion) and no orphan videos when the page upload 
  // A small recorded tour video (fixture bytes), so publishing uploads video + page.
  await page.evaluate(()=>{const blob=new Blob([new Uint8Array([0x1a,0x45,0xdf,0xa3,1,2,3,4])],{type:'video/webm'});Object.defineProperty(window.FloorPlanTourVideo,'result',{get:()=>({blob,extension:'webm'}),configurable:true});});
  const dialog=page.locator('#shareLinkDialog'),pubs=dialog.locator('#sharePublications');
- await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;await dialog.waitFor();
  const publish=async()=>{await dialog.locator('#shareLinkAgree').check();if(!(await dialog.locator('#shareLinkToken').inputValue()))await dialog.locator('#shareLinkToken').fill(SHARE);await dialog.locator('#shareLinkGo').click();};
  // 1) Page upload fails after the video → the video (and only it) is deleted, nothing stays published, nothing registered.
  failHtml=true;await publish();

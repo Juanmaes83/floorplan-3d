@@ -40,7 +40,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanClientShare);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#shareLinkDialog');
- await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;await dialog.waitFor();
  // S1: its own code field, empty: the render code is never read nor pre-filled.
  assert.equal(await dialog.locator('#shareLinkToken').inputValue(),'','the render code is not reused');
  assert.match(await dialog.innerText(),/Código de publicación de enlaces[\s\S]*Es distinto del código del Render IA/);
@@ -81,7 +81,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  const ext=await page.evaluate(()=>FloorPlanTourVideo.result.extension);await page.keyboard.press('Escape');
  await page.locator('#presentationClose').click({timeout:30000});await page.waitForFunction(()=>!FloorPlanPresentation.active);
  if(!(await workspace.isVisible()))await page.locator('#workArea-deliver').click();
- await abrirFicha(page,'P7');await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;await dialog.waitFor();
  assert.equal(await dialog.locator('#shareLinkVideo').isChecked(),true);assert.match(await dialog.innerText(),new RegExp(`Incluir el vídeo del recorrido \\(${ext.toUpperCase()}`));
  assert.equal(await dialog.locator('#shareLinkToken').inputValue(),SHARE,'the publishing code is remembered while this page is open');
  assert.equal(await page.evaluate(s=>Object.keys(localStorage).some(k=>localStorage.getItem(k)===s)||Object.keys(sessionStorage).some(k=>sessionStorage.getItem(k)===s),SHARE),false,'the publishing code is never stored in the browser');
