@@ -20,7 +20,7 @@ async page => {
       await p.locator('#welcomeInAction').screenshot({ path: out + `home-en-accion-${tag}.png` });
       // Muestras con archivos reales; vuelta del foco
       for (const id of ['video', 'comparativa', 'estilos', 'entrega']) {
-        const b = p.locator('#welcomeDemo-' + id); await b.scrollIntoViewIfNeeded(); touch ? await b.tap() : await b.click(); await p.waitForTimeout(500);
+        const b = p.locator('#welcomeDemo-' + id); await b.scrollIntoViewIfNeeded(); touch ? await b.tap() : await b.click(); await p.waitForTimeout(500); await p.waitForFunction(() => [...document.querySelectorAll('#homeMuestra img')].every(x => x.complete && x.naturalWidth > 0), null, { timeout: 8000 }).catch(() => {});
         const m = await p.evaluate(() => { const d = document.querySelector('#homeMuestra'); const media = [...d.querySelectorAll('img,video')]; return { open: d.open, n: media.length, src: media.map(x => x.getAttribute('src')).join(' '), ok: media.every(x => x.tagName === 'VIDEO' || (x.complete && x.naturalWidth > 0)) }; });
         if (id === 'video') { const v = await p.evaluate(async () => { const v = document.querySelector('#homeMuestra video'); if (v.readyState < 1) await new Promise((a, b) => { v.onloadedmetadata = a; v.onerror = () => b(Error('video')); setTimeout(a, 8000); }); return [v.videoWidth, v.videoHeight, Math.round(v.duration * 10) / 10]; }); m.video = v.join('×'); m.ok = m.ok && v[0] === 1280; }
         if (tag === 'escritorio') await p.screenshot({ path: out + `home-muestra-${id}.png` });

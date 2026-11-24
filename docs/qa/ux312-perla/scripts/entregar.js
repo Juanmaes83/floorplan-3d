@@ -13,25 +13,28 @@ async page => {
   await page.locator('#workArea-deliver').click(); await page.waitForTimeout(1800);
   await page.screenshot({ path: out + 'playwright/perla-entregar-indice.png' });
 
-  // Fichas compactas del índice
-  const idx = await ev(() => [...document.querySelectorAll('#professionalWorkspace .professional-index .professional-card')].map(c => ({ code: c.dataset.entregaCode, compact: c.classList.contains('perla-compact'), more: !!c.querySelector('.perla-more-btn:not([hidden])'), detailHidden: [...c.querySelectorAll(':scope>p.professional-detail')].every(p => !p.getClientRects().length) })));
-  ok('Índice', 'Fichas compactas (título, estado, acción; detalle oculto)', idx.length >= 16 && idx.every(c => c.compact && c.detailHidden), `${idx.length} fichas · con «Ver detalles» ${idx.filter(c => c.more).length} · fuera de regla: ${idx.filter(c => !(c.compact && c.detailHidden)).map(c => c.code + (c.compact ? '' : ' no-compacta') + (c.detailHidden ? '' : ' detalle-visible')).join(', ')}`);
-  const card = page.locator('#professionalWorkspace .professional-card[data-entrega-code="D1"]');
-  const sib = page.locator('#professionalWorkspace .professional-card[data-entrega-code="D2"]');
+  // Fichas del índice según la maqueta aprobada (c96888ac): una sola acción principal a la vista; el selector de la ficha
+  // abre su panel de detalle con todas las acciones. (Sustituye a las «fichas compactas con Ver detalles» de la V4.)
+  const idx = await ev(() => [...document.querySelectorAll('#professionalWorkspace [data-entrega-code].perla-ref')].map(c => ({ code: c.dataset.entregaCode, go: [...c.querySelectorAll('.perla-go')].filter(b => b.checkVisibility()).length, sel: !!c.querySelector('.perla-card-selector') })));
+  ok('Índice', 'Fichas: una acción principal a la vista y selector de detalle', idx.length >= 16 && idx.every(c => c.go === 1 && c.sel), `${idx.length} fichas · fuera de regla: ${idx.filter(c => !(c.go === 1 && c.sel)).map(c => c.code + ':' + c.go + (c.sel ? '' : ' sin-selector')).join(', ') || 'ninguna'}`);
+  const card = page.locator('#professionalWorkspace [data-entrega-code="D1"]');
+  const sib = page.locator('#professionalWorkspace [data-entrega-code="D2"]');
   const pos = () => sib.evaluate(n => { const g = n.closest('.professional-grid') || n.offsetParent; const a = n.getBoundingClientRect(), b = g.getBoundingClientRect(); return { x: a.x - b.x, y: a.y - b.y }; });
   const before = await pos();
-  await card.locator('.perla-more-btn').focus(); await page.keyboard.press('Enter'); await page.waitForTimeout(200);
-  const opened = await card.evaluate(c => !c.querySelector('.perla-detail').hidden && c.querySelector('.perla-more-btn').getAttribute('aria-expanded') === 'true');
+  await card.locator('.perla-card-selector').focus(); await page.keyboard.press('Enter'); await page.waitForTimeout(250);
+  const opened = await ev(() => document.querySelector('#professionalWorkspace .perla-panel-open .perla-panel-code')?.textContent === 'D1');
   const after = await pos();
   await page.screenshot({ path: out + 'playwright/perla-entregar-detalle.png' });
-  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
-  const closed = await card.evaluate(c => c.querySelector('.perla-detail').hidden && document.activeElement === c.querySelector('.perla-more-btn'));
-  ok('Índice', '«Ver detalles» con teclado: abre, Escape cierra y devuelve el foco', opened && closed);
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  const closed = await ev(() => !document.querySelector('#professionalWorkspace .perla-panel-open') && !!document.activeElement?.closest('[data-entrega-code="D1"]'));
+  ok('Índice', 'Detalle con teclado: abre el panel, Escape lo cierra y devuelve el foco a la ficha', opened && closed, `abierto ${opened} · cerrado y foco ${closed}`);
   ok('Índice', 'La cuadrícula no se mueve al abrir el detalle', Math.abs(before.y - after.y) < 1 && Math.abs(before.x - after.x) < 1, `${before.x},${before.y} → ${after.x},${after.y}`);
-  const fmtD2 = await ev(() => document.querySelector('.professional-card[data-entrega-code="D2"] .perla-detail')?.textContent);
-  ok('Índice', 'D2 Lámina: formato real SVG en el detalle', /SVG/.test(fmtD2) && !/PDF · PNG/.test(fmtD2), fmtD2);
-  await page.locator('.professional-card[data-entrega-code="D3"]').hover(); await page.waitForTimeout(200);
-  ok('Índice', 'Descripción al pasar el cursor', await ev(() => { const c = document.querySelector('.professional-card[data-entrega-code="D3"]'), d = c.querySelector('.perla-detail'); return !!d && d.getClientRects().length > 0; }), await ev(() => { const c = document.querySelector('.professional-card[data-entrega-code="D3"]'); return 'hover=' + c.matches(':hover') + ' · bajo el puntero: ' + (document.querySelectorAll(':hover').length ? [...document.querySelectorAll(':hover')].pop().className : ''); }));
+  // Maqueta: el formato y la descripción completa están en el panel de la ficha; en el índice, la descripción corta.
+  await page.locator('#professionalWorkspace [data-entrega-code="D2"] .perla-card-selector').click(); await page.waitForTimeout(250);
+  const fmtD2 = await ev(() => document.querySelector('#professionalWorkspace .perla-panel-open')?.textContent || '');
+  ok('Índice', 'D2 Lámina: formato real SVG en el detalle', /SVG/.test(fmtD2) && !/PDF · PNG/.test(fmtD2), (fmtD2.match(/[^.]*SVG[^.]*/) || [''])[0].slice(0, 120));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  ok('Índice', 'Descripción corta visible en cada ficha', await ev(() => [...document.querySelectorAll('#professionalWorkspace [data-entrega-code].perla-ref')].every(c => c.querySelector('.perla-desc')?.checkVisibility() && c.querySelector('.perla-desc').textContent.trim().length > 10)), '');
   await page.mouse.move(5, 5);
   ok('Índice', 'Visores Blueprint 3D y Despiece 3D junto a Presentación 3D', await ev(() => { const g = document.querySelector('[data-group="experience"] .professional-group-items'); return !!g?.querySelector('#bpdpCard-blueprint') && !!g?.querySelector('#bpdpCard-despiece'); }));
 

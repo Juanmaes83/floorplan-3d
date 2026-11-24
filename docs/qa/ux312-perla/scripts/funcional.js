@@ -47,8 +47,12 @@ async page => {
 
   // Fila 2
   await page.locator('#perlaImport > summary').click(); await page.waitForTimeout(200);
-  const imp = await ev(() => ['roomPlanJoinQuick', 'newProjectBtn', 'importJson', 'importImage', 'joinRoomPlan'].filter(id => { const n = document.getElementById(id); return n && n.getClientRects().length > 0; }));
-  ok('Fila 2', 'Subir plano a la vista · ▾: RoomPlan, nuevo, JSON, imagen, unir', imp.length === 5 && await vis('#uploadPlanBtn'), imp.join(','));
+  // Desde 7e813b6b «Importar proyecto JSON» está en «Archivo», junto a «Guardar» (las demás importaciones siguen en «Subir plano ▾»).
+  const imp = await ev(() => ['roomPlanJoinQuick', 'newProjectBtn', 'importImage', 'joinRoomPlan'].filter(id => { const n = document.getElementById(id); return n && n.checkVisibility(); }));
+  ok('Fila 2', 'Subir plano a la vista · ▾: RoomPlan, nuevo, imagen, unir', imp.length === 4 && await vis('#uploadPlanBtn'), imp.join(','));
+  await ev(() => { document.querySelector('#perlaImport').open = false; });
+  await page.locator('#perlaFile > summary').click(); await page.waitForTimeout(200);
+  ok('Fila 2', 'Archivo ▾ incluye «Importar proyecto JSON»', await ev(() => document.querySelector('#importJson')?.checkVisibility()), '');
   await ev(() => { window.__fileClicks = []; const o = HTMLInputElement.prototype.click; window.__origClick = o; HTMLInputElement.prototype.click = function () { if (this.type === 'file') { window.__fileClicks.push(this.id || this.accept); return; } return o.call(this); }; });
   await page.locator('#importJson').click(); await page.waitForTimeout(300);
   const fc = await ev(() => { const r = window.__fileClicks.slice(); HTMLInputElement.prototype.click = window.__origClick; return r; });

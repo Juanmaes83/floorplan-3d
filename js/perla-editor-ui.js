@@ -227,7 +227,7 @@
  layersMenu?.addEventListener('toggle',placeLayers);addEventListener('resize',placeLayers);
  let wasArea=document.body.classList.contains('professional-area');
  new MutationObserver(()=>{const now=document.body.classList.contains('professional-area');if(now!==wasArea){wasArea=now;paneIcons();}}).observe(document.body,{attributes:true,attributeFilter:['class']});
- const compactTools=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
+ const compactTools=matchMedia('(max-width:900px), (max-width:1100px) and (max-height:500px)');
  // Deshacer / Rehacer: en teléfono y horizontal, a la vista en la barra del lienzo (antes solo dentro de «⋯»); en
  // escritorio, en la fila 1. Mismo control (#editHistory, #undo, #redo) y mismo efecto.
  const histNode=$('#editHistory'),histHome=histNode?.parentElement,histNext=histNode?.nextSibling;

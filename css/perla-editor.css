@@ -537,3 +537,19 @@ button[data-perla-done="1"],button.btn[data-perla-done="1"]{background:#e9f5ee!i
 button[data-perla-done="1"]:hover{background:#dcefe3!important}
 body.perla .perla-r2>#exportJsonQuick[data-perla-done="1"]::before,body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick[data-perla-done="1"]::before{content:'✓' / '';color:#1d6b3f}
 button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
+/* UX-312 PERLA · tableta estrecha (761–900 px, también el escritorio con zoom al 200 %): las dos filas caben enteras.
+   Deshacer/Rehacer van a la barra del lienzo (como en el móvil); idioma, proyecto y áreas se compactan; «Guardar proyecto
+   JSON» queda como icono con su nombre accesible. */
+@media (min-width:761px) and (max-width:900px){
+ body.perla .perla-areas>button,body.perla .perla-areas .btn{padding-inline:5px!important;font-size:13.5px!important}
+ body.perla .perla-r1{gap:4px!important}body.perla .perla-utils{gap:2px!important}
+ body.perla .perla-utils #langBtn{padding:0 5px!important;font-size:11px!important;min-width:0!important}
+ body.perla .perla-left>.perla-project{max-width:84px}
+ body.perla .perla-r2>#exportJsonQuick{font-size:0!important;width:44px;min-width:44px;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+ body.perla .perla-r2>#exportJsonQuick::before{content:'⤓' / '';font-size:20px;line-height:1;color:var(--ink,#1f2326)}
+ body.perla .perla-r2>#exportJsonQuick[data-perla-done="1"]::before{content:'✓' / '';color:#1d6b3f}
+ body.perla .perla-r2 #viewSeg>span:first-child:not(.pill),body.perla .perla-r2 #viewSeg .seg-label{display:none}
+ body.perla .perla-sem-dots{display:none}
+}
+/* Inicio en el teléfono: objetivo táctil de al menos 40 × 40 px. */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #welcomeBtn{min-width:40px!important;min-height:40px}}
