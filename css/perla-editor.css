@@ -515,3 +515,7 @@ body.perla .perla-r2:has(>#levelBar:not([hidden])) #viewSeg>span:first-child:not
   body.perla #mobileDock>#editHistory :is(#undo,#redo):disabled{opacity:.4}
 }
 body.perla #mobileDock>#editHistory :is(#undo,#redo){min-height:52px!important;border:0!important;background:transparent!important;display:inline-flex!important;align-items:center;justify-content:center}
+/* UX-312 PERLA · U9: «← Volver a <área>» en el editor, en el sitio del «Volver» de siempre (inicio de la fila 2). */
+body.perla .perla-r2>#perlaReturn{order:-10!important;flex:0 0 auto;min-height:40px;padding:0 14px;border:1px solid var(--perla-wine,#7a2e45);color:var(--perla-wine,#7a2e45);background:#fff;font-weight:600;border-radius:10px;white-space:nowrap}
+body.perla .perla-r2>#perlaReturn:hover{background:#faf3f5}
+body.perla .perla-r2>#perlaReturn[hidden]{display:none!important}
