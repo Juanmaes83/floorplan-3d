@@ -393,3 +393,11 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 @media (max-width:1100px) and (max-height:500px){
  body.perla:has(#paletteWallBanner:not([hidden])) #stage>#mobileDock,body.perla:has(#paletteWallBanner:not([hidden])) .perla-canvas-bottom{visibility:hidden}
 }
+/* Aviso de conflictos entre plantas (#levelConflicts): en PERLA la escala y el zoom van en la barra inferior del lienzo;
+   el aviso queda por encima de esa barra (y de la de selección), sin tapar la escala ni los controles de vista. */
+@media (max-width:760px){
+ body.perla #stage>.level-conflicts,body.perla #stage:has(#fab.show)>.level-conflicts{top:54px;bottom:auto;left:12px;right:12px;max-width:none}
+ /* mientras el aviso está a la vista, el plano se encaja debajo de él: no tapa cotas ni estancias */
+ body.perla #stage:has(>.level-conflicts:not([hidden]))>#plan{margin-top:104px;height:calc(100% - 104px)}
+}
+@media (min-width:761px){body.perla #stage>.level-conflicts{bottom:72px}body.perla #stage:has(#fab.show)>.level-conflicts{bottom:128px}}

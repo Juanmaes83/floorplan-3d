@@ -212,6 +212,12 @@
  document.addEventListener('click',e=>{const b=e.target.closest?.('details.perla-dd .perla-pop button');if(b)b.closest('details.perla-dd').open=false;});
  document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const m=document.activeElement?.closest?.('details.perla-dd[open]');if(m){m.open=false;m.querySelector('summary')?.focus();}});
  addEventListener('resize',paneIcons);
+ // «Mostrar ▾» en teléfono: sus opciones se abren bajo el botón, dentro de la pantalla y por encima del lienzo.
+ const layersMenu=$('#layersMenu'),layersPop=$('#layers');
+ const placeLayers=()=>{if(!layersMenu||!layersPop)return;const small=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)').matches;
+  if(!layersMenu.open||!small){for(const k of ['position','top','right','left','zIndex','maxHeight','overflow'])layersPop.style[k]='';return;}
+  const r=layersMenu.getBoundingClientRect();Object.assign(layersPop.style,{position:'fixed',top:Math.round(r.bottom+6)+'px',right:'12px',left:'auto',zIndex:'80',maxHeight:Math.max(120,innerHeight-r.bottom-18)+'px',overflow:'auto'});};
+ layersMenu?.addEventListener('toggle',placeLayers);addEventListener('resize',placeLayers);
  let wasArea=document.body.classList.contains('professional-area');
  new MutationObserver(()=>{const now=document.body.classList.contains('professional-area');if(now!==wasArea){wasArea=now;paneIcons();}}).observe(document.body,{attributes:true,attributeFilter:['class']});
  const compactTools=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
