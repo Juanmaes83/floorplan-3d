@@ -96,6 +96,41 @@
   closeMap();renderMapLabels();importButton.focus();void run(input);
  };
  file.addEventListener('change',()=>{closeMap();renderMapLabels();});
+ const surroundings=el('section',body),surroundingsTitle=el('h3',surroundings),surroundingsInfo=el('p',surroundings),surroundingsLinks=el('div',surroundings);
+ surroundings.id='territorySurroundings';surroundings.className='territory-orthophoto';
+ surroundingsLinks.className='territory-orthophoto-actions';
+ let focusedParcel=null,contextSequence=0;
+ function renderSurroundings(){
+  const saved=site()?.parcel;
+  surroundingsTitle.textContent=t('Entorno y accesos','Surroundings and access','周边与交通');
+  surroundingsInfo.textContent=saved?t('Consulta servicios cercanos, cómo llegar y la vista de calle en Google Maps. Los enlaces abren en otra pestaña.','Check nearby services, directions and street view on Google Maps. Links open in a new tab.','在 Google 地图中查看周边服务、路线和街景。链接在新标签页中打开。'):t('Guarda una parcela para consultar su entorno.','Save a parcel to explore its surroundings.','保存地块后可查看周边。');
+  const key=saved?[saved.reference,saved.sourceCrs,saved.frame.originX,saved.frame.originY].join('|'):null;
+  if(focusedParcel===key){for(const link of surroundingsLinks.children)labelSurroundings(link);return;}
+  focusedParcel=key;
+  const sequence=++contextSequence;
+  surroundingsLinks.replaceChildren();
+  if(!saved)return;
+  Promise.all([import('./territory-map-adapter.mjs'), import('./territory-context-links.mjs')]).then(async ([adapter,links])=>{
+   const projection=await adapter.loadProjection();
+   if(sequence!==contextSequence||!dialog.open)return;
+   const {originX,originY}=saved.frame;
+   for(const [kind,href] of Object.entries(links.googleContextLinks(adapter.parcelPoint(saved.sourceCrs,[originX,originY],projection)))){
+    const link=el('a',surroundingsLinks);
+    link.href=href;link.target='_blank';link.rel='noopener noreferrer';link.className='btn';
+    link.dataset.contextLink=kind;labelSurroundings(link);
+   }
+  }).catch(()=>{
+   if(sequence!==contextSequence||!dialog.open)return;
+   surroundingsInfo.textContent=t('No se pudo preparar la ubicación de la parcela.','Could not prepare the parcel location.','无法准备地块位置。');
+  });
+ }
+ function labelSurroundings(link){
+  link.textContent={
+   map:t('Explorar entorno','Explore surroundings','探索周边'),
+   directions:t('Cómo llegar','Directions','路线'),
+   street:t('Ver calle','Street view','查看街景')
+  }[link.dataset.contextLink];
+ }
  const orthoSection=el('section',body),orthoTitle=el('h3',orthoSection),orthoIntro=el('p',orthoSection),orthoProviderRow=el('div',orthoSection),orthoProviderLabel=el('span',orthoProviderRow),orthoProviderChoice=el('select',orthoProviderRow),orthoStatus=el('p',orthoSection),orthoMetadata=el('dl',orthoSection),orthoControls=el('div',orthoSection),orthoLoad=el('button',orthoControls),orthoSave=el('button',orthoControls),orthoRemove=el('button',orthoControls);
  orthoSection.id='territoryOrthophoto';orthoSection.className='territory-orthophoto';orthoProviderRow.className='territory-orthophoto-provider';orthoProviderChoice.id='territoryOrthophotoProvider';orthoStatus.id='territoryOrthophotoStatus';orthoStatus.setAttribute('role','status');orthoMetadata.id='territoryOrthophotoMetadata';orthoControls.className='territory-orthophoto-actions';orthoLoad.id='territoryOrthophotoLoad';orthoSave.id='territoryOrthophotoSave';orthoRemove.id='territoryOrthophotoRemove';for(const button of [orthoLoad,orthoSave,orthoRemove]){button.type='button';button.className='btn';}
  const terrainSection=el('section',body),terrainTitle=el('h3',terrainSection),terrainIntro=el('p',terrainSection),terrainProviderRow=el('div',terrainSection),terrainProviderLabel=el('span',terrainProviderRow),terrainProviderChoice=el('select',terrainProviderRow),terrainStatus=el('p',terrainSection),terrainMetadata=el('dl',terrainSection),terrainControls=el('div',terrainSection),terrainLoad=el('button',terrainControls),terrainSave=el('button',terrainControls),terrainRemove=el('button',terrainControls);
@@ -147,7 +182,7 @@
   providerChoice.hidden=list.length<=1;
   const modes=selected?.parcelInputModes||[];
   documentSection.hidden=!modes.includes('document');referenceSection.hidden=!modes.includes('reference');
-  renderMapLabels();
+  renderMapLabels();renderSurroundings();
   fileLabel.firstChild?.nodeType===3?fileLabel.firstChild.textContent=t('Documento GML/XML de parcela','Parcel GML/XML document','地块 GML/XML 文件'):fileLabel.prepend(document.createTextNode(t('Documento GML/XML de parcela','Parcel GML/XML document','地块 GML/XML 文件')));
   selectLabel.firstChild?.nodeType===3?selectLabel.firstChild.textContent=t('Referencia opcional si hay varias parcelas','Optional reference if there are several parcels','多个地块时可填参考号'):selectLabel.prepend(document.createTextNode(t('Referencia opcional si hay varias parcelas','Optional reference if there are several parcels','多个地块时可填参考号')));
   lookupLabel.firstChild?.nodeType===3?lookupLabel.firstChild.textContent=t('Referencia de parcela','Parcel reference','地块参考号'):lookupLabel.prepend(document.createTextNode(t('Referencia de parcela','Parcel reference','地块参考号')));
@@ -221,7 +256,7 @@
  terrainProviderChoice.onchange=()=>{loadedTerrain=null;pendingTerrain=null;terrainError='';render();};
  providerChoice.onchange=()=>{closeMap();pending=null;render();};
  function open(){ensureTerritoryStyles();if(!document.querySelector('link[data-map-territory-styles]')){const link=el('link',document.head);link.rel='stylesheet';link.href='css/territory-map.css';link.dataset.mapTerritoryStyles='';}owner=app.entryId;pending=null;releaseRaster();pendingOrtho=null;orthoError='';loadedTerrain=null;pendingTerrain=null;terrainError='';status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
- entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{closeMap();parcelRequest?.abort();parcelRequest=null;busy=false;orthoController?.abort();terrainController?.abort();releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;const opener=returnFocus?.isConnected?returnFocus:document.querySelector('#professionalWorkspace [data-route="territory"]');opener?.focus({preventScroll:true});});
+ entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{closeMap();contextSequence++;focusedParcel=null;surroundingsLinks.replaceChildren();parcelRequest?.abort();parcelRequest=null;busy=false;orthoController?.abort();terrainController?.abort();releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;const opener=returnFocus?.isConnected?returnFocus:document.querySelector('#professionalWorkspace [data-route="territory"]');opener?.focus({preventScroll:true});});
  window.FloorPlanTerritoryUI={open,registry,render};
  render();
 })();

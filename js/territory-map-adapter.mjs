@@ -7,17 +7,29 @@ const projections = {
   'EPSG:32628': '+proj=utm +zone=28 +datum=WGS84 +units=m +no_defs'
 };
 
+export function parcelPoint(sourceCrs, point, project) {
+  const projection = projections[sourceCrs];
+  if (!projection) throw Error('Unsupported parcel CRS');
+  const [lng, lat] = project(projection, 'EPSG:4326', point);
+  if (!Number.isFinite(lng) || Math.abs(lng) > 180 || !Number.isFinite(lat) || Math.abs(lat) > 85) {
+    throw Error('Invalid parcel position');
+  }
+  return [lng, lat];
+}
+
+let projectionReady;
+export function loadProjection() {
+  projectionReady ||= Promise.resolve(window.proj4 || loadAsset('../vendor/proj4/proj4.js', 'script'))
+    .then(() => window.proj4).catch(error => { projectionReady = undefined; throw error; });
+  return projectionReady;
+}
+
 export function parcelFeatures(parcels, project) {
   return { type: 'FeatureCollection', features: parcels.map(parcel => {
-    const projection = projections[parcel.sourceCrs];
-    if (!projection) throw Error('Unsupported parcel CRS');
+
     const coordinates = parcel.sourceGeometry.polygons.map(polygon => polygon.rings.map(ring => {
       const transformed = ring.map(point => {
-        const [lng, lat] = project(projection, 'EPSG:4326', point);
-        if (!Number.isFinite(lng) || Math.abs(lng) > 180 || !Number.isFinite(lat) || Math.abs(lat) > 85) {
-          throw Error('Invalid parcel position');
-        }
-        return [lng, lat];
+        return parcelPoint(parcel.sourceCrs, point, project);
       });
       return [...transformed, transformed[0]];
     }));
@@ -41,7 +53,7 @@ function loadAsset(path, tag) {
 function libraries() {
   dependencies ||= Promise.all([
     window.maplibregl || loadAsset('../vendor/maplibre/maplibre-gl.js', 'script'),
-    window.proj4 || loadAsset('../vendor/proj4/proj4.js', 'script'),
+    loadProjection(),
     loadAsset('../vendor/maplibre/maplibre-gl.css', 'link')
   ]).catch(error => { dependencies = undefined; throw error; });
   return dependencies;

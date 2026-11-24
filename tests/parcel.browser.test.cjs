@@ -89,6 +89,8 @@ test('8C-B building stores parcel only at shared site',{timeout:60000},async t=>
 test('MapLibre reviews a GML choice, preserves geometry and releases its canvas', { timeout: 60000 }, async t => {
  const {page,errors}=await pageFor(t,{width:390,height:844}),beforeGeometry=await editable(page);
  let tiles=0;
+ const googleRequests=[];
+ page.on('request',request=>{if(new URL(request.url()).hostname==='www.google.com')googleRequests.push(request.url());});
  await page.route('https://www.ign.es/wmts/ign-base?**',route=>{
   tiles++;
   return route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aQXQAAAAASUVORK5CYII=','base64')});
@@ -118,6 +120,15 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.site.parcel.reference),'1907401VK4810J');
  assert.equal(await page.locator('#territorySave').innerText(),'Parcela guardada');
  assert.equal(await page.locator('#territorySave').isDisabled(),true);
+ const contextLinks=page.locator('#territorySurroundings a');
+ await contextLinks.last().waitFor();
+ const urls=await contextLinks.evaluateAll(links=>links.map(link=>new URL(link.href).toString()));
+ assert.equal(urls.length,3);
+ assert.ok(urls.every(url=>url.startsWith('https://www.google.com/maps/')&&!url.includes('key=')));
+ const params=urls.map(url=>new URL(url).searchParams);
+ assert.equal(params[0].get('query'),params[1].get('destination'));
+ assert.equal(params[0].get('query'),params[2].get('viewpoint'));
+ assert.match(params[0].get('query'),/^40\.\d{6},-2\.\d{6}$/);
  assert.match(await page.locator('#professionalWorkspace').innerText(),/Parcela disponible/);
  assert.equal(await editable(page),beforeGeometry);
  await page.locator('#territoryMapToggle').click();
@@ -129,5 +140,6 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  await page.waitForFunction(gl=>gl.isContextLost(),context);
  await context.dispose();
  assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'territory');
+ assert.deepEqual(googleRequests,[],'preparing links never contacts Google');
  assert.deepEqual(errors,[]);
 });
