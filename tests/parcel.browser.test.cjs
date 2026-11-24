@@ -131,6 +131,27 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  assert.match(params[0].get('query'),/^40\.\d{6},-2\.\d{6}$/);
  assert.match(await page.locator('#professionalWorkspace').innerText(),/Parcela disponible/);
  assert.equal(await editable(page),beforeGeometry);
+ const requests=[];
+ await page.route('**/api/places-context',async route=>{
+  const body=route.request().postDataJSON();requests.push(body);
+  const data=body.action==='nearby'?{places:[{id:'PLACE_1',name:'Centro de prueba',address:'Calle de prueba',credits:[]}]}:
+   body.action==='route'?{available:true,meters:650,seconds:540}:{available:false};
+  await route.fulfill({json:data});
+ });
+ await page.getByText('Consultar servicios y rutas',{exact:true}).click();
+ assert.equal(await page.locator('#territoryNearby').isDisabled(),true);
+ assert.equal(requests.length,0);
+ await page.locator('#territoryContextCode').fill('x'.repeat(36));
+ await page.locator('#territoryNearby').click();
+ await page.getByText('Centro de prueba',{exact:true}).waitFor();
+ await page.getByRole('button',{name:'Calcular desde la parcela'}).click();
+ await page.getByText('0,7 km · 9 min',{exact:true}).waitFor();
+ await page.locator('#territoryStreetCheck').click();
+ await page.getByText('Google no encontró Street View cerca de este punto.',{exact:true}).waitFor();
+ assert.deepEqual(requests.map(body=>body.action),['nearby','route','street']);
+ assert.equal(requests[1].mode,'WALK');
+ assert.equal(requests[1].placeId,'PLACE_1');
+ assert.ok(requests.every(body=>!('reference' in body)));
  await page.locator('#territoryMapToggle').click();
  await page.locator('#territoryMapContent canvas').waitFor();
  const context=await page.locator('#territoryMapContent canvas').evaluateHandle(canvas=>canvas.getContext('webgl2'));
@@ -139,6 +160,7 @@ test('MapLibre reviews a GML choice, preserves geometry and releases its canvas'
  await page.locator('#territoryMapContent canvas').waitFor({state:'detached'});
  await page.waitForFunction(gl=>gl.isContextLost(),context);
  await context.dispose();
+ assert.equal(await page.locator('#territoryContextCode').count(),0);
  assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'territory');
  assert.deepEqual(googleRequests,[],'preparing links never contacts Google');
  assert.deepEqual(errors,[]);
