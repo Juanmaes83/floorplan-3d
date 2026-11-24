@@ -1,3 +1,4 @@
+// UX-312 PERLA · la guía es el panel «Tareas del proyecto» a demanda (V4): la prueba lo abre antes de usar sus botones.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const Core=require('../js/project-core.js'),Metrics=require('../js/surface-core.js');
@@ -30,7 +31,7 @@ for(const width of [1440,390])test('single-level area schedule is readable and p
  assert.doesNotThrow(()=>Core.validate(p));
  await page.evaluate(project=>FloorPlanApp.importProject(project),p);
  const expected=Metrics.home(p);
- await page.locator('#guideDetails').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false}));await page.locator('#guideDetails').click();
  await page.locator('#guideDeliverSurfaceSheet').click();
  assert.equal(await page.locator('#surfaceSheetDialog').evaluate(d=>d.open),true);
  assert.equal(await page.locator('.surface-sheet-level').count(),1);

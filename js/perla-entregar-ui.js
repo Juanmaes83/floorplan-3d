@@ -216,7 +216,7 @@
   let desc=body.querySelector(':scope>.perla-desc');if(!desc)desc=el('p','perla-desc',body);const d=T(REF[code][0]);if(desc.textContent!==d)desc.textContent=d;
   let meta=body.querySelector(':scope>.perla-meta');if(!meta){meta=el('div','perla-meta',body);el('span','perla-pill',meta);}
   const pill=meta.firstChild;if(pill.className!=='perla-pill '+k)pill.className='perla-pill '+k;if(pill.textContent!==txt)pill.textContent=txt;
-  const acts=actionsOf(card),pri=acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
+  const acts=actionsOf(card),pri=acts.find(b=>code==='P2'&&b.dataset.route==='prepare-views')||acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
   for(const b of acts)b.classList.toggle('perla-go',b===pri);
   let sel=body.querySelector(':scope>.perla-card-selector');
   if(!sel){sel=el('button','btn perla-card-selector professional-card-details',body,tx('Ver detalles','View details','查看详情'));sel.type='button';}
@@ -269,8 +269,10 @@
  document.addEventListener('close',()=>setTimeout(()=>{if(!selCard&&returnCard&&!document.querySelector('dialog[open]')){const c=returnCard,a=document.activeElement;returnCard=null;
    if(c.isConnected&&(!a||a===document.body||a.offsetParent===null||!a.isConnected))c.querySelector('.perla-card-selector')?.focus({preventScroll:true});return;}
   if(!selCard||!deliverOpen()||document.querySelector('dialog[open]'))return;
-  const a=document.activeElement;if(a&&a!==document.body&&a.offsetParent!==null&&a.isConnected)return;const t=lastMirror;
-  if(selCard.isConnected)openPanel(selCard);const bs=[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])],mb=t&&(bs.find(b=>t.route&&b.dataset.perlaMirror===t.route)||bs.find(b=>b.textContent===t.text));(mb||deskPanel())?.focus({preventScroll:true});},30),true);
+  // Entregar se repinta al cerrar algunos generadores (y lleva el foco a su título): se recupera la ficha por su código.
+  if(!selCard.isConnected){const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${selCard.dataset.entregaCode}"]`);if(n)selCard=n;}
+  const a=document.activeElement;if(a&&a!==document.body&&a.id!=='professionalTitle'&&a!==deskPanel()&&a.offsetParent!==null&&a.isConnected)return;const t=lastMirror;
+  if(selCard.isConnected)openPanel(selCard);const bs=[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])],mb=t&&(bs.find(b=>t.route&&b.dataset.perlaMirror===t.route)||bs.find(b=>b.textContent===t.text));(mb||deskPanel())?.focus({preventScroll:true});},60),true);
  // Barra inferior del teléfono: el producto ya tiene la suya (.professional-dock, mismo atajo de P7); solo cambia su color.
  function maqueta(index){
   for(const c of $$('#professionalWorkspace .professional-index .professional-card[data-entrega-code]'))if(c.querySelector(':scope>.thumb'))tile(c);
@@ -278,7 +280,9 @@
   groupHeads(index);heroList();
   const e3=index.querySelector(':scope>.professional-full-catalog>summary');if(e3){const t=tx('Preparación directa · entregables profesionales (E3)','Direct preparation · professional deliverables (E3)','直接准备 · 专业交付物 (E3)');if(e3.textContent!==t)e3.textContent=t;}
   const p=deskPanel();if(p&&!selCard&&!p.querySelector('.perla-vacio-txt'))emptyPanel(p);
-  if(selCard&&!selCard.isConnected){const code=selCard.dataset.entregaCode;const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${code}"]`);selCard=n||null;if(!n)closePanel(false);else pressed();}}
+  if(selCard&&!selCard.isConnected){const code=selCard.dataset.entregaCode;const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${code}"]`);selCard=n||null;if(!n)closePanel(false);else pressed();}
+  // Si Entregar se repintó con el panel abierto, el panel vuelve con su ficha (mismo contenido actualizado).
+  if(selCard&&p&&!p.querySelector('.perla-panel-code'))openPanel(selCard);}
 
  // ── Aplicar al pintar Entregar (idempotente; no reordena lo que ya está en su sitio) ──
  let pending=false;
