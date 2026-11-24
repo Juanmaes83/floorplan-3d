@@ -32,7 +32,8 @@ async function open(viewport,lang,{full=true}={}){
  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanGuideUI&&document.documentElement.classList.contains('lang-ready'),null,{timeout:30000});
  await page.locator('#welcomeExample').click();await page.waitForFunction(()=>!document.getElementById('welcomeDialog').open);
- if(full){await page.locator('#guideDetails').click();await page.locator('#guideAllTools').click();}
+ if(full){await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})); // UX-312 PERLA: guía a demanda (V4)
+  await page.locator('#guideDetails').click();await page.locator('#guideAllTools').click();}
  await page.waitForTimeout(400);
  return {page,context,errors};
 }

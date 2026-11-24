@@ -19,7 +19,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test('Pro
  await page.route('**/*',r=>{const u=r.request().url();if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();external.push(u);return r.abort();});
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanProfessionalUI&&window.FloorPlanProjectViews);
  const workspace=page.locator('#professionalWorkspace'),before=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),view:FloorPlanApp.viewMode}));
- await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Entregar al cliente',exact:true}).waitFor();
+ await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Lo que recibirá tu cliente',exact:true}).waitFor();
  // Before: no image pretends to exist; the action says how many views Rubik can prepare.
  const stops=await page.evaluate(()=>FloorPlanProjectViews.plan().stops.map(s=>s.id));assert.equal(stops[0],'overview');assert.ok(stops.length>=2&&stops.length<=5);
  assert.equal(await workspace.locator('[data-module="images"] img:not(.thumb img)').count(),0);assert.match(await workspace.locator('[data-module="images"] .thumb .tag-ej').innerText(),/Ejemplo/);assert.match(await workspace.locator('[data-module="images"]').textContent(),/Todavía no hay vistas preparadas/);

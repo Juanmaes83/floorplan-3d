@@ -23,7 +23,9 @@ const bw5Count=b=>B.warnings(b).filter(w=>w.code==='BW5').length;
 const digest=v=>require('node:crypto').createHash('sha256').update(typeof v==='string'?v:B.canonical(v)).digest('hex');
 const lib=page=>page.evaluate(async k=>{const session=FloorPlanApp.persistence.session;await FloorPlanApp.persistence.requireSaved();return JSON.parse((await FloorPlanPersistence.load(session.db)).docs.get(k));},KEY);
 const ctx=page=>page.evaluate(()=>FloorPlanBuildingUI.context);
-const press=async(page,locator,mobile)=>{const l=page.locator(locator);await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();};
+// UX-312 PERLA: en teléfono las herramientas avanzadas (+ Estancia, Plantas…) van en el menú «⋯» (tests/helpers-perla-editor.cjs).
+const {mostrar}=require('./helpers-perla-editor.cjs');
+const press=async(page,locator,mobile)=>{const l=typeof locator==='string'?await mostrar(page,locator):page.locator(locator);await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();};
 async function download(page,trigger){const pending=page.waitForEvent('download');await trigger();const d=await pending,chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return {name:d.suggestedFilename(),bytes:Buffer.concat(chunks)};}
 async function addRoom(page,mobile,{name,width,depth,x,y,neighbor}){
  await press(page,'#newRoomBtn',mobile);await page.locator('#roomDesignForm').waitFor();

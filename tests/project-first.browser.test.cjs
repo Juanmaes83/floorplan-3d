@@ -20,7 +20,7 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
  const facts=await page.evaluate(()=>{const m=FloorPlanSurfaceMetrics.home(FloorPlanApp.project);return {rooms:FloorPlanApp.geometry.rooms.length,walls:FloorPlanApp.geometry.walls.length,counted:m.levels[0].rooms.filter(r=>r.counted).length,top:m.levels[0].rooms.filter(r=>r.counted).sort((a,b)=>b.areaM2-a.areaM2).slice(0,5).map(r=>typeof nm==='function'?nm(r.name):r.name)};});
 
  // Case A — Deliver: which project, what documentation and visuals exist, what is ready, what is missing, which identity.
- await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Entregar al cliente',exact:true}).waitFor();
+ await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Lo que recibirá tu cliente',exact:true}).waitFor();
  await page.waitForFunction(()=>document.querySelectorAll('#professionalWorkspace .hero-ent .listo li').length>=2);
  const hero=workspace.locator('.hero-ent');
  // Vivienda de ejemplo: la portada es su vista 3D real (en otro proyecto, el esquema axonométrico de su planta).

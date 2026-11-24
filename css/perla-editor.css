@@ -298,7 +298,7 @@ body.perla .perla-split>#perlaImport>summary{border-radius:0 8px 8px 0!important
 /* Las barras del lienzo quedan por debajo de los avisos y paneles propios del lienzo (conflictos de plantas, etc.) */
 body.perla .perla-canvas-top,body.perla .perla-canvas-bottom{z-index:6}
 body.perla #stage>#mobileDock{z-index:6}
-@media (max-width:760px){body.perla #stage>#mobileDock{z-index:70}}
+@media (max-width:760px){body.perla #stage>#mobileDock{z-index:50} /* sobre los cajones (6), bajo superficies a pantalla completa (60+) */}
 /* Menús propios de PERLA (no son details.menu: «Archivo» sigue siendo el único menú de la cabecera con esa clase) */
 body.perla details.perla-dd{position:relative}
 body.perla details.perla-dd>summary{list-style:none;cursor:pointer}
@@ -326,7 +326,7 @@ body.perla aside.right:has(#tracePanel:not([hidden])) .perla-inspector-head,body
    z 5) y de los cajones Construir / Inspector (z 6). En el teléfono (vertical y horizontal) la barra inferior queda por
    encima de los cajones para poder cerrarlos siempre. */
 body.perla .perla-canvas-top,body.perla .perla-canvas-bottom,body.perla #stage>#mobileDock{z-index:4}
-@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #stage>#mobileDock{z-index:70}}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #stage>#mobileDock{z-index:50} /* sobre los cajones (6), bajo superficies a pantalla completa (60+) */}
 /* Fila 1: las columnas laterales nunca encogen por debajo de su contenido; así las utilidades no tapan las áreas */
 body.perla .perla-r1{grid-template-columns:minmax(max-content,1fr) auto minmax(max-content,1fr)}
 @media (max-width:1280px){body.perla .perla-r1{gap:6px}body.perla .perla-utils .perla-studio>*:not(svg){display:none}}
@@ -367,4 +367,29 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 
 @media (max-width:1100px) and (max-height:500px){
  body.perla .perla-r2 .perla-progress{display:none}
+}
+
+/* Teléfono · editor completo: la fila 2 cabe en dos líneas y el lienzo conserva al menos el 60 % de la pantalla.
+   «Guardar proyecto JSON» se muestra como icono (su nombre sigue siendo el texto del botón); el resumen del paso de la
+   guía se oculta solo con la guía cerrada (sigue «Recuperar guía» y la acción principal). */
+@media (max-width:760px){
+ body.perla .perla-r2>.perla-break{display:none}
+ body.perla .perla-r2>.perla-split{order:1!important}body.perla .perla-r2>#perlaFile{order:2!important}body.perla .perla-r2>#exportJsonQuick{order:3!important}
+ body.perla .perla-r2>#guideResume{order:4!important}body.perla .perla-r2>#perlaTasks{order:4!important}body.perla .perla-r2>#viewSeg{order:5!important;flex:0 1 auto!important}
+ body.perla .perla-r2>#presentationBtn{order:6!important}body.perla .perla-r2>#perlaPrimary{order:7!important;margin-left:auto}body.perla .perla-r2>#perlaProgress{order:8!important}
+ body.perla .perla-r2>#exportJsonQuick{font-size:0!important;width:44px;min-width:44px;height:38px;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+ body.perla .perla-r2>#exportJsonQuick::before{content:'⤓' / '';font-size:20px;line-height:1;color:var(--ink,#1f2326)}
+ body.perla .perla-r2>#viewSeg .btn,body.perla .perla-r2>#viewSeg button{min-width:0;padding-inline:12px}
+ body.perla:not(.guided) .perla-r2>#perlaProgress{display:none}
+ body.perla .perla-r2{column-gap:6px!important}
+ body.perla .perla-r2>#guideResume{padding-inline:10px}
+ body.perla .perla-r2>#levelStatus{position:absolute}
+}
+/* La barra de selección (#fab) sube por encima de la barra inferior del lienzo (zoom y escala): nunca se pisan.
+   En el teléfono vertical la barra del lienzo ya va encima del dock y la de selección queda debajo, sin tocarse. */
+@media (min-width:761px){body.perla #stage>#fab{bottom:72px}}
+/* Teléfono en horizontal: mientras se dibuja (aviso «Dibujando muros» a la vista), las barras inferiores del lienzo no
+   tapan el plano; el aviso trae «Terminar» y al terminar vuelven. */
+@media (max-width:1100px) and (max-height:500px){
+ body.perla:has(#paletteWallBanner:not([hidden])) #stage>#mobileDock,body.perla:has(#paletteWallBanner:not([hidden])) .perla-canvas-bottom{visibility:hidden}
 }

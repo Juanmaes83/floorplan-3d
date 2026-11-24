@@ -186,8 +186,24 @@
   if(lab===b){b.lastChild&&(b.lastChild.textContent=tx('Retirar tabique','Remove partition','拆除隔墙'));}else lab.textContent=tx('Retirar tabique','Remove partition','拆除隔墙');
   b.title=tx('Retirar o restaurar tabiques no portantes (X). Pulsa un tabique para retirarlo; pulsa uno retirado para restaurarlo.','Remove or restore non-bearing partitions (X). Press a partition to remove it; press a removed one to restore it.','拆除或恢复非承重隔墙 (X)。');};
  // Idioma: re-etiquetar al cambiar (el resto de la app traduce sus propios textos).
+ // Cabecera: etiquetas propias de PERLA y textos de controles trasladados que su módulo solo pinta al crearlos. Igual que
+ // una carga nueva en ese idioma (tests/language-home-navigation compara ambos estados).
+ const perlaBrand=()=>{if(!home)return;if(!home.querySelector('.perla-ico')||home.textContent.trim()!=='Rubik Sota')home.innerHTML=`${svg('home',20)}<b>Rubik Sota</b>`;
+  const a=tx('Ir a Inicio','Go to Home','前往首页');if(home.getAttribute('aria-label')!==a)home.setAttribute('aria-label',a);};
+ if(home)new MutationObserver(()=>{if(!home.querySelector(".perla-ico"))perlaBrand();}).observe(home,{childList:true});
+ function paintHeader(){
+  r1.setAttribute('aria-label',tx('Proyecto y áreas','Project and areas','项目与区域'));r2.setAttribute('aria-label',tx('Archivo, vista y paso','File, view and step','文件、视图与步骤'));
+  center.setAttribute("aria-label",tx("Áreas de trabajo","Work areas","工作区域"));perlaBrand();
+  $('#actionSearchBtn')?.setAttribute('aria-label',tx('Buscar una acción','Search an action','搜索操作'));$('#editHistory')?.setAttribute('aria-label',tx('Historial de sesión','Session history','会话历史'));
+  $('#perlaLegal')?._t?.();
+  const set=(id,es,en,zh)=>{const n=document.getElementById(id);if(n&&n.textContent!==tx(es,en,zh))n.textContent=tx(es,en,zh);};
+  set('guideDeliverSheet','Abrir lámina','Open sheet','打开图纸');set('guideDeliverSurfaceSheet','Ficha de superficies','Area schedule','面积明细表');
+  set('guideDeliverReview','Observaciones del cliente…','Client observations…','客户意见…');set('guideDeliverImage','Exportar imagen','Export image','导出图片');
+  set('territoryOpen','Contexto territorial','Territorial context','地理背景');
+  set('openSheet','Abrir lámina','Open sheet','打开图纸');
+ }
  // Idioma: se repinta cuando la app cambia <html lang> (cualquier vía: selector, atajo, carga), no solo con #langBtn.
- new MutationObserver(()=>setTimeout(()=>{paintTexts();demoName();},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ new MutationObserver(()=>setTimeout(()=>{paintTexts();demoName();paintHeader();setTimeout(paintHeader,120);},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
  // Paseo 3D: mientras el joystick está a la vista, la barra de escena no tapa la vista y la inferior deja libre el minimapa.
  const joy=$('#joy');if(joy){const walk=()=>document.body.classList.toggle('perla-walking',joy.getClientRects().length>0&&getComputedStyle(joy).visibility!=='hidden');
   new MutationObserver(walk).observe(joy,{attributes:true});new MutationObserver(walk).observe(document.body,{attributes:true,attributeFilter:['class']});}
@@ -201,7 +217,7 @@
  const compactTools=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
  const placeFullTools=()=>{if(compactTools.matches)morePop.append(keep);else header.append(keep);};
  placeFullTools();compactTools.addEventListener('change',placeFullTools);
- setGuide(false,{focus:false});paintTexts();demoName();
+ setGuide(false,{focus:false});paintTexts();demoName();paintHeader();
  // El dibujo vuelve a encajar en el lienzo reorganizado (mismo «Ajustar» del visor, sin cambiar el proyecto).
  requestAnimationFrame(()=>$('#fit')?.click());
  addEventListener('load',()=>{paneIcons();dispatchEvent(new Event('resize'));});

@@ -35,7 +35,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   await screenshot(page,`${size}-p01-${query==='tour'?'tour':query==='presentar mi vivienda'?'presentar':'3d'}-config`);
   await page.locator('#presentationConfig').getByRole('button',{name:'Cancelar'}).click();assert.deepEqual(await state(page),initial);
  }
- await page.locator('#guidePresent').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
+ await (await presentEntry(page)).first().click(); // UX-312 PERLA: la guía es un panel a demanda; la entrada visible es «Presentar vivienda» de la cabecera
+ assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
  await page.locator('.presentation-room-row').nth(1).locator('input').check();
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
@@ -92,7 +93,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`presentation starts from a real room and restores 2D ${viewport.width}x${viewport.height}`,{timeout:budget(120000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
  const matches=await page.evaluate(()=>FloorPlanGuide.resolve('presentación en 3D').map(a=>a.id));assert.equal(matches[0],'presentation');
- await page.locator('#guidePresent').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);await screenshot(page,`${size}-config`);
+ await (await presentEntry(page)).first().click(); // UX-312 PERLA: la guía es un panel a demanda; la entrada visible es «Presentar vivienda» de la cabecera
+ assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);await screenshot(page,`${size}-config`);
  const startBox=await page.getByRole('button',{name:'Iniciar presentación'}).boundingBox();
  assert.ok(startBox&&startBox.y>=0&&startBox.y+startBox.height<=viewport.height,`${size}: start button inside viewport`);
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});

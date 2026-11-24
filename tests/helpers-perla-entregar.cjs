@@ -3,18 +3,28 @@
 // Las pruebas que usaban una acción secundaria abren antes el panel de su ficha con estos ayudantes.
 'use strict';
 
+const isOpen = (page, code) => page.evaluate(c => {
+  const p = document.querySelector('#professionalWorkspace .mesa .panel.perla-panel-open');
+  return !!p && p.querySelector('.perla-panel-code')?.textContent === c && !!p.querySelector('.panel-f');
+}, code);
+
 // Abre el panel de la ficha con ese código (D1…T2, P8/P9). Si ya está abierto, no hace nada.
+// Entregar se repinta al volver de un generador y reabre su panel en el siguiente fotograma: se espera a que se asiente
+// y, si un clic coincide con esa reapertura (el segundo clic cierra), se vuelve a intentar.
 async function abrirFicha(page, code) {
-  const open = await page.evaluate(c => {
-    const p = document.querySelector('#professionalWorkspace .mesa .panel.perla-panel-open');
-    return !!p && p.querySelector('.perla-panel-code')?.textContent === c;
-  }, code);
-  if (open) return;
   const sel = page.locator(`#professionalWorkspace [data-entrega-code="${code}"] .perla-card-selector`);
-  await sel.waitFor({ state: 'attached' });
-  await sel.scrollIntoViewIfNeeded();
-  await sel.click({ position: { x: 12, y: 12 } });
-  await page.locator('#professionalWorkspace .mesa .panel.perla-panel-open .panel-f').waitFor();
+  const foot = page.locator('#professionalWorkspace .mesa .panel.perla-panel-open .panel-f');
+  for (let i = 0; i < 3; i++) {
+    await page.waitForTimeout(150);
+    if (await isOpen(page, code)) return;
+    await sel.waitFor({ state: 'attached' });
+    await sel.scrollIntoViewIfNeeded();
+    await sel.click({ position: { x: 12, y: 12 } });
+    try { await foot.waitFor({ timeout: 4000 }); } catch { continue; }
+    await page.waitForTimeout(150);
+    if (await isOpen(page, code)) return;
+  }
+  await foot.waitFor();
 }
 
 // Devuelve un localizador pulsable para un control de una ficha: el propio control si está a la vista; si no, el botón

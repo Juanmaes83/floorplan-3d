@@ -16,7 +16,9 @@ const aligned=(page,selector,which)=>page.evaluate(([selector,which])=>{const sv
  const r=document.querySelector(selector).getBoundingClientRect(),xs=s.map(p=>p.x),ys=s.map(p=>p.y);
  return Math.max(Math.abs(r.left-Math.min(...xs)),Math.abs(r.right-Math.max(...xs)),Math.abs(r.top-Math.min(...ys)),Math.abs(r.bottom-Math.max(...ys)));},[selector,which]);
 async function shot(page,mobile,name){if(mobile){await page.evaluate(()=>drawer(null));await page.waitForTimeout(400);}await fs.mkdir('docs/qa/artifacts/layout-review',{recursive:true});await page.screenshot({path:`docs/qa/artifacts/layout-review/${name}.png`});}
-async function openPanel(page){await page.locator('#traceBtn').click();await page.locator('#layoutReview').waitFor();}
+// UX-312 PERLA: en teléfono «Plano propio» está en el menú «⋯» de la cabecera (tests/helpers-perla-editor.cjs).
+const {mostrar}=require('./helpers-perla-editor.cjs');
+async function openPanel(page){await (await mostrar(page,'#traceBtn')).click();await page.locator('#layoutReview').waitFor();}
 // Overlap fixture derived from the reference plan: one extra armchair placed on the existing sofa.
 function withOverlap(){const p=Core.initial(),sofa=p.objects.find(o=>o.type==='sofa');p.id='prj_review-overlap';p.objects.push({id:'obj_review-armchair',type:'armchair',name:'单人沙发',position:{x:sofa.position.x+600,y:sofa.position.y},size:{widthMm:850,depthMm:850},rotationDeg:30});return p;}
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`layout review states and exact 2D highlight stay read-only ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
