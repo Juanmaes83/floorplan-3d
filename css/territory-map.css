@@ -1,0 +1,4 @@
+.territory-map{height:clamp(240px,52vh,480px);border:1px solid var(--line);border-radius:10px;background:var(--surface-sunken);overflow:hidden}
+.territory-map-tools{display:flex;align-items:end;flex-wrap:wrap;gap:6px;margin:12px 0}
+.territory-map-tools .btn[aria-pressed=true]{background:var(--select-soft);box-shadow:inset 0 0 0 1.5px var(--select)}
+.territory-map-panel{margin-top:12px}

@@ -86,3 +86,44 @@ test('8C-B building stores parcel only at shared site',{timeout:60000},async t=>
  await page.locator('#territoryCard:not([hidden])').waitFor();
  assert.equal(await page.locator('#territoryPreview path').count(),2);assert.deepEqual(errors,[]);
 });
+test('MapLibre reviews a GML choice, preserves geometry and releases its canvas', { timeout: 60000 }, async t => {
+ const {page,errors}=await pageFor(t,{width:390,height:844}),beforeGeometry=await editable(page);
+ let tiles=0;
+ await page.route('https://www.ign.es/wmts/ign-base?**',route=>{
+  tiles++;
+  return route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aQXQAAAAASUVORK5CYII=','base64')});
+ });
+ const xml=await fs.readFile(FIXTURE,'utf8');
+ const second=xml.replaceAll('1907401VK4810H','1907401VK4810J').match(/<g:featureMember>[\s\S]*?<\/g:featureMember>/)[0]
+  .replace(/\b5000\d\d\b/g,value=>String(Number(value)+100));
+ const many=xml.replace('</g:FeatureCollection>',second+'</g:FeatureCollection>');
+ await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);
+ await page.locator('#territoryOpen').click();
+ await page.locator('#territoryFile').setInputFiles({name:'varias.gml',mimeType:'application/xml',buffer:Buffer.from(many)});
+ await page.locator('#territoryMapToggle').click();
+ await page.locator('#territoryMapContent canvas').waitFor();
+ assert.equal(tiles,0,'opening a local parcel sends no tile requests');
+ await Promise.all([page.waitForRequest(request=>request.url().startsWith('https://www.ign.es/wmts/ign-base?')),page.locator('#territoryMapBasemap').click()]);
+ await page.getByRole('link',{name:'© Instituto Geográfico Nacional'}).waitFor();
+ await page.locator('#territoryMapBasemap').click();
+ assert.equal(await page.getByRole('link',{name:'© Instituto Geográfico Nacional'}).count(),0);
+ await page.locator('#territoryMapChoice').selectOption('1907401VK4810J');
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.site?.parcel),undefined);
+ await page.locator('#territoryMapConfirm').click();
+ await page.locator('#territorySave:enabled').waitFor();
+ assert.equal(await page.locator('#territoryMapContent canvas').count(),0);
+ assert.match(await page.locator('#territoryCard').innerText(),/1907401VK4810J/);
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.site?.parcel),undefined);
+ await page.locator('#territorySave').click();
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.site.parcel.reference),'1907401VK4810J');
+ assert.equal(await editable(page),beforeGeometry);
+ await page.locator('#territoryMapToggle').click();
+ await page.locator('#territoryMapContent canvas').waitFor();
+ const context=await page.locator('#territoryMapContent canvas').evaluateHandle(canvas=>canvas.getContext('webgl2'));
+ await page.keyboard.press('Escape');
+ await page.locator('#territoryDialog').waitFor({state:'hidden'});
+ await page.locator('#territoryMapContent canvas').waitFor({state:'detached'});
+ await page.waitForFunction(gl=>gl.isContextLost(),context);
+ await context.dispose();
+ assert.deepEqual(errors,[]);
+});

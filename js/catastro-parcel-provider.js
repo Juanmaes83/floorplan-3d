@@ -53,7 +53,7 @@
   }
   return {sourceCrs:crs[0],sourceGeometry:{type:'MultiPolygon',polygons}};
  }
- function parseDocument(text,selected){
+ function documentCandidates(text){
   if(typeof text!=='string'||!text.trim()||new TextEncoder().encode(text).length>Parcel.LIMITS.documentBytes)err('invalid-parcel-input');
   if(/<!\s*(?:DOCTYPE|ENTITY)\b/i.test(text))err('invalid-source-document');
   if(typeof DOMParser!=='function')err('invalid-source-document');
@@ -61,7 +61,7 @@
   if(xml.getElementsByTagName('parsererror').length||xml.doctype)err('invalid-source-document');
   const nodes=CP.flatMap(ns=>descendants(xml,ns,'CadastralParcel'));
   if(!nodes.length||nodes.length>Parcel.LIMITS.parcels)err('invalid-source-document');
-  const candidates=nodes.map(node=>{
+  return nodes.map(node=>{
    const reference=Parcel.normalizeReference(read(node,node.namespaceURI,'nationalCadastralReference'));
    const identifier=first(node,node.namespaceURI,'inspireId');
    const localId=identifier?read(identifier,BASE,'localId'):'';
@@ -69,12 +69,23 @@
    const inspireId=localId&&namespace?{localId,namespace}:undefined;
    return {node,reference,inspireId};
   });
+ }
+ function candidateParcel(chosen){
+  return Parcel.normalizeParcel({reference:chosen.reference,inspireId:chosen.inspireId,...parseGeometry(chosen.node)});
+ }
+ function listDocumentParcels(text){
+  const candidates=documentCandidates(text),counts=new Map();
+  for(const item of candidates)counts.set(item.reference,(counts.get(item.reference)||0)+1);
+  if(counts.size!==candidates.length)err('multiple-parcels-require-selection');
+  return candidates.map(candidateParcel);
+ }
+ function parseDocument(text,selected){
+  const candidates=documentCandidates(text);
   let candidatesForSelection=candidates;
   if(selected)candidatesForSelection=candidates.filter(c=>c.reference===selected);
   if(!candidatesForSelection.length)err('parcel-not-found');
   if(candidatesForSelection.length!==1)err('multiple-parcels-require-selection');
-  const chosen=candidatesForSelection[0],geometry=parseGeometry(chosen.node);
-  return Parcel.normalizeParcel({reference:chosen.reference,inspireId:chosen.inspireId,...geometry});
+  return candidateParcel(candidatesForSelection[0]);
  }
  const provider=Object.freeze({
   id,contractVersion:Geo.CONTRACT_VERSION,capabilities:caps,
@@ -96,6 +107,6 @@
    }
   }
  });
- const api={provider,parseDocument};
+ const api={provider,parseDocument,listDocumentParcels};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanCatastroParcel=api;
 })(globalThis);

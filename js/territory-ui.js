@@ -23,11 +23,85 @@
  const status=el('p',body);status.id='territoryStatus';status.setAttribute('role','status');
  const card=el('section',body),cardTitle=el('h3',card),metadata=el('dl',card),preview=el('div',card),caution=el('p',card);
  card.id='territoryCard';preview.id='territoryPreview';preview.className='territory-preview';caution.className='territory-caution';
+ const mapPanel=el('div',body),mapToggle=el('button',mapPanel),mapContent=el('div',mapPanel),mapTools=el('div',mapContent);
+ const mapLabel=el('label',mapTools),mapChoice=el('select',mapLabel),mapConfirm=el('button',mapTools),mapIn=el('button',mapTools),mapOut=el('button',mapTools),mapReset=el('button',mapTools),mapTilt=el('button',mapTools),mapBase=el('button',mapTools);
+ const mapCanvas=el('div',mapContent),mapStatus=el('p',mapContent),mapAttribution=el('a',mapContent,'© Instituto Geográfico Nacional');
+ mapAttribution.href='https://www.ign.es/';mapAttribution.target='_blank';mapAttribution.rel='noopener noreferrer';mapAttribution.hidden=true;
+ mapBase.id='territoryMapBasemap';mapBase.setAttribute('aria-pressed','false');
+ mapPanel.className='territory-map-panel';mapTools.className='territory-map-tools';mapCanvas.className='territory-map';
+ mapToggle.id='territoryMapToggle';mapContent.id='territoryMapContent';mapChoice.id='territoryMapChoice';mapConfirm.id='territoryMapConfirm';
+ mapToggle.setAttribute('aria-controls',mapContent.id);mapToggle.setAttribute('aria-expanded','false');mapContent.hidden=true;
+ mapStatus.setAttribute('role','status');mapTilt.setAttribute('aria-pressed','false');
+ for(const button of [mapToggle,mapConfirm,mapIn,mapOut,mapReset,mapTilt,mapBase]){button.type='button';button.className='btn';}
+ let mapView=null,mapRequest=null,mapDocument=null;
+ function closeMap(){
+  mapRequest?.abort();mapRequest=null;mapView=null;mapDocument=null;
+  mapContent.hidden=true;mapToggle.setAttribute('aria-expanded','false');mapTilt.setAttribute('aria-pressed','false');
+  mapCanvas.replaceChildren();mapBase.setAttribute('aria-pressed','false');mapAttribution.hidden=true;
+ }
+ function renderMapLabels(){
+  mapToggle.textContent=mapContent.hidden?t('Ver mapa de parcelas','Open parcel map','打开地块地图'):t('Cerrar mapa','Close map','关闭地图');
+  mapCanvas.setAttribute('aria-label',t('Mapa de parcelas','Parcel map','地块地图'));
+  mapChoice.setAttribute('aria-label',t('Referencia de parcela','Parcel reference','地块参考号'));
+  mapConfirm.textContent=t('Preparar parcela','Review parcel','审核地块');
+  mapIn.textContent='+';mapIn.setAttribute('aria-label',t('Acercar mapa','Zoom in','放大地图'));
+  mapOut.textContent='−';mapOut.setAttribute('aria-label',t('Alejar mapa','Zoom out','缩小地图'));
+  mapReset.textContent=t('Encuadrar','Fit parcels','适应地块');
+  mapBase.textContent=t('Mapa base IGN','IGN basemap','IGN 底图');
+  mapTilt.textContent=t('Vista inclinada','Tilted view','倾斜视图');
+  mapPanel.hidden=!(pending||site()?.parcel||(!documentSection.hidden&&file.files[0]));
+ }
+ mapToggle.onclick=async()=>{
+  if(!mapContent.hidden){closeMap();renderMapLabels();return;}
+  const request=mapRequest=new AbortController(),entryId=app.entryId;
+  mapContent.hidden=false;mapToggle.setAttribute('aria-expanded','true');renderMapLabels();
+  mapConfirm.hidden=true;mapTools.hidden=true;mapCanvas.hidden=false;mapChoice.replaceChildren();
+  mapStatus.textContent=t('Preparando mapa…','Preparing map…','正在准备地图…');
+  try{
+   const input=!documentSection.hidden&&file.files[0];
+   if(input?.size>Parcel.LIMITS.documentBytes)throw Error(message({reason:'invalid-parcel-input'}));
+   const text=input?await input.text():null;
+   if(request.signal.aborted||entryId!==app.entryId||!dialog.open)return;
+   const parcels=text?window.FloorPlanCatastroParcel.listDocumentParcels(text):[pending||site().parcel];
+   mapDocument=text;
+   for(const parcel of parcels){const option=el('option',mapChoice,parcel.reference);option.value=parcel.reference;}
+   if(selectRef.value&&parcels.some(p=>p.reference===selectRef.value))mapChoice.value=selectRef.value;
+   const map=await import('./territory-map-adapter.mjs');
+   mapView=await map.openParcelMap(mapCanvas,parcels,{signal:request.signal,initialReference:mapChoice.value,onPick:reference=>{mapChoice.value=reference;mapView?.select(reference);},
+    onBasemapError:()=>{mapStatus.textContent=t('El IGN no ha respondido. La parcela sigue disponible.','IGN did not respond. The parcel remains available.','IGN 未响应，仍可查看地块。');}});
+   if(request.signal.aborted||entryId!==app.entryId||!dialog.open){request.abort();return;}
+   mapTools.hidden=false;mapConfirm.hidden=!mapDocument;
+   mapStatus.textContent=t('Geometría de la fuente, sin mapa base.','Source geometry, without a basemap.','来源几何，无底图。');
+  }catch(error){
+   if(request.signal.aborted)return;
+   mapCanvas.hidden=true;mapTools.hidden=!mapChoice.options.length;mapConfirm.hidden=!mapDocument;
+   mapStatus.textContent=mapChoice.options.length?t('Mapa no disponible. Puedes elegir la referencia en la lista.','Map unavailable. Select the reference from the list.','地图不可用，请从列表选择参考号。'):
+    message({reason:error.reason||'invalid-source-document'});
+  }
+ };
+ mapBase.onclick=()=>{
+  const active=mapBase.getAttribute('aria-pressed')!=='true';
+  if(!mapView?.basemap(active))return;
+  mapBase.setAttribute('aria-pressed',String(active));mapAttribution.hidden=!active;
+  mapStatus.textContent=active?t('Mapa base del IGN y geometría de la fuente.','IGN basemap and source geometry.','IGN 底图与来源几何。'):t('Geometría de la fuente, sin mapa base.','Source geometry, without a basemap.','来源几何，无底图。');
+ };
+ mapChoice.onchange=()=>mapView?.select(mapChoice.value);
+ mapIn.onclick=()=>mapView?.zoom(1);mapOut.onclick=()=>mapView?.zoom(-1);
+ mapReset.onclick=()=>{mapTilt.setAttribute('aria-pressed','false');mapView?.reset();};
+ mapTilt.onclick=()=>{const next=mapTilt.getAttribute('aria-pressed')!=='true';mapView?.tilt(next);if(mapView)mapTilt.setAttribute('aria-pressed',String(next));};
+ mapConfirm.onclick=()=>{
+  if(!mapDocument||!mapChoice.value||busy)return;
+  const input={mode:'document',text:mapDocument,reference:mapChoice.value};
+  selectRef.value=mapChoice.value;
+  closeMap();renderMapLabels();importButton.focus();void run(input);
+ };
+ file.addEventListener('change',()=>{closeMap();renderMapLabels();});
  const orthoSection=el('section',body),orthoTitle=el('h3',orthoSection),orthoIntro=el('p',orthoSection),orthoProviderRow=el('div',orthoSection),orthoProviderLabel=el('span',orthoProviderRow),orthoProviderChoice=el('select',orthoProviderRow),orthoStatus=el('p',orthoSection),orthoMetadata=el('dl',orthoSection),orthoControls=el('div',orthoSection),orthoLoad=el('button',orthoControls),orthoSave=el('button',orthoControls),orthoRemove=el('button',orthoControls);
  orthoSection.id='territoryOrthophoto';orthoSection.className='territory-orthophoto';orthoProviderRow.className='territory-orthophoto-provider';orthoProviderChoice.id='territoryOrthophotoProvider';orthoStatus.id='territoryOrthophotoStatus';orthoStatus.setAttribute('role','status');orthoMetadata.id='territoryOrthophotoMetadata';orthoControls.className='territory-orthophoto-actions';orthoLoad.id='territoryOrthophotoLoad';orthoSave.id='territoryOrthophotoSave';orthoRemove.id='territoryOrthophotoRemove';for(const button of [orthoLoad,orthoSave,orthoRemove]){button.type='button';button.className='btn';}
  const terrainSection=el('section',body),terrainTitle=el('h3',terrainSection),terrainIntro=el('p',terrainSection),terrainProviderRow=el('div',terrainSection),terrainProviderLabel=el('span',terrainProviderRow),terrainProviderChoice=el('select',terrainProviderRow),terrainStatus=el('p',terrainSection),terrainMetadata=el('dl',terrainSection),terrainControls=el('div',terrainSection),terrainLoad=el('button',terrainControls),terrainSave=el('button',terrainControls),terrainRemove=el('button',terrainControls);
  terrainSection.id='territoryTerrain';terrainSection.className='territory-orthophoto';terrainProviderRow.className='territory-orthophoto-provider';terrainProviderChoice.id='territoryTerrainProvider';terrainStatus.id='territoryTerrainStatus';terrainStatus.setAttribute('role','status');terrainMetadata.id='territoryTerrainMetadata';terrainControls.className='territory-orthophoto-actions';terrainLoad.id='territoryTerrainLoad';terrainSave.id='territoryTerrainSave';terrainRemove.id='territoryTerrainRemove';for(const button of [terrainLoad,terrainSave,terrainRemove]){button.type='button';button.className='btn';}
  const actions=el('div',dialog),save=el('button',actions),remove=el('button',actions);actions.className='territory-actions';save.id='territorySave';remove.id='territoryRemove';save.type=remove.type='button';save.className='btn primary';remove.className='btn';
+ let parcelRequest=null;
  let pending=null,owner=null,busy=false,returnFocus=null,loaded=null,pendingOrtho=null,orthoBusy=false,orthoError='',orthoController=null,loadedTerrain=null,pendingTerrain=null,terrainBusy=false,terrainError='',terrainController=null;
  const providers=()=>registry.list({capability:'parcel'});
  const orthoProviders=()=>registry.list({capability:'orthophoto'});
@@ -62,7 +136,7 @@
   preview.append(svg);
  }
  function render(){
-  if(owner&&owner!==app.entryId){releaseRaster();pendingOrtho=null;orthoError='';loadedTerrain=null;pendingTerrain=null;terrainError='';owner=app.entryId;}
+  if(owner&&owner!==app.entryId){closeMap();releaseRaster();pendingOrtho=null;orthoError='';loadedTerrain=null;pendingTerrain=null;terrainError='';owner=app.entryId;}
   const current=pending||site()?.parcel,selected=descriptor(),list=providers();
   entry.textContent=t('Contexto territorial','Territorial context','地理背景');title.textContent=entry.textContent;close.textContent=t('Cerrar','Close','关闭');
   intro.textContent=t('Parcela fuente para contexto. No posiciona ni modifica la vivienda.','Source parcel for context. It does not position or change the home.','地块仅作背景，不定位或修改住宅。');
@@ -73,6 +147,7 @@
   providerChoice.hidden=list.length<=1;
   const modes=selected?.parcelInputModes||[];
   documentSection.hidden=!modes.includes('document');referenceSection.hidden=!modes.includes('reference');
+  renderMapLabels();
   fileLabel.firstChild?.nodeType===3?fileLabel.firstChild.textContent=t('Documento GML/XML de parcela','Parcel GML/XML document','地块 GML/XML 文件'):fileLabel.prepend(document.createTextNode(t('Documento GML/XML de parcela','Parcel GML/XML document','地块 GML/XML 文件')));
   selectLabel.firstChild?.nodeType===3?selectLabel.firstChild.textContent=t('Referencia opcional si hay varias parcelas','Optional reference if there are several parcels','多个地块时可填参考号'):selectLabel.prepend(document.createTextNode(t('Referencia opcional si hay varias parcelas','Optional reference if there are several parcels','多个地块时可填参考号')));
   lookupLabel.firstChild?.nodeType===3?lookupLabel.firstChild.textContent=t('Referencia de parcela','Parcel reference','地块参考号'):lookupLabel.prepend(document.createTextNode(t('Referencia de parcela','Parcel reference','地块参考号')));
@@ -112,15 +187,16 @@
   cancelled:t('Consulta cancelada. No ha cambiado nada.','Lookup cancelled. Nothing changed.','已取消。')})[result.reason]||t('No se pudo incorporar la parcela: ','Could not load parcel: ','无法加载地块：')+result.reason;}
  async function run(input){
   const d=descriptor();if(!d){status.textContent=t('No hay fuente de parcela disponible.','No parcel source available.','没有可用的地块来源。');return;}
+  const request=parcelRequest=new AbortController(),entryId=app.entryId;
   busy=true;status.textContent=t('Procesando documento…','Processing document…','正在处理文件…');render();
-  try{const result=await registry.getParcel(d.providerId,input);if(result.status!=='available')throw Error(message(result));releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;pending=Adapter.toSiteParcel(result);status.textContent=t('Parcela preparada; guarda para incorporarla al proyecto.','Parcel ready; save to add it to the project.','地块已准备，保存后加入项目。');}
-  catch(error){status.textContent=error.message;pending=null;}
-  finally{busy=false;render();}
+  try{const result=await registry.getParcel(d.providerId,input,{signal:request.signal});if(request.signal.aborted||entryId!==app.entryId||!dialog.open)return;if(result.status!=='available')throw Error(message(result));releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;pending=Adapter.toSiteParcel(result);status.textContent=t('Parcela preparada; guarda para incorporarla al proyecto.','Parcel ready; save to add it to the project.','地块已准备，保存后加入项目。');}
+  catch(error){if(!request.signal.aborted&&entryId===app.entryId&&dialog.open){status.textContent=error.message;pending=null;}}
+  finally{if(parcelRequest===request){parcelRequest=null;busy=false;if(dialog.open)render();}}
  }
  importButton.onclick=async()=>{const selected=file.files[0];if(!selected){status.textContent=t('Selecciona un GML/XML.','Select a GML/XML file.','请选择 GML/XML 文件。');return;}if(selected.size>Parcel.LIMITS.documentBytes){status.textContent=t('El documento supera el límite local de 2 MB.','Document exceeds the local 2 MB limit.','文件超过本地 2 MB 限制。');return;}await run({mode:'document',text:await selected.text(),...(selectRef.value.trim()?{reference:selectRef.value}:null)});};
  lookupButton.onclick=()=>run({mode:'reference',reference:lookup.value});
- save.onclick=()=>{if(!pending)return;try{const next={...site(),parcel:pending};delete next.orthophoto;delete next.terrain;delete next.buildingPlacement;app.setSite(next);pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();window.FloorPlanTerritoryPlacementUI?.render?.();/* M2: placement offered right away */}catch(error){status.textContent=error.message;}};
- remove.onclick=()=>{try{const next={...site()};delete next.parcel;delete next.orthophoto;delete next.terrain;delete next.buildingPlacement;app.setSite(Object.keys(next).length?next:undefined);pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
+ save.onclick=()=>{if(!pending)return;try{const next={...site(),parcel:pending};delete next.orthophoto;delete next.terrain;delete next.buildingPlacement;app.setSite(next);closeMap();pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();window.FloorPlanTerritoryPlacementUI?.render?.();/* M2: placement offered right away */}catch(error){status.textContent=error.message;}};
+ remove.onclick=()=>{try{const next={...site()};delete next.parcel;delete next.orthophoto;delete next.terrain;delete next.buildingPlacement;app.setSite(Object.keys(next).length?next:undefined);closeMap();pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
  async function runOrtho(){
   const parcel=site()?.parcel,d=orthoDescriptor();if(!parcel||!d)return;
   const controller=new AbortController();orthoController=controller;orthoBusy=true;orthoError='';render();
@@ -141,9 +217,9 @@
  terrainSave.onclick=()=>{if(!pendingTerrain)return;try{app.setSite({...site(),terrain:pendingTerrain});window.FloorPlanTerritorySession.sync(app.entryId,site());window.FloorPlanTerritorySession.set('terrain',site().terrain,{grid:loadedTerrain.terrain});pendingTerrain=null;terrainError='';render();}catch(error){terrainError=error.message;render();}};
  terrainRemove.onclick=()=>{try{const next={...site()};delete next.terrain;app.setSite(next);loadedTerrain=null;pendingTerrain=null;terrainError='';render();}catch(error){terrainError=error.message;render();}};
  terrainProviderChoice.onchange=()=>{loadedTerrain=null;pendingTerrain=null;terrainError='';render();};
- providerChoice.onchange=()=>{pending=null;render();};
- function open(){ensureTerritoryStyles();owner=app.entryId;pending=null;releaseRaster();pendingOrtho=null;orthoError='';loadedTerrain=null;pendingTerrain=null;terrainError='';status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
- entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{orthoController?.abort();terrainController?.abort();releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;returnFocus?.focus?.({preventScroll:true});});
+ providerChoice.onchange=()=>{closeMap();pending=null;render();};
+ function open(){ensureTerritoryStyles();if(!document.querySelector('link[data-map-territory-styles]')){const link=el('link',document.head);link.rel='stylesheet';link.href='css/territory-map.css';link.dataset.mapTerritoryStyles='';}owner=app.entryId;pending=null;releaseRaster();pendingOrtho=null;orthoError='';loadedTerrain=null;pendingTerrain=null;terrainError='';status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
+ entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{closeMap();parcelRequest?.abort();parcelRequest=null;busy=false;orthoController?.abort();terrainController?.abort();releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;returnFocus?.focus?.({preventScroll:true});});
  window.FloorPlanTerritoryUI={open,registry,render};
  render();
 })();

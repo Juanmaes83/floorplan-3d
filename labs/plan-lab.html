@@ -4,39 +4,37 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="data:,">
 <title>SCULPT 1.1 · Plano, sol y vuelo</title>
-<style>
-  *{box-sizing:border-box}body{margin:0;background:#f2f2ef;color:#202727;font:16px/1.5 system-ui,sans-serif}
-  main{max-width:1080px;margin:auto;padding:24px clamp(12px,4vw,42px)}h1,h2{line-height:1.15}
-  section,form{background:white;border:1px solid #dadedd;border-radius:12px;padding:16px;margin:14px 0;min-width:0}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid section{margin:0}
-  label{display:block;min-width:0;max-width:100%}input,button{min-height:44px;max-width:100%;font:inherit}button{background:#20545e;border:0;color:white;padding:8px 14px;border-radius:6px}
-  .controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap}#flight-controls{align-items:center}
-  canvas{display:block;width:100%;aspect-ratio:16/9;background:#e8eeeb;border-radius:8px;margin:12px 0}
-  li{overflow-wrap:anywhere}#status{min-height:1.5em}
-  @media(max-width:680px){.grid{grid-template-columns:1fr}canvas{aspect-ratio:1}}
-</style>
+<link rel="stylesheet" href="../css/design-system.css">
+<link rel="stylesheet" href="sculpt-workspace.css">
+<header class="lab-header"><div>
+  <span class="lab-brand">Rubik Sota</span>
+  <nav aria-label="Herramientas del laboratorio">
+    <a class="btn on" aria-current="page" href="plan-lab.html">Plano, sol y vuelo</a>
+    <a class="btn" href="territory-map.html">Contexto territorial</a>
+  </nav>
+</div></header>
 <main>
   <h1>Plano, sol y vuelo</h1>
-  <p id="source">Vivienda de ejemplo con parcela y ubicación simuladas. Laboratorio local.</p>
-  <form id="inputs">
+  <p class="lab-lead" id="source">Vivienda de ejemplo con parcela y ubicación simuladas. Laboratorio local.</p>
+  <form class="lab-card" id="inputs">
     <div class="controls">
       <label>Abrir proyecto JSON <input id="file" type="file" accept=".json,application/json"></label>
       <label>Fecha del estudio <input id="date" type="date" value="2026-06-21" required></label>
       <label>Retranqueo de referencia (m) <input id="setback" type="number" min="0" step=".1" value="3" required></label>
-      <button>Evaluar</button>
+      <button class="btn primary">Evaluar</button>
     </div>
     <p id="status" role="status"></p>
   </form>
-  <div class="grid">
-    <section aria-labelledby="qa-title"><h2 id="qa-title">Comprobaciones orientativas</h2><p id="areas"></p><p id="parcel"></p><details><summary id="finding-count">Revisiones del plano</summary><ul id="findings"></ul></details></section>
-    <section aria-labelledby="sun-title"><h2 id="sun-title">Sol directo por estancia</h2><p>Estimación en el centro de ventanas exteriores, cada 15 min. Considera muros modelados. El entorno y otros obstáculos requieren un estudio aparte.</p><ul id="sun-results"></ul></section>
+  <div class="lab-grid">
+    <section class="lab-card" aria-labelledby="qa-title"><h2 id="qa-title">Comprobaciones orientativas</h2><p id="areas"></p><p id="parcel"></p><details><summary id="finding-count">Revisiones del plano</summary><ul id="findings"></ul></details></section>
+    <section class="lab-card" aria-labelledby="sun-title"><h2 id="sun-title">Sol directo por estancia</h2><p>Estimación en el centro de ventanas exteriores, cada 15 min. Considera muros modelados. El entorno y otros obstáculos requieren un estudio aparte.</p><ul id="sun-results"></ul></section>
   </div>
-  <section aria-labelledby="flight-title">
+  <section class="lab-card" aria-labelledby="flight-title">
     <h2 id="flight-title">Vista previa del vuelo</h2>
     <p>Recorrido helicoidal sobre la geometría de muros, con encuadre adaptado a la pantalla.</p>
     <canvas id="flight" aria-label="Vista 3D del recorrido helicoidal"></canvas>
     <div class="controls" id="flight-controls">
-      <button id="play" type="button">Reproducir vuelo</button>
+      <button class="btn" id="play" type="button">Reproducir vuelo</button>
       <label>Posición del vuelo <input id="progress" type="range" min="0" max="54" step="0.1" value="0"></label>
     </div>
     <p id="flight-state" role="status"></p>
