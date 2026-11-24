@@ -55,6 +55,9 @@
  // Atrás/Adelante: si la entrada es de un área, se abre esa área; si se sale de las áreas, se vuelve al editor.
  // Se adelanta (captura) al manejo de pantallas de la guía para que «Atrás» desde un área no abra el inicio.
  addEventListener('popstate',e=>{const st=e.state||{},a=areaNow();
+  // La presentación gestiona su propia entrada (#presentacion): no se toca nada mientras está activa o saliendo.
+  if(window.FloorPlanPresentation?.active||st.rubikPresentation||document.body.classList.contains('presenting')||document.body.classList.contains('presentation-exiting'))return;
+  if(st.perlaArea&&st.perlaArea===a)return;
   // Con un diálogo abierto en un área, «Atrás» cierra el diálogo y deja a la persona en su área.
   // (Chromium cierra él mismo un diálogo modal al ir Atrás, justo antes de este evento: también cuenta.)
   const dlg=[...document.querySelectorAll('dialog[open]')].pop(),justClosed=[...openDialogs].some(d=>!d.open);
