@@ -56,3 +56,8 @@
    used to stay above it (z-index 13 > drawer 6) and covered the «Construir» tab of the palette in 3D. While a drawer is
    open they go under it; nothing is hidden or removed, and they are back on top as soon as the drawer closes. */
 @media (max-width:1100px){.app:has(aside.lib.open) .nav3d,.app:has(aside.right.open) .nav3d{z-index:5}}
+
+@media (max-width:699px),(max-height:500px){
+  .nav3d.open{max-height:min(calc(100% - 16px),var(--nav3d-visible-height,100dvh))}
+  .nav3d.open .nav3d-toggle{flex:none}
+}

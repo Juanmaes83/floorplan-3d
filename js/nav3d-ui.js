@@ -193,6 +193,14 @@
   if(walking!==(lastMode==='walk')){if(walking){openBeforeWalk=open;open=false;}else if(lastMode==='walk')open=openBeforeWalk;lastMode=walking?'walk':'orbit';}
   const show=in3d&&!presenting;panel.hidden=!show;
   if(!show)return;
+  // El escenario puede empezar más abajo que la cabecera cuando se abre la guía.
+  // La hoja debe caber en el área visible aunque el escenario continúe fuera de ella.
+  if(open&&matchMedia('(max-width:699px), (max-height:500px)').matches){
+   const bounds=panel.getBoundingClientRect(), viewport=window.visualViewport;
+   const bottom=(viewport?.offsetTop||0)+(viewport?.height||innerHeight);
+   const limit=Math.max(0,Math.floor(bottom-bounds.top-8))+'px';
+   if(panel.style.getPropertyValue('--nav3d-visible-height')!==limit)panel.style.setProperty('--nav3d-visible-height',limit);
+  }else panel.style.removeProperty('--nav3d-visible-height');
   refreshRooms();
   const vm=C.viewModel(s,{lang:lang(),groups,levels:levelList});
   const k=JSON.stringify([vm,open,busyGoing,lang()]);if(!force&&k===stateKey)return;stateKey=k;

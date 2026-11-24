@@ -335,3 +335,20 @@ body.perla .perla-r1{grid-template-columns:minmax(max-content,1fr) auto minmax(m
   body.perla:not(.guided):not(.professional-area):not(.presenting) .app>header>.perla-keep{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:3px 8px}
   body.perla .perla-keep>*{flex:none}
 }
+
+/* La confirmación de entrada al paseo queda encima de la barra del lienzo. */
+body.perla #stage:has(#walkOverlay[style*="display: flex"]) .perla-canvas-top{visibility:hidden}
+
+/* El visor utiliza el alto del escenario, que PERLA calcula con su propia cabecera. */
+body.perla #stage #view3d{height:auto}
+body.perla .perla-r1 :is(.perla-areas > .btn,#workArea-studio){min-height:40px}
+@media (max-height:500px) and (pointer:coarse){
+ body.perla #stage #joy{width:88px;height:88px}
+ body.perla #stage #joy i{width:40px;height:40px;margin:-20px 0 0 -20px}
+}
+@media (max-height:500px) and (orientation:landscape) and (pointer:coarse){
+ body.perla #stage .nav3d-map{right:156px;top:8px}
+}
+@media (min-width:1101px) and (min-height:501px){
+ body.perla.m3d #stage:has(#nav3d.open:not([hidden])) .perla-canvas-top{left:324px;max-width:calc(100% - 336px)}
+}

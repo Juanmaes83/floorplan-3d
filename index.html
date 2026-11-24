@@ -4687,9 +4687,10 @@ function stopTouchWalk(){
   $('#joy').style.display = 'none'; $('#walkExit').style.display = 'none';
 }
 function bindJoystick(){
-  const el = $('#joy'), knob = $('#joy i'), R = 50;
+  const el = $('#joy'), knob = $('#joy i');
   const upd = e => {
     const r = el.getBoundingClientRect();
+    const R = Math.min(50, Math.max(1, (r.width - knob.offsetWidth) / 2));
     let dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
     const L = Math.hypot(dx, dy); if (L > R){ dx *= R/L; dy *= R/L; }
     updateWalkInput(() => { joy.x = dx/R; joy.y = dy/R; });

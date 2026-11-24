@@ -2,6 +2,13 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const Core=require('../js/project-core.js'),Building=require('../js/building-core.js');
 const root=path.resolve(__dirname,'..');let server,browser,url;
+async function exitWalkToOrbit(page){
+ const orbit=page.locator('#modes3d [data-mode="orbit"]');
+ if(await orbit.isVisible())return orbit.click();
+ const toggle=page.locator('#nav3dToggle');
+ if(await toggle.getAttribute('aria-expanded')==='false')await toggle.click();
+ await page.locator('#nav3dMode-exterior').click();
+}
 before(async()=>{
   server=createServer(async(req,res)=>{try{if(req.url==='/favicon.ico'){res.writeHead(204);res.end();return;}const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
   await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
@@ -36,7 +43,7 @@ test('Exterior remains reversible across Walk, Presentation, captures and two of
   assert.ok((await page.evaluate(()=>View3D.deliveryShot({width:640,height:360}).dataUrl)).startsWith('data:image/png;base64,'));
   await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating);
   await page.locator('#modes3d [data-mode="walk"]').click();await page.waitForFunction(()=>View3D.walking()&&!View3D.exteriorVolumeInfo.visible);
-  await page.locator('#modes3d [data-mode="orbit"]').click();await page.waitForFunction(()=>View3D.exteriorVolumeInfo.visible);
+  await exitWalkToOrbit(page);await page.waitForFunction(()=>View3D.exteriorVolumeInfo.visible);
   await page.locator('#presentationBtn').click();await page.locator('#presentationConfig[open]').waitFor();
   await page.getByRole('button',{name:'Iniciar presentación'}).click();
   await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:90000});
