@@ -35,5 +35,10 @@ test(`U10 semáforo ${viewport.width}x${viewport.height}`,{timeout:180000},async
  await page.evaluate(()=>FloorPlanProfessionalUI.open('budget'));await page.waitForTimeout(900);
  assert.equal(await page.locator('#professionalWorkspace .pres-hero-txt .perla-sem-bar').isVisible(),true);
  assert.ok(await page.locator('#professionalWorkspace .cx-jstep[data-sem]').count()>0,'los pasos del recorrido llevan semáforo');
+ // U12 · Analizar: escala estimada → naranja; norte y parcela sin configurar → rojo; fachadas detectadas → verde.
+ await page.evaluate(()=>FloorPlanProfessionalUI.open('analyze'));await page.waitForTimeout(900);
+ const an=await page.evaluate(()=>Object.fromEntries([...document.querySelectorAll('#professionalWorkspace .professional-card[data-sem]')].map(c=>[c.querySelector('h2,h3').textContent.trim(),c.dataset.sem])));
+ assert.deepEqual(an,{'Medidas y superficies':'pend','Orientación y sol':'req','Emplazamiento':'req','Exterior':'ok'},'estado real de cada ficha de Analizar');
+ assert.equal(await page.locator('#professionalWorkspace .perla-sem-bar').getAttribute('aria-valuenow'),'25');
  assert.deepEqual(errors,[]);
 });

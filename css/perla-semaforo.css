@@ -33,3 +33,7 @@
 #professionalWorkspace[data-area] .perla-pill.req,#professionalWorkspace.perla-pres :is(.perla-pill.req,.perla-pill-state[data-kind=req]){color:var(--sem-req);background:var(--sem-req-bg)}
 #professionalWorkspace[data-area] .perla-pill.pend::before,#professionalWorkspace.perla-pres :is(.perla-pill.pend,.perla-pill-state[data-kind=pend])::before{background:var(--sem-pend)}
 .perla-sem-host .perla-sem{margin:0 0 10px}
+/* U12 · Analizar: fichas con el mismo semáforo. */
+#professionalWorkspace .professional-card[data-sem]{border-inline-start:4px solid var(--sem-req)}
+#professionalWorkspace .professional-card[data-sem="ok"]{border-inline-start-color:var(--sem-ok)}
+#professionalWorkspace .professional-card[data-sem="pend"]{border-inline-start-color:var(--sem-pend)}

@@ -46,6 +46,18 @@
   if(area==='budget'){const rows=$$('#professionalWorkspace .pres-listo li');if(!rows.length)return;const c={ok:0,pend:0,req:0};
    for(const r of rows){const k=r.querySelector('.ok')?'ok':r.querySelector('.pend')?'pend':'req';c[k]++;r.dataset.sem=k;}
    const host=$('#professionalWorkspace .pres-hero-txt');if(host)bar(host,c,tx('Estado del presupuesto','Budget status','预算状态'));}
+  // U12 · Analizar: cada ficha con estado real del proyecto (escala, norte, parcela, fachadas).
+  if(area==='analyze'){const p=window.FloorPlanApp?.project,s=window.FloorPlanBuildingUI?.site||p?.site||{};if(!p)return;
+   let ext=0;try{ext=window.FloorPlanExterior?.derive(p)?.walls?.filter(w=>w.status==='facade').length||0;}catch{}
+   const conf=p.scale?.confidence;
+   const STATES=[[/^(Medidas y superficies|Measurements and areas|Measurements and surfaces|尺寸)/,conf==='real'?'ok':conf==='estimated'?'pend':'req'],
+    [/^(Orientación y sol|Orientation and sun|朝向)/,s.northOffsetDeg===undefined?'req':s.location?'ok':'pend'],
+    [/^(Emplazamiento|Site context|场地)/,!s.parcel?'req':s.buildingPlacement?'ok':'pend'],
+    [/^(Exterior|外部)/,ext>0?'ok':'req']];
+   const c={ok:0,pend:0,req:0};
+   for(const card of $$('#professionalWorkspace .professional-card')){const h=(card.querySelector('h2,h3')?.textContent||'').trim();const m=STATES.find(([re])=>re.test(h));if(!m)continue;
+    c[m[1]]++;if(card.dataset.sem!==m[1])card.dataset.sem=m[1];}
+   const intro=$('#professionalWorkspace .professional-intro');if(intro&&(c.ok+c.pend+c.req)){let w=intro.nextElementSibling;if(!w?.classList.contains('perla-sem-host')){w=el('div','perla-sem-host',null);intro.after(w);}bar(w,c,tx('Estado del análisis','Analysis status','分析状态'));}}
   // Recorrido de obra: semáforo en sus pasos. Sus botones se conservan: son el camino guiado paso a paso (decisión
   // documentada: misma acción que la ficha, ordenada como flujo de trabajo).
   for(const li of $$('#professionalWorkspace .cx-jstep')){const k=li.dataset.state==='done'?'ok':li.dataset.state==='next'?'pend':'req';if(li.dataset.sem!==k)li.dataset.sem=k;

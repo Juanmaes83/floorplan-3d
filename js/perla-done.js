@@ -13,6 +13,7 @@
  const rev=()=>{try{const p=window.FloorPlanApp?.project;return p?(window.RubikAssistantDomainTools?.revision?.(p)??JSON.stringify(p).length):null;}catch{return null;}};
  let clickDone=0;
  // Acciones por clic: hechas mientras el proyecto no cambie (el archivo o la descarga refleja el estado actual).
+ const site=()=>window.FloorPlanBuildingUI?.site||window.FloorPlanApp?.project?.site||{};
  const clicked=new WeakMap();
  const byClick=el=>{const r=clicked.get(el);return !!r&&r===String(rev());};
  const RULES=[
@@ -21,6 +22,9 @@
   {match:el=>/^e3-descargar-/.test(el.dataset.route||''),done:byClick,label:['Descargado','Downloaded','已下载'],onClick:true},
   // Estado real del producto.
   {match:el=>el.dataset.route==='prepare-views',done:()=>window.FloorPlanProjectViews?.status?.()==='ready',label:['Vistas preparadas','Views prepared','视图已准备']},
+  // U12 · Territorio: la configuración de ortofoto y de terreno está guardada cuando el proyecto la tiene y no hay cambios pendientes.
+  {match:el=>el.id==='territoryOrthophotoSave',done:el=>el.disabled&&!!site().orthophoto,label:['Configuración guardada','Configuration saved','配置已保存']},
+  {match:el=>el.id==='territoryTerrainSave',done:el=>el.disabled&&!!site().terrain,label:['Configuración guardada','Configuration saved','配置已保存']},
   // La parcela ya cambia su texto sola («Parcela guardada»): aquí solo se le da el color y el ✓ del patrón común.
   {match:el=>el.id==='territorySave',done:el=>/^(✓ )?(Parcela guardada|Parcel saved|地块已保存)$/.test(el.textContent.trim()),label:null},
  ];

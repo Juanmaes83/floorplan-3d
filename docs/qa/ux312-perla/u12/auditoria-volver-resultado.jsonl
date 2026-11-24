@@ -1,0 +1,48 @@
+{"area":"deliver","r":"surface-sheet","opened":"surfaceSheetDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"sheet","opened":"sheetDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"dossier","opened":"dossierDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"economic-dossier","opened":"economicDossierDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"e3-entregas","opened":"e3Entregas","via":"×","after":"deliver","ok":true}
+{"area":"deliver","r":"presentation","opened":"presentationConfig","via":"Atrás navegador","after":"deliver","ok":true}
+{"area":"deliver","r":"prepare-views","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"construction-plan-from-deliver","opened":"planDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"moodboard","opened":"moodboardDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-hero","opened":"#editor","via":"← Volver a Entregar","after":"deliver","ok":true}
+{"area":"deliver","r":"client-link","opened":"shareLinkDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"budget","opened":"#editor","via":"← Volver a Entregar","after":"deliver","ok":true}
+{"area":"deliver","r":"review","opened":"reviewDialog","via":"×","after":"deliver","ok":true}
+{"area":"deliver","r":"compare-projects","opened":"projectsDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-imaginar","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-disenar","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-construir","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-presentar","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-recorrer","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-todas","opened":"studioTodas","via":"×","after":"deliver","ok":true}
+{"area":"deliver","r":"studio-profile","opened":"en el sitio (sin salir del área)","via":"—","after":"deliver","ok":true}
+{"area":"deliver","r":"studio","opened":"brandDialog","via":"Cerrar","after":"deliver","ok":true}
+{"area":"deliver","r":"export-project","opened":"#editor","via":"← Volver a Entregar","after":"deliver","ok":true}
+{"area":"deliver","r":"export-dxf","opened":"#editor","via":"← Volver a Entregar","after":"deliver","ok":true}
+{"area":"budget","r":"quantities","opened":"quantityDialog","via":"Cerrar","after":"budget","ok":true}
+{"area":"budget","r":"budget-edit","opened":"budgetDialog","via":"Cerrar","after":"budget","ok":true}
+{"area":"budget","r":"budget-surfaces","opened":"surfaceSheetDialog","via":"Cerrar","after":"budget","ok":true}
+{"area":"budget","r":"construction-plan","opened":"planDialog","via":"Cerrar","after":"budget","ok":true}
+{"area":"budget","r":"reference-prices","opened":"pricesDialog","via":"Cerrar","after":"budget","ok":true}
+{"area":"analyze","r":"site-report","opened":"siteReportDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"areas","opened":"surfaceSheetDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"floors","opened":"#editor","via":"← Volver a Analizar","after":"analyze","ok":true}
+{"area":"analyze","r":"calibration","opened":"#editor","via":"← Volver a Analizar","after":"analyze","ok":true}
+{"area":"analyze","r":"plan-check","opened":"planAnalysisDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"orientation","opened":"solarDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"sun","opened":"solarDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"room-sun","opened":"planAnalysisDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"territory","opened":"territoryDialog","via":"Cerrar","after":"analyze","ok":true}
+{"area":"analyze","r":"exterior","opened":"#editor","via":"← Volver a Analizar","after":"analyze","ok":true}
+{"area":"analyze","r":"parapets","opened":"#editor","via":"← Volver a Analizar","after":"analyze","ok":true}
+{"area":"studio","r":"studio-profile","opened":"en el sitio (sin salir del área)","via":"—","after":"studio","ok":true}
+{"area":"studio","r":"studio","opened":"brandDialog","via":"Cerrar","after":"studio","ok":true}
+{"area":"studio","r":"studio-imaginar","opened":"en el sitio (sin salir del área)","via":"—","after":"studio","ok":true}
+{"area":"studio","r":"studio-disenar","opened":"en el sitio (sin salir del área)","via":"—","after":"studio","ok":true}
+{"area":"studio","r":"studio-construir","opened":"en el sitio (sin salir del área)","via":"—","after":"studio","ok":true}
+{"area":"studio","r":"studio-presentar","opened":"en el sitio (sin salir del área)","via":"—","after":"studio","ok":true}
+{"area":"studio","r":"studio-recorrer","opened":"en el sitio (sin salir del área)","via":"—","after":"studio","ok":true}
+{"area":"studio","r":"studio-todas","opened":"studioTodas","via":"×","after":"studio","ok":true}

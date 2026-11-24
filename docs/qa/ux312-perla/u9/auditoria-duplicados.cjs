@@ -3,7 +3,7 @@ const {chromium}=require('/home/user/pwcli/node_modules/playwright');
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium-1243/chrome-linux64/chrome'});
 for(const [w,h,m] of [[1440,900,false],[390,844,true]]){const p=await (await b.newContext({viewport:{width:w,height:h},isMobile:m,hasTouch:m})).newPage();
 await p.goto('http://127.0.0.1:43984/');await p.waitForFunction(()=>window.FloorPlanProfessionalUI);await p.evaluate(()=>document.querySelector('#welcomeExample').click());await p.waitForTimeout(900);
-for(const a of ['design','analyze','budget','deliver']){
+for(const a of ['design','analyze','budget','deliver','studio']){
  if(a==='design')await p.evaluate(()=>FloorPlanProfessionalUI.close());else await p.evaluate(a=>FloorPlanProfessionalUI.open(a),a);await p.waitForTimeout(800);
  const d=await p.evaluate(async()=>{const s=document.querySelector('#professionalWorkspace');const sc=s&&!s.hidden?s:document.scrollingElement;const found=new Set();
   for(let y=0;y<=sc.scrollHeight;y+=Math.round(innerHeight*0.5)){sc.scrollTop=y;await new Promise(r=>setTimeout(r,120));

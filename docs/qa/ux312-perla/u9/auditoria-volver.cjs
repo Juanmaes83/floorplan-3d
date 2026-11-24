@@ -3,7 +3,7 @@
 const {chromium}=require('/home/user/pwcli/node_modules/playwright');const U='http://127.0.0.1:43984/';
 const where=p=>p.evaluate(()=>{const dlg=[...document.querySelectorAll('dialog[open]')].map(d=>d.id||d.className).join('|');return {hash:location.hash,area:window.FloorPlanProfessionalUI?.area||null,welcome:!!document.querySelector('#welcome[open],dialog#welcomeDialog[open]')||document.body.classList.contains('welcome-open'),dlg,y:Math.round(scrollY+(document.querySelector('#professionalWorkspace')?.scrollTop||0))};});
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium-1243/chrome-linux64/chrome'});const out=[];
-for(const area of ['deliver','budget','analyze']){
+for(const area of ['deliver','budget','analyze','studio']){
  const c=await b.newContext({viewport:{width:1440,height:900}});const p=await c.newPage();p.on('dialog',d=>d.dismiss());
  await p.goto(U);await p.waitForFunction(()=>window.FloorPlanProfessionalUI);await p.evaluate(()=>document.querySelector('#welcomeExample').click());await p.waitForTimeout(800);
  await p.evaluate(a=>FloorPlanProfessionalUI.open(a),area);await p.waitForTimeout(1000);
@@ -13,6 +13,7 @@ for(const area of ['deliver','budget','analyze']){
    await p.evaluate(a=>{for(const d of document.querySelectorAll('dialog[open]'))d.close();FloorPlanProfessionalUI.open(a);},area);await p.waitForTimeout(500);
    const before=await where(p);const ok=await p.evaluate(r=>{const e=[...document.querySelectorAll(`#professionalWorkspace [data-route="${r}"]`)].find(e=>e.checkVisibility());if(!e)return false;e.scrollIntoView({block:'center'});e.click();return true;},r);if(!ok)continue;
    await p.waitForTimeout(1500);const opened=await where(p);
+   if(opened.area===area&&!opened.dlg&&opened.hash===before.hash){out.push({area,r,opened:'en el sitio (sin salir del área)',via:'—',after:area,ok:true});continue;}
    // control de vuelta visible
    const back=await p.evaluate(()=>{const vis=e=>e.checkVisibility()&&getComputedStyle(e).visibility!=='hidden';const scope=[...document.querySelectorAll('dialog[open]')].pop()||document;const ret=document.querySelector('#perlaReturn:not([hidden]),#professionalWorkspace .professional-head>button[data-perla-return]');if(ret&&!document.querySelector('dialog[open]')){const t=ret.textContent.trim();ret.click();return t;}const cands=[...scope.querySelectorAll('button,a')].filter(vis);const e=cands.find(e=>/^(←|✕|×)|Volver|Cerrar|Close|Back/i.test((e.textContent||'').trim()+' '+(e.getAttribute('aria-label')||'')));if(!e)return null;const t=(e.textContent.trim()||e.getAttribute('aria-label')).slice(0,40);e.click();return t;});
    await p.waitForTimeout(1200);let after=await where(p),via=back;
