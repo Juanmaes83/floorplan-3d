@@ -2,8 +2,8 @@ import * as THREE from '../vendor/three/build/three.module.js';
 
 const $ = id => document.getElementById(id);
 const Core = window.FloorPlanCore;
-const { directSun, droneFlight } = window.RubikLabSunDrone;
-const { inspectPlan } = window.RubikLabPlanValidator;
+const { directSun, droneFlight } = window.FloorPlanSunDrone;
+const { inspectPlan } = window.FloorPlanValidation;
 const units = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 });
 const number = value => units.format(value);
 const checks = {

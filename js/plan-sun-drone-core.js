@@ -1,10 +1,10 @@
 (function (root) {
   'use strict';
   const node = typeof module === 'object';
-  const Solar = node ? require('../js/solar-core.js') : root.FloorPlanSolar;
-  const Openings = node ? require('../js/opening-edit.js') : root.FloorPlanOpenings;
-  const Core = node ? require('../js/project-core.js') : root.FloorPlanCore;
-  const Motion = node ? require('../js/motion-quality-core.js') : root.RubikMotionQuality;
+  const Solar = node ? require('./solar-core.js') : root.FloorPlanSolar;
+  const Openings = node ? require('./opening-edit.js') : root.FloorPlanOpenings;
+  const Core = node ? require('./project-core.js') : root.FloorPlanCore;
+  const Motion = node ? require('./motion-quality-core.js') : root.RubikMotionQuality;
 
   const levelsOf = source => source.levels || [{ id: null, project: source, offsetMm: { x: 0, y: 0 }, elevationMm: 0 }];
   const cross = (a, b) => a.x * b.y - a.y * b.x;
@@ -88,10 +88,16 @@
   }
 
   function droneFlight(source, aspect = 16 / 9) {
-    if (!Number.isFinite(aspect) || aspect <= 0) throw new RangeError('Invalid aspect ratio');
     const points = levelsOf(source).flatMap(level => level.project.walls.filter(w => w.status !== 'demolished')
       .flatMap(w => Core.wallRect(w).poly.flatMap(([x, y]) => [0, w.heightMm].map(h =>
         [(x + level.offsetMm.x) / 1000, (level.elevationMm + h) / 1000, (y + level.offsetMm.y) / 1000]))));
+    return flightForPoints(points, aspect);
+  }
+
+  function flightForPoints(points, aspect = 16 / 9, verticalFrame = 1) {
+    if (!Number.isFinite(aspect) || aspect <= 0 || !Number.isFinite(verticalFrame) || verticalFrame <= 0 || verticalFrame > 1) {
+      throw new RangeError('Invalid field of view');
+    }
     if (!points.length) return { status: 'unavailable', reason: 'no-walls' };
     const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
     for (const point of points) point.forEach((value, i) => {
@@ -101,22 +107,32 @@
     const target = max.map((value, i) => (value + min[i]) / 2);
     const halfDiagonal = Math.hypot(...max.map((value, i) => value - min[i])) / 2;
     const fov = 42;
-    const halfFov = Math.min(fov * Math.PI / 360, Math.atan(Math.tan(fov * Math.PI / 360) * aspect));
+    const halfFov = Math.atan(Math.tan(fov * Math.PI / 360) * Math.min(verticalFrame, aspect));
     const radius = Math.max(4, halfDiagonal / Math.sin(halfFov * 0.8));
     const duration = 54;
-    const pose = time => {
+    const cameraAt = (time, distanceScale) => {
       const u = Math.min(1, Math.max(0, time / duration));
       const progress = u * u * (3 - 2 * u);
       const angle = -Math.PI / 4 + progress * 1.5 * Math.PI;
-      const r = radius * (1.14 - 0.14 * progress);
+      const r = radius * distanceScale * (1.14 - 0.14 * progress);
       const y = max[1] + Math.max(2, halfDiagonal * (1.15 - 0.55 * progress));
       return { t: u * duration, position: [target[0] + r * Math.cos(angle), y, target[2] + r * Math.sin(angle)], target: [...target], fov };
     };
+    const verticalFov = 2 * Math.atan(Math.tan(fov * Math.PI / 360) * verticalFrame) * 180 / Math.PI;
+    const fits = scale => Array.from({ length: 73 }, (_, i) => cameraAt(i * duration / 72, scale))
+      .every(view => Motion.framing({ ...view, fov: verticalFov }, points, { aspect: aspect / verticalFrame, safe: 0.82 }).inside === 1);
+    let near = 0.66, far = 1;
+    for (let i = 0; i < 12; i++) {
+      const candidate = (near + far) / 2;
+      if (fits(candidate)) far = candidate;
+      else near = candidate;
+    }
+    const pose = time => cameraAt(time, far);
     const samples = Array.from({ length: 1621 }, (_, i) => pose(i / 30));
     return { status: 'preview', duration, pose, metrics: Motion.analyze(samples) };
   }
 
-  const api = { directSun, droneFlight };
+  const api = { directSun, droneFlight, flightForPoints };
   if (node) module.exports = api;
-  else root.RubikLabSunDrone = api;
+  else root.FloorPlanSunDrone = api;
 })(globalThis);

@@ -21,3 +21,9 @@ El dossier puede seguir usando la ubicación y el plano del propio proyecto. Una
 - [Places y atribución](https://developers.google.com/maps/documentation/places/web-service/policies)
 - [Routes y atribución](https://developers.google.com/maps/documentation/routes/policies)
 - [Street View y atribución](https://developers.google.com/maps/documentation/streetview/policies)
+
+## Comprobación de un Preview autorizado
+
+1. Limitar el despliegue a la rama `codex/sculpt-mapas-11` como Preview protegido. Configurar la clave de servidor para Places API (New), Routes API y Street View Static API. Preparar el código de acceso separado y el Redis de cuotas de ese Preview.
+2. Verificar primero la respuesta 503 con el servicio apagado y 401 con un código erróneo tras activarlo. Con un código válido y una parcela autorizada, registrar únicamente el resultado técnico y la latencia de una consulta por operación. Acordar la cuota antes de realizar llamadas reales.
+3. Verificar el 429 al superar la cuota, y repetir el estudio tras cerrar el diálogo para comprobar que los resultados ya no están. Conservar la atribución en pantalla y comprobar que el dossier no contiene las respuestas.

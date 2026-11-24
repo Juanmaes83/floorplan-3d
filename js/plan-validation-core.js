@@ -4,12 +4,12 @@
   // SCULPT 1.1. Door, stair and bedroom references adapted from validate_layout.py
   // Juanmaes83/floorplan-to-3d-house@1ec97dc01f997dfd99ebf607ab4e7186f7a6c5d2 (MIT).
   const node = typeof module === 'object';
-  const Core = node ? require('../js/project-core.js') : root.FloorPlanCore;
-  const Surface = node ? require('../js/surface-core.js') : root.FloorPlanSurfaceMetrics;
-  const Parcel = node ? require('../js/parcel-core.js') : root.FloorPlanParcelCore;
-  const Territory = node ? require('../js/territory-integration-core.js') : root.FloorPlanTerritoryIntegration;
-  const Ceiling = node ? require('../js/r02a-ceiling-contract.js') : root.RubikCeilingContract;
-  const Tracing = node ? require('../js/tracing-core.js') : root.FloorPlanTracing;
+  const Core = node ? require('./project-core.js') : root.FloorPlanCore;
+  const Surface = node ? require('./surface-core.js') : root.FloorPlanSurfaceMetrics;
+  const Parcel = node ? require('./parcel-core.js') : root.FloorPlanParcelCore;
+  const Territory = node ? require('./territory-integration-core.js') : root.FloorPlanTerritoryIntegration;
+  const Ceiling = node ? require('./r02a-ceiling-contract.js') : root.RubikCeilingContract;
+  const Tracing = node ? require('./tracing-core.js') : root.FloorPlanTracing;
 
   const edges = ring => ring.map((point, i) => [point, ring[(i + 1) % ring.length]]);
   function inside(point, ring) {
@@ -101,5 +101,5 @@
 
   const api = { inspectPlan };
   if (node) module.exports = api;
-  else root.RubikLabPlanValidator = api;
+  else root.FloorPlanValidation = api;
 })(globalThis);

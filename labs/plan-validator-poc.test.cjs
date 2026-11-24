@@ -4,8 +4,8 @@ const { test } = require('node:test');
 const Core = require('../js/project-core.js');
 const Parcel = require('../js/parcel-core.js');
 const Motion = require('../js/motion-quality-core.js');
-const { inspectPlan } = require('./plan-validator-poc.js');
-const { directSun, droneFlight } = require('./plan-sun-drone-poc.js');
+const { inspectPlan } = require('../js/plan-validation-core.js');
+const { directSun, droneFlight } = require('../js/plan-sun-drone-core.js');
 
 const point = (x, y) => ({ x, y });
 const rectangle = (x0, y0, x1, y1) => [point(x0, y0), point(x1, y0), point(x1, y1), point(x0, y1)];

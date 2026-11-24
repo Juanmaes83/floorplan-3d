@@ -5401,6 +5401,31 @@ function presentationRestoreView(view){
   if(frameInfo)showRoomOutline(frameInfo.roomId);else clearRoomOutline();
   presentationRestorePose(view.pose);
 }
+// Temporary aerial camera over the already active product scene.
+function presentationDrone(){
+  const initial=presentationViewState(), enabled=orbit.enabled, near=camera.near;
+  const close=()=>{if(!active)return;camera.near=near;orbit.enabled=enabled;presentationRestoreView(initial);};
+  try{
+    orbit.enabled=false;
+    presentationRestoreView({...initial,cut:2.8,frame:null,levelView:levelContext?'all':initial.levelView,
+      roof:true,territorialPresentation:true});
+    const bounds=new THREE.Box3();
+    for(const group of [archFloor,archUp,furnG,levelsG,roofG,exteriorG])if(group?.visible)bounds.expandByObject(group);
+    if(bounds.isEmpty())throw Error(L3('No hay una vista exterior para el vuelo.','There is no exterior view for the flight.','没有可用于航拍的外观。'));
+    const points=[];
+    for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])
+      for(const z of [bounds.min.z,bounds.max.z])points.push([x,y,z]);
+    const extent=bounds.getSize(new THREE.Vector3()).length();
+    return {points,aspect:camera.aspect,close,apply(state){
+      camera.position.fromArray(state.position);
+      orbit.target.fromArray(state.target);
+      camera.lookAt(orbit.target);
+      camera.fov=state.fov;
+      camera.far=Math.max(initial.far, camera.position.distanceTo(orbit.target)+extent*2);
+      camera.updateProjectionMatrix();renderer.render(scene,camera);requestFrame();
+    }};
+  }catch(error){close();throw error;}
+}
 function presentationRestorePose(state){
   if(!active||!state)return;
   if(fly?.res)fly.res(false);fly=null;
@@ -5940,7 +5965,7 @@ window.View3D = {
     if(renderSuspended) resetWalkInput();
     if(renderSuspended&&!anim&&!fly)renderScheduler.cancel();else requestFrame();
   },get suspended(){return renderSuspended;},
-  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get renderedFrames(){return renderedFrames;},get lifecycleMetrics(){return {loopActive:renderScheduler.pending,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationDrone,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get renderedFrames(){return renderedFrames;},get lifecycleMetrics(){return {loopActive:renderScheduler.pending,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
   // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
   // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.
   get walkAim(){if(!active)return null;ptr.set(0,0);ray.setFromCamera(ptr,camera);const h=ray.intersectObjects([...(opt.furn?[furnG]:[]),archUp,archFloor],true).find(h=>h.object.material!==glassMat&&!h.object.isLine&&!h.object.isPoints);if(!h)return null;const o=h.object;return {door:o.userData.door?.id||null,wall:o.userData.wallId||null,name:o.name||o.type,dist:+h.distance.toFixed(2),mesh:o.geometry?.type};},
@@ -6150,7 +6175,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/project-dossier-ui.js"></script>
 <script src="js/client-share-ui.js"></script>
 <!-- SIMULATOR B · recorrido cinematográfico por tiempo (guion, contrato de suavidad, exportación fotograma a fotograma con el muxer de RUBIK) -->
-<script src="js/shot-timeline-core.js"></script><script src="js/film-plan-core.js"></script><script src="js/motion-quality-core.js"></script><script src="js/construction-mp4-muxer.js"></script><script src="js/presentation-film.js"></script>
+<script src="js/shot-timeline-core.js"></script><script src="js/film-plan-core.js"></script><script src="js/motion-quality-core.js"></script><script src="js/construction-mp4-muxer.js"></script><script src="js/plan-validation-core.js"></script><script src="js/plan-sun-drone-core.js"></script><script src="js/plan-analysis-ui.js"></script><script src="js/presentation-film.js"></script>
 <script src="js/tour-video-ui.js"></script>
 <script src="js/share-expiry-core.js"></script>
 <script src="js/share-registry-core.js"></script>
