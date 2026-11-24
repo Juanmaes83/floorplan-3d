@@ -359,4 +359,12 @@ body.perla.presenting .app>header{display:none!important}
 body.perla:not(.professional-area) #perlaMore[open] #editHistory{display:flex!important}
 body.perla #perlaMore #editHistory button{font-size:13px!important;width:auto!important;min-height:44px!important}
 body.perla #perlaMore #editHistory button::before{content:none!important}
+body.perla:not(.guided):not(.professional-area):not(.presenting) #perlaMore[open] .perla-keep{
+ display:flex!important;flex-wrap:wrap;gap:6px;padding:6px 0 0;border-top:1px solid var(--perla-line)
+}
+body.perla #perlaMore .perla-keep .btn{min-height:44px}
+body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!important}
 
+@media (max-width:1100px) and (max-height:500px){
+ body.perla .perla-r2 .perla-progress{display:none}
+}

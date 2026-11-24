@@ -83,6 +83,7 @@
  el('span',{class:'perla-break','aria-hidden':'true'},r2);
  const prog=el('div',{class:'perla-progress',id:'perlaProgress',role:'status','aria-live':'polite'},r2);
  const step=el('div',{class:'perla-step'},prog),bar=el('div',{class:'perla-meter',role:'progressbar','aria-valuemin':'0','aria-valuemax':'100'},prog);el('i',{},bar);
+ move('#guideResume',r2);
  const tasks=el('button',{type:'button',id:'perlaTasks',class:'btn perla-tasks','aria-expanded':'false','aria-controls':'guideBar'},r2);
  el('span',{class:'perla-spacer'},r2);
  const present=move('#presentationBtn',r2);if(present)present.classList.add('perla-secondary');
@@ -197,6 +198,9 @@
  addEventListener('resize',paneIcons);
  let wasArea=document.body.classList.contains('professional-area');
  new MutationObserver(()=>{const now=document.body.classList.contains('professional-area');if(now!==wasArea){wasArea=now;paneIcons();}}).observe(document.body,{attributes:true,attributeFilter:['class']});
+ const compactTools=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
+ const placeFullTools=()=>{if(compactTools.matches)morePop.append(keep);else header.append(keep);};
+ placeFullTools();compactTools.addEventListener('change',placeFullTools);
  setGuide(false,{focus:false});paintTexts();demoName();
  // El dibujo vuelve a encajar en el lienzo reorganizado (mismo «Ajustar» del visor, sin cambiar el proyecto).
  requestAnimationFrame(()=>$('#fit')?.click());

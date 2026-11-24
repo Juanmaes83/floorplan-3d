@@ -270,4 +270,4 @@
 #professionalWorkspace[data-area=deliver] .professional-dock .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
 
 /* La vigencia de la última entrega de obra debe poder leerse antes de volver a descargar. */
-#professionalWorkspace[data-area=deliver] .perla-ref #deliveryState{display:block!important;margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState{display:block!important;margin:0;font-size:13px}
