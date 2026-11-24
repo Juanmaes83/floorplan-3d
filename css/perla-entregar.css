@@ -269,3 +269,6 @@
 #professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
 #professionalWorkspace[data-area=deliver] .perla-ref>:not(.thumb):not(.body):not(.bpdp-card-body):not(.perla-card-selector){display:none!important}
 #professionalWorkspace[data-area=deliver] .professional-dock .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
+
+/* La vigencia de la última entrega de obra debe poder leerse antes de volver a descargar. */
+#professionalWorkspace[data-area=deliver] .perla-ref #deliveryState{display:block!important;margin:0;font-size:13px}
