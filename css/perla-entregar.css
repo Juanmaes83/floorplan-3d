@@ -266,11 +266,12 @@
 @media (prefers-reduced-motion:reduce){#professionalWorkspace[data-area=deliver] .perla-ref{transition:none}}
 #professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26}
 #professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
-#professionalWorkspace[data-area=deliver] .perla-ref>:not(.thumb):not(.body):not(.bpdp-card-body):not(.perla-card-selector){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref>:not(.thumb):not(.body):not(.bpdp-card-body):not(.perla-card-selector):not(.perla-go):not(#deliveryState){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref>.perla-go{position:relative;z-index:2;margin:0 14px 12px}
 #professionalWorkspace[data-area=deliver] .professional-dock .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
 
 /* La vigencia de la última entrega de obra debe poder leerse antes de volver a descargar. */
-#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState{display:block!important;margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState,#professionalWorkspace[data-area=deliver] .perla-ref>#deliveryState{display:block!important;padding:0 14px 12px;margin:0;font-size:13px}
 /* P4 · «Última entrega: … corresponde / desactualizada»: es un estado, no una descripción; se ve en la ficha */
-#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState{display:block!important;order:3;margin:0;font-size:12.5px;line-height:1.4;color:#5c3d00}
-#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState[data-result=match]{color:var(--ok)}
+#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState,#professionalWorkspace[data-area=deliver] .perla-ref>#deliveryState{display:block!important;padding:0 14px 12px;order:3;margin:0;font-size:12.5px;line-height:1.4;color:#5c3d00}
+#professionalWorkspace[data-area=deliver] .perla-ref #deliveryState[data-result=match]{color:var(--ok)}

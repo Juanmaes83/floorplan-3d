@@ -456,3 +456,6 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 }
 /* Teléfono: el aviso del norte («Norte sin configurar») va por encima de la barra de zoom y escala, sin taparla. */
 @media (max-width:760px){body.perla #solarNorth{bottom:140px!important}}
+/* Con «Mostrar ▾» abierto, la barra del lienzo pasa por encima de la brújula, los avisos y la barra inferior:
+   sus opciones nunca quedan debajo. */
+body.perla .perla-canvas-top:has(#layersMenu[open]){z-index:60!important}

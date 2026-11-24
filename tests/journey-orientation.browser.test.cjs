@@ -120,7 +120,7 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  // Own copy, back to 2D; presenting it reviews this version and marks it as presented.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
  if(await page.evaluate(()=>FloorPlanApp.viewMode==='3d')){await press('#viewSeg [data-view="2d"]');await page.waitForFunction(()=>FloorPlanApp.viewMode==='2d',null,{timeout:180000});}
- await press('button:visible:has-text("Presentar mi vivienda")');await page.locator('#presentationConfig[open]').waitFor();await press('#presentationConfig .presentation-config-actions .btn');
+ await press('#presentationBtn:visible, #guidePresent:visible'); // UX-312 PERLA: «Presentar vivienda» en la cabecera (V4)await page.locator('#presentationConfig[open]').waitFor();await press('#presentationConfig .presentation-config-actions .btn');
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay')?.dataset.moving==='false',null,{timeout:300000});
  await press('#presentationClose');await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:300000});await page.waitForTimeout(800);
  g=await guide();assert.notEqual(g.primary,'Abrir 3D','a presented home is not asked to be opened in 3D');assert.notEqual(g.primary,'Ver en 3D');
@@ -152,7 +152,7 @@ test('T12 guided header keeps every control on screen in 2D, 3D and with two lev
  if(!process.env.THREE_LOCAL_DIR)return t.skip('THREE_LOCAL_DIR is required for 3D');
  const c=await open(t,{width:1440,height:900},{three:true}),{page,press}=c;await press('#welcomeExample');await page.waitForTimeout(500);
  const off=()=>page.evaluate(()=>{const h=document.querySelector('header');return {overflow:h.scrollWidth-h.clientWidth,height:Math.round(h.getBoundingClientRect().height),off:[...h.querySelectorAll('button,input,select')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{const r=e.getBoundingClientRect();return r.right>innerWidth+1||r.left<-1;}).map(e=>e.id||e.textContent.trim())};});
- const flat=await off();assert.deepEqual(flat.off,[]);assert.ok(flat.height<=80,`2D header on one line (${flat.height} px)`);
+ const flat=await off();assert.deepEqual(flat.off,[]);assert.ok(flat.height<=120,`2D header in its two V4 rows (${flat.height} px)`); // UX-312 PERLA: cabecera en dos filas (V4 aprobada)
  await press('#viewSeg [data-view="3d"]',{timeout:180000});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
  const three=await off();assert.deepEqual(three.off,[],`3D ${JSON.stringify(three)}`);assert.ok(three.overflow<=0,`3D header overflow ${three.overflow}`);
  assert.equal(await page.locator('#modes3d').isVisible(),true);await c.shot('t12-header-3d');
