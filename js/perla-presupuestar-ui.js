@@ -50,9 +50,7 @@
   const t=el('h2','pres-big',a,area||'—');t.id='presHeroT';if(rest)el('p','pres-hero-meta',a,rest);
   const r=el('div','pres-hero-txt',h);const ul=el('ul','pres-listo',r);
   for(const k of ['ok','pend','req'])for(const x of rows[k]){const li=el('li',null,ul);pill(k,PILL[k](),li);el('span',null,li,x);}
-  const acts=el('div','pres-hero-actions',r);
-  for(const[rt,label,primary]of [['budget-edit',tx('Abrir presupuesto','Open budget','打开预算'),true],['quantities',tx('Ver cantidades','View quantities','查看数量'),false]]){
-   const src=route(rt);if(!src)continue;const btn=el('button','btn'+(primary?' pres-primary':''),acts,label);btn.type='button';btn.disabled=src.disabled;btn.onclick=()=>route(rt)?.click();}
+  // U9 sin duplicados: el resumen dice el estado; cada acción vive una sola vez, en su ficha (justo debajo).
  }
  // El recorrido de obra va tras las tarjetas, como en Entregar (el resumen ya dice el siguiente paso)
  function order(){const grid=ws().querySelector('.professional-grid');if(!grid)return;const j=grid.querySelector(':scope>.cx-journey'),leg=grid.querySelector(':scope>.professional-legend');

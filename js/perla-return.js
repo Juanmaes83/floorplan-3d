@@ -29,7 +29,9 @@
 
  // 2 · Botón único de retorno.
  function ensureBtn(){if(btn?.isConnected)return btn;btn=document.createElement('button');btn.type='button';btn.id='perlaReturn';btn.className='btn perla-return';btn.hidden=true;btn.onclick=goBack;return btn;}
- function paint(){const a=areaNow();
+ // U9: dos acciones distintas no comparten nombre accesible (Blueprint 3D y Despiece 3D abren visores diferentes).
+ function names(){for(const [m,es,en,zh] of [['blueprint','Abrir la vista 3D de Blueprint 3D','Open the Blueprint 3D view','打开 Blueprint 3D 视图'],['despiece','Abrir la vista 3D de Despiece 3D','Open the Exploded 3D view','打开分解 3D 视图']]){const b=document.getElementById('bpdpOpen3d-'+m);if(b&&b.getAttribute('aria-label')!==tx(es,en,zh))b.setAttribute('aria-label',tx(es,en,zh));}}
+ function paint(){names();const a=areaNow();
   // En un área: su «← Volver» de cabecera pasa a «← Volver a <origen>» cuando hay un retorno pendiente a otra área.
   const head=$('#professionalWorkspace .professional-head>button');
   if(head){if(pending&&pending.area!==a){head.textContent='← '+tx('Volver a ','Back to ','返回 ')+label(pending.area);head.dataset.perlaReturn=pending.area;}else if(head.dataset.perlaReturn){delete head.dataset.perlaReturn;head.textContent=tx('← Volver a Diseñar','← Return to Design','← 返回设计');}}
@@ -65,10 +67,18 @@
   if(st.perlaArea&&(st.perlaArea!=='design'||a!=='design')){e.stopImmediatePropagation();fromPop=true;if(st.perlaArea==='design')PW()?.close?.();else PW()?.open(st.perlaArea);if(areaNow()===a)fromPop=false;return;}
   if(a!=='design'){e.stopImmediatePropagation();fromPop=true;PW()?.close?.();if(areaNow()===a)fromPop=false;}},true);
 
+ // U9 sin duplicados en el móvil: la barra fija de Entregar repite la acción principal de la cabecera; solo se muestra
+ // cuando esa acción de la cabecera ha salido de la vista. Siempre hay una, nunca dos a la vez.
+ let heroIO=null,heroEl=null;
+ function watchHero(){const s=section(),cta=s?.querySelector('.hero-ent .acciones');if(cta===heroEl)return;heroIO?.disconnect();heroEl=cta;
+  if(!cta){s?.classList.remove('perla-hero-cta-in-view');return;}
+  heroIO=new IntersectionObserver(es=>{for(const e of es)s.classList.toggle('perla-hero-cta-in-view',e.isIntersecting);},{root:null,threshold:0.01});heroIO.observe(cta);}
  function start(){const nav=document.querySelectorAll('[id^="workArea-"]');if(!nav.length||!PW()){setTimeout(start,200);return;}
   last=areaNow();
   const mo=new MutationObserver(()=>onArea());for(const b of nav)mo.observe(b,{attributes:true,attributeFilter:['aria-current']});
-  const s=section();if(s)new MutationObserver(()=>{onArea();paint();}).observe(s,{childList:true,attributes:true,attributeFilter:['hidden']});
+  const s=section();if(s){new MutationObserver(()=>{onArea();paint();watchHero();}).observe(s,{childList:true,attributes:true,attributeFilter:['hidden']});
+   // Los visores Blueprint/Despiece se pintan más tarde y más adentro: se nombran al aparecer.
+   let q=0;new MutationObserver(()=>{if(!q)q=requestAnimationFrame(()=>{q=0;names();});}).observe(s,{childList:true,subtree:true});}
   document.addEventListener('rubik:languagechange',()=>queueMicrotask(paint));}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
  window.FloorPlanPerlaReturn={get pending(){return pending&&{...pending};},back:goBack};

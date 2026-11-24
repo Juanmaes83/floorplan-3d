@@ -221,8 +221,11 @@
   let desc=body.querySelector(':scope>.perla-desc');if(!desc)desc=el('p','perla-desc',body);const d=T(REF[code][0]);if(desc.textContent!==d)desc.textContent=d;
   let meta=body.querySelector(':scope>.perla-meta');if(!meta){meta=el('div','perla-meta',body);el('span','perla-pill',meta);}
   const pill=meta.firstChild;if(pill.className!=='perla-pill '+k)pill.className='perla-pill '+k;if(pill.textContent!==txt)pill.textContent=txt;
-  const acts=actionsOf(card),pri=acts.find(b=>code==='P2'&&b.dataset.route==='prepare-views')||acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
-  for(const b of acts)b.classList.toggle('perla-go',b===pri);
+  // U9 sin duplicados: si la cabecera ya ofrece esta acción como principal, la ficha muestra otra de las suyas.
+  const heroT=new Set([...document.querySelectorAll('#professionalWorkspace .hero-ent .acciones button')].map(b=>b.textContent.trim()));
+  const all=actionsOf(card),own=all.filter(b=>!heroT.has(b.textContent.trim())),acts=own.length?own:all;
+  const pri=acts.find(b=>code==='P2'&&b.dataset.route==='prepare-views')||acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
+  for(const b of all)b.classList.toggle('perla-go',b===pri);
   let sel=body.querySelector(':scope>.perla-card-selector');
   if(!sel){sel=el('button','btn perla-card-selector professional-card-details',body,tx('Ver detalles','View details','查看详情'));sel.type='button';}
   const label=tx('Ver detalles','View details','查看详情')+' · '+code+' '+(card.querySelector('h3')?.textContent||'')+': '+txt;if(sel.getAttribute('aria-label')!==label)sel.setAttribute('aria-label',label);

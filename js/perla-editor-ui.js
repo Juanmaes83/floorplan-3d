@@ -132,6 +132,10 @@
   const top=el('div',{class:'perla-canvas-top',role:'toolbar','aria-label':tx('Representación del plano','Plan display','平面显示')},stage);
   const layers=$('#layers'),layersMenu=$('#layersMenu');
   for(const k of ['dims','labels','furn']){const b=layers?.querySelector(`[data-layer="${k}"]`);if(b)top.append(b);}
+  // U9: «Estancias» del lienzo (mostrar u ocultar) y la pestaña «Estancias» del Inspector se distinguen por su nombre accesible.
+  const layerNames={dims:['Mostrar u ocultar cotas','Show or hide dimensions','显示或隐藏尺寸'],labels:['Mostrar u ocultar nombres de estancias','Show or hide room names','显示或隐藏房间名称'],furn:['Mostrar u ocultar muebles','Show or hide furniture','显示或隐藏家具']};
+  const nameLayers=()=>{for(const [k,n] of Object.entries(layerNames)){const b=top.querySelector(`[data-layer="${k}"]`);if(b){b.setAttribute('aria-label',tx(...n));b.title=tx(...n);}}};nameLayers();
+  document.addEventListener('rubik:languagechange',()=>queueMicrotask(nameLayers));
   if(layersMenu){top.append(layersMenu);const s=layersMenu.querySelector('summary');if(s){s.innerHTML=svg('layers',18);s.setAttribute('aria-label',tx('Mostrar: rejilla, muros de carga y ajuste magnético','Show: grid, bearing walls and wall snap','显示：网格、承重墙和贴墙吸附'));s.title=s.getAttribute('aria-label');}}
   // 3D: los mismos grupos de escena (solo visibles en 3D por su clase only3d).
   for(const n of [$('#modes3d'),$('#roofGroup'),...$$('.perla-keep .grp.only3d')])if(n)top.append(n);

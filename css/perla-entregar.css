@@ -275,3 +275,5 @@
 /* P4 · «Última entrega: … corresponde / desactualizada»: es un estado, no una descripción; se ve en la ficha */
 #professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState,#professionalWorkspace[data-area=deliver] .perla-ref>#deliveryState{display:block!important;padding:0 14px 12px;order:3;margin:0;font-size:12.5px;line-height:1.4;color:#5c3d00}
 #professionalWorkspace[data-area=deliver] .perla-ref #deliveryState[data-result=match]{color:var(--ok)}
+/* UX-312 PERLA · U9: la barra fija del móvil no duplica la acción principal mientras la de la cabecera está a la vista. */
+#professionalWorkspace.perla-hero-cta-in-view .professional-dock{visibility:hidden;pointer-events:none}
