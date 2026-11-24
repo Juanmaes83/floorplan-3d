@@ -227,11 +227,15 @@
  // Deshacer / Rehacer: en teléfono y horizontal, a la vista en la barra del lienzo (antes solo dentro de «⋯»); en
  // escritorio, en la fila 1. Mismo control (#editHistory, #undo, #redo) y mismo efecto.
  const histNode=$('#editHistory'),histHome=histNode?.parentElement,histNext=histNode?.nextSibling;
+ const phoneHistory=matchMedia('(max-width:760px)');
  const placeHistory=()=>{const top=$('.perla-canvas-top');if(!histNode||!top)return;
-  if(compactTools.matches){if(histNode.parentElement!==top)top.append(histNode);}
+  const dock=$('#mobileDock');
+  // Teléfono vertical: Deshacer/Rehacer en la barra inferior, siempre alcanzables aunque haya un cajón abierto.
+  if(phoneHistory.matches&&dock){if(histNode.parentElement!==dock)dock.prepend(histNode);}
+  else if(compactTools.matches){if(histNode.parentElement!==top)top.append(histNode);}
   else if(histHome&&histNode.parentElement!==histHome)histHome.insertBefore(histNode,histNext&&histNext.parentElement===histHome?histNext:null);};
  const placeFullTools=()=>{if(compactTools.matches)morePop.append(keep);else header.append(keep);placeHistory();};
- placeFullTools();compactTools.addEventListener('change',placeFullTools);
+ placeFullTools();compactTools.addEventListener('change',placeFullTools);phoneHistory.addEventListener('change',placeHistory);
  setGuide(false,{focus:false});paintTexts();demoName();paintHeader();
  // La paleta se reconstruye al cambiar de idioma o de pestaña: «Retirar tabique» vuelve a nombrarse cuando su botón cambia.
  const pb=$('#paletteBuild');if(pb){let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;demoName();});}).observe(pb,{childList:true,subtree:true,attributes:true,attributeFilter:['title']});}
