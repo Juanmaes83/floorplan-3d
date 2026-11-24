@@ -229,7 +229,7 @@
 #professionalWorkspace[data-area=deliver] .perla-ref .perla-meta{order:3;margin-top:4px}
 #professionalWorkspace[data-area=deliver] .perla-ref :is(.perla-go,.bpdp-card-actions){order:4}
 #professionalWorkspace[data-area=deliver] .perla-ref .perla-go{position:relative;z-index:2;justify-self:start;min-height:32px;padding:0;margin:0;border:0!important;background:none!important;box-shadow:none!important;color:var(--action)!important;font-size:13px;font-weight:650;text-align:left;white-space:normal;cursor:pointer}
-#professionalWorkspace[data-area=deliver] .perla-ref .perla-go::after{content:' →'}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go::after{content:' →' / ''}
 #professionalWorkspace[data-area=deliver] .perla-ref .perla-go:hover{text-decoration:underline}
 #professionalWorkspace[data-area=deliver] .perla-ref .perla-go:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
 #professionalWorkspace[data-area=deliver] .perla-ref .perla-go:disabled{color:var(--ink-muted)!important;cursor:not-allowed}

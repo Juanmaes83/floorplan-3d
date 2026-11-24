@@ -1,4 +1,7 @@
 'use strict';
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 /* QA del árbol COMBINADO #225, #226, #227. Clics reales con Playwright/Chromium y fotos sintéticas. */
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path');
@@ -114,7 +117,7 @@ test('móvil táctil: UX-12, paseo NAV3D con joystick y minimapa, mueble propio 
     assert.equal(await page.locator('aside.lib.open, aside.right.open').count(),0,'el plano queda a la vista');await capture(page,'movil-04-mueble-propio.png');
     // FOT-01 en el teléfono: consentimiento y simulación rotulada; el proyecto no cambia.
     const before=await projectState(page);
-    await page.locator('#workArea-deliver').tap();await page.locator('#photoReformCard').scrollIntoViewIfNeeded();await page.locator('#photoReformCard').tap();await page.locator('#photoReformDialog[open]').waitFor();
+    await page.locator('#workArea-deliver').tap();{const b=await accion(page,'#photoReformCard');await b.scrollIntoViewIfNeeded();await b.tap();}await page.locator('#photoReformDialog[open]').waitFor();
     await page.locator('#photoReformFile').setInputFiles({name:'salon.jpg',mimeType:'image/jpeg',buffer:jpg});await page.locator('#photoReformOriginal:not([hidden])').waitFor();
     await page.locator('#photoReformIntent').selectOption('light');await page.locator('#photoReformConsent').check();await page.locator('#photoReformSimulate').tap();
     await page.waitForFunction(()=>RubikPhotoReform.state?.status==='done',null,{timeout:30000});assert.equal(await page.locator('#photoReformCmpTag').innerText(),'SIMULACIÓN · no generada por IA');

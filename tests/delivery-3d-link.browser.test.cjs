@@ -1,5 +1,8 @@
 // ENT-01: synthetic publish -> second browser reads the 3D snapshot -> withdraw both files.
 // Real API handlers, in-memory Blob fixture; no remote publication or paid service.
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path');
 const {createServer}=require('node:http'),{Readable}=require('node:stream'),{chromium}=require('playwright');
@@ -39,7 +42,7 @@ test('a separate browser opens the published 3D visit and revocation removes bot
  const professional=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>professional.close());await route(professional);
  const page=await professional.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(url);await page.locator('#welcomeExample').click();await page.locator('#workArea-deliver').click();
- await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();
+ await abrirFicha(page,'P7');await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();
  const dialog=page.locator('#shareLinkDialog');await dialog.locator('#shareLink3d').check();await dialog.locator('#shareLinkAgree').check();
  await dialog.locator('#shareLinkToken').fill(CODE);await dialog.locator('#shareLinkGo').click();await dialog.locator('#shareLinkUrl').waitFor();
  const link=await dialog.locator('#shareLinkUrl').inputValue();assert.equal(store.size,2);

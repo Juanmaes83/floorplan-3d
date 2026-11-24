@@ -1,4 +1,7 @@
 'use strict';
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('../helpers-perla-entregar.cjs');
 /* CAT-IA · utilidades de navegador compartidas por las pruebas y por scripts/qa/record-cat-ia-v1.cjs. */
 const fs=require('node:fs');
 // Synthetic kitchen photo (no people, no real place): wall, window (left), oven slot (right), floor.
@@ -12,7 +15,7 @@ async function synthKitchen(browser){const ctx=await browser.newContext(),page=a
   return Buffer.from(b64,'base64');}finally{await ctx.close();}}
 async function loadPilot(page,touch){const go=l=>touch?l.tap():l.click();await go(page.locator('#workArea-studio'));const b=page.locator('#catalogOpen');await b.waitFor();await b.scrollIntoViewIfNeeded();await go(b);
  await page.locator('#catalogLoadPilot').click();await page.waitForFunction(()=>document.querySelector('#catalogDialog').dataset.imported==='5');await page.locator('#catalogClose').click();}
-async function openStudio(page,touch){const go=l=>touch?l.tap():l.click();await go(page.locator('#workArea-deliver'));const b=page.locator('#visualStudioCard');await b.waitFor();await b.scrollIntoViewIfNeeded();await go(b);await page.locator('#visualStudioDialog[open]').waitFor();}
+async function openStudio(page,touch){const go=l=>touch?l.tap():l.click();await go(page.locator('#workArea-deliver'));const b=await accion(page,'#visualStudioCard');await b.scrollIntoViewIfNeeded();await go(b);await page.locator('#visualStudioDialog[open]').waitFor();}
 async function dragZone(page,[x0,y0],[x1,y1]){const c=page.locator('#vsStageCanvas');await c.scrollIntoViewIfNeeded();const b=await c.boundingBox();
  await page.mouse.move(b.x+b.width*x0,b.y+b.height*y0);await page.mouse.down();await page.mouse.move(b.x+b.width*(x0+x1)/2,b.y+b.height*(y0+y1)/2,{steps:4});await page.mouse.move(b.x+b.width*x1,b.y+b.height*y1,{steps:4});await page.mouse.up();}
 async function sheetOf(page){const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#vsSheet').click()]);return JSON.parse(fs.readFileSync(await d.path(),'utf8'));}
