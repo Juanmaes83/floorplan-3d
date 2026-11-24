@@ -148,7 +148,8 @@ test('mobile dock stays tappable in 3D with reduced motion', {timeout:120000}, a
  await page.goto(url);
  await page.waitForFunction(()=>window.FloorPlanApp&&window.View3D);
  await page.locator('#welcomeExample').click();
- await page.locator('#mobileDock [data-view="3d"]').tap();
+ // UX-312 PERLA: Plano 2D / Escena 3D viven en la segunda fila de la cabecera (no en la barra inferior); mismo control y mismo efecto.
+ await page.locator('[data-view="3d"]:visible').first().tap();
  await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');
  const result=await page.locator('#mobileDock').evaluate(dock=>{
   const r=dock.getBoundingClientRect(),p=dock.querySelector('#tgPanel').getBoundingClientRect();

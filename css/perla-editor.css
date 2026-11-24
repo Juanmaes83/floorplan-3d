@@ -480,3 +480,27 @@ body.perla .perla-canvas-top>#editHistory :is(#undo,#redo):disabled{opacity:.45}
 /* Escala «1:60 · 1:100»: su menú se abre hacia arriba y por encima de todo; la barra no lo recorta. */
 body.perla .perla-canvas-bottom:has(details[open]){overflow:visible!important;z-index:60!important}
 body.perla .perla-canvas-bottom details.perla-scales>.perla-pop{top:auto!important;bottom:calc(100% + 6px)!important}
+/* UX-312 PERLA · teléfono: la barra inferior se apoya ENCIMA del pie (24 px), así «Legal y uso» y el pie siguen a la vista y pulsables. */
+@media (max-width:760px){
+  body.perla:not(.presenting) #stage>#mobileDock{bottom:24px}
+  body.perla.perla-guide-open #guideBar:not([hidden]){position:fixed;top:auto;bottom:94px;right:8px;left:8px;width:auto;max-height:50vh}
+  body.perla .perla-menu .perla-pop,body.perla .perla-more .perla-pop{bottom:100px}
+  body.perla .perla-canvas-bottom{bottom:72px}
+}
+/* UX-312 PERLA · teléfono horizontal con el panel de propiedades abierto: la barra pasa a columna junto al panel y no tapa su contenido. */
+@media (max-width:1100px) and (max-height:500px){
+  body.perla:has(aside.right.open) #stage>#mobileDock{right:328px;flex-direction:column;align-items:stretch}
+}
+/* UX-312 PERLA · ventanas estrechas (también con ratón): Plano 2D / Escena 3D conservan 40 px de alto para el toque. */
+@media (max-width:1100px){body.perla .perla-r2 #viewSeg [data-view]{min-height:40px}}
+/* UX-312 PERLA · teléfono horizontal: la barra de selección cabe entera junto a los controles del lienzo. Girar, Duplicar y
+   Eliminar quedan como icono; su nombre sigue en el árbol accesible (texto recortado, no oculto). */
+@media (max-width:1100px) and (max-height:500px){
+  body.perla #stage>#fab .fab-text{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  body.perla #stage>#fab button{padding-inline:10px;min-width:44px;justify-content:center}
+}
+/* UX-312 PERLA · escritorio con dos plantas: el selector de planta entra en la fila 2; «Guardar proyecto JSON» pasa a icono
+   (conserva su nombre accesible y su title) y la vista pierde su rótulo «Vista:», para que «Abrir 3D» no se salga. */
+body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick{font-size:0!important;width:44px;min-width:44px;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick::before{content:'⤓' / '';font-size:20px;line-height:1;color:var(--ink,#1f2326)}
+body.perla .perla-r2:has(>#levelBar:not([hidden])) #viewSeg>span:first-child:not(.pill),body.perla .perla-r2:has(>#levelBar:not([hidden])) #viewSeg .seg-label{display:none}
