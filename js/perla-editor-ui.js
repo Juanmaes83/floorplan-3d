@@ -113,6 +113,7 @@
   if(open){if(guide?.hidden){$('#guideResume')?.click();}guide?.querySelector('#guideCompact,#guidePrimary,button')?.focus?.({preventScroll:true});}
   else if(focus)tasks.focus({preventScroll:true});
  }
+ guide?.addEventListener('rubik:guide-reveal',()=>setGuide(true,{focus:false}));
  tasks.onclick=()=>setGuide(!document.body.classList.contains('perla-guide-open'));
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('perla-guide-open')&&guide?.contains(document.activeElement)){e.preventDefault();setGuide(false);}},true);
  if(guide)new MutationObserver(()=>paintProgress()).observe(guide,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['aria-valuenow','hidden','disabled']});

@@ -1,5 +1,6 @@
 name: Blueprint and Despiece browser validation
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - 'bpdp/**'
