@@ -44,7 +44,8 @@ async function rig(viewport){
 }
 async function openDialog(page){
  if(await page.locator('#shareLinkDialog[open]').count())await page.locator('#shareLinkClose').click();
- await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');// UX-312 PERLA: con el panel de la ficha abierto, la acción está en la ficha y en su panel (mismo control real); se pulsa la primera.
+ await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).first().click();
  const d=page.locator('#shareLinkDialog');await d.waitFor();return d;
 }
 
