@@ -1,0 +1,40 @@
+# §6 · A0 sobre la candidata #310 (2c7e7739) en Firefox y WebKit: arnés de master (docs/integration/op07-a0-2026-11-20/a0-run.cjs,
+# copiado sin cambios en tools/a0-cross/), perfiles persistentes nuevos, sin traza, aserciones intactas, A0_PATTERN='.' (todas).
+name: A0 cross-browser (candidata 2c7e7739)
+on:
+  push:
+    branches: [claude/a0-cruzado-2c7e7739]
+  workflow_dispatch:
+jobs:
+  a0:
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [webkit, firefox]
+        size: [desktop, mobile]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Playwright 1.63.0 (${{ matrix.engine }})
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.63.0
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.engine }}
+      - name: A0 writer fence + residuals (${{ matrix.engine }}, ${{ matrix.size }})
+        env:
+          A0_ROOT: ${{ github.workspace }}
+          A0_TRACE_OUT: ${{ runner.temp }}/a0-out
+          A0_TRACED: '0'
+          A0_PATTERN: '.'
+          A0_SIZE: ${{ matrix.size }}
+          NODE_PATH: ${{ runner.temp }}/pw/node_modules
+        run: |
+          mkdir -p "$A0_TRACE_OUT"
+          node --test-reporter=tap tools/a0-cross/a0-run.cjs ${{ matrix.engine }} a0-browser-residuals.browser.test.cjs a0-writer-fence.browser.test.cjs | tee "$A0_TRACE_OUT/result.tap"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a0-${{ matrix.engine }}-${{ matrix.size }}
+          path: ${{ runner.temp }}/a0-out
