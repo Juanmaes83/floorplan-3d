@@ -33,4 +33,4 @@ test(`Home → Asesor por profesión ${viewport.width}x${viewport.height}`,{time
   assert.equal(lab.transporte,'sim');assert.equal(lab.badge,'Sesión simulada');assert.equal(lab.iniciar,true,'espera a que la persona pulse');assert.equal(lab.termina,true,'no hay conversación abierta');
   await press(page.locator('#advBackHome'));await page.locator('#welcomeDialog[open]').waitFor({timeout:120000});}
  assert.deepEqual(external,[],'cero peticiones externas (ninguna a Nuance)');assert.deepEqual(errors,[]);});
-function AsesorProfilesFor(id){const ctx={};new Function('self',fs.readFileSync(path.join(root,'labs/asesor-rubik/profiles.js'),'utf8'))(ctx);return ctx.AsesorProfiles.get(id);}
+function AsesorProfilesFor(id){const ctx={};for(const f of ['js/assistant-unified.js','labs/asesor-rubik/profiles.js'])new Function('self',fs.readFileSync(path.join(root,f),'utf8'))(ctx);return ctx.AsesorProfiles.get(id);}
