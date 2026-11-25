@@ -12,8 +12,11 @@ const buildingFixture = require('./fixtures/building-fixture.cjs');
 const engine = process.env.BPDP_BROWSER || 'chromium';
 const url = process.env.BPDP_URL || 'http://127.0.0.1:43987/';
 const out = process.env.BPDP_EVIDENCE;
+// GitHub's CPU renderer took about 15 minutes for the signed Despiece from the viewer.
+const videoRenderTimeout = 20 * 60_000;
+const videoFrames = { 'blueprint-video': 571, 'despiece-video': 646 };
 
-test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo real', { timeout: 1200000 }, async t => {
+test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo real', { timeout: 42 * 60_000 }, async t => {
   const browser = await playwright[engine].launch({
     headless: process.env.BPDP_HEADED !== '1',
     ...(engine === 'chromium' && process.env.CHROME ? { executablePath: process.env.CHROME } : {})
@@ -87,9 +90,17 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
       console.log('Entregar: ' + id + ' sin codificador; aviso comprobado');
       continue;
     }
-    // Render por CPU (SwiftShader), medido en local: láminas ~3 s; vídeo Blueprint 571 fotogramas ~104 s; vídeo Despiece
-    // 646 fotogramas ~326 s (ver docs/integration/perla-ci-322/bpdp-salidas/verificacion.txt).
-    const tPrep = Date.now(); await download.waitFor({ timeout: 600000 }); console.log(`PREP ${id} ${((Date.now() - tPrep) / 1000).toFixed(1)} s`);
+    const tPrep = Date.now();
+    try {
+      await page.waitForFunction(route => {
+        const button = document.querySelector(`#e3Entregas [data-route="${route}"]`);
+        return button && !button.disabled;
+      }, `e3-preparar-${id}`, { timeout: id.endsWith('video') ? videoRenderTimeout : 60_000 });
+    } catch (error) {
+      throw new Error(`${id} · ${await dialog.locator('#e3Estado').innerText()}`, { cause: error });
+    }
+    assert.ok(await download.isVisible(), `${id} · ${await dialog.locator('#e3Estado').innerText()}`);
+    console.log(`PREP ${id} ${((Date.now() - tPrep) / 1000).toFixed(1)} s`);
     const [file] = await Promise.all([page.waitForEvent('download'), download.click()]);
     const ext = id.endsWith('lamina') ? 'png' : 'mp4';
     assert.ok(file.suggestedFilename().endsWith('.' + ext));
@@ -104,8 +115,14 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
       assert.ok(density > 0);
       assert.equal(bytes.readUInt32BE(density + 4), 7874);
     } else {
-      const stream = execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=codec_name,width,height', '-of', 'csv=p=0', path], { encoding: 'utf8' }).trim();
-      assert.equal(stream, 'h264,1920,1080');
+      const { streams: [stream] } = JSON.parse(execFileSync('ffprobe', [
+        '-v', 'error', '-select_streams', 'v:0', '-show_entries',
+        'stream=codec_name,width,height,avg_frame_rate,nb_frames', '-of', 'json', path
+      ], { encoding: 'utf8' }));
+      assert.deepEqual(
+        [stream.codec_name, stream.width, stream.height, stream.avg_frame_rate, Number(stream.nb_frames)],
+        ['h264', 1920, 1080, '30/1', videoFrames[id]]
+      );
       const decoded = spawnSync('ffmpeg', ['-v', 'error', '-xerror', '-i', path, '-f', 'null', '-'], { encoding: 'utf8' });
       assert.equal(decoded.status, 0, decoded.stderr);
       assert.equal(decoded.stderr.trim(), '');

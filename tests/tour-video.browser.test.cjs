@@ -67,7 +67,10 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
 });
 // Keep desktop entry-point coverage and the complete 433-frame export. Use a smaller 3D canvas for the
 // readback on software-rendered runners; the exported size, duration and frame assertions stay the same.
-test('SCULPT plan and drone use the active project and the presentation recorder', {timeout: 600000}, async t => {
+test('SCULPT plan and drone use the active project and the presentation recorder', {
+ // The GitHub CPU runner rendered half of the 433 frames in about 8.5 minutes.
+ timeout: 25 * 60_000
+}, async t => {
  const context=await browser.newContext({viewport:{width:1440,height:900}});
  t.after(()=>context.close());
  const page=await context.newPage(),errors=[];
@@ -101,7 +104,10 @@ test('SCULPT plan and drone use the active project and the presentation recorder
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:120000});
  await page.locator('#presentationVideo').click();
  const drone=page.locator('input[name=tourVideoMode][value=drone]');
- if(await drone.isDisabled())return t.skip('Chromium has no H.264 encoder');
+ if(await drone.isDisabled()){
+  assert.ok(!process.env.QA_DRONE_MP4,'The drone artifact requires an H.264 encoder');
+  return t.skip('Chromium has no H.264 encoder');
+ }
  await drone.check();
  assert.match(await page.locator('#tourVideoNote').innerText(),/Vuelo exterior de 54 s/);
  await page.locator('#tourVideoClose').click();
