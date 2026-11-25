@@ -553,3 +553,24 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
 }
 /* Inicio en el teléfono: objetivo táctil de al menos 40 × 40 px. */
 @media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #welcomeBtn{min-width:40px!important;min-height:40px}}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r2{position:relative}
+  body.perla .perla-r2>#perlaReturn{position:absolute;left:8px;top:calc(100% + 8px);z-index:30;min-height:44px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+}
+/* Tableta vertical: el panel lateral abierto no tapa la botonera inferior (Propiedades, Biblioteca). */
+@media (max-width:1100px) and (min-height:501px){
+  body.perla:has(aside.right.open) #mobileDock,body.perla:has(aside.lib.open) #mobileDock{z-index:60!important}
+}
+/* Teléfono estrecho (≤400 px): la cabecera cabe sin solapes. El selector conserva ES · EN · ZH y el nombre del proyecto cede
+   espacio (queda su desplegable); ningún control se oculta. */
+@media (max-width:400px){
+  body.perla .perla-r1>.perla-left{flex:1 1 0!important;min-width:0;overflow:hidden}
+  body.perla .perla-r1>.perla-utils{flex:0 0 auto!important;gap:2px}
+  body.perla .perla-r1{column-gap:4px;padding-inline:6px}
+  body.perla .perla-r1>.perla-left{gap:4px}
+  body.perla .perla-r1>.perla-left>#welcomeBtn{margin:0!important;min-width:36px!important;width:36px!important;padding:0!important}
+  body.perla .perla-utils>#actionSearchBtn{min-width:36px!important;width:36px!important;padding:0!important}
+  body.perla .perla-utils #langBtn{padding:0 4px!important}
+  body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
+  body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
+}
