@@ -28,15 +28,20 @@ const projects=page=>page.evaluate(k=>{const l=JSON.parse(localStorage.getItem(k
 test('Home: «Descubre RUBIK en acción» right after the ways to start, two visual cards with real captures and clear actions',{timeout:120000},async t=>{
  const {context,page,errors}=await open({width:1440,height:900});t.after(()=>context.close());
  await page.goto(url);await page.locator('#welcomeInAction').waitFor();await page.locator('#welcomeInAction').scrollIntoViewIfNeeded();
- const h=await page.evaluate(()=>{const s=document.getElementById('welcomeInAction'),entries=document.getElementById('welcomeExample'),aud=document.querySelector('.welcome-audience'),ai=document.getElementById('welcomeAIServices');
+ const h=await page.evaluate(()=>{const s=document.getElementById('welcomeInAction'),entries=document.getElementById('welcomeExample'),aud=document.querySelector('.welcome-audience'),ai=document.getElementById('welcomeModules');
   const after=(a,b)=>!!(a&&b)&&!!(a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING);
   return {afterEntries:after(entries,s),beforeAudience:after(s,aud),beforeAI:after(s,ai),title:s.querySelector('h2').textContent,
-   cards:[...s.querySelectorAll('.demo-card')].map(c=>({id:c.dataset.demo,title:c.querySelector('h3').textContent,img:c.querySelector('img').naturalWidth,go:c.querySelector('.demo-card-go').textContent}))};});
- assert.equal(h.title,'Descubre RUBIK en acción');assert.equal(h.afterEntries,true);assert.equal(h.beforeAudience,true);assert.equal(h.beforeAI,true,'not hidden inside «Nuevos servicios IA»');
- await page.waitForFunction(()=>[...document.querySelectorAll('#welcomeInAction img')].every(i=>i.complete&&i.naturalWidth>0));
- const cards=await page.evaluate(()=>[...document.querySelectorAll('#welcomeInAction .demo-card')].map(c=>({id:c.dataset.demo,title:c.querySelector('h3').textContent,img:c.querySelector('img').naturalWidth,go:c.querySelector('.demo-card-go').textContent})));
- assert.deepEqual(cards.map(c=>[c.id,c.title,c.go]),[['evolucion-obra','Descubre cómo evoluciona una obra','Ver demo de evolución 4D'],['dibujo-vivo','Del dibujo a la realidad','Ver demo de dibujo vivo']]);
- assert.ok(cards.every(c=>c.img>=900),'both cards carry their 16:9 capture');
+   cards:[...s.querySelectorAll('.demo-card:not(.demo-card-lab)')].map(c=>({id:c.dataset.demo,title:c.querySelector('h3').textContent,img:c.querySelector('img').naturalWidth,go:c.querySelector('.demo-card-go').textContent}))};});
+ assert.equal(h.title,'Descubre RUBIK en acción');assert.equal(h.afterEntries,true);assert.equal(h.beforeAudience,true);assert.equal(h.beforeAI,true,'before the modules of «¿En qué trabajas?»');
+ // UX-312 PERLA · Home aprobada: diez tarjetas en este orden, cada una con su portada real (carga diferida: se recorre
+ // la sección para que el navegador las pida) y su acción. Blueprint 3D y Despiece 3D ya están integrados (bpdp-routes).
+ for(const c of await page.locator('#welcomeInAction .demo-card').all()){await c.scrollIntoViewIfNeeded();}
+ await page.waitForFunction(()=>[...document.querySelectorAll('#welcomeInAction img')].every(i=>i.complete&&i.naturalWidth>0),null,{timeout:60000});
+ const cards=await page.evaluate(()=>[...document.querySelectorAll('#welcomeInAction .demo-card')].map(c=>({id:c.dataset.demo,title:c.querySelector('h3').textContent,img:c.querySelector('img')?.naturalWidth||0,go:c.querySelector('.demo-card-go')?.textContent})));
+ assert.deepEqual(cards.map(c=>c.id),['evolucion-obra','dibujo-vivo','blueprint-3d','despiece-3d','recorrido','video','comparativa','asistente','estilos','entrega']);
+ assert.deepEqual(cards.slice(0,2).map(c=>[c.id,c.title,c.go]),[['evolucion-obra','Descubre cómo evoluciona una obra','Ver demo de evolución 4D'],['dibujo-vivo','Del dibujo a la realidad','Ver demo de dibujo vivo']]);
+ assert.ok(cards.slice(0,2).every(c=>c.img>=900),'the two original cards keep their 16:9 capture');
+ assert.ok(cards.every(c=>c.img>0&&c.go),'every card has its real cover and its action');
  await shot(page,'01-home-in-action-1440');assert.deepEqual(errors,[]);
 });
 

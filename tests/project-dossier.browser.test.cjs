@@ -51,3 +51,58 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test('Pro
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),configured,'the dossier does not change the project');
  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
 });
+test('Dossier adds an attributed IGN map and location link only when selected', {timeout:120000}, async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});
+ t.after(()=>context.close());
+ const page=await context.newPage(),tiles=[];
+ const fixture=await fs.readFile(path.join(root,'tests/fixtures/catastro-cp-synthetic.gml'),'utf8');
+ const mockTile=await page.evaluate(()=>{
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;
+  const ctx=canvas.getContext('2d');ctx.fillStyle='#ccd5c3';ctx.fillRect(0,0,256,256);
+  ctx.strokeStyle='#678591';ctx.lineWidth=13;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(256,256);ctx.stroke();
+  return canvas.toDataURL().split(',')[1];
+ });
+ await context.route('https://www.ign.es/wmts/ign-base?**',route=>{
+  tiles.push(route.request().url());
+  return process.env.QA_IGN_LIVE==='1'?route.continue():route.fulfill({contentType:'image/png',body:Buffer.from(mockTile,'base64')});
+ });
+ await page.goto(url);
+ await page.locator('#welcomeExample').click();
+ await page.waitForFunction(()=>window.FloorPlanDossier&&window.FloorPlanCatastroParcel);
+ const before=await page.evaluate(xml=>{
+  const result=FloorPlanCatastroParcel.provider.getParcel({mode:'document',text:xml});
+  const parcel=FloorPlanParcelSiteAdapter.toSiteParcel(result);
+  FloorPlanApp.setSite({...FloorPlanApp.project.site,parcel});
+  return JSON.stringify(FloorPlanApp.project);
+ },fixture);
+ await page.locator('#workArea-deliver').click();
+ await page.getByRole('button',{name:'Preparar dossier',exact:true}).click();
+ const doc=page.locator('#dossierDocument');
+ assert.equal(tiles.length,0);
+ assert.equal(await doc.locator('.dossier-location').count(),0);
+ assert.equal(await doc.locator('.dossier-location-link').count(),0);
+ assert.equal(await doc.locator('.dossier-site svg').count(),1);
+ await page.locator('#dossierIncludeIgn').check();
+ await doc.locator('.dossier-ign-figure img').waitFor({timeout:20000});
+ assert.ok(tiles.length>0);
+ assert.ok(tiles.length<=12);
+ assert.match(await doc.locator('.dossier-ign-figure figcaption').innerText(),/IGNBaseTodo.*Instituto Geográfico Nacional.*CC BY 4.0/);
+ const count=tiles.length;
+ await page.locator('#dossierIncludeLocation').check();
+ const locationLink=doc.getByRole('link',{name:'Abrir la ubicación en Google Maps'});
+ await locationLink.waitFor();
+ assert.match(await locationLink.getAttribute('href'),/^https:\/\/www\.google\.com\/maps\/search\//);
+ assert.equal(tiles.length,count);
+ const [win]=await Promise.all([context.waitForEvent('page'),page.locator('#dossierPrint').click()]);
+ await win.waitForFunction(()=>document.querySelector('.dossier-ign-figure img')?.complete);
+ await win.waitForFunction(()=>getComputedStyle(document.querySelector('.dossier-ign-figure')).breakInside==='avoid');
+ assert.equal(await win.locator('.dossier-ign-figure img').evaluate(image=>image.naturalWidth),768);
+ assert.match(await win.locator('.dossier-ign-figure figcaption').innerText(),/CC BY 4.0/);
+ assert.equal(await win.locator('.dossier-location-link').count(),1);
+ const pdf=await win.pdf({printBackground:true,preferCSSPageSize:true, ...(process.env.QA_IGN_PDF?{path:process.env.QA_IGN_PDF}:{})});
+ assert.equal(pdf.subarray(0,5).toString(),'%PDF-');
+ assert.ok(pdf.length>10000);
+ await win.close();
+ await page.locator('#dossierClose').click();
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+});

@@ -33,7 +33,7 @@
  function sheetImage(parent,bag=urls){let svg;try{svg=FloorPlanSheet.preview();}catch{return false;}const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'}));bag.push(url);
   const img=el('img',undefined,parent,'dossier-sheet-image');img.src=url;img.alt=tx('Lámina de distribución del proyecto','Project floor plan sheet','项目平面图纸');return true;}
  // bag: where the blob URLs of this composition are kept (the dialog's own list unless a host composes its copy).
- function render(paper,st=style,bag=null){
+ function render(paper,st=style,bag=null,appendix=null){
   if(!bag){release();bag=urls;}paper.replaceChildren();paper.dataset.style=st;paper.lang=typeof LANG==='string'?LANG:'es';
   const c=contents(),s=c.summary,b=s.brand,area=Preview.areaNumber(s),status=Preview.statusText(s);
   const page=(cls,title)=>{const p=el('section',undefined,paper,'dossier-page '+cls);if(title)el('h2',title,p);return p;};
@@ -63,7 +63,22 @@
      if(d.sun.status==='available-orientative'){const g2=el('div',undefined,p,'dossier-grid');SP.sunChart(g2,d.sun);const st=el('div',undefined,g2);SP.sunTable(st,d.sun);el('p',tx('Recorrido orientativo del sol (SunCalc). No considera relieve ni edificios vecinos.','Orientative sun path (SunCalc). Terrain and neighbouring buildings are not considered.','参考太阳轨迹（SunCalc）。'),st,'dossier-note');}
      else el('p',tx('Sin ubicación o norte configurados: no se incluye el recorrido del sol.','Location or north not configured: the sun path is not included.','未配置位置或北向：不含太阳轨迹。'),p,'dossier-note');continue;}
    if(key==='site'){if(!c.sections.site)continue;const SP=FloorPlanSitePreview,v=c.site.siteView,p=page('dossier-site',tx('Emplazamiento','Site','场地')),g=el('div',undefined,p,'dossier-grid');SP.siteDiagram(g,v);
-     el('p',tx(`Parcela de ${v.parcelAreaM2.toLocaleString(locale(),{maximumFractionDigits:1})} m². `,`${v.parcelAreaM2} m² parcel. `,`地块 ${v.parcelAreaM2} m²。`)+(v.building?tx('Huella colocada por el profesional.','Footprint placed by the professional.','轮廓由专业人员定位。'):tx('El edificio no está colocado.','The building is not placed.','建筑未定位。'))+' '+tx('No es un informe urbanístico ni catastral certificado.','Not a certified planning or cadastral report.','非经认证的规划或地籍报告。'),g,'dossier-note');continue;}
+     el('p',tx(`Parcela de ${v.parcelAreaM2.toLocaleString(locale(),{maximumFractionDigits:1})} m². `,`${v.parcelAreaM2} m² parcel. `,`地块 ${v.parcelAreaM2} m²。`)+(v.building?tx('Huella colocada por el profesional.','Footprint placed by the professional.','轮廓由专业人员定位。'):tx('El edificio no está colocado.','The building is not placed.','建筑未定位。'))+' '+tx('No es un informe urbanístico ni catastral certificado.','Not a certified planning or cadastral report.','非经认证的规划或地籍报告。'),g,'dossier-note');
+     if(appendix?.location){
+      const a=el('a',tx('Abrir la ubicación en Google Maps','Open location in Google Maps','在 Google 地图中打开位置'),p,'dossier-location-link');
+      a.href=appendix.location;a.target='_blank';a.rel='noopener noreferrer';
+     }
+     if(appendix?.map){
+      const sheet=page('dossier-location',tx('Plano de situación','Location map','位置图'));
+      const figure=el('figure',undefined,sheet,'dossier-ign-figure');
+      const image=el('img',undefined,figure);image.src=appendix.map.dataUrl;image.alt=tx('Mapa base del entorno de la parcela','Basemap around the parcel','地块周边底图');
+      const credit=el('figcaption',undefined,figure);
+      const sourceLink=el('a',appendix.map.credit,credit);sourceLink.href='https://www.scne.es/';sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';
+      el('p',tx('Recorte del mapa base centrado en el entorno de la parcela. Vista orientativa con el norte arriba.',
+       'Basemap crop centered on the surroundings of the parcel. Indicative view with north up.',
+       '以地块周边为中心截取底图。示意图，北向朝上。'),sheet,'dossier-note');
+     }
+     continue;}
    if(key==='exterior'){const p=page('dossier-exterior',tx('Exterior','Exterior','外部'));let roof=null;try{roof=FloorPlanRoof.deriveProject(app.project,FloorPlanExterior);}catch{}
      const facades=FloorPlanExterior.derive(app.project).walls.filter(w=>w.status==='facade').length;el('p',tx(`${facades} muros de fachada identificados a partir del plano. Cubierta: ${roof?.status==='available'?'derivada de la huella':'no disponible con la geometría actual'}.`,`${facades} facade walls identified from the plan. Roof: ${roof?.status==='available'?'derived from the footprint':'not available with the current geometry'}.`,`识别出 ${facades} 面立面墙。`),p,'dossier-note');continue;}
    if(key==='views'){const p=page('dossier-views',tx('Imágenes de la vivienda','Images of the home','住宅图片'));
@@ -83,18 +98,79 @@
  const tools=el('div',undefined,dialog,'dossier-tools'),heading=el('h2',undefined,tools);heading.id='dossierTitle';
  const styleLabel=el('label',undefined,tools,'dossier-style'),styleText=el('span',undefined,styleLabel),select=el('select',undefined,styleLabel);select.id='dossierStyle';
  const printButton=el('button',undefined,tools,'btn');printButton.type='button';printButton.id='dossierPrint';const closeButton=el('button',undefined,tools,'btn');closeButton.type='button';closeButton.id='dossierClose';
+ const options=el('div',undefined,dialog,'dossier-site-options');
+ const mapLabel=el('label',undefined,options),mapCheck=el('input',undefined,mapLabel),mapText=el('span',undefined,mapLabel);
+ const linkLabel=el('label',undefined,options),linkCheck=el('input',undefined,linkLabel),linkText=el('span',undefined,linkLabel);
+ mapCheck.type=linkCheck.type='checkbox';mapCheck.id='dossierIncludeIgn';linkCheck.id='dossierIncludeLocation';
+ const siteStatus=el('p',undefined,options);siteStatus.setAttribute('role','status');
+ let appendix=null,siteRequest=null;
+ const parcelOf=()=>window.FloorPlanBuildingUI?.site?.parcel||app.project.site?.parcel;
+ const parcelKey=parcel=>parcel&&JSON.stringify([app.entryId,parcel.reference,parcel.sourceCrs,parcel.frame,parcel.sourceGeometry]);
+ function resetOptions(){
+  siteRequest?.abort();siteRequest=null;appendix=null;mapCheck.checked=linkCheck.checked=false;siteStatus.textContent='';printButton.disabled=false;
+ }
+ function renderDialog(){
+  const parcel=parcelOf(),hasSite=STYLES[style].sections.includes('site')&&!!parcel;
+  options.hidden=!hasSite;
+  const include=hasSite&&appendix?.key===parcelKey(parcel)?appendix:null;
+  render(paper,style,null,include);
+ }
+ async function loadSiteOptions(){
+  siteRequest?.abort();siteRequest=null;const previous=appendix;appendix=null;printButton.disabled=false;
+  const parcel=parcelOf(),key=parcelKey(parcel);
+  if(!parcel||!STYLES[style].sections.includes('site')||(!mapCheck.checked&&!linkCheck.checked)){siteStatus.textContent='';renderDialog();return;}
+  renderDialog();
+  const request=siteRequest=new AbortController();
+  const timer=setTimeout(()=>request.abort(),10000);
+  printButton.disabled=true;
+  siteStatus.textContent=tx('Preparando la ubicación…','Preparing the location…','正在准备位置…');
+  const fallback=tx('La ubicación adicional no está disponible. El dossier conserva el plano vectorial.','Additional location content is unavailable. The dossier keeps its vector site plan.','附加位置内容不可用。资料保留矢量场地图。');
+  try{
+   const m=await import('./territory-dossier-map.mjs');
+   const [map,location]=await Promise.allSettled([
+    mapCheck.checked?(previous?.key===key&&previous.map||m.captureIgnBasemap(parcel,request.signal)):null,
+    linkCheck.checked?(previous?.key===key&&previous.location||m.dossierLocation(parcel)):null
+   ]);
+   if(siteRequest!==request)return;
+   if(!dialog.open||key!==parcelKey(parcelOf())){resetOptions();if(dialog.open)renderDialog();return;}
+   appendix={key,map:map.status==='fulfilled'?map.value:null,location:location.status==='fulfilled'?location.value:null};
+   mapCheck.checked=!!appendix.map;linkCheck.checked=!!appendix.location;
+   siteStatus.textContent=map.status==='rejected'||location.status==='rejected'?fallback:'';
+   renderDialog();
+  }catch{
+   if(siteRequest===request){mapCheck.checked=linkCheck.checked=false;siteStatus.textContent=fallback;}
+  }finally{
+   clearTimeout(timer);
+   if(siteRequest===request){siteRequest=null;printButton.disabled=false;}
+  }
+ }
+ mapCheck.onchange=linkCheck.onchange=loadSiteOptions;
  const paper=el('article',undefined,dialog,'dossier-paper');paper.id='dossierDocument';
  function relang(){heading.textContent=tx('Dossier del proyecto','Project dossier','项目资料');styleText.textContent=tx('Estilo','Style','风格');printButton.textContent=tx('Imprimir / Guardar PDF','Print / Save PDF','打印 / 保存 PDF');closeButton.textContent=tx('Cerrar','Close','关闭');
+  mapText.textContent=tx('Incluir mapa base IGN','Include IGN basemap','包含 IGN 底图');linkText.textContent=tx('Compartir enlace a la ubicación','Share location link','分享位置链接');
   select.replaceChildren(...Object.entries(STYLES).map(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label();return o;}));select.value=style;}
- select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';render(paper);};
- function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;relang();try{render(paper);dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
- async function print(){const win=window.open('','_blank');if(!win){toast(tx('El navegador bloqueó la ventana de impresión.','The browser blocked the print window.','浏览器阻止了打印窗口。'),5000);return;}
-  const sheets=['css/project-dossier.css','css/site-report.css'].map(h=>new URL(h,document.baseURI).href);win.document.open();win.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+sheets.map(h=>'<link rel="stylesheet" href="'+h+'">').join('')+'</head><body class="dossier-print"></body></html>');win.document.close();
+ select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();};
+ function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
+ async function print(){
+  if(appendix&&appendix.key!==parcelKey(parcelOf())){resetOptions();renderDialog();}
+  const win=window.open('','_blank');if(!win){toast(tx('El navegador bloqueó la ventana de impresión.','The browser blocked the print window.','浏览器阻止了打印窗口。'),5000);return;}
+  win.document.open();win.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body class="dossier-print"></body></html>');win.document.close();
+  const styles=Promise.all(['css/project-dossier.css','css/site-report.css'].map(async h=>{
+   const href=new URL(h,document.baseURI).href;
+   try{
+    const response=await fetch(href,{signal:AbortSignal.timeout(2000)});
+    if(!response.ok)throw Error('Print stylesheet unavailable');
+    const css=await response.text();const style=win.document.createElement('style');
+    style.textContent=css;win.document.head.append(style);
+   }catch{
+    const link=win.document.createElement('link');link.rel='stylesheet';link.href=href;win.document.head.append(link);
+   }
+  }));
   win.document.title=heading.textContent+' · '+name();const b=win.document.createElement('button');b.textContent=printButton.textContent;b.className='dossier-print-button';b.onclick=()=>win.print();
   // The sheet preview is a blob image of this window: inline it as data so the print window owns its copy.
   const copy=paper.cloneNode(true);for(const img of copy.querySelectorAll('img[src^="blob:"]')){try{const blob=await (await fetch(img.src)).blob();img.src=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(blob);});}catch{}}
-  win.document.body.append(b,copy);const links=[...win.document.querySelectorAll('link')];await Promise.race([Promise.all(links.map(l=>new Promise(r=>{if(l.sheet)return r();l.onload=r;l.onerror=r;}))),new Promise(r=>setTimeout(r,2000))]);win.focus();win.print();}
- printButton.onclick=print;closeButton.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{release();returnFocus?.focus?.({preventScroll:true});});
+  win.document.body.append(b,copy);await styles;win.focus();win.print();}
+ printButton.onclick=print;closeButton.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{resetOptions();release();returnFocus?.focus?.({preventScroll:true});});
  // compose: the same document for another host (the client file); the caller owns and revokes `bag`.
  window.FloorPlanDossier={open,contents,STYLES,compose:(paper,st='client',bag=[])=>{render(paper,STYLES[st]?st:'client',bag);return bag;},get style(){return style;},get active(){return dialog.open;}};
 })();

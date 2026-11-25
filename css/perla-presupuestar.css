@@ -1,0 +1,130 @@
+/* UX-312 PERLA · Presupuestar y sus páginas interiores con el lenguaje de Entregar (maqueta c96888ac). Solo diseño.
+   Jerarquía aprobada: acción principal vino #783B4B (sombra suave, halo #F4E8EC); segundo nivel verde petróleo #1F5A66;
+   paneles #FAF7F8; estados en tres colores: listo (✓), al pulsar (•), falta (!). */
+#professionalWorkspace.perla-pres{--action:#1F5A66;--ok:#2f6e4a;--ok-soft:#e6f2ea;--info:#1F5A66;--info-soft:#e3eef0;--warn:#8a5a00;--warn-soft:#fbf0d9;--pres-line:#dfe3e3;--pres-shadow:0 1px 2px #1f23260f,0 8px 24px #1f232614;background:#eceeee;padding-inline:max(16px,calc((100vw - 1328px)/2))}
+/* Cabecera: un título, como Entregar */
+#professionalWorkspace.perla-pres .professional-head h1{font:700 clamp(26px,3vw,34px)/1.15 system-ui,sans-serif;letter-spacing:-.01em}
+#professionalWorkspace.perla-pres .professional-head small{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:650;color:var(--ink-muted)}
+#professionalWorkspace.perla-pres .professional-intro{margin:0 0 16px;max-width:70ch}
+/* Resumen */
+#professionalWorkspace.perla-pres .pres-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);background:#fff;border-radius:14px;box-shadow:var(--pres-shadow);overflow:hidden;margin:0 0 28px}
+#professionalWorkspace.perla-pres .pres-hero-num{padding:22px 24px;background:#FAF7F8;border-right:1px solid var(--pres-line);display:grid;align-content:center;gap:6px}
+#professionalWorkspace.perla-pres .pres-eyebrow{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:650;color:var(--ink-muted)}
+#professionalWorkspace.perla-pres .pres-big{margin:0;font:650 40px/1.05 system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--ink)}
+#professionalWorkspace.perla-pres .pres-hero-meta{margin:0;color:var(--ink-muted);font-size:13.5px}
+#professionalWorkspace.perla-pres .pres-hero-txt{padding:22px 24px;display:grid;gap:16px;align-content:center}
+#professionalWorkspace.perla-pres .pres-listo{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14px}
+#professionalWorkspace.perla-pres .pres-listo li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start}
+#professionalWorkspace.perla-pres .pres-hero-actions{display:flex;flex-wrap:wrap;gap:8px}
+#professionalWorkspace.perla-pres .pres-hero-actions .btn{min-height:44px;padding:0 18px;border-radius:8px;font-weight:600;border:1px solid #c9cfcf;background:#fff;color:var(--ink)}
+#professionalWorkspace.perla-pres .pres-primary,#professionalWorkspace.perla-pres .pres-primary:hover{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26}
+#professionalWorkspace.perla-pres .pres-primary:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
+/* Estados en color (mismas píldoras que Entregar) */
+#professionalWorkspace.perla-pres .perla-pill,#professionalWorkspace.perla-pres .perla-pill-state{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;padding:2px 9px;border-radius:12px;max-width:100%;line-height:1.35;justify-self:start;width:fit-content}
+#professionalWorkspace.perla-pres :is(.perla-pill,.perla-pill-state)::before{content:'';flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+#professionalWorkspace.perla-pres :is(.perla-pill.ok,.perla-pill-state[data-kind=ok]){color:var(--ok);background:var(--ok-soft)}
+#professionalWorkspace.perla-pres :is(.perla-pill.pend,.perla-pill-state[data-kind=pend]){color:var(--info);background:var(--info-soft)}
+#professionalWorkspace.perla-pres :is(.perla-pill.req,.perla-pill-state[data-kind=req]){color:var(--warn);background:var(--warn-soft)}
+#professionalWorkspace.perla-pres :is(.perla-pill.ok,.perla-pill-state[data-kind=ok])::before{content:'✓' / '';width:auto;height:auto;background:none;font-size:11px}
+#professionalWorkspace.perla-pres :is(.perla-pill.req,.perla-pill-state[data-kind=req])::before{content:'!' / '';width:auto;height:auto;background:none}
+/* Tarjetas: rejilla de dos columnas, cada pieza en su ficha blanca */
+#professionalWorkspace.perla-pres .professional-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+#professionalWorkspace.perla-pres .professional-grid>:not(.pres-card){grid-column:1/-1}
+#professionalWorkspace.perla-pres .pres-card{display:grid;gap:8px;align-content:start;background:#fff;border:1px solid var(--pres-line)!important;border-radius:10px;padding:18px 20px!important;margin:0!important;box-shadow:none;transition:border-color .15s,box-shadow .15s}
+#professionalWorkspace.perla-pres .pres-card:hover{border-color:#c9cfcf!important;box-shadow:var(--pres-shadow)}
+#professionalWorkspace.perla-pres .pres-card::before{display:none}
+#professionalWorkspace.perla-pres .pres-card h3{margin:0;font:650 18px/1.25 system-ui,sans-serif;color:var(--ink)}
+#professionalWorkspace.perla-pres .pres-card .professional-detail{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-muted)}
+#professionalWorkspace.perla-pres .pres-card>.btn{justify-self:start;margin:4px 8px 0 0;min-height:44px;border-radius:8px}
+#professionalWorkspace.perla-pres .pres-card>.btn.pres-go{background:none!important;border-color:transparent!important;box-shadow:none!important;color:var(--action)!important;font-weight:650;padding-left:0}
+#professionalWorkspace.perla-pres .pres-card>.btn.pres-go::after{content:' →' / ''}
+#professionalWorkspace.perla-pres .pres-card>.btn.pres-go:hover{text-decoration:underline}
+#professionalWorkspace.perla-pres .pres-card>.btn:focus-visible{outline:3px solid #1f6f8b;outline-offset:2px}
+#professionalWorkspace.perla-pres .pres-card>svg{position:absolute;right:18px;top:18px}
+#professionalWorkspace.perla-pres .pres-card{position:relative}
+#professionalWorkspace.perla-pres .pres-card[data-module=reference-prices]{background:#f4f6f6}
+/* Recorrido de obra tras las tarjetas, con el mismo marco */
+#professionalWorkspace.perla-pres .cx-journey{background:#fff;border-radius:14px;box-shadow:var(--pres-shadow);border-left:0!important}
+#professionalWorkspace.perla-pres .professional-legend{margin-top:4px}
+@media (max-width:900px){
+ #professionalWorkspace.perla-pres .pres-hero{grid-template-columns:minmax(0,1fr)}
+ #professionalWorkspace.perla-pres .pres-hero-num{border-right:0;border-bottom:1px solid var(--pres-line)}
+ #professionalWorkspace.perla-pres .professional-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){#professionalWorkspace.perla-pres .pres-big{font-size:32px}#professionalWorkspace.perla-pres .pres-hero-actions .btn{flex:1 1 100%}}
+
+/* ── Páginas interiores: Presupuesto, Cantidades, Superficies, Precios de referencia y Plan de obra ── */
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog,#pricesDialog,#planDialog){--pi-line:#dfe3e3;--pi-wine:#783B4B;--pi-petrol:#1F5A66;border-radius:14px;border:0;box-shadow:0 2px 6px #1f23261a,0 24px 64px #1f232633}
+/* Cabecera fija: título y «Cerrar» siempre a la vista al desplazarse */
+:is(#pricesDialog,#planDialog)>.cx-head{position:sticky;top:0;z-index:5;background:#fff;padding:14px 20px;align-items:center}
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog)>.ai-render-head{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--pi-line);margin-inline:calc(-1 * var(--pi-pad,20px));padding:14px var(--pi-pad,20px);margin-top:calc(-1 * var(--pi-pad,20px))}
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog)>.ai-render-head h2,:is(#pricesDialog,#planDialog) .cx-head h2{font:650 22px/1.2 system-ui,sans-serif;letter-spacing:-.01em;margin:0}
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog,#pricesDialog,#planDialog) :is(.ai-render-head,.cx-head)>.btn{min-height:44px;min-width:44px;border-radius:8px;border:1px solid #c9cfcf;background:#fff;font-weight:600}
+/* Notas: aviso informativo en petróleo claro, no gris plano */
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog)>.ai-render-note{background:#e3eef0;border-left:3px solid var(--pi-petrol);border-radius:8px;color:#1f3c42;padding:10px 14px;font-size:13.5px}
+/* Títulos de tabla: frase normal con peso, no versalitas */
+:is(#budgetDialog,#quantityDialog) .quantity-table caption{text-transform:none;letter-spacing:0;font:650 16px/1.3 system-ui,sans-serif;color:var(--ink);text-align:left;padding:18px 0 8px}
+:is(#budgetDialog,#quantityDialog) .quantity-table thead th{background:#FAF7F8;font-size:12px;font-weight:650;color:var(--ink-muted)}
+:is(#budgetDialog,#quantityDialog) .quantity-table tbody tr:hover{background:#FAF7F8}
+:is(#budgetDialog,#quantityDialog) .quantity-table td{vertical-align:top}
+/* Presupuesto: la nota repetida de cada partida baja de tono; el precio se lee mejor */
+#budgetDialog .budget-table td small,#budgetDialog .budget-table td .budget-plan-note,#budgetDialog .budget-table td p{font-size:12px;color:var(--ink-muted)}
+#budgetDialog .budget-table input[type=number],#budgetDialog .budget-table input[type=text]{min-height:44px;border-radius:8px;border:1px solid #c9cfcf;font-variant-numeric:tabular-nums}
+#budgetDialog .budget-table input:focus-visible,#budgetDialog select:focus-visible{outline:3px solid #1f6f8b;outline-offset:1px}
+#budgetDialog .budget-table input::placeholder{color:#8a5a00;opacity:1;font-style:italic}
+#budgetDialog .budget-bar>label{margin:0!important}
+#budgetDialog .budget-bar{height:auto!important;min-height:0!important;row-gap:0!important;display:flex;flex-wrap:wrap;gap:12px;align-items:end;min-height:0;padding:10px 14px;background:#FAF7F8;border:1px solid var(--pi-line);border-radius:10px}
+#budgetDialog .budget-bc3{border:1px solid var(--pi-line);border-radius:10px;background:#fff}
+/* Totales: tarjeta de resumen a la vista, el total grande */
+#budgetDialog #budgetTotals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:#FAF7F8;border:1px solid var(--pi-line);border-radius:10px;overflow:hidden;margin:18px 0 10px}
+#budgetDialog #budgetTotals>div{padding:12px 16px;border-right:1px solid var(--pi-line)}
+#budgetDialog #budgetTotals>div:last-child{border-right:0;background:#fff}
+#budgetDialog #budgetTotals dt{font-size:12px;color:var(--ink-muted);font-weight:600}
+#budgetDialog #budgetTotals dd{margin:2px 0 0;font:650 20px/1.2 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+#budgetDialog #budgetTotals>div:last-child dd{font-size:24px;color:var(--pi-wine)}
+#budgetDialog .budget-warnings{list-style:none;padding:10px 14px;margin:0 0 12px;background:#fbf0d9;border-left:3px solid #8a5a00;border-radius:8px;color:#5c3d00;font-size:13.5px}
+#budgetDialog .budget-warnings:empty{display:none}
+/* Barra de acciones fija al pie: descargar a la vista sin bajar hasta el final */
+:is(#budgetDialog,#quantityDialog) .tour-video-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#budgetDialog>.tour-video-actions{margin:16px 0 0;padding:14px 16px;background:#FAF7F8;border:1px solid var(--pi-line);border-radius:10px}
+#budgetDialog>.tour-video-actions>.btn.primary{order:-1}
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog,#pricesDialog,#planDialog) .btn.primary,:is(#pricesDialog) #pricesSearch button[type=submit]{background:var(--pi-wine)!important;border-color:var(--pi-wine)!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26;min-height:44px;border-radius:8px;font-weight:600}
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog,#pricesDialog,#planDialog) .btn.primary:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog,#pricesDialog,#planDialog) .btn:not(.primary){min-height:44px;border-radius:8px}
+/* Cantidades: cifras clave en fichas blancas */
+#quantityDialog #quantitySummary{gap:10px}
+#quantityDialog #quantitySummary>div{background:#fff;border:1px solid var(--pi-line);border-radius:10px;padding:12px 14px}
+#quantityDialog #quantitySummary dd{font:650 24px/1.15 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+#quantityDialog>.tour-video-actions{margin:14px 0 4px}
+/* Precios de referencia: fuentes como pestañas, partidas como lista seleccionable */
+#pricesDialog .cx-body{background:#FAF7F8}
+#pricesDialog .cx-prices-grid>div{background:#fff;border:1px solid var(--pi-line);border-radius:12px;padding:16px}
+#pricesDialog .cx-prices-grid h3{font:650 16px/1.3 system-ui,sans-serif;margin:0 0 10px}
+#pricesDialog .cx-links>button,#pricesDialog .cx-links>a{border-radius:8px}
+#pricesDialog .cx-links>[aria-current=true],#pricesDialog .cx-links>[aria-pressed=true],#pricesDialog .cx-links>.active{box-shadow:inset 3px 0 0 var(--pi-petrol)}
+/* Fuentes: cada una carga un archivo BC3; botones con contorno e icono de subir */
+#pricesDialog .cx-prices-grid label.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #c9cfcf;border-radius:8px;background:#fff;font-weight:600;cursor:pointer}
+#pricesDialog .cx-prices-grid label.btn::before{content:'↑' / '';font-weight:700;color:var(--pi-petrol)}
+#pricesDialog .cx-prices-grid label.btn:hover{border-color:var(--pi-petrol)}
+#pricesDialog .cx-prices-grid label.btn:focus-within{outline:3px solid #1f6f8b;outline-offset:2px}
+#pricesDialog [role=tablist]{display:inline-flex;gap:4px;padding:4px;background:#eceeee;border-radius:999px}
+#pricesDialog [role=tab]{border:0;background:transparent;border-radius:999px;min-height:36px;padding:0 14px;font-weight:600;cursor:pointer}
+#pricesDialog [role=tab][aria-selected=true]{background:#fff;box-shadow:0 1px 2px #1f23261f;color:var(--pi-petrol)}
+#pricesDialog .cx-banner.warn{border-radius:8px}
+#pricesDialog .cx-foot,#planDialog .cx-foot{border-top:1px solid var(--pi-line);padding-right:160px}
+#pricesDialog .cx-foot>.btn{border:1px solid #c9cfcf;background:#fff;min-height:44px;border-radius:8px;font-weight:600}
+/* Plan de obra vacío: un solo paso claro */
+#planDialog .cx-empty{display:grid;justify-items:center;gap:12px;padding:32px 20px;max-width:640px;margin:0 auto}
+#planDialog .cx-empty h3{font:650 20px/1.3 system-ui,sans-serif;text-align:center;margin:0}
+#planDialog .cx-empty>p{text-align:center;color:var(--ink-muted);margin:0}
+#planDialog #planCreate{min-width:200px}
+#planDialog .cx-empty label.btn{border:1px solid #c9cfcf;background:#fff;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:8px;cursor:pointer}
+/* El acceso «Asistente» dentro de los diálogos no tapa la última fila */
+:is(#budgetDialog,#quantityDialog,#surfaceSheetDialog){padding-bottom:72px}
+@media (max-width:760px){
+ #budgetDialog #budgetTotals{grid-template-columns:minmax(0,1fr)}
+ #budgetDialog #budgetTotals>div{border-right:0;border-bottom:1px solid var(--pi-line)}
+ #pricesDialog .cx-foot,#planDialog .cx-foot{padding-right:var(--pi-pad,20px);padding-bottom:72px}
+}
+@media (prefers-reduced-motion:reduce){#professionalWorkspace.perla-pres .pres-card{transition:none}}
+#budgetDialog .budget-bar::before,#budgetDialog .budget-bar::after{display:none!important}

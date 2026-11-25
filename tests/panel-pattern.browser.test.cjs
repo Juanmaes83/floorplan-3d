@@ -1,3 +1,4 @@
+// UX-312 PERLA: el Inspector lleva su cabecera de pestañas (V4) encima de #panel; «Volver» se mide desde el borde de #panel.
 // Shared panel pattern (19-10-2026): every properties panel starts with the same head. «Volver» is the first control,
 // at the top, with the same look in equivalent panels, and goes one level up (furniture → room → overview, opening →
 // room, «Plano propio» edit → its tools). On narrow screens «Ver en el plano» closes the drawer and keeps the
@@ -21,7 +22,7 @@ test(`panel head, «Volver» and «Ver en el plano» ${viewport.width}x${viewpor
  const press=async sel=>{const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(150);};
  const open=async sel=>{await page.evaluate(sel=>{window.select(sel);drawer('panel',true);},sel);await page.waitForTimeout(400);};
  // Measures the head of the current panel: first control, its position and its look.
- const head=()=>page.evaluate(()=>{const p=document.querySelector('#panel .panel-view, #panel > .opening-panel'),h=p?.querySelector('.panel-head'),b=h?.querySelector('[data-panel-back]'),aside=document.querySelector('aside.right').getBoundingClientRect();
+ const head=()=>page.evaluate(()=>{const p=document.querySelector('#panel .panel-view, #panel > .opening-panel'),h=p?.querySelector('.panel-head'),b=h?.querySelector('[data-panel-back]'),aside=(document.querySelector('#panel')||document.querySelector('aside.right')).getBoundingClientRect();
   const first=p?.querySelector('button,input,select,textarea,summary,a[href]');const cs=b&&getComputedStyle(b),r=b?.getBoundingClientRect();
   return {head:!!h,headFirst:p?.firstElementChild===h,back:b&&{text:b.textContent,first:first===b,top:Math.round(r.top-aside.top),left:Math.round(r.left-aside.left),h:Math.round(r.height),style:[cs.fontWeight,cs.borderTopStyle,cs.borderRadius,cs.backgroundColor,cs.color].join('|')},title:h?.querySelector('h3')?.textContent,plan:!!h?.querySelector('[data-panel-plan]'),hScroll:document.documentElement.scrollWidth>innerWidth+1,panelOverflow:p?p.scrollWidth>p.clientWidth+1:false};});
  const ids=await page.evaluate(()=>{const p=FloorPlanApp.project,room=p.rooms.find(r=>r.id==='rom_child')||p.rooms[0];const f=state.furniture.find(f=>{const g=FloorPlanApp.geometry.rooms.find(r=>r.id===room.id);let y=false;const poly=g.poly;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>f.cy)!==(b[1]>f.cy)&&f.cx<(b[0]-a[0])*(f.cy-a[1])/(b[1]-a[1])+a[0])y=!y;}return y;});const o=p.openings.find(o=>{const s=FloorPlanOpenings.sides(p,o);return s.left.roomId===room.id||s.right.roomId===room.id;});return {room:room.id,furn:f.id,opening:o.id};});

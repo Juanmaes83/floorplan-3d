@@ -123,7 +123,7 @@
  dlg.addEventListener('cancel',e=>{if(state==='working'){e.preventDefault();abort?.abort();}});
  function open(){if(state!=='ready')state='idle';else if(!result.stillCurrent())state='stale';render();dlg.showModal();(primary.hidden?secondary:primary).focus();}
  // Entrada: «Entregar» → grupo «Documentación». Botón SECUNDARIO, como las demás tarjetas (sin acciones primarias en tarjetas).
- const addCard=()=>{const items=document.querySelector('[data-group="documentation"] .professional-group-items');if(!items||items.querySelector('#sceneExportCard'))return;
+ const addCard=()=>{const items=document.querySelector('[data-group="documentation"] .professional-group-items');if(!items||document.getElementById('sceneExportCard'))return; // una sola tarjeta: Entregar puede colocarla en otro grupo (UX-312 F3)
   const card=el('article',{class:'professional-card scene-export-card',id:'sceneExportCard','data-module':'blender-scene'},items);el('h3',{},card,tx('Escena para Blender','Scene for Blender','Blender 场景'));
   el('p',{class:'professional-state'},card,tx('La vivienda en 3D con medidas e identificadores, para visualización profesional.','The home in 3D with dimensions and identifiers, for professional visualisation.','带尺寸和标识的 3D 住宅，用于专业可视化。'));
   const b=el('button',{type:'button',class:'btn',id:'sceneExportOpen'},card,tx('Preparar escena…','Prepare scene…','准备场景…'));b.onclick=open;

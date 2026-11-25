@@ -242,7 +242,7 @@ test('guía de cinco fases: 27 recorridos, destinos efectivos y ninguna escritur
     }else{
      await action.click();
      if(id==='navigate')await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');
-     else await page.locator(target).first().waitFor({state:'visible'});
+     else await page.locator(target).filter({visible:true}).first().waitFor({state:'visible'});
     }
 
     assert.deepEqual(await project(page),original,id+' navigation preserves project');

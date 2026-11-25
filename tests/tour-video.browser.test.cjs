@@ -19,7 +19,8 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanTourVideo&&window.View3D);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),type=await page.evaluate(()=>FloorPlanTourRecorder.pickType());
  await page.locator('#workArea-deliver').click();const workspace=page.locator('#professionalWorkspace');
- assert.match(await workspace.innerText(),/Vídeo del recorrido: inicia la presentación y pulsa «Grabar vídeo»/);
+ // UX-312 PERLA: la indicación vive en el detalle de la ficha compacta («Ver detalles»); sigue en el DOM.
+ assert.match(await workspace.textContent(),/Vídeo del recorrido: inicia la presentación y pulsa «Grabar vídeo»/);
  await workspace.getByRole('button',{name:'Preparar presentación'}).click();
  // Two rooms keep the recording short on software rendering; the selection is the professional's, as in the product.
  const rows=page.locator('#presentationConfig .presentation-room-row input');const n=await rows.count();for(let i=2;i<n;i++)await rows.nth(i).uncheck();
@@ -63,4 +64,92 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
  await page.locator('#presentationClose').click({timeout:30000});await page.waitForFunction(()=>!FloorPlanPresentation.active);
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'recording never changes the project');
  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
+});
+// Keep desktop entry-point coverage and the complete 433-frame export. Use a smaller 3D canvas for the
+// readback on software-rendered runners; the exported size, duration and frame assertions stay the same.
+test('SCULPT plan and drone use the active project and the presentation recorder', {
+ // The GitHub CPU runner rendered half of the 433 frames in about 8.5 minutes.
+ timeout: 25 * 60_000
+}, async t => {
+ const context=await browser.newContext({viewport:{width:1440,height:900}});
+ t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://cdn.jsdelivr.net/**',route=>route.abort());
+ await page.goto(url);
+ await page.locator('#welcomeExample').click();
+ await page.waitForFunction(()=>window.FloorPlanTourVideo&&window.View3D);
+ const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.locator('#workArea-analyze').click();
+ await page.getByRole('button',{name:'Comprobar el plano',exact:true}).click();
+ const report=page.locator('#planAnalysisDialog');
+ assert.match(await report.innerText(),/87,18 m²/);
+ await report.locator('#planAnalysisInput').fill('3');
+ await report.getByRole('button',{name:'Calcular',exact:true}).click();
+ assert.match(await report.innerText(),/Retranqueo pendiente de parcela/);
+ await report.getByRole('button',{name:'Cerrar',exact:true}).click();
+ await page.getByRole('button',{name:'Sol directo por estancia',exact:true}).click();
+ assert.match(await report.innerText(),/Revisa la ubicación/);
+ await report.getByRole('button',{name:'Cerrar',exact:true}).click();
+ await page.evaluate(()=>FloorPlanApp.setSite({...FloorPlanApp.project.site,northOffsetDeg:0,location:{latitude:40.4,longitude:-3.7,timeZone:'Europe/Madrid',source:{providerId:'manual',type:'user-entered'}}}));
+ const configured=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.getByRole('button',{name:'Sol directo por estancia',exact:true}).click();
+ await report.locator('#planAnalysisInput').fill('2026-06-21');
+ await report.getByRole('button',{name:'Calcular',exact:true}).click();
+ assert.equal(await report.locator('li').count(),13);
+ await report.getByRole('button',{name:'Cerrar',exact:true}).click();
+ await page.locator('#workArea-deliver').click();
+ await page.getByRole('button',{name:'Preparar presentación',exact:true}).click();
+ await page.getByRole('button',{name:'Iniciar presentación',exact:true}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:120000});
+ await page.locator('#presentationVideo').click();
+ const drone=page.locator('input[name=tourVideoMode][value=drone]');
+ if(await drone.isDisabled()){
+  assert.ok(!process.env.QA_DRONE_MP4,'The drone artifact requires an H.264 encoder');
+  return t.skip('Chromium has no H.264 encoder');
+ }
+ await drone.check();
+ assert.match(await page.locator('#tourVideoNote').innerText(),/Vuelo exterior de 54 s/);
+ await page.locator('#tourVideoClose').click();
+ const readView=()=>page.evaluate(()=>{
+  const view=View3D.presentationViewState();
+  for(const key of ['position','quaternion','target'])view.pose[key]=view.pose[key].map(value=>Number(value.toFixed(9)));
+  return view;
+ });
+ await page.setViewportSize({width:960,height:540});
+ await page.waitForFunction(()=>document.querySelector('#view3d canvas')?.clientWidth<=960);
+ const originalView=await readView();
+ await page.exposeFunction('reportDroneProgress',(phase,progress)=>console.log(`SCULPT ${phase}: ${Math.round(progress*100)}%`));
+ const moved=await page.evaluate(async()=>{
+  const before=View3D.presentationPose().position.toString(),control=new AbortController();
+  let moved=false;
+  await window.reportDroneProgress('preview',0);
+  try{await FloorPlanPresentationFilm.previsualizar({drone:true,signal:control.signal,onProgress:progress=>{
+   moved ||= before!==View3D.presentationPose().position.toString();
+   if(progress>0)control.abort();
+  }});}catch(error){if(error.name!=='AbortError')throw error;}
+  return moved;
+ });
+ assert.equal(moved,true);
+ assert.deepEqual(await readView(),originalView,'cancel restores the view');
+ const flight=await page.evaluate(async()=>{
+  await window.reportDroneProgress('export',0);
+  let milestone=0;
+  const output=await FloorPlanPresentationFilm.exportar({drone:true,width:640,height:360,fps:8,onProgress:progress=>{
+   if(progress>=milestone+.25){milestone+=.25;void window.reportDroneProgress('render',milestone);}
+  }});
+  await window.reportDroneProgress('export',1);
+  const bytes=new Uint8Array(await output.blob.arrayBuffer());
+  return {bytes:Array.from(bytes),frames:output.frames,ms:output.durationMs,type:output.type};
+ });
+ assert.equal(flight.type,'video/mp4');
+ assert.equal(flight.frames,433);
+ assert.ok(flight.ms>=54000);
+ const bytes=Buffer.from(flight.bytes);
+ assert.equal(bytes.subarray(4,8).toString(),'ftyp');
+ if(process.env.QA_DRONE_MP4)await fs.writeFile(process.env.QA_DRONE_MP4,bytes);
+ assert.deepEqual(await readView(),originalView,'export restores the view');
+ assert.notEqual(before,configured);
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),configured);
+ assert.deepEqual(errors,[]);
 });

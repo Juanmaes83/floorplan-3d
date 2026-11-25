@@ -1,6 +1,9 @@
 // OP-10 · «Entregar → Escena para Blender» en la app real (Chromium; Firefox/WebKit con SCENE_BROWSERS=chromium,firefox,webkit).
 // C5 de principio a fin por la interfaz, robustez (GLB retrasado, recurso ausente, cancelación, escena vacía), determinismo de
 // exportaciones sucesivas, C2 (0 mallas sin ID), C3 (0 caras coincidentes visibles), invariantes de no mutación y OP-02.
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const { test, before, after } = require('node:test'), assert = require('node:assert/strict'), fs = require('node:fs'), os = require('node:os'), path = require('node:path'), http = require('node:http');
 const Capture = require('../scripts/interop/scene-capture.cjs'), Fixtures = require('./fixtures/scene-blender/build.cjs'), Scene = require('../js/scene-capture-core.js');
 const browsers = (process.env.SCENE_BROWSERS || 'chromium').split(',');
@@ -124,7 +127,8 @@ test('UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la
     await page.evaluate(() => document.querySelector('#welcomeDialog')?.close?.());
     // 1 · Desde Entregar en 2D, la acción principal abre la escena y devuelve el visor al reposo del área.
     await page.locator('#workArea-deliver').press('Enter');
-    await page.locator('#professionalWorkspace [data-group="documentation"] #sceneExportOpen').press('Enter');
+    // UX-312 F3 (V2.6 aprobada): la escena vive en «Herramientas de trabajo (no son para el cliente)» del índice de Entregar.
+    await page.locator('#professionalWorkspace [data-group="tools"] #sceneExportOpen').press('Enter');
     assert.equal(await page.locator('#sceneExportDialog').getAttribute('data-state'), 'no3d');
     assert.match(await page.locator('#seStatus').textContent(), /vista 3D abierta/);
     assert.equal(await page.locator('#sePrimary').textContent(), 'Abrir la vista 3D');
@@ -210,7 +214,7 @@ test('Residuales · ZIP con los dos caminos y script idéntico; diálogo en ZH/E
       // M03: exercise the real review entry point and verify that changing project invalidates an accepted delivery.
       await page.evaluate(() => { LANG = 'es'; });
       await page.locator('#workArea-deliver').click();
-      await page.locator('#blenderReviewOpen').click();
+      await (await accion(page,'#blenderReviewOpen')).click();
       const dlg = page.locator('#blenderReviewDialog'), primary = dlg.locator('#brPrimary');
       assert.match(await primary.innerText(), /manifiesto original/);
       assert.equal(await page.evaluate(() => document.activeElement?.id), 'brPrimary');
@@ -254,7 +258,7 @@ test('Residuales · ZIP con los dos caminos y script idéntico; diálogo en ZH/E
       await page.locator('#fileIn').setInputFiles(path.join(fx, 'f1-rect.json'));
       await page.waitForFunction(id => FloorPlanApp.project.id !== id, scene.projectId);
       await page.locator('#workArea-deliver').click();
-      await page.locator('#blenderReviewOpen').click();
+      await (await accion(page,'#blenderReviewOpen')).click();
       await dlg.getByRole('button', { name: 'Elegir manifiesto original…' }).waitFor();
       assert.match(await dlg.getByRole('status').innerText(), /proyecto ha cambiado/);
       assert.equal(await page.evaluate(() => Boolean(RubikBlenderReview.delivery)), false);

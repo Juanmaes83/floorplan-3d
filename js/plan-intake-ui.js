@@ -329,7 +329,8 @@
     }else if(result==='independent')say('Escaneo importado como proyecto independiente. La planta original se conserva.',9000);
     else if(current()){
      say('Unión cancelada. El proyecto no ha cambiado.');
-     $('#roomPlanJoinQuick').focus();
+     const join = $('#roomPlanJoinQuick');
+     (join.closest('details:not([open])')?.querySelector(':scope > summary') || join).focus();
     }
     return;
    }

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BP-DP Studio</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="runtime/ui.css">
+<script type="importmap">{"imports":{"three":"../vendor/three/build/three.module.js","three/addons/":"../vendor/three/examples/jsm/"}}</script>
+<script src="../js/construction-mp4-muxer.js"></script>
+<script src="../js/shot-timeline-core.js"></script>
+<!-- HERO FINAL universal de RUBIK (SCULPT, bytes exactos): firma del profesional al cierre del vídeo -->
+<script src="../js/rubik-final-core.js"></script>
+<script src="../js/rubik-final-titulos.js"></script>
+<script src="../js/brand-core.js"></script>
+<script src="runtime/g1/evidence-core.js"></script>
+<script src="runtime/g1/blueprint-core.js"></script>
+<script src="runtime/g1/revision-core.js"></script>
+<script src="runtime/model.js"></script>
+<script src="runtime/assembly.js"></script>
+</head>
+<body>
+<main class="app" id="app" data-theme="paper">
+ <div class="stage" id="stage"></div>
+ <div class="annot" id="annot"></div>
+ <div class="caption" id="caption" aria-live="polite"></div>
+ <header class="top" id="top"></header>
+ <section class="drawer" id="drawer" hidden aria-live="polite"></section>
+ <div class="dock" id="dock"></div>
+ <section class="launch" id="launch" aria-labelledby="launchTitle">
+  <div class="box">
+   <h1 id="launchTitle">¿Qué quieres mostrar?</h1>
+   <p class="lead">Dos maneras profesionales de contar la misma vivienda. Elige la experiencia y la escena; Blueprint y Despiece usan la misma geometría y la misma revisión en cada escena.</p>
+   <div class="cards">
+    <article class="card"><span class="k">Blueprint 3D</span><h2>Explicar el diseño</h2><p>Planta ortográfica, axonometría, secciones y alzados; cotas y espacios a demanda; ficha técnica con certeza; presentación, vídeo y lámina.</p>
+     <div class="opts"><button type="button" class="btn primary" data-open="blueprint:synthetic">Vivienda sintética</button><button type="button" class="btn" data-open="blueprint:rubik-real">Proyecto RUBIK real</button></div></article>
+    <article class="card"><span class="k">Despiece 3D</span><h2>Explicar el montaje</h2><p>Sistemas constructivos que se separan y se ensamblan; selección, aislamiento, ficha; montaje cinematográfico de 15 s, vídeo y lámina.</p>
+     <div class="opts"><button type="button" class="btn primary" data-open="despiece:synthetic">Vivienda sintética</button><button type="button" class="btn" data-open="despiece:rubik-real">Proyecto RUBIK real</button></div></article>
+   </div>
+   <p class="fine">Blueprint 3D y Despiece 3D · candidata de integración (no activada en la Home ni en Entregar). «Vivienda sintética» es una escena de demostración identificada como tal; «Proyecto RUBIK real» usa únicamente las entidades y la geometría del ejemplo de RUBIK (master 6ca70a5) y declara lo que no está modelado.</p>
+  </div>
+ </section>
+</main>
+<script type="module" src="runtime/main.js"></script>
+</body>
+</html>

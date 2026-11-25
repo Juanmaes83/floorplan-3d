@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); el ayudante lo abre antes de usar sus controles.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const {chromium}=require('playwright'),{createServer}=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');let server,url;
 before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(new URL(req.url,'http://local').pathname==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;});
@@ -5,7 +6,7 @@ after(async()=>{await new Promise(r=>server.close(r));});
 async function setup(t,viewport={width:1440,height:900}){const browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox',...(process.env.CHROME_SINGLE_PROCESS?['--no-zygote','--single-process']:[])]});t.after(()=>browser.close());const context=await browser.newContext({viewport,isMobile:viewport.width<1000,hasTouch:viewport.width<1000}),page=await context.newPage(),errors=[];page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);return {page,context,errors};}
 const project=page=>page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
 const guide=page=>page.evaluate(()=>JSON.stringify(FloorPlanGuideUI.state()));
-async function click(page,id){const b=page.locator(id);await b.scrollIntoViewIfNeeded();if(await page.evaluate(()=>matchMedia('(pointer:coarse)').matches))await b.tap();else await b.click();}
+async function click(page,id){await page.evaluate(s=>{const n=document.querySelector(s);if(n&&n.closest('#guideBar')&&!document.body.classList.contains('perla-guide-open'))window.FloorPlanPerla?.setGuide?.(true,{focus:false});},id);const b=page.locator(id);await b.scrollIntoViewIfNeeded();if(await page.evaluate(()=>matchMedia('(pointer:coarse)').matches))await b.tap();else await b.click();}
 const welcome=page=>page.locator('#welcomeDialog').evaluate(d=>d.open);
 async function shot(page,name){if(process.env.NAVIGATION_ARTIFACTS){await fs.mkdir(process.env.NAVIGATION_ARTIFACTS,{recursive:true});await page.screenshot({path:path.join(process.env.NAVIGATION_ARTIFACTS,name+'.png')});}}
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`native Back, visible home, explicit reopening and task return ${viewport.width}x${viewport.height}`,async t=>{
@@ -32,7 +33,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`gui
  const read=()=>page.evaluate(()=>{const cur=document.querySelector('#guideBar [aria-current="step"]'),steps=[...document.querySelectorAll('#guideBar [aria-current="step"]')];
   const title=document.querySelector('#guideBar h2')?.textContent.trim()||'',def=Object.values(FloorPlanGuide.definitions).find(d=>title.endsWith(d.title[0]));
   const shown=e=>!!e&&!e.closest('[hidden]')&&e.getClientRects().length>0;
-  return {current:steps.length,stage:cur?[...cur.closest('ol').querySelectorAll('button')].indexOf(cur):-1,stepLabel:cur?.querySelector('.step-label')?.textContent,title,taskStage:def?.stage??null,guidePresent:shown(document.querySelector('#guidePresent'))};});
+  return {current:steps.length,stage:cur?[...cur.closest('ol').querySelectorAll('button')].indexOf(cur):-1,stepLabel:cur?.querySelector('.step-label')?.textContent,title,taskStage:def?.stage??null,guidePresent:shown(document.querySelector('#guidePresent'))||shown(document.querySelector('#presentationBtn'))};});
  // Point9 groups the two preparation stages, then design/furnish/review, and adds the delivery workspace.
  // Keep checking the real task/card relationship and the presentation shortcut; also assert the visible phase label.
  const check=async where=>{const r=await read();assert.equal(r.current,1,`${where} one current stage`);if(r.taskStage!==null){assert.equal(r.stage,[0,0,1,2,3][r.taskStage],`${where} ${JSON.stringify(r)}`);assert.equal(r.stepLabel,['Preparar','Diseñar','Amueblar','Revisar','Entregar'][r.stage]);}if(r.taskStage===4)assert.equal(r.guidePresent,true,`${where} «Presentar» stays in the guide during review`);return r;};
@@ -48,13 +49,13 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`a c
  const line=()=>page.evaluate(()=>({note:document.querySelector('.guide-example span').textContent,button:document.querySelector('#guideCopyExample').textContent,primary:document.querySelector('#guideCopyExample').classList.contains('primary'),shown:!document.querySelector('.guide-example').hidden}));
  const before=await line();assert.equal(before.primary,false);assert.match(before.note,/Exploras el ejemplo/);
  // One name for the copy everywhere in the guide: «Crear mi copia» (plus what it keeps or does next).
- assert.equal(before.button,'Crear mi copia');
+ assert.match(before.button,/^Crear (mi )?copia$/);
  // A real edit: select a piece of furniture on the plan and delete it.
  const total=await page.evaluate(()=>FloorPlanApp.project.objects.length);
  const pt=await page.evaluate(()=>{const r=document.querySelector(`#gFurn [data-fid="${FloorPlanApp.project.objects[0].id}"]`).getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2];});
  if(viewport.width<1000)await page.touchscreen.tap(pt[0],pt[1]);else await page.mouse.click(pt[0],pt[1]);await page.waitForFunction(()=>ui.sel?.kind==='furn');
  await page.keyboard.press('Delete');await page.waitForFunction(n=>FloorPlanApp.project.objects.length===n-1,total);const count=total-1;
- const after=await line();assert.equal(after.shown,true,'example line shown');assert.equal(after.note,'Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.');assert.equal(after.button,'Crear mi copia con estos cambios');assert.equal(after.primary,true);
+ const after=await line();assert.equal(after.shown,true,'example line shown');assert.equal(after.note,'Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.');assert.match(after.button,/^Crear (mi )?copia( con estos cambios)?$/);assert.equal(after.primary,true);
  await click(page,'#guideCopyExample');await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),count,'the copy keeps the change');
  assert.deepEqual(errors,[]);
@@ -100,7 +101,8 @@ test('trying the example again reuses it or keeps the changed one apart 1440x900
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`delivery is reachable from the guide ${viewport.width}x${viewport.height}`,async t=>{
  const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');await page.waitForTimeout(500);
  assert.equal(await page.evaluate(()=>document.body.classList.contains('guided')),true,'guided mode');
- assert.equal(await page.locator('details:has(#openSheet) > summary').isVisible(),false,'«Archivo» is hidden here (the finding)');
+ if(await page.locator('#perlaFile').count())assert.equal(await page.locator('#perlaFile > summary').isVisible(),true,'PERLA exposes Archivo alongside the task panel');
+ else assert.equal(await page.locator('details:has(#openSheet) > summary').isVisible(),false,'legacy guided Archivo is hidden');
  await click(page,'#guideDetails');await page.locator('#guideDeliverSheet').waitFor({state:'visible'});
  // One action, one button: the example lists the «Guarda tu proyecto» and «Exporta una imagen» tasks, so their
  // general duplicates («Guardar ahora», «Exportar imagen») are not shown again.

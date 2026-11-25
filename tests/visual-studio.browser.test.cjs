@@ -1,4 +1,7 @@
 'use strict';
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 /* CAT-01 + FOT-01 visual · «Entregar → Estudio de imágenes» en el editor REAL con controles visibles: cocina SINTÉTICA
    dibujada por Chromium (ventana a la izquierda, hueco de horno a la derecha), zona dibujada con el ratón, conservar y
    cambiar, referencias de «Mis catálogos» (piloto sintético), coste bloqueado (STOP_GASTO) y simulación rotulada,
@@ -18,7 +21,7 @@ test('Estudio de imágenes escritorio: zona dibujada, referencias del catálogo,
  try{
   const before=await K.snapshot(page);await loadPilot(page,false);const afterCatalog=await K.snapshot(page);
   // Entregar keeps equal CTA hierarchy: the new entry is secondary, no card gets a primary action.
-  await page.locator('#workArea-deliver').click();await page.locator('#visualStudioCard').waitFor();
+  await page.locator('#workArea-deliver').click();await page.locator('#visualStudioCard').waitFor({state:'attached'});
   assert.equal(await page.locator('#professionalWorkspace .professional-card .primary').count(),0,'delivery cards have equal CTA hierarchy');
   await openStudio(page,false);assert.match(await page.locator('#vsTruth').innerText(),/un parecido no certifica el producto \(SKU\)/);
   await page.locator('#vsFile').setInputFiles(K.file('IMG_0001.jpg',K.withExif(kitchen),'image/jpeg'));await page.locator('#vsStage').waitFor();

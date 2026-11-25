@@ -2,6 +2,8 @@
 module.exports=async function enterFullEditor(page,{keepPalette=false}={}){
  await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
  if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');
+ // UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); se abre como lo haría la persona.
+ if(!(await page.locator('#guideDetails').isVisible())&&await page.locator('#perlaTasks').isVisible())await page.locator('#perlaTasks').click();
  if(await page.locator('#guideDetails').isVisible()){
   await page.locator('#guideDetails').click();await page.locator('#guideAllTools').click();
  }

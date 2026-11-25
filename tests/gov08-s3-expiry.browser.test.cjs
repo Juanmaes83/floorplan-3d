@@ -2,6 +2,9 @@
 // api/unshare.js and api/publications.js run over a fake in-memory Blob store; the server clock is simulated and the
 // browser clock is moved with Playwright's clock, so «before», «at» and «after» the expiry are checked for real.
 // Synthetic project (RUBIK's example) and fictitious codes only: no network, nothing real is published or deleted.
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{Readable}=require('node:stream'),{chromium}=require('playwright');
 const Share=require('../api/share.js'),View=require('../api/view.js'),Delivery=require('../api/delivery.js'),Unshare=require('../api/unshare.js'),Pubs=require('../api/publications.js');
 const EX=require('../docs/contracts/examples/floorplan-project-v1.example.json');
@@ -41,7 +44,8 @@ async function rig(viewport){
 }
 async function openDialog(page){
  if(await page.locator('#shareLinkDialog[open]').count())await page.locator('#shareLinkClose').click();
- await page.locator('#workArea-deliver').click();await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');// UX-312 PERLA: con el panel de la ficha abierto se pulsa la acción del panel (mismo control real que la ficha).
+ await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;
  const d=page.locator('#shareLinkDialog');await d.waitFor();return d;
 }
 

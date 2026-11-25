@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 // Keyboard focus stays in the presentation when the control that held it is disabled or rebuilt: «Siguiente» at the
 // last view, «Anterior» at the first, and a stop button pressed from the keyboard (the stop row is rebuilt).
 // Before the fix the focus fell to <body> and the next Tab started again from the top of the page.
@@ -19,7 +20,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`pre
  const mobile=viewport.width<1000,page=await browser.newPage({viewport,isMobile:mobile,hasTouch:mobile}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D,null,{timeout:120000});await page.locator('#welcomeExample').click();
- await page.locator('#guideClose').click();await page.locator('#presentationBtn').click();
+ await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await page.locator('#presentationBtn').click();
  await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
  // «Siguiente» from the keyboard, view after view, to the last one.
  const total=await page.evaluate(()=>FloorPlanPresentation.plan.stops.length);assert.ok(total>=2);

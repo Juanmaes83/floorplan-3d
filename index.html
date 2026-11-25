@@ -538,6 +538,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <link rel="stylesheet" href="css/surface-library.css">
 <link rel="stylesheet" href="css/guided-experience.css">
 <link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/perla-editor.css">
 <link rel="stylesheet" href="css/brand.css">
 <link rel="stylesheet" href="css/home-demos.css">
 <link rel="stylesheet" href="css/surface-sheet.css">
@@ -728,10 +729,15 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <span id="roomPlanJoinAnnouncement" class="sr-only" role="status"></span>
 <dialog id="legalDialog" aria-labelledby="legalTitle">
   <h2 id="legalTitle" data-en="Legal & use" data-es="Legal y uso">法律与使用</h2>
-  <p><strong data-en="Platform authorship" data-es="Autoría de la plataforma">平台作者</strong><br>Juan Manuel Espinosa Galant · Rubik Sota</p>
+  <!-- UX-312 Home: texto del borrador legal aprobado por el propietario (23/11/2026). Sus datos de identificación personal no se publican aquí. -->
+  <p><strong data-en="Owner and authorship" data-es="Titular y autoría">权利人与作者</strong><br>Juan Manuel Espinosa Galant · Rubik Sota<br><span data-en="Owner and author of RUBIK SOTA." data-es="Titular y autor de RUBIK SOTA.">RUBIK SOTA 的权利人和作者。</span></p>
   <p><strong data-en="Contact" data-es="Contacto">联系方式</strong><br><a href="tel:+34629554870">629 554 870</a></p>
-  <p data-en="Sale, resale or distribution of this platform is not authorized without the owner's express permission." data-es="No se autoriza la venta, reventa ni distribución de la plataforma sin autorización expresa del titular.">未经权利人明确授权，不得销售、转售或分发本平台。</p>
-  <p data-en="The platform's authorship is separate from third-party resources. Models, textures and other third-party assets retain their own licenses, permissions and attributions; see the credits and resource documentation." data-es="La autoría de la plataforma es distinta de los derechos sobre recursos de terceros. Los modelos, texturas y otros activos de terceros conservan sus licencias, permisos y atribuciones; consulta los créditos y la documentación de recursos.">平台作者身份与第三方资源的权利分开。模型、纹理等第三方资源保留各自的许可、授权和署名；请查看资源说明。</p>
+  <h3 data-en="Use of the platform" data-es="Uso de la plataforma">平台的使用</h3>
+  <p data-en="Commercial exploitation of RUBIK SOTA is prohibited without the express authorisation of its owner. This includes selling, reselling, sublicensing and commercially redistributing the platform." data-es="Se prohíbe la explotación comercial de RUBIK SOTA sin autorización expresa de su titular. Esto incluye la venta, la reventa, la sublicencia y la redistribución comercial de la plataforma.">未经权利人明确授权，禁止对 RUBIK SOTA 进行商业利用，包括销售、转售、再许可和商业再分发本平台。</p>
+  <p data-en="Professionals may prepare and deliver the results of their projects under the terms of use and the applicable licences. Third-party models, textures, photographs and other resources keep their own licences and attributions." data-es="El profesional puede preparar y entregar resultados de sus proyectos conforme a las condiciones de uso y a las licencias aplicables. Los modelos, texturas, fotografías y demás recursos de terceros conservan sus licencias y atribuciones.">专业人员可按使用条件和适用许可准备并交付其项目成果。第三方模型、纹理、照片及其他资源保留各自的许可和署名。</p>
+  <h3 data-en="Projects, copies and deliveries" data-es="Proyectos, copias y entregas">项目、副本与交付</h3>
+  <p data-en="Your project is stored in this browser. Export a copy to keep it or open it on another device. You decide whether to share the downloaded file or publish a link with the platform's options. External providers and the sending of requests have their own terms." data-es="Tu proyecto se guarda en este navegador. Exporta una copia para conservarlo o abrirlo en otro equipo. Tú decides si compartes el archivo descargado o publicas un enlace con las opciones de la plataforma. Los proveedores externos y el envío de solicitudes tienen sus propias condiciones.">你的项目保存在此浏览器中。导出副本以便保存或在其他设备上打开。由你决定是否分享下载的文件或通过平台选项发布链接。外部服务商和请求的发送有其各自的条件。</p>
+  <p data-en="Measurements and simulations are indicative. Check any data you will use in professional work." data-es="Las mediciones y simulaciones son orientativas. Comprueba los datos que vayas a utilizar en una intervención profesional.">测量和模拟仅供参考。在专业工作中使用数据前请先核实。</p>
   <div class="actions"><button type="button" class="btn" id="legalClose" data-en="Close" data-es="Cerrar">关闭</button></div>
 </dialog>
 <input type="file" id="traceImageFile" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-label="Imagen de plano PNG, JPG o WebP" hidden>
@@ -2659,7 +2665,8 @@ $('#roomPlanUndoJoin').onclick=()=>{
     return;
   }
   undo();
-  $('#roomPlanJoinQuick').focus();
+  const join = $('#roomPlanJoinQuick');
+  (join.closest('details:not([open])')?.querySelector(':scope > summary') || join).focus();
 };
 $('#clearAll').onclick = clearLayout;
 
@@ -4681,9 +4688,10 @@ function stopTouchWalk(){
   $('#joy').style.display = 'none'; $('#walkExit').style.display = 'none';
 }
 function bindJoystick(){
-  const el = $('#joy'), knob = $('#joy i'), R = 50;
+  const el = $('#joy'), knob = $('#joy i');
   const upd = e => {
     const r = el.getBoundingClientRect();
+    const R = Math.min(50, Math.max(1, (r.width - knob.offsetWidth) / 2));
     let dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
     const L = Math.hypot(dx, dy); if (L > R){ dx *= R/L; dy *= R/L; }
     updateWalkInput(() => { joy.x = dx/R; joy.y = dy/R; });
@@ -5401,6 +5409,31 @@ function presentationRestoreView(view){
   if(frameInfo)showRoomOutline(frameInfo.roomId);else clearRoomOutline();
   presentationRestorePose(view.pose);
 }
+// Temporary aerial camera over the already active product scene.
+function presentationDrone(){
+  const initial=presentationViewState(), enabled=orbit.enabled, near=camera.near;
+  const close=()=>{if(!active)return;camera.near=near;orbit.enabled=enabled;presentationRestoreView(initial);};
+  try{
+    orbit.enabled=false;
+    presentationRestoreView({...initial,cut:2.8,frame:null,levelView:levelContext?'all':initial.levelView,
+      roof:true,territorialPresentation:true});
+    const bounds=new THREE.Box3();
+    for(const group of [archFloor,archUp,furnG,levelsG,roofG,exteriorG])if(group?.visible)bounds.expandByObject(group);
+    if(bounds.isEmpty())throw Error(L3('No hay una vista exterior para el vuelo.','There is no exterior view for the flight.','没有可用于航拍的外观。'));
+    const points=[];
+    for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])
+      for(const z of [bounds.min.z,bounds.max.z])points.push([x,y,z]);
+    const extent=bounds.getSize(new THREE.Vector3()).length();
+    return {points,aspect:camera.aspect,close,apply(state){
+      camera.position.fromArray(state.position);
+      orbit.target.fromArray(state.target);
+      camera.lookAt(orbit.target);
+      camera.fov=state.fov;
+      camera.far=Math.max(initial.far, camera.position.distanceTo(orbit.target)+extent*2);
+      camera.updateProjectionMatrix();renderer.render(scene,camera);requestFrame();
+    }};
+  }catch(error){close();throw error;}
+}
 function presentationRestorePose(state){
   if(!active||!state)return;
   if(fly?.res)fly.res(false);fly=null;
@@ -5940,7 +5973,7 @@ window.View3D = {
     if(renderSuspended) resetWalkInput();
     if(renderSuspended&&!anim&&!fly)renderScheduler.cancel();else requestFrame();
   },get suspended(){return renderSuspended;},
-  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get renderedFrames(){return renderedFrames;},get lifecycleMetrics(){return {loopActive:renderScheduler.pending,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationDrone,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get renderedFrames(){return renderedFrames;},get lifecycleMetrics(){return {loopActive:renderScheduler.pending,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get sceneGeometries(){if(!inited)return null;const ids=new Set();scene.traverse(o=>{if(o.geometry)ids.add(o.geometry.id);});return ids.size;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',walkPose,walkToRoom,
   // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
   // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.
   get walkAim(){if(!active)return null;ptr.set(0,0);ray.setFromCamera(ptr,camera);const h=ray.intersectObjects([...(opt.furn?[furnG]:[]),archUp,archFloor],true).find(h=>h.object.material!==glassMat&&!h.object.isLine&&!h.object.isPoints);if(!h)return null;const o=h.object;return {door:o.userData.door?.id||null,wall:o.userData.wallId||null,name:o.name||o.type,dist:+h.distance.toFixed(2),mesh:o.geometry?.type};},
@@ -6139,18 +6172,23 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 }});
 </script>
 <link rel="stylesheet" href="css/professional-workspace.css">
+<link rel="stylesheet" href="css/perla-entregar.css">
+<link rel="stylesheet" href="css/perla-semaforo.css">
+<link rel="stylesheet" href="css/perla-presupuestar.css">
 <link rel="stylesheet" href="css/project-first.css">
 <link rel="stylesheet" href="css/delivery-client.css">
 <script src="js/project-visual-core.js"></script>
 <script src="js/project-preview-ui.js"></script>
 <script src="js/project-views-ui.js"></script>
+<script src="js/render-styles.js"></script>
+<script src="js/render-resolution.js"></script>
 <script src="js/ai-render-ui.js"></script>
 <script src="js/site-visual-core.js"></script>
 <script src="js/site-preview-ui.js"></script>
 <script src="js/project-dossier-ui.js"></script>
 <script src="js/client-share-ui.js"></script>
 <!-- SIMULATOR B · recorrido cinematográfico por tiempo (guion, contrato de suavidad, exportación fotograma a fotograma con el muxer de RUBIK) -->
-<script src="js/shot-timeline-core.js"></script><script src="js/film-plan-core.js"></script><script src="js/motion-quality-core.js"></script><script src="js/construction-mp4-muxer.js"></script><script src="js/presentation-film.js"></script>
+<script src="js/shot-timeline-core.js"></script><script src="js/film-plan-core.js"></script><script src="js/motion-quality-core.js"></script><script src="js/construction-mp4-muxer.js"></script><script src="js/plan-validation-core.js"></script><script src="js/plan-sun-drone-core.js"></script><script src="js/plan-analysis-ui.js"></script><script src="js/presentation-film.js"></script>
 <script src="js/tour-video-ui.js"></script>
 <script src="js/share-expiry-core.js"></script>
 <script src="js/share-registry-core.js"></script>
@@ -6175,8 +6213,17 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/delivery-map-core.js"></script>
 <script src="js/delivery-preview-ui.js"></script>
 <script src="js/e3-entregas-core.js"></script><script src="js/e3-entregas-ui.js"></script>
+<!-- BP-DP · Blueprint 3D y Despiece 3D para Entregar. -->
+<script type="module" src="bpdp/runtime/entregar.js"></script>
 <script src="js/rubik-final-core.js"></script><script src="js/rubik-final-titulos.js"></script><script src="js/rubik-final-dibujo.js"></script><script src="js/rubik-final-dibujo-ui.js"></script><script src="js/studio-hero-ui.js"></script>
 <script src="js/professional-workspace-ui.js"></script>
+<script src="js/perla-editor-ui.js"></script>
+<script src="js/perla-entregar-ui.js"></script>
+<script src="js/perla-presupuestar-ui.js"></script>
+<script src="js/perla-return.js"></script>
+<script src="js/perla-saved.js"></script>
+<script src="js/perla-done.js"></script>
+<script src="js/perla-semaforo.js"></script>
 <!-- FT3D-8 M2 (S4): one project, one budget, one plan, one evolution, one delivery. Reuses M1 and Gate D engines. -->
 <script src="js/cost-provider-bcca-es.js"></script>
 <script src="js/cost-catalog-core.js"></script>
@@ -6223,6 +6270,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <!-- HOM-04 · «Descubre RUBIK en acción»: arranque directo de la demo «Dibujo vivo» (?demo=dibujo-vivo) con el
      ejemplo y la presentación existentes. Sin ?demo no hace nada. -->
 <script src="js/home-demos.js"></script>
+<script src="js/home-en-accion.js"></script>
 <!-- OP-10 · «Entregar → Escena para Blender»: captura de solo lectura de la vista 3D → GLB + manifiesto en un ZIP local.
      Sin red, sin texturas ni fotos, sin cambios en el proyecto (candidata de integración; ver docs/integration/OP10-BLENDER-HANDOFF.md). -->
 <link rel="stylesheet" href="css/scene-export.css">

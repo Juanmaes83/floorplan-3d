@@ -1,0 +1,46 @@
+/* UX-M07 · «Materiales y acabados» en el panel de propiedades (Diseñar → Propiedades). Patrones PERLA de UX-312.
+   Componente de solo presentación: NO se carga todavía. El punto de montaje (<link> en index.html y el marcado dentro de
+   overviewPanel / wallPanel / roomPanel) se acuerda con Codex (HANDOFF-PANEL-ACABADOS.md, punto 4).
+   Reutiliza details.panel-group y .btn del panel; solo tokens de css/design-system.css; sin colores de contenido salvo la
+   muestra del acabado, que pone el producto (style="--fin-swatch:<color>").
+   Estados de una fila (data-state):
+     saved       acabado guardado en el proyecto (persistente)
+     unassigned  «Sin acabado asignado» (solo cuando procede)
+     fallback    se ve un respaldo visual: no es una asignación
+   Calidad visual de fachadas (F03 V2): siempre «solo en esta sesión»; nunca cambia la asignación. */
+.fin-groups{display:grid;gap:12px;margin:4px 0 6px}
+.fin-group{min-width:0}
+.fin-group-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 4px}
+.fin-group-title{margin:0;font:600 12px/1.3 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted)}
+.fin-group-count{font-size:12px;color:var(--ink-muted);font-variant-numeric:tabular-nums}
+.fin-list{list-style:none;margin:0;padding:0;display:grid}
+.fin-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:start;gap:6px 10px;padding:8px 0;border-top:1px solid var(--line)}
+.fin-row:first-child{border-top:0}
+.fin-swatch{margin-top:2px;width:28px;height:28px;border-radius:6px;border:1px solid var(--line-strong);background:var(--fin-swatch,var(--surface-sunken))}
+.fin-row[data-state=unassigned] .fin-swatch{background:repeating-linear-gradient(135deg,var(--surface-sunken) 0 4px,var(--surface-panel) 4px 8px)}
+.fin-text{min-width:0}
+.fin-name{display:block;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.fin-scope{display:block;font-size:12px;color:var(--ink-muted);overflow-wrap:anywhere}
+.fin-state{white-space:nowrap;display:inline-flex;align-items:center;gap:4px;margin-top:3px;padding:1px 8px;border-radius:999px;font-size:11.5px;font-weight:600;line-height:1.6;border:1px solid transparent}
+.fin-row[data-state=saved] .fin-state{color:var(--action);border-color:var(--action);background:var(--action-soft)}
+.fin-row[data-state=unassigned] .fin-state{color:var(--warn);background:var(--warn-soft)}
+.fin-row[data-state=fallback] .fin-state{color:var(--ink-muted);background:var(--surface-sunken);border-style:dashed;border-color:var(--line-strong)}
+.fin-change{white-space:nowrap;align-self:center}
+.fin-view{background:none;border:0;padding:4px 0;color:var(--action);text-decoration:underline;font:inherit;cursor:pointer}
+/* Calidad visual de fachadas: interruptor de sesión, distinto de la asignación guardada. */
+.fin-quality{margin:8px 0 0;padding:10px 12px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--surface-sunken)}
+.fin-quality-row{display:flex;align-items:flex-start;gap:10px;min-height:44px}
+.fin-quality-row input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--action);flex:0 0 auto}
+.fin-quality-row b{display:block}.fin-quality-row small{display:block;color:var(--ink-muted);font-size:12px}
+.fin-session{display:inline-block;margin-top:4px;font-size:11.5px;font-weight:600;color:var(--ink-muted)}
+.fin-req{margin:8px 0 0;font-size:12.5px;color:var(--ink)}
+.fin-status{margin:8px 0 0;font-size:12.5px;color:var(--ink-muted)}
+.fin-status[data-state=loading]::before{content:"";display:inline-block;width:.8em;height:.8em;margin-right:.45em;border:2px solid var(--line-strong);border-top-color:var(--action);border-radius:50%;vertical-align:-.1em;animation:fin-spin .9s linear infinite}
+.fin-status[data-state=error]{color:var(--danger)}
+.fin-status[data-state=partial]{color:var(--warn)}
+@keyframes fin-spin{to{transform:rotate(1turn)}}
+@media (prefers-reduced-motion:reduce){.fin-status[data-state=loading]::before{animation:none}}
+.fin-groups :focus-visible,.fin-quality :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+/* Panel estrecho y móvil: la acción baja a su propia línea y ocupa el ancho. */
+@media (max-width:480px){.fin-row{grid-template-columns:28px minmax(0,1fr)}.fin-row .fin-change{grid-column:1/-1;width:100%}}
+@media (pointer:coarse){.fin-row .fin-change,.fin-row .fin-view{min-height:44px}}

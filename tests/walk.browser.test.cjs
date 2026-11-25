@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 /* «Recorrer» (free walk) moves a person through the home with the keyboard (24-10-2026, PR #89 §6). Juanma found that
    on the example the view turned but WASD and the arrows did not move it: the walk started on the entrance hinge,
    inside the next wall's collision box, so every step was refused. Entering the mode or locking the pointer is not
@@ -21,7 +22,7 @@ async function walkTo(t,name,load){
  await page.locator('[data-view="3d"]').click();
  await page.waitForFunction(()=>window.View3D?.cameraState&&!View3D.lifecycleMetrics.animating&&!View3D.lifecycleMetrics.flying,null,{timeout:200000});await page.waitForTimeout(800);
  // On master the guided header hides «Vista aérea / Recorrer»; a person closes the guide to reach it.
- if(!(await page.locator('[data-mode="walk"]').isVisible())&&await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();
+ if(!(await page.locator('[data-mode="walk"]').isVisible())&&await page.locator('#guideClose').isVisible())await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  await page.locator('[data-mode="walk"]').click();await page.locator('#walkOverlay').click();
  assert.equal(await page.evaluate(()=>!!document.pointerLockElement),true,`${name}: pointer locked`);
  // Where the person is (plan mm and room) and where they look, read from the real camera.

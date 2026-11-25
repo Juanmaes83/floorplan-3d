@@ -12,13 +12,13 @@
  let area='design',returnTo=null;const buttons={};
  function button(text,parent,fn,primary=false){const b=el('button',text,parent,'btn'+(primary?' primary':''));b.type='button';b.onclick=fn;return b;}
  for(const key of Object.keys(titles())){const b=button(titles()[key],nav,()=>open(key));b.id='workArea-'+key;b.setAttribute('aria-label',titles()[key]);if(key==='studio')b.title=studioTitle();b.setAttribute('aria-controls','professionalWorkspace');buttons[key]=b;}
- function position(){const bottom=nav.getBoundingClientRect().bottom;section.style.top=bottom+'px';document.documentElement.style.setProperty('--professional-nav-bottom',bottom+'px');}
+ function position(){/* PERLA: con la barra de áreas integrada en la cabecera, el área se ancla bajo la cabecera */const anchor=nav.getClientRects().length?nav:document.querySelector('header');const bottom=anchor.getBoundingClientRect().bottom;section.style.top=bottom+'px';document.documentElement.style.setProperty('--professional-nav-bottom',bottom+'px');}
  const resize=new ResizeObserver(position);resize.observe(nav);resize.observe(document.querySelector('header'));addEventListener('resize',position);
  // Global header controls keep their original handlers. Only the editor behind the workspace is inert.
  const globalControls=['welcomeBtn','projectsBtn','langBtn','fullscreen'];for(const id of globalControls)document.getElementById(id)?.classList.add('professional-global-control');
  // The editor behind a work area is inert and its 3D view stops drawing until the area closes.
  function setInert(value){for(const n of document.querySelectorAll('.app>aside,#stage,#guideBar,.mobile-bar,#fab'))n.inert=value;window.View3D?.setSuspended?.(value);}
- function finish(){section.hidden=true;setInert(false);document.body.classList.remove('professional-area');area='design';for(const[k,b]of Object.entries(buttons))b.setAttribute('aria-current',k==='design'?'page':'false');}
+ function finish(){if(area==='deliver')section.dispatchEvent(new Event('rubik:leave-deliver',{bubbles:true}));section.hidden=true;setInert(false);document.body.classList.remove('professional-area');area='design';for(const[k,b]of Object.entries(buttons))b.setAttribute('aria-current',k==='design'?'page':'false');}
  function close(){if(window.FloorPlanProjectViews?.status()==='busy'){toast(tx('Espera a que terminen de prepararse las vistas: se está usando la vista 3D.','Wait until the views are prepared: the 3D view is in use.','请等待视图准备完成：三维视图正在使用中。'),4000);return;}finish();(returnTo?.isConnected?returnTo:buttons.design).focus();}
  async function run(fn){try{await fn();}catch(e){toast(e.message,6000);}}
  // Existing dialogs stay the only implementation. Their native close returns to this area and its initiating card.
@@ -48,8 +48,9 @@
    section.querySelector('.professional-head small').textContent=tx('Mesa de trabajo','Project desk','项目工作台');const frame=document.createDocumentFragment();projectContext=Preview.context(frame,summary,{variant:'hero',caption:area==='deliver'?tx('Lo que recibirá tu cliente','What your client will receive','客户将收到的内容'):tx('La vivienda que analizas','The home you are analysing','您正在分析的住宅')});projectContext.classList.add('professional-project-context');grid.before(frame);
   }
   if(area==='deliver'){
+   if(projectContext)perlaHero(projectContext);
    const groups=[['documentation',tx('Documentación','Documentation','文档'),['surface-sheet','sheet']],['experience',tx('La vivienda, para tu cliente','Your home, for the client','向客户展示住宅'),['presentation','images']],['coordination',tx('Seguimiento del proyecto','Project follow-up','项目跟进'),['budget','review']],['signature',tx('Identidad de la entrega','Delivery identity','交付身份'),['studio']]];
-   for(const[key,title,routes]of groups){const group=el('section',undefined,grid,'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
+   for(const[key,title,routes]of groups){const group=el('section',undefined,grid,key==='signature'?'professional-delivery-signature':'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
    // The group provides the identity heading; retain the card's original title for existing accessible routes.
    grid.querySelector('[data-group="signature"]>h2').textContent=tx('La firma del profesional','Professional signature','专业签名');
    // ENT-01 I1B: review the REAL 3D engine in an isolated, non-publishing client tab.
@@ -58,7 +59,7 @@
    window.RubikStudioHero?.acceso(grid.querySelector('[data-group="experience"] .professional-group-items'));
   }
   if(area==='studio'){
-   window.RubikE3Entregables?.card(grid,'studio'); // STUDIO E3
+   // UX-312 C4 (aprobado 22/11/2026): «Preparar entregables» (E3) vive solo en Entregar · D5; Mi estudio ya no la repite.
    // HERO FINAL · STUDIO: visión de cinco fases y tarjeta principal de personalización (ancla de una línea: convive con STUDIO E3 #299).
    window.RubikStudioHero?.studio(grid);
    const profiles=grid.querySelector('[data-module="studio"]'),snap=FloorPlanBrandUI.snapshot(),profile=snap?.profile;
@@ -69,6 +70,232 @@
   projectFirst(grid,m,summary,projectContext);
   if(area==='deliver')window.RubikE3Entregables?.card(grid.querySelector('[data-group="documentation"] .professional-group-items'),'entregar');
  }
+ /* UX-312 F3 · estructura V2.6 aprobada (Gate 1). Solo ordena y agrupa las tarjetas EXISTENTES: ninguna se crea de nuevo,
+    ninguna pierde su ruta, su id ni su manejador. Es idempotente: se aplica al terminar el render y otra vez cuando otro
+    módulo monta su tarjeta más tarde (Recorrido de obra, Evolución de obra, Escena para Blender, Visita 3D, E3).
+    Entregar: firma → lo que recibirá tu cliente → índice (con códigos y recuentos) → Recorrido de obra → cinco fases.
+    Mi estudio: identidad → más ajustes → personalización HERO → cinco fases («Tu marca en RUBIK»). */
+ const INDICE=()=>[['documentation',null,[['surface-sheet','D1'],['sheet','D2'],['dossier','D3'],['economic-dossier','D4'],['e3-entregas','D5']]],
+  ['experience',null,[['presentation','P1'],['images','P2'],['client-3d','P3'],['construction-delivery','P4'],['moodboard','P5'],['studio-hero-acceso','P6'],['client-file','P7']]],
+  ['coordination',null,[['budget','S1'],['review','S2']]],
+  ['tools',tx('Herramientas de trabajo (no son para el cliente)','Working tools (not for the client)','工作工具（不交给客户）'),[['blender-scene','T1'],['compare','T2']]]];
+ const moduleOf=c=>c.dataset.compareState!==undefined?'compare':c.dataset.module;
+ // Mover un nodo solo si no está ya en su sitio: mover un nodo le quita el foco y reinicia su estado.
+ const putAfter=(ref,n)=>{if(n&&ref&&ref.nextElementSibling!==n)ref.after(n);};
+ const putBefore=(ref,n)=>{if(n&&ref&&ref.previousElementSibling!==n)ref.before(n);};
+ const putEnd=(parent,n)=>{if(n&&parent&&parent.lastElementChild!==n)parent.append(n);};
+ const putStart=(parent,n)=>{if(n&&parent&&parent.firstElementChild!==n)parent.prepend(n);};
+ let arranging=false;
+ function arrange(){
+  if(arranging||section.hidden||imagesScreen||(area!=='deliver'&&area!=='studio'))return;const grid=section.querySelector('.professional-grid');if(!grid)return;
+  arranging=true;watch.disconnect();
+  try{if(area==='deliver')arrangeDeliver(grid);else arrangeStudio(grid);}finally{arranging=false;watch.observe(section,{childList:true,subtree:true});}}
+ function groupSection(parent,key,title,cls='professional-delivery-group'){let g=section.querySelector('[data-group="'+key+'"]');
+  if(!g){g=el('section',undefined,parent,cls);g.dataset.group=key;const h=el('h2',title,g);h.id='delivery-group-'+key;g.setAttribute('aria-labelledby',h.id);el('div',undefined,g,'professional-group-items');}
+  return g;}
+ // Encadres y orden de la maqueta PERLA V3, c96888ac. Los estados y acciones viven en las fichas del producto.
+ const perlaCovers={"D1":{"images":["d1-ficha.jpg"],"document":true,"sample":false},"D2":{"images":["d2-lamina.jpg"],"document":true,"sample":false},"D3":{"images":["d3-dossier.jpg"],"document":true,"sample":false},"D4":{"images":[],"document":false,"sample":false},"D5":{"images":["d5-entregables.jpg"],"document":true,"sample":false},"P1":{"images":["vista-general.jpg"],"document":false,"sample":false},"P2":{"images":["vista-salon.jpg","vista-dormitorio-principal.jpg","vista-dormitorio-infantil.jpg"],"document":false,"sample":false},"P3":{"images":["fase-recorrer.jpg"],"document":false,"sample":false},"P4":{"images":["demo-evolucion.jpg"],"document":false,"sample":true},"P5":{"images":["p5-material-board.jpg"],"document":true,"sample":false},"P6":{"images":["fase-hero.jpg"],"document":false,"sample":true},"P7":{"images":["p7-archivo-cliente.jpg"],"document":true,"sample":false},"S1":{"images":["s1-presupuesto.jpg"],"document":true,"sample":false},"S2":{"images":["s2-observaciones.jpg"],"document":true,"sample":false},"T1":{"images":["t1-render-cycles.jpg"],"document":false,"sample":false},"T2":{"images":["vista-general.jpg"],"document":false,"sample":false}};
+ function perlaImage(parent,file){
+  const img=el('img',undefined,parent);
+  img.src='assets/delivery/perla/'+file;img.alt='';img.loading='lazy';
+  return img;
+ }
+ function perlaCover(code){
+  const spec=perlaCovers[code];
+  if(!spec)return null;
+  const thumb=el('div',undefined,null,'thumb'+(spec.document?' doc':''));
+  if(code==='D4'){
+   const illustration=el('div',undefined,thumb,'ilus');
+   const lines=el('div',undefined,illustration,'ilus-eco');lines.setAttribute('aria-hidden','true');
+   for(let i=0;i<6;i++)el('i',undefined,lines);
+  }else if(code==='T2'){
+   const illustration=el('div',undefined,thumb,'ilus');
+   const comparison=el('div',undefined,illustration,'ilus-ab');
+   const original=el('figure',undefined,comparison);
+   perlaImage(original,spec.images[0]);
+   el('figcaption',tx('A · original','A · original','A · 原版'),original);
+   el('div',tx('B · crea una variante','B · create a variant','B · 创建变体'),comparison,'vacio');
+  }else{
+   const target=spec.images.length>1?el('div',undefined,thumb,'mosaico'):thumb;
+   for(const file of spec.images)perlaImage(target,file);
+  }
+  el('span',code,thumb,'code');
+  if(spec.sample||code==='D4')el('span',tx('Ejemplo','Example','示例'),thumb,'tag-ej');
+  return thumb;
+ }
+ function perlaTile(card,code){
+  if(card.classList.contains('perla-tile'))return;
+  const cover=perlaCover(code);
+  if(!cover)return;
+  card.classList.add('perla-tile');
+  const body=el('div',undefined,null,'body');
+  body.append(...card.childNodes);
+  card.append(cover,body);
+ }
+ function perlaHero(context){
+  const header=el('div',undefined,null,'ent-head');
+  const heading=el('div',undefined,header);
+  el('small',tx('Entregar al cliente','Deliver to the client','交付给客户'),heading);
+  const title=section.querySelector('#professionalTitle');
+  title.textContent=tx('Lo que recibirá tu cliente','What your client will receive','客户将收到的内容');
+  heading.append(title);
+  el('div',undefined,header,'firma-chip');
+  const hero=el('div',undefined,null,'hero-ent');
+  const figure=el('figure',undefined,hero);
+  const isExample=window.FloorPlanGuideUI?.state()?.kind==='example';
+  if(isExample){
+   const image=perlaImage(figure,'vista-general.jpg');
+   image.alt=tx('Vista 3D de la vivienda de ejemplo','3D view of the example home','示例住宅三维视图');image.loading='eager';
+  }else if(!Preview.axonometric(figure)){
+   figure.append(context.querySelector('.project-context-drawing'));
+  }
+  const copy=context.querySelector('.project-context-copy');copy.classList.add('txt');
+  copy.querySelector('small')?.remove();
+  hero.append(copy);context.before(header,hero);context.remove();
+ }
+ function deliveryCatalog(index){
+  const catalog=el('details',undefined,index,'professional-full-catalog');
+  el('summary',tx('Ver todos los documentos y entregables','View all documents and deliverables','查看所有文档与交付物'),catalog);
+  const items=el('div',undefined,catalog,'professional-catalog-items');
+  catalog.addEventListener('toggle',()=>{
+   if(!catalog.open)return;
+   items.replaceChildren();
+   const E3=window.RubikE3Entregables;
+   for(const item of E3?.catalogo()||[]){
+    const row=el('article',undefined,items);
+    el('h3',item.nombre,row);
+    el('p',item.formato+' · '+(item.disponible?tx('Abrir preparación','Open preparation','可打开准备'):tx('No disponible','Unavailable','不可用')),row);
+    el('p',item.que,row);
+    const action=button(tx('Abrir','Open','打开'),row,()=>E3.abrir(action,item.id));
+    action.setAttribute('aria-label',action.textContent+' · '+item.nombre);
+    action.disabled=!item.disponible;
+   }
+   for(const [route,title,format] of [
+    ['economic-dossier',tx('Dossier económico','Economic dossier','经济资料'),'PDF · CSV · JSON · BC3'],
+    ['export-project',tx('Proyecto editable','Editable project','可编辑项目'),'JSON / ZIP'],
+    ['export-dxf',tx('Planta activa','Active floor','当前楼层'),'DXF']
+   ]){
+    const source=section.querySelector('[data-route="'+route+'"]');
+    if(!source)continue;
+    const row=el('article',undefined,items);
+    el('h3',title,row);el('p',format,row);
+    const status=source.closest('.professional-card')?.querySelector('.professional-state');
+    if(status)el('p',status.textContent,row);
+    const action=button(source.textContent,row,()=>source.click());
+    action.disabled=source.disabled;
+   }
+  });
+ }
+ function deliveryFilters(index,count){
+  const filters=el('div',undefined,null,'professional-delivery-filters filtros');
+  count.after(filters);
+  const labels=[['all',tx('Todo','All','全部')],['documentation',tx('Documentación','Documentation','文档')],['experience',tx('Para tu cliente','For your client','给客户')],['coordination',tx('Seguimiento','Follow-up','跟进')],['tools',tx('Herramientas','Tools','工具')]];
+  for(const [key,label] of labels){
+   const b=button(label,filters,()=>{
+    index.dataset.filter=key;
+    for(const filter of filters.querySelectorAll('button'))filter.setAttribute('aria-pressed',String(filter===b));
+    for(const group of index.querySelectorAll(':scope>.professional-delivery-group')){
+     group.hidden=(!group.querySelector('.professional-card')||key!=='all'&&group.dataset.group!==key);
+    }
+   });
+   b.setAttribute('aria-pressed',String(key==='all'));
+  }
+  return filters;
+ }
+ function arrangeDeliver(grid){
+  let index=grid.querySelector('.mesa > .professional-index');
+  if(!index){const desk=el('div',undefined,null,'mesa');grid.prepend(desk);index=el('section',undefined,desk,'professional-index');index.setAttribute('aria-labelledby','professionalIndexTitle');const h=el('h2',tx('Índice de la entrega','Delivery index','交付索引'),index);h.id='professionalIndexTitle';const count=el('p',undefined,index,'professional-count');deliveryFilters(index,count);deliveryCatalog(index);const panel=el('aside',undefined,desk,'professional-delivery-detail panel');panel.tabIndex=-1;panel.setAttribute('aria-live','polite');const placeholder=el('div',undefined,panel,'vacio-panel');el('h3',tx('Elige un entregable','Choose a deliverable','选择交付物'),placeholder);el('p',tx('Verás aquí el estado y las opciones de la ficha.','See the status and options for the selected item.','查看所选交付物的状态和选项。'),placeholder);}
+  const desk=index.parentElement,panel=desk.querySelector('.panel');
+  let prev=index.querySelector(':scope>.professional-delivery-filters');
+  for(const[key,title,items]of INDICE()){const g=groupSection(index,key,title);putAfter(prev,g);prev=g;const box=g.querySelector('.professional-group-items');box.classList.add('cards');let last=null;
+   for(const[mod,code]of items){const c=[...section.querySelectorAll('.professional-card')].find(x=>moduleOf(x)===mod);if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;c.dataset.entregaCode=code;
+    perlaTile(c,code);
+    if(c.querySelector('.perla-card-selector'))continue;
+    const body=c.querySelector('.body');
+    if(!body)continue;
+    const open=button(tx('Ver detalles','View details','查看详情'),body,()=>{
+     const heading=el('div',undefined,null,'panel-h');
+     el('h2',c.querySelector('h3')?.textContent,heading);
+     const close=button('×',heading,()=>{panel.replaceChildren();el('h3',tx('Elige un entregable','Choose a deliverable','选择交付物'),panel,'vacio-panel');open.focus();});
+     close.setAttribute('aria-label',tx('Volver al índice','Return to index','返回索引'));
+     const content=el('div',undefined,null,'panel-b');
+     content.append(perlaCover(code));
+     for(const item of c.querySelectorAll('.professional-state,.professional-detail,.delivery3d-lead,.delivery3d-meta')){
+      if(item.textContent.trim())el('p',item.textContent,content);
+     }
+     const actions=el('div',undefined,null,'panel-f');
+     for(const control of c.querySelectorAll('button[data-route],#delivery3dPreview')){
+      const action=button(control.textContent,actions,()=>control.click(),!actions.children.length);action.disabled=control.disabled;
+     }
+     panel.replaceChildren(heading,content,actions);panel.focus();
+    });
+    open.classList.add('perla-card-selector','professional-card-details');
+   }
+   let n=g.querySelector(':scope>.professional-count');if(!n){n=el('span',undefined,null,'professional-count');g.querySelector('h2').after(n);}n.textContent=String(box.children.length);g.hidden=!box.children.length||!!index.dataset.filter&&index.dataset.filter!=='all'&&index.dataset.filter!==key;}
+  // «Más opciones · Guardar y exportar» sigue fuera del índice: la copia editable no es una salida para el cliente (Point9).
+  index.querySelector(':scope>.professional-count').textContent=tx(`${index.querySelectorAll('.professional-card').length} entregables y herramientas`,`${index.querySelectorAll('.professional-card').length} deliverables and tools`,`${index.querySelectorAll('.professional-card').length} 项交付物与工具`);
+  // Lo que otro módulo inserte delante del índice (p. ej. el Recorrido de obra) se coloca DETRÁS: nunca se mueve el índice,
+  // que contiene la tarjeta con el foco.
+  for(let n=desk.previousElementSibling;n;n=desk.previousElementSibling){if(n.matches('.professional-card,.professional-delivery-group'))break;desk.after(n);}
+  const journey=grid.querySelector('#obraJourney');putAfter(desk,journey);
+  const band=[...grid.querySelectorAll(':scope>.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putAfter(journey||desk,band);
+  const sign=section.querySelector('[data-group="signature"]');
+  putBefore(section.querySelector(':scope>.professional-more'),sign);
+  const copy=section.querySelector('.hero-ent .txt');
+  if(copy&&!copy.querySelector('.listo')){
+   const list=el('ul',undefined,copy,'listo');
+   for(const [code,label] of [['D1',tx('Ficha','Area schedule','面积表')],['D3',tx('Dossier','Dossier','项目档案')],['S1',tx('Presupuesto','Budget','预算')]]){
+    const status=index.querySelector('[data-entrega-code="'+code+'"] .professional-state');
+    if(!status)continue;
+    const row=el('li',undefined,list);el('b',label,row);el('span',status.textContent,row);
+   }
+  }
+  if(copy&&!copy.querySelector('.acciones')){
+   const signature=sign?.querySelector('[data-route="studio-profile"]'),chip=section.querySelector('.firma-chip');
+   if(signature&&chip){
+    el('span',sign.querySelector('.professional-state')?.textContent,chip);
+    button(tx('Elegir firma','Choose signature','选择签名'),chip,()=>signature.focus());
+   }
+   const actions=el('div',undefined,copy,'acciones');
+   for(const [selector,label,primary] of [
+    ['[data-route="client-file"]',tx('Descargar archivo para el cliente','Download client file','下载客户文件'),true],
+    ['#delivery3dPreview',tx('Ver como cliente','View as client','以客户身份查看'),false]
+   ]){
+    const target=section.querySelector(selector);
+    if(!target)continue;
+    const shortcut=button(label,actions,()=>section.querySelector(selector)?.click(),primary);
+    shortcut.classList.toggle('professional-wine-action',primary);shortcut.disabled=target.disabled;
+   }
+  }
+  dock();}
+ function arrangeStudio(grid){
+  const projectCards=[...grid.querySelectorAll('.professional-card[data-module="project"]')];
+  if(projectCards[0]&&!projectCards[0].dataset.studioRole)projectCards[0].dataset.studioRole='identity';if(projectCards[1]&&!projectCards[1].dataset.studioRole)projectCards[1].dataset.studioRole='preferences';
+  const nuevo=!section.querySelector('[data-group="studio-identity"]');
+  const ident=groupSection(grid,'studio-identity',tx('Tu identidad profesional','Your professional identity','你的专业身份'),'professional-studio-group'),more=groupSection(grid,'studio-settings',tx('Más ajustes','More settings','更多设置'),'professional-studio-group');
+  const pick=sel=>grid.querySelector(sel);
+  const fill=(g,list)=>{const box=g.querySelector('.professional-group-items');let last=null;for(const c of list){if(!c)continue;if(last)putAfter(last,c);else putStart(box,c);last=c;}};
+  fill(ident,[pick('[data-studio-role="identity"]'),pick('.professional-card[data-module="studio"]')]);fill(more,[pick('[data-studio-role="preferences"]'),pick('#catalogStudioCard')]);
+  if(nuevo)grid.prepend(ident);putAfter(ident,more);
+  const hero=pick('[data-module="studio-hero"]');putAfter(more,hero);
+  const band=[...grid.querySelectorAll('.studio-hero-area')].find(w=>w.querySelector('[data-module="studio-vision"]'));putEnd(grid,band);}
+ // Acción principal fija en el móvil (V2.4 · decisión aprobada): «Descargar archivo para el cliente» siempre a mano.
+ // Es un atajo al MISMO botón de la tarjeta P7 (mismo manejador, mismo estado). Solo se oculta cuando ese botón está ENTERO
+ // dentro de la zona útil del área, descontando la altura de la propia barra (auditoría Codex 23/11: antes bastaban 2 px).
+ // La decisión no depende de si la barra se ve, así que no parpadea; si el foco estaba en el atajo, pasa al botón real.
+ let dockSeen=null,dockH=80;
+ function dock(){const real=section.querySelector('.professional-card [data-route="client-file"]');let bar=section.querySelector(':scope>.professional-dock');
+  if(!real){bar?.remove();dockSeen?.disconnect();return;}
+  if(!bar){bar=el('div',undefined,section,'professional-dock');const b=button(real.textContent,bar,()=>real.click(),true);b.dataset.dock='client-file';}
+  const b=bar.querySelector('button');b.textContent=real.textContent;b.disabled=real.disabled;
+  const h=bar.getBoundingClientRect().height;if(h>0)dockH=Math.ceil(h);
+  dockSeen?.disconnect();
+  dockSeen=new IntersectionObserver(es=>{for(const e of es){const covered=e.intersectionRatio>=0.999;
+   if(covered&&!bar.classList.contains('is-covered')&&bar.contains(document.activeElement))real.focus({preventScroll:true});
+   bar.classList.toggle('is-covered',covered);}},{root:section,rootMargin:`0px 0px -${dockH}px 0px`,threshold:[0,0.5,0.999,1]});
+  dockSeen.observe(real);}
+ // Solo la llegada de tarjetas o secciones reordena; imágenes, textos y estados internos no.
+ const watch=new MutationObserver(list=>{if(arranging)return;if(list.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches('.professional-card,section,.studio-hero-area')))))requestAnimationFrame(arrange);});
  // Project-First A1: each output shows what Rubik already produced from this project, before any click. Previews
  // come from FloorPlanProjectPreview (real plan, real sheet, model axonometric, selected signature); every fact
  // stays as text; nothing is generated, saved or invented here.
@@ -142,7 +369,7 @@
     const ec=card(docs,tx('Dossier económico','Economic dossier','经济资料'),st);ec.classList.add('economic-card');ec.dataset.module='economic-dossier';ec.dataset.state=cs.state;
     const f=figure(ec,'delivery-economic');el('p',cs.state==='none'?tx('Prepara el presupuesto en Presupuestar para presentarlo aquí en versión profesional o para el cliente.','Prepare the budget in Budget to present it here for the professional or the client.','请先在“预算”中准备预算。'):tx('Mismas cifras del presupuesto en dos versiones: profesional (detalle y trazabilidad) y cliente (resumen claro). Imprime o guarda en PDF; exporta CSV, JSON o BC3.','The same budget figures in two versions: professional (detail and traceability) and client (clear summary). Print or save as PDF; export CSV, JSON or BC3.','同一预算的两个版本：专业与客户。'),f,'professional-detail');
     route(ec,tx('Preparar dossier económico','Prepare economic dossier','准备经济资料'),'economic-dossier',()=>U.open(),cs.state!=='none');
-    route(ec,tx('Revisar presupuesto','Review budget','审核预算'),'economic-review',()=>window.FloorPlanProfessionalUI?.open('budget'));}
+    {const r=route(ec,tx('Los precios se revisan en S1 · Presupuesto','Prices are reviewed in S1 · Budget','价格在 S1 · 预算 中审核'),'economic-review',()=>window.FloorPlanProfessionalUI?.open('budget'));r.classList.add('professional-link');}}
    // B1 client file: one self-contained HTML the professional sends; the client's observations come back as a file.
    const exp=grid.querySelector('[data-group="experience"] .professional-group-items');if(exp&&window.FloorPlanClientShare&&window.FloorPlanDossier){const c=FloorPlanDossier.contents({sheet:sheetOk}),n=(FloorPlanProjectViews?.current()||[]).length;
     const sc=card(exp,tx('Archivo para tu cliente','File for your client','客户文件'),tx('Listo para enviar · sin servidor','Ready to send · no server','可发送 · 无需服务器'));sc.classList.add('share-card');sc.dataset.module='client-file';
@@ -196,11 +423,15 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
  detail(technical,tx('Los archivos BC3 se leen en este navegador desde «Abrir presupuesto» o «Precios de referencia»; RUBIK no los sube ni los guarda. La BCCA gestionada por RUBIK no está conectada ni se descarga automáticamente mientras su permiso no esté documentado.','BC3 files are read in this browser from «Open budget» or «Reference prices»; RUBIK neither uploads nor keeps them. RUBIK-managed BCCA is not connected or downloaded while its permission is not documented.','BC3 文件在本浏览器中读取。由 RUBIK 管理的 BCCA 尚未连接。'));detail(technical,tx('El presupuesto se descarga en CSV, JSON y BC3 desde «Abrir presupuesto». Lo que se presenta es siempre un presupuesto previsto, no un coste certificado.','The budget downloads as CSV, JSON and BC3 from «Open budget». It is always a planned budget, not a certified cost.','预算可从“打开预算”下载 CSV、JSON 和 BC3。'));}
 
  let imagesScreen=false;
- function render(focus=true){if(section.hidden)return;imagesScreen=false;const activeRoute=document.activeElement?.dataset.route;section.replaceChildren();const head=el('div',undefined,section,'professional-head');button(tx('← Volver a Diseñar','← Return to Design','← 返回设计'),head,close);const context=el('div',undefined,head);el('small',area==='studio'?tx('Configuración de este navegador','Browser settings','本浏览器设置'):typeof nm==='function'?nm(app.project.name):app.project.name,context);const title=el('h1',area==='deliver'?tx('Entregar al cliente','Deliver to the client','交付给客户'):titles()[area],context);title.id='professionalTitle';title.tabIndex=-1;
+ function render(focus=true){if(section.hidden)return;imagesScreen=false;const activeRoute=document.activeElement?.dataset.route;const headingFocused=document.activeElement?.id==='professionalTitle';section.replaceChildren();const head=el('div',undefined,section,'professional-head');button(tx('← Volver a Diseñar','← Return to Design','← 返回设计'),head,close);const context=el('div',undefined,head);el('small',area==='studio'?tx('Configuración de este navegador','Browser settings','本浏览器设置'):typeof nm==='function'?nm(app.project.name):app.project.name,context);const title=el('h1',area==='deliver'?tx('Entregar al cliente','Deliver to the client','交付给客户'):titles()[area],context);title.id='professionalTitle';title.tabIndex=-1;
  const questions={analyze:tx('Comprueba las medidas y el contexto antes de decidir.','Check measurements and context before deciding.','决策前检查尺寸和环境。'),budget:tx('Cantidades del proyecto y presupuesto con tus precios, revisados por ti.','Project quantities and a budget with your prices, reviewed by you.','了解数量、价格来源和待审核内容。'),deliver:tx('Prepara el resultado que recibirá tu cliente. Elige una salida y revisa su contenido.','Prepare what your client will receive. Choose an output and review it.','准备客户将收到的成果。选择输出并检查内容。'),studio:tx('Reutiliza tu identidad profesional en las entregas. Los datos se guardan en este navegador.','Reuse your professional identity in deliveries. Data stays in this browser.','在交付中复用专业身份。数据保存在本浏览器。')};el('p',questions[area],section,'professional-intro');const grid=el('div',undefined,section,'professional-grid'),m=metrics(),s=site();
  if(area==='analyze'){
   const c=card(grid,tx('Medidas y superficies','Measurements and areas','尺寸与面积'),areaText(m));detail(c,app.project.scale.confidence==='real'?tx('Escala confirmada en el modelo','Scale confirmed in the model','模型比例已确认'):tx('Escala sin calibración confirmada','Scale has no confirmed calibration','比例未经确认校准'));route(c,tx('Revisar superficies','Review areas','检查面积'),'areas',()=>FloorPlanSurfaceSheet.open());route(c,tx('Estancias y pavimentos','Rooms and flooring','房间与地面'),'floors',()=>showProperties('areas'));route(c,tx('Abrir herramientas de calibración','Open calibration tools','打开校准工具'),'calibration',()=>{finish();if(app.viewMode==='3d')setView('2d').then(()=>document.querySelector('#traceBtn').click());else document.querySelector('#traceBtn').click();});
   const o=card(grid,tx('Orientación y sol','Orientation and sun','朝向与日照'),s.northOffsetDeg===undefined?tx('Norte sin configurar','North not configured','未配置北向'):tx(`Norte ${s.northOffsetDeg}°`,`North ${s.northOffsetDeg}°`,`北向 ${s.northOffsetDeg}°`));detail(o,s.location?tx('Ubicación y zona horaria definidas','Location and timezone set','位置与时区已配置'):tx('Ubicación sin configurar','Location not configured','未配置位置'));route(o,tx('Configurar orientación','Configure orientation','配置朝向'),'orientation',()=>FloorPlanSolarUI.open());route(o,tx('Ver estudio solar','View sun study','查看日照研究'),'sun',()=>FloorPlanSolarUI.open());
+  if(window.FloorPlanPlanAnalysisUI){
+   route(c,tx('Comprobar el plano','Check the plan','检查平面图'),'plan-check',()=>FloorPlanPlanAnalysisUI.open('plan'));
+   route(o,tx('Sol directo por estancia','Direct sun by room','各房间直射阳光'),'room-sun',()=>FloorPlanPlanAnalysisUI.open('sun'));
+  }
   const e=card(grid,tx('Emplazamiento','Site context','场地环境'),s.parcel?tx('Parcela disponible','Parcel available','地块可用'):tx('Parcela sin configurar','Parcel not configured','未配置地块'));detail(e,s.buildingPlacement?tx('Edificio colocado','Building placed','建筑已定位'):tx('Edificio sin colocar','Building not placed','建筑未定位'));for(const[k,label]of [['orthophoto',tx('Ortofoto','Orthophoto','正射影像')],['terrain',tx('Terreno','Terrain','地形')]])detail(e,label+': '+(FloorPlanTerritorySession.get(k)?tx('cargada en esta sesión','loaded in this session','本次会话已加载'):s[k]?tx('fuente guardada; sin cargar en esta sesión','source saved; not loaded this session','已保存来源，本次会话未加载'):tx('sin configurar','not configured','未配置')));route(e,tx('Configurar emplazamiento','Configure site','配置场地'),'territory',()=>FloorPlanTerritoryUI.open());
   const exterior=FloorPlanExterior.derive(app.project),x=card(grid,tx('Exterior','Exterior','外部'),tx(`Fachadas: ${exterior.walls.filter(w=>w.status==='facade').length} muros detectados a partir del plano`,`Facades: ${exterior.walls.filter(w=>w.status==='facade').length} walls detected from the plan`,`${exterior.walls.filter(w=>w.status==='facade').length} 面推导立面墙`));const building=sources(),roof=building?FloorPlanRoof.deriveBuilding(building.building,FloorPlanExterior,FloorPlanBuilding):FloorPlanRoof.deriveProject(app.project,FloorPlanExterior);detail(x,roof.status==='available'?tx('Cubierta: disponible','Roof: available','屋顶：可用'):tx('Cubierta: no disponible con la geometría actual','Roof: unavailable with current geometry','屋顶：当前几何无法证明'));detail(x,tx('Revisa las fachadas, la cubierta y los elementos exteriores definidos en el proyecto. La vista sólo muestra lo que permite el plano.','Facades, roof, parapets and declared volumes depend on demonstrable geometry.','立面、屋顶、女儿墙与声明体量取决于可证明的几何。'));route(x,tx('Revisar exterior 3D','Review 3D exterior','检查三维外部'),'exterior',()=>view3d(true));route(x,tx('Revisar petos y propiedades','Review parapets and properties','检查女儿墙与属性'),'parapets',()=>showProperties('roof-parapet'));
  }else if(area==='budget')budget(grid);
@@ -223,11 +454,11 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
    if(t.state==='ready')for(const [i,pr] of t.pairs.entries()){const b=route(cmp,(t.pairs.length===1?tx('Comparar','Compare','比较'):tx(`Comparar «${localName(pr.name)}»`,`Compare «${localName(pr.name)}»`,`比较「${localName(pr.name)}」`)),'compare-'+i,()=>app.persistence.openComparison(pr.href));b?.setAttribute?.('data-compare-variant',pr.id);}
    else if(t.state==='no-variant'||t.state==='no-library')route(cmp,tx('Abrir proyectos','Open projects','打开项目'),'compare-projects',()=>document.getElementById('projectsBtn')?.click());}
   const review=card(grid,tx('Observaciones del cliente','Client observations','客户意见'),reviewState());route(review,tx('Gestionar observaciones','Manage observations','管理意见'),'review',()=>FloorPlanReviewUI.open());identity(grid);
-  const more=el('section',undefined,section,'professional-more');el('h2',tx('Más opciones · Guardar y exportar','More options · Save and export','更多选项 · 保存与导出'),more);const exports=card(more,tx('Proyecto editable','Editable project','可编辑项目'),tx('Conserva una copia para seguir trabajando','Keep a copy to continue working','保留副本以继续工作'));route(exports,tx('Exportar proyecto JSON / ZIP','Export JSON / ZIP project','导出 JSON / ZIP 项目'),'export-project',()=>{finish();document.querySelector('#exportJson').click();});
+  const more=el('section',undefined,section,'professional-more');el('h2',tx('Más opciones · Guardar y exportar','More options · Save and export','更多选项 · 保存与导出'),more);const exports=card(more,tx('Proyecto editable','Editable project','可编辑项目'),tx('Conserva una copia para seguir trabajando','Keep a copy to continue working','保留副本以继续工作'));route(exports,tx('Exportar proyecto JSON / ZIP','Export JSON / ZIP project','导出 JSON / ZIP 项目'),'export-project',()=>{finish();document.querySelector('#exportJson').click();});route(exports,tx('Exportar planta activa en DXF','Export active floor as DXF','导出当前楼层 DXF'),'export-dxf',()=>{finish();document.querySelector('#exportDxf').click();});
  }else if(area==='studio'){identity(grid,true);const c=card(grid,tx('Perfiles profesionales','Professional profiles','专业配置'),tx('Perfiles reutilizables en este navegador','Reusable profiles in this browser','本浏览器中的可复用配置'));detail(c,tx('Nombre comercial, responsable, logo, email, teléfono, web y lema: se editan en el gestor de marca existente. No es una cuenta en la nube.','Business name, professional, logo, email, phone, website and tagline use the existing brand manager. This is not a cloud account.','商业名称、负责人、标志、邮箱、电话、网站和标语使用现有品牌管理器。这不是云账户。'));route(c,tx('Gestionar identidades','Manage identities','管理身份'),'studio',()=>FloorPlanBrandUI.open(),true);detail(c,tx('La selección «Firmar con» es por proyecto. Los perfiles permanecen disponibles para otros proyectos. Las entregas ya descargadas no cambian.','The signature choice is per project; profiles can be reused elsewhere. Downloaded deliveries do not change.','签名选择按项目保存，配置可跨项目复用，已下载交付不会改变。'));const pref=card(grid,tx('Preferencias profesionales','Professional preferences','专业偏好'),tx('Sólo configuración ya disponible','Existing settings only','仅现有设置'));detail(pref,tx('La escala de lámina y las opciones de presentación se ajustan en sus herramientas. Tarifa propia: aún sin editor en esta interfaz; no se guardan precios de proyecto aquí.','Set sheet scale and presentation options in their tools. Own rates have no editor in this interface; no project prices are stored here.','图纸比例与展示选项在各自工具中设置。此界面无自有费率编辑器，不在此保存项目价格。'));}
- visualLayout(grid,m);
+ visualLayout(grid,m);arrange();
  // FT3D-8 M2 (S4): Plan de obra, precios de referencia, evolución de obra y origen de la parcela, in the real areas.
- window.FloorPlanConstructionUI?.cards?.(area,grid,{card,detail,route})?.catch?.(e=>console.error(e));if(focus)title.focus();else if(activeRoute)section.querySelector('[data-route="'+activeRoute+'"]')?.focus();position();}
+ const late=window.FloorPlanConstructionUI?.cards?.(area,grid,{card,detail,route});late?.catch?.(e=>console.error(e));late?.then?.(()=>requestAnimationFrame(arrange));if(focus||headingFocused)title.focus();else if(activeRoute)section.querySelector('[data-route="'+activeRoute+'"]')?.focus();position();}
  function renderImages(focus=true){imagesScreen=true;section.replaceChildren();const h=el('div',undefined,section,'professional-head');button(tx('← Volver a Entregar','← Return to Deliver','← 返回交付'),h,()=>render());const title=el('h1',tx('Generar imágenes','Generate images','生成图片'),h);title.tabIndex=-1;const grid=el('div',undefined,section,'professional-grid');
   // A2: the prepared project views, each downloadable as a delivery image with the project data and the signature.
   const V=window.FloorPlanProjectViews;if(V){const items=V.current(),views=card(grid,tx('Vistas del proyecto','Project views','项目视图'),items.length?tx(`${items.length} vistas reales preparadas`,`${items.length} real views prepared`,`已准备 ${items.length} 个真实视图`):tx('Sin vistas preparadas','No views prepared','尚未准备视图'));views.classList.add('project-views-card');
@@ -237,7 +468,7 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
    detail(views,V.source==='presentation'?tx('Estancias: las que elegiste para la presentación.','Rooms: the ones you chose for the presentation.','房间：您为展示选择的房间。'):tx('Estancias: las principales del cómputo. Puedes elegirlas en «Preparar presentación».','Rooms: the main ones in the total. You can choose them in «Prepare presentation».','房间：计入面积的主要房间，可在“准备展示”中选择。'));
    viewsAction(views);}
   const c=card(grid,tx('Plano 2D','2D plan','二维平面'),tx('PNG del plano existente','PNG of the existing plan','现有平面图 PNG'));route(c,tx('Generar PNG 2D','Generate 2D PNG','生成二维 PNG'),'image-2d',async()=>{finish();if(app.viewMode!=='2d')await setView('2d');document.querySelector('#exportPng').click();},true);const d=card(grid,tx('Vista 3D y exterior','3D view and exterior','三维视图与外部'),tx('La captura conserva la política de licencia y atribución existente.','Capture keeps the existing license and attribution policy.','截图保留现有许可与署名政策。'));route(d,tx('Preparar vista 3D','Prepare 3D view','准备三维视图'),'image-3d',()=>view3d());route(d,tx('Preparar exterior','Prepare exterior','准备外部'),'image-exterior',()=>view3d(true));detail(d,tx('En la vista 3D, usa Archivo → Captura 3D para elegir tamaño y descargar.','In 3D, use File → 3D capture to choose size and download.','在三维视图中使用文件 → 三维截图选择尺寸并下载。'));if(focus)title.focus();else section.querySelector('[data-route="prepare-views"]')?.focus();}
- function open(key){if(key==='design'){close();return;}if(!titles()[key])return;if(section.hidden||nav.contains(document.activeElement))returnTo=document.activeElement;area=key;section.hidden=false;document.body.classList.add('professional-area');setInert(true);section.scrollTop=0;for(const[k,b]of Object.entries(buttons))b.setAttribute('aria-current',k===key?'page':'false');render();}
+ function open(key){if(key==='design'){close();return;}if(!titles()[key])return;if(section.hidden||nav.contains(document.activeElement)||document.activeElement?.id?.startsWith('workArea-'))returnTo=document.activeElement;if(area==='deliver'&&key!==area)section.dispatchEvent(new Event('rubik:leave-deliver',{bubbles:true}));area=key;section.hidden=false;document.body.classList.add('professional-area');setInert(true);section.scrollTop=0;for(const[k,b]of Object.entries(buttons))b.setAttribute('aria-current',k===key?'page':'false');render();}
  section.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')&&!document.body.classList.contains('evolution-open')){e.preventDefault();close();}});
  let suspendedForPresentation=false;
  new MutationObserver(()=>{const presenting=document.body.classList.contains('presenting');if(presenting&&!section.hidden&&!suspendedForPresentation){suspendedForPresentation=true;setInert(false);section.inert=true;}else if(!presenting&&suspendedForPresentation){suspendedForPresentation=false;section.inert=false;if(!section.hidden){setInert(true);render();}}}).observe(document.body,{attributes:true,attributeFilter:['class']});
@@ -253,5 +484,5 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
   const home=button(tx('Ir a ','Go to ','前往 ')+titles()[key],null,()=>{dialog.close();open(key);});home.classList.add('professional-origin');home.dataset.professionalHome=key;
   const mount=()=>{if(!dialog.contains(home))dialog.querySelector('h2')?.after(home);};mount();new MutationObserver(mount).observe(dialog,{childList:true,subtree:true});
  }
- buttons.design.setAttribute('aria-current','page');window.FloorPlanProfessionalUI={open,close,get area(){return area;}};
+ buttons.design.setAttribute('aria-current','page');window.FloorPlanProfessionalUI={open,close,refreshAnalyze(){if(area==='analyze')render(false);},get area(){return area;}};
 })();

@@ -111,7 +111,7 @@
    'production','area:studio',['js/brand-ui.js','js/brand-core.js'],['tests/brand.browser.test.cjs','tests/brand-core.test.cjs'],
    ['developer']),
   C('client-file',['Entrega al cliente','Client delivery','客户交付'],
-   ['Archivo de cliente para abrir sin instalar nada, con vídeo del recorrido y comentarios.','A client file that opens without installing anything, with the tour video and comments.','客户无需安装即可打开的文件，附漫游视频和评论。'],
+   ['Archivo HTML para el cliente: se abre sin instalar nada y sin conexión, con vistas, lámina y observaciones. El vídeo y la visita 3D van en el enlace publicado, con tu consentimiento.','An HTML file for the client: it opens without installing anything or a connection, with views, sheet and comments. The video and 3D visit go in the published link, with your consent.','客户 HTML 文件：无需安装、无需联网即可打开，含视图、图纸和意见。视频和三维参观通过经你同意发布的链接提供。'],
    'production','area:deliver',['js/client-share-ui.js','js/tour-video-ui.js'],['tests/client-share.browser.test.cjs','tests/tour-video.browser.test.cjs'],
    ['real-estate'],['El enlace público en línea está en revisión de seguridad; el archivo local no depende de él.','The online public link is under security review; the local file does not depend on it.','在线公开链接正在进行安全审查；本地文件不依赖它。']),
   // HOM-02 · Constructora / jefe de obra: FT3D-8 capabilities in master. The 4D evolution is derived from the plan and

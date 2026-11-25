@@ -21,11 +21,17 @@ async function editor(env,opts={}){
   return {context,page,watch:w};
 }
 // Selecciona una estancia tocando un punto de su polígono que no tape ningún mueble ni muro.
+// UX-312 PERLA: con el lienzo PERLA el plano cae en otra posición y el punto más centrado rozaba la cama; ahora se exige margen.
 async function selectRoom(page,roomId,{touch=false}={}){
   const pt=await page.evaluate(id=>{const poly=document.querySelector(`#gRooms polygon[data-room="${id}"]`),r=poly.getBoundingClientRect();
     // El punto libre MÁS CENTRADO: con el dedo, un punto en una esquina selecciona la puerta o el muro de al lado.
     const cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null;
-    for(let i=1;i<20;i++)for(let j=1;j<20;j++){const x=r.left+r.width*i/20,y=r.top+r.height*j/20,e=document.elementFromPoint(x,y);if(e===poly){const d=Math.hypot(x-cx,y-cy);if(!best||d<best.d)best={x,y,d};}}return best;},roomId);
+    // Con el dedo, Chromium ajusta el toque al elemento pulsable más cercano: se elige el punto con más margen libre a su
+    // alrededor (anillo que sigue en la estancia) y, entre los de igual margen, el más centrado.
+    const free=(x,y)=>document.elementFromPoint(x,y)===poly;
+    const margin=(x,y)=>{let m=0;for(let rad=2;rad<=30;rad+=2){if([0,1,2,3,4,5,6,7].every(k=>free(x+rad*Math.cos(k*Math.PI/4),y+rad*Math.sin(k*Math.PI/4))))m=rad;else break;}return m;};
+    for(let i=1;i<30;i++)for(let j=1;j<30;j++){const x=r.left+r.width*i/30,y=r.top+r.height*j/30;if(!free(x,y))continue;const d=Math.hypot(x-cx,y-cy),m=margin(x,y);
+      if(!best||m>best.m||(m===best.m&&d<best.d))best={x,y,d,m};}return best;},roomId);
   if(!pt)throw Error('estancia no alcanzable '+roomId);
   if(touch)await page.touchscreen.tap(pt.x,pt.y);else await page.mouse.click(pt.x,pt.y);
   await page.waitForSelector(`section.r02a-ceiling[data-room-id="${roomId}"]`,{state:'attached'});

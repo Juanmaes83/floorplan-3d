@@ -42,7 +42,8 @@ test(`contextual door and window editing ${viewport.width}x${viewport.height}`,{
  const mobile=viewport.width<1000,narrow=viewport.width<=1100,name=`${viewport.width}x${viewport.height}`;
  const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await open(context);
- const press=async sel=>{const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(120);};
+ // UX-312 PERLA: en teléfono las herramientas avanzadas (Plano propio…) van en el menú «⋯» (tests/helpers-perla-editor.cjs).
+ const press=async sel=>{const l=await require('./helpers-perla-editor.cjs').mostrar(page,sel);await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(120);};
  const tapPlan=async q=>{const s=await screen(page,q);mobile?await page.touchscreen.tap(s.x,s.y):await page.mouse.click(s.x,s.y);await page.waitForTimeout(150);};
  const panelOpen=async()=>{if(narrow&&!(await page.evaluate(()=>document.querySelector('aside.right').classList.contains('open'))))await press('#fab [data-a=prop]');await page.waitForTimeout(250);};
  const panelShown=()=>page.evaluate(()=>{const a=document.querySelector('aside.right'),r=a.getBoundingClientRect();return !document.querySelector('.app').classList.contains('hide-panel')&&r.width>40&&r.left<innerWidth-4&&(!matchMedia('(max-width:1100px)').matches||a.classList.contains('open'));});
@@ -194,7 +195,8 @@ test(`two-level building: editing a door changes only the active level ${viewpor
  const mobile=viewport.width<1000,narrow=viewport.width<=1100,name=`${viewport.width}x${viewport.height}`;
  const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
  const {page,errors}=await open(context);
- const press=async sel=>{const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(120);};
+ // UX-312 PERLA: en teléfono las herramientas avanzadas (Plano propio…) van en el menú «⋯» (tests/helpers-perla-editor.cjs).
+ const press=async sel=>{const l=await require('./helpers-perla-editor.cjs').mostrar(page,sel);await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(120);};
  await page.locator('#uploadIn').setInputFiles(path.join(tmp,'duplex.zip'));await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2,null,{timeout:60000});
  if((await page.evaluate(()=>FloorPlanBuildingUI.context.order))!==0){await press('#levelBar [data-level]');await page.waitForFunction(()=>FloorPlanBuildingUI.context.order===0);}
  await page.evaluate(()=>{if(matchMedia('(max-width:1100px)').matches)for(const a of document.querySelectorAll('aside.right,aside.lib'))a.classList.remove('open');document.querySelector('#fit').click();});await page.waitForTimeout(300);

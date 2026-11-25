@@ -208,7 +208,7 @@
   return {text,tone:plan.result==='match'?'ok':plan.result==='absent'?'':'warn',result:plan.result,corr};
  }
  /* Recorrido de obra (novice guide): the five steps of the construction flow in order, each with its real state and ONE
-    primary action on the next step. It only reads the same documents as the cards below and opens the same dialogs. */
+    primary action on the next step. In Budget, steps shared with a card point to that card’s action. */
  async function journey(grid,snap,area){
   grid.querySelector('#obraJourney')?.remove();
   // The stored plan may use the compact 0.1.0 fields (elementIds/budgetItemIds): read it in its full form, as the editor does.
@@ -223,12 +223,17 @@
   const refresh=()=>{const a=window.FloorPlanProfessionalUI?.area;if(a)window.FloorPlanProfessionalUI.open(a);setTimeout(()=>document.querySelector('#obraJourney [aria-current=step] button')?.focus(),400);};
   const viaDialog=(fn,sel)=>async()=>{await fn();const d=document.querySelector(sel);if(d?.open)d.addEventListener('close',refresh,{once:true});};
   const openBudget=viaDialog(()=>document.querySelector('#professionalWorkspace [data-route="budget-edit"]')?.click(),'#budgetDialog');
+  const goToCard=route=>()=>{const action=grid.querySelector(`[data-route="${route}"]`);if(!action)return;
+   action.scrollIntoView({block:'center',inline:'nearest'});action.focus({preventScroll:true});};
+  const budgetAction=area==='budget'?['Ir a la ficha de presupuesto',goToCard('budget-edit')]:['Abrir presupuesto',openBudget];
+  const planAction=area==='budget'?['Ir a la ficha del plan de obra',goToCard('construction-plan')]:
+   [sch?'Abrir plan de obra':'Crear plan de obra',viaDialog(()=>window.FloorPlanConstructionPlanUI.open(),'#planDialog')];
   const steps=[
    {k:'precios',t:'Pon precio a las partidas',done:isBuilding||total>0&&priced===total,
     s:isBuilding?'En un edificio, cada planta tiene su presupuesto: ábrelo desde la planta.':total?`${priced} de ${total} partidas con precio${priced<total?' · las que no tienen precio no suman':''}`:'Todavía no hay partidas: dibuja estancias y huecos en Diseñar.',
-    a:isBuilding||!total?null:['Abrir presupuesto',openBudget]},
+    a:isBuilding||!total?null:budgetAction},
    {k:'plan',t:'Crea el plan de obra',done:!!sch&&tasks.length>0,s:sch?`${tasks.length} ${tasks.length===1?'tarea':'tareas'} guardadas${sch.review?.status==='reviewed'?' · revisado':' · en borrador: cuando lo compruebes, márcalo como revisado en el plan'}`:'Añade las tareas con sus fechas y dependencias.',
-    a:[sch?'Abrir plan de obra':'Crear plan de obra',viaDialog(()=>window.FloorPlanConstructionPlanUI.open(),'#planDialog')]},
+    a:planAction},
    {k:'vinculos',t:'Vincula cada tarea con lo que construye',done:works.length>0&&withEl===works.length&&(isBuilding||withIt>0),
     s:tasks.length?`${withEl} de ${works.length} ${works.length===1?'trabajo':'trabajos'} con elementos del proyecto${isBuilding?'':` · ${withIt} con partidas del presupuesto`}`:'Primero crea el plan de obra.',
     a:tasks.length?['Revisar vínculos',viaDialog(()=>window.FloorPlanConstructionPlanUI.open({tab:'tasks'}),'#planDialog')]:null},
@@ -244,7 +249,7 @@
   steps.forEach((x,i)=>{const li=el('li',undefined,ol,'cx-jstep');li.dataset.step=x.k;li.dataset.state=x.done?'done':x===next?'next':'todo';if(x===next)li.setAttribute('aria-current','step');
    el('span',x.done?'✓':String(i+1),li,'cx-jnum').setAttribute('aria-hidden','true');const body=el('div',undefined,li);
    el('b',x.t+(x.done?' · hecho':x===next?' · siguiente paso':''),body);el('span',x.s,body,'cx-jtext');
-   if(x.a){const bt=el('button',x.a[0],body,x===next?'btn primary':'btn');bt.type='button';bt.dataset.journey=x.k;bt.onclick=x.a[1];}});
+   if(x.a){const bt=el('button',x.a[0],body,x===next&&!(area==='budget'&&(x.k==='precios'||x.k==='plan'))?'btn primary':'btn');bt.type='button';bt.dataset.journey=x.k;bt.onclick=x.a[1];}});
   (area==='deliver'?grid:grid).prepend(sec);
  }
  async function cards(area,grid,{card,detail,route}){

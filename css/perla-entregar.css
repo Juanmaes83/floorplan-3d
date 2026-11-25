@@ -1,0 +1,279 @@
+/* ── Codex · PERLA V3 Entregar (codex/perla-entregar-exacta @ d7b3bb0e) ── */
+/* Composición Entregar · laboratorio c96888ac, con selectores acotados al área. */
+
+#professionalWorkspace[data-area=deliver] .ent-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:end;margin-bottom:16px}
+#professionalWorkspace[data-area=deliver] .firma-chip{display:flex;gap:8px;align-items:center;font-size:13px;flex-wrap:wrap}
+#professionalWorkspace[data-area=deliver] .hero-ent{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);background:var(--surface-panel);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:28px}
+#professionalWorkspace[data-area=deliver] .hero-ent figure{margin:0;position:relative;background:var(--surface-sunken);min-height:260px}
+#professionalWorkspace[data-area=deliver] .hero-ent figure img{width:100%;height:100%;object-fit:cover}
+#professionalWorkspace[data-area=deliver] .hero-ent .txt{padding:22px 24px;display:grid;gap:14px;align-content:start}
+#professionalWorkspace[data-area=deliver] .listo{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14px}
+#professionalWorkspace[data-area=deliver] .listo li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start}
+#professionalWorkspace[data-area=deliver] .listo b{font-weight:600}
+#professionalWorkspace[data-area=deliver] .big{font-size:34px;font-weight:650;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+#professionalWorkspace[data-area=deliver] .acciones{display:flex;flex-wrap:wrap;gap:8px}
+#professionalWorkspace[data-area=deliver] .mesa{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+#professionalWorkspace[data-area=deliver] .filtros{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 16px}
+#professionalWorkspace[data-area=deliver] .filtros button{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface-panel);cursor:pointer;font-weight:550}
+#professionalWorkspace[data-area=deliver] .filtros button[aria-pressed=true]{background:var(--select);color:var(--select-ink);border-color:var(--select)}
+#professionalWorkspace[data-area=deliver] .grupo{margin:0 0 26px}
+#professionalWorkspace[data-area=deliver] .grupo-h{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .grupo-h p{margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
+#professionalWorkspace[data-area=deliver] .perla-tile{all:unset;box-sizing:border-box;display:grid;grid-template-rows:auto 1fr;background:var(--surface-panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+#professionalWorkspace[data-area=deliver] .perla-tile:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+#professionalWorkspace[data-area=deliver] .perla-tile[aria-pressed=true]{border-color:var(--action);box-shadow:0 0 0 2px var(--action)}
+#professionalWorkspace[data-area=deliver] .perla-tile:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#professionalWorkspace[data-area=deliver] .thumb{position:relative;aspect-ratio:16/10;background:var(--surface-sunken);overflow:hidden}
+#professionalWorkspace[data-area=deliver] .thumb img{width:100%;height:100%;object-fit:cover}
+#professionalWorkspace[data-area=deliver] .thumb.doc{background:#ffffff}#professionalWorkspace[data-area=deliver] .thumb.doc img{object-fit:contain;padding:6px}
+#professionalWorkspace[data-area=deliver] .code{position:absolute;left:8px;top:8px;background:var(--surface-panel);border:1px solid var(--line-strong);border-radius:4px;font-size:11.5px;font-weight:700;padding:1px 6px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+#professionalWorkspace[data-area=deliver] .perla-tile .body{padding:12px 14px 14px;display:grid;gap:6px;align-content:start}
+#professionalWorkspace[data-area=deliver] .perla-tile h3{font-size:15.5px;font-weight:650}
+#professionalWorkspace[data-area=deliver] .perla-tile p{margin:0;font-size:13.5px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .perla-tile .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+#professionalWorkspace[data-area=deliver] .perla-tile .cta{font-size:13px;font-weight:650;color:var(--action)}
+#professionalWorkspace[data-area=deliver] .grupo.interno .perla-tile{background:var(--surface-sunken)}
+/* Representaciones explicativas (sin resultado real todavía) */
+#professionalWorkspace[data-area=deliver] .ilus{position:absolute;inset:0;display:grid;place-items:center;padding:14px;background:var(--surface-sunken)}
+#professionalWorkspace[data-area=deliver] .ilus-eco{width:86%;display:grid;gap:6px}
+#professionalWorkspace[data-area=deliver] .ilus-eco i{display:block;height:10px;border-radius:3px;background:var(--line)}
+#professionalWorkspace[data-area=deliver] .ilus-eco i:nth-child(1){width:55%;background:var(--line-strong)}#professionalWorkspace[data-area=deliver] .ilus-eco i:nth-child(3){width:80%}#professionalWorkspace[data-area=deliver] .ilus-eco i:nth-child(5){width:65%}
+#professionalWorkspace[data-area=deliver] .ilus-ab{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:92%}
+#professionalWorkspace[data-area=deliver] .ilus-ab figure{margin:0;position:relative;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--surface-panel);border:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .ilus-ab figure img{width:100%;height:100%;object-fit:cover}
+#professionalWorkspace[data-area=deliver] .ilus-ab .vacio{border:2px dashed var(--line-strong);display:grid;place-items:center;font-size:12px;color:var(--ink-muted);text-align:center;padding:6px}
+#professionalWorkspace[data-area=deliver] .ilus-ab figcaption{position:absolute;left:4px;top:4px;background:rgba(255,255,255,.92);font-size:10.5px;font-weight:700;padding:0 5px;border-radius:3px}
+#professionalWorkspace[data-area=deliver] .mosaico{position:absolute;inset:0;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:2px}
+#professionalWorkspace[data-area=deliver] .mosaico img{width:100%;height:100%;object-fit:cover}#professionalWorkspace[data-area=deliver] .mosaico img:first-child{grid-row:1/3}
+/* Panel de vista previa (foco por intención) */
+#professionalWorkspace[data-area=deliver] .panel{position:sticky;top:76px;background:var(--surface-panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;max-height:calc(100dvh - 96px);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+#professionalWorkspace[data-area=deliver] .panel-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .panel-h h2{font-size:17px;flex:1;min-width:0}
+#professionalWorkspace[data-area=deliver] .panel-x{min-width:44px;min-height:44px;border-radius:8px;border:1px solid var(--line);background:var(--surface-panel);cursor:pointer}
+#professionalWorkspace[data-area=deliver] .panel-b{overflow:auto;padding:14px;display:grid;gap:14px;align-content:start}
+#professionalWorkspace[data-area=deliver] .panel-b .prev{position:relative;border-radius:8px;overflow:hidden;background:var(--surface-sunken);border:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .panel-b .prev img{width:100%}
+#professionalWorkspace[data-area=deliver] .panel-b dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0;font-size:13.5px}
+#professionalWorkspace[data-area=deliver] .panel-b dt{color:var(--ink-muted)}#professionalWorkspace[data-area=deliver] .panel-b dd{margin:0}
+#professionalWorkspace[data-area=deliver] .panel-f{padding:12px 14px;border-top:1px solid var(--line);display:grid;gap:8px}
+#professionalWorkspace[data-area=deliver] .panel-f .btn{width:100%}
+#professionalWorkspace[data-area=deliver] .vacio-panel{padding:28px 20px;text-align:center;color:var(--ink-muted)}
+
+#professionalWorkspace[data-area=deliver]{--select:#2b3034;--select-ink:#fff;--focus:#1f6f8b;--shadow:0 1px 2px #1f23260f,0 8px 24px #1f232614;--radius:10px;background:#eceeee;padding-inline:max(16px,calc((100vw - 1328px)/2))}
+#professionalWorkspace[data-area=deliver] .ent-head h1{margin:4px 0 0;font:700 clamp(24px,3vw,34px)/1.15 system-ui,sans-serif}
+#professionalWorkspace[data-area=deliver] .hero-ent figure{aspect-ratio:1.49;width:100%;min-width:0;align-self:start;overflow:hidden}
+#professionalWorkspace[data-area=deliver] .hero-ent figure>img{display:block;position:absolute;inset:0}
+#professionalWorkspace[data-area=deliver] .hero-ent .txt{min-width:0}
+#professionalWorkspace[data-area=deliver] .hero-ent .project-context-area{font:650 34px/1 system-ui,sans-serif}
+#professionalWorkspace[data-area=deliver] .hero-ent .professional-wine-action{background:#713747;color:#fff;border-color:#713747}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index{display:block;min-width:0;margin:0}
+#professionalWorkspace[data-area=deliver] .mesa .panel{grid-column:auto;grid-row:auto;top:12px}
+#professionalWorkspace[data-area=deliver] .perla-tile.professional-card{padding:0;min-width:0;cursor:default;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-tile .body{min-width:0;overflow-wrap:anywhere}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>.btn{justify-self:start;max-width:100%;white-space:normal}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>.professional-symbol{display:none}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>.delivery-preview,#professionalWorkspace[data-area=deliver] .perla-tile .body>figure{display:none}
+#professionalWorkspace[data-area=deliver] .thumb img{display:block;box-sizing:border-box;min-width:0;min-height:0}
+#professionalWorkspace[data-area=deliver] .thumb .mosaico{grid-template-rows:repeat(2,minmax(0,1fr));grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+#professionalWorkspace[data-area=deliver] .panel[hidden]{display:none}
+@media(max-width:1100px){
+ #professionalWorkspace[data-area=deliver] .mesa{grid-template-columns:minmax(0,1fr)}
+ #professionalWorkspace[data-area=deliver] .mesa .panel{position:static;order:-1;max-height:none}
+}
+@media(max-width:760px){
+ #professionalWorkspace[data-area=deliver] .hero-ent,#professionalWorkspace[data-area=deliver] .ent-head{grid-template-columns:minmax(0,1fr)}
+ #professionalWorkspace[data-area=deliver] .cards{grid-template-columns:repeat(auto-fill,minmax(min(160px,100%),1fr));gap:10px}
+}
+
+#professionalWorkspace[data-area=deliver] .professional-grid:has(>.mesa){display:block}
+#professionalWorkspace[data-area=deliver] .mesa .professional-delivery-detail{padding:0}
+#professionalWorkspace[data-area=deliver] .perla-tile .thumb{width:100%;min-width:0}
+#professionalWorkspace[data-area=deliver] .perla-tile .body .professional-state{justify-self:start;background:#e7eef6;color:#24527a;border-radius:99px;padding:2px 8px;font-size:12px}
+#professionalWorkspace[data-area=deliver] .perla-tile .body>button[data-route]{min-height:44px}
+@media(min-width:1200px){
+ #professionalWorkspace[data-area=deliver] .mesa .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* ── Claude · fichas compactas, catálogo y Home (UX-312 PERLA) ── */
+/* UX-312 · PERLA · Entregar: fichas compactas y catálogo (js/perla-entregar-ui.js). */
+:root{--perla-wine:#783B4B;--perla-petrol:#1F5A66;--perla-petrol-soft:#E3ECEE;--perla-side:#FAF7F8;--perla-line:#E4DDE0}
+/* Ficha compacta: la descripción vive en una capa superpuesta; la cuadrícula no cambia de alto */
+.perla-compact{position:relative}
+.perla-compact>.perla-detail{position:absolute;z-index:30;left:-1px;right:-1px;top:calc(100% - 6px);padding:12px 14px;background:#fff;border:1px solid var(--perla-line);border-radius:0 0 10px 10px;box-shadow:0 14px 28px rgba(40,20,28,.16);font-size:13.5px;line-height:1.45;color:#1f2326}
+.perla-compact>.perla-detail[hidden]{display:none}
+.perla-compact>.perla-detail p{margin:0 0 8px}
+.perla-detail-meta{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:4px 0 0;font-size:13px}
+.perla-detail-meta dt{font-weight:600;color:#5b6266}
+.perla-detail-meta dd{margin:0}
+@media (hover:hover) and (pointer:fine){
+  .perla-compact:hover>.perla-detail:not(:empty){display:block}
+  .perla-compact:hover>.perla-detail[hidden]{display:block!important;pointer-events:none}
+  /* La capa que aparece al pasar el cursor es de lectura: no tapa los clics de las fichas de debajo */
+  .perla-compact:hover{z-index:31}
+}
+.perla-compact.perla-open{z-index:32}
+.perla-more-btn{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:2px 10px;margin:2px 0 6px;font-size:12.5px;font-weight:600;color:var(--perla-petrol);background:transparent;border:1px solid transparent;border-radius:999px;align-self:flex-start;width:max-content}
+.perla-more-btn::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);margin-left:4px}
+.perla-more-btn[aria-expanded="true"]::after{transform:rotate(-135deg) translate(-2px,0)}
+.perla-more-btn:hover{background:var(--perla-petrol-soft)}
+.perla-more-btn:focus-visible{outline:3px solid var(--perla-wine);outline-offset:2px}
+/* Acceso al catálogo: visible bajo el recuento del índice, segundo nivel (verde petróleo) */
+.perla-cat-toggle{display:inline-flex;align-items:center;gap:8px;min-height:42px;margin:4px 0 14px;padding:0 16px;font-size:14px;font-weight:600;color:var(--perla-petrol);background:#fff;border:1.5px solid var(--perla-petrol);border-radius:10px}
+.perla-cat-toggle::before{content:"";width:16px;height:12px;background:linear-gradient(currentColor 0 0) 0 0/100% 2px no-repeat,linear-gradient(currentColor 0 0) 0 5px/100% 2px no-repeat,linear-gradient(currentColor 0 0) 0 10px/100% 2px no-repeat}
+.perla-cat-toggle[aria-expanded="true"]{background:var(--perla-petrol-soft)}
+.perla-cat-toggle:focus-visible{outline:3px solid var(--perla-wine);outline-offset:2px}
+.perla-catalog{margin:0 0 22px;padding:16px;background:var(--perla-side);border:1px solid var(--perla-line);border-radius:12px}
+.perla-catalog>h3{margin:0 0 2px;font-size:18px}
+.perla-cat-count{margin:0 0 12px;color:#5b6266;font-size:13px}
+.perla-cat-group{margin:14px 0 0}
+.perla-cat-group>h4{margin:0 0 8px;font-size:14px;color:#1f2326}
+.perla-cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.perla-cat-item{display:flex;flex-direction:column;gap:4px;padding:12px;background:#fff;border:1px solid var(--perla-line);border-radius:10px;min-height:150px}
+.perla-cat-item[data-kind="acceso"]{background:#fdfcfc;border-style:dashed}
+.perla-cat-item>h5{margin:0;font-size:14.5px;line-height:1.25}
+.perla-cat-item>.professional-state{margin:0;font-size:12.5px;color:#5b6266}
+.perla-cat-format{display:inline-block;width:max-content;max-width:100%;padding:1px 8px;font-size:11.5px;font-weight:600;color:#3d4347;background:#EEF0F0;border-radius:999px}
+.perla-cat-action{margin-top:auto;min-height:40px;font-weight:600}
+.perla-cat-req{margin:2px 0 0;font-size:12px;color:#7a5200}
+.perla-cat-item.perla-compact>.perla-detail{border-radius:0 0 10px 10px}
+@media (max-width:760px){
+  .perla-cat-grid{grid-template-columns:1fr}
+  .perla-cat-item{min-height:0}
+  .perla-compact>.perla-detail{position:static;margin-top:6px;border-radius:10px;box-shadow:none}
+}
+/* Home · muestras de «Descubre RUBIK en acción» (js/home-en-accion.js) */
+.home-muestra{width:min(1100px,calc(100vw - 32px));max-height:calc(100vh - 32px);padding:0;border:0;border-radius:14px;background:#FAF7F8;color:#1f2326;box-shadow:0 30px 70px rgba(40,20,28,.35)}
+.home-muestra::backdrop{background:rgba(30,20,24,.55)}
+.home-muestra-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid #E4DDE0;position:sticky;top:0;background:#FAF7F8}
+.home-muestra-head h2{margin:0;font-size:18px}
+.home-muestra-body{padding:16px 18px 4px}
+.home-muestra-media{display:block;width:100%;height:auto;border-radius:10px;background:#111}
+.home-muestra-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+.home-muestra-grid figure{margin:0}.home-muestra-grid figure:last-child{grid-column:1/-1}
+.home-muestra-grid figcaption{margin-top:4px;font-size:12.5px;color:#5b6266}
+.home-muestra-note{margin:10px 18px 18px;font-size:13.5px;line-height:1.5;color:#3d4347}
+@media (max-width:760px){.home-muestra-grid{grid-template-columns:1fr}}
+/* Home · retrato del oficio junto al resumen (guide-ui showPurpose) */
+.welcome-audience-purpose:not([hidden]){display:grid;grid-template-columns:180px minmax(0,1fr);gap:16px;align-items:center;max-width:720px}
+.welcome-audience-portrait{margin:0;position:relative}
+.welcome-audience-portrait-img{display:block;width:180px;height:180px;object-fit:cover;border-radius:14px;box-shadow:0 10px 24px rgba(40,20,28,.16)}
+.welcome-audience-portrait figcaption{position:absolute;left:8px;bottom:8px;padding:1px 8px;font-size:11px;font-weight:600;color:#3d4347;background:rgba(255,255,255,.88);border-radius:999px}
+@media (max-width:560px){.welcome-audience-purpose:not([hidden]){grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:start}.welcome-audience-portrait-img{width:96px;height:96px}}
+/* Home · módulos compactos: misma capa de detalle; la rejilla no cambia de alto */
+.welcome-modules-grid>li.perla-compact{position:relative}
+.welcome-modules-grid>li.perla-compact>.perla-detail{font-size:12.5px}
+/* Móvil: el detalle también se superpone (la lista de tarjetas no se desplaza al abrirlo) */
+@media (max-width:760px){.perla-compact>.perla-detail{position:absolute;margin-top:0;border-radius:0 0 10px 10px;box-shadow:0 14px 28px rgba(40,20,28,.18)}}
+
+/* Home · retrato grande (ilustración 2K, 4:5) y muestra de estilos */
+.welcome-audience-purpose:not([hidden]){grid-template-columns:200px minmax(0,1fr)}
+.welcome-audience-portrait-img{width:200px;height:250px;object-fit:cover;object-position:top}
+@media (max-width:560px){.welcome-audience-purpose:not([hidden]){grid-template-columns:110px minmax(0,1fr)}.welcome-audience-portrait-img{width:110px;height:138px}}
+.home-muestra-estilos{grid-template-columns:1fr 1fr}
+.home-muestra-estilos figure:last-child{grid-column:auto}
+
+/* Composición Codex + Claude: un solo «Ver todos los documentos y entregables» (el catálogo completo, 24 salidas y 7
+   accesos, con sus generadores); formato y requisitos dentro del panel lateral de detalle. */
+/* El catálogo E3 de Codex (preparación directa de cada entregable profesional) sigue a la vista con su propio nombre */
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-full-catalog{order:2;flex:1 1 100%;margin:8px 0 0}
+#professionalWorkspace[data-area=deliver] .professional-full-catalog>summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;color:var(--action);font-weight:650;font-size:14px}
+#professionalWorkspace[data-area=deliver] .professional-full-catalog[open]{background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px 14px 14px}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-meta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-meta dt{color:var(--color-ash,#6b6b6b);font-weight:600}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-meta dd{margin:0}
+
+/* ── Maqueta PERLA c96888ac: ficha, grupos, resumen, panel y móvil ──
+   Jerarquía aprobada: acción principal vino #783B4B (halo #F4E8EC); enlaces y selección verde petróleo #1F5A66. */
+#professionalWorkspace[data-area=deliver]{--action:#1F5A66;--ok:#2f6e4a;--ok-soft:#e6f2ea;--info:#1F5A66;--info-soft:#e3eef0;--warn:#8a5a00;--warn-soft:#fbf0d9}
+/* Cabecera: un solo título visible («Lo que recibirá tu cliente»); el h1 sigue para lectores de pantalla y foco */
+#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-head small,#professionalWorkspace[data-area=deliver]:has(.ent-head) .professional-intro{display:none}
+/* Índice: «Índice de la entrega · N entregables y herramientas» en una línea; debajo, «Ver todos…» y los filtros */
+#professionalWorkspace[data-area=deliver] .mesa .professional-index{display:flex!important;flex-wrap:wrap;align-items:baseline;column-gap:8px}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>*{flex:1 1 100%;order:3;min-width:0}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>h2{flex:0 1 auto;min-width:0;overflow-wrap:anywhere;order:0;margin:0;font-size:20px}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-count{flex:1 1 0;order:1;color:var(--ink-muted);font-size:14px;margin:0}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>.professional-count::before{content:'· '}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>#perlaCatToggle{flex:0 0 auto;order:2;margin:10px 0 0}
+#professionalWorkspace[data-area=deliver] .mesa .professional-index>#perlaCatalog{order:2}
+/* Grupos: título, recuento y subtítulo en una línea con filete */
+#professionalWorkspace[data-area=deliver] .professional-delivery-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 26px}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>*{flex:1 1 100%}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>h2{flex:0 1 auto;min-width:0;font-size:16px;font-weight:650;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-count{flex:0 0 auto;background:none;padding:0;color:var(--ink-muted);font-weight:400;font-size:16px}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-count::before{content:'· '}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.perla-group-sub{flex:1 1 0;margin:0;font-size:13px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group>.professional-group-items{margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}
+#professionalWorkspace[data-area=deliver] .professional-delivery-group[data-group=tools] .perla-ref{background:var(--surface-sunken,#f1f2f2)}
+/* Estados con color: listo (✓), al pulsar (•), falta (!) */
+#professionalWorkspace[data-area=deliver] .perla-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;padding:2px 9px;border-radius:12px;max-width:100%;line-height:1.35;justify-self:start}
+#professionalWorkspace[data-area=deliver] .perla-pill::before{content:'';flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+#professionalWorkspace[data-area=deliver] .perla-pill.ok{color:var(--ok);background:var(--ok-soft)}
+#professionalWorkspace[data-area=deliver] .perla-pill.pend{color:var(--info);background:var(--info-soft)}
+#professionalWorkspace[data-area=deliver] .perla-pill.req{color:var(--warn);background:var(--warn-soft)}
+#professionalWorkspace[data-area=deliver] .perla-pill.ok::before{content:'✓';width:auto;height:auto;background:none;font-size:11px}
+#professionalWorkspace[data-area=deliver] .perla-pill.req::before{content:'!';width:auto;height:auto;background:none}
+/* Ficha: portada, título, una línea, estado y una acción; el resto de la ficha sigue en el DOM y se ve en el panel */
+#professionalWorkspace[data-area=deliver] .perla-ref{position:relative;display:grid;grid-template-rows:auto 1fr;cursor:pointer}
+#professionalWorkspace[data-area=deliver] .perla-ref>.bpdp-card-figure{display:none}
+#professionalWorkspace[data-area=deliver] .perla-ref>.body,#professionalWorkspace[data-area=deliver] .perla-ref>.bpdp-card-body{padding:12px 14px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+#professionalWorkspace[data-area=deliver] .perla-ref>:is(.body,.bpdp-card-body)>:not(h3):not(.perla-desc):not(.perla-meta):not(.perla-go):not(.perla-card-selector):not(.bpdp-card-actions):not(.delivery3d-body){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .bpdp-card-actions>:not(.perla-go){display:none!important}
+/* P3 (visita 3D) anida su contenido: participa en la misma rejilla; su mensaje de estado se ve si dice algo */
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-body{display:contents!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-body>:not(h3):not(.delivery3d-actions){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-body>#delivery3dMessage:not(:empty){display:block!important;order:5;margin:0;font-size:13px}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-actions{order:4;display:block;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-ref .delivery3d-actions>:not(.perla-go){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref .bpdp-card-actions{display:block;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-ref h3{order:1;font-size:15.5px;font-weight:650;margin:0}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-desc{order:2;margin:0;font-size:13.5px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-meta{order:3;margin-top:4px}
+#professionalWorkspace[data-area=deliver] .perla-ref :is(.perla-go,.bpdp-card-actions){order:4}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go{position:relative;z-index:2;justify-self:start;min-height:32px;padding:0;margin:0;border:0!important;background:none!important;box-shadow:none!important;color:var(--action)!important;font-size:13px;font-weight:650;text-align:left;white-space:normal;cursor:pointer}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go::after{content:' →' / ''}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go:hover{text-decoration:underline}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-go:disabled{color:var(--ink-muted)!important;cursor:not-allowed}
+/* El selector cubre toda la ficha: un toque o clic en cualquier parte abre el panel (la acción queda por encima) */
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-card-selector{position:absolute!important;inset:0!important;width:auto!important;max-width:none!important;height:auto!important;justify-self:stretch!important;z-index:1;margin:0;padding:0;min-height:0;border:0;border-radius:var(--radius);background:transparent!important;box-shadow:none!important;color:transparent!important;font-size:0;cursor:pointer}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-card-selector:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#professionalWorkspace[data-area=deliver] .perla-ref:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+#professionalWorkspace[data-area=deliver] .perla-ref:has(.perla-card-selector[aria-pressed=true]){border-color:var(--action);box-shadow:0 0 0 2px var(--action)}
+#professionalWorkspace[data-area=deliver] .perla-ref .thumb{position:relative}
+/* Resumen junto a la vista 3D */
+#professionalWorkspace[data-area=deliver] .hero-ent .listo li{grid-template-columns:auto minmax(0,1fr)}
+/* Panel */
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-code{position:static}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-desc{margin:0}
+#professionalWorkspace[data-area=deliver] .panel .perla-panel-more{margin:0;font-size:13px;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .panel .prev .thumb{aspect-ratio:auto;min-height:220px}
+#professionalWorkspace[data-area=deliver] .panel .prev .thumb>img{position:static}
+#professionalWorkspace[data-area=deliver] .panel-f .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26}
+#professionalWorkspace[data-area=deliver] .panel-f .btn.primary:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
+#professionalWorkspace[data-area=deliver] .panel .vacio-panel{margin:0;font-size:16px;color:var(--ink)}
+#professionalWorkspace[data-area=deliver] .panel .perla-vacio-txt{margin:8px 0 0;font-size:13.5px;font-weight:400;color:var(--ink-muted)}
+#professionalWorkspace[data-area=deliver] .perla-velo{display:none}
+@media (max-width:1100px){
+ #professionalWorkspace[data-area=deliver] .mesa .panel:not(.perla-panel-open){display:none}
+ #professionalWorkspace[data-area=deliver] .mesa .panel.perla-panel-open{position:fixed;inset:auto 0 0 0;top:auto;max-height:88dvh;border-radius:16px 16px 0 0;z-index:91;padding-bottom:env(safe-area-inset-bottom,0px)}
+ #professionalWorkspace[data-area=deliver] .perla-velo:not([hidden]){display:block;position:fixed;inset:0;background:rgba(31,35,38,.42);z-index:90}
+}
+@media (max-width:760px){
+ #professionalWorkspace[data-area=deliver] .perla-ref .perla-desc{display:none}
+ #professionalWorkspace[data-area=deliver] .perla-ref h3{font-size:14.5px}
+}
+@media (prefers-reduced-motion:reduce){#professionalWorkspace[data-area=deliver] .perla-ref{transition:none}}
+#professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important;box-shadow:0 1px 2px #783b4b33,0 4px 12px #783b4b26}
+#professionalWorkspace[data-area=deliver] .hero-ent .acciones .professional-wine-action:focus-visible{outline:3px solid #F4E8EC;outline-offset:1px;box-shadow:0 0 0 5px #783B4B}
+#professionalWorkspace[data-area=deliver] .perla-ref>:not(.thumb):not(.body):not(.bpdp-card-body):not(.perla-card-selector):not(.perla-go):not(#deliveryState){display:none!important}
+#professionalWorkspace[data-area=deliver] .perla-ref>.perla-go{position:relative;z-index:2;margin:0 14px 12px}
+#professionalWorkspace[data-area=deliver] .professional-dock .btn.primary{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
+
+/* La vigencia de la última entrega de obra debe poder leerse antes de volver a descargar. */
+#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState,#professionalWorkspace[data-area=deliver] .perla-ref>#deliveryState{display:block!important;padding:0 14px 12px;margin:0;font-size:13px}
+/* P4 · «Última entrega: … corresponde / desactualizada»: es un estado, no una descripción; se ve en la ficha */
+#professionalWorkspace[data-area=deliver] .perla-ref>.body>#deliveryState,#professionalWorkspace[data-area=deliver] .perla-ref>#deliveryState{display:block!important;padding:0 14px 12px;order:3;margin:0;font-size:12.5px;line-height:1.4;color:#5c3d00}
+#professionalWorkspace[data-area=deliver] .perla-ref #deliveryState[data-result=match]{color:var(--ok)}
+/* UX-312 PERLA · U9: la barra fija del móvil no duplica la acción principal mientras la de la cabecera está a la vista. */
+#professionalWorkspace.perla-hero-cta-in-view .professional-dock{visibility:hidden;pointer-events:none}

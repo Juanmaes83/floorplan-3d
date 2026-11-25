@@ -39,7 +39,9 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
  // Áreas de trabajo (Analizar, Presupuestar, Entregar, Mi estudio…) y cuadro de cantidades.
  for(const id of await page.evaluate(()=>[...document.querySelectorAll('[id^="workArea-"]')].map(b=>b.id))){
   await page.locator('#'+id).click();await page.waitForTimeout(250);await scan('área '+id);
-  if(id==='workArea-deliver'||id==='workArea-studio'){
+  // UX-312 C4 (aprobado por el propietario el 22/11/2026): «Preparar entregables» (E3) vive solo en Entregar · D5.
+  if(id==='workArea-studio')assert.equal(await page.locator('#professionalWorkspace [data-route="e3-entregas"]').count(),0,'C4: E3 solo en Entregar');
+  if(id==='workArea-deliver'){
    const trigger=page.locator('#professionalWorkspace [data-route="e3-entregas"]');
    assert.equal(await trigger.count(),1,'one E3 entry per workspace');
    assert.equal(await trigger.getAttribute('aria-haspopup'),'dialog');
@@ -53,7 +55,7 @@ test(`sin chino visible en ${lang.toUpperCase()}: plano, paneles, interiores R03
    const e3=page.locator('#e3Entregas[open]');
    const next=e3.locator('[data-route="e3-siguiente"]');
    await e3.waitFor();
-   assert.equal(await e3.locator('input[type="checkbox"]').count(),10);
+   assert.equal(await e3.locator('input[type="checkbox"]').count(),await page.evaluate(()=>RubikE3Core.CATALOGO.length),'una casilla por entregable del catálogo E3 (14 con Blueprint y Despiece)');
    assert.equal(await e3.evaluate(dialog=>document.activeElement?.id===dialog.getAttribute('aria-labelledby')),true);
    await scan('E3 elegir '+id);
    await next.click();await next.waitFor();await scan('E3 previsualizar '+id);

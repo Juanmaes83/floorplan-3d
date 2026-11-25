@@ -1,6 +1,9 @@
 // C4: «Dossier económico» in Entregar. Same report as Presupuestar (buildReport); professional and client variants;
 // no budget → says so; null VAT is not 0 % and the gross total is not final; print window; CSV/JSON/BC3 through the
 // existing authorities; A4 economic page and the B1 client file inherit it; nothing is saved, the project never changes.
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..'),SHOTS=process.env.QA_SHOTS||'';let server,browser,url;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary'};
@@ -26,7 +29,7 @@ test(`C4: economic dossier ${viewport.width}x${viewport.height}`,{timeout:300000
  await page.evaluate(()=>FloorPlanDossier.open('technical'));let a4=await page.locator('#dossierDialog').innerText();
  assert.doesNotMatch(a4,/no disponible todavía/);assert.match(a4,/No se ha preparado presupuesto para este proyecto/);await page.keyboard.press('Escape');
  // 2. «Revisar presupuesto» goes to Presupuestar; prepare an incomplete budget with VAT undefined.
- await page.locator('#workArea-deliver').click();await ws.locator('[data-route="economic-review"]').click();await page.waitForFunction(()=>document.querySelector('[data-route="budget-edit"]'));
+ await page.locator('#workArea-deliver').click();await (await accion(page,ws.locator('[data-route="economic-review"]'))).click();await page.waitForFunction(()=>document.querySelector('[data-route="budget-edit"]'));
  await ws.locator('[data-route="budget-edit"]').click();const bd=page.locator('#budgetDialog');await bd.waitFor();
  const price=async(id,v)=>{const f=bd.locator(`tr[data-item="${id}"] [data-field="price"]`);await f.fill(String(v));await f.press('Tab');};
  await price('opening:door',250);await price('paint',8);await bd.locator('tr[data-item="opening:door"] [data-field="review"]').check();
@@ -61,7 +64,7 @@ test(`C4: economic dossier ${viewport.width}x${viewport.height}`,{timeout:300000
  const bc3=await dl('#econBc3');assert.match(bc3.name,/\.bc3$/);assert.ok(bc3.body.length>100);
  // 5. Print / Save PDF: own window with the same document.
  const popup=page.waitForEvent('popup');await page.evaluate(()=>{window.__printed=0;});await d.locator('#econPrint').click();const win=await popup;await win.waitForLoadState();
- await win.waitForSelector('.econ-paper');assert.equal(await win.evaluate(()=>getComputedStyle(document.querySelector('.econ-paper')).backgroundColor),'rgb(255, 253, 248)','print window styled offline');assert.match(await win.locator('.econ-paper').innerText(),/IVA 21 %/);await win.close();
+ await win.waitForSelector('.econ-paper');assert.equal(await win.evaluate(()=>getComputedStyle(document.querySelector('.econ-paper')).backgroundColor),'rgb(255, 255, 255)','print window styled offline (PERLA --surface-panel; UX-312 F2)');assert.match(await win.locator('.econ-paper').innerText(),/IVA 21 %/);await win.close();
  // §14.28 blocked print window: said, not thrown.
  await page.evaluate(()=>{window.__open=window.open;window.open=()=>null;});await d.locator('#econPrint').click();assert.match(await d.locator('.econ-status').innerText(),/bloqueó la ventana/);await page.evaluate(()=>{window.open=window.__open;});
  assert.match(pro,/Documento generado el/);assert.doesNotMatch(cli,/Pendiente de revisar/,'review state is professional detail');

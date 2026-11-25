@@ -2,6 +2,7 @@
 // and city; the choice is a browser preference that survives a reload and never enters the project or its history;
 // it is announced as decorative; day and night change the look; and the exported 3D PNG uses the same backdrop as
 // the editor. Needs three.js (THREE_LOCAL_DIR when the CDN is unreachable).
+// UX-312 PERLA: día/noche está en la barra del lienzo (misma acción, mismo data-t), no en <header>.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..'),shots=process.env.ENV3D_SHOTS||null;
@@ -35,10 +36,10 @@ test(`3D setting ${viewport.width}x${viewport.height}`,{timeout:300000,skip:!pro
  assert.equal(await page.evaluate(()=>View3D.environment3D),'garden');
  assert.ok(Math.abs(studio[2]-garden[2])+Math.abs(studio[0]-garden[0])+Math.abs(studio[1]-garden[1])>8,`backdrop changes (${studio} → ${garden})`);
  if(shots)await page.screenshot({path:path.join(shots,`${name}-garden-day.png`)});
- await page.evaluate(()=>document.querySelector('header [data-t="night"]').click());await page.waitForTimeout(800);const night=await sky();
+ await page.evaluate(()=>document.querySelector('[data-t="night"]').click());await page.waitForTimeout(800);const night=await sky();
  assert.ok(night.reduce((a,b)=>a+b,0)<garden.reduce((a,b)=>a+b,0)-150,`night is darker (${garden} → ${night})`);
  assert.ok(night.reduce((a,b)=>a+b,0)>=30,`the night setting stays readable, not black (${night})`);
- await page.evaluate(()=>document.querySelector('header [data-t="night"]').click());await page.waitForTimeout(500);
+ await page.evaluate(()=>document.querySelector('[data-t="night"]').click());await page.waitForTimeout(500);
  // The exported 3D PNG carries the same backdrop.
  const dl=page.waitForEvent('download',{timeout:30000});await page.evaluate(()=>{document.querySelector('header details.menu').open=true;document.querySelector('#exportPng').click();});
  const file=await (await dl).path(),corner=await page.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);const p=x.getImageData(3,3,1,1).data;return [p[0],p[1],p[2]];},(await fs.readFile(file)).toString('base64'));

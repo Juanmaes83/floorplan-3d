@@ -7,6 +7,7 @@ const {execFile}=require('node:child_process');
 const {promisify}=require('node:util');
 const verifiedFetch=promisify(execFile);
 const {chromium}=require('playwright');
+const {mostrar}=require('./helpers-perla-editor.cjs');
 const Core=require('../js/project-core.js');
 const example=require('../docs/contracts/examples/floorplan-project-v1.example.json');
 let server,browser,url;
@@ -104,8 +105,8 @@ test('hostile names and material names stay text; ID/color payloads cannot creat
   await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===2);
   await page.locator('#gFurn [data-fid="obj_bed-01"]').dispatchEvent('pointerdown',{button:0,pointerId:1,clientX:400,clientY:400});
   assert.equal(await page.locator('#fName').inputValue(),payload);
-  // Images the app draws itself (sheet preview, the welcome's real 3D captures and its demo cards) are not injected markup.
-  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview):not(.welcome-shot):not(.welcome-walk-shot):not(.welcome-render-ai-shot):not(.welcome-demo-shot)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
+  // Images the app draws itself (sheet preview, UX-312 Home real captures .welcome-real-shot, the welcome's real 3D captures and its demo cards) are not injected markup.
+  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview):not(.welcome-real-shot):not(.welcome-shot):not(.welcome-walk-shot):not(.welcome-render-ai-shot):not(.welcome-demo-shot)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
   assert.deepEqual(JSON.parse((await readDownload(page,'#exportJson')).toString()),p);assert.deepEqual(errors,[]);
 });
 test('browser legacy migration is repeatable and keeps the original key',async t=>{
@@ -228,12 +229,12 @@ test('F1 completion: collection adopts F1a migration and preserves both historic
  assert.deepEqual(await page.evaluate(()=>({legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')})),{legacy:initial.legacy,v1:initial.v1});assert.deepEqual(errors,[]);
 });
 
-async function traceTool(page,id){await page.locator('#traceBtn').click();await page.locator('#'+id).click();await page.waitForTimeout(350);}
+async function traceTool(page,id){await (await mostrar(page,'#traceBtn')).click();await page.locator('#'+id).click();await page.waitForTimeout(350);}
 async function imageTap(page,point){const screen=await page.evaluate(p=>{const image=FloorPlanApp.project.sourceImages[0],q=FloorPlanTracing.imageToWorld(image,p),svg=document.querySelector('#plan'),screen=new DOMPoint(q.x,q.y).matrixTransform(svg.getScreenCTM());return {x:screen.x,y:screen.y};},point);await page.touchscreen.tap(screen.x,screen.y);}
 async function knownDistance(page,tool,a,b,value){await traceTool(page,tool);await imageTap(page,a);await imageTap(page,b);await page.locator('#traceKnown').fill(String(value));await page.locator('#traceDistanceSave').click();await page.waitForFunction(()=>!document.querySelector('#traceDistance').open);}
 for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F1b full workflow ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
- const existing=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#traceBtn').click();await page.locator('#traceNew').click();
+ const existing=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();
  await page.locator('#traceImageFile').setInputFiles({name:'bad.png',mimeType:'image/png',buffer:Buffer.from('not an image')});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PNG'));assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),existing);
  await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1&&FloorPlanApp.project.walls.length===0);await page.waitForFunction(()=>document.querySelector('#gSource image'));
  assert.ok(!JSON.stringify(await page.evaluate(()=>FloorPlanApp.project)).includes('blob:'));assert.equal(await page.locator('#gSource image').count(),1);
@@ -243,7 +244,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls.length),4);
  await traceTool(page,'traceDoor');await imageTap(page,{x:240,y:40});await traceTool(page,'traceWindow');await imageTap(page,{x:440,y:160});
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.openings.length),2);
- await traceTool(page,'traceRoom');for(const corner of corners)await imageTap(page,corner);await page.locator('#traceBtn').click();await page.locator('#traceCloseRoom').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms.length),1);
+ await traceTool(page,'traceRoom');for(const corner of corners)await imageTap(page,corner);await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceCloseRoom').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms.length),1);
  await page.locator('#undo').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms.length),0);await page.locator('#redo').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms.length),1);
  assert.ok((await page.locator('#traceWarnings').textContent()).includes('W1'));
  assert.ok(await page.evaluate(()=>!!(document.querySelector('#gRooms').compareDocumentPosition(document.querySelector('#gSource'))&Node.DOCUMENT_POSITION_FOLLOWING)));
@@ -261,11 +262,11 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
  assert.ok(await page.evaluate(()=>View3D.renderedSource===FloorPlanApp.project&&View3D.renderedGeometry.source.walls.length===4));
  assert.ok(await page.evaluate(()=>{const c=document.createElement('canvas');c.width=c.height=64;const ctx=c.getContext('2d');ctx.drawImage(document.querySelector('#view3d canvas'),0,0,64,64);return new Set(ctx.getImageData(0,0,64,64).data).size>20;}));
- const first3D=await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL());const canvasBox=await page.locator('#view3d canvas').boundingBox();await page.mouse.move(canvasBox.x+canvasBox.width*.5,canvasBox.y+canvasBox.height*.2);await page.mouse.down();await page.mouse.move(canvasBox.x+canvasBox.width*.5+80,canvasBox.y+canvasBox.height*.2+10,{steps:8});await page.mouse.up();await page.waitForTimeout(300);assert.notEqual(await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL()),first3D);
+ const first3D=await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL());const canvasBox=await page.locator('#view3d canvas').boundingBox();await page.mouse.move(canvasBox.x+canvasBox.width*.5,canvasBox.y+canvasBox.height*.5);await page.mouse.down();await page.mouse.move(canvasBox.x+canvasBox.width*.5+80,canvasBox.y+canvasBox.height*.5+10,{steps:8});await page.mouse.up();await page.waitForFunction(before=>document.querySelector('#view3d canvas').toDataURL()!==before,first3D);
  await page.screenshot({path:`/tmp/f1b-${viewport.width}-3d-orbit.png`});
  if(viewport.width<1100)assert.ok(await page.evaluate(()=>document.querySelector('#view3d canvas').getBoundingClientRect().height/innerHeight>=.6));
  await page.locator('[data-view="2d"]').click();await page.waitForFunction(()=>!document.body.classList.contains('busy'));
- await page.locator('#traceBtn').click();const pending=page.waitForEvent('download');await page.locator('#traceExport').click();const dl=await pending,stream=await dl.createReadStream(),parts=[];for await(const c of stream)parts.push(c);const zip=Buffer.concat(parts);
+ await (await mostrar(page,'#traceBtn')).click();const pending=page.waitForEvent('download');await page.locator('#traceExport').click();const dl=await pending,stream=await dl.createReadStream(),parts=[];for await(const c of stream)parts.push(c);const zip=Buffer.concat(parts);
  const original=await page.evaluate(()=>FloorPlanApp.project);
  const fresh=await browser.newContext({viewport,hasTouch:true});t.after(()=>fresh.close());const imported=await fresh.newPage();await imported.route('https://cdn.jsdelivr.net/**',r=>r.abort());await imported.goto(url);await imported.locator('#traceZipFile').setInputFiles({name:'project.zip',mimeType:'application/zip',buffer:zip});await imported.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1&&FloorPlanApp.project.walls.length===4);await imported.waitForFunction(()=>document.querySelector('#gSource image'));
  const roundtrip=await imported.evaluate(()=>FloorPlanApp.project);assert.deepEqual(roundtrip.walls,original.walls);assert.deepEqual(roundtrip.rooms,original.rooms);assert.deepEqual(roundtrip.objects,original.objects);assert.deepEqual(roundtrip.scale,original.scale);assert.equal(roundtrip.sourceImages[0].sha256,original.sourceImages[0].sha256);
@@ -275,7 +276,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440
  assert.deepEqual(errors,[]);
 });
 test('F1b storage/image editing and shared-reference deletion stay local and recoverable',async t=>{
- const {page,errors}=await pageFor(t);await page.locator('#traceBtn').click();await page.locator('#traceNew').click();
+ const {page,errors}=await pageFor(t);await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();
  const before=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1')}));
  await page.evaluate(()=>{window.savedSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='rubik-sota-project-library-v1')throw new DOMException('quota','QuotaExceededError');return savedSetItem.call(this,k,v);};});
  await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('quota'));await page.waitForFunction(async()=> (await FloorPlanImages.keys()).length===0);
@@ -286,14 +287,14 @@ test('F1b storage/image editing and shared-reference deletion stay local and rec
  await page.locator('#traceOpacity').fill('.3');await page.locator('#traceOpacity').press('Tab');await page.locator('#traceImageX').fill('1000');await page.locator('#traceImageX').press('Tab');await page.locator('#traceVisible').uncheck();assert.equal(await page.locator('#gSource image').count(),0);
  await page.locator('#undo').click();await page.waitForFunction(()=>document.querySelector('#gSource image'));await page.reload();await page.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await page.evaluate(()=>FloorPlanApp.project.sourceImages[0].placement.originMm.x),1000);assert.equal(await page.evaluate(()=>FloorPlanApp.project.sourceImages[0].opacity),.3);
  await page.locator('#projectsBtn').click();const originalEntry=await page.locator('#projectList').inputValue();await page.locator('#projectName').fill('Copy with image');await page.locator('#projectDuplicate').click();page.once('dialog',d=>d.accept());await page.locator('#projectDelete').click();await page.locator('#projectList').selectOption(originalEntry);await page.locator('#projectOpen').click();await page.waitForTimeout(100);assert.equal(await page.evaluate(async()=> (await FloorPlanImages.keys()).length),1);
- await page.locator('#traceBtn').click();page.once('dialog',d=>d.accept());await page.locator('#traceRemoveImage').click();await page.waitForFunction(async()=> (await FloorPlanImages.keys()).length===0);assert.equal(await page.evaluate(()=>FloorPlanApp.project.sourceImages.length),0);assert.deepEqual(errors,[]);
+ await (await mostrar(page,'#traceBtn')).click();page.once('dialog',d=>d.accept());await page.locator('#traceRemoveImage').click();await page.waitForFunction(async()=> (await FloorPlanImages.keys()).length===0);assert.equal(await page.evaluate(()=>FloorPlanApp.project.sourceImages.length),0);assert.deepEqual(errors,[]);
 });
 test('F1b rejects signature-valid but corrupt image payload without changing projects',async t=>{
- const {page,errors}=await pageFor(t);await page.locator('#traceBtn').click();await page.locator('#traceNew').click();const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));const bytes=await readFile(path.join(__dirname,'fixtures/manual-plan.png')),truncated=bytes.subarray(0,40);
+ const {page,errors}=await pageFor(t);await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));const bytes=await readFile(path.join(__dirname,'fixtures/manual-plan.png')),truncated=bytes.subarray(0,40);
  await page.locator('#traceImageFile').setInputFiles({name:'corrupt.png',mimeType:'image/png',buffer:truncated});await page.waitForFunction(()=>document.querySelector('#toast').textContent.length>0);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.equal(await page.evaluate(async()=> (await FloorPlanImages.keys()).length),0);assert.deepEqual(errors,[]);
 });
 test('F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history',async t=>{
- const {page,errors}=await pageFor(t);const sample=require('../docs/contracts/examples/floorplan-project-v1.f1b.example.json');await page.evaluate(p=>FloorPlanApp.importProject(p),sample);await page.locator('#traceBtn').click();
+ const {page,errors}=await pageFor(t);const sample=require('../docs/contracts/examples/floorplan-project-v1.f1b.example.json');await page.evaluate(p=>FloorPlanApp.importProject(p),sample);await (await mostrar(page,'#traceBtn')).click();
  const wall=sample.walls[2],room=sample.rooms[0];await page.locator(`#traceWarnings button[data-target="${wall.id}"]`).first().click();await page.locator('#traceEdit-start-x').fill('4300');await page.locator('#traceEditSave').click();
  assert.equal(await page.evaluate(id=>FloorPlanApp.project.walls.find(w=>w.id===id).start.x,wall.id),4300);await page.locator('#undo').click();assert.equal(await page.evaluate(id=>FloorPlanApp.project.walls.find(w=>w.id===id).start.x,wall.id),wall.start.x);await page.locator('#redo').click();assert.equal(await page.evaluate(id=>FloorPlanApp.project.walls.find(w=>w.id===id).start.x,wall.id),4300);
  await page.locator('#traceReviewed').click();assert.equal(await page.evaluate(id=>FloorPlanApp.project.walls.find(w=>w.id===id).source.review,wall.id),'confirmed');
@@ -315,7 +316,7 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');assert.equal(await page.evaluate(()=>FloorPlanApp.project.schemaVersion),'1.2.0');
  const project=await page.evaluate(()=>FloorPlanApp.project);assert.equal(await page.evaluate(value=>{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1'));return JSON.stringify(lib).includes(value);},original),true);
  await page.reload();await page.waitForFunction(()=>document.querySelector('#gSource image'));assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),project);
- await page.locator('#traceBtn').tap();const zip=await imageZip(page);
+ await (await mostrar(page,'#traceBtn')).tap();const zip=await imageZip(page);
  const {page:fresh}=await pageFor(t,{viewport,hasTouch:true});await fresh.locator('#traceZipFile').setInputFiles({name:'project.zip',mimeType:'application/zip',buffer:zip});await fresh.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await fresh.waitForFunction(()=>document.querySelector('#gSource image'));
  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
  const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
@@ -342,7 +343,7 @@ test('image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and
 });
 
 test('image import failures preserve current project, collection and image keys atomically',async t=>{
- const {page,errors}=await pageFor(t);await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.webp'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ const {page,errors}=await pageFor(t);await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.webp'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
  const snapshot=()=>page.evaluate(async()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1'),keys:await FloorPlanImages.keys()})),before=await snapshot();
  const png=await readFile(path.join(__dirname,'fixtures/manual-plan.png')),webp=await readFile(path.join(__dirname,'fixtures/manual-plan.webp')),large=Buffer.from(png);large.writeUInt32BE(8001,16);const corrupt=Buffer.from(webp);corrupt.fill(0,25);
  const cases=[{name:'fake.png',mimeType:'image/png',buffer:webp},{name:'fake.jpg',mimeType:'',buffer:png},{name:'truncated.webp',mimeType:'image/webp',buffer:webp.subarray(0,-1)},{name:'corrupt.webp',mimeType:'image/webp',buffer:corrupt},{name:'large.png',mimeType:'image/png',buffer:Buffer.alloc(15*1024*1024+1)},{name:'huge.png',mimeType:'image/png',buffer:large},{name:'plan.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')},{name:'plan.heic',mimeType:'',buffer:Buffer.alloc(30)}];
@@ -373,10 +374,10 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
  const localThree=new Set(Object.keys(require('../vendor/three/manifest.json').files).map(file=>'/vendor/three/'+file));
- const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z0-9-]+\.m?js$/.test(u.pathname)||/^\/css\/[a-z0-9-]+\.css$/.test(u.pathname)||localThree.has(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/f3/cat-ia.manifest.json','/assets/f3/op11-lote-01.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css','/css/design-system.css','/css/brand.css','/css/surface-sheet.css','/css/solar.css','/vendor/suncalc/suncalc.js','/assets/welcome/example-3d.webp','/assets/welcome/demo-evolucion-4d.webp','/assets/welcome/demo-dibujo-vivo.webp'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z0-9-]+\.m?js$/.test(u.pathname)||/^\/css\/[a-z0-9-]+\.css$/.test(u.pathname)||localThree.has(u.pathname)||/^\/bpdp\/runtime\/(?:g1\/)?[a-z0-9-]+\.js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/f3/cat-ia.manifest.json','/assets/f3/op11-lote-01.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css','/css/design-system.css','/css/brand.css','/css/surface-sheet.css','/css/solar.css','/vendor/suncalc/suncalc.js','/assets/welcome/example-3d.webp','/assets/welcome/demo-evolucion-4d.webp','/assets/welcome/demo-dibujo-vivo.webp'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
  await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
- await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
  await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#assistCandidates button').length>=6);
@@ -398,16 +399,21 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  await page.reload();await page.waitForFunction(()=>document.querySelector('#gSource image'));assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls),[first,second]);assert.equal(await page.locator('#gAssist line').count(),0);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:artifact+'-2d.png'});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
- assert.ok(await page.evaluate(()=>View3D.renderedSource===FloorPlanApp.project&&View3D.renderedGeometry.source.walls.length===2));assert.ok(await page.evaluate(()=>document.querySelector('#view3d canvas').getBoundingClientRect().height/innerHeight>=.6));
+ assert.ok(await page.evaluate(()=>View3D.renderedSource===FloorPlanApp.project&&View3D.renderedGeometry.source.walls.length===2));const viewportFit=await page.evaluate(()=>{
+  const view=document.querySelector('#view3d canvas').getBoundingClientRect();
+  const stage=document.querySelector('#stage').getBoundingClientRect();
+  return {viewHeight:view.height,stageHeight:stage.height};
+ });
+ assert.ok(viewportFit.viewHeight>=viewportFit.stageHeight*.6&&viewportFit.stageHeight>0,JSON.stringify(viewportFit));
  assert.ok(await page.evaluate(()=>{const c=document.createElement('canvas');c.width=c.height=32;const ctx=c.getContext('2d');ctx.drawImage(document.querySelector('#view3d canvas'),0,0,32,32);return new Set(ctx.getImageData(0,0,32,32).data).size>20;}));
  await page.screenshot({path:artifact+'-3d.png'});await page.locator('[data-view="2d"]').click();await page.waitForFunction(()=>!document.body.classList.contains('busy'));
- await page.locator('#traceBtn').click();const zip=await imageZip(page),Package=require('../js/project-package.js'),decoded=await Package.validateEntries(await Package.unzip(zip));assert.deepEqual(decoded.project.walls,[first,second]);
+ await (await mostrar(page,'#traceBtn')).click();const zip=await imageZip(page),Package=require('../js/project-package.js'),decoded=await Package.validateEntries(await Package.unzip(zip));assert.deepEqual(decoded.project.walls,[first,second]);
  assert.deepEqual(unexpected,[]);assert.ok(requests.length>0);assert.ok(requests.every(r=>r.method==='GET'&&r.bodyBytes===0));assert.deepEqual(errors,[]);
  t.diagnostic(JSON.stringify({viewport,requests:requests.length,unexpected:unexpected.length,wallIds:[first.id,second.id],candidateCount:count}));
 });
 
 test('F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits',async t=>{
- const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('#traceBtn').click();
+ const {page,errors}=await pageFor(t,{hasTouch:true});await (await mostrar(page,'#traceBtn')).click();
  const initial=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#traceStatus').textContent.includes('Importa'));assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),initial);
  await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
@@ -432,7 +438,7 @@ test('F2 temporary proposals cancel safely, invalidate on reference change and p
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 raw export private snapshot ${viewport.width}x${viewport.height}`,async t=>{
  const {page,errors}=await pageFor(t,{viewport,isMobile:viewport.width<1100,hasTouch:true});const unexpected=[],downloads=[];
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;const u=new URL(r.url());if(r.method()!=='GET'||r.postDataBuffer()||u.search||!(u.origin===new URL(url).origin||u.origin==='https://cdn.jsdelivr.net'))unexpected.push(r.url());});page.on('websocket',s=>unexpected.push(s.url()));page.on('download',d=>downloads.push(d));
- await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);assert.equal(await page.locator('#assistRawExport').isEnabled(),false);assert.match(await page.locator('#rawExportUnavailable').textContent(),/Calibra/);
  await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);
  // World placement is demonstrably rotated/displaced; raw export must remain image-aligned.
@@ -461,13 +467,13 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
 });
 
 test('F2 raw export invalidates pending download on reference, scale, image, project and review changes',async t=>{
- const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);
- async function prepare(){await page.locator('#traceBtn').click();await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#assistRawExport')&&!document.querySelector('#assistRawExport').disabled);await page.locator('#assistRawExport').click();}
+ const {page,errors}=await pageFor(t,{hasTouch:true});await (await mostrar(page,'#traceBtn')).click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);
+ async function prepare(){await (await mostrar(page,'#traceBtn')).click();await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#assistRawExport')&&!document.querySelector('#assistRawExport').disabled);await page.locator('#assistRawExport').click();}
  async function stale(){assert.equal(await page.locator('#rawExportDialog').evaluate(d=>d.open),false);assert.equal(await page.locator('#gAssist line').count(),0);}
  await prepare();await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);p.sourceImages[0].placement.originMm.x=500;FloorPlanApp.importProject(p);});await stale();
  await prepare();await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);FloorPlanTracing.calibrate(p,p.sourceImages[0].id,{x:50,y:50},{x:450,y:50},8000);FloorPlanApp.importProject(p);});await stale();
  await prepare();await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);p.sourceImages[0].id='img_different';p.scale={confidence:'pending',method:'none'};FloorPlanApp.importProject(p);});await stale();
- await page.locator('#traceBtn').click();await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await prepare();await page.evaluate(()=>FloorPlanApp.importProject(FloorPlanTracing.blank()));await stale();
+ await (await mostrar(page,'#traceBtn')).click();await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await prepare();await page.evaluate(()=>FloorPlanApp.importProject(FloorPlanTracing.blank()));await stale();
  assert.deepEqual(errors,[]);
 });
 

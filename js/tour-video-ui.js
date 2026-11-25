@@ -26,7 +26,7 @@
  const open=btn(tx('Grabar vídeo','Record video','录制视频'),access);open.id='presentationVideo';
  const detail=el('span','',access,'presentation-video-detail');detail.id='presentationVideoAvailability';
  detail.setAttribute('role','status');open.setAttribute('aria-describedby',detail.id);
- const selectedMode=()=>((mode==='cine'&&cineOK)||(mode==='paradas'&&byStopsType))?mode:byStopsType?'paradas':cineOK?'cine':null;
+ const selectedMode=()=>(((mode==='cine'||mode==='drone')&&cineOK)||(mode==='paradas'&&byStopsType))?mode:byStopsType?'paradas':cineOK?'cine':null;
  open.title=tx('Graba el recorrido de esta presentación para descargarlo','Record this presentation tour to download it','录制此展示路线以便下载');
  const dialog=el('dialog',undefined,document.body,'ai-render-dialog tour-video-dialog');dialog.id='tourVideoDialog';dialog.setAttribute('aria-labelledby','tourVideoTitle');
  open.setAttribute('aria-haspopup','dialog');open.setAttribute('aria-controls',dialog.id);
@@ -57,10 +57,15 @@
   const focusTarget=document.activeElement;
   const reason=unavailable();
   open.setAttribute('aria-disabled',String(!!reason));
-  open.hidden=playingStory;
+  // Siempre a la vista en su sitio (cabecera del panel). Si aún no se puede grabar (historia en curso, cámara en
+  // movimiento…) queda desactivado con el motivo al lado, en lugar de aparecer y desaparecer.
+  open.hidden=false;void playingStory;
   if(playingStory)detail.tabIndex=0;
   else detail.removeAttribute('tabindex');
-  const message=playingStory?`${open.textContent} · ${reason}`:reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
+  // Estado visible del botón: bloqueado (con motivo), listo, grabando o vídeo listo. Nunca parece activo si no lo está.
+  const busy=!!(controller||Recorder?.busy||Film?.busy),state=busy?'grabando':reason?'bloqueado':result?'hecho':'listo';
+  open.dataset.state=state;const label=busy?tx('Grabando vídeo…','Recording video…','正在录制视频…'):tx('Grabar vídeo','Record video','录制视频');if(open.textContent!==label)open.textContent=label;
+  const message=reason||(result?tx('Vídeo listo para revisar o descargar.','Video ready to review or download.','视频已就绪，可以预览或下载。'):'');
   if(detail.textContent!==message)detail.textContent=message;
   if(playingStory&&focusTarget===open)detail.focus({preventScroll:true});
   else if(!playingStory&&focusTarget===detail)open.focus({preventScroll:true});
@@ -74,7 +79,9 @@
   finally{checking=false;sync();}
  }
  new MutationObserver(sync).observe(overlay,{attributes:true,attributeFilter:['hidden','data-moving','data-story','data-walking','data-route','data-batch']});
- open.onclick=()=>{if(unavailable()||dialog.open){sync();return;}returnFocus=open;draw();dialog.showModal();dialog.querySelector('#tourVideoDownload,#tourVideoGo')?.focus();};
+ open.onclick=()=>{if(dialog.open){sync();return;}
+  // Bloqueado: no abre nada, pero lo dice (el motivo destaca un momento junto al botón).
+  if(unavailable()){sync();detail.classList.remove('is-flash');void detail.offsetWidth;detail.classList.add('is-flash');return;}returnFocus=open;draw();dialog.showModal();dialog.querySelector('#tourVideoDownload,#tourVideoGo')?.focus();};
  dialog.addEventListener('cancel',e=>{if(controller){e.preventDefault();controller.abort();}});
  dialog.addEventListener('close',()=>{if(!leaving)returnFocus?.focus?.({preventScroll:true});sync();});
  window.addEventListener('floorplan-presentation-started',()=>{
@@ -100,18 +107,25 @@
   // Cinematográfico: la nota y el formato describen ESE vídeo (no la estimación ni el formato de «Por paradas»).
   if(Film&&cineOK&&selectedMode()==='cine'){note.textContent=tx(`Se exporta la vista 3D de las ${stops} paradas con el guion cinematográfico: escena de entrada, pausa en cada estancia y traslados. La duración depende de las estancias elegidas y se indica al terminar. Sin paneles, cursor ni editor. El vídeo se queda en este equipo: nada se envía.`,`The 3D view of the ${stops} stops is exported with the cinematic script: opening scene, a pause in each room and moves. The length depends on the rooms chosen and is shown when it finishes. No panels, cursor or editor. The video stays on this device: nothing is sent.`,`按电影式脚本导出 ${stops} 个停留点的三维视图：开场、每个房间停留与过渡。时长取决于所选房间，完成后显示。不含面板、光标或编辑器。视频保留在本设备，不会发送。`);
    format.textContent=tx('Formato: MP4 (H.264) · 1280×720 · 30 fps.','Format: MP4 (H.264) · 1280×720 · 30 fps.','格式：MP4 (H.264) · 1280×720 · 30 fps。');format.classList.remove('is-warning');}
+  if(selectedMode()==='drone'){
+   note.textContent=tx('Vuelo exterior de 54 s alrededor de la vivienda. Usa la escena actual de RUBIK.','54-second aerial flight around the home using the active RUBIK scene.','围绕住宅航拍 54 秒，使用当前 RUBIK 场景。');
+   format.textContent=tx('Formato: MP4 (H.264) · 1280×720 · 30 fps.','Format: MP4 (H.264) · 1280×720 · 30 fps.','格式：MP4 (H.264) · 1280×720 · 30 fps。');
+   format.classList.remove('is-warning');
+  }
   if(Film&&state!=='recording'){const modo=el('fieldset',undefined,dialog,'tour-video-mode');modo.id='tourVideoMode';el('legend',tx('Tipo de recorrido','Tour type','路线类型'),modo);
    const opc=(v,t,d,ok,reason)=>{const l=el('label',undefined,modo,'tour-video-mode-opt');const r=el('input',undefined,l);r.type='radio';r.name='tourVideoMode';r.value=v;r.disabled=!ok;r.checked=selectedMode()===v&&ok;r.onchange=()=>{mode=v;draw(state==='done'?'done':'intro');dialog.querySelector('input[name=tourVideoMode][value='+v+']')?.focus();};
     const s=el('span',undefined,l);el('b',t,s);el('small',ok?d:reason,s);};
    opc('cine',tx('Cinematográfico','Cinematic','电影式'),tx('Recorrido continuo: del plano a la vivienda, entrada en las estancias con traslados suaves y cortes declarados. Se exporta fotograma a fotograma a 30 fps según el guion: la duración no depende de la velocidad del equipo.','Continuous tour: from plan to home, into the rooms with smooth moves and declared cuts. Exported frame by frame at 30 fps from the script: the length does not depend on the device speed.','连续路线：从平面到住宅，平滑过渡与明确剪切。按脚本以 30 fps 逐帧导出：时长不取决于设备速度。'),cineOK,
     filmError?tx('No se pudo comprobar H.264. Usa Por paradas o vuelve a abrir la presentación.','Could not check H.264. Use By stops or reopen the presentation.','无法检查 H.264。请使用按停留点或重新打开演示。'):
     tx('Este navegador necesita WebCodecs H.264 para exportar en modo cinematográfico.','This browser needs H.264 WebCodecs to export in cinematic mode.','此浏览器需要 H.264 WebCodecs 才能导出电影式路线。'));
+   opc('drone',tx('Vuelo de dron','Drone flight','无人机航拍'),tx('Vista exterior helicoidal de la vivienda.','Helical exterior view of the home.','住宅外观螺旋航拍。'),cineOK,
+    tx('La exportación requiere WebCodecs H.264.','Export requires H.264 WebCodecs.','导出需要 H.264 WebCodecs。'));
    opc('paradas',tx('Por paradas','By stops','按停留点'),tx('Graba en tiempo real cada parada con una pausa (la grabación de siempre).','Records each stop in real time with a pause (the usual recording).','实时录制每个停留点（原有录制）。'),!!type,
      recorderError?tx('No se pudo comprobar la grabación en tiempo real. Usa Cinematográfico.','Could not check real-time recording. Use Cinematic.','无法检查实时录制。请选择电影式。'):
      tx('Este navegador no ofrece grabación en tiempo real. Usa Cinematográfico.','This browser cannot record in real time. Use Cinematic.','此浏览器不支持实时录制。请选择电影式。'));
-   if(selectedMode()==='cine'&&state!=='done'){const ver=btn(tx('Ver el recorrido en la presentación','Watch the tour in the presentation','在展示中观看路线'),modo,'btn');ver.id='tourVideoWatch';
+   if(['cine','drone'].includes(selectedMode())&&state!=='done'){const ver=btn(tx('Ver el recorrido en la presentación','Watch the tour in the presentation','在展示中观看路线'),modo,'btn');ver.id='tourVideoWatch';
     ver.onclick=()=>begin(async()=>{if(unavailable())return;dialog.close();previewController=new AbortController();sync();let problem='';
-     try{await Film.previsualizar({signal:previewController.signal});}
+     try{await Film.previsualizar({signal:previewController.signal,drone:selectedMode()==='drone'});}
      catch(e){if(e?.name!=='AbortError')problem=e.message;}
      finally{previewController=null;sync();}
      if(leaving||!Presentation.active)return;
@@ -126,7 +140,7 @@
   if(state==='done'&&result){
    const video=el('video',undefined,dialog,'tour-video-preview');video.id='tourVideoPreview';video.controls=true;video.playsInline=true;video.muted=true;video.src=url;
    video.setAttribute('aria-label',tx('Vista previa del vídeo del recorrido','Tour video preview','路线视频预览'));
-   const meta=el('p',`${result.extension.toUpperCase()} · ${result.width}×${result.height} · ${seconds(result.durationMs)} · ${result.stops} ${tx('paradas','stops','个停留点')} · ${sizeText(result.blob.size)}`,dialog,'tour-video-meta');meta.id='tourVideoMeta';
+   const meta=el('p',`${result.extension.toUpperCase()} · ${result.width}×${result.height} · ${seconds(result.durationMs)} · ${result.drone?tx('Vuelo de dron','Drone flight','无人机航拍'):result.stops+' '+tx('paradas','stops','个停留点')} · ${sizeText(result.blob.size)}`,dialog,'tour-video-meta');meta.id='tourVideoMeta';
    if(!status.textContent)status.textContent=tx('Revisa el vídeo antes de descargarlo: es exactamente el archivo que se descarga.','Check the video before downloading it: it is exactly the file that is downloaded.','下载前请检查视频：它就是将要下载的文件。');
    const dl=btn(tx('Descargar vídeo','Download video','下载视频'),actions,'btn primary');dl.id='tourVideoDownload';dl.onclick=download;
   }
@@ -135,12 +149,13 @@
  }
  async function record(){
   const reason=unavailable();if(reason){draw(result?'done':'intro',reason);return;}
-  const cine=selectedMode()==='cine'&&cineOK;
+  const drone=selectedMode()==='drone';
+  const cine=(drone||selectedMode()==='cine')&&cineOK;
   controller=new AbortController();
   draw('recording',cine?tx('Preparando la exportación…','Preparing the export…','正在准备导出…'):'');sync();
   dialog.querySelector('#tourVideoCancel')?.focus();
   const avance=(k,l)=>{const s=dialog.querySelector('#tourVideoStatus');if(s)s.textContent=(p=>tx(`Exportando ${p} %`,`Exporting ${p} %`,`正在导出 ${p} %`))(k<.01?(k*100).toFixed(1):Math.round(k*100))+(l?' · '+l:'');};
-  try{const r=cine?await Film.exportar({signal:controller.signal,onProgress:avance}):await Recorder.record({holdMs:HOLD_MS,signal:controller.signal});
+  try{const r=cine?await Film.exportar({signal:controller.signal,onProgress:avance,drone}):await Recorder.record({holdMs:HOLD_MS,signal:controller.signal});
    if(leaving)return;
    if(!r.blob.size)throw Error(tx('El navegador no generó ningún fotograma. Vuelve a intentarlo.','The browser produced no frames. Try again.','浏览器未生成任何帧，请重试。'));
    clear();result=r;url=URL.createObjectURL(r.blob);controller=null;draw('done');dialog.querySelector('#tourVideoDownload')?.focus();}
@@ -151,7 +166,19 @@
   .presentation-video-access{display:flex;align-items:center;gap:8px;min-width:0;min-height:44px;flex:1 1 100%}
   .presentation-video-access #presentationVideo{min-height:44px;flex:none;white-space:nowrap;border:1px solid var(--line)}
   .presentation-video-access #presentationVideo[hidden]{display:none}
-  #presentationVideo[aria-disabled=true]{cursor:default;color:var(--ink-muted)}
+  #presentationVideo[aria-disabled=true]{cursor:not-allowed;color:var(--ink-muted)}
+  #presentationVideo{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+  #presentationVideo::before{content:'';width:10px;height:10px;border-radius:50%;flex:none;background:#c7c2c4}
+  #presentationVideo[data-state=listo]{border-color:#1F5A66!important;color:#1F5A66;background:#fff}
+  #presentationVideo[data-state=listo]::before{background:#c0392b}
+  #presentationVideo[data-state=bloqueado]{border-style:dashed!important;background:#f4f2f3;opacity:.8}
+  #presentationVideo[data-state=grabando]{background:#783B4B!important;border-color:#783B4B!important;color:#fff!important}
+  #presentationVideo[data-state=grabando]::before{background:#fff;animation:recPulse 1s ease-in-out infinite}
+  #presentationVideo[data-state=hecho]::before{content:'✓';width:auto;height:auto;background:none;color:#2f6e4a;font-size:14px}
+  @keyframes recPulse{50%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){#presentationVideo[data-state=grabando]::before{animation:none}}
+  .presentation-video-detail.is-flash{color:#783B4B;font-weight:600;animation:recFlash 1.2s ease-out}
+  @keyframes recFlash{0%{background:#F4E8EC}100%{background:transparent}}
   :is(#presentationVideo,.presentation-video-detail):focus-visible{outline:2px solid var(--focus);outline-offset:2px}
   .presentation-video-detail{font-size:12px;line-height:1.25;color:var(--ink-muted);overflow-wrap:anywhere}
   .tour-video-mode{border:0;padding:0;margin:8px 0;display:grid;gap:6px}.tour-video-mode legend{font-weight:700;margin-bottom:4px}

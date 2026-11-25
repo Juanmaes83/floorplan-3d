@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>SCULPT 1.1 · Plano, sol y vuelo</title>
+<link rel="stylesheet" href="../css/design-system.css">
+<link rel="stylesheet" href="sculpt-workspace.css">
+<header class="lab-header"><div>
+  <span class="lab-brand">Rubik Sota</span>
+  <nav aria-label="Herramientas del laboratorio">
+    <a class="btn on" aria-current="page" href="plan-lab.html">Plano, sol y vuelo</a>
+    <a class="btn" href="territory-map.html">Contexto territorial</a>
+  </nav>
+</div></header>
+<main>
+  <h1>Plano, sol y vuelo</h1>
+  <p class="lab-lead" id="source">Vivienda de ejemplo con parcela y ubicación simuladas. Laboratorio local.</p>
+  <form class="lab-card" id="inputs">
+    <div class="controls">
+      <label>Abrir proyecto JSON <input id="file" type="file" accept=".json,application/json"></label>
+      <label>Fecha del estudio <input id="date" type="date" value="2026-06-21" required></label>
+      <label>Retranqueo de referencia (m) <input id="setback" type="number" min="0" step=".1" value="3" required></label>
+      <button class="btn primary">Evaluar</button>
+    </div>
+    <p id="status" role="status"></p>
+  </form>
+  <div class="lab-grid">
+    <section class="lab-card" aria-labelledby="qa-title"><h2 id="qa-title">Comprobaciones orientativas</h2><p id="areas"></p><p id="parcel"></p><details><summary id="finding-count">Revisiones del plano</summary><ul id="findings"></ul></details></section>
+    <section class="lab-card" aria-labelledby="sun-title"><h2 id="sun-title">Sol directo por estancia</h2><p>Estimación en el centro de ventanas exteriores, cada 15 min. Considera muros modelados. El entorno y otros obstáculos requieren un estudio aparte.</p><ul id="sun-results"></ul></section>
+  </div>
+  <section class="lab-card" aria-labelledby="flight-title">
+    <h2 id="flight-title">Vista previa del vuelo</h2>
+    <p>Recorrido helicoidal sobre la geometría de muros, con encuadre adaptado a la pantalla.</p>
+    <canvas id="flight" aria-label="Vista 3D del recorrido helicoidal"></canvas>
+    <div class="controls" id="flight-controls">
+      <button class="btn" id="play" type="button">Reproducir vuelo</button>
+      <label>Posición del vuelo <input id="progress" type="range" min="0" max="54" step="0.1" value="0"></label>
+    </div>
+    <p id="flight-state" role="status"></p>
+  </section>
+</main>
+<script src="../js/project-schema.js"></script>
+<script src="../js/reference-project.js"></script>
+<script src="../js/parcel-core.js"></script>
+<script src="../js/orthophoto-core.js"></script>
+<script src="../js/terrain-core.js"></script>
+<script src="../js/territory-integration-core.js"></script>
+<script src="../js/geo-provider.js"></script>
+<script src="../js/parcel-site-adapter.js"></script>
+<script src="../js/orthophoto-site-adapter.js"></script>
+<script src="../js/terrain-site-adapter.js"></script>
+<script src="../js/project-core.js"></script>
+<script src="../js/building-core.js"></script>
+<script src="../js/tracing-core.js"></script>
+<script src="../js/surface-core.js"></script>
+<script src="../js/opening-edit.js"></script>
+<script src="../js/r02a-donor-extracts.js"></script>
+<script src="../js/r02a-ceiling-core.js"></script>
+<script src="../js/r02a-ceiling-session.js"></script>
+<script src="../js/r02a-ceiling-contract.js"></script>
+<script src="../vendor/suncalc/suncalc.js"></script>
+<script src="../js/solar-core.js"></script>
+<script src="../js/motion-quality-core.js"></script>
+<script src="../js/plan-validation-core.js"></script>
+<script src="../js/plan-sun-drone-core.js"></script>
+<script type="module" src="plan-lab-ui.mjs"></script>
+</html>
