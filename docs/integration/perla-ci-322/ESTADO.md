@@ -12,3 +12,9 @@
   7. presentation R2 P05 360x800: #guideCopyExample no estable.
   8. bpdp-candidate: memoria Δ24,7 MB; bpdp-routes: e3-descargar-blueprint-video no visible.
 - Registros en /root/.claude/projects/-home-user/f18da444-ec78-5298-b836-06fe16cf01e3/tool-results/mcp-github-get_job_logs-17955983*.txt
+
+## Cola según el encargo actualizado (89bae1ff, rama documental `codex/encargo-cierre-perla-visualizacion`)
+1. Cierre de PERLA #322 (en curso: causas 1–2 hechas; 3–8 pendientes; luego SHA y deltas a Codex).
+2. Visualización y Home: Render IA, rodaje local, Asesor junto al retrato **y §2.1** (perfil y catálogo de capacidades comunes a consulta guiada, texto IA, voz y avatar; memoria bajo control; traspaso de contexto; proveedores simulados primero en Chromium). Correcciones de CI en commits separados de prestaciones nuevas.
+3. Presupuestos y geometría: MSPDI #320, BCCA, A0 y muros.
+4. **§8 Examen del MVP** (cinco proyectos sintéticos de principio a fin) solo sobre la candidata MVP cerrada y antes del piloto. Mientras tanto, preparar protocolo, hojas de referencia y casos sin mezclarlos con pruebas de desarrollo.
